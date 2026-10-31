@@ -198,7 +198,9 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
             "lyrics_others_alpha", "lyrics_sung_color", "lyrics_sung_custom", "lyrics_other_color", "lyrics_other_custom", "lyrics_weight",
             "lyrics_backing_size", "lyrics_shadow", "lyrics_uppercase", "lyrics_ahead", "lyrics_position", "lyrics_extra_size", "lyrics_extra_color",
             "lyrics_extra_italic", "lyrics_extra_place", "lyrics_background", "immersive_background", "lyrics_bg_color", "lyrics_bg_color2", "lyrics_everywhere",
-            "lyrics_strip_align", "lyrics_strip_two_lines",
+            "lyrics_strip_align", "lyrics_strip_two_lines", "lyrics_gap_mark",
+            // 1.8.0 lyrics look
+            "lyrics_motion", "lyrics_word_by_word", "lyrics_card", "lyrics_halo", "lyrics_bold_lines",
         )
         else -> emptyList()
     }
@@ -2022,26 +2024,25 @@ private fun SingSettings() {
     }
 }
 
-/** The lyrics' look; [title] names the group where "Look" alone wouldn't say whose (the player's Customize sheet). */
+/** The lyrics' animation; [title] names the group where "Animation" alone wouldn't say whose (the player's Customize sheet). */
 @Composable
-private fun LyricsLookGroup(title: String = tr(R.string.look)) {
-    val s = LocalAppSettings.current
-    val prefs = LocalContainer.current.settings
-    // Lyrics, your way (1.7.5): LyricsYourWay.kt. The settings above them stay where they were.
-    Group(title) { LyricsLookDetails() }
+private fun LyricsLookGroup(title: String = tr(R.string.animation)) {
+    // Lyrics in parts (1.8.0, #253): LyricsYourWay.kt.
+    Group(title, info = tr(R.string.animation_info)) { LyricsAnimationChoices() }
 }
 
-/** Customize Prism → Lyrics (1.7.6): how the lyrics look, the less-used parts folded away. */
+/** Customize Prism → Lyrics (1.8.0, #253): where you start from, then the four parts; the line on the player folded away. */
 @Composable
 private fun LyricsLookPage() {
     Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
         LyricsStyleGroup()
-        LyricsLookGroup()
-        LyricsColorsGroup()
-        MoreOptions(listOf(tr(R.string.where_the_lines_go), tr(R.string.translations_romanized_lines), tr(R.string.background))) {
-            LyricsPlacementGroup()
+        LyricsAnimationGroup()
+        LyricsTextGroup()
+        LyricsBackgroundGroup()
+        LyricsEffectsGroup()
+        MoreOptions(listOf(tr(R.string.translations_romanized_lines), tr(R.string.on_the_player))) {
             LyricsExtrasGroup()
-            LyricsBackgroundGroup()
+            LyricsOnThePlayerGroup()
         }
     }
 }

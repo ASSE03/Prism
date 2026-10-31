@@ -125,13 +125,12 @@ import com.prism.music.ui.theme.rememberHaptics
 /** The lines' look (Aura × Spectrum): big, light and centred, lifted off the cover by a soft glow rather than a hard shadow. */
 private val lineShadow = Shadow(Color.Black.copy(alpha = 0.45f), androidx.compose.ui.geometry.Offset(0f, 1f), 26f)
 
-/** How immersive mode draws its lyrics: as the lyrics page does ("Same look everywhere", 1.7.5), else as it always has. */
+/** How immersive mode draws its lyrics: as the lyrics page does (1.8.0: always). */
 @Composable
 private fun immersiveLook(song: Song): LyricsLook {
     val s = com.prism.music.ui.theme.LocalAppSettings.current
-    val look = rememberLyricsLook(s, song.thumbnail)
     // There's no card under immersive lyrics: Bold card keeps its bold type, on the cover.
-    return if (s.lyricsEverywhere) look.withoutCard(s.lyricsOthersAlpha) else LyricsLook.Classic
+    return rememberLyricsLook(s, song.thumbnail).withoutCard(s.lyricsOthersAlpha)
 }
 
 /** The lyrics' typeface on its weight axis, so the sung words thicken as on the lyrics page; null for System / imported fonts. */
@@ -455,8 +454,8 @@ private fun LineAtATime(song: Song, state: LyricsState, active: Boolean, align: 
                 // Before the first line: the song's name, as a lyric video opens.
                 line == null && i < firstSung -> TitleCard(song)
                 line == null -> Text("♪", style = lineStyle, color = Color.White.copy(alpha = 0.7f))
-                // Prism's line-timed lines stay as they were here (Normal, white); every style else draws its own.
-                !line.isWordSynced && look.style == com.prism.music.data.prefs.LyricsStyle.PRISM ->
+                // Prism's line-timed lines stay as they were here (Normal, white); every animation else draws its own.
+                !line.isWordSynced && look.plainWhenLineTimed ->
                     Text(line.text, style = lineStyle.copy(fontWeight = FontWeight(look.weight + 100)), color = Color.White, maxLines = 4, overflow = TextOverflow.Ellipsis, modifier = Modifier.fillMaxWidth())
                 else -> SungLine(line, clock, lineStyle, look, axis, Modifier.fillMaxWidth(), maxLines = 4, dimAlpha = 0.45f)
             }
@@ -635,7 +634,7 @@ private fun LyricsOverAll(song: Song, state: LyricsState, active: Boolean, modif
                     Column(Modifier.fillMaxWidth()) {
                         when {
                             line.isGap -> Text("♪", style = style, color = Color.White, modifier = Modifier.fillMaxWidth())
-                            current && (line.isWordSynced || look.style != com.prism.music.data.prefs.LyricsStyle.PRISM) ->
+                            current && (line.isWordSynced || !look.plainWhenLineTimed) ->
                                 SungLine(line, clock, style, look, axis, Modifier.fillMaxWidth(), dimAlpha = 0.45f)
                             // The lines around it are dimmed by the list itself; their color is the look's.
                             else -> Text(line.text, style = style.copy(shadow = look.shadow ?: style.shadow), color = if (current) Color.White else look.others, modifier = Modifier.fillMaxWidth())

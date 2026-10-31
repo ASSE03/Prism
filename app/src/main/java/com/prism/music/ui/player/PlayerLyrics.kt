@@ -97,6 +97,8 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import com.prism.music.ui.components.pane
@@ -404,10 +406,9 @@ fun CurrentLyricStrip(state: LyricsState, isPlaying: Boolean, onClick: () -> Uni
     // Romanized "instead": the strip sings the Latin spelling too (same timings).
     val roman = rememberRomanized(state)
     val instead = romanizeMode(state.song.id) == com.prism.music.data.prefs.RomanizeMode.INSTEAD
-    // As the lyrics page draws them (1.7.5, "Same look everywhere"), else as the strip always has.
+    // As the lyrics page draws them (1.8.0: always; "Same look everywhere" is gone).
     val settings = LocalAppSettings.current
-    val pageLook = rememberLyricsLook(settings, state.song.thumbnail)
-    val look = if (settings.lyricsEverywhere) pageLook else LyricsLook.Classic
+    val look = rememberLyricsLook(settings, state.song.thumbnail)
     val lines = remember(state.lines, roman, instead, look.uppercase) {
         (if (instead && roman != null) state.lines.mapIndexed { i, l -> roman.getOrNull(i) ?: l } else state.lines).map(look::shown)
     }
@@ -454,7 +455,7 @@ fun CurrentLyricStrip(state: LyricsState, isPlaying: Boolean, onClick: () -> Uni
                         label = "strip",
                     ) { (i, t) ->
                         val line = lines.getOrNull(i)
-                        if (line != null && !line.isGap && (line.isWordSynced || look.style != com.prism.music.data.prefs.LyricsStyle.PRISM)) {
+                        if (line != null && !line.isGap && (line.isWordSynced || !look.plainWhenLineTimed)) {
                             SungLine(line, clock, stripStyle.copy(shadow = look.shadow), look, null, maxLines = rows, strip = true)
                         } else {
                             Text(
@@ -547,9 +548,27 @@ fun SweptLine(
     val rtl = remember(line) { isRtl(line.text) }
     // In a right-to-left layout a right-to-left line already starts at the right, so it can keep its own width.
     val ltrLayout = LocalLayoutDirection.current == LayoutDirection.Ltr
+    // Full width, so centred and right-aligned lines (and right-to-left ones) sit where their plain copies do.
+    val wide = if ((rtl && ltrLayout) || style.textAlign == TextAlign.Center || style.textAlign == TextAlign.End) Modifier.fillMaxWidth() else Modifier
+    // 1.8.0 (#253, "choppy"): the sung part is drawn onto the line itself, its edge faded in its own fill, instead of a
+    // second copy in an offscreen layer with what's still to come erased: that redrew a layer and two texts every frame
+    // (~5 ms a frame for Karaoke and Bold card, ~10 for Glow, on the CPU alone). A fill that's a gradient itself (your
+    // light) can only be faded by another gradient on the GPU from Android 9; below that it keeps the layer. So does a
+    // line with a shadow: a text shadow ignores the fill's fade, and would lie under the words still to come too.
+    if ((glow ?: style.shadow) == null && (litBrush == null || litBrush is SolidColor || Build.VERSION.SDK_INT >= 28)) {
+        Box(modifier) {
+            Text(
+                line.text, wide.drawWithContent {
+                    drawContent()
+                    val l = layout ?: return@drawWithContent
+                    drawSung(l, line, offsets, clock.value, litBrush ?: SolidColor(Color.White), style, glow ?: style.shadow)
+                },
+                style = style, color = dimColor ?: Color.White.copy(alpha = dimAlpha), maxLines = maxLines, overflow = TextOverflow.Ellipsis, onTextLayout = { layout = it },
+            )
+        }
+        return
+    }
     Box(modifier) {
-        // Full width, so centred and right-aligned lines (and right-to-left ones) sit where their plain copies do.
-        val wide = if ((rtl && ltrLayout) || style.textAlign == TextAlign.Center || style.textAlign == TextAlign.End) Modifier.fillMaxWidth() else Modifier
         Text(line.text, wide, style = style, color = dimColor ?: Color.White.copy(alpha = dimAlpha), maxLines = maxLines, overflow = TextOverflow.Ellipsis, onTextLayout = { layout = it })
         Text(
             line.text, style = style.copy(brush = litBrush, shadow = glow ?: style.shadow), color = if (litBrush != null) Color.Unspecified else Color.White,
@@ -559,17 +578,7 @@ fun SweptLine(
                 .drawWithContent {
                     val l = layout ?: return@drawWithContent
                     val now = clock.value
-                    // Characters sung so far, with a fractional part inside the current word.
-                    var sung = 0f
-                    for ((i, w) in line.words.withIndex()) {
-                        val (s, e) = offsets[i]
-                        if (now >= w.endMs) sung = e.toFloat()
-                        else if (now >= w.startMs) {
-                            val f = ((now - w.startMs).toFloat() / (w.endMs - w.startMs).coerceAtLeast(1)).coerceIn(0f, 1f)
-                            sung = s + (w.text.trimEnd().length) * f
-                            break
-                        } else break
-                    }
+                    val sung = sungChars(line, offsets, now)
                     if (sung <= 0f) return@drawWithContent
                     drawContent()
                     // Erase what hasn't been sung yet, with a soft edge so the light glides through the word.
@@ -600,6 +609,72 @@ fun SweptLine(
                     }
                 },
         )
+    }
+}
+
+/** Characters of [line] sung by [now], with a fractional part inside the word being sung ([offsets]: each word's span). */
+private fun sungChars(line: LyricLine, offsets: List<Pair<Int, Int>>, now: Long): Float {
+    var sung = 0f
+    for ((i, w) in line.words.withIndex()) {
+        val (s, e) = offsets[i]
+        if (now >= w.endMs) sung = e.toFloat()
+        else if (now >= w.startMs) {
+            val f = ((now - w.startMs).toFloat() / (w.endMs - w.startMs).coerceAtLeast(1)).coerceIn(0f, 1f)
+            return s + (w.text.trimEnd().length) * f
+        } else break
+    }
+    return sung
+}
+
+/**
+ * [SweptLine]'s sung part over the line [l] was laid out as: each row sung through drawn in [lit], the row being sung
+ * drawn up to the singing point with a soft edge (the fill fading out over [lit] itself, so no layer is needed).
+ */
+private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawSung(
+    l: TextLayoutResult, line: LyricLine, offsets: List<Pair<Int, Int>>, now: Long, lit: Brush, style: TextStyle, shadow: androidx.compose.ui.graphics.Shadow?,
+) {
+    val sung = sungChars(line, offsets, now)
+    if (sung <= 0f) return
+    val feather = size.height.coerceAtMost(l.getLineBottom(0) - l.getLineTop(0)) * 0.55f
+    val textLen = line.text.length
+    for (li in 0 until l.lineCount) {
+        val ls = l.getLineStart(li)
+        val le = l.getLineEnd(li, visibleEnd = true)
+        if (sung <= ls) break
+        val top = l.getLineTop(li)
+        val bottom = l.getLineBottom(li)
+        val brush = if (sung >= le) lit else {
+            val ci = sung.toInt().coerceIn(0, textLen - 1)
+            val box = l.getBoundingBox(ci)
+            // A right-to-left letter is read from its right edge; what's still to come lies after x (to its left in a
+            // right-to-left line).
+            val rtlChar = l.getBidiRunDirection(ci) == androidx.compose.ui.text.style.ResolvedTextDirection.Rtl
+            val x = if (rtlChar) box.right - box.width * (sung - ci) else box.left + box.width * (sung - ci)
+            val rtlLine = l.getParagraphDirection(ls) == androidx.compose.ui.text.style.ResolvedTextDirection.Rtl
+            fadedAt(lit, x - feather / 2, x + feather / 2, rtlLine)
+        }
+        clipRect(0f, top, size.width, bottom) {
+            // alpha 1: left unset, the paint keeps the dim copy's alpha and the sung words came out half see-through.
+            drawText(l, brush, alpha = 1f, shadow = shadow, textDecoration = style.textDecoration, drawStyle = style.drawStyle)
+        }
+    }
+}
+
+/** [lit], fully there before [from] and gone after [to] (the other way round when [rtl]). */
+private fun fadedAt(lit: Brush, from: Float, to: Float, rtl: Boolean): Brush {
+    if (lit is SolidColor) {
+        val c = lit.value
+        val stops = if (rtl) arrayOf(0f to c.copy(alpha = 0f), 1f to c) else arrayOf(0f to c, 1f to c.copy(alpha = 0f))
+        return Brush.horizontalGradient(*stops, startX = from, endX = to)
+    }
+    val shaderBrush = lit as androidx.compose.ui.graphics.ShaderBrush
+    return object : androidx.compose.ui.graphics.ShaderBrush() {
+        override fun createShader(size: androidx.compose.ui.geometry.Size): androidx.compose.ui.graphics.Shader {
+            val on = android.graphics.Color.BLACK
+            val off = android.graphics.Color.TRANSPARENT
+            val mask = android.graphics.LinearGradient(from, 0f, to, 0f, if (rtl) off else on, if (rtl) on else off, android.graphics.Shader.TileMode.CLAMP)
+            return android.graphics.ComposeShader(shaderBrush.createShader(size), mask, android.graphics.PorterDuff.Mode.DST_IN)
+        }
     }
 }
 
@@ -929,9 +1004,9 @@ fun LyricsPanel(
                     textAlign = when { line.alignEnd -> TextAlign.End; centred -> TextAlign.Center; else -> TextAlign.Start },
                     textDirection = androidx.compose.ui.text.style.TextDirection.Content,
                 )
-            // Calm holds every line at its size; the others breathe back a little.
+            // No animation holds every line at its size; with one, the others breathe back a little.
             val lineScale by animateFloatAsState(
-                if (isActive || !synced || look.style == com.prism.music.data.prefs.LyricsStyle.CALM) 1f else 0.98f, tween(LYRIC_SETTLE_MS, easing = LYRIC_EASING), label = "scale",
+                if (isActive || !synced || look.motion == com.prism.music.data.prefs.LyricsMotion.NONE) 1f else 0.98f, tween(LYRIC_SETTLE_MS, easing = LYRIC_EASING), label = "scale",
             )
             Box(
                 Modifier
