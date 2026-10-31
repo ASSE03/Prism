@@ -485,7 +485,8 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
         val inSession = together is com.prism.music.playback.together.TogetherState.Hosting || together is com.prism.music.playback.together.TogetherState.Guest
         // Wide windows (tablets, foldables, a phone on its side) put the tabs in a rail down the start edge.
         val window = com.prism.music.ui.theme.LocalWindowLayout.current
-        val useRail = window.rail && showChrome
+        // #264 (1.8.0): on a tablet the listener picks bottom or side; phones (compact) always have the tabs at the bottom.
+        val useRail = showChrome && window.rail && settings.behavior.tabBarPosition != com.prism.music.data.prefs.TabBarPosition.BOTTOM
         val layoutDirection = androidx.compose.ui.platform.LocalLayoutDirection.current
         val cutoutStart = WindowInsets.displayCutout.union(WindowInsets.navigationBars).asPaddingValues().calculateStartPadding(layoutDirection)
         val railInset = if (useRail) cutoutStart + RAIL_MARGIN + RAIL_WIDTH + 4.dp else 0.dp

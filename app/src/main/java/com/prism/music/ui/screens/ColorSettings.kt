@@ -278,10 +278,19 @@ private fun ColorSettings() {
                             onSelect = { prefs.setAccentExact(it) },
                         ) { exact -> AccentPair(s.copy(accentExact = exact)) }
                     }
-                    Toggle(tr(R.string.different_color_for_light_mode), tr(R.string.light_pages_get_an_accent_of), s.accentLight != 0) {
-                        prefs.setAccentLight(if (it) s.accent else 0)
+                    // 1.8.0: one row instead of a switch that only revealed it (accentLight 0 = the same as the accent;
+                    // the picker starts from the accent and only saves on Done).
+                    Item(
+                        tr(R.string.light_mode_accent),
+                        if (s.accentLight == 0) tr(R.string.same_as_your_accent) else tr(R.string.tap_to_change, ColorMath.toHex(s.accentLight)),
+                        info = tr(R.string.light_pages_get_an_accent_of),
+                        onClick = { picking = Picking.LightAccent },
+                    ) {
+                        if (s.accentLight != 0) Row(verticalAlignment = Alignment.CenterVertically) {
+                            PrismTextButton(onClick = { prefs.setAccentLight(0) }) { Text(tr(R.string.use_the_same)) }
+                            Swatch(s.accentLight)
+                        } else Chevron()
                     }
-                    if (s.accentLight != 0) Item(tr(R.string.light_mode_accent), tr(R.string.tap_to_change, ColorMath.toHex(s.accentLight)), onClick = { picking = Picking.LightAccent }) { Swatch(s.accentLight) }
                 }
                 ColorSource.ARTWORK -> {
                     Label(

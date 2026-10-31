@@ -82,22 +82,27 @@ private fun CurveSample(curve: CrossfadeCurve) {
 fun NormalizeLevel() {
     val c = LocalContainer.current
     val s = LocalAppSettings.current
-    Label(tr(R.string.level), info = tr(R.string.how_loud_normalize_volume_makes_every))
+    // 1.8.0 (#210): Normalize's switch is the first card ("Off"); picking a level turns it on. Same stored settings
+    // (normalize + normalizeTarget), so nothing is migrated.
+    Label(tr(R.string.same_loudness_for_every_song), info = tr(R.string.each_song_is_measured_on_your) + " " + tr(R.string.how_loud_normalize_volume_makes_every))
     val ink = MaterialTheme.colorScheme.primary
     val track = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.10f)
+    val off = Int.MIN_VALUE
     ChoiceCards(
-        NORMALIZE_TARGETS.map { it.first }, s.sound.normalizeTarget,
-        { t -> NORMALIZE_TARGETS.first { it.first == t }.second },
-        { t -> "$t LUFS" + when (t) { -14 -> tr(R.string.like_spotify_and_youtube); -16 -> tr(R.string.like_apple_music); -23 -> tr(R.string.like_tv_and_radio); else -> "" } },
-        columns = 3, onSelect = { c.settings.setNormalizeTarget(it) },
+        listOf(off) + NORMALIZE_TARGETS.map { it.first }, if (s.normalize) s.sound.normalizeTarget else off,
+        { t -> if (t == off) tr(R.string.off) else NORMALIZE_TARGETS.first { it.first == t }.second },
+        { t -> if (t == off) tr(R.string.as_each_song_was_mastered) else "$t LUFS" + when (t) { -14 -> tr(R.string.like_spotify_and_youtube); -16 -> tr(R.string.like_apple_music); -23 -> tr(R.string.like_tv_and_radio); else -> "" } },
+        columns = 2, onSelect = { t ->
+            if (t == off) c.settings.setNormalize(false) else { c.settings.setNormalizeTarget(t); c.settings.setNormalize(true) }
+        },
     ) { t ->
         androidx.compose.foundation.Canvas(Modifier.fillMaxWidth().height(10.dp)) {
-            val f = ((t + 30f) / 25f).coerceIn(0.05f, 1f)
+            val f = if (t == off) 0f else ((t + 30f) / 25f).coerceIn(0.05f, 1f)
             drawRoundRect(track, cornerRadius = androidx.compose.ui.geometry.CornerRadius(size.height / 2))
-            drawRoundRect(ink, size = size.copy(width = size.width * f), cornerRadius = androidx.compose.ui.geometry.CornerRadius(size.height / 2))
+            if (f > 0f) drawRoundRect(ink, size = size.copy(width = size.width * f), cornerRadius = androidx.compose.ui.geometry.CornerRadius(size.height / 2))
         }
     }
-    Toggle(
+    if (s.normalize) Toggle(
         tr(R.string.albums_as_they_are), tr(R.string.an_album_keeps_its_own_quiet), s.sound.normalizeAlbums,
         info = tr(R.string.while_an_album_plays_through_every),
     ) { c.settings.setNormalizeAlbums(it) }

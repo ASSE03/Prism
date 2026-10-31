@@ -3994,4 +3994,36 @@
     <string name="play_pause_always_stays">Play and pause always stay</string>
     <string name="what_s_on_the_player_keywords">hide show parts show on the player under the title cover title artist like heart menu progress bar seek previous next skip buttons row song length cast mark</string>
     <string name="edit_this_menu_keywords">menu ⋯ dots more options song options quick tiles actions hide show</string>
+    <!-- 1.8.0 settings (coordinator) -->
+    <string name="what_plays_next">What plays next</string>
+    <string name="when_the_queue_ends">When the queue ends</string>
+    <string name="when_the_queue_ends_info">Stop: the music ends with the queue. Your music: Prism\'s own radio from what you play. Both: mostly your music, with a few new songs. Prism Music: a radio from Prism Music\'s catalog. Offline it\'s always your music.</string>
+    <string name="music_videos_label">Music videos</string>
+    <string name="play_them">Play them</string>
+    <string name="songs_in_radios">Songs in radios</string>
+    <string name="songs_everywhere">Songs everywhere</string>
+    <string name="music_videos_label_info">Play them: a music video plays as a video. Songs in radios: autoplay and radios play the video\'s song instead. Songs everywhere: any music video you tap plays as its song, and the Video button still shows the video.</string>
+    <string name="trim_silence">Trim silence at the start and end</string>
+    <string name="podcasts_only">Podcasts only</string>
+    <string name="songs_and_podcasts">Songs and podcasts</string>
+    <string name="trim_silence_info">Songs: only the silence before the first sound and after the last is left out, never a pause inside a song. Podcasts: long pauses are shortened too.</string>
+    <string name="automatic_plain">Automatic</string>
+    <string name="fixed_length">Fixed length</string>
+    <string name="crossfade_choice_info">Off: songs play one after another. Automatic: each crossfade fits how the songs end and begin. Fixed length: the same length every time.</string>
+    <string name="stopping_and_pausing">Stopping and pausing</string>
+    <string name="same_loudness_for_every_song">Same loudness for every song</string>
+    <string name="as_each_song_was_mastered">As each song was mastered</string>
+    <string name="buttons_at_the_top_of_home">Buttons at the top of Home</string>
+    <string name="podcasts_and_customize">Podcasts and Customize</string>
+    <string name="customize">Customize</string>
+    <string name="slide">Slide</string>
+    <string name="changing_screens">Changing screens</string>
+    <string name="changing_screens_info">Fade: one page fades into the next. Slide: a new page slides in from the side and Back slides it away. None: pages change at once.</string>
+    <string name="down_the_side">Down the side</string>
+    <string name="at_the_bottom">At the bottom</string>
+    <string name="tabs_on_a_tablet">Tabs on a tablet</string>
+    <string name="tabs_on_a_tablet_info">On a tablet or a wide window. Phones always have the tabs at the bottom.</string>
+    <string name="same_as_your_accent">The same as your accent</string>
+    <string name="use_the_same">Use the same</string>
+    <string name="glass_choice_info">Frosted Glass: a soft blur behind the bars and controls. Liquid Glass: they bend what\'s behind them like real glass (Android 12 and later; older phones get Frosted). Regular is fuller, Clear lets more through.</string>
 </resources>
