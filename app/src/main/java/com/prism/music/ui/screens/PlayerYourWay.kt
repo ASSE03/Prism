@@ -394,7 +394,7 @@ fun PlayerPartsPreview(s: com.prism.music.data.prefs.AppSettings, modifier: Modi
                                     }
                                 }
                                 Spacer(Modifier.width(6.dp))
-                                Spot(PlayerPart.QUALITY) { Text("AAC · 256", color = Color.White.copy(alpha = 0.6f), fontSize = tiny, maxLines = 1) }
+                                Spot(PlayerPart.QUALITY) { Text(tr(R.string.sample_stream_quality), color = Color.White.copy(alpha = 0.6f), fontSize = tiny, maxLines = 1) }
                                 // With Crossfade on: the mark where the next song comes in.
                                 if (s.mix) {
                                     Spacer(Modifier.width(6.dp))

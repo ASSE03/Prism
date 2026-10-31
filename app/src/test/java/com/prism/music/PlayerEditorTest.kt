@@ -109,7 +109,11 @@ class PlayerEditorTest {
         val s = settled { !it.playerHandle }
         val hidden = PlayerPart.entries.filter { !s.shows(it) }.toSet()
         assertEquals(
-            setOf(PlayerPart.HANDLE, PlayerPart.FROM_ALBUM, PlayerPart.LYRIC_LINE, PlayerPart.QUALITY, PlayerPart.BEST_PART, PlayerPart.OUTPUT, PlayerPart.NAV_BAND, PlayerPart.TIMES),
+            setOf(
+                PlayerPart.HANDLE, PlayerPart.FROM_ALBUM, PlayerPart.LYRIC_LINE, PlayerPart.QUALITY, PlayerPart.BEST_PART, PlayerPart.OUTPUT, PlayerPart.NAV_BAND, PlayerPart.TIMES,
+                // Off by default, as before (shown only while Crossfade is on).
+                PlayerPart.CROSSFADE_MARK, PlayerPart.BLEND_COVERS,
+            ),
             hidden,
         )
         assertTrue(s.shows(PlayerPart.SHUFFLE_REPEAT))
