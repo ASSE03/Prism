@@ -798,6 +798,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.appearance() {
                     lookParts.forEach { sec -> NavRow(sec.icon, sec.title, sec.summary(s, dark)) { nav.go(Routes.settings(sec.key)) } }
                 }
             }
+            Box { MotionGroup() }
             // "Customize this" (1.7.3): tap the mini player, tab bar, player or a Home section to change it there.
             Box {
                 val c = LocalContainer.current
@@ -840,28 +841,28 @@ private fun GlassSettings() {
                 val s = LocalAppSettings.current
                 val prefs = LocalContainer.current.settings
                 Group(tr(R.string.glass)) {
-                    Toggle(tr(R.string.liquid_glass), tr(R.string.refractive_bars_and_controls), s.liquidGlass) { prefs.setLiquidGlass(it) }
-                    if (s.liquidGlass) {
-                        Label(tr(R.string.glass_style))
-                        Chips(GlassKind.entries, s.glassKind, { it.label }) { prefs.setGlassKind(it) }
-                    }
-                    Toggle(tr(R.string.frosted_glass), tr(R.string.soft_blur_no_refraction), s.frostedGlass) { prefs.setFrostedGlass(it) }
+                    // 1.8.0: one choice over liquidGlass + glassKind + frostedGlass (LookChoices).
+                    Label(tr(R.string.glass), info = tr(R.string.glass_choice_info))
+                    Chips(GlassChoice.entries, LookChoices.glass(s), { it.label }) { LookChoices.setGlass(prefs, it) }
                     Toggle(tr(R.string.frosted_pages), tr(R.string.pages_frosted_with_their_picture), s.frostedPages, info = tr(R.string.artist_album_and_playlist_pages_sit)) { prefs.setFrostedPages(it) }
                 }
             }
-            Box {
-                val s = LocalAppSettings.current
-                val prefs = LocalContainer.current.settings
-                Group(tr(R.string.motion)) {
-                    Toggle(tr(R.string.reduce_motion), tr(R.string.calmer_quicker_animations), s.reduceMotion, info = tr(R.string.no_drifting_backgrounds_no_artwork_bounce)) { prefs.setReduceMotion(it) }
-                    Toggle(tr(R.string.fades_between_screens), tr(R.string.pages_fade_into_each_other), s.behavior.screenFades, info = tr(R.string.off_a_page_changes_at_once)) { prefs.setScreenFades(it) }
-                    // #208 (1.7.9.2): with fades on, the pages can slide instead.
-                    if (s.behavior.screenFades) Toggle(
-                        tr(R.string.slide_between_screens), tr(R.string.a_new_page_slides_in_from_the_side_back_slides_it_away),
-                        s.behavior.pageSlide,
-                    ) { prefs.setPageSlide(it) }
-                }
-            }
+            // Reduce motion and how screens change are on the Customize Prism page itself (1.8.0: MotionGroup).
+    }
+}
+
+/**
+ * Motion (1.8.0, on the Customize Prism page: it changes the whole app, and Reduce motion is an accessibility choice):
+ * Reduce motion, and how screens change (fades + #208's slide as one choice).
+ */
+@Composable
+private fun MotionGroup() {
+    val s = LocalAppSettings.current
+    val prefs = LocalContainer.current.settings
+    Group(tr(R.string.motion)) {
+        Toggle(tr(R.string.reduce_motion), tr(R.string.calmer_quicker_animations), s.reduceMotion, info = tr(R.string.no_drifting_backgrounds_no_artwork_bounce)) { prefs.setReduceMotion(it) }
+        Label(tr(R.string.changing_screens), info = tr(R.string.changing_screens_info))
+        Chips(ScreenChange.entries, LookChoices.screenChange(s), { it.label }) { LookChoices.setScreenChange(prefs, it) }
     }
 }
 
@@ -1648,12 +1649,12 @@ private fun ControlsPage() {
         // Swipes, double tap and long press (#79's seeking among them), then the buttons' own.
         PlayerGesturesGroup()
         Group(tr(R.string.buttons_and_touch)) {
-            Toggle(tr(R.string.hold_previous_next_to_seek), tr(R.string.a_tap_still_changes_songs), s.holdSeekSeconds > 0) {
-                prefs.setHoldSeekSeconds(if (it) 10 else 0)
-            }
-            if (s.holdSeekSeconds > 0) SliderSetting(tr(R.string.each_step), s.holdSeekSeconds.toFloat(), 1f..20f, { "${it.roundToInt()} s" }, steps = 18) {
-                prefs.setHoldSeekSeconds(it.roundToInt())
-            }
+            // 1.8.0: one slider, Off at its start (the switch only flipped this between 0 and 10 s). Same stored value.
+            SliderSetting(
+                tr(R.string.hold_previous_next_to_seek), s.holdSeekSeconds.toFloat(), 0f..20f,
+                { if (it.roundToInt() == 0) tr(R.string.off) else "${it.roundToInt()} s" }, steps = 19,
+                info = tr(R.string.a_tap_still_changes_songs),
+            ) { prefs.setHoldSeekSeconds(it.roundToInt()) }
             Toggle(tr(R.string.haptics), tr(R.string.a_light_tap_on_buttons_and), s.haptics) { prefs.setHaptics(it) }
             Toggle(
                 tr(R.string.swipe_up_for_the_queue), tr(R.string.on_the_player_s_lower_half), s.behavior.panelSwipes,
@@ -1669,9 +1670,6 @@ private fun ControlsPage() {
             Chips(com.prism.music.data.prefs.PipMode.entries, s.behavior.pip, { it.label }) { prefs.setPipMode(it) }
         }
         SessionButtonsGroup()
-        Group(tr(R.string.search)) {
-            Toggle(tr(R.string.open_the_keyboard), tr(R.string.ready_to_type_when_search_opens), s.searchKeyboard) { prefs.setSearchKeyboard(it) }
-        }
     }
 }
 
@@ -2335,9 +2333,14 @@ private fun HomeLibraryLook() {
             ) { prefs.setHomeContinue(it) }
             Label(tr(R.string.recently_played_shows), info = tr(R.string.every_song_you_played_or_the))
             Chips(com.prism.music.data.prefs.RecentShows.entries, s.behavior.recentShows, { it.label }) { prefs.setRecentShows(it) }
-            Toggle(tr(R.string.podcasts_button), tr(R.string.at_the_top_of_home), s.homePodcastsButton, info = tr(R.string.off_podcasts_opens_from_library_playlists)) { prefs.setHomePodcastsButton(it) }
-            Toggle(tr(R.string.customize_button_at_the_top), tr(R.string.top_right_of_home), s.homeCustomizeTopButton) { prefs.setHomeCustomizeTopButton(it) }
+            // 1.8.0: the two top-bar switches as one choice (same stored settings, HomeChoices).
+            Label(tr(R.string.buttons_at_the_top_of_home), info = tr(R.string.off_podcasts_opens_from_library_playlists))
+            Chips(TopButtons.entries, HomeChoices.topButtons(s), { it.label }) { HomeChoices.setTopButtons(prefs, it) }
             Toggle(tr(R.string.customize_button_at_the_bottom), tr(R.string.at_the_end_of_home), s.homeCustomizeButton) { prefs.setHomeCustomizeButton(it) }
+        }
+        // Search's own option (1.8.0: from Controls & gestures, it isn't a gesture).
+        Group(tr(R.string.search)) {
+            Toggle(tr(R.string.open_the_keyboard), tr(R.string.ready_to_type_when_search_opens), s.searchKeyboard) { prefs.setSearchKeyboard(it) }
         }
         val look = ReplayCardStyle.entries.firstOrNull { it.name == s.replayCard } ?: ReplayCardStyle.WASH
         Group(tr(R.string.replay_card), info = tr(R.string.how_replay_looks_on_home_from, look.label, look.note)) {

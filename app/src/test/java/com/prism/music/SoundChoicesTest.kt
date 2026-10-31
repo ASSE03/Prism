@@ -2,7 +2,11 @@ package com.prism.music
 
 import com.prism.music.data.prefs.AppSettings
 import com.prism.music.data.prefs.AutoplaySource
+import com.prism.music.data.prefs.GlassKind
 import com.prism.music.ui.screens.Crossfade
+import com.prism.music.ui.screens.GlassChoice
+import com.prism.music.ui.screens.LookChoices
+import com.prism.music.ui.screens.ScreenChange
 import com.prism.music.ui.screens.QueueEnd
 import com.prism.music.ui.screens.SoundChoices
 import com.prism.music.ui.screens.TrimSilence
@@ -60,6 +64,44 @@ class SoundChoicesTest {
         }
         // Off keeps automatic/fixed, so turning crossfade back on gives the old way.
         assertEquals(null, SoundChoices.crossfadeValues(Crossfade.OFF).second)
+    }
+
+    @Test fun homeTopButtonsFollowBothSwitches() {
+        fun s(p: Boolean, cz: Boolean) = base.copy(homePodcastsButton = p, homeCustomizeTopButton = cz)
+        assertEquals(com.prism.music.ui.screens.TopButtons.BOTH, com.prism.music.ui.screens.HomeChoices.topButtons(s(true, true)))
+        assertEquals(com.prism.music.ui.screens.TopButtons.PODCASTS, com.prism.music.ui.screens.HomeChoices.topButtons(s(true, false)))
+        assertEquals(com.prism.music.ui.screens.TopButtons.CUSTOMIZE, com.prism.music.ui.screens.HomeChoices.topButtons(s(false, true)))
+        assertEquals(com.prism.music.ui.screens.TopButtons.NONE, com.prism.music.ui.screens.HomeChoices.topButtons(s(false, false)))
+        for (t in com.prism.music.ui.screens.TopButtons.entries) {
+            val (p, cz) = com.prism.music.ui.screens.HomeChoices.topButtonsValues(t)
+            assertEquals(t, com.prism.music.ui.screens.HomeChoices.topButtons(s(p, cz)))
+        }
+    }
+
+    @Test fun glassReadsAsGlassPathDoes() {
+        fun s(liquid: Boolean, kind: GlassKind, frosted: Boolean) = base.copy(liquidGlass = liquid, glassKind = kind, frostedGlass = frosted)
+        assertEquals(GlassChoice.OFF, LookChoices.glass(s(false, GlassKind.REGULAR, false)))
+        assertEquals(GlassChoice.FROSTED, LookChoices.glass(s(false, GlassKind.CLEAR, true)))
+        // Liquid wins over frosted, as glassPath does.
+        assertEquals(GlassChoice.LIQUID_REGULAR, LookChoices.glass(s(true, GlassKind.REGULAR, true)))
+        assertEquals(GlassChoice.LIQUID_CLEAR, LookChoices.glass(s(true, GlassKind.CLEAR, false)))
+        for (g in GlassChoice.entries) {
+            val v = LookChoices.glassValues(g)
+            assertEquals(g, LookChoices.glass(s(v.liquid, v.kind ?: GlassKind.REGULAR, v.frosted ?: false)))
+        }
+    }
+
+    @Test fun changingScreensFollowsFadesAndSlide() {
+        fun s(fades: Boolean, slide: Boolean) = base.copy(behavior = base.behavior.copy(screenFades = fades, pageSlide = slide))
+        assertEquals(ScreenChange.NONE, LookChoices.screenChange(s(false, false)))
+        // Slide never showed with fades off: still None.
+        assertEquals(ScreenChange.NONE, LookChoices.screenChange(s(false, true)))
+        assertEquals(ScreenChange.FADE, LookChoices.screenChange(s(true, false)))
+        assertEquals(ScreenChange.SLIDE, LookChoices.screenChange(s(true, true)))
+        for (c in ScreenChange.entries) {
+            val (fades, slide) = LookChoices.screenChangeValues(c)
+            assertEquals(c, LookChoices.screenChange(s(fades, slide)))
+        }
     }
 
     @Test fun trimSilenceFollowsSongsAndPodcasts() {

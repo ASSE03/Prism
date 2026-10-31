@@ -159,14 +159,12 @@ object SettingsIndex {
         SettingEntry(I, tr(R.string.buttons), tr(R.string.play_on_album_and_playlist_pages), tr(R.string.play_button_outlined_filled)),
         SettingEntry(I, tr(R.string.buttons), tr(R.string.switches_sliders_and_buttons), tr(R.string.classic_controls_1_6_material_switch)),
         SettingEntry(G, tr(R.string.backgrounds), tr(R.string.screen_backgrounds), tr(R.string.wallpaper_photo_pattern_design)),
-        SettingEntry(G, tr(R.string.glass), tr(R.string.liquid_glass), tr(R.string.blur_transparent)),
-        SettingEntry(G, tr(R.string.glass), tr(R.string.glass_style)),
-        SettingEntry(G, tr(R.string.glass), tr(R.string.frosted_glass), tr(R.string.blur_transparent)),
+        // 1.8.0: one Glass choice; Motion moved to the Customize Prism page. Old titles stay as search words.
+        SettingEntry(G, tr(R.string.glass), tr(R.string.glass), tr(R.string.blur_transparent) + " " + tr(R.string.liquid_glass) + " " + tr(R.string.frosted_glass) + " " + tr(R.string.glass_style)),
         SettingEntry(G, tr(R.string.glass), tr(R.string.frosted_pages), tr(R.string.blur_artist_album_playlist)),
-        SettingEntry(G, tr(R.string.motion), tr(R.string.reduce_motion), tr(R.string.animations_accessibility)),
-        SettingEntry(G, tr(R.string.motion), tr(R.string.fades_between_screens), tr(R.string.fades_between_screens_keywords)),
-        SettingEntry(G, tr(R.string.motion), tr(R.string.slide_between_screens), tr(R.string.slide_between_screens_keywords),
-            needs = Needs(tr(R.string.turn_on_first, tr(R.string.fades_between_screens))) { it.behavior.screenFades }),
+        SettingEntry(A, tr(R.string.motion), tr(R.string.motion)),
+        SettingEntry(A, tr(R.string.motion), tr(R.string.reduce_motion), tr(R.string.animations_accessibility)),
+        SettingEntry(A, tr(R.string.motion), tr(R.string.changing_screens), tr(R.string.fades_between_screens_keywords) + " " + tr(R.string.slide_between_screens_keywords) + " " + tr(R.string.fades_between_screens) + " " + tr(R.string.slide_between_screens)),
         // Layout & navigation
         SettingEntry(L, tr(R.string.navigation_bar), tr(R.string.style), tr(R.string.tab_bar_bottom_bar)),
         SettingEntry(L, tr(R.string.navigation_bar), tr(R.string.labels), tr(R.string.tab_bar_names),
@@ -187,7 +185,7 @@ object SettingsIndex {
         SettingEntry(L, tr(R.string.pages), tr(R.string.spacing), tr(R.string.density_compact)),
         SettingEntry(L, tr(R.string.pages), tr(R.string.page_titles)),
         SettingEntry(L, tr(R.string.pages), tr(R.string.album_playlist_cards)),
-        SettingEntry(CT, tr(R.string.search), tr(R.string.open_the_keyboard), tr(R.string.search_typing)),
+        SettingEntry(H, tr(R.string.search), tr(R.string.open_the_keyboard), tr(R.string.search_typing)),
         // Player
         SettingEntry(P, tr(R.string.look), tr(R.string.background), tr(R.string.player_blur_cover_color)),
         SettingEntry(P, tr(R.string.look), tr(R.string.show_background)),
@@ -248,8 +246,7 @@ object SettingsIndex {
         SettingEntry(CT, tr(R.string.gestures), tr(R.string.long_press), tr(R.string.hold_cover)),
         SettingEntry(CT, tr(R.string.gestures), tr(R.string.pull_down), tr(R.string.mini_player_stop)),
         SettingEntry(CT, tr(R.string.gestures), tr(R.string.swipe_the_mini_player_up), tr(R.string.mini_player_swipe_up_open_player)),
-        SettingEntry(CT, tr(R.string.buttons_and_touch), tr(R.string.hold_previous_next_to_seek), tr(R.string.fast_forward_rewind)),
-        SettingEntry(CT, tr(R.string.buttons_and_touch), tr(R.string.each_step), needs = holdSeek),
+        SettingEntry(CT, tr(R.string.buttons_and_touch), tr(R.string.hold_previous_next_to_seek), tr(R.string.fast_forward_rewind) + " " + tr(R.string.each_step)),
         SettingEntry(CT, tr(R.string.buttons_and_touch), tr(R.string.haptics), tr(R.string.vibration_vibrate)),
         // Playback & sound
         // 1.8.0 (#210): merged choices; the old titles stay as search words.
@@ -377,8 +374,8 @@ object SettingsIndex {
         SettingEntry(H, tr(R.string.home), tr(R.string.add_new_sections_automatically), "shelves"),
         SettingEntry(H, tr(R.string.home), tr(R.string.continue_line), tr(R.string.continue_album_resume_greeting_hide_context)),
         SettingEntry(H, tr(R.string.replay_card), tr(R.string.replay_card), tr(R.string.replay_teaser_look_style_design_quiet)),
-        SettingEntry(H, tr(R.string.home), tr(R.string.podcasts_button)),
-        SettingEntry(H, tr(R.string.home), tr(R.string.customize_button_at_the_top)),
+        SettingEntry(H, tr(R.string.home), tr(R.string.buttons_at_the_top_of_home), tr(R.string.podcasts_button) + " " + tr(R.string.customize_button_at_the_top)),
+        SettingEntry(H, tr(R.string.search), tr(R.string.search)),
         SettingEntry(H, tr(R.string.home), tr(R.string.customize_button_at_the_bottom)),
         SettingEntry(LB, tr(R.string.region), tr(R.string.content_country), tr(R.string.region_location_gl)),
         // Prism Connect
