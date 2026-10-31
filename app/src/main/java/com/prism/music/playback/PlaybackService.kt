@@ -94,6 +94,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     /** Sing: the song's vocals taken out as it plays (first, on the music as it came from the decoder). */
     private val vocals by lazy { com.prism.music.playback.sing.VocalStemProcessor(c.sing) }
     private val headphoneEq = ParametricEqProcessor()
+    /** Skip silence for songs: their start and end only (#210); episodes keep Media3's skipper. */
+    private val edges = EdgeSilenceProcessor()
     private val spatial = SpatialAudioProcessor()
     /** "Pause when muted" (#157). */
     private val muteWatch by lazy { MuteWatch(this, player) { c.settings.current.behavior.pauseOnMute } }
@@ -155,8 +157,14 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                     .setEnableFloatOutput(enableFloatOutput || c.settings.current.lossless)
                     .setEnableAudioTrackPlaybackParams(enableAudioTrackPlaybackParams)
                     // The visualizer's tap last (1.7.4): what you hear; it passes the sound through untouched and
-                    // only copies it while a visualizer is on screen.
-                    .setAudioProcessors(arrayOf(vocals, headphoneEq, spatial, normalizer, androidx.media3.exoplayer.audio.TeeAudioProcessor(VisualizerTap)))
+                    // only copies it while a visualizer is on screen. Songs' silence is trimmed after Sing (which
+                    // counts the song's own frames) and before the effects, through a chain that tells the player what
+                    // was left out (#210).
+                    .setAudioProcessorChain(
+                        EdgeSilenceProcessor.Chain(
+                            edges, arrayOf(vocals, edges, headphoneEq, spatial, normalizer, androidx.media3.exoplayer.audio.TeeAudioProcessor(VisualizerTap)),
+                        )
+                    )
                     .build()
 
             override fun buildAudioRenderers(
@@ -208,7 +216,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         player.addListener(this)
         player.addAnalyticsListener(StatsListener())
         player.addAnalyticsListener(DiagnosticsListener())
-        player.skipSilenceEnabled = c.settings.current.skipSilence
+        applySkipSilence()
 
         sessionPlayer = LyricsOverlayPlayer(player)
         carLyrics = CarLyrics(this, c, player, sessionPlayer, scope)
@@ -662,10 +670,14 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         return pitch
     }
 
-    /** Skip silence for what's playing: songs and podcast episodes each have their own switch (1.7.8, A4). */
+    /**
+     * Skip silence for what's playing: songs and podcast episodes each have their own switch (1.7.8, A4). Songs only
+     * lose the silence at their start and end ([edges], #210); an episode's pauses are shortened too (Media3's skipper).
+     */
     private fun applySkipSilence() {
         val s = c.settings.current
-        val on = if (player.currentMediaItem?.toSong()?.isEpisode == true) s.sound.skipSilenceEpisodes else s.skipSilence
+        edges.enabled = s.skipSilence
+        val on = player.currentMediaItem?.toSong()?.isEpisode == true && s.sound.skipSilenceEpisodes
         if (player.skipSilenceEnabled != on) player.skipSilenceEnabled = on
     }
 
@@ -836,6 +848,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
         vocals.shuffle = shuffleModeEnabled
+        edges.shuffle = shuffleModeEnabled
         // Shuffle and DJ mode both decide the order: the listener's shuffle wins.
         if (shuffleModeEnabled && c.dj.onNow) c.dj.setOn(false)
         // Shuffle off (from anywhere: the notification, the car) is Smart Shuffle off too.
@@ -848,6 +861,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     override fun onRepeatModeChanged(repeatMode: Int) {
         vocals.repeatMode = repeatMode
+        edges.repeatMode = repeatMode
         updateButtons()
         scheduleSave()
     }
