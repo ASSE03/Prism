@@ -895,7 +895,7 @@ private fun PlayerButtonGlyph(
             }, width)
         }
         PlayerButton.DOWNLOAD -> {
-            val downloads by c.downloads.downloads.collectAsState()
+            val downloads by c.downloadState.collectAsState()
             val d = downloads[s.id]
             val done = d?.state == androidx.media3.exoplayer.offline.Download.STATE_COMPLETED
             BottomGlyph(

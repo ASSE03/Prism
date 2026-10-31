@@ -23,6 +23,9 @@ What changed in each release. Older releases are described on the [Releases page
   the shrinking cover) the switch says so.
 - **Sonos speakers didn't show up to play on** (#239, Reddit): Sonos answers as a "ZonePlayer" with its renderer inside,
   which Prism didn't ask for. It does now, and names the speaker by its room.
+- **Prism could take seconds to show Home on slower phones**: the first screen waited for the downloads to read their
+  list and cache from storage (3.4 s on a slow phone in 1.7.8's check). They start in the background now, and screens
+  show what's downloaded as soon as it's read.
 - **Speed dial's last page could hold a single tile** (#267): its pages are whole now.
 - **Tab icons were a little smaller with labels "Selected"** (#272): they're the same size in every label style.
 - **The docked tab bar bent what was behind it** (#273): with Liquid Glass on, the flat docked bar worked like a lens,

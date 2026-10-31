@@ -363,7 +363,7 @@ fun SearchScreen(bottomPadding: Dp) {
 private fun PhoneResults(query: String, bottomPadding: Dp, onPlay: () -> Unit) {
     val c = LocalContainer.current
     val tracks by c.localMusic.tracks.collectAsState()
-    val dls by c.downloads.downloads.collectAsState()
+    val dls by c.downloadState.collectAsState()
     val current by c.player.currentSong.collectAsState()
     // Matched off the main thread: with a few thousand files and downloads, every letter typed went through all of
     // them while the screen waited (1.7.4). Null until the first answer for this query is in.

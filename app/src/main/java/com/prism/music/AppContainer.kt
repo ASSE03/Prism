@@ -138,8 +138,8 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
         }
         // A restored backup's settings (since 1.7.8 kept as values beside the store) go in at once, before Home shows.
         container.scope.launch(kotlinx.coroutines.Dispatchers.IO) { runCatching { container.backup.applyRestoredSettings() } }
-        // Downloads a restore left waiting carry on once the first screen is up (the download manager stays on the
-        // main thread, where it was made).
+        // Downloads a restore left waiting carry on once the first screen is up (the download manager's calls go on the
+        // main thread).
         container.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
             kotlinx.coroutines.delay(1_500)
             runCatching { container.backup.resumeDownloads() }
@@ -425,6 +425,14 @@ class AppContainer(val app: Application) {
         }
     }
     val downloads by lazy { DownloadRepository(app, this, scope) }
+
+    /**
+     * What's downloaded, for screens: empty until [downloads] has started, then kept in step by it. Screens read these
+     * rather than [downloads] itself, which reads the download index and cache from disk when first touched (1.7.8's
+     * check: Home's first frame waited 3.4 s for it on a slow phone). [downloads] starts in the background at launch.
+     */
+    val downloadState = kotlinx.coroutines.flow.MutableStateFlow<Map<String, com.prism.music.download.DownloadInfo>>(emptyMap())
+    val videoState = kotlinx.coroutines.flow.MutableStateFlow<Map<String, com.prism.music.download.VideoDownload>>(emptyMap())
     val covers by lazy { com.prism.music.data.PlaylistCovers(app) }
     /** Saves lyrics into your own music files' tags (#16). */
     val lyricsToFiles by lazy { com.prism.music.data.local.LyricsToFiles(app, this) }

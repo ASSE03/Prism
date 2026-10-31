@@ -144,7 +144,7 @@ fun LibraryScreen(bottomPadding: Dp) {
     val remoteArtists by c.library.artists.collectAsState()
     val liked by c.library.likedShown.collectAsState()
     val sync by c.library.syncState.collectAsState()
-    val dls by c.downloads.downloads.collectAsState()
+    val dls by c.downloadState.collectAsState()
     val thumbs by c.library.artistThumbs.collectAsState()
     val favorites by c.artistPrefs.favorites.collectAsState()
     // Playlists and albums kept on the phone (without an account, the only ones there are).
@@ -799,7 +799,7 @@ private fun LibraryOrderSample(playlistsFirst: Boolean) {
 private fun DownloadsSummary() {
     val c = LocalContainer.current
     val nav = LocalNavigator.current
-    val dls by c.downloads.downloads.collectAsState()
+    val dls by c.downloadState.collectAsState()
     val done = dls.values.filter { it.state == androidx.media3.exoplayer.offline.Download.STATE_COMPLETED }
     val active = dls.values.filter { it.state != androidx.media3.exoplayer.offline.Download.STATE_COMPLETED }
     val waiting by c.downloads.waitingForNetwork.collectAsState()

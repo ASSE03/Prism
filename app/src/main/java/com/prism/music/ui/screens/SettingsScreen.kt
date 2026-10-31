@@ -2266,7 +2266,7 @@ private fun DownloadSettings() {
             val gb = sizes[i.roundToInt().coerceIn(0, sizes.lastIndex)]
             val freeGb = remember { context.filesDir.usableSpace / 1_073_741_824f }
             val picks by c.downloads.smartIds.collectAsState()
-            val downloads by c.downloads.downloads.collectAsState()
+            val downloads by c.downloadState.collectAsState()
             val pickBytes = picks.sumOf { downloads[it]?.bytes ?: 0L }
             Label(tr(R.string.space_to_use_2, formatGb(gb)))
             val used = pickBytes + cacheBytes

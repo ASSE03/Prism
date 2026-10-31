@@ -84,6 +84,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
     val downloads: StateFlow<Map<String, DownloadInfo>> = _downloads
     private fun publish() {
         _downloads.value = _lossless.value + _media.value
+        c.downloadState.value = _downloads.value
         c.smartPickBytes = _smartIds.value.sumOf { _media.value[it]?.bytes ?: 0L }
     }
 
@@ -136,6 +137,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
             }
             songId to VideoDownload(videoId, state, parts.map { it.percentDownloaded.coerceAtLeast(0f) }.average().toFloat(), parts.sumOf { it.bytesDownloaded })
         }.toMap()
+        c.videoState.value = _videos.value
     }
 
     private fun Download.part(): VideoPart? = runCatching { InnerTube.json.decodeFromString(VideoPart.serializer(), String(request.data)) }.getOrNull()

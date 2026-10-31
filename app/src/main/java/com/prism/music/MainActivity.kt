@@ -173,6 +173,10 @@ open class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val c = container
         c.player.connect()
+        // The downloads start in the background (their index and cache come off the disk) while the first frame draws;
+        // screens read c.downloadState meanwhile, so they never wait for them (1.7.9.3: Home's first frame waited 3.4 s
+        // on a slow phone). Media3's download manager still answers on the main thread.
+        c.scope.launch(kotlinx.coroutines.Dispatchers.IO) { runCatching { c.downloads } }
         // Not asked here any more (a prompt before the welcome screen, with no reason given): the tour or the first
         // download asks, through this.
         if (c.returningUser == null) c.returningUser = c.settings.current.let { it.onboarded || it.isLoggedIn }

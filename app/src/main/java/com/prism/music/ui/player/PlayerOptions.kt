@@ -51,8 +51,8 @@ fun PlayerOptionsSheet(
     val nav = LocalNavigator.current
     val context = LocalContext.current
     val liked by c.library.likedIds.collectAsState()
-    val downloads by c.downloads.downloads.collectAsState()
-    val videos by c.downloads.videos.collectAsState()
+    val downloads by c.downloadState.collectAsState()
+    val videos by c.videoState.collectAsState()
     val hidden by c.canvas.hidden.collectAsState()
     val saved by c.canvas.saved.collectAsState()
     val sleepAt by c.player.sleepAt.collectAsState()

@@ -167,8 +167,8 @@ fun SongRow(
 ) {
     val c = LocalContainer.current
     val likedIds = c.library.likedIds.collectAsState()
-    val downloads = c.downloads.downloads.collectAsState()
-    val videos = c.downloads.videos.collectAsState()
+    val downloads = c.downloadState.collectAsState()
+    val videos = c.videoState.collectAsState()
     var menu by remember { mutableStateOf(false) }
     val done = androidx.media3.exoplayer.offline.Download.STATE_COMPLETED
     // Each row recomposes only when its own marks change, not every time any download, like or video changes anywhere
@@ -572,8 +572,8 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
     val nav = LocalNavigator.current
     val context = LocalContext.current
     val liked by c.library.likedIds.collectAsState()
-    val downloads by c.downloads.downloads.collectAsState()
-    val videos by c.downloads.videos.collectAsState()
+    val downloads by c.downloadState.collectAsState()
+    val videos by c.videoState.collectAsState()
     val disliked by c.library.dislikedIds.collectAsState()
     var pickPlaylist by remember { mutableStateOf(false) }
     var sharing by remember { mutableStateOf(false) }

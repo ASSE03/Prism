@@ -155,7 +155,7 @@ enum class SortMode(val label: String) {
 fun CollectionScreen(type: CollectionType, id: String, initialGenre: String?, bottomPadding: Dp) {
     val c = LocalContainer.current
     val liked by c.library.likedShown.collectAsState()
-    val downloads by c.downloads.downloads.collectAsState()
+    val downloads by c.downloadState.collectAsState()
 
     val remote = when (type) {
         CollectionType.ALBUM -> rememberLoad("album:$id") { orSaved(c, id) { LiveCollection(c.ytm.album(id), c.scope, null) } }
@@ -257,7 +257,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     val scope = rememberCoroutineScope()
     val settings = LocalAppSettings.current
     val current by c.player.currentSong.collectAsState()
-    val downloads by c.downloads.downloads.collectAsState()
+    val downloads by c.downloadState.collectAsState()
     val songs by live.songs.collectAsState()
     val loadingMore by live.loadingMore.collectAsState()
     val page = live.page.copy(songs = songs)
@@ -1137,7 +1137,7 @@ private fun HeroHeader(type: CollectionType, page: CollectionPage, art: String?,
 private fun DownloadedCollections(visible: List<Song>, sort: SortMode, query: String, filtered: Boolean) {
     val c = LocalContainer.current
     val nav = LocalNavigator.current
-    val all by c.downloads.downloads.collectAsState()
+    val all by c.downloadState.collectAsState()
     // Only a finished download changes this (not every progress tick), so the rows aren't worked out again for those.
     val done = remember(all) { all.filterValues { it.state == Download.STATE_COMPLETED }.keys }
     val kept by produceState<List<Pair<String, CollectionPage>>?>(null) {
@@ -1468,10 +1468,10 @@ private fun sizeText(bytes: Long): String =
 private fun DownloadsInfo(songs: List<Song>, ask: (String, () -> Unit) -> Unit) {
     val c = LocalContainer.current
     val scheme = MaterialTheme.colorScheme
-    val all by c.downloads.downloads.collectAsState()
+    val all by c.downloadState.collectAsState()
     val levels by c.downloads.lyricLevels.collectAsState()
     val working by c.downloads.lyricsWorking.collectAsState()
-    val videos by c.downloads.videos.collectAsState()
+    val videos by c.videoState.collectAsState()
     val active = remember(all) { all.filter { it.value.state != Download.STATE_COMPLETED && it.value.state != Download.STATE_FAILED } }
     val bytes = remember(all) { all.values.filter { it.state == Download.STATE_COMPLETED }.sumOf { it.bytes } }
     Column(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 6.dp)) {
@@ -1556,7 +1556,7 @@ fun FailedDownloadsSheet(onDismiss: () -> Unit) {
     val c = LocalContainer.current
     val scheme = MaterialTheme.colorScheme
     val ui = LocalUi.current
-    val all by c.downloads.downloads.collectAsState()
+    val all by c.downloadState.collectAsState()
     val why by c.downloads.failures.collectAsState()
     val failed = remember(all) { all.filter { it.value.state == Download.STATE_FAILED }.toList().sortedByDescending { it.second.addedAt } }
     // Everything tried again or removed: nothing left to show.
@@ -1605,13 +1605,13 @@ private const val MAX_FAILED_ROWS = 60
 @Composable
 private fun downloadsSheetItems(ask: (String, () -> Unit) -> Unit): List<SheetItem> {
     val c = LocalContainer.current
-    val all by c.downloads.downloads.collectAsState()
+    val all by c.downloadState.collectAsState()
     var smartIds by remember { mutableStateOf(emptySet<String>()) }
     LaunchedEffect(all.size) {
         smartIds = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { c.db.songs().smartDownloads().map { it.id }.toSet() }
     }
     val smart = all.filter { it.value.state == Download.STATE_COMPLETED && it.key in smartIds }.keys
-    val videos by c.downloads.videos.collectAsState()
+    val videos by c.videoState.collectAsState()
     // With Premium quality on: downloads below it (from before it was on, or before 1.7.7.1 made it work) can come down
     // again in 256 kbps (#149).
     val settings = com.prism.music.ui.theme.LocalAppSettings.current

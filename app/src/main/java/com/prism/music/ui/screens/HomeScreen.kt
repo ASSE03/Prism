@@ -307,8 +307,9 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
                         HomeSections.REPEAT_REWIND -> yours?.repeatRewind?.takeIf { it.isNotEmpty() }?.let { SongSection(cfg, cfg.titled(), tr(R.string.what_you_used_to_play_on), it) }
                         HomeSections.FORGOTTEN -> yours?.forgotten?.takeIf { it.isNotEmpty() }?.let { SongSection(cfg, cfg.titled(), tr(R.string.favorites_you_haven_t_played_in), it) }
                         HomeSections.DOWNLOADS -> {
-                            val dls by c.downloads.downloads.collectAsState()
-                            val songs = remember(dls) { c.downloads.completedSongs() }
+                            val dls by c.downloadState.collectAsState()
+                            // Nothing until the downloads have started (then they're up already, so this doesn't hold up the first frame).
+                            val songs = remember(dls) { if (dls.isEmpty()) emptyList() else c.downloads.completedSongs() }
                             if (songs.isNotEmpty()) SongSection(cfg, cfg.titled(tr(R.string.downloads)), null, songs.take(20)) { nav.go(Routes.DOWNLOADS) }
                         }
                         HomeSections.SPEED_DIAL -> SpeedDialSection(cfg, if (online) dialItems else dialItems.filter { it is SongItem && c.availableOffline(it.id) }, openItem)

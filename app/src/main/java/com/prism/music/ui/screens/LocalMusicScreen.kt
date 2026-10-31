@@ -236,7 +236,7 @@ fun LocalMusicScreen(bottomPadding: Dp) {
     }
     val liked by c.library.likedIds.collectAsState()
     val recentIds by c.library.recentLocalIds.collectAsState()
-    val dls by c.downloads.downloads.collectAsState()
+    val dls by c.downloadState.collectAsState()
 
     val albums = remember(tracks) { albumsOf(tracks) }
     val artists = remember(tracks, albums) {
