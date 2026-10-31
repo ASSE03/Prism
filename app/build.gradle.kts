@@ -71,7 +71,7 @@ android {
             // "Prism Dev". `-PsideBySide=name` installs as com.prism.music.name instead of .dev, beside an older dev copy.
             if (project.hasProperty("sideBySide")) {
                 applicationIdSuffix = "." + (project.property("sideBySide") as String).ifBlank { "dev" }
-                manifestPlaceholders["appLabel"] = "Prism Dev"
+                manifestPlaceholders["appLabel"] = (project.findProperty("sideByLabel") as String?) ?: "Prism Dev"
             }
         }
         release {
@@ -89,7 +89,8 @@ android {
             // it can't be mistaken for (or installed over) the real Prism.
             if (project.hasProperty("sideBySide")) {
                 applicationIdSuffix = "." + (project.property("sideBySide") as String).ifBlank { "dev" }
-                manifestPlaceholders["appLabel"] = "Prism Dev"
+                // `-PsideByLabel="Prism Premium"`: a second test copy that reads differently on the home screen.
+                manifestPlaceholders["appLabel"] = (project.findProperty("sideByLabel") as String?) ?: "Prism Dev"
                 manifestPlaceholders["profileable"] = "true"
                 signingConfig = signingConfigs.getByName("debug")
             }
