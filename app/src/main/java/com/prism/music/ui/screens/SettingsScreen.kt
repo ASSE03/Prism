@@ -1549,43 +1549,13 @@ private fun PlayerSettings() {
     val prefs = container.settings
     Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
         // How the player looks (1.7.6: what it does on a touch is in Controls & gestures, what it keeps on the phone in
-        // Downloads, storage & data). Its layout first, then its look, cover and buttons (PlayerYourWay.kt).
+        // Downloads, storage & data). 1.8.0: its layout, then what's on it (one editor with the player drawn, replacing
+        // "Show on the player", "Under the title" and the buttons; PlayerYourWay.kt), its look and its cover.
+        // "Song length" went (tapping the time switches it, and it's remembered); the cast mark is no longer a choice.
         PlayerLayoutGroup()
+        PlayerPartsGroup()
         PlayerLookGroup()
         PlayerCoverGroup()
-        PlayerButtonsGroup()
-        // Tick what else you want there (the current lyric and volume are in "Under the title").
-        Group(tr(R.string.show_on_the_player)) {
-            ShowChips(
-                listOf(
-                    // Reddit, 1.7.9.1: the grey handle at the top can go (a swipe down still closes the player).
-                    ShowOption(tr(R.string.handle_at_the_top), s.playerHandle) { prefs.setPlayerHandle(it) },
-                    // #250: the dark band behind three-button navigation (off: the player shows through it).
-                    ShowOption(tr(R.string.band_behind_the_navigation_buttons), s.playerNavBand) { prefs.setPlayerNavBand(it) },
-                    ShowOption(tr(R.string.from_the_album), s.showPlayingFrom) { prefs.setShowPlayingFrom(it) },
-                    ShowOption(tr(R.string.best_part), s.bestPartButton) { prefs.setBestPartButton(it) },
-                    ShowOption(tr(R.string.stream_quality), s.showQuality) { prefs.setShowQuality(it) },
-                    ShowOption(tr(R.string.shuffle_repeat), s.playerShuffleRepeat) { prefs.setPlayerShuffleRepeat(it) },
-                    ShowOption(tr(R.string.song_video), s.showVideoSwitch) {
-                        prefs.setShowVideoSwitch(it)
-                        if (!it) container.player.setVideoMode(false)
-                    },
-                    ShowOption(tr(R.string.output_device), s.showOutputDevice) { prefs.setShowOutputDevice(it) },
-                ) + if (s.showOutputDevice) listOf(ShowOption(tr(R.string.cast_mark), s.view.castMark) { prefs.setCastMark(it) }) else emptyList()
-            )
-            Toggle(
-                tr(R.string.hide_controls_over_videos), tr(R.string.they_come_back_with_a_tap), s.view.videoControlsHide,
-                info = tr(R.string.while_a_music_video_plays_the),
-            ) { prefs.setVideoControlsHide(it) }
-            Toggle(
-                tr(R.string.cover_flies_into_place), tr(R.string.opening_the_player_the_mini_player), s.view.coverFlight,
-                info = tr(R.string.instead_of_the_whole_player_sliding),
-            ) { prefs.setCoverFlight(it) }
-            Toggle(
-                tr(R.string.song_length), tr(R.string.instead_of_the_time_left), s.showTrackLength,
-                info = tr(R.string.the_time_on_the_right_shows),
-            ) { prefs.setShowTrackLength(it) }
-        }
         Group(tr(R.string.lyrics_and_the_queue), info = tr(R.string.the_player_s_controls_while_the)) {
             ChoiceCards(
                 com.prism.music.data.prefs.PanelPlayer.entries, s.view.panelPlayer, title = { it.label }, detail = { it.detail }, columns = 2,
@@ -1610,8 +1580,7 @@ private fun PlayerSettings() {
                 info = tr(R.string.the_moving_artwork_fills_the_whole),
             ) { prefs.setCanvasFillsBackground(it) }
         }
-        MoreOptions(listOf(tr(R.string.under_the_title), tr(R.string.title_and_times), tr(R.string.visualizer), tr(R.string.immersive_mode))) {
-        PlayerArrangeGroup()
+        MoreOptions(listOf(tr(R.string.title_and_times), tr(R.string.visualizer), tr(R.string.immersive_mode))) {
         PlayerTitleGroup()
         PlayerVisualizerGroup()
         Group(tr(R.string.immersive_mode)) {
@@ -1701,6 +1670,8 @@ private fun PlayerLookGroup() {
         Chips(TransportStyle.entries, s.transportStyle, { it.label }) { prefs.setTransportStyle(it) }
         // #231 (1.7.9.2): the split-light ring around play, which some find too much.
         Toggle(tr(R.string.ring_on_the_play_button), tr(R.string.the_split_light_around_play_and_pause), s.view.playRing) { prefs.setPlayRing(it) }
+        // The row in a capsule or apart (1.8.0: a look choice here; which buttons are in What's on the player).
+        ButtonsPillCards()
         Label(
             tr(R.string.progress_bar),
             info = when (s.scrubberStyle) {
@@ -1776,6 +1747,10 @@ private fun PlayerCoverGroup() {
             tr(R.string.square_video_covers), tr(R.string.no_black_bars_when_a_video), s.squareVideoCovers,
             info = tr(R.string.youtube_s_video_pictures_are_wide),
         ) { prefs.setSquareVideoCovers(it) }
+        Toggle(
+            tr(R.string.cover_flies_into_place), tr(R.string.opening_the_player_the_mini_player), s.view.coverFlight,
+            info = tr(R.string.instead_of_the_whole_player_sliding),
+        ) { prefs.setCoverFlight(it) }
     }
 }
 

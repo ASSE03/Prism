@@ -511,7 +511,11 @@ object BestPartButton {
 
 /** Previous, play/pause, next — oversized glyphs, no circles. */
 @Composable
-fun TransportRow(isPlaying: Boolean, isLoading: Boolean, previousEnabled: Boolean, nextEnabled: Boolean, compact: Boolean = false, episode: Boolean = false) {
+fun TransportRow(
+    isPlaying: Boolean, isLoading: Boolean, previousEnabled: Boolean, nextEnabled: Boolean, compact: Boolean = false, episode: Boolean = false,
+    /** Previous and next (or an episode's skips) on the player: What's on the player can hide them (1.8.0). */
+    skips: Boolean = true,
+) {
     val pc = LocalContainer.current.player
     val style = LocalAppSettings.current.transportStyle
     val playSize = if (compact) 58.dp else 74.dp
@@ -536,8 +540,10 @@ fun TransportRow(isPlaying: Boolean, isLoading: Boolean, previousEnabled: Boolea
         val back = if (holdMs > 0) ({ pc.seekBy(-holdMs) }) else null
         val ahead = if (holdMs > 0) ({ pc.seekBy(holdMs) }) else null
         // A podcast episode skips within itself, as podcast players do: back 15 s, ahead 30 s.
-        if (episode) SkipGlyph(EPISODE_BACK_S, ahead = false, touch = 53.dp) { pc.seekBy(-EPISODE_BACK_S * 1000L) }
-        else TransportGlyph(prevIcon, tr(R.string.widget_previous), skip, 53.dp, if (style == TransportStyle.GLYPHS) 0.85f else 1f, previousEnabled, onHold = back) { pc.previous() }
+        if (skips) {
+            if (episode) SkipGlyph(EPISODE_BACK_S, ahead = false, touch = 53.dp) { pc.seekBy(-EPISODE_BACK_S * 1000L) }
+            else TransportGlyph(prevIcon, tr(R.string.widget_previous), skip, 53.dp, if (style == TransportStyle.GLYPHS) 0.85f else 1f, previousEnabled, onHold = back) { pc.previous() }
+        }
         if (style == TransportStyle.GLYPHS) {
             if (isLoading) {
                 Box(Modifier.size(playTouch), contentAlignment = Alignment.Center) {
@@ -549,8 +555,10 @@ fun TransportRow(isPlaying: Boolean, isLoading: Boolean, previousEnabled: Boolea
         } else {
             PlayDisc(isPlaying, isLoading, filled = style == TransportStyle.BUTTON, size = if (compact) 64.dp else 78.dp) { pc.togglePlay() }
         }
-        if (episode) SkipGlyph(EPISODE_AHEAD_S, ahead = true, touch = 53.dp) { pc.seekBy(EPISODE_AHEAD_S * 1000L) }
-        else TransportGlyph(nextIcon, tr(R.string.widget_next), skip, 53.dp, if (style == TransportStyle.GLYPHS) 0.85f else 1f, nextEnabled, onHold = ahead) { pc.next() }
+        if (skips) {
+            if (episode) SkipGlyph(EPISODE_AHEAD_S, ahead = true, touch = 53.dp) { pc.seekBy(EPISODE_AHEAD_S * 1000L) }
+            else TransportGlyph(nextIcon, tr(R.string.widget_next), skip, 53.dp, if (style == TransportStyle.GLYPHS) 0.85f else 1f, nextEnabled, onHold = ahead) { pc.next() }
+        }
         if (modes) ModeGlyph(
             PrismIcons.Repeat,
             when (repeat) { Player.REPEAT_MODE_ALL -> tr(R.string.repeat_all); Player.REPEAT_MODE_ONE -> tr(R.string.repeat_one); else -> tr(R.string.repeat_off) },
@@ -1103,8 +1111,9 @@ fun OutputCaption() {
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
         )
-        // The cast mark says the line opens speakers and TVs (Reddit 1.7: "where's the cast button?"); it can go (#149).
-        if (!away && settings.view.castMark) {
+        // The cast mark says the line opens speakers and TVs (Reddit 1.7: "where's the cast button?"). 1.8.0: no longer a
+        // choice of its own (#149's switch is gone): the line itself can be hidden in What's on the player.
+        if (!away) {
             Spacer(Modifier.width(7.dp))
             Icon(PrismIcons.Cast, tr(R.string.play_on_a_speaker_or_tv), Modifier.size(14.dp), tint = Color.White.copy(alpha = 0.62f))
         }
