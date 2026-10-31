@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -251,7 +252,7 @@ fun PrismAccountScreen(onboarding: Boolean, bottomPadding: Dp, onDone: () -> Uni
             )
             Spacer(Modifier.height(22.dp))
             val changed = profile == null || name.trim() != profile?.name
-            PrismButton({ save() }, Modifier.fillMaxWidth().height(52.dp), enabled = changed || pendingPicture != null || pendingAvatar != null) {
+            PrismButton({ save() }, Modifier.fillMaxWidth().heightIn(min = 52.dp), enabled = changed || pendingPicture != null || pendingAvatar != null) {
                 Text(if (profile == null) tr(R.string.make_my_account) else tr(R.string.save))
             }
             if (onboarding) PrismTextButton(onDone, Modifier.fillMaxWidth().padding(top = 4.dp)) { Text(tr(R.string.skip_for_now)) }

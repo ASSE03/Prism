@@ -10,6 +10,12 @@ What changed in each release. Older releases are described on the [Releases page
   TV app Prism asks for them "The page needs to be reloaded" for most songs, so they came from the web app, whose
   links stop after the first megabyte. Prism now asks the way yt-dlp does for signed-in users (the older TV app as a
   Samsung TV, then YouTube's embedded player), and asks the older TV app twice before giving up on it.
+- **New listeners with large text couldn't get past the welcome screen**: with a large font or display size its list
+  pushed the buttons off the bottom, and the page didn't scroll. It scrolls now, opens on its buttons when it doesn't
+  fit, and the buttons grow with their words instead of cutting them off.
+- **A cleared or edited queue could come back after a restart**: the queue was only saved when the song changed, on
+  play / pause, shuffle or repeat, and the last save as Prism closed could be dropped. Every change to what's lined up is
+  kept now, and the last save always lands.
 - **Speed dial's last page could hold a single tile** (#267): its pages are whole now.
 - **Tab icons were a little smaller with labels "Selected"** (#272): they're the same size in every label style.
 - **The docked tab bar bent what was behind it** (#273): with Liquid Glass on, the flat docked bar worked like a lens,

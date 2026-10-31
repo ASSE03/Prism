@@ -482,7 +482,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private fun inForeground(): Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.Q || foregroundServiceType != 0
 
     override fun onTaskRemoved(rootIntent: Intent?) {
-        saveQueue()
+        saveQueue(now = true)
         // Settings → Playback → "Stop when swiped away" (#45): closing Prism from Recents ends the music too (some
         // phones, Samsung's among them, otherwise keep it playing with no app on screen).
         if (c.settings.current.stopOnSwipeAway) {
@@ -499,7 +499,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         PlaybackServices.failForTest = null
         flushPlayTime()
         saveEpisodePosition()
-        saveQueue()
+        saveQueue(now = true)
         player.currentMediaItem?.toSong()?.let { song ->
             com.prism.music.widget.Widgets.update(this, song, false, song.id in c.library.likedIds.value, player.currentPosition, player.duration.takeIf { it > 0 })
         }
@@ -753,7 +753,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         setNotificationClosed(true)
         flushPlayTime()
         saveEpisodePosition()
-        saveQueue()
+        saveQueue(now = true)
         pauseAllPlayersAndStopSelf()
     }
 
@@ -785,6 +785,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      */
     override fun onTimelineChanged(timeline: androidx.media3.common.Timeline, reason: Int) {
         if (reason != Player.TIMELINE_CHANGE_REASON_PLAYLIST_CHANGED) return
+        // What's lined up changed (songs added, moved, removed, the queue emptied): kept for the next start. It was only
+        // saved on a song change, play / pause, shuffle or repeat, so an emptied or edited queue could come back as it was.
+        scheduleSave()
         val i = player.nextMediaItemIndex
         val next = if (i == C.INDEX_UNSET) null else player.getMediaItemAt(i).mediaId
         if (next != null && next != warmedNext && player.currentMediaItem != null) prefetchNext()
@@ -1967,7 +1970,13 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         saveJob = scope.launch { delay(2000); saveQueue() }
     }
 
-    private fun saveQueue() {
+    /**
+     * Writes what's lined up to queue.json. [now]: on this thread, for the last save as the service ends (1.7.9.3: it
+     * went through [scope], which onDestroy cancels right after, so the final save could be dropped and the queue from
+     * before came back; the in-app test PlaybackModesTest failed on it about every other run). Other saves go through
+     * one writer, in order, and every write goes to a temporary file first, then takes the real one's place.
+     */
+    private fun saveQueue(now: Boolean = false) {
         if (!::player.isInitialized) return
         val songs = (0 until player.mediaItemCount).mapNotNull { player.getMediaItemAt(it).toSong() }
         // The play order while shuffled, walked from its first song (only when every item made it into the list).
@@ -1980,7 +1989,17 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             shuffle = player.shuffleModeEnabled, shuffleOrder = order, repeat = player.repeatMode,
         )
         val text = InnerTube.json.encodeToString(SavedQueue.serializer(), q)
-        scope.launch(Dispatchers.IO) { runCatching { queueFile.writeText(text) } }
+        if (now) writeQueue(text) else scope.launch(queueWriter) { writeQueue(text) }
+    }
+
+    private val queueWriter = Dispatchers.IO.limitedParallelism(1)
+
+    @Synchronized private fun writeQueue(text: String) {
+        runCatching {
+            val tmp = File(filesDir, "queue.json.tmp")
+            tmp.writeText(text)
+            if (!tmp.renameTo(queueFile)) { queueFile.writeText(text); tmp.delete() }
+        }
     }
 
     private fun restoreQueue() {

@@ -64,6 +64,9 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.ui.platform.testTag
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -432,9 +435,14 @@ fun WelcomeScreen(onSignIn: () -> Unit, onAccount: () -> Unit, onSkip: () -> Uni
             }
             drawRect(Brush.verticalGradient(listOf(Color.Transparent, Color(0xFF07060C)), startY = size.height * 0.35f))
         }
-        // A phone's width in the middle on a tablet, rather than buttons stretched across the screen.
+        // A phone's width in the middle on a tablet, rather than buttons stretched across the screen. It scrolls: with
+        // large text or display size the list pushed the buttons off the bottom and new listeners couldn't go on (1.7.9.3,
+        // owner's report). When it doesn't fit, it opens scrolled to the buttons; the rest is a swipe up.
+        val scroll = androidx.compose.foundation.rememberScrollState()
+        LaunchedEffect(scroll.maxValue) { if (scroll.maxValue > 0 && scroll.value == 0) scroll.scrollTo(scroll.maxValue) }
+        androidx.compose.foundation.layout.BoxWithConstraints(Modifier.align(Alignment.TopCenter).widthIn(max = 480.dp).fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
         Column(
-            Modifier.align(Alignment.TopCenter).widthIn(max = 480.dp).fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(28.dp),
+            Modifier.fillMaxWidth().verticalScroll(scroll).heightIn(min = maxHeight).padding(28.dp).testTag("welcome"),
             verticalArrangement = Arrangement.Bottom,
         ) {
             Text(tr(R.string.app_name), color = Color.White, style = MaterialTheme.typography.displayLarge)
@@ -448,21 +456,22 @@ fun WelcomeScreen(onSignIn: () -> Unit, onAccount: () -> Unit, onSkip: () -> Uni
             Feature(PrismIcons.Replay, tr(R.string.rewind_your_year_in_music))
             Spacer(Modifier.height(32.dp))
             // A Prism Account first: it's all on this phone, no sign-in anywhere. Google's for the YouTube Music library.
-            PrismButton(onClick = onAccount, Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(18.dp)) {
-                Text(tr(R.string.make_a_prism_account), style = MaterialTheme.typography.titleMedium)
+            PrismButton(onClick = onAccount, Modifier.fillMaxWidth().heightIn(min = 56.dp), shape = RoundedCornerShape(18.dp)) {
+                Text(tr(R.string.make_a_prism_account), style = MaterialTheme.typography.titleMedium, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
             }
             Text(
                 tr(R.string.kept_on_this_phone_no_email),
                 color = Color.White.copy(alpha = 0.62f), style = MaterialTheme.typography.bodySmall,
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
             )
-            com.prism.music.ui.components.PrismOutlinedButton(onClick = onSignIn, Modifier.fillMaxWidth().padding(top = 12.dp).height(52.dp), shape = RoundedCornerShape(18.dp)) {
-                Text(tr(R.string.sign_in_with_google), color = Color.White)
+            com.prism.music.ui.components.PrismOutlinedButton(onClick = onSignIn, Modifier.fillMaxWidth().padding(top = 12.dp).heightIn(min = 52.dp), shape = RoundedCornerShape(18.dp)) {
+                Text(tr(R.string.sign_in_with_google), color = Color.White, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
             }
             PrismTextButton(onClick = onSkip, Modifier.fillMaxWidth().padding(top = 4.dp)) {
                 Text(tr(R.string.skip_for_now), color = Color.White.copy(alpha = 0.8f))
             }
             WelcomeRestoreButton()
+        }
         }
     }
 }
