@@ -1834,59 +1834,21 @@ private fun SoundPage() {
     LaunchedEffect(s.losslessLocal) { if (s.losslessLocal && found < 0) c.losslessSync.sync() }
 
     Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
-        Group(tr(R.string.playback)) {
-            Toggle(tr(R.string.autoplay), tr(R.string.similar_music_when_the_queue_ends), s.autoplay) { prefs.setAutoplay(it) }
-            if (s.autoplay) {
-                Label(
-                    tr(R.string.autoplay_from),
-                    info = s.autoplaySource.label + ": " + when (s.autoplaySource) {
-                        com.prism.music.data.prefs.AutoplaySource.YOURS -> tr(R.string.prism_s_own_radio_picked_on)
-                        com.prism.music.data.prefs.AutoplaySource.YOUTUBE -> tr(R.string.prism_music_s_radio_for_songs)
-                        com.prism.music.data.prefs.AutoplaySource.MIXED -> tr(R.string.mostly_your_music_with_two_new)
-                    } + tr(R.string.offline_it_s_always_your_music),
-                )
-                Chips(com.prism.music.data.prefs.AutoplaySource.entries, s.autoplaySource, { it.label }) { prefs.setAutoplaySource(it) }
-            }
-            Toggle(
-                tr(R.string.songs_not_videos), tr(R.string.autoplay_and_radios_play_songs), s.radioSongsOnly,
-                info = tr(R.string.a_music_video_in_autoplay_or),
-            ) { prefs.setRadioSongsOnly(it) }
-            // #80: the same everywhere else music videos turn up.
-            if (s.radioSongsOnly) Toggle(
-                tr(R.string.everywhere), tr(R.string.videos_everywhere_play_as_their_song), s.songsEverywhere,
-                info = tr(R.string.music_videos_in_search_albums_playlists),
-            ) { prefs.setSongsEverywhere(it) }
+        // 1.8.0 (#210): one choice per decision. Each choice is a face over the settings Prism already keeps
+        // (autoplay + its source, radioSongsOnly + songsEverywhere, mix + mixAuto), so nothing is migrated and Looks,
+        // backups and old builds read them as before ([SoundChoices]).
+        Group(tr(R.string.what_plays_next)) {
+            Label(tr(R.string.when_the_queue_ends), info = tr(R.string.when_the_queue_ends_info))
+            Chips(QueueEnd.entries, SoundChoices.queueEnd(s), { it.label }) { SoundChoices.setQueueEnd(prefs, it) }
+            Label(tr(R.string.music_videos_label), info = tr(R.string.music_videos_label_info))
+            Chips(VideoPolicy.entries, SoundChoices.videoPolicy(s), { it.label }) { SoundChoices.setVideoPolicy(prefs, it) }
             Toggle(tr(R.string.keep_playing_videos), tr(R.string.after_a_video_the_next_song), s.videoContinues) { prefs.setVideoContinues(it) }
-            Toggle(tr(R.string.skip_silence), tr(R.string.trims_silence_in_songs), s.skipSilence) { prefs.setSkipSilence(it) }
-            Toggle(
-                tr(R.string.skip_silence_in_podcasts), tr(R.string.trims_pauses_in_episodes), s.sound.skipSilenceEpisodes,
-                info = tr(R.string.podcasts_have_their_own_switch_trimming),
-            ) { prefs.setSkipSilenceEpisodes(it) }
-            Toggle(tr(R.string.stop_when_swiped_away), tr(R.string.swiping_prism_out_of_recent_apps), s.stopOnSwipeAway) { prefs.setStopOnSwipeAway(it) }
-            Toggle(
-                tr(R.string.pause_when_muted), tr(R.string.volume_all_the_way_down_pauses), s.behavior.pauseOnMute,
-                info = tr(R.string.only_the_phone_s_media_volume),
-            ) { prefs.setPauseOnMute(it) }
-            Label(
-                tr(R.string.load_ahead),
-                info = when (s.preload) {
-                    com.prism.music.data.prefs.Preload.START -> tr(R.string.now_the_next_song_s_start)
-                    else -> tr(R.string.now_whole_songs_so_they_play)
-                },
-            )
-            Chips(com.prism.music.data.prefs.Preload.entries, s.preload, { it.label }) { prefs.setPreload(it) }
         }
         Group(tr(R.string.crossfade)) {
-            Toggle(
-                tr(R.string.crossfade_songs), tr(R.string.each_song_fades_into_the_next), s.mix,
-                info = tr(R.string.as_a_song_ends_it_fades),
-            ) { prefs.setMix(it) }
+            Label(tr(R.string.crossfade), info = tr(R.string.crossfade_choice_info))
+            Chips(Crossfade.entries, SoundChoices.crossfade(s), { it.label }) { SoundChoices.setCrossfade(prefs, it) }
+            if (s.mix && !s.mixAuto) SliderSetting(tr(R.string.length), s.mixSeconds.toFloat(), 1f..12f, { "${it.roundToInt()} s" }, steps = 10) { prefs.setMixSeconds(it.roundToInt()) }
             if (s.mix) {
-                Toggle(
-                    tr(R.string.automatic_length), tr(R.string.fitted_to_how_songs_end_and), s.mixAuto,
-                    info = tr(R.string.prism_listens_to_how_each_song),
-                ) { prefs.setMixAuto(it) }
-                if (!s.mixAuto) SliderSetting(tr(R.string.length), s.mixSeconds.toFloat(), 1f..12f, { "${it.roundToInt()} s" }, steps = 10) { prefs.setMixSeconds(it.roundToInt()) }
                 Toggle(
                     tr(R.string.match_tempo_and_beats_dj_style), tr(R.string.beats_line_up_while_songs_overlap), s.mixBeatMatch,
                     info = tr(R.string.the_next_song_plays_at_the),
@@ -1896,16 +1858,8 @@ private fun SoundPage() {
                     tr(R.string.keep_an_album_s_songs_whole), tr(R.string.no_crossfade_between_songs_of_one_album), s.mixKeepAlbums,
                     info = tr(R.string.an_album_playing_through_never_blends),
                 ) { prefs.setMixKeepAlbums(it) }
-                CrossfadeCurveCards()
-                Toggle(
-                    tr(R.string.crossfade_mark), tr(R.string.where_the_next_song_comes_in), s.view.crossfadeMark,
-                    info = tr(R.string.a_small_mark_on_the_player),
-                ) { prefs.setCrossfadeMark(it) }
-                Toggle(
-                    tr(R.string.covers_blend_too), tr(R.string.the_cover_dissolves_into_the_next), s.view.blendCovers,
-                    info = tr(R.string.while_a_crossfade_plays_the_player),
-                ) { prefs.setBlendCovers(it) }
             }
+            // The crossfade mark and blended covers are on the player now: Player → What's on the player.
         }
         Group(tr(R.string.speed_pitch_and_fades)) { SpeedAndFades() }
         Group(tr(R.string.quality)) {
@@ -1935,7 +1889,8 @@ private fun SoundPage() {
                 else Item(tr(R.string.allow_access_to_lossless_files), null, onClick = { askFiles.launch(LocalLossless.permission) })
                 // Data saver plays songs at this quality on mobile data, lossless or not (#40).
                 if (s.dataSaver) {
-                    Label(tr(R.string.streaming_quality_on_mobile_data_data))
+                    // 1.8.0: the same row name as without lossless (it is the same setting, cellularQuality).
+                    Label(tr(R.string.streaming_quality_on_mobile_data))
                     Chips(AudioQuality.entries.filter { it != AudioQuality.HIGH }, s.cellularQuality.takeIf { it != AudioQuality.HIGH } ?: AudioQuality.NORMAL, { it.label }) { prefs.setCellularQuality(it) }
                 }
             } else {
@@ -1954,12 +1909,21 @@ private fun SoundPage() {
             Spacer(Modifier.height(6.dp))
         }
         Group(tr(R.string.sound)) {
-            Toggle(
-                tr(R.string.normalize_volume), tr(R.string.every_song_at_the_same_loudness), s.normalize,
-                info = tr(R.string.each_song_is_measured_on_your),
-            ) { prefs.setNormalize(it) }
-            if (s.normalize) NormalizeLevel()
+            // Normalize's switch and its level are one choice: Off, or how loud (#210).
+            NormalizeLevel()
+            Label(tr(R.string.trim_silence), info = tr(R.string.trim_silence_info))
+            Chips(TrimSilence.entries, SoundChoices.trimSilence(s), { it.label }) { SoundChoices.setTrimSilence(prefs, it) }
             SoundSettings(onOpenEq = { nav.go(Routes.EQ) })
+        }
+        MoreOptions(listOf(tr(R.string.stopping_and_pausing), tr(R.string.how_they_cross))) {
+            Group(tr(R.string.stopping_and_pausing)) {
+                Toggle(tr(R.string.stop_when_swiped_away), tr(R.string.swiping_prism_out_of_recent_apps), s.stopOnSwipeAway) { prefs.setStopOnSwipeAway(it) }
+                Toggle(
+                    tr(R.string.pause_when_muted), tr(R.string.volume_all_the_way_down_pauses), s.behavior.pauseOnMute,
+                    info = tr(R.string.only_the_phone_s_media_volume),
+                ) { prefs.setPauseOnMute(it) }
+            }
+            Group(tr(R.string.how_they_cross)) { CrossfadeCurveCards() }
         }
     }
 }
@@ -2297,6 +2261,17 @@ private fun DownloadSettings() {
                 if (it) c.downloads.saveCanvases()
             }
             CanvasStorage()
+        }
+        // How much of the next songs is loaded ahead (1.8.0: from Playback & sound; it's about data and buffering).
+        Group(tr(R.string.load_ahead)) {
+            Label(
+                tr(R.string.load_ahead),
+                info = when (s.preload) {
+                    com.prism.music.data.prefs.Preload.START -> tr(R.string.now_the_next_song_s_start)
+                    else -> tr(R.string.now_whole_songs_so_they_play)
+                },
+            )
+            Chips(com.prism.music.data.prefs.Preload.entries, s.preload, { it.label }) { prefs.setPreload(it) }
         }
         // Every "on mobile data" choice in one place (1.7.6; they were spread over six pages). Each shows while the
         // thing it's about is on. Streaming quality on mobile data stays with the other qualities in Playback & sound.
