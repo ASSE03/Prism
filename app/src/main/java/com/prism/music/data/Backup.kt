@@ -210,7 +210,7 @@ class Backup(private val c: AppContainer) {
                 .forEach { put(it, BackupPart.LIBRARY) }
             listOf(
                 "dislikes", "exclusions", "for_you", "for_you_feedback", "release_radar", "search", "episode_progress", "episode_played", "best_part_mine",
-                "mix_tempo", "song_loudness", "song_key", "dj_quick", "loudness", "lyric_offsets", "lyrics_choice", "lyrics_search_as",
+                "mix_tempo", "song_loudness", "song_peak", "song_key", "dj_quick", "loudness", "lyric_offsets", "lyrics_choice", "lyrics_search_as",
                 "romanize_songs", "video_sync", "local_album_tags", "local_lengths", "local_no_art",
             ).forEach { put(it, BackupPart.HISTORY) }
             listOf(

@@ -373,7 +373,7 @@ class MixEngine(
         // measured, not at all (the song ends as usual).
         if (handoverMs == 0L) {
             handoverMs = when {
-                d == null || !t.isPlaying || abs(d) > 250 -> {
+                outOfStep(d, t.isPlaying, p.beats) -> {
                     // Usually the tail stopped for a moment to load (a slow connection) and fell behind after it was put in
                     // step. Rather than no crossfade at all, the blend is put off a little (it ends where it would have),
                     // the tail shifted, and measured again.
@@ -403,7 +403,8 @@ class MixEngine(
                         return abort("out of step")
                     }
                 }
-                abs(d) > 45 -> LONG_HANDOVER_MS
+                // (Measured: [outOfStep] says so otherwise.)
+                abs(d ?: 0L) > IN_STEP_DOUBLING_MS -> LONG_HANDOVER_MS
                 else -> HANDOVER_MS
             }
         }
@@ -491,7 +492,7 @@ class MixEngine(
     /**
      * Beats: the next song started a little late (it had to load), so its beats are off the ending song's. Only the
      * beat matters, not which one, so the gap is taken modulo a beat. It's measured over a window (each player at its
-     * freshest reading, as in [syncing]); a big gap is closed by a seek while the next song is still barely audible,
+     * freshest reading, as in [syncing]); a big gap is closed by a seek on ([beatSeekMs]) while the next song is still barely audible,
      * a small one by playing it a few percent faster or slower for exactly as long as that takes, without steering by
      * the reported position meanwhile (it glides for a while after a speed change).
      */
@@ -519,7 +520,7 @@ class MixEngine(
         when {
             abs(err) <= BEATS_IN_STEP_MS -> syncActionAt = now
             abs(err) > 60 && progress < 0.2f -> {
-                main.seekTo(main.currentPosition - err)
+                main.seekTo(beatSeekMs(main.currentPosition, mainLead + (dt * p.ratio).toLong(), err, p.beatMs))
                 syncActionAt = now
             }
             else -> {
@@ -607,6 +608,30 @@ class MixEngine(
             val by = if (beatMs > 0) (kotlin.math.ceil(POSTPONE_MS / beatMs) * beatMs).toLong() else POSTPONE_MS
             return if (lengthMs - by >= MIN_POSTPONED_MS) by else 0
         }
+
+        /**
+         * Where the next song is moved to bring its beats [err] ms off the ending song's back in line, [beatMs] apart:
+         * [reportedMs] is its reported position, [heardMs] where it really is by the freshest readings (neither is ever
+         * ahead of the sound). #210: only ever on, never back. Back by [err] lines the beats up, and so does on by a beat
+         * less [err]; the move back played again what had just been heard (half a beat, and more from a stale reported
+         * position), heard as a repeat in a tempo-matched crossfade.
+         */
+        fun beatSeekMs(reportedMs: Long, heardMs: Long, err: Long, beatMs: Double): Long {
+            val on = ((-err % beatMs) + beatMs) % beatMs
+            return maxOf(reportedMs, heardMs) + Math.round(on)
+        }
+
+        /**
+         * At the hand-over, the tail [d] ms ahead of the main player (null: not measured) is too far out of step to cross
+         * over to: the blend is put off and the tail set right, or there's no blend. #210: with the beats matched, a tail
+         * more than [IN_STEP_DOUBLING_MS] behind counts too: the slow cross-over to it played that much of the ending
+         * song again, heard as a repeat. (Ahead, the cross-over skips a moment instead; a plain crossfade keeps it.)
+         */
+        fun outOfStep(d: Long?, tailPlaying: Boolean, beats: Boolean): Boolean =
+            d == null || !tailPlaying || abs(d) > 250 || (beats && d < -IN_STEP_DOUBLING_MS)
+
+        /** Two copies of the song this close are heard as one (the quick cross-over's limit). */
+        private const val IN_STEP_DOUBLING_MS = 45L
 
         private const val POSTPONE_MS = 2000L
         private const val MAX_POSTPONES = 2

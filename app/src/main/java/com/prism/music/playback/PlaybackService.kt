@@ -94,6 +94,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     /** Sing: the song's vocals taken out as it plays (first, on the music as it came from the decoder). */
     private val vocals by lazy { com.prism.music.playback.sing.VocalStemProcessor(c.sing) }
     private val headphoneEq = ParametricEqProcessor()
+    /** Skip silence for songs: their start and end only (#210); episodes keep Media3's skipper. */
+    private val edges = EdgeSilenceProcessor()
     private val spatial = SpatialAudioProcessor()
     /** "Pause when muted" (#157). */
     private val muteWatch by lazy { MuteWatch(this, player) { c.settings.current.behavior.pauseOnMute } }
@@ -155,8 +157,14 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                     .setEnableFloatOutput(enableFloatOutput || c.settings.current.lossless)
                     .setEnableAudioTrackPlaybackParams(enableAudioTrackPlaybackParams)
                     // The visualizer's tap last (1.7.4): what you hear; it passes the sound through untouched and
-                    // only copies it while a visualizer is on screen.
-                    .setAudioProcessors(arrayOf(vocals, headphoneEq, spatial, normalizer, androidx.media3.exoplayer.audio.TeeAudioProcessor(VisualizerTap)))
+                    // only copies it while a visualizer is on screen. Songs' silence is trimmed after Sing (which
+                    // counts the song's own frames) and before the effects, through a chain that tells the player what
+                    // was left out (#210).
+                    .setAudioProcessorChain(
+                        EdgeSilenceProcessor.Chain(
+                            edges, arrayOf(vocals, edges, headphoneEq, spatial, normalizer, androidx.media3.exoplayer.audio.TeeAudioProcessor(VisualizerTap)),
+                        )
+                    )
                     .build()
 
             override fun buildAudioRenderers(
@@ -208,7 +216,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         player.addListener(this)
         player.addAnalyticsListener(StatsListener())
         player.addAnalyticsListener(DiagnosticsListener())
-        player.skipSilenceEnabled = c.settings.current.skipSilence
+        applySkipSilence()
 
         sessionPlayer = LyricsOverlayPlayer(player)
         carLyrics = CarLyrics(this, c, player, sessionPlayer, scope)
@@ -662,10 +670,14 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         return pitch
     }
 
-    /** Skip silence for what's playing: songs and podcast episodes each have their own switch (1.7.8, A4). */
+    /**
+     * Skip silence for what's playing: songs and podcast episodes each have their own switch (1.7.8, A4). Songs only
+     * lose the silence at their start and end ([edges], #210); an episode's pauses are shortened too (Media3's skipper).
+     */
     private fun applySkipSilence() {
         val s = c.settings.current
-        val on = if (player.currentMediaItem?.toSong()?.isEpisode == true) s.sound.skipSilenceEpisodes else s.skipSilence
+        edges.enabled = s.skipSilence
+        val on = player.currentMediaItem?.toSong()?.isEpisode == true && s.sound.skipSilenceEpisodes
         if (player.skipSilenceEnabled != on) player.skipSilenceEnabled = on
     }
 
@@ -836,6 +848,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
         vocals.shuffle = shuffleModeEnabled
+        edges.shuffle = shuffleModeEnabled
         // Shuffle and DJ mode both decide the order: the listener's shuffle wins.
         if (shuffleModeEnabled && c.dj.onNow) c.dj.setOn(false)
         // Shuffle off (from anywhere: the notification, the car) is Smart Shuffle off too.
@@ -848,6 +861,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     override fun onRepeatModeChanged(repeatMode: Int) {
         vocals.repeatMode = repeatMode
+        edges.repeatMode = repeatMode
         updateButtons()
         scheduleSave()
     }
@@ -1027,8 +1041,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     /**
      * Normalization gain for the current song: YouTube's loudness figure says how far the track
-     * sits from its reference level, so loud songs come down and quiet ones go up (by up to 6 dB;
-     * the limiter in [NormalizerProcessor] keeps those from clipping).
+     * sits from its reference level, so loud songs come down and quiet ones go up (as far as their
+     * peaks allow, [NormalizerProcessor.gainFor]; the limiter keeps those from clipping).
      */
     /** The normalization gain now applied (the ending song's, when a Mix blend's tail takes it over). */
     private var normalizeGainDb = 0f
@@ -1043,13 +1057,15 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      * "Albums as they are" (A2): while an album plays through, every song gets the same gain, set by the loudest of its
      * songs measured so far, so a quiet interlude stays quiet next to the single. Null otherwise.
      */
-    private fun albumLoudness(): Float? {
+    private fun albumLoudness(): Pair<Float, Float?>? {
         if (!c.settings.current.sound.normalizeAlbums || c.queue.source.value.kind != QueueKind.ALBUM) return null
         val album = trackedSong?.album?.id ?: return null
-        return (0 until player.mediaItemCount).mapNotNull { i ->
-            val item = player.getMediaItemAt(i)
-            if (item.toSong()?.album?.id == album) c.mixTempo.loudness(item.mediaId) else null
-        }.maxOrNull()
+        val songs = (0 until player.mediaItemCount).map { player.getMediaItemAt(it) }.filter { it.toSong()?.album?.id == album }
+            .filter { c.mixTempo.loudness(it.mediaId) != null }
+        val loudest = songs.maxOfOrNull { c.mixTempo.loudness(it.mediaId)!! } ?: return null
+        // The album's highest peak bounds how far all of it can be lifted (unknown while any song's is).
+        val peaks = songs.map { c.mixTempo.peak(it.mediaId) }
+        return loudest to (if (null in peaks) null else peaks.maxOf { it!! })
     }
 
     private fun applyNormalization() {
@@ -1063,9 +1079,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val album = albumLoudness()
         val gain = when {
             !c.settings.current.normalize -> 0f
-            album != null -> (target - album).coerceIn(-12f, 6f)
-            measured != null -> (target - measured).coerceIn(-12f, 6f)
-            yt != null -> (-yt + (target - TARGET_LUFS)).coerceIn(-12f, 6f)
+            album != null -> NormalizerProcessor.gainFor(target, album.first, album.second)
+            measured != null -> NormalizerProcessor.gainFor(target, measured, trackedSong?.id?.let { c.mixTempo.peak(it) })
+            yt != null -> NormalizerProcessor.gainFor(target, TARGET_LUFS + yt)
             else -> 0f
         }
         // Once the song is under way, a better figure eases in over two seconds, and a small one isn't worth a change
@@ -1118,7 +1134,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             // Crossfade needs it, near its end).
             // With the waveform bar, the playing song goes first: its bar is waiting for it.
             for (song in songs.sortedBy { if (wave) it.id != playing else it.id == playing }) {
-                c.mixTempo.measure(song.id, network, edges, wave = wave)
+                c.mixTempo.measure(song.id, network, edges, wave = wave, peak = s.normalize)
                 // Measured while it's just begun: its own figure takes over (later in the song, a jump would be heard).
                 if (trackedSong?.id == song.id && settling()) applyNormalization()
             }
