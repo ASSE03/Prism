@@ -177,10 +177,13 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
         TEXT -> listOf("font_choice", "lyrics_font", "text_scale", "type_weight", "type_spacing", "title_font")
         ICONS -> listOf(
             "corners", "corner_scale", "cover_shape_songs", "cover_shape_albums", "cover_shape_artists", "cover_shape_player",
-            "button_shape", "play_outlined", "tab_icon_tint",
+            "button_shape", "play_outlined",
         )
-        GLASS -> listOf("liquid_glass", "glass_kind", "frosted_glass", "frosted_pages", "backdrops", "backdrop_dim", "backdrop_motion", "reduce_motion")
+        // 1.8.0: Reduce motion is on the Customize Prism page now (MotionGroup), so this page's reset leaves it.
+        GLASS -> listOf("liquid_glass", "glass_kind", "frosted_glass", "frosted_pages", "backdrops", "backdrop_dim", "backdrop_motion")
         INTERFACE -> listOf(
+            // 1.8.0: the tab you're on's tint is with the tab bar now (from Icons & shapes).
+            "tab_icon_tint",
             "nav_style", "nav_labels", "nav_hide_on_scroll", "nav_tabs", "start_tab", "mini_player_style", "mini_skip_buttons",
             "mini_prev_button", "mini_progress", "mini_progress_color", "mini_fill_strength", "ui_density", "title_size", "card_size", "hide_status_bar", "hide_status_bar_player",
             "tab_names", "nav_bar_size", "nav_bar_fill", "mini_player_joined",
@@ -191,7 +194,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
             "show_output_device", "immersive_art", "immersive_lyrics", "immersive_controls", "player_handle", "player_nav_band", "play_ring",
         )
         LYRICS_LOOK -> listOf(
-            "lyrics_align", "lyrics_scale", "lyrics_blur", "lyrics_progress_line", "lyrics_source_button", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",
+            "lyrics_align", "lyrics_scale", "lyrics_blur", "lyrics_progress_line", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",
             "lyrics_others_alpha", "lyrics_sung_color", "lyrics_sung_custom", "lyrics_other_color", "lyrics_other_custom", "lyrics_weight",
             "lyrics_backing_size", "lyrics_shadow", "lyrics_uppercase", "lyrics_ahead", "lyrics_position", "lyrics_extra_size", "lyrics_extra_color",
             "lyrics_extra_italic", "lyrics_extra_place", "lyrics_background", "immersive_background", "lyrics_bg_color", "lyrics_bg_color2", "lyrics_everywhere",
@@ -1004,18 +1007,7 @@ private fun IconSettings() {
                 icons.forEach { Icon(it, null, Modifier.size(22.dp), tint = MaterialTheme.colorScheme.onSurface) }
             }
         }
-        Label(tr(R.string.the_tab_you_re_on))
-        ChoiceCards(
-            com.prism.music.data.prefs.TabTint.entries, s.shapes.tabTint, title = { it.label }, detail = { null }, columns = 3,
-            onSelect = { prefs.setTabTint(it) },
-        ) { t ->
-            Box(Modifier.fillMaxWidth().padding(10.dp), contentAlignment = Alignment.Center) {
-                Icon(
-                    com.prism.music.ui.theme.PrismIcons.HomeFilled, null,
-                    Modifier.size(26.dp).tabTint(t),
-                )
-            }
-        }
+        // "The tab you're on" is with the tab bar now (1.8.0: NavBarGroup).
         // Packs (1.7.7 adds Facet and Dots): each card draws the same four icons in its pack.
         Label(tr(R.string.pack))
         ChoiceCards(
@@ -1210,6 +1202,11 @@ private fun CoverShapeGroup() {
             com.prism.music.data.prefs.CoverShape.entries, now, title = { it.label }, detail = { null }, columns = 4,
             onSelect = { prefs.setCoverShape(which, it) },
         ) { shape -> CoverShapeSample(shape, round = which == "artists") }
+        // 1.8.0 (from Player → Cover): it squares video pictures everywhere, not only on the player (#92).
+        Toggle(
+            tr(R.string.square_video_covers), tr(R.string.no_black_bars_when_a_video), s.squareVideoCovers,
+            info = tr(R.string.youtube_s_video_pictures_are_wide),
+        ) { prefs.setSquareVideoCovers(it) }
     }
 }
 
@@ -1338,6 +1335,16 @@ private fun NavBarGroup() {
         Chips(com.prism.music.data.prefs.NavBarSize.entries, s.navBarSize, { it.label }) { prefs.setNavBarSize(it) }
         Label(tr(R.string.background), info = tr(R.string.see_through_lets_the_page_show))
         Chips(com.prism.music.data.prefs.NavBarFill.entries, s.navBarFill, { it.label }) { prefs.setNavBarFill(it) }
+        // 1.8.0: from Icons & shapes (it's how the tab bar marks where you are).
+        Label(tr(R.string.the_tab_you_re_on))
+        ChoiceCards(
+            com.prism.music.data.prefs.TabTint.entries, s.shapes.tabTint, title = { it.label }, detail = { null }, columns = 3,
+            onSelect = { prefs.setTabTint(it) },
+        ) { t ->
+            Box(Modifier.fillMaxWidth().padding(10.dp), contentAlignment = Alignment.Center) {
+                Icon(com.prism.music.ui.theme.PrismIcons.HomeFilled, null, Modifier.size(26.dp).tabTint(t))
+            }
+        }
         Toggle(tr(R.string.shrink_while_scrolling), tr(R.string.slims_down_as_you_scroll), s.navHideOnScroll) { prefs.setNavHideOnScroll(it) }
         Toggle(
             tr(R.string.swipe_between_tabs), tr(R.string.swipe_sideways_on_a_tab_s), s.swipeTabs,
