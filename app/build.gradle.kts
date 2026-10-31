@@ -107,9 +107,25 @@ android {
         buildConfig = true
     }
 
-    // Android 13+ lists Prism's languages (each values-xx folder) in the phone's own per-app language setting.
+    // Android 13+ lists Prism's languages (each values-xx folder) in the phone's own per-app language setting: since
+    // 1.8.0 that list (xml/locales_config) comes from splitTranslations, as the build's own generator only reads src/.
     androidResources {
-        generateLocaleConfig = true
+        // Only Prism's own languages (1.8.0, #268): the libraries bring their few words in ~85, and every one of them
+        // costs ~19 KB of resources.arsc (which Android needs stored uncompressed) even where Prism shows English.
+        // A region is only kept when named (the libraries' own regional words for Prism's languages too).
+        localeFilters += listOf(
+            "en", "en-rGB", "en-rAU", "en-rCA", "en-rIN", "es", "es-rUS", "pt", "pt-rBR", "pt-rPT", "fr", "fr-rCA", "de",
+            "it", "nl", "sv", "pl", "cs", "ro", "hu", "el", "ru", "uk", "tr", "ar", "fa", "iw", "hi", "bn", "ur", "in",
+            "ms", "vi", "th", "fil", "tl", "ja", "ko", "zh", "zh-rCN", "zh-rTW", "zh-rHK",
+        )
+    }
+
+    // res/ reaches the build through splitTranslations (below), which keeps the translations out of resources.arsc.
+    sourceSets.getByName("main").res.directories.clear()
+
+    // The translations' MissingTranslation would flag every string (they're assets now); TranslationsTest checks them.
+    lint {
+        disable += "MissingTranslation"
     }
 
     testOptions {
@@ -583,6 +599,97 @@ androidComponents {
     onVariants { variant ->
         variant.sources.kotlin?.addGeneratedSourceDirectory(generatePrismIcons, GeneratePrismIcons::outputDir)
         variant.sources.res?.addGeneratedSourceDirectory(generatePrismIcons, GeneratePrismIcons::resDir)
+    }
+}
+
+/**
+ * The translations kept small (1.8.0, #268). Android needs resources.arsc stored uncompressed, and 31 languages' text in
+ * it took 1.7.9's APK from 23 to 33 MB. So res/ goes to the build through this copy, in which each values-xx/strings.xml
+ * keeps only what Android reads itself (the manifest's and widgets' labels, [kept]) and the plurals; every other string
+ * goes into the compressed assets/i18n/<folder> (the strings' XML text in names' order, NUL between them, U+0001 for one
+ * not translated yet), which Strings.kt reads. Each language's resources say which table is theirs (prism_i18n_table),
+ * so Android still picks the language, exactly as it picks a values-xx folder. The files in src/main/res stay as they
+ * are (TranslationsTest, corrections as pull requests).
+ */
+abstract class SplitTranslations : DefaultTask() {
+    @get:InputDirectory @get:PathSensitive(PathSensitivity.RELATIVE) abstract val res: DirectoryProperty
+    @get:InputFile @get:PathSensitive(PathSensitivity.RELATIVE) abstract val manifest: RegularFileProperty
+    /** Strings the code hands to Android by id (Media3's download notification) or that the build names (app_name). */
+    @get:Input abstract val kept: SetProperty<String>
+    @get:OutputDirectory abstract val resDir: DirectoryProperty
+    @get:OutputDirectory abstract val assetsDir: DirectoryProperty
+
+    private fun parse(f: File): org.w3c.dom.Document =
+        javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(f)
+
+    private fun elements(d: org.w3c.dom.Document, tag: String) =
+        d.documentElement.getElementsByTagName(tag).let { l -> (0 until l.length).map { l.item(it) as org.w3c.dom.Element } }
+
+    @TaskAction fun split() {
+        val src = res.get().asFile
+        val outRes = resDir.get().asFile.apply { deleteRecursively(); mkdirs() }
+        val outAssets = assetsDir.get().asFile.apply { deleteRecursively() }.resolve("i18n").apply { mkdirs() }
+        val ref = Regex("@string/(\\w+)")
+        val keep = kept.get().toMutableSet()
+        src.walkTopDown().filter { it.isFile && it.extension == "xml" && !it.parentFile.name.startsWith("values") }
+            .plus(manifest.get().asFile).forEach { f -> ref.findAll(f.readText()).forEach { keep += it.groupValues[1] } }
+
+        val english = elements(parse(File(src, "values/strings.xml")), "string")
+        val names = english.filter { it.getAttribute("translatable") != "false" }.map { it.getAttribute("name") }.filter { it !in keep }
+        outAssets.resolve("names").writeText(names.joinToString("\n"))
+        // English stays in resources.arsc: it's every language's fallback.
+        File(outRes, "values").mkdirs()
+        File(outRes, "values/i18n_table.xml").writeText(
+            "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n" +
+                "    <string name=\"prism_i18n_table\" translatable=\"false\"></string>\n</resources>\n",
+        )
+
+        // The phone's per-app language list (Android 13+): English (resources.properties says which) and every values-xx.
+        val default = File(src, "resources.properties").readLines().first { it.startsWith("unqualifiedResLocale=") }.substringAfter('=')
+        val locales = src.listFiles().orEmpty().filter { File(it, "strings.xml").isFile && it.name.startsWith("values-") }
+            .map { it.name.removePrefix("values-").removePrefix("b+").replace("-r", "-").replace('+', '-') }.sorted()
+        File(outRes, "xml").mkdirs()
+        File(outRes, "xml/locales_config.xml").writeText(
+            "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<locale-config xmlns:android=\"http://schemas.android.com/apk/res/android\"" +
+                " android:defaultLocale=\"$default\">\n" +
+                (listOf(default) + locales).joinToString("") { "    <locale android:name=\"$it\"/>\n" } + "</locale-config>\n",
+        )
+
+        val transformer = javax.xml.transform.TransformerFactory.newInstance().newTransformer()
+        src.walkTopDown().filter { it.isFile && it.parentFile != src }.forEach { f ->
+            val rel = f.relativeTo(src).path
+            val folder = f.parentFile.name
+            if (!(folder.startsWith("values-") && f.name == "strings.xml")) {
+                f.copyTo(File(outRes, rel))
+                return@forEach
+            }
+            val doc = parse(f)
+            val qualifier = folder.removePrefix("values-")
+            val texts = elements(doc, "string").associate { it.getAttribute("name") to it.textContent }
+            outAssets.resolve(qualifier).writeText(names.joinToString("\u0000") { texts[it] ?: "\u0001" })
+            elements(doc, "string").filter { it.getAttribute("name") !in keep }.forEach { it.parentNode.removeChild(it) }
+            doc.documentElement.appendChild(doc.createElement("string").apply {
+                setAttribute("name", "prism_i18n_table")
+                textContent = qualifier
+            })
+            File(outRes, rel).apply { parentFile.mkdirs() }.outputStream().use {
+                transformer.transform(javax.xml.transform.dom.DOMSource(doc), javax.xml.transform.stream.StreamResult(it))
+            }
+        }
+    }
+}
+
+val splitTranslations = tasks.register<SplitTranslations>("splitTranslations") {
+    res.set(layout.projectDirectory.dir("src/main/res"))
+    manifest.set(layout.projectDirectory.file("src/main/AndroidManifest.xml"))
+    kept.set(setOf("app_name", "downloads"))
+    resDir.set(layout.buildDirectory.dir("generated/i18n/res"))
+    assetsDir.set(layout.buildDirectory.dir("generated/i18n/assets"))
+}
+androidComponents {
+    onVariants { variant ->
+        variant.sources.res?.addGeneratedSourceDirectory(splitTranslations, SplitTranslations::resDir)
+        variant.sources.assets?.addGeneratedSourceDirectory(splitTranslations, SplitTranslations::assetsDir)
     }
 }
 

@@ -175,7 +175,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
     init {
         NotificationManagerCompat.from(context).createNotificationChannel(
             NotificationChannelCompat.Builder(DOWNLOAD_CHANNEL, NotificationManagerCompat.IMPORTANCE_LOW)
-                .setName(context.getString(R.string.downloads)).build()
+                .setName(tr(R.string.downloads)).build()
         )
         scope.launch(Dispatchers.IO) {
             val map = mutableMapOf<String, DownloadInfo>()
