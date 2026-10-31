@@ -3993,6 +3993,9 @@
     <string name="and_the_sky_lit_up">And the sky lit up</string>
     <string name="play_pause_always_stays">Play and pause always stay</string>
     <string name="what_s_on_the_player_keywords">hide show parts show on the player under the title cover title artist like heart menu progress bar seek previous next skip buttons row song length cast mark</string>
+    <string name="cover_and_video_fill_the_top">The cover and music videos fill the top</string>
+    <string name="background_movement">Background movement</string>
+    <string name="lively">Lively</string>
     <string name="edit_this_menu_keywords">menu ⋯ dots more options song options quick tiles actions hide show</string>
     <!-- 1.8.0 settings (coordinator) -->
     <string name="what_plays_next">What plays next</string>

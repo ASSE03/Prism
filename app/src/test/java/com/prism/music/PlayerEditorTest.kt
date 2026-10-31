@@ -77,8 +77,12 @@ class PlayerEditorTest {
 
     @Test fun theDefaultsAreTheOldPlayerAndMenu() {
         val s = AppSettings()
-        // Every part shows but shuffle & repeat and the volume bar, which were off by default before too.
-        assertEquals(listOf(PlayerPart.SHUFFLE_REPEAT, PlayerPart.VOLUME), PlayerPart.entries.filter { !s.shows(it) })
+        // Every part shows but the crossfade's mark and blending covers, shuffle & repeat and the volume bar, which were
+        // off by default before too.
+        assertEquals(
+            listOf(PlayerPart.CROSSFADE_MARK, PlayerPart.BLEND_COVERS, PlayerPart.SHUFFLE_REPEAT, PlayerPart.VOLUME),
+            PlayerPart.entries.filter { !s.shows(it) },
+        )
         assertTrue(s.showsMenuButton())
         assertTrue("nothing from the player in the menu", s.menuFromPlayer().isEmpty())
         assertEquals(listOf(MenuAction.RADIO, MenuAction.DOWNLOAD, MenuAction.ADD_TO_PLAYLIST, MenuAction.SLEEP), s.view.parts.menuTiles)
@@ -220,6 +224,31 @@ class PlayerEditorTest {
         assertTrue(d.canHide(PlayerPart.VOLUME))
     }
 
+    /** Full-bleed artwork and full-bleed video are one switch: on if either was, and both written together. */
+    @Test fun fullBleedIsOneSwitch() {
+        runBlocking { store.editNow { it[booleanPreferencesKey("video_full_bleed")] = true; it[booleanPreferencesKey("full_bleed_artwork")] = false } }
+        var s = settled { it.videoFullBleed }
+        assertTrue("video only before: the cover too now", s.fullBleedArtwork)
+        store.setFullBleedArtwork(false)
+        s = settled { !it.fullBleedArtwork }
+        assertFalse(s.videoFullBleed)
+        // The chip on a playing video is the same switch.
+        store.setVideoFullBleed(true)
+        s = settled { it.videoFullBleed }
+        assertTrue(s.fullBleedArtwork)
+        assertFalse("off by default", AppSettings().fullBleedArtwork || AppSettings().videoFullBleed)
+    }
+
+    /** Background movement: still keeps the mesh as it shipped; lively drifts and grows richer together. */
+    @Test fun backgroundMovementIsMotionAndColorsTogether() {
+        val d = AppSettings()
+        assertEquals(d.meshSpeed to d.meshIntensity, com.prism.music.ui.screens.meshMovement(0f))
+        assertEquals(0f to 1f, com.prism.music.ui.screens.meshMovement(0.03f))
+        assertEquals(1f to 1.5f, com.prism.music.ui.screens.meshMovement(1f))
+        val (speed, colors) = com.prism.music.ui.screens.meshMovement(0.5f)
+        assertEquals(0.5f, speed); assertEquals(1.25f, colors)
+    }
+
     @Test fun keysAreLookOrNot() {
         assertEquals('s', store.lookKinds["player_hidden_parts"])
         assertTrue("player_menu_hidden" in store.notLookNames)
@@ -238,8 +267,9 @@ class PlayerEditorTest {
 
     private fun shoot(name: String, dark: Boolean) {
         val plain = AppSettings(themeMode = if (dark) ThemeMode.DARK else ThemeMode.LIGHT)
+        // The second one with Crossfade on, so its mark and blending covers are there to pick.
         val someHidden = plain.copy(
-            playerHandle = false, showQuality = false, playerShuffleRepeat = true,
+            playerHandle = false, showQuality = false, playerShuffleRepeat = true, mix = true,
             view = plain.view.copy(parts = PlayerParts(hidden = setOf(PlayerPart.LIKE, PlayerPart.BUTTONS))),
         )
         val menu = PlayerParts(menuHidden = setOf(MenuAction.STATS, MenuAction.NOT_FOR_ME), menuTiles = listOf(MenuAction.RADIO, MenuAction.SING, MenuAction.OUTPUT))
@@ -250,7 +280,7 @@ class PlayerEditorTest {
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
                     Group("What's on the player (as it ships)") { PlayerPartsPreview(plain, Modifier.padding(16.dp)) {} }
-                    Group("Handle, quality, like, row hidden") { PlayerPartsPreview(someHidden, Modifier.padding(16.dp)) {} }
+                    Group("Handle, quality, like, row hidden; crossfade on") { PlayerPartsPreview(someHidden, Modifier.padding(16.dp)) {} }
                     Group("Edit this menu") { MenuEditorContent(menu, {}, { _, _ -> }, {}, {}) }
                 }
             }

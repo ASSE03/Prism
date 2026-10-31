@@ -209,7 +209,7 @@ fun PlayerPartsGroup() {
     var editMenu by remember { mutableStateOf(false) }
     Group(tr(R.string.what_s_on_the_player), info = tr(R.string.tap_a_part_of_the_player_to_hide_or_show_it)) {
         PlayerPartsPreview(s, Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) { part -> prefs.setPartShown(part, !s.shows(part)) }
-        val hidden = PlayerPart.entries.filter { !s.shows(it) && it != PlayerPart.NAV_BAND }
+        val hidden = PlayerPart.entries.filter { !s.shows(it) && it != PlayerPart.NAV_BAND && (s.mix || it !in PlayerPart.CROSSFADE) }
         if (hidden.isNotEmpty()) Note(tr(R.string.hidden_s, hidden.joinToString(", ") { it.label }))
         // The parts under the title, top to bottom, as they sit on the player.
         Label(tr(R.string.under_the_title), info = tr(R.string.top_to_bottom_as_they_sit))
@@ -354,8 +354,14 @@ fun PlayerPartsPreview(s: com.prism.music.data.prefs.AppSettings, modifier: Modi
                 Spot(PlayerPart.HANDLE) { Box(Modifier.padding(horizontal = 14.dp, vertical = 3.dp).size(30.dp, 4.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.6f))) }
                 Spot(PlayerPart.FROM_ALBUM) { Text(tr(R.string.from_the_album_2, tr(R.string.northern_lights)), color = Color.White.copy(alpha = 0.6f), fontSize = 10.sp, maxLines = 1) }
                 Spacer(Modifier.height(6.dp))
-                Spot(PlayerPart.COVER, Modifier.fillMaxWidth(0.62f)) {
-                    Box(Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(8.dp)).background(Brush.linearGradient(listOf(Color(0xFF8A6BFF), Color(0xFFFF7A59)))))
+                Box(Modifier.fillMaxWidth(0.62f)) {
+                    Spot(PlayerPart.COVER, Modifier.fillMaxWidth()) {
+                        Box(Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(8.dp)).background(Brush.linearGradient(listOf(Color(0xFF8A6BFF), Color(0xFFFF7A59)))))
+                    }
+                    // With Crossfade on: the cover dissolving into the next song's, drawn as the next cover over a corner.
+                    if (s.mix) Spot(PlayerPart.BLEND_COVERS, Modifier.align(Alignment.BottomEnd).padding(6.dp)) {
+                        Box(Modifier.size(30.dp).clip(RoundedCornerShape(5.dp)).background(Brush.linearGradient(listOf(Color(0xFF2EC5CE).copy(alpha = 0.9f), Color(0xFF8A6BFF).copy(alpha = 0.2f)))))
+                    }
                 }
                 Spacer(Modifier.height(8.dp))
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -389,6 +395,16 @@ fun PlayerPartsPreview(s: com.prism.music.data.prefs.AppSettings, modifier: Modi
                                 }
                                 Spacer(Modifier.width(6.dp))
                                 Spot(PlayerPart.QUALITY) { Text("AAC · 256", color = Color.White.copy(alpha = 0.6f), fontSize = tiny, maxLines = 1) }
+                                // With Crossfade on: the mark where the next song comes in.
+                                if (s.mix) {
+                                    Spacer(Modifier.width(6.dp))
+                                    Spot(PlayerPart.CROSSFADE_MARK) {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Box(Modifier.size(2.dp, 10.dp).background(Color.White.copy(alpha = 0.85f)))
+                                            Text(" " + tr(R.string.crossfade_mark), color = Color.White.copy(alpha = 0.6f), fontSize = tiny, maxLines = 1)
+                                        }
+                                    }
+                                }
                                 Spacer(Modifier.weight(1f))
                                 Spot(PlayerPart.TIMES) { Text("−2:31", color = Color.White.copy(alpha = 0.6f), fontSize = tiny) }
                             }
@@ -574,6 +590,23 @@ fun PlayerTitleGroup() {
         ChoiceCards(
             PlayerTimes.entries, s.playerTimes, title = { it.label }, detail = { null }, onSelect = { prefs.setPlayerTimes(it) },
         ) { TimesSample(it) }
+    }
+}
+
+/** The progress bar (1.8.0, one group): its style first, then its color, thickness and knob, and the volume bar like it. */
+@Composable
+fun PlayerProgressGroup() {
+    val s = LocalAppSettings.current
+    val prefs = LocalContainer.current.settings
+    Group(
+        tr(R.string.progress_bar),
+        info = when (s.scrubberStyle) {
+            com.prism.music.data.prefs.ScrubberStyle.WAVE -> tr(R.string.waveform_each_song_s_own_shape)
+            com.prism.music.data.prefs.ScrubberStyle.RIBBONS -> tr(R.string.ribbons_flow_only_while_a_song)
+            else -> null
+        },
+    ) {
+        ScrubberStyleCards()
         Label(tr(R.string.progress_bar_color))
         ChoiceCards(
             ScrubberColor.entries, s.scrubberColor, title = { it.label },
@@ -827,17 +860,25 @@ private fun BarSample(color: ScrubberColor) {
 
 // ---------------------------------------------------------------------------- Background
 
-/** The color mesh's motion and strength, and how soft the blurred cover is (under Look → Background). */
+/** Background movement [v] (0 still … 1 lively) as the mesh's speed and its colors' strength (1 = as the cover … 1.5). */
+fun meshMovement(v: Float): Pair<Float, Float> = if (v < 0.05f) 0f to 1f else v to 1f + 0.5f * v
+
+/** The color mesh's movement, and how soft the blurred cover is (under Look → Background). */
 @Composable
 fun PlayerBackgroundTuning() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     if (s.playerBackground == com.prism.music.data.prefs.PlayerBackground.MESH) {
-        SliderSetting(tr(R.string.motion), s.meshSpeed, 0f..1f, { if (it < 0.05f) tr(R.string.still) else worded(if (it < 0.5f) tr(R.string.slow_drift) else tr(R.string.drifting), it) }) { prefs.setMeshSpeed(if (it < 0.05f) 0f else it) }
+        // 1.8.0: Motion and Colors as one feeling, still → lively: the mesh drifts faster and its colors grow richer
+        // together. The slider stands where the motion is; colors set apart before keep until it's moved.
+        SliderSetting(
+            tr(R.string.background_movement), s.meshSpeed, 0f..1f,
+            { if (it < 0.05f) tr(R.string.still) else worded(if (it < 0.5f) tr(R.string.gentle) else tr(R.string.lively), it) },
+        ) { v -> meshMovement(v).let { (speed, colors) -> prefs.setMeshSpeed(speed); prefs.setMeshIntensity(colors) } }
         if (s.reduceMotion && s.meshSpeed > 0f) Note(tr(R.string.reduce_motion_is_on_so_it))
-        SliderSetting(tr(R.string.colors), s.meshIntensity, 0.4f..1.6f, { worded(if (it < 0.8f) tr(R.string.soft) else if (it <= 1.2f) tr(R.string.as_the_cover) else tr(R.string.rich), it) }) { prefs.setMeshIntensity(it) }
     }
-    if (s.playerBackground == com.prism.music.data.prefs.PlayerBackground.MESH || s.playerBackground == com.prism.music.data.prefs.PlayerBackground.BLUR) {
+    // How soft the blurred cover is (1.8.0: only for Blurred cover, where it shows).
+    if (s.playerBackground == com.prism.music.data.prefs.PlayerBackground.BLUR) {
         SliderSetting(tr(R.string.softness), s.playerBlur, 0.5f..1.5f, { "${(it * 100).roundToInt()}%" }) { prefs.setPlayerBlur(it) }
     }
 }

@@ -293,12 +293,16 @@ enum class PlayerPart(val label: String) {
     TITLE(tr(R.string.title)), ARTIST(tr(R.string.artist)), LIKE(tr(R.string.widget_like)), MENU(tr(R.string.song_menu)),
     LYRIC_LINE(tr(R.string.current_lyric)), PROGRESS(tr(R.string.progress_bar)), TIMES(tr(R.string.times)),
     QUALITY(tr(R.string.stream_quality)), BEST_PART(tr(R.string.best_part)), PREV_NEXT(tr(R.string.previous_and_next)),
+    /** Shown only while Crossfade is on (Settings → Sound): the mark where the next song comes in, and the covers blending. */
+    CROSSFADE_MARK(tr(R.string.crossfade_mark)), BLEND_COVERS(tr(R.string.covers_blend_too)),
     SHUFFLE_REPEAT(tr(R.string.shuffle_repeat)), VOLUME(tr(R.string.volume)), BUTTONS(tr(R.string.buttons)),
     OUTPUT(tr(R.string.output_device)), NAV_BAND(tr(R.string.band_behind_the_navigation_buttons));
 
     companion object {
         /** The parts with no switch of their own before 1.8.0: hidden ones are kept by name in [PlayerParts.hidden]. */
         val NEW = setOf(COVER, TITLE, ARTIST, LIKE, MENU, PROGRESS, PREV_NEXT, BUTTONS)
+        /** Only on the player (and in the editor) while Crossfade is on. */
+        val CROSSFADE = setOf(CROSSFADE_MARK, BLEND_COVERS)
     }
 }
 
@@ -354,6 +358,8 @@ fun AppSettings.shows(part: PlayerPart): Boolean = when (part) {
     PlayerPart.VOLUME -> !hideVolumeBar
     PlayerPart.OUTPUT -> showOutputDevice
     PlayerPart.NAV_BAND -> playerNavBand
+    PlayerPart.CROSSFADE_MARK -> view.crossfadeMark
+    PlayerPart.BLEND_COVERS -> view.blendCovers
     else -> part !in view.parts.hidden
 }
 
@@ -1858,8 +1864,10 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
             pageColors = p[K.pageColors] ?: d.pageColors,
             frostedGlass = p[K.frostedGlass] ?: d.frostedGlass,
             haptics = p[K.haptics] ?: d.haptics,
-            fullBleedArtwork = p[K.fullBleedArtwork] ?: d.fullBleedArtwork,
-            videoFullBleed = p[K.videoFullBleed] ?: d.videoFullBleed,
+            // 1.8.0 player editor: one switch for the cover and the video ("Full-bleed artwork"); on if either was on (a
+            // full-bleed cover with a framed video looked broken). Both keys are kept and always written together.
+            fullBleedArtwork = fullBleed(p),
+            videoFullBleed = fullBleed(p),
             immersivePlayer = p[K.immersivePlayer] ?: d.immersivePlayer,
             immersiveArt = p.enum(K.immersiveArt, d.immersiveArt),
             immersiveLyrics = p.enum(K.immersiveLyrics, d.immersiveLyrics),
@@ -2328,8 +2336,9 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     /** Appearance → Color → Reset colors: style, accent, split light, background, contrast and cover color as Prism ships. */
     @Suppress("UNCHECKED_CAST")
     fun resetColors() = edit { p -> K.colors.forEach { p.remove(it as Preferences.Key<Any>) } }
-    fun setFullBleedArtwork(v: Boolean) = edit { it[K.fullBleedArtwork] = v }
-    fun setVideoFullBleed(v: Boolean) = edit { it[K.videoFullBleed] = v }
+    // 1.8.0 player editor: the cover and the video are one switch (see [fullBleed]).
+    fun setFullBleedArtwork(v: Boolean) = edit { it[K.fullBleedArtwork] = v; it[K.videoFullBleed] = v }
+    fun setVideoFullBleed(v: Boolean) = setFullBleedArtwork(v)
     fun setImmersivePlayer(v: Boolean) = edit { it[K.immersivePlayer] = v }
     fun setImmersiveArt(v: ImmersiveArt) = edit { it[K.immersiveArt] = v.name }
     fun setImmersiveLyrics(v: ImmersiveLyrics) = edit { it[K.immersiveLyrics] = v.name }
@@ -2578,6 +2587,9 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     private inline fun <reified E : Enum<E>> namesOf(v: String?): List<E> =
         v.orEmpty().split(',').mapNotNull { n -> enumValues<E>().firstOrNull { it.name == n } }.distinct()
 
+    /** Full-bleed artwork and full-bleed video, one switch since 1.8.0: on if either was. */
+    private fun fullBleed(p: Preferences) = (p[K.fullBleedArtwork] ?: false) || (p[K.videoFullBleed] ?: false)
+
     private fun readParts(p: Preferences): PlayerParts {
         val d = PlayerParts()
         return PlayerParts(
@@ -2602,6 +2614,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
             PlayerPart.VOLUME -> it[K.hideVolumeBar] = !on
             PlayerPart.OUTPUT -> it[K.showOutputDevice] = on
             PlayerPart.NAV_BAND -> it[K.playerNavBand] = on
+            PlayerPart.CROSSFADE_MARK -> it[K.crossfadeMark] = on
+            PlayerPart.BLEND_COVERS -> it[K.blendCovers] = on
             else -> {
                 val hidden = namesOf<PlayerPart>(it[K.playerHiddenParts]).toSet().let { h -> if (on) h - part else h + part }
                 if (hidden.isEmpty()) it.remove(K.playerHiddenParts) else it[K.playerHiddenParts] = hidden.joinToString(",") { h -> h.name }
