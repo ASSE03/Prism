@@ -148,6 +148,11 @@ class LyricsPartsTest {
             assertEquals(mine.spacing, start.spacing)
             assertEquals(mine.shadow, start.shadow)
             assertEquals(template.name, template.motionDefault(), start.motionNow)
+            // Word by word on lines timed as a whole: only where 1.7.9's Style did it (not Prism, Glow or Calm), also
+            // after another template set it (Bold card's on, then Glow's off).
+            val words = template == LyricsStyle.KARAOKE || template == LyricsStyle.CARD || template == LyricsStyle.TYPEWRITER
+            assertEquals(template.name, words, start.wordByWordNow)
+            assertEquals(template.name, words, mine.startFrom(LyricsStyle.CARD).copy(wordByWord = true, motion = LyricsMotion.TYPEWRITER).startFrom(template).wordByWordNow)
             // Bold card brings its color back; the others leave the background as it was.
             assertEquals(template == LyricsStyle.CARD, start.onCard)
             if (template != LyricsStyle.CARD) assertEquals(LyricsBackground.DARK, start.background)

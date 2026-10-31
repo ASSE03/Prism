@@ -81,9 +81,13 @@ class LyricsLookPartsTest {
         compose.waitUntil(10_000) { now().lyricsLook.pageBackground == LyricsBackground.DARK }
         assertEquals(card.copy(motion = LyricsMotion.TYPEWRITER, page = LyricsBackground.DARK, card = false), now().look())
 
-        // Start from Glow: its animation and glow, the type back to your own; the background you picked stays.
+        // Start from Glow: its animation and glow, the type back to your own; the background you picked stays. Glow
+        // lights a line timed only as a whole all at once (as 1.7.9 did), so word by word is off there.
         tap("Glow", "lyricsStartFrom")
         compose.waitUntil(10_000) { now().lyricsStyle == LyricsStyle.GLOW }
-        assertEquals(card.copy(motion = LyricsMotion.SWEEP, weight = 300, size = card.size / 1.1f, page = LyricsBackground.DARK, card = false, halo = true), now().look())
+        assertEquals(
+            card.copy(motion = LyricsMotion.SWEEP, wordByWord = false, weight = 300, size = card.size / 1.1f, page = LyricsBackground.DARK, card = false, halo = true),
+            now().look(),
+        )
     }
 }
