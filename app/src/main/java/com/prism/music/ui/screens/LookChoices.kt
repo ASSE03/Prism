@@ -9,7 +9,7 @@ import com.prism.music.tr
 /** Glass (1.8.0): Liquid glass, its style and Frosted glass as one choice (they interacted: liquid overrides frosted). */
 enum class GlassChoice(val label: String) {
     OFF(tr(R.string.off)), FROSTED(tr(R.string.frosted_glass)),
-    LIQUID_REGULAR(tr(R.string.liquid_glass) + " · " + tr(R.string.regular)), LIQUID_CLEAR(tr(R.string.liquid_glass) + " · " + tr(R.string.clear)),
+    LIQUID_REGULAR(tr(R.string.liquid_glass) + " · " + tr(R.string.regular)), LIQUID_CLEAR(tr(R.string.liquid_glass) + " · " + tr(R.string.glass_clear)),
 }
 
 /** Changing screens (1.8.0): "Fades between screens" and "Slide between screens" (#208) as one choice. */

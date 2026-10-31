@@ -4027,6 +4027,8 @@
     <string name="at_the_bottom">At the bottom</string>
     <string name="tabs_on_a_tablet">Tabs on a tablet</string>
     <string name="tabs_on_a_tablet_info">On a tablet or a wide window. Phones always have the tabs at the bottom.</string>
+    <!-- The glass style: see-through (an adjective), not the verb "clear" ("Clear history"). -->
+    <string name="glass_clear">Clear</string>
     <string name="same_as_your_accent">The same as your accent</string>
     <string name="use_the_same">Use the same</string>
     <string name="glass_choice_info">Frosted Glass: a soft blur behind the bars and controls. Liquid Glass: they bend what\'s behind them like real glass (Android 12 and later; older phones get Frosted). Regular is fuller, Clear lets more through.</string>

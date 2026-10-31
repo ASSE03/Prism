@@ -28,7 +28,9 @@ private val Context.dataStore by preferencesDataStore("prism_settings")
 
 enum class ThemeMode(val label: String) { SYSTEM(tr(R.string.system)), LIGHT(tr(R.string.light)), DARK(tr(R.string.dark)) }
 enum class ColorSource(val label: String) { ARTWORK(tr(R.string.widget_now_playing)), DYNAMIC(tr(R.string.wallpaper)), CUSTOM(tr(R.string.custom)) }
-enum class GlassKind(val label: String) { REGULAR(tr(R.string.regular)), CLEAR(tr(R.string.clear)) }
+// CLEAR: see-through glass. Its own word (1.8.0): the shared "clear" is the verb ("Clear history"), and translations
+// read it as "erase" (消去, Hapus…).
+enum class GlassKind(val label: String) { REGULAR(tr(R.string.regular)), CLEAR(tr(R.string.glass_clear)) }
 /** Appearance → Color → Spectrum: the split light through the app, or white light (neutral greys and ink, no accent). */
 enum class LightStyle(val label: String) { SPECTRUM(tr(R.string.spectrum)), WHITE(tr(R.string.white_light)) }
 /** Appearance → Color → Background (1.7.2): how much color the page itself carries. */
