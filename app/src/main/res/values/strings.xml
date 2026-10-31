@@ -3972,6 +3972,32 @@
     <string name="tour_1792_gestures">The player\'s gestures around its controls too</string>
     <string name="tour_1792_colors">The mini player\'s progress in your accent, the playing song in the album\'s color</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Not with full-bleed artwork: the banner covers it</string>
+    <!-- 1.8.0 player editor -->
+    <string name="this_song">This song</string>
+    <string name="playing_now">Playing</string>
+    <string name="help">Help</string>
+    <string name="edit_this_menu">Edit this menu</string>
+    <string name="go_to_artist">Go to artist</string>
+    <string name="quick_tiles">Quick tiles</string>
+    <string name="up_to_four_actions_as_tiles_at_the_top">Up to four actions as round tiles at the top of the menu. Tap a tile to take it off, or the pin beside an action to put it there. An action you switch off isn\'t gone: it\'s under More at the end of the menu. Player settings and Edit this menu always stay.</string>
+    <string name="no_quick_tiles">No tiles: pin an action below to add one</string>
+    <string name="back_to_prism_s_menu">Back to Prism\'s menu</string>
+    <string name="under_more">Under More</string>
+    <string name="quick_tile_s">Quick tile: %1$s</string>
+    <string name="what_s_on_the_player">What\'s on the player</string>
+    <string name="tap_a_part_of_the_player_to_hide_or_show_it">Tap a part of the player to hide or show it; a hidden part stays here, faint, to tap back. Only play and pause always stay. Nothing you hide is gone: what it did is in the player\'s ⋯ menu. With the ⋯ button hidden, a long press on the title or the artist opens the menu.</string>
+    <string name="hidden_s">Hidden: %1$s</string>
+    <string name="buttons_in_the_row">Buttons in the row</string>
+    <string name="add_a_button">Add a button</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">The player\'s ⋯ menu: its tiles and what it shows</string>
+    <string name="and_the_sky_lit_up">And the sky lit up</string>
+    <string name="play_pause_always_stays">Play and pause always stay</string>
+    <string name="what_s_on_the_player_keywords">hide show parts show on the player under the title cover title artist like heart menu progress bar seek previous next skip buttons row song length cast mark</string>
+    <string name="sample_stream_quality" translatable="false">AAC · 256</string>
+    <string name="cover_and_video_fill_the_top">The cover and music videos fill the top</string>
+    <string name="background_movement">Background movement</string>
+    <string name="lively">Lively</string>
+    <string name="edit_this_menu_keywords">menu ⋯ dots more options song options quick tiles actions hide show</string>
     <!-- 1.8.0 settings (coordinator) -->
     <string name="what_plays_next">What plays next</string>
     <string name="when_the_queue_ends">When the queue ends</string>

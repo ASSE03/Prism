@@ -271,6 +271,7 @@ object LookLabels {
         "volume_matches_progress" to tr(R.string.volume_bar_like_the_progress_bar),
         "player_handle" to tr(R.string.handle_at_the_top),
         "player_nav_band" to tr(R.string.band_behind_the_navigation_buttons),
+        "player_hidden_parts" to tr(R.string.what_s_on_the_player),
         "corner_scale" to tr(R.string.corners), "cover_shape_songs" to tr(R.string.songs_covers), "cover_shape_albums" to tr(R.string.albums_covers),
         "cover_shape_artists" to tr(R.string.artists_pictures), "cover_shape_player" to tr(R.string.player_s_cover), "button_shape" to tr(R.string.buttons),
         "play_outlined" to tr(R.string.outlined_play), "type_weight" to tr(R.string.text_weight), "type_spacing" to tr(R.string.letter_spacing), "title_font" to tr(R.string.titles_font),
@@ -379,6 +380,9 @@ object LookLabels {
                 }.ifEmpty { tr(R.string.default_text) }
                 "tab_names" -> com.prism.music.data.prefs.parseTabNames(v).entries.joinToString(", ") { (t, n) -> "${t.label}: $n" }.ifEmpty { tr(R.string.their_own) }
                 "player_deck", "player_buttons" -> v.split(',').joinToString(", ") { t -> choices[name]?.get(t) ?: t }
+                // 1.8.0: the player's hidden parts, by name.
+                "player_hidden_parts" -> v.split(',').mapNotNull { t -> com.prism.music.data.prefs.PlayerPart.entries.firstOrNull { it.name == t }?.label }
+                    .joinToString(", ").ifEmpty { tr(R.string.none) }
                 "spectrum_stops" -> tr(R.string.colors_2, v.split(',').size)
                 "replay_card", "app_font_name" -> v.lowercase().replaceFirstChar { it.uppercase() }
                 else -> choices[name]?.get(v) ?: v
@@ -407,6 +411,7 @@ object LookLabels {
             "player_title_weight", "player_title_scroll", "player_times", "mesh_speed", "mesh_intensity", "player_blur", "canvas_fills_background",
             "scrubber_thickness", "scrubber_thumb", "volume_matches_progress", "player_handle", "player_nav_band", "play_ring", "visualizer", "visualizer_color",
             "panel_player", "queue_headings", "cast_mark", "immersive_video", "bleed_fit", "cover_flight", "video_controls_hide", "crossfade_mark", "blend_covers", "player_buttons_pill",
+            "player_hidden_parts",
         ),
         "lyrics" to setOf(
             "lyrics_align", "lyrics_blur", "lyrics_progress_line", "lyrics_source_button", "lyrics_scale", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",

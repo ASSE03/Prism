@@ -1566,43 +1566,13 @@ private fun PlayerSettings() {
     val prefs = container.settings
     Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
         // How the player looks (1.7.6: what it does on a touch is in Controls & gestures, what it keeps on the phone in
-        // Downloads, storage & data). Its layout first, then its look, cover and buttons (PlayerYourWay.kt).
+        // Downloads, storage & data). 1.8.0: its layout, then what's on it (one editor with the player drawn, replacing
+        // "Show on the player", "Under the title" and the buttons; PlayerYourWay.kt), its look and its cover.
+        // "Song length" went (tapping the time switches it, and it's remembered); the cast mark is no longer a choice.
         PlayerLayoutGroup()
+        PlayerPartsGroup()
         PlayerLookGroup()
         PlayerCoverGroup()
-        PlayerButtonsGroup()
-        // Tick what else you want there (the current lyric and volume are in "Under the title").
-        Group(tr(R.string.show_on_the_player)) {
-            ShowChips(
-                listOf(
-                    // Reddit, 1.7.9.1: the grey handle at the top can go (a swipe down still closes the player).
-                    ShowOption(tr(R.string.handle_at_the_top), s.playerHandle) { prefs.setPlayerHandle(it) },
-                    // #250: the dark band behind three-button navigation (off: the player shows through it).
-                    ShowOption(tr(R.string.band_behind_the_navigation_buttons), s.playerNavBand) { prefs.setPlayerNavBand(it) },
-                    ShowOption(tr(R.string.from_the_album), s.showPlayingFrom) { prefs.setShowPlayingFrom(it) },
-                    ShowOption(tr(R.string.best_part), s.bestPartButton) { prefs.setBestPartButton(it) },
-                    ShowOption(tr(R.string.stream_quality), s.showQuality) { prefs.setShowQuality(it) },
-                    ShowOption(tr(R.string.shuffle_repeat), s.playerShuffleRepeat) { prefs.setPlayerShuffleRepeat(it) },
-                    ShowOption(tr(R.string.song_video), s.showVideoSwitch) {
-                        prefs.setShowVideoSwitch(it)
-                        if (!it) container.player.setVideoMode(false)
-                    },
-                    ShowOption(tr(R.string.output_device), s.showOutputDevice) { prefs.setShowOutputDevice(it) },
-                ) + if (s.showOutputDevice) listOf(ShowOption(tr(R.string.cast_mark), s.view.castMark) { prefs.setCastMark(it) }) else emptyList()
-            )
-            Toggle(
-                tr(R.string.hide_controls_over_videos), tr(R.string.they_come_back_with_a_tap), s.view.videoControlsHide,
-                info = tr(R.string.while_a_music_video_plays_the),
-            ) { prefs.setVideoControlsHide(it) }
-            Toggle(
-                tr(R.string.cover_flies_into_place), tr(R.string.opening_the_player_the_mini_player), s.view.coverFlight,
-                info = tr(R.string.instead_of_the_whole_player_sliding),
-            ) { prefs.setCoverFlight(it) }
-            Toggle(
-                tr(R.string.song_length), tr(R.string.instead_of_the_time_left), s.showTrackLength,
-                info = tr(R.string.the_time_on_the_right_shows),
-            ) { prefs.setShowTrackLength(it) }
-        }
         Group(tr(R.string.lyrics_and_the_queue), info = tr(R.string.the_player_s_controls_while_the)) {
             ChoiceCards(
                 com.prism.music.data.prefs.PanelPlayer.entries, s.view.panelPlayer, title = { it.label }, detail = { it.detail }, columns = 2,
@@ -1627,8 +1597,7 @@ private fun PlayerSettings() {
                 info = tr(R.string.the_moving_artwork_fills_the_whole),
             ) { prefs.setCanvasFillsBackground(it) }
         }
-        MoreOptions(listOf(tr(R.string.under_the_title), tr(R.string.title_and_times), tr(R.string.visualizer), tr(R.string.immersive_mode))) {
-        PlayerArrangeGroup()
+        MoreOptions(listOf(tr(R.string.title_and_times), tr(R.string.visualizer), tr(R.string.immersive_mode))) {
         PlayerTitleGroup()
         PlayerVisualizerGroup()
         Group(tr(R.string.immersive_mode)) {
@@ -1709,22 +1678,17 @@ private fun PlayerLookGroup() {
         if (s.playerBackground == PlayerBackground.BLUR || s.playerBackground == PlayerBackground.APPEARANCE) SliderSetting(
             tr(R.string.show_background), s.playerBackdropShow, 0f..1f, { worded(if (it < 0.2f) tr(R.string.subtle) else if (it < 0.7f) tr(R.string.balanced) else tr(R.string.vivid), it) },
         ) { prefs.setPlayerBackdropShow(it) }
-        // The mesh's motion and colors, the blur's softness (1.7.4).
+        // The mesh's movement, the blur's softness (1.7.4; one movement slider since 1.8.0).
         PlayerBackgroundTuning()
         Label(tr(R.string.controls))
         Chips(TransportStyle.entries, s.transportStyle, { it.label }) { prefs.setTransportStyle(it) }
         // #231 (1.7.9.2): the split-light ring around play, which some find too much.
         Toggle(tr(R.string.ring_on_the_play_button), tr(R.string.the_split_light_around_play_and_pause), s.view.playRing) { prefs.setPlayRing(it) }
-        Label(
-            tr(R.string.progress_bar),
-            info = when (s.scrubberStyle) {
-                ScrubberStyle.WAVE -> tr(R.string.waveform_each_song_s_own_shape)
-                ScrubberStyle.RIBBONS -> tr(R.string.ribbons_flow_only_while_a_song)
-                else -> null
-            },
-        )
-        ScrubberStyleCards()
+        // The row in a capsule or apart (1.8.0: a look choice here; which buttons are in What's on the player).
+        ButtonsPillCards()
     }
+    // 1.8.0: the progress bar's style, color, thickness and knob in one group (they were split between here and More options).
+    PlayerProgressGroup()
 }
 
 /** The player with its lyrics open, drawn small: lines of lyrics, and the controls under them as [mode] leaves them. */
@@ -1771,25 +1735,23 @@ private fun PlayerCoverGroup() {
         Label(tr(R.string.cover_size))
         Chips(CoverSize.entries, s.coverSize, { it.label }) { prefs.setCoverSize(it) }
         SliderSetting(tr(R.string.corners), s.playerArtCorners.toFloat(), 0f..32f, { tr(R.string.dp, it.roundToInt()) }, steps = 7) { prefs.setPlayerArtCorners(it.roundToInt()) }
+        // 1.8.0: one switch for the cover and a music video (full-bleed video was its own; on if either was).
         Toggle(
-            tr(R.string.full_bleed_artwork), tr(R.string.edge_to_edge_at_the_top), s.fullBleedArtwork,
-            info = tr(R.string.the_cover_runs_to_the_screen),
+            tr(R.string.full_bleed_artwork), tr(R.string.cover_and_video_fill_the_top), s.fullBleedArtwork,
+            info = tr(R.string.the_cover_runs_to_the_screen) + " " + tr(R.string.a_music_video_runs_to_the),
         ) { prefs.setFullBleedArtwork(it) }
         if (s.fullBleedArtwork) Chips(com.prism.music.data.prefs.BleedFit.entries, s.view.bleedFit, { it.label }) { prefs.setBleedFit(it) }
-        Toggle(
-            tr(R.string.full_bleed_video), tr(R.string.music_videos_fill_the_top_of), s.videoFullBleed,
-            info = tr(R.string.a_music_video_runs_to_the),
-        ) { prefs.setVideoFullBleed(it) }
         // With full-bleed artwork the banner covers the cover that shrinks (Reddit, 1.7.9.3): it says so rather than seem broken.
         Toggle(
             tr(R.string.shrink_when_paused),
             if (s.fullBleedArtwork) tr(R.string.not_with_full_bleed_artwork_the_banner_covers_it) else tr(R.string.the_cover_eases_back_while_paused),
             s.artShrinkOnPause,
         ) { prefs.setArtShrinkOnPause(it) }
+        // Square video covers moved to Icons & shapes → Covers' shapes (1.8.0: it changes covers everywhere).
         Toggle(
-            tr(R.string.square_video_covers), tr(R.string.no_black_bars_when_a_video), s.squareVideoCovers,
-            info = tr(R.string.youtube_s_video_pictures_are_wide),
-        ) { prefs.setSquareVideoCovers(it) }
+            tr(R.string.cover_flies_into_place), tr(R.string.opening_the_player_the_mini_player), s.view.coverFlight,
+            info = tr(R.string.instead_of_the_whole_player_sliding),
+        ) { prefs.setCoverFlight(it) }
     }
 }
 

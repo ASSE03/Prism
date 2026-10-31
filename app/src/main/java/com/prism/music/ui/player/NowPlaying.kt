@@ -2,6 +2,9 @@ package com.prism.music.ui.player
 
 import com.prism.music.tr
 import com.prism.music.ui.theme.PrismIcons
+import com.prism.music.data.prefs.PlayerPart
+import com.prism.music.data.prefs.shows
+import com.prism.music.data.prefs.showsMenuButton
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
@@ -23,6 +26,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
@@ -380,6 +384,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     val collapse = animateFloatAsState(if (lyricsOpen || queueOpen || statsOpen) 1f else 0f, tween(420, easing = FastOutSlowInEasing), label = "collapse")
     val p: () -> Float = { collapse.value }
     val collapsePastHalf = collapse.value >= 0.5f
+    // Settings → Player → What's on the player (1.8.0): a hidden part leaves the player; the cover, title and buttons come
+    // back in the header over the lyrics and the queue, where they say which song it is.
+    val inHeader = { part: PlayerPart -> settings.shows(part) || collapsePastHalf }
     val panelsSettled = collapse.value >= 1f
     val panelFade by animateFloatAsState(if (panelsSettled) 1f else 0f, tween(200, easing = FastOutSlowInEasing), label = "panelFade")
     // The listener's own Reduce motion, not Performance mode's (Reddit, 1.7.9.3: Performance mode turns Reduce motion on,
@@ -468,6 +475,24 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     // Only ever the song's album (tapping it opens the album); nothing for songs without one.
     val originAlbum = song.album?.takeIf { it.id != null && it.title.isNotBlank() }
 
+    // The bottom row's buttons that open something over the player (Settings → Player → Buttons).
+    val onButton: (com.prism.music.data.prefs.PlayerButton) -> Unit = { b ->
+        when (b) {
+            com.prism.music.data.prefs.PlayerButton.SLEEP -> showSleep = true
+            com.prism.music.data.prefs.PlayerButton.OUTPUT -> showOutputs = true
+            com.prism.music.data.prefs.PlayerButton.ADD_TO_PLAYLIST -> showPlaylists = true
+            com.prism.music.data.prefs.PlayerButton.SHARE -> showShare = true
+            com.prism.music.data.prefs.PlayerButton.SPEED -> showSpeed = true
+            // Sing on (with the lyrics opening) or off; the download sheet the first time.
+            com.prism.music.data.prefs.PlayerButton.SING -> {
+                if (c.sing.engineReady() && !c.sing.on.value) openLyrics()
+                toggleSing(c) { showSing = true }
+            }
+            com.prism.music.data.prefs.PlayerButton.EQUALIZER -> { onCollapse(); nav.go(Routes.settings(com.prism.music.ui.screens.SettingsSection.SOUND.key)) }
+            else -> {}
+        }
+    }
+
     // The sheets that open over the player (in immersive mode too).
     val playerSheets = @Composable {
         if (showProviders) LyricsProviderSheet(lyricsState) { showProviders = false }
@@ -476,6 +501,13 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             hasCanvas = songCanvas != null,
             statsShown = statsOpen,
             hasNext = hasNext,
+            // What the player's hidden parts did (1.8.0): open the lyrics or the queue, the music video, the buttons.
+            onOpenLyrics = { openLyrics() },
+            onOpenQueue = { if (!queueOpen) toggleQueue() },
+            videoMode = videoMode,
+            videoAvailable = videoAvailable,
+            onVideoMode = { pc.setVideoMode(it) },
+            onButton = { onButton(it) },
             onLyricsSource = { showProviders = true },
             onLyricsTiming = { showTiming = true },
             onRedownloadLyrics = { lyricsState.redownload() },
@@ -501,23 +533,6 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         if (showPlaylists) com.prism.music.ui.components.PlaylistPicker(song) { showPlaylists = false }
         if (showShare) com.prism.music.ui.components.ShareSheet(song.shareTarget()) { showShare = false }
         if (showSpeed) SpeedPitchSheet(song) { showSpeed = false }
-    }
-    // The bottom row's buttons that open something over the player (Settings → Player → Buttons).
-    val onButton: (com.prism.music.data.prefs.PlayerButton) -> Unit = { b ->
-        when (b) {
-            com.prism.music.data.prefs.PlayerButton.SLEEP -> showSleep = true
-            com.prism.music.data.prefs.PlayerButton.OUTPUT -> showOutputs = true
-            com.prism.music.data.prefs.PlayerButton.ADD_TO_PLAYLIST -> showPlaylists = true
-            com.prism.music.data.prefs.PlayerButton.SHARE -> showShare = true
-            com.prism.music.data.prefs.PlayerButton.SPEED -> showSpeed = true
-            // Sing on (with the lyrics opening) or off; the download sheet the first time.
-            com.prism.music.data.prefs.PlayerButton.SING -> {
-                if (c.sing.engineReady() && !c.sing.on.value) openLyrics()
-                toggleSing(c) { showSing = true }
-            }
-            com.prism.music.data.prefs.PlayerButton.EQUALIZER -> { onCollapse(); nav.go(Routes.settings(com.prism.music.ui.screens.SettingsSection.SOUND.key)) }
-            else -> {}
-        }
     }
 
     // ------------------------------------------------ Immersive mode (⋯ menu): the cover fills the screen, lyrics over it
@@ -896,6 +911,8 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                         CoverFlight.flying -> 0f
                                         videoMode -> (2f * p() - 1f).coerceIn(0f, 1f)
                                         heroMode && (artLoaded || heroPicture != null) -> 1f - heroVisible()
+                                        // Hidden (1.8.0): it shows only as it shrinks into the header.
+                                        !settings.shows(PlayerPart.COVER) -> p()
                                         else -> 1f
                                     }
                                 }
@@ -960,7 +977,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                         // Like picked for the buttons row: one heart is enough while that row is on screen (the
                         // header keeps its own over the lyrics and the queue, and with Cover / Minimal, which hide the row).
                         val heartBelow = com.prism.music.data.prefs.PlayerButton.LIKE in settings.playerButtons &&
-                            com.prism.music.data.prefs.DeckPart.BUTTONS in settings.playerDeck &&
+                            settings.shows(PlayerPart.BUTTONS) &&
                             layout != com.prism.music.data.prefs.PlayerLayout.MINIMAL && layout != com.prism.music.data.prefs.PlayerLayout.COVER &&
                             !lyricsOpen && !queueOpen && !statsOpen
                         if (centred) Spacer(Modifier.width(if (heartBelow) TITLE_BUTTONS_WIDTH - LIKE_GLYPH_ROOM else TITLE_BUTTONS_WIDTH))
@@ -974,20 +991,24 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                         ) {
                             val scrolls = collapse.value < 0.01f && !covered && settings.playerTitleScroll
                             val titleScale = settings.playerTitleSize.scale
-                            PlayerMarquee(
+                            // With the ⋯ button hidden (1.8.0), a long press on the title or the artist opens the menu.
+                            val menuHeld: (() -> Unit)? = if (settings.shows(PlayerPart.MENU)) null else ({ showActions = true })
+                            if (inHeader(PlayerPart.TITLE)) PlayerMarquee(
                                 // The title leads, the artist under it a size smaller (#41). Spectrum: large and light
                                 // (a tenth under headlineMedium, so longer titles fit before they scroll).
                                 song.title, MaterialTheme.typography.headlineMedium.let { it.copy(fontSize = it.fontSize * 0.9f * titleScale, lineHeight = it.lineHeight * 0.9f * titleScale, fontWeight = settings.type.playerTitleWeight.title ?: it.fontWeight) }, Color.White, scrolls,
-                                Modifier.clickable(enabled = song.album?.id != null) { song.album?.id?.let { onCollapse(); nav.go(Routes.album(it)) } },
+                                Modifier.testTag("playerTitle").combinedClickable(enabled = song.album?.id != null || menuHeld != null, onLongClick = menuHeld) {
+                                    song.album?.id?.let { onCollapse(); nav.go(Routes.album(it)) }
+                                },
                             )
                             // With more than one artist, the name asks which one to open (#42).
                             // Artists YouTube names without a link open by name (#78).
                             val linked = com.prism.music.ui.components.openableArtists(song)
                             var pickArtist by remember(song.id) { mutableStateOf(false) }
-                            Box {
+                            if (inHeader(PlayerPart.ARTIST)) Box {
                                 PlayerMarquee(
                                     song.artistText, MaterialTheme.typography.bodyLarge.let { it.copy(fontSize = 17.sp, lineHeight = 22.sp, fontWeight = settings.type.playerTitleWeight.artist ?: it.fontWeight) }, Color.White.copy(alpha = 0.6f), scrolls,
-                                    Modifier.clickable(enabled = linked.isNotEmpty()) {
+                                    Modifier.testTag("playerArtist").combinedClickable(enabled = linked.isNotEmpty() || menuHeld != null, onLongClick = menuHeld) {
                                         if (linked.size > 1) pickArtist = true else linked.firstOrNull()?.let { onCollapse(); nav.go(Routes.artist(it)) }
                                     },
                                     delayMs = 5500,
@@ -1010,13 +1031,13 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                             Spacer(Modifier.width(8.dp))
                         }
                         val isLiked = song.id in liked
-                        if (!heartBelow) {
+                        if (!heartBelow && inHeader(PlayerPart.LIKE)) {
                             CircleGlyph(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) tr(R.string.remove_from_liked) else tr(R.string.widget_like), isLiked) {
                                 c.library.toggleLike(song)
                             }
                             Spacer(Modifier.width(8.dp))
                         }
-                        CircleGlyph(PrismIcons.More, tr(R.string.song_options)) { showActions = true }
+                        if (settings.showsMenuButton() || collapsePastHalf) CircleGlyph(PrismIcons.More, tr(R.string.song_options)) { showActions = true }
                     }
 
                     // ---- Lyrics and queue panels, under the collapsed header
@@ -1097,6 +1118,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                             val small = (lyricsOpen || queueOpen) && panelPlayer == com.prism.music.data.prefs.PanelPlayer.SMALL
                             val parts = settings.playerDeck.filter { it != com.prism.music.data.prefs.DeckPart.STRIP || (!lyricsOpen && settings.lyricsOnPlayer) }
                                 .filter { !small || it == com.prism.music.data.prefs.DeckPart.SCRUBBER || it == com.prism.music.data.prefs.DeckPart.TRANSPORT || it == com.prism.music.data.prefs.DeckPart.BUTTONS }
+                                // What's on the player (1.8.0): the progress bar and the buttons row can go too.
+                                .filter { it != com.prism.music.data.prefs.DeckPart.SCRUBBER || settings.shows(PlayerPart.PROGRESS) }
+                                .filter { it != com.prism.music.data.prefs.DeckPart.BUTTONS || settings.shows(PlayerPart.BUTTONS) }
                             parts.forEachIndexed { i, part ->
                                 when (part) {
                                     com.prism.music.data.prefs.DeckPart.STRIP -> CurrentLyricStrip(lyricsState, isPlaying && !covered, openLyrics)
@@ -1106,7 +1130,10 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                         if (!SingWord() && !BestPartChip() && settings.showQuality) QualityLabel(Modifier.align(Alignment.Center), selected = statsOpen) { toggleStats() }
                                     }
                                     com.prism.music.data.prefs.DeckPart.TRANSPORT ->
-                                        TransportRow(isPlaying, buffering, previousEnabled = hasPrevious || pastStart, nextEnabled = hasNext, compact = small, episode = song.isEpisode)
+                                        TransportRow(
+                                            isPlaying, buffering, previousEnabled = hasPrevious || pastStart, nextEnabled = hasNext, compact = small, episode = song.isEpisode,
+                                            skips = settings.shows(PlayerPart.PREV_NEXT),
+                                        )
                                     // A hidden volume bar keeps its room, so the transport sits where it always has (giving it
                                     // to a Large / Full width cover in 1.6.4 dropped the controls toward the bottom row).
                                     com.prism.music.data.prefs.DeckPart.VOLUME -> if (!settings.hideVolumeBar) VolumeRow(volume) else Spacer(Modifier.height(VOLUME_ROW_HEIGHT))

@@ -344,7 +344,137 @@ data class ViewLook(
     val playRing: Boolean = true,
     /** Reddit (1.7.9.2): on album, playlist and artist pages, the playing song's bars and title in the page's picture color. */
     val playingInPageColor: Boolean = false,
+    /** 1.8.0: what's on the player and what's in its ⋯ menu ([PlayerParts]). */
+    val parts: PlayerParts = PlayerParts(),
 )
+
+// 1.8.0 player editor
+/**
+ * A part of the player that can be hidden or shown ("What's on the player", 1.8.0). Only play / pause always stays.
+ * Parts that had a switch of their own keep it ([AppSettings.shows]); the rest are kept in [PlayerParts.hidden].
+ */
+enum class PlayerPart(val label: String) {
+    HANDLE(tr(R.string.handle_at_the_top)), FROM_ALBUM(tr(R.string.from_the_album)), COVER(tr(R.string.cover)),
+    TITLE(tr(R.string.title)), ARTIST(tr(R.string.artist)), LIKE(tr(R.string.widget_like)), MENU(tr(R.string.song_menu)),
+    LYRIC_LINE(tr(R.string.current_lyric)), PROGRESS(tr(R.string.progress_bar)), TIMES(tr(R.string.times)),
+    QUALITY(tr(R.string.stream_quality)), BEST_PART(tr(R.string.best_part)), PREV_NEXT(tr(R.string.previous_and_next)),
+    /** Shown only while Crossfade is on (Settings → Sound): the mark where the next song comes in, and the covers blending. */
+    CROSSFADE_MARK(tr(R.string.crossfade_mark)), BLEND_COVERS(tr(R.string.covers_blend_too)),
+    SHUFFLE_REPEAT(tr(R.string.shuffle_repeat)), VOLUME(tr(R.string.volume)), BUTTONS(tr(R.string.buttons)),
+    OUTPUT(tr(R.string.output_device)), NAV_BAND(tr(R.string.band_behind_the_navigation_buttons));
+
+    companion object {
+        /** The parts with no switch of their own before 1.8.0: hidden ones are kept by name in [PlayerParts.hidden]. */
+        val NEW = setOf(COVER, TITLE, ARTIST, LIKE, MENU, PROGRESS, PREV_NEXT, BUTTONS)
+        /** Only on the player (and in the editor) while Crossfade is on. */
+        val CROSSFADE = setOf(CROSSFADE_MARK, BLEND_COVERS)
+    }
+}
+
+/** The ⋯ menu's groups, in the menu's order (1.8.0). */
+enum class MenuGroup(val label: String) { SONG(tr(R.string.this_song)), LYRICS(tr(R.string.lyrics)), PLAYING(tr(R.string.playing_now)), HELP(tr(R.string.help)) }
+
+/**
+ * An action in the player's ⋯ menu (1.8.0), in its group's order. Any of them can be one of the four quick tiles or be
+ * hidden ("Edit this menu"); a hidden one folds under "More" at the menu's end, never gone. "Player settings" and "Edit
+ * this menu" aren't here: they always stay. [fromPlayer] actions only show while their part of the player is hidden.
+ */
+enum class MenuAction(val group: MenuGroup, val fromPlayer: Boolean = false) {
+    ADD_TO_PLAYLIST(MenuGroup.SONG), RADIO(MenuGroup.SONG), DOWNLOAD(MenuGroup.SONG), ALBUM(MenuGroup.SONG), ARTIST(MenuGroup.SONG),
+    CREDITS(MenuGroup.SONG), VERSION(MenuGroup.SONG), NOT_FOR_ME(MenuGroup.SONG),
+    SING(MenuGroup.LYRICS), LYRICS_SOURCE(MenuGroup.LYRICS), LYRICS_TIMING(MenuGroup.LYRICS), TRANSLATE(MenuGroup.LYRICS),
+    ROMANIZE(MenuGroup.LYRICS), LYRICS_AGAIN(MenuGroup.LYRICS), LYRICS_INTO_FILE(MenuGroup.LYRICS),
+    OPEN_LYRICS(MenuGroup.PLAYING, true), OPEN_QUEUE(MenuGroup.PLAYING, true), VIDEO_SWITCH(MenuGroup.PLAYING, true),
+    PREVIOUS(MenuGroup.PLAYING, true), NEXT(MenuGroup.PLAYING, true), DJ(MenuGroup.PLAYING, true), EQUALIZER(MenuGroup.PLAYING, true),
+    SLEEP(MenuGroup.PLAYING), SPEED_PITCH(MenuGroup.PLAYING), OUTPUT(MenuGroup.PLAYING), IMMERSIVE(MenuGroup.PLAYING),
+    VIDEO_DOWNLOAD(MenuGroup.PLAYING), LISTEN_TOGETHER(MenuGroup.PLAYING), BEST_PART(MenuGroup.PLAYING),
+    ANIMATED_COVER(MenuGroup.PLAYING), SAVE_ANIMATED_COVER(MenuGroup.PLAYING),
+    STATS(MenuGroup.HELP), MARK_STUTTER(MenuGroup.HELP);
+
+    companion object {
+        /** The tiles as the menu always had them. */
+        val DEFAULT_TILES = listOf(RADIO, DOWNLOAD, ADD_TO_PLAYLIST, SLEEP)
+        const val MAX_TILES = 4
+    }
+}
+
+/**
+ * What's on the player and in its ⋯ menu (1.8.0), in one value (AppSettings is at its slot limit). Every default is the
+ * player and the menu as 1.7.9 had them. The menu's choices aren't part of a Look.
+ */
+data class PlayerParts(
+    /** Hidden parts of [PlayerPart.NEW] (the others keep their own switches). */
+    val hidden: Set<PlayerPart> = emptySet(),
+    /** Menu actions folded under "More". */
+    val menuHidden: Set<MenuAction> = emptySet(),
+    /** The quick tiles, in order (up to [MenuAction.MAX_TILES]). */
+    val menuTiles: List<MenuAction> = MenuAction.DEFAULT_TILES,
+)
+
+/** Whether [part] is on the player (each part that had its own switch still reads it). */
+fun AppSettings.shows(part: PlayerPart): Boolean = when (part) {
+    PlayerPart.HANDLE -> playerHandle
+    PlayerPart.FROM_ALBUM -> showPlayingFrom
+    PlayerPart.LYRIC_LINE -> lyricsOnPlayer
+    PlayerPart.TIMES -> playerTimes != PlayerTimes.NONE
+    PlayerPart.QUALITY -> showQuality
+    PlayerPart.BEST_PART -> bestPartButton
+    PlayerPart.SHUFFLE_REPEAT -> playerShuffleRepeat
+    PlayerPart.VOLUME -> !hideVolumeBar
+    PlayerPart.OUTPUT -> showOutputDevice
+    PlayerPart.NAV_BAND -> playerNavBand
+    PlayerPart.CROSSFADE_MARK -> view.crossfadeMark
+    PlayerPart.BLEND_COVERS -> view.blendCovers
+    else -> part !in view.parts.hidden
+}
+
+/** Prism's own volume (#116) has no buttons of its own: its slider stays while it's picked. */
+fun AppSettings.canHide(part: PlayerPart): Boolean = !(part == PlayerPart.VOLUME && volumeControl == VolumeControl.PRISM)
+
+/**
+ * The ⋯ button shows unless hidden, and even then while nothing else on the player opens the menu: a long press on the
+ * title or the artist does while either shows, and a gesture set to the song menu does.
+ */
+fun AppSettings.showsMenuButton(): Boolean = shows(PlayerPart.MENU) ||
+    (!shows(PlayerPart.TITLE) && !shows(PlayerPart.ARTIST) && PlayerGesture.MENU !in listOf(coverSwipeLeft, coverSwipeRight, coverSwipeUp, coverDoubleTap, coverLongPress))
+
+/** The bottom row's buttons as they show on the player (none while the row is hidden). */
+fun AppSettings.rowButtons(): List<PlayerButton> =
+    if (!shows(PlayerPart.BUTTONS)) emptyList() else playerButtons.filter { it != PlayerButton.VIDEO || showVideoSwitch }
+
+/**
+ * The ⋯ menu's [MenuAction.fromPlayer] actions: what the player no longer shows, so hiding never takes a feature away.
+ * (Shuffle and repeat live in the queue, which is either on the row or here.)
+ */
+fun AppSettings.menuFromPlayer(): List<MenuAction> {
+    val row = rowButtons()
+    return listOfNotNull(
+        MenuAction.OPEN_LYRICS.takeIf { PlayerButton.LYRICS !in row },
+        MenuAction.OPEN_QUEUE.takeIf { PlayerButton.QUEUE !in row },
+        MenuAction.VIDEO_SWITCH.takeIf { PlayerButton.VIDEO !in row && showVideoSwitch },
+        MenuAction.PREVIOUS.takeIf { !shows(PlayerPart.PREV_NEXT) },
+        MenuAction.NEXT.takeIf { !shows(PlayerPart.PREV_NEXT) },
+        MenuAction.DJ.takeIf { PlayerButton.DJ in playerButtons && PlayerButton.DJ !in row },
+        MenuAction.EQUALIZER.takeIf { PlayerButton.EQUALIZER in playerButtons && PlayerButton.EQUALIZER !in row },
+    )
+}
+
+/** The ⋯ menu laid out (1.8.0): the quick tiles, each group's shown actions, and the hidden ones folded under "More". */
+data class MenuLayout(val tiles: List<MenuAction>, val groups: List<Pair<MenuGroup, List<MenuAction>>>, val more: List<MenuAction>)
+
+/** [available]: the actions this song has (a file on the phone has no radio…), in any order. */
+fun PlayerParts.menuLayout(available: Collection<MenuAction>): MenuLayout {
+    val here = available.toSet()
+    val tiles = menuTiles.filter { it in here }.distinct().take(MenuAction.MAX_TILES)
+    // An action from the player is never folded away: it's there because its part is hidden.
+    val rest = MenuAction.entries.filter { it in here && it !in tiles }
+    val shown = rest.filter { it.fromPlayer || it !in menuHidden }
+    return MenuLayout(
+        tiles,
+        MenuGroup.entries.map { g -> g to shown.filter { it.group == g } }.filter { it.second.isNotEmpty() },
+        rest.filter { !it.fromPlayer && it in menuHidden },
+    )
+}
 
 /**
  * How music sounds, added in 1.7.8 (A1–A5, R12; not part of a Look). Nested (see [ShapeLook]). Every default keeps
@@ -1628,6 +1758,10 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val crossfadeMark = booleanPreferencesKey("crossfade_mark")
         val blendCovers = booleanPreferencesKey("blend_covers")
         val buttonsPill = booleanPreferencesKey("player_buttons_pill")
+        // 1.8.0 player editor ([PlayerParts]): the hidden parts are part of a Look, the menu's choices aren't.
+        val playerHiddenParts = stringPreferencesKey("player_hidden_parts")
+        val playerMenuHidden = stringPreferencesKey("player_menu_hidden")
+        val playerMenuTiles = stringPreferencesKey("player_menu_tiles")
         // 1.7.8 ([SoundPrefs]).
         val crossfadeCurve = stringPreferencesKey("crossfade_curve")
         val normalizeTarget = intPreferencesKey("normalize_target")
@@ -1657,7 +1791,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 cornerScale, songShape, albumShape, artistShape, playerShape, buttonShape, playOutlined,
                 typeWeight, typeSpacing, titleFont, tabTint, playerTitleWeight, typeClassic, controlsClassic,
                 panelPlayer, queueHeadings, castMark, immersiveVideo, bleedFit, coverFlight, videoControlsHide,
-                crossfadeMark, blendCovers, buttonsPill,
+                crossfadeMark, blendCovers, buttonsPill, playerHiddenParts,
             ) + lyricsLook.map { it.first }
         }
 
@@ -1691,7 +1825,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 cornerScale to 'f', songShape to 's', albumShape to 's', artistShape to 's', playerShape to 's', buttonShape to 's', playOutlined to 'b',
                 typeWeight to 's', typeSpacing to 's', titleFont to 's', tabTint to 's', playerTitleWeight to 's', typeClassic to 'b', controlsClassic to 'b',
                 panelPlayer to 's', queueHeadings to 'b', castMark to 'b', immersiveVideo to 'b', bleedFit to 's', coverFlight to 'b',
-                videoControlsHide to 'b', crossfadeMark to 'b', blendCovers to 'b', buttonsPill to 'b',
+                videoControlsHide to 'b', crossfadeMark to 'b', blendCovers to 'b', buttonsPill to 'b', playerHiddenParts to 's',
             ) + lyricsLook
         }
 
@@ -1699,6 +1833,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val notLook: Set<String> by lazy {
             setOf(
                 "performance_mode", "performance_offered", "share_youtube_links", "mix_keep_albums",
+                "player_menu_hidden", "player_menu_tiles",
                 "lyrics_file_words", "lyrics_file_translation",
                 "merge_liked_videos", "volume_control", "app_volume", "speed_dial_youtube_only", "swipe_tabs",
                 "onboarded", "cookie", "visitor_data", "data_sync_id", "auth_user", "discord_presence", "account_name", "account_email",
@@ -1803,8 +1938,10 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
             pageColors = p[K.pageColors] ?: d.pageColors,
             frostedGlass = p[K.frostedGlass] ?: d.frostedGlass,
             haptics = p[K.haptics] ?: d.haptics,
-            fullBleedArtwork = p[K.fullBleedArtwork] ?: d.fullBleedArtwork,
-            videoFullBleed = p[K.videoFullBleed] ?: d.videoFullBleed,
+            // 1.8.0 player editor: one switch for the cover and the video ("Full-bleed artwork"); on if either was on (a
+            // full-bleed cover with a framed video looked broken). Both keys are kept and always written together.
+            fullBleedArtwork = fullBleed(p),
+            videoFullBleed = fullBleed(p),
             immersivePlayer = p[K.immersivePlayer] ?: d.immersivePlayer,
             immersiveArt = p.enum(K.immersiveArt, d.immersiveArt),
             immersiveLyrics = p.enum(K.immersiveLyrics, d.immersiveLyrics),
@@ -1973,6 +2110,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 miniFillStrength = (p[K.miniFillStrength] ?: d.view.miniFillStrength).coerceIn(0.1f, 0.9f),
                 playRing = p[K.playRing] ?: d.view.playRing,
                 playingInPageColor = p[K.playingInPageColor] ?: d.view.playingInPageColor,
+                parts = readParts(p),
             ),
             sound = SoundPrefs(
                 crossfadeCurve = p.enum(K.crossfadeCurve, d.sound.crossfadeCurve),
@@ -2278,8 +2416,9 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     /** Appearance → Color → Reset colors: style, accent, split light, background, contrast and cover color as Prism ships. */
     @Suppress("UNCHECKED_CAST")
     fun resetColors() = edit { p -> K.colors.forEach { p.remove(it as Preferences.Key<Any>) } }
-    fun setFullBleedArtwork(v: Boolean) = edit { it[K.fullBleedArtwork] = v }
-    fun setVideoFullBleed(v: Boolean) = edit { it[K.videoFullBleed] = v }
+    // 1.8.0 player editor: the cover and the video are one switch (see [fullBleed]).
+    fun setFullBleedArtwork(v: Boolean) = edit { it[K.fullBleedArtwork] = v; it[K.videoFullBleed] = v }
+    fun setVideoFullBleed(v: Boolean) = setFullBleedArtwork(v)
     fun setImmersivePlayer(v: Boolean) = edit { it[K.immersivePlayer] = v }
     fun setImmersiveArt(v: ImmersiveArt) = edit { it[K.immersiveArt] = v.name }
     fun setImmersiveLyrics(v: ImmersiveLyrics) = edit { it[K.immersiveLyrics] = v.name }
@@ -2535,6 +2674,63 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setCrossfadeMark(v: Boolean) = edit { it[K.crossfadeMark] = v }
     fun setBlendCovers(v: Boolean) = edit { it[K.blendCovers] = v }
     fun setButtonsPill(v: Boolean) = edit { it[K.buttonsPill] = v }
+
+    // 1.8.0 player editor
+    /** A comma-separated set of names (unknown ones skipped): a Look or backup from a later Prism still opens. */
+    private inline fun <reified E : Enum<E>> namesOf(v: String?): List<E> =
+        v.orEmpty().split(',').mapNotNull { n -> enumValues<E>().firstOrNull { it.name == n } }.distinct()
+
+    /** Full-bleed artwork and full-bleed video, one switch since 1.8.0: on if either was. */
+    private fun fullBleed(p: Preferences) = (p[K.fullBleedArtwork] ?: false) || (p[K.videoFullBleed] ?: false)
+
+    private fun readParts(p: Preferences): PlayerParts {
+        val d = PlayerParts()
+        return PlayerParts(
+            hidden = namesOf<PlayerPart>(p[K.playerHiddenParts]).filter { it in PlayerPart.NEW }.toSet(),
+            menuHidden = namesOf<MenuAction>(p[K.playerMenuHidden]).filter { !it.fromPlayer }.toSet(),
+            // Set (even to none): as picked; never set: the menu's own four.
+            menuTiles = p[K.playerMenuTiles]?.let { v -> namesOf<MenuAction>(v).filter { !it.fromPlayer }.take(MenuAction.MAX_TILES) } ?: d.menuTiles,
+        )
+    }
+
+    /** Shows or hides [part] on the player, in its own switch where it has one ("What's on the player"). */
+    fun setPartShown(part: PlayerPart, on: Boolean) = edit {
+        when (part) {
+            PlayerPart.HANDLE -> it[K.playerHandle] = on
+            PlayerPart.FROM_ALBUM -> it[K.showPlayingFrom] = on
+            PlayerPart.LYRIC_LINE -> it[K.lyricsOnPlayer] = on
+            // Times back: both, as the player first had them (left / elapsed only are picked in Title and times).
+            PlayerPart.TIMES -> it[K.playerTimes] = if (on) PlayerTimes.BOTH.name else PlayerTimes.NONE.name
+            PlayerPart.QUALITY -> it[K.showQuality] = on
+            PlayerPart.BEST_PART -> it[K.bestPartButton] = on
+            PlayerPart.SHUFFLE_REPEAT -> it[K.playerShuffleRepeat] = on
+            PlayerPart.VOLUME -> it[K.hideVolumeBar] = !on
+            PlayerPart.OUTPUT -> it[K.showOutputDevice] = on
+            PlayerPart.NAV_BAND -> it[K.playerNavBand] = on
+            PlayerPart.CROSSFADE_MARK -> it[K.crossfadeMark] = on
+            PlayerPart.BLEND_COVERS -> it[K.blendCovers] = on
+            else -> {
+                val hidden = namesOf<PlayerPart>(it[K.playerHiddenParts]).toSet().let { h -> if (on) h - part else h + part }
+                if (hidden.isEmpty()) it.remove(K.playerHiddenParts) else it[K.playerHiddenParts] = hidden.joinToString(",") { h -> h.name }
+            }
+        }
+    }
+
+    /** Shows [action] in the ⋯ menu's groups, or folds it under "More" ("Edit this menu"). */
+    fun setMenuShown(action: MenuAction, on: Boolean) = edit {
+        val hidden = namesOf<MenuAction>(it[K.playerMenuHidden]).toSet().let { h -> if (on) h - action else h + action }
+        if (hidden.isEmpty()) it.remove(K.playerMenuHidden) else it[K.playerMenuHidden] = hidden.joinToString(",") { h -> h.name }
+    }
+
+    /** The ⋯ menu's quick tiles, in order (up to four); the menu's own four when they're those again. */
+    fun setMenuTiles(v: List<MenuAction>) = edit {
+        val tiles = v.filter { a -> !a.fromPlayer }.distinct().take(MenuAction.MAX_TILES)
+        if (tiles == MenuAction.DEFAULT_TILES) it.remove(K.playerMenuTiles) else it[K.playerMenuTiles] = tiles.joinToString(",") { t -> t.name }
+    }
+
+    /** Edit this menu → "Back to Prism's menu". */
+    fun resetMenu() = edit { it.remove(K.playerMenuHidden); it.remove(K.playerMenuTiles) }
+
     fun setCrossfadeCurve(v: CrossfadeCurve) = edit { it[K.crossfadeCurve] = v.name }
     fun setNormalizeTarget(v: Int) = edit { it[K.normalizeTarget] = v.coerceIn(-30, -5) }
     fun setNormalizeAlbums(v: Boolean) = edit { it[K.normalizeAlbums] = v }
