@@ -217,12 +217,12 @@ object Widgets {
     private fun views(context: Context, style: WidgetStyle, s: State, art: Art?, o: WidgetOptions = WidgetOptions()): RemoteViews {
         val v = RemoteViews(context.packageName, style.layout)
         val song = s.song
-        v.setTextViewText(R.id.widget_title, song?.title ?: context.getString(R.string.widget_nothing))
-        v.setTextViewText(R.id.widget_artist, song?.artistText ?: context.getString(R.string.widget_tap_to_play))
+        v.setTextViewText(R.id.widget_title, song?.title ?: com.prism.music.tr(R.string.widget_nothing))
+        v.setTextViewText(R.id.widget_artist, song?.artistText ?: com.prism.music.tr(R.string.widget_tap_to_play))
         val cover = art?.square?.get(style)
         if (cover != null) v.setImageViewBitmap(R.id.widget_art, cover) else v.setImageViewResource(R.id.widget_art, R.drawable.ic_notification)
         v.setImageViewResource(R.id.widget_play, if (s.playing) R.drawable.ic_w_pause else R.drawable.ic_w_play)
-        v.setContentDescription(R.id.widget_play, context.getString(if (s.playing) R.string.widget_pause else R.string.widget_play))
+        v.setContentDescription(R.id.widget_play, com.prism.music.tr(if (s.playing) R.string.widget_pause else R.string.widget_play))
         val heart = when (style) {
             WidgetStyle.YTMUSIC -> if (s.liked) R.drawable.ic_w_thumb else R.drawable.ic_w_thumb_outline
             else -> if (s.liked) R.drawable.ic_w_heart else R.drawable.ic_w_heart_outline
