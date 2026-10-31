@@ -2042,17 +2042,18 @@ private fun LyricsSettings() {
             Toggle(tr(R.string.prefer_karaoke_synced_lyrics), tr(R.string.word_by_word_first_then_by), s.preferSynced, info = tr(R.string.karaoke_lyrics_lit_up_word_by)) { prefs.setPreferSynced(it) }
             Toggle(tr(R.string.uncensor_lyrics), tr(R.string.fills_in_starred_out_words), s.skipCensored, info = tr(R.string.swear_words_starred_out_f_k)) { prefs.setSkipCensored(it) }
             LyricSourcesOrder()
+            // 1.8.0: from the lyrics look page (it's about sources, not looks).
+            Toggle(tr(R.string.lyrics_source_button), tr(R.string.lyrics_source_button_info), s.lyricsSourceButton) { prefs.setLyricsSourceButton(it) }
         }
         Group(tr(R.string.language)) {
-            Toggle(
-                tr(R.string.translate_lyrics), tr(R.string.your_language_under_each_line), s.lyricsTranslate,
-                info = tr(R.string.for_songs_in_another_language_machine),
-            ) { prefs.setLyricsTranslate(it) }
-            if (s.lyricsTranslate) {
-                Label(tr(R.string.translate_into))
-                Chips(TRANSLATE_LANGUAGES.map { it.first }, s.lyricsTranslateTo.takeIf { code -> TRANSLATE_LANGUAGES.any { it.first == code } } ?: "",
-                    { code -> TRANSLATE_LANGUAGES.first { it.first == code }.second }) { prefs.setLyricsTranslateTo(it) }
-            }
+            // 1.8.0: the switch is the first choice, Off (same stored settings: lyricsTranslate + lyricsTranslateTo).
+            Label(tr(R.string.translate_into), info = tr(R.string.for_songs_in_another_language_machine))
+            val off = "\u0000off"
+            Chips(
+                listOf(off) + TRANSLATE_LANGUAGES.map { it.first },
+                if (!s.lyricsTranslate) off else s.lyricsTranslateTo.takeIf { code -> TRANSLATE_LANGUAGES.any { it.first == code } } ?: "",
+                { code -> if (code == off) tr(R.string.off) else TRANSLATE_LANGUAGES.first { it.first == code }.second },
+            ) { code -> if (code == off) prefs.setLyricsTranslate(false) else { prefs.setLyricsTranslateTo(code); prefs.setLyricsTranslate(true) } }
             Label(tr(R.string.romanize_lyrics), info = tr(R.string.other_scripts_in_latin_letters_to))
             Chips(com.prism.music.data.prefs.RomanizeMode.entries, s.romanize, { it.label }) { prefs.setRomanize(it) }
             if (s.romanize != com.prism.music.data.prefs.RomanizeMode.OFF) Toggle(
@@ -2062,21 +2063,24 @@ private fun LyricsSettings() {
             JapaneseReadingData()
         }
         SingSettings()
-        Group(tr(R.string.your_music_files)) {
-            val c = LocalContainer.current
-            Item(
-                tr(R.string.save_lyrics_into_your_music_files), tr(R.string.so_other_players_show_them_too),
-                info = tr(R.string.synced_lyrics_go_into_your_flac),
-                onClick = { c.lyricsToFiles.request(null) },
-            )
-            // Reddit, 1.7.9.2: what goes in with them.
-            Toggle(
-                tr(R.string.keep_word_timings), tr(R.string.karaoke_lyrics_light_word_by_word), s.lyricsFileWords,
-                info = tr(R.string.saved_as_enhanced_lrc_players),
-            ) { prefs.setLyricsFileWords(it) }
-            Toggle(
-                tr(R.string.include_the_translation), tr(R.string.under_each_line_in_your_translation_language), s.lyricsFileTranslation,
-            ) { prefs.setLyricsFileTranslation(it) }
+        // 1.8.0: rarely used, so folded away.
+        MoreOptions(listOf(tr(R.string.your_music_files))) {
+            Group(tr(R.string.your_music_files)) {
+                val c = LocalContainer.current
+                Item(
+                    tr(R.string.save_lyrics_into_your_music_files), tr(R.string.so_other_players_show_them_too),
+                    info = tr(R.string.synced_lyrics_go_into_your_flac),
+                    onClick = { c.lyricsToFiles.request(null) },
+                )
+                // Reddit, 1.7.9.2: what goes in with them.
+                Toggle(
+                    tr(R.string.keep_word_timings), tr(R.string.karaoke_lyrics_light_word_by_word), s.lyricsFileWords,
+                    info = tr(R.string.saved_as_enhanced_lrc_players),
+                ) { prefs.setLyricsFileWords(it) }
+                Toggle(
+                    tr(R.string.include_the_translation), tr(R.string.under_each_line_in_your_translation_language), s.lyricsFileTranslation,
+                ) { prefs.setLyricsFileTranslation(it) }
+            }
         }
     }
 }

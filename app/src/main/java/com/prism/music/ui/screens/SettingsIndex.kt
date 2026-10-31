@@ -305,9 +305,8 @@ object SettingsIndex {
         // Lyrics
         SettingEntry(YL, tr(R.string.look), tr(R.string.focus_blur)),
         SettingEntry(YL, tr(R.string.look), tr(R.string.progress_line), tr(R.string.spectrum_line_underline_sung_lyric)),
-        SettingEntry(YL, tr(R.string.look), tr(R.string.lyrics_source_button), tr(R.string.change_lyrics_source)),
-        SettingEntry(Y, tr(R.string.language), tr(R.string.translate_lyrics), tr(R.string.translation_language)),
-        SettingEntry(Y, tr(R.string.language), tr(R.string.translate_into), tr(R.string.translation_language), needs = translate),
+        SettingEntry(Y, tr(R.string.sources), tr(R.string.lyrics_source_button), tr(R.string.change_lyrics_source)),
+        SettingEntry(Y, tr(R.string.language), tr(R.string.translate_into), tr(R.string.translation_language) + " " + tr(R.string.translate_lyrics)),
         SettingEntry(Y, tr(R.string.language), tr(R.string.romanize_lyrics), tr(R.string.romanization_romaji_pinyin_latin_letters_transli)),
         SettingEntry(Y, tr(R.string.language), tr(R.string.romanize_my_own_language_too), tr(R.string.romanization_native_script), needs = romanize),
         SettingEntry(Y, tr(R.string.language), tr(R.string.japanese_kanji_readings), tr(R.string.romaji_kanji_dictionary_download_kuromoji_japane)),
