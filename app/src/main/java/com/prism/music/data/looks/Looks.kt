@@ -260,6 +260,9 @@ object LookLabels {
         "lyrics_bg_color2" to tr(R.string.lyrics_gradient_s_second_color), "lyrics_everywhere" to tr(R.string.same_lyrics_look_everywhere),
         "lyrics_strip_align" to tr(R.string.lyric_line_on_the_player), "lyrics_strip_two_lines" to tr(R.string.lyric_line_up_to_two_lines),
         "lyrics_gap_mark" to tr(R.string.instrumental_breaks),
+        // 1.8.0 lyrics look
+        "lyrics_motion" to tr(R.string.lyrics_animation), "lyrics_word_by_word" to tr(R.string.lyrics_word_by_word),
+        "lyrics_card" to tr(R.string.lyrics_on_bold_card), "lyrics_halo" to tr(R.string.lyrics_glow), "lyrics_bold_lines" to tr(R.string.bold_card_s_bold_lines),
         "panel_player" to tr(R.string.player_over_lyrics_queue), "queue_headings" to tr(R.string.queue_headings), "cast_mark" to tr(R.string.cast_mark_under_the_player),
         "immersive_video" to tr(R.string.video_in_immersive_mode), "bleed_fit" to tr(R.string.full_bleed_artwork_s_fit), "cover_flight" to tr(R.string.cover_flies_into_the_player),
         "video_controls_hide" to tr(R.string.controls_hide_over_videos), "crossfade_mark" to tr(R.string.crossfade_mark), "blend_covers" to tr(R.string.covers_blend_in_a_crossfade), "player_buttons_pill" to tr(R.string.player_buttons_in_a_capsule),
@@ -334,6 +337,7 @@ object LookLabels {
             "visualizer" to e(com.prism.music.data.prefs.VisualizerStyle.entries) { it.label },
             "visualizer_color" to e(com.prism.music.data.prefs.ScrubberColor.entries) { it.label },
             "lyrics_style" to e(com.prism.music.data.prefs.LyricsStyle.entries) { it.label },
+            "lyrics_motion" to e(com.prism.music.data.prefs.LyricsMotion.entries) { it.label },
             "lyrics_sung_color" to e(com.prism.music.data.prefs.LyricsColor.entries) { it.label },
             "lyrics_other_color" to e(com.prism.music.data.prefs.LyricsColor.entries) { it.label },
             "lyrics_extra_color" to e(com.prism.music.data.prefs.LyricsColor.entries) { it.label },

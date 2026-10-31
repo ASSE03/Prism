@@ -154,7 +154,72 @@ data class LyricsLookPrefs(
     val everywhere: Boolean = true,
     /** What an instrumental break shows on the lyrics page (#158): the three dots, or a music note. */
     val gapMark: LyricsGapMark = LyricsGapMark.DOTS,
-)
+    // 1.8.0 lyrics look (#253): the parts a Style used to fix, each the listener's own once picked. Unset (null), a
+    // part is what [style] (now "Start from") gives it, so 1.7.9's looks, older Look codes and backups draw as they did.
+    val motion: LyricsMotion? = null,
+    val wordByWord: Boolean? = null,
+    val card: Boolean? = null,
+    val halo: Boolean? = null,
+    val boldLines: Boolean? = null,
+) {
+    // 1.8.0 lyrics look: each part as it's drawn.
+    /** How the line being sung moves. */
+    val motionNow: LyricsMotion get() = motion ?: style.motion
+    /** Lines timed only as a whole get word timings of their own (by length), so they move word by word too. */
+    val wordByWordNow: Boolean get() = wordByWord ?: style.wordByWord
+    /** Bold card: the lines on the cover's color, the ones to come dark (only with that background; see [pageBackground]). */
+    val cardNow: Boolean get() = card ?: (style == LyricsStyle.CARD)
+    /** A glow round the sung words (Android 12 and later). */
+    val haloNow: Boolean get() = halo ?: (style == LyricsStyle.GLOW)
+    /** Bold card's type: at least Bold, whatever [weight] says, until a weight is picked. */
+    val boldLinesNow: Boolean get() = boldLines ?: (style == LyricsStyle.CARD)
+    /** The weight the lines are drawn in. */
+    val weightNow: LyricsWeight get() = if (boldLinesNow && weight.weight < LyricsWeight.BOLD.weight) LyricsWeight.BOLD else weight
+    /** The lines' size against the size setting: starting from Bold card, a tenth bigger. */
+    val sizeScale: Float get() = if (style == LyricsStyle.CARD) 1.1f else 1f
+    /** What's behind the lyrics page: Bold card brings its own color when the background is left as it is. */
+    val pageBackground: LyricsBackground get() = if (cardNow && background == LyricsBackground.PLAYER) LyricsBackground.COVER_COLOR else background
+
+    /**
+     * The look started again from [template] ("Start from"): its animation, type, card and glow, every other choice
+     * (colors, size, where the lines sit…) kept. Bold card brings its color back when another background hid it.
+     */
+    fun startFrom(template: LyricsStyle): LyricsLookPrefs = copy(
+        style = template, motion = null, wordByWord = null, card = null, halo = null, boldLines = null,
+        background = if (template == LyricsStyle.CARD && background != LyricsBackground.COVER_COLOR) LyricsBackground.PLAYER else background,
+    )
+
+    /** Bold card is drawn on the lyrics page. */
+    val onCard: Boolean get() = cardNow && pageBackground == LyricsBackground.COVER_COLOR
+
+    /** Whether a part [style] sets (animation, type, card, glow) was changed since it was picked. */
+    val changedFromStart: Boolean get() = startFrom(style).let { t ->
+        motionNow != t.motionNow || wordByWordNow != t.wordByWordNow || haloNow != t.haloNow || weightNow != t.weightNow || onCard != t.onCard
+    }
+}
+
+// ---------------------------------------------------------------------------- 1.8.0 lyrics look (#253)
+
+/** How the line being sung moves (1.8.0: a part of its own; 1.7.9's Styles each had one). */
+enum class LyricsMotion(val label: String, val note: String) {
+    GROW(tr(R.string.grows_bolder), tr(R.string.each_word_grows_bolder_as_it)),
+    FILL(tr(R.string.color_fills), tr(R.string.color_fills_the_words_as_they)),
+    SWEEP(tr(R.string.light_sweeps), tr(R.string.a_light_sweeps_through_the_words)),
+    TYPEWRITER(tr(R.string.typewriter), tr(R.string.words_appear_as_they_re_sung)),
+    NONE(tr(R.string.none), tr(R.string.no_animation_the_line_simply_brightens)),
+}
+
+/** The animation each Style starts with: Prism's words grow, Karaoke fills, Bold card and Glow sweep a light. */
+val LyricsStyle.motion: LyricsMotion get() = when (this) {
+    LyricsStyle.PRISM -> LyricsMotion.GROW
+    LyricsStyle.KARAOKE -> LyricsMotion.FILL
+    LyricsStyle.CARD, LyricsStyle.GLOW -> LyricsMotion.SWEEP
+    LyricsStyle.TYPEWRITER -> LyricsMotion.TYPEWRITER
+    LyricsStyle.CALM -> LyricsMotion.NONE
+}
+
+/** Whether a Style moves lines timed only as a whole word by word (Karaoke, Bold card and Typewriter did). */
+val LyricsStyle.wordByWord: Boolean get() = this == LyricsStyle.KARAOKE || this == LyricsStyle.CARD || this == LyricsStyle.TYPEWRITER
 
 /** An instrumental break on the lyrics page (1.7.8, #158). */
 enum class LyricsGapMark(val label: String) { DOTS(tr(R.string.three_dots)), NOTE(tr(R.string.music_note)) }
@@ -1222,7 +1287,7 @@ data class AppSettings(
         lyricsLook = lyricsLook.copy(
             blurAmount = 0f,
             shadow = false,
-            style = if (lyricsStyle == LyricsStyle.GLOW) LyricsStyle.PRISM else lyricsStyle,
+            halo = false,
             background = if (lyricsBackground == LyricsBackground.BLUR || lyricsBackground == LyricsBackground.CANVAS) LyricsBackground.PLAYER else lyricsBackground,
             immersiveBackground = if (immersiveBackground == LyricsBackground.CANVAS) LyricsBackground.PLAYER else immersiveBackground,
         ),
@@ -1491,6 +1556,15 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val lyricsGapMark = stringPreferencesKey("lyrics_gap_mark")
         val lyricsStripAlign = stringPreferencesKey("lyrics_strip_align")
         val lyricsStripTwoLines = booleanPreferencesKey("lyrics_strip_two_lines")
+        // 1.8.0 lyrics look (#253): the parts of [LyricsLookPrefs] a Style used to fix; unset follows the Style.
+        val lyricsMotion = stringPreferencesKey("lyrics_motion")
+        val lyricsWordByWord = booleanPreferencesKey("lyrics_word_by_word")
+        val lyricsCard = booleanPreferencesKey("lyrics_card")
+        val lyricsHalo = booleanPreferencesKey("lyrics_halo")
+        val lyricsBoldLines = booleanPreferencesKey("lyrics_bold_lines")
+        val lyricsParts: List<Pair<Preferences.Key<*>, Char>> by lazy {
+            listOf(lyricsMotion to 's', lyricsWordByWord to 'b', lyricsCard to 'b', lyricsHalo to 'b', lyricsBoldLines to 'b')
+        }
         val mergeLikedVideos = booleanPreferencesKey("merge_liked_videos")
         val hideStatusBar = booleanPreferencesKey("hide_status_bar")
         val volumeControl = stringPreferencesKey("volume_control")
@@ -1505,7 +1579,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 lyricsExtraColor to 's', lyricsExtraItalic to 'b', lyricsExtraPlace to 's', lyricsBackground to 's', immersiveBackground to 's',
                 lyricsBgColor to 'i', lyricsBgColor2 to 'i', lyricsEverywhere to 'b', lyricsStripAlign to 's', lyricsStripTwoLines to 'b',
                 lyricsGapMark to 's',
-            )
+            ) + lyricsParts
         }
         val coverSwipeLeft = stringPreferencesKey("cover_swipe_left")
         val coverSwipeRight = stringPreferencesKey("cover_swipe_right")
@@ -1996,6 +2070,12 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 bgColor2 = p[K.lyricsBgColor2] ?: d.lyricsBgColor2,
                 everywhere = p[K.lyricsEverywhere] ?: d.lyricsEverywhere,
                 gapMark = p.enum(K.lyricsGapMark, d.lyricsGapMark),
+                // 1.8.0 lyrics look: unset, each part follows the Style.
+                motion = p[K.lyricsMotion]?.let { v -> LyricsMotion.entries.firstOrNull { it.name == v } },
+                wordByWord = p[K.lyricsWordByWord],
+                card = p[K.lyricsCard],
+                halo = p[K.lyricsHalo],
+                boldLines = p[K.lyricsBoldLines],
             ),
             lyricsStripAlign = p.enum(K.lyricsStripAlign, d.lyricsStripAlign),
             lyricsStripTwoLines = p[K.lyricsStripTwoLines] ?: d.lyricsStripTwoLines,
@@ -2397,7 +2477,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setLyricsSungCustom(v: Int) = edit { it[K.lyricsSungCustom] = v; it[K.lyricsSungColor] = LyricsColor.CUSTOM.name }
     fun setLyricsOtherColor(v: LyricsColor) = edit { it[K.lyricsOtherColor] = v.name }
     fun setLyricsOtherCustom(v: Int) = edit { it[K.lyricsOtherCustom] = v; it[K.lyricsOtherColor] = LyricsColor.CUSTOM.name }
-    fun setLyricsWeight(v: LyricsWeight) = edit { it[K.lyricsWeight] = v.name }
+    /** The lines' weight, as picked (1.8.0: Bold card's own Bold gives way to it). */
+    fun setLyricsWeight(v: LyricsWeight) = edit { it[K.lyricsWeight] = v.name; it[K.lyricsBoldLines] = false }
     fun setLyricsBackingSize(v: Float) = edit { it[K.lyricsBackingSize] = v }
     fun setLyricsShadow(v: Boolean) = edit { it[K.lyricsShadow] = v }
     fun setLyricsUppercase(v: Boolean) = edit { it[K.lyricsUppercase] = v }
@@ -2412,6 +2493,18 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setLyricsBgColors(first: Int, second: Int) = edit { it[K.lyricsBgColor] = first; it[K.lyricsBgColor2] = second }
     fun setLyricsEverywhere(v: Boolean) = edit { it[K.lyricsEverywhere] = v }
     fun setLyricsGapMark(v: LyricsGapMark) = edit { it[K.lyricsGapMark] = v.name }
+    // 1.8.0 lyrics look (#253)
+    /** "Start from" [v]: as [LyricsLookPrefs.startFrom], every part back to what [v] sets. */
+    fun setLyricsStartFrom(v: LyricsStyle) = edit { p ->
+        p[K.lyricsStyle] = v.name
+        K.lyricsParts.forEach { (k, _) -> @Suppress("UNCHECKED_CAST") p.remove(k as Preferences.Key<Any>) }
+        if (v == LyricsStyle.CARD && p[K.lyricsBackground] != LyricsBackground.COVER_COLOR.name) p[K.lyricsBackground] = LyricsBackground.PLAYER.name
+    }
+    fun setLyricsMotion(v: LyricsMotion) = edit { it[K.lyricsMotion] = v.name }
+    fun setLyricsWordByWord(v: Boolean) = edit { it[K.lyricsWordByWord] = v }
+    fun setLyricsHalo(v: Boolean) = edit { it[K.lyricsHalo] = v }
+    /** What's behind the lyrics page; [card]: Bold card, in place of the player's background. */
+    fun setLyricsBehind(v: LyricsBackground, card: Boolean) = edit { it[K.lyricsBackground] = v.name; it[K.lyricsCard] = card }
     // 1.7.8
     fun setPanelPlayer(v: PanelPlayer) = edit { it[K.panelPlayer] = v.name }
     fun setQueueHeadings(v: Boolean) = edit { it[K.queueHeadings] = v }
