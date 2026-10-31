@@ -45,27 +45,35 @@ fun TvRoot() {
     TvTheme {
         var section by rememberSaveable { mutableStateOf(TvSection.HOME) }
         BackHandler(enabled = section != TvSection.HOME) { section = TvSection.HOME }
-        Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-            NavigationDrawer(
-                drawerContent = {
-                    Column(
-                        Modifier.fillMaxHeight().padding(vertical = TV_SAFE_V, horizontal = 12.dp).selectableGroup().testTag(TAG_NAV),
-                        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-                    ) {
-                        for (s in TvSection.entries) {
-                            NavigationDrawerItem(
-                                selected = section == s,
-                                onClick = { section = s },
-                                leadingContent = { Icon(s.icon(), contentDescription = null) },
-                                modifier = (if (s == TvSection.HOME) Modifier.entryFocus() else Modifier).testTag("$TAG_NAV/${s.name}"),
-                            ) { Text(s.label()) }
-                        }
+        TvNavFrame(section, { section = it }, focusNav = true) { TvPlace(section) }
+    }
+}
+
+/**
+ * The side navigation beside a top-level place's [content]. [focusNav]: focus opens on the picked place's item (while
+ * a place has nothing to focus yet); otherwise the place's own first item takes it.
+ */
+@Composable
+fun TvNavFrame(section: TvSection, onSection: (TvSection) -> Unit, focusNav: Boolean, content: @Composable () -> Unit) {
+    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+        NavigationDrawer(
+            drawerContent = {
+                Column(
+                    Modifier.fillMaxHeight().padding(vertical = TV_SAFE_V, horizontal = 12.dp).selectableGroup().testTag(TAG_NAV),
+                    verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+                ) {
+                    for (s in TvSection.entries) {
+                        NavigationDrawerItem(
+                            selected = section == s,
+                            onClick = { onSection(s) },
+                            leadingContent = { Icon(s.icon(), contentDescription = null) },
+                            modifier = (if (focusNav && s == section) Modifier.entryFocus() else Modifier).testTag("$TAG_NAV/${s.name}"),
+                        ) { Text(s.label()) }
                     }
-                },
-            ) {
-                TvPlace(section)
-            }
-        }
+                }
+            },
+            content = content,
+        )
     }
 }
 

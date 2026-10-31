@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
+import com.prism.music.data.prefs.AppSettings
 import com.prism.music.data.prefs.ThemeMode
 import com.prism.music.ui.theme.LocalContainer
 import com.prism.music.ui.theme.PrismTheme
@@ -17,8 +18,13 @@ import com.prism.music.ui.theme.PrismTheme
  */
 @Composable
 fun TvTheme(content: @Composable () -> Unit) {
-    val c = LocalContainer.current
-    val settings by c.settings.flow.collectAsState()
+    val settings by LocalContainer.current.settings.flow.collectAsState()
+    TvTheme(settings, content)
+}
+
+/** [TvTheme] on given [settings] (the design pages and tests draw TV screens without the app around them). */
+@Composable
+fun TvTheme(settings: AppSettings, content: @Composable () -> Unit) {
     val dark = remember(settings) { if (settings.themeMode == ThemeMode.DARK) settings else settings.copy(themeMode = ThemeMode.DARK) }
     PrismTheme(dark, artworkColor = null) {
         val m3 = androidx.compose.material3.MaterialTheme.colorScheme
