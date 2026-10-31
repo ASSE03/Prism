@@ -4049,4 +4049,21 @@
     <string name="tour_1792_gestures">Жесты плеера и вокруг кнопок</string>
     <string name="tour_1792_colors">Прогресс мини-плеера в вашем акценте, играющий трек в цвете альбома</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Не с обложкой во всю ширину: баннер её закрывает</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s готов</string>
+    <string name="tv_update_note">Установите сейчас: Android спросит разрешение только один раз</string>
+    <string name="tv_up_next_line">Далее: %1$s</string>
+    <string name="tv_playing_from">Играет из: %1$s</string>
+    <string name="tv_vocals_out">Без вокала</string>
+    <string name="tv_key_line">Тональность: %1$s</string>
+    <string name="tv_search_hint">Ищите треки, исполнителей, альбомы и тексты</string>
+    <string name="tv_voice_search">Голосовой поиск</string>
+    <string name="tv_radio">Радио</string>
+    <string name="tv_welcome_line">Ваша музыка из YouTube Music на большом экране</string>
+    <string name="tv_sign_in_with_phone">Войти с телефона</string>
+    <string name="tv_continue_without_account">Продолжить без аккаунта</string>
+    <string name="tv_pair_step_open">Откройте Prism на телефоне в той же сети Wi-Fi, что и этот телевизор</string>
+    <string name="tv_pair_step_pick">Выберите %1$s, когда телефон его покажет</string>
+    <string name="tv_pair_step_code">Введите этот код на телефоне</string>
+    <string name="tv_pair_qr">Или отсканируйте его камерой телефона</string>
 </resources>

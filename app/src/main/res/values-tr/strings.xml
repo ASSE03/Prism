@@ -3949,4 +3949,21 @@
     <string name="tour_1792_gestures">Oynatıcının hareketleri kontrollerin çevresinde de</string>
     <string name="tour_1792_colors">Mini oynatıcının ilerlemesi vurgu renginizde, çalan şarkı albümün renginde</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Kenardan kenara kapakla olmaz: afiş onu kapatır</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s hazır</string>
+    <string name="tv_update_note">Şimdi yükleyin: Android yalnızca bir kez izin ister</string>
+    <string name="tv_up_next_line">Sıradaki: %1$s</string>
+    <string name="tv_playing_from">Çalınan yer: %1$s</string>
+    <string name="tv_vocals_out">Vokalsiz</string>
+    <string name="tv_key_line">Ton: %1$s</string>
+    <string name="tv_search_hint">Şarkı, sanatçı, albüm ve şarkı sözü arayın</string>
+    <string name="tv_voice_search">Sesle ara</string>
+    <string name="tv_radio">Radyo</string>
+    <string name="tv_welcome_line">YouTube Music\'teki müziğiniz, büyük ekranda</string>
+    <string name="tv_sign_in_with_phone">Telefonunuzla oturum açın</string>
+    <string name="tv_continue_without_account">Hesap olmadan devam et</string>
+    <string name="tv_pair_step_open">Prism\'i telefonunuzda, bu TV ile aynı Wi-Fi ağında açın</string>
+    <string name="tv_pair_step_pick">Telefonunuz gösterdiğinde %1$s seçin</string>
+    <string name="tv_pair_step_code">Bu kodu telefonunuza girin</string>
+    <string name="tv_pair_qr">Ya da telefonunuzun kamerasıyla tarayın</string>
 </resources>

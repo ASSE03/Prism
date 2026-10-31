@@ -219,7 +219,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             .setSessionActivity(
                 PendingIntent.getActivity(
                     this, 0,
-                    Intent(this, com.prism.music.PrismActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                    // On a TV, Prism TV's own screen (1.8.0).
+                    Intent(this, if (com.prism.music.ui.tv.TvDevice.isTv(this)) com.prism.music.TvActivity::class.java else com.prism.music.PrismActivity::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
                 )
             )

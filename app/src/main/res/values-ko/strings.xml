@@ -3899,4 +3899,21 @@
     <string name="tour_1792_gestures">컨트롤 주변에서도 플레이어 제스처</string>
     <string name="tour_1792_colors">미니 플레이어 진행 바를 강조 색으로, 재생 중인 곡을 앨범 색으로</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">가장자리까지 채운 커버에서는 안 됨: 배너가 가립니다</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s 준비 완료</string>
+    <string name="tv_update_note">지금 설치하세요: Android는 처음 한 번만 허용을 묻습니다</string>
+    <string name="tv_up_next_line">다음 곡: %1$s</string>
+    <string name="tv_playing_from">%1$s에서 재생 중</string>
+    <string name="tv_vocals_out">보컬 제거</string>
+    <string name="tv_key_line">키: %1$s</string>
+    <string name="tv_search_hint">노래, 아티스트, 앨범, 가사 검색</string>
+    <string name="tv_voice_search">음성으로 검색</string>
+    <string name="tv_radio">라디오</string>
+    <string name="tv_welcome_line">YouTube Music의 내 음악을 큰 화면으로</string>
+    <string name="tv_sign_in_with_phone">휴대전화로 로그인</string>
+    <string name="tv_continue_without_account">계정 없이 계속</string>
+    <string name="tv_pair_step_open">이 TV와 같은 Wi-Fi에서 휴대전화의 Prism을 여세요</string>
+    <string name="tv_pair_step_pick">휴대전화에 %1$s이(가) 보이면 선택하세요</string>
+    <string name="tv_pair_step_code">휴대전화에 이 코드를 입력하세요</string>
+    <string name="tv_pair_qr">또는 휴대전화 카메라로 스캔하세요</string>
 </resources>

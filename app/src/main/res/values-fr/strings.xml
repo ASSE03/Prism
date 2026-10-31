@@ -3999,4 +3999,21 @@
     <string name="tour_1792_gestures">Les gestes du lecteur aussi autour des commandes</string>
     <string name="tour_1792_colors">La progression du mini-lecteur dans votre accent, le titre en cours dans la couleur de l\'album</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Pas avec la pochette pleine largeur : la bannière la recouvre</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s est prêt</string>
+    <string name="tv_update_note">Installez-le maintenant : Android ne demande l\'autorisation qu\'une fois</string>
+    <string name="tv_up_next_line">À suivre : %1$s</string>
+    <string name="tv_playing_from">Lecture depuis %1$s</string>
+    <string name="tv_vocals_out">Sans la voix</string>
+    <string name="tv_key_line">Tonalité : %1$s</string>
+    <string name="tv_search_hint">Rechercher des titres, artistes, albums et paroles</string>
+    <string name="tv_voice_search">Rechercher par la voix</string>
+    <string name="tv_radio">Radio</string>
+    <string name="tv_welcome_line">Votre musique de YouTube Music, sur grand écran</string>
+    <string name="tv_sign_in_with_phone">Se connecter avec votre téléphone</string>
+    <string name="tv_continue_without_account">Continuer sans compte</string>
+    <string name="tv_pair_step_open">Ouvrez Prism sur votre téléphone, sur le même Wi-Fi que ce téléviseur</string>
+    <string name="tv_pair_step_pick">Choisissez %1$s quand votre téléphone l\'affiche</string>
+    <string name="tv_pair_step_code">Saisissez ce code sur votre téléphone</string>
+    <string name="tv_pair_qr">Ou scannez-le avec l\'appareil photo de votre téléphone</string>
 </resources>

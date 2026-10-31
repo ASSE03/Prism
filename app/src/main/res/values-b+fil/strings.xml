@@ -3949,4 +3949,21 @@
     <string name="tour_1792_gestures">Ang mga gesture ng player pati sa paligid ng mga kontrol</string>
     <string name="tour_1792_colors">Ang progress ng mini player sa accent mo, ang tumutugtog na kanta sa kulay ng album</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Hindi kapag gilid-sa-gilid ang cover: tinatakpan ito ng banner</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Handa na ang Prism %1$s</string>
+    <string name="tv_update_note">I-install na ngayon: minsan lang hihingi ng pahintulot ang Android</string>
+    <string name="tv_up_next_line">Susunod: %1$s</string>
+    <string name="tv_playing_from">Tumutugtog mula sa %1$s</string>
+    <string name="tv_vocals_out">Walang boses</string>
+    <string name="tv_key_line">Key: %1$s</string>
+    <string name="tv_search_hint">Maghanap ng kanta, artist, album at lyrics</string>
+    <string name="tv_voice_search">Maghanap gamit ang boses</string>
+    <string name="tv_radio">Radyo</string>
+    <string name="tv_welcome_line">Ang musika mo mula sa YouTube Music, sa malaking screen</string>
+    <string name="tv_sign_in_with_phone">Mag-sign in gamit ang phone mo</string>
+    <string name="tv_continue_without_account">Magpatuloy nang walang account</string>
+    <string name="tv_pair_step_open">Buksan ang Prism sa phone mo, sa parehong Wi-Fi ng TV na ito</string>
+    <string name="tv_pair_step_pick">Piliin ang %1$s kapag lumabas ito sa phone mo</string>
+    <string name="tv_pair_step_code">Ilagay ang code na ito sa phone mo</string>
+    <string name="tv_pair_qr">O i-scan ito gamit ang camera ng phone mo</string>
 </resources>

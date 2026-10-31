@@ -3949,4 +3949,21 @@
     <string name="tour_1792_gestures">De gebaren van de speler ook rond de bediening</string>
     <string name="tour_1792_colors">De voortgang van de minispeler in je accentkleur, het spelende nummer in de kleur van het album</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Niet met hoes van rand tot rand: de banner bedekt hem</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s staat klaar</string>
+    <string name="tv_update_note">Installeer het nu: Android vraagt maar één keer toestemming</string>
+    <string name="tv_up_next_line">Hierna: %1$s</string>
+    <string name="tv_playing_from">Speelt uit %1$s</string>
+    <string name="tv_vocals_out">Zonder zang</string>
+    <string name="tv_key_line">Toonsoort: %1$s</string>
+    <string name="tv_search_hint">Zoek nummers, artiesten, albums en songteksten</string>
+    <string name="tv_voice_search">Zoeken met je stem</string>
+    <string name="tv_radio">Radio</string>
+    <string name="tv_welcome_line">Je muziek van YouTube Music, op het grote scherm</string>
+    <string name="tv_sign_in_with_phone">Inloggen met je telefoon</string>
+    <string name="tv_continue_without_account">Doorgaan zonder account</string>
+    <string name="tv_pair_step_open">Open Prism op je telefoon, op hetzelfde wifi als deze tv</string>
+    <string name="tv_pair_step_pick">Kies %1$s zodra je telefoon hem toont</string>
+    <string name="tv_pair_step_code">Voer deze code in op je telefoon</string>
+    <string name="tv_pair_qr">Of scan hem met de camera van je telefoon</string>
 </resources>

@@ -3899,4 +3899,21 @@
     <string name="tour_1792_gestures">Gestur pemutar juga di sekitar kontrol</string>
     <string name="tour_1792_colors">Progres pemutar mini dalam warna aksen Anda, lagu yang diputar dalam warna album</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Tidak dengan sampul tepi ke tepi: banner menutupinya</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s sudah siap</string>
+    <string name="tv_update_note">Pasang sekarang: Android hanya meminta izin sekali</string>
+    <string name="tv_up_next_line">Berikutnya: %1$s</string>
+    <string name="tv_playing_from">Diputar dari %1$s</string>
+    <string name="tv_vocals_out">Tanpa vokal</string>
+    <string name="tv_key_line">Kunci nada: %1$s</string>
+    <string name="tv_search_hint">Cari lagu, artis, album, dan lirik</string>
+    <string name="tv_voice_search">Cari dengan suara</string>
+    <string name="tv_radio">Radio</string>
+    <string name="tv_welcome_line">Musik Anda dari YouTube Music, di layar besar</string>
+    <string name="tv_sign_in_with_phone">Masuk dengan ponsel Anda</string>
+    <string name="tv_continue_without_account">Lanjutkan tanpa akun</string>
+    <string name="tv_pair_step_open">Buka Prism di ponsel Anda, di Wi-Fi yang sama dengan TV ini</string>
+    <string name="tv_pair_step_pick">Pilih %1$s saat ponsel Anda menampilkannya</string>
+    <string name="tv_pair_step_code">Masukkan kode ini di ponsel Anda</string>
+    <string name="tv_pair_qr">Atau pindai dengan kamera ponsel Anda</string>
 </resources>

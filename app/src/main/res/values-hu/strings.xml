@@ -3949,4 +3949,21 @@
     <string name="tour_1792_gestures">A lejátszó mozdulatai a vezérlők körül is</string>
     <string name="tour_1792_colors">A minilejátszó haladása a kiemelőszínedben, a szóló dal az album színében</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Szélétől széléig érő borítóval nem: a szalag eltakarja</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Elkészült a Prism %1$s</string>
+    <string name="tv_update_note">Telepítsd most: az Android csak egyszer kér engedélyt</string>
+    <string name="tv_up_next_line">Következik: %1$s</string>
+    <string name="tv_playing_from">Lejátszás innen: %1$s</string>
+    <string name="tv_vocals_out">Ének nélkül</string>
+    <string name="tv_key_line">Hangnem: %1$s</string>
+    <string name="tv_search_hint">Dalok, előadók, albumok és dalszövegek keresése</string>
+    <string name="tv_voice_search">Keresés hanggal</string>
+    <string name="tv_radio">Rádió</string>
+    <string name="tv_welcome_line">A zenéd a YouTube Musicról, a nagy képernyőn</string>
+    <string name="tv_sign_in_with_phone">Bejelentkezés a telefonoddal</string>
+    <string name="tv_continue_without_account">Folytatás fiók nélkül</string>
+    <string name="tv_pair_step_open">Nyisd meg a Prismet a telefonodon, ugyanazon a Wi-Fin, mint ez a tévé</string>
+    <string name="tv_pair_step_pick">Válaszd ki: %1$s, amikor a telefonod mutatja</string>
+    <string name="tv_pair_step_code">Írd be ezt a kódot a telefonodon</string>
+    <string name="tv_pair_qr">Vagy olvasd be a telefonod kamerájával</string>
 </resources>

@@ -3949,4 +3949,21 @@
     <string name="tour_1792_gestures">Die Gesten des Players auch rund um die Bedienelemente</string>
     <string name="tour_1792_colors">Der Fortschritt des Mini-Players in deiner Akzentfarbe, der laufende Song in der Farbe des Albums</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Nicht mit randlosem Cover: das Banner verdeckt es</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s ist bereit</string>
+    <string name="tv_update_note">Jetzt installieren: Android fragt nur einmal um Erlaubnis</string>
+    <string name="tv_up_next_line">Als Nächstes: %1$s</string>
+    <string name="tv_playing_from">Läuft aus %1$s</string>
+    <string name="tv_vocals_out">Ohne Gesang</string>
+    <string name="tv_key_line">Tonart: %1$s</string>
+    <string name="tv_search_hint">Songs, Künstler, Alben und Songtexte suchen</string>
+    <string name="tv_voice_search">Per Sprache suchen</string>
+    <string name="tv_radio">Radio</string>
+    <string name="tv_welcome_line">Deine Musik von YouTube Music, auf dem großen Bildschirm</string>
+    <string name="tv_sign_in_with_phone">Mit dem Handy anmelden</string>
+    <string name="tv_continue_without_account">Ohne Konto weiter</string>
+    <string name="tv_pair_step_open">Öffne Prism auf deinem Handy, im selben WLAN wie dieser Fernseher</string>
+    <string name="tv_pair_step_pick">Wähle %1$s, sobald dein Handy ihn anzeigt</string>
+    <string name="tv_pair_step_code">Gib diesen Code auf deinem Handy ein</string>
+    <string name="tv_pair_qr">Oder scanne ihn mit der Kamera deines Handys</string>
 </resources>

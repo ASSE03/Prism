@@ -36,8 +36,9 @@ android {
         // recordings (PrismTestRunner), each test in a fresh app with its data cleared (the orchestrator).
         testInstrumentationRunner = "com.prism.music.PrismTestRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
-        // Tests that need the real internet (@Live) only run when asked for.
-        testInstrumentationRunnerArguments["notAnnotation"] = "com.prism.music.Live"
+        // Tests that need the real internet (@Live) only run when asked for; Prism TV's (@TvTest, 1.8.0) only on the TV
+        // emulators (.claude/tv-1.8/tvsuite.ps1 asks for them).
+        testInstrumentationRunnerArguments["notAnnotation"] = "com.prism.music.Live,com.prism.music.TvTest"
         // Optional: `lastfm.apiKey=…` in local.properties lets genre detection ask Last.fm too.
         val localProps = Properties().apply {
             rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) }
@@ -166,6 +167,9 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     // Window size and fold posture (tablets, foldables, landscape): Apache-2.0, brings androidx.window.
     implementation("androidx.compose.material3.adaptive:adaptive:1.3.0")
+    // Prism TV (1.8.0): Compose for TV's focus styling (cards that lift when focused, the side navigation), Google,
+    // Apache-2.0. Only the TV screens (ui/tv) use it.
+    implementation("androidx.tv:tv-material:1.1.0")
 
     implementation("androidx.core:core-ktx:1.19.1")
     implementation("androidx.activity:activity-compose:1.13.0")

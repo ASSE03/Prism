@@ -3999,4 +3999,21 @@
     <string name="tour_1792_gestures">Gesturile playerului și în jurul comenzilor</string>
     <string name="tour_1792_colors">Progresul mini playerului în accentul tău, melodia redată în culoarea albumului</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Nu cu coperta pe tot ecranul: bannerul o acoperă</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s este gata</string>
+    <string name="tv_update_note">Instalează-l acum: Android cere permisiunea o singură dată</string>
+    <string name="tv_up_next_line">Urmează: %1$s</string>
+    <string name="tv_playing_from">Se redă din %1$s</string>
+    <string name="tv_vocals_out">Fără voce</string>
+    <string name="tv_key_line">Tonalitate: %1$s</string>
+    <string name="tv_search_hint">Caută melodii, artiști, albume și versuri</string>
+    <string name="tv_voice_search">Caută vocal</string>
+    <string name="tv_radio">Radio</string>
+    <string name="tv_welcome_line">Muzica ta din YouTube Music, pe ecranul mare</string>
+    <string name="tv_sign_in_with_phone">Conectează-te cu telefonul</string>
+    <string name="tv_continue_without_account">Continuă fără cont</string>
+    <string name="tv_pair_step_open">Deschide Prism pe telefon, în aceeași rețea Wi-Fi cu acest televizor</string>
+    <string name="tv_pair_step_pick">Alege %1$s când apare pe telefon</string>
+    <string name="tv_pair_step_code">Introdu acest cod pe telefon</string>
+    <string name="tv_pair_qr">Sau scanează-l cu camera telefonului</string>
 </resources>

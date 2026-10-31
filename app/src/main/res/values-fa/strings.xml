@@ -3949,4 +3949,21 @@
     <string name="tour_1792_gestures">حرکت‌های پخش‌کننده دور کنترل‌ها هم</string>
     <string name="tour_1792_colors">پیشرفت پخش‌کنندهٔ کوچک به رنگ تأکید شما، آهنگ در حال پخش به رنگ آلبوم</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">نه با کاور سرتاسری: بنر آن را می‌پوشاند</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">‏Prism %1$s آماده است</string>
+    <string name="tv_update_note">همین حالا نصبش کنید: Android فقط یک بار اجازه می‌خواهد</string>
+    <string name="tv_up_next_line">بعدی: %1$s</string>
+    <string name="tv_playing_from">در حال پخش از %1$s</string>
+    <string name="tv_vocals_out">بدون صدای خواننده</string>
+    <string name="tv_key_line">گام: %1$s</string>
+    <string name="tv_search_hint">آهنگ، هنرمند، آلبوم و متن ترانه را جست‌وجو کنید</string>
+    <string name="tv_voice_search">جست‌وجوی صوتی</string>
+    <string name="tv_radio">رادیو</string>
+    <string name="tv_welcome_line">موسیقی شما از YouTube Music، روی صفحهٔ بزرگ</string>
+    <string name="tv_sign_in_with_phone">ورود با تلفنتان</string>
+    <string name="tv_continue_without_account">ادامه بدون حساب</string>
+    <string name="tv_pair_step_open">Prism را روی تلفنتان باز کنید، روی همان Wi-Fi این تلویزیون</string>
+    <string name="tv_pair_step_pick">وقتی تلفنتان %1$s را نشان داد، آن را انتخاب کنید</string>
+    <string name="tv_pair_step_code">این کد را روی تلفنتان وارد کنید</string>
+    <string name="tv_pair_qr">یا آن را با دوربین تلفنتان اسکن کنید</string>
 </resources>

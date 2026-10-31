@@ -3899,4 +3899,21 @@
     <string name="tour_1792_gestures">控制按鈕周圍也能用的播放器手勢</string>
     <string name="tour_1792_colors">迷你播放器進度使用你的強調色，正在播放的歌曲使用專輯顏色</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">全寬封面時無效：橫幅會遮住它</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s 已準備就緒</string>
+    <string name="tv_update_note">立即安裝：Android 只會要求一次許可</string>
+    <string name="tv_up_next_line">接下來：%1$s</string>
+    <string name="tv_playing_from">播放來源：%1$s</string>
+    <string name="tv_vocals_out">去除人聲</string>
+    <string name="tv_key_line">調：%1$s</string>
+    <string name="tv_search_hint">搜尋歌曲、藝人、專輯和歌詞</string>
+    <string name="tv_voice_search">語音搜尋</string>
+    <string name="tv_radio">電台</string>
+    <string name="tv_welcome_line">來自 YouTube Music 的音樂，在大螢幕上</string>
+    <string name="tv_sign_in_with_phone">用手機登入</string>
+    <string name="tv_continue_without_account">不登入繼續</string>
+    <string name="tv_pair_step_open">在手機上開啟 Prism，並連上與這台電視相同的 Wi-Fi</string>
+    <string name="tv_pair_step_pick">手機上出現 %1$s 時選擇它</string>
+    <string name="tv_pair_step_code">在手機上輸入這組代碼</string>
+    <string name="tv_pair_qr">或用手機相機掃描</string>
 </resources>

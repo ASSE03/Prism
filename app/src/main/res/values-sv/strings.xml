@@ -3949,4 +3949,21 @@
     <string name="tour_1792_gestures">Spelarens gester även runt kontrollerna</string>
     <string name="tour_1792_colors">Miniplayerns förlopp i din accentfärg, låten som spelas i albumets färg</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Inte med omslag kant till kant: bannern täcker det</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s är redo</string>
+    <string name="tv_update_note">Installera nu: Android frågar om lov bara en gång</string>
+    <string name="tv_up_next_line">Härnäst: %1$s</string>
+    <string name="tv_playing_from">Spelas från %1$s</string>
+    <string name="tv_vocals_out">Utan sång</string>
+    <string name="tv_key_line">Tonart: %1$s</string>
+    <string name="tv_search_hint">Sök efter låtar, artister, album och låttexter</string>
+    <string name="tv_voice_search">Sök med rösten</string>
+    <string name="tv_radio">Radio</string>
+    <string name="tv_welcome_line">Din musik från YouTube Music, på den stora skärmen</string>
+    <string name="tv_sign_in_with_phone">Logga in med telefonen</string>
+    <string name="tv_continue_without_account">Fortsätt utan konto</string>
+    <string name="tv_pair_step_open">Öppna Prism i telefonen, på samma wifi som den här tv:n</string>
+    <string name="tv_pair_step_pick">Välj %1$s när telefonen visar den</string>
+    <string name="tv_pair_step_code">Ange den här koden i telefonen</string>
+    <string name="tv_pair_qr">Eller skanna den med telefonens kamera</string>
 </resources>

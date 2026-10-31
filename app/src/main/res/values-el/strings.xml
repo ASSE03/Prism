@@ -3949,4 +3949,21 @@
     <string name="tour_1792_gestures">Οι χειρονομίες του player και γύρω από τα χειριστήρια</string>
     <string name="tour_1792_colors">Η πρόοδος του mini player στο χρώμα έμφασής σας, το τραγούδι που παίζει στο χρώμα του άλμπουμ</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Όχι με εξώφυλλο από άκρη σε άκρη: το banner το καλύπτει</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Το Prism %1$s είναι έτοιμο</string>
+    <string name="tv_update_note">Εγκαταστήστε το τώρα: το Android ζητά άδεια μόνο μία φορά</string>
+    <string name="tv_up_next_line">Επόμενο: %1$s</string>
+    <string name="tv_playing_from">Παίζει από %1$s</string>
+    <string name="tv_vocals_out">Χωρίς φωνή</string>
+    <string name="tv_key_line">Τόνος: %1$s</string>
+    <string name="tv_search_hint">Αναζητήστε τραγούδια, καλλιτέχνες, άλμπουμ και στίχους</string>
+    <string name="tv_voice_search">Αναζήτηση με φωνή</string>
+    <string name="tv_radio">Ραδιόφωνο</string>
+    <string name="tv_welcome_line">Η μουσική σας από το YouTube Music, στη μεγάλη οθόνη</string>
+    <string name="tv_sign_in_with_phone">Σύνδεση με το κινητό σας</string>
+    <string name="tv_continue_without_account">Συνέχεια χωρίς λογαριασμό</string>
+    <string name="tv_pair_step_open">Ανοίξτε το Prism στο κινητό σας, στο ίδιο Wi-Fi με αυτή την τηλεόραση</string>
+    <string name="tv_pair_step_pick">Επιλέξτε %1$s όταν εμφανιστεί στο κινητό σας</string>
+    <string name="tv_pair_step_code">Πληκτρολογήστε αυτόν τον κωδικό στο κινητό σας</string>
+    <string name="tv_pair_qr">Ή σαρώστε τον με την κάμερα του κινητού σας</string>
 </resources>

@@ -4049,4 +4049,21 @@
     <string name="tour_1792_gestures">Gesta přehrávače i kolem ovládání</string>
     <string name="tour_1792_colors">Průběh mini přehrávače ve vaší barvě, hrající skladba v barvě alba</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Ne s obalem přes celou šířku: banner ho zakrývá</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s je připraven</string>
+    <string name="tv_update_note">Nainstalujte ho hned: Android se zeptá jen jednou</string>
+    <string name="tv_up_next_line">Další: %1$s</string>
+    <string name="tv_playing_from">Hraje z: %1$s</string>
+    <string name="tv_vocals_out">Bez zpěvu</string>
+    <string name="tv_key_line">Tónina: %1$s</string>
+    <string name="tv_search_hint">Hledejte skladby, interprety, alba a texty</string>
+    <string name="tv_voice_search">Hledat hlasem</string>
+    <string name="tv_radio">Rádio</string>
+    <string name="tv_welcome_line">Vaše hudba z YouTube Music na velké obrazovce</string>
+    <string name="tv_sign_in_with_phone">Přihlásit se telefonem</string>
+    <string name="tv_continue_without_account">Pokračovat bez účtu</string>
+    <string name="tv_pair_step_open">Otevřete Prism v telefonu, na stejné Wi-Fi jako tato televize</string>
+    <string name="tv_pair_step_pick">Až ji telefon ukáže, vyberte %1$s</string>
+    <string name="tv_pair_step_code">Zadejte tento kód v telefonu</string>
+    <string name="tv_pair_qr">Nebo ho naskenujte fotoaparátem telefonu</string>
 </resources>

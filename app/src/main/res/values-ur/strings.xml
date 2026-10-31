@@ -3949,4 +3949,21 @@
     <string name="tour_1792_gestures">پلیئر کے اشارے کنٹرولز کے آس پاس بھی</string>
     <string name="tour_1792_colors">منی پلیئر کی پیش رفت آپ کے رنگ میں، چلتا گانا البم کے رنگ میں</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">کنارے تک کور کے ساتھ نہیں: بینر اسے ڈھانپ دیتا ہے</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">‏Prism %1$s تیار ہے</string>
+    <string name="tv_update_note">ابھی انسٹال کریں: Android صرف ایک بار اجازت مانگتا ہے</string>
+    <string name="tv_up_next_line">اگلا: %1$s</string>
+    <string name="tv_playing_from">%1$s سے چل رہا ہے</string>
+    <string name="tv_vocals_out">آواز کے بغیر</string>
+    <string name="tv_key_line">سُر: %1$s</string>
+    <string name="tv_search_hint">گانے، فنکار، البم اور بول تلاش کریں</string>
+    <string name="tv_voice_search">آواز سے تلاش کریں</string>
+    <string name="tv_radio">ریڈیو</string>
+    <string name="tv_welcome_line">YouTube Music سے آپ کی موسیقی، بڑی اسکرین پر</string>
+    <string name="tv_sign_in_with_phone">اپنے فون سے سائن ان کریں</string>
+    <string name="tv_continue_without_account">اکاؤنٹ کے بغیر جاری رکھیں</string>
+    <string name="tv_pair_step_open">اپنے فون پر Prism کھولیں، اسی Wi-Fi پر جس پر یہ ٹی وی ہے</string>
+    <string name="tv_pair_step_pick">فون پر دکھائی دینے پر %1$s چنیں</string>
+    <string name="tv_pair_step_code">یہ کوڈ اپنے فون پر درج کریں</string>
+    <string name="tv_pair_qr">یا اسے اپنے فون کے کیمرے سے اسکین کریں</string>
 </resources>

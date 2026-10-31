@@ -3949,4 +3949,21 @@
     <string name="tour_1792_gestures">প্লেয়ারের জেসচার কন্ট্রোলের চারপাশেও</string>
     <string name="tour_1792_colors">মিনি প্লেয়ারের অগ্রগতি আপনার রঙে, চলমান গান অ্যালবামের রঙে</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">কিনারা-জোড়া কভারের সাথে নয়: ব্যানার সেটি ঢেকে দেয়</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s তৈরি</string>
+    <string name="tv_update_note">এখনই ইনস্টল করুন: Android শুধু একবার অনুমতি চায়</string>
+    <string name="tv_up_next_line">এরপর: %1$s</string>
+    <string name="tv_playing_from">%1$s থেকে চলছে</string>
+    <string name="tv_vocals_out">কণ্ঠ ছাড়া</string>
+    <string name="tv_key_line">স্কেল: %1$s</string>
+    <string name="tv_search_hint">গান, শিল্পী, অ্যালবাম ও লিরিক্স খুঁজুন</string>
+    <string name="tv_voice_search">ভয়েস দিয়ে খুঁজুন</string>
+    <string name="tv_radio">রেডিও</string>
+    <string name="tv_welcome_line">YouTube Music থেকে আপনার গান, বড় পর্দায়</string>
+    <string name="tv_sign_in_with_phone">ফোন দিয়ে সাইন ইন করুন</string>
+    <string name="tv_continue_without_account">অ্যাকাউন্ট ছাড়া চালিয়ে যান</string>
+    <string name="tv_pair_step_open">ফোনে Prism খুলুন, এই টিভির একই Wi-Fi-তে</string>
+    <string name="tv_pair_step_pick">ফোনে দেখালে %1$s বেছে নিন</string>
+    <string name="tv_pair_step_code">ফোনে এই কোডটি লিখুন</string>
+    <string name="tv_pair_qr">অথবা ফোনের ক্যামেরা দিয়ে এটি স্ক্যান করুন</string>
 </resources>

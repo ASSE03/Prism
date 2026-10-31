@@ -171,6 +171,13 @@ open class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        // Prism TV (1.8.0): on a TV, Prism's screens are TvActivity's (made for a remote); whatever opened this one (a
+        // link, the media notification, an old shortcut) opens that instead.
+        if (com.prism.music.ui.tv.TvDevice.isTv(this)) {
+            startActivity(Intent(intent).setComponent(android.content.ComponentName(this, TvActivity::class.java)).setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP))
+            finish()
+            return
+        }
         val c = container
         c.player.connect()
         // The downloads start in the background (their index and cache come off the disk) while the first frame draws;

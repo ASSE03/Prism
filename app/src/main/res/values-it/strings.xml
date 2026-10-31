@@ -3999,4 +3999,21 @@
     <string name="tour_1792_gestures">I gesti del player anche intorno ai controlli</string>
     <string name="tour_1792_colors">L\'avanzamento del mini player nel tuo colore d\'accento, il brano in riproduzione nel colore dell\'album</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Non con la copertina a tutto schermo: il banner la copre</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s è pronto</string>
+    <string name="tv_update_note">Installalo ora: Android chiede il permesso una volta sola</string>
+    <string name="tv_up_next_line">A seguire: %1$s</string>
+    <string name="tv_playing_from">In riproduzione da %1$s</string>
+    <string name="tv_vocals_out">Senza voce</string>
+    <string name="tv_key_line">Tonalità: %1$s</string>
+    <string name="tv_search_hint">Cerca brani, artisti, album e testi</string>
+    <string name="tv_voice_search">Cerca con la voce</string>
+    <string name="tv_radio">Radio</string>
+    <string name="tv_welcome_line">La tua musica da YouTube Music, sul grande schermo</string>
+    <string name="tv_sign_in_with_phone">Accedi con il telefono</string>
+    <string name="tv_continue_without_account">Continua senza account</string>
+    <string name="tv_pair_step_open">Apri Prism sul telefono, sulla stessa Wi-Fi di questa TV</string>
+    <string name="tv_pair_step_pick">Scegli %1$s quando il telefono la mostra</string>
+    <string name="tv_pair_step_code">Inserisci questo codice sul telefono</string>
+    <string name="tv_pair_qr">Oppure inquadralo con la fotocamera del telefono</string>
 </resources>

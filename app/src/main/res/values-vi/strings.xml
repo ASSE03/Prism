@@ -3899,4 +3899,21 @@
     <string name="tour_1792_gestures">Cử chỉ của trình phát cả quanh các nút điều khiển</string>
     <string name="tour_1792_colors">Tiến trình trình phát mini theo màu nhấn của bạn, bài đang phát theo màu album</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Không áp dụng với ảnh bìa tràn viền: biểu ngữ che mất</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s đã sẵn sàng</string>
+    <string name="tv_update_note">Cài ngay: Android chỉ xin phép một lần</string>
+    <string name="tv_up_next_line">Tiếp theo: %1$s</string>
+    <string name="tv_playing_from">Đang phát từ %1$s</string>
+    <string name="tv_vocals_out">Không lời hát</string>
+    <string name="tv_key_line">Tông: %1$s</string>
+    <string name="tv_search_hint">Tìm bài hát, nghệ sĩ, album và lời bài hát</string>
+    <string name="tv_voice_search">Tìm bằng giọng nói</string>
+    <string name="tv_radio">Radio</string>
+    <string name="tv_welcome_line">Nhạc của bạn từ YouTube Music, trên màn hình lớn</string>
+    <string name="tv_sign_in_with_phone">Đăng nhập bằng điện thoại</string>
+    <string name="tv_continue_without_account">Tiếp tục không cần tài khoản</string>
+    <string name="tv_pair_step_open">Mở Prism trên điện thoại, cùng mạng Wi-Fi với TV này</string>
+    <string name="tv_pair_step_pick">Chọn %1$s khi điện thoại hiện ra</string>
+    <string name="tv_pair_step_code">Nhập mã này trên điện thoại</string>
+    <string name="tv_pair_qr">Hoặc quét bằng camera điện thoại</string>
 </resources>

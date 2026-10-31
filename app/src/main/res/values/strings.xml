@@ -3972,4 +3972,22 @@
     <string name="tour_1792_gestures">The player\'s gestures around its controls too</string>
     <string name="tour_1792_colors">The mini player\'s progress in your accent, the playing song in the album\'s color</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Not with full-bleed artwork: the banner covers it</string>
+    <!-- 1.8.0 TV -->
+    <string name="compose_for_tv" translatable="false">Compose for TV (androidx.tv)</string>
+    <string name="tv_update_ready">Prism %1$s is ready</string>
+    <string name="tv_update_note">Install it now: Android asks once to allow it</string>
+    <string name="tv_up_next_line">Up next: %1$s</string>
+    <string name="tv_playing_from">Playing from %1$s</string>
+    <string name="tv_vocals_out">Vocals out</string>
+    <string name="tv_key_line">Key: %1$s</string>
+    <string name="tv_search_hint">Search songs, artists, albums and lyrics</string>
+    <string name="tv_voice_search">Search by voice</string>
+    <string name="tv_radio">Radio</string>
+    <string name="tv_welcome_line">Your music from YouTube Music, on the big screen</string>
+    <string name="tv_sign_in_with_phone">Sign in with your phone</string>
+    <string name="tv_continue_without_account">Continue without an account</string>
+    <string name="tv_pair_step_open">Open Prism on your phone, on the same Wi-Fi as this TV</string>
+    <string name="tv_pair_step_pick">Pick %1$s when your phone shows it</string>
+    <string name="tv_pair_step_code">Enter this code on your phone</string>
+    <string name="tv_pair_qr">Or scan this with your phone\'s camera</string>
 </resources>

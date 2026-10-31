@@ -3949,4 +3949,21 @@
     <string name="tour_1792_gestures">प्लेयर के जेस्चर कंट्रोल के आसपास भी</string>
     <string name="tour_1792_colors">मिनी प्लेयर की प्रगति आपके रंग में, चल रहा गाना एल्बम के रंग में</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">किनारे-तक कवर के साथ नहीं: बैनर उसे ढक देता है</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">Prism %1$s तैयार है</string>
+    <string name="tv_update_note">अभी इंस्टॉल करें: Android सिर्फ़ एक बार अनुमति माँगता है</string>
+    <string name="tv_up_next_line">आगे: %1$s</string>
+    <string name="tv_playing_from">%1$s से चल रहा है</string>
+    <string name="tv_vocals_out">आवाज़ के बिना</string>
+    <string name="tv_key_line">स्केल: %1$s</string>
+    <string name="tv_search_hint">गाने, कलाकार, एल्बम और बोल खोजें</string>
+    <string name="tv_voice_search">आवाज़ से खोजें</string>
+    <string name="tv_radio">रेडियो</string>
+    <string name="tv_welcome_line">YouTube Music से आपका संगीत, बड़ी स्क्रीन पर</string>
+    <string name="tv_sign_in_with_phone">अपने फ़ोन से साइन इन करें</string>
+    <string name="tv_continue_without_account">बिना खाते के जारी रखें</string>
+    <string name="tv_pair_step_open">अपने फ़ोन पर Prism खोलें, इसी टीवी वाले Wi-Fi पर</string>
+    <string name="tv_pair_step_pick">फ़ोन पर दिखने पर %1$s चुनें</string>
+    <string name="tv_pair_step_code">अपने फ़ोन पर यह कोड डालें</string>
+    <string name="tv_pair_qr">या इसे अपने फ़ोन के कैमरे से स्कैन करें</string>
 </resources>

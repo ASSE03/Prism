@@ -4149,4 +4149,21 @@
     <string name="tour_1792_gestures">إيماءات المشغّل حول عناصر التحكم أيضاً</string>
     <string name="tour_1792_colors">تقدّم المشغّل المصغّر بلون تمييزك، والأغنية قيد التشغيل بلون الألبوم</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">ليس مع الغلاف الممتد بعرض الشاشة: الشريط يغطيه</string>
+    <!-- 1.8.0 TV -->
+    <string name="tv_update_ready">‏Prism %1$s جاهز</string>
+    <string name="tv_update_note">ثبّته الآن: يطلب Android الإذن مرة واحدة فقط</string>
+    <string name="tv_up_next_line">التالي: %1$s</string>
+    <string name="tv_playing_from">يُشغَّل من %1$s</string>
+    <string name="tv_vocals_out">بلا صوت المغني</string>
+    <string name="tv_key_line">المقام: %1$s</string>
+    <string name="tv_search_hint">ابحث عن الأغاني والفنانين والألبومات والكلمات</string>
+    <string name="tv_voice_search">البحث بالصوت</string>
+    <string name="tv_radio">راديو</string>
+    <string name="tv_welcome_line">موسيقاك من YouTube Music على الشاشة الكبيرة</string>
+    <string name="tv_sign_in_with_phone">سجّل الدخول بهاتفك</string>
+    <string name="tv_continue_without_account">المتابعة بدون حساب</string>
+    <string name="tv_pair_step_open">افتح Prism على هاتفك، على شبكة Wi-Fi نفسها التي يتصل بها هذا التلفزيون</string>
+    <string name="tv_pair_step_pick">اختر %1$s عندما يظهر على هاتفك</string>
+    <string name="tv_pair_step_code">أدخل هذا الرمز على هاتفك</string>
+    <string name="tv_pair_qr">أو امسحه بكاميرا هاتفك</string>
 </resources>

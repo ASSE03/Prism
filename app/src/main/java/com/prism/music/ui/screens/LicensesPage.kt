@@ -48,6 +48,8 @@ private val libraries = listOf(
     Library(tr(R.string.kuromoji_japanese_readings_for_romanized_lyrics), tr(R.string.atilika), tr(R.string.apache_2_0), "apache-2.0", "https://github.com/atilika/kuromoji"),
     Library(tr(R.string.ipadic_downloaded_with_japanese_reading_data), tr(R.string.nara_institute_of_science_and_technology), tr(R.string.ipadic_license), "ipadic", "https://github.com/atilika/kuromoji"),
     Library(tr(R.string.material_3_adaptive_androidx_window), tr(R.string.the_android_open_source_project), tr(R.string.apache_2_0), "apache-2.0", "https://developer.android.com/jetpack/androidx"),
+    // Prism TV (1.8.0): the name is the library's own, the same in every language.
+    Library(tr(R.string.compose_for_tv),tr(R.string.the_android_open_source_project), tr(R.string.apache_2_0), "apache-2.0", "https://developer.android.com/jetpack/androidx/releases/tv"),
     Library(tr(R.string.songrec_song_recognition_s_audio_fingerprint), tr(R.string.marin_m), tr(R.string.gpl_3_0), "gpl-3.0", "https://github.com/marin-m/SongRec"),
     Library(tr(R.string.zxing_core_blend_s_qr_codes), tr(R.string.zxing_authors), tr(R.string.apache_2_0), "apache-2.0", "https://github.com/zxing/zxing"),
     Library(tr(R.string.camerax_scanning_a_blend_code), tr(R.string.the_android_open_source_project), tr(R.string.apache_2_0), "apache-2.0", "https://developer.android.com/jetpack/androidx/releases/camera"),
