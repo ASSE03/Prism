@@ -376,6 +376,9 @@ object LookLabels {
                 }.ifEmpty { tr(R.string.default_text) }
                 "tab_names" -> com.prism.music.data.prefs.parseTabNames(v).entries.joinToString(", ") { (t, n) -> "${t.label}: $n" }.ifEmpty { tr(R.string.their_own) }
                 "player_deck", "player_buttons" -> v.split(',').joinToString(", ") { t -> choices[name]?.get(t) ?: t }
+                // 1.8.0: the player's hidden parts, by name.
+                "player_hidden_parts" -> v.split(',').mapNotNull { t -> com.prism.music.data.prefs.PlayerPart.entries.firstOrNull { it.name == t }?.label }
+                    .joinToString(", ").ifEmpty { tr(R.string.none) }
                 "spectrum_stops" -> tr(R.string.colors_2, v.split(',').size)
                 "replay_card", "app_font_name" -> v.lowercase().replaceFirstChar { it.uppercase() }
                 else -> choices[name]?.get(v) ?: v
