@@ -1027,8 +1027,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     /**
      * Normalization gain for the current song: YouTube's loudness figure says how far the track
-     * sits from its reference level, so loud songs come down and quiet ones go up (by up to 6 dB;
-     * the limiter in [NormalizerProcessor] keeps those from clipping).
+     * sits from its reference level, so loud songs come down and quiet ones go up (as far as their
+     * peaks allow, [NormalizerProcessor.gainFor]; the limiter keeps those from clipping).
      */
     /** The normalization gain now applied (the ending song's, when a Mix blend's tail takes it over). */
     private var normalizeGainDb = 0f
@@ -1043,13 +1043,15 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      * "Albums as they are" (A2): while an album plays through, every song gets the same gain, set by the loudest of its
      * songs measured so far, so a quiet interlude stays quiet next to the single. Null otherwise.
      */
-    private fun albumLoudness(): Float? {
+    private fun albumLoudness(): Pair<Float, Float?>? {
         if (!c.settings.current.sound.normalizeAlbums || c.queue.source.value.kind != QueueKind.ALBUM) return null
         val album = trackedSong?.album?.id ?: return null
-        return (0 until player.mediaItemCount).mapNotNull { i ->
-            val item = player.getMediaItemAt(i)
-            if (item.toSong()?.album?.id == album) c.mixTempo.loudness(item.mediaId) else null
-        }.maxOrNull()
+        val songs = (0 until player.mediaItemCount).map { player.getMediaItemAt(it) }.filter { it.toSong()?.album?.id == album }
+            .filter { c.mixTempo.loudness(it.mediaId) != null }
+        val loudest = songs.maxOfOrNull { c.mixTempo.loudness(it.mediaId)!! } ?: return null
+        // The album's highest peak bounds how far all of it can be lifted (unknown while any song's is).
+        val peaks = songs.map { c.mixTempo.peak(it.mediaId) }
+        return loudest to (if (null in peaks) null else peaks.maxOf { it!! })
     }
 
     private fun applyNormalization() {
@@ -1063,9 +1065,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val album = albumLoudness()
         val gain = when {
             !c.settings.current.normalize -> 0f
-            album != null -> (target - album).coerceIn(-12f, 6f)
-            measured != null -> (target - measured).coerceIn(-12f, 6f)
-            yt != null -> (-yt + (target - TARGET_LUFS)).coerceIn(-12f, 6f)
+            album != null -> NormalizerProcessor.gainFor(target, album.first, album.second)
+            measured != null -> NormalizerProcessor.gainFor(target, measured, trackedSong?.id?.let { c.mixTempo.peak(it) })
+            yt != null -> NormalizerProcessor.gainFor(target, TARGET_LUFS + yt)
             else -> 0f
         }
         // Once the song is under way, a better figure eases in over two seconds, and a small one isn't worth a change
@@ -1118,7 +1120,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             // Crossfade needs it, near its end).
             // With the waveform bar, the playing song goes first: its bar is waiting for it.
             for (song in songs.sortedBy { if (wave) it.id != playing else it.id == playing }) {
-                c.mixTempo.measure(song.id, network, edges, wave = wave)
+                c.mixTempo.measure(song.id, network, edges, wave = wave, peak = s.normalize)
                 // Measured while it's just begun: its own figure takes over (later in the song, a jump would be heard).
                 if (trackedSong?.id == song.id && settling()) applyNormalization()
             }
