@@ -26,18 +26,17 @@ class SettingsSearchTest {
         Fixture.launch()
     }
 
+    /** 1.8.0: Crossfade is one choice (Off / Automatic / Fixed length); its old name still finds it. */
     @Test fun aSearchOpensTheSettingAndItWorks() {
         compose.openSettings()
-        compose.onNode(hasSetTextAction()).performTextInput("crossfade")
-        compose.waitForText("Crossfade songs")
-        compose.onNodeWithText("Crossfade songs").performClick()
-        // Its page: the search box is gone and the switch is there.
+        compose.onNode(hasSetTextAction()).performTextInput("crossfade songs")
+        compose.clickWhenFound(androidx.compose.ui.test.hasText("Crossfade") and androidx.compose.ui.test.hasClickAction())
+        // Its page: the search box is gone and the choice is there.
         compose.waitUntil(5_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isEmpty() }
-        compose.onNodeWithText("Crossfade songs").assertIsDisplayed()
-        val before = Fixture.container.settings.current.mix
-        compose.onNodeWithText("Crossfade songs").performClick()
-        compose.waitUntil(5_000) { Fixture.container.settings.current.mix != before }
-        assertTrue("Crossfade songs turned ${if (before) "off" else "on"}", Fixture.container.settings.current.mix != before)
+        compose.clickWhenFound(androidx.compose.ui.test.hasText("Fixed length") and androidx.compose.ui.test.hasClickAction())
+        compose.waitUntil(5_000) { Fixture.container.settings.current.let { it.mix && !it.mixAuto } }
+        val s = Fixture.container.settings.current
+        assertTrue("Crossfade on with a fixed length (mix=${s.mix}, mixAuto=${s.mixAuto})", s.mix && !s.mixAuto)
     }
 
     /** #209 (1.7.9): a slider described in words also shows its number. */

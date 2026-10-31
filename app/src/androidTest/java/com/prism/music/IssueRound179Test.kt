@@ -80,21 +80,19 @@ class IssueRound179Test {
         compose.waitForText("No matches")
     }
 
-    /** #227: "Fades between screens" is in Settings and switches the fades off. */
+    /**
+     * #227: the screen fades can be turned off from Settings. Since 1.8.0 that's "Changing screens" → None (fades and
+     * #208's slide are one choice, on the Customize Prism page); searching "fades" still finds it.
+     */
     @Test fun screenFadesCanBeTurnedOff() {
         Fixture.ready()
         Fixture.launch()
         compose.openSettings()
         compose.onNode(hasSetTextAction()).performTextInput("fades")
-        compose.clickWhenFound(hasText("Fades between screens") and hasClickAction())
+        compose.clickWhenFound(hasText("Changing screens") and hasClickAction())
         compose.waitUntil(5_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isEmpty() }
         assertTrue(Fixture.container.settings.current.behavior.screenFades)
-        // The switch on its row (the name itself opens the ⓘ explanation).
-        val title = compose.onNodeWithText("Fades between screens").fetchSemanticsNode().boundsInRoot.center.y
-        val switches = compose.onAllNodes(androidx.compose.ui.test.isToggleable())
-        val i = switches.fetchSemanticsNodes().withIndex().minBy { kotlin.math.abs(it.value.boundsInRoot.center.y - title) }.index
-        // At its right end, where the switch is drawn (the row's middle is its text, which opens the ⓘ).
-        switches[i].performTouchInput { click(androidx.compose.ui.geometry.Offset(width - 60f, height / 2f)) }
+        compose.clickWhenFound(hasText("None") and hasClickAction())
         compose.waitUntil(5_000) { !Fixture.container.settings.current.behavior.screenFades }
     }
 
