@@ -23,7 +23,7 @@ import org.robolectric.annotation.Config
  * bars take the page's color when asked for; off (the default), they stay in the split light.
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [34])
+@Config(sdk = [34], application = android.app.Application::class)
 class PlayingPageColorTest {
     @get:Rule val compose = createComposeRule()
 

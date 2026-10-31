@@ -26,7 +26,7 @@ import org.robolectric.annotation.Config
  * left: end of the queue; a short swipe: nothing.
  */
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [34], qualifiers = "w400dp-h800dp")
+@Config(sdk = [34], qualifiers = "w400dp-h800dp", application = android.app.Application::class)
 class SwipeToQueueTest {
     @get:Rule val compose = createComposeRule()
 
