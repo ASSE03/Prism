@@ -1335,6 +1335,11 @@ private fun NavBarGroup() {
         Chips(com.prism.music.data.prefs.NavBarSize.entries, s.navBarSize, { it.label }) { prefs.setNavBarSize(it) }
         Label(tr(R.string.background), info = tr(R.string.see_through_lets_the_page_show))
         Chips(com.prism.music.data.prefs.NavBarFill.entries, s.navBarFill, { it.label }) { prefs.setNavBarFill(it) }
+        // #264 (1.8.0): only where it means something, a tablet or wide window (phones: always the bottom).
+        if (com.prism.music.ui.theme.LocalWindowLayout.current.rail) {
+            Label(tr(R.string.tabs_on_a_tablet), info = tr(R.string.tabs_on_a_tablet_info))
+            Chips(com.prism.music.data.prefs.TabBarPosition.entries, s.behavior.tabBarPosition, { it.label }) { prefs.setTabBarPosition(it) }
+        }
         // 1.8.0: from Icons & shapes (it's how the tab bar marks where you are).
         Label(tr(R.string.the_tab_you_re_on))
         ChoiceCards(

@@ -155,6 +155,7 @@ object SettingsIndex {
         SettingEntry(I, tr(R.string.buttons), tr(R.string.buttons), tr(R.string.button_shape_pill_rounded_square)),
         SettingEntry(I, tr(R.string.home_screen_widgets), tr(R.string.home_screen_widgets), tr(R.string.widget_background_transparent_see_through_color)),
         SettingEntry(L, tr(R.string.navigation_bar), tr(R.string.the_tab_you_re_on), tr(R.string.tab_icon_color_tint_accent_light)),
+        SettingEntry(L, tr(R.string.navigation_bar), tr(R.string.tabs_on_a_tablet), tr(R.string.down_the_side) + " " + tr(R.string.at_the_bottom)),
         SettingEntry(I, tr(R.string.buttons), tr(R.string.play_on_album_and_playlist_pages), tr(R.string.play_button_outlined_filled)),
         SettingEntry(I, tr(R.string.buttons), tr(R.string.switches_sliders_and_buttons), tr(R.string.classic_controls_1_6_material_switch)),
         SettingEntry(G, tr(R.string.backgrounds), tr(R.string.screen_backgrounds), tr(R.string.wallpaper_photo_pattern_design)),
