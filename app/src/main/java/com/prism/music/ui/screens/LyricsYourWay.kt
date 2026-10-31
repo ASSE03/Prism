@@ -80,7 +80,8 @@ import kotlin.math.roundToInt
 private val SampleDark = Color(0xFF15141B)
 
 /** Prism's own words for the examples, timed word by word: a line sung over three seconds. */
-private val SAMPLE_WORDS = listOf(tr(R.string.every), "color ", "finds ", "its ", "way")
+// The string's own trailing space doesn't survive (resources trim it): "Everycolor" until 1.8.0.
+private val SAMPLE_WORDS = listOf(tr(R.string.every).trimEnd() + " ", "color ", "finds ", "its ", "way")
 private val SAMPLE_LINE = LyricLine(
     0, SAMPLE_WORDS.joinToString(""), 3000,
     SAMPLE_WORDS.mapIndexed { i, w -> LyricWord(i * 560L, i * 560L + 520L, w) },
