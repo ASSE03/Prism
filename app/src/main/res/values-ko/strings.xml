@@ -3898,4 +3898,5 @@
     <string name="tour_1792_slide">밀려 들어오고 나가는 페이지</string>
     <string name="tour_1792_gestures">컨트롤 주변에서도 플레이어 제스처</string>
     <string name="tour_1792_colors">미니 플레이어 진행 바를 강조 색으로, 재생 중인 곡을 앨범 색으로</string>
+    <string name="not_with_full_bleed_artwork_the_banner_covers_it">가장자리까지 채운 커버에서는 안 됨: 배너가 가립니다</string>
 </resources>

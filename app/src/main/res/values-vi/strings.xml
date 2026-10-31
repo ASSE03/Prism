@@ -3898,4 +3898,5 @@
     <string name="tour_1792_slide">Trang trượt vào và trượt ra</string>
     <string name="tour_1792_gestures">Cử chỉ của trình phát cả quanh các nút điều khiển</string>
     <string name="tour_1792_colors">Tiến trình trình phát mini theo màu nhấn của bạn, bài đang phát theo màu album</string>
+    <string name="not_with_full_bleed_artwork_the_banner_covers_it">Không áp dụng với ảnh bìa tràn viền: biểu ngữ che mất</string>
 </resources>

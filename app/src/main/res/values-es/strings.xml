@@ -3998,4 +3998,5 @@
     <string name="tour_1792_slide">Páginas que entran y salen deslizándose</string>
     <string name="tour_1792_gestures">Los gestos del reproductor también alrededor de los controles</string>
     <string name="tour_1792_colors">El progreso del minirreproductor en tu acento, la canción que suena en el color del álbum</string>
+    <string name="not_with_full_bleed_artwork_the_banner_covers_it">No con la portada a pantalla completa: el banner la tapa</string>
 </resources>

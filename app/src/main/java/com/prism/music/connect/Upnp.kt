@@ -143,6 +143,8 @@ object Ssdp {
     const val PORT = 1900
     const val RENDERER = "urn:schemas-upnp-org:device:MediaRenderer:1"
     const val AV_TRANSPORT = "urn:schemas-upnp-org:service:AVTransport:1"
+    /** Sonos speakers answer as a ZonePlayer, with the MediaRenderer inside it (GitHub #239, Reddit: Sonos never showed). */
+    const val ZONE_PLAYER = "urn:schemas-upnp-org:device:ZonePlayer:1"
 
     fun search(target: String, mx: Int = 2): String =
         "M-SEARCH * HTTP/1.1\r\n" +
@@ -155,7 +157,7 @@ object Ssdp {
     /** Whether a search answer or NOTIFY is about something that can play music sent to it. */
     fun isRenderer(m: SsdpMessage): Boolean {
         val t = m.target ?: return false
-        return t.contains(":MediaRenderer:", ignoreCase = true) || t.contains(":AVTransport:", ignoreCase = true)
+        return t.contains(":MediaRenderer:", ignoreCase = true) || t.contains(":AVTransport:", ignoreCase = true) || t.contains(":ZonePlayer:", ignoreCase = true)
     }
 }
 
@@ -188,9 +190,11 @@ object Description {
             }
             val av = service("AVTransport") ?: return null
             val model = device.text("modelName").orEmpty()
+            // A Sonos speaker's room ("Living Room") is its name; the renderer inside it is called "… Media Renderer".
+            val room = devices.firstNotNullOfOrNull { it.text("roomName")?.takeIf { r -> r.isNotBlank() } }
             return Renderer(
                 id = device.text("UDN")?.takeIf { it.isNotBlank() } ?: location,
-                name = device.text("friendlyName")?.takeIf { it.isNotBlank() } ?: model.ifBlank { "Speaker" },
+                name = room ?: device.text("friendlyName")?.takeIf { it.isNotBlank() } ?: model.ifBlank { "Speaker" },
                 manufacturer = device.text("manufacturer").orEmpty(),
                 model = model,
                 location = location,

@@ -3948,4 +3948,5 @@
     <string name="tour_1792_slide">Kayarak gelip giden sayfalar</string>
     <string name="tour_1792_gestures">Oynatıcının hareketleri kontrollerin çevresinde de</string>
     <string name="tour_1792_colors">Mini oynatıcının ilerlemesi vurgu renginizde, çalan şarkı albümün renginde</string>
+    <string name="not_with_full_bleed_artwork_the_banner_covers_it">Kenardan kenara kapakla olmaz: afiş onu kapatır</string>
 </resources>

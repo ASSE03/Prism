@@ -3948,4 +3948,5 @@
     <string name="tour_1792_slide">Be- és kicsúszó oldalak</string>
     <string name="tour_1792_gestures">A lejátszó mozdulatai a vezérlők körül is</string>
     <string name="tour_1792_colors">A minilejátszó haladása a kiemelőszínedben, a szóló dal az album színében</string>
+    <string name="not_with_full_bleed_artwork_the_banner_covers_it">Szélétől széléig érő borítóval nem: a szalag eltakarja</string>
 </resources>

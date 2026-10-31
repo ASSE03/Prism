@@ -3898,4 +3898,5 @@
     <string name="tour_1792_slide">滑入滑出的页面</string>
     <string name="tour_1792_gestures">控制按钮周围也能用的播放器手势</string>
     <string name="tour_1792_colors">迷你播放器进度使用你的强调色，正在播放的歌曲使用专辑颜色</string>
+    <string name="not_with_full_bleed_artwork_the_banner_covers_it">全宽封面时无效：横幅会遮住它</string>
 </resources>

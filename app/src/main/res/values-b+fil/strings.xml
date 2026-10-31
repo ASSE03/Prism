@@ -3948,4 +3948,5 @@
     <string name="tour_1792_slide">Mga page na pumapasok at lumalabas nang pa-slide</string>
     <string name="tour_1792_gestures">Ang mga gesture ng player pati sa paligid ng mga kontrol</string>
     <string name="tour_1792_colors">Ang progress ng mini player sa accent mo, ang tumutugtog na kanta sa kulay ng album</string>
+    <string name="not_with_full_bleed_artwork_the_banner_covers_it">Hindi kapag gilid-sa-gilid ang cover: tinatakpan ito ng banner</string>
 </resources>

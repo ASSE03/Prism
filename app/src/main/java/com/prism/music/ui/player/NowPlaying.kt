@@ -144,6 +144,16 @@ private val DECK_GAP_AFTER = mapOf(
 )
 private const val HERO_FADE = 0.42f
 
+/**
+ * Whether the full-bleed cover is up: in full-bleed mode, once there's a picture to show, this song's or (#244) the
+ * last one's while this one loads, or an animated cover.
+ */
+internal fun heroTarget(heroMode: Boolean, picture: Boolean, canvas: Boolean): Boolean = heroMode && (picture || canvas)
+
+/** The cover's size: a little smaller while paused when asked, unless the listener chose Reduce motion themselves. */
+internal fun pausedCoverScale(playing: Boolean, shrinkWhenPaused: Boolean, ownReduceMotion: Boolean): Float =
+    if (playing || !shrinkWhenPaused || ownReduceMotion) 1f else 0.86f
+
 @Composable
 fun rememberPosition(fast: Boolean, hold: Boolean = false): Long = rememberPositionState(fast, hold).value
 
@@ -372,8 +382,11 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     val collapsePastHalf = collapse.value >= 0.5f
     val panelsSettled = collapse.value >= 1f
     val panelFade by animateFloatAsState(if (panelsSettled) 1f else 0f, tween(200, easing = FastOutSlowInEasing), label = "panelFade")
+    // The listener's own Reduce motion, not Performance mode's (Reddit, 1.7.9.3: Performance mode turns Reduce motion on,
+    // which took the shrink away too; it's one scale of one layer, nothing to save).
+    val ownReduceMotion = c.settings.stored.collectAsState().value.reduceMotion
     val artScale by animateFloatAsState(
-        if (isPlaying || !settings.artShrinkOnPause || settings.reduceMotion) 1f else 0.86f,
+        pausedCoverScale(isPlaying, settings.artShrinkOnPause, ownReduceMotion),
         spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow),
         label = "artScale",
     )
@@ -417,7 +430,11 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     // in the full-bleed cover's place; the box it would sit in keeps only its buttons.
     val videoBehind = settings.videoFullBleed && videoMode && !wide
     var heroHeight by remember { mutableStateOf(0.dp) }
-    val heroT = animateFloatAsState(if (heroMode && (artLoaded || canvasCover > 0f)) 1f else 0f, tween(420, easing = FastOutSlowInEasing), label = "hero")
+    // #244 (1.7.9.3): once the full-bleed cover has shown it stays up while the next song's picture loads, over the last
+    // one (it used to drop to the square cover for every new song, then grow back, a jump on each skip).
+    var heroPicture by remember { mutableStateOf<coil3.request.ImageRequest?>(null) }
+    LaunchedEffect(heroMode) { if (!heroMode) heroPicture = null }
+    val heroT = animateFloatAsState(if (heroTarget(heroMode, artLoaded || heroPicture != null, canvasCover > 0f)) 1f else 0f, tween(420, easing = FastOutSlowInEasing), label = "hero")
     val heroVisible: () -> Float = { heroT.value * (1f - p()) }
     val mesh = rememberArtworkMesh(song.thumbnail)
     val blurImage = rememberFullArtworkBlur(song.thumbnail, settings.playerBlur)
@@ -611,9 +628,13 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 if (frost != null) androidx.compose.foundation.Image(
                     frost.image, null, contentScale = ContentScale.Crop, modifier = Modifier.matchParentSize().graphicsLayer { alpha = 0.8f },
                 )
+                // The last song's picture under the new one until it's in (#244).
+                heroPicture?.takeIf { it != artRequest }?.let { last ->
+                    AsyncImage(last, null, contentScale = if (fit) ContentScale.Fit else ContentScale.Crop, modifier = Modifier.matchParentSize())
+                }
                 AsyncImage(
                     artRequest, null, contentScale = if (fit) ContentScale.Fit else ContentScale.Crop,
-                    onState = { if (it is AsyncImagePainter.State.Success) artLoaded = true },
+                    onState = { if (it is AsyncImagePainter.State.Success) { artLoaded = true; heroPicture = artRequest } },
                     modifier = Modifier.matchParentSize(),
                 )
             }
@@ -874,7 +895,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                     alpha = when {
                                         CoverFlight.flying -> 0f
                                         videoMode -> (2f * p() - 1f).coerceIn(0f, 1f)
-                                        heroMode && artLoaded -> 1f - heroVisible()
+                                        heroMode && (artLoaded || heroPicture != null) -> 1f - heroVisible()
                                         else -> 1f
                                     }
                                 }

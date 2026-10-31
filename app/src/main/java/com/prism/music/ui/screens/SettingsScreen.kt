@@ -1766,7 +1766,12 @@ private fun PlayerCoverGroup() {
             tr(R.string.full_bleed_video), tr(R.string.music_videos_fill_the_top_of), s.videoFullBleed,
             info = tr(R.string.a_music_video_runs_to_the),
         ) { prefs.setVideoFullBleed(it) }
-        Toggle(tr(R.string.shrink_when_paused), tr(R.string.the_cover_eases_back_while_paused), s.artShrinkOnPause) { prefs.setArtShrinkOnPause(it) }
+        // With full-bleed artwork the banner covers the cover that shrinks (Reddit, 1.7.9.3): it says so rather than seem broken.
+        Toggle(
+            tr(R.string.shrink_when_paused),
+            if (s.fullBleedArtwork) tr(R.string.not_with_full_bleed_artwork_the_banner_covers_it) else tr(R.string.the_cover_eases_back_while_paused),
+            s.artShrinkOnPause,
+        ) { prefs.setArtShrinkOnPause(it) }
         Toggle(
             tr(R.string.square_video_covers), tr(R.string.no_black_bars_when_a_video), s.squareVideoCovers,
             info = tr(R.string.youtube_s_video_pictures_are_wide),

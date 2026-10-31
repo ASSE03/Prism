@@ -16,6 +16,13 @@ What changed in each release. Older releases are described on the [Releases page
 - **A cleared or edited queue could come back after a restart**: the queue was only saved when the song changed, on
   play / pause, shuffle or repeat, and the last save as Prism closed could be dropped. Every change to what's lined up is
   kept now, and the last save always lands.
+- **The full-bleed cover jumped on every new song** (#244): it dropped to the square cover while the next picture
+  loaded, then grew back. It stays full now, showing the last picture until the new one is in.
+- **"Shrink when paused" did nothing in Performance mode** (Reddit): Performance mode turns Reduce motion on, which
+  took the shrink with it; it only follows your own Reduce motion now. With full-bleed artwork (where the banner hides
+  the shrinking cover) the switch says so.
+- **Sonos speakers didn't show up to play on** (#239, Reddit): Sonos answers as a "ZonePlayer" with its renderer inside,
+  which Prism didn't ask for. It does now, and names the speaker by its room.
 - **Speed dial's last page could hold a single tile** (#267): its pages are whole now.
 - **Tab icons were a little smaller with labels "Selected"** (#272): they're the same size in every label style.
 - **The docked tab bar bent what was behind it** (#273): with Liquid Glass on, the flat docked bar worked like a lens,
