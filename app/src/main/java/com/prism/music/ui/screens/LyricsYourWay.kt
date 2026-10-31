@@ -539,7 +539,7 @@ private fun GapSample(note: Boolean, centered: Boolean) {
 
 // ---------------------------------------------------------------------------- On the player
 
-/** The lyric line on the player itself (#121: centered, up to two lines), and the lyrics source button beside Sing. */
+/** The lyric line on the player itself (#121: centered, up to two lines). */
 @Composable
 fun LyricsOnThePlayerGroup() {
     val s = LocalAppSettings.current
@@ -554,7 +554,6 @@ fun LyricsOnThePlayerGroup() {
             tr(R.string.up_to_two_lines), tr(R.string.a_long_line_wraps_instead_of), s.lyricsStripTwoLines,
             info = tr(R.string.the_line_keeps_room_for_two),
         ) { prefs.setLyricsStripTwoLines(it) }
-        Toggle(tr(R.string.lyrics_source_button), tr(R.string.lyrics_source_button_info), s.lyricsSourceButton) { prefs.setLyricsSourceButton(it) }
     }
 }
 

@@ -553,8 +553,9 @@ fun SweptLine(
     // 1.8.0 (#253, "choppy"): the sung part is drawn onto the line itself, its edge faded in its own fill, instead of a
     // second copy in an offscreen layer with what's still to come erased: that redrew a layer and two texts every frame
     // (~5 ms a frame for Karaoke and Bold card, ~10 for Glow, on the CPU alone). A fill that's a gradient itself (your
-    // light) can only be faded by another gradient on the GPU from Android 9; below that it keeps the layer.
-    if (litBrush == null || litBrush is SolidColor || Build.VERSION.SDK_INT >= 28) {
+    // light) can only be faded by another gradient on the GPU from Android 9; below that it keeps the layer. So does a
+    // line with a shadow: a text shadow ignores the fill's fade, and would lie under the words still to come too.
+    if ((glow ?: style.shadow) == null && (litBrush == null || litBrush is SolidColor || Build.VERSION.SDK_INT >= 28)) {
         Box(modifier) {
             Text(
                 line.text, wide.drawWithContent {
@@ -653,7 +654,8 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawSung(
             fadedAt(lit, x - feather / 2, x + feather / 2, rtlLine)
         }
         clipRect(0f, top, size.width, bottom) {
-            drawText(l, brush, shadow = shadow, textDecoration = style.textDecoration, drawStyle = style.drawStyle)
+            // alpha 1: left unset, the paint keeps the dim copy's alpha and the sung words came out half see-through.
+            drawText(l, brush, alpha = 1f, shadow = shadow, textDecoration = style.textDecoration, drawStyle = style.drawStyle)
         }
     }
 }

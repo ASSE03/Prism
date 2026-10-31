@@ -313,7 +313,7 @@ object SettingsIndex {
         // Lyrics
         SettingEntry(YL, tr(R.string.text), tr(R.string.focus_blur)),
         SettingEntry(YL, tr(R.string.effects), tr(R.string.progress_line), tr(R.string.spectrum_line_underline_sung_lyric)),
-        SettingEntry(YL, tr(R.string.on_the_player), tr(R.string.lyrics_source_button), tr(R.string.change_lyrics_source)),
+        SettingEntry(YL, tr(R.string.look), tr(R.string.lyrics_source_button), tr(R.string.change_lyrics_source)),
         SettingEntry(Y, tr(R.string.language), tr(R.string.translate_lyrics), tr(R.string.translation_language)),
         SettingEntry(Y, tr(R.string.language), tr(R.string.translate_into), tr(R.string.translation_language), needs = translate),
         SettingEntry(Y, tr(R.string.language), tr(R.string.romanize_lyrics), tr(R.string.romanization_romaji_pinyin_latin_letters_transli)),

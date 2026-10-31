@@ -191,7 +191,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
             "show_output_device", "immersive_art", "immersive_lyrics", "immersive_controls", "player_handle", "player_nav_band", "play_ring",
         )
         LYRICS_LOOK -> listOf(
-            "lyrics_align", "lyrics_scale", "lyrics_blur", "lyrics_progress_line", "lyrics_source_button", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",
+            "lyrics_align", "lyrics_scale", "lyrics_blur", "lyrics_progress_line", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",
             "lyrics_others_alpha", "lyrics_sung_color", "lyrics_sung_custom", "lyrics_other_color", "lyrics_other_custom", "lyrics_weight",
             "lyrics_backing_size", "lyrics_shadow", "lyrics_uppercase", "lyrics_ahead", "lyrics_position", "lyrics_extra_size", "lyrics_extra_color",
             "lyrics_extra_italic", "lyrics_extra_place", "lyrics_background", "immersive_background", "lyrics_bg_color", "lyrics_bg_color2", "lyrics_everywhere",
