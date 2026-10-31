@@ -38,24 +38,37 @@ class TvShellTests {
     @Test fun opensOnHomeWithFocus() {
         TvFixture.launch()
         placeShown(TvSection.HOME)
-        compose.awaitFocusOn(hasTestTag("$TAG_NAV/${TvSection.HOME.name}"), 10_000)
+        // Home's first item (its Search button while Home is empty, as here with no network).
+        compose.awaitFocus(10_000)
+    }
+
+    /** Left until the side navigation has focus (it opens), on [section]'s item. */
+    private fun toNav(section: TvSection = TvSection.HOME) {
+        compose.awaitFocus(10_000)
+        for (i in 0 until 6) {
+            if (compose.onAllNodes(hasTestTag("$TAG_NAV/${section.name}") and androidx.compose.ui.test.isFocused(), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()) return
+            TvFixture.left(); Thread.sleep(300)
+        }
+        compose.awaitFocusOn(hasTestTag("$TAG_NAV/${section.name}"))
     }
 
     @Test fun theRemoteReachesEveryPlace() {
         TvFixture.launch()
-        compose.awaitFocusOn(hasTestTag("$TAG_NAV/${TvSection.HOME.name}"), 10_000)
+        toNav()
         for (s in TvSection.entries.drop(1)) {
             TvFixture.down()
             compose.awaitFocusOn(hasTestTag("$TAG_NAV/${s.name}"))
             TvFixture.ok()
             placeShown(s)
             compose.awaitFocus()
+            // The place's own first item may have taken focus: back to the side navigation for the next one.
+            toNav(s)
         }
     }
 
     @Test fun backGoesHomeThenLeaves() {
         val scenario = TvFixture.launch()
-        compose.awaitFocusOn(hasTestTag("$TAG_NAV/${TvSection.HOME.name}"), 10_000)
+        toNav()
         repeat(3) { TvFixture.down() }
         compose.awaitFocusOn(hasTestTag("$TAG_NAV/${TvSection.SETTINGS.name}"))
         TvFixture.ok()

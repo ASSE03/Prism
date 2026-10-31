@@ -46,4 +46,11 @@ class TvManifestTest {
         }
         assertTrue(File("src/main/res/drawable-xhdpi/tv_banner.png").isFile)
     }
+
+    @Test fun prismIsAScreensaverOnlySystemCanBind() {
+        val dream = elements("service").single { it.getAttributeNS(ns, "name") == ".ui.tv.PrismDream" }
+        assertEquals("android.permission.BIND_DREAM_SERVICE", dream.getAttributeNS(ns, "permission"))
+        val actions = dream.getElementsByTagName("action").let { l -> (0 until l.length).map { (l.item(it) as Element).getAttributeNS(ns, "name") } }
+        assertTrue(actions.contains("android.service.dreams.DreamService"))
+    }
 }

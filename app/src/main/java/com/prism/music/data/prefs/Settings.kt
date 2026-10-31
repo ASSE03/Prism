@@ -238,6 +238,19 @@ data class BehaviorPrefs(
     val pageSlide: Boolean = false,
 )
 
+/**
+ * Prism TV's settings and the phone's desk mode (1.8.0): how Prism behaves on a TV, and the ambient screen both share
+ * (not part of a Look). Nested (see [ShapeLook]).
+ */
+data class TvPrefs(
+    /** On a TV, minutes with no remote while music plays before the ambient screen (0: never). */
+    val ambientMinutes: Int = 3,
+    /** Phones: while music plays and the phone is charging, the ambient screen instead of the phone sleeping (#265). */
+    val deskMode: Boolean = false,
+    /** How large lyrics are on the TV (1 = as designed). */
+    val lyricsScale: Float = 1f,
+)
+
 /** Picture-in-picture for a playing video (1.7.8, #167). */
 enum class PipMode(val label: String) { AUTO(tr(R.string.when_you_leave_prism)), MENU(tr(R.string.only_with_its_button)) }
 
@@ -1039,6 +1052,8 @@ data class AppSettings(
     val view: ViewLook = ViewLook(),
     val sound: SoundPrefs = SoundPrefs(),
     val behavior: BehaviorPrefs = BehaviorPrefs(),
+    /** Prism TV and the phone's desk mode (1.8.0). */
+    val tv: TvPrefs = TvPrefs(),
     val uiDensity: UiDensity = UiDensity.COMFORTABLE,
     val titleSize: TitleSize = TitleSize.LARGE,
     val cardSize: CardSize = CardSize.MEDIUM,
@@ -1537,6 +1552,10 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val lockPortrait = booleanPreferencesKey("lock_portrait")
         val gesturesEverywhere = booleanPreferencesKey("player_gestures_everywhere")
         val pageSlide = booleanPreferencesKey("page_slide")
+        // 1.8.0 ([TvPrefs]).
+        val tvAmbientMinutes = intPreferencesKey("tv_ambient_minutes")
+        val deskMode = booleanPreferencesKey("desk_mode")
+        val tvLyricsScale = floatPreferencesKey("tv_lyrics_scale")
         val pauseOnMute = booleanPreferencesKey("pause_on_mute")
         val pipMode = stringPreferencesKey("pip_mode")
         val panelSwipes = booleanPreferencesKey("panel_swipes")
@@ -1643,6 +1662,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "mini_swipe_left", "mini_swipe_right", "mini_swipe_down", "mini_swipe_up",
                 // 1.7.8 ([BehaviorPrefs]).
                 "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres", "screen_fades", "player_gestures_everywhere", "page_slide",
+                // 1.8.0 ([TvPrefs]): how Prism behaves on a TV and in desk mode.
+                "tv_ambient_minutes", "desk_mode", "tv_lyrics_scale",
                 // 1.7.8 ([SoundPrefs]).
                 "crossfade_curve", "normalize_target", "normalize_albums", "music_speed", "music_pitch",
                 "skip_silence_episodes", "sleep_fade", "pause_fade",
@@ -1917,6 +1938,11 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 screenFades = p[K.screenFades] ?: d.behavior.screenFades,
                 gesturesEverywhere = p[K.gesturesEverywhere] ?: d.behavior.gesturesEverywhere,
                 pageSlide = p[K.pageSlide] ?: d.behavior.pageSlide,
+            ),
+            tv = TvPrefs(
+                ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
+                deskMode = p[K.deskMode] ?: d.tv.deskMode,
+                lyricsScale = (p[K.tvLyricsScale] ?: d.tv.lyricsScale).coerceIn(0.75f, 1.5f),
             ),
             uiDensity = p.enum(K.uiDensity, d.uiDensity),
             titleSize = p.enum(K.titleSize, d.titleSize),
@@ -2423,6 +2449,9 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setLockPortrait(v: Boolean) = edit { it[K.lockPortrait] = v }
     fun setGesturesEverywhere(v: Boolean) = edit { it[K.gesturesEverywhere] = v }
     fun setPageSlide(v: Boolean) = edit { it[K.pageSlide] = v }
+    fun setTvAmbientMinutes(v: Int) = edit { it[K.tvAmbientMinutes] = v.coerceIn(0, 60) }
+    fun setDeskMode(v: Boolean) = edit { it[K.deskMode] = v }
+    fun setTvLyricsScale(v: Float) = edit { it[K.tvLyricsScale] = v.coerceIn(0.75f, 1.5f) }
     fun setPauseOnMute(v: Boolean) = edit { it[K.pauseOnMute] = v }
     fun setPipMode(v: PipMode) = edit { it[K.pipMode] = v.name }
     fun setPanelSwipes(v: Boolean) = edit { it[K.panelSwipes] = v }

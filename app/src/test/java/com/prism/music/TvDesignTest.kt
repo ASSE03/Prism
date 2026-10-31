@@ -214,7 +214,7 @@ class TvDesignTest {
                 Step("tv_home/row1/0", "↓", "Speed dial"),
                 Step("tv_nav/HOME", "← (from a row's start)", "the side navigation opens"),
             ),
-        ) { inShell(TvSection.HOME) { TvHomeScreen("Good evening", now, shelves, noop, noop, noop, {}, accent = Color(0xFF7C5CFF)) } }
+        ) { inShell(TvSection.HOME) { TvHomeScreen("Good evening", now, shelves, noop, noop, noop, { _, _ -> }, accent = Color(0xFF7C5CFF)) } }
 
         shoot(
             "home-idle", "Home, nothing playing, an update ready",
@@ -223,7 +223,7 @@ class TvDesignTest {
                 Step("tv_home/row0/0", "opens here", "OK plays it"),
                 Step("tv_home/update", "↑", "Update downloads and installs Prism (Android asks once)"),
             ),
-        ) { inShell(TvSection.HOME) { TvHomeScreen("Good evening", null, shelves, noop, noop, noop, {}, banner = { TvUpdateBanner("1.8.1", noop) }) } }
+        ) { inShell(TvSection.HOME) { TvHomeScreen("Good evening", null, shelves, noop, noop, noop, { _, _ -> }, banner = { TvUpdateBanner("1.8.1", noop) }) } }
 
         shoot(
             "nav", "The side navigation, open",
@@ -232,7 +232,7 @@ class TvDesignTest {
                 Step("tv_nav/HOME", "←", "from the page"),
                 Step("tv_nav/SEARCH", "↓", ""), Step("tv_nav/LIBRARY", "↓", ""), Step("tv_nav/SETTINGS", "↓", ""),
             ),
-        ) { TvNavFrame(TvSection.HOME, {}, focusNav = true) { TvHomeScreen("Good evening", null, emptyList(), noop, noop, noop, {}) } }
+        ) { TvNavFrame(TvSection.HOME, {}, focusNav = true) { TvHomeScreen("Good evening", null, emptyList(), noop, noop, noop, { _, _ -> }) } }
 
         shoot(
             "player", "Now playing",
@@ -341,7 +341,7 @@ class TvDesignTest {
                     TvShelf("Popular", items(80, TvItem.Kind.SONG, "Glass Horizon" to "312M plays", "Velvet Hours" to "98M plays", "Low Tide" to "54M plays", "Paper Moons" to "40M plays", "Coastline" to "22M plays")),
                     TvShelf("Albums", items(50, TvItem.Kind.ALBUM, "Tidewater" to "2025", "Glass" to "2023", "Live at the Pier" to "2024")),
                 ),
-                noop, noop, noop, {}, accent = Color(0xFF7C5CFF),
+                noop, noop, noop, { _, _ -> }, accent = Color(0xFF7C5CFF),
             )
         }
 

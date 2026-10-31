@@ -62,10 +62,11 @@ fun TvHomeScreen(
     onPlayPause: () -> Unit,
     onOpenPlayer: () -> Unit,
     onOpenLyrics: () -> Unit,
-    onItem: (TvItem) -> Unit,
+    onItem: (row: Int, index: Int) -> Unit,
     modifier: Modifier = Modifier,
     accent: Color? = null,
     banner: (@Composable () -> Unit)? = null,
+    onSearch: (() -> Unit)? = null,
 ) {
     val scheme = MaterialTheme.colorScheme
     // Rows run to the screen's edges (their cards grow when focused, and slide in from the edge); everything else keeps
@@ -79,7 +80,14 @@ fun TvHomeScreen(
         item {
             Box(Modifier.padding(horizontal = 48.dp)) {
                 if (now != null) TvNowHero(now, onPlayPause, onOpenPlayer, onOpenLyrics)
-                else Text(greeting, style = MaterialTheme.typography.displaySmall, color = scheme.onBackground)
+                else Column {
+                    Text(greeting, style = MaterialTheme.typography.displaySmall, color = scheme.onBackground)
+                    // Nothing to show yet (offline, or Home still loading): Search, so focus is never nowhere.
+                    if (shelves.isEmpty() && onSearch != null) {
+                        Spacer(Modifier.height(24.dp))
+                        TvButton(tr(R.string.search), onSearch, Modifier.tvItem("$TAG_HOME/search", entry = true), icon = PrismIcons.Search)
+                    }
+                }
             }
         }
         itemsIndexed(shelves) { r, shelf ->
@@ -93,8 +101,8 @@ fun TvHomeScreen(
                     itemsIndexed(shelf.items) { i, item ->
                         val first = now == null && r == 0 && i == 0
                         TvCard(
-                            item.art, item.title, item.subtitle, { onItem(item) },
-                            modifier = (if (first) Modifier.entryFocus() else Modifier).testTag("$TAG_HOME/row$r/$i"),
+                            item.art, item.title, item.subtitle, { onItem(r, i) },
+                            modifier = Modifier.tvItem("$TAG_HOME/row$r/$i", entry = first),
                             round = item.kind == TvItem.Kind.ARTIST,
                         )
                     }
@@ -122,10 +130,10 @@ private fun TvNowHero(now: TvNow, onPlayPause: () -> Unit, onOpenPlayer: () -> U
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
                 TvIconButton(
                     if (now.playing) PrismIcons.Pause else PrismIcons.Play,
-                    tr(if (now.playing) R.string.widget_pause else R.string.widget_play), onPlayPause, Modifier.testTag("$TAG_HOME/playpause"),
+                    tr(if (now.playing) R.string.widget_pause else R.string.widget_play), onPlayPause, Modifier.tvItem("$TAG_HOME/playpause"),
                 )
-                TvButton(tr(R.string.now_playing), onOpenPlayer, Modifier.entryFocus().testTag("$TAG_HOME/player"), icon = PrismIcons.PlayCircle, primary = true)
-                if (now.hasLyrics) TvButton(tr(R.string.lyrics), onOpenLyrics, Modifier.testTag("$TAG_HOME/lyrics"), icon = PrismIcons.Lyrics)
+                TvButton(tr(R.string.now_playing), onOpenPlayer, Modifier.tvItem("$TAG_HOME/player", entry = true), icon = PrismIcons.PlayCircle, primary = true)
+                if (now.hasLyrics) TvButton(tr(R.string.lyrics), onOpenLyrics, Modifier.tvItem("$TAG_HOME/lyrics"), icon = PrismIcons.Lyrics)
             }
         }
     }
@@ -133,7 +141,7 @@ private fun TvNowHero(now: TvNow, onPlayPause: () -> Unit, onOpenPlayer: () -> U
 
 /** The update banner on Home (TV): a new Prism is out; OK downloads and installs it (Android asks once to allow it). */
 @Composable
-fun TvUpdateBanner(version: String, onUpdate: () -> Unit, modifier: Modifier = Modifier) {
+fun TvUpdateBanner(version: String, onUpdate: () -> Unit, modifier: Modifier = Modifier, note: String? = null) {
     val scheme = MaterialTheme.colorScheme
     Row(
         modifier.fillMaxWidth().background(scheme.surfaceVariant, RoundedCornerShape(14.dp)).padding(horizontal = 24.dp, vertical = 14.dp),
@@ -141,9 +149,9 @@ fun TvUpdateBanner(version: String, onUpdate: () -> Unit, modifier: Modifier = M
     ) {
         Column(Modifier.weight(1f)) {
             Text(tr(R.string.tv_update_ready, version), style = MaterialTheme.typography.titleMedium, color = scheme.onSurface)
-            Text(tr(R.string.tv_update_note), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant)
+            Text(note ?: tr(R.string.tv_update_note), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant)
         }
-        TvButton(tr(R.string.update), onUpdate, Modifier.testTag("$TAG_HOME/update"), icon = PrismIcons.Update, primary = true)
+        TvButton(tr(R.string.update), onUpdate, Modifier.tvItem("$TAG_HOME/update"), icon = PrismIcons.Update, primary = true)
     }
 }
 

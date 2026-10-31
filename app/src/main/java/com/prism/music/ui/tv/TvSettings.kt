@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -58,7 +59,7 @@ fun TvSettingsScreen(
                 ListItem(
                     selected = i == group,
                     onClick = { onGroup(i) },
-                    modifier = Modifier.then(if (i == group && focusedSetting == null) Modifier.entryFocus() else Modifier).testTag("$TAG_SETTINGS/group/$i"),
+                    modifier = Modifier.tvItem("$TAG_SETTINGS/group/$i", entry = i == group && focusedSetting == null).onFocusChanged { if (it.isFocused && i != group) onGroup(i) },
                     leadingContent = { Icon(g.icon, null, Modifier.size(22.dp)) },
                     headlineContent = { Text(g.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
                     colors = ListItemDefaults.colors(selectedContainerColor = scheme.surfaceVariant, focusedContainerColor = scheme.onSurface, focusedContentColor = scheme.surface),
@@ -76,7 +77,7 @@ fun TvSettingsScreen(
                     ListItem(
                         selected = false,
                         onClick = { onSetting(i) },
-                        modifier = Modifier.weight(1f).then(if (i == focusedSetting) Modifier.entryFocus() else Modifier).testTag("$TAG_SETTINGS/setting/$i"),
+                        modifier = Modifier.weight(1f).then(Modifier.tvItem("$TAG_SETTINGS/setting/$i", entry = i == focusedSetting)),
                         headlineContent = { Text(s.title, maxLines = 2, overflow = TextOverflow.Ellipsis) },
                         supportingContent = s.value?.let { { Text(it, maxLines = 1, overflow = TextOverflow.Ellipsis) } },
                         trailingContent = s.on?.let { on -> { Switch(checked = on, onCheckedChange = null) } },
@@ -84,7 +85,7 @@ fun TvSettingsScreen(
                     )
                     if (s.info != null) {
                         Spacer(Modifier.width(8.dp))
-                        TvIconButton(PrismIcons.Info, s.info, { onInfo(i) }, Modifier.testTag("$TAG_SETTINGS/info/$i"))
+                        TvIconButton(PrismIcons.Info, s.info, { onInfo(i) }, Modifier.tvItem("$TAG_SETTINGS/info/$i"))
                     }
                 }
             }

@@ -12,6 +12,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.platform.testTag
 import kotlinx.coroutines.delay
 
 /*
@@ -49,3 +51,46 @@ fun Modifier.entryFocus(key: Any? = Unit): Modifier {
  */
 @OptIn(ExperimentalComposeUiApi::class)
 fun Modifier.rememberedFocus(): Modifier = this.focusRestorer()
+
+/**
+ * Which item had focus on each screen, so coming back to a screen (Back from the player, from an album) lands on the
+ * item the listener left, not on the screen's first one. Lives as long as the TV app's screen.
+ */
+class TvFocusMemory {
+    internal val lastFocused = HashMap<String, String>()
+    /** Screens where something has taken focus since they were last opened. */
+    internal val landed = HashSet<String>()
+
+    /** [screen] is opening (again): its items may take focus anew. */
+    fun opening(screen: String) { landed -= screen }
+}
+
+/** How long a screen waits for the item the listener left to take focus before its first item does instead. */
+private const val RESTORE_WAIT_MS = 700L
+
+val LocalTvFocusMemory = staticCompositionLocalOf { TvFocusMemory() }
+/** The screen being drawn, as the key [TvFocusMemory] files its focus under ("section:HOME", "player", "album:…"). */
+val LocalTvScreen = staticCompositionLocalOf { "" }
+
+/**
+ * A focusable item on a TV screen, named [tag] (its test tag too). It takes focus when the screen opens if it's the
+ * screen's [entry] item, or, coming back to the screen, if it's the item that had focus when the listener left.
+ */
+@Composable
+fun Modifier.tvItem(tag: String, entry: Boolean = false): Modifier {
+    val memory = LocalTvFocusMemory.current
+    val screen = LocalTvScreen.current
+    val left = remember(screen) { memory.lastFocused[screen] }
+    val takes = if (left != null) left == tag else entry
+    // The item left isn't there any more (the row changed): the screen's first item, so focus is never nowhere.
+    val fallback = entry && left != null && left != tag
+    val requester = remember { FocusRequester() }
+    if (fallback) LaunchedEffect(screen) {
+        delay(RESTORE_WAIT_MS)
+        if (screen !in memory.landed) runCatching { requester.requestFocus() }
+    }
+    return (if (takes) this.entryFocus(screen) else this)
+        .focusRequester(requester)
+        .onFocusChanged { if (it.isFocused) { memory.lastFocused[screen] = tag; memory.landed += screen } }
+        .testTag(tag)
+}

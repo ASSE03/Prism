@@ -10,10 +10,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -25,6 +30,7 @@ import androidx.tv.material3.NavigationDrawer
 import androidx.tv.material3.NavigationDrawerItem
 import androidx.tv.material3.Text
 import com.prism.music.R
+import com.prism.music.data.model.BrowseItem
 import com.prism.music.tr
 import com.prism.music.ui.theme.PrismIcons
 
@@ -36,16 +42,96 @@ enum class TvSection(val label: () -> String, val icon: () -> ImageVector) {
     SETTINGS({ tr(R.string.settings) }, { PrismIcons.Settings }),
 }
 
+/** A page opened over the top-level places (Back closes it). [key] files its scroll and focus. */
+sealed interface TvRoute {
+    val key: String
+
+    data object Player : TvRoute { override val key = "player" }
+    data object Lyrics : TvRoute { override val key = "lyrics" }
+    data object Video : TvRoute { override val key = "video" }
+    /** An album or a playlist. */
+    data class Collection(val item: BrowseItem) : TvRoute { override val key = "collection:${item.id}" }
+    data class Artist(val id: String) : TvRoute { override val key = "artist:$id" }
+    /** Pairing a phone: to sign in with it ([signIn]), or as a remote. */
+    data class Pair(val signIn: Boolean, val firstRun: Boolean = false) : TvRoute { override val key = "pair:$signIn" }
+    data object Sing : TvRoute { override val key = "sing" }
+    /** The first run's welcome. */
+    data object Welcome : TvRoute { override val key = "welcome" }
+}
+
+/** Moving between Prism TV's pages: [go] opens one over the others, [back] closes the top one. */
+class TvNav(private val stack: SnapshotStateList<TvRoute>, private val memory: TvFocusMemory, private val sectionKey: () -> String) {
+    val top: TvRoute? get() = stack.lastOrNull()
+
+    fun go(route: TvRoute) {
+        if (stack.lastOrNull() == route) return
+        memory.opening(route.key)
+        stack += route
+    }
+
+    /** Closes the top page; false when none is open (Back then belongs to the places). */
+    fun back(): Boolean {
+        if (stack.isEmpty()) return false
+        stack.removeAt(stack.lastIndex)
+        memory.opening(stack.lastOrNull()?.key ?: sectionKey())
+        return true
+    }
+
+    /** Closes every page: back to the places. */
+    fun clear() {
+        while (stack.isNotEmpty()) stack.removeAt(stack.lastIndex)
+        memory.opening(sectionKey())
+    }
+
+    /** The first run is over (signed in with the phone, or not): its pages go, Home shows. */
+    var firstRunDone: () -> Unit = {}
+}
+
 /**
- * Prism TV's shell (1.8.0): the side navigation (it opens wide while it has focus) and the place picked in it. Back
- * from any other place goes to Home; Back on Home leaves Prism, and the music plays on.
+ * Prism TV's shell (1.8.0): the side navigation (it opens wide while it has focus) and the place picked in it, with
+ * pages (the player, an album…) opened over them. Back closes a page, then goes to Home from another place; Back on
+ * Home leaves Prism, and the music plays on. Each page keeps its scroll and the item that had focus.
  */
 @Composable
 fun TvRoot() {
     TvTheme {
         var section by rememberSaveable { mutableStateOf(TvSection.HOME) }
-        BackHandler(enabled = section != TvSection.HOME) { section = TvSection.HOME }
-        TvNavFrame(section, { section = it }, focusNav = true) { TvPlace(section) }
+        val stack = remember { mutableStateListOf<TvRoute>() }
+        val memory = remember { TvFocusMemory() }
+        val sectionKey = "section:${section.name}"
+        val nav = remember(stack, memory) { TvNav(stack, memory) { "section:${section.name}" } }
+        // First run (plan §2): welcome, then sign in with the phone or carry on without an account.
+        val c = com.prism.music.ui.theme.LocalContainer.current
+        nav.firstRunDone = { c.settings.setOnboarded(true); nav.clear() }
+        androidx.compose.runtime.LaunchedEffect(Unit) {
+            val s = c.settings.current
+            if (!s.onboarded && !s.isLoggedIn) nav.go(TvRoute.Welcome)
+        }
+        BackHandler(enabled = stack.isNotEmpty() || section != TvSection.HOME) {
+            if (!nav.back()) { section = TvSection.HOME; memory.opening("section:${TvSection.HOME.name}") }
+        }
+        val holder = rememberSaveableStateHolder()
+        val top = stack.lastOrNull()
+        val key = top?.key ?: sectionKey
+        CompositionLocalProvider(LocalTvFocusMemory provides memory) { Box(Modifier.fillMaxSize()) {
+            holder.SaveableStateProvider(key) {
+                CompositionLocalProvider(LocalTvScreen provides key) {
+                    when (top) {
+                        null -> TvNavFrame(section, { section = it; memory.opening("section:${it.name}") }, focusNav = false) { TvPlace(section, nav) { section = it; memory.opening("section:${it.name}") } }
+                        TvRoute.Player -> TvPlayerPage(nav)
+                        TvRoute.Lyrics -> TvLyricsPage(nav)
+                        TvRoute.Video -> TvVideoPage(nav)
+                        is TvRoute.Collection -> TvCollectionPage(top.item, nav)
+                        is TvRoute.Artist -> TvArtistPage(top.id, nav)
+                        is TvRoute.Pair -> if (top.firstRun) TvPairPage(top.signIn, nav) { nav.firstRunDone() } else TvPairPage(top.signIn, nav)
+                        TvRoute.Sing -> TvSingPage(nav)
+                        TvRoute.Welcome -> TvWelcomePage(nav)
+                    }
+                }
+            }
+            // Over everything, when the room has gone quiet while music plays.
+            AmbientHost(onTv = true)
+        } }
     }
 }
 
@@ -67,7 +153,7 @@ fun TvNavFrame(section: TvSection, onSection: (TvSection) -> Unit, focusNav: Boo
                             selected = section == s,
                             onClick = { onSection(s) },
                             leadingContent = { Icon(s.icon(), contentDescription = null) },
-                            modifier = (if (focusNav && s == section) Modifier.entryFocus() else Modifier).testTag("$TAG_NAV/${s.name}"),
+                            modifier = Modifier.tvItem("$TAG_NAV/${s.name}", entry = focusNav && s == section),
                         ) { Text(s.label()) }
                     }
                 }
@@ -77,11 +163,17 @@ fun TvNavFrame(section: TvSection, onSection: (TvSection) -> Unit, focusNav: Boo
     }
 }
 
-/** One top-level place. Slice 1 (foundations): each is its title only; the screens come in the next slices. */
+/** One top-level place. */
 @Composable
-private fun TvPlace(section: TvSection) {
-    Box(Modifier.fillMaxSize().padding(TvSafe).testTag("$TAG_PLACE/${section.name}")) {
-        Text(section.label(), style = MaterialTheme.typography.displaySmall, color = MaterialTheme.colorScheme.onBackground)
+private fun TvPlace(section: TvSection, nav: TvNav, onSection: (TvSection) -> Unit) {
+    Box(Modifier.fillMaxSize().testTag("$TAG_PLACE/${section.name}")) {
+        when (section) {
+            TvSection.HOME -> TvHomePlace(nav) { onSection(TvSection.SEARCH) }
+            TvSection.SEARCH -> TvSearchPlace(nav)
+            TvSection.LIBRARY -> TvLibraryPlace(nav)
+
+            TvSection.SETTINGS -> TvSettingsPlace(nav)
+        }
     }
 }
 

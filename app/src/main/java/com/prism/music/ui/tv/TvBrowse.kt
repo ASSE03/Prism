@@ -1,7 +1,11 @@
 package com.prism.music.ui.tv
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -41,7 +45,7 @@ import com.prism.music.ui.theme.PrismIcons
 
 /** One row of cards under a title, remembering its column (search results, artist pages). */
 @Composable
-fun TvShelfRow(shelf: TvShelf, onItem: (TvItem) -> Unit, tag: String, modifier: Modifier = Modifier) {
+fun TvShelfRow(shelf: TvShelf, onItem: (Int) -> Unit, tag: String, modifier: Modifier = Modifier) {
     Column(modifier) {
         TvRowTitle(shelf.title, Modifier.padding(start = 48.dp))
         LazyRow(
@@ -50,7 +54,7 @@ fun TvShelfRow(shelf: TvShelf, onItem: (TvItem) -> Unit, tag: String, modifier: 
             horizontalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             itemsIndexed(shelf.items) { i, item ->
-                TvCard(item.art, item.title, item.subtitle, { onItem(item) }, Modifier.testTag("$tag/$i"), round = item.kind == TvItem.Kind.ARTIST)
+                TvCard(item.art, item.title, item.subtitle, { onItem(i) }, Modifier.tvItem("$tag/$i"), round = item.kind == TvItem.Kind.ARTIST)
             }
         }
     }
@@ -74,6 +78,10 @@ fun TvSearchScreen(
     onItem: (TvItem) -> Unit,
     onSong: (TvSong) -> Unit,
     modifier: Modifier = Modifier,
+    typing: Boolean = false,
+    onQueryChange: (String) -> Unit = {},
+    onSubmit: () -> Unit = {},
+    onStopTyping: () -> Unit = {},
 ) {
     val scheme = MaterialTheme.colorScheme
     LazyColumn(
@@ -83,9 +91,11 @@ fun TvSearchScreen(
     ) {
         item {
             Row(Modifier.padding(horizontal = 48.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Surface(
+                // Typing: the line becomes a text box with the TV's keyboard up; its Search key (or Back) ends typing.
+                if (typing) TvSearchInput(query, onQueryChange, onSubmit, onStopTyping)
+                else Surface(
                     onClick = onType,
-                    modifier = Modifier.width(620.dp).height(60.dp).entryFocus().testTag("$TAG_SEARCH/field"),
+                    modifier = Modifier.width(620.dp).height(60.dp).tvItem("$TAG_SEARCH/field", entry = true),
                     shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(30.dp)),
                     colors = ClickableSurfaceDefaults.colors(containerColor = scheme.surfaceVariant, focusedContainerColor = scheme.onSurface, contentColor = scheme.onSurface, focusedContentColor = scheme.surface),
                     scale = ClickableSurfaceDefaults.scale(focusedScale = 1.02f),
@@ -96,7 +106,7 @@ fun TvSearchScreen(
                         Text(query.ifEmpty { tr(R.string.tv_search_hint) }, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     }
                 }
-                TvIconButton(PrismIcons.Mic, tr(R.string.tv_voice_search), onVoice, Modifier.testTag("$TAG_SEARCH/voice"))
+                TvIconButton(PrismIcons.Mic, tr(R.string.tv_voice_search), onVoice, Modifier.tvItem("$TAG_SEARCH/voice"))
             }
         }
         if (query.isEmpty()) {
@@ -104,7 +114,7 @@ fun TvSearchScreen(
                 Column {
                     TvRowTitle(tr(R.string.recent_searches), Modifier.padding(start = 48.dp))
                     LazyRow(Modifier.rememberedFocus(), horizontalArrangement = Arrangement.spacedBy(14.dp), contentPadding = TvRowPadding) {
-                        itemsIndexed(recent) { i, r -> TvButton(r, { onRecent(r) }, Modifier.testTag("$TAG_SEARCH/recent/$i"), icon = PrismIcons.History) }
+                        itemsIndexed(recent) { i, r -> TvButton(r, { onRecent(r) }, Modifier.tvItem("$TAG_SEARCH/recent/$i"), icon = PrismIcons.History) }
                     }
                 }
             }
@@ -113,19 +123,52 @@ fun TvSearchScreen(
                 Row(Modifier.padding(horizontal = 48.dp), horizontalArrangement = Arrangement.spacedBy(40.dp)) {
                     if (top != null) Column(Modifier.width(200.dp)) {
                         Text(tr(R.string.top_result), style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold), color = scheme.primary, modifier = Modifier.padding(bottom = 12.dp))
-                        TvCard(top.art, top.title, top.subtitle, { onItem(top) }, Modifier.testTag("$TAG_SEARCH/top"), round = top.kind == TvItem.Kind.ARTIST, width = 200.dp)
+                        TvCard(top.art, top.title, top.subtitle, { onItem(top) }, Modifier.tvItem("$TAG_SEARCH/top"), round = top.kind == TvItem.Kind.ARTIST, width = 200.dp)
                     }
                     Column(Modifier.weight(1f)) {
                         TvRowTitle(tr(R.string.songs))
                         Column(Modifier.rememberedFocus(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                            songs.take(5).forEachIndexed { i, s -> TvSongRow(s.title, s.artist, s.length, { onSong(s) }, Modifier.testTag("$TAG_SEARCH/song/$i"), art = s.art) }
+                            songs.take(5).forEachIndexed { i, s -> TvSongRow(s.title, s.artist, s.length, { onSong(s) }, Modifier.tvItem("$TAG_SEARCH/song/$i"), art = s.art) }
                         }
                     }
                 }
             }
-            itemsIndexed(shelves) { r, shelf -> TvShelfRow(shelf, onItem, "$TAG_SEARCH/row$r") }
+            itemsIndexed(shelves) { r, shelf -> TvShelfRow(shelf, { i -> onItem(shelf.items[i]) }, "$TAG_SEARCH/row$r") }
         }
     }
+}
+
+/** The search line while typing: a text box with the TV's keyboard, focused at once. */
+@Composable
+private fun TvSearchInput(query: String, onQueryChange: (String) -> Unit, onSubmit: () -> Unit, onStop: () -> Unit) {
+    val scheme = MaterialTheme.colorScheme
+    val focus = androidx.compose.runtime.remember { androidx.compose.ui.focus.FocusRequester() }
+    val keyboard = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
+    androidx.compose.runtime.LaunchedEffect(Unit) { runCatching { focus.requestFocus() }; keyboard?.show() }
+    androidx.activity.compose.BackHandler { onStop() }
+    androidx.compose.foundation.text.BasicTextField(
+        value = query,
+        onValueChange = onQueryChange,
+        singleLine = true,
+        textStyle = MaterialTheme.typography.titleMedium.copy(color = scheme.onSurface),
+        cursorBrush = androidx.compose.ui.graphics.SolidColor(scheme.primary),
+        keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(imeAction = androidx.compose.ui.text.input.ImeAction.Search),
+        keyboardActions = androidx.compose.foundation.text.KeyboardActions(onSearch = { onSubmit() }, onDone = { onSubmit() }),
+        modifier = Modifier.width(620.dp).height(60.dp)
+            .background(scheme.surfaceVariant, RoundedCornerShape(30.dp))
+            .border(3.dp, scheme.onSurface, RoundedCornerShape(30.dp))
+            .focusRequester(focus).testTag("$TAG_SEARCH/input"),
+        decorationBox = { inner ->
+            Row(Modifier.fillMaxSize().padding(horizontal = 22.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(PrismIcons.Search, null, Modifier.size(24.dp), tint = scheme.onSurface)
+                Spacer(Modifier.width(14.dp))
+                Box(Modifier.weight(1f)) {
+                    if (query.isEmpty()) Text(tr(R.string.tv_search_hint), style = MaterialTheme.typography.titleMedium, color = scheme.onSurfaceVariant, maxLines = 1)
+                    inner()
+                }
+            }
+        },
+    )
 }
 
 /**
@@ -144,7 +187,7 @@ fun TvLibraryScreen(
     Column(modifier.fillMaxSize().padding(start = 48.dp, top = 27.dp).testTag(TAG_LIBRARY)) {
         TabRow(selectedTabIndex = tab, modifier = Modifier.testTag("$TAG_LIBRARY/tabs")) {
             tabs.forEachIndexed { i, t ->
-                Tab(selected = i == tab, onFocus = { onTab(i) }, onClick = { onTab(i) }, modifier = (if (i == tab) Modifier.entryFocus() else Modifier).testTag("$TAG_LIBRARY/tab/$i")) {
+                Tab(selected = i == tab, onFocus = { onTab(i) }, onClick = { onTab(i) }, modifier = Modifier.tvItem("$TAG_LIBRARY/tab/$i", entry = i == tab)) {
                     Text(t, Modifier.padding(horizontal = 16.dp, vertical = 8.dp), style = MaterialTheme.typography.titleMedium)
                 }
             }
@@ -158,7 +201,7 @@ fun TvLibraryScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             itemsIndexed(items) { i, item ->
-                TvCard(item.art, item.title, item.subtitle, { onItem(item) }, Modifier.testTag("$TAG_LIBRARY/grid/$i"), round = item.kind == TvItem.Kind.ARTIST, width = 132.dp)
+                TvCard(item.art, item.title, item.subtitle, { onItem(item) }, Modifier.tvItem("$TAG_LIBRARY/grid/$i"), round = item.kind == TvItem.Kind.ARTIST, width = 132.dp)
             }
         }
     }
@@ -191,13 +234,13 @@ fun TvCollectionScreen(
             Text(details, style = MaterialTheme.typography.bodyLarge, color = scheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Spacer(Modifier.height(20.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                TvButton(tr(R.string.widget_play), onPlay, Modifier.entryFocus().testTag("$TAG_COLLECTION/play"), icon = PrismIcons.Play, primary = true)
-                TvButton(tr(R.string.shuffle), onShuffle, Modifier.testTag("$TAG_COLLECTION/shuffle"), icon = PrismIcons.Shuffle)
+                TvButton(tr(R.string.widget_play), onPlay, Modifier.tvItem("$TAG_COLLECTION/play", entry = true), icon = PrismIcons.Play, primary = true)
+                TvButton(tr(R.string.shuffle), onShuffle, Modifier.tvItem("$TAG_COLLECTION/shuffle"), icon = PrismIcons.Shuffle)
             }
         }
         Spacer(Modifier.width(48.dp))
         LazyColumn(Modifier.weight(1f).rememberedFocus().testTag("$TAG_COLLECTION/songs"), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            itemsIndexed(songs) { i, s -> TvSongRow(s.title, s.artist, s.length, { onSong(i) }, Modifier.testTag("$TAG_COLLECTION/song/$i"), number = i + 1, playing = i == playing) }
+            itemsIndexed(songs) { i, s -> TvSongRow(s.title, s.artist, s.length, { onSong(i) }, Modifier.tvItem("$TAG_COLLECTION/song/$i"), number = i + 1, playing = i == playing) }
         }
     }
 }
@@ -215,7 +258,7 @@ fun TvArtistScreen(
     onPlay: () -> Unit,
     onShuffle: () -> Unit,
     onRadio: () -> Unit,
-    onItem: (TvItem) -> Unit,
+    onItem: (row: Int, index: Int) -> Unit,
     modifier: Modifier = Modifier,
     accent: Color? = null,
 ) {
@@ -234,14 +277,14 @@ fun TvArtistScreen(
                     if (details != null) Text(details, style = MaterialTheme.typography.titleMedium, color = scheme.onSurfaceVariant)
                     Spacer(Modifier.height(18.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                        TvButton(tr(R.string.widget_play), onPlay, Modifier.entryFocus().testTag("$TAG_ARTIST/play"), icon = PrismIcons.Play, primary = true)
-                        TvButton(tr(R.string.shuffle), onShuffle, Modifier.testTag("$TAG_ARTIST/shuffle"), icon = PrismIcons.Shuffle)
-                        TvButton(tr(R.string.tv_radio), onRadio, Modifier.testTag("$TAG_ARTIST/radio"), icon = PrismIcons.Radio)
+                        TvButton(tr(R.string.widget_play), onPlay, Modifier.tvItem("$TAG_ARTIST/play", entry = true), icon = PrismIcons.Play, primary = true)
+                        TvButton(tr(R.string.shuffle), onShuffle, Modifier.tvItem("$TAG_ARTIST/shuffle"), icon = PrismIcons.Shuffle)
+                        TvButton(tr(R.string.tv_radio), onRadio, Modifier.tvItem("$TAG_ARTIST/radio"), icon = PrismIcons.Radio)
                     }
                 }
             }
         }
-        itemsIndexed(shelves) { r, shelf -> TvShelfRow(shelf, onItem, "$TAG_ARTIST/row$r") }
+        itemsIndexed(shelves) { r, shelf -> TvShelfRow(shelf, { i -> onItem(r, i) }, "$TAG_ARTIST/row$r") }
     }
 }
 

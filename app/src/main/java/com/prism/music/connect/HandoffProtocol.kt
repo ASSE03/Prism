@@ -7,10 +7,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.Closeable
 import java.net.Socket
-import java.security.MessageDigest
 import java.security.SecureRandom
-import javax.crypto.Mac
-import javax.crypto.spec.SecretKeySpec
 
 /**
  * What's playing, as it moves from one Prism to another: the whole queue, the song it's on and where, play order
@@ -56,19 +53,42 @@ data class HandoffSnapshot(
     companion object { const val MAX_SONGS = 2_000 }
 }
 
-/** One message per line between two Prisms moving playback ([Handoff]). */
+/** What a TV is playing, for a phone being its remote. */
+@Serializable
+data class RemoteNow(
+    val title: String,
+    val artist: String,
+    val thumbnail: String? = null,
+    val playing: Boolean,
+    val positionMs: Long,
+    val durationMs: Long,
+    /** The TV's volume, 0–100. */
+    val volume: Int = 0,
+)
+
+/** The phone-as-remote's buttons. */
+enum class RemoteKey { TOGGLE, PLAY, PAUSE, NEXT, PREVIOUS, SEEK_TO, SEEK_BY, VOLUME_UP, VOLUME_DOWN }
+
+/**
+ * One message per line between two Prisms ([Handoff]). Version 2 (1.8.0): the hello and challenge carry fresh X25519
+ * keys; after pairing or proving the pairing, every line is sealed ([SealedChannel]).
+ */
 @Serializable
 sealed class HMsg {
     @Serializable @SerialName("hello")
-    data class Hello(val name: String, val device: String, val version: Int = Handoff.VERSION) : HMsg()
+    data class Hello(val name: String, val device: String, val version: Int = Handoff.VERSION, val key: String = "", val nonce: String = "", val tv: Boolean = false) : HMsg()
 
-    /** The receiving side's answer: who it is, and a fresh number for the caller to prove it's paired with. */
+    /** The receiving side's answer: who it is, its own fresh key and number. */
     @Serializable @SerialName("challenge")
-    data class Challenge(val name: String, val device: String, val nonce: String) : HMsg()
+    data class Challenge(val name: String, val device: String, val nonce: String, val key: String = "", val tv: Boolean = false) : HMsg()
 
-    /** HMAC of the challenge with the pair's shared key. */
+    /** The caller's proof that it holds the pairing's key, for this connection. */
     @Serializable @SerialName("auth")
     data class Auth(val mac: String) : HMsg()
+
+    /** The receiving side's proof back (both prove it: neither can be stood in for). */
+    @Serializable @SerialName("auth_ok")
+    data class AuthOk(val mac: String) : HMsg()
 
     @Serializable @SerialName("pair_request")
     data object PairRequest : HMsg()
@@ -77,12 +97,17 @@ sealed class HMsg {
     @Serializable @SerialName("enter_code")
     data object EnterCode : HMsg()
 
-    @Serializable @SerialName("pair")
-    data class Pair(val code: String) : HMsg()
+    /** One round of confirming the code: a commitment to a fresh number and one of the code's bits ([Passkey]). */
+    @Serializable @SerialName("commit")
+    data class Commit(val c: String) : HMsg()
 
-    /** The key the two now share (sent once, at pairing). */
+    /** The number behind the last commitment. */
+    @Serializable @SerialName("reveal")
+    data class Reveal(val n: String) : HMsg()
+
+    /** All twenty rounds held: paired (each side works out the key itself; it's never sent). */
     @Serializable @SerialName("paired")
-    data class Paired(val secret: String) : HMsg()
+    data object Paired : HMsg()
 
     @Serializable @SerialName("ok")
     data object Ok : HMsg()
@@ -104,6 +129,29 @@ sealed class HMsg {
     /** It's playing on this side now: the other side can stop. */
     @Serializable @SerialName("moved")
     data object Moved : HMsg()
+
+    /** A remote's button ([value]: the place for SEEK_TO, the jump for SEEK_BY, in ms). */
+    @Serializable @SerialName("remote")
+    data class Remote(val key: RemoteKey, val value: Long = 0) : HMsg()
+
+    /** What are you playing? */
+    @Serializable @SerialName("now")
+    data object Now : HMsg()
+
+    @Serializable @SerialName("now_is")
+    data class NowIs(val now: RemoteNow?) : HMsg()
+
+    /** Songs for the other side's queue: next, or at the end. */
+    @Serializable @SerialName("add")
+    data class Add(val songs: List<Song>, val next: Boolean) : HMsg()
+
+    /** The phone's YouTube Music sign-in, for the TV (sent only after the listener said so on the phone). */
+    @Serializable @SerialName("sign_in")
+    data class SignIn(val values: Map<String, String>, val account: String) : HMsg()
+
+    /** A Look, as its code, to use on the other side. */
+    @Serializable @SerialName("look")
+    data class Look(val code: String) : HMsg()
 }
 
 object HWire {
@@ -112,25 +160,36 @@ object HWire {
     fun decode(line: String): HMsg? = runCatching { json.decodeFromString(HMsg.serializer(), line) }.getOrNull()
 }
 
-/** A connection between two Prisms: [send] and [read] one message per line. */
+/**
+ * A connection between two Prisms: [send] and [read] one message per line. Once [channel] is set every line is sealed
+ * ("e:" and the sealed message in Base64); after that a line that isn't, or doesn't open, ends the connection.
+ */
 class HLink(private val socket: Socket) : Closeable {
     private val reader = com.prism.music.playback.together.LineReader(socket.getInputStream().buffered())
     private val writer = socket.getOutputStream().bufferedWriter(Charsets.UTF_8)
+
+    @Volatile var channel: SealedChannel? = null
 
     val remote: String get() = socket.inetAddress?.hostAddress ?: "?"
 
     fun timeout(ms: Int) { runCatching { socket.soTimeout = ms } }
 
     fun send(m: HMsg): Boolean = synchronized(writer) {
-        runCatching { writer.write(HWire.encode(m)); writer.write("\n"); writer.flush() }.isSuccess
+        val text = HWire.encode(m)
+        val line = channel?.let { "e:" + java.util.Base64.getEncoder().encodeToString(it.seal(text.toByteArray())) } ?: text
+        runCatching { writer.write(line); writer.write("\n"); writer.flush() }.isSuccess
     }
 
-    /** The next message it understands; null once the connection's gone (or the wait ran out). */
+    /** The next message it understands; null once the connection's gone (or the wait ran out, or a sealed line failed). */
     fun read(): HMsg? {
         while (true) {
             val line = runCatching { reader.readLine() }.getOrNull() ?: return null
             if (line.isBlank()) continue
-            HWire.decode(line)?.let { return it }
+            val ch = channel
+            if (ch == null) { HWire.decode(line)?.let { return it }; continue }
+            if (!line.startsWith("e:")) return null
+            val plain = runCatching { java.util.Base64.getDecoder().decode(line.substring(2)) }.getOrNull()?.let(ch::open) ?: return null
+            return HWire.decode(plain.decodeToString())
         }
     }
 
@@ -140,19 +199,5 @@ class HLink(private val socket: Socket) : Closeable {
 object HandoffKeys {
     private val random = SecureRandom()
 
-    fun newSecret(): String = hex(ByteArray(32).also { random.nextBytes(it) })
-    fun newNonce(): String = hex(ByteArray(16).also { random.nextBytes(it) })
     fun newCode(): String = (100_000 + random.nextInt(900_000)).toString()
-
-    /** Proof of the shared key for this challenge, tied to who's answering it. */
-    fun mac(secretHex: String, nonce: String, device: String): String {
-        val mac = Mac.getInstance("HmacSHA256")
-        mac.init(SecretKeySpec(unhex(secretHex), "HmacSHA256"))
-        return hex(mac.doFinal("prism-handoff|$nonce|$device".toByteArray()))
-    }
-
-    fun matches(a: String, b: String) = MessageDigest.isEqual(a.toByteArray(), b.toByteArray())
-
-    fun hex(b: ByteArray) = b.joinToString("") { "%02x".format(it) }
-    private fun unhex(s: String) = ByteArray(s.length / 2) { s.substring(it * 2, it * 2 + 2).toInt(16).toByte() }
 }

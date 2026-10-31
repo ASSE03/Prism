@@ -248,6 +248,12 @@ open class MainActivity : ComponentActivity() {
     /** Floats the music video now (the player's PiP button). False if Android or the listener's settings won't allow it. */
     fun enterPip(): Boolean = pipSupported && runCatching { enterPictureInPictureMode(pipParams()) }.getOrDefault(false)
 
+    /** A touch or key: the listener is here (desk mode's ambient screen waits, or goes). */
+    override fun onUserInteraction() {
+        super.onUserInteraction()
+        com.prism.music.ui.tv.Idle.touched()
+    }
+
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
         // Before Android 12 there's no auto-enter: going Home with a video playing floats it here.
@@ -547,6 +553,8 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
             c.handoff.events.collect { Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
         }
         com.prism.music.ui.components.HandoffDialogs()
+        // Desk mode (#265, 1.8.0, off unless switched on): the ambient screen while charging and playing.
+        com.prism.music.ui.tv.AmbientHost(onTv = false)
         LaunchedEffect(Unit) {
             deepLink.collect { uri -> if (uri != null) { handleDeepLink(uri, navigator, c); deepLink.value = null } }
         }
@@ -1164,6 +1172,8 @@ private fun handleDeepLink(uri: Uri, nav: Navigator, c: AppContainer) {
     val list = uri.getQueryParameter("list")
     val path = uri.pathSegments
     when {
+        // A Prism TV's QR code, read by the phone's camera (1.8.0): pairs with that TV (and offers it the sign-in).
+        uri.scheme == "prism" && uri.host == "pair" -> c.handoff.pairFromLink(uri)
         // Back from Last.fm's page in the browser, with the token it gave for this listener (#133).
         uri.scheme == "prism" && uri.host == "lastfm" -> {
             nav.go(Routes.settings(com.prism.music.ui.screens.SettingsSection.LIBRARY.key))

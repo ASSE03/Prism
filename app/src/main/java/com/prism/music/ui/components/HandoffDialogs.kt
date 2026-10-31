@@ -34,6 +34,9 @@ fun HandoffDialogs() {
     val handoff = LocalContainer.current.handoff
     val asking by handoff.askingCodeFor.collectAsState()
     val shown by handoff.shownCode.collectAsState()
+    // A TV paired by its QR code asked for this phone's sign-in (1.8.0): asked here first.
+    val signInFor by handoff.signInAsk.collectAsState()
+    signInFor?.let { tv -> TvSignInAsk(tv) { handoff.askSignIn(null) } }
     asking?.let { them ->
         var code by remember(them) { mutableStateOf("") }
         AlertDialog(

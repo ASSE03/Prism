@@ -36,7 +36,7 @@ import java.util.UUID
 import kotlin.coroutines.resume
 
 /** Another Prism on this network that's available for handoff. */
-data class PrismDevice(val name: String, val host: String, val port: Int, val id: String?, val key: String, val paired: Boolean)
+data class PrismDevice(val name: String, val host: String, val port: Int, val id: String?, val key: String, val paired: Boolean, val tv: Boolean = false)
 
 /** A code this device is showing for another to type in, while it pairs. */
 data class ShownCode(val code: String, val from: String)
@@ -67,6 +67,12 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
     val busy: StateFlow<String?> = _busy.asStateFlow()
     private val _events = MutableSharedFlow<String>(extraBufferCapacity = 8)
     val events = _events.asSharedFlow()
+    init {
+        // 1.8.0: links are encrypted now (version 2); keys from before can't be used for it, so those devices pair again once.
+        val old = prefs.all.keys.filter { it.startsWith("s:") }
+        if (old.isNotEmpty()) prefs.edit().apply { old.forEach { k -> remove(k); remove("n:" + k.removePrefix("s:")) } }.apply()
+    }
+
     private val _pairings = MutableStateFlow(pairings())
     /** Devices this one is paired with: id → name. */
     val pairedDevices: StateFlow<List<Pair<String, String>>> = _pairings.asStateFlow()
@@ -84,21 +90,22 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
 
     // ------------------------------------------------------------ Pairings
 
-    private fun pairings(): List<Pair<String, String>> = prefs.all.keys.filter { it.startsWith("s:") }.map { k ->
-        val id = k.removePrefix("s:")
+    private fun pairings(): List<Pair<String, String>> = prefs.all.keys.filter { it.startsWith("k:") }.map { k ->
+        val id = k.removePrefix("k:")
         id to (prefs.getString("n:$id", null) ?: tr(R.string.a_prism_device))
     }.sortedBy { it.second.lowercase() }
 
-    override fun secretFor(device: String): String? = prefs.getString("s:$device", null)
+    override fun secretFor(device: String): String? = prefs.getString("k:$device", null)
 
     override fun savePairing(device: String, name: String, secret: String) {
-        prefs.edit().putString("s:$device", secret).putString("n:$device", name).apply()
+        prefs.edit().putString("k:$device", secret).putString("n:$device", name).apply()
         _pairings.value = pairings()
         refreshPaired()
+        _pairedWith.tryEmit(name)
     }
 
     override fun forget(device: String) {
-        prefs.edit().remove("s:$device").remove("n:$device").apply()
+        prefs.edit().remove("k:$device").remove("n:$device").apply()
         _pairings.value = pairings()
         refreshPaired()
     }
@@ -108,6 +115,8 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
     }
 
     override fun showCode(code: String?, from: String) {
+        // A TV's code is on its pairing screen already, not in a notification.
+        if (isTv) return
         _shown.value = code?.let { ShownCode(it, from) }
         if (code == null) {
             runCatching { androidx.core.app.NotificationManagerCompat.from(app).cancel(Notifications.CONNECT, NOTIFY_ID) }
@@ -189,12 +198,162 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
         }
     }
 
+    // ------------------------------------------------------------ A TV's side (1.8.0)
+
+    override val isTv: Boolean by lazy { com.prism.music.ui.tv.TvDevice.isTv(app) }
+
+    private val _tvCode = MutableStateFlow<String?>(null)
+    /** The code the TV's pairing screen shows, while it's open; a TV takes pairings only then. */
+    val tvCode: StateFlow<String?> = _tvCode.asStateFlow()
+    private val _pairedWith = MutableSharedFlow<String>(extraBufferCapacity = 4)
+    /** A device that just paired with this one (its name): the TV's pairing screen moves on. */
+    val pairedWith = _pairedWith.asSharedFlow()
+    private val _signedIn = MutableSharedFlow<String>(extraBufferCapacity = 4)
+    /** The account a phone just signed this TV in with. */
+    val signedIn = _signedIn.asSharedFlow()
+
+    /** The TV's pairing screen opens: a fresh code, shown on it. */
+    fun openPairing(): String = HandoffKeys.newCode().also { _tvCode.value = it }
+    fun closePairing() { _tvCode.value = null }
+
+    /**
+     * The link a TV's pairing screen puts in its QR code: this TV's address and port, its name and the code shown, and
+     * whether the phone should then offer its sign-in ([signIn]). A phone's camera opens it in Prism ([pairFromLink]).
+     */
+    fun pairingLink(code: String, signIn: Boolean): String? {
+        val host = Lan.ownAddress() ?: return null
+        val port = server?.localPort ?: return null
+        return android.net.Uri.Builder().scheme("prism").authority("pair")
+            .appendQueryParameter("h", host).appendQueryParameter("p", port.toString())
+            .appendQueryParameter("n", name).appendQueryParameter("c", code)
+            .apply { if (signIn) appendQueryParameter("s", "1") }
+            .build().toString()
+    }
+
+    private val _signInAsk = MutableStateFlow<PrismDevice?>(null)
+    /** A TV this phone just paired with asked for its sign-in: the phone asks the listener first ([HandoffDialogs]). */
+    val signInAsk: StateFlow<PrismDevice?> = _signInAsk.asStateFlow()
+    fun askSignIn(d: PrismDevice?) { _signInAsk.value = d }
+
+    /** A TV's QR code, scanned on this phone: pairs with it (the code comes with the link), then offers the sign-in. */
+    fun pairFromLink(link: android.net.Uri) {
+        val host = link.getQueryParameter("h") ?: return
+        val port = link.getQueryParameter("p")?.toIntOrNull() ?: return
+        val code = link.getQueryParameter("c")?.filter { it.isDigit() }?.takeIf { it.length == 6 } ?: return
+        val tv = PrismDevice(link.getQueryParameter("n")?.take(60) ?: host, host, port, null, "link:$host:$port", false, tv = true)
+        // Only an address on this network (a link can't send the phone elsewhere).
+        if (!runCatching { Lan.isLocal(java.net.InetAddress.getByName(host)) }.getOrDefault(false)) return
+        scope.launch {
+            val socket = runCatching { Socket().apply { connect(InetSocketAddress(host, port), 5_000); tcpNoDelay = true } }.getOrNull()
+            val r = socket?.let { s -> HLink(s).use { link -> runCatching { peer.request(link, HandoffRequest.Pair) { code } }.getOrNull() } }
+            when (r) {
+                is HandoffResult.Done -> {
+                    _events.tryEmit(tr(R.string.tv_paired_with, tv.name))
+                    if (link.getQueryParameter("s") == "1") _signInAsk.value = tv
+                }
+                is HandoffResult.Failed -> _events.tryEmit(r.reason)
+                else -> _events.tryEmit(tr(R.string.couldn_t_reach_is_prism_open, tv.name))
+            }
+        }
+    }
+
+    /** This phone's YouTube Music sign-in, sent to [d] (after the listener said yes); what to tell them. */
+    suspend fun sendSignIn(d: PrismDevice): String {
+        val values = c.settings.forBackup(settings = false, accounts = true).filterKeys { it in SIGN_IN_KEYS }
+        val account = c.settings.current.let { it.accountEmail.ifBlank { it.accountName } }
+        return when (val r = ask(d, HandoffRequest.SignIn(values, account))) {
+            is HandoffResult.Done -> tr(R.string.tv_signed_in_on, d.name)
+            is HandoffResult.Failed -> r.reason
+            else -> tr(R.string.couldn_t_reach_is_prism_open, d.name)
+        }
+    }
+
+    /** The look this phone has now, sent to [d] as a Look code; what to tell the listener. */
+    suspend fun sendLook(d: PrismDevice): String {
+        val look = com.prism.music.data.looks.Look("sent", name, c.settings.lookValues.value, c.looks.currentIcons(), null, System.currentTimeMillis())
+        return when (val r = ask(d, HandoffRequest.Look(c.looks.code(look)))) {
+            is HandoffResult.Done -> tr(R.string.tv_look_sent, d.name)
+            is HandoffResult.Failed -> r.reason
+            else -> tr(R.string.couldn_t_reach_is_prism_open, d.name)
+        }
+    }
+
+    override fun pairingCode(from: String): String? = if (isTv) _tvCode.value else HandoffKeys.newCode().also { showCode(it, from) }
+
+    override fun remote(key: RemoteKey, value: Long): String? {
+        runBlocking(Dispatchers.Main) {
+            val p = c.player
+            when (key) {
+                RemoteKey.TOGGLE -> p.togglePlay()
+                RemoteKey.PLAY -> p.setPlaying(true)
+                RemoteKey.PAUSE -> p.setPlaying(false)
+                RemoteKey.NEXT -> p.next()
+                RemoteKey.PREVIOUS -> p.previous()
+                RemoteKey.SEEK_TO -> p.seekTo(value.coerceAtLeast(0))
+                RemoteKey.SEEK_BY -> p.seekBy(value)
+                RemoteKey.VOLUME_UP, RemoteKey.VOLUME_DOWN -> app.getSystemService(android.media.AudioManager::class.java)?.adjustStreamVolume(
+                    android.media.AudioManager.STREAM_MUSIC,
+                    if (key == RemoteKey.VOLUME_UP) android.media.AudioManager.ADJUST_RAISE else android.media.AudioManager.ADJUST_LOWER,
+                    android.media.AudioManager.FLAG_SHOW_UI,
+                )
+            }
+        }
+        return null
+    }
+
+    override fun nowPlaying(): RemoteNow? = runBlocking(Dispatchers.Main) {
+        val song = c.player.currentSong.value ?: return@runBlocking null
+        val audio = app.getSystemService(android.media.AudioManager::class.java)
+        val volume = audio?.let { a ->
+            val max = a.getStreamMaxVolume(android.media.AudioManager.STREAM_MUSIC).coerceAtLeast(1)
+            a.getStreamVolume(android.media.AudioManager.STREAM_MUSIC) * 100 / max
+        } ?: 0
+        RemoteNow(song.title, song.artistText, song.thumbnail, c.player.isPlaying.value, c.player.position, c.player.duration, volume)
+    }
+
+    override fun addSongs(songs: List<com.prism.music.data.model.Song>, next: Boolean, from: String): String? {
+        runBlocking(Dispatchers.Main) {
+            val source = com.prism.music.playback.QueueSource(com.prism.music.playback.QueueKind.OTHER, tr(R.string.from, from))
+            when {
+                c.player.queue.value.isEmpty() -> c.player.playQueue(songs, 0, source)
+                next -> c.player.playNext(songs, source)
+                else -> c.player.addToQueue(songs, source)
+            }
+        }
+        return null
+    }
+
+    /** A phone's sign-in: only a TV takes one (and only the sign-in's own settings; Discord and Last.fm never come). */
+    override fun signIn(values: Map<String, String>, account: String, from: String): String? {
+        if (!isTv) return tr(R.string.tv_not_a_tv, name)
+        val signIn = values.filterKeys { it in SIGN_IN_KEYS }
+        if (signIn["cookie"].isNullOrBlank()) return tr(R.string.tv_not_a_tv, name)
+        runBlocking {
+            c.settings.fromBackup(signIn, settings = false, accounts = true)
+            c.settings.setOnboarded(true)
+        }
+        c.library.syncInBackground()
+        _signedIn.tryEmit(account)
+        return null
+    }
+
+    /** A Look sent from a phone: a TV uses it (on a phone, Looks are shared as codes and files instead). */
+    override fun useLook(code: String, from: String): String? {
+        if (!isTv) return tr(R.string.tv_not_a_tv, name)
+        val look = c.looks.decode(code) ?: return tr(R.string.that_look_code_couldn_t_be)
+        runBlocking { c.looks.apply(look) }
+        return null
+    }
+
     // ------------------------------------------------------------ Being available
 
     @Volatile private var server: ServerSocket? = null
     private var registration: NsdManager.RegistrationListener? = null
 
     fun setAvailable(on: Boolean) { if (on) startServer() else stopServer() }
+
+    /** The port this device listens on while available (null: not listening). */
+    val port: Int? get() = server?.localPort
 
     @Synchronized
     private fun startServer() {
@@ -228,6 +387,7 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
             setPort(port)
             setAttribute("id", device)
             setAttribute("v", VERSION.toString())
+            if (isTv) setAttribute("tv", "1")
         }
         val listener = object : NsdManager.RegistrationListener {
             override fun onServiceRegistered(info: NsdServiceInfo) = Unit
@@ -249,7 +409,7 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
         lookers++
         val manager = nsd ?: return
         if (discovery != null) return
-        _devices.value = emptyList()
+        _devices.value = testPeers()
         val listener = object : NsdManager.DiscoveryListener {
             override fun onServiceFound(info: NsdServiceInfo) { if (info.serviceType.contains(SERVICE_LABEL)) resolve(info) }
             override fun onServiceLost(info: NsdServiceInfo) { _devices.value = _devices.value.filterNot { it.key == info.serviceName } }
@@ -260,6 +420,22 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
         }
         discovery = listener
         runCatching { manager.discoverServices(SERVICE, NsdManager.PROTOCOL_DNS_SD, listener) }.onFailure { discovery = null }
+    }
+
+    /**
+     * Debug builds only: Prisms by address, one "host:port|name|tv" per line in …/files/connect_peers.txt, for the
+     * two-emulator tests (emulators can't find each other on a network; adb forwards a port between them).
+     */
+    private fun testPeers(): List<PrismDevice> {
+        if (!com.prism.music.BuildConfig.DEBUG) return emptyList()
+        val f = app.getExternalFilesDir(null)?.let { java.io.File(it, "connect_peers.txt") }?.takeIf { it.isFile } ?: return emptyList()
+        return f.readLines().mapNotNull { line ->
+            val parts = line.trim().split("|")
+            val host = parts[0].substringBeforeLast(':').takeIf { it.isNotBlank() } ?: return@mapNotNull null
+            val port = parts[0].substringAfterLast(':').toIntOrNull() ?: return@mapNotNull null
+            val name = parts.getOrNull(1)?.takeIf { it.isNotBlank() } ?: host
+            PrismDevice(name, host, port, null, "test:$host:$port", false, tv = parts.getOrNull(2) == "tv")
+        }
     }
 
     fun stopDiscovery() {
@@ -290,7 +466,8 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
                 @Suppress("DEPRECATION")
                 val all = if (Build.VERSION.SDK_INT >= 34) r.hostAddresses else listOfNotNull(r.host)
                 val host = (all.firstOrNull { it is Inet4Address } ?: all.firstOrNull())?.hostAddress ?: return@withLock
-                val d = PrismDevice(r.serviceName.removePrefix(NAME_PREFIX), host, r.port, id, r.serviceName, id != null && secretFor(id) != null)
+                val tv = r.attributes["tv"]?.toString(Charsets.UTF_8) == "1"
+                val d = PrismDevice(r.serviceName.removePrefix(NAME_PREFIX), host, r.port, id, r.serviceName, id != null && secretFor(id) != null, tv)
                 _devices.value = (_devices.value.filterNot { it.key == d.key } + d).sortedBy { it.name.lowercase() }
             }
         }
@@ -316,16 +493,17 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
         _busy.value = label
         scope.launch {
             try {
-                var result = attempt(d, command)
+                val request = if (command == HandoffCommand.MOVE) HandoffRequest.Move else HandoffRequest.Pull
+                var result = attempt(d, request)
                 // Its key was refused (forgotten over there): pair again, once.
-                if (result == HandoffResult.Unpaired) result = attempt(d, command)
+                if (result == HandoffResult.Unpaired) result = attempt(d, request)
                 when (result) {
                     is HandoffResult.Done -> _events.tryEmit(
                         (if (command == HandoffCommand.MOVE) tr(R.string.playing_on, d.name) else tr(R.string.playing_here)) + (result.note?.let { " · $it" } ?: "")
                     )
                     is HandoffResult.Failed -> _events.tryEmit(result.reason)
                     HandoffResult.Unpaired -> _events.tryEmit(tr(R.string.didn_t_accept_the_pairing_try, d.name))
-                    HandoffResult.Cancelled -> Unit
+                    HandoffResult.Cancelled, is HandoffResult.Playing -> Unit
                 }
             } finally {
                 _busy.value = null
@@ -334,12 +512,21 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
         }
     }
 
-    private fun attempt(d: PrismDevice, command: HandoffCommand): HandoffResult {
+    /**
+     * [request] of [d] (a TV's remote button, what it's playing, a sign-in, a Look), pairing first if they aren't yet
+     * (the code is asked for as for a move); its answer. Off the main thread.
+     */
+    suspend fun ask(d: PrismDevice, request: HandoffRequest): HandoffResult = withContext(Dispatchers.IO) {
+        val r = attempt(d, request)
+        if (r == HandoffResult.Unpaired) attempt(d, request) else r
+    }
+
+    private fun attempt(d: PrismDevice, request: HandoffRequest): HandoffResult {
         val socket = runCatching { Socket().apply { connect(InetSocketAddress(d.host, d.port), 5_000); tcpNoDelay = true } }.getOrNull()
             ?: return HandoffResult.Failed(tr(R.string.couldn_t_reach_is_prism_open, d.name))
         return HLink(socket).use { link ->
             runCatching {
-                peer.call(link, command) { them ->
+                peer.request(link, request) { them ->
                     val wait = CompletableDeferred<String?>()
                     code = wait
                     _asking.value = them
@@ -351,12 +538,15 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
 
     companion object {
         private const val TAG = "PrismHandoff"
-        const val VERSION = 1
+        /** 2 (1.8.0): X25519 + AES-GCM; a version 1 Prism is told both need the latest. */
+        const val VERSION = 2
         const val PORT = 47321
         private const val SERVICE_LABEL = "_prismconnect"
         private const val SERVICE = "$SERVICE_LABEL._tcp"
         private const val NAME_PREFIX = "Prism · "
         private const val NOTIFY_ID = 4701
+        /** The sign-in's own settings (as the backup's "Accounts" part): all a phone sends a TV. */
+        val SIGN_IN_KEYS = setOf("cookie", "visitor_data", "data_sync_id", "auth_user", "account_name", "account_email", "account_avatar")
         /** How long a song gets to start here (it may still be loading) before the move counts as failed. */
         private const val START_WAIT_MS = 12_000L
     }

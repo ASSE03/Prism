@@ -47,8 +47,8 @@ fun TvWelcomeScreen(onPhone: () -> Unit, onSkip: () -> Unit, modifier: Modifier 
             Text(tr(R.string.tv_welcome_line), style = MaterialTheme.typography.titleLarge, color = scheme.onSurfaceVariant, textAlign = TextAlign.Center)
             Spacer(Modifier.height(40.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-                TvButton(tr(R.string.tv_sign_in_with_phone), onPhone, Modifier.entryFocus().testTag("$TAG_WELCOME/phone"), icon = PrismIcons.Phone, primary = true)
-                TvButton(tr(R.string.tv_continue_without_account), onSkip, Modifier.testTag("$TAG_WELCOME/skip"))
+                TvButton(tr(R.string.tv_sign_in_with_phone), onPhone, Modifier.tvItem("$TAG_WELCOME/phone", entry = true), icon = PrismIcons.Phone, primary = true)
+                TvButton(tr(R.string.tv_continue_without_account), onSkip, Modifier.tvItem("$TAG_WELCOME/skip"))
             }
         }
     }
@@ -74,7 +74,7 @@ fun TvPairScreen(title: String, code: String, link: String, tvName: String, stat
             Spacer(Modifier.height(8.dp))
             Text(status, style = MaterialTheme.typography.titleMedium, color = scheme.primary)
             Spacer(Modifier.height(20.dp))
-            TvButton(tr(R.string.cancel), onCancel, Modifier.entryFocus().testTag("$TAG_PAIR/cancel"))
+            TvButton(tr(R.string.cancel), onCancel, Modifier.tvItem("$TAG_PAIR/cancel", entry = true))
         }
         Spacer(Modifier.width(48.dp))
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
