@@ -247,7 +247,7 @@
     <string name="sent_to">Gönderildi: %1$s</string>
     <string name="playing_next">Sıradaki</string>
     <string name="added_to_queue">Sıraya eklendi</string>
-    <string name="play_next">Sırada çal</string>
+    <string name="play_next">Sıradaki olarak çal</string>
     <string name="add_to_queue">Sıraya ekle</string>
     <string name="your_account">Hesabın</string>
     <string name="pick_a_photo">Fotoğraf seç</string>
@@ -995,7 +995,7 @@
     <string name="the_page_came_back_empty">Sayfa boş geldi</string>
     <string name="couldn_t_reach_discord">Discord\'a ulaşılamadı</string>
     <string name="your_music_refracted">Müziğin, kırılarak.</string>
-    <string name="make_a_prism_account">Prism Account oluştur</string>
+    <string name="make_a_prism_account">Prism Hesabı oluştur</string>
     <string name="kept_on_this_phone_no_email">Bu telefonda saklanır. E-posta yok, şifre yok, sunucu yok.</string>
     <string name="sign_in_with_google">Google ile oturum aç</string>
     <string name="northern_lights">Northern Lights</string>
@@ -1339,7 +1339,7 @@
     <string name="lyrics_in_the_car">Arabada şarkı sözleri</string>
     <string name="account">Hesap</string>
     <string name="google_youtube_sign_in_sign_out">google youtube oturum aç oturumu kapat giriş çıkış hesap değiştir hesap ekle sign in</string>
-    <string name="prism_account">Prism Account</string>
+    <string name="prism_account">Prism Hesabı</string>
     <string name="profile_name_picture_photo_local_on">profil ad resim fotoğraf yerel bu telefonda kopyala kitaplık youtube çalma listeleri</string>
     <string name="performance">Performans</string>
     <string name="performance_mode">Performans modu</string>
@@ -1542,7 +1542,7 @@
     <string name="stream_quality">Yayın kalitesi</string>
     <string name="codec_bitrate_nerd_stats">kodek bit hızı teknik istatistik</string>
     <string name="best_part">En iyi kısım</string>
-    <string name="skip_chorus_hook_highlight_most_replayed">atla nakarat en güzel kısım öne çıkan en çok tekrar dinlenen atla</string>
+    <string name="skip_chorus_hook_highlight_most_replayed">atla nakarat en iyi kısım en güzel kısım öne çıkan en çok tekrar dinlenen atla</string>
     <string name="song_length">Şarkı uzunluğu</string>
     <string name="duration_time_left_remaining">süre kalan süre kalan zaman</string>
     <string name="shuffle_repeat">Karıştır ve tekrarla</string>
@@ -1931,12 +1931,12 @@
     <string name="you_re_up_to_date">Güncelsin</string>
     <string name="couldn_t_reach_github_try_again">GitHub\'a ulaşılamadı · birazdan tekrar dene</string>
     <string name="sign_out_of_youtube_music">YouTube Music\'ten çıkış yapılsın mı?</string>
-    <string name="keep_a_copy_of_its_playlists">Önce çalma listelerinin, kaydedilen albümlerin ve sanatçıların bir kopyası Prism Account\'unda saklansın mı? Beğenilen şarkılar, indirilenler ve Replay her durumda kalır.</string>
+    <string name="keep_a_copy_of_its_playlists">Önce çalma listelerinin, kaydedilen albümlerin ve sanatçıların bir kopyası Prism Hesabında saklansın mı? Beğenilen şarkılar, indirilenler ve Replay her durumda kalır.</string>
     <string name="signed_out_playlists_and_albums_kept">Çıkış yapıldı. %1$s ve %2$s Prism\'de saklandı</string>
     <string name="signed_out">Çıkış yapıldı</string>
     <string name="keep_a_copy">Kopya sakla</string>
     <string name="just_sign_out">Yalnızca çıkış yap</string>
-    <string name="prism_account_on_this_phone">Prism Account · bu telefonda</string>
+    <string name="prism_account_on_this_phone">Prism Hesabı · bu telefonda</string>
     <string name="your_name_and_picture_kept_on">Adın ve resmin bu telefonda saklanır. Sahip olduğun hiçbir şey değişmez</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">oturum açık</string>
@@ -2615,7 +2615,7 @@
     <string name="performance_mode_at_the_top_for">Yavaş telefonlar için en üstte Performans modu</string>
     <string name="make_the_pieces_of_prism_yours">Prism\'in parçalarını kendine göre yap.</string>
     <string name="covers_as_circles_squircles_flowers_arches">Şarkılar, albümler, sanatçılar ve oynatıcı için daire, yuvarlak kare, çiçek, kemer… şeklinde kapaklar</string>
-    <string name="corners_on_a_slider_and_pill">Kaydırıcı köşeleri; kapsül, yuvarlak ya da kare düğmeler</string>
+    <string name="corners_on_a_slider_and_pill">Kaydırıcıyla köşeler; kapsül, yuvarlak ya da kare düğmeler</string>
     <string name="icons_in_outline_duotone_or_filled">Çizgili, çift tonlu ya da dolu simgeler, iki yeni paket (Faset ve Noktalar) ve altı yeni uygulama simgesi</string>
     <string name="bolder_or_lighter_text_wider_spacing">Daha kalın ya da daha ince yazı, daha geniş aralık, başlıklar için bir yazı tipi ve okuma için yapılmış iki yazı tipi</string>
     <string name="each_home_screen_widget_with_its">Her ana ekran widget\'ı kendi arka planı ve düğmeleriyle</string>
