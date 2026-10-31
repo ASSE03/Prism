@@ -26,6 +26,8 @@ What changed in each release. Older releases are described on the [Releases page
 - **Prism could take seconds to show Home on slower phones**: the first screen waited for the downloads to read their
   list and cache from storage (3.4 s on a slow phone in 1.7.8's check). They start in the background now, and screens
   show what's downloaded as soon as it's read.
+- **Home's date and greeting stayed as they were when it opened**: left open overnight, it still said "Friday …
+  Good evening" on Saturday morning. They're checked again when Prism comes back and each minute it's on screen.
 - **Speed dial's last page could hold a single tile** (#267): its pages are whole now.
 - **Tab icons were a little smaller with labels "Selected"** (#272): they're the same size in every label style.
 - **The docked tab bar bent what was behind it** (#273): with Liquid Glass on, the flat docked bar worked like a lens,

@@ -17,6 +17,9 @@ import org.robolectric.RobolectricTestRunner
  * player took it as an error. Prism now answers it itself, and the player's own data source reads that as the end.
  */
 @RunWith(RobolectricTestRunner::class)
+// A plain Application: Prism's own started its whole container (Room too) for nothing, and Room's late work then failed
+// the next Compose test in the same run (SwipeToQueueTest, 1.7.9.3).
+@org.robolectric.annotation.Config(sdk = [34], application = android.app.Application::class)
 @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 class StreamEndTest {
     private val clen = 3_559_271L

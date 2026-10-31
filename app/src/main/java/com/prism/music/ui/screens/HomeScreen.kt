@@ -57,6 +57,8 @@ import kotlinx.coroutines.launch
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableIntStateOf
+import com.prism.music.ui.components.tickWhileShown
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -428,12 +430,23 @@ private fun OfflineNote() {
 private fun HomeTopBar() {
     val nav = LocalNavigator.current
     val settings = LocalAppSettings.current
-    val hour = remember { Calendar.getInstance().get(Calendar.HOUR_OF_DAY) }
+    // The hour and the day, looked at again when Prism comes back on screen and each minute while it's shown (1.7.9.3:
+    // left open overnight, Home still said "Friday … Good evening" on Saturday morning). Only a change redraws.
+    var hour by remember { mutableIntStateOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) }
+    var day by remember { mutableIntStateOf(Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) }
+    val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
+    LaunchedEffect(lifecycle) {
+        lifecycle.tickWhileShown(60_000) {
+            val now = Calendar.getInstance()
+            hour = now.get(Calendar.HOUR_OF_DAY)
+            day = now.get(Calendar.DAY_OF_YEAR)
+        }
+    }
     val greeting = settings.greetingText.trim().ifBlank {
         when (hour) { in 5..11 -> tr(R.string.good_morning); in 12..17 -> tr(R.string.good_afternoon); else -> tr(R.string.good_evening) }
     }
     // In the language's own order ("Thursday 15 October", "10월 15일 목요일"), not English's with translated words.
-    val today = remember {
+    val today = remember(day) {
         val locale = java.util.Locale.getDefault()
         java.text.SimpleDateFormat(android.text.format.DateFormat.getBestDateTimePattern(locale, tr(R.string.eeeedmmmm)), locale).format(java.util.Date())
     }
