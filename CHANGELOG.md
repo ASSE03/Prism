@@ -2,6 +2,20 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.7.9.3 (unreleased)
+
+### Fixes
+
+- **Songs only your account can play stopped after about a minute again** (#260): YouTube began answering the older
+  TV app Prism asks for them "The page needs to be reloaded" for most songs, so they came from the web app, whose
+  links stop after the first megabyte. Prism now asks the way yt-dlp does for signed-in users (the older TV app as a
+  Samsung TV, then YouTube's embedded player), and asks the older TV app twice before giving up on it.
+- **Speed dial's last page could hold a single tile** (#267): its pages are whole now.
+- **Tab icons were a little smaller with labels "Selected"** (#272): they're the same size in every label style.
+- **The docked tab bar bent what was behind it** (#273): with Liquid Glass on, the flat docked bar worked like a lens,
+  smearing the page across the tabs and showing its edges at the screen's sides. It's frosted glass now (the floating
+  bars keep Liquid Glass).
+
 ## 1.7.9.2
 
 ### Requests

@@ -16,6 +16,12 @@ class GlassPathTest {
         for (sdk in 26..30) assertEquals("sdk $sdk", GlassPath.FROSTED, glassPath(sdk, liquid = true, frosted = false, haze = true))
     }
 
+    /** #273 (1.7.9.3): the docked tab bar is flat glass, not a lens, whatever the glass setting. */
+    @Test fun flatBarsAreFrostedEvenWithLiquidGlass() {
+        assertEquals(GlassPath.FROSTED, glassPath(36, liquid = true, frosted = false, haze = true, refract = false))
+        assertEquals(GlassPath.LIQUID, glassPath(36, liquid = true, frosted = false, haze = true, refract = true))
+    }
+
     @Test fun theRestIsAsBefore() {
         assertEquals(GlassPath.FROSTED, glassPath(28, liquid = false, frosted = true, haze = true))
         assertEquals(GlassPath.FROSTED, glassPath(34, liquid = false, frosted = true, haze = true))

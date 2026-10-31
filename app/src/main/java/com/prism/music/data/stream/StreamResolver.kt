@@ -589,7 +589,25 @@ class StreamResolver(
         )
     }
 
-    /** The player response as the signed-in user: the TV clients first (no PO token needed), then the web app. */
+    /**
+     * Which of the account's clients are asked, in what order (1.7.9.3, GitHub #260): yt-dlp's for signed-in users
+     * (the older TV app as a Samsung TV, the embedded player), then the plain older TV app, today's TV app (links
+     * rarely), and the web app last (its links stop after a megabyte without a PO token, unless Premium).
+     */
+    internal object AccountClients {
+        val order = listOf(
+            InnerTube.PlayerClient.TV_SAMSUNG, InnerTube.PlayerClient.WEB_EMBEDDED, InnerTube.PlayerClient.TV_OLD,
+            InnerTube.PlayerClient.TV, InnerTube.PlayerClient.WEB_REMIX,
+        )
+
+        /** One more ask for the older TV app on UNPLAYABLE ("The page needs to be reloaded" comes and goes). */
+        fun retries(client: InnerTube.PlayerClient): Int =
+            if (client == InnerTube.PlayerClient.TV_SAMSUNG || client == InnerTube.PlayerClient.TV_OLD) 1 else 0
+
+        const val RETRY_PAUSE_MS = 300L
+    }
+
+    /** The player response as the signed-in user: [AccountClients.order], the first with links wins. */
     private fun signedInFormats(videoId: String): Formats {
         val player = try {
             solver.currentPlayer()
@@ -600,9 +618,16 @@ class StreamResolver(
         var reason: String? = null
         // A live answer without an HLS manifest is kept only until a client gives one ([liveManifest] fills it in).
         var liveWithoutHls: Formats? = null
-        for (client in InnerTube.PlayerClient.entries) {
+        for (client in AccountClients.order) {
             val res = try {
-                innerTube.signedInPlayer(client, videoId, player?.second)
+                var answer = innerTube.signedInPlayer(client, videoId, player?.second)
+                // "The page needs to be reloaded" (GitHub #260) is often gone on the next ask.
+                repeat(AccountClients.retries(client)) {
+                    if (answer.str("playabilityStatus", "status") != "UNPLAYABLE") return@repeat
+                    Thread.sleep(AccountClients.RETRY_PAUSE_MS)
+                    answer = innerTube.signedInPlayer(client, videoId, player?.second)
+                }
+                answer
             } catch (e: Exception) {
                 reason = reason ?: e.message
                 noteClient(client, "request failed: ${e.message}")

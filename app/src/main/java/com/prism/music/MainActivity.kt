@@ -980,7 +980,7 @@ private fun TabBar(
                     tabs.forEach { tab -> TabItem(tab, isSelected(tab, route), settings.navLabels, compact, Modifier.weight(1f).fillMaxHeight(), line = true) { onSelect(tab.route) } }
                 }
             }
-            if (settings.liquidGlass || settings.frostedGlass) GlassSurface(Modifier.fillMaxWidth(), shape = RoundedCornerShape(0.dp), elevation = 0.dp, tint = tint) { row() }
+            if (settings.liquidGlass || settings.frostedGlass) GlassSurface(Modifier.fillMaxWidth(), shape = RoundedCornerShape(0.dp), elevation = 0.dp, tint = tint, refract = false) { row() }
             else Box(
                 Modifier.fillMaxWidth().background(if (tint.isSpecified) tint else scheme.background)
                     .drawBehind { drawLine(scheme.hairline, Offset(0f, 0f), Offset(size.width, 0f), 1.dp.toPx() * 0.75f) },
@@ -1105,7 +1105,8 @@ private fun TabItem(tab: Tab, selected: Boolean, labels: NavLabels, compact: Flo
                 Modifier.height(40.dp).clip(CircleShape).background(indicator).padding(horizontal = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(icon, tab.label, tint = fg, modifier = Modifier.size(22.dp).then(if (selected) Modifier.tabTint(tabTint) else Modifier))
+                // 24 dp as in the other label styles (#272: 22 here made every icon a little smaller with "Selected").
+                Icon(icon, tab.label, tint = fg, modifier = Modifier.size(24.dp).then(if (selected) Modifier.tabTint(tabTint) else Modifier))
                 AnimatedVisibility(selected && compact < 0.5f, enter = expandHorizontally() + fadeIn(), exit = shrinkHorizontally() + fadeOut()) {
                     Row {
                         Spacer(Modifier.width(6.dp))

@@ -801,6 +801,15 @@ private fun SpeedDialSection(cfg: HomeSectionConfig, items: List<BrowseItem>, op
 
 private const val SPEED_DIAL_SIZE = 27
 
+/**
+ * Speed dial's pages of 3 × 3: whole pages only (#267, 1.7.9.3: 19 tiles left a last page with one), unless there's
+ * less than a page, which shows as it is.
+ */
+internal fun <T> speedDialPages(items: List<T>): List<List<T>> {
+    val whole = if (items.size > 9) items.size - items.size % 9 else items.size
+    return items.take(whole).chunked(9)
+}
+
 /** The last three months' most played: albums you've played two or more songs from, and the songs otherwise. */
 private suspend fun speedDialFromHistory(c: com.prism.music.AppContainer): List<BrowseItem> {
     val since = System.currentTimeMillis() - 90L * 86_400_000L
@@ -818,7 +827,7 @@ private suspend fun speedDialFromHistory(c: com.prism.music.AppContainer): List<
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 internal fun SpeedDialPages(items: List<BrowseItem>, open: (BrowseItem) -> Unit) {
-    val pages = remember(items) { items.chunked(9) }
+    val pages = remember(items) { speedDialPages(items) }
     val pager = androidx.compose.foundation.pager.rememberPagerState { pages.size }
     val ui = com.prism.music.ui.theme.LocalUi.current
     val menu = rememberPlayMenu()

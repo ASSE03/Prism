@@ -36,9 +36,9 @@ internal enum class GlassPath { LIQUID, FROSTED, SOLID }
  * Android 12's blur, without which it fell back to a thin tint and Clear glass showed everything behind it sharp, so
  * below it Liquid Glass is drawn frosted (1.7.9.2).
  */
-internal fun glassPath(sdk: Int, liquid: Boolean, frosted: Boolean, haze: Boolean): GlassPath = when {
+internal fun glassPath(sdk: Int, liquid: Boolean, frosted: Boolean, haze: Boolean, refract: Boolean = true): GlassPath = when {
     !haze -> GlassPath.SOLID
-    liquid && sdk >= 31 -> GlassPath.LIQUID
+    liquid && refract && sdk >= 31 -> GlassPath.LIQUID
     liquid || frosted -> GlassPath.FROSTED
     else -> GlassPath.SOLID
 }
@@ -62,6 +62,11 @@ fun GlassSurface(
      * Glass on (issue #5): in a page it's frosted with the page's own fill instead.
      */
     inPage: Boolean = false,
+    /**
+     * False for flat, edge-to-edge bars (the docked tab bar): frosted even with Liquid Glass on. As a lens it bent
+     * everything behind it across the tabs and showed its edges at the screen's sides (#273, 1.7.9.3).
+     */
+    refract: Boolean = true,
     content: @Composable BoxScope.() -> Unit,
 ) {
     val settings = LocalAppSettings.current
@@ -80,7 +85,7 @@ fun GlassSurface(
                 ),
             content = content,
         )
-    } else if (glassPath(android.os.Build.VERSION.SDK_INT, settings.liquidGlass, settings.frostedGlass, haze != null) == GlassPath.LIQUID) {
+    } else if (glassPath(android.os.Build.VERSION.SDK_INT, settings.liquidGlass, settings.frostedGlass, haze != null, refract) == GlassPath.LIQUID) {
         val clear = onMedia || settings.glassKind == GlassKind.CLEAR
         val style = remember(shape, tint, clear, dark) {
             val baseStyle = if (clear) GlassStyle.clear else GlassStyle.regular
@@ -97,7 +102,7 @@ fun GlassSurface(
                 .clip(shape),
             content = content,
         )
-    } else if (glassPath(android.os.Build.VERSION.SDK_INT, settings.liquidGlass, settings.frostedGlass, haze != null) == GlassPath.FROSTED) {
+    } else if (glassPath(android.os.Build.VERSION.SDK_INT, settings.liquidGlass, settings.frostedGlass, haze != null, refract) == GlassPath.FROSTED) {
         val scheme = MaterialTheme.colorScheme
         // Below Android 12 there's no blur (1.7.9's check: Clear glass showed Home's tiles sharp through the tab bar
         // and mini player, as if drawn over them), so the wash carries it alone and is made thick enough to.
