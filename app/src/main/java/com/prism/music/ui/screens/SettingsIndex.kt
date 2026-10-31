@@ -258,7 +258,7 @@ object SettingsIndex {
         SettingEntry(S, tr(R.string.stopping_and_pausing), tr(R.string.stopping_and_pausing)),
         SettingEntry(S, tr(R.string.stopping_and_pausing), tr(R.string.stop_when_swiped_away), tr(R.string.recents_background)),
         SettingEntry(S, tr(R.string.stopping_and_pausing), tr(R.string.pause_when_muted), tr(R.string.volume_zero_mute_pause_resume)),
-        SettingEntry(LB, "Last.fm", tr(R.string.last_fm_scrobbling), tr(R.string.lastfm_last_fm_scrobble)),
+        SettingEntry(LF, "Last.fm", tr(R.string.last_fm_scrobbling), tr(R.string.lastfm_last_fm_scrobble)),
         SettingEntry(LF, "Last.fm", tr(R.string.connect_last_fm), tr(R.string.lastfm_last_fm_scrobble_scrobbling_account)),
         SettingEntry(LF, "Last.fm", tr(R.string.scrobble), tr(R.string.lastfm_scrobble_send_plays)),
         SettingEntry(LF, "Last.fm", tr(R.string.first_artist_only), tr(R.string.lastfm_featured_artists_main_artist)),
@@ -376,7 +376,7 @@ object SettingsIndex {
         SettingEntry(H, tr(R.string.home), tr(R.string.buttons_at_the_top_of_home), tr(R.string.podcasts_button) + " " + tr(R.string.customize_button_at_the_top)),
         SettingEntry(H, tr(R.string.search), tr(R.string.search)),
         SettingEntry(H, tr(R.string.home), tr(R.string.customize_button_at_the_bottom)),
-        SettingEntry(LB, tr(R.string.region), tr(R.string.content_country), tr(R.string.region_location_gl)),
+        SettingEntry(SettingsSection.LANGUAGE, tr(R.string.region), tr(R.string.content_country), tr(R.string.region_location_gl)),
         // Prism Connect
         SettingEntry(C, tr(R.string.speakers_tvs), tr(R.string.play_on_a_speaker_or_tv), tr(R.string.cast_casting_google_cast_google_tv)),
         SettingEntry(C, tr(R.string.control_from_a_browser), tr(R.string.control_from_a_browser), tr(R.string.web_remote_computer_laptop_tablet_browser)),

@@ -365,7 +365,8 @@ private fun SettingsPage(
             SettingsSection.LIBRARY -> item { RecommendationsPage() }
             SettingsSection.DISCORD -> item { DiscordGroup() }
             SettingsSection.LASTFM -> item { LastFmGroup() }
-            SettingsSection.LANGUAGE -> item { LanguageSettings() }
+            // 1.8.0: Region (the country Prism Music is asked as) beside the language, from Recommendations & Replay.
+            SettingsSection.LANGUAGE -> item { Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { LanguageSettings(); ContentCountrySetting() } }
             SettingsSection.ABOUT -> item {
                 Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
                 BackupGroup()
@@ -383,7 +384,8 @@ private fun SettingsPage(
                         title = tr(R.string.design_gallery), subtitle = tr(R.string.every_component_of_the_redesign_in), onClick = { nav.go(Routes.DESIGN_GALLERY) },
                     ) { Chevron() }
                 }
-                DiagnosticsGroup()
+                // 1.8.0: only for sending a bug report, so folded away.
+                MoreOptions(listOf(tr(R.string.diagnostics))) { DiagnosticsGroup() }
                 }
             }
             SettingsSection.LICENSES -> item { LicensesPage() }
@@ -2417,16 +2419,13 @@ private fun RecommendationsPage() {
                 info = tr(R.string.when_you_ve_liked_a_song),
             ) { prefs.setMergeLikedVideos(it) }
         }
-        // Last.fm's own page is in Devices & connections, beside Discord; a way there for whoever looks for it here.
-        Group("Last.fm") {
-            Item(tr(R.string.last_fm_scrobbling), tr(R.string.in_devices_connections), onClick = { nav.go(Routes.settings(SettingsSection.LASTFM.key)) }) { Chevron() }
-        }
+        // 1.8.0: the Last.fm link here is gone (its page is in Devices & connections; Settings search finds it).
         Group(tr(R.string.replay_2)) {
             Toggle(tr(R.string.show_time_in_hours), if (s.replayHours) tr(R.string.like_20h_4m) else tr(R.string.like_1_204_min), s.replayHours) { prefs.setReplayHours(it) }
             Toggle(tr(R.string.use_theme_colors), tr(R.string.your_accent_instead_of_prism_s), s.replayThemeColors) { prefs.setReplayThemeColors(it) }
             Toggle(tr(R.string.rewind_notification), tr(R.string.on_december_1_when_your_year), s.rewindNotification) { prefs.setRewindNotification(it) }
         }
-        ContentCountrySetting()
+        // Region moved to the Language page (1.8.0).
     }
 }
 
