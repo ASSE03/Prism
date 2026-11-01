@@ -50,7 +50,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsIgnoringVisibility
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -447,7 +449,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     val mesh = rememberArtworkMesh(song.thumbnail)
     val blurImage = rememberFullArtworkBlur(song.thumbnail, settings.playerBlur)
     val fullBlur by animateFloatAsState(if (lyricsOpen || queueOpen || statsOpen) 1f else 0f, tween(360, easing = FastOutSlowInEasing), label = "fullBlur")
-    val statusTop = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    val statusTop = statusBarRoom().asPaddingValues().calculateTopPadding()
     // Collapsed into the header thumbnail, the sleeve keeps gentle corners whatever the setting.
     // A Full width cover meets the screen's edges, so it has square corners until it shrinks into the header.
     val artCorners = if (settings.coverSize == com.prism.music.data.prefs.CoverSize.FULL) 0.dp else settings.playerArtCorners.dp
@@ -801,7 +803,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             onSingNeedsDownload = { showSing = true },
             onButton = onButton,
         ) else
-        Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().then(skipGesture), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(Modifier.fillMaxSize().windowInsetsPadding(statusBarRoom()).navigationBarsPadding().then(skipGesture), horizontalAlignment = Alignment.CenterHorizontally) {
             // ------------------------------------------------ Handle + caption
             Box(Modifier.fillMaxWidth().height(DISMISS_STRIP).then(dismissGesture)) {
                 // Settings → Player → Show on the player → Handle at the top (Reddit, 1.7.9.1): off, the strip still
@@ -1374,3 +1376,11 @@ private fun BlendingCover(songId: String, modifier: Modifier) {
         modifier = modifier.graphicsLayer { this.alpha = alpha },
     )
 }
+
+/**
+ * The status bar's room at the top, also while it's hidden (Hide status bar): the player keeps its place and only the bar
+ * goes (the owner, 1.8.0: it moved the whole player up).
+ */
+@kotlin.OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+@Composable
+internal fun statusBarRoom(): WindowInsets = WindowInsets.statusBarsIgnoringVisibility
