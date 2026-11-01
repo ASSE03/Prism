@@ -4197,4 +4197,7 @@
     <string name="holiday_winter_chill_blurb">Mala-niyebe at mabagal, walang sleigh bells</string>
     <string name="holiday_new_years_eve">New Year\'s Eve Party</string>
     <string name="holiday_new_years_eve_blurb">Mga anthem para sa countdown hanggang hatinggabi</string>
+    <string name="sing_taking_voice_out">Inaalis ang boses… %1$s%%</string>
+    <string name="sing_quick_then_full">Hininaan ang boses (mabilis) · buong paghihiwalay %1$s%%</string>
+    <string name="tv_sing_play_first">Magpatugtog muna ng kanta, saka mag-check</string>
 </resources>

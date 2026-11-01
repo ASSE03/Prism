@@ -4297,4 +4297,7 @@
     <string name="holiday_winter_chill_blurb">Śnieżnie i powoli, bez dzwonków sań</string>
     <string name="holiday_new_years_eve">Impreza sylwestrowa</string>
     <string name="holiday_new_years_eve_blurb">Hymny do odliczania do północy</string>
+    <string name="sing_taking_voice_out">Usuwam głos… %1$s%%</string>
+    <string name="sing_quick_then_full">Głos ściszony (szybko) · pełne oddzielanie %1$s%%</string>
+    <string name="tv_sing_play_first">Najpierw włącz utwór, potem sprawdź</string>
 </resources>

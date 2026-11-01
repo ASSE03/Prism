@@ -4297,4 +4297,7 @@
     <string name="holiday_winter_chill_blurb">Снежно и неспешно, без бубенцов</string>
     <string name="holiday_new_years_eve">Новогодняя вечеринка</string>
     <string name="holiday_new_years_eve_blurb">Гимны для обратного отсчёта до полуночи</string>
+    <string name="sing_taking_voice_out">Убираем голос… %1$s%%</string>
+    <string name="sing_quick_then_full">Голос тише (быстро) · полное разделение %1$s%%</string>
+    <string name="tv_sing_play_first">Сначала включите трек, потом проверьте</string>
 </resources>

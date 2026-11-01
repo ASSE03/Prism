@@ -121,13 +121,41 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
     /** Songs are being got ready: Sing is on, or set to get them ready anyway. */
     private val working: Boolean get() = onNow || alwaysReady
 
+    /** When Sing was last switched off (nanoTime): the song in hand is finished for [GRACE_NS] more, not thrown away. */
+    @Volatile private var offAt = 0L
+
+    /** Still at work on the song in hand: Sing is on (or set to get songs ready), or was switched off only just now. */
+    private val stillWorking: Boolean get() = working || System.nanoTime() - offAt < GRACE_NS
+
     fun setOn(on: Boolean) {
         _on.value = on
         onNow = on
+        if (!on) offAt = System.nanoTime()
         if (!on && !alwaysReady) {
             synchronized(wanted) { wanted.clear() }
             scheduleRelease()
         }
+    }
+
+    /** The quick way's stand-ins (1.8.x): done first, in seconds, so Sing takes effect at once. */
+    override val quickStore: StemStore get() = store.quick!!
+
+    /** What Sing has for a song now, for the words on screen. */
+    sealed interface Status {
+        /** The quick way's stand-in is on its way (the song is fetched first): how far, 0..1. */
+        data class Starting(val done: Float) : Status
+        /** The quick way stands in while the song's own separation goes: how far that is, 0..1. */
+        data class QuickWhileOwn(val done: Float) : Status
+        /** The quick way, which is all this device does. */
+        data object Quick : Status
+        /** The song's own vocals are out. */
+        data object Out : Status
+    }
+
+    fun status(id: String): Status = when {
+        store.complete(id) && store.meta(id)?.method != Separation.QUICK.name -> Status.Out
+        quickStore.complete(id) || store.complete(id) -> if (needsOwn(id)) Status.QuickWhileOwn(store.progress(id)) else Status.Quick
+        else -> Status.Starting(quickStore.progress(id))
     }
 
     fun setLevel(v: Float) {
@@ -144,10 +172,19 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
     private fun done(id: String): Boolean =
         store.complete(id) && (store.meta(id)?.method != Separation.QUICK.name || _method.value == Separation.QUICK)
 
-    /** Separates [songs] (the playing one first), skipping what's done, what can't be done, and what's already queued. */
+    /** The quick way's stand-in is there, or isn't needed (the song's own vocals are done). */
+    private fun quickDone(id: String): Boolean = done(id) || quickStore.complete(id)
+
+    /** A network way is still to run on [id] (never where only the quick way runs here). */
+    private fun needsOwn(id: String): Boolean = _method.value != Separation.QUICK && fullEngine && engineReady() && !done(id)
+
+    /**
+     * Separates [songs] (the playing one first, then the ones coming up), skipping what's done, what can't be done,
+     * and what's already queued: each song's quick stand-in first, then its own separation ([nextPass]).
+     */
     fun prepare(songs: List<Song>) {
         if (!working || !engineReady()) return
-        val todo = songs.filter { canSing(it) && !done(it.id) }
+        val todo = songs.filter { canSing(it) && (!quickDone(it.id) || needsOwn(it.id)) }
         synchronized(wanted) {
             // The playing song goes to the front; anything no longer wanted is dropped.
             wanted.removeAll { w -> todo.none { it.id == w.id } }
@@ -161,15 +198,51 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
 
     private suspend fun drain() {
         while (true) {
-            val next = synchronized(wanted) { wanted.removeFirstOrNull() } ?: return
             if (!working) return
-            runCatching { withContext(worker) { separate(next) } }
-                .onSuccess { _problem.value = it }
+            val (next, quickPass) = synchronized(wanted) {
+                nextPass(wanted.map { it.id }, ::quickDone, ::needsOwn)?.let { (id, q) -> wanted.first { it.id == id } to q }
+                    ?: run { wanted.clear(); null }
+            } ?: return
+            runCatching { withContext(worker) { separate(next, quickPass) } }
+                .onSuccess {
+                    _problem.value = it
+                    // A pass that left nothing done (it shouldn't): the song isn't tried round and round.
+                    if (quickPass && !quickDone(next.id)) synchronized(wanted) { wanted.removeAll { w -> w.id == next.id } }
+                }
                 .onFailure {
-                    Log.w("PrismSing", "Couldn't separate ${next.id}: $it")
-                    _problem.value = it.message ?: tr(R.string.couldn_t_get_this_song_ready)
+                    synchronized(wanted) { wanted.removeAll { w -> w.id == next.id } }
+                    if (it !is Stopped) {
+                        Log.w("PrismSing", "Couldn't separate ${next.id}: $it")
+                        _problem.value = it.message ?: tr(R.string.couldn_t_get_this_song_ready)
+                    }
                 }
             _progress.update { it - next.id }
+        }
+    }
+
+    /** Sing was switched off a while ago: the song in hand is let go. */
+    private class Stopped(message: String) : IOException(message)
+
+    /** The device fell behind and stepped down to the quick way: the song's own separation stops (its stand-in stays). */
+    private class SteppedDown : IOException()
+
+    companion object {
+        /** How long the song in hand is still finished after Sing is switched off (leaving the TV's Sing page, say). */
+        private const val GRACE_NS = 90_000_000_000L
+
+        /**
+         * Which song to work on next, and whether it's its quick pass: the playing song's and the next one's quick
+         * stand-ins first (seconds each, so Sing takes effect on both at once, the next song included however slow the
+         * device), then each song's own separation in order, any later song's stand-in just before its own. Null when
+         * there's nothing left to do.
+         */
+        internal fun nextPass(ids: List<String>, quickDone: (String) -> Boolean, needsOwn: (String) -> Boolean): Pair<String, Boolean>? {
+            ids.take(2).firstOrNull { !quickDone(it) }?.let { return it to true }
+            for (id in ids) {
+                if (!quickDone(id)) return id to true
+                if (needsOwn(id)) return id to false
+            }
+            return null
         }
     }
 
@@ -251,12 +324,15 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
     }
 
     /**
-     * Works out [song]'s vocals and writes them to [store] as it goes, each chunk the best way this device keeps up
-     * with ([SingPace], timed as it goes). What to tell the listener about it, if anything.
+     * Works out [song]'s vocals and writes them as it goes: with [quickPass], the quick way's stand-in (seconds a song)
+     * into the quick store; otherwise its own vocals into [store], each chunk the best way this device keeps up with
+     * ([SingPace], timed as it goes), stopping if it falls back to the quick way (the stand-in is there already). What to
+     * tell the listener about it, if anything.
      */
-    private fun separate(song: Song): String? {
+    private fun separate(song: Song, quickPass: Boolean): String? {
         val id = song.id
-        if (done(id)) return null
+        if (if (quickPass) quickDone(id) else !needsOwn(id)) return null
+        val target = if (quickPass) quickStore else store
         val started = System.nanoTime()
         _progress.update { it + (id to 0f) }
         // The whole song from the player's own copy (cached whole first if need be), so the vocals line up with it.
@@ -264,38 +340,40 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
         val scratch = File(c.app.cacheDir, "sing_${id.replace(Regex("[^A-Za-z0-9_-]"), "_")}.part")
         val uri = c.audioOnPhone(id, scratch)
             ?: throw IOException(if (c.network.metered.value && !c.settings.current.singOnCellular) tr(R.string.waiting_for_wi_fi_to_get) else tr(R.string.this_song_isn_t_on_the))
-        val way = choose()
-        _method.value = way
+        val way = if (quickPass) Separation.QUICK else choose()
+        if (!quickPass) _method.value = way
+        if (way == Separation.QUICK && !quickPass) { scratch.delete(); return null }
         val (vocals, accompaniment) = networks(way)
         // The way least good of the song's chunks, kept with its vocals.
         var least = way
+        var steppedDown = false
         com.prism.music.playback.AudioDiagnostics.log("background", "Sing separation of $id started ($way)")
         try {
             PcmDecoder(c.app, uri).use { dec ->
                 val first = dec.read() ?: throw IOException(tr(R.string.the_song_didn_t_decode))
                 val rate = dec.sampleRate
                 val total = dec.totalFrames.coerceAtLeast(1)
-                store.pcm(id).delete()
-                store.writeMeta(id, StemStore.Meta(rate, total))
+                target.pcm(id).delete()
+                target.writeMeta(id, StemStore.Meta(rate, total))
                 val back = Resampler(2, Spleeter.RATE, rate)
                 val spleeter = Spleeter(env, vocals, accompaniment).apply { method = way }
                 // Each chunk timed, and the next one done the way that keeps up (a slow device moves to a lighter way
                 // within its first song; the full way needs its network loaded, so the light way stands in till the
-                // next song).
-                spleeter.onChunk = { _, ms ->
+                // next song). Down to the quick way, the song's own separation stops: its stand-in is there.
+                if (!quickPass) spleeter.onChunk = { _, ms ->
                     val ran = spleeter.ran
                     if (ran != Separation.QUICK) keepPace(ran, SingPace.speed(Spleeter.CHUNK_SECONDS, ms))
                     if (ran.ordinal > least.ordinal) least = ran
                     // The light way's retry only at a song's start, where its network can be loaded.
                     val next = choose(retry = false)
-                    spleeter.method = next
+                    if (next == Separation.QUICK) steppedDown = true else spleeter.method = next
                     _method.value = next
                 }
                 // Decoding (the phone's decoder answers a buffer at a time) and the step to 44.1 kHz run on their own
                 // thread, a few pieces ahead, while the networks work on what's already in.
                 val reader = PieceReader(dec, first, Resampler(2, rate, Spleeter.RATE))
                 var written = 0L
-                BufferedOutputStream(FileOutputStream(store.pcm(id)), 1 shl 16).use { out ->
+                BufferedOutputStream(FileOutputStream(target.pcm(id)), 1 shl 16).use { out ->
                     val bytes = ByteArray(16 * 1024)
                     fun write(v: FloatArray, limit: Long = Long.MAX_VALUE) {
                         var i = 0
@@ -313,7 +391,10 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
                     }
                     try {
                         while (true) {
-                            if (!working) throw IOException(tr(R.string.sing_was_switched_off))
+                            // Switched off: the song in hand is still finished for a while (leaving the TV's Sing page
+                            // used to throw a nearly done separation away), then let go.
+                            if (!stillWorking) throw Stopped(tr(R.string.sing_was_switched_off))
+                            if (steppedDown) throw SteppedDown()
                             val in44 = reader.next() ?: break
                             val vocalsNow = back.push(spleeter.feed(in44))
                             if (vocalsNow.isNotEmpty()) {
@@ -332,16 +413,23 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
                     if (written < decoded) write(FloatArray(((decoded - written) * 2).toInt()), decoded)
                 }
                 // Marked complete only once every byte is in the file.
-                store.writeMeta(id, StemStore.Meta(rate, written, complete = true, method = least.name))
+                target.writeMeta(id, StemStore.Meta(rate, written, complete = true, method = least.name))
+                // The song's own vocals are done: its stand-in isn't needed any more.
+                if (!quickPass) quickStore.delete(id)
                 // Stepped down from the full way: the backing's network isn't needed any more (~half the memory).
                 if (_method.value != Separation.FULL) backingNet?.let { runCatching { it.close() }; backingNet = null }
                 val secs = (System.nanoTime() - started) / 1e9
                 Log.i("PrismSing", "separated $id ($least): ${"%.1f".format(written / rate.toDouble())} s of song in ${"%.1f".format(secs)} s")
-                // A mono song the quick way: nothing could be told apart, so it plays as it is.
-                return if (spleeter.quickChunks > 0 && spleeter.monoChunks == spleeter.quickChunks) tr(R.string.sing_mono_song) else null
+                // A mono song the quick way, with no network way to come: nothing could be told apart, so it plays as
+                // it is.
+                val mono = spleeter.quickChunks > 0 && spleeter.monoChunks == spleeter.quickChunks
+                return if (mono && !needsOwn(id)) tr(R.string.sing_mono_song) else null
             }
+        } catch (_: SteppedDown) {
+            target.delete(id)
+            return null
         } catch (t: Throwable) {
-            store.delete(id)
+            target.delete(id)
             throw t
         } finally {
             com.prism.music.playback.AudioDiagnostics.log("background", "Sing separation of $id ended after ${(System.nanoTime() - started) / 1_000_000} ms")
@@ -351,6 +439,14 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
             if (room < com.prism.music.data.prefs.SING_ROOM_UNLIMITED) store.trim(room * 1_048_576L, setOfNotNull(id, c.player.currentSong.value?.id))
         }
     }
+}
+
+/** What Sing has for a song, in words: the TV's Sing page and the phone's Sing sheet. */
+fun Sing.Status.words(): String = when (this) {
+    is Sing.Status.Starting -> tr(R.string.sing_taking_voice_out, (done * 100).toInt())
+    is Sing.Status.QuickWhileOwn -> tr(R.string.sing_quick_then_full, (done * 100).toInt())
+    Sing.Status.Quick -> tr(R.string.tv_voice_quick)
+    Sing.Status.Out -> tr(R.string.tv_vocals_out)
 }
 
 /**

@@ -4147,4 +4147,7 @@
     <string name="holiday_winter_chill_blurb">Bersalju dan pelan, tanpa lonceng kereta salju</string>
     <string name="holiday_new_years_eve">Pesta Malam Tahun Baru</string>
     <string name="holiday_new_years_eve_blurb">Lagu penyemangat untuk hitung mundur menuju tengah malam</string>
+    <string name="sing_taking_voice_out">Menghapus suara… %1$s%%</string>
+    <string name="sing_quick_then_full">Suara dipelankan (cepat) · pemisahan penuh %1$s%%</string>
+    <string name="tv_sing_play_first">Putar lagu dulu, lalu periksa</string>
 </resources>

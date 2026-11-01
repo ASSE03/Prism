@@ -4247,4 +4247,7 @@
     <string name="holiday_winter_chill_blurb">Neve e calma, senza sonagli</string>
     <string name="holiday_new_years_eve">Festa di Capodanno</string>
     <string name="holiday_new_years_eve_blurb">Inni per il conto alla rovescia fino a mezzanotte</string>
+    <string name="sing_taking_voice_out">Tolgo la voce… %1$s%%</string>
+    <string name="sing_quick_then_full">Voce abbassata (rapido) · separazione completa %1$s%%</string>
+    <string name="tv_sing_play_first">Prima avvia un brano, poi verifica</string>
 </resources>

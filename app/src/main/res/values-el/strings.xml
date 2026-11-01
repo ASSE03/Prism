@@ -4197,4 +4197,7 @@
     <string name="holiday_winter_chill_blurb">Χιονισμένα και αργά, χωρίς κουδουνάκια</string>
     <string name="holiday_new_years_eve">Πάρτι της Πρωτοχρονιάς</string>
     <string name="holiday_new_years_eve_blurb">Ύμνοι για την αντίστροφη μέτρηση ως τα μεσάνυχτα</string>
+    <string name="sing_taking_voice_out">Αφαίρεση φωνής… %1$s%%</string>
+    <string name="sing_quick_then_full">Χαμηλωμένη φωνή (γρήγορα) · πλήρης διαχωρισμός %1$s%%</string>
+    <string name="tv_sing_play_first">Παίξε πρώτα ένα τραγούδι και μετά κάνε τον έλεγχο</string>
 </resources>

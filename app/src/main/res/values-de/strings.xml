@@ -4197,4 +4197,7 @@
     <string name="holiday_winter_chill_blurb">Verschneit und langsam, ohne Schlittenglocken</string>
     <string name="holiday_new_years_eve">Silvesterparty</string>
     <string name="holiday_new_years_eve_blurb">Hymnen für den Countdown bis Mitternacht</string>
+    <string name="sing_taking_voice_out">Stimme wird herausgenommen… %1$s%%</string>
+    <string name="sing_quick_then_full">Stimme leiser (schnell) · volle Trennung %1$s%%</string>
+    <string name="tv_sing_play_first">Spiel zuerst einen Song ab, dann prüfe</string>
 </resources>

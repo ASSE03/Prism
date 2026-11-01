@@ -4247,4 +4247,7 @@
     <string name="holiday_winter_chill_blurb">Înzăpezit și lent, fără clopoței</string>
     <string name="holiday_new_years_eve">Petrecere de Revelion</string>
     <string name="holiday_new_years_eve_blurb">Imnuri pentru numărătoarea inversă până la miezul nopții</string>
+    <string name="sing_taking_voice_out">Se scoate vocea… %1$s%%</string>
+    <string name="sing_quick_then_full">Voce redusă (rapid) · separare completă %1$s%%</string>
+    <string name="tv_sing_play_first">Pornește întâi o melodie, apoi verifică</string>
 </resources>

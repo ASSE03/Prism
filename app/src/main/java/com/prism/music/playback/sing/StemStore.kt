@@ -13,12 +13,18 @@ import java.nio.channels.FileChannel
  * hands Sing's processor), written as the separation goes, so Sing can start before a song is done. Least recently
  * used ones go when the store is over its size.
  */
-class StemStore(root: File) {
+class StemStore(root: File, /** The folder (1.8.x: the quick way's stand-ins have their own). */ name: String = "stems") {
     /** [method]: the [Separation] the vocals were told apart by (the least good of the song's chunks; null: full). */
     @Serializable
     data class Meta(val rate: Int, val totalFrames: Long, val complete: Boolean = false, val version: Int = VERSION, val method: String? = null)
 
-    val dir = File(root, "stems").apply { mkdirs() }
+    val dir = File(root, name).apply { mkdirs() }
+
+    /**
+     * The quick way's stand-ins (1.8.x), done first so Sing takes effect at once, kept until the song's own vocals are
+     * done. Cleared, measured and trimmed with this store, so Settings' room and its clear button count them too.
+     */
+    val quick: StemStore? = if (name == "stems") StemStore(root, "stems-quick") else null
     private val json = Json { ignoreUnknownKeys = true }
 
     private fun safe(id: String) = id.replace(Regex("[^A-Za-z0-9_-]"), "_")
@@ -41,13 +47,14 @@ class StemStore(root: File) {
 
     fun delete(id: String) { pcm(id).delete(); metaFile(id).delete() }
 
-    fun clear() { dir.listFiles()?.forEach { it.delete() } }
+    fun clear() { dir.listFiles()?.forEach { it.delete() }; quick?.clear() }
 
-    fun bytes(): Long = dir.listFiles()?.sumOf { it.length() } ?: 0L
+    fun bytes(): Long = (dir.listFiles()?.sumOf { it.length() } ?: 0L) + (quick?.bytes() ?: 0L)
 
     /** Keeps the store within [limit] bytes, oldest used first, never [keep] (the ones playing or coming up). */
     fun trim(limit: Long, keep: Set<String>) {
-        val files = dir.listFiles { f -> f.name.endsWith(".pcm") }?.sortedBy { it.lastModified() } ?: return
+        val files = (dir.listFiles { f -> f.name.endsWith(".pcm") }.orEmpty().toList() +
+            quick?.dir?.listFiles { f -> f.name.endsWith(".pcm") }.orEmpty()).sortedBy { it.lastModified() }
         var total = bytes()
         for (f in files) {
             if (total <= limit) break
@@ -55,7 +62,7 @@ class StemStore(root: File) {
             if (keep.any { safe(it) == id }) continue
             total -= f.length()
             f.delete()
-            File(dir, "$id.json").delete()
+            File(f.parentFile, "$id.json").delete()
         }
     }
 

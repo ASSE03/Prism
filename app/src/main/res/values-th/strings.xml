@@ -4147,4 +4147,7 @@
     <string name="holiday_winter_chill_blurb">หิมะและช้าๆ ไม่มีเสียงกระดิ่งเลื่อน</string>
     <string name="holiday_new_years_eve">ปาร์ตี้ส่งท้ายปีเก่า</string>
     <string name="holiday_new_years_eve_blurb">เพลงสำหรับนับถอยหลังสู่เที่ยงคืน</string>
+    <string name="sing_taking_voice_out">กำลังเอาเสียงร้องออก… %1$s%%</string>
+    <string name="sing_quick_then_full">ลดเสียงร้อง (ด่วน) · แยกเสียงแบบเต็ม %1$s%%</string>
+    <string name="tv_sing_play_first">เล่นเพลงก่อน แล้วจึงตรวจ</string>
 </resources>

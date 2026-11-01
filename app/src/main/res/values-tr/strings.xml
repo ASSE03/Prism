@@ -4197,4 +4197,7 @@
     <string name="holiday_winter_chill_blurb">Karlı ve yavaş, kızak çanı yok</string>
     <string name="holiday_new_years_eve">Yılbaşı Gecesi Partisi</string>
     <string name="holiday_new_years_eve_blurb">Gece yarısına geri sayım için marşlar</string>
+    <string name="sing_taking_voice_out">Vokal çıkarılıyor… %1$s%%</string>
+    <string name="sing_quick_then_full">Ses kısıldı (hızlı) · tam ayırma %1$s%%</string>
+    <string name="tv_sing_play_first">Önce bir şarkı çalın, sonra kontrol edin</string>
 </resources>

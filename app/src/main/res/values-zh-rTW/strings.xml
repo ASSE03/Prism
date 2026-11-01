@@ -4147,4 +4147,7 @@
     <string name="holiday_winter_chill_blurb">雪天慢慢聽，沒有雪橇鈴</string>
     <string name="holiday_new_years_eve">跨年派對</string>
     <string name="holiday_new_years_eve_blurb">倒數到午夜的派對戰歌</string>
+    <string name="sing_taking_voice_out">正在去除人聲… %1$s%%</string>
+    <string name="sing_quick_then_full">人聲調低（快速）· 完整分離 %1$s%%</string>
+    <string name="tv_sing_play_first">請先播放一首歌，再進行檢查</string>
 </resources>

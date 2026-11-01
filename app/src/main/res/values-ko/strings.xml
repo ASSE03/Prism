@@ -4147,4 +4147,7 @@
     <string name="holiday_winter_chill_blurb">눈처럼 느리게, 썰매 방울 없이</string>
     <string name="holiday_new_years_eve">새해 전야 파티</string>
     <string name="holiday_new_years_eve_blurb">자정 카운트다운을 위한 앤섬</string>
+    <string name="sing_taking_voice_out">목소리를 빼는 중… %1$s%%</string>
+    <string name="sing_quick_then_full">목소리 줄임(빠름) · 전체 분리 %1$s%%</string>
+    <string name="tv_sing_play_first">먼저 곡을 재생한 다음 확인하세요</string>
 </resources>

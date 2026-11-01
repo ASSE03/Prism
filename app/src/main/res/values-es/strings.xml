@@ -4247,4 +4247,7 @@
     <string name="holiday_winter_chill_blurb">Nevado y lento, sin cascabeles</string>
     <string name="holiday_new_years_eve">Fiesta de Nochevieja</string>
     <string name="holiday_new_years_eve_blurb">Himnos para la cuenta atrás hasta medianoche</string>
+    <string name="sing_taking_voice_out">Quitando la voz… %1$s%%</string>
+    <string name="sing_quick_then_full">Voz más baja (rápida) · separación completa %1$s%%</string>
+    <string name="tv_sing_play_first">Pon una canción primero y luego comprueba</string>
 </resources>

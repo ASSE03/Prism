@@ -4247,4 +4247,7 @@
     <string name="holiday_winter_chill_blurb">Enneigé et lent, sans grelots</string>
     <string name="holiday_new_years_eve">Fête du Nouvel An</string>
     <string name="holiday_new_years_eve_blurb">Des hymnes pour le compte à rebours de minuit</string>
+    <string name="sing_taking_voice_out">Retrait de la voix… %1$s%%</string>
+    <string name="sing_quick_then_full">Voix baissée (rapide) · séparation complète %1$s%%</string>
+    <string name="tv_sing_play_first">Lancez d\'abord une chanson, puis vérifiez</string>
 </resources>

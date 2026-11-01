@@ -4225,4 +4225,7 @@
     <string name="holiday_winter_chill_blurb">Snowy and slow, no sleigh bells</string>
     <string name="holiday_new_years_eve">New Year\'s Eve Party</string>
     <string name="holiday_new_years_eve_blurb">Anthems to count down to midnight</string>
+    <string name="sing_taking_voice_out">Taking the voice out… %1$s%%</string>
+    <string name="sing_quick_then_full">Voice lowered (quick) · full separation %1$s%%</string>
+    <string name="tv_sing_play_first">Play a song first, then check</string>
 </resources>

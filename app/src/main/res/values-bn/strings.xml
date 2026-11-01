@@ -4197,4 +4197,7 @@
     <string name="holiday_winter_chill_blurb">তুষারময় আর ধীর, স্লেজের ঘণ্টা ছাড়া</string>
     <string name="holiday_new_years_eve">নববর্ষের পার্টি</string>
     <string name="holiday_new_years_eve_blurb">মধ্যরাতের কাউন্টডাউনের অ্যান্থেম</string>
+    <string name="sing_taking_voice_out">কণ্ঠ সরানো হচ্ছে… %1$s%%</string>
+    <string name="sing_quick_then_full">কণ্ঠ কমানো (দ্রুত) · পূর্ণ বিভাজন %1$s%%</string>
+    <string name="tv_sing_play_first">আগে একটি গান চালান, তারপর পরীক্ষা করুন</string>
 </resources>

@@ -4197,4 +4197,7 @@
     <string name="holiday_winter_chill_blurb">Havas és lassú, csengők nélkül</string>
     <string name="holiday_new_years_eve">Szilveszteri buli</string>
     <string name="holiday_new_years_eve_blurb">Himnuszok az éjféli visszaszámláláshoz</string>
+    <string name="sing_taking_voice_out">Az ének kivétele… %1$s%%</string>
+    <string name="sing_quick_then_full">Halkított ének (gyors) · teljes szétválasztás %1$s%%</string>
+    <string name="tv_sing_play_first">Előbb indíts el egy dalt, aztán ellenőrizd</string>
 </resources>

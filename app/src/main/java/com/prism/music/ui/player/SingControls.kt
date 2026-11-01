@@ -55,6 +55,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.unit.dp
 import com.prism.music.data.ModelStore
+import com.prism.music.playback.sing.words
 import com.prism.music.data.model.Song
 import com.prism.music.ui.components.ActionSheet
 import com.prism.music.ui.components.PrismSlider
@@ -346,13 +347,15 @@ fun SingSheet(song: Song, onDismiss: () -> Unit) {
                 }
                 !singable -> Text(tr(R.string.sing_works_with_songs_not_live), style = MaterialTheme.typography.bodyMedium)
                 else -> {
-                    val p = progress[song.id]
+                    // Read again as the separation moves along ([progress]): taking the voice out, the quick way
+                    // standing in while the song's own separation goes, or the voice out (1.8.x).
+                    progress.size
+                    val now = sing.status(song.id)
                     val status = when {
                         !on -> tr(R.string.off_the_song_plays_as_it)
-                        sing.store.complete(song.id) -> tr(R.string.ready_the_voice_is_out)
-                        p != null -> tr(R.string.getting_this_song_ready_you_can, (p * 100).toInt())
-                        problem != null -> problem!!
-                        else -> tr(R.string.getting_this_song_ready)
+                        now == com.prism.music.playback.sing.Sing.Status.Out -> tr(R.string.ready_the_voice_is_out)
+                        now is com.prism.music.playback.sing.Sing.Status.Starting && problem != null -> problem!!
+                        else -> now.words()
                     }
                     Text(status, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     // The quick way, said plainly: why, and what it can and can't do.

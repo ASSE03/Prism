@@ -4147,4 +4147,7 @@
     <string name="holiday_winter_chill_blurb">雪のようにゆっくり、鈴の音なし</string>
     <string name="holiday_new_years_eve">年越しパーティー</string>
     <string name="holiday_new_years_eve_blurb">真夜中へのカウントダウンに向けたアンセム</string>
+    <string name="sing_taking_voice_out">歌声を取り除いています… %1$s%%</string>
+    <string name="sing_quick_then_full">歌声を弱めています（簡易）· 完全な分離 %1$s%%</string>
+    <string name="tv_sing_play_first">先に曲を再生してからチェックしてください</string>
 </resources>

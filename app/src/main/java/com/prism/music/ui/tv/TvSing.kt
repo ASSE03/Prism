@@ -26,6 +26,7 @@ import com.prism.music.R
 import com.prism.music.playback.CarLyricsCard
 import com.prism.music.playback.sing.Separation
 import com.prism.music.playback.sing.SingPace
+import com.prism.music.playback.sing.words
 import com.prism.music.tr
 import com.prism.music.ui.player.rememberLyricClock
 import com.prism.music.ui.player.rememberLyricsState
@@ -50,8 +51,11 @@ object TvSing {
             UNSUPPORTED -> tr(R.string.tv_sing_no_cpu)
         }
 
-        /** Sing is in the player's ⋯ (a way it runs here has been found). */
-        val sings: Boolean get() = this == READY || this == SLOW || this == UNSUPPORTED
+        /**
+         * Sing is in the player's ⋯: always but while the check runs. Unchecked, the first use times this TV as it goes
+         * (and the quick way stands in meanwhile); the check only says ahead what it'll do.
+         */
+        val sings: Boolean get() = this != CHECKING
     }
 
     private val _state = MutableStateFlow(State.UNCHECKED)
@@ -77,7 +81,8 @@ object TvSing {
     suspend fun check(c: AppContainer): String {
         if (_state.value == State.CHECKING) return State.CHECKING.label()
         if (!c.sing.fullEngine) return keep(c, State.UNSUPPORTED)
-        val song = c.player.currentSong.value?.takeIf { c.sing.canSing(it) } ?: return tr(R.string.tv_sing_checking)
+        // Nothing playing to time it with: said so (it used to say "checking" and do nothing).
+        val song = c.player.currentSong.value?.takeIf { c.sing.canSing(it) } ?: return tr(R.string.tv_sing_play_first)
         if (!c.sing.engineReady() && !c.sing.downloadEngine()) return tr(R.string.sing_s_engine_isn_t_downloaded)
         var speeds: Pair<Double?, Double?> = null to null
         var problem: String? = null
@@ -130,7 +135,11 @@ fun TvSingPage(nav: TvNav) {
     if (s == null || now == null) { TvStarting { nav.back() }; return }
     DisposableEffect(Unit) {
         c.sing.setOn(true)
-        c.sing.prepare(c.player.queue.value.map { it.song })
+        // The playing song and the next (the player keeps it one ahead from there, as on the phone).
+        val queue = c.player.queue.value.map { it.song }
+        val at = queue.indexOfFirst { it.id == s.id }
+        c.sing.prepare(listOf(s) + queue.drop(at + 1).take(1))
+        // Leaving the page, the song in hand is still finished for a while (Sing's grace), not thrown away.
         onDispose { c.sing.setOn(false) }
     }
     val state = rememberLyricsState(s)
@@ -151,8 +160,11 @@ fun TvSingPage(nav: TvNav) {
         TvLyricsPlace(now, lines, current, clock, state.loading, state.unavailable, state.source?.label, accent, onPlayPause = { c.player.togglePlay() }) { ms -> c.player.seekToLyric(ms) }
         Row(Modifier.align(Alignment.TopEnd).padding(TvSafe), horizontalArrangement = Arrangement.spacedBy(androidx.compose.ui.unit.Dp(10f)), verticalAlignment = Alignment.CenterVertically) {
             val scheme = MaterialTheme.colorScheme
-            val method by c.sing.method.collectAsState()
-            TvChip(if (method == Separation.QUICK) tr(R.string.tv_voice_quick) else tr(R.string.tv_vocals_out), PrismIcons.Mic, scheme.primary, scheme.onPrimary)
+            // What Sing has for the song, honestly: taking the voice out (how far), the quick way standing in while the
+            // song's own separation goes (how far), or the voice out. Re-read as the separation moves along.
+            c.sing.progress.collectAsState().value
+            c.sing.method.collectAsState().value
+            TvChip(c.sing.status(s.id).words(), PrismIcons.Mic, scheme.primary, scheme.onPrimary)
             TvChip(tr(R.string.tv_key_line, if (semitones > 0) "+$semitones" else "$semitones"), null, scheme.surfaceVariant, scheme.onSurface)
         }
     }

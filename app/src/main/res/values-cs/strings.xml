@@ -4297,4 +4297,7 @@
     <string name="holiday_winter_chill_blurb">Zasněženě a pomalu, bez rolniček</string>
     <string name="holiday_new_years_eve">Silvestrovská párty</string>
     <string name="holiday_new_years_eve_blurb">Hymny na odpočítávání do půlnoci</string>
+    <string name="sing_taking_voice_out">Odstraňuji hlas… %1$s%%</string>
+    <string name="sing_quick_then_full">Hlas ztlumen (rychle) · úplné oddělení %1$s%%</string>
+    <string name="tv_sing_play_first">Nejdřív pusťte skladbu, pak zkontrolujte</string>
 </resources>
