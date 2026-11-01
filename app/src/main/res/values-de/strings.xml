@@ -4216,4 +4216,5 @@
     <string name="holiday_new_years_eve_blurb">Hymnen für den Countdown bis Mitternacht</string>
     <string name="tv_back_to_now">Zurück zu jetzt</string>
     <string name="tv_timing_keys">← → 0,1 s  ·  ↑ ↓ 1 s  ·  OK: %1$s</string>
+    <string name="tv_sing_checking_now">Dieser Fernseher wird geprüft … das dauert etwa eine Minute</string>
 </resources>

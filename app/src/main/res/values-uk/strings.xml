@@ -4316,4 +4316,5 @@
     <string name="holiday_new_years_eve_blurb">Гімни для відліку до опівночі</string>
     <string name="tv_back_to_now">Повернутися до поточного</string>
     <string name="tv_timing_keys">← → 0,1 с  ·  ↑ ↓ 1 с  ·  OK: %1$s</string>
+    <string name="tv_sing_checking_now">Перевіряємо цей телевізор… це триває близько хвилини</string>
 </resources>

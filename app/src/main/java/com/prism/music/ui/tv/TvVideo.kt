@@ -209,6 +209,7 @@ fun TvSeekLine(now: TvNow, onSeek: (Long) -> Unit, onPlayPause: () -> Unit, modi
  * [TvVideoControls]; they fade [TV_VIDEO_CONTROLS_MS] after the last key while the video plays (paused, they stay).
  * Back hides them; with them hidden, Back is the page's (back to the song). [panelOpen]: a side panel ([panel], the
  * queue or ⋯) is over the screen and has focus; when it closes, focus returns to the control that opened it.
+ * [panelCovers]: the panel covers the whole screen (the lyrics over the video), so the controls hide under it.
  */
 @Composable
 fun TvVideoPlace(
@@ -223,6 +224,7 @@ fun TvVideoPlace(
     onSong: () -> Unit,
     onMore: () -> Unit,
     panelOpen: Boolean = false,
+    panelCovers: Boolean = false,
     panel: @Composable BoxScope.() -> Unit = {},
     video: @Composable () -> Unit,
 ) {
@@ -301,7 +303,7 @@ fun TvVideoPlace(
         ) {
             if (ready) video() else Artwork(now.art, Modifier.align(Alignment.Center).size(360.dp), shape = TvShapes.art, size = 1080)
         }
-        AnimatedVisibility(shown, Modifier.align(Alignment.BottomCenter), enter = fadeIn(), exit = fadeOut()) {
+        AnimatedVisibility(shown && !(panelOpen && panelCovers), Modifier.align(Alignment.BottomCenter), enter = fadeIn(), exit = fadeOut()) {
             TvVideoControls(
                 now, onPlayPause, onNext, onPrevious, onSong,
                 onSeek = onSeek, onLyrics = onLyrics, onQueue = onQueue, onMore = onMore,
@@ -313,13 +315,13 @@ fun TvVideoPlace(
     }
 }
 
-/** The panels over the video. */
-private enum class TvVideoPanel { NONE, QUEUE, MORE }
+/** The panels over the video (the lyrics over all of it). */
+private enum class TvVideoPanel { NONE, QUEUE, MORE, LYRICS }
 
 /**
  * A music video, full screen, on the engine. Opening the page turns video mode on (and again when coming back to it
- * from an album or Sing); leaving it ends video mode, the song plays on as audio, except for Lyrics, which open over
- * the video and come back to it. The queue is the player's panel: a song picked plays as its video.
+ * from an album or Sing); leaving it ends video mode, the song plays on as audio. Lyrics open over the video, which
+ * plays on under them. The queue is the player's panel: a song picked plays as its video.
  */
 @Composable
 fun TvVideoPage(nav: TvNav) {
@@ -331,9 +333,7 @@ fun TvVideoPage(nav: TvNav) {
     val context = LocalContext.current
     LaunchedEffect(Unit) { TvSing.load(context) }
     val singReady = TvSing.state.collectAsState().value.sings
-    // Lyrics keep the video on behind them (Back from the lyrics returns to it); everything else ends it.
-    val toLyrics = remember { booleanArrayOf(false) }
-    DisposableEffect(Unit) { onDispose { if (!toLyrics[0]) c.player.setVideoMode(false) } }
+    DisposableEffect(Unit) { onDispose { c.player.setVideoMode(false) } }
     LaunchedEffect(Unit) { if (!c.player.videoMode.value && !c.player.videoLoading.value) c.player.setVideoMode(true) }
     // Another song (the queue, next): with "Keep playing videos" on the service lines each up as its video; with it off
     // this page asks, since it's a video page.
@@ -353,14 +353,16 @@ fun TvVideoPage(nav: TvNav) {
         onNext = { c.player.next() },
         onPrevious = { c.player.previous() },
         onSeek = { ms -> c.player.seekBy(ms) },
-        onLyrics = { toLyrics[0] = true; nav.go(TvRoute.Lyrics) },
+        onLyrics = { panel = TvVideoPanel.LYRICS },
         onQueue = { panel = TvVideoPanel.QUEUE },
         onSong = { nav.back() },
         onMore = { panel = TvVideoPanel.MORE },
         panelOpen = panel != TvVideoPanel.NONE,
+        panelCovers = panel == TvVideoPanel.LYRICS,
         panel = {
             when (panel) {
                 TvVideoPanel.NONE -> Unit
+                TvVideoPanel.LYRICS -> TvVideoLyrics(close)
                 // A song picked plays (as its video) and the panel closes, so it's watched.
                 TvVideoPanel.QUEUE -> TvPanel("queue", close) { TvQueuePlace(onPicked = close) }
                 TvVideoPanel.MORE -> TvPanel("more", close) { TvActionPanel(song?.title ?: "", songActions(c, nav, song, singReady, close)) }
