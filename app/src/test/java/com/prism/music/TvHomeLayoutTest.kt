@@ -143,6 +143,32 @@ class TvHomeLayoutTest {
         assertTrue(!com.prism.music.ui.tv.hiddenIn(reset, KEY_DIAL))
         assertTrue(com.prism.music.ui.tv.hiddenIn(reset, HomeSections.DOWNLOADS))
     }
+    @Test fun upAndDownCarryARowPastTheRowsHomeShows() {
+        // The TV suite's case: the holiday key in the layout, visible but out of season (not on Home), empty rows (no
+        // plays yet), A hidden; Home shows only B and C. C up once passes B; up again it passes A and everything not on
+        // Home, to the top. Each press moves it on Home.
+        val list = listOf(HERO, HomeSections.REPLAY, KEY_PICKS, HomeSections.SEASONAL, HomeSections.ON_REPEAT, yt("A"), yt("B"), yt("C"))
+            .map { cfg(it, visible = it != yt("A")) }
+        val onHome = setOf(yt("B"), yt("C"))
+        fun shown(k: String) = k in onHome
+        val once = TvHomeLayout.movedPast(list, yt("C"), -1, ::shown)
+        assertEquals(listOf(yt("A"), yt("C"), yt("B")), once.map { it.key }.takeLast(3))
+        val twice = TvHomeLayout.movedPast(once, yt("C"), -1, ::shown)
+        assertEquals(yt("C"), twice.first().key)
+        assertTrue(twice.indexOfFirst { it.key == yt("C") } < twice.indexOfFirst { it.key == yt("A") })
+        // Nothing else moved, and nothing was lost.
+        assertEquals(list.map { it.key }.toSet(), twice.map { it.key }.toSet())
+        assertEquals(listOf(HERO, HomeSections.REPLAY, KEY_PICKS, HomeSections.SEASONAL, HomeSections.ON_REPEAT, yt("A"), yt("B")), twice.drop(1).map { it.key })
+        // Down passes the rows not on Home too: from the top, one press lands right after B (the first row on Home).
+        val down = TvHomeLayout.movedPast(twice, yt("C"), 1, ::shown)
+        assertEquals(listOf(yt("A"), yt("B"), yt("C")), down.map { it.key }.takeLast(3))
+        // At an end it stays (nothing on Home past it).
+        assertEquals(down, TvHomeLayout.movedPast(down, yt("C"), 1, ::shown))
+        // With the holiday in season (on Home), C stops right before it.
+        val inSeason = TvHomeLayout.movedPast(list, yt("C"), -2) { it in onHome + HomeSections.SEASONAL }
+        assertEquals(listOf(HERO, HomeSections.REPLAY, KEY_PICKS, yt("C"), HomeSections.SEASONAL), inSeason.map { it.key }.take(5))
+    }
+
     @Test fun movingStopsAtEitherEnd() {
         val list = listOf(cfg("a"), cfg("b"), cfg("c"))
         assertEquals(listOf("b", "a", "c"), TvHomeLayout.moved(list, "b", -1).map { it.key })
