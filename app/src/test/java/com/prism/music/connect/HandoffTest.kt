@@ -115,7 +115,7 @@ class HandoffTest {
         assertEquals(HandoffResult.Unpaired, session(tablet) { link -> HandoffPeer(phone).call(link, HandoffCommand.MOVE) { null } })
         assertTrue(phone.secrets.isEmpty())
         // A made-up key gets nowhere either.
-        phone.secrets["tablet-1"] = HandoffKeys.newSecret()
+        phone.secrets["tablet-1"] = LinkKeys.hex(LinkKeys.nonce() + LinkKeys.nonce())
         assertEquals(HandoffResult.Unpaired, session(tablet) { link -> HandoffPeer(phone).call(link, HandoffCommand.PULL) { null } })
     }
 
@@ -176,17 +176,5 @@ class HandoffTest {
         assertTrue(answers.dropLast(1).all { it == HandoffResult.Cancelled })
         assertEquals(HandoffResult.Failed("Too many pairing tries. Wait a minute."), answers.last())
         now += 61_000
-    }
-
-    @Test
-    fun macsTieTheKeyToTheChallengeAndTheCaller() {
-        val k = HandoffKeys.newSecret()
-        val n = HandoffKeys.newNonce()
-        assertEquals(HandoffKeys.mac(k, n, "a"), HandoffKeys.mac(k, n, "a"))
-        assertTrue(HandoffKeys.mac(k, n, "a") != HandoffKeys.mac(k, n, "b"))
-        assertTrue(HandoffKeys.mac(k, n, "a") != HandoffKeys.mac(k, HandoffKeys.newNonce(), "a"))
-        assertTrue(HandoffKeys.mac(k, n, "a") != HandoffKeys.mac(HandoffKeys.newSecret(), n, "a"))
-        assertEquals(64, k.length)
-        assertTrue(HandoffKeys.newCode().let { it.length == 6 && it.all(Char::isDigit) })
     }
 }

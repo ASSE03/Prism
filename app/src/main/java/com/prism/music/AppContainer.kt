@@ -507,7 +507,9 @@ class AppContainer(val app: Application) {
             }
         }
         scope.launch {
-            settings.flow.map { it.handoffAvailable }.distinctUntilChanged().collect { on -> if (on) handoff.setAvailable(true) else handoff.setAvailable(false) }
+            // A TV is always reachable for the phones paired with it (1.8.0: the phone as its remote); it takes new
+            // pairings only while its pairing screen is open.
+            settings.flow.map { it.handoffAvailable }.distinctUntilChanged().collect { on -> handoff.setAvailable(on || handoff.isTv) }
         }
         // White light / Spectrum: the home-screen widgets are drawn again to match.
         scope.launch {

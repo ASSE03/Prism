@@ -825,7 +825,7 @@ internal fun <T> speedDialPages(items: List<T>): List<List<T>> {
 }
 
 /** The last three months' most played: albums you've played two or more songs from, and the songs otherwise. */
-private suspend fun speedDialFromHistory(c: com.prism.music.AppContainer): List<BrowseItem> {
+internal suspend fun speedDialFromHistory(c: com.prism.music.AppContainer): List<BrowseItem> {
     val since = System.currentTimeMillis() - 90L * 86_400_000L
     val ids = c.db.plays().mostPlayedIds(since, 80)
     if (ids.isEmpty()) return emptyList()

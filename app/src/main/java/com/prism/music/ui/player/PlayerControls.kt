@@ -1324,14 +1324,18 @@ private fun PrismDevices() {
         handoff.startDiscovery()
         onDispose { handoff.stopDiscovery() }
     }
+    // A TV running Prism (1.8.0) gets its remote here (with its sign-in and the look), beside moving the music there.
+    var remoteFor by remember { mutableStateOf<com.prism.music.connect.PrismDevice?>(null) }
+    remoteFor?.let { tv -> com.prism.music.ui.components.TvRemoteSheet(tv) { remoteFor = null } }
     if (devices.isEmpty() && busy == null) return
     OutputGroup(tr(R.string.prism_devices)) {
         busy?.let { label -> DeviceRow(PrismIcons.Handoff, label, tr(R.string.one_moment), busy = true, enabled = false) {} }
         devices.forEach { d ->
             DeviceRow(
-                PrismIcons.Handoff, d.name, tr(R.string.move_the_music_there) + if (d.paired) "" else tr(R.string.pairs_the_first_time), enabled = busy == null,
+                if (d.tv) PrismIcons.Tv else PrismIcons.Handoff, d.name, tr(R.string.move_the_music_there) + if (d.paired) "" else tr(R.string.pairs_the_first_time), enabled = busy == null,
                 trailing = {
-                    com.prism.music.ui.components.PrismTextButton(onClick = { handoff.bringFrom(d) }, enabled = busy == null) { Text(tr(R.string.bring_here)) }
+                    if (d.tv) com.prism.music.ui.components.PrismTextButton(onClick = { remoteFor = d }, enabled = busy == null) { Text(tr(R.string.tv_remote)) }
+                    else com.prism.music.ui.components.PrismTextButton(onClick = { handoff.bringFrom(d) }, enabled = busy == null) { Text(tr(R.string.bring_here)) }
                 },
             ) { handoff.moveTo(d) }
         }
