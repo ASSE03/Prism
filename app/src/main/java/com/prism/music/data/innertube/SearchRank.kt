@@ -277,7 +277,43 @@ object SearchRank {
             if (hit.song.primaryArtist.isNotBlank() && card.song.artists.any { norm(it.name) == norm(hit.song.primaryArtist) }) return true
             return (cardPlays ?: 0) * 3 >= (hit.plays ?: 0) * 2
         }
+        if (yieldsToHit(card, hit)) return false
         return match(q, card.title) >= 0.97 || (hit.plays ?: 0) < HIT_SONG
+    }
+
+    /** From this many plays, a song outranks another artist's soundtrack, cover or tribute collection of its title. */
+    private const val COLLECTION_HIT = 20_000_000L
+    /**
+     * From this many, it outranks another artist's album of its title that came out this year or last ("africa" → a
+     * 2026 album by someone new, against Toto's Africa). Not an older one, however big the song: "AM" is Arctic
+     * Monkeys' album (2013), not Nio Garcia's AM (491M plays); "lemonade" Beyoncé's (2016).
+     */
+    private const val BIG_HIT = 100_000_000L
+
+    /** The year in an album's subtitle ("Album • Buddy DML • 2026") is this year or last. */
+    private fun isNew(item: BrowseItem): Boolean {
+        val year = item.subtitle.split(" • ").lastOrNull { it.trim().matches(Regex("\\d{4}")) }?.trim()?.toInt() ?: return false
+        return year >= java.time.Year.now().value - 1
+    }
+
+    /** Collections of other people's songs: a film's soundtrack, a cast recording, covers, a tribute, karaoke. */
+    private val collection = Regex(
+        "\\b(soundtrack|ost|music from|original cast|cast recording|tribute|covers?|karaoke|made famous|instrumental)\\b",
+    )
+
+    /**
+     * Another artist's album or playlist of the title that gives way to [hit]: a collection of other people's songs
+     * ("yesterday" → the 2019 film's soundtrack album, Himesh Patel, against The Beatles' Yesterday), or a new album
+     * against a big song. The hit's own album stands ("after hours", "thriller": the title track gives way to it
+     * further down).
+     */
+    private fun yieldsToHit(item: BrowseItem, hit: SongItem): Boolean {
+        if (item !is AlbumItem && item !is PlaylistItem) return false
+        val plays = hit.plays ?: return false
+        val artist = norm(hit.song.primaryArtist)
+        if (artist.isNotBlank() && item.subtitle.split(" • ").any { norm(it) == artist }) return false
+        return (plays >= BIG_HIT && item is AlbumItem && isNew(item)) ||
+            (plays >= COLLECTION_HIT && collection.containsMatchIn(norm("${item.title} ${item.subtitle}")))
     }
 
     /**
@@ -350,6 +386,8 @@ object SearchRank {
             val plays = hit?.plays ?: 0
             if (norm(a.title) == q && familiarity(a, taste) <= 0.0 && audience > 0 && plays >= SONG_OVER_ARTIST * audience) top = hit
         }
+        // Nor does another artist's album or playlist of the title, scored on its own, against a far bigger song.
+        if (hit != null && top != null && familiarity(top!!, taste) <= 0.0 && yieldsToHit(top!!, hit)) top = hit
         // A title track ("After Hours" by The Weeknd) gives way to the album it names.
         (top as? SongItem)?.song?.let { song ->
             val albums = trimmed.firstOrNull { it.first == SearchFilter.ALBUMS }?.second.orEmpty()

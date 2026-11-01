@@ -93,6 +93,52 @@ class SearchPlaysTest {
         assertEquals("UCroar", SearchRank.rank("roar", listOf(SearchFilter.SONGS to listOf(roar), SearchFilter.ARTISTS to listOf(roarArtist)), fan).top?.id)
     }
 
+    @Test fun aSoundtrackAlbumGivesWayToTheSongItsTitleIsKnownFor() {
+        // "yesterday", 2026-11-01: YouTube's card became the 2019 film's soundtrack album, which also outscores a song
+        // on its own (an album weighs more than a song).
+        val beatles = song("tb", "Yesterday (Remastered 2009)", "The Beatles", 300_000_000)
+        val other = song("x", "Yesterday", "Someone", 2_000_000)
+        val ost = AlbumItem("MPREb_y", "Yesterday (Original Motion Picture Soundtrack)", "Album • Himesh Patel • 2019", null)
+        val rows = listOf(SearchFilter.SONGS to listOf(other, beatles), SearchFilter.ALBUMS to listOf(ost))
+        assertEquals("tb", SearchRank.rank("yesterday", rows, card = ost).top?.id)
+        assertEquals("tb", SearchRank.rank("yesterday", rows).top?.id)
+        // From 20M plays; below that the soundtrack keeps YouTube's say.
+        val smaller = song("tb", "Yesterday", "The Beatles", 30_000_000)
+        assertEquals("tb", SearchRank.rank("yesterday", listOf(SearchFilter.SONGS to listOf(smaller), SearchFilter.ALBUMS to listOf(ost)), card = ost).top?.id)
+        val small = song("tb", "Yesterday", "The Beatles", 5_000_000)
+        assertEquals("MPREb_y", SearchRank.rank("yesterday", listOf(SearchFilter.SONGS to listOf(small), SearchFilter.ALBUMS to listOf(ost)), card = ost).top?.id)
+    }
+
+    @Test fun aNewAlbumGivesWayToABigSongAnOlderOneStands() {
+        val year = java.time.Year.now().value
+        // "africa", 2026-11-01: YouTube's card was a new album by someone new (twice: DavOlution's, Buddy DML's).
+        val toto = song("toto", "Africa", "TOTO", 1_900_000_000)
+        val fresh = AlbumItem("MPREb_af", "AFRICA", "Album • DavOlution • $year", null)
+        assertEquals("toto", SearchRank.rank("africa", listOf(SearchFilter.SONGS to listOf(toto), SearchFilter.ALBUMS to listOf(fresh)), card = fresh).top?.id)
+        val lastYear = AlbumItem("MPREb_af2", "AfricA", "Album • Buddy DML • ${year - 1}", null)
+        assertEquals("toto", SearchRank.rank("africa", listOf(SearchFilter.SONGS to listOf(toto), SearchFilter.ALBUMS to listOf(lastYear)), card = lastYear).top?.id)
+        // Under 100M plays the new album keeps YouTube's say.
+        val smaller = song("toto", "Africa", "TOTO", 60_000_000)
+        assertEquals("MPREb_af", SearchRank.rank("africa", listOf(SearchFilter.SONGS to listOf(smaller), SearchFilter.ALBUMS to listOf(fresh)), card = fresh).top?.id)
+        // "AM": Arctic Monkeys' album (2013), not Nio Garcia's AM, though that song is played 491M times.
+        val nio = song("ng", "AM", "Nio Garcia, Flow La Movie", 491_000_000)
+        val am = AlbumItem("MPREb_am", "AM", "Album • Arctic Monkeys • 2013", null)
+        assertEquals("MPREb_am", SearchRank.rank("am", listOf(SearchFilter.SONGS to listOf(nio), SearchFilter.ALBUMS to listOf(am)), card = am).top?.id)
+        // "lemonade": Beyoncé's album (2016) against Internet Money's Lemonade (337M).
+        val lemon = song("im", "Lemonade (feat. NAV)", "Internet Money", 337_000_000)
+        val beyonce = AlbumItem("MPREb_lm", "Lemonade", "Album • Beyoncé • 2016", null)
+        assertEquals("MPREb_lm", SearchRank.rank("lemonade", listOf(SearchFilter.SONGS to listOf(lemon), SearchFilter.ALBUMS to listOf(beyonce)), card = beyonce).top?.id)
+    }
+
+    @Test fun anAlbumByTheHitsOwnArtistStands() {
+        // "after hours": The Weeknd's album stays the top, however big his title track.
+        val song = song("aw", "After Hours", "The Weeknd", 900_000_000)
+        val album = AlbumItem("MPREb_ah", "After Hours", "Album • The Weeknd • 2020", null)
+        val rows = listOf(SearchFilter.SONGS to listOf(song), SearchFilter.ALBUMS to listOf(album))
+        assertEquals("MPREb_ah", SearchRank.rank("after hours", rows, card = album).top?.id)
+        assertEquals("MPREb_ah", SearchRank.rank("after hours", rows).top?.id)
+    }
+
     @Test fun aTitleTrackStillGivesWayToItsAlbum() {
         val thriller = song("mj", "Thriller", "Michael Jackson", 1_000_000_000)
         val other = song("x", "Thriller", "Someone", 5_000_000)
