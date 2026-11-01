@@ -634,6 +634,13 @@ object HomeSections {
     const val FORGOTTEN = "local:forgotten"
     /** Was its own section ("Mixes from your music"); its mixes are in Made for you now ([mergeYourMixes]). */
     const val YOUR_MIXES = "local:your_mixes"
+    /**
+     * Prism's holiday mixes (1.8.0): "Thanksgiving" through November, "Holiday music" through December, and not on Home
+     * at all outside them ([inSeason]). Moved, renamed or hidden like any other section.
+     */
+    const val SEASONAL = "local:holiday"
+    /** A holiday mix pinned on its own: "pin:holiday:<mix key>". */
+    const val HOLIDAY_PIN = "holiday"
     const val YT_PREFIX = "yt:shelf:"
     /** GREETING's key predates the rename: the section is only the shortcut tiles. */
     const val TILES_TITLE = "Shortcut tiles"
@@ -660,6 +667,7 @@ object HomeSections {
             ON_REPEAT -> com.prism.music.R.string.section_on_repeat
             REPEAT_REWIND -> com.prism.music.R.string.section_repeat_rewind
             FORGOTTEN -> com.prism.music.R.string.section_forgotten_favorites
+            SEASONAL -> com.prism.music.R.string.section_holiday_music
             else -> return s
         }
         return s.copy(title = com.prism.music.tr(id))
@@ -694,6 +702,7 @@ object HomeSections {
         HomeSectionConfig(ON_REPEAT, "On repeat"),
         HomeSectionConfig(REPEAT_REWIND, "Repeat rewind"),
         HomeSectionConfig(FORGOTTEN, "Forgotten favorites"),
+        HomeSectionConfig(SEASONAL, "Holiday music"),
     )
 
     /** What a fresh install's Home shows (and what Reset goes back to). */
@@ -701,6 +710,7 @@ object HomeSections {
         HomeSectionConfig(REPLAY, "Replay teaser", style = SectionStyle.HERO),
         HomeSectionConfig(GREETING, TILES_TITLE, style = SectionStyle.HERO),
         HomeSectionConfig(QUICK_PICKS, "Quick picks", style = SectionStyle.LIST),
+        HomeSectionConfig(SEASONAL, "Holiday music"),
         HomeSectionConfig(MADE_FOR_YOU, "Made for you"),
         HomeSectionConfig(NEW_RELEASES, NEW_RELEASES_TITLE),
         HomeSectionConfig(ON_REPEAT, "On repeat"),
@@ -732,6 +742,19 @@ object HomeSections {
         if (old < 0) return layout
         if (layout.any { it.key == MADE_FOR_YOU }) return layout.filterNot { it.key == YOUR_MIXES }
         return layout.toMutableList().apply { this[old] = this[old].copy(key = MADE_FOR_YOU, title = "Made for you") }
+    }
+
+    /**
+     * What Home shows of [layout] on [date]: the holiday section and holiday mixes pinned on their own only in their
+     * season (they stay in the layout, where the listener put them, for next year).
+     */
+    fun inSeason(layout: List<HomeSectionConfig>, date: java.time.LocalDate): List<HomeSectionConfig> = layout.filter { s ->
+        when {
+            s.key == SEASONAL -> com.prism.music.data.seasonal.HolidayMixes.on(date).isNotEmpty()
+            s.key.startsWith(pinKey(HOLIDAY_PIN, "")) ->
+                com.prism.music.data.seasonal.HolidayMixes.byId(com.prism.music.data.seasonal.HolidayMixes.PREFIX + s.key.removePrefix(pinKey(HOLIDAY_PIN, "")))?.shownOn(date) == true
+            else -> true
+        }
     }
 
     /**
@@ -2131,6 +2154,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         once("home_mixes_merged") { HomeSections.mergeYourMixes(it) }
         // The Replay card heads Home (1.7).
         once("home_replay_top") { HomeSections.replayOnTop(it) }
+        // The holiday mixes' section (1.8.0), after Quick picks: it only shows in November and December.
+        once("home_holiday_1_8") { HomeSections.withNewSections(it, listOf(HomeSectionConfig(HomeSections.SEASONAL, "Holiday music"))) }
     }
 
     suspend fun saveAccount(cookie: String, visitorData: String, dataSyncId: String) = editNow {

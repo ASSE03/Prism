@@ -191,12 +191,14 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
     val dialOn = settings.homeLayout.any { it.key == HomeSections.SPEED_DIAL && it.visible }
     // The Speed dial section shows YouTube's own, so it isn't added again as a shelf of its own.
     val dial = shelves.speedDial(settings.accountName)?.takeIf { dialOn }
-    val layout = remember(settings.homeLayout, shelves, settings.autoAddSections, picks, settings.homeHideKinds) {
+    // The holiday section and holiday pins only in their season (1.8.0), read from the phone's own date.
+    val today = c.seasonal.today()
+    val layout = remember(settings.homeLayout, shelves, settings.autoAddSections, picks, settings.homeHideKinds, today) {
         val known = settings.homeLayout.map { it.key }.toSet()
         val extra = if (settings.autoAddSections) shelves
             .filter { shelfKey(it.title) !in known && it !== picks && it !== dial && shelfKind(it) !in settings.homeHideKinds }
             .map { HomeSectionConfig(shelfKey(it.title), it.title) } else emptyList()
-        settings.homeLayout.filter { it.visible } + extra
+        HomeSections.inSeason(settings.homeLayout, today).filter { it.visible } + extra
     }
 
     // Worked out here rather than inside their rows: a LazyColumn row forgets its state when scrolled off, so these were
@@ -317,6 +319,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
                         HomeSections.SPEED_DIAL -> SpeedDialSection(cfg, if (online) dialItems else dialItems.filter { it is SongItem && c.availableOffline(it.id) }, openItem)
                         HomeSections.MADE_FOR_YOU -> MadeForYouSection(cfg, offline = !online, yours = yours?.mixes.orEmpty())
                         HomeSections.NEW_RELEASES -> if (online) NewReleasesSection(cfg)
+                        HomeSections.SEASONAL -> if (online) HolidaySection(cfg)
                         HomeSections.REPLAY -> ReplayTeaser(cfg)
                         HomeSections.GENRES -> TopGenresSection(cfg)
                         HomeSections.MOODS -> if (online) {
