@@ -19,8 +19,10 @@ import java.nio.ByteBuffer
  *
  * Which song plays and how long it is comes from the player (on every seek and new song, [onFlush]); across a gapless
  * move to the next song, which the player doesn't announce here, the processor counts its way to the next one, as
- * Sing's VocalStemProcessor does. A song's start is dropped up to its first sound; in its last [EDGE_SECONDS], silence
- * is held back, then dropped if the song ends in it or let through if sound comes back. What's dropped is counted
+ * Sing's VocalStemProcessor does, by the player's timeline as it is now ([timelineChanged]). A song's silent start is
+ * held back and dropped when its first sound comes within [EDGE_SECONDS] (a longer one is a quiet intro, played
+ * whole); in its last [EDGE_SECONDS], silence is held back, then dropped if the song ends in it or let through if sound
+ * comes back. What's dropped is counted
  * ([Chain]) so the playing position, and the lyrics with it, stay where the sound is, as with Media3's skipper.
  */
 @UnstableApi
@@ -42,6 +44,12 @@ class EdgeSilenceProcessor : BaseAudioProcessor() {
     private var frameBytes = 4
 
     private var timeline: Timeline? = null
+    /**
+     * The player's timeline since the last flush ([timelineChanged]): songs put in or taken out after the playing one
+     * (Play next, queue edits, DJ mode) don't flush the processors, and counting on into the next song by the timeline
+     * the last flush brought took the old next song's length and cut pauses inside the real one (1.8.0 review).
+     */
+    @Volatile private var newTimeline: Timeline? = null
     private var periodUid: Any? = null
     private var periodFrames = -1L
     /** The song frame the next input frame is. */
@@ -65,7 +73,13 @@ class EdgeSilenceProcessor : BaseAudioProcessor() {
         return inputAudioFormat
     }
 
+    /** The player's timeline changed (from the player's listener; any thread). Period uids stay the same across it. */
+    fun timelineChanged(timeline: Timeline) {
+        newTimeline = timeline
+    }
+
     override fun onFlush(streamMetadata: AudioProcessor.StreamMetadata) {
+        newTimeline = null
         timeline = streamMetadata.timeline.takeIf { !it.isEmpty }
         periodUid = streamMetadata.periodUid
         position = if (streamMetadata.positionOffsetUs == C.TIME_UNSET) 0 else streamMetadata.positionOffsetUs * rate / 1_000_000
@@ -115,6 +129,12 @@ class EdgeSilenceProcessor : BaseAudioProcessor() {
     override fun queueInput(inputBuffer: ByteBuffer) {
         val bytes = inputBuffer.remaining()
         if (bytes == 0) return
+        // The queue changed: the same song, in the timeline as it is now (what follows it, and how long it is).
+        newTimeline?.let { tl ->
+            newTimeline = null
+            timeline = tl.takeIf { !it.isEmpty }
+            identify()
+        }
         // Held-back silence may go out ahead of this buffer.
         val out = replaceOutputBuffer(bytes + heldBytes)
         var frames = bytes / frameBytes
@@ -151,10 +171,15 @@ class EdgeSilenceProcessor : BaseAudioProcessor() {
                 if (v > SILENCE || v < -SILENCE) sound = true
             }
             val passes = when {
-                // A start silent for longer than this isn't a gap to skip (a quiet intro): played from there on.
-                leading && !sound && position < edge -> { skippedFrames++; false }
+                // The start's silence is held back too, as it may not be a gap to skip: silent for longer than this,
+                // it's a quiet intro, played whole (1.8.0 review: its first 10 s used to be dropped).
+                leading && !sound && position < edge -> { hold(input, start); false }
+                leading && !sound -> { release(out); true }
                 sound -> {
-                    if (heldBytes > 0) release(out)
+                    if (leading) {
+                        skippedFrames += heldBytes / frameBytes
+                        heldBytes = 0
+                    } else if (heldBytes > 0) release(out)
                     true
                 }
                 position >= tailFrom -> { hold(input, start); false }
@@ -203,7 +228,7 @@ class EdgeSilenceProcessor : BaseAudioProcessor() {
     companion object {
         /** Quieter than this (about -54 dBFS) counts as silence. */
         private const val SILENCE = 0.002f
-        /** How much of a song's start can be skipped, and how near its end silence is held back. */
+        /** The longest silent start that's skipped (a longer one is an intro), and how near the end silence is held back. */
         const val EDGE_SECONDS = 10.0
 
         /** A song is trimmed; a podcast episode (Media3's skipper) and a music video's sound (the picture) aren't. */
