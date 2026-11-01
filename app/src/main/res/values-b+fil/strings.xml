@@ -4047,6 +4047,7 @@
     <string name="tv_update_ready">Handa na ang Prism %1$s</string>
     <string name="tv_update_note">I-install na ngayon: minsan lang hihingi ng pahintulot ang Android</string>
     <string name="tv_up_next_line">Susunod: %1$s</string>
+    <string name="tv_seek_line">Posisyon sa kanta: %1$s sa %2$s</string>
     <string name="tv_playing_from">Tumutugtog mula sa %1$s</string>
     <string name="tv_vocals_out">Walang boses</string>
     <string name="tv_key_line">Key: %1$s</string>

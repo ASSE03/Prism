@@ -4047,6 +4047,7 @@
     <string name="tv_update_ready">Prism %1$s hazır</string>
     <string name="tv_update_note">Şimdi yükleyin: Android yalnızca bir kez izin ister</string>
     <string name="tv_up_next_line">Sıradaki: %1$s</string>
+    <string name="tv_seek_line">Şarkıdaki konum: %1$s / %2$s</string>
     <string name="tv_playing_from">Çalınan yer: %1$s</string>
     <string name="tv_vocals_out">Vokalsiz</string>
     <string name="tv_key_line">Ton: %1$s</string>

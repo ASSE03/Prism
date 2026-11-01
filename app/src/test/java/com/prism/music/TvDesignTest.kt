@@ -282,7 +282,7 @@ class TvDesignTest {
             ),
         ) {
             Box(Modifier.fillMaxSize().background(Brush.linearGradient(listOf(Color(0xFF203A43), Color(0xFF2C5364), Color(0xFF0F2027))))) {
-                TvVideoControls(now, noop, noop, noop, noop, onSeek = {}, onLyrics = noop, onQueue = noop, onMore = noop)
+                TvVideoControls(now, noop, noop, noop, noop, Modifier.align(Alignment.BottomCenter), onSeek = {}, onLyrics = noop, onQueue = noop, onMore = noop)
             }
         }
 

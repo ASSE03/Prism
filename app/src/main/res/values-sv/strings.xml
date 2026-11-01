@@ -4047,6 +4047,7 @@
     <string name="tv_update_ready">Prism %1$s är redo</string>
     <string name="tv_update_note">Installera nu: Android frågar om lov bara en gång</string>
     <string name="tv_up_next_line">Härnäst: %1$s</string>
+    <string name="tv_seek_line">Position i låten: %1$s av %2$s</string>
     <string name="tv_playing_from">Spelas från %1$s</string>
     <string name="tv_vocals_out">Utan sång</string>
     <string name="tv_key_line">Tonart: %1$s</string>

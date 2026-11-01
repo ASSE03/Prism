@@ -4047,6 +4047,7 @@
     <string name="tv_update_ready">Prism %1$s তৈরি</string>
     <string name="tv_update_note">এখনই ইনস্টল করুন: Android শুধু একবার অনুমতি চায়</string>
     <string name="tv_up_next_line">এরপর: %1$s</string>
+    <string name="tv_seek_line">গানের অবস্থান: %2$s-এর মধ্যে %1$s</string>
     <string name="tv_playing_from">%1$s থেকে চলছে</string>
     <string name="tv_vocals_out">কণ্ঠ ছাড়া</string>
     <string name="tv_key_line">স্কেল: %1$s</string>

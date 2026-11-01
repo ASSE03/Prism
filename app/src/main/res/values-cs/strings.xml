@@ -4147,6 +4147,7 @@
     <string name="tv_update_ready">Prism %1$s je připraven</string>
     <string name="tv_update_note">Nainstalujte ho hned: Android se zeptá jen jednou</string>
     <string name="tv_up_next_line">Další: %1$s</string>
+    <string name="tv_seek_line">Pozice ve skladbě: %1$s z %2$s</string>
     <string name="tv_playing_from">Hraje z: %1$s</string>
     <string name="tv_vocals_out">Bez zpěvu</string>
     <string name="tv_key_line">Tónina: %1$s</string>

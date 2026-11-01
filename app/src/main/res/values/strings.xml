@@ -4103,6 +4103,7 @@
     <string name="tv_update_ready">Prism %1$s is ready</string>
     <string name="tv_update_note">Install it now: Android asks once to allow it</string>
     <string name="tv_up_next_line">Up next: %1$s</string>
+    <string name="tv_seek_line">Song position: %1$s of %2$s</string>
     <string name="tv_playing_from">Playing from %1$s</string>
     <string name="tv_vocals_out">Vocals out</string>
     <string name="tv_key_line">Key: %1$s</string>

@@ -4247,6 +4247,7 @@
     <string name="tv_update_ready">‏Prism %1$s جاهز</string>
     <string name="tv_update_note">ثبّته الآن: يطلب Android الإذن مرة واحدة فقط</string>
     <string name="tv_up_next_line">التالي: %1$s</string>
+    <string name="tv_seek_line">موضع الأغنية: %1$s من %2$s</string>
     <string name="tv_playing_from">يُشغَّل من %1$s</string>
     <string name="tv_vocals_out">بلا صوت المغني</string>
     <string name="tv_key_line">المقام: %1$s</string>

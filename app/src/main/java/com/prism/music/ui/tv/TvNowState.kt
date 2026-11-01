@@ -70,9 +70,11 @@ fun rememberTvNow(c: AppContainer): TvNow? {
     val likedIds by c.library.likedIds.collectAsState()
     var position by remember { mutableLongStateOf(c.player.position) }
     var duration by remember { mutableLongStateOf(c.player.duration) }
+    // A seek moves the line at once (paused too: the video's ← →, the remote's rewind and fast forward).
+    val jumps by c.player.jumps.collectAsState()
     // Only while the screen is on view (stopped, nothing's watching it move).
     val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
-    LaunchedEffect(song?.id, playing, lifecycle) {
+    LaunchedEffect(song?.id, playing, lifecycle, jumps) {
         lifecycle.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
             while (true) {
                 position = c.player.position

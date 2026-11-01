@@ -4047,6 +4047,7 @@
     <string name="tv_update_ready">Elkészült a Prism %1$s</string>
     <string name="tv_update_note">Telepítsd most: az Android csak egyszer kér engedélyt</string>
     <string name="tv_up_next_line">Következik: %1$s</string>
+    <string name="tv_seek_line">Hely a dalban: %1$s / %2$s</string>
     <string name="tv_playing_from">Lejátszás innen: %1$s</string>
     <string name="tv_vocals_out">Ének nélkül</string>
     <string name="tv_key_line">Hangnem: %1$s</string>

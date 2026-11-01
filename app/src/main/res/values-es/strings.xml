@@ -4097,6 +4097,7 @@
     <string name="tv_update_ready">Prism %1$s está listo</string>
     <string name="tv_update_note">Instálalo ahora: Android pide permiso una sola vez</string>
     <string name="tv_up_next_line">A continuación: %1$s</string>
+    <string name="tv_seek_line">Posición en la canción: %1$s de %2$s</string>
     <string name="tv_playing_from">Sonando desde %1$s</string>
     <string name="tv_vocals_out">Sin voz</string>
     <string name="tv_key_line">Tono: %1$s</string>

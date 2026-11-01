@@ -4047,6 +4047,7 @@
     <string name="tv_update_ready">Το Prism %1$s είναι έτοιμο</string>
     <string name="tv_update_note">Εγκαταστήστε το τώρα: το Android ζητά άδεια μόνο μία φορά</string>
     <string name="tv_up_next_line">Επόμενο: %1$s</string>
+    <string name="tv_seek_line">Θέση στο τραγούδι: %1$s από %2$s</string>
     <string name="tv_playing_from">Παίζει από %1$s</string>
     <string name="tv_vocals_out">Χωρίς φωνή</string>
     <string name="tv_key_line">Τόνος: %1$s</string>
