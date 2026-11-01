@@ -44,6 +44,7 @@ import com.prism.music.ui.tv.TvInfoCard
 import com.prism.music.ui.tv.TvItem
 import com.prism.music.ui.tv.TvLibraryScreen
 import com.prism.music.ui.tv.TvLightChoice
+import com.prism.music.ui.tv.TvLyricsStyleChoice
 import com.prism.music.ui.tv.TvLyrics
 import com.prism.music.ui.tv.TvLyricsScreen
 import com.prism.music.ui.tv.TvNavFrame
@@ -419,6 +420,19 @@ class TvDesignTest {
             Box(Modifier.fillMaxSize()) {
                 inShell(TvSection.SETTINGS) { TvSettingsScreen(groups, 0, {}, {}, {}) }
                 TvLightChoice(com.prism.music.data.prefs.LightStyle.SPECTRUM) {}
+            }
+        }
+
+        // Held part-way through the sung line (Reduce motion), so the picture is still.
+        look = AppSettings(reduceMotion = true)
+        shoot(
+            "lyrics-style", "Settings → Lyrics style",
+            "The phone's lyrics styles, picked as the phone's \"Start from\"; the focused one's example on the left, its middle line sung in that style.",
+            listOf(Step("tv_lyrics_style/prism", "opens here", "the style in use"), Step("tv_lyrics_style/glow", "↓ ↓ ↓", "Glow's example")),
+        ) {
+            Box(Modifier.fillMaxSize()) {
+                inShell(TvSection.SETTINGS) { TvSettingsScreen(groups, 0, {}, {}, {}) }
+                TvLyricsStyleChoice(com.prism.music.data.prefs.LyricsStyle.PRISM) {}
             }
         }
 

@@ -60,6 +60,7 @@ fun TvSettingsPlace(nav: TvNav) {
     var choosing by remember { mutableStateOf<Pair<String, List<Pair<String, () -> Unit>>>?>(null) }
     var info by remember { mutableStateOf<TvSetting?>(null) }
     var pickingLight by remember { mutableStateOf(false) }
+    var pickingLyricsStyle by remember { mutableStateOf(false) }
     val say: (String) -> Unit = { Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
     // For an answer that may come after Settings has closed.
     val app = context.applicationContext
@@ -93,6 +94,8 @@ fun TvSettingsPlace(nav: TvNav) {
                 TvSetting(tr(R.string.tv_lyrics_size), percent(settings.tv.lyricsScale)),
                 TvSettingAction.Choose(LYRICS_SIZES.map { v -> percent(v) to { c.settings.setTvLyricsScale(v) } }),
             ),
+            // The phone's own lyrics style, with a live example of each (TvLyricsStyleChoice).
+            TvSettingRow(TvSetting(tr(R.string.lyrics_style), settings.lyricsLook.style.label), TvSettingAction.Run { pickingLyricsStyle = true }),
             TvSettingRow(
                 TvSetting(tr(R.string.lyrics_source), settings.lyricsSources.firstOrNull()?.label),
                 TvSettingAction.Choose(settings.lyricsSources.map { s -> s.label to { c.settings.setLyricsOrder(listOf(s) + settings.lyricsOrder.filter { it != s }) } }),
@@ -154,6 +157,13 @@ fun TvSettingsPlace(nav: TvNav) {
         if (pickingLight) {
             BackHandler { pickingLight = false }
             TvPanelBox(LocalTvScreen.current + "/light") { TvLightChoice(settings.lightStyle) { c.settings.setLightStyle(it); pickingLight = false } }
+        }
+        if (pickingLyricsStyle) {
+            BackHandler { pickingLyricsStyle = false }
+            // As the phone's "Start from": the style with its own parts (motion, glow, weight).
+            TvPanelBox(LocalTvScreen.current + "/lyricsstyle") {
+                TvLyricsStyleChoice(settings.lyricsLook.style) { c.settings.setLyricsStartFrom(it); pickingLyricsStyle = false }
+            }
         }
         info?.let { s ->
             BackHandler { info = null }
