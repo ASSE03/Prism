@@ -44,6 +44,10 @@ object OwnSections {
         else -> null
     }
 
+    /** A holiday mix's own section (1.8.0), under its name. */
+    fun pinOf(mix: com.prism.music.data.seasonal.HolidayMix): HomeSectionConfig =
+        HomeSectionConfig(HomeSections.pinKey(HomeSections.HOLIDAY_PIN, mix.key), tr(mix.name), style = SectionStyle.LIST)
+
     /** Where a pinned section's "more" goes: its own page. */
     fun pageOf(key: String): String? {
         val (kind, id) = key.removePrefix(HomeSections.PIN_PREFIX).split(':', limit = 2).takeIf { it.size == 2 } ?: return null
@@ -51,6 +55,7 @@ object OwnSections {
             "album" -> Routes.album(id)
             "playlist" -> Routes.playlist(id)
             "artist" -> Routes.artist(id)
+            HomeSections.HOLIDAY_PIN -> Routes.mix(com.prism.music.data.seasonal.HolidayMixes.PREFIX + id)
             else -> null
         }
     }
@@ -98,6 +103,8 @@ object OwnSections {
                         "artist" -> c.ytm.artist(id).shelves.firstOrNull { s -> s.items.any { it is SongItem } }
                             ?.items?.filterIsInstance<SongItem>()?.map { it.song }.orEmpty()
                         "mix" -> c.radio(null, id).songs
+                        // One of Prism's holiday mixes (1.8.0): nothing outside its season.
+                        HomeSections.HOLIDAY_PIN -> c.seasonal.mix(com.prism.music.data.seasonal.HolidayMixes.PREFIX + id)?.songs.orEmpty()
                         else -> emptyList()
                     }.take(50)
                 }

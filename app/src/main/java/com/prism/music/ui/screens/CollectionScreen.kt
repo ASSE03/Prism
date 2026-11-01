@@ -163,6 +163,14 @@ fun CollectionScreen(type: CollectionType, id: String, initialGenre: String?, bo
         CollectionType.PLAYLIST -> rememberLoad("playlist:$id") { orSaved(c, id) { LiveCollection(c.ytm.playlist(id), c.scope, c.ytm::playlistPage) } }
         // Prism's own mixes (Daily Mix, the time-of-day mix, Release Radar): kept on the phone.
         CollectionType.MIX -> rememberLoad("mix:$id") {
+            // A holiday mix (1.8.0): kept for the season, else made now; its cover is Prism's own drawing.
+            com.prism.music.data.seasonal.HolidayMixes.byId(id)?.let { def ->
+                val mix = c.seasonal.mix(id) ?: throw IllegalStateException(
+                    if (def.shownOn(c.seasonal.today())) tr(R.string.this_mix_isn_t_made_yet) else tr(R.string.holiday_mix_out_of_season),
+                )
+                val cover = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { HolidayCovers.file(c.app, def) }
+                return@rememberLoad LiveCollection(CollectionPage(mix.id, CollectionKind.PLAYLIST, mix.title, mix.subtitle, thumbnail = cover ?: mix.covers.firstOrNull(), songs = mix.songs), c.scope, null)
+            }
             // Daily Mixes are kept in the database; mixes from your music are made on the spot (again, if need be).
             val mix = c.forYou.mix(id)
                 ?: c.yourMusic.mix(id)
@@ -794,6 +802,8 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     SheetItem(PrismIcons.PlaylistAdd, if (likedPlaylistId != null) tr(R.string.playlist_kept_up_to_date) else tr(R.string.make_it_a_playlist)) { likedPlaylistSheet = true },
                 )
                 if (coverKey != null) add(SheetItem(PrismIcons.Photo, tr(R.string.change_picture)) { coverSheet = true })
+                // A holiday mix: pinned to Home on its own, or kept as a Prism playlist (1.8.0).
+                if (type == CollectionType.MIX) com.prism.music.data.seasonal.HolidayMixes.byId(page.id)?.let { addAll(holidayActions(c, context, it)) }
                 if ((type == CollectionType.PLAYLIST && live.page.owned) || type == CollectionType.PRISM) add(SheetItem(PrismIcons.Edit, tr(R.string.edit_details)) { editing = true })
                 if (canRearrange) add(SheetItem(PrismIcons.SwapVertical, tr(R.string.rearrange_songs)) { startRearranging() })
                 // A sleep or kids' playlist: plays as usual, but doesn't shape recommendations.
