@@ -364,7 +364,10 @@ fun BoxScope.TvActionPanel(title: String, actions: List<TvAction>, modifier: Mod
     ) {
         Text(title, style = MaterialTheme.typography.headlineSmall, color = scheme.onSurface, maxLines = 2, overflow = TextOverflow.Ellipsis)
         Spacer(Modifier.height(8.dp))
-        actions.forEachIndexed { i, a -> TvButton(a.label, a.onClick, Modifier.fillMaxWidth().tvItem("$TAG_ACTIONS/$i", entry = i == 0), icon = a.icon) }
+        // A list that scrolls: a choice can be long (Settings' 32 languages), and every one must be reachable.
+        LazyColumn(Modifier.fillMaxWidth().weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp), contentPadding = PaddingValues(vertical = 6.dp, horizontal = 4.dp)) {
+            itemsIndexed(actions) { i, a -> TvButton(a.label, a.onClick, Modifier.fillMaxWidth().tvItem("$TAG_ACTIONS/$i", entry = i == 0), icon = a.icon) }
+        }
     }
 }
 

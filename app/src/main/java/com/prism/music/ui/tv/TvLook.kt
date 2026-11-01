@@ -95,8 +95,14 @@ fun TvAura(modifier: Modifier = Modifier) {
 fun TvAuraFrom(url: String?, modifier: Modifier = Modifier) {
     val frost = rememberFrost(url)
     val palette = rememberArtPalette(url)
-    FrostedBackdrop(frost, palette, TV_AURA_HEIGHT, { 0f }, modifier.fillMaxSize().graphicsLayer(), parallax = 0f, ambient = true)
+    FrostedBackdrop(frost, palette, TV_AURA_HEIGHT, { 0f }, modifier.fillMaxSize().tvStill(), parallax = 0f, ambient = true)
 }
+
+/**
+ * A backdrop that doesn't move: drawn into a layer of its own, whose pixels the TV keeps and puts back each frame (a
+ * focus move redraws what moved, not the frost and its grain under it).
+ */
+fun Modifier.tvStill(): Modifier = graphicsLayer { compositingStrategy = androidx.compose.ui.graphics.CompositingStrategy.Offscreen }
 
 /** How much of the screen's top the frost's picture covers before its colors run on down (a TV's whole height). */
 private val TV_AURA_HEIGHT = 540.dp
@@ -114,5 +120,5 @@ fun TvPictureBackdrop(url: String?, modifier: Modifier = Modifier) {
 /** The player's (and lyrics') backdrop: the phone's cover-made mesh, still, without a live blur. */
 @Composable
 fun TvMeshBackdrop(url: String?, modifier: Modifier = Modifier) {
-    ArtworkMeshBackdrop(rememberArtworkMesh(url), modifier.fillMaxSize().graphicsLayer(), liveBlur = false)
+    ArtworkMeshBackdrop(rememberArtworkMesh(url), modifier.fillMaxSize().tvStill(), liveBlur = false)
 }

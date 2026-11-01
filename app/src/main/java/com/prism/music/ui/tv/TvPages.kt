@@ -409,7 +409,7 @@ fun TvCollectionPage(item: BrowseItem, nav: TvNav) {
     val details = listOfNotNull(p?.subtitle?.takeIf { it.isNotBlank() }, p?.secondSubtitle?.takeIf { it.isNotBlank() }).joinToString(" · ").ifBlank { item.subtitle }
     val accent = rememberTvAccent(p?.thumbnail ?: item.thumbnail)
     TvCollectionScreen(
-        p?.title ?: item.title, details, p?.thumbnail ?: item.thumbnail,
+        p?.title ?: item.title.ifBlank { tr(R.string.one_moment) }, details, p?.thumbnail ?: item.thumbnail,
         songs.map { s -> TvSong(s.id, s.title, s.artistText, if (s.isLive) null else tvTime(s.durationSec * 1000L)) },
         onPlay = { play(0, false) }, onShuffle = { play(0, true) }, onSong = { i -> play(i, false) },
         playing = songs.indexOfFirst { it.id == current?.id }, accent = accent,
@@ -430,7 +430,7 @@ fun TvArtistPage(id: String, nav: TvNav) {
     val fail = { Toast.makeText(context, tr(R.string.couldn_t_start, p?.name ?: ""), Toast.LENGTH_SHORT).show() }
     val accent = rememberTvAccent(p?.thumbnail)
     TvArtistScreen(
-        p?.name ?: "", p?.subscribers, p?.thumbnail,
+        p?.name ?: tr(R.string.one_moment), p?.subscribers, p?.thumbnail,
         shelves.map { (s, items) -> TvShelf(s.title, items.map { it.toTvItem() }) },
         onPlay = {
             val top = shelves.firstOrNull { (_, items) -> items.any { it is SongItem } }

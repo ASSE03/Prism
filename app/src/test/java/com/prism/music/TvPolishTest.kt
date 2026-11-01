@@ -23,6 +23,7 @@ import com.prism.music.ui.tv.LocalTvFocusMemory
 import com.prism.music.ui.tv.LocalTvScreen
 import com.prism.music.ui.tv.TAG_VIDEO
 import com.prism.music.ui.tv.TV_SEEK_STEP_MS
+import com.prism.music.ui.tv.TvActionPanel
 import com.prism.music.ui.tv.TvFocusMemory
 import com.prism.music.ui.tv.TvNow
 import com.prism.music.ui.tv.TvTheme
@@ -121,6 +122,24 @@ class TvPolishTest {
         // Moving past the ends does nothing.
         assertEquals(rows, moved(rows, 0, -1))
         assertEquals(rows, moved(rows, rows.lastIndex, 1))
+    }
+
+    /** A long choice (Settings' languages, 33 of them) scrolls: the last one can be reached and picked. */
+    @Test fun everyChoiceInALongListIsReachable() {
+        val picked = ArrayList<Int>()
+        val choices = (0 until 33).map { i -> com.prism.music.ui.tv.TvAction("Language $i", com.prism.music.ui.theme.PrismIcons.Check) { picked += i } }
+        compose.setContent {
+            focus = LocalFocusManager.current
+            TvTheme(AppSettings()) {
+                val memory = remember { TvFocusMemory() }
+                CompositionLocalProvider(LocalTvFocusMemory provides memory, LocalTvScreen provides "choice") {
+                    Box(Modifier.fillMaxSize()) { TvActionPanel("Language", choices) }
+                }
+            }
+        }
+        awaitFocus("${com.prism.music.ui.tv.TAG_ACTIONS}/0")
+        repeat(32) { press(FocusDirection.Down) }
+        awaitFocus("${com.prism.music.ui.tv.TAG_ACTIONS}/32")
     }
 
     @Test fun homesRowKeysStayUnique() {

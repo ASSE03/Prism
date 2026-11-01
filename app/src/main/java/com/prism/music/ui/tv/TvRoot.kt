@@ -190,7 +190,10 @@ fun TvNavFrame(
     )
     val itemBorder = androidx.tv.material3.NavigationDrawerItemDefaults.border(focusedBorder = tvFocusBorder(androidx.compose.foundation.shape.CircleShape, TV_RING_THIN))
     Box(Modifier.fillMaxSize()) {
-        NavigationDrawer(
+        // Over the place (a scrim behind it while open), not beside it: the place isn't laid out again on every frame of
+        // the navigation opening and closing.
+        androidx.tv.material3.ModalNavigationDrawer(
+            scrimBrush = androidx.compose.ui.graphics.SolidColor(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.45f)),
             drawerContent = {
                 // Its own focus key: moving through it never counts as focus inside a place.
                 CompositionLocalProvider(LocalTvScreen provides NAV_SCREEN) {
@@ -234,7 +237,8 @@ fun TvNavFrame(
                     }
                 }
             },
-            content = { CompositionLocalProvider(LocalTvNavFocus provides current) { content() } },
+            // The place starts beside the closed navigation's icons.
+            content = { Box(Modifier.fillMaxSize().padding(start = TV_RAIL)) { CompositionLocalProvider(LocalTvNavFocus provides current) { content() } } },
         )
     }
 }
@@ -260,6 +264,8 @@ private fun TvPlace(section: TvSection, nav: TvNav, onSection: (TvSection) -> Un
 }
 
 private val TV_SAFE_V = 27.dp
+/** The closed navigation's width (its icons and their margins): where the places start. */
+private val TV_RAIL = 80.dp
 /** Whether the TV's welcome (sign in with the phone) shows now: once per TV, and only signed out. */
 fun tvWelcomeDue(welcomed: Boolean, signedIn: Boolean): Boolean = !welcomed && !signedIn
 
