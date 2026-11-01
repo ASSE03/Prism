@@ -27,26 +27,36 @@ class EdgeSilenceTest {
     private fun silence(seconds: Double) = FloatArray((seconds * rate).toInt())
     private fun cat(vararg parts: FloatArray) = parts.reduce { a, b -> a + b }
 
-    /** Songs one after another, each [lengths] seconds long, as the player's timeline has them. */
-    private class Songs(private val lengths: List<Double>) : Timeline() {
-        override fun getWindowCount() = lengths.size
+    /**
+     * Songs one after another, as the player's timeline has them: each [songs]' name (its period's uid, which stays the
+     * same when the queue changes around it) and length in seconds.
+     */
+    private class Songs(private val songs: List<Pair<String, Double>>) : Timeline() {
+        override fun getWindowCount() = songs.size
         override fun getWindow(windowIndex: Int, window: Window, defaultPositionProjectionUs: Long): Window = window.set(
-            windowIndex, MediaItem.Builder().setMediaId("song$windowIndex").build(), null, 0, 0, 0, true, false, null, 0,
-            (lengths[windowIndex] * 1e6).toLong(), windowIndex, windowIndex, 0,
+            songs[windowIndex].first, MediaItem.Builder().setMediaId(songs[windowIndex].first).build(), null, 0, 0, 0, true, false,
+            null, 0, (songs[windowIndex].second * 1e6).toLong(), windowIndex, windowIndex, 0,
         )
-        override fun getPeriodCount() = lengths.size
+        override fun getPeriodCount() = songs.size
         override fun getPeriod(periodIndex: Int, period: Period, setIds: Boolean): Period =
-            period.set(periodIndex, periodIndex, periodIndex, (lengths[periodIndex] * 1e6).toLong(), 0)
-        override fun getIndexOfPeriod(uid: Any) = uid as? Int ?: C.INDEX_UNSET
-        override fun getUidOfPeriod(periodIndex: Int): Any = periodIndex
+            period.set(songs[periodIndex].first, songs[periodIndex].first, periodIndex, (songs[periodIndex].second * 1e6).toLong(), 0)
+        override fun getIndexOfPeriod(uid: Any) = songs.indexOfFirst { it.first == uid }.takeIf { it >= 0 } ?: C.INDEX_UNSET
+        override fun getUidOfPeriod(periodIndex: Int): Any = songs[periodIndex].first
     }
+
+    private fun songs(lengths: List<Double>) = Songs(lengths.mapIndexed { i, s -> "song$i" to s })
 
     private fun processor() = EdgeSilenceProcessor().apply { enabled = true }
 
     /** [pcm] (mono, 16-bit) through [p] from the start of the first of [songs], a bit at a time as the player feeds it. */
-    private fun play(p: AudioProcessor, pcm: FloatArray, songs: List<Double>, startUs: Long = 0): FloatArray {
+    private fun play(p: AudioProcessor, pcm: FloatArray, songs: List<Double>, startUs: Long = 0): FloatArray =
+        play(p, pcm, songs(songs), startUs)
+
+    private fun play(p: AudioProcessor, pcm: FloatArray, songs: Songs, startUs: Long = 0, queueChange: Songs? = null): FloatArray {
         p.configure(AudioProcessor.AudioFormat(rate, 1, C.ENCODING_PCM_16BIT))
-        p.flush(AudioProcessor.StreamMetadata.Builder().setTimeline(Songs(songs)).setPeriodUid(0).setPositionOffsetUs(startUs).build())
+        p.flush(AudioProcessor.StreamMetadata.Builder().setTimeline(songs).setPeriodUid(songs.getUidOfPeriod(0)).setPositionOffsetUs(startUs).build())
+        // The queue changes while the first song plays: the player says so, and doesn't flush the processors.
+        queueChange?.let { (p as EdgeSilenceProcessor).timelineChanged(it) }
         val out = ArrayList<Float>()
         fun drain() { val o = p.output.order(ByteOrder.nativeOrder()); while (o.remaining() >= 2) out += o.short / 32768f }
         for (from in pcm.indices step 1_000) {
@@ -95,9 +105,27 @@ class EdgeSilenceTest {
         assertEquals(listOf(2.0), pauses(out).map { Math.round(it * 100) / 100.0 })
     }
 
-    @Test fun aLongQuietStartIsOnlySkippedSoFar() {
-        val out = play(processor(), cat(silence(14.0), tone(2.0)), listOf(16.0))
-        assertEquals(16.0 - EdgeSilenceProcessor.EDGE_SECONDS, out.size.toDouble() / rate, 0.01)
+    @Test fun aLongQuietStartIsPlayedWhole() {
+        // 15 s near silent before the first sound: a quiet intro, not a gap. Its first 10 s used to be dropped.
+        val p = processor()
+        val song = cat(silence(15.0), tone(2.0))
+        assertEquals(song.size, play(p, song, listOf(17.0)).size)
+        assertEquals(0L, p.skippedFrames)
+    }
+
+    @Test fun aSongPutNextWithoutAFlushIsCountedByItsOwnLength() {
+        // A plays with C next; Play next puts B between them. The player doesn't flush the processors for that, so the
+        // move from A to B was counted by C's length: B's end and C's start stayed, and C's own pause, where the old
+        // count ran out, was taken for a new song's silent start and dropped.
+        val a = cat(tone(3.0), silence(1.0))
+        val b = cat(silence(1.0), tone(4.0), silence(1.0))
+        val c = cat(silence(0.5), tone(1.5), silence(2.0), tone(3.0), silence(1.0))
+        val out = play(
+            processor(), cat(a, b, c), Songs(listOf("A" to 4.0, "C" to 8.0)),
+            queueChange = Songs(listOf("A" to 4.0, "B" to 6.0, "C" to 8.0)),
+        )
+        assertEquals("C's pause kept whole: ${pauses(out)}", listOf(2.0), pauses(out).map { Math.round(it * 100) / 100.0 })
+        assertEquals("each song's own start and end left out", 3.0 + 4.0 + 6.5, out.size.toDouble() / rate, 0.01)
     }
 
     @Test fun aSeekIntoTheSongPlaysFromThere() {

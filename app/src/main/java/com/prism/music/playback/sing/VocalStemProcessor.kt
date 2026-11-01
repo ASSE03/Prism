@@ -87,7 +87,20 @@ class VocalStemProcessor(private val sing: Source) : BaseAudioProcessor() {
         return inputAudioFormat
     }
 
+    /**
+     * The player's timeline since the last flush: songs put in or taken out after the playing one (Play next, queue
+     * edits) don't flush the processors, and the gapless move used to go by the timeline the last flush brought, so the
+     * song that really came next was taken for the old next one (1.8.0 review). Period uids stay the same across it.
+     */
+    @Volatile private var newTimeline: Timeline? = null
+
+    /** The player's timeline changed (from the player's listener; any thread). */
+    fun timelineChanged(timeline: Timeline) {
+        newTimeline = timeline
+    }
+
     override fun onFlush(streamMetadata: AudioProcessor.StreamMetadata) {
+        newTimeline = null
         val tl = streamMetadata.timeline
         val uid = streamMetadata.periodUid
         timeline = tl.takeIf { !it.isEmpty }
@@ -145,6 +158,12 @@ class VocalStemProcessor(private val sing: Source) : BaseAudioProcessor() {
         val bytes = inputBuffer.remaining()
         if (bytes == 0) return
         val t0 = if (com.prism.music.playback.AudioDiagnostics.enabled) System.nanoTime() else 0L
+        // The queue changed: the same song, in the timeline as it is now (what follows it, and how long it is).
+        newTimeline?.let { tl ->
+            newTimeline = null
+            timeline = tl.takeIf { !it.isEmpty }
+            identify()
+        }
         val frameBytes = (if (float) 4 else 2) * channels
         var frames = bytes / frameBytes
         val total = frames
