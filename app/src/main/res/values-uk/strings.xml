@@ -4321,4 +4321,5 @@
     <string name="sing_taking_voice_out">Прибираємо голос… %1$s%%</string>
     <string name="sing_quick_then_full">Голос тихіше (швидко) · повне розділення %1$s%%</string>
     <string name="tv_sing_play_first">Спершу ввімкніть трек, потім перевірте</string>
+    <string name="tv_stop_comes_back">Музика повернеться на цей телефон</string>
 </resources>

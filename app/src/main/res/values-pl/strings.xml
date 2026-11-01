@@ -4321,4 +4321,5 @@
     <string name="sing_taking_voice_out">Usuwam głos… %1$s%%</string>
     <string name="sing_quick_then_full">Głos ściszony (szybko) · pełne oddzielanie %1$s%%</string>
     <string name="tv_sing_play_first">Najpierw włącz utwór, potem sprawdź</string>
+    <string name="tv_stop_comes_back">Muzyka wróci na ten telefon</string>
 </resources>

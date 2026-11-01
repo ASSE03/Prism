@@ -277,6 +277,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
         player = p
         hooks = h
         p.addListener(this)
+        if (tv != null) { h.beforeCasting(); applyLocalMode() }
         session?.let { s ->
             h.beforeCasting()
             applyLocalMode()
@@ -286,7 +287,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
 
     fun detach(p: ExoPlayer) {
         if (player !== p) return
-        if (session != null) disconnect(tr(R.string.casting_stopped), keepPlaying = false)
+        if (session != null || tv != null) disconnect(tr(R.string.casting_stopped), keepPlaying = false)
         p.removeListener(this)
         player = null
         hooks = null
@@ -350,9 +351,10 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
 
     /** Sends what's playing to [r] from now on. */
     fun connect(r: Renderer) {
+        if (r.kind == RendererKind.PRISM_TV) return
         val now = state.value
         if (now is CastState.Casting && now.renderer.id == r.id) return
-        if (session != null) disconnect(null, keepPlaying = true)
+        if (session != null || tv != null) disconnect(null, keepPlaying = true)
         _state.value = CastState.Connecting(r)
         scope.launch {
             val ctl: RendererLink = if (r.kind == RendererKind.GOOGLE_CAST) GoogleCastLink(r) else RendererControl(c.http, r)
@@ -399,11 +401,90 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
         }
     }
 
+    // ------------------------------------------------------------ A Prism TV (1.8.0)
+
+    /** A TV with Prism on it playing along ([TvCast]), instead of a [session]. */
+    private var tv: TvCast? = null
+
+    /** Whether it's a Prism TV that plays now (Stop then brings the music back here, playing). */
+    val toPrismTv: Boolean get() = tv != null
+
+    /**
+     * What's playing goes to the Prism TV [d] as to a speaker (the owner, 1.8.0: "the phone and TV were supposed to have
+     * the music in sync"): the phone stays connected, its player and controls the TV's, and what's done on the TV shows
+     * here ([TvCast]). Pairs first if they aren't yet.
+     */
+    fun connectTv(d: PrismDevice) {
+        val r = Renderer("prism:${d.id ?: d.key}", d.name, "Prism", "", "prism://${d.host}:${d.port}", null, kind = RendererKind.PRISM_TV)
+        when (val now = state.value) {
+            is CastState.Casting -> if (now.renderer.id == r.id) return
+            is CastState.Connecting -> if (now.renderer.id == r.id) return
+            CastState.Idle -> Unit
+        }
+        if (session != null || tv != null) disconnect(null, keepPlaying = true)
+        val p = player
+        if (p == null || p.mediaItemCount == 0) { _events.tryEmit(tr(R.string.nothing_s_playing_here)); return }
+        val first = TvCast.build(p, 1, p.currentPosition, c.queue.source.value.title)
+        if (first.state.index < 0) { _events.tryEmit(tr(R.string.this_song_is_a_file_on)); return }
+        _state.value = CastState.Connecting(r)
+        scope.launch {
+            val (link, why) = withContext(Dispatchers.IO) { c.handoff.openFollow(d, first.state) }
+            if (state.value != CastState.Connecting(r)) { link?.let { l -> c.scope.launch(Dispatchers.IO) { l.close() } }; return@launch }
+            if (link == null) {
+                _state.value = CastState.Idle
+                why?.let { _events.tryEmit(it) }
+                return@launch
+            }
+            val t = TvCast(c, r, link, scope, { player }, lost = { msg -> if (tv != null) disconnect(msg, keepPlaying = false) }, changed = { onTvChanged() })
+            t.took(first)
+            tv = t
+            casting = true
+            liveLocal = false
+            hooks?.beforeCasting()
+            applyLocalMode()
+            hooks?.remoteChanged()
+            _state.value = CastState.Casting(r, null)
+            t.start()
+            Log.i(TAG, "playing on ${d.name} (Prism TV)")
+        }
+    }
+
+    private fun onTvChanged() {
+        val t = tv ?: return
+        applyLocalMode()
+        _state.value = CastState.Casting(t.renderer, t.volume)
+        hooks?.remoteChanged()
+    }
+
+    /**
+     * The Prism TV stops playing along: the music comes back here ([keepPlaying]: playing, at the TV's place), or, the
+     * connection lost, pauses here where the TV was last heard to be.
+     */
+    private fun endTv(t: TvCast, message: String?, keepPlaying: Boolean) {
+        val place = t.tvPlace()
+        tv = null
+        casting = false
+        t.end(back = keepPlaying)
+        val p = player
+        if (p != null) {
+            if (place != null && kotlin.math.abs(p.currentPosition - place) > 300) p.seekTo(place)
+            if (!keepPlaying && p.playWhenReady) p.pause()
+        }
+        applyLocalMode()
+        hooks?.afterCasting()
+        hooks?.remoteChanged()
+        _state.value = CastState.Idle
+        if (message != null) _events.tryEmit(message)
+        Log.i(TAG, "stopped playing on ${t.renderer.name}${message?.let { ": $it" } ?: ""}")
+    }
+
     /**
      * Stops casting. [keepPlaying]: the phone carries on from where the renderer was (picking the phone in the
-     * output picker); otherwise it pauses (stopped, or the connection was lost).
+     * output picker); otherwise it pauses (stopped, or the connection was lost). A Prism TV's music comes back here
+     * playing when it's stopped from the phone ([message] null), as when this phone is picked.
      */
     fun disconnect(message: String? = null, keepPlaying: Boolean = false) {
+        tv?.let { t -> endTv(t, message, keepPlaying || message == null); return }
         val s = session
         if (s == null) {
             if (state.value is CastState.Connecting) _state.value = CastState.Idle
@@ -432,9 +513,16 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
     }
 
     /** The renderer's volume (0–100), for the player's volume bar and the phone's volume keys. */
-    val volume: Int? get() = session?.volume
+    val volume: Int? get() = tv?.volume ?: session?.volume
 
     fun setVolume(v: Int) {
+        tv?.let { t ->
+            if (t.volume == v.coerceIn(0, 100)) return
+            t.setVolume(v)
+            _state.value = CastState.Casting(t.renderer, t.volume)
+            hooks?.remoteChanged()
+            return
+        }
         val s = session ?: return
         val level = v.coerceIn(0, 100)
         if (s.volume == level) return
@@ -449,7 +537,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
         }
     }
 
-    fun adjustVolume(delta: Int) = setVolume((session?.volume ?: 50) + delta)
+    fun adjustVolume(delta: Int) = setVolume((volume ?: 50) + delta)
 
     private fun publish(s: Session, loading: Boolean? = null) {
         if (session !== s) return
@@ -460,7 +548,8 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
     /** The phone's own sound off while the renderer plays (and back after); audio focus isn't the phone's to hold then. */
     private fun applyLocalMode() {
         val p = player ?: return
-        val remote = session != null && !liveLocal
+        // A song a Prism TV can't play (a file on the phone) plays here meanwhile.
+        val remote = (session != null && !liveLocal) || tv?.local == false
         if (remote) {
             if (p.volume != 0f) p.volume = 0f
             muted = true
@@ -820,6 +909,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
     // ------------------------------------------------------------ The phone's player changing
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+        tv?.let { it.onMediaItemTransition(reason); return }
         val s = session ?: return
         val p = player ?: return
         val song = mediaItem?.toSong() ?: return
@@ -846,6 +936,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
     }
 
     override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+        tv?.let { it.onPlayWhenReadyChanged(); return }
         val s = session ?: return
         val p = player ?: return
         if (liveLocal || playWhenReady == s.wantPlaying) return
@@ -872,6 +963,10 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
     }
 
     override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
+        tv?.let { t ->
+            if (reason == Player.DISCONTINUITY_REASON_SEEK) t.onSeek(oldPosition.mediaItemIndex == newPosition.mediaItemIndex, newPosition.positionMs)
+            return
+        }
         val s = session ?: return
         if (reason != Player.DISCONTINUITY_REASON_SEEK || oldPosition.mediaItemIndex != newPosition.mediaItemIndex) return
         val target = s.followTarget
@@ -886,15 +981,18 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
     }
 
     override fun onTimelineChanged(timeline: Timeline, reason: Int) {
+        tv?.let { it.onQueueChanged(); return }
         val s = session ?: return
         if (s.current?.started == true && s.waiting == null) armNext(s)
     }
 
     override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
+        tv?.let { it.onQueueChanged(); return }
         session?.let { if (it.current?.started == true) armNext(it) }
     }
 
     override fun onRepeatModeChanged(repeatMode: Int) {
+        tv?.let { it.onQueueChanged(); return }
         session?.let { if (it.current?.started == true) armNext(it) }
     }
 

@@ -4221,4 +4221,5 @@
     <string name="sing_taking_voice_out">आवाज़ हटाई जा रही है… %1$s%%</string>
     <string name="sing_quick_then_full">आवाज़ धीमी (तेज़) · पूरा अलगाव %1$s%%</string>
     <string name="tv_sing_play_first">पहले कोई गाना चलाएँ, फिर जाँचें</string>
+    <string name="tv_stop_comes_back">संगीत इस फ़ोन पर वापस आ जाएगा</string>
 </resources>

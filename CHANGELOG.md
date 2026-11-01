@@ -13,6 +13,13 @@ What changed in each release. Older releases are described on the [Releases page
   the two pair over your Wi-Fi with an encrypted link, your phone offers to sign the TV in to YouTube Music (it asks
   first, and only sends to the TV you paired), and from then on the phone's device list has a remote for the TV: play,
   pause, skip, seek, volume, add songs. Your phone can send the TV your Look, too.
+- **Playing on the TV from your phone stays in sync**, as casting does: pick the TV under Prism devices in Play on and
+  the phone stays connected. Its player shows the TV's song, place and play / pause ("Playing on" the TV), and
+  everything on the phone acts on the TV: play, pause, skip, seek, any song, album, playlist or radio, Play next, Add
+  to queue, shuffle, repeat, volume. What's done on the TV (its remote, a song ending, a pick from its queue) shows on
+  the phone. Pick This phone (or Stop casting) and the music comes back to the phone where the TV was, still playing;
+  if the TV goes (switched off, Wi-Fi gone) the phone pauses there and says so. Moving music between two phones is as
+  before.
 - **Ambient screen**: after a few minutes without the remote while music plays, the TV dims to the song, its cover and
   its lyrics, drifting slowly so it doesn't burn in. Also there as a screensaver ("Prism") where the TV lets you pick one.
 - **Getting Prism onto a TV**: type code **8986606** into the Downloader app on the TV for the newest Prism, or turn on

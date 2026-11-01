@@ -4221,4 +4221,5 @@
     <string name="sing_taking_voice_out">Αφαίρεση φωνής… %1$s%%</string>
     <string name="sing_quick_then_full">Χαμηλωμένη φωνή (γρήγορα) · πλήρης διαχωρισμός %1$s%%</string>
     <string name="tv_sing_play_first">Παίξε πρώτα ένα τραγούδι και μετά κάνε τον έλεγχο</string>
+    <string name="tv_stop_comes_back">Η μουσική επιστρέφει σε αυτό το τηλέφωνο</string>
 </resources>

@@ -4221,4 +4221,5 @@
     <string name="sing_taking_voice_out">কণ্ঠ সরানো হচ্ছে… %1$s%%</string>
     <string name="sing_quick_then_full">কণ্ঠ কমানো (দ্রুত) · পূর্ণ বিভাজন %1$s%%</string>
     <string name="tv_sing_play_first">আগে একটি গান চালান, তারপর পরীক্ষা করুন</string>
+    <string name="tv_stop_comes_back">গান এই ফোনে ফিরে আসবে</string>
 </resources>

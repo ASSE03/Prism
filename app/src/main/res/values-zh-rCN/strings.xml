@@ -4171,4 +4171,5 @@
     <string name="sing_taking_voice_out">正在去除人声… %1$s%%</string>
     <string name="sing_quick_then_full">人声调低（快速）· 完整分离 %1$s%%</string>
     <string name="tv_sing_play_first">请先播放一首歌，再进行检查</string>
+    <string name="tv_stop_comes_back">音乐会回到这部手机</string>
 </resources>

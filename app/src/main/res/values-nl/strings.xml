@@ -4221,4 +4221,5 @@
     <string name="sing_taking_voice_out">Stem wordt eruit gehaald… %1$s%%</string>
     <string name="sing_quick_then_full">Stem zachter (snel) · volledige scheiding %1$s%%</string>
     <string name="tv_sing_play_first">Speel eerst een song af en controleer dan</string>
+    <string name="tv_stop_comes_back">De muziek komt terug op deze telefoon</string>
 </resources>

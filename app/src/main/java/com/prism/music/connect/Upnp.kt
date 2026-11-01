@@ -11,8 +11,11 @@ import javax.xml.parsers.DocumentBuilderFactory
 /** One of a renderer's UPnP services: its type and the URLs its actions go to. */
 data class UpnpService(val type: String, val controlUrl: String, val eventUrl: String? = null, val scpdUrl: String? = null)
 
-/** How a device is spoken to: UPnP / DLNA, or Google Cast (Chromecast, Google TV, speakers with Cast built in). */
-enum class RendererKind { UPNP, GOOGLE_CAST }
+/**
+ * How a device is spoken to: UPnP / DLNA, Google Cast (Chromecast, Google TV, speakers with Cast built in), or a TV
+ * with Prism on it (1.8.0: it plays along with the phone over the handoff link, [TvCast]).
+ */
+enum class RendererKind { UPNP, GOOGLE_CAST, PRISM_TV }
 
 /**
  * A speaker, TV or receiver on the local network that plays what it's sent. For UPnP / DLNA [id] is its UDN (stable
@@ -35,8 +38,11 @@ data class Renderer(
     val detail: String
         get() {
             val about = listOf(manufacturer, model).filter { it.isNotBlank() && !name.contains(it, ignoreCase = true) }.joinToString(" ")
-            return if (kind == RendererKind.GOOGLE_CAST) listOf(about, "Google Cast").filter { it.isNotBlank() }.joinToString(" · ")
-            else about.ifBlank { "Speaker or TV" }
+            return when (kind) {
+                RendererKind.GOOGLE_CAST -> listOf(about, "Google Cast").filter { it.isNotBlank() }.joinToString(" · ")
+                RendererKind.PRISM_TV -> "Prism TV"
+                RendererKind.UPNP -> about.ifBlank { "Speaker or TV" }
+            }
         }
 
     val host: String? get() = runCatching { URI(location).host }.getOrNull()

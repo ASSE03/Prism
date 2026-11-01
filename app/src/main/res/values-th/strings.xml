@@ -4171,4 +4171,5 @@
     <string name="sing_taking_voice_out">กำลังเอาเสียงร้องออก… %1$s%%</string>
     <string name="sing_quick_then_full">ลดเสียงร้อง (ด่วน) · แยกเสียงแบบเต็ม %1$s%%</string>
     <string name="tv_sing_play_first">เล่นเพลงก่อน แล้วจึงตรวจ</string>
+    <string name="tv_stop_comes_back">เพลงจะกลับมาเล่นที่โทรศัพท์เครื่องนี้</string>
 </resources>

@@ -110,7 +110,8 @@ fun TvRemoteSheet(tv: PrismDevice, onDismiss: () -> Unit) {
             }
             Spacer(Modifier.height(16.dp))
             Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                PrismTextButton(onClick = { handoff.moveTo(tv); onDismiss() }, Modifier.fillMaxWidth()) { Text(tr(R.string.move_the_music_there)) }
+                // Plays along with this phone (1.8.0), as a speaker cast to: the phone stays its remote.
+                PrismTextButton(onClick = { c.cast.connectTv(tv); onDismiss() }, Modifier.fillMaxWidth()) { Text(tr(R.string.move_the_music_there)) }
                 if (settings.isLoggedIn) PrismTextButton(onClick = { askSignIn = true }, Modifier.fillMaxWidth().testTag("tvRemote/signIn")) { Text(tr(R.string.tv_sign_in_here)) }
                 PrismTextButton(onClick = { scope.launch { say(handoff.sendLook(tv)) } }, Modifier.fillMaxWidth()) { Text(tr(R.string.tv_send_look)) }
                 PrismTextButton(onClick = { askBring = true }, Modifier.fillMaxWidth().testTag("tvRemote/bring")) { Text(tr(R.string.bring_my_prism)) }

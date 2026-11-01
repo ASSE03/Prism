@@ -444,8 +444,11 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         }
     }
 
-    /** Listen Together: plays the host's queue ([songs], the current one first) from [positionMs], as songs, in order. */
-    fun follow(songs: List<Song>, positionMs: Long, title: String, playing: Boolean) {
+    /**
+     * Listen Together, and a TV playing along with a phone: plays [songs] in order from the one at [index] (the current
+     * one first by default), from [positionMs].
+     */
+    fun follow(songs: List<Song>, positionMs: Long, title: String, playing: Boolean, index: Int = 0) {
         if (songs.isEmpty()) return
         ++playToken
         c.queue.source.value = QueueSource(QueueKind.OTHER, title)
@@ -456,7 +459,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         withPlayer { p ->
             p.shuffleModeEnabled = false
             p.repeatMode = Player.REPEAT_MODE_OFF
-            p.setMediaItems(songs.map { it.toMediaItem() }, 0, positionMs.coerceAtLeast(0))
+            p.setMediaItems(songs.map { it.toMediaItem() }, index.coerceIn(0, songs.lastIndex), positionMs.coerceAtLeast(0))
             p.prepare()
             p.playWhenReady = playing
         }

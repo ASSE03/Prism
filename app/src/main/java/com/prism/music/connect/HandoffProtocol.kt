@@ -72,6 +72,58 @@ data class RemoteNow(
 enum class RemoteKey { TOGGLE, PLAY, PAUSE, NEXT, PREVIOUS, SEEK_TO, SEEK_BY, VOLUME_UP, VOLUME_DOWN }
 
 /**
+ * Playing on a Prism TV from the phone (1.8.0), what the phone sends: the songs around the one playing in play order
+ * ([songs]: the one before, then [index], the one playing, then what plays next), whether it plays, and a place to go to
+ * ([seekTo], -1: none). [index] is -1 when the song playing can't go to the TV (a file on the phone). [seq] counts up.
+ */
+@Serializable
+data class FollowState(
+    val songs: List<Song>,
+    val index: Int,
+    val playing: Boolean,
+    val seekTo: Long = -1,
+    val seq: Long = 0,
+    val repeatOne: Boolean = false,
+    val title: String = "",
+)
+
+/** What the TV says back, about once a second: the song it's on and where, as of when it sent it. */
+@Serializable
+data class TvWhere(
+    val songId: String?,
+    val positionMs: Long,
+    val playing: Boolean,
+    val buffering: Boolean = false,
+    val durationMs: Long = 0,
+    /** The TV's volume, 0–100. */
+    val volume: Int = 0,
+    /** The last [FollowState.seq] it has taken in. */
+    val seq: Long = 0,
+)
+
+/**
+ * Something done on the TV itself (its remote, its own player, its queue), for the phone to do too: [kind] is one of
+ * [PLAY], [PAUSE], [SEEK] ([positionMs]), [PICK] (the song at [index] of the last [FollowState.songs], [songId]) or
+ * [REPLACE] (the TV started a queue of its own: [songs] from [index] at [positionMs]).
+ */
+@Serializable
+data class TvAct(
+    val kind: String,
+    val positionMs: Long = 0,
+    val index: Int = -1,
+    val songId: String? = null,
+    val songs: List<Song> = emptyList(),
+) {
+    companion object {
+        const val PLAY = "play"
+        const val PAUSE = "pause"
+        const val SEEK = "seek"
+        const val PICK = "pick"
+        const val REPLACE = "replace"
+    }
+}
+
+/**
  * One message per line between two Prisms ([Handoff]). Version 2 (1.8.0): the hello and challenge carry fresh X25519
  * keys; after pairing or proving the pairing, every line is sealed ([SealedChannel]).
  */
@@ -173,6 +225,33 @@ sealed class HMsg {
     /** Every chunk sent: the TV checks the whole and merges it in, then answers Ok or Denied. */
     @Serializable @SerialName("bring_end")
     data object BringEnd : HMsg()
+
+    /**
+     * Phone → TV (1.8.0): play along with this phone, as a speaker it casts to; the TV answers Ok (or Denied) and the
+     * connection stays open for the whole time, both ways ([FollowNow], [Where], [Act], [Volume], [FollowEnd]).
+     */
+    @Serializable @SerialName("follow_start")
+    data class FollowStart(val state: FollowState) : HMsg()
+
+    /** Phone → TV: what plays now. */
+    @Serializable @SerialName("follow")
+    data class FollowNow(val state: FollowState) : HMsg()
+
+    /** TV → phone: where it is. */
+    @Serializable @SerialName("where")
+    data class Where(val at: TvWhere) : HMsg()
+
+    /** TV → phone: something done on the TV. */
+    @Serializable @SerialName("act")
+    data class Act(val act: TvAct) : HMsg()
+
+    /** Phone → TV: its volume, 0–100. */
+    @Serializable @SerialName("volume")
+    data class Volume(val level: Int) : HMsg()
+
+    /** Either way: playing along is over ([back]: the music goes back to the phone). */
+    @Serializable @SerialName("follow_end")
+    data class FollowEnd(val back: Boolean = false) : HMsg()
 }
 
 object HWire {

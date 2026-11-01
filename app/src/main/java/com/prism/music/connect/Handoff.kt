@@ -674,20 +674,45 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
     }
 
     /** [repair]: pair again though a key is kept (it was refused); the kept key is replaced only once that works. */
-    private fun attempt(d: PrismDevice, request: HandoffRequest, repair: Boolean = false): HandoffResult {
-        val socket = runCatching { Socket().apply { connect(InetSocketAddress(d.host, d.port), 5_000); tcpNoDelay = true } }.getOrNull()
-            ?: return HandoffResult.Failed(tr(R.string.couldn_t_reach_is_prism_open, d.name))
-        return HLink(socket).use { link ->
-            runCatching {
-                peer.request(link, request, HandoffExpect(device = d.id, repair = repair)) { them ->
-                    val wait = CompletableDeferred<String?>()
-                    code = wait
-                    _asking.value = them
-                    try { runBlocking { withTimeoutOrNull(HandoffPeer.PAIR_WAIT_MS.toLong() - 5_000) { wait.await() } } } finally { _asking.value = null; code = null }
-                }
-            }.getOrElse { HandoffResult.Failed(tr(R.string.lost_the_connection_to, d.name)) }
+    private fun attempt(d: PrismDevice, request: HandoffRequest, repair: Boolean = false): HandoffResult =
+        (connect(d) ?: return HandoffResult.Failed(tr(R.string.couldn_t_reach_is_prism_open, d.name))).use { link -> attempt(d, link, request, repair) }
+
+    private fun connect(d: PrismDevice): HLink? =
+        runCatching { Socket().apply { connect(InetSocketAddress(d.host, d.port), 5_000); tcpNoDelay = true } }.getOrNull()?.let(::HLink)
+
+    private fun attempt(d: PrismDevice, link: HLink, request: HandoffRequest, repair: Boolean): HandoffResult = runCatching {
+        peer.request(link, request, HandoffExpect(device = d.id, repair = repair)) { them ->
+            val wait = CompletableDeferred<String?>()
+            code = wait
+            _asking.value = them
+            try { runBlocking { withTimeoutOrNull(HandoffPeer.PAIR_WAIT_MS.toLong() - 5_000) { wait.await() } } } finally { _asking.value = null; code = null }
         }
+    }.getOrElse { HandoffResult.Failed(tr(R.string.lost_the_connection_to, d.name)) }
+
+    /**
+     * A Prism TV playing along with this phone ([Cast.connectTv], 1.8.0), from [first] on, pairing first if they aren't
+     * yet: the connection, kept open for it, or why not (null and null: the listener cancelled the code). Off the main
+     * thread.
+     */
+    fun openFollow(d: PrismDevice, first: FollowState): Pair<HLink?, String?> {
+        for (repair in listOf(false, true)) {
+            val link = connect(d) ?: return null to tr(R.string.couldn_t_reach_is_prism_open, d.name)
+            when (val r = attempt(d, link, HandoffRequest.Follow(first), repair)) {
+                is HandoffResult.Done -> return link to null
+                // Its key was refused (forgotten over there): pair again, once.
+                HandoffResult.Unpaired -> link.close()
+                is HandoffResult.Failed -> { link.close(); return null to r.reason }
+                else -> { link.close(); return null to null }
+            }
+        }
+        return null to tr(R.string.didn_t_accept_the_pairing_try, d.name)
     }
+
+    // ------------------------------------------------------------ A TV playing along with a phone (1.8.0)
+
+    override fun followStart(from: String): String? = if (!isTv) tr(R.string.tv_not_a_tv, name) else null
+
+    override fun follow(link: HLink, first: FollowState, from: String) = TvFollower(c, link, from).run(first)
 
     companion object {
         private const val TAG = "PrismHandoff"

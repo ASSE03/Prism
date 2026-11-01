@@ -4321,4 +4321,5 @@
     <string name="sing_taking_voice_out">Odstraňuji hlas… %1$s%%</string>
     <string name="sing_quick_then_full">Hlas ztlumen (rychle) · úplné oddělení %1$s%%</string>
     <string name="tv_sing_play_first">Nejdřív pusťte skladbu, pak zkontrolujte</string>
+    <string name="tv_stop_comes_back">Hudba se vrátí do tohoto telefonu</string>
 </resources>

@@ -4221,4 +4221,5 @@
     <string name="sing_taking_voice_out">Az ének kivétele… %1$s%%</string>
     <string name="sing_quick_then_full">Halkított ének (gyors) · teljes szétválasztás %1$s%%</string>
     <string name="tv_sing_play_first">Előbb indíts el egy dalt, aztán ellenőrizd</string>
+    <string name="tv_stop_comes_back">A zene visszatér erre a telefonra</string>
 </resources>
