@@ -22,6 +22,7 @@ import com.prism.music.ui.tv.TvHomeLayout
 import com.prism.music.ui.tv.TvHomeShelves
 import com.prism.music.ui.tv.TvSection
 import org.junit.Assert.assertEquals
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -45,6 +46,9 @@ class TvHomeCustomizeTests {
     @Before fun setUp() {
         TvFixture.assumeTv()
         Fixture.ready()
+        // A day outside the holidays: no holiday row (it comes in November and December, after Quick picks).
+        val zone = java.time.ZoneId.systemDefault()
+        Fixture.container.seasonal.clock = java.time.Clock.fixed(java.time.LocalDateTime.of(2026, 7, 10, 12, 0).atZone(zone).toInstant(), zone)
         // Home's shelves as YouTube would send them (fresh for this run, so nothing is asked of the network).
         val songs = Fixture.songs(6)
         TvHomeShelves.keep(
@@ -53,6 +57,8 @@ class TvHomeCustomizeTests {
             System.currentTimeMillis(),
         )
     }
+
+    @After fun backToToday() { Fixture.container.seasonal.clock = null }
 
     private val inNav = SemanticsMatcher("in the side navigation") { n ->
         n.config.getOrElseNullable(androidx.compose.ui.semantics.SemanticsProperties.TestTag) { null }?.startsWith("$TAG_NAV/") == true

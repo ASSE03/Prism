@@ -95,6 +95,21 @@ fun tvMixRow(title: String, mixes: List<com.prism.music.data.foryou.Mix>): TvOwn
     return TvOwnRow(TvHomeRow(HomeSections.MADE_FOR_YOU, title, items), shown.associate { m -> TV_PLAY + "mix:" + m.id to TvPlayList(m.title, m.songs) })
 }
 
+/**
+ * The season's holiday mixes (1.8.0; "Thanksgiving" through November, "Holiday music" through December): each a card of
+ * its own cover ([cover]: the picture HolidayCovers keeps), opening as the phone's do: the mix is made when it's
+ * picked, not before (the card's id is [TV_PLAY] + "holiday:" + its id). Nothing outside its season ([mixes] empty).
+ */
+fun tvHolidayRow(
+    title: String, mixes: List<com.prism.music.data.seasonal.HolidayMix>,
+    name: (com.prism.music.data.seasonal.HolidayMix) -> String, blurb: (com.prism.music.data.seasonal.HolidayMix) -> String,
+    cover: (com.prism.music.data.seasonal.HolidayMix) -> String?,
+): TvOwnRow? = mixes.take(ROW_SIZE).map { m -> PlaylistItem(TV_HOLIDAY + m.id, name(m), blurb(m), cover(m), isMix = true) }
+    .takeIf { it.isNotEmpty() }?.let { TvOwnRow(TvHomeRow(HomeSections.SEASONAL, title, it)) }
+
+/** A holiday mix's card id: [TV_PLAY] + "holiday:" + the mix's id ("season:<key>"). */
+const val TV_HOLIDAY = TV_PLAY + "holiday:"
+
 /** New from your artists: the releases (newest first, as the store has them) as album cards. */
 fun tvReleaseRow(title: String, releases: List<com.prism.music.data.db.ReleaseEntity>): TvOwnRow? =
     releases.take(15).map { r -> AlbumItem(r.id, r.title, "${r.kind} · ${r.artistName}", r.thumbnail, r.playlistId) }

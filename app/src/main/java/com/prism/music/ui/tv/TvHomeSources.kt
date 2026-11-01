@@ -106,6 +106,17 @@ internal fun rememberTvOwnRows(
         if (!made.isNullOrEmpty()) { value = made; TvHomeOwn.picks = made }
     }
 
+    // The season's holiday mixes (November and December), online as on the phone. Their covers are drawn once, off the
+    // main thread (HolidayCovers keeps them as files).
+    val today = c.seasonal.today()
+    val holidayMixes = remember(today) { com.prism.music.data.seasonal.HolidayMixes.on(today) }
+    val wantHoliday = online && holidayMixes.isNotEmpty() && want(HomeSections.SEASONAL)
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val holidayCovers by produceState(emptyMap<String, String?>(), wantHoliday, holidayMixes) {
+        if (!wantHoliday) return@produceState
+        value = withContext(Dispatchers.Default) { holidayMixes.associate { m -> m.id to runCatching { com.prism.music.ui.screens.HolidayCovers.file(context, m) }.getOrNull() } }
+    }
+
     // Made for you and the lists from your music (On repeat, Repeat rewind, Forgotten favorites).
     val wantMixes = want(HomeSections.MADE_FOR_YOU)
     val wantYours = wantMixes || want(HomeSections.ON_REPEAT) || want(HomeSections.REPEAT_REWIND) || want(HomeSections.FORGOTTEN)
@@ -119,10 +130,10 @@ internal fun rememberTvOwnRows(
 
     // New from your artists (online, as on the phone).
     val wantReleases = online && want(HomeSections.NEW_RELEASES)
-    val today = remember { LocalDate.now() }
+    val releaseDay = remember { LocalDate.now() }
     val releases by remember(wantReleases) {
         if (!wantReleases) flowOf(emptyList())
-        else c.db.releases().freshFlow(today.year - 1).map { l -> l.filter { ReleaseRadar.isRecent(it, today, 30) } }.flowOn(Dispatchers.Default)
+        else c.db.releases().freshFlow(releaseDay.year - 1).map { l -> l.filter { ReleaseRadar.isRecent(it, releaseDay, 30) } }.flowOn(Dispatchers.Default)
     }.collectAsState(emptyList())
     LaunchedEffect(wantReleases) { if (wantReleases && c.releaseRadar.due()) ReleaseRadar.runSoon(c.app) }
 
@@ -159,7 +170,8 @@ internal fun rememberTvOwnRows(
     val prismLists by c.prismLibrary.lists.collectAsState()
 
     // Your pinned albums, playlists, artists and mixes, and the rules over your listening.
-    val ownKeys = phone.filter { it.visible && TvHomeLayout.isOwn(it.key) }.map { it.key }
+    // A holiday mix pinned on its own shows only in its season, as on the phone.
+    val ownKeys = HomeSections.inSeason(phone, today).filter { it.visible && TvHomeLayout.isOwn(it.key) }.map { it.key }
     val own = ownKeys.mapNotNull { k ->
         key(k) {
             val songs by OwnSections.rememberSongs(k, 0)
@@ -168,9 +180,13 @@ internal fun rememberTvOwnRows(
     }
 
     val year = remember { Calendar.getInstance().get(Calendar.YEAR) }
-    return remember(picks, mixes, yours, releases, replay, moods, liked, downloads, genres, prismLists, recent, own, phone, online, settings.homePlaylists, settings.homeShortcuts, settings.homeRecentTiles) {
+    return remember(holidayCovers, wantHoliday, picks, mixes, yours, releases, replay, moods, liked, downloads, genres, prismLists, recent, own, phone, online, settings.homePlaylists, settings.homeShortcuts, settings.homeRecentTiles) {
         buildList {
             if (wantPicks) picks?.let { tvSongRow(HomeSections.QUICK_PICKS, tvRowTitle(phone, HomeSections.QUICK_PICKS), it) }?.let(::add)
+            if (wantHoliday) {
+                val section = c.seasonal.holiday()?.section?.let { tr(it) }
+                tvHolidayRow(tvRowTitle(phone, HomeSections.SEASONAL, section), holidayMixes, { tr(it.name) }, { tr(it.blurb) }) { holidayCovers[it.id] }?.let(::add)
+            }
             if (wantMixes) {
                 val made = mixes.orEmpty().let { list ->
                     if (online) list else list.map { m -> m.copy(songs = m.songs.filter(offline)) }.filter { it.songs.size >= 5 }
@@ -215,11 +231,25 @@ internal fun rememberTvOwnRows(
 }
 
 /**
- * OK on one of the own rows' cards: a [TV_PLAY] card plays its list (the player opens); a mood or genre tile opens its
- * page. False for any other card (it opens as cards do, [open]).
+ * OK on one of the own rows' cards: a [TV_PLAY] card plays its list (the player opens; a holiday mix is made first, on
+ * [launch]); a mood or genre tile opens its page. False for any other card (it opens as cards do, [open]).
  */
-internal fun openOwn(c: AppContainer, nav: TvNav, item: BrowseItem, plays: Map<String, TvPlayList>): Boolean {
+internal fun openOwn(
+    c: AppContainer, nav: TvNav, item: BrowseItem, plays: Map<String, TvPlayList>, launch: (suspend () -> Unit) -> Unit = {},
+): Boolean {
     if (item is MoodItem) { nav.go(TvRoute.Mood(item)); return true }
+    // A holiday mix is made when it's picked (as the phone's are), then plays.
+    if (item.id.startsWith(TV_HOLIDAY)) {
+        val id = item.id.removePrefix(TV_HOLIDAY)
+        launch {
+            val songs = withContext(Dispatchers.IO) { runCatching { c.seasonal.mix(id)?.songs }.getOrNull() }.orEmpty()
+            if (songs.isNotEmpty()) {
+                c.player.playQueue(songs, 0, QueueSource(QueueKind.PLAYLIST, item.title, originId = id))
+                nav.go(TvRoute.Player)
+            } else android.widget.Toast.makeText(c.app, tr(R.string.couldn_t_load, item.title), android.widget.Toast.LENGTH_SHORT).show()
+        }
+        return true
+    }
     if (!item.id.startsWith(TV_PLAY)) return false
     val list = plays[item.id]?.takeIf { it.songs.isNotEmpty() } ?: return false
     c.player.playQueue(list.songs, 0, QueueSource(QueueKind.PLAYLIST, list.title, originId = item.id))

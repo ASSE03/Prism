@@ -156,7 +156,7 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
         onOpenLyrics = { nav.go(TvRoute.Lyrics) },
         onItem = { r, i ->
             val row = rows.getOrNull(r) ?: return@TvHomeScreen
-            if (openOwn(c, nav, row.items.getOrNull(i) ?: return@TvHomeScreen, plays)) return@TvHomeScreen
+            if (openOwn(c, nav, row.items.getOrNull(i) ?: return@TvHomeScreen, plays) { scope.launch { it() } }) return@TvHomeScreen
             open(c, nav, row.items[i], row.items, i, row.title, radio = row.key == KEY_PICKS && settings.quickPicksRadio) {
                 scope.launch { it() }
             }.let { ok -> if (!ok) Toast.makeText(context, tr(R.string.couldn_t_start, row.items[i].title), Toast.LENGTH_SHORT).show() }

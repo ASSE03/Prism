@@ -129,4 +129,26 @@ class TvHomeOwnRowsTest {
             tvAllRows(rows).map { it.key },
         )
     }
+    @Test fun theHolidayRowShowsOnlyInItsSeason() {
+        fun row(date: java.time.LocalDate) = com.prism.music.ui.tv.tvHolidayRow(
+            "Holiday music", com.prism.music.data.seasonal.HolidayMixes.on(date), { it.key }, { "blurb" }, { "file:///covers/${it.key}.jpg" },
+        )
+        // December: the holiday mixes, each a mix card with its own cover, made when it's picked.
+        val december = row(java.time.LocalDate.of(2026, 12, 10))!!
+        assertEquals(HomeSections.SEASONAL, december.row.key)
+        val first = december.row.items.first() as PlaylistItem
+        assertTrue(first.isMix)
+        assertTrue(first.id.startsWith(com.prism.music.ui.tv.TV_HOLIDAY + com.prism.music.data.seasonal.HolidayMixes.PREFIX))
+        assertEquals("file:///covers/${first.title}.jpg", first.thumbnail)
+        assertTrue(december.plays.isEmpty())
+        // November has Thanksgiving's; July has none, so no row at all.
+        val november = row(java.time.LocalDate.of(2026, 11, 20))!!
+        assertTrue(november.row.items.map { it.id }.none { it in december.row.items.map { d -> d.id } })
+        assertNull(row(java.time.LocalDate.of(2026, 7, 4)))
+        // It comes after Quick picks, as the phone's layout puts it.
+        assertEquals(
+            listOf(HomeSections.QUICK_PICKS, HomeSections.SEASONAL, HomeSections.MADE_FOR_YOU),
+            tvAllRows(listOf(TvHomeRow(HomeSections.MADE_FOR_YOU, "", emptyList()), december.row, TvHomeRow(HomeSections.QUICK_PICKS, "", emptyList()))).map { it.key },
+        )
+    }
 }

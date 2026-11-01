@@ -76,7 +76,7 @@ object TvHomeLayout {
      * their page on the TV too; nothing of the phone's Home is left out.
      */
     val CATALOG = listOf(
-        HomeSections.REPLAY, HomeSections.GREETING, HomeSections.QUICK_PICKS, HomeSections.SPEED_DIAL, HomeSections.MADE_FOR_YOU,
+        HomeSections.REPLAY, HomeSections.GREETING, HomeSections.QUICK_PICKS, HomeSections.SEASONAL, HomeSections.SPEED_DIAL, HomeSections.MADE_FOR_YOU,
         HomeSections.NEW_RELEASES, HomeSections.ON_REPEAT, HomeSections.REPEAT_REWIND, HomeSections.FORGOTTEN, HomeSections.RECENT,
         HomeSections.LIKED, HomeSections.GENRES, HomeSections.MOODS, HomeSections.DOWNLOADS,
     )
