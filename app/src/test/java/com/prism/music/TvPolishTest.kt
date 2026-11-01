@@ -13,6 +13,7 @@ import androidx.compose.ui.test.isFocused
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.pressKey
+import androidx.compose.ui.test.performSemanticsAction
 import com.prism.music.data.prefs.AppSettings
 import com.prism.music.data.prefs.HomeSectionConfig
 import com.prism.music.data.prefs.HomeSections
@@ -25,6 +26,7 @@ import com.prism.music.ui.tv.TAG_VIDEO
 import com.prism.music.ui.tv.TV_SEEK_STEP_MS
 import com.prism.music.ui.tv.TvActionPanel
 import com.prism.music.ui.tv.TvFocusMemory
+import com.prism.music.ui.tv.TvLightChoice
 import com.prism.music.ui.tv.TvNow
 import com.prism.music.ui.tv.TvTheme
 import com.prism.music.ui.tv.TvVideoControls
@@ -140,6 +142,25 @@ class TvPolishTest {
         awaitFocus("${com.prism.music.ui.tv.TAG_ACTIONS}/0")
         repeat(32) { press(FocusDirection.Down) }
         awaitFocus("${com.prism.music.ui.tv.TAG_ACTIONS}/32")
+    }
+
+    /** Settings → Colors: Spectrum or White light, opening on the one in use; picking writes the phone's own setting. */
+    @Test fun colorsOffersSpectrumAndWhiteLight() {
+        val picked = ArrayList<com.prism.music.data.prefs.LightStyle>()
+        compose.setContent {
+            focus = LocalFocusManager.current
+            TvTheme(AppSettings()) {
+                val memory = remember { TvFocusMemory() }
+                CompositionLocalProvider(LocalTvFocusMemory provides memory, LocalTvScreen provides "colors") {
+                    Box(Modifier.fillMaxSize()) { TvLightChoice(com.prism.music.data.prefs.LightStyle.WHITE) { picked += it } }
+                }
+            }
+        }
+        awaitFocus("${com.prism.music.ui.tv.TAG_LIGHT}/white")
+        press(FocusDirection.Left)
+        awaitFocus("${com.prism.music.ui.tv.TAG_LIGHT}/spectrum")
+        compose.onNode(hasTestTag("${com.prism.music.ui.tv.TAG_LIGHT}/spectrum")).performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
+        assertEquals(listOf(com.prism.music.data.prefs.LightStyle.SPECTRUM), picked)
     }
 
     @Test fun homesRowKeysStayUnique() {

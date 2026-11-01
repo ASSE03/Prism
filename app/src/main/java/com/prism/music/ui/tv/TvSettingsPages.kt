@@ -59,6 +59,7 @@ fun TvSettingsPlace(nav: TvNav) {
     var group by rememberSaveable { mutableIntStateOf(0) }
     var choosing by remember { mutableStateOf<Pair<String, List<Pair<String, () -> Unit>>>?>(null) }
     var info by remember { mutableStateOf<TvSetting?>(null) }
+    var pickingLight by remember { mutableStateOf(false) }
     // Home's rows as Home last showed them (moved here, they're moved there too).
     var homeRows by remember { mutableStateOf(TvHomeRowsSeen.rows) }
     val say: (String) -> Unit = { Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
@@ -137,6 +138,10 @@ fun TvSettingsPlace(nav: TvNav) {
         TvSettingGroup(tr(R.string.text_size), PrismIcons.Visible, emptyList()) to listOf(
             TvSettingRow(TvSetting(tr(R.string.text_size), percent(settings.textScale)), TvSettingAction.Choose(SIZES.map { v -> percent(v) to { c.settings.setTextScale(v) } })),
         ),
+        // The highlights' light: Spectrum or White light (monochrome), the phone's own Color setting.
+        TvSettingGroup(tr(R.string.colors), PrismIcons.Palette, emptyList()) to listOf(
+            TvSettingRow(TvSetting(tr(R.string.colors), settings.lightStyle.label), TvSettingAction.Run { pickingLight = true }),
+        ),
         TvSettingGroup(tr(R.string.about_3), PrismIcons.Info, emptyList()) to listOf(
             TvSettingRow(TvSetting(tr(R.string.tv_version, BuildConfig.VERSION_NAME)), TvSettingAction.Run {}),
             TvSettingRow(TvSetting(tr(R.string.check_for_updates)), TvSettingAction.Run { scope.launch { say(runCatching { c.updates.checkNow()?.let { tr(R.string.tv_update_ready, it) } ?: tr(R.string.you_re_up_to_date) }.getOrElse { it.message ?: tr(R.string.you_re_up_to_date) }) } }),
@@ -162,6 +167,10 @@ fun TvSettingsPlace(nav: TvNav) {
             TvPanelBox(LocalTvScreen.current + "/choice") {
                 TvActionPanel(title, options.map { (label, pick) -> TvAction(label, PrismIcons.Check) { pick(); choosing = null } })
             }
+        }
+        if (pickingLight) {
+            BackHandler { pickingLight = false }
+            TvPanelBox(LocalTvScreen.current + "/light") { TvLightChoice(settings.lightStyle) { c.settings.setLightStyle(it); pickingLight = false } }
         }
         info?.let { s ->
             BackHandler { info = null }

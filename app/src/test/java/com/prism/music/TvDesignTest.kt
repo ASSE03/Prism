@@ -43,6 +43,7 @@ import com.prism.music.ui.tv.TvHomeScreen
 import com.prism.music.ui.tv.TvInfoCard
 import com.prism.music.ui.tv.TvItem
 import com.prism.music.ui.tv.TvLibraryScreen
+import com.prism.music.ui.tv.TvLightChoice
 import com.prism.music.ui.tv.TvLyrics
 import com.prism.music.ui.tv.TvLyricsScreen
 import com.prism.music.ui.tv.TvNavFrame
@@ -171,6 +172,8 @@ class TvDesignTest {
 
     /** The screen being drawn: the rule takes one setContent per test, so screens are swapped through this. */
     private var screen by mutableStateOf<Pair<String, @Composable () -> Unit>?>(null)
+    /** The settings drawn with (Settings → Colors' White light is drawn with its own). */
+    private var look by mutableStateOf(AppSettings())
     private var started = false
 
     private fun shoot(id: String, title: String, about: String, steps: List<Step>, content: @Composable () -> Unit) {
@@ -178,7 +181,7 @@ class TvDesignTest {
             started = true
             // As the TV's shell draws them: on the Aura of what's playing (here the made-up cover of "Glass Horizon").
             compose.setContent {
-                TvTheme(AppSettings()) {
+                TvTheme(look) {
                     Box(Modifier.fillMaxSize().background(Color(0xFF060609))) {
                         com.prism.music.ui.tv.TvAuraFrom(art(1))
                         screen?.let { (key, draw) -> androidx.compose.runtime.key(key) { draw() } }
@@ -407,6 +410,26 @@ class TvDesignTest {
             "The TV shows a code (and a QR code); the phone enters or scans it. The link is encrypted (X25519 + AES-GCM) and the phone asks before sending the account. Also used for \"Use your phone as a remote\".",
             listOf(Step("tv_pair/cancel", "opens here", "the screen moves on by itself once the phone confirms")),
         ) { TvPairScreen("Sign in with your phone", "482913", "prism://pair?tv=Living%20room%20TV&code=482913", "Living room TV", "Waiting for your phone…", noop) }
+
+        shoot(
+            "colors", "Settings → Colors",
+            "The highlights' light: Spectrum (as Prism comes) or White light (monochrome). The phone's own Color setting, so both agree.",
+            listOf(Step("tv_light/spectrum", "opens here", ""), Step("tv_light/white", "→", "white ring and lines")),
+        ) {
+            Box(Modifier.fillMaxSize()) {
+                inShell(TvSection.SETTINGS) { TvSettingsScreen(groups, 0, {}, {}, {}) }
+                TvLightChoice(com.prism.music.data.prefs.LightStyle.SPECTRUM) {}
+            }
+        }
+
+        // White light: the same Home with white highlights (the phone's Color → White light).
+        look = AppSettings(lightStyle = com.prism.music.data.prefs.LightStyle.WHITE)
+        shoot(
+            "home-white", "Home in White light",
+            "Settings → Colors → White light: the focus ring, progress line and marks in white; covers keep their color.",
+            listOf(Step("tv_home/player", "opens here", "")),
+        ) { inShell(TvSection.HOME) { TvHomeScreen("Good evening", now, shelves, noop, noop, noop, { _, _ -> }, accent = Color(0xFF7C5CFF)) } }
+        look = AppSettings()
 
         File(out, "design.json").writeText(Json { prettyPrint = true }.encodeToString(JsonArray.serializer(), JsonArray(shots)))
         assertTrue(File(out, "home.png").isFile)

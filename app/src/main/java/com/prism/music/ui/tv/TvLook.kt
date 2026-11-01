@@ -3,7 +3,13 @@ package com.prism.music.ui.tv
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -17,6 +23,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
 import com.prism.music.ui.components.FrostedBackdrop
@@ -71,11 +78,18 @@ fun Modifier.tvGlass(shape: Shape, fill: Color = TvGlassFill): Modifier = this
     .background(fill, shape)
     .border(0.7.dp, Brush.verticalGradient(listOf(Color.White.copy(alpha = 0.18f), Color.White.copy(alpha = 0.02f))), shape)
 
-/** The current place's mark in the side navigation: a short bar of the split light at its leading edge. */
-fun Modifier.tvCurrentMark(on: Boolean, light: Brush): Modifier = if (!on) this else drawWithContent {
+/**
+ * The current place's mark (the side navigation, Settings' groups): a short bar at its leading edge with the split
+ * light running down it, as the phone's tab mark (White light: white). [light] is kept for callers; the bar reads the
+ * light itself, top to bottom (a bar this thin across a left-to-right light would show only its red end).
+ */
+@Suppress("UNUSED_PARAMETER")
+fun Modifier.tvCurrentMark(on: Boolean, light: Brush? = null): Modifier = if (!on) this else drawWithContent {
     drawContent()
-    val h = size.height * 0.46f
-    drawRoundRect(light, topLeft = Offset(4.dp.toPx(), (size.height - h) / 2), size = Size(4.dp.toPx(), h), cornerRadius = CornerRadius(2.dp.toPx()))
+    val h = size.height * 0.5f
+    val top = (size.height - h) / 2
+    val run = Brush.verticalGradient(*PrismTokens.spectrumColors(dark = true).toTypedArray(), startY = top, endY = top + h)
+    drawRoundRect(run, topLeft = Offset(4.dp.toPx(), top), size = Size(4.dp.toPx(), h), cornerRadius = CornerRadius(2.dp.toPx()))
 }
 
 /**
@@ -117,8 +131,74 @@ fun TvPictureBackdrop(url: String?, modifier: Modifier = Modifier) {
     TvAuraFrom(url, modifier)
 }
 
-/** The player's (and lyrics') backdrop: the phone's cover-made mesh, still, without a live blur. */
+/**
+ * The player's (and lyrics') backdrop: the phone's cover-made mesh, still, without a live blur; until the mesh is made
+ * (a moment after a new cover), the cover's frost, so the player is never flat black.
+ */
 @Composable
 fun TvMeshBackdrop(url: String?, modifier: Modifier = Modifier) {
-    ArtworkMeshBackdrop(rememberArtworkMesh(url), modifier.fillMaxSize().tvStill(), liveBlur = false)
+    val mesh = rememberArtworkMesh(url)
+    if (mesh == null) TvAuraFrom(url, modifier)
+    else ArtworkMeshBackdrop(mesh, modifier.fillMaxSize().tvStill(), liveBlur = false)
 }
+
+/**
+ * Settings → Colors (TV): the split light (Spectrum, as Prism comes) or White light (a white ring and white lines:
+ * monochrome highlights). The phone's own setting ([com.prism.music.data.prefs.AppSettings.lightStyle]), so the phone
+ * and the TV agree. Each choice shows a focused card and a progress line in its light; OK picks it.
+ */
+@Composable
+fun androidx.compose.foundation.layout.BoxScope.TvLightChoice(
+    current: com.prism.music.data.prefs.LightStyle,
+    onPick: (com.prism.music.data.prefs.LightStyle) -> Unit,
+) {
+    val scheme = androidx.tv.material3.MaterialTheme.colorScheme
+    androidx.compose.foundation.layout.Box(Modifier.matchParentSize().background(Brush.horizontalGradient(listOf(Color.Transparent, scheme.background.copy(alpha = 0.85f)))))
+    androidx.compose.foundation.layout.Column(
+        Modifier.align(androidx.compose.ui.Alignment.CenterEnd).fillMaxHeight().fillMaxWidth(0.5f).tvGlass(TvShapes.panelStart, TvPanelFill)
+            .padding(horizontal = 32.dp, vertical = 27.dp).testTag(TAG_LIGHT),
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(20.dp, androidx.compose.ui.Alignment.CenterVertically),
+    ) {
+        androidx.tv.material3.Text(com.prism.music.tr(com.prism.music.R.string.colors), style = androidx.tv.material3.MaterialTheme.typography.headlineSmall, color = scheme.onSurface)
+        androidx.compose.foundation.layout.Row(horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(24.dp)) {
+            for (style in com.prism.music.data.prefs.LightStyle.entries) {
+                val white = style == com.prism.music.data.prefs.LightStyle.WHITE
+                androidx.tv.material3.Surface(
+                    onClick = { onPick(style) },
+                    modifier = Modifier.weight(1f).tvItem("$TAG_LIGHT/${style.name.lowercase()}", entry = style == current),
+                    shape = androidx.tv.material3.ClickableSurfaceDefaults.shape(TvShapes.card),
+                    colors = androidx.tv.material3.ClickableSurfaceDefaults.colors(containerColor = TvGlassFill, focusedContainerColor = scheme.onSurface.copy(alpha = 0.16f)),
+                    border = androidx.tv.material3.ClickableSurfaceDefaults.border(focusedBorder = tvFocusBorder(TvShapes.card, TV_RING_THIN)),
+                    scale = androidx.tv.material3.ClickableSurfaceDefaults.scale(focusedScale = 1.03f),
+                ) {
+                    androidx.compose.foundation.layout.Column(Modifier.padding(18.dp), verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(14.dp)) {
+                        TvLightExample(white)
+                        androidx.compose.foundation.layout.Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                            androidx.tv.material3.Text(style.label, style = androidx.tv.material3.MaterialTheme.typography.titleMedium, color = scheme.onSurface, modifier = Modifier.weight(1f))
+                            if (style == current) androidx.tv.material3.Icon(com.prism.music.ui.theme.PrismIcons.Check, null, Modifier.size(22.dp), tint = scheme.onSurface)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/** A focused card and a progress line in the split light ([white] false) or White light, whichever is in use now. */
+@Composable
+private fun TvLightExample(white: Boolean) {
+    val ring = Brush.sweepGradient(PrismTokens.ringOf(white, PrismTokens.whiteAccent, PrismTokens.light))
+    val line = Brush.horizontalGradient(*PrismTokens.runOf(white, PrismTokens.whiteAccent, PrismTokens.light, dark = true).toTypedArray())
+    androidx.compose.foundation.layout.Column(verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(12.dp)) {
+        androidx.compose.foundation.layout.Box(
+            Modifier.size(96.dp).border(TV_RING, ring, TvShapes.card).padding(6.dp)
+                .background(Brush.linearGradient(listOf(Color(0xFF36B8FF), Color(0xFF3DDC97))), TvShapes.card),
+        )
+        androidx.compose.foundation.layout.Box(Modifier.width(150.dp).height(6.dp).background(Color.White.copy(alpha = 0.18f), androidx.compose.foundation.shape.CircleShape)) {
+            androidx.compose.foundation.layout.Box(Modifier.fillMaxWidth(0.55f).height(6.dp).background(line, androidx.compose.foundation.shape.CircleShape))
+        }
+    }
+}
+
+/** Test tags: Settings → Colors' choices ("tv_light/spectrum", "tv_light/white"). */
+const val TAG_LIGHT = "tv_light"
