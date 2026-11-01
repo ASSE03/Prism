@@ -4057,7 +4057,6 @@
     <string name="tv_sign_in_with_phone">Telefonunuzla oturum açın</string>
     <string name="tv_continue_without_account">Hesap olmadan devam et</string>
     <string name="tv_pair_step_open">Prism\'i telefonunuzda, bu TV ile aynı Wi-Fi ağında açın</string>
-    <string name="tv_pair_step_pick">Telefonunuz gösterdiğinde %1$s seçin</string>
     <string name="tv_pair_step_code">Bu kodu telefonunuza girin</string>
     <string name="tv_pair_qr">Ya da telefonunuzun kamerasıyla tarayın</string>
     <string name="tv_no_voice">Bu TV sesle arama yapamıyor: bunun yerine klavyeyle yazın</string>
@@ -4125,4 +4124,8 @@
     <string name="tour_180_silence">Sessizlik kırpma yalnızca şarkının başına ve sonuna dokunur</string>
     <string name="tour_180_normalize">Aynı ses düzeyi, şarkılar arasındaki büyük farkları giderir</string>
     <string name="tour_180_size">Daha küçük bir indirme</string>
+    <string name="tv_library_signed_out">YouTube Music\'teki çalma listelerini, albümlerini, sanatçılarını ve beğendiğin şarkıları burada görmek için oturum aç.</string>
+    <string name="tv_search_how">Kumandayla yazmak için arama satırında OK\'e bas.</string>
+    <string name="tv_search_voice_how">Ya da yanındaki mikrofonu seç ve bir şarkı, sanatçı veya albüm söyle.</string>
+    <string name="tv_pair_step_find">Telefonunda, Prism\'de kontrollerin altındaki cihaz satırına dokun (ya da Ayarlar → Hoparlörler, TV\'ler ve tarayıcı\'yı aç) ve %1$s seç</string>
 </resources>

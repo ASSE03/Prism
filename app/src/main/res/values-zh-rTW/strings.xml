@@ -4007,7 +4007,6 @@
     <string name="tv_sign_in_with_phone">用手機登入</string>
     <string name="tv_continue_without_account">不登入繼續</string>
     <string name="tv_pair_step_open">在手機上開啟 Prism，並連上與這台電視相同的 Wi-Fi</string>
-    <string name="tv_pair_step_pick">手機上出現 %1$s 時選擇它</string>
     <string name="tv_pair_step_code">在手機上輸入這組代碼</string>
     <string name="tv_pair_qr">或用手機相機掃描</string>
     <string name="tv_no_voice">這台電視無法語音搜尋：請用鍵盤輸入</string>
@@ -4075,4 +4074,8 @@
     <string name="tour_180_silence">修剪靜音只處理歌曲的開頭和結尾</string>
     <string name="tour_180_normalize">統一響度可抹平歌曲之間的巨大音量落差</string>
     <string name="tour_180_size">更小的下載大小</string>
+    <string name="tv_library_signed_out">登入後即可在這裡看到你在 YouTube Music 的播放清單、專輯、藝人和喜歡的歌曲。</string>
+    <string name="tv_search_how">在搜尋列上按 OK，即可用遙控器輸入。</string>
+    <string name="tv_search_voice_how">或者選擇旁邊的麥克風，說出歌曲、藝人或專輯名稱。</string>
+    <string name="tv_pair_step_find">在手機上的 Prism 中，輕觸控制項下方的裝置列（或開啟「設定」→「喇叭、電視和瀏覽器」），然後選擇 %1$s</string>
 </resources>

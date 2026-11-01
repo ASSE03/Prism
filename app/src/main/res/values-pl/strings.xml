@@ -4157,7 +4157,6 @@
     <string name="tv_sign_in_with_phone">Zaloguj się telefonem</string>
     <string name="tv_continue_without_account">Kontynuuj bez konta</string>
     <string name="tv_pair_step_open">Otwórz Prism w telefonie, w tej samej sieci Wi-Fi co ten telewizor</string>
-    <string name="tv_pair_step_pick">Wybierz %1$s, gdy pojawi się w telefonie</string>
     <string name="tv_pair_step_code">Wpisz ten kod w telefonie</string>
     <string name="tv_pair_qr">Albo zeskanuj go aparatem telefonu</string>
     <string name="tv_no_voice">Ten telewizor nie umie szukać głosem: wpisz na klawiaturze</string>
@@ -4225,4 +4224,8 @@
     <string name="tour_180_silence">Przycinanie ciszy dotyczy tylko początku i końca utworu</string>
     <string name="tour_180_normalize">Ta sama głośność wyrównuje duże skoki między utworami</string>
     <string name="tour_180_size">Mniejszy rozmiar pobierania</string>
+    <string name="tv_library_signed_out">Zaloguj się, aby zobaczyć tu swoje playlisty, albumy, wykonawców i polubione utwory z YouTube Music.</string>
+    <string name="tv_search_how">Naciśnij OK na wierszu wyszukiwania, aby pisać pilotem.</string>
+    <string name="tv_search_voice_how">Albo wybierz mikrofon obok i powiedz tytuł utworu, wykonawcę lub album.</string>
+    <string name="tv_pair_step_find">W telefonie, w Prismie, kliknij wiersz urządzenia pod sterowaniem (albo otwórz Ustawienia → Głośniki, telewizory i przeglądarka) i wybierz %1$s</string>
 </resources>

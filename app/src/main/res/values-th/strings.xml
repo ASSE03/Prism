@@ -4007,7 +4007,6 @@
     <string name="tv_sign_in_with_phone">ลงชื่อเข้าใช้ด้วยโทรศัพท์</string>
     <string name="tv_continue_without_account">ดำเนินการต่อโดยไม่มีบัญชี</string>
     <string name="tv_pair_step_open">เปิด Prism บนโทรศัพท์ โดยใช้ Wi-Fi เดียวกับทีวีเครื่องนี้</string>
-    <string name="tv_pair_step_pick">เลือก %1$s เมื่อโทรศัพท์แสดงขึ้นมา</string>
     <string name="tv_pair_step_code">ป้อนรหัสนี้บนโทรศัพท์</string>
     <string name="tv_pair_qr">หรือสแกนด้วยกล้องของโทรศัพท์</string>
     <string name="tv_no_voice">ทีวีเครื่องนี้ค้นหาด้วยเสียงไม่ได้: พิมพ์ด้วยแป้นพิมพ์แทน</string>
@@ -4075,4 +4074,8 @@
     <string name="tour_180_silence">ตัดช่วงเงียบจะตัดเฉพาะต้นเพลงและท้ายเพลงเท่านั้น</string>
     <string name="tour_180_normalize">ระดับเสียงเท่ากันช่วยลดความต่างของเสียงระหว่างเพลง</string>
     <string name="tour_180_size">ดาวน์โหลดเล็กลง</string>
+    <string name="tv_library_signed_out">ลงชื่อเข้าใช้เพื่อดูเพลย์ลิสต์ อัลบั้ม ศิลปิน และเพลงที่ชอบจาก YouTube Music ที่นี่</string>
+    <string name="tv_search_how">กด OK ที่บรรทัดค้นหาเพื่อพิมพ์ด้วยรีโมต</string>
+    <string name="tv_search_voice_how">หรือเลือกไมโครโฟนข้างๆ แล้วพูดชื่อเพลง ศิลปิน หรืออัลบั้ม</string>
+    <string name="tv_pair_step_find">บนโทรศัพท์ ใน Prism แตะบรรทัดอุปกรณ์ใต้ปุ่มควบคุม (หรือเปิดการตั้งค่า → ลำโพง ทีวี และเบราว์เซอร์) แล้วเลือก %1$s</string>
 </resources>

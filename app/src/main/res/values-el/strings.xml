@@ -4057,7 +4057,6 @@
     <string name="tv_sign_in_with_phone">Σύνδεση με το κινητό σας</string>
     <string name="tv_continue_without_account">Συνέχεια χωρίς λογαριασμό</string>
     <string name="tv_pair_step_open">Ανοίξτε το Prism στο κινητό σας, στο ίδιο Wi-Fi με αυτή την τηλεόραση</string>
-    <string name="tv_pair_step_pick">Επιλέξτε %1$s όταν εμφανιστεί στο κινητό σας</string>
     <string name="tv_pair_step_code">Πληκτρολογήστε αυτόν τον κωδικό στο κινητό σας</string>
     <string name="tv_pair_qr">Ή σαρώστε τον με την κάμερα του κινητού σας</string>
     <string name="tv_no_voice">Αυτή η τηλεόραση δεν μπορεί να αναζητήσει με φωνή: πληκτρολογήστε στο πληκτρολόγιο</string>
@@ -4125,4 +4124,8 @@
     <string name="tour_180_silence">Το κόψιμο σιωπής αγγίζει μόνο την αρχή και το τέλος ενός τραγουδιού</string>
     <string name="tour_180_normalize">Η κανονικοποίηση έντασης εξομαλύνει τα μεγάλα άλματα ανάμεσα στα τραγούδια</string>
     <string name="tour_180_size">Μικρότερη λήψη</string>
+    <string name="tv_library_signed_out">Συνδέσου για να βλέπεις εδώ τις λίστες, τα άλμπουμ, τους καλλιτέχνες και τα αγαπημένα σου τραγούδια από το YouTube Music.</string>
+    <string name="tv_search_how">Πάτα OK στη γραμμή αναζήτησης για να πληκτρολογήσεις με το τηλεχειριστήριο.</string>
+    <string name="tv_search_voice_how">Ή διάλεξε το μικρόφωνο δίπλα της και πες ένα τραγούδι, καλλιτέχνη ή άλμπουμ.</string>
+    <string name="tv_pair_step_find">Στο κινητό σου, στο Prism, πάτα τη γραμμή συσκευής κάτω από τα χειριστήρια (ή άνοιξε Ρυθμίσεις → Ηχεία, τηλεοράσεις &amp; πρόγραμμα περιήγησης) και διάλεξε %1$s</string>
 </resources>

@@ -21,6 +21,8 @@ object Fixture {
         container.settings.editNow {
             it[booleanPreferencesKey("onboarded")] = true
             it[booleanPreferencesKey("performance_offered")] = true
+            // A TV's welcome (1.8.0) seen too: tests start where a listener's day does.
+            it[booleanPreferencesKey("tv_welcomed")] = true
         }
         com.prism.music.ui.tour.Tour.markSeen(context)
         context.getSharedPreferences("prompts", Context.MODE_PRIVATE).edit().putBoolean("notifications_asked", true).commit()

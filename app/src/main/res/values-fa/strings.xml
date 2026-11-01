@@ -4057,7 +4057,6 @@
     <string name="tv_sign_in_with_phone">ورود با تلفنتان</string>
     <string name="tv_continue_without_account">ادامه بدون حساب</string>
     <string name="tv_pair_step_open">Prism را روی تلفنتان باز کنید، روی همان Wi-Fi این تلویزیون</string>
-    <string name="tv_pair_step_pick">وقتی تلفنتان %1$s را نشان داد، آن را انتخاب کنید</string>
     <string name="tv_pair_step_code">این کد را روی تلفنتان وارد کنید</string>
     <string name="tv_pair_qr">یا آن را با دوربین تلفنتان اسکن کنید</string>
     <string name="tv_no_voice">این تلویزیون نمی‌تواند با صدا جست‌وجو کند: با صفحه‌کلید بنویسید</string>
@@ -4125,4 +4124,8 @@
     <string name="tour_180_silence">حذف سکوت فقط به ابتدا و انتهای آهنگ دست می‌زند</string>
     <string name="tour_180_normalize">یکسان‌سازی صدا پرش‌های بزرگ بین آهنگ‌ها را هموار می‌کند</string>
     <string name="tour_180_size">دانلودی کوچک‌تر</string>
+    <string name="tv_library_signed_out">وارد شوید تا فهرست‌های پخش، آلبوم‌ها، هنرمندان و آهنگ‌های پسندیده‌تان در YouTube Music را اینجا ببینید.</string>
+    <string name="tv_search_how">برای تایپ با کنترل، روی خط جست‌وجو OK را بزنید.</string>
+    <string name="tv_search_voice_how">یا میکروفون کنارش را انتخاب کنید و نام آهنگ، هنرمند یا آلبوم را بگویید.</string>
+    <string name="tv_pair_step_find">در تلفنتان، در Prism، خط دستگاه زیر کنترل‌ها را بزنید (یا تنظیمات ← بلندگوها، تلویزیون‌ها و مرورگر را باز کنید) و %1$s را انتخاب کنید</string>
 </resources>

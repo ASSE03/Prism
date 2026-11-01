@@ -4007,7 +4007,6 @@
     <string name="tv_sign_in_with_phone">휴대전화로 로그인</string>
     <string name="tv_continue_without_account">계정 없이 계속</string>
     <string name="tv_pair_step_open">이 TV와 같은 Wi-Fi에서 휴대전화의 Prism을 여세요</string>
-    <string name="tv_pair_step_pick">휴대전화에 %1$s이(가) 보이면 선택하세요</string>
     <string name="tv_pair_step_code">휴대전화에 이 코드를 입력하세요</string>
     <string name="tv_pair_qr">또는 휴대전화 카메라로 스캔하세요</string>
     <string name="tv_no_voice">이 TV는 음성으로 검색할 수 없습니다: 키보드로 입력하세요</string>
@@ -4075,4 +4074,8 @@
     <string name="tour_180_silence">무음 구간 자르기는 곡의 시작과 끝에만 적용돼요</string>
     <string name="tour_180_normalize">같은 음량은 곡 사이의 큰 음량 차이를 고르게 해요</string>
     <string name="tour_180_size">더 작아진 다운로드</string>
+    <string name="tv_library_signed_out">로그인하면 YouTube Music의 재생목록, 앨범, 아티스트, 좋아요 표시한 노래를 여기서 볼 수 있어요.</string>
+    <string name="tv_search_how">검색 줄에서 OK를 누르면 리모컨으로 입력할 수 있어요.</string>
+    <string name="tv_search_voice_how">또는 옆의 마이크를 고르고 노래, 아티스트, 앨범을 말하세요.</string>
+    <string name="tv_pair_step_find">휴대전화의 Prism에서 컨트롤 아래의 기기 줄을 탭하고(또는 설정 → 스피커, TV, 브라우저를 열고) %1$s을(를) 고르세요</string>
 </resources>

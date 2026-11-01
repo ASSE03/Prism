@@ -70,8 +70,9 @@ fun TvSearchPlace(nav: TvNav) {
         val taste = runCatching { c.taste.searchTaste() }.getOrDefault(SearchRank.Taste.NONE)
         result = runCatching { withContext(Dispatchers.Default) { c.ytm.searchTop(query.trim(), taste) } }.getOrNull() ?: result
     }
+    var submitted by remember { androidx.compose.runtime.mutableIntStateOf(0) }
     val submit: (String) -> Unit = { q ->
-        query = q; typing = false
+        query = q; typing = false; submitted++
         TvSearchHistory.add(context, q)
         recent.clear(); recent.addAll(TvSearchHistory.read(context))
     }
@@ -108,6 +109,7 @@ fun TvSearchPlace(nav: TvNav) {
         onQueryChange = { query = it },
         onSubmit = { submit(query) },
         onStopTyping = { typing = false },
+        submitted = submitted,
     )
 }
 
@@ -141,6 +143,7 @@ fun TvLibraryPlace(nav: TvNav) {
         }
     }
     val labels = listOf(tr(R.string.playlists), tr(R.string.albums), tr(R.string.artists), tr(R.string.liked_songs), tr(R.string.history))
+    val settings by c.settings.flow.collectAsState()
     TvLibraryScreen(
         labels, tab.ordinal, { tab = TvLibraryTab.entries[it] },
         items.map { it.toTvItem() },
@@ -148,5 +151,7 @@ fun TvLibraryPlace(nav: TvNav) {
             val i = items.indexOfFirst { it.id == item.id }
             if (i >= 0) open(c, nav, items[i], items, i, labels[tab.ordinal], radio = false) { scope.launch { it() } }
         },
+        // Prism's own lists and history show signed out too; an empty tab says why, and how to fill it.
+        empty = { TvLibraryEmpty(settings.isLoggedIn) { nav.go(TvRoute.Pair(signIn = true)) } },
     )
 }

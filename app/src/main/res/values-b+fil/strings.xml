@@ -4057,7 +4057,6 @@
     <string name="tv_sign_in_with_phone">Mag-sign in gamit ang phone mo</string>
     <string name="tv_continue_without_account">Magpatuloy nang walang account</string>
     <string name="tv_pair_step_open">Buksan ang Prism sa phone mo, sa parehong Wi-Fi ng TV na ito</string>
-    <string name="tv_pair_step_pick">Piliin ang %1$s kapag lumabas ito sa phone mo</string>
     <string name="tv_pair_step_code">Ilagay ang code na ito sa phone mo</string>
     <string name="tv_pair_qr">O i-scan ito gamit ang camera ng phone mo</string>
     <string name="tv_no_voice">Hindi makakapaghanap gamit ang boses ang TV na ito: gamitin ang keyboard</string>
@@ -4125,4 +4124,8 @@
     <string name="tour_180_silence">Ang pagtanggal ng katahimikan ay sa simula at dulo lang ng kanta</string>
     <string name="tour_180_normalize">Pinapantay ng parehong lakas ng tunog ang malalaking pagtalon sa pagitan ng mga kanta</string>
     <string name="tour_180_size">Mas maliit na download</string>
+    <string name="tv_library_signed_out">Mag-sign in para makita rito ang mga playlist, album, artist at gusto mong kanta mula sa YouTube Music.</string>
+    <string name="tv_search_how">Pindutin ang OK sa linya ng paghahanap para mag-type gamit ang remote.</string>
+    <string name="tv_search_voice_how">O piliin ang mikropono sa tabi nito at sabihin ang kanta, artist o album.</string>
+    <string name="tv_pair_step_find">Sa phone mo, sa Prism, i-tap ang linya ng device sa ilalim ng mga kontrol (o buksan ang Settings → Mga speaker, TV at browser) at piliin ang %1$s</string>
 </resources>

@@ -4057,7 +4057,6 @@
     <string name="tv_sign_in_with_phone">اپنے فون سے سائن ان کریں</string>
     <string name="tv_continue_without_account">اکاؤنٹ کے بغیر جاری رکھیں</string>
     <string name="tv_pair_step_open">اپنے فون پر Prism کھولیں، اسی Wi-Fi پر جس پر یہ ٹی وی ہے</string>
-    <string name="tv_pair_step_pick">فون پر دکھائی دینے پر %1$s چنیں</string>
     <string name="tv_pair_step_code">یہ کوڈ اپنے فون پر درج کریں</string>
     <string name="tv_pair_qr">یا اسے اپنے فون کے کیمرے سے اسکین کریں</string>
     <string name="tv_no_voice">یہ ٹی وی آواز سے تلاش نہیں کر سکتا: کی بورڈ سے لکھیں</string>
@@ -4125,4 +4124,8 @@
     <string name="tour_180_silence">خاموشی تراشنا صرف گانے کے آغاز اور اختتام کو چھوتا ہے</string>
     <string name="tour_180_normalize">یکساں آواز گانوں کے درمیان بڑے فرق کو ہموار کرتی ہے</string>
     <string name="tour_180_size">چھوٹا ڈاؤن لوڈ</string>
+    <string name="tv_library_signed_out">YouTube Music سے اپنی پلے لسٹس، البمز، فنکار اور پسندیدہ گانے یہاں دیکھنے کے لیے سائن ان کریں۔</string>
+    <string name="tv_search_how">ریموٹ سے ٹائپ کرنے کے لیے سرچ لائن پر OK دبائیں۔</string>
+    <string name="tv_search_voice_how">یا ساتھ والا مائیکروفون چنیں اور کسی گانے، فنکار یا البم کا نام بولیں۔</string>
+    <string name="tv_pair_step_find">اپنے فون پر، Prism میں، کنٹرولز کے نیچے ڈیوائس والی لائن پر ٹیپ کریں (یا ترتیبات ← اسپیکرز، TVs اور براؤزر کھولیں) اور %1$s چنیں</string>
 </resources>

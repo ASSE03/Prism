@@ -4057,7 +4057,6 @@
     <string name="tv_sign_in_with_phone">Logga in med telefonen</string>
     <string name="tv_continue_without_account">Fortsätt utan konto</string>
     <string name="tv_pair_step_open">Öppna Prism i telefonen, på samma wifi som den här tv:n</string>
-    <string name="tv_pair_step_pick">Välj %1$s när telefonen visar den</string>
     <string name="tv_pair_step_code">Ange den här koden i telefonen</string>
     <string name="tv_pair_qr">Eller skanna den med telefonens kamera</string>
     <string name="tv_no_voice">Den här tv:n kan inte söka med rösten: skriv med tangentbordet</string>
@@ -4125,4 +4124,8 @@
     <string name="tour_180_silence">Ta bort tystnad rör bara en låts början och slut</string>
     <string name="tour_180_normalize">Samma ljudstyrka jämnar ut stora hopp mellan låtar</string>
     <string name="tour_180_size">En mindre nedladdning</string>
+    <string name="tv_library_signed_out">Logga in för att se dina spellistor, album, artister och gillade låtar från YouTube Music här.</string>
+    <string name="tv_search_how">Tryck på OK på sökraden för att skriva med fjärrkontrollen.</string>
+    <string name="tv_search_voice_how">Eller välj mikrofonen bredvid och säg en låt, artist eller ett album.</string>
+    <string name="tv_pair_step_find">Tryck på telefonen i Prism på enhetsraden under kontrollerna (eller öppna Inställningar → Högtalare, tv-apparater &amp; webbläsare) och välj %1$s</string>
 </resources>

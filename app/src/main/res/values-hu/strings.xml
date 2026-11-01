@@ -4057,7 +4057,6 @@
     <string name="tv_sign_in_with_phone">Bejelentkezés a telefonoddal</string>
     <string name="tv_continue_without_account">Folytatás fiók nélkül</string>
     <string name="tv_pair_step_open">Nyisd meg a Prismet a telefonodon, ugyanazon a Wi-Fin, mint ez a tévé</string>
-    <string name="tv_pair_step_pick">Válaszd ki: %1$s, amikor a telefonod mutatja</string>
     <string name="tv_pair_step_code">Írd be ezt a kódot a telefonodon</string>
     <string name="tv_pair_qr">Vagy olvasd be a telefonod kamerájával</string>
     <string name="tv_no_voice">Ez a tévé nem tud hanggal keresni: gépelj a billentyűzettel</string>
@@ -4125,4 +4124,8 @@
     <string name="tour_180_silence">A csend levágása csak a dal elejét és végét érinti</string>
     <string name="tour_180_normalize">Az azonos hangerő kiegyenlíti a dalok közti nagy ugrásokat</string>
     <string name="tour_180_size">Kisebb letöltés</string>
+    <string name="tv_library_signed_out">Jelentkezz be, és itt látod a YouTube Music lejátszási listáidat, albumaidat, előadóidat és kedvelt dalaidat.</string>
+    <string name="tv_search_how">Nyomd meg az OK-t a keresősoron, és gépelj a távirányítóval.</string>
+    <string name="tv_search_voice_how">Vagy válaszd a mellette lévő mikrofont, és mondj egy dalt, előadót vagy albumot.</string>
+    <string name="tv_pair_step_find">A telefonodon a Prismben koppints a vezérlők alatti eszközsorra (vagy nyisd meg: Beállítások → Hangszórók, tévék és böngésző), és válaszd ki: %1$s</string>
 </resources>

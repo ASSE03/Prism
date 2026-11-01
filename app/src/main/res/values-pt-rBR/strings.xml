@@ -4107,7 +4107,6 @@
     <string name="tv_sign_in_with_phone">Entrar com o celular</string>
     <string name="tv_continue_without_account">Continuar sem conta</string>
     <string name="tv_pair_step_open">Abra o Prism no celular, no mesmo Wi-Fi desta TV</string>
-    <string name="tv_pair_step_pick">Escolha %1$s quando o celular mostrar</string>
     <string name="tv_pair_step_code">Digite este código no celular</string>
     <string name="tv_pair_qr">Ou escaneie com a câmera do celular</string>
     <string name="tv_no_voice">Esta TV não pesquisa por voz: digite com o teclado</string>
@@ -4175,4 +4174,8 @@
     <string name="tour_180_silence">Cortar o silêncio só mexe no início e no fim da música</string>
     <string name="tour_180_normalize">O mesmo volume suaviza os grandes saltos entre músicas</string>
     <string name="tour_180_size">Um download menor</string>
+    <string name="tv_library_signed_out">Faça login para ver aqui suas playlists, álbuns, artistas e músicas curtidas do YouTube Music.</string>
+    <string name="tv_search_how">Aperte OK na linha de busca para digitar com o controle.</string>
+    <string name="tv_search_voice_how">Ou escolha o microfone ao lado e diga uma música, um artista ou um álbum.</string>
+    <string name="tv_pair_step_find">No celular, no Prism, toque na linha de dispositivo abaixo dos controles (ou abra Configurações → Alto-falantes, TVs e navegador) e escolha %1$s</string>
 </resources>

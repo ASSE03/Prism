@@ -4007,7 +4007,6 @@
     <string name="tv_sign_in_with_phone">用手机登录</string>
     <string name="tv_continue_without_account">不登录继续</string>
     <string name="tv_pair_step_open">在手机上打开 Prism，并连接与这台电视相同的 Wi-Fi</string>
-    <string name="tv_pair_step_pick">手机上出现 %1$s 时选择它</string>
     <string name="tv_pair_step_code">在手机上输入此代码</string>
     <string name="tv_pair_qr">或用手机相机扫描</string>
     <string name="tv_no_voice">这台电视无法语音搜索：请用键盘输入</string>
@@ -4075,4 +4074,8 @@
     <string name="tour_180_silence">裁剪静音只处理歌曲的开头和结尾</string>
     <string name="tour_180_normalize">统一响度可抹平歌曲之间的巨大音量落差</string>
     <string name="tour_180_size">更小的下载体积</string>
+    <string name="tv_library_signed_out">登录后可在这里看到你在 YouTube Music 的播放列表、专辑、艺人和赞过的歌曲。</string>
+    <string name="tv_search_how">在搜索栏上按 OK，即可用遥控器输入。</string>
+    <string name="tv_search_voice_how">或者选择旁边的麦克风，说出歌曲、艺人或专辑名称。</string>
+    <string name="tv_pair_step_find">在手机上的 Prism 中，点按控制按钮下方的设备栏（或打开“设置”→“音箱、电视和浏览器”），然后选择 %1$s</string>
 </resources>

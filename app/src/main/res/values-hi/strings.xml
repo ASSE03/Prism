@@ -4057,7 +4057,6 @@
     <string name="tv_sign_in_with_phone">अपने फ़ोन से साइन इन करें</string>
     <string name="tv_continue_without_account">बिना खाते के जारी रखें</string>
     <string name="tv_pair_step_open">अपने फ़ोन पर Prism खोलें, इसी टीवी वाले Wi-Fi पर</string>
-    <string name="tv_pair_step_pick">फ़ोन पर दिखने पर %1$s चुनें</string>
     <string name="tv_pair_step_code">अपने फ़ोन पर यह कोड डालें</string>
     <string name="tv_pair_qr">या इसे अपने फ़ोन के कैमरे से स्कैन करें</string>
     <string name="tv_no_voice">यह टीवी आवाज़ से नहीं खोज सकता: कीबोर्ड से लिखें</string>
@@ -4125,4 +4124,8 @@
     <string name="tour_180_silence">चुप्पी हटाना सिर्फ़ गाने की शुरुआत और अंत को छूता है</string>
     <string name="tour_180_normalize">एक जैसी आवाज़ गानों के बीच के बड़े उछाल को बराबर करती है</string>
     <string name="tour_180_size">छोटा डाउनलोड</string>
+    <string name="tv_library_signed_out">YouTube Music से अपनी प्लेलिस्ट, एल्बम, कलाकार और पसंद किए गाने यहां देखने के लिए साइन इन करें।</string>
+    <string name="tv_search_how">रिमोट से टाइप करने के लिए सर्च लाइन पर OK दबाएं।</string>
+    <string name="tv_search_voice_how">या पास वाला माइक्रोफ़ोन चुनें और कोई गाना, कलाकार या एल्बम बोलें।</string>
+    <string name="tv_pair_step_find">अपने फ़ोन पर, Prism में, कंट्रोल के नीचे डिवाइस वाली लाइन पर टैप करें (या सेटिंग → स्पीकर, टीवी &amp; ब्राउज़र खोलें) और %1$s चुनें</string>
 </resources>

@@ -4007,7 +4007,6 @@
     <string name="tv_sign_in_with_phone">Đăng nhập bằng điện thoại</string>
     <string name="tv_continue_without_account">Tiếp tục không cần tài khoản</string>
     <string name="tv_pair_step_open">Mở Prism trên điện thoại, cùng mạng Wi-Fi với TV này</string>
-    <string name="tv_pair_step_pick">Chọn %1$s khi điện thoại hiện ra</string>
     <string name="tv_pair_step_code">Nhập mã này trên điện thoại</string>
     <string name="tv_pair_qr">Hoặc quét bằng camera điện thoại</string>
     <string name="tv_no_voice">TV này không tìm bằng giọng nói được: hãy gõ bằng bàn phím</string>
@@ -4075,4 +4074,8 @@
     <string name="tour_180_silence">Cắt khoảng lặng chỉ tác động đến phần đầu và phần cuối của bài hát</string>
     <string name="tour_180_normalize">Âm lượng đồng đều làm dịu những chênh lệch lớn giữa các bài hát</string>
     <string name="tour_180_size">Dung lượng tải xuống nhỏ hơn</string>
+    <string name="tv_library_signed_out">Đăng nhập để xem danh sách phát, album, nghệ sĩ và bài hát đã thích từ YouTube Music tại đây.</string>
+    <string name="tv_search_how">Nhấn OK trên dòng tìm kiếm để nhập bằng điều khiển.</string>
+    <string name="tv_search_voice_how">Hoặc chọn micrô bên cạnh và nói tên bài hát, nghệ sĩ hoặc album.</string>
+    <string name="tv_pair_step_find">Trên điện thoại, trong Prism, nhấn dòng thiết bị dưới các nút điều khiển (hoặc mở Cài đặt → Loa, TV &amp; trình duyệt) rồi chọn %1$s</string>
 </resources>
