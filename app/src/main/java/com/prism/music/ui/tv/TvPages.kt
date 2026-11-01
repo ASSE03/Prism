@@ -243,7 +243,7 @@ fun TvPlayerPage(nav: TvNav) {
     var panel by rememberSaveable { mutableStateOf(Panel.NONE) }
     val context = LocalContext.current
     LaunchedEffect(Unit) { TvSing.load(context) }
-    val singReady = TvSing.state.collectAsState().value == TvSing.State.READY
+    val singReady = TvSing.state.collectAsState().value.sings
     // Each time a panel closes the controls are drawn anew, so the button that opened it takes focus back.
     var returns by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(0) }
     val screen = LocalTvScreen.current

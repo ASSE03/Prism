@@ -2136,7 +2136,7 @@
     <string name="couldn_t_download_it_tap_to">Không tải xuống được · nhấn để thử lại</string>
     <string name="only_for_japanese_songs">Chỉ dành cho bài hát tiếng Nhật · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Chỉ tiếng Nhật cần cái này: kanji có nhiều cách đọc, nên cần từ điển để chọn đúng cách đọc cho romaji (\"kimi no na wa\"). Chỉ tải một lần. Các ngôn ngữ khác (tiếng Hàn, Trung, Nga, Hindi…) phiên âm không cần tải. Không có nó, Google sẽ phiên âm kanji.</string>
-    <string name="sing_doesn_t_run_on_this">Hát cùng không chạy được trên loại bộ xử lý của điện thoại này.</string>
+    <string name="sing_doesn_t_run_on_this">Chế độ tách đầy đủ của Hát cùng không chạy được trên loại bộ xử lý của điện thoại này, nên Hát cùng dùng cách nhanh: bỏ phần nằm giữa bản phối, nơi thường có giọng hát. Kết quả kém sạch hơn, và bài mono vẫn giữ nguyên.</string>
     <string name="needed_for_sing">Cần cho Hát cùng · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Tách giọng ca sĩ khỏi bài hát, ngay trên điện thoại, để hát karaoke. Chỉ tải một lần.</string>
     <string name="so_sing_starts_at_once_when">Để Hát cùng bắt đầu ngay khi bạn bật</string>
@@ -4040,7 +4040,7 @@
     <string name="tv_same_loudness_info">Các bài phát ở âm lượng gần như nhau, nên bài nhỏ tiếng không khiến bạn phải với lấy điều khiển.</string>
     <string name="tv_lyrics_size">Cỡ lời bài hát</string>
     <string name="tv_sing_on_tv">Hát trên TV này</string>
-    <string name="tv_sing_info">Hát tách giọng ca khỏi bài ngay trên TV này, không cần máy chủ. Cần tải một lần và một TV đủ nhanh để theo kịp bài: bước kiểm tra tìm ra điều đó với bài đang phát.</string>
+    <string name="tv_sing_info">Hát tách giọng ca khỏi bài ngay trên TV này, không cần máy chủ. Cần tải một lần; bước kiểm tra đo tốc độ với bài đang phát. TV quá chậm để theo kịp bài sẽ dùng cách nhanh thay thế: bỏ phần nằm giữa bản phối.</string>
     <string name="tv_ambient_screen">Màn hình thư giãn</string>
     <string name="tv_ambient_after">Sau %1$d phút không dùng điều khiển</string>
     <string name="tv_ambient_info">Khi nhạc đang phát và điều khiển được đặt xuống, màn hình dịu lại thành bài hát và lời, trôi chậm, thay cho trình bảo vệ màn hình của TV.</string>
@@ -4048,8 +4048,8 @@
     <string name="tv_sing_check">Kiểm tra TV này có đủ nhanh không</string>
     <string name="tv_sing_checking">Phát một bài rồi kiểm tra: mất khoảng một phút</string>
     <string name="tv_sing_ready">Đủ nhanh: Hát nằm trong ⋯ của trình phát</string>
-    <string name="tv_sing_too_slow">TV này không đủ nhanh cho Hát: nó sẽ bị chậm hơn bài hát</string>
-    <string name="tv_sing_no_cpu">Hát không chạy trên bộ xử lý của TV này</string>
+    <string name="tv_sing_too_slow">Cách nhanh: TV này quá chậm cho chế độ tách đầy đủ, nên Hát bỏ phần nằm giữa bản phối (kém sạch hơn). Hát nằm trong ⋯ của trình phát</string>
+    <string name="tv_sing_no_cpu">Cách nhanh: chế độ tách đầy đủ không chạy trên bộ xử lý của TV này, nên Hát bỏ phần nằm giữa bản phối (kém sạch hơn). Hát nằm trong ⋯ của trình phát</string>
     <string name="tv_link_pair_note">Mã bạn đã quét là của %1$s tại %2$s trong mạng của bạn. Chỉ ghép nối nếu đó là TV trước mặt bạn.</string>
     <string name="tv_sign_in_pair_first">Hãy ghép nối với %1$s trước, rồi đăng nhập trên đó</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4084,4 +4084,8 @@
     <string name="tv_search_how">Nhấn OK trên dòng tìm kiếm để nhập bằng điều khiển.</string>
     <string name="tv_search_voice_how">Hoặc chọn micrô bên cạnh và nói tên bài hát, nghệ sĩ hoặc album.</string>
     <string name="tv_pair_step_find">Trên điện thoại, trong Prism, nhấn dòng thiết bị dưới các nút điều khiển (hoặc mở Cài đặt → Loa, TV &amp; trình duyệt) rồi chọn %1$s</string>
+    <string name="sing_quick_slow">Điện thoại này quá chậm cho chế độ tách đầy đủ, nên Hát cùng dùng cách nhanh: bỏ phần nằm giữa bản phối, nơi thường có giọng hát. Kết quả kém sạch hơn, và bài mono vẫn giữ nguyên.</string>
+    <string name="sing_mono_song">Bài này là mono: cách nhanh không bỏ được giọng hát, nên bài phát nguyên như cũ.</string>
+    <string name="tv_sing_measured">TV này tách bài nhanh gấp %1$s lần tốc độ phát.</string>
+    <string name="tv_voice_quick">Giảm giọng (cách nhanh)</string>
 </resources>

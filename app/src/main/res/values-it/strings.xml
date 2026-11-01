@@ -2136,7 +2136,7 @@
     <string name="couldn_t_download_it_tap_to">Impossibile scaricarlo · tocca per riprovare</string>
     <string name="only_for_japanese_songs">Solo per brani giapponesi · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Serve solo al giapponese: i suoi kanji hanno più letture, quindi un dizionario sceglie quella giusta per il romaji (\"kimi no na wa\"). Si scarica una volta. Le altre lingue (coreano, cinese, russo, hindi…) si traslitterano senza download. Senza di esso, i kanji li scrive Google.</string>
-    <string name="sing_doesn_t_run_on_this">Canta non funziona con il tipo di processore di questo telefono.</string>
+    <string name="sing_doesn_t_run_on_this">La separazione completa di Canta non funziona con il tipo di processore di questo telefono, quindi Canta usa il modo rapido: toglie ciò che sta al centro del mix, dove di solito c\'è la voce. È meno pulito, e un brano mono resta com\'è.</string>
     <string name="needed_for_sing">Necessario per Canta · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Toglie la voce del cantante dai brani, sul tuo telefono, per il karaoke. Si scarica una volta.</string>
     <string name="so_sing_starts_at_once_when">Così Canta parte subito quando lo attivi</string>
@@ -4140,7 +4140,7 @@
     <string name="tv_same_loudness_info">I brani suonano più o meno allo stesso volume, così uno più basso non ti fa cercare il telecomando.</string>
     <string name="tv_lyrics_size">Dimensione del testo</string>
     <string name="tv_sing_on_tv">Canta su questa TV</string>
-    <string name="tv_sing_info">Canta toglie la voce da un brano su questa TV, senza server. Serve un download una tantum e una TV abbastanza veloce da stare al passo col brano: il controllo lo scopre col brano in riproduzione.</string>
+    <string name="tv_sing_info">Canta toglie la voce da un brano su questa TV, senza server. Serve un download una tantum; la verifica ne misura la velocità con il brano in riproduzione. Una TV troppo lenta per stare al passo usa invece il modo rapido: viene tolto ciò che sta al centro del mix.</string>
     <string name="tv_ambient_screen">Schermo ambiente</string>
     <string name="tv_ambient_after">Dopo %1$d min senza telecomando</string>
     <string name="tv_ambient_info">Mentre suona la musica e il telecomando è posato, lo schermo si attenua sul brano e sul suo testo, spostandosi piano, al posto del salvaschermo della TV.</string>
@@ -4148,8 +4148,8 @@
     <string name="tv_sing_check">Controlla se questa TV è abbastanza veloce</string>
     <string name="tv_sing_checking">Avvia un brano, poi controlla: ci vuole circa un minuto</string>
     <string name="tv_sing_ready">Abbastanza veloce: Canta è nel ⋯ del player</string>
-    <string name="tv_sing_too_slow">Questa TV non è abbastanza veloce per Canta: resterebbe indietro rispetto al brano</string>
-    <string name="tv_sing_no_cpu">Canta non funziona sul processore di questa TV</string>
+    <string name="tv_sing_too_slow">Modo rapido: questa TV è troppo lenta per la separazione completa, quindi Canta toglie ciò che sta al centro del mix (meno pulito). Canta è nel ⋯ del player</string>
+    <string name="tv_sing_no_cpu">Modo rapido: la separazione completa non funziona sul processore di questa TV, quindi Canta toglie ciò che sta al centro del mix (meno pulito). Canta è nel ⋯ del player</string>
     <string name="tv_link_pair_note">Il codice scansionato è di %1$s all’indirizzo %2$s sulla tua rete. Associa solo se è la TV davanti a te.</string>
     <string name="tv_sign_in_pair_first">Prima associa %1$s, poi accedi su di esso</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4184,4 +4184,8 @@
     <string name="tv_search_how">Premi OK sulla riga di ricerca per scrivere con il telecomando.</string>
     <string name="tv_search_voice_how">Oppure scegli il microfono accanto e di\' un brano, un artista o un album.</string>
     <string name="tv_pair_step_find">Sul telefono, in Prism, tocca la riga del dispositivo sotto i controlli (o apri Impostazioni → Altoparlanti, TV e browser) e scegli %1$s</string>
+    <string name="sing_quick_slow">Questo telefono è troppo lento per la separazione completa, quindi Canta usa il modo rapido: toglie ciò che sta al centro del mix, dove di solito c\'è la voce. È meno pulito, e un brano mono resta com\'è.</string>
+    <string name="sing_mono_song">Questo brano è mono: il modo rapido non riesce a toglierne la voce, quindi si sente com\'è.</string>
+    <string name="tv_sing_measured">Questa TV separa i brani %1$s× più veloce di quanto suonino.</string>
+    <string name="tv_voice_quick">Voce abbassata (modo rapido)</string>
 </resources>

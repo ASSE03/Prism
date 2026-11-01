@@ -2136,7 +2136,7 @@
     <string name="couldn_t_download_it_tap_to">Det gick inte att ladda ned · tryck för att försöka igen</string>
     <string name="only_for_japanese_songs">Bara för japanska låtar · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Bara japanska behöver detta: dess kanji har flera läsningar, så en ordbok väljer rätt för romaji (\"kimi no na wa\"). Laddas ned en gång. Andra språk (koreanska, kinesiska, ryska, hindi…) romaniseras utan nedladdning. Utan den skriver Google ut kanji.</string>
-    <string name="sing_doesn_t_run_on_this">Sjung fungerar inte på den här telefonens typ av processor.</string>
+    <string name="sing_doesn_t_run_on_this">Sjungs fullständiga separering fungerar inte på den här telefonens typ av processor, så Sjung använder det snabba sättet: det tar bort det som ligger mitt i mixen, där rösten brukar ligga. Det blir mindre rent, och en monolåt förblir som den är.</string>
     <string name="needed_for_sing">Behövs för Sjung · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Tar bort sångarens röst ur låtar, på din telefon, för karaoke. Laddas ned en gång.</string>
     <string name="so_sing_starts_at_once_when">Så att Sjung startar direkt när du slår på det</string>
@@ -4090,7 +4090,7 @@
     <string name="tv_same_loudness_info">Låtarna spelas med ungefär samma volym, så en tyst låt får dig inte att leta efter fjärrkontrollen.</string>
     <string name="tv_lyrics_size">Storlek på låttexter</string>
     <string name="tv_sing_on_tv">Sjung på den här tv:n</string>
-    <string name="tv_sing_info">Sjung tar bort sången ur en låt på den här tv:n, utan server. Det kräver en engångsnedladdning och en tv som är snabb nog att hänga med i låten: kontrollen tar reda på det med låten som spelas.</string>
+    <string name="tv_sing_info">Sjung tar bort sången ur en låt på den här tv:n, utan server. Det kräver en engångsnedladdning; kontrollen mäter hastigheten med låten som spelas. En tv som är för långsam för att hänga med får det snabba sättet i stället: det som ligger mitt i mixen tas bort.</string>
     <string name="tv_ambient_screen">Vilskärm</string>
     <string name="tv_ambient_after">Efter %1$d min utan fjärrkontroll</string>
     <string name="tv_ambient_info">När musik spelas och fjärrkontrollen är bortlagd tonas skärmen ned till låten och dess text, som sakta glider, i stället för tv:ns skärmsläckare.</string>
@@ -4098,8 +4098,8 @@
     <string name="tv_sing_check">Kontrollera om den här tv:n är snabb nog</string>
     <string name="tv_sing_checking">Spela en låt och kontrollera sedan: det tar ungefär en minut</string>
     <string name="tv_sing_ready">Snabb nog: Sjung finns i spelarens ⋯</string>
-    <string name="tv_sing_too_slow">Den här tv:n är inte snabb nog för Sjung: den skulle hamna efter låten</string>
-    <string name="tv_sing_no_cpu">Sjung fungerar inte på den här tv:ns processor</string>
+    <string name="tv_sing_too_slow">Snabbt sätt: den här tv:n är för långsam för den fullständiga separeringen, så Sjung tar bort det som ligger mitt i mixen (mindre rent). Sjung finns i spelarens ⋯</string>
+    <string name="tv_sing_no_cpu">Snabbt sätt: den fullständiga separeringen fungerar inte på den här tv:ns processor, så Sjung tar bort det som ligger mitt i mixen (mindre rent). Sjung finns i spelarens ⋯</string>
     <string name="tv_link_pair_note">Koden du skannade gäller %1$s på %2$s i ditt nätverk. Parkoppla bara om det är tv:n framför dig.</string>
     <string name="tv_sign_in_pair_first">Parkoppla med %1$s först och logga sedan in på den</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4134,4 +4134,8 @@
     <string name="tv_search_how">Tryck på OK på sökraden för att skriva med fjärrkontrollen.</string>
     <string name="tv_search_voice_how">Eller välj mikrofonen bredvid och säg en låt, artist eller ett album.</string>
     <string name="tv_pair_step_find">Tryck på telefonen i Prism på enhetsraden under kontrollerna (eller öppna Inställningar → Högtalare, tv-apparater &amp; webbläsare) och välj %1$s</string>
+    <string name="sing_quick_slow">Den här telefonen är för långsam för den fullständiga separeringen, så Sjung använder det snabba sättet: det tar bort det som ligger mitt i mixen, där rösten brukar ligga. Det blir mindre rent, och en monolåt förblir som den är.</string>
+    <string name="sing_mono_song">Den här låten är i mono: det snabba sättet kan inte ta bort rösten, så den spelas som den är.</string>
+    <string name="tv_sing_measured">Den här tv:n separerar låtar %1$s× så snabbt som de spelas.</string>
+    <string name="tv_voice_quick">Rösten sänkt (snabbt sätt)</string>
 </resources>

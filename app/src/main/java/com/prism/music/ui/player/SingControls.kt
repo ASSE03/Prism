@@ -107,7 +107,8 @@ fun toggleSing(c: com.prism.music.AppContainer, onNeedsDownload: () -> Unit) {
 @Composable
 fun LyricsButtonsRow(song: Song, state: LyricsState, onChangeSource: () -> Unit, onNeedsDownload: () -> Unit, modifier: Modifier = Modifier) {
     val c = LocalContainer.current
-    val singable = c.sing.supported && c.sing.canSing(song)
+    // Every phone sings (1.8.x): one Sing's engine doesn't run on uses the quick way.
+    val singable = c.sing.canSing(song)
     val source = LocalAppSettings.current.lyricsSourceButton
     if (!singable && !source) return
     Box(modifier.fillMaxWidth().padding(horizontal = 4.dp)) {
@@ -303,8 +304,10 @@ fun SingSheet(song: Song, onDismiss: () -> Unit) {
     val runtime = ModelStore.Model.singRuntime()
     val downloading = listOfNotNull(runtime, ModelStore.Model.SING_MODEL).mapNotNull { models[it] as? ModelStore.State.Downloading }
     val failed = listOfNotNull(runtime, ModelStore.Model.SING_MODEL).mapNotNull { models[it] as? ModelStore.State.Failed }.firstOrNull()
-    val ready = runtime != null && models[runtime] == ModelStore.State.Ready && models[ModelStore.Model.SING_MODEL] == ModelStore.State.Ready
+    // Where Sing's engine doesn't run, the quick way needs no download.
+    val ready = runtime == null || (models[runtime] == ModelStore.State.Ready && models[ModelStore.Model.SING_MODEL] == ModelStore.State.Ready)
     val singable = sing.canSing(song)
+    val method by sing.method.collectAsState()
 
     ActionSheet(song.thumbnail, onDismiss) { _ ->
         Column(Modifier.padding(horizontal = 24.dp).padding(bottom = 8.dp)) {
@@ -319,8 +322,7 @@ fun SingSheet(song: Song, onDismiss: () -> Unit) {
             }
             Spacer(Modifier.height(16.dp))
             when {
-                runtime == null -> Text(tr(R.string.sing_doesn_t_run_on_this), style = MaterialTheme.typography.bodyMedium)
-                !ready -> {
+                !ready && runtime != null -> {
                     Text(
                         tr(R.string.sing_separates_each_song_s_voice, ModelStore.Model.sizeText(ModelStore.Model.SING_MODEL, runtime)),
                         style = MaterialTheme.typography.bodyMedium,
@@ -353,6 +355,15 @@ fun SingSheet(song: Song, onDismiss: () -> Unit) {
                         else -> tr(R.string.getting_this_song_ready)
                     }
                     Text(status, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    // The quick way, said plainly: why, and what it can and can't do.
+                    if (method == com.prism.music.playback.sing.Separation.QUICK) {
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            if (runtime == null) tr(R.string.sing_doesn_t_run_on_this) else tr(R.string.sing_quick_slow),
+                            Modifier.testTag("singQuickNote"),
+                            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                     Spacer(Modifier.height(14.dp))
                     Row {
                         Text(tr(R.string.lead_voice), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)

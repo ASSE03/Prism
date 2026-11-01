@@ -330,7 +330,7 @@ fun TvVideoPage(nav: TvNav) {
     val settings by c.settings.flow.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(Unit) { TvSing.load(context) }
-    val singReady = TvSing.state.collectAsState().value == TvSing.State.READY
+    val singReady = TvSing.state.collectAsState().value.sings
     // Lyrics keep the video on behind them (Back from the lyrics returns to it); everything else ends it.
     val toLyrics = remember { booleanArrayOf(false) }
     DisposableEffect(Unit) { onDispose { if (!toLyrics[0]) c.player.setVideoMode(false) } }
