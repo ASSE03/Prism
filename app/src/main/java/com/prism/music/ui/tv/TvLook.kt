@@ -39,8 +39,9 @@ import com.prism.music.ui.theme.PrismTokens
  * played last) behind the places, the cover's own frost behind its album or artist page, the cover-made mesh behind
  * the player; frosted glass panels; and the split light as the one focus mark (a spectrum ring round what has focus).
  *
- * Made for a mid-range TV's GPU: every backdrop is drawn once into its own layer from a small picture blurred once in
- * software (cached per cover), never blurred live; nothing moves on its own while the remote is down.
+ * Made for a mid-range TV's GPU: the frost is made once into a picture of the screen's size, from a small picture
+ * blurred once in software (cached per cover), and shown as that picture; never blurred or drawn live (on the owner's
+ * TV that took about 9 ms of every frame); nothing moves on its own while the remote is down.
  */
 
 /** Soft corners, as the phone's ([PrismTokens.Radius]). */
@@ -109,7 +110,8 @@ fun TvAura(modifier: Modifier = Modifier) {
 fun TvAuraFrom(url: String?, modifier: Modifier = Modifier) {
     val frost = rememberFrost(url)
     val palette = rememberArtPalette(url)
-    FrostedBackdrop(frost, palette, TV_AURA_HEIGHT, { 0f }, modifier.fillMaxSize().tvStill(), parallax = 0f, ambient = true)
+    // Made once into a picture (a TV's GPU drew it live at half of each frame's time), and shown as that picture.
+    FrostedBackdrop(frost, palette, TV_AURA_HEIGHT, { 0f }, modifier.fillMaxSize(), parallax = 0f, ambient = true, baked = true)
 }
 
 /**

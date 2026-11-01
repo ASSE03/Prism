@@ -94,7 +94,8 @@ fun TvCard(
             shape = CardDefaults.shape(shape),
             scale = CardDefaults.scale(focusedScale = FOCUS_SCALE),
             border = CardDefaults.border(focusedBorder = tvFocusBorder(shape)),
-            colors = CardDefaults.colors(containerColor = TvGlassFill),
+            // No fill of its own: the artwork's tile covers it (a whole card's area drawn twice per frame for nothing).
+            colors = CardDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
         ) {
             Artwork(art, Modifier.fillMaxSize(), shape = shape, size = 360)
         }
