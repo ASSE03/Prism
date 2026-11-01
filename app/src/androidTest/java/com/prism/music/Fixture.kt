@@ -30,6 +30,12 @@ object Fixture {
         val seasons = (year - 1..year + 1).flatMap { y -> com.prism.music.data.looks.Season.entries.map { "${it.name}:$y" } }.toSet()
         context.getSharedPreferences("prompts", Context.MODE_PRIVATE).edit().putBoolean("notifications_asked", true)
             .putStringSet("season_asked", seasons).commit()
+        // Holiday mixes (1.8.0) out of season unless a test picks a date: in November or December their row leads
+        // Home (phone and TV), which isn't what tests about other rows expect. A test that wants them sets it after.
+        if (container.seasonal.clock == null) {
+            val zone = java.time.ZoneId.systemDefault()
+            container.seasonal.clock = java.time.Clock.fixed(java.time.LocalDateTime.of(2026, 7, 10, 12, 0).atZone(zone).toInstant(), zone)
+        }
         // The settings Prism reads at start are its live copy of the store: wait until it has them.
         withTimeout(10_000) { while (!container.settings.current.onboarded) kotlinx.coroutines.delay(20) }
     }

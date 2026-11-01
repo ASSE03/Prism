@@ -3,6 +3,8 @@ package com.prism.music.ui.tv
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -35,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -122,6 +126,8 @@ fun TvLyricsScreen(
     roman: List<LyricLine?>? = null,
     romanInstead: Boolean = false,
     translations: List<String?>? = null,
+    /** Puts focus back on the lines (after Back to now, or the timing closing). */
+    linesFocus: androidx.compose.ui.focus.FocusRequester? = null,
 ) {
     val scheme = MaterialTheme.colorScheme
     val settings = LocalAppSettings.current
@@ -161,6 +167,7 @@ fun TvLyricsScreen(
         }
         BoxWithConstraints(
             Modifier.fillMaxSize().padding(start = 96.dp, end = 160.dp, top = 96.dp, bottom = 88.dp)
+                .then(if (linesFocus != null) Modifier.focusRequester(linesFocus) else Modifier)
                 .tvItem("$TAG_LYRICS/lines", entry = true).focusable(),
         ) {
             val settle = maxHeight * SETTLE_AT
@@ -286,8 +293,10 @@ private fun TvGapMark(line: LyricLine, until: Long, clock: State<Long>, active: 
 
 /**
  * The lyrics page's states around [TvLyricsScreen]: looking for lyrics, none found, or the lines. The lines take the
- * remote: ↑ ↓ pick a line (it lights up and comes into place), OK plays from the picked line (or pauses and plays with
- * none picked).
+ * remote: ↑ ↓ pick a line (it lights up and comes into place), OK plays from the picked line (then the lyrics follow
+ * the song from there) or pauses and plays with none picked. With a line picked, Back (or "Back to now", or
+ * [TV_PICK_RETURN_MS] without a key) goes back to the sung line, following the song again; a second Back leaves.
+ * Right reaches the Timing button: the song's lyrics timing, moved live.
  */
 @Composable
 fun TvLyricsPlace(
@@ -307,6 +316,17 @@ fun TvLyricsPlace(
 ) {
     val scheme = MaterialTheme.colorScheme
     var picked by remember(lines) { mutableStateOf<Int?>(null) }
+    var timing by remember { mutableStateOf(false) }
+    var lastKey by remember { androidx.compose.runtime.mutableLongStateOf(0L) }
+    val linesFocus = remember { androidx.compose.ui.focus.FocusRequester() }
+    // Back to following the song: the lines take focus back (the chip or the timing may have had it).
+    val follow: () -> Unit = { picked = null; runCatching { linesFocus.requestFocus() } }
+    androidx.activity.compose.BackHandler(enabled = picked != null && !timing) { follow() }
+    LaunchedEffect(picked, lastKey) {
+        if (picked == null) return@LaunchedEffect
+        delay(TV_PICK_RETURN_MS)
+        picked = null
+    }
     if (lines.isEmpty()) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             TvMeshBackdrop(now.art)
@@ -319,26 +339,88 @@ fun TvLyricsPlace(
         }
         return
     }
-    // The clock is read only where words are drawn (not here, or the whole page would be redrawn every frame).
-    TvLyricsScreen(
-        now, TvLyrics(lines, current, 0L, source), clock, picked = picked, accent = accent,
-        roman = roman, romanInstead = romanInstead, translations = translations,
-        modifier = Modifier.onPreviewKeyEvent { e ->
-            if (e.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
-            when (e.key) {
-                Key.DirectionUp -> { picked = ((picked ?: current) - 1).coerceAtLeast(0); true }
-                Key.DirectionDown -> { picked = ((picked ?: current) + 1).coerceAtMost(lines.lastIndex); true }
-                Key.DirectionCenter, Key.Enter -> {
-                    val p = picked
-                    if (p != null) { onSeek(lines[p].timeMs); picked = null } else onPlayPause()
-                    true
+    Box(Modifier.fillMaxSize()) {
+        // The clock is read only where words are drawn (not here, or the whole page would be redrawn every frame).
+        TvLyricsScreen(
+            now, TvLyrics(lines, current, 0L, source), clock, picked = picked, accent = accent,
+            roman = roman, romanInstead = romanInstead, translations = translations, linesFocus = linesFocus,
+            modifier = Modifier.onPreviewKeyEvent { e ->
+                if (e.type != KeyEventType.KeyDown || timing) return@onPreviewKeyEvent false
+                lastKey = System.nanoTime()
+                when (e.key) {
+                    Key.DirectionUp -> { picked = ((picked ?: current) - 1).coerceAtLeast(0); true }
+                    Key.DirectionDown -> { picked = ((picked ?: current) + 1).coerceAtMost(lines.lastIndex); true }
+                    Key.DirectionCenter, Key.Enter -> {
+                        val p = picked
+                        if (p != null) { onSeek(lines[p].timeMs); picked = null } else onPlayPause()
+                        true
+                    }
+                    else -> false
                 }
-                else -> false
-            }
-        },
-    )
+            },
+        )
+        // Top right: "Back to now" while a line is picked, and Timing. Right from the lyrics reaches them.
+        Row(Modifier.align(Alignment.TopEnd).padding(TvSafe), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
+            if (picked != null) TvButton(tr(R.string.tv_back_to_now), follow, Modifier.tvItem("$TAG_LYRICS/now"), icon = com.prism.music.ui.theme.PrismIcons.Lyrics)
+            TvButton(tr(R.string.lyrics_timing), { timing = true }, Modifier.tvItem("$TAG_LYRICS/timing"), icon = com.prism.music.ui.theme.PrismIcons.Timer)
+        }
+        if (timing) {
+            androidx.activity.compose.BackHandler { timing = false; runCatching { linesFocus.requestFocus() } }
+            TvTimingPanel()
+        }
+    }
 }
 
+/**
+ * The song's lyrics timing, over the lyrics (TV): how far they're moved ("In sync", "+0.4 s · lyrics earlier"), and
+ * the remote's keys for it: ← → 0.1 s (held, faster), ↑ ↓ 1 s, OK back to in sync. The lines move as it changes, so it
+ * can be set by ear. Back closes it.
+ */
+@Composable
+private fun androidx.compose.foundation.layout.BoxScope.TvTimingPanel() {
+    val c = LocalContainer.current
+    val pc = c.player
+    val offset by pc.lyricOffset.collectAsState()
+    val video by pc.videoMode.collectAsState()
+    val scheme = MaterialTheme.colorScheme
+    val interaction = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+    val focused by interaction.collectIsFocusedAsState()
+    Column(
+        Modifier.align(Alignment.BottomCenter).padding(bottom = 96.dp).width(640.dp)
+            .tvGlass(TvShapes.panel, TvPanelFill).padding(horizontal = 32.dp, vertical = 24.dp).testTag("$TAG_LYRICS/timingpanel"),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        Text(tr(R.string.lyrics_timing), style = MaterialTheme.typography.titleLarge, color = scheme.onSurface)
+        Text(tr(if (video) R.string.for_this_song_s_music_video else R.string.for_this_song), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant)
+        Box(
+            Modifier.fillMaxWidth()
+                .onPreviewKeyEvent { e ->
+                    if (e.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+                    val repeats = e.nativeKeyEvent.repeatCount
+                    when (e.key) {
+                        Key.DirectionRight -> { pc.setLyricOffset(TvLyricTiming.nudged(offset, TvLyricTiming.stepFor(repeats))); true }
+                        Key.DirectionLeft -> { pc.setLyricOffset(TvLyricTiming.nudged(offset, -TvLyricTiming.stepFor(repeats))); true }
+                        Key.DirectionUp -> { pc.setLyricOffset(TvLyricTiming.nudged(offset, TvLyricTiming.BIG_STEP)); true }
+                        Key.DirectionDown -> { pc.setLyricOffset(TvLyricTiming.nudged(offset, -TvLyricTiming.BIG_STEP)); true }
+                        Key.DirectionCenter, Key.Enter -> { pc.setLyricOffset(0L); true }
+                        else -> false
+                    }
+                }
+                .tvItem("$TAG_LYRICS/nudge", entry = true)
+                .focusable(interactionSource = interaction)
+                .then(if (focused) Modifier.border(TV_RING_THIN, tvRing(), TvShapes.card) else Modifier)
+                .padding(vertical = 14.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                if (offset == 0L) tr(R.string.in_sync) else tr(if (offset > 0) R.string.lyrics_earlier else R.string.lyrics_later, TvLyricTiming.shown(offset)),
+                style = MaterialTheme.typography.headlineMedium, color = scheme.onSurface,
+            )
+        }
+        Text(tr(R.string.tv_timing_keys, tr(R.string.reset)), style = MaterialTheme.typography.titleMedium, color = scheme.onSurfaceVariant)
+    }
+}
 /** How many times a song's translation is asked for while its lyrics stay open (Google can be busy). */
 private const val TRANSLATE_TRIES = 3
 
@@ -364,3 +446,30 @@ fun rememberTvTranslations(lines: List<LyricLine>): List<String?>? {
     }
     return translation?.takeUnless { it.sameLanguage }?.translations
 }
+
+/**
+ * Lyrics timing on the TV (1.8.0): the phone's own per-song offset ([com.prism.music.playback.PlayerConnection.setLyricOffset],
+ * up to [com.prism.music.ui.player.MAX_LYRIC_OFFSET_MS] either way), so the phone and the TV share each song's timing.
+ * Positive shows the lyrics earlier.
+ */
+object TvLyricTiming {
+    /** ← → move this much; held, the steps grow (after a few repeats 0.2 s, then 0.5 s). */
+    fun stepFor(repeats: Int): Long = when {
+        repeats >= 10 -> 500L
+        repeats >= 4 -> 200L
+        else -> 100L
+    }
+
+    /** ↑ ↓ move a whole second. */
+    const val BIG_STEP = 1_000L
+
+    /** [offset] moved [by], held within the phone's reach. */
+    fun nudged(offset: Long, by: Long): Long =
+        (offset + by).coerceIn(-com.prism.music.ui.player.MAX_LYRIC_OFFSET_MS, com.prism.music.ui.player.MAX_LYRIC_OFFSET_MS)
+
+    /** "+0.4 s", "−1.2 s" (the phone's own way of writing it). */
+    fun shown(ms: Long): String = (if (ms > 0) "+" else if (ms < 0) "−" else "") + "%.1f s".format(kotlin.math.abs(ms) / 1000f)
+}
+
+/** After this long with no key, a picked line lets go and the lyrics follow the song again. */
+const val TV_PICK_RETURN_MS = 4_000L

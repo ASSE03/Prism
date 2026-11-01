@@ -41,7 +41,8 @@ class TvHomeLayoutTest {
         val a = TvHomeLayout.arrange(emptyList(), today)
         assertEquals(today, a.rows)
         assertEquals(0, a.heroAt)
-        assertEquals(TvHomeLayout.FIXED, listOf(HERO, KEY_PICKS, KEY_DIAL, KEY_RECENT))
+        assertEquals(listOf(HERO), TvHomeLayout.FIXED.take(1))
+        assertTrue(listOf(KEY_PICKS, KEY_DIAL, KEY_RECENT, HomeSections.MADE_FOR_YOU, HomeSections.ON_REPEAT, HomeSections.REPLAY, HomeSections.MOODS).all { it in TvHomeLayout.CATALOG })
         assertTrue(AppSettings().tv.homeLayout.isEmpty())
     }
 
@@ -57,14 +58,30 @@ class TvHomeLayoutTest {
         assertEquals(listOf("yt:shelf:mixed for you"), rows.map { it.key })
     }
 
-    @Test fun noTvLayoutFollowsThePhonesOrderWhereItNamesTheRows() {
-        // The phone's layout as a fresh install has it: the TV's Home as it was.
-        assertEquals(today, TvHomeLayout.arrange(emptyList(), today, HomeSections.initial).rows)
-        // A phone layout with "Mixed for you" before Quick picks: they swap places, the rest stay.
+    @Test fun noTvLayoutMirrorsThePhonesOrder() {
+        // The phone's layout as a fresh install has it: its rows in its order (Quick picks, then "Mixed for you"), then
+        // the rows the TV always had (Speed dial, Recently played) and YouTube's other shelves.
+        assertEquals(
+            listOf(KEY_PICKS, yt("Mixed for you"), KEY_DIAL, KEY_RECENT, yt("New releases")),
+            TvHomeLayout.arrange(emptyList(), today, HomeSections.initial).rows.map { it.key },
+        )
+        // A phone layout with "Mixed for you" before Quick picks: so on the TV.
         val phone = listOf(cfg(yt("Mixed for you")), cfg(KEY_PICKS))
-        assertEquals(listOf(yt("Mixed for you"), KEY_DIAL, KEY_RECENT, KEY_PICKS, yt("New releases")), TvHomeLayout.arrange(emptyList(), today, phone).rows.map { it.key })
+        assertEquals(listOf(yt("Mixed for you"), KEY_PICKS, KEY_DIAL, KEY_RECENT, yt("New releases")), TvHomeLayout.arrange(emptyList(), today, phone).rows.map { it.key })
     }
 
+    @Test fun whatShowsFollowsThePhoneAndRowsThePhoneDoesntNameAsTheTvHadThem() {
+        val own = listOf(row(HomeSections.MADE_FOR_YOU), row(HomeSections.ON_REPEAT), row(HomeSections.LIKED))
+        // The phone names Made for you (shown) and Liked songs (hidden); On repeat isn't named: the TV never had it.
+        val phone = listOf(cfg(HomeSections.MADE_FOR_YOU), cfg(HomeSections.LIKED, visible = false))
+        val a = TvHomeLayout.arrange(emptyList(), com.prism.music.ui.tv.tvAllRows(own + today), phone)
+        assertEquals(listOf(HomeSections.MADE_FOR_YOU, KEY_PICKS, KEY_DIAL, KEY_RECENT, yt("Mixed for you"), yt("New releases")), a.rows.map { it.key })
+        // YouTube's shelves the phone doesn't name show while the phone adds them (Customize Home's "Add new sections").
+        assertEquals(listOf(KEY_PICKS, KEY_DIAL, KEY_RECENT), TvHomeLayout.arrange(emptyList(), today, emptyList(), autoAdd = false).rows.map { it.key })
+        assertTrue(TvHomeLayout.isShown(HERO, emptyList(), phone))
+        assertTrue(!TvHomeLayout.isShown(HomeSections.ON_REPEAT, emptyList(), phone))
+        assertTrue(TvHomeLayout.isShown(HomeSections.ON_REPEAT, emptyList(), phone + cfg(HomeSections.ON_REPEAT)))
+    }
     @Test fun aLayoutOrdersRowsAndTheHeroAndThePhoneSaysWhichShow() {
         // The TV's order: Recently played first, then the hero. Quick picks hidden in the phone's layout (shared).
         val stored = listOf(cfg(KEY_RECENT), cfg(HERO), cfg(KEY_PICKS), cfg(KEY_DIAL), cfg(yt("Mixed for you")), cfg(yt("New releases")))
@@ -90,27 +107,41 @@ class TvHomeLayoutTest {
         assertEquals(0, TvHomeLayout.arrange(listOf(cfg(KEY_RECENT), cfg(KEY_PICKS)), today).heroAt)
     }
 
-    @Test fun theEditorListsEveryRowAsHomeHasIt() {
-        val natural = TvHomeLayout.natural(listOf(cfg(yt("Mixed for you")))) { it.uppercase() }
-        assertEquals(listOf(HERO, KEY_PICKS, KEY_DIAL, KEY_RECENT, yt("Mixed for you")), natural.map { it.key })
-        assertEquals(KEY_PICKS.uppercase(), natural[1].title)
-        // No TV layout: Home's own order, shown as the phone's layout says.
-        val phone = listOf(cfg(KEY_DIAL, visible = false), HomeSectionConfig(HomeSections.DOWNLOADS, "Downloads", visible = false))
-        val fresh = TvHomeLayout.editable(emptyList(), natural, phone)
-        assertEquals(natural.map { it.key }, fresh.map { it.key })
-        assertEquals(listOf(true, true, false, true, true), fresh.map { it.visible })
-        // With one: its order; rows it doesn't have after the row before them on Home (Quick picks and Speed dial after
-        // the hero, "Mixed for you" after Recently played); rows Home hasn't now aren't listed.
+    @Test fun theEditorListsEveryRowTheTvCanHave() {
+        val phone = listOf(
+            cfg(KEY_DIAL, visible = false), HomeSectionConfig(HomeSections.DOWNLOADS, "Downloads", visible = false),
+            HomeSectionConfig(HomeSections.pinKey("album", "MPREb_1"), "Album One", name = "My album"),
+        )
+        val available = TvHomeLayout.available(listOf(cfg(yt("Mixed for you"))), phone) { it.uppercase() }
+        // The hero, every phone section the TV shows (empty ones too), the phone's pins (by its name), YouTube's shelves.
+        assertEquals(listOf(HERO) + TvHomeLayout.CATALOG + listOf(HomeSections.pinKey("album", "MPREb_1"), yt("Mixed for you")), available.map { it.key })
+        assertEquals("My album", available.single { it.key.startsWith("pin:") }.title)
+        assertEquals(KEY_PICKS.uppercase(), available.single { it.key == KEY_PICKS }.title)
+        // No TV layout: the phone's order first (Speed dial, Downloads, the pin), then the rest; shown as Home has them.
+        val fresh = TvHomeLayout.editable(emptyList(), available, phone)
+        assertEquals(listOf(HERO, KEY_DIAL, HomeSections.DOWNLOADS, HomeSections.pinKey("album", "MPREb_1"), HomeSections.REPLAY), fresh.take(5).map { it.key })
+        val shown = fresh.associate { it.key to it.visible }
+        assertEquals(false, shown[KEY_DIAL])
+        assertEquals(false, shown[HomeSections.DOWNLOADS])
+        assertEquals(true, shown[HomeSections.pinKey("album", "MPREb_1")])
+        assertEquals(true, shown[KEY_PICKS])
+        assertEquals(false, shown[HomeSections.ON_REPEAT])
+        assertEquals(true, shown[yt("Mixed for you")])
+        // Turning On repeat on in the editor names it shown in the phone's layout: both Homes show it.
+        val on = com.prism.music.ui.tv.layoutWithShown(phone, HomeSections.ON_REPEAT, "On repeat", shown = true)
+        assertTrue(TvHomeLayout.isShown(HomeSections.ON_REPEAT, emptyList(), on))
+        // With a TV layout: its order; rows it doesn't have after the row before them; the hero hidden as it says.
         val stored = listOf(cfg(yt("Gone")), cfg(KEY_RECENT), cfg(HERO, visible = false))
-        val editable = TvHomeLayout.editable(stored, natural, phone)
-        assertEquals(listOf(KEY_RECENT, yt("Mixed for you"), HERO, KEY_PICKS, KEY_DIAL), editable.map { it.key })
-        assertEquals(listOf(true, true, false, true, false), editable.map { it.visible })
+        val editable = TvHomeLayout.editable(stored, available, phone)
+        assertEquals(KEY_RECENT, editable.first().key)
+        assertTrue(editable.none { it.key == yt("Gone") })
+        assertEquals(false, editable.single { it.key == HERO }.visible)
         assertEquals(editable, TvHomeLayout.saved(editable + editable.first()))
-        // Two of the TV's rows hidden (the phone-only Downloads isn't one); Back to default shows them, Downloads stays.
-        assertEquals(2, TvHomeLayout.hiddenCount(stored, phone))
-        val shown = TvHomeLayout.allShown(phone)
-        assertTrue(!com.prism.music.ui.tv.hiddenIn(shown, KEY_DIAL))
-        assertTrue(com.prism.music.ui.tv.hiddenIn(shown, HomeSections.DOWNLOADS))
+        // Hidden: the hero, Speed dial and Downloads; Back to default shows Speed dial again, Downloads stays as the phone has it.
+        assertEquals(3, TvHomeLayout.hiddenCount(stored, phone))
+        val reset = TvHomeLayout.allShown(phone)
+        assertTrue(!com.prism.music.ui.tv.hiddenIn(reset, KEY_DIAL))
+        assertTrue(com.prism.music.ui.tv.hiddenIn(reset, HomeSections.DOWNLOADS))
     }
     @Test fun movingStopsAtEitherEnd() {
         val list = listOf(cfg("a"), cfg("b"), cfg("c"))

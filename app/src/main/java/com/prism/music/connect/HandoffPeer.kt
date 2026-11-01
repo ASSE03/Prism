@@ -47,6 +47,20 @@ interface HandoffLocal {
     fun signIn(values: Map<String, String>, account: String, from: String): String? = tr(R.string.both_devices_need_the_latest_prism)
     /** A Look from [from] to use here; null when it's on. */
     fun useLook(code: String, from: String): String? = tr(R.string.both_devices_need_the_latest_prism)
+
+    /**
+     * "Bring your Prism" ([BringTransfer]): [from] (a paired phone) wants to bring [size] bytes here. Null to take it,
+     * else why not (only a TV takes one, one at a time).
+     */
+    fun bringStarting(from: String, size: Long): String? = tr(R.string.both_devices_need_the_latest_prism)
+    /** [got] of [total] bytes have come. */
+    fun bringProgress(from: String, got: Long, total: Long) = Unit
+    /** Where what comes is written while it comes (deleted after, whatever happens). */
+    fun bringScratch(): java.io.File = java.io.File.createTempFile("bring", ".zip")
+    /** Everything came and checked out: [file] is merged in here. Null once it is, else why not. */
+    fun bringArrived(file: java.io.File, from: String): String? = tr(R.string.both_devices_need_the_latest_prism)
+    /** The transfer is over: [ok] when it was merged in; otherwise nothing here changed. */
+    fun bringEnded(from: String, ok: Boolean) = Unit
 }
 
 /** The device at the other end, as it proved itself (a pairing's result). */
@@ -72,6 +86,8 @@ sealed interface HandoffRequest {
     data class Add(val songs: List<Song>, val next: Boolean) : HandoffRequest
     data class SignIn(val values: Map<String, String>, val account: String) : HandoffRequest
     data class Look(val code: String) : HandoffRequest
+    /** "Bring your Prism": [source] for a TV paired already; [progress] = bytes the TV has, of the whole. */
+    class Bring(val source: BringSource, val progress: (Long, Long) -> Unit = { _, _ -> }) : HandoffRequest
     /** Only pair (or check the pairing): nothing more. */
     data object Pair : HandoffRequest
 }
@@ -214,6 +230,8 @@ class HandoffPeer(
             }
             is HMsg.SignIn -> link.send(local.signIn(cmd.values, cmd.account.take(200), them)?.let { HMsg.Denied(it) } ?: HMsg.Ok)
             is HMsg.Look -> link.send(local.useLook(cmd.code.take(MAX_LOOK_CODE), them)?.let { HMsg.Denied(it) } ?: HMsg.Ok)
+            // Only from a paired phone (proved above), and only to a TV ([HandoffLocal.bringStarting]).
+            is HMsg.BringBegin -> BringTransfer.receive(link, cmd, local, them, fromTv = hello.tv)
             // Pairing only: done.
             HMsg.Ok -> Unit
             else -> Unit
@@ -253,6 +271,11 @@ class HandoffPeer(
         if (request is HandoffRequest.SignIn) {
             if (!ch.tv) return HandoffResult.Failed(tr(R.string.tv_not_a_tv, them))
             if (pairingKey == null) return HandoffResult.Failed(tr(R.string.tv_sign_in_pair_first, them))
+        }
+        // So does the listening (1.8.0, "Bring your Prism"): only to a TV this phone was paired with before.
+        if (request is HandoffRequest.Bring) {
+            if (!ch.tv) return HandoffResult.Failed(tr(R.string.tv_not_a_tv, them))
+            if (pairingKey == null) return HandoffResult.Failed(tr(R.string.bring_pair_first, them))
         }
         if (pairingKey == null) {
             link.send(HMsg.PairRequest)
@@ -328,6 +351,7 @@ class HandoffPeer(
             is HandoffRequest.Add -> answer(link, HMsg.Add(request.songs, request.next), them)
             is HandoffRequest.SignIn -> answer(link, HMsg.SignIn(request.values, request.account), them)
             is HandoffRequest.Look -> answer(link, HMsg.Look(request.code), them)
+            is HandoffRequest.Bring -> BringTransfer.send(link, request.source, them, request.progress)
         }
     }
 
