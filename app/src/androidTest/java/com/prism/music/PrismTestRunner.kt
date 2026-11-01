@@ -19,8 +19,45 @@ class PrismTestRunner : AndroidJUnitRunner() {
         if (args.getString("annotation")?.contains(TvTest::class.java.name) != true) {
             args.putString("filter", listOfNotNull(args.getString("filter"), NoTvTests::class.java.name).joinToString(","))
         }
+        // Measurements (@Measurement) run only when asked for (`-e tvperf 1`): left out of every other run, rather than
+        // each one skipped by an assumption, which the orchestrator reports as a failure.
+        if (args.getString("tvperf") == null) {
+            args.putString("filter", listOfNotNull(args.getString("filter"), NoMeasurements::class.java.name).joinToString(","))
+        }
+        whoTouchedCompose()
         super.onCreate(args)
     }
+
+    /**
+     * "Detected multithreaded access to SnapshotStateObserver: previousThreadId=47" (Google TV 14, 1.8.0) names the other
+     * thread only by its number: when it happens, the log says which thread that was and what it was doing.
+     */
+    private fun whoTouchedCompose() {
+        val before = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { thread, e ->
+            runCatching {
+                val id = Regex("previousThreadId=(\\d+)").find(e.message.orEmpty())?.groupValues?.get(1)?.toLong()
+                if (id != null) {
+                    val other = Thread.getAllStackTraces().entries.firstOrNull { it.key.id == id }
+                    android.util.Log.e("PrismCompose", "previousThreadId=$id is ${other?.key?.name ?: "gone"}:\n" + other?.value?.joinToString("\n") { "  at $it" })
+                }
+            }
+            before?.uncaughtException(thread, e)
+        }
+    }
+}
+
+/** A measurement, not a pass-or-fail test: it runs only when asked for (`-e tvperf 1`). */
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.CLASS)
+annotation class Measurement
+
+/** Leaves measurements (@Measurement classes) out of a run. */
+class NoMeasurements : org.junit.runner.manipulation.Filter() {
+    override fun shouldRun(description: org.junit.runner.Description): Boolean =
+        description.testClass?.isAnnotationPresent(Measurement::class.java) != true
+
+    override fun describe() = "no measurements"
 }
 
 /** Leaves Prism TV's tests (@TvTest classes) out of a run. */
