@@ -4421,4 +4421,5 @@
     <string name="sing_taking_voice_out">جارٍ إزالة الصوت… %1$s%%</string>
     <string name="sing_quick_then_full">الصوت مخفَّض (سريع) · الفصل الكامل %1$s%%</string>
     <string name="tv_sing_play_first">شغّل أغنية أولًا، ثم افحص</string>
+    <string name="tv_stop_comes_back">تعود الموسيقى إلى هذا الهاتف</string>
 </resources>

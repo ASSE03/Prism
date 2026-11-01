@@ -1319,8 +1319,13 @@ internal fun DeviceRow(
 @Composable
 private fun PrismDevices() {
     val handoff = LocalContainer.current.handoff
+    val cast = LocalContainer.current.cast
     val devices by handoff.devices.collectAsState()
     val busy by handoff.busy.collectAsState()
+    val castState by cast.state.collectAsState()
+    // A Prism TV the music plays on now (or is going to): it shows as playing, as a speaker cast to does.
+    val tvNow = ((castState as? com.prism.music.connect.CastState.Casting)?.renderer ?: (castState as? com.prism.music.connect.CastState.Connecting)?.renderer)
+        ?.takeIf { it.kind == com.prism.music.connect.RendererKind.PRISM_TV }
     DisposableEffect(Unit) {
         handoff.startDiscovery()
         onDispose { handoff.stopDiscovery() }
@@ -1332,13 +1337,22 @@ private fun PrismDevices() {
     OutputGroup(tr(R.string.prism_devices)) {
         busy?.let { label -> DeviceRow(PrismIcons.Handoff, label, tr(R.string.one_moment), busy = true, enabled = false) {} }
         devices.forEach { d ->
+            // A TV plays along with this phone (1.8.0), the phone staying its remote; another phone takes the music over.
+            val thisTv = d.tv && tvNow != null && tvNow.id == "prism:${d.id ?: d.key}"
+            val connecting = thisTv && castState is com.prism.music.connect.CastState.Connecting
             DeviceRow(
-                if (d.tv) PrismIcons.Tv else PrismIcons.Handoff, d.name, tr(R.string.move_the_music_there) + if (d.paired) "" else tr(R.string.pairs_the_first_time), enabled = busy == null,
+                if (d.tv) PrismIcons.Tv else PrismIcons.Handoff, d.name,
+                when {
+                    connecting -> tvNow!!.detail + tr(R.string.connecting)
+                    thisTv -> tvNow!!.detail
+                    else -> tr(R.string.move_the_music_there) + if (d.paired) "" else tr(R.string.pairs_the_first_time)
+                },
+                selected = thisTv && !connecting, busy = connecting, enabled = busy == null,
                 trailing = {
                     if (d.tv) com.prism.music.ui.components.PrismTextButton(onClick = { remoteFor = d }, enabled = busy == null) { Text(tr(R.string.tv_remote)) }
                     else com.prism.music.ui.components.PrismTextButton(onClick = { handoff.bringFrom(d) }, enabled = busy == null) { Text(tr(R.string.bring_here)) }
                 },
-            ) { handoff.moveTo(d) }
+            ) { if (d.tv) { if (!thisTv) cast.connectTv(d) } else handoff.moveTo(d) }
         }
     }
 }
@@ -1361,7 +1375,7 @@ private fun SpeakersAndTvs(castState: com.prism.music.connect.CastState, casting
     val shown = renderers.let { list ->
         // The one being cast to stays listed even if it's stopped answering searches.
         val playing = (castState as? com.prism.music.connect.CastState.Casting)?.renderer ?: (castState as? com.prism.music.connect.CastState.Connecting)?.renderer
-        val all = if (playing != null && list.none { it.id == playing.id }) listOf(playing) + list else list
+        val all = if (playing != null && playing.kind != com.prism.music.connect.RendererKind.PRISM_TV && list.none { it.id == playing.id }) listOf(playing) + list else list
         // A TV whose Prism is listed under Prism devices isn't listed again as its own Cast or DLNA player.
         all.filter { r -> r.id == castingTo || prismTvs.none { it.tv && it.host == rendererHost(r) } }
     }
@@ -1378,7 +1392,8 @@ private fun SpeakersAndTvs(castState: com.prism.music.connect.CastState, casting
                 selected = selected && !connecting, busy = connecting,
             ) { if (!selected) cast.connect(r) }
         }
-        if (castingTo != null) DeviceRow(PrismIcons.Close, tr(R.string.stop_casting), tr(R.string.the_music_pauses_pick_this_phone)) {
+        // A Prism TV's music comes back to this phone, playing; a speaker's pauses.
+        if (castingTo != null) DeviceRow(PrismIcons.Close, tr(R.string.stop_casting), tr(if (cast.toPrismTv) R.string.tv_stop_comes_back else R.string.the_music_pauses_pick_this_phone)) {
             cast.disconnect(keepPlaying = false)
         }
         if (shown.isEmpty()) {

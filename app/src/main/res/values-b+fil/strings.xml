@@ -4221,4 +4221,5 @@
     <string name="sing_taking_voice_out">Inaalis ang boses… %1$s%%</string>
     <string name="sing_quick_then_full">Hininaan ang boses (mabilis) · buong paghihiwalay %1$s%%</string>
     <string name="tv_sing_play_first">Magpatugtog muna ng kanta, saka mag-check</string>
+    <string name="tv_stop_comes_back">Babalik ang musika sa phone na ito</string>
 </resources>

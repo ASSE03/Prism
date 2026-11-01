@@ -4221,4 +4221,5 @@
     <string name="sing_taking_voice_out">Tar bort rösten… %1$s%%</string>
     <string name="sing_quick_then_full">Rösten sänkt (snabbt) · fullständig separering %1$s%%</string>
     <string name="tv_sing_play_first">Spela en låt först och kontrollera sedan</string>
+    <string name="tv_stop_comes_back">Musiken kommer tillbaka till den här telefonen</string>
 </resources>

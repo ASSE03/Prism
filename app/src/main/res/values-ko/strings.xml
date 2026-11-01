@@ -4171,4 +4171,5 @@
     <string name="sing_taking_voice_out">목소리를 빼는 중… %1$s%%</string>
     <string name="sing_quick_then_full">목소리 줄임(빠름) · 전체 분리 %1$s%%</string>
     <string name="tv_sing_play_first">먼저 곡을 재생한 다음 확인하세요</string>
+    <string name="tv_stop_comes_back">음악이 이 휴대전화로 돌아옵니다</string>
 </resources>

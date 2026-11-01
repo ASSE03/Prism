@@ -61,6 +61,14 @@ interface HandoffLocal {
     fun bringArrived(file: java.io.File, from: String): String? = tr(R.string.both_devices_need_the_latest_prism)
     /** The transfer is over: [ok] when it was merged in; otherwise nothing here changed. */
     fun bringEnded(from: String, ok: Boolean) = Unit
+
+    /**
+     * Playing along with [from] (a paired phone, 1.8.0): null to start, else why not (only a TV does). Then [follow]
+     * runs for as long as the connection lasts.
+     */
+    fun followStart(from: String): String? = tr(R.string.both_devices_need_the_latest_prism)
+    /** Plays along with [from] over [link], from [first] on ([TvFollower]); blocking. */
+    fun follow(link: HLink, first: FollowState, from: String) = Unit
 }
 
 /** The device at the other end, as it proved itself (a pairing's result). */
@@ -90,6 +98,11 @@ sealed interface HandoffRequest {
     class Bring(val source: BringSource, val progress: (Long, Long) -> Unit = { _, _ -> }) : HandoffRequest
     /** Only pair (or check the pairing): nothing more. */
     data object Pair : HandoffRequest
+    /**
+     * A TV playing along with this phone from [first] on (1.8.0): once it's Done, the connection stays open for it, both
+     * ways ([TvCast], [TvFollower]), and the caller keeps it.
+     */
+    data class Follow(val first: FollowState) : HandoffRequest
 }
 
 /** What a caller expects of the device it reaches. */
@@ -232,6 +245,13 @@ class HandoffPeer(
             is HMsg.Look -> link.send(local.useLook(cmd.code.take(MAX_LOOK_CODE), them)?.let { HMsg.Denied(it) } ?: HMsg.Ok)
             // Only from a paired phone (proved above), and only to a TV ([HandoffLocal.bringStarting]).
             is HMsg.BringBegin -> BringTransfer.receive(link, cmd, local, them, fromTv = hello.tv)
+            // Playing along with a paired phone (proved above), for as long as the connection lasts: only a TV does.
+            is HMsg.FollowStart -> {
+                val why = local.followStart(them)
+                if (why != null) { link.send(HMsg.Denied(why)); return }
+                link.send(HMsg.Ok)
+                local.follow(link, cmd.state, them)
+            }
             // Pairing only: done.
             HMsg.Ok -> Unit
             else -> Unit
@@ -352,6 +372,13 @@ class HandoffPeer(
             is HandoffRequest.SignIn -> answer(link, HMsg.SignIn(request.values, request.account), them)
             is HandoffRequest.Look -> answer(link, HMsg.Look(request.code), them)
             is HandoffRequest.Bring -> BringTransfer.send(link, request.source, them, request.progress)
+            is HandoffRequest.Follow -> {
+                if (!ch.tv) return HandoffResult.Failed(tr(R.string.tv_not_a_tv, them))
+                answer(link, HMsg.FollowStart(request.first), them).also {
+                    // Open from here on, for as long as the TV plays along (it says where it is every second).
+                    if (it is HandoffResult.Done) link.deadline(0)
+                }
+            }
         }
     }
 

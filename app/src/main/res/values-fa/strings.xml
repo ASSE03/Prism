@@ -4221,4 +4221,5 @@
     <string name="sing_taking_voice_out">در حال برداشتن صدا… %1$s%%</string>
     <string name="sing_quick_then_full">صدا کمتر (سریع) · جداسازی کامل %1$s%%</string>
     <string name="tv_sing_play_first">اول یک آهنگ پخش کنید، بعد بررسی کنید</string>
+    <string name="tv_stop_comes_back">موسیقی به این گوشی برمی‌گردد</string>
 </resources>

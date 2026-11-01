@@ -4221,4 +4221,5 @@
     <string name="sing_taking_voice_out">آواز نکالی جا رہی ہے… %1$s%%</string>
     <string name="sing_quick_then_full">آواز کم (تیز) · مکمل علیحدگی %1$s%%</string>
     <string name="tv_sing_play_first">پہلے کوئی گانا چلائیں، پھر جانچیں</string>
+    <string name="tv_stop_comes_back">موسیقی اس فون پر واپس آ جائے گی</string>
 </resources>

@@ -4271,4 +4271,5 @@
     <string name="sing_taking_voice_out">Quitando la voz… %1$s%%</string>
     <string name="sing_quick_then_full">Voz más baja (rápida) · separación completa %1$s%%</string>
     <string name="tv_sing_play_first">Pon una canción primero y luego comprueba</string>
+    <string name="tv_stop_comes_back">La música vuelve a este teléfono</string>
 </resources>

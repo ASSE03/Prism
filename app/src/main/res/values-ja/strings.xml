@@ -4171,4 +4171,5 @@
     <string name="sing_taking_voice_out">歌声を取り除いています… %1$s%%</string>
     <string name="sing_quick_then_full">歌声を弱めています（簡易）· 完全な分離 %1$s%%</string>
     <string name="tv_sing_play_first">先に曲を再生してからチェックしてください</string>
+    <string name="tv_stop_comes_back">音楽がこのスマートフォンに戻ります</string>
 </resources>
