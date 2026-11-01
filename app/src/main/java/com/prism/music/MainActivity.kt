@@ -174,7 +174,8 @@ open class MainActivity : ComponentActivity() {
         // Prism TV (1.8.0): on a TV, Prism's screens are TvActivity's (made for a remote); whatever opened this one (a
         // link, the media notification, an old shortcut) opens that instead.
         if (com.prism.music.ui.tv.TvDevice.isTv(this)) {
-            startActivity(Intent(intent).setComponent(android.content.ComponentName(this, TvActivity::class.java)).setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP))
+            // Added to its flags, not in their place: a shared file's or link's read permission comes with them.
+            startActivity(Intent(intent).setComponent(android.content.ComponentName(this, TvActivity::class.java)).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP))
             finish()
             return
         }

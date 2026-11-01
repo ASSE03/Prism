@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -96,7 +97,7 @@ class TvNav(private val stack: SnapshotStateList<TvRoute>, private val memory: T
  * Home leaves Prism, and the music plays on. Each page keeps its scroll and the item that had focus.
  */
 @Composable
-fun TvRoot() {
+fun TvRoot(link: kotlinx.coroutines.flow.MutableStateFlow<android.net.Uri?> = remember { kotlinx.coroutines.flow.MutableStateFlow(null) }) {
     TvTheme {
         var section by rememberSaveable { mutableStateOf(TvSection.HOME) }
         val stack = remember { mutableStateListOf<TvRoute>() }
@@ -116,7 +117,20 @@ fun TvRoot() {
         val holder = rememberSaveableStateHolder()
         val top = stack.lastOrNull()
         val pick: (TvSection) -> Unit = { section = it; memory.opening("section:${it.name}") }
-        CompositionLocalProvider(LocalTvFocusMemory provides memory) { Box(Modifier.fillMaxSize()) {
+        // A link the TV was opened with (a YouTube Music link, the media notification): its song plays, or its page opens.
+        val pending by link.collectAsState()
+        androidx.compose.runtime.LaunchedEffect(pending) {
+            val uri = pending ?: return@LaunchedEffect
+            link.value = null
+            when (val l = tvLinkFor(uri)) {
+                is TvLink.Song -> { nav.go(TvRoute.Player); TvPlay.single(c, l.id) }
+                is TvLink.Page -> nav.go(l.route)
+                null -> Unit
+            }
+        }
+        // Over everything, when the room has gone quiet while music plays; nothing is drawn under it meanwhile (no
+        // lyrics or progress moving unseen), and each page comes back as it was.
+        CompositionLocalProvider(LocalTvFocusMemory provides memory) { AmbientHost(onTv = true) { Box(Modifier.fillMaxSize()) {
             // The side navigation stays put while the places change beside it (focus moves from it into the new place);
             // each place keeps its own scroll and focus.
             if (top == null) TvNavFrame(section, pick, focusNav = false) {
@@ -138,9 +152,7 @@ fun TvRoot() {
                     }
                 }
             }
-            // Over everything, when the room has gone quiet while music plays.
-            AmbientHost(onTv = true)
-        } }
+        } } }
     }
 }
 

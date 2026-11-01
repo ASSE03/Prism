@@ -70,23 +70,39 @@ object TvSing {
 
     /** Checks this TV with the playing song; what to tell the listener. */
     suspend fun check(c: AppContainer): String {
+        if (_state.value == State.CHECKING) return State.CHECKING.label()
         if (!c.sing.supported) return keep(c, State.UNSUPPORTED)
         val song = c.player.currentSong.value?.takeIf { c.sing.canSing(it) } ?: return tr(R.string.tv_sing_checking)
         if (!c.sing.engineReady() && !c.sing.downloadEngine()) return tr(R.string.sing_s_engine_isn_t_downloaded)
-        _state.value = State.CHECKING
-        val wasOn = c.sing.on.value
-        c.sing.setOn(true)
-        c.sing.prepare(listOf(song))
-        val start = System.currentTimeMillis()
-        var fraction = 0f
-        while (System.currentTimeMillis() - start < CHECK_MS) {
-            fraction = if (c.sing.store.complete(song.id)) 1f else c.sing.progress.value[song.id] ?: fraction
-            if (fraction >= 1f) break
-            delay(1_000)
+        val result = checking(c.sing.on.value, c.sing::setOn) {
+            c.sing.prepare(listOf(song))
+            val start = System.currentTimeMillis()
+            var fraction = 0f
+            while (System.currentTimeMillis() - start < CHECK_MS) {
+                fraction = if (c.sing.store.complete(song.id)) 1f else c.sing.progress.value[song.id] ?: fraction
+                if (fraction >= 1f) break
+                delay(1_000)
+            }
+            if (fastEnough(fraction, System.currentTimeMillis() - start, song.durationSec * 1000L)) State.READY else State.SLOW
         }
-        val ok = fastEnough(fraction, System.currentTimeMillis() - start, song.durationSec * 1000L)
-        if (!wasOn) c.sing.setOn(false)
-        return keep(c, if (ok) State.READY else State.SLOW)
+        return keep(c, result)
+    }
+
+    /**
+     * The check's [run] with Sing on, then Sing as it was ([wasOn]) and the state as it was if it's cut short (the
+     * listener left, the TV closed Prism): never left on, nor stuck at "checking".
+     */
+    internal suspend fun checking(wasOn: Boolean, setOn: (Boolean) -> Unit, run: suspend () -> State): State {
+        val before = _state.value
+        _state.value = State.CHECKING
+        var done = false
+        try {
+            setOn(true)
+            return run().also { done = true }
+        } finally {
+            if (!wasOn) setOn(false)
+            if (!done) _state.value = before
+        }
     }
 
     private fun keep(c: AppContainer, s: State): String {
@@ -107,7 +123,7 @@ fun TvSingPage(nav: TvNav) {
     val now = rememberTvNow(c)
     val semitones by c.sing.semitones.collectAsState()
     val s = song
-    if (s == null || now == null) { LaunchedEffect(Unit) { nav.back() }; return }
+    if (s == null || now == null) { TvStarting { nav.back() }; return }
     DisposableEffect(Unit) {
         c.sing.setOn(true)
         c.sing.prepare(c.player.queue.value.map { it.song })

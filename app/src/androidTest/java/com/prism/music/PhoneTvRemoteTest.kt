@@ -75,7 +75,15 @@ class PhoneTvRemoteTest {
         val key = LinkKeys.hex(LinkKeys.nonce() + LinkKeys.nonce())
         tv.keys[c.handoff.device] = key
         c.handoff.savePairing(tv.device, tv.name, key)
-        thread { while (!server.isClosed) { val s = runCatching { server.accept() }.getOrNull() ?: break; thread { HLink(s).use { HandoffPeer(tv).serve(it) } } } }
+        // The sheet's first ask (the second connection) is dropped, as when the Wi-Fi blinks: it asks again.
+        var connections = 0
+        thread {
+            while (!server.isClosed) {
+                val s = runCatching { server.accept() }.getOrNull() ?: break
+                if (++connections == 2) { runCatching { s.close() }; continue }
+                thread { HLink(s).use { HandoffPeer(tv).serve(it) } }
+            }
+        }
         // Signed in on the phone (a made-up account), so "Sign in on this TV" is offered.
         runBlocking { c.settings.fromBackup(mapOf("cookie" to "s:SAPISID=phone-sapisid; SID=phone-sid", "account_name" to "s:Phone Listener"), settings = false, accounts = true) }
         val device = PrismDevice(tv.name, "127.0.0.1", server.localPort, tv.device, "test", paired = true, tv = true)
@@ -87,8 +95,9 @@ class PhoneTvRemoteTest {
                 PrismTheme(c.settings.current, null) { TvRemoteSheet(device) {} }
             }
         }
-        // What the TV plays, then play/pause pressed on the phone reaches it.
-        compose.waitUntil(15_000) { compose.onAllNodes(hasText("Glass Horizon")).fetchSemanticsNodes().isNotEmpty() }
+        // What the TV plays (after the dropped ask), then play/pause pressed on the phone reaches it.
+        compose.waitUntil(20_000) { compose.onAllNodes(hasText("Glass Horizon")).fetchSemanticsNodes().isNotEmpty() }
+        assertTrue("the dropped ask happened", connections >= 3)
         compose.onNode(hasTestTag("tvRemote/toggle")).performClick()
         compose.waitUntil(10_000) { tv.pressed.isNotEmpty() }
         assertEquals(RemoteKey.TOGGLE, tv.pressed.first())

@@ -1,6 +1,8 @@
 package com.prism.music.ui.tv
 
 import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -56,10 +58,33 @@ import java.util.Calendar
  * screens only draw; what they show and what OK does is worked out here.
  */
 
-/** Home's shelves for this run of Prism: coming back to Home shows them at once, and they refresh in the background. */
-private object TvHomeShelves {
-    var shelves: List<Shelf> = emptyList()
-    var loadedAt = 0L
+/**
+ * Home's shelves for this run of Prism: coming back to Home shows them at once, and they refresh in the background.
+ * They're the account's ([owner]): another account (or none) never sees them.
+ */
+internal object TvHomeShelves {
+    private var shelves: List<Shelf> = emptyList()
+    private var owner: String? = null
+    private var loadedAt = 0L
+
+    /** [account]'s shelves (empty if they're someone else's), and whether they're still fresh at [now]. */
+    @Synchronized fun of(account: String?, now: Long): Pair<List<Shelf>, Boolean> =
+        if (account != owner) emptyList<Shelf>() to false else shelves to (shelves.isNotEmpty() && now - loadedAt < HOME_FRESH_MS)
+
+    @Synchronized fun keep(account: String?, s: List<Shelf>, now: Long) { shelves = s; owner = account; loadedAt = now }
+
+    @Synchronized fun clear() { shelves = emptyList(); owner = null; loadedAt = 0L }
+}
+
+/**
+ * Signing out on the TV, as on the phone: the account's library, offline copies and personal Home go with it (a TV is
+ * often shared), and its sign-in cookies.
+ */
+internal fun tvSignOut(c: AppContainer) {
+    c.settings.logout()
+    c.library.forgetAccount()
+    TvHomeShelves.clear()
+    runCatching { android.webkit.CookieManager.getInstance().removeAllCookies(null) }
 }
 
 /** How long Home's shelves count as fresh (YouTube's Home changes through the day, not by the minute). */
@@ -72,19 +97,22 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
     val scope = rememberCoroutineScope()
     val settings by c.settings.flow.collectAsState()
     val owner = settings.accountName.takeIf { it.isNotBlank() }
-    val shelves by produceState(TvHomeShelves.shelves) {
+    // The account's own (signing in or out loads Home again; the disk's copy goes with the account, forgetAccount).
+    val account = settings.accountEmail.ifBlank { settings.accountName }.takeIf { settings.isLoggedIn }
+    val shelves by produceState(TvHomeShelves.of(account, System.currentTimeMillis()).first, account) {
+        val (kept, fresh) = TvHomeShelves.of(account, System.currentTimeMillis())
+        value = kept
         if (value.isEmpty()) c.homeCache.read()?.let { value = it }
-        if (System.currentTimeMillis() - TvHomeShelves.loadedAt < HOME_FRESH_MS && TvHomeShelves.shelves.isNotEmpty()) return@produceState
-        val fresh = runCatching {
+        if (fresh) return@produceState
+        val got = runCatching {
             withContext(Dispatchers.IO) {
                 c.ytm.fullHomePages(pages = 3, maxPages = 8) { got -> owner == null || got.quickPicks(owner) != null }
             }
         }.getOrNull()
-        if (fresh != null && fresh.first.isNotEmpty()) {
-            c.scope.launch { c.homeCache.write(fresh.second) }
-            TvHomeShelves.shelves = fresh.first
-            TvHomeShelves.loadedAt = System.currentTimeMillis()
-            value = fresh.first
+        if (got != null && got.first.isNotEmpty()) {
+            c.scope.launch { c.homeCache.write(got.second) }
+            TvHomeShelves.keep(account, got.first, System.currentTimeMillis())
+            value = got.first
         }
     }
     val recent by c.library.recent.collectAsState()
@@ -171,12 +199,34 @@ fun rememberTvAccent(art: String?): Color? {
     return color
 }
 
+/** How long a page opened for a song waits for it to start (a music video's stream takes a few seconds to find). */
+internal const val TV_START_WAIT_MS = 6_000L
+
+/**
+ * A page opened for a song that isn't playing yet: "One moment" (focused, so focus is never nowhere) while it starts;
+ * if nothing has started after [TV_START_WAIT_MS] (the queue ended or was cleared), [onGiveUp].
+ */
+@Composable
+fun TvStarting(onGiveUp: () -> Unit) {
+    LaunchedEffect(Unit) { kotlinx.coroutines.delay(TV_START_WAIT_MS); onGiveUp() }
+    val scheme = androidx.tv.material3.MaterialTheme.colorScheme
+    Box(Modifier.fillMaxSize().background(scheme.background), contentAlignment = androidx.compose.ui.Alignment.Center) {
+        androidx.tv.material3.Text(
+            tr(R.string.one_moment),
+            Modifier.tvItem(TAG_STARTING, entry = true).focusable(),
+            style = androidx.tv.material3.MaterialTheme.typography.headlineMedium, color = scheme.onSurfaceVariant,
+        )
+    }
+}
+
+const val TAG_STARTING = "tv_starting"
+
 /** Now playing: the player's controls on the engine. With nothing lined up (the queue ended, cleared), it closes. */
 @Composable
 fun TvPlayerPage(nav: TvNav) {
     val c = LocalContainer.current
     val now = rememberTvNow(c)
-    if (now == null) { LaunchedEffect(Unit) { nav.back() }; return }
+    if (now == null) { TvStarting { nav.back() }; return }
     val accent = rememberTvAccent(now.art)
     val song by c.player.currentSong.collectAsState()
     var panel by rememberSaveable { mutableStateOf(Panel.NONE) }
@@ -251,11 +301,13 @@ private fun androidx.compose.foundation.layout.BoxScope.TvQueuePlace() {
     val queue by c.player.queue.collectAsState()
     val index by c.player.currentIndex.collectAsState()
     val source by c.queue.source.collectAsState()
+    // Rows are the queue's entries; the player counts by each entry's own index (a row isn't always the same number).
     TvQueuePanel(
         source.title.takeIf { it.isNotBlank() },
         queue.map { e -> TvSong(e.uid, e.song.title, e.song.artistText, if (e.song.isLive) null else tvTime(e.song.durationSec * 1000L), e.song.thumbnail) },
-        index,
-        onSong = { i -> c.player.player?.seekTo(i, 0) },
+        queue.indexOfFirst { it.index == index },
+        // As the phone's queue plays one: prepared and playing, and shuffled, Previous comes back to the song before.
+        onSong = { i -> queue.getOrNull(i)?.let { c.player.skipTo(it.index) } },
     )
 }
 
@@ -266,7 +318,7 @@ fun TvLyricsPage(nav: TvNav) {
     val song by c.player.currentSong.collectAsState()
     val now = rememberTvNow(c)
     val s = song
-    if (s == null || now == null) { LaunchedEffect(Unit) { nav.back() }; return }
+    if (s == null || now == null) { TvStarting { nav.back() }; return }
     val state = rememberLyricsState(s)
     val clock = rememberLyricClock(now.playing)
     val accent = rememberTvAccent(now.art)
@@ -281,7 +333,7 @@ fun TvVideoPage(nav: TvNav) {
     val c = LocalContainer.current
     val now = rememberTvNow(c)
     val video by c.player.videoMode.collectAsState()
-    if (now == null) { LaunchedEffect(Unit) { nav.back() }; return }
+    if (now == null) { TvStarting { nav.back() }; return }
     // Leaving the page ends video mode (the song plays on as audio).
     androidx.compose.runtime.DisposableEffect(Unit) { onDispose { c.player.setVideoMode(false) } }
     TvVideoPlace(now, video, onPlayPause = { c.player.togglePlay() }, onNext = { c.player.next() }, onPrevious = { c.player.previous() }, onSong = { nav.back() }) {

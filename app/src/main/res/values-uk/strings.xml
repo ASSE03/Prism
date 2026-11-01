@@ -4195,6 +4195,8 @@
     <string name="tv_sing_ready">Досить швидкий: «Співати» в меню ⋯ плеєра</string>
     <string name="tv_sing_too_slow">Цей телевізор недостатньо швидкий для «Співати»: він відставав би від треку</string>
     <string name="tv_sing_no_cpu">«Співати» не працює на процесорі цього телевізора</string>
+    <string name="tv_link_pair_note">Відсканований код — для %1$s за адресою %2$s у вашій мережі. Підключайте, лише якщо це телевізор перед вами.</string>
+    <string name="tv_sign_in_pair_first">Спершу підключіть %1$s, потім увійдіть на ньому</string>
     <!-- 1.8.0 desk mode and the tour -->
     <string name="desk_mode">Режим столу</string>
     <string name="desk_mode_detail">Поки телефон заряджається й грає музика</string>

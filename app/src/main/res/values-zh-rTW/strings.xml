@@ -4045,6 +4045,8 @@
     <string name="tv_sing_ready">夠快：「唱歌」在播放器的 ⋯ 中</string>
     <string name="tv_sing_too_slow">這台電視不夠快，無法「唱歌」：會跟不上歌曲</string>
     <string name="tv_sing_no_cpu">「唱歌」無法在這台電視的處理器上執行</string>
+    <string name="tv_link_pair_note">你掃描的代碼屬於你網路中位於 %2$s 的 %1$s。只有當它就是你面前的電視時才配對。</string>
+    <string name="tv_sign_in_pair_first">請先與 %1$s 配對，然後再登入</string>
     <!-- 1.8.0 desk mode and the tour -->
     <string name="desk_mode">桌面模式</string>
     <string name="desk_mode_detail">手機充電且正在播放音樂時</string>

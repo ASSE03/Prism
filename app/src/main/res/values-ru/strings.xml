@@ -4195,6 +4195,8 @@
     <string name="tv_sing_ready">Скорости хватает: «Пение» в меню ⋯ плеера</string>
     <string name="tv_sing_too_slow">Этот телевизор недостаточно быстр для «Пения»: он отставал бы от трека</string>
     <string name="tv_sing_no_cpu">«Пение» не работает на процессоре этого телевизора</string>
+    <string name="tv_link_pair_note">Отсканированный код — для %1$s по адресу %2$s в вашей сети. Связывайте, только если это телевизор перед вами.</string>
+    <string name="tv_sign_in_pair_first">Сначала свяжите %1$s, потом войдите на нём</string>
     <!-- 1.8.0 desk mode and the tour -->
     <string name="desk_mode">Режим на столе</string>
     <string name="desk_mode_detail">Пока телефон заряжается и играет музыка</string>

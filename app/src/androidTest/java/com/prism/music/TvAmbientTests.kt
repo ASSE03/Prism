@@ -57,12 +57,24 @@ class TvAmbientTests {
         compose.awaitFocusOn(hasTestTag("$TAG_HOME/player"), 20_000)
         assertTrue("not before a quiet minute", !shown())
         compose.waitUntil(90_000) { shown() }
-        // OK: back to Home, with the same button focused, and it wasn't pressed (the player didn't open).
-        TvFixture.ok()
+        // Nothing is drawn under it meanwhile.
+        assertTrue("Home drawn under the ambient screen", compose.onAllNodes(hasTestTag(TAG_HOME), useUnmergedTree = true).fetchSemanticsNodes().isEmpty())
+        // OK, held as a hand does (let go well after the ambient screen has gone; buttons click on letting go): back
+        // to Home, with the same button focused, and it wasn't pressed (the player didn't open).
+        TvFixture.hold(android.view.KeyEvent.KEYCODE_DPAD_CENTER, 600)
         compose.waitUntil(5_000) { !shown() }
         compose.awaitFocusOn(hasTestTag("$TAG_HOME/player"))
         Thread.sleep(500)
         assertTrue("the key opened the player", compose.onAllNodes(hasTestTag(TAG_PLAYER), useUnmergedTree = true).fetchSemanticsNodes().isEmpty())
+        assertTrue(player.isPlaying.value)
+        // On the player, Back held to wake it: the player stays open.
+        TvFixture.ok()
+        compose.awaitFocusOn(hasTestTag("$TAG_PLAYER/playpause"), 10_000)
+        compose.waitUntil(90_000) { shown() }
+        TvFixture.hold(android.view.KeyEvent.KEYCODE_BACK, 600)
+        compose.waitUntil(5_000) { !shown() }
+        Thread.sleep(500)
+        assertTrue("Back closed the player", compose.onAllNodes(hasTestTag(TAG_PLAYER), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty())
         assertTrue(player.isPlaying.value)
         // Paused, it doesn't come back.
         instrumentation.runOnMainSync { player.setPlaying(false) }

@@ -4145,6 +4145,8 @@
     <string name="tv_sing_ready">Rápida o suficiente: Cantar está no ⋯ do leitor</string>
     <string name="tv_sing_too_slow">Esta TV não é rápida o suficiente para Cantar: ficaria para trás da música</string>
     <string name="tv_sing_no_cpu">Cantar não funciona no processador desta TV</string>
+    <string name="tv_link_pair_note">O código que leu é de %1$s em %2$s na sua rede. Emparelhe só se for a TV à sua frente.</string>
+    <string name="tv_sign_in_pair_first">Emparelhe primeiro com %1$s e depois inicie sessão</string>
     <!-- 1.8.0 desk mode and the tour -->
     <string name="desk_mode">Modo secretária</string>
     <string name="desk_mode_detail">Enquanto o telemóvel carrega e a música toca</string>

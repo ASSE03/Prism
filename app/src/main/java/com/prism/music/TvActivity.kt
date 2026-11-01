@@ -27,10 +27,28 @@ class TvActivity : ComponentActivity() {
         c.scope.launch(kotlinx.coroutines.Dispatchers.IO) { runCatching { c.downloads } }
         // Library: what YouTube Music keeps for the account, brought up to date as on the phone.
         if (c.settings.current.isLoggedIn) c.library.syncInBackground()
+        if (savedInstanceState == null) link.value = linkIn(intent)
         setContent {
-            CompositionLocalProvider(LocalContainer provides c) { TvRoot() }
+            CompositionLocalProvider(LocalContainer provides c) { TvRoot(link) }
         }
     }
+
+    /** A link this screen was opened with (or sent while open), for [TvRoot] to open. */
+    private val link = kotlinx.coroutines.flow.MutableStateFlow<android.net.Uri?>(null)
+
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        linkIn(intent)?.let { link.value = it }
+    }
+
+    /** A link opened in Prism, or a YouTube / YouTube Music link shared to it. */
+    private fun linkIn(intent: android.content.Intent?): android.net.Uri? = when (intent?.action) {
+        android.content.Intent.ACTION_SEND -> com.prism.music.data.ShareLinks.findIn(intent.getStringExtra(android.content.Intent.EXTRA_TEXT))?.let(android.net.Uri::parse)
+        else -> intent?.data
+    }
+
+    /** The key pressed to wake the ambient screen, until it's let go ([NO_KEY]: none). */
+    private var wakeKey = NO_KEY
 
     /** Any key: the room isn't quiet (the ambient screen waits, or goes). */
     override fun onUserInteraction() {
@@ -43,15 +61,27 @@ class TvActivity : ComponentActivity() {
      * never swallows Play/Pause, and they don't depend on Android passing them on to the media session.
      */
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        // The key that woke the ambient screen: its repeats and its key-up go too (buttons click on key-up, and Back
+        // would close the page), however soon the ambient screen has gone.
+        if (event.keyCode == wakeKey) {
+            if (event.action == KeyEvent.ACTION_UP) wakeKey = NO_KEY
+            return true
+        }
         val action = TvMediaKeys.action(event.keyCode)
         if (action == null) {
             // The ambient screen: a key only brings back what was there.
-            if (com.prism.music.ui.tv.Idle.ambient) { com.prism.music.ui.tv.Idle.touched(); return true }
+            if (com.prism.music.ui.tv.Idle.ambient) {
+                if (event.action == KeyEvent.ACTION_DOWN) wakeKey = event.keyCode
+                com.prism.music.ui.tv.Idle.touched()
+                return true
+            }
             return super.dispatchKeyEvent(event)
         }
         if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) TvMediaKeys.run(action, container.player)
         return true
     }
+
+    private companion object { const val NO_KEY = -1 }
 }
 
 /** What each of the remote's media keys does. */

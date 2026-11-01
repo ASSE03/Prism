@@ -4195,6 +4195,8 @@
     <string name="tv_sing_ready">Wystarczająco szybki: Śpiewaj jest w ⋯ odtwarzacza</string>
     <string name="tv_sing_too_slow">Ten telewizor jest za wolny na Śpiewaj: nie nadążyłby za utworem</string>
     <string name="tv_sing_no_cpu">Śpiewaj nie działa na procesorze tego telewizora</string>
+    <string name="tv_link_pair_note">Zeskanowany kod należy do urządzenia %1$s pod adresem %2$s w Twojej sieci. Paruj tylko, jeśli to telewizor przed Tobą.</string>
+    <string name="tv_sign_in_pair_first">Najpierw sparuj %1$s, a potem je zaloguj</string>
     <!-- 1.8.0 desk mode and the tour -->
     <string name="desk_mode">Tryb biurkowy</string>
     <string name="desk_mode_detail">Gdy telefon się ładuje i gra muzyka</string>

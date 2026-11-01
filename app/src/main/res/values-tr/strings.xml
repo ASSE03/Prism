@@ -4095,6 +4095,8 @@
     <string name="tv_sing_ready">Yeterince hızlı: Söyle oynatıcının ⋯ menüsünde</string>
     <string name="tv_sing_too_slow">Bu TV, Söyle için yeterince hızlı değil: şarkının gerisinde kalır</string>
     <string name="tv_sing_no_cpu">Söyle bu TV\'nin işlemcisinde çalışmaz</string>
+    <string name="tv_link_pair_note">Taradığın kod, ağındaki %2$s adresindeki %1$s için. Yalnızca önündeki TV buysa eşleştir.</string>
+    <string name="tv_sign_in_pair_first">Önce %1$s ile eşleştir, sonra oturum aç</string>
     <!-- 1.8.0 desk mode and the tour -->
     <string name="desk_mode">Masa modu</string>
     <string name="desk_mode_detail">Telefon şarj olurken ve müzik çalarken</string>

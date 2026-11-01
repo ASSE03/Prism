@@ -4145,6 +4145,8 @@
     <string name="tv_sing_ready">Destul de rapid: Cântă e în ⋯ din player</string>
     <string name="tv_sing_too_slow">Acest televizor nu e destul de rapid pentru Cântă: ar rămâne în urma melodiei</string>
     <string name="tv_sing_no_cpu">Cântă nu rulează pe procesorul acestui televizor</string>
+    <string name="tv_link_pair_note">Codul scanat este pentru %1$s la %2$s din rețeaua ta. Asociază doar dacă este televizorul din fața ta.</string>
+    <string name="tv_sign_in_pair_first">Asociază mai întâi %1$s, apoi conectează-l</string>
     <!-- 1.8.0 desk mode and the tour -->
     <string name="desk_mode">Modul birou</string>
     <string name="desk_mode_detail">Cât timp telefonul se încarcă și muzica rulează</string>

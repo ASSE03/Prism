@@ -180,7 +180,9 @@ fun BoxScope.TvQueuePanel(source: String?, songs: List<TvSong>, current: Int, on
         Text(tr(R.string.up_next), style = MaterialTheme.typography.headlineSmall, color = scheme.onSurface)
         if (source != null) Text(tr(R.string.tv_playing_from, source), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
         Spacer(Modifier.height(12.dp))
-        LazyColumn(Modifier.rememberedFocus(), contentPadding = PaddingValues(vertical = 4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        // Opens at the playing song, so the next one (focus's place) is drawn however far down the queue it is.
+        val list = androidx.compose.foundation.lazy.rememberLazyListState(initialFirstVisibleItemIndex = current.coerceIn(0, (songs.size - 1).coerceAtLeast(0)))
+        LazyColumn(Modifier.rememberedFocus(), state = list, contentPadding = PaddingValues(vertical = 4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             itemsIndexed(songs) { i, s ->
                 TvSongRow(
                     s.title, s.artist, s.length, { onSong(i) },
@@ -288,7 +290,8 @@ fun TvLyricsPlace(
         Box(Modifier.fillMaxSize().tvBackdrop(accent, scheme.background), contentAlignment = Alignment.Center) {
             Text(
                 tr(if (loading || !unavailable) R.string.looking_for_lyrics else R.string.no_lyrics_found_for_this_song),
-                Modifier.tvItem("$TAG_LYRICS/none", entry = true).focusable(),
+                // The lines' own tag: when they come (or go, as the song changes), focus stays on the lyrics.
+                Modifier.tvItem("$TAG_LYRICS/lines", entry = true).focusable(),
                 style = MaterialTheme.typography.headlineMedium, color = scheme.onSurfaceVariant,
             )
         }

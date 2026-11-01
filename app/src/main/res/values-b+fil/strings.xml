@@ -4095,6 +4095,8 @@
     <string name="tv_sing_ready">Sapat ang bilis: nasa ⋯ ng player ang Kumanta</string>
     <string name="tv_sing_too_slow">Hindi sapat ang bilis ng TV na ito para sa Kumanta: mahuhuli ito sa kanta</string>
     <string name="tv_sing_no_cpu">Hindi gumagana ang Kumanta sa processor ng TV na ito</string>
+    <string name="tv_link_pair_note">Ang code na na-scan mo ay para sa %1$s sa %2$s sa network mo. Mag-pair lang kung ito ang TV na nasa harap mo.</string>
+    <string name="tv_sign_in_pair_first">Mag-pair muna sa %1$s, saka ito i-sign in</string>
     <!-- 1.8.0 desk mode and the tour -->
     <string name="desk_mode">Desk mode</string>
     <string name="desk_mode_detail">Habang nagcha-charge ang telepono at tumutugtog ang musika</string>

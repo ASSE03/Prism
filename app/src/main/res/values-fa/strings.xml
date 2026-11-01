@@ -4095,6 +4095,8 @@
     <string name="tv_sing_ready">به‌اندازهٔ کافی سریع: «بخوان» در ⋯ پخش‌کننده است</string>
     <string name="tv_sing_too_slow">این تلویزیون برای «بخوان» به‌اندازهٔ کافی سریع نیست: از آهنگ عقب می‌ماند</string>
     <string name="tv_sing_no_cpu">«بخوان» روی پردازندهٔ این تلویزیون اجرا نمی‌شود</string>
+    <string name="tv_link_pair_note">کدی که اسکن کردید برای %1$s در %2$s در شبکهٔ شماست. فقط اگر همان تلویزیونی است که جلوی شماست، جفت کنید.</string>
+    <string name="tv_sign_in_pair_first">اول با %1$s جفت شوید، بعد وارد حساب آن شوید</string>
     <!-- 1.8.0 desk mode and the tour -->
     <string name="desk_mode">حالت میز کار</string>
     <string name="desk_mode_detail">وقتی گوشی شارژ می‌شود و موسیقی پخش می‌شود</string>

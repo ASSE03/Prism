@@ -4095,6 +4095,8 @@
     <string name="tv_sing_ready">Elég gyors: az Éneklés a lejátszó ⋯ menüjében van</string>
     <string name="tv_sing_too_slow">Ez a tévé nem elég gyors az Énekléshez: lemaradna a dal mögött</string>
     <string name="tv_sing_no_cpu">Az Éneklés nem fut ennek a tévének a processzorán</string>
+    <string name="tv_link_pair_note">A beolvasott kód a hálózatodon lévő %1$s eszközé (%2$s). Csak akkor párosítsd, ha ez az előtted lévő tévé.</string>
+    <string name="tv_sign_in_pair_first">Előbb párosítsd ezt: %1$s, aztán jelentkeztesd be</string>
     <!-- 1.8.0 desk mode and the tour -->
     <string name="desk_mode">Asztali mód</string>
     <string name="desk_mode_detail">Amíg a telefon töltődik és szól a zene</string>

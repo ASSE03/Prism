@@ -4195,6 +4195,8 @@
     <string name="tv_sing_ready">Dost rychlá: Zpívat je v ⋯ přehrávače</string>
     <string name="tv_sing_too_slow">Tato televize není pro Zpívat dost rychlá: zaostávala by za skladbou</string>
     <string name="tv_sing_no_cpu">Zpívat na procesoru této televize nefunguje</string>
+    <string name="tv_link_pair_note">Naskenovaný kód patří zařízení %1$s na adrese %2$s ve vaší síti. Spárujte jen tehdy, když je to televize před vámi.</string>
+    <string name="tv_sign_in_pair_first">Nejdřív spárujte %1$s, pak ho přihlaste</string>
     <!-- 1.8.0 desk mode and the tour -->
     <string name="desk_mode">Stolní režim</string>
     <string name="desk_mode_detail">Když se telefon nabíjí a hraje hudba</string>

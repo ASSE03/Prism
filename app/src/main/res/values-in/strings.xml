@@ -4045,6 +4045,8 @@
     <string name="tv_sing_ready">Cukup cepat: Bernyanyi ada di ⋯ pemutar</string>
     <string name="tv_sing_too_slow">TV ini tidak cukup cepat untuk Bernyanyi: akan tertinggal dari lagu</string>
     <string name="tv_sing_no_cpu">Bernyanyi tidak berjalan di prosesor TV ini</string>
+    <string name="tv_link_pair_note">Kode yang kamu pindai untuk %1$s di %2$s pada jaringanmu. Sambungkan hanya jika itu TV di depanmu.</string>
+    <string name="tv_sign_in_pair_first">Sambungkan dengan %1$s dulu, lalu masuk di sana</string>
     <!-- 1.8.0 desk mode and the tour -->
     <string name="desk_mode">Mode meja</string>
     <string name="desk_mode_detail">Saat ponsel mengisi daya dan musik diputar</string>

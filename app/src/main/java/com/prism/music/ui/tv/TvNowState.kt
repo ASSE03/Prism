@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.prism.music.AppContainer
 import com.prism.music.data.model.Song
+import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.delay
 
 /** How often the TV's progress line moves (it's a thin line seen from across the room: twice a second is smooth). */
@@ -69,12 +70,16 @@ fun rememberTvNow(c: AppContainer): TvNow? {
     val likedIds by c.library.likedIds.collectAsState()
     var position by remember { mutableLongStateOf(c.player.position) }
     var duration by remember { mutableLongStateOf(c.player.duration) }
-    LaunchedEffect(song?.id, playing) {
-        while (true) {
-            position = c.player.position
-            duration = c.player.duration
-            if (!playing) break
-            delay(TICK_MS)
+    // Only while the screen is on view (stopped, nothing's watching it move).
+    val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
+    LaunchedEffect(song?.id, playing, lifecycle) {
+        lifecycle.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
+            while (true) {
+                position = c.player.position
+                duration = c.player.duration
+                if (!playing) break
+                delay(TICK_MS)
+            }
         }
     }
     val s = song ?: return null

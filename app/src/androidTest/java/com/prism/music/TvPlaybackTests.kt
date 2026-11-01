@@ -42,17 +42,44 @@ class TvPlaybackTests {
         tones.forEach { runCatching { Fixture.context.contentResolver.delete(it, null, null) } }
     }
 
-    /** Two silent songs lined up and playing, as if picked from Home. */
-    private fun lineUp() {
+    /**
+     * Two silent songs lined up and playing, as if picked from Home ([times] over, playing from [from]: a long queue
+     * with the song playing far down it).
+     */
+    private fun lineUp(times: Int = 1, from: Int = 0) {
         val perm = if (android.os.Build.VERSION.SDK_INT >= 33) android.Manifest.permission.READ_MEDIA_AUDIO else android.Manifest.permission.READ_EXTERNAL_STORAGE
         instrumentation.uiAutomation.grantRuntimePermission(Fixture.context.packageName, perm)
         tones += Fixture.tone("Prism TV tone one", 90)
         tones += Fixture.tone("Prism TV tone two", 90)
         val local = Fixture.container.localMusic
         runBlocking { local.scan() }
-        val songs = listOf("Prism TV tone one", "Prism TV tone two").map { t -> local.tracks.value.first { it.song.title == t }.song }
-        instrumentation.runOnMainSync { player.playQueue(songs, 0, QueueSource(QueueKind.OTHER, "TV test")) }
-        waitFor(20_000) { player.currentSong.value?.id == songs[0].id && player.isPlaying.value }
+        val two = listOf("Prism TV tone one", "Prism TV tone two").map { t -> local.tracks.value.first { it.song.title == t }.song }
+        val songs = (0 until times).flatMap { two }
+        instrumentation.runOnMainSync { player.playQueue(songs, from, QueueSource(QueueKind.OTHER, "TV test")) }
+        waitFor(20_000) { player.currentIndex.value == from && player.isPlaying.value }
+    }
+
+    /** The review (1.8.0): far down a long queue, the queue still opens on the next song, and OK plays it. */
+    @Test fun aLongQueueOpensOnTheNextSongFarDownAndPlaysIt() {
+        lineUp(times = 15, from = 20)
+        TvFixture.launch()
+        compose.awaitFocusOn(hasTestTag("$TAG_HOME/player"), 15_000)
+        TvFixture.ok()
+        compose.awaitFocusOn(hasTestTag("$TAG_PLAYER/playpause"), 10_000)
+        TvFixture.down()
+        compose.awaitFocusOn(hasTestTag("$TAG_PLAYER/lyrics"))
+        TvFixture.right()
+        compose.awaitFocusOn(hasTestTag("$TAG_PLAYER/queue"))
+        TvFixture.ok()
+        compose.awaitFocusOn(hasTestTag("$TAG_QUEUE/21"), 10_000)
+        // Two further down, and OK: that song plays (prepared and playing, as the phone's queue does).
+        TvFixture.down(); Thread.sleep(200); TvFixture.down()
+        compose.awaitFocusOn(hasTestTag("$TAG_QUEUE/23"))
+        TvFixture.ok()
+        waitFor(5_000) { player.currentIndex.value == 23 && player.isPlaying.value }
+        // Left closes the panel.
+        TvFixture.left()
+        compose.awaitFocusOn(hasTestTag("$TAG_PLAYER/queue"), 10_000)
     }
 
     @Test fun homesHeroOpensThePlayerAndBackComesBack() {

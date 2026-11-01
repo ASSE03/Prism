@@ -87,4 +87,12 @@ class TvShellTests {
         compose.awaitFocus(10_000)
         assertEquals(Lifecycle.State.DESTROYED, phone.state)
     }
+
+    /** The review (1.8.0): a link opened on a TV (it comes to the phone's screen first) opens its page there. */
+    @Test fun aLinkOpensItsPageOnTheTv() {
+        val link = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://music.youtube.com/channel/UCprismTvTest"), Fixture.context, PrismActivity::class.java)
+        ActivityScenario.launch<PrismActivity>(link)
+        compose.waitUntil(15_000) { compose.onAllNodes(hasTestTag(com.prism.music.ui.tv.TAG_ARTIST), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        compose.awaitFocus(10_000)
+    }
 }

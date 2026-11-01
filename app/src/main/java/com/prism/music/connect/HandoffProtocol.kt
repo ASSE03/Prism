@@ -23,6 +23,8 @@ data class HandoffSnapshot(
     val order: List<Int> = emptyList(),
     val repeat: Int = 0,
     val title: String = "",
+    /** Songs the sender left out before sending (files on it: their names never leave it). */
+    val left: Int = 0,
 ) {
     /**
      * Made safe to play here: only YouTube songs ([fromPeer]; files on the other phone can't come along), with the
@@ -48,7 +50,7 @@ data class HandoffSnapshot(
     }
 
     /** How many songs the queue had that couldn't come (files on the other phone). */
-    fun leftOut(cleaned: HandoffSnapshot): Int = songs.size - cleaned.songs.size
+    fun leftOut(cleaned: HandoffSnapshot): Int = songs.size - cleaned.songs.size + left.coerceIn(0, 100_000)
 
     companion object { const val MAX_SONGS = 2_000 }
 }
@@ -162,17 +164,34 @@ object HWire {
 
 /**
  * A connection between two Prisms: [send] and [read] one message per line. Once [channel] is set every line is sealed
- * ("e:" and the sealed message in Base64); after that a line that isn't, or doesn't open, ends the connection.
+ * ("e:" and the sealed message in Base64); after that a line that isn't, or doesn't open, ends the connection. Before
+ * it, lines are short handshake messages: a longer one, or one that isn't a message, ends the connection too.
  */
 class HLink(private val socket: Socket) : Closeable {
-    private val reader = com.prism.music.playback.together.LineReader(socket.getInputStream().buffered())
+    private val reader = com.prism.music.playback.together.LineReader(socket.getInputStream().buffered(), PLAIN_MAX_LINE).apply { endOnTooLong = true }
     private val writer = socket.getOutputStream().bufferedWriter(Charsets.UTF_8)
 
+    /** Sealed lines carry whole queues (2,000 songs, in Base64): longer ones than the handshake's. */
     @Volatile var channel: SealedChannel? = null
+        set(value) {
+            field = value
+            reader.max = if (value != null) SEALED_MAX_LINE else PLAIN_MAX_LINE
+        }
 
     val remote: String get() = socket.inetAddress?.hostAddress ?: "?"
 
     fun timeout(ms: Int) { runCatching { socket.soTimeout = ms } }
+
+    @Volatile private var closer: java.util.concurrent.ScheduledFuture<*>? = null
+
+    /**
+     * Closes the connection [ms] from now whatever it's doing (a read trickled a byte at a time never times out on its
+     * own); replaces the last deadline. 0: none.
+     */
+    fun deadline(ms: Long) {
+        closer?.cancel(false)
+        closer = if (ms > 0) DEADLINES.schedule({ close() }, ms, java.util.concurrent.TimeUnit.MILLISECONDS) else null
+    }
 
     fun send(m: HMsg): Boolean = synchronized(writer) {
         val text = HWire.encode(m)
@@ -185,19 +204,83 @@ class HLink(private val socket: Socket) : Closeable {
         while (true) {
             val line = runCatching { reader.readLine() }.getOrNull() ?: return null
             if (line.isBlank()) continue
-            val ch = channel
-            if (ch == null) { HWire.decode(line)?.let { return it }; continue }
+            val ch = channel ?: return HWire.decode(line)
             if (!line.startsWith("e:")) return null
             val plain = runCatching { java.util.Base64.getDecoder().decode(line.substring(2)) }.getOrNull()?.let(ch::open) ?: return null
             return HWire.decode(plain.decodeToString())
         }
     }
 
-    override fun close() { runCatching { socket.close() } }
+    override fun close() {
+        closer?.cancel(false)
+        runCatching { socket.close() }
+    }
+
+    companion object {
+        /** The handshake's lines (keys, numbers, names) are well under this. */
+        const val PLAIN_MAX_LINE = 16 * 1024
+        const val SEALED_MAX_LINE = 4 * 1024 * 1024
+        private val DEADLINES = java.util.concurrent.Executors.newSingleThreadScheduledExecutor { r ->
+            Thread(r, "handoff-deadlines").apply { isDaemon = true }
+        }
+    }
 }
 
 object HandoffKeys {
     private val random = SecureRandom()
 
     fun newCode(): String = (100_000 + random.nextInt(900_000)).toString()
+}
+
+/**
+ * A TV's pairing code (1.8.0): there only while its pairing screen is open ([open]). Each failed try tells a caller a
+ * bit or two of the code, so a new one comes after every try ([ended]); once a phone has paired there is none.
+ */
+class PairingCode(private val newCode: () -> String = HandoffKeys::newCode) {
+    private val _value = kotlinx.coroutines.flow.MutableStateFlow<String?>(null)
+    /** The code in force (shown on the TV and in its QR code), or null when it isn't taking pairings. */
+    val value: kotlinx.coroutines.flow.StateFlow<String?> = _value
+
+    @Synchronized fun open(): String = newCode().also { _value.value = it }
+    @Synchronized fun close() { _value.value = null }
+
+    /**
+     * A try with [code] is over ([matched]: all its rounds held). True when it may pair: [code] is still in force (a try
+     * that outlived its code, while another failed, gets nowhere either).
+     */
+    @Synchronized fun ended(code: String, matched: Boolean): Boolean {
+        val inForce = _value.value == code
+        if (inForce) _value.value = if (matched) null else newCode()
+        return matched && inForce
+    }
+}
+
+/**
+ * Serves accepted connections ([serve], blocking) on threads of its own, so a slow or junk one never holds up the
+ * app's other work: [max] at a time and [perAddress] from one address; more are closed at once.
+ */
+class LinkGate(private val max: Int, private val perAddress: Int, private val serve: (Socket) -> Unit) {
+    private val threads = java.util.concurrent.ThreadPoolExecutor(
+        0, max, 30, java.util.concurrent.TimeUnit.SECONDS, java.util.concurrent.SynchronousQueue(),
+    ) { r -> Thread(r, "handoff-link").apply { isDaemon = true } }
+    private val from = HashMap<String, Int>()
+
+    /** Serves [s], or closes it (too many already); whether it's served. */
+    fun take(s: Socket): Boolean {
+        val who = s.inetAddress?.hostAddress ?: "?"
+        val ok = synchronized(from) {
+            val n = from[who] ?: 0
+            (n < perAddress).also { if (it) from[who] = n + 1 }
+        }
+        if (!ok) { runCatching { s.close() }; return false }
+        val done = { synchronized(from) { val n = (from[who] ?: 1) - 1; if (n <= 0) from.remove(who) else from[who] = n } }
+        return try {
+            threads.execute { try { serve(s) } finally { runCatching { s.close() }; done() } }
+            true
+        } catch (_: java.util.concurrent.RejectedExecutionException) {
+            runCatching { s.close() }
+            done()
+            false
+        }
+    }
 }

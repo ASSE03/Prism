@@ -4095,6 +4095,8 @@
     <string name="tv_sing_ready">काफ़ी तेज़: गाएँ प्लेयर के ⋯ में है</string>
     <string name="tv_sing_too_slow">यह टीवी गाएँ के लिए काफ़ी तेज़ नहीं: यह गाने से पीछे रह जाएगा</string>
     <string name="tv_sing_no_cpu">गाएँ इस टीवी के प्रोसेसर पर नहीं चलता</string>
+    <string name="tv_link_pair_note">आपने जो कोड स्कैन किया वह आपके नेटवर्क पर %2$s पते वाले %1$s का है। पेयर तभी करें जब यह आपके सामने वाला टीवी हो।</string>
+    <string name="tv_sign_in_pair_first">पहले %1$s से पेयर करें, फिर उसमें साइन इन करें</string>
     <!-- 1.8.0 desk mode and the tour -->
     <string name="desk_mode">डेस्क मोड</string>
     <string name="desk_mode_detail">जब फ़ोन चार्ज हो रहा हो और संगीत चल रहा हो</string>

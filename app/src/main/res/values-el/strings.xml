@@ -4095,6 +4095,8 @@
     <string name="tv_sing_ready">Αρκετά γρήγορη: το Τραγούδι είναι στο ⋯ του προγράμματος αναπαραγωγής</string>
     <string name="tv_sing_too_slow">Αυτή η τηλεόραση δεν είναι αρκετά γρήγορη για το Τραγούδι: θα έμενε πίσω από το τραγούδι</string>
     <string name="tv_sing_no_cpu">Το Τραγούδι δεν τρέχει στον επεξεργαστή αυτής της τηλεόρασης</string>
+    <string name="tv_link_pair_note">Ο κωδικός που σάρωσες είναι για %1$s στη διεύθυνση %2$s στο δίκτυό σου. Κάνε σύζευξη μόνο αν είναι η τηλεόραση μπροστά σου.</string>
+    <string name="tv_sign_in_pair_first">Κάνε πρώτα σύζευξη με %1$s και μετά σύνδεσέ το</string>
     <!-- 1.8.0 desk mode and the tour -->
     <string name="desk_mode">Λειτουργία γραφείου</string>
     <string name="desk_mode_detail">Όσο το τηλέφωνο φορτίζει και παίζει μουσική</string>
