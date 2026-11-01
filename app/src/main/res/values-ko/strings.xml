@@ -4147,4 +4147,6 @@
     <string name="holiday_winter_chill_blurb">눈처럼 느리게, 썰매 방울 없이</string>
     <string name="holiday_new_years_eve">새해 전야 파티</string>
     <string name="holiday_new_years_eve_blurb">자정 카운트다운을 위한 앤섬</string>
+    <string name="tv_back_to_now">지금 부분으로 돌아가기</string>
+    <string name="tv_timing_keys">← → 0.1초  ·  ↑ ↓ 1초  ·  OK: %1$s</string>
 </resources>

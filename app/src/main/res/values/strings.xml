@@ -4225,4 +4225,6 @@
     <string name="holiday_winter_chill_blurb">Snowy and slow, no sleigh bells</string>
     <string name="holiday_new_years_eve">New Year\'s Eve Party</string>
     <string name="holiday_new_years_eve_blurb">Anthems to count down to midnight</string>
+    <string name="tv_back_to_now">Back to now</string>
+    <string name="tv_timing_keys">← → 0.1 s  ·  ↑ ↓ 1 s  ·  OK: %1$s</string>
 </resources>

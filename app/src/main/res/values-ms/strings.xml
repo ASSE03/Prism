@@ -4147,4 +4147,6 @@
     <string name="holiday_winter_chill_blurb">Bersalji dan perlahan, tanpa loceng giring-giring</string>
     <string name="holiday_new_years_eve">Parti Malam Tahun Baharu</string>
     <string name="holiday_new_years_eve_blurb">Lagu semangat untuk kira detik ke tengah malam</string>
+    <string name="tv_back_to_now">Kembali ke sekarang</string>
+    <string name="tv_timing_keys">← → 0.1 s  ·  ↑ ↓ 1 s  ·  OK: %1$s</string>
 </resources>

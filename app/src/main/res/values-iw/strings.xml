@@ -4247,4 +4247,6 @@
     <string name="holiday_winter_chill_blurb">מושלג ואיטי, בלי פעמוני מזחלת</string>
     <string name="holiday_new_years_eve">מסיבת ערב השנה החדשה</string>
     <string name="holiday_new_years_eve_blurb">המנונים לספירה לאחור עד חצות</string>
+    <string name="tv_back_to_now">חזרה לעכשיו</string>
+    <string name="tv_timing_keys">← → 0.1 שנ׳  ·  ↑ ↓ 1 שנ׳  ·  OK: %1$s</string>
 </resources>

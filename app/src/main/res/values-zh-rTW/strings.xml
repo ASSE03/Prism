@@ -4147,4 +4147,6 @@
     <string name="holiday_winter_chill_blurb">雪天慢慢聽，沒有雪橇鈴</string>
     <string name="holiday_new_years_eve">跨年派對</string>
     <string name="holiday_new_years_eve_blurb">倒數到午夜的派對戰歌</string>
+    <string name="tv_back_to_now">回到目前</string>
+    <string name="tv_timing_keys">← → 0.1 秒  ·  ↑ ↓ 1 秒  ·  OK：%1$s</string>
 </resources>

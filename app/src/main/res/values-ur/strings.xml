@@ -4197,4 +4197,6 @@
     <string name="holiday_winter_chill_blurb">برفیلا اور دھیما، بغیر سلیج کی گھنٹیوں کے</string>
     <string name="holiday_new_years_eve">نئے سال کی پارٹی</string>
     <string name="holiday_new_years_eve_blurb">آدھی رات کی الٹی گنتی کے ترانے</string>
+    <string name="tv_back_to_now">ابھی پر واپس جائیں</string>
+    <string name="tv_timing_keys">← → 0.1 سیکنڈ  ·  ↑ ↓ 1 سیکنڈ  ·  OK: %1$s</string>
 </resources>

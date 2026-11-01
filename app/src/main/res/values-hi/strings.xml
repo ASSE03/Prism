@@ -4197,4 +4197,6 @@
     <string name="holiday_winter_chill_blurb">बर्फ़ीला और धीमा, बिना स्लेज की घंटियों के</string>
     <string name="holiday_new_years_eve">नए साल की पार्टी</string>
     <string name="holiday_new_years_eve_blurb">आधी रात की उलटी गिनती के एंथम</string>
+    <string name="tv_back_to_now">अभी पर वापस जाएं</string>
+    <string name="tv_timing_keys">← → 0.1 से  ·  ↑ ↓ 1 से  ·  OK: %1$s</string>
 </resources>

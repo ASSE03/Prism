@@ -4197,4 +4197,6 @@
     <string name="holiday_winter_chill_blurb">برفی و آرام، بدون زنگوله‌ی سورتمه</string>
     <string name="holiday_new_years_eve">جشن شب سال نو</string>
     <string name="holiday_new_years_eve_blurb">سرودهایی برای شمارش معکوس تا نیمه‌شب</string>
+    <string name="tv_back_to_now">بازگشت به اکنون</string>
+    <string name="tv_timing_keys">← → ۰٫۱ ث  ·  ↑ ↓ ۱ ث  ·  OK: %1$s</string>
 </resources>
