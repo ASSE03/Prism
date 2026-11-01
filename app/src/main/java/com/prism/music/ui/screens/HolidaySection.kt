@@ -17,8 +17,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -53,7 +55,8 @@ import kotlinx.coroutines.withContext
 /**
  * Home's holiday section (1.8.0), as Spotify's and Apple Music's seasonal hubs are: "Thanksgiving" through November,
  * "Holiday music" through December, each of Prism's holiday mixes a card of its own cover. The cards cost nothing to
- * show: a mix is made when it's opened (its page, a long press, Play), not before.
+ * show; while they're shown on Wi-Fi the mixes are made ahead, one at a time ([com.prism.music.data.seasonal.SeasonalMixes.makeAhead]),
+ * so opening one (its page, a long press, Play) is instant. Otherwise a mix is made when it's opened.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -64,6 +67,8 @@ fun HolidaySection(cfg: HomeSectionConfig) {
     val holiday = c.seasonal.holiday() ?: return
     val mixes = remember(today) { HolidayMixes.on(today) }
     if (mixes.isEmpty()) return
+    // Once the row is on screen (on Wi-Fi only: makeAhead checks), the first card first; it carries on behind Home.
+    LaunchedEffect(mixes) { c.seasonal.makeAhead(mixes) }
     var menu by remember { mutableStateOf<HolidayMix?>(null) }
     menu?.let { m -> HolidayMixSheet(m) { menu = null } }
     SectionHeader(cfg.titled(tr(holiday.section)), Modifier.testTag("holidaySection"), strapline = tr(R.string.holiday_mixes_strapline))
@@ -94,7 +99,8 @@ fun HolidaySection(cfg: HomeSectionConfig) {
 private fun HolidayMixSheet(mix: HolidayMix, onDismiss: () -> Unit) {
     val c = LocalContainer.current
     val context = LocalContext.current
-    val cover = remember(mix.id) { HolidayCovers.file(context, mix) }
+    // Drawn into its file the first time, off the main thread (the sheet opens at once and takes it when it's there).
+    val cover by produceState<String?>(null, mix.id) { value = withContext(Dispatchers.Default) { runCatching { HolidayCovers.file(context, mix) }.getOrNull() } }
     val name = tr(mix.name)
     val target = Playable.Page(
         name, tr(mix.blurb), cover, album = false,
