@@ -51,7 +51,11 @@ sealed interface BrowseItem {
     val thumbnail: String?
 }
 
-data class SongItem(val song: Song) : BrowseItem {
+/**
+ * A song or video in a list. [plays]: how often it's been played, as a search result says ("189M plays", a video's
+ * "120M views"), in any language; null where nothing says (1.8.0: search ranks songs of the same title by it).
+ */
+data class SongItem(val song: Song, val plays: Long? = null) : BrowseItem {
     override val id get() = song.id
     override val title get() = song.title
     override val subtitle get() = song.artistText
