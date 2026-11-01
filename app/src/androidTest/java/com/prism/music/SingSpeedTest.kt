@@ -36,6 +36,7 @@ import kotlin.random.Random
  * app's Kotlin times several times slower). Results go to logcat (PrismSingBench) and `singbench.txt` in this app's
  * external files. [quality] is the same against songs with their parts known.
  */
+@Measurement
 @RunWith(AndroidJUnit4::class)
 class SingSpeedTest {
     private val args get() = InstrumentationRegistry.getArguments()
