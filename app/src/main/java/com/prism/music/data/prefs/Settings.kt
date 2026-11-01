@@ -449,8 +449,19 @@ fun AppSettings.canHide(part: PlayerPart): Boolean = !(part == PlayerPart.VOLUME
  * The ⋯ button shows unless hidden, and even then while nothing else on the player opens the menu: a long press on the
  * title or the artist does while either shows, and a gesture set to the song menu does.
  */
-fun AppSettings.showsMenuButton(): Boolean = shows(PlayerPart.MENU) ||
-    (!shows(PlayerPart.TITLE) && !shows(PlayerPart.ARTIST) && PlayerGesture.MENU !in listOf(coverSwipeLeft, coverSwipeRight, coverSwipeUp, coverDoubleTap, coverLongPress))
+fun AppSettings.showsMenuButton(wide: Boolean = false): Boolean = shows(PlayerPart.MENU) ||
+    (!shows(PlayerPart.TITLE) && !shows(PlayerPart.ARTIST) &&
+        // The wide player's cover (a tablet, a phone on its side) only seeks and skips: no gesture opens the menu there.
+        (wide || PlayerGesture.MENU !in listOf(coverSwipeLeft, coverSwipeRight, coverSwipeUp, coverDoubleTap, coverLongPress)))
+
+/** The player's cover is drawn: shown, or (hidden) once it's shrinking into the header over the lyrics or the queue. */
+fun AppSettings.drawsCover(collapsedPastHalf: Boolean): Boolean = shows(PlayerPart.COVER) || collapsedPastHalf
+
+/**
+ * A podcast episode's ⋯ menu gets what its hidden parts did too: with the row hidden, the queue (the episode keeps its
+ * back / ahead skips whatever previous & next are set to, and its speed is in the menu already).
+ */
+fun AppSettings.episodeMenuFromPlayer(): List<MenuAction> = listOfNotNull(MenuAction.OPEN_QUEUE.takeIf { !shows(PlayerPart.BUTTONS) })
 
 /** The bottom row's buttons as they show on the player (none while the row is hidden). */
 fun AppSettings.rowButtons(): List<PlayerButton> =

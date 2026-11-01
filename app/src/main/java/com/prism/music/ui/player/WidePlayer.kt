@@ -368,6 +368,6 @@ internal fun PlayerCredits(song: Song, onMore: () -> Unit, onCollapse: () -> Uni
             CircleGlyph(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) tr(R.string.remove_from_liked) else tr(R.string.widget_like), isLiked) { c.library.toggleLike(song) }
             Spacer(Modifier.width(8.dp))
         }
-        if (settings.showsMenuButton()) CircleGlyph(PrismIcons.More, tr(R.string.song_options), onClick = onMore)
+        if (settings.showsMenuButton(wide = true)) CircleGlyph(PrismIcons.More, tr(R.string.song_options), onClick = onMore)
     }
 }
