@@ -327,7 +327,14 @@ fun TvLyricsPage(nav: TvNav) {
     val accent = rememberTvAccent(now.art)
     val lines = state.lines
     val current by remember(lines) { androidx.compose.runtime.derivedStateOf { CarLyricsCard.lineAt(lines, clock.value).coerceAtLeast(0) } }
-    TvLyricsPlace(now, lines, current, clock, state.loading, state.unavailable, state.source?.label, accent, onPlayPause = { c.player.togglePlay() }) { ms -> c.player.seekToLyric(ms) }
+    // Under each line as the listener has them (Settings → Lyrics): the romanized line and the translation.
+    val roman = com.prism.music.ui.player.rememberRomanized(state)
+    val romanInstead = com.prism.music.ui.player.romanizeMode(s.id) == com.prism.music.data.prefs.RomanizeMode.INSTEAD
+    val translations = rememberTvTranslations(lines)
+    TvLyricsPlace(
+        now, lines, current, clock, state.loading, state.unavailable, state.source?.label, accent, onPlayPause = { c.player.togglePlay() },
+        roman = roman, romanInstead = romanInstead, translations = translations,
+    ) { ms -> c.player.seekToLyric(ms) }
 }
 
 /**
