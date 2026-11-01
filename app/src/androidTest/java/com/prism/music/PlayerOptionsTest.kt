@@ -114,6 +114,26 @@ class PlayerOptionsTest {
         compose.waitUntil(10_000) { statusBarShown() }
     }
 
+    /**
+     * The owner (1.8.0): hiding the status bar moved the whole player up. Now only the bar goes: the player's title and
+     * cover stay where they were, for "Hide it only on the player" and for hiding it everywhere.
+     */
+    @Test fun hidingTheStatusBarLeavesThePlayerInPlace() {
+        openPlayer()
+        fun top(tag: String) = compose.onAllNodes(hasTestTag(tag), useUnmergedTree = true).fetchSemanticsNodes().first().boundsInRoot.top
+        val title = top("playerTitle")
+        val handle = top("playerHandle")
+        for (hide in listOf<suspend () -> Unit>({ Fixture.container.settings.setHideStatusBarPlayer(true) }, { Fixture.container.settings.setHideStatusBar(true) })) {
+            runBlocking { hide() }
+            compose.waitUntil(10_000) { !statusBarShown() }
+            compose.waitForIdle(); Thread.sleep(600)
+            assertEquals("the title stayed", title, top("playerTitle"), 1f)
+            assertEquals("the handle stayed", handle, top("playerHandle"), 1f)
+            runBlocking { Fixture.container.settings.setHideStatusBarPlayer(false); Fixture.container.settings.setHideStatusBar(false) }
+            compose.waitUntil(10_000) { statusBarShown() }
+        }
+    }
+
     /** #231 (1.7.9.2): the split-light ring around play can go. Only the ring's own pixels should change. */
     @Test fun thePlayRingCanGo() {
         openPlayer()
