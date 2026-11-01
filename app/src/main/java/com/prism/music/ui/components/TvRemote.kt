@@ -64,7 +64,8 @@ fun TvRemoteSheet(tv: PrismDevice, onDismiss: () -> Unit) {
     val settings by c.settings.flow.collectAsState()
     var now by remember { mutableStateOf<RemoteNow?>(null) }
     var askSignIn by remember { mutableStateOf(false) }
-    val say: (String) -> Unit = { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
+    // On the main thread whatever the caller's (the link answers on its own).
+    val say: (String) -> Unit = { msg -> androidx.core.content.ContextCompat.getMainExecutor(context).execute { Toast.makeText(context, msg, Toast.LENGTH_SHORT).show() } }
     LaunchedEffect(tv.key) {
         while (true) {
             when (val r = handoff.ask(tv, HandoffRequest.Now)) {

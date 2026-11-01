@@ -59,7 +59,8 @@ class PhoneTvRemoteTest {
         override fun signIn(values: Map<String, String>, account: String, from: String): String? { signIns += values; return null }
     }
 
-    private val server = ServerSocket(0, 10, InetAddress.getLoopbackAddress())
+    // 127.0.0.1, as the TV's address below (Android's getLoopbackAddress() is IPv6's ::1).
+    private val server = ServerSocket(0, 10, InetAddress.getByName("127.0.0.1"))
 
     @After fun cleanUp() {
         runCatching { server.close() }
@@ -78,6 +79,9 @@ class PhoneTvRemoteTest {
         // Signed in on the phone (a made-up account), so "Sign in on this TV" is offered.
         runBlocking { c.settings.fromBackup(mapOf("cookie" to "s:SAPISID=phone-sapisid; SID=phone-sid", "account_name" to "s:Phone Listener"), settings = false, accounts = true) }
         val device = PrismDevice(tv.name, "127.0.0.1", server.localPort, tv.device, "test", paired = true, tv = true)
+        // The link itself first, so a failure says why (the sheet only shows it as a toast).
+        val first = runBlocking { c.handoff.ask(device, com.prism.music.connect.HandoffRequest.Now) }
+        assertTrue("the TV answers what it plays: $first", first is com.prism.music.connect.HandoffResult.Playing)
         compose.setContent {
             CompositionLocalProvider(LocalContainer provides c) {
                 PrismTheme(c.settings.current, null) { TvRemoteSheet(device) {} }
