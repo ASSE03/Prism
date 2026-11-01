@@ -20,7 +20,7 @@ import kotlinx.coroutines.sync.withPermit
  * artist), no karaoke, covers, sped-up or other knock-offs, an artist three times at most and never twice running, and
  * the week's own draw from what was found, so the mix changes a little each week while it's in season.
  */
-class HolidayMixMaker(private val sources: Sources) {
+class HolidayMixMaker(private val sources: Sources, private val atOnce: Int = AT_ONCE) {
     /** Where songs come from. Never the listener's account: these are anonymous searches. */
     interface Sources {
         /** Songs for [query] (YouTube Music's Songs filter), [pages] pages of them. */
@@ -37,47 +37,59 @@ class HolidayMixMaker(private val sources: Sources) {
     suspend fun build(mix: HolidayMix, week: String): List<Song> = assemble(mix, find(mix), week)
 
     /**
-     * Every seed of [mix], three asked at a time; a seed that fails finds nothing (the rest still make the mix). A
+     * Every seed of [mix], [atOnce] requests at a time; a seed that fails finds nothing (the rest still make the mix). A
      * playlist taken by one seed isn't taken again by the next (two seeds finding "Latin Jazz Christmas" first would
-     * otherwise make a third of a jazz mix Latin).
+     * otherwise make a third of a jazz mix Latin). The playlist searches go first, so their playlists are read while the
+     * song searches are still answering, and a seed's playlists are read side by side; what's found is the same, in
+     * the same order, however the answers come in.
      */
-    suspend fun find(mix: HolidayMix): List<Found> {
-        val gate = Semaphore(3)
-        return coroutineScope {
-            val asked = mix.seeds.map { seed ->
-                async {
-                    runCatching {
-                        if (seed.playlist) emptyList<Song>() to gate.withPermit { sources.playlists(seed.query) }.filter { listFits(mix, seed, it.title) }
-                        else gate.withPermit { sources.songs(seed.query, SONG_PAGES) } to emptyList()
-                    }.getOrDefault(emptyList<Song>() to emptyList())
-                }
-            }.awaitAll()
-            val taken = HashSet<String>()
-            val lists = mix.seeds.indices.map { i ->
+    suspend fun find(mix: HolidayMix): List<Found> = coroutineScope {
+        // The gate lets waiting requests in in turn, so the playlist searches, asked first, mostly go first.
+        val gate = Semaphore(atOnce)
+        val lists = mix.seeds.map { seed ->
+            async {
+                if (!seed.playlist) emptyList<PlaylistItem>()
+                else runCatching { gate.withPermit { sources.playlists(seed.query) }.filter { listFits(mix, seed, it.title) } }.getOrDefault(emptyList())
+            }
+        }
+        val songs = mix.seeds.map { seed ->
+            async {
+                if (seed.playlist) emptyList<Song>()
+                else runCatching { gate.withPermit { sources.songs(seed.query, SONG_PAGES) } }.getOrDefault(emptyList())
+            }
+        }
+        // Which playlists each seed takes, in the seeds' order (only the playlist searches are waited for).
+        val taken = async {
+            val seen = HashSet<String>()
+            mix.seeds.indices.map { i ->
                 val mine = ArrayList<PlaylistItem>()
-                for (p in asked[i].second) {
+                for (p in lists[i].await()) {
                     if (mine.size >= mix.seeds[i].take) break
-                    if (taken.add(p.id.removePrefix("VL"))) mine += p
+                    if (seen.add(p.id.removePrefix("VL"))) mine += p
                 }
                 mine
             }
-            mix.seeds.mapIndexed { i, seed ->
-                async {
-                    if (!seed.playlist) Found(seed, asked[i].first)
-                    else Found(
-                        seed,
-                        lists[i].flatMap { p -> gate.withPermit { runCatching { sources.playlistSongs(p.id) }.getOrDefault(emptyList()) }.take(PER_PLAYLIST) },
-                        lists[i].map { it.title },
-                    )
-                }
-            }.awaitAll()
         }
+        mix.seeds.mapIndexed { i, seed ->
+            async {
+                if (!seed.playlist) Found(seed, songs[i].await())
+                else {
+                    val mine = taken.await()[i]
+                    val read = mine.map { p ->
+                        async { gate.withPermit { runCatching { sources.playlistSongs(p.id) }.getOrDefault(emptyList()) }.take(PER_PLAYLIST) }
+                    }.awaitAll()
+                    Found(seed, read.flatten(), mine.map { it.title })
+                }
+            }
+        }.awaitAll()
     }
 
     companion object {
         /** About fifty songs a mix. */
         const val SIZE = 50
         const val PER_ARTIST = 3
+        /** Requests a mix has out at once (it's about twenty: searches, their second pages, playlists). */
+        const val AT_ONCE = 6
         private const val SONG_PAGES = 2
         private const val PER_PLAYLIST = 80
 
