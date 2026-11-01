@@ -1,3 +1,5 @@
+@file:OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+
 package com.prism.music.ui.tv
 
 import androidx.compose.foundation.background
@@ -24,6 +26,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.foundation.focusGroup
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
@@ -94,9 +98,11 @@ fun TvNowPlayingScreen(
                     )
                 }
                 Spacer(Modifier.height(20.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                    if (now.hasLyrics) TvButton(tr(R.string.lyrics), onLyrics, Modifier.tvItem("$TAG_PLAYER/lyrics"), icon = PrismIcons.Lyrics)
-                    TvButton(tr(R.string.queue), onQueue, Modifier.tvItem("$TAG_PLAYER/queue"), icon = PrismIcons.Queue)
+                // Down from the controls lands on this row's first button, every time (as the design's path).
+                val rowStart = androidx.compose.runtime.remember { androidx.compose.ui.focus.FocusRequester() }
+                Row(Modifier.focusProperties { onEnter = { rowStart.requestFocus() } }.focusGroup(), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                    if (now.hasLyrics) TvButton(tr(R.string.lyrics), onLyrics, Modifier.focusRequester(rowStart).tvItem("$TAG_PLAYER/lyrics"), icon = PrismIcons.Lyrics)
+                    TvButton(tr(R.string.queue), onQueue, (if (now.hasLyrics) Modifier else Modifier.focusRequester(rowStart)).tvItem("$TAG_PLAYER/queue"), icon = PrismIcons.Queue)
                     if (now.hasVideo) TvButton(tr(R.string.video), onVideo, Modifier.tvItem("$TAG_PLAYER/video"), icon = PrismIcons.Video)
                     TvIconButton(if (now.liked) PrismIcons.HeartFilled else PrismIcons.Heart, tr(if (now.liked) R.string.liked else R.string.widget_like), onLike, Modifier.tvItem("$TAG_PLAYER/like"), on = now.liked)
                     TvIconButton(PrismIcons.More, tr(R.string.more), onMore, Modifier.tvItem("$TAG_PLAYER/more"))

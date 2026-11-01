@@ -91,6 +91,8 @@ fun Modifier.tvItem(tag: String, entry: Boolean = false): Modifier {
     }
     return (if (takes) this.entryFocus(screen) else this)
         .focusRequester(requester)
-        .onFocusChanged { if (it.isFocused) { memory.lastFocused[screen] = tag; memory.landed += screen } }
+        .onFocusChanged {
+            if (it.isFocused) { memory.lastFocused[screen] = tag; memory.landed += screen }
+        }
         .testTag(tag)
 }

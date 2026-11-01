@@ -69,6 +69,14 @@ fun TvHomeScreen(
     onSearch: (() -> Unit)? = null,
 ) {
     val scheme = MaterialTheme.colorScheme
+    // Search stands in while Home loads; if it had focus when the song or the rows come (it goes), focus goes to their
+    // first item as on opening Home, not to the side navigation.
+    val memory = LocalTvFocusMemory.current
+    val screen = LocalTvScreen.current
+    if ((now != null || shelves.isNotEmpty()) && memory.lastFocused[screen] == "$TAG_HOME/search") {
+        memory.lastFocused.remove(screen)
+        memory.opening(screen)
+    }
     // Rows run to the screen's edges (their cards grow when focused, and slide in from the edge); everything else keeps
     // the 48 dp margins.
     LazyColumn(

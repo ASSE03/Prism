@@ -57,7 +57,9 @@ class TvSettingsTests {
         goTo(TvSection.SETTINGS)
         compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/group/0"), 10_000)
         // Down to Sound (moving along the groups shows each), Right into it, down to "Same loudness".
-        TvFixture.down(); TvFixture.down()
+        TvFixture.down()
+        compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/group/1"))
+        TvFixture.down()
         compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/group/2"))
         TvFixture.right()
         compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/setting/0"))
@@ -97,8 +99,13 @@ class TvSettingsTests {
         kotlinx.coroutines.runBlocking { Fixture.container.updates.checkNow() }
         TvFixture.launch()
         compose.waitUntil(15_000) { compose.onAllNodes(hasTestTag("$TAG_HOME/update"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
-        // Empty Home (no network): its Search button first; Up reaches Update.
-        compose.awaitFocus(10_000)
+        // Home's first item: Search while it's empty, the first card once its rows come (focus follows when Search goes,
+        // never left on the side navigation), the hero's "Now playing" if a song is left from another test. Up: Update.
+        compose.awaitFocusOn(hasTestTag("$TAG_HOME/search") or hasTestTag("$TAG_HOME/row0/0") or hasTestTag("$TAG_HOME/player"), 15_000)
+        if (compose.onAllNodes(hasTestTag("$TAG_HOME/search") and androidx.compose.ui.test.isFocused(), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty())
+            Thread.sleep(3_000) // the rows may still be on their way: let them come, so Up starts from where focus settles
+        compose.awaitFocusOn(hasTestTag("$TAG_HOME/search") or hasTestTag("$TAG_HOME/row0/0") or hasTestTag("$TAG_HOME/player"), 10_000)
+        compose.waitForIdle()
         TvFixture.up()
         compose.awaitFocusOn(hasTestTag("$TAG_HOME/update"))
         assertTrue(Fixture.container.updates.available.value?.version == "9.9.9")

@@ -19,6 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.foundation.focusGroup
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -68,8 +71,11 @@ fun TvSettingsScreen(
         }
         Spacer(Modifier.width(32.dp))
         val settings = groups.getOrNull(group)?.settings.orEmpty()
+        // Right from the groups enters a group's settings at its first one (the design's path), whatever its height.
+        val firstSetting = androidx.compose.runtime.remember { androidx.compose.ui.focus.FocusRequester() }
         LazyColumn(
-            Modifier.weight(1f).fillMaxHeight().background(scheme.surface.copy(alpha = 0.6f), RoundedCornerShape(topStart = 18.dp, bottomStart = 18.dp)).padding(20.dp).rememberedFocus(),
+            Modifier.weight(1f).fillMaxHeight().background(scheme.surface.copy(alpha = 0.6f), RoundedCornerShape(topStart = 18.dp, bottomStart = 18.dp)).padding(20.dp)
+                .focusProperties { onEnter = { firstSetting.requestFocus() } }.focusGroup(),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             itemsIndexed(settings) { i, s ->
@@ -77,7 +83,7 @@ fun TvSettingsScreen(
                     ListItem(
                         selected = false,
                         onClick = { onSetting(i) },
-                        modifier = Modifier.weight(1f).then(Modifier.tvItem("$TAG_SETTINGS/setting/$i", entry = i == focusedSetting)),
+                        modifier = Modifier.weight(1f).then(if (i == 0) Modifier.focusRequester(firstSetting) else Modifier).then(Modifier.tvItem("$TAG_SETTINGS/setting/$i", entry = i == focusedSetting)),
                         headlineContent = { Text(s.title, maxLines = 2, overflow = TextOverflow.Ellipsis) },
                         supportingContent = s.value?.let { { Text(it, maxLines = 1, overflow = TextOverflow.Ellipsis) } },
                         trailingContent = s.on?.let { on -> { Switch(checked = on, onCheckedChange = null) } },

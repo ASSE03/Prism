@@ -21,6 +21,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.focusGroup
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
@@ -112,12 +115,18 @@ fun TvRoot() {
         }
         val holder = rememberSaveableStateHolder()
         val top = stack.lastOrNull()
-        val key = top?.key ?: sectionKey
+        val pick: (TvSection) -> Unit = { section = it; memory.opening("section:${it.name}") }
         CompositionLocalProvider(LocalTvFocusMemory provides memory) { Box(Modifier.fillMaxSize()) {
-            holder.SaveableStateProvider(key) {
-                CompositionLocalProvider(LocalTvScreen provides key) {
+            // The side navigation stays put while the places change beside it (focus moves from it into the new place);
+            // each place keeps its own scroll and focus.
+            if (top == null) TvNavFrame(section, pick, focusNav = false) {
+                holder.SaveableStateProvider(sectionKey) {
+                    CompositionLocalProvider(LocalTvScreen provides sectionKey) { TvPlace(section, nav, pick) }
+                }
+            }
+            else holder.SaveableStateProvider(top.key) {
+                CompositionLocalProvider(LocalTvScreen provides top.key) {
                     when (top) {
-                        null -> TvNavFrame(section, { section = it; memory.opening("section:${it.name}") }, focusNav = false) { TvPlace(section, nav) { section = it; memory.opening("section:${it.name}") } }
                         TvRoute.Player -> TvPlayerPage(nav)
                         TvRoute.Lyrics -> TvLyricsPage(nav)
                         TvRoute.Video -> TvVideoPage(nav)
@@ -141,20 +150,27 @@ fun TvRoot() {
  */
 @Composable
 fun TvNavFrame(section: TvSection, onSection: (TvSection) -> Unit, focusNav: Boolean, content: @Composable () -> Unit) {
+    // Entering the navigation (Left from a place) lands on the place being shown.
+    val current = remember { androidx.compose.ui.focus.FocusRequester() }
     Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         NavigationDrawer(
             drawerContent = {
-                Column(
-                    Modifier.fillMaxHeight().padding(vertical = TV_SAFE_V, horizontal = 12.dp).selectableGroup().testTag(TAG_NAV),
-                    verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-                ) {
-                    for (s in TvSection.entries) {
-                        NavigationDrawerItem(
-                            selected = section == s,
-                            onClick = { onSection(s) },
-                            leadingContent = { Icon(s.icon(), contentDescription = null) },
-                            modifier = Modifier.tvItem("$TAG_NAV/${s.name}", entry = focusNav && s == section),
-                        ) { Text(s.label()) }
+                // Its own focus key: moving through it never counts as focus inside a place.
+                CompositionLocalProvider(LocalTvScreen provides NAV_SCREEN) {
+                    Column(
+                        Modifier.fillMaxHeight().padding(vertical = TV_SAFE_V, horizontal = 12.dp).selectableGroup()
+                            .focusRestorerTo(current).testTag(TAG_NAV),
+                        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+                    ) {
+                        for (s in TvSection.entries) {
+                            NavigationDrawerItem(
+                                selected = section == s,
+                                onClick = { onSection(s) },
+                                leadingContent = { Icon(s.icon(), contentDescription = null) },
+                                modifier = (if (s == section) Modifier.focusRequester(current) else Modifier)
+                                    .tvItem("$TAG_NAV/${s.name}", entry = focusNav && s == section),
+                            ) { Text(s.label()) }
+                        }
                     }
                 }
             },
@@ -178,6 +194,13 @@ private fun TvPlace(section: TvSection, nav: TvNav, onSection: (TvSection) -> Un
 }
 
 private val TV_SAFE_V = 27.dp
+/** The side navigation's own focus key. */
+private const val NAV_SCREEN = "nav"
+
+/** Focus coming into this group goes to [target] (the navigation's current place), whatever was focused in it before. */
+@OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+private fun Modifier.focusRestorerTo(target: androidx.compose.ui.focus.FocusRequester): Modifier =
+    this.focusProperties { onEnter = { target.requestFocus() } }.focusGroup()
 /** Test tags (TV in-app tests): the side navigation, its items ("tv_nav/HOME"), and the shown place ("tv_place/HOME"). */
 const val TAG_NAV = "tv_nav"
 const val TAG_PLACE = "tv_place"

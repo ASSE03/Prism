@@ -54,6 +54,12 @@ object TvFixture {
 
     /** Waits until a node matching [matcher] has focus. */
     fun ComposeTestRule.awaitFocusOn(matcher: SemanticsMatcher, ms: Long = 5_000) {
-        waitUntil(ms) { onAllNodes(matcher and isFocused(), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        try {
+            waitUntil(ms) { onAllNodes(matcher and isFocused(), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        } catch (e: androidx.compose.ui.test.ComposeTimeoutException) {
+            // Says where focus is instead, so a failure on a slow TV shows what went wrong.
+            val tag = runCatching { focused()?.config?.getOrElseNullable(androidx.compose.ui.semantics.SemanticsProperties.TestTag) { null } }.getOrNull()
+            throw AssertionError("focus never reached ${matcher.description} in $ms ms; it is on ${tag ?: "nothing tagged"}", e)
+        }
     }
 }
