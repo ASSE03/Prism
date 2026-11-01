@@ -24,20 +24,23 @@ import androidx.tv.material3.MaterialTheme
 import com.prism.music.AppContainer
 import com.prism.music.R
 import com.prism.music.playback.CarLyricsCard
+import com.prism.music.playback.sing.Separation
+import com.prism.music.playback.sing.SingPace
 import com.prism.music.tr
 import com.prism.music.ui.player.rememberLyricClock
 import com.prism.music.ui.player.rememberLyricsState
 import com.prism.music.ui.theme.LocalContainer
 import com.prism.music.ui.theme.PrismIcons
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Sing on a TV (1.8.0, plan §2): karaoke night, only on TVs fast enough. The speed check separates the playing song's
- * voice for a while and works out whether the whole song would be ready before it's played through; the answer is kept.
+ * Sing on a TV (1.8.0, plan §2): karaoke night. The speed check times Sing's full and light separation on this TV with
+ * the playing song (1.8.x); a TV that keeps up with one of them gets it, one too slow, or whose processor Sing's engine
+ * doesn't run on, gets the quick way (what's in the middle of the mix taken out) rather than nothing. The answer is kept.
  */
 object TvSing {
+    /** [SLOW] and [UNSUPPORTED]: Sing the quick way. */
     enum class State { UNCHECKED, CHECKING, READY, SLOW, UNSUPPORTED;
         fun label(): String = when (this) {
             UNCHECKED -> tr(R.string.tv_sing_check)
@@ -46,46 +49,47 @@ object TvSing {
             SLOW -> tr(R.string.tv_sing_too_slow)
             UNSUPPORTED -> tr(R.string.tv_sing_no_cpu)
         }
+
+        /** Sing is in the player's ⋯ (a way it runs here has been found). */
+        val sings: Boolean get() = this == READY || this == SLOW || this == UNSUPPORTED
     }
 
     private val _state = MutableStateFlow(State.UNCHECKED)
     val state: StateFlow<State> = _state
 
-    /** How long the check watches the separation. */
-    private const val CHECK_MS = 40_000L
-    /** The separation has to beat the song by this much (it also shares the TV with playback). */
-    private const val MARGIN = 0.85
-
     private fun prefs(context: Context) = context.getSharedPreferences("tv_sing", Context.MODE_PRIVATE)
 
-    /** The kept answer of an earlier check (called as the settings open). */
+    /** The kept answer of an earlier check (called as the settings open); no check needed where only the quick way runs. */
     fun load(context: Context) {
         if (_state.value != State.UNCHECKED) return
-        _state.value = prefs(context).getString("state", null)?.let { s -> State.entries.firstOrNull { it.name == s } }?.takeIf { it != State.CHECKING } ?: State.UNCHECKED
+        _state.value = prefs(context).getString("state", null)?.let { s -> State.entries.firstOrNull { it.name == s } }?.takeIf { it != State.CHECKING }
+            ?: if (com.prism.music.data.ModelStore.Model.singRuntime() == null) State.UNSUPPORTED else State.UNCHECKED
     }
 
-    /** Whether separating at [fraction] done after [elapsedMs] would have the whole song ready before [songMs] plays. */
-    fun fastEnough(fraction: Float, elapsedMs: Long, songMs: Long): Boolean =
-        fraction > 0f && songMs > 0 && elapsedMs / fraction <= songMs * MARGIN
+    /** What the check's speeds (seconds of song a second; null: not timed) say this TV can do. */
+    fun verdict(full: Double?, light: Double?): State? = when {
+        full == null && light == null -> null
+        SingPace.choose(true, full, light) == Separation.QUICK -> State.SLOW
+        else -> State.READY
+    }
 
     /** Checks this TV with the playing song; what to tell the listener. */
     suspend fun check(c: AppContainer): String {
         if (_state.value == State.CHECKING) return State.CHECKING.label()
-        if (!c.sing.supported) return keep(c, State.UNSUPPORTED)
+        if (!c.sing.fullEngine) return keep(c, State.UNSUPPORTED)
         val song = c.player.currentSong.value?.takeIf { c.sing.canSing(it) } ?: return tr(R.string.tv_sing_checking)
         if (!c.sing.engineReady() && !c.sing.downloadEngine()) return tr(R.string.sing_s_engine_isn_t_downloaded)
+        var speeds: Pair<Double?, Double?> = null to null
+        var problem: String? = null
+        val before = _state.value
         val result = checking(c.sing.on.value, c.sing::setOn) {
-            c.sing.prepare(listOf(song))
-            val start = System.currentTimeMillis()
-            var fraction = 0f
-            while (System.currentTimeMillis() - start < CHECK_MS) {
-                fraction = if (c.sing.store.complete(song.id)) 1f else c.sing.progress.value[song.id] ?: fraction
-                if (fraction >= 1f) break
-                delay(1_000)
-            }
-            if (fastEnough(fraction, System.currentTimeMillis() - start, song.durationSec * 1000L)) State.READY else State.SLOW
+            runCatching { speeds = c.sing.timeWays(song) }.onFailure { problem = it.message }
+            verdict(speeds.first, speeds.second) ?: State.UNCHECKED
         }
-        return keep(c, result)
+        // Nothing timed (the song couldn't be had): the answer stays as it was.
+        if (result == State.UNCHECKED) { _state.value = before; return problem ?: tr(R.string.couldn_t_get_this_song_ready) }
+        val best = listOfNotNull(speeds.first, speeds.second).maxOrNull()
+        return keep(c, result) + (best?.let { "\n" + tr(R.string.tv_sing_measured, "%.1f".format(it)) } ?: "")
     }
 
     /**
@@ -147,7 +151,8 @@ fun TvSingPage(nav: TvNav) {
         TvLyricsPlace(now, lines, current, clock, state.loading, state.unavailable, state.source?.label, accent, onPlayPause = { c.player.togglePlay() }) { ms -> c.player.seekToLyric(ms) }
         Row(Modifier.align(Alignment.TopEnd).padding(TvSafe), horizontalArrangement = Arrangement.spacedBy(androidx.compose.ui.unit.Dp(10f)), verticalAlignment = Alignment.CenterVertically) {
             val scheme = MaterialTheme.colorScheme
-            TvChip(tr(R.string.tv_vocals_out), PrismIcons.Mic, scheme.primary, scheme.onPrimary)
+            val method by c.sing.method.collectAsState()
+            TvChip(if (method == Separation.QUICK) tr(R.string.tv_voice_quick) else tr(R.string.tv_vocals_out), PrismIcons.Mic, scheme.primary, scheme.onPrimary)
             TvChip(tr(R.string.tv_key_line, if (semitones > 0) "+$semitones" else "$semitones"), null, scheme.surfaceVariant, scheme.onSurface)
         }
     }

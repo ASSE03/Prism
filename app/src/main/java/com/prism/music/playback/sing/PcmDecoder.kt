@@ -14,7 +14,7 @@ import java.nio.ByteOrder
  * file's own sample rate: mono is doubled, anything beyond two channels is left out. Pieces come about half a second
  * at a time; the decoder is kept fed with every input buffer it has free, and every finished output is taken at once.
  */
-class PcmDecoder(context: Context, uri: Uri) : AutoCloseable {
+class PcmDecoder(context: Context, uri: Uri, /** Which of the file's audio tracks (the first by default). */ audioTrack: Int = 0) : AutoCloseable {
     private val extractor = MediaExtractor()
     private val codec: MediaCodec
     private val info = MediaCodec.BufferInfo()
@@ -33,9 +33,9 @@ class PcmDecoder(context: Context, uri: Uri) : AutoCloseable {
 
     init {
         extractor.setDataSource(context, uri, null)
-        val track = (0 until extractor.trackCount).firstOrNull {
+        val track = (0 until extractor.trackCount).filter {
             extractor.getTrackFormat(it).getString(MediaFormat.KEY_MIME)?.startsWith("audio/") == true
-        } ?: throw IOException("No audio in the file")
+        }.getOrNull(audioTrack) ?: throw IOException("No audio in the file")
         extractor.selectTrack(track)
         val format = extractor.getTrackFormat(track)
         sampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE)

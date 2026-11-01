@@ -2131,7 +2131,7 @@
     <string name="couldn_t_download_it_tap_to">ডাউনলোড করা যায়নি · আবার চেষ্টা করতে ট্যাপ করুন</string>
     <string name="only_for_japanese_songs">শুধু জাপানি গানের জন্য · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">শুধু জাপানির এটি দরকার: এর কাঞ্জির কয়েকটি উচ্চারণ আছে, তাই রোমাজির (\"kimi no na wa\") জন্য একটি অভিধান ঠিকটি বাছে। একবারই ডাউনলোড হয়। অন্য ভাষাগুলো (কোরিয়ান, চীনা, রুশ, হিন্দি…) ডাউনলোড ছাড়াই রোমান হরফে হয়। এটি ছাড়া Google কাঞ্জির বানান করে দেয়।</string>
-    <string name="sing_doesn_t_run_on_this">এই ফোনের প্রসেসরে গলা মেলান চলে না।</string>
+    <string name="sing_doesn_t_run_on_this">এই ফোনের প্রসেসরে গলা মেলান-এর পূর্ণ বিভাজন চলে না, তাই গলা মেলান দ্রুত পদ্ধতি ব্যবহার করে: মিক্সের মাঝখানে যা থাকে, যেখানে সাধারণত কণ্ঠ থাকে, তা সরিয়ে দেয়। এটা কম পরিষ্কার, আর মোনো গান যেমন আছে তেমনই থাকে।</string>
     <string name="needed_for_sing">গলা মেলানোর জন্য দরকার · %1$s</string>
     <string name="takes_the_singer_s_voice_out">কারাওকের জন্য আপনার ফোনেই গান থেকে শিল্পীর কণ্ঠ সরিয়ে দেয়। একবারই ডাউনলোড হয়।</string>
     <string name="so_sing_starts_at_once_when">যাতে চালু করলেই গলা মেলান সাথে সাথে শুরু হয়</string>
@@ -4085,7 +4085,7 @@
     <string name="tv_same_loudness_info">গানগুলো প্রায় একই ভলিউমে বাজে, তাই কম আওয়াজের গানের জন্য রিমোট খুঁজতে হয় না।</string>
     <string name="tv_lyrics_size">লিরিক্সের আকার</string>
     <string name="tv_sing_on_tv">এই টিভিতে গান গাওয়া</string>
-    <string name="tv_sing_info">Sing এই টিভিতেই গান থেকে কণ্ঠ সরিয়ে দেয়, কোনো সার্ভার ছাড়া। এর জন্য একবারের ডাউনলোড আর গানের সাথে তাল রাখার মতো দ্রুত টিভি লাগে: চলমান গান দিয়ে পরীক্ষা তা জেনে নেয়।</string>
+    <string name="tv_sing_info">Sing এই টিভিতেই গান থেকে কণ্ঠ সরিয়ে দেয়, কোনো সার্ভার ছাড়া। এর জন্য একবারের ডাউনলোড লাগে; চলমান গান দিয়ে পরীক্ষা এর গতি মাপে। গানের সাথে তাল রাখতে না পারা ধীর টিভি এর বদলে দ্রুত পদ্ধতি পায়: মিক্সের মাঝখানে যা আছে তা সরানো হয়।</string>
     <string name="tv_ambient_screen">অ্যাম্বিয়েন্ট স্ক্রিন</string>
     <string name="tv_ambient_after">রিমোট ছাড়া %1$d মিনিট পর</string>
     <string name="tv_ambient_info">গান চলার সময় রিমোট রেখে দিলে স্ক্রিন ধীরে সরে যাওয়া গান ও লিরিক্সে ম্লান হয়, টিভির স্ক্রিনসেভারের বদলে।</string>
@@ -4093,8 +4093,8 @@
     <string name="tv_sing_check">এই টিভি যথেষ্ট দ্রুত কিনা দেখুন</string>
     <string name="tv_sing_checking">একটি গান চালান, তারপর দেখুন: প্রায় এক মিনিট লাগে</string>
     <string name="tv_sing_ready">যথেষ্ট দ্রুত: Sing প্লেয়ারের ⋯-এ আছে</string>
-    <string name="tv_sing_too_slow">এই টিভি Sing-এর জন্য যথেষ্ট দ্রুত নয়: গানের পেছনে পড়ে যাবে</string>
-    <string name="tv_sing_no_cpu">এই টিভির প্রসেসরে Sing চলে না</string>
+    <string name="tv_sing_too_slow">দ্রুত পদ্ধতি: পূর্ণ বিভাজনের জন্য এই টিভি খুব ধীর, তাই Sing মিক্সের মাঝখানে যা আছে তা সরিয়ে দেয় (কম পরিষ্কার)। Sing প্লেয়ারের ⋯-এ আছে</string>
+    <string name="tv_sing_no_cpu">দ্রুত পদ্ধতি: এই টিভির প্রসেসরে পূর্ণ বিভাজন চলে না, তাই Sing মিক্সের মাঝখানে যা আছে তা সরিয়ে দেয় (কম পরিষ্কার)। Sing প্লেয়ারের ⋯-এ আছে</string>
     <string name="tv_link_pair_note">আপনার স্ক্যান করা কোডটি আপনার নেটওয়ার্কে %2$s ঠিকানায় থাকা %1$s-এর জন্য। শুধু তখনই পেয়ার করুন যদি এটি আপনার সামনের টিভি হয়।</string>
     <string name="tv_sign_in_pair_first">আগে %1$s-এর সঙ্গে পেয়ার করুন, তারপর এতে সাইন ইন করুন</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4125,4 +4125,8 @@
     <string name="tour_180_silence">নীরবতা বাদ দেওয়া শুধু গানের শুরু আর শেষ ছোঁয়</string>
     <string name="tour_180_normalize">ভলিউম সমান করা গানের মাঝের বড় ফারাক মিটিয়ে দেয়</string>
     <string name="tour_180_size">ছোট ডাউনলোড</string>
+    <string name="sing_quick_slow">পূর্ণ বিভাজনের জন্য এই ফোন খুব ধীর, তাই গলা মেলান দ্রুত পদ্ধতি ব্যবহার করে: মিক্সের মাঝখানে যা থাকে, যেখানে সাধারণত কণ্ঠ থাকে, তা সরিয়ে দেয়। এটা কম পরিষ্কার, আর মোনো গান যেমন আছে তেমনই থাকে।</string>
+    <string name="sing_mono_song">এই গানটি মোনো: দ্রুত পদ্ধতি এর কণ্ঠ সরাতে পারে না, তাই এটি যেমন আছে তেমনই বাজবে।</string>
+    <string name="tv_sing_measured">এই টিভি গান বাজার চেয়ে %1$s× গতিতে আলাদা করে।</string>
+    <string name="tv_voice_quick">কণ্ঠ কমানো (দ্রুত পদ্ধতি)</string>
 </resources>

@@ -2131,7 +2131,7 @@
     <string name="couldn_t_download_it_tap_to">Nepodařilo se stáhnout · klepni a zkus to znovu</string>
     <string name="only_for_japanese_songs">Jen pro japonské skladby · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Potřebuje to jen japonština: její kandži mají několik čtení, takže slovník vybere to správné pro romaji („kimi no na wa“). Stahuje se jednou. Ostatní jazyky (korejština, čínština, ruština, hindština…) se přepisují bez stahování. Bez něj kandži přepíše Google.</string>
-    <string name="sing_doesn_t_run_on_this">Zpívání na tomto typu procesoru telefonu nefunguje.</string>
+    <string name="sing_doesn_t_run_on_this">Úplné oddělení hlasu v Zpívání na tomto typu procesoru telefonu nefunguje, takže Zpívání použije rychlý způsob: odstraní to, co je uprostřed mixu, kde obvykle bývá hlas. Je méně čistý a mono skladba zůstane, jak je.</string>
     <string name="needed_for_sing">Potřeba pro Zpívání · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Odstraní ze skladeb hlas zpěváka, přímo v telefonu, pro karaoke. Stahuje se jednou.</string>
     <string name="so_sing_starts_at_once_when">Aby Zpívání začalo hned, jak ho zapneš</string>
@@ -4185,7 +4185,7 @@
     <string name="tv_same_loudness_info">Skladby hrají zhruba stejně hlasitě, takže kvůli tiché nemusíte sahat po ovladači.</string>
     <string name="tv_lyrics_size">Velikost textu písní</string>
     <string name="tv_sing_on_tv">Zpívat na této televizi</string>
-    <string name="tv_sing_info">Zpívat odstraní ze skladby hlas přímo v této televizi, bez serveru. Potřebuje jednorázové stažení a televizi dost rychlou, aby stačila skladbě: kontrola to zjistí s hrající skladbou.</string>
+    <string name="tv_sing_info">Zpívat odstraní ze skladby hlas přímo v této televizi, bez serveru. Potřebuje jednorázové stažení; kontrola změří rychlost s hrající skladbou. Televize, která skladbě nestačí, dostane místo toho rychlý způsob: odstraní se to, co je uprostřed mixu.</string>
     <string name="tv_ambient_screen">Klidná obrazovka</string>
     <string name="tv_ambient_after">Po %1$d min bez ovladače</string>
     <string name="tv_ambient_info">Když hraje hudba a ovladač leží, obrazovka ztlumí na skladbu a její text, pomalu se posouvá, místo spořiče obrazovky televize.</string>
@@ -4193,8 +4193,8 @@
     <string name="tv_sing_check">Zjistit, zda je televize dost rychlá</string>
     <string name="tv_sing_checking">Pusťte skladbu a pak zkontrolujte: trvá to asi minutu</string>
     <string name="tv_sing_ready">Dost rychlá: Zpívat je v ⋯ přehrávače</string>
-    <string name="tv_sing_too_slow">Tato televize není pro Zpívat dost rychlá: zaostávala by za skladbou</string>
-    <string name="tv_sing_no_cpu">Zpívat na procesoru této televize nefunguje</string>
+    <string name="tv_sing_too_slow">Rychlý způsob: tato televize je na úplné oddělení hlasu příliš pomalá, takže Zpívat odstraní to, co je uprostřed mixu (méně čisté). Zpívat je v ⋯ přehrávače</string>
+    <string name="tv_sing_no_cpu">Rychlý způsob: úplné oddělení hlasu na procesoru této televize nefunguje, takže Zpívat odstraní to, co je uprostřed mixu (méně čisté). Zpívat je v ⋯ přehrávače</string>
     <string name="tv_link_pair_note">Naskenovaný kód patří zařízení %1$s na adrese %2$s ve vaší síti. Spárujte jen tehdy, když je to televize před vámi.</string>
     <string name="tv_sign_in_pair_first">Nejdřív spárujte %1$s, pak ho přihlaste</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4225,4 +4225,8 @@
     <string name="tour_180_silence">Ořezání ticha se týká jen začátku a konce skladby</string>
     <string name="tour_180_normalize">Stejná hlasitost vyrovná velké skoky mezi skladbami</string>
     <string name="tour_180_size">Menší stahování</string>
+    <string name="sing_quick_slow">Tento telefon je na úplné oddělení hlasu příliš pomalý, takže Zpívání použije rychlý způsob: odstraní to, co je uprostřed mixu, kde obvykle bývá hlas. Je méně čistý a mono skladba zůstane, jak je.</string>
+    <string name="sing_mono_song">Tato skladba je mono: rychlý způsob z ní hlas odstranit nedokáže, takže hraje, jak je.</string>
+    <string name="tv_sing_measured">Tato televize odděluje skladby %1$s× rychleji, než hrají.</string>
+    <string name="tv_voice_quick">Hlas ztlumen (rychlý způsob)</string>
 </resources>

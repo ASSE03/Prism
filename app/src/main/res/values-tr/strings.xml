@@ -2131,7 +2131,7 @@
     <string name="couldn_t_download_it_tap_to">İndirilemedi · tekrar denemek için dokun</string>
     <string name="only_for_japanese_songs">Yalnızca Japonca şarkılar için · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Buna yalnızca Japonca ihtiyaç duyar: kanjilerin birkaç okunuşu vardır, bu yüzden romaji için doğru okunuşu bir sözlük seçer (\"kimi no na wa\"). Bir kez indirilir. Diğer diller (Korece, Çince, Rusça, Hintçe…) indirme olmadan Latin harflerine çevrilir. Bu olmadan kanjileri Google yazar.</string>
-    <string name="sing_doesn_t_run_on_this">Sing, bu telefonun işlemci türünde çalışmıyor.</string>
+    <string name="sing_doesn_t_run_on_this">Sing\'in tam ayırma işlemi bu telefonun işlemci türünde çalışmıyor, bu yüzden Sing hızlı yolu kullanıyor: miksin ortasında, sesin genellikle bulunduğu yerdekini çıkarır. Daha az temizdir ve mono bir şarkı olduğu gibi kalır.</string>
     <string name="needed_for_sing">Sing için gerekli · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Karaoke için, telefonunda, şarkılardan şarkıcının sesini çıkarır. Bir kez indirilir.</string>
     <string name="so_sing_starts_at_once_when">Böylece Sing\'i açtığında hemen başlar</string>
@@ -4085,7 +4085,7 @@
     <string name="tv_same_loudness_info">Şarkılar yaklaşık aynı ses düzeyinde çalar, böylece sessiz bir şarkı için kumandaya uzanmazsınız.</string>
     <string name="tv_lyrics_size">Şarkı sözü boyutu</string>
     <string name="tv_sing_on_tv">Bu TV\'de söyle</string>
-    <string name="tv_sing_info">Söyle, bu TV\'de bir şarkıdan vokali sunucusuz çıkarır. Tek seferlik bir indirme ve şarkıya yetişecek kadar hızlı bir TV gerekir: kontrol bunu çalan şarkıyla anlar.</string>
+    <string name="tv_sing_info">Söyle, bu TV\'de bir şarkıdan vokali sunucusuz çıkarır. Tek seferlik bir indirme gerekir; kontrol hızını çalan şarkıyla ölçer. Şarkıya yetişemeyecek kadar yavaş bir TV bunun yerine hızlı yolu kullanır: miksin ortasındaki çıkarılır.</string>
     <string name="tv_ambient_screen">Ortam ekranı</string>
     <string name="tv_ambient_after">Kumandasız %1$d dk sonra</string>
     <string name="tv_ambient_info">Müzik çalarken kumanda bırakıldığında ekran, TV\'nin ekran koruyucusu yerine şarkıya ve sözlerine kararır, yavaşça kayarak.</string>
@@ -4093,8 +4093,8 @@
     <string name="tv_sing_check">Bu TV yeterince hızlı mı kontrol et</string>
     <string name="tv_sing_checking">Bir şarkı çalın, sonra kontrol edin: yaklaşık bir dakika sürer</string>
     <string name="tv_sing_ready">Yeterince hızlı: Söyle oynatıcının ⋯ menüsünde</string>
-    <string name="tv_sing_too_slow">Bu TV, Söyle için yeterince hızlı değil: şarkının gerisinde kalır</string>
-    <string name="tv_sing_no_cpu">Söyle bu TV\'nin işlemcisinde çalışmaz</string>
+    <string name="tv_sing_too_slow">Hızlı yol: Bu TV tam ayırma için fazla yavaş, bu yüzden Söyle miksin ortasındakini çıkarır (daha az temiz). Söyle oynatıcının ⋯ menüsünde</string>
+    <string name="tv_sing_no_cpu">Hızlı yol: Tam ayırma bu TV\'nin işlemcisinde çalışmaz, bu yüzden Söyle miksin ortasındakini çıkarır (daha az temiz). Söyle oynatıcının ⋯ menüsünde</string>
     <string name="tv_link_pair_note">Taradığın kod, ağındaki %2$s adresindeki %1$s için. Yalnızca önündeki TV buysa eşleştir.</string>
     <string name="tv_sign_in_pair_first">Önce %1$s ile eşleştir, sonra oturum aç</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4125,4 +4125,8 @@
     <string name="tour_180_silence">Sessizlik kırpma yalnızca şarkının başına ve sonuna dokunur</string>
     <string name="tour_180_normalize">Aynı ses düzeyi, şarkılar arasındaki büyük farkları giderir</string>
     <string name="tour_180_size">Daha küçük bir indirme</string>
+    <string name="sing_quick_slow">Bu telefon tam ayırma için fazla yavaş, bu yüzden Sing hızlı yolu kullanıyor: miksin ortasında, sesin genellikle bulunduğu yerdekini çıkarır. Daha az temizdir ve mono bir şarkı olduğu gibi kalır.</string>
+    <string name="sing_mono_song">Bu şarkı mono: hızlı yol vokalini çıkaramaz, bu yüzden olduğu gibi çalar.</string>
+    <string name="tv_sing_measured">Bu TV şarkıları çaldıkları hızın %1$s katı hızla ayırır.</string>
+    <string name="tv_voice_quick">Ses kısıldı (hızlı yol)</string>
 </resources>

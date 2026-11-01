@@ -2131,7 +2131,7 @@
     <string name="couldn_t_download_it_tap_to">Kan het niet downloaden · tik om het opnieuw te proberen</string>
     <string name="only_for_japanese_songs">Alleen voor Japanse nummers · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Alleen Japans heeft dit nodig: de kanji hebben meerdere uitspraken, dus een woordenboek kiest de juiste voor romaji (\"kimi no na wa\"). Eén keer gedownload. Andere talen (Koreaans, Chinees, Russisch, Hindi…) worden zonder download geromaniseerd. Zonder dit spelt Google de kanji uit.</string>
-    <string name="sing_doesn_t_run_on_this">Meezingen werkt niet op het soort processor van deze telefoon.</string>
+    <string name="sing_doesn_t_run_on_this">De volledige scheiding van Meezingen werkt niet op het soort processor van deze telefoon, dus Meezingen gebruikt de snelle manier: het haalt weg wat in het midden van de mix zit, waar de stem meestal zit. Dat is minder zuiver, en een monosong blijft zoals hij is.</string>
     <string name="needed_for_sing">Nodig voor Meezingen · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Haalt de stem van de zanger uit nummers, op je telefoon, voor karaoke. Eén keer gedownload.</string>
     <string name="so_sing_starts_at_once_when">Zodat Meezingen meteen start als je het aanzet</string>
@@ -4085,7 +4085,7 @@
     <string name="tv_same_loudness_info">Nummers spelen op ongeveer hetzelfde volume, zodat je voor een zacht nummer niet naar de afstandsbediening hoeft te grijpen.</string>
     <string name="tv_lyrics_size">Grootte van songteksten</string>
     <string name="tv_sing_on_tv">Zingen op deze tv</string>
-    <string name="tv_sing_info">Zingen haalt de zang uit een nummer op deze tv, zonder server. Het heeft één download nodig en een tv die snel genoeg is om het nummer bij te houden: de controle zoekt het uit met het nummer dat speelt.</string>
+    <string name="tv_sing_info">Zingen haalt de stem uit een song op deze tv, zonder server. Het heeft een eenmalige download nodig; de controle meet de snelheid met de song die speelt. Een tv die het niet bijhoudt, krijgt in plaats daarvan de snelle manier: wat in het midden van de mix zit, wordt weggehaald.</string>
     <string name="tv_ambient_screen">Sfeerscherm</string>
     <string name="tv_ambient_after">Na %1$d min zonder afstandsbediening</string>
     <string name="tv_ambient_info">Terwijl er muziek speelt en de afstandsbediening is neergelegd, dimt het scherm naar het nummer en de tekst, langzaam verschuivend, in plaats van de screensaver van de tv.</string>
@@ -4093,8 +4093,8 @@
     <string name="tv_sing_check">Controleren of deze tv snel genoeg is</string>
     <string name="tv_sing_checking">Speel een nummer en controleer dan: het duurt ongeveer een minuut</string>
     <string name="tv_sing_ready">Snel genoeg: Zingen staat in de ⋯ van de speler</string>
-    <string name="tv_sing_too_slow">Deze tv is niet snel genoeg voor Zingen: hij zou achter het nummer aan lopen</string>
-    <string name="tv_sing_no_cpu">Zingen werkt niet op de processor van deze tv</string>
+    <string name="tv_sing_too_slow">Snelle manier: deze tv is te traag voor de volledige scheiding, dus Zingen haalt weg wat in het midden van de mix zit (minder zuiver). Zingen staat in de ⋯ van de speler</string>
+    <string name="tv_sing_no_cpu">Snelle manier: de volledige scheiding werkt niet op de processor van deze tv, dus Zingen haalt weg wat in het midden van de mix zit (minder zuiver). Zingen staat in de ⋯ van de speler</string>
     <string name="tv_link_pair_note">De gescande code is van %1$s op %2$s in je netwerk. Koppel alleen als dat de tv voor je is.</string>
     <string name="tv_sign_in_pair_first">Koppel eerst %1$s, meld het daarna aan</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4125,4 +4125,8 @@
     <string name="tour_180_silence">Stilte weglaten raakt alleen het begin en eind van een nummer</string>
     <string name="tour_180_normalize">Even luid vlakt grote sprongen tussen nummers uit</string>
     <string name="tour_180_size">Een kleinere download</string>
+    <string name="sing_quick_slow">Deze telefoon is te traag voor de volledige scheiding, dus Meezingen gebruikt de snelle manier: het haalt weg wat in het midden van de mix zit, waar de stem meestal zit. Dat is minder zuiver, en een monosong blijft zoals hij is.</string>
+    <string name="sing_mono_song">Deze song is mono: de snelle manier kan de stem er niet uit halen, dus hij speelt zoals hij is.</string>
+    <string name="tv_sing_measured">Deze tv scheidt songs %1$s× zo snel als ze spelen.</string>
+    <string name="tv_voice_quick">Stem zachter (snelle manier)</string>
 </resources>

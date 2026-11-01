@@ -2131,7 +2131,7 @@
     <string name="couldn_t_download_it_tap_to">다운로드할 수 없어요 · 탭하여 다시 시도</string>
     <string name="only_for_japanese_songs">일본어 곡 전용 · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">일본어에만 필요해요. 한자는 읽는 법이 여러 가지라 로마지(\"kimi no na wa\")로 바꿀 때 사전이 올바른 읽기를 골라요. 한 번만 다운로드하면 돼요. 다른 언어(한국어, 중국어, 러시아어, 힌디어 등)는 다운로드 없이 로마자로 표기돼요. 사전이 없으면 Google이 한자를 표기해요.</string>
-    <string name="sing_doesn_t_run_on_this">따라 부르기는 이 휴대전화의 프로세서에서 작동하지 않아요.</string>
+    <string name="sing_doesn_t_run_on_this">따라 부르기의 전체 분리는 이 휴대전화의 프로세서에서 작동하지 않아, 따라 부르기가 빠른 방식을 사용해요: 보통 목소리가 있는 믹스 가운데의 소리를 빼요. 덜 깔끔하고, 모노 곡은 그대로 재생돼요.</string>
     <string name="needed_for_sing">따라 부르기에 필요 · %1$s</string>
     <string name="takes_the_singer_s_voice_out">노래방처럼 부를 수 있도록 휴대전화에서 곡의 보컬을 빼요. 한 번만 다운로드하면 돼요.</string>
     <string name="so_sing_starts_at_once_when">켜는 즉시 따라 부르기를 시작할 수 있게</string>
@@ -4035,7 +4035,7 @@
     <string name="tv_same_loudness_info">곡들이 비슷한 볼륨으로 재생되어, 조용한 곡 때문에 리모컨을 찾을 필요가 없습니다.</string>
     <string name="tv_lyrics_size">가사 크기</string>
     <string name="tv_sing_on_tv">이 TV에서 노래하기</string>
-    <string name="tv_sing_info">노래하기는 이 TV에서 서버 없이 곡의 보컬을 제거합니다. 한 번의 다운로드와 곡을 따라갈 만큼 빠른 TV가 필요합니다: 확인은 재생 중인 곡으로 알아봅니다.</string>
+    <string name="tv_sing_info">노래하기는 서버 없이 이 TV에서 곡의 목소리를 뺍니다. 한 번 다운로드가 필요하며, 확인은 재생 중인 곡으로 속도를 잽니다. 곡을 따라가지 못할 만큼 느린 TV에서는 대신 빠른 방식을 씁니다: 믹스 가운데의 소리를 뺍니다.</string>
     <string name="tv_ambient_screen">앰비언트 화면</string>
     <string name="tv_ambient_after">리모컨 없이 %1$d분 후</string>
     <string name="tv_ambient_info">음악이 재생되고 리모컨을 내려놓으면, TV 화면 보호기 대신 곡과 가사가 천천히 움직이는 어두운 화면이 됩니다.</string>
@@ -4043,8 +4043,8 @@
     <string name="tv_sing_check">이 TV가 충분히 빠른지 확인</string>
     <string name="tv_sing_checking">곡을 재생한 뒤 확인하세요: 약 1분 걸립니다</string>
     <string name="tv_sing_ready">충분히 빠름: 노래하기는 플레이어의 ⋯에 있습니다</string>
-    <string name="tv_sing_too_slow">이 TV는 노래하기에 충분히 빠르지 않습니다: 곡을 따라가지 못합니다</string>
-    <string name="tv_sing_no_cpu">노래하기는 이 TV의 프로세서에서 실행되지 않습니다</string>
+    <string name="tv_sing_too_slow">빠른 방식: 이 TV는 전체 분리를 하기에 너무 느려서, 노래하기가 믹스 가운데의 소리를 뺍니다(덜 깔끔함). 노래하기는 플레이어의 ⋯에 있습니다</string>
+    <string name="tv_sing_no_cpu">빠른 방식: 이 TV의 프로세서에서는 전체 분리가 실행되지 않아, 노래하기가 믹스 가운데의 소리를 뺍니다(덜 깔끔함). 노래하기는 플레이어의 ⋯에 있습니다</string>
     <string name="tv_link_pair_note">스캔한 코드는 네트워크의 %2$s에 있는 %1$s의 코드예요. 눈앞의 TV일 때만 페어링하세요.</string>
     <string name="tv_sign_in_pair_first">먼저 %1$s와 페어링한 다음 로그인하세요</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4075,4 +4075,8 @@
     <string name="tour_180_silence">무음 구간 자르기는 곡의 시작과 끝에만 적용돼요</string>
     <string name="tour_180_normalize">같은 음량은 곡 사이의 큰 음량 차이를 고르게 해요</string>
     <string name="tour_180_size">더 작아진 다운로드</string>
+    <string name="sing_quick_slow">이 휴대전화는 전체 분리를 하기에 너무 느려서, 따라 부르기가 빠른 방식을 사용해요: 보통 목소리가 있는 믹스 가운데의 소리를 빼요. 덜 깔끔하고, 모노 곡은 그대로 재생돼요.</string>
+    <string name="sing_mono_song">이 곡은 모노예요: 빠른 방식으로는 목소리를 뺄 수 없어서 그대로 재생돼요.</string>
+    <string name="tv_sing_measured">이 TV는 곡이 재생되는 속도의 %1$s배로 곡을 분리합니다.</string>
+    <string name="tv_voice_quick">목소리 줄임(빠른 방식)</string>
 </resources>

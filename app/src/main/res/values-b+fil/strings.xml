@@ -2131,7 +2131,7 @@
     <string name="couldn_t_download_it_tap_to">Hindi ma-download · i-tap para subukan ulit</string>
     <string name="only_for_japanese_songs">Para lang sa mga kantang Japanese · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Japanese lang ang nangangailangan nito: may ilang pagbasa ang kanji nito, kaya diksyunaryo ang pumipili ng tama para sa romaji (\"kimi no na wa\"). Isang beses lang dina-download. Ang ibang wika (Korean, Chinese, Ruso, Hindi…) ay nai-romanize nang walang download. Kung wala ito, Google ang magbabaybay ng kanji.</string>
-    <string name="sing_doesn_t_run_on_this">Hindi gumagana ang Kumanta sa uri ng processor ng phone na ito.</string>
+    <string name="sing_doesn_t_run_on_this">Hindi gumagana ang buong paghihiwalay ng Kumanta sa uri ng processor ng phone na ito, kaya ginagamit ng Kumanta ang mabilis na paraan: inaalis nito ang nasa gitna ng mix, kung saan karaniwang naroon ang boses. Hindi ito kasinglinis, at mananatili ang mono na kanta kung ano ito.</string>
     <string name="needed_for_sing">Kailangan para sa Kumanta · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Tinatanggal ang boses ng mang-aawit sa mga kanta, sa phone mo, para sa karaoke. Isang beses lang dina-download.</string>
     <string name="so_sing_starts_at_once_when">Para agad magsimula ang Kumanta pag-on mo</string>
@@ -4085,7 +4085,7 @@
     <string name="tv_same_loudness_info">Halos pareho ang lakas ng mga kanta, kaya hindi mo kailangang abutin ang remote dahil sa mahinang kanta.</string>
     <string name="tv_lyrics_size">Laki ng lyrics</string>
     <string name="tv_sing_on_tv">Kumanta sa TV na ito</string>
-    <string name="tv_sing_info">Inaalis ng Kumanta ang boses sa kanta sa TV na ito, walang server. Kailangan nito ng isang beses na download at TV na sapat ang bilis para makasabay sa kanta: alamin ito ng check gamit ang tumutugtog na kanta.</string>
+    <string name="tv_sing_info">Inaalis ng Kumanta ang boses sa kanta sa TV na ito, walang server. Kailangan nito ng isang beses na download; sinusukat ng check ang bilis gamit ang tumutugtog na kanta. Ang TV na masyadong mabagal para makasabay ay gagamit ng mabilis na paraan: aalisin ang nasa gitna ng mix.</string>
     <string name="tv_ambient_screen">Ambient screen</string>
     <string name="tv_ambient_after">Pagkalipas ng %1$d min nang walang remote</string>
     <string name="tv_ambient_info">Habang may tumutugtog at nakababa ang remote, lumalabo ang screen sa kanta at lyrics nito, dahan-dahang gumagalaw, sa halip na screensaver ng TV.</string>
@@ -4093,8 +4093,8 @@
     <string name="tv_sing_check">Alamin kung sapat ang bilis ng TV na ito</string>
     <string name="tv_sing_checking">Magpatugtog ng kanta, saka i-check: mga isang minuto ito</string>
     <string name="tv_sing_ready">Sapat ang bilis: nasa ⋯ ng player ang Kumanta</string>
-    <string name="tv_sing_too_slow">Hindi sapat ang bilis ng TV na ito para sa Kumanta: mahuhuli ito sa kanta</string>
-    <string name="tv_sing_no_cpu">Hindi gumagana ang Kumanta sa processor ng TV na ito</string>
+    <string name="tv_sing_too_slow">Mabilis na paraan: masyadong mabagal ang TV na ito para sa buong paghihiwalay, kaya inaalis ng Kumanta ang nasa gitna ng mix (hindi kasinglinis). Nasa ⋯ ng player ang Kumanta</string>
+    <string name="tv_sing_no_cpu">Mabilis na paraan: hindi gumagana ang buong paghihiwalay sa processor ng TV na ito, kaya inaalis ng Kumanta ang nasa gitna ng mix (hindi kasinglinis). Nasa ⋯ ng player ang Kumanta</string>
     <string name="tv_link_pair_note">Ang code na na-scan mo ay para sa %1$s sa %2$s sa network mo. Mag-pair lang kung ito ang TV na nasa harap mo.</string>
     <string name="tv_sign_in_pair_first">Mag-pair muna sa %1$s, saka ito i-sign in</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4125,4 +4125,8 @@
     <string name="tour_180_silence">Ang pagtanggal ng katahimikan ay sa simula at dulo lang ng kanta</string>
     <string name="tour_180_normalize">Pinapantay ng parehong lakas ng tunog ang malalaking pagtalon sa pagitan ng mga kanta</string>
     <string name="tour_180_size">Mas maliit na download</string>
+    <string name="sing_quick_slow">Masyadong mabagal ang phone na ito para sa buong paghihiwalay, kaya ginagamit ng Kumanta ang mabilis na paraan: inaalis nito ang nasa gitna ng mix, kung saan karaniwang naroon ang boses. Hindi ito kasinglinis, at mananatili ang mono na kanta kung ano ito.</string>
+    <string name="sing_mono_song">Mono ang kantang ito: hindi maalis ng mabilis na paraan ang boses nito, kaya tutugtog ito nang ganoon pa rin.</string>
+    <string name="tv_sing_measured">Naghihiwalay ang TV na ito ng mga kanta nang %1$s× kasing-bilis ng pagtugtog nila.</string>
+    <string name="tv_voice_quick">Hininaan ang boses (mabilis na paraan)</string>
 </resources>

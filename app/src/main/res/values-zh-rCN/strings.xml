@@ -2131,7 +2131,7 @@
     <string name="couldn_t_download_it_tap_to">无法下载 · 点按重试</string>
     <string name="only_for_japanese_songs">仅用于日语歌曲 · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">只有日语需要这个：日语汉字有多种读音，需要词典为罗马字选出正确的读法（“kimi no na wa”）。只需下载一次。其他语言（韩语、中文、俄语、印地语…）无需下载即可转为罗马音。没有它时，由 Google 拼写汉字。</string>
-    <string name="sing_doesn_t_run_on_this">跟唱无法在这台手机的处理器类型上运行。</string>
+    <string name="sing_doesn_t_run_on_this">跟唱的完整分离无法在这台手机的处理器类型上运行，所以跟唱改用快速方式：去掉混音中间的声音，人声通常就在那里。效果没那么干净，单声道歌曲会保持原样。</string>
     <string name="needed_for_sing">跟唱需要 · %1$s</string>
     <string name="takes_the_singer_s_voice_out">在你的手机上去除歌曲中的歌手人声，用于卡拉 OK。只需下载一次。</string>
     <string name="so_sing_starts_at_once_when">这样打开跟唱时即可立即开始</string>
@@ -4035,7 +4035,7 @@
     <string name="tv_same_loudness_info">歌曲以大致相同的音量播放，不会因为一首较轻的歌去找遥控器。</string>
     <string name="tv_lyrics_size">歌词大小</string>
     <string name="tv_sing_on_tv">在这台电视上唱歌</string>
-    <string name="tv_sing_info">「唱歌」在这台电视上去除歌曲中的人声，无需服务器。需要下载一次，且电视够快，能跟上歌曲：检查会用正在播放的歌曲来确认。</string>
+    <string name="tv_sing_info">「唱歌」在这台电视上去除歌曲中的人声，无需服务器。需要下载一次；检查会用正在播放的歌曲测速。跟不上歌曲的电视会改用快速方式：去掉混音中间的声音。</string>
     <string name="tv_ambient_screen">氛围屏幕</string>
     <string name="tv_ambient_after">不用遥控器 %1$d 分钟后</string>
     <string name="tv_ambient_info">音乐播放且遥控器放下时，屏幕会暗下来，显示缓慢漂移的歌曲和歌词，代替电视的屏保。</string>
@@ -4043,8 +4043,8 @@
     <string name="tv_sing_check">检查这台电视是否够快</string>
     <string name="tv_sing_checking">播放一首歌，然后检查：大约需要一分钟</string>
     <string name="tv_sing_ready">够快：「唱歌」在播放器的 ⋯ 中</string>
-    <string name="tv_sing_too_slow">这台电视不够快，无法「唱歌」：会跟不上歌曲</string>
-    <string name="tv_sing_no_cpu">「唱歌」无法在这台电视的处理器上运行</string>
+    <string name="tv_sing_too_slow">快速方式：这台电视太慢，跑不动完整分离，所以「唱歌」会去掉混音中间的声音（没那么干净）。「唱歌」在播放器的 ⋯ 中</string>
+    <string name="tv_sing_no_cpu">快速方式：完整分离无法在这台电视的处理器上运行，所以「唱歌」会去掉混音中间的声音（没那么干净）。「唱歌」在播放器的 ⋯ 中</string>
     <string name="tv_link_pair_note">你扫描的代码属于你网络中位于 %2$s 的 %1$s。只有当它就是你面前的电视时才配对。</string>
     <string name="tv_sign_in_pair_first">请先与 %1$s 配对，然后再登录</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4075,4 +4075,8 @@
     <string name="tour_180_silence">裁剪静音只处理歌曲的开头和结尾</string>
     <string name="tour_180_normalize">统一响度可抹平歌曲之间的巨大音量落差</string>
     <string name="tour_180_size">更小的下载体积</string>
+    <string name="sing_quick_slow">这台手机太慢，跑不动完整分离，所以跟唱改用快速方式：去掉混音中间的声音，人声通常就在那里。效果没那么干净，单声道歌曲会保持原样。</string>
+    <string name="sing_mono_song">这首歌是单声道：快速方式无法去掉其中的人声，所以按原样播放。</string>
+    <string name="tv_sing_measured">这台电视分离歌曲的速度是播放速度的 %1$s 倍。</string>
+    <string name="tv_voice_quick">人声调低（快速方式）</string>
 </resources>

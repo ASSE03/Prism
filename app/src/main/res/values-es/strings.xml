@@ -2131,7 +2131,7 @@
     <string name="couldn_t_download_it_tap_to">No se pudo descargar · toca para reintentar</string>
     <string name="only_for_japanese_songs">Solo para canciones en japonés · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Solo el japonés lo necesita: sus kanji tienen varias lecturas, así que un diccionario elige la correcta para el romaji (\"kimi no na wa\"). Se descarga una vez. Otros idiomas (coreano, chino, ruso, hindi…) se romanizan sin descarga. Sin él, Google transcribe los kanji.</string>
-    <string name="sing_doesn_t_run_on_this">Cantar no funciona con el tipo de procesador de este teléfono.</string>
+    <string name="sing_doesn_t_run_on_this">La separación completa de Cantar no funciona con el tipo de procesador de este teléfono, así que Cantar usa la forma rápida: quita lo que está en el centro de la mezcla, donde suele estar la voz. Es menos limpia, y una canción mono se queda como está.</string>
     <string name="needed_for_sing">Necesario para Cantar · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Quita la voz del cantante de las canciones, en tu teléfono, para hacer karaoke. Se descarga una vez.</string>
     <string name="so_sing_starts_at_once_when">Así Cantar empieza al instante cuando lo activas</string>
@@ -4135,7 +4135,7 @@
     <string name="tv_same_loudness_info">Las canciones suenan a un volumen parecido, así que una más baja no te obliga a buscar el mando.</string>
     <string name="tv_lyrics_size">Tamaño de la letra</string>
     <string name="tv_sing_on_tv">Cantar en esta TV</string>
-    <string name="tv_sing_info">Cantar quita la voz de una canción en esta TV, sin servidor. Necesita una descarga única y una TV lo bastante rápida para seguir la canción: la comprobación lo averigua con la canción que suena.</string>
+    <string name="tv_sing_info">Cantar quita la voz de una canción en esta TV, sin servidor. Necesita una descarga única; la comprobación mide su velocidad con la canción que suena. Una TV demasiado lenta para seguir el ritmo usa en su lugar la forma rápida: se quita lo que está en el centro de la mezcla.</string>
     <string name="tv_ambient_screen">Pantalla ambiente</string>
     <string name="tv_ambient_after">Tras %1$d min sin el mando</string>
     <string name="tv_ambient_info">Mientras suena música y dejas el mando, la pantalla se atenúa a la canción y su letra, moviéndose despacio, en lugar del salvapantallas de la TV.</string>
@@ -4143,8 +4143,8 @@
     <string name="tv_sing_check">Comprobar si esta TV es lo bastante rápida</string>
     <string name="tv_sing_checking">Pon una canción y comprueba: tarda alrededor de un minuto</string>
     <string name="tv_sing_ready">Lo bastante rápida: Cantar está en el ⋯ del reproductor</string>
-    <string name="tv_sing_too_slow">Esta TV no es lo bastante rápida para Cantar: se quedaría atrás de la canción</string>
-    <string name="tv_sing_no_cpu">Cantar no funciona con el procesador de esta TV</string>
+    <string name="tv_sing_too_slow">Forma rápida: esta TV es demasiado lenta para la separación completa, así que Cantar quita lo que está en el centro de la mezcla (menos limpio). Cantar está en el ⋯ del reproductor</string>
+    <string name="tv_sing_no_cpu">Forma rápida: la separación completa no funciona con el procesador de esta TV, así que Cantar quita lo que está en el centro de la mezcla (menos limpio). Cantar está en el ⋯ del reproductor</string>
     <string name="tv_link_pair_note">El código que escaneaste es de %1$s en %2$s de tu red. Vincula solo si es la tele que tienes delante.</string>
     <string name="tv_sign_in_pair_first">Primero vincula %1$s y luego inicia sesión en él</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4175,4 +4175,8 @@
     <string name="tour_180_silence">Recortar el silencio solo toca el inicio y el final de una canción</string>
     <string name="tour_180_normalize">Normalizar volumen suaviza los grandes saltos entre canciones</string>
     <string name="tour_180_size">Una descarga más pequeña</string>
+    <string name="sing_quick_slow">Este teléfono es demasiado lento para la separación completa, así que Cantar usa la forma rápida: quita lo que está en el centro de la mezcla, donde suele estar la voz. Es menos limpia, y una canción mono se queda como está.</string>
+    <string name="sing_mono_song">Esta canción es mono: la forma rápida no puede quitarle la voz, así que suena como está.</string>
+    <string name="tv_sing_measured">Esta TV separa las canciones %1$s× más rápido de lo que suenan.</string>
+    <string name="tv_voice_quick">Voz más baja (forma rápida)</string>
 </resources>

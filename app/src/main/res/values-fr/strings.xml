@@ -2131,7 +2131,7 @@
     <string name="couldn_t_download_it_tap_to">Échec du téléchargement · appuyez pour réessayer</string>
     <string name="only_for_japanese_songs">Uniquement pour les titres japonais · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Seul le japonais en a besoin : ses kanji ont plusieurs lectures, un dictionnaire choisit donc la bonne pour le romaji (« kimi no na wa »). Téléchargé une seule fois. Les autres langues (coréen, chinois, russe, hindi…) se romanisent sans téléchargement. Sans lui, Google transcrit les kanji.</string>
-    <string name="sing_doesn_t_run_on_this">Chanter ne fonctionne pas avec le type de processeur de ce téléphone.</string>
+    <string name="sing_doesn_t_run_on_this">La séparation complète de Chanter ne fonctionne pas avec le type de processeur de ce téléphone, donc Chanter utilise la méthode rapide : il retire ce qui est au centre du mixage, là où se trouve d\'habitude la voix. C\'est moins net, et une chanson mono reste telle quelle.</string>
     <string name="needed_for_sing">Nécessaire pour Chanter · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Retire la voix du chanteur des titres, sur votre téléphone, pour le karaoké. Téléchargé une seule fois.</string>
     <string name="so_sing_starts_at_once_when">Pour que Chanter démarre aussitôt quand vous l’activez</string>
@@ -4135,7 +4135,7 @@
     <string name="tv_same_loudness_info">Les titres jouent à peu près au même volume, pour qu\'un titre plus faible ne vous fasse pas chercher la télécommande.</string>
     <string name="tv_lyrics_size">Taille des paroles</string>
     <string name="tv_sing_on_tv">Chanter sur ce téléviseur</string>
-    <string name="tv_sing_info">Chanter retire la voix d\'un titre sur ce téléviseur, sans serveur. Il faut un téléchargement unique et un téléviseur assez rapide pour suivre le titre : la vérification le découvre avec le titre en cours.</string>
+    <string name="tv_sing_info">Chanter retire la voix d\'une chanson sur ce téléviseur, sans serveur. Il faut un téléchargement unique ; la vérification mesure la vitesse avec la chanson en cours. Un téléviseur trop lent pour suivre utilise à la place la méthode rapide : ce qui est au centre du mixage est retiré.</string>
     <string name="tv_ambient_screen">Écran d\'ambiance</string>
     <string name="tv_ambient_after">Après %1$d min sans la télécommande</string>
     <string name="tv_ambient_info">Quand la musique joue et que la télécommande est posée, l\'écran s\'assombrit sur le titre et ses paroles, qui dérivent lentement, au lieu de l\'économiseur d\'écran du téléviseur.</string>
@@ -4143,8 +4143,8 @@
     <string name="tv_sing_check">Vérifier si ce téléviseur est assez rapide</string>
     <string name="tv_sing_checking">Lancez un titre, puis vérifiez : cela prend environ une minute</string>
     <string name="tv_sing_ready">Assez rapide : Chanter est dans le ⋯ du lecteur</string>
-    <string name="tv_sing_too_slow">Ce téléviseur n\'est pas assez rapide pour Chanter : il prendrait du retard sur le titre</string>
-    <string name="tv_sing_no_cpu">Chanter ne fonctionne pas sur le processeur de ce téléviseur</string>
+    <string name="tv_sing_too_slow">Méthode rapide : ce téléviseur est trop lent pour la séparation complète, donc Chanter retire ce qui est au centre du mixage (moins net). Chanter est dans le ⋯ du lecteur</string>
+    <string name="tv_sing_no_cpu">Méthode rapide : la séparation complète ne fonctionne pas sur le processeur de ce téléviseur, donc Chanter retire ce qui est au centre du mixage (moins net). Chanter est dans le ⋯ du lecteur</string>
     <string name="tv_link_pair_note">Le code scanné correspond à %1$s à l’adresse %2$s sur votre réseau. N’associez que s’il s’agit de la télé devant vous.</string>
     <string name="tv_sign_in_pair_first">Associez d’abord %1$s, puis connectez-le</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4175,4 +4175,8 @@
     <string name="tour_180_silence">Couper le silence ne touche que le début et la fin d’un titre</string>
     <string name="tour_180_normalize">Même volume atténue les gros écarts entre les titres</string>
     <string name="tour_180_size">Un téléchargement plus léger</string>
+    <string name="sing_quick_slow">Ce téléphone est trop lent pour la séparation complète, donc Chanter utilise la méthode rapide : il retire ce qui est au centre du mixage, là où se trouve d\'habitude la voix. C\'est moins net, et une chanson mono reste telle quelle.</string>
+    <string name="sing_mono_song">Cette chanson est en mono : la méthode rapide ne peut pas en retirer la voix, elle est donc jouée telle quelle.</string>
+    <string name="tv_sing_measured">Ce téléviseur sépare les chansons %1$s× plus vite qu\'elles ne se jouent.</string>
+    <string name="tv_voice_quick">Voix baissée (méthode rapide)</string>
 </resources>

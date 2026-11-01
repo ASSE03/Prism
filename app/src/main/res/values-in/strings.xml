@@ -2131,7 +2131,7 @@
     <string name="couldn_t_download_it_tap_to">Tidak dapat mendownloadnya · ketuk untuk mencoba lagi</string>
     <string name="only_for_japanese_songs">Hanya untuk lagu Jepang · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Hanya bahasa Jepang yang perlu ini: kanjinya punya beberapa cara baca, jadi kamus memilih yang tepat untuk romaji (\"kimi no na wa\"). Didownload sekali. Bahasa lain (Korea, Mandarin, Rusia, Hindi…) diromanisasi tanpa download. Tanpanya, Google yang mengeja kanjinya.</string>
-    <string name="sing_doesn_t_run_on_this">Nyanyi tidak berjalan di jenis prosesor ponsel ini.</string>
+    <string name="sing_doesn_t_run_on_this">Pemisahan penuh Nyanyi tidak berjalan di jenis prosesor ponsel ini, jadi Nyanyi memakai cara cepat: menghapus apa yang ada di tengah campuran, tempat suara biasanya berada. Hasilnya kurang bersih, dan lagu mono tetap apa adanya.</string>
     <string name="needed_for_sing">Dibutuhkan untuk Nyanyi · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Menghilangkan suara penyanyi dari lagu, di ponselmu, untuk karaoke. Didownload sekali.</string>
     <string name="so_sing_starts_at_once_when">Agar Nyanyi langsung dimulai saat kamu mengaktifkannya</string>
@@ -4035,7 +4035,7 @@
     <string name="tv_same_loudness_info">Lagu diputar dengan volume yang kurang lebih sama, jadi lagu yang pelan tidak membuat Anda meraih remote.</string>
     <string name="tv_lyrics_size">Ukuran lirik</string>
     <string name="tv_sing_on_tv">Bernyanyi di TV ini</string>
-    <string name="tv_sing_info">Bernyanyi menghapus vokal dari lagu langsung di TV ini, tanpa server. Perlu satu kali unduhan dan TV yang cukup cepat untuk mengikuti lagu: pemeriksaan mengetahuinya dengan lagu yang sedang diputar.</string>
+    <string name="tv_sing_info">Bernyanyi menghapus vokal dari lagu langsung di TV ini, tanpa server. Perlu unduhan satu kali; pemeriksaan mengukur kecepatannya dengan lagu yang sedang diputar. TV yang terlalu lambat untuk mengikuti lagu mendapat cara cepat sebagai gantinya: apa yang ada di tengah campuran dihapus.</string>
     <string name="tv_ambient_screen">Layar ambien</string>
     <string name="tv_ambient_after">Setelah %1$d mnt tanpa remote</string>
     <string name="tv_ambient_info">Saat musik diputar dan remote diletakkan, layar meredup ke lagu dan liriknya, bergeser perlahan, alih-alih screensaver TV.</string>
@@ -4043,8 +4043,8 @@
     <string name="tv_sing_check">Periksa apakah TV ini cukup cepat</string>
     <string name="tv_sing_checking">Putar lagu, lalu periksa: butuh sekitar satu menit</string>
     <string name="tv_sing_ready">Cukup cepat: Bernyanyi ada di ⋯ pemutar</string>
-    <string name="tv_sing_too_slow">TV ini tidak cukup cepat untuk Bernyanyi: akan tertinggal dari lagu</string>
-    <string name="tv_sing_no_cpu">Bernyanyi tidak berjalan di prosesor TV ini</string>
+    <string name="tv_sing_too_slow">Cara cepat: TV ini terlalu lambat untuk pemisahan penuh, jadi Bernyanyi menghapus apa yang ada di tengah campuran (kurang bersih). Bernyanyi ada di ⋯ pemutar</string>
+    <string name="tv_sing_no_cpu">Cara cepat: pemisahan penuh tidak berjalan di prosesor TV ini, jadi Bernyanyi menghapus apa yang ada di tengah campuran (kurang bersih). Bernyanyi ada di ⋯ pemutar</string>
     <string name="tv_link_pair_note">Kode yang kamu pindai untuk %1$s di %2$s pada jaringanmu. Sambungkan hanya jika itu TV di depanmu.</string>
     <string name="tv_sign_in_pair_first">Sambungkan dengan %1$s dulu, lalu masuk di sana</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4075,4 +4075,8 @@
     <string name="tour_180_silence">Pangkas hening hanya menyentuh awal dan akhir lagu</string>
     <string name="tour_180_normalize">Kenyaringan sama meratakan lonjakan besar antarlagu</string>
     <string name="tour_180_size">Unduhan lebih kecil</string>
+    <string name="sing_quick_slow">Ponsel ini terlalu lambat untuk pemisahan penuh, jadi Nyanyi memakai cara cepat: menghapus apa yang ada di tengah campuran, tempat suara biasanya berada. Hasilnya kurang bersih, dan lagu mono tetap apa adanya.</string>
+    <string name="sing_mono_song">Lagu ini mono: cara cepat tidak bisa menghapus suaranya, jadi lagu diputar apa adanya.</string>
+    <string name="tv_sing_measured">TV ini memisahkan lagu %1$s× lebih cepat daripada lagu diputar.</string>
+    <string name="tv_voice_quick">Suara dipelankan (cara cepat)</string>
 </resources>

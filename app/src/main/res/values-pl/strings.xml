@@ -2131,7 +2131,7 @@
     <string name="couldn_t_download_it_tap_to">Nie udało się pobrać · kliknij, by spróbować ponownie</string>
     <string name="only_for_japanese_songs">Tylko dla japońskich utworów · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Potrzebne tylko dla japońskiego: kanji mają kilka odczytów, więc słownik wybiera właściwy dla romaji („kimi no na wa”). Pobierany raz. Inne języki (koreański, chiński, rosyjski, hindi…) są transliterowane bez pobierania. Bez niego kanji zapisuje Google.</string>
-    <string name="sing_doesn_t_run_on_this">Śpiewaj nie działa na procesorze tego telefonu.</string>
+    <string name="sing_doesn_t_run_on_this">Pełne oddzielanie w Śpiewaj nie działa na procesorze tego telefonu, więc Śpiewaj używa szybkiego sposobu: usuwa to, co jest w środku miksu, gdzie zwykle jest głos. Efekt jest mniej czysty, a utwór mono pozostaje bez zmian.</string>
     <string name="needed_for_sing">Potrzebne do Śpiewaj · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Usuwa głos wokalisty z utworów, na twoim telefonie, do karaoke. Pobierane raz.</string>
     <string name="so_sing_starts_at_once_when">By Śpiewaj ruszało od razu po włączeniu</string>
@@ -4185,7 +4185,7 @@
     <string name="tv_same_loudness_info">Utwory grają z podobną głośnością, więc cichszy nie zmusza do sięgania po pilota.</string>
     <string name="tv_lyrics_size">Rozmiar tekstu piosenek</string>
     <string name="tv_sing_on_tv">Śpiewaj na tym telewizorze</string>
-    <string name="tv_sing_info">Śpiewaj usuwa wokal z utworu na tym telewizorze, bez serwera. Potrzebuje jednorazowego pobrania i telewizora na tyle szybkiego, by nadążyć za utworem: sprawdzenie ustala to na odtwarzanym utworze.</string>
+    <string name="tv_sing_info">Śpiewaj usuwa głos z utworu na tym telewizorze, bez serwera. Wymaga jednorazowego pobrania; sprawdzanie mierzy szybkość na odtwarzanym utworze. Telewizor zbyt wolny, by nadążyć, dostaje zamiast tego szybki sposób: usuwane jest to, co jest w środku miksu.</string>
     <string name="tv_ambient_screen">Ekran wyciszenia</string>
     <string name="tv_ambient_after">Po %1$d min bez pilota</string>
     <string name="tv_ambient_info">Gdy gra muzyka, a pilot leży, ekran przygasa do utworu i jego tekstu, powoli się przesuwając, zamiast wygaszacza telewizora.</string>
@@ -4193,8 +4193,8 @@
     <string name="tv_sing_check">Sprawdź, czy ten telewizor jest wystarczająco szybki</string>
     <string name="tv_sing_checking">Włącz utwór i sprawdź: to trwa około minuty</string>
     <string name="tv_sing_ready">Wystarczająco szybki: Śpiewaj jest w ⋯ odtwarzacza</string>
-    <string name="tv_sing_too_slow">Ten telewizor jest za wolny na Śpiewaj: nie nadążyłby za utworem</string>
-    <string name="tv_sing_no_cpu">Śpiewaj nie działa na procesorze tego telewizora</string>
+    <string name="tv_sing_too_slow">Szybki sposób: ten telewizor jest zbyt wolny na pełne oddzielanie, więc Śpiewaj usuwa to, co jest w środku miksu (mniej czysto). Śpiewaj jest w ⋯ odtwarzacza</string>
+    <string name="tv_sing_no_cpu">Szybki sposób: pełne oddzielanie nie działa na procesorze tego telewizora, więc Śpiewaj usuwa to, co jest w środku miksu (mniej czysto). Śpiewaj jest w ⋯ odtwarzacza</string>
     <string name="tv_link_pair_note">Zeskanowany kod należy do urządzenia %1$s pod adresem %2$s w Twojej sieci. Paruj tylko, jeśli to telewizor przed Tobą.</string>
     <string name="tv_sign_in_pair_first">Najpierw sparuj %1$s, a potem je zaloguj</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4225,4 +4225,8 @@
     <string name="tour_180_silence">Przycinanie ciszy dotyczy tylko początku i końca utworu</string>
     <string name="tour_180_normalize">Ta sama głośność wyrównuje duże skoki między utworami</string>
     <string name="tour_180_size">Mniejszy rozmiar pobierania</string>
+    <string name="sing_quick_slow">Ten telefon jest zbyt wolny na pełne oddzielanie, więc Śpiewaj używa szybkiego sposobu: usuwa to, co jest w środku miksu, gdzie zwykle jest głos. Efekt jest mniej czysty, a utwór mono pozostaje bez zmian.</string>
+    <string name="sing_mono_song">Ten utwór jest mono: szybki sposób nie usunie z niego głosu, więc gra bez zmian.</string>
+    <string name="tv_sing_measured">Ten telewizor oddziela utwory %1$s× szybciej, niż są odtwarzane.</string>
+    <string name="tv_voice_quick">Głos ściszony (szybki sposób)</string>
 </resources>

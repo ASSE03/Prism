@@ -2131,7 +2131,7 @@
     <string name="couldn_t_download_it_tap_to">Download fehlgeschlagen · zum Wiederholen tippen</string>
     <string name="only_for_japanese_songs">Nur für japanische Songs · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Nur Japanisch braucht das: Seine Kanji haben mehrere Lesungen, deshalb wählt ein Wörterbuch die richtige für Romaji („kimi no na wa“). Wird einmal heruntergeladen. Andere Sprachen (Koreanisch, Chinesisch, Russisch, Hindi…) werden ohne Download romanisiert. Ohne das buchstabiert Google die Kanji.</string>
-    <string name="sing_doesn_t_run_on_this">Mitsingen läuft nicht auf dem Prozessortyp dieses Handys.</string>
+    <string name="sing_doesn_t_run_on_this">Die volle Trennung von Mitsingen läuft nicht auf dem Prozessortyp dieses Handys, deshalb nutzt Mitsingen den schnellen Weg: Es nimmt heraus, was in der Mitte des Mixes liegt, wo meist die Stimme ist. Das klingt weniger sauber, und ein Mono-Song bleibt, wie er ist.</string>
     <string name="needed_for_sing">Nötig für Mitsingen · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Nimmt die Stimme des Sängers aus Songs heraus, auf deinem Handy, für Karaoke. Wird einmal heruntergeladen.</string>
     <string name="so_sing_starts_at_once_when">Damit Mitsingen sofort startet, wenn du es einschaltest</string>
@@ -4085,7 +4085,7 @@
     <string name="tv_same_loudness_info">Songs laufen etwa gleich laut, damit dich ein leiser nicht zur Fernbedienung greifen lässt.</string>
     <string name="tv_lyrics_size">Größe der Songtexte</string>
     <string name="tv_sing_on_tv">Auf diesem Fernseher singen</string>
-    <string name="tv_sing_info">Singen nimmt die Stimme direkt auf diesem Fernseher aus dem Song, ohne Server. Es braucht einen einmaligen Download und einen Fernseher, der schnell genug mit dem Song mithält: die Prüfung findet es mit dem laufenden Song heraus.</string>
+    <string name="tv_sing_info">Singen nimmt die Stimme direkt auf diesem Fernseher aus dem Song, ohne Server. Es braucht einen einmaligen Download; die Prüfung misst das Tempo mit dem laufenden Song. Ein Fernseher, der nicht mithält, bekommt stattdessen den schnellen Weg: Was in der Mitte des Mixes liegt, wird herausgenommen.</string>
     <string name="tv_ambient_screen">Ruhebildschirm</string>
     <string name="tv_ambient_after">Nach %1$d Min. ohne Fernbedienung</string>
     <string name="tv_ambient_info">Während Musik läuft und die Fernbedienung liegt, wird der Bildschirm zum Song und seinem Text gedimmt, langsam wandernd, statt des Bildschirmschoners des Fernsehers.</string>
@@ -4093,8 +4093,8 @@
     <string name="tv_sing_check">Prüfen, ob dieser Fernseher schnell genug ist</string>
     <string name="tv_sing_checking">Spiel einen Song ab und prüfe dann: das dauert etwa eine Minute</string>
     <string name="tv_sing_ready">Schnell genug: Singen ist im ⋯ des Players</string>
-    <string name="tv_sing_too_slow">Dieser Fernseher ist für Singen nicht schnell genug: er käme hinter dem Song nicht mit</string>
-    <string name="tv_sing_no_cpu">Singen läuft nicht auf dem Prozessor dieses Fernsehers</string>
+    <string name="tv_sing_too_slow">Schneller Weg: Dieser Fernseher ist für die volle Trennung zu langsam, deshalb nimmt Singen heraus, was in der Mitte des Mixes liegt (weniger sauber). Singen ist im ⋯ des Players</string>
+    <string name="tv_sing_no_cpu">Schneller Weg: Die volle Trennung läuft nicht auf dem Prozessor dieses Fernsehers, deshalb nimmt Singen heraus, was in der Mitte des Mixes liegt (weniger sauber). Singen ist im ⋯ des Players</string>
     <string name="tv_link_pair_note">Der gescannte Code gehört zu %1$s unter %2$s in deinem Netzwerk. Kopple nur, wenn das der Fernseher vor dir ist.</string>
     <string name="tv_sign_in_pair_first">Kopple zuerst %1$s, dann melde es an</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4125,4 +4125,8 @@
     <string name="tour_180_silence">Stille entfernen betrifft nur Anfang und Ende eines Songs</string>
     <string name="tour_180_normalize">Gleiche Lautstärke gleicht große Sprünge zwischen Songs aus</string>
     <string name="tour_180_size">Ein kleinerer Download</string>
+    <string name="sing_quick_slow">Dieses Handy ist für die volle Trennung zu langsam, deshalb nutzt Mitsingen den schnellen Weg: Es nimmt heraus, was in der Mitte des Mixes liegt, wo meist die Stimme ist. Das klingt weniger sauber, und ein Mono-Song bleibt, wie er ist.</string>
+    <string name="sing_mono_song">Dieser Song ist mono: Der schnelle Weg kann seine Stimme nicht herausnehmen, deshalb läuft er, wie er ist.</string>
+    <string name="tv_sing_measured">Dieser Fernseher trennt Songs %1$s× so schnell, wie sie spielen.</string>
+    <string name="tv_voice_quick">Stimme leiser (schneller Weg)</string>
 </resources>

@@ -66,24 +66,53 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
     private val scope = CoroutineScope(Dispatchers.Default)
     private val wanted = ArrayDeque<Song>()
     private var job: Job? = null
-    private var sessions: Pair<OrtSession, OrtSession>? = null
+    // The networks, each loaded when a way needs it (the backing's only for the full way).
+    private var vocalsNet: OrtSession? = null
+    private var backingNet: OrtSession? = null
     private var env: OrtEnvironment? = null
     private var releaseJob: Job? = null
 
-    /** The runtime and model are on the phone. */
+    /** Sing's engine can run on this processor (otherwise only the quick way, [Separation.QUICK]). */
+    val fullEngine: Boolean get() = ModelStore.Model.singRuntime() != null
+
+    /** Sing can start: its engine is on the phone, or this processor only has the quick way, which needs nothing. */
     fun engineReady(): Boolean {
-        val runtime = ModelStore.Model.singRuntime() ?: return false
+        val runtime = ModelStore.Model.singRuntime() ?: return true
         return c.models.ready(runtime) && c.models.ready(ModelStore.Model.SING_MODEL)
     }
 
-    /** This phone's processor can run Sing at all. */
-    val supported: Boolean get() = ModelStore.Model.singRuntime() != null
+    // How fast each network way has gone on this device ([SingPace]), kept between runs.
+    private val pacePrefs by lazy { c.app.getSharedPreferences("sing_pace", android.content.Context.MODE_PRIVATE) }
+    private fun paceOf(way: Separation): Double? = pacePrefs.getFloat(way.name, 0f).takeIf { it > 0f }?.toDouble()
+    private fun keepPace(way: Separation, speed: Double, blend: Boolean = true) {
+        pacePrefs.edit().putFloat(way.name, (if (blend) SingPace.blend(paceOf(way), speed) else speed).toFloat()).apply()
+    }
+
+    /** The full and light ways' speeds here (seconds of song a second), null till timed. */
+    fun pace(): Pair<Double?, Double?> = paceOf(Separation.FULL) to paceOf(Separation.LIGHT)
+
+    /** Once a run, a device that went the quick way for being slow gets another try at the light way (one chunk). */
+    @Volatile private var retried = false
+
+    /** The way songs are separated here now, best this device keeps up with. */
+    private val _method by lazy { MutableStateFlow(choose(retry = false)) }
+    val method: StateFlow<Separation> get() = _method
+
+    /** The way chosen again, after its timings or the engine changed from outside (an in-app test). */
+    internal fun rechoose() { _method.value = choose(retry = false) }
+
+    private fun choose(retry: Boolean = true): Separation {
+        val way = SingPace.choose(fullEngine && engineReady(), paceOf(Separation.FULL), paceOf(Separation.LIGHT))
+        if (way == Separation.QUICK && retry && !retried && fullEngine && engineReady()) { retried = true; return Separation.LIGHT }
+        return way
+    }
 
     /** Downloads the engine and the model (about 50 MB, once). */
     suspend fun downloadEngine(): Boolean {
         val runtime = ModelStore.Model.singRuntime() ?: return false
         // Both parts on Sing's own scope, so closing the sheet after the first doesn't leave the second undownloaded.
-        return scope.async { c.models.download(runtime) && c.models.download(ModelStore.Model.SING_MODEL) }.await()
+        return scope.async { c.models.download(runtime) && c.models.download(ModelStore.Model.SING_MODEL) }
+            .await().also { _method.value = choose(retry = false) }
     }
 
     /** Settings → Lyrics → Sing → "Get songs ready while Sing is off": songs are separated ahead with Sing off too. */
@@ -108,10 +137,17 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
 
     fun setSemitones(v: Int) { _semitones.value = v.coerceIn(-6, 6) }
 
+    /**
+     * Separated already, and well enough: a song done the quick way is done again once a network way runs here (the
+     * engine downloaded since, or a TV's check found it fast enough).
+     */
+    private fun done(id: String): Boolean =
+        store.complete(id) && (store.meta(id)?.method != Separation.QUICK.name || _method.value == Separation.QUICK)
+
     /** Separates [songs] (the playing one first), skipping what's done, what can't be done, and what's already queued. */
     fun prepare(songs: List<Song>) {
         if (!working || !engineReady()) return
-        val todo = songs.filter { canSing(it) && !store.complete(it.id) }
+        val todo = songs.filter { canSing(it) && !done(it.id) }
         synchronized(wanted) {
             // The playing song goes to the front; anything no longer wanted is dropped.
             wanted.removeAll { w -> todo.none { it.id == w.id } }
@@ -128,7 +164,7 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
             val next = synchronized(wanted) { wanted.removeFirstOrNull() } ?: return
             if (!working) return
             runCatching { withContext(worker) { separate(next) } }
-                .onSuccess { _problem.value = null }
+                .onSuccess { _problem.value = it }
                 .onFailure {
                     Log.w("PrismSing", "Couldn't separate ${next.id}: $it")
                     _problem.value = it.message ?: tr(R.string.couldn_t_get_this_song_ready)
@@ -137,19 +173,29 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
         }
     }
 
-    private fun sessions(): Pair<OrtSession, OrtSession> {
-        sessions?.let { return it }
+    /**
+     * How the networks run: a thread per core up to 4; waiting threads asleep rather than spinning, as the player
+     * shares the processor (no slower on the A16); memory handed back after each chunk rather than kept for the next
+     * (on 32-bit the peak went from 197 to 171 MB).
+     */
+    private fun options() = OrtSession.SessionOptions().apply {
+        setIntraOpNumThreads(minOf(4, Runtime.getRuntime().availableProcessors()).coerceAtLeast(1))
+        setOptimizationLevel(OrtSession.SessionOptions.OptLevel.ALL_OPT)
+        addConfigEntry("session.intra_op.allow_spinning", "0")
+        setCPUArenaAllocator(false)
+        setMemoryPatternOptimization(false)
+    }
+
+    /** The networks [way] needs, loaded (none for the quick way; the backing's for the full way only). */
+    private fun networks(way: Separation): Pair<OrtSession?, OrtSession?> {
+        if (way == Separation.QUICK) return null to null
         val runtime = ModelStore.Model.singRuntime() ?: throw IOException(tr(R.string.sing_doesn_t_run_on_this_2))
-        val e = OrtLoader.environment(c.models.dir(runtime))
-        val opts = OrtSession.SessionOptions().apply {
-            setIntraOpNumThreads(minOf(4, Runtime.getRuntime().availableProcessors()).coerceAtLeast(1))
-            setOptimizationLevel(OrtSession.SessionOptions.OptLevel.ALL_OPT)
-        }
+        val e = env ?: OrtLoader.environment(c.models.dir(runtime)).also { env = it }
         val dir = c.models.dir(ModelStore.Model.SING_MODEL)
-        val pair = e.createSession(File(dir, "vocals.fp16.onnx").path, opts) to e.createSession(File(dir, "accompaniment.fp16.onnx").path, opts)
-        env = e
-        sessions = pair
-        return pair
+        val vocals = vocalsNet ?: e.createSession(File(dir, "vocals.fp16.onnx").path, options()).also { vocalsNet = it }
+        val backing = if (way == Separation.FULL) backingNet ?: e.createSession(File(dir, "accompaniment.fp16.onnx").path, options()).also { backingNet = it }
+        else backingNet
+        return vocals to backing
     }
 
     /** The networks take ~100 MB: let go of them a few minutes after Sing is switched off. */
@@ -157,19 +203,60 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
         releaseJob?.cancel()
         releaseJob = scope.launch {
             delay(3 * 60_000L)
-            withContext(worker) {
-                if (!working) {
-                    sessions?.let { (v, a) -> runCatching { v.close() }; runCatching { a.close() } }
-                    sessions = null
-                }
-            }
+            withContext(worker) { if (!working) closeNetworks() }
         }
     }
 
-    /** Works out [song]'s vocals and writes them to [store] as it goes. */
-    private fun separate(song: Song) {
+    private fun closeNetworks() {
+        vocalsNet?.let { runCatching { it.close() } }
+        backingNet?.let { runCatching { it.close() } }
+        vocalsNet = null
+        backingNet = null
+    }
+
+    /**
+     * Times the full and the light way on this device with [song] (a chunk, ~12 s of it, each; nothing is kept): the
+     * TV's speed check. Their speeds in seconds of song a second, also kept for choosing ([method]).
+     */
+    suspend fun timeWays(song: Song): Pair<Double?, Double?> = withContext(worker) {
+        if (!song.isLocal) c.warmUp(song.id, whole = true, cellular = c.settings.current.singOnCellular)
+        val scratch = File(c.app.cacheDir, "sing_time.part")
+        val uri = c.audioOnPhone(song.id, scratch) ?: throw IOException(tr(R.string.this_song_isn_t_on_the))
+        val speeds = HashMap<Separation, Double>()
+        try {
+            val (vocals, backing) = networks(Separation.FULL)
+            PcmDecoder(c.app, uri).use { dec ->
+                val first = dec.read() ?: throw IOException(tr(R.string.the_song_didn_t_decode))
+                val reader = PieceReader(dec, first, Resampler(2, dec.sampleRate, Spleeter.RATE))
+                val sp = Spleeter(env, vocals, backing)
+                // The full way's chunk first, then the light way's.
+                sp.onChunk = { _, ms -> speeds[sp.ran] = SingPace.speed(Spleeter.CHUNK_SECONDS, ms); sp.method = Separation.LIGHT }
+                try {
+                    while (speeds.size < 2) sp.feed(reader.next() ?: break)
+                } finally {
+                    reader.stop()
+                }
+                // A song shorter than two chunks: the rest of it.
+                if (speeds.size < 2) sp.finish()
+            }
+        } finally {
+            scratch.delete()
+        }
+        speeds[Separation.FULL]?.let { keepPace(Separation.FULL, it, blend = false) }
+        speeds[Separation.LIGHT]?.let { keepPace(Separation.LIGHT, it, blend = false) }
+        retried = false
+        _method.value = choose(retry = false)
+        if (_method.value != Separation.FULL) backingNet?.let { runCatching { it.close() }; backingNet = null }
+        speeds[Separation.FULL] to speeds[Separation.LIGHT]
+    }
+
+    /**
+     * Works out [song]'s vocals and writes them to [store] as it goes, each chunk the best way this device keeps up
+     * with ([SingPace], timed as it goes). What to tell the listener about it, if anything.
+     */
+    private fun separate(song: Song): String? {
         val id = song.id
-        if (store.complete(id)) return
+        if (done(id)) return null
         val started = System.nanoTime()
         _progress.update { it + (id to 0f) }
         // The whole song from the player's own copy (cached whole first if need be), so the vocals line up with it.
@@ -177,8 +264,12 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
         val scratch = File(c.app.cacheDir, "sing_${id.replace(Regex("[^A-Za-z0-9_-]"), "_")}.part")
         val uri = c.audioOnPhone(id, scratch)
             ?: throw IOException(if (c.network.metered.value && !c.settings.current.singOnCellular) tr(R.string.waiting_for_wi_fi_to_get) else tr(R.string.this_song_isn_t_on_the))
-        val (vocals, accompaniment) = sessions()
-        com.prism.music.playback.AudioDiagnostics.log("background", "Sing separation of $id started")
+        val way = choose()
+        _method.value = way
+        val (vocals, accompaniment) = networks(way)
+        // The way least good of the song's chunks, kept with its vocals.
+        var least = way
+        com.prism.music.playback.AudioDiagnostics.log("background", "Sing separation of $id started ($way)")
         try {
             PcmDecoder(c.app, uri).use { dec ->
                 val first = dec.read() ?: throw IOException(tr(R.string.the_song_didn_t_decode))
@@ -187,7 +278,19 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
                 store.pcm(id).delete()
                 store.writeMeta(id, StemStore.Meta(rate, total))
                 val back = Resampler(2, Spleeter.RATE, rate)
-                val spleeter = Spleeter(env!!, vocals, accompaniment)
+                val spleeter = Spleeter(env, vocals, accompaniment).apply { method = way }
+                // Each chunk timed, and the next one done the way that keeps up (a slow device moves to a lighter way
+                // within its first song; the full way needs its network loaded, so the light way stands in till the
+                // next song).
+                spleeter.onChunk = { _, ms ->
+                    val ran = spleeter.ran
+                    if (ran != Separation.QUICK) keepPace(ran, SingPace.speed(Spleeter.CHUNK_SECONDS, ms))
+                    if (ran.ordinal > least.ordinal) least = ran
+                    // The light way's retry only at a song's start, where its network can be loaded.
+                    val next = choose(retry = false)
+                    spleeter.method = next
+                    _method.value = next
+                }
                 // Decoding (the phone's decoder answers a buffer at a time) and the step to 44.1 kHz run on their own
                 // thread, a few pieces ahead, while the networks work on what's already in.
                 val reader = PieceReader(dec, first, Resampler(2, rate, Spleeter.RATE))
@@ -229,9 +332,13 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
                     if (written < decoded) write(FloatArray(((decoded - written) * 2).toInt()), decoded)
                 }
                 // Marked complete only once every byte is in the file.
-                store.writeMeta(id, StemStore.Meta(rate, written, complete = true))
+                store.writeMeta(id, StemStore.Meta(rate, written, complete = true, method = least.name))
+                // Stepped down from the full way: the backing's network isn't needed any more (~half the memory).
+                if (_method.value != Separation.FULL) backingNet?.let { runCatching { it.close() }; backingNet = null }
                 val secs = (System.nanoTime() - started) / 1e9
-                Log.i("PrismSing", "separated $id: ${"%.1f".format(written / rate.toDouble())} s of song in ${"%.1f".format(secs)} s")
+                Log.i("PrismSing", "separated $id ($least): ${"%.1f".format(written / rate.toDouble())} s of song in ${"%.1f".format(secs)} s")
+                // A mono song the quick way: nothing could be told apart, so it plays as it is.
+                return if (spleeter.quickChunks > 0 && spleeter.monoChunks == spleeter.quickChunks) tr(R.string.sing_mono_song) else null
             }
         } catch (t: Throwable) {
             store.delete(id)

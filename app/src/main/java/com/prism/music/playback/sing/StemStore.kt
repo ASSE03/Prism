@@ -14,8 +14,9 @@ import java.nio.channels.FileChannel
  * used ones go when the store is over its size.
  */
 class StemStore(root: File) {
+    /** [method]: the [Separation] the vocals were told apart by (the least good of the song's chunks; null: full). */
     @Serializable
-    data class Meta(val rate: Int, val totalFrames: Long, val complete: Boolean = false, val version: Int = VERSION)
+    data class Meta(val rate: Int, val totalFrames: Long, val complete: Boolean = false, val version: Int = VERSION, val method: String? = null)
 
     val dir = File(root, "stems").apply { mkdirs() }
     private val json = Json { ignoreUnknownKeys = true }

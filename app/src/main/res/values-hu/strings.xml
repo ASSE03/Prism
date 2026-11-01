@@ -2131,7 +2131,7 @@
     <string name="couldn_t_download_it_tap_to">Nem sikerült letölteni · koppints az újrapróbáláshoz</string>
     <string name="only_for_japanese_songs">Csak japán dalokhoz · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Csak a japánhoz kell: a kandzsiknak több olvasata van, ezért egy szótár választja ki a helyeset a romajihoz („kimi no na wa”). Egyszer kell letölteni. Más nyelvek (koreai, kínai, orosz, hindi…) letöltés nélkül írhatók át. Nélküle a Google írja át a kandzsikat.</string>
-    <string name="sing_doesn_t_run_on_this">Az Éneklés nem fut ennek a telefonnak a processzortípusán.</string>
+    <string name="sing_doesn_t_run_on_this">Az Éneklés teljes szétválasztása nem fut ennek a telefonnak a processzortípusán, ezért az Éneklés a gyors módot használja: kiveszi, ami a keverés közepén szól, ahol általában az ének van. Kevésbé tiszta, és egy monó dal úgy marad, ahogy van.</string>
     <string name="needed_for_sing">Az Énekléshez kell · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Kiveszi az énekes hangját a dalokból, a telefonodon, karaokéhoz. Egyszer kell letölteni.</string>
     <string name="so_sing_starts_at_once_when">Hogy az Éneklés azonnal induljon, amikor bekapcsolod</string>
@@ -4085,7 +4085,7 @@
     <string name="tv_same_loudness_info">A dalok nagyjából egyforma hangerővel szólnak, így egy halkabb miatt nem kell a távirányítóért nyúlni.</string>
     <string name="tv_lyrics_size">Dalszöveg mérete</string>
     <string name="tv_sing_on_tv">Éneklés ezen a tévén</string>
-    <string name="tv_sing_info">Az Éneklés ezen a tévén veszi ki a dalból a hangot, szerver nélkül. Egyszeri letöltés kell hozzá, és elég gyors tévé, hogy lépést tartson a dallal: az ellenőrzés a szóló dallal deríti ki.</string>
+    <string name="tv_sing_info">Az Éneklés közvetlenül ezen a tévén veszi ki a dalból az éneket, szerver nélkül. Egyszeri letöltés kell hozzá; az ellenőrzés a szóló dallal méri a sebességét. Egy tévé, amely túl lassú ahhoz, hogy lépést tartson, helyette a gyors módot kapja: kikerül, ami a keverés közepén szól.</string>
     <string name="tv_ambient_screen">Nyugalmi képernyő</string>
     <string name="tv_ambient_after">%1$d perc után távirányító nélkül</string>
     <string name="tv_ambient_info">Amíg szól a zene és le van téve a távirányító, a képernyő a dalra és a szövegére halványul, lassan sodródva, a tévé képernyővédője helyett.</string>
@@ -4093,8 +4093,8 @@
     <string name="tv_sing_check">Ellenőrizd, elég gyors-e ez a tévé</string>
     <string name="tv_sing_checking">Indíts el egy dalt, majd ellenőrizd: kb. egy percig tart</string>
     <string name="tv_sing_ready">Elég gyors: az Éneklés a lejátszó ⋯ menüjében van</string>
-    <string name="tv_sing_too_slow">Ez a tévé nem elég gyors az Énekléshez: lemaradna a dal mögött</string>
-    <string name="tv_sing_no_cpu">Az Éneklés nem fut ennek a tévének a processzorán</string>
+    <string name="tv_sing_too_slow">Gyors mód: ez a tévé túl lassú a teljes szétválasztáshoz, ezért az Éneklés kiveszi, ami a keverés közepén szól (kevésbé tiszta). Az Éneklés a lejátszó ⋯ menüjében van</string>
+    <string name="tv_sing_no_cpu">Gyors mód: a teljes szétválasztás nem fut ennek a tévének a processzorán, ezért az Éneklés kiveszi, ami a keverés közepén szól (kevésbé tiszta). Az Éneklés a lejátszó ⋯ menüjében van</string>
     <string name="tv_link_pair_note">A beolvasott kód a hálózatodon lévő %1$s eszközé (%2$s). Csak akkor párosítsd, ha ez az előtted lévő tévé.</string>
     <string name="tv_sign_in_pair_first">Előbb párosítsd ezt: %1$s, aztán jelentkeztesd be</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4125,4 +4125,8 @@
     <string name="tour_180_silence">A csend levágása csak a dal elejét és végét érinti</string>
     <string name="tour_180_normalize">Az azonos hangerő kiegyenlíti a dalok közti nagy ugrásokat</string>
     <string name="tour_180_size">Kisebb letöltés</string>
+    <string name="sing_quick_slow">Ez a telefon túl lassú a teljes szétválasztáshoz, ezért az Éneklés a gyors módot használja: kiveszi, ami a keverés közepén szól, ahol általában az ének van. Kevésbé tiszta, és egy monó dal úgy marad, ahogy van.</string>
+    <string name="sing_mono_song">Ez a dal monó: a gyors mód nem tudja kivenni belőle az éneket, ezért úgy szól, ahogy van.</string>
+    <string name="tv_sing_measured">Ez a tévé a lejátszásuknál %1$s×-ször gyorsabban választja szét a dalokat.</string>
+    <string name="tv_voice_quick">Halkított ének (gyors mód)</string>
 </resources>
