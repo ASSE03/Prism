@@ -3949,4 +3949,15 @@
     <string name="tour_1792_gestures">Die Gesten des Players auch rund um die Bedienelemente</string>
     <string name="tour_1792_colors">Der Fortschritt des Mini-Players in deiner Akzentfarbe, der laufende Song in der Farbe des Albums</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Nicht mit randlosem Cover: das Banner verdeckt es</string>
+    <string name="harvest">Ernte</string>
+    <string name="holiday">Festtage</string>
+    <string name="harvest_note">Fallende Blätter, ein Truthahn, Kuchen und Kürbisse, für November</string>
+    <string name="holiday_note">Schnee, Bäume, Geschenke und Zuckerstangen, für Dezember</string>
+    <string name="for_the_season">Zur Saison: %1$s</string>
+    <string name="season_info">Nur in diesem Monat. Wenn er endet, kehrt Prism zu deinem vorherigen Look zurück.</string>
+    <string name="season_over_back_to">%1$s ist vorbei: zurück zu %2$s</string>
+    <string name="season_over_backgrounds">%1$s ist vorbei: sein Hintergrund ist weggeräumt</string>
+    <string name="holiday_mode">Feiertagsmodus</string>
+    <string name="holiday_mode_harvest">Feiertagsmodus für Thanksgiving einschalten? Prism bekommt Herbstfarben mit fallenden Blättern, Truthähnen, Kuchen und Kürbissen hinter deiner Musik. Dein eigener Look kommt am 1. Dezember zurück.</string>
+    <string name="holiday_mode_holiday">Feiertagsmodus für Weihnachten einschalten? Prism wird rot, grün und gold, mit Schneefall, Bäumen, Christbaumkugeln und Geschenken hinter deiner Musik. Dein eigener Look kommt am 1. Januar zurück.</string>
 </resources>

@@ -3949,4 +3949,15 @@
     <string name="tour_1792_gestures">प्लेयर के जेस्चर कंट्रोल के आसपास भी</string>
     <string name="tour_1792_colors">मिनी प्लेयर की प्रगति आपके रंग में, चल रहा गाना एल्बम के रंग में</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">किनारे-तक कवर के साथ नहीं: बैनर उसे ढक देता है</string>
+    <string name="harvest">फ़सल</string>
+    <string name="holiday">त्योहार</string>
+    <string name="harvest_note">गिरते पत्ते, टर्की, पाई और कद्दू, नवंबर के लिए</string>
+    <string name="holiday_note">बर्फ़, पेड़, तोहफ़े और कैंडी केन, दिसंबर के लिए</string>
+    <string name="for_the_season">इस मौसम के लिए: %1$s</string>
+    <string name="season_info">सिर्फ़ इसी महीने के लिए। महीना खत्म होने पर Prism आपके पिछले लुक पर लौट जाता है।</string>
+    <string name="season_over_back_to">%1$s खत्म: %2$s पर वापस</string>
+    <string name="season_over_backgrounds">%1$s खत्म: इसका बैकग्राउंड हटा दिया गया</string>
+    <string name="holiday_mode">त्योहार मोड</string>
+    <string name="holiday_mode_harvest">थैंक्सगिविंग के लिए त्योहार मोड चालू करें? आपके संगीत के पीछे गिरते पत्तों, टर्की, पाई और कद्दू के साथ Prism पतझड़ के रंगों में रंग जाता है। आपका अपना लुक 1 दिसंबर को लौट आता है।</string>
+    <string name="holiday_mode_holiday">क्रिसमस के लिए त्योहार मोड चालू करें? आपके संगीत के पीछे बर्फ़बारी, पेड़, सजावट और तोहफ़ों के साथ Prism लाल, हरा और सुनहरा हो जाता है। आपका अपना लुक 1 जनवरी को लौट आता है।</string>
 </resources>

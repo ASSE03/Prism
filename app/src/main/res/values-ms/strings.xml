@@ -3899,4 +3899,15 @@
     <string name="tour_1792_gestures">Gerak isyarat pemain juga di sekeliling kawalan</string>
     <string name="tour_1792_colors">Kemajuan pemain mini dalam warna aksen anda, lagu yang dimainkan dalam warna album</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Tidak dengan kulit tepi ke tepi: sepanduk menutupnya</string>
+    <string name="harvest">Tuaian</string>
+    <string name="holiday">Perayaan</string>
+    <string name="harvest_note">Daun gugur, ayam belanda, pai dan labu, untuk November</string>
+    <string name="holiday_note">Salji, pokok, hadiah dan gula-gula tongkat, untuk Disember</string>
+    <string name="for_the_season">Untuk musim ini: %1$s</string>
+    <string name="season_info">Hanya untuk bulan ini. Apabila tamat, Prism kembali ke gaya yang anda guna sebelum ini.</string>
+    <string name="season_over_back_to">%1$s sudah tamat: kembali ke %2$s</string>
+    <string name="season_over_backgrounds">%1$s sudah tamat: latar belakangnya disimpan</string>
+    <string name="holiday_mode">Mod Perayaan</string>
+    <string name="holiday_mode_harvest">Hidupkan Mod Perayaan untuk Thanksgiving? Prism bertukar ke warna musim luruh dengan daun gugur, ayam belanda, pai dan labu di belakang muzik anda. Gaya anda sendiri kembali pada 1 Disember.</string>
+    <string name="holiday_mode_holiday">Hidupkan Mod Perayaan untuk Krismas? Prism bertukar merah, hijau dan emas, dengan salji, pokok, hiasan dan hadiah di belakang muzik anda. Gaya anda sendiri kembali pada 1 Januari.</string>
 </resources>

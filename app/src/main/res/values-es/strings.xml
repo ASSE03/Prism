@@ -3999,4 +3999,15 @@
     <string name="tour_1792_gestures">Los gestos del reproductor también alrededor de los controles</string>
     <string name="tour_1792_colors">El progreso del minirreproductor en tu acento, la canción que suena en el color del álbum</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">No con la portada a pantalla completa: el banner la tapa</string>
+    <string name="harvest">Cosecha</string>
+    <string name="holiday">Fiestas</string>
+    <string name="harvest_note">Hojas que caen, un pavo, tartas y calabazas, para noviembre</string>
+    <string name="holiday_note">Nieve, árboles, regalos y bastones de caramelo, para diciembre</string>
+    <string name="for_the_season">De temporada: %1$s</string>
+    <string name="season_info">Solo este mes. Cuando termine, Prism vuelve al look que tenías antes.</string>
+    <string name="season_over_back_to">%1$s terminó: vuelves a %2$s</string>
+    <string name="season_over_backgrounds">%1$s terminó: su fondo se ha guardado</string>
+    <string name="holiday_mode">Modo festivo</string>
+    <string name="holiday_mode_harvest">¿Activar el modo festivo para Acción de Gracias? Prism se viste de otoño con hojas que caen, pavos, tartas y calabazas detrás de tu música. Tu propio look vuelve el 1 de diciembre.</string>
+    <string name="holiday_mode_holiday">¿Activar el modo festivo para Navidad? Prism se viste de rojo, verde y dorado, con nieve, árboles, adornos y regalos detrás de tu música. Tu propio look vuelve el 1 de enero.</string>
 </resources>

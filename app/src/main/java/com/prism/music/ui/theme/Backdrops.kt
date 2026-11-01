@@ -68,6 +68,8 @@ enum class BackdropKind {
     DOTS, PAPER, PINSTRIPE, WAVES, RIPPLES, DIAMONDS, ZIGZAG, HALFTONE, CROSSES, SCALES, CONFETTI,
     /** Detailed illustrations in their own palettes ([Design]). */
     CONSTELLATION, CONTOURS, MOSAIC, BOKEH, SILK, HORIZON,
+    /** The seasonal scenes (1.8.0, [SeasonalDesigns]): Thanksgiving's harvest and Christmas. */
+    HARVEST, HOLIDAY,
 }
 
 /** Which row of the picker a background sits in. */
@@ -85,6 +87,8 @@ enum class Backdrop(
     val group: BackdropGroup,
     val dark: List<Long> = emptyList(),
     val light: List<Long> = emptyList(),
+    /** Only offered in this season's month (a seasonal Look's own background); null for always. */
+    val season: com.prism.music.data.looks.Season? = null,
 ) {
     /** Ambient: frost from what's playing (Aura × Spectrum's own look), or the plain page with frosted pages off. */
     DEFAULT(tr(R.string.ambient), BackdropKind.SPECIAL, BackdropGroup.YOURS),
@@ -146,9 +150,19 @@ enum class Backdrop(
         listOf(0xFF0A0E18, 0xFF9C84FF, 0xFF27C4E8, 0xFFFF6B9D), listOf(0xFFF6F4FB, 0xFF7C5CFF, 0xFF1AA6CC, 0xFFE8558A)),
     HORIZON(tr(R.string.horizon), BackdropKind.HORIZON, BackdropGroup.DESIGNS,
         listOf(0xFF0D0420, 0xFFFFB03D, 0xFFFF2E88, 0xFFB08CFF), listOf(0xFFFFF3EA, 0xFFFFB27A, 0xFFFF86B8, 0xFF9B7BFF)),
+    // Seasonal (1.8.0): base, then the glows' colors; the scenes keep their own inks ([SeasonalDesigns]).
+    HARVEST(tr(R.string.harvest), BackdropKind.HARVEST, BackdropGroup.DESIGNS,
+        listOf(0xFF1A0F09, 0xFFE8892B, 0xFFB8432A, 0xFFE0B04A), listOf(0xFFFBF3E7, 0xFFF0A65A, 0xFFE07F62, 0xFFEBC77A),
+        season = com.prism.music.data.looks.Season.HARVEST),
+    HOLIDAY(tr(R.string.holiday), BackdropKind.HOLIDAY, BackdropGroup.DESIGNS,
+        listOf(0xFF08150F, 0xFFD7263D, 0xFF2E8B57, 0xFFF2C14E), listOf(0xFFF5F8F6, 0xFFE8707C, 0xFF6DB88C, 0xFFEBC66C),
+        season = com.prism.music.data.looks.Season.HOLIDAY),
     ;
 
     fun colors(dark: Boolean): List<Long> = if (dark) this.dark else light
+
+    /** Whether the pickers offer it on [date]: always, or a seasonal one in its month. */
+    fun offeredOn(date: java.time.LocalDate): Boolean = season?.contains(date) ?: true
 
     companion object {
         /** Stored as "NAME" or "PHOTO|/path/to/image". */

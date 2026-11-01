@@ -3949,4 +3949,15 @@
     <string name="tour_1792_gestures">A lejátszó mozdulatai a vezérlők körül is</string>
     <string name="tour_1792_colors">A minilejátszó haladása a kiemelőszínedben, a szóló dal az album színében</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Szélétől széléig érő borítóval nem: a szalag eltakarja</string>
+    <string name="harvest">Aratás</string>
+    <string name="holiday">Ünnepek</string>
+    <string name="harvest_note">Hulló levelek, pulyka, piték és tökök, novemberre</string>
+    <string name="holiday_note">Hó, fenyők, ajándékok és cukorpálcák, decemberre</string>
+    <string name="for_the_season">Az évszakra: %1$s</string>
+    <string name="season_info">Csak ebben a hónapban. Ha véget ér, a Prism visszaáll a korábbi arculatodra.</string>
+    <string name="season_over_back_to">Véget ért: %1$s, vissza ide: %2$s</string>
+    <string name="season_over_backgrounds">Véget ért: %1$s, a háttere elrakva</string>
+    <string name="holiday_mode">Ünnepi mód</string>
+    <string name="holiday_mode_harvest">Bekapcsolod az ünnepi módot hálaadásra? A Prism őszi színeket kap hulló levelekkel, pulykákkal, pitékkel és tökökkel a zenéd mögött. A saját arculatod december 1-jén tér vissza.</string>
+    <string name="holiday_mode_holiday">Bekapcsolod az ünnepi módot karácsonyra? A Prism piros, zöld és arany lesz, hóeséssel, fenyőkkel, díszekkel és ajándékokkal a zenéd mögött. A saját arculatod január 1-jén tér vissza.</string>
 </resources>

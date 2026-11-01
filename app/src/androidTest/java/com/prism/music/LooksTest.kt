@@ -26,9 +26,14 @@ class LooksTest {
     @get:Rule val shots = ScreenshotOnFailure()
 
     @Before fun start() {
+        // A November day (1.8.0's seasonal Looks): Harvest is offered, Holiday isn't.
+        val zone = java.time.ZoneId.systemDefault()
+        com.prism.music.data.looks.Seasons.clock = java.time.Clock.fixed(java.time.LocalDate.of(2026, 11, 20).atTime(12, 0).atZone(zone).toInstant(), zone)
         Fixture.ready()
         Fixture.launch()
     }
+
+    @org.junit.After fun end() { com.prism.music.data.looks.Seasons.clock = null }
 
     private fun openLooks() {
         compose.openSettings()
@@ -54,6 +59,20 @@ class LooksTest {
         compose.onAllNodes(hasText("Undo") and hasClickAction()).onFirst().performClick()
         compose.waitUntil(10_000) { settings.lookValues.value == before }
         assertEquals(false, settings.current.pureBlack)
+    }
+
+    /** 1.8.0: in November the Looks page offers Harvest (card and grid); picking it puts on its colors and background. */
+    @Test fun harvestInNovember() {
+        // The date is November 20 ([start]).
+        openLooks()
+        compose.waitForText("For the season: Harvest")
+        assertEquals("Holiday isn't offered in November", 0, compose.onAllNodes(clickLabel("Use Holiday")).fetchSemanticsNodes().size)
+        compose.clickWhenFound(clickLabel("Use Harvest"))
+        val looks = Fixture.container.looks
+        compose.waitUntil(10_000) { looks.currentId.value == "harvest" }
+        val values = Fixture.container.settings.lookValues.value
+        assertEquals("s:HARVEST", values["spectrum_preset"])
+        assertEquals(true, values["backdrops"]?.contains("HARVEST"))
     }
 
     @Test fun aSavedLookComesBackAfterAnother() {

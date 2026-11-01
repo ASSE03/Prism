@@ -3999,4 +3999,15 @@
     <string name="tour_1792_gestures">I gesti del player anche intorno ai controlli</string>
     <string name="tour_1792_colors">L\'avanzamento del mini player nel tuo colore d\'accento, il brano in riproduzione nel colore dell\'album</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Non con la copertina a tutto schermo: il banner la copre</string>
+    <string name="harvest">Raccolto</string>
+    <string name="holiday">Feste</string>
+    <string name="harvest_note">Foglie che cadono, un tacchino, torte e zucche, per novembre</string>
+    <string name="holiday_note">Neve, alberi, regali e bastoncini di zucchero, per dicembre</string>
+    <string name="for_the_season">Di stagione: %1$s</string>
+    <string name="season_info">Solo per questo mese. Quando finisce, Prism torna al look che avevi prima.</string>
+    <string name="season_over_back_to">%1$s è finito: si torna a %2$s</string>
+    <string name="season_over_backgrounds">%1$s è finito: il suo sfondo è stato messo via</string>
+    <string name="holiday_mode">Modalità feste</string>
+    <string name="holiday_mode_harvest">Attivare la modalità feste per il Ringraziamento? Prism si veste d\'autunno con foglie che cadono, tacchini, torte e zucche dietro la tua musica. Il tuo look torna il 1° dicembre.</string>
+    <string name="holiday_mode_holiday">Attivare la modalità feste per Natale? Prism si veste di rosso, verde e oro, con neve, alberi, decorazioni e regali dietro la tua musica. Il tuo look torna il 1° gennaio.</string>
 </resources>

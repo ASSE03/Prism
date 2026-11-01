@@ -3999,4 +3999,15 @@
     <string name="tour_1792_gestures">Os gestos do leitor também à volta dos controlos</string>
     <string name="tour_1792_colors">O progresso do minileitor no seu destaque, a música a tocar na cor do álbum</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Não com a capa em ecrã inteiro: o banner tapa-a</string>
+    <string name="harvest">Colheita</string>
+    <string name="holiday">Festas</string>
+    <string name="harvest_note">Folhas a cair, um peru, tartes e abóboras, para novembro</string>
+    <string name="holiday_note">Neve, árvores, presentes e bengalas de açúcar, para dezembro</string>
+    <string name="for_the_season">Da estação: %1$s</string>
+    <string name="season_info">Só neste mês. Quando acabar, o Prism volta ao visual anterior.</string>
+    <string name="season_over_back_to">%1$s terminou: de volta a %2$s</string>
+    <string name="season_over_backgrounds">%1$s terminou: o fundo foi arrumado</string>
+    <string name="holiday_mode">Modo Festas</string>
+    <string name="holiday_mode_harvest">Ativar o Modo Festas para o Dia de Ação de Graças? O Prism ganha cores de outono com folhas a cair, perus, tartes e abóboras atrás da tua música. O teu visual volta a 1 de dezembro.</string>
+    <string name="holiday_mode_holiday">Ativar o Modo Festas para o Natal? O Prism fica vermelho, verde e dourado, com neve, árvores, enfeites e presentes atrás da tua música. O teu visual volta a 1 de janeiro.</string>
 </resources>

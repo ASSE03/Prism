@@ -3949,4 +3949,15 @@
     <string name="tour_1792_gestures">Oynatıcının hareketleri kontrollerin çevresinde de</string>
     <string name="tour_1792_colors">Mini oynatıcının ilerlemesi vurgu renginizde, çalan şarkı albümün renginde</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Kenardan kenara kapakla olmaz: afiş onu kapatır</string>
+    <string name="harvest">Hasat</string>
+    <string name="holiday">Yılbaşı</string>
+    <string name="harvest_note">Düşen yapraklar, hindi, turtalar ve balkabakları, kasım için</string>
+    <string name="holiday_note">Kar, ağaçlar, hediyeler ve baston şekerler, aralık için</string>
+    <string name="for_the_season">Mevsimin görünümü: %1$s</string>
+    <string name="season_info">Yalnızca bu ay. Ay bitince Prism önceki Görünümüne döner.</string>
+    <string name="season_over_back_to">%1$s bitti: %2$s Görünümüne dönüldü</string>
+    <string name="season_over_backgrounds">%1$s bitti: arka planı kaldırıldı</string>
+    <string name="holiday_mode">Bayram Modu</string>
+    <string name="holiday_mode_harvest">Şükran Günü için Bayram Modu açılsın mı? Müziğinin arkasında düşen yapraklar, hindiler, turtalar ve su kabaklarıyla Prism sonbahar renklerine bürünür. Kendi Görünümün 1 Aralık\'ta geri gelir.</string>
+    <string name="holiday_mode_holiday">Yılbaşı için Bayram Modu açılsın mı? Müziğinin arkasında kar, ağaçlar, süsler ve hediyelerle Prism kırmızı, yeşil ve altın rengine bürünür. Kendi Görünümün 1 Ocak\'ta geri gelir.</string>
 </resources>

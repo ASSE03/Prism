@@ -3949,4 +3949,15 @@
     <string name="tour_1792_gestures">پلیئر کے اشارے کنٹرولز کے آس پاس بھی</string>
     <string name="tour_1792_colors">منی پلیئر کی پیش رفت آپ کے رنگ میں، چلتا گانا البم کے رنگ میں</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">کنارے تک کور کے ساتھ نہیں: بینر اسے ڈھانپ دیتا ہے</string>
+    <string name="harvest">فصل</string>
+    <string name="holiday">تعطیلات</string>
+    <string name="harvest_note">گرتے پتے، ٹرکی، پائی اور کدو، نومبر کے لیے</string>
+    <string name="holiday_note">برف، درخت، تحفے اور کینڈی کین، دسمبر کے لیے</string>
+    <string name="for_the_season">اس موسم کے لیے: %1$s</string>
+    <string name="season_info">صرف اس مہینے کے لیے۔ مہینہ ختم ہونے پر Prism آپ کے پچھلے لُک پر واپس چلا جاتا ہے۔</string>
+    <string name="season_over_back_to">%1$s ختم: %2$s پر واپسی</string>
+    <string name="season_over_backgrounds">%1$s ختم: اس کا پس منظر ہٹا دیا گیا</string>
+    <string name="holiday_mode">تہوار موڈ</string>
+    <string name="holiday_mode_harvest">تھینکس گیونگ کے لیے تہوار موڈ آن کریں؟ آپ کی موسیقی کے پیچھے گرتے پتوں، ٹرکی، پائی اور کدو کے ساتھ Prism خزاں کے رنگوں میں ڈھل جاتا ہے۔ آپ کا اپنا لُک 1 دسمبر کو واپس آ جاتا ہے۔</string>
+    <string name="holiday_mode_holiday">کرسمس کے لیے تہوار موڈ آن کریں؟ آپ کی موسیقی کے پیچھے برف باری، درختوں، سجاوٹ اور تحفوں کے ساتھ Prism سرخ، سبز اور سنہرا ہو جاتا ہے۔ آپ کا اپنا لُک 1 جنوری کو واپس آ جاتا ہے۔</string>
 </resources>

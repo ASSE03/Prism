@@ -3999,4 +3999,15 @@
     <string name="tour_1792_gestures">Les gestes du lecteur aussi autour des commandes</string>
     <string name="tour_1792_colors">La progression du mini-lecteur dans votre accent, le titre en cours dans la couleur de l\'album</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Pas avec la pochette pleine largeur : la bannière la recouvre</string>
+    <string name="harvest">Récolte</string>
+    <string name="holiday">Fêtes</string>
+    <string name="harvest_note">Feuilles qui tombent, une dinde, des tartes et des citrouilles, pour novembre</string>
+    <string name="holiday_note">Neige, sapins, cadeaux et sucres d\'orge, pour décembre</string>
+    <string name="for_the_season">De saison : %1$s</string>
+    <string name="season_info">Seulement ce mois-ci. À la fin, Prism revient au Look que vous aviez avant.</string>
+    <string name="season_over_back_to">%1$s est terminé : retour à %2$s</string>
+    <string name="season_over_backgrounds">%1$s est terminé : son arrière-plan est rangé</string>
+    <string name="holiday_mode">Mode fêtes</string>
+    <string name="holiday_mode_harvest">Activer le mode fêtes pour Thanksgiving ? Prism prend les couleurs de l\'automne avec des feuilles qui tombent, des dindes, des tartes et des courges derrière votre musique. Votre propre Look revient le 1er décembre.</string>
+    <string name="holiday_mode_holiday">Activer le mode fêtes pour Noël ? Prism passe au rouge, vert et or, avec de la neige, des sapins, des boules et des cadeaux derrière votre musique. Votre propre Look revient le 1er janvier.</string>
 </resources>

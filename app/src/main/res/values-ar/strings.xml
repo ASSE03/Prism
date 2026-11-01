@@ -4149,4 +4149,15 @@
     <string name="tour_1792_gestures">إيماءات المشغّل حول عناصر التحكم أيضاً</string>
     <string name="tour_1792_colors">تقدّم المشغّل المصغّر بلون تمييزك، والأغنية قيد التشغيل بلون الألبوم</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">ليس مع الغلاف الممتد بعرض الشاشة: الشريط يغطيه</string>
+    <string name="harvest">الحصاد</string>
+    <string name="holiday">الأعياد</string>
+    <string name="harvest_note">أوراق متساقطة وديك رومي وفطائر ويقطين، لشهر نوفمبر</string>
+    <string name="holiday_note">ثلج وأشجار وهدايا وعصي حلوى، لشهر ديسمبر</string>
+    <string name="for_the_season">لهذا الموسم: %1$s</string>
+    <string name="season_info">متاح هذا الشهر فقط. عند انتهائه يعود Prism إلى المظهر الذي كان لديك من قبل.</string>
+    <string name="season_over_back_to">انتهى %1$s: عودة إلى %2$s</string>
+    <string name="season_over_backgrounds">انتهى %1$s: أُزيلت خلفيته</string>
+    <string name="holiday_mode">وضع الأعياد</string>
+    <string name="holiday_mode_harvest">هل تريد تشغيل وضع الأعياد لعيد الشكر؟ يكتسي Prism بألوان الخريف مع أوراق متساقطة وديوك رومية وفطائر وقرع خلف موسيقاك. يعود مظهرك في 1 ديسمبر.</string>
+    <string name="holiday_mode_holiday">هل تريد تشغيل وضع الأعياد لعيد الميلاد؟ يكتسي Prism بالأحمر والأخضر والذهبي، مع تساقط الثلج والأشجار والزينة والهدايا خلف موسيقاك. يعود مظهرك في 1 يناير.</string>
 </resources>

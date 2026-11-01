@@ -4049,4 +4049,15 @@
     <string name="tour_1792_gestures">Жести плеєра й навколо кнопок</string>
     <string name="tour_1792_colors">Прогрес міні-плеєра у вашому акценті, трек, що грає, у кольорі альбому</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">Не з обкладинкою на всю ширину: банер її закриває</string>
+    <string name="harvest">Урожай</string>
+    <string name="holiday">Свята</string>
+    <string name="harvest_note">Листя, що падає, індичка, пироги й гарбузи — на листопад</string>
+    <string name="holiday_note">Сніг, ялинки, подарунки й льодяникові палички — на грудень</string>
+    <string name="for_the_season">До сезону: %1$s</string>
+    <string name="season_info">Лише цього місяця. Коли він скінчиться, Prism поверне попередній стиль.</string>
+    <string name="season_over_back_to">%1$s скінчився: повертаємо %2$s</string>
+    <string name="season_over_backgrounds">%1$s скінчився: його фон прибрано</string>
+    <string name="holiday_mode">Святковий режим</string>
+    <string name="holiday_mode_harvest">Увімкнути святковий режим на День подяки? Prism набуде осінніх кольорів: листя, що падає, індички, пироги й гарбузи за твоєю музикою. Твій стиль повернеться 1 грудня.</string>
+    <string name="holiday_mode_holiday">Увімкнути святковий режим на Різдво? Prism стане червоним, зеленим і золотим: снігопад, ялинки, прикраси й подарунки за твоєю музикою. Твій стиль повернеться 1 січня.</string>
 </resources>

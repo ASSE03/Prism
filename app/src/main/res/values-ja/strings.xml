@@ -3899,4 +3899,15 @@
     <string name="tour_1792_gestures">操作ボタンのまわりでもプレーヤーのジェスチャー</string>
     <string name="tour_1792_colors">ミニプレーヤーの進行をアクセントカラーで、再生中の曲をアルバムの色で</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">全幅のカバーでは使えません（バナーに隠れます）</string>
+    <string name="harvest">収穫</string>
+    <string name="holiday">ホリデー</string>
+    <string name="harvest_note">舞い落ちる葉、七面鳥、パイ、かぼちゃ。11月のために</string>
+    <string name="holiday_note">雪、ツリー、プレゼント、キャンディケイン。12月のために</string>
+    <string name="for_the_season">季節のルック: %1$s</string>
+    <string name="season_info">今月だけの限定です。月が終わると、Prism は前のルックに戻ります。</string>
+    <string name="season_over_back_to">%1$s は終わりました: %2$s に戻します</string>
+    <string name="season_over_backgrounds">%1$s は終わりました: 背景をしまいました</string>
+    <string name="holiday_mode">ホリデーモード</string>
+    <string name="holiday_mode_harvest">感謝祭のホリデーモードをオンにしますか？音楽の後ろに舞い落ちる葉、七面鳥、パイ、ひょうたんが並び、Prism が秋の色になります。12月1日にいつものルックに戻ります。</string>
+    <string name="holiday_mode_holiday">クリスマスのホリデーモードをオンにしますか？音楽の後ろに雪、ツリー、オーナメント、プレゼントが並び、Prism が赤、緑、金になります。1月1日にいつものルックに戻ります。</string>
 </resources>

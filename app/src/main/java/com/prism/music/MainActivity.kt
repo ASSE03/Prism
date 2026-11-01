@@ -856,6 +856,30 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 tour?.let { plan ->
                     com.prism.music.ui.tour.TourOverlay(plan, onOpen = { r -> playerOpen = false; navigator.go(r) }, onDone = { tour = null })
                 }
+
+                // Holiday Mode (1.8.0): once a season, the first time Prism opens in its month after setting up and the
+                // tour; never over the welcome screen, the tour, the player or another question.
+                var seasonAsk by remember { mutableStateOf<com.prism.music.data.looks.Season?>(null) }
+                val lookPending by c.looks.pending.collectAsState()
+                val blendPending by c.blends.pending.collectAsState()
+                val clear = showChrome && tour == null && !playerOpen && customizing == null && lookPending == null && blendPending == null
+                LaunchedEffect(clear) {
+                    if (!clear || seasonAsk != null) return@LaunchedEffect
+                    kotlinx.coroutines.delay(1_500) // after the tour would have come up
+                    if (com.prism.music.ui.tour.pendingTour(context, c.returningUser == true) != null) return@LaunchedEffect
+                    val today = com.prism.music.data.looks.Seasons.today()
+                    val now = c.settings.current
+                    val onLook = com.prism.music.data.looks.Seasons.current(today)?.let { com.prism.music.data.looks.BuiltInLooks.of(it.lookId) }
+                        ?.takeIf { kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { c.looks.isOn(it) } }?.id
+                    seasonAsk = com.prism.music.data.looks.SeasonPrompt.due(today, com.prism.music.data.looks.SeasonPrompt.asked(context), now.onboarded || now.isLoggedIn, onLook)
+                }
+                seasonAsk?.let { season ->
+                    com.prism.music.ui.screens.HolidayModeDialog(season) { yes ->
+                        com.prism.music.data.looks.SeasonPrompt.markAsked(context, season, com.prism.music.data.looks.Seasons.today())
+                        seasonAsk = null
+                        if (yes) com.prism.music.data.looks.BuiltInLooks.of(season.lookId)?.let { look -> c.scope.launch { c.looks.apply(look) } }
+                    }
+                }
             }
         }
     }

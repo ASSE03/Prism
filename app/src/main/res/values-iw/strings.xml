@@ -3999,4 +3999,15 @@
     <string name="tour_1792_gestures">מחוות הנגן גם סביב הפקדים</string>
     <string name="tour_1792_colors">התקדמות הנגן המוקטן בצבע ההדגשה שלך, השיר שמתנגן בצבע האלבום</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">לא עם עטיפה מקצה לקצה: הבאנר מכסה אותה</string>
+    <string name="harvest">קציר</string>
+    <string name="holiday">חגים</string>
+    <string name="harvest_note">עלים נושרים, תרנגול הודו, פשטידות ודלעות, לנובמבר</string>
+    <string name="holiday_note">שלג, עצים, מתנות וממתקי מקל, לדצמבר</string>
+    <string name="for_the_season">לעונה: %1$s</string>
+    <string name="season_info">לחודש הזה בלבד. כשהוא נגמר, Prism חוזר למראה שהיה לך קודם.</string>
+    <string name="season_over_back_to">%1$s הסתיים: חזרה אל %2$s</string>
+    <string name="season_over_backgrounds">%1$s הסתיים: הרקע שלו הוסר</string>
+    <string name="holiday_mode">מצב חג</string>
+    <string name="holiday_mode_harvest">להפעיל מצב חג לחג ההודיה? Prism מתלבש בצבעי סתיו עם עלים נושרים, תרנגולי הודו, פשטידות ודלעות מאחורי המוזיקה שלך. המראה שלך חוזר ב־1 בדצמבר.</string>
+    <string name="holiday_mode_holiday">להפעיל מצב חג לחג המולד? Prism נצבע באדום, ירוק וזהב, עם שלג, עצים, קישוטים ומתנות מאחורי המוזיקה שלך. המראה שלך חוזר ב־1 בינואר.</string>
 </resources>

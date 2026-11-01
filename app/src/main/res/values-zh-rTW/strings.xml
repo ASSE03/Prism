@@ -3899,4 +3899,15 @@
     <string name="tour_1792_gestures">控制按鈕周圍也能用的播放器手勢</string>
     <string name="tour_1792_colors">迷你播放器進度使用你的強調色，正在播放的歌曲使用專輯顏色</string>
     <string name="not_with_full_bleed_artwork_the_banner_covers_it">全寬封面時無效：橫幅會遮住它</string>
+    <string name="harvest">豐收</string>
+    <string name="holiday">節日</string>
+    <string name="harvest_note">飄落的樹葉、火雞、派和南瓜，獻給十一月</string>
+    <string name="holiday_note">雪、聖誕樹、禮物和拐杖糖，獻給十二月</string>
+    <string name="for_the_season">應景風格：%1$s</string>
+    <string name="season_info">僅限本月。月份結束後，Prism 會回到你之前的風格。</string>
+    <string name="season_over_back_to">%1$s 已結束：回到 %2$s</string>
+    <string name="season_over_backgrounds">%1$s 已結束：它的背景已收起</string>
+    <string name="holiday_mode">節日模式</string>
+    <string name="holiday_mode_harvest">為感恩節開啟節日模式嗎？Prism 會換上秋天的顏色，在你的音樂背後飄落樹葉，擺上火雞、派和葫蘆。你自己的風格會在 12 月 1 日回來。</string>
+    <string name="holiday_mode_holiday">為聖誕節開啟節日模式嗎？Prism 會換上紅、綠、金三色，在你的音樂背後下雪，擺上聖誕樹、掛飾和禮物。你自己的風格會在 1 月 1 日回來。</string>
 </resources>
