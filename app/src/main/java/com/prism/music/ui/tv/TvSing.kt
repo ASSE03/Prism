@@ -143,27 +143,36 @@ fun TvSingPage(nav: TvNav) {
         c.sing.prepare(listOf(s) + queue.drop(at + 1).take(1), c.player.position)
     }
     val state = rememberLyricsState(s)
-    val clock = rememberLyricClock(now.playing)
+    // Always running (it idles while paused): a seek while paused still moves the lines.
+    val clock = rememberLyricClock(true)
     val accent = rememberTvAccent(now.art)
     val lines = state.lines
     val current by remember(lines) { derivedStateOf { CarLyricsCard.lineAt(lines, clock.value).coerceAtLeast(0) } }
     val progress by c.sing.progress.collectAsState()
     val problem by c.sing.problem.collectAsState()
-    val status = tvSingStatus(engineMissing, progress[s.id], c.sing.store.complete(s.id), problem)
+    val method by c.sing.method.collectAsState()
+    // What Sing has on disk for the song (its files and their notes), read off the main thread and only when that can
+    // have changed (the page redraws twice a second as the song plays).
+    val disk by androidx.compose.runtime.produceState(TvSingDisk(), s.id, progress[s.id], method) {
+        value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { TvSingDisk(c.sing.store.complete(s.id), c.sing.status(s.id)) }
+    }
+    val status = tvSingStatus(engineMissing, progress[s.id], disk.complete, problem)
     val scheme = MaterialTheme.colorScheme
-    c.sing.method.collectAsState().value
     TvLyricsPlace(
         now, lines, current, clock, state.loading, state.unavailable, state.source?.label, accent, onPlayPause = { c.player.togglePlay() },
         status = status,
         buttons = {
             // What Sing has for the song, honestly: the voice being taken out, the quick way standing in, or out.
-            TvChip(c.sing.status(s.id).words(), PrismIcons.Mic, scheme.primary, scheme.onPrimary)
+            disk.status?.let { TvChip(it.words(), PrismIcons.Mic, scheme.primary, scheme.onPrimary) }
             TvIconButton(PrismIcons.Remove, tr(R.string.tv_key_line, "−"), { c.sing.setSemitones(semitones - 1) }, Modifier.tvItem("$TAG_SING/keydown"))
             TvChip(tr(R.string.tv_key_line, if (semitones > 0) "+$semitones" else "$semitones"), null, scheme.surfaceVariant, scheme.onSurface)
             TvIconButton(PrismIcons.Add, tr(R.string.tv_key_line, "+"), { c.sing.setSemitones(semitones + 1) }, Modifier.tvItem("$TAG_SING/keyup"))
         },
     ) { ms -> c.player.seekToLyric(ms) }
 }
+
+/** What Sing has on disk for a song: all of it done ([complete]), and what that means ([status], null until read). */
+internal data class TvSingDisk(val complete: Boolean = false, val status: com.prism.music.playback.sing.Sing.Status? = null)
 
 /** What Sing's page says of the playing song: being got ready (how far), ready, or why it can't be. */
 fun tvSingStatus(engineMissing: Boolean, progress: Float?, complete: Boolean, problem: String?): String = when {

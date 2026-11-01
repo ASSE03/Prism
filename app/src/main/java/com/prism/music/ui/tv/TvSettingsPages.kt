@@ -181,6 +181,7 @@ fun TvSettingsPlace(nav: TvNav) {
 private fun TvPanelBox(screen: String, content: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit) {
     val memory = LocalTvFocusMemory.current
     remember(screen) { memory.opening(screen); true }
-    androidx.compose.runtime.CompositionLocalProvider(LocalTvScreen provides screen) { Box(Modifier.fillMaxSize(), content = content) }
+    // Focus stays in the panel (Settings' rows behind it can't be reached and pressed unseen).
+    androidx.compose.runtime.CompositionLocalProvider(LocalTvScreen provides screen) { Box(Modifier.fillMaxSize().tvHoldsFocus(), content = content) }
 }
 

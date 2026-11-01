@@ -75,6 +75,19 @@ class TvLinkTests {
         return HLink(Socket(InetAddress.getLoopbackAddress(), port)).use { HandoffPeer(phone).request(it, request) { code } }
     }
 
+    /**
+     * The release check (1.8.0): a song's link opened on the TV showed "One moment" and went back, the song never put
+     * on (its play was cancelled halfway). Now the player opens on it.
+     */
+    @Test fun aSongLinkOpensThePlayerOnIt() {
+        val id = "dQw4w9WgXcQ"
+        val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://youtu.be/$id"))
+            .setClass(Fixture.context, TvActivity::class.java)
+        androidx.test.core.app.ActivityScenario.launch<TvActivity>(intent)
+        val player = Fixture.container.player
+        waitFor(20_000) { player.currentSong.value?.id == id }
+    }
+
     @Test fun aPhonePairsSignsInAndIsTheRemote() {
         TvFixture.launch()
         val handoff = Fixture.container.handoff

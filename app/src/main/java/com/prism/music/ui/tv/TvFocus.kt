@@ -9,6 +9,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.foundation.focusGroup
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
@@ -31,6 +33,23 @@ private const val ENTRY_STEP_MS = 50L
  * Takes focus when it first appears (the item a screen opens on). Asks again for a moment if it isn't placed yet;
  * once it has had focus it never takes it back (the listener has moved on).
  */
+/**
+ * Focus coming into a group by the D-pad (not given to one of its items: a page coming back puts it on the item left
+ * there, and a group's own way in mustn't take it elsewhere, the release check).
+ */
+fun androidx.compose.ui.focus.FocusEnterExitScope.byDpad(): Boolean = requestedFocusDirection.let {
+    it == androidx.compose.ui.focus.FocusDirection.Left || it == androidx.compose.ui.focus.FocusDirection.Right ||
+        it == androidx.compose.ui.focus.FocusDirection.Up || it == androidx.compose.ui.focus.FocusDirection.Down
+}
+
+/**
+ * A panel or card over a page: the D-pad keeps focus inside it (the release check: Left, Up or Down could leave it for a
+ * control hidden behind it, which OK then pressed). It's closed with Back, or its own way.
+ */
+fun Modifier.tvHoldsFocus(): Modifier = this
+    .then(Modifier.focusProperties { onExit = { cancelFocusChange() } })
+    .then(Modifier.focusGroup())
+
 @Composable
 fun Modifier.entryFocus(key: Any? = Unit): Modifier {
     val requester = remember { FocusRequester() }
