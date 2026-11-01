@@ -115,6 +115,9 @@ fun AmbientHost(onTv: Boolean, content: (@Composable () -> Unit)? = null) {
     androidx.compose.runtime.SideEffect { Idle.ambient = shown }
     androidx.compose.runtime.DisposableEffect(Unit) { onDispose { Idle.ambient = false } }
     if (!shown || !onTv) content?.invoke()
+    // Back never reaches the activity's keys (Android's own back handling, 13 and later): while the ambient screen
+    // shows it only wakes it, ahead of the pages' Back (registered after theirs, so it's asked first).
+    if (shown && onTv) androidx.activity.compose.BackHandler { Idle.touched() }
     if (shown) {
         val ambient: @Composable () -> Unit = {
             TvTheme(settings) {
