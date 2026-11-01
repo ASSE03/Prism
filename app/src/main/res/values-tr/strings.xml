@@ -4128,4 +4128,5 @@
     <string name="tv_search_how">Kumandayla yazmak için arama satırında OK\'e bas.</string>
     <string name="tv_search_voice_how">Ya da yanındaki mikrofonu seç ve bir şarkı, sanatçı veya albüm söyle.</string>
     <string name="tv_pair_step_find">Telefonunda, Prism\'de kontrollerin altındaki cihaz satırına dokun (ya da Ayarlar → Hoparlörler, TV\'ler ve tarayıcı\'yı aç) ve %1$s seç</string>
+    <string name="tv_home_rows_later">Ana sayfanın satırları, ana sayfa açıldıktan sonra burada görünür</string>
 </resources>

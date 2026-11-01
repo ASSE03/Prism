@@ -4078,4 +4078,5 @@
     <string name="tv_search_how">在搜索栏上按 OK，即可用遥控器输入。</string>
     <string name="tv_search_voice_how">或者选择旁边的麦克风，说出歌曲、艺人或专辑名称。</string>
     <string name="tv_pair_step_find">在手机上的 Prism 中，点按控制按钮下方的设备栏（或打开“设置”→“音箱、电视和浏览器”），然后选择 %1$s</string>
+    <string name="tv_home_rows_later">打开过首页后，首页的各行会显示在这里</string>
 </resources>

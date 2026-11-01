@@ -4128,4 +4128,5 @@
     <string name="tv_search_how">برای تایپ با کنترل، روی خط جست‌وجو OK را بزنید.</string>
     <string name="tv_search_voice_how">یا میکروفون کنارش را انتخاب کنید و نام آهنگ، هنرمند یا آلبوم را بگویید.</string>
     <string name="tv_pair_step_find">در تلفنتان، در Prism، خط دستگاه زیر کنترل‌ها را بزنید (یا تنظیمات ← بلندگوها، تلویزیون‌ها و مرورگر را باز کنید) و %1$s را انتخاب کنید</string>
+    <string name="tv_home_rows_later">ردیف‌های صفحه اصلی پس از باز شدن صفحه اصلی اینجا نشان داده می‌شوند</string>
 </resources>

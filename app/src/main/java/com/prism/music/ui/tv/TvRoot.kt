@@ -120,6 +120,8 @@ fun TvRoot(link: kotlinx.coroutines.flow.MutableStateFlow<android.net.Uri?> = re
         val holder = rememberSaveableStateHolder()
         val top = stack.lastOrNull()
         val pick: (TvSection) -> Unit = { section = it; memory.opening("section:${it.name}") }
+        // The song only (not its progress, which moves twice a second): the shell redraws when it changes, not as it plays.
+        val playingNow by c.player.currentSong.collectAsState()
         // A link the TV was opened with (a YouTube Music link, the media notification): its song plays, or its page opens.
         val pending by link.collectAsState()
         androidx.compose.runtime.LaunchedEffect(pending) {
@@ -134,9 +136,11 @@ fun TvRoot(link: kotlinx.coroutines.flow.MutableStateFlow<android.net.Uri?> = re
         // Over everything, when the room has gone quiet while music plays; nothing is drawn under it meanwhile (no
         // lyrics or progress moving unseen), and each page comes back as it was.
         CompositionLocalProvider(LocalTvFocusMemory provides memory) { AmbientHost(onTv = true) { Box(Modifier.fillMaxSize()) {
+            // Prism's Aura behind every place and page: the frost of what's playing (or played last).
+            TvAura()
             // The side navigation stays put while the places change beside it (focus moves from it into the new place);
             // each place keeps its own scroll and focus.
-            if (top == null) TvNavFrame(section, pick, focusNav = false, now = rememberTvNow(c), onNowPlaying = { nav.go(TvRoute.Player) }) {
+            if (top == null) TvNavFrame(section, pick, focusNav = false, now = playingNow?.let { it.title to it.thumbnail }, onNowPlaying = { nav.go(TvRoute.Player) }) {
                 holder.SaveableStateProvider(sectionKey) {
                     CompositionLocalProvider(LocalTvScreen provides sectionKey) { TvPlace(section, nav, pick) }
                 }
@@ -169,19 +173,35 @@ fun TvNavFrame(
     section: TvSection,
     onSection: (TvSection) -> Unit,
     focusNav: Boolean,
-    now: TvNow? = null,
+    /** What's playing (its title and cover), for the navigation's "Now playing"; null with nothing lined up. */
+    now: Pair<String, String?>? = null,
     onNowPlaying: () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     // Entering the navigation (Left from a place) lands on the place being shown.
     val current = remember { androidx.compose.ui.focus.FocusRequester() }
-    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-        NavigationDrawer(
+    val scheme = MaterialTheme.colorScheme
+    val light = tvLight()
+    val itemColors = androidx.tv.material3.NavigationDrawerItemDefaults.colors(
+        containerColor = androidx.compose.ui.graphics.Color.Transparent, contentColor = scheme.onSurfaceVariant,
+        selectedContainerColor = TvGlassFill, selectedContentColor = scheme.onSurface,
+        focusedContainerColor = scheme.onSurface, focusedContentColor = scheme.surface,
+        focusedSelectedContainerColor = scheme.onSurface, focusedSelectedContentColor = scheme.surface,
+    )
+    val itemBorder = androidx.tv.material3.NavigationDrawerItemDefaults.border(focusedBorder = tvFocusBorder(androidx.compose.foundation.shape.CircleShape, TV_RING_THIN))
+    Box(Modifier.fillMaxSize()) {
+        // Over the place (a scrim behind it while open), not beside it: the place isn't laid out again on every frame of
+        // the navigation opening and closing.
+        androidx.tv.material3.ModalNavigationDrawer(
+            scrimBrush = androidx.compose.ui.graphics.SolidColor(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.45f)),
             drawerContent = {
                 // Its own focus key: moving through it never counts as focus inside a place.
                 CompositionLocalProvider(LocalTvScreen provides NAV_SCREEN) {
                     Column(
-                        Modifier.fillMaxHeight().padding(vertical = TV_SAFE_V, horizontal = 12.dp).selectableGroup()
+                        // A strip of darker glass, so the places' names read over any cover's frost.
+                        Modifier.fillMaxHeight()
+                            .background(androidx.compose.ui.graphics.Brush.horizontalGradient(listOf(TvPanelFill, TvPanelFill.copy(alpha = 0.35f))))
+                            .padding(vertical = TV_SAFE_V, horizontal = 12.dp).selectableGroup()
                             .focusRestorerTo(current).testTag(TAG_NAV),
                         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
                     ) {
@@ -190,7 +210,11 @@ fun TvNavFrame(
                                 selected = section == s,
                                 onClick = { onSection(s) },
                                 leadingContent = { Icon(s.icon(), contentDescription = null) },
+                                colors = itemColors,
+                                border = itemBorder,
+                                // Where you are: the split light's mark at its edge (as the phone's tab bar).
                                 modifier = (if (s == section) Modifier.focusRequester(current) else Modifier)
+                                    .tvCurrentMark(s == section, light)
                                     .tvItem("$TAG_NAV/${s.name}", entry = focusNav && s == section),
                             ) { Text(s.label()) }
                         }
@@ -199,19 +223,22 @@ fun TvNavFrame(
                             NavigationDrawerItem(
                                 selected = false,
                                 onClick = onNowPlaying,
+                                colors = itemColors,
+                                border = itemBorder,
                                 leadingContent = {
                                     com.prism.music.ui.components.Artwork(
-                                        now.art, Modifier.size(28.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(6.dp), size = 96,
+                                        now.second, Modifier.size(28.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(6.dp), size = 96,
                                     )
                                 },
-                                supportingContent = { Text(now.title, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) },
+                                supportingContent = { Text(now.first, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) },
                                 modifier = Modifier.tvItem(TAG_NAV_NOW),
                             ) { Text(tr(R.string.now_playing), maxLines = 1) }
                         }
                     }
                 }
             },
-            content = { CompositionLocalProvider(LocalTvNavFocus provides current) { content() } },
+            // The place starts beside the closed navigation's icons.
+            content = { Box(Modifier.fillMaxSize().padding(start = TV_RAIL)) { CompositionLocalProvider(LocalTvNavFocus provides current) { content() } } },
         )
     }
 }
@@ -237,6 +264,8 @@ private fun TvPlace(section: TvSection, nav: TvNav, onSection: (TvSection) -> Un
 }
 
 private val TV_SAFE_V = 27.dp
+/** The closed navigation's width (its icons and their margins): where the places start. */
+private val TV_RAIL = 80.dp
 /** Whether the TV's welcome (sign in with the phone) shows now: once per TV, and only signed out. */
 fun tvWelcomeDue(welcomed: Boolean, signedIn: Boolean): Boolean = !welcomed && !signedIn
 

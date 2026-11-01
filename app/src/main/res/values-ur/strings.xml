@@ -4128,4 +4128,5 @@
     <string name="tv_search_how">ریموٹ سے ٹائپ کرنے کے لیے سرچ لائن پر OK دبائیں۔</string>
     <string name="tv_search_voice_how">یا ساتھ والا مائیکروفون چنیں اور کسی گانے، فنکار یا البم کا نام بولیں۔</string>
     <string name="tv_pair_step_find">اپنے فون پر، Prism میں، کنٹرولز کے نیچے ڈیوائس والی لائن پر ٹیپ کریں (یا ترتیبات ← اسپیکرز، TVs اور براؤزر کھولیں) اور %1$s چنیں</string>
+    <string name="tv_home_rows_later">ہوم کھلنے کے بعد اس کی قطاریں یہاں دکھائی دیں گی</string>
 </resources>

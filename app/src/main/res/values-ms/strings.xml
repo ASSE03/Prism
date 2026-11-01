@@ -4078,4 +4078,5 @@
     <string name="tv_search_how">Tekan OK pada baris carian untuk menaip dengan alat kawalan jauh.</string>
     <string name="tv_search_voice_how">Atau pilih mikrofon di sebelahnya dan sebut lagu, artis atau album.</string>
     <string name="tv_pair_step_find">Pada telefon anda, dalam Prism, ketik baris peranti di bawah kawalan (atau buka Tetapan → Pembesar suara, TV &amp; pelayar) dan pilih %1$s</string>
+    <string name="tv_home_rows_later">Baris Laman Utama dipaparkan di sini selepas Laman Utama dibuka</string>
 </resources>

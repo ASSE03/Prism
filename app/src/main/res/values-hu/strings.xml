@@ -4128,4 +4128,5 @@
     <string name="tv_search_how">Nyomd meg az OK-t a keresősoron, és gépelj a távirányítóval.</string>
     <string name="tv_search_voice_how">Vagy válaszd a mellette lévő mikrofont, és mondj egy dalt, előadót vagy albumot.</string>
     <string name="tv_pair_step_find">A telefonodon a Prismben koppints a vezérlők alatti eszközsorra (vagy nyisd meg: Beállítások → Hangszórók, tévék és böngésző), és válaszd ki: %1$s</string>
+    <string name="tv_home_rows_later">A Kezdőlap sorai itt jelennek meg, amint a Kezdőlap megnyílt</string>
 </resources>

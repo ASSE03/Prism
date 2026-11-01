@@ -4128,4 +4128,5 @@
     <string name="tv_search_how">Druk op OK op de zoekregel om met de afstandsbediening te typen.</string>
     <string name="tv_search_voice_how">Of kies de microfoon ernaast en zeg een nummer, artiest of album.</string>
     <string name="tv_pair_step_find">Tik op je telefoon in Prism op de apparaatregel onder de bediening (of open Instellingen → Speakers, tv\'s &amp; browser) en kies %1$s</string>
+    <string name="tv_home_rows_later">De rijen van Home verschijnen hier zodra Home is geopend</string>
 </resources>

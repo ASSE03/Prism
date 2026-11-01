@@ -46,6 +46,8 @@ class TvSettingsTests {
             if (compose.onAllNodes(inNav and isFocused(), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()) break
             TvFixture.left(); Thread.sleep(300)
         }
+        // The navigation opens on the place shown: up to its top (Home), then down to [section].
+        repeat(TvSection.entries.size) { TvFixture.up(); Thread.sleep(150) }
         repeat(section.ordinal) { TvFixture.down(); Thread.sleep(200) }
         compose.awaitFocusOn(hasTestTag("$TAG_NAV/${section.name}"))
         TvFixture.ok()
@@ -115,6 +117,37 @@ class TvSettingsTests {
         compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/setting/0"))
         TvFixture.ok()
         compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag(com.prism.music.ui.tv.TAG_PAIR), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+    }
+
+    /**
+     * The owner's second round (1.8.0): Home's rows are customized from the TV's Settings, in the phone's own Home
+     * layout (so the phone agrees): a row hidden there is gone from Home.
+     */
+    @Test fun aHomeRowHiddenInSettingsIsGoneFromHome() {
+        Fixture.ready()
+        val c = Fixture.container
+        val before = c.settings.current.homeLayout
+        try {
+            TvFixture.launch()
+            compose.waitUntil(30_000) { com.prism.music.ui.tv.TvHomeRowsSeen.rows.isNotEmpty() }
+            val (key, title) = com.prism.music.ui.tv.TvHomeRowsSeen.rows.first()
+            goTo(TvSection.SETTINGS)
+            compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/group/0"), 10_000)
+            // Customize Home: the seventh group.
+            for (g in 1..6) { TvFixture.down(); compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/group/$g")) }
+            TvFixture.right()
+            compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/setting/0"))
+            TvFixture.ok()
+            compose.awaitFocusOn(hasTestTag("${com.prism.music.ui.tv.TAG_ACTIONS}/0"), 10_000)
+            TvFixture.ok()
+            compose.waitUntil(10_000) { com.prism.music.ui.tv.hiddenIn(c.settings.current.homeLayout, key) }
+            goTo(TvSection.HOME)
+            compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag(TAG_HOME), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+            Thread.sleep(1_000)
+            assertTrue("\"$title\" still on Home", compose.onAllNodes(androidx.compose.ui.test.hasText(title), useUnmergedTree = true).fetchSemanticsNodes().isEmpty())
+        } finally {
+            c.settings.setHomeLayout(before)
+        }
     }
 
     /** The review (1.8.0): signing out on a (shared) TV takes the account's library with it, as on the phone. */

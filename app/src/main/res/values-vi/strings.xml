@@ -4078,4 +4078,5 @@
     <string name="tv_search_how">Nhấn OK trên dòng tìm kiếm để nhập bằng điều khiển.</string>
     <string name="tv_search_voice_how">Hoặc chọn micrô bên cạnh và nói tên bài hát, nghệ sĩ hoặc album.</string>
     <string name="tv_pair_step_find">Trên điện thoại, trong Prism, nhấn dòng thiết bị dưới các nút điều khiển (hoặc mở Cài đặt → Loa, TV &amp; trình duyệt) rồi chọn %1$s</string>
+    <string name="tv_home_rows_later">Các hàng của Trang chủ hiện ở đây sau khi Trang chủ đã mở</string>
 </resources>

@@ -59,6 +59,9 @@ fun TvSettingsPlace(nav: TvNav) {
     var group by rememberSaveable { mutableIntStateOf(0) }
     var choosing by remember { mutableStateOf<Pair<String, List<Pair<String, () -> Unit>>>?>(null) }
     var info by remember { mutableStateOf<TvSetting?>(null) }
+    var pickingLight by remember { mutableStateOf(false) }
+    // Home's rows as Home last showed them (moved here, they're moved there too).
+    var homeRows by remember { mutableStateOf(TvHomeRowsSeen.rows) }
     val say: (String) -> Unit = { Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
     // For an answer that may come after Settings has closed.
     val app = context.applicationContext
@@ -110,8 +113,34 @@ fun TvSettingsPlace(nav: TvNav) {
                 TvSettingAction.Choose(AMBIENT_MINUTES.map { m -> tr(R.string.tv_ambient_after, m) to { c.settings.setTvAmbientMinutes(m) } } + (tr(R.string.never) to { c.settings.setTvAmbientMinutes(0) })),
             ),
         ),
+        // Home's rows: shown or hidden, and their order (the phone's Customize Home keeps the same layout).
+        TvSettingGroup(tr(R.string.customize_home), PrismIcons.Home, emptyList()) to homeRows.let { seen ->
+            if (seen.isEmpty()) listOf(TvSettingRow(TvSetting(tr(R.string.tv_home_rows_later)), TvSettingAction.Run {}))
+            else seen.mapIndexed { i, (key, title) ->
+                val shown = !hiddenIn(settings.homeLayout, key)
+                val move: (Int) -> Unit = { by ->
+                    val order = moved(seen, i, by)
+                    homeRows = order
+                    c.settings.setHomeLayout(layoutInOrder(settings.homeLayout, order))
+                }
+                TvSettingRow(
+                    TvSetting(title, on = shown),
+                    TvSettingAction.Choose(
+                        listOfNotNull(
+                            tr(if (shown) R.string.hide else R.string.show) to { c.settings.setHomeLayout(layoutWithShown(settings.homeLayout, key, title, !shown)) },
+                            (tr(R.string.move_up) to { move(-1) }).takeIf { i > 0 },
+                            (tr(R.string.move_down) to { move(1) }).takeIf { i < seen.lastIndex },
+                        ),
+                    ),
+                )
+            }
+        },
         TvSettingGroup(tr(R.string.text_size), PrismIcons.Visible, emptyList()) to listOf(
             TvSettingRow(TvSetting(tr(R.string.text_size), percent(settings.textScale)), TvSettingAction.Choose(SIZES.map { v -> percent(v) to { c.settings.setTextScale(v) } })),
+        ),
+        // The highlights' light: Spectrum or White light (monochrome), the phone's own Color setting.
+        TvSettingGroup(tr(R.string.colors), PrismIcons.Palette, emptyList()) to listOf(
+            TvSettingRow(TvSetting(tr(R.string.colors), settings.lightStyle.label), TvSettingAction.Run { pickingLight = true }),
         ),
         TvSettingGroup(tr(R.string.about_3), PrismIcons.Info, emptyList()) to listOf(
             TvSettingRow(TvSetting(tr(R.string.tv_version, BuildConfig.VERSION_NAME)), TvSettingAction.Run {}),
@@ -138,6 +167,10 @@ fun TvSettingsPlace(nav: TvNav) {
             TvPanelBox(LocalTvScreen.current + "/choice") {
                 TvActionPanel(title, options.map { (label, pick) -> TvAction(label, PrismIcons.Check) { pick(); choosing = null } })
             }
+        }
+        if (pickingLight) {
+            BackHandler { pickingLight = false }
+            TvPanelBox(LocalTvScreen.current + "/light") { TvLightChoice(settings.lightStyle) { c.settings.setLightStyle(it); pickingLight = false } }
         }
         info?.let { s ->
             BackHandler { info = null }

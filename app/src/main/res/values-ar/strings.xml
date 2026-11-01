@@ -4328,4 +4328,5 @@
     <string name="tv_search_how">اضغط OK على سطر البحث لتكتب باستخدام جهاز التحكم.</string>
     <string name="tv_search_voice_how">أو اختر الميكروفون بجانبه وقل اسم أغنية أو فنان أو ألبوم.</string>
     <string name="tv_pair_step_find">على هاتفك، في Prism، انقر على سطر الجهاز أسفل عناصر التحكم (أو افتح الإعدادات ← مكبرات الصوت والتلفزيون والمتصفح) واختر %1$s</string>
+    <string name="tv_home_rows_later">تظهر صفوف الصفحة الرئيسية هنا بعد فتحها</string>
 </resources>

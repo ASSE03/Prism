@@ -4078,4 +4078,5 @@
     <string name="tv_search_how">検索欄で OK を押すと、リモコンで入力できます。</string>
     <string name="tv_search_voice_how">または横のマイクを選んで、曲名、アーティスト、アルバムを話してください。</string>
     <string name="tv_pair_step_find">スマートフォンの Prism で、コントロールの下のデバイス表示をタップし（または［設定］→［スピーカー、テレビ、ブラウザ］を開き）、%1$s を選びます</string>
+    <string name="tv_home_rows_later">ホームを一度開くと、ホームの行がここに表示されます</string>
 </resources>
