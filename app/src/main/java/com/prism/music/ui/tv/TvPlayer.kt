@@ -120,57 +120,6 @@ fun TvNowPlayingScreen(
 }
 
 /**
- * Lyrics (TV): the song's lyrics large across the screen, the sung line in the listener's lyrics style (all six, word
- * by word where the lyrics have it), the cover and title small in the corner. The lyrics take focus as one piece:
- * Up/Down pick a line (it lights up), OK plays from there, Back returns to the player. Media keys and OK on the sung
- * line pause and play.
- */
-@Composable
-fun TvLyricsScreen(
-    now: TvNow,
-    lyrics: TvLyrics,
-    clock: State<Long>,
-    modifier: Modifier = Modifier,
-    picked: Int? = null,
-    accent: Color? = null,
-) {
-    val scheme = MaterialTheme.colorScheme
-    val look = rememberLyricsLook(LocalAppSettings.current, now.art)
-    // Prism's lyrics font when one is picked, else the app's.
-    // Settings → Lyrics → Lyrics size (on the TV).
-    val scale = LocalAppSettings.current.tv.lyricsScale
-    val big = MaterialTheme.typography.displaySmall.copy(fontSize = 40.sp * scale, lineHeight = 52.sp * scale, fontWeight = FontWeight.SemiBold)
-        .let { s -> com.prism.music.ui.theme.LocalLyricsFont.current?.let { s.copy(fontFamily = it) } ?: s }
-    Box(modifier.fillMaxSize().testTag(TAG_LYRICS)) {
-        TvMeshBackdrop(now.art)
-        Row(Modifier.padding(TvSafe), verticalAlignment = Alignment.CenterVertically) {
-            Artwork(now.art, Modifier.size(56.dp), shape = RoundedCornerShape(8.dp), size = 160)
-            Spacer(Modifier.width(16.dp))
-            Column {
-                Text(now.title, style = MaterialTheme.typography.titleMedium, color = scheme.onBackground, maxLines = 1)
-                Text(now.artist, style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 1)
-            }
-        }
-        Column(
-            Modifier.fillMaxSize().padding(start = 96.dp, end = 160.dp, top = 120.dp, bottom = 96.dp).tvItem("$TAG_LYRICS/lines", entry = true).focusable(),
-            verticalArrangement = Arrangement.spacedBy(18.dp),
-        ) {
-            // The line before the sung one, the sung one, and what comes next.
-            val from = ((picked ?: lyrics.current) - 1).coerceAtLeast(0)
-            for (i in from until (from + 5).coerceAtMost(lyrics.lines.size)) {
-                val line = lyrics.lines[i]
-                when {
-                    i == lyrics.current -> SungLine(line, clock, big, look, axis = null)
-                    i == picked -> Text(line.text, style = big, color = scheme.onBackground, modifier = Modifier.background(scheme.onBackground.copy(alpha = 0.12f), RoundedCornerShape(10.dp)).padding(horizontal = 10.dp))
-                    else -> Text(line.text, style = big, color = scheme.onBackground.copy(alpha = if (i < lyrics.current) 0.32f else 0.5f))
-                }
-            }
-        }
-        TvProgress(now.fraction, now.played, now.total, Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(TvSafe))
-    }
-}
-
-/**
  * The queue (TV): a panel over the player's right side, the playing song first, the rest under "Up next". Focus
  * opens on the next song; OK plays it, holding OK opens its menu (play next, remove); Back or Left closes the panel.
  */
@@ -248,55 +197,6 @@ fun BoxScope.TvActionPanel(title: String, actions: List<TvAction>, modifier: Mod
             itemsIndexed(actions) { i, a -> TvButton(a.label, a.onClick, Modifier.fillMaxWidth().tvItem("$TAG_ACTIONS/$i", entry = i == 0), icon = a.icon) }
         }
     }
-}
-
-/**
- * The lyrics page's states around [TvLyricsScreen]: looking for lyrics, none found, or the lines. The lines take the
- * remote: ↑ ↓ pick a line (it lights up), OK plays from the picked line (or pauses and plays with none picked).
- */
-@Composable
-fun TvLyricsPlace(
-    now: TvNow,
-    lines: List<com.prism.music.data.lyrics.LyricLine>,
-    current: Int,
-    clock: State<Long>,
-    loading: Boolean,
-    unavailable: Boolean,
-    source: String?,
-    accent: Color?,
-    onPlayPause: () -> Unit = {},
-    onSeek: (Long) -> Unit,
-) {
-    val scheme = MaterialTheme.colorScheme
-    var picked by androidx.compose.runtime.remember(lines) { androidx.compose.runtime.mutableStateOf<Int?>(null) }
-    if (lines.isEmpty()) {
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            TvMeshBackdrop(now.art)
-            Text(
-                tr(if (loading || !unavailable) R.string.looking_for_lyrics else R.string.no_lyrics_found_for_this_song),
-                // The lines' own tag: when they come (or go, as the song changes), focus stays on the lyrics.
-                Modifier.tvItem("$TAG_LYRICS/lines", entry = true).focusable(),
-                style = MaterialTheme.typography.headlineMedium, color = scheme.onSurfaceVariant,
-            )
-        }
-        return
-    }
-    TvLyricsScreen(
-        now, TvLyrics(lines, current, clock.value, source), clock, picked = picked, accent = accent,
-        modifier = Modifier.onPreviewKeyEvent { e ->
-            if (e.type != androidx.compose.ui.input.key.KeyEventType.KeyDown) return@onPreviewKeyEvent false
-            when (e.key) {
-                androidx.compose.ui.input.key.Key.DirectionUp -> { picked = ((picked ?: current) - 1).coerceAtLeast(0); true }
-                androidx.compose.ui.input.key.Key.DirectionDown -> { picked = ((picked ?: current) + 1).coerceAtMost(lines.lastIndex); true }
-                androidx.compose.ui.input.key.Key.DirectionCenter, androidx.compose.ui.input.key.Key.Enter -> {
-                    val p = picked
-                    if (p != null) { onSeek(lines[p].timeMs); picked = null } else onPlayPause()
-                    true
-                }
-                else -> false
-            }
-        },
-    )
 }
 
 const val TAG_ACTIONS = "tv_actions"
