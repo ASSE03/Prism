@@ -4103,6 +4103,7 @@
     <string name="tv_update_note">Installalo ora: Android chiede il permesso una volta sola</string>
     <string name="tv_up_next_line">A seguire: %1$s</string>
     <string name="tv_seek_line">Posizione nel brano: %1$s di %2$s</string>
+    <string name="tv_video_failed">Il video musicale non si è caricato, quindi continua il brano</string>
     <string name="tv_playing_from">In riproduzione da %1$s</string>
     <string name="tv_vocals_out">Senza voce</string>
     <string name="tv_key_line">Tonalità: %1$s</string>

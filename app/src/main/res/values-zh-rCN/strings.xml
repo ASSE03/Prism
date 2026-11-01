@@ -4003,6 +4003,7 @@
     <string name="tv_update_note">立即安装：Android 只会请求一次许可</string>
     <string name="tv_up_next_line">接下来：%1$s</string>
     <string name="tv_seek_line">歌曲位置：%1$s / %2$s</string>
+    <string name="tv_video_failed">音乐视频未能加载，所以继续播放歌曲</string>
     <string name="tv_playing_from">正在播放：%1$s</string>
     <string name="tv_vocals_out">去除人声</string>
     <string name="tv_key_line">调：%1$s</string>

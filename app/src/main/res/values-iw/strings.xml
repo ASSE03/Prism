@@ -4103,6 +4103,7 @@
     <string name="tv_update_note">אפשר להתקין עכשיו: Android מבקשת אישור פעם אחת בלבד</string>
     <string name="tv_up_next_line">הבא בתור: %1$s</string>
     <string name="tv_seek_line">מיקום בשיר: %1$s מתוך %2$s</string>
+    <string name="tv_video_failed">הקליפ לא נטען, ולכן השיר ממשיך להתנגן</string>
     <string name="tv_playing_from">מתנגן מתוך %1$s</string>
     <string name="tv_vocals_out">בלי שירה</string>
     <string name="tv_key_line">סולם: %1$s</string>

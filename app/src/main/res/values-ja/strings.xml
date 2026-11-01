@@ -4003,6 +4003,7 @@
     <string name="tv_update_note">今すぐインストール：Android が許可を求めるのは最初の 1 回だけです</string>
     <string name="tv_up_next_line">次の曲：%1$s</string>
     <string name="tv_seek_line">曲の位置：%1$s / %2$s</string>
+    <string name="tv_video_failed">ミュージック ビデオを読み込めなかったため、曲を再生しています</string>
     <string name="tv_playing_from">再生元：%1$s</string>
     <string name="tv_vocals_out">ボーカルなし</string>
     <string name="tv_key_line">キー：%1$s</string>

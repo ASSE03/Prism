@@ -799,6 +799,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         val song = item?.toSong()
         val changed = song?.id != _current.value?.id
         val wasLive = _current.value?.isLive == true
+        if (changed) _videoFailedFor.value = null
         _current.value = song
         _isPlaying.value = p.isPlaying
         _buffering.value = p.playbackState == Player.STATE_BUFFERING
@@ -835,7 +836,15 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
     /** Called when a music video failed to load; the button stays usable so it can be tried again. */
     internal fun onVideoFailed(songId: String) {
         _videoLoading.value = false
+        _videoFailedFor.value = songId
     }
+
+    private val _videoFailedFor = MutableStateFlow<String?>(null)
+    /**
+     * The song (playing now) whose music video didn't load, so its song plays instead; null once another song plays.
+     * The TV's video screen says so rather than showing only the cover.
+     */
+    val videoFailedFor: StateFlow<String?> = _videoFailedFor
 
     /**
      * Finds the song's music video as it starts (and warms it up), so the

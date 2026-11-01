@@ -4053,6 +4053,7 @@
     <string name="tv_update_note">همین حالا نصبش کنید: Android فقط یک بار اجازه می‌خواهد</string>
     <string name="tv_up_next_line">بعدی: %1$s</string>
     <string name="tv_seek_line">موقعیت در آهنگ: %1$s از %2$s</string>
+    <string name="tv_video_failed">موزیک‌ویدیو بارگیری نشد، پس آهنگ پخش می‌شود</string>
     <string name="tv_playing_from">در حال پخش از %1$s</string>
     <string name="tv_vocals_out">بدون صدای خواننده</string>
     <string name="tv_key_line">گام: %1$s</string>

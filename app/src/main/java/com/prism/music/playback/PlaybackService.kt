@@ -126,6 +126,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     /** The tracked play doesn't count towards taste (an excluded song, playlist or artist). */
     private var trackedExcluded = false
     private val retries = HashMap<String, Int>()
+    /** When each music video last got its streams asked for afresh after an error ([videoRetryAllowed]). */
+    private val videoRetriedAt = HashMap<String, Long>()
     private var saveJob: Job? = null
     private var extrasJob: Job? = null
 
@@ -918,12 +920,15 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // a direct link away, and the next answer comes the other way, through NewPipe); after that it falls back to
         // the song itself — never skip ahead.
         player.currentMediaItem?.videoModeId?.let { videoId ->
-            val key = "video:$videoId"
-            val tries = retries[key] ?: 0
             val parse = generateSequence(error as Throwable) { it.cause }.any { it is androidx.media3.common.ParserException }
-            if (tries < 1 && (httpCode == 403 || httpCode == 410 || parse)) {
-                retries[key] = tries + 1
-                AudioDiagnostics.log("video", "video $videoId failed (${httpCode ?: "unreadable"}): trying its streams afresh")
+            // A dropped connection or a timeout (a long seek on a slow TV, a fast skip) is worth one more go too. One
+            // go a minute per video: it used to be one per session, so a second refused link hours later (a seek far
+            // into the video) sent it back to the song for good.
+            val network = error.errorCode in PlaybackException.ERROR_CODE_IO_UNSPECIFIED..PlaybackException.ERROR_CODE_IO_READ_POSITION_OUT_OF_RANGE
+            val at = SystemClock.elapsedRealtime()
+            if (videoRetryAllowed(videoRetriedAt[videoId], at) && (httpCode == 403 || httpCode == 410 || parse || network)) {
+                videoRetriedAt[videoId] = at
+                AudioDiagnostics.log("video", "video $videoId failed (${httpCode ?: if (parse) "unreadable" else error.errorCodeName}): trying its streams afresh")
                 c.streams.invalidate(videoId, refused = true)
                 val pos = player.currentPosition
                 player.prepare()
@@ -1481,6 +1486,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             found.id ?: return if (found.lookupFailed) tr(R.string.couldn_t_reach_youtube_for_the) else tr(R.string.no_music_video_for_this_song)
         } else null
         if (player.currentMediaItemIndex != idx) return null
+        // Asked twice meanwhile (the service as the song started, and a screen showing video): the first already
+        // swapped it, so the second doesn't load it again.
+        if ((player.currentMediaItem?.videoModeId != null) == enabled) return null
         if (vid != null && failedVideos.remove(vid)) c.streams.invalidate(vid)
         // Videos often have an intro, so the same moment falls at a different time: carry the
         // listener to the matching spot. Uses the measured offset if it's ready (it's prefetched);
@@ -1543,13 +1551,26 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
     }
 
-    /** No picture after a fair wait: fall back to the song (the button stays usable). */
+    /**
+     * No picture after a fair wait: fall back to the song (the button stays usable). While the video is still loading
+     * (a slow TV after a fast skip or a long seek) it waits on, up to [VIDEO_WAIT_MAX_MS]; the song playing on without
+     * a picture is the failure.
+     */
     private fun watchVideo(songId: String) {
         videoWatchdog?.cancel()
         videoWatchdog = scope.launch {
-            delay(20_000)
-            val cur = player.currentMediaItem
-            if (cur?.mediaId == songId && cur.videoModeId != null && player.videoSize.width <= 0) revertVideo(songId)
+            var waited = 0L
+            while (true) {
+                delay(VIDEO_WATCH_STEP_MS)
+                waited += VIDEO_WATCH_STEP_MS
+                val cur = player.currentMediaItem
+                if (cur?.mediaId != songId || cur.videoModeId == null) return@launch
+                when (videoWatchVerdict(player.videoSize.width > 0, player.playbackState == Player.STATE_BUFFERING, waited)) {
+                    VideoWatch.FINE -> return@launch
+                    VideoWatch.WAIT -> Unit
+                    VideoWatch.GIVE_UP -> { revertVideo(songId); return@launch }
+                }
+            }
         }
     }
 

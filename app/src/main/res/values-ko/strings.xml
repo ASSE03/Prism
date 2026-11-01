@@ -4003,6 +4003,7 @@
     <string name="tv_update_note">지금 설치하세요: Android는 처음 한 번만 허용을 묻습니다</string>
     <string name="tv_up_next_line">다음 곡: %1$s</string>
     <string name="tv_seek_line">노래 위치: %1$s / %2$s</string>
+    <string name="tv_video_failed">뮤직비디오를 불러오지 못해서 노래를 계속 재생해요</string>
     <string name="tv_playing_from">%1$s에서 재생 중</string>
     <string name="tv_vocals_out">보컬 제거</string>
     <string name="tv_key_line">키: %1$s</string>
