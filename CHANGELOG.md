@@ -15,6 +15,9 @@ What changed in each release. Older releases are described on the [Releases page
   pause, skip, seek, volume, add songs. Your phone can send the TV your Look, too.
 - **Ambient screen**: after a few minutes without the remote while music plays, the TV dims to the song, its cover and
   its lyrics, drifting slowly so it doesn't burn in. Also there as a screensaver ("Prism") where the TV lets you pick one.
+- **Lyrics over a music video**: the video plays on under them, smoothly (it goes straight to the TV's video layer, so
+  the lyrics over it are drawn again only when they move), and the song's title, progress and Timing fade a couple of
+  seconds after the last key while it plays; any key brings them back.
 - **Getting Prism onto a TV**: type code **8986606** into the Downloader app on the TV for the newest Prism, or turn on
   Settings → Speakers, TVs & browser → **Share Prism with a TV** and type the address it shows: your phone hands the TV
   its own copy over Wi-Fi (only while that page is open). After that, updates come to the TV like on a phone.

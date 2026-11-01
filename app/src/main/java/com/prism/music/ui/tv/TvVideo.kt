@@ -60,7 +60,6 @@ import com.prism.music.R
 import com.prism.music.TvMediaKeys
 import com.prism.music.tr
 import com.prism.music.ui.components.Artwork
-import com.prism.music.ui.player.MusicVideoSurface
 import com.prism.music.ui.theme.LocalContainer
 import com.prism.music.ui.theme.PrismIcons
 import kotlinx.coroutines.delay
@@ -390,8 +389,37 @@ fun TvVideoPage(nav: TvNav) {
             }
         },
     ) {
-        MusicVideoSurface(Modifier.fillMaxSize(), fill = false)
+        TvVideoSurface(Modifier.fillMaxSize())
     }
+}
+
+/**
+ * The TV's video: the player on a SurfaceView ([R.layout.surface_player]), not the phone's TextureView
+ * ([com.prism.music.ui.player.MusicVideoSurface], which composes the picture into the window so it can fade). On a SurfaceView the picture goes
+ * to the display's own video layer under the window, so what's drawn over it (the lyrics and their scrim, the controls,
+ * the cover) is drawn again only when it changes, not for every frame of the video. On the owner's Google TV a playing
+ * video with lyrics over it ran at ~47 fps on the TextureView (111 of 474 frames missed in 10 s): each video frame drew
+ * the whole window again, the lyrics' faded list layer with it. The shutter is see-through and the last picture is kept
+ * on a reset, so a song change or the lyrics opening never flashes black; the cover covers it while there's none.
+ */
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+@Composable
+fun TvVideoSurface(modifier: Modifier = Modifier) {
+    val pc = LocalContainer.current.player
+    androidx.compose.ui.viewinterop.AndroidView(
+        factory = { ctx ->
+            (android.view.LayoutInflater.from(ctx).inflate(R.layout.surface_player, null) as androidx.media3.ui.PlayerView).apply {
+                useController = false
+                setShutterBackgroundColor(android.graphics.Color.TRANSPARENT)
+                setKeepContentOnPlayerReset(true)
+                resizeMode = androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FIT
+                player = pc.player
+            }
+        },
+        update = { view -> if (view.player !== pc.player) view.player = pc.player },
+        onRelease = { it.player = null },
+        modifier = modifier,
+    )
 }
 
 /** What the video screen shows behind its controls. */

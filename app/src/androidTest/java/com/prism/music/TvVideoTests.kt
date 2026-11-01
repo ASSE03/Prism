@@ -288,6 +288,8 @@ class TvVideoTests {
         instrumentation.runOnMainSync { player.setPlaying(false) }
         waitFor(5_000) { !player.isPlaying.value }
         assertTrue(exists(com.prism.music.ui.tv.TAG_VIDEO_LYRICS) && exists(TAG_VIDEO_SCREEN))
+        // Paused, the title and Timing are shown (playing, they fade a moment after the last key).
+        compose.waitUntil(3_000) { exists("$TAG_LYRICS/timing") && exists("$TAG_LYRICS/title") }
         // Timing works there too: Right reaches it, OK opens its panel, Back closes it onto the lines.
         TvFixture.right()
         compose.awaitFocusOn(hasTestTag("$TAG_LYRICS/timing"))
@@ -299,6 +301,76 @@ class TvVideoTests {
         TvFixture.back()
         focusOn(TvVideoControl.LYRICS)
         assertTrue(!exists(com.prism.music.ui.tv.TAG_VIDEO_LYRICS) && exists(TAG_VIDEO))
+    }
+
+    /**
+     * The owner's Google TV: the video lagged with lyrics over it (it played on a TextureView, so each video frame drew
+     * the whole window again), and the title, progress and Timing stayed over it. The picture keeps coming under the
+     * lyrics (now on a SurfaceView), and those fade a moment after the last key while it plays, the lines staying; a key
+     * brings them back without doing anything else (OK on the lines would pause); Back closes the lyrics onto the picture.
+     */
+    @Test fun lyricsOverAPlayingVideoLetThePictureThroughAndTheTitleFades() {
+        openTheVideo(pictures = true, withLyrics = true)
+        awaitPicture()
+        // Opened paused (the screen is looked at; while lyrics play the test framework never sees it still, so then
+        // only the player, the frame count and the lyrics' own probe are read).
+        instrumentation.runOnMainSync { player.setPlaying(false) }
+        waitFor(5_000) { !player.isPlaying.value }
+        TvFixture.right(); focusOn(TvVideoControl.NEXT)
+        TvFixture.right(); focusOn(TvVideoControl.LYRICS)
+        TvFixture.ok()
+        compose.waitUntil(30_000) { compose.onAllNodes(androidx.compose.ui.test.hasText("Line number", substring = true), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        compose.awaitFocusOn(hasTestTag("$TAG_LYRICS/lines"), 10_000)
+        assertTrue("on a scrim over the video", exists("$TAG_LYRICS/scrim") && exists(TAG_VIDEO_SCREEN))
+        assertTrue("paused, the title and Timing show", exists("$TAG_LYRICS/timing") && exists("$TAG_LYRICS/title") && exists("$TAG_LYRICS/progress"))
+        // Playing: the picture keeps coming under the lyrics.
+        instrumentation.runOnMainSync { player.setPlaying(true) }
+        waitFor(5_000) { player.isPlaying.value }
+        val before = frames().sinceReset.get()
+        waitFor(5_000) { frames().sinceReset.get() >= before + 20 }
+        // The remote put down: the title, progress and Timing go (the lines stay). The screen's own clock is moved on
+        // (the test framework holds it while it isn't asked to wait for a still screen).
+        assertTrue("shown while the remote was just used", com.prism.music.ui.tv.TvLyricsCounts.chrome)
+        awayFromTheRemote()
+        // A key only brings them back: still playing (OK on the lines would pause).
+        TvFixture.ok()
+        aFewFrames()
+        waitFor(3_000) { com.prism.music.ui.tv.TvLyricsCounts.chrome }
+        Thread.sleep(500)
+        assertTrue("the key that brought them back paused", player.isPlaying.value)
+        // Gone again; paused, they're back, focus on the lines (never on a hidden Timing).
+        awayFromTheRemote()
+        instrumentation.runOnMainSync { player.setPlaying(false) }
+        waitFor(5_000) { !player.isPlaying.value }
+        aFewFrames()
+        waitFor(3_000) { com.prism.music.ui.tv.TvLyricsCounts.chrome }
+        compose.awaitFocusOn(hasTestTag("$TAG_LYRICS/lines"), 5_000)
+        assertTrue(exists("$TAG_LYRICS/timing") && exists("$TAG_LYRICS/title") && exists("$TAG_LYRICS/list"))
+        // Back: the lyrics close onto the video's controls, the picture still there.
+        TvFixture.back()
+        focusOn(TvVideoControl.LYRICS)
+        assertTrue(!exists(com.prism.music.ui.tv.TAG_VIDEO_LYRICS) && !exists(com.prism.music.ui.tv.TAG_VIDEO_COVER))
+        // Back to the song (the player), then the video again: the picture comes back on the screen's new surface.
+        TvFixture.right(); focusOn(TvVideoControl.QUEUE)
+        TvFixture.right(); focusOn(TvVideoControl.SONG)
+        TvFixture.ok()
+        // Leaving the video played the song as itself: it's marked as its video again (a file on the TV has none to
+        // look up), with the Video button shown.
+        // (Waited on through the test framework, which moves the screen's clock: the page closing runs on it.)
+        compose.waitUntil(5_000) { !player.videoMode.value }
+        instrumentation.runOnMainSync { val p = player.player!!; p.replaceMediaItem(p.currentMediaItemIndex, asVideo(p.currentMediaItem!!)) }
+        compose.waitUntil(10_000) { player.videoMode.value }
+        val end = System.currentTimeMillis() + 10_000
+        while (!exists("$TAG_PLAYER/video")) {
+            if (System.currentTimeMillis() > end) throw AssertionError("the player's Video button never showed")
+            pretendItHasAVideo(); Thread.sleep(300)
+        }
+        compose.awaitFocusOn(hasTestTag("$TAG_PLAYER/video"), 10_000)
+        TvFixture.ok()
+        // The video's controls as they were left: on "Back to the song".
+        compose.awaitFocusOn(hasTestTag(TvVideoControl.SONG.fullTag), 10_000)
+        instrumentation.runOnMainSync { player.setPlaying(true) }
+        awaitPicture()
     }
 
     /**
@@ -339,6 +411,15 @@ class TvVideoTests {
         awaitPicture()
         assertTrue(player.videoMode.value)
     }
+
+    /** The lyrics' title, progress and Timing fade on their own while a video plays: the screen's clock moved past it. */
+    private fun awayFromTheRemote() {
+        compose.mainClock.advanceTimeBy(com.prism.music.ui.tv.TV_LYRICS_CHROME_MS + 1_000)
+        waitFor(5_000) { !com.prism.music.ui.tv.TvLyricsCounts.chrome }
+    }
+
+    /** The screen's clock moved on a few frames (so it shows what a key or a pause changed; well short of the fade). */
+    private fun aFewFrames() = compose.mainClock.advanceTimeBy(200)
 
     private fun waitFor(timeoutMs: Long, condition: () -> Boolean) {
         val end = System.currentTimeMillis() + timeoutMs

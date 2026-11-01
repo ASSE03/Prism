@@ -37,9 +37,10 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.foundation.focusGroup
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -113,6 +114,10 @@ private const val GLIDE_MS = SETTLE_MS
 /** Lines not sung, a little smaller (the phone's, when the look moves). */
 private const val RESTING_SCALE = 0.98f
 
+/** The lines' fade at the list's edges: from nothing at the top to full at this share down, and back from this one. */
+private const val EDGE_FADE_TOP = 0.12f
+private const val EDGE_FADE_BOTTOM = 0.86f
+
 /** Where the sung line settles: this share of the screen down. */
 private const val SETTLE_AT = 0.3f
 
@@ -139,6 +144,8 @@ fun TvLyricsScreen(
     overVideo: Boolean = false,
     /** Where Right from the lines goes (the buttons' first, top right). */
     toButtons: androidx.compose.ui.focus.FocusRequester? = null,
+    /** The title and the progress shown (over a video they fade while the remote is put down; the lines stay). */
+    chrome: Boolean = true,
 ) {
     val scheme = MaterialTheme.colorScheme
     val settings = LocalAppSettings.current
@@ -162,12 +169,14 @@ fun TvLyricsScreen(
             // Bold card: the lines on the cover's own color, as the phone's lyrics page.
             look.card?.let { card -> Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(card, lerp(card, Color.Black, 0.35f))))) }
         }
-        Row(Modifier.padding(TvSafe), verticalAlignment = Alignment.CenterVertically) {
-            Artwork(now.art, Modifier.size(56.dp), shape = RoundedCornerShape(8.dp), size = 160)
-            Spacer(Modifier.width(16.dp))
-            Column {
-                Text(now.title, style = MaterialTheme.typography.titleMedium, color = scheme.onBackground, maxLines = 1)
-                Text(now.artist, style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 1)
+        TvLyricsChrome(chrome) {
+            Row(Modifier.padding(TvSafe).testTag("$TAG_LYRICS/title"), verticalAlignment = Alignment.CenterVertically) {
+                Artwork(now.art, Modifier.size(56.dp), shape = RoundedCornerShape(8.dp), size = 160)
+                Spacer(Modifier.width(16.dp))
+                Column {
+                    Text(now.title, style = MaterialTheme.typography.titleMedium, color = scheme.onBackground, maxLines = 1)
+                    Text(now.artist, style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 1)
+                }
             }
         }
         // On its own: the song's progress moving (twice a second) redraws the header and the foot, not the lines.
@@ -175,9 +184,28 @@ fun TvLyricsScreen(
             lyrics.lines, lyrics.current, picked, clock, style, look, axis, centred, onCard,
             note = settings.lyricsGapMark == LyricsGapMark.NOTE, roman, romanInstead, translations, linesFocus, toButtons,
         )
-        TvProgress(now.fraction, now.played, now.total, Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(TvSafe))
+        TvLyricsChrome(chrome, Modifier.align(Alignment.BottomCenter)) {
+            TvProgress(now.fraction, now.played, now.total, Modifier.fillMaxWidth().padding(TvSafe).testTag("$TAG_LYRICS/progress"))
+        }
     }
 }
+
+/**
+ * The lyrics' title, progress and buttons while [shown]: they fade in and out (at once with Reduce motion), and are
+ * gone from the screen once faded.
+ */
+@Composable
+private fun TvLyricsChrome(shown: Boolean, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    val ms = if (LocalAppSettings.current.reduceMotion) 0 else TV_LYRICS_CHROME_FADE_MS
+    androidx.compose.animation.AnimatedVisibility(
+        shown, modifier,
+        enter = androidx.compose.animation.fadeIn(tween(ms)), exit = androidx.compose.animation.fadeOut(tween(ms)),
+    ) { content() }
+}
+
+/** Over a music video, how long the lyrics' title, progress and Timing stay after the last key while the song plays. */
+const val TV_LYRICS_CHROME_MS = 2_000L
+private const val TV_LYRICS_CHROME_FADE_MS = 400
 
 /**
  * The lines, as the phone's lyrics page moves them: the sung (or [picked]) line glides into place with one animated
@@ -224,12 +252,22 @@ private fun TvLyricsList(
         LazyColumn(
             state = list,
             userScrollEnabled = false,
-            // Lines fade out at the top and bottom edges (as on the phone), never cut across.
+            // Lines fade out at the top and bottom edges (as on the phone), never cut across. The fade is masked only
+            // over those two bands (in between the mask would keep every pixel as it is), with its brushes made once per
+            // size: the sung line redraws this layer every frame, over a video too.
             modifier = Modifier.fillMaxSize().testTag("$TAG_LYRICS/list")
                 .graphicsLayer { compositingStrategy = androidx.compose.ui.graphics.CompositingStrategy.Offscreen }
-                .drawWithContent {
-                    drawContent()
-                    drawRect(Brush.verticalGradient(0f to Color.Transparent, 0.12f to Color.Black, 0.86f to Color.Black, 1f to Color.Transparent), blendMode = androidx.compose.ui.graphics.BlendMode.DstIn)
+                .drawWithCache {
+                    val topEnd = size.height * EDGE_FADE_TOP
+                    val bottomStart = size.height * EDGE_FADE_BOTTOM
+                    val topFade = Brush.verticalGradient(listOf(Color.Transparent, Color.Black), startY = 0f, endY = topEnd)
+                    val bottomFade = Brush.verticalGradient(listOf(Color.Black, Color.Transparent), startY = bottomStart, endY = size.height)
+                    val dstIn = androidx.compose.ui.graphics.BlendMode.DstIn
+                    onDrawWithContent {
+                        drawContent()
+                        drawRect(topFade, size = androidx.compose.ui.geometry.Size(size.width, topEnd), blendMode = dstIn)
+                        drawRect(bottomFade, topLeft = Offset(0f, bottomStart), size = androidx.compose.ui.geometry.Size(size.width, size.height - bottomStart), blendMode = dstIn)
+                    }
                 },
             contentPadding = PaddingValues(top = settle, bottom = maxHeight),
             verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -276,6 +314,8 @@ private fun TvLyricsList(
 internal object TvLyricsCounts {
     @Volatile var lists = 0
     @Volatile var lines = 0
+    /** The title, progress and buttons are shown (the in-app tests read it while lyrics play over a video). */
+    @Volatile var chrome = true
 }
 
 /**
@@ -386,7 +426,8 @@ private fun TvGapMark(line: LyricLine, until: Long, clock: State<Long>, active: 
  * the song from there) or pauses and plays with none picked. With a line picked, Back (or "Back to now", or
  * [TV_PICK_RETURN_MS] without a key) goes back to the sung line, following the song again; a second Back leaves.
  * Right reaches the Timing button: the song's lyrics timing, moved live. [buttons] go before Timing (Sing's key) and
- * [status] under them; [overVideo]: over a playing music video ([TvLyricsScreen]'s).
+ * [status] under them; [overVideo]: over a playing music video ([TvLyricsScreen]'s), where the title, the progress and
+ * the buttons fade [TV_LYRICS_CHROME_MS] after the last key while the song plays.
  */
 @Composable
 fun TvLyricsPlace(
@@ -440,12 +481,39 @@ fun TvLyricsPlace(
         }
         return
     }
-    Box(Modifier.fillMaxSize()) {
+    // Over a music video (the owner's TV: they "should disappear after a second or two"): the title, the progress and
+    // the buttons fade TV_LYRICS_CHROME_MS after the last key while the song plays, as the video's own controls do; the
+    // lines stay. A key then only brings them back; paused, they stay. On the lyrics page they always show.
+    val autoHide = overVideo
+    var chrome by remember { mutableStateOf(true) }
+    var touched by remember { androidx.compose.runtime.mutableLongStateOf(0L) }
+    // A key whose key-down brought them back: its repeats and key-up go too (a button would click on key-up).
+    var swallow by remember { mutableStateOf<Key?>(null) }
+    var buttonsFocused by remember { mutableStateOf(false) }
+    LaunchedEffect(now.playing) { if (!now.playing) chrome = true }
+    LaunchedEffect(autoHide, chrome, now.playing, timing, touched) {
+        if (!autoHide || !chrome || !now.playing || timing) return@LaunchedEffect
+        delay(TV_LYRICS_CHROME_MS)
+        // Focus first onto the lines, then the buttons fade: it's never left on one going away.
+        if (buttonsFocused) runCatching { linesFocus.requestFocus() }
+        chrome = false
+    }
+    androidx.compose.runtime.SideEffect { TvLyricsCounts.chrome = chrome }
+    Box(
+        Modifier.fillMaxSize().onPreviewKeyEvent { e ->
+            if (!autoHide) return@onPreviewKeyEvent false
+            if (swallow == e.key) { if (e.type == KeyEventType.KeyUp) swallow = null; return@onPreviewKeyEvent true }
+            if (e.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+            touched = System.nanoTime()
+            // Hidden: the key only brings them back (Back still closes the lyrics).
+            if (!chrome && e.key != Key.Back) { chrome = true; swallow = e.key; true } else false
+        },
+    ) {
         // The clock is read only where words are drawn (not here, or the whole page would be redrawn every frame).
         TvLyricsScreen(
             now, TvLyrics(lines, current, 0L, source), clock, picked = picked, accent = accent,
             roman = roman, romanInstead = romanInstead, translations = translations, linesFocus = linesFocus, overVideo = overVideo,
-            toButtons = buttonsFocus,
+            toButtons = buttonsFocus, chrome = chrome,
             modifier = Modifier.onPreviewKeyEvent { e ->
                 if (e.type != KeyEventType.KeyDown || timing) return@onPreviewKeyEvent false
                 lastKey = System.nanoTime()
@@ -463,13 +531,20 @@ fun TvLyricsPlace(
         )
         // Top right: "Back to now" while a line is picked, and Timing. Right from the lyrics reaches them.
         Column(Modifier.align(Alignment.TopEnd).padding(TvSafe), horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            // A group: Right from the lines lands on its first button.
-            Row(Modifier.focusRequester(buttonsFocus).focusGroup(), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                if (picked != null) TvButton(tr(R.string.tv_back_to_now), follow, Modifier.tvItem("$TAG_LYRICS/now"), icon = com.prism.music.ui.theme.PrismIcons.Lyrics)
-                buttons()
-                TvButton(tr(R.string.lyrics_timing), { timing = true }, Modifier.tvItem("$TAG_LYRICS/timing"), icon = com.prism.music.ui.theme.PrismIcons.Timer)
+            // A group: Right from the lines lands on its first button. It stays while the buttons in it fade (Right
+            // from the lines names it).
+            Row(Modifier.focusRequester(buttonsFocus).onFocusChanged { buttonsFocused = it.hasFocus }.focusGroup()) {
+                TvLyricsChrome(chrome) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                        // Fading out, they can't take focus.
+                        val canFocus = Modifier.focusProperties { canFocus = chrome }
+                        if (picked != null) TvButton(tr(R.string.tv_back_to_now), follow, canFocus.tvItem("$TAG_LYRICS/now"), icon = com.prism.music.ui.theme.PrismIcons.Lyrics)
+                        buttons()
+                        TvButton(tr(R.string.lyrics_timing), { timing = true }, canFocus.tvItem("$TAG_LYRICS/timing"), icon = com.prism.music.ui.theme.PrismIcons.Timer)
+                    }
+                }
             }
-            status?.let { Text(it, Modifier.width(560.dp).testTag("$TAG_LYRICS/status"), style = MaterialTheme.typography.bodyLarge, color = scheme.onSurfaceVariant, textAlign = TextAlign.End) }
+            status?.let { TvLyricsChrome(chrome) { Text(it, Modifier.width(560.dp).testTag("$TAG_LYRICS/status"), style = MaterialTheme.typography.bodyLarge, color = scheme.onSurfaceVariant, textAlign = TextAlign.End) } }
         }
         if (timing) {
             androidx.activity.compose.BackHandler { timing = false; runCatching { linesFocus.requestFocus() } }
