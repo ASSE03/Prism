@@ -225,11 +225,15 @@ object SearchRank {
 
     /**
      * Ranks [results]; live streams ([SearchFilter.LIVE]) always get a row of their own, last, and don't
-     * compete for the top spot unless there's nothing else.
+     * compete for the top spot unless there's nothing else. [pageSongs]: the songs on the page of YouTube's card.
      */
-    fun rank(query: String, results: List<Pair<SearchFilter, List<BrowseItem>>>, taste: Taste = Taste.NONE, card: BrowseItem? = null): TopSearch {
+    fun rank(
+        query: String, results: List<Pair<SearchFilter, List<BrowseItem>>>, taste: Taste = Taste.NONE, card: BrowseItem? = null,
+        pageSongs: List<SongItem> = emptyList(),
+    ): TopSearch {
         val live = results.firstOrNull { it.first == SearchFilter.LIVE }?.second.orEmpty().distinctBy { it.id }.take(10)
-        val ranked = rankMusic(query, results.filter { it.first != SearchFilter.LIVE }, taste, card?.takeUnless { it is SongItem && it.song.isLive })
+        val music = withPageSongs(norm(query), results.filter { it.first != SearchFilter.LIVE }, pageSongs)
+        val ranked = rankMusic(query, music, taste, card?.takeUnless { it is SongItem && it.song.isLive })
         if (live.isEmpty()) return ranked
         val top = ranked.top ?: live.first()
         val sections = ranked.sections.toMutableList()
@@ -258,6 +262,19 @@ object SearchRank {
         if (slots.size < 2) return items
         val ordered = slots.map { items[it] }.sortedByDescending { (it as SongItem).plays }
         return items.toMutableList().also { out -> slots.forEachIndexed { k, i -> out[i] = ordered[k] } }
+    }
+
+    /**
+     * Songs of exactly the title typed that YouTube's song search left out but its unfiltered page shows join the
+     * songs, at the end ([byPlays] then gives the most played the first place one of them holds). "halo": the song
+     * search had a Halo game soundtrack and LP's live Halo, the page Beyoncé's Halo (2.7B plays).
+     */
+    private fun withPageSongs(q: String, results: List<Pair<SearchFilter, List<BrowseItem>>>, page: List<SongItem>): List<Pair<SearchFilter, List<BrowseItem>>> {
+        val row = results.firstOrNull { it.first == SearchFilter.SONGS }?.second.orEmpty()
+        val extra = page.filter { s -> exactSong(q, s) && (s.plays ?: 0) >= KNOWN_SONG && row.none { it.id == s.id } }.distinctBy { it.id }
+        if (extra.isEmpty()) return results
+        return if (results.any { it.first == SearchFilter.SONGS }) results.map { (f, items) -> if (f == SearchFilter.SONGS) f to (items + extra) else f to items }
+        else results + (SearchFilter.SONGS to extra)
     }
 
     /** From this many plays, a song is one people mean when they type its title. */

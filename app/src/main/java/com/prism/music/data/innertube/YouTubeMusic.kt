@@ -174,12 +174,13 @@ class YouTubeMusic(
     suspend fun searchTop(query: String, taste: SearchRank.Taste = SearchRank.Taste.NONE): TopSearch = kotlinx.coroutines.coroutineScope {
         val kinds = listOf(SearchFilter.SONGS, SearchFilter.ALBUMS, SearchFilter.ARTISTS, SearchFilter.PLAYLISTS, SearchFilter.VIDEOS, SearchFilter.LIVE)
         // YouTube's own "Top result" card, from its unfiltered search: it reads abbreviations and typos well.
-        val card = async { runCatching { youtubeTopResult(query) }.getOrNull() }
+        val top = async { runCatching { youtubeTop(query) }.getOrNull() }
         val attempts = kinds.map { f -> async { f to runCatching { search(query, f).items } } }.awaitAll()
         val results = attempts.map { (f, r) -> f to r.getOrDefault(emptyList()) }
         // Every search failed: keep why (offline, a timeout…), so the message can say so.
         if (results.all { it.second.isEmpty() }) throw java.io.IOException("Search failed", attempts.firstNotNullOfOrNull { it.second.exceptionOrNull() })
-        val ranked = SearchRank.rank(query, results, taste, card.await())
+        val (card, pageSongs) = top.await() ?: (null to emptyList())
+        val ranked = SearchRank.rank(query, results, taste, card, pageSongs)
         // A title track on top whose album YouTube's album search left out (it varies from one request to the next:
         // "after hours" sometimes has no After Hours by The Weeknd): the song names its album, so look that up.
         val song = (ranked.top as? SongItem)?.song
@@ -194,9 +195,17 @@ class YouTubeMusic(
     }
 
     /** The card at the top of YouTube Music's unfiltered search, if it shows one. */
-    suspend fun youtubeTopResult(query: String): BrowseItem? {
+    suspend fun youtubeTopResult(query: String): BrowseItem? = youtubeTop(query).first
+
+    /**
+     * That card, and the songs (not videos) on the same page: they sometimes hold the song a title is known for when
+     * the song search leaves it out ("halo": Beyoncé's, under a Halo game soundtrack card).
+     */
+    suspend fun youtubeTop(query: String): Pair<BrowseItem?, List<SongItem>> {
         val res = api.postAnonymous("search", buildJsonObject { put("query", query) })
-        return res.findAll("musicCardShelfRenderer").firstOrNull()?.let { Parser.card(it) }
+        val card = res.findAll("musicCardShelfRenderer").firstOrNull()?.let { Parser.card(it) }
+        val songs = res.findAll("musicResponsiveListItemRenderer").mapNotNull { Parser.responsive(it) as? SongItem }.filter { !it.song.isVideo }
+        return card to songs
     }
 
     suspend fun search(query: String, filter: SearchFilter, continuation: String? = null): SearchResult {
