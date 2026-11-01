@@ -1,21 +1,14 @@
 package com.prism.music
 
-import androidx.compose.ui.test.hasTestTag
-import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.prism.music.TvFixture.awaitFocusOn
 import com.prism.music.data.db.LyricsEntity
 import com.prism.music.playback.QueueKind
 import com.prism.music.playback.QueueSource
-import com.prism.music.ui.tv.TAG_HOME
-import com.prism.music.ui.tv.TAG_LYRICS
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assume.assumeTrue
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -28,7 +21,6 @@ import org.junit.runner.RunWith
 @TvTest
 @RunWith(AndroidJUnit4::class)
 class TvLyricsFramesProbe {
-    @get:Rule val compose = createEmptyComposeRule()
     private val instrumentation get() = InstrumentationRegistry.getInstrumentation()
     private val tones = ArrayList<android.net.Uri>()
     private val player get() = Fixture.container.player
@@ -47,15 +39,22 @@ class TvLyricsFramesProbe {
     private fun shell(cmd: String): String =
         instrumentation.uiAutomation.executeShellCommand(cmd).use { java.io.FileInputStream(it.fileDescriptor).readBytes().toString(Charsets.UTF_8) }
 
+    private fun position(): Long { var p = 0L; instrumentation.runOnMainSync { p = player.position }; return p }
+
     private fun measure(label: String): String {
         val pkg = Fixture.context.packageName
         shell("dumpsys gfxinfo $pkg reset")
+        val from = position()
         Thread.sleep(SECONDS * 1000L)
+        val moved = position() - from
+        val playing = player.isPlaying.value
         val g = shell("dumpsys gfxinfo $pkg")
         fun num(name: String) = Regex("$name\\s*:\\s*([\\d.]+)ms").find(g)?.groupValues?.get(1) ?: "?"
         val frames = Regex("Total frames rendered:\\s*(\\d+)").find(g)?.groupValues?.get(1)?.toInt() ?: 0
         val janky = Regex("Janky frames:\\s*(\\d+)\\s*\\(([\\d.]+)%\\)").find(g)?.let { "${it.groupValues[1]} (${it.groupValues[2]}%)" } ?: "?"
-        return "%-22s frames %4d  (%.1f fps)  p50 %s  p90 %s  p95 %s  janky %s".format(label, frames, frames / SECONDS.toFloat(), num("50th percentile"), num("90th percentile"), num("95th percentile"), janky)
+        return "%-14s frames %4d  (%.1f fps)  p50 %s  p90 %s  p95 %s  janky %s  (played %.1f s, playing %s)".format(
+            label, frames, frames / SECONDS.toFloat(), num("50th percentile"), num("90th percentile"), num("95th percentile"), janky, moved / 1000f, playing,
+        )
     }
 
     @Test fun framesWhileLinesAreSung() {
@@ -80,20 +79,24 @@ class TvLyricsFramesProbe {
         instrumentation.runOnMainSync { player.playQueue(listOf(words, lines), 0, QueueSource(QueueKind.OTHER, "TV frames probe")) }
         val end0 = System.currentTimeMillis() + 20_000
         while (!player.isPlaying.value && System.currentTimeMillis() < end0) Thread.sleep(100)
-        // Paused while the page is opened (the test framework waits for a still screen), then playing while measured.
+        // No Compose test rule here: it drives the app's frames itself, only while a test waits on it, so with one the
+        // screen stood still while measured (0 frames). Home opens on "Now playing"; Right is its Lyrics button.
         instrumentation.runOnMainSync { player.setPlaying(false) }
         TvFixture.launch()
-        compose.awaitFocusOn(hasTestTag("$TAG_HOME/player"), 20_000)
-        TvFixture.right()
-        compose.awaitFocusOn(hasTestTag("$TAG_HOME/lyrics"))
-        TvFixture.ok()
-        compose.waitUntil(30_000) { compose.onAllNodes(hasText("Word1", substring = true), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
-        compose.awaitFocusOn(hasTestTag("$TAG_LYRICS/lines"), 10_000)
+        Thread.sleep(15_000)
+        TvFixture.right(); Thread.sleep(1_500)
+        TvFixture.ok(); Thread.sleep(8_000)
         val out = ArrayList<String>()
         fun run(label: String, song: Int) {
-            instrumentation.runOnMainSync { player.skipTo(song); player.seekTo(4_000); player.setPlaying(true) }
-            Thread.sleep(2_000)
+            instrumentation.runOnMainSync { if (player.currentIndex.value != song) player.skipTo(song) }
+            Thread.sleep(1_000)
+            instrumentation.runOnMainSync { player.seekTo(4_000); player.setPlaying(true) }
+            val end = System.currentTimeMillis() + 10_000
+            while (!player.isPlaying.value && System.currentTimeMillis() < end) Thread.sleep(100)
+            Thread.sleep(1_000)
             out += measure(label)
+            // What was measured, for a look (/sdcard/prism-tests/tvperf-<label>.png).
+            Fixture.screenshot("tvperf-" + label.replace(' ', '-'))
         }
         val settings = Fixture.container.settings
         for (style in listOf(com.prism.music.data.prefs.LyricsStyle.PRISM, com.prism.music.data.prefs.LyricsStyle.GLOW)) {

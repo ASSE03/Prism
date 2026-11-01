@@ -260,6 +260,9 @@ private fun TvLyricsList(
                     roman?.getOrNull(i), romanInstead, translations?.getOrNull(i),
                     Modifier.graphicsLayer {
                         this.alpha = alpha.value
+                        // The alpha on each thing drawn, not the line drawn offscreen first (that was every dimmed line,
+                        // every frame: the Android TV 11 run went from 37% to 49% janky frames with it).
+                        compositingStrategy = androidx.compose.ui.graphics.CompositingStrategy.ModulateAlpha
                         scaleX = size.value; scaleY = size.value
                         transformOrigin = androidx.compose.ui.graphics.TransformOrigin(if (centred) 0.5f else 0f, 0.5f)
                     },

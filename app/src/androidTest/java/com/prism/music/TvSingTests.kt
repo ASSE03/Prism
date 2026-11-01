@@ -100,7 +100,8 @@ class TvSingTests {
             TvFixture.ok()
             // A tone has no album or artist page: Sing is the ⋯'s first.
             compose.awaitFocusOn(hasTestTag("$TAG_ACTIONS/0"), 10_000)
-            compose.onNode(hasTestTag("$TAG_ACTIONS/0") and hasText(tr(R.string.sing), substring = true), useUnmergedTree = true).assertExists()
+            // (The label is a child of the button in the unmerged tree.)
+            compose.onNode(hasText(tr(R.string.sing)) and androidx.compose.ui.test.hasAnyAncestor(hasTestTag("$TAG_ACTIONS/0")), useUnmergedTree = true).assertExists()
             TvFixture.ok()
             compose.awaitFocusOn(hasTestTag("$TAG_LYRICS/lines"), 20_000)
             org.junit.Assert.assertTrue("Sing is on", c.sing.on.value)
