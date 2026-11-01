@@ -141,9 +141,13 @@ class TvSettingsTests {
             TvFixture.right()
             compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/setting/0"))
             TvFixture.ok()
-            // The hero, Quick picks, Speed dial, Recently played, then the shelf: OK hides it.
+            // The hero, then every row the TV can have, YouTube's shelves last: down to the shelf, OK hides it.
             compose.awaitFocusOn(hasTestTag("${com.prism.music.ui.tv.TAG_HOME_EDITOR}/row/${com.prism.music.ui.tv.TvHomeLayout.HERO}"), 10_000)
-            repeat(4) { TvFixture.down(); Thread.sleep(250) }
+            val shelfRow = hasTestTag("${com.prism.music.ui.tv.TAG_HOME_EDITOR}/row/$key")
+            for (i in 0 until 30) {
+                if (compose.onAllNodes(shelfRow and isFocused(), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()) break
+                TvFixture.down(); Thread.sleep(200)
+            }
             compose.awaitFocusOn(hasTestTag("${com.prism.music.ui.tv.TAG_HOME_EDITOR}/row/$key"))
             TvFixture.ok()
             compose.waitUntil(10_000) { com.prism.music.ui.tv.hiddenIn(c.settings.current.homeLayout, key) }

@@ -4,17 +4,19 @@ import com.prism.music.data.prefs.HomeSectionConfig
 import com.prism.music.data.prefs.HomeSections
 
 /*
- * Customizing the TV's Home (1.8.0; the owner: "You should be able to customize the homescreen"): showing, hiding and
- * moving its rows (Settings → Home → Customize Home, or the button at the end of Home). Kept in two places, so the
- * phone and the TV agree where they can:
- * - Which rows show: the rows both have (Quick picks, Speed dial, Recently played, YouTube's shelves, named by the
- *   phone's keys) in the phone's own Home layout ([com.prism.music.data.prefs.AppSettings.homeLayout]): a row hidden on
- *   one is hidden on the other. The TV's own now-playing hero in the TV's layout
+ * The TV's Home and its layout (1.8.0; the owner: "You should be able to customize the homescreen", then "I do not see
+ * things like Prism Music mixes or Quick picks etc. that match my phone app"). Every phone Home section a TV can show
+ * is a row here, by the phone's own key ([TvHomeLayout.CATALOG], plus pinned items and rules, "pin:*" / "rule:*", and
+ * YouTube's shelves), so one layout drives both:
+ * - Which rows show: the phone's own Home layout ([com.prism.music.data.prefs.AppSettings.homeLayout]). A row it names
+ *   shows or hides as it says (a row hidden on one is hidden on the other); a row it doesn't name shows only if the TV's
+ *   Home always had it (the hero, Quick picks, Speed dial, Recently played, and YouTube's shelves while the phone adds
+ *   them, `autoAddSections`). The TV's own now-playing hero is shown or hidden in the TV's layout
  *   ([com.prism.music.data.prefs.TvPrefs.homeLayout]).
- * - Their order: the TV's layout (it has the hero, and the phone lays out sections the TV doesn't have). None kept, the
- *   rows both have follow the phone's order where it names them and stay where Home puts them otherwise, so an
- *   untouched phone layout is the TV's Home as it was.
- * Back to default: no TV layout, and every TV row shown again.
+ * - Their order: the TV's layout once the TV's editor has been used; before that the phone's order (a fresh TV mirrors
+ *   the phone), with the rows the phone doesn't place after, in [TvHomeLayout.CATALOG]'s order, then YouTube's.
+ * Rows with nothing in them (no plays yet for On repeat) leave themselves out.
+ * Back to default: no TV layout, and the rows the TV's Home always had shown again.
  */
 
 /** A TV row's key in the phone's Home layout (the TV's rows use the phone's keys; "yt:<title>" is the older form). */
@@ -67,33 +69,66 @@ data class TvHomeArranged(val rows: List<TvHomeRow>, val heroAt: Int)
 object TvHomeLayout {
     /** The TV's now-playing hero (the phone has no such section). */
     const val HERO = "tv:now_playing"
-    /** The rows Prism makes itself, in Home's own order (YouTube's shelves follow them). */
-    val FIXED = listOf(HERO, KEY_PICKS, KEY_DIAL, KEY_RECENT)
+
+    /**
+     * Every phone Home section the TV has a row for, in the order they come when the phone's layout doesn't place them.
+     * Pinned items and rules ("pin:*", "rule:*") and YouTube's shelves come after. The phone's Moods & genres tiles open
+     * their page on the TV too; nothing of the phone's Home is left out.
+     */
+    val CATALOG = listOf(
+        HomeSections.REPLAY, HomeSections.GREETING, HomeSections.QUICK_PICKS, HomeSections.SEASONAL, HomeSections.SPEED_DIAL, HomeSections.MADE_FOR_YOU,
+        HomeSections.NEW_RELEASES, HomeSections.ON_REPEAT, HomeSections.REPEAT_REWIND, HomeSections.FORGOTTEN, HomeSections.RECENT,
+        HomeSections.LIKED, HomeSections.GENRES, HomeSections.MOODS, HomeSections.DOWNLOADS,
+    )
+    /** The rows Prism makes itself: the hero, then [CATALOG]. */
+    val FIXED = listOf(HERO) + CATALOG
+    /** Shown when the phone's layout doesn't name them: the rows the TV's Home always had. */
+    val SHOWN_UNNAMED = setOf(HERO, KEY_PICKS, KEY_DIAL, KEY_RECENT)
     /** How many rows a layout keeps. */
     private const val MAX_KEPT = 80
 
+    /** A section of the listener's own: a pinned album, playlist, artist or mix, or a rule over their listening. */
+    fun isOwn(key: String) = key.startsWith(HomeSections.PIN_PREFIX) || key.startsWith("rule:")
+
     /** Whether [key] is one of the TV Home's kinds of row (not a phone-only section). */
-    fun isTvRow(key: String) = key in FIXED || key.startsWith(HomeSections.YT_PREFIX)
+    fun isTvRow(key: String) = key in FIXED || key.startsWith(HomeSections.YT_PREFIX) || isOwn(key)
 
     private fun heroShown(stored: List<HomeSectionConfig>) = stored.firstOrNull { it.key == HERO }?.visible != false
 
-    /** [rows] (from [tvHomeRows]) as the TV's [stored] layout and the [phone]'s Home layout lay them out. */
-    fun arrange(stored: List<HomeSectionConfig>, rows: List<TvHomeRow>, phone: List<HomeSectionConfig> = emptyList()): TvHomeArranged {
-        val keys = if (stored.isEmpty()) listOf(HERO) + arrangeTvRows(rows, phone) { it.key }.map { it.key }.distinct()
-        else merged(stored, natural(rows.map { HomeSectionConfig(it.key, it.title) })).map { it.key }
+    /**
+     * Whether the row [key] shows: the hero as the TV's [stored] layout says; the others as the [phone]'s layout says, and
+     * when it doesn't name them, if the TV's Home always had them ([SHOWN_UNNAMED]; YouTube's shelves while the phone adds
+     * them, [autoAdd]).
+     */
+    fun isShown(key: String, stored: List<HomeSectionConfig>, phone: List<HomeSectionConfig>, autoAdd: Boolean = true): Boolean {
+        if (key == HERO) return heroShown(stored)
+        phone.firstOrNull { it.key == phoneKeyOf(key) }?.let { return it.visible }
+        return key in SHOWN_UNNAMED || (autoAdd && key.startsWith(HomeSections.YT_PREFIX))
+    }
+
+    /**
+     * Home's own order of the rows there are ([rows], in [CATALOG]'s order then YouTube's, see [tvAllRows]): the hero,
+     * then the ones the [phone]'s layout places in its order, then the rest as they came.
+     */
+    fun natural(rows: List<HomeSectionConfig>, phone: List<HomeSectionConfig>): List<HomeSectionConfig> {
+        val byKey = rows.associateBy { it.key }
+        val hero = byKey[HERO] ?: HomeSectionConfig(HERO, "")
+        return (listOf(hero) + phone.mapNotNull { byKey[phoneKeyOf(it.key)] } + rows).distinctBy { it.key }
+    }
+
+    /** [rows] (from [tvAllRows]) as the TV's [stored] layout and the [phone]'s Home layout lay them out. */
+    fun arrange(stored: List<HomeSectionConfig>, rows: List<TvHomeRow>, phone: List<HomeSectionConfig> = emptyList(), autoAdd: Boolean = true): TvHomeArranged {
+        val natural = natural(rows.map { HomeSectionConfig(it.key, it.title) }, phone)
+        val keys = (if (stored.isEmpty()) natural else merged(stored, natural)).map { it.key }
         val byKey = rows.groupBy { it.key }
         val out = ArrayList<TvHomeRow>()
         var heroAt = -1
         for (k in keys) {
-            if (k == HERO) { if (heroShown(stored)) heroAt = out.size }
-            else if (!hiddenIn(phone, k)) byKey[k]?.let { out += it }
+            if (!isShown(k, stored, phone, autoAdd)) continue
+            if (k == HERO) heroAt = out.size else byKey[k]?.let { out += it }
         }
         return TvHomeArranged(out, heroAt)
     }
-
-    /** Home's own order of the rows there are: the fixed ones (titled by [titles]), then [shelves] as they came. */
-    fun natural(shelves: List<HomeSectionConfig>, titles: (String) -> String = { "" }): List<HomeSectionConfig> =
-        (FIXED.map { HomeSectionConfig(it, titles(it)) } + shelves.filter { it.key !in FIXED }).distinctBy { it.key }
 
     /**
      * [stored] with each row of [natural] it doesn't have put in after the row before it in [natural], so a new shelf
@@ -111,15 +146,26 @@ object TvHomeLayout {
     }
 
     /**
-     * The editor's list: every row there is now ([natural], hero first), in the order Home shows them, each shown or
-     * hidden as Home has it (the hero by [stored], the others by [phone]).
+     * The editor's list: every row the TV can have ([available]: the whole [CATALOG], the phone's own sections, YouTube's
+     * shelves now), in the order Home shows them, each shown or hidden as Home has it. Empty rows are listed too, so
+     * they can be turned on before they have anything in them.
      */
-    fun editable(stored: List<HomeSectionConfig>, natural: List<HomeSectionConfig>, phone: List<HomeSectionConfig> = emptyList()): List<HomeSectionConfig> {
+    fun editable(
+        stored: List<HomeSectionConfig>, available: List<HomeSectionConfig>, phone: List<HomeSectionConfig> = emptyList(), autoAdd: Boolean = true,
+    ): List<HomeSectionConfig> {
+        val natural = natural(available, phone)
         val there = natural.map { it.key }.toSet()
-        val base = if (stored.isEmpty()) natural.filter { it.key == HERO } + arrangeTvRows(natural.filter { it.key != HERO }, phone) { it.key }
-        else merged(stored, natural).filter { it.key in there }
-        return base.map { it.copy(visible = if (it.key == HERO) heroShown(stored) else !hiddenIn(phone, it.key)) }
+        val base = if (stored.isEmpty()) natural else merged(stored, natural).filter { it.key in there }
+        return base.map { it.copy(visible = isShown(it.key, stored, phone, autoAdd)) }
     }
+
+    /**
+     * Every row the TV can have, for the editor: the hero, [CATALOG], the [phone]'s pinned items and rules (by their
+     * names there), then [youtube]'s shelves. [title] names the hero and [CATALOG]'s rows.
+     */
+    fun available(youtube: List<HomeSectionConfig>, phone: List<HomeSectionConfig>, title: (String) -> String): List<HomeSectionConfig> =
+        (FIXED.map { HomeSectionConfig(it, title(it)) } + phone.filter { isOwn(it.key) }.map { HomeSectionConfig(it.key, it.name ?: it.title) } + youtube)
+            .distinctBy { it.key }
 
     /** What the TV's layout keeps for the editor's [list]. */
     fun saved(list: List<HomeSectionConfig>): List<HomeSectionConfig> = list.distinctBy { it.key }.take(MAX_KEPT)
@@ -132,11 +178,14 @@ object TvHomeLayout {
     fun moved(list: List<HomeSectionConfig>, key: String, by: Int): List<HomeSectionConfig> =
         com.prism.music.ui.tv.moved(list, list.indexOfFirst { it.key == key }, by)
 
-    /** The [phone]'s layout with every TV row shown again (Back to default); its phone-only sections as they were. */
+    /**
+     * The [phone]'s layout with the rows the TV's Home always had shown again (Back to default): Quick picks, Speed dial,
+     * Recently played and YouTube's shelves. The other sections stay as the phone has them.
+     */
     fun allShown(phone: List<HomeSectionConfig>): List<HomeSectionConfig> =
-        phone.map { if (!it.visible && isTvRow(it.key)) it.copy(visible = true) else it }
+        phone.map { if (!it.visible && (it.key in SHOWN_UNNAMED || it.key.startsWith(HomeSections.YT_PREFIX))) it.copy(visible = true) else it }
 
-    /** How many of the TV's rows are hidden (Settings' line under Customize Home). */
+    /** How many of the TV's rows a layout hides (Settings' line under Customize Home). */
     fun hiddenCount(stored: List<HomeSectionConfig>, phone: List<HomeSectionConfig>): Int =
         (if (heroShown(stored)) 0 else 1) + phone.count { !it.visible && isTvRow(it.key) }
 }

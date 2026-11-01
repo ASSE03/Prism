@@ -205,14 +205,15 @@ fun TvHomeEditorPage(nav: TvNav) {
         if (value.isEmpty()) c.homeCache.read()?.let { value = it }
     }
     val titles = TvHomeTitles(tr(R.string.quick_picks), tr(R.string.section_speed_dial), tr(R.string.recently_played))
-    val natural = remember(shelves, owner) { tvHomeNatural(shelves, owner, titles) }
+    // Every row the TV can have (empty ones too, so they can be turned on before they have anything in them).
+    val natural = remember(shelves, owner, settings.homeLayout) { tvHomeAvailable(shelves, owner, settings.homeLayout, titles) }
     // The editor's own copies while it's open (the TV's layout: order and the hero; the phone's: which rows show), so
     // quick presses never act on a layout still being written.
     var localTv by remember { mutableStateOf<List<HomeSectionConfig>?>(null) }
     var localPhone by remember { mutableStateOf<List<HomeSectionConfig>?>(null) }
     val tvLayout = localTv ?: settings.tv.homeLayout
     val phoneLayout = localPhone ?: settings.homeLayout
-    val layout = TvHomeLayout.editable(tvLayout, natural, phoneLayout)
+    val layout = TvHomeLayout.editable(tvLayout, natural, phoneLayout, settings.autoAddSections)
     var moving by remember { mutableStateOf<String?>(null) }
     fun keepTv(next: List<HomeSectionConfig>) { localTv = TvHomeLayout.saved(next); c.settings.setTvHomeLayout(localTv!!) }
     fun keepPhone(next: List<HomeSectionConfig>) { localPhone = next; c.settings.setHomeLayout(next) }
@@ -242,16 +243,16 @@ fun TvHomeEditorPage(nav: TvNav) {
     )
 }
 
-/** Every row Home can have now, in Home's own order, titled: the fixed rows, then [shelves]' YouTube rows. */
-internal fun tvHomeNatural(shelves: List<Shelf>, owner: String?, titles: TvHomeTitles): List<HomeSectionConfig> {
+/**
+ * Every row the TV's Home can have, titled as Home names them: the hero, every phone section the TV shows
+ * ([TvHomeLayout.CATALOG]), the phone's own pins and rules, then YouTube's shelves on Home now ([shelves]).
+ */
+internal fun tvHomeAvailable(shelves: List<Shelf>, owner: String?, phone: List<HomeSectionConfig>, titles: TvHomeTitles): List<HomeSectionConfig> {
     val youtube = tvHomeRows(shelves, owner, emptyList(), emptyList(), titles).filter { it.key.startsWith(HomeSections.YT_PREFIX) }
-    return TvHomeLayout.natural(youtube.map { HomeSectionConfig(it.key, it.title) }) { key ->
+    return TvHomeLayout.available(youtube.map { HomeSectionConfig(it.key, it.title) }, phone) { key ->
         when (key) {
             TvHomeLayout.HERO -> tr(R.string.now_playing)
-            KEY_PICKS -> titles.quickPicks
-            KEY_DIAL -> titles.speedDial
-            KEY_RECENT -> titles.recent
-            else -> key
+            else -> tvRowTitle(phone, key)
         }
     }
 }

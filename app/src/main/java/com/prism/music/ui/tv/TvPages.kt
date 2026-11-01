@@ -84,6 +84,7 @@ internal fun tvSignOut(c: AppContainer) {
     c.settings.logout()
     c.library.forgetAccount()
     TvHomeShelves.clear()
+    TvHomeOwn.clear()
     runCatching { android.webkit.CookieManager.getInstance().removeAllCookies(null) }
 }
 
@@ -124,8 +125,16 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
     // and TV agree), the hero and the order as the TV's own layout keeps them (none kept: the phone's order, else Home
     // as it comes).
     val phoneLayout = settings.homeLayout
-    val arranged = remember(shelves, recent, mostPlayed, owner, settings.tv.homeLayout, phoneLayout) {
-        TvHomeLayout.arrange(settings.tv.homeLayout, tvHomeRows(shelves, owner, recent, mostPlayed, titles), phoneLayout)
+    // Every phone Home section the TV can show, from the same places the phone reads them (TvHomeSources): Prism's
+    // mixes, your own lists, the Replay card, moods, tiles, pins… Only the rows Home shows are worked out.
+    val online by c.network.online.collectAsState()
+    val own = rememberTvOwnRows(c, settings, online, recent, shelves, owner)
+    val plays = remember(own) { own.flatMap { it.plays.entries }.associate { it.key to it.value } }
+    val arranged = remember(shelves, recent, mostPlayed, owner, settings.tv.homeLayout, phoneLayout, own, settings.autoAddSections) {
+        // A row Prism makes itself takes the place of YouTube's of the same kind (its Quick picks, made as the phone's).
+        val youtube = tvHomeRows(shelves, owner, recent, mostPlayed, titles).filterNot { y -> own.any { it.row.key == y.key } }
+            .map { r -> r.copy(title = phoneLayout.firstOrNull { it.key == r.key }?.name ?: r.title) }
+        TvHomeLayout.arrange(settings.tv.homeLayout, tvAllRows(own.map { it.row } + youtube), phoneLayout, settings.autoAddSections)
     }
     val rows = arranged.rows
     val now = rememberTvNow(c)
@@ -147,7 +156,8 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
         onOpenLyrics = { nav.go(TvRoute.Lyrics) },
         onItem = { r, i ->
             val row = rows.getOrNull(r) ?: return@TvHomeScreen
-            open(c, nav, row.items.getOrNull(i) ?: return@TvHomeScreen, row.items, i, row.title, radio = row.key == KEY_PICKS && settings.quickPicksRadio) {
+            if (openOwn(c, nav, row.items.getOrNull(i) ?: return@TvHomeScreen, plays) { scope.launch { it() } }) return@TvHomeScreen
+            open(c, nav, row.items[i], row.items, i, row.title, radio = row.key == KEY_PICKS && settings.quickPicksRadio) {
                 scope.launch { it() }
             }.let { ok -> if (!ok) Toast.makeText(context, tr(R.string.couldn_t_start, row.items[i].title), Toast.LENGTH_SHORT).show() }
         },
@@ -186,6 +196,7 @@ internal fun open(
         is PlaylistItem -> if (item.isMix) launch { if (TvPlay.mix(c, item)) nav.go(TvRoute.Player) } else nav.go(TvRoute.Collection(item))
         is AlbumItem -> nav.go(TvRoute.Collection(item))
         is ArtistItem -> nav.go(TvRoute.Artist(item.id))
+        is com.prism.music.data.model.MoodItem -> nav.go(TvRoute.Mood(item))
         else -> return false
     }
     return true

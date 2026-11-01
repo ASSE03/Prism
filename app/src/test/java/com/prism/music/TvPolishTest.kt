@@ -117,7 +117,7 @@ class TvPolishTest {
         // Moved on the TV: Throwbacks up to the top, in the TV's own layout (its order; the phone's stays as it was), and
         // still hidden or shown as the phone's layout says.
         val tvRows = rows.map { com.prism.music.ui.tv.TvHomeRow(phoneKeyOf(it), it, emptyList()) }
-        val natural = com.prism.music.ui.tv.TvHomeLayout.natural(tvRows.map { HomeSectionConfig(it.key, it.title) })
+        val natural = tvRows.map { HomeSectionConfig(it.key, it.title) }
         val list = com.prism.music.ui.tv.TvHomeLayout.editable(emptyList(), natural, noDial)
         val tvLayout = com.prism.music.ui.tv.TvHomeLayout.moved(list, phoneKeyOf("yt:Throwbacks"), -9)
         val shown = com.prism.music.ui.tv.TvHomeLayout.arrange(tvLayout, tvRows, noDial)
