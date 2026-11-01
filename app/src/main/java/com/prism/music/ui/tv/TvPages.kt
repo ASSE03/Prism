@@ -318,7 +318,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.TvQueuePlace(onPicked: 
     // Rows are the queue's entries; the player counts by each entry's own index (a row isn't always the same number).
     TvQueuePanel(
         source.title.takeIf { it.isNotBlank() },
-        queue.map { e -> TvSong(e.uid, e.song.title, e.song.artistText, if (e.song.isLive) null else tvTime(e.song.durationSec * 1000L), e.song.thumbnail) },
+        queue.map { e -> TvSong(e.uid, e.song.title, e.song.artistText, if (e.song.isLive || e.song.durationSec <= 0) null else tvTime(e.song.durationSec * 1000L), e.song.thumbnail) },
         queue.indexOfFirst { it.index == index },
         // As the phone's queue plays one: prepared and playing, and shuffled, Previous comes back to the song before.
         onSong = { i -> queue.getOrNull(i)?.let { c.player.skipTo(it.index); onPicked() } },
@@ -338,7 +338,14 @@ fun TvLyricsPage(nav: TvNav) {
     val accent = rememberTvAccent(now.art)
     val lines = state.lines
     val current by remember(lines) { androidx.compose.runtime.derivedStateOf { CarLyricsCard.lineAt(lines, clock.value).coerceAtLeast(0) } }
-    TvLyricsPlace(now, lines, current, clock, state.loading, state.unavailable, state.source?.label, accent, onPlayPause = { c.player.togglePlay() }) { ms -> c.player.seekToLyric(ms) }
+    // Under each line as the listener has them (Settings → Lyrics): the romanized line and the translation.
+    val roman = com.prism.music.ui.player.rememberRomanized(state)
+    val romanInstead = com.prism.music.ui.player.romanizeMode(s.id) == com.prism.music.data.prefs.RomanizeMode.INSTEAD
+    val translations = rememberTvTranslations(lines)
+    TvLyricsPlace(
+        now, lines, current, clock, state.loading, state.unavailable, state.source?.label, accent, onPlayPause = { c.player.togglePlay() },
+        roman = roman, romanInstead = romanInstead, translations = translations,
+    ) { ms -> c.player.seekToLyric(ms) }
 }
 
 /**
@@ -383,7 +390,7 @@ fun TvCollectionPage(item: BrowseItem, nav: TvNav) {
     val accent = rememberTvAccent(p?.thumbnail ?: item.thumbnail)
     TvCollectionScreen(
         p?.title ?: item.title.ifBlank { tr(R.string.one_moment) }, details, p?.thumbnail ?: item.thumbnail,
-        songs.map { s -> TvSong(s.id, s.title, s.artistText, if (s.isLive) null else tvTime(s.durationSec * 1000L)) },
+        songs.map { s -> TvSong(s.id, s.title, s.artistText, if (s.isLive || s.durationSec <= 0) null else tvTime(s.durationSec * 1000L)) },
         onPlay = { play(0, false) }, onShuffle = { play(0, true) }, onSong = { i -> play(i, false) },
         playing = songs.indexOfFirst { it.id == current?.id }, accent = accent,
     )

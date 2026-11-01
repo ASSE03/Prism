@@ -573,7 +573,9 @@ private fun LightPresets(s: AppSettings, dark: Boolean, onPick: (String) -> Unit
     val scheme = MaterialTheme.colorScheme
     val white = s.lightStyle == LightStyle.WHITE
     // White is a preset like the others: white light on dark pages, black on light ones (named for what it shows).
-    val keys = SpectrumPresets.all.map { it.key to it.label } + (SpectrumPresets.COVER to SpectrumPresets.COVER_LABEL) +
+    // A seasonal Look's light only in its month (or while it's the one picked).
+    val today = remember { com.prism.music.data.looks.Seasons.today() }
+    val keys = SpectrumPresets.all.filter { p -> p.season?.contains(today) ?: true || p.key == s.spectrumPreset }.map { it.key to it.label } + (SpectrumPresets.COVER to SpectrumPresets.COVER_LABEL) +
         (WHITE_KEY to whiteName(dark)) + ("CUSTOM" to tr(R.string.your_own))
     // Three to a row, every tile the same width (a short last row keeps its tiles' size, it doesn't stretch them).
     Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {

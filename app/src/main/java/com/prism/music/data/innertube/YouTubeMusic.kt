@@ -387,6 +387,31 @@ class YouTubeMusic(
     suspend fun playlistContinuation(token: String): Pair<List<Song>, String?> =
         playlistPage(token).let { it.songs to it.next }
 
+    /**
+     * A public playlist's songs as anyone sees it, never with the account (1.8.0's holiday mixes: Prism's own
+     * lookups, which shouldn't end up in the listener's history): its first page, and more up to [limit].
+     */
+    suspend fun publicPlaylistSongs(playlistId: String, limit: Int = 100): List<Song> {
+        val browseId = if (playlistId.startsWith("VL")) playlistId else "VL$playlistId"
+        val res = api.postAnonymous("browse", buildJsonObject { put("browseId", browseId) })
+        val shelf = res.findFirst("musicPlaylistShelfRenderer") ?: res.findFirst("musicShelfRenderer")
+        val songs = (shelf.arr("contents") ?: emptyList()).mapNotNull {
+            it.obj("musicResponsiveListItemRenderer")?.let { r -> (Parser.responsive(r) as? SongItem)?.song }
+        }.toMutableList()
+        var token = Parser.continuation(shelf)
+            ?: res.findAll("continuationItemRenderer").firstOrNull()?.findFirst("continuationCommand").str("token")
+        while (token != null && songs.size < limit) {
+            val t: String = token
+            val more = runCatching { api.postAnonymous("browse", buildJsonObject { put("continuation", t) }, "&ctoken=$t&continuation=$t&type=next") }.getOrNull() ?: break
+            val items = more.findAll("musicResponsiveListItemRenderer").mapNotNull { (Parser.responsive(it) as? SongItem)?.song }
+            if (items.isEmpty()) break
+            songs += items
+            token = more.findAll("continuationItemRenderer").firstOrNull()?.findFirst("continuationCommand").str("token")
+                ?: more.findFirst("musicPlaylistShelfContinuation").let { Parser.continuation(it) }
+        }
+        return songs.distinctBy { it.id }.take(limit)
+    }
+
     /** Loads every song of a playlist, following continuations up to [limit]. */
     suspend fun playlistAll(playlistId: String, limit: Int = 2000): CollectionPage {
         val first = playlist(playlistId)

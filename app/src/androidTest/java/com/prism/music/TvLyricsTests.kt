@@ -69,6 +69,12 @@ class TvLyricsTests {
         compose.awaitFocusOn(hasTestTag("$TAG_LYRICS/lines"), 10_000)
         // Three lines down and OK plays from there (0:24).
         repeat(3) { TvFixture.down(); Thread.sleep(200) }
+        // The picked line glides up into the sung line's place (a third of the way down), the list moving under it.
+        compose.waitUntil(5_000) {
+            val list = compose.onAllNodes(hasTestTag("$TAG_LYRICS/list"), useUnmergedTree = true).fetchSemanticsNodes().firstOrNull()?.boundsInRoot
+            val line = compose.onAllNodes(hasTestTag("$TAG_LYRICS/line/3"), useUnmergedTree = true).fetchSemanticsNodes().firstOrNull()?.boundsInRoot
+            list != null && line != null && line.top - list.top < list.height * 0.45f
+        }
         TvFixture.ok()
         // The player is read on its own thread.
         fun position(): Long { var p = 0L; instrumentation.runOnMainSync { p = player.position }; return p }

@@ -325,7 +325,8 @@ private fun HeaderPicturePicker() {
     }
     val current = com.prism.music.ui.theme.Backdrop.parse(settings.homeHeaderPicture).first
     val designs = com.prism.music.ui.theme.Backdrop.entries.filter {
-        it.group == com.prism.music.ui.theme.BackdropGroup.COLOR || it.group == com.prism.music.ui.theme.BackdropGroup.DESIGNS
+        (it.group == com.prism.music.ui.theme.BackdropGroup.COLOR || it.group == com.prism.music.ui.theme.BackdropGroup.DESIGNS) &&
+            (it.offeredOn(com.prism.music.data.looks.Seasons.today()) || it == current)
     }
     Label(tr(R.string.picture))
     androidx.compose.foundation.layout.FlowRow(

@@ -92,6 +92,7 @@ fun BackgroundsScreen(bottomPadding: Dp, forPlayer: Boolean = false) {
     val scroll = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val current = if (forPlayer) s.backdrops[com.prism.music.ui.theme.PLAYER_BACKDROP] ?: s.backdrops[BackdropScreen.HOME.name] else s.backdrops[screen.name]
     val (currentStyle, currentPhoto) = Backdrop.parse(current)
+    val today = remember { com.prism.music.data.looks.Seasons.today() }
 
     fun apply(value: String?) {
         val map = s.backdrops.toMutableMap()
@@ -174,7 +175,8 @@ fun BackgroundsScreen(bottomPadding: Dp, forPlayer: Boolean = false) {
                     )
                 }
             }
-            Backdrop.entries.filter { it.group == group }.chunked(3).forEachIndexed { r, row -> item(key = "bg:${group.name}:$r") {
+            // A seasonal background only in its month (still shown when it's the one picked).
+            Backdrop.entries.filter { it.group == group && (it.offeredOn(today) || it == currentStyle) }.chunked(3).forEachIndexed { r, row -> item(key = "bg:${group.name}:$r") {
               Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
               row.forEach { style ->
                 val selected = style == currentStyle && (!forPlayer || s.backdrops[com.prism.music.ui.theme.PLAYER_BACKDROP] != null)

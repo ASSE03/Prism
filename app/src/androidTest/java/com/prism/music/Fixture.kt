@@ -25,7 +25,11 @@ object Fixture {
             it[booleanPreferencesKey("tv_welcomed")] = true
         }
         com.prism.music.ui.tour.Tour.markSeen(context)
-        context.getSharedPreferences("prompts", Context.MODE_PRIVATE).edit().putBoolean("notifications_asked", true).commit()
+        // Holiday Mode (1.8.0) asked already, around whatever year the test's clock says.
+        val year = com.prism.music.data.looks.Seasons.today().year
+        val seasons = (year - 1..year + 1).flatMap { y -> com.prism.music.data.looks.Season.entries.map { "${it.name}:$y" } }.toSet()
+        context.getSharedPreferences("prompts", Context.MODE_PRIVATE).edit().putBoolean("notifications_asked", true)
+            .putStringSet("season_asked", seasons).commit()
         // The settings Prism reads at start are its live copy of the store: wait until it has them.
         withTimeout(10_000) { while (!container.settings.current.onboarded) kotlinx.coroutines.delay(20) }
     }
