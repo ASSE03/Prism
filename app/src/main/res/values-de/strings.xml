@@ -4095,4 +4095,32 @@
     <string name="tv_sing_ready">Schnell genug: Singen ist im ⋯ des Players</string>
     <string name="tv_sing_too_slow">Dieser Fernseher ist für Singen nicht schnell genug: er käme hinter dem Song nicht mit</string>
     <string name="tv_sing_no_cpu">Singen läuft nicht auf dem Prozessor dieses Fernsehers</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Schreibtischmodus</string>
+    <string name="desk_mode_detail">Während das Handy lädt und Musik läuft</string>
+    <string name="desk_mode_info">Statt in den Ruhezustand zu gehen, zeigt Prism Song, Cover und Songtext auf einem gedimmten Bildschirm, der langsam wandert, damit nichts einbrennt. Tippe auf den Bildschirm, um zurückzukehren.</string>
+    <string name="desk_mode_keywords">immer an ständer halterung laden ladegerät dock uhr bildschirmschoner nachttisch schreibtisch tischmodus bildschirm anlassen always on</string>
+    <string name="tour_180_tv">Prism auf deinem Fernseher</string>
+    <string name="tour_180_tv_body">Dasselbe Prism, gemacht für die Fernbedienung, auf Android TV und Google TV.</string>
+    <string name="tour_180_tv_phone">Dein Handy meldet den Fernseher an und wird zu seiner Fernbedienung</string>
+    <string name="tour_180_tv_get">Hol es dir mit der App Downloader auf den Fernseher: Code %1$s, oder von diesem Handy</string>
+    <string name="tour_180_tv_big">Große Songtexte, Musikvideos und Mitsingen auf dem großen Bildschirm</string>
+    <string name="tour_180_settings">Einstellungen, übersichtlicher</string>
+    <string name="tour_180_settings_body">Weniger Schalter: Einstellungen, die zusammengehören, sind jetzt eine Auswahl.</string>
+    <string name="tour_180_settings_merged">Crossfade, Glas und was als Nächstes spielt sind jeweils eine Auswahl</string>
+    <string name="tour_180_settings_search">Die Suche findet eine Einstellung weiterhin unter ihrem alten Namen</string>
+    <string name="tour_180_settings_tablet">Auf dem Tablet wählst du, wo die Tabs sitzen</string>
+    <string name="tour_180_player">Der Player, wie du ihn willst</string>
+    <string name="tour_180_player_body">Blende jeden Teil des Players aus und ordne das ⋯-Menü in deiner Reihenfolge.</string>
+    <string name="tour_180_player_parts">Tippe auf einen Teil der Zeichnung, um ihn auszublenden: Seine Aktion bleibt im Menü</string>
+    <string name="tour_180_player_menu">Dieses Menü bearbeiten: Pinne bis zu vier Kacheln, der Rest wird eingeklappt</string>
+    <string name="tour_180_lyrics">Songtexte in vier Teilen</string>
+    <string name="tour_180_lyrics_body">Starte mit einem Look und wähle dann Animation, Text, Hintergrund und Effekte.</string>
+    <string name="tour_180_lyrics_start">Starte mit Prism, Karaoke, Kräftige Karte, Leuchten, Schreibmaschine oder Ruhig</string>
+    <string name="tour_180_lyrics_smooth">Karaoke und Kräftige Karte animieren flüssiger</string>
+    <string name="tour_180_desk">Schreibtischmodus: ein ruhiger Bildschirm, während das Handy lädt und spielt</string>
+    <string name="tour_180_crossfade">Crossfades wiederholen keinen Moment des Songs</string>
+    <string name="tour_180_silence">Stille entfernen betrifft nur Anfang und Ende eines Songs</string>
+    <string name="tour_180_normalize">Gleiche Lautstärke gleicht große Sprünge zwischen Songs aus</string>
+    <string name="tour_180_size">Ein kleinerer Download</string>
 </resources>

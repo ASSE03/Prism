@@ -4145,4 +4145,32 @@
     <string name="tv_sing_ready">Abbastanza veloce: Canta è nel ⋯ del player</string>
     <string name="tv_sing_too_slow">Questa TV non è abbastanza veloce per Canta: resterebbe indietro rispetto al brano</string>
     <string name="tv_sing_no_cpu">Canta non funziona sul processore di questa TV</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Modalità scrivania</string>
+    <string name="desk_mode_detail">Mentre il telefono si ricarica e la musica suona</string>
+    <string name="desk_mode_info">Invece di andare in stop, il telefono mostra il brano, la copertina e il testo su uno schermo attenuato che si sposta lentamente per non rimanere impresso. Tocca lo schermo per tornare.</string>
+    <string name="desk_mode_keywords">sempre attivo supporto ricarica in carica dock orologio ambiente salvaschermo comodino tenere schermo acceso scrivania</string>
+    <string name="tour_180_tv">Prism sulla tua TV</string>
+    <string name="tour_180_tv_body">Lo stesso Prism, pensato per il telecomando, su Android TV e Google TV.</string>
+    <string name="tour_180_tv_phone">Il telefono accede alla TV e ne diventa il telecomando</string>
+    <string name="tour_180_tv_get">Installalo sulla TV con l\'app Downloader: codice %1$s, oppure da questo telefono</string>
+    <string name="tour_180_tv_big">Testi grandi, video musicali e Canta sul grande schermo</string>
+    <string name="tour_180_settings">Impostazioni più chiare</string>
+    <string name="tour_180_settings_body">Meno interruttori: le impostazioni che funzionavano insieme ora sono una sola scelta.</string>
+    <string name="tour_180_settings_merged">Dissolvenza incrociata, vetro e cosa suona dopo: una scelta ciascuno</string>
+    <string name="tour_180_settings_search">La ricerca trova ancora un\'impostazione dal suo vecchio nome</string>
+    <string name="tour_180_settings_tablet">Su un tablet, scegli dove mettere le schede</string>
+    <string name="tour_180_player">Il player, a modo tuo</string>
+    <string name="tour_180_player_body">Nascondi qualsiasi parte del player e metti il menu ⋯ nell\'ordine che vuoi.</string>
+    <string name="tour_180_player_parts">Tocca una parte del disegno per nasconderla: la sua azione resta nel menu</string>
+    <string name="tour_180_player_menu">Modifica questo menu: fissa fino a quattro riquadri, riponi gli altri</string>
+    <string name="tour_180_lyrics">Testi in quattro parti</string>
+    <string name="tour_180_lyrics_body">Parti da uno stile, poi scegli animazione, testo, sfondo ed effetti.</string>
+    <string name="tour_180_lyrics_start">Parti da Prism, Karaoke, Scheda decisa, Bagliore, Macchina da scrivere o Calmo</string>
+    <string name="tour_180_lyrics_smooth">Karaoke e Scheda decisa si animano in modo più fluido</string>
+    <string name="tour_180_desk">Modalità scrivania: uno schermo calmo mentre il telefono si ricarica e suona</string>
+    <string name="tour_180_crossfade">Le dissolvenze incrociate non ripetono mai un momento del brano</string>
+    <string name="tour_180_silence">Togli il silenzio tocca solo l\'inizio e la fine di un brano</string>
+    <string name="tour_180_normalize">Stesso volume livella i grandi sbalzi tra i brani</string>
+    <string name="tour_180_size">Un download più leggero</string>
 </resources>

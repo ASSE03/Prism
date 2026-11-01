@@ -4145,4 +4145,32 @@
     <string name="tv_sing_ready">מהירה מספיק: ״שירה״ נמצאת ב-⋯ של הנגן</string>
     <string name="tv_sing_too_slow">הטלוויזיה לא מהירה מספיק ל״שירה״: היא תפגר אחרי השיר</string>
     <string name="tv_sing_no_cpu">״שירה״ לא פועלת על המעבד של הטלוויזיה הזו</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">מצב שולחן</string>
+    <string name="desk_mode_detail">בזמן שהטלפון נטען והמוזיקה מתנגנת</string>
+    <string name="desk_mode_info">במקום שהטלפון יעבור למצב שינה, מוצגים על מסך מעומעם השיר, העטיפה והמילים שלו. המסך נע לאט כדי שלא ייצרב. גע במסך כדי לחזור.</string>
+    <string name="desk_mode_keywords">תמיד דלוק מעמד טעינה נטען עגינה שעון אווירה שומר מסך ליד המיטה להשאיר מסך דלוק שולחן</string>
+    <string name="tour_180_tv">Prism בטלוויזיה שלך</string>
+    <string name="tour_180_tv_body">אותו Prism, בנוי לשלט רחוק, ב-Android TV וב-Google TV.</string>
+    <string name="tour_180_tv_phone">הטלפון שלך מחבר את הטלוויזיה לחשבון והופך לשלט שלה</string>
+    <string name="tour_180_tv_get">מתקינים בטלוויזיה עם האפליקציה Downloader: קוד %1$s, או מהטלפון הזה</string>
+    <string name="tour_180_tv_big">מילים גדולות, סרטוני מוזיקה ושירה על המסך הגדול</string>
+    <string name="tour_180_settings">הגדרות ברורות יותר</string>
+    <string name="tour_180_settings_body">פחות מתגים: הגדרות שפעלו יחד הן עכשיו בחירה אחת.</string>
+    <string name="tour_180_settings_merged">מעבר הדרגתי, זכוכית ומה שמתנגן אחר כך: כל אחד בחירה אחת</string>
+    <string name="tour_180_settings_search">החיפוש עדיין מוצא הגדרה לפי שמה הישן</string>
+    <string name="tour_180_settings_tablet">בטאבלט אפשר לבחור איפה הכרטיסיות</string>
+    <string name="tour_180_player">הנגן, בדרך שלך</string>
+    <string name="tour_180_player_body">הסתר כל חלק בנגן, וסדר את תפריט ⋯ בסדר שנוח לך.</string>
+    <string name="tour_180_player_parts">הקש על חלק בשרטוט כדי להסתיר אותו: הפעולה שלו נשארת בתפריט</string>
+    <string name="tour_180_player_menu">עריכת התפריט הזה: הצמד עד ארבעה אריחים, ואת השאר קפל</string>
+    <string name="tour_180_lyrics">מילים בארבעה חלקים</string>
+    <string name="tour_180_lyrics_body">התחל מסגנון, ואז בחר את האנימציה, הטקסט, הרקע והאפקטים שלו.</string>
+    <string name="tour_180_lyrics_start">התחל מ-Prism, קריוקי, כרטיס בולט, זוהר, מכונת כתיבה או רגוע</string>
+    <string name="tour_180_lyrics_smooth">קריוקי וכרטיס בולט נעים בצורה חלקה יותר</string>
+    <string name="tour_180_desk">מצב שולחן: מסך רגוע בזמן שהטלפון נטען ומנגן</string>
+    <string name="tour_180_crossfade">מעברים הדרגתיים אף פעם לא חוזרים על רגע בשיר</string>
+    <string name="tour_180_silence">חיתוך שקט נוגע רק בהתחלה ובסוף של שיר</string>
+    <string name="tour_180_normalize">אותה עוצמה מאזנת קפיצות גדולות בין שירים</string>
+    <string name="tour_180_size">הורדה קטנה יותר</string>
 </resources>

@@ -4145,4 +4145,32 @@
     <string name="tv_sing_ready">Destul de rapid: Cântă e în ⋯ din player</string>
     <string name="tv_sing_too_slow">Acest televizor nu e destul de rapid pentru Cântă: ar rămâne în urma melodiei</string>
     <string name="tv_sing_no_cpu">Cântă nu rulează pe procesorul acestui televizor</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Modul birou</string>
+    <string name="desk_mode_detail">Cât timp telefonul se încarcă și muzica rulează</string>
+    <string name="desk_mode_info">În loc să adoarmă telefonul, Prism afișează melodia, coperta și versurile pe un ecran întunecat care se mișcă lent, ca să nu se întipărească imaginea. Atinge ecranul ca să revii.</string>
+    <string name="desk_mode_keywords">mereu pornit suport încărcare dock ceas ambiental economizor ecran noptieră ecran aprins birou</string>
+    <string name="tour_180_tv">Prism pe televizorul tău</string>
+    <string name="tour_180_tv_body">Același Prism, făcut pentru telecomandă, pe Android TV și Google TV.</string>
+    <string name="tour_180_tv_phone">Telefonul autentifică televizorul și îi devine telecomandă</string>
+    <string name="tour_180_tv_get">Instalează-l pe televizor cu aplicația Downloader: codul %1$s, sau de pe acest telefon</string>
+    <string name="tour_180_tv_big">Versuri mari, videoclipuri muzicale și Cântă pe ecranul mare</string>
+    <string name="tour_180_settings">Setări mai clare</string>
+    <string name="tour_180_settings_body">Mai puține comutatoare: setările care lucrau împreună sunt acum o singură alegere.</string>
+    <string name="tour_180_settings_merged">Tranziția, sticla și ce se redă mai departe sunt câte o alegere</string>
+    <string name="tour_180_settings_search">Căutarea găsește în continuare o setare după numele vechi</string>
+    <string name="tour_180_settings_tablet">Pe tabletă, alege unde stau filele</string>
+    <string name="tour_180_player">Playerul, cum vrei tu</string>
+    <string name="tour_180_player_body">Ascunde orice parte a playerului și pune meniul ⋯ în ordinea ta.</string>
+    <string name="tour_180_player_parts">Atinge o parte din desen ca să o ascunzi: acțiunea rămâne în meniu</string>
+    <string name="tour_180_player_menu">Editează acest meniu: fixează până la patru plăci, restul le strângi</string>
+    <string name="tour_180_lyrics">Versuri în patru părți</string>
+    <string name="tour_180_lyrics_body">Pornește de la un look, apoi alege animația, textul, fundalul și efectele.</string>
+    <string name="tour_180_lyrics_start">Pornește de la Prism, Karaoke, Card îndrăzneț, Strălucire, Mașină de scris sau Calm</string>
+    <string name="tour_180_lyrics_smooth">Karaoke și Card îndrăzneț se animă mai fluid</string>
+    <string name="tour_180_desk">Modul birou: un ecran calm cât telefonul se încarcă și redă muzică</string>
+    <string name="tour_180_crossfade">Tranziția nu repetă niciodată un moment din melodie</string>
+    <string name="tour_180_silence">Tăierea liniștii atinge doar începutul și sfârșitul unei melodii</string>
+    <string name="tour_180_normalize">Aceeași intensitate netezește salturile mari dintre melodii</string>
+    <string name="tour_180_size">O descărcare mai mică</string>
 </resources>

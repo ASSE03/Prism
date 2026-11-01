@@ -4095,4 +4095,32 @@
     <string name="tv_sing_ready">काफ़ी तेज़: गाएँ प्लेयर के ⋯ में है</string>
     <string name="tv_sing_too_slow">यह टीवी गाएँ के लिए काफ़ी तेज़ नहीं: यह गाने से पीछे रह जाएगा</string>
     <string name="tv_sing_no_cpu">गाएँ इस टीवी के प्रोसेसर पर नहीं चलता</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">डेस्क मोड</string>
+    <string name="desk_mode_detail">जब फ़ोन चार्ज हो रहा हो और संगीत चल रहा हो</string>
+    <string name="desk_mode_info">फ़ोन को सोने देने के बजाय, Prism मंद स्क्रीन पर गाना, उसका कवर और उसके बोल दिखाता है। स्क्रीन धीरे-धीरे खिसकती रहती है ताकि उस पर निशान न पड़े। वापस आने के लिए स्क्रीन को छुएं।</string>
+    <string name="desk_mode_keywords">हमेशा चालू स्टैंड चार्जिंग चार्ज डॉक घड़ी एम्बिएंट स्क्रीनसेवर बेडसाइड स्क्रीन चालू रखें डेस्क</string>
+    <string name="tour_180_tv">आपके टीवी पर Prism</string>
+    <string name="tour_180_tv_body">वही Prism, रिमोट के लिए बना, Android TV और Google TV पर।</string>
+    <string name="tour_180_tv_phone">आपका फ़ोन टीवी में साइन इन कराता है और उसका रिमोट बन जाता है</string>
+    <string name="tour_180_tv_get">Downloader ऐप से टीवी पर पाएं: कोड %1$s, या इस फ़ोन से</string>
+    <string name="tour_180_tv_big">बड़ी स्क्रीन पर बड़े बोल, म्यूज़िक वीडियो और साथ गाएं</string>
+    <string name="tour_180_settings">सेटिंग, और ज़्यादा साफ़</string>
+    <string name="tour_180_settings_body">कम स्विच: जो सेटिंग साथ काम करती थीं, अब एक ही विकल्प हैं।</string>
+    <string name="tour_180_settings_merged">क्रॉसफ़ेड, ग्लास और आगे क्या चले: हर एक अब एक विकल्प</string>
+    <string name="tour_180_settings_search">खोज अब भी सेटिंग को उसके पुराने नाम से ढूंढ लेती है</string>
+    <string name="tour_180_settings_tablet">टैबलेट पर चुनें कि टैब कहां रहें</string>
+    <string name="tour_180_player">प्लेयर, आपके अंदाज़ में</string>
+    <string name="tour_180_player_body">प्लेयर का कोई भी हिस्सा छिपाएं, और ⋯ मेनू को अपने क्रम में रखें।</string>
+    <string name="tour_180_player_parts">चित्र के किसी हिस्से पर टैप करके उसे छिपाएं: उसकी कार्रवाई मेनू में रहती है</string>
+    <string name="tour_180_player_menu">यह मेनू बदलें: चार तक टाइल पिन करें, बाकी को समेट दें</string>
+    <string name="tour_180_lyrics">चार हिस्सों में बोल</string>
+    <string name="tour_180_lyrics_body">एक स्टाइल से शुरू करें, फिर उसका एनिमेशन, टेक्स्ट, बैकग्राउंड और इफ़ेक्ट चुनें।</string>
+    <string name="tour_180_lyrics_start">Prism, कराओके, बोल्ड कार्ड, चमक, टाइपराइटर या शांत से शुरू करें</string>
+    <string name="tour_180_lyrics_smooth">कराओके और बोल्ड कार्ड अब ज़्यादा सहजता से चलते हैं</string>
+    <string name="tour_180_desk">डेस्क मोड: फ़ोन के चार्ज होने और चलने के दौरान एक शांत स्क्रीन</string>
+    <string name="tour_180_crossfade">क्रॉसफ़ेड गाने का कोई पल कभी दोहराता नहीं</string>
+    <string name="tour_180_silence">चुप्पी हटाना सिर्फ़ गाने की शुरुआत और अंत को छूता है</string>
+    <string name="tour_180_normalize">एक जैसी आवाज़ गानों के बीच के बड़े उछाल को बराबर करती है</string>
+    <string name="tour_180_size">छोटा डाउनलोड</string>
 </resources>

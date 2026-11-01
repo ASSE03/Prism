@@ -4045,4 +4045,32 @@
     <string name="tv_sing_ready">Cukup laju: Menyanyi ada dalam ⋯ pemain</string>
     <string name="tv_sing_too_slow">TV ini tidak cukup laju untuk Menyanyi: ia akan ketinggalan daripada lagu</string>
     <string name="tv_sing_no_cpu">Menyanyi tidak berjalan pada pemproses TV ini</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Mod meja</string>
+    <string name="desk_mode_detail">Semasa telefon mengecas dan muzik dimainkan</string>
+    <string name="desk_mode_info">Daripada membiarkan telefon tidur, Prism memaparkan lagu, kulit album dan liriknya pada skrin malap yang bergerak perlahan supaya tidak terbakar. Sentuh skrin untuk kembali.</string>
+    <string name="desk_mode_keywords">sentiasa hidup dudukan mengecas dok jam ambien penyimpan skrin tepi katil kekalkan skrin menyala meja</string>
+    <string name="tour_180_tv">Prism di TV anda</string>
+    <string name="tour_180_tv_body">Prism yang sama, dibuat untuk alat kawalan jauh, di Android TV dan Google TV.</string>
+    <string name="tour_180_tv_phone">Telefon anda mendaftarkan masuk TV dan menjadi alat kawalan jauhnya</string>
+    <string name="tour_180_tv_get">Dapatkannya di TV dengan aplikasi Downloader: kod %1$s, atau daripada telefon ini</string>
+    <string name="tour_180_tv_big">Lirik besar, video muzik dan Nyanyi pada skrin besar</string>
+    <string name="tour_180_settings">Tetapan, lebih jelas</string>
+    <string name="tour_180_settings_body">Kurang suis: tetapan yang berfungsi bersama kini menjadi satu pilihan.</string>
+    <string name="tour_180_settings_merged">Pudar silang, kaca dan apa yang dimainkan seterusnya masing-masing satu pilihan</string>
+    <string name="tour_180_settings_search">Carian masih menemui tetapan melalui nama lamanya</string>
+    <string name="tour_180_settings_tablet">Pada tablet, pilih di mana tab diletakkan</string>
+    <string name="tour_180_player">Pemain, ikut cara anda</string>
+    <string name="tour_180_player_body">Sembunyikan mana-mana bahagian pemain, dan susun menu ⋯ mengikut urutan anda sendiri.</string>
+    <string name="tour_180_player_parts">Ketik satu bahagian lukisan untuk menyembunyikannya: tindakannya kekal dalam menu</string>
+    <string name="tour_180_player_menu">Edit menu ini: semat sehingga empat jubin, lipat yang lain</string>
+    <string name="tour_180_lyrics">Lirik dalam empat bahagian</string>
+    <string name="tour_180_lyrics_body">Mulakan daripada satu gaya, kemudian pilih animasi, teks, latar belakang dan kesannya.</string>
+    <string name="tour_180_lyrics_start">Mulakan daripada Prism, Karaoke, Kad tebal, Cahaya, Mesin taip atau Tenang</string>
+    <string name="tour_180_lyrics_smooth">Karaoke dan Kad tebal beranimasi dengan lebih lancar</string>
+    <string name="tour_180_desk">Mod meja: skrin yang tenang semasa telefon mengecas dan memainkan muzik</string>
+    <string name="tour_180_crossfade">Pudar silang tidak pernah mengulang satu detik pun dalam lagu</string>
+    <string name="tour_180_silence">Potong senyap hanya menyentuh awal dan akhir lagu</string>
+    <string name="tour_180_normalize">Kenyaringan sama meratakan lonjakan besar antara lagu</string>
+    <string name="tour_180_size">Muat turun yang lebih kecil</string>
 </resources>

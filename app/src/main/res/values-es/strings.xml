@@ -4145,4 +4145,32 @@
     <string name="tv_sing_ready">Lo bastante rápida: Cantar está en el ⋯ del reproductor</string>
     <string name="tv_sing_too_slow">Esta TV no es lo bastante rápida para Cantar: se quedaría atrás de la canción</string>
     <string name="tv_sing_no_cpu">Cantar no funciona con el procesador de esta TV</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Modo escritorio</string>
+    <string name="desk_mode_detail">Mientras el teléfono carga y suena música</string>
+    <string name="desk_mode_info">En vez de dejar que el teléfono se duerma, Prism muestra la canción, su portada y su letra en una pantalla atenuada que se desplaza despacio para que no se queme. Toca la pantalla para volver.</string>
+    <string name="desk_mode_keywords">siempre encendida soporte base cargando carga cargador dock reloj escritorio salvapantallas mesita de noche mantener pantalla encendida always on</string>
+    <string name="tour_180_tv">Prism en tu TV</string>
+    <string name="tour_180_tv_body">El mismo Prism, hecho para un control remoto, en Android TV y Google TV.</string>
+    <string name="tour_180_tv_phone">Tu teléfono inicia sesión en la TV y se convierte en su control remoto</string>
+    <string name="tour_180_tv_get">Consíguelo en la TV con la app Downloader: código %1$s, o desde este teléfono</string>
+    <string name="tour_180_tv_big">Letras grandes, videos musicales y Cantar en la pantalla grande</string>
+    <string name="tour_180_settings">Ajustes más claros</string>
+    <string name="tour_180_settings_body">Menos interruptores: los ajustes que funcionaban juntos ahora son una sola opción.</string>
+    <string name="tour_180_settings_merged">Fundido, cristal y qué suena después son cada uno una sola opción</string>
+    <string name="tour_180_settings_search">La búsqueda sigue encontrando un ajuste por su nombre antiguo</string>
+    <string name="tour_180_settings_tablet">En una tablet, elige dónde van las pestañas</string>
+    <string name="tour_180_player">El reproductor, a tu manera</string>
+    <string name="tour_180_player_body">Oculta cualquier parte del reproductor y ordena el menú ⋯ como quieras.</string>
+    <string name="tour_180_player_parts">Toca una parte del dibujo para ocultarla: su acción se queda en el menú</string>
+    <string name="tour_180_player_menu">Editar este menú: fija hasta cuatro mosaicos y pliega el resto</string>
+    <string name="tour_180_lyrics">La letra en cuatro partes</string>
+    <string name="tour_180_lyrics_body">Empieza por un look y elige después su animación, texto, fondo y efectos.</string>
+    <string name="tour_180_lyrics_start">Empieza por Prism, Karaoke, Tarjeta intensa, Brillo, Máquina de escribir o Calma</string>
+    <string name="tour_180_lyrics_smooth">Karaoke y Tarjeta intensa se animan con más fluidez</string>
+    <string name="tour_180_desk">Modo escritorio: una pantalla tranquila mientras el teléfono carga y reproduce</string>
+    <string name="tour_180_crossfade">El fundido nunca repite un momento de la canción</string>
+    <string name="tour_180_silence">Recortar el silencio solo toca el inicio y el final de una canción</string>
+    <string name="tour_180_normalize">Normalizar volumen suaviza los grandes saltos entre canciones</string>
+    <string name="tour_180_size">Una descarga más pequeña</string>
 </resources>

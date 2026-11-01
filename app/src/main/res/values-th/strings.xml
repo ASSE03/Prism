@@ -4045,4 +4045,32 @@
     <string name="tv_sing_ready">เร็วพอ: ร้องเพลงอยู่ใน ⋯ ของเครื่องเล่น</string>
     <string name="tv_sing_too_slow">ทีวีเครื่องนี้เร็วไม่พอสำหรับร้องเพลง: จะตามเพลงไม่ทัน</string>
     <string name="tv_sing_no_cpu">ร้องเพลงใช้กับโปรเซสเซอร์ของทีวีเครื่องนี้ไม่ได้</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">โหมดตั้งโต๊ะ</string>
+    <string name="desk_mode_detail">ขณะที่โทรศัพท์ชาร์จและกำลังเล่นเพลง</string>
+    <string name="desk_mode_info">แทนที่โทรศัพท์จะดับหน้าจอ Prism จะแสดงเพลง ปก และเนื้อเพลงบนหน้าจอที่หรี่แสงและเลื่อนไปช้า ๆ เพื่อไม่ให้เกิดภาพค้าง แตะหน้าจอเพื่อกลับ</string>
+    <string name="desk_mode_keywords">เปิดตลอด ขาตั้ง ชาร์จ แท่นชาร์จ นาฬิกา บรรยากาศ สกรีนเซฟเวอร์ ข้างเตียง เปิดหน้าจอค้างไว้ desk charging</string>
+    <string name="tour_180_tv">Prism บนทีวีของคุณ</string>
+    <string name="tour_180_tv_body">Prism ตัวเดิม ออกแบบมาให้ใช้กับรีโมต บน Android TV และ Google TV</string>
+    <string name="tour_180_tv_phone">โทรศัพท์ของคุณลงชื่อเข้าใช้ให้ทีวีและกลายเป็นรีโมต</string>
+    <string name="tour_180_tv_get">ติดตั้งบนทีวีด้วยแอป Downloader: รหัส %1$s หรือจากโทรศัพท์เครื่องนี้</string>
+    <string name="tour_180_tv_big">เนื้อเพลงตัวใหญ่ มิวสิกวิดีโอ และ Sing บนจอใหญ่</string>
+    <string name="tour_180_settings">การตั้งค่าที่ชัดเจนขึ้น</string>
+    <string name="tour_180_settings_body">สวิตช์น้อยลง: การตั้งค่าที่ทำงานร่วมกันตอนนี้รวมเป็นตัวเลือกเดียว</string>
+    <string name="tour_180_settings_merged">ครอสเฟด กระจก และเพลงถัดไป แต่ละอย่างเป็นตัวเลือกเดียว</string>
+    <string name="tour_180_settings_search">ค้นหายังหาการตั้งค่าเจอด้วยชื่อเดิม</string>
+    <string name="tour_180_settings_tablet">บนแท็บเล็ต เลือกได้ว่าจะวางแท็บไว้ที่ใด</string>
+    <string name="tour_180_player">เพลเยอร์ในแบบของคุณ</string>
+    <string name="tour_180_player_body">ซ่อนส่วนใดของเพลเยอร์ก็ได้ และจัดเรียงเมนู ⋯ ตามที่คุณต้องการ</string>
+    <string name="tour_180_player_parts">แตะส่วนหนึ่งของภาพวาดเพื่อซ่อน: การทำงานของส่วนนั้นยังอยู่ในเมนู</string>
+    <string name="tour_180_player_menu">แก้ไขเมนูนี้: ปักหมุดได้สูงสุดสี่ไทล์ แล้วพับที่เหลือเก็บ</string>
+    <string name="tour_180_lyrics">เนื้อเพลงสี่ส่วน</string>
+    <string name="tour_180_lyrics_body">เริ่มจากลุคหนึ่ง แล้วเลือกแอนิเมชัน ข้อความ พื้นหลัง และเอฟเฟกต์ของมัน</string>
+    <string name="tour_180_lyrics_start">เริ่มจาก Prism, คาราโอเกะ, การ์ดสีสด, เรืองแสง, พิมพ์ดีด หรือสงบ</string>
+    <string name="tour_180_lyrics_smooth">คาราโอเกะและการ์ดสีสดเคลื่อนไหวลื่นไหลขึ้น</string>
+    <string name="tour_180_desk">โหมดตั้งโต๊ะ: หน้าจอสงบ ๆ ขณะที่โทรศัพท์ชาร์จและเล่นเพลง</string>
+    <string name="tour_180_crossfade">ครอสเฟดจะไม่เล่นซ้ำช่วงใดของเพลงอีก</string>
+    <string name="tour_180_silence">ตัดช่วงเงียบจะตัดเฉพาะต้นเพลงและท้ายเพลงเท่านั้น</string>
+    <string name="tour_180_normalize">ระดับเสียงเท่ากันช่วยลดความต่างของเสียงระหว่างเพลง</string>
+    <string name="tour_180_size">ดาวน์โหลดเล็กลง</string>
 </resources>

@@ -679,7 +679,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private fun applySkipSilence() {
         val s = c.settings.current
         edges.enabled = s.skipSilence
-        val on = player.currentMediaItem?.toSong()?.isEpisode == true && s.sound.skipSilenceEpisodes
+        // 1.8.0's one choice has no "songs only": songs trimmed reads as "Songs and podcasts" (SoundChoices), so it is.
+        val on = player.currentMediaItem?.toSong()?.isEpisode == true && (s.sound.skipSilenceEpisodes || s.skipSilence)
         if (player.skipSilenceEnabled != on) player.skipSilenceEnabled = on
     }
 

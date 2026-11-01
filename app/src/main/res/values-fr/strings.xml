@@ -4145,4 +4145,32 @@
     <string name="tv_sing_ready">Assez rapide : Chanter est dans le ⋯ du lecteur</string>
     <string name="tv_sing_too_slow">Ce téléviseur n\'est pas assez rapide pour Chanter : il prendrait du retard sur le titre</string>
     <string name="tv_sing_no_cpu">Chanter ne fonctionne pas sur le processeur de ce téléviseur</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Mode bureau</string>
+    <string name="desk_mode_detail">Pendant que le téléphone charge et que la musique joue</string>
+    <string name="desk_mode_info">Au lieu de se mettre en veille, le téléphone affiche le titre, sa pochette et ses paroles sur un écran atténué qui dérive lentement pour éviter la rémanence. Touchez l’écran pour revenir.</string>
+    <string name="desk_mode_keywords">toujours allumé support chargement charge dock horloge ambiance économiseur écran veille chevet garder écran allumé bureau</string>
+    <string name="tour_180_tv">Prism sur votre TV</string>
+    <string name="tour_180_tv_body">Le même Prism, conçu pour une télécommande, sur Android TV et Google TV.</string>
+    <string name="tour_180_tv_phone">Votre téléphone connecte la TV à votre compte et devient sa télécommande</string>
+    <string name="tour_180_tv_get">Installez-le sur la TV avec l’application Downloader : code %1$s, ou depuis ce téléphone</string>
+    <string name="tour_180_tv_big">Paroles en grand, clips vidéo et Chanter sur grand écran</string>
+    <string name="tour_180_settings">Des réglages plus clairs</string>
+    <string name="tour_180_settings_body">Moins d’interrupteurs : les réglages qui allaient ensemble ne forment plus qu’un seul choix.</string>
+    <string name="tour_180_settings_merged">Fondu enchaîné, verre et lecture suivante : un seul choix chacun</string>
+    <string name="tour_180_settings_search">La recherche retrouve toujours un réglage par son ancien nom</string>
+    <string name="tour_180_settings_tablet">Sur tablette, choisissez où placer les onglets</string>
+    <string name="tour_180_player">Le lecteur à votre façon</string>
+    <string name="tour_180_player_body">Masquez n’importe quelle partie du lecteur et classez le menu ⋯ dans l’ordre voulu.</string>
+    <string name="tour_180_player_parts">Touchez une partie du dessin pour la masquer : son action reste dans le menu</string>
+    <string name="tour_180_player_menu">Modifier ce menu : épinglez jusqu’à quatre tuiles, rangez le reste</string>
+    <string name="tour_180_lyrics">Les paroles en quatre parties</string>
+    <string name="tour_180_lyrics_body">Partez d’un style, puis choisissez son animation, son texte, son arrière-plan et ses effets.</string>
+    <string name="tour_180_lyrics_start">Partez de Prism, Karaoké, Carte vive, Halo, Machine à écrire ou Calme</string>
+    <string name="tour_180_lyrics_smooth">Karaoké et Carte vive s’animent plus fluidement</string>
+    <string name="tour_180_desk">Mode bureau : un écran calme pendant que le téléphone charge et lit</string>
+    <string name="tour_180_crossfade">Les fondus enchaînés ne répètent jamais un moment du titre</string>
+    <string name="tour_180_silence">Couper le silence ne touche que le début et la fin d’un titre</string>
+    <string name="tour_180_normalize">Même volume atténue les gros écarts entre les titres</string>
+    <string name="tour_180_size">Un téléchargement plus léger</string>
 </resources>

@@ -4095,4 +4095,32 @@
     <string name="tv_sing_ready">Yeterince hızlı: Söyle oynatıcının ⋯ menüsünde</string>
     <string name="tv_sing_too_slow">Bu TV, Söyle için yeterince hızlı değil: şarkının gerisinde kalır</string>
     <string name="tv_sing_no_cpu">Söyle bu TV\'nin işlemcisinde çalışmaz</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Masa modu</string>
+    <string name="desk_mode_detail">Telefon şarj olurken ve müzik çalarken</string>
+    <string name="desk_mode_info">Telefonun uyku moduna geçmesi yerine Prism, şarkıyı, kapağını ve sözlerini ekranın yanmaması için yavaşça kayan, karartılmış bir ekranda gösterir. Geri dönmek için ekrana dokunun.</string>
+    <string name="desk_mode_keywords">her zaman açık stand şarj dock saat ortam ekran koruyucu komodin ekranı açık tut masa</string>
+    <string name="tour_180_tv">Prism TV\'nizde</string>
+    <string name="tour_180_tv_body">Aynı Prism, kumandaya göre tasarlandı: Android TV ve Google TV\'de.</string>
+    <string name="tour_180_tv_phone">Telefonunuz TV\'de oturum açar ve kumandası olur</string>
+    <string name="tour_180_tv_get">TV\'ye Downloader uygulamasıyla alın: kod %1$s veya bu telefondan</string>
+    <string name="tour_180_tv_big">Büyük ekranda büyük şarkı sözleri, müzik videoları ve Sing</string>
+    <string name="tour_180_settings">Daha anlaşılır ayarlar</string>
+    <string name="tour_180_settings_body">Daha az anahtar: birlikte çalışan ayarlar artık tek bir seçim.</string>
+    <string name="tour_180_settings_merged">Çapraz geçiş, cam ve sıradaki şarkı artık birer seçim</string>
+    <string name="tour_180_settings_search">Arama, bir ayarı hâlâ eski adıyla bulur</string>
+    <string name="tour_180_settings_tablet">Tablette sekmelerin nerede duracağını seçin</string>
+    <string name="tour_180_player">Oynatıcı, sizin tarzınızda</string>
+    <string name="tour_180_player_body">Oynatıcının istediğiniz bölümünü gizleyin ve ⋯ menüsünü kendi sıranıza koyun.</string>
+    <string name="tour_180_player_parts">Gizlemek için çizimin bir parçasına dokunun: işlevi menüde kalır</string>
+    <string name="tour_180_player_menu">Bu menüyü düzenle: dört kutucuğa kadar sabitleyin, gerisini katlayın</string>
+    <string name="tour_180_lyrics">Dört bölümlü şarkı sözleri</string>
+    <string name="tour_180_lyrics_body">Bir görünümle başlayın, sonra animasyonunu, metnini, arka planını ve efektlerini seçin.</string>
+    <string name="tour_180_lyrics_start">Prism, Karaoke, Cesur kart, Parıltı, Daktilo veya Sakin ile başlayın</string>
+    <string name="tour_180_lyrics_smooth">Karaoke ve Cesur kart daha akıcı canlanır</string>
+    <string name="tour_180_desk">Masa modu: telefon şarj olup çalarken sakin bir ekran</string>
+    <string name="tour_180_crossfade">Çapraz geçişler şarkının hiçbir anını tekrarlamaz</string>
+    <string name="tour_180_silence">Sessizlik kırpma yalnızca şarkının başına ve sonuna dokunur</string>
+    <string name="tour_180_normalize">Aynı ses düzeyi, şarkılar arasındaki büyük farkları giderir</string>
+    <string name="tour_180_size">Daha küçük bir indirme</string>
 </resources>

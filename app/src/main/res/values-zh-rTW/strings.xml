@@ -4045,4 +4045,32 @@
     <string name="tv_sing_ready">夠快：「唱歌」在播放器的 ⋯ 中</string>
     <string name="tv_sing_too_slow">這台電視不夠快，無法「唱歌」：會跟不上歌曲</string>
     <string name="tv_sing_no_cpu">「唱歌」無法在這台電視的處理器上執行</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">桌面模式</string>
+    <string name="desk_mode_detail">手機充電且正在播放音樂時</string>
+    <string name="desk_mode_info">手機不會進入休眠，Prism 會在調暗的螢幕上顯示歌曲、封面和歌詞，畫面還會緩慢漂移，避免烙印。觸碰螢幕即可返回。</string>
+    <string name="desk_mode_keywords">恆亮 支架 充電 底座 時鐘 氛圍 螢幕保護程式 床邊 保持螢幕開啟 桌面</string>
+    <string name="tour_180_tv">電視上的 Prism</string>
+    <string name="tour_180_tv_body">還是那個 Prism，專為遙控器打造，支援 Android TV 和 Google TV。</string>
+    <string name="tour_180_tv_phone">你的手機會替電視登入，並變成它的遙控器</string>
+    <string name="tour_180_tv_get">用 Downloader 應用程式安裝到電視：代碼 %1$s，或從這支手機安裝</string>
+    <string name="tour_180_tv_big">在大螢幕上享受大字歌詞、音樂影片和 Sing</string>
+    <string name="tour_180_settings">更清楚的設定</string>
+    <string name="tour_180_settings_body">開關更少：原本搭配使用的設定，現在合為一個選項。</string>
+    <string name="tour_180_settings_merged">淡入淡出、玻璃效果和接下來播放的內容，現在各是一個選項</string>
+    <string name="tour_180_settings_search">搜尋仍可用舊名稱找到設定</string>
+    <string name="tour_180_settings_tablet">在平板上，可選擇分頁的位置</string>
+    <string name="tour_180_player">依你的方式使用播放器</string>
+    <string name="tour_180_player_body">可隱藏播放器的任何部分，並依你的順序排列 ⋯ 選單。</string>
+    <string name="tour_180_player_parts">輕觸圖示的某一部分即可隱藏：其動作仍保留在選單中</string>
+    <string name="tour_180_player_menu">編輯這個選單：最多固定四個方塊，其餘收合</string>
+    <string name="tour_180_lyrics">分四個部分的歌詞</string>
+    <string name="tour_180_lyrics_body">先選一種樣式，再選擇它的動畫、文字、背景和效果。</string>
+    <string name="tour_180_lyrics_start">從 Prism、卡拉 OK、粗體卡片、光暈、打字機或平靜開始</string>
+    <string name="tour_180_lyrics_smooth">卡拉 OK 和粗體卡片的動畫更流暢</string>
+    <string name="tour_180_desk">桌面模式：手機充電並播放時，顯示寧靜的螢幕</string>
+    <string name="tour_180_crossfade">淡入淡出不會重複歌曲的任何一刻</string>
+    <string name="tour_180_silence">修剪靜音只處理歌曲的開頭和結尾</string>
+    <string name="tour_180_normalize">統一響度可抹平歌曲之間的巨大音量落差</string>
+    <string name="tour_180_size">更小的下載大小</string>
 </resources>

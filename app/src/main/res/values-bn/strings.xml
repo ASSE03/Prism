@@ -4095,4 +4095,32 @@
     <string name="tv_sing_ready">যথেষ্ট দ্রুত: Sing প্লেয়ারের ⋯-এ আছে</string>
     <string name="tv_sing_too_slow">এই টিভি Sing-এর জন্য যথেষ্ট দ্রুত নয়: গানের পেছনে পড়ে যাবে</string>
     <string name="tv_sing_no_cpu">এই টিভির প্রসেসরে Sing চলে না</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">ডেস্ক মোড</string>
+    <string name="desk_mode_detail">ফোন চার্জ হওয়ার সময় আর গান চললে</string>
+    <string name="desk_mode_info">ফোন ঘুমিয়ে না গিয়ে Prism একটি ম্লান স্ক্রিনে গান, তার কভার আর লিরিক্স দেখায়। স্ক্রিনটা ধীরে ধীরে সরতে থাকে, যাতে বার্ন-ইন না হয়। ফিরে আসতে স্ক্রিন ছুঁন।</string>
+    <string name="desk_mode_keywords">সবসময় চালু স্ট্যান্ড চার্জিং চার্জ ডক ঘড়ি স্ক্রিনসেভার বিছানার পাশে ডেস্ক স্ক্রিন চালু রাখুন always on</string>
+    <string name="tour_180_tv">আপনার টিভিতে Prism</string>
+    <string name="tour_180_tv_body">একই Prism, রিমোটের জন্য তৈরি, Android TV আর Google TV-তে।</string>
+    <string name="tour_180_tv_phone">আপনার ফোন টিভিতে সাইন ইন করায় আর তার রিমোট হয়ে যায়</string>
+    <string name="tour_180_tv_get">Downloader অ্যাপ দিয়ে টিভিতে নিন: কোড %1$s, অথবা এই ফোন থেকে</string>
+    <string name="tour_180_tv_big">বড় পর্দায় বড় লিরিক্স, মিউজিক ভিডিও আর গলা মেলান</string>
+    <string name="tour_180_settings">আরও পরিষ্কার সেটিংস</string>
+    <string name="tour_180_settings_body">সুইচ কম: যে সেটিংস একসঙ্গে কাজ করত, সেগুলো এখন একটাই পছন্দ।</string>
+    <string name="tour_180_settings_merged">ক্রসফেড, গ্লাস আর পরে কী বাজবে, প্রতিটিই এখন একটা পছন্দ</string>
+    <string name="tour_180_settings_search">পুরোনো নামে খুঁজলেও সার্চ সেটিংটা খুঁজে দেয়</string>
+    <string name="tour_180_settings_tablet">ট্যাবলেটে ট্যাবগুলো কোথায় থাকবে তা বেছে নিন</string>
+    <string name="tour_180_player">আপনার মতো করে প্লেয়ার</string>
+    <string name="tour_180_player_body">প্লেয়ারের যেকোনো অংশ লুকান, আর ⋯ মেনু নিজের ক্রমে সাজান।</string>
+    <string name="tour_180_player_parts">ছবির কোনো অংশে ট্যাপ করে সেটি লুকান: তার কাজ মেনুতেই থাকে</string>
+    <string name="tour_180_player_menu">এই মেনু বদলান: চারটি পর্যন্ত টাইল পিন করুন, বাকিগুলো ভাঁজ করে রাখুন</string>
+    <string name="tour_180_lyrics">চার ভাগে লিরিক্স</string>
+    <string name="tour_180_lyrics_body">একটা লুক থেকে শুরু করুন, তারপর তার অ্যানিমেশন, লেখা, ব্যাকগ্রাউন্ড আর ইফেক্ট বেছে নিন।</string>
+    <string name="tour_180_lyrics_start">Prism, কারাওকে, বোল্ড কার্ড, আভা, টাইপরাইটার বা শান্ত থেকে শুরু করুন</string>
+    <string name="tour_180_lyrics_smooth">কারাওকে আর বোল্ড কার্ড আরও মসৃণভাবে চলে</string>
+    <string name="tour_180_desk">ডেস্ক মোড: ফোন চার্জ হওয়ার সময় গান চললে শান্ত স্ক্রিন</string>
+    <string name="tour_180_crossfade">ক্রসফেডে গানের কোনো মুহূর্ত দুবার বাজে না</string>
+    <string name="tour_180_silence">নীরবতা বাদ দেওয়া শুধু গানের শুরু আর শেষ ছোঁয়</string>
+    <string name="tour_180_normalize">ভলিউম সমান করা গানের মাঝের বড় ফারাক মিটিয়ে দেয়</string>
+    <string name="tour_180_size">ছোট ডাউনলোড</string>
 </resources>

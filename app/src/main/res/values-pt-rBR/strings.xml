@@ -4145,4 +4145,32 @@
     <string name="tv_sing_ready">Rápida o bastante: Cantar está no ⋯ do player</string>
     <string name="tv_sing_too_slow">Esta TV não é rápida o bastante para Cantar: ficaria atrás da música</string>
     <string name="tv_sing_no_cpu">Cantar não funciona no processador desta TV</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Modo mesa</string>
+    <string name="desk_mode_detail">Enquanto o celular carrega e a música toca</string>
+    <string name="desk_mode_info">Em vez de deixar o celular entrar em repouso, o Prism mostra a música, a capa e a letra numa tela escurecida que se move devagar para não marcar. Toque na tela para voltar.</string>
+    <string name="desk_mode_keywords">sempre ligada suporte carregando dock relógio ambiente protetor de tela criado-mudo manter a tela ligada mesa</string>
+    <string name="tour_180_tv">Prism na sua TV</string>
+    <string name="tour_180_tv_body">O mesmo Prism, feito para o controle remoto, no Android TV e no Google TV.</string>
+    <string name="tour_180_tv_phone">Seu celular conecta a TV e vira o controle remoto dela</string>
+    <string name="tour_180_tv_get">Instale na TV com o app Downloader: código %1$s, ou a partir deste celular</string>
+    <string name="tour_180_tv_big">Letras grandes, videoclipes e Cantar na tela grande</string>
+    <string name="tour_180_settings">Configurações mais claras</string>
+    <string name="tour_180_settings_body">Menos chaves: configurações que funcionavam juntas agora são uma escolha só.</string>
+    <string name="tour_180_settings_merged">Crossfade, vidro e o que toca depois são uma escolha cada</string>
+    <string name="tour_180_settings_search">A busca ainda encontra uma configuração pelo nome antigo</string>
+    <string name="tour_180_settings_tablet">No tablet, escolha onde ficam as abas</string>
+    <string name="tour_180_player">O player do seu jeito</string>
+    <string name="tour_180_player_body">Oculte qualquer parte do player e coloque o menu ⋯ na ordem que quiser.</string>
+    <string name="tour_180_player_parts">Toque numa parte do desenho para ocultá-la: a ação continua no menu</string>
+    <string name="tour_180_player_menu">Editar este menu: fixe até quatro blocos e esconda o resto</string>
+    <string name="tour_180_lyrics">Letra em quatro partes</string>
+    <string name="tour_180_lyrics_body">Comece por um look e escolha a animação, o texto, o fundo e os efeitos.</string>
+    <string name="tour_180_lyrics_start">Comece por Prism, Karaokê, Cartão marcante, Brilho, Máquina de escrever ou Calmo</string>
+    <string name="tour_180_lyrics_smooth">Karaokê e Cartão marcante animam com mais suavidade</string>
+    <string name="tour_180_desk">Modo mesa: uma tela calma enquanto o celular carrega e toca</string>
+    <string name="tour_180_crossfade">O crossfade nunca repete um momento da música</string>
+    <string name="tour_180_silence">Cortar o silêncio só mexe no início e no fim da música</string>
+    <string name="tour_180_normalize">O mesmo volume suaviza os grandes saltos entre músicas</string>
+    <string name="tour_180_size">Um download menor</string>
 </resources>

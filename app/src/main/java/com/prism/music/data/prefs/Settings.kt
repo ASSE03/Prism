@@ -2320,7 +2320,11 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         names.forEach { n -> lookKeysByName[n]?.let { p.remove(it as Preferences.Key<Any>) } }
     }
 
-    private val writeScope = scope
+    // One write at a time, in the order they were asked for (1.8.0): a merged choice writes two or three keys with
+    // separate edits, and on the shared scope's threads two quick taps could interleave (Everywhere then Play read back
+    // as Radios). A one-thread queue starts them in order, and DataStore applies them in the order they start.
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    private val writeScope = CoroutineScope(scope.coroutineContext + kotlinx.coroutines.Dispatchers.IO.limitedParallelism(1))
 
     private fun edit(block: (MutablePreferences) -> Unit) {
         writeScope.launch { context.dataStore.edit { block(it) } }

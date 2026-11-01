@@ -4195,4 +4195,32 @@
     <string name="tv_sing_ready">Dost rychlá: Zpívat je v ⋯ přehrávače</string>
     <string name="tv_sing_too_slow">Tato televize není pro Zpívat dost rychlá: zaostávala by za skladbou</string>
     <string name="tv_sing_no_cpu">Zpívat na procesoru této televize nefunguje</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Stolní režim</string>
+    <string name="desk_mode_detail">Když se telefon nabíjí a hraje hudba</string>
+    <string name="desk_mode_info">Místo uspání telefonu zobrazí Prism skladbu, její obal a text na ztlumené obrazovce, která se pomalu posouvá, aby se nevypálila. Dotykem se vrátíš zpět.</string>
+    <string name="desk_mode_keywords">stále zapnuto nabíjení nabíječka stojánek dok hodiny stůl noční stolek spořič displeje nechat displej zapnutý always on</string>
+    <string name="tour_180_tv">Prism na tvé televizi</string>
+    <string name="tour_180_tv_body">Stejný Prism, vytvořený pro dálkový ovladač, na Android TV a Google TV.</string>
+    <string name="tour_180_tv_phone">Telefon přihlásí televizi a stane se jejím ovladačem</string>
+    <string name="tour_180_tv_get">Do televize ho dostaneš přes aplikaci Downloader: kód %1$s, nebo z tohoto telefonu</string>
+    <string name="tour_180_tv_big">Velké texty, hudební videa a Zpívání na velké obrazovce</string>
+    <string name="tour_180_settings">Přehlednější nastavení</string>
+    <string name="tour_180_settings_body">Méně přepínačů: nastavení, která fungovala spolu, jsou teď jedna volba.</string>
+    <string name="tour_180_settings_merged">Prolínání, sklo i to, co hraje dál, jsou teď každé jedna volba</string>
+    <string name="tour_180_settings_search">Hledání pořád najde nastavení podle starého názvu</string>
+    <string name="tour_180_settings_tablet">Na tabletu si vyber, kde budou karty</string>
+    <string name="tour_180_player">Přehrávač podle tebe</string>
+    <string name="tour_180_player_body">Skryj libovolnou část přehrávače a seřaď nabídku ⋯ po svém.</string>
+    <string name="tour_180_player_parts">Klepnutím na část obrázku ji skryješ: její akce zůstane v nabídce</string>
+    <string name="tour_180_player_menu">Upravit tuto nabídku: připni až čtyři dlaždice, zbytek schovej</string>
+    <string name="tour_180_lyrics">Texty ve čtyřech částech</string>
+    <string name="tour_180_lyrics_body">Začni vzhledem a pak vyber jeho animaci, text, pozadí a efekty.</string>
+    <string name="tour_180_lyrics_start">Začni od Prism, Karaoke, Výrazné karty, Záře, Psacího stroje nebo Klidu</string>
+    <string name="tour_180_lyrics_smooth">Karaoke a Výrazná karta se animují plynuleji</string>
+    <string name="tour_180_desk">Stolní režim: klidná obrazovka, když se telefon nabíjí a hraje</string>
+    <string name="tour_180_crossfade">Prolínání nikdy neopakuje žádný okamžik skladby</string>
+    <string name="tour_180_silence">Ořezání ticha se týká jen začátku a konce skladby</string>
+    <string name="tour_180_normalize">Stejná hlasitost vyrovná velké skoky mezi skladbami</string>
+    <string name="tour_180_size">Menší stahování</string>
 </resources>

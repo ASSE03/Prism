@@ -4295,4 +4295,32 @@
     <string name="tv_sing_ready">سريع بما يكفي: «غنِّ» في قائمة ⋯ في المشغّل</string>
     <string name="tv_sing_too_slow">هذا التلفزيون ليس سريعًا بما يكفي لـ«غنِّ»: سيتأخر عن الأغنية</string>
     <string name="tv_sing_no_cpu">لا يعمل «غنِّ» على معالج هذا التلفزيون</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">وضع المكتب</string>
+    <string name="desk_mode_detail">أثناء شحن الهاتف وتشغيل الموسيقى</string>
+    <string name="desk_mode_info">بدلًا من أن ينام الهاتف، يعرض Prism الأغنية وغلافها وكلماتها على شاشة خافتة تتحرك ببطء حتى لا تُحتَرق. المس الشاشة للعودة.</string>
+    <string name="desk_mode_keywords">تشغيل دائم قاعدة حامل شحن شاحن ساعة مكتب شاشة التوقف بجانب السرير إبقاء الشاشة مضاءة always on</string>
+    <string name="tour_180_tv">Prism على تلفازك</string>
+    <string name="tour_180_tv_body">نفس Prism، مصمَّم للتحكم عن بُعد، على Android TV وGoogle TV.</string>
+    <string name="tour_180_tv_phone">هاتفك يسجّل الدخول على التلفاز ويصبح جهاز التحكم به</string>
+    <string name="tour_180_tv_get">ثبّته على التلفاز عبر تطبيق Downloader: الرمز %1$s، أو من هذا الهاتف</string>
+    <string name="tour_180_tv_big">كلمات كبيرة ومقاطع فيديو موسيقية والغناء على الشاشة الكبيرة</string>
+    <string name="tour_180_settings">إعدادات أوضح</string>
+    <string name="tour_180_settings_body">مفاتيح أقل: الإعدادات التي تعمل معًا صارت خيارًا واحدًا.</string>
+    <string name="tour_180_settings_merged">التلاشي المتداخل والزجاج وما يُشغَّل تاليًا، لكلٍّ منها خيار واحد</string>
+    <string name="tour_180_settings_search">البحث ما زال يجد الإعداد باسمه القديم</string>
+    <string name="tour_180_settings_tablet">على الجهاز اللوحي، اختر مكان علامات التبويب</string>
+    <string name="tour_180_player">المشغّل على طريقتك</string>
+    <string name="tour_180_player_body">أخفِ أي جزء من المشغّل، ورتّب قائمة ⋯ بالترتيب الذي تريده.</string>
+    <string name="tour_180_player_parts">المس جزءًا من الرسم لإخفائه: يبقى إجراؤه في القائمة</string>
+    <string name="tour_180_player_menu">تعديل هذه القائمة: ثبّت حتى أربعة مربعات واطوِ الباقي</string>
+    <string name="tour_180_lyrics">الكلمات في أربعة أجزاء</string>
+    <string name="tour_180_lyrics_body">ابدأ من مظهر، ثم اختر حركته ونصه وخلفيته وتأثيراته.</string>
+    <string name="tour_180_lyrics_start">ابدأ من Prism أو كاريوكي أو بطاقة جريئة أو توهج أو آلة كاتبة أو هادئ</string>
+    <string name="tour_180_lyrics_smooth">كاريوكي وبطاقة جريئة يتحركان بسلاسة أكبر</string>
+    <string name="tour_180_desk">وضع المكتب: شاشة هادئة أثناء شحن الهاتف وتشغيله للموسيقى</string>
+    <string name="tour_180_crossfade">التلاشي المتداخل لا يكرر أي لحظة من الأغنية</string>
+    <string name="tour_180_silence">قص الصمت يمسّ بداية الأغنية ونهايتها فقط</string>
+    <string name="tour_180_normalize">توحيد مستوى الصوت يخفف القفزات الكبيرة بين الأغاني</string>
+    <string name="tour_180_size">حجم تنزيل أصغر</string>
 </resources>

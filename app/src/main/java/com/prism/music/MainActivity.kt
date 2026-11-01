@@ -1177,7 +1177,8 @@ private fun handleDeepLink(uri: Uri, nav: Navigator, c: AppContainer) {
         uri.scheme == "prism" && uri.host == "pair" -> c.handoff.pairFromLink(uri)
         // Back from Last.fm's page in the browser, with the token it gave for this listener (#133).
         uri.scheme == "prism" && uri.host == "lastfm" -> {
-            nav.go(Routes.settings(com.prism.music.ui.screens.SettingsSection.LIBRARY.key))
+            // Last.fm's own page (Devices & connections), where its sign-in started (1.8.0: no longer on Recommendations).
+            nav.go(Routes.settings(com.prism.music.ui.screens.SettingsSection.LASTFM.key))
             uri.getQueryParameter("token")?.takeIf { it.isNotBlank() }?.let { token ->
                 c.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
                     val ok = c.lastFm.finishSignIn(token)

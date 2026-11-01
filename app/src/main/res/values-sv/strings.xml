@@ -4095,4 +4095,32 @@
     <string name="tv_sing_ready">Snabb nog: Sjung finns i spelarens ⋯</string>
     <string name="tv_sing_too_slow">Den här tv:n är inte snabb nog för Sjung: den skulle hamna efter låten</string>
     <string name="tv_sing_no_cpu">Sjung fungerar inte på den här tv:ns processor</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Skrivbordsläge</string>
+    <string name="desk_mode_detail">Medan telefonen laddas och musik spelas</string>
+    <string name="desk_mode_info">I stället för att telefonen går i viloläge visar Prism låten, omslaget och låttexten på en dämpad skärm som sakta glider så att inget bränns in. Rör vid skärmen för att komma tillbaka.</string>
+    <string name="desk_mode_keywords">alltid på stativ laddar docka klocka stämning skärmsläckare nattduksbord behåll skärmen tänd skrivbord</string>
+    <string name="tour_180_tv">Prism på din tv</string>
+    <string name="tour_180_tv_body">Samma Prism, gjort för en fjärrkontroll, på Android TV och Google TV.</string>
+    <string name="tour_180_tv_phone">Din telefon loggar in tv:n och blir dess fjärrkontroll</string>
+    <string name="tour_180_tv_get">Hämta den på tv:n med appen Downloader: kod %1$s, eller från den här telefonen</string>
+    <string name="tour_180_tv_big">Stora låttexter, musikvideor och Sjung på den stora skärmen</string>
+    <string name="tour_180_settings">Inställningar, tydligare</string>
+    <string name="tour_180_settings_body">Färre reglage: inställningar som hörde ihop är nu ett enda val.</string>
+    <string name="tour_180_settings_merged">Övertoning, glas och vad som spelas härnäst är ett val var</string>
+    <string name="tour_180_settings_search">Sökningen hittar fortfarande en inställning på dess gamla namn</string>
+    <string name="tour_180_settings_tablet">På en surfplatta väljer du var flikarna sitter</string>
+    <string name="tour_180_player">Spelaren, på ditt sätt</string>
+    <string name="tour_180_player_body">Dölj vilken del av spelaren som helst och ordna ⋯-menyn som du vill.</string>
+    <string name="tour_180_player_parts">Tryck på en del av ritningen för att dölja den: dess åtgärd finns kvar i menyn</string>
+    <string name="tour_180_player_menu">Redigera den här menyn: fäst upp till fyra brickor, vik undan resten</string>
+    <string name="tour_180_lyrics">Låttext i fyra delar</string>
+    <string name="tour_180_lyrics_body">Börja med en look och välj sedan animation, text, bakgrund och effekter.</string>
+    <string name="tour_180_lyrics_start">Börja med Prism, Karaoke, Fet kort, Glöd, Skrivmaskin eller Lugn</string>
+    <string name="tour_180_lyrics_smooth">Karaoke och Fet kort animeras mjukare</string>
+    <string name="tour_180_desk">Skrivbordsläge: en lugn skärm medan telefonen laddas och spelar</string>
+    <string name="tour_180_crossfade">Övertoning upprepar aldrig ett ögonblick av låten</string>
+    <string name="tour_180_silence">Ta bort tystnad rör bara en låts början och slut</string>
+    <string name="tour_180_normalize">Samma ljudstyrka jämnar ut stora hopp mellan låtar</string>
+    <string name="tour_180_size">En mindre nedladdning</string>
 </resources>

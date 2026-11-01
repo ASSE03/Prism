@@ -4045,4 +4045,32 @@
     <string name="tv_sing_ready">够快：「唱歌」在播放器的 ⋯ 中</string>
     <string name="tv_sing_too_slow">这台电视不够快，无法「唱歌」：会跟不上歌曲</string>
     <string name="tv_sing_no_cpu">「唱歌」无法在这台电视的处理器上运行</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">桌面模式</string>
+    <string name="desk_mode_detail">手机充电且正在播放音乐时</string>
+    <string name="desk_mode_info">手机不会进入休眠，Prism 会在调暗的屏幕上显示歌曲、封面和歌词，画面还会缓慢漂移，避免烧屏。触摸屏幕即可返回。</string>
+    <string name="desk_mode_keywords">常亮 支架 充电 底座 时钟 氛围 屏保 床头 保持亮屏 桌面</string>
+    <string name="tour_180_tv">电视上的 Prism</string>
+    <string name="tour_180_tv_body">还是那个 Prism，专为遥控器打造，支持 Android TV 和 Google TV。</string>
+    <string name="tour_180_tv_phone">你的手机为电视登录，并变成它的遥控器</string>
+    <string name="tour_180_tv_get">用 Downloader 应用安装到电视：代码 %1$s，或从这部手机安装</string>
+    <string name="tour_180_tv_big">在大屏幕上享受大字歌词、音乐视频和 Sing</string>
+    <string name="tour_180_settings">更清晰的设置</string>
+    <string name="tour_180_settings_body">开关更少：原本配合使用的设置，现在合为一个选项。</string>
+    <string name="tour_180_settings_merged">交叉淡入淡出、玻璃效果和接下来播放的内容，现在各是一个选项</string>
+    <string name="tour_180_settings_search">搜索仍可通过旧名称找到设置</string>
+    <string name="tour_180_settings_tablet">在平板上，可选择标签页的位置</string>
+    <string name="tour_180_player">按你的方式使用播放器</string>
+    <string name="tour_180_player_body">可隐藏播放器的任何部分，并按你的顺序排列 ⋯ 菜单。</string>
+    <string name="tour_180_player_parts">点按图示的某一部分即可隐藏：其操作仍保留在菜单中</string>
+    <string name="tour_180_player_menu">编辑此菜单：最多固定四个磁贴，其余收起</string>
+    <string name="tour_180_lyrics">分四部分的歌词</string>
+    <string name="tour_180_lyrics_body">先选一种样式，再选择它的动画、文字、背景和效果。</string>
+    <string name="tour_180_lyrics_start">从 Prism、逐字、醒目卡片、发光、打字机或平静开始</string>
+    <string name="tour_180_lyrics_smooth">逐字和醒目卡片的动画更流畅</string>
+    <string name="tour_180_desk">桌面模式：手机充电并播放时，显示宁静的屏幕</string>
+    <string name="tour_180_crossfade">交叉淡入淡出不会重复歌曲的任何一刻</string>
+    <string name="tour_180_silence">裁剪静音只处理歌曲的开头和结尾</string>
+    <string name="tour_180_normalize">统一响度可抹平歌曲之间的巨大音量落差</string>
+    <string name="tour_180_size">更小的下载体积</string>
 </resources>
