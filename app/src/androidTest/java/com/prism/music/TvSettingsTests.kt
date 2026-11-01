@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.prism.music.TvFixture.awaitFocus
 import com.prism.music.TvFixture.awaitFocusOn
 import com.prism.music.ui.tv.TAG_HOME
+import com.prism.music.ui.tv.TAG_LYRICS_STYLE
 import com.prism.music.ui.tv.TAG_NAV
 import com.prism.music.ui.tv.TAG_SETTINGS
 import com.prism.music.ui.tv.TAG_WELCOME
@@ -79,6 +80,45 @@ class TvSettingsTests {
         compose.waitUntil(5_000) { compose.onAllNodes(hasTestTag("$TAG_SETTINGS/infoclose"), useUnmergedTree = true).fetchSemanticsNodes().isEmpty() }
         compose.awaitFocus()
     }
+
+    /**
+     * The owner (1.8.0): the lyrics style on the TV, with a live example of each. Settings → Lyrics → Lyrics style opens
+     * on the style in use, the focused one's example shows, OK picks it (the phone's own setting) and the panel closes.
+     */
+    @Test fun aLyricsStyleIsPickedWithItsExample() {
+        Fixture.ready()
+        val settings = Fixture.container.settings
+        // Held still (Reduce motion): the example otherwise moves every frame, and the test waits for a still screen.
+        settings.setReduceMotion(true)
+        compose.waitUntil(5_000) { settings.current.reduceMotion }
+        try {
+            TvFixture.launch()
+            goTo(TvSection.SETTINGS)
+            compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/group/0"), 10_000)
+            // Account, Language, Sound, Lyrics; Right into it, down to Lyrics style (under the size).
+            for (g in 1..3) { TvFixture.down(); compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/group/$g")) }
+            TvFixture.right()
+            compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/setting/0"))
+            TvFixture.down()
+            compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/setting/1"))
+            TvFixture.ok()
+            compose.awaitFocusOn(hasTestTag("$TAG_LYRICS_STYLE/prism"), 10_000)
+            assertTrue(exists("$TAG_LYRICS_STYLE/example/prism"))
+            // Down to Glow (Prism, Classic karaoke, Bold card, Glow): its example shows.
+            repeat(3) { TvFixture.down(); Thread.sleep(200) }
+            compose.awaitFocusOn(hasTestTag("$TAG_LYRICS_STYLE/glow"))
+            compose.waitUntil(5_000) { exists("$TAG_LYRICS_STYLE/example/glow") }
+            TvFixture.ok()
+            compose.waitUntil(5_000) { settings.current.lyricsLook.style == com.prism.music.data.prefs.LyricsStyle.GLOW }
+            compose.waitUntil(5_000) { !exists(TAG_LYRICS_STYLE) }
+            assertTrue("Glow's own glow", settings.current.lyricsLook.haloNow)
+        } finally {
+            settings.setLyricsStartFrom(com.prism.music.data.prefs.LyricsStyle.PRISM)
+            settings.setReduceMotion(false)
+        }
+    }
+
+    private fun exists(tag: String) = compose.onAllNodes(hasTestTag(tag), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
 
     @Test fun theFirstRunWelcomesAndCarriesOnWithoutAnAccount() {
         // A fresh install: no Fixture.ready().
