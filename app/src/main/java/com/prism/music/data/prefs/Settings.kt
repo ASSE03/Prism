@@ -2369,13 +2369,25 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     }
 
     // One write at a time, in the order they were asked for (1.8.0): a merged choice writes two or three keys with
-    // separate edits, and on the shared scope's threads two quick taps could interleave (Everywhere then Play read back
-    // as Radios). A one-thread queue starts them in order, and DataStore applies them in the order they start.
-    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
-    private val writeScope = CoroutineScope(scope.coroutineContext + kotlinx.coroutines.Dispatchers.IO.limitedParallelism(1))
+    // separate edits, and two quick taps could interleave (Everywhere then Play read back as Radios). A one-thread
+    // dispatcher wasn't enough: an edit suspends inside DataStore and lets the next one start, so they could still land
+    // out of order. One reader takes them off a queue and finishes each before the next (what's waiting by then goes in
+    // the same edit, still in order).
+    private val writes = kotlinx.coroutines.channels.Channel<(MutablePreferences) -> Unit>(kotlinx.coroutines.channels.Channel.UNLIMITED)
+
+    init {
+        scope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            for (first in writes) {
+                val batch = mutableListOf(first)
+                while (true) batch += writes.tryReceive().getOrNull() ?: break
+                runCatching { context.dataStore.edit { p -> batch.forEach { b -> runCatching { b(p) } } } }
+                    .onFailure { android.util.Log.w("PrismSettings", "a settings write failed", it) }
+            }
+        }
+    }
 
     private fun edit(block: (MutablePreferences) -> Unit) {
-        writeScope.launch { context.dataStore.edit { block(it) } }
+        writes.trySend(block)
     }
 
     suspend fun editNow(block: (MutablePreferences) -> Unit) {
