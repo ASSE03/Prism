@@ -86,7 +86,10 @@ class TvLyricsTests {
         val end = System.currentTimeMillis() + 5_000
         while (position() < 20_000 && System.currentTimeMillis() < end) Thread.sleep(100)
         assertTrue("played from the picked line: ${position()} ms", position() in 20_000..40_000)
-        // Back: the player, its controls as they were.
+        // Playing from it let go of the line (no "Back to now"), so one Back leaves the lyrics.
+        compose.waitUntil(5_000) { compose.onAllNodes(hasTestTag("$TAG_LYRICS/now"), useUnmergedTree = true).fetchSemanticsNodes().isEmpty() }
+        compose.awaitFocusOn(hasTestTag("$TAG_LYRICS/lines"))
+        // Back: Home, on its Lyrics button; then the player, its controls as they were.
         TvFixture.back()
         compose.awaitFocusOn(hasTestTag("$TAG_HOME/lyrics"), 10_000)
         TvFixture.left(); TvFixture.ok()

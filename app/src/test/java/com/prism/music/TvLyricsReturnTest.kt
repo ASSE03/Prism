@@ -1,6 +1,14 @@
 package com.prism.music
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
@@ -73,6 +81,54 @@ class TvLyricsReturnTest {
         compose.runOnUiThread { compose.activity.onBackPressedDispatcher.onBackPressed() }
         compose.waitForIdle()
         assertTrue("following the song again", !chip())
+    }
+
+    /** OK on a picked line plays from it and lets go of it: one Back then leaves the lyrics (the page's own Back). */
+    @Test fun afterPlayingFromAPickedLineOneBackLeaves() {
+        var left = 0
+        var seekedTo = -1L
+        compose.setContent {
+            TvTheme(AppSettings()) {
+                androidx.activity.compose.BackHandler { left++ }
+                val memory = remember { TvFocusMemory() }
+                CompositionLocalProvider(LocalTvFocusMemory provides memory, LocalTvScreen provides "lyrics") {
+                    TvLyricsPlace(now, lines, 2, remember { mutableLongStateOf(8_500L) }, loading = false, unavailable = false, source = null, accent = null) { seekedTo = it }
+                }
+            }
+        }
+        pick()
+        compose.onNode(hasTestTag("$TAG_LYRICS/lines")).performKeyInput { pressKey(Key.DirectionCenter) }
+        compose.waitForIdle()
+        assertEquals(12_000L, seekedTo)
+        assertTrue(!chip())
+        compose.runOnUiThread { compose.activity.onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
+        assertEquals("one Back leaves", 1, left)
+    }
+
+    /** The Google TV run: OK on Timing left focus on the button; the panel opens with its nudge focused. */
+    @Test fun okOnTimingOpensThePanelOnItsNudge() {
+        compose.setContent {
+            TvTheme(AppSettings()) {
+                val memory = remember { TvFocusMemory() }
+                CompositionLocalProvider(LocalTvFocusMemory provides memory, LocalTvScreen provides "lyrics") {
+                    TvLyricsPlace(
+                        now, lines, 2, remember { mutableLongStateOf(8_500L) }, loading = false, unavailable = false, source = null, accent = null,
+                        // A stand-in for the song's timing (it needs the player): the nudge, focusable.
+                        timingPanel = { f ->
+                            Box(Modifier.align(Alignment.BottomCenter).size(200.dp).focusRequester(f).testTag("$TAG_LYRICS/nudge").focusable())
+                        },
+                    ) {}
+                }
+            }
+        }
+        compose.mainClock.advanceTimeBy(500); compose.waitForIdle()
+        compose.onNode(hasTestTag("$TAG_LYRICS/lines")).performKeyInput { pressKey(Key.DirectionRight) }
+        compose.waitForIdle()
+        compose.waitUntil(3_000) { compose.onAllNodes(hasTestTag("$TAG_LYRICS/timing") and androidx.compose.ui.test.isFocused(), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNode(hasTestTag("$TAG_LYRICS/timing"), useUnmergedTree = true).performKeyInput { pressKey(Key.DirectionCenter) }
+        compose.mainClock.advanceTimeBy(500); compose.waitForIdle()
+        compose.waitUntil(3_000) { compose.onAllNodes(hasTestTag("$TAG_LYRICS/nudge") and androidx.compose.ui.test.isFocused(), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
     }
 
     @Test fun aPickedLineLetsGoAfterAMoment() {
