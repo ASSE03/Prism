@@ -89,6 +89,15 @@ internal fun tvRowTitle(phone: List<HomeSectionConfig>, key: String, own: String
  * The rows Prism makes from your own music for the TV's Home, for the ones it shows ([TvHomeLayout.isShown]); empty
  * ones are left out. [online]: offline, lists keep to songs that play without a connection, as on the phone.
  */
+/**
+ * The holiday row's mixes made ahead while it's [shown] (as the phone's Home does), so picking one plays at once: on
+ * Wi-Fi only, one at a time, a few seconds in ([com.prism.music.data.seasonal.SeasonalMixes.makeAhead]).
+ */
+@Composable
+internal fun TvHolidayAhead(seasonal: com.prism.music.data.seasonal.SeasonalMixes, shown: Boolean, mixes: List<com.prism.music.data.seasonal.HolidayMix>) {
+    LaunchedEffect(shown, mixes) { if (shown) seasonal.makeAhead(mixes) }
+}
+
 @Composable
 internal fun rememberTvOwnRows(
     c: AppContainer, settings: AppSettings, online: Boolean, recent: List<Song>,
@@ -124,6 +133,7 @@ internal fun rememberTvOwnRows(
         if (!wantHoliday) return@produceState
         value = withContext(Dispatchers.Default) { holidayMixes.associate { m -> m.id to runCatching { com.prism.music.ui.screens.HolidayCovers.file(context, m) }.getOrNull() } }
     }
+    TvHolidayAhead(c.seasonal, wantHoliday, holidayMixes)
 
     // Made for you and the lists from your music (On repeat, Repeat rewind, Forgotten favorites).
     val wantMixes = want(HomeSections.MADE_FOR_YOU)
