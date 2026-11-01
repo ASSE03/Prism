@@ -3997,6 +3997,7 @@
     <string name="tv_update_ready">Prism %1$s 已準備就緒</string>
     <string name="tv_update_note">立即安裝：Android 只會要求一次許可</string>
     <string name="tv_up_next_line">接下來：%1$s</string>
+    <string name="tv_seek_line">歌曲位置：%1$s / %2$s</string>
     <string name="tv_playing_from">播放來源：%1$s</string>
     <string name="tv_vocals_out">去除人聲</string>
     <string name="tv_key_line">調：%1$s</string>

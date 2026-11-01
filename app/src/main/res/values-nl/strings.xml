@@ -4047,6 +4047,7 @@
     <string name="tv_update_ready">Prism %1$s staat klaar</string>
     <string name="tv_update_note">Installeer het nu: Android vraagt maar één keer toestemming</string>
     <string name="tv_up_next_line">Hierna: %1$s</string>
+    <string name="tv_seek_line">Positie in het nummer: %1$s van %2$s</string>
     <string name="tv_playing_from">Speelt uit %1$s</string>
     <string name="tv_vocals_out">Zonder zang</string>
     <string name="tv_key_line">Toonsoort: %1$s</string>

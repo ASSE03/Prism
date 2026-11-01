@@ -4047,6 +4047,7 @@
     <string name="tv_update_ready">Prism %1$s तैयार है</string>
     <string name="tv_update_note">अभी इंस्टॉल करें: Android सिर्फ़ एक बार अनुमति माँगता है</string>
     <string name="tv_up_next_line">आगे: %1$s</string>
+    <string name="tv_seek_line">गाने में जगह: %2$s में से %1$s</string>
     <string name="tv_playing_from">%1$s से चल रहा है</string>
     <string name="tv_vocals_out">आवाज़ के बिना</string>
     <string name="tv_key_line">स्केल: %1$s</string>

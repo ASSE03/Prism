@@ -4097,6 +4097,7 @@
     <string name="tv_update_ready">Prism %1$s este gata</string>
     <string name="tv_update_note">Instalează-l acum: Android cere permisiunea o singură dată</string>
     <string name="tv_up_next_line">Urmează: %1$s</string>
+    <string name="tv_seek_line">Poziția în melodie: %1$s din %2$s</string>
     <string name="tv_playing_from">Se redă din %1$s</string>
     <string name="tv_vocals_out">Fără voce</string>
     <string name="tv_key_line">Tonalitate: %1$s</string>
