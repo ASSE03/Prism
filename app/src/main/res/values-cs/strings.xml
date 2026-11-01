@@ -4195,4 +4195,6 @@
     <string name="tv_sing_ready">Dost rychlá: Zpívat je v ⋯ přehrávače</string>
     <string name="tv_sing_too_slow">Tato televize není pro Zpívat dost rychlá: zaostávala by za skladbou</string>
     <string name="tv_sing_no_cpu">Zpívat na procesoru této televize nefunguje</string>
+    <string name="tv_link_pair_note">Naskenovaný kód patří zařízení %1$s na adrese %2$s ve vaší síti. Spárujte jen tehdy, když je to televize před vámi.</string>
+    <string name="tv_sign_in_pair_first">Nejdřív spárujte %1$s, pak ho přihlaste</string>
 </resources>

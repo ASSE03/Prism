@@ -4045,4 +4045,6 @@
     <string name="tv_sing_ready">十分速い：「歌う」はプレーヤーの ⋯ にあります</string>
     <string name="tv_sing_too_slow">このテレビは「歌う」には遅すぎます：曲に追いつけません</string>
     <string name="tv_sing_no_cpu">「歌う」はこのテレビのプロセッサでは動きません</string>
+    <string name="tv_link_pair_note">スキャンしたコードは、ネットワーク上の %2$s にある %1$s のものです。目の前のテレビの場合だけペア設定してください。</string>
+    <string name="tv_sign_in_pair_first">先に %1$s とペア設定してから、ログインしてください</string>
 </resources>

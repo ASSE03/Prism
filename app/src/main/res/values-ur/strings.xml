@@ -4095,4 +4095,6 @@
     <string name="tv_sing_ready">کافی تیز: گائیں پلیئر کے ⋯ میں ہے</string>
     <string name="tv_sing_too_slow">یہ ٹی وی گائیں کے لیے کافی تیز نہیں: یہ گانے سے پیچھے رہ جائے گا</string>
     <string name="tv_sing_no_cpu">گائیں اس ٹی وی کے پروسیسر پر نہیں چلتا</string>
+    <string name="tv_link_pair_note">آپ نے جو کوڈ اسکین کیا وہ آپ کے نیٹ ورک پر %2$s پر موجود %1$s کا ہے۔ صرف تبھی جوڑیں اگر یہ آپ کے سامنے والا ٹی وی ہو۔</string>
+    <string name="tv_sign_in_pair_first">پہلے %1$s سے جوڑیں، پھر اس میں سائن ان کریں</string>
 </resources>

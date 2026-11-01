@@ -4045,4 +4045,6 @@
     <string name="tv_sing_ready">Cukup laju: Menyanyi ada dalam ⋯ pemain</string>
     <string name="tv_sing_too_slow">TV ini tidak cukup laju untuk Menyanyi: ia akan ketinggalan daripada lagu</string>
     <string name="tv_sing_no_cpu">Menyanyi tidak berjalan pada pemproses TV ini</string>
+    <string name="tv_link_pair_note">Kod yang anda imbas adalah untuk %1$s di %2$s pada rangkaian anda. Gandingkan hanya jika itu TV di hadapan anda.</string>
+    <string name="tv_sign_in_pair_first">Gandingkan dengan %1$s dahulu, kemudian log masuk padanya</string>
 </resources>

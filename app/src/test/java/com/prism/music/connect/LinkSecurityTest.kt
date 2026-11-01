@@ -85,13 +85,17 @@ class LinkSecurityTest {
         val secrets = ConcurrentHashMap<String, String>()
         @Volatile var code: String? = null
         @Volatile var open = true
+        /** A TV's real code: a new one after every try, none once paired (when set, [code] and [open] aren't used). */
+        var pairing: PairingCode? = null
         val signIns = CopyOnWriteArrayList<Map<String, String>>()
         val keys = CopyOnWriteArrayList<RemoteKey>()
         override fun secretFor(device: String) = secrets[device]
         override fun savePairing(device: String, name: String, secret: String) { secrets[device] = secret }
         override fun forget(device: String) { secrets.remove(device) }
         override fun showCode(code: String?, from: String) = Unit
-        override fun pairingCode(from: String): String? = if (open) code else null
+        override fun takesPairing() = pairing?.let { it.value.value != null } ?: open
+        override fun pairingCode(from: String): String? = pairing?.value?.value ?: if (open && pairing == null) code else null
+        override fun pairingEnded(code: String, matched: Boolean) = pairing?.ended(code, matched) ?: matched
         override fun snapshot(): HandoffSnapshot? = null
         override fun takeOver(s: HandoffSnapshot, from: String): String? = null
         override fun stepAside() = Unit
@@ -119,9 +123,11 @@ class LinkSecurityTest {
         override fun toString() = synchronized(bytes) { bytes.toString(Charsets.UTF_8) }
     }
 
-    private fun <T> session(receiver: Device, wire: Wire? = null, run: (HLink) -> T): T {
+    /** [receiver] serving one connection ([servedBy]: a peer kept between connections, for its limits). */
+    private fun <T> session(receiver: Device, wire: Wire? = null, servedBy: HandoffPeer? = null, run: (HLink) -> T): T {
         val server = ServerSocket(0, 5, InetAddress.getLoopbackAddress())
-        val t = thread { runCatching { server.accept().use { s -> HLink(s).use { HandoffPeer(receiver).serve(it) } } } }
+        val peer = servedBy ?: HandoffPeer(receiver)
+        val t = thread { runCatching { server.accept().use { s -> HLink(s).use { peer.serve(it) } } } }
         try {
             val socket = Socket(InetAddress.getLoopbackAddress(), server.localPort)
             return HLink(wire?.tap(socket) ?: socket).use(run)
@@ -136,8 +142,10 @@ class LinkSecurityTest {
         val phone = Device("Alex's Pixel", "phone-1")
         val cookie = "SAPISID=secret-sapisid-value; SID=very-secret-sid"
         val wire = Wire()
-        // Pair (the code typed on the phone), then the sign-in, on one connection.
-        val r = session(tv, wire) { link -> HandoffPeer(phone).request(link, HandoffRequest.SignIn(mapOf("cookie" to "s:$cookie"), "alex@example.com")) { tv.code } }
+        // Pair (the code typed on the phone), then the sign-in (only ever to a TV paired already).
+        val paired = session(tv, wire) { link -> HandoffPeer(phone).request(link, HandoffRequest.Pair) { tv.code } }
+        assertEquals(HandoffResult.Done(peer = LinkPeer("tv-1", "Living room TV", tv = true)), paired)
+        val r = session(tv, wire) { link -> HandoffPeer(phone).request(link, HandoffRequest.SignIn(mapOf("cookie" to "s:$cookie"), "alex@example.com")) { error("no code") } }
         assertEquals(HandoffResult.Done(), r)
         assertEquals("s:$cookie", tv.signIns.single()["cookie"])
         // Both worked out the same key; it never crossed the wire.
@@ -176,12 +184,19 @@ class LinkSecurityTest {
     @Test fun aKeyFromBeforeOrMadeUpIsRefused() {
         val tv = Device("TV", "tv-1", isTv = true).apply { code = "111222" }
         val phone = Device("Phone", "phone-1")
-        assertEquals(HandoffResult.Done(), session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.Pair) { tv.code } })
-        // The phone's key swapped for another: the TV refuses it, and the phone forgets the pairing (to pair again).
-        phone.secrets["tv-1"] = LinkKeys.hex(LinkKeys.nonce() + LinkKeys.nonce())
+        assertTrue(session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.Pair) { tv.code } } is HandoffResult.Done)
+        // The phone's key swapped for another: the TV refuses it. The phone keeps it (anyone can say "not paired")
+        // until it pairs again with the code, which replaces it.
+        val madeUp = LinkKeys.hex(LinkKeys.nonce() + LinkKeys.nonce())
+        phone.secrets["tv-1"] = madeUp
         assertEquals(HandoffResult.Unpaired, session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.Remote(RemoteKey.NEXT)) { null } })
-        assertTrue(phone.secrets.isEmpty())
+        assertEquals(madeUp, phone.secrets["tv-1"])
         assertTrue(tv.keys.isEmpty())
+        val again = session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.Remote(RemoteKey.NEXT), HandoffExpect(repair = true)) { tv.code } }
+        assertEquals(HandoffResult.Done(), again)
+        assertEquals(tv.secrets["phone-1"], phone.secrets["tv-1"])
+        assertEquals(listOf(RemoteKey.NEXT), tv.keys.toList())
+        tv.keys.clear()
         // A version 1 Prism (no keys in its hello) is told both need the latest.
         val old = session(tv) { link ->
             link.send(HMsg.Hello("Old phone", "old-1", version = 1))
@@ -193,7 +208,7 @@ class LinkSecurityTest {
     @Test fun aReplayedSessionGetsNowhere() {
         val tv = Device("TV", "tv-1", isTv = true).apply { code = "123456" }
         val phone = Device("Phone", "phone-1")
-        assertEquals(HandoffResult.Done(), session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.Pair) { tv.code } })
+        assertTrue(session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.Pair) { tv.code } } is HandoffResult.Done)
         // Record a whole remote press, then play the caller's lines back to the TV on a new connection.
         val wire = Wire()
         session(tv, wire) { link -> HandoffPeer(phone).request(link, HandoffRequest.Remote(RemoteKey.NEXT)) { null } }
@@ -208,5 +223,189 @@ class LinkSecurityTest {
         }
         assertTrue("$answer", answer is HMsg.Denied)
         assertEquals("the replayed press did nothing", 1, tv.keys.size)
+    }
+
+    // ------------------------------------------------------------ The 1.8.0 review's findings
+
+    private fun wrongFor(code: String) = if (code == "111111") "222222" else "111111"
+
+    /** Each failed try gives a caller a bit or two of the code: a TV's code is new after every try, and gone once used. */
+    @Test fun aTvsCodeChangesAfterEveryTryAndClosesOnceAPhonePairs() {
+        val tv = Device("TV", "tv-1", isTv = true).apply { pairing = PairingCode() }
+        val first = tv.pairing!!.open()
+        val phone = Device("Phone", "phone-1")
+        assertTrue(session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.Pair) { wrongFor(first) } } is HandoffResult.Failed)
+        val second = tv.pairing!!.value.value
+        assertNotNull(second)
+        assertTrue("a new code after a failed try", second != first)
+        // A caller that gave up at the code box ends its try too.
+        assertEquals(HandoffResult.Cancelled, session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.Pair) { null } })
+        val third = tv.pairing!!.value.value!!
+        assertTrue(third != second)
+        // The code on screen now pairs; then the TV takes no more pairings, not even with that code.
+        val ok = session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.Pair) { third } }
+        assertEquals(HandoffResult.Done(peer = LinkPeer("tv-1", "TV", tv = true)), ok)
+        assertNull(tv.pairing!!.value.value)
+        val other = Device("Other phone", "phone-2")
+        assertTrue(session(tv) { link -> HandoffPeer(other).request(link, HandoffRequest.Pair) { third } } is HandoffResult.Failed)
+        assertTrue(other.secrets.isEmpty() && tv.secrets.keys == setOf("phone-1"))
+    }
+
+    /** Two tries at once: what one learns while the other fails is about a code that's gone by then. */
+    @Test fun aTryThatOutlivesItsCodeGetsNowhere() {
+        val tv = Device("TV", "tv-1", isTv = true).apply { pairing = PairingCode() }
+        val code = tv.pairing!!.open()
+        val asked = java.util.concurrent.CountDownLatch(1)
+        val go = java.util.concurrent.CountDownLatch(1)
+        var slow: HandoffResult? = null
+        val t = thread {
+            slow = session(tv) { link -> HandoffPeer(Device("Slow", "phone-1")).request(link, HandoffRequest.Pair) { asked.countDown(); go.await(); code } }
+        }
+        assertTrue(asked.await(5, java.util.concurrent.TimeUnit.SECONDS))
+        assertTrue(session(tv) { link -> HandoffPeer(Device("Quick", "phone-2")).request(link, HandoffRequest.Pair) { wrongFor(code) } } is HandoffResult.Failed)
+        assertTrue(tv.pairing!!.value.value != code)
+        // The slow try now answers with the code it was shown: right then, not now.
+        go.countDown()
+        t.join(10_000)
+        assertTrue("$slow", slow is HandoffResult.Failed)
+        assertTrue(tv.secrets.isEmpty())
+    }
+
+    /** Asking while the TV isn't pairing never uses up the tries a real phone needs once it is. */
+    @Test fun askingWhilePairingIsClosedUsesUpNoTries() {
+        val tv = Device("TV", "tv-1", isTv = true).apply { code = "112233"; open = false }
+        val peer = HandoffPeer(tv)
+        repeat(HandoffPeer.PAIR_ASKS_PER_MINUTE * 3) {
+            val r = session(tv, servedBy = peer) { link -> HandoffPeer(Device("Stranger", "s-$it")).request(link, HandoffRequest.Pair) { "112233" } }
+            assertTrue("$r", r is HandoffResult.Failed && !r.reason.startsWith("Too many"))
+        }
+        tv.open = true
+        assertTrue(session(tv, servedBy = peer) { link -> HandoffPeer(Device("Phone", "phone-1")).request(link, HandoffRequest.Pair) { tv.code } } is HandoffResult.Done)
+    }
+
+    /**
+     * A device's id isn't secret (it's in its announcement on the network): something else answering as the TV and
+     * saying "not paired" doesn't make the phone drop the real pairing.
+     */
+    @Test fun aStrangersNoNeverWipesAPairing() {
+        val tv = Device("TV", "tv-1", isTv = true).apply { code = "135790" }
+        val phone = Device("Phone", "phone-1")
+        assertTrue(session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.Pair) { tv.code } } is HandoffResult.Done)
+        val key = phone.secrets["tv-1"]
+        val server = ServerSocket(0, 5, InetAddress.getLoopbackAddress())
+        val t = thread {
+            runCatching {
+                server.accept().use { s ->
+                    HLink(s).use { link ->
+                        link.read()
+                        link.send(HMsg.Challenge("TV", "tv-1", LinkKeys.hex(LinkKeys.nonce()), LinkKeys.hex(X25519.publicKey(X25519.newPrivateKey())), tv = true))
+                        link.read()
+                        link.send(HMsg.Denied("Not paired", unpaired = true))
+                    }
+                }
+            }
+        }
+        val r = HLink(Socket(InetAddress.getLoopbackAddress(), server.localPort)).use { link -> HandoffPeer(phone).request(link, HandoffRequest.Remote(RemoteKey.NEXT)) { null } }
+        t.join(5_000); server.close()
+        assertEquals(HandoffResult.Unpaired, r)
+        assertEquals(key, phone.secrets["tv-1"])
+        // The real TV still knows the phone.
+        assertEquals(HandoffResult.Done(), session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.Remote(RemoteKey.NEXT)) { error("no code") } })
+    }
+
+    /** The account goes only to the TV expected, paired before (never one paired on the way), and never to a phone. */
+    @Test fun theAccountGoesOnlyToAPairedTvItExpects() {
+        val values = mapOf("cookie" to "s:SID=secret")
+        val tv = Device("TV", "tv-1", isTv = true).apply { code = "246810" }
+        val phone = Device("Phone", "phone-1")
+        val unpaired = session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.SignIn(values, "a")) { error("no code for a sign-in") } }
+        assertTrue("$unpaired", unpaired is HandoffResult.Failed)
+        assertTrue(tv.signIns.isEmpty() && tv.secrets.isEmpty())
+        assertTrue(session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.Pair) { tv.code } } is HandoffResult.Done)
+        // Someone else where another TV was expected.
+        val elsewhere = session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.SignIn(values, "a"), HandoffExpect(device = "tv-2")) { null } }
+        assertTrue("$elsewhere", elsewhere is HandoffResult.Failed)
+        assertTrue(tv.signIns.isEmpty())
+        // A phone, paired or not, takes no account.
+        val otherPhone = Device("Other phone", "phone-2").apply { code = "975310" }
+        assertTrue(session(otherPhone) { link -> HandoffPeer(phone).request(link, HandoffRequest.Pair) { otherPhone.code } } is HandoffResult.Done)
+        assertTrue(session(otherPhone) { link -> HandoffPeer(phone).request(link, HandoffRequest.SignIn(values, "a")) { null } } is HandoffResult.Failed)
+        assertTrue(otherPhone.signIns.isEmpty())
+        // The TV expected, paired: it goes.
+        assertEquals(HandoffResult.Done(), session(tv) { link -> HandoffPeer(phone).request(link, HandoffRequest.SignIn(values, "a"), HandoffExpect(device = "tv-1")) { null } })
+        assertEquals(1, tv.signIns.size)
+    }
+
+    /** A stranger that connects and sends nonsense, or nothing whole, is let go: it never holds a thread for long. */
+    @Test fun aStrangerCantHoldTheLinkOpen() {
+        val tv = Device("TV", "tv-1", isTv = true).apply { code = "123123" }
+        val peer = HandoffPeer(tv, handshakeMs = 600)
+        fun msUntilLetGo(talk: (Socket) -> Unit): Long {
+            val server = ServerSocket(0, 5, InetAddress.getLoopbackAddress())
+            val t = thread { runCatching { server.accept().use { s -> HLink(s).use { peer.serve(it) } } } }
+            val start = System.currentTimeMillis()
+            Socket(InetAddress.getLoopbackAddress(), server.localPort).use { s ->
+                s.soTimeout = 10_000
+                talk(s)
+                runCatching { while (s.getInputStream().read() >= 0) Unit }
+            }
+            val ms = System.currentTimeMillis() - start
+            t.join(5_000); server.close()
+            return ms
+        }
+        // Not a message: let go at once.
+        assertTrue(msUntilLetGo { s -> s.getOutputStream().apply { write("not a message\n".toByteArray()); flush() } } < 2_000)
+        // A line far longer than any handshake message: let go at once.
+        assertTrue(msUntilLetGo { s -> s.getOutputStream().apply { write(ByteArray(HLink.PLAIN_MAX_LINE + 10) { 'a'.code.toByte() }); flush() } } < 2_000)
+        // A byte now and then, never a whole line (each read alone would never time out): let go at the deadline.
+        val trickled = msUntilLetGo { s ->
+            thread { runCatching { repeat(60) { s.getOutputStream().apply { write('{'.code); flush() }; Thread.sleep(100) } } }
+        }
+        assertTrue("let go after $trickled ms", trickled < 3_000)
+    }
+
+    /** Connections are served a few at a time, and a few from one address: the rest are closed, the app carries on. */
+    @Test fun onlyAFewLinksAreServedAtOnce() {
+        val release = java.util.concurrent.CountDownLatch(1)
+        val served = java.util.concurrent.atomic.AtomicInteger()
+        val server = ServerSocket(0, 50, InetAddress.getLoopbackAddress())
+        try {
+            fun accepted(n: Int) = (1..n).map { Socket(InetAddress.getLoopbackAddress(), server.localPort) to server.accept() }
+            val hold: (Socket) -> Unit = { served.incrementAndGet(); release.await(5, java.util.concurrent.TimeUnit.SECONDS) }
+            // From one address (all of these come from this machine): two at a time.
+            val perAddress = LinkGate(max = 10, perAddress = 2, serve = hold)
+            assertEquals(listOf(true, true, false), accepted(3).map { (_, s) -> perAddress.take(s) })
+            // Three at a time in all.
+            val all = LinkGate(max = 3, perAddress = 10, serve = hold)
+            val pairs = accepted(4)
+            assertEquals(listOf(true, true, true, false), pairs.map { (_, s) -> all.take(s) })
+            // The one turned away is closed at once.
+            pairs.last().first.soTimeout = 2_000
+            assertEquals(-1, pairs.last().first.getInputStream().read())
+            release.countDown()
+            Thread.sleep(300)
+            // Once they're done, there's room again.
+            assertTrue(all.take(accepted(1).single().second))
+        } finally {
+            release.countDown()
+            server.close()
+        }
+    }
+
+    @Test fun aTvsCodeKeepsToItsRules() {
+        var n = 0
+        val codes = PairingCode { "10000${n++}" }
+        assertNull(codes.value.value)
+        val a = codes.open()
+        assertEquals(false, codes.ended(a, matched = false))
+        val b = codes.value.value!!
+        assertTrue(a != b)
+        // A try with a code no longer in force: refused, and the code in force stays.
+        assertEquals(false, codes.ended(a, matched = true))
+        assertEquals(b, codes.value.value)
+        assertEquals(true, codes.ended(b, matched = true))
+        assertNull(codes.value.value)
+        // Closed: nothing pairs.
+        assertEquals(false, codes.ended(b, matched = true))
     }
 }

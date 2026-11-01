@@ -202,9 +202,9 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
 
     override val isTv: Boolean by lazy { com.prism.music.ui.tv.TvDevice.isTv(app) }
 
-    private val _tvCode = MutableStateFlow<String?>(null)
+    private val tvPairing = PairingCode()
     /** The code the TV's pairing screen shows, while it's open; a TV takes pairings only then. */
-    val tvCode: StateFlow<String?> = _tvCode.asStateFlow()
+    val tvCode: StateFlow<String?> = tvPairing.value
     private val _pairedWith = MutableSharedFlow<String>(extraBufferCapacity = 4)
     /** A device that just paired with this one (its name): the TV's pairing screen moves on. */
     val pairedWith = _pairedWith.asSharedFlow()
@@ -213,8 +213,13 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
     val signedIn = _signedIn.asSharedFlow()
 
     /** The TV's pairing screen opens: a fresh code, shown on it. */
-    fun openPairing(): String = HandoffKeys.newCode().also { _tvCode.value = it }
-    fun closePairing() { _tvCode.value = null }
+    fun openPairing(): String = tvPairing.open()
+    fun closePairing() = tvPairing.close()
+
+    override fun takesPairing(): Boolean = !isTv || tvPairing.value.value != null
+
+    /** A TV: a new code after every try (shown on its screen and in the QR code), none once a phone has paired. */
+    override fun pairingEnded(code: String, matched: Boolean): Boolean = if (isTv) tvPairing.ended(code, matched) else matched
 
     /**
      * The link a TV's pairing screen puts in its QR code: this TV's address and port, its name and the code shown, and
@@ -235,30 +240,62 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
     val signInAsk: StateFlow<PrismDevice?> = _signInAsk.asStateFlow()
     fun askSignIn(d: PrismDevice?) { _signInAsk.value = d }
 
-    /** A TV's QR code, scanned on this phone: pairs with it (the code comes with the link), then offers the sign-in. */
+    /** A pairing link opened on this phone, waiting for the listener's yes ([HandoffDialogs]). */
+    data class LinkPair(val name: String, val address: java.net.InetAddress, val port: Int, val code: String, val signIn: Boolean) {
+        val shownAddress: String get() = address.hostAddress ?: "?"
+    }
+
+    private val _linkPair = MutableStateFlow<LinkPair?>(null)
+    val linkPair: StateFlow<LinkPair?> = _linkPair.asStateFlow()
+
+    /**
+     * A TV's QR code, scanned on this phone: once the listener says yes to the TV's name and address ([answerLinkPair]),
+     * pairs with it (the code comes with the link), then offers the sign-in if it's a TV. Any page or app can open such
+     * a link, so nothing happens without that yes, and only to an address on this network (not this phone itself).
+     */
     fun pairFromLink(link: android.net.Uri) {
         val host = link.getQueryParameter("h") ?: return
-        val port = link.getQueryParameter("p")?.toIntOrNull() ?: return
+        val port = link.getQueryParameter("p")?.toIntOrNull()?.takeIf { it in 1..65_535 } ?: return
         val code = link.getQueryParameter("c")?.filter { it.isDigit() }?.takeIf { it.length == 6 } ?: return
-        val tv = PrismDevice(link.getQueryParameter("n")?.take(60) ?: host, host, port, null, "link:$host:$port", false, tv = true)
-        // Only an address on this network (a link can't send the phone elsewhere).
-        if (!runCatching { Lan.isLocal(java.net.InetAddress.getByName(host)) }.getOrDefault(false)) return
+        val name = link.getQueryParameter("n")?.trim()?.take(60)?.ifBlank { null }
+        val signIn = link.getQueryParameter("s") == "1"
         scope.launch {
-            val socket = runCatching { Socket().apply { connect(InetSocketAddress(host, port), 5_000); tcpNoDelay = true } }.getOrNull()
-            val r = socket?.let { s -> HLink(s).use { link -> runCatching { peer.request(link, HandoffRequest.Pair) { code } }.getOrNull() } }
+            // Looked up once, here, and connected to as found (a name can't point elsewhere in between).
+            val address = runCatching { java.net.InetAddress.getByName(host) }.getOrNull() ?: return@launch
+            if (address.isLoopbackAddress || address.isAnyLocalAddress || !Lan.isLocal(address)) return@launch
+            _linkPair.value = LinkPair(name ?: address.hostAddress ?: host, address, port, code, signIn)
+        }
+    }
+
+    /** The listener's answer to [linkPair]. */
+    fun answerLinkPair(yes: Boolean) {
+        val ask = _linkPair.value ?: return
+        _linkPair.value = null
+        if (!yes) return
+        scope.launch {
+            val socket = runCatching { Socket().apply { connect(InetSocketAddress(ask.address, ask.port), 5_000); tcpNoDelay = true } }.getOrNull()
+            val r = socket?.let { s -> HLink(s).use { link -> runCatching { peer.request(link, HandoffRequest.Pair) { ask.code } }.getOrNull() } }
             when (r) {
                 is HandoffResult.Done -> {
-                    _events.tryEmit(tr(R.string.tv_paired_with, tv.name))
-                    if (link.getQueryParameter("s") == "1") _signInAsk.value = tv
+                    val them = r.peer ?: return@launch
+                    _events.tryEmit(tr(R.string.tv_paired_with, them.name))
+                    // The sign-in is offered to the device that just proved itself, and only if it says it's a TV.
+                    if (ask.signIn && them.tv) {
+                        _signInAsk.value = PrismDevice(them.name, ask.shownAddress, ask.port, them.device, "link:${them.device}", true, tv = true)
+                    }
                 }
                 is HandoffResult.Failed -> _events.tryEmit(r.reason)
-                else -> _events.tryEmit(tr(R.string.couldn_t_reach_is_prism_open, tv.name))
+                else -> _events.tryEmit(tr(R.string.couldn_t_reach_is_prism_open, ask.name))
             }
         }
     }
 
-    /** This phone's YouTube Music sign-in, sent to [d] (after the listener said yes); what to tell them. */
+    /**
+     * This phone's YouTube Music sign-in, sent to [d] (after the listener said yes); what to tell them. Only to the
+     * device [d] names, paired already and a TV ([HandoffPeer.request]).
+     */
     suspend fun sendSignIn(d: PrismDevice): String {
+        if (d.id == null) return tr(R.string.tv_sign_in_pair_first, d.name)
         val values = c.settings.forBackup(settings = false, accounts = true).filterKeys { it in SIGN_IN_KEYS }
         val account = c.settings.current.let { it.accountEmail.ifBlank { it.accountName } }
         return when (val r = ask(d, HandoffRequest.SignIn(values, account))) {
@@ -278,7 +315,7 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
         }
     }
 
-    override fun pairingCode(from: String): String? = if (isTv) _tvCode.value else HandoffKeys.newCode().also { showCode(it, from) }
+    override fun pairingCode(from: String): String? = if (isTv) tvPairing.value.value else HandoffKeys.newCode().also { showCode(it, from) }
 
     override fun remote(key: RemoteKey, value: Long): String? {
         runBlocking(Dispatchers.Main) {
@@ -355,16 +392,21 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
     /** The port this device listens on while available (null: not listening). */
     val port: Int? get() = server?.localPort
 
+    /** Connections being served, on threads of their own ([LinkGate]). */
+    private val links = LinkGate(MAX_LINKS, MAX_LINKS_PER_ADDRESS) { s ->
+        HLink(s.apply { tcpNoDelay = true }).use { link -> runCatching { peer.serve(link) }.onFailure { Log.w(TAG, "handoff from ${link.remote} failed", it) } }
+    }
+
     @Synchronized
     private fun startServer() {
         if (server != null) return
         val ss = runCatching { ServerSocket(PORT) }.getOrNull() ?: runCatching { ServerSocket(0) }.getOrNull() ?: return
         server = ss
-        scope.launch {
+        kotlin.concurrent.thread(name = "handoff-accept", isDaemon = true) {
             while (!ss.isClosed) {
                 val s = runCatching { ss.accept() }.getOrNull() ?: break
                 if (!Lan.isLocal(s.inetAddress)) { runCatching { s.close() }; continue }
-                scope.launch { HLink(s.apply { tcpNoDelay = true }).use { link -> runCatching { peer.serve(link) }.onFailure { Log.w(TAG, "handoff from ${link.remote} failed", it) } } }
+                links.take(s)
             }
         }
         register(ss.localPort)
@@ -496,7 +538,7 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
                 val request = if (command == HandoffCommand.MOVE) HandoffRequest.Move else HandoffRequest.Pull
                 var result = attempt(d, request)
                 // Its key was refused (forgotten over there): pair again, once.
-                if (result == HandoffResult.Unpaired) result = attempt(d, request)
+                if (result == HandoffResult.Unpaired) result = attempt(d, request, repair = true)
                 when (result) {
                     is HandoffResult.Done -> _events.tryEmit(
                         (if (command == HandoffCommand.MOVE) tr(R.string.playing_on, d.name) else tr(R.string.playing_here)) + (result.note?.let { " · $it" } ?: "")
@@ -518,15 +560,16 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
      */
     suspend fun ask(d: PrismDevice, request: HandoffRequest): HandoffResult = withContext(Dispatchers.IO) {
         val r = attempt(d, request)
-        if (r == HandoffResult.Unpaired) attempt(d, request) else r
+        if (r == HandoffResult.Unpaired) attempt(d, request, repair = true) else r
     }
 
-    private fun attempt(d: PrismDevice, request: HandoffRequest): HandoffResult {
+    /** [repair]: pair again though a key is kept (it was refused); the kept key is replaced only once that works. */
+    private fun attempt(d: PrismDevice, request: HandoffRequest, repair: Boolean = false): HandoffResult {
         val socket = runCatching { Socket().apply { connect(InetSocketAddress(d.host, d.port), 5_000); tcpNoDelay = true } }.getOrNull()
             ?: return HandoffResult.Failed(tr(R.string.couldn_t_reach_is_prism_open, d.name))
         return HLink(socket).use { link ->
             runCatching {
-                peer.request(link, request) { them ->
+                peer.request(link, request, HandoffExpect(device = d.id, repair = repair)) { them ->
                     val wait = CompletableDeferred<String?>()
                     code = wait
                     _asking.value = them
@@ -549,5 +592,8 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
         val SIGN_IN_KEYS = setOf("cookie", "visitor_data", "data_sync_id", "auth_user", "account_name", "account_email", "account_avatar")
         /** How long a song gets to start here (it may still be loading) before the move counts as failed. */
         private const val START_WAIT_MS = 12_000L
+        /** Connections served at once (a move, a remote's buttons, a pairing), and from one address. */
+        private const val MAX_LINKS = 6
+        private const val MAX_LINKS_PER_ADDRESS = 3
     }
 }

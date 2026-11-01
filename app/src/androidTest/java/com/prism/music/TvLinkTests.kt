@@ -83,9 +83,16 @@ class TvLinkTests {
         // With the pairing screen closed, a phone can't pair.
         assertTrue(call(phone, HandoffRequest.Pair, "123456") is HandoffResult.Failed)
         assertTrue(phone.keys.isEmpty())
-        // Open: the code on screen pairs, and the sign-in comes over.
+        // Open: a wrong try, and the code on screen is a new one (each failed try tells a caller a little of the code).
         val code = handoff.openPairing()
-        val r = call(phone, HandoffRequest.SignIn(mapOf("cookie" to "s:SAPISID=test-sapisid; SID=test-sid", "account_name" to "s:Test Listener"), "listener@example.com"), code)
+        assertTrue(call(phone, HandoffRequest.Pair, if (code == "111111") "222222" else "111111") is HandoffResult.Failed)
+        val shown = handoff.tvCode.value
+        assertTrue("a new code: $code → $shown", shown != null && shown != code)
+        // The code on screen pairs, and then the TV takes no more pairings.
+        assertTrue(call(phone, HandoffRequest.Pair, shown) is HandoffResult.Done)
+        assertEquals(null, handoff.tvCode.value)
+        // Paired: the sign-in comes over.
+        val r = call(phone, HandoffRequest.SignIn(mapOf("cookie" to "s:SAPISID=test-sapisid; SID=test-sid", "account_name" to "s:Test Listener"), "listener@example.com"))
         assertEquals(HandoffResult.Done(), r)
         handoff.closePairing()
         waitFor(10_000) { Fixture.container.settings.current.isLoggedIn }

@@ -4095,4 +4095,6 @@
     <string name="tv_sing_ready">যথেষ্ট দ্রুত: Sing প্লেয়ারের ⋯-এ আছে</string>
     <string name="tv_sing_too_slow">এই টিভি Sing-এর জন্য যথেষ্ট দ্রুত নয়: গানের পেছনে পড়ে যাবে</string>
     <string name="tv_sing_no_cpu">এই টিভির প্রসেসরে Sing চলে না</string>
+    <string name="tv_link_pair_note">আপনার স্ক্যান করা কোডটি আপনার নেটওয়ার্কে %2$s ঠিকানায় থাকা %1$s-এর জন্য। শুধু তখনই পেয়ার করুন যদি এটি আপনার সামনের টিভি হয়।</string>
+    <string name="tv_sign_in_pair_first">আগে %1$s-এর সঙ্গে পেয়ার করুন, তারপর এতে সাইন ইন করুন</string>
 </resources>

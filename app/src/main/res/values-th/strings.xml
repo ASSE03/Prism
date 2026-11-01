@@ -4045,4 +4045,6 @@
     <string name="tv_sing_ready">เร็วพอ: ร้องเพลงอยู่ใน ⋯ ของเครื่องเล่น</string>
     <string name="tv_sing_too_slow">ทีวีเครื่องนี้เร็วไม่พอสำหรับร้องเพลง: จะตามเพลงไม่ทัน</string>
     <string name="tv_sing_no_cpu">ร้องเพลงใช้กับโปรเซสเซอร์ของทีวีเครื่องนี้ไม่ได้</string>
+    <string name="tv_link_pair_note">โค้ดที่คุณสแกนเป็นของ %1$s ที่ %2$s ในเครือข่ายของคุณ จับคู่เฉพาะเมื่อเป็นทีวีตรงหน้าคุณเท่านั้น</string>
+    <string name="tv_sign_in_pair_first">จับคู่กับ %1$s ก่อน แล้วค่อยลงชื่อเข้าใช้</string>
 </resources>

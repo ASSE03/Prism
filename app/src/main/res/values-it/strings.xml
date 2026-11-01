@@ -4145,4 +4145,6 @@
     <string name="tv_sing_ready">Abbastanza veloce: Canta è nel ⋯ del player</string>
     <string name="tv_sing_too_slow">Questa TV non è abbastanza veloce per Canta: resterebbe indietro rispetto al brano</string>
     <string name="tv_sing_no_cpu">Canta non funziona sul processore di questa TV</string>
+    <string name="tv_link_pair_note">Il codice scansionato è di %1$s all’indirizzo %2$s sulla tua rete. Associa solo se è la TV davanti a te.</string>
+    <string name="tv_sign_in_pair_first">Prima associa %1$s, poi accedi su di esso</string>
 </resources>

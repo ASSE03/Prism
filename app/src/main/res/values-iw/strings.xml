@@ -4145,4 +4145,6 @@
     <string name="tv_sing_ready">מהירה מספיק: ״שירה״ נמצאת ב-⋯ של הנגן</string>
     <string name="tv_sing_too_slow">הטלוויזיה לא מהירה מספיק ל״שירה״: היא תפגר אחרי השיר</string>
     <string name="tv_sing_no_cpu">״שירה״ לא פועלת על המעבד של הטלוויזיה הזו</string>
+    <string name="tv_link_pair_note">הקוד שסרקת שייך ל-%1$s בכתובת %2$s ברשת שלך. כדאי להתאים רק אם זו הטלוויזיה שמולך.</string>
+    <string name="tv_sign_in_pair_first">קודם צריך להתאים את %1$s, ואז להתחבר בו</string>
 </resources>

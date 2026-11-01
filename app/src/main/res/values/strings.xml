@@ -4151,4 +4151,6 @@
     <string name="tv_sing_ready">Fast enough: Sing is in the player\'s ⋯</string>
     <string name="tv_sing_too_slow">This TV isn\'t fast enough for Sing: it would fall behind the song</string>
     <string name="tv_sing_no_cpu">Sing doesn\'t run on this TV\'s processor</string>
+    <string name="tv_link_pair_note">The code you scanned is for %1$s at %2$s on your network. Pair only if it\'s the TV in front of you.</string>
+    <string name="tv_sign_in_pair_first">Pair with %1$s first, then sign it in</string>
 </resources>

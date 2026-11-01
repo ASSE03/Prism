@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,8 +31,13 @@ fun TvPairPage(signIn: Boolean, nav: TvNav, onDone: () -> Unit = { nav.back() })
     val c = LocalContainer.current
     val context = LocalContext.current
     val handoff = c.handoff
-    val code = remember { handoff.openPairing() }
+    val first = remember { handoff.openPairing() }
     DisposableEffect(Unit) { onDispose { handoff.closePairing() } }
+    // A new code after every try (on screen and in the QR code); once a phone has paired none is taken, and the last
+    // one stays on screen.
+    val inForce by handoff.tvCode.collectAsState()
+    var code by remember { mutableStateOf(first) }
+    LaunchedEffect(inForce) { inForce?.let { code = it } }
     var status by remember { mutableStateOf(tr(R.string.tv_waiting_phone)) }
     LaunchedEffect(Unit) {
         handoff.pairedWith.collect { phone ->

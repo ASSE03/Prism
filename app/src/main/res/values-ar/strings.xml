@@ -4295,4 +4295,6 @@
     <string name="tv_sing_ready">سريع بما يكفي: «غنِّ» في قائمة ⋯ في المشغّل</string>
     <string name="tv_sing_too_slow">هذا التلفزيون ليس سريعًا بما يكفي لـ«غنِّ»: سيتأخر عن الأغنية</string>
     <string name="tv_sing_no_cpu">لا يعمل «غنِّ» على معالج هذا التلفزيون</string>
+    <string name="tv_link_pair_note">الرمز الذي مسحته يخص %1$s على العنوان %2$s في شبكتك. لا تقرن إلا إذا كان هو التلفزيون الذي أمامك.</string>
+    <string name="tv_sign_in_pair_first">اقرن مع %1$s أولًا، ثم سجّل الدخول عليه</string>
 </resources>

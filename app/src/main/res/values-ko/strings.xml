@@ -4045,4 +4045,6 @@
     <string name="tv_sing_ready">충분히 빠름: 노래하기는 플레이어의 ⋯에 있습니다</string>
     <string name="tv_sing_too_slow">이 TV는 노래하기에 충분히 빠르지 않습니다: 곡을 따라가지 못합니다</string>
     <string name="tv_sing_no_cpu">노래하기는 이 TV의 프로세서에서 실행되지 않습니다</string>
+    <string name="tv_link_pair_note">스캔한 코드는 네트워크의 %2$s에 있는 %1$s의 코드예요. 눈앞의 TV일 때만 페어링하세요.</string>
+    <string name="tv_sign_in_pair_first">먼저 %1$s와 페어링한 다음 로그인하세요</string>
 </resources>

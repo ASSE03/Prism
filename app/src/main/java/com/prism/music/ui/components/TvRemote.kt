@@ -124,8 +124,7 @@ fun TvRemoteSheet(tv: PrismDevice, onDismiss: () -> Unit) {
 @Composable
 fun TvSignInAsk(tv: PrismDevice, onDone: () -> Unit) {
     val c = LocalContainer.current
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
+    val context = LocalContext.current.applicationContext
     val account = c.settings.current.let { it.accountEmail.ifBlank { it.accountName } }
     AlertDialog(
         onDismissRequest = onDone,
@@ -133,7 +132,11 @@ fun TvSignInAsk(tv: PrismDevice, onDone: () -> Unit) {
         text = { Text(tr(R.string.tv_sign_in_note, account, tv.name)) },
         confirmButton = {
             PrismTextButton(onClick = {
-                scope.launch { Toast.makeText(context, c.handoff.sendSignIn(tv), Toast.LENGTH_LONG).show() }
+                // On the app's scope: the dialog closes now, the answer comes after (a toast on the main thread).
+                c.scope.launch {
+                    val said = c.handoff.sendSignIn(tv)
+                    androidx.core.content.ContextCompat.getMainExecutor(context).execute { Toast.makeText(context, said, Toast.LENGTH_LONG).show() }
+                }
                 onDone()
             }, Modifier.testTag("tvSignIn/yes")) { Text(tr(R.string.sign_in)) }
         },

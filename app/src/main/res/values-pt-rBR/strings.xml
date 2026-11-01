@@ -4145,4 +4145,6 @@
     <string name="tv_sing_ready">Rápida o bastante: Cantar está no ⋯ do player</string>
     <string name="tv_sing_too_slow">Esta TV não é rápida o bastante para Cantar: ficaria atrás da música</string>
     <string name="tv_sing_no_cpu">Cantar não funciona no processador desta TV</string>
+    <string name="tv_link_pair_note">O código que você escaneou é de %1$s em %2$s na sua rede. Pareie só se for a TV na sua frente.</string>
+    <string name="tv_sign_in_pair_first">Pareie com %1$s primeiro e depois faça login nela</string>
 </resources>

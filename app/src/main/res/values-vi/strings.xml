@@ -4045,4 +4045,6 @@
     <string name="tv_sing_ready">Đủ nhanh: Hát nằm trong ⋯ của trình phát</string>
     <string name="tv_sing_too_slow">TV này không đủ nhanh cho Hát: nó sẽ bị chậm hơn bài hát</string>
     <string name="tv_sing_no_cpu">Hát không chạy trên bộ xử lý của TV này</string>
+    <string name="tv_link_pair_note">Mã bạn đã quét là của %1$s tại %2$s trong mạng của bạn. Chỉ ghép nối nếu đó là TV trước mặt bạn.</string>
+    <string name="tv_sign_in_pair_first">Hãy ghép nối với %1$s trước, rồi đăng nhập trên đó</string>
 </resources>

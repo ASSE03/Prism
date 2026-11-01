@@ -4095,4 +4095,6 @@
     <string name="tv_sing_ready">Snel genoeg: Zingen staat in de ⋯ van de speler</string>
     <string name="tv_sing_too_slow">Deze tv is niet snel genoeg voor Zingen: hij zou achter het nummer aan lopen</string>
     <string name="tv_sing_no_cpu">Zingen werkt niet op de processor van deze tv</string>
+    <string name="tv_link_pair_note">De gescande code is van %1$s op %2$s in je netwerk. Koppel alleen als dat de tv voor je is.</string>
+    <string name="tv_sign_in_pair_first">Koppel eerst %1$s, meld het daarna aan</string>
 </resources>

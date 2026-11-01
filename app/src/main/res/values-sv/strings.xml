@@ -4095,4 +4095,6 @@
     <string name="tv_sing_ready">Snabb nog: Sjung finns i spelarens ⋯</string>
     <string name="tv_sing_too_slow">Den här tv:n är inte snabb nog för Sjung: den skulle hamna efter låten</string>
     <string name="tv_sing_no_cpu">Sjung fungerar inte på den här tv:ns processor</string>
+    <string name="tv_link_pair_note">Koden du skannade gäller %1$s på %2$s i ditt nätverk. Parkoppla bara om det är tv:n framför dig.</string>
+    <string name="tv_sign_in_pair_first">Parkoppla med %1$s först och logga sedan in på den</string>
 </resources>

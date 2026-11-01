@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -37,6 +38,17 @@ fun HandoffDialogs() {
     // A TV paired by its QR code asked for this phone's sign-in (1.8.0): asked here first.
     val signInFor by handoff.signInAsk.collectAsState()
     signInFor?.let { tv -> TvSignInAsk(tv) { handoff.askSignIn(null) } }
+    // A pairing link (a TV's QR code, or any page or app that opens one): nothing happens until the listener says yes.
+    val linkPair by handoff.linkPair.collectAsState()
+    linkPair?.let { ask ->
+        AlertDialog(
+            onDismissRequest = { handoff.answerLinkPair(false) },
+            title = { Text(tr(R.string.pair_with_2, ask.name)) },
+            text = { Text(tr(R.string.tv_link_pair_note, ask.name, ask.shownAddress)) },
+            confirmButton = { PrismTextButton(onClick = { handoff.answerLinkPair(true) }, Modifier.testTag("linkPair/yes")) { Text(tr(R.string.pair)) } },
+            dismissButton = { PrismTextButton(onClick = { handoff.answerLinkPair(false) }) { Text(tr(R.string.cancel)) } },
+        )
+    }
     asking?.let { them ->
         var code by remember(them) { mutableStateOf("") }
         AlertDialog(

@@ -4145,4 +4145,6 @@
     <string name="tv_sing_ready">Assez rapide : Chanter est dans le ⋯ du lecteur</string>
     <string name="tv_sing_too_slow">Ce téléviseur n\'est pas assez rapide pour Chanter : il prendrait du retard sur le titre</string>
     <string name="tv_sing_no_cpu">Chanter ne fonctionne pas sur le processeur de ce téléviseur</string>
+    <string name="tv_link_pair_note">Le code scanné correspond à %1$s à l’adresse %2$s sur votre réseau. N’associez que s’il s’agit de la télé devant vous.</string>
+    <string name="tv_sign_in_pair_first">Associez d’abord %1$s, puis connectez-le</string>
 </resources>
