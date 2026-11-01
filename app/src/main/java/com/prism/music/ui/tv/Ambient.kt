@@ -63,6 +63,14 @@ fun ambientDue(playing: Boolean, allowed: Boolean, minutes: Int, idleMs: Long): 
 fun ambientAllowed(onTv: Boolean, minutes: Int, deskMode: Boolean, charging: Boolean, video: Boolean, singing: Boolean): Boolean =
     minutes > 0 && (onTv || (deskMode && charging)) && !video && !singing
 
+/**
+ * Whether the screen is kept on: while something plays and the ambient screen may come (it's that, not the TV's
+ * screensaver, that shows), and on a TV while a music video or Sing plays, which the ambient screen never covers and the
+ * TV's own screensaver or sleep timer mustn't either (the owner's TV covered the video).
+ */
+fun keepScreenOn(playing: Boolean, allowed: Boolean, onTv: Boolean, video: Boolean, singing: Boolean): Boolean =
+    playing && (allowed || (onTv && (video || singing)))
+
 /** The slow drift that keeps the ambient screen burn-in safe: a few dp, one loop every several minutes. */
 fun ambientDrift(nowMs: Long): DpOffset {
     val t = nowMs / 1000.0
@@ -72,7 +80,8 @@ fun ambientDrift(nowMs: Long): DpOffset {
 /**
  * The ambient screen over everything, when it's due: on a TV after [TvPrefs.ambientMinutes] with no remote while music
  * plays; on a phone in desk mode (#265: switched on, charging, playing). While it's allowed and music plays the screen
- * stays on (it's the ambient screen that shows, not the TV's screensaver over the lyrics); paused, the screen may sleep.
+ * stays on (it's the ambient screen that shows, not the TV's screensaver over the lyrics), and on a TV while a video or
+ * Sing plays ([keepScreenOn]); paused, the screen may sleep.
  * The first key or touch only brings back what was there. On a TV the screens are [content], not drawn while the
  * ambient screen shows (nothing moves unseen under it); they come back as they were.
  */
@@ -93,8 +102,9 @@ fun AmbientHost(onTv: Boolean, content: (@Composable () -> Unit)? = null) {
     val allowed = ambientAllowed(onTv, settings.tv.ambientMinutes, settings.tv.deskMode, charging, video, singing)
     // The window's own flag (the player sets the view's for videos, #169): neither turns the other off.
     val window = (view.context as? android.app.Activity)?.window
-    androidx.compose.runtime.DisposableEffect(allowed, playing, window) {
-        val on = allowed && playing
+    val keepOn = keepScreenOn(playing, allowed, onTv, video, singing)
+    androidx.compose.runtime.DisposableEffect(keepOn, window) {
+        val on = keepOn
         if (on) window?.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         onDispose { if (on) window?.clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
     }

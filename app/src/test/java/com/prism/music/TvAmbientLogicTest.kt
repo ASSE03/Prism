@@ -36,6 +36,23 @@ class TvAmbientLogicTest {
         assertFalse(ambientAllowed(onTv = false, minutes = 3, deskMode = false, charging = true, video = false, singing = false))
     }
 
+    /** The owner: the TV's own screensaver covered a playing video. A video or Sing playing keeps a TV's screen on. */
+    @Test fun aVideoOrSingPlayingKeepsTheTvAwake() {
+        // Music with the ambient screen allowed: on; paused: the screen may sleep.
+        assertTrue(com.prism.music.ui.tv.keepScreenOn(playing = true, allowed = true, onTv = true, video = false, singing = false))
+        assertFalse(com.prism.music.ui.tv.keepScreenOn(playing = false, allowed = true, onTv = true, video = false, singing = false))
+        // A video or Sing on a TV (the ambient screen isn't allowed over them): on while playing, not paused.
+        assertTrue(com.prism.music.ui.tv.keepScreenOn(playing = true, allowed = false, onTv = true, video = true, singing = false))
+        assertTrue(com.prism.music.ui.tv.keepScreenOn(playing = true, allowed = false, onTv = true, video = false, singing = true))
+        assertFalse(com.prism.music.ui.tv.keepScreenOn(playing = false, allowed = false, onTv = true, video = true, singing = false))
+        // Ambient set to Never on a TV, just music: the TV's own screensaver, as before.
+        assertFalse(com.prism.music.ui.tv.keepScreenOn(playing = true, allowed = false, onTv = true, video = false, singing = false))
+        // A phone isn't kept on here for a video (its player does that itself).
+        assertFalse(com.prism.music.ui.tv.keepScreenOn(playing = true, allowed = false, onTv = false, video = true, singing = false))
+        // The ambient screen still never comes over them.
+        assertFalse(ambientDue(playing = true, allowed = ambientAllowed(true, 3, false, false, video = true, singing = false), minutes = 3, idleMs = 10 * 60_000L))
+    }
+
     @Test fun itDriftsAFewDpAndKeepsMoving() {
         val points = (0 until 600 step 7).map { ambientDrift(it * 1_000L) }
         assertTrue(points.all { abs(it.x.value) <= 14f && abs(it.y.value) <= 10f })
