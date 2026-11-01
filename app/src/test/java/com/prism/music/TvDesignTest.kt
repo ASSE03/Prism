@@ -176,7 +176,15 @@ class TvDesignTest {
     private fun shoot(id: String, title: String, about: String, steps: List<Step>, content: @Composable () -> Unit) {
         if (!started) {
             started = true
-            compose.setContent { TvTheme(AppSettings()) { screen?.let { (key, draw) -> androidx.compose.runtime.key(key) { draw() } } } }
+            // As the TV's shell draws them: on the Aura of what's playing (here the made-up cover of "Glass Horizon").
+            compose.setContent {
+                TvTheme(AppSettings()) {
+                    Box(Modifier.fillMaxSize().background(Color(0xFF060609))) {
+                        com.prism.music.ui.tv.TvAuraFrom(art(1))
+                        screen?.let { (key, draw) -> androidx.compose.runtime.key(key) { draw() } }
+                    }
+                }
+            }
         }
         screen = id to content
         repeat(12) { compose.mainClock.advanceTimeBy(120); Thread.sleep(40) }
@@ -267,11 +275,14 @@ class TvDesignTest {
 
         shoot(
             "video", "A music video",
-            "The video fills the screen; any key shows these controls for a few seconds. \"Back to the song\" returns to the audio and the player.",
-            listOf(Step("tv_video/playpause", "opens here", ""), Step("tv_video/next", "→", ""), Step("tv_video/song", "→", "back to the song")),
+            "The video fills the screen; any key shows these controls for a few seconds, every one reachable: the seek line (← → move 10 s), previous and next, Lyrics, the queue, back to the song, ⋯.",
+            listOf(
+                Step("tv_video/playpause", "opens here", ""), Step("tv_video/seek", "↑", "← → seek 10 s"), Step("tv_video/next", "↓ →", ""),
+                Step("tv_video/queue", "→", "the queue, over the video"), Step("tv_video/song", "→", "back to the song"), Step("tv_video/more", "→", "album, artist, Sing"),
+            ),
         ) {
             Box(Modifier.fillMaxSize().background(Brush.linearGradient(listOf(Color(0xFF203A43), Color(0xFF2C5364), Color(0xFF0F2027))))) {
-                TvVideoControls(now, noop, noop, noop, noop)
+                TvVideoControls(now, noop, noop, noop, noop, onSeek = {}, onLyrics = noop, onQueue = noop, onMore = noop)
             }
         }
 

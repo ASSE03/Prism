@@ -16,8 +16,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
@@ -80,8 +83,13 @@ fun TvHomeScreen(
     }
     // Rows run to the screen's edges (their cards grow when focused, and slide in from the edge); everything else keeps
     // the 48 dp margins.
+    // Keys that stay with each row (and card) as Home refreshes, so what's on screen isn't redrawn for nothing.
+    val rowKeys = remember(shelves) { occurrenceKeys(shelves.map { it.title }) }
+    val list = rememberLazyListState()
+    TvPrefetch(list, shelves, rowsBefore = if (banner != null) 2 else 1)
     LazyColumn(
-        modifier.fillMaxSize().tvBackdrop(accent, scheme.background).testTag(TAG_HOME),
+        modifier.fillMaxSize().testTag(TAG_HOME),
+        state = list,
         contentPadding = PaddingValues(top = 27.dp, bottom = 48.dp),
         verticalArrangement = Arrangement.spacedBy(22.dp),
     ) {
@@ -99,7 +107,7 @@ fun TvHomeScreen(
                 }
             }
         }
-        itemsIndexed(shelves) { r, shelf ->
+        itemsIndexed(shelves, key = { r, _ -> rowKeys[r] }) { r, shelf ->
             Column {
                 TvRowTitle(shelf.title, Modifier.padding(start = 48.dp))
                 LazyRow(
@@ -107,7 +115,7 @@ fun TvHomeScreen(
                     contentPadding = TvRowPadding,
                     horizontalArrangement = Arrangement.spacedBy(24.dp),
                 ) {
-                    itemsIndexed(shelf.items) { i, item ->
+                    itemsIndexed(shelf.items, key = { i, item -> item.id + "#" + i }) { i, item ->
                         val first = now == null && r == 0 && i == 0
                         TvCard(
                             item.art, item.title, item.subtitle, { onItem(r, i) },
@@ -129,7 +137,7 @@ private fun TvNowHero(now: TvNow, onPlayPause: () -> Unit, onOpenPlayer: () -> U
         Artwork(now.art, Modifier.size(196.dp), shape = RoundedCornerShape(14.dp), size = 544)
         Spacer(Modifier.width(32.dp))
         Column(Modifier.weight(1f)) {
-            Text(tr(R.string.now_playing).uppercase(), style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold), color = scheme.primary)
+            Text(tr(R.string.now_playing).uppercase(), style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold, brush = tvLight()))
             Spacer(Modifier.height(6.dp))
             Text(now.title, style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.SemiBold), color = scheme.onBackground, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(now.artist, style = MaterialTheme.typography.titleMedium, color = scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -157,7 +165,7 @@ private fun TvNowHero(now: TvNow, onPlayPause: () -> Unit, onOpenPlayer: () -> U
 fun TvUpdateBanner(version: String, onUpdate: () -> Unit, modifier: Modifier = Modifier, note: String? = null) {
     val scheme = MaterialTheme.colorScheme
     Row(
-        modifier.fillMaxWidth().background(scheme.surfaceVariant, RoundedCornerShape(14.dp)).padding(horizontal = 24.dp, vertical = 14.dp),
+        modifier.fillMaxWidth().tvGlass(TvShapes.card).padding(horizontal = 24.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(Modifier.weight(1f)) {
@@ -169,3 +177,35 @@ fun TvUpdateBanner(version: String, onUpdate: () -> Unit, modifier: Modifier = M
 }
 
 const val TAG_HOME = "tv_home"
+
+/** Keys from [titles], unique: a title that comes twice gets "#2" the second time. */
+internal fun occurrenceKeys(titles: List<String>): List<String> {
+    val seen = HashMap<String, Int>()
+    return titles.map { t -> val n = seen.merge(t, 1, Int::plus) ?: 1; if (n == 1) t else "$t#$n" }
+}
+
+/** How many cards of a row ahead are fetched (a row's first screenful on a TV). */
+private const val PREFETCH_CARDS = 8
+
+/**
+ * Fetches the next rows' pictures (at the size their cards draw them) as Home scrolls, so a row comes in with its
+ * covers already there. [rowsBefore]: the list's items above the rows (the hero, a banner).
+ */
+@Composable
+fun TvPrefetch(list: androidx.compose.foundation.lazy.LazyListState, shelves: List<TvShelf>, rowsBefore: Int) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val px = with(androidx.compose.ui.platform.LocalDensity.current) { 132.dp.roundToPx() }
+    LaunchedEffect(list, shelves) {
+        val fetched = HashSet<Int>()
+        androidx.compose.runtime.snapshotFlow { list.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0 }.collect { last ->
+            val loader = coil3.SingletonImageLoader.get(context)
+            for (r in (last - rowsBefore + 1)..(last - rowsBefore + 2)) {
+                val shelf = shelves.getOrNull(r) ?: continue
+                if (!fetched.add(r)) continue
+                shelf.items.take(PREFETCH_CARDS).mapNotNull { it.art }.forEach { url ->
+                    loader.enqueue(coil3.request.ImageRequest.Builder(context).data(com.prism.music.data.model.hiRes(url, 360)).size(px).build())
+                }
+            }
+        }
+    }
+}

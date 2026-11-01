@@ -115,6 +115,11 @@ fun ArtworkMeshBackdrop(
     speed: Float = 0f,
     intensity: Float = 1f,
     blur: Float = 1f,
+    /**
+     * The system's blur over the mesh (Android 12+), redone every frame it's drawn. Off on a TV (1.8.0): the mesh is a
+     * smoothly scaled texture already, and a TV's GPU spends its frames on focus moves instead.
+     */
+    liveBlur: Boolean = true,
 ) {
     var shown by remember { mutableStateOf(mesh) }
     var incoming by remember { mutableStateOf<ArtworkMesh?>(null) }
@@ -155,7 +160,7 @@ fun ArtworkMeshBackdrop(
                 translationX = size.width * 0.04f * kotlin.math.cos(t)
                 translationY = size.height * 0.03f * kotlin.math.sin(t)
             }
-            .then(if (Build.VERSION.SDK_INT >= 31) Modifier.blur(32.dp * blur.coerceIn(0.3f, 2f)) else Modifier),
+            .then(if (liveBlur && Build.VERSION.SDK_INT >= 31) Modifier.blur(32.dp * blur.coerceIn(0.3f, 2f)) else Modifier),
     ) {
         val seamY = seam.toPx().coerceIn(0f, size.height)
         shown?.let { drawMesh(it, seamY, 1f, tone) }

@@ -4128,4 +4128,5 @@
     <string name="tv_search_how">Drück OK auf der Suchzeile, um mit der Fernbedienung zu tippen.</string>
     <string name="tv_search_voice_how">Oder wähl das Mikrofon daneben und sag einen Song, Künstler oder ein Album.</string>
     <string name="tv_pair_step_find">Tippe auf dem Handy in Prism auf die Gerätezeile unter der Steuerung (oder öffne Einstellungen → Lautsprecher, Fernseher &amp; Browser) und wähle %1$s</string>
+    <string name="tv_home_rows_later">Die Reihen der Startseite erscheinen hier, sobald sie einmal geöffnet war</string>
 </resources>

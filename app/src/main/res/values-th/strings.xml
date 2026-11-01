@@ -4078,4 +4078,5 @@
     <string name="tv_search_how">กด OK ที่บรรทัดค้นหาเพื่อพิมพ์ด้วยรีโมต</string>
     <string name="tv_search_voice_how">หรือเลือกไมโครโฟนข้างๆ แล้วพูดชื่อเพลง ศิลปิน หรืออัลบั้ม</string>
     <string name="tv_pair_step_find">บนโทรศัพท์ ใน Prism แตะบรรทัดอุปกรณ์ใต้ปุ่มควบคุม (หรือเปิดการตั้งค่า → ลำโพง ทีวี และเบราว์เซอร์) แล้วเลือก %1$s</string>
+    <string name="tv_home_rows_later">แถวของหน้าแรกจะแสดงที่นี่เมื่อเปิดหน้าแรกแล้ว</string>
 </resources>

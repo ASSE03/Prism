@@ -39,7 +39,7 @@ import com.prism.music.ui.theme.PrismIcons
 @Composable
 fun TvWelcomeScreen(onPhone: () -> Unit, onSkip: () -> Unit, modifier: Modifier = Modifier) {
     val scheme = MaterialTheme.colorScheme
-    Box(modifier.fillMaxSize().tvBackdrop(scheme.primary, scheme.background).testTag(TAG_WELCOME), contentAlignment = Alignment.Center) {
+    Box(modifier.fillMaxSize().testTag(TAG_WELCOME), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(painterResource(R.drawable.ic_launcher_foreground), null, Modifier.size(180.dp))
             Text(tr(R.string.welcome_to_prism), style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.SemiBold), color = scheme.onBackground)
@@ -62,7 +62,7 @@ fun TvWelcomeScreen(onPhone: () -> Unit, onSkip: () -> Unit, modifier: Modifier 
 @Composable
 fun TvPairScreen(title: String, code: String, link: String, tvName: String, status: String, onCancel: () -> Unit, modifier: Modifier = Modifier) {
     val scheme = MaterialTheme.colorScheme
-    Row(modifier.fillMaxSize().tvBackdrop(scheme.primary, scheme.background).padding(horizontal = 96.dp, vertical = 40.dp).testTag(TAG_PAIR), verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier.fillMaxSize().padding(horizontal = 96.dp, vertical = 40.dp).testTag(TAG_PAIR), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.SemiBold), color = scheme.onBackground)
             Spacer(Modifier.height(20.dp))
@@ -89,7 +89,7 @@ fun TvPairScreen(title: String, code: String, link: String, tvName: String, stat
 private fun Step(n: Int, text: String) {
     val scheme = MaterialTheme.colorScheme
     Row(Modifier.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-        Box(Modifier.size(36.dp).background(scheme.surfaceVariant, CircleShape), contentAlignment = Alignment.Center) {
+        Box(Modifier.size(36.dp).tvGlass(CircleShape), contentAlignment = Alignment.Center) {
             Text("$n", style = MaterialTheme.typography.titleMedium, color = scheme.onSurface)
         }
         Spacer(Modifier.width(16.dp))

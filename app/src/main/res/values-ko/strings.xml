@@ -4078,4 +4078,5 @@
     <string name="tv_search_how">검색 줄에서 OK를 누르면 리모컨으로 입력할 수 있어요.</string>
     <string name="tv_search_voice_how">또는 옆의 마이크를 고르고 노래, 아티스트, 앨범을 말하세요.</string>
     <string name="tv_pair_step_find">휴대전화의 Prism에서 컨트롤 아래의 기기 줄을 탭하고(또는 설정 → 스피커, TV, 브라우저를 열고) %1$s을(를) 고르세요</string>
+    <string name="tv_home_rows_later">홈을 한 번 열면 홈의 줄이 여기에 표시돼요</string>
 </resources>

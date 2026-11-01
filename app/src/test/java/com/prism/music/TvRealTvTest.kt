@@ -85,7 +85,7 @@ class TvRealTvTest {
 
     @Test fun theSideNavigationHasNowPlayingWhileSomethingPlays() {
         val now = TvNow("Stay With Me", "Sam Smith", null, null, 0.1f, "0:03", "2:53", playing = true)
-        compose.setContent { TvTheme(AppSettings()) { TvNavFrame(TvSection.HOME, {}, focusNav = true, now = now) {} } }
+        compose.setContent { TvTheme(AppSettings()) { TvNavFrame(TvSection.HOME, {}, focusNav = true, now = now.title to now.art) {} } }
         compose.waitForIdle()
         assertTrue(exists(TAG_NAV_NOW))
     }

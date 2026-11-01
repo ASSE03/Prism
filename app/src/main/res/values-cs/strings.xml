@@ -4228,4 +4228,5 @@
     <string name="tv_search_how">Stiskněte OK na řádku hledání a pište ovladačem.</string>
     <string name="tv_search_voice_how">Nebo vyberte mikrofon vedle něj a řekněte skladbu, interpreta nebo album.</string>
     <string name="tv_pair_step_find">V telefonu v Prismu klepněte na řádek zařízení pod ovládáním (nebo otevřete Nastavení → Reproduktory, televize a prohlížeč) a vyberte %1$s</string>
+    <string name="tv_home_rows_later">Řádky Domů se tu ukážou, jakmile se Domů otevře</string>
 </resources>

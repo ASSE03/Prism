@@ -4155,5 +4155,6 @@
     <string name="tv_library_signed_out">Sign in to see your playlists, albums, artists and liked songs from YouTube Music here.</string>
     <string name="tv_search_how">Press OK on the search line to type with your remote.</string>
     <string name="tv_search_voice_how">Or pick the microphone beside it and say a song, artist or album.</string>
+    <string name="tv_home_rows_later">Home\'s rows show here once Home has opened</string>
     <string name="tv_pair_step_find">On your phone, in Prism, tap the device line under the controls (or open Settings → Speakers, TVs &amp; browser) and pick %1$s</string>
 </resources>

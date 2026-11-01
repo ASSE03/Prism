@@ -120,7 +120,12 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
         value = withContext(Dispatchers.IO) { runCatching { com.prism.music.ui.screens.speedDialFromHistory(c) }.getOrDefault(emptyList()) }
     }
     val titles = TvHomeTitles(tr(R.string.quick_picks), tr(R.string.section_speed_dial), tr(R.string.recently_played))
-    val rows = remember(shelves, recent, mostPlayed, owner) { tvHomeRows(shelves, owner, recent, mostPlayed, titles) }
+    // In the order the phone's Home layout gives (the TV's editor and the phone's Customize Home share it), hidden rows
+    // left out; what Home had is noted for the editor.
+    val layout = settings.homeLayout
+    val arranged = remember(shelves, recent, mostPlayed, owner, layout) { arrangeTvRows(tvHomeRows(shelves, owner, recent, mostPlayed, titles), layout) { it.key } }
+    LaunchedEffect(arranged) { if (arranged.isNotEmpty()) TvHomeRowsSeen.rows = arranged.map { it.key to it.title } }
+    val rows = remember(arranged, layout) { arranged.filterNot { hiddenIn(layout, it.key) } }
     val now = rememberTvNow(c)
     val accent = rememberTvAccent(now?.art)
     // Updates on the TV (plan §2): the same banner and installer as the phone (Android asks once to allow installs).
@@ -131,8 +136,10 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
     val greeting = settings.greetingText.trim().ifBlank {
         when (hour) { in 5..11 -> tr(R.string.good_morning); in 12..17 -> tr(R.string.good_afternoon); else -> tr(R.string.good_evening) }
     }
+    // Made once per change of rows, not on each tick of the progress (or every row would redraw twice a second).
+    val tvShelves = remember(rows) { rows.map { r -> TvShelf(r.title, r.items.map { it.toTvItem() }) } }
     TvHomeScreen(
-        greeting, now, rows.map { r -> TvShelf(r.title, r.items.map { it.toTvItem() }) },
+        greeting, now, tvShelves,
         onPlayPause = { c.player.togglePlay() },
         onOpenPlayer = { nav.go(TvRoute.Player) },
         onOpenLyrics = { nav.go(TvRoute.Lyrics) },
@@ -210,7 +217,7 @@ internal const val TV_START_WAIT_MS = 6_000L
 fun TvStarting(onGiveUp: () -> Unit) {
     LaunchedEffect(Unit) { kotlinx.coroutines.delay(TV_START_WAIT_MS); onGiveUp() }
     val scheme = androidx.tv.material3.MaterialTheme.colorScheme
-    Box(Modifier.fillMaxSize().background(scheme.background), contentAlignment = androidx.compose.ui.Alignment.Center) {
+    Box(Modifier.fillMaxSize(), contentAlignment = androidx.compose.ui.Alignment.Center) {
         androidx.tv.material3.Text(
             tr(R.string.one_moment),
             Modifier.tvItem(TAG_STARTING, entry = true).focusable(),
@@ -258,16 +265,7 @@ fun TvPlayerPage(nav: TvNav) {
         when (panel) {
             Panel.NONE -> Unit
             Panel.QUEUE -> TvPanel("queue", close) { TvQueuePlace() }
-            Panel.MORE -> TvPanel("more", close) {
-                val s = song
-                val actions = buildList {
-                    s?.album?.id?.let { id -> add(TvAction(tr(R.string.go_to_album), com.prism.music.ui.theme.PrismIcons.Album) { close(); nav.go(TvRoute.Collection(AlbumItem(id, s.album.title, s.primaryArtist, s.thumbnail))) }) }
-                    s?.artists?.filter { it.id != null }?.forEach { a -> add(TvAction(a.name, com.prism.music.ui.theme.PrismIcons.Person) { close(); nav.go(TvRoute.Artist(a.id!!)) }) }
-                    // Sing, once this TV passed its speed check (Settings → Sing).
-                    if (singReady && s != null && c.sing.canSing(s)) add(TvAction(tr(R.string.sing), com.prism.music.ui.theme.PrismIcons.Mic) { close(); nav.go(TvRoute.Sing) })
-                }
-                TvActionPanel(s?.title ?: "", actions)
-            }
+            Panel.MORE -> TvPanel("more", close) { TvActionPanel(song?.title ?: "", songActions(c, nav, song, singReady, close)) }
         }
     }
 }
@@ -327,17 +325,57 @@ fun TvLyricsPage(nav: TvNav) {
     TvLyricsPlace(now, lines, current, clock, state.loading, state.unavailable, state.source?.label, accent, onPlayPause = { c.player.togglePlay() }) { ms -> c.player.seekToLyric(ms) }
 }
 
-/** A music video, full screen; any key shows the controls; "Back to the song" (or Back) returns to the song. */
+/**
+ * The ⋯ of a song (the player's and the video's): its album, its artists, and Sing once this TV passed Sing's speed
+ * check. [close] puts the panel away first.
+ */
+internal fun songActions(c: AppContainer, nav: TvNav, s: com.prism.music.data.model.Song?, singReady: Boolean, close: () -> Unit): List<TvAction> = buildList {
+    s?.album?.id?.let { id -> add(TvAction(tr(R.string.go_to_album), com.prism.music.ui.theme.PrismIcons.Album) { close(); nav.go(TvRoute.Collection(AlbumItem(id, s.album.title, s.primaryArtist, s.thumbnail))) }) }
+    s?.artists?.filter { it.id != null }?.forEach { a -> add(TvAction(a.name, com.prism.music.ui.theme.PrismIcons.Person) { close(); nav.go(TvRoute.Artist(a.id!!)) }) }
+    // Sing, once this TV passed its speed check (Settings → Sing).
+    if (singReady && s != null && c.sing.canSing(s)) add(TvAction(tr(R.string.sing), com.prism.music.ui.theme.PrismIcons.Mic) { close(); nav.go(TvRoute.Sing) })
+}
+
+/**
+ * A music video, full screen; any key shows the controls, every one reachable: the seek line, previous and next,
+ * Lyrics, the queue and the ⋯ (the player's own panels, over the video), "Back to the song" (or Back).
+ */
 @Composable
 fun TvVideoPage(nav: TvNav) {
     val c = LocalContainer.current
     val now = rememberTvNow(c)
     val video by c.player.videoMode.collectAsState()
+    val song by c.player.currentSong.collectAsState()
+    var panel by rememberSaveable { mutableStateOf(Panel.NONE) }
+    val context = LocalContext.current
+    LaunchedEffect(Unit) { TvSing.load(context) }
+    val singReady = TvSing.state.collectAsState().value == TvSing.State.READY
     if (now == null) { TvStarting { nav.back() }; return }
-    // Leaving the page ends video mode (the song plays on as audio).
-    androidx.compose.runtime.DisposableEffect(Unit) { onDispose { c.player.setVideoMode(false) } }
-    TvVideoPlace(now, video, onPlayPause = { c.player.togglePlay() }, onNext = { c.player.next() }, onPrevious = { c.player.previous() }, onSong = { nav.back() }) {
-        MusicVideoSurface(Modifier.fillMaxSize(), fill = false)
+    // On this page the video shows (again, coming back from Lyrics or an album); leaving it, the song plays on as audio.
+    androidx.compose.runtime.DisposableEffect(Unit) {
+        c.player.setVideoMode(true)
+        onDispose { c.player.setVideoMode(false) }
+    }
+    val screen = LocalTvScreen.current
+    val memory = LocalTvFocusMemory.current
+    val close: () -> Unit = { panel = Panel.NONE; memory.opening(screen) }
+    Box(Modifier.fillMaxSize()) {
+        TvVideoPlace(
+            now, video,
+            onPlayPause = { c.player.togglePlay() }, onNext = { c.player.next() }, onPrevious = { c.player.previous() }, onSong = { nav.back() },
+            onSeek = { c.player.seekBy(it) },
+            onLyrics = { nav.go(TvRoute.Lyrics) },
+            onQueue = { panel = Panel.QUEUE },
+            onMore = { panel = Panel.MORE },
+            held = panel != Panel.NONE,
+        ) {
+            MusicVideoSurface(Modifier.fillMaxSize(), fill = false)
+        }
+        when (panel) {
+            Panel.NONE -> Unit
+            Panel.QUEUE -> TvPanel("queue", close) { TvQueuePlace() }
+            Panel.MORE -> TvPanel("more", close) { TvActionPanel(song?.title ?: "", songActions(c, nav, song, singReady, close)) }
+        }
     }
 }
 

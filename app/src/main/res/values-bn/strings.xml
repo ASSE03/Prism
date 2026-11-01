@@ -4128,4 +4128,5 @@
     <string name="tv_search_how">রিমোট দিয়ে টাইপ করতে সার্চ লাইনে OK চাপুন।</string>
     <string name="tv_search_voice_how">অথবা পাশের মাইক্রোফোন বেছে নিয়ে কোনো গান, শিল্পী বা অ্যালবামের নাম বলুন।</string>
     <string name="tv_pair_step_find">আপনার ফোনে, Prism-এ, কন্ট্রোলের নিচের ডিভাইস লাইনে ট্যাপ করুন (বা সেটিংস → স্পিকার, টিভি ও ব্রাউজার খুলুন) এবং %1$s বেছে নিন</string>
+    <string name="tv_home_rows_later">হোম একবার খোলার পর এর সারিগুলো এখানে দেখা যাবে</string>
 </resources>

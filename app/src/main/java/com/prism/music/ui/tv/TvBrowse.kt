@@ -22,6 +22,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -120,7 +122,8 @@ fun TvSearchScreen(
                     onClick = onType,
                     modifier = Modifier.width(620.dp).height(60.dp).tvItem("$TAG_SEARCH/field", entry = true),
                     shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(30.dp)),
-                    colors = ClickableSurfaceDefaults.colors(containerColor = scheme.surfaceVariant, focusedContainerColor = scheme.onSurface, contentColor = scheme.onSurface, focusedContentColor = scheme.surface),
+                    colors = ClickableSurfaceDefaults.colors(containerColor = TvGlassFill, focusedContainerColor = scheme.onSurface, contentColor = scheme.onSurface, focusedContentColor = scheme.surface),
+                    border = ClickableSurfaceDefaults.border(focusedBorder = tvFocusBorder(RoundedCornerShape(30.dp), TV_RING_THIN)),
                     scale = ClickableSurfaceDefaults.scale(focusedScale = 1.02f),
                 ) {
                     Row(Modifier.fillMaxSize().padding(horizontal = 22.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -188,8 +191,8 @@ private fun TvSearchInput(query: String, onQueryChange: (String) -> Unit, onSubm
         keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(imeAction = androidx.compose.ui.text.input.ImeAction.Search),
         keyboardActions = androidx.compose.foundation.text.KeyboardActions(onSearch = { onSubmit() }, onDone = { onSubmit() }),
         modifier = Modifier.width(620.dp).height(60.dp)
-            .background(scheme.surfaceVariant, RoundedCornerShape(30.dp))
-            .border(3.dp, scheme.onSurface, RoundedCornerShape(30.dp))
+            .background(TvGlassFill, RoundedCornerShape(30.dp))
+            .border(TV_RING_THIN, tvRing(), RoundedCornerShape(30.dp))
             .focusRequester(focus).testTag("$TAG_SEARCH/input"),
         decorationBox = { inner ->
             Row(Modifier.fillMaxSize().padding(horizontal = 22.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -220,7 +223,19 @@ fun TvLibraryScreen(
     empty: (@Composable () -> Unit)? = null,
 ) {
     Column(modifier.fillMaxSize().padding(start = 48.dp, top = 27.dp).testTag(TAG_LIBRARY)) {
-        TabRow(selectedTabIndex = tab, modifier = Modifier.testTag("$TAG_LIBRARY/tabs")) {
+        val light = tvLight()
+        TabRow(
+            selectedTabIndex = tab, modifier = Modifier.testTag("$TAG_LIBRARY/tabs"),
+            // The tab shown: the split light under it (as the phone's tabs).
+            indicator = { positions, _ ->
+                positions.getOrNull(tab)?.let { p ->
+                    Box(
+                        Modifier.fillMaxSize().wrapContentSize(Alignment.BottomStart)
+                            .offset(x = p.left).width(p.right - p.left).height(3.dp).background(light, RoundedCornerShape(2.dp)),
+                    )
+                }
+            },
+        ) {
             tabs.forEachIndexed { i, t ->
                 Tab(selected = i == tab, onFocus = { onTab(i) }, onClick = { onTab(i) }, modifier = Modifier.tvItem("$TAG_LIBRARY/tab/$i", entry = i == tab)) {
                     Text(t, Modifier.padding(horizontal = 16.dp, vertical = 8.dp), style = MaterialTheme.typography.titleMedium)
@@ -272,7 +287,9 @@ fun TvCollectionScreen(
     val into = androidx.compose.runtime.remember { androidx.compose.ui.focus.FocusRequester() }
     val list = androidx.compose.foundation.lazy.rememberLazyListState(initialFirstVisibleItemIndex = (playing - 1).coerceIn(0, (songs.size - 1).coerceAtLeast(0)))
     val down = Modifier.focusProperties { if (songs.isNotEmpty()) down = into }
-    Row(modifier.fillMaxSize().tvBackdrop(accent, scheme.background).padding(TvSafe).testTag(TAG_COLLECTION)) {
+    Box(modifier.fillMaxSize()) {
+    TvPictureBackdrop(art)
+    Row(Modifier.fillMaxSize().padding(TvSafe).testTag(TAG_COLLECTION)) {
         Column(Modifier.width(300.dp)) {
             Artwork(art, Modifier.size(300.dp), shape = RoundedCornerShape(16.dp), size = 720)
             Spacer(Modifier.height(20.dp))
@@ -298,6 +315,7 @@ fun TvCollectionScreen(
                 )
             }
         }
+    }
     }
 }
 
@@ -327,8 +345,10 @@ fun TvArtistScreen(
     accent: Color? = null,
 ) {
     val scheme = MaterialTheme.colorScheme
+    Box(modifier.fillMaxSize()) {
+    TvPictureBackdrop(art)
     LazyColumn(
-        modifier.fillMaxSize().tvBackdrop(accent, scheme.background).testTag(TAG_ARTIST),
+        Modifier.fillMaxSize().testTag(TAG_ARTIST),
         contentPadding = PaddingValues(top = 27.dp, bottom = 48.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
@@ -349,6 +369,7 @@ fun TvArtistScreen(
             }
         }
         itemsIndexed(shelves) { r, shelf -> TvShelfRow(shelf, { i -> onItem(r, i) }, "$TAG_ARTIST/row$r") }
+    }
     }
 }
 
