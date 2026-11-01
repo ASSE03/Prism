@@ -138,7 +138,7 @@ fun TvSingPage(nav: TvNav) {
         // The playing song and the next (the player keeps it one ahead from there, as on the phone).
         val queue = c.player.queue.value.map { it.song }
         val at = queue.indexOfFirst { it.id == s.id }
-        c.sing.prepare(listOf(s) + queue.drop(at + 1).take(1))
+        c.sing.prepare(listOf(s) + queue.drop(at + 1).take(1), c.player.position)
         // Leaving the page, the song in hand is still finished for a while (Sing's grace), not thrown away.
         onDispose { c.sing.setOn(false) }
     }

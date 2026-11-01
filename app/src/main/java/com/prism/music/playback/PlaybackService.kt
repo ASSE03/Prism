@@ -1630,7 +1630,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private fun singAhead() {
         if (!c.sing.onNow && !c.settings.current.singAlwaysReady) return
         val songs = listOfNotNull(player.currentMediaItem, *upcoming(1).toTypedArray()).filter { it.videoModeId == null }.mapNotNull { it.toSong() }
-        c.sing.prepare(songs)
+        // Where the playing song is: Sing switched on part way through starts there (1.8.x).
+        c.sing.prepare(songs, player.currentPosition)
     }
 
     /** What a play of [item] is counted as (play_events.source): the kind of queue it's in. */

@@ -298,7 +298,8 @@ class VocalStemProcessor(private val sing: Source) : BaseAudioProcessor() {
         var lastCheck = 0L
         var misses = 0
         while (true) {
-            try { Thread.sleep(400) } catch (_: InterruptedException) { return }
+            // Till the vocals line up, looked at more often: the first seconds of Sing are the ones that count.
+            try { Thread.sleep(if (matchedFor == null) 250 else 400) } catch (_: InterruptedException) { return }
             if (!sing.onNow) continue
             val (id, music, end) = synchronized(ringLock) {
                 if (ringSong == null || ringFilled < rate * ALIGN_SECONDS) return@synchronized Triple(null, null, 0L)
@@ -372,7 +373,8 @@ class VocalStemProcessor(private val sing: Source) : BaseAudioProcessor() {
     companion object {
         private const val TAG = "PrismSing"
         private const val RING_SECONDS = 4
-        private const val ALIGN_SECONDS = 3
+        /** How much of what's playing is matched against the vocals (2 s, 1.8.x: 3 s held the first effect back). */
+        private const val ALIGN_SECONDS = 2
         private const val MAX_LAG_MS = 150
         /** How strongly the music must match the vocals to subtract them (the vocals are part of the music). */
         private const val MIN_MATCH = 0.2f
