@@ -6,6 +6,8 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isFocused
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.performScrollToIndex
+import androidx.compose.ui.test.performScrollToNode
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.prism.music.TvFixture.awaitFocus
 import com.prism.music.TvFixture.awaitFocusOn
@@ -69,10 +71,34 @@ class TvHomeCustomizeTests {
         TvFixture.ok()
     }
 
-    /** Home's row titles, top to bottom. */
-    private fun homeTitles(): List<String> = (0 until 8).mapNotNull { r ->
+    private fun titleOf(r: Int): String? =
         compose.onAllNodes(hasTestTag("$TAG_HOME/title$r"), useUnmergedTree = true).fetchSemanticsNodes().firstOrNull()
             ?.config?.getOrElseNullable(androidx.compose.ui.semantics.SemanticsProperties.Text) { null }?.joinToString { it.text }
+
+    /**
+     * Home's row titles, top to bottom. A TV screen holds about two rows and Home only draws what's on it, so the list
+     * is scrolled to each further row in turn (no remote key, so focus stays where it is), then back to its top.
+     */
+    private fun homeTitles(): List<String> {
+        val seen = sortedMapOf<Int, String>()
+        val home = compose.onNode(hasTestTag(TAG_HOME))
+        for (r in 0 until 8) {
+            if (titleOf(r) == null) runCatching { home.performScrollToNode(hasTestTag("$TAG_HOME/title$r")) }
+            titleOf(r)?.let { seen[r] = it } ?: break
+        }
+        runCatching { home.performScrollToIndex(0) }
+        return seen.values.toList()
+    }
+
+    /** Waits until Home shows [titles] (polling: each look scrolls the list). */
+    private fun awaitHomeTitles(titles: List<String>, ms: Long) {
+        val end = System.currentTimeMillis() + ms
+        var got = homeTitles()
+        while (got != titles) {
+            if (System.currentTimeMillis() > end) throw AssertionError("Home shows $got, not $titles")
+            Thread.sleep(300)
+            got = homeTitles()
+        }
     }
 
     private fun keys() = settings.current.tv.homeLayout.map { it.key }
@@ -90,7 +116,7 @@ class TvHomeCustomizeTests {
     @Test fun aRowHiddenAndTwoMovedShowSoOnHome() {
         TvFixture.launch()
         compose.awaitFocusOn(hasTestTag("$TAG_HOME/row0/0"), 15_000)
-        compose.waitUntil(5_000) { homeTitles() == listOf("Prism test A", "Prism test B", "Prism test C") }
+        awaitHomeTitles(listOf("Prism test A", "Prism test B", "Prism test C"), 5_000)
         // Down past the rows: Customize Home, at Home's end.
         repeat(3) { TvFixture.down(); Thread.sleep(250) }
         compose.awaitFocusOn(hasTestTag("$TAG_HOME/customize"))
@@ -133,7 +159,7 @@ class TvHomeCustomizeTests {
 
         // Back: Home, as laid out (A gone, C before B).
         TvFixture.back()
-        compose.waitUntil(10_000) { homeTitles() == listOf("Prism test C", "Prism test B") }
+        awaitHomeTitles(listOf("Prism test C", "Prism test B"), 10_000)
         compose.awaitFocus()
     }
 
@@ -147,7 +173,7 @@ class TvHomeCustomizeTests {
         waitFor(5_000, "the layouts kept") { keys().isNotEmpty() && com.prism.music.ui.tv.hiddenIn(settings.current.homeLayout, a) }
         TvFixture.launch()
         compose.awaitFocusOn(hasTestTag("$TAG_HOME/row0/0"), 15_000)
-        compose.waitUntil(5_000) { homeTitles() == listOf("Prism test C", "Prism test B") }
+        awaitHomeTitles(listOf("Prism test C", "Prism test B"), 5_000)
 
         // Settings → Home (after Account, Language, Sound, Lyrics, Sing and Ambient screen) → Customize Home.
         goTo(TvSection.SETTINGS)
@@ -174,6 +200,6 @@ class TvHomeCustomizeTests {
         TvFixture.back()
         compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/setting/0"), 10_000)
         TvFixture.back()
-        compose.waitUntil(10_000) { homeTitles() == listOf("Prism test A", "Prism test B", "Prism test C") }
+        awaitHomeTitles(listOf("Prism test A", "Prism test B", "Prism test C"), 10_000)
     }
 }

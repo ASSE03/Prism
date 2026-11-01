@@ -1,6 +1,11 @@
 package com.prism.music.ui.tv
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.focusGroup
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -76,7 +81,24 @@ fun TvHomeEditorScreen(
     // The row focus opens on: the first as the page opened (not whichever is first after a move, which would take
     // focus from the row being carried).
     val firstKey = remember { rows.firstOrNull()?.key }
-    Column(modifier.fillMaxSize().padding(start = 48.dp, end = 48.dp, top = 27.dp).testTag(TAG_HOME_EDITOR)) {
+    // Focus coming into the page (as it opens, or handed on by Android when the page under it went) lands on the list's
+    // first row, not on "Back to default" above it: the list is what the page is for.
+    val firstRow = remember { FocusRequester() }
+    // Until the remote is first pressed here: if focus was put on "Back to default" anyway (Android hands focus to the
+    // page's top item when the page under it goes), it goes to the first row.
+    var touched by remember { mutableStateOf(false) }
+    var resetFocused by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        repeat(ENTRY_CHECKS) {
+            kotlinx.coroutines.delay(ENTRY_CHECK_MS)
+            if (!touched && resetFocused) runCatching { firstRow.requestFocus() }
+        }
+    }
+    Column(
+        modifier.fillMaxSize().padding(start = 48.dp, end = 48.dp, top = 27.dp).testTag(TAG_HOME_EDITOR)
+            .focusProperties { onEnter = { firstRow.requestFocus() } }.focusGroup()
+            .onPreviewKeyEvent { if (it.type == KeyEventType.KeyDown) touched = true; false },
+    ) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
                 Text(tr(R.string.customize_home), style = MaterialTheme.typography.headlineMedium, color = scheme.onBackground)
@@ -89,7 +111,7 @@ fun TvHomeEditorScreen(
                 )
             }
             Spacer(Modifier.width(24.dp))
-            TvButton(tr(R.string.tv_home_back_to_default), onReset, Modifier.tvItem("$TAG_HOME_EDITOR/reset"), icon = PrismIcons.Undo)
+            TvButton(tr(R.string.tv_home_back_to_default), onReset, Modifier.onFocusChanged { resetFocused = it.isFocused }.tvItem("$TAG_HOME_EDITOR/reset"), icon = PrismIcons.Undo)
         }
         Spacer(Modifier.height(20.dp))
         LazyColumn(
@@ -120,6 +142,8 @@ fun TvHomeEditorScreen(
                     val click = { if (isMoving) onPutDown() else onToggle(r.key) }
                     val hold = { if (isMoving) onPutDown() else onPickUp(r.key) }
                     var held by remember { mutableStateOf(false) }
+                    // A key-up whose key-down this row never had (OK let go on the page that opened the editor) is no press.
+                    var pressed by remember { mutableStateOf(false) }
                     ListItem(
                         selected = isMoving,
                         onClick = click,
@@ -131,15 +155,17 @@ fun TvHomeEditorScreen(
                             val n = e.nativeKeyEvent
                             val long = n.eventTime - n.downTime >= HOLD_MS
                             when (e.type) {
-                                KeyEventType.KeyDown -> if (long && !held) { held = true; hold() }
+                                KeyEventType.KeyDown -> { pressed = true; if (long && !held) { held = true; hold() } }
                                 KeyEventType.KeyUp -> when {
-                                    held -> held = false
-                                    long -> hold()
-                                    else -> click()
+                                    !pressed -> Unit
+                                    held -> { held = false; pressed = false }
+                                    long -> { pressed = false; hold() }
+                                    else -> { pressed = false; click() }
                                 }
                             }
                             true
-                        }.tvItem("$TAG_HOME_EDITOR/row/${r.key}", entry = r.key == firstKey),
+                        }.then(if (r.key == rows.firstOrNull()?.key) Modifier.focusRequester(firstRow) else Modifier)
+                            .tvItem("$TAG_HOME_EDITOR/row/${r.key}", entry = r.key == firstKey),
                         leadingContent = { Icon(if (isMoving) PrismIcons.SwapVertical else if (r.shown) PrismIcons.Visible else PrismIcons.Hidden, null, Modifier.size(22.dp)) },
                         headlineContent = { Text(r.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         supportingContent = { Text(tr(if (r.shown) R.string.shown else R.string.hidden), maxLines = 1) },
@@ -234,3 +260,7 @@ const val TAG_HOME_EDITOR = "tv_home_editor"
 
 /** How long OK is held to pick a row up (Android's own long press). */
 private const val HOLD_MS = 500L
+/** How long the editor watches, as it opens, for focus put on "Back to default" instead of the list (20 × 100 ms).
+ */
+private const val ENTRY_CHECKS = 20
+private const val ENTRY_CHECK_MS = 100L
