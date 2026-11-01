@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import kotlinx.coroutines.flow.first
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -98,10 +99,13 @@ fun TvSearchScreen(
     val firstResult = androidx.compose.runtime.remember { androidx.compose.ui.focus.FocusRequester() }
     var focusedFor by androidx.compose.runtime.remember { androidx.compose.runtime.mutableIntStateOf(0) }
     val hasResults = top != null || songs.isNotEmpty()
+    // The search line takes focus back as the keyboard goes (its entry, asked again for a moment until it has it): the
+    // first result only takes it from there, so the two never pull it back and forth (on a slow TV they did).
+    var lineFocused by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
     androidx.compose.runtime.LaunchedEffect(submitted, hasResults, typing) {
         if (submitted == 0 || submitted == focusedFor || !hasResults || typing) return@LaunchedEffect
-        // After the search line has taken focus back (as the keyboard goes), then the first result.
-        kotlinx.coroutines.delay(300)
+        kotlinx.coroutines.withTimeoutOrNull(2_500) { androidx.compose.runtime.snapshotFlow { lineFocused }.first { it } }
+        kotlinx.coroutines.delay(100)
         repeat(20) {
             // Not placed yet: it throws, or says no.
             val took = runCatching { firstResult.requestFocus() }.map { (it as? Boolean) ?: true }.getOrDefault(false)
@@ -120,7 +124,7 @@ fun TvSearchScreen(
                 if (typing) TvSearchInput(query, onQueryChange, onSubmit, onStopTyping)
                 else Surface(
                     onClick = onType,
-                    modifier = Modifier.width(620.dp).height(60.dp).tvItem("$TAG_SEARCH/field", entry = true),
+                    modifier = Modifier.width(620.dp).height(60.dp).onFocusChanged { lineFocused = it.isFocused }.tvItem("$TAG_SEARCH/field", entry = true),
                     shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(30.dp)),
                     colors = ClickableSurfaceDefaults.colors(containerColor = TvGlassFill, focusedContainerColor = scheme.onSurface, contentColor = scheme.onSurface, focusedContentColor = scheme.surface),
                     border = ClickableSurfaceDefaults.border(focusedBorder = tvFocusBorder(RoundedCornerShape(30.dp), TV_RING_THIN)),
