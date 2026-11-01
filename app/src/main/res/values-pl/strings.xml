@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism potrzebuje aparatu, by zeskanować kod</string>
     <string name="allow_the_camera">Zezwól na aparat</string>
     <string name="customize_home">Dostosuj ekran główny</string>
+    <string name="tv_home_editor_how">OK pokazuje lub ukrywa rząd. Aby go przenieść, wybierz Przenieś obok (lub przytrzymaj OK), a potem Góra lub Dół.</string>
+    <string name="tv_home_moving">Przenoszenie: %1$s. Góra i Dół je przesuwają, OK odkłada.</string>
+    <string name="tv_home_move">Przenieś %1$s</string>
+    <string name="tv_home_back_to_default">Przywróć domyślne</string>
+    <string name="tv_home_hidden_count">Ukryte: %1$d</string>
     <string name="top_of_home">Góra ekranu głównego</string>
     <string name="show_your_name">Pokaż swoją nazwę</string>
     <string name="height">Wysokość</string>
@@ -4147,6 +4152,7 @@
     <string name="tv_update_ready">Prism %1$s jest gotowy</string>
     <string name="tv_update_note">Zainstaluj teraz: Android poprosi o zgodę tylko raz</string>
     <string name="tv_up_next_line">Następnie: %1$s</string>
+    <string name="tv_seek_line">Pozycja w utworze: %1$s z %2$s</string>
     <string name="tv_playing_from">Odtwarzane z: %1$s</string>
     <string name="tv_vocals_out">Bez wokalu</string>
     <string name="tv_key_line">Tonacja: %1$s</string>
@@ -4157,7 +4163,6 @@
     <string name="tv_sign_in_with_phone">Zaloguj się telefonem</string>
     <string name="tv_continue_without_account">Kontynuuj bez konta</string>
     <string name="tv_pair_step_open">Otwórz Prism w telefonie, w tej samej sieci Wi-Fi co ten telewizor</string>
-    <string name="tv_pair_step_pick">Wybierz %1$s, gdy pojawi się w telefonie</string>
     <string name="tv_pair_step_code">Wpisz ten kod w telefonie</string>
     <string name="tv_pair_qr">Albo zeskanuj go aparatem telefonu</string>
     <string name="tv_no_voice">Ten telewizor nie umie szukać głosem: wpisz na klawiaturze</string>
@@ -4225,6 +4230,10 @@
     <string name="tour_180_silence">Przycinanie ciszy dotyczy tylko początku i końca utworu</string>
     <string name="tour_180_normalize">Ta sama głośność wyrównuje duże skoki między utworami</string>
     <string name="tour_180_size">Mniejszy rozmiar pobierania</string>
+    <string name="tv_library_signed_out">Zaloguj się, aby zobaczyć tu swoje playlisty, albumy, wykonawców i polubione utwory z YouTube Music.</string>
+    <string name="tv_search_how">Naciśnij OK na wierszu wyszukiwania, aby pisać pilotem.</string>
+    <string name="tv_search_voice_how">Albo wybierz mikrofon obok i powiedz tytuł utworu, wykonawcę lub album.</string>
+    <string name="tv_pair_step_find">W telefonie, w Prismie, kliknij wiersz urządzenia pod sterowaniem (albo otwórz Ustawienia → Głośniki, telewizory i przeglądarka) i wybierz %1$s</string>
     <string name="sing_quick_slow">Ten telefon jest zbyt wolny na pełne oddzielanie, więc Śpiewaj używa szybkiego sposobu: usuwa to, co jest w środku miksu, gdzie zwykle jest głos. Efekt jest mniej czysty, a utwór mono pozostaje bez zmian.</string>
     <string name="sing_mono_song">Ten utwór jest mono: szybki sposób nie usunie z niego głosu, więc gra bez zmian.</string>
     <string name="tv_sing_measured">Ten telewizor oddziela utwory %1$s× szybciej, niż są odtwarzane.</string>

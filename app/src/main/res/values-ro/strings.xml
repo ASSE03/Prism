@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism are nevoie de cameră ca să scaneze un cod</string>
     <string name="allow_the_camera">Permite camera</string>
     <string name="customize_home">Personalizează Acasă</string>
+    <string name="tv_home_editor_how">OK afișează sau ascunde un rând. Ca să-l muți, alege Mută de lângă el (sau ține apăsat OK), apoi Sus sau Jos.</string>
+    <string name="tv_home_moving">Se mută %1$s: Sus și Jos îl duc, OK îl lasă.</string>
+    <string name="tv_home_move">Mută %1$s</string>
+    <string name="tv_home_back_to_default">Înapoi la implicit</string>
+    <string name="tv_home_hidden_count">Ascunse: %1$d</string>
     <string name="top_of_home">Partea de sus a ecranului Acasă</string>
     <string name="show_your_name">Afișează-ți numele</string>
     <string name="height">Înălțime</string>
@@ -4097,6 +4102,7 @@
     <string name="tv_update_ready">Prism %1$s este gata</string>
     <string name="tv_update_note">Instalează-l acum: Android cere permisiunea o singură dată</string>
     <string name="tv_up_next_line">Urmează: %1$s</string>
+    <string name="tv_seek_line">Poziția în melodie: %1$s din %2$s</string>
     <string name="tv_playing_from">Se redă din %1$s</string>
     <string name="tv_vocals_out">Fără voce</string>
     <string name="tv_key_line">Tonalitate: %1$s</string>
@@ -4107,7 +4113,6 @@
     <string name="tv_sign_in_with_phone">Conectează-te cu telefonul</string>
     <string name="tv_continue_without_account">Continuă fără cont</string>
     <string name="tv_pair_step_open">Deschide Prism pe telefon, în aceeași rețea Wi-Fi cu acest televizor</string>
-    <string name="tv_pair_step_pick">Alege %1$s când apare pe telefon</string>
     <string name="tv_pair_step_code">Introdu acest cod pe telefon</string>
     <string name="tv_pair_qr">Sau scanează-l cu camera telefonului</string>
     <string name="tv_no_voice">Acest televizor nu poate căuta vocal: scrie cu tastatura</string>
@@ -4175,6 +4180,10 @@
     <string name="tour_180_silence">Tăierea liniștii atinge doar începutul și sfârșitul unei melodii</string>
     <string name="tour_180_normalize">Aceeași intensitate netezește salturile mari dintre melodii</string>
     <string name="tour_180_size">O descărcare mai mică</string>
+    <string name="tv_library_signed_out">Conectează-te ca să vezi aici playlisturile, albumele, artiștii și melodiile apreciate din YouTube Music.</string>
+    <string name="tv_search_how">Apasă OK pe rândul de căutare ca să scrii cu telecomanda.</string>
+    <string name="tv_search_voice_how">Sau alege microfonul de lângă el și spune o melodie, un artist sau un album.</string>
+    <string name="tv_pair_step_find">Pe telefon, în Prism, atinge rândul cu dispozitivul de sub controale (sau deschide Setări → Boxe, televizoare și browser) și alege %1$s</string>
     <string name="sing_quick_slow">Acest telefon e prea lent pentru separarea completă, așa că Cântă folosește metoda rapidă: scoate ce se află în mijlocul mixajului, unde e de obicei vocea. E mai puțin curat, iar o melodie mono rămâne cum e.</string>
     <string name="sing_mono_song">Această melodie e mono: metoda rapidă nu îi poate scoate vocea, așa că se aude cum e.</string>
     <string name="tv_sing_measured">Acest televizor separă melodiile de %1$s× mai repede decât se aud.</string>

@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">کوڈ اسکین کرنے کے لیے Prism کو کیمرا درکار ہے</string>
     <string name="allow_the_camera">کیمرے کی اجازت دیں</string>
     <string name="customize_home">ہوم کو حسبِ منشا بنائیں</string>
+    <string name="tv_home_editor_how">OK قطار کو دکھاتا یا چھپاتا ہے۔ منتقل کرنے کے لیے ساتھ والا منتقل کریں چنیں (یا OK دبائے رکھیں)، پھر اوپر یا نیچے۔</string>
+    <string name="tv_home_moving">%1$s منتقل ہو رہی ہے: اوپر اور نیچے سے لے جائیں، OK سے رکھیں۔</string>
+    <string name="tv_home_move">%1$s منتقل کریں</string>
+    <string name="tv_home_back_to_default">ڈیفالٹ پر واپس</string>
+    <string name="tv_home_hidden_count">چھپی ہوئی: %1$d</string>
     <string name="top_of_home">ہوم کا اوپری حصہ</string>
     <string name="show_your_name">اپنا نام دکھائیں</string>
     <string name="height">اونچائی</string>
@@ -4047,6 +4052,7 @@
     <string name="tv_update_ready">‏Prism %1$s تیار ہے</string>
     <string name="tv_update_note">ابھی انسٹال کریں: Android صرف ایک بار اجازت مانگتا ہے</string>
     <string name="tv_up_next_line">اگلا: %1$s</string>
+    <string name="tv_seek_line">گانے میں جگہ: %2$s میں سے %1$s</string>
     <string name="tv_playing_from">%1$s سے چل رہا ہے</string>
     <string name="tv_vocals_out">آواز کے بغیر</string>
     <string name="tv_key_line">سُر: %1$s</string>
@@ -4057,7 +4063,6 @@
     <string name="tv_sign_in_with_phone">اپنے فون سے سائن ان کریں</string>
     <string name="tv_continue_without_account">اکاؤنٹ کے بغیر جاری رکھیں</string>
     <string name="tv_pair_step_open">اپنے فون پر Prism کھولیں، اسی Wi-Fi پر جس پر یہ ٹی وی ہے</string>
-    <string name="tv_pair_step_pick">فون پر دکھائی دینے پر %1$s چنیں</string>
     <string name="tv_pair_step_code">یہ کوڈ اپنے فون پر درج کریں</string>
     <string name="tv_pair_qr">یا اسے اپنے فون کے کیمرے سے اسکین کریں</string>
     <string name="tv_no_voice">یہ ٹی وی آواز سے تلاش نہیں کر سکتا: کی بورڈ سے لکھیں</string>
@@ -4125,6 +4130,10 @@
     <string name="tour_180_silence">خاموشی تراشنا صرف گانے کے آغاز اور اختتام کو چھوتا ہے</string>
     <string name="tour_180_normalize">یکساں آواز گانوں کے درمیان بڑے فرق کو ہموار کرتی ہے</string>
     <string name="tour_180_size">چھوٹا ڈاؤن لوڈ</string>
+    <string name="tv_library_signed_out">YouTube Music سے اپنی پلے لسٹس، البمز، فنکار اور پسندیدہ گانے یہاں دیکھنے کے لیے سائن ان کریں۔</string>
+    <string name="tv_search_how">ریموٹ سے ٹائپ کرنے کے لیے سرچ لائن پر OK دبائیں۔</string>
+    <string name="tv_search_voice_how">یا ساتھ والا مائیکروفون چنیں اور کسی گانے، فنکار یا البم کا نام بولیں۔</string>
+    <string name="tv_pair_step_find">اپنے فون پر، Prism میں، کنٹرولز کے نیچے ڈیوائس والی لائن پر ٹیپ کریں (یا ترتیبات ← اسپیکرز، TVs اور براؤزر کھولیں) اور %1$s چنیں</string>
     <string name="sing_quick_slow">یہ فون مکمل علیحدگی کے لیے بہت سست ہے، اس لیے گائیں تیز طریقہ استعمال کرتا ہے: مکس کے بیچ میں جو ہے، جہاں عموماً آواز ہوتی ہے، اسے نکال دیتا ہے۔ یہ کم صاف ہے، اور مونو گانا ویسا ہی رہتا ہے۔</string>
     <string name="sing_mono_song">یہ گانا مونو ہے: تیز طریقہ اس کی آواز نہیں نکال سکتا، اس لیے یہ ویسا ہی بجے گا۔</string>
     <string name="tv_sing_measured">یہ ٹی وی گانوں کو ان کے بجنے سے %1$s× تیزی سے الگ کرتا ہے۔</string>

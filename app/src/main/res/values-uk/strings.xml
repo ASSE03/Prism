@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism потрібна камера, щоб сканувати код</string>
     <string name="allow_the_camera">Дозволити камеру</string>
     <string name="customize_home">Налаштувати Головну</string>
+    <string name="tv_home_editor_how">OK показує або ховає ряд. Щоб перемістити його, виберіть «Перемістити» поруч (або утримуйте OK), потім угору чи вниз.</string>
+    <string name="tv_home_moving">Переміщення: %1$s. Угору й униз рухають, OK ставить на місце.</string>
+    <string name="tv_home_move">Перемістити %1$s</string>
+    <string name="tv_home_back_to_default">Повернути типові</string>
+    <string name="tv_home_hidden_count">Приховано: %1$d</string>
     <string name="top_of_home">Верх Головної</string>
     <string name="show_your_name">Показувати твоє ім\'я</string>
     <string name="height">Висота</string>
@@ -4147,6 +4152,7 @@
     <string name="tv_update_ready">Prism %1$s готовий</string>
     <string name="tv_update_note">Установіть зараз: Android попросить дозвіл лише один раз</string>
     <string name="tv_up_next_line">Далі: %1$s</string>
+    <string name="tv_seek_line">Позиція в пісні: %1$s з %2$s</string>
     <string name="tv_playing_from">Грає з: %1$s</string>
     <string name="tv_vocals_out">Без вокалу</string>
     <string name="tv_key_line">Тональність: %1$s</string>
@@ -4157,7 +4163,6 @@
     <string name="tv_sign_in_with_phone">Увійти з телефона</string>
     <string name="tv_continue_without_account">Продовжити без облікового запису</string>
     <string name="tv_pair_step_open">Відкрийте Prism на телефоні в тій самій мережі Wi-Fi, що й цей телевізор</string>
-    <string name="tv_pair_step_pick">Виберіть %1$s, коли телефон його покаже</string>
     <string name="tv_pair_step_code">Введіть цей код на телефоні</string>
     <string name="tv_pair_qr">Або відскануйте його камерою телефона</string>
     <string name="tv_no_voice">Цей телевізор не вміє шукати голосом: введіть текст з клавіатури</string>
@@ -4225,6 +4230,10 @@
     <string name="tour_180_silence">Обрізання тиші зачіпає лише початок і кінець пісні</string>
     <string name="tour_180_normalize">Однакова гучність згладжує великі перепади між піснями</string>
     <string name="tour_180_size">Менше завантаження</string>
+    <string name="tv_library_signed_out">Увійдіть, щоб бачити тут свої плейлисти, альбоми, виконавців і вподобані треки з YouTube Music.</string>
+    <string name="tv_search_how">Натисніть OK на рядку пошуку, щоб друкувати пультом.</string>
+    <string name="tv_search_voice_how">Або виберіть мікрофон поруч і назвіть трек, виконавця чи альбом.</string>
+    <string name="tv_pair_step_find">На телефоні, у Prism, торкніться рядка пристрою під елементами керування (або відкрийте Налаштування → Колонки, телевізори й браузер) і виберіть %1$s</string>
     <string name="sing_quick_slow">Цей телефон надто повільний для повного розділення, тож Спів використовує швидкий спосіб: прибирає те, що звучить у центрі міксу, де зазвичай голос. Виходить менш чисто, а моно-трек лишається як є.</string>
     <string name="sing_mono_song">Цей трек у моно: швидкий спосіб не може прибрати з нього голос, тож він звучить як є.</string>
     <string name="tv_sing_measured">Цей телевізор розділяє треки в %1$s раза швидше, ніж вони звучать.</string>

@@ -127,7 +127,7 @@ private val speedDialMine = MutableStateFlow<List<BrowseItem>>(emptyList())
 private val lastYours = MutableStateFlow<com.prism.music.data.foryou.YourMusic.Sections?>(null)
 private val YOURS_KEYS = setOf(HomeSections.ON_REPEAT, HomeSections.REPEAT_REWIND, HomeSections.FORGOTTEN, HomeSections.MADE_FOR_YOU)
 
-fun shelfKey(title: String) = HomeSections.YT_PREFIX + title.trim().lowercase()
+fun shelfKey(title: String) = HomeSections.shelfKey(title)
 
 /** What kind of section a YouTube shelf is, for "Leave off Home" (1.7.6): mostly music videos, or podcasts. */
 internal fun shelfKind(shelf: Shelf): String? {

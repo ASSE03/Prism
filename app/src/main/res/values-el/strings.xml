@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Το Prism χρειάζεται την κάμερα για να σαρώσει έναν κωδικό</string>
     <string name="allow_the_camera">Επίτρεψε την κάμερα</string>
     <string name="customize_home">Προσαρμογή Αρχικής</string>
+    <string name="tv_home_editor_how">Το OK εμφανίζει ή κρύβει μια σειρά. Για μετακίνηση, επιλέξτε Μετακίνηση δίπλα της (ή κρατήστε πατημένο το OK) και μετά Πάνω ή Κάτω.</string>
+    <string name="tv_home_moving">Μετακίνηση: %1$s. Πάνω και Κάτω τη μετακινούν, το OK την αφήνει.</string>
+    <string name="tv_home_move">Μετακίνηση %1$s</string>
+    <string name="tv_home_back_to_default">Επαναφορά προεπιλογής</string>
+    <string name="tv_home_hidden_count">Κρυφές: %1$d</string>
     <string name="top_of_home">Πάνω μέρος της Αρχικής</string>
     <string name="show_your_name">Εμφάνιση του ονόματός σου</string>
     <string name="height">Ύψος</string>
@@ -4047,6 +4052,7 @@
     <string name="tv_update_ready">Το Prism %1$s είναι έτοιμο</string>
     <string name="tv_update_note">Εγκαταστήστε το τώρα: το Android ζητά άδεια μόνο μία φορά</string>
     <string name="tv_up_next_line">Επόμενο: %1$s</string>
+    <string name="tv_seek_line">Θέση στο τραγούδι: %1$s από %2$s</string>
     <string name="tv_playing_from">Παίζει από %1$s</string>
     <string name="tv_vocals_out">Χωρίς φωνή</string>
     <string name="tv_key_line">Τόνος: %1$s</string>
@@ -4057,7 +4063,6 @@
     <string name="tv_sign_in_with_phone">Σύνδεση με το κινητό σας</string>
     <string name="tv_continue_without_account">Συνέχεια χωρίς λογαριασμό</string>
     <string name="tv_pair_step_open">Ανοίξτε το Prism στο κινητό σας, στο ίδιο Wi-Fi με αυτή την τηλεόραση</string>
-    <string name="tv_pair_step_pick">Επιλέξτε %1$s όταν εμφανιστεί στο κινητό σας</string>
     <string name="tv_pair_step_code">Πληκτρολογήστε αυτόν τον κωδικό στο κινητό σας</string>
     <string name="tv_pair_qr">Ή σαρώστε τον με την κάμερα του κινητού σας</string>
     <string name="tv_no_voice">Αυτή η τηλεόραση δεν μπορεί να αναζητήσει με φωνή: πληκτρολογήστε στο πληκτρολόγιο</string>
@@ -4125,6 +4130,10 @@
     <string name="tour_180_silence">Το κόψιμο σιωπής αγγίζει μόνο την αρχή και το τέλος ενός τραγουδιού</string>
     <string name="tour_180_normalize">Η κανονικοποίηση έντασης εξομαλύνει τα μεγάλα άλματα ανάμεσα στα τραγούδια</string>
     <string name="tour_180_size">Μικρότερη λήψη</string>
+    <string name="tv_library_signed_out">Συνδέσου για να βλέπεις εδώ τις λίστες, τα άλμπουμ, τους καλλιτέχνες και τα αγαπημένα σου τραγούδια από το YouTube Music.</string>
+    <string name="tv_search_how">Πάτα OK στη γραμμή αναζήτησης για να πληκτρολογήσεις με το τηλεχειριστήριο.</string>
+    <string name="tv_search_voice_how">Ή διάλεξε το μικρόφωνο δίπλα της και πες ένα τραγούδι, καλλιτέχνη ή άλμπουμ.</string>
+    <string name="tv_pair_step_find">Στο κινητό σου, στο Prism, πάτα τη γραμμή συσκευής κάτω από τα χειριστήρια (ή άνοιξε Ρυθμίσεις → Ηχεία, τηλεοράσεις &amp; πρόγραμμα περιήγησης) και διάλεξε %1$s</string>
     <string name="sing_quick_slow">Αυτό το τηλέφωνο είναι πολύ αργό για τον πλήρη διαχωρισμό, οπότε το Τραγούδα χρησιμοποιεί τον γρήγορο τρόπο: αφαιρεί ό,τι βρίσκεται στη μέση της μίξης, εκεί που συνήθως είναι η φωνή. Είναι λιγότερο καθαρό, και ένα μονοφωνικό τραγούδι μένει όπως είναι.</string>
     <string name="sing_mono_song">Αυτό το τραγούδι είναι μονοφωνικό: ο γρήγορος τρόπος δεν μπορεί να αφαιρέσει τη φωνή του, οπότε παίζει όπως είναι.</string>
     <string name="tv_sing_measured">Αυτή η τηλεόραση διαχωρίζει τα τραγούδια με %1$s× την ταχύτητα αναπαραγωγής τους.</string>

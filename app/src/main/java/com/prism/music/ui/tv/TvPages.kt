@@ -120,7 +120,14 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
         value = withContext(Dispatchers.IO) { runCatching { com.prism.music.ui.screens.speedDialFromHistory(c) }.getOrDefault(emptyList()) }
     }
     val titles = TvHomeTitles(tr(R.string.quick_picks), tr(R.string.section_speed_dial), tr(R.string.recently_played))
-    val rows = remember(shelves, recent, mostPlayed, owner) { tvHomeRows(shelves, owner, recent, mostPlayed, titles) }
+    // Laid out as Customize Home has them: shown or hidden as the phone's Home layout has the rows both have (so phone
+    // and TV agree), the hero and the order as the TV's own layout keeps them (none kept: the phone's order, else Home
+    // as it comes).
+    val phoneLayout = settings.homeLayout
+    val arranged = remember(shelves, recent, mostPlayed, owner, settings.tv.homeLayout, phoneLayout) {
+        TvHomeLayout.arrange(settings.tv.homeLayout, tvHomeRows(shelves, owner, recent, mostPlayed, titles), phoneLayout)
+    }
+    val rows = arranged.rows
     val now = rememberTvNow(c)
     val accent = rememberTvAccent(now?.art)
     // Updates on the TV (plan §2): the same banner and installer as the phone (Android asks once to allow installs).
@@ -131,8 +138,10 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
     val greeting = settings.greetingText.trim().ifBlank {
         when (hour) { in 5..11 -> tr(R.string.good_morning); in 12..17 -> tr(R.string.good_afternoon); else -> tr(R.string.good_evening) }
     }
+    // Made once per change of rows, not on each tick of the progress (or every row would redraw twice a second).
+    val tvShelves = remember(rows) { rows.map { r -> TvShelf(r.title, r.items.map { it.toTvItem() }) } }
     TvHomeScreen(
-        greeting, now, rows.map { r -> TvShelf(r.title, r.items.map { it.toTvItem() }) },
+        greeting, now, tvShelves,
         onPlayPause = { c.player.togglePlay() },
         onOpenPlayer = { nav.go(TvRoute.Player) },
         onOpenLyrics = { nav.go(TvRoute.Lyrics) },
@@ -158,6 +167,8 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
             }
         },
         onSearch = onSearch,
+        heroAt = arranged.heroAt,
+        onCustomize = { nav.go(TvRoute.HomeEditor) },
     )
 }
 
@@ -210,7 +221,7 @@ internal const val TV_START_WAIT_MS = 6_000L
 fun TvStarting(onGiveUp: () -> Unit) {
     LaunchedEffect(Unit) { kotlinx.coroutines.delay(TV_START_WAIT_MS); onGiveUp() }
     val scheme = androidx.tv.material3.MaterialTheme.colorScheme
-    Box(Modifier.fillMaxSize().background(scheme.background), contentAlignment = androidx.compose.ui.Alignment.Center) {
+    Box(Modifier.fillMaxSize(), contentAlignment = androidx.compose.ui.Alignment.Center) {
         androidx.tv.material3.Text(
             tr(R.string.one_moment),
             Modifier.tvItem(TAG_STARTING, entry = true).focusable(),
@@ -249,7 +260,8 @@ fun TvPlayerPage(nav: TvNav) {
                 onRepeat = { c.player.cycleRepeat() },
                 onLyrics = { nav.go(TvRoute.Lyrics) },
                 onQueue = { panel = Panel.QUEUE },
-                onVideo = { c.player.setVideoMode(true); nav.go(TvRoute.Video) },
+                // The video page turns video mode on (and off as it's left).
+                onVideo = { nav.go(TvRoute.Video) },
                 onLike = { c.player.currentSong.value?.let { c.library.toggleLike(it) } },
                 onMore = { panel = Panel.MORE },
                 accent = accent,
@@ -258,16 +270,7 @@ fun TvPlayerPage(nav: TvNav) {
         when (panel) {
             Panel.NONE -> Unit
             Panel.QUEUE -> TvPanel("queue", close) { TvQueuePlace() }
-            Panel.MORE -> TvPanel("more", close) {
-                val s = song
-                val actions = buildList {
-                    s?.album?.id?.let { id -> add(TvAction(tr(R.string.go_to_album), com.prism.music.ui.theme.PrismIcons.Album) { close(); nav.go(TvRoute.Collection(AlbumItem(id, s.album.title, s.primaryArtist, s.thumbnail))) }) }
-                    s?.artists?.filter { it.id != null }?.forEach { a -> add(TvAction(a.name, com.prism.music.ui.theme.PrismIcons.Person) { close(); nav.go(TvRoute.Artist(a.id!!)) }) }
-                    // Sing, once this TV passed its speed check (Settings → Sing).
-                    if (singReady && s != null && c.sing.canSing(s)) add(TvAction(tr(R.string.sing), com.prism.music.ui.theme.PrismIcons.Mic) { close(); nav.go(TvRoute.Sing) })
-                }
-                TvActionPanel(s?.title ?: "", actions)
-            }
+            Panel.MORE -> TvPanel("more", close) { TvActionPanel(song?.title ?: "", songActions(c, nav, song, singReady, close)) }
         }
     }
 }
@@ -280,7 +283,7 @@ private enum class Panel { NONE, QUEUE, MORE }
  * key of its own under the page's).
  */
 @Composable
-private fun androidx.compose.foundation.layout.BoxScope.TvPanel(name: String, onClose: () -> Unit, content: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit) {
+internal fun androidx.compose.foundation.layout.BoxScope.TvPanel(name: String, onClose: () -> Unit, content: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit) {
     val screen = LocalTvScreen.current + "/" + name
     val memory = LocalTvFocusMemory.current
     remember(screen) { memory.opening(screen); true }
@@ -294,9 +297,9 @@ private fun androidx.compose.foundation.layout.BoxScope.TvPanel(name: String, on
     }
 }
 
-/** The queue: the playing song and what comes next; OK plays one. */
+/** The queue: the playing song and what comes next; OK plays one ([onPicked] then: the video screen closes it). */
 @Composable
-private fun androidx.compose.foundation.layout.BoxScope.TvQueuePlace() {
+internal fun androidx.compose.foundation.layout.BoxScope.TvQueuePlace(onPicked: () -> Unit = {}) {
     val c = LocalContainer.current
     val queue by c.player.queue.collectAsState()
     val index by c.player.currentIndex.collectAsState()
@@ -307,7 +310,7 @@ private fun androidx.compose.foundation.layout.BoxScope.TvQueuePlace() {
         queue.map { e -> TvSong(e.uid, e.song.title, e.song.artistText, if (e.song.isLive) null else tvTime(e.song.durationSec * 1000L), e.song.thumbnail) },
         queue.indexOfFirst { it.index == index },
         // As the phone's queue plays one: prepared and playing, and shuffled, Previous comes back to the song before.
-        onSong = { i -> queue.getOrNull(i)?.let { c.player.skipTo(it.index) } },
+        onSong = { i -> queue.getOrNull(i)?.let { c.player.skipTo(it.index); onPicked() } },
     )
 }
 
@@ -327,18 +330,15 @@ fun TvLyricsPage(nav: TvNav) {
     TvLyricsPlace(now, lines, current, clock, state.loading, state.unavailable, state.source?.label, accent, onPlayPause = { c.player.togglePlay() }) { ms -> c.player.seekToLyric(ms) }
 }
 
-/** A music video, full screen; any key shows the controls; "Back to the song" (or Back) returns to the song. */
-@Composable
-fun TvVideoPage(nav: TvNav) {
-    val c = LocalContainer.current
-    val now = rememberTvNow(c)
-    val video by c.player.videoMode.collectAsState()
-    if (now == null) { TvStarting { nav.back() }; return }
-    // Leaving the page ends video mode (the song plays on as audio).
-    androidx.compose.runtime.DisposableEffect(Unit) { onDispose { c.player.setVideoMode(false) } }
-    TvVideoPlace(now, video, onPlayPause = { c.player.togglePlay() }, onNext = { c.player.next() }, onPrevious = { c.player.previous() }, onSong = { nav.back() }) {
-        MusicVideoSurface(Modifier.fillMaxSize(), fill = false)
-    }
+/**
+ * The ⋯ of a song (the player's and the video's): its album, its artists, and Sing once this TV passed Sing's speed
+ * check. [close] puts the panel away first.
+ */
+internal fun songActions(c: AppContainer, nav: TvNav, s: com.prism.music.data.model.Song?, singReady: Boolean, close: () -> Unit): List<TvAction> = buildList {
+    s?.album?.id?.let { id -> add(TvAction(tr(R.string.go_to_album), com.prism.music.ui.theme.PrismIcons.Album) { close(); nav.go(TvRoute.Collection(AlbumItem(id, s.album.title, s.primaryArtist, s.thumbnail))) }) }
+    s?.artists?.filter { it.id != null }?.forEach { a -> add(TvAction(a.name, com.prism.music.ui.theme.PrismIcons.Person) { close(); nav.go(TvRoute.Artist(a.id!!)) }) }
+    // Sing, once this TV passed its speed check (Settings → Sing).
+    if (singReady && s != null && c.sing.canSing(s)) add(TvAction(tr(R.string.sing), com.prism.music.ui.theme.PrismIcons.Mic) { close(); nav.go(TvRoute.Sing) })
 }
 
 /** An album or playlist: its songs from YouTube (or Prism's own list), Play and Shuffle, a song plays from there. */
@@ -371,7 +371,7 @@ fun TvCollectionPage(item: BrowseItem, nav: TvNav) {
     val details = listOfNotNull(p?.subtitle?.takeIf { it.isNotBlank() }, p?.secondSubtitle?.takeIf { it.isNotBlank() }).joinToString(" · ").ifBlank { item.subtitle }
     val accent = rememberTvAccent(p?.thumbnail ?: item.thumbnail)
     TvCollectionScreen(
-        p?.title ?: item.title, details, p?.thumbnail ?: item.thumbnail,
+        p?.title ?: item.title.ifBlank { tr(R.string.one_moment) }, details, p?.thumbnail ?: item.thumbnail,
         songs.map { s -> TvSong(s.id, s.title, s.artistText, if (s.isLive) null else tvTime(s.durationSec * 1000L)) },
         onPlay = { play(0, false) }, onShuffle = { play(0, true) }, onSong = { i -> play(i, false) },
         playing = songs.indexOfFirst { it.id == current?.id }, accent = accent,
@@ -392,7 +392,7 @@ fun TvArtistPage(id: String, nav: TvNav) {
     val fail = { Toast.makeText(context, tr(R.string.couldn_t_start, p?.name ?: ""), Toast.LENGTH_SHORT).show() }
     val accent = rememberTvAccent(p?.thumbnail)
     TvArtistScreen(
-        p?.name ?: "", p?.subscribers, p?.thumbnail,
+        p?.name ?: tr(R.string.one_moment), p?.subscribers, p?.thumbnail,
         shelves.map { (s, items) -> TvShelf(s.title, items.map { it.toTvItem() }) },
         onPlay = {
             val top = shelves.firstOrNull { (_, items) -> items.any { it is SongItem } }

@@ -320,6 +320,14 @@ data class TvPrefs(
     val deskMode: Boolean = false,
     /** How large lyrics are on the TV (1 = as designed). */
     val lyricsScale: Float = 1f,
+    /** This TV has shown Prism TV's welcome (sign in with the phone) once: also for a TV that had the phone app before. */
+    val welcomed: Boolean = false,
+    /**
+     * The TV Home's rows, in order, shown or hidden (the owner, 1.8.0: "You should be able to customize the
+     * homescreen"). Keyed as the phone's Home sections where the rows are the same kind ([HomeSections]), plus the TV's
+     * own now-playing hero. Empty: Home as it comes (see `TvHomeLayout`).
+     */
+    val homeLayout: List<HomeSectionConfig> = emptyList(),
 )
 
 /** Picture-in-picture for a playing video (1.7.8, #167). */
@@ -860,6 +868,8 @@ object HomeSections {
     /** Was its own section ("Mixes from your music"); its mixes are in Made for you now ([mergeYourMixes]). */
     const val YOUR_MIXES = "local:your_mixes"
     const val YT_PREFIX = "yt:shelf:"
+    /** One of YouTube Music's own shelves, by its title (the phone's Home and the TV's name it the same). */
+    fun shelfKey(title: String) = YT_PREFIX + title.trim().lowercase()
     /** GREETING's key predates the rename: the section is only the shortcut tiles. */
     const val TILES_TITLE = "Shortcut tiles"
     /** Release Radar's section: not "New releases", which is YouTube's own shelf on Home too. */
@@ -1778,6 +1788,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val tvAmbientMinutes = intPreferencesKey("tv_ambient_minutes")
         val deskMode = booleanPreferencesKey("desk_mode")
         val tvLyricsScale = floatPreferencesKey("tv_lyrics_scale")
+    val tvWelcomed = booleanPreferencesKey("tv_welcomed")
+        val tvHomeLayout = stringPreferencesKey("tv_home_layout")
         val pauseOnMute = booleanPreferencesKey("pause_on_mute")
         val pipMode = stringPreferencesKey("pip_mode")
         val panelSwipes = booleanPreferencesKey("panel_swipes")
@@ -1890,7 +1902,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 // 1.7.8 ([BehaviorPrefs]).
                 "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres", "screen_fades", "player_gestures_everywhere", "page_slide", "tab_bar_position",
                 // 1.8.0 ([TvPrefs]): how Prism behaves on a TV and in desk mode.
-                "tv_ambient_minutes", "desk_mode", "tv_lyrics_scale",
+                "tv_ambient_minutes", "desk_mode", "tv_lyrics_scale", "tv_welcomed", "tv_home_layout",
                 // 1.7.8 ([SoundPrefs]).
                 "crossfade_curve", "normalize_target", "normalize_albums", "music_speed", "music_pitch",
                 "skip_silence_episodes", "sleep_fade", "pause_fade",
@@ -2174,6 +2186,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
                 deskMode = p[K.deskMode] ?: d.tv.deskMode,
                 lyricsScale = (p[K.tvLyricsScale] ?: d.tv.lyricsScale).coerceIn(0.75f, 1.5f),
+            welcomed = p[K.tvWelcomed] ?: d.tv.welcomed,
+                homeLayout = p[K.tvHomeLayout]?.let { runCatching { json.decodeFromString<List<HomeSectionConfig>>(it) }.getOrNull() } ?: d.tv.homeLayout,
             ),
             uiDensity = p.enum(K.uiDensity, d.uiDensity),
             titleSize = p.enum(K.titleSize, d.titleSize),
@@ -2708,6 +2722,12 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setTvAmbientMinutes(v: Int) = edit { it[K.tvAmbientMinutes] = v.coerceIn(0, 60) }
     fun setDeskMode(v: Boolean) = edit { it[K.deskMode] = v }
     fun setTvLyricsScale(v: Float) = edit { it[K.tvLyricsScale] = v.coerceIn(0.75f, 1.5f) }
+    fun setTvWelcomed() = edit { it[K.tvWelcomed] = true }
+    /** The TV Home's rows ([TvPrefs.homeLayout]); an empty list is Home as it comes (Back to default). */
+    fun setTvHomeLayout(v: List<HomeSectionConfig>) = edit {
+        if (v.isEmpty()) it.remove(K.tvHomeLayout)
+        else it[K.tvHomeLayout] = json.encodeToString(kotlinx.serialization.builtins.ListSerializer(HomeSectionConfig.serializer()), v)
+    }
     fun setPauseOnMute(v: Boolean) = edit { it[K.pauseOnMute] = v }
     fun setPipMode(v: PipMode) = edit { it[K.pipMode] = v.name }
     fun setPanelSwipes(v: Boolean) = edit { it[K.panelSwipes] = v }

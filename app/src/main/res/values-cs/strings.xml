@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism potřebuje fotoaparát ke skenování kódu</string>
     <string name="allow_the_camera">Povolit fotoaparát</string>
     <string name="customize_home">Přizpůsobit Domů</string>
+    <string name="tv_home_editor_how">OK řádek zobrazí nebo skryje. Pro přesun vyberte Přesunout vedle něj (nebo podržte OK) a pak Nahoru či Dolů.</string>
+    <string name="tv_home_moving">Přesouvá se %1$s: Nahoru a Dolů ho posouvají, OK ho položí.</string>
+    <string name="tv_home_move">Přesunout %1$s</string>
+    <string name="tv_home_back_to_default">Zpět na výchozí</string>
+    <string name="tv_home_hidden_count">Skryto: %1$d</string>
     <string name="top_of_home">Horní část Domů</string>
     <string name="show_your_name">Zobrazit tvoje jméno</string>
     <string name="height">Výška</string>
@@ -4147,6 +4152,7 @@
     <string name="tv_update_ready">Prism %1$s je připraven</string>
     <string name="tv_update_note">Nainstalujte ho hned: Android se zeptá jen jednou</string>
     <string name="tv_up_next_line">Další: %1$s</string>
+    <string name="tv_seek_line">Pozice ve skladbě: %1$s z %2$s</string>
     <string name="tv_playing_from">Hraje z: %1$s</string>
     <string name="tv_vocals_out">Bez zpěvu</string>
     <string name="tv_key_line">Tónina: %1$s</string>
@@ -4157,7 +4163,6 @@
     <string name="tv_sign_in_with_phone">Přihlásit se telefonem</string>
     <string name="tv_continue_without_account">Pokračovat bez účtu</string>
     <string name="tv_pair_step_open">Otevřete Prism v telefonu, na stejné Wi-Fi jako tato televize</string>
-    <string name="tv_pair_step_pick">Až ji telefon ukáže, vyberte %1$s</string>
     <string name="tv_pair_step_code">Zadejte tento kód v telefonu</string>
     <string name="tv_pair_qr">Nebo ho naskenujte fotoaparátem telefonu</string>
     <string name="tv_no_voice">Tato televize neumí hledat hlasem: pište na klávesnici</string>
@@ -4225,6 +4230,10 @@
     <string name="tour_180_silence">Ořezání ticha se týká jen začátku a konce skladby</string>
     <string name="tour_180_normalize">Stejná hlasitost vyrovná velké skoky mezi skladbami</string>
     <string name="tour_180_size">Menší stahování</string>
+    <string name="tv_library_signed_out">Přihlaste se a uvidíte tu své playlisty, alba, interprety a oblíbené skladby z YouTube Music.</string>
+    <string name="tv_search_how">Stiskněte OK na řádku hledání a pište ovladačem.</string>
+    <string name="tv_search_voice_how">Nebo vyberte mikrofon vedle něj a řekněte skladbu, interpreta nebo album.</string>
+    <string name="tv_pair_step_find">V telefonu v Prismu klepněte na řádek zařízení pod ovládáním (nebo otevřete Nastavení → Reproduktory, televize a prohlížeč) a vyberte %1$s</string>
     <string name="sing_quick_slow">Tento telefon je na úplné oddělení hlasu příliš pomalý, takže Zpívání použije rychlý způsob: odstraní to, co je uprostřed mixu, kde obvykle bývá hlas. Je méně čistý a mono skladba zůstane, jak je.</string>
     <string name="sing_mono_song">Tato skladba je mono: rychlý způsob z ní hlas odstranit nedokáže, takže hraje, jak je.</string>
     <string name="tv_sing_measured">Tato televize odděluje skladby %1$s× rychleji, než hrají.</string>

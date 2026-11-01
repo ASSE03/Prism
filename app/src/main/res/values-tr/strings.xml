@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism\'in kod taraması için kameraya ihtiyacı var</string>
     <string name="allow_the_camera">Kameraya izin ver</string>
     <string name="customize_home">Ana sayfayı özelleştir</string>
+    <string name="tv_home_editor_how">OK bir satırı gösterir veya gizler. Taşımak için yanındaki Taşı düğmesini seçin (veya OK basılı tutun), sonra Yukarı ya da Aşağı.</string>
+    <string name="tv_home_moving">%1$s taşınıyor: Yukarı ve Aşağı ile götürün, OK ile bırakın.</string>
+    <string name="tv_home_move">Taşı: %1$s</string>
+    <string name="tv_home_back_to_default">Varsayılana dön</string>
+    <string name="tv_home_hidden_count">Gizli: %1$d</string>
     <string name="top_of_home">Ana sayfanın üstü</string>
     <string name="show_your_name">Adını göster</string>
     <string name="height">Yükseklik</string>
@@ -4047,6 +4052,7 @@
     <string name="tv_update_ready">Prism %1$s hazır</string>
     <string name="tv_update_note">Şimdi yükleyin: Android yalnızca bir kez izin ister</string>
     <string name="tv_up_next_line">Sıradaki: %1$s</string>
+    <string name="tv_seek_line">Şarkıdaki konum: %1$s / %2$s</string>
     <string name="tv_playing_from">Çalınan yer: %1$s</string>
     <string name="tv_vocals_out">Vokalsiz</string>
     <string name="tv_key_line">Ton: %1$s</string>
@@ -4057,7 +4063,6 @@
     <string name="tv_sign_in_with_phone">Telefonunuzla oturum açın</string>
     <string name="tv_continue_without_account">Hesap olmadan devam et</string>
     <string name="tv_pair_step_open">Prism\'i telefonunuzda, bu TV ile aynı Wi-Fi ağında açın</string>
-    <string name="tv_pair_step_pick">Telefonunuz gösterdiğinde %1$s seçin</string>
     <string name="tv_pair_step_code">Bu kodu telefonunuza girin</string>
     <string name="tv_pair_qr">Ya da telefonunuzun kamerasıyla tarayın</string>
     <string name="tv_no_voice">Bu TV sesle arama yapamıyor: bunun yerine klavyeyle yazın</string>
@@ -4125,6 +4130,10 @@
     <string name="tour_180_silence">Sessizlik kırpma yalnızca şarkının başına ve sonuna dokunur</string>
     <string name="tour_180_normalize">Aynı ses düzeyi, şarkılar arasındaki büyük farkları giderir</string>
     <string name="tour_180_size">Daha küçük bir indirme</string>
+    <string name="tv_library_signed_out">YouTube Music\'teki çalma listelerini, albümlerini, sanatçılarını ve beğendiğin şarkıları burada görmek için oturum aç.</string>
+    <string name="tv_search_how">Kumandayla yazmak için arama satırında OK\'e bas.</string>
+    <string name="tv_search_voice_how">Ya da yanındaki mikrofonu seç ve bir şarkı, sanatçı veya albüm söyle.</string>
+    <string name="tv_pair_step_find">Telefonunda, Prism\'de kontrollerin altındaki cihaz satırına dokun (ya da Ayarlar → Hoparlörler, TV\'ler ve tarayıcı\'yı aç) ve %1$s seç</string>
     <string name="sing_quick_slow">Bu telefon tam ayırma için fazla yavaş, bu yüzden Sing hızlı yolu kullanıyor: miksin ortasında, sesin genellikle bulunduğu yerdekini çıkarır. Daha az temizdir ve mono bir şarkı olduğu gibi kalır.</string>
     <string name="sing_mono_song">Bu şarkı mono: hızlı yol vokalini çıkaramaz, bu yüzden olduğu gibi çalar.</string>
     <string name="tv_sing_measured">Bu TV şarkıları çaldıkları hızın %1$s katı hızla ayırır.</string>

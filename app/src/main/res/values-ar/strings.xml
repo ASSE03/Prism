@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">يحتاج Prism إلى الكاميرا لمسح الرمز</string>
     <string name="allow_the_camera">السماح بالكاميرا</string>
     <string name="customize_home">تخصيص الرئيسية</string>
+    <string name="tv_home_editor_how">زر OK يُظهر الصف أو يخفيه. لنقل صف، اختر «نقل» بجانبه (أو اضغط OK مطوّلًا)، ثم أعلى أو أسفل.</string>
+    <string name="tv_home_moving">جارٍ نقل %1$s: أعلى وأسفل لتحريكه، وOK لوضعه.</string>
+    <string name="tv_home_move">نقل %1$s</string>
+    <string name="tv_home_back_to_default">العودة إلى الافتراضي</string>
+    <string name="tv_home_hidden_count">مخفية: %1$d</string>
     <string name="top_of_home">أعلى الرئيسية</string>
     <string name="show_your_name">إظهار اسمك</string>
     <string name="height">الارتفاع</string>
@@ -4247,6 +4252,7 @@
     <string name="tv_update_ready">‏Prism %1$s جاهز</string>
     <string name="tv_update_note">ثبّته الآن: يطلب Android الإذن مرة واحدة فقط</string>
     <string name="tv_up_next_line">التالي: %1$s</string>
+    <string name="tv_seek_line">موضع الأغنية: %1$s من %2$s</string>
     <string name="tv_playing_from">يُشغَّل من %1$s</string>
     <string name="tv_vocals_out">بلا صوت المغني</string>
     <string name="tv_key_line">المقام: %1$s</string>
@@ -4257,7 +4263,6 @@
     <string name="tv_sign_in_with_phone">سجّل الدخول بهاتفك</string>
     <string name="tv_continue_without_account">المتابعة بدون حساب</string>
     <string name="tv_pair_step_open">افتح Prism على هاتفك، على شبكة Wi-Fi نفسها التي يتصل بها هذا التلفزيون</string>
-    <string name="tv_pair_step_pick">اختر %1$s عندما يظهر على هاتفك</string>
     <string name="tv_pair_step_code">أدخل هذا الرمز على هاتفك</string>
     <string name="tv_pair_qr">أو امسحه بكاميرا هاتفك</string>
     <string name="tv_no_voice">لا يمكن لهذا التلفزيون البحث بالصوت: اكتب بلوحة المفاتيح بدلًا من ذلك</string>
@@ -4325,6 +4330,10 @@
     <string name="tour_180_silence">قص الصمت يمسّ بداية الأغنية ونهايتها فقط</string>
     <string name="tour_180_normalize">توحيد مستوى الصوت يخفف القفزات الكبيرة بين الأغاني</string>
     <string name="tour_180_size">حجم تنزيل أصغر</string>
+    <string name="tv_library_signed_out">سجّل الدخول لترى هنا قوائم التشغيل والألبومات والفنانين والأغاني التي أعجبتك من YouTube Music.</string>
+    <string name="tv_search_how">اضغط OK على سطر البحث لتكتب باستخدام جهاز التحكم.</string>
+    <string name="tv_search_voice_how">أو اختر الميكروفون بجانبه وقل اسم أغنية أو فنان أو ألبوم.</string>
+    <string name="tv_pair_step_find">على هاتفك، في Prism، انقر على سطر الجهاز أسفل عناصر التحكم (أو افتح الإعدادات ← مكبرات الصوت والتلفزيون والمتصفح) واختر %1$s</string>
     <string name="sing_quick_slow">هذا الهاتف أبطأ من أن يشغّل الفصل الكامل، لذا يستخدم الغناء الطريقة السريعة: يزيل ما في منتصف المزج، حيث يكون الصوت عادةً. النتيجة أقل نقاءً، والأغنية الأحادية تبقى كما هي.</string>
     <string name="sing_mono_song">هذه الأغنية أحادية: لا تستطيع الطريقة السريعة إزالة صوتها، لذا تُشغَّل كما هي.</string>
     <string name="tv_sing_measured">يفصل هذا التلفزيون الأغاني بسرعة %1$s× من سرعة تشغيلها.</string>

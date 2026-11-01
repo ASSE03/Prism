@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">कोड स्कैन करने के लिए Prism को कैमरा चाहिए</string>
     <string name="allow_the_camera">कैमरे की अनुमति दें</string>
     <string name="customize_home">होम कस्टमाइज़ करें</string>
+    <string name="tv_home_editor_how">OK से पंक्ति दिखती या छिपती है। हटाने के लिए उसके बगल में खिसकाएँ चुनें (या OK दबाकर रखें), फिर ऊपर या नीचे।</string>
+    <string name="tv_home_moving">%1$s को खिसकाया जा रहा है: ऊपर और नीचे से ले जाएँ, OK से रखें।</string>
+    <string name="tv_home_move">%1$s खिसकाएँ</string>
+    <string name="tv_home_back_to_default">डिफ़ॉल्ट पर लौटें</string>
+    <string name="tv_home_hidden_count">छिपी हुई: %1$d</string>
     <string name="top_of_home">होम का ऊपरी हिस्सा</string>
     <string name="show_your_name">अपना नाम दिखाएं</string>
     <string name="height">ऊंचाई</string>
@@ -4047,6 +4052,7 @@
     <string name="tv_update_ready">Prism %1$s तैयार है</string>
     <string name="tv_update_note">अभी इंस्टॉल करें: Android सिर्फ़ एक बार अनुमति माँगता है</string>
     <string name="tv_up_next_line">आगे: %1$s</string>
+    <string name="tv_seek_line">गाने में जगह: %2$s में से %1$s</string>
     <string name="tv_playing_from">%1$s से चल रहा है</string>
     <string name="tv_vocals_out">आवाज़ के बिना</string>
     <string name="tv_key_line">स्केल: %1$s</string>
@@ -4057,7 +4063,6 @@
     <string name="tv_sign_in_with_phone">अपने फ़ोन से साइन इन करें</string>
     <string name="tv_continue_without_account">बिना खाते के जारी रखें</string>
     <string name="tv_pair_step_open">अपने फ़ोन पर Prism खोलें, इसी टीवी वाले Wi-Fi पर</string>
-    <string name="tv_pair_step_pick">फ़ोन पर दिखने पर %1$s चुनें</string>
     <string name="tv_pair_step_code">अपने फ़ोन पर यह कोड डालें</string>
     <string name="tv_pair_qr">या इसे अपने फ़ोन के कैमरे से स्कैन करें</string>
     <string name="tv_no_voice">यह टीवी आवाज़ से नहीं खोज सकता: कीबोर्ड से लिखें</string>
@@ -4125,6 +4130,10 @@
     <string name="tour_180_silence">चुप्पी हटाना सिर्फ़ गाने की शुरुआत और अंत को छूता है</string>
     <string name="tour_180_normalize">एक जैसी आवाज़ गानों के बीच के बड़े उछाल को बराबर करती है</string>
     <string name="tour_180_size">छोटा डाउनलोड</string>
+    <string name="tv_library_signed_out">YouTube Music से अपनी प्लेलिस्ट, एल्बम, कलाकार और पसंद किए गाने यहां देखने के लिए साइन इन करें।</string>
+    <string name="tv_search_how">रिमोट से टाइप करने के लिए सर्च लाइन पर OK दबाएं।</string>
+    <string name="tv_search_voice_how">या पास वाला माइक्रोफ़ोन चुनें और कोई गाना, कलाकार या एल्बम बोलें।</string>
+    <string name="tv_pair_step_find">अपने फ़ोन पर, Prism में, कंट्रोल के नीचे डिवाइस वाली लाइन पर टैप करें (या सेटिंग → स्पीकर, टीवी &amp; ब्राउज़र खोलें) और %1$s चुनें</string>
     <string name="sing_quick_slow">यह फ़ोन पूरे अलगाव के लिए बहुत धीमा है, इसलिए साथ गाएं तेज़ तरीका इस्तेमाल करता है: मिक्स के बीच में जो है, जहाँ आमतौर पर आवाज़ होती है, उसे हटा देता है। यह कम साफ़ है, और मोनो गाना जैसा है वैसा ही रहता है।</string>
     <string name="sing_mono_song">यह गाना मोनो है: तेज़ तरीका इसकी आवाज़ नहीं हटा सकता, इसलिए यह जैसा है वैसा ही बजेगा।</string>
     <string name="tv_sing_measured">यह टीवी गानों को उनके बजने से %1$s× तेज़ी से अलग करता है।</string>

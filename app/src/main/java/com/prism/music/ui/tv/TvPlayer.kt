@@ -3,6 +3,8 @@
 package com.prism.music.ui.tv
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -72,8 +74,9 @@ fun TvNowPlayingScreen(
     accent: Color? = null,
 ) {
     val scheme = MaterialTheme.colorScheme
-    Box(modifier.fillMaxSize().tvBackdrop(accent, scheme.background).padding(TvSafe).testTag(TAG_PLAYER)) {
-        Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
+    Box(modifier.fillMaxSize().testTag(TAG_PLAYER)) {
+        TvMeshBackdrop(now.art)
+        Row(Modifier.fillMaxSize().padding(TvSafe), verticalAlignment = Alignment.CenterVertically) {
             Artwork(now.art, Modifier.size(340.dp), shape = RoundedCornerShape(18.dp), size = 1080)
             Spacer(Modifier.width(52.dp))
             Column(Modifier.weight(1f)) {
@@ -138,7 +141,8 @@ fun TvLyricsScreen(
     val scale = LocalAppSettings.current.tv.lyricsScale
     val big = MaterialTheme.typography.displaySmall.copy(fontSize = 40.sp * scale, lineHeight = 52.sp * scale, fontWeight = FontWeight.SemiBold)
         .let { s -> com.prism.music.ui.theme.LocalLyricsFont.current?.let { s.copy(fontFamily = it) } ?: s }
-    Box(modifier.fillMaxSize().tvBackdrop(accent, scheme.background).testTag(TAG_LYRICS)) {
+    Box(modifier.fillMaxSize().testTag(TAG_LYRICS)) {
+        TvMeshBackdrop(now.art)
         Row(Modifier.padding(TvSafe), verticalAlignment = Alignment.CenterVertically) {
             Artwork(now.art, Modifier.size(56.dp), shape = RoundedCornerShape(8.dp), size = 160)
             Spacer(Modifier.width(16.dp))
@@ -175,7 +179,7 @@ fun BoxScope.TvQueuePanel(source: String?, songs: List<TvSong>, current: Int, on
     val scheme = MaterialTheme.colorScheme
     Box(Modifier.matchParentSize().background(Brush.horizontalGradient(listOf(Color.Transparent, scheme.background.copy(alpha = 0.85f)))))
     Column(
-        modifier.align(Alignment.CenterEnd).fillMaxHeight().width(460.dp).background(scheme.surface.copy(alpha = 0.96f)).padding(vertical = 27.dp, horizontal = 24.dp).testTag(TAG_QUEUE),
+        modifier.align(Alignment.CenterEnd).fillMaxHeight().width(460.dp).tvGlass(TvShapes.panelStart, TvPanelFill).padding(vertical = 27.dp, horizontal = 24.dp).testTag(TAG_QUEUE),
     ) {
         Text(tr(R.string.up_next), style = MaterialTheme.typography.headlineSmall, color = scheme.onSurface)
         if (source != null) Text(tr(R.string.tv_playing_from, source), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -186,7 +190,8 @@ fun BoxScope.TvQueuePanel(source: String?, songs: List<TvSong>, current: Int, on
             itemsIndexed(songs) { i, s ->
                 TvSongRow(
                     s.title, s.artist, s.length, { onSong(i) },
-                    modifier = Modifier.tvItem("$TAG_QUEUE/$i", entry = i == current + 1),
+                    // The next song; on the last song, that one (focus is never left behind the panel).
+                    modifier = Modifier.tvItem("$TAG_QUEUE/$i", entry = i == (current + 1).coerceAtMost(songs.lastIndex)),
                     art = s.art, playing = i == current,
                 )
             }
@@ -194,32 +199,7 @@ fun BoxScope.TvQueuePanel(source: String?, songs: List<TvSong>, current: Int, on
     }
 }
 
-/**
- * A music video (TV): the video fills the screen; any key shows these controls over its bottom for a few seconds
- * (title, progress, play/pause, previous, next, back to the song), then they fade. Focus opens on play/pause.
- */
-@Composable
-fun BoxScope.TvVideoControls(now: TvNow, onPlayPause: () -> Unit, onNext: () -> Unit, onPrevious: () -> Unit, onSong: () -> Unit, modifier: Modifier = Modifier) {
-    val scheme = MaterialTheme.colorScheme
-    Column(
-        modifier.align(Alignment.BottomCenter).fillMaxWidth()
-            .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.85f))))
-            .padding(start = 48.dp, end = 48.dp, top = 72.dp, bottom = 27.dp).testTag(TAG_VIDEO),
-    ) {
-        Text(now.title, style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.SemiBold), color = Color.White, maxLines = 1)
-        Text(now.artist, style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.75f), maxLines = 1)
-        Spacer(Modifier.height(14.dp))
-        TvProgress(now.fraction, now.played, now.total)
-        Spacer(Modifier.height(8.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(18.dp), verticalAlignment = Alignment.CenterVertically) {
-            TvIconButton(PrismIcons.Previous, tr(R.string.previous_song), onPrevious, Modifier.tvItem("$TAG_VIDEO/previous"))
-            TvIconButton(if (now.playing) PrismIcons.Pause else PrismIcons.Play, tr(if (now.playing) R.string.widget_pause else R.string.widget_play), onPlayPause, Modifier.tvItem("$TAG_VIDEO/playpause", entry = true), big = true)
-            TvIconButton(PrismIcons.Next, tr(R.string.next_song), onNext, Modifier.tvItem("$TAG_VIDEO/next"))
-            Spacer(Modifier.width(12.dp))
-            TvButton(tr(R.string.back_to_the_song), onSong, Modifier.tvItem("$TAG_VIDEO/song"), icon = PrismIcons.Song)
-        }
-    }
-}
+// The music video (its controls, the seek line, the queue over it): TvVideo.kt.
 
 /**
  * Sing (TV): karaoke night. The lyrics screen with the voice taken out: the song's key under the title and a
@@ -258,12 +238,15 @@ fun BoxScope.TvActionPanel(title: String, actions: List<TvAction>, modifier: Mod
     val scheme = MaterialTheme.colorScheme
     Box(Modifier.matchParentSize().background(Brush.horizontalGradient(listOf(Color.Transparent, scheme.background.copy(alpha = 0.85f)))))
     Column(
-        modifier.align(Alignment.CenterEnd).fillMaxHeight().width(400.dp).background(scheme.surface.copy(alpha = 0.96f)).padding(vertical = 27.dp, horizontal = 24.dp).testTag(TAG_ACTIONS),
+        modifier.align(Alignment.CenterEnd).fillMaxHeight().width(400.dp).tvGlass(TvShapes.panelStart, TvPanelFill).padding(vertical = 27.dp, horizontal = 24.dp).testTag(TAG_ACTIONS),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Text(title, style = MaterialTheme.typography.headlineSmall, color = scheme.onSurface, maxLines = 2, overflow = TextOverflow.Ellipsis)
         Spacer(Modifier.height(8.dp))
-        actions.forEachIndexed { i, a -> TvButton(a.label, a.onClick, Modifier.fillMaxWidth().tvItem("$TAG_ACTIONS/$i", entry = i == 0), icon = a.icon) }
+        // A list that scrolls: a choice can be long (Settings' 32 languages), and every one must be reachable.
+        LazyColumn(Modifier.fillMaxWidth().weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp), contentPadding = PaddingValues(vertical = 6.dp, horizontal = 4.dp)) {
+            itemsIndexed(actions) { i, a -> TvButton(a.label, a.onClick, Modifier.fillMaxWidth().tvItem("$TAG_ACTIONS/$i", entry = i == 0), icon = a.icon) }
+        }
     }
 }
 
@@ -287,7 +270,8 @@ fun TvLyricsPlace(
     val scheme = MaterialTheme.colorScheme
     var picked by androidx.compose.runtime.remember(lines) { androidx.compose.runtime.mutableStateOf<Int?>(null) }
     if (lines.isEmpty()) {
-        Box(Modifier.fillMaxSize().tvBackdrop(accent, scheme.background), contentAlignment = Alignment.Center) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            TvMeshBackdrop(now.art)
             Text(
                 tr(if (loading || !unavailable) R.string.looking_for_lyrics else R.string.no_lyrics_found_for_this_song),
                 // The lines' own tag: when they come (or go, as the song changes), focus stays on the lyrics.
@@ -313,52 +297,6 @@ fun TvLyricsPlace(
             }
         },
     )
-}
-
-/** How long the video's controls stay after the last key. */
-private const val VIDEO_CONTROLS_MS = 4_000L
-
-/**
- * A music video full screen ([video] draws it): any key shows the controls ([TvVideoControls]) for a few seconds.
- * While the video isn't ready ([ready] false) the song's cover stands in.
- */
-@Composable
-fun TvVideoPlace(
-    now: TvNow,
-    ready: Boolean,
-    onPlayPause: () -> Unit,
-    onNext: () -> Unit,
-    onPrevious: () -> Unit,
-    onSong: () -> Unit,
-    video: @Composable () -> Unit,
-) {
-    var shown by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(true) }
-    var touched by androidx.compose.runtime.remember { androidx.compose.runtime.mutableLongStateOf(0L) }
-    val screen = androidx.compose.runtime.remember { androidx.compose.ui.focus.FocusRequester() }
-    androidx.compose.runtime.LaunchedEffect(touched, now.playing) {
-        if (now.playing) {
-            kotlinx.coroutines.delay(VIDEO_CONTROLS_MS)
-            shown = false
-            // The controls had focus: the video takes it back.
-            kotlinx.coroutines.delay(50)
-            runCatching { screen.requestFocus() }
-        }
-    }
-    Box(
-        Modifier.fillMaxSize().background(Color.Black).testTag(TAG_VIDEO)
-            .onPreviewKeyEvent { e ->
-                if (e.type == androidx.compose.ui.input.key.KeyEventType.KeyDown) {
-                    touched = System.nanoTime()
-                    if (!shown) { shown = true; return@onPreviewKeyEvent e.key != androidx.compose.ui.input.key.Key.Back }
-                }
-                false
-            }
-            // While the controls are hidden this holds focus (focus is never nowhere).
-            .focusRequester(screen).tvItem("$TAG_VIDEO/screen", entry = true).focusable(),
-    ) {
-        if (ready) video() else Artwork(now.art, Modifier.align(Alignment.Center).size(360.dp), shape = RoundedCornerShape(18.dp), size = 1080)
-        if (shown) TvVideoControls(now, onPlayPause, onNext, onPrevious, onSong)
-    }
 }
 
 const val TAG_ACTIONS = "tv_actions"

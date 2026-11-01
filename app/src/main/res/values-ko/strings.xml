@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">코드를 스캔하려면 카메라가 필요해요</string>
     <string name="allow_the_camera">카메라 허용</string>
     <string name="customize_home">홈 맞춤 설정</string>
+    <string name="tv_home_editor_how">OK로 행을 표시하거나 숨깁니다. 옮기려면 옆의 이동을 고르고(또는 OK 길게 누르기) 위나 아래를 누르세요.</string>
+    <string name="tv_home_moving">%1$s 이동 중: 위아래로 옮기고 OK로 놓습니다.</string>
+    <string name="tv_home_move">%1$s 이동</string>
+    <string name="tv_home_back_to_default">기본값으로 되돌리기</string>
+    <string name="tv_home_hidden_count">숨김: %1$d</string>
     <string name="top_of_home">홈 상단</string>
     <string name="show_your_name">이름 표시</string>
     <string name="height">높이</string>
@@ -3997,6 +4002,7 @@
     <string name="tv_update_ready">Prism %1$s 준비 완료</string>
     <string name="tv_update_note">지금 설치하세요: Android는 처음 한 번만 허용을 묻습니다</string>
     <string name="tv_up_next_line">다음 곡: %1$s</string>
+    <string name="tv_seek_line">노래 위치: %1$s / %2$s</string>
     <string name="tv_playing_from">%1$s에서 재생 중</string>
     <string name="tv_vocals_out">보컬 제거</string>
     <string name="tv_key_line">키: %1$s</string>
@@ -4007,7 +4013,6 @@
     <string name="tv_sign_in_with_phone">휴대전화로 로그인</string>
     <string name="tv_continue_without_account">계정 없이 계속</string>
     <string name="tv_pair_step_open">이 TV와 같은 Wi-Fi에서 휴대전화의 Prism을 여세요</string>
-    <string name="tv_pair_step_pick">휴대전화에 %1$s이(가) 보이면 선택하세요</string>
     <string name="tv_pair_step_code">휴대전화에 이 코드를 입력하세요</string>
     <string name="tv_pair_qr">또는 휴대전화 카메라로 스캔하세요</string>
     <string name="tv_no_voice">이 TV는 음성으로 검색할 수 없습니다: 키보드로 입력하세요</string>
@@ -4075,6 +4080,10 @@
     <string name="tour_180_silence">무음 구간 자르기는 곡의 시작과 끝에만 적용돼요</string>
     <string name="tour_180_normalize">같은 음량은 곡 사이의 큰 음량 차이를 고르게 해요</string>
     <string name="tour_180_size">더 작아진 다운로드</string>
+    <string name="tv_library_signed_out">로그인하면 YouTube Music의 재생목록, 앨범, 아티스트, 좋아요 표시한 노래를 여기서 볼 수 있어요.</string>
+    <string name="tv_search_how">검색 줄에서 OK를 누르면 리모컨으로 입력할 수 있어요.</string>
+    <string name="tv_search_voice_how">또는 옆의 마이크를 고르고 노래, 아티스트, 앨범을 말하세요.</string>
+    <string name="tv_pair_step_find">휴대전화의 Prism에서 컨트롤 아래의 기기 줄을 탭하고(또는 설정 → 스피커, TV, 브라우저를 열고) %1$s을(를) 고르세요</string>
     <string name="sing_quick_slow">이 휴대전화는 전체 분리를 하기에 너무 느려서, 따라 부르기가 빠른 방식을 사용해요: 보통 목소리가 있는 믹스 가운데의 소리를 빼요. 덜 깔끔하고, 모노 곡은 그대로 재생돼요.</string>
     <string name="sing_mono_song">이 곡은 모노예요: 빠른 방식으로는 목소리를 뺄 수 없어서 그대로 재생돼요.</string>
     <string name="tv_sing_measured">이 TV는 곡이 재생되는 속도의 %1$s배로 곡을 분리합니다.</string>

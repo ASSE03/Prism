@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">A Prismnek kamera kell a kód beolvasásához</string>
     <string name="allow_the_camera">Kamera engedélyezése</string>
     <string name="customize_home">Kezdőlap testreszabása</string>
+    <string name="tv_home_editor_how">Az OK megjeleníti vagy elrejti a sort. Áthelyezéshez válaszd mellette az Áthelyezést (vagy tartsd lenyomva az OK-t), majd Fel vagy Le.</string>
+    <string name="tv_home_moving">%1$s áthelyezése: a Fel és a Le viszi, az OK leteszi.</string>
+    <string name="tv_home_move">%1$s áthelyezése</string>
+    <string name="tv_home_back_to_default">Vissza az alapértelmezetthez</string>
+    <string name="tv_home_hidden_count">Rejtett: %1$d</string>
     <string name="top_of_home">A kezdőlap teteje</string>
     <string name="show_your_name">A neved megjelenítése</string>
     <string name="height">Magasság</string>
@@ -4047,6 +4052,7 @@
     <string name="tv_update_ready">Elkészült a Prism %1$s</string>
     <string name="tv_update_note">Telepítsd most: az Android csak egyszer kér engedélyt</string>
     <string name="tv_up_next_line">Következik: %1$s</string>
+    <string name="tv_seek_line">Hely a dalban: %1$s / %2$s</string>
     <string name="tv_playing_from">Lejátszás innen: %1$s</string>
     <string name="tv_vocals_out">Ének nélkül</string>
     <string name="tv_key_line">Hangnem: %1$s</string>
@@ -4057,7 +4063,6 @@
     <string name="tv_sign_in_with_phone">Bejelentkezés a telefonoddal</string>
     <string name="tv_continue_without_account">Folytatás fiók nélkül</string>
     <string name="tv_pair_step_open">Nyisd meg a Prismet a telefonodon, ugyanazon a Wi-Fin, mint ez a tévé</string>
-    <string name="tv_pair_step_pick">Válaszd ki: %1$s, amikor a telefonod mutatja</string>
     <string name="tv_pair_step_code">Írd be ezt a kódot a telefonodon</string>
     <string name="tv_pair_qr">Vagy olvasd be a telefonod kamerájával</string>
     <string name="tv_no_voice">Ez a tévé nem tud hanggal keresni: gépelj a billentyűzettel</string>
@@ -4125,6 +4130,10 @@
     <string name="tour_180_silence">A csend levágása csak a dal elejét és végét érinti</string>
     <string name="tour_180_normalize">Az azonos hangerő kiegyenlíti a dalok közti nagy ugrásokat</string>
     <string name="tour_180_size">Kisebb letöltés</string>
+    <string name="tv_library_signed_out">Jelentkezz be, és itt látod a YouTube Music lejátszási listáidat, albumaidat, előadóidat és kedvelt dalaidat.</string>
+    <string name="tv_search_how">Nyomd meg az OK-t a keresősoron, és gépelj a távirányítóval.</string>
+    <string name="tv_search_voice_how">Vagy válaszd a mellette lévő mikrofont, és mondj egy dalt, előadót vagy albumot.</string>
+    <string name="tv_pair_step_find">A telefonodon a Prismben koppints a vezérlők alatti eszközsorra (vagy nyisd meg: Beállítások → Hangszórók, tévék és böngésző), és válaszd ki: %1$s</string>
     <string name="sing_quick_slow">Ez a telefon túl lassú a teljes szétválasztáshoz, ezért az Éneklés a gyors módot használja: kiveszi, ami a keverés közepén szól, ahol általában az ének van. Kevésbé tiszta, és egy monó dal úgy marad, ahogy van.</string>
     <string name="sing_mono_song">Ez a dal monó: a gyors mód nem tudja kivenni belőle az éneket, ezért úgy szól, ahogy van.</string>
     <string name="tv_sing_measured">Ez a tévé a lejátszásuknál %1$s×-ször gyorsabban választja szét a dalokat.</string>

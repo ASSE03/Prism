@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism ต้องใช้กล้องเพื่อสแกนรหัส</string>
     <string name="allow_the_camera">อนุญาตให้ใช้กล้อง</string>
     <string name="customize_home">ปรับแต่งหน้าแรก</string>
+    <string name="tv_home_editor_how">กด OK เพื่อแสดงหรือซ่อนแถว หากต้องการย้าย ให้เลือก ย้าย ข้างแถว (หรือกด OK ค้าง) แล้วกดขึ้นหรือลง</string>
+    <string name="tv_home_moving">กำลังย้าย %1$s: ขึ้นและลงเพื่อเลื่อน OK เพื่อวาง</string>
+    <string name="tv_home_move">ย้าย %1$s</string>
+    <string name="tv_home_back_to_default">กลับเป็นค่าเริ่มต้น</string>
+    <string name="tv_home_hidden_count">ซ่อนอยู่: %1$d</string>
     <string name="top_of_home">ด้านบนของหน้าแรก</string>
     <string name="show_your_name">แสดงชื่อของคุณ</string>
     <string name="height">ความสูง</string>
@@ -3997,6 +4002,7 @@
     <string name="tv_update_ready">Prism %1$s พร้อมแล้ว</string>
     <string name="tv_update_note">ติดตั้งตอนนี้: Android จะขออนุญาตเพียงครั้งเดียว</string>
     <string name="tv_up_next_line">ถัดไป: %1$s</string>
+    <string name="tv_seek_line">ตำแหน่งในเพลง: %1$s จาก %2$s</string>
     <string name="tv_playing_from">กำลังเล่นจาก %1$s</string>
     <string name="tv_vocals_out">ไม่มีเสียงร้อง</string>
     <string name="tv_key_line">คีย์: %1$s</string>
@@ -4007,7 +4013,6 @@
     <string name="tv_sign_in_with_phone">ลงชื่อเข้าใช้ด้วยโทรศัพท์</string>
     <string name="tv_continue_without_account">ดำเนินการต่อโดยไม่มีบัญชี</string>
     <string name="tv_pair_step_open">เปิด Prism บนโทรศัพท์ โดยใช้ Wi-Fi เดียวกับทีวีเครื่องนี้</string>
-    <string name="tv_pair_step_pick">เลือก %1$s เมื่อโทรศัพท์แสดงขึ้นมา</string>
     <string name="tv_pair_step_code">ป้อนรหัสนี้บนโทรศัพท์</string>
     <string name="tv_pair_qr">หรือสแกนด้วยกล้องของโทรศัพท์</string>
     <string name="tv_no_voice">ทีวีเครื่องนี้ค้นหาด้วยเสียงไม่ได้: พิมพ์ด้วยแป้นพิมพ์แทน</string>
@@ -4075,6 +4080,10 @@
     <string name="tour_180_silence">ตัดช่วงเงียบจะตัดเฉพาะต้นเพลงและท้ายเพลงเท่านั้น</string>
     <string name="tour_180_normalize">ระดับเสียงเท่ากันช่วยลดความต่างของเสียงระหว่างเพลง</string>
     <string name="tour_180_size">ดาวน์โหลดเล็กลง</string>
+    <string name="tv_library_signed_out">ลงชื่อเข้าใช้เพื่อดูเพลย์ลิสต์ อัลบั้ม ศิลปิน และเพลงที่ชอบจาก YouTube Music ที่นี่</string>
+    <string name="tv_search_how">กด OK ที่บรรทัดค้นหาเพื่อพิมพ์ด้วยรีโมต</string>
+    <string name="tv_search_voice_how">หรือเลือกไมโครโฟนข้างๆ แล้วพูดชื่อเพลง ศิลปิน หรืออัลบั้ม</string>
+    <string name="tv_pair_step_find">บนโทรศัพท์ ใน Prism แตะบรรทัดอุปกรณ์ใต้ปุ่มควบคุม (หรือเปิดการตั้งค่า → ลำโพง ทีวี และเบราว์เซอร์) แล้วเลือก %1$s</string>
     <string name="sing_quick_slow">โทรศัพท์เครื่องนี้ช้าเกินไปสำหรับการแยกเสียงแบบเต็ม ร้องตามจึงใช้วิธีด่วน: เอาเสียงที่อยู่ตรงกลางของมิกซ์ออก ซึ่งมักเป็นตำแหน่งของเสียงร้อง ผลจะไม่สะอาดเท่า และเพลงโมโนจะเล่นตามเดิม</string>
     <string name="sing_mono_song">เพลงนี้เป็นโมโน: วิธีด่วนเอาเสียงร้องออกไม่ได้ จึงเล่นตามเดิม</string>
     <string name="tv_sing_measured">ทีวีเครื่องนี้แยกเสียงเพลงได้เร็ว %1$s เท่าของความเร็วที่เพลงเล่น</string>

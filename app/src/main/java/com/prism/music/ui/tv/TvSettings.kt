@@ -56,16 +56,23 @@ fun TvSettingsScreen(
     focusedSetting: Int? = null,
 ) {
     val scheme = MaterialTheme.colorScheme
+    val light = tvLight()
     Row(modifier.fillMaxSize().padding(start = 48.dp, top = 27.dp, bottom = 27.dp).testTag(TAG_SETTINGS)) {
         LazyColumn(Modifier.width(300.dp).fillMaxHeight().rememberedFocus(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             itemsIndexed(groups) { i, g ->
                 ListItem(
                     selected = i == group,
                     onClick = { onGroup(i) },
-                    modifier = Modifier.tvItem("$TAG_SETTINGS/group/$i", entry = i == group && focusedSetting == null).onFocusChanged { if (it.isFocused && i != group) onGroup(i) },
+                    modifier = Modifier.tvCurrentMark(i == group, light).tvItem("$TAG_SETTINGS/group/$i", entry = i == group && focusedSetting == null).onFocusChanged { if (it.isFocused && i != group) onGroup(i) },
                     leadingContent = { Icon(g.icon, null, Modifier.size(22.dp)) },
                     headlineContent = { Text(g.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                    colors = ListItemDefaults.colors(selectedContainerColor = scheme.surfaceVariant, focusedContainerColor = scheme.onSurface, focusedContentColor = scheme.surface),
+                    colors = ListItemDefaults.colors(
+                        selectedContainerColor = TvGlassFill, focusedContainerColor = scheme.onSurface, focusedContentColor = scheme.surface,
+                        focusedSelectedContainerColor = scheme.onSurface, focusedSelectedContentColor = scheme.surface,
+                    ),
+                    shape = ListItemDefaults.shape(TvShapes.card),
+                    border = ListItemDefaults.border(focusedBorder = tvFocusBorder(TvShapes.card, TV_RING_THIN)),
+
                 )
             }
         }
@@ -74,7 +81,7 @@ fun TvSettingsScreen(
         // Right from the groups enters a group's settings at its first one (the design's path), whatever its height.
         val firstSetting = androidx.compose.runtime.remember { androidx.compose.ui.focus.FocusRequester() }
         LazyColumn(
-            Modifier.weight(1f).fillMaxHeight().background(scheme.surface.copy(alpha = 0.6f), RoundedCornerShape(topStart = 18.dp, bottomStart = 18.dp)).padding(20.dp)
+            Modifier.weight(1f).fillMaxHeight().tvGlass(TvShapes.panelStart).padding(20.dp)
                 .focusProperties { onEnter = { firstSetting.requestFocus() } }.focusGroup(),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
@@ -88,6 +95,8 @@ fun TvSettingsScreen(
                         supportingContent = s.value?.let { { Text(it, maxLines = 1, overflow = TextOverflow.Ellipsis) } },
                         trailingContent = s.on?.let { on -> { Switch(checked = on, onCheckedChange = null) } },
                         colors = ListItemDefaults.colors(containerColor = Color.Transparent, focusedContainerColor = scheme.onSurface, focusedContentColor = scheme.surface),
+                        shape = ListItemDefaults.shape(TvShapes.card),
+                        border = ListItemDefaults.border(focusedBorder = tvFocusBorder(TvShapes.card, TV_RING_THIN)),
                     )
                     if (s.info != null) {
                         Spacer(Modifier.width(8.dp))
@@ -103,7 +112,7 @@ fun TvSettingsScreen(
 @Composable
 fun TvInfoCard(title: String, text: String, modifier: Modifier = Modifier) {
     val scheme = MaterialTheme.colorScheme
-    Column(modifier.width(520.dp).background(scheme.surfaceVariant, RoundedCornerShape(20.dp)).padding(32.dp).testTag("$TAG_SETTINGS/infocard")) {
+    Column(modifier.width(520.dp).tvGlass(TvShapes.panel, TvPanelFill).padding(32.dp).testTag("$TAG_SETTINGS/infocard")) {
         Text(title, style = MaterialTheme.typography.headlineSmall, color = scheme.onSurface)
         Spacer(Modifier.size(12.dp))
         Text(text, style = MaterialTheme.typography.bodyLarge, color = scheme.onSurfaceVariant)

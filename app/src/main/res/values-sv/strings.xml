@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism behöver kameran för att skanna en kod</string>
     <string name="allow_the_camera">Tillåt kameran</string>
     <string name="customize_home">Anpassa Hem</string>
+    <string name="tv_home_editor_how">OK visar eller döljer en rad. För att flytta den väljer du Flytta bredvid (eller håller ned OK), sedan Upp eller Ned.</string>
+    <string name="tv_home_moving">Flyttar %1$s: Upp och Ned bär den, OK släpper den.</string>
+    <string name="tv_home_move">Flytta %1$s</string>
+    <string name="tv_home_back_to_default">Tillbaka till standard</string>
+    <string name="tv_home_hidden_count">Dolda: %1$d</string>
     <string name="top_of_home">Överst på Hem</string>
     <string name="show_your_name">Visa ditt namn</string>
     <string name="height">Höjd</string>
@@ -4047,6 +4052,7 @@
     <string name="tv_update_ready">Prism %1$s är redo</string>
     <string name="tv_update_note">Installera nu: Android frågar om lov bara en gång</string>
     <string name="tv_up_next_line">Härnäst: %1$s</string>
+    <string name="tv_seek_line">Position i låten: %1$s av %2$s</string>
     <string name="tv_playing_from">Spelas från %1$s</string>
     <string name="tv_vocals_out">Utan sång</string>
     <string name="tv_key_line">Tonart: %1$s</string>
@@ -4057,7 +4063,6 @@
     <string name="tv_sign_in_with_phone">Logga in med telefonen</string>
     <string name="tv_continue_without_account">Fortsätt utan konto</string>
     <string name="tv_pair_step_open">Öppna Prism i telefonen, på samma wifi som den här tv:n</string>
-    <string name="tv_pair_step_pick">Välj %1$s när telefonen visar den</string>
     <string name="tv_pair_step_code">Ange den här koden i telefonen</string>
     <string name="tv_pair_qr">Eller skanna den med telefonens kamera</string>
     <string name="tv_no_voice">Den här tv:n kan inte söka med rösten: skriv med tangentbordet</string>
@@ -4125,6 +4130,10 @@
     <string name="tour_180_silence">Ta bort tystnad rör bara en låts början och slut</string>
     <string name="tour_180_normalize">Samma ljudstyrka jämnar ut stora hopp mellan låtar</string>
     <string name="tour_180_size">En mindre nedladdning</string>
+    <string name="tv_library_signed_out">Logga in för att se dina spellistor, album, artister och gillade låtar från YouTube Music här.</string>
+    <string name="tv_search_how">Tryck på OK på sökraden för att skriva med fjärrkontrollen.</string>
+    <string name="tv_search_voice_how">Eller välj mikrofonen bredvid och säg en låt, artist eller ett album.</string>
+    <string name="tv_pair_step_find">Tryck på telefonen i Prism på enhetsraden under kontrollerna (eller öppna Inställningar → Högtalare, tv-apparater &amp; webbläsare) och välj %1$s</string>
     <string name="sing_quick_slow">Den här telefonen är för långsam för den fullständiga separeringen, så Sjung använder det snabba sättet: det tar bort det som ligger mitt i mixen, där rösten brukar ligga. Det blir mindre rent, och en monolåt förblir som den är.</string>
     <string name="sing_mono_song">Den här låten är i mono: det snabba sättet kan inte ta bort rösten, så den spelas som den är.</string>
     <string name="tv_sing_measured">Den här tv:n separerar låtar %1$s× så snabbt som de spelas.</string>

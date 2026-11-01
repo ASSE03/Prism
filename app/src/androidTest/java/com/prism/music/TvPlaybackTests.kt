@@ -59,6 +59,25 @@ class TvPlaybackTests {
         waitFor(20_000) { player.currentIndex.value == from && player.isPlaying.value }
     }
 
+    /**
+     * The real TV's feedback (1.8.0): Left from the hero's first button opens the side navigation (it fell to a card
+     * below), and the navigation's "Now playing" opens the player from any place.
+     */
+    @Test fun theSideNavigationLeadsBackToThePlayer() {
+        lineUp()
+        TvFixture.launch()
+        compose.awaitFocusOn(hasTestTag("$TAG_HOME/player"), 15_000)
+        TvFixture.left()
+        compose.awaitFocusOn(hasTestTag("$TAG_HOME/playpause"))
+        TvFixture.left()
+        compose.awaitFocusOn(hasTestTag("${com.prism.music.ui.tv.TAG_NAV}/HOME"), 10_000)
+        // Down past the places to "Now playing".
+        repeat(4) { TvFixture.down(); Thread.sleep(250) }
+        compose.awaitFocusOn(hasTestTag(com.prism.music.ui.tv.TAG_NAV_NOW))
+        TvFixture.ok()
+        compose.awaitFocusOn(hasTestTag("$TAG_PLAYER/playpause"), 10_000)
+    }
+
     /** The review (1.8.0): far down a long queue, the queue still opens on the next song, and OK plays it. */
     @Test fun aLongQueueOpensOnTheNextSongFarDownAndPlaysIt() {
         lineUp(times = 15, from = 20)

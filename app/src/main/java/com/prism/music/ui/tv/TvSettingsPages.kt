@@ -59,6 +59,7 @@ fun TvSettingsPlace(nav: TvNav) {
     var group by rememberSaveable { mutableIntStateOf(0) }
     var choosing by remember { mutableStateOf<Pair<String, List<Pair<String, () -> Unit>>>?>(null) }
     var info by remember { mutableStateOf<TvSetting?>(null) }
+    var pickingLight by remember { mutableStateOf(false) }
     val say: (String) -> Unit = { Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
     // For an answer that may come after Settings has closed.
     val app = context.applicationContext
@@ -68,7 +69,8 @@ fun TvSettingsPlace(nav: TvNav) {
     val groups: List<Pair<TvSettingGroup, List<TvSettingRow>>> = listOf(
         TvSettingGroup(tr(R.string.account), PrismIcons.Person, emptyList()) to buildList {
             if (settings.isLoggedIn) add(TvSettingRow(TvSetting(tr(R.string.tv_signed_in_as, settings.accountName.ifBlank { settings.accountEmail }), settings.accountEmail.takeIf { it.isNotBlank() }), TvSettingAction.Run {}))
-            else add(TvSettingRow(TvSetting(tr(R.string.tv_not_signed_in)), TvSettingAction.Run {}))
+            // Not signed in: OK signs in with the phone (it isn't a row that does nothing).
+            else add(TvSettingRow(TvSetting(tr(R.string.tv_not_signed_in), tr(R.string.tv_sign_in_with_phone)), TvSettingAction.Run { nav.go(TvRoute.Pair(signIn = true)) }))
             add(TvSettingRow(TvSetting(tr(R.string.tv_sign_in_with_phone)), TvSettingAction.Run { nav.go(TvRoute.Pair(signIn = true)) }))
             add(TvSettingRow(TvSetting(tr(R.string.tv_phone_as_remote)), TvSettingAction.Run { nav.go(TvRoute.Pair(signIn = false)) }))
             if (settings.isLoggedIn) add(TvSettingRow(TvSetting(tr(R.string.sign_out)), TvSettingAction.Choose(listOf(tr(R.string.sign_out) to { tvSignOut(c) }))))
@@ -109,8 +111,19 @@ fun TvSettingsPlace(nav: TvNav) {
                 TvSettingAction.Choose(AMBIENT_MINUTES.map { m -> tr(R.string.tv_ambient_after, m) to { c.settings.setTvAmbientMinutes(m) } } + (tr(R.string.never) to { c.settings.setTvAmbientMinutes(0) })),
             ),
         ),
+        // Home's rows: shown or hidden, in what order (also from the end of Home itself); the editor is TvHomeEditor.
+        TvSettingGroup(tr(R.string.home), PrismIcons.Home, emptyList()) to listOf(
+            TvSettingRow(
+                TvSetting(tr(R.string.customize_home), TvHomeLayout.hiddenCount(settings.tv.homeLayout, settings.homeLayout).takeIf { it > 0 }?.let { tr(R.string.tv_home_hidden_count, it) }),
+                TvSettingAction.Run { nav.go(TvRoute.HomeEditor) },
+            ),
+        ),
         TvSettingGroup(tr(R.string.text_size), PrismIcons.Visible, emptyList()) to listOf(
             TvSettingRow(TvSetting(tr(R.string.text_size), percent(settings.textScale)), TvSettingAction.Choose(SIZES.map { v -> percent(v) to { c.settings.setTextScale(v) } })),
+        ),
+        // The highlights' light: Spectrum or White light (monochrome), the phone's own Color setting.
+        TvSettingGroup(tr(R.string.colors), PrismIcons.Palette, emptyList()) to listOf(
+            TvSettingRow(TvSetting(tr(R.string.colors), settings.lightStyle.label), TvSettingAction.Run { pickingLight = true }),
         ),
         TvSettingGroup(tr(R.string.about_3), PrismIcons.Info, emptyList()) to listOf(
             TvSettingRow(TvSetting(tr(R.string.tv_version, BuildConfig.VERSION_NAME)), TvSettingAction.Run {}),
@@ -137,6 +150,10 @@ fun TvSettingsPlace(nav: TvNav) {
             TvPanelBox(LocalTvScreen.current + "/choice") {
                 TvActionPanel(title, options.map { (label, pick) -> TvAction(label, PrismIcons.Check) { pick(); choosing = null } })
             }
+        }
+        if (pickingLight) {
+            BackHandler { pickingLight = false }
+            TvPanelBox(LocalTvScreen.current + "/light") { TvLightChoice(settings.lightStyle) { c.settings.setLightStyle(it); pickingLight = false } }
         }
         info?.let { s ->
             BackHandler { info = null }

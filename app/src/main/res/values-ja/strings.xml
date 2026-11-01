@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">コードをスキャンするには Prism にカメラの許可が必要です</string>
     <string name="allow_the_camera">カメラを許可</string>
     <string name="customize_home">ホームをカスタマイズ</string>
+    <string name="tv_home_editor_how">OKで行を表示/非表示にします。移動するには横の「移動」を選ぶ（またはOKを長押し）と、上下で動かせます。</string>
+    <string name="tv_home_moving">%1$sを移動中：上下で動かし、OKで置きます。</string>
+    <string name="tv_home_move">%1$sを移動</string>
+    <string name="tv_home_back_to_default">デフォルトに戻す</string>
+    <string name="tv_home_hidden_count">非表示：%1$d</string>
     <string name="top_of_home">ホームの上部</string>
     <string name="show_your_name">名前を表示</string>
     <string name="height">高さ</string>
@@ -3997,6 +4002,7 @@
     <string name="tv_update_ready">Prism %1$s の準備ができました</string>
     <string name="tv_update_note">今すぐインストール：Android が許可を求めるのは最初の 1 回だけです</string>
     <string name="tv_up_next_line">次の曲：%1$s</string>
+    <string name="tv_seek_line">曲の位置：%1$s / %2$s</string>
     <string name="tv_playing_from">再生元：%1$s</string>
     <string name="tv_vocals_out">ボーカルなし</string>
     <string name="tv_key_line">キー：%1$s</string>
@@ -4007,7 +4013,6 @@
     <string name="tv_sign_in_with_phone">スマートフォンでログイン</string>
     <string name="tv_continue_without_account">アカウントなしで続ける</string>
     <string name="tv_pair_step_open">このテレビと同じ Wi-Fi で、スマートフォンの Prism を開きます</string>
-    <string name="tv_pair_step_pick">スマートフォンに %1$s が表示されたら選びます</string>
     <string name="tv_pair_step_code">スマートフォンにこのコードを入力します</string>
     <string name="tv_pair_qr">またはスマートフォンのカメラで読み取ります</string>
     <string name="tv_no_voice">このテレビは音声で検索できません：キーボードで入力してください</string>
@@ -4075,6 +4080,10 @@
     <string name="tour_180_silence">無音部分のカットは曲の最初と最後だけに作用します</string>
     <string name="tour_180_normalize">すべての曲を同じ音量にすると、曲ごとの大きな音量差がならされます</string>
     <string name="tour_180_size">ダウンロードサイズが小さくなりました</string>
+    <string name="tv_library_signed_out">ログインすると、YouTube Music のプレイリスト、アルバム、アーティスト、高く評価した曲がここに表示されます。</string>
+    <string name="tv_search_how">検索欄で OK を押すと、リモコンで入力できます。</string>
+    <string name="tv_search_voice_how">または横のマイクを選んで、曲名、アーティスト、アルバムを話してください。</string>
+    <string name="tv_pair_step_find">スマートフォンの Prism で、コントロールの下のデバイス表示をタップし（または［設定］→［スピーカー、テレビ、ブラウザ］を開き）、%1$s を選びます</string>
     <string name="sing_quick_slow">このスマホは完全な分離には遅すぎるため、シングは簡易モードを使います：ふつう歌声がある、ミックスの中央の音を取り除きます。仕上がりはやや粗く、モノラルの曲はそのままです。</string>
     <string name="sing_mono_song">この曲はモノラルです：簡易モードでは歌声を取り除けないため、そのまま再生されます。</string>
     <string name="tv_sing_measured">このテレビは再生速度の%1$s倍の速さで曲を分離します。</string>

@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism a besoin de l’appareil photo pour scanner un code</string>
     <string name="allow_the_camera">Autoriser l’appareil photo</string>
     <string name="customize_home">Personnaliser l’accueil</string>
+    <string name="tv_home_editor_how">OK affiche ou masque une rangée. Pour la déplacer, choisissez Déplacer à côté (ou maintenez OK), puis Haut ou Bas.</string>
+    <string name="tv_home_moving">Déplacement de %1$s : Haut et Bas la déplacent, OK la pose.</string>
+    <string name="tv_home_move">Déplacer %1$s</string>
+    <string name="tv_home_back_to_default">Rétablir par défaut</string>
+    <string name="tv_home_hidden_count">Masquées : %1$d</string>
     <string name="top_of_home">Haut de l’accueil</string>
     <string name="show_your_name">Afficher votre nom</string>
     <string name="height">Hauteur</string>
@@ -4097,6 +4102,7 @@
     <string name="tv_update_ready">Prism %1$s est prêt</string>
     <string name="tv_update_note">Installez-le maintenant : Android ne demande l\'autorisation qu\'une fois</string>
     <string name="tv_up_next_line">À suivre : %1$s</string>
+    <string name="tv_seek_line">Position dans le titre : %1$s sur %2$s</string>
     <string name="tv_playing_from">Lecture depuis %1$s</string>
     <string name="tv_vocals_out">Sans la voix</string>
     <string name="tv_key_line">Tonalité : %1$s</string>
@@ -4107,7 +4113,6 @@
     <string name="tv_sign_in_with_phone">Se connecter avec votre téléphone</string>
     <string name="tv_continue_without_account">Continuer sans compte</string>
     <string name="tv_pair_step_open">Ouvrez Prism sur votre téléphone, sur le même Wi-Fi que ce téléviseur</string>
-    <string name="tv_pair_step_pick">Choisissez %1$s quand votre téléphone l\'affiche</string>
     <string name="tv_pair_step_code">Saisissez ce code sur votre téléphone</string>
     <string name="tv_pair_qr">Ou scannez-le avec l\'appareil photo de votre téléphone</string>
     <string name="tv_no_voice">Ce téléviseur ne peut pas chercher à la voix : utilisez plutôt le clavier</string>
@@ -4175,6 +4180,10 @@
     <string name="tour_180_silence">Couper le silence ne touche que le début et la fin d’un titre</string>
     <string name="tour_180_normalize">Même volume atténue les gros écarts entre les titres</string>
     <string name="tour_180_size">Un téléchargement plus léger</string>
+    <string name="tv_library_signed_out">Connectez-vous pour voir ici vos playlists, albums, artistes et titres aimés de YouTube Music.</string>
+    <string name="tv_search_how">Appuyez sur OK sur la ligne de recherche pour taper avec la télécommande.</string>
+    <string name="tv_search_voice_how">Ou choisissez le micro à côté et dites un titre, un artiste ou un album.</string>
+    <string name="tv_pair_step_find">Sur votre téléphone, dans Prism, appuyez sur la ligne d’appareil sous les commandes (ou ouvrez Réglages → Enceintes, TV et navigateur) et choisissez %1$s</string>
     <string name="sing_quick_slow">Ce téléphone est trop lent pour la séparation complète, donc Chanter utilise la méthode rapide : il retire ce qui est au centre du mixage, là où se trouve d\'habitude la voix. C\'est moins net, et une chanson mono reste telle quelle.</string>
     <string name="sing_mono_song">Cette chanson est en mono : la méthode rapide ne peut pas en retirer la voix, elle est donc jouée telle quelle.</string>
     <string name="tv_sing_measured">Ce téléviseur sépare les chansons %1$s× plus vite qu\'elles ne se jouent.</string>

@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism צריך את המצלמה כדי לסרוק קוד</string>
     <string name="allow_the_camera">אישור גישה למצלמה</string>
     <string name="customize_home">התאמה אישית של דף הבית</string>
+    <string name="tv_home_editor_how">OK מציג או מסתיר שורה. כדי להזיז אותה, בחרו הזזה לידה (או החזיקו את OK), ואז למעלה או למטה.</string>
+    <string name="tv_home_moving">מזיזים את %1$s: למעלה ולמטה מזיזים, OK מניח.</string>
+    <string name="tv_home_move">הזזת %1$s</string>
+    <string name="tv_home_back_to_default">חזרה לברירת המחדל</string>
+    <string name="tv_home_hidden_count">מוסתרות: %1$d</string>
     <string name="top_of_home">ראש דף הבית</string>
     <string name="show_your_name">הצגת השם שלך</string>
     <string name="height">גובה</string>
@@ -4097,6 +4102,7 @@
     <string name="tv_update_ready">‏Prism %1$s מוכנה</string>
     <string name="tv_update_note">אפשר להתקין עכשיו: Android מבקשת אישור פעם אחת בלבד</string>
     <string name="tv_up_next_line">הבא בתור: %1$s</string>
+    <string name="tv_seek_line">מיקום בשיר: %1$s מתוך %2$s</string>
     <string name="tv_playing_from">מתנגן מתוך %1$s</string>
     <string name="tv_vocals_out">בלי שירה</string>
     <string name="tv_key_line">סולם: %1$s</string>
@@ -4107,7 +4113,6 @@
     <string name="tv_sign_in_with_phone">כניסה עם הטלפון</string>
     <string name="tv_continue_without_account">המשך בלי חשבון</string>
     <string name="tv_pair_step_open">פתחו את Prism בטלפון, באותה רשת Wi-Fi של הטלוויזיה הזו</string>
-    <string name="tv_pair_step_pick">בחרו ב-%1$s כשהטלפון מציג אותה</string>
     <string name="tv_pair_step_code">הזינו את הקוד הזה בטלפון</string>
     <string name="tv_pair_qr">או סרקו אותו במצלמת הטלפון</string>
     <string name="tv_no_voice">הטלוויזיה הזו לא יכולה לחפש בקול: הקלידו במקלדת</string>
@@ -4175,6 +4180,10 @@
     <string name="tour_180_silence">חיתוך שקט נוגע רק בהתחלה ובסוף של שיר</string>
     <string name="tour_180_normalize">אותה עוצמה מאזנת קפיצות גדולות בין שירים</string>
     <string name="tour_180_size">הורדה קטנה יותר</string>
+    <string name="tv_library_signed_out">אפשר להתחבר כדי לראות כאן את הפלייליסטים, האלבומים, האומנים והשירים שאהבת ב-YouTube Music.</string>
+    <string name="tv_search_how">לחיצה על OK בשורת החיפוש מאפשרת להקליד עם השלט.</string>
+    <string name="tv_search_voice_how">אפשר גם לבחור במיקרופון שלידה ולומר שם של שיר, אומן או אלבום.</string>
+    <string name="tv_pair_step_find">בטלפון, ב-Prism, יש להקיש על שורת המכשיר שמתחת לפקדים (או לפתוח את הגדרות ← רמקולים, טלוויזיות ודפדפן) ולבחור ב-%1$s</string>
     <string name="sing_quick_slow">הטלפון הזה איטי מדי להפרדה המלאה, לכן שירה משתמשת בדרך המהירה: היא מסירה את מה שנמצא באמצע המיקס, היכן שהקול נמצא בדרך כלל. התוצאה פחות נקייה, ושיר מונו נשאר כמו שהוא.</string>
     <string name="sing_mono_song">השיר הזה במונו: הדרך המהירה לא יכולה להסיר ממנו את הקול, לכן הוא מתנגן כמו שהוא.</string>
     <string name="tv_sing_measured">הטלוויזיה הזו מפרידה שירים פי %1$s מהר יותר מקצב ההשמעה שלהם.</string>

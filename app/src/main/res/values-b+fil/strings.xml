@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Kailangan ng Prism ang camera para mag-scan ng code</string>
     <string name="allow_the_camera">Payagan ang camera</string>
     <string name="customize_home">I-customize ang Home</string>
+    <string name="tv_home_editor_how">Ipinapakita o itinatago ng OK ang isang row. Para ilipat ito, piliin ang Ilipat sa tabi nito (o pindutin nang matagal ang OK), saka Taas o Baba.</string>
+    <string name="tv_home_moving">Inililipat ang %1$s: dinadala ito ng Taas at Baba, inilalapag ito ng OK.</string>
+    <string name="tv_home_move">Ilipat ang %1$s</string>
+    <string name="tv_home_back_to_default">Ibalik sa default</string>
+    <string name="tv_home_hidden_count">Nakatago: %1$d</string>
     <string name="top_of_home">Itaas ng Home</string>
     <string name="show_your_name">Ipakita ang pangalan mo</string>
     <string name="height">Taas</string>
@@ -4047,6 +4052,7 @@
     <string name="tv_update_ready">Handa na ang Prism %1$s</string>
     <string name="tv_update_note">I-install na ngayon: minsan lang hihingi ng pahintulot ang Android</string>
     <string name="tv_up_next_line">Susunod: %1$s</string>
+    <string name="tv_seek_line">Posisyon sa kanta: %1$s sa %2$s</string>
     <string name="tv_playing_from">Tumutugtog mula sa %1$s</string>
     <string name="tv_vocals_out">Walang boses</string>
     <string name="tv_key_line">Key: %1$s</string>
@@ -4057,7 +4063,6 @@
     <string name="tv_sign_in_with_phone">Mag-sign in gamit ang phone mo</string>
     <string name="tv_continue_without_account">Magpatuloy nang walang account</string>
     <string name="tv_pair_step_open">Buksan ang Prism sa phone mo, sa parehong Wi-Fi ng TV na ito</string>
-    <string name="tv_pair_step_pick">Piliin ang %1$s kapag lumabas ito sa phone mo</string>
     <string name="tv_pair_step_code">Ilagay ang code na ito sa phone mo</string>
     <string name="tv_pair_qr">O i-scan ito gamit ang camera ng phone mo</string>
     <string name="tv_no_voice">Hindi makakapaghanap gamit ang boses ang TV na ito: gamitin ang keyboard</string>
@@ -4125,6 +4130,10 @@
     <string name="tour_180_silence">Ang pagtanggal ng katahimikan ay sa simula at dulo lang ng kanta</string>
     <string name="tour_180_normalize">Pinapantay ng parehong lakas ng tunog ang malalaking pagtalon sa pagitan ng mga kanta</string>
     <string name="tour_180_size">Mas maliit na download</string>
+    <string name="tv_library_signed_out">Mag-sign in para makita rito ang mga playlist, album, artist at gusto mong kanta mula sa YouTube Music.</string>
+    <string name="tv_search_how">Pindutin ang OK sa linya ng paghahanap para mag-type gamit ang remote.</string>
+    <string name="tv_search_voice_how">O piliin ang mikropono sa tabi nito at sabihin ang kanta, artist o album.</string>
+    <string name="tv_pair_step_find">Sa phone mo, sa Prism, i-tap ang linya ng device sa ilalim ng mga kontrol (o buksan ang Settings → Mga speaker, TV at browser) at piliin ang %1$s</string>
     <string name="sing_quick_slow">Masyadong mabagal ang phone na ito para sa buong paghihiwalay, kaya ginagamit ng Kumanta ang mabilis na paraan: inaalis nito ang nasa gitna ng mix, kung saan karaniwang naroon ang boses. Hindi ito kasinglinis, at mananatili ang mono na kanta kung ano ito.</string>
     <string name="sing_mono_song">Mono ang kantang ito: hindi maalis ng mabilis na paraan ang boses nito, kaya tutugtog ito nang ganoon pa rin.</string>
     <string name="tv_sing_measured">Naghihiwalay ang TV na ito ng mga kanta nang %1$s× kasing-bilis ng pagtugtog nila.</string>

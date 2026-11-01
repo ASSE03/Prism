@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">O Prism precisa da câmara para ler um código</string>
     <string name="allow_the_camera">Permitir a câmara</string>
     <string name="customize_home">Personalizar o Início</string>
+    <string name="tv_home_editor_how">OK mostra ou oculta uma fila. Para a mover, escolha Mover ao lado (ou mantenha OK premido) e depois Cima ou Baixo.</string>
+    <string name="tv_home_moving">A mover %1$s: Cima e Baixo levam-na, OK pousa-a.</string>
+    <string name="tv_home_move">Mover %1$s</string>
+    <string name="tv_home_back_to_default">Repor predefinição</string>
+    <string name="tv_home_hidden_count">Ocultas: %1$d</string>
     <string name="top_of_home">Topo do Início</string>
     <string name="show_your_name">Mostrar o teu nome</string>
     <string name="height">Altura</string>
@@ -4097,6 +4102,7 @@
     <string name="tv_update_ready">O Prism %1$s está pronto</string>
     <string name="tv_update_note">Instale agora: o Android pede autorização só uma vez</string>
     <string name="tv_up_next_line">A seguir: %1$s</string>
+    <string name="tv_seek_line">Posição na música: %1$s de %2$s</string>
     <string name="tv_playing_from">A tocar de %1$s</string>
     <string name="tv_vocals_out">Sem voz</string>
     <string name="tv_key_line">Tom: %1$s</string>
@@ -4107,7 +4113,6 @@
     <string name="tv_sign_in_with_phone">Iniciar sessão com o telemóvel</string>
     <string name="tv_continue_without_account">Continuar sem conta</string>
     <string name="tv_pair_step_open">Abra o Prism no telemóvel, na mesma rede Wi-Fi desta TV</string>
-    <string name="tv_pair_step_pick">Escolha %1$s quando o telemóvel a mostrar</string>
     <string name="tv_pair_step_code">Introduza este código no telemóvel</string>
     <string name="tv_pair_qr">Ou digitalize-o com a câmara do telemóvel</string>
     <string name="tv_no_voice">Esta TV não pesquisa por voz: escreva com o teclado</string>
@@ -4175,6 +4180,10 @@
     <string name="tour_180_silence">Cortar o silêncio só mexe no início e no fim da música</string>
     <string name="tour_180_normalize">O mesmo volume suaviza os grandes saltos entre músicas</string>
     <string name="tour_180_size">Uma transferência mais pequena</string>
+    <string name="tv_library_signed_out">Inicie sessão para ver aqui as suas playlists, álbuns, artistas e músicas de que gosta no YouTube Music.</string>
+    <string name="tv_search_how">Prima OK na linha de pesquisa para escrever com o comando.</string>
+    <string name="tv_search_voice_how">Ou escolha o microfone ao lado e diga uma música, um artista ou um álbum.</string>
+    <string name="tv_pair_step_find">No telemóvel, no Prism, toque na linha do dispositivo por baixo dos controlos (ou abra Definições → Altifalantes, TVs e browser) e escolha %1$s</string>
     <string name="sing_quick_slow">Este telemóvel é demasiado lento para a separação completa, por isso o Cantar usa o modo rápido: retira o que está no centro da mistura, onde a voz costuma estar. É menos limpo, e uma música mono fica como está.</string>
     <string name="sing_mono_song">Esta música é mono: o modo rápido não consegue retirar-lhe a voz, por isso toca como está.</string>
     <string name="tv_sing_measured">Esta TV separa as músicas %1$s× mais depressa do que elas tocam.</string>

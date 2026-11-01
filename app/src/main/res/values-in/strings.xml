@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism perlu kamera untuk memindai kode</string>
     <string name="allow_the_camera">Izinkan kamera</string>
     <string name="customize_home">Sesuaikan Beranda</string>
+    <string name="tv_home_editor_how">OK menampilkan atau menyembunyikan baris. Untuk memindahkannya, pilih Pindahkan di sebelahnya (atau tahan OK), lalu Atas atau Bawah.</string>
+    <string name="tv_home_moving">Memindahkan %1$s: Atas dan Bawah membawanya, OK meletakkannya.</string>
+    <string name="tv_home_move">Pindahkan %1$s</string>
+    <string name="tv_home_back_to_default">Kembali ke default</string>
+    <string name="tv_home_hidden_count">Tersembunyi: %1$d</string>
     <string name="top_of_home">Bagian atas Beranda</string>
     <string name="show_your_name">Tampilkan namamu</string>
     <string name="height">Tinggi</string>
@@ -3997,6 +4002,7 @@
     <string name="tv_update_ready">Prism %1$s sudah siap</string>
     <string name="tv_update_note">Pasang sekarang: Android hanya meminta izin sekali</string>
     <string name="tv_up_next_line">Berikutnya: %1$s</string>
+    <string name="tv_seek_line">Posisi lagu: %1$s dari %2$s</string>
     <string name="tv_playing_from">Diputar dari %1$s</string>
     <string name="tv_vocals_out">Tanpa vokal</string>
     <string name="tv_key_line">Kunci nada: %1$s</string>
@@ -4007,7 +4013,6 @@
     <string name="tv_sign_in_with_phone">Masuk dengan ponsel Anda</string>
     <string name="tv_continue_without_account">Lanjutkan tanpa akun</string>
     <string name="tv_pair_step_open">Buka Prism di ponsel Anda, di Wi-Fi yang sama dengan TV ini</string>
-    <string name="tv_pair_step_pick">Pilih %1$s saat ponsel Anda menampilkannya</string>
     <string name="tv_pair_step_code">Masukkan kode ini di ponsel Anda</string>
     <string name="tv_pair_qr">Atau pindai dengan kamera ponsel Anda</string>
     <string name="tv_no_voice">TV ini tidak bisa mencari dengan suara: ketik dengan keyboard</string>
@@ -4075,6 +4080,10 @@
     <string name="tour_180_silence">Pangkas hening hanya menyentuh awal dan akhir lagu</string>
     <string name="tour_180_normalize">Kenyaringan sama meratakan lonjakan besar antarlagu</string>
     <string name="tour_180_size">Unduhan lebih kecil</string>
+    <string name="tv_library_signed_out">Masuk untuk melihat playlist, album, artis, dan lagu yang Anda sukai dari YouTube Music di sini.</string>
+    <string name="tv_search_how">Tekan OK pada baris pencarian untuk mengetik dengan remote.</string>
+    <string name="tv_search_voice_how">Atau pilih mikrofon di sebelahnya dan sebutkan lagu, artis, atau album.</string>
+    <string name="tv_pair_step_find">Di ponsel Anda, di Prism, ketuk baris perangkat di bawah kontrol (atau buka Setelan → Speaker, TV &amp; browser) lalu pilih %1$s</string>
     <string name="sing_quick_slow">Ponsel ini terlalu lambat untuk pemisahan penuh, jadi Nyanyi memakai cara cepat: menghapus apa yang ada di tengah campuran, tempat suara biasanya berada. Hasilnya kurang bersih, dan lagu mono tetap apa adanya.</string>
     <string name="sing_mono_song">Lagu ini mono: cara cepat tidak bisa menghapus suaranya, jadi lagu diputar apa adanya.</string>
     <string name="tv_sing_measured">TV ini memisahkan lagu %1$s× lebih cepat daripada lagu diputar.</string>

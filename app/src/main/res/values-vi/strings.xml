@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism cần máy ảnh để quét mã</string>
     <string name="allow_the_camera">Cho phép máy ảnh</string>
     <string name="customize_home">Tùy chỉnh Trang chủ</string>
+    <string name="tv_home_editor_how">OK hiện hoặc ẩn một hàng. Để di chuyển, chọn Di chuyển bên cạnh (hoặc giữ OK), rồi Lên hoặc Xuống.</string>
+    <string name="tv_home_moving">Đang di chuyển %1$s: Lên và Xuống để mang đi, OK để đặt xuống.</string>
+    <string name="tv_home_move">Di chuyển %1$s</string>
+    <string name="tv_home_back_to_default">Về mặc định</string>
+    <string name="tv_home_hidden_count">Đã ẩn: %1$d</string>
     <string name="top_of_home">Đầu Trang chủ</string>
     <string name="show_your_name">Hiện tên của bạn</string>
     <string name="height">Chiều cao</string>
@@ -3997,6 +4002,7 @@
     <string name="tv_update_ready">Prism %1$s đã sẵn sàng</string>
     <string name="tv_update_note">Cài ngay: Android chỉ xin phép một lần</string>
     <string name="tv_up_next_line">Tiếp theo: %1$s</string>
+    <string name="tv_seek_line">Vị trí trong bài hát: %1$s / %2$s</string>
     <string name="tv_playing_from">Đang phát từ %1$s</string>
     <string name="tv_vocals_out">Không lời hát</string>
     <string name="tv_key_line">Tông: %1$s</string>
@@ -4007,7 +4013,6 @@
     <string name="tv_sign_in_with_phone">Đăng nhập bằng điện thoại</string>
     <string name="tv_continue_without_account">Tiếp tục không cần tài khoản</string>
     <string name="tv_pair_step_open">Mở Prism trên điện thoại, cùng mạng Wi-Fi với TV này</string>
-    <string name="tv_pair_step_pick">Chọn %1$s khi điện thoại hiện ra</string>
     <string name="tv_pair_step_code">Nhập mã này trên điện thoại</string>
     <string name="tv_pair_qr">Hoặc quét bằng camera điện thoại</string>
     <string name="tv_no_voice">TV này không tìm bằng giọng nói được: hãy gõ bằng bàn phím</string>
@@ -4075,6 +4080,10 @@
     <string name="tour_180_silence">Cắt khoảng lặng chỉ tác động đến phần đầu và phần cuối của bài hát</string>
     <string name="tour_180_normalize">Âm lượng đồng đều làm dịu những chênh lệch lớn giữa các bài hát</string>
     <string name="tour_180_size">Dung lượng tải xuống nhỏ hơn</string>
+    <string name="tv_library_signed_out">Đăng nhập để xem danh sách phát, album, nghệ sĩ và bài hát đã thích từ YouTube Music tại đây.</string>
+    <string name="tv_search_how">Nhấn OK trên dòng tìm kiếm để nhập bằng điều khiển.</string>
+    <string name="tv_search_voice_how">Hoặc chọn micrô bên cạnh và nói tên bài hát, nghệ sĩ hoặc album.</string>
+    <string name="tv_pair_step_find">Trên điện thoại, trong Prism, nhấn dòng thiết bị dưới các nút điều khiển (hoặc mở Cài đặt → Loa, TV &amp; trình duyệt) rồi chọn %1$s</string>
     <string name="sing_quick_slow">Điện thoại này quá chậm cho chế độ tách đầy đủ, nên Hát cùng dùng cách nhanh: bỏ phần nằm giữa bản phối, nơi thường có giọng hát. Kết quả kém sạch hơn, và bài mono vẫn giữ nguyên.</string>
     <string name="sing_mono_song">Bài này là mono: cách nhanh không bỏ được giọng hát, nên bài phát nguyên như cũ.</string>
     <string name="tv_sing_measured">TV này tách bài nhanh gấp %1$s lần tốc độ phát.</string>

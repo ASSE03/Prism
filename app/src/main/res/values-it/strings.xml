@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism ha bisogno della fotocamera per scansionare un codice</string>
     <string name="allow_the_camera">Consenti la fotocamera</string>
     <string name="customize_home">Personalizza la Home</string>
+    <string name="tv_home_editor_how">OK mostra o nasconde una riga. Per spostarla, scegli Sposta accanto (o tieni premuto OK), poi Su o Giù.</string>
+    <string name="tv_home_moving">Spostamento di %1$s: Su e Giù la portano, OK la posa.</string>
+    <string name="tv_home_move">Sposta %1$s</string>
+    <string name="tv_home_back_to_default">Ripristina predefinito</string>
+    <string name="tv_home_hidden_count">Nascoste: %1$d</string>
     <string name="top_of_home">In cima alla Home</string>
     <string name="show_your_name">Mostra il tuo nome</string>
     <string name="height">Altezza</string>
@@ -4097,6 +4102,7 @@
     <string name="tv_update_ready">Prism %1$s è pronto</string>
     <string name="tv_update_note">Installalo ora: Android chiede il permesso una volta sola</string>
     <string name="tv_up_next_line">A seguire: %1$s</string>
+    <string name="tv_seek_line">Posizione nel brano: %1$s di %2$s</string>
     <string name="tv_playing_from">In riproduzione da %1$s</string>
     <string name="tv_vocals_out">Senza voce</string>
     <string name="tv_key_line">Tonalità: %1$s</string>
@@ -4107,7 +4113,6 @@
     <string name="tv_sign_in_with_phone">Accedi con il telefono</string>
     <string name="tv_continue_without_account">Continua senza account</string>
     <string name="tv_pair_step_open">Apri Prism sul telefono, sulla stessa Wi-Fi di questa TV</string>
-    <string name="tv_pair_step_pick">Scegli %1$s quando il telefono la mostra</string>
     <string name="tv_pair_step_code">Inserisci questo codice sul telefono</string>
     <string name="tv_pair_qr">Oppure inquadralo con la fotocamera del telefono</string>
     <string name="tv_no_voice">Questa TV non può cercare con la voce: scrivi con la tastiera</string>
@@ -4175,6 +4180,10 @@
     <string name="tour_180_silence">Togli il silenzio tocca solo l\'inizio e la fine di un brano</string>
     <string name="tour_180_normalize">Stesso volume livella i grandi sbalzi tra i brani</string>
     <string name="tour_180_size">Un download più leggero</string>
+    <string name="tv_library_signed_out">Accedi per vedere qui le tue playlist, gli album, gli artisti e i brani che ti piacciono di YouTube Music.</string>
+    <string name="tv_search_how">Premi OK sulla riga di ricerca per scrivere con il telecomando.</string>
+    <string name="tv_search_voice_how">Oppure scegli il microfono accanto e di\' un brano, un artista o un album.</string>
+    <string name="tv_pair_step_find">Sul telefono, in Prism, tocca la riga del dispositivo sotto i controlli (o apri Impostazioni → Altoparlanti, TV e browser) e scegli %1$s</string>
     <string name="sing_quick_slow">Questo telefono è troppo lento per la separazione completa, quindi Canta usa il modo rapido: toglie ciò che sta al centro del mix, dove di solito c\'è la voce. È meno pulito, e un brano mono resta com\'è.</string>
     <string name="sing_mono_song">Questo brano è mono: il modo rapido non riesce a toglierne la voce, quindi si sente com\'è.</string>
     <string name="tv_sing_measured">Questa TV separa i brani %1$s× più veloce di quanto suonino.</string>

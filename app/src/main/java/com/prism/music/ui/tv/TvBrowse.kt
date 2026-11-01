@@ -1,3 +1,5 @@
+@file:OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+
 package com.prism.music.ui.tv
 
 import androidx.compose.foundation.background
@@ -5,7 +7,12 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.focusGroup
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +22,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -82,8 +91,24 @@ fun TvSearchScreen(
     onQueryChange: (String) -> Unit = {},
     onSubmit: () -> Unit = {},
     onStopTyping: () -> Unit = {},
+    /** Counts searches sent: after each, focus goes to the first result once there is one (not left on the box). */
+    submitted: Int = 0,
 ) {
     val scheme = MaterialTheme.colorScheme
+    val firstResult = androidx.compose.runtime.remember { androidx.compose.ui.focus.FocusRequester() }
+    var focusedFor by androidx.compose.runtime.remember { androidx.compose.runtime.mutableIntStateOf(0) }
+    val hasResults = top != null || songs.isNotEmpty()
+    androidx.compose.runtime.LaunchedEffect(submitted, hasResults, typing) {
+        if (submitted == 0 || submitted == focusedFor || !hasResults || typing) return@LaunchedEffect
+        // After the search line has taken focus back (as the keyboard goes), then the first result.
+        kotlinx.coroutines.delay(300)
+        repeat(20) {
+            // Not placed yet: it throws, or says no.
+            val took = runCatching { firstResult.requestFocus() }.map { (it as? Boolean) ?: true }.getOrDefault(false)
+            if (took) { focusedFor = submitted; return@LaunchedEffect }
+            kotlinx.coroutines.delay(50)
+        }
+    }
     LazyColumn(
         modifier.fillMaxSize().testTag(TAG_SEARCH),
         contentPadding = PaddingValues(top = 27.dp, bottom = 48.dp),
@@ -97,7 +122,8 @@ fun TvSearchScreen(
                     onClick = onType,
                     modifier = Modifier.width(620.dp).height(60.dp).tvItem("$TAG_SEARCH/field", entry = true),
                     shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(30.dp)),
-                    colors = ClickableSurfaceDefaults.colors(containerColor = scheme.surfaceVariant, focusedContainerColor = scheme.onSurface, contentColor = scheme.onSurface, focusedContentColor = scheme.surface),
+                    colors = ClickableSurfaceDefaults.colors(containerColor = TvGlassFill, focusedContainerColor = scheme.onSurface, contentColor = scheme.onSurface, focusedContentColor = scheme.surface),
+                    border = ClickableSurfaceDefaults.border(focusedBorder = tvFocusBorder(RoundedCornerShape(30.dp), TV_RING_THIN)),
                     scale = ClickableSurfaceDefaults.scale(focusedScale = 1.02f),
                 ) {
                     Row(Modifier.fillMaxSize().padding(horizontal = 22.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -110,6 +136,13 @@ fun TvSearchScreen(
             }
         }
         if (query.isEmpty()) {
+            // How to search with a remote: the line, or the microphone beside it.
+            item {
+                Column(Modifier.padding(horizontal = 48.dp).testTag("$TAG_SEARCH/how"), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(tr(R.string.tv_search_how), style = MaterialTheme.typography.titleMedium, color = scheme.onSurfaceVariant)
+                    Text(tr(R.string.tv_search_voice_how), style = MaterialTheme.typography.titleMedium, color = scheme.onSurfaceVariant)
+                }
+            }
             if (recent.isNotEmpty()) item {
                 Column {
                     TvRowTitle(tr(R.string.recent_searches), Modifier.padding(start = 48.dp))
@@ -123,12 +156,15 @@ fun TvSearchScreen(
                 Row(Modifier.padding(horizontal = 48.dp), horizontalArrangement = Arrangement.spacedBy(40.dp)) {
                     if (top != null) Column(Modifier.width(200.dp)) {
                         Text(tr(R.string.top_result), style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold), color = scheme.primary, modifier = Modifier.padding(bottom = 12.dp))
-                        TvCard(top.art, top.title, top.subtitle, { onItem(top) }, Modifier.tvItem("$TAG_SEARCH/top"), round = top.kind == TvItem.Kind.ARTIST, width = 200.dp)
+                        TvCard(top.art, top.title, top.subtitle, { onItem(top) }, Modifier.focusRequester(firstResult).tvItem("$TAG_SEARCH/top"), round = top.kind == TvItem.Kind.ARTIST, width = 200.dp)
                     }
                     Column(Modifier.weight(1f)) {
                         TvRowTitle(tr(R.string.songs))
                         Column(Modifier.rememberedFocus(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                            songs.take(5).forEachIndexed { i, s -> TvSongRow(s.title, s.artist, s.length, { onSong(s) }, Modifier.tvItem("$TAG_SEARCH/song/$i"), art = s.art) }
+                            songs.take(5).forEachIndexed { i, s ->
+                                val first = if (top == null && i == 0) Modifier.focusRequester(firstResult) else Modifier
+                                TvSongRow(s.title, s.artist, s.length, { onSong(s) }, first.tvItem("$TAG_SEARCH/song/$i"), art = s.art)
+                            }
                         }
                     }
                 }
@@ -155,8 +191,8 @@ private fun TvSearchInput(query: String, onQueryChange: (String) -> Unit, onSubm
         keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(imeAction = androidx.compose.ui.text.input.ImeAction.Search),
         keyboardActions = androidx.compose.foundation.text.KeyboardActions(onSearch = { onSubmit() }, onDone = { onSubmit() }),
         modifier = Modifier.width(620.dp).height(60.dp)
-            .background(scheme.surfaceVariant, RoundedCornerShape(30.dp))
-            .border(3.dp, scheme.onSurface, RoundedCornerShape(30.dp))
+            .background(TvGlassFill, RoundedCornerShape(30.dp))
+            .border(TV_RING_THIN, tvRing(), RoundedCornerShape(30.dp))
             .focusRequester(focus).testTag("$TAG_SEARCH/input"),
         decorationBox = { inner ->
             Row(Modifier.fillMaxSize().padding(horizontal = 22.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -183,9 +219,23 @@ fun TvLibraryScreen(
     items: List<TvItem>,
     onItem: (TvItem) -> Unit,
     modifier: Modifier = Modifier,
+    /** What an empty tab says instead (why, and what to do: signed out, sign in with the phone). */
+    empty: (@Composable () -> Unit)? = null,
 ) {
     Column(modifier.fillMaxSize().padding(start = 48.dp, top = 27.dp).testTag(TAG_LIBRARY)) {
-        TabRow(selectedTabIndex = tab, modifier = Modifier.testTag("$TAG_LIBRARY/tabs")) {
+        val light = tvLight()
+        TabRow(
+            selectedTabIndex = tab, modifier = Modifier.testTag("$TAG_LIBRARY/tabs"),
+            // The tab shown: the split light under it (as the phone's tabs).
+            indicator = { positions, _ ->
+                positions.getOrNull(tab)?.let { p ->
+                    Box(
+                        Modifier.fillMaxSize().wrapContentSize(Alignment.BottomStart)
+                            .offset(x = p.left).width(p.right - p.left).height(3.dp).background(light, RoundedCornerShape(2.dp)),
+                    )
+                }
+            },
+        ) {
             tabs.forEachIndexed { i, t ->
                 Tab(selected = i == tab, onFocus = { onTab(i) }, onClick = { onTab(i) }, modifier = Modifier.tvItem("$TAG_LIBRARY/tab/$i", entry = i == tab)) {
                     Text(t, Modifier.padding(horizontal = 16.dp, vertical = 8.dp), style = MaterialTheme.typography.titleMedium)
@@ -193,6 +243,10 @@ fun TvLibraryScreen(
             }
         }
         Spacer(Modifier.height(24.dp))
+        if (items.isEmpty() && empty != null) {
+            Box(Modifier.fillMaxSize().padding(end = 48.dp, bottom = 48.dp).testTag("$TAG_LIBRARY/empty")) { empty() }
+            return@Column
+        }
         LazyVerticalGrid(
             GridCells.Adaptive(132.dp),
             Modifier.fillMaxSize().rememberedFocus().testTag("$TAG_LIBRARY/grid"),
@@ -226,7 +280,16 @@ fun TvCollectionScreen(
     accent: Color? = null,
 ) {
     val scheme = MaterialTheme.colorScheme
-    Row(modifier.fillMaxSize().tvBackdrop(accent, scheme.background).padding(TvSafe).testTag(TAG_COLLECTION)) {
+    // Into the songs (Right, or Down from the buttons): the song last picked here, else the one playing, else the first,
+    // never whichever row happens to be level with the buttons.
+    var last by androidx.compose.runtime.saveable.rememberSaveable { androidx.compose.runtime.mutableIntStateOf(-1) }
+    val target = collectionEntry(last, playing, songs.size)
+    val into = androidx.compose.runtime.remember { androidx.compose.ui.focus.FocusRequester() }
+    val list = androidx.compose.foundation.lazy.rememberLazyListState(initialFirstVisibleItemIndex = (playing - 1).coerceIn(0, (songs.size - 1).coerceAtLeast(0)))
+    val down = Modifier.focusProperties { if (songs.isNotEmpty()) down = into }
+    Box(modifier.fillMaxSize()) {
+    TvPictureBackdrop(art)
+    Row(Modifier.fillMaxSize().padding(TvSafe).testTag(TAG_COLLECTION)) {
         Column(Modifier.width(300.dp)) {
             Artwork(art, Modifier.size(300.dp), shape = RoundedCornerShape(16.dp), size = 720)
             Spacer(Modifier.height(20.dp))
@@ -234,15 +297,34 @@ fun TvCollectionScreen(
             Text(details, style = MaterialTheme.typography.bodyLarge, color = scheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Spacer(Modifier.height(20.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                TvButton(tr(R.string.widget_play), onPlay, Modifier.tvItem("$TAG_COLLECTION/play", entry = true), icon = PrismIcons.Play, primary = true)
-                TvButton(tr(R.string.shuffle), onShuffle, Modifier.tvItem("$TAG_COLLECTION/shuffle"), icon = PrismIcons.Shuffle)
+                TvButton(tr(R.string.widget_play), onPlay, down.tvItem("$TAG_COLLECTION/play", entry = true), icon = PrismIcons.Play, primary = true)
+                TvButton(tr(R.string.shuffle), onShuffle, down.tvItem("$TAG_COLLECTION/shuffle"), icon = PrismIcons.Shuffle)
             }
         }
         Spacer(Modifier.width(48.dp))
-        LazyColumn(Modifier.weight(1f).rememberedFocus().testTag("$TAG_COLLECTION/songs"), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            itemsIndexed(songs) { i, s -> TvSongRow(s.title, s.artist, s.length, { onSong(i) }, Modifier.tvItem("$TAG_COLLECTION/song/$i"), number = i + 1, playing = i == playing) }
+        LazyColumn(
+            Modifier.weight(1f).focusProperties { onEnter = { if (songs.isNotEmpty()) into.requestFocus() } }.focusGroup().testTag("$TAG_COLLECTION/songs"),
+            state = list, verticalArrangement = Arrangement.spacedBy(2.dp),
+        ) {
+            itemsIndexed(songs) { i, s ->
+                TvSongRow(
+                    s.title, s.artist, s.length, { onSong(i) },
+                    (if (i == target) Modifier.focusRequester(into) else Modifier)
+                        .onFocusChanged { if (it.isFocused) last = i }.tvItem("$TAG_COLLECTION/song/$i"),
+                    number = i + 1, playing = i == playing,
+                )
+            }
         }
     }
+    }
+}
+
+/** Where focus enters an album's or playlist's songs: the one last picked, else the one playing, else the first. */
+fun collectionEntry(last: Int, playing: Int, size: Int): Int = when {
+    size <= 0 -> -1
+    last in 0 until size -> last
+    playing in 0 until size -> playing
+    else -> 0
 }
 
 /**
@@ -263,8 +345,10 @@ fun TvArtistScreen(
     accent: Color? = null,
 ) {
     val scheme = MaterialTheme.colorScheme
+    Box(modifier.fillMaxSize()) {
+    TvPictureBackdrop(art)
     LazyColumn(
-        modifier.fillMaxSize().tvBackdrop(accent, scheme.background).testTag(TAG_ARTIST),
+        Modifier.fillMaxSize().testTag(TAG_ARTIST),
         contentPadding = PaddingValues(top = 27.dp, bottom = 48.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
@@ -285,6 +369,23 @@ fun TvArtistScreen(
             }
         }
         itemsIndexed(shelves) { r, shelf -> TvShelfRow(shelf, { i -> onItem(r, i) }, "$TAG_ARTIST/row$r") }
+    }
+    }
+}
+
+/**
+ * An empty Library tab: signed out, why it's empty and "Sign in with your phone" ([onSignIn]); signed in, that there's
+ * nothing here yet.
+ */
+@Composable
+fun TvLibraryEmpty(signedIn: Boolean, onSignIn: () -> Unit) {
+    val scheme = MaterialTheme.colorScheme
+    Column(Modifier.padding(top = 24.dp).width(640.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text(
+            tr(if (signedIn) R.string.nothing_here_yet else R.string.tv_library_signed_out),
+            style = MaterialTheme.typography.titleLarge, color = scheme.onSurfaceVariant,
+        )
+        if (!signedIn) TvButton(tr(R.string.tv_sign_in_with_phone), onSignIn, Modifier.tvItem("$TAG_LIBRARY/signin"), icon = PrismIcons.Phone, primary = true)
     }
 }
 
