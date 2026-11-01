@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism potřebuje fotoaparát ke skenování kódu</string>
     <string name="allow_the_camera">Povolit fotoaparát</string>
     <string name="customize_home">Přizpůsobit Domů</string>
+    <string name="tv_home_editor_how">OK řádek zobrazí nebo skryje. Pro přesun vyberte Přesunout vedle něj (nebo podržte OK) a pak Nahoru či Dolů.</string>
+    <string name="tv_home_moving">Přesouvá se %1$s: Nahoru a Dolů ho posouvají, OK ho položí.</string>
+    <string name="tv_home_move">Přesunout %1$s</string>
+    <string name="tv_home_back_to_default">Zpět na výchozí</string>
+    <string name="tv_home_hidden_count">Skryto: %1$d</string>
     <string name="top_of_home">Horní část Domů</string>
     <string name="show_your_name">Zobrazit tvoje jméno</string>
     <string name="height">Výška</string>
@@ -4228,5 +4233,4 @@
     <string name="tv_search_how">Stiskněte OK na řádku hledání a pište ovladačem.</string>
     <string name="tv_search_voice_how">Nebo vyberte mikrofon vedle něj a řekněte skladbu, interpreta nebo album.</string>
     <string name="tv_pair_step_find">V telefonu v Prismu klepněte na řádek zařízení pod ovládáním (nebo otevřete Nastavení → Reproduktory, televize a prohlížeč) a vyberte %1$s</string>
-    <string name="tv_home_rows_later">Řádky Domů se tu ukážou, jakmile se Domů otevře</string>
 </resources>

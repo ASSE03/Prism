@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">কোড স্ক্যান করতে Prism-এর ক্যামেরা দরকার</string>
     <string name="allow_the_camera">ক্যামেরার অনুমতি দিন</string>
     <string name="customize_home">হোম কাস্টমাইজ করুন</string>
+    <string name="tv_home_editor_how">OK চাপলে একটি সারি দেখায় বা লুকায়। সরাতে পাশের সরান বেছে নিন (বা OK চেপে ধরে রাখুন), তারপর উপরে বা নিচে।</string>
+    <string name="tv_home_moving">%1$s সরানো হচ্ছে: উপরে ও নিচে দিয়ে সরান, OK দিয়ে রাখুন।</string>
+    <string name="tv_home_move">%1$s সরান</string>
+    <string name="tv_home_back_to_default">ডিফল্টে ফিরুন</string>
+    <string name="tv_home_hidden_count">লুকানো: %1$d</string>
     <string name="top_of_home">হোমের ওপরে</string>
     <string name="show_your_name">আপনার নাম দেখান</string>
     <string name="height">উচ্চতা</string>
@@ -4128,5 +4133,4 @@
     <string name="tv_search_how">রিমোট দিয়ে টাইপ করতে সার্চ লাইনে OK চাপুন।</string>
     <string name="tv_search_voice_how">অথবা পাশের মাইক্রোফোন বেছে নিয়ে কোনো গান, শিল্পী বা অ্যালবামের নাম বলুন।</string>
     <string name="tv_pair_step_find">আপনার ফোনে, Prism-এ, কন্ট্রোলের নিচের ডিভাইস লাইনে ট্যাপ করুন (বা সেটিংস → স্পিকার, টিভি ও ব্রাউজার খুলুন) এবং %1$s বেছে নিন</string>
-    <string name="tv_home_rows_later">হোম একবার খোলার পর এর সারিগুলো এখানে দেখা যাবে</string>
 </resources>

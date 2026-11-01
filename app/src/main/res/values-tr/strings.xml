@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism\'in kod taraması için kameraya ihtiyacı var</string>
     <string name="allow_the_camera">Kameraya izin ver</string>
     <string name="customize_home">Ana sayfayı özelleştir</string>
+    <string name="tv_home_editor_how">OK bir satırı gösterir veya gizler. Taşımak için yanındaki Taşı düğmesini seçin (veya OK basılı tutun), sonra Yukarı ya da Aşağı.</string>
+    <string name="tv_home_moving">%1$s taşınıyor: Yukarı ve Aşağı ile götürün, OK ile bırakın.</string>
+    <string name="tv_home_move">Taşı: %1$s</string>
+    <string name="tv_home_back_to_default">Varsayılana dön</string>
+    <string name="tv_home_hidden_count">Gizli: %1$d</string>
     <string name="top_of_home">Ana sayfanın üstü</string>
     <string name="show_your_name">Adını göster</string>
     <string name="height">Yükseklik</string>
@@ -4128,5 +4133,4 @@
     <string name="tv_search_how">Kumandayla yazmak için arama satırında OK\'e bas.</string>
     <string name="tv_search_voice_how">Ya da yanındaki mikrofonu seç ve bir şarkı, sanatçı veya albüm söyle.</string>
     <string name="tv_pair_step_find">Telefonunda, Prism\'de kontrollerin altındaki cihaz satırına dokun (ya da Ayarlar → Hoparlörler, TV\'ler ve tarayıcı\'yı aç) ve %1$s seç</string>
-    <string name="tv_home_rows_later">Ana sayfanın satırları, ana sayfa açıldıktan sonra burada görünür</string>
 </resources>

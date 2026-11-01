@@ -120,12 +120,14 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
         value = withContext(Dispatchers.IO) { runCatching { com.prism.music.ui.screens.speedDialFromHistory(c) }.getOrDefault(emptyList()) }
     }
     val titles = TvHomeTitles(tr(R.string.quick_picks), tr(R.string.section_speed_dial), tr(R.string.recently_played))
-    // In the order the phone's Home layout gives (the TV's editor and the phone's Customize Home share it), hidden rows
-    // left out; what Home had is noted for the editor.
-    val layout = settings.homeLayout
-    val arranged = remember(shelves, recent, mostPlayed, owner, layout) { arrangeTvRows(tvHomeRows(shelves, owner, recent, mostPlayed, titles), layout) { it.key } }
-    LaunchedEffect(arranged) { if (arranged.isNotEmpty()) TvHomeRowsSeen.rows = arranged.map { it.key to it.title } }
-    val rows = remember(arranged, layout) { arranged.filterNot { hiddenIn(layout, it.key) } }
+    // Laid out as Customize Home has them: shown or hidden as the phone's Home layout has the rows both have (so phone
+    // and TV agree), the hero and the order as the TV's own layout keeps them (none kept: the phone's order, else Home
+    // as it comes).
+    val phoneLayout = settings.homeLayout
+    val arranged = remember(shelves, recent, mostPlayed, owner, settings.tv.homeLayout, phoneLayout) {
+        TvHomeLayout.arrange(settings.tv.homeLayout, tvHomeRows(shelves, owner, recent, mostPlayed, titles), phoneLayout)
+    }
+    val rows = arranged.rows
     val now = rememberTvNow(c)
     val accent = rememberTvAccent(now?.art)
     // Updates on the TV (plan §2): the same banner and installer as the phone (Android asks once to allow installs).
@@ -165,6 +167,8 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
             }
         },
         onSearch = onSearch,
+        heroAt = arranged.heroAt,
+        onCustomize = { nav.go(TvRoute.HomeEditor) },
     )
 }
 

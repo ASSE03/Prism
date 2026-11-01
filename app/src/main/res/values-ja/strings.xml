@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">コードをスキャンするには Prism にカメラの許可が必要です</string>
     <string name="allow_the_camera">カメラを許可</string>
     <string name="customize_home">ホームをカスタマイズ</string>
+    <string name="tv_home_editor_how">OKで行を表示/非表示にします。移動するには横の「移動」を選ぶ（またはOKを長押し）と、上下で動かせます。</string>
+    <string name="tv_home_moving">%1$sを移動中：上下で動かし、OKで置きます。</string>
+    <string name="tv_home_move">%1$sを移動</string>
+    <string name="tv_home_back_to_default">デフォルトに戻す</string>
+    <string name="tv_home_hidden_count">非表示：%1$d</string>
     <string name="top_of_home">ホームの上部</string>
     <string name="show_your_name">名前を表示</string>
     <string name="height">高さ</string>
@@ -4078,5 +4083,4 @@
     <string name="tv_search_how">検索欄で OK を押すと、リモコンで入力できます。</string>
     <string name="tv_search_voice_how">または横のマイクを選んで、曲名、アーティスト、アルバムを話してください。</string>
     <string name="tv_pair_step_find">スマートフォンの Prism で、コントロールの下のデバイス表示をタップし（または［設定］→［スピーカー、テレビ、ブラウザ］を開き）、%1$s を選びます</string>
-    <string name="tv_home_rows_later">ホームを一度開くと、ホームの行がここに表示されます</string>
 </resources>

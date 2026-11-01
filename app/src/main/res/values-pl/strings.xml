@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism potrzebuje aparatu, by zeskanować kod</string>
     <string name="allow_the_camera">Zezwól na aparat</string>
     <string name="customize_home">Dostosuj ekran główny</string>
+    <string name="tv_home_editor_how">OK pokazuje lub ukrywa rząd. Aby go przenieść, wybierz Przenieś obok (lub przytrzymaj OK), a potem Góra lub Dół.</string>
+    <string name="tv_home_moving">Przenoszenie: %1$s. Góra i Dół je przesuwają, OK odkłada.</string>
+    <string name="tv_home_move">Przenieś %1$s</string>
+    <string name="tv_home_back_to_default">Przywróć domyślne</string>
+    <string name="tv_home_hidden_count">Ukryte: %1$d</string>
     <string name="top_of_home">Góra ekranu głównego</string>
     <string name="show_your_name">Pokaż swoją nazwę</string>
     <string name="height">Wysokość</string>
@@ -4228,5 +4233,4 @@
     <string name="tv_search_how">Naciśnij OK na wierszu wyszukiwania, aby pisać pilotem.</string>
     <string name="tv_search_voice_how">Albo wybierz mikrofon obok i powiedz tytuł utworu, wykonawcę lub album.</string>
     <string name="tv_pair_step_find">W telefonie, w Prismie, kliknij wiersz urządzenia pod sterowaniem (albo otwórz Ustawienia → Głośniki, telewizory i przeglądarka) i wybierz %1$s</string>
-    <string name="tv_home_rows_later">Wiersze strony głównej pojawią się tu po jej otwarciu</string>
 </resources>

@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism behöver kameran för att skanna en kod</string>
     <string name="allow_the_camera">Tillåt kameran</string>
     <string name="customize_home">Anpassa Hem</string>
+    <string name="tv_home_editor_how">OK visar eller döljer en rad. För att flytta den väljer du Flytta bredvid (eller håller ned OK), sedan Upp eller Ned.</string>
+    <string name="tv_home_moving">Flyttar %1$s: Upp och Ned bär den, OK släpper den.</string>
+    <string name="tv_home_move">Flytta %1$s</string>
+    <string name="tv_home_back_to_default">Tillbaka till standard</string>
+    <string name="tv_home_hidden_count">Dolda: %1$d</string>
     <string name="top_of_home">Överst på Hem</string>
     <string name="show_your_name">Visa ditt namn</string>
     <string name="height">Höjd</string>
@@ -4128,5 +4133,4 @@
     <string name="tv_search_how">Tryck på OK på sökraden för att skriva med fjärrkontrollen.</string>
     <string name="tv_search_voice_how">Eller välj mikrofonen bredvid och säg en låt, artist eller ett album.</string>
     <string name="tv_pair_step_find">Tryck på telefonen i Prism på enhetsraden under kontrollerna (eller öppna Inställningar → Högtalare, tv-apparater &amp; webbläsare) och välj %1$s</string>
-    <string name="tv_home_rows_later">Hemmets rader visas här när Hem har öppnats</string>
 </resources>

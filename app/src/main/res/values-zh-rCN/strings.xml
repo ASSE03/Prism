@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism 需要使用相机来扫描代码</string>
     <string name="allow_the_camera">允许使用相机</string>
     <string name="customize_home">自定义首页</string>
+    <string name="tv_home_editor_how">按 OK 显示或隐藏一行。要移动，选择旁边的“移动”（或长按 OK），再按上或下。</string>
+    <string name="tv_home_moving">正在移动%1$s：按上下移动，按 OK 放下。</string>
+    <string name="tv_home_move">移动%1$s</string>
+    <string name="tv_home_back_to_default">恢复默认</string>
+    <string name="tv_home_hidden_count">已隐藏：%1$d</string>
     <string name="top_of_home">首页顶部</string>
     <string name="show_your_name">显示你的名字</string>
     <string name="height">高度</string>
@@ -4078,5 +4083,4 @@
     <string name="tv_search_how">在搜索栏上按 OK，即可用遥控器输入。</string>
     <string name="tv_search_voice_how">或者选择旁边的麦克风，说出歌曲、艺人或专辑名称。</string>
     <string name="tv_pair_step_find">在手机上的 Prism 中，点按控制按钮下方的设备栏（或打开“设置”→“音箱、电视和浏览器”），然后选择 %1$s</string>
-    <string name="tv_home_rows_later">打开过首页后，首页的各行会显示在这里</string>
 </resources>

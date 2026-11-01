@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism perlu kamera untuk memindai kode</string>
     <string name="allow_the_camera">Izinkan kamera</string>
     <string name="customize_home">Sesuaikan Beranda</string>
+    <string name="tv_home_editor_how">OK menampilkan atau menyembunyikan baris. Untuk memindahkannya, pilih Pindahkan di sebelahnya (atau tahan OK), lalu Atas atau Bawah.</string>
+    <string name="tv_home_moving">Memindahkan %1$s: Atas dan Bawah membawanya, OK meletakkannya.</string>
+    <string name="tv_home_move">Pindahkan %1$s</string>
+    <string name="tv_home_back_to_default">Kembali ke default</string>
+    <string name="tv_home_hidden_count">Tersembunyi: %1$d</string>
     <string name="top_of_home">Bagian atas Beranda</string>
     <string name="show_your_name">Tampilkan namamu</string>
     <string name="height">Tinggi</string>
@@ -4078,5 +4083,4 @@
     <string name="tv_search_how">Tekan OK pada baris pencarian untuk mengetik dengan remote.</string>
     <string name="tv_search_voice_how">Atau pilih mikrofon di sebelahnya dan sebutkan lagu, artis, atau album.</string>
     <string name="tv_pair_step_find">Di ponsel Anda, di Prism, ketuk baris perangkat di bawah kontrol (atau buka Setelan → Speaker, TV &amp; browser) lalu pilih %1$s</string>
-    <string name="tv_home_rows_later">Baris Beranda muncul di sini setelah Beranda dibuka</string>
 </resources>

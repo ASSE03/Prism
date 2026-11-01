@@ -71,13 +71,19 @@ fun TvHomeScreen(
     accent: Color? = null,
     banner: (@Composable () -> Unit)? = null,
     onSearch: (() -> Unit)? = null,
+    /** Where the now-playing hero sits among [shelves] (0: on top, as it comes); -1: hidden (Customize Home). */
+    heroAt: Int = 0,
+    /** Customize Home, at the end of Home. */
+    onCustomize: (() -> Unit)? = null,
 ) {
     val scheme = MaterialTheme.colorScheme
+    val heroShown = now != null && heroAt >= 0
+    val heroIndex = if (heroShown) heroAt.coerceIn(0, shelves.size) else -1
     // Search stands in while Home loads; if it had focus when the song or the rows come (it goes), focus goes to their
     // first item as on opening Home, not to the side navigation.
     val memory = LocalTvFocusMemory.current
     val screen = LocalTvScreen.current
-    if ((now != null || shelves.isNotEmpty()) && memory.lastFocused[screen] == "$TAG_HOME/search") {
+    if ((heroShown || shelves.isNotEmpty()) && memory.lastFocused[screen] == "$TAG_HOME/search") {
         memory.lastFocused.remove(screen)
         memory.opening(screen)
     }
@@ -86,7 +92,8 @@ fun TvHomeScreen(
     // Keys that stay with each row (and card) as Home refreshes, so what's on screen isn't redrawn for nothing.
     val rowKeys = remember(shelves) { occurrenceKeys(shelves.map { it.title }) }
     val list = rememberLazyListState()
-    TvPrefetch(list, shelves, rowsBefore = if (banner != null) 2 else 1)
+    // The list's items above the rows: the banner, and the greeting or the hero on top.
+    TvPrefetch(list, shelves, rowsBefore = (if (banner != null) 1 else 0) + (if (!heroShown || heroIndex == 0) 1 else 0))
     LazyColumn(
         modifier.fillMaxSize().testTag(TAG_HOME),
         state = list,
@@ -94,10 +101,15 @@ fun TvHomeScreen(
         verticalArrangement = Arrangement.spacedBy(22.dp),
     ) {
         if (banner != null) item { Box(Modifier.padding(horizontal = 48.dp)) { banner() } }
-        item {
+        // Focus opens on Home's first thing: the hero's "Now playing" when it's on top, else the first row's first card.
+        val hero: @Composable () -> Unit = {
+            Box(Modifier.padding(horizontal = 48.dp).testTag("$TAG_HOME/hero")) {
+                if (now != null) TvNowHero(now, onPlayPause, onOpenPlayer, onOpenLyrics, entry = heroIndex == 0)
+            }
+        }
+        if (!heroShown) item {
             Box(Modifier.padding(horizontal = 48.dp)) {
-                if (now != null) TvNowHero(now, onPlayPause, onOpenPlayer, onOpenLyrics)
-                else Column {
+                Column {
                     Text(greeting, style = MaterialTheme.typography.displaySmall, color = scheme.onBackground)
                     // Nothing to show yet (offline, or Home still loading): Search, so focus is never nowhere.
                     if (shelves.isEmpty() && onSearch != null) {
@@ -107,23 +119,33 @@ fun TvHomeScreen(
                 }
             }
         }
-        itemsIndexed(shelves, key = { r, _ -> rowKeys[r] }) { r, shelf ->
-            Column {
-                TvRowTitle(shelf.title, Modifier.padding(start = 48.dp))
-                LazyRow(
-                    Modifier.rememberedFocus().testTag("$TAG_HOME/row$r"),
-                    contentPadding = TvRowPadding,
-                    horizontalArrangement = Arrangement.spacedBy(24.dp),
-                ) {
-                    itemsIndexed(shelf.items, key = { i, item -> item.id + "#" + i }) { i, item ->
-                        val first = now == null && r == 0 && i == 0
-                        TvCard(
-                            item.art, item.title, item.subtitle, { onItem(r, i) },
-                            modifier = Modifier.tvItem("$TAG_HOME/row$r/$i", entry = first),
-                            round = item.kind == TvItem.Kind.ARTIST,
-                        )
+        if (heroIndex == 0) item(key = HERO_ITEM) { hero() }
+        shelves.forEachIndexed { r, shelf ->
+            item(key = rowKeys[r]) {
+                Column {
+                    TvRowTitle(shelf.title, Modifier.padding(start = 48.dp).testTag("$TAG_HOME/title$r"))
+                    LazyRow(
+                        Modifier.rememberedFocus().testTag("$TAG_HOME/row$r"),
+                        contentPadding = TvRowPadding,
+                        horizontalArrangement = Arrangement.spacedBy(24.dp),
+                    ) {
+                        itemsIndexed(shelf.items, key = { i, item -> item.id + "#" + i }) { i, item ->
+                            val first = heroIndex != 0 && r == 0 && i == 0
+                            TvCard(
+                                item.art, item.title, item.subtitle, { onItem(r, i) },
+                                modifier = Modifier.tvItem("$TAG_HOME/row$r/$i", entry = first),
+                                round = item.kind == TvItem.Kind.ARTIST,
+                            )
+                        }
                     }
                 }
+            }
+            if (heroIndex == r + 1) item(key = HERO_ITEM) { hero() }
+        }
+        // The way to Customize Home from Home itself: at its end, after the last row.
+        if (onCustomize != null && (heroShown || shelves.isNotEmpty())) item {
+            Box(Modifier.padding(horizontal = 48.dp)) {
+                TvButton(tr(R.string.customize_home), onCustomize, Modifier.tvItem("$TAG_HOME/customize"), icon = PrismIcons.Customize)
             }
         }
     }
@@ -131,7 +153,7 @@ fun TvHomeScreen(
 
 /** Home's hero: the playing song's cover, title, artist and progress, with play/pause, the player and its lyrics. */
 @Composable
-private fun TvNowHero(now: TvNow, onPlayPause: () -> Unit, onOpenPlayer: () -> Unit, onOpenLyrics: () -> Unit) {
+private fun TvNowHero(now: TvNow, onPlayPause: () -> Unit, onOpenPlayer: () -> Unit, onOpenLyrics: () -> Unit, entry: Boolean = true) {
     val scheme = MaterialTheme.colorScheme
     Row(Modifier.fillMaxWidth().height(196.dp), verticalAlignment = Alignment.CenterVertically) {
         Artwork(now.art, Modifier.size(196.dp), shape = RoundedCornerShape(14.dp), size = 544)
@@ -153,7 +175,7 @@ private fun TvNowHero(now: TvNow, onPlayPause: () -> Unit, onOpenPlayer: () -> U
                     tr(if (now.playing) R.string.widget_pause else R.string.widget_play), onPlayPause,
                     Modifier.focusProperties { if (nav != null) left = nav }.tvItem("$TAG_HOME/playpause"),
                 )
-                TvButton(tr(R.string.now_playing), onOpenPlayer, Modifier.tvItem("$TAG_HOME/player", entry = true), icon = PrismIcons.PlayCircle, primary = true)
+                TvButton(tr(R.string.now_playing), onOpenPlayer, Modifier.tvItem("$TAG_HOME/player", entry = entry), icon = PrismIcons.PlayCircle, primary = true)
                 if (now.hasLyrics) TvButton(tr(R.string.lyrics), onOpenLyrics, Modifier.tvItem("$TAG_HOME/lyrics"), icon = PrismIcons.Lyrics)
             }
         }
@@ -177,6 +199,8 @@ fun TvUpdateBanner(version: String, onUpdate: () -> Unit, modifier: Modifier = M
 }
 
 const val TAG_HOME = "tv_home"
+/** The hero's item key in Home's list (row keys are their titles, which never start with a space). */
+private const val HERO_ITEM = " hero"
 
 /** Keys from [titles], unique: a title that comes twice gets "#2" the second time. */
 internal fun occurrenceKeys(titles: List<String>): List<String> {

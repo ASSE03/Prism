@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism braucht die Kamera, um einen Code zu scannen</string>
     <string name="allow_the_camera">Kamera erlauben</string>
     <string name="customize_home">Startseite anpassen</string>
+    <string name="tv_home_editor_how">OK blendet eine Reihe ein oder aus. Zum Verschieben daneben Verschieben wählen (oder OK gedrückt halten), dann hoch oder runter.</string>
+    <string name="tv_home_moving">%1$s wird verschoben: Hoch und Runter bewegen sie, OK legt sie ab.</string>
+    <string name="tv_home_move">%1$s verschieben</string>
+    <string name="tv_home_back_to_default">Auf Standard zurücksetzen</string>
+    <string name="tv_home_hidden_count">Ausgeblendet: %1$d</string>
     <string name="top_of_home">Oben auf der Startseite</string>
     <string name="show_your_name">Deinen Namen zeigen</string>
     <string name="height">Höhe</string>
@@ -4128,5 +4133,4 @@
     <string name="tv_search_how">Drück OK auf der Suchzeile, um mit der Fernbedienung zu tippen.</string>
     <string name="tv_search_voice_how">Oder wähl das Mikrofon daneben und sag einen Song, Künstler oder ein Album.</string>
     <string name="tv_pair_step_find">Tippe auf dem Handy in Prism auf die Gerätezeile unter der Steuerung (oder öffne Einstellungen → Lautsprecher, Fernseher &amp; Browser) und wähle %1$s</string>
-    <string name="tv_home_rows_later">Die Reihen der Startseite erscheinen hier, sobald sie einmal geöffnet war</string>
 </resources>

@@ -29,7 +29,6 @@ import com.prism.music.ui.tv.TvTheme
 import com.prism.music.ui.tv.TvVideoControls
 import com.prism.music.ui.tv.arrangeTvRows
 import com.prism.music.ui.tv.hiddenIn
-import com.prism.music.ui.tv.layoutInOrder
 import com.prism.music.ui.tv.layoutWithShown
 import com.prism.music.ui.tv.moved
 import com.prism.music.ui.tv.occurrenceKeys
@@ -112,12 +111,15 @@ class TvPolishTest {
         assertEquals(layout.size + 1, noDial.size)
         // Shown again.
         assertFalse(hiddenIn(layoutWithShown(noDial, KEY_DIAL, "Speed dial", shown = true), KEY_DIAL))
-        // Moved: Throwbacks up to the top; the phone's own section (Made for you) stays where it was.
-        val order = moved(rows.map { it to it }, from = 4, by = -4)
-        assertEquals("yt:Throwbacks", order.first().first)
-        val newLayout = layoutInOrder(layout, order)
-        assertEquals(HomeSections.MADE_FOR_YOU, newLayout[1].key)
-        assertEquals(listOf("yt:Throwbacks", KEY_PICKS, KEY_DIAL, KEY_RECENT, "yt:Mixed for you"), arrangeTvRows(rows, newLayout) { it })
+        // Moved on the TV: Throwbacks up to the top, in the TV's own layout (its order; the phone's stays as it was), and
+        // still hidden or shown as the phone's layout says.
+        val tvRows = rows.map { com.prism.music.ui.tv.TvHomeRow(phoneKeyOf(it), it, emptyList()) }
+        val natural = com.prism.music.ui.tv.TvHomeLayout.natural(tvRows.map { HomeSectionConfig(it.key, it.title) })
+        val list = com.prism.music.ui.tv.TvHomeLayout.editable(emptyList(), natural, noDial)
+        val tvLayout = com.prism.music.ui.tv.TvHomeLayout.moved(list, phoneKeyOf("yt:Throwbacks"), -9)
+        val shown = com.prism.music.ui.tv.TvHomeLayout.arrange(tvLayout, tvRows, noDial)
+        assertEquals(listOf("yt:Throwbacks", KEY_PICKS, "yt:Mixed for you", KEY_RECENT), shown.rows.map { it.title })
+        assertEquals(1, shown.heroAt)
         // Moving past the ends does nothing.
         assertEquals(rows, moved(rows, 0, -1))
         assertEquals(rows, moved(rows, rows.lastIndex, 1))

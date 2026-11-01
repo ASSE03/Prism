@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">O Prism precisa da câmara para ler um código</string>
     <string name="allow_the_camera">Permitir a câmara</string>
     <string name="customize_home">Personalizar o Início</string>
+    <string name="tv_home_editor_how">OK mostra ou oculta uma fila. Para a mover, escolha Mover ao lado (ou mantenha OK premido) e depois Cima ou Baixo.</string>
+    <string name="tv_home_moving">A mover %1$s: Cima e Baixo levam-na, OK pousa-a.</string>
+    <string name="tv_home_move">Mover %1$s</string>
+    <string name="tv_home_back_to_default">Repor predefinição</string>
+    <string name="tv_home_hidden_count">Ocultas: %1$d</string>
     <string name="top_of_home">Topo do Início</string>
     <string name="show_your_name">Mostrar o teu nome</string>
     <string name="height">Altura</string>
@@ -4178,5 +4183,4 @@
     <string name="tv_search_how">Prima OK na linha de pesquisa para escrever com o comando.</string>
     <string name="tv_search_voice_how">Ou escolha o microfone ao lado e diga uma música, um artista ou um álbum.</string>
     <string name="tv_pair_step_find">No telemóvel, no Prism, toque na linha do dispositivo por baixo dos controlos (ou abra Definições → Altifalantes, TVs e browser) e escolha %1$s</string>
-    <string name="tv_home_rows_later">As linhas do Início aparecem aqui depois de o Início ser aberto</string>
 </resources>

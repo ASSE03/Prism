@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism нужна камера, чтобы сканировать код</string>
     <string name="allow_the_camera">Разрешить камеру</string>
     <string name="customize_home">Настроить главную</string>
+    <string name="tv_home_editor_how">OK показывает или скрывает ряд. Чтобы переместить его, выберите «Переместить» рядом (или удерживайте OK), затем вверх или вниз.</string>
+    <string name="tv_home_moving">Перемещение: %1$s. Вверх и вниз двигают, OK ставит на место.</string>
+    <string name="tv_home_move">Переместить %1$s</string>
+    <string name="tv_home_back_to_default">Вернуть по умолчанию</string>
+    <string name="tv_home_hidden_count">Скрыто: %1$d</string>
     <string name="top_of_home">Верх главной</string>
     <string name="show_your_name">Показывать твоё имя</string>
     <string name="height">Высота</string>
@@ -4228,5 +4233,4 @@
     <string name="tv_search_how">Нажмите OK на строке поиска, чтобы печатать пультом.</string>
     <string name="tv_search_voice_how">Или выберите микрофон рядом и назовите трек, исполнителя или альбом.</string>
     <string name="tv_pair_step_find">На телефоне, в Prism, нажмите на строку устройства под элементами управления (или откройте Настройки → Колонки, телевизоры и браузер) и выберите %1$s</string>
-    <string name="tv_home_rows_later">Ряды главной появятся здесь, когда главная откроется</string>
 </resources>

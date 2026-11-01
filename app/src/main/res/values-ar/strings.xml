@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">يحتاج Prism إلى الكاميرا لمسح الرمز</string>
     <string name="allow_the_camera">السماح بالكاميرا</string>
     <string name="customize_home">تخصيص الرئيسية</string>
+    <string name="tv_home_editor_how">زر OK يُظهر الصف أو يخفيه. لنقل صف، اختر «نقل» بجانبه (أو اضغط OK مطوّلًا)، ثم أعلى أو أسفل.</string>
+    <string name="tv_home_moving">جارٍ نقل %1$s: أعلى وأسفل لتحريكه، وOK لوضعه.</string>
+    <string name="tv_home_move">نقل %1$s</string>
+    <string name="tv_home_back_to_default">العودة إلى الافتراضي</string>
+    <string name="tv_home_hidden_count">مخفية: %1$d</string>
     <string name="top_of_home">أعلى الرئيسية</string>
     <string name="show_your_name">إظهار اسمك</string>
     <string name="height">الارتفاع</string>
@@ -4328,5 +4333,4 @@
     <string name="tv_search_how">اضغط OK على سطر البحث لتكتب باستخدام جهاز التحكم.</string>
     <string name="tv_search_voice_how">أو اختر الميكروفون بجانبه وقل اسم أغنية أو فنان أو ألبوم.</string>
     <string name="tv_pair_step_find">على هاتفك، في Prism، انقر على سطر الجهاز أسفل عناصر التحكم (أو افتح الإعدادات ← مكبرات الصوت والتلفزيون والمتصفح) واختر %1$s</string>
-    <string name="tv_home_rows_later">تظهر صفوف الصفحة الرئيسية هنا بعد فتحها</string>
 </resources>

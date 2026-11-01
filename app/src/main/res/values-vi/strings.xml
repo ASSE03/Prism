@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism cần máy ảnh để quét mã</string>
     <string name="allow_the_camera">Cho phép máy ảnh</string>
     <string name="customize_home">Tùy chỉnh Trang chủ</string>
+    <string name="tv_home_editor_how">OK hiện hoặc ẩn một hàng. Để di chuyển, chọn Di chuyển bên cạnh (hoặc giữ OK), rồi Lên hoặc Xuống.</string>
+    <string name="tv_home_moving">Đang di chuyển %1$s: Lên và Xuống để mang đi, OK để đặt xuống.</string>
+    <string name="tv_home_move">Di chuyển %1$s</string>
+    <string name="tv_home_back_to_default">Về mặc định</string>
+    <string name="tv_home_hidden_count">Đã ẩn: %1$d</string>
     <string name="top_of_home">Đầu Trang chủ</string>
     <string name="show_your_name">Hiện tên của bạn</string>
     <string name="height">Chiều cao</string>
@@ -4078,5 +4083,4 @@
     <string name="tv_search_how">Nhấn OK trên dòng tìm kiếm để nhập bằng điều khiển.</string>
     <string name="tv_search_voice_how">Hoặc chọn micrô bên cạnh và nói tên bài hát, nghệ sĩ hoặc album.</string>
     <string name="tv_pair_step_find">Trên điện thoại, trong Prism, nhấn dòng thiết bị dưới các nút điều khiển (hoặc mở Cài đặt → Loa, TV &amp; trình duyệt) rồi chọn %1$s</string>
-    <string name="tv_home_rows_later">Các hàng của Trang chủ hiện ở đây sau khi Trang chủ đã mở</string>
 </resources>
