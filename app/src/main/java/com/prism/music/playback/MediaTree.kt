@@ -47,6 +47,8 @@ class MediaTree(private val c: AppContainer) {
         const val DJ = "dj:"
         /** A Prism playlist's folder ("pp:" + its "prism:…" id). */
         const val PRISM_LIST = "pp:"
+        /** A holiday mix's folder ("hm:" + its "season:…" id). */
+        const val HOLIDAY = "hm:"
         /** How many of each Home section's items show as tiles in the car. */
         private const val HOME_TILES = 8
     }
@@ -138,11 +140,17 @@ class MediaTree(private val c: AppContainer) {
         parentId == MADE_FOR_YOU -> {
             // What's kept is listed straight away (the car waits for nothing); anything due is made behind it.
             c.scope.launch { runCatching { c.forYou.refresh() } }
-            c.forYou.mixes.filterNotNull().first().filter { it.songs.isNotEmpty() }.map { m ->
+            // The season's holiday mixes first, in November and December (1.8.0), each made when it's opened.
+            val holiday = c.seasonal.shown().map { m ->
+                val cover = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { com.prism.music.ui.screens.HolidayCovers.file(c.app, m) }
+                folder(HOLIDAY + m.id, tr(m.name), tr(m.blurb), cover, MediaMetadata.MEDIA_TYPE_PLAYLIST)
+            }
+            holiday + c.forYou.mixes.filterNotNull().first().filter { it.songs.isNotEmpty() }.map { m ->
                 folder("fy:${m.id}", m.title, m.subtitle, m.covers.firstOrNull(), MediaMetadata.MEDIA_TYPE_PLAYLIST)
             }
         }
         parentId.startsWith("fy:") -> c.forYou.mix(parentId.removePrefix("fy:"))?.let { songList(parentId, it.title, it.songs) } ?: emptyList()
+        parentId.startsWith(HOLIDAY) -> c.seasonal.mix(parentId.removePrefix(HOLIDAY))?.let { songList(parentId, it.title, it.songs) } ?: emptyList()
         parentId == LIKED -> songList(parentId, tr(R.string.liked_songs), c.library.likedShown.value)
         parentId == RECENT -> songList(parentId, tr(R.string.recently_played), c.library.recent.value)
         parentId == DOWNLOADS -> songList(parentId, tr(R.string.downloads), c.downloads.completedSongs())
@@ -297,7 +305,10 @@ class ArtworkProvider : ContentProvider() {
         if (url.startsWith("file:")) {
             val file = File(Uri.parse(url).path ?: return null)
             val covers = File(ctx.filesDir, "covers").canonicalPath
-            if (!file.canonicalPath.startsWith(covers + File.separator) || !file.exists()) return null
+            // ...or a holiday mix's cover, drawn by Prism (1.8.0).
+            val holiday = File(ctx.filesDir, "seasonal").canonicalPath
+            val path = file.canonicalPath
+            if (!(path.startsWith(covers + File.separator) || path.startsWith(holiday + File.separator)) || !file.exists()) return null
             return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
         }
         // A local song's album art (Library → On this phone), passed on from Android's media store; nothing else there.

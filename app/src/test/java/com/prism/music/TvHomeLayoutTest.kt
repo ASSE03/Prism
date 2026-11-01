@@ -1,5 +1,6 @@
 package com.prism.music
 
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.prism.music.data.model.Shelf
 import com.prism.music.data.model.SongItem
@@ -161,6 +162,37 @@ class TvHomeArrangedScreenTest {
         show(heroAt = 1)
         compose.waitUntil(5_000) { focusedOn("tv_home/row0/0") }
         assertTrue(exists("tv_home/hero"))
+    }
+}
+
+/**
+ * The editor opens on its list (the TV suite found focus on "Back to default": Android hands focus to the page's top
+ * item when the page under it goes), and stays there until the remote is used.
+ */
+@org.junit.runner.RunWith(org.robolectric.RobolectricTestRunner::class)
+@org.robolectric.annotation.Config(sdk = [34], qualifiers = "w960dp-h540dp-land-xhdpi", application = android.app.Application::class)
+class TvHomeEditorFocusTest {
+    @get:org.junit.Rule val compose = androidx.compose.ui.test.junit4.createComposeRule()
+    private fun focusedOn(tag: String) =
+        compose.onAllNodes(androidx.compose.ui.test.hasTestTag(tag) and androidx.compose.ui.test.isFocused(), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
+
+    @Test fun theEditorOpensOnItsFirstRowEvenWhenFocusIsPutOnBackToDefault() {
+        val rows = listOf(HERO, KEY_PICKS, KEY_DIAL).map { com.prism.music.ui.tv.TvHomeEditorRow(it, it, shown = true) }
+        compose.setContent {
+            com.prism.music.ui.tv.TvTheme(AppSettings()) {
+                androidx.compose.runtime.CompositionLocalProvider(
+                    com.prism.music.ui.tv.LocalTvScreen provides "home_editor",
+                    com.prism.music.ui.tv.LocalTvFocusMemory provides androidx.compose.runtime.remember { com.prism.music.ui.tv.TvFocusMemory() },
+                ) {
+                    com.prism.music.ui.tv.TvHomeEditorScreen(rows, null, {}, {}, { _, _ -> }, {}, {})
+                }
+            }
+        }
+        val first = "${com.prism.music.ui.tv.TAG_HOME_EDITOR}/row/$HERO"
+        compose.waitUntil(5_000) { focusedOn(first) }
+        // Focus handed to the top item, as Android did on the TVs: it comes back to the list.
+        compose.onNode(androidx.compose.ui.test.hasTestTag("${com.prism.music.ui.tv.TAG_HOME_EDITOR}/reset")).performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.RequestFocus)
+        compose.waitUntil(5_000) { focusedOn(first) }
     }
 }
 

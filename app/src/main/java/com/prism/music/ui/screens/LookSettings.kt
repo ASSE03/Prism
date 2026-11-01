@@ -493,6 +493,66 @@ private fun PendingLookDialog(look: Look) {
     )
 }
 
+/**
+ * The season's Look, offered in its month (1.8.0): a quiet card with the Look on two small phones, what it is, and Use it;
+ * the ⓘ says it's only for the month and what happens when it ends.
+ */
+@Composable
+private fun SeasonCard(look: Look, onUse: () -> Unit) {
+    val c = LocalContainer.current
+    val app = LocalAppSettings.current
+    val ui = LocalUi.current
+    val scheme = MaterialTheme.colorScheme
+    val s = remember(look, app) { c.looks.preview(look) }
+    val song by c.player.currentSong.collectAsState()
+    var info by remember { mutableStateOf(false) }
+    Row(
+        Modifier.fillMaxWidth().padding(horizontal = 12.dp).clip(ui.tile).background(frostFill(1.4f))
+            .border(1.dp, scheme.onSurface.copy(alpha = 0.08f), ui.tile).padding(10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        PreviewPhone(56.dp) { LookTheme(s, com.prism.music.ui.theme.isAppDark(s)) { colors -> MiniHome(colors, song) } }
+        Spacer(Modifier.width(12.dp))
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(tr(R.string.for_the_season, look.name), Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)
+                InfoMark(info, look.name) { info = !info }
+            }
+            Text(look.note, style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
+            InfoText(info, tr(R.string.season_info))
+            PrismOutlinedButton(onUse) { Text(tr(R.string.use_it)) }
+        }
+    }
+}
+
+/**
+ * Holiday Mode (1.8.0): asked once a season, the first time Prism opens in its month ([com.prism.music.data.looks.SeasonPrompt]).
+ * The season's background, small and moving, what changes, and that it ends with the month. [onAnswer]: true to turn it
+ * on; false for No thanks or closing it (asked either way).
+ */
+@Composable
+fun HolidayModeDialog(season: com.prism.music.data.looks.Season, onAnswer: (Boolean) -> Unit) {
+    val s = LocalAppSettings.current
+    val style = com.prism.music.ui.theme.Backdrop.entries.first { it.name == season.backdrop }
+    AlertDialog(
+        onDismissRequest = { onAnswer(false) },
+        title = { Text(tr(R.string.holiday_mode)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(Modifier.fillMaxWidth().height(150.dp).clip(RoundedCornerShape(16.dp))) {
+                    com.prism.music.ui.theme.BackdropLayer(style, null, 0f, s.backdropMotion && !s.reduceMotion, Modifier.fillMaxSize())
+                }
+                Text(
+                    tr(if (season == com.prism.music.data.looks.Season.HARVEST) R.string.holiday_mode_harvest else R.string.holiday_mode_holiday),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
+        },
+        confirmButton = { PrismTextButton({ onAnswer(true) }) { Text(tr(R.string.turn_on)) } },
+        dismissButton = { PrismTextButton({ onAnswer(false) }) { Text(tr(R.string.no_thanks)) } },
+    )
+}
+
 /** A Look by day and another by night, switched at sunrise and sunset or at set times. */
 @Composable
 private fun ScheduleGroup() {
