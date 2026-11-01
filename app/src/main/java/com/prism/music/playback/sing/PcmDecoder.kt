@@ -46,6 +46,18 @@ class PcmDecoder(context: Context, uri: Uri, /** Which of the file's audio track
         codec.start()
     }
 
+    /** The song frame the first decoded sample is (after [seekTo], wherever the decoder could start: a sync sample). */
+    var firstFrame = -1L
+        private set
+
+    /**
+     * Starts decoding at or just before [us] (the sync sample before it), before the first [read]: Sing separates a
+     * song from where it's playing first (1.8.x). [firstFrame] says exactly where it started.
+     */
+    fun seekTo(us: Long) {
+        extractor.seekTo(us, MediaExtractor.SEEK_TO_PREVIOUS_SYNC)
+    }
+
     /** The next decoded piece (interleaved stereo, ~0.5 s), or null at the end. */
     fun read(): FloatArray? {
         while (!outputDone && pendingFrames < PIECE_FRAMES) {
@@ -105,6 +117,7 @@ class PcmDecoder(context: Context, uri: Uri, /** Which of the file's audio track
         out.position(info.offset); out.limit(info.offset + info.size)
         val samples = if (floatPcm) info.size / 4 else info.size / 2
         val frames = samples / channels
+        if (firstFrame < 0 && frames > 0) firstFrame = maxOf(0L, Math.round(info.presentationTimeUs * sampleRate / 1e6))
         if ((pendingFrames + frames) * 2 > pending.size) pending = pending.copyOf(maxOf(pending.size * 2, (pendingFrames + frames) * 2))
         var at = pendingFrames * 2
         if (!floatPcm && channels == 2) {

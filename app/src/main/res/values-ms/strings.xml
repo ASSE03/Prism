@@ -4167,4 +4167,7 @@
     <string name="tv_back_to_now">Kembali ke sekarang</string>
     <string name="tv_timing_keys">← → 0.1 s  ·  ↑ ↓ 1 s  ·  OK: %1$s</string>
     <string name="tv_sing_checking_now">Memeriksa TV ini… ia mengambil masa kira-kira seminit</string>
+    <string name="sing_taking_voice_out">Membuang suara… %1$s%%</string>
+    <string name="sing_quick_then_full">Suara diperlahankan (pantas) · pemisahan penuh %1$s%%</string>
+    <string name="tv_sing_play_first">Mainkan lagu dahulu, kemudian semak</string>
 </resources>

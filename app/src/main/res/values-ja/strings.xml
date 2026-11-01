@@ -4167,4 +4167,7 @@
     <string name="tv_back_to_now">今の歌詞に戻る</string>
     <string name="tv_timing_keys">← → 0.1 秒  ·  ↑ ↓ 1 秒  ·  OK: %1$s</string>
     <string name="tv_sing_checking_now">このテレビを確認しています…約 1 分かかります</string>
+    <string name="sing_taking_voice_out">歌声を取り除いています… %1$s%%</string>
+    <string name="sing_quick_then_full">歌声を弱めています（簡易）· 完全な分離 %1$s%%</string>
+    <string name="tv_sing_play_first">先に曲を再生してからチェックしてください</string>
 </resources>

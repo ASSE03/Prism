@@ -17,6 +17,7 @@ import com.prism.music.R
 import com.prism.music.playback.CarLyricsCard
 import com.prism.music.playback.sing.Separation
 import com.prism.music.playback.sing.SingPace
+import com.prism.music.playback.sing.words
 import com.prism.music.tr
 import com.prism.music.ui.player.rememberLyricClock
 import com.prism.music.ui.player.rememberLyricsState
@@ -42,8 +43,11 @@ object TvSing {
             UNSUPPORTED -> tr(R.string.tv_sing_no_cpu)
         }
 
-        /** Sing is in the player's ⋯ (a way it runs here has been found). */
-        val sings: Boolean get() = this == READY || this == SLOW || this == UNSUPPORTED
+        /**
+         * Sing is in the player's ⋯: always but while the check runs. Unchecked, the first use times this TV as it goes
+         * (and the quick way stands in meanwhile); the check only says ahead what it'll do.
+         */
+        val sings: Boolean get() = this != CHECKING
     }
 
     private val _state = MutableStateFlow(State.UNCHECKED)
@@ -69,7 +73,8 @@ object TvSing {
     suspend fun check(c: AppContainer): String {
         if (_state.value == State.CHECKING) return State.CHECKING.label()
         if (!c.sing.fullEngine) return keep(c, State.UNSUPPORTED)
-        val song = c.player.currentSong.value?.takeIf { c.sing.canSing(it) } ?: return tr(R.string.tv_sing_checking)
+        // Nothing playing to time it with: said so (it used to say "checking" and do nothing).
+        val song = c.player.currentSong.value?.takeIf { c.sing.canSing(it) } ?: return tr(R.string.tv_sing_play_first)
         if (!c.sing.engineReady() && !c.sing.downloadEngine()) return tr(R.string.sing_s_engine_isn_t_downloaded)
         var speeds: Pair<Double?, Double?> = null to null
         var problem: String? = null
@@ -125,13 +130,17 @@ fun TvSingPage(nav: TvNav) {
     var engineMissing by remember { mutableStateOf(false) }
     DisposableEffect(Unit) {
         c.sing.setOn(true)
+        // Leaving the page, the song in hand is still finished for a while (Sing's grace), not thrown away.
         onDispose { c.sing.setOn(false) }
     }
     // Without its engine Sing would get nothing ready; the songs lined up are got ready, the playing one first.
     LaunchedEffect(s.id) {
         if (!c.sing.engineReady() && !c.sing.downloadEngine()) { engineMissing = true; return@LaunchedEffect }
         engineMissing = false
-        c.sing.prepare(c.player.queue.value.map { it.song })
+        // The playing song from where it plays, then the next (the player keeps it one ahead from there).
+        val queue = c.player.queue.value.map { it.song }
+        val at = queue.indexOfFirst { it.id == s.id }
+        c.sing.prepare(listOf(s) + queue.drop(at + 1).take(1), c.player.position)
     }
     val state = rememberLyricsState(s)
     val clock = rememberLyricClock(now.playing)
@@ -142,12 +151,13 @@ fun TvSingPage(nav: TvNav) {
     val problem by c.sing.problem.collectAsState()
     val status = tvSingStatus(engineMissing, progress[s.id], c.sing.store.complete(s.id), problem)
     val scheme = MaterialTheme.colorScheme
-    val method by c.sing.method.collectAsState()
+    c.sing.method.collectAsState().value
     TvLyricsPlace(
         now, lines, current, clock, state.loading, state.unavailable, state.source?.label, accent, onPlayPause = { c.player.togglePlay() },
         status = status,
         buttons = {
-            TvChip(if (method == Separation.QUICK) tr(R.string.tv_voice_quick) else tr(R.string.tv_vocals_out), PrismIcons.Mic, scheme.primary, scheme.onPrimary)
+            // What Sing has for the song, honestly: the voice being taken out, the quick way standing in, or out.
+            TvChip(c.sing.status(s.id).words(), PrismIcons.Mic, scheme.primary, scheme.onPrimary)
             TvIconButton(PrismIcons.Remove, tr(R.string.tv_key_line, "−"), { c.sing.setSemitones(semitones - 1) }, Modifier.tvItem("$TAG_SING/keydown"))
             TvChip(tr(R.string.tv_key_line, if (semitones > 0) "+$semitones" else "$semitones"), null, scheme.surfaceVariant, scheme.onSurface)
             TvIconButton(PrismIcons.Add, tr(R.string.tv_key_line, "+"), { c.sing.setSemitones(semitones + 1) }, Modifier.tvItem("$TAG_SING/keyup"))

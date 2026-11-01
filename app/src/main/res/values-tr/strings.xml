@@ -4217,4 +4217,7 @@
     <string name="tv_back_to_now">Şimdiye dön</string>
     <string name="tv_timing_keys">← → 0,1 sn  ·  ↑ ↓ 1 sn  ·  OK: %1$s</string>
     <string name="tv_sing_checking_now">Bu TV kontrol ediliyor… yaklaşık bir dakika sürer</string>
+    <string name="sing_taking_voice_out">Vokal çıkarılıyor… %1$s%%</string>
+    <string name="sing_quick_then_full">Ses kısıldı (hızlı) · tam ayırma %1$s%%</string>
+    <string name="tv_sing_play_first">Önce bir şarkı çalın, sonra kontrol edin</string>
 </resources>

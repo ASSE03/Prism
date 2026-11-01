@@ -4267,4 +4267,7 @@
     <string name="tv_back_to_now">Înapoi la acum</string>
     <string name="tv_timing_keys">← → 0,1 s  ·  ↑ ↓ 1 s  ·  OK: %1$s</string>
     <string name="tv_sing_checking_now">Se verifică acest televizor… durează aproximativ un minut</string>
+    <string name="sing_taking_voice_out">Se scoate vocea… %1$s%%</string>
+    <string name="sing_quick_then_full">Voce redusă (rapid) · separare completă %1$s%%</string>
+    <string name="tv_sing_play_first">Pornește întâi o melodie, apoi verifică</string>
 </resources>

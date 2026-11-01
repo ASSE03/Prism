@@ -4217,4 +4217,7 @@
     <string name="tv_back_to_now">ابھی پر واپس جائیں</string>
     <string name="tv_timing_keys">← → 0.1 سیکنڈ  ·  ↑ ↓ 1 سیکنڈ  ·  OK: %1$s</string>
     <string name="tv_sing_checking_now">اس ٹی وی کی جانچ ہو رہی ہے… تقریباً ایک منٹ لگتا ہے</string>
+    <string name="sing_taking_voice_out">آواز نکالی جا رہی ہے… %1$s%%</string>
+    <string name="sing_quick_then_full">آواز کم (تیز) · مکمل علیحدگی %1$s%%</string>
+    <string name="tv_sing_play_first">پہلے کوئی گانا چلائیں، پھر جانچیں</string>
 </resources>

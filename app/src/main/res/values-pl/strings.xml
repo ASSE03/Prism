@@ -4317,4 +4317,7 @@
     <string name="tv_back_to_now">Wróć do teraz</string>
     <string name="tv_timing_keys">← → 0,1 s  ·  ↑ ↓ 1 s  ·  OK: %1$s</string>
     <string name="tv_sing_checking_now">Sprawdzanie tego telewizora… potrwa to około minuty</string>
+    <string name="sing_taking_voice_out">Usuwam głos… %1$s%%</string>
+    <string name="sing_quick_then_full">Głos ściszony (szybko) · pełne oddzielanie %1$s%%</string>
+    <string name="tv_sing_play_first">Najpierw włącz utwór, potem sprawdź</string>
 </resources>

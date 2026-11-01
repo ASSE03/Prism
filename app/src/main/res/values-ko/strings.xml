@@ -4167,4 +4167,7 @@
     <string name="tv_back_to_now">지금 부분으로 돌아가기</string>
     <string name="tv_timing_keys">← → 0.1초  ·  ↑ ↓ 1초  ·  OK: %1$s</string>
     <string name="tv_sing_checking_now">이 TV를 확인하는 중… 1분 정도 걸립니다</string>
+    <string name="sing_taking_voice_out">목소리를 빼는 중… %1$s%%</string>
+    <string name="sing_quick_then_full">목소리 줄임(빠름) · 전체 분리 %1$s%%</string>
+    <string name="tv_sing_play_first">먼저 곡을 재생한 다음 확인하세요</string>
 </resources>

@@ -4267,4 +4267,7 @@
     <string name="tv_back_to_now">חזרה לעכשיו</string>
     <string name="tv_timing_keys">← → 0.1 שנ׳  ·  ↑ ↓ 1 שנ׳  ·  OK: %1$s</string>
     <string name="tv_sing_checking_now">בודקים את הטלוויזיה הזו… זה לוקח בערך דקה</string>
+    <string name="sing_taking_voice_out">מסירים את הקול… %1$s%%</string>
+    <string name="sing_quick_then_full">קול מונמך (מהיר) · הפרדה מלאה %1$s%%</string>
+    <string name="tv_sing_play_first">קודם להפעיל שיר, ואז לבדוק</string>
 </resources>

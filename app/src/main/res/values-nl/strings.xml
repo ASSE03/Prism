@@ -4217,4 +4217,7 @@
     <string name="tv_back_to_now">Terug naar nu</string>
     <string name="tv_timing_keys">← → 0,1 s  ·  ↑ ↓ 1 s  ·  OK: %1$s</string>
     <string name="tv_sing_checking_now">Deze tv wordt gecontroleerd… dit duurt ongeveer een minuut</string>
+    <string name="sing_taking_voice_out">Stem wordt eruit gehaald… %1$s%%</string>
+    <string name="sing_quick_then_full">Stem zachter (snel) · volledige scheiding %1$s%%</string>
+    <string name="tv_sing_play_first">Speel eerst een song af en controleer dan</string>
 </resources>

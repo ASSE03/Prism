@@ -4217,4 +4217,7 @@
     <string name="tv_back_to_now">Vissza a mostanihoz</string>
     <string name="tv_timing_keys">← → 0,1 mp  ·  ↑ ↓ 1 mp  ·  OK: %1$s</string>
     <string name="tv_sing_checking_now">A tévé ellenőrzése folyamatban… nagyjából egy percig tart</string>
+    <string name="sing_taking_voice_out">Az ének kivétele… %1$s%%</string>
+    <string name="sing_quick_then_full">Halkított ének (gyors) · teljes szétválasztás %1$s%%</string>
+    <string name="tv_sing_play_first">Előbb indíts el egy dalt, aztán ellenőrizd</string>
 </resources>

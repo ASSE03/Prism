@@ -53,9 +53,33 @@ class TvSingCheckTest {
         assertTrue(TvSing.State.SLOW.sings)
         assertTrue(TvSing.State.UNSUPPORTED.sings)
         assertTrue(TvSing.State.READY.sings)
-        assertFalse(TvSing.State.UNCHECKED.sings)
+        // The owner's TV (1.8.x): Sing wasn't in the player's ⋯ till the check had run. Unchecked, it is (the first use
+        // times the TV as it goes, the quick way standing in); only while the check runs it isn't.
+        assertTrue(TvSing.State.UNCHECKED.sings)
         assertFalse(TvSing.State.CHECKING.sings)
         // Nothing timed (the song couldn't be had): no answer to keep.
         assertNull(TvSing.verdict(null, null))
+    }
+
+    @Test fun quickStandInsComeFirstForThePlayingSongAndTheNext() {
+        val quick = mutableSetOf<String>()
+        val own = mutableSetOf<String>()
+        fun next(ids: List<String>, ownWay: Boolean = true) =
+            com.prism.music.playback.sing.Sing.nextPass(ids, { it in quick }, { ownWay && it !in own })
+        val ids = listOf("playing", "next", "later")
+        // The playing song's stand-in, then the next one's, before either's own separation.
+        assertEquals("playing" to true, next(ids)); quick += "playing"
+        assertEquals("next" to true, next(ids)); quick += "next"
+        // Then the playing song's own, then the next one's.
+        assertEquals("playing" to false, next(ids)); own += "playing"
+        assertEquals("next" to false, next(ids)); own += "next"
+        // A later song: its stand-in just before its own.
+        assertEquals("later" to true, next(ids)); quick += "later"
+        assertEquals("later" to false, next(ids)); own += "later"
+        assertNull(next(ids))
+        // Where only the quick way runs, the stand-ins are all there is to do.
+        quick.clear(); own.clear()
+        assertEquals("playing" to true, next(ids, ownWay = false)); quick += ids
+        assertNull(next(ids, ownWay = false))
     }
 }

@@ -4167,4 +4167,7 @@
     <string name="tv_back_to_now">Quay lại hiện tại</string>
     <string name="tv_timing_keys">← → 0,1 giây  ·  ↑ ↓ 1 giây  ·  OK: %1$s</string>
     <string name="tv_sing_checking_now">Đang kiểm tra TV này… mất khoảng một phút</string>
+    <string name="sing_taking_voice_out">Đang bỏ giọng hát… %1$s%%</string>
+    <string name="sing_quick_then_full">Giảm giọng (nhanh) · tách đầy đủ %1$s%%</string>
+    <string name="tv_sing_play_first">Hãy phát một bài trước, rồi kiểm tra</string>
 </resources>

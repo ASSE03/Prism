@@ -4167,4 +4167,7 @@
     <string name="tv_back_to_now">กลับไปที่ตอนนี้</string>
     <string name="tv_timing_keys">← → 0.1 วิ  ·  ↑ ↓ 1 วิ  ·  OK: %1$s</string>
     <string name="tv_sing_checking_now">กำลังตรวจสอบทีวีเครื่องนี้… ใช้เวลาประมาณหนึ่งนาที</string>
+    <string name="sing_taking_voice_out">กำลังเอาเสียงร้องออก… %1$s%%</string>
+    <string name="sing_quick_then_full">ลดเสียงร้อง (ด่วน) · แยกเสียงแบบเต็ม %1$s%%</string>
+    <string name="tv_sing_play_first">เล่นเพลงก่อน แล้วจึงตรวจ</string>
 </resources>

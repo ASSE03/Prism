@@ -4417,4 +4417,7 @@
     <string name="tv_back_to_now">العودة إلى الآن</string>
     <string name="tv_timing_keys">← → 0.1 ث  ·  ↑ ↓ 1 ث  ·  OK: %1$s</string>
     <string name="tv_sing_checking_now">جارٍ فحص هذا التلفاز… يستغرق ذلك نحو دقيقة</string>
+    <string name="sing_taking_voice_out">جارٍ إزالة الصوت… %1$s%%</string>
+    <string name="sing_quick_then_full">الصوت مخفَّض (سريع) · الفصل الكامل %1$s%%</string>
+    <string name="tv_sing_play_first">شغّل أغنية أولًا، ثم افحص</string>
 </resources>
