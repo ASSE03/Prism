@@ -29,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,12 +76,22 @@ fun TvHomeEditorScreen(
     onPutDown: () -> Unit,
     onReset: () -> Unit,
     modifier: Modifier = Modifier,
+    /** The row being carried, as the page keeps it: read when a key comes, so a key before the next frame still finds it. */
+    movingState: androidx.compose.runtime.State<String?>? = null,
 ) {
     val scheme = MaterialTheme.colorScheme
     val list = rememberLazyListState()
     // The row focus opens on: the first as the page opened (not whichever is first after a move, which would take
     // focus from the row being carried).
     val firstKey = remember { rows.firstOrNull()?.key }
+    // What the rows' keys act on is read when the key comes, not when the row was last drawn: on a slow TV a key can
+    // come before a row is drawn again (the TV suite: Up on a row just picked up still moved focus, the row "not moving").
+    val movingUpdated = rememberUpdatedState(moving)
+    val movingNow = movingState ?: movingUpdated
+    val stepNow = rememberUpdatedState(onStep)
+    val pickUpNow = rememberUpdatedState(onPickUp)
+    val putDownNow = rememberUpdatedState(onPutDown)
+    val toggleNow = rememberUpdatedState(onToggle)
     // Focus coming into the page (as it opens, or handed on by Android when the page under it went) lands on the list's
     // first row, not on "Back to default" above it: the list is what the page is for.
     val firstRow = remember { FocusRequester() }
@@ -115,13 +126,13 @@ fun TvHomeEditorScreen(
         }
         Spacer(Modifier.height(20.dp))
         LazyColumn(
-            Modifier.weight(1f).fillMaxWidth().rememberedFocus(),
+            Modifier.weight(1f).fillMaxWidth().rememberedFocus().testTag("$TAG_HOME_EDITOR/list"),
             state = list,
             contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 27.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             items(rows, key = { it.key }) { r ->
-                val isMoving = r.key == moving
+                val isMoving = r.key == movingNow.value
                 val bring = remember { BringIntoViewRequester() }
                 val scope = rememberCoroutineScope()
                 // A row being carried keeps focus where it was picked up (the row, or its Move button) as it goes from
@@ -137,10 +148,12 @@ fun TvHomeEditorScreen(
                 }
                 Row(
                     Modifier.fillMaxWidth().bringIntoViewRequester(bring).onPreviewKeyEvent { e ->
-                        if (!isMoving || e.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+                        val carried = r.key == movingNow.value
+                        if (e.type == KeyEventType.KeyDown && (e.key == Key.DirectionUp || e.key == Key.DirectionDown)) android.util.Log.d(EDITOR_LOG, "key ${e.key} on ${r.key} moving=$carried")
+                        if (!carried || e.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
                         when (e.key) {
-                            Key.DirectionUp -> { onStep(r.key, -1); scope.launch { runCatching { bring.bringIntoView() } }; true }
-                            Key.DirectionDown -> { onStep(r.key, 1); scope.launch { runCatching { bring.bringIntoView() } }; true }
+                            Key.DirectionUp -> { stepNow.value(r.key, -1); scope.launch { runCatching { bring.bringIntoView() } }; true }
+                            Key.DirectionDown -> { stepNow.value(r.key, 1); scope.launch { runCatching { bring.bringIntoView() } }; true }
                             // Carried, it stays itself: Left and Right don't wander off to the other button.
                             Key.DirectionLeft, Key.DirectionRight -> true
                             else -> false
@@ -148,8 +161,8 @@ fun TvHomeEditorScreen(
                     },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    val click = { if (isMoving) onPutDown() else onToggle(r.key) }
-                    val hold = { if (isMoving) onPutDown() else onPickUp(r.key) }
+                    val click = { if (r.key == movingNow.value) putDownNow.value() else toggleNow.value(r.key) }
+                    val hold = { if (r.key == movingNow.value) putDownNow.value() else pickUpNow.value(r.key) }
                     var held by remember { mutableStateOf(false) }
                     // A key-up whose key-down this row never had (OK let go on the page that opened the editor) is no press.
                     var pressed by remember { mutableStateOf(false) }
@@ -193,7 +206,7 @@ fun TvHomeEditorScreen(
                     TvIconButton(
                         if (isMoving) PrismIcons.Check else PrismIcons.SwapVertical,
                         if (isMoving) tr(R.string.done) else tr(R.string.tv_home_move, r.title),
-                        { if (isMoving) onPutDown() else onPickUp(r.key) },
+                        hold,
                         Modifier.focusRequester(buttonFocus).onFocusChanged { if (it.isFocused) { onButton = true; focused = true } else if (onButton) focused = false }
                             .tvItem("$TAG_HOME_EDITOR/move/${r.key}"),
                         on = isMoving,
@@ -225,7 +238,8 @@ fun TvHomeEditorPage(nav: TvNav) {
     val tvLayout = localTv ?: settings.tv.homeLayout
     val phoneLayout = localPhone ?: settings.homeLayout
     val layout = TvHomeLayout.editable(tvLayout, natural, phoneLayout, settings.autoAddSections)
-    var moving by remember { mutableStateOf<String?>(null) }
+    val movingState = remember { mutableStateOf<String?>(null) }
+    var moving by movingState
     // Rows turned on while the editor is open (Home hasn't shown them yet).
     val turnedOn = remember { mutableSetOf<String>() }
     fun keepTv(next: List<HomeSectionConfig>) { localTv = TvHomeLayout.saved(next); c.settings.setTvHomeLayout(localTv!!) }
@@ -235,25 +249,33 @@ fun TvHomeEditorPage(nav: TvNav) {
         layout.map { TvHomeEditorRow(it.key, it.title, it.visible) },
         moving,
         onToggle = { key ->
-            val row = layout.first { it.key == key }
+            // As it is now, not as last drawn (see onStep).
+            val phoneNow = localPhone ?: settings.homeLayout
+            val now = TvHomeLayout.editable(localTv ?: settings.tv.homeLayout, natural, phoneNow, settings.autoAddSections)
+            val row = now.first { it.key == key }
             // The hero is the TV's own; the other rows are shown or hidden in the phone's Home layout too.
-            if (key == TvHomeLayout.HERO) { if (!row.visible) turnedOn += key; keepTv(TvHomeLayout.toggled(layout, key)) }
+            if (key == TvHomeLayout.HERO) { if (!row.visible) turnedOn += key; keepTv(TvHomeLayout.toggled(now, key)) }
             else {
                 if (!row.visible) turnedOn += key else turnedOn -= key
-                keepPhone(layoutWithShown(phoneLayout, key, row.title, !row.visible))
+                keepPhone(layoutWithShown(phoneNow, key, row.title, !row.visible))
                 // The order as it is now is the TV's from here on (the phone's layout may name the row in another place).
-                keepTv(layout)
+                keepTv(now)
             }
         },
-        onPickUp = { moving = it },
+        onPickUp = { android.util.Log.d(EDITOR_LOG, "pick up $it"); moving = it },
         // Each press carries the row past one row Home shows: rows hidden, empty or out of season now are passed on the way
         // (what Home showed last, plus rows turned on here; before Home has shown, every row turned on counts).
         onStep = { key, by ->
+            // The layout as it is now (the last press may not be drawn yet on a slow TV), not as it was last drawn.
+            val now = TvHomeLayout.editable(localTv ?: settings.tv.homeLayout, natural, localPhone ?: settings.homeLayout, settings.autoAddSections)
             val home = TvHomeOnHome.keys
-            val visible = layout.filter { it.visible }.map { it.key }.toSet()
-            keepTv(TvHomeLayout.movedPast(layout, key, by) { k -> k in visible && (home.isEmpty() || k in home || k in turnedOn) })
+            val visible = now.filter { it.visible }.map { it.key }.toSet()
+            val next = TvHomeLayout.movedPast(now, key, by) { k -> k in visible && (home.isEmpty() || k in home || k in turnedOn) }
+            android.util.Log.d(EDITOR_LOG, "step $key by $by: ${now.indexOfFirst { it.key == key }} -> ${next.indexOfFirst { it.key == key }}")
+            keepTv(next)
         },
-        onPutDown = { moving = null },
+        onPutDown = { android.util.Log.d(EDITOR_LOG, "put down $moving"); moving = null },
+        movingState = movingState,
         onReset = {
             moving = null
             localTv = emptyList()
@@ -278,6 +300,8 @@ internal fun tvHomeAvailable(shelves: List<Shelf>, owner: String?, phone: List<H
 }
 
 const val TAG_HOME_EDITOR = "tv_home_editor"
+/** Customize Home's moves in logcat (pick up, each step, put down), for a failure on a TV. */
+private const val EDITOR_LOG = "PrismTvEditor"
 
 /** How long OK is held to pick a row up (Android's own long press). */
 private const val HOLD_MS = 500L
