@@ -36,6 +36,15 @@ object TvFixture {
         InstrumentationRegistry.getInstrumentation().sendKeyDownUpSync(key)
     }
 
+    /** A key pressed and let go [ms] later, as a hand on a remote does (key-down and key-up apart). */
+    fun hold(key: Int, ms: Long) {
+        val i = InstrumentationRegistry.getInstrumentation()
+        val down = android.os.SystemClock.uptimeMillis()
+        i.sendKeySync(KeyEvent(down, down, KeyEvent.ACTION_DOWN, key, 0))
+        Thread.sleep(ms)
+        i.sendKeySync(KeyEvent(down, android.os.SystemClock.uptimeMillis(), KeyEvent.ACTION_UP, key, 0))
+    }
+
     fun up() = press(KeyEvent.KEYCODE_DPAD_UP)
     fun down() = press(KeyEvent.KEYCODE_DPAD_DOWN)
     fun left() = press(KeyEvent.KEYCODE_DPAD_LEFT)

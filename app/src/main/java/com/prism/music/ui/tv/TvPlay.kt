@@ -70,6 +70,13 @@ object TvPlay {
         true
     }.getOrDefault(false)
 
+    /** One song by its id (a link), as the phone plays a link's song: its details from YouTube, then it alone. */
+    suspend fun single(c: AppContainer, id: String) {
+        val r = withContext(Dispatchers.IO) { runCatching { c.ytm.next(id) }.getOrNull() }
+        val song = r?.songs?.firstOrNull { it.id == id } ?: com.prism.music.data.model.Song(id, tr(R.string.loading_2))
+        withContext(Dispatchers.Main) { c.player.playSingle(song) }
+    }
+
     private const val LIVE_CHECK_MS = 8_000L
 }
 

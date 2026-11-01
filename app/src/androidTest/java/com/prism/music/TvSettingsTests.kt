@@ -91,6 +91,30 @@ class TvSettingsTests {
         assertEquals(false, Fixture.container.settings.current.isLoggedIn)
     }
 
+    /** The review (1.8.0): signing out on a (shared) TV takes the account's library with it, as on the phone. */
+    @Test fun signingOutTakesTheAccountsLibraryWithIt() {
+        Fixture.ready()
+        val c = Fixture.container
+        kotlinx.coroutines.runBlocking {
+            c.settings.fromBackup(mapOf("cookie" to "s:SAPISID=tv-test; SID=tv-test", "account_name" to "s:TV Listener"), settings = false, accounts = true)
+        }
+        TvFixture.launch()
+        goTo(TvSection.SETTINGS)
+        compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/group/0"), 10_000)
+        // The account's library, as a sync would have kept it.
+        c.library.playlists.value = listOf(com.prism.music.data.model.PlaylistItem("PLtv", "The listener's own list", "", null))
+        // Account: signed in as, sign in with phone, phone as remote, sign out.
+        TvFixture.right()
+        compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/setting/0"))
+        repeat(3) { TvFixture.down(); Thread.sleep(250) }
+        compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/setting/3"))
+        TvFixture.ok()
+        compose.awaitFocusOn(hasTestTag("${com.prism.music.ui.tv.TAG_ACTIONS}/0"), 10_000)
+        TvFixture.ok()
+        compose.waitUntil(10_000) { !c.settings.current.isLoggedIn }
+        assertTrue(c.library.playlists.value.isEmpty())
+    }
+
     @Test fun anUpdateShowsOnHomeAndTheRemoteReachesIt() {
         RecordedNetwork.answers["https://api.github.com/repos/Yigder/Prism/releases/latest"] =
             """{"tag_name":"v9.9.9","html_url":"https://github.com/Yigder/Prism/releases/tag/v9.9.9",

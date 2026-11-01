@@ -60,6 +60,9 @@ fun TvSettingsPlace(nav: TvNav) {
     var choosing by remember { mutableStateOf<Pair<String, List<Pair<String, () -> Unit>>>?>(null) }
     var info by remember { mutableStateOf<TvSetting?>(null) }
     val say: (String) -> Unit = { Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
+    // For an answer that may come after Settings has closed.
+    val app = context.applicationContext
+    val sayLater: (String) -> Unit = { Toast.makeText(app, it, Toast.LENGTH_LONG).show() }
     fun percent(v: Float) = tr(R.string.tv_percent, (v * 100).toInt())
 
     val groups: List<Pair<TvSettingGroup, List<TvSettingRow>>> = listOf(
@@ -68,7 +71,7 @@ fun TvSettingsPlace(nav: TvNav) {
             else add(TvSettingRow(TvSetting(tr(R.string.tv_not_signed_in)), TvSettingAction.Run {}))
             add(TvSettingRow(TvSetting(tr(R.string.tv_sign_in_with_phone)), TvSettingAction.Run { nav.go(TvRoute.Pair(signIn = true)) }))
             add(TvSettingRow(TvSetting(tr(R.string.tv_phone_as_remote)), TvSettingAction.Run { nav.go(TvRoute.Pair(signIn = false)) }))
-            if (settings.isLoggedIn) add(TvSettingRow(TvSetting(tr(R.string.sign_out)), TvSettingAction.Choose(listOf(tr(R.string.sign_out) to { c.settings.logout() }))))
+            if (settings.isLoggedIn) add(TvSettingRow(TvSetting(tr(R.string.sign_out)), TvSettingAction.Choose(listOf(tr(R.string.sign_out) to { tvSignOut(c) }))))
         },
         TvSettingGroup(tr(R.string.language), PrismIcons.Translate, emptyList()) to listOf(
             TvSettingRow(
@@ -96,7 +99,8 @@ fun TvSettingsPlace(nav: TvNav) {
         TvSettingGroup(tr(R.string.sing), PrismIcons.Mic, emptyList()) to listOf(
             TvSettingRow(
                 TvSetting(tr(R.string.tv_sing_on_tv), sing.label(), info = tr(R.string.tv_sing_info)),
-                TvSettingAction.Run { scope.launch { say(TvSing.check(c)) } },
+                // On the app's scope: leaving Settings doesn't cut the check short (it switches Sing back off itself).
+                TvSettingAction.Run { c.scope.launch(kotlinx.coroutines.Dispatchers.Main) { sayLater(TvSing.check(c)) } },
             ),
         ),
         TvSettingGroup(tr(R.string.tv_ambient_screen), PrismIcons.Moon, emptyList()) to listOf(

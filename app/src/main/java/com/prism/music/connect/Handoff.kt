@@ -365,6 +365,8 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
         if (!isTv) return tr(R.string.tv_not_a_tv, name)
         val signIn = values.filterKeys { it in SIGN_IN_KEYS }
         if (signIn["cookie"].isNullOrBlank()) return tr(R.string.tv_not_a_tv, name)
+        // Another account was signed in here: its library, offline copies and Home go first, as on signing out.
+        if (c.settings.current.isLoggedIn) c.library.forgetAccount()
         runBlocking {
             c.settings.fromBackup(signIn, settings = false, accounts = true)
             c.settings.setOnboarded(true)

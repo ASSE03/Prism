@@ -67,14 +67,16 @@ fun TvRemoteSheet(tv: PrismDevice, onDismiss: () -> Unit) {
     // On the main thread whatever the caller's (the link answers on its own).
     val say: (String) -> Unit = { msg -> androidx.core.content.ContextCompat.getMainExecutor(context).execute { Toast.makeText(context, msg, Toast.LENGTH_SHORT).show() } }
     LaunchedEffect(tv.key) {
+        // A missed answer (the Wi-Fi blinked, the TV was busy) is said once, and the sheet keeps asking.
+        var failing = false
         while (true) {
             when (val r = handoff.ask(tv, HandoffRequest.Now)) {
-                is HandoffResult.Playing -> now = r.now
-                is HandoffResult.Failed -> { say(r.reason); return@LaunchedEffect }
+                is HandoffResult.Playing -> { now = r.now; failing = false }
+                is HandoffResult.Failed -> { if (!failing) say(r.reason); failing = true }
                 HandoffResult.Cancelled -> { onDismiss(); return@LaunchedEffect }
                 else -> Unit
             }
-            delay(POLL_MS)
+            delay(if (failing) POLL_MS * 2 else POLL_MS)
         }
     }
     val press: (RemoteKey) -> Unit = { key ->

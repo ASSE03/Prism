@@ -1,6 +1,7 @@
 package com.prism.music
 
 import com.prism.music.data.prefs.AppSettings
+import com.prism.music.ui.tv.ambientAllowed
 import com.prism.music.ui.tv.ambientDrift
 import com.prism.music.ui.tv.ambientDue
 import org.junit.Assert.assertEquals
@@ -20,6 +21,19 @@ class TvAmbientLogicTest {
         // Switched off (0), or not allowed (a phone without desk mode, or not charging).
         assertFalse(ambientDue(playing = true, allowed = true, minutes = 0, idleMs = 10 * three))
         assertFalse(ambientDue(playing = true, allowed = false, minutes = 3, idleMs = 10 * three))
+    }
+
+    /** The review (1.8.0): "Never" kept a TV's screen on for good; a video or Sing could be covered. */
+    @Test fun neverMeansTheTvsOwnScreensaverAndVideosAndSingAreNeverCovered() {
+        assertTrue(ambientAllowed(onTv = true, minutes = 3, deskMode = false, charging = false, video = false, singing = false))
+        // Never: not allowed at all, so the screen isn't kept on (the TV's screensaver comes as usual).
+        assertFalse(ambientAllowed(onTv = true, minutes = 0, deskMode = false, charging = false, video = false, singing = false))
+        assertFalse(ambientAllowed(onTv = true, minutes = 3, deskMode = false, charging = false, video = true, singing = false))
+        assertFalse(ambientAllowed(onTv = true, minutes = 3, deskMode = false, charging = false, video = false, singing = true))
+        // A phone: only in desk mode while charging.
+        assertTrue(ambientAllowed(onTv = false, minutes = 3, deskMode = true, charging = true, video = false, singing = false))
+        assertFalse(ambientAllowed(onTv = false, minutes = 3, deskMode = true, charging = false, video = false, singing = false))
+        assertFalse(ambientAllowed(onTv = false, minutes = 3, deskMode = false, charging = true, video = false, singing = false))
     }
 
     @Test fun itDriftsAFewDpAndKeepsMoving() {
