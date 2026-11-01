@@ -115,7 +115,7 @@ fun TvHomeEditorScreen(
         }
         Spacer(Modifier.height(20.dp))
         LazyColumn(
-            Modifier.weight(1f).fillMaxWidth().rememberedFocus(),
+            Modifier.weight(1f).fillMaxWidth().rememberedFocus().testTag("$TAG_HOME_EDITOR/list"),
             state = list,
             contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 27.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -137,6 +137,7 @@ fun TvHomeEditorScreen(
                 }
                 Row(
                     Modifier.fillMaxWidth().bringIntoViewRequester(bring).onPreviewKeyEvent { e ->
+                        if (e.type == KeyEventType.KeyDown && (e.key == Key.DirectionUp || e.key == Key.DirectionDown)) android.util.Log.d(EDITOR_LOG, "key ${e.key} on ${r.key} moving=$isMoving")
                         if (!isMoving || e.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
                         when (e.key) {
                             Key.DirectionUp -> { onStep(r.key, -1); scope.launch { runCatching { bring.bringIntoView() } }; true }
@@ -245,15 +246,17 @@ fun TvHomeEditorPage(nav: TvNav) {
                 keepTv(layout)
             }
         },
-        onPickUp = { moving = it },
+        onPickUp = { android.util.Log.d(EDITOR_LOG, "pick up $it"); moving = it },
         // Each press carries the row past one row Home shows: rows hidden, empty or out of season now are passed on the way
         // (what Home showed last, plus rows turned on here; before Home has shown, every row turned on counts).
         onStep = { key, by ->
             val home = TvHomeOnHome.keys
             val visible = layout.filter { it.visible }.map { it.key }.toSet()
-            keepTv(TvHomeLayout.movedPast(layout, key, by) { k -> k in visible && (home.isEmpty() || k in home || k in turnedOn) })
+            val next = TvHomeLayout.movedPast(layout, key, by) { k -> k in visible && (home.isEmpty() || k in home || k in turnedOn) }
+            android.util.Log.d(EDITOR_LOG, "step $key by $by: ${layout.indexOfFirst { it.key == key }} -> ${next.indexOfFirst { it.key == key }} (on Home: $home)")
+            keepTv(next)
         },
-        onPutDown = { moving = null },
+        onPutDown = { android.util.Log.d(EDITOR_LOG, "put down $moving"); moving = null },
         onReset = {
             moving = null
             localTv = emptyList()
@@ -278,6 +281,8 @@ internal fun tvHomeAvailable(shelves: List<Shelf>, owner: String?, phone: List<H
 }
 
 const val TAG_HOME_EDITOR = "tv_home_editor"
+/** Customize Home's moves in logcat (pick up, each step, put down), for a failure on a TV. */
+private const val EDITOR_LOG = "PrismTvEditor"
 
 /** How long OK is held to pick a row up (Android's own long press). */
 private const val HOLD_MS = 500L
