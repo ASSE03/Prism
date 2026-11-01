@@ -69,7 +69,7 @@ class TvVideoLyricsTest {
             val memory = remember { TvFocusMemory() }
             CompositionLocalProvider(LocalTvFocusMemory provides memory, LocalTvScreen provides "video") {
                 TvVideoPlace(
-                    now, ready = true,
+                    now, status = com.prism.music.ui.tv.TvVideoStatus.PICTURE,
                     onPlayPause = {}, onNext = {}, onPrevious = {}, onSeek = {}, onLyrics = { open = true }, onQueue = {}, onSong = {}, onMore = {},
                     panelOpen = open, panelCovers = open,
                     panel = {
