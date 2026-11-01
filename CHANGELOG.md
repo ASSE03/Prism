@@ -28,7 +28,38 @@ What changed in each release. Older releases are described on the [Releases page
 - **Getting Prism onto a TV**: type code **8986606** into the Downloader app on the TV for the newest Prism, or turn on
   Settings → Speakers, TVs & browser → **Share Prism with a TV** and type the address it shows: your phone hands the TV
   its own copy over Wi-Fi (only while that page is open). After that, updates come to the TV like on a phone.
+- **Bring your Prism to the TV**: from your phone, send the TV your listening history, likes and Prism playlists
+  (and your Look, if you like), so its Home, Replay and mixes know you from the first day.
+- **Make the TV's Home yours**: every row the phone's Home has (Quick picks, Speed dial, Prism's mixes, your own pinned
+  rows…) can be on the TV too; Settings → Home → Customize Home shows, hides and moves them with the remote.
+- **Prism's look on a TV**: the frost of what's playing behind every screen, glass panels and the split light round
+  what has focus, drawn so a mid-range TV stays smooth; Settings → Colors offers White light for plain monochrome
+  highlights.
+- **Lyrics on the TV like the phone's**: word by word, the sung word growing bolder, lines settling smoothly; a Timing
+  control right on the lyrics, "Back to now" after looking around, and Settings → Lyrics → **Lyrics style** with the
+  phone's six styles and a live example of each.
+- **Sing on more TVs**: Prism times Sing on the TV once and picks the best way it keeps up with; on slower TVs it
+  starts at once with a quick version while the full one gets ready, beginning where the song is playing.
+- **The screen stays on** while a music video or Sing plays on the TV (the ambient screen is for music only).
 - Devices paired for handoff before 1.8.0 pair once more (the link is encrypted now).
+
+### For the holidays
+
+- **Harvest (November) and Holiday (December) Looks**: Prism dressed for the season, with its own illustrations
+  (leaves, acorns, pumpkins, pies, a turkey; snow, stars, trees, ornaments, lights) and colors (warm browns and golds; red and green), only in
+  their month. The first time you open Prism in each, it asks once whether to turn on **Holiday Mode**; "No" means not
+  again that year, and Looks → For the season has it any time.
+- **Holiday mixes from Prism**: in November Thanksgiving Dinner, Friendsgiving, Football Sunday, Fall Jazz, Autumn
+  Lo-fi and more; in December Christmas Classics, Christmas Jazz, R&B, Hip-Hop, Rock and Country Christmas, Navidad
+  Latina, Kids' Christmas, Merry Lo-fi, New Year's Eve Party and more. A Home row appears by itself in season (phone,
+  TV and the car), and the mixes are made on Wi-Fi ahead of time, so they open at once.
+
+### Search and playing
+
+- **Search finds the song a title is known for**: "upside down" leads with Jack Johnson, "yesterday" with the Beatles
+  and "halo" with Beyoncé, by how much each is played, not with a soundtrack, tribute or cover of the same name.
+- **Play on lists your Prism devices first**, so picking your TV plays in Prism there rather than in the TV's own Cast
+  player (which is listed only while Prism isn't open on the TV).
 
 ### Settings, made clearer
 
@@ -65,6 +96,8 @@ What changed in each release. Older releases are described on the [Releases page
 ### Fixes
 
 - Settings were saved one change at a time but not always in order: two quick taps could end on the wrong choice.
+- Hiding the status bar no longer moves the whole player up; only the bar goes.
+- The Looks page offers each season's Look only in its own month.
 - Back from Last.fm's sign-in opens Last.fm's page.
 
 ## 1.7.9.3
