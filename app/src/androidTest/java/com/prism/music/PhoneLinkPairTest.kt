@@ -30,7 +30,7 @@ import kotlin.concurrent.thread
 
 /**
  * A pairing link (a TV's QR code, 1.8.0): any page or app can open one, so the phone asks first, naming the TV and
- * its address; only on yes does it pair, and the sign-in is then offered to the TV that proved itself. A link to
+ * its address; only on yes does it pair, and the sign-in (with one here) or bringing the listener's Prism is then offered to the TV that proved itself. A link to
  * this phone itself is ignored.
  */
 @RunWith(AndroidJUnit4::class)
@@ -64,6 +64,7 @@ class PhoneLinkPairTest {
         runCatching { server?.close() }
         Fixture.container.handoff.answerLinkPair(false)
         Fixture.container.handoff.askSignIn(null)
+        Fixture.container.handoff.askBring(null)
         Fixture.container.handoff.forget(tv.device)
     }
 
@@ -88,7 +89,7 @@ class PhoneLinkPairTest {
         compose.setContent { CompositionLocalProvider(LocalContainer provides c) { PrismTheme(c.settings.current, null) { HandoffDialogs() } } }
     }
 
-    @Test fun aScannedLinkAsksFirstThenPairsAndOffersTheSignIn() {
+    @Test fun aScannedLinkAsksFirstThenPairsAndOffersTheNextStep() {
         Fixture.ready()
         val own = Lan.ownAddress()
         assumeTrue("needs a network address", own != null)
@@ -106,14 +107,16 @@ class PhoneLinkPairTest {
         Thread.sleep(500)
         assertEquals(0, tv.connections.get())
 
-        // Yes: paired, and the sign-in is offered to that TV.
+        // Yes: paired, then the next step is offered to that TV. This phone isn't signed in (the test's fresh install),
+        // so there's no sign-in to give (the link's s=1 notwithstanding): bringing the listener's Prism there instead.
         handoff.pairFromLink(link(own, port, code))
         compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag("linkPair/yes")).fetchSemanticsNodes().isNotEmpty() }
         compose.onNode(hasTestTag("linkPair/yes")).performClick()
-        compose.waitUntil(15_000) { compose.onAllNodes(hasTestTag("tvSignIn/yes")).fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(15_000) { compose.onAllNodes(hasTestTag("tvBring/yes")).fetchSemanticsNodes().isNotEmpty() }
+        assertTrue("no sign-in offered without one", compose.onAllNodes(hasTestTag("tvSignIn/yes")).fetchSemanticsNodes().isEmpty())
         assertTrue(tv.keys.containsKey(handoff.device))
         assertEquals(tv.keys[handoff.device], handoff.secretFor(tv.device))
-        compose.onNode(hasText("Cancel")).performClick()
+        handoff.askBring(null)
     }
 
     @Test fun aLinkToThisPhoneItselfIsIgnored() {

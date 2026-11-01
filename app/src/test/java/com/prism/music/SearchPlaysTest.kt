@@ -139,6 +139,32 @@ class SearchPlaysTest {
         assertEquals("MPREb_ah", SearchRank.rank("after hours", rows).top?.id)
     }
 
+    @Test fun theSongOnYouTubesOwnPageCountsWhenTheSongSearchLeftItOut() {
+        // "halo", 2026-11-01: the card was a Halo game soundtrack song (553K plays), the song search had no Beyoncé;
+        // YouTube's unfiltered page did (2.7B).
+        val amber = song("ac", "In Amber Clad", "Halo", 553_000)
+        val lp = song("lp", "Halo (Live)", "LP", 133_000_000)
+        val nomelon = song("nn", "HALO", "NOMELON NOLEMON", 8_100_000)
+        val beyonce = song("bey", "Halo", "Beyoncé", 2_700_000_000)
+        val ost = AlbumItem("MPREb_h", "Halo: Combat Evolved (Original Soundtrack)", "Album • Halo, Martin O'Donnell & Michael Salvatori • 2002", null)
+        val artists = listOf(
+            ArtistItem("UCo", "Oetil Halo", "Artist • 110 subscribers", null),
+            ArtistItem("UCh", "Halo", "Artist • 20.4K subscribers", null),
+        )
+        val rows = listOf(
+            SearchFilter.ALBUMS to listOf(ost), SearchFilter.ARTISTS to artists,
+            SearchFilter.SONGS to listOf(amber, lp, song("ht", "Halo Theme Scorpion Mix", "Paul Lipson", 3_000_000), nomelon),
+        )
+        val page = listOf(beyonce, song("mv", "Halo", "MVMURO", 455_000), amber)
+        val r = SearchRank.rank("halo", rows, card = amber, pageSongs = page)
+        assertEquals("bey", r.top?.id)
+        // Beyoncé's took LP's place (the first of the title), LP the next. Only songs of exactly the title, and known
+        // ones, join: MVMURO's (455K) doesn't.
+        assertEquals(listOf("ac", "ht", "lp", "nn"), r.sections.first { it.first == SearchFilter.SONGS }.second.map { it.id })
+        // Without the page, as before: the most played song of the title the song search had.
+        assertEquals("lp", SearchRank.rank("halo", rows, card = amber).top?.id)
+    }
+
     @Test fun aTitleTrackStillGivesWayToItsAlbum() {
         val thriller = song("mj", "Thriller", "Michael Jackson", 1_000_000_000)
         val other = song("x", "Thriller", "Someone", 5_000_000)
