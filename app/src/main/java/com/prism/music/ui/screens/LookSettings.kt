@@ -184,8 +184,14 @@ private fun LooksSettings() {
             }) { Icon(PrismIcons.Refresh, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(tr(R.string.restart_prism_to_see_its_icons)) }
         }
 
+        // The season's Look in its month (1.8.0) on a card of its own above Prism's; out of its month it isn't offered
+        // (unless it's the one on, until the season ends it).
+        val today = remember { com.prism.music.data.looks.Seasons.today() }
+        com.prism.music.data.looks.Seasons.current(today)?.let { season ->
+            BuiltInLooks.of(season.lookId)?.let { look -> SeasonCard(look) { apply(look) } }
+        }
         Group(tr(R.string.prism_s_looks)) {
-            LookGrid(BuiltInLooks.all, current, onPick = ::apply, onMore = { acting = it })
+            LookGrid(BuiltInLooks.all.filter { com.prism.music.data.looks.Seasons.shown(it.id, today) || it.id == current }, current, onPick = ::apply, onMore = { acting = it })
         }
         Group(tr(R.string.your_looks)) {
             if (mine.isEmpty()) Note(tr(R.string.looks_you_save_show_here_save))
