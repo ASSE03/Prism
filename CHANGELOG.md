@@ -67,7 +67,9 @@ What changed in each release. Older releases are described on the [Releases page
   place. What plays when the queue ends, music videos (play them / songs in radios / songs everywhere), Crossfade (Off ·
   Automatic · Fixed length), Trim silence, the same loudness for every song, Glass (Off · Frosted · Liquid), how screens
   change, the buttons at the top of Home, and the light-mode accent are each a single choice. Nothing you had set
-  changes on the update, and Settings search still finds a setting by its old name.
+  changes on the update, and Settings search still finds a setting by its old name. Two switches are gone: the cast
+  mark now always shows while you cast, and the lyrics look is the same on the player's lyric line and in immersive
+  mode as on the lyrics page.
 - **The player, your way**: Customize Prism → Player → **What's on the player** is a drawing of your player: tap any
   part to hide it (cover, title, artist, like, buttons, progress bar, times, volume, device line…), tap it again to bring
   it back. Only play / pause always stays, and nothing hidden is gone: its action moves into the ⋯ menu.

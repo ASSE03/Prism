@@ -34,7 +34,9 @@ A free, open-source YouTube Music client for Android, with word-by-word lyrics, 
 The first 1.8 update: Prism on your TV, with your phone as its remote, and every Settings page gone through so each choice is in one place. Nothing you had set changes on the update.
 
 - **Prism TV:** the same app on Android TV and Google TV, with screens made for a remote: Home, Search (with the remote's microphone), your Library, and a full-screen player with big word-by-word lyrics, the queue, music videos and Sing. When music plays and the remote is put down, the TV dims to the song and its lyrics.
-- **Your phone as the TV's remote:** pair them once over your Wi-Fi (an encrypted link), and your phone can sign the TV in to YouTube Music, control it, add songs and send it your Look.
+- **Your phone as the TV's remote:** pair them once over your Wi-Fi (an encrypted link), and your phone can sign the TV in to YouTube Music, control it, add songs, send it your Look and bring it your history, likes and playlists. Pick the TV in Play on and the two stay in sync, as casting does.
+- **The TV your way:** every Home row the phone has, arranged with the remote; lyrics word by word in your style, a timing control, lyrics over music videos; Sing on mid-range TVs too.
+- **For the holidays:** Harvest and Holiday Looks with their own illustrations and colors, only in their month (Holiday Mode asks once), and holiday mixes from Prism on Home in season.
 - **Getting Prism onto a TV:** type code **8986606** into the Downloader app on the TV, or turn on Settings → Speakers, TVs & browser → **Share Prism with a TV** and type the address it shows.
 - **Settings, made clearer:** settings that worked together are one choice now (what plays when the queue ends, music videos, Crossfade, Trim silence, Glass, how screens change…), and search still finds them by their old names.
 - **The player, your way:** a drawing of your player where you tap any part to hide it, and a ⋯ menu in groups that you can rearrange with Edit this menu.

@@ -442,7 +442,9 @@ fun AppSettings.shows(part: PlayerPart): Boolean = when (part) {
     PlayerPart.QUALITY -> showQuality
     PlayerPart.BEST_PART -> bestPartButton
     PlayerPart.SHUFFLE_REPEAT -> playerShuffleRepeat
-    PlayerPart.VOLUME -> !hideVolumeBar
+    // With Prism's own volume the slider is the only way to change it: shown whatever a Look says (a Look applied
+    // after picking it could hide it, and then it couldn't be brought back: canHide below).
+    PlayerPart.VOLUME -> !hideVolumeBar || volumeControl == VolumeControl.PRISM
     PlayerPart.OUTPUT -> showOutputDevice
     PlayerPart.NAV_BAND -> playerNavBand
     PlayerPart.CROSSFADE_MARK -> view.crossfadeMark

@@ -239,6 +239,10 @@ class PlayerEditorTest {
         // Prism's own volume has no buttons: its slider can't be hidden.
         assertFalse(d.copy(volumeControl = VolumeControl.PRISM).canHide(PlayerPart.VOLUME))
         assertTrue(d.canHide(PlayerPart.VOLUME))
+        // …and stays on the player even when a Look applied afterwards (Holiday Mode, a schedule) says hidden: with it
+        // gone, Prism's own volume couldn't be changed or turned back to the phone's.
+        assertTrue(d.copy(volumeControl = VolumeControl.PRISM, hideVolumeBar = true).shows(PlayerPart.VOLUME))
+        assertFalse(d.copy(hideVolumeBar = true).shows(PlayerPart.VOLUME))
     }
 
     /** Full-bleed artwork and full-bleed video are one switch: on if either was, and both written together. */

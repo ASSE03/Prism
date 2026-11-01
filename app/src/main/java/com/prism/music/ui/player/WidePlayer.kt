@@ -138,7 +138,7 @@ internal fun WidePlayerContent(
             )
             if (!short) {
                 Spacer(Modifier.height(10.dp))
-                if (!settings.hideVolumeBar) VolumeRow(volume)
+                if (settings.shows(com.prism.music.data.prefs.PlayerPart.VOLUME)) VolumeRow(volume)
             }
             Spacer(Modifier.height(if (short) 2.dp else 6.dp))
             if (settings.shows(PlayerPart.BUTTONS)) PlayerActionRow(

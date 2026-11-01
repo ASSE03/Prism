@@ -1142,7 +1142,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                         )
                                     // A hidden volume bar keeps its room, so the transport sits where it always has (giving it
                                     // to a Large / Full width cover in 1.6.4 dropped the controls toward the bottom row).
-                                    com.prism.music.data.prefs.DeckPart.VOLUME -> if (!settings.hideVolumeBar) VolumeRow(volume) else Spacer(Modifier.height(VOLUME_ROW_HEIGHT))
+                                    com.prism.music.data.prefs.DeckPart.VOLUME -> if (settings.shows(com.prism.music.data.prefs.PlayerPart.VOLUME)) VolumeRow(volume) else Spacer(Modifier.height(VOLUME_ROW_HEIGHT))
                                     com.prism.music.data.prefs.DeckPart.BUTTONS -> PlayerActionRow(
                                         lyricsOpen, queueOpen, videoMode, videoAvailable,
                                         onToggleLyrics = { if (lyricsOpen) closeLyrics() else openLyrics() },
