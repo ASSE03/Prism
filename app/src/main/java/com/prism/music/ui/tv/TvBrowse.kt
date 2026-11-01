@@ -241,7 +241,14 @@ fun TvLibraryScreen(
             },
         ) {
             tabs.forEachIndexed { i, t ->
-                Tab(selected = i == tab, onFocus = { onTab(i) }, onClick = { onTab(i) }, modifier = Modifier.tvItem("$TAG_LIBRARY/tab/$i", entry = i == tab)) {
+                // Light on the dark page, the tab shown brightest (the split light under it); focused, white on the pill.
+                Tab(
+                    selected = i == tab, onFocus = { onTab(i) }, onClick = { onTab(i) }, modifier = Modifier.tvItem("$TAG_LIBRARY/tab/$i", entry = i == tab),
+                    colors = androidx.tv.material3.TabDefaults.underlinedIndicatorTabColors(
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant, selectedContentColor = MaterialTheme.colorScheme.onSurface,
+                        focusedContentColor = MaterialTheme.colorScheme.onSurface, focusedSelectedContentColor = MaterialTheme.colorScheme.onSurface,
+                    ),
+                ) {
                     Text(t, Modifier.padding(horizontal = 16.dp, vertical = 8.dp), style = MaterialTheme.typography.titleMedium)
                 }
             }
