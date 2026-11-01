@@ -387,6 +387,7 @@ object SettingsIndex {
         SettingEntry(SettingsSection.LANGUAGE, tr(R.string.region), tr(R.string.content_country), tr(R.string.region_location_gl)),
         // Prism Connect
         SettingEntry(C, tr(R.string.speakers_tvs), tr(R.string.play_on_a_speaker_or_tv), tr(R.string.cast_casting_google_cast_google_tv)),
+        SettingEntry(SettingsSection.PLAYER, tr(R.string.desk_mode), tr(R.string.desk_mode), tr(R.string.desk_mode_keywords)),
         SettingEntry(C, tr(R.string.prism_on_a_tv), tr(R.string.share_prism_with_a_tv), tr(R.string.tv_install_keywords)),
         SettingEntry(C, tr(R.string.prism_on_a_tv), tr(R.string.downloader_code), tr(R.string.tv_install_keywords)),
         SettingEntry(C, tr(R.string.control_from_a_browser), tr(R.string.control_from_a_browser), tr(R.string.web_remote_computer_laptop_tablet_browser)),

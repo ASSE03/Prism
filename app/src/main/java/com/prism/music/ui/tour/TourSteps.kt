@@ -51,6 +51,8 @@ object Tour {
     private const val V1_7_9 = 49
 /** Prism 1.7.9.2 (build 51): your requests, each an option. */
 private const val V1_7_9_2 = 51
+/** Prism 1.8.0 (build 53): Prism TV, Settings made clearer, the player and lyrics in parts. */
+private const val V1_8_0 = 53
 
     /** Every step, in the order they're shown. */
     val steps: List<TourStep> = listOf(
@@ -406,6 +408,54 @@ private const val V1_7_9_2 = 51
                 tr(R.string.tour_1792_colors),
             ),
             listOf(PrismIcons.Search, PrismIcons.Palette),
+        ),
+        TourStep(
+            V1_8_0, PrismIcons.Tv, tr(R.string.tour_180_tv),
+            tr(R.string.tour_180_tv_body),
+            listOf(
+                tr(R.string.tour_180_tv_phone),
+                tr(R.string.tour_180_tv_get, com.prism.music.connect.TvInstall.DOWNLOADER_CODE),
+                tr(R.string.tour_180_tv_big),
+            ),
+            listOf(PrismIcons.Tv, PrismIcons.Handoff),
+            showMe = Routes.settings("connect"),
+        ),
+        TourStep(
+            V1_8_0, PrismIcons.Settings, tr(R.string.tour_180_settings),
+            tr(R.string.tour_180_settings_body),
+            listOf(
+                tr(R.string.tour_180_settings_merged),
+                tr(R.string.tour_180_settings_search),
+                tr(R.string.tour_180_settings_tablet),
+            ),
+            listOf(PrismIcons.Settings, PrismIcons.Search),
+            showMe = Routes.settings("sound"),
+        ),
+        TourStep(
+            V1_8_0, PrismIcons.PlayCircle, tr(R.string.tour_180_player),
+            tr(R.string.tour_180_player_body),
+            listOf(tr(R.string.tour_180_player_parts), tr(R.string.tour_180_player_menu)),
+            listOf(PrismIcons.PlayCircle, PrismIcons.Edit),
+            showMe = Routes.settings("player"),
+        ),
+        TourStep(
+            V1_8_0, PrismIcons.Lyrics, tr(R.string.tour_180_lyrics),
+            tr(R.string.tour_180_lyrics_body),
+            listOf(tr(R.string.tour_180_lyrics_start), tr(R.string.tour_180_lyrics_smooth)),
+            listOf(PrismIcons.Lyrics, PrismIcons.Palette),
+            showMe = Routes.settings("lyrics_look"),
+        ),
+        TourStep(
+            V1_8_0, PrismIcons.QueueMusic, tr(R.string.also_new),
+            tr(R.string.from_your_requests),
+            listOf(
+                tr(R.string.tour_180_desk),
+                tr(R.string.tour_180_crossfade),
+                tr(R.string.tour_180_silence),
+                tr(R.string.tour_180_normalize),
+                tr(R.string.tour_180_size),
+            ),
+            listOf(PrismIcons.Moon, PrismIcons.Equalizer),
         ),
         TourStep(
             V1_7, PrismIcons.Update, tr(R.string.stay_in_the_loop),

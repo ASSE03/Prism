@@ -1597,6 +1597,10 @@ private fun PlayerSettings() {
                 info = tr(R.string.the_moving_artwork_fills_the_whole),
             ) { prefs.setCanvasFillsBackground(it) }
         }
+        // #265 (1.8.0): the TV's ambient screen on a phone at its stand ([com.prism.music.ui.tv.AmbientHost]); off unless switched on.
+        Group(tr(R.string.desk_mode)) {
+            Toggle(tr(R.string.desk_mode), tr(R.string.desk_mode_detail), s.tv.deskMode, info = tr(R.string.desk_mode_info)) { prefs.setDeskMode(it) }
+        }
         MoreOptions(listOf(tr(R.string.title_and_times), tr(R.string.visualizer), tr(R.string.immersive_mode))) {
         PlayerTitleGroup()
         PlayerVisualizerGroup()

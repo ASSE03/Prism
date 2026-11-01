@@ -4070,6 +4070,34 @@
     <string name="downloader_code_detail">%1$s, for the Downloader app on a TV</string>
     <string name="downloader_code_info">Type it into Downloader on a TV to get the newest Prism from the internet. It works without this phone.</string>
     <string name="tv_install_keywords">tv android tv google tv fire tv install apk download sideload downloader send put on</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Desk mode</string>
+    <string name="desk_mode_detail">While the phone charges and music plays</string>
+    <string name="desk_mode_info">Instead of the phone going to sleep, Prism shows the song, its cover and its lyrics on a dimmed screen that drifts slowly so it doesn\'t burn in. Touch the screen to come back.</string>
+    <string name="desk_mode_keywords">always on stand charging dock clock ambient screensaver bedside keep the screen on</string>
+    <string name="tour_180_tv">Prism on your TV</string>
+    <string name="tour_180_tv_body">The same Prism, made for a remote, on Android TV and Google TV.</string>
+    <string name="tour_180_tv_phone">Your phone signs the TV in and becomes its remote</string>
+    <string name="tour_180_tv_get">Get it on the TV with the Downloader app: code %1$s, or from this phone</string>
+    <string name="tour_180_tv_big">Big lyrics, music videos and Sing on the big screen</string>
+    <string name="tour_180_settings">Settings, made clearer</string>
+    <string name="tour_180_settings_body">Fewer switches: settings that worked together are one choice now.</string>
+    <string name="tour_180_settings_merged">Crossfade, glass and what plays next are each one choice</string>
+    <string name="tour_180_settings_search">Search still finds a setting by its old name</string>
+    <string name="tour_180_settings_tablet">On a tablet, choose where the tabs sit</string>
+    <string name="tour_180_player">The player, your way</string>
+    <string name="tour_180_player_body">Hide any part of the player, and put the ⋯ menu in your own order.</string>
+    <string name="tour_180_player_parts">Tap a part of the drawing to hide it: its action stays in the menu</string>
+    <string name="tour_180_player_menu">Edit this menu: pin up to four tiles, fold the rest away</string>
+    <string name="tour_180_lyrics">Lyrics in four parts</string>
+    <string name="tour_180_lyrics_body">Start from a look, then choose its animation, text, background and effects.</string>
+    <string name="tour_180_lyrics_start">Start from Prism, Karaoke, Bold card, Glow, Typewriter or Calm</string>
+    <string name="tour_180_lyrics_smooth">Karaoke and Bold card animate more smoothly</string>
+    <string name="tour_180_desk">Desk mode: a calm screen while the phone charges and plays</string>
+    <string name="tour_180_crossfade">Crossfades never repeat a moment of the song</string>
+    <string name="tour_180_silence">Trim silence only touches a song\'s start and end</string>
+    <string name="tour_180_normalize">Same loudness evens out big jumps between songs</string>
+    <string name="tour_180_size">A smaller download</string>
     <!-- 1.8.0 TV -->
     <string name="compose_for_tv" translatable="false">Compose for TV (androidx.tv)</string>
     <string name="tv_update_ready">Prism %1$s is ready</string>
