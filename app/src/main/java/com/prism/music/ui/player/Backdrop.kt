@@ -170,6 +170,16 @@ fun ArtworkMeshBackdrop(
     }
 }
 
+/**
+ * [ArtworkMeshBackdrop] as it rests on a TV (no drift, no live blur, no seam): the same fill, mesh and deepening,
+ * for the TV to make once into a picture (1.8.0).
+ */
+internal fun DrawScope.drawStillMesh(mesh: ArtworkMesh) {
+    drawRect(PlayerFallbackBackdrop)
+    drawMesh(mesh, 0f, 1f)
+    drawRect(Brush.verticalGradient(0f to Color.Black.copy(alpha = 0.08f), 0.55f to Color.Black.copy(alpha = 0.22f), 1f to Color.Black.copy(alpha = 0.42f)))
+}
+
 private fun DrawScope.drawMesh(mesh: ArtworkMesh, seamY: Float, alpha: Float, tone: androidx.compose.ui.graphics.ColorFilter? = null) {
     if (alpha <= 0.001f) return
     val img = mesh.image

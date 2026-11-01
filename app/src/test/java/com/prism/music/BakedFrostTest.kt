@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.prism.music.data.prefs.AppSettings
 import com.prism.music.ui.components.FrostImage
 import com.prism.music.ui.components.FrostedBackdrop
+import com.prism.music.ui.player.drawStillMesh
 import com.prism.music.ui.tv.TvTheme
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -63,6 +64,24 @@ class BakedFrostTest {
             n++
         }
         return sum / n
+    }
+
+    /** The player's mesh made once into a picture (the TV's player and lyrics) looks like the mesh drawn live. */
+    @Test fun theBakedPlayerMeshLooksLikeTheLiveOne() {
+        val mesh = com.prism.music.ui.player.ArtworkMesh(frost.image)
+        compose.setContent {
+            TvTheme(AppSettings()) {
+                if (!baked) com.prism.music.ui.player.ArtworkMeshBackdrop(mesh, Modifier.fillMaxSize(), liveBlur = false)
+                else com.prism.music.ui.tv.TvBaked(mesh) { drawStillMesh(mesh) }
+            }
+        }
+        val live = shot()
+        baked = true
+        var got = shot()
+        val end = System.currentTimeMillis() + 10_000
+        while (diff(live, got) > 2.0 && System.currentTimeMillis() < end) got = shot()
+        val d = diff(live, got)
+        assertTrue("baked mesh differs from live by $d per channel", d <= 2.0)
     }
 
     @Test fun theBakedFrostLooksLikeTheLiveOne() {
