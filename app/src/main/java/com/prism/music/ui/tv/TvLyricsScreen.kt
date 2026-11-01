@@ -260,6 +260,9 @@ private fun TvLyricsList(
                     roman?.getOrNull(i), romanInstead, translations?.getOrNull(i),
                     Modifier.graphicsLayer {
                         this.alpha = alpha.value
+                        // The alpha on each thing drawn, not the line drawn offscreen first (that was every dimmed line,
+                        // every frame: the Android TV 11 run went from 37% to 49% janky frames with it).
+                        compositingStrategy = androidx.compose.ui.graphics.CompositingStrategy.ModulateAlpha
                         scaleX = size.value; scaleY = size.value
                         transformOrigin = androidx.compose.ui.graphics.TransformOrigin(if (centred) 0.5f else 0f, 0.5f)
                     },
@@ -402,6 +405,8 @@ fun TvLyricsPlace(
     overVideo: Boolean = false,
     status: String? = null,
     buttons: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {},
+    /** The timing's panel, its nudge taking the requester (the tests' stand-in; the song's own timing otherwise). */
+    timingPanel: @Composable androidx.compose.foundation.layout.BoxScope.(androidx.compose.ui.focus.FocusRequester) -> Unit = { TvTimingPanel(it) },
     onSeek: (Long) -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
@@ -468,7 +473,13 @@ fun TvLyricsPlace(
         }
         if (timing) {
             androidx.activity.compose.BackHandler { timing = false; runCatching { linesFocus.requestFocus() } }
-            TvTimingPanel()
+            val nudge = remember { androidx.compose.ui.focus.FocusRequester() }
+            timingPanel(nudge)
+            // Focus onto the nudge as soon as it's placed (it isn't the screen's first item: the screen is open already,
+            // so it wouldn't take focus itself, and focus stayed on Timing; the Google TV run).
+            LaunchedEffect(Unit) {
+                repeat(40) { if (runCatching { nudge.requestFocus() }.getOrDefault(false)) return@LaunchedEffect; delay(50) }
+            }
         }
     }
 }
@@ -479,7 +490,7 @@ fun TvLyricsPlace(
  * can be set by ear. Back closes it.
  */
 @Composable
-private fun androidx.compose.foundation.layout.BoxScope.TvTimingPanel() {
+private fun androidx.compose.foundation.layout.BoxScope.TvTimingPanel(focus: androidx.compose.ui.focus.FocusRequester) {
     val c = LocalContainer.current
     val pc = c.player
     val offset by pc.lyricOffset.collectAsState()
@@ -509,7 +520,8 @@ private fun androidx.compose.foundation.layout.BoxScope.TvTimingPanel() {
                         else -> false
                     }
                 }
-                .tvItem("$TAG_LYRICS/nudge", entry = true)
+                .focusRequester(focus)
+                .tvItem("$TAG_LYRICS/nudge")
                 .focusable(interactionSource = interaction)
                 .then(if (focused) Modifier.border(TV_RING_THIN, tvRing(), TvShapes.card) else Modifier)
                 .padding(vertical = 14.dp),
