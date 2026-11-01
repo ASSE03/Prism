@@ -4053,6 +4053,7 @@
     <string name="tv_update_note">ابھی انسٹال کریں: Android صرف ایک بار اجازت مانگتا ہے</string>
     <string name="tv_up_next_line">اگلا: %1$s</string>
     <string name="tv_seek_line">گانے میں جگہ: %2$s میں سے %1$s</string>
+    <string name="tv_video_failed">میوزک ویڈیو لوڈ نہیں ہوئی، اس لیے گانا چل رہا ہے</string>
     <string name="tv_playing_from">%1$s سے چل رہا ہے</string>
     <string name="tv_vocals_out">آواز کے بغیر</string>
     <string name="tv_key_line">سُر: %1$s</string>

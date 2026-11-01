@@ -4003,6 +4003,7 @@
     <string name="tv_update_note">Cài ngay: Android chỉ xin phép một lần</string>
     <string name="tv_up_next_line">Tiếp theo: %1$s</string>
     <string name="tv_seek_line">Vị trí trong bài hát: %1$s / %2$s</string>
+    <string name="tv_video_failed">Video nhạc không tải được, nên bài hát vẫn phát tiếp</string>
     <string name="tv_playing_from">Đang phát từ %1$s</string>
     <string name="tv_vocals_out">Không lời hát</string>
     <string name="tv_key_line">Tông: %1$s</string>

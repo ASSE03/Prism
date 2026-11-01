@@ -4153,6 +4153,7 @@
     <string name="tv_update_note">Установіть зараз: Android попросить дозвіл лише один раз</string>
     <string name="tv_up_next_line">Далі: %1$s</string>
     <string name="tv_seek_line">Позиція в пісні: %1$s з %2$s</string>
+    <string name="tv_video_failed">Музичне відео не завантажилося, тож грає пісня</string>
     <string name="tv_playing_from">Грає з: %1$s</string>
     <string name="tv_vocals_out">Без вокалу</string>
     <string name="tv_key_line">Тональність: %1$s</string>

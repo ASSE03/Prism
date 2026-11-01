@@ -7,6 +7,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.prism.music.TvFixture.awaitFocusOn
 import com.prism.music.playback.QueueKind
 import com.prism.music.playback.QueueSource
+import com.prism.music.playback.videoModeId
 import com.prism.music.ui.tv.TAG_HOME
 import com.prism.music.ui.tv.TAG_LYRICS
 import com.prism.music.ui.tv.TAG_PLAYER
@@ -43,27 +44,94 @@ class TvVideoTests {
         Fixture.ready()
     }
 
+    /** Re-marks the queue's songs as their videos after each move (see [lineUp]). */
+    private var marker: androidx.media3.common.Player.Listener? = null
+
     @After fun cleanUp() {
-        runCatching { instrumentation.runOnMainSync { player.setVideoMode(false); player.stop() } }
+        runCatching { instrumentation.runOnMainSync { marker?.let { player.player?.removeListener(it) }; player.setVideoMode(false); player.stop() } }
         tones.forEach { runCatching { Fixture.context.contentResolver.delete(it, null, null) } }
     }
 
-    /** [withLyrics]: the first tone has lyrics saved for it (as if found earlier), so no network is needed. */
-    private fun lineUp(withLyrics: Boolean = false) {
+    /**
+     * Three songs lined up and playing. Silent tones (no picture), or with [pictures] short clips with a real picture
+     * (assets/tv-test-video.m4a: 45 s of a test pattern, H.264 + silent AAC) played as their own videos: each is marked
+     * as in video mode, as Prism does once YouTube gave a song's video, and marked again after each move (Prism lines
+     * the next song up as its video, or switches it as it starts; for a file on the phone it would find none).
+     * [withLyrics]: the first song has lyrics saved for it (as if found earlier), so no network is needed.
+     */
+    private fun lineUp(pictures: Boolean = false, withLyrics: Boolean = false) {
         val perm = if (android.os.Build.VERSION.SDK_INT >= 33) android.Manifest.permission.READ_MEDIA_AUDIO else android.Manifest.permission.READ_EXTERNAL_STORAGE
         instrumentation.uiAutomation.grantRuntimePermission(Fixture.context.packageName, perm)
-        tones += Fixture.tone("Prism TV video one", 90)
-        tones += Fixture.tone("Prism TV video two", 90)
-        tones += Fixture.tone("Prism TV video three", 90)
+        val titles = listOf("Prism TV video one", "Prism TV video two", "Prism TV video three")
+        titles.forEach { tones += if (pictures) clip(it) else Fixture.tone(it, 90) }
         val local = Fixture.container.localMusic
-        runBlocking { local.scan() }
-        val songs = listOf("Prism TV video one", "Prism TV video two", "Prism TV video three").map { t -> local.tracks.value.first { it.song.title == t }.song }
+        val end = System.currentTimeMillis() + 20_000
+        // The media store reads a clip's length a moment after it's written.
+        while (true) {
+            runBlocking { local.scan() }
+            if (titles.all { t -> local.tracks.value.any { it.song.title == t } }) break
+            if (System.currentTimeMillis() > end) throw AssertionError("the test songs never showed in Local files")
+            Thread.sleep(500)
+        }
+        val songs = titles.map { t -> local.tracks.value.first { it.song.title == t }.song }
         if (withLyrics) {
             val lrc = (0 until 10).joinToString("\n") { i -> "[00:%02d.00]Line number ${i + 1} of the tone".format(i * 8) }
             runBlocking { Fixture.container.db.lyrics().put(com.prism.music.data.db.LyricsEntity(songs[0].id, "LRCLIB", true, lrc, System.currentTimeMillis())) }
         }
         instrumentation.runOnMainSync { player.playQueue(songs, 0, QueueSource(QueueKind.OTHER, "TV video test")) }
         waitFor(20_000) { player.currentIndex.value == 0 && player.isPlaying.value }
+        if (!pictures) return
+        instrumentation.runOnMainSync {
+            val p = player.player!!
+            p.replaceMediaItems(0, p.mediaItemCount, (0 until p.mediaItemCount).map { asVideo(p.getMediaItemAt(it)) })
+            val main = android.os.Handler(android.os.Looper.getMainLooper())
+            marker = object : androidx.media3.common.Player.Listener {
+                override fun onMediaItemTransition(mediaItem: androidx.media3.common.MediaItem?, reason: Int) {
+                    main.post {
+                        for (i in 0 until p.mediaItemCount) {
+                            val item = p.getMediaItemAt(i)
+                            if (item.videoModeId == null && item.mediaId in songs.map { it.id }) p.replaceMediaItem(i, asVideo(item))
+                        }
+                    }
+                }
+            }.also { p.addListener(it) }
+        }
+        waitFor(20_000) { player.isPlaying.value && player.videoMode.value }
+    }
+
+    /** [item] marked as playing in video mode (its own file is the video). */
+    private fun asVideo(item: androidx.media3.common.MediaItem): androidx.media3.common.MediaItem {
+        val extras = android.os.Bundle(item.mediaMetadata.extras ?: android.os.Bundle()).apply { putString(com.prism.music.playback.EXTRA_VIDEO, item.mediaId) }
+        return item.buildUpon().setMediaMetadata(item.mediaMetadata.buildUpon().setExtras(extras).build()).build()
+    }
+
+    /** One copy of the test clip in the TV's music, as [title]. */
+    private fun clip(title: String): android.net.Uri {
+        org.junit.Assume.assumeTrue("clips are written through the media store (Android 10+)", android.os.Build.VERSION.SDK_INT >= 29)
+        val bytes = instrumentation.context.assets.open("tv-test-video.m4a").use { it.readBytes() }
+        val resolver = Fixture.context.contentResolver
+        val values = android.content.ContentValues().apply {
+            put(android.provider.MediaStore.Audio.Media.DISPLAY_NAME, "$title.m4a")
+            put(android.provider.MediaStore.Audio.Media.TITLE, title)
+            put(android.provider.MediaStore.Audio.Media.MIME_TYPE, "audio/mp4")
+            put(android.provider.MediaStore.Audio.Media.RELATIVE_PATH, "Music/")
+            put(android.provider.MediaStore.Audio.Media.IS_PENDING, 1)
+        }
+        val uri = resolver.insert(android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values)!!
+        resolver.openOutputStream(uri)!!.use { it.write(bytes) }
+        resolver.update(uri, android.content.ContentValues().apply { put(android.provider.MediaStore.Audio.Media.IS_PENDING, 0) }, null, null)
+        return uri
+    }
+
+    /** The video screen's frame count (it's open). */
+    private fun frames() = com.prism.music.ui.tv.TvVideoProbe.frames ?: throw AssertionError("the video screen counts no frames")
+    private fun videoWidth(): Int { var w = 0; instrumentation.runOnMainSync { w = player.player?.videoSize?.width ?: 0 }; return w }
+
+    /** The picture is on screen: frames since the last move, the player's video size, no cover over it. */
+    private fun awaitPicture(ms: Long = 20_000) {
+        waitFor(ms) { frames().sinceReset.get() >= 3 }
+        assertTrue("the player has no video size", videoWidth() > 0)
+        compose.waitUntil(5_000) { !exists(com.prism.music.ui.tv.TAG_VIDEO_COVER) }
     }
 
     /** The tones have no video: the player is told this one has, so its Video button shows (as for a real song). */
@@ -76,8 +144,8 @@ class TvVideoTests {
     private fun exists(tag: String) = compose.onAllNodes(hasTestTag(tag), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
 
     /** Home → the player → its Video button → the video, focus on play/pause. */
-    private fun openTheVideo(withLyrics: Boolean = false) {
-        lineUp(withLyrics)
+    private fun openTheVideo(pictures: Boolean = false, withLyrics: Boolean = false) {
+        lineUp(pictures, withLyrics)
         TvFixture.launch()
         compose.awaitFocusOn(hasTestTag("$TAG_HOME/player"), 15_000)
         TvFixture.ok()
@@ -231,6 +299,45 @@ class TvVideoTests {
         TvFixture.back()
         focusOn(TvVideoControl.LYRICS)
         assertTrue(!exists(com.prism.music.ui.tv.TAG_VIDEO_LYRICS) && exists(TAG_VIDEO))
+    }
+
+    /**
+     * The owner's TV: "If you skip too fast … it just shows the album artwork". Two skips in a row end on the third
+     * song, as its video, with its picture on screen (frames counted since the skips, the player's video size).
+     */
+    @Test fun skippingTwiceQuicklyEndsOnTheRightVideoWithItsPicture() {
+        openTheVideo(pictures = true)
+        awaitPicture()
+        val before = frames().resets
+        TvFixture.press(android.view.KeyEvent.KEYCODE_MEDIA_NEXT)
+        TvFixture.press(android.view.KeyEvent.KEYCODE_MEDIA_NEXT)
+        waitFor(10_000) { player.currentIndex.value == 2 }
+        assertTrue("the skips didn't reset the picture", frames().resets > before)
+        waitFor(10_000) { player.videoMode.value }
+        awaitPicture()
+        assertTrue(player.currentSong.value?.title == "Prism TV video three")
+        // Still on the video screen, the controls as they were.
+        assertTrue(exists(TAG_VIDEO))
+    }
+
+    /**
+     * The owner's TV: "If you … seek far in a song while on the video, it just shows the album artwork". A long seek
+     * from the seek line (30 s on), then one from elsewhere (the phone as a remote), each ending with the picture back.
+     */
+    @Test fun aLongSeekEndsWithThePictureBack() {
+        openTheVideo(pictures = true)
+        awaitPicture()
+        TvFixture.up(); focusOn(TvVideoControl.SEEK)
+        var before = frames().resets
+        repeat(3) { TvFixture.right(); Thread.sleep(150) }
+        waitFor(5_000) { position() >= 28_000 }
+        assertTrue("the seek didn't reset the picture", frames().resets > before)
+        awaitPicture()
+        before = frames().resets
+        instrumentation.runOnMainSync { player.seekTo(2_000) }
+        waitFor(5_000) { frames().resets > before }
+        awaitPicture()
+        assertTrue(player.videoMode.value)
     }
 
     private fun waitFor(timeoutMs: Long, condition: () -> Boolean) {

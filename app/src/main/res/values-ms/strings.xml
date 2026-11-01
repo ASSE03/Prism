@@ -4003,6 +4003,7 @@
     <string name="tv_update_note">Pasang sekarang: Android hanya meminta kebenaran sekali</string>
     <string name="tv_up_next_line">Seterusnya: %1$s</string>
     <string name="tv_seek_line">Kedudukan lagu: %1$s daripada %2$s</string>
+    <string name="tv_video_failed">Video muzik tidak dimuatkan, jadi lagu terus dimainkan</string>
     <string name="tv_playing_from">Dimainkan dari %1$s</string>
     <string name="tv_vocals_out">Tanpa vokal</string>
     <string name="tv_key_line">Kunci: %1$s</string>

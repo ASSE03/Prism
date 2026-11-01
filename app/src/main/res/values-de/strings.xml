@@ -4053,6 +4053,7 @@
     <string name="tv_update_note">Jetzt installieren: Android fragt nur einmal um Erlaubnis</string>
     <string name="tv_up_next_line">Als Nächstes: %1$s</string>
     <string name="tv_seek_line">Position im Song: %1$s von %2$s</string>
+    <string name="tv_video_failed">Das Musikvideo wurde nicht geladen, deshalb läuft der Song weiter</string>
     <string name="tv_playing_from">Läuft aus %1$s</string>
     <string name="tv_vocals_out">Ohne Gesang</string>
     <string name="tv_key_line">Tonart: %1$s</string>

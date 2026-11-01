@@ -4153,6 +4153,7 @@
     <string name="tv_update_note">Установите сейчас: Android спросит разрешение только один раз</string>
     <string name="tv_up_next_line">Далее: %1$s</string>
     <string name="tv_seek_line">Позиция в песне: %1$s из %2$s</string>
+    <string name="tv_video_failed">Клип не загрузился, поэтому играет песня</string>
     <string name="tv_playing_from">Играет из: %1$s</string>
     <string name="tv_vocals_out">Без вокала</string>
     <string name="tv_key_line">Тональность: %1$s</string>

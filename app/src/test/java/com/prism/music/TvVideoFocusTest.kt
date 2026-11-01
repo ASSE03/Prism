@@ -66,12 +66,14 @@ class TvVideoFocusTest {
         compose.waitForIdle()
     }
 
+    private var status by mutableStateOf(com.prism.music.ui.tv.TvVideoStatus.LOADING)
+
     private fun show(nowShown: TvNow = now) {
         compose.setContent {
             TvTheme(AppSettings()) {
                 CompositionLocalProvider(LocalTvScreen provides "video") {
                     TvVideoPlace(
-                        nowShown, ready = false,
+                        nowShown, status = status,
                         onPlayPause = { pressed += "playpause" }, onNext = { pressed += "next" }, onPrevious = { pressed += "previous" },
                         onSeek = { seeks += it }, onLyrics = { pressed += "lyrics" }, onQueue = { pressed += "queue"; panel = true },
                         onSong = { pressed += "song" }, onMore = { pressed += "more" },
@@ -138,6 +140,21 @@ class TvVideoFocusTest {
         key(Key.DirectionCenter)
         compose.waitUntil(2_000) { !panel }
         awaitFocus(tag(TvVideoControl.QUEUE))
+    }
+
+    /** The cover (with a spinner) stands over the video until it has a picture, then goes; it says why when there's none. */
+    @Test fun theCoverStandsInUntilThePictureComes() {
+        show()
+        awaitFocus(tag(TvVideoControl.PLAYPAUSE))
+        fun exists(t: String) = compose.onAllNodes(hasTestTag(t), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
+        assertTrue(exists(com.prism.music.ui.tv.TAG_VIDEO_COVER) && exists(com.prism.music.ui.tv.TAG_VIDEO_SPINNER))
+        status = com.prism.music.ui.tv.TvVideoStatus.PICTURE
+        compose.waitUntil(3_000) { !exists(com.prism.music.ui.tv.TAG_VIDEO_COVER) }
+        status = com.prism.music.ui.tv.TvVideoStatus.NO_VIDEO
+        compose.waitUntil(3_000) { exists(com.prism.music.ui.tv.TAG_VIDEO_COVER) }
+        assertFalse(exists(com.prism.music.ui.tv.TAG_VIDEO_SPINNER))
+        // Focus stays on the controls throughout.
+        assertTrue(focusedOn(tag(TvVideoControl.PLAYPAUSE)))
     }
 
     @Test fun whichControlsAVideoShows() {
