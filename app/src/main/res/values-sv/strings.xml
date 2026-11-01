@@ -4138,4 +4138,15 @@
     <string name="sing_mono_song">Den här låten är i mono: det snabba sättet kan inte ta bort rösten, så den spelas som den är.</string>
     <string name="tv_sing_measured">Den här tv:n separerar låtar %1$s× så snabbt som de spelas.</string>
     <string name="tv_voice_quick">Rösten sänkt (snabbt sätt)</string>
+    <string name="harvest">Skörd</string>
+    <string name="holiday">Helger</string>
+    <string name="harvest_note">Fallande löv, en kalkon, pajer och pumpor, för november</string>
+    <string name="holiday_note">Snö, granar, presenter och polkagrisar, för december</string>
+    <string name="for_the_season">Säsongens: %1$s</string>
+    <string name="season_info">Bara den här månaden. När den är slut går Prism tillbaka till looken du hade innan.</string>
+    <string name="season_over_back_to">%1$s är över: tillbaka till %2$s</string>
+    <string name="season_over_backgrounds">%1$s är över: dess bakgrund är undanplockad</string>
+    <string name="holiday_mode">Helgläge</string>
+    <string name="holiday_mode_harvest">Slå på helgläge för Thanksgiving? Prism får höstfärger med fallande löv, kalkoner, pajer och kurbitsar bakom din musik. Din egen look kommer tillbaka den 1 december.</string>
+    <string name="holiday_mode_holiday">Slå på helgläge för jul? Prism blir rött, grönt och guld, med snöfall, granar, julgranskulor och presenter bakom din musik. Din egen look kommer tillbaka den 1 januari.</string>
 </resources>

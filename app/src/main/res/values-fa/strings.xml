@@ -4138,4 +4138,15 @@
     <string name="sing_mono_song">این آهنگ مونو است: روش سریع نمی‌تواند صدای خواننده‌اش را بردارد، پس همان‌طور که هست پخش می‌شود.</string>
     <string name="tv_sing_measured">این تلویزیون آهنگ‌ها را %1$s× سریع‌تر از پخششان جدا می‌کند.</string>
     <string name="tv_voice_quick">صدای کمتر (روش سریع)</string>
+    <string name="harvest">برداشت</string>
+    <string name="holiday">تعطیلات</string>
+    <string name="harvest_note">برگ‌های ریزان، بوقلمون، پای و کدو، برای نوامبر</string>
+    <string name="holiday_note">برف، درخت، هدیه و آب‌نبات عصایی، برای دسامبر</string>
+    <string name="for_the_season">برای این فصل: %1$s</string>
+    <string name="season_info">فقط برای همین ماه. وقتی تمام شود، Prism به پوسته‌ای که قبلاً داشتید برمی‌گردد.</string>
+    <string name="season_over_back_to">%1$s تمام شد: بازگشت به %2$s</string>
+    <string name="season_over_backgrounds">%1$s تمام شد: پس‌زمینه‌اش کنار گذاشته شد</string>
+    <string name="holiday_mode">حالت تعطیلات</string>
+    <string name="holiday_mode_harvest">حالت تعطیلات برای روز شکرگزاری روشن شود؟ Prism با برگ‌های ریزان، بوقلمون، پای و کدو پشت موسیقی شما رنگ پاییز می‌گیرد. پوستهٔ خودتان در ۱ دسامبر برمی‌گردد.</string>
+    <string name="holiday_mode_holiday">حالت تعطیلات برای کریسمس روشن شود؟ Prism با برف، درخت، تزئینات و هدیه پشت موسیقی شما قرمز، سبز و طلایی می‌شود. پوستهٔ خودتان در ۱ ژانویه برمی‌گردد.</string>
 </resources>

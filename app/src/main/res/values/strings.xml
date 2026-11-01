@@ -4166,4 +4166,15 @@
     <string name="sing_mono_song">This song is in mono: the quick way can\'t take its voice out, so it plays as it is.</string>
     <string name="tv_sing_measured">This TV separates songs %1$s× as fast as they play.</string>
     <string name="tv_voice_quick">Voice turned down (quick way)</string>
+    <string name="harvest">Harvest</string>
+    <string name="holiday">Holiday</string>
+    <string name="harvest_note">Falling leaves, a turkey, pies and pumpkins, for November</string>
+    <string name="holiday_note">Snow, trees, gifts and candy canes, for December</string>
+    <string name="for_the_season">For the season: %1$s</string>
+    <string name="season_info">Here for this month only. When it ends, Prism goes back to the Look you had before.</string>
+    <string name="season_over_back_to">%1$s is over: back to %2$s</string>
+    <string name="season_over_backgrounds">%1$s is over: its background is put away</string>
+    <string name="holiday_mode">Holiday Mode</string>
+    <string name="holiday_mode_harvest">Turn on Holiday Mode for Thanksgiving? Prism takes on autumn colors with falling leaves, turkeys, pies and gourds behind your music. Your own look comes back on December 1.</string>
+    <string name="holiday_mode_holiday">Turn on Holiday Mode for Christmas? Prism takes on red, green and gold, with snowfall, trees, ornaments and gifts behind your music. Your own look comes back on January 1.</string>
 </resources>

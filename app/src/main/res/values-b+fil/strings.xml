@@ -4138,4 +4138,15 @@
     <string name="sing_mono_song">Mono ang kantang ito: hindi maalis ng mabilis na paraan ang boses nito, kaya tutugtog ito nang ganoon pa rin.</string>
     <string name="tv_sing_measured">Naghihiwalay ang TV na ito ng mga kanta nang %1$s× kasing-bilis ng pagtugtog nila.</string>
     <string name="tv_voice_quick">Hininaan ang boses (mabilis na paraan)</string>
+    <string name="harvest">Ani</string>
+    <string name="holiday">Kapaskuhan</string>
+    <string name="harvest_note">Nalalaglag na dahon, pabo, pie at kalabasa, para sa Nobyembre</string>
+    <string name="holiday_note">Niyebe, puno, regalo at candy cane, para sa Disyembre</string>
+    <string name="for_the_season">Para sa season: %1$s</string>
+    <string name="season_info">Para lang sa buwang ito. Pagkatapos nito, babalik ang Prism sa Look na gamit mo dati.</string>
+    <string name="season_over_back_to">Tapos na ang %1$s: balik sa %2$s</string>
+    <string name="season_over_backgrounds">Tapos na ang %1$s: inalis na ang background nito</string>
+    <string name="holiday_mode">Holiday Mode</string>
+    <string name="holiday_mode_harvest">I-on ang Holiday Mode para sa Thanksgiving? Magkakaroon ang Prism ng kulay ng taglagas, may nalalaglag na dahon, pabo, pie at kalabasa sa likod ng musika mo. Babalik ang sarili mong look sa Disyembre 1.</string>
+    <string name="holiday_mode_holiday">I-on ang Holiday Mode para sa Pasko? Magiging pula, berde at ginto ang Prism, may niyebe, puno, palamuti at regalo sa likod ng musika mo. Babalik ang sarili mong look sa Enero 1.</string>
 </resources>

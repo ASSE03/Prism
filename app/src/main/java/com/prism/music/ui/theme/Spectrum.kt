@@ -155,7 +155,8 @@ val ColorScheme.hairline: Color get() = onBackground.copy(alpha = InkLevels.line
  * hues white icons sit on.
  */
 object SpectrumPresets {
-    class Preset(val key: String, val label: String, val colors: List<Color>)
+    /** [season]: a seasonal Look's light (1.8.0), only offered in its month. */
+    class Preset(val key: String, val label: String, val colors: List<Color>, val season: com.prism.music.data.looks.Season? = null)
 
     class Light(
         val colors: List<Pair<Float, Color>>,
@@ -194,6 +195,10 @@ object SpectrumPresets {
         Preset("SILVER", tr(R.string.silver), c(0xFFF5F5F7, 0xFFB8B8C0, 0xFF8E8E96, 0xFFD6D6DC)),
         // Okabe & Ito's palette: hues that stay apart for every common kind of color blindness.
         Preset("CLEAR", tr(R.string.color_blind_safe), c(0xFFF0E442, 0xFFE69F00, 0xFFD55E00, 0xFFCC79A7, 0xFF0072B2, 0xFF56B4E9, 0xFF009E73)),
+        // Seasonal (1.8.0): Thanksgiving's cranberry, burnt orange, amber, gold and olive; Christmas as a candy cane meeting a
+        // tree: red, silver white, pine green and gold. (Kept readable on light and dark pages, like every preset.)
+        Preset("HARVEST", tr(R.string.harvest), c(0xFF9B1B30, 0xFFC8642A, 0xFFFFA726, 0xFFE0B04A, 0xFF7A8B2E), com.prism.music.data.looks.Season.HARVEST),
+        Preset("HOLIDAY", tr(R.string.holiday), c(0xFFC62828, 0xFFE3E8EC, 0xFF1E8A4C, 0xFFE6B740), com.prism.music.data.looks.Season.HOLIDAY),
     )
 
     fun preset(key: String): Preset? = all.firstOrNull { it.key == key }

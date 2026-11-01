@@ -4138,4 +4138,15 @@
     <string name="sing_mono_song">এই গানটি মোনো: দ্রুত পদ্ধতি এর কণ্ঠ সরাতে পারে না, তাই এটি যেমন আছে তেমনই বাজবে।</string>
     <string name="tv_sing_measured">এই টিভি গান বাজার চেয়ে %1$s× গতিতে আলাদা করে।</string>
     <string name="tv_voice_quick">কণ্ঠ কমানো (দ্রুত পদ্ধতি)</string>
+    <string name="harvest">ফসল</string>
+    <string name="holiday">ছুটির মৌসুম</string>
+    <string name="harvest_note">ঝরা পাতা, টার্কি, পাই আর কুমড়া, নভেম্বরের জন্য</string>
+    <string name="holiday_note">তুষার, গাছ, উপহার আর ক্যান্ডি কেন, ডিসেম্বরের জন্য</string>
+    <string name="for_the_season">এই মৌসুমের জন্য: %1$s</string>
+    <string name="season_info">শুধু এই মাসের জন্য। মাস শেষ হলে Prism আপনার আগের লুকে ফিরে যাবে।</string>
+    <string name="season_over_back_to">%1$s শেষ: %2$s-এ ফিরে যাওয়া হলো</string>
+    <string name="season_over_backgrounds">%1$s শেষ: এর ব্যাকগ্রাউন্ড সরিয়ে রাখা হলো</string>
+    <string name="holiday_mode">ছুটির মোড</string>
+    <string name="holiday_mode_harvest">থ্যাংকসগিভিংয়ের জন্য ছুটির মোড চালু করবেন? আপনার গানের পেছনে ঝরা পাতা, টার্কি, পাই আর লাউ-কুমড়া নিয়ে Prism শরতের রঙে সাজবে। ১ ডিসেম্বর আপনার নিজের লুক ফিরে আসবে।</string>
+    <string name="holiday_mode_holiday">বড়দিনের জন্য ছুটির মোড চালু করবেন? আপনার গানের পেছনে তুষারপাত, গাছ, অলংকার আর উপহার নিয়ে Prism লাল, সবুজ আর সোনালি রঙে সাজবে। ১ জানুয়ারি আপনার নিজের লুক ফিরে আসবে।</string>
 </resources>

@@ -4088,4 +4088,15 @@
     <string name="sing_mono_song">这首歌是单声道：快速方式无法去掉其中的人声，所以按原样播放。</string>
     <string name="tv_sing_measured">这台电视分离歌曲的速度是播放速度的 %1$s 倍。</string>
     <string name="tv_voice_quick">人声调低（快速方式）</string>
+    <string name="harvest">丰收</string>
+    <string name="holiday">节日</string>
+    <string name="harvest_note">飘落的树叶、火鸡、派和南瓜，献给十一月</string>
+    <string name="holiday_note">雪、圣诞树、礼物和拐杖糖，献给十二月</string>
+    <string name="for_the_season">应季风格：%1$s</string>
+    <string name="season_info">仅限本月。月份结束后，Prism 会回到你之前的风格。</string>
+    <string name="season_over_back_to">%1$s 已结束：回到 %2$s</string>
+    <string name="season_over_backgrounds">%1$s 已结束：它的背景已收起</string>
+    <string name="holiday_mode">节日模式</string>
+    <string name="holiday_mode_harvest">为感恩节打开节日模式吗？Prism 会换上秋天的颜色，在你的音乐背后飘落树叶，摆上火鸡、派和葫芦。你自己的风格会在 12 月 1 日回来。</string>
+    <string name="holiday_mode_holiday">为圣诞节打开节日模式吗？Prism 会换上红、绿、金三色，在你的音乐背后下雪，摆上圣诞树、挂饰和礼物。你自己的风格会在 1 月 1 日回来。</string>
 </resources>

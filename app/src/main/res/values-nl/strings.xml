@@ -4138,4 +4138,15 @@
     <string name="sing_mono_song">Deze song is mono: de snelle manier kan de stem er niet uit halen, dus hij speelt zoals hij is.</string>
     <string name="tv_sing_measured">Deze tv scheidt songs %1$s× zo snel als ze spelen.</string>
     <string name="tv_voice_quick">Stem zachter (snelle manier)</string>
+    <string name="harvest">Oogst</string>
+    <string name="holiday">Feestdagen</string>
+    <string name="harvest_note">Vallende bladeren, een kalkoen, taarten en pompoenen, voor november</string>
+    <string name="holiday_note">Sneeuw, bomen, cadeaus en zuurstokken, voor december</string>
+    <string name="for_the_season">Voor het seizoen: %1$s</string>
+    <string name="season_info">Alleen deze maand. Als die voorbij is, gaat Prism terug naar de look die je eerder had.</string>
+    <string name="season_over_back_to">%1$s is voorbij: terug naar %2$s</string>
+    <string name="season_over_backgrounds">%1$s is voorbij: de achtergrond is opgeborgen</string>
+    <string name="holiday_mode">Feestdagenmodus</string>
+    <string name="holiday_mode_harvest">Feestdagenmodus aanzetten voor Thanksgiving? Prism krijgt herfstkleuren met vallende bladeren, kalkoenen, taarten en kalebassen achter je muziek. Je eigen look komt terug op 1 december.</string>
+    <string name="holiday_mode_holiday">Feestdagenmodus aanzetten voor Kerstmis? Prism wordt rood, groen en goud, met sneeuw, bomen, kerstballen en cadeaus achter je muziek. Je eigen look komt terug op 1 januari.</string>
 </resources>

@@ -4088,4 +4088,15 @@
     <string name="sing_mono_song">Lagu ini mono: cara cepat tidak bisa menghapus suaranya, jadi lagu diputar apa adanya.</string>
     <string name="tv_sing_measured">TV ini memisahkan lagu %1$s× lebih cepat daripada lagu diputar.</string>
     <string name="tv_voice_quick">Suara dipelankan (cara cepat)</string>
+    <string name="harvest">Panen</string>
+    <string name="holiday">Liburan</string>
+    <string name="harvest_note">Daun berguguran, kalkun, pai, dan labu, untuk November</string>
+    <string name="holiday_note">Salju, pohon, kado, dan permen tongkat, untuk Desember</string>
+    <string name="for_the_season">Untuk musim ini: %1$s</string>
+    <string name="season_info">Hanya bulan ini. Saat berakhir, Prism kembali ke Look yang kamu pakai sebelumnya.</string>
+    <string name="season_over_back_to">%1$s sudah berakhir: kembali ke %2$s</string>
+    <string name="season_over_backgrounds">%1$s sudah berakhir: latarnya disimpan</string>
+    <string name="holiday_mode">Mode Liburan</string>
+    <string name="holiday_mode_harvest">Nyalakan Mode Liburan untuk Thanksgiving? Prism berwarna musim gugur dengan daun berguguran, kalkun, pai, dan labu di balik musikmu. Look-mu sendiri kembali pada 1 Desember.</string>
+    <string name="holiday_mode_holiday">Nyalakan Mode Liburan untuk Natal? Prism berwarna merah, hijau, dan emas, dengan salju turun, pohon, hiasan, dan kado di balik musikmu. Look-mu sendiri kembali pada 1 Januari.</string>
 </resources>

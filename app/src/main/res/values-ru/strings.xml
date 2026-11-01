@@ -4238,4 +4238,15 @@
     <string name="sing_mono_song">Этот трек в моно: быстрый способ не может убрать из него голос, поэтому он звучит как есть.</string>
     <string name="tv_sing_measured">Этот телевизор разделяет треки в %1$s раза быстрее, чем они звучат.</string>
     <string name="tv_voice_quick">Голос тише (быстрый способ)</string>
+    <string name="harvest">Урожай</string>
+    <string name="holiday">Праздники</string>
+    <string name="harvest_note">Падающие листья, индейка, пироги и тыквы — для ноября</string>
+    <string name="holiday_note">Снег, ёлки, подарки и леденцовые трости — для декабря</string>
+    <string name="for_the_season">По сезону: %1$s</string>
+    <string name="season_info">Только в этом месяце. Когда он закончится, Prism вернёт прежний стиль.</string>
+    <string name="season_over_back_to">%1$s закончился: возвращаем %2$s</string>
+    <string name="season_over_backgrounds">%1$s закончился: его фон убран</string>
+    <string name="holiday_mode">Праздничный режим</string>
+    <string name="holiday_mode_harvest">Включить праздничный режим ко Дню благодарения? Prism окрасится в осенние цвета: падающие листья, индейки, пироги и тыквы за твоей музыкой. Твой стиль вернётся 1 декабря.</string>
+    <string name="holiday_mode_holiday">Включить праздничный режим к Рождеству? Prism станет красным, зелёным и золотым: снегопад, ёлки, игрушки и подарки за твоей музыкой. Твой стиль вернётся 1 января.</string>
 </resources>

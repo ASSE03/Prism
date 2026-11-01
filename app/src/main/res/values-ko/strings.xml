@@ -4088,4 +4088,15 @@
     <string name="sing_mono_song">이 곡은 모노예요: 빠른 방식으로는 목소리를 뺄 수 없어서 그대로 재생돼요.</string>
     <string name="tv_sing_measured">이 TV는 곡이 재생되는 속도의 %1$s배로 곡을 분리합니다.</string>
     <string name="tv_voice_quick">목소리 줄임(빠른 방식)</string>
+    <string name="harvest">수확</string>
+    <string name="holiday">홀리데이</string>
+    <string name="harvest_note">떨어지는 낙엽, 칠면조, 파이와 호박, 11월을 위해</string>
+    <string name="holiday_note">눈, 트리, 선물과 캔디 케인, 12월을 위해</string>
+    <string name="for_the_season">이번 시즌: %1$s</string>
+    <string name="season_info">이번 달에만 있어요. 달이 끝나면 Prism이 이전 룩으로 돌아가요.</string>
+    <string name="season_over_back_to">%1$s 종료: %2$s(으)로 돌아감</string>
+    <string name="season_over_backgrounds">%1$s 종료: 배경을 치웠어요</string>
+    <string name="holiday_mode">홀리데이 모드</string>
+    <string name="holiday_mode_harvest">추수감사절 홀리데이 모드를 켤까요? 음악 뒤로 떨어지는 낙엽, 칠면조, 파이, 조롱박과 함께 Prism이 가을 색으로 물들어요. 12월 1일에 원래 룩으로 돌아와요.</string>
+    <string name="holiday_mode_holiday">크리스마스 홀리데이 모드를 켤까요? 음악 뒤로 내리는 눈, 트리, 장식, 선물과 함께 Prism이 빨강, 초록, 금색으로 바뀌어요. 1월 1일에 원래 룩으로 돌아와요.</string>
 </resources>

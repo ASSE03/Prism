@@ -4188,4 +4188,15 @@
     <string name="sing_mono_song">Această melodie e mono: metoda rapidă nu îi poate scoate vocea, așa că se aude cum e.</string>
     <string name="tv_sing_measured">Acest televizor separă melodiile de %1$s× mai repede decât se aud.</string>
     <string name="tv_voice_quick">Voce redusă (metoda rapidă)</string>
+    <string name="harvest">Recoltă</string>
+    <string name="holiday">Sărbători</string>
+    <string name="harvest_note">Frunze care cad, un curcan, plăcinte și dovleci, pentru noiembrie</string>
+    <string name="holiday_note">Zăpadă, brazi, cadouri și acadele baston, pentru decembrie</string>
+    <string name="for_the_season">De sezon: %1$s</string>
+    <string name="season_info">Doar luna aceasta. Când se termină, Prism revine la look-ul pe care îl aveai înainte.</string>
+    <string name="season_over_back_to">%1$s s-a terminat: înapoi la %2$s</string>
+    <string name="season_over_backgrounds">%1$s s-a terminat: fundalul lui a fost pus deoparte</string>
+    <string name="holiday_mode">Modul de sărbători</string>
+    <string name="holiday_mode_harvest">Pornești modul de sărbători pentru Ziua Recunoștinței? Prism capătă culori de toamnă, cu frunze care cad, curcani, plăcinte și dovleci în spatele muzicii tale. Look-ul tău revine pe 1 decembrie.</string>
+    <string name="holiday_mode_holiday">Pornești modul de sărbători pentru Crăciun? Prism devine roșu, verde și auriu, cu ninsoare, brazi, globuri și cadouri în spatele muzicii tale. Look-ul tău revine pe 1 ianuarie.</string>
 </resources>

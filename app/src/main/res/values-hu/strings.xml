@@ -4138,4 +4138,15 @@
     <string name="sing_mono_song">Ez a dal monó: a gyors mód nem tudja kivenni belőle az éneket, ezért úgy szól, ahogy van.</string>
     <string name="tv_sing_measured">Ez a tévé a lejátszásuknál %1$s×-ször gyorsabban választja szét a dalokat.</string>
     <string name="tv_voice_quick">Halkított ének (gyors mód)</string>
+    <string name="harvest">Aratás</string>
+    <string name="holiday">Ünnepek</string>
+    <string name="harvest_note">Hulló levelek, pulyka, piték és tökök, novemberre</string>
+    <string name="holiday_note">Hó, fenyők, ajándékok és cukorpálcák, decemberre</string>
+    <string name="for_the_season">Az évszakra: %1$s</string>
+    <string name="season_info">Csak ebben a hónapban. Ha véget ér, a Prism visszaáll a korábbi arculatodra.</string>
+    <string name="season_over_back_to">Véget ért: %1$s, vissza ide: %2$s</string>
+    <string name="season_over_backgrounds">Véget ért: %1$s, a háttere elrakva</string>
+    <string name="holiday_mode">Ünnepi mód</string>
+    <string name="holiday_mode_harvest">Bekapcsolod az ünnepi módot hálaadásra? A Prism őszi színeket kap hulló levelekkel, pulykákkal, pitékkel és tökökkel a zenéd mögött. A saját arculatod december 1-jén tér vissza.</string>
+    <string name="holiday_mode_holiday">Bekapcsolod az ünnepi módot karácsonyra? A Prism piros, zöld és arany lesz, hóeséssel, fenyőkkel, díszekkel és ajándékokkal a zenéd mögött. A saját arculatod január 1-jén tér vissza.</string>
 </resources>

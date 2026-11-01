@@ -4188,4 +4188,15 @@
     <string name="sing_mono_song">Esta canción es mono: la forma rápida no puede quitarle la voz, así que suena como está.</string>
     <string name="tv_sing_measured">Esta TV separa las canciones %1$s× más rápido de lo que suenan.</string>
     <string name="tv_voice_quick">Voz más baja (forma rápida)</string>
+    <string name="harvest">Cosecha</string>
+    <string name="holiday">Fiestas</string>
+    <string name="harvest_note">Hojas que caen, un pavo, tartas y calabazas, para noviembre</string>
+    <string name="holiday_note">Nieve, árboles, regalos y bastones de caramelo, para diciembre</string>
+    <string name="for_the_season">De temporada: %1$s</string>
+    <string name="season_info">Solo este mes. Cuando termine, Prism vuelve al look que tenías antes.</string>
+    <string name="season_over_back_to">%1$s terminó: vuelves a %2$s</string>
+    <string name="season_over_backgrounds">%1$s terminó: su fondo se ha guardado</string>
+    <string name="holiday_mode">Modo festivo</string>
+    <string name="holiday_mode_harvest">¿Activar el modo festivo para Acción de Gracias? Prism se viste de otoño con hojas que caen, pavos, tartas y calabazas detrás de tu música. Tu propio look vuelve el 1 de diciembre.</string>
+    <string name="holiday_mode_holiday">¿Activar el modo festivo para Navidad? Prism se viste de rojo, verde y dorado, con nieve, árboles, adornos y regalos detrás de tu música. Tu propio look vuelve el 1 de enero.</string>
 </resources>

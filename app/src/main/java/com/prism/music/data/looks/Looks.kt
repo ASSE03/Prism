@@ -212,9 +212,29 @@ object BuiltInLooks {
             ),
             icons = LookIcons(pack = "CLASSIC"),
         ),
+        // Seasonal (1.8.0, [Seasons]): only offered in their month, and put away when it ends.
+        Look(
+            Season.HARVEST.lookId, tr(R.string.harvest), builtIn = true, note = tr(R.string.harvest_note),
+            values = mapOf(
+                "color_source" to "s:CUSTOM", "accent" to color(0xFFC8642A), "spectrum_preset" to "s:${Season.HARVEST.light}",
+                "surface_tint" to "s:CUSTOM", "surface_color" to color(0xFF8B5A2B), "surface_tint_strength" to "f:1.3",
+                "backdrops" to everywhere(Season.HARVEST.backdrop),
+            ),
+        ),
+        Look(
+            Season.HOLIDAY.lookId, tr(R.string.holiday), builtIn = true, note = tr(R.string.holiday_note),
+            values = mapOf(
+                "color_source" to "s:CUSTOM", "accent" to color(0xFFC62828), "spectrum_preset" to "s:${Season.HOLIDAY.light}",
+                "surface_tint" to "s:CUSTOM", "surface_color" to color(0xFF1F5E3A), "surface_tint_strength" to "f:1.2",
+                "backdrops" to everywhere(Season.HOLIDAY.backdrop),
+            ),
+        ),
     )
 
     fun of(id: String): Look? = all.firstOrNull { it.id == id }
+
+    /** Prism's Looks to offer on [date]: all but a seasonal one outside its month. */
+    fun shown(date: java.time.LocalDate = Seasons.today()): List<Look> = all.filter { Seasons.shown(it.id, date) }
 }
 
 /** How a look setting and its value read in the undo bar and History ("Corners → Sharp"). */

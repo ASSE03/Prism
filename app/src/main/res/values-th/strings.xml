@@ -4088,4 +4088,15 @@
     <string name="sing_mono_song">เพลงนี้เป็นโมโน: วิธีด่วนเอาเสียงร้องออกไม่ได้ จึงเล่นตามเดิม</string>
     <string name="tv_sing_measured">ทีวีเครื่องนี้แยกเสียงเพลงได้เร็ว %1$s เท่าของความเร็วที่เพลงเล่น</string>
     <string name="tv_voice_quick">ลดเสียงร้อง (วิธีด่วน)</string>
+    <string name="harvest">เก็บเกี่ยว</string>
+    <string name="holiday">เทศกาล</string>
+    <string name="harvest_note">ใบไม้ร่วง ไก่งวง พาย และฟักทอง สำหรับเดือนพฤศจิกายน</string>
+    <string name="holiday_note">หิมะ ต้นคริสต์มาส ของขวัญ และลูกกวาดไม้เท้า สำหรับเดือนธันวาคม</string>
+    <string name="for_the_season">ประจำฤดูกาล: %1$s</string>
+    <string name="season_info">มีเฉพาะเดือนนี้ เมื่อหมดเดือน Prism จะกลับไปใช้ลุคเดิมของคุณ</string>
+    <string name="season_over_back_to">%1$s จบแล้ว: กลับไปที่ %2$s</string>
+    <string name="season_over_backgrounds">%1$s จบแล้ว: เก็บพื้นหลังแล้ว</string>
+    <string name="holiday_mode">โหมดเทศกาล</string>
+    <string name="holiday_mode_harvest">เปิดโหมดเทศกาลสำหรับวันขอบคุณพระเจ้าไหม Prism จะเป็นสีฤดูใบไม้ร่วง มีใบไม้ร่วง ไก่งวง พาย และน้ำเต้าอยู่หลังเพลงของคุณ ลุคเดิมของคุณจะกลับมาในวันที่ 1 ธันวาคม</string>
+    <string name="holiday_mode_holiday">เปิดโหมดเทศกาลสำหรับคริสต์มาสไหม Prism จะเป็นสีแดง เขียว และทอง มีหิมะตก ต้นคริสต์มาส ของประดับ และของขวัญอยู่หลังเพลงของคุณ ลุคเดิมของคุณจะกลับมาในวันที่ 1 มกราคม</string>
 </resources>

@@ -4088,4 +4088,15 @@
     <string name="sing_mono_song">Bài này là mono: cách nhanh không bỏ được giọng hát, nên bài phát nguyên như cũ.</string>
     <string name="tv_sing_measured">TV này tách bài nhanh gấp %1$s lần tốc độ phát.</string>
     <string name="tv_voice_quick">Giảm giọng (cách nhanh)</string>
+    <string name="harvest">Mùa gặt</string>
+    <string name="holiday">Lễ hội</string>
+    <string name="harvest_note">Lá rơi, gà tây, bánh pie và bí ngô, cho tháng 11</string>
+    <string name="holiday_note">Tuyết, cây thông, quà và kẹo gậy, cho tháng 12</string>
+    <string name="for_the_season">Theo mùa: %1$s</string>
+    <string name="season_info">Chỉ trong tháng này. Khi tháng kết thúc, Prism quay lại phong cách bạn dùng trước đó.</string>
+    <string name="season_over_back_to">%1$s đã hết: quay lại %2$s</string>
+    <string name="season_over_backgrounds">%1$s đã hết: hình nền của nó đã được cất đi</string>
+    <string name="holiday_mode">Chế độ lễ hội</string>
+    <string name="holiday_mode_harvest">Bật chế độ lễ hội cho Lễ Tạ ơn? Prism khoác màu thu với lá rơi, gà tây, bánh pie và bầu bí phía sau âm nhạc của bạn. Phong cách riêng của bạn trở lại vào ngày 1 tháng 12.</string>
+    <string name="holiday_mode_holiday">Bật chế độ lễ hội cho Giáng sinh? Prism chuyển sang đỏ, xanh lá và vàng, với tuyết rơi, cây thông, đồ trang trí và quà phía sau âm nhạc của bạn. Phong cách riêng của bạn trở lại vào ngày 1 tháng 1.</string>
 </resources>

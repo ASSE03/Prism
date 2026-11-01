@@ -7,6 +7,7 @@ import com.prism.music.data.prefs.FontChoice
 import com.prism.music.data.prefs.LookValue
 import com.prism.music.data.prefs.SettingsRepository
 import com.prism.music.ui.theme.AppFonts
+import com.prism.music.ui.theme.Backdrop
 import com.prism.music.ui.theme.IconPack
 import com.prism.music.ui.theme.IconStyle
 import com.prism.music.ui.theme.IconWeight
@@ -279,7 +280,10 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
      * later: History only goes back ten.
      */
     suspend fun apply(look: Look, label: String = tr(R.string.look_2, look.name), scheduled: Boolean = false) = withContext(Dispatchers.IO) {
-        if (look.id != BEFORE_ID && lookNow(settings.current) == null) runCatching {
+        val from = lookNow(settings.current)
+        // A seasonal Look remembers the Look the listener had, to go back to when its month ends ([endSeasons]).
+        if (Seasons.of(look.id) != null && Seasons.of(from?.id) == null) prefs.edit().putString(SEASON_FROM, from?.id ?: BEFORE_ID).apply()
+        if (look.id != BEFORE_ID && from == null) runCatching {
             val note = if (scheduled) tr(R.string.your_own_settings_from_before_day, look.name)
             else tr(R.string.your_own_settings_from_before_you, look.name)
             saveCurrent(tr(R.string.before, look.name), BEFORE_ID, note, repoint = false)
@@ -521,7 +525,8 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
                 val id = if (last.to == SunClock.Part.DAY) s.day else s.night
                 val key = "${last.to}@${last.at.epochSecond / 60}|$id"
                 if (key != prefs.getString(LAST_TURN, null)) {
-                    find(id)?.let { apply(it, tr(if (last.to == SunClock.Part.DAY) R.string.look_for_the_day else R.string.look_for_the_night, it.name), scheduled = true) }
+                    // A seasonal Look picked for day or night stays put away outside its month.
+                    find(id)?.takeIf { Seasons.shown(it.id) }?.let { apply(it, tr(if (last.to == SunClock.Part.DAY) R.string.look_for_the_day else R.string.look_for_the_night, it.name), scheduled = true) }
                     prefs.edit().putString(LAST_TURN, key).apply()
                 }
                 // Looked at again by the turn, and at least every 15 minutes (the clock or time zone may change).
@@ -530,7 +535,57 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
         }
     }
 
+    // ---------------------------------------------------------------- Seasons
+
+    /** Whether the look is [look] exactly (its settings and icons), as stored: Performance mode doesn't hide it. */
+    fun isOn(look: Look): Boolean = look.icons == currentIcons() && settings.lookValues.value == settings.lookAfter(resolved(look))
+
+    /**
+     * When a seasonal Look's month is over (once for each turn, so a Look picked afterwards is left alone): a listener on
+     * it goes back to the Look they had before it ([SEASON_FROM], or "Before <Look>" for their own mix), and a listener who
+     * changed it since keeps their changes but loses its background (the screens go back to theirs, or the default).
+     * Returns whether it changed anything.
+     */
+    suspend fun endSeasons(today: java.time.LocalDate = Seasons.today()): Boolean {
+        var changed = false
+        for ((season, key) in Seasons.ended(today)) {
+            val done = prefs.getStringSet(SEASONS_ENDED, emptySet()).orEmpty()
+            if (key in done) continue
+            val look = BuiltInLooks.of(season.lookId)
+            val backdrops = Backgrounds.parse(settings.lookValues.value[Look.BACKDROPS])
+            if (look != null && isOn(look)) {
+                val back = prefs.getString(SEASON_FROM, null)?.let(::find)?.takeIf { Seasons.of(it.id) == null } ?: BuiltInLooks.all.first()
+                apply(back, tr(R.string.season_over_back_to, look.name, back.name))
+                changed = true
+            } else if (backdrops.values.any { Backdrop.parse(it).first.season == season }) {
+                val before = prefs.getString(SEASON_FROM, null)?.let(::find)?.let { Backgrounds.parse(resolved(it)[Look.BACKDROPS]) }.orEmpty()
+                val kept = backdrops.mapNotNull { (screen, v) ->
+                    if (Backdrop.parse(v).first.season != season) screen to v else before[screen]?.let { screen to it }
+                }.toMap()
+                val values = settings.lookValues.value.toMutableMap()
+                if (kept.isEmpty()) values.remove(Look.BACKDROPS) else values[Look.BACKDROPS] = Backgrounds.tag(kept)
+                expect = Expect(settings.lookAfter(values), label = tr(R.string.season_over_backgrounds, look?.name ?: season.name))
+                settings.applyLook(values)
+                changed = true
+            }
+            prefs.edit().putStringSet(SEASONS_ENDED, done + key).apply()
+        }
+        return changed
+    }
+
+    /** Looks at the seasons as Prism starts, and again at each midnight (and at least hourly: the clock or zone may change). */
+    private fun runSeasons() = scope.launch {
+        while (true) {
+            runCatching { endSeasons() }
+            val zone = java.time.ZoneId.systemDefault()
+            val now = java.time.ZonedDateTime.now(zone)
+            val midnight = now.toLocalDate().plusDays(1).atStartOfDay(zone)
+            delay(Duration.between(now, midnight).toMillis().plus(1_000).coerceIn(5_000, 60 * 60_000))
+        }
+    }
+
     init {
+        runSeasons()
         scope.launch {
             var last = settings.lookValues.value
             settings.lookValues.collect { now ->
@@ -555,6 +610,10 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
         private const val SCHEDULE = "schedule.json"
         private const val LAST_TURN = "schedule_last"
         private const val KEPT = "schedule_kept"
+        /** The Look the listener had before a seasonal one. */
+        private const val SEASON_FROM = "season_from"
+        /** The seasons' turns already seen to ("HARVEST:2026"). */
+        private const val SEASONS_ENDED = "seasons_ended"
         private const val MERGE_MS = 4_000L
     }
 }
