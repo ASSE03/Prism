@@ -2136,7 +2136,7 @@
     <string name="couldn_t_download_it_tap_to">Tidak dapat memuat turunnya · ketik untuk mencuba lagi</string>
     <string name="only_for_japanese_songs">Hanya untuk lagu Jepun · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Hanya bahasa Jepun memerlukan ini: kanjinya mempunyai beberapa bacaan, jadi kamus memilih yang betul untuk romaji (\"kimi no na wa\"). Dimuat turun sekali. Bahasa lain (Korea, Cina, Rusia, Hindi…) dirumikan tanpa muat turun. Tanpanya, Google mengeja kanji.</string>
-    <string name="sing_doesn_t_run_on_this">Nyanyi tidak berjalan pada jenis pemproses telefon ini.</string>
+    <string name="sing_doesn_t_run_on_this">Pemisahan penuh Nyanyi tidak berjalan pada jenis pemproses telefon ini, jadi Nyanyi menggunakan cara pantas: ia membuang apa yang berada di tengah campuran, tempat suara biasanya berada. Hasilnya kurang bersih, dan lagu mono kekal seperti asal.</string>
     <string name="needed_for_sing">Diperlukan untuk Nyanyi · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Mengeluarkan suara penyanyi daripada lagu, pada telefon anda, untuk karaoke. Dimuat turun sekali.</string>
     <string name="so_sing_starts_at_once_when">Supaya Nyanyi bermula serta-merta apabila anda menghidupkannya</string>
@@ -4040,7 +4040,7 @@
     <string name="tv_same_loudness_info">Lagu dimainkan pada kekuatan yang lebih kurang sama, jadi lagu yang perlahan tidak buat anda mencapai alat kawalan.</string>
     <string name="tv_lyrics_size">Saiz lirik</string>
     <string name="tv_sing_on_tv">Menyanyi pada TV ini</string>
-    <string name="tv_sing_info">Menyanyi membuang vokal daripada lagu pada TV ini, tanpa pelayan. Ia perlukan muat turun sekali dan TV yang cukup laju untuk mengikut lagu: semakan mengetahuinya dengan lagu yang sedang dimainkan.</string>
+    <string name="tv_sing_info">Menyanyi membuang vokal daripada lagu terus pada TV ini, tanpa pelayan. Ia memerlukan muat turun sekali; semakan mengukur kelajuannya dengan lagu yang sedang dimainkan. TV yang terlalu perlahan untuk mengikut lagu mendapat cara pantas sebagai gantinya: apa yang berada di tengah campuran dibuang.</string>
     <string name="tv_ambient_screen">Skrin ambien</string>
     <string name="tv_ambient_after">Selepas %1$d min tanpa alat kawalan</string>
     <string name="tv_ambient_info">Semasa muzik dimainkan dan alat kawalan diletak, skrin malap kepada lagu dan liriknya, bergerak perlahan, menggantikan penyelamat skrin TV.</string>
@@ -4048,8 +4048,8 @@
     <string name="tv_sing_check">Semak jika TV ini cukup laju</string>
     <string name="tv_sing_checking">Mainkan lagu, kemudian semak: kira-kira seminit</string>
     <string name="tv_sing_ready">Cukup laju: Menyanyi ada dalam ⋯ pemain</string>
-    <string name="tv_sing_too_slow">TV ini tidak cukup laju untuk Menyanyi: ia akan ketinggalan daripada lagu</string>
-    <string name="tv_sing_no_cpu">Menyanyi tidak berjalan pada pemproses TV ini</string>
+    <string name="tv_sing_too_slow">Cara pantas: TV ini terlalu perlahan untuk pemisahan penuh, jadi Menyanyi membuang apa yang berada di tengah campuran (kurang bersih). Menyanyi ada dalam ⋯ pemain</string>
+    <string name="tv_sing_no_cpu">Cara pantas: pemisahan penuh tidak berjalan pada pemproses TV ini, jadi Menyanyi membuang apa yang berada di tengah campuran (kurang bersih). Menyanyi ada dalam ⋯ pemain</string>
     <string name="tv_link_pair_note">Kod yang anda imbas adalah untuk %1$s di %2$s pada rangkaian anda. Gandingkan hanya jika itu TV di hadapan anda.</string>
     <string name="tv_sign_in_pair_first">Gandingkan dengan %1$s dahulu, kemudian log masuk padanya</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4084,4 +4084,8 @@
     <string name="tv_search_how">Tekan OK pada baris carian untuk menaip dengan alat kawalan jauh.</string>
     <string name="tv_search_voice_how">Atau pilih mikrofon di sebelahnya dan sebut lagu, artis atau album.</string>
     <string name="tv_pair_step_find">Pada telefon anda, dalam Prism, ketik baris peranti di bawah kawalan (atau buka Tetapan → Pembesar suara, TV &amp; pelayar) dan pilih %1$s</string>
+    <string name="sing_quick_slow">Telefon ini terlalu perlahan untuk pemisahan penuh, jadi Nyanyi menggunakan cara pantas: ia membuang apa yang berada di tengah campuran, tempat suara biasanya berada. Hasilnya kurang bersih, dan lagu mono kekal seperti asal.</string>
+    <string name="sing_mono_song">Lagu ini mono: cara pantas tidak dapat membuang suaranya, jadi ia dimainkan seperti asal.</string>
+    <string name="tv_sing_measured">TV ini memisahkan lagu %1$s× lebih laju daripada lagu dimainkan.</string>
+    <string name="tv_voice_quick">Suara diperlahankan (cara pantas)</string>
 </resources>

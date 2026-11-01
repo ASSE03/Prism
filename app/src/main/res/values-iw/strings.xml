@@ -2136,7 +2136,7 @@
     <string name="couldn_t_download_it_tap_to">לא ניתן להוריד · הקש כדי לנסות שוב</string>
     <string name="only_for_japanese_songs">רק לשירים ביפנית · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">רק יפנית צריכה את זה: לקאנג׳י יש כמה הגיות, ולכן מילון בוחר את הנכונה עבור רומאג׳י (״kimi no na wa״). מורד פעם אחת. שפות אחרות (קוריאנית, סינית, רוסית, הינדי…) נכתבות באותיות לטיניות בלי הורדה. בלעדיו, Google מתעתק את הקאנג׳י.</string>
-    <string name="sing_doesn_t_run_on_this">שירה לא פועלת על סוג המעבד של הטלפון הזה.</string>
+    <string name="sing_doesn_t_run_on_this">ההפרדה המלאה של שירה לא פועלת על סוג המעבד של הטלפון הזה, לכן שירה משתמשת בדרך המהירה: היא מסירה את מה שנמצא באמצע המיקס, היכן שהקול נמצא בדרך כלל. התוצאה פחות נקייה, ושיר מונו נשאר כמו שהוא.</string>
     <string name="needed_for_sing">נדרש לשירה · %1$s</string>
     <string name="takes_the_singer_s_voice_out">מוציא את הקול של הזמר מהשירים, בטלפון שלך, לקריוקי. מורד פעם אחת.</string>
     <string name="so_sing_starts_at_once_when">כדי ששירה תתחיל מיד כשמפעילים אותה</string>
@@ -4140,7 +4140,7 @@
     <string name="tv_same_loudness_info">השירים מתנגנים בעוצמה דומה, כך ששיר שקט לא ישלח אתכם לשלט.</string>
     <string name="tv_lyrics_size">גודל המילים</string>
     <string name="tv_sing_on_tv">שירה בטלוויזיה הזו</string>
-    <string name="tv_sing_info">״שירה״ מוציאה את הקול מהשיר בטלוויזיה הזו, בלי שרת. נדרשת הורדה חד-פעמית וטלוויזיה מהירה מספיק כדי לעמוד בקצב השיר: הבדיקה מגלה זאת עם השיר שמתנגן.</string>
+    <string name="tv_sing_info">״שירה״ מסירה את הקול משיר בטלוויזיה הזו, בלי שרת. צריך הורדה חד-פעמית; הבדיקה מודדת את המהירות עם השיר שמתנגן. טלוויזיה איטית מדי מכדי לעמוד בקצב מקבלת במקום זאת את הדרך המהירה: מה שנמצא באמצע המיקס מוסר.</string>
     <string name="tv_ambient_screen">מסך רגוע</string>
     <string name="tv_ambient_after">אחרי %1$d דק׳ בלי השלט</string>
     <string name="tv_ambient_info">בזמן שמוזיקה מתנגנת והשלט מונח, המסך מתעמעם לשיר ולמילים שלו, זז לאט, במקום שומר המסך של הטלוויזיה.</string>
@@ -4148,8 +4148,8 @@
     <string name="tv_sing_check">בדיקה אם הטלוויזיה מהירה מספיק</string>
     <string name="tv_sing_checking">הפעילו שיר ואז בדקו: זה לוקח בערך דקה</string>
     <string name="tv_sing_ready">מהירה מספיק: ״שירה״ נמצאת ב-⋯ של הנגן</string>
-    <string name="tv_sing_too_slow">הטלוויזיה לא מהירה מספיק ל״שירה״: היא תפגר אחרי השיר</string>
-    <string name="tv_sing_no_cpu">״שירה״ לא פועלת על המעבד של הטלוויזיה הזו</string>
+    <string name="tv_sing_too_slow">דרך מהירה: הטלוויזיה הזו איטית מדי להפרדה המלאה, לכן ״שירה״ מסירה את מה שנמצא באמצע המיקס (פחות נקי). ״שירה״ נמצאת ב-⋯ של הנגן</string>
+    <string name="tv_sing_no_cpu">דרך מהירה: ההפרדה המלאה לא פועלת על המעבד של הטלוויזיה הזו, לכן ״שירה״ מסירה את מה שנמצא באמצע המיקס (פחות נקי). ״שירה״ נמצאת ב-⋯ של הנגן</string>
     <string name="tv_link_pair_note">הקוד שסרקת שייך ל-%1$s בכתובת %2$s ברשת שלך. כדאי להתאים רק אם זו הטלוויזיה שמולך.</string>
     <string name="tv_sign_in_pair_first">קודם צריך להתאים את %1$s, ואז להתחבר בו</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4184,4 +4184,8 @@
     <string name="tv_search_how">לחיצה על OK בשורת החיפוש מאפשרת להקליד עם השלט.</string>
     <string name="tv_search_voice_how">אפשר גם לבחור במיקרופון שלידה ולומר שם של שיר, אומן או אלבום.</string>
     <string name="tv_pair_step_find">בטלפון, ב-Prism, יש להקיש על שורת המכשיר שמתחת לפקדים (או לפתוח את הגדרות ← רמקולים, טלוויזיות ודפדפן) ולבחור ב-%1$s</string>
+    <string name="sing_quick_slow">הטלפון הזה איטי מדי להפרדה המלאה, לכן שירה משתמשת בדרך המהירה: היא מסירה את מה שנמצא באמצע המיקס, היכן שהקול נמצא בדרך כלל. התוצאה פחות נקייה, ושיר מונו נשאר כמו שהוא.</string>
+    <string name="sing_mono_song">השיר הזה במונו: הדרך המהירה לא יכולה להסיר ממנו את הקול, לכן הוא מתנגן כמו שהוא.</string>
+    <string name="tv_sing_measured">הטלוויזיה הזו מפרידה שירים פי %1$s מהר יותר מקצב ההשמעה שלהם.</string>
+    <string name="tv_voice_quick">קול מונמך (דרך מהירה)</string>
 </resources>

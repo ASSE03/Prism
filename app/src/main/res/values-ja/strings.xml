@@ -2136,7 +2136,7 @@
     <string name="couldn_t_download_it_tap_to">ダウンロードできませんでした · タップして再試行</string>
     <string name="only_for_japanese_songs">日本語の曲専用 · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">これが必要なのは日本語だけです。漢字には複数の読みがあるため、辞書でローマ字（「kimi no na wa」）の正しい読みを選びます。ダウンロードは 1 回だけです。ほかの言語（韓国語、中国語、ロシア語、ヒンディー語など）はダウンロードなしでローマ字化できます。辞書がない場合は Google が漢字を表記します。</string>
-    <string name="sing_doesn_t_run_on_this">このスマホのプロセッサではシングを使用できません。</string>
+    <string name="sing_doesn_t_run_on_this">このスマホのプロセッサではシングの完全な分離を使用できないため、シングは簡易モードを使います：ふつう歌声がある、ミックスの中央の音を取り除きます。仕上がりはやや粗く、モノラルの曲はそのままです。</string>
     <string name="needed_for_sing">シングに必要 · %1$s</string>
     <string name="takes_the_singer_s_voice_out">カラオケのために、スマホ上で曲から歌声を取り除きます。ダウンロードは 1 回だけです。</string>
     <string name="so_sing_starts_at_once_when">オンにしたらすぐにシングを始められます</string>
@@ -4040,7 +4040,7 @@
     <string name="tv_same_loudness_info">曲がほぼ同じ音量で流れるので、小さい曲のたびにリモコンを取らずに済みます。</string>
     <string name="tv_lyrics_size">歌詞の大きさ</string>
     <string name="tv_sing_on_tv">このテレビで歌う</string>
-    <string name="tv_sing_info">「歌う」はこのテレビ上で曲からボーカルを取り除きます（サーバーなし）。一度のダウンロードと、曲に追いつける速さのテレビが必要です：再生中の曲でチェックして確かめます。</string>
+    <string name="tv_sing_info">「歌う」はこのテレビ上で、サーバーを使わずに曲から歌声を取り除きます。1回のダウンロードが必要です。チェックでは再生中の曲で速度を測ります。曲に追いつけないほど遅いテレビでは、代わりに簡易モードになります：ミックスの中央の音を取り除きます。</string>
     <string name="tv_ambient_screen">アンビエント画面</string>
     <string name="tv_ambient_after">リモコン操作なしで %1$d 分後</string>
     <string name="tv_ambient_info">音楽の再生中にリモコンを置いておくと、テレビのスクリーンセーバーの代わりに、曲と歌詞がゆっくり動く暗めの画面になります。</string>
@@ -4048,8 +4048,8 @@
     <string name="tv_sing_check">このテレビが十分速いか確認</string>
     <string name="tv_sing_checking">曲を再生してから確認してください：約 1 分かかります</string>
     <string name="tv_sing_ready">十分速い：「歌う」はプレーヤーの ⋯ にあります</string>
-    <string name="tv_sing_too_slow">このテレビは「歌う」には遅すぎます：曲に追いつけません</string>
-    <string name="tv_sing_no_cpu">「歌う」はこのテレビのプロセッサでは動きません</string>
+    <string name="tv_sing_too_slow">簡易モード：このテレビは完全な分離には遅すぎるため、「歌う」はミックスの中央の音を取り除きます（やや粗め）。「歌う」はプレーヤーの ⋯ にあります</string>
+    <string name="tv_sing_no_cpu">簡易モード：このテレビのプロセッサでは完全な分離が動かないため、「歌う」はミックスの中央の音を取り除きます（やや粗め）。「歌う」はプレーヤーの ⋯ にあります</string>
     <string name="tv_link_pair_note">スキャンしたコードは、ネットワーク上の %2$s にある %1$s のものです。目の前のテレビの場合だけペア設定してください。</string>
     <string name="tv_sign_in_pair_first">先に %1$s とペア設定してから、ログインしてください</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4084,4 +4084,8 @@
     <string name="tv_search_how">検索欄で OK を押すと、リモコンで入力できます。</string>
     <string name="tv_search_voice_how">または横のマイクを選んで、曲名、アーティスト、アルバムを話してください。</string>
     <string name="tv_pair_step_find">スマートフォンの Prism で、コントロールの下のデバイス表示をタップし（または［設定］→［スピーカー、テレビ、ブラウザ］を開き）、%1$s を選びます</string>
+    <string name="sing_quick_slow">このスマホは完全な分離には遅すぎるため、シングは簡易モードを使います：ふつう歌声がある、ミックスの中央の音を取り除きます。仕上がりはやや粗く、モノラルの曲はそのままです。</string>
+    <string name="sing_mono_song">この曲はモノラルです：簡易モードでは歌声を取り除けないため、そのまま再生されます。</string>
+    <string name="tv_sing_measured">このテレビは再生速度の%1$s倍の速さで曲を分離します。</string>
+    <string name="tv_voice_quick">歌声を弱めています（簡易モード）</string>
 </resources>

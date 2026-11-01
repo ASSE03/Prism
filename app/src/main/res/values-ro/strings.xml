@@ -2136,7 +2136,7 @@
     <string name="couldn_t_download_it_tap_to">Nu s-a putut descărca · atinge ca să încerci din nou</string>
     <string name="only_for_japanese_songs">Doar pentru melodii japoneze · %1$s</string>
     <string name="only_japanese_needs_this_its_kanji">Doar japoneza are nevoie de asta: kanji-urile ei au mai multe citiri, așa că un dicționar o alege pe cea corectă pentru romaji („kimi no na wa”). Se descarcă o singură dată. Celelalte limbi (coreeană, chineză, rusă, hindi…) se romanizează fără descărcare. Fără el, Google transcrie kanji-urile.</string>
-    <string name="sing_doesn_t_run_on_this">Cântă nu funcționează pe tipul de procesor al acestui telefon.</string>
+    <string name="sing_doesn_t_run_on_this">Separarea completă din Cântă nu funcționează pe tipul de procesor al acestui telefon, așa că Cântă folosește metoda rapidă: scoate ce se află în mijlocul mixajului, unde e de obicei vocea. E mai puțin curat, iar o melodie mono rămâne cum e.</string>
     <string name="needed_for_sing">Necesar pentru Cântă · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Scoate vocea cântărețului din melodii, pe telefon, pentru karaoke. Se descarcă o singură dată.</string>
     <string name="so_sing_starts_at_once_when">Ca Cântă să pornească imediat când îl activezi</string>
@@ -4140,7 +4140,7 @@
     <string name="tv_same_loudness_info">Melodiile se aud cam la același volum, așa că una mai încetă nu te face să cauți telecomanda.</string>
     <string name="tv_lyrics_size">Mărimea versurilor</string>
     <string name="tv_sing_on_tv">Cântă pe acest televizor</string>
-    <string name="tv_sing_info">Cântă scoate vocea dintr-o melodie pe acest televizor, fără server. Are nevoie de o descărcare unică și de un televizor destul de rapid ca să țină pasul cu melodia: verificarea află asta cu melodia care se aude.</string>
+    <string name="tv_sing_info">Cântă scoate vocea dintr-o melodie pe acest televizor, fără server. Are nevoie de o descărcare unică; verificarea măsoară viteza cu melodia care se aude. Un televizor prea lent ca să țină pasul primește în schimb metoda rapidă: se scoate ce se află în mijlocul mixajului.</string>
     <string name="tv_ambient_screen">Ecran ambiental</string>
     <string name="tv_ambient_after">După %1$d min fără telecomandă</string>
     <string name="tv_ambient_info">Cât cântă muzica și telecomanda e lăsată jos, ecranul se estompează la melodie și versurile ei, mișcându-se încet, în locul economizorului de ecran al televizorului.</string>
@@ -4148,8 +4148,8 @@
     <string name="tv_sing_check">Verifică dacă acest televizor e destul de rapid</string>
     <string name="tv_sing_checking">Pornește o melodie, apoi verifică: durează cam un minut</string>
     <string name="tv_sing_ready">Destul de rapid: Cântă e în ⋯ din player</string>
-    <string name="tv_sing_too_slow">Acest televizor nu e destul de rapid pentru Cântă: ar rămâne în urma melodiei</string>
-    <string name="tv_sing_no_cpu">Cântă nu rulează pe procesorul acestui televizor</string>
+    <string name="tv_sing_too_slow">Metoda rapidă: acest televizor e prea lent pentru separarea completă, așa că Cântă scoate ce se află în mijlocul mixajului (mai puțin curat). Cântă e în ⋯ din player</string>
+    <string name="tv_sing_no_cpu">Metoda rapidă: separarea completă nu rulează pe procesorul acestui televizor, așa că Cântă scoate ce se află în mijlocul mixajului (mai puțin curat). Cântă e în ⋯ din player</string>
     <string name="tv_link_pair_note">Codul scanat este pentru %1$s la %2$s din rețeaua ta. Asociază doar dacă este televizorul din fața ta.</string>
     <string name="tv_sign_in_pair_first">Asociază mai întâi %1$s, apoi conectează-l</string>
     <!-- 1.8.0 desk mode and the tour -->
@@ -4184,4 +4184,8 @@
     <string name="tv_search_how">Apasă OK pe rândul de căutare ca să scrii cu telecomanda.</string>
     <string name="tv_search_voice_how">Sau alege microfonul de lângă el și spune o melodie, un artist sau un album.</string>
     <string name="tv_pair_step_find">Pe telefon, în Prism, atinge rândul cu dispozitivul de sub controale (sau deschide Setări → Boxe, televizoare și browser) și alege %1$s</string>
+    <string name="sing_quick_slow">Acest telefon e prea lent pentru separarea completă, așa că Cântă folosește metoda rapidă: scoate ce se află în mijlocul mixajului, unde e de obicei vocea. E mai puțin curat, iar o melodie mono rămâne cum e.</string>
+    <string name="sing_mono_song">Această melodie e mono: metoda rapidă nu îi poate scoate vocea, așa că se aude cum e.</string>
+    <string name="tv_sing_measured">Acest televizor separă melodiile de %1$s× mai repede decât se aud.</string>
+    <string name="tv_voice_quick">Voce redusă (metoda rapidă)</string>
 </resources>
