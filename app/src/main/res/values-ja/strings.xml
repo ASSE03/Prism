@@ -4047,4 +4047,32 @@
     <string name="tv_sing_no_cpu">「歌う」はこのテレビのプロセッサでは動きません</string>
     <string name="tv_link_pair_note">スキャンしたコードは、ネットワーク上の %2$s にある %1$s のものです。目の前のテレビの場合だけペア設定してください。</string>
     <string name="tv_sign_in_pair_first">先に %1$s とペア設定してから、ログインしてください</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">デスクモード</string>
+    <string name="desk_mode_detail">充電中に音楽を再生しているとき</string>
+    <string name="desk_mode_info">スマホをスリープさせる代わりに、暗くした画面に曲とジャケット、歌詞を表示します。画面は焼き付きを防ぐためにゆっくり動きます。画面をタッチすると元に戻ります。</string>
+    <string name="desk_mode_keywords">常時表示 スタンド 充電 ドック 時計 アンビエント スクリーンセーバー 枕元 画面をつけたまま デスク</string>
+    <string name="tour_180_tv">テレビで Prism</string>
+    <string name="tour_180_tv_body">リモコン向けに作られた同じ Prism を、Android TV と Google TV で。</string>
+    <string name="tour_180_tv_phone">スマホがテレビにサインインし、そのままリモコンになります</string>
+    <string name="tour_180_tv_get">テレビでは Downloader アプリから入手：コード %1$s、またはこのスマホから</string>
+    <string name="tour_180_tv_big">大きな歌詞、ミュージックビデオ、シングを大画面で</string>
+    <string name="tour_180_settings">わかりやすくなった設定</string>
+    <string name="tour_180_settings_body">スイッチを減らしました。連動していた設定は 1 つの選択になりました。</string>
+    <string name="tour_180_settings_merged">クロスフェード、ガラス、次に再生する曲は、それぞれ 1 つの選択に</string>
+    <string name="tour_180_settings_search">検索なら、以前の名前でも設定が見つかります</string>
+    <string name="tour_180_settings_tablet">タブレットではタブの位置を選べます</string>
+    <string name="tour_180_player">自分好みのプレーヤー</string>
+    <string name="tour_180_player_body">プレーヤーのどの部分も非表示にでき、⋯ メニューも好きな順に並べられます。</string>
+    <string name="tour_180_player_parts">イラストの一部をタップして非表示に：その操作はメニューに残ります</string>
+    <string name="tour_180_player_menu">このメニューを編集：タイルを最大 4 つまでピン留めし、残りは畳めます</string>
+    <string name="tour_180_lyrics">4 つのパートでできた歌詞</string>
+    <string name="tour_180_lyrics_body">スタイルから始めて、アニメーション、文字、背景、エフェクトを選びます。</string>
+    <string name="tour_180_lyrics_start">Prism、カラオケ、ボールド カード、グロー、タイプライター、カームから始めます</string>
+    <string name="tour_180_lyrics_smooth">カラオケとボールド カードがなめらかに動きます</string>
+    <string name="tour_180_desk">デスクモード：充電しながら再生するあいだ、落ち着いた画面に</string>
+    <string name="tour_180_crossfade">クロスフェードで曲の同じ場面が繰り返されることはありません</string>
+    <string name="tour_180_silence">無音部分のカットは曲の最初と最後だけに作用します</string>
+    <string name="tour_180_normalize">すべての曲を同じ音量にすると、曲ごとの大きな音量差がならされます</string>
+    <string name="tour_180_size">ダウンロードサイズが小さくなりました</string>
 </resources>

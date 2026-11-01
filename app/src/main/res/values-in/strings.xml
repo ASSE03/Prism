@@ -4047,4 +4047,32 @@
     <string name="tv_sing_no_cpu">Bernyanyi tidak berjalan di prosesor TV ini</string>
     <string name="tv_link_pair_note">Kode yang kamu pindai untuk %1$s di %2$s pada jaringanmu. Sambungkan hanya jika itu TV di depanmu.</string>
     <string name="tv_sign_in_pair_first">Sambungkan dengan %1$s dulu, lalu masuk di sana</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Mode meja</string>
+    <string name="desk_mode_detail">Saat ponsel mengisi daya dan musik diputar</string>
+    <string name="desk_mode_info">Alih-alih tidur, ponsel menampilkan lagu, sampul, dan liriknya di layar yang diredupkan. Tampilannya bergeser perlahan agar tidak membekas di layar. Sentuh layar untuk kembali.</string>
+    <string name="desk_mode_keywords">selalu aktif dudukan pengisian daya mengisi charging dock jam ambient screensaver penghemat layar samping tempat tidur layar tetap menyala meja</string>
+    <string name="tour_180_tv">Prism di TV</string>
+    <string name="tour_180_tv_body">Prism yang sama, dibuat untuk remote, di Android TV dan Google TV.</string>
+    <string name="tour_180_tv_phone">Ponsel memasukkan akun ke TV dan menjadi remotenya</string>
+    <string name="tour_180_tv_get">Pasang di TV lewat aplikasi Downloader: kode %1$s, atau dari ponsel ini</string>
+    <string name="tour_180_tv_big">Lirik besar, video musik, dan Nyanyi di layar lebar</string>
+    <string name="tour_180_settings">Pengaturan yang lebih jelas</string>
+    <string name="tour_180_settings_body">Sakelar lebih sedikit: pengaturan yang saling terkait kini jadi satu pilihan.</string>
+    <string name="tour_180_settings_merged">Crossfade, kaca, dan lagu berikutnya masing-masing satu pilihan</string>
+    <string name="tour_180_settings_search">Pencarian tetap menemukan pengaturan dengan nama lamanya</string>
+    <string name="tour_180_settings_tablet">Di tablet, pilih posisi tab</string>
+    <string name="tour_180_player">Pemutar, sesuai keinginan</string>
+    <string name="tour_180_player_body">Sembunyikan bagian pemutar mana pun, dan susun menu ⋯ sesuai urutan pilihan.</string>
+    <string name="tour_180_player_parts">Ketuk bagian gambar untuk menyembunyikannya: aksinya tetap ada di menu</string>
+    <string name="tour_180_player_menu">Edit menu ini: sematkan hingga empat ubin, lipat sisanya</string>
+    <string name="tour_180_lyrics">Lirik dalam empat bagian</string>
+    <string name="tour_180_lyrics_body">Mulai dari satu gaya, lalu pilih animasi, teks, latar, dan efeknya.</string>
+    <string name="tour_180_lyrics_start">Mulai dari Prism, Karaoke, Kartu tegas, Pendar, Mesin tik, atau Tenang</string>
+    <string name="tour_180_lyrics_smooth">Karaoke dan Kartu tegas beranimasi lebih mulus</string>
+    <string name="tour_180_desk">Mode meja: layar tenang saat ponsel mengisi daya dan memutar musik</string>
+    <string name="tour_180_crossfade">Crossfade tidak pernah mengulang bagian mana pun dari lagu</string>
+    <string name="tour_180_silence">Pangkas hening hanya menyentuh awal dan akhir lagu</string>
+    <string name="tour_180_normalize">Kenyaringan sama meratakan lonjakan besar antarlagu</string>
+    <string name="tour_180_size">Unduhan lebih kecil</string>
 </resources>

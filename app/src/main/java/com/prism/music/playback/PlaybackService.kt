@@ -679,7 +679,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private fun applySkipSilence() {
         val s = c.settings.current
         edges.enabled = s.skipSilence
-        val on = player.currentMediaItem?.toSong()?.isEpisode == true && s.sound.skipSilenceEpisodes
+        // 1.8.0's one choice has no "songs only": songs trimmed reads as "Songs and podcasts" (SoundChoices), so it is.
+        val on = player.currentMediaItem?.toSong()?.isEpisode == true && (s.sound.skipSilenceEpisodes || s.skipSilence)
         if (player.skipSilenceEnabled != on) player.skipSilenceEnabled = on
     }
 
@@ -798,6 +799,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      * radio song cold, since the suggestions arrive after the song has started.
      */
     override fun onTimelineChanged(timeline: androidx.media3.common.Timeline, reason: Int) {
+        // The processors that follow songs across gapless moves count by the timeline as it is now (a queue change
+        // doesn't flush them), and learn a song's length once it's known.
+        edges.timelineChanged(timeline)
+        vocals.timelineChanged(timeline)
         if (reason != Player.TIMELINE_CHANGE_REASON_PLAYLIST_CHANGED) return
         // What's lined up changed (songs added, moved, removed, the queue emptied): kept for the next start. It was only
         // saved on a song change, play / pause, shuffle or repeat, so an emptied or edited queue could come back as it was.

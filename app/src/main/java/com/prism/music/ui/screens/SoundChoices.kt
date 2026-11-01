@@ -82,7 +82,10 @@ object SoundChoices {
         prefs.setMix(on)
     }
 
-    /** Songs trimmed implies podcasts trimmed too: songs-only isn't a choice (an old songs-only setting reads as both). */
+    /**
+     * Songs trimmed implies podcasts trimmed too: songs-only isn't a choice, and an old songs-only setting reads as both
+     * (PlaybackService.applySkipSilence trims episodes then too, so the page says what plays).
+     */
     fun trimSilence(s: AppSettings): TrimSilence = when {
         s.skipSilence -> TrimSilence.ALL
         s.sound.skipSilenceEpisodes -> TrimSilence.PODCASTS

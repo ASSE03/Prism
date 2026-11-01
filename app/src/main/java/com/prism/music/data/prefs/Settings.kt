@@ -449,8 +449,19 @@ fun AppSettings.canHide(part: PlayerPart): Boolean = !(part == PlayerPart.VOLUME
  * The ⋯ button shows unless hidden, and even then while nothing else on the player opens the menu: a long press on the
  * title or the artist does while either shows, and a gesture set to the song menu does.
  */
-fun AppSettings.showsMenuButton(): Boolean = shows(PlayerPart.MENU) ||
-    (!shows(PlayerPart.TITLE) && !shows(PlayerPart.ARTIST) && PlayerGesture.MENU !in listOf(coverSwipeLeft, coverSwipeRight, coverSwipeUp, coverDoubleTap, coverLongPress))
+fun AppSettings.showsMenuButton(wide: Boolean = false): Boolean = shows(PlayerPart.MENU) ||
+    (!shows(PlayerPart.TITLE) && !shows(PlayerPart.ARTIST) &&
+        // The wide player's cover (a tablet, a phone on its side) only seeks and skips: no gesture opens the menu there.
+        (wide || PlayerGesture.MENU !in listOf(coverSwipeLeft, coverSwipeRight, coverSwipeUp, coverDoubleTap, coverLongPress)))
+
+/** The player's cover is drawn: shown, or (hidden) once it's shrinking into the header over the lyrics or the queue. */
+fun AppSettings.drawsCover(collapsedPastHalf: Boolean): Boolean = shows(PlayerPart.COVER) || collapsedPastHalf
+
+/**
+ * A podcast episode's ⋯ menu gets what its hidden parts did too: with the row hidden, the queue (the episode keeps its
+ * back / ahead skips whatever previous & next are set to, and its speed is in the menu already).
+ */
+fun AppSettings.episodeMenuFromPlayer(): List<MenuAction> = listOfNotNull(MenuAction.OPEN_QUEUE.takeIf { !shows(PlayerPart.BUTTONS) })
 
 /** The bottom row's buttons as they show on the player (none while the row is hidden). */
 fun AppSettings.rowButtons(): List<PlayerButton> =
@@ -2320,7 +2331,11 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         names.forEach { n -> lookKeysByName[n]?.let { p.remove(it as Preferences.Key<Any>) } }
     }
 
-    private val writeScope = scope
+    // One write at a time, in the order they were asked for (1.8.0): a merged choice writes two or three keys with
+    // separate edits, and on the shared scope's threads two quick taps could interleave (Everywhere then Play read back
+    // as Radios). A one-thread queue starts them in order, and DataStore applies them in the order they start.
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    private val writeScope = CoroutineScope(scope.coroutineContext + kotlinx.coroutines.Dispatchers.IO.limitedParallelism(1))
 
     private fun edit(block: (MutablePreferences) -> Unit) {
         writeScope.launch { context.dataStore.edit { block(it) } }

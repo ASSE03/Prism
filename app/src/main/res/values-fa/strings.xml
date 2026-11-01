@@ -4097,4 +4097,32 @@
     <string name="tv_sing_no_cpu">«بخوان» روی پردازندهٔ این تلویزیون اجرا نمی‌شود</string>
     <string name="tv_link_pair_note">کدی که اسکن کردید برای %1$s در %2$s در شبکهٔ شماست. فقط اگر همان تلویزیونی است که جلوی شماست، جفت کنید.</string>
     <string name="tv_sign_in_pair_first">اول با %1$s جفت شوید، بعد وارد حساب آن شوید</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">حالت میز کار</string>
+    <string name="desk_mode_detail">وقتی گوشی شارژ می‌شود و موسیقی پخش می‌شود</string>
+    <string name="desk_mode_info">به‌جای خوابیدن گوشی، Prism آهنگ، جلد و متن آن را روی صفحه‌ای کم‌نور نشان می‌دهد که آرام جابه‌جا می‌شود تا تصویر روی صفحه نسوزد. برای بازگشت، صفحه را لمس کنید.</string>
+    <string name="desk_mode_keywords">همیشه روشن پایه شارژ شارژر داک ساعت محافظ صفحه کنار تخت میز نگه داشتن صفحه روشن always on</string>
+    <string name="tour_180_tv">Prism روی تلویزیون شما</string>
+    <string name="tour_180_tv_body">همان Prism، ساخته‌شده برای کنترل از راه دور، روی Android TV و Google TV.</string>
+    <string name="tour_180_tv_phone">تلفن شما تلویزیون را وارد حساب می‌کند و کنترل آن می‌شود</string>
+    <string name="tour_180_tv_get">با برنامهٔ Downloader آن را روی تلویزیون بگیرید: کد %1$s، یا از همین تلفن</string>
+    <string name="tour_180_tv_big">متن آهنگ بزرگ، موزیک‌ویدیو و همخوانی روی صفحهٔ بزرگ</string>
+    <string name="tour_180_settings">تنظیمات روشن‌تر</string>
+    <string name="tour_180_settings_body">کلیدهای کمتر: تنظیماتی که با هم کار می‌کردند حالا یک گزینه‌اند.</string>
+    <string name="tour_180_settings_merged">کراس‌فید، شیشه و آهنگ بعدی هرکدام یک گزینه‌اند</string>
+    <string name="tour_180_settings_search">جستجو هنوز تنظیم را با نام قدیمی‌اش پیدا می‌کند</string>
+    <string name="tour_180_settings_tablet">در تبلت انتخاب کنید زبانه‌ها کجا باشند</string>
+    <string name="tour_180_player">پخش‌کننده، به سلیقهٔ شما</string>
+    <string name="tour_180_player_body">هر بخش پخش‌کننده را پنهان کنید و منوی ⋯ را به ترتیب خودتان بچینید.</string>
+    <string name="tour_180_player_parts">روی بخشی از نقاشی بزنید تا پنهان شود: کارکردش در منو می‌ماند</string>
+    <string name="tour_180_player_menu">ویرایش این منو: تا چهار کاشی را سنجاق کنید و بقیه را جمع کنید</string>
+    <string name="tour_180_lyrics">متن آهنگ در چهار بخش</string>
+    <string name="tour_180_lyrics_body">از یک پوسته شروع کنید، سپس انیمیشن، متن، پس‌زمینه و جلوه‌هایش را انتخاب کنید.</string>
+    <string name="tour_180_lyrics_start">از Prism، کارائوکه، کارت پررنگ، درخشش، ماشین تحریر یا آرام شروع کنید</string>
+    <string name="tour_180_lyrics_smooth">کارائوکه و کارت پررنگ با حرکتی روان‌تر نمایش داده می‌شوند</string>
+    <string name="tour_180_desk">حالت میز کار: صفحه‌ای آرام وقتی گوشی شارژ می‌شود و پخش می‌کند</string>
+    <string name="tour_180_crossfade">کراس‌فید هیچ لحظه‌ای از آهنگ را تکرار نمی‌کند</string>
+    <string name="tour_180_silence">حذف سکوت فقط به ابتدا و انتهای آهنگ دست می‌زند</string>
+    <string name="tour_180_normalize">یکسان‌سازی صدا پرش‌های بزرگ بین آهنگ‌ها را هموار می‌کند</string>
+    <string name="tour_180_size">دانلودی کوچک‌تر</string>
 </resources>

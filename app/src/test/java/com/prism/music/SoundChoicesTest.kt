@@ -11,6 +11,7 @@ import com.prism.music.ui.screens.QueueEnd
 import com.prism.music.ui.screens.SoundChoices
 import com.prism.music.ui.screens.TrimSilence
 import com.prism.music.ui.screens.VideoPolicy
+import kotlinx.coroutines.flow.first
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,6 +27,41 @@ import org.robolectric.annotation.Config
 @Config(sdk = [34], application = android.app.Application::class)
 class SoundChoicesTest {
     private val base = AppSettings()
+
+    /**
+     * A merged choice is two or three writes; quick taps one after another land in the order they were made (the
+     * repository writes one at a time). Everywhere then Play once read back as Radios when the writes interleaved.
+     */
+    @Test fun quickChoicesLandInOrder() {
+        val repo = com.prism.music.data.prefs.SettingsRepository(
+            org.robolectric.RuntimeEnvironment.getApplication(),
+            kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + kotlinx.coroutines.Dispatchers.Default),
+        )
+        val was = kotlinx.coroutines.runBlocking { repo.flow.first() }
+        try {
+            repeat(20) {
+                SoundChoices.setVideoPolicy(repo, VideoPolicy.EVERYWHERE)
+                SoundChoices.setVideoPolicy(repo, VideoPolicy.PLAY)
+                SoundChoices.setTrimSilence(repo, TrimSilence.ALL)
+                SoundChoices.setTrimSilence(repo, TrimSilence.PODCASTS)
+            }
+            val settled = kotlinx.coroutines.runBlocking {
+                kotlinx.coroutines.withTimeout(10_000) {
+                    repo.flow.first { SoundChoices.videoPolicy(it) == VideoPolicy.PLAY && SoundChoices.trimSilence(it) == TrimSilence.PODCASTS }
+                }
+            }
+            // Nothing written after it: still there a moment later.
+            Thread.sleep(300)
+            val now = kotlinx.coroutines.runBlocking { repo.flow.first() }
+            assertEquals(VideoPolicy.PLAY, SoundChoices.videoPolicy(now))
+            assertEquals(TrimSilence.PODCASTS, SoundChoices.trimSilence(now))
+            assertEquals(SoundChoices.videoPolicy(settled), SoundChoices.videoPolicy(now))
+        } finally {
+            SoundChoices.setVideoPolicy(repo, SoundChoices.videoPolicy(was))
+            SoundChoices.setTrimSilence(repo, SoundChoices.trimSilence(was))
+            Thread.sleep(300)
+        }
+    }
 
     @Test fun whenTheQueueEndsFollowsAutoplayAndItsSource() {
         assertEquals(QueueEnd.STOP, SoundChoices.queueEnd(base.copy(autoplay = false, autoplaySource = AutoplaySource.YOURS)))

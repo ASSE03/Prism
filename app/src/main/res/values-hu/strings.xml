@@ -4097,4 +4097,32 @@
     <string name="tv_sing_no_cpu">Az Éneklés nem fut ennek a tévének a processzorán</string>
     <string name="tv_link_pair_note">A beolvasott kód a hálózatodon lévő %1$s eszközé (%2$s). Csak akkor párosítsd, ha ez az előtted lévő tévé.</string>
     <string name="tv_sign_in_pair_first">Előbb párosítsd ezt: %1$s, aztán jelentkeztesd be</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Asztali mód</string>
+    <string name="desk_mode_detail">Amíg a telefon töltődik és szól a zene</string>
+    <string name="desk_mode_info">Ahelyett, hogy a telefon elaludna, egy tompított képernyőn megjelenik a dal, a borítója és a szövege. A kép lassan elmozdul, hogy ne égjen be. Érintsd meg a képernyőt a visszatéréshez.</string>
+    <string name="desk_mode_keywords">mindig bekapcsolva állvány töltés töltő dokkoló óra hangulat képernyőkímélő éjjeli szekrény képernyő bekapcsolva tartása asztal</string>
+    <string name="tour_180_tv">A Prism a tévéden</string>
+    <string name="tour_180_tv_body">Ugyanaz a Prism, távirányítóra szabva, Android TV-n és Google TV-n.</string>
+    <string name="tour_180_tv_phone">A telefonod bejelentkezteti a tévét, és a távirányítója lesz</string>
+    <string name="tour_180_tv_get">Töltsd le a tévére a Downloader alkalmazással: kód %1$s, vagy erről a telefonról</string>
+    <string name="tour_180_tv_big">Nagy dalszöveg, zenei videók és Éneklés a nagy képernyőn</string>
+    <string name="tour_180_settings">Áttekinthetőbb beállítások</string>
+    <string name="tour_180_settings_body">Kevesebb kapcsoló: az összetartozó beállítások most egyetlen választás.</string>
+    <string name="tour_180_settings_merged">Áttűnés, üveg és a következő lejátszás: mind egy-egy választás</string>
+    <string name="tour_180_settings_search">A keresés a beállításokat a régi nevükön is megtalálja</string>
+    <string name="tour_180_settings_tablet">Táblagépen te választod meg, hol legyenek a lapok</string>
+    <string name="tour_180_player">A lejátszó, ahogy neked tetszik</string>
+    <string name="tour_180_player_body">Rejtsd el a lejátszó bármely részét, és rendezd a ⋯ menüt a saját sorrendedbe.</string>
+    <string name="tour_180_player_parts">Koppints a rajz egy részére az elrejtéséhez: a művelete a menüben marad</string>
+    <string name="tour_180_player_menu">Menü szerkesztése: tűzz ki legfeljebb négy csempét, a többit hajtsd össze</string>
+    <string name="tour_180_lyrics">Dalszöveg négy részben</string>
+    <string name="tour_180_lyrics_body">Indulj egy stílusból, majd válaszd ki az animációját, szövegét, hátterét és effektjeit.</string>
+    <string name="tour_180_lyrics_start">Indulj a Prism, Karaoke, Merész kártya, Ragyogás, Írógép vagy Nyugodt stílusból</string>
+    <string name="tour_180_lyrics_smooth">A Karaoke és a Merész kártya simábban mozog</string>
+    <string name="tour_180_desk">Asztali mód: nyugodt képernyő, amíg a telefon töltődik és szól</string>
+    <string name="tour_180_crossfade">Az áttűnések sosem ismétlik meg a dal egy pillanatát</string>
+    <string name="tour_180_silence">A csend levágása csak a dal elejét és végét érinti</string>
+    <string name="tour_180_normalize">Az azonos hangerő kiegyenlíti a dalok közti nagy ugrásokat</string>
+    <string name="tour_180_size">Kisebb letöltés</string>
 </resources>

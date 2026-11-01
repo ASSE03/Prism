@@ -4097,4 +4097,32 @@
     <string name="tv_sing_no_cpu">Hindi gumagana ang Kumanta sa processor ng TV na ito</string>
     <string name="tv_link_pair_note">Ang code na na-scan mo ay para sa %1$s sa %2$s sa network mo. Mag-pair lang kung ito ang TV na nasa harap mo.</string>
     <string name="tv_sign_in_pair_first">Mag-pair muna sa %1$s, saka ito i-sign in</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Desk mode</string>
+    <string name="desk_mode_detail">Habang nagcha-charge ang telepono at tumutugtog ang musika</string>
+    <string name="desk_mode_info">Sa halip na matulog ang telepono, ipinapakita ng Prism ang kanta, ang cover, at ang lyrics nito sa isang madilim na screen na dahan-dahang gumagalaw para hindi ito ma-burn in. I-tap ang screen para bumalik.</string>
+    <string name="desk_mode_keywords">always on stand charging charge dock orasan relo screensaver tabi ng kama mesa desk panatilihing bukas ang screen</string>
+    <string name="tour_180_tv">Prism sa TV mo</string>
+    <string name="tour_180_tv_body">Ang parehong Prism, ginawa para sa remote, sa Android TV at Google TV.</string>
+    <string name="tour_180_tv_phone">Ang telepono mo ang magsa-sign in sa TV at magiging remote nito</string>
+    <string name="tour_180_tv_get">Kunin ito sa TV gamit ang Downloader app: code %1$s, o mula sa teleponong ito</string>
+    <string name="tour_180_tv_big">Malalaking lyrics, music video at Kumanta sa malaking screen</string>
+    <string name="tour_180_settings">Mas malinaw na Settings</string>
+    <string name="tour_180_settings_body">Mas kaunting switch: iisang pagpipilian na ngayon ang mga setting na magkakasama ang gamit.</string>
+    <string name="tour_180_settings_merged">Ang Crossfade, glass at kung ano ang susunod na tutugtog ay tig-iisang pagpipilian na</string>
+    <string name="tour_180_settings_search">Nahahanap pa rin ng search ang isang setting sa dati nitong pangalan</string>
+    <string name="tour_180_settings_tablet">Sa tablet, piliin kung nasaan ang mga tab</string>
+    <string name="tour_180_player">Ang player, ayon sa gusto mo</string>
+    <string name="tour_180_player_body">Itago ang kahit anong bahagi ng player, at ayusin ang ⋯ menu ayon sa gusto mong ayos.</string>
+    <string name="tour_180_player_parts">I-tap ang bahagi ng drawing para itago ito: nananatili sa menu ang aksyon nito</string>
+    <string name="tour_180_player_menu">I-edit ang menu na ito: mag-pin ng hanggang apat na tile, tiklupin ang iba</string>
+    <string name="tour_180_lyrics">Lyrics sa apat na bahagi</string>
+    <string name="tour_180_lyrics_body">Magsimula sa isang Look, saka piliin ang animation, text, background at mga effect nito.</string>
+    <string name="tour_180_lyrics_start">Magsimula sa Prism, Karaoke, Bold card, Glow, Typewriter o Calm</string>
+    <string name="tour_180_lyrics_smooth">Mas makinis ang animation ng Karaoke at Bold card</string>
+    <string name="tour_180_desk">Desk mode: payapang screen habang nagcha-charge at tumutugtog ang telepono</string>
+    <string name="tour_180_crossfade">Hindi inuulit ng Crossfade ang kahit anong sandali ng kanta</string>
+    <string name="tour_180_silence">Ang pagtanggal ng katahimikan ay sa simula at dulo lang ng kanta</string>
+    <string name="tour_180_normalize">Pinapantay ng parehong lakas ng tunog ang malalaking pagtalon sa pagitan ng mga kanta</string>
+    <string name="tour_180_size">Mas maliit na download</string>
 </resources>

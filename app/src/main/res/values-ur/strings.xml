@@ -4097,4 +4097,32 @@
     <string name="tv_sing_no_cpu">گائیں اس ٹی وی کے پروسیسر پر نہیں چلتا</string>
     <string name="tv_link_pair_note">آپ نے جو کوڈ اسکین کیا وہ آپ کے نیٹ ورک پر %2$s پر موجود %1$s کا ہے۔ صرف تبھی جوڑیں اگر یہ آپ کے سامنے والا ٹی وی ہو۔</string>
     <string name="tv_sign_in_pair_first">پہلے %1$s سے جوڑیں، پھر اس میں سائن ان کریں</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">ڈیسک موڈ</string>
+    <string name="desk_mode_detail">جب فون چارج ہو رہا ہو اور موسیقی چل رہی ہو</string>
+    <string name="desk_mode_info">فون کے سو جانے کے بجائے Prism مدھم اسکرین پر گانا، اس کا کور اور بول دکھاتا ہے، جو آہستہ آہستہ سرکتی رہتی ہے تاکہ نشان نہ پڑے۔ واپس آنے کے لیے اسکرین کو چھوئیں۔</string>
+    <string name="desk_mode_keywords">ہمیشہ آن اسٹینڈ چارجنگ ڈاک گھڑی ماحول اسکرین سیور بستر کے پاس اسکرین آن رکھیں ڈیسک</string>
+    <string name="tour_180_tv">آپ کے ٹی وی پر Prism</string>
+    <string name="tour_180_tv_body">وہی Prism، ریموٹ کے لیے بنایا گیا، Android TV اور Google TV پر۔</string>
+    <string name="tour_180_tv_phone">آپ کا فون ٹی وی میں سائن اِن کرتا ہے اور اس کا ریموٹ بن جاتا ہے</string>
+    <string name="tour_180_tv_get">ٹی وی پر Downloader ایپ سے حاصل کریں: کوڈ %1$s، یا اس فون سے</string>
+    <string name="tour_180_tv_big">بڑی اسکرین پر بڑے بول، میوزک ویڈیوز اور Sing</string>
+    <string name="tour_180_settings">سیٹنگز، زیادہ واضح</string>
+    <string name="tour_180_settings_body">کم سوئچ: جو سیٹنگز مل کر کام کرتی تھیں اب ایک ہی انتخاب ہیں۔</string>
+    <string name="tour_180_settings_merged">کراس فیڈ، گلاس اور اگلا گانا، ہر ایک اب ایک انتخاب ہے</string>
+    <string name="tour_180_settings_search">تلاش اب بھی سیٹنگ کو اس کے پرانے نام سے ڈھونڈ لیتی ہے</string>
+    <string name="tour_180_settings_tablet">ٹیبلیٹ پر منتخب کریں کہ ٹیبز کہاں رہیں</string>
+    <string name="tour_180_player">پلیئر، آپ کے انداز میں</string>
+    <string name="tour_180_player_body">پلیئر کا کوئی بھی حصہ چھپائیں، اور ⋯ مینو کو اپنی ترتیب میں رکھیں۔</string>
+    <string name="tour_180_player_parts">چھپانے کے لیے ڈرائنگ کے کسی حصے کو تھپتھپائیں: اس کا عمل مینو میں رہتا ہے</string>
+    <string name="tour_180_player_menu">اس مینو میں ترمیم کریں: چار ٹائلز تک پن کریں، باقی سمیٹ دیں</string>
+    <string name="tour_180_lyrics">بول، چار حصوں میں</string>
+    <string name="tour_180_lyrics_body">ایک لُک سے شروع کریں، پھر اس کی اینیمیشن، متن، پس منظر اور اثرات چنیں۔</string>
+    <string name="tour_180_lyrics_start">Prism، کراؤکی، نمایاں کارڈ، چمک، ٹائپ رائٹر یا پرسکون سے شروع کریں</string>
+    <string name="tour_180_lyrics_smooth">کراؤکی اور نمایاں کارڈ زیادہ ہموار اینیمیٹ ہوتے ہیں</string>
+    <string name="tour_180_desk">ڈیسک موڈ: فون کے چارج ہونے اور چلنے کے دوران پرسکون اسکرین</string>
+    <string name="tour_180_crossfade">کراس فیڈ گانے کا کوئی لمحہ دوبارہ نہیں دہراتے</string>
+    <string name="tour_180_silence">خاموشی تراشنا صرف گانے کے آغاز اور اختتام کو چھوتا ہے</string>
+    <string name="tour_180_normalize">یکساں آواز گانوں کے درمیان بڑے فرق کو ہموار کرتی ہے</string>
+    <string name="tour_180_size">چھوٹا ڈاؤن لوڈ</string>
 </resources>

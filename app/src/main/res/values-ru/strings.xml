@@ -4197,4 +4197,32 @@
     <string name="tv_sing_no_cpu">«Пение» не работает на процессоре этого телевизора</string>
     <string name="tv_link_pair_note">Отсканированный код — для %1$s по адресу %2$s в вашей сети. Связывайте, только если это телевизор перед вами.</string>
     <string name="tv_sign_in_pair_first">Сначала свяжите %1$s, потом войдите на нём</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Режим на столе</string>
+    <string name="desk_mode_detail">Пока телефон заряжается и играет музыка</string>
+    <string name="desk_mode_info">Вместо того чтобы засыпать, телефон показывает песню, обложку и текст на приглушённом экране, который медленно смещается, чтобы изображение не выгорало. Коснитесь экрана, чтобы вернуться.</string>
+    <string name="desk_mode_keywords">всегда включён подставка зарядка док часы атмосфера заставка прикроватный экран не гаснет стол</string>
+    <string name="tour_180_tv">Prism на вашем телевизоре</string>
+    <string name="tour_180_tv_body">Тот же Prism, созданный для пульта, на Android TV и Google TV.</string>
+    <string name="tour_180_tv_phone">Телефон входит в аккаунт на телевизоре и становится его пультом</string>
+    <string name="tour_180_tv_get">Установите его на телевизор через приложение Downloader: код %1$s, или с этого телефона</string>
+    <string name="tour_180_tv_big">Крупный текст песен, клипы и Подпевай на большом экране</string>
+    <string name="tour_180_settings">Настройки стали понятнее</string>
+    <string name="tour_180_settings_body">Меньше переключателей: настройки, которые работали вместе, теперь один выбор.</string>
+    <string name="tour_180_settings_merged">Плавный переход, стекло и то, что играет дальше, теперь по одному выбору</string>
+    <string name="tour_180_settings_search">Поиск по-прежнему находит настройку по старому названию</string>
+    <string name="tour_180_settings_tablet">На планшете выберите, где находятся вкладки</string>
+    <string name="tour_180_player">Плеер под вас</string>
+    <string name="tour_180_player_body">Скрывайте любую часть плеера и расставьте меню ⋯ в своём порядке.</string>
+    <string name="tour_180_player_parts">Коснитесь части рисунка, чтобы скрыть её: действие останется в меню</string>
+    <string name="tour_180_player_menu">Изменить это меню: закрепите до четырёх плиток, остальные уберите</string>
+    <string name="tour_180_lyrics">Текст из четырёх частей</string>
+    <string name="tour_180_lyrics_body">Начните со стиля, затем выберите анимацию, текст, фон и эффекты.</string>
+    <string name="tour_180_lyrics_start">Начните с Prism, Караоке, Яркой карточки, Свечения, Печатной машинки или Спокойного</string>
+    <string name="tour_180_lyrics_smooth">Караоке и Яркая карточка анимируются плавнее</string>
+    <string name="tour_180_desk">Режим на столе: спокойный экран, пока телефон заряжается и играет</string>
+    <string name="tour_180_crossfade">Плавный переход никогда не повторяет момент песни</string>
+    <string name="tour_180_silence">Обрезка тишины затрагивает только начало и конец песни</string>
+    <string name="tour_180_normalize">Одна громкость сглаживает резкие скачки между песнями</string>
+    <string name="tour_180_size">Меньший размер загрузки</string>
 </resources>

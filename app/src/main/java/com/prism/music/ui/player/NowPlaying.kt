@@ -5,6 +5,7 @@ import com.prism.music.ui.theme.PrismIcons
 import com.prism.music.data.prefs.PlayerPart
 import com.prism.music.data.prefs.shows
 import com.prism.music.data.prefs.showsMenuButton
+import com.prism.music.data.prefs.drawsCover
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
@@ -891,8 +892,11 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                             ),
                         contentAlignment = Alignment.Center,
                     ) {
+                        // A hidden cover (What's on the player, 1.8.0) isn't drawn at all until it shrinks into the header:
+                        // no animated cover decoding, no record or tape turning, no blend or ring around nothing.
+                        val coverAway = !settings.drawsCover(collapsePastHalf)
                         // The visualizer's Ring, behind the cover (it reaches out past the edge).
-                        if (viz != null && vizStyle == com.prism.music.data.prefs.VisualizerStyle.RING && !collapsePastHalf && !heroMode) {
+                        if (viz != null && vizStyle == com.prism.music.data.prefs.VisualizerStyle.RING && !collapsePastHalf && !heroMode && !coverAway) {
                             // A tape is wider than tall, with its own corners (Cassette.kt).
                             val cornerPx = with(LocalDensity.current) { if (cassette) 0f else artCorners.toPx() }
                             VisualizerRing(
@@ -923,10 +927,10 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                         ) {
                             // Vinyl: the cover as a record's label, turning while it plays (the animated cover isn't used).
                             if (vinyl) VinylRecord(
-                                artRequest, isPlaying, settings.vinylTonearm, Modifier.fillMaxSize(), hold = covered,
+                                artRequest, isPlaying, settings.vinylTonearm, Modifier.fillMaxSize(), hold = covered || coverAway,
                                 collapsed = p, onArtLoaded = { artLoaded = true },
                             ) else if (cassette) CassetteTape(
-                                artRequest, isPlaying, Modifier.fillMaxSize(), hold = covered,
+                                artRequest, isPlaying, Modifier.fillMaxSize(), hold = covered || coverAway,
                                 collapsed = p, onArtLoaded = { artLoaded = true },
                             ) else {
                             // A file on the phone with no artwork gets a cover of its own rather than a bare note.
@@ -939,9 +943,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                 onState = { if (it is AsyncImagePainter.State.Success) artLoaded = true },
                                 modifier = Modifier.fillMaxSize(),
                             )
-                            if (!videoMode) BlendingCover(song.id, Modifier.fillMaxSize())
+                            if (!videoMode && !coverAway) BlendingCover(song.id, Modifier.fillMaxSize())
                             }
-                            if (!heroMode && !videoMode && !canvasBehind && !vinyl && !cassette) canvas?.takeIf { !collapsePastHalf }?.let { clip ->
+                            if (!heroMode && !videoMode && !canvasBehind && !vinyl && !cassette && !coverAway) canvas?.takeIf { !collapsePastHalf }?.let { clip ->
                                 CanvasPlayer(clip, canvasSaved, isPlaying, Modifier.fillMaxSize(), onCoverChanged = { canvasCover = it })
                             }
                         }

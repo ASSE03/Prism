@@ -4047,4 +4047,32 @@
     <string name="tv_sing_no_cpu">Hát không chạy trên bộ xử lý của TV này</string>
     <string name="tv_link_pair_note">Mã bạn đã quét là của %1$s tại %2$s trong mạng của bạn. Chỉ ghép nối nếu đó là TV trước mặt bạn.</string>
     <string name="tv_sign_in_pair_first">Hãy ghép nối với %1$s trước, rồi đăng nhập trên đó</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Chế độ để bàn</string>
+    <string name="desk_mode_detail">Khi điện thoại đang sạc và nhạc đang phát</string>
+    <string name="desk_mode_info">Thay vì để điện thoại chuyển sang chế độ ngủ, Prism hiển thị bài hát, ảnh bìa và lời bài hát trên màn hình đã giảm sáng, trôi chậm để không bị lưu bóng ảnh. Chạm vào màn hình để quay lại.</string>
+    <string name="desk_mode_keywords">luôn bật giá đỡ đang sạc đế sạc đồng hồ không gian bảo vệ màn hình đầu giường giữ màn hình sáng để bàn</string>
+    <string name="tour_180_tv">Prism trên TV của bạn</string>
+    <string name="tour_180_tv_body">Vẫn là Prism ấy, được làm cho điều khiển từ xa, trên Android TV và Google TV.</string>
+    <string name="tour_180_tv_phone">Điện thoại đăng nhập TV và trở thành điều khiển của nó</string>
+    <string name="tour_180_tv_get">Cài trên TV bằng ứng dụng Downloader: mã %1$s, hoặc từ điện thoại này</string>
+    <string name="tour_180_tv_big">Lời bài hát cỡ lớn, video nhạc và Sing trên màn hình lớn</string>
+    <string name="tour_180_settings">Cài đặt rõ ràng hơn</string>
+    <string name="tour_180_settings_body">Ít công tắc hơn: các cài đặt vốn đi cùng nhau nay là một lựa chọn.</string>
+    <string name="tour_180_settings_merged">Chuyển tiếp mượt, kính và bài phát tiếp theo mỗi thứ là một lựa chọn</string>
+    <string name="tour_180_settings_search">Tìm kiếm vẫn tìm ra cài đặt theo tên cũ</string>
+    <string name="tour_180_settings_tablet">Trên máy tính bảng, chọn vị trí đặt các tab</string>
+    <string name="tour_180_player">Trình phát theo cách của bạn</string>
+    <string name="tour_180_player_body">Ẩn bất kỳ phần nào của trình phát và sắp xếp menu ⋯ theo thứ tự riêng.</string>
+    <string name="tour_180_player_parts">Chạm vào một phần của hình vẽ để ẩn: thao tác của nó vẫn nằm trong menu</string>
+    <string name="tour_180_player_menu">Sửa menu này: ghim tối đa bốn ô, gập phần còn lại lại</string>
+    <string name="tour_180_lyrics">Lời bài hát gồm bốn phần</string>
+    <string name="tour_180_lyrics_body">Bắt đầu từ một kiểu, rồi chọn hiệu ứng chuyển động, văn bản, nền và hiệu ứng của nó.</string>
+    <string name="tour_180_lyrics_start">Bắt đầu từ Prism, Karaoke, Thẻ đậm, Phát sáng, Máy đánh chữ hoặc Êm dịu</string>
+    <string name="tour_180_lyrics_smooth">Karaoke và Thẻ đậm chuyển động mượt hơn</string>
+    <string name="tour_180_desk">Chế độ để bàn: màn hình êm dịu khi điện thoại đang sạc và phát nhạc</string>
+    <string name="tour_180_crossfade">Chuyển tiếp mượt không bao giờ lặp lại một khoảnh khắc nào của bài hát</string>
+    <string name="tour_180_silence">Cắt khoảng lặng chỉ tác động đến phần đầu và phần cuối của bài hát</string>
+    <string name="tour_180_normalize">Âm lượng đồng đều làm dịu những chênh lệch lớn giữa các bài hát</string>
+    <string name="tour_180_size">Dung lượng tải xuống nhỏ hơn</string>
 </resources>

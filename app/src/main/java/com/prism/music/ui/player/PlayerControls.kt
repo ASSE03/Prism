@@ -513,7 +513,7 @@ object BestPartButton {
 @Composable
 fun TransportRow(
     isPlaying: Boolean, isLoading: Boolean, previousEnabled: Boolean, nextEnabled: Boolean, compact: Boolean = false, episode: Boolean = false,
-    /** Previous and next (or an episode's skips) on the player: What's on the player can hide them (1.8.0). */
+    /** Previous and next on the player: What's on the player can hide them (1.8.0). An episode keeps its back / ahead skips. */
     skips: Boolean = true,
 ) {
     val pc = LocalContainer.current.player
@@ -540,7 +540,7 @@ fun TransportRow(
         val back = if (holdMs > 0) ({ pc.seekBy(-holdMs) }) else null
         val ahead = if (holdMs > 0) ({ pc.seekBy(holdMs) }) else null
         // A podcast episode skips within itself, as podcast players do: back 15 s, ahead 30 s.
-        if (skips) {
+        if (skips || episode) {
             if (episode) SkipGlyph(EPISODE_BACK_S, ahead = false, touch = 53.dp) { pc.seekBy(-EPISODE_BACK_S * 1000L) }
             else TransportGlyph(prevIcon, tr(R.string.widget_previous), skip, 53.dp, if (style == TransportStyle.GLYPHS) 0.85f else 1f, previousEnabled, onHold = back) { pc.previous() }
         }
@@ -555,7 +555,7 @@ fun TransportRow(
         } else {
             PlayDisc(isPlaying, isLoading, filled = style == TransportStyle.BUTTON, size = if (compact) 64.dp else 78.dp) { pc.togglePlay() }
         }
-        if (skips) {
+        if (skips || episode) {
             if (episode) SkipGlyph(EPISODE_AHEAD_S, ahead = true, touch = 53.dp) { pc.seekBy(EPISODE_AHEAD_S * 1000L) }
             else TransportGlyph(nextIcon, tr(R.string.widget_next), skip, 53.dp, if (style == TransportStyle.GLYPHS) 0.85f else 1f, nextEnabled, onHold = ahead) { pc.next() }
         }

@@ -4147,4 +4147,32 @@
     <string name="tv_sing_no_cpu">Cantar não funciona no processador desta TV</string>
     <string name="tv_link_pair_note">O código que leu é de %1$s em %2$s na sua rede. Emparelhe só se for a TV à sua frente.</string>
     <string name="tv_sign_in_pair_first">Emparelhe primeiro com %1$s e depois inicie sessão</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Modo secretária</string>
+    <string name="desk_mode_detail">Enquanto o telemóvel carrega e a música toca</string>
+    <string name="desk_mode_info">Em vez de deixar o telemóvel adormecer, o Prism mostra a música, a capa e a letra num ecrã escurecido que se move devagar para não ficar marcado. Toque no ecrã para voltar.</string>
+    <string name="desk_mode_keywords">sempre ligado suporte a carregar dock relógio ambiente proteção de ecrã mesa de cabeceira manter o ecrã ligado secretária</string>
+    <string name="tour_180_tv">Prism na sua TV</string>
+    <string name="tour_180_tv_body">O mesmo Prism, feito para o telecomando, no Android TV e no Google TV.</string>
+    <string name="tour_180_tv_phone">O seu telemóvel inicia sessão na TV e passa a ser o telecomando</string>
+    <string name="tour_180_tv_get">Instale-o na TV com a aplicação Downloader: código %1$s, ou a partir deste telemóvel</string>
+    <string name="tour_180_tv_big">Letras grandes, videoclipes e Cantar no ecrã grande</string>
+    <string name="tour_180_settings">Definições mais claras</string>
+    <string name="tour_180_settings_body">Menos interruptores: as definições que funcionavam em conjunto são agora uma só escolha.</string>
+    <string name="tour_180_settings_merged">Crossfade, vidro e o que toca a seguir são uma escolha cada</string>
+    <string name="tour_180_settings_search">A pesquisa continua a encontrar uma definição pelo nome antigo</string>
+    <string name="tour_180_settings_tablet">No tablet, escolha onde ficam os separadores</string>
+    <string name="tour_180_player">O leitor à sua maneira</string>
+    <string name="tour_180_player_body">Oculte qualquer parte do leitor e ponha o menu ⋯ pela ordem que quiser.</string>
+    <string name="tour_180_player_parts">Toque numa parte do desenho para a ocultar: a ação fica no menu</string>
+    <string name="tour_180_player_menu">Editar este menu: fixe até quatro blocos e esconda os restantes</string>
+    <string name="tour_180_lyrics">Letra em quatro partes</string>
+    <string name="tour_180_lyrics_body">Comece por um visual e escolha a animação, o texto, o fundo e os efeitos.</string>
+    <string name="tour_180_lyrics_start">Comece por Prism, Karaoke, Cartão forte, Brilho, Máquina de escrever ou Calmo</string>
+    <string name="tour_180_lyrics_smooth">O Karaoke e o Cartão forte animam com mais suavidade</string>
+    <string name="tour_180_desk">Modo secretária: um ecrã calmo enquanto o telemóvel carrega e toca</string>
+    <string name="tour_180_crossfade">O crossfade nunca repete um momento da música</string>
+    <string name="tour_180_silence">Cortar o silêncio só mexe no início e no fim da música</string>
+    <string name="tour_180_normalize">O mesmo volume suaviza os grandes saltos entre músicas</string>
+    <string name="tour_180_size">Uma transferência mais pequena</string>
 </resources>

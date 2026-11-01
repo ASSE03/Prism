@@ -30,6 +30,8 @@ import com.prism.music.data.prefs.ThemeMode
 import com.prism.music.data.prefs.ViewLook
 import com.prism.music.data.prefs.VolumeControl
 import com.prism.music.data.prefs.canHide
+import com.prism.music.data.prefs.drawsCover
+import com.prism.music.data.prefs.episodeMenuFromPlayer
 import com.prism.music.data.prefs.menuFromPlayer
 import com.prism.music.data.prefs.menuLayout
 import com.prism.music.data.prefs.shows
@@ -223,6 +225,17 @@ class PlayerEditorTest {
         val bare = d.copy(view = ViewLook(parts = PlayerParts(hidden = setOf(PlayerPart.MENU, PlayerPart.TITLE, PlayerPart.ARTIST))))
         assertTrue(bare.showsMenuButton())
         assertFalse(bare.copy(coverLongPress = PlayerGesture.MENU).showsMenuButton())
+        // The wide player's cover has no gestures but seek and skip: there ⋯ stays even with a gesture set to the menu.
+        assertTrue(bare.copy(coverLongPress = PlayerGesture.MENU).showsMenuButton(wide = true))
+        assertFalse("hidden on its own, the title still opens it", noMenu.showsMenuButton(wide = true))
+        // A hidden cover isn't drawn (no animated cover, no turning record) until it shrinks into the header.
+        val noCover = d.copy(view = ViewLook(parts = PlayerParts(hidden = setOf(PlayerPart.COVER))))
+        assertFalse(noCover.drawsCover(collapsedPastHalf = false))
+        assertTrue(noCover.drawsCover(collapsedPastHalf = true))
+        assertTrue(d.drawsCover(collapsedPastHalf = false))
+        // An episode: with the row hidden, its queue is in the menu (its skips stay on the player).
+        assertTrue(d.episodeMenuFromPlayer().isEmpty())
+        assertEquals(listOf(MenuAction.OPEN_QUEUE), noRow.episodeMenuFromPlayer())
         // Prism's own volume has no buttons: its slider can't be hidden.
         assertFalse(d.copy(volumeControl = VolumeControl.PRISM).canHide(PlayerPart.VOLUME))
         assertTrue(d.canHide(PlayerPart.VOLUME))

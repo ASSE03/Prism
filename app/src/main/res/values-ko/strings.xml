@@ -4047,4 +4047,32 @@
     <string name="tv_sing_no_cpu">노래하기는 이 TV의 프로세서에서 실행되지 않습니다</string>
     <string name="tv_link_pair_note">스캔한 코드는 네트워크의 %2$s에 있는 %1$s의 코드예요. 눈앞의 TV일 때만 페어링하세요.</string>
     <string name="tv_sign_in_pair_first">먼저 %1$s와 페어링한 다음 로그인하세요</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">데스크 모드</string>
+    <string name="desk_mode_detail">휴대전화가 충전되고 음악이 재생되는 동안</string>
+    <string name="desk_mode_info">휴대전화가 잠들지 않고, 어두워진 화면에 곡과 커버, 가사가 표시돼요. 화면 잔상이 남지 않도록 화면이 천천히 움직여요. 화면을 터치하면 돌아와요.</string>
+    <string name="desk_mode_keywords">항상 켜짐 거치대 충전 중 도크 시계 앰비언트 화면 보호기 침대 옆 화면 켜 두기 데스크 책상</string>
+    <string name="tour_180_tv">TV에서 만나는 Prism</string>
+    <string name="tour_180_tv_body">리모컨에 맞게 만든 똑같은 Prism을 Android TV와 Google TV에서 써 보세요.</string>
+    <string name="tour_180_tv_phone">휴대전화가 TV에 로그인시키고 리모컨이 돼요</string>
+    <string name="tour_180_tv_get">Downloader 앱으로 TV에 설치하세요: 코드 %1$s, 또는 이 휴대전화에서</string>
+    <string name="tour_180_tv_big">큰 가사, 뮤직비디오, 따라 부르기를 큰 화면으로</string>
+    <string name="tour_180_settings">더 알기 쉬워진 설정</string>
+    <string name="tour_180_settings_body">스위치가 줄었어요. 함께 쓰이던 설정이 이제 하나의 선택이에요.</string>
+    <string name="tour_180_settings_merged">크로스페이드, 글래스, 다음 재생 방식이 각각 하나의 선택으로</string>
+    <string name="tour_180_settings_search">예전 이름으로도 검색해서 설정을 찾을 수 있어요</string>
+    <string name="tour_180_settings_tablet">태블릿에서는 탭 위치를 고를 수 있어요</string>
+    <string name="tour_180_player">내 취향대로 쓰는 플레이어</string>
+    <string name="tour_180_player_body">플레이어의 어떤 부분이든 숨기고, ⋯ 메뉴를 원하는 순서로 정리하세요.</string>
+    <string name="tour_180_player_parts">그림의 한 부분을 탭하면 숨겨져요: 그 동작은 메뉴에 남아요</string>
+    <string name="tour_180_player_menu">이 메뉴 편집: 타일을 최대 4개까지 고정하고 나머지는 접어 두세요</string>
+    <string name="tour_180_lyrics">네 부분으로 나뉜 가사</string>
+    <string name="tour_180_lyrics_body">스타일에서 시작해 애니메이션, 텍스트, 배경, 효과를 고르세요.</string>
+    <string name="tour_180_lyrics_start">Prism, 노래방, 볼드 카드, 글로우, 타자기, 차분하게 중에서 시작하세요</string>
+    <string name="tour_180_lyrics_smooth">노래방과 볼드 카드가 더 부드럽게 움직여요</string>
+    <string name="tour_180_desk">데스크 모드: 충전하며 재생하는 동안 차분한 화면</string>
+    <string name="tour_180_crossfade">크로스페이드는 곡의 같은 구간을 되풀이하지 않아요</string>
+    <string name="tour_180_silence">무음 구간 자르기는 곡의 시작과 끝에만 적용돼요</string>
+    <string name="tour_180_normalize">같은 음량은 곡 사이의 큰 음량 차이를 고르게 해요</string>
+    <string name="tour_180_size">더 작아진 다운로드</string>
 </resources>

@@ -4197,4 +4197,32 @@
     <string name="tv_sing_no_cpu">Śpiewaj nie działa na procesorze tego telewizora</string>
     <string name="tv_link_pair_note">Zeskanowany kod należy do urządzenia %1$s pod adresem %2$s w Twojej sieci. Paruj tylko, jeśli to telewizor przed Tobą.</string>
     <string name="tv_sign_in_pair_first">Najpierw sparuj %1$s, a potem je zaloguj</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Tryb biurkowy</string>
+    <string name="desk_mode_detail">Gdy telefon się ładuje i gra muzyka</string>
+    <string name="desk_mode_info">Zamiast usypiać telefon, Prism pokazuje utwór, okładkę i tekst na przyciemnionym ekranie, który powoli się przesuwa, żeby nic się nie wypaliło. Dotknij ekranu, aby wrócić.</string>
+    <string name="desk_mode_keywords">zawsze włączony podstawka ładowanie stacja dokująca zegar nastrojowy wygaszacz szafka nocna ekran nie gaśnie biurko</string>
+    <string name="tour_180_tv">Prism na Twoim telewizorze</string>
+    <string name="tour_180_tv_body">Ten sam Prism, stworzony do pilota, na Android TV i Google TV.</string>
+    <string name="tour_180_tv_phone">Telefon loguje telewizor i staje się jego pilotem</string>
+    <string name="tour_180_tv_get">Pobierz go na telewizor przez aplikację Downloader: kod %1$s, albo z tego telefonu</string>
+    <string name="tour_180_tv_big">Duże teksty, teledyski i Śpiewaj na dużym ekranie</string>
+    <string name="tour_180_settings">Ustawienia, czytelniejsze</string>
+    <string name="tour_180_settings_body">Mniej przełączników: ustawienia, które działały razem, to teraz jeden wybór.</string>
+    <string name="tour_180_settings_merged">Przenikanie, szkło i to, co zagra dalej, to po jednym wyborze</string>
+    <string name="tour_180_settings_search">Wyszukiwarka nadal znajdzie ustawienie po starej nazwie</string>
+    <string name="tour_180_settings_tablet">Na tablecie wybierz, gdzie mają być karty</string>
+    <string name="tour_180_player">Odtwarzacz po Twojemu</string>
+    <string name="tour_180_player_body">Ukryj dowolną część odtwarzacza i ułóż menu ⋯ w swojej kolejności.</string>
+    <string name="tour_180_player_parts">Stuknij część rysunku, aby ją ukryć: jej działanie zostaje w menu</string>
+    <string name="tour_180_player_menu">Edytuj to menu: przypnij do czterech kafelków, resztę schowaj</string>
+    <string name="tour_180_lyrics">Tekst w czterech częściach</string>
+    <string name="tour_180_lyrics_body">Zacznij od looku, potem wybierz animację, tekst, tło i efekty.</string>
+    <string name="tour_180_lyrics_start">Zacznij od Prism, Karaoke, Wyrazistej karty, Poświaty, Maszyny do pisania lub Spokoju</string>
+    <string name="tour_180_lyrics_smooth">Karaoke i Wyrazista karta animują się płynniej</string>
+    <string name="tour_180_desk">Tryb biurkowy: spokojny ekran, gdy telefon się ładuje i gra</string>
+    <string name="tour_180_crossfade">Przenikanie nigdy nie powtarza fragmentu utworu</string>
+    <string name="tour_180_silence">Przycinanie ciszy dotyczy tylko początku i końca utworu</string>
+    <string name="tour_180_normalize">Ta sama głośność wyrównuje duże skoki między utworami</string>
+    <string name="tour_180_size">Mniejszy rozmiar pobierania</string>
 </resources>

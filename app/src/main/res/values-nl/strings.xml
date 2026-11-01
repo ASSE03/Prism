@@ -4097,4 +4097,32 @@
     <string name="tv_sing_no_cpu">Zingen werkt niet op de processor van deze tv</string>
     <string name="tv_link_pair_note">De gescande code is van %1$s op %2$s in je netwerk. Koppel alleen als dat de tv voor je is.</string>
     <string name="tv_sign_in_pair_first">Koppel eerst %1$s, meld het daarna aan</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Bureaumodus</string>
+    <string name="desk_mode_detail">Terwijl de telefoon oplaadt en er muziek speelt</string>
+    <string name="desk_mode_info">In plaats van naar slaapstand te gaan, toont Prism het nummer, de hoes en de songtekst op een gedimd scherm dat langzaam verschuift, zodat er niets inbrandt. Raak het scherm aan om terug te gaan.</string>
+    <string name="desk_mode_keywords">altijd aan standaard opladen dock klok sfeer schermbeveiliging nachtkastje scherm aanhouden bureau</string>
+    <string name="tour_180_tv">Prism op je tv</string>
+    <string name="tour_180_tv_body">Dezelfde Prism, gemaakt voor een afstandsbediening, op Android TV en Google TV.</string>
+    <string name="tour_180_tv_phone">Je telefoon logt de tv in en wordt de afstandsbediening</string>
+    <string name="tour_180_tv_get">Haal het op de tv met de Downloader-app: code %1$s, of vanaf deze telefoon</string>
+    <string name="tour_180_tv_big">Grote songteksten, muziekvideo\'s en Meezingen op het grote scherm</string>
+    <string name="tour_180_settings">Instellingen, duidelijker</string>
+    <string name="tour_180_settings_body">Minder schakelaars: instellingen die samenwerkten zijn nu één keuze.</string>
+    <string name="tour_180_settings_merged">Crossfade, glas en wat er daarna speelt zijn elk één keuze</string>
+    <string name="tour_180_settings_search">Zoeken vindt een instelling nog steeds op de oude naam</string>
+    <string name="tour_180_settings_tablet">Kies op een tablet waar de tabs staan</string>
+    <string name="tour_180_player">De speler, op jouw manier</string>
+    <string name="tour_180_player_body">Verberg elk onderdeel van de speler en zet het ⋯-menu in je eigen volgorde.</string>
+    <string name="tour_180_player_parts">Tik op een deel van de tekening om het te verbergen: de actie blijft in het menu</string>
+    <string name="tour_180_player_menu">Dit menu bewerken: maak tot vier tegels vast, vouw de rest weg</string>
+    <string name="tour_180_lyrics">Songtekst in vier delen</string>
+    <string name="tour_180_lyrics_body">Begin met een look en kies dan de animatie, tekst, achtergrond en effecten.</string>
+    <string name="tour_180_lyrics_start">Begin met Prism, Karaoke, Opvallende kaart, Gloed, Typemachine of Kalm</string>
+    <string name="tour_180_lyrics_smooth">Karaoke en Opvallende kaart bewegen soepeler</string>
+    <string name="tour_180_desk">Bureaumodus: een rustig scherm terwijl de telefoon oplaadt en speelt</string>
+    <string name="tour_180_crossfade">Crossfades herhalen nooit een moment van het nummer</string>
+    <string name="tour_180_silence">Stilte weglaten raakt alleen het begin en eind van een nummer</string>
+    <string name="tour_180_normalize">Even luid vlakt grote sprongen tussen nummers uit</string>
+    <string name="tour_180_size">Een kleinere download</string>
 </resources>

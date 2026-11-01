@@ -4097,4 +4097,32 @@
     <string name="tv_sing_no_cpu">Το Τραγούδι δεν τρέχει στον επεξεργαστή αυτής της τηλεόρασης</string>
     <string name="tv_link_pair_note">Ο κωδικός που σάρωσες είναι για %1$s στη διεύθυνση %2$s στο δίκτυό σου. Κάνε σύζευξη μόνο αν είναι η τηλεόραση μπροστά σου.</string>
     <string name="tv_sign_in_pair_first">Κάνε πρώτα σύζευξη με %1$s και μετά σύνδεσέ το</string>
+    <!-- 1.8.0 desk mode and the tour -->
+    <string name="desk_mode">Λειτουργία γραφείου</string>
+    <string name="desk_mode_detail">Όσο το τηλέφωνο φορτίζει και παίζει μουσική</string>
+    <string name="desk_mode_info">Αντί να κοιμηθεί το τηλέφωνο, το Prism δείχνει το τραγούδι, το εξώφυλλο και τους στίχους σε μια χαμηλωμένη οθόνη που κινείται αργά για να μην καεί. Άγγιξε την οθόνη για να επιστρέψεις.</string>
+    <string name="desk_mode_keywords">πάντα ενεργή βάση φόρτιση φορτίζει dock ρολόι προφύλαξη οθόνης κομοδίνο γραφείο διατήρηση οθόνης αναμμένη always on</string>
+    <string name="tour_180_tv">Το Prism στην τηλεόρασή σου</string>
+    <string name="tour_180_tv_body">Το ίδιο Prism, φτιαγμένο για τηλεχειριστήριο, σε Android TV και Google TV.</string>
+    <string name="tour_180_tv_phone">Το τηλέφωνό σου συνδέει την τηλεόραση και γίνεται το τηλεχειριστήριό της</string>
+    <string name="tour_180_tv_get">Πάρε το στην τηλεόραση με την εφαρμογή Downloader: κωδικός %1$s, ή από αυτό το τηλέφωνο</string>
+    <string name="tour_180_tv_big">Μεγάλοι στίχοι, μουσικά βίντεο και Τραγούδα στη μεγάλη οθόνη</string>
+    <string name="tour_180_settings">Πιο καθαρές ρυθμίσεις</string>
+    <string name="tour_180_settings_body">Λιγότεροι διακόπτες: οι ρυθμίσεις που δούλευαν μαζί είναι τώρα μία επιλογή.</string>
+    <string name="tour_180_settings_merged">Η ομαλή μετάβαση, το γυαλί και τι παίζει μετά είναι η καθεμία μία επιλογή</string>
+    <string name="tour_180_settings_search">Η αναζήτηση βρίσκει ακόμα μια ρύθμιση με το παλιό της όνομα</string>
+    <string name="tour_180_settings_tablet">Στο tablet, διάλεξε πού θα βρίσκονται οι καρτέλες</string>
+    <string name="tour_180_player">Η οθόνη αναπαραγωγής, όπως τη θέλεις</string>
+    <string name="tour_180_player_body">Κρύψε οποιοδήποτε μέρος της οθόνης αναπαραγωγής και βάλε το μενού ⋯ στη δική σου σειρά.</string>
+    <string name="tour_180_player_parts">Πάτα ένα μέρος του σχεδίου για να το κρύψεις: η ενέργειά του μένει στο μενού</string>
+    <string name="tour_180_player_menu">Επεξεργασία μενού: καρφίτσωσε έως τέσσερα πλακίδια, μάζεψε τα υπόλοιπα</string>
+    <string name="tour_180_lyrics">Στίχοι σε τέσσερα μέρη</string>
+    <string name="tour_180_lyrics_body">Ξεκίνα από ένα στυλ και μετά διάλεξε την κίνηση, το κείμενο, το φόντο και τα εφέ του.</string>
+    <string name="tour_180_lyrics_start">Ξεκίνα από Prism, Καραόκε, Έντονη κάρτα, Λάμψη, Γραφομηχανή ή Ήρεμο</string>
+    <string name="tour_180_lyrics_smooth">Το Καραόκε και η Έντονη κάρτα κινούνται πιο ομαλά</string>
+    <string name="tour_180_desk">Λειτουργία γραφείου: μια ήρεμη οθόνη όσο το τηλέφωνο φορτίζει και παίζει</string>
+    <string name="tour_180_crossfade">Η ομαλή μετάβαση δεν επαναλαμβάνει ποτέ μια στιγμή του τραγουδιού</string>
+    <string name="tour_180_silence">Το κόψιμο σιωπής αγγίζει μόνο την αρχή και το τέλος ενός τραγουδιού</string>
+    <string name="tour_180_normalize">Η κανονικοποίηση έντασης εξομαλύνει τα μεγάλα άλματα ανάμεσα στα τραγούδια</string>
+    <string name="tour_180_size">Μικρότερη λήψη</string>
 </resources>
