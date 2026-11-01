@@ -38,6 +38,12 @@ fun HandoffDialogs() {
     // A TV paired by its QR code asked for this phone's sign-in (1.8.0): asked here first.
     val signInFor by handoff.signInAsk.collectAsState()
     signInFor?.let { tv -> TvSignInAsk(tv) { handoff.askSignIn(null) } }
+    // Then (or after pairing with a TV without a sign-in): "Also bring your listening history, likes and Prism
+    // playlists?" Nothing goes until the listener says yes.
+    val bringFor by handoff.bringAsk.collectAsState()
+    bringFor?.takeIf { signInFor == null }?.let { tv -> TvBringAsk(tv) { handoff.askBring(null) } }
+    val bringing by handoff.bringing.collectAsState()
+    bringing?.let { b -> TvBringProgress(b, onTryAgain = { handoff.dismissBringing(); handoff.askBring(b.device) }, onClose = { handoff.dismissBringing() }) }
     // A pairing link (a TV's QR code, or any page or app that opens one): nothing happens until the listener says yes.
     val linkPair by handoff.linkPair.collectAsState()
     linkPair?.let { ask ->

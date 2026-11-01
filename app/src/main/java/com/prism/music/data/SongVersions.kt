@@ -18,6 +18,9 @@ class SongVersions(private val prefs: SharedPreferences) {
     private val _picks = MutableStateFlow(read())
     val picks: StateFlow<Map<String, Pick>> = _picks
 
+    /** Reads the picks again (after "Bring your Prism" merged a phone's in, 1.8.0). */
+    fun reload() { _picks.value = read() }
+
     /** The recording that plays for [songId], or null for its own. */
     fun of(songId: String): String? = _picks.value[songId]?.id
 

@@ -279,9 +279,11 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
                 is HandoffResult.Done -> {
                     val them = r.peer ?: return@launch
                     _events.tryEmit(tr(R.string.tv_paired_with, them.name))
-                    // The sign-in is offered to the device that just proved itself, and only if it says it's a TV.
-                    if (ask.signIn && them.tv) {
-                        _signInAsk.value = PrismDevice(them.name, ask.shownAddress, ask.port, them.device, "link:${them.device}", true, tv = true)
+                    // The sign-in is offered to the device that just proved itself, and only if it says it's a TV (and
+                    // there's a sign-in here to give); then, as without one, bringing the listener's Prism there.
+                    if (them.tv) {
+                        val tv = PrismDevice(them.name, ask.shownAddress, ask.port, them.device, "link:${them.device}", true, tv = true)
+                        if (ask.signIn && c.settings.current.isLoggedIn) _signInAsk.value = tv else _bringAsk.value = tv
                     }
                 }
                 is HandoffResult.Failed -> _events.tryEmit(r.reason)
@@ -299,16 +301,115 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
         val values = c.settings.forBackup(settings = false, accounts = true).filterKeys { it in SIGN_IN_KEYS }
         val account = c.settings.current.let { it.accountEmail.ifBlank { it.accountName } }
         return when (val r = ask(d, HandoffRequest.SignIn(values, account))) {
-            is HandoffResult.Done -> tr(R.string.tv_signed_in_on, d.name)
+            is HandoffResult.Done -> {
+                // Signed in: the same flow then asks about the listening, likes and Prism playlists.
+                _bringAsk.value = d
+                tr(R.string.tv_signed_in_on, d.name)
+            }
             is HandoffResult.Failed -> r.reason
             else -> tr(R.string.couldn_t_reach_is_prism_open, d.name)
         }
     }
 
+    private fun lookCode(): String =
+        c.looks.code(com.prism.music.data.looks.Look("sent", name, c.settings.lookValues.value, c.looks.currentIcons(), null, System.currentTimeMillis()))
+
+    // ------------------------------------------------------------ Bring your Prism (1.8.0), the phone's side
+
+    private val _bringAsk = MutableStateFlow<PrismDevice?>(null)
+    /** A TV to offer "Bring your Prism" to (after pairing with it, or signing it in): asked first ([HandoffDialogs]). */
+    val bringAsk: StateFlow<PrismDevice?> = _bringAsk.asStateFlow()
+    fun askBring(d: PrismDevice?) { _bringAsk.value = d }
+
+    /** A bring under way, or just over ([done], or [failed] with why), from this phone to [device]. */
+    data class Bringing(val device: PrismDevice, val sent: Long = 0, val total: Long = 0, val done: Boolean = false, val failed: String? = null) {
+        val running: Boolean get() = !done && failed == null
+        val fraction: Float get() = if (total > 0) (sent.toFloat() / total).coerceIn(0f, 1f) else 0f
+    }
+
+    private val _bringing = MutableStateFlow<Bringing?>(null)
+    val bringing: StateFlow<Bringing?> = _bringing.asStateFlow()
+    fun dismissBringing() { if (_bringing.value?.running != true) _bringing.value = null }
+
+    /**
+     * Brings this phone's Prism to [d] (the listener said yes): listening history and likes, Prism playlists, folders and
+     * saved albums, starred artists, song versions, lyric timings, best parts and exclusions ([com.prism.music.data.Backup.bringBundle]),
+     * and the look with [withLook]. Only to the TV [d] names, paired already ([HandoffPeer.request]). Progress in [bringing].
+     */
+    fun bringTo(d: PrismDevice, withLook: Boolean) {
+        if (_bringing.value?.running == true) return
+        _bringing.value = Bringing(d)
+        scope.launch {
+            val out = java.io.File(app.cacheDir, "bring-out-${UUID.randomUUID()}.zip")
+            var size = 0L
+            val result = try {
+                if (d.id == null || !d.tv) HandoffResult.Failed(tr(R.string.bring_pair_first, d.name))
+                else {
+                    c.backup.bringBundle(out, if (withLook) lookCode() else null)
+                    size = out.length()
+                    if (size > BringTransfer.MAX_BYTES) HandoffResult.Failed(tr(R.string.bring_too_big))
+                    else ask(d, HandoffRequest.Bring(BringSource.of(out)) { sent, total -> _bringing.value = Bringing(d, sent, total) })
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "bringing to ${d.name} failed", e)
+                HandoffResult.Failed(tr(R.string.bring_failed))
+            } finally {
+                out.delete()
+            }
+            _bringing.value = when (result) {
+                is HandoffResult.Done -> Bringing(d, size, size, done = true)
+                is HandoffResult.Failed -> Bringing(d, failed = result.reason)
+                else -> Bringing(d, failed = tr(R.string.bring_failed))
+            }
+        }
+    }
+
+    // ------------------------------------------------------------ Bring your Prism, the TV's side
+
+    /** A phone's Prism coming in ([from]: its name), or just in ([done]) or not ([failed]: nothing here changed). */
+    data class BringingIn(val from: String, val got: Long = 0, val total: Long = 0, val done: Boolean = false, val failed: Boolean = false) {
+        val fraction: Float get() = if (total > 0) (got.toFloat() / total).coerceIn(0f, 1f) else 0f
+    }
+
+    private val _bringIn = MutableStateFlow<BringingIn?>(null)
+    val bringIn: StateFlow<BringingIn?> = _bringIn.asStateFlow()
+    private val _broughtAt = MutableStateFlow(0L)
+    /** When a phone's Prism was last merged in here (0: never, this run): Home's own rows are made again from it. */
+    val broughtAt: StateFlow<Long> = _broughtAt.asStateFlow()
+
+    override fun bringStarting(from: String, size: Long): String? = synchronized(_bringIn) {
+        if (!isTv) return tr(R.string.tv_not_a_tv, name)
+        val now = _bringIn.value
+        if (now != null && !now.done && !now.failed) return tr(R.string.bring_busy, now.from)
+        _bringIn.value = BringingIn(from, 0, size)
+        null
+    }
+
+    override fun bringProgress(from: String, got: Long, total: Long) { _bringIn.value = BringingIn(from, got, total) }
+
+    override fun bringScratch(): java.io.File = java.io.File(app.cacheDir, "bring-in-${UUID.randomUUID()}.zip")
+
+    override fun bringArrived(file: java.io.File, from: String): String? {
+        if (!isTv) return tr(R.string.tv_not_a_tv, name)
+        val merged = runCatching { runBlocking(Dispatchers.IO) { c.backup.mergeBrought(file) } }
+            .onFailure { Log.w(TAG, "bringing in from $from failed", it) }.getOrNull() ?: return tr(R.string.bring_failed)
+        Log.i(TAG, "brought in from $from: $merged")
+        // Prism's own rows are made from it now: Made for you's mixes again, the rest as Home asks.
+        c.scope.launch(Dispatchers.IO) { runCatching { c.forYou.refresh(force = true) } }
+        _broughtAt.value = System.currentTimeMillis()
+        return null
+    }
+
+    override fun bringEnded(from: String, ok: Boolean) {
+        val now = _bringIn.value
+        val ended = BringingIn(from, now?.got ?: 0, now?.total ?: 0, done = ok, failed = !ok)
+        _bringIn.value = ended
+        scope.launch { delay(if (ok) 6_000 else 12_000); _bringIn.compareAndSet(ended, null) }
+    }
+
     /** The look this phone has now, sent to [d] as a Look code; what to tell the listener. */
     suspend fun sendLook(d: PrismDevice): String {
-        val look = com.prism.music.data.looks.Look("sent", name, c.settings.lookValues.value, c.looks.currentIcons(), null, System.currentTimeMillis())
-        return when (val r = ask(d, HandoffRequest.Look(c.looks.code(look)))) {
+        return when (val r = ask(d, HandoffRequest.Look(lookCode()))) {
             is HandoffResult.Done -> tr(R.string.tv_look_sent, d.name)
             is HandoffResult.Failed -> r.reason
             else -> tr(R.string.couldn_t_reach_is_prism_open, d.name)

@@ -162,6 +162,8 @@ fun TvRoot(link: kotlinx.coroutines.flow.MutableStateFlow<android.net.Uri?> = re
                     }
                 }
             }
+            // A phone bringing its Prism here: a card in the corner over any screen (never takes focus).
+            TvBringBanner()
         } } }
     }
 }
