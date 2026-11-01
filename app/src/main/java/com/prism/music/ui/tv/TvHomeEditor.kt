@@ -145,10 +145,13 @@ fun TvHomeEditorScreen(
                         supportingContent = { Text(tr(if (r.shown) R.string.shown else R.string.hidden), maxLines = 1) },
                         trailingContent = { Switch(checked = r.shown, onCheckedChange = null) },
                         colors = ListItemDefaults.colors(
-                            containerColor = Color.Transparent, selectedContainerColor = scheme.primary.copy(alpha = 0.22f), selectedContentColor = scheme.onSurface,
+                            containerColor = Color.Transparent, selectedContainerColor = TvGlassFill, selectedContentColor = scheme.onSurface,
                             focusedContainerColor = scheme.onSurface, focusedContentColor = scheme.surface,
                             focusedSelectedContainerColor = scheme.onSurface, focusedSelectedContentColor = scheme.surface,
                         ),
+                        // As the settings' rows: Prism's soft corners, the split light round the focused one.
+                        shape = ListItemDefaults.shape(TvShapes.card),
+                        border = ListItemDefaults.border(focusedBorder = tvFocusBorder(TvShapes.card, TV_RING_THIN)),
                     )
                     Spacer(Modifier.width(8.dp))
                     TvIconButton(
