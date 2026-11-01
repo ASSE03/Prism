@@ -4031,4 +4031,16 @@
     <string name="lyrics_glow">درخشش متن آهنگ</string>
     <string name="bold_card_s_bold_lines">خط‌های پررنگ کارت پررنگ</string>
     <string name="glass_clear">شفاف</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism روی تلویزیون</string>
+    <string name="share_prism_with_a_tv">اشتراک‌گذاری Prism با تلویزیون</string>
+    <string name="from_this_phone_over_your_wi_fi">از این تلفن، از طریق Wi-Fi شما</string>
+    <string name="tv_share_info">تلفن شما نسخهٔ خودش از Prism را به تلویزیونی در همان Wi-Fi می‌دهد. با خروج از این صفحه، اشتراک‌گذاری متوقف می‌شود.</string>
+    <string name="tv_share_steps">روی تلویزیون: برنامهٔ Downloader را از فروشگاه برنامه‌های تلویزیون بگیرید و به آن اجازه دهید برنامه‌های ناشناس را نصب کند. سپس این نشانی را در آن وارد کنید و Prism را نصب کنید.</string>
+    <string name="sent_finish_installing_on_the_tv">ارسال شد. نصب را روی تلویزیون به پایان برسانید.</string>
+    <string name="this_copy_can_t_be_shared">این نسخه از Prism قابل اشتراک‌گذاری نیست.</string>
+    <string name="downloader_code">کد Downloader</string>
+    <string name="downloader_code_detail">%1$s، برای برنامهٔ Downloader روی تلویزیون</string>
+    <string name="downloader_code_info">آن را در Downloader روی تلویزیون وارد کنید تا جدیدترین Prism را از اینترنت بگیرید. بدون این تلفن هم کار می‌کند.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv apk downloader تلویزیون نصب دانلود ارسال اشتراک‌گذاری</string>
 </resources>

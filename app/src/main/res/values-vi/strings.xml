@@ -3981,4 +3981,16 @@
     <string name="lyrics_glow">Lời bài hát phát sáng</string>
     <string name="bold_card_s_bold_lines">Các dòng đậm của Thẻ đậm</string>
     <string name="glass_clear">Trong</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism trên TV</string>
+    <string name="share_prism_with_a_tv">Chia sẻ Prism với TV</string>
+    <string name="from_this_phone_over_your_wi_fi">Từ điện thoại này, qua Wi-Fi của bạn</string>
+    <string name="tv_share_info">Điện thoại của bạn gửi bản Prism của chính nó cho TV trong cùng mạng Wi-Fi. Việc chia sẻ sẽ dừng khi bạn rời khỏi trang này.</string>
+    <string name="tv_share_steps">Trên TV: tải ứng dụng Downloader từ kho ứng dụng của TV và cho phép ứng dụng này cài đặt ứng dụng không xác định. Sau đó nhập địa chỉ này vào Downloader và cài Prism.</string>
+    <string name="sent_finish_installing_on_the_tv">Đã gửi. Hãy hoàn tất cài đặt trên TV.</string>
+    <string name="this_copy_can_t_be_shared">Không thể chia sẻ bản Prism này.</string>
+    <string name="downloader_code">Mã Downloader</string>
+    <string name="downloader_code_detail">%1$s, dành cho ứng dụng Downloader trên TV</string>
+    <string name="downloader_code_info">Nhập mã này vào Downloader trên TV để tải Prism mới nhất từ internet. Mã hoạt động mà không cần điện thoại này.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv apk downloader ti vi truyền hình cài cài đặt tải tải xuống gửi chia sẻ</string>
 </resources>

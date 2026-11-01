@@ -4081,4 +4081,16 @@
     <string name="lyrics_glow">Strălucirea versurilor</string>
     <string name="bold_card_s_bold_lines">Rândurile îngroșate ale Cardului îndrăzneț</string>
     <string name="glass_clear">Transparent</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism pe un TV</string>
+    <string name="share_prism_with_a_tv">Trimite Prism către un TV</string>
+    <string name="from_this_phone_over_your_wi_fi">De pe acest telefon, prin Wi-Fi-ul tău</string>
+    <string name="tv_share_info">Telefonul tău oferă propria copie a aplicației Prism unui TV aflat în același Wi-Fi. Partajarea se oprește când părăsești această pagină.</string>
+    <string name="tv_share_steps">Pe TV: descarcă aplicația Downloader din magazinul de aplicații și permite-i să instaleze aplicații din surse necunoscute. Apoi introdu în ea această adresă și instalează Prism.</string>
+    <string name="sent_finish_installing_on_the_tv">Trimis. Termină instalarea pe TV.</string>
+    <string name="this_copy_can_t_be_shared">Această copie a aplicației Prism nu poate fi partajată.</string>
+    <string name="downloader_code">Codul Downloader</string>
+    <string name="downloader_code_detail">%1$s, pentru aplicația Downloader de pe un TV</string>
+    <string name="downloader_code_info">Introdu-l în Downloader pe un TV ca să obții cel mai nou Prism de pe internet. Funcționează și fără acest telefon.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv instalare instala instalează apk descărcare descarcă download sideload downloader trimite televizor</string>
 </resources>

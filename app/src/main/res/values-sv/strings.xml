@@ -4031,4 +4031,16 @@
     <string name="lyrics_glow">Låttextens glöd</string>
     <string name="bold_card_s_bold_lines">Fet korts feta rader</string>
     <string name="glass_clear">Klar</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism på en TV</string>
+    <string name="share_prism_with_a_tv">Dela Prism med en TV</string>
+    <string name="from_this_phone_over_your_wi_fi">Från den här telefonen, över ditt Wi-Fi</string>
+    <string name="tv_share_info">Din telefon lämnar över sin egen kopia av Prism till en TV på samma Wi-Fi. Delningen avslutas när du lämnar den här sidan.</string>
+    <string name="tv_share_steps">På TV:n: hämta appen Downloader från appbutiken och låt den installera okända appar. Skriv sedan in den här adressen i den och installera Prism.</string>
+    <string name="sent_finish_installing_on_the_tv">Skickat. Slutför installationen på TV:n.</string>
+    <string name="this_copy_can_t_be_shared">Den här kopian av Prism kan inte delas.</string>
+    <string name="downloader_code">Downloader-kod</string>
+    <string name="downloader_code_detail">%1$s, för appen Downloader på en TV</string>
+    <string name="downloader_code_info">Skriv in den i Downloader på en TV för att hämta den senaste versionen av Prism från internet. Det fungerar utan den här telefonen.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv installera installation apk ladda ner hämta download sideload downloader skicka television</string>
 </resources>

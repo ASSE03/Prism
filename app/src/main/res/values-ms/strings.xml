@@ -3981,4 +3981,16 @@
     <string name="lyrics_glow">Cahaya lirik</string>
     <string name="bold_card_s_bold_lines">Baris tebal Kad tebal</string>
     <string name="glass_clear">Jernih</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism pada TV</string>
+    <string name="share_prism_with_a_tv">Kongsi Prism dengan TV</string>
+    <string name="from_this_phone_over_your_wi_fi">Daripada telefon ini, melalui Wi-Fi anda</string>
+    <string name="tv_share_info">Telefon anda memberikan salinan Prism miliknya kepada TV pada Wi-Fi yang sama. Perkongsian berhenti apabila anda meninggalkan halaman ini.</string>
+    <string name="tv_share_steps">Pada TV: dapatkan apl Downloader daripada gedung apl TV dan benarkan ia memasang apl dari sumber tidak dikenali. Kemudian taip alamat ini ke dalamnya dan pasang Prism.</string>
+    <string name="sent_finish_installing_on_the_tv">Dihantar. Selesaikan pemasangan pada TV.</string>
+    <string name="this_copy_can_t_be_shared">Salinan Prism ini tidak boleh dikongsi.</string>
+    <string name="downloader_code">Kod Downloader</string>
+    <string name="downloader_code_detail">%1$s, untuk apl Downloader pada TV</string>
+    <string name="downloader_code_info">Taip kod ini ke dalam Downloader pada TV untuk mendapatkan Prism terbaharu dari internet. Ia berfungsi tanpa telefon ini.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv pasang pemasangan install apk muat turun download sideload downloader hantar televisyen</string>
 </resources>

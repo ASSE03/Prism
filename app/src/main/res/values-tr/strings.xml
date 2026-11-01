@@ -4031,4 +4031,16 @@
     <string name="lyrics_glow">Şarkı sözü parıltısı</string>
     <string name="bold_card_s_bold_lines">Belirgin kartın kalın satırları</string>
     <string name="glass_clear">Şeffaf</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">TV\'de Prism</string>
+    <string name="share_prism_with_a_tv">Prism\'i bir TV ile paylaş</string>
+    <string name="from_this_phone_over_your_wi_fi">Bu telefondan, Wi-Fi üzerinden</string>
+    <string name="tv_share_info">Telefonunuz, kendi Prism kopyasını aynı Wi-Fi ağındaki bir TV\'ye verir. Bu sayfadan çıktığınızda paylaşım durur.</string>
+    <string name="tv_share_steps">TV\'de: Downloader uygulamasını TV\'nin uygulama mağazasından alın ve bilinmeyen uygulamaları yüklemesine izin verin. Sonra bu adresi uygulamaya yazıp Prism\'i yükleyin.</string>
+    <string name="sent_finish_installing_on_the_tv">Gönderildi. Kurulumu TV\'de tamamlayın.</string>
+    <string name="this_copy_can_t_be_shared">Prism\'in bu kopyası paylaşılamaz.</string>
+    <string name="downloader_code">Downloader kodu</string>
+    <string name="downloader_code_detail">%1$s, bir TV\'deki Downloader uygulaması için</string>
+    <string name="downloader_code_info">En yeni Prism\'i internetten almak için bunu bir TV\'deki Downloader\'a yazın. Bu telefon olmadan da çalışır.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv apk downloader televizyon yükle yükleme kur kurulum indir indirme gönder aktar</string>
 </resources>

@@ -3981,4 +3981,16 @@
     <string name="lyrics_glow">เนื้อเพลงเรืองแสง</string>
     <string name="bold_card_s_bold_lines">บรรทัดตัวหนาของการ์ดสีสด</string>
     <string name="glass_clear">ใส</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism บนทีวี</string>
+    <string name="share_prism_with_a_tv">แชร์ Prism ให้ทีวี</string>
+    <string name="from_this_phone_over_your_wi_fi">จากโทรศัพท์เครื่องนี้ ผ่าน Wi-Fi ของคุณ</string>
+    <string name="tv_share_info">โทรศัพท์ของคุณจะส่งสำเนา Prism ของตัวเองให้ทีวีที่อยู่ใน Wi-Fi เดียวกัน การแชร์จะหยุดเมื่อคุณออกจากหน้านี้</string>
+    <string name="tv_share_steps">บนทีวี: ติดตั้งแอป Downloader จากร้านแอปของทีวี แล้วอนุญาตให้ติดตั้งแอปที่ไม่รู้จัก จากนั้นพิมพ์ที่อยู่นี้ลงในแอปแล้วติดตั้ง Prism</string>
+    <string name="sent_finish_installing_on_the_tv">ส่งแล้ว ติดตั้งให้เสร็จบนทีวี</string>
+    <string name="this_copy_can_t_be_shared">ไม่สามารถแชร์สำเนา Prism นี้ได้</string>
+    <string name="downloader_code">รหัส Downloader</string>
+    <string name="downloader_code_detail">%1$s สำหรับแอป Downloader บนทีวี</string>
+    <string name="downloader_code_info">พิมพ์รหัสนี้ลงใน Downloader บนทีวีเพื่อรับ Prism เวอร์ชันล่าสุดจากอินเทอร์เน็ต ใช้งานได้โดยไม่ต้องมีโทรศัพท์เครื่องนี้</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv apk downloader ทีวี โทรทัศน์ ติดตั้ง ดาวน์โหลด ส่ง แชร์ ติดตั้งแอป</string>
 </resources>

@@ -4031,4 +4031,16 @@
     <string name="lyrics_glow">Songtext-Leuchten</string>
     <string name="bold_card_s_bold_lines">Fette Zeilen bei „Kräftige Karte“</string>
     <string name="glass_clear">Klar</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism auf dem Fernseher</string>
+    <string name="share_prism_with_a_tv">Prism mit einem Fernseher teilen</string>
+    <string name="from_this_phone_over_your_wi_fi">Von diesem Handy, über dein WLAN</string>
+    <string name="tv_share_info">Dein Handy gibt seine eigene Kopie von Prism an einen Fernseher im selben WLAN weiter. Das Teilen endet, wenn du diese Seite verlässt.</string>
+    <string name="tv_share_steps">Auf dem Fernseher: Hol dir die App Downloader aus dem App-Store und erlaube ihr, unbekannte Apps zu installieren. Gib dann diese Adresse darin ein und installiere Prism.</string>
+    <string name="sent_finish_installing_on_the_tv">Gesendet. Schließe die Installation auf dem Fernseher ab.</string>
+    <string name="this_copy_can_t_be_shared">Diese Kopie von Prism kann nicht geteilt werden.</string>
+    <string name="downloader_code">Downloader-Code</string>
+    <string name="downloader_code_detail">%1$s, für die Downloader-App auf einem Fernseher</string>
+    <string name="downloader_code_info">Gib ihn in Downloader auf einem Fernseher ein, um das neueste Prism aus dem Internet zu laden. Funktioniert ohne dieses Handy.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv apk downloader fernseher installieren herunterladen senden übertragen sideload</string>
 </resources>

@@ -4031,4 +4031,16 @@
     <string name="lyrics_glow">Dalszöveg ragyogása</string>
     <string name="bold_card_s_bold_lines">A Merész kártya félkövér sorai</string>
     <string name="glass_clear">Átlátszó</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism a TV-n</string>
+    <string name="share_prism_with_a_tv">Prism megosztása TV-vel</string>
+    <string name="from_this_phone_over_your_wi_fi">Erről a telefonról, Wi-Fi-n keresztül</string>
+    <string name="tv_share_info">A telefonod átadja a saját Prism-példányát a vele azonos Wi-Fi-n lévő TV-nek. A megosztás leáll, ha elhagyod ezt az oldalt.</string>
+    <string name="tv_share_steps">A TV-n: töltsd le a Downloader alkalmazást az alkalmazásboltjából, és engedélyezd neki az ismeretlen alkalmazások telepítését. Ezután írd be benne ezt a címet, és telepítsd a Prismet.</string>
+    <string name="sent_finish_installing_on_the_tv">Elküldve. Fejezd be a telepítést a TV-n.</string>
+    <string name="this_copy_can_t_be_shared">A Prismnek ez a példánya nem osztható meg.</string>
+    <string name="downloader_code">Downloader-kód</string>
+    <string name="downloader_code_detail">%1$s, a TV-n lévő Downloader alkalmazáshoz</string>
+    <string name="downloader_code_info">Írd be a TV-n a Downloaderbe, hogy az internetről megkapd a Prism legújabb verzióját. Ez a telefon nélkül is működik.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv televízió telepítés telepíteni apk letöltés letölteni küldés küldeni downloader sideload</string>
 </resources>

@@ -4031,4 +4031,16 @@
     <string name="lyrics_glow">Gloed van de songtekst</string>
     <string name="bold_card_s_bold_lines">Vette regels van Opvallende kaart</string>
     <string name="glass_clear">Helder</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism op een tv</string>
+    <string name="share_prism_with_a_tv">Prism delen met een tv</string>
+    <string name="from_this_phone_over_your_wi_fi">Vanaf deze telefoon, via je wifi</string>
+    <string name="tv_share_info">Je telefoon geeft zijn eigen kopie van Prism aan een tv op hetzelfde wifi-netwerk. Het delen stopt zodra je deze pagina verlaat.</string>
+    <string name="tv_share_steps">Op de tv: haal de app Downloader uit de appstore en sta toe dat die onbekende apps installeert. Typ daarna dit adres erin en installeer Prism.</string>
+    <string name="sent_finish_installing_on_the_tv">Verzonden. Rond de installatie op de tv af.</string>
+    <string name="this_copy_can_t_be_shared">Deze kopie van Prism kan niet worden gedeeld.</string>
+    <string name="downloader_code">Downloader-code</string>
+    <string name="downloader_code_detail">%1$s, voor de app Downloader op een tv</string>
+    <string name="downloader_code_info">Typ deze in Downloader op een tv om de nieuwste Prism van internet te halen. Dit werkt ook zonder deze telefoon.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv installeren installatie apk downloaden download sideload downloader versturen sturen televisie</string>
 </resources>

@@ -4031,4 +4031,16 @@
     <string name="lyrics_glow">লিরিক্সের আভা</string>
     <string name="bold_card_s_bold_lines">বোল্ড কার্ডের মোটা লাইন</string>
     <string name="glass_clear">স্বচ্ছ</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">টিভিতে Prism</string>
+    <string name="share_prism_with_a_tv">টিভির সঙ্গে Prism শেয়ার করুন</string>
+    <string name="from_this_phone_over_your_wi_fi">এই ফোন থেকে, আপনার Wi-Fi-এর মাধ্যমে</string>
+    <string name="tv_share_info">আপনার ফোন একই Wi-Fi-এর কোনো টিভিকে Prism-এর নিজের কপি পাঠায়। এই পেজ ছেড়ে গেলে শেয়ার করা বন্ধ হয়ে যায়।</string>
+    <string name="tv_share_steps">টিভিতে: অ্যাপ স্টোর থেকে Downloader অ্যাপটি নিন এবং এটিকে অজানা উৎস থেকে অ্যাপ ইনস্টল করার অনুমতি দিন। তারপর এতে এই ঠিকানাটি লিখে Prism ইনস্টল করুন।</string>
+    <string name="sent_finish_installing_on_the_tv">পাঠানো হয়েছে। টিভিতে ইনস্টল শেষ করুন।</string>
+    <string name="this_copy_can_t_be_shared">Prism-এর এই কপি শেয়ার করা যাবে না।</string>
+    <string name="downloader_code">Downloader কোড</string>
+    <string name="downloader_code_detail">%1$s, টিভির Downloader অ্যাপের জন্য</string>
+    <string name="downloader_code_info">টিভির Downloader-এ এটি লিখলে ইন্টারনেট থেকে সর্বশেষ Prism পাবেন। এই ফোন ছাড়াই কাজ করে।</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv apk downloader টিভি টেলিভিশন ইনস্টল ডাউনলোড পাঠান শেয়ার</string>
 </resources>

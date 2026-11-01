@@ -4031,4 +4031,16 @@
     <string name="lyrics_glow">Λάμψη στίχων</string>
     <string name="bold_card_s_bold_lines">Έντονες γραμμές της Έντονης κάρτας</string>
     <string name="glass_clear">Διάφανο</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Το Prism στην τηλεόραση</string>
+    <string name="share_prism_with_a_tv">Κοινοποίηση του Prism σε τηλεόραση</string>
+    <string name="from_this_phone_over_your_wi_fi">Από αυτό το τηλέφωνο, μέσω του Wi-Fi σου</string>
+    <string name="tv_share_info">Το τηλέφωνό σου δίνει το δικό του αντίγραφο του Prism σε μια τηλεόραση στο ίδιο Wi-Fi. Η κοινοποίηση σταματά όταν φύγεις από αυτή τη σελίδα.</string>
+    <string name="tv_share_steps">Στην τηλεόραση: κατέβασε την εφαρμογή Downloader από το κατάστημα εφαρμογών και επίτρεψέ της να εγκαθιστά εφαρμογές από άγνωστες πηγές. Μετά πληκτρολόγησε αυτή τη διεύθυνση σε αυτήν και εγκατέστησε το Prism.</string>
+    <string name="sent_finish_installing_on_the_tv">Στάλθηκε. Ολοκλήρωσε την εγκατάσταση στην τηλεόραση.</string>
+    <string name="this_copy_can_t_be_shared">Αυτό το αντίγραφο του Prism δεν μπορεί να κοινοποιηθεί.</string>
+    <string name="downloader_code">Κωδικός Downloader</string>
+    <string name="downloader_code_detail">%1$s, για την εφαρμογή Downloader σε τηλεόραση</string>
+    <string name="downloader_code_info">Πληκτρολόγησέ τον στο Downloader σε μια τηλεόραση για να πάρεις το πιο πρόσφατο Prism από το διαδίκτυο. Λειτουργεί χωρίς αυτό το τηλέφωνο.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv apk downloader τηλεόραση εγκατάσταση λήψη κατέβασμα αποστολή</string>
 </resources>

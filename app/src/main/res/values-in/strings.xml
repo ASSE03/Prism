@@ -3981,4 +3981,16 @@
     <string name="lyrics_glow">Pendar lirik</string>
     <string name="bold_card_s_bold_lines">Baris tebal Kartu tegas</string>
     <string name="glass_clear">Bening</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism di TV</string>
+    <string name="share_prism_with_a_tv">Bagikan Prism ke TV</string>
+    <string name="from_this_phone_over_your_wi_fi">Dari ponsel ini, lewat Wi-Fi-mu</string>
+    <string name="tv_share_info">Ponselmu mengirim salinan Prism miliknya ke TV yang ada di Wi-Fi yang sama. Pembagian berhenti saat kamu meninggalkan halaman ini.</string>
+    <string name="tv_share_steps">Di TV: unduh aplikasi Downloader dari toko aplikasinya dan izinkan untuk memasang aplikasi dari sumber tidak dikenal. Lalu ketik alamat ini di dalamnya dan pasang Prism.</string>
+    <string name="sent_finish_installing_on_the_tv">Terkirim. Selesaikan pemasangan di TV.</string>
+    <string name="this_copy_can_t_be_shared">Salinan Prism ini tidak dapat dibagikan.</string>
+    <string name="downloader_code">Kode Downloader</string>
+    <string name="downloader_code_detail">%1$s, untuk aplikasi Downloader di TV</string>
+    <string name="downloader_code_info">Ketik di Downloader pada TV untuk mendapatkan Prism terbaru dari internet. Tetap berfungsi tanpa ponsel ini.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv televisi pasang memasang instal install apk unduh mengunduh download kirim mengirim downloader sideload</string>
 </resources>

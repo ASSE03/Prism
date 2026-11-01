@@ -3981,4 +3981,16 @@
     <string name="lyrics_glow">歌詞光暈</string>
     <string name="bold_card_s_bold_lines">粗體卡片的粗體行</string>
     <string name="glass_clear">透明</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">電視上的 Prism</string>
+    <string name="share_prism_with_a_tv">與電視分享 Prism</string>
+    <string name="from_this_phone_over_your_wi_fi">來自這支手機，透過你的 Wi-Fi</string>
+    <string name="tv_share_info">你的手機會把自己的 Prism 副本交給同一個 Wi-Fi 下的電視。離開此頁面後，分享就會停止。</string>
+    <string name="tv_share_steps">在電視上：從電視的應用程式商店取得 Downloader 應用程式，並允許它安裝未知應用程式。接著在其中輸入這個位址，安裝 Prism。</string>
+    <string name="sent_finish_installing_on_the_tv">已傳送。請在電視上完成安裝。</string>
+    <string name="this_copy_can_t_be_shared">無法分享這份 Prism 副本。</string>
+    <string name="downloader_code">Downloader 代碼</string>
+    <string name="downloader_code_detail">%1$s，用於電視上的 Downloader 應用程式</string>
+    <string name="downloader_code_info">在電視的 Downloader 中輸入它，即可從網際網路取得最新的 Prism。沒有這支手機也能使用。</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv apk downloader 電視 電視機 安裝 下載 傳送 傳輸 側載</string>
 </resources>

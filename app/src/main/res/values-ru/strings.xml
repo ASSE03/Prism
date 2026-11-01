@@ -4131,4 +4131,16 @@
     <string name="lyrics_glow">Свечение текста</string>
     <string name="bold_card_s_bold_lines">Жирные строки яркой карточки</string>
     <string name="glass_clear">Прозрачное</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism на телевизоре</string>
+    <string name="share_prism_with_a_tv">Передать Prism на телевизор</string>
+    <string name="from_this_phone_over_your_wi_fi">С этого телефона, по твоей сети Wi-Fi</string>
+    <string name="tv_share_info">Телефон передаёт телевизору в той же сети Wi-Fi собственную копию Prism. Передача прекращается, когда ты покидаешь эту страницу.</string>
+    <string name="tv_share_steps">На телевизоре: скачай приложение Downloader из магазина приложений и разреши ему устанавливать приложения из неизвестных источников. Затем введи в нём этот адрес и установи Prism.</string>
+    <string name="sent_finish_installing_on_the_tv">Отправлено. Заверши установку на телевизоре.</string>
+    <string name="this_copy_can_t_be_shared">Этой копией Prism нельзя поделиться.</string>
+    <string name="downloader_code">Код Downloader</string>
+    <string name="downloader_code_detail">%1$s, для приложения Downloader на телевизоре</string>
+    <string name="downloader_code_info">Введи его в Downloader на телевизоре, чтобы скачать из интернета новейшую версию Prism. Работает и без этого телефона.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv тв телевизор установка установить установи apk скачать загрузка загрузить sideload downloader отправить передать</string>
 </resources>

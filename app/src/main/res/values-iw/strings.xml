@@ -4081,4 +4081,16 @@
     <string name="lyrics_glow">זוהר המילים</string>
     <string name="bold_card_s_bold_lines">השורות המודגשות של כרטיס בולט</string>
     <string name="glass_clear">שקוף</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism בטלוויזיה</string>
+    <string name="share_prism_with_a_tv">שיתוף Prism עם טלוויזיה</string>
+    <string name="from_this_phone_over_your_wi_fi">מהטלפון הזה, דרך ה-Wi-Fi</string>
+    <string name="tv_share_info">הטלפון שלך מעביר את העותק של Prism שמותקן בו לטלוויזיה שנמצאת באותה רשת Wi-Fi. השיתוף נפסק כשאתה יוצא מהדף הזה.</string>
+    <string name="tv_share_steps">בטלוויזיה: הורד את האפליקציה Downloader מחנות האפליקציות שלה ואשר לה להתקין אפליקציות ממקורות לא ידועים. אחר כך הקלד בה את הכתובת הזאת והתקן את Prism.</string>
+    <string name="sent_finish_installing_on_the_tv">נשלח. סיים את ההתקנה בטלוויזיה.</string>
+    <string name="this_copy_can_t_be_shared">אי אפשר לשתף את העותק הזה של Prism.</string>
+    <string name="downloader_code">קוד Downloader</string>
+    <string name="downloader_code_detail">%1$s, עבור האפליקציה Downloader בטלוויזיה</string>
+    <string name="downloader_code_info">הקלד אותו ב-Downloader בטלוויזיה כדי להוריד את Prism העדכני ביותר מהאינטרנט. זה עובד גם בלי הטלפון הזה.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv טלוויזיה טלויזיה מסך התקנה להתקין apk הורדה להוריד שליחה לשלוח downloader sideload</string>
 </resources>

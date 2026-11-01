@@ -4031,4 +4031,16 @@
     <string name="lyrics_glow">بولوں کی چمک</string>
     <string name="bold_card_s_bold_lines">نمایاں کارڈ کی موٹی سطریں</string>
     <string name="glass_clear">شفاف</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">ٹی وی پر Prism</string>
+    <string name="share_prism_with_a_tv">Prism کو ٹی وی کے ساتھ شیئر کریں</string>
+    <string name="from_this_phone_over_your_wi_fi">اس فون سے، آپ کے Wi-Fi کے ذریعے</string>
+    <string name="tv_share_info">آپ کا فون Prism کی اپنی کاپی اسی Wi-Fi پر موجود ٹی وی کو دیتا ہے۔ اس صفحے سے نکلتے ہی شیئرنگ بند ہو جاتی ہے۔</string>
+    <string name="tv_share_steps">ٹی وی پر: ٹی وی کے ایپ اسٹور سے Downloader ایپ حاصل کریں اور اسے نامعلوم ایپس انسٹال کرنے کی اجازت دیں۔ پھر یہ پتہ اس میں ٹائپ کریں اور Prism انسٹال کریں۔</string>
+    <string name="sent_finish_installing_on_the_tv">بھیج دیا گیا۔ ٹی وی پر انسٹالیشن مکمل کریں۔</string>
+    <string name="this_copy_can_t_be_shared">Prism کی یہ کاپی شیئر نہیں کی جا سکتی۔</string>
+    <string name="downloader_code">Downloader کوڈ</string>
+    <string name="downloader_code_detail">%1$s، ٹی وی پر Downloader ایپ کے لیے</string>
+    <string name="downloader_code_info">انٹرنیٹ سے Prism کا نیا ترین ورژن لینے کے لیے اسے ٹی وی پر Downloader میں ٹائپ کریں۔ یہ اس فون کے بغیر بھی کام کرتا ہے۔</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv apk downloader ٹی وی ٹیلی ویژن انسٹال انسٹالیشن ڈاؤن لوڈ بھیجیں شیئر</string>
 </resources>

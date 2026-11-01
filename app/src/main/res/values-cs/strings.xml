@@ -4131,4 +4131,16 @@
     <string name="lyrics_glow">Záře textů</string>
     <string name="bold_card_s_bold_lines">Tučné řádky Výrazné karty</string>
     <string name="glass_clear">Průhledné</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism v televizi</string>
+    <string name="share_prism_with_a_tv">Sdílet Prism s televizí</string>
+    <string name="from_this_phone_over_your_wi_fi">Z tohoto telefonu přes Wi-Fi</string>
+    <string name="tv_share_info">Telefon předá vlastní kopii Prismu televizi na stejné Wi-Fi. Sdílení skončí, když tuto stránku opustíš.</string>
+    <string name="tv_share_steps">V televizi: stáhni si z obchodu s aplikacemi aplikaci Downloader a povol jí instalovat neznámé aplikace. Pak do ní zadej tuto adresu a nainstaluj Prism.</string>
+    <string name="sent_finish_installing_on_the_tv">Odesláno. Dokonči instalaci v televizi.</string>
+    <string name="this_copy_can_t_be_shared">Tuto kopii Prismu nelze sdílet.</string>
+    <string name="downloader_code">Kód aplikace Downloader</string>
+    <string name="downloader_code_detail">%1$s, pro aplikaci Downloader v televizi</string>
+    <string name="downloader_code_info">Zadej ho do aplikace Downloader v televizi a získáš nejnovější Prism z internetu. Funguje i bez tohoto telefonu.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv apk downloader televize televizor instalace instalovat stáhnout stažení odeslat sdílet</string>
 </resources>

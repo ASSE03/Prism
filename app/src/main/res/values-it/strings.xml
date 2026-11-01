@@ -4081,4 +4081,16 @@
     <string name="lyrics_glow">Bagliore dei testi</string>
     <string name="bold_card_s_bold_lines">Righe in grassetto di Scheda decisa</string>
     <string name="glass_clear">Trasparente</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism sulla TV</string>
+    <string name="share_prism_with_a_tv">Condividi Prism con una TV</string>
+    <string name="from_this_phone_over_your_wi_fi">Da questo telefono, via Wi-Fi</string>
+    <string name="tv_share_info">Il tuo telefono passa la propria copia di Prism a una TV sullo stesso Wi-Fi. La condivisione si interrompe quando esci da questa pagina.</string>
+    <string name="tv_share_steps">Sulla TV: scarica l\'app Downloader dal suo store di app e consentile di installare app da fonti sconosciute. Poi digita questo indirizzo al suo interno e installa Prism.</string>
+    <string name="sent_finish_installing_on_the_tv">Inviato. Completa l\'installazione sulla TV.</string>
+    <string name="this_copy_can_t_be_shared">Questa copia di Prism non può essere condivisa.</string>
+    <string name="downloader_code">Codice Downloader</string>
+    <string name="downloader_code_detail">%1$s, per l\'app Downloader su una TV</string>
+    <string name="downloader_code_info">Digitalo in Downloader su una TV per ottenere da internet l\'ultima versione di Prism. Funziona anche senza questo telefono.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv televisione installare installazione apk scaricare download inviare invio downloader sideload</string>
 </resources>

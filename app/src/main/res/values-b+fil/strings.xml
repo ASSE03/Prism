@@ -4031,4 +4031,16 @@
     <string name="lyrics_glow">Glow ng lyrics</string>
     <string name="bold_card_s_bold_lines">Makakapal na linya ng Bold card</string>
     <string name="glass_clear">Malinaw</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism sa TV</string>
+    <string name="share_prism_with_a_tv">Ibahagi ang Prism sa TV</string>
+    <string name="from_this_phone_over_your_wi_fi">Mula sa teleponong ito, sa pamamagitan ng Wi-Fi mo</string>
+    <string name="tv_share_info">Ibinibigay ng telepono mo ang sarili nitong kopya ng Prism sa isang TV na nasa parehong Wi-Fi. Titigil ang pagbabahagi kapag umalis ka sa page na ito.</string>
+    <string name="tv_share_steps">Sa TV: kunin ang Downloader app mula sa app store nito at payagan itong mag-install ng mga app mula sa hindi kilalang source. Pagkatapos, i-type ang address na ito roon at i-install ang Prism.</string>
+    <string name="sent_finish_installing_on_the_tv">Naipadala na. Tapusin ang pag-install sa TV.</string>
+    <string name="this_copy_can_t_be_shared">Hindi maibabahagi ang kopyang ito ng Prism.</string>
+    <string name="downloader_code">Downloader code</string>
+    <string name="downloader_code_detail">%1$s, para sa Downloader app sa TV</string>
+    <string name="downloader_code_info">I-type ito sa Downloader sa isang TV para makuha ang pinakabagong Prism mula sa internet. Gumagana ito kahit wala ang teleponong ito.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv apk downloader telebisyon i-install install i-download download ipadala ibahagi</string>
 </resources>

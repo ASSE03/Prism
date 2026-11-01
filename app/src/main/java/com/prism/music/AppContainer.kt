@@ -491,6 +491,8 @@ class AppContainer(val app: Application) {
     private val webRemoteMade = lazy { com.prism.music.connect.WebRemote(app, this) }
     /** Prism Connect: Prism played from a browser on the same Wi-Fi (Settings → Prism Connect). */
     val webRemote by webRemoteMade
+    /** Prism on a TV: this phone's own copy handed to a TV on the Wi-Fi while its settings group is switched on. */
+    val tvInstall by lazy { com.prism.music.connect.TvInstall { com.prism.music.connect.TvInstall.installedApk(app.applicationInfo) } }
     /** Rewind: each year in music (Replay → a year). */
     val rewind by lazy { com.prism.music.data.Rewinds(this) }
     /** A year's Rewind to open (Home's Rewind card, the 1 December notification): Replay shows it and clears this. */

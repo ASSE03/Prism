@@ -3981,4 +3981,16 @@
     <string name="lyrics_glow">歌詞のグロー</string>
     <string name="bold_card_s_bold_lines">ボールド カードの太字の行</string>
     <string name="glass_clear">クリア</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">テレビで Prism</string>
+    <string name="share_prism_with_a_tv">Prism をテレビと共有</string>
+    <string name="from_this_phone_over_your_wi_fi">このスマートフォンから Wi-Fi 経由で</string>
+    <string name="tv_share_info">スマートフォンにある Prism 自身のコピーを、同じ Wi-Fi 上のテレビに渡します。このページを離れると共有は止まります。</string>
+    <string name="tv_share_steps">テレビで: アプリストアから Downloader アプリを入手し、提供元不明のアプリのインストールを許可します。続いて、このアドレスを Downloader に入力して Prism をインストールします。</string>
+    <string name="sent_finish_installing_on_the_tv">送信しました。テレビでインストールを完了してください。</string>
+    <string name="this_copy_can_t_be_shared">この Prism のコピーは共有できません。</string>
+    <string name="downloader_code">Downloader コード</string>
+    <string name="downloader_code_detail">%1$s、テレビの Downloader アプリ用</string>
+    <string name="downloader_code_info">テレビの Downloader に入力すると、インターネットから最新の Prism を入手できます。このスマートフォンがなくても使えます。</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv テレビ インストール 入れる apk ダウンロード 送信 送る downloader sideload</string>
 </resources>

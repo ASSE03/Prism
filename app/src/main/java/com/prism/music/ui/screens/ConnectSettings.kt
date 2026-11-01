@@ -41,6 +41,8 @@ fun ConnectSettings() {
             )
         }
 
+        TvInstallGroup()
+
         Group(tr(R.string.control_from_a_browser)) {
             Toggle(
                 tr(R.string.control_from_a_browser), tr(R.string.from_a_computer_or_tablet_on), s.webRemote,
@@ -98,6 +100,50 @@ fun ConnectSettings() {
             }
 
         }
+    }
+}
+
+/**
+ * Prism on a TV (1.8.0): "Share Prism with a TV" hands this phone's own copy to a TV on the Wi-Fi ([TvInstall]), and the
+ * Downloader code gets the newest release from the internet. Off whenever the page opens, and sharing stops when it goes
+ * (the switch isn't kept), so nothing listens on the network unless someone is putting Prism on a TV right now.
+ */
+@Composable
+private fun TvInstallGroup() {
+    val share = LocalContainer.current.tvInstall
+    val context = LocalContext.current
+    val clipboard = LocalClipboardManager.current
+    var on by remember { mutableStateOf(false) }
+    var failed by remember { mutableStateOf(false) }
+    androidx.compose.runtime.DisposableEffect(share) { onDispose { share.stop() } }
+    fun copy(text: String) {
+        clipboard.setText(AnnotatedString(text))
+        android.widget.Toast.makeText(context, tr(R.string.copied), android.widget.Toast.LENGTH_SHORT).show()
+    }
+    Group(tr(R.string.prism_on_a_tv)) {
+        Toggle(tr(R.string.share_prism_with_a_tv), tr(R.string.from_this_phone_over_your_wi_fi), on, info = tr(R.string.tv_share_info)) { want ->
+            if (want) { failed = !share.start(); on = !failed } else { share.stop(); on = false }
+        }
+        if (failed) Note(tr(R.string.this_copy_can_t_be_shared))
+        if (on) {
+            // The address follows the network (another Wi-Fi), so it's read again every few seconds.
+            var tick by remember { mutableIntStateOf(0) }
+            val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
+            LaunchedEffect(lifecycle) { lifecycle.tickWhileShown(2_000) { tick++ } }
+            val address = remember(tick) { share.address }
+            val sent by share.sent.collectAsState()
+            Item(
+                tr(R.string.address), address ?: tr(R.string.connect_to_wi_fi_to_use),
+                onClick = { address?.let { copy(it) } },
+            ) { if (address != null) Icon(PrismIcons.Copy, tr(R.string.copy), tint = MaterialTheme.colorScheme.onSurfaceVariant) }
+            if (sent > 0) Note(tr(R.string.sent_finish_installing_on_the_tv))
+            Note(tr(R.string.tv_share_steps))
+        }
+        val code = com.prism.music.connect.TvInstall.DOWNLOADER_CODE
+        if (code.isNotBlank()) Item(
+            tr(R.string.downloader_code), tr(R.string.downloader_code_detail, code),
+            info = tr(R.string.downloader_code_info), onClick = { copy(code) },
+        ) { Icon(PrismIcons.Copy, tr(R.string.copy), tint = MaterialTheme.colorScheme.onSurfaceVariant) }
     }
 }
 

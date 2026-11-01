@@ -4058,4 +4058,16 @@
     <string name="lyrics_on_bold_card">Lyrics on Bold card</string>
     <string name="lyrics_glow">Lyrics glow</string>
     <string name="bold_card_s_bold_lines">Bold card\'s bold lines</string>
+    <!-- 1.8.0 Prism on a TV -->
+    <string name="prism_on_a_tv">Prism on a TV</string>
+    <string name="share_prism_with_a_tv">Share Prism with a TV</string>
+    <string name="from_this_phone_over_your_wi_fi">From this phone, over your Wi-Fi</string>
+    <string name="tv_share_info">Your phone hands its own copy of Prism to a TV on the same Wi-Fi. Sharing stops when you leave this page.</string>
+    <string name="tv_share_steps">On the TV: get the Downloader app from its app store and let it install unknown apps. Then type this address into it and install Prism.</string>
+    <string name="sent_finish_installing_on_the_tv">Sent. Finish installing on the TV.</string>
+    <string name="this_copy_can_t_be_shared">This copy of Prism can\'t be shared.</string>
+    <string name="downloader_code">Downloader code</string>
+    <string name="downloader_code_detail">%1$s, for the Downloader app on a TV</string>
+    <string name="downloader_code_info">Type it into Downloader on a TV to get the newest Prism from the internet. It works without this phone.</string>
+    <string name="tv_install_keywords">tv android tv google tv fire tv install apk download sideload downloader send put on</string>
 </resources>
