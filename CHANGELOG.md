@@ -2,6 +2,61 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.8.0 (unreleased)
+
+### Prism TV
+
+- **Prism on Android TV and Google TV**, in the same app: install it on the TV and it opens with screens made for a
+  remote. Home's rows, Search (with the remote's microphone), your Library, album, playlist and artist pages, and a
+  full-screen player with big word-by-word lyrics, the queue, music videos and Sing (on TVs fast enough for it).
+- **Your phone signs the TV in and becomes its remote.** Scan the TV's code with your phone (or type the code shown):
+  the two pair over your Wi-Fi with an encrypted link, your phone offers to sign the TV in to YouTube Music (it asks
+  first, and only sends to the TV you paired), and from then on the phone's device list has a remote for the TV: play,
+  pause, skip, seek, volume, add songs. Your phone can send the TV your Look, too.
+- **Ambient screen**: after a few minutes without the remote while music plays, the TV dims to the song, its cover and
+  its lyrics, drifting slowly so it doesn't burn in. Also there as a screensaver ("Prism") where the TV lets you pick one.
+- **Getting Prism onto a TV**: type code **8986606** into the Downloader app on the TV for the newest Prism, or turn on
+  Settings → Speakers, TVs & browser → **Share Prism with a TV** and type the address it shows: your phone hands the TV
+  its own copy over Wi-Fi (only while that page is open). After that, updates come to the TV like on a phone.
+- Devices paired for handoff before 1.8.0 pair once more (the link is encrypted now).
+
+### Settings, made clearer
+
+- **Every Settings page was gone through**: settings that worked together are one choice now, and each lives in one
+  place. What plays when the queue ends, music videos (play them / songs in radios / songs everywhere), Crossfade (Off ·
+  Automatic · Fixed length), Trim silence, the same loudness for every song, Glass (Off · Frosted · Liquid), how screens
+  change, the buttons at the top of Home, and the light-mode accent are each a single choice. Nothing you had set
+  changes on the update, and Settings search still finds a setting by its old name.
+- **The player, your way**: Customize Prism → Player → **What's on the player** is a drawing of your player: tap any
+  part to hide it (cover, title, artist, like, buttons, progress bar, times, volume, device line…), tap it again to bring
+  it back. Only play / pause always stays, and nothing hidden is gone: its action moves into the ⋯ menu.
+- **The player's ⋯ menu** is in groups (This song, Lyrics, Playing, Help) with four quick tiles at the top, and
+  **Edit this menu** lets you pin up to four tiles and fold the rest away under More. With the defaults it has exactly
+  the actions it had.
+- **Lyrics in four parts** (#253): Customize Prism → Lyrics starts from one of the six looks, then Animation, Text,
+  Background and Effects are each chosen on their own, with your look shown live. Karaoke and Bold card animate more
+  smoothly (they take well under half the work per frame they did).
+- **Desk mode** (#265, off unless you turn it on; Customize Prism → Player): while the phone charges and music plays,
+  the TV's ambient screen instead of the phone going to sleep.
+- **Tablets: choose where the tabs sit** (#264): down the side as before, or along the bottom.
+- **A smaller download** (#268): 1.7.9's 31 languages had made Prism 32.6 MB; they're stored compressed now, and the
+  whole app, TV included, is about 26 MB.
+
+### Sound (#210)
+
+- **Same loudness evens out big jumps**: a quiet recording is lifted as far as its own peaks allow (it used to stop at
+  6 dB, leaving some songs far quieter than the one before). Songs measured before 1.8.0 are measured once more.
+- **Trim silence only touches a song's start and end** (renamed from Skip silence): pauses inside a song stay whole
+  (they used to be shortened everywhere); a quiet intro of more than 10 seconds plays whole. Podcasts still have every
+  pause shortened.
+- **A crossfade that matches tempo never repeats a moment of the song** (it could replay half a beat while lining the
+  beats up).
+
+### Fixes
+
+- Settings were saved one change at a time but not always in order: two quick taps could end on the wrong choice.
+- Back from Last.fm's sign-in opens Last.fm's page.
+
 ## 1.7.9.3
 
 ### Fixes

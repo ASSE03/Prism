@@ -15,7 +15,7 @@ A free, open-source YouTube Music client for Android, with word-by-word lyrics, 
 
 ### [⬇ Download Prism.apk](../../releases/latest/download/Prism.apk)
 
-[What's new in 1.7.9.2](../../releases/tag/v1.7.9.2) · [Changelog](CHANGELOG.md) · [Watch the film](../../releases/download/v1.7.0/Prism-1.7-film.mp4)
+[What's new in 1.8.0](../../releases/tag/v1.8.0) · [Changelog](CHANGELOG.md) · [Watch the film](../../releases/download/v1.7.0/Prism-1.7-film.mp4)
 
 <a href="../../releases/download/v1.7.0/Prism-1.7-film.mp4"><img src="docs/screenshots/preview.gif" width="720" alt="Prism 1.7: word-by-word lyrics on the player. Click to watch the full film."></a>
 
@@ -29,13 +29,21 @@ A free, open-source YouTube Music client for Android, with word-by-word lyrics, 
 > [!NOTE]
 > Prism is an independent, unofficial app. It is not affiliated with, endorsed by, or connected to Google, YouTube or YouTube Music.
 
-## New in 1.7.9: Prism in your language
+## New in 1.8.0: Prism TV, and Settings made clearer
+
+The first 1.8 update: Prism on your TV, with your phone as its remote, and every Settings page gone through so each choice is in one place. Nothing you had set changes on the update.
+
+- **Prism TV:** the same app on Android TV and Google TV, with screens made for a remote: Home, Search (with the remote's microphone), your Library, and a full-screen player with big word-by-word lyrics, the queue, music videos and Sing. When music plays and the remote is put down, the TV dims to the song and its lyrics.
+- **Your phone as the TV's remote:** pair them once over your Wi-Fi (an encrypted link), and your phone can sign the TV in to YouTube Music, control it, add songs and send it your Look.
+- **Getting Prism onto a TV:** type code **8986606** into the Downloader app on the TV, or turn on Settings → Speakers, TVs & browser → **Share Prism with a TV** and type the address it shows.
+- **Settings, made clearer:** settings that worked together are one choice now (what plays when the queue ends, music videos, Crossfade, Trim silence, Glass, how screens change…), and search still finds them by their old names.
+- **The player, your way:** a drawing of your player where you tap any part to hide it, and a ⋯ menu in groups that you can rearrange with Edit this menu.
+- **Lyrics in four parts (#253):** start from one of six looks, then pick the animation, text, background and effects on their own.
+- **Also:** desk mode while the phone charges (#265), the tab bar's place on tablets (#264), a smaller download (#268), and better sound (#210): the same loudness for very quiet songs, silence trimmed only at a song's ends, crossfades that never repeat a moment. See the [changelog](CHANGELOG.md).
+
+## 1.7.9: Prism in your language
 
 The last of the 1.7.x updates: Prism in 31 languages, recommendations that keep finding new music, and your requests from GitHub and Reddit. New options start off, so nothing changes until you pick it.
-
-<img src="docs/screenshots/languages.jpg" width="32%" alt="Settings → Language: your phone's language or any of Prism's 31">
-<img src="docs/screenshots/song-versions.jpg" width="32%" alt="Play a different version: the other recordings of a song, with album and length">
-<img src="docs/screenshots/playlist-slider.jpg" width="32%" alt="A 1,100-song playlist with the slider on its right edge and the song's number beside it">
 
 - **31 languages (#105):** Spanish, Portuguese, French, German, Italian, Dutch, Swedish, Polish, Czech, Romanian, Hungarian, Greek, Russian, Ukrainian, Turkish, Arabic, Persian, Hebrew, Hindi, Bengali, Urdu, Indonesian, Malay, Vietnamese, Thai, Filipino, Japanese, Korean and Chinese, plus English. Prism follows your phone's language or the one you pick, right to left where the language is, with dates, counts and YouTube's own words to match. Translated with AI (Claude): corrections are welcome (see [Contributing](CONTRIBUTING.md)).
 - **Recommendations that keep changing:** Daily Mixes that are half new every day, new music from YouTube Music's radio, "You might also like" and similar artists, no artist taking over, skipped suggestions resting for two months, and radio that sounds like radio.
