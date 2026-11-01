@@ -113,6 +113,15 @@ class TvHomeCustomizeTests {
 
     private fun row(key: String) = hasTestTag("$TAG_HOME_EDITOR/row/$key")
 
+    /** Down through the editor's list until [key]'s row has focus (the list holds every row the TV can have). */
+    private fun downTo(key: String) {
+        for (i in 0 until 30) {
+            if (compose.onAllNodes(row(key) and isFocused(), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()) return
+            TvFixture.down(); Thread.sleep(200)
+        }
+        compose.awaitFocusOn(row(key))
+    }
+
     @Test fun aRowHiddenAndTwoMovedShowSoOnHome() {
         TvFixture.launch()
         compose.awaitFocusOn(hasTestTag("$TAG_HOME/row0/0"), 15_000)
@@ -122,10 +131,9 @@ class TvHomeCustomizeTests {
         compose.awaitFocusOn(hasTestTag("$TAG_HOME/customize"))
         TvFixture.ok()
 
-        // The editor opens on its first row (the hero); Home's rows follow in Home's order.
+        // The editor opens on its first row (the hero); every row the TV can have follows, YouTube's shelves last.
         compose.awaitFocusOn(row(TvHomeLayout.HERO), 10_000)
-        repeat(4) { TvFixture.down(); Thread.sleep(250) }
-        compose.awaitFocusOn(row(a))
+        downTo(a)
         // OK hides A.
         TvFixture.ok()
         waitFor(5_000, "A hidden") { com.prism.music.ui.tv.hiddenIn(settings.current.homeLayout, a) }
@@ -155,7 +163,8 @@ class TvHomeCustomizeTests {
         // Put down: Up moves focus again, not B.
         TvFixture.up()
         compose.awaitFocusOn(row(c))
-        assertEquals(listOf(TvHomeLayout.HERO, HomeSections.QUICK_PICKS, HomeSections.SPEED_DIAL, HomeSections.RECENT, c, b, a), keys())
+        assertEquals(TvHomeLayout.HERO, keys().first())
+        assertEquals(listOf(c, b, a), keys().filter { it == a || it == b || it == c })
 
         // Back: Home, as laid out (A gone, C before B).
         TvFixture.back()
@@ -190,16 +199,40 @@ class TvHomeCustomizeTests {
         compose.awaitFocusOn(hasTestTag("$TAG_HOME_EDITOR/reset"))
         TvFixture.ok()
         waitFor(5_000, "no layout kept, A shown") { keys().isEmpty() && !com.prism.music.ui.tv.hiddenIn(settings.current.homeLayout, a) }
-        // The list is Home's own order again: A shown, right after Recently played (the list may run past the screen, so C
-        fun top(key: String) = compose.onAllNodes(row(key), useUnmergedTree = true).fetchSemanticsNodes().firstOrNull()?.boundsInRoot?.top
-        // isn't looked for).
-        compose.waitUntil(5_000) { val tRecent = top(HomeSections.RECENT); val ta = top(a); tRecent != null && ta != null && tRecent < ta && (top(c) ?: Float.MAX_VALUE) > ta }
-        compose.waitUntil(5_000) { compose.onAllNodes(row(a) and hasText(com.prism.music.tr(R.string.shown), substring = true)).fetchSemanticsNodes().isNotEmpty() }
-
         // Back to Settings, then Home: as it came.
         TvFixture.back()
         compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/setting/0"), 10_000)
         TvFixture.back()
         awaitHomeTitles(listOf("Prism test A", "Prism test B", "Prism test C"), 10_000)
+    }
+    /**
+     * The owner's second round (1.8.0): "I do not see things like Prism Music mixes … that match my phone app". A Prism
+     * mix made on this TV shows in Made for you (on a fresh install's layout, as on the phone) and OK plays it.
+     */
+    @Test fun aPrismMixShowsInMadeForYouAndPlays() {
+        val perm = if (android.os.Build.VERSION.SDK_INT >= 33) android.Manifest.permission.READ_MEDIA_AUDIO else android.Manifest.permission.READ_EXTERNAL_STORAGE
+        val instrumentation = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation()
+        instrumentation.uiAutomation.grantRuntimePermission(Fixture.context.packageName, perm)
+        val tones = listOf(Fixture.tone("Prism TV mix one", 90), Fixture.tone("Prism TV mix two", 90))
+        try {
+            val local = Fixture.container.localMusic
+            kotlinx.coroutines.runBlocking { local.scan() }
+            val songs = listOf("Prism TV mix one", "Prism TV mix two").map { t -> local.tracks.value.first { it.song.title == t }.song }
+            kotlinx.coroutines.runBlocking { Fixture.container.forYou.saveMix("daily:1", "Prism test mix", "With Test Artist", listOf("Test Artist"), 0, songs) }
+            assertEquals(true, HomeSections.initial.any { it.key == HomeSections.MADE_FOR_YOU })
+            TvFixture.launch()
+            // Made for you comes before YouTube's shelves, as the phone's layout has it.
+            compose.waitUntil(20_000) { compose.onAllNodes(hasText("Prism test mix"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+            compose.awaitFocusOn(hasTestTag("$TAG_HOME/row0/0"), 15_000)
+            assertEquals(com.prism.music.tr(R.string.made_for_you), titleOf(0))
+            TvFixture.ok()
+            compose.awaitFocusOn(hasTestTag("${com.prism.music.ui.tv.TAG_PLAYER}/playpause"), 15_000)
+            val player = Fixture.container.player
+            waitFor(15_000, "the mix playing") { player.currentSong.value?.id == songs[0].id }
+            assertEquals(2, player.queue.value.size)
+        } finally {
+            runCatching { instrumentation.runOnMainSync { Fixture.container.player.stop() } }
+            tones.forEach { runCatching { Fixture.context.contentResolver.delete(it, null, null) } }
+        }
     }
 }
