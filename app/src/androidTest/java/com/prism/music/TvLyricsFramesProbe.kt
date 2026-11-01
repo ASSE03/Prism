@@ -7,7 +7,6 @@ import com.prism.music.playback.QueueKind
 import com.prism.music.playback.QueueSource
 import kotlinx.coroutines.runBlocking
 import org.junit.After
-import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,6 +18,7 @@ import org.junit.runner.RunWith
  * default look (Prism) and in Glow. The numbers go to logcat (PrismTvPerf).
  */
 @TvTest
+@Measurement
 @RunWith(AndroidJUnit4::class)
 class TvLyricsFramesProbe {
     private val instrumentation get() = InstrumentationRegistry.getInstrumentation()
@@ -26,7 +26,6 @@ class TvLyricsFramesProbe {
     private val player get() = Fixture.container.player
 
     @Before fun setUp() {
-        assumeTrue("asked for (-e tvperf 1)", InstrumentationRegistry.getArguments().getString("tvperf") != null)
         TvFixture.assumeTv()
         Fixture.ready()
     }
