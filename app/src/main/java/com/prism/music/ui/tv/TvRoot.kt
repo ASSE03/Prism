@@ -201,9 +201,9 @@ fun TvNavFrame(
                 // Its own focus key: moving through it never counts as focus inside a place.
                 CompositionLocalProvider(LocalTvScreen provides NAV_SCREEN) {
                     Column(
-                        // A strip of darker glass, so the places' names read over any cover's frost.
+                        // Dark glass all the way across (open, it lies over the place: the place mustn't show through its names).
                         Modifier.fillMaxHeight()
-                            .background(androidx.compose.ui.graphics.Brush.horizontalGradient(listOf(TvPanelFill, TvPanelFill.copy(alpha = 0.35f))))
+                            .background(TvPanelFill.copy(alpha = 1f))
                             .padding(vertical = TV_SAFE_V, horizontal = 12.dp).selectableGroup()
                             .focusRestorerTo(current).testTag(TAG_NAV),
                         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
