@@ -68,7 +68,8 @@ fun TvSettingsPlace(nav: TvNav) {
     val groups: List<Pair<TvSettingGroup, List<TvSettingRow>>> = listOf(
         TvSettingGroup(tr(R.string.account), PrismIcons.Person, emptyList()) to buildList {
             if (settings.isLoggedIn) add(TvSettingRow(TvSetting(tr(R.string.tv_signed_in_as, settings.accountName.ifBlank { settings.accountEmail }), settings.accountEmail.takeIf { it.isNotBlank() }), TvSettingAction.Run {}))
-            else add(TvSettingRow(TvSetting(tr(R.string.tv_not_signed_in)), TvSettingAction.Run {}))
+            // Not signed in: OK signs in with the phone (it isn't a row that does nothing).
+            else add(TvSettingRow(TvSetting(tr(R.string.tv_not_signed_in), tr(R.string.tv_sign_in_with_phone)), TvSettingAction.Run { nav.go(TvRoute.Pair(signIn = true)) }))
             add(TvSettingRow(TvSetting(tr(R.string.tv_sign_in_with_phone)), TvSettingAction.Run { nav.go(TvRoute.Pair(signIn = true)) }))
             add(TvSettingRow(TvSetting(tr(R.string.tv_phone_as_remote)), TvSettingAction.Run { nav.go(TvRoute.Pair(signIn = false)) }))
             if (settings.isLoggedIn) add(TvSettingRow(TvSetting(tr(R.string.sign_out)), TvSettingAction.Choose(listOf(tr(R.string.sign_out) to { tvSignOut(c) }))))

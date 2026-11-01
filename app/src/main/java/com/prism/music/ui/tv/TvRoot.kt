@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -106,10 +107,12 @@ fun TvRoot(link: kotlinx.coroutines.flow.MutableStateFlow<android.net.Uri?> = re
         val nav = remember(stack, memory) { TvNav(stack, memory) { "section:${section.name}" } }
         // First run (plan §2): welcome, then sign in with the phone or carry on without an account.
         val c = com.prism.music.ui.theme.LocalContainer.current
-        nav.firstRunDone = { c.settings.setOnboarded(true); nav.clear() }
+        nav.firstRunDone = { c.settings.setOnboarded(true); c.settings.setTvWelcomed(); nav.clear() }
+        // Once per TV, signed out: also a TV that had Prism's phone app before (onboarded there, never offered the
+        // sign-in with the phone).
         androidx.compose.runtime.LaunchedEffect(Unit) {
             val s = c.settings.current
-            if (!s.onboarded && !s.isLoggedIn) nav.go(TvRoute.Welcome)
+            if (tvWelcomeDue(s.tv.welcomed, s.isLoggedIn)) nav.go(TvRoute.Welcome)
         }
         BackHandler(enabled = stack.isNotEmpty() || section != TvSection.HOME) {
             if (!nav.back()) { section = TvSection.HOME; memory.opening("section:${TvSection.HOME.name}") }
@@ -133,7 +136,7 @@ fun TvRoot(link: kotlinx.coroutines.flow.MutableStateFlow<android.net.Uri?> = re
         CompositionLocalProvider(LocalTvFocusMemory provides memory) { AmbientHost(onTv = true) { Box(Modifier.fillMaxSize()) {
             // The side navigation stays put while the places change beside it (focus moves from it into the new place);
             // each place keeps its own scroll and focus.
-            if (top == null) TvNavFrame(section, pick, focusNav = false) {
+            if (top == null) TvNavFrame(section, pick, focusNav = false, now = rememberTvNow(c), onNowPlaying = { nav.go(TvRoute.Player) }) {
                 holder.SaveableStateProvider(sectionKey) {
                     CompositionLocalProvider(LocalTvScreen provides sectionKey) { TvPlace(section, nav, pick) }
                 }
@@ -158,10 +161,18 @@ fun TvRoot(link: kotlinx.coroutines.flow.MutableStateFlow<android.net.Uri?> = re
 
 /**
  * The side navigation beside a top-level place's [content]. [focusNav]: focus opens on the picked place's item (while
- * a place has nothing to focus yet); otherwise the place's own first item takes it.
+ * a place has nothing to focus yet); otherwise the place's own first item takes it. While something plays ([now]) it
+ * ends with "Now playing" (its cover, and its title when open), the way back to the player from any place.
  */
 @Composable
-fun TvNavFrame(section: TvSection, onSection: (TvSection) -> Unit, focusNav: Boolean, content: @Composable () -> Unit) {
+fun TvNavFrame(
+    section: TvSection,
+    onSection: (TvSection) -> Unit,
+    focusNav: Boolean,
+    now: TvNow? = null,
+    onNowPlaying: () -> Unit = {},
+    content: @Composable () -> Unit,
+) {
     // Entering the navigation (Left from a place) lands on the place being shown.
     val current = remember { androidx.compose.ui.focus.FocusRequester() }
     Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
@@ -183,13 +194,33 @@ fun TvNavFrame(section: TvSection, onSection: (TvSection) -> Unit, focusNav: Boo
                                     .tvItem("$TAG_NAV/${s.name}", entry = focusNav && s == section),
                             ) { Text(s.label()) }
                         }
+                        if (now != null) {
+                            androidx.compose.foundation.layout.Spacer(Modifier.padding(top = 16.dp))
+                            NavigationDrawerItem(
+                                selected = false,
+                                onClick = onNowPlaying,
+                                leadingContent = {
+                                    com.prism.music.ui.components.Artwork(
+                                        now.art, Modifier.size(28.dp), shape = androidx.compose.foundation.shape.RoundedCornerShape(6.dp), size = 96,
+                                    )
+                                },
+                                supportingContent = { Text(now.title, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis) },
+                                modifier = Modifier.tvItem(TAG_NAV_NOW),
+                            ) { Text(tr(R.string.now_playing), maxLines = 1) }
+                        }
                     }
                 }
             },
-            content = content,
+            content = { CompositionLocalProvider(LocalTvNavFocus provides current) { content() } },
         )
     }
 }
+
+/** The side navigation's place being shown, for a screen whose Left should open the navigation (Home's hero). */
+val LocalTvNavFocus = androidx.compose.runtime.staticCompositionLocalOf<androidx.compose.ui.focus.FocusRequester?> { null }
+
+/** Test tag: the side navigation's "Now playing". */
+const val TAG_NAV_NOW = "tv_nav/now"
 
 /** One top-level place. */
 @Composable
@@ -206,6 +237,9 @@ private fun TvPlace(section: TvSection, nav: TvNav, onSection: (TvSection) -> Un
 }
 
 private val TV_SAFE_V = 27.dp
+/** Whether the TV's welcome (sign in with the phone) shows now: once per TV, and only signed out. */
+fun tvWelcomeDue(welcomed: Boolean, signedIn: Boolean): Boolean = !welcomed && !signedIn
+
 /** The side navigation's own focus key. */
 private const val NAV_SCREEN = "nav"
 

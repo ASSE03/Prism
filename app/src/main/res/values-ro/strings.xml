@@ -4107,7 +4107,6 @@
     <string name="tv_sign_in_with_phone">Conectează-te cu telefonul</string>
     <string name="tv_continue_without_account">Continuă fără cont</string>
     <string name="tv_pair_step_open">Deschide Prism pe telefon, în aceeași rețea Wi-Fi cu acest televizor</string>
-    <string name="tv_pair_step_pick">Alege %1$s când apare pe telefon</string>
     <string name="tv_pair_step_code">Introdu acest cod pe telefon</string>
     <string name="tv_pair_qr">Sau scanează-l cu camera telefonului</string>
     <string name="tv_no_voice">Acest televizor nu poate căuta vocal: scrie cu tastatura</string>
@@ -4175,4 +4174,8 @@
     <string name="tour_180_silence">Tăierea liniștii atinge doar începutul și sfârșitul unei melodii</string>
     <string name="tour_180_normalize">Aceeași intensitate netezește salturile mari dintre melodii</string>
     <string name="tour_180_size">O descărcare mai mică</string>
+    <string name="tv_library_signed_out">Conectează-te ca să vezi aici playlisturile, albumele, artiștii și melodiile apreciate din YouTube Music.</string>
+    <string name="tv_search_how">Apasă OK pe rândul de căutare ca să scrii cu telecomanda.</string>
+    <string name="tv_search_voice_how">Sau alege microfonul de lângă el și spune o melodie, un artist sau un album.</string>
+    <string name="tv_pair_step_find">Pe telefon, în Prism, atinge rândul cu dispozitivul de sub controale (sau deschide Setări → Boxe, televizoare și browser) și alege %1$s</string>
 </resources>

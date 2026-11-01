@@ -91,6 +91,32 @@ class TvSettingsTests {
         assertEquals(false, Fixture.container.settings.current.isLoggedIn)
     }
 
+    /**
+     * The real TV's feedback (1.8.0): a TV that had Prism's phone app before (onboarded there) still gets the TV's
+     * welcome once, signed out; and Settings' "Not signed in" signs in with the phone.
+     */
+    @Test fun aTvOnboardedOnThePhoneAppIsWelcomedOnceAndNotSignedInSignsIn() {
+        Fixture.ready()
+        kotlinx.coroutines.runBlocking {
+            Fixture.container.settings.editNow { it[androidx.datastore.preferences.core.booleanPreferencesKey("tv_welcomed")] = false }
+            kotlinx.coroutines.withTimeout(10_000) { while (Fixture.container.settings.current.tv.welcomed) kotlinx.coroutines.delay(20) }
+        }
+        assertTrue(Fixture.container.settings.current.onboarded)
+        TvFixture.launch()
+        compose.awaitFocusOn(hasTestTag("$TAG_WELCOME/phone"), 20_000)
+        TvFixture.right()
+        compose.awaitFocusOn(hasTestTag("$TAG_WELCOME/skip"))
+        TvFixture.ok()
+        compose.waitUntil(10_000) { Fixture.container.settings.current.tv.welcomed }
+        // Settings → Account: "Not signed in" opens the sign-in with the phone.
+        goTo(TvSection.SETTINGS)
+        compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/group/0"), 10_000)
+        TvFixture.right()
+        compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/setting/0"))
+        TvFixture.ok()
+        compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag(com.prism.music.ui.tv.TAG_PAIR), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+    }
+
     /** The review (1.8.0): signing out on a (shared) TV takes the account's library with it, as on the phone. */
     @Test fun signingOutTakesTheAccountsLibraryWithIt() {
         Fixture.ready()

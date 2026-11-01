@@ -4257,7 +4257,6 @@
     <string name="tv_sign_in_with_phone">سجّل الدخول بهاتفك</string>
     <string name="tv_continue_without_account">المتابعة بدون حساب</string>
     <string name="tv_pair_step_open">افتح Prism على هاتفك، على شبكة Wi-Fi نفسها التي يتصل بها هذا التلفزيون</string>
-    <string name="tv_pair_step_pick">اختر %1$s عندما يظهر على هاتفك</string>
     <string name="tv_pair_step_code">أدخل هذا الرمز على هاتفك</string>
     <string name="tv_pair_qr">أو امسحه بكاميرا هاتفك</string>
     <string name="tv_no_voice">لا يمكن لهذا التلفزيون البحث بالصوت: اكتب بلوحة المفاتيح بدلًا من ذلك</string>
@@ -4325,4 +4324,8 @@
     <string name="tour_180_silence">قص الصمت يمسّ بداية الأغنية ونهايتها فقط</string>
     <string name="tour_180_normalize">توحيد مستوى الصوت يخفف القفزات الكبيرة بين الأغاني</string>
     <string name="tour_180_size">حجم تنزيل أصغر</string>
+    <string name="tv_library_signed_out">سجّل الدخول لترى هنا قوائم التشغيل والألبومات والفنانين والأغاني التي أعجبتك من YouTube Music.</string>
+    <string name="tv_search_how">اضغط OK على سطر البحث لتكتب باستخدام جهاز التحكم.</string>
+    <string name="tv_search_voice_how">أو اختر الميكروفون بجانبه وقل اسم أغنية أو فنان أو ألبوم.</string>
+    <string name="tv_pair_step_find">على هاتفك، في Prism، انقر على سطر الجهاز أسفل عناصر التحكم (أو افتح الإعدادات ← مكبرات الصوت والتلفزيون والمتصفح) واختر %1$s</string>
 </resources>

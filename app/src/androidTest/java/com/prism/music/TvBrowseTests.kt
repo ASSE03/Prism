@@ -4,6 +4,7 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isFocused
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -69,14 +70,38 @@ class TvBrowseTests {
         compose.awaitFocusOn(hasTestTag("$TAG_SEARCH/input"), 10_000)
         compose.onNode(hasTestTag("$TAG_SEARCH/input")).performTextInput("get lucky daft punk")
         compose.waitUntil(20_000) { compose.onAllNodes(hasText("Get Lucky", substring = true), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
-        // Back ends typing (the keyboard may take one Back itself); focus returns to the search line.
-        TvFixture.back()
-        Thread.sleep(500)
-        if (compose.onAllNodes(hasTestTag("$TAG_SEARCH/input"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()) TvFixture.back()
+        // The keyboard's Search: focus goes to the first result (the real TV's feedback: it stayed on the box).
+        compose.onNode(hasTestTag("$TAG_SEARCH/input")).performImeAction()
+        compose.awaitFocusOn(hasTestTag("$TAG_SEARCH/top") or hasTestTag("$TAG_SEARCH/song/0"), 10_000)
+        // Up reaches the search line again.
+        TvFixture.up(); Thread.sleep(300)
+        compose.awaitFocusOn(hasTestTag("$TAG_SEARCH/field") or hasTestTag("$TAG_SEARCH/voice"), 10_000)
+    }
+
+    /** Before typing: how to search with a remote, not a bare box. */
+    @Test fun searchSaysHowBeforeAnythingIsTyped() {
+        TvFixture.launch()
+        goTo(TvSection.SEARCH)
         compose.awaitFocusOn(hasTestTag("$TAG_SEARCH/field"), 10_000)
-        // Down reaches the results.
+        compose.onNode(hasTestTag("$TAG_SEARCH/how"), useUnmergedTree = true).assertExists()
+        // The microphone is reachable beside the line.
+        TvFixture.right()
+        compose.awaitFocusOn(hasTestTag("$TAG_SEARCH/voice"))
+    }
+
+    /** Signed out, an empty Library tab says why and offers the sign-in with the phone. */
+    @Test fun anEmptyLibrarySaysWhyAndOffersTheSignIn() {
+        TvFixture.launch()
+        goTo(TvSection.LIBRARY)
+        compose.awaitFocusOn(hasTestTag("$TAG_LIBRARY/tab/0"), 10_000)
+        // Artists: only an account has them.
+        TvFixture.right(); Thread.sleep(250); TvFixture.right()
+        compose.awaitFocusOn(hasTestTag("$TAG_LIBRARY/tab/2"))
+        compose.waitUntil(5_000) { compose.onAllNodes(hasTestTag("$TAG_LIBRARY/empty"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
         TvFixture.down()
-        compose.awaitFocus()
+        compose.awaitFocusOn(hasTestTag("$TAG_LIBRARY/signin"))
+        TvFixture.ok()
+        compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag(com.prism.music.ui.tv.TAG_PAIR), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
     }
 
     @Test fun aPlaylistOpensFromLibraryAndPlays() {
@@ -98,6 +123,13 @@ class TvBrowseTests {
         TvFixture.ok()
         compose.awaitFocusOn(hasTestTag("$TAG_COLLECTION/play"), 15_000)
         compose.waitUntil(10_000) { compose.onAllNodes(hasText("Prism TV list two"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        // Down from Play goes into the songs, at the first (the real TV's feedback: it did nothing).
+        TvFixture.down()
+        compose.awaitFocusOn(hasTestTag("$TAG_COLLECTION/song/0"))
+        TvFixture.left()
+        compose.awaitFocusOn(hasTestTag("$TAG_COLLECTION/play") or hasTestTag("$TAG_COLLECTION/shuffle"))
+        if (compose.onAllNodes(hasTestTag("$TAG_COLLECTION/shuffle") and isFocused(), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()) TvFixture.left()
+        compose.awaitFocusOn(hasTestTag("$TAG_COLLECTION/play"))
         TvFixture.ok()
         compose.awaitFocusOn(hasTestTag("$TAG_PLAYER/playpause"), 15_000)
         val player = Fixture.container.player
@@ -105,9 +137,10 @@ class TvBrowseTests {
         while (player.currentSong.value?.id != songs[0].id && System.currentTimeMillis() < end) Thread.sleep(100)
         assertEquals(songs[0].id, player.currentSong.value?.id)
         assertEquals(2, player.queue.value.size)
-        // Back: the playlist's page, Play still focused; Back again: Library, on the playlist.
+        // Back: the playlist's page, Play still focused, the playing song marked; Back again: Library, on the playlist.
         TvFixture.back()
         compose.awaitFocusOn(hasTestTag("$TAG_COLLECTION/play"), 10_000)
+        compose.waitUntil(5_000) { compose.onAllNodes(hasTestTag(com.prism.music.ui.tv.TAG_PLAYING_MARK), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
         TvFixture.back()
         compose.awaitFocusOn(hasTestTag("$TAG_LIBRARY/grid/0"), 10_000)
     }

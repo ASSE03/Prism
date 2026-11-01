@@ -4107,7 +4107,6 @@
     <string name="tv_sign_in_with_phone">כניסה עם הטלפון</string>
     <string name="tv_continue_without_account">המשך בלי חשבון</string>
     <string name="tv_pair_step_open">פתחו את Prism בטלפון, באותה רשת Wi-Fi של הטלוויזיה הזו</string>
-    <string name="tv_pair_step_pick">בחרו ב-%1$s כשהטלפון מציג אותה</string>
     <string name="tv_pair_step_code">הזינו את הקוד הזה בטלפון</string>
     <string name="tv_pair_qr">או סרקו אותו במצלמת הטלפון</string>
     <string name="tv_no_voice">הטלוויזיה הזו לא יכולה לחפש בקול: הקלידו במקלדת</string>
@@ -4175,4 +4174,8 @@
     <string name="tour_180_silence">חיתוך שקט נוגע רק בהתחלה ובסוף של שיר</string>
     <string name="tour_180_normalize">אותה עוצמה מאזנת קפיצות גדולות בין שירים</string>
     <string name="tour_180_size">הורדה קטנה יותר</string>
+    <string name="tv_library_signed_out">אפשר להתחבר כדי לראות כאן את הפלייליסטים, האלבומים, האומנים והשירים שאהבת ב-YouTube Music.</string>
+    <string name="tv_search_how">לחיצה על OK בשורת החיפוש מאפשרת להקליד עם השלט.</string>
+    <string name="tv_search_voice_how">אפשר גם לבחור במיקרופון שלידה ולומר שם של שיר, אומן או אלבום.</string>
+    <string name="tv_pair_step_find">בטלפון, ב-Prism, יש להקיש על שורת המכשיר שמתחת לפקדים (או לפתוח את הגדרות ← רמקולים, טלוויזיות ודפדפן) ולבחור ב-%1$s</string>
 </resources>

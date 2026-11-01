@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -135,10 +136,14 @@ private fun TvNowHero(now: TvNow, onPlayPause: () -> Unit, onOpenPlayer: () -> U
             Spacer(Modifier.height(14.dp))
             TvProgress(now.fraction, now.played, now.total, Modifier.width(420.dp))
             Spacer(Modifier.height(10.dp))
+            // Left from the hero's first button opens the side navigation (not the row of cards below; the cover beside
+            // it can't take focus).
+            val nav = LocalTvNavFocus.current
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
                 TvIconButton(
                     if (now.playing) PrismIcons.Pause else PrismIcons.Play,
-                    tr(if (now.playing) R.string.widget_pause else R.string.widget_play), onPlayPause, Modifier.tvItem("$TAG_HOME/playpause"),
+                    tr(if (now.playing) R.string.widget_pause else R.string.widget_play), onPlayPause,
+                    Modifier.focusProperties { if (nav != null) left = nav }.tvItem("$TAG_HOME/playpause"),
                 )
                 TvButton(tr(R.string.now_playing), onOpenPlayer, Modifier.tvItem("$TAG_HOME/player", entry = true), icon = PrismIcons.PlayCircle, primary = true)
                 if (now.hasLyrics) TvButton(tr(R.string.lyrics), onOpenLyrics, Modifier.tvItem("$TAG_HOME/lyrics"), icon = PrismIcons.Lyrics)

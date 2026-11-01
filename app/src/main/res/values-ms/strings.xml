@@ -4007,7 +4007,6 @@
     <string name="tv_sign_in_with_phone">Log masuk dengan telefon anda</string>
     <string name="tv_continue_without_account">Teruskan tanpa akaun</string>
     <string name="tv_pair_step_open">Buka Prism pada telefon anda, pada Wi-Fi yang sama dengan TV ini</string>
-    <string name="tv_pair_step_pick">Pilih %1$s apabila telefon anda menunjukkannya</string>
     <string name="tv_pair_step_code">Masukkan kod ini pada telefon anda</string>
     <string name="tv_pair_qr">Atau imbas dengan kamera telefon anda</string>
     <string name="tv_no_voice">TV ini tidak boleh mencari dengan suara: taip dengan papan kekunci</string>
@@ -4075,4 +4074,8 @@
     <string name="tour_180_silence">Potong senyap hanya menyentuh awal dan akhir lagu</string>
     <string name="tour_180_normalize">Kenyaringan sama meratakan lonjakan besar antara lagu</string>
     <string name="tour_180_size">Muat turun yang lebih kecil</string>
+    <string name="tv_library_signed_out">Log masuk untuk melihat senarai main, album, artis dan lagu yang anda suka dari YouTube Music di sini.</string>
+    <string name="tv_search_how">Tekan OK pada baris carian untuk menaip dengan alat kawalan jauh.</string>
+    <string name="tv_search_voice_how">Atau pilih mikrofon di sebelahnya dan sebut lagu, artis atau album.</string>
+    <string name="tv_pair_step_find">Pada telefon anda, dalam Prism, ketik baris peranti di bawah kawalan (atau buka Tetapan → Pembesar suara, TV &amp; pelayar) dan pilih %1$s</string>
 </resources>

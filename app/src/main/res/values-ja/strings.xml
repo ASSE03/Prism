@@ -4007,7 +4007,6 @@
     <string name="tv_sign_in_with_phone">スマートフォンでログイン</string>
     <string name="tv_continue_without_account">アカウントなしで続ける</string>
     <string name="tv_pair_step_open">このテレビと同じ Wi-Fi で、スマートフォンの Prism を開きます</string>
-    <string name="tv_pair_step_pick">スマートフォンに %1$s が表示されたら選びます</string>
     <string name="tv_pair_step_code">スマートフォンにこのコードを入力します</string>
     <string name="tv_pair_qr">またはスマートフォンのカメラで読み取ります</string>
     <string name="tv_no_voice">このテレビは音声で検索できません：キーボードで入力してください</string>
@@ -4075,4 +4074,8 @@
     <string name="tour_180_silence">無音部分のカットは曲の最初と最後だけに作用します</string>
     <string name="tour_180_normalize">すべての曲を同じ音量にすると、曲ごとの大きな音量差がならされます</string>
     <string name="tour_180_size">ダウンロードサイズが小さくなりました</string>
+    <string name="tv_library_signed_out">ログインすると、YouTube Music のプレイリスト、アルバム、アーティスト、高く評価した曲がここに表示されます。</string>
+    <string name="tv_search_how">検索欄で OK を押すと、リモコンで入力できます。</string>
+    <string name="tv_search_voice_how">または横のマイクを選んで、曲名、アーティスト、アルバムを話してください。</string>
+    <string name="tv_pair_step_find">スマートフォンの Prism で、コントロールの下のデバイス表示をタップし（または［設定］→［スピーカー、テレビ、ブラウザ］を開き）、%1$s を選びます</string>
 </resources>

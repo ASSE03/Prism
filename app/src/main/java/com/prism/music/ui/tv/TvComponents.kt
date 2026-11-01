@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -40,7 +41,10 @@ import androidx.tv.material3.ListItem
 import androidx.tv.material3.ListItemDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import com.prism.music.R
+import com.prism.music.tr
 import com.prism.music.ui.components.Artwork
+import com.prism.music.ui.theme.PrismIcons
 
 /*
  * Prism TV's pieces (1.8.0): every TV screen is made of these, so focus looks and behaves the same everywhere. Focus
@@ -102,7 +106,10 @@ fun TvCard(
     }
 }
 
-/** A labeled button (Play, Shuffle, Sign in with your phone…); [primary] is the screen's main action, filled. */
+/**
+ * A labeled button (Play, Shuffle, Sign in with your phone…); [primary] is the screen's main action, its label in the
+ * accent. Only the focused button is filled (white): across a room, one thing looks picked, never two.
+ */
 @Composable
 fun TvButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, icon: ImageVector? = null, primary: Boolean = false) {
     val scheme = MaterialTheme.colorScheme
@@ -110,8 +117,10 @@ fun TvButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, i
         onClick = onClick,
         modifier = modifier,
         scale = ButtonDefaults.scale(focusedScale = 1.05f),
-        colors = if (primary) ButtonDefaults.colors(containerColor = scheme.primary, contentColor = scheme.onPrimary, focusedContainerColor = scheme.onSurface, focusedContentColor = scheme.surface)
-        else ButtonDefaults.colors(containerColor = scheme.surfaceVariant, contentColor = scheme.onSurface, focusedContainerColor = scheme.onSurface, focusedContentColor = scheme.surface),
+        colors = ButtonDefaults.colors(
+            containerColor = scheme.surfaceVariant, contentColor = if (primary) scheme.primary else scheme.onSurface,
+            focusedContainerColor = scheme.onSurface, focusedContentColor = scheme.surface,
+        ),
         contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
     ) {
         if (icon != null) {
@@ -122,7 +131,10 @@ fun TvButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, i
     }
 }
 
-/** A round icon button (the player's controls); [big] is play/pause. [label] is what TalkBack reads. */
+/**
+ * A round icon button (the player's controls); [big] is play/pause, on a quiet disc until focused (then white, as
+ * every focused item). [label] is what TalkBack reads.
+ */
 @Composable
 fun TvIconButton(icon: ImageVector, label: String, onClick: () -> Unit, modifier: Modifier = Modifier, big: Boolean = false, on: Boolean = false) {
     val scheme = MaterialTheme.colorScheme
@@ -132,8 +144,8 @@ fun TvIconButton(icon: ImageVector, label: String, onClick: () -> Unit, modifier
         modifier = modifier.size(size),
         scale = IconButtonDefaults.scale(focusedScale = 1.1f),
         colors = IconButtonDefaults.colors(
-            containerColor = if (big) scheme.onSurface else Color.Transparent,
-            contentColor = if (big) scheme.surface else if (on) scheme.primary else scheme.onSurface,
+            containerColor = if (big) scheme.surfaceVariant else Color.Transparent,
+            contentColor = if (on) scheme.primary else scheme.onSurface,
             focusedContainerColor = scheme.onSurface, focusedContentColor = scheme.surface,
         ),
     ) {
@@ -161,12 +173,15 @@ fun TvSongRow(
         onLongClick = onLongClick,
         modifier = modifier,
         scale = ListItemDefaults.scale(focusedScale = 1.02f),
+        // The song playing: tinted, in the accent, its number turned into the playing mark (as the phone's lists).
         colors = ListItemDefaults.colors(
-            containerColor = Color.Transparent, selectedContainerColor = scheme.primary.copy(alpha = 0.18f),
+            containerColor = Color.Transparent, selectedContainerColor = scheme.primary.copy(alpha = 0.18f), selectedContentColor = scheme.primary,
             focusedContainerColor = scheme.onSurface, focusedContentColor = scheme.surface,
+            focusedSelectedContainerColor = scheme.onSurface, focusedSelectedContentColor = scheme.surface,
         ),
         leadingContent = when {
             art != null -> { { Artwork(art, Modifier.size(44.dp), shape = RoundedCornerShape(6.dp), size = 120) } }
+            number != null && playing -> { { Box(Modifier.width(28.dp).testTag(TAG_PLAYING_MARK), contentAlignment = Alignment.Center) { Icon(PrismIcons.Equalizer, tr(R.string.now_playing), Modifier.size(20.dp)) } } }
             number != null -> { { Box(Modifier.width(28.dp), contentAlignment = Alignment.Center) { Text("$number", style = MaterialTheme.typography.titleSmall) } } }
             else -> null
         },
@@ -190,3 +205,6 @@ fun TvProgress(fraction: Float, played: String, total: String, modifier: Modifie
         }
     }
 }
+
+/** Test tag: the playing mark on the song playing in a list. */
+const val TAG_PLAYING_MARK = "tv_playing_mark"

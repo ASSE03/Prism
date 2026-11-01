@@ -4113,7 +4113,6 @@
     <string name="tv_sign_in_with_phone">Sign in with your phone</string>
     <string name="tv_continue_without_account">Continue without an account</string>
     <string name="tv_pair_step_open">Open Prism on your phone, on the same Wi-Fi as this TV</string>
-    <string name="tv_pair_step_pick">Pick %1$s when your phone shows it</string>
     <string name="tv_pair_step_code">Enter this code on your phone</string>
     <string name="tv_pair_qr">Or scan this with your phone\'s camera</string>
     <string name="tv_no_voice">This TV can\'t search by voice: type with the keyboard instead</string>
@@ -4153,4 +4152,8 @@
     <string name="tv_sing_no_cpu">Sing doesn\'t run on this TV\'s processor</string>
     <string name="tv_link_pair_note">The code you scanned is for %1$s at %2$s on your network. Pair only if it\'s the TV in front of you.</string>
     <string name="tv_sign_in_pair_first">Pair with %1$s first, then sign it in</string>
+    <string name="tv_library_signed_out">Sign in to see your playlists, albums, artists and liked songs from YouTube Music here.</string>
+    <string name="tv_search_how">Press OK on the search line to type with your remote.</string>
+    <string name="tv_search_voice_how">Or pick the microphone beside it and say a song, artist or album.</string>
+    <string name="tv_pair_step_find">On your phone, in Prism, tap the device line under the controls (or open Settings → Speakers, TVs &amp; browser) and pick %1$s</string>
 </resources>

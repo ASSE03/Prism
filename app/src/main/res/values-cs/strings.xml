@@ -4157,7 +4157,6 @@
     <string name="tv_sign_in_with_phone">Přihlásit se telefonem</string>
     <string name="tv_continue_without_account">Pokračovat bez účtu</string>
     <string name="tv_pair_step_open">Otevřete Prism v telefonu, na stejné Wi-Fi jako tato televize</string>
-    <string name="tv_pair_step_pick">Až ji telefon ukáže, vyberte %1$s</string>
     <string name="tv_pair_step_code">Zadejte tento kód v telefonu</string>
     <string name="tv_pair_qr">Nebo ho naskenujte fotoaparátem telefonu</string>
     <string name="tv_no_voice">Tato televize neumí hledat hlasem: pište na klávesnici</string>
@@ -4225,4 +4224,8 @@
     <string name="tour_180_silence">Ořezání ticha se týká jen začátku a konce skladby</string>
     <string name="tour_180_normalize">Stejná hlasitost vyrovná velké skoky mezi skladbami</string>
     <string name="tour_180_size">Menší stahování</string>
+    <string name="tv_library_signed_out">Přihlaste se a uvidíte tu své playlisty, alba, interprety a oblíbené skladby z YouTube Music.</string>
+    <string name="tv_search_how">Stiskněte OK na řádku hledání a pište ovladačem.</string>
+    <string name="tv_search_voice_how">Nebo vyberte mikrofon vedle něj a řekněte skladbu, interpreta nebo album.</string>
+    <string name="tv_pair_step_find">V telefonu v Prismu klepněte na řádek zařízení pod ovládáním (nebo otevřete Nastavení → Reproduktory, televize a prohlížeč) a vyberte %1$s</string>
 </resources>

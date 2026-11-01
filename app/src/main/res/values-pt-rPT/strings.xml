@@ -4107,7 +4107,6 @@
     <string name="tv_sign_in_with_phone">Iniciar sessão com o telemóvel</string>
     <string name="tv_continue_without_account">Continuar sem conta</string>
     <string name="tv_pair_step_open">Abra o Prism no telemóvel, na mesma rede Wi-Fi desta TV</string>
-    <string name="tv_pair_step_pick">Escolha %1$s quando o telemóvel a mostrar</string>
     <string name="tv_pair_step_code">Introduza este código no telemóvel</string>
     <string name="tv_pair_qr">Ou digitalize-o com a câmara do telemóvel</string>
     <string name="tv_no_voice">Esta TV não pesquisa por voz: escreva com o teclado</string>
@@ -4175,4 +4174,8 @@
     <string name="tour_180_silence">Cortar o silêncio só mexe no início e no fim da música</string>
     <string name="tour_180_normalize">O mesmo volume suaviza os grandes saltos entre músicas</string>
     <string name="tour_180_size">Uma transferência mais pequena</string>
+    <string name="tv_library_signed_out">Inicie sessão para ver aqui as suas playlists, álbuns, artistas e músicas de que gosta no YouTube Music.</string>
+    <string name="tv_search_how">Prima OK na linha de pesquisa para escrever com o comando.</string>
+    <string name="tv_search_voice_how">Ou escolha o microfone ao lado e diga uma música, um artista ou um álbum.</string>
+    <string name="tv_pair_step_find">No telemóvel, no Prism, toque na linha do dispositivo por baixo dos controlos (ou abra Definições → Altifalantes, TVs e browser) e escolha %1$s</string>
 </resources>

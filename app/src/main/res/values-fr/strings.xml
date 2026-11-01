@@ -4107,7 +4107,6 @@
     <string name="tv_sign_in_with_phone">Se connecter avec votre téléphone</string>
     <string name="tv_continue_without_account">Continuer sans compte</string>
     <string name="tv_pair_step_open">Ouvrez Prism sur votre téléphone, sur le même Wi-Fi que ce téléviseur</string>
-    <string name="tv_pair_step_pick">Choisissez %1$s quand votre téléphone l\'affiche</string>
     <string name="tv_pair_step_code">Saisissez ce code sur votre téléphone</string>
     <string name="tv_pair_qr">Ou scannez-le avec l\'appareil photo de votre téléphone</string>
     <string name="tv_no_voice">Ce téléviseur ne peut pas chercher à la voix : utilisez plutôt le clavier</string>
@@ -4175,4 +4174,8 @@
     <string name="tour_180_silence">Couper le silence ne touche que le début et la fin d’un titre</string>
     <string name="tour_180_normalize">Même volume atténue les gros écarts entre les titres</string>
     <string name="tour_180_size">Un téléchargement plus léger</string>
+    <string name="tv_library_signed_out">Connectez-vous pour voir ici vos playlists, albums, artistes et titres aimés de YouTube Music.</string>
+    <string name="tv_search_how">Appuyez sur OK sur la ligne de recherche pour taper avec la télécommande.</string>
+    <string name="tv_search_voice_how">Ou choisissez le micro à côté et dites un titre, un artiste ou un album.</string>
+    <string name="tv_pair_step_find">Sur votre téléphone, dans Prism, appuyez sur la ligne d’appareil sous les commandes (ou ouvrez Réglages → Enceintes, TV et navigateur) et choisissez %1$s</string>
 </resources>

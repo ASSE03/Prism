@@ -4057,7 +4057,6 @@
     <string name="tv_sign_in_with_phone">Mit dem Handy anmelden</string>
     <string name="tv_continue_without_account">Ohne Konto weiter</string>
     <string name="tv_pair_step_open">Öffne Prism auf deinem Handy, im selben WLAN wie dieser Fernseher</string>
-    <string name="tv_pair_step_pick">Wähle %1$s, sobald dein Handy ihn anzeigt</string>
     <string name="tv_pair_step_code">Gib diesen Code auf deinem Handy ein</string>
     <string name="tv_pair_qr">Oder scanne ihn mit der Kamera deines Handys</string>
     <string name="tv_no_voice">Dieser Fernseher kann nicht per Sprache suchen: tippe stattdessen mit der Tastatur</string>
@@ -4125,4 +4124,8 @@
     <string name="tour_180_silence">Stille entfernen betrifft nur Anfang und Ende eines Songs</string>
     <string name="tour_180_normalize">Gleiche Lautstärke gleicht große Sprünge zwischen Songs aus</string>
     <string name="tour_180_size">Ein kleinerer Download</string>
+    <string name="tv_library_signed_out">Melde dich an, um hier deine Playlists, Alben, Künstler und Lieblingssongs aus YouTube Music zu sehen.</string>
+    <string name="tv_search_how">Drück OK auf der Suchzeile, um mit der Fernbedienung zu tippen.</string>
+    <string name="tv_search_voice_how">Oder wähl das Mikrofon daneben und sag einen Song, Künstler oder ein Album.</string>
+    <string name="tv_pair_step_find">Tippe auf dem Handy in Prism auf die Gerätezeile unter der Steuerung (oder öffne Einstellungen → Lautsprecher, Fernseher &amp; Browser) und wähle %1$s</string>
 </resources>

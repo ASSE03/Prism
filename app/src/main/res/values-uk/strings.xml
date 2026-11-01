@@ -4157,7 +4157,6 @@
     <string name="tv_sign_in_with_phone">Увійти з телефона</string>
     <string name="tv_continue_without_account">Продовжити без облікового запису</string>
     <string name="tv_pair_step_open">Відкрийте Prism на телефоні в тій самій мережі Wi-Fi, що й цей телевізор</string>
-    <string name="tv_pair_step_pick">Виберіть %1$s, коли телефон його покаже</string>
     <string name="tv_pair_step_code">Введіть цей код на телефоні</string>
     <string name="tv_pair_qr">Або відскануйте його камерою телефона</string>
     <string name="tv_no_voice">Цей телевізор не вміє шукати голосом: введіть текст з клавіатури</string>
@@ -4225,4 +4224,8 @@
     <string name="tour_180_silence">Обрізання тиші зачіпає лише початок і кінець пісні</string>
     <string name="tour_180_normalize">Однакова гучність згладжує великі перепади між піснями</string>
     <string name="tour_180_size">Менше завантаження</string>
+    <string name="tv_library_signed_out">Увійдіть, щоб бачити тут свої плейлисти, альбоми, виконавців і вподобані треки з YouTube Music.</string>
+    <string name="tv_search_how">Натисніть OK на рядку пошуку, щоб друкувати пультом.</string>
+    <string name="tv_search_voice_how">Або виберіть мікрофон поруч і назвіть трек, виконавця чи альбом.</string>
+    <string name="tv_pair_step_find">На телефоні, у Prism, торкніться рядка пристрою під елементами керування (або відкрийте Налаштування → Колонки, телевізори й браузер) і виберіть %1$s</string>
 </resources>
