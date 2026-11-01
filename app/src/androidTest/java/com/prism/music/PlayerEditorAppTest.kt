@@ -42,10 +42,15 @@ class PlayerEditorAppTest {
     @After fun cleanUp() {
         runCatching { instrumentation.runOnMainSync { Fixture.container.player.stop() } }
         tone?.let { runCatching { Fixture.context.contentResolver.delete(it, null, null) } }
+        // Upright again, and the phone's own rotation back (wideMenuButtonStaysWithoutTitleAndArtist turns it).
+        runCatching {
+            val device = androidx.test.uiautomator.UiDevice.getInstance(instrumentation)
+            device.setOrientationNatural(); device.unfreezeRotation()
+        }
     }
 
-    /** A test tone playing, the full player open (the widget's link), paused so Compose goes idle. */
-    private fun openPlayer() {
+    /** A test tone playing ([episode]: as a podcast episode), the full player open (the widget's link), paused so Compose goes idle. */
+    private fun openPlayer(episode: Boolean = false) {
         Fixture.ready()
         val perm = if (android.os.Build.VERSION.SDK_INT >= 33) android.Manifest.permission.READ_MEDIA_AUDIO else android.Manifest.permission.READ_EXTERNAL_STORAGE
         instrumentation.uiAutomation.grantRuntimePermission(Fixture.context.packageName, perm)
@@ -53,7 +58,7 @@ class PlayerEditorAppTest {
         Fixture.launch()
         val local = Fixture.container.localMusic
         runBlocking { local.scan() }
-        val song = local.tracks.value.first { it.song.title == "Prism editor tone" }.song
+        val song = local.tracks.value.first { it.song.title == "Prism editor tone" }.song.let { if (episode) it.copy(isEpisode = true) else it }
         instrumentation.runOnMainSync { Fixture.container.player.playQueue(listOf(song), 0, QueueSource(QueueKind.OTHER, "Editor test")) }
         compose.waitForText("Prism editor tone", 20_000)
         Fixture.context.startActivity(
@@ -99,6 +104,42 @@ class PlayerEditorAppTest {
         settings.setPartShown(PlayerPart.PREV_NEXT, true)
         settings.setPartShown(PlayerPart.BUTTONS, true)
         compose.waitUntil(10_000) { present(hasTestTag("progressBar")) }
+    }
+
+    /**
+     * A podcast episode with previous & next and the row hidden: it keeps its back 15 s / ahead 30 s, and its menu has
+     * the queue the hidden row held.
+     */
+    @Test fun anEpisodeKeepsItsSkipsAndItsQueue() {
+        settings.setPartShown(PlayerPart.PREV_NEXT, false)
+        settings.setPartShown(PlayerPart.BUTTONS, false)
+        openPlayer(episode = true)
+        compose.waitUntil(10_000) { present(hasContentDescription(trp(R.plurals.back_n_seconds, 15))) }
+        assertTrue("ahead 30 s stays", present(hasContentDescription(trp(R.plurals.ahead_n_seconds, 30))))
+        compose.onAllNodes(menuButton()).onFirst().performSemanticsClick()
+        // The episode's menu (its own group, with Stats for nerds), and the queue in it.
+        compose.waitForText(tr(R.string.stats_for_nerds), 10_000)
+        Fixture.screenshot("player-editor-episode-menu")
+        compose.clickWhenFound(hasText(tr(R.string.up_next)) and hasClickAction())
+        compose.waitUntil(10_000) { !present(hasText(tr(R.string.stats_for_nerds))) }
+    }
+
+    /**
+     * The wide player (a phone on its side): with the ⋯ button, the title and the artist hidden and the cover's long press
+     * set to the menu, ⋯ still shows there (its cover has no long press), and opens the menu.
+     */
+    @Test fun wideMenuButtonStaysWithoutTitleAndArtist() {
+        settings.setPartShown(PlayerPart.MENU, false)
+        settings.setPartShown(PlayerPart.TITLE, false)
+        settings.setPartShown(PlayerPart.ARTIST, false)
+        settings.setGesture("cover_long_press", com.prism.music.data.prefs.PlayerGesture.MENU)
+        openPlayer()
+        assertFalse("upright: the long press opens it, so ⋯ goes", present(menuButton()))
+        androidx.test.uiautomator.UiDevice.getInstance(instrumentation).setOrientationLeft()
+        compose.waitUntil(15_000) { present(menuButton()) }
+        compose.onAllNodes(menuButton()).onFirst().performSemanticsClick()
+        compose.waitForText(tr(R.string.edit_this_menu), 10_000)
+        Fixture.screenshot("player-editor-wide-menu")
     }
 
     /** With the ⋯ button hidden, a long press on the title opens the menu. */

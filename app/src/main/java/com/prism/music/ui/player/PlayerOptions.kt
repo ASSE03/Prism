@@ -35,6 +35,7 @@ import com.prism.music.data.model.Song
 import com.prism.music.data.prefs.MenuAction
 import com.prism.music.data.prefs.MenuGroup
 import com.prism.music.data.prefs.PlayerButton
+import com.prism.music.data.prefs.episodeMenuFromPlayer
 import com.prism.music.data.prefs.menuFromPlayer
 import com.prism.music.data.prefs.menuLayout
 import com.prism.music.ui.LocalNavigator
@@ -146,6 +147,9 @@ fun PlayerOptionsSheet(
                 PrismIcons.Speed, tr(R.string.playback_speed_2), value = "${speed.toString().removeSuffix(".0")}×", active = speed != 1f, keepOpen = true,
             ) { c.player.setEpisodeSpeed(speeds[(speeds.indexOf(speed) + 1) % speeds.size]) },
             song.podcastId?.let { id -> ActionItem(PrismIcons.Podcasts, tr(R.string.go_to_podcast)) { onCollapse(); nav.go(Routes.podcast(id)) } },
+            // What the episode's hidden row did (1.8.0): its queue.
+            if (MenuAction.OPEN_QUEUE in c.settings.flow.collectAsState().value.episodeMenuFromPlayer())
+                ActionItem(PrismIcons.Queue, tr(R.string.up_next), onClick = onOpenQueue) else null,
             statsItem,
         )
         ActionSheet(song.thumbnail, onDismiss) { close ->
