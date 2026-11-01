@@ -4397,4 +4397,6 @@
     <string name="holiday_winter_chill_blurb">ثلجي وبطيء، بلا أجراس زلاجة</string>
     <string name="holiday_new_years_eve">حفلة رأس السنة</string>
     <string name="holiday_new_years_eve_blurb">أناشيد للعد التنازلي حتى منتصف الليل</string>
+    <string name="tv_back_to_now">العودة إلى الآن</string>
+    <string name="tv_timing_keys">← → 0.1 ث  ·  ↑ ↓ 1 ث  ·  OK: %1$s</string>
 </resources>

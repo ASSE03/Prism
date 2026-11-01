@@ -4247,4 +4247,6 @@
     <string name="holiday_winter_chill_blurb">Neve e calma, sem guizos</string>
     <string name="holiday_new_years_eve">Festa de Passagem de Ano</string>
     <string name="holiday_new_years_eve_blurb">Hinos para a contagem decrescente até à meia-noite</string>
+    <string name="tv_back_to_now">Voltar ao agora</string>
+    <string name="tv_timing_keys">← → 0,1 s  ·  ↑ ↓ 1 s  ·  OK: %1$s</string>
 </resources>

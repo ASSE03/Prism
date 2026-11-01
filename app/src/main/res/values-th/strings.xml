@@ -4147,4 +4147,6 @@
     <string name="holiday_winter_chill_blurb">หิมะและช้าๆ ไม่มีเสียงกระดิ่งเลื่อน</string>
     <string name="holiday_new_years_eve">ปาร์ตี้ส่งท้ายปีเก่า</string>
     <string name="holiday_new_years_eve_blurb">เพลงสำหรับนับถอยหลังสู่เที่ยงคืน</string>
+    <string name="tv_back_to_now">กลับไปที่ตอนนี้</string>
+    <string name="tv_timing_keys">← → 0.1 วิ  ·  ↑ ↓ 1 วิ  ·  OK: %1$s</string>
 </resources>

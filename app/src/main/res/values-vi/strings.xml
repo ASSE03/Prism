@@ -4147,4 +4147,6 @@
     <string name="holiday_winter_chill_blurb">Tuyết rơi chậm rãi, không tiếng chuông xe trượt</string>
     <string name="holiday_new_years_eve">Tiệc đêm Giao thừa</string>
     <string name="holiday_new_years_eve_blurb">Những bản nhạc đếm ngược đến nửa đêm</string>
+    <string name="tv_back_to_now">Quay lại hiện tại</string>
+    <string name="tv_timing_keys">← → 0,1 giây  ·  ↑ ↓ 1 giây  ·  OK: %1$s</string>
 </resources>

@@ -4197,4 +4197,6 @@
     <string name="holiday_winter_chill_blurb">Karlı ve yavaş, kızak çanı yok</string>
     <string name="holiday_new_years_eve">Yılbaşı Gecesi Partisi</string>
     <string name="holiday_new_years_eve_blurb">Gece yarısına geri sayım için marşlar</string>
+    <string name="tv_back_to_now">Şimdiye dön</string>
+    <string name="tv_timing_keys">← → 0,1 sn  ·  ↑ ↓ 1 sn  ·  OK: %1$s</string>
 </resources>
