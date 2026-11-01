@@ -124,8 +124,17 @@ fun TvHomeEditorScreen(
                 val isMoving = r.key == moving
                 val bring = remember { BringIntoViewRequester() }
                 val scope = rememberCoroutineScope()
-                // A row being carried stays in view as it goes past the list's edge.
-                LaunchedEffect(isMoving, rows.indexOf(r)) { if (isMoving) runCatching { bring.bringIntoView() } }
+                // A row being carried keeps focus where it was picked up (the row, or its Move button) as it goes from
+                // place to place, and stays in view past the list's edge.
+                val rowFocus = remember { FocusRequester() }
+                val buttonFocus = remember { FocusRequester() }
+                var onButton by remember { mutableStateOf(false) }
+                var focused by remember { mutableStateOf(false) }
+                LaunchedEffect(isMoving, rows.indexOf(r)) {
+                    if (!isMoving) return@LaunchedEffect
+                    runCatching { bring.bringIntoView() }
+                    if (!focused) runCatching { (if (onButton) buttonFocus else rowFocus).requestFocus() }
+                }
                 Row(
                     Modifier.fillMaxWidth().bringIntoViewRequester(bring).onPreviewKeyEvent { e ->
                         if (!isMoving || e.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
@@ -165,6 +174,7 @@ fun TvHomeEditorScreen(
                             }
                             true
                         }.then(if (r.key == rows.firstOrNull()?.key) Modifier.focusRequester(firstRow) else Modifier)
+                            .focusRequester(rowFocus).onFocusChanged { if (it.isFocused) { onButton = false; focused = true } else if (!onButton) focused = false }
                             .tvItem("$TAG_HOME_EDITOR/row/${r.key}", entry = r.key == firstKey),
                         leadingContent = { Icon(if (isMoving) PrismIcons.SwapVertical else if (r.shown) PrismIcons.Visible else PrismIcons.Hidden, null, Modifier.size(22.dp)) },
                         headlineContent = { Text(r.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
@@ -184,7 +194,8 @@ fun TvHomeEditorScreen(
                         if (isMoving) PrismIcons.Check else PrismIcons.SwapVertical,
                         if (isMoving) tr(R.string.done) else tr(R.string.tv_home_move, r.title),
                         { if (isMoving) onPutDown() else onPickUp(r.key) },
-                        Modifier.tvItem("$TAG_HOME_EDITOR/move/${r.key}"),
+                        Modifier.focusRequester(buttonFocus).onFocusChanged { if (it.isFocused) { onButton = true; focused = true } else if (onButton) focused = false }
+                            .tvItem("$TAG_HOME_EDITOR/move/${r.key}"),
                         on = isMoving,
                     )
                 }
@@ -215,6 +226,8 @@ fun TvHomeEditorPage(nav: TvNav) {
     val phoneLayout = localPhone ?: settings.homeLayout
     val layout = TvHomeLayout.editable(tvLayout, natural, phoneLayout, settings.autoAddSections)
     var moving by remember { mutableStateOf<String?>(null) }
+    // Rows turned on while the editor is open (Home hasn't shown them yet).
+    val turnedOn = remember { mutableSetOf<String>() }
     fun keepTv(next: List<HomeSectionConfig>) { localTv = TvHomeLayout.saved(next); c.settings.setTvHomeLayout(localTv!!) }
     fun keepPhone(next: List<HomeSectionConfig>) { localPhone = next; c.settings.setHomeLayout(next) }
     BackHandler(enabled = moving != null) { moving = null }
@@ -224,15 +237,22 @@ fun TvHomeEditorPage(nav: TvNav) {
         onToggle = { key ->
             val row = layout.first { it.key == key }
             // The hero is the TV's own; the other rows are shown or hidden in the phone's Home layout too.
-            if (key == TvHomeLayout.HERO) keepTv(TvHomeLayout.toggled(layout, key))
+            if (key == TvHomeLayout.HERO) { if (!row.visible) turnedOn += key; keepTv(TvHomeLayout.toggled(layout, key)) }
             else {
+                if (!row.visible) turnedOn += key else turnedOn -= key
                 keepPhone(layoutWithShown(phoneLayout, key, row.title, !row.visible))
                 // The order as it is now is the TV's from here on (the phone's layout may name the row in another place).
                 keepTv(layout)
             }
         },
         onPickUp = { moving = it },
-        onStep = { key, by -> keepTv(TvHomeLayout.moved(layout, key, by)) },
+        // Each press carries the row past one row Home shows: rows hidden, empty or out of season now are passed on the way
+        // (what Home showed last, plus rows turned on here; before Home has shown, every row turned on counts).
+        onStep = { key, by ->
+            val home = TvHomeOnHome.keys
+            val visible = layout.filter { it.visible }.map { it.key }.toSet()
+            keepTv(TvHomeLayout.movedPast(layout, key, by) { k -> k in visible && (home.isEmpty() || k in home || k in turnedOn) })
+        },
         onPutDown = { moving = null },
         onReset = {
             moving = null

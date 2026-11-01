@@ -144,7 +144,8 @@ class TvHomeCustomizeTests {
         TvFixture.ok()
         waitFor(5_000, "A hidden") { com.prism.music.ui.tv.hiddenIn(settings.current.homeLayout, a) }
 
-        // C, carried up twice with Move beside it, put down with OK.
+        // C, carried up twice with Move beside it, put down with OK. Each press passes one row Home shows: B, then
+        // (past A, hidden now, and the rows Home doesn't show) to the top.
         TvFixture.down(); Thread.sleep(250); TvFixture.down()
         compose.awaitFocusOn(row(c))
         TvFixture.right()
@@ -156,25 +157,25 @@ class TvHomeCustomizeTests {
         compose.awaitFocusOn(hasTestTag("$TAG_HOME_EDITOR/move/$c"))
         TvFixture.ok(); Thread.sleep(300)
 
-        // B, picked up by holding OK, carried up once past A, put down with OK.
+        // B, picked up by holding OK, carried up once (past A, hidden, to just above C, the row above it on Home), put
+        // down with OK.
         TvFixture.left()
         compose.awaitFocusOn(row(c))
-        TvFixture.down(); Thread.sleep(250); TvFixture.down()
-        compose.awaitFocusOn(row(b))
+        // C is at the top now: down the list to B.
+        downTo(b)
         TvFixture.hold(KeyEvent.KEYCODE_DPAD_CENTER, 1_500); Thread.sleep(300)
         TvFixture.up()
-        waitFor(5_000, "B above A") { keys().indexOf(b) in 0 until keys().indexOf(a) }
+        waitFor(5_000, "B above C") { keys().indexOf(b) in 0 until keys().indexOf(c) }
         compose.awaitFocusOn(row(b))
         TvFixture.ok(); Thread.sleep(300)
-        // Put down: Up moves focus again, not B.
-        TvFixture.up()
+        // Put down: Down moves focus again (to C, under it), not B.
+        TvFixture.down()
         compose.awaitFocusOn(row(c))
-        assertEquals(TvHomeLayout.HERO, keys().first())
-        assertEquals(listOf(c, b, a), keys().filter { it == a || it == b || it == c })
+        assertEquals(listOf(b, c, a), keys().filter { it == a || it == b || it == c })
 
-        // Back: Home, as laid out (A gone, C before B).
+        // Back: Home, as laid out (A gone, B before C).
         TvFixture.back()
-        awaitHomeTitles(listOf("Prism test C", "Prism test B"), 10_000)
+        awaitHomeTitles(listOf("Prism test B", "Prism test C"), 10_000)
         compose.awaitFocus()
     }
 

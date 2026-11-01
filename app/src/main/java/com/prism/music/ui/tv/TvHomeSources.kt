@@ -57,6 +57,14 @@ internal object TvHomeOwn {
     fun clear() { picks = null; yours = null; replay = null; moods = null; genres = null }
 }
 
+/**
+ * The rows Home showed last (the hero too while it showed), for the editor: Up and Down carry a row past the rows on
+ * Home, not past hidden, empty or out-of-season ones. Empty until Home has shown.
+ */
+internal object TvHomeOnHome {
+    @Volatile var keys: Set<String> = emptySet()
+}
+
 /** The year so far: time listened and the top songs (best first), as of [at]. */
 internal class TvReplay(val at: Long, val ms: Long, val top: List<Song>)
 

@@ -138,6 +138,9 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
     }
     val rows = arranged.rows
     val now = rememberTvNow(c)
+    // What Home shows, for the editor's Up and Down.
+    val heroOn = arranged.heroAt >= 0 && now != null
+    LaunchedEffect(arranged, heroOn) { TvHomeOnHome.keys = arranged.rows.map { it.key }.toSet() + if (heroOn) setOf(TvHomeLayout.HERO) else emptySet() }
     val accent = rememberTvAccent(now?.art)
     // Updates on the TV (plan §2): the same banner and installer as the phone (Android asks once to allow installs).
     val update by c.updates.available.collectAsState()

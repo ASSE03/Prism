@@ -174,6 +174,30 @@ object TvHomeLayout {
     fun toggled(list: List<HomeSectionConfig>, key: String): List<HomeSectionConfig> =
         list.map { if (it.key == key) it.copy(visible = !it.visible) else it }
 
+    /**
+     * [list] with [key] carried past [by] of the rows Home shows right now ([onHome]; up is negative), so each press of
+     * Up or Down moves it on Home: the rows Home doesn't show (hidden, empty, out of season) are passed on the way, and
+     * it stops at either end.
+     */
+    fun movedPast(list: List<HomeSectionConfig>, key: String, by: Int, onHome: (String) -> Boolean): List<HomeSectionConfig> {
+        val from = list.indexOfFirst { it.key == key }
+        if (from < 0 || by == 0) return list
+        val rest = list.toMutableList().apply { removeAt(from) }
+        val step = if (by < 0) -1 else 1
+        var left = kotlin.math.abs(by)
+        // Where it goes among the others (an index into [rest]), one row passed at a time.
+        var at = from
+        while (left > 0) {
+            val next = if (step < 0) at - 1 else at
+            if (next !in rest.indices) break
+            at = if (step < 0) next else next + 1
+            if (onHome(rest[next].key)) left--
+        }
+        // Going up it lands right before the last row it passed; going down, right after it.
+        rest.add(at.coerceIn(0, rest.size), list[from])
+        return rest
+    }
+
     /** [list] with [key] moved [by] places (up is negative), stopping at either end. */
     fun moved(list: List<HomeSectionConfig>, key: String, by: Int): List<HomeSectionConfig> =
         com.prism.music.ui.tv.moved(list, list.indexOfFirst { it.key == key }, by)
