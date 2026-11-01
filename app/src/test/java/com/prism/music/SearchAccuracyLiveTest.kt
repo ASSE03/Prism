@@ -18,7 +18,8 @@ import java.util.concurrent.TimeUnit
  * a trending Hazbin Hotel song of the same name took the top card). Live against YouTube Music, signed out, so it reads
  * what a new listener gets. A title shared by several artists should lead with the one most people mean: the most
  * played. 2026-11-01: 22 of 30 led with the song meant before search read play counts (the owner's 4 of 7: upside
- * down, hello and dreams missed), 30 of 30 after.
+ * down, hello and dreams missed), 30 of 30 after. Later that day YouTube's card for "yesterday" became the 2019 film's
+ * soundtrack album and for "africa" a new 2026 album: both give way to the song now.
  */
 class SearchAccuracyLiveTest {
     private val http = OkHttpClient.Builder().readTimeout(30, TimeUnit.SECONDS).build()
@@ -75,6 +76,19 @@ class SearchAccuracyLiveTest {
         println("[score] ${more.size - missed.size} of ${more.size}")
         // Live, and some of these are close calls (Hurt: Nine Inch Nails wrote it): most, not all.
         assertTrue("Missed ${missed.size} of ${more.size}: $missed", missed.size <= more.size / 5)
+    }
+
+    /** Albums people mean by their title stand against bigger songs of it (AM: Nio Garcia's, 491M plays). */
+    @Test
+    fun realAlbumsStand() = runBlocking {
+        val albums = listOf("am" to "Arctic Monkeys", "lemonade" to "Beyoncé", "after hours" to "The Weeknd", "rumours" to "Fleetwood Mac", "blonde" to "Frank Ocean")
+        val missed = albums.mapNotNull { (q, artist) ->
+            val top = runCatching { ytm.searchTop(q) }.getOrNull()?.top
+            val ok = top is AlbumItem && top.subtitle.contains(artist, ignoreCase = true)
+            println("[${if (ok) "hit " else "MISS"}] $q → ${describe(top)} (want the album by $artist)")
+            if (ok) null else q
+        }
+        assertTrue("Missed: $missed", missed.isEmpty())
     }
 
     /** Jack Johnson's song is also among the first songs, and his video leads the videos (it was 7th). */
