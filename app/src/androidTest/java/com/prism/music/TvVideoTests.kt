@@ -48,7 +48,8 @@ class TvVideoTests {
         tones.forEach { runCatching { Fixture.context.contentResolver.delete(it, null, null) } }
     }
 
-    private fun lineUp() {
+    /** [withLyrics]: the first tone has lyrics saved for it (as if found earlier), so no network is needed. */
+    private fun lineUp(withLyrics: Boolean = false) {
         val perm = if (android.os.Build.VERSION.SDK_INT >= 33) android.Manifest.permission.READ_MEDIA_AUDIO else android.Manifest.permission.READ_EXTERNAL_STORAGE
         instrumentation.uiAutomation.grantRuntimePermission(Fixture.context.packageName, perm)
         tones += Fixture.tone("Prism TV video one", 90)
@@ -57,6 +58,10 @@ class TvVideoTests {
         val local = Fixture.container.localMusic
         runBlocking { local.scan() }
         val songs = listOf("Prism TV video one", "Prism TV video two", "Prism TV video three").map { t -> local.tracks.value.first { it.song.title == t }.song }
+        if (withLyrics) {
+            val lrc = (0 until 10).joinToString("\n") { i -> "[00:%02d.00]Line number ${i + 1} of the tone".format(i * 8) }
+            runBlocking { Fixture.container.db.lyrics().put(com.prism.music.data.db.LyricsEntity(songs[0].id, "LRCLIB", true, lrc, System.currentTimeMillis())) }
+        }
         instrumentation.runOnMainSync { player.playQueue(songs, 0, QueueSource(QueueKind.OTHER, "TV video test")) }
         waitFor(20_000) { player.currentIndex.value == 0 && player.isPlaying.value }
     }
@@ -71,8 +76,8 @@ class TvVideoTests {
     private fun exists(tag: String) = compose.onAllNodes(hasTestTag(tag), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
 
     /** Home → the player → its Video button → the video, focus on play/pause. */
-    private fun openTheVideo() {
-        lineUp()
+    private fun openTheVideo(withLyrics: Boolean = false) {
+        lineUp(withLyrics)
         TvFixture.launch()
         compose.awaitFocusOn(hasTestTag("$TAG_HOME/player"), 15_000)
         TvFixture.ok()
@@ -126,7 +131,7 @@ class TvVideoTests {
         compose.waitUntil(5_000) { exists(com.prism.music.ui.tv.TAG_ACTIONS) }
         TvFixture.back()
         focusOn(TvVideoControl.MORE)
-        // Lyrics: the lyrics page, and Back comes back to the video on Lyrics.
+        // Lyrics: over the video, and Back comes back to its controls on Lyrics.
         TvFixture.left(); TvFixture.left(); TvFixture.left()
         focusOn(TvVideoControl.LYRICS)
         TvFixture.ok()
@@ -186,6 +191,46 @@ class TvVideoTests {
         compose.awaitFocusOn(hasTestTag("$TAG_QUEUE/2"), 10_000)
         TvFixture.left()
         focusOn(TvVideoControl.QUEUE)
+    }
+
+    /**
+     * The owner: "the lyrics should play over the video". Lyrics open over the video, which is still there and plays on
+     * under them (on a scrim, not the cover's backdrop); Back closes them onto the video's controls, the page never left.
+     */
+    @Test fun lyricsPlayOverTheVideo() {
+        openTheVideo(withLyrics = true)
+        // Paused while the screen is looked at (the sung line moves every frame while playing; the test framework waits
+        // for a still screen).
+        instrumentation.runOnMainSync { player.setPlaying(false) }
+        waitFor(5_000) { !player.isPlaying.value }
+        TvFixture.right(); focusOn(TvVideoControl.NEXT)
+        TvFixture.right(); focusOn(TvVideoControl.LYRICS)
+        TvFixture.ok()
+        compose.waitUntil(30_000) { compose.onAllNodes(androidx.compose.ui.test.hasText("Line number 1 of the tone", substring = true), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        compose.awaitFocusOn(hasTestTag("$TAG_LYRICS/lines"), 10_000)
+        assertTrue("the lyrics are over the video", exists(com.prism.music.ui.tv.TAG_VIDEO_LYRICS))
+        assertTrue("the video is still under them", exists(TAG_VIDEO) && exists(TAG_VIDEO_SCREEN))
+        assertTrue("on a scrim", exists("$TAG_LYRICS/scrim"))
+        assertTrue("the controls hide under the lyrics", !exists(TvVideoControl.PLAYPAUSE.fullTag))
+        // OK on the lines (no line picked) plays: the video plays on under the lyrics, still the video page.
+        TvFixture.ok()
+        waitFor(5_000) { player.isPlaying.value }
+        Thread.sleep(1_500)
+        assertTrue("still playing under the lyrics", player.isPlaying.value)
+        instrumentation.runOnMainSync { player.setPlaying(false) }
+        waitFor(5_000) { !player.isPlaying.value }
+        assertTrue(exists(com.prism.music.ui.tv.TAG_VIDEO_LYRICS) && exists(TAG_VIDEO_SCREEN))
+        // Timing works there too: Right reaches it, OK opens its panel, Back closes it onto the lines.
+        TvFixture.right()
+        compose.awaitFocusOn(hasTestTag("$TAG_LYRICS/timing"))
+        TvFixture.ok()
+        compose.awaitFocusOn(hasTestTag("$TAG_LYRICS/nudge"), 5_000)
+        TvFixture.back()
+        compose.awaitFocusOn(hasTestTag("$TAG_LYRICS/lines"), 5_000)
+        // Back: the lyrics close, the video's controls come back on Lyrics; the video page is still there.
+        TvFixture.back()
+        focusOn(TvVideoControl.LYRICS)
+        assertTrue(!exists(com.prism.music.ui.tv.TAG_VIDEO_LYRICS) && exists(TAG_VIDEO))
     }
 
     private fun waitFor(timeoutMs: Long, condition: () -> Boolean) {

@@ -4299,4 +4299,5 @@
     <string name="holiday_new_years_eve_blurb">Гимны для обратного отсчёта до полуночи</string>
     <string name="tv_back_to_now">Вернуться к текущей</string>
     <string name="tv_timing_keys">← → 0,1 с  ·  ↑ ↓ 1 с  ·  OK: %1$s</string>
+    <string name="tv_sing_checking_now">Проверяем этот телевизор… это займёт около минуты</string>
 </resources>

@@ -316,26 +316,7 @@ internal fun androidx.compose.foundation.layout.BoxScope.TvQueuePlace(onPicked: 
 
 /** Lyrics, large: the song's lyrics from the shared lyrics engine, in the listener's lyrics style. */
 @Composable
-fun TvLyricsPage(nav: TvNav) {
-    val c = LocalContainer.current
-    val song by c.player.currentSong.collectAsState()
-    val now = rememberTvNow(c)
-    val s = song
-    if (s == null || now == null) { TvStarting { nav.back() }; return }
-    val state = rememberLyricsState(s)
-    val clock = rememberLyricClock(now.playing)
-    val accent = rememberTvAccent(now.art)
-    val lines = state.lines
-    val current by remember(lines) { androidx.compose.runtime.derivedStateOf { CarLyricsCard.lineAt(lines, clock.value).coerceAtLeast(0) } }
-    // Under each line as the listener has them (Settings → Lyrics): the romanized line and the translation.
-    val roman = com.prism.music.ui.player.rememberRomanized(state)
-    val romanInstead = com.prism.music.ui.player.romanizeMode(s.id) == com.prism.music.data.prefs.RomanizeMode.INSTEAD
-    val translations = rememberTvTranslations(lines)
-    TvLyricsPlace(
-        now, lines, current, clock, state.loading, state.unavailable, state.source?.label, accent, onPlayPause = { c.player.togglePlay() },
-        roman = roman, romanInstead = romanInstead, translations = translations,
-    ) { ms -> c.player.seekToLyric(ms) }
-}
+fun TvLyricsPage(nav: TvNav) = TvSongLyrics({ nav.back() })
 
 /**
  * The ⋯ of a song (the player's and the video's): its album, its artists, and Sing once this TV passed Sing's speed

@@ -4149,4 +4149,5 @@
     <string name="holiday_new_years_eve_blurb">倒数到午夜的派对战歌</string>
     <string name="tv_back_to_now">回到当前</string>
     <string name="tv_timing_keys">← → 0.1 秒  ·  ↑ ↓ 1 秒  ·  OK：%1$s</string>
+    <string name="tv_sing_checking_now">正在检查这台电视…大约需要一分钟</string>
 </resources>

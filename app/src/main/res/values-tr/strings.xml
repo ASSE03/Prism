@@ -4199,4 +4199,5 @@
     <string name="holiday_new_years_eve_blurb">Gece yarısına geri sayım için marşlar</string>
     <string name="tv_back_to_now">Şimdiye dön</string>
     <string name="tv_timing_keys">← → 0,1 sn  ·  ↑ ↓ 1 sn  ·  OK: %1$s</string>
+    <string name="tv_sing_checking_now">Bu TV kontrol ediliyor… yaklaşık bir dakika sürer</string>
 </resources>

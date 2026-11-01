@@ -4227,4 +4227,5 @@
     <string name="holiday_new_years_eve_blurb">Anthems to count down to midnight</string>
     <string name="tv_back_to_now">Back to now</string>
     <string name="tv_timing_keys">← → 0.1 s  ·  ↑ ↓ 1 s  ·  OK: %1$s</string>
+    <string name="tv_sing_checking_now">Checking this TV… it takes about a minute</string>
 </resources>

@@ -4199,4 +4199,5 @@
     <string name="holiday_new_years_eve_blurb">মধ্যরাতের কাউন্টডাউনের অ্যান্থেম</string>
     <string name="tv_back_to_now">এখনকার লাইনে ফিরুন</string>
     <string name="tv_timing_keys">← → 0.1 সে  ·  ↑ ↓ 1 সে  ·  OK: %1$s</string>
+    <string name="tv_sing_checking_now">এই টিভি পরীক্ষা করা হচ্ছে… প্রায় এক মিনিট লাগবে</string>
 </resources>

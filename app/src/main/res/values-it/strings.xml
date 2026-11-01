@@ -4249,4 +4249,5 @@
     <string name="holiday_new_years_eve_blurb">Inni per il conto alla rovescia fino a mezzanotte</string>
     <string name="tv_back_to_now">Torna ad adesso</string>
     <string name="tv_timing_keys">← → 0,1 s  ·  ↑ ↓ 1 s  ·  OK: %1$s</string>
+    <string name="tv_sing_checking_now">Controllo di questo televisore… ci vuole circa un minuto</string>
 </resources>

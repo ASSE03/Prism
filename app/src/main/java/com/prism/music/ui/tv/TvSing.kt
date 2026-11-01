@@ -1,25 +1,16 @@
 package com.prism.music.ui.tv
 
 import android.content.Context
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onPreviewKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.tv.material3.MaterialTheme
 import com.prism.music.AppContainer
 import com.prism.music.R
@@ -44,7 +35,8 @@ object TvSing {
     enum class State { UNCHECKED, CHECKING, READY, SLOW, UNSUPPORTED;
         fun label(): String = when (this) {
             UNCHECKED -> tr(R.string.tv_sing_check)
-            CHECKING -> tr(R.string.tv_sing_checking)
+            // What it's doing (the row said "Play a song, then check" through the check, as if nothing had started).
+            CHECKING -> tr(R.string.tv_sing_checking_now)
             READY -> tr(R.string.tv_sing_ready)
             SLOW -> tr(R.string.tv_sing_too_slow)
             UNSUPPORTED -> tr(R.string.tv_sing_no_cpu)
@@ -117,8 +109,10 @@ object TvSing {
 }
 
 /**
- * Sing (TV): the lyrics large with the voice taken out; Left and Right move the key. Leaving the page switches Sing
- * off again (the song plays on as it is).
+ * Sing (TV): the lyrics large with the voice taken out, and how far the song is got ready (or why it can't be). Right
+ * from the lyrics reaches the key's − and + (then Timing), as the lyrics page's Timing; ↑ ↓ and OK are the lyrics'.
+ * Sing's engine is fetched first if it isn't on the TV (the check fetched it once; it may have gone since). Leaving
+ * the page switches Sing off again (the song plays on as it is).
  */
 @Composable
 fun TvSingPage(nav: TvNav) {
@@ -128,32 +122,47 @@ fun TvSingPage(nav: TvNav) {
     val semitones by c.sing.semitones.collectAsState()
     val s = song
     if (s == null || now == null) { TvStarting { nav.back() }; return }
+    var engineMissing by remember { mutableStateOf(false) }
     DisposableEffect(Unit) {
         c.sing.setOn(true)
-        c.sing.prepare(c.player.queue.value.map { it.song })
         onDispose { c.sing.setOn(false) }
+    }
+    // Without its engine Sing would get nothing ready; the songs lined up are got ready, the playing one first.
+    LaunchedEffect(s.id) {
+        if (!c.sing.engineReady() && !c.sing.downloadEngine()) { engineMissing = true; return@LaunchedEffect }
+        engineMissing = false
+        c.sing.prepare(c.player.queue.value.map { it.song })
     }
     val state = rememberLyricsState(s)
     val clock = rememberLyricClock(now.playing)
     val accent = rememberTvAccent(now.art)
     val lines = state.lines
     val current by remember(lines) { derivedStateOf { CarLyricsCard.lineAt(lines, clock.value).coerceAtLeast(0) } }
-    Box(
-        Modifier.fillMaxSize().onPreviewKeyEvent { e ->
-            if (e.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
-            when (e.key) {
-                Key.DirectionLeft -> { c.sing.setSemitones(semitones - 1); true }
-                Key.DirectionRight -> { c.sing.setSemitones(semitones + 1); true }
-                else -> false
-            }
-        },
-    ) {
-        TvLyricsPlace(now, lines, current, clock, state.loading, state.unavailable, state.source?.label, accent, onPlayPause = { c.player.togglePlay() }) { ms -> c.player.seekToLyric(ms) }
-        Row(Modifier.align(Alignment.TopEnd).padding(TvSafe), horizontalArrangement = Arrangement.spacedBy(androidx.compose.ui.unit.Dp(10f)), verticalAlignment = Alignment.CenterVertically) {
-            val scheme = MaterialTheme.colorScheme
-            val method by c.sing.method.collectAsState()
+    val progress by c.sing.progress.collectAsState()
+    val problem by c.sing.problem.collectAsState()
+    val status = tvSingStatus(engineMissing, progress[s.id], c.sing.store.complete(s.id), problem)
+    val scheme = MaterialTheme.colorScheme
+    val method by c.sing.method.collectAsState()
+    TvLyricsPlace(
+        now, lines, current, clock, state.loading, state.unavailable, state.source?.label, accent, onPlayPause = { c.player.togglePlay() },
+        status = status,
+        buttons = {
             TvChip(if (method == Separation.QUICK) tr(R.string.tv_voice_quick) else tr(R.string.tv_vocals_out), PrismIcons.Mic, scheme.primary, scheme.onPrimary)
+            TvIconButton(PrismIcons.Remove, tr(R.string.tv_key_line, "−"), { c.sing.setSemitones(semitones - 1) }, Modifier.tvItem("$TAG_SING/keydown"))
             TvChip(tr(R.string.tv_key_line, if (semitones > 0) "+$semitones" else "$semitones"), null, scheme.surfaceVariant, scheme.onSurface)
-        }
-    }
+            TvIconButton(PrismIcons.Add, tr(R.string.tv_key_line, "+"), { c.sing.setSemitones(semitones + 1) }, Modifier.tvItem("$TAG_SING/keyup"))
+        },
+    ) { ms -> c.player.seekToLyric(ms) }
 }
+
+/** What Sing's page says of the playing song: being got ready (how far), ready, or why it can't be. */
+fun tvSingStatus(engineMissing: Boolean, progress: Float?, complete: Boolean, problem: String?): String = when {
+    engineMissing -> tr(R.string.sing_s_engine_isn_t_downloaded)
+    progress != null -> tr(R.string.getting_this_song_ready_you_can, (progress * 100).toInt())
+    complete -> tr(R.string.ready_the_voice_is_out)
+    problem != null -> problem
+    else -> tr(R.string.getting_this_song_ready)
+}
+
+/** Test tags: Sing's page (its key's − and +). */
+const val TAG_SING = "tv_sing"

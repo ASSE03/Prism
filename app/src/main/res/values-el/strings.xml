@@ -4199,4 +4199,5 @@
     <string name="holiday_new_years_eve_blurb">Ύμνοι για την αντίστροφη μέτρηση ως τα μεσάνυχτα</string>
     <string name="tv_back_to_now">Πίσω στο τώρα</string>
     <string name="tv_timing_keys">← → 0,1 δ  ·  ↑ ↓ 1 δ  ·  OK: %1$s</string>
+    <string name="tv_sing_checking_now">Γίνεται έλεγχος αυτής της τηλεόρασης… διαρκεί περίπου ένα λεπτό</string>
 </resources>

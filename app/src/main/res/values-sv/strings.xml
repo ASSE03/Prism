@@ -4199,4 +4199,5 @@
     <string name="holiday_new_years_eve_blurb">Hymner att räkna ner till midnatt</string>
     <string name="tv_back_to_now">Tillbaka till nu</string>
     <string name="tv_timing_keys">← → 0,1 s  ·  ↑ ↓ 1 s  ·  OK: %1$s</string>
+    <string name="tv_sing_checking_now">Kontrollerar den här tv:n … det tar ungefär en minut</string>
 </resources>

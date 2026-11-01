@@ -4199,4 +4199,5 @@
     <string name="holiday_new_years_eve_blurb">Mga anthem para sa countdown hanggang hatinggabi</string>
     <string name="tv_back_to_now">Bumalik sa ngayon</string>
     <string name="tv_timing_keys">← → 0.1 s  ·  ↑ ↓ 1 s  ·  OK: %1$s</string>
+    <string name="tv_sing_checking_now">Sinusuri ang TV na ito… mga isang minuto ito</string>
 </resources>

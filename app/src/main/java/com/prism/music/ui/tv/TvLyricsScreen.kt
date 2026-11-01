@@ -38,7 +38,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.foundation.focusGroup
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -113,7 +115,8 @@ private const val SETTLE_AT = 0.3f
  * Lyrics (TV): the song's lyrics large across the screen, the cover and title small in the corner, the progress at the
  * foot. [lyrics]' sung line ([TvLyrics.current]) settles a third of the way down; a line [picked] with the remote is
  * lit and comes there instead. [roman] (line for line, null where none) and [translations] go under each line;
- * [romanInstead]: the romanized line is sung in the line's place.
+ * [romanInstead]: the romanized line is sung in the line's place. [overVideo]: drawn over a playing music video, on a
+ * soft dark scrim instead of the cover's backdrop (and no Bold card, which would hide the video).
  */
 @Composable
 fun TvLyricsScreen(
@@ -128,6 +131,9 @@ fun TvLyricsScreen(
     translations: List<String?>? = null,
     /** Puts focus back on the lines (after Back to now, or the timing closing). */
     linesFocus: androidx.compose.ui.focus.FocusRequester? = null,
+    overVideo: Boolean = false,
+    /** Where Right from the lines goes (the buttons' first, top right). */
+    toButtons: androidx.compose.ui.focus.FocusRequester? = null,
 ) {
     val scheme = MaterialTheme.colorScheme
     val settings = LocalAppSettings.current
@@ -135,7 +141,7 @@ fun TvLyricsScreen(
     val axis = rememberTvLyricsAxis(settings)
     val scale = settings.tv.lyricsScale * look.sizeScale
     val centred = settings.lyricsAlign == LyricsAlign.CENTER
-    val onCard = look.card != null
+    val onCard = look.card != null && !overVideo
     val style = TextStyle(
         fontSize = 40.sp * scale, lineHeight = 52.sp * scale, fontWeight = FontWeight(look.weight),
         fontFamily = LocalLyricsFont.current ?: MaterialTheme.typography.displaySmall.fontFamily,
@@ -154,9 +160,12 @@ fun TvLyricsScreen(
         else list.scrollToItem(target)
     }
     Box(modifier.fillMaxSize().testTag(TAG_LYRICS)) {
-        TvMeshBackdrop(now.art)
-        // Bold card: the lines on the cover's own color, as the phone's lyrics page.
-        look.card?.let { card -> Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(card, lerp(card, Color.Black, 0.35f))))) }
+        if (overVideo) TvVideoScrim()
+        else {
+            TvMeshBackdrop(now.art)
+            // Bold card: the lines on the cover's own color, as the phone's lyrics page.
+            look.card?.let { card -> Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(card, lerp(card, Color.Black, 0.35f))))) }
+        }
         Row(Modifier.padding(TvSafe), verticalAlignment = Alignment.CenterVertically) {
             Artwork(now.art, Modifier.size(56.dp), shape = RoundedCornerShape(8.dp), size = 160)
             Spacer(Modifier.width(16.dp))
@@ -168,7 +177,9 @@ fun TvLyricsScreen(
         BoxWithConstraints(
             Modifier.fillMaxSize().padding(start = 96.dp, end = 160.dp, top = 96.dp, bottom = 88.dp)
                 .then(if (linesFocus != null) Modifier.focusRequester(linesFocus) else Modifier)
-                .tvItem("$TAG_LYRICS/lines", entry = true).focusable(),
+                .tvItem("$TAG_LYRICS/lines", entry = true)
+                .then(if (toButtons != null) Modifier.focusProperties { right = toButtons } else Modifier)
+                .focusable(),
         ) {
             val settle = maxHeight * SETTLE_AT
             LazyColumn(
@@ -208,6 +219,22 @@ fun TvLyricsScreen(
         }
         TvProgress(now.fraction, now.played, now.total, Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(TvSafe))
     }
+}
+
+/**
+ * Over a music video: the picture darkened just enough for the lines to read, a little more at the top and foot (the
+ * title, the progress), so the video still shows through.
+ */
+@Composable
+private fun TvVideoScrim() {
+    Box(
+        Modifier.fillMaxSize().testTag("$TAG_LYRICS/scrim").background(
+            Brush.verticalGradient(
+                0f to Color.Black.copy(alpha = 0.7f), 0.3f to Color.Black.copy(alpha = 0.5f),
+                0.75f to Color.Black.copy(alpha = 0.5f), 1f to Color.Black.copy(alpha = 0.8f),
+            ),
+        ),
+    )
 }
 
 /** One line of the lyrics: sung or resting, with its background vocals, romanized line and translation under it. */
@@ -296,7 +323,8 @@ private fun TvGapMark(line: LyricLine, until: Long, clock: State<Long>, active: 
  * remote: ↑ ↓ pick a line (it lights up and comes into place), OK plays from the picked line (then the lyrics follow
  * the song from there) or pauses and plays with none picked. With a line picked, Back (or "Back to now", or
  * [TV_PICK_RETURN_MS] without a key) goes back to the sung line, following the song again; a second Back leaves.
- * Right reaches the Timing button: the song's lyrics timing, moved live.
+ * Right reaches the Timing button: the song's lyrics timing, moved live. [buttons] go before Timing (Sing's key) and
+ * [status] under them; [overVideo]: over a playing music video ([TvLyricsScreen]'s).
  */
 @Composable
 fun TvLyricsPlace(
@@ -312,6 +340,9 @@ fun TvLyricsPlace(
     roman: List<LyricLine?>? = null,
     romanInstead: Boolean = false,
     translations: List<String?>? = null,
+    overVideo: Boolean = false,
+    status: String? = null,
+    buttons: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {},
     onSeek: (Long) -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
@@ -319,6 +350,7 @@ fun TvLyricsPlace(
     var timing by remember { mutableStateOf(false) }
     var lastKey by remember { androidx.compose.runtime.mutableLongStateOf(0L) }
     val linesFocus = remember { androidx.compose.ui.focus.FocusRequester() }
+    val buttonsFocus = remember { androidx.compose.ui.focus.FocusRequester() }
     // Back to following the song: the lines take focus back (the chip or the timing may have had it).
     val follow: () -> Unit = { picked = null; runCatching { linesFocus.requestFocus() } }
     androidx.activity.compose.BackHandler(enabled = picked != null && !timing) { follow() }
@@ -329,13 +361,18 @@ fun TvLyricsPlace(
     }
     if (lines.isEmpty()) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            TvMeshBackdrop(now.art)
+            if (overVideo) TvVideoScrim() else TvMeshBackdrop(now.art)
             Text(
                 tr(if (loading || !unavailable) R.string.looking_for_lyrics else R.string.no_lyrics_found_for_this_song),
                 // The lines' own tag: when they come (or go, as the song changes), focus stays on the lyrics.
-                Modifier.tvItem("$TAG_LYRICS/lines", entry = true).focusable(),
+                Modifier.tvItem("$TAG_LYRICS/lines", entry = true).focusProperties { right = buttonsFocus }.focusable(),
                 style = MaterialTheme.typography.headlineMedium, color = scheme.onSurfaceVariant,
             )
+            // Sing's key and how the song's getting ready, with no lyrics too.
+            Column(Modifier.align(Alignment.TopEnd).padding(TvSafe), horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Row(Modifier.focusRequester(buttonsFocus).focusGroup(), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) { buttons() }
+                status?.let { Text(it, Modifier.width(560.dp).testTag("$TAG_LYRICS/status"), style = MaterialTheme.typography.bodyLarge, color = scheme.onSurfaceVariant, textAlign = TextAlign.End) }
+            }
         }
         return
     }
@@ -343,7 +380,8 @@ fun TvLyricsPlace(
         // The clock is read only where words are drawn (not here, or the whole page would be redrawn every frame).
         TvLyricsScreen(
             now, TvLyrics(lines, current, 0L, source), clock, picked = picked, accent = accent,
-            roman = roman, romanInstead = romanInstead, translations = translations, linesFocus = linesFocus,
+            roman = roman, romanInstead = romanInstead, translations = translations, linesFocus = linesFocus, overVideo = overVideo,
+            toButtons = buttonsFocus,
             modifier = Modifier.onPreviewKeyEvent { e ->
                 if (e.type != KeyEventType.KeyDown || timing) return@onPreviewKeyEvent false
                 lastKey = System.nanoTime()
@@ -360,9 +398,14 @@ fun TvLyricsPlace(
             },
         )
         // Top right: "Back to now" while a line is picked, and Timing. Right from the lyrics reaches them.
-        Row(Modifier.align(Alignment.TopEnd).padding(TvSafe), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            if (picked != null) TvButton(tr(R.string.tv_back_to_now), follow, Modifier.tvItem("$TAG_LYRICS/now"), icon = com.prism.music.ui.theme.PrismIcons.Lyrics)
-            TvButton(tr(R.string.lyrics_timing), { timing = true }, Modifier.tvItem("$TAG_LYRICS/timing"), icon = com.prism.music.ui.theme.PrismIcons.Timer)
+        Column(Modifier.align(Alignment.TopEnd).padding(TvSafe), horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            // A group: Right from the lines lands on its first button.
+            Row(Modifier.focusRequester(buttonsFocus).focusGroup(), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                if (picked != null) TvButton(tr(R.string.tv_back_to_now), follow, Modifier.tvItem("$TAG_LYRICS/now"), icon = com.prism.music.ui.theme.PrismIcons.Lyrics)
+                buttons()
+                TvButton(tr(R.string.lyrics_timing), { timing = true }, Modifier.tvItem("$TAG_LYRICS/timing"), icon = com.prism.music.ui.theme.PrismIcons.Timer)
+            }
+            status?.let { Text(it, Modifier.width(560.dp).testTag("$TAG_LYRICS/status"), style = MaterialTheme.typography.bodyLarge, color = scheme.onSurfaceVariant, textAlign = TextAlign.End) }
         }
         if (timing) {
             androidx.activity.compose.BackHandler { timing = false; runCatching { linesFocus.requestFocus() } }
@@ -473,3 +516,49 @@ object TvLyricTiming {
 
 /** After this long with no key, a picked line lets go and the lyrics follow the song again. */
 const val TV_PICK_RETURN_MS = 4_000L
+
+/**
+ * The playing song's lyrics from the shared lyrics engine, in the listener's lyrics style, with the romanized line and
+ * the translation as Settings → Lyrics has them: the lyrics page's, and over a music video ([overVideo]). With nothing
+ * playing, [onGone] after a moment.
+ */
+@Composable
+fun TvSongLyrics(onGone: () -> Unit, overVideo: Boolean = false) {
+    val c = LocalContainer.current
+    val song by c.player.currentSong.collectAsState()
+    val now = rememberTvNow(c)
+    val s = song
+    if (s == null || now == null) { TvStarting(onGone); return }
+    val state = com.prism.music.ui.player.rememberLyricsState(s)
+    val clock = com.prism.music.ui.player.rememberLyricClock(now.playing)
+    val accent = rememberTvAccent(now.art)
+    val lines = state.lines
+    val current by remember(lines) { androidx.compose.runtime.derivedStateOf { com.prism.music.playback.CarLyricsCard.lineAt(lines, clock.value).coerceAtLeast(0) } }
+    val roman = com.prism.music.ui.player.rememberRomanized(state)
+    val romanInstead = com.prism.music.ui.player.romanizeMode(s.id) == com.prism.music.data.prefs.RomanizeMode.INSTEAD
+    val translations = rememberTvTranslations(lines)
+    TvLyricsPlace(
+        now, lines, current, clock, state.loading, state.unavailable, state.source?.label, accent, onPlayPause = { c.player.togglePlay() },
+        roman = roman, romanInstead = romanInstead, translations = translations, overVideo = overVideo,
+    ) { ms -> c.player.seekToLyric(ms) }
+}
+
+/**
+ * Lyrics over a music video (1.8.0, the owner: "the lyrics should play over the video"): the video plays on full screen
+ * under them, the lines on a soft scrim; picking a line, Back to now and Timing work as on the lyrics page. Back (with no
+ * line picked and the timing closed) closes them, the video playing on. Its own focus memory, under the video's.
+ */
+@Composable
+fun androidx.compose.foundation.layout.BoxScope.TvVideoLyrics(onClose: () -> Unit) {
+    val screen = LocalTvScreen.current + "/lyrics"
+    val memory = LocalTvFocusMemory.current
+    remember(screen) { memory.opening(screen); true }
+    // Before the lyrics' own Back (a picked line, the timing), which come later and so go first.
+    androidx.activity.compose.BackHandler { onClose() }
+    androidx.compose.runtime.CompositionLocalProvider(LocalTvScreen provides screen) {
+        Box(Modifier.matchParentSize().testTag(TAG_VIDEO_LYRICS)) { TvSongLyrics(onClose, overVideo = true) }
+    }
+}
+
+/** Test tag: the lyrics over a music video. */
+const val TAG_VIDEO_LYRICS = "tv_video/lyricsover"
