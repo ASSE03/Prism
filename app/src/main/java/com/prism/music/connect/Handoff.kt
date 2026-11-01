@@ -613,6 +613,7 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
                 val host = (all.firstOrNull { it is Inet4Address } ?: all.firstOrNull())?.hostAddress ?: return@withLock
                 val tv = r.attributes["tv"]?.toString(Charsets.UTF_8) == "1"
                 val d = PrismDevice(r.serviceName.removePrefix(NAME_PREFIX), host, r.port, id, r.serviceName, id != null && secretFor(id) != null, tv)
+                if (tv) prefs.edit().putString("tvhost:$host", d.name).apply()
                 _devices.value = (_devices.value.filterNot { it.key == d.key } + d).sortedBy { it.name.lowercase() }
             }
         }
@@ -626,6 +627,12 @@ class Handoff(private val app: Application, private val c: AppContainer) : Hando
     fun submitCode(value: String?) {
         code?.complete(value?.filter { it.isDigit() }?.takeIf { it.length == 6 })
     }
+
+    /**
+     * The Prism TV last seen at [host] (its name), or null: a TV's own Cast or DLNA player on that address is the same
+     * TV, where Prism plays better (1.8.0). Kept from when its Prism was found on this Wi-Fi.
+     */
+    fun prismTvAt(host: String?): String? = host?.let { prefs.getString("tvhost:$it", null) }
 
     /** What's playing here goes to [d]. */
     fun moveTo(d: PrismDevice) = run(d, HandoffCommand.MOVE, tr(R.string.moving_to, d.name))

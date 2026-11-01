@@ -1257,8 +1257,9 @@ fun OutputPickerSheet(phoneName: String, onDismiss: () -> Unit) {
                     if (MediaRouter2.getInstance(context).showSystemOutputSwitcher()) onDismiss()
                 }
             }
-            SpeakersAndTvs(castState, castingTo)
+            // Prism devices first: a TV with Prism on it plays there in the app, rather than in its own Cast player.
             PrismDevices()
+            SpeakersAndTvs(castState, castingTo)
         }
     }
 }
@@ -1348,7 +1349,9 @@ private val speakerWords = listOf("speaker", "sonos", "receiver", "avr", "denon"
 @Composable
 private fun SpeakersAndTvs(castState: com.prism.music.connect.CastState, castingTo: String?) {
     val cast = LocalContainer.current.cast
+    val handoff = LocalContainer.current.handoff
     val renderers by cast.renderers.collectAsState()
+    val prismTvs by handoff.devices.collectAsState()
     var lookedLong by remember { mutableStateOf(false) }
     DisposableEffect(Unit) {
         cast.startDiscovery()
@@ -1358,8 +1361,12 @@ private fun SpeakersAndTvs(castState: com.prism.music.connect.CastState, casting
     val shown = renderers.let { list ->
         // The one being cast to stays listed even if it's stopped answering searches.
         val playing = (castState as? com.prism.music.connect.CastState.Casting)?.renderer ?: (castState as? com.prism.music.connect.CastState.Connecting)?.renderer
-        if (playing != null && list.none { it.id == playing.id }) listOf(playing) + list else list
+        val all = if (playing != null && list.none { it.id == playing.id }) listOf(playing) + list else list
+        // A TV whose Prism is listed under Prism devices isn't listed again as its own Cast or DLNA player.
+        all.filter { r -> r.id == castingTo || prismTvs.none { it.tv && it.host == rendererHost(r) } }
     }
+    // A TV that had Prism on it, not open now: the TV's own player still works, and Prism plays there once opened.
+    val closedPrismTv = shown.firstNotNullOfOrNull { r -> handoff.prismTvAt(rendererHost(r)) }
     OutputGroup(tr(R.string.speakers_tvs)) {
         shown.forEach { r ->
             val selected = r.id == castingTo
@@ -1382,8 +1389,20 @@ private fun SpeakersAndTvs(castState: com.prism.music.connect.CastState, casting
                 modifier = Modifier.padding(16.dp),
             )
         }
+        closedPrismTv?.let { name ->
+            Text(
+                tr(R.string.open_prism_on_first_android_only, name),
+                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 12.dp).testTag("output/open_prism_on_tv"),
+            )
+        }
     }
 }
+
+/** The address a Cast or DLNA player answers on (its location's host), to tell when it's a TV with Prism on it. */
+internal fun rendererHost(r: com.prism.music.connect.Renderer): String? =
+    runCatching { java.net.URI(r.location.replace("googlecast://", "http://")).host }.getOrNull()
+
 @Composable
 fun PlaybackOriginCaption(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Text(
