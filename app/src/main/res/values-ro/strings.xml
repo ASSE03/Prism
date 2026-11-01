@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism are nevoie de cameră ca să scaneze un cod</string>
     <string name="allow_the_camera">Permite camera</string>
     <string name="customize_home">Personalizează Acasă</string>
+    <string name="tv_home_editor_how">OK afișează sau ascunde un rând. Ca să-l muți, alege Mută de lângă el (sau ține apăsat OK), apoi Sus sau Jos.</string>
+    <string name="tv_home_moving">Se mută %1$s: Sus și Jos îl duc, OK îl lasă.</string>
+    <string name="tv_home_move">Mută %1$s</string>
+    <string name="tv_home_back_to_default">Înapoi la implicit</string>
+    <string name="tv_home_hidden_count">Ascunse: %1$d</string>
     <string name="top_of_home">Partea de sus a ecranului Acasă</string>
     <string name="show_your_name">Afișează-ți numele</string>
     <string name="height">Înălțime</string>
@@ -4179,5 +4184,4 @@
     <string name="tv_search_how">Apasă OK pe rândul de căutare ca să scrii cu telecomanda.</string>
     <string name="tv_search_voice_how">Sau alege microfonul de lângă el și spune o melodie, un artist sau un album.</string>
     <string name="tv_pair_step_find">Pe telefon, în Prism, atinge rândul cu dispozitivul de sub controale (sau deschide Setări → Boxe, televizoare și browser) și alege %1$s</string>
-    <string name="tv_home_rows_later">Rândurile din Acasă apar aici după ce Acasă a fost deschis</string>
 </resources>

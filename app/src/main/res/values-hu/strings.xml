@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">A Prismnek kamera kell a kód beolvasásához</string>
     <string name="allow_the_camera">Kamera engedélyezése</string>
     <string name="customize_home">Kezdőlap testreszabása</string>
+    <string name="tv_home_editor_how">Az OK megjeleníti vagy elrejti a sort. Áthelyezéshez válaszd mellette az Áthelyezést (vagy tartsd lenyomva az OK-t), majd Fel vagy Le.</string>
+    <string name="tv_home_moving">%1$s áthelyezése: a Fel és a Le viszi, az OK leteszi.</string>
+    <string name="tv_home_move">%1$s áthelyezése</string>
+    <string name="tv_home_back_to_default">Vissza az alapértelmezetthez</string>
+    <string name="tv_home_hidden_count">Rejtett: %1$d</string>
     <string name="top_of_home">A kezdőlap teteje</string>
     <string name="show_your_name">A neved megjelenítése</string>
     <string name="height">Magasság</string>
@@ -4129,5 +4134,4 @@
     <string name="tv_search_how">Nyomd meg az OK-t a keresősoron, és gépelj a távirányítóval.</string>
     <string name="tv_search_voice_how">Vagy válaszd a mellette lévő mikrofont, és mondj egy dalt, előadót vagy albumot.</string>
     <string name="tv_pair_step_find">A telefonodon a Prismben koppints a vezérlők alatti eszközsorra (vagy nyisd meg: Beállítások → Hangszórók, tévék és böngésző), és válaszd ki: %1$s</string>
-    <string name="tv_home_rows_later">A Kezdőlap sorai itt jelennek meg, amint a Kezdőlap megnyílt</string>
 </resources>

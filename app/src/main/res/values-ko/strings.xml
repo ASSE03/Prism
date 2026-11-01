@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">코드를 스캔하려면 카메라가 필요해요</string>
     <string name="allow_the_camera">카메라 허용</string>
     <string name="customize_home">홈 맞춤 설정</string>
+    <string name="tv_home_editor_how">OK로 행을 표시하거나 숨깁니다. 옮기려면 옆의 이동을 고르고(또는 OK 길게 누르기) 위나 아래를 누르세요.</string>
+    <string name="tv_home_moving">%1$s 이동 중: 위아래로 옮기고 OK로 놓습니다.</string>
+    <string name="tv_home_move">%1$s 이동</string>
+    <string name="tv_home_back_to_default">기본값으로 되돌리기</string>
+    <string name="tv_home_hidden_count">숨김: %1$d</string>
     <string name="top_of_home">홈 상단</string>
     <string name="show_your_name">이름 표시</string>
     <string name="height">높이</string>
@@ -4079,5 +4084,4 @@
     <string name="tv_search_how">검색 줄에서 OK를 누르면 리모컨으로 입력할 수 있어요.</string>
     <string name="tv_search_voice_how">또는 옆의 마이크를 고르고 노래, 아티스트, 앨범을 말하세요.</string>
     <string name="tv_pair_step_find">휴대전화의 Prism에서 컨트롤 아래의 기기 줄을 탭하고(또는 설정 → 스피커, TV, 브라우저를 열고) %1$s을(를) 고르세요</string>
-    <string name="tv_home_rows_later">홈을 한 번 열면 홈의 줄이 여기에 표시돼요</string>
 </resources>

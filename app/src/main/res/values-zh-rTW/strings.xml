@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism 需要使用相機才能掃描代碼</string>
     <string name="allow_the_camera">允許使用相機</string>
     <string name="customize_home">自訂首頁</string>
+    <string name="tv_home_editor_how">按 OK 顯示或隱藏一列。要移動，選擇旁邊的「移動」（或長按 OK），再按上或下。</string>
+    <string name="tv_home_moving">正在移動%1$s：按上下移動，按 OK 放下。</string>
+    <string name="tv_home_move">移動%1$s</string>
+    <string name="tv_home_back_to_default">恢復預設</string>
+    <string name="tv_home_hidden_count">已隱藏：%1$d</string>
     <string name="top_of_home">首頁頂端</string>
     <string name="show_your_name">顯示你的名稱</string>
     <string name="height">高度</string>
@@ -4079,5 +4084,4 @@
     <string name="tv_search_how">在搜尋列上按 OK，即可用遙控器輸入。</string>
     <string name="tv_search_voice_how">或者選擇旁邊的麥克風，說出歌曲、藝人或專輯名稱。</string>
     <string name="tv_pair_step_find">在手機上的 Prism 中，輕觸控制項下方的裝置列（或開啟「設定」→「喇叭、電視和瀏覽器」），然後選擇 %1$s</string>
-    <string name="tv_home_rows_later">開啟過首頁後，首頁的各列會顯示在這裡</string>
 </resources>

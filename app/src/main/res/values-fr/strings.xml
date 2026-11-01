@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism a besoin de l’appareil photo pour scanner un code</string>
     <string name="allow_the_camera">Autoriser l’appareil photo</string>
     <string name="customize_home">Personnaliser l’accueil</string>
+    <string name="tv_home_editor_how">OK affiche ou masque une rangée. Pour la déplacer, choisissez Déplacer à côté (ou maintenez OK), puis Haut ou Bas.</string>
+    <string name="tv_home_moving">Déplacement de %1$s : Haut et Bas la déplacent, OK la pose.</string>
+    <string name="tv_home_move">Déplacer %1$s</string>
+    <string name="tv_home_back_to_default">Rétablir par défaut</string>
+    <string name="tv_home_hidden_count">Masquées : %1$d</string>
     <string name="top_of_home">Haut de l’accueil</string>
     <string name="show_your_name">Afficher votre nom</string>
     <string name="height">Hauteur</string>
@@ -4179,5 +4184,4 @@
     <string name="tv_search_how">Appuyez sur OK sur la ligne de recherche pour taper avec la télécommande.</string>
     <string name="tv_search_voice_how">Ou choisissez le micro à côté et dites un titre, un artiste ou un album.</string>
     <string name="tv_pair_step_find">Sur votre téléphone, dans Prism, appuyez sur la ligne d’appareil sous les commandes (ou ouvrez Réglages → Enceintes, TV et navigateur) et choisissez %1$s</string>
-    <string name="tv_home_rows_later">Les rangées de l’accueil s’affichent ici une fois l’accueil ouvert</string>
 </resources>

@@ -37,7 +37,7 @@ class TvPlaybackLogicTest {
             Shelf("Moods & genres", items = listOf(MoodItem("m2", "Focus", null, 0L))),
         )
         val rows = tvHomeRows(shelves, "Alex", recent = listOf(song(7), song(7), song(8)), mostPlayed = listOf(SongItem(song(9)), AlbumItem("al9", "Album 9", "", null)), titles)
-        assertEquals(listOf(KEY_PICKS, KEY_DIAL, KEY_RECENT, "yt:Mixed for you"), rows.map { it.key })
+        assertEquals(listOf(KEY_PICKS, KEY_DIAL, KEY_RECENT, "yt:shelf:mixed for you"), rows.map { it.key })
         // Speed dial: YouTube's tiles first, then your most played, each once; mood tiles aren't cards.
         assertEquals(listOf("al9", "s9"), rows[1].items.map { it.id })
         // Recently played: each song once. A shelf of only mood tiles is left out.

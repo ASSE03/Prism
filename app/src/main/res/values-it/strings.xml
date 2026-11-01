@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism ha bisogno della fotocamera per scansionare un codice</string>
     <string name="allow_the_camera">Consenti la fotocamera</string>
     <string name="customize_home">Personalizza la Home</string>
+    <string name="tv_home_editor_how">OK mostra o nasconde una riga. Per spostarla, scegli Sposta accanto (o tieni premuto OK), poi Su o Giù.</string>
+    <string name="tv_home_moving">Spostamento di %1$s: Su e Giù la portano, OK la posa.</string>
+    <string name="tv_home_move">Sposta %1$s</string>
+    <string name="tv_home_back_to_default">Ripristina predefinito</string>
+    <string name="tv_home_hidden_count">Nascoste: %1$d</string>
     <string name="top_of_home">In cima alla Home</string>
     <string name="show_your_name">Mostra il tuo nome</string>
     <string name="height">Altezza</string>
@@ -4179,5 +4184,4 @@
     <string name="tv_search_how">Premi OK sulla riga di ricerca per scrivere con il telecomando.</string>
     <string name="tv_search_voice_how">Oppure scegli il microfono accanto e di\' un brano, un artista o un album.</string>
     <string name="tv_pair_step_find">Sul telefono, in Prism, tocca la riga del dispositivo sotto i controlli (o apri Impostazioni → Altoparlanti, TV e browser) e scegli %1$s</string>
-    <string name="tv_home_rows_later">Le righe della Home appaiono qui dopo che la Home è stata aperta</string>
 </resources>

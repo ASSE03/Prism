@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism ต้องใช้กล้องเพื่อสแกนรหัส</string>
     <string name="allow_the_camera">อนุญาตให้ใช้กล้อง</string>
     <string name="customize_home">ปรับแต่งหน้าแรก</string>
+    <string name="tv_home_editor_how">กด OK เพื่อแสดงหรือซ่อนแถว หากต้องการย้าย ให้เลือก ย้าย ข้างแถว (หรือกด OK ค้าง) แล้วกดขึ้นหรือลง</string>
+    <string name="tv_home_moving">กำลังย้าย %1$s: ขึ้นและลงเพื่อเลื่อน OK เพื่อวาง</string>
+    <string name="tv_home_move">ย้าย %1$s</string>
+    <string name="tv_home_back_to_default">กลับเป็นค่าเริ่มต้น</string>
+    <string name="tv_home_hidden_count">ซ่อนอยู่: %1$d</string>
     <string name="top_of_home">ด้านบนของหน้าแรก</string>
     <string name="show_your_name">แสดงชื่อของคุณ</string>
     <string name="height">ความสูง</string>
@@ -4079,5 +4084,4 @@
     <string name="tv_search_how">กด OK ที่บรรทัดค้นหาเพื่อพิมพ์ด้วยรีโมต</string>
     <string name="tv_search_voice_how">หรือเลือกไมโครโฟนข้างๆ แล้วพูดชื่อเพลง ศิลปิน หรืออัลบั้ม</string>
     <string name="tv_pair_step_find">บนโทรศัพท์ ใน Prism แตะบรรทัดอุปกรณ์ใต้ปุ่มควบคุม (หรือเปิดการตั้งค่า → ลำโพง ทีวี และเบราว์เซอร์) แล้วเลือก %1$s</string>
-    <string name="tv_home_rows_later">แถวของหน้าแรกจะแสดงที่นี่เมื่อเปิดหน้าแรกแล้ว</string>
 </resources>

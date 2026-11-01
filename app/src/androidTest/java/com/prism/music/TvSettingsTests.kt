@@ -120,27 +120,35 @@ class TvSettingsTests {
     }
 
     /**
-     * The owner's second round (1.8.0): Home's rows are customized from the TV's Settings, in the phone's own Home
-     * layout (so the phone agrees): a row hidden there is gone from Home.
+     * The owner's second round (1.8.0): Home's rows are customized from the TV's Settings (Customize Home), in the
+     * phone's own Home layout (so the phone agrees): a row hidden there is gone from Home.
      */
     @Test fun aHomeRowHiddenInSettingsIsGoneFromHome() {
         Fixture.ready()
         val c = Fixture.container
         val before = c.settings.current.homeLayout
         try {
+            // A shelf on Home (fresh for this run, so nothing is asked of the network).
+            val title = "Prism settings row"
+            val key = com.prism.music.data.prefs.HomeSections.shelfKey(title)
+            com.prism.music.ui.tv.TvHomeShelves.keep(null, listOf(com.prism.music.data.model.Shelf(title, items = Fixture.songs(2).map { com.prism.music.data.model.SongItem(it) })), System.currentTimeMillis())
             TvFixture.launch()
-            compose.waitUntil(30_000) { com.prism.music.ui.tv.TvHomeRowsSeen.rows.isNotEmpty() }
-            val (key, title) = com.prism.music.ui.tv.TvHomeRowsSeen.rows.first()
+            compose.waitUntil(15_000) { compose.onAllNodes(androidx.compose.ui.test.hasText(title), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
             goTo(TvSection.SETTINGS)
             compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/group/0"), 10_000)
-            // Customize Home: the seventh group.
+            // Home: the seventh group; its Customize Home opens the editor.
             for (g in 1..6) { TvFixture.down(); compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/group/$g")) }
             TvFixture.right()
             compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/setting/0"))
             TvFixture.ok()
-            compose.awaitFocusOn(hasTestTag("${com.prism.music.ui.tv.TAG_ACTIONS}/0"), 10_000)
+            // The hero, Quick picks, Speed dial, Recently played, then the shelf: OK hides it.
+            compose.awaitFocusOn(hasTestTag("${com.prism.music.ui.tv.TAG_HOME_EDITOR}/row/${com.prism.music.ui.tv.TvHomeLayout.HERO}"), 10_000)
+            repeat(4) { TvFixture.down(); Thread.sleep(250) }
+            compose.awaitFocusOn(hasTestTag("${com.prism.music.ui.tv.TAG_HOME_EDITOR}/row/$key"))
             TvFixture.ok()
             compose.waitUntil(10_000) { com.prism.music.ui.tv.hiddenIn(c.settings.current.homeLayout, key) }
+            TvFixture.back()
+            compose.awaitFocusOn(hasTestTag("$TAG_SETTINGS/setting/0"), 10_000)
             goTo(TvSection.HOME)
             compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag(TAG_HOME), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
             Thread.sleep(1_000)

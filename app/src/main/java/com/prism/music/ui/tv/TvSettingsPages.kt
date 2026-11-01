@@ -60,8 +60,6 @@ fun TvSettingsPlace(nav: TvNav) {
     var choosing by remember { mutableStateOf<Pair<String, List<Pair<String, () -> Unit>>>?>(null) }
     var info by remember { mutableStateOf<TvSetting?>(null) }
     var pickingLight by remember { mutableStateOf(false) }
-    // Home's rows as Home last showed them (moved here, they're moved there too).
-    var homeRows by remember { mutableStateOf(TvHomeRowsSeen.rows) }
     val say: (String) -> Unit = { Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
     // For an answer that may come after Settings has closed.
     val app = context.applicationContext
@@ -113,28 +111,13 @@ fun TvSettingsPlace(nav: TvNav) {
                 TvSettingAction.Choose(AMBIENT_MINUTES.map { m -> tr(R.string.tv_ambient_after, m) to { c.settings.setTvAmbientMinutes(m) } } + (tr(R.string.never) to { c.settings.setTvAmbientMinutes(0) })),
             ),
         ),
-        // Home's rows: shown or hidden, and their order (the phone's Customize Home keeps the same layout).
-        TvSettingGroup(tr(R.string.customize_home), PrismIcons.Home, emptyList()) to homeRows.let { seen ->
-            if (seen.isEmpty()) listOf(TvSettingRow(TvSetting(tr(R.string.tv_home_rows_later)), TvSettingAction.Run {}))
-            else seen.mapIndexed { i, (key, title) ->
-                val shown = !hiddenIn(settings.homeLayout, key)
-                val move: (Int) -> Unit = { by ->
-                    val order = moved(seen, i, by)
-                    homeRows = order
-                    c.settings.setHomeLayout(layoutInOrder(settings.homeLayout, order))
-                }
-                TvSettingRow(
-                    TvSetting(title, on = shown),
-                    TvSettingAction.Choose(
-                        listOfNotNull(
-                            tr(if (shown) R.string.hide else R.string.show) to { c.settings.setHomeLayout(layoutWithShown(settings.homeLayout, key, title, !shown)) },
-                            (tr(R.string.move_up) to { move(-1) }).takeIf { i > 0 },
-                            (tr(R.string.move_down) to { move(1) }).takeIf { i < seen.lastIndex },
-                        ),
-                    ),
-                )
-            }
-        },
+        // Home's rows: shown or hidden, in what order (also from the end of Home itself); the editor is TvHomeEditor.
+        TvSettingGroup(tr(R.string.home), PrismIcons.Home, emptyList()) to listOf(
+            TvSettingRow(
+                TvSetting(tr(R.string.customize_home), TvHomeLayout.hiddenCount(settings.tv.homeLayout, settings.homeLayout).takeIf { it > 0 }?.let { tr(R.string.tv_home_hidden_count, it) }),
+                TvSettingAction.Run { nav.go(TvRoute.HomeEditor) },
+            ),
+        ),
         TvSettingGroup(tr(R.string.text_size), PrismIcons.Visible, emptyList()) to listOf(
             TvSettingRow(TvSetting(tr(R.string.text_size), percent(settings.textScale)), TvSettingAction.Choose(SIZES.map { v -> percent(v) to { c.settings.setTextScale(v) } })),
         ),

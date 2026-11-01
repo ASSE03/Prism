@@ -10,6 +10,7 @@ import com.prism.music.data.model.Song
 import com.prism.music.data.model.SongItem
 import com.prism.music.data.model.quickPicks
 import com.prism.music.data.model.speedDial
+import com.prism.music.data.prefs.HomeSections
 
 /** One of Home's rows on the TV, with the items behind its cards (what OK opens or plays). */
 data class TvHomeRow(val key: String, val title: String, val items: List<BrowseItem>)
@@ -41,7 +42,7 @@ fun tvHomeRows(
     for (s in shelves) {
         if (s === picks || s === dial) continue
         val items = s.items.filter { it !is MoodItem }.take(ROW_SIZE)
-        if (items.isNotEmpty()) rows += TvHomeRow("yt:" + s.title, s.title, items)
+        if (items.isNotEmpty()) rows += TvHomeRow(HomeSections.shelfKey(s.title), s.title, items)
     }
     return rows
 }
@@ -49,9 +50,10 @@ fun tvHomeRows(
 /** The row titles Prism writes itself (translated). */
 data class TvHomeTitles(val quickPicks: String, val speedDial: String, val recent: String)
 
-const val KEY_PICKS = "picks"
-const val KEY_DIAL = "dial"
-const val KEY_RECENT = "recent"
+/** The rows' keys are the phone's Home sections' (one layout's names on both). */
+const val KEY_PICKS = HomeSections.QUICK_PICKS
+const val KEY_DIAL = HomeSections.SPEED_DIAL
+const val KEY_RECENT = HomeSections.RECENT
 
 /** A card for [this]: an artist's is round, a mix or station is a mix, a music video is a video. */
 fun BrowseItem.toTvItem(): TvItem = TvItem(

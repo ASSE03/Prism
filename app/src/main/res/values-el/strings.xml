@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Το Prism χρειάζεται την κάμερα για να σαρώσει έναν κωδικό</string>
     <string name="allow_the_camera">Επίτρεψε την κάμερα</string>
     <string name="customize_home">Προσαρμογή Αρχικής</string>
+    <string name="tv_home_editor_how">Το OK εμφανίζει ή κρύβει μια σειρά. Για μετακίνηση, επιλέξτε Μετακίνηση δίπλα της (ή κρατήστε πατημένο το OK) και μετά Πάνω ή Κάτω.</string>
+    <string name="tv_home_moving">Μετακίνηση: %1$s. Πάνω και Κάτω τη μετακινούν, το OK την αφήνει.</string>
+    <string name="tv_home_move">Μετακίνηση %1$s</string>
+    <string name="tv_home_back_to_default">Επαναφορά προεπιλογής</string>
+    <string name="tv_home_hidden_count">Κρυφές: %1$d</string>
     <string name="top_of_home">Πάνω μέρος της Αρχικής</string>
     <string name="show_your_name">Εμφάνιση του ονόματός σου</string>
     <string name="height">Ύψος</string>
@@ -4129,5 +4134,4 @@
     <string name="tv_search_how">Πάτα OK στη γραμμή αναζήτησης για να πληκτρολογήσεις με το τηλεχειριστήριο.</string>
     <string name="tv_search_voice_how">Ή διάλεξε το μικρόφωνο δίπλα της και πες ένα τραγούδι, καλλιτέχνη ή άλμπουμ.</string>
     <string name="tv_pair_step_find">Στο κινητό σου, στο Prism, πάτα τη γραμμή συσκευής κάτω από τα χειριστήρια (ή άνοιξε Ρυθμίσεις → Ηχεία, τηλεοράσεις &amp; πρόγραμμα περιήγησης) και διάλεξε %1$s</string>
-    <string name="tv_home_rows_later">Οι σειρές της Αρχικής εμφανίζονται εδώ μόλις ανοίξει η Αρχική</string>
 </resources>

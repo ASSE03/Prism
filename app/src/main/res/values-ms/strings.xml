@@ -418,6 +418,11 @@
     <string name="prism_needs_the_camera_to_scan">Prism memerlukan kamera untuk mengimbas kod</string>
     <string name="allow_the_camera">Benarkan kamera</string>
     <string name="customize_home">Sesuaikan Laman Utama</string>
+    <string name="tv_home_editor_how">OK memaparkan atau menyembunyikan baris. Untuk mengalihkannya, pilih Alih di sebelahnya (atau tahan OK), kemudian Atas atau Bawah.</string>
+    <string name="tv_home_moving">Mengalihkan %1$s: Atas dan Bawah membawanya, OK meletakkannya.</string>
+    <string name="tv_home_move">Alih %1$s</string>
+    <string name="tv_home_back_to_default">Kembali ke lalai</string>
+    <string name="tv_home_hidden_count">Tersembunyi: %1$d</string>
     <string name="top_of_home">Bahagian atas Laman Utama</string>
     <string name="show_your_name">Tunjukkan nama anda</string>
     <string name="height">Ketinggian</string>
@@ -4079,5 +4084,4 @@
     <string name="tv_search_how">Tekan OK pada baris carian untuk menaip dengan alat kawalan jauh.</string>
     <string name="tv_search_voice_how">Atau pilih mikrofon di sebelahnya dan sebut lagu, artis atau album.</string>
     <string name="tv_pair_step_find">Pada telefon anda, dalam Prism, ketik baris peranti di bawah kawalan (atau buka Tetapan → Pembesar suara, TV &amp; pelayar) dan pilih %1$s</string>
-    <string name="tv_home_rows_later">Baris Laman Utama dipaparkan di sini selepas Laman Utama dibuka</string>
 </resources>

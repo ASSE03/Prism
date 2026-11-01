@@ -62,6 +62,8 @@ sealed interface TvRoute {
     data object Sing : TvRoute { override val key = "sing" }
     /** The first run's welcome. */
     data object Welcome : TvRoute { override val key = "welcome" }
+    /** Customize Home: which rows show, in what order. */
+    data object HomeEditor : TvRoute { override val key = "home_editor" }
 }
 
 /** Moving between Prism TV's pages: [go] opens one over the others, [back] closes the top one. */
@@ -156,6 +158,7 @@ fun TvRoot(link: kotlinx.coroutines.flow.MutableStateFlow<android.net.Uri?> = re
                         is TvRoute.Pair -> if (top.firstRun) TvPairPage(top.signIn, nav) { nav.firstRunDone() } else TvPairPage(top.signIn, nav)
                         TvRoute.Sing -> TvSingPage(nav)
                         TvRoute.Welcome -> TvWelcomePage(nav)
+                        TvRoute.HomeEditor -> TvHomeEditorPage(nav)
                     }
                 }
             }
