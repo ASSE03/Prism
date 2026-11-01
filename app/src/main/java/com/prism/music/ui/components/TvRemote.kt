@@ -64,6 +64,7 @@ fun TvRemoteSheet(tv: PrismDevice, onDismiss: () -> Unit) {
     val settings by c.settings.flow.collectAsState()
     var now by remember { mutableStateOf<RemoteNow?>(null) }
     var askSignIn by remember { mutableStateOf(false) }
+    var askBring by remember { mutableStateOf(false) }
     // On the main thread whatever the caller's (the link answers on its own).
     val say: (String) -> Unit = { msg -> androidx.core.content.ContextCompat.getMainExecutor(context).execute { Toast.makeText(context, msg, Toast.LENGTH_SHORT).show() } }
     LaunchedEffect(tv.key) {
@@ -112,11 +113,98 @@ fun TvRemoteSheet(tv: PrismDevice, onDismiss: () -> Unit) {
                 PrismTextButton(onClick = { handoff.moveTo(tv); onDismiss() }, Modifier.fillMaxWidth()) { Text(tr(R.string.move_the_music_there)) }
                 if (settings.isLoggedIn) PrismTextButton(onClick = { askSignIn = true }, Modifier.fillMaxWidth().testTag("tvRemote/signIn")) { Text(tr(R.string.tv_sign_in_here)) }
                 PrismTextButton(onClick = { scope.launch { say(handoff.sendLook(tv)) } }, Modifier.fillMaxWidth()) { Text(tr(R.string.tv_send_look)) }
+                PrismTextButton(onClick = { askBring = true }, Modifier.fillMaxWidth().testTag("tvRemote/bring")) { Text(tr(R.string.bring_my_prism)) }
+            }
+            // A bring to this TV under way: how far it is, here too.
+            val bringing by handoff.bringing.collectAsState()
+            bringing?.takeIf { it.device.id == tv.id && it.running }?.let { b ->
+                Spacer(Modifier.height(6.dp))
+                Text(tr(R.string.bring_sending, tv.name), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Spacer(Modifier.height(6.dp))
+                PrismProgressBar(progress = { b.fraction }, modifier = Modifier.fillMaxWidth())
             }
             Spacer(Modifier.height(12.dp))
         }
     }
     if (askSignIn) TvSignInAsk(tv, onDone = { askSignIn = false })
+    if (askBring) TvBringAsk(tv, onDone = { askBring = false })
+}
+
+/**
+ * "Bring your Prism to Living room TV?" (1.8.0): this phone's listening history, likes, Prism playlists and the
+ * choices that go with them (starred artists, song versions, lyric timings, best parts, exclusions) go to the TV only
+ * once the listener says yes here; their look only if they tick it. The sign-in, downloads and settings never go.
+ */
+@Composable
+fun TvBringAsk(tv: PrismDevice, onDone: () -> Unit) {
+    val c = LocalContainer.current
+    var withLook by remember { mutableStateOf(false) }
+    AlertDialog(
+        onDismissRequest = onDone,
+        title = { Text(tr(R.string.bring_ask_title, tv.name)) },
+        text = {
+            Column {
+                Text(tr(R.string.bring_ask_text, tv.name), style = MaterialTheme.typography.bodyLarge)
+                Spacer(Modifier.height(10.dp))
+                Text(tr(R.string.bring_ask_detail), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Spacer(Modifier.height(10.dp))
+                Row(Modifier.fillMaxWidth().testTag("tvBring/look"), verticalAlignment = Alignment.CenterVertically) {
+                    com.prism.music.ui.screens.PrismCheck(withLook, label = tr(R.string.bring_with_look)) { withLook = it }
+                    Spacer(Modifier.width(6.dp))
+                    Text(tr(R.string.bring_with_look), style = MaterialTheme.typography.bodyLarge)
+                }
+            }
+        },
+        confirmButton = {
+            PrismTextButton(onClick = { c.handoff.bringTo(tv, withLook); onDone() }, Modifier.testTag("tvBring/yes")) { Text(tr(R.string.bring_yes)) }
+        },
+        dismissButton = { PrismTextButton(onClick = onDone) { Text(tr(R.string.not_now)) } },
+    )
+}
+
+/**
+ * A bring from this phone, while it goes and once it's over: how far, then done, or "Couldn't finish, try again" with
+ * why and a Try again (nothing on the TV changed then).
+ */
+@Composable
+fun TvBringProgress(state: com.prism.music.connect.Handoff.Bringing, onTryAgain: () -> Unit, onClose: () -> Unit) {
+    val context = LocalContext.current
+    AlertDialog(
+        onDismissRequest = { if (!state.running) onClose() },
+        title = {
+            Text(
+                when {
+                    state.done -> tr(R.string.bring_done, state.device.name)
+                    state.failed != null -> tr(R.string.bring_failed)
+                    else -> tr(R.string.bring_sending, state.device.name)
+                },
+            )
+        },
+        text = {
+            Column(Modifier.fillMaxWidth().testTag("tvBring/progress")) {
+                if (state.failed != null) {
+                    if (state.failed != tr(R.string.bring_failed)) Text(state.failed, style = MaterialTheme.typography.bodyMedium)
+                } else {
+                    PrismProgressBar(progress = { if (state.done) 1f else state.fraction }, modifier = Modifier.fillMaxWidth())
+                    if (state.total > 0) {
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            android.text.format.Formatter.formatShortFileSize(context, state.sent) + " / " + android.text.format.Formatter.formatShortFileSize(context, state.total),
+                            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            when {
+                state.failed != null -> PrismTextButton(onClick = onTryAgain, Modifier.testTag("tvBring/again")) { Text(tr(R.string.try_again)) }
+                state.done -> PrismTextButton(onClick = onClose) { Text(tr(R.string.done)) }
+                else -> Unit
+            }
+        },
+        dismissButton = { if (state.failed != null) PrismTextButton(onClick = onClose) { Text(tr(R.string.close)) } },
+    )
 }
 
 /**

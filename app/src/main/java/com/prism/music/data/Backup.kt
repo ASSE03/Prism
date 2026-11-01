@@ -41,6 +41,8 @@ private data class BackupManifest(
     val downloads: List<Song> = emptyList(),
     /** The parts it holds ([BackupPart] names); null in backups made before 1.7.8, which hold everything. */
     val parts: List<String>? = null,
+    /** "Bring your Prism" (1.8.0): a phone's listening for a TV, merged in there, never restored as a backup. */
+    val bring: Boolean = false,
 )
 
 /**
@@ -151,7 +153,7 @@ class Backup(private val c: AppContainer) {
                 }
             }
             val m = manifest ?: error(tr(R.string.that_file_isn_t_a_prism_2))
-            if (!fromPrism(m)) error(tr(R.string.that_file_isn_t_a_prism_2))
+            if (!fromPrism(m) || m.bring) error(tr(R.string.that_file_isn_t_a_prism_2))
             if (m.format > FORMAT) error(tr(R.string.that_backup_is_from_a_newer))
             File(staging, MANIFEST).writeText(InnerTube.json.encodeToString(BackupManifest.serializer(), m))
         } catch (e: Throwable) {
@@ -187,6 +189,37 @@ class Backup(private val c: AppContainer) {
         c.downloads.downloadAll(songs)
     }
 
+    // ------------------------------------------------------------ Bring your Prism (1.8.0)
+
+    private fun prefsOf(name: String) = ctx.getSharedPreferences(name, Context.MODE_PRIVATE)
+
+    /**
+     * What makes this Prism the listener's, for their TV, written to [out] in the backup's format (a zip with
+     * prism-backup.json): listening history and likes, Prism playlists, folders and saved albums, starred artists, song
+     * versions, lyric timings, best parts and exclusions ([BringOver]); [look]: their Look's code, when they chose it.
+     * Never the sign-in, downloads' audio or the phone's settings.
+     */
+    suspend fun bringBundle(out: File, look: String?) = withContext(Dispatchers.IO) {
+        runCatching { c.db.query(androidx.sqlite.db.SimpleSQLiteQuery("PRAGMA wal_checkpoint(FULL)")).close() }
+        val content = BringOver.collect(c.db, ::prefsOf, c.prismLibrary.forBringing(), look)
+        out.outputStream().buffered().use { writeBring(it, content, ctx.packageName) }
+    }
+
+    /**
+     * A phone's bundle ([bringBundle]) merged into this Prism (a TV's): added to what's here, nothing here wiped
+     * ([BringOver.merge]); then what keeps those choices in memory reads them again. Throws when it isn't one.
+     */
+    suspend fun mergeBrought(file: File): BringMerged = withContext(Dispatchers.IO) {
+        val content = file.inputStream().buffered().use { readBring(it) } ?: error(tr(R.string.bring_didn_t_check_out))
+        val merged = BringOver.merge(content, c.db, ::prefsOf, c.prismLibrary)
+        c.artistPrefs.reload()
+        c.versions.reload()
+        c.exclusions.reload()
+        c.library.dislikedIds.value = prefsOf("dislikes").getStringSet("ids", emptySet()).orEmpty().toSet()
+        content.look?.let { code -> c.looks.decode(code)?.let { c.looks.apply(it) } }
+        merged
+    }
+
     @Serializable
     private data class RestoredSettings(val parts: List<String>, val values: Map<String, String>)
 
@@ -203,6 +236,69 @@ class Backup(private val c: AppContainer) {
         private const val EXO_DB = "exoplayer_internal.db"
         private val ALLOWED = listOf("databases/", "shared_prefs/", "datastore/", "files/")
         private val SETTINGS_MAP = MapSerializer(String.serializer(), String.serializer())
+
+        private const val BRING_HISTORY = "bring/history.json"
+        private const val BRING_PREFS = "bring/prefs.json"
+        /** Prism's playlists in the library file's own format, at the library file's own place in a backup. */
+        private const val BRING_LIBRARY = "files/library/prism.json"
+        private const val BRING_LOOK = "bring/look.txt"
+        /** All a bundle may unpack to (its own size is held to [com.prism.music.connect.BringTransfer.MAX_BYTES]). */
+        private const val BRING_UNPACKED_MAX = 128L * 1024 * 1024
+
+        /** A "Bring your Prism" bundle ([bringBundle]): the backup's manifest, marked as one, and its entries. */
+        fun writeBring(out: java.io.OutputStream, content: BringContent, app: String) {
+            val manifest = BackupManifest(
+                format = FORMAT, app = app, versionCode = BuildConfig.VERSION_CODE, versionName = BuildConfig.VERSION_NAME,
+                createdAt = System.currentTimeMillis(), parts = listOf(BackupPart.HISTORY.name, BackupPart.LIBRARY.name), bring = true,
+            )
+            ZipOutputStream(out).use { zip ->
+                fun put(name: String, text: String) { zip.putNextEntry(ZipEntry(name)); zip.write(text.toByteArray()); zip.closeEntry() }
+                put(MANIFEST, InnerTube.json.encodeToString(BackupManifest.serializer(), manifest))
+                put(BRING_HISTORY, BringOver.historyJson(content.history))
+                put(BRING_PREFS, BringOver.prefsJson(content.prefs))
+                content.library?.let { put(BRING_LIBRARY, it) }
+                content.look?.let { put(BRING_LOOK, it) }
+            }
+        }
+
+        /**
+         * A bundle read back, or null when it isn't one: no manifest of Prism's marked as a bundle, a newer format, an
+         * entry that won't read, or more than [BRING_UNPACKED_MAX] unpacked. Entries it doesn't know are skipped.
+         */
+        fun readBring(input: java.io.InputStream): BringContent? = runCatching {
+            var manifest: BackupManifest? = null
+            var history: BringHistory? = null
+            var prefs: Map<String, Map<String, String>>? = null
+            var library: String? = null
+            var look: String? = null
+            var total = 0L
+            ZipInputStream(input).use { zip ->
+                while (true) {
+                    val e = zip.nextEntry ?: break
+                    if (e.isDirectory || e.name !in setOf(MANIFEST, BRING_HISTORY, BRING_PREFS, BRING_LIBRARY, BRING_LOOK)) continue
+                    val buf = java.io.ByteArrayOutputStream()
+                    val chunk = ByteArray(64 * 1024)
+                    while (true) {
+                        val n = zip.read(chunk)
+                        if (n < 0) break
+                        total += n
+                        if (total > BRING_UNPACKED_MAX) return@runCatching null
+                        buf.write(chunk, 0, n)
+                    }
+                    val text = buf.toString(Charsets.UTF_8.name())
+                    when (e.name) {
+                        MANIFEST -> manifest = InnerTube.json.decodeFromString(BackupManifest.serializer(), text)
+                        BRING_HISTORY -> history = BringOver.history(text) ?: return@runCatching null
+                        BRING_PREFS -> prefs = BringOver.prefs(text) ?: return@runCatching null
+                        BRING_LIBRARY -> library = text
+                        BRING_LOOK -> look = text.take(64_000)
+                    }
+                }
+            }
+            val m = manifest ?: return@runCatching null
+            if (m.app.isBlank() || !m.bring || m.format > FORMAT) return@runCatching null
+            BringContent(history ?: BringHistory(), prefs.orEmpty(), library, look)
+        }.getOrNull()
 
         /** Saved preferences by part; anything not named here counts as Settings. Some never go in a backup (null). */
         private val PREFS_PARTS: Map<String, BackupPart?> = buildMap {

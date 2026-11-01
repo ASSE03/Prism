@@ -154,6 +154,25 @@ sealed class HMsg {
     /** A Look, as its code, to use on the other side. */
     @Serializable @SerialName("look")
     data class Look(val code: String) : HMsg()
+
+    /**
+     * "Bring your Prism" (1.8.0): a phone's listening, likes and Prism playlists for a TV ([BringTransfer]), [size]
+     * bytes in [chunks] chunks, whose SHA-256 is [sha256]. The TV answers Ok (send them) or Denied.
+     */
+    @Serializable @SerialName("bring_begin")
+    data class BringBegin(val size: Long, val sha256: String, val chunks: Int) : HMsg()
+
+    /** Chunk [n] (from 0), in Base64. */
+    @Serializable @SerialName("bring_chunk")
+    data class BringChunk(val n: Int, val data: String) : HMsg()
+
+    /** The TV has chunk [n]. */
+    @Serializable @SerialName("bring_got")
+    data class BringGot(val n: Int) : HMsg()
+
+    /** Every chunk sent: the TV checks the whole and merges it in, then answers Ok or Denied. */
+    @Serializable @SerialName("bring_end")
+    data object BringEnd : HMsg()
 }
 
 object HWire {
