@@ -102,11 +102,16 @@ private fun rememberTvLyricsAxis(s: AppSettings): FontFamily? {
     return remember(choice) { choice?.let(AppFonts::axis) }
 }
 
-/** The lines' brightness by how far they are from the sung one (then the look's own brightness for others). */
-private val FALLOFF = floatArrayOf(1f, 0.85f, 0.65f, 0.5f, 0.4f)
+/** The lines' brightness by how far they are from the sung one, times the look's brightness for others (the phone's). */
+private val FALLOFF = floatArrayOf(1f, 0.8f, 0.7f, 0.58f, 0.46f)
 
-/** How long the sung line takes to glide into place. */
-private const val GLIDE_MS = 450
+/** How lines settle (the phone's lyrics page): the glide, brightness and size, over half a second. */
+private val SETTLE_EASING = androidx.compose.animation.core.CubicBezierEasing(0.2f, 0.6f, 0.25f, 1f)
+private const val SETTLE_MS = 500
+private const val GLIDE_MS = SETTLE_MS
+
+/** Lines not sung, a little smaller (the phone's, when the look moves). */
+private const val RESTING_SCALE = 0.98f
 
 /** Where the sung line settles: this share of the screen down. */
 private const val SETTLE_AT = 0.3f
@@ -144,21 +149,12 @@ fun TvLyricsScreen(
     val onCard = look.card != null && !overVideo
     val style = TextStyle(
         fontSize = 40.sp * scale, lineHeight = 52.sp * scale, fontWeight = FontWeight(look.weight),
-        fontFamily = LocalLyricsFont.current ?: MaterialTheme.typography.displaySmall.fontFamily,
+        // The phone's: the lyrics font when one is picked, else the app's body font (the titles' font can be a heavy one,
+        // which drew every line bold).
+        fontFamily = LocalLyricsFont.current ?: MaterialTheme.typography.bodyLarge.fontFamily,
         textAlign = if (centred) TextAlign.Center else TextAlign.Start,
         textDirection = androidx.compose.ui.text.style.TextDirection.Content,
     )
-    val lines = lyrics.lines
-    val target = picked ?: lyrics.current
-    val list = rememberLazyListState(initialFirstVisibleItemIndex = target.coerceIn(0, (lines.size - 1).coerceAtLeast(0)))
-    // The line comes to the settle point: gliding when it's on screen (the next line, mostly), at once from further.
-    LaunchedEffect(target, lines) {
-        if (target !in lines.indices) return@LaunchedEffect
-        snapshotFlow { list.layoutInfo.viewportSize.height }.first { it > 0 }
-        val shown = list.layoutInfo.visibleItemsInfo.firstOrNull { it.index == target }
-        if (shown != null) list.animateScrollBy(shown.offset.toFloat(), tween(GLIDE_MS, easing = FastOutSlowInEasing))
-        else list.scrollToItem(target)
-    }
     Box(modifier.fillMaxSize().testTag(TAG_LYRICS)) {
         if (overVideo) TvVideoScrim()
         else {
@@ -174,51 +170,109 @@ fun TvLyricsScreen(
                 Text(now.artist, style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant, maxLines = 1)
             }
         }
-        BoxWithConstraints(
-            Modifier.fillMaxSize().padding(start = 96.dp, end = 160.dp, top = 96.dp, bottom = 88.dp)
-                .then(if (linesFocus != null) Modifier.focusRequester(linesFocus) else Modifier)
-                .tvItem("$TAG_LYRICS/lines", entry = true)
-                .then(if (toButtons != null) Modifier.focusProperties { right = toButtons } else Modifier)
-                .focusable(),
-        ) {
-            val settle = maxHeight * SETTLE_AT
-            LazyColumn(
-                state = list,
-                userScrollEnabled = false,
-                // Lines fade out at the top and bottom edges (as on the phone), never cut across.
-                modifier = Modifier.fillMaxSize().testTag("$TAG_LYRICS/list")
-                    .graphicsLayer { compositingStrategy = androidx.compose.ui.graphics.CompositingStrategy.Offscreen }
-                    .drawWithContent {
-                        drawContent()
-                        drawRect(Brush.verticalGradient(0f to Color.Transparent, 0.12f to Color.Black, 0.86f to Color.Black, 1f to Color.Transparent), blendMode = androidx.compose.ui.graphics.BlendMode.DstIn)
-                    },
-                contentPadding = PaddingValues(top = settle, bottom = maxHeight),
-                verticalArrangement = Arrangement.spacedBy(6.dp),
-            ) {
-                itemsIndexed(lines, key = { i, _ -> i }) { i, line ->
-                    val active = i == lyrics.current
-                    val distance = if (lyrics.current < 0) 3 else abs(i - lyrics.current)
-                    val alpha = when {
-                        active -> 1f
-                        i == picked -> 0.95f
-                        else -> FALLOFF[distance.coerceAtMost(FALLOFF.lastIndex)] * look.othersAlpha / 0.55f
-                    }.coerceIn(0f, 1f)
-                    if (line.isGap) {
-                        TvGapMark(
-                            line, lines.getOrNull(i + 1)?.timeMs ?: line.endMs, clock, active, centred,
-                            note = settings.lyricsGapMark == LyricsGapMark.NOTE, modifier = Modifier.testTag("$TAG_LYRICS/gap/$i"),
-                        )
-                        return@itemsIndexed
-                    }
-                    TvLyricLine(
-                        line, i, active, i == picked, alpha, clock, style, look, axis, onCard,
-                        roman?.getOrNull(i), romanInstead, translations?.getOrNull(i),
-                    )
-                }
-            }
-        }
+        // On its own: the song's progress moving (twice a second) redraws the header and the foot, not the lines.
+        TvLyricsList(
+            lyrics.lines, lyrics.current, picked, clock, style, look, axis, centred, onCard,
+            note = settings.lyricsGapMark == LyricsGapMark.NOTE, roman, romanInstead, translations, linesFocus, toButtons,
+        )
         TvProgress(now.fraction, now.played, now.total, Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(TvSafe))
     }
+}
+
+/**
+ * The lines, as the phone's lyrics page moves them: the sung (or [picked]) line glides into place with one animated
+ * offset, and each line eases to its brightness and size in its own layer, so nothing is composed again frame by frame;
+ * only the sung line is redrawn as it's sung.
+ */
+@Composable
+private fun TvLyricsList(
+    lines: List<LyricLine>,
+    current: Int,
+    picked: Int?,
+    clock: State<Long>,
+    style: TextStyle,
+    look: com.prism.music.ui.player.LyricsLook,
+    axis: FontFamily?,
+    centred: Boolean,
+    onCard: Boolean,
+    note: Boolean,
+    roman: List<LyricLine?>?,
+    romanInstead: Boolean,
+    translations: List<String?>?,
+    linesFocus: androidx.compose.ui.focus.FocusRequester?,
+    toButtons: androidx.compose.ui.focus.FocusRequester?,
+) {
+    TvLyricsCounts.lists++
+    val target = picked ?: current
+    val list = rememberLazyListState(initialFirstVisibleItemIndex = target.coerceIn(0, (lines.size - 1).coerceAtLeast(0)))
+    // The line comes to the settle point: gliding when it's on screen (the next line, mostly), at once from further.
+    LaunchedEffect(target, lines) {
+        if (target !in lines.indices) return@LaunchedEffect
+        snapshotFlow { list.layoutInfo.viewportSize.height }.first { it > 0 }
+        val shown = list.layoutInfo.visibleItemsInfo.firstOrNull { it.index == target }
+        if (shown != null) list.animateScrollBy(shown.offset.toFloat(), tween(GLIDE_MS, easing = SETTLE_EASING))
+        else list.scrollToItem(target)
+    }
+    BoxWithConstraints(
+        Modifier.fillMaxSize().padding(start = 96.dp, end = 160.dp, top = 96.dp, bottom = 88.dp)
+            .then(if (linesFocus != null) Modifier.focusRequester(linesFocus) else Modifier)
+            .tvItem("$TAG_LYRICS/lines", entry = true)
+            .then(if (toButtons != null) Modifier.focusProperties { right = toButtons } else Modifier)
+            .focusable(),
+    ) {
+        val settle = maxHeight * SETTLE_AT
+        LazyColumn(
+            state = list,
+            userScrollEnabled = false,
+            // Lines fade out at the top and bottom edges (as on the phone), never cut across.
+            modifier = Modifier.fillMaxSize().testTag("$TAG_LYRICS/list")
+                .graphicsLayer { compositingStrategy = androidx.compose.ui.graphics.CompositingStrategy.Offscreen }
+                .drawWithContent {
+                    drawContent()
+                    drawRect(Brush.verticalGradient(0f to Color.Transparent, 0.12f to Color.Black, 0.86f to Color.Black, 1f to Color.Transparent), blendMode = androidx.compose.ui.graphics.BlendMode.DstIn)
+                },
+            contentPadding = PaddingValues(top = settle, bottom = maxHeight),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            itemsIndexed(lines, key = { i, _ -> i }) { i, line ->
+                val active = i == current
+                if (line.isGap) {
+                    TvGapMark(line, lines.getOrNull(i + 1)?.timeMs ?: line.endMs, clock, active, centred, note = note, modifier = Modifier.testTag("$TAG_LYRICS/gap/$i"))
+                    return@itemsIndexed
+                }
+                // The phone's: lines dim with distance from the sung one, at the look's brightness for others, and breathe
+                // back a little when the look moves; both eased, read only in the line's layer.
+                val distance = if (current < 0) 3 else abs(i - current)
+                val alpha = androidx.compose.animation.core.animateFloatAsState(
+                    when {
+                        active -> 1f
+                        i == picked -> 0.95f
+                        else -> FALLOFF[distance.coerceAtMost(FALLOFF.lastIndex)] * look.othersAlpha
+                    }.coerceIn(0f, 1f),
+                    tween(SETTLE_MS, easing = SETTLE_EASING), label = "alpha",
+                )
+                val size = androidx.compose.animation.core.animateFloatAsState(
+                    if (active || i == picked || look.motion == com.prism.music.data.prefs.LyricsMotion.NONE) 1f else RESTING_SCALE,
+                    tween(SETTLE_MS, easing = SETTLE_EASING), label = "size",
+                )
+                TvLyricLine(
+                    line, i, active, i == picked, clock, style, look, axis, onCard,
+                    roman?.getOrNull(i), romanInstead, translations?.getOrNull(i),
+                    Modifier.graphicsLayer {
+                        this.alpha = alpha.value
+                        scaleX = size.value; scaleY = size.value
+                        transformOrigin = androidx.compose.ui.graphics.TransformOrigin(if (centred) 0.5f else 0f, 0.5f)
+                    },
+                )
+            }
+        }
+    }
+}
+
+/** How often the lyrics' parts are composed (tests: the lines aren't composed again frame by frame). */
+internal object TvLyricsCounts {
+    @Volatile var lists = 0
+    @Volatile var lines = 0
 }
 
 /**
@@ -237,14 +291,16 @@ private fun TvVideoScrim() {
     )
 }
 
-/** One line of the lyrics: sung or resting, with its background vocals, romanized line and translation under it. */
+/**
+ * One line of the lyrics: sung or resting, with its background vocals, romanized line and translation under it. Its
+ * brightness is [settle]'s (a layer), so the parts here are drawn at their own share of it.
+ */
 @Composable
 private fun TvLyricLine(
     line: LyricLine,
     index: Int,
     active: Boolean,
     picked: Boolean,
-    alpha: Float,
     clock: State<Long>,
     style: TextStyle,
     look: com.prism.music.ui.player.LyricsLook,
@@ -253,11 +309,14 @@ private fun TvLyricLine(
     romanLine: LyricLine?,
     romanInstead: Boolean,
     translated: String?,
+    settle: Modifier,
 ) {
+    TvLyricsCounts.lines++
+    val alpha = 1f
     val shown = remember(line, romanLine, romanInstead, look.uppercase) { look.shown(if (romanInstead && romanLine != null) romanLine else line) }
     val extraInk = if (onCard) Color.Black else look.extraColor
     Column(
-        Modifier.fillMaxWidth().testTag("$TAG_LYRICS/line/$index")
+        Modifier.fillMaxWidth().then(settle).testTag("$TAG_LYRICS/line/$index")
             .then(if (picked) Modifier.background(Color.White.copy(alpha = 0.12f), RoundedCornerShape(12.dp)) else Modifier)
             .padding(horizontal = 10.dp, vertical = 8.dp * look.spacing),
     ) {

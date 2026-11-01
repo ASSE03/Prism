@@ -58,6 +58,34 @@ class TvLyricsViewTest {
 
     private fun bounds(tag: String) = compose.onAllNodes(hasTestTag(tag), useUnmergedTree = true).fetchSemanticsNodes().firstOrNull()?.boundsInRoot
 
+    /**
+     * The owner: "they should flow smoother". The clock running (every frame) and the song's progress moving (twice a
+     * second) don't compose the lines again: only the sung line's own drawing follows the clock.
+     */
+    @Test fun theLinesAreNotComposedAgainFrameByFrame() {
+        val clock = mutableLongStateOf(4_200L)
+        var shown by androidx.compose.runtime.mutableStateOf(now)
+        compose.setContent {
+            TvTheme(AppSettings()) {
+                val memory = remember { TvFocusMemory() }
+                CompositionLocalProvider(LocalTvFocusMemory provides memory, LocalTvScreen provides "lyrics") {
+                    TvLyricsScreen(shown, TvLyrics(lines, 1, 0L, null), clock)
+                }
+            }
+        }
+        compose.mainClock.advanceTimeBy(1_000); compose.waitForIdle()
+        val lists = com.prism.music.ui.tv.TvLyricsCounts.lists
+        val composed = com.prism.music.ui.tv.TvLyricsCounts.lines
+        // A second of frames through the sung line, and the progress moving on twice.
+        repeat(60) { f ->
+            clock.longValue = 4_200L + f * 16L
+            if (f == 20 || f == 50) shown = shown.copy(fraction = shown.fraction + 0.01f, played = "0:2$f")
+            compose.mainClock.advanceTimeBy(16); compose.waitForIdle()
+        }
+        assertTrue("lines composed again: ${com.prism.music.ui.tv.TvLyricsCounts.lines - composed}", com.prism.music.ui.tv.TvLyricsCounts.lines == composed)
+        assertTrue("the list composed again: ${com.prism.music.ui.tv.TvLyricsCounts.lists - lists}", com.prism.music.ui.tv.TvLyricsCounts.lists == lists)
+    }
+
     @Test fun theSungLineGlidesIntoPlaceWithItsBackgroundVocalsAndBreaks() {
         var current by mutableIntStateOf(1)
         compose.setContent {
