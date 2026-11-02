@@ -196,7 +196,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             .setMediaSourceFactory(
                 PrismMediaSourceFactory(
                     c.playbackDataSourceFactory(), c.videoDataSourceFactory(),
-                    androidx.media3.datasource.DefaultDataSource.Factory(this),
+                    localFiles(),
                     localAudio = { item -> losslessFileFor(item) },
                     liveDsf = c.liveDataSourceFactory(),
                 )
@@ -458,7 +458,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             .setMediaSourceFactory(
                 PrismMediaSourceFactory(
                     c.playbackDataSourceFactory(), c.videoDataSourceFactory(),
-                    androidx.media3.datasource.DefaultDataSource.Factory(this),
+                    localFiles(),
                     localAudio = { item -> losslessFileFor(item) },
                     liveDsf = c.liveDataSourceFactory(),
                 )
@@ -2022,6 +2022,12 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      * The lossless add-on: a matching FLAC / WAV / AIFF on the phone, when lossless mode and the add-on are on; and since
      * 1.8.1 one of your own MP3 / AAC / Ogg files when "Use your own song files" is on.
      */
+    /** Files on the phone, read as the player loads them (a test holds the loading here: [TestHooks.songLoads]). */
+    private fun localFiles(): androidx.media3.datasource.DataSource.Factory {
+        val files = androidx.media3.datasource.DefaultDataSource.Factory(this)
+        return androidx.media3.datasource.ResolvingDataSource.Factory(files) { spec -> if (com.prism.music.TestHooks.singHolding) com.prism.music.TestHooks.songLoads(); spec }
+    }
+
     private fun losslessFileFor(item: MediaItem): android.net.Uri? {
         // Local music always plays from its file.
         if (item.mediaId.startsWith(Song.LOCAL_PREFIX)) {

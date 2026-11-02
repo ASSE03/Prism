@@ -4310,4 +4310,20 @@
     <string name="imp_channel_desc">Prism getirdiğin şarkıları eşleştirirken</string>
     <string name="imp_matching_notice">Geçmişin eşleştiriliyor</string>
     <string name="imp_matching_n_of_n">%1$d / %2$d şarkı</string>
+    <string name="sing_stopped_for_the_song">Şarkı çalabilsin diye Sing durdu: Sing hazırlarken şarkı yüklenmede kaldı. Şimdi olduğu gibi çalıyor.</string>
+    <string name="sing_engine_didn_t_start">Sing motoru bu cihazda başlamadı. Bunun yerine sesi hızlı yöntem çıkarıyor.</string>
+    <string name="sing_song_plays_as_it_is">Şarkı olduğu gibi çalmaya devam ediyor.</string>
+    <string name="link_refused">%1$s yanıt verdi ama oradaki Prism bağlantı kabul etmiyor. Orada Prism\'i açın, sonra yeniden deneyin.</string>
+    <string name="link_other_network">Bu telefon %1$s ile aynı ağda değil. İkisi de aynı Wi-Fi\'da mı?</string>
+    <string name="link_no_answer">%1$s bu Wi-Fi\'da ama yanıt vermedi. Prism orada açık mı? Açıksa Wi-Fi\'nız cihazların birbirine ulaşmasını engelliyor olabilir (istemci yalıtımı, misafir ağlarında yaygındır).</string>
+    <string name="link_tap_to_try_again">Yanıt yok. Yeniden denemek için dokunun</string>
+    <string name="tv_pair_step_where">Telefonunuzda, Prism\'in oynatıcısında, kontrollerin altındaki yayın işaretli satıra dokunun (uzun basmayın, dokunun) ya da ⋯ → Hoparlörde ya da TV\'de çal. Sonra %1$s yanındaki Kumanda\'ya dokunun</string>
+    <string name="tv_pair_step_sign_in">Sonra telefonda “Bu TV\'de oturum açın”a dokunun. Ardından kitaplığınızı ve çalma listelerinizi de taşımayı önerir (sonradan: Kumanda → Prism\'imi taşı)</string>
+    <string name="tv_backdrop">Arka plan koyuluğu</string>
+    <string name="tv_backdrop_info">Oynatıcının ve şarkı sözlerinin arkasındaki arka planın ne kadar koyu olduğu. Daha açık, müzik videosunu sözlerin altında daha çok gösterir.</string>
+    <string name="tv_backdrop_lighter">Daha açık</string>
+    <string name="tv_backdrop_as_it_comes">Olduğu gibi</string>
+    <string name="tv_backdrop_darker">Daha koyu</string>
+    <string name="tv_backdrop_much_darker">Çok daha koyu</string>
+    <string name="tv_backdrop_darkest">Neredeyse siyah</string>
 </resources>

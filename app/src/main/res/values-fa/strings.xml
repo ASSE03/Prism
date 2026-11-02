@@ -4310,4 +4310,20 @@
     <string name="imp_channel_desc">وقتی Prism آهنگ‌هایی را که آورده‌اید تطبیق می‌دهد</string>
     <string name="imp_matching_notice">در حال تطبیق سابقهٔ شما</string>
     <string name="imp_matching_n_of_n">%1$d از %2$d آهنگ</string>
+    <string name="sing_stopped_for_the_song">Sing متوقف شد تا آهنگ پخش شود: وقتی Sing آن را آماده می‌کرد، در حال بارگیری ماند. اکنون همان‌طور که هست پخش می‌شود.</string>
+    <string name="sing_engine_didn_t_start">موتور Sing روی این دستگاه شروع نشد. به‌جای آن، روش سریع صدا را حذف می‌کند.</string>
+    <string name="sing_song_plays_as_it_is">آهنگ همان‌طور که هست ادامه دارد.</string>
+    <string name="link_refused">%1$s پاسخ داد، اما Prism در آنجا اتصال نمی‌پذیرد. Prism را روی آن باز کنید و دوباره امتحان کنید.</string>
+    <string name="link_other_network">این تلفن در همان شبکهٔ %1$s نیست. آیا هر دو به همان Wi-Fi وصل هستند؟</string>
+    <string name="link_no_answer">%1$s روی این Wi-Fi است اما پاسخ نداد. آیا Prism آنجا باز است؟ اگر هست، شاید Wi-Fi شما نگذارد دستگاه‌ها به هم برسند (جداسازی کلاینت، رایج در شبکه‌های مهمان).</string>
+    <string name="link_tap_to_try_again">پاسخ نداد. برای امتحان دوباره ضربه بزنید</string>
+    <string name="tv_pair_step_where">در تلفن، در پخش‌کنندهٔ Prism، روی خطی که نشان پخش (Cast) زیر دکمه‌ها دارد ضربه بزنید (یک ضربه، نه نگه‌داشتن)، یا ⋯ ← پخش روی بلندگو یا تلویزیون. سپس کنار %1$s روی «کنترل از راه دور» ضربه بزنید</string>
+    <string name="tv_pair_step_sign_in">سپس در تلفن روی «ورود در این تلویزیون» ضربه بزنید. بعد پیشنهاد می‌دهد کتابخانه و فهرست‌های پخش شما را هم ببرد (بعدها: کنترل از راه دور ← بردن Prism من)</string>
+    <string name="tv_backdrop">تیرگی پس‌زمینه</string>
+    <string name="tv_backdrop_info">پس‌زمینهٔ پشت پخش‌کننده و متن ترانه چقدر تیره باشد. «روشن‌تر» ویدیوی موسیقی را زیر متن بیشتر نشان می‌دهد.</string>
+    <string name="tv_backdrop_lighter">روشن‌تر</string>
+    <string name="tv_backdrop_as_it_comes">همان‌طور که هست</string>
+    <string name="tv_backdrop_darker">تیره‌تر</string>
+    <string name="tv_backdrop_much_darker">خیلی تیره‌تر</string>
+    <string name="tv_backdrop_darkest">تقریباً سیاه</string>
 </resources>

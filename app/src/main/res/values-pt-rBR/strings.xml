@@ -4360,4 +4360,20 @@
     <string name="imp_channel_desc">Enquanto o Prism encontra as músicas que você trouxe</string>
     <string name="imp_matching_notice">Encontrando seu histórico</string>
     <string name="imp_matching_n_of_n">%1$d de %2$d músicas</string>
+    <string name="sing_stopped_for_the_song">O Sing parou para a música poder tocar: ela ficava carregando enquanto o Sing a preparava. Agora ela toca como é.</string>
+    <string name="sing_engine_didn_t_start">O mecanismo do Sing não iniciou neste dispositivo. Em vez disso, o modo rápido tira a voz.</string>
+    <string name="sing_song_plays_as_it_is">A música continua tocando como é.</string>
+    <string name="link_refused">%1$s respondeu, mas o Prism de lá não está aceitando conexões. Abra o Prism nele e tente de novo.</string>
+    <string name="link_other_network">Este celular não está na mesma rede que %1$s. Os dois estão no mesmo Wi-Fi?</string>
+    <string name="link_no_answer">%1$s está neste Wi-Fi, mas não respondeu. O Prism está aberto lá? Se estiver, talvez seu Wi-Fi impeça os dispositivos de se comunicarem (isolamento de clientes, comum em redes de convidados).</string>
+    <string name="link_tap_to_try_again">Não respondeu. Toque para tentar de novo</string>
+    <string name="tv_pair_step_where">No celular, no player do Prism, toque na linha com o símbolo de transmitir abaixo dos controles (um toque, não segure), ou ⋯ → Tocar num alto-falante ou TV. Depois toque em Controle remoto ao lado de %1$s</string>
+    <string name="tv_pair_step_sign_in">Depois toque em “Entrar nesta TV” no celular. Em seguida ele oferece levar também sua biblioteca e playlists (mais tarde: Controle remoto → Levar meu Prism)</string>
+    <string name="tv_backdrop">Escurecimento do fundo</string>
+    <string name="tv_backdrop_info">O quanto o fundo atrás do player e das letras é escuro. Mais claro deixa o videoclipe aparecer mais sob a letra.</string>
+    <string name="tv_backdrop_lighter">Mais claro</string>
+    <string name="tv_backdrop_as_it_comes">Como vem</string>
+    <string name="tv_backdrop_darker">Mais escuro</string>
+    <string name="tv_backdrop_much_darker">Bem mais escuro</string>
+    <string name="tv_backdrop_darkest">Quase preto</string>
 </resources>

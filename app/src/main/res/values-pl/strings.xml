@@ -4410,4 +4410,20 @@
     <string name="imp_channel_desc">Gdy Prism dopasowuje przeniesione utwory</string>
     <string name="imp_matching_notice">Dopasowywanie twojej historii</string>
     <string name="imp_matching_n_of_n">%1$d z %2$d utworów</string>
+    <string name="sing_stopped_for_the_song">Sing zatrzymał się, żeby utwór mógł grać: ciągle się ładował, gdy Sing go przygotowywał. Teraz gra tak, jak jest.</string>
+    <string name="sing_engine_didn_t_start">Silnik Sing nie uruchomił się na tym urządzeniu. Zamiast tego głos usunie szybki sposób.</string>
+    <string name="sing_song_plays_as_it_is">Utwór gra dalej tak, jak jest.</string>
+    <string name="link_refused">%1$s odpowiedział, ale Prism nie przyjmuje tam połączeń. Otwórz na nim Prism i spróbuj ponownie.</string>
+    <string name="link_other_network">Ten telefon nie jest w tej samej sieci co %1$s. Czy oba są w tej samej sieci Wi-Fi?</string>
+    <string name="link_no_answer">%1$s jest w tej sieci Wi-Fi, ale nie odpowiedział. Czy Prism jest tam otwarty? Jeśli tak, Twoja sieć Wi-Fi może nie pozwalać urządzeniom łączyć się ze sobą (izolacja klientów, częsta w sieciach dla gości).</string>
+    <string name="link_tap_to_try_again">Brak odpowiedzi. Dotknij, aby spróbować ponownie</string>
+    <string name="tv_pair_step_where">Na telefonie, w odtwarzaczu Prism, dotknij wiersza ze znakiem przesyłania pod przyciskami (dotknięcie, nie przytrzymanie) albo ⋯ → Odtwarzaj na głośniku lub telewizorze. Potem dotknij Pilot obok %1$s</string>
+    <string name="tv_pair_step_sign_in">Potem dotknij na telefonie „Zaloguj się na tym telewizorze”. Następnie zaproponuje przeniesienie także biblioteki i playlist (później: Pilot → Przenieś mój Prism)</string>
+    <string name="tv_backdrop">Przyciemnienie tła</string>
+    <string name="tv_backdrop_info">Jak ciemne jest tło za odtwarzaczem i tekstem. Jaśniej pozwala lepiej widzieć teledysk pod tekstem.</string>
+    <string name="tv_backdrop_lighter">Jaśniej</string>
+    <string name="tv_backdrop_as_it_comes">Bez zmian</string>
+    <string name="tv_backdrop_darker">Ciemniej</string>
+    <string name="tv_backdrop_much_darker">Dużo ciemniej</string>
+    <string name="tv_backdrop_darkest">Prawie czarne</string>
 </resources>

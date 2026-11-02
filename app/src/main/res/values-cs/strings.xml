@@ -4410,4 +4410,20 @@
     <string name="imp_channel_desc">Zatímco Prism přiřazuje skladby, které sis přenesl</string>
     <string name="imp_matching_notice">Přiřazuji tvoji historii</string>
     <string name="imp_matching_n_of_n">%1$d z %2$d skladeb</string>
+    <string name="sing_stopped_for_the_song">Sing se zastavil, aby skladba mohla hrát: načítala se, zatímco ji Sing připravoval. Teď hraje tak, jak je.</string>
+    <string name="sing_engine_didn_t_start">Engine funkce Sing se na tomto zařízení nespustil. Hlas místo toho odstraní rychlý způsob.</string>
+    <string name="sing_song_plays_as_it_is">Skladba hraje dál tak, jak je.</string>
+    <string name="link_refused">%1$s odpověděl, ale Prism tam nepřijímá připojení. Otevřete na něm Prism a zkuste to znovu.</string>
+    <string name="link_other_network">Tento telefon není ve stejné síti jako %1$s. Jsou obě zařízení na stejné Wi-Fi?</string>
+    <string name="link_no_answer">%1$s je na této Wi-Fi, ale neodpověděl. Je tam Prism otevřený? Pokud ano, vaše Wi-Fi možná brání zařízením, aby se navzájem spojila (izolace klientů, běžná u sítí pro hosty).</string>
+    <string name="link_tap_to_try_again">Neodpověděl. Klepnutím to zkusíte znovu</string>
+    <string name="tv_pair_step_where">V telefonu v přehrávači Prism klepněte na řádek se značkou odesílání pod ovládáním (klepnutí, ne dlouhé podržení), nebo ⋯ → Přehrát na reproduktoru nebo televizi. Pak klepněte na Ovladač vedle %1$s</string>
+    <string name="tv_pair_step_sign_in">Pak v telefonu klepněte na „Přihlásit se na této televizi“. Potom nabídne přenést i knihovnu a playlisty (později: Ovladač → Přenést můj Prism)</string>
+    <string name="tv_backdrop">Tmavost pozadí</string>
+    <string name="tv_backdrop_info">Jak tmavé je pozadí za přehrávačem a texty. Světlejší nechá pod texty víc prosvítat hudební video.</string>
+    <string name="tv_backdrop_lighter">Světlejší</string>
+    <string name="tv_backdrop_as_it_comes">Výchozí</string>
+    <string name="tv_backdrop_darker">Tmavší</string>
+    <string name="tv_backdrop_much_darker">Mnohem tmavší</string>
+    <string name="tv_backdrop_darkest">Skoro černé</string>
 </resources>

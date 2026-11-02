@@ -4360,4 +4360,20 @@
     <string name="imp_channel_desc">Mentre Prism abbina i brani che hai portato</string>
     <string name="imp_matching_notice">Abbinamento della tua cronologia</string>
     <string name="imp_matching_n_of_n">%1$d di %2$d brani</string>
+    <string name="sing_stopped_for_the_song">Sing si è fermato perché il brano potesse suonare: restava in caricamento mentre Sing lo preparava. Ora suona così com\'è.</string>
+    <string name="sing_engine_didn_t_start">Il motore di Sing non si è avviato su questo dispositivo. Al suo posto, il modo rapido toglie la voce.</string>
+    <string name="sing_song_plays_as_it_is">Il brano continua così com\'è.</string>
+    <string name="link_refused">%1$s ha risposto, ma Prism lì non accetta connessioni. Apri Prism su quel dispositivo, poi riprova.</string>
+    <string name="link_other_network">Questo telefono non è sulla stessa rete di %1$s. Sono entrambi sulla stessa Wi-Fi?</string>
+    <string name="link_no_answer">%1$s è su questa Wi-Fi ma non ha risposto. Prism è aperto lì? Se sì, la tua Wi-Fi potrebbe impedire ai dispositivi di comunicare tra loro (isolamento dei client, comune nelle reti ospiti).</string>
+    <string name="link_tap_to_try_again">Nessuna risposta. Tocca per riprovare</string>
+    <string name="tv_pair_step_where">Sul telefono, nel player di Prism, tocca la riga con il simbolo di trasmissione sotto i comandi (un tocco, non una pressione prolungata), oppure ⋯ → Riproduci su un altoparlante o una TV. Poi tocca Telecomando accanto a %1$s</string>
+    <string name="tv_pair_step_sign_in">Poi tocca «Accedi su questa TV» sul telefono. Dopo propone di portare anche la tua libreria e le playlist (in seguito: Telecomando → Porta il mio Prism)</string>
+    <string name="tv_backdrop">Oscurità dello sfondo</string>
+    <string name="tv_backdrop_info">Quanto è scuro lo sfondo dietro il player e i testi. Più chiaro lascia vedere di più un video musicale sotto il testo.</string>
+    <string name="tv_backdrop_lighter">Più chiaro</string>
+    <string name="tv_backdrop_as_it_comes">Com\'è</string>
+    <string name="tv_backdrop_darker">Più scuro</string>
+    <string name="tv_backdrop_much_darker">Molto più scuro</string>
+    <string name="tv_backdrop_darkest">Quasi nero</string>
 </resources>

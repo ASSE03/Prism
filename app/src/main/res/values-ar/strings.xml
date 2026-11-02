@@ -4510,4 +4510,20 @@
     <string name="imp_channel_desc">أثناء مطابقة Prism للأغاني التي أحضرتها</string>
     <string name="imp_matching_notice">جارٍ مطابقة سجلّك</string>
     <string name="imp_matching_n_of_n">%1$d من %2$d أغنية</string>
+    <string name="sing_stopped_for_the_song">توقف الغناء حتى تُشغَّل الأغنية: بقيت قيد التحميل بينما كان الغناء يجهّزها. تُشغَّل الآن كما هي.</string>
+    <string name="sing_engine_didn_t_start">لم يبدأ محرك الغناء على هذا الجهاز. الطريقة السريعة تزيل الصوت بدلًا منه.</string>
+    <string name="sing_song_plays_as_it_is">تستمر الأغنية كما هي.</string>
+    <string name="link_refused">ردّ %1$s، لكن Prism هناك لا يقبل الاتصالات. افتح Prism عليه، ثم حاول مرة أخرى.</string>
+    <string name="link_other_network">هذا الهاتف ليس على نفس شبكة %1$s. هل كلاهما على نفس شبكة Wi-Fi؟</string>
+    <string name="link_no_answer">%1$s على شبكة Wi-Fi هذه لكنه لم يرد. هل Prism مفتوح هناك؟ إن كان كذلك، فقد تمنع شبكة Wi-Fi الأجهزة من الوصول إلى بعضها (عزل العملاء، شائع في شبكات الضيوف).</string>
+    <string name="link_tap_to_try_again">لم يرد. اضغط للمحاولة مرة أخرى</string>
+    <string name="tv_pair_step_where">على هاتفك، في مشغّل Prism، اضغط على السطر الذي يحمل علامة البث أسفل عناصر التحكم (ضغطة عادية، لا ضغطة مطوّلة)، أو ⋯ ← التشغيل على مكبر صوت أو تلفزيون. ثم اضغط «جهاز التحكم» بجوار %1$s</string>
+    <string name="tv_pair_step_sign_in">ثم اضغط «تسجيل الدخول على هذا التلفزيون» على هاتفك. سيعرض بعدها نقل مكتبتك وقوائم التشغيل (لاحقًا: جهاز التحكم ← نقل Prism الخاص بي)</string>
+    <string name="tv_backdrop">تعتيم الخلفية</string>
+    <string name="tv_backdrop_info">مدى قتامة الخلفية خلف المشغّل والكلمات. «أفتح» يُظهر الفيديو الموسيقي أكثر تحت كلماته.</string>
+    <string name="tv_backdrop_lighter">أفتح</string>
+    <string name="tv_backdrop_as_it_comes">كما هي</string>
+    <string name="tv_backdrop_darker">أغمق</string>
+    <string name="tv_backdrop_much_darker">أغمق بكثير</string>
+    <string name="tv_backdrop_darkest">شبه سوداء</string>
 </resources>

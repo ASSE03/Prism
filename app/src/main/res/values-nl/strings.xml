@@ -4310,4 +4310,20 @@
     <string name="imp_channel_desc">Terwijl Prism de nummers opzoekt die je hebt meegenomen</string>
     <string name="imp_matching_notice">Je geschiedenis wordt opgezocht</string>
     <string name="imp_matching_n_of_n">%1$d van %2$d nummers</string>
+    <string name="sing_stopped_for_the_song">Sing is gestopt zodat het nummer kon spelen: het bleef laden terwijl Sing het klaarmaakte. Het speelt nu zoals het is.</string>
+    <string name="sing_engine_didn_t_start">De engine van Sing is op dit apparaat niet gestart. In plaats daarvan haalt de snelle manier de stem eruit.</string>
+    <string name="sing_song_plays_as_it_is">Het nummer speelt verder zoals het is.</string>
+    <string name="link_refused">%1$s antwoordde, maar Prism neemt daar geen verbindingen aan. Open Prism erop en probeer het dan opnieuw.</string>
+    <string name="link_other_network">Deze telefoon zit niet op hetzelfde netwerk als %1$s. Zitten ze allebei op dezelfde wifi?</string>
+    <string name="link_no_answer">%1$s zit op deze wifi maar antwoordde niet. Is Prism daar geopend? Zo ja, dan laat je wifi apparaten misschien niet met elkaar praten (clientisolatie, vaak bij gastnetwerken).</string>
+    <string name="link_tap_to_try_again">Geen antwoord. Tik om het opnieuw te proberen</string>
+    <string name="tv_pair_step_where">Tik op je telefoon in de speler van Prism op de regel met het cast-teken onder de bediening (een tik, niet lang drukken), of ⋯ → Afspelen op een speaker of tv. Tik daarna op Afstandsbediening naast %1$s</string>
+    <string name="tv_pair_step_sign_in">Tik daarna op je telefoon op ‘Inloggen op deze tv’. Daarna biedt hij aan ook je bibliotheek en playlists mee te brengen (later: Afstandsbediening → Mijn Prism meebrengen)</string>
+    <string name="tv_backdrop">Donkerte van de achtergrond</string>
+    <string name="tv_backdrop_info">Hoe donker de achtergrond achter de speler en de songtekst is. Lichter laat een muziekvideo meer doorschijnen onder de songtekst.</string>
+    <string name="tv_backdrop_lighter">Lichter</string>
+    <string name="tv_backdrop_as_it_comes">Zoals het is</string>
+    <string name="tv_backdrop_darker">Donkerder</string>
+    <string name="tv_backdrop_much_darker">Veel donkerder</string>
+    <string name="tv_backdrop_darkest">Bijna zwart</string>
 </resources>

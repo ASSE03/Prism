@@ -4310,4 +4310,20 @@
     <string name="imp_channel_desc">جب Prism آپ کے لائے گئے گانوں کا ملان کرتا ہے</string>
     <string name="imp_matching_notice">آپ کی ہسٹری کا ملان ہو رہا ہے</string>
     <string name="imp_matching_n_of_n">%2$d میں سے %1$d گانے</string>
+    <string name="sing_stopped_for_the_song">گانا چل سکے، اس لیے Sing رک گیا: جب Sing اسے تیار کر رہا تھا تو یہ لوڈ ہی ہوتا رہا۔ اب یہ جیسا ہے ویسا چل رہا ہے۔</string>
+    <string name="sing_engine_didn_t_start">اس ڈیوائس پر Sing کا انجن شروع نہیں ہوا۔ اس کے بجائے تیز طریقہ آواز ہٹاتا ہے۔</string>
+    <string name="sing_song_plays_as_it_is">گانا جیسا ہے ویسا چلتا رہے گا۔</string>
+    <string name="link_refused">%1$s نے جواب دیا، لیکن وہاں Prism کنکشن قبول نہیں کر رہا۔ اس پر Prism کھولیں، پھر دوبارہ کوشش کریں۔</string>
+    <string name="link_other_network">یہ فون %1$s والے نیٹ ورک پر نہیں ہے۔ کیا دونوں ایک ہی Wi-Fi پر ہیں؟</string>
+    <string name="link_no_answer">%1$s اس Wi-Fi پر ہے لیکن اس نے جواب نہیں دیا۔ کیا وہاں Prism کھلا ہے؟ اگر ہاں، تو شاید آپ کا Wi-Fi ڈیوائسز کو ایک دوسرے تک پہنچنے نہیں دیتا (کلائنٹ آئسولیشن، مہمان نیٹ ورکس پر عام)۔</string>
+    <string name="link_tap_to_try_again">جواب نہیں ملا۔ دوبارہ کوشش کے لیے تھپتھپائیں</string>
+    <string name="tv_pair_step_where">اپنے فون پر، Prism کے پلیئر میں، کنٹرولز کے نیچے کاسٹ نشان والی لائن پر تھپتھپائیں (صرف تھپتھپائیں، دیر تک نہ دبائیں)، یا ⋯ ← اسپیکر یا TV پر چلائیں۔ پھر %1$s کے ساتھ ریموٹ پر تھپتھپائیں</string>
+    <string name="tv_pair_step_sign_in">پھر فون پر “اس ٹی وی پر سائن ان کریں” تھپتھپائیں۔ اس کے بعد یہ آپ کی لائبریری اور پلے لسٹس بھی لے جانے کی پیشکش کرے گا (بعد میں: ریموٹ ← میرا Prism لے جائیں)</string>
+    <string name="tv_backdrop">پس منظر کا گہرا پن</string>
+    <string name="tv_backdrop_info">پلیئر اور بولوں کے پیچھے پس منظر کتنا گہرا ہو۔ ہلکا کرنے سے بولوں کے نیچے میوزک ویڈیو زیادہ دکھائی دیتی ہے۔</string>
+    <string name="tv_backdrop_lighter">ہلکا</string>
+    <string name="tv_backdrop_as_it_comes">جیسا ہے</string>
+    <string name="tv_backdrop_darker">گہرا</string>
+    <string name="tv_backdrop_much_darker">بہت گہرا</string>
+    <string name="tv_backdrop_darkest">تقریباً سیاہ</string>
 </resources>

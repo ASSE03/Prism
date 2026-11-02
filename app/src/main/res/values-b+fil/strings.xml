@@ -4310,4 +4310,20 @@
     <string name="imp_channel_desc">Habang itinutugma ng Prism ang mga kantang dinala mo</string>
     <string name="imp_matching_notice">Itinutugma ang history mo</string>
     <string name="imp_matching_n_of_n">%1$d ng %2$d kanta</string>
+    <string name="sing_stopped_for_the_song">Huminto ang Sing para tumugtog ang kanta: naka-loading ito habang inihahanda ito ng Sing. Tumutugtog na ito nang dati.</string>
+    <string name="sing_engine_didn_t_start">Hindi nagsimula ang engine ng Sing sa device na ito. Ang mabilis na paraan ang mag-aalis ng boses sa halip.</string>
+    <string name="sing_song_plays_as_it_is">Tuloy ang kanta nang dati.</string>
+    <string name="link_refused">Sumagot ang %1$s, pero hindi tumatanggap ng koneksyon ang Prism doon. Buksan ang Prism dito, saka subukan ulit.</string>
+    <string name="link_other_network">Wala ang phone na ito sa parehong network ng %1$s. Nasa parehong Wi-Fi ba ang dalawa?</string>
+    <string name="link_no_answer">Nasa Wi-Fi na ito ang %1$s pero hindi sumagot. Bukas ba ang Prism doon? Kung oo, maaaring pinaghihiwalay ng Wi-Fi mo ang mga device (client isolation, karaniwan sa guest network).</string>
+    <string name="link_tap_to_try_again">Hindi sumagot. I-tap para subukan ulit</string>
+    <string name="tv_pair_step_where">Sa phone mo, sa player ng Prism, i-tap ang linyang may cast mark sa ilalim ng mga kontrol (tap lang, hindi long press), o ⋯ → I-play sa speaker o TV. Pagkatapos, i-tap ang Remote sa tabi ng %1$s</string>
+    <string name="tv_pair_step_sign_in">Pagkatapos, i-tap ang “Mag-sign in sa TV na ito” sa phone mo. Iaalok nitong dalhin din ang library at mga playlist mo (sa susunod: Remote → Dalhin ang Prism ko)</string>
+    <string name="tv_backdrop">Dilim ng background</string>
+    <string name="tv_backdrop_info">Gaano kadilim ang background sa likod ng player at lyrics. Sa Mas maliwanag, mas kita ang music video sa ilalim ng lyrics nito.</string>
+    <string name="tv_backdrop_lighter">Mas maliwanag</string>
+    <string name="tv_backdrop_as_it_comes">Gaya ng dati</string>
+    <string name="tv_backdrop_darker">Mas madilim</string>
+    <string name="tv_backdrop_much_darker">Mas madilim pa</string>
+    <string name="tv_backdrop_darkest">Halos itim</string>
 </resources>

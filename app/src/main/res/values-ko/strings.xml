@@ -4260,4 +4260,20 @@
     <string name="imp_channel_desc">Prism이 가져온 곡을 매칭하는 동안</string>
     <string name="imp_matching_notice">기록 매칭 중</string>
     <string name="imp_matching_n_of_n">%2$d곡 중 %1$d곡</string>
+    <string name="sing_stopped_for_the_song">노래가 재생되도록 Sing을 멈췄어요: Sing이 준비하는 동안 노래가 계속 로딩 중이었어요. 이제 원래대로 재생돼요.</string>
+    <string name="sing_engine_didn_t_start">이 기기에서 Sing 엔진이 시작되지 않았어요. 대신 빠른 방식으로 목소리를 뺍니다.</string>
+    <string name="sing_song_plays_as_it_is">노래는 원래대로 계속 재생돼요.</string>
+    <string name="link_refused">%1$s이(가) 응답했지만 그곳의 Prism이 연결을 받지 않고 있어요. 그 기기에서 Prism을 연 다음 다시 시도하세요.</string>
+    <string name="link_other_network">이 휴대전화는 %1$s와(과) 같은 네트워크에 있지 않아요. 둘 다 같은 Wi-Fi에 있나요?</string>
+    <string name="link_no_answer">%1$s이(가) 이 Wi-Fi에 있지만 응답하지 않았어요. 그곳에서 Prism이 열려 있나요? 열려 있다면 Wi-Fi가 기기끼리 연결되지 못하게 막고 있을 수 있어요(클라이언트 격리, 게스트 네트워크에서 흔함).</string>
+    <string name="link_tap_to_try_again">응답 없음. 다시 시도하려면 탭하세요</string>
+    <string name="tv_pair_step_where">휴대전화의 Prism 플레이어에서 컨트롤 아래 전송 표시가 있는 줄을 탭하세요(길게 누르지 말고 탭). 또는 ⋯ → 스피커나 TV에서 재생. 그런 다음 %1$s 옆의 리모컨을 탭하세요</string>
+    <string name="tv_pair_step_sign_in">그런 다음 휴대전화에서 ‘이 TV에 로그인’을 탭하세요. 이어서 보관함과 플레이리스트도 가져갈지 물어봐요(나중에: 리모컨 → 내 Prism 가져가기)</string>
+    <string name="tv_backdrop">배경 어둡기</string>
+    <string name="tv_backdrop_info">플레이어와 가사 뒤 배경이 얼마나 어두운지. 더 밝게로 하면 가사 아래 뮤직비디오가 더 잘 보여요.</string>
+    <string name="tv_backdrop_lighter">더 밝게</string>
+    <string name="tv_backdrop_as_it_comes">원래대로</string>
+    <string name="tv_backdrop_darker">더 어둡게</string>
+    <string name="tv_backdrop_much_darker">훨씬 어둡게</string>
+    <string name="tv_backdrop_darkest">거의 검정</string>
 </resources>

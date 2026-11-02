@@ -4360,4 +4360,20 @@
     <string name="imp_channel_desc">Mientras Prism empareja las canciones que trajiste</string>
     <string name="imp_matching_notice">Emparejando tu historial</string>
     <string name="imp_matching_n_of_n">%1$d de %2$d canciones</string>
+    <string name="sing_stopped_for_the_song">Sing se detuvo para que la canción pudiera sonar: se quedaba cargando mientras Sing la preparaba. Ahora suena tal como es.</string>
+    <string name="sing_engine_didn_t_start">El motor de Sing no se inició en este dispositivo. En su lugar, el modo rápido quita la voz.</string>
+    <string name="sing_song_plays_as_it_is">La canción sigue sonando tal como es.</string>
+    <string name="link_refused">%1$s respondió, pero Prism no está aceptando conexiones allí. Abre Prism en él y vuelve a intentarlo.</string>
+    <string name="link_other_network">Este teléfono no está en la misma red que %1$s. ¿Están los dos en el mismo Wi-Fi?</string>
+    <string name="link_no_answer">%1$s está en este Wi-Fi, pero no respondió. ¿Está Prism abierto allí? Si lo está, puede que tu Wi-Fi impida que los dispositivos se comuniquen entre sí (aislamiento de clientes, habitual en redes de invitados).</string>
+    <string name="link_tap_to_try_again">No respondió. Toca para volver a intentarlo</string>
+    <string name="tv_pair_step_where">En tu teléfono, en el reproductor de Prism, toca la línea con el icono de transmitir bajo los controles (un toque, no mantener pulsado), o ⋯ → Reproducir en un altavoz o TV. Luego toca Control remoto junto a %1$s</string>
+    <string name="tv_pair_step_sign_in">Luego toca «Iniciar sesión en esta TV» en tu teléfono. Después ofrece llevar también tu biblioteca y tus listas (más tarde: Control remoto → Llevar mi Prism)</string>
+    <string name="tv_backdrop">Oscuridad del fondo</string>
+    <string name="tv_backdrop_info">Lo oscuro que es el fondo detrás del reproductor y la letra. Más claro deja ver más un videoclip bajo su letra.</string>
+    <string name="tv_backdrop_lighter">Más claro</string>
+    <string name="tv_backdrop_as_it_comes">Tal como viene</string>
+    <string name="tv_backdrop_darker">Más oscuro</string>
+    <string name="tv_backdrop_much_darker">Mucho más oscuro</string>
+    <string name="tv_backdrop_darkest">Casi negro</string>
 </resources>

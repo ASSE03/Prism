@@ -4260,4 +4260,20 @@
     <string name="imp_channel_desc">ขณะที่ Prism จับคู่เพลงที่คุณนำมา</string>
     <string name="imp_matching_notice">กำลังจับคู่ประวัติของคุณ</string>
     <string name="imp_matching_n_of_n">%1$d จาก %2$d เพลง</string>
+    <string name="sing_stopped_for_the_song">Sing หยุดเพื่อให้เพลงเล่นได้: เพลงค้างโหลดอยู่ระหว่างที่ Sing เตรียมเพลง ตอนนี้เพลงเล่นตามเดิมแล้ว</string>
+    <string name="sing_engine_didn_t_start">เอนจินของ Sing ไม่เริ่มทำงานในอุปกรณ์นี้ วิธีด่วนจะเอาเสียงร้องออกแทน</string>
+    <string name="sing_song_plays_as_it_is">เพลงจะเล่นต่อตามเดิม</string>
+    <string name="link_refused">%1$s ตอบกลับแล้ว แต่ Prism ที่นั่นไม่รับการเชื่อมต่อ เปิด Prism บนอุปกรณ์นั้น แล้วลองอีกครั้ง</string>
+    <string name="link_other_network">โทรศัพท์นี้ไม่ได้อยู่ในเครือข่ายเดียวกับ %1$s ทั้งสองเครื่องใช้ Wi-Fi เดียวกันหรือไม่</string>
+    <string name="link_no_answer">%1$s อยู่ใน Wi-Fi นี้แต่ไม่ตอบกลับ Prism เปิดอยู่ที่นั่นหรือไม่ ถ้าเปิดอยู่ Wi-Fi ของคุณอาจกันไม่ให้อุปกรณ์ติดต่อกัน (การแยกไคลเอ็นต์ พบบ่อยในเครือข่ายสำหรับแขก)</string>
+    <string name="link_tap_to_try_again">ไม่ตอบกลับ แตะเพื่อลองอีกครั้ง</string>
+    <string name="tv_pair_step_where">บนโทรศัพท์ ในเครื่องเล่นของ Prism แตะบรรทัดที่มีเครื่องหมายแคสต์ใต้ปุ่มควบคุม (แตะธรรมดา ไม่ใช่กดค้าง) หรือ ⋯ → เล่นบนลำโพงหรือทีวี จากนั้นแตะ รีโมต ข้าง %1$s</string>
+    <string name="tv_pair_step_sign_in">จากนั้นแตะ “ลงชื่อเข้าใช้บนทีวีเครื่องนี้” บนโทรศัพท์ ต่อไปจะเสนอให้ย้ายคลังเพลงและเพลย์ลิสต์ด้วย (ภายหลัง: รีโมต → ย้าย Prism ของฉัน)</string>
+    <string name="tv_backdrop">ความมืดของพื้นหลัง</string>
+    <string name="tv_backdrop_info">พื้นหลังหลังเครื่องเล่นและเนื้อเพลงมืดแค่ไหน สว่างขึ้นจะเห็นมิวสิกวิดีโอใต้เนื้อเพลงมากขึ้น</string>
+    <string name="tv_backdrop_lighter">สว่างขึ้น</string>
+    <string name="tv_backdrop_as_it_comes">ตามเดิม</string>
+    <string name="tv_backdrop_darker">มืดขึ้น</string>
+    <string name="tv_backdrop_much_darker">มืดขึ้นมาก</string>
+    <string name="tv_backdrop_darkest">เกือบดำ</string>
 </resources>

@@ -4410,4 +4410,20 @@
     <string name="imp_channel_desc">Пока Prism сопоставляет перенесённые тобой песни</string>
     <string name="imp_matching_notice">Сопоставляем твою историю</string>
     <string name="imp_matching_n_of_n">Песен: %1$d из %2$d</string>
+    <string name="sing_stopped_for_the_song">Sing остановлен, чтобы песня могла играть: она всё загружалась, пока Sing её готовил. Теперь она играет как есть.</string>
+    <string name="sing_engine_didn_t_start">Движок Sing не запустился на этом устройстве. Вместо него голос убирает быстрый способ.</string>
+    <string name="sing_song_plays_as_it_is">Песня продолжает играть как есть.</string>
+    <string name="link_refused">%1$s ответил, но Prism на нём не принимает подключения. Откройте на нём Prism и попробуйте ещё раз.</string>
+    <string name="link_other_network">Этот телефон не в той же сети, что %1$s. Оба устройства подключены к одной сети Wi-Fi?</string>
+    <string name="link_no_answer">%1$s в этой сети Wi-Fi, но не ответил. Prism там открыт? Если да, возможно, ваш Wi-Fi не даёт устройствам связываться друг с другом (изоляция клиентов, частая в гостевых сетях).</string>
+    <string name="link_tap_to_try_again">Нет ответа. Нажмите, чтобы повторить</string>
+    <string name="tv_pair_step_where">На телефоне, в плеере Prism, нажмите на строку со значком трансляции под кнопками (обычное нажатие, не долгое) или ⋯ → Включить на колонке или телевизоре. Затем нажмите «Пульт» рядом с %1$s</string>
+    <string name="tv_pair_step_sign_in">Затем нажмите на телефоне «Войти на этом телевизоре». После этого он предложит перенести и медиатеку с плейлистами (позже: Пульт → Перенести мой Prism)</string>
+    <string name="tv_backdrop">Затемнение фона</string>
+    <string name="tv_backdrop_info">Насколько тёмный фон за плеером и текстом песни. «Светлее» сильнее показывает клип под текстом.</string>
+    <string name="tv_backdrop_lighter">Светлее</string>
+    <string name="tv_backdrop_as_it_comes">Как есть</string>
+    <string name="tv_backdrop_darker">Темнее</string>
+    <string name="tv_backdrop_much_darker">Намного темнее</string>
+    <string name="tv_backdrop_darkest">Почти чёрный</string>
 </resources>
