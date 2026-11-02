@@ -433,6 +433,8 @@ class AppContainer(val app: Application) {
      */
     val downloadState = kotlinx.coroutines.flow.MutableStateFlow<Map<String, com.prism.music.download.DownloadInfo>>(emptyMap())
     val videoState = kotlinx.coroutines.flow.MutableStateFlow<Map<String, com.prism.music.download.VideoDownload>>(emptyMap())
+    /** Music videos downloaded as their song, video id -> song id ([com.prism.music.download.forRow], #315). */
+    val downloadStandIns = kotlinx.coroutines.flow.MutableStateFlow<Map<String, String>>(emptyMap())
     val covers by lazy { com.prism.music.data.PlaylistCovers(app) }
     /** Saves lyrics into your own music files' tags (#16). */
     val lyricsToFiles by lazy { com.prism.music.data.local.LyricsToFiles(app, this) }

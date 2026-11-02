@@ -381,9 +381,14 @@ class LibraryRepository(private val c: AppContainer) {
         }
     }
 
-    /** Saves an album or playlist to the account's library, or takes it out. False if YouTube Music refused. */
-    suspend fun setSaved(playlistId: String, saved: Boolean): Boolean = withContext(Dispatchers.IO) {
-        runCatching { c.ytm.setLibrarySaved(playlistId, saved) }.isSuccess.also { ok -> if (ok) refreshCollections() }
+    /**
+     * Saves an album or playlist to the account's library, or takes it out. False if YouTube Music refused; an album's
+     * other playlist id ([orElse]) is tried before giving up.
+     */
+    suspend fun setSaved(playlistId: String, saved: Boolean, orElse: String? = null): Boolean = withContext(Dispatchers.IO) {
+        listOfNotNull(playlistId, orElse).distinct().any { id ->
+            runCatching { c.ytm.setLibrarySaved(id, saved) }.onFailure { android.util.Log.w("PrismLibrary", "library ${if (saved) "save" else "removal"} of $id refused: $it") }.isSuccess
+        }.also { ok -> if (ok) refreshCollections() }
     }
 
     /**
@@ -400,6 +405,20 @@ class LibraryRepository(private val c: AppContainer) {
         val fresh = runCatching { c.ytm.libraryAlbums() }.getOrNull()
         if (fresh != null) { albums.value = fresh; persist() }
         fresh?.none { it.id == albumId } ?: true
+    }
+
+    /**
+     * When each YouTube playlist was last changed from Prism (songs added), by its id without "VL". An open playlist
+     * page, or one kept in a tab's back stack, loads again when it's behind (Reddit, 1.7.9: a song added from the queue
+     * "wasn't there", because the playlist page still showed what it had loaded before).
+     */
+    val playlistEdits = MutableStateFlow<Map<String, Long>>(emptyMap())
+
+    /** Songs went into [playlistId]: its page and the Library's playlists (count, cover) are brought up to date. */
+    fun playlistChanged(playlistId: String) {
+        val id = playlistId.removePrefix("VL")
+        playlistEdits.value = playlistEdits.value + (id to System.currentTimeMillis())
+        refreshCollections()
     }
 
     /** Fetches the library's playlists and albums again (after one is saved, created or changed). */

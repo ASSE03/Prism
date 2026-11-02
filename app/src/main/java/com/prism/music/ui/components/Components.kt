@@ -2,6 +2,7 @@ package com.prism.music.ui.components
 
 import com.prism.music.R
 import com.prism.music.tr
+import com.prism.music.download.forRow
 import com.prism.music.ui.theme.lit
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.contentDescription
@@ -168,13 +169,15 @@ fun SongRow(
     val c = LocalContainer.current
     val likedIds = c.library.likedIds.collectAsState()
     val downloads = c.downloadState.collectAsState()
+    val standIns = c.downloadStandIns.collectAsState()
     val videos = c.videoState.collectAsState()
     var menu by remember { mutableStateOf(false) }
     val done = androidx.media3.exoplayer.offline.Download.STATE_COMPLETED
     // Each row recomposes only when its own marks change, not every time any download, like or video changes anywhere
     // (a list on screen while Smart Downloads ran was rebuilt row by row at each step).
     val liked by remember(song.id) { derivedStateOf { song.id in likedIds.value } }
-    val downloaded by remember(song.id) { derivedStateOf { downloads.value[song.id]?.state == done } }
+    // A music video downloaded as its song shows as downloaded (#315).
+    val downloaded by remember(song.id) { derivedStateOf { downloads.value.forRow(song.id, standIns.value)?.state == done } }
     val videoSaved by remember(song.id) { derivedStateOf { videos.value[song.id]?.state == done } }
     SongRowLayout(
         song, modifier, index, playing, trailingInfo, starred,
@@ -581,7 +584,8 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
     var versions by remember { mutableStateOf(false) }
     val picks by c.versions.picks.collectAsState()
     val isLiked = song.id in liked
-    val dl = downloads[song.id]
+    val standIns by c.downloadStandIns.collectAsState()
+    val dl = downloads.forRow(song.id, standIns)
     val downloaded = dl?.state == androidx.media3.exoplayer.offline.Download.STATE_COMPLETED
     val together by c.together.state.collectAsState()
     // A file on the phone isn't on YouTube: no radio, download, sharing, YouTube playlists, or sending it to a session.
@@ -713,7 +717,7 @@ fun PlaylistPicker(songs: List<Song>, what: String, onDismiss: () -> Unit) {
                 // A long list (Liked songs, a big playlist) goes in 50 at a time after the first: one request with
                 // thousands of songs could be refused.
                 val id = runCatching {
-                    c.ytm.createPlaylist(name, ids.take(50), privacy = privacy)?.also { if (ids.size > 50) c.ytm.addAllToPlaylist(it, ids.drop(50)) }
+                    c.ytm.createPlaylist(name, ids.take(50), privacy = privacy)?.also { if (ids.size > 50) runCatching { c.ytm.addAllToPlaylist(it, ids.drop(50)) } }
                 }.getOrNull()
                 toast(if (id != null) tr(R.string.added_to, name) else tr(R.string.couldn_t_make_the_playlist))
                 if (id != null) c.library.refreshCollections()
@@ -755,14 +759,11 @@ fun PlaylistPicker(songs: List<Song>, what: String, onDismiss: () -> Unit) {
                                     return@close
                                 }
                                 c.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
-                                    val added = runCatching { if (many) { c.ytm.addAllToPlaylist(p.id, ids); true } else c.ytm.addToPlaylist(p.id, ids.single()) }
-                                    toast(
-                                        when {
-                                            added.isFailure -> tr(R.string.couldn_t_add_to, p.title)
-                                            added.getOrNull() == false -> tr(R.string.already_in, p.title)
-                                            else -> tr(R.string.added_to, p.title)
-                                        },
-                                    )
+                                    // Only what YouTube says went in is called added (Reddit, 1.7.9: "Added" for songs
+                                    // that never got there).
+                                    val result = runCatching { c.ytm.addSongsToPlaylist(p.id, ids) }
+                                    toast(addedMessage(result.getOrNull(), p.title, many))
+                                    if ((result.getOrNull()?.added ?: 0) > 0) c.library.playlistChanged(p.id)
                                 }
                             }
                         }.padding(horizontal = 20.dp, vertical = 8.dp),
@@ -779,6 +780,17 @@ fun PlaylistPicker(songs: List<Song>, what: String, onDismiss: () -> Unit) {
             }
         }
     }
+}
+
+/**
+ * What to say after adding to the playlist [title]: only songs YouTube took count as added ([result] null = it failed).
+ * Several songs say how many went in, so a partly refused album doesn't read as all of it.
+ */
+internal fun addedMessage(result: com.prism.music.data.innertube.YouTubeMusic.PlaylistAdd?, title: String, many: Boolean): String = when {
+    result == null || (result.added == 0 && result.alreadyThere == 0) -> tr(R.string.couldn_t_add_to, title)
+    result.added == 0 -> tr(R.string.already_in, title)
+    many || result.added > 1 -> tr(R.string.added_to_2, com.prism.music.data.model.songCount(result.added), title)
+    else -> tr(R.string.added_to, title)
 }
 
 /** Name a new playlist: a YouTube Music one (and who can open it), or with [local] a Prism one kept on this phone. */

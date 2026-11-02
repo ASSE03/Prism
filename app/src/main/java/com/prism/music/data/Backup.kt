@@ -310,7 +310,7 @@ class Backup(private val c: AppContainer) {
                 "romanize_songs", "video_sync", "local_album_tags", "local_lengths", "local_no_art",
             ).forEach { put(it, BackupPart.HISTORY) }
             listOf(
-                "canvas_saved", "download_lyrics", "download_failures", "download_auto_retry", "download_formats", "smart_downloads",
+                "canvas_saved", "download_lyrics", "download_failures", "download_auto_retry", "download_formats", "smart_downloads", "download_standins",
                 "lossless_links", "lossless_misses", "lossless_hidden", "lossless_alac",
             ).forEach { put(it, BackupPart.DOWNLOADS) }
             // The Last.fm connection (and its waiting scrobbles) is the listener's account.
