@@ -18,9 +18,10 @@ import org.robolectric.annotation.Config
  * (withContext(Dispatchers.Default), as Prism's pages do) carries on on that background thread, and the composition's
  * next frame with it. The v2 rules run them on a StandardTestDispatcher, which the test clock runs on the main thread:
  * what the app itself does (its effects always come back to the main thread). The TV's in-app tests that wait only
- * through the rule (Ambient, Browse, Lyrics, Settings, Shell, Sing) use the v2 rules; the ones that also wait on the
- * player by sleeping (Link, Playback, Video, Home customize) keep the old ones for now: with v2, an effect runs only when
- * the test waits through the rule.
+ * through the rule (Ambient, Browse, Lyrics, Shell, Sing) use the v2 rules; the ones that also wait on the player by
+ * sleeping (Link, Playback, Video, Home customize) keep the old ones: with v2, an effect runs only when the test waits
+ * through the rule. So does Settings: there Home's first focus, a moment late under v2, took focus back from the side
+ * navigation now and then on the slow TV.
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34], application = android.app.Application::class)

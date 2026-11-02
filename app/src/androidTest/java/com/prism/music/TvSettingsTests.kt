@@ -2,7 +2,7 @@ package com.prism.music
 
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isFocused
-import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
+import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.prism.music.TvFixture.awaitFocus
 import com.prism.music.TvFixture.awaitFocusOn
@@ -41,15 +41,31 @@ class TvSettingsTests {
         n.config.getOrElseNullable(androidx.compose.ui.semantics.SemanticsProperties.TestTag) { null }?.startsWith("$TAG_NAV/") == true
     }
 
+    private fun navFocused() = compose.onAllNodes(inNav and isFocused(), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
+
     private fun goTo(section: TvSection) {
-        compose.awaitFocus(15_000)
-        for (i in 0 until 6) {
-            if (compose.onAllNodes(inNav and isFocused(), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()) break
-            TvFixture.left(); Thread.sleep(300)
+        // On a place (past the welcome, which goes once it's done), or on the side navigation: only then do the keys
+        // below go where they're meant to (on the slow TV, Home's first focus came after all the presses).
+        compose.waitUntil(15_000) {
+            val tag = compose.onAllNodes(isFocused(), useUnmergedTree = true).fetchSemanticsNodes().firstOrNull()
+                ?.config?.getOrElseNullable(androidx.compose.ui.semantics.SemanticsProperties.TestTag) { null }
+            tag != null && !tag.startsWith(TAG_WELCOME)
+        }
+        // Into the side navigation, and still there once the place has settled (its first focus, which can come a moment
+        // later, would take it back).
+        for (attempt in 0 until 3) {
+            for (i in 0 until 8) {
+                if (navFocused()) break
+                TvFixture.left()
+                // Waited on through the rule, so the screen moves meanwhile.
+                runCatching { compose.waitUntil(1_500) { navFocused() } }
+            }
+            compose.waitForIdle()
+            if (navFocused()) break
         }
         // The navigation opens on the place shown: up to its top (Home), then down to [section].
-        repeat(TvSection.entries.size) { TvFixture.up(); Thread.sleep(150) }
-        repeat(section.ordinal) { TvFixture.down(); Thread.sleep(200) }
+        repeat(TvSection.entries.size) { TvFixture.up(); compose.waitForIdle() }
+        repeat(section.ordinal) { TvFixture.down(); compose.waitForIdle() }
         compose.awaitFocusOn(hasTestTag("$TAG_NAV/${section.name}"))
         TvFixture.ok()
     }
