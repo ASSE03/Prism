@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.prism.music.data.imports.HistoryImports
@@ -82,28 +83,53 @@ class BringHistoryTest {
         compose.openSettings()
         compose.clickWhenFound(hasText("Recommendations & Replay") and hasClickAction())
         compose.clickWhenFound(hasText("Bring your history") and hasClickAction())
-        compose.waitForText("Your imports")
-        compose.waitForText("2 plays")
+        seeText("Your imports")
+        seeText("2 plays")
 
         // Back on Recommendations & Replay: count Spotify.
         androidx.test.uiautomator.UiDevice.getInstance(androidx.test.platform.app.InstrumentationRegistry.getInstrumentation()).pressBack()
-        compose.waitForText("Count history from")
+        seeText("Count history from")
         compose.clickWhenFound(hasText("Spotify") and hasClickAction())
         compose.waitUntil(5_000) { ImportSource.SPOTIFY in c.imports.counted.value }
         assertEquals(prismOnly + 200_040 + 268_000, runBlocking { c.imports.replay().totalMs(0, Long.MAX_VALUE) })
 
         // Replay says what it counts.
-        compose.clickWhenFound(hasText("Replay") and hasClickAction())
-        compose.waitForText("Includes Spotify")
+        // The Replay tab (its name may be hidden by the tab bar's label style; the tab still carries it).
+        compose.clickWhenFound((hasText("Replay") or hasContentDescription("Replay")) and hasClickAction())
+        seeText("Includes Spotify")
 
-        // Removed from its page.
-        compose.openSettings()
-        compose.clickWhenFound(hasText("Recommendations & Replay") and hasClickAction())
+        // Removed from its page. Replay is a tab: Back from it goes Home, and the Settings tab then reopens where it was
+        // (tabs keep their pages), Recommendations & Replay.
+        androidx.test.uiautomator.UiDevice.getInstance(androidx.test.platform.app.InstrumentationRegistry.getInstrumentation()).pressBack()
+        compose.clickWhenFound(hasContentDescription("Settings") and hasClickAction())
+        if (compose.onAllNodes(hasText("Bring your history") and hasClickAction()).fetchSemanticsNodes().isEmpty()) {
+            compose.clickWhenFound(hasText("Recommendations & Replay") and hasClickAction())
+        }
         compose.clickWhenFound(hasText("Bring your history") and hasClickAction())
         compose.clickWhenFound(hasContentDescription("Remove") and hasClickAction())
         compose.clickWhenFound(hasText("Remove") and hasClickAction() and !hasContentDescription("Remove"))
         compose.waitUntil(10_000) { runBlocking { c.db.imports().summaries().isEmpty() } }
         assertTrue("no longer counted", c.imports.counted.value.isEmpty())
         assertEquals(prismOnly, runBlocking { c.imports.replay().totalMs(0, Long.MAX_VALUE) })
+    }
+
+    /** Waits for [text], scrolling the page's lists to it: the page builds only what's on screen. */
+    private fun seeText(text: String, timeoutMs: Long = 10_000) {
+        // Group headings are shown in capitals ("YOUR IMPORTS").
+        val matcher = hasText(text, substring = true, ignoreCase = true)
+        val end = System.currentTimeMillis() + timeoutMs
+        while (compose.onAllNodes(matcher).fetchSemanticsNodes().isEmpty()) {
+            if (System.currentTimeMillis() > end) {
+                val shown = compose.onAllNodes(hasText("", substring = true)).fetchSemanticsNodes()
+                    .mapNotNull { it.config.getOrElseNullable(androidx.compose.ui.semantics.SemanticsProperties.Text) { null }?.joinToString() }
+                val stored = runBlocking { c.db.imports().summaries() }
+                throw AssertionError("Not found: $text. Stored: $stored. On screen: ${shown.joinToString(" | ").take(1500)}")
+            }
+            compose.onAllNodes(androidx.compose.ui.test.hasScrollToNodeAction()).fetchSemanticsNodes().indices.forEach { i ->
+                runCatching { compose.onAllNodes(androidx.compose.ui.test.hasScrollToNodeAction())[i].performScrollToNode(matcher) }
+            }
+            compose.waitForIdle()
+            Thread.sleep(200)
+        }
     }
 }
