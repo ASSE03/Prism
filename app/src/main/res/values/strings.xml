@@ -1518,6 +1518,29 @@
     <string name="search_typing">search typing</string>
     <string name="player_blur_cover_color">player blur cover color</string>
     <string name="show_background">Show background</string>
+    <!-- 1.8.1: library, player look and settings requests -->
+    <string name="show_background_info">How much of the background shows through. At 0% the player is fully dark, at 100% the background shows at its brightest.</string>
+    <string name="show_album_names">Show album names</string>
+    <string name="album_names_in_downloads">Album names in Downloads</string>
+    <string name="album_names_in_downloads_detail">Under each song, after the artist</string>
+    <string name="album_names_in_downloads_info">Off, the Downloads list shows just the artist under each song, for a cleaner list. The same switch is in Downloads\' sort menu.</string>
+    <string name="album_names_in_downloads_keywords">downloads album name secondary text subtitle under song clean compact hide</string>
+    <string name="now_playing_background_fades">Now playing fades between songs</string>
+    <string name="now_playing_background_fades_detail">The cover behind your screens fades into the next song\'s, at the pace you picked for colors between songs</string>
+    <string name="now_playing_background_fades_keywords">now playing background cover fade crossfade change song cut smooth transition</string>
+    <string name="each_artist_its_own_link">Artists\' names</string>
+    <string name="each_artist_its_own_link_info">With more than one artist under the title, each name can open its own page at a tap. A tap between the names, or on a name that couldn\'t be told apart, still asks which artist.</string>
+    <string name="each_artist_its_own_link_keywords">artist name link tap open page featured several multiple menu pop-up popup</string>
+    <string name="each_name_opens_its_artist">Each name opens its artist</string>
+    <string name="one_tap_asks_which">One tap asks which</string>
+    <string name="a_tap_between_names_still_asks">A tap between them still asks</string>
+    <string name="already_has_this_song">Already has this song</string>
+    <string name="already_has_all_of_these">Already has all of these</string>
+    <string name="already_has_n_of_these">Already has %1$d of these %2$d</string>
+    <string name="favorite_artists_only">Favorite artists only</string>
+    <string name="every_artist">Every artist</string>
+    <string name="no_favorite_artists_yet">No favorite artists yet. Star an artist on their page (or hold their name) and their new releases show here.</string>
+    <!-- end of 1.8.1 library, player look and settings requests -->
     <string name="controls">Controls</string>
     <string name="buttons_transport">buttons transport</string>
     <string name="progress_bar">Progress bar</string>

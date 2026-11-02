@@ -599,9 +599,14 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 if (fullBlur > 0f) FullArtworkBlurBackdrop(blurImage, Modifier.graphicsLayer { alpha = fullBlur })
             }
             // "Show background" lifts the darkening: about as before at its default, down to a light veil at full.
-            com.prism.music.data.prefs.PlayerBackground.BLUR -> FullArtworkBlurBackdrop(blurImage, scrim = 1.3f - 0.95f * settings.playerBackdropShow)
+            com.prism.music.data.prefs.PlayerBackground.BLUR -> {
+                FullArtworkBlurBackdrop(blurImage, scrim = 1.3f - 0.95f * settings.playerBackdropShow.coerceAtLeast(0f))
+                // #309: below 0 the slider darkens on, to black at its start.
+                backdropBlackout(settings.playerBackdropShow).takeIf { it > 0f }?.let { Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = it))) }
+            }
             com.prism.music.data.prefs.PlayerBackground.APPEARANCE -> {
-                AppearanceBackdrop(settings.playerBackdropShow)
+                AppearanceBackdrop(settings.playerBackdropShow.coerceAtLeast(0f))
+                backdropBlackout(settings.playerBackdropShow).takeIf { it > 0f }?.let { Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = it))) }
                 if (fullBlur > 0f) FullArtworkBlurBackdrop(blurImage, Modifier.graphicsLayer { alpha = fullBlur })
             }
             com.prism.music.data.prefs.PlayerBackground.THEME -> ThemeBackdrop()
@@ -1045,8 +1050,10 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                             val linked = com.prism.music.ui.components.openableArtists(song)
                             var pickArtist by remember(song.id) { mutableStateOf(false) }
                             if (inHeader(PlayerPart.ARTIST)) Box {
+                                // #289 (1.8.1): each name its own link, if asked for; a tap between them still asks.
+                                val artistLine = artistLinkText(song.artistText, linked, settings.view.artistLinks) { a -> onCollapse(); nav.go(Routes.artist(a)) }
                                 PlayerMarquee(
-                                    song.artistText, MaterialTheme.typography.bodyLarge.let { it.copy(fontSize = 17.sp, lineHeight = 22.sp, fontWeight = settings.type.playerTitleWeight.artist ?: it.fontWeight) }, Color.White.copy(alpha = 0.6f), scrolls,
+                                    artistLine, MaterialTheme.typography.bodyLarge.let { it.copy(fontSize = 17.sp, lineHeight = 22.sp, fontWeight = settings.type.playerTitleWeight.artist ?: it.fontWeight) }, Color.White.copy(alpha = 0.6f), scrolls,
                                     Modifier.testTag("playerArtist").combinedClickable(enabled = linked.isNotEmpty() || menuHeld != null, onLongClick = menuHeld) {
                                         if (linked.size > 1) pickArtist = true else linked.firstOrNull()?.let { onCollapse(); nav.go(Routes.artist(it)) }
                                     },

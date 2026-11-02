@@ -86,6 +86,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -315,6 +316,8 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     // wants them (1.7.9, Reddit: "some people want that same order of the playlist").
     val sortable = type != CollectionType.ALBUM && songs.size > 1
     val showGenres = sortable && settings.behavior.playlistGenres
+    // #310 (1.8.1): Downloads can leave the album's name out from under each song.
+    val showAlbums = type != CollectionType.DOWNLOADS || settings.view.downloadsAlbums
     LaunchedEffect(showGenres) { if (!showGenres) { genreFilter = null; if (groupByGenre) toggleGenreGroups() } }
     val showSearch = type != CollectionType.ALBUM || songs.size > 12
 
@@ -705,6 +708,11 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                                 HorizontalDivider()
                                 if (showGenres) DropdownMenuItem({ Text(tr(R.string.group_by_genre)) }, { toggleGenreGroups(); sortMenu = false }, trailingIcon = { if (groupByGenre) Icon(PrismIcons.Check, null) })
                                 DropdownMenuItem({ Text(tr(R.string.show_genres)) }, { c.settings.setPlaylistGenres(!showGenres); sortMenu = false }, trailingIcon = { if (showGenres) Icon(PrismIcons.Check, null) })
+                                // #310: the album's name under each download, or just the artist.
+                                if (type == CollectionType.DOWNLOADS) DropdownMenuItem(
+                                    { Text(tr(R.string.show_album_names)) }, { c.settings.setDownloadsAlbums(!showAlbums); sortMenu = false },
+                                    Modifier.testTag("downloadsAlbumsMenu"), trailingIcon = { if (showAlbums) Icon(PrismIcons.Check, null) },
+                                )
                             }
                         }
                     }
@@ -736,7 +744,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                             }
                             itemsIndexed(songs, key = { i, s -> "g:$g:${s.id}:$i" }) { _, s ->
                                 com.prism.music.ui.components.SwipeToQueue(s) {
-                                    SongRow(s, dim(s), playing = current?.id == s.id, trailingInfo = null, extraActions = removeAction(s)) {
+                                    SongRow(s, dim(s), playing = current?.id == s.id, trailingInfo = null, extraActions = removeAction(s), showAlbum = showAlbums) {
                                         playFrom(songs, s, source.copy(title = "$title · $g"))
                                     }
                                 }
@@ -755,8 +763,9 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                                 // #314: a song playing from one of your own files says so ("MP3 · 320 kbps, from your file").
                                 trailingInfo = if (type == CollectionType.ALBUM) formatDuration(s.durationSec)
                                 else if (type == CollectionType.DOWNLOADS && downloads[s.id]?.ownFile != null) tr(R.string.x_from_your_file, downloads[s.id]?.ownFile)
-                                else genreVersion.let { genres[s.id] }?.takeIf { sort == SortMode.GENRE || genreFilter == null && showGenres }?.let { g -> listOfNotNull(s.album?.title, com.prism.music.data.meta.Genres.shown(g)).joinToString(" • ") },
+                                else genreVersion.let { genres[s.id] }?.takeIf { sort == SortMode.GENRE || genreFilter == null && showGenres }?.let { g -> listOfNotNull(s.album?.title?.takeIf { showAlbums }, com.prism.music.data.meta.Genres.shown(g)).joinToString(" • ") },
                                 extraActions = removeAction(s),
+                                showAlbum = showAlbums,
                             ) { playFrom(visible, s, source) }
                         }
                     }

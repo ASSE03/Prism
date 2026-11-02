@@ -375,6 +375,12 @@ data class ViewLook(
      * the next song's bar grows in as it fades in, along the crossfade's own curve ([CrossfadeCurve.gains]).
      */
     val crossfadeShape: Boolean = false,
+    /** #310 (1.8.1): the album's name under each song in Downloads (as before); off, just the artist. */
+    val downloadsAlbums: Boolean = true,
+    /** #289 (1.8.1): with more than one artist, each name under the player's title opens its own page (off: a menu asks which). */
+    val artistLinks: Boolean = false,
+    /** #283 (1.8.1): the "Now playing" background fades into the next song's cover (at "Between songs"' pace) instead of cutting. */
+    val backdropFade: Boolean = false,
 )
 
 // 1.8.0 player editor
@@ -1343,7 +1349,10 @@ data class AppSettings(
     val miniProgress: MiniProgress = MiniProgress.LINE,
     // Player look
     val playerBackground: PlayerBackground = PlayerBackground.MESH,
-    /** 0..1: how much of the player's background shows through its darkening (blurred cover and your background). */
+    /**
+     * 0..1: how much of the player's background shows through its darkening (blurred cover and your background); below
+     * 0, down to [com.prism.music.ui.player.BACKDROP_SHOW_MIN], it darkens on to black (#309, 1.8.1).
+     */
     val playerBackdropShow: Float = 0.35f,
     val playerArtCorners: Int = 20,
     val coverSize: CoverSize = CoverSize.STANDARD,
@@ -1843,6 +1852,10 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val buttonsPill = booleanPreferencesKey("player_buttons_pill")
         // 1.8.1 ([ViewLook.crossfadeShape]).
         val crossfadeShape = booleanPreferencesKey("crossfade_shape")
+        // 1.8.1 requests ([ViewLook.downloadsAlbums], [ViewLook.artistLinks], [ViewLook.backdropFade]).
+        val downloadsAlbums = booleanPreferencesKey("downloads_albums")
+        val artistLinks = booleanPreferencesKey("player_artist_links")
+        val backdropFade = booleanPreferencesKey("backdrop_fade")
         // 1.8.0 player editor ([PlayerParts]): the hidden parts are part of a Look, the menu's choices aren't.
         val playerHiddenParts = stringPreferencesKey("player_hidden_parts")
         val playerMenuHidden = stringPreferencesKey("player_menu_hidden")
@@ -1879,6 +1892,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 typeWeight, typeSpacing, titleFont, tabTint, playerTitleWeight, typeClassic, controlsClassic,
                 panelPlayer, queueHeadings, castMark, immersiveVideo, bleedFit, coverFlight, videoControlsHide,
                 crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape,
+                downloadsAlbums, artistLinks, backdropFade,
             ) + lyricsLook.map { it.first }
         }
 
@@ -1914,6 +1928,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 panelPlayer to 's', queueHeadings to 'b', castMark to 'b', immersiveVideo to 'b', bleedFit to 's', coverFlight to 'b',
                 videoControlsHide to 'b', crossfadeMark to 'b', blendCovers to 'b', buttonsPill to 'b', playerHiddenParts to 's',
                 crossfadeShape to 'b',
+                downloadsAlbums to 'b', artistLinks to 'b', backdropFade to 'b',
             ) + lyricsLook
         }
 
@@ -2205,6 +2220,9 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 playingInPageColor = p[K.playingInPageColor] ?: d.view.playingInPageColor,
                 parts = readParts(p),
                 crossfadeShape = p[K.crossfadeShape] ?: d.view.crossfadeShape,
+                downloadsAlbums = p[K.downloadsAlbums] ?: d.view.downloadsAlbums,
+                artistLinks = p[K.artistLinks] ?: d.view.artistLinks,
+                backdropFade = p[K.backdropFade] ?: d.view.backdropFade,
             ),
             sound = SoundPrefs(
                 crossfadeCurve = p.enum(K.crossfadeCurve, d.sound.crossfadeCurve),
@@ -2260,7 +2278,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
             miniPrevButton = p[K.miniPrevButton] ?: d.miniPrevButton,
             miniProgress = p.enum(K.miniProgress, d.miniProgress),
             playerBackground = p.enum(K.playerBackground, d.playerBackground),
-            playerBackdropShow = p[K.playerBackdropShow] ?: d.playerBackdropShow,
+            // #309 (1.8.1): down to a fully dark player.
+            playerBackdropShow = (p[K.playerBackdropShow] ?: d.playerBackdropShow).coerceIn(com.prism.music.ui.player.BACKDROP_SHOW_MIN, 1f),
             playerArtCorners = p[K.playerArtCorners] ?: d.playerArtCorners,
             transportStyle = p.enum(K.transportStyle, d.transportStyle),
             coverSize = p.enum(K.coverSize, d.coverSize),
@@ -2805,6 +2824,9 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setBlendCovers(v: Boolean) = edit { it[K.blendCovers] = v }
     fun setButtonsPill(v: Boolean) = edit { it[K.buttonsPill] = v }
     fun setCrossfadeShape(v: Boolean) = edit { it[K.crossfadeShape] = v }
+    fun setDownloadsAlbums(v: Boolean) = edit { it[K.downloadsAlbums] = v }
+    fun setArtistLinks(v: Boolean) = edit { it[K.artistLinks] = v }
+    fun setBackdropFade(v: Boolean) = edit { it[K.backdropFade] = v }
 
     // 1.8.0 player editor
     /** A comma-separated set of names (unknown ones skipped): a Look or backup from a later Prism still opens. */

@@ -164,6 +164,8 @@ fun SongRow(
     starred: Boolean = false,
     /** More rows for the song's menu (e.g. "Remove from this playlist"). */
     extraActions: List<SheetItem> = emptyList(),
+    /** The album's name after the artist when there's no [trailingInfo] (#310: Downloads can leave it out). */
+    showAlbum: Boolean = true,
     onClick: () -> Unit,
 ) {
     val c = LocalContainer.current
@@ -181,7 +183,7 @@ fun SongRow(
     val videoSaved by remember(song.id) { derivedStateOf { videos.value[song.id]?.state == done } }
     SongRowLayout(
         song, modifier, index, playing, trailingInfo, starred,
-        liked = liked, downloaded = downloaded, videoSaved = videoSaved,
+        liked = liked, downloaded = downloaded, videoSaved = videoSaved, showAlbum = showAlbum,
         onLongClick = onLongClick ?: { menu = true }, onMore = { menu = true }, onClick = onClick,
     )
     if (menu) SongActionsSheet(song, extraActions) { menu = false }
@@ -200,6 +202,7 @@ fun SongRowLayout(
     liked: Boolean = false,
     downloaded: Boolean = false,
     videoSaved: Boolean = false,
+    showAlbum: Boolean = true,
     onLongClick: (() -> Unit)? = null,
     onMore: () -> Unit = {},
     onClick: () -> Unit = {},
@@ -250,7 +253,7 @@ fun SongRowLayout(
                 if (downloaded) Icon(PrismIcons.DownloadDone, tr(R.string.downloaded), mark, tint = scheme.ink3)
                 if (videoSaved) Icon(PrismIcons.Video, tr(R.string.video_saved), mark, tint = scheme.ink3)
                 Text(
-                    listOfNotNull(song.artistText, trailingInfo ?: song.album?.title).joinToString(" · "),
+                    listOfNotNull(song.artistText, trailingInfo ?: song.album?.title?.takeIf { showAlbum }).joinToString(" · "),
                     maxLines = 1, overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
                 )
@@ -728,6 +731,15 @@ fun PlaylistPicker(songs: List<Song>, what: String, onDismiss: () -> Unit) {
     val mine = prismLists.map { it.item() } +
         (if (signedIn) playlists.filterIsInstance<PlaylistItem>().filter { !it.id.startsWith("LM") && !it.isMix } else emptyList())
     val shown = if (query.isBlank()) mine else mine.filter { it.title.contains(query.trim(), ignoreCase = true) }
+    // #246 (1.8.1): the playlists that already have it, from what's on the phone (Prism playlists, the kept copies of
+    // playlists opened before, what was added since): nothing is asked from YouTube for the marks.
+    val holds by androidx.compose.runtime.produceState(emptyMap<String, Int>(), mine.map { it.id }, prismLists, ids) {
+        value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+            val prism = prismLists.associate { l -> l.id to l.songs.map { it.id } }
+            val known = com.prism.music.data.PlaylistMembership.known(mine, prism) { id -> c.offline.page(id)?.songs?.map { it.id } }
+            com.prism.music.data.PlaylistMembership.counts(ids, known)
+        }
+    }
     PrismSheet(onDismiss = onDismiss) { close ->
         Column(Modifier.padding(bottom = 20.dp)) {
             Text(tr(R.string.add_to_playlist), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 20.dp))
@@ -763,6 +775,8 @@ fun PlaylistPicker(songs: List<Song>, what: String, onDismiss: () -> Unit) {
                                     // that never got there).
                                     val result = runCatching { c.ytm.addSongsToPlaylist(p.id, ids) }
                                     toast(addedMessage(result.getOrNull(), p.title, many))
+                                    // #246: the next time the sheet opens it says they're in, though the kept copy predates them.
+                                    result.getOrNull()?.takeIf { it.added + it.alreadyThere > 0 }?.let { com.prism.music.data.PlaylistMembership.noteAdded(p.id, ids) }
                                     if ((result.getOrNull()?.added ?: 0) > 0) c.library.playlistChanged(p.id)
                                 }
                             }
@@ -773,8 +787,24 @@ fun PlaylistPicker(songs: List<Song>, what: String, onDismiss: () -> Unit) {
                         Spacer(Modifier.width(14.dp))
                         Column(Modifier.weight(1f)) {
                             Text(p.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                            if (p.subtitle.isNotBlank()) Text(p.subtitle.removePrefix("Playlist • "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            val has = holds[p.id] ?: 0
+                            // #246: says when it's in there already (or how many of several are).
+                            val line = when {
+                                has == 0 -> p.subtitle.removePrefix("Playlist • ").takeIf { it.isNotBlank() }
+                                !many -> tr(R.string.already_has_this_song)
+                                has >= ids.distinct().size -> tr(R.string.already_has_all_of_these)
+                                else -> tr(R.string.already_has_n_of_these, has, ids.distinct().size)
+                            }
+                            if (line != null) Text(
+                                line, style = MaterialTheme.typography.bodySmall,
+                                color = if (has > 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1, overflow = TextOverflow.Ellipsis,
+                            )
                         }
+                        if ((holds[p.id] ?: 0) > 0) Icon(
+                            PrismIcons.Check, tr(R.string.already_in, p.title),
+                            Modifier.padding(start = 8.dp).size(20.dp).testTag("inPlaylist:${p.id}"), tint = MaterialTheme.colorScheme.onSurface,
+                        )
                     }
                 }
             }
@@ -875,6 +905,20 @@ fun <T> SortButton(options: List<T>, selected: T, label: (T) -> String, modifier
 fun openableArtists(song: Song): List<com.prism.music.data.model.ArtistRef> =
     if (song.isLocal) emptyList()
     else song.artists.filter { it.name.isNotBlank() }.distinctBy { it.id ?: com.prism.music.data.innertube.SearchRank.norm(it.name) }
+
+/**
+ * #289 (1.8.1): where each of [artists] is written in [text] (the song's "A, B & C"), in order, so each name can open its
+ * own page. Null when a name isn't there as written (the text then stays one link, which asks which artist).
+ */
+fun artistSpans(text: String, artists: List<com.prism.music.data.model.ArtistRef>): List<Pair<IntRange, com.prism.music.data.model.ArtistRef>>? {
+    if (artists.size < 2) return null
+    var from = 0
+    return artists.map { a ->
+        val at = text.indexOf(a.name, from).takeIf { it >= 0 } ?: return null
+        from = at + a.name.length
+        (at until from) to a
+    }
+}
 
 /** "Go to …" for each of a song's artists (#42): a song with features lists every one, not only the first. */
 fun goToArtists(song: Song, go: (String) -> Unit): List<ActionItem> =

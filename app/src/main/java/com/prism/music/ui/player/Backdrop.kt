@@ -54,6 +54,22 @@ import kotlin.random.Random
 
 val PlayerFallbackBackdrop = Color(0xFF060609)
 
+/**
+ * #309 (1.8.1): "Show background" goes below what it could before, on down to a fully dark player. Stored values from
+ * 0 to 1 draw exactly as they always did; from 0 down to this one a black veil comes over the background, solid here.
+ * The slider shows the whole stretch as 0-100%, so its 0% is fully dark.
+ */
+const val BACKDROP_SHOW_MIN = -0.25f
+
+/** How much of the black veil a stored "Show background" [show] puts over the player's background (0 = none, 1 = solid). */
+fun backdropBlackout(show: Float): Float = (show / BACKDROP_SHOW_MIN).coerceIn(0f, 1f)
+
+/** Where on the slider (0..1) a stored "Show background" [show] sits. */
+fun backdropShowOnSlider(show: Float): Float = ((show - BACKDROP_SHOW_MIN) / (1f - BACKDROP_SHOW_MIN)).coerceIn(0f, 1f)
+
+/** The stored "Show background" for a place [at] (0..1) on the slider. */
+fun backdropShowFromSlider(at: Float): Float = BACKDROP_SHOW_MIN + at.coerceIn(0f, 1f) * (1f - BACKDROP_SHOW_MIN)
+
 /** The cover reduced to a tiny, smoothly interpolated color field. */
 @Immutable
 class ArtworkMesh internal constructor(internal val image: ImageBitmap)

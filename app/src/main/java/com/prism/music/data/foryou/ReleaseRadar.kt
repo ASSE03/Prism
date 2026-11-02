@@ -294,6 +294,27 @@ class ReleaseRadar(private val c: AppContainer) {
             .replace(Regex("""\s+(ep|single)$"""), "")
             .filter { it.isLetterOrDigit() }
 
+        /**
+         * #311 (1.8.1): the New releases page's "Favorite artists only" (kept with its other filters, in the library's
+         * sort choices; Home's section follows it). Off, every watched artist's releases show, as before.
+         */
+        const val STARRED_ONLY = "releases:starred_only"
+
+        /** The releases by the starred artists ([starred], their ids). */
+        fun fromFavorites(releases: List<ReleaseEntity>, starred: Set<String>): List<ReleaseEntity> = releases.filter { it.artistId in starred }
+
+        /**
+         * The artists to pick one of on the New releases page (#311): those with releases in [releases], the ones played
+         * most lately ([mostPlayed], artist ids, most first) leading, then by name; as (id, name).
+         */
+        fun artistsToPick(releases: List<ReleaseEntity>, mostPlayed: List<String>, max: Int = 12): List<Pair<String, String>> {
+            val rank = mostPlayed.withIndex().associate { (i, id) -> id to i }
+            return releases.distinctBy { it.artistId }
+                .sortedWith(compareBy<ReleaseEntity> { rank[it.artistId] ?: Int.MAX_VALUE }.thenBy { it.artistName.lowercase() })
+                .take(max)
+                .map { it.artistId to it.artistName }
+        }
+
         /** Out within the last [days] days, by its date where known, else by when Prism first saw it. */
         fun isRecent(r: ReleaseEntity, today: LocalDate, days: Int): Boolean {
             val date = r.releaseDate?.let { runCatching { LocalDate.parse(it) }.getOrNull() }

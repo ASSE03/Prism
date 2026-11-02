@@ -51,6 +51,25 @@ What changed in each release. Older releases are described on the [Releases page
   drops. Its length is the real blend's (an automatic one shows once the blend is planned); the knob rides the shape.
   The waveform and Ribbons keep the crossfade mark; nothing changes where songs don't blend (an album's tracks,
   casting, episodes, live streams).
+- **"Show background" goes all the way to dark** (#309): the player's Show background slider (Blurred cover and Your
+  background) now runs from a fully dark player at 0% to the brightest background at 100%. Whatever you had set looks
+  exactly as before (only its percent moved along the longer slider).
+- **Album names in Downloads can go** (#310): Customize Prism → Home & Library → "Album names in Downloads", or Downloads'
+  sort menu → Show album names. Off, each download shows just its artist under the title. On unless you turn it off.
+- **Each artist's name on the player can open their page** (#289): Customize Prism → Player → Title and times →
+  Artists' names → "Each name opens its artist". With more than one artist, a tap on a name goes straight to that
+  artist; a tap between the names still asks which. Off unless you pick it.
+- **The "Now playing" background can fade between songs** (#283): with a screen on the Now playing background,
+  Backgrounds has "Now playing fades between songs", which fades the cover into the next song's at the pace your colors
+  change between songs. Off unless you turn it on (and off with Reduce motion).
+- **Add to playlist says which playlists already have it** (#246): a check and "Already has this song" (or "Already
+  has 3 of these 12" for an album) beside each playlist that holds it. Prism goes by what's on the phone: your Prism
+  playlists, every playlist you've opened (Prism keeps a copy for offline), and what you add from the sheet, so nothing
+  extra is asked from YouTube; a playlist never opened in Prism has no mark until you open it.
+- **New releases from your favorite artists only** (#311): the New releases page has a "Favorite artists only" chip
+  (the artists you've starred; Home's New releases follows it too) and a row of your artists, the ones you play most
+  first, to see one artist's releases at a time. Starred artists' new releases already come with a notification
+  (Settings → Recommendations & Replay), and Customize Home can move New releases to the top of Home.
 ### Fixes
 
 - **Your own photo background stays in Performance mode** (Reddit: "only a black background now"). Performance mode

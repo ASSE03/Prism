@@ -1483,7 +1483,39 @@ fun PlaybackOriginCaption(text: String, modifier: Modifier = Modifier, onClick: 
 
 /** Title / artist line that scrolls only when it doesn't fit, after a rest. */
 @Composable
-fun PlayerMarquee(text: String, style: TextStyle, color: Color, enabled: Boolean, modifier: Modifier = Modifier, delayMs: Int = 2500) {
+fun PlayerMarquee(text: String, style: TextStyle, color: Color, enabled: Boolean, modifier: Modifier = Modifier, delayMs: Int = 2500) =
+    PlayerMarquee(androidx.compose.ui.text.AnnotatedString(text), style, color, enabled, modifier, delayMs)
+
+/**
+ * The artists' line under the player's title (#289, 1.8.1): with [separate] on and more than one artist, each name is its
+ * own link to [open]; otherwise (or when a name can't be found in [text]) plain words, the line itself asking which.
+ */
+@Composable
+fun artistLinkText(
+    text: String,
+    linked: List<com.prism.music.data.model.ArtistRef>,
+    separate: Boolean,
+    open: (com.prism.music.data.model.ArtistRef) -> Unit,
+): androidx.compose.ui.text.AnnotatedString {
+    val go by androidx.compose.runtime.rememberUpdatedState(open)
+    return remember(text, linked, separate) {
+        val spans = if (separate) com.prism.music.ui.components.artistSpans(text, linked) else null
+        if (spans == null) androidx.compose.ui.text.AnnotatedString(text)
+        else androidx.compose.ui.text.buildAnnotatedString {
+            append(text)
+            spans.forEach { (range, a) ->
+                addLink(
+                    androidx.compose.ui.text.LinkAnnotation.Clickable("artist:${a.id ?: a.name}") { go(a) },
+                    range.first, range.last + 1,
+                )
+            }
+        }
+    }
+}
+
+/** [PlayerMarquee] for words that carry links (#289: each artist's name opens their page). */
+@Composable
+fun PlayerMarquee(text: androidx.compose.ui.text.AnnotatedString, style: TextStyle, color: Color, enabled: Boolean, modifier: Modifier = Modifier, delayMs: Int = 2500) {
     Text(
         text,
         style = style,

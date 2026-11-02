@@ -160,6 +160,7 @@ object SettingsIndex {
         SettingEntry(I, tr(R.string.buttons), tr(R.string.play_on_album_and_playlist_pages), tr(R.string.play_button_outlined_filled)),
         SettingEntry(I, tr(R.string.buttons), tr(R.string.switches_sliders_and_buttons), tr(R.string.classic_controls_1_6_material_switch)),
         SettingEntry(G, tr(R.string.backgrounds), tr(R.string.screen_backgrounds), tr(R.string.wallpaper_photo_pattern_design)),
+        SettingEntry(G, tr(R.string.backgrounds), tr(R.string.now_playing_background_fades), tr(R.string.now_playing_background_fades_keywords)),
         // 1.8.0: one Glass choice; Motion moved to the Customize Prism page. Old titles stay as search words.
         SettingEntry(G, tr(R.string.glass), tr(R.string.glass), tr(R.string.blur_transparent) + " " + tr(R.string.liquid_glass) + " " + tr(R.string.frosted_glass) + " " + tr(R.string.glass_style)),
         SettingEntry(G, tr(R.string.glass), tr(R.string.frosted_pages), tr(R.string.blur_artist_album_playlist)),
@@ -237,6 +238,7 @@ object SettingsIndex {
         SettingEntry(P, tr(R.string.title_and_times), tr(R.string.title_size), tr(R.string.big_small_large_font)),
         SettingEntry(P, tr(R.string.title_and_times), tr(R.string.title_weight), tr(R.string.bold_heavy_thick_light_regular_font)),
         SettingEntry(P, tr(R.string.title_and_times), tr(R.string.scrolling_titles), tr(R.string.marquee_scroll_long_title_ellipsis)),
+        SettingEntry(P, tr(R.string.title_and_times), tr(R.string.each_artist_its_own_link), tr(R.string.each_artist_its_own_link_keywords)),
         SettingEntry(P, tr(R.string.title_and_times), tr(R.string.times_under_the_progress_bar), tr(R.string.elapsed_remaining_time_left_none)),
         SettingEntry(P, tr(R.string.progress_bar), tr(R.string.progress_bar_color), tr(R.string.scrubber_color_accent_white_cover_spectrum)),
         SettingEntry(P, tr(R.string.progress_bar), tr(R.string.progress_bar_thickness), tr(R.string.scrubber_thick_thin_height_bold)),
@@ -415,6 +417,7 @@ object SettingsIndex {
         SettingEntry(H, tr(R.string.library), tr(R.string.open_library_on), tr(R.string.start_tab)),
         SettingEntry(H, tr(R.string.library), tr(R.string.full_width_playlist_pictures)),
         SettingEntry(H, tr(R.string.library), tr(R.string.genres_on_playlists), tr(R.string.genres_on_playlists_keywords)),
+        SettingEntry(H, tr(R.string.library), tr(R.string.album_names_in_downloads), tr(R.string.album_names_in_downloads_keywords)),
         SettingEntry(H, tr(R.string.library), tr(R.string.library_tiles), tr(R.string.liked_downloads_local_files_replay_podcasts)),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.show_time_in_hours), tr(R.string.stats_minutes)),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.use_theme_colors), tr(R.string.colors_stats)),
