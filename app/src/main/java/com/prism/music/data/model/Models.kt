@@ -166,7 +166,20 @@ fun List<Shelf>.quickPicks(owner: String? = null): Shelf? = firstOrNull { it.tit
  * per column (YouTube stopped stacking Listen again by 2026-10).
  */
 fun List<Shelf>.speedDial(owner: String? = null): Shelf? = firstOrNull { it.title.equals("Speed dial", true) } ?: firstOrNull { it.title.equals("Listen again", true) }
-    ?: firstOrNull { it.yours(owner) && !it.rows } ?: firstOrNull { it.stacked && !it.rows }
+    ?: speedDialByShape(owner)
+
+/**
+ * Found by its shape (another language): a shelf headed with your name, else one stacked a few per column; of several,
+ * the one with songs in it (#266: an account in English (India) got only saved playlists and albums, never a song, as if
+ * another shelf of yours had been taken for it). Your Speed dial holds songs too; one with none is taken when it's
+ * the only one like it.
+ */
+private fun List<Shelf>.speedDialByShape(owner: String?): Shelf? {
+    fun songs(s: Shelf) = s.items.any { it is SongItem }
+    val yours = filter { it.yours(owner) && !it.rows }
+    val stacked = filter { it.stacked && !it.rows }
+    return yours.firstOrNull(::songs) ?: yours.firstOrNull() ?: stacked.firstOrNull(::songs) ?: stacked.firstOrNull()
+}
 
 /** Headed with the account's own name: a shelf of your history (#163). */
 private fun Shelf.yours(owner: String?) = !owner.isNullOrBlank() && strapline?.trim().equals(owner.trim(), ignoreCase = true)
