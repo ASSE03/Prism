@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 11 and older: what Android's own backup takes. Same list as data_extraction_rules.xml. -->
+<full-backup-content>
+    <exclude domain="sharedpref" path="discord.xml" />
+    <exclude domain="sharedpref" path="lastfm.xml" />
+    <exclude domain="sharedpref" path="connect_remote.xml" />
+    <exclude domain="sharedpref" path="connect_handoff.xml" />
+</full-backup-content>

@@ -321,6 +321,8 @@ class Backup(private val c: AppContainer) {
             listOf("discord", "connect_remote", "connect_handoff").forEach { put(it, null) }
             // The song cache's formats describe this phone's cache, which a backup doesn't carry.
             put("cache_formats", null)
+            // Which install this is (RestoredInstall): restoring one's own backup elsewhere mustn't look like Android's.
+            put(RestoredInstall.PREFS, null)
         }
 
         /** Folders (and files) right under files/ by part; anything else counts as Settings. */

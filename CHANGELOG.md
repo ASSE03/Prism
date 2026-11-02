@@ -53,6 +53,10 @@ What changed in each release. Older releases are described on the [Releases page
   casting, episodes, live streams).
 ### Fixes
 
+- **Your sign-ins stay out of Android's own backup.** Android's backup (to Google, or copied to a new phone) took your
+  Discord and Last.fm connections and Prism Connect's pairings along; they're left out now. Your YouTube Music sign-in
+  travels with your settings, so a copy restored onto a new phone signs out of it once: sign in again there. Prism's
+  own backups are as before.
 - **Add to playlist only says "Added" when the songs got there.** It took an unclear answer from YouTube Music as
   success and never checked a whole album's or queue's add; now it counts what went in ("12 songs added to …"), says
   "Already in …" or "Couldn't add to …" otherwise, and the playlist's page shows the new songs when you open it.
