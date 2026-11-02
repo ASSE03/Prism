@@ -632,6 +632,8 @@ abstract class PrismDatabase : RoomDatabase() {
     abstract fun imports(): ImportDao
     /** Replay's numbers over Prism's plays and the imported ones the listener counts (1.8.1). */
     abstract fun counted(): CountedPlayDao
+    /** The Spotify connection's questions of the imported plays (1.8.1; no table of its own). */
+    abstract fun spotify(): com.prism.music.data.spotify.SpotifyDao
 
     companion object {
         /**

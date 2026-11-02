@@ -217,7 +217,8 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
         com.prism.music.playback.AudioDiagnostics.log(
             "home",
             tr(R.string.pages_2, pages.size) + fresh.joinToString { s ->
-                s.title + " (" + listOfNotNull("rows".takeIf { s.rows }, "stacked".takeIf { s.stacked }, "${s.items.size}",
+                // What's in each by kind ("song=3 album=4 playlist=2"): #266's Speed dial had no songs.
+                s.title + " (" + listOfNotNull("rows".takeIf { s.rows }, "stacked".takeIf { s.stacked }, shelfKinds(s),
                     s.strapline?.let { "strapline=" + if (it.equals(settings.accountName, true)) "owner" else it }).joinToString(" ") + ")"
             } + tr(R.string.quick_picks_speed_dial, fresh.quickPicks(owner)?.title ?: "none", fresh.speedDial(owner)?.title ?: "none") +
                 if (kept.isNotEmpty()) tr(R.string.kept_from_before, kept.joinToString { it.title }) else "",
@@ -912,6 +913,10 @@ internal fun <T> speedDialPages(items: List<T>): List<List<T>> {
     val whole = if (items.size > 9) items.size - items.size % 9 else items.size
     return items.take(whole).chunked(9)
 }
+
+/** A shelf's items counted by kind, for the diagnostics log's Home line ("song=3 album=4 playlist=2"). */
+internal fun shelfKinds(s: com.prism.music.data.model.Shelf): String =
+    s.items.groupingBy { it.javaClass.simpleName.removeSuffix("Item").lowercase() }.eachCount().entries.joinToString(" ") { "${it.key}=${it.value}" }
 
 /** The last three months' most played: albums you've played two or more songs from, and the songs otherwise. */
 internal suspend fun speedDialFromHistory(c: com.prism.music.AppContainer): List<BrowseItem> {

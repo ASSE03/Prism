@@ -28,14 +28,38 @@ What changed in each release. Older releases are described on the [Releases page
 - **Keep it current: bring a newer download any time, and only what's new comes in.** The page says so before you
   bring it ("312 new plays since your last import (Oct 3)", with the download's dates and how many plays are already
   here); the same or an older download says "Nothing new in this download". Plays already brought in are passed over,
-  even between Spotify's two histories (the same song within about a minute is the same play, and an Extended play
+  even between Spotify's two histories (the same song within about a minute is the same play, also when one names a
+  featured artist the other leaves out, while two songs that only share a title stay two plays; and an Extended play
   takes the place of the Account data one), and only songs Prism hasn't seen are matched: your matches and picks stay.
   Newly liked songs are liked, newly saved albums and followed artists come in, and a playlist brought before gets its
   new songs added to the same Prism playlist (songs removed from it on Spotify stay in Prism's copy; none is made
   twice, even after removing a history and bringing it again). Last.fm asks only for scrobbles since the last import.
+  Afterwards Prism says what came in ("Added 3 liked songs and 12 playlist songs."), also when no plays were new.
 - **"Last Spotify import: Oct 3 (31 days ago)"** on the page, with **Request a fresh download** (Spotify's Privacy
   page, or Google Takeout), and a gentle reminder to bring a fresh one every 1, 3 or 6 months (3 unless you change it,
   or Off): a quiet notification, only once you've imported Spotify or YouTube Music history, never for anyone else.
+
+### Spotify (optional, your own key)
+
+- **Connect Spotify through its official Web API, with a developer app of your own.** Spotify lets a developer app in
+  Development Mode have only five users, and its owner needs Spotify Premium, so each listener makes one for themselves
+  (free, about three minutes): Settings → Devices & connections → Spotify walks you through it (the dashboard link,
+  the redirect address to copy), then you paste its Client ID and sign in on Spotify's own page. Prism never sees your
+  password and has no secret of its own; the access stays on this phone, sealed by a key only it holds, never in
+  backups. Off unless you connect, and every feature below has its own switch, off too.
+- **Recent plays**: what you play in Spotify comes into your history every few hours as its own source, "Spotify
+  (live)", with its own switch under Count history from and its own Remove. Plays your data download already brought
+  aren't counted twice.
+- **Top songs and artists**: Spotify's own measure of your last four weeks, six months and year shapes your mixes,
+  radio and Quick picks (read on connecting, then weekly; Replay doesn't count it).
+- **Your Spotify playlists in Library**, marked Spotify, playing through their YouTube Music matches (Spotify's ISRCs
+  make the matches surer). **Keep in step** reads one again when you open it, and all daily on Wi-Fi.
+- **Liked Songs both ways** (off until you've seen its counts: "42 to like here, 17 to like on Spotify"): each like is
+  carried over once, unliking never is, and likes you brought from a data download stay out of it.
+- **Quiet when Spotify is**: a feature Spotify doesn't answer says so and the rest of Prism carries on; a "too many
+  requests" is waited out, and five failures running pause that feature for a day. Only Spotify's own addresses are
+  asked. Spotify no longer gives developer apps its mixes (Discover Weekly, Daily Mixes), editorial playlists, new
+  releases or the songs of playlists you only follow, so those aren't offered.
 
 ### New
 
@@ -98,10 +122,26 @@ What changed in each release. Older releases are described on the [Releases page
   found again under its Spanish one, where YouTube gives it a link to more.
 - **Speed dial fills its last page** from what you play instead of leaving it out (#295); "YouTube Music's only" still
   shows whole pages of YouTube's own.
+- **Speed dial keeps YouTube's songs** (#266): a song tile that starts another kind of radio was taken for a station,
+  and of several sections headed with your name, the one with songs in it is now taken for Speed dial (it had only
+  playlists and albums for some). A diagnostics log's Home line now says what's in each section.
 - **Pull down on Liked songs** to bring in likes made elsewhere (#306).
 - **The update banner shows sooner** (Prism looks for a new version every hour, not every six), and a second tap while
   an update is downloading or waiting for Android's installer doesn't start another (#278).
 - **Swiping Prism away while it's paused** takes its notification with it (#274).
+- **"Hey Google, play … on Prism" plays what you asked for, in the car too** (Reddit: Android Auto's voice button did
+  nothing). Everything used to be looked up as one song: now an artist plays their top songs, an album the album, "my
+  road trip playlist" your own playlist by name, "my liked songs" and "my downloads" yours, "shuffle …" shuffles, a song
+  its radio, and anything else plays Search's top result. When nothing is found, what was playing keeps playing (it
+  used to stop) and the car says Prism couldn't find it. The car's search button lists your own playlists and liked
+  songs first, then Search's top results, songs, albums, artists and playlists. With the phone locked, the phone's
+  voice request plays too.
+- **Word-by-word lyrics line up with the singing more often** (#301). Their timings (Better Lyrics, LyricsPlus and the
+  other word sources are Apple Music's) are made for Apple's copy of a song, and some of YouTube's start a little sooner
+  or later. When the song's line-by-line lyrics (YouTube Music's own, or LRCLIB's) put every line the same amount
+  earlier or later, the words are moved by it, once per song. Word timings that can't be the singing (every word the
+  same length, or outside their own line) show as line-by-line lyrics instead, so a source with real ones comes first.
+  The lyrics' timing sheet still moves a song's lyrics by hand.
 - **Tapping a lyric line while the song is paused** moves the lyrics there too (the music moved, the lyrics stayed) (#308).
 - **The play button's triangle sits in the middle of its circle** (it looked a little to the right) (#313).
 - **The playing bars beside the current song stand still while it's paused** (#302).

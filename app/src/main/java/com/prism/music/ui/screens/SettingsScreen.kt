@@ -129,6 +129,8 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
     CONNECT("connect", tr(R.string.speakers_tvs_browser), PrismIcons.Cast),
     DISCORD("discord", tr(R.string.discord), PrismIcons.Groups),
     LASTFM("lastfm", "Last.fm", PrismIcons.Replay),
+    /** 1.8.1: Spotify through the listener's own developer app. */
+    SPOTIFY("spotify", tr(R.string.spotify), PrismIcons.Library),
     /** Not on the hub: opened from About. */
     LICENSES("licenses", tr(R.string.open_source_licenses), PrismIcons.Info),
     /** Not on the hub: Customize Prism's pages. */
@@ -157,6 +159,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
         LIBRARY -> listOfNotNull(tr(R.string.your_artists_new_releases), if (s.contentCountry.isNotBlank()) countryName(s.contentCountry) else null, tr(R.string.replay_2)).joinToString(" · ")
         DISCORD -> if (s.discordPresence) tr(R.string.showing_what_you_play_on_your) else tr(R.string.show_what_you_re_playing_on)
         LASTFM -> tr(R.string.scrobble_what_you_play_to_your)
+        SPOTIFY -> tr(R.string.spot_summary)
         LANGUAGE -> java.util.Locale.getDefault().let { it.getDisplayName(it) }.replaceFirstChar { it.titlecase() }
         ABOUT -> tr(R.string.prism_backup_updates_diagnostics, com.prism.music.BuildConfig.VERSION_NAME)
         LICENSES -> tr(R.string.gpl_3_0_or_later)
@@ -374,6 +377,7 @@ private fun SettingsPage(
             SettingsSection.LIBRARY -> item { RecommendationsPage() }
             SettingsSection.DISCORD -> item { DiscordGroup() }
             SettingsSection.LASTFM -> item { LastFmGroup() }
+            SettingsSection.SPOTIFY -> item { SpotifyPage() }
             // 1.8.0: Region (the country Prism Music is asked as) beside the language, from Recommendations & Replay.
             SettingsSection.LANGUAGE -> item { Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { LanguageSettings(); ContentCountrySetting() } }
             SettingsSection.ABOUT -> item {
@@ -2142,7 +2146,7 @@ private fun DevicesPage() {
         }
         Group(tr(R.string.connections)) {
             val dark = com.prism.music.ui.theme.LocalIsDark.current
-            listOf(SettingsSection.CONNECT, SettingsSection.DISCORD, SettingsSection.LASTFM).forEach { sec ->
+            listOf(SettingsSection.CONNECT, SettingsSection.DISCORD, SettingsSection.LASTFM, SettingsSection.SPOTIFY).forEach { sec ->
                 NavRow(sec.icon, sec.title, sec.summary(s, dark)) { nav.go(Routes.settings(sec.key)) }
             }
         }
