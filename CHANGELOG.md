@@ -78,6 +78,9 @@ What changed in each release. Older releases are described on the [Releases page
   found again under its Spanish one, where YouTube gives it a link to more.
 - **Speed dial fills its last page** from what you play instead of leaving it out (#295); "YouTube Music's only" still
   shows whole pages of YouTube's own.
+- **Speed dial keeps YouTube's songs** (#266): a song tile that starts another kind of radio was taken for a station,
+  and of several sections headed with your name, the one with songs in it is now taken for Speed dial (it had only
+  playlists and albums for some). A diagnostics log's Home line now says what's in each section.
 - **Pull down on Liked songs** to bring in likes made elsewhere (#306).
 - **The update banner shows sooner** (Prism looks for a new version every hour, not every six), and a second tap while
   an update is downloading or waiting for Android's installer doesn't start another (#278).
