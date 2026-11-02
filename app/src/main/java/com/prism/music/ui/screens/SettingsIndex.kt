@@ -61,6 +61,7 @@ object SettingsIndex {
     private val C = SettingsSection.CONNECT
     private val DC = SettingsSection.DISCORD
     private val LF = SettingsSection.LASTFM
+    private val SP = SettingsSection.SPOTIFY
     private val YL = SettingsSection.LYRICS_LOOK
     private val CT = SettingsSection.CONTROLS
     private val DV = SettingsSection.DEVICES
@@ -273,6 +274,18 @@ object SettingsIndex {
         SettingEntry(LF, "Last.fm", tr(R.string.first_artist_only), tr(R.string.lastfm_featured_artists_main_artist)),
         SettingEntry(LF, "Last.fm", tr(R.string.love_when_i_like_a_song), tr(R.string.lastfm_love_like_heart)),
         SettingEntry(LF, "Last.fm", tr(R.string.disconnect), tr(R.string.lastfm_sign_out)),
+        // 1.8.1: Spotify, through the listener's own developer app.
+        SettingEntry(SP, tr(R.string.spotify), tr(R.string.spotify), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spot_set_up), tr(R.string.spot_open_dashboard), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spot_set_up), tr(R.string.spot_redirect_uri), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spot_set_up), tr(R.string.spot_client_id), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spotify), tr(R.string.spot_connected_as, "").trim(), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spotify), tr(R.string.spot_recent), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spotify), tr(R.string.spot_top), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spotify), tr(R.string.spot_playlists), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spotify), tr(R.string.spot_keep_in_step), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spotify), tr(R.string.spot_likes), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spot_connection), tr(R.string.disconnect), tr(R.string.spot_keywords)),
         SettingEntry(H, tr(R.string.home), tr(R.string.recently_played_shows), tr(R.string.recently_played_albums_playlists_songs_home)),
         SettingEntry(P, tr(R.string.lyrics_and_the_queue), tr(R.string.lyrics_and_the_queue), tr(R.string.player_controls_hide_full_screen_lyrics)),
         SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.hide_controls_over_videos), tr(R.string.music_video_controls_hide_tap_full)),
@@ -422,6 +435,8 @@ object SettingsIndex {
         // 1.8.1: Bring your history.
         SettingEntry(LB, tr(R.string.imp_title), tr(R.string.imp_title), tr(R.string.imp_keywords)),
         SettingEntry(LB, tr(R.string.imp_title), tr(R.string.imp_shape_mixes), tr(R.string.imp_shape_mixes_keywords)),
+        // On the Bring your history page (opened from this group): the fresh-download reminder.
+        SettingEntry(LB, tr(R.string.imp_title), tr(R.string.imp_remind), tr(R.string.imp_remind_keywords)),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.imp_count_history_from), tr(R.string.imp_count_keywords)),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.imp_prism_plays)),
         SettingEntry(LB, tr(R.string.made_for_you), tr(R.string.exclusions), tr(R.string.taste_profile_exclude_artist_playlist_don)),

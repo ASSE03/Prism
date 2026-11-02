@@ -1600,6 +1600,8 @@
     <string name="haptics">Haptics</string>
     <string name="vibration_vibrate">vibration vibrate</string>
     <string name="autoplay">Autoplay</string>
+    <string name="voice_nothing_found">Prism couldn\'t find “%1$s”</string>
+    <string name="voice_search_offline">Prism couldn\'t search: check the connection</string>
     <string name="radio_continue_similar">radio continue similar</string>
     <string name="autoplay_from">Autoplay from</string>
     <string name="radio_your_music_prism_radio_youtube">radio your music prism radio youtube offline local</string>
@@ -4354,4 +4356,125 @@
     <string name="tv_backdrop_darker">Darker</string>
     <string name="tv_backdrop_much_darker">Much darker</string>
     <string name="tv_backdrop_darkest">Nearly black</string>
+    <!-- 1.8.1: Spotify, through the listener's own developer app (Settings, Devices and connections, Spotify) -->
+    <string name="spotify">Spotify</string>
+    <string name="spot_summary">Your playlists, plays and likes, with your own Spotify app</string>
+    <string name="spot_about">Spotify\'s official Web API, through a developer app you make for yourself in Spotify\'s dashboard. Spotify allows a developer app in Development Mode up to 5 users and needs its owner to have Spotify Premium; yours is for you alone. You sign in on Spotify\'s own page, so Prism never sees your password, and it keeps the access on this phone only, sealed, never in backups. Nothing goes anywhere but Spotify and, to find each song, YouTube Music\'s search.</string>
+    <string name="spot_intro">Connect Spotify with your own developer app: about three minutes, once.</string>
+    <string name="spot_premium_note">You need Spotify Premium to make the app (Spotify\'s rule since February 2026). This is Spotify\'s official access.</string>
+    <string name="spot_set_up">Set up</string>
+    <string name="spot_set_up_info">Spotify lets each developer app have only a few users, so each listener makes their own. It\'s free, and only you use it. If Spotify later says your account isn\'t allowed, open your app\'s User Management in the dashboard and add your Spotify name and email.</string>
+    <string name="spot_step_1">1. Open Spotify\'s developer dashboard and log in with your Spotify account. Accept the developer terms if it asks.</string>
+    <string name="spot_open_dashboard">Open the dashboard</string>
+    <string name="spot_step_2">2. Tap Create app. Give it any name and description (for example \"My Prism\"). The website can stay empty.</string>
+    <string name="spot_step_3">3. Under Redirect URIs, add this address exactly (tap it to copy), then tap Add:</string>
+    <string name="spot_redirect_uri">Redirect URI</string>
+    <string name="spot_step_4">4. Under \"Which API/SDKs are you planning to use?\", tick Web API. Agree to Spotify\'s terms and tap Save.</string>
+    <string name="spot_step_5">5. In your app, open Settings and copy the Client ID (not the Client secret: Prism doesn\'t need it).</string>
+    <string name="spot_step_6">6. Paste the Client ID here and tap Connect. Spotify asks you to agree, then sends you back to Prism.</string>
+    <string name="spot_client_id">Client ID</string>
+    <string name="spot_client_id_invalid">A Client ID is 32 letters and digits</string>
+    <string name="spot_connect">Connect</string>
+    <string name="spot_reconnect">Reconnect</string>
+    <string name="spot_waiting">Waiting for Spotify…</string>
+    <string name="spot_browser_done">Spotify answered. You can go back to Prism.</string>
+    <string name="spot_browser_back">Back to Prism</string>
+    <string name="spot_failed_receiver">Prism couldn\'t get ready for Spotify\'s answer. Try again.</string>
+    <string name="spot_failed_denied">You didn\'t agree on Spotify\'s page, so nothing is connected.</string>
+    <string name="spot_failed_refused">Spotify refused the sign-in (%1$s). Check the Client ID, and that the redirect URI in your app is exactly http://127.0.0.1/callback.</string>
+    <string name="spot_failed_forbidden">Spotify didn\'t let this account in. In your app\'s User Management, add your Spotify name and email, and check the app owner has Premium.</string>
+    <string name="spot_failed_client">Spotify didn\'t accept your app. Check the Client ID and the redirect URI, then try again.</string>
+    <string name="spot_failed_network">Couldn\'t reach Spotify. Check your connection and try again.</string>
+    <string name="spot_revoked">Spotify took back Prism\'s access (the app was removed from your account, or deleted). Reconnect to carry on.</string>
+    <string name="spot_connected_as">Connected as %1$s</string>
+    <string name="spot_official">Spotify\'s official access, through your own app</string>
+    <string name="spot_not_answering">Spotify isn\'t answering</string>
+    <string name="spot_paused">Spotify isn\'t answering; trying again later</string>
+    <string name="spot_recent">Recent plays</string>
+    <string name="spot_recent_sub">What you play in Spotify, into your history</string>
+    <string name="spot_recent_info">Every few hours, Prism reads the songs you played in Spotify (Spotify gives the last 50) and keeps them as their own source, Spotify (live). Replay counts them only when you turn it on under Count history from, and you can remove them in Bring your history. Plays your Spotify data download already brought aren\'t counted twice.</string>
+    <string name="spot_top">Top songs and artists</string>
+    <string name="spot_top_sub">Spotify\'s top picks shape your mixes</string>
+    <string name="spot_top_info">Prism reads what Spotify counts as your top songs and artists (the last four weeks, six months and year) when you turn this on and then weekly. Your mixes, radio and Quick picks then lean on them as if you\'d played them here. Replay doesn\'t count them.</string>
+    <string name="spot_playlists">Your playlists</string>
+    <string name="spot_playlists_sub">Your Spotify playlists in Library</string>
+    <string name="spot_playlists_count">%1$d playlists in Library</string>
+    <string name="spot_playlists_info">The playlists you made or collaborate on show in Library marked Spotify, and play through their YouTube Music matches, in Spotify\'s order. Songs are matched once and remembered. Playlists you only follow can\'t be read: Spotify gives developer apps their names only. Turning this off takes them out of Library.</string>
+    <string name="spot_playlists_not_yours">%1$d playlists you follow can\'t be read: Spotify only lets a developer app read playlists you made or collaborate on.</string>
+    <string name="spot_keep_in_step">Keep in step</string>
+    <string name="spot_keep_in_step_sub">Read again when opened, and daily on Wi-Fi</string>
+    <string name="spot_keep_in_step_info">When you open one of them, Prism asks Spotify whether it changed and reads it again if it did. All of them are read again once a day on Wi-Fi either way. Changes you make to them in Prism are replaced by Spotify\'s.</string>
+    <string name="spot_likes">Liked Songs both ways</string>
+    <string name="spot_likes_sub">A like on one side is a like on the other</string>
+    <string name="spot_likes_counting">Counting your likes on both sides…</string>
+    <string name="spot_likes_info">Songs you like in Spotify are liked here once matched, and songs you like here are found on Spotify and saved to your Liked Songs (sure matches only). Each like is carried over once, so nothing goes back and forth, and unliking is never carried over: Prism never takes a like away. Likes you brought from a Spotify data download stay out of it. Read daily, on Wi-Fi.</string>
+    <string name="spot_likes_dry_run">Turning this on likes %1$d songs here and %2$d on Spotify (songs liked on both count nowhere). Later likes follow by themselves.</string>
+    <string name="spot_likes_turn_on">Turn on</string>
+    <string name="spot_connection">Connection</string>
+    <string name="spot_disconnect_sub">Forgets the access, stops every Spotify job and what was read</string>
+    <string name="spot_disconnect_title">Disconnect Spotify?</string>
+    <string name="spot_disconnect_text">Prism forgets the access and stops asking Spotify. Plays already in your history as Spotify (live) stay until you remove them in Bring your history.</string>
+    <string name="spot_forget_client_id">Forget the Client ID too</string>
+    <string name="spot_keep_playlists">Keep the playlists as Prism playlists</string>
+    <string name="spot_playlist_subtitle">Spotify · %1$s</string>
+    <string name="spot_keywords">spotify connect sign in web api developer app client id redirect playlists liked songs likes recently played top</string>
+    <!-- 1.8.1: repeat imports and the fresh-download reminder -->
+    <plurals name="imp_new_plays_since">
+        <item quantity="one">%1$s new play since your last import (%2$s)</item>
+        <item quantity="other">%1$s new plays since your last import (%2$s)</item>
+    </plurals>
+    <string name="imp_download_range">This download: %1$s to %2$s · %3$s already here, passed over</string>
+    <string name="imp_download_dates">This download: %1$s to %2$s</string>
+    <string name="imp_nothing_new">Nothing new in this download: everything in it is already here.</string>
+    <string name="imp_nothing_new_range">Nothing new in this download (%1$s to %2$s): everything in it is already here.</string>
+    <string name="imp_liked_new_detail">%1$s new, liked here</string>
+    <string name="imp_playlists_new_detail">%1$s new · %2$s songs to add to ones brought before</string>
+    <string name="imp_playlists_info">Brought again from a newer download, a playlist made before gets its new songs added, and none is made twice. Songs removed from it on Spotify aren\'t removed from Prism\'s copy: take them out in Prism if you like.</string>
+    <string name="imp_albums_new_detail">%1$s new, into your library</string>
+    <string name="imp_artists_new_detail">%1$s new, starred</string>
+    <string name="imp_keep_current">Keep it current</string>
+    <string name="imp_keep_current_info">Spotify and Google Takeout give your history only as a download. Ask for a fresh one now and then and bring it here: only what\'s new comes in, plays already here are passed over, and your matches and picks stay.</string>
+    <string name="imp_last_import">Last %1$s import: %2$s (%3$s)</string>
+    <string name="imp_today">today</string>
+    <plurals name="imp_days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <string name="imp_request_fresh">Request a fresh download</string>
+    <string name="imp_remind">Remind me to bring a fresh download</string>
+    <string name="imp_remind_info">A quiet notification every few months after your last Spotify or YouTube Music import, and nothing else. Never if you haven\'t imported one.</string>
+    <string name="imp_remind_keywords">reminder notification fresh new download again update repeat import spotify takeout</string>
+    <plurals name="imp_months">
+        <item quantity="one">%d month</item>
+        <item quantity="other">%d months</item>
+    </plurals>
+    <string name="imp_remind_channel">Fresh download reminders</string>
+    <string name="imp_remind_channel_desc">Every few months, when your imported history could use a fresh download</string>
+    <string name="imp_remind_spotify_title">Time for a fresh Spotify download?</string>
+    <string name="imp_remind_spotify_text">Your last Spotify import was on %1$s. Request your data on Spotify\'s Privacy page, then bring it into Prism: only what\'s new comes in.</string>
+    <string name="imp_remind_takeout_title">Time for a fresh YouTube Music history?</string>
+    <string name="imp_remind_takeout_text">Your last YouTube Music import was on %1$s. Ask Google Takeout for your history again, then bring it into Prism: only what\'s new comes in.</string>
+    <string name="imp_lastfm_detail_since">Your new scrobbles since %2$s, as %1$s</string>
+    <string name="imp_added">Added %1$s.</string>
+    <string name="imp_and">%1$s and %2$s</string>
+    <plurals name="imp_n_liked_songs">
+        <item quantity="one">%d liked song</item>
+        <item quantity="other">%d liked songs</item>
+    </plurals>
+    <plurals name="imp_n_new_playlists">
+        <item quantity="one">%d playlist</item>
+        <item quantity="other">%d playlists</item>
+    </plurals>
+    <plurals name="imp_n_playlist_songs">
+        <item quantity="one">%d playlist song</item>
+        <item quantity="other">%d playlist songs</item>
+    </plurals>
+    <plurals name="imp_n_saved_albums">
+        <item quantity="one">%d saved album</item>
+        <item quantity="other">%d saved albums</item>
+    </plurals>
+    <plurals name="imp_n_followed_artists">
+        <item quantity="one">%d followed artist</item>
+        <item quantity="other">%d followed artists</item>
+    </plurals>
 </resources>

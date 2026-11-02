@@ -121,6 +121,9 @@ fun BackgroundsScreen(bottomPadding: Dp, forPlayer: Boolean = false) {
         subtitle = if (forPlayer) tr(R.string.behind_the_player_darkened_so_its) else tr(R.string.color_from_what_s_playing_ready),
         horizontalPadding = 16.dp, spacing = 12.dp,
     ) {
+            // Performance mode draws every screen on the plain background: say so here, where a background is picked and
+            // otherwise looks chosen while the screens stay plain (Reddit 1.8.0, "only a black background now").
+            if (s.performanceMode) item(key = "paused") { PerformancePaused() }
             if (forPlayer) item {
                 val own = s.backdrops[com.prism.music.ui.theme.PLAYER_BACKDROP]
                 Column(Modifier.pane(ui.card, MaterialTheme.colorScheme.surfaceContainer).padding(vertical = 8.dp)) {

@@ -2279,9 +2279,11 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             pageSize: Int,
             params: LibraryParams?,
         ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> = scope.future {
-            val all = tree.searchResults()
-            val from = (page * pageSize).coerceAtMost(all.size)
-            LibraryResult.ofItemList(all.subList(from, (from + pageSize).coerceAtMost(all.size)), params)
+            // This query's results (searched now if the car asks for them without a search first), not the last search's.
+            val all = tree.searchItems(query)
+            // A car that asks for no pages gets page 0 of Int.MAX_VALUE: worked out in Long, so it can't overflow.
+            val from = (page.toLong() * pageSize).coerceIn(0, all.size.toLong()).toInt()
+            LibraryResult.ofItemList(all.subList(from, (from.toLong() + pageSize).coerceAtMost(all.size.toLong()).toInt()), params)
         }
 
         // ---- Playing what a controller picked
@@ -2306,20 +2308,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             startPositionMs: Long,
         ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> = scope.future {
             val single = mediaItems.singleOrNull()
-            // "Hey Google, play … on Prism": a search query instead of an id.
-            val query = single?.requestMetadata?.searchQuery
-            if (single != null && single.mediaId.isBlank() && !query.isNullOrBlank()) {
-                val top = tree.searchTop(query)
-                if (top != null) {
-                    c.queue.source.value = QueueSource(QueueKind.SINGLE, tr(R.string.autoplay), seedId = top.id)
-                    c.queue.autoplayStart.value = -1
-                    c.queue.autoplayContinuation = null
-                    return@future MediaSession.MediaItemsWithStartPosition(listOf(top.toMediaItem()), 0, C.TIME_UNSET)
-                }
-            }
-            // "Hey Google, play music on Prism": no query at all, so carry on with the last queue.
-            if (single != null && single.mediaId.isBlank() && query.isNullOrBlank() && single.toSong() == null) {
-                return@future onPlaybackResumption(mediaSession, controller, true).await()
+            // "Hey Google, play … on Prism" (the phone's VoicePlayActivity, or the car's voice button through the
+            // session's play-from-search): words and voice extras instead of an id.
+            if (single != null && single.mediaId.isBlank() && single.toSong() == null) {
+                return@future playVoice(mediaSession, controller, single.requestMetadata.searchQuery, single.requestMetadata.extras)
             }
             // "Shuffle play" at the top of a list.
             if (single != null && single.mediaId.startsWith(MediaTree.SHUFFLE)) {
@@ -2366,6 +2358,53 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             }
             val resolved = mediaItems.mapNotNull { item -> (item.toSong() ?: tree.song(item.mediaId, item))?.toMediaItem() }
             MediaSession.MediaItemsWithStartPosition(resolved, startIndex.coerceIn(0, (resolved.size - 1).coerceAtLeast(0)), startPositionMs)
+        }
+
+        /**
+         * A spoken request ([VoiceSearch]): an artist's songs, an album, a playlist (the listener's own first), liked songs,
+         * downloads, a song and its radio, or Search's Top result; "play music" carries on with the last queue. With
+         * nothing found the queue is left as it was (it used to be cleared, so the car went silent) and the asker is told
+         * why, which Android Auto shows.
+         */
+        private suspend fun playVoice(
+            session: MediaSession,
+            controller: MediaSession.ControllerInfo,
+            query: String?,
+            extras: Bundle?,
+        ): MediaSession.MediaItemsWithStartPosition {
+            val request = VoiceSearch.parse(query, extras)
+            AudioDiagnostics.log("voice", "\"${query.orEmpty()}\" (${extras?.getString(android.provider.MediaStore.EXTRA_MEDIA_FOCUS) ?: "no focus"}) from ${controller.packageName}: $request")
+            if (request == VoiceRequest.Resume) return onPlaybackResumption(session, controller, true).await()
+            val pick = try {
+                tree.voice(request)
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                AudioDiagnostics.log("voice", "couldn't search: ${e.javaClass.simpleName} ${e.message.orEmpty()}")
+                session.sendError(controller, SessionError(SessionError.ERROR_IO, tr(R.string.voice_search_offline)))
+                throw VoiceNotFound(request)
+            }
+            if (pick == null) {
+                AudioDiagnostics.log("voice", "nothing found")
+                val heard = query?.trim()?.takeIf { it.isNotEmpty() } ?: request.toString()
+                session.sendError(controller, SessionError(SessionError.ERROR_BAD_VALUE, tr(R.string.voice_nothing_found, heard)))
+                throw VoiceNotFound(request)
+            }
+            AudioDiagnostics.log("voice", "playing \"${pick.title}\": ${pick.songs.size} songs")
+            c.queue.autoplayStart.value = -1
+            c.queue.autoplayContinuation = null
+            if (pick.radio) {
+                val song = pick.songs.first()
+                c.queue.source.value = QueueSource(QueueKind.SINGLE, pick.title, seedId = song.id)
+                player.shuffleModeEnabled = false
+                return MediaSession.MediaItemsWithStartPosition(listOf(song.toMediaItem()), 0, C.TIME_UNSET)
+            }
+            c.queue.source.value = QueueSource(QueueKind.PLAYLIST, pick.title)
+            // Asked to shuffle: shuffled here too, so it's a new order each time (as the car's "Shuffle play" is);
+            // otherwise in order, whatever shuffle was left on.
+            player.shuffleModeEnabled = request.shuffle && pick.songs.size > 1
+            val list = if (player.shuffleModeEnabled) pick.songs.shuffled() else pick.songs
+            return MediaSession.MediaItemsWithStartPosition(list.map { it.toMediaItem() }, pick.start.coerceIn(0, list.lastIndex), C.TIME_UNSET)
         }
 
         /** Lets the system media controls (and the car) resume the last queue after Prism was closed. */

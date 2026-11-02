@@ -1501,7 +1501,8 @@ data class AppSettings(
         liquidGlass = false,
         frostedGlass = false,
         frostedPages = false,
-        backdrops = emptyMap(),
+        // Your own photo stays (owner, 1.8.1): a still picture costs next to nothing; the drawn and moving ones pause.
+        backdrops = backdrops.filterValues { it.substringBefore('|') == "PHOTO" },
         backdropMotion = false,
         reduceMotion = true,
         canvasEnabled = false,

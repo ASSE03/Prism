@@ -80,6 +80,12 @@ class HistoryImports(private val c: AppContainer) {
      */
     fun keptLikes(): Set<String> = prefs.getStringSet(KEPT_LIKES, emptySet()).orEmpty()
 
+    /**
+     * Likes [songs] here as imported likes are (the account too only when "like on the account" is on; else kept in
+     * Prism): Spotify's Liked Songs both ways (1.8.1) uses it.
+     */
+    suspend fun likeImported(songs: List<Song>) = hands.like(songs)
+
     private fun keepLikes(ids: Collection<String>) {
         if (ids.isEmpty()) return
         synchronized(this) { prefs.edit().putStringSet(KEPT_LIKES, keptLikes() + ids).apply() }
@@ -98,7 +104,7 @@ class HistoryImports(private val c: AppContainer) {
         if (sources.isEmpty()) PrismPlays(c.db.plays()) else CountedPlays(sources.sortedBy { it.ordinal }, c.db.counted(), c.db.plays())
 
     /** Plays the recommendations learn from ([TasteHistory]). */
-    val taste = TasteHistory(c.db.plays(), c.db.counted()) { if (_teach.value) ImportSource.entries else emptyList() }
+    val taste = TasteHistory(c.db.plays(), c.db.counted(), boost = { c.spotify.taste() }) { if (_teach.value) ImportSource.entries else emptyList() }
 
     val summaries: Flow<List<com.prism.music.data.db.ImportSummary>> = c.db.imports().summariesFlow()
     val statuses: Flow<List<com.prism.music.data.db.StatusCount>> = c.db.imports().statusFlow()
@@ -110,11 +116,42 @@ class HistoryImports(private val c: AppContainer) {
 
     private val lock = Mutex()
 
+    /** Files the listener picked, waiting for the page to look at them ([preview]); the page takes them off. */
+    val picked = MutableStateFlow<Picked?>(null)
+    data class Picked(val source: ImportSource, val uris: List<Uri>)
+
+    private val _lastImports = MutableStateFlow(lastImportsNow())
+    /** When each source was last brought in (a repeat import adds only what's new since). */
+    val lastImports: StateFlow<Map<ImportSource, Long>> = _lastImports
+
+    private fun lastImportsNow(): Map<ImportSource, Long> =
+        ImportSource.entries.mapNotNull { s -> ImportReminders.lastImport(prefs, s)?.let { s to it } }.toMap()
+
+    private fun noteImport(source: ImportSource, at: Long = System.currentTimeMillis()) {
+        prefs.edit().putLong(ImportReminders.lastKey(source), at).remove(ImportReminders.remindedKey(source)).apply()
+        _lastImports.value = lastImportsNow()
+        runCatching { ImportReminders.schedule(c.app) }
+    }
+
+    private val _remindMonths = MutableStateFlow(ImportReminders.months(prefs))
+    /** Months between reminders to bring a fresh Spotify or Takeout download (0: never); only once one was imported. */
+    val remindMonths: StateFlow<Int> = _remindMonths
+
+    fun setRemindMonths(months: Int) {
+        val m = months.takeIf { it in ImportReminders.CHOICES } ?: ImportReminders.DEFAULT_MONTHS
+        prefs.edit().putInt(ImportReminders.MONTHS, m).apply()
+        _remindMonths.value = m
+        runCatching { ImportReminders.schedule(c.app) }
+    }
+
     private fun nameOf(uri: Uri): String = runCatching {
         c.app.contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { if (it.moveToFirst()) it.getString(0) else null }
     }.getOrNull() ?: uri.lastPathSegment.orEmpty()
 
-    /** What [uris] hold, counted without bringing anything in. */
+    /**
+     * What [uris] hold, counted without bringing anything in. After an earlier import of [source], also what of it is
+     * new: plays an earlier import brought (the same song at about the same time) and library items already here aren't.
+     */
     suspend fun preview(source: ImportSource, uris: List<Uri>): ImportPreview = withContext(Dispatchers.IO) {
         val keys = HashSet<String>()
         var plays = 0
@@ -123,10 +160,12 @@ class HistoryImports(private val c: AppContainer) {
         var library = ParsedLibrary()
         val kinds = mutableSetOf<FileKind>()
         var skipped = 0
+        val novelty = importer.novelty(source)
         val count: (ParsedPlay) -> Unit = { p ->
             plays++; keys += ImportKeys.songKey(p.title, p.artist)
             if (p.timestamp < first) first = p.timestamp
             if (p.timestamp > last) last = p.timestamp
+            novelty.add(p)
         }
         // Both histories in one download: the extended one alone (the account data's repeats it).
         val extended = source == ImportSource.SPOTIFY && uris.any { u -> SpotifyExport.kindOf(nameOf(u)) == FileKind.SPOTIFY_EXTENDED || zipHasExtended(u) }
@@ -138,11 +177,17 @@ class HistoryImports(private val c: AppContainer) {
                         library += r.library; kinds += r.kinds; skipped += r.skippedFiles
                     }
                     ImportSource.TAKEOUT -> if (TakeoutHistory.read(nameOf(u), s, count)) kinds += FileKind.TAKEOUT_HISTORY else skipped++
-                    ImportSource.LASTFM -> Unit
+                    ImportSource.LASTFM, ImportSource.SPOTIFY_LIVE -> Unit
                 }
             }
         }
-        ImportPreview(source, plays, keys.size, first.takeIf { plays > 0 }, last.takeIf { plays > 0 }, library, kinds, skipped)
+        val fresh = novelty.result()
+        ImportPreview(
+            source, plays, keys.size, first.takeIf { plays > 0 }, last.takeIf { plays > 0 }, library, kinds, skipped,
+            newPlays = fresh.plays, newFirstAt = fresh.firstAt, newLastAt = fresh.lastAt,
+            lastImportAt = ImportReminders.lastImport(prefs, source),
+            libraryNews = if (library.isEmpty) LibraryNews() else LibraryJob.load(jobFile).news(library),
+        )
     }
 
     private fun zipHasExtended(u: Uri): Boolean = runCatching {
@@ -178,13 +223,16 @@ class HistoryImports(private val c: AppContainer) {
                                     .let { library += it.library }
                             }
                             ImportSource.TAKEOUT -> if (choice.history) TakeoutHistory.read(nameOf(u), s, batched(sink, plays) { runBlocking { drain() } })
-                            ImportSource.LASTFM -> Unit
+                            ImportSource.LASTFM, ImportSource.SPOTIFY_LIVE -> Unit
                         }
                     }
                     drain()
                 }
-                val stats = session.finish()
-                if (!library.isEmpty) addLibrary(library, choice.library)
+                // What the library adds is told apart from the plays (a repeat may bring only new likes or playlist songs).
+                val stats = session.finish().let { s -> if (library.isEmpty) s else s.copy(library = addLibrary(library, choice.library)) }
+                // Plays the Spotify connection read live that this download has too count once (the download's).
+                if (source == ImportSource.SPOTIFY) runCatching { c.db.spotify().dropLiveTwins(com.prism.music.data.spotify.SpotifyRecent.TWIN_MS) }
+                noteImport(source)
                 afterImport()
                 AudioDiagnostics.log("imports", "${source.key}: $stats")
                 stats
@@ -209,11 +257,13 @@ class HistoryImports(private val c: AppContainer) {
             if (c.lastFm.user.value == null) return@withContext null
             val session = importer.session(ImportSource.LASTFM)
             val page = ArrayList<ParsedPlay>()
+            // Again: only the scrobbles since the newest one brought before (that one, at its second, is passed over).
+            val from = LastFmHistory.fromSeconds(c.db.imports().newest(ImportSource.LASTFM.key))
             reading.value = Reading(ImportSource.LASTFM, 0, 0 to 1)
             try {
                 var n = 0
                 LastFmHistory.readAll(
-                    fetch = { p -> c.lastFm.recentTracksPage(p, LastFmHistory.PER_PAGE) },
+                    fetch = { p -> c.lastFm.recentTracksPage(p, LastFmHistory.PER_PAGE, from) },
                     onPlay = { page += it },
                     // Each page stored as it comes: a long scrobble history is never held whole.
                     onProgress = { done, all ->
@@ -225,6 +275,7 @@ class HistoryImports(private val c: AppContainer) {
                 )
                 page.forEach { session.add(it) }
                 val stats = session.finish()
+                noteImport(ImportSource.LASTFM)
                 afterImport()
                 AudioDiagnostics.log("imports", "lastfm: $stats")
                 stats
@@ -234,11 +285,18 @@ class HistoryImports(private val c: AppContainer) {
         }
     }
 
-    private suspend fun addLibrary(lib: ParsedLibrary, choice: LibraryJob.LibraryChoice) {
-        val job = LibraryJob.load(jobFile).plus(lib, choice)
+    /** Lines [lib] up (as far as [choice] says); returns what of it is new. */
+    private suspend fun addLibrary(lib: ParsedLibrary, choice: LibraryJob.LibraryChoice): LibraryNews {
+        val before = LibraryJob.load(jobFile)
+        val news = before.news(ParsedLibrary(
+            if (choice.liked) lib.liked else emptyList(), if (choice.playlists) lib.playlists else emptyList(),
+            if (choice.albums) lib.albums else emptyList(), if (choice.artists) lib.artists else emptyList(),
+        ))
+        val job = before.plus(lib, choice)
         LibraryJob.save(jobFile, job)
         val tracks = (if (choice.liked) lib.liked else emptyList()) + (if (choice.playlists) lib.playlists.flatMap { it.tracks } else emptyList())
         importer.addLibrarySongs(tracks)
+        return news
     }
 
     /** The first import turns "shape your mixes" on (the owner's choice); after that it's the listener's. */
@@ -250,12 +308,23 @@ class HistoryImports(private val c: AppContainer) {
         ImportMatchWorker.enqueue(c.app, _matchOnMobile.value)
     }
 
-    /** Takes [source]'s plays away (Replay stops counting it); what its library already added to Prism stays. */
+    /**
+     * Takes [source]'s plays away (Replay stops counting it); what its library already added to Prism stays, and is
+     * remembered ([LibraryJob.remembered]): a download brought again later tops its playlists up, never makes them twice.
+     * Its reminders stop.
+     */
     suspend fun remove(source: ImportSource) = lock.withLock {
         withContext(Dispatchers.IO) {
-            val keep = if (source == ImportSource.SPOTIFY) { jobFile.delete(); emptySet() } else LibraryJob.load(jobFile).keys
+            val keep = if (source == ImportSource.SPOTIFY) {
+                val job = LibraryJob.load(jobFile).remembered()
+                if (job == LibraryJob()) jobFile.delete() else LibraryJob.save(jobFile, job)
+                emptySet()
+            } else LibraryJob.load(jobFile).keys
             importer.remove(source, keep)
             setCounted(source, false)
+            prefs.edit().remove(ImportReminders.lastKey(source)).remove(ImportReminders.remindedKey(source)).apply()
+            _lastImports.value = lastImportsNow()
+            runCatching { ImportReminders.schedule(c.app) }
         }
     }
 
