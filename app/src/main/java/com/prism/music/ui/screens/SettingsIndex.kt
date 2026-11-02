@@ -178,6 +178,7 @@ object SettingsIndex {
         SettingEntry(L, tr(R.string.tabs), tr(R.string.open_prism_on), tr(R.string.start_tab_first_screen)),
         SettingEntry(L, tr(R.string.mini_player), tr(R.string.mini_player), tr(R.string.style_card_slim_pill)),
         SettingEntry(L, tr(R.string.mini_player), tr(R.string.previous_button), tr(R.string.back_skip)),
+        SettingEntry(L, tr(R.string.mini_player), tr(R.string.play_pause_button), tr(R.string.play_pause)),
         SettingEntry(L, tr(R.string.mini_player), tr(R.string.next_button), tr(R.string.skip_forward)),
         SettingEntry(L, tr(R.string.mini_player), tr(R.string.progress)),
         SettingEntry(L, tr(R.string.mini_player), tr(R.string.progress_bar_color), tr(R.string.scrubber_color_accent_white_cover_spectrum)),

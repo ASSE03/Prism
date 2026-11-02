@@ -513,7 +513,8 @@ private fun StoryContent(story: ReplayStory, onDismiss: () -> Unit) {
             ) {
                 AsyncImage(hiRes(song.thumbnail, 120), null, Modifier.size(28.dp).clip(CircleShape), contentScale = ContentScale.Crop)
                 Spacer(Modifier.width(8.dp))
-                if (!muted) PlayingBars(Modifier.size(12.dp))
+                // The story's own music, not the player's: it plays while the story shows.
+                if (!muted) PlayingBars(Modifier.size(12.dp), playing = true)
                 Spacer(Modifier.width(6.dp))
                 Text(
                     "${song.title} · ${song.primaryArtist}", color = Color.White, style = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Medium),

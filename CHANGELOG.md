@@ -28,6 +28,24 @@ What changed in each release. Older releases are described on the [Releases page
 - **The update banner shows sooner** (Prism looks for a new version every hour, not every six), and a second tap while
   an update is downloading or waiting for Android's installer doesn't start another (#278).
 - **Swiping Prism away while it's paused** takes its notification with it (#274).
+- **Tapping a lyric line while the song is paused** moves the lyrics there too (the music moved, the lyrics stayed) (#308).
+- **The play button's triangle sits in the middle of its circle** (it looked a little to the right) (#313).
+- **The playing bars beside the current song stand still while it's paused** (#302).
+- **Karaoke-style lyrics: no pale edge round the sung words**: the words still to come aren't drawn under them any more
+  (#303). For a softer fill, pick your own color (a soft grey, say) for "The line being sung" under Lyrics → Text.
+- **The color mesh behind the player visibly moves at Motion 100%** (a loop is three times as quick and goes farther),
+  and the setting says when Performance mode or the phone's animations switch hold it still (#284).
+- **Search no longer opens scrolled to the bottom** the first time after Prism starts (#279).
+- **Player cover**: Full width meets the screen's sides in the Standard layout too (on a phone too short for a square
+  that wide, its top and bottom are cropped a little), it no longer shrinks when paused, and a swipe down anywhere
+  around the cover closes the player (in the Cover and Minimal layouts the room above the cover took nothing) (#276).
+- **Tab bar**: the docked bar no longer shows bright lines at the screen's sides with Frosted or Liquid glass (#290),
+  and with Labels "Selected" the current tab's name sits under its icon, as with "Always" (#291).
+- **Smart Shuffle's "Add to …"** says "Already in …" when the song is in the playlist already, as Add to playlist does.
+- **Start radio on the song that's playing** keeps it playing where it is and lines the radio up after it (it started
+  the song again) (#292).
+- **New option**: Customize Prism → Tabs & mini player → Mini player → "Play/pause button", to leave play / pause off
+  the mini player (on by default; a tap still opens the player).
 
 ## 1.8.0
 

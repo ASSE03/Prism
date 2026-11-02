@@ -185,7 +185,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
             // 1.8.0: the tab you're on's tint is with the tab bar now (from Icons & shapes).
             "tab_icon_tint",
             "nav_style", "nav_labels", "nav_hide_on_scroll", "nav_tabs", "start_tab", "mini_player_style", "mini_skip_buttons",
-            "mini_prev_button", "mini_progress", "mini_progress_color", "mini_fill_strength", "ui_density", "title_size", "card_size", "hide_status_bar", "hide_status_bar_player",
+            "mini_prev_button", "mini_play_button", "mini_progress", "mini_progress_color", "mini_fill_strength", "ui_density", "title_size", "card_size", "hide_status_bar", "hide_status_bar_player",
             "tab_names", "nav_bar_size", "nav_bar_fill", "mini_player_joined",
         )
         PLAYER -> listOf(
@@ -1375,6 +1375,8 @@ private fun MiniPlayerGroup() {
             info = tr(R.string.the_mini_player_sits_on_top),
         ) { prefs.setMiniPlayerJoined(it) }
         Toggle(tr(R.string.previous_button), tr(R.string.swiping_right_goes_back_too), s.miniPrevButton) { prefs.setMiniPrevButton(it) }
+        // Reddit (1.8.1): play / pause can go too, as Next can.
+        Toggle(tr(R.string.play_pause_button), tr(R.string.the_player_and_your_phone_s_controls_still_have_it), s.view.miniPlayButton) { prefs.setMiniPlayButton(it) }
         Toggle(tr(R.string.next_button), tr(R.string.swiping_left_skips_too), s.miniSkipButtons) { prefs.setMiniSkipButtons(it) }
         Label(tr(R.string.progress))
         Chips(MiniProgress.entries, s.miniProgress, { it.label }) { prefs.setMiniProgress(it) }

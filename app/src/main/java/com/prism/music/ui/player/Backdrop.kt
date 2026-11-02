@@ -139,10 +139,10 @@ fun ArtworkMeshBackdrop(
     }
     // The drift moves the drawn layer only (scaled up a little so its edges never show): what's drawn and blurred
     // inside it stays as it is, so it costs the GPU a transform a frame, not a redraw.
-    val still = speed <= 0.01f || com.prism.music.ui.theme.LocalUi.current.reduceMotion
-    val drift = if (still) null else rememberInfiniteTransition(label = "meshDrift").animateFloat(
+    val move = meshDrift(speed).takeUnless { com.prism.music.ui.theme.LocalUi.current.reduceMotion }
+    val drift = if (move == null) null else rememberInfiniteTransition(label = "meshDrift").animateFloat(
         0f, (2 * Math.PI).toFloat(),
-        infiniteRepeatable(tween((48_000 / speed.coerceIn(0.1f, 1f)).roundToInt(), easing = LinearEasing)),
+        infiniteRepeatable(tween(move.loopMs, easing = LinearEasing)),
         label = "drift",
     )
     val tone = remember(intensity) {
@@ -155,10 +155,11 @@ fun ArtworkMeshBackdrop(
             .background(PlayerFallbackBackdrop)
             .graphicsLayer {
                 val t = drift?.value ?: return@graphicsLayer
-                val s = 1.12f + 0.04f * kotlin.math.sin(t * 2)
+                val m = move ?: return@graphicsLayer
+                val s = m.scale + 0.04f * kotlin.math.sin(t * 2)
                 scaleX = s; scaleY = s
-                translationX = size.width * 0.04f * kotlin.math.cos(t)
-                translationY = size.height * 0.03f * kotlin.math.sin(t)
+                translationX = size.width * m.reachX * kotlin.math.cos(t)
+                translationY = size.height * m.reachY * kotlin.math.sin(t)
             }
             .then(if (liveBlur && Build.VERSION.SDK_INT >= 31) Modifier.blur(32.dp * blur.coerceIn(0.3f, 2f)) else Modifier),
     ) {
@@ -168,6 +169,28 @@ fun ArtworkMeshBackdrop(
         // Aura × Spectrum (1.7): the cover's colors glow, deepening under the controls so the white type reads.
         drawRect(Brush.verticalGradient(0f to Color.Black.copy(alpha = 0.08f), 0.55f to Color.Black.copy(alpha = 0.22f), 1f to Color.Black.copy(alpha = 0.42f)))
     }
+}
+
+/**
+ * How the color mesh drifts at [speed] (0 still … 1 lively): one loop in [loopMs], reaching [reachX] / [reachY] of the
+ * screen to the sides and up and down, drawn [scale] times its size (breathing a little round it) so its edges never
+ * show. Null holds it still.
+ */
+internal data class MeshDrift(val loopMs: Int, val reachX: Float, val reachY: Float, val scale: Float)
+
+/**
+ * #284 (1.8.1): at 100% one loop took 48 s and went 4% of the way across, too slow and small to see as movement. Every
+ * step of the slider is now three times as quick (16 s a loop at 100%), and the livelier it is the farther it goes (up
+ * to 9% across).
+ */
+internal fun meshDrift(speed: Float): MeshDrift? {
+    if (speed <= 0.01f) return null
+    val v = speed.coerceIn(0.1f, 1f)
+    val reachX = 0.04f + 0.05f * v
+    val reachY = 0.03f + 0.04f * v
+    // Twice the farthest reach plus the breathing (±0.04) and a little more, so the drifted layer still covers the screen.
+    val scale = 1f + 2f * maxOf(reachX, reachY) + 0.08f
+    return MeshDrift((16_000 / v).roundToInt(), reachX, reachY, scale)
 }
 
 /**

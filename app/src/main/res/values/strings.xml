@@ -1126,6 +1126,8 @@
     <string name="it_listens_to_prism_s_own">It listens to Prism\'s own sound (no microphone) and only runs while the player is open and playing. On an older phone, Off keeps the player lightest.</string>
     <string name="visualizer_color">Visualizer color</string>
     <string name="reduce_motion_is_on_so_it">Reduce motion is on, so it stays still.</string>
+    <string name="performance_mode_is_on_so_it_stays_still">Performance mode is on, so it stays still.</string>
+    <string name="your_phone_s_animations_are_off_so_it_stays_still">Your phone\'s animations are off, so it stays still.</string>
     <string name="a_thin_line">A thin line</string>
     <string name="a_thicker_bar">A thicker bar</string>
     <string name="a_line_and_a_knob">A line and a knob</string>
@@ -3199,6 +3201,9 @@
     <string name="start_tab_2">Start tab</string>
     <string name="mini_player_s_next">Mini player\'s Next</string>
     <string name="mini_player_s_previous">Mini player\'s Previous</string>
+    <string name="mini_player_s_play_pause">Mini player\'s Play/pause</string>
+    <string name="play_pause_button">Play/pause button</string>
+    <string name="the_player_and_your_phone_s_controls_still_have_it">The player and your phone\'s controls still have it</string>
     <string name="mini_player_progress">Mini player progress</string>
     <string name="player_background_showing">Player background showing</string>
     <string name="cover_corners">Cover corners</string>
