@@ -1546,7 +1546,7 @@
     <string name="explicit_show">Show them</string>
     <string name="explicit_skip">Skip them</string>
     <string name="explicit_hide">Hide them</string>
-    <string name="explicit_skipped">Explicit songs are left out (Settings → Sound)</string>
+    <string name="explicit_skipped">Explicit songs are left out (Settings → Playback &amp; sound)</string>
     <string name="explicit_none_left">Nothing to play: every song here is explicit</string>
     <string name="change_cover">Change cover</string>
     <string name="cover_changed">Cover changed</string>

@@ -70,7 +70,7 @@ What changed in each release. Older releases are described on the [Releases page
   (the artists you've starred; Home's New releases follows it too) and a row of your artists, the ones you play most
   first, to see one artist's releases at a time. Starred artists' new releases already come with a notification
   (Settings → Recommendations & Replay), and Customize Home can move New releases to the top of Home.
-- **An explicit filter** (#216): Settings → Sound → What plays next → Explicit songs. **Show them** is as before;
+- **An explicit filter** (#216): Settings → Playback & sound → What plays next → Explicit songs. **Show them** is as before;
   **Skip them** keeps explicit songs (YouTube Music's "E") in lists but never plays them: radios, autoplay and mixes leave
   them out, a tapped one gives way to the next clean song, and the queue passes over any that got in; **Hide them** also
   leaves them out of search, Home and album, playlist, Liked songs and Downloads lists. It goes by YouTube Music's own
