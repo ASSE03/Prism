@@ -38,6 +38,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.drawscope.clipRect
 import com.prism.music.ui.player.drawRibbonStrands
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -633,6 +634,14 @@ fun PlayerProgressGroup() {
             detail = { if (it == com.prism.music.data.prefs.ScrubberThumb.AUTO) tr(R.string.a_dot_with_the_thumb_style) else null },
             onSelect = { prefs.setScrubberThumb(it) },
         ) { KnobSample(it, s.scrubberThickness) }
+        // 1.8.1 (the owner's): the bar shaped by the crossfade, an option; off it's the bar as before.
+        Label(tr(R.string.crossfade_on_the_progress_bar), info = tr(R.string.crossfade_shape_info))
+        ChoiceCards(
+            listOf(false, true), s.view.crossfadeShape,
+            title = { if (it) tr(R.string.shaped_by_the_crossfade) else tr(R.string.plain) },
+            detail = { if (it) tr(R.string.the_end_tapers_as_the_song_fades) else tr(R.string.as_now) },
+            onSelect = { prefs.setCrossfadeShape(it) },
+        ) { CrossfadeShapeSample(it, s.sound.crossfadeCurve, s.scrubberColor) }
         // Reddit, 1.7.9.1: the volume bar as thick as the progress bar (its style's height and this thickness).
         Toggle(tr(R.string.volume_bar_like_the_progress_bar), tr(R.string.same_style_and_thickness), s.volumeMatchesProgress) {
             prefs.setVolumeMatchesProgress(it)
@@ -661,6 +670,39 @@ private fun KnobSample(knob: com.prism.music.data.prefs.ScrubberThumb, thickness
                 }
                 com.prism.music.data.prefs.ScrubberThumb.NONE -> {}
             }
+        }
+    }
+}
+
+/**
+ * A song's bar near its end, as the mockup draws it: the last quarter its blend, the playhead in it ([shaped]: tapering
+ * along [curve], the knob riding it; else the plain bar).
+ */
+@Composable
+private fun CrossfadeShapeSample(shaped: Boolean, curve: com.prism.music.data.prefs.CrossfadeCurve, color: ScrubberColor) {
+    val fill = com.prism.music.ui.player.scrubberFill(color, LocalContainer.current.player.currentSong.value?.thumbnail)
+        ?: Brush.horizontalGradient(*PrismTokens.spectrumColors(true).toTypedArray())
+    val outline = remember { com.prism.music.ui.player.BlendBarPath() }
+    val shape = remember(curve) { com.prism.music.ui.player.BlendShape(curve, outFrom = 0.75f, outTo = 1f) }
+    SampleScreen(Modifier.fillMaxWidth().height(40.dp)) {
+        androidx.compose.foundation.Canvas(Modifier.align(Alignment.Center).padding(horizontal = 14.dp).fillMaxWidth().height(16.dp)) {
+            val h = 7.dp.toPx()
+            val y = size.height / 2
+            val played = size.width * 0.86f
+            translate(top = y - h / 2) {
+                val bar = androidx.compose.ui.geometry.Size(size.width, h)
+                if (shaped) {
+                    val path = outline.outline(shape, bar.width, h)
+                    drawPath(path, Faint)
+                    clipRect(right = played) { drawPath(path, fill) }
+                } else {
+                    val r = androidx.compose.ui.geometry.CornerRadius(h / 2)
+                    drawRoundRect(Faint, size = bar, cornerRadius = r)
+                    drawRoundRect(fill, size = androidx.compose.ui.geometry.Size(played, h), cornerRadius = r)
+                }
+            }
+            val knob = 6.dp.toPx() * (if (shaped) com.prism.music.ui.player.BlendShape.knobScale(shape.height(0.86f)) else 1f)
+            drawCircle(Color.White, knob, androidx.compose.ui.geometry.Offset(played, y))
         }
     }
 }

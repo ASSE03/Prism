@@ -4255,4 +4255,9 @@
     <string name="sing_quick_then_full">Voice lowered (quick) · full separation %1$s%%</string>
     <string name="tv_sing_play_first">Play a song first, then check</string>
     <string name="tv_stop_comes_back">The music comes back to this phone</string>
+    <string name="crossfade_on_the_progress_bar">Show the crossfade on the progress bar</string>
+    <string name="shaped_by_the_crossfade">Shaped by the crossfade</string>
+    <string name="crossfade_shape_keywords">crossfade blend fade out fade in taper shape curve scrubber seek bar</string>
+    <string name="the_end_tapers_as_the_song_fades">The end tapers as the song fades out</string>
+    <string name="crossfade_shape_info">The end of the bar takes the shape of how the song fades out, and the next song\'s bar grows in as it fades in, along your crossfade\'s type (Sound → Crossfade). Only while a crossfade is coming: not between an album\'s tracks, while casting, for episodes or live streams. With an automatic length it shows once the blend is planned. The waveform and Ribbons keep the mark instead.</string>
 </resources>

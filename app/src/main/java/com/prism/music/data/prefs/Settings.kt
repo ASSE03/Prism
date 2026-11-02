@@ -370,6 +370,11 @@ data class ViewLook(
     val playingInPageColor: Boolean = false,
     /** 1.8.0: what's on the player and what's in its ⋯ menu ([PlayerParts]). */
     val parts: PlayerParts = PlayerParts(),
+    /**
+     * 1.8.1 (the owner's): with Crossfade on and a blend planned, the progress bar's end tapers as the song fades out and
+     * the next song's bar grows in as it fades in, along the crossfade's own curve ([CrossfadeCurve.gains]).
+     */
+    val crossfadeShape: Boolean = false,
 )
 
 // 1.8.0 player editor
@@ -1491,6 +1496,7 @@ data class AppSettings(
             immersiveBackground = if (immersiveBackground == LyricsBackground.CANVAS) LyricsBackground.PLAYER else immersiveBackground,
         ),
         homeHeader = if (homeHeader == HomeHeader.PICTURE || homeHeader == HomeHeader.NOW_PLAYING) HomeHeader.GREETING else homeHeader,
+        view = view.copy(crossfadeShape = false),
     )
 
     /** The lyric sources Prism asks, in the listener's order: the ones turned off are left out (#51). */
@@ -1829,6 +1835,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val crossfadeMark = booleanPreferencesKey("crossfade_mark")
         val blendCovers = booleanPreferencesKey("blend_covers")
         val buttonsPill = booleanPreferencesKey("player_buttons_pill")
+        // 1.8.1 ([ViewLook.crossfadeShape]).
+        val crossfadeShape = booleanPreferencesKey("crossfade_shape")
         // 1.8.0 player editor ([PlayerParts]): the hidden parts are part of a Look, the menu's choices aren't.
         val playerHiddenParts = stringPreferencesKey("player_hidden_parts")
         val playerMenuHidden = stringPreferencesKey("player_menu_hidden")
@@ -1862,7 +1870,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 cornerScale, songShape, albumShape, artistShape, playerShape, buttonShape, playOutlined,
                 typeWeight, typeSpacing, titleFont, tabTint, playerTitleWeight, typeClassic, controlsClassic,
                 panelPlayer, queueHeadings, castMark, immersiveVideo, bleedFit, coverFlight, videoControlsHide,
-                crossfadeMark, blendCovers, buttonsPill, playerHiddenParts,
+                crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape,
             ) + lyricsLook.map { it.first }
         }
 
@@ -1897,6 +1905,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 typeWeight to 's', typeSpacing to 's', titleFont to 's', tabTint to 's', playerTitleWeight to 's', typeClassic to 'b', controlsClassic to 'b',
                 panelPlayer to 's', queueHeadings to 'b', castMark to 'b', immersiveVideo to 'b', bleedFit to 's', coverFlight to 'b',
                 videoControlsHide to 'b', crossfadeMark to 'b', blendCovers to 'b', buttonsPill to 'b', playerHiddenParts to 's',
+                crossfadeShape to 'b',
             ) + lyricsLook
         }
 
@@ -2185,6 +2194,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 miniPlayButton = p[K.miniPlayButton] ?: d.view.miniPlayButton,
                 playingInPageColor = p[K.playingInPageColor] ?: d.view.playingInPageColor,
                 parts = readParts(p),
+                crossfadeShape = p[K.crossfadeShape] ?: d.view.crossfadeShape,
             ),
             sound = SoundPrefs(
                 crossfadeCurve = p.enum(K.crossfadeCurve, d.sound.crossfadeCurve),
@@ -2783,6 +2793,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setCrossfadeMark(v: Boolean) = edit { it[K.crossfadeMark] = v }
     fun setBlendCovers(v: Boolean) = edit { it[K.blendCovers] = v }
     fun setButtonsPill(v: Boolean) = edit { it[K.buttonsPill] = v }
+    fun setCrossfadeShape(v: Boolean) = edit { it[K.crossfadeShape] = v }
 
     // 1.8.0 player editor
     /** A comma-separated set of names (unknown ones skipped): a Look or backup from a later Prism still opens. */

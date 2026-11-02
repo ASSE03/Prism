@@ -87,6 +87,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
@@ -151,15 +152,25 @@ fun ThinSlider(
     pulse: (() -> Float)? = null,
     /** Ribbons (#151): strands flowing over the played part, at this phase (seconds, read while drawing). */
     ribbons: (() -> Float)? = null,
+    /**
+     * The bar shaped by the crossfade (1.8.1): its height follows the fade-out at the end and the fade-in at the start,
+     * and the knob rides it. Null (and with [wave]): the bar as 1.8.0 drew it.
+     */
+    shape: BlendShape? = null,
+    /** Points (0–1) that give a haptic step when dragged across without a tick drawn (the shaped bar's start of the blend). */
+    quietMarks: List<Float> = emptyList(),
 ) {
     var dragging by remember { mutableStateOf(false) }
+    // The shaped bar's outline, kept between frames; only made once a shape is there.
+    val outline = remember(shape != null) { if (shape != null) BlendBarPath() else null }
     // The strands' paths, rebuilt in place each frame rather than made anew.
     val strands = remember { List(RIBBON_STRANDS.size) { androidx.compose.ui.graphics.Path() } }
     val haptics = rememberHaptics()
     val marksNow by androidx.compose.runtime.rememberUpdatedState(marks)
+    val quietNow by androidx.compose.runtime.rememberUpdatedState(quietMarks)
     var last by remember { mutableFloatStateOf(-1f) }
     fun crossed(v: Float) {
-        if (last >= 0f && marksNow.any { m -> (last < m) != (v < m) }) haptics.tick()
+        if (last >= 0f && (marksNow.any { m -> (last < m) != (v < m) } || quietNow.any { m -> (last < m) != (v < m) })) haptics.tick()
         last = v
     }
     // The gesture below runs for the slider's whole life; without these it kept the first callbacks, which
@@ -216,6 +227,23 @@ fun ThinSlider(
                         if (brush != null) drawRoundRect(brush, top, bar, bars) else drawRoundRect(Color.White.copy(alpha = 0.92f), top, bar, bars)
                     } else drawRoundRect(Color.White.copy(alpha = 0.22f), top, bar, bars)
                 }
+            } else if (shape != null && outline != null) {
+                // Shaped by the crossfade (1.8.1, as the owner's mockup): the bar's outline, the played part of it in the
+                // fill up to the playhead, the rest in the track's grey.
+                val path = outline.outline(shape, size.width, size.height)
+                drawPath(path, Color.White.copy(alpha = 0.20f))
+                if (secondary > 0f) clipRect(right = size.width * secondary.coerceIn(0f, 1f)) { drawPath(path, Color.White.copy(alpha = 0.12f)) }
+                if (filled > 0f) {
+                    val beat = pulse?.invoke()?.coerceIn(0f, 1f) ?: 0f
+                    if (beat > 0.02f) {
+                        val grow = size.height * 1.6f * beat
+                        val glow = brush ?: androidx.compose.ui.graphics.SolidColor(Color.White)
+                        drawRoundRect(glow, Offset(0f, -grow), Size(filled, size.height + 2 * grow), CornerRadius(size.height / 2 + grow), alpha = 0.22f * beat)
+                    }
+                    clipRect(right = filled) {
+                        if (brush != null) drawPath(path, brush) else drawPath(path, Color.White.copy(alpha = 0.92f))
+                    }
+                }
             } else {
                 drawRoundRect(Color.White.copy(alpha = 0.20f), cornerRadius = r)
                 if (secondary > 0f) drawRoundRect(Color.White.copy(alpha = 0.12f), size = Size(size.width * secondary.coerceIn(0f, 1f), size.height), cornerRadius = r)
@@ -239,13 +267,16 @@ fun ThinSlider(
                 drawLine(Color.White.copy(alpha = 0.34f), Offset(x, -1.5.dp.toPx()), Offset(x, size.height + 1.5.dp.toPx()), 1.dp.toPx(), StrokeCap.Round)
             }
             if (thumb) {
-                val knob = (if (dragging) 9.dp else 7.dp).toPx()
+                // On the shaped bar the knob rides the shape: as small as the bar is thin there (1.8.1).
+                val ride = if (shape != null && outline != null && wave == null) BlendShape.knobScale(shape.height(value.coerceIn(0f, 1f))) else 1f
+                val base = (if (dragging) 9.dp else 7.dp).toPx()
+                val knob = base * ride
                 val x = filled.coerceIn(knob, size.width - knob)
                 val y = size.height / 2
                 when (thumbShape) {
                     com.prism.music.data.prefs.ScrubberThumb.LINE -> {
                         // An upright tick standing past the bar.
-                        val half = maxOf(size.height / 2 + 5.dp.toPx(), knob)
+                        val half = maxOf(size.height / 2 + 5.dp.toPx(), base) * ride
                         val w = (if (dragging) 4.dp else 3.dp).toPx()
                         drawLine(Color.Black.copy(alpha = 0.18f), Offset(x, y - half + 1f), Offset(x, y + half + 1f), w + 1.5f, StrokeCap.Round)
                         drawLine(Color.White, Offset(x, y - half), Offset(x, y + half), w, StrokeCap.Round)
@@ -372,10 +403,14 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
         ?.startMs?.let { ((it - shift).toFloat() / duration).takeIf { f -> f in 0.01f..0.99f } }
     // Where the crossfade into the next song starts (A6, an option): once it's known, while Crossfade is on.
     val blend by c.mixState.mark.collectAsState()
-    val blendMark = blend?.takeIf { LocalAppSettings.current.view.crossfadeMark && it.songId == current?.id }
+    val settings = LocalAppSettings.current
+    // The bar shaped by the crossfade (1.8.1, an option; the lines only: the waveform and Ribbons keep the mark). Its
+    // own start of the blend needs no tick, but dragging across it still gives the step.
+    val shaped = settings.view.crossfadeShape && style != ScrubberStyle.WAVE && style != ScrubberStyle.RIBBONS
+    val blendShape = if (shaped) rememberBlendShape(current?.id, durationMs, blend) else null
+    val blendMark = blend?.takeIf { settings.view.crossfadeMark && it.songId == current?.id && blendShape?.fadesOut != true }
         ?.let { (it.startMs.toFloat() / duration).takeIf { f -> f in 0.01f..0.99f } }
     val times = MaterialTheme.typography.labelMedium.copy(fontFeatureSettings = "tnum")
-    val settings = LocalAppSettings.current
     val fill = scrubberFill(settings.scrubberColor, current?.thumbnail)
     // Waveform: the song's outline from its scan (a plain bar until there is one).
     val waveStamp by c.waves.stamp.collectAsState()
@@ -405,7 +440,9 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
         // Spectrum: a thin line, the played part in the split light (or the color picked for it).
         ThinSlider(
             value = shown,
-            modifier = Modifier.testTag("progressBar"),
+            modifier = Modifier.testTag("progressBar").then(
+                if (blendShape != null) Modifier.semantics { this[CrossfadeShapeKey] = blendShape.semanticsValue() } else Modifier,
+            ),
             onValueChange = { scrub = it },
             onValueChangeFinished = { scrub?.let { pc.seekTo((it * duration).toLong()) }; scrub = null },
             idleHeight = if (waved) 22.dp else barHeights(style, thick).first,
@@ -418,6 +455,8 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
             wave = wave,
             pulse = pulse?.let { level -> { level.floatValue } },
             ribbons = if (style == ScrubberStyle.RIBBONS && !waved) ({ ribbonPhase.floatValue }) else null,
+            shape = blendShape,
+            quietMarks = if (blendShape?.fadesOut == true) remember(blendShape) { listOf(blendShape.outFrom) } else emptyList(),
         )
         Box(Modifier.fillMaxWidth().offset(y = (-9).dp).heightIn(min = 16.dp)) {
             val elapsed = settings.playerTimes == com.prism.music.data.prefs.PlayerTimes.BOTH || settings.playerTimes == com.prism.music.data.prefs.PlayerTimes.ELAPSED
@@ -435,6 +474,17 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
             centerLabel()
         }
     }
+}
+
+/**
+ * The playing song's bar shape from the crossfade (1.8.1): its end from the blend after it ([ending], once its length is
+ * known) and its start from how it came in. Worked out again only when one of them changes, not as the song plays.
+ */
+@Composable
+private fun rememberBlendShape(songId: String?, durationMs: Long, ending: com.prism.music.playback.BlendMark?): BlendShape? {
+    val into by LocalContainer.current.mixState.into.collectAsState()
+    val curve = LocalAppSettings.current.sound.crossfadeCurve
+    return remember(songId, durationMs, ending, into, curve) { BlendShape.of(songId, durationMs, ending, into, curve) }
 }
 
 /**
