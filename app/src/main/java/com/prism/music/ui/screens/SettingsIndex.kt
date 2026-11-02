@@ -242,6 +242,8 @@ object SettingsIndex {
         SettingEntry(P, tr(R.string.progress_bar), tr(R.string.progress_bar_thickness), tr(R.string.scrubber_thick_thin_height_bold)),
         SettingEntry(P, tr(R.string.progress_bar), tr(R.string.knob_at_the_playhead), tr(R.string.scrubber_thumb_knob_dot_line_ring)),
         SettingEntry(P, tr(R.string.progress_bar), tr(R.string.volume_bar_like_the_progress_bar), tr(R.string.volume_bar_keywords)),
+        // 1.8.1: the bar shaped by the crossfade (drawn only while Crossfade is on).
+        SettingEntry(P, tr(R.string.progress_bar), tr(R.string.crossfade_on_the_progress_bar), tr(R.string.crossfade_shape_keywords), needs = crossfade),
         SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.handle_at_the_top), tr(R.string.player_handle_keywords)),
         SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.band_behind_the_navigation_buttons), tr(R.string.nav_band_keywords)),
         SettingEntry(P, tr(R.string.visualizer), tr(R.string.visualizer), tr(R.string.visualiser_bars_wave_ring_pulse_glow)),

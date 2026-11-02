@@ -12,6 +12,12 @@ What changed in each release. Older releases are described on the [Releases page
   file", as on the player. A lossless file of the same song still comes first, and a file worse than the stream (under
   128 kbps, 96 for Opus, or under 44.1 kHz) is left alone. Your files are never changed; turn it off and those songs
   stream again at once.
+- **The progress bar can take the crossfade's shape** (Customize Prism → Player → Progress bar, off unless turned on).
+  With Crossfade on, the end of a song's bar tapers the way its volume falls in the blend, and the next song's bar
+  grows in the way its volume rises: Smooth rounds off, Straight is a wedge, Gentle an S, DJ cut stays full and then
+  drops. Its length is the real blend's (an automatic one shows once the blend is planned); the knob rides the shape.
+  The waveform and Ribbons keep the crossfade mark; nothing changes where songs don't blend (an album's tracks,
+  casting, episodes, live streams).
 
 ### Fixes
 

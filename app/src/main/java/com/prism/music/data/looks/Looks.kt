@@ -286,6 +286,7 @@ object LookLabels {
         "panel_player" to tr(R.string.player_over_lyrics_queue), "queue_headings" to tr(R.string.queue_headings), "cast_mark" to tr(R.string.cast_mark_under_the_player),
         "immersive_video" to tr(R.string.video_in_immersive_mode), "bleed_fit" to tr(R.string.full_bleed_artwork_s_fit), "cover_flight" to tr(R.string.cover_flies_into_the_player),
         "video_controls_hide" to tr(R.string.controls_hide_over_videos), "crossfade_mark" to tr(R.string.crossfade_mark), "blend_covers" to tr(R.string.covers_blend_in_a_crossfade), "player_buttons_pill" to tr(R.string.player_buttons_in_a_capsule),
+        "crossfade_shape" to tr(R.string.crossfade_on_the_progress_bar),
         "hide_status_bar" to tr(R.string.hide_the_status_bar),
         "hide_status_bar_player" to tr(R.string.hide_status_bar_on_the_player),
         "volume_matches_progress" to tr(R.string.volume_bar_like_the_progress_bar),
@@ -431,7 +432,7 @@ object LookLabels {
             "player_title_weight", "player_title_scroll", "player_times", "mesh_speed", "mesh_intensity", "player_blur", "canvas_fills_background",
             "scrubber_thickness", "scrubber_thumb", "volume_matches_progress", "player_handle", "player_nav_band", "play_ring", "visualizer", "visualizer_color",
             "panel_player", "queue_headings", "cast_mark", "immersive_video", "bleed_fit", "cover_flight", "video_controls_hide", "crossfade_mark", "blend_covers", "player_buttons_pill",
-            "player_hidden_parts",
+            "player_hidden_parts", "crossfade_shape",
         ),
         "lyrics" to setOf(
             "lyrics_align", "lyrics_blur", "lyrics_progress_line", "lyrics_source_button", "lyrics_scale", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",
