@@ -51,6 +51,26 @@ What changed in each release. Older releases are described on the [Releases page
   drops. Its length is the real blend's (an automatic one shows once the blend is planned); the knob rides the shape.
   The waveform and Ribbons keep the crossfade mark; nothing changes where songs don't blend (an album's tracks,
   casting, episodes, live streams).
+- **Pause your history** (#296): Settings → Recommendations & Replay → History → Pause history, for 1 hour, 1 day or
+  until you turn it back on. Meanwhile nothing you play or search is kept: no plays for Replay, Rewind and History, no
+  recent searches, nothing sent to your YouTube Music history and, like Spotify's private session, no Last.fm scrobbles;
+  skipped suggestions aren't learned from either. What's already kept stays, and likes still count. Replay says when
+  history is paused, with a button to turn it back on.
+- **Choose when a song counts as played** (#263): "Counts as a play after" at once, 5, 10 (as always), 30 seconds or a
+  minute, for Replay, Rewind and History. Signed in, "Same for your YouTube Music history" (off by default) makes your
+  account's history wait for it too, so a song skipped at once is in neither.
+- **Replay graphs a day by its hours, a week or a month by its days**, and up to half a year by weeks (#287, #286):
+  until now only a stretch of more than a month had a graph. Each says its busiest hour, day, week or month.
+- **Home's Replay card can show the last 14 days or the last 12 weeks** instead of this year's months (#286):
+  Customize Prism → Home & Library → Replay card → "Bars on the card" (Months unless changed).
+- **Replay and Rewind stories in your font** (#287, #269): Recommendations & Replay → Replay → Story type, "Your font"
+  sets the stories in the font you picked for Prism instead of the poster type (Poster type unless changed).
+- **Home's Replay card says "Includes Spotify"** (or the other histories it counts) when Replay counts an imported
+  history, as Replay and its story do.
+- **Last.fm: see what's there before bringing it.** Tapping Last.fm now shows how many scrobbles there are and their
+  dates ("4,210 scrobbles, Mar 3, 2019 to Nov 1, 2026", or the new ones since your last import), from two small
+  requests, then Bring them.
+
 ### Fixes
 
 - **Your own photo background stays in Performance mode** (Reddit: "only a black background now"). Performance mode

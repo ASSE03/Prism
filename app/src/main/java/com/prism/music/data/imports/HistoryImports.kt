@@ -243,6 +243,16 @@ class HistoryImports(private val c: AppContainer) {
         }
     }
 
+    /**
+     * What [bringLastFm] would bring, from two small requests ([LastFmPeek]): how many scrobbles (only the new ones
+     * after an earlier import) and their dates. Null: not connected, or Last.fm didn't answer.
+     */
+    suspend fun previewLastFm(): LastFmPeek.Peek? = withContext(Dispatchers.IO) {
+        if (c.lastFm.user.value == null) return@withContext null
+        val from = LastFmHistory.fromSeconds(c.db.imports().newest(ImportSource.LASTFM.key))
+        runCatching { LastFmPeek.peek({ page, per -> c.lastFm.recentTracksPage(page, per, from) }, from) }.getOrNull()
+    }
+
     /** The connected Last.fm account's scrobbles, page by page. */
     suspend fun bringLastFm(): HistoryImporter.Stats? = lock.withLock {
         withContext(Dispatchers.IO) {
