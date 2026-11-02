@@ -41,6 +41,7 @@ What changed in each release. Older releases are described on the [Releases page
   around the cover closes the player (in the Cover and Minimal layouts the room above the cover took nothing) (#276).
 - **Tab bar**: the docked bar no longer shows bright lines at the screen's sides with Frosted or Liquid glass (#290),
   and with Labels "Selected" the current tab's name sits under its icon, as with "Always" (#291).
+- **Smart Shuffle's "Add to …"** says "Already in …" when the song is in the playlist already, as Add to playlist does.
 - **Start radio on the song that's playing** keeps it playing where it is and lines the radio up after it (it started
   the song again) (#292).
 - **New option**: Customize Prism → Tabs & mini player → Mini player → "Play/pause button", to leave play / pause off
