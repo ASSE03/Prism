@@ -863,6 +863,18 @@ private fun BarSample(color: ScrubberColor) {
 /** Background movement [v] (0 still … 1 lively) as the mesh's speed and its colors' strength (1 = as the cover … 1.5). */
 fun meshMovement(v: Float): Pair<Float, Float> = if (v < 0.05f) 0f to 1f else v to 1f + 0.5f * v
 
+/**
+ * Why the color mesh holds still though its movement is up (#284), or null: Reduce motion, Performance mode, or the
+ * phone's animations turned off (Settings → Accessibility, or developer options' animation scale).
+ */
+internal fun meshHeldBy(s: com.prism.music.data.prefs.AppSettings, context: android.content.Context): String? = when {
+    s.reduceMotion -> tr(R.string.reduce_motion_is_on_so_it)
+    s.performanceMode -> tr(R.string.performance_mode_is_on_so_it_stays_still)
+    android.provider.Settings.Global.getFloat(context.contentResolver, android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f ->
+        tr(R.string.your_phone_s_animations_are_off_so_it_stays_still)
+    else -> null
+}
+
 /** The color mesh's movement, and how soft the blurred cover is (under Look → Background). */
 @Composable
 fun PlayerBackgroundTuning() {
@@ -875,7 +887,9 @@ fun PlayerBackgroundTuning() {
             tr(R.string.background_movement), s.meshSpeed, 0f..1f,
             { if (it < 0.05f) tr(R.string.still) else worded(if (it < 0.5f) tr(R.string.gentle) else tr(R.string.lively), it) },
         ) { v -> meshMovement(v).let { (speed, colors) -> prefs.setMeshSpeed(speed); prefs.setMeshIntensity(colors) } }
-        if (s.reduceMotion && s.meshSpeed > 0f) Note(tr(R.string.reduce_motion_is_on_so_it))
+        // #284: what else holds it still says so too (the page shows the settings as set, which Performance mode and the
+        // phone's own animations switch leave alone).
+        if (s.meshSpeed > 0f) meshHeldBy(s, androidx.compose.ui.platform.LocalContext.current)?.let { Note(it) }
     }
     // How soft the blurred cover is (1.8.0: only for Blurred cover, where it shows).
     if (s.playerBackground == com.prism.music.data.prefs.PlayerBackground.BLUR) {

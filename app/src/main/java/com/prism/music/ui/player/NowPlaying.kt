@@ -157,9 +157,36 @@ private const val HERO_FADE = 0.42f
  */
 internal fun heroTarget(heroMode: Boolean, picture: Boolean, canvas: Boolean): Boolean = heroMode && (picture || canvas)
 
-/** The cover's size: a little smaller while paused when asked, unless the listener chose Reduce motion themselves. */
-internal fun pausedCoverScale(playing: Boolean, shrinkWhenPaused: Boolean, ownReduceMotion: Boolean): Float =
-    if (playing || !shrinkWhenPaused || ownReduceMotion) 1f else 0.86f
+/**
+ * The cover's size: a little smaller while paused when asked, unless the listener chose Reduce motion themselves. A
+ * Full width cover ([fullWidth]) stays edge to edge (#276: it shrank away from the screen's sides).
+ */
+internal fun pausedCoverScale(playing: Boolean, shrinkWhenPaused: Boolean, ownReduceMotion: Boolean, fullWidth: Boolean = false): Float =
+    if (playing || !shrinkWhenPaused || ownReduceMotion || fullWidth) 1f else 0.86f
+
+/**
+ * The player's cover, [width] by [height], in a box [maxWidth] by [maxHeight] (the player's side margins [extra] wide
+ * each, which Large and Full width reach into). It's square as big as the box lets it be; a Full width cover ([full])
+ * always meets the screen's sides (#276: on most phones the player is too short for a square that wide, so Full kept the
+ * margins in the Standard layout, looking just like Large), its top and bottom then cropped a little instead.
+ */
+internal fun coverBox(maxWidth: Dp, maxHeight: Dp, extra: Dp, full: Boolean, titleRoom: Dp = ART_TITLE_GAP + HEADER_HEIGHT, least: Dp = THUMB_SIZE): Pair<Dp, Dp> {
+    val across = maxWidth + extra * 2
+    val side = minOf(across, maxHeight - titleRoom).coerceAtLeast(least)
+    return (if (full) maxOf(side, across) else side) to side
+}
+
+/**
+ * [width] by [height] (a square when they're the same); it may be wider than the slot (a Large / Full width cover
+ * reaches into the side margins). Taller than the slot, both sides give up the same.
+ */
+private fun Modifier.measuredBox(width: () -> Dp, height: () -> Dp): Modifier = layout { measurable, constraints ->
+    val wanted = height().roundToPx()
+    val h = wanted.coerceAtMost(constraints.maxHeight)
+    val w = (width().roundToPx() - (wanted - h)).coerceAtLeast(0)
+    val p = measurable.measure(Constraints.fixed(w, h))
+    layout(minOf(p.width, constraints.maxWidth), p.height) { p.placeRelative(0, 0) }
+}
 
 @Composable
 fun rememberPosition(fast: Boolean, hold: Boolean = false): Long = rememberPositionState(fast, hold).value
@@ -183,12 +210,6 @@ fun rememberPositionState(fast: Boolean, hold: Boolean = false): androidx.compos
     return pos
 }
 
-/** A square of [side]; it may be wider than the slot (a Large / Full width cover reaches into the side margins). */
-private fun Modifier.measuredSquare(side: () -> Dp): Modifier = layout { measurable, constraints ->
-    val px = side().roundToPx().coerceAtMost(constraints.maxHeight)
-    val p = measurable.measure(Constraints.fixed(px, px))
-    layout(minOf(p.width, constraints.maxWidth), p.height) { p.placeRelative(0, 0) }
-}
 
 /**
  * Now Playing, modelled on BitChord v1.7 (itself after Apple Music): artwork
@@ -396,7 +417,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     // which took the shrink away too; it's one scale of one layer, nothing to save).
     val ownReduceMotion = c.settings.stored.collectAsState().value.reduceMotion
     val artScale by animateFloatAsState(
-        pausedCoverScale(isPlaying, settings.artShrinkOnPause, ownReduceMotion),
+        pausedCoverScale(isPlaying, settings.artShrinkOnPause, ownReduceMotion, fullWidth = settings.coverSize == com.prism.music.data.prefs.CoverSize.FULL),
         spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow),
         label = "artScale",
     )
@@ -825,11 +846,22 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             }
 
             Column(Modifier.weight(1f).fillMaxWidth().padding(horizontal = PLAYER_GUTTER), horizontalAlignment = Alignment.CenterHorizontally) {
-                BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().padding(top = ART_BOX_TOP_PAD, bottom = if (roomyCover) 12.dp else 18.dp)) {
+                BoxWithConstraints(
+                    Modifier.weight(1f).fillMaxWidth()
+                        // #276: a swipe down anywhere round the cover closes the player, not only on the cover and the strip
+                        // at the top (the Cover and Minimal layouts leave room above the cover that took nothing). What's
+                        // on it (the cover, the title's buttons) takes its own drags first.
+                        .then(if (lyricsOpen || queueOpen || statsOpen) Modifier else dismissGesture)
+                        .testTag("playerArtBox")
+                        .padding(top = ART_BOX_TOP_PAD, bottom = if (roomyCover) 12.dp else 18.dp),
+                ) {
                     // Settings → Player → Cover size: Large and Full width reach into the side margins (still square).
                     // The Cover layout's cover is at least Large (its controls are out of the way).
                     val extra = if (layout == com.prism.music.data.prefs.PlayerLayout.COVER) maxOf(settings.coverSize.extra, com.prism.music.data.prefs.CoverSize.LARGE.extra) else settings.coverSize.extra
-                    val fullArt = minOf(maxWidth + extra.dp * 2, maxHeight - ART_TITLE_GAP - HEADER_HEIGHT).coerceAtLeast(THUMB_SIZE)
+                    // Full width meets the screen's sides whatever the player's height (#276); a record, a tape and a
+                    // shaped cover stay whole.
+                    val fullWidth = settings.coverSize == com.prism.music.data.prefs.CoverSize.FULL && !vinyl && !cassette && settings.shapes.player == com.prism.music.data.prefs.CoverShape.ROUNDED
+                    val (artWidth, fullArt) = coverBox(maxWidth, maxHeight, extra.dp, fullWidth)
                     // Room the cover can't use (a tall screen) is shared above and below it, as before 1.6.4 (all of it
                     // above pushed the whole player down). The title drops into part of the room below, so no blank
                     // band opens up between the artist and the scrubber (issue #9).
@@ -840,8 +872,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                     if (!lyricsOpen && !queueOpen && !statsOpen && bannerBottom != heroHeight) SideEffect { heroHeight = bannerBottom }
                     val sleeveMaxWidth = maxWidth
                     fun artSize(): Dp = lerp(fullArt, THUMB_SIZE, p())
+                    fun artWidthNow(): Dp = lerp(artWidth, THUMB_SIZE, p())
                     fun artTop(): Dp = lerp(groupTop, 0.dp, p())
-                    fun artStart(): Dp = lerp((maxWidth - fullArt) / 2, 0.dp, p())
+                    fun artStart(): Dp = lerp((maxWidth - artWidth) / 2, 0.dp, p())
                     fun titleTop(): Dp = lerp(groupTop + fullArt + ART_TITLE_GAP + titleDrop, 0.dp, p())
                     fun titleStart(): Dp = lerp(0.dp, THUMB_SIZE + 12.dp, p())
 
@@ -882,7 +915,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                     Box(
                         Modifier
                             .offset { IntOffset(artStart().roundToPx(), artTop().roundToPx()) }
-                            .measuredSquare(::artSize)
+                            .measuredBox(::artWidthNow, ::artSize)
                             .then(if (!videoMode) sleeveGesture.then(doubleTapSeek) else Modifier)
                             .graphicsLayer {
                                 val idle = artScale + (1f - artScale) * p()

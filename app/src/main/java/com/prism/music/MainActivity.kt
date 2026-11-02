@@ -17,14 +17,12 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
@@ -586,8 +584,12 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
         // What's under the full player holds its purely visual motion still while the player hides it.
         val playerCover = remember { com.prism.music.ui.components.PlayerCover() }
         val hiddenByPlayer = remember(playerCover) { { playerCover.hides } }
+        // The playing bars stand still while the song is paused (#302); read where they're drawn.
+        val musicPlaying = c.player.isPlaying.collectAsState()
+        val playingNow = remember(musicPlaying) { { musicPlaying.value } }
         CompositionLocalProvider(
             com.prism.music.ui.components.LocalPlayerCover provides playerCover,
+            com.prism.music.ui.components.LocalMusicPlaying provides playingNow,
             LocalNavigator provides navigator,
             LocalHazeState provides haze,
             com.prism.music.ui.theme.LocalChromeStart provides railInset,
@@ -1144,20 +1146,24 @@ private fun TabItem(tab: Tab, selected: Boolean, labels: NavLabels, compact: Flo
                 }
             }
         }
-        // The picked tab grows into a capsule with its name beside the icon.
-        NavLabels.SELECTED -> Box(modifier.then(spectrumLine).then(click), contentAlignment = Alignment.Center) {
-            Row(
-                Modifier.height(40.dp).clip(CircleShape).background(indicator).padding(horizontal = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+        // The picked tab's name under its icon, as "Always" places it (#291: it grew into a capsule with the name beside
+        // the icon, which a long name pushed off the tab); the other tabs show their icons alone.
+        NavLabels.SELECTED -> Column(
+            modifier.then(spectrumLine).then(click),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Box(Modifier.size(52.dp, 32.dp).clip(CircleShape).background(indicator), contentAlignment = Alignment.Center) {
                 // 24 dp as in the other label styles (#272: 22 here made every icon a little smaller with "Selected").
                 Icon(icon, tab.label, tint = fg, modifier = Modifier.size(24.dp).then(if (selected) Modifier.tabTint(tabTint) else Modifier))
-                AnimatedVisibility(selected && compact < 0.5f, enter = expandHorizontally() + fadeIn(), exit = shrinkHorizontally() + fadeOut()) {
-                    Row {
-                        Spacer(Modifier.width(6.dp))
-                        Text(tab.label, color = fg, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold, maxLines = 1)
-                    }
-                }
+            }
+            AnimatedVisibility(selected && compact < 0.5f, enter = expandVertically() + fadeIn(), exit = shrinkVertically() + fadeOut()) {
+                Text(
+                    tab.label, color = fg, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                    autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased(minFontSize = androidx.compose.ui.unit.TextUnit(8f, androidx.compose.ui.unit.TextUnitType.Sp), maxFontSize = MaterialTheme.typography.labelSmall.fontSize),
+                    modifier = Modifier.padding(top = 2.dp, start = 6.dp, end = 6.dp),
+                )
             }
         }
         NavLabels.NEVER -> Box(modifier.then(spectrumLine).then(click), contentAlignment = Alignment.Center) {

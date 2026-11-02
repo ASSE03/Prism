@@ -153,8 +153,12 @@ internal fun SearchLanding(
     var arranging by remember { mutableStateOf(false) }
     if (arranging) ArrangeSearchSheet { arranging = false }
     val artists = rememberYourArtists()
+    // #279: sections come in as they load (your artists, moods); the list held on to the first row it showed, so on the
+    // first visit after launch, when that was "Arrange this page" at the end, Search opened scrolled to the bottom.
+    val listState = androidx.compose.foundation.lazy.rememberLazyListState()
+    com.prism.music.ui.components.KeepAtTopUntilScrolled(listState)
 
-    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = bottomPadding + 16.dp)) {
+    LazyColumn(Modifier.fillMaxSize().testTag("searchLanding"), state = listState, contentPadding = PaddingValues(bottom = bottomPadding + 16.dp)) {
         settings.searchSections.forEach { section ->
             when (section) {
                 SearchSection.RECENT -> {

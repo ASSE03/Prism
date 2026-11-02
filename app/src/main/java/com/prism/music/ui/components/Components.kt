@@ -263,14 +263,14 @@ fun SongRowLayout(
 
 /**
  * Three bouncing bars: what's playing. [spectrum]: Spectrum's mark, the bars in the split light (red, green, violet)
- * instead of [color]. Still with reduced motion.
+ * instead of [color]. Still with reduced motion, and while the music is paused ([playing], #302: they bounced on).
  */
 @Composable
-fun PlayingBars(modifier: Modifier = Modifier, color: Color = Color.White, spectrum: Boolean = false) {
-    val still = com.prism.music.ui.theme.LocalUi.current.reduceMotion
+fun PlayingBars(modifier: Modifier = Modifier, color: Color = Color.White, spectrum: Boolean = false, playing: Boolean = LocalMusicPlaying.current()) {
+    val still = com.prism.music.ui.theme.LocalUi.current.reduceMotion || !playing
     val colors = if (spectrum && !com.prism.music.ui.theme.PrismTokens.white) listOf(Color(0xFFFF6B5E), Color(0xFF3DDC97), Color(0xFF7C8CFF)) else listOf(color, color, color)
     // With reduced motion there's no animation running at all (it used to tick every frame and just not show it); nor
-    // while the full player hides the list it's in.
+    // while the full player hides the list it's in, nor while the song is paused.
     val hidden = LocalHiddenByPlayer.current()
     val heights: List<androidx.compose.runtime.State<Float>> = if (still || hidden) STILL_BARS else {
         val t = rememberInfiniteTransition(label = "bars")
@@ -874,5 +874,23 @@ fun <T> SortBar(count: String, options: List<T>, selected: T, label: (T) -> Stri
     Row(modifier.fillMaxWidth().padding(start = 8.dp, top = 4.dp, bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
         Text(count, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
         SortButton(options, selected, label, onSelect = onSelect)
+    }
+}
+
+/**
+ * Keeps the list [state] scrolls at its top while rows come in above the one it shows, until the listener scrolls it
+ * themselves (#279). A lazy list holds on to the first row in view by its key: when a page's sections load in one by one
+ * and only the last row was there at first, the page opened scrolled to its bottom.
+ */
+@Composable
+fun KeepAtTopUntilScrolled(state: androidx.compose.foundation.lazy.LazyListState) {
+    var scrolled by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(state) {
+        state.interactionSource.interactions.collect { if (it is androidx.compose.foundation.interaction.DragInteraction.Start) scrolled = true }
+    }
+    LaunchedEffect(state) {
+        androidx.compose.runtime.snapshotFlow { state.layoutInfo.totalItemsCount }.collect {
+            if (!scrolled && (state.firstVisibleItemIndex != 0 || state.firstVisibleItemScrollOffset != 0)) state.scrollToItem(0)
+        }
     }
 }
