@@ -143,8 +143,9 @@ fun TvSingPage(nav: TvNav) {
         c.sing.prepare(listOf(s) + queue.drop(at + 1).take(1), c.player.position)
     }
     val state = rememberLyricsState(s)
-    // Always running (it idles while paused): a seek while paused still moves the lines.
-    val clock = rememberLyricClock(true)
+    // Made again at each seek, so one while paused still moves the lines; paused, it stands still.
+    val jumps by c.player.jumps.collectAsState()
+    val clock = androidx.compose.runtime.key(jumps) { rememberLyricClock(now.playing) }
     val accent = rememberTvAccent(now.art)
     val lines = state.lines
     val current by remember(lines) { derivedStateOf { CarLyricsCard.lineAt(lines, clock.value).coerceAtLeast(0) } }

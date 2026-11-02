@@ -311,7 +311,8 @@ fun TvCollectionScreen(
     val goIn: () -> Unit = goIn@{
         if (songs.isEmpty() || target < 0) return@goIn
         if (runCatching { into.requestFocus() }.getOrDefault(false)) return@goIn
-        scope.launch {
+        // On the main thread, where the list is laid out (see TvLyricsList's glide).
+        scope.launch(kotlinx.coroutines.Dispatchers.Main.immediate) {
             list.scrollToItem(target)
             repeat(20) { if (runCatching { into.requestFocus() }.getOrDefault(false)) return@launch; kotlinx.coroutines.delay(16) }
         }
