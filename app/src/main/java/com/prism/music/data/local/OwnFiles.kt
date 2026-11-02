@@ -65,7 +65,8 @@ object OwnFiles {
     /** A file's title and artist, cleaned up: track numbers, "Artist - Title" titles, "<unknown>" artists. */
     data class Tags(val title: String, val artist: String)
 
-    private val trackNumber = Regex("^\\s*(?:\\d{1,3}|[a-d]\\d{1,2})\\s*[-._)]\\s*", RegexOption.IGNORE_CASE)
+    /** "03 - ", "03_", "07. ", "1) ", "A1 - " (a vinyl side); not "4.44" or "7 Rings". */
+    private val trackNumber = Regex("^\\s*(?:\\d{1,3}|[a-d]\\d{1,2})\\s*(?:[-_]|[.)]\\s)\\s*", RegexOption.IGNORE_CASE)
     private val unknownArtist = setOf("<unknown>", "unknown", "unknown artist", "various artists", "various", "va")
 
     fun clean(title: String, artist: String): Tags {
