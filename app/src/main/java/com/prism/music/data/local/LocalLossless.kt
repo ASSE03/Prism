@@ -34,7 +34,7 @@ class LocalLossless(private val context: Context) {
         val modified: Long = 0,
         /** The bitrate the media store read from the file (Android 11+), in kbps; 0 = not known. */
         val tagKbps: Int = 0,
-        /** Hz, from the media store (Android 12+); 0 = not known. */
+        /** Hz, from the media store (Android 14+); 0 = not known. */
         val sampleRate: Int = 0,
     ) {
         /** One of your own MP3/AAC/Ogg files (1.8.1, #314), not a lossless one. */
@@ -123,11 +123,12 @@ class LocalLossless(private val context: Context) {
         val ownProjection = projection + listOfNotNull(
             MediaStore.Audio.Media.DISPLAY_NAME, MediaStore.Audio.Media.DATE_MODIFIED,
             if (Build.VERSION.SDK_INT >= 30) "bitrate" else null,
-            if (Build.VERSION.SDK_INT >= 31) "samplerate" else null,
+            // The media store only has the column from Android 14: asked for below that, the whole query fails.
+            if (Build.VERSION.SDK_INT >= 34) "samplerate" else null,
         )
         fun own(c: android.database.Cursor, uri: Uri, mime: String): Track? {
             val bitrate = if (Build.VERSION.SDK_INT >= 30) c.getColumnIndex("bitrate").takeIf { it >= 0 }?.let { c.getLong(it) } ?: 0L else 0L
-            val rate = if (Build.VERSION.SDK_INT >= 31) c.getColumnIndex("samplerate").takeIf { it >= 0 }?.let { c.getInt(it) } ?: 0 else 0
+            val rate = if (Build.VERSION.SDK_INT >= 34) c.getColumnIndex("samplerate").takeIf { it >= 0 }?.let { c.getInt(it) } ?: 0 else 0
             return Track(
                 uri, c.getString(1) ?: return null, c.getString(2) ?: "", c.getLong(3), mime, c.getLong(5),
                 name = c.getString(6) ?: "", modified = c.getLong(7), tagKbps = (bitrate / 1000).toInt(), sampleRate = rate,
@@ -141,7 +142,7 @@ class LocalLossless(private val context: Context) {
                     own(c, uri, c.getString(4) ?: continue)?.let { tracks += it }
                 }
             }
-        }
+        }.onFailure { android.util.Log.w("PrismLossless", "the MP3/AAC/Ogg pass failed", it) }
         // ALAC (#135): .m4a files whose track is Apple Lossless, looked at once each (a few hundred a scan at most; the
         // rest on the next scans). The others are AAC: your own files when [lossy].
         runCatching {
@@ -160,7 +161,7 @@ class LocalLossless(private val context: Context) {
                     }
                 }
             }
-        }
+        }.onFailure { android.util.Log.w("PrismLossless", "the .m4a pass failed", it) }
         use(tracks)
         found.value = tracks.count { !it.lossy }
         ownFound.value = if (lossy) tracks.count { it.lossy } else -1

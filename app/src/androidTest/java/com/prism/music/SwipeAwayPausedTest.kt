@@ -39,7 +39,8 @@ class SwipeAwayPausedTest {
         val player = Fixture.container.player
 
         InstrumentationRegistry.getInstrumentation().runOnMainSync { player.playQueue(listOf(song), 0, QueueSource(QueueKind.OTHER, "Swipe test")) }
-        waitFor(20_000) { PlaybackServices.taskRemovedForTest != null && player.currentSong.value?.id == song.id && mediaNotifications() > 0 }
+        // Playing for real before the pause: togglePlay on a song still loading starts it instead of pausing it.
+        waitFor(20_000) { PlaybackServices.taskRemovedForTest != null && player.currentSong.value?.id == song.id && player.isPlaying.value && mediaNotifications() > 0 }
         InstrumentationRegistry.getInstrumentation().runOnMainSync { player.togglePlay() }
         // Paused for real first: a pause fades out, and the player only stops wanting to play once the fade is done
         // (on a busy emulator that took longer than a fixed wait, and the swipe then found it still playing).

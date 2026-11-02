@@ -49,8 +49,10 @@ class OwnSongFilesTest {
         ui.executeShellCommand("cmd media_session volume --stream 3 --set 0").close()
         val perm = if (android.os.Build.VERSION.SDK_INT >= 33) android.Manifest.permission.READ_MEDIA_AUDIO else android.Manifest.permission.READ_EXTERNAL_STORAGE
         ui.grantRuntimePermission(Fixture.context.packageName, perm)
-        files += aacTone(song.title, song.durationSec)
-        c.losslessSync.lookUpForTest = { t -> if (t.title == song.title) song else null }
+        // A muxed .m4a carries no artist tag, so the file is named "Artist - Title" the way many untagged files are:
+        // a file with no artist never matches.
+        files += aacTone("Prism Test Band - ${song.title}", song.durationSec)
+        c.losslessSync.lookUpForTest = { t -> if (t.title.endsWith(song.title)) song else null }
         Fixture.launch()
 
         // Off, as in 1.8.0: the file isn't even looked at.
@@ -62,7 +64,15 @@ class OwnSongFilesTest {
         c.settings.setOwnLossyFiles(true)
         waitFor(10_000) { c.settings.current.sound.ownLossyFiles }
         runBlocking { c.losslessSync.sync() }
-        waitFor(20_000) { c.losslessSync.songs.value[song.id]?.second?.lossy == true }
+        waitFor(20_000, {
+            val store = Fixture.context.contentResolver.query(files[0], arrayOf(MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.MIME_TYPE, MediaStore.Audio.Media.DURATION, MediaStore.Audio.Media.SIZE, "bitrate"), null, null, null)
+                ?.use { q -> if (q.moveToFirst()) (0 until q.columnCount).joinToString { q.getString(it) ?: "null" } else "none" }
+            "store: $store; own found ${c.localLossless.ownFound.value}; scanned: " +
+                c.localLossless.tracks.joinToString { "${it.title}/${it.artist}/${it.mime}/${it.bitrateKbps}k/${it.sampleRate}Hz/${it.durationMs}ms" }
+        }) {
+            c.losslessSync.songs.value[song.id]?.second?.lossy == true
+        }
         val track = c.losslessSync.songs.value.getValue(song.id).second
         assertEquals("AAC", track.format)
         waitFor(10_000) { c.downloadState.value[song.id]?.ownFile != null }
@@ -171,10 +181,10 @@ class OwnSongFilesTest {
         return uri
     }
 
-    private fun waitFor(timeoutMs: Long, condition: () -> Boolean) {
+    private fun waitFor(timeoutMs: Long, what: () -> String = { "" }, condition: () -> Boolean) {
         val end = System.currentTimeMillis() + timeoutMs
         while (!condition()) {
-            if (System.currentTimeMillis() > end) throw AssertionError("not ready after $timeoutMs ms")
+            if (System.currentTimeMillis() > end) throw AssertionError("not ready after $timeoutMs ms ${what()}")
             Thread.sleep(200)
         }
     }
