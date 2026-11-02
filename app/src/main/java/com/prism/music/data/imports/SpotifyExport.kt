@@ -21,7 +21,8 @@ import java.time.format.DateTimeFormatter
  * - Account data's history, `StreamingHistory_music_*.json` (older: `StreamingHistory*.json`): `endTime`
  *   ("2023-01-04 21:15", UTC), `artistName`, `trackName`, `msPlayed`. Podcasts' own files are left out.
  * - `YourLibrary.json`: `tracks` (Liked Songs), `albums`, `artists` (followed).
- * - `Playlist*.json`: `playlists` [{name, items: [{track: {trackName, artistName, albumName, trackUri}}]}].
+ * - `Playlist*.json`: `playlists` [{name, items: [{track: {trackName, artistName, albumName, trackUri}}]}] (some
+ *   downloads also give a playlist's `uri`).
  *
  * Where a download holds both histories, the extended one is the whole story and the account data's (the same plays
  * again, to the minute) is passed over: [Options.accountHistory].
@@ -117,7 +118,8 @@ object SpotifyExport {
                 val t = item["track"] as? JsonObject ?: return@mapNotNull null
                 LibraryTrack(t.str("trackName") ?: return@mapNotNull null, t.str("artistName") ?: return@mapNotNull null, t.str("albumName"), t.str("trackUri"))
             }
-            LibraryPlaylist(name, tracks)
+            // Its "uri", when a download has one: a renamed playlist is still the same one.
+            LibraryPlaylist(name, tracks, p.str("uri"))
         }
         return ParsedLibrary(playlists = lists)
     }

@@ -78,16 +78,56 @@ class ImportPerformanceTest {
         System.gc(); peak = maxOf(peak, usedMb())
         val counted = runBlocking { CountedPlays(listOf(ImportSource.SPOTIFY), db.counted(), db.plays()).count(0, Long.MAX_VALUE) }
         println("[import] ${"%,d".format(plays)} plays (${file.length() / 1_048_576} MB) in ${"%.1f".format(seconds)} s; heap +${"%.0f".format(peak - base)} MB at most; $stats")
-        db.close()
         assertEquals(plays, stats.stored)
         assertEquals(songs, stats.songs)
         assertEquals(plays, counted)
         assertTrue("took ${"%.1f".format(seconds)} s", seconds < MAX_SECONDS)
         assertTrue("heap grew ${"%.0f".format(peak - base)} MB", peak - base < MAX_MB)
+
+        // The same download brought again (a "fresh" one with nothing new): the preview and the import both pass every
+        // play over, quickly and in little memory.
+        System.gc(); Thread.sleep(200)
+        val base2 = usedMb()
+        var peak2 = base2
+        val previewStarted = System.nanoTime()
+        val fresh = runBlocking {
+            val n = importer.novelty(ImportSource.SPOTIFY)
+            SpotifyExport.read("Streaming_History_Audio_2016-2026_0.json", file.inputStream()) { n.add(it) }
+            n.result()
+        }
+        val previewSeconds = (System.nanoTime() - previewStarted) / 1e9
+        val againStarted = System.nanoTime()
+        val again = runBlocking {
+            val session = importer.session(ImportSource.SPOTIFY)
+            val batch = ArrayList<ParsedPlay>(HistoryImporter.BATCH)
+            var n = 0
+            SpotifyExport.read("Streaming_History_Audio_2016-2026_0.json", file.inputStream()) { p ->
+                batch += p
+                if (batch.size >= HistoryImporter.BATCH) { runBlocking { batch.forEach { session.add(it) } }; batch.clear() }
+                if (++n % 20_000 == 0) { System.gc(); peak2 = maxOf(peak2, usedMb()) }
+            }
+            batch.forEach { session.add(it) }
+            session.finish()
+        }
+        val againSeconds = (System.nanoTime() - againStarted) / 1e9
+        System.gc(); peak2 = maxOf(peak2, usedMb())
+        println("[import] again: preview ${"%.1f".format(previewSeconds)} s, import ${"%.1f".format(againSeconds)} s; heap +${"%.0f".format(peak2 - base2)} MB at most; $again")
+        val countedAgain = runBlocking { CountedPlays(listOf(ImportSource.SPOTIFY), db.counted(), db.plays()).count(0, Long.MAX_VALUE) }
+        db.close()
+        assertEquals("nothing new in it", 0, fresh.plays)
+        assertEquals(0, again.stored)
+        assertEquals(plays, again.alreadyThere)
+        assertEquals(0, again.newSongs)
+        assertEquals(plays, countedAgain)
+        assertTrue("preview again took ${"%.1f".format(previewSeconds)} s", previewSeconds < MAX_REPEAT_SECONDS)
+        assertTrue("import again took ${"%.1f".format(againSeconds)} s", againSeconds < MAX_REPEAT_SECONDS)
+        assertTrue("heap grew ${"%.0f".format(peak2 - base2)} MB again", peak2 - base2 < MAX_MB)
     }
 
     companion object {
         const val MAX_SECONDS = 60.0
+        /** A repeat import stores nothing: it must be quicker than the first. */
+        const val MAX_REPEAT_SECONDS = 30.0
         const val MAX_MB = 30.0
     }
 }

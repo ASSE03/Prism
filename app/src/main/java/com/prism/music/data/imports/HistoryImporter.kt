@@ -12,9 +12,43 @@ import kotlinx.serialization.builtins.ListSerializer
  * Stores imported plays (1.8.1): a [Session] takes plays as a file is read, a few thousand at a time into the database,
  * and keeps one entry per song for matching. Takeout and Last.fm plays that are really Prism's own (Prism reports its
  * plays to YouTube's history, and scrobbles them) are left out. Matching's answers come back through [applyMatch].
+ *
+ * A newer download of the same source adds only what's new ([ImportedIndex]): a play already brought in by an earlier
+ * import is passed over, and only songs never seen before are lined up for matching.
  */
 class HistoryImporter(private val db: PrismDatabase) {
-    data class Stats(val read: Int, val stored: Int, val alreadyThere: Int, val prismsOwn: Int, val songs: Int, val newSongs: Int)
+    /**
+     * [songs]: the songs of the plays stored (or upgraded) now; [upgraded]: account-data plays an extended download's
+     * same plays took the place of (counted in [alreadyThere]).
+     */
+    data class Stats(val read: Int, val stored: Int, val alreadyThere: Int, val prismsOwn: Int, val songs: Int, val newSongs: Int, val upgraded: Int = 0)
+
+    /** What a download holds that isn't here yet ([HistoryImports.preview]); counted, nothing stored. */
+    data class Novelty(val plays: Int, val firstAt: Long?, val lastAt: Long?, val prismsOwn: Int)
+
+    /** Counts what of a download is new, as a [Session] of [source] would store it (nothing is written). */
+    suspend fun novelty(source: ImportSource): NoveltyCounter = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+        NoveltyCounter(ImportedIndex.of(db, source), if (source != ImportSource.SPOTIFY) PrismIndex.of(db) else null)
+    }
+
+    class NoveltyCounter internal constructor(private val stored: ImportedIndex, private val prism: PrismIndex?) {
+        private var plays = 0
+        private var dropped = 0
+        private var first = Long.MAX_VALUE
+        private var last = Long.MIN_VALUE
+
+        /** One play read from the download (the readers call back plainly). */
+        fun add(p: ParsedPlay) {
+            val key = ImportKeys.songKey(p.title, p.artist)
+            if (prism != null && prism.absorbs(p, key)) { dropped++; return }
+            if (stored.absorb(p, key, upgrades = false) != ImportedIndex.Hit.New) return
+            plays++
+            if (p.timestamp < first) first = p.timestamp
+            if (p.timestamp > last) last = p.timestamp
+        }
+
+        fun result() = Novelty(plays, first.takeIf { plays > 0 }, last.takeIf { plays > 0 }, dropped)
+    }
 
     private class Seed(val title: String, val artist: String, val album: String?, val sourceId: String?, val youtubeId: String?) {
         var full = 0L
@@ -27,9 +61,12 @@ class HistoryImporter(private val db: PrismDatabase) {
         private val buffer = ArrayList<ImportedPlayEntity>(BATCH)
         private val seeds = HashMap<String, Seed>()
         private var prism: PrismIndex? = null
+        private var earlier: ImportedIndex? = null
+        private val upgrades = ArrayList<Pair<Long, ParsedPlay>>()
         private var read = 0
         private var stored = 0
         private var dropped = 0
+        private var upgraded = 0
 
         /** One play read from the file. */
         suspend fun add(p: ParsedPlay) {
@@ -39,9 +76,19 @@ class HistoryImporter(private val db: PrismDatabase) {
                 val index = prism ?: PrismIndex.of(db).also { prism = it }
                 if (index.absorbs(p, key)) { dropped++; return }
             }
-            val seed = seeds.getOrPut(key) { Seed(p.title.take(MAX_TEXT), p.artist.take(MAX_TEXT), p.album?.take(MAX_TEXT), p.sourceId, p.youtubeId) }
-            if (p.fullPlay) seed.full = maxOf(seed.full, p.playedMs)
-            if (!p.estimated) seed.longest = maxOf(seed.longest, p.playedMs)
+            // Brought in by an earlier import: passed over (an account-data play takes the extended one's details).
+            val before = earlier ?: kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { ImportedIndex.of(db, source) }.also { earlier = it }
+            when (val hit = before.absorb(p, key, upgrades = source == ImportSource.SPOTIFY)) {
+                ImportedIndex.Hit.New -> Unit
+                ImportedIndex.Hit.Same -> return
+                is ImportedIndex.Hit.Upgrade -> {
+                    seedOf(key, p)
+                    upgrades += hit.id to p
+                    if (upgrades.size >= BATCH) flush()
+                    return
+                }
+            }
+            seedOf(key, p)
             buffer += ImportedPlayEntity(
                 origin = source.key, timestamp = p.timestamp, playedMs = p.playedMs.coerceIn(0, MAX_PLAY_MS), skipped = p.skipped,
                 estimated = p.estimated, title = p.title.take(MAX_TEXT), artist = p.artist.take(MAX_TEXT), album = p.album?.take(MAX_TEXT),
@@ -50,13 +97,26 @@ class HistoryImporter(private val db: PrismDatabase) {
             if (buffer.size >= BATCH) flush()
         }
 
-        private suspend fun flush() {
-            if (buffer.isEmpty()) return
-            stored += kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { insertRows(buffer) }
-            buffer.clear()
+        private fun seedOf(key: String, p: ParsedPlay) {
+            val seed = seeds.getOrPut(key) { Seed(p.title.take(MAX_TEXT), p.artist.take(MAX_TEXT), p.album?.take(MAX_TEXT), p.sourceId, p.youtubeId) }
+            if (p.fullPlay) seed.full = maxOf(seed.full, p.playedMs)
+            if (!p.estimated) seed.longest = maxOf(seed.longest, p.playedMs)
         }
 
-        /** Stores what's left and lines the songs up for matching (songs matched before get their plays at once). */
+        private suspend fun flush() {
+            if (buffer.isEmpty() && upgrades.isEmpty()) return
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                if (buffer.isNotEmpty()) stored += insertRows(buffer)
+                if (upgrades.isNotEmpty()) upgraded += upgradeRows(upgrades)
+            }
+            buffer.clear()
+            upgrades.clear()
+        }
+
+        /**
+         * Stores what's left and lines the songs up for matching (songs matched before get their plays at once). A song
+         * matched before keeps its match and the listener's pick; only songs never seen are new to matching.
+         */
         suspend fun finish(): Stats {
             flush()
             val dao = db.imports()
@@ -64,24 +124,52 @@ class HistoryImporter(private val db: PrismDatabase) {
             db.withTransaction {
                 seeds.keys.chunked(500).forEach { keys ->
                     val known = dao.matches(keys).associateBy { it.songKey }
-                    dao.putMatches(keys.map { k ->
+                    val changed = keys.mapNotNull { k ->
                         val s = seeds.getValue(k)
                         val old = known[k]
                         if (old == null) fresh++
-                        old?.copy(
+                        val next = old?.copy(
                             durationMs = maxOf(old.durationMs, s.full), atLeastMs = maxOf(old.atLeastMs, s.longest),
                             sourceId = old.sourceId ?: s.sourceId, youtubeId = old.youtubeId ?: s.youtubeId,
                         ) ?: ImportMatchEntity(
                             songKey = k, title = s.title, artist = s.artist, album = s.album, durationMs = s.full, atLeastMs = s.longest,
                             sourceId = s.sourceId, youtubeId = s.youtubeId, status = MatchStatus.PENDING.name,
                         )
-                    })
+                        next.takeIf { it != old }
+                    }
+                    if (changed.isNotEmpty()) dao.putMatches(changed)
                 }
-                dao.linkKnown(source.key)
-                dao.capEstimatedAll(source.key)
+                // Nothing stored (the same download again): nothing to link or cap.
+                if (stored > 0 || upgraded > 0) {
+                    dao.linkKnown(source.key)
+                    dao.capEstimatedAll(source.key)
+                }
             }
-            return Stats(read, stored, read - dropped - stored, dropped, seeds.size, fresh)
+            return Stats(read, stored, read - dropped - stored, dropped, seeds.size, fresh, upgraded)
         }
+    }
+
+    /**
+     * Account-data plays an extended download's same plays take the place of: its time to the second, how long it was
+     * heard, whether it was skipped, the album and the Spotify id. Returns how many rows changed.
+     */
+    private fun upgradeRows(rows: List<Pair<Long, ParsedPlay>>): Int {
+        var n = 0
+        db.runInTransaction {
+            db.compileStatement(
+                "UPDATE OR IGNORE imported_plays SET timestamp = ?, playedMs = ?, skipped = ?, album = COALESCE(album, ?), sourceId = ? WHERE id = ?"
+            ).use { st ->
+                for ((id, p) in rows) {
+                    st.clearBindings()
+                    st.bindLong(1, p.timestamp); st.bindLong(2, p.playedMs.coerceIn(0, MAX_PLAY_MS)); st.bindLong(3, if (p.skipped) 1 else 0)
+                    p.album?.take(MAX_TEXT)?.let { st.bindString(4, it) } ?: st.bindNull(4)
+                    p.sourceId?.take(120)?.let { st.bindString(5, it) } ?: st.bindNull(5)
+                    st.bindLong(6, id)
+                    n += st.executeUpdateDelete()
+                }
+            }
+        }
+        return n
     }
 
     /**
