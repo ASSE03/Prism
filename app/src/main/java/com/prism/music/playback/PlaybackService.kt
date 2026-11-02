@@ -509,10 +509,12 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
         // Paused (#274): the notification goes too. stopSelf alone left it, and the service, while anything else was
         // still connected (the system's media controls, a watch, a widget), sometimes one that couldn't be swiped away.
-        // The queue is saved above, and Play from anywhere picks it up again.
+        // The queue is saved above, and Play from anywhere picks it up again. Marked closed first: the service shows a
+        // stopped player's notification otherwise (idle mode ALWAYS), until something plays again.
         if (!player.playWhenReady || player.mediaItemCount == 0) {
             flushPlayTime()
             saveEpisodePosition()
+            setNotificationClosed(true)
             player.stop()
             stopSelf()
         }
