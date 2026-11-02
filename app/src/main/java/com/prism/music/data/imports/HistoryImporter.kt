@@ -19,9 +19,13 @@ import kotlinx.serialization.builtins.ListSerializer
 class HistoryImporter(private val db: PrismDatabase) {
     /**
      * [songs]: the songs of the plays stored (or upgraded) now; [upgraded]: account-data plays an extended download's
-     * same plays took the place of (counted in [alreadyThere]).
+     * same plays took the place of (counted in [alreadyThere]); [library]: what the download's library added
+     * ([HistoryImports.bring] fills it in).
      */
-    data class Stats(val read: Int, val stored: Int, val alreadyThere: Int, val prismsOwn: Int, val songs: Int, val newSongs: Int, val upgraded: Int = 0)
+    data class Stats(
+        val read: Int, val stored: Int, val alreadyThere: Int, val prismsOwn: Int, val songs: Int, val newSongs: Int,
+        val upgraded: Int = 0, val library: LibraryNews = LibraryNews(),
+    )
 
     /** What a download holds that isn't here yet ([HistoryImports.preview]); counted, nothing stored. */
     data class Novelty(val plays: Int, val firstAt: Long?, val lastAt: Long?, val prismsOwn: Int)
@@ -82,7 +86,8 @@ class HistoryImporter(private val db: PrismDatabase) {
                 ImportedIndex.Hit.New -> Unit
                 ImportedIndex.Hit.Same -> return
                 is ImportedIndex.Hit.Upgrade -> {
-                    seedOf(key, p)
+                    // Found by its title and a related artist: the row keeps its own song (and its match).
+                    if (hit.sameSong) seedOf(key, p)
                     upgrades += hit.id to p
                     if (upgrades.size >= BATCH) flush()
                     return

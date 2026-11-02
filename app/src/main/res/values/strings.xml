@@ -4377,4 +4377,26 @@
     <string name="imp_remind_takeout_title">Time for a fresh YouTube Music history?</string>
     <string name="imp_remind_takeout_text">Your last YouTube Music import was on %1$s. Ask Google Takeout for your history again, then bring it into Prism: only what\'s new comes in.</string>
     <string name="imp_lastfm_detail_since">Your new scrobbles since %2$s, as %1$s</string>
+    <string name="imp_added">Added %1$s.</string>
+    <string name="imp_and">%1$s and %2$s</string>
+    <plurals name="imp_n_liked_songs">
+        <item quantity="one">%d liked song</item>
+        <item quantity="other">%d liked songs</item>
+    </plurals>
+    <plurals name="imp_n_new_playlists">
+        <item quantity="one">%d playlist</item>
+        <item quantity="other">%d playlists</item>
+    </plurals>
+    <plurals name="imp_n_playlist_songs">
+        <item quantity="one">%d playlist song</item>
+        <item quantity="other">%d playlist songs</item>
+    </plurals>
+    <plurals name="imp_n_saved_albums">
+        <item quantity="one">%d saved album</item>
+        <item quantity="other">%d saved albums</item>
+    </plurals>
+    <plurals name="imp_n_followed_artists">
+        <item quantity="one">%d followed artist</item>
+        <item quantity="other">%d followed artists</item>
+    </plurals>
 </resources>

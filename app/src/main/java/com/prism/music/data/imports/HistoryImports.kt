@@ -222,8 +222,8 @@ class HistoryImports(private val c: AppContainer) {
                     }
                     drain()
                 }
-                val stats = session.finish()
-                if (!library.isEmpty) addLibrary(library, choice.library)
+                // What the library adds is told apart from the plays (a repeat may bring only new likes or playlist songs).
+                val stats = session.finish().let { s -> if (library.isEmpty) s else s.copy(library = addLibrary(library, choice.library)) }
                 noteImport(source)
                 afterImport()
                 AudioDiagnostics.log("imports", "${source.key}: $stats")
@@ -277,11 +277,18 @@ class HistoryImports(private val c: AppContainer) {
         }
     }
 
-    private suspend fun addLibrary(lib: ParsedLibrary, choice: LibraryJob.LibraryChoice) {
-        val job = LibraryJob.load(jobFile).plus(lib, choice)
+    /** Lines [lib] up (as far as [choice] says); returns what of it is new. */
+    private suspend fun addLibrary(lib: ParsedLibrary, choice: LibraryJob.LibraryChoice): LibraryNews {
+        val before = LibraryJob.load(jobFile)
+        val news = before.news(ParsedLibrary(
+            if (choice.liked) lib.liked else emptyList(), if (choice.playlists) lib.playlists else emptyList(),
+            if (choice.albums) lib.albums else emptyList(), if (choice.artists) lib.artists else emptyList(),
+        ))
+        val job = before.plus(lib, choice)
         LibraryJob.save(jobFile, job)
         val tracks = (if (choice.liked) lib.liked else emptyList()) + (if (choice.playlists) lib.playlists.flatMap { it.tracks } else emptyList())
         importer.addLibrarySongs(tracks)
+        return news
     }
 
     /** The first import turns "shape your mixes" on (the owner's choice); after that it's the listener's. */
