@@ -34,17 +34,19 @@ class BringHistoryTest {
 
     private val c get() = Fixture.container
 
-    private fun zip(): Uri {
-        val now = java.time.Instant.now()
-        fun ts(daysAgo: Long) = now.minus(java.time.Duration.ofDays(daysAgo)).toString()
-        val history = """[
-            {"ts":"${ts(3)}","ms_played":200040,"master_metadata_track_name":"Blinding Lights","master_metadata_album_artist_name":"The Weeknd","master_metadata_album_album_name":"After Hours","spotify_track_uri":"spotify:track:0VjIjW4GlUZAMYd2vXMi3b","reason_start":"clickrow","reason_end":"trackdone","skipped":false},
-            {"ts":"${ts(2)}","ms_played":268000,"master_metadata_track_name":"Anti-Hero","master_metadata_album_artist_name":"Taylor Swift","master_metadata_album_album_name":"Midnights","spotify_track_uri":"spotify:track:0V3wPSX9ygBnCm8psDIegu","reason_start":"trackdone","reason_end":"trackdone","skipped":false},
-            {"ts":"${ts(1)}","ms_played":1800000,"master_metadata_track_name":null,"master_metadata_album_artist_name":null,"episode_name":"An episode","episode_show_name":"A podcast","reason_end":"endplay"}
-        ]"""
+    private val now = java.time.Instant.now()
+    private fun ts(daysAgo: Long) = now.minus(java.time.Duration.ofDays(daysAgo)).toString()
+    private val blindingLights get() = """{"ts":"${ts(3)}","ms_played":200040,"master_metadata_track_name":"Blinding Lights","master_metadata_album_artist_name":"The Weeknd","master_metadata_album_album_name":"After Hours","spotify_track_uri":"spotify:track:0VjIjW4GlUZAMYd2vXMi3b","reason_start":"clickrow","reason_end":"trackdone","skipped":false}"""
+    private val antiHero get() = """{"ts":"${ts(2)}","ms_played":268000,"master_metadata_track_name":"Anti-Hero","master_metadata_album_artist_name":"Taylor Swift","master_metadata_album_album_name":"Midnights","spotify_track_uri":"spotify:track:0V3wPSX9ygBnCm8psDIegu","reason_start":"trackdone","reason_end":"trackdone","skipped":false}"""
+    private val podcast get() = """{"ts":"${ts(1)}","ms_played":1800000,"master_metadata_track_name":null,"master_metadata_album_artist_name":null,"episode_name":"An episode","episode_show_name":"A podcast","reason_end":"endplay"}"""
+    private val levitating get() = """{"ts":"${ts(1)}","ms_played":203000,"master_metadata_track_name":"Levitating","master_metadata_album_artist_name":"Dua Lipa","master_metadata_album_album_name":"Future Nostalgia","spotify_track_uri":"spotify:track:463CkQjx2Zk1yXoBuierM9","reason_start":"trackdone","reason_end":"trackdone","skipped":false}"""
+
+    /** A Spotify data download as Spotify writes it, holding [plays] (extended history entries). */
+    private fun zip(name: String = "my_spotify_data.zip", plays: List<String> = listOf(blindingLights, antiHero, podcast)): Uri {
+        val history = plays.joinToString(",\n", "[", "]")
         val library = """{"tracks":[{"artist":"The Weeknd","album":"After Hours","track":"Blinding Lights","uri":"spotify:track:0VjIjW4GlUZAMYd2vXMi3b"}],"albums":[],"artists":[]}"""
         val playlists = """{"playlists":[{"name":"Bring test","lastModifiedDate":"2024-01-01","items":[{"track":{"trackName":"Anti-Hero","artistName":"Taylor Swift","albumName":"Midnights","trackUri":"spotify:track:0V3wPSX9ygBnCm8psDIegu"}}]}]}"""
-        val file = File(Fixture.context.cacheDir, "my_spotify_data.zip")
+        val file = File(Fixture.context.cacheDir, name)
         ZipOutputStream(file.outputStream()).use { z ->
             fun put(name: String, text: String) { z.putNextEntry(ZipEntry(name)); z.write(text.toByteArray()); z.closeEntry() }
             put("Spotify Extended Streaming History/Streaming_History_Audio_2025-2026_0.json", history)
@@ -111,6 +113,45 @@ class BringHistoryTest {
         compose.waitUntil(10_000) { runBlocking { c.db.imports().summaries().isEmpty() } }
         assertTrue("no longer counted", c.imports.counted.value.isEmpty())
         assertEquals(prismOnly, runBlocking { c.imports.replay().totalMs(0, Long.MAX_VALUE) })
+    }
+
+    /**
+     * A newer download of the same kind (1.8.1): the page says what's new in it ("1 new play since your last import"),
+     * brings only that, says "Nothing new in this download" for the same one again, and shows when Spotify was last
+     * brought in with the way to ask for a fresh download and the reminder's choices.
+     */
+    @Test fun aNewerDownloadBringsOnlyWhatsNew() {
+        val first = zip("spotify_first.zip", listOf(blindingLights, antiHero))
+        runBlocking {
+            val preview = c.imports.preview(ImportSource.SPOTIFY, listOf(first))
+            assertEquals(2, preview.newPlays)
+            c.imports.bring(ImportSource.SPOTIFY, listOf(first), HistoryImports.Choice(), preview)
+        }
+        assertTrue("the import is dated", ImportSource.SPOTIFY in c.imports.lastImports.value)
+
+        Fixture.launch()
+        compose.openSettings()
+        compose.clickWhenFound(hasText("Recommendations & Replay") and hasClickAction())
+        compose.clickWhenFound(hasText("Bring your history") and hasClickAction())
+        seeText("Last Spotify import")
+        seeText("(today)")
+        seeText("Request a fresh download")
+        seeText("Remind me to bring a fresh download")
+        seeText("3 months")
+
+        // The newer download: the same two plays, and one more (as picked in the file picker).
+        val second = zip("spotify_second.zip", listOf(blindingLights, antiHero, levitating))
+        c.imports.picked.value = HistoryImports.Picked(ImportSource.SPOTIFY, listOf(second))
+        seeText("1 new play since your last import")
+        seeText("2 already here")
+        seeText("Bring them")
+        compose.clickWhenFound(hasText("Bring them") and hasClickAction())
+        compose.waitUntil(15_000) { runBlocking { c.db.imports().summaries().firstOrNull()?.plays } == 3 }
+
+        // The same download again.
+        c.imports.picked.value = HistoryImports.Picked(ImportSource.SPOTIFY, listOf(second))
+        seeText("Nothing new in this download")
+        assertEquals(3, runBlocking { c.db.imports().summaries().single().plays })
     }
 
     /** Waits for [text], scrolling the page's lists to it: the page builds only what's on screen. */

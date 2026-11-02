@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,17 +34,21 @@ import com.prism.music.data.imports.HistoryImporter
 import com.prism.music.data.imports.HistoryImports
 import com.prism.music.data.imports.ImportPreview
 import com.prism.music.data.imports.ImportSource
+import com.prism.music.data.imports.ImportReminders
 import com.prism.music.data.imports.LibraryJob
+import com.prism.music.data.imports.LibraryNews
 import com.prism.music.data.imports.MatchStatus
 import com.prism.music.data.model.Song
 import com.prism.music.playback.QueueKind
 import com.prism.music.playback.QueueSource
 import com.prism.music.tr
+import com.prism.music.trp
 import com.prism.music.ui.LocalNavigator
 import com.prism.music.ui.Routes
 import com.prism.music.ui.components.Artwork
 import com.prism.music.ui.components.EmptyState
 import com.prism.music.ui.components.PrismButton
+import com.prism.music.ui.components.PrismOutlinedButton
 import com.prism.music.ui.components.PrismProgressBar
 import com.prism.music.ui.components.PrismTextButton
 import com.prism.music.ui.components.SubPage
@@ -57,6 +62,15 @@ import java.util.Date
 
 private fun count(n: Int): String = NumberFormat.getIntegerInstance().format(n)
 private fun day(ms: Long?): String = ms?.let { DateFormat.getDateInstance(DateFormat.MEDIUM).format(Date(it)) } ?: "–"
+
+/** "today", "1 day ago", "31 days ago": calendar days since [ms]. */
+private fun ago(ms: Long, now: Long = System.currentTimeMillis()): String {
+    val zone = java.time.ZoneId.systemDefault()
+    val days = java.time.temporal.ChronoUnit.DAYS.between(
+        java.time.Instant.ofEpochMilli(ms).atZone(zone).toLocalDate(), java.time.Instant.ofEpochMilli(now).atZone(zone).toLocalDate(),
+    ).toInt().coerceAtLeast(0)
+    return if (days == 0) tr(R.string.imp_today) else trp(R.plurals.imp_days_ago, days)
+}
 
 /**
  * Bring your history (1.8.1): pick Spotify's data download, a Google Takeout file or Last.fm; see what's in it; choose
@@ -73,6 +87,9 @@ fun BringHistoryScreen(bottomPadding: Dp) {
     val reading by imports.reading.collectAsState()
     val mobile by imports.matchOnMobile.collectAsState()
     val lastFmUser by c.lastFm.user.collectAsState()
+    val lastImports by imports.lastImports.collectAsState()
+    val remind by imports.remindMonths.collectAsState()
+    val uriHandler = androidx.compose.ui.platform.LocalUriHandler.current
 
     var source by remember { mutableStateOf<ImportSource?>(null) }
     var uris by remember { mutableStateOf<List<Uri>>(emptyList()) }
@@ -97,14 +114,28 @@ fun BringHistoryScreen(bottomPadding: Dp) {
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { picked ->
         val s = source ?: return@rememberLauncherForActivityResult
         if (picked.isEmpty()) return@rememberLauncherForActivityResult
+        imports.picked.value = HistoryImports.Picked(s, picked)
+    }
+    // What was picked is looked at here (kept in HistoryImports, so it's looked at once, whoever picked it).
+    val pickedNow by imports.picked.collectAsState()
+    LaunchedEffect(pickedNow) {
+        val (s, picked) = pickedNow ?: return@LaunchedEffect
+        // Taken off at once; the look goes on in the page's scope (clearing it restarts this effect).
+        imports.picked.value = null
         uris = picked; preview = null; message = null; looking = true
         scope.launch {
             val p = runCatching { imports.preview(s, picked) }.getOrNull()
             looking = false
-            if (p == null || p.isEmpty) message = tr(R.string.imp_nothing_found) else {
-                preview = p
-                history = p.plays > 0; liked = p.library.liked.isNotEmpty(); playlists = p.library.playlists.isNotEmpty()
-                albums = p.library.albums.isNotEmpty(); artists = p.library.artists.isNotEmpty()
+            when {
+                p == null || p.isEmpty -> message = tr(R.string.imp_nothing_found)
+                // An older or the same download again.
+                p.nothingNew -> message = if (p.plays > 0) tr(R.string.imp_nothing_new_range, day(p.firstAt), day(p.lastAt)) else tr(R.string.imp_nothing_new)
+                else -> {
+                    preview = p
+                    val news = p.libraryNews
+                    history = p.newPlays > 0; liked = news.liked > 0; playlists = news.playlists > 0 || news.playlistSongs > 0
+                    albums = news.albums > 0; artists = news.artists > 0
+                }
             }
         }
     }
@@ -125,7 +156,11 @@ fun BringHistoryScreen(bottomPadding: Dp) {
                 Item(ImportSource.SPOTIFY.label, tr(R.string.imp_spotify_detail), onClick = { source = ImportSource.SPOTIFY; picker.launch(arrayOf("*/*")) }, icon = PrismIcons.Library)
                 Item(ImportSource.TAKEOUT.label, tr(R.string.imp_takeout_detail), onClick = { source = ImportSource.TAKEOUT; picker.launch(arrayOf("*/*")) }, icon = PrismIcons.History)
                 Item(
-                    ImportSource.LASTFM.label, lastFmUser?.let { tr(R.string.imp_lastfm_detail, it) } ?: tr(R.string.imp_lastfm_connect),
+                    ImportSource.LASTFM.label,
+                    lastFmUser?.let { u ->
+                        // Again: only what was scrobbled since.
+                        lastImports[ImportSource.LASTFM]?.let { tr(R.string.imp_lastfm_detail_since, u, day(it)) } ?: tr(R.string.imp_lastfm_detail, u)
+                    } ?: tr(R.string.imp_lastfm_connect),
                     onClick = {
                         if (lastFmUser == null) nav.go(Routes.settings(SettingsSection.LASTFM.key))
                         else if (reading == null) { message = null; preview = null; c.scope.launch { done(imports.bringLastFm()) } }
@@ -150,22 +185,42 @@ fun BringHistoryScreen(bottomPadding: Dp) {
         preview?.let { p ->
             item(key = "preview") {
                 Group(tr(R.string.imp_whats_in_it)) {
-                    if (p.plays > 0) {
+                    if (p.isRepeat && p.plays > 0) {
+                        // A newer download: what's new since the last import, then the download's dates.
+                        Note(trp(R.plurals.imp_new_plays_since, p.newPlays, count(p.newPlays), day(p.lastImportAt)))
+                        val old = p.plays - p.newPlays
+                        Note(if (old > 0) tr(R.string.imp_download_range, day(p.firstAt), day(p.lastAt), count(old)) else tr(R.string.imp_download_dates, day(p.firstAt), day(p.lastAt)))
+                        if (p.newPlays > 0) Toggle(tr(R.string.imp_history), tr(R.string.imp_history_detail), history) { history = it }
+                    } else if (p.plays > 0) {
                         Note(tr(R.string.imp_plays_range, count(p.plays), count(p.songs), day(p.firstAt), day(p.lastAt)))
                         Toggle(tr(R.string.imp_history), tr(R.string.imp_history_detail), history) { history = it }
                     }
                     val lib = p.library
-                    if (lib.liked.isNotEmpty()) {
-                        Toggle(tr(R.string.imp_liked_songs), tr(R.string.imp_liked_detail, count(lib.liked.size)), liked, info = tr(R.string.imp_liked_info)) { liked = it }
+                    val news = p.libraryNews
+                    // Some of it was brought before (a newer download, or one brought again after its history was removed).
+                    val again = p.isRepeat || news != LibraryNews.of(lib)
+                    if (news.liked > 0) {
+                        val detail = if (again) tr(R.string.imp_liked_new_detail, count(news.liked)) else tr(R.string.imp_liked_detail, count(lib.liked.size))
+                        Toggle(tr(R.string.imp_liked_songs), detail, liked, info = tr(R.string.imp_liked_info)) { liked = it }
                         // Off unless asked for: the likes stay in Prism, and library sync leaves them be.
                         if (liked && c.settings.current.isLoggedIn) {
                             val onAccount by imports.likeOnAccount.collectAsState()
                             Toggle(tr(R.string.imp_like_on_account), tr(R.string.imp_like_on_account_detail), onAccount, info = tr(R.string.imp_like_on_account_info)) { imports.setLikeOnAccount(it) }
                         }
                     }
-                    if (lib.playlists.isNotEmpty()) Toggle(tr(R.string.imp_playlists), tr(R.string.imp_playlists_detail, count(lib.playlists.size)), playlists) { playlists = it }
-                    if (lib.albums.isNotEmpty()) Toggle(tr(R.string.imp_albums), tr(R.string.imp_albums_detail, count(lib.albums.size)), albums) { albums = it }
-                    if (lib.artists.isNotEmpty()) Toggle(tr(R.string.imp_artists), tr(R.string.imp_artists_detail, count(lib.artists.size)), artists) { artists = it }
+                    if (news.playlists > 0 || news.playlistSongs > 0) {
+                        val detail = if (again) tr(R.string.imp_playlists_new_detail, count(news.playlists), count(news.playlistSongs))
+                            else tr(R.string.imp_playlists_detail, count(lib.playlists.size))
+                        Toggle(tr(R.string.imp_playlists), detail, playlists, info = tr(R.string.imp_playlists_info)) { playlists = it }
+                    }
+                    if (news.albums > 0) {
+                        val detail = if (again) tr(R.string.imp_albums_new_detail, count(news.albums)) else tr(R.string.imp_albums_detail, count(lib.albums.size))
+                        Toggle(tr(R.string.imp_albums), detail, albums) { albums = it }
+                    }
+                    if (news.artists > 0) {
+                        val detail = if (again) tr(R.string.imp_artists_new_detail, count(news.artists)) else tr(R.string.imp_artists_detail, count(lib.artists.size))
+                        Toggle(tr(R.string.imp_artists), detail, artists) { artists = it }
+                    }
                     Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         PrismButton(
                             onClick = {
@@ -196,6 +251,28 @@ fun BringHistoryScreen(bottomPadding: Dp) {
                             )
                         }
                     }
+                }
+            }
+        }
+        // Spotify and Takeout come as downloads: when the last was brought in, where to ask for a fresh one, a reminder.
+        val downloads = ImportReminders.SOURCES.mapNotNull { s -> lastImports[s]?.let { s to it } }
+        if (downloads.isNotEmpty()) {
+            item(key = "current") {
+                Group(tr(R.string.imp_keep_current), info = tr(R.string.imp_keep_current_info)) {
+                    downloads.forEach { (s, at) ->
+                        Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text(tr(R.string.imp_last_import, s.label, day(at), ago(at)), style = MaterialTheme.typography.bodyLarge)
+                            PrismOutlinedButton(onClick = { ImportReminders.requestUrl(s)?.let { runCatching { uriHandler.openUri(it) } } }) {
+                                Text(tr(R.string.imp_request_fresh))
+                            }
+                        }
+                    }
+                    Label(tr(R.string.imp_remind), info = tr(R.string.imp_remind_info))
+                    com.prism.music.ui.components.Segmented(
+                        ImportReminders.CHOICES, remind,
+                        { m -> if (m == 0) tr(R.string.off) else trp(R.plurals.imp_months, m) },
+                        Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+                    ) { imports.setRemindMonths(it) }
                 }
             }
         }
