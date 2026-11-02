@@ -150,7 +150,7 @@ class Spotify(private val c: AppContainer) {
             throw e
         } catch (e: Exception) {
             log("sign-in didn't finish: ${e.javaClass.simpleName}")
-            store.wipe(clientIdToo = false)
+            store.clearTokens()
             _connection.value = Connection.Failed(
                 when (e) {
                     is SpotifyError.Forbidden -> tr(R.string.spot_failed_forbidden)
@@ -186,11 +186,12 @@ class Spotify(private val c: AppContainer) {
     suspend fun disconnect(clientIdToo: Boolean, keepPlaylists: Boolean) = withContext(Dispatchers.IO) {
         cancelConnect()
         SpotifyWorker.cancel(c.app)
-        runCatching { playlists.forget(keepPlaylists) }
-        top.forget()
-        likes.forget()
-        dir.deleteRecursively()
+        // The tokens first, so a feature running now stops at its next request; then each waits for its run to end.
         store.wipe(clientIdToo)
+        running.getValue(SpotifyFeature.PLAYLISTS).withLock { runCatching { playlists.forget(keepPlaylists) } }
+        running.getValue(SpotifyFeature.TOP).withLock { top.forget() }
+        running.getValue(SpotifyFeature.LIKES).withLock { likes.forget() }
+        dir.deleteRecursively()
         guards.values.forEach { it.reset() }
         _options.value = optionsNow()
         _connection.value = Connection.None
@@ -237,11 +238,13 @@ class Spotify(private val c: AppContainer) {
         schedule()
         c.scope.launch {
             if (on) run(f)
-            else when (f) {
-                SpotifyFeature.PLAYLISTS -> runCatching { playlists.forget(keep = false) }
-                SpotifyFeature.TOP -> top.forget()
-                SpotifyFeature.LIKES -> likes.forget()
-                SpotifyFeature.RECENT -> Unit
+            else running.getValue(f).withLock {
+                when (f) {
+                    SpotifyFeature.PLAYLISTS -> runCatching { playlists.forget(keep = false) }
+                    SpotifyFeature.TOP -> top.forget()
+                    SpotifyFeature.LIKES -> likes.forget()
+                    SpotifyFeature.RECENT -> Unit
+                }
             }
         }
     }
@@ -280,7 +283,7 @@ class Spotify(private val c: AppContainer) {
                 SpotifyFeature.LIKES -> if (daily && (!scheduled || now - likes.state().lastRun >= DAILY_MS)) likes.sync(now)
             }
             guard.succeeded()
-            ImportMatchWorker.enqueue(c.app, c.imports.matchOnMobile.value)
+            matchSoon()
         } catch (e: CancellationException) {
             throw e
         } catch (e: SpotifyError.Revoked) {
@@ -291,6 +294,19 @@ class Spotify(private val c: AppContainer) {
             _connection.value = connectionNow()
         } catch (e: Exception) {
             guard.failed(e)
+        }
+    }
+
+    /**
+     * Bring your history's matching, for the songs a run lined up: started when some wait and it isn't already lined
+     * up or running (its enqueue replaces a running one, which would only start it over).
+     */
+    private suspend fun matchSoon() = withContext(Dispatchers.IO) {
+        runCatching {
+            if (c.db.imports().toMatchCount(System.currentTimeMillis() - com.prism.music.data.imports.HistoryImports.WEEK_MS) == 0) return@runCatching
+            val busy = androidx.work.WorkManager.getInstance(c.app).getWorkInfosForUniqueWork(ImportMatchWorker.workName()).get()
+                .any { it.state == androidx.work.WorkInfo.State.RUNNING || it.state == androidx.work.WorkInfo.State.ENQUEUED }
+            if (!busy) ImportMatchWorker.enqueue(c.app, c.imports.matchOnMobile.value)
         }
     }
 

@@ -92,6 +92,9 @@ class SpotifyStore(private val auth: SharedPreferences, val prefs: SharedPrefere
 
     val connected: Boolean get() = auth.contains(ACCESS) && !revoked
 
+    /** Only the tokens and the account go (a sign-in that didn't finish): the switches and the Client ID stay. */
+    fun clearTokens() { auth.edit().clear().commit() }
+
     /** Everything about the connection goes; the Client ID only when [clientIdToo]. */
     fun wipe(clientIdToo: Boolean) {
         auth.edit().clear().commit()

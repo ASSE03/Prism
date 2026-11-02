@@ -4339,6 +4339,7 @@
     <string name="imp_matching_notice">Matching your history</string>
     <string name="imp_matching_n_of_n">%1$d of %2$d songs</string>
     <!-- 1.8.1: Spotify, through the listener's own developer app (Settings, Devices and connections, Spotify) -->
+    <string name="spotify">Spotify</string>
     <string name="spot_summary">Your playlists, plays and likes, with your own Spotify app</string>
     <string name="spot_about">Spotify\'s official Web API, through a developer app you make for yourself in Spotify\'s dashboard. Spotify allows a developer app in Development Mode up to 5 users and needs its owner to have Spotify Premium; yours is for you alone. You sign in on Spotify\'s own page, so Prism never sees your password, and it keeps the access on this phone only, sealed, never in backups. Nothing goes anywhere but Spotify and, to find each song, YouTube Music\'s search.</string>
     <string name="spot_intro">Connect Spotify with your own developer app: about three minutes, once.</string>

@@ -56,7 +56,7 @@ internal fun SpotifyPage() {
                 SpotifyAccount(conn.name)
             }
             Spotify.Connection.Revoked -> {
-                Group("Spotify", info = tr(R.string.spot_about)) {
+                Group(tr(R.string.spotify), info = tr(R.string.spot_about)) {
                     Note(tr(R.string.spot_revoked))
                 }
                 SpotifySetUp(reconnect = true)
@@ -78,7 +78,7 @@ private fun SpotifySetUp(reconnect: Boolean) {
     val connection by spotify.connection.collectAsState()
     var clientId by rememberSaveable { mutableStateOf(spotify.store.clientId) }
     val valid = SpotifyOAuth.validClientId(clientId)
-    if (!reconnect) Group("Spotify", info = tr(R.string.spot_about)) {
+    if (!reconnect) Group(tr(R.string.spotify), info = tr(R.string.spot_about)) {
         Note(tr(R.string.spot_intro))
         Note(tr(R.string.spot_premium_note))
     }
@@ -137,7 +137,7 @@ private fun SpotifyFeatures(name: String) {
             SpotifyGuard.State.PAUSED -> tr(R.string.spot_paused)
         }
     }
-    Group("Spotify", info = tr(R.string.spot_about)) {
+    Group(tr(R.string.spotify), info = tr(R.string.spot_about)) {
         Item(tr(R.string.spot_connected_as, name), tr(R.string.spot_official), onClick = {})
         Toggle(
             tr(R.string.spot_recent), status(SpotifyFeature.RECENT, tr(R.string.spot_recent_sub)), o.recent,

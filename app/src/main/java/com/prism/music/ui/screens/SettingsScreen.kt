@@ -130,7 +130,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
     DISCORD("discord", tr(R.string.discord), PrismIcons.Groups),
     LASTFM("lastfm", "Last.fm", PrismIcons.Replay),
     /** 1.8.1: Spotify through the listener's own developer app. */
-    SPOTIFY("spotify", "Spotify", PrismIcons.Library),
+    SPOTIFY("spotify", tr(R.string.spotify), PrismIcons.Library),
     /** Not on the hub: opened from About. */
     LICENSES("licenses", tr(R.string.open_source_licenses), PrismIcons.Info),
     /** Not on the hub: Customize Prism's pages. */
