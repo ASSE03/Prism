@@ -2188,6 +2188,47 @@ private fun SharingGroup() {
 
 // ---------------------------------------------------------------------------- Downloads & storage
 
+/**
+ * #314 (1.8.1): your own MP3/AAC/Ogg files in place of the stream, beside lossless sync's files in Downloads. Off by
+ * default; it needs file access, not lossless playback.
+ */
+@Composable
+private fun OwnSongFiles() {
+    val c = LocalContainer.current
+    val s = LocalAppSettings.current
+    val prefs = c.settings
+    val scope = rememberCoroutineScope()
+    val found by c.localLossless.ownFound.collectAsState()
+    val synced by c.losslessSync.songs.collectAsState()
+    val syncing by c.losslessSync.working.collectAsState()
+    val inDownloads = remember(synced) { synced.values.count { it.second.lossy } }
+    val askFiles = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) prefs.setOwnLossyFiles(true) // lossless sync scans when this turns on
+    }
+    Group(tr(R.string.your_own_song_files)) {
+        Toggle(
+            tr(R.string.use_your_own_song_files),
+            when {
+                !s.sound.ownLossyFiles -> tr(R.string.own_files_off)
+                found < 0 -> tr(R.string.own_files_looking)
+                found == 0 -> tr(R.string.own_files_none)
+                syncing -> tr(R.string.own_files_adding, found)
+                else -> tr(R.string.own_files_status, found, inDownloads)
+            },
+            s.sound.ownLossyFiles,
+            info = tr(R.string.own_files_info),
+        ) { on ->
+            if (!on) prefs.setOwnLossyFiles(false)
+            else if (c.localLossless.hasPermission()) prefs.setOwnLossyFiles(true)
+            else askFiles.launch(LocalLossless.permission)
+        }
+        if (s.sound.ownLossyFiles) Item(
+            tr(R.string.scan_your_song_files_again), tr(R.string.also_checked_every_few_hours),
+            onClick = { scope.launch { c.losslessSync.sync() } },
+        )
+    }
+}
+
 @Composable
 private fun DownloadSettings() {
     val c = LocalContainer.current
@@ -2205,6 +2246,7 @@ private fun DownloadSettings() {
                 if (it) c.downloads.downloadAll(c.library.liked.value)
             }
         }
+        OwnSongFiles()
         Group(tr(R.string.smart_downloads)) {
             Toggle(
                 tr(R.string.smart_downloads), tr(R.string.songs_you_ll_likely_play_ready), s.smartDownloads,

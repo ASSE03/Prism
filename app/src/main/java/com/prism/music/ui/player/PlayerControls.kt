@@ -1457,6 +1457,9 @@ fun qualityText(stats: com.prism.music.playback.NerdStats): String {
         listOf("flac", "alac", "wav", "pcm", "aiff", "raw").any { stats.codec.contains(it, true) }
     return when {
         stats.source == "Downloaded" -> tr(R.string.downloaded)
+        // One of your own files (#314): "MP3 · 320 kbps, from your file".
+        stats.source.startsWith(com.prism.music.data.local.OwnFiles.SOURCE + " · ") ->
+            tr(R.string.x_from_your_file, stats.source.removePrefix(com.prism.music.data.local.OwnFiles.SOURCE + " · "))
         lossless -> {
             // The file's own format when Prism knows it ("On this phone · WAV", "Lossless · FLAC on this phone").
             val named = Regex("\\b(WAV|AIFF|FLAC|ALAC)\\b").find(stats.source)?.value

@@ -752,7 +752,10 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                                 index = if (type == CollectionType.ALBUM) i + 1 else null,
                                 starred = s.id in popular,
                                 playing = current?.id == s.id,
-                                trailingInfo = if (type == CollectionType.ALBUM) formatDuration(s.durationSec) else genreVersion.let { genres[s.id] }?.takeIf { sort == SortMode.GENRE || genreFilter == null && showGenres }?.let { g -> listOfNotNull(s.album?.title, com.prism.music.data.meta.Genres.shown(g)).joinToString(" • ") },
+                                // #314: a song playing from one of your own files says so ("MP3 · 320 kbps, from your file").
+                                trailingInfo = if (type == CollectionType.ALBUM) formatDuration(s.durationSec)
+                                else if (type == CollectionType.DOWNLOADS && downloads[s.id]?.ownFile != null) tr(R.string.x_from_your_file, downloads[s.id]?.ownFile)
+                                else genreVersion.let { genres[s.id] }?.takeIf { sort == SortMode.GENRE || genreFilter == null && showGenres }?.let { g -> listOfNotNull(s.album?.title, com.prism.music.data.meta.Genres.shown(g)).joinToString(" • ") },
                                 extraActions = removeAction(s),
                             ) { playFrom(visible, s, source) }
                         }
@@ -1523,9 +1526,15 @@ private fun DownloadsInfo(songs: List<Song>, ask: (String, () -> Unit) -> Unit) 
                 if (videosLoading > 0) tr(R.string.downloading_3, videosLoading) else "",
             style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
         )
-        val lossless = remember(all) { all.count { it.value.lossless } }
+        val lossless = remember(all) { all.count { it.value.lossless && it.value.ownFile == null } }
         if (lossless > 0) Text(
             tr(R.string.lossless_from_your_phone_s_music, lossless),
+            style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
+        )
+        // #314: your own MP3/AAC/Ogg files playing in place of the stream.
+        val ownFiles = remember(all) { all.count { it.value.ownFile != null } }
+        if (ownFiles > 0) Text(
+            tr(R.string.n_from_your_own_song_files, ownFiles),
             style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant,
         )
         val ids = songs.map { it.id }
@@ -1669,10 +1678,12 @@ private fun downloadsSheetItems(ask: (String, () -> Unit) -> Unit): List<SheetIt
             ask(tr(R.string.delete_the_saved_music_videos_the, videos.size)) { videos.keys.forEach(c.downloads::removeVideo) }
         })
         add(SheetItem(PrismIcons.Delete, tr(R.string.delete_all_downloads), danger = true) {
-            val lossless = all.count { it.value.lossless }
+            val lossless = all.count { it.value.lossless && it.value.ownFile == null }
+            val ownFiles = all.count { it.value.ownFile != null }
             ask(
                 trp(R.plurals.delete_all_n_downloads, all.size, all.size, sizeText(c.downloads.totalBytes)) +
-                    if (lossless > 0) tr(R.string.your_lossless_files_stay_on_the, lossless) else ""
+                    (if (lossless > 0) tr(R.string.your_lossless_files_stay_on_the, lossless) else "") +
+                    if (ownFiles > 0) tr(R.string.your_own_song_files_stay, ownFiles) else ""
             ) { c.downloads.removeAll() }
         })
     }
