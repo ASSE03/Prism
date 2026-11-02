@@ -302,6 +302,14 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
 
     fun playQueue(songs: List<Song>, startIndex: Int = 0, source: QueueSource, shuffle: Boolean = false) {
         if (songs.isEmpty()) return
+        // #216: with the explicit filter on, explicit songs don't go in (a tapped one gives way to the next that may play).
+        val mode = c.settings.current.behavior.explicitContent
+        if (mode != com.prism.music.data.prefs.ExplicitContent.SHOW && songs.any { it.explicit }) {
+            val (kept, at) = com.prism.music.data.ExplicitFilter.queue(mode, songs, startIndex) ?: run { reportError(tr(R.string.explicit_none_left)); return }
+            if (!shuffle && songs.getOrNull(startIndex)?.explicit == true) reportError(tr(R.string.explicit_skipped))
+            playQueue(kept, at, source, shuffle)
+            return
+        }
         source.page?.let { c.recentCollections.played(it) }
         val token = ++playToken
         val first = if (shuffle) songs.indices.random() else startIndex.coerceIn(0, songs.lastIndex)
@@ -430,9 +438,23 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         c.queue.userQueued.value = c.queue.userQueued.value + songs.map { it.id }
     }
 
+    /**
+     * #216: [songs] without the explicit ones when the filter is on (saying so when some were left out); null, having
+     * said so, when none is left.
+     */
+    private fun playable(songs: List<Song>): List<Song>? {
+        val mode = c.settings.current.behavior.explicitContent
+        val kept = songs.filter { com.prism.music.data.ExplicitFilter.plays(mode, it) }
+        if (kept.isEmpty()) { reportError(tr(R.string.explicit_none_left)); return null }
+        if (kept.size < songs.size) reportError(tr(R.string.explicit_skipped))
+        return kept
+    }
+
     /** Songs (one, or a whole album or playlist) straight after the current song, or played, with nothing on. */
     fun playNext(songs: List<Song>, source: QueueSource?) {
         if (songs.isEmpty()) return
+        val allowed = playable(songs) ?: return
+        if (allowed.size < songs.size) return playNext(allowed, source)
         withPlayer { p ->
             if (p.mediaItemCount == 0) {
                 if (source == null) playSingle(songs.first()) else playQueue(songs, 0, source)
@@ -446,6 +468,8 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
      */
     fun addToQueue(songs: List<Song>, source: QueueSource?) {
         if (songs.isEmpty()) return
+        val allowed = playable(songs) ?: return
+        if (allowed.size < songs.size) return addToQueue(allowed, source)
         withPlayer { p ->
             if (p.mediaItemCount == 0) {
                 if (source == null) playSingle(songs.first()) else playQueue(songs, 0, source)

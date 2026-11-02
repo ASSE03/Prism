@@ -580,6 +580,21 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             player.seekToNextMediaItem()
             return
         }
+        // #216: with the explicit filter on, an explicit song that got into the queue anyway (a mix, the DJ, a Look's
+        // shuffle) is passed over for the next one that may play; with none left, the music stops there.
+        val explicitMode = c.settings.current.behavior.explicitContent
+        if (!c.queue.followingHost && !com.prism.music.data.ExplicitFilter.plays(explicitMode, song)) {
+            val tl = player.currentTimeline
+            var i = tl.getNextWindowIndex(player.currentMediaItemIndex, Player.REPEAT_MODE_OFF, player.shuffleModeEnabled)
+            while (i != C.INDEX_UNSET) {
+                val next = player.getMediaItemAt(i).toSong()
+                if (next == null || com.prism.music.data.ExplicitFilter.plays(explicitMode, next)) { player.seekTo(i, 0); return }
+                i = tl.getNextWindowIndex(i, Player.REPEAT_MODE_OFF, player.shuffleModeEnabled)
+            }
+            player.pause()
+            c.player.reportError(tr(R.string.explicit_none_left))
+            return
+        }
         // Offline, songs that aren't on the phone are passed over too (#55): they'd play as far as any cached start
         // goes and then cut to the next song.
         if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO && !song.isLive && !c.network.online.value && !c.availableOffline(song.id)) {
@@ -1250,7 +1265,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             // An artist a few times a batch at most, never twice running.
             val songs = com.prism.music.data.foryou.Variety.arrange(mine, theirs, 25, freshShare, perArtist = 3) { it.primaryArtist.lowercase() }
             android.util.Log.i("PrismRadio", "autoplay after $seed: ${mine.size} of yours, ${theirs.size} from YouTube ($mode${if (offline) ", offline" else ""})")
-            val add = songs.distinctBy { it.id }.filter { it.id !in existing && !c.library.isDisliked(it.id) && !c.exclusions.blocks(it) }
+            val explicit = c.settings.current.behavior.explicitContent
+            val add = songs.distinctBy { it.id }.filter {
+                it.id !in existing && !c.library.isDisliked(it.id) && !c.exclusions.blocks(it) && com.prism.music.data.ExplicitFilter.plays(explicit, it)
+            }
             if (add.isNotEmpty()) {
                 if (c.queue.autoplayStart.value < 0) c.queue.autoplayStart.value = player.mediaItemCount
                 player.addMediaItems(add.map { it.toMediaItem() })
@@ -1981,7 +1999,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         scope.launch {
             val r = runCatching { withContext(Dispatchers.IO) { c.radio(song.id, "RDAMVM${song.id}") } }.getOrNull() ?: return@launch
             if (player.currentMediaItem?.mediaId != song.id) return@launch
-            val add = r.songs.filter { it.id != song.id && !c.library.isDisliked(it.id) && !c.exclusions.blocks(it) }
+            val explicit = c.settings.current.behavior.explicitContent
+            val add = r.songs.filter { it.id != song.id && !c.library.isDisliked(it.id) && !c.exclusions.blocks(it) && com.prism.music.data.ExplicitFilter.plays(explicit, it) }
             if (add.isEmpty()) return@launch
             val idx = player.currentMediaItemIndex
             if (idx + 1 < player.mediaItemCount) player.removeMediaItems(idx + 1, player.mediaItemCount)

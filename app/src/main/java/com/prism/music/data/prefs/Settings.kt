@@ -305,7 +305,15 @@ data class BehaviorPrefs(
     val pageSlide: Boolean = false,
     /** #264 (1.8.0): on a tablet, the tabs along the bottom or down the side; phones always have them at the bottom. */
     val tabBarPosition: TabBarPosition = TabBarPosition.SIDE,
+    /** #216 (1.8.1): explicit songs shown and played (as before), skipped when they'd play, or hidden too. */
+    val explicitContent: ExplicitContent = ExplicitContent.SHOW,
 )
+
+/**
+ * Explicit songs (#216, 1.8.1): YouTube Music marks them "E". [SHOW] is as before; [SKIP] leaves them out of what plays
+ * (radios, autoplay, mixes, the queue) while they stay listed; [HIDE] also leaves them out of search and the song lists.
+ */
+enum class ExplicitContent(val label: String) { SHOW(tr(R.string.explicit_show)), SKIP(tr(R.string.explicit_skip)), HIDE(tr(R.string.explicit_hide)) }
 
 /** Where the tabs sit on a tablet or a wide window (#264); phones always have them at the bottom. Side = as before 1.8.0. */
 enum class TabBarPosition(val label: String) { SIDE(tr(R.string.down_the_side)), BOTTOM(tr(R.string.at_the_bottom)) }
@@ -1856,6 +1864,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val downloadsAlbums = booleanPreferencesKey("downloads_albums")
         val artistLinks = booleanPreferencesKey("player_artist_links")
         val backdropFade = booleanPreferencesKey("backdrop_fade")
+        /** 1.8.1 (#216, [BehaviorPrefs.explicitContent]). */
+        val explicitContent = stringPreferencesKey("explicit_content")
         // 1.8.0 player editor ([PlayerParts]): the hidden parts are part of a Look, the menu's choices aren't.
         val playerHiddenParts = stringPreferencesKey("player_hidden_parts")
         val playerMenuHidden = stringPreferencesKey("player_menu_hidden")
@@ -1968,6 +1978,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "skip_silence_episodes", "sleep_fade", "pause_fade",
                 // 1.8.1 (#314): your own song files in place of the stream.
                 "own_lossy_files",
+                // 1.8.1 (#216): what plays and shows, not a look.
+                "explicit_content",
             )
         }
     }
@@ -2249,6 +2261,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 gesturesEverywhere = p[K.gesturesEverywhere] ?: d.behavior.gesturesEverywhere,
                 pageSlide = p[K.pageSlide] ?: d.behavior.pageSlide,
                 tabBarPosition = p.enum(K.tabBarPosition, d.behavior.tabBarPosition),
+                explicitContent = p.enum(K.explicitContent, d.behavior.explicitContent),
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -2827,6 +2840,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setDownloadsAlbums(v: Boolean) = edit { it[K.downloadsAlbums] = v }
     fun setArtistLinks(v: Boolean) = edit { it[K.artistLinks] = v }
     fun setBackdropFade(v: Boolean) = edit { it[K.backdropFade] = v }
+    fun setExplicitContent(v: ExplicitContent) = edit { it[K.explicitContent] = v.name }
 
     // 1.8.0 player editor
     /** A comma-separated set of names (unknown ones skipped): a Look or backup from a later Prism still opens. */

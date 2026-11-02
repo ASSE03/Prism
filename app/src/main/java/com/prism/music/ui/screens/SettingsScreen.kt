@@ -1836,6 +1836,9 @@ private fun SoundPage() {
             Label(tr(R.string.music_videos_label), info = tr(R.string.music_videos_label_info))
             Chips(VideoPolicy.entries, SoundChoices.videoPolicy(s), { it.label }) { SoundChoices.setVideoPolicy(prefs, it) }
             Toggle(tr(R.string.keep_playing_videos), tr(R.string.after_a_video_the_next_song), s.videoContinues) { prefs.setVideoContinues(it) }
+            // #216 (1.8.1): explicit songs as before, never played, or not shown either.
+            Label(tr(R.string.explicit_songs), info = tr(R.string.explicit_songs_info))
+            Chips(com.prism.music.data.prefs.ExplicitContent.entries, s.behavior.explicitContent, { it.label }) { prefs.setExplicitContent(it) }
         }
         Group(tr(R.string.crossfade)) {
             Label(tr(R.string.crossfade), info = tr(R.string.crossfade_choice_info))

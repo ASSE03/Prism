@@ -265,6 +265,7 @@ object SettingsIndex {
         SettingEntry(S, tr(R.string.what_plays_next), tr(R.string.when_the_queue_ends), tr(R.string.radio_continue_similar) + " " + tr(R.string.autoplay) + " " + tr(R.string.autoplay_from) + " " + tr(R.string.radio_your_music_prism_radio_youtube)),
         SettingEntry(S, tr(R.string.what_plays_next), tr(R.string.music_videos_label), tr(R.string.music_videos_audio) + " " + tr(R.string.songs_not_videos) + " " + tr(R.string.songs_not_videos_everywhere)),
         SettingEntry(S, tr(R.string.what_plays_next), tr(R.string.keep_playing_videos), tr(R.string.music_video_2)),
+        SettingEntry(S, tr(R.string.what_plays_next), tr(R.string.explicit_songs), tr(R.string.explicit_songs_keywords)),
         SettingEntry(S, tr(R.string.sound), tr(R.string.trim_silence), tr(R.string.trim_silence_songs_gaps) + " " + tr(R.string.skip_silence) + " " + tr(R.string.skip_silence_in_podcasts) + " " + tr(R.string.trim_silence_episodes_pauses_talk)),
         SettingEntry(S, tr(R.string.stopping_and_pausing), tr(R.string.stopping_and_pausing)),
         SettingEntry(S, tr(R.string.stopping_and_pausing), tr(R.string.stop_when_swiped_away), tr(R.string.recents_background)),

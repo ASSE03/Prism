@@ -1519,7 +1519,7 @@
     <string name="player_blur_cover_color">player blur cover color</string>
     <string name="show_background">Show background</string>
     <!-- 1.8.1: library, player look and settings requests -->
-    <string name="show_background_info">How much of the background shows through. At 0% the player is fully dark, at 100% the background shows at its brightest.</string>
+    <string name="show_background_info">How much of the background shows through: all the way to the left the player is fully dark, all the way to the right the background shows at its brightest.</string>
     <string name="show_album_names">Show album names</string>
     <string name="album_names_in_downloads">Album names in Downloads</string>
     <string name="album_names_in_downloads_detail">Under each song, after the artist</string>
@@ -1540,6 +1540,14 @@
     <string name="favorite_artists_only">Favorite artists only</string>
     <string name="every_artist">Every artist</string>
     <string name="no_favorite_artists_yet">No favorite artists yet. Star an artist on their page (or hold their name) and their new releases show here.</string>
+    <string name="explicit_songs">Explicit songs</string>
+    <string name="explicit_songs_info">Songs YouTube Music marks explicit (E). Show them: as now. Skip them: they stay in lists with their E, but never play: radios, autoplay and mixes leave them out, and the queue passes over any that got in. Hide them: also left out of search, Home and song lists. A song only counts once YouTube Music has marked it; songs kept on the phone without the mark (older likes, your own files) still play.</string>
+    <string name="explicit_songs_keywords">explicit clean family friendly kids children filter parental swear lyrics e mark skip hide</string>
+    <string name="explicit_show">Show them</string>
+    <string name="explicit_skip">Skip them</string>
+    <string name="explicit_hide">Hide them</string>
+    <string name="explicit_skipped">Explicit songs are left out (Settings → Sound)</string>
+    <string name="explicit_none_left">Nothing to play: every song here is explicit</string>
     <!-- end of 1.8.1 library, player look and settings requests -->
     <string name="controls">Controls</string>
     <string name="buttons_transport">buttons transport</string>

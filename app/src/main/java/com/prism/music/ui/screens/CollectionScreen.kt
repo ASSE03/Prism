@@ -352,9 +352,12 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     val genreCounts = remember(songs, genreVersion) {
         songs.flatMap { genresOf(it.id) }.groupingBy { it }.eachCount().toList().sortedByDescending { it.second }
     }
-    val visible = remember(songs, genreFilter, sort, query, if (genreFilter != null || sort == SortMode.GENRE || groupByGenre) genreVersion else 0) {
+    // #216: "Hide them" leaves explicit songs out of the list (they're never played either way).
+    val explicit = settings.behavior.explicitContent
+    val visible = remember(songs, genreFilter, sort, query, explicit, if (genreFilter != null || sort == SortMode.GENRE || groupByGenre) genreVersion else 0) {
         val words = query.trim().lowercase().split(Regex("\\s+")).filter { it.isNotEmpty() }
         val filtered = page.songs.filter { s ->
+            com.prism.music.data.ExplicitFilter.shows(explicit, s) &&
             (genreFilter == null || genreFilter in genresOf(s.id)) &&
                 // Every word typed has to turn up in the title, the artists or the album.
                 (words.isEmpty() || "${s.title} ${s.artistText} ${s.album?.title.orEmpty()}".lowercase().let { hay -> words.all { it in hay } })

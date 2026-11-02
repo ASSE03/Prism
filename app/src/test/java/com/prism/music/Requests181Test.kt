@@ -168,6 +168,60 @@ class Requests181Test {
         assertTrue("prism:x" !in asked)
     }
 
+    // ------------------------------------------------ #216 explicit songs
+
+    private fun song(id: String, explicit: Boolean = false) = com.prism.music.data.model.Song(id, "Song $id", explicit = explicit)
+    private val SHOW = com.prism.music.data.prefs.ExplicitContent.SHOW
+    private val SKIP = com.prism.music.data.prefs.ExplicitContent.SKIP
+    private val HIDE = com.prism.music.data.prefs.ExplicitContent.HIDE
+
+    @Test fun explicitSongsPlayAsBeforeUnlessTheFilterIsOn() {
+        assertEquals(SHOW, AppSettings().behavior.explicitContent)
+        val e = song("e", explicit = true)
+        val f = com.prism.music.data.ExplicitFilter
+        assertTrue(f.plays(SHOW, e) && f.shows(SHOW, e))
+        // Skip: listed, never played; Hide: neither.
+        assertTrue(!f.plays(SKIP, e) && f.shows(SKIP, e))
+        assertTrue(!f.plays(HIDE, e) && !f.shows(HIDE, e))
+        // A clean song is never touched.
+        assertTrue(f.plays(HIDE, song("c")) && f.shows(HIDE, song("c")))
+    }
+
+    @Test fun aQueueStartsFromTheNextSongThatMayPlay() {
+        val f = com.prism.music.data.ExplicitFilter
+        val list = listOf(song("a"), song("b", true), song("c"), song("d", true))
+        // Nothing changes with the filter off.
+        assertEquals(list to 1, f.queue(SHOW, list, 1))
+        // The tapped explicit song gives way to the next clean one; the rest keep their order.
+        assertEquals(listOf("a", "c") to 1, f.queue(SKIP, list, 1)!!.let { (s, i) -> s.map { it.id } to i })
+        // Tapped past the last clean song: from the first.
+        assertEquals(0, f.queue(SKIP, list, 3)!!.second)
+        assertEquals(null, f.queue(HIDE, listOf(song("x", true)), 0))
+    }
+
+    @Test fun hideLeavesExplicitSongsOutOfSearch() {
+        val f = com.prism.music.data.ExplicitFilter
+        val e = com.prism.music.data.model.SongItem(song("e", true))
+        val c = com.prism.music.data.model.SongItem(song("c"))
+        val album = com.prism.music.data.model.AlbumItem("MPREb_1", "An album", "Album", null, null)
+        val top = com.prism.music.data.innertube.TopSearch(
+            e, listOf(com.prism.music.data.innertube.SearchFilter.SONGS to listOf(e, c), com.prism.music.data.innertube.SearchFilter.ALBUMS to listOf(album)),
+        )
+        assertEquals(top, f.top(SKIP, top))
+        val hidden = f.top(HIDE, top)
+        assertEquals(c, hidden.top)
+        assertEquals(listOf(listOf(c), listOf(album)), hidden.sections.map { it.second })
+        assertEquals(listOf(c, album), f.items(HIDE, listOf(e, c, album)))
+    }
+
+    @Test fun theExplicitChoiceIsKept(): Unit = kotlinx.coroutines.runBlocking {
+        val repo = repo()
+        repo.setExplicitContent(HIDE)
+        kotlinx.coroutines.withTimeout(5_000) { repo.flow.first { it.behavior.explicitContent == HIDE } }
+        repo.setExplicitContent(SHOW)
+        kotlinx.coroutines.withTimeout(5_000) { repo.flow.first { it.behavior.explicitContent == SHOW } }
+    }
+
     // ------------------------------------------------ #311 new releases from favorite artists
 
     private fun release(id: String, artist: String, name: String = artist) = com.prism.music.data.db.ReleaseEntity(
