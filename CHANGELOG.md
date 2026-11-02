@@ -39,6 +39,28 @@ What changed in each release. Older releases are described on the [Releases page
   page, or Google Takeout), and a gentle reminder to bring a fresh one every 1, 3 or 6 months (3 unless you change it,
   or Off): a quiet notification, only once you've imported Spotify or YouTube Music history, never for anyone else.
 
+### Spotify (optional, your own key)
+
+- **Connect Spotify through its official Web API, with a developer app of your own.** Spotify lets a developer app in
+  Development Mode have only five users, and its owner needs Spotify Premium, so each listener makes one for themselves
+  (free, about three minutes): Settings → Devices & connections → Spotify walks you through it (the dashboard link,
+  the redirect address to copy), then you paste its Client ID and sign in on Spotify's own page. Prism never sees your
+  password and has no secret of its own; the access stays on this phone, sealed by a key only it holds, never in
+  backups. Off unless you connect, and every feature below has its own switch, off too.
+- **Recent plays**: what you play in Spotify comes into your history every few hours as its own source, "Spotify
+  (live)", with its own switch under Count history from and its own Remove. Plays your data download already brought
+  aren't counted twice.
+- **Top songs and artists**: Spotify's own measure of your last four weeks, six months and year shapes your mixes,
+  radio and Quick picks (read on connecting, then weekly; Replay doesn't count it).
+- **Your Spotify playlists in Library**, marked Spotify, playing through their YouTube Music matches (Spotify's ISRCs
+  make the matches surer). **Keep in step** reads one again when you open it, and all daily on Wi-Fi.
+- **Liked Songs both ways** (off until you've seen its counts: "42 to like here, 17 to like on Spotify"): each like is
+  carried over once, unliking never is, and likes you brought from a data download stay out of it.
+- **Quiet when Spotify is**: a feature Spotify doesn't answer says so and the rest of Prism carries on; a "too many
+  requests" is waited out, and five failures running pause that feature for a day. Only Spotify's own addresses are
+  asked. Spotify no longer gives developer apps its mixes (Discover Weekly, Daily Mixes), editorial playlists, new
+  releases or the songs of playlists you only follow, so those aren't offered.
+
 ### New
 
 - **Your own MP3, AAC and Ogg files can play in place of the stream** (#314). Turn on Downloads, storage & data →
