@@ -104,7 +104,7 @@ class HistoryImports(private val c: AppContainer) {
         if (sources.isEmpty()) PrismPlays(c.db.plays()) else CountedPlays(sources.sortedBy { it.ordinal }, c.db.counted(), c.db.plays())
 
     /** Plays the recommendations learn from ([TasteHistory]). */
-    val taste = TasteHistory(c.db.plays(), c.db.counted(), { if (_teach.value) ImportSource.entries else emptyList() }) { c.spotify.taste() }
+    val taste = TasteHistory(c.db.plays(), c.db.counted(), boost = { c.spotify.taste() }) { if (_teach.value) ImportSource.entries else emptyList() }
 
     val summaries: Flow<List<com.prism.music.data.db.ImportSummary>> = c.db.imports().summariesFlow()
     val statuses: Flow<List<com.prism.music.data.db.StatusCount>> = c.db.imports().statusFlow()

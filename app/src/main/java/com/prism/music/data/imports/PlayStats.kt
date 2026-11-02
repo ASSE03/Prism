@@ -92,9 +92,9 @@ class CountedPlays(override val sources: List<ImportSource>, private val d: Coun
 class TasteHistory(
     private val prism: PlayEventDao,
     private val counted: CountedPlayDao,
-    private val imported: () -> List<ImportSource>,
     /** More to learn from that isn't plays (Spotify's top songs and artists, 1.8.1); null when there's none. */
     private val boost: () -> TasteBoost? = { null },
+    private val imported: () -> List<ImportSource>,
 ) {
     private fun origins(): List<String>? = imported().takeIf { it.isNotEmpty() }?.let { listOf(CountedPlays.PRISM) + it.map { s -> s.key } }
 
