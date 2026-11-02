@@ -238,8 +238,12 @@ private fun TvLyricsList(
         if (target !in lines.indices) return@LaunchedEffect
         snapshotFlow { list.layoutInfo.viewportSize.height }.first { it > 0 }
         val shown = list.layoutInfo.visibleItemsInfo.firstOrNull { it.index == target }
-        if (shown != null) list.animateScrollBy(shown.offset.toFloat(), tween(GLIDE_MS, easing = SETTLE_EASING))
-        else list.scrollToItem(target)
+        // A scroll lays the list out where it runs: always on the main thread (the in-app tests' frame clock resumed it
+        // on another, and the next draw failed: "multithreaded access to SnapshotStateObserver"); no hop in the app.
+        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main.immediate) {
+            if (shown != null) list.animateScrollBy(shown.offset.toFloat(), tween(GLIDE_MS, easing = SETTLE_EASING))
+            else list.scrollToItem(target)
+        }
     }
     BoxWithConstraints(
         Modifier.fillMaxSize().padding(start = 96.dp, end = 160.dp, top = 96.dp, bottom = 88.dp)
@@ -683,8 +687,10 @@ fun TvSongLyrics(onGone: () -> Unit, overVideo: Boolean = false) {
     val s = song
     if (s == null || now == null) { TvStarting(onGone); return }
     val state = com.prism.music.ui.player.rememberLyricsState(s)
-    // Always running (it idles while paused): a seek while paused still moves the lines (the release check).
-    val clock = com.prism.music.ui.player.rememberLyricClock(true)
+    // Made again at each seek, so one while paused still moves the lines (the release check); paused, it stands still
+    // rather than looking every frame.
+    val jumps by c.player.jumps.collectAsState()
+    val clock = androidx.compose.runtime.key(jumps) { com.prism.music.ui.player.rememberLyricClock(now.playing) }
     val accent = rememberTvAccent(now.art)
     val lines = state.lines
     val current by remember(lines) { androidx.compose.runtime.derivedStateOf { com.prism.music.playback.CarLyricsCard.lineAt(lines, clock.value).coerceAtLeast(0) } }
