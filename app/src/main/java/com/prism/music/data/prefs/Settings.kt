@@ -534,6 +534,11 @@ data class SoundPrefs(
     val sleepFadeSeconds: Int = 0,
     /** Pausing and playing fade the sound out and in over a moment instead of cutting (A5). */
     val pauseFade: Boolean = false,
+    /**
+     * #314 (1.8.1): your own MP3/AAC/Ogg files on the phone that match songs play in place of the stream and show in
+     * Downloads ("Use your own song files"). Off by default; doesn't need lossless playback.
+     */
+    val ownLossyFiles: Boolean = false,
 )
 
 /** How a crossfade's two volumes cross (1.7.8, A1). */
@@ -1842,6 +1847,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val skipSilenceEpisodes = booleanPreferencesKey("skip_silence_episodes")
         val sleepFade = intPreferencesKey("sleep_fade")
         val pauseFade = booleanPreferencesKey("pause_fade")
+        /** 1.8.1 (#314, [SoundPrefs.ownLossyFiles]). */
+        val ownLossyFiles = booleanPreferencesKey("own_lossy_files")
         val performanceMode = booleanPreferencesKey("performance_mode")
         /** The Home card offering Performance mode on a slower phone was answered (either way). */
         val performanceOffered = booleanPreferencesKey("performance_offered")
@@ -1934,6 +1941,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 // 1.7.8 ([SoundPrefs]).
                 "crossfade_curve", "normalize_target", "normalize_albums", "music_speed", "music_pitch",
                 "skip_silence_episodes", "sleep_fade", "pause_fade",
+                // 1.8.1 (#314): your own song files in place of the stream.
+                "own_lossy_files",
             )
         }
     }
@@ -2196,6 +2205,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 skipSilenceEpisodes = p[K.skipSilenceEpisodes] ?: p[K.skipSilence] ?: d.sound.skipSilenceEpisodes,
                 sleepFadeSeconds = (p[K.sleepFade] ?: d.sound.sleepFadeSeconds).coerceIn(0, 60),
                 pauseFade = p[K.pauseFade] ?: d.sound.pauseFade,
+                ownLossyFiles = p[K.ownLossyFiles] ?: d.sound.ownLossyFiles,
             ),
             behavior = BehaviorPrefs(
                 lockPortrait = p[K.lockPortrait] ?: d.behavior.lockPortrait,
@@ -2849,6 +2859,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setSkipSilenceEpisodes(v: Boolean) = edit { it[K.skipSilenceEpisodes] = v }
     fun setSleepFade(v: Int) = edit { it[K.sleepFade] = v.coerceIn(0, 60) }
     fun setPauseFade(v: Boolean) = edit { it[K.pauseFade] = v }
+    fun setOwnLossyFiles(v: Boolean) = edit { it[K.ownLossyFiles] = v }
     fun setLyricsStripAlign(v: LyricsAlign) = edit { it[K.lyricsStripAlign] = v.name }
     fun setLyricsStripTwoLines(v: Boolean) = edit { it[K.lyricsStripTwoLines] = v }
     fun setMergeLikedVideos(v: Boolean) = edit { it[K.mergeLikedVideos] = v }

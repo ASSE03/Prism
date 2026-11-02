@@ -2018,7 +2018,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         )
     }
 
-    /** The lossless add-on: a matching FLAC / WAV / AIFF on the phone, when lossless mode and the add-on are on. */
+    /**
+     * The lossless add-on: a matching FLAC / WAV / AIFF on the phone, when lossless mode and the add-on are on; and since
+     * 1.8.1 one of your own MP3 / AAC / Ogg files when "Use your own song files" is on.
+     */
     private fun losslessFileFor(item: MediaItem): android.net.Uri? {
         // Local music always plays from its file.
         if (item.mediaId.startsWith(Song.LOCAL_PREFIX)) {
@@ -2028,11 +2031,13 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             scope.launch { applyStreamStats(item.mediaId) }
             return uri
         }
-        val s = c.settings.current
-        if (!s.lossless || !s.losslessLocal) return null
+        // Lossless files need lossless playback, as in 1.8.0; your own MP3/AAC/Ogg files (#314) need only their switch,
+        // and give way to a lossless file of the same song ([com.prism.music.data.local.PlaySourceRule]).
+        val kinds = com.prism.music.data.local.OwnFiles.kinds(c.settings.current)
+        if (!kinds.any) return null
         val song = item.toSong() ?: return null
-        val track = c.localLossless.match(song) ?: return null
-        c.streamDetails[song.id] = "Lossless · ${track.format} on this phone" to null
+        val track = c.localLossless.match(song, lossless = kinds.lossless, lossy = kinds.lossy) ?: return null
+        c.streamDetails[song.id] = (if (track.lossy) com.prism.music.data.local.OwnFiles.source(track) else "Lossless · ${track.format} on this phone") to null
         scope.launch { applyStreamStats(song.id) }
         return track.uri
     }

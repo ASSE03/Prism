@@ -42,6 +42,7 @@ object SettingsIndex {
     private val carLyrics = turnOn(tr(R.string.lyrics_in_the_car)) { it.carLyrics }
     private val smart = turnOn(tr(R.string.smart_downloads)) { it.smartDownloads }
     private val webRemote = turnOn(tr(R.string.control_from_a_browser)) { it.webRemote }
+    private val ownFiles = turnOn(tr(R.string.use_your_own_song_files)) { it.sound.ownLossyFiles }
 
     private val A = SettingsSection.APPEARANCE
     private val CO = SettingsSection.COLOR
@@ -373,6 +374,9 @@ object SettingsIndex {
         SettingEntry(D, tr(R.string.downloads), tr(R.string.manage_downloads), tr(R.string.offline_delete)),
         SettingEntry(D, tr(R.string.downloads), tr(R.string.download_on_wi_fi_only), tr(R.string.cellular_mobile_data)),
         SettingEntry(D, tr(R.string.downloads), tr(R.string.download_liked_songs_automatically), tr(R.string.offline_likes)),
+        // #314 (1.8.1).
+        SettingEntry(D, tr(R.string.your_own_song_files), tr(R.string.use_your_own_song_files), tr(R.string.own_files_keywords)),
+        SettingEntry(D, tr(R.string.your_own_song_files), tr(R.string.scan_your_song_files_again), tr(R.string.own_files_keywords), needs = ownFiles),
         SettingEntry(D, tr(R.string.smart_downloads), tr(R.string.smart_downloads), tr(R.string.offline_cache_storage_space)),
         SettingEntry(D, tr(R.string.smart_downloads), tr(R.string.space_to_use), tr(R.string.storage_cache_size_gb)),
         SettingEntry(D, tr(R.string.mobile_data), tr(R.string.smart_downloads_on_mobile_data), "cellular", needs = smart),

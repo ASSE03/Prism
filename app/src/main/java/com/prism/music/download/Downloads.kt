@@ -42,8 +42,11 @@ import java.util.concurrent.TimeUnit
 
 const val DOWNLOAD_CHANNEL = "downloads"
 
-/** [lossless]: a lossless file on the phone that lossless sync matched to this song (see [LosslessSync]). */
-data class DownloadInfo(val song: Song?, val state: Int, val percent: Float, val bytes: Long, val addedAt: Long = 0, val lossless: Boolean = false)
+/**
+ * [lossless]: a file on the phone that lossless sync matched to this song (see [LosslessSync]): a lossless one, or with
+ * [ownFile] one of your own MP3/AAC/Ogg files (1.8.1, #314), whose quality that is ("MP3 · 320 kbps").
+ */
+data class DownloadInfo(val song: Song?, val state: Int, val percent: Float, val bytes: Long, val addedAt: Long = 0, val lossless: Boolean = false, val ownFile: String? = null)
 
 /**
  * A list row's download: its own, or for a music video that was downloaded as its song ("Songs, not videos"), the
@@ -278,7 +281,10 @@ class DownloadRepository(private val context: Context, private val c: AppContain
             c.losslessSync.songs.collect { synced ->
                 val known = _lossless.value
                 _lossless.value = synced.mapValues { (id, v) ->
-                    DownloadInfo(v.first, Download.STATE_COMPLETED, 100f, v.second.size, known[id]?.addedAt ?: System.currentTimeMillis(), lossless = true)
+                    DownloadInfo(
+                        v.first, Download.STATE_COMPLETED, 100f, v.second.size, known[id]?.addedAt ?: System.currentTimeMillis(), lossless = true,
+                        ownFile = v.second.takeIf { it.lossy }?.let(com.prism.music.data.local.OwnFiles::label),
+                    )
                 }
                 publish()
                 // Lyrics come with synced songs too, like with any download (same Wi-Fi-only rule).
