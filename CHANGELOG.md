@@ -99,6 +99,7 @@ What changed in each release. Older releases are described on the [Releases page
 
 - Settings were saved one change at a time but not always in order: two quick taps could end on the wrong choice.
 - Hiding the status bar no longer moves the whole player up; only the bar goes.
+- With shuffle on, Undo after taking a song out of the queue puts it back where it was in the order.
 - The Looks page offers each season's Look only in its own month.
 - Back from Last.fm's sign-in opens Last.fm's page.
 
