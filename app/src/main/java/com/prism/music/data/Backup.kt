@@ -308,6 +308,8 @@ class Backup(private val c: AppContainer) {
                 "dislikes", "exclusions", "for_you", "for_you_feedback", "release_radar", "search", "episode_progress", "episode_played", "best_part_mine",
                 "mix_tempo", "song_loudness", "song_peak", "song_key", "dj_quick", "loudness", "lyric_offsets", "lyrics_choice", "lyrics_search_as",
                 "romanize_songs", "video_sync", "local_album_tags", "local_lengths", "local_no_art",
+                // 1.8.1: Bring your history's choices (what Replay counts, what shapes the mixes).
+                "imports",
             ).forEach { put(it, BackupPart.HISTORY) }
             listOf(
                 "canvas_saved", "download_lyrics", "download_failures", "download_auto_retry", "download_formats", "smart_downloads",
@@ -324,7 +326,8 @@ class Backup(private val c: AppContainer) {
         /** Folders (and files) right under files/ by part; anything else counts as Settings. */
         private val FILE_PARTS: Map<String, BackupPart?> = buildMap {
             listOf("library", "blends", "covers", "offline", "artwork").forEach { put(it, BackupPart.LIBRARY) }
-            listOf("rewind", "waves", "queue.json").forEach { put(it, BackupPart.HISTORY) }
+            // 1.8.1: imports/ holds the library a data download is still bringing over (its plays are in the database).
+            listOf("rewind", "waves", "queue.json", "imports").forEach { put(it, BackupPart.HISTORY) }
             put("account", BackupPart.ACCOUNTS)
             listOf("downloads", "canvas_saved").forEach { put(it, BackupPart.DOWNLOADS) }
             // Downloaded data files (models/) can always be downloaded again; stems are made again; staging is a restore's.

@@ -1,0 +1,361 @@
+package com.prism.music.data.imports
+
+import android.content.Context
+import android.net.Uri
+import android.provider.OpenableColumns
+import com.prism.music.AppContainer
+import com.prism.music.data.FavoriteArtist
+import com.prism.music.data.SavedAlbum
+import com.prism.music.data.db.toEntity
+import com.prism.music.data.innertube.SearchFilter
+import com.prism.music.data.model.AlbumItem
+import com.prism.music.data.model.ArtistItem
+import com.prism.music.data.model.Song
+import com.prism.music.data.model.SongItem
+import com.prism.music.playback.AudioDiagnostics
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+import java.io.File
+
+/**
+ * "Bring your history" (1.8.1): histories and libraries from Spotify's data download, Google Takeout and Last.fm, read
+ * on the phone, kept apart from Prism's own plays, matched to YouTube Music songs in the background, and counted where
+ * the listener says. Nothing leaves the phone but the song searches matching needs (anonymous, as Prism's search) and
+ * Last.fm's own answers.
+ *
+ * The listener's choices live in the "imports" preferences (in backups with the history): which sources Replay and
+ * Rewind count (none by default: Prism's plays only), whether imported plays shape the mixes (turned on by the first
+ * import, then the listener's), whether matching may use mobile data (no).
+ */
+class HistoryImports(private val c: AppContainer) {
+    private val prefs = c.app.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+    val importer = HistoryImporter(c.db)
+    private val jobFile = File(c.app.filesDir, "imports/library.json")
+
+    private val _counted = MutableStateFlow(ImportSource.entries.filter { prefs.getBoolean(countKey(it), false) }.toSet())
+    /** The imported sources Replay and Rewind count besides Prism's own plays. */
+    val counted: StateFlow<Set<ImportSource>> = _counted
+
+    private val _teach = MutableStateFlow(prefs.getBoolean(TEACH, false))
+    /** Imported plays shape the mixes, radio and Quick picks. */
+    val teach: StateFlow<Boolean> = _teach
+
+    private val _matchOnMobile = MutableStateFlow(prefs.getBoolean(MOBILE, false))
+    val matchOnMobile: StateFlow<Boolean> = _matchOnMobile
+
+    fun setCounted(source: ImportSource, on: Boolean) {
+        prefs.edit().putBoolean(countKey(source), on).apply()
+        _counted.value = if (on) _counted.value + source else _counted.value - source
+    }
+
+    fun setTeach(on: Boolean) {
+        prefs.edit().putBoolean(TEACH, on).putBoolean(TEACH_SET, true).apply()
+        _teach.value = on
+        c.scope.launch(Dispatchers.IO) { runCatching { c.forYou.refresh(force = true) } }
+    }
+
+    fun setMatchOnMobile(on: Boolean) {
+        prefs.edit().putBoolean(MOBILE, on).apply()
+        _matchOnMobile.value = on
+        ImportMatchWorker.enqueue(c.app, on)
+    }
+
+    /** What Replay, Rewind and the Replay card count now. */
+    fun replay(): PlayStats = stats(_counted.value)
+
+    fun stats(sources: Set<ImportSource>): PlayStats =
+        if (sources.isEmpty()) PrismPlays(c.db.plays()) else CountedPlays(sources.sortedBy { it.ordinal }, c.db.counted(), c.db.plays())
+
+    /** Plays the recommendations learn from ([TasteHistory]). */
+    val taste = TasteHistory(c.db.plays(), c.db.counted()) { if (_teach.value) ImportSource.entries else emptyList() }
+
+    val summaries: Flow<List<com.prism.music.data.db.ImportSummary>> = c.db.imports().summariesFlow()
+    val statuses: Flow<List<com.prism.music.data.db.StatusCount>> = c.db.imports().statusFlow()
+    val review: Flow<List<com.prism.music.data.db.ImportMatchEntity>> = c.db.imports().reviewFlow()
+
+    /** Reading files or Last.fm now: what's read so far (null when nothing is). */
+    val reading = MutableStateFlow<Reading?>(null)
+    data class Reading(val source: ImportSource, val plays: Int, val pages: Pair<Int, Int>? = null)
+
+    private val lock = Mutex()
+
+    private fun nameOf(uri: Uri): String = runCatching {
+        c.app.contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { if (it.moveToFirst()) it.getString(0) else null }
+    }.getOrNull() ?: uri.lastPathSegment.orEmpty()
+
+    /** What [uris] hold, counted without bringing anything in. */
+    suspend fun preview(source: ImportSource, uris: List<Uri>): ImportPreview = withContext(Dispatchers.IO) {
+        val keys = HashSet<String>()
+        var plays = 0
+        var first = Long.MAX_VALUE
+        var last = Long.MIN_VALUE
+        var library = ParsedLibrary()
+        val kinds = mutableSetOf<FileKind>()
+        var skipped = 0
+        val count: (ParsedPlay) -> Unit = { p ->
+            plays++; keys += ImportKeys.songKey(p.title, p.artist)
+            if (p.timestamp < first) first = p.timestamp
+            if (p.timestamp > last) last = p.timestamp
+        }
+        // Both histories in one download: the extended one alone (the account data's repeats it).
+        val extended = source == ImportSource.SPOTIFY && uris.any { u -> SpotifyExport.kindOf(nameOf(u)) == FileKind.SPOTIFY_EXTENDED || zipHasExtended(u) }
+        for (u in uris) {
+            val stream = c.app.contentResolver.openInputStream(u) ?: continue
+            stream.use { s ->
+                when (source) {
+                    ImportSource.SPOTIFY -> SpotifyExport.read(nameOf(u), s, SpotifyExport.Options(accountHistory = !extended), count).let { r ->
+                        library += r.library; kinds += r.kinds; skipped += r.skippedFiles
+                    }
+                    ImportSource.TAKEOUT -> if (TakeoutHistory.read(nameOf(u), s, count)) kinds += FileKind.TAKEOUT_HISTORY else skipped++
+                    ImportSource.LASTFM -> Unit
+                }
+            }
+        }
+        ImportPreview(source, plays, keys.size, first.takeIf { plays > 0 }, last.takeIf { plays > 0 }, library, kinds, skipped)
+    }
+
+    private fun zipHasExtended(u: Uri): Boolean = runCatching {
+        c.app.contentResolver.openInputStream(u)?.use { s ->
+            java.util.zip.ZipInputStream(s.buffered()).use { z ->
+                generateSequence { z.nextEntry }.any { SpotifyExport.kindOf(it.name) == FileKind.SPOTIFY_EXTENDED }
+            }
+        } ?: false
+    }.getOrDefault(false)
+
+    /** What the listener chose to bring from what [preview] showed. */
+    data class Choice(val history: Boolean = true, val library: LibraryJob.LibraryChoice = LibraryJob.LibraryChoice())
+
+    /** Brings [uris] in: the history stored, the library lined up, matching started. */
+    suspend fun bring(source: ImportSource, uris: List<Uri>, choice: Choice, preview: ImportPreview): HistoryImporter.Stats? = lock.withLock {
+        withContext(Dispatchers.IO) {
+            val session = importer.session(source)
+            var library = ParsedLibrary()
+            val extended = FileKind.SPOTIFY_EXTENDED in preview.kinds
+            reading.value = Reading(source, 0)
+            try {
+                for (u in uris) {
+                    val stream = c.app.contentResolver.openInputStream(u) ?: continue
+                    val plays = ArrayList<ParsedPlay>(HistoryImporter.BATCH)
+                    suspend fun drain() { plays.forEach { session.add(it) }; plays.clear() }
+                    stream.use { s ->
+                        // The readers call back plainly; plays are stored a batch at a time between them.
+                        val sink: (ParsedPlay) -> Unit = { p -> plays += p }
+                        when (source) {
+                            ImportSource.SPOTIFY -> {
+                                // Read file by file so a long history is stored as it's read, not held whole.
+                                SpotifyExport.read(nameOf(u), s, SpotifyExport.Options(history = choice.history, accountHistory = !extended), batched(sink, plays) { runBlocking { drain() } })
+                                    .let { library += it.library }
+                            }
+                            ImportSource.TAKEOUT -> if (choice.history) TakeoutHistory.read(nameOf(u), s, batched(sink, plays) { runBlocking { drain() } })
+                            ImportSource.LASTFM -> Unit
+                        }
+                    }
+                    drain()
+                }
+                val stats = session.finish()
+                if (!library.isEmpty) addLibrary(library, choice.library)
+                afterImport()
+                AudioDiagnostics.log("imports", "${source.key}: $stats")
+                stats
+            } finally {
+                reading.value = null
+            }
+        }
+    }
+
+    /** [sink] that stores [plays] each time a batch is full (the readers aren't suspending). */
+    private fun batched(sink: (ParsedPlay) -> Unit, plays: List<ParsedPlay>, flush: () -> Unit): (ParsedPlay) -> Unit = { p ->
+        sink(p)
+        if (plays.size >= HistoryImporter.BATCH) {
+            flush()
+            reading.value = reading.value?.let { it.copy(plays = it.plays + HistoryImporter.BATCH) }
+        }
+    }
+
+    /** The connected Last.fm account's scrobbles, page by page. */
+    suspend fun bringLastFm(): HistoryImporter.Stats? = lock.withLock {
+        withContext(Dispatchers.IO) {
+            if (c.lastFm.user.value == null) return@withContext null
+            val session = importer.session(ImportSource.LASTFM)
+            val page = ArrayList<ParsedPlay>()
+            reading.value = Reading(ImportSource.LASTFM, 0, 0 to 1)
+            try {
+                var n = 0
+                LastFmHistory.readAll(
+                    fetch = { p -> c.lastFm.recentTracksPage(p, LastFmHistory.PER_PAGE) },
+                    onPlay = { page += it },
+                    // Each page stored as it comes: a long scrobble history is never held whole.
+                    onProgress = { done, all ->
+                        n += page.size
+                        runBlocking { page.forEach { session.add(it) } }
+                        page.clear()
+                        reading.value = Reading(ImportSource.LASTFM, n, done to all)
+                    },
+                )
+                page.forEach { session.add(it) }
+                val stats = session.finish()
+                afterImport()
+                AudioDiagnostics.log("imports", "lastfm: $stats")
+                stats
+            } finally {
+                reading.value = null
+            }
+        }
+    }
+
+    private suspend fun addLibrary(lib: ParsedLibrary, choice: LibraryJob.LibraryChoice) {
+        val job = LibraryJob.load(jobFile).plus(lib, choice)
+        LibraryJob.save(jobFile, job)
+        val tracks = (if (choice.liked) lib.liked else emptyList()) + (if (choice.playlists) lib.playlists.flatMap { it.tracks } else emptyList())
+        importer.addLibrarySongs(tracks)
+    }
+
+    /** The first import turns "shape your mixes" on (the owner's choice); after that it's the listener's. */
+    private fun afterImport() {
+        if (!prefs.getBoolean(TEACH_SET, false)) {
+            prefs.edit().putBoolean(TEACH, true).putBoolean(TEACH_SET, true).apply()
+            _teach.value = true
+        }
+        ImportMatchWorker.enqueue(c.app, _matchOnMobile.value)
+    }
+
+    /** Takes [source]'s plays away (Replay stops counting it); what its library already added to Prism stays. */
+    suspend fun remove(source: ImportSource) = lock.withLock {
+        withContext(Dispatchers.IO) {
+            val keep = if (source == ImportSource.SPOTIFY) { jobFile.delete(); emptySet() } else LibraryJob.load(jobFile).keys
+            importer.remove(source, keep)
+            setCounted(source, false)
+        }
+    }
+
+    /** The listener's pick in "Needs a look" ([song] null: none of these). */
+    suspend fun fix(key: String, song: Song?) = withContext(Dispatchers.IO) {
+        val m = c.db.imports().match(key) ?: return@withContext
+        importer.fix(m, song)
+        if (song != null) applyLibrary()
+    }
+
+    // ---- Matching (from ImportMatchWorker)
+
+    private val matcher = TrackMatcher { q ->
+        c.ytm.search(q, SearchFilter.SONGS).items.filterIsInstance<SongItem>().map { it.song }
+    }
+
+    /**
+     * Matches songs until none are left or [until] (a time), a few searches at a time with a pause between, so YouTube
+     * sees about what a person searching would send. [progress]: songs done, and how many were waiting.
+     */
+    suspend fun matchSome(until: Long, stopped: () -> Boolean, progress: suspend (Int, Int) -> Unit): Boolean = withContext(Dispatchers.IO) {
+        val dao = c.db.imports()
+        val week = System.currentTimeMillis() - WEEK_MS
+        val total = dao.toMatchCount(week)
+        var done = 0
+        var failures = 0
+        while (System.currentTimeMillis() < until && !stopped()) {
+            val batch = dao.toMatch(week, 30)
+            if (batch.isEmpty()) break
+            for (group in batch.chunked(AT_ONCE)) {
+                val answers = coroutineScope {
+                    group.map { m -> async { m to runCatching { matcher.match(m.toTrack()) } } }.awaitAll()
+                }
+                for ((m, r) in answers) {
+                    val result = r.getOrNull()
+                    if (result == null) { failures++; continue }
+                    failures = 0
+                    importer.applyMatch(m, result)
+                    done++
+                }
+                // Offline or refused a few times running: stop for now, WorkManager tries again later.
+                if (failures >= AT_ONCE * 3) return@withContext false
+                progress(done, total)
+                delay(PAUSE_MS)
+                if (System.currentTimeMillis() >= until || stopped()) break
+            }
+        }
+        runCatching { applyLibrary() }.onFailure { AudioDiagnostics.log("imports", "library: $it") }
+        dao.toMatchCount(week) == 0
+    }
+
+    /** Songs, albums and artists of the library job, as far as matching has got. */
+    suspend fun applyLibrary() = withContext(Dispatchers.IO) {
+        val job = LibraryJob.load(jobFile)
+        if (job == LibraryJob()) return@withContext
+        LibraryJob.save(jobFile, job.apply(hands))
+    }
+
+    private val hands = object : LibraryJob.Hands {
+        override suspend fun matched(keys: Collection<String>): Map<String, Song> {
+            val ids = keys.chunked(500).flatMap { c.db.imports().matches(it) }
+                .filter { MatchStatus.of(it.status).matched && it.matchedId != null }.associate { it.songKey to it.matchedId!! }
+            val songs = ids.values.distinct().chunked(500).flatMap { c.db.songs().getAll(it) }.associateBy { it.id }
+            return ids.mapNotNull { (k, id) -> songs[id]?.let { k to it.toSong() } }.toMap()
+        }
+
+        override suspend fun pending(keys: Collection<String>): Set<String> =
+            keys.chunked(500).flatMap { c.db.imports().matches(it) }.filter { MatchStatus.of(it.status) == MatchStatus.PENDING }.map { it.songKey }.toSet()
+
+        override suspend fun like(songs: List<Song>) {
+            val now = System.currentTimeMillis()
+            songs.forEachIndexed { i, s ->
+                val existing = c.db.songs().get(s.id)
+                if (existing?.liked == true) return@forEachIndexed
+                // The download's order, first newest; liked here only (signed in, also on the account, a few at a time).
+                c.db.songs().upsert(s.toEntity(existing).copy(liked = true, likedAt = now - i))
+            }
+            if (c.settings.current.isLoggedIn) songs.forEach { s ->
+                runCatching { c.ytm.like(s.id, true) }
+                delay(PAUSE_MS / 2)
+            }
+        }
+
+        override fun createPlaylist(name: String, songs: List<Song>): String = c.prismLibrary.create(name, songs)
+        override fun addToPlaylist(id: String, songs: List<Song>) { c.prismLibrary.add(id, songs) }
+        override fun playlistExists(id: String): Boolean = c.prismLibrary.list(id) != null
+
+        override suspend fun saveAlbum(album: LibraryAlbum): Boolean {
+            val found = c.ytm.search("${album.title} ${album.artist}", SearchFilter.ALBUMS).items.filterIsInstance<AlbumItem>()
+            delay(PAUSE_MS)
+            val want = ImportKeys.core(album.title)
+            val artist = ImportKeys.norm(ImportKeys.mainArtist(album.artist))
+            val hit = found.firstOrNull { ImportKeys.core(it.title) == want && ImportKeys.norm(it.subtitle).contains(artist) } ?: return false
+            if (!c.prismLibrary.isSaved(hit.id)) c.prismLibrary.saveAlbum(SavedAlbum(hit.id, hit.title, hit.subtitle, hit.thumbnail, hit.playlistId, System.currentTimeMillis()))
+            return true
+        }
+
+        override suspend fun starArtist(name: String): Boolean {
+            val found = c.ytm.search(name, SearchFilter.ARTISTS).items.filterIsInstance<ArtistItem>()
+            delay(PAUSE_MS)
+            val hit = found.firstOrNull { ImportKeys.norm(it.title) == ImportKeys.norm(name) } ?: return false
+            if (!c.artistPrefs.isFavorite(hit.id)) c.artistPrefs.setFavorite(FavoriteArtist(hit.id, hit.title, hit.thumbnail), true)
+            return true
+        }
+    }
+
+    private fun com.prism.music.data.db.ImportMatchEntity.toTrack() =
+        TrackToMatch(title, artist, album, durationMs, atLeastMs, isrc, youtubeId)
+
+
+    companion object {
+        const val PREFS = "imports"
+        private const val TEACH = "teach"
+        private const val TEACH_SET = "teach_set"
+        private const val MOBILE = "match_on_mobile"
+        private fun countKey(s: ImportSource) = "count_${s.key}"
+
+        /** Searches at once, and the pause after each few. */
+        const val AT_ONCE = 3
+        const val PAUSE_MS = 1_200L
+        const val WEEK_MS = 7 * 86_400_000L
+    }
+}

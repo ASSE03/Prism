@@ -499,6 +499,11 @@ class AppContainer(val app: Application) {
     val rewind by lazy { com.prism.music.data.Rewinds(this) }
     /** A year's Rewind to open (Home's Rewind card, the 1 December notification): Replay shows it and clears this. */
     val rewindRequest = MutableStateFlow<Int?>(null)
+    /**
+     * Bring your history (1.8.1): plays and libraries from Spotify, Google Takeout and Last.fm. Replay counts its
+     * plays through [com.prism.music.data.imports.HistoryImports.replay], the mixes through its `taste`.
+     */
+    val imports by lazy { com.prism.music.data.imports.HistoryImports(this) }
 
     /** Prism Connect: playback moving between Prism devices on the same Wi-Fi. */
     val handoff by lazy { com.prism.music.connect.Handoff(app, this) }
