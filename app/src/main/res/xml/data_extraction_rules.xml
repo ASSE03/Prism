@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12+: what Android's own backup (to Google, or phone to phone) takes. Everything but the sign-ins kept in
+     files of their own; the YouTube Music sign-in lives with the settings and is signed out on a restored copy
+     (RestoredInstall). Same list as backup_rules.xml. -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="discord.xml" />
+        <exclude domain="sharedpref" path="lastfm.xml" />
+        <exclude domain="sharedpref" path="connect_remote.xml" />
+        <exclude domain="sharedpref" path="connect_handoff.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="discord.xml" />
+        <exclude domain="sharedpref" path="lastfm.xml" />
+        <exclude domain="sharedpref" path="connect_remote.xml" />
+        <exclude domain="sharedpref" path="connect_handoff.xml" />
+    </device-transfer>
+</data-extraction-rules>

@@ -100,6 +100,14 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
         com.prism.music.ui.theme.IconStyle.load(this)
         com.prism.music.ui.theme.AppFonts.init(this)
         container = AppContainer(this)
+        // Android's own backup restored onto another install: its sign-ins aren't this phone's (RestoredInstall).
+        runCatching {
+            com.prism.music.data.RestoredInstall.check(this) {
+                container.settings.logout()
+                runCatching { container.lastFm.signOut() }
+                runCatching { container.discord.signOut() }
+            }
+        }
         // Whether any of Prism's screens is showing: what Android 12+ allows depends on it (DownloadRepository).
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             private var started = 0
