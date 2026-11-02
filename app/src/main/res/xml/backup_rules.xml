@@ -5,4 +5,5 @@
     <exclude domain="sharedpref" path="lastfm.xml" />
     <exclude domain="sharedpref" path="connect_remote.xml" />
     <exclude domain="sharedpref" path="connect_handoff.xml" />
+    <exclude domain="sharedpref" path="spotify_auth.xml" />
 </full-backup-content>

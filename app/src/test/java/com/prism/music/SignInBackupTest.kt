@@ -36,7 +36,7 @@ class SignInBackupTest {
     }
 
     @Test fun signInFilesAreLeftOutOfAndroidsBackup() {
-        val signIns = listOf("discord.xml", "lastfm.xml", "connect_remote.xml", "connect_handoff.xml")
+        val signIns = listOf("discord.xml", "lastfm.xml", "connect_remote.xml", "connect_handoff.xml", "spotify_auth.xml")
         val res = listOf(File("src/main/res/xml"), File("app/src/main/res/xml")).first { it.isDirectory }
         for (name in listOf("data_extraction_rules.xml", "backup_rules.xml")) {
             val rules = File(res, name).readText()
