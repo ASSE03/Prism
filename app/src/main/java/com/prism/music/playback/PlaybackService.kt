@@ -498,6 +498,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private fun inForeground(): Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.Q || foregroundServiceType != 0
 
     override fun onTaskRemoved(rootIntent: Intent?) {
+        android.util.Log.i("PrismControl", "swiped away: wants to play ${player.playWhenReady}, ${player.mediaItemCount} songs, stop on swipe ${c.settings.current.stopOnSwipeAway}")
         saveQueue(now = true)
         // Settings → Playback → "Stop when swiped away" (#45): closing Prism from Recents ends the music too (some
         // phones, Samsung's among them, otherwise keep it playing with no app on screen).
@@ -514,6 +515,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         if (!player.playWhenReady || player.mediaItemCount == 0) {
             flushPlayTime()
             saveEpisodePosition()
+            android.util.Log.i("PrismControl", "swiped away while paused: stopping, notification closed until something plays")
+            AudioDiagnostics.log("control", "swiped away while paused: Prism stops until something plays")
             setNotificationClosed(true)
             player.stop()
             stopSelf()
