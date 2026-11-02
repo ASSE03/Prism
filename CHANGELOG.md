@@ -75,6 +75,43 @@ What changed in each release. Older releases are described on the [Releases page
   drops. Its length is the real blend's (an automatic one shows once the blend is planned); the knob rides the shape.
   The waveform and Ribbons keep the crossfade mark; nothing changes where songs don't blend (an album's tracks,
   casting, episodes, live streams).
+- **"Show background" goes all the way to dark** (#309): the player's Show background slider (Blurred cover and Your
+  background) now runs from a fully dark player at 0% to the brightest background at 100%. Whatever you had set looks
+  exactly as before (only its percent moved along the longer slider).
+- **Album names in Downloads can go** (#310): Customize Prism → Home & Library → "Album names in Downloads", or Downloads'
+  sort menu → Show album names. Off, each download shows just its artist under the title. On unless you turn it off.
+- **Each artist's name on the player can open their page** (#289): Customize Prism → Player → Title and times →
+  Artists' names → "Each name opens its artist". With more than one artist, a tap on a name goes straight to that
+  artist; a tap between the names still asks which. Off unless you pick it.
+- **The "Now playing" background can fade between songs** (#283): with a screen on the Now playing background,
+  Backgrounds has "Now playing fades between songs", which fades the cover into the next song's at the pace your colors
+  change between songs. Off unless you turn it on (and off with Reduce motion).
+- **Add to playlist says which playlists already have it** (#246): a check and "Already has this song" (or "Already
+  has 3 of these 12" for an album) beside each playlist that holds it. Prism goes by what's on the phone: your Prism
+  playlists, every playlist you've opened (Prism keeps a copy for offline), and what you add from the sheet, so nothing
+  extra is asked from YouTube; a playlist never opened in Prism has no mark until you open it.
+- **New releases from your favorite artists only** (#311): the New releases page has a "Favorite artists only" chip
+  (the artists you've starred; Home's New releases follows it too) and a row of your artists, the ones you play most
+  first, to see one artist's releases at a time. Starred artists' new releases already come with a notification
+  (Settings → Recommendations & Replay), and Customize Home can move New releases to the top of Home.
+- **An explicit filter** (#216): Settings → Playback & sound → What plays next → Explicit songs. **Show them** is as before;
+  **Skip them** keeps explicit songs (YouTube Music's "E") in lists but never plays them: radios, autoplay and mixes leave
+  them out, a tapped one gives way to the next clean song, and the queue passes over any that got in; **Hide them** also
+  leaves them out of search, Home and album, playlist, Liked songs and Downloads lists. It goes by YouTube Music's own
+  mark, so songs kept on the phone without it (older likes, your own files) still play.
+- **Change a song's or an album's cover** (#305, and Reddit): a song's menu (or the player's ⋯) → Change cover, and an
+  album's menu or its page's ⋯. Pick a photo, one of the covers of the song's other versions (a lyric video's
+  thumbnail swapped for the album's), or **Use the original** to go back. An album's cover shows on its songs too. It's
+  used wherever the song shows: lists, the player and mini player, the notification and lock screen, widgets and
+  Android Auto. Kept on your phone and in backups (with your library); nothing changes on YouTube Music.
+- **A White player background** (#320): Customize Prism → Player → Look → Background → White, for the light theme.
+  The player turns white with dark type and controls (the split light keeps its colors, a white play button turns
+  black), and the status bar's icons go dark over it. With the lyrics or the queue open it turns to the dark blurred
+  cover, as Color mesh does; a tablet's or a turned phone's wide player keeps the color mesh. Only when picked.
+- **A font installed on your phone** (#318): Customize Prism → Text → "A font installed on your phone" (and one for the
+  lyrics) lists the phone's own fonts, each written in itself, no file needed (Android 10 and later; fonts with Latin
+  letters). Fonts a phone adds from its own font store (Samsung's) aren't listed to apps by Android: the System font
+  is the font picked for the phone.
 - **Pause your history** (#296): Settings → Recommendations & Replay → History → Pause history, for 1 hour, 1 day or
   until you turn it back on. Meanwhile nothing you play or search is kept: no plays for Replay, Rewind and History, no
   recent searches, nothing sent to your YouTube Music history and, like Spotify's private session, no Last.fm scrobbles;

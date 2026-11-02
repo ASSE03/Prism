@@ -86,6 +86,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -317,6 +318,8 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     // wants them (1.7.9, Reddit: "some people want that same order of the playlist").
     val sortable = type != CollectionType.ALBUM && songs.size > 1
     val showGenres = sortable && settings.behavior.playlistGenres
+    // #310 (1.8.1): Downloads can leave the album's name out from under each song.
+    val showAlbums = type != CollectionType.DOWNLOADS || settings.view.downloadsAlbums
     LaunchedEffect(showGenres) { if (!showGenres) { genreFilter = null; if (groupByGenre) toggleGenreGroups() } }
     val showSearch = type != CollectionType.ALBUM || songs.size > 12
 
@@ -351,9 +354,12 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     val genreCounts = remember(songs, genreVersion) {
         songs.flatMap { genresOf(it.id) }.groupingBy { it }.eachCount().toList().sortedByDescending { it.second }
     }
-    val visible = remember(songs, genreFilter, sort, query, if (genreFilter != null || sort == SortMode.GENRE || groupByGenre) genreVersion else 0) {
+    // #216: "Hide them" leaves explicit songs out of the list (they're never played either way).
+    val explicit = settings.behavior.explicitContent
+    val visible = remember(songs, genreFilter, sort, query, explicit, if (genreFilter != null || sort == SortMode.GENRE || groupByGenre) genreVersion else 0) {
         val words = query.trim().lowercase().split(Regex("\\s+")).filter { it.isNotEmpty() }
         val filtered = page.songs.filter { s ->
+            com.prism.music.data.ExplicitFilter.shows(explicit, s) &&
             (genreFilter == null || genreFilter in genresOf(s.id)) &&
                 // Every word typed has to turn up in the title, the artists or the album.
                 (words.isEmpty() || "${s.title} ${s.artistText} ${s.album?.title.orEmpty()}".lowercase().let { hay -> words.all { it in hay } })
@@ -400,7 +406,9 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     val popular = remember(live.page) { if (type == CollectionType.ALBUM) live.page.popularIds else emptySet() }
     // Playlists (and Liked songs) can have a picture of the listener's choosing.
     val coverKey = when (type) { CollectionType.PLAYLIST, CollectionType.PRISM -> page.id; CollectionType.LIKED -> "liked"; CollectionType.DOWNLOADS -> "downloads"; else -> null }
-    val art = coverKey?.let { c.covers.art(it, page.thumbnail) } ?: page.thumbnail
+    // An album can have one of the listener's choosing too (#305), from its ⋯ menu (its cover's tap stays as it was).
+    val art = coverKey?.let { c.covers.art(it, page.thumbnail) }
+        ?: (if (type == CollectionType.ALBUM) c.covers.albumArt(page.id, page.thumbnail) else null) ?: page.thumbnail
     // Prism's own lists without a picture take their colors from their newest song.
     val frostUrl = art ?: songs.firstOrNull()?.thumbnail
     val palette = rememberArtPalette(frostUrl)
@@ -531,6 +539,10 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     }
     var coverSheet by remember { mutableStateOf(false) }
     if (coverSheet && coverKey != null) CoverSheet(coverKey, page.title, page.songs) { coverSheet = false }
+    var albumCover by remember { mutableStateOf(false) }
+    if (albumCover) com.prism.music.ui.components.CoverPickSheet(
+        com.prism.music.ui.components.CoverFor.OfAlbum(page.id, page.title, page.thumbnail, c.covers.albumKey(page.id)),
+    ) { albumCover = false }
     // Liked songs: made into (and kept in step with) a real YouTube Music playlist.
     var likedPlaylistSheet by remember { mutableStateOf(false) }
     val likedPlaylistId by c.likedPlaylist.playlistId.collectAsState()
@@ -707,6 +719,11 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                                 HorizontalDivider()
                                 if (showGenres) DropdownMenuItem({ Text(tr(R.string.group_by_genre)) }, { toggleGenreGroups(); sortMenu = false }, trailingIcon = { if (groupByGenre) Icon(PrismIcons.Check, null) })
                                 DropdownMenuItem({ Text(tr(R.string.show_genres)) }, { c.settings.setPlaylistGenres(!showGenres); sortMenu = false }, trailingIcon = { if (showGenres) Icon(PrismIcons.Check, null) })
+                                // #310: the album's name under each download, or just the artist.
+                                if (type == CollectionType.DOWNLOADS) DropdownMenuItem(
+                                    { Text(tr(R.string.show_album_names)) }, { c.settings.setDownloadsAlbums(!showAlbums); sortMenu = false },
+                                    Modifier.testTag("downloadsAlbumsMenu"), trailingIcon = { if (showAlbums) Icon(PrismIcons.Check, null) },
+                                )
                             }
                         }
                     }
@@ -738,7 +755,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                             }
                             itemsIndexed(songs, key = { i, s -> "g:$g:${s.id}:$i" }) { _, s ->
                                 com.prism.music.ui.components.SwipeToQueue(s) {
-                                    SongRow(s, dim(s), playing = current?.id == s.id, trailingInfo = null, extraActions = removeAction(s)) {
+                                    SongRow(s, dim(s), playing = current?.id == s.id, trailingInfo = null, extraActions = removeAction(s), showAlbum = showAlbums) {
                                         playFrom(songs, s, source.copy(title = "$title · $g"))
                                     }
                                 }
@@ -757,8 +774,9 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                                 // #314: a song playing from one of your own files says so ("MP3 · 320 kbps, from your file").
                                 trailingInfo = if (type == CollectionType.ALBUM) formatDuration(s.durationSec)
                                 else if (type == CollectionType.DOWNLOADS && downloads[s.id]?.ownFile != null) tr(R.string.x_from_your_file, downloads[s.id]?.ownFile)
-                                else genreVersion.let { genres[s.id] }?.takeIf { sort == SortMode.GENRE || genreFilter == null && showGenres }?.let { g -> listOfNotNull(s.album?.title, com.prism.music.data.meta.Genres.shown(g)).joinToString(" • ") },
+                                else genreVersion.let { genres[s.id] }?.takeIf { sort == SortMode.GENRE || genreFilter == null && showGenres }?.let { g -> listOfNotNull(s.album?.title?.takeIf { showAlbums }, com.prism.music.data.meta.Genres.shown(g)).joinToString(" • ") },
                                 extraActions = removeAction(s),
+                                showAlbum = showAlbums,
                             ) { playFrom(visible, s, source) }
                         }
                     }
@@ -832,6 +850,8 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     SheetItem(PrismIcons.PlaylistAdd, if (likedPlaylistId != null) tr(R.string.playlist_kept_up_to_date) else tr(R.string.make_it_a_playlist)) { likedPlaylistSheet = true },
                 )
                 if (coverKey != null) add(SheetItem(PrismIcons.Photo, tr(R.string.change_picture)) { coverSheet = true })
+                // #305: an album's own cover, kept on the phone, on its songs everywhere too.
+                if (type == CollectionType.ALBUM) add(SheetItem(PrismIcons.Photo, tr(R.string.change_cover)) { albumCover = true })
                 // A holiday mix: pinned to Home on its own, or kept as a Prism playlist (1.8.0).
                 if (type == CollectionType.MIX) com.prism.music.data.seasonal.HolidayMixes.byId(page.id)?.let { addAll(holidayActions(c, context, it)) }
                 if ((type == CollectionType.PLAYLIST && live.page.owned) || type == CollectionType.PRISM) add(SheetItem(PrismIcons.Edit, tr(R.string.edit_details)) { editing = true })

@@ -124,7 +124,7 @@ fun MiniPlayer(
     fun fraction() = (position.value.toFloat() / pc.duration.coerceAtLeast(1)).coerceIn(0f, 1f)
     val dark = com.prism.music.ui.theme.LocalIsDark.current
     // #231 (1.7.9.2): the progress in your accent, plain ink or the cover's color instead of the split light.
-    val progressBrush = miniProgressBrush(settings.view.miniProgressColor, s.thumbnail)
+    val progressBrush = miniProgressBrush(settings.view.miniProgressColor, com.prism.music.data.PlaylistCovers.artOf(s))
     // The same piece of glass as the tab bar under it, with the tab bar's own Background (see-through, solid…): Card used
     // to turn into a solid bar with the progress along its top whenever Frosted Glass was off (owner, 1.7.6).
     val tint = com.prism.music.navFill(settings.navBarFill)
@@ -233,7 +233,7 @@ fun MiniPlayer(
                 .padding(start = if (style == MiniPlayerStyle.PILL) 6.dp else if (bar) 16.dp else 8.dp, end = if (style == MiniPlayerStyle.PILL) 8.dp else if (bar) 8.dp else 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Artwork(s.thumbnail, with(CoverFlight) { Modifier.size(artSize).miniCover() }, artShape, size = 226)
+            Artwork(com.prism.music.data.PlaylistCovers.artOf(s), with(CoverFlight) { Modifier.size(artSize).miniCover() }, artShape, size = 226)
             Spacer(Modifier.width(12.dp))
             AnimatedContent(
                 s,

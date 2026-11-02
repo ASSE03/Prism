@@ -913,6 +913,18 @@ private fun TypeSettings() {
             if (hasAppFont) tr(R.string.tap_to_pick_a_different_ttf) else tr(R.string.pick_a_ttf_or_otf_file),
             onClick = { pickApp.launch(fontTypes) },
         ) { Chevron() }
+        // #318 (1.8.1): a font installed on the phone, without a file to pick (Android 10 and later list them).
+        var installedFor by remember { mutableStateOf<AppFonts.FontSlot?>(null) }
+        installedFor?.let { slot ->
+            InstalledFontsSheet(slot, onPicked = { name ->
+                if (slot == AppFonts.FontSlot.APP) { prefs.setAppFont(name); prefs.setFontChoice(FontChoice.CUSTOM) }
+                else { prefs.setLyricsFontFile(name); prefs.setLyricsFont(FontChoice.CUSTOM.name) }
+            }) { installedFor = null }
+        }
+        if (android.os.Build.VERSION.SDK_INT >= 29) Item(
+            tr(R.string.installed_fonts), tr(R.string.installed_fonts_detail), info = tr(R.string.installed_fonts_info),
+            onClick = { installedFor = AppFonts.FontSlot.APP },
+        ) { Chevron() }
         if (hasAppFont) Item(tr(R.string.remove_your_font), tr(R.string.back_to_a_built_in_font), onClick = {
             AppFonts.remove(AppFonts.FontSlot.APP)
             if (s.fontChoice == FontChoice.CUSTOM) prefs.setFontChoice(FontChoice.PRISM)
@@ -928,6 +940,10 @@ private fun TypeSettings() {
                 else -> FontChoice.valueOf(v).label
             }
         }) { v -> if (v == FontChoice.CUSTOM.name && !hasLyricsFont) pickLyrics.launch(fontTypes) else prefs.setLyricsFont(v) }
+        if (android.os.Build.VERSION.SDK_INT >= 29) Item(
+            tr(R.string.installed_fonts_for_lyrics), tr(R.string.installed_fonts_detail),
+            onClick = { installedFor = AppFonts.FontSlot.LYRICS },
+        ) { Chevron() }
         if (hasLyricsFont) {
             Item(tr(R.string.lyrics_font_file_2, s.lyricsFontName), tr(R.string.tap_to_pick_a_different_file), onClick = { pickLyrics.launch(fontTypes) }) { Chevron() }
             Item(tr(R.string.remove_the_lyrics_font_file), null, onClick = {
@@ -1677,7 +1693,8 @@ private fun PlayerLookGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     Group(tr(R.string.look)) {
-        Label(tr(R.string.background))
+        // #320 (1.8.1): White is a white player with dark type, for the light theme.
+        Label(tr(R.string.background), info = tr(R.string.player_background_white_info))
         Chips(PlayerBackground.entries, s.playerBackground, { it.label }) { prefs.setPlayerBackground(it) }
         if (s.playerBackground == PlayerBackground.APPEARANCE) {
             val nav = LocalNavigator.current
@@ -1689,9 +1706,16 @@ private fun PlayerLookGroup() {
                 onClick = { nav.go(Routes.BACKGROUNDS + "?player=true") },
             ) { Chevron() }
         }
+        // #309 (1.8.1): the slider runs on past what it could before, to a fully dark player at 0% (stored values from
+        // before draw as they did; only the percent shown for them moved).
         if (s.playerBackground == PlayerBackground.BLUR || s.playerBackground == PlayerBackground.APPEARANCE) SliderSetting(
-            tr(R.string.show_background), s.playerBackdropShow, 0f..1f, { worded(if (it < 0.2f) tr(R.string.subtle) else if (it < 0.7f) tr(R.string.balanced) else tr(R.string.vivid), it) },
-        ) { prefs.setPlayerBackdropShow(it) }
+            tr(R.string.show_background), com.prism.music.ui.player.backdropShowOnSlider(s.playerBackdropShow), 0f..1f,
+            {
+                val show = com.prism.music.ui.player.backdropShowFromSlider(it)
+                worded(if (it < 0.01f) tr(R.string.dark) else if (show < 0.2f) tr(R.string.subtle) else if (show < 0.7f) tr(R.string.balanced) else tr(R.string.vivid), it)
+            },
+            info = tr(R.string.show_background_info),
+        ) { prefs.setPlayerBackdropShow(com.prism.music.ui.player.backdropShowFromSlider(it)) }
         // The mesh's movement, the blur's softness (1.7.4; one movement slider since 1.8.0).
         PlayerBackgroundTuning()
         Label(tr(R.string.controls))
@@ -1831,6 +1855,9 @@ private fun SoundPage() {
             Label(tr(R.string.music_videos_label), info = tr(R.string.music_videos_label_info))
             Chips(VideoPolicy.entries, SoundChoices.videoPolicy(s), { it.label }) { SoundChoices.setVideoPolicy(prefs, it) }
             Toggle(tr(R.string.keep_playing_videos), tr(R.string.after_a_video_the_next_song), s.videoContinues) { prefs.setVideoContinues(it) }
+            // #216 (1.8.1): explicit songs as before, never played, or not shown either.
+            Label(tr(R.string.explicit_songs), info = tr(R.string.explicit_songs_info))
+            Chips(com.prism.music.data.prefs.ExplicitContent.entries, s.behavior.explicitContent, { it.label }) { prefs.setExplicitContent(it) }
         }
         Group(tr(R.string.crossfade)) {
             Label(tr(R.string.crossfade), info = tr(R.string.crossfade_choice_info))
@@ -2515,6 +2542,11 @@ private fun LibraryLookGroup() {
             Spacer(Modifier.height(6.dp))
             Toggle(tr(R.string.full_width_playlist_pictures), tr(R.string.edge_to_edge_like_an_artist), s.playlistHeroCover) { prefs.setPlaylistHeroCover(it) }
             Toggle(tr(R.string.genres_on_playlists), tr(R.string.genres_on_playlists_detail), s.behavior.playlistGenres) { prefs.setPlaylistGenres(it) }
+            // #310 (1.8.1): off, Downloads lists each song with just its artist under it.
+            Toggle(
+                tr(R.string.album_names_in_downloads), tr(R.string.album_names_in_downloads_detail), s.view.downloadsAlbums,
+                info = tr(R.string.album_names_in_downloads_info),
+            ) { prefs.setDownloadsAlbums(it) }
             var editingTiles by remember { mutableStateOf(false) }
             Item(
                 tr(R.string.library_tiles), tr(R.string.of_shown_pick_and_order_them, s.libraryTiles.size, com.prism.music.data.prefs.LibraryTile.entries.size),

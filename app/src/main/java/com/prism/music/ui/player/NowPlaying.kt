@@ -121,6 +121,7 @@ import com.prism.music.data.canvas.CanvasArtwork
 import com.prism.music.data.model.Song
 import com.prism.music.data.model.hiRes
 import com.prism.music.ui.LocalNavigator
+import com.prism.music.ui.player.PlayerInk.inked
 import com.prism.music.ui.Routes
 import com.prism.music.ui.components.shareTarget
 import com.prism.music.ui.components.tickWhileShown
@@ -444,7 +445,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     var canvasCover by remember(canvas) { mutableFloatStateOf(0f) }
 
     // ---------------------------------------------------------------- Artwork
-    val artUrl = hiRes(song.thumbnail, 1200)
+    // The cover picked for the song or its album (#305), else its own.
+    val songArt = c.covers.art(song)
+    val artUrl = hiRes(songArt, 1200)
     // Decoded at full size whatever size the cover is first laid out at (#86): opened mid-animation or with lyrics
     // open it starts out small, and the picture decoded for that size was then stretched over the whole cover.
     val artRequest = remember(artUrl) { coil3.request.ImageRequest.Builder(context).data(artUrl).size(1200).build() }
@@ -467,9 +470,33 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     LaunchedEffect(heroMode) { if (!heroMode) heroPicture = null }
     val heroT = animateFloatAsState(if (heroTarget(heroMode, artLoaded || heroPicture != null, canvasCover > 0f)) 1f else 0f, tween(420, easing = FastOutSlowInEasing), label = "hero")
     val heroVisible: () -> Float = { heroT.value * (1f - p()) }
-    val mesh = rememberArtworkMesh(song.thumbnail)
-    val blurImage = rememberFullArtworkBlur(song.thumbnail, settings.playerBlur)
+    val mesh = rememberArtworkMesh(songArt)
+    val blurImage = rememberFullArtworkBlur(songArt, settings.playerBlur)
     val fullBlur by animateFloatAsState(if (lyricsOpen || queueOpen || statsOpen) 1f else 0f, tween(360, easing = FastOutSlowInEasing), label = "fullBlur")
+    // #320: over the White background the type and controls are dark ([PlayerInk]); over the lyrics and the queue (their
+    // dark blurred cover), a canvas or a video behind, a wide player or immersive mode they're white as ever.
+    val inkLight = settings.playerBackground == com.prism.music.data.prefs.PlayerBackground.WHITE && !wide && !canvasBehind && !videoBehind &&
+        fullBlur < 0.5f && !(settings.immersivePlayer && (!videoMode || settings.view.immersiveVideo))
+    PlayerInk.light = inkLight
+    DisposableEffect(Unit) { onDispose { PlayerInk.light = false } }
+    // The status bar's and the navigation bar's icons dark over it too.
+    DisposableEffect(inkLight, settings.playerNavBand) {
+        if (!inkLight) return@DisposableEffect onDispose {}
+        val window = (view.context as? Activity)?.window
+        val ctl = window?.let { WindowCompat.getInsetsController(it, view) }
+        ctl?.isAppearanceLightStatusBars = true
+        ctl?.isAppearanceLightNavigationBars = true
+        @Suppress("DEPRECATION")
+        val previousNavColor = window?.navigationBarColor
+        @Suppress("DEPRECATION")
+        if (settings.playerNavBand) window?.navigationBarColor = android.graphics.Color.argb(0x80, 0xf2, 0xf2, 0xf4)
+        onDispose {
+            ctl?.isAppearanceLightStatusBars = false
+            ctl?.isAppearanceLightNavigationBars = false
+            @Suppress("DEPRECATION")
+            if (previousNavColor != null) window.navigationBarColor = previousNavColor
+        }
+    }
     val statusTop = statusBarRoom().asPaddingValues().calculateTopPadding()
     // Collapsed into the header thumbnail, the sleeve keeps gentle corners whatever the setting.
     // A Full width cover meets the screen's edges, so it has square corners until it shrinks into the header.
@@ -491,7 +518,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         vizStyle != com.prism.music.data.prefs.VisualizerStyle.OFF && !settings.reduceMotion && !covered && !videoMode && isPlaying,
     )
     val vizBrush: Brush = if (viz == null) androidx.compose.ui.graphics.SolidColor(Color.White) else
-        scrubberFill(settings.visualizerColor, song.thumbnail)
+        scrubberFill(settings.visualizerColor, songArt)
             ?: Brush.horizontalGradient(*com.prism.music.ui.theme.PrismTokens.spectrumColors(true).toTypedArray())
     val vizColor: Color = (vizBrush as? androidx.compose.ui.graphics.SolidColor)?.value
         ?: com.prism.music.ui.theme.PrismTokens.spectrumColors(true).let { it[it.size / 2].second }
@@ -599,13 +626,24 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 if (fullBlur > 0f) FullArtworkBlurBackdrop(blurImage, Modifier.graphicsLayer { alpha = fullBlur })
             }
             // "Show background" lifts the darkening: about as before at its default, down to a light veil at full.
-            com.prism.music.data.prefs.PlayerBackground.BLUR -> FullArtworkBlurBackdrop(blurImage, scrim = 1.3f - 0.95f * settings.playerBackdropShow)
+            com.prism.music.data.prefs.PlayerBackground.BLUR -> {
+                FullArtworkBlurBackdrop(blurImage, scrim = 1.3f - 0.95f * settings.playerBackdropShow.coerceAtLeast(0f))
+                // #309: below 0 the slider darkens on, to black at its start.
+                backdropBlackout(settings.playerBackdropShow).takeIf { it > 0f }?.let { Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = it))) }
+            }
             com.prism.music.data.prefs.PlayerBackground.APPEARANCE -> {
-                AppearanceBackdrop(settings.playerBackdropShow)
+                AppearanceBackdrop(settings.playerBackdropShow.coerceAtLeast(0f))
+                backdropBlackout(settings.playerBackdropShow).takeIf { it > 0f }?.let { Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = it))) }
                 if (fullBlur > 0f) FullArtworkBlurBackdrop(blurImage, Modifier.graphicsLayer { alpha = fullBlur })
             }
             com.prism.music.data.prefs.PlayerBackground.THEME -> ThemeBackdrop()
             com.prism.music.data.prefs.PlayerBackground.BLACK -> Box(Modifier.fillMaxSize().background(Color.Black))
+            // #320: white, the type dark ([PlayerInk]); the lyrics and the queue fade to the dark blurred cover as the
+            // mesh does. A wide player keeps the mesh (its two panes are drawn for a dark ground).
+            com.prism.music.data.prefs.PlayerBackground.WHITE -> if (wide) ArtworkMeshBackdrop(mesh, speed = 0f, intensity = settings.meshIntensity, blur = settings.playerBlur) else {
+                Box(Modifier.fillMaxSize().background(PlayerWhiteBackdrop))
+                if (fullBlur > 0f) FullArtworkBlurBackdrop(blurImage, Modifier.graphicsLayer { alpha = fullBlur })
+            }
         }
         // Settings → Lyrics → Background (1.7.5): while the lyrics are open, their own background over the player's.
         val lyricsGround = settings.lyricsPageBackground()
@@ -613,7 +651,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             if (lyricsOpen && lyricsGround != com.prism.music.data.prefs.LyricsBackground.PLAYER) 1f else 0f, tween(420, easing = FastOutSlowInEasing), label = "lyricsGround",
         )
         if (lyricsGroundT > 0f) LyricsBackdrop(
-            lyricsGround, settings, song.thumbnail, blurImage, canvas, canvasSaved, isPlaying,
+            lyricsGround, settings, songArt, blurImage, canvas, canvasSaved, isPlaying,
             Modifier.fillMaxSize().graphicsLayer { alpha = lyricsGroundT }, hold = covered,
         )
         // The visualizer's Glow behind everything, and its Bars along the bottom, under the controls.
@@ -621,7 +659,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             com.prism.music.data.prefs.VisualizerStyle.GLOW -> VisualizerGlow(viz, vizColor, Modifier.fillMaxSize())
             com.prism.music.data.prefs.VisualizerStyle.BARS -> VisualizerBars(
                 viz, vizBrush,
-                Modifier.align(Alignment.BottomCenter).fillMaxWidth().fillMaxHeight(0.2f).padding(horizontal = 12.dp).navigationBarsPadding(),
+                Modifier.align(Alignment.BottomCenter).fillMaxWidth().fillMaxHeight(0.2f).padding(horizontal = 12.dp).navigationBarsPadding().inked(),
             )
             else -> {}
         }
@@ -687,8 +725,8 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 )
             }
         }
-        // Status-bar scrim
-        Box(Modifier.fillMaxWidth().height(statusTop + DISMISS_STRIP).background(Brush.verticalGradient(listOf(Color.Black.copy(alpha = 0.32f), Color.Transparent))))
+        // Status-bar scrim (none on the White background, whose status bar has dark icons)
+        if (!inkLight) Box(Modifier.fillMaxWidth().height(statusTop + DISMISS_STRIP).background(Brush.verticalGradient(listOf(Color.Black.copy(alpha = 0.32f), Color.Transparent))))
 
         val dismissGesture = Modifier.pointerInput(Unit) {
             detectVerticalDragGestures(
@@ -826,7 +864,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         ) else
         Column(Modifier.fillMaxSize().windowInsetsPadding(statusBarRoom()).navigationBarsPadding().then(skipGesture), horizontalAlignment = Alignment.CenterHorizontally) {
             // ------------------------------------------------ Handle + caption
-            Box(Modifier.fillMaxWidth().height(DISMISS_STRIP).then(dismissGesture)) {
+            Box(Modifier.fillMaxWidth().height(DISMISS_STRIP).then(dismissGesture).inked()) {
                 // Settings → Player → Show on the player → Handle at the top (Reddit, 1.7.9.1): off, the strip still
                 // takes the swipe down.
                 if (settings.playerHandle) Box(
@@ -992,7 +1030,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                     // The visualizer's Wave, behind the title.
                     if (viz != null && vizStyle == com.prism.music.data.prefs.VisualizerStyle.WAVE && !collapsePastHalf) VisualizerWave(
                         viz, vizBrush,
-                        Modifier.fillMaxWidth().height(HEADER_HEIGHT).offset { IntOffset(0, titleTop().roundToPx()) }.graphicsLayer { alpha = 1f - 2f * p() },
+                        Modifier.fillMaxWidth().height(HEADER_HEIGHT).offset { IntOffset(0, titleTop().roundToPx()) }.graphicsLayer { alpha = 1f - 2f * p() }.inked(),
                     )
                     // ---- Credits: title, artist, like, menu
                     Row(
@@ -1007,7 +1045,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                 }
                             }
                             .height(HEADER_HEIGHT)
-                            .then(sleeveGesture),
+                            .then(sleeveGesture)
+                            // #320: dark over the White background.
+                            .inked(),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         // Settings → Player → Title (1.7.4): centred titles sit in the middle of the screen (a space as wide
@@ -1045,8 +1085,10 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                             val linked = com.prism.music.ui.components.openableArtists(song)
                             var pickArtist by remember(song.id) { mutableStateOf(false) }
                             if (inHeader(PlayerPart.ARTIST)) Box {
+                                // #289 (1.8.1): each name its own link, if asked for; a tap between them still asks.
+                                val artistLine = artistLinkText(song.artistText, linked, settings.view.artistLinks) { a -> onCollapse(); nav.go(Routes.artist(a)) }
                                 PlayerMarquee(
-                                    song.artistText, MaterialTheme.typography.bodyLarge.let { it.copy(fontSize = 17.sp, lineHeight = 22.sp, fontWeight = settings.type.playerTitleWeight.artist ?: it.fontWeight) }, Color.White.copy(alpha = 0.6f), scrolls,
+                                    artistLine, MaterialTheme.typography.bodyLarge.let { it.copy(fontSize = 17.sp, lineHeight = 22.sp, fontWeight = settings.type.playerTitleWeight.artist ?: it.fontWeight) }, Color.White.copy(alpha = 0.6f), scrolls,
                                     Modifier.testTag("playerArtist").combinedClickable(enabled = linked.isNotEmpty() || menuHeld != null, onLongClick = menuHeld) {
                                         if (linked.size > 1) pickArtist = true else linked.firstOrNull()?.let { onCollapse(); nav.go(Routes.artist(it)) }
                                     },
@@ -1140,7 +1182,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                     // around the controls too (the buttons and bars keep their own taps and drags).
                     val coverGestures = if (settings.behavior.panelSwipes || !settings.behavior.gesturesEverywhere || lyricsOpen || queueOpen || statsOpen) Modifier
                         else sleeveGesture.then(doubleTapSeek)
-                    Column(swipes.then(coverGestures).testTag("playerDeck"), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(swipes.then(coverGestures).testTag("playerDeck").inked(), horizontalAlignment = Alignment.CenterHorizontally) {
                         val deckGap = if (roomyCover) 12.dp else 18.dp
                         // With the lyrics open: Sing's one button at their lower right (1.7.8, V; their source is a line
                         // at their end), and the source as a button at the lower left when asked for (1.7.9).

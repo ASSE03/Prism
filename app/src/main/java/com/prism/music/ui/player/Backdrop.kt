@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
@@ -53,6 +54,69 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 
 val PlayerFallbackBackdrop = Color(0xFF060609)
+
+/** #320 (1.8.1): the White player background (a soft white, so a white cover still has an edge). */
+val PlayerWhiteBackdrop = Color(0xFFF7F7F9)
+
+/**
+ * #320 (1.8.1): the player's type and controls are drawn white for its dark backgrounds; over the White one they're
+ * drawn through this, which turns light into dark and dark into light while keeping each color's hue (an inversion
+ * with the hue turned back round): white type reads near-black, a white play button turns black with a white
+ * glyph, the split light keeps its colors. [light] is set by the player while it shows the White background (not over
+ * the lyrics or the queue, which keep their dark blurred cover).
+ */
+object PlayerInk {
+    var light by androidx.compose.runtime.mutableStateOf(false)
+
+    /** Inverts lightness (255 − c), then turns hue round 180° (W3C's hue matrix at 180°), so hues stay. */
+    internal val matrix = floatArrayOf(
+        0.574f, -1.43f, -0.144f, 0f, 255f,
+        -0.426f, -0.43f, -0.144f, 0f, 255f,
+        -0.426f, -1.43f, 0.856f, 0f, 255f,
+        0f, 0f, 0f, 1f, 0f,
+    )
+    private val paint by lazy {
+        androidx.compose.ui.graphics.Paint().apply {
+            colorFilter = androidx.compose.ui.graphics.ColorFilter.colorMatrix(androidx.compose.ui.graphics.ColorMatrix(matrix))
+        }
+    }
+
+    /** What [color] reads as over the White background. */
+    fun over(color: Color): Color {
+        val m = matrix
+        val r = color.red * 255; val g = color.green * 255; val b = color.blue * 255
+        fun ch(i: Int) = ((m[i] * r + m[i + 1] * g + m[i + 2] * b + m[i + 4]) / 255f).coerceIn(0f, 1f)
+        return Color(ch(0), ch(5), ch(10), color.alpha)
+    }
+
+    /**
+     * Draws what's in it as it reads over the White background while [on] (read as it draws, so a change only redraws).
+     * Shadows and glows a little outside it are kept.
+     */
+    fun Modifier.inked(on: () -> Boolean = { light }): Modifier = this.drawWithContent {
+        if (!on()) { drawContent(); return@drawWithContent }
+        val reach = 96.dp.toPx()
+        drawContext.canvas.saveLayer(androidx.compose.ui.geometry.Rect(-reach, -reach, size.width + reach, size.height + reach), paint)
+        drawContent()
+        drawContext.canvas.restore()
+    }
+}
+
+/**
+ * #309 (1.8.1): "Show background" goes below what it could before, on down to a fully dark player. Stored values from
+ * 0 to 1 draw exactly as they always did; from 0 down to this one a black veil comes over the background, solid here.
+ * The slider shows the whole stretch as 0-100%, so its 0% is fully dark.
+ */
+const val BACKDROP_SHOW_MIN = -0.25f
+
+/** How much of the black veil a stored "Show background" [show] puts over the player's background (0 = none, 1 = solid). */
+fun backdropBlackout(show: Float): Float = (show / BACKDROP_SHOW_MIN).coerceIn(0f, 1f)
+
+/** Where on the slider (0..1) a stored "Show background" [show] sits. */
+fun backdropShowOnSlider(show: Float): Float = ((show - BACKDROP_SHOW_MIN) / (1f - BACKDROP_SHOW_MIN)).coerceIn(0f, 1f)
+
+/** The stored "Show background" for a place [at] (0..1) on the slider. */
+fun backdropShowFromSlider(at: Float): Float = BACKDROP_SHOW_MIN + at.coerceIn(0f, 1f) * (1f - BACKDROP_SHOW_MIN)
 
 /** The cover reduced to a tiny, smoothly interpolated color field. */
 @Immutable

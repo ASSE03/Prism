@@ -805,7 +805,7 @@ private fun GreetingSection(cfg: HomeSectionConfig, recent: List<Song>) {
 
 @Composable
 private fun SongSection(
-    cfg: HomeSectionConfig, title: String, strapline: String?, songs: List<Song>,
+    cfg: HomeSectionConfig, title: String, strapline: String?, listed: List<Song>,
     /** Swipes stop on each column of rows, as YouTube Music's Quick picks do. */
     snap: Boolean = false,
     /** What tapping a song does; null plays the section from it. */
@@ -813,6 +813,9 @@ private fun SongSection(
     onMore: (() -> Unit)? = null,
 ) {
     val c = LocalContainer.current
+    // #216: "Hide them" leaves explicit songs off Home's rows too (a row of nothing else goes).
+    val songs = com.prism.music.data.ExplicitFilter.shown(com.prism.music.ui.theme.LocalAppSettings.current.behavior.explicitContent, listed)
+    if (songs.isEmpty()) return
     val current by c.player.currentSong.collectAsState()
     val start: (Int) -> Unit = { i -> play?.invoke(songs, i) ?: c.player.playQueue(songs, i, QueueSource(QueueKind.OTHER, title)) }
     val indexOf: (BrowseItem) -> Int = { item -> songs.indexOfFirst { it.id == item.id }.coerceAtLeast(0) }

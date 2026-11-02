@@ -288,6 +288,9 @@ object LookLabels {
         "immersive_video" to tr(R.string.video_in_immersive_mode), "bleed_fit" to tr(R.string.full_bleed_artwork_s_fit), "cover_flight" to tr(R.string.cover_flies_into_the_player),
         "video_controls_hide" to tr(R.string.controls_hide_over_videos), "crossfade_mark" to tr(R.string.crossfade_mark), "blend_covers" to tr(R.string.covers_blend_in_a_crossfade), "player_buttons_pill" to tr(R.string.player_buttons_in_a_capsule),
         "crossfade_shape" to tr(R.string.crossfade_on_the_progress_bar),
+        // 1.8.1 requests (#310, #289, #283).
+        "downloads_albums" to tr(R.string.album_names_in_downloads), "player_artist_links" to tr(R.string.each_artist_its_own_link),
+        "backdrop_fade" to tr(R.string.now_playing_background_fades),
         "hide_status_bar" to tr(R.string.hide_the_status_bar),
         "hide_status_bar_player" to tr(R.string.hide_status_bar_on_the_player),
         "volume_matches_progress" to tr(R.string.volume_bar_like_the_progress_bar),
@@ -393,7 +396,11 @@ object LookLabels {
         val v = LookValue.text(tagged) ?: return tr(R.string.default_text)
         return when (tagged!![0]) {
             'b' -> if (v == "1") tr(R.string.on_2) else tr(R.string.off)
-            'f' -> v.toFloatOrNull()?.let { if (name in percent) "${(it * 100).toInt()}%" else v } ?: v
+            // "Show background" reads as its slider does (#309: its 0% is below the stored 0).
+            'f' -> v.toFloatOrNull()?.let { f ->
+                if (name == "player_backdrop_show") "${kotlin.math.round(com.prism.music.ui.player.backdropShowOnSlider(f) * 100).toInt()}%"
+                else if (name in percent) "${(f * 100).toInt()}%" else v
+            } ?: v
             'i' -> v.toIntOrNull()?.let { if (name in colors) "#%06X".format(it and 0xFFFFFF) else if (name == "player_art_corners") tr(R.string.dp, it) else v } ?: v
             else -> when (name) {
                 "backdrops" -> tr(R.string.changed)
@@ -421,12 +428,13 @@ object LookLabels {
             "surface_tint", "surface_tint_strength", "surface_color", "contrast_level", "artwork_swatch", "artwork_vivid", "artwork_change", "page_picture_accent", "playing_page_color",
         ),
         "type" to setOf("font_choice", "app_font_name", "lyrics_font", "text_scale", "type_classic"),
-        "backgrounds" to setOf("liquid_glass", "glass_kind", "frosted_glass", "frosted_pages", "backdrops", "backdrop_dim", "backdrop_motion", "reduce_motion"),
+        "backgrounds" to setOf("liquid_glass", "glass_kind", "frosted_glass", "frosted_pages", "backdrops", "backdrop_dim", "backdrop_motion", "reduce_motion", "backdrop_fade"),
         "layout" to setOf(
             "corners", "ui_density", "title_size", "card_size", "nav_style", "nav_labels", "nav_hide_on_scroll", "nav_tabs", "start_tab",
             "mini_player_style", "mini_skip_buttons", "mini_prev_button", "mini_play_button", "mini_progress", "mini_progress_color", "mini_fill_strength", "library_view", "library_views", "library_columns", "library_subtitles", "home_header", "home_header_height", "playlist_hero_cover", "replay_theme_colors", "replay_card",
             "replay_card_graph", "replay_story_font",
             "hide_status_bar", "hide_status_bar_player", "tab_names", "nav_bar_size", "nav_bar_fill", "mini_player_joined", "controls_classic",
+            "downloads_albums",
         ),
         "player" to setOf(
             "player_background", "player_backdrop_show", "player_art_corners", "transport_style", "cover_size", "scrubber_style", "art_shrink_on_pause",
@@ -435,7 +443,7 @@ object LookLabels {
             "player_title_weight", "player_title_scroll", "player_times", "mesh_speed", "mesh_intensity", "player_blur", "canvas_fills_background",
             "scrubber_thickness", "scrubber_thumb", "volume_matches_progress", "player_handle", "player_nav_band", "play_ring", "visualizer", "visualizer_color",
             "panel_player", "queue_headings", "cast_mark", "immersive_video", "bleed_fit", "cover_flight", "video_controls_hide", "crossfade_mark", "blend_covers", "player_buttons_pill",
-            "player_hidden_parts", "crossfade_shape",
+            "player_hidden_parts", "crossfade_shape", "player_artist_links",
         ),
         "lyrics" to setOf(
             "lyrics_align", "lyrics_blur", "lyrics_progress_line", "lyrics_source_button", "lyrics_scale", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",
