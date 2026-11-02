@@ -133,6 +133,9 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
             runCatching { com.prism.music.data.Rewinds.schedule(this@PrismApp) }
             // DJ mode: the songs played most and liked get their key read once a day, on Wi-Fi while charging.
             runCatching { com.prism.music.playback.DjPrescanWorker.schedule(this@PrismApp) }
+            // Bring your history: the daily look at whether a fresh Spotify or Takeout download is due (only once one
+            // was imported; a restored backup brings the dates with it).
+            runCatching { com.prism.music.data.imports.ImportReminders.schedule(this@PrismApp) }
         }
         container.scope.launch(kotlinx.coroutines.Dispatchers.IO) {
             kotlinx.coroutines.delay(45_000)

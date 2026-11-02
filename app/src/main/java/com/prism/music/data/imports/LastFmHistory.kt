@@ -22,6 +22,12 @@ object LastFmHistory {
     const val PAUSE_MS = 400L
     private const val TRIES = 3
 
+    /**
+     * `user.getRecentTracks`' `from` (seconds) for a repeat import: the newest scrobble brought before, so Last.fm sends
+     * only what came since (that scrobble again too, which the import passes over as already here). Null: everything.
+     */
+    fun fromSeconds(newestStoredMs: Long?): Long? = newestStoredMs?.takeIf { it > 0 }?.div(1000)
+
     /** One page of `user.getRecentTracks` (JSON); [laterAt]: the time of the play read before this page's first. */
     fun page(text: String, laterAt: Long? = null): Page? {
         val root = runCatching { ImportFiles.json.parseToJsonElement(text) as? JsonObject }.getOrNull() ?: return null

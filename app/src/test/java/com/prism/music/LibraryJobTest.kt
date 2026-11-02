@@ -82,6 +82,66 @@ class LibraryJobTest {
         assertEquals(1, job.plus(lib, LibraryJob.LibraryChoice()).playlists.size)
     }
 
+    @Test fun aNewerDownloadTopsUpItsPlaylistsAndLikesOnlyNewSongs() = runBlocking {
+        val d = LibraryTrack("Dreams", "Fleetwood Mac")
+        val e = LibraryTrack("Everlong", "Foo Fighters")
+        val hands = Hands(mutableMapOf(a.key to s("a"), b.key to s("b"), c.key to s("c")), mutableSetOf())
+        var job = LibraryJob().plus(lib, LibraryJob.LibraryChoice()).apply(hands)
+        assertEquals(listOf("a", "b"), hands.playlists.values.single())
+        assertEquals(listOf("c", "a"), hands.liked)
+
+        // Months later on Spotify: Mr. Brightside was taken out of Road trip, Dreams added; Everlong liked.
+        val newer = ParsedLibrary(
+            liked = listOf(e, c, a),
+            playlists = listOf(LibraryPlaylist("Road trip", listOf(a, d)), LibraryPlaylist("Gym", listOf(e))),
+            albums = listOf(LibraryAlbum("Rumours", "Fleetwood Mac"), LibraryAlbum("The Colour and the Shape", "Foo Fighters")),
+            artists = listOf("Radiohead", "Foo Fighters"),
+        )
+        assertEquals(
+            "what the preview says is new",
+            com.prism.music.data.imports.LibraryNews(liked = 1, playlists = 1, playlistSongs = 1, playlistsGrowing = 1, albums = 1, artists = 1),
+            job.news(newer),
+        )
+        hands.songs[d.key] = s("d"); hands.songs[e.key] = s("e")
+        job = job.plus(newer, LibraryJob.LibraryChoice()).apply(hands)
+        assertEquals("no second Road trip", 2, hands.playlists.size)
+        assertEquals("Dreams added; Mr. Brightside stays in Prism's copy", listOf("a", "b", "d"), hands.playlists.values.first())
+        assertEquals(listOf("e"), hands.playlists.values.last())
+        assertEquals("only the new like", listOf("c", "a", "e"), hands.liked)
+        assertEquals(listOf("Radiohead", "Foo Fighters"), hands.starred)
+        // The same newer download again: nothing.
+        assertTrue(job.news(newer).isEmpty)
+        job = job.plus(newer, LibraryJob.LibraryChoice()).apply(hands)
+        assertEquals(listOf("c", "a", "e"), hands.liked)
+        assertEquals(listOf("a", "b", "d"), hands.playlists.values.first())
+    }
+
+    @Test fun aRenamedPlaylistIsFoundByItsSpotifyId() = runBlocking {
+        val hands = Hands(mutableMapOf(a.key to s("a"), b.key to s("b")), mutableSetOf())
+        val first = ParsedLibrary(playlists = listOf(LibraryPlaylist("Road trip", listOf(a), uri = "spotify:playlist:1"), LibraryPlaylist("Road trip", listOf(b), uri = "spotify:playlist:2")))
+        var job = LibraryJob().plus(first, LibraryJob.LibraryChoice()).apply(hands)
+        assertEquals("two playlists may share a name", 2, hands.playlists.size)
+        val renamed = ParsedLibrary(playlists = listOf(LibraryPlaylist("Summer 2026", listOf(a, b), uri = "spotify:playlist:1")))
+        job = job.plus(renamed, LibraryJob.LibraryChoice()).apply(hands)
+        assertEquals(2, hands.playlists.size)
+        assertEquals(listOf("a", "b"), hands.playlists.values.first())
+        assertEquals(listOf("b"), hands.playlists.values.last())
+    }
+
+    @Test fun broughtAgainAfterTheHistoryWasRemovedNothingIsMadeTwice() = runBlocking {
+        val hands = Hands(mutableMapOf(a.key to s("a"), b.key to s("b"), c.key to s("c")), mutableSetOf())
+        hands.albumFails = false
+        var job = LibraryJob().plus(lib, LibraryJob.LibraryChoice()).apply(hands)
+        val kept = job.remembered()
+        assertTrue("it waits on no song: their matches can go", kept.keys.isEmpty())
+        job = kept.plus(lib, LibraryJob.LibraryChoice()).apply(hands)
+        assertEquals(1, hands.playlists.size)
+        assertEquals(listOf("a", "b"), hands.playlists.values.single())
+        assertEquals(listOf("c", "a"), hands.liked)
+        assertEquals(listOf("Radiohead"), hands.starred)
+        assertEquals(listOf("Rumours"), hands.albums)
+    }
+
     @Test fun onlyWhatWasChosen() {
         val job = LibraryJob().plus(lib, LibraryJob.LibraryChoice(liked = false, playlists = true, albums = false, artists = false))
         assertTrue(job.liked.isEmpty() && job.albums.isEmpty() && job.artists.isEmpty())

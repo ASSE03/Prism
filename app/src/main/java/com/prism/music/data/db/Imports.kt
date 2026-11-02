@@ -178,6 +178,10 @@ interface ImportDao {
     @Query("DELETE FROM imported_plays WHERE origin = :origin")
     suspend fun deletePlays(origin: String): Int
 
+    /** The newest play [origin] brought (a repeat Last.fm import asks only for scrobbles since). */
+    @Query("SELECT MAX(timestamp) FROM imported_plays WHERE origin = :origin")
+    suspend fun newest(origin: String): Long?
+
     /** Matches no imported play refers to (the listener's own picks aside, kept for a later import). */
     @Query("SELECT songKey FROM import_matches WHERE status != 'FIXED' AND songKey NOT IN (SELECT DISTINCT songKey FROM imported_plays)")
     suspend fun orphanMatches(): List<String>
