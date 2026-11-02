@@ -221,6 +221,20 @@ class SpotifyFeaturesTest {
         assertFalse(File(dir, "playlists.json").exists())
     }
 
+    @Test fun aPlaylistSpotifyWontLetTheAppReadIsLeftOut() = runBlocking {
+        net.routes["https://api.spotify.com/v1/me/playlists"] = {
+            200 to SpotifyFixtures.page(listOf(SpotifyFixtures.playlist("p1", "Road trip", "samr", 1), SpotifyFixtures.playlist("p3", "Shared", "friend", 1, collaborative = true)))
+        }
+        net.routes["https://api.spotify.com/v1/playlists/p1/items"] = { 200 to SpotifyFixtures.page(listOf(SpotifyFixtures.playlistItem(blinding))) }
+        net.routes["https://api.spotify.com/v1/playlists/p3/items"] = { 403 to """{"error":{"status":403,"message":"Forbidden"}}""" }
+        val hands = FakeHands()
+        val playlists = SpotifyPlaylists(api, db, importer, dir, hands, matchOf(), pause = {})
+        playlists.refreshAll("samr", now = 1)
+        assertEquals(listOf("p1"), playlists.mirror().lists.map { it.playlist.id })
+        assertEquals(1, playlists.mirror().notYours)
+        assertEquals(1, hands.lists.size)
+    }
+
     // ---- Liked Songs both ways
 
     private fun saved(t: String, iso: String) = SavedTrack(SpotifyParse.track(kotlinx.serialization.json.Json.parseToJsonElement(t))!!, at(iso))

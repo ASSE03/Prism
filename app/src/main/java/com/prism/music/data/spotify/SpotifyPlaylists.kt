@@ -90,18 +90,21 @@ class SpotifyPlaylists(
         var page = SpotifyParse.playlists(api.get("/me/playlists", mapOf("limit" to "50")))
         all += page.items
         var pages = 1
-        while (page.next != null && pages < MAX_LIST_PAGES) { page = SpotifyParse.playlists(api.next(page.next!!)); all += page.items; pages++ }
+        while (pages < MAX_LIST_PAGES) { val next = page.next ?: break; page = SpotifyParse.playlists(api.next(next)); all += page.items; pages++ }
         val (yours, others) = all.partition { it.ownerId == userId || it.collaborative }
         val old = mirror().lists.associateBy { it.playlist.id }
-        val lists = yours.map { p ->
+        var refused = 0
+        val lists = yours.mapNotNull { p ->
             val before = old[p.id]
-            if (before != null && before.playlist.snapshot == p.snapshot && before.readAt > 0) before.copy(playlist = p)
-            else MirroredPlaylist(p, readItems(p.id), before?.prismId, before?.removed ?: false, now)
+            if (before != null && before.playlist.snapshot == p.snapshot && before.readAt > 0) return@mapNotNull before.copy(playlist = p)
+            // One Spotify won't let this app read (a collaborative one it treats as another's): left out, the rest go on.
+            val items = try { readItems(p.id) } catch (e: SpotifyError.Forbidden) { refused++; return@mapNotNull before }
+            MirroredPlaylist(p, items, before?.prismId, before?.removed ?: false, now)
         }
         // A playlist gone from Spotify (deleted there, or no longer shared with the listener) goes from Library too.
         old.values.filter { o -> lists.none { it.playlist.id == o.playlist.id } }.forEach { gone -> gone.prismId?.let { if (hands.exists(it)) hands.delete(it) } }
         SpotifyQueue.remember(db, lists.flatMap { it.tracks })
-        save(PlaylistMirror(apply(lists), others.size, now))
+        save(PlaylistMirror(apply(lists), others.size + refused, now))
     }
 
     /**
@@ -137,7 +140,7 @@ class SpotifyPlaylists(
         var page = SpotifyParse.playlistItems(api.get("/playlists/$id/items", mapOf("limit" to "50", "additional_types" to "track", "fields" to ITEM_FIELDS)))
         out += page.items.filterNotNull()
         var pages = 1
-        while (page.next != null && pages < MAX_ITEM_PAGES) { page = SpotifyParse.playlistItems(api.next(page.next!!)); out += page.items.filterNotNull(); pages++ }
+        while (pages < MAX_ITEM_PAGES) { val next = page.next ?: break; page = SpotifyParse.playlistItems(api.next(next)); out += page.items.filterNotNull(); pages++ }
         return out
     }
 

@@ -142,7 +142,7 @@ class SpotifyLikes(
         val out = ArrayList<SavedTrack>()
         var page = SpotifyParse.savedTracks(api.get("/me/tracks", mapOf("limit" to "50")))
         out += page.items
-        while (page.next != null && out.size < MAX_LIKES) { page = SpotifyParse.savedTracks(api.next(page.next!!)); out += page.items }
+        while (out.size < MAX_LIKES) { val next = page.next ?: break; page = SpotifyParse.savedTracks(api.next(next)); out += page.items }
         return out
     }
 
