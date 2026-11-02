@@ -1030,34 +1030,36 @@ internal fun HeroRow(items: List<BrowseItem>, open: (BrowseItem) -> Unit) {
 private class YearSoFar(
     val at: Long, val ms: Long, val months: List<Long>,
     val topSong: com.prism.music.data.db.SongPlays?, val topArtist: com.prism.music.data.db.ArtistPlays?,
+    /** What the bars are (#286) and the imported sources counted (1.8.1): read again when either changes. */
+    val graph: com.prism.music.data.prefs.ReplayGraph = com.prism.music.data.prefs.ReplayGraph.MONTHS,
+    val counted: Set<com.prism.music.data.imports.ImportSource> = emptySet(),
 )
 private val yearSoFar = MutableStateFlow<YearSoFar?>(null)
 
-private suspend fun loadYearSoFar(c: com.prism.music.AppContainer): YearSoFar = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+private suspend fun loadYearSoFar(
+    c: com.prism.music.AppContainer, graph: com.prism.music.data.prefs.ReplayGraph, counted: Set<com.prism.music.data.imports.ImportSource>,
+): YearSoFar = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
     val now = System.currentTimeMillis()
     val start = Calendar.getInstance().apply { set(Calendar.DAY_OF_YEAR, 1); set(Calendar.HOUR_OF_DAY, 0) }.timeInMillis
     // 1.8.1: the sources Replay counts (Prism's own plays unless the listener counts an imported history too).
-    val plays = c.imports.replay()
-    val months = Calendar.getInstance().let { today ->
-        (0..today.get(Calendar.MONTH)).map { m ->
-            val from = Calendar.getInstance().apply { set(Calendar.MONTH, m); set(Calendar.DAY_OF_MONTH, 1); set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0) }
-            val to = (from.clone() as Calendar).apply { add(Calendar.MONTH, 1) }
-            runCatching { plays.totalMs(from.timeInMillis, minOf(to.timeInMillis, now)) }.getOrDefault(0L)
-        }
-    }
+    val plays = c.imports.stats(counted)
+    // This year's months, or (#286) the last weeks or days.
+    val bars = replayCardBars(plays, graph, now)
     val top = runCatching { plays.topSongs(start, now, 20).mergeUploads().firstOrNull() to plays.topArtists(start, now, 1).firstOrNull() }
         .getOrDefault(null to null)
-    YearSoFar(now, plays.totalMs(start, now), months, top.first, top.second)
+    YearSoFar(now, plays.totalMs(start, now), bars, top.first, top.second, graph, counted)
 }
 
 @Composable
 private fun ReplayTeaser(cfg: HomeSectionConfig) {
     val c = LocalContainer.current
     val nav = LocalNavigator.current
-    val kept by produceState(yearSoFar.value) {
-        val have = yearSoFar.value
-        if (have != null && System.currentTimeMillis() - have.at < 5 * 60_000L) return@produceState
-        value = runCatching { loadYearSoFar(c) }.getOrNull()?.also { yearSoFar.value = it } ?: have
+    val graph = LocalAppSettings.current.view.replayGraph
+    val counted by c.imports.counted.collectAsState()
+    val kept by produceState(yearSoFar.value?.takeIf { it.graph == graph && it.counted == counted }, graph, counted) {
+        val have = yearSoFar.value?.takeIf { it.graph == graph && it.counted == counted }
+        if (have != null && System.currentTimeMillis() - have.at < 5 * 60_000L) { value = have; return@produceState }
+        value = runCatching { loadYearSoFar(c, graph, counted) }.getOrNull()?.also { yearSoFar.value = it } ?: have
     }
     val soFar = kept ?: return
     val ms = soFar.ms
@@ -1070,12 +1072,14 @@ private fun ReplayTeaser(cfg: HomeSectionConfig) {
     // Spotlight (the default) is the big card below; the other styles show the year so far as a few cards or rows:
     // the time listened, the top song and the top artist, each opening Replay.
     val top = soFar.topSong to soFar.topArtist
+    // "Includes Spotify" (1.8.1): the card counts imported histories too, so it says so, as Replay itself does.
+    val includes = replayIncludes(soFar.counted)
     if (cfg.style != SectionStyle.HERO) {
         val open: () -> Unit = { if (rewind) c.rewindRequest.value = year; nav.go(Routes.REPLAY) }
         val dark = com.prism.music.ui.theme.LocalIsDark.current
         SectionHeader(if (rewind) tr(R.string.rewind, year) else tr(R.string.replay, year), strapline = tr(R.string.your_year_so_far), onMore = open)
         StyledEntries(cfg.style, listOfNotNull(
-            HomeEntry("replay:time", total.full, if (rewind) tr(R.string.your_year_in_music) else tr(R.string.listened_this_year), icon = PrismIcons.ReplayFilled,
+            HomeEntry("replay:time", total.full, listOfNotNull(if (rewind) tr(R.string.your_year_in_music) else tr(R.string.listened_this_year), includes).joinToString(" · "), icon = PrismIcons.ReplayFilled,
                 fill = com.prism.music.ui.theme.PrismTokens.spectrum(dark), onFill = true, onClick = open),
             top.first?.let { s -> HomeEntry("replay:song", s.title, tr(R.string.your_top_song, s.artistName), image = s.thumbnail, onClick = open) },
             top.second?.let { a -> HomeEntry("replay:artist", a.artistName, tr(R.string.your_top_artist), image = a.thumbnail, icon = PrismIcons.Person, onClick = open) },
@@ -1100,7 +1104,7 @@ private fun ReplayTeaser(cfg: HomeSectionConfig) {
         }
         ReplayCard(
             look,
-            ReplayCardData(year, total.full, months, top.first?.title, top.first?.artistName, top.second?.artistName, yearDone, 0),
+            ReplayCardData(year, total.full, months, top.first?.title, top.first?.artistName, top.second?.artistName, yearDone, 0, soFar.graph, includes),
             art, Modifier.padding(vertical = ui.gap(16.dp)),
         ) { nav.go(Routes.REPLAY) }
         return
@@ -1133,7 +1137,8 @@ private fun ReplayTeaser(cfg: HomeSectionConfig) {
             if (rewind) Text(tr(R.string.your_year_in_music), style = big, color = scheme.onSurface, maxLines = 1)
             else Text(total.full, Modifier.toggleListenUnit(), style = big, color = scheme.onSurface, maxLines = 1)
             Text(
-                if (rewind) tr(R.string.your_top_songs_and_artists_your, total.full) else tr(R.string.your_top_songs_artists_and_genres),
+                (if (rewind) tr(R.string.your_top_songs_and_artists_your, total.full) else tr(R.string.your_top_songs_artists_and_genres)) +
+                    (includes?.let { " · $it" } ?: ""),
                 color = scheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium, maxLines = 2,
             )
         }

@@ -596,7 +596,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         trackedSource = sourceOf(mediaItem)
         trackedRecommended = picked || mediaItem.mediaId in c.queue.smartPicks.value ||
             c.queue.source.value.originId?.let { com.prism.music.data.foryou.ForYou.isMixId(it) } == true
-        c.lastFm.started(song)
+        // Not while history is paused (#296): no "now playing" on Last.fm either.
+        if (!com.prism.music.data.HistoryPause.paused(c.settings.current.behavior)) c.lastFm.started(song)
         trackedExcluded = c.exclusions.outOfTaste(song, c.queue.source.value.originId)
         // Podcast episodes pick up where they were left, and play at the speed picked for episodes.
         if (song.isEpisode) {
@@ -624,7 +625,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         if (player.isPlaying) playStartedAt = SystemClock.elapsedRealtime()
         c.nerdStats.value = NerdStats(videoId = song.id, outputDevice = AudioEffects.outputDevice(this))
         c.streamDetails[song.id]?.let { applyStreamStats(song.id) }
-        scope.launch(Dispatchers.IO) { c.library.recordPlayed(song) }
+        // Recently played (#296: not while history is paused).
+        if (!com.prism.music.data.HistoryPause.paused(c.settings.current.behavior)) scope.launch(Dispatchers.IO) { c.library.recordPlayed(song) }
         scope.launch { c.bestParts.onSongStarted(song) }
         singAhead()
         djAhead()
@@ -1188,7 +1190,14 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 if (trackedSong?.id == song.id && settling()) { songLoudness = loud; applyNormalization() }
             }
             if (ex != null && c.settings.current.isLoggedIn) {
-                withContext(Dispatchers.IO) { runCatching { c.ytm.registerPlayback(ex) } }
+                // #263: with "Same for your YouTube Music history" on, the account hears of the play once it counts here
+                // too (this job is cancelled by the next song, so a song skipped first isn't sent). Off: at once, as before.
+                val after = com.prism.music.data.PlayCount.accountAfterMs(c.settings.current.behavior)
+                if (after > 0) while (trackedSong?.id == song.id && heardMs() < after) delay(500)
+                // #296: nothing goes to the account's history while history is paused.
+                if (trackedSong?.id == song.id && !com.prism.music.data.HistoryPause.paused(c.settings.current.behavior)) {
+                    withContext(Dispatchers.IO) { runCatching { c.ytm.registerPlayback(ex) } }
+                }
             }
         }
     }
@@ -1653,6 +1662,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     /** Whether the song being heard was Prism's or YouTube's suggestion (radio, autoplay, a mix, Smart Shuffle). */
     private var trackedRecommended = false
 
+    /** How long the song being tracked has been heard so far (what [flushPlayTime] would count now). */
+    private fun heardMs(): Long = accumulatedMs + (if (playStartedAt > 0) SystemClock.elapsedRealtime() - playStartedAt else 0L)
+
     private fun flushPlayTime(skipped: Boolean = false) {
         val now = SystemClock.elapsedRealtime()
         if (playStartedAt > 0) accumulatedMs += now - playStartedAt
@@ -1662,19 +1674,22 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val excluded = trackedExcluded
         val ms = accumulatedMs
         accumulatedMs = 0
+        // History paused (#296): a private stretch, as Spotify's private session: no scrobbles, nothing learned from it.
+        val paused = com.prism.music.data.HistoryPause.paused(c.settings.current.behavior)
         // Last.fm counts every stretch heard (#133); it scrobbles once the play is long enough.
-        if (song != null && ms > 0) c.lastFm.heard(song, ms)
+        if (song != null && ms > 0 && !paused) c.lastFm.heard(song, ms)
         // What the listener made of a suggestion (1.7.9): skipped within its first moments, it's left out of them for a while;
         // heard through, it's welcome. Under ten seconds a play isn't kept at all, so this is the only trace of a quick skip.
-        if (song != null && trackedRecommended && !song.isEpisode && !song.isLive) {
+        if (song != null && trackedRecommended && !song.isEpisode && !song.isLive && !paused) {
             val length = song.durationSec * 1000L
             when {
                 skipped && ms < minOf(30_000L, if (length > 0) length * 3 / 10 else 30_000L) -> c.recFeedback.skipped(song.id, song.primaryArtist)
                 length > 0 && ms >= length * 7 / 10 -> c.recFeedback.heard(song.id, song.primaryArtist)
             }
         }
-        // Replay, smart downloads and search taste are about music: episodes aren't counted.
-        if (song != null && ms >= 10_000 && !song.isEpisode) {
+        // Replay, smart downloads and search taste are about music: episodes aren't counted. Long enough to be a play
+        // (#263: ten seconds unless the listener picked otherwise), and not while history is paused (#296).
+        if (song != null && com.prism.music.data.HistoryPause.keepsPlay(c.settings.current.behavior, ms, song.isEpisode)) {
             scope.launch(Dispatchers.IO) {
                 c.db.plays().insert(PlayEventEntity(songId = song.id, timestamp = System.currentTimeMillis(), playedMs = ms, source = source, excluded = excluded))
             }

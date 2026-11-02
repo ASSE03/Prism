@@ -318,7 +318,7 @@ fun LibraryScreen(bottomPadding: Dp) {
             var fromAccount by rememberSaveable { mutableStateOf(false) }
             var historyLimit by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(300) }
             val phoneHistory = if (tab == LibTab.HISTORY) {
-                val rows by remember(historyLimit) { c.db.plays().historyFlow(historyLimit, 10_000) }.collectAsState(null)
+                val rows by remember(historyLimit) { c.db.plays().historyFlow(historyLimit, 0) /* #263: every kept play (how long one takes is the listener's pick) */ }.collectAsState(null)
                 remember(rows) { rows?.let { it.size to historyByDay(it) } }
             } else null
             var accountReload by remember { androidx.compose.runtime.mutableIntStateOf(0) }

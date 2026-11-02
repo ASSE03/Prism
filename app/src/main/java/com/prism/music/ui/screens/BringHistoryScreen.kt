@@ -122,6 +122,7 @@ fun BringHistoryScreen(bottomPadding: Dp) {
     var looking by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
     var removing by remember { mutableStateOf<ImportSource?>(null) }
+    var lastFmPeek by remember { mutableStateOf<com.prism.music.data.imports.LastFmPeek.Peek?>(null) }
     var history by remember { mutableStateOf(true) }
     var liked by remember { mutableStateOf(true) }
     var playlists by remember { mutableStateOf(true) }
@@ -141,7 +142,7 @@ fun BringHistoryScreen(bottomPadding: Dp) {
         val (s, picked) = pickedNow ?: return@LaunchedEffect
         // Taken off at once; the look goes on in the page's scope (clearing it restarts this effect).
         imports.picked.value = null
-        uris = picked; preview = null; message = null; looking = true
+        uris = picked; preview = null; lastFmPeek = null; message = null; looking = true
         scope.launch {
             val p = runCatching { imports.preview(s, picked) }.getOrNull()
             looking = false
@@ -182,7 +183,19 @@ fun BringHistoryScreen(bottomPadding: Dp) {
                     } ?: tr(R.string.imp_lastfm_connect),
                     onClick = {
                         if (lastFmUser == null) nav.go(Routes.settings(SettingsSection.LASTFM.key))
-                        else if (reading == null) { message = null; preview = null; c.scope.launch { done(imports.bringLastFm()) } }
+                        // 1.8.1: a look first (how many scrobbles, from when to when), then Bring them.
+                        else if (reading == null && !looking) {
+                            message = null; preview = null; lastFmPeek = null; looking = true
+                            scope.launch {
+                                val peek = imports.previewLastFm()
+                                looking = false
+                                when {
+                                    peek == null -> message = tr(R.string.imp_cant_read)
+                                    peek.isEmpty -> message = peek.since?.let { tr(R.string.imp_lastfm_nothing_new, day(it)) } ?: tr(R.string.imp_lastfm_none)
+                                    else -> lastFmPeek = peek
+                                }
+                            }
+                        }
                     },
                     icon = PrismIcons.Replay,
                 )
@@ -201,6 +214,23 @@ fun BringHistoryScreen(bottomPadding: Dp) {
         }
         if (looking) item(key = "looking") { com.prism.music.ui.components.LoadingState() }
         message?.let { m -> item(key = "message") { Text(m, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(horizontal = 8.dp)) } }
+        lastFmPeek?.let { p ->
+            item(key = "lastfm") {
+                Group(tr(R.string.imp_whats_in_it)) {
+                    Note(
+                        if (p.since != null) trp(R.plurals.imp_lastfm_new, p.total, count(p.total), day(p.since))
+                        else trp(R.plurals.imp_lastfm_range, p.total, count(p.total), day(p.oldestAt), day(p.newestAt)),
+                    )
+                    Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        PrismButton(
+                            onClick = { lastFmPeek = null; c.scope.launch { done(imports.bringLastFm()) } },
+                            enabled = reading == null,
+                        ) { Text(tr(R.string.imp_bring_them)) }
+                        PrismTextButton(onClick = { lastFmPeek = null }) { Text(tr(R.string.cancel)) }
+                    }
+                }
+            }
+        }
         preview?.let { p ->
             item(key = "preview") {
                 Group(tr(R.string.imp_whats_in_it)) {

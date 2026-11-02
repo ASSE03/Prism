@@ -149,6 +149,8 @@ private data class ReplayData(
     val genres: List<Pair<String, Long>>,
     /** Up to 250 top songs: what Play and Shuffle play. Not shown. */
     val top250: List<SongPlays> = songs,
+    /** #286/#287: the graph by hours, days or weeks for a shorter stretch (null: by month, [months]). */
+    val timeline: ReplayTimeline? = null,
 )
 
 internal fun SongPlays.toSong() = Song(
@@ -254,6 +256,7 @@ fun ReplayScreen(bottomPadding: Dp) {
     }
     // The imported histories Replay counts besides Prism's own plays (1.8.1): the page says so, and reads again on a change.
     val counted by c.imports.counted.collectAsState()
+    val historyPaused = com.prism.music.data.HistoryPause.paused(LocalAppSettings.current.behavior)
     val data by produceState<ReplayData?>(null, period, counted) {
         value = null
         val (from, to) = range(period)
@@ -268,7 +271,7 @@ fun ReplayScreen(bottomPadding: Dp) {
         value = ReplayData(
             totalMs = dao.totalMs(from, to), plays = dao.count(from, to), activeDays = dao.activeDays(from, to),
             songCount = dao.songCount(from, to), songs = songs, artists = dao.topArtists(from, to, 12), months = dao.monthly(from, to), genres = genres,
-            top250 = top,
+            top250 = top, timeline = runCatching { loadTimeline(dao, period, from, to) }.getOrNull(),
         )
         // Fill in genres for the top tracks in the background so the next visit is richer.
         songs.take(40).filter { it.songId !in genreMap }.forEach { runCatching { c.meta.genreFor(it.toSong()) } }
@@ -304,10 +307,11 @@ fun ReplayScreen(bottomPadding: Dp) {
         item {
             com.prism.music.ui.components.ScreenHeader(
                 tr(R.string.replay_2),
-                subtitle = if (counted.isEmpty()) tr(R.string.your_listening_recapped_on_device)
-                else tr(R.string.imp_includes, counted.sortedBy { it.ordinal }.joinToString(", ") { it.label }),
+                subtitle = replayIncludes(counted) ?: tr(R.string.your_listening_recapped_on_device),
             )
         }
+        // #296: while history is paused, Replay says so (and how to turn it back on).
+        if (historyPaused) item { HistoryPausedNote() }
         item {
             // Any dates (#149): today, this week, any month, or the days you pick, beside the usual ones.
             val presets = listOf(Period.TODAY, Period.WEEK, Period.MONTH, Period.DAYS30) + years.map { Period.year(it) } + Period.ALL
@@ -347,9 +351,24 @@ fun ReplayScreen(bottomPadding: Dp) {
                 ) { Icon(PrismIcons.PlaylistAdd, tr(R.string.save_as_a_playlist)) }
             }
         }
-        if (d.months.size > 1) item {
+        // A day by its hours, a week or a month by its days (#286, #287); longer stretches by month, as before.
+        val timeline = d.timeline
+        if (timeline != null) item {
+            SectionHeader(timeline.heading())
+            TimelineChart(timeline, Modifier.padding(horizontal = 20.dp).fillMaxWidth().height(196.dp))
+        } else if (d.months.size > 1) item {
             SectionHeader(if (LocalAppSettings.current.replayHours) tr(R.string.hours_by_month) else tr(R.string.minutes_by_month))
             MonthChart(d.months, Modifier.padding(horizontal = 20.dp).fillMaxWidth().height(160.dp))
+            // The busiest month, as the shorter graphs say theirs.
+            d.months.maxByOrNull { it.ms }?.takeIf { it.ms > 0 }?.let { m ->
+                val (y, mo) = m.month.split("-").mapNotNull { it.toIntOrNull() }.takeIf { it.size == 2 } ?: return@let
+                val at = java.time.LocalDate.of(y, mo, 1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
+                Text(
+                    tr(R.string.replay_busiest_month, formatAt(at, com.prism.music.localDates("MMMMy")), listenTime(m.ms)),
+                    Modifier.padding(start = 20.dp, end = 20.dp, top = 10.dp),
+                    style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
         if (d.artists.isNotEmpty()) item {
             // Artist photos, not the cover of whichever of their songs came first.
