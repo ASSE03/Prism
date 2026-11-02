@@ -289,7 +289,7 @@ private suspend fun previewYear(c: com.prism.music.AppContainer): PreviewYear {
     }
     val start = monthStart(0).timeInMillis
     val now = System.currentTimeMillis()
-    val plays = c.db.plays()
+    val plays = c.imports.replay()
     val months = (0..cal.get(java.util.Calendar.MONTH)).map { m ->
         val from = monthStart(m)
         val to = (from.clone() as java.util.Calendar).apply { add(java.util.Calendar.MONTH, 1) }

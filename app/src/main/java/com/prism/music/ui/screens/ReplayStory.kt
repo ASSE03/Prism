@@ -164,9 +164,11 @@ internal class ReplayStory(
     val topLyric: String? = null,
     val previousTopArtist: String? = null,
     val previousSongCount: Int? = null,
+    /** "Includes Spotify" when an imported history is counted (1.8.1): every card says so. */
+    val includes: String? = null,
 ) {
-    /** "PRISM REWIND" for a year, "PRISM REPLAY" otherwise. */
-    val brand: String get() = if (rewind) tr(R.string.prism_rewind) else tr(R.string.prism_replay)
+    /** "PRISM REWIND" for a year, "PRISM REPLAY" otherwise (and what else it counts). */
+    val brand: String get() = (if (rewind) tr(R.string.prism_rewind) else tr(R.string.prism_replay)) + (includes?.let { " · " + it.uppercase() } ?: "")
 }
 
 /** The facts [StoryParts.pick] chooses this story's slides by. */
@@ -198,8 +200,13 @@ private suspend fun loadRewindStory(c: AppContainer, year: Int): ReplayStory = w
         topArtistImage = s.topArtistImage ?: leadPage?.thumbnail, topArtistType = leadType,
         rewind = true, months = s.months, topAlbum = s.topAlbum, firstSong = s.firstSong, seasons = s.seasons, prism = s.prism,
         topLyric = s.topLyric, previousTopArtist = s.previousTopArtist, previousSongCount = s.previousSongCount,
+        includes = includesLine(c),
     )
 }
+
+/** "Includes Spotify" while an imported history is counted (1.8.1). */
+private fun includesLine(c: AppContainer): String? =
+    c.imports.counted.value.takeIf { it.isNotEmpty() }?.let { s -> tr(R.string.imp_includes, s.sortedBy { it.ordinal }.joinToString(", ") { it.label }) }
 
 internal suspend fun loadReplayStory(c: AppContainer, period: Period): ReplayStory {
     if (period.isYear) return loadRewindStory(c, period.year)
@@ -208,7 +215,8 @@ internal suspend fun loadReplayStory(c: AppContainer, period: Period): ReplaySto
 
 private suspend fun loadPeriodStory(c: AppContainer, period: Period): ReplayStory = withContext(Dispatchers.IO) {
     val (from, to) = range(period)
-    val dao = c.db.plays()
+    // Prism's plays, plus the imported sources the listener counts (1.8.1).
+    val dao = c.imports.replay()
     val songs = dao.topSongs(from, to, 150).mergeUploads().take(100)
     val artists = dao.topArtists(from, to, 20)
     val totalMs = dao.totalMs(from, to)
@@ -274,6 +282,7 @@ private suspend fun loadPeriodStory(c: AppContainer, period: Period): ReplayStor
         topArtistImage = leadPage?.thumbnail,
         topArtistType = leadType,
         months = months,
+        includes = includesLine(c),
     )
 }
 

@@ -124,7 +124,7 @@ class ReleaseRadar(private val c: AppContainer) {
     private suspend fun artists(): List<FavoriteRef> {
         val now = System.currentTimeMillis()
         val starred = c.artistPrefs.favorites.value.map { FavoriteRef(it.id, it.name) }
-        val played = c.db.plays().tasteTopArtists(now - 90L * 86_400_000, now, 60).filter { it.artistId != null }
+        val played = c.imports.taste.tasteTopArtists(now - 90L * 86_400_000, now, 60).filter { it.artistId != null }
             .map { FavoriteRef(it.artistId!!, it.artistName) }
         val followed = if (!c.settings.current.isLoggedIn) emptyList() else
             runCatching { withContext(Dispatchers.IO) { c.ytm.librarySubscriptions() } }.getOrNull().orEmpty().map { FavoriteRef(it.id, it.title) }

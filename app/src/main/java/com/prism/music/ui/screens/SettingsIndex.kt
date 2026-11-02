@@ -419,6 +419,11 @@ object SettingsIndex {
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.show_time_in_hours), tr(R.string.stats_minutes)),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.use_theme_colors), tr(R.string.colors_stats)),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.rewind_notification), tr(R.string.rewind_wrapped_year_in_review_december)),
+        // 1.8.1: Bring your history.
+        SettingEntry(LB, tr(R.string.imp_title), tr(R.string.imp_title), tr(R.string.imp_keywords)),
+        SettingEntry(LB, tr(R.string.imp_title), tr(R.string.imp_shape_mixes), tr(R.string.imp_shape_mixes_keywords)),
+        SettingEntry(LB, tr(R.string.replay_2), tr(R.string.imp_count_history_from), tr(R.string.imp_count_keywords)),
+        SettingEntry(LB, tr(R.string.replay_2), tr(R.string.imp_prism_plays)),
         SettingEntry(LB, tr(R.string.made_for_you), tr(R.string.exclusions), tr(R.string.taste_profile_exclude_artist_playlist_don)),
         SettingEntry(LB, tr(R.string.made_for_you), tr(R.string.forget_skipped_suggestions), tr(R.string.skipped_suggestions_keywords)),
         // About

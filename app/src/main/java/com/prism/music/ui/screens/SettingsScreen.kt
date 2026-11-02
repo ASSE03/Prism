@@ -2446,11 +2446,34 @@ private fun RecommendationsPage() {
                 info = tr(R.string.when_you_ve_liked_a_song),
             ) { prefs.setMergeLikedVideos(it) }
         }
+        // 1.8.1: histories from Spotify, YouTube Music (Takeout) and Last.fm.
+        val imported by c.imports.summaries.collectAsState(emptyList())
+        val teach by c.imports.teach.collectAsState()
+        val counted by c.imports.counted.collectAsState()
+        Group(tr(R.string.imp_title), info = tr(R.string.imp_group_info)) {
+            Item(tr(R.string.imp_title), tr(R.string.imp_row_detail), onClick = { nav.go(Routes.BRING_HISTORY) }) { Chevron() }
+            if (imported.isNotEmpty()) Toggle(
+                tr(R.string.imp_shape_mixes), tr(R.string.imp_shape_mixes_detail), teach, info = tr(R.string.imp_shape_mixes_info),
+            ) { c.imports.setTeach(it) }
+        }
         // 1.8.0: the Last.fm link here is gone (its page is in Devices & connections; Settings search finds it).
         Group(tr(R.string.replay_2)) {
             Toggle(tr(R.string.show_time_in_hours), if (s.replayHours) tr(R.string.like_20h_4m) else tr(R.string.like_1_204_min), s.replayHours) { prefs.setReplayHours(it) }
             Toggle(tr(R.string.use_theme_colors), tr(R.string.your_accent_instead_of_prism_s), s.replayThemeColors) { prefs.setReplayThemeColors(it) }
             Toggle(tr(R.string.rewind_notification), tr(R.string.on_december_1_when_your_year), s.rewindNotification) { prefs.setRewindNotification(it) }
+            // Prism's plays always count; each imported source only when switched on (off by default: Replay as before).
+            if (imported.isNotEmpty()) {
+                Label(tr(R.string.imp_count_history_from), info = tr(R.string.imp_count_history_info))
+                Item(tr(R.string.imp_prism_plays), tr(R.string.imp_always_counted), onClick = {}) {
+                    Icon(PrismIcons.Check, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                imported.forEach { sum ->
+                    val source = com.prism.music.data.imports.ImportSource.of(sum.origin) ?: return@forEach
+                    Toggle(source.label, tr(R.string.imp_n_plays, java.text.NumberFormat.getIntegerInstance().format(sum.plays)), source in counted) {
+                        c.imports.setCounted(source, it)
+                    }
+                }
+            }
         }
         // Region moved to the Language page (1.8.0).
     }

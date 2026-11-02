@@ -1031,16 +1031,18 @@ private val yearSoFar = MutableStateFlow<YearSoFar?>(null)
 private suspend fun loadYearSoFar(c: com.prism.music.AppContainer): YearSoFar = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
     val now = System.currentTimeMillis()
     val start = Calendar.getInstance().apply { set(Calendar.DAY_OF_YEAR, 1); set(Calendar.HOUR_OF_DAY, 0) }.timeInMillis
+    // 1.8.1: the sources Replay counts (Prism's own plays unless the listener counts an imported history too).
+    val plays = c.imports.replay()
     val months = Calendar.getInstance().let { today ->
         (0..today.get(Calendar.MONTH)).map { m ->
             val from = Calendar.getInstance().apply { set(Calendar.MONTH, m); set(Calendar.DAY_OF_MONTH, 1); set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0) }
             val to = (from.clone() as Calendar).apply { add(Calendar.MONTH, 1) }
-            runCatching { c.db.plays().totalMs(from.timeInMillis, minOf(to.timeInMillis, now)) }.getOrDefault(0L)
+            runCatching { plays.totalMs(from.timeInMillis, minOf(to.timeInMillis, now)) }.getOrDefault(0L)
         }
     }
-    val top = runCatching { c.db.plays().topSongs(start, now, 20).mergeUploads().firstOrNull() to c.db.plays().topArtists(start, now, 1).firstOrNull() }
+    val top = runCatching { plays.topSongs(start, now, 20).mergeUploads().firstOrNull() to plays.topArtists(start, now, 1).firstOrNull() }
         .getOrDefault(null to null)
-    YearSoFar(now, c.db.plays().totalMs(start, now), months, top.first, top.second)
+    YearSoFar(now, plays.totalMs(start, now), months, top.first, top.second)
 }
 
 @Composable

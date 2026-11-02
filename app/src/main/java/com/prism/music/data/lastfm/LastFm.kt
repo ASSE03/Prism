@@ -187,6 +187,26 @@ class LastFm(private val context: Context, private val http: OkHttpClient, priva
         }
     }
 
+    // ---- Bring your history (1.8.1)
+
+    /**
+     * One page of the connected account's scrobbles, newest first ([com.prism.music.data.imports.LastFmHistory]), as
+     * Last.fm's JSON. Public data of the account, asked with Prism's key: nothing is signed or sent but the user's name.
+     */
+    suspend fun recentTracksPage(page: Int, perPage: Int = 200): String = withContext(Dispatchers.IO) {
+        val name = _user.value ?: throw IOException("Last.fm isn't connected")
+        val url = okhttp3.HttpUrl.Builder().scheme("https").host("ws.audioscrobbler.com").addPathSegments("2.0/")
+            .addQueryParameter("method", "user.getrecenttracks").addQueryParameter("user", name)
+            .addQueryParameter("limit", perPage.toString()).addQueryParameter("page", page.toString())
+            .addQueryParameter("api_key", KEY).addQueryParameter("format", "json").build()
+        val req = Request.Builder().url(url).header("User-Agent", "Prism/${BuildConfig.VERSION_NAME}").build()
+        http.newCall(req).execute().use { r ->
+            val body = r.body.string()
+            if (!r.isSuccessful) throw IOException(tr(R.string.last_fm_answered_http, r.code))
+            body
+        }
+    }
+
     // ---- The API
 
     class LastFmError(val code: Int, message: String) : IOException(tr(R.string.last_fm, message, code))
