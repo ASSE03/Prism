@@ -53,6 +53,9 @@ What changed in each release. Older releases are described on the [Releases page
   casting, episodes, live streams).
 ### Fixes
 
+- **Your own photo background stays in Performance mode** (Reddit: "only a black background now"). Performance mode
+  drew every screen plain, your photo too; a still picture costs next to nothing, so it stays now (the drawn and moving
+  backgrounds still pause). The Backgrounds page also says when Performance mode is why a pick doesn't show.
 - **Your sign-ins stay out of Android's own backup.** Android's backup (to Google, or copied to a new phone) took your
   Discord and Last.fm connections and Prism Connect's pairings along; they're left out now. Your YouTube Music sign-in
   travels with your settings, so a copy restored onto a new phone signs out of it once: sign in again there. Prism's
