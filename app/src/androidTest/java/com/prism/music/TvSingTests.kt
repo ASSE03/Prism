@@ -3,7 +3,7 @@ package com.prism.music
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isFocused
-import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.prism.music.TvFixture.awaitFocus
 import com.prism.music.TvFixture.awaitFocusOn
