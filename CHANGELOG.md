@@ -6,24 +6,45 @@ What changed in each release. Older releases are described on the [Releases page
 
 ### Fixes
 
-- Tapping a lyric line while the song is paused moves the lyrics there too (the music moved, the lyrics stayed) (#308).
-- The play button's triangle sits in the middle of its circle (it looked a little to the right) (#313).
-- The playing bars beside the current song stand still while it's paused (#302).
-- Karaoke-style lyrics: no pale edge round the sung words any more; the words still to come aren't drawn under them
-  (#303). For a softer fill, pick your own color (a soft grey, say) for "The line being sung" under
-  Lyrics → Text.
-- The color mesh behind the player visibly moves at Motion 100% (a loop is three times as quick and goes farther), and
-  the setting says when Performance mode or the phone's animations switch hold it still (#284).
-- Search no longer opens scrolled to the bottom the first time after Prism starts (#279).
-- Player cover: Full width meets the screen's sides in the Standard layout too (on a phone too short for a square that
-  wide, its top and bottom are cropped a little), it no longer shrinks when paused, and a swipe down anywhere around the
-  cover closes the player (in the Cover and Minimal layouts the room above the cover took nothing) (#276).
-- Tab bar: the docked bar no longer shows bright lines at the screen's sides with Frosted or Liquid glass (#290), and
-  with Labels "Selected" the current tab's name sits under its icon, as with "Always" (#291).
-- Start radio on the song that's playing keeps it playing where it is and lines the radio up after it (it started the
-  song again) (#292).
-- New option: Customize Prism → Tabs & mini player → Mini player → "Play/pause button", to leave play / pause off the
-  mini player (on by default; a tap still opens the player).
+- **Add to playlist only says "Added" when the songs got there.** It took an unclear answer from YouTube Music as
+  success and never checked a whole album's or queue's add; now it counts what went in ("12 songs added to …"), says
+  "Already in …" or "Couldn't add to …" otherwise, and the playlist's page shows the new songs when you open it.
+- **Add to playlist from a long press on an album's cover** works when one of the album's songs can't go in (the others
+  still do), and uses the album kept on the phone when YouTube can't be reached.
+- **"Couldn't add to library" on some albums** (from a long press, or on the album's page): an album is now saved the way
+  its own page's library button does it.
+- **New from your artists missed releases** from artists you play a lot when you follow many: your starred and most
+  played artists are always looked at, and the others take turns.
+- **Podcasts' "New episodes" opened empty** though it showed a count and a length: its episodes are listed now.
+- **Songs played from Speed dial have their album** (to go to, and "From the album") (#312).
+- **"Songs, not videos": a playlist's music videos downloaded as their songs show as downloaded** (#315).
+- **Quick picks change once at most after Prism opens** (#297): they come in when they're ready and stay until you pull
+  to refresh.
+- **YouTube's sections on Home stay when YouTube's language changes** (#277): a section kept by its English title is
+  found again under its Spanish one, where YouTube gives it a link to more.
+- **Speed dial fills its last page** from what you play instead of leaving it out (#295); "YouTube Music's only" still
+  shows whole pages of YouTube's own.
+- **Pull down on Liked songs** to bring in likes made elsewhere (#306).
+- **The update banner shows sooner** (Prism looks for a new version every hour, not every six), and a second tap while
+  an update is downloading or waiting for Android's installer doesn't start another (#278).
+- **Swiping Prism away while it's paused** takes its notification with it (#274).
+- **Tapping a lyric line while the song is paused** moves the lyrics there too (the music moved, the lyrics stayed) (#308).
+- **The play button's triangle sits in the middle of its circle** (it looked a little to the right) (#313).
+- **The playing bars beside the current song stand still while it's paused** (#302).
+- **Karaoke-style lyrics: no pale edge round the sung words**: the words still to come aren't drawn under them any more
+  (#303). For a softer fill, pick your own color (a soft grey, say) for "The line being sung" under Lyrics → Text.
+- **The color mesh behind the player visibly moves at Motion 100%** (a loop is three times as quick and goes farther),
+  and the setting says when Performance mode or the phone's animations switch hold it still (#284).
+- **Search no longer opens scrolled to the bottom** the first time after Prism starts (#279).
+- **Player cover**: Full width meets the screen's sides in the Standard layout too (on a phone too short for a square
+  that wide, its top and bottom are cropped a little), it no longer shrinks when paused, and a swipe down anywhere
+  around the cover closes the player (in the Cover and Minimal layouts the room above the cover took nothing) (#276).
+- **Tab bar**: the docked bar no longer shows bright lines at the screen's sides with Frosted or Liquid glass (#290),
+  and with Labels "Selected" the current tab's name sits under its icon, as with "Always" (#291).
+- **Start radio on the song that's playing** keeps it playing where it is and lines the radio up after it (it started
+  the song again) (#292).
+- **New option**: Customize Prism → Tabs & mini player → Mini player → "Play/pause button", to leave play / pause off
+  the mini player (on by default; a tap still opens the player).
 
 ## 1.8.0
 

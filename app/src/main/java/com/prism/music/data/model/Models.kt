@@ -221,6 +221,8 @@ data class CollectionPage(
     val setVideoIds: Map<String, String> = emptyMap(),
     /** For albums: YouTube Music's "Other versions" (deluxe, clean, live…). */
     val otherVersions: List<BrowseItem> = emptyList(),
+    /** For albums: the playlist id the page's own library button saves (can differ from [playlistId]). */
+    val libraryId: String? = null,
     val explicit: Boolean = false,
 ) {
     /** An album's second line, "Album • 2026", split up. */
