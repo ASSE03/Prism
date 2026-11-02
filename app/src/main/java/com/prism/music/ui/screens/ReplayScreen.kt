@@ -186,7 +186,7 @@ private val PICK_DATES = Period(Period.Kind.DAYS, fromDay = -1, toDay = -1)
 private fun ReplayDatesSheet(onPick: (Period) -> Unit, onDismiss: () -> Unit) {
     val c = LocalContainer.current
     val months by produceState(emptyList<Period>()) {
-        value = runCatching { c.db.plays().monthly(0, System.currentTimeMillis()) }.getOrDefault(emptyList())
+        value = runCatching { c.imports.replay().monthly(0, System.currentTimeMillis()) }.getOrDefault(emptyList())
             .mapNotNull { m -> m.month.split("-").mapNotNull { it.toIntOrNull() }.takeIf { it.size == 2 }?.let { (y, mo) -> Period.monthOf(y, mo - 1) } }
             .reversed()
     }
@@ -252,10 +252,12 @@ fun ReplayScreen(bottomPadding: Dp) {
     val years by produceState(listOf(Period.thisYear().year)) {
         value = runCatching { c.rewind.years() }.getOrNull()?.takeIf { it.isNotEmpty() } ?: value
     }
-    val data by produceState<ReplayData?>(null, period) {
+    // The imported histories Replay counts besides Prism's own plays (1.8.1): the page says so, and reads again on a change.
+    val counted by c.imports.counted.collectAsState()
+    val data by produceState<ReplayData?>(null, period, counted) {
         value = null
         val (from, to) = range(period)
-        val dao = c.db.plays()
+        val dao = c.imports.replay()
         // The top 250 are kept for Play / Shuffle; the screen itself shows the top 100 at most.
         val top = dao.topSongs(from, to, 300).mergeUploads().take(250)
         val songs = top.take(100)
@@ -300,7 +302,11 @@ fun ReplayScreen(bottomPadding: Dp) {
     Box(Modifier.fillMaxSize()) {
     LazyColumn(Modifier.fillMaxSize(), state = list, contentPadding = PaddingValues(bottom = bottomPadding + 24.dp)) {
         item {
-            com.prism.music.ui.components.ScreenHeader(tr(R.string.replay_2), subtitle = tr(R.string.your_listening_recapped_on_device))
+            com.prism.music.ui.components.ScreenHeader(
+                tr(R.string.replay_2),
+                subtitle = if (counted.isEmpty()) tr(R.string.your_listening_recapped_on_device)
+                else tr(R.string.imp_includes, counted.sortedBy { it.ordinal }.joinToString(", ") { it.label }),
+            )
         }
         item {
             // Any dates (#149): today, this week, any month, or the days you pick, beside the usual ones.
