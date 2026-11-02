@@ -1749,11 +1749,9 @@ private fun PlayerCoverGroup() {
         Label(tr(R.string.cover_size))
         Chips(CoverSize.entries, s.coverSize, { it.label }) { prefs.setCoverSize(it) }
         SliderSetting(tr(R.string.corners), s.playerArtCorners.toFloat(), 0f..32f, { tr(R.string.dp, it.roundToInt()) }, steps = 7) { prefs.setPlayerArtCorners(it.roundToInt()) }
-        // 1.8.0: one switch for the cover and a music video (full-bleed video was its own; on if either was).
-        Toggle(
-            tr(R.string.full_bleed_artwork), tr(R.string.cover_and_video_fill_the_top), s.fullBleedArtwork,
-            info = tr(R.string.the_cover_runs_to_the_screen) + " " + tr(R.string.a_music_video_runs_to_the),
-        ) { prefs.setFullBleedArtwork(it) }
+        // Two switches again (1.8.1): one for the cover, one for a music video; the video's own button changes only the video.
+        Toggle(tr(R.string.edge_to_edge_cover), null, s.fullBleedArtwork, info = tr(R.string.the_cover_runs_to_the_screen)) { prefs.setFullBleedArtwork(it) }
+        Toggle(tr(R.string.edge_to_edge_video), null, s.videoFullBleed, info = tr(R.string.a_music_video_runs_to_the)) { prefs.setVideoFullBleed(it) }
         if (s.fullBleedArtwork) Chips(com.prism.music.data.prefs.BleedFit.entries, s.view.bleedFit, { it.label }) { prefs.setBleedFit(it) }
         // With full-bleed artwork the banner covers the cover that shrinks (Reddit, 1.7.9.3): it says so rather than seem broken.
         Toggle(

@@ -2030,10 +2030,10 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
             pageColors = p[K.pageColors] ?: d.pageColors,
             frostedGlass = p[K.frostedGlass] ?: d.frostedGlass,
             haptics = p[K.haptics] ?: d.haptics,
-            // 1.8.0 player editor: one switch for the cover and the video ("Full-bleed artwork"); on if either was on (a
-            // full-bleed cover with a framed video looked broken). Both keys are kept and always written together.
-            fullBleedArtwork = fullBleed(p),
-            videoFullBleed = fullBleed(p),
+            // Two switches again (1.8.1, owner): 1.8.0 made the cover and the video one, so the video's own button turned
+            // the cover's edge-to-edge look on and off too. Each key is its own setting, as before 1.8.0.
+            fullBleedArtwork = p[K.fullBleedArtwork] ?: d.fullBleedArtwork,
+            videoFullBleed = p[K.videoFullBleed] ?: d.videoFullBleed,
             immersivePlayer = p[K.immersivePlayer] ?: d.immersivePlayer,
             immersiveArt = p.enum(K.immersiveArt, d.immersiveArt),
             immersiveLyrics = p.enum(K.immersiveLyrics, d.immersiveLyrics),
@@ -2537,8 +2537,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     @Suppress("UNCHECKED_CAST")
     fun resetColors() = edit { p -> K.colors.forEach { p.remove(it as Preferences.Key<Any>) } }
     // 1.8.0 player editor: the cover and the video are one switch (see [fullBleed]).
-    fun setFullBleedArtwork(v: Boolean) = edit { it[K.fullBleedArtwork] = v; it[K.videoFullBleed] = v }
-    fun setVideoFullBleed(v: Boolean) = setFullBleedArtwork(v)
+    fun setFullBleedArtwork(v: Boolean) = edit { it[K.fullBleedArtwork] = v }
+    fun setVideoFullBleed(v: Boolean) = edit { it[K.videoFullBleed] = v }
     fun setImmersivePlayer(v: Boolean) = edit { it[K.immersivePlayer] = v }
     fun setImmersiveArt(v: ImmersiveArt) = edit { it[K.immersiveArt] = v.name }
     fun setImmersiveLyrics(v: ImmersiveLyrics) = edit { it[K.immersiveLyrics] = v.name }
@@ -2810,9 +2810,6 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     /** A comma-separated set of names (unknown ones skipped): a Look or backup from a later Prism still opens. */
     private inline fun <reified E : Enum<E>> namesOf(v: String?): List<E> =
         v.orEmpty().split(',').mapNotNull { n -> enumValues<E>().firstOrNull { it.name == n } }.distinct()
-
-    /** Full-bleed artwork and full-bleed video, one switch since 1.8.0: on if either was. */
-    private fun fullBleed(p: Preferences) = (p[K.fullBleedArtwork] ?: false) || (p[K.videoFullBleed] ?: false)
 
     private fun readParts(p: Preferences): PlayerParts {
         val d = PlayerParts()

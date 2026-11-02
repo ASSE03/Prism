@@ -77,6 +77,9 @@ What changed in each release. Older releases are described on the [Releases page
   casting, episodes, live streams).
 ### Fixes
 
+- **Edge-to-edge cover and edge-to-edge video are two switches again.** 1.8.0 made them one, so the button on a playing
+  video also turned the cover's edge-to-edge look on and off. Customize Prism → Player → Cover has a switch for each, and
+  the video's button changes only the video.
 - **Your own photo background stays in Performance mode** (Reddit: "only a black background now"). Performance mode
   drew every screen plain, your photo too; a still picture costs next to nothing, so it stays now (the drawn and moving
   backgrounds still pause). The Backgrounds page also says when Performance mode is why a pick doesn't show.
