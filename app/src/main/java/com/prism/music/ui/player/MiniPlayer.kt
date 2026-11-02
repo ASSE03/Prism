@@ -252,7 +252,10 @@ fun MiniPlayer(
             if (settings.miniPrevButton) {
                 IconButton(onClick = { haptics.click(); pc.previous() }, modifier = Modifier.size(40.dp)) { Icon(PrismIcons.Previous, tr(R.string.widget_previous)) }
             }
-            if (style == MiniPlayerStyle.PILL) {
+            // Play / pause can be left off (Reddit, 1.8.1): a tap still opens the player.
+            if (!settings.view.miniPlayButton) {
+                if (!settings.miniSkipButtons) Spacer(Modifier.width(8.dp))
+            } else if (style == MiniPlayerStyle.PILL) {
                 Box(
                     Modifier.size(40.dp).clip(CircleShape).background(scheme.onSurface).clickable { haptics.click(); pc.togglePlay() },
                     contentAlignment = Alignment.Center,

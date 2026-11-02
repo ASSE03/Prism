@@ -392,8 +392,31 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         }
     }
 
-    /** Plays [song] and then a radio of songs like it (YouTube Music's), whether or not Autoplay is on. */
-    fun playRadio(song: Song) = playQueue(listOf(song), 0, QueueSource(QueueKind.RADIO, tr(R.string.radio, song.title), seedId = song.id))
+    /**
+     * Plays [song] and then a radio of songs like it (YouTube Music's), whether or not Autoplay is on. The song playing
+     * now carries on where it is, the radio lined up after it (#292: it started again from the top).
+     */
+    fun playRadio(song: Song) {
+        val source = QueueSource(QueueKind.RADIO, tr(R.string.radio, song.title), seedId = song.id)
+        val p = player
+        if (p == null || p.mediaItemCount == 0 || p.currentMediaItem?.mediaId != song.id) { playQueue(listOf(song), 0, source); return }
+        ++playToken
+        // As a new queue would be: just this song (what came before stays in Played), in order, the radio to follow.
+        djNext = false
+        c.dj.setOn(false)
+        c.queue.smartShuffle.value = false
+        c.queue.smartPicks.value = emptySet()
+        c.queue.source.value = source
+        c.queue.autoplayContinuation = null
+        c.queue.autoplayStart.value = -1
+        c.queue.userQueued.value = emptySet()
+        p.shuffleModeEnabled = false
+        val at = p.currentMediaItemIndex
+        if (at + 1 < p.mediaItemCount) p.removeMediaItems(at + 1, p.mediaItemCount)
+        if (at > 0) p.removeMediaItems(0, at)
+        if (!p.isPlaying) { ensureStarted(); if (p.playbackState == Player.STATE_IDLE) p.prepare(); p.play() }
+        service?.maybeAutoplay()
+    }
 
     fun playNext(song: Song) = playNext(listOf(song), null)
 

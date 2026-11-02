@@ -252,7 +252,7 @@ object LookLabels {
         "card_size" to tr(R.string.cards), "nav_style" to tr(R.string.tab_bar), "nav_labels" to tr(R.string.tab_labels), "nav_hide_on_scroll" to tr(R.string.shrink_while_scrolling),
         "nav_tabs" to tr(R.string.tabs), "tab_names" to tr(R.string.tab_names), "nav_bar_size" to tr(R.string.tab_bar_height), "nav_bar_fill" to tr(R.string.tab_bar_background),
         "mini_player_joined" to tr(R.string.mini_player_joined_to_the_tab), "start_tab" to tr(R.string.start_tab_2), "mini_player_style" to tr(R.string.mini_player), "mini_skip_buttons" to tr(R.string.mini_player_s_next),
-        "mini_prev_button" to tr(R.string.mini_player_s_previous), "mini_progress" to tr(R.string.mini_player_progress), "mini_progress_color" to tr(R.string.mini_player_progress_color), "mini_fill_strength" to tr(R.string.mini_player_fill_strength), "play_ring" to tr(R.string.ring_on_the_play_button), "player_background" to tr(R.string.player_background),
+        "mini_prev_button" to tr(R.string.mini_player_s_previous), "mini_play_button" to tr(R.string.mini_player_s_play_pause), "mini_progress" to tr(R.string.mini_player_progress), "mini_progress_color" to tr(R.string.mini_player_progress_color), "mini_fill_strength" to tr(R.string.mini_player_fill_strength), "play_ring" to tr(R.string.ring_on_the_play_button), "player_background" to tr(R.string.player_background),
         "player_backdrop_show" to tr(R.string.player_background_showing), "player_art_corners" to tr(R.string.cover_corners), "transport_style" to tr(R.string.controls),
         "cover_size" to tr(R.string.cover_size), "scrubber_style" to tr(R.string.progress_bar), "art_shrink_on_pause" to tr(R.string.cover_shrinks_on_pause),
         "show_output_device" to tr(R.string.output_device), "full_bleed_artwork" to tr(R.string.edge_to_edge_cover), "video_full_bleed" to tr(R.string.edge_to_edge_video),"hide_volume_bar" to tr(R.string.hide_volume_bar),
@@ -421,7 +421,7 @@ object LookLabels {
         "backgrounds" to setOf("liquid_glass", "glass_kind", "frosted_glass", "frosted_pages", "backdrops", "backdrop_dim", "backdrop_motion", "reduce_motion"),
         "layout" to setOf(
             "corners", "ui_density", "title_size", "card_size", "nav_style", "nav_labels", "nav_hide_on_scroll", "nav_tabs", "start_tab",
-            "mini_player_style", "mini_skip_buttons", "mini_prev_button", "mini_progress", "mini_progress_color", "mini_fill_strength", "library_view", "library_views", "library_columns", "library_subtitles", "home_header", "home_header_height", "playlist_hero_cover", "replay_theme_colors", "replay_card",
+            "mini_player_style", "mini_skip_buttons", "mini_prev_button", "mini_play_button", "mini_progress", "mini_progress_color", "mini_fill_strength", "library_view", "library_views", "library_columns", "library_subtitles", "home_header", "home_header_height", "playlist_hero_cover", "replay_theme_colors", "replay_card",
             "hide_status_bar", "hide_status_bar_player", "tab_names", "nav_bar_size", "nav_bar_fill", "mini_player_joined", "controls_classic",
         ),
         "player" to setOf(
