@@ -254,8 +254,15 @@ class PlayerOptionsTest {
         instrumentation.runOnMainSync {
             val activity = androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry.getInstance()
                 .getActivitiesInStage(androidx.test.runner.lifecycle.Stage.RESUMED).firstOrNull()
-            val insets = activity?.window?.decorView?.let { androidx.core.view.ViewCompat.getRootWindowInsets(it) }
-            shown = insets?.isVisible(androidx.core.view.WindowInsetsCompat.Type.statusBars()) ?: true
+            val decor = activity?.window?.decorView
+            shown = if (android.os.Build.VERSION.SDK_INT < 30) {
+                // Before Android 11 the bar is hidden with the old full-screen flag, which insets don't report.
+                @Suppress("DEPRECATION")
+                decor == null || decor.systemUiVisibility and android.view.View.SYSTEM_UI_FLAG_FULLSCREEN == 0
+            } else {
+                val insets = decor?.let { androidx.core.view.ViewCompat.getRootWindowInsets(it) }
+                insets?.isVisible(androidx.core.view.WindowInsetsCompat.Type.statusBars()) ?: true
+            }
         }
         return shown
     }

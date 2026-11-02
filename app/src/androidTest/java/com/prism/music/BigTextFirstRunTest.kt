@@ -32,6 +32,8 @@ class BigTextFirstRunTest {
     }
 
     private fun shot(name: String) {
+        // Kept through the media store's Downloads, which Android 9 doesn't have: there the test checks without a picture.
+        if (android.os.Build.VERSION.SDK_INT < 29) return
         val bmp = automation.takeScreenshot() ?: return
         val values = android.content.ContentValues().apply {
             put(android.provider.MediaStore.MediaColumns.DISPLAY_NAME, "bigtext-$name-${System.currentTimeMillis()}.png")
