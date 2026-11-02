@@ -44,6 +44,7 @@ import com.prism.music.MainActivity
 import com.prism.music.R
 import com.prism.music.container
 import com.prism.music.data.db.PlayEventEntity
+import com.prism.music.data.db.toEntity
 import com.prism.music.data.innertube.InnerTube
 import com.prism.music.data.model.Song
 import kotlinx.coroutines.CoroutineScope
@@ -135,7 +136,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     override fun onCreate() {
         super.onCreate()
         PlaybackServices.running = this::class.java
-        if (com.prism.music.BuildConfig.DEBUG) PlaybackServices.failForTest = { onPlayerError(it) }
+        if (com.prism.music.BuildConfig.DEBUG) {
+            PlaybackServices.failForTest = { onPlayerError(it) }
+            PlaybackServices.taskRemovedForTest = { onTaskRemoved(null) }
+        }
         AudioDiagnostics.init(this)
         // Media3's own audio warnings (spurious AudioTrack timestamps, position jumps…) go into the diagnostics too.
         androidx.media3.common.util.Log.setLogger(object : androidx.media3.common.util.Log.Logger {
@@ -503,12 +507,21 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             pauseAllPlayersAndStopSelf()
             return
         }
-        if (!player.playWhenReady || player.mediaItemCount == 0) stopSelf()
+        // Paused (#274): the notification goes too. stopSelf alone left it, and the service, while anything else was
+        // still connected (the system's media controls, a watch, a widget), sometimes one that couldn't be swiped away.
+        // The queue is saved above, and Play from anywhere picks it up again.
+        if (!player.playWhenReady || player.mediaItemCount == 0) {
+            flushPlayTime()
+            saveEpisodePosition()
+            player.stop()
+            stopSelf()
+        }
     }
 
     override fun onDestroy() {
         if (PlaybackServices.running == this::class.java) PlaybackServices.running = null
         PlaybackServices.failForTest = null
+        PlaybackServices.taskRemovedForTest = null
         flushPlayTime()
         saveEpisodePosition()
         saveQueue(now = true)
@@ -630,6 +643,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         maybeAutoplay()
         prefetchNext()
         songCoverForVideo(song)
+        albumForSong(song)
         updateButtons()
         PlayTileService.update(this)
         carLyrics.refresh()
@@ -1530,6 +1544,24 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      * search for the same title by the same artist, once per video). Only the cover changes: the item keeps its address (and
      * its video mode), so Media3 swaps it without a pause, and the video and its sound play on as they were.
      */
+    /**
+     * A song that came without its album (#312: Speed dial's tiles, and other Home cards, carry only a title and the
+     * artist) gets it from YouTube's own queue for it, whose first item is the song with its album: the player's
+     * album link, "From the album" and the history row then have it. Same address, so it plays on untouched.
+     */
+    private fun albumForSong(song: Song) {
+        if (!AlbumFill.wanted(song)) return
+        scope.launch {
+            val found = runCatching { withContext(Dispatchers.IO) { c.ytm.next(song.id, "RDAMVM${song.id}").songs.take(3) } }.getOrNull() ?: return@launch
+            val now = player.currentMediaItem
+            if (now?.mediaId != song.id) return@launch
+            val current = now.toSong() ?: return@launch
+            val filled = AlbumFill.withAlbum(current, found) ?: return@launch
+            swapInPlace(player.currentMediaItemIndex, filled.toMediaItem(now.videoModeId))
+            withContext(Dispatchers.IO) { runCatching { c.db.songs().upsert(filled.toEntity(c.db.songs().get(filled.id))) } }
+        }
+    }
+
     private fun songCoverForVideo(song: Song) {
         if (!song.isVideo || song.isLive || song.isLocal || song.isEpisode || song.isUpload) return
         val item = player.currentMediaItem ?: return

@@ -92,6 +92,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.media3.exoplayer.offline.Download
+import com.prism.music.download.forRow
+import androidx.compose.material3.pulltorefresh.pullToRefresh
 import coil3.compose.AsyncImage
 import com.prism.music.data.ShareLinks
 import com.prism.music.data.innertube.YouTubeMusic
@@ -180,6 +182,15 @@ fun CollectionScreen(type: CollectionType, id: String, initialGenre: String?, bo
         }
         else -> null
     }
+    // Songs added to this playlist from elsewhere in Prism (a song's menu, the queue): loaded again, also when the page
+    // was waiting in a tab's back stack (Reddit, 1.7.9: the added song "wasn't in the playlist").
+    if (type == CollectionType.PLAYLIST) {
+        val editedAt = c.library.playlistEdits.collectAsState().value[id.removePrefix("VL")]
+        var seenEdit by rememberSaveable(id) { mutableStateOf(editedAt) }
+        LaunchedEffect(editedAt) {
+            if (editedAt != null && editedAt != seenEdit) { seenEdit = editedAt; remote?.reload(true) }
+        }
+    }
     // Opened from YouTube Music: kept (with all its songs, once they're in) to open offline later (#55).
     (remote?.state as? Load.Ok)?.value?.takeIf { !it.offline }?.let { live ->
         val more by live.loadingMore.collectAsState()
@@ -257,6 +268,7 @@ class LiveCollection(
     }
 }
 
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 private fun CollectionContent(type: CollectionType, live: LiveCollection, initialGenre: String?, bottomPadding: Dp, reload: () -> Unit) {
     val c = LocalContainer.current
@@ -378,8 +390,10 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     }
     val dim: (Song) -> Modifier = { s -> if (ready != null && s.id !in ready) Modifier.alpha(0.4f) else Modifier }
     val listState = rememberLazyListState()
-    val downloadedCount = page.songs.count { downloads[it.id]?.state == Download.STATE_COMPLETED }
-    val downloadingCount = page.songs.count { downloads[it.id]?.let { d -> d.state != Download.STATE_COMPLETED && d.state != Download.STATE_FAILED } == true }
+    // A video row downloaded as its song counts as downloaded (#315).
+    val standIns by c.downloadStandIns.collectAsState()
+    val downloadedCount = page.songs.count { downloads.forRow(it.id, standIns)?.state == Download.STATE_COMPLETED }
+    val downloadingCount = page.songs.count { downloads.forRow(it.id, standIns)?.let { d -> d.state != Download.STATE_COMPLETED && d.state != Download.STATE_FAILED } == true }
     val totalSec = visible.sumOf { it.durationSec }
     val popular = remember(live.page) { if (type == CollectionType.ALBUM) live.page.popularIds else emptySet() }
     // Playlists (and Liked songs) can have a picture of the listener's choosing.
@@ -396,7 +410,8 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     var privacy by remember(page.id) { mutableStateOf(live.page.privacy) }
     val savableId = when {
         !settings.isLoggedIn || saved == null -> null
-        type == CollectionType.ALBUM -> live.page.playlistId
+        // What the page's own library button saves, as YouTube Music's app does (1.7.9.1's "Couldn't add to library").
+        type == CollectionType.ALBUM -> live.page.libraryId ?: live.page.playlistId
         type == CollectionType.PLAYLIST && !live.page.owned -> live.page.id
         else -> null
     }
@@ -406,7 +421,8 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
         if (id != null && now != null) {
             saved = !now
             scope.launch {
-                val done = if (type == CollectionType.ALBUM && now) c.library.removeAlbum(page.id, id) else c.library.setSaved(id, !now)
+                val done = if (type == CollectionType.ALBUM && now) c.library.removeAlbum(page.id, id)
+                    else c.library.setSaved(id, !now, orElse = if (type == CollectionType.ALBUM) live.page.playlistId else null)
                 if (!done) {
                     saved = now
                     Toast.makeText(context, tr(R.string.couldn_t_update_your_library), Toast.LENGTH_SHORT).show()
@@ -612,6 +628,10 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     var pageHeight by remember { mutableStateOf(0.dp) }
     // Search and chips go see-through on the frost (and keep the theme's color without it).
     val frosted = if (settings.frostedPages) frostFill(1.4f) else Color.Unspecified
+    // Liked songs: pull down to bring in likes made elsewhere (#306), signed in (without an account they're all here).
+    val likedRefresh = type == CollectionType.LIKED && settings.isLoggedIn
+    val likesSyncing = c.library.syncState.collectAsState().value == com.prism.music.data.SyncState.SYNCING
+    val pull = androidx.compose.material3.pulltorefresh.rememberPullToRefreshState()
 
     ArtworkAccent(palette) {
         Box(Modifier.fillMaxSize().onSizeChanged { with(density) { pageHeight = it.height.toDp(); pageWidth = it.width.toDp() } }) {
@@ -642,7 +662,8 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
             }
             LazyColumn(
                 state = listState,
-                modifier = if (sideBySide) Modifier.padding(start = sideWidth) else Modifier,
+                modifier = (if (sideBySide) Modifier.padding(start = sideWidth) else Modifier)
+                    .then(if (likedRefresh) Modifier.pullToRefresh(likesSyncing, pull, onRefresh = { c.library.syncInBackground() }) else Modifier),
                 contentPadding = PaddingValues(top = if (sideBySide) statusTop + 60.dp else 0.dp, bottom = bottomPadding + 24.dp),
             ) {
                 if (!sideBySide) item("header") { header() }
@@ -756,6 +777,10 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     live.page.artists.firstOrNull { it.id != null }?.let { a -> item("moreby") { MoreBy(a.name, a.id!!, page.id) } }
                 }
             }
+
+            if (likedRefresh) androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator(
+                pull, likesSyncing, Modifier.align(Alignment.TopCenter).padding(top = statusTop + 60.dp),
+            )
 
             // Long playlists get a slider on the right to jump through them (1.7.9, Reddit), saying which song it's at.
             if (!rearranging && !groupByGenre) com.prism.music.ui.components.FastScroller(
