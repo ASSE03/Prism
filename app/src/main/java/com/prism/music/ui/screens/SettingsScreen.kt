@@ -430,7 +430,7 @@ private fun PerformanceGroup() {
 
 /** At the top of a page whose effects Performance mode is pausing. */
 @Composable
-private fun PerformancePaused() {
+internal fun PerformancePaused() {
     val c = LocalContainer.current
     Group("") {
         Item(

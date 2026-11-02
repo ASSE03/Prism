@@ -4,9 +4,15 @@ import com.prism.music.data.model.Song
 import kotlinx.serialization.Serializable
 import java.io.File
 
-/** A playlist being brought over: its songs by key, and the Prism playlist made for it once its songs were matched. */
+/**
+ * A playlist being brought over: its songs by key, and the Prism playlist made for it once its songs were matched.
+ * [uri]: Spotify's id for it when the download had one; a newer download finds it by that, else by its name.
+ */
 @Serializable
-data class PlaylistJob(val name: String, val keys: List<String>, val prismId: String? = null, val added: Set<String> = emptySet())
+data class PlaylistJob(val name: String, val keys: List<String>, val prismId: String? = null, val added: Set<String> = emptySet(), val uri: String? = null) {
+    /** [p] is this playlist in a newer download. */
+    fun isSame(p: LibraryPlaylist): Boolean = if (uri != null && p.uri != null) uri == p.uri else name == p.name
+}
 
 /**
  * The library a data download brought (1.8.1), and how far bringing it got: songs are liked and put in playlists as
@@ -29,13 +35,66 @@ data class LibraryJob(
     /** Albums and artists done, every playlist made (songs still to be found or picked may follow). */
     val settled: Boolean get() = albumsDone.size >= albums.size && artistsDone.size >= artists.size && playlists.all { it.prismId != null }
 
-    /** The same job with [lib] added (a second download, or more of the same: nothing twice). */
+    /**
+     * The same job with [lib] added (a newer download, or more of the same: nothing twice). A playlist brought before
+     * (by its Spotify id, else its name) gets the download's new songs added to the same Prism playlist; songs gone from
+     * it on Spotify stay in Prism's.
+     */
     fun plus(lib: ParsedLibrary, chosen: LibraryChoice): LibraryJob = copy(
         liked = if (chosen.liked) (liked + lib.liked).distinctBy { it.key } else liked,
-        playlists = if (chosen.playlists) playlists + lib.playlists.filter { p -> playlists.none { it.name == p.name } }
-            .map { PlaylistJob(it.name, it.tracks.map { t -> t.key }.distinct()) } else playlists,
+        playlists = if (chosen.playlists) mergePlaylists(lib.playlists) else playlists,
         albums = if (chosen.albums) (albums + lib.albums).distinctBy { albumKey(it) } else albums,
         artists = if (chosen.artists) (artists + lib.artists).distinctBy { ImportKeys.norm(it) } else artists,
+    )
+
+    private fun mergePlaylists(incoming: List<LibraryPlaylist>): List<PlaylistJob> {
+        val out = playlists.toMutableList()
+        // Each earlier playlist is one of the download's at most (Spotify lets two have one name).
+        val taken = BooleanArray(playlists.size)
+        for (p in incoming) {
+            val keys = p.tracks.map { it.key }.distinct()
+            val i = playlists.indices.firstOrNull { !taken[it] && out[it].isSame(p) }
+            if (i == null) { out += PlaylistJob(p.name, keys, uri = p.uri); continue }
+            taken[i] = true
+            val old = out[i]
+            val have = old.keys.toHashSet()
+            out[i] = old.copy(name = p.name, keys = old.keys + keys.filter { have.add(it) }, uri = old.uri ?: p.uri)
+        }
+        return out
+    }
+
+    /** What [lib] would add to this job: new likes, new playlists, new songs of earlier ones, new albums and artists. */
+    fun news(lib: ParsedLibrary): LibraryNews {
+        val likedKeys = liked.map { it.key }.toHashSet() + likedDone
+        val taken = BooleanArray(playlists.size)
+        var newLists = 0
+        var songs = 0
+        var growing = 0
+        for (p in lib.playlists) {
+            val i = playlists.indices.firstOrNull { !taken[it] && playlists[it].isSame(p) }
+            if (i == null) { newLists++; continue }
+            taken[i] = true
+            val have = playlists[i].keys.toHashSet() + playlists[i].added
+            val more = p.tracks.map { it.key }.distinct().count { it !in have }
+            if (more > 0) { songs += more; growing++ }
+        }
+        val albumKeys = albums.map { albumKey(it) }.toHashSet() + albumsDone
+        val artistKeys = artists.map { ImportKeys.norm(it) }.toHashSet() + artistsDone
+        return LibraryNews(
+            liked = lib.liked.count { it.key !in likedKeys }, playlists = newLists, playlistSongs = songs, playlistsGrowing = growing,
+            albums = lib.albums.count { albumKey(it) !in albumKeys }, artists = lib.artists.count { ImportKeys.norm(it) !in artistKeys },
+        )
+    }
+
+    /**
+     * What's kept when the history it came with is removed: what was already done (liked, added, saved, starred) and
+     * which Prism playlist each one made, so bringing a download again later tops those up instead of making them
+     * twice or liking again what the listener has since unliked. It waits on no song any more.
+     */
+    fun remembered(): LibraryJob = LibraryJob(
+        likedDone = likedDone,
+        playlists = playlists.filter { it.prismId != null }.map { it.copy(keys = emptyList()) },
+        albumsDone = albumsDone, artistsDone = artistsDone,
     )
 
     /** What the listener chose to bring from a download's library. */

@@ -4399,4 +4399,63 @@
     <string name="spot_keep_playlists">Keep the playlists as Prism playlists</string>
     <string name="spot_playlist_subtitle">Spotify · %1$s</string>
     <string name="spot_keywords">spotify connect sign in web api developer app client id redirect playlists liked songs likes recently played top</string>
+    <!-- 1.8.1: repeat imports and the fresh-download reminder -->
+    <plurals name="imp_new_plays_since">
+        <item quantity="one">%1$s new play since your last import (%2$s)</item>
+        <item quantity="other">%1$s new plays since your last import (%2$s)</item>
+    </plurals>
+    <string name="imp_download_range">This download: %1$s to %2$s · %3$s already here, passed over</string>
+    <string name="imp_download_dates">This download: %1$s to %2$s</string>
+    <string name="imp_nothing_new">Nothing new in this download: everything in it is already here.</string>
+    <string name="imp_nothing_new_range">Nothing new in this download (%1$s to %2$s): everything in it is already here.</string>
+    <string name="imp_liked_new_detail">%1$s new, liked here</string>
+    <string name="imp_playlists_new_detail">%1$s new · %2$s songs to add to ones brought before</string>
+    <string name="imp_playlists_info">Brought again from a newer download, a playlist made before gets its new songs added, and none is made twice. Songs removed from it on Spotify aren\'t removed from Prism\'s copy: take them out in Prism if you like.</string>
+    <string name="imp_albums_new_detail">%1$s new, into your library</string>
+    <string name="imp_artists_new_detail">%1$s new, starred</string>
+    <string name="imp_keep_current">Keep it current</string>
+    <string name="imp_keep_current_info">Spotify and Google Takeout give your history only as a download. Ask for a fresh one now and then and bring it here: only what\'s new comes in, plays already here are passed over, and your matches and picks stay.</string>
+    <string name="imp_last_import">Last %1$s import: %2$s (%3$s)</string>
+    <string name="imp_today">today</string>
+    <plurals name="imp_days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <string name="imp_request_fresh">Request a fresh download</string>
+    <string name="imp_remind">Remind me to bring a fresh download</string>
+    <string name="imp_remind_info">A quiet notification every few months after your last Spotify or YouTube Music import, and nothing else. Never if you haven\'t imported one.</string>
+    <string name="imp_remind_keywords">reminder notification fresh new download again update repeat import spotify takeout</string>
+    <plurals name="imp_months">
+        <item quantity="one">%d month</item>
+        <item quantity="other">%d months</item>
+    </plurals>
+    <string name="imp_remind_channel">Fresh download reminders</string>
+    <string name="imp_remind_channel_desc">Every few months, when your imported history could use a fresh download</string>
+    <string name="imp_remind_spotify_title">Time for a fresh Spotify download?</string>
+    <string name="imp_remind_spotify_text">Your last Spotify import was on %1$s. Request your data on Spotify\'s Privacy page, then bring it into Prism: only what\'s new comes in.</string>
+    <string name="imp_remind_takeout_title">Time for a fresh YouTube Music history?</string>
+    <string name="imp_remind_takeout_text">Your last YouTube Music import was on %1$s. Ask Google Takeout for your history again, then bring it into Prism: only what\'s new comes in.</string>
+    <string name="imp_lastfm_detail_since">Your new scrobbles since %2$s, as %1$s</string>
+    <string name="imp_added">Added %1$s.</string>
+    <string name="imp_and">%1$s and %2$s</string>
+    <plurals name="imp_n_liked_songs">
+        <item quantity="one">%d liked song</item>
+        <item quantity="other">%d liked songs</item>
+    </plurals>
+    <plurals name="imp_n_new_playlists">
+        <item quantity="one">%d playlist</item>
+        <item quantity="other">%d playlists</item>
+    </plurals>
+    <plurals name="imp_n_playlist_songs">
+        <item quantity="one">%d playlist song</item>
+        <item quantity="other">%d playlist songs</item>
+    </plurals>
+    <plurals name="imp_n_saved_albums">
+        <item quantity="one">%d saved album</item>
+        <item quantity="other">%d saved albums</item>
+    </plurals>
+    <plurals name="imp_n_followed_artists">
+        <item quantity="one">%d followed artist</item>
+        <item quantity="other">%d followed artists</item>
+    </plurals>
 </resources>

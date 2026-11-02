@@ -100,6 +100,14 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
         com.prism.music.ui.theme.IconStyle.load(this)
         com.prism.music.ui.theme.AppFonts.init(this)
         container = AppContainer(this)
+        // Android's own backup restored onto another install: its sign-ins aren't this phone's (RestoredInstall).
+        runCatching {
+            com.prism.music.data.RestoredInstall.check(this) {
+                container.settings.logout()
+                runCatching { container.lastFm.signOut() }
+                runCatching { container.discord.signOut() }
+            }
+        }
         // Whether any of Prism's screens is showing: what Android 12+ allows depends on it (DownloadRepository).
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             private var started = 0
@@ -125,6 +133,9 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
             runCatching { com.prism.music.data.Rewinds.schedule(this@PrismApp) }
             // DJ mode: the songs played most and liked get their key read once a day, on Wi-Fi while charging.
             runCatching { com.prism.music.playback.DjPrescanWorker.schedule(this@PrismApp) }
+            // Bring your history: the daily look at whether a fresh Spotify or Takeout download is due (only once one
+            // was imported; a restored backup brings the dates with it).
+            runCatching { com.prism.music.data.imports.ImportReminders.schedule(this@PrismApp) }
         }
         container.scope.launch(kotlinx.coroutines.Dispatchers.IO) {
             kotlinx.coroutines.delay(45_000)

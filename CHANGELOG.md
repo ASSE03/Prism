@@ -25,6 +25,19 @@ What changed in each release. Older releases are described on the [Releases page
 - Everything is read on your phone and kept there (it's in backups with your history); the only requests are the song
   searches matching needs and Last.fm's own. Remove a history any time: its plays leave Replay and your mixes, and
   what it added to your library stays.
+- **Keep it current: bring a newer download any time, and only what's new comes in.** The page says so before you
+  bring it ("312 new plays since your last import (Oct 3)", with the download's dates and how many plays are already
+  here); the same or an older download says "Nothing new in this download". Plays already brought in are passed over,
+  even between Spotify's two histories (the same song within about a minute is the same play, also when one names a
+  featured artist the other leaves out, while two songs that only share a title stay two plays; and an Extended play
+  takes the place of the Account data one), and only songs Prism hasn't seen are matched: your matches and picks stay.
+  Newly liked songs are liked, newly saved albums and followed artists come in, and a playlist brought before gets its
+  new songs added to the same Prism playlist (songs removed from it on Spotify stay in Prism's copy; none is made
+  twice, even after removing a history and bringing it again). Last.fm asks only for scrobbles since the last import.
+  Afterwards Prism says what came in ("Added 3 liked songs and 12 playlist songs."), also when no plays were new.
+- **"Last Spotify import: Oct 3 (31 days ago)"** on the page, with **Request a fresh download** (Spotify's Privacy
+  page, or Google Takeout), and a gentle reminder to bring a fresh one every 1, 3 or 6 months (3 unless you change it,
+  or Off): a quiet notification, only once you've imported Spotify or YouTube Music history, never for anyone else.
 
 ### Spotify (optional, your own key)
 
@@ -64,6 +77,13 @@ What changed in each release. Older releases are described on the [Releases page
   casting, episodes, live streams).
 ### Fixes
 
+- **Your own photo background stays in Performance mode** (Reddit: "only a black background now"). Performance mode
+  drew every screen plain, your photo too; a still picture costs next to nothing, so it stays now (the drawn and moving
+  backgrounds still pause). The Backgrounds page also says when Performance mode is why a pick doesn't show.
+- **Your sign-ins stay out of Android's own backup.** Android's backup (to Google, or copied to a new phone) took your
+  Discord and Last.fm connections and Prism Connect's pairings along; they're left out now. Your YouTube Music sign-in
+  travels with your settings, so a copy restored onto a new phone signs out of it once: sign in again there. Prism's
+  own backups are as before.
 - **Add to playlist only says "Added" when the songs got there.** It took an unclear answer from YouTube Music as
   success and never checked a whole album's or queue's add; now it counts what went in ("12 songs added to …"), says
   "Already in …" or "Couldn't add to …" otherwise, and the playlist's page shows the new songs when you open it.

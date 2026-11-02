@@ -62,8 +62,9 @@ data class LibraryTrack(val title: String, val artist: String, val album: String
     val key: String get() = ImportKeys.songKey(title, artist)
 }
 
+/** [uri]: Spotify's own id for the playlist, when the download names it (a newer download then finds it if renamed). */
 @Serializable
-data class LibraryPlaylist(val name: String, val tracks: List<LibraryTrack>)
+data class LibraryPlaylist(val name: String, val tracks: List<LibraryTrack>, val uri: String? = null)
 
 @Serializable
 data class LibraryAlbum(val title: String, val artist: String)
@@ -96,8 +97,42 @@ data class ImportPreview(
     val kinds: Set<FileKind> = emptySet(),
     /** Files in it Prism doesn't read (a podcast history, an HTML Takeout). */
     val skippedFiles: Int = 0,
+    /** Plays not brought in before (a repeat import: an earlier import's plays, to about the minute, are passed over). */
+    val newPlays: Int = plays,
+    val newFirstAt: Long? = firstAt,
+    val newLastAt: Long? = lastAt,
+    /** When this source was last brought in; null for a first import. */
+    val lastImportAt: Long? = null,
+    /** What of the library is new to Prism (a first import: all of it). */
+    val libraryNews: LibraryNews = LibraryNews.of(library),
 ) {
     val isEmpty: Boolean get() = plays == 0 && library.isEmpty
+
+    /** A repeat import: this source was brought in before. */
+    val isRepeat: Boolean get() = lastImportAt != null
+
+    /** An older or the same download again: nothing in it that isn't here. */
+    val nothingNew: Boolean get() = isRepeat && !isEmpty && newPlays == 0 && libraryNews.isEmpty
+}
+
+/**
+ * What a download's library adds to what earlier imports brought ([LibraryJob.news]): Liked Songs not liked yet,
+ * playlists not brought before, new songs of ones that were, albums and artists not saved or starred yet.
+ */
+data class LibraryNews(
+    val liked: Int = 0,
+    val playlists: Int = 0,
+    /** New songs of playlists an earlier import made, and how many playlists get them. */
+    val playlistSongs: Int = 0,
+    val playlistsGrowing: Int = 0,
+    val albums: Int = 0,
+    val artists: Int = 0,
+) {
+    val isEmpty: Boolean get() = liked == 0 && playlists == 0 && playlistSongs == 0 && albums == 0 && artists == 0
+
+    companion object {
+        fun of(lib: ParsedLibrary) = LibraryNews(lib.liked.size, lib.playlists.size, 0, 0, lib.albums.size, lib.artists.size)
+    }
 }
 
 /** The kinds of file a data download holds that Prism reads. */
