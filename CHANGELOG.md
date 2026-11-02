@@ -6,6 +6,29 @@ What changed in each release. Older releases are described on the [Releases page
 
 ### Fixes
 
+- **Add to playlist only says "Added" when the songs got there.** It took an unclear answer from YouTube Music as
+  success and never checked a whole album's or queue's add; now it counts what went in ("12 songs added to …"), says
+  "Already in …" or "Couldn't add to …" otherwise, and the playlist's page shows the new songs when you open it.
+- **Add to playlist from a long press on an album's cover** works when one of the album's songs can't go in (the others
+  still do), and uses the album kept on the phone when YouTube can't be reached.
+- **"Couldn't add to library" on some albums** (from a long press, or on the album's page): an album is now saved the way
+  its own page's library button does it.
+- **New from your artists missed releases** from artists you play a lot when you follow many: your starred and most
+  played artists are always looked at, and the others take turns.
+- **Podcasts' "New episodes" opened empty** though it showed a count and a length: its episodes are listed now.
+- **Songs played from Speed dial have their album** (to go to, and "From the album") (#312).
+- **"Songs, not videos": a playlist's music videos downloaded as their songs show as downloaded** (#315).
+- **Quick picks change once at most after Prism opens** (#297): they come in when they're ready and stay until you pull
+  to refresh.
+- **YouTube's sections on Home stay when YouTube's language changes** (#277): a section kept by its English title is
+  found again under its Spanish one, where YouTube gives it a link to more.
+- **Speed dial fills its last page** from what you play instead of leaving it out (#295); "YouTube Music's only" still
+  shows whole pages of YouTube's own.
+- **Pull down on Liked songs** to bring in likes made elsewhere (#306).
+- **The update banner shows sooner** (Prism looks for a new version every hour, not every six), and a second tap while
+  an update is downloading or waiting for Android's installer doesn't start another (#278).
+- **Swiping Prism away while it's paused** takes its notification with it (#274).
+
 ## 1.8.0
 
 ### Prism TV
