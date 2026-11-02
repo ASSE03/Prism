@@ -89,6 +89,12 @@ What changed in each release. Older releases are described on the [Releases page
   used to stop) and the car says Prism couldn't find it. The car's search button lists your own playlists and liked
   songs first, then Search's top results, songs, albums, artists and playlists. With the phone locked, the phone's
   voice request plays too.
+- **Word-by-word lyrics line up with the singing more often** (#301). Their timings (Better Lyrics, LyricsPlus and the
+  other word sources are Apple Music's) are made for Apple's copy of a song, and some of YouTube's start a little sooner
+  or later. When the song's line-by-line lyrics (YouTube Music's own, or LRCLIB's) put every line the same amount
+  earlier or later, the words are moved by it, once per song. Word timings that can't be the singing (every word the
+  same length, or outside their own line) show as line-by-line lyrics instead, so a source with real ones comes first.
+  The lyrics' timing sheet still moves a song's lyrics by hand.
 - **Tapping a lyric line while the song is paused** moves the lyrics there too (the music moved, the lyrics stayed) (#308).
 - **The play button's triangle sits in the middle of its circle** (it looked a little to the right) (#313).
 - **The playing bars beside the current song stand still while it's paused** (#302).
