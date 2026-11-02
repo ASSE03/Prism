@@ -829,7 +829,7 @@ private fun ArtistLinksSample(separate: Boolean) {
     SampleScreen(Modifier.fillMaxWidth().height(72.dp)) {
         Column(Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 8.dp)) {
             Text(tr(R.string.northern_lights), color = Color.White, fontSize = 12.sp, maxLines = 1, fontWeight = androidx.compose.ui.text.font.FontWeight.Light)
-            val names = listOf("Ava Lune", "Kite", "Mira")
+            val names = listOf(tr(R.string.sample_artist_one), tr(R.string.sample_artist_two), tr(R.string.sample_artist_three))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 names.forEachIndexed { i, n ->
                     val mark = if (separate) Modifier.drawBehind {
@@ -840,7 +840,7 @@ private fun ArtistLinksSample(separate: Boolean) {
                 }
             }
             Spacer(Modifier.height(4.dp))
-            if (separate) Text("→ Kite", color = Color.White.copy(alpha = 0.8f), fontSize = 9.sp)
+            if (separate) Text(tr(R.string.opens_artist_page, names[1]), color = Color.White.copy(alpha = 0.8f), fontSize = 9.sp)
             else Row(
                 Modifier.clip(RoundedCornerShape(5.dp)).background(Color.White.copy(alpha = 0.12f)).padding(horizontal = 6.dp, vertical = 2.dp),
                 horizontalArrangement = Arrangement.spacedBy(6.dp),

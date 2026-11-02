@@ -1534,6 +1534,10 @@
     <string name="each_name_opens_its_artist">Each name opens its artist</string>
     <string name="one_tap_asks_which">One tap asks which</string>
     <string name="a_tap_between_names_still_asks">A tap between them still asks</string>
+    <string name="sample_artist_one">Ava Lune</string>
+    <string name="sample_artist_two">Kite</string>
+    <string name="sample_artist_three">Mira</string>
+    <string name="opens_artist_page">→ %1$s</string>
     <string name="already_has_this_song">Already has this song</string>
     <string name="already_has_all_of_these">Already has all of these</string>
     <string name="already_has_n_of_these">Already has %1$d of these %2$d</string>
