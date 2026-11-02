@@ -89,19 +89,63 @@ class CountedPlays(override val sources: List<ImportSource>, private val d: Coun
  * What the mixes, radio and Quick picks learn from (1.8.1): Prism's own plays, and the imported ones once they're
  * matched to songs, when "Imported plays shape your mixes" is on. One seam: every recommendation reads plays here.
  */
-class TasteHistory(private val prism: PlayEventDao, private val counted: CountedPlayDao, private val imported: () -> List<ImportSource>) {
+class TasteHistory(
+    private val prism: PlayEventDao,
+    private val counted: CountedPlayDao,
+    private val imported: () -> List<ImportSource>,
+    /** More to learn from that isn't plays (Spotify's top songs and artists, 1.8.1); null when there's none. */
+    private val boost: () -> TasteBoost? = { null },
+) {
     private fun origins(): List<String>? = imported().takeIf { it.isNotEmpty() }?.let { listOf(CountedPlays.PRISM) + it.map { s -> s.key } }
 
     suspend fun tasteEventsSince(since: Long): List<PlayEventEntity> =
         origins()?.let { counted.tasteEventsSince(it, since) } ?: prism.tasteEventsSince(since)
 
-    suspend fun tasteTopSongs(from: Long, to: Long, limit: Int): List<SongPlays> =
-        origins()?.let { counted.tasteTopSongs(it, from, to, limit) } ?: prism.tasteTopSongs(from, to, limit)
+    suspend fun tasteTopSongs(from: Long, to: Long, limit: Int): List<SongPlays> {
+        val plays = origins()?.let { counted.tasteTopSongs(it, from, to, limit) } ?: prism.tasteTopSongs(from, to, limit)
+        val more = boost()?.let { b -> runCatching { b.songs() }.getOrNull() }.orEmpty()
+        return if (more.isEmpty()) plays else TasteBoost.mergeSongs(plays, more, limit)
+    }
 
-    suspend fun tasteTopArtists(from: Long, to: Long, limit: Int): List<ArtistPlays> =
-        origins()?.let { counted.tasteTopArtists(it, from, to, limit) } ?: prism.tasteTopArtists(from, to, limit)
+    suspend fun tasteTopArtists(from: Long, to: Long, limit: Int): List<ArtistPlays> {
+        val plays = origins()?.let { counted.tasteTopArtists(it, from, to, limit) } ?: prism.tasteTopArtists(from, to, limit)
+        val more = boost()?.let { b -> runCatching { b.artists() }.getOrNull() }.orEmpty()
+        return if (more.isEmpty()) plays else TasteBoost.mergeArtists(plays, more, limit)
+    }
 
     /** Changes whenever there are new plays to learn from (a snapshot's "anything new?" check). */
     suspend fun changeCount(now: Long): Int =
-        prism.count(0, now) + (origins()?.let { o -> counted.matchedCount(o.drop(1), 0, now) } ?: 0)
+        prism.count(0, now) + (origins()?.let { o -> counted.matchedCount(o.drop(1), 0, now) } ?: 0) + (boost()?.version() ?: 0)
+}
+
+/**
+ * Songs and artists the listener is into by another app's measure (Spotify's top items), counted as if they had been
+ * played: added to the plays' own numbers, so a song both played here and in Spotify's top climbs, and one only in
+ * the top joins the list.
+ */
+interface TasteBoost {
+    suspend fun songs(): List<SongPlays>
+    suspend fun artists(): List<ArtistPlays>
+    /** Changes when what it says does. */
+    fun version(): Int
+
+    companion object {
+        fun mergeSongs(plays: List<SongPlays>, more: List<SongPlays>, limit: Int): List<SongPlays> {
+            val byId = LinkedHashMap<String, SongPlays>()
+            plays.forEach { byId[it.songId] = it }
+            more.forEach { m -> byId[m.songId] = byId[m.songId]?.let { it.copy(plays = it.plays + m.plays, ms = it.ms + m.ms) } ?: m }
+            return byId.values.sortedWith(compareByDescending<SongPlays> { it.ms }.thenByDescending { it.plays }).take(limit)
+        }
+
+        fun mergeArtists(plays: List<ArtistPlays>, more: List<ArtistPlays>, limit: Int): List<ArtistPlays> {
+            fun k(a: ArtistPlays) = ImportKeys.norm(a.artistName)
+            val byName = LinkedHashMap<String, ArtistPlays>()
+            plays.forEach { byName[k(it)] = it }
+            more.forEach { m ->
+                val key = k(m)
+                byName[key] = byName[key]?.let { it.copy(plays = it.plays + m.plays, ms = it.ms + m.ms, thumbnail = it.thumbnail ?: m.thumbnail) } ?: m
+            }
+            return byName.values.sortedByDescending { it.ms }.take(limit)
+        }
+    }
 }

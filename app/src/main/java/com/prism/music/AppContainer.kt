@@ -507,6 +507,12 @@ class AppContainer(val app: Application) {
      */
     val imports by lazy { com.prism.music.data.imports.HistoryImports(this) }
 
+    /**
+     * The optional Spotify connection (1.8.1): Spotify's official Web API through the listener's own developer app.
+     * Made when first asked (Settings, the mixes' taste); never connected, it only reads its own preferences.
+     */
+    val spotify by lazy { com.prism.music.data.spotify.Spotify(this) }
+
     /** Prism Connect: playback moving between Prism devices on the same Wi-Fi. */
     val handoff by lazy { com.prism.music.connect.Handoff(app, this) }
     init {

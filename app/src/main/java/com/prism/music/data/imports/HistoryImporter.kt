@@ -35,7 +35,8 @@ class HistoryImporter(private val db: PrismDatabase) {
         suspend fun add(p: ParsedPlay) {
             read++
             val key = ImportKeys.songKey(p.title, p.artist)
-            if (source != ImportSource.SPOTIFY) {
+            // Prism's plays go to YouTube's history and Last.fm, never to Spotify's.
+            if (source != ImportSource.SPOTIFY && source != ImportSource.SPOTIFY_LIVE) {
                 val index = prism ?: PrismIndex.of(db).also { prism = it }
                 if (index.absorbs(p, key)) { dropped++; return }
             }

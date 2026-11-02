@@ -80,6 +80,12 @@ class HistoryImports(private val c: AppContainer) {
      */
     fun keptLikes(): Set<String> = prefs.getStringSet(KEPT_LIKES, emptySet()).orEmpty()
 
+    /**
+     * Likes [songs] here as imported likes are (the account too only when "like on the account" is on; else kept in
+     * Prism): Spotify's Liked Songs both ways (1.8.1) uses it.
+     */
+    suspend fun likeImported(songs: List<Song>) = hands.like(songs)
+
     private fun keepLikes(ids: Collection<String>) {
         if (ids.isEmpty()) return
         synchronized(this) { prefs.edit().putStringSet(KEPT_LIKES, keptLikes() + ids).apply() }
@@ -98,7 +104,7 @@ class HistoryImports(private val c: AppContainer) {
         if (sources.isEmpty()) PrismPlays(c.db.plays()) else CountedPlays(sources.sortedBy { it.ordinal }, c.db.counted(), c.db.plays())
 
     /** Plays the recommendations learn from ([TasteHistory]). */
-    val taste = TasteHistory(c.db.plays(), c.db.counted()) { if (_teach.value) ImportSource.entries else emptyList() }
+    val taste = TasteHistory(c.db.plays(), c.db.counted(), { if (_teach.value) ImportSource.entries else emptyList() }) { c.spotify.taste() }
 
     val summaries: Flow<List<com.prism.music.data.db.ImportSummary>> = c.db.imports().summariesFlow()
     val statuses: Flow<List<com.prism.music.data.db.StatusCount>> = c.db.imports().statusFlow()
@@ -138,7 +144,7 @@ class HistoryImports(private val c: AppContainer) {
                         library += r.library; kinds += r.kinds; skipped += r.skippedFiles
                     }
                     ImportSource.TAKEOUT -> if (TakeoutHistory.read(nameOf(u), s, count)) kinds += FileKind.TAKEOUT_HISTORY else skipped++
-                    ImportSource.LASTFM -> Unit
+                    ImportSource.LASTFM, ImportSource.SPOTIFY_LIVE -> Unit
                 }
             }
         }
@@ -178,12 +184,14 @@ class HistoryImports(private val c: AppContainer) {
                                     .let { library += it.library }
                             }
                             ImportSource.TAKEOUT -> if (choice.history) TakeoutHistory.read(nameOf(u), s, batched(sink, plays) { runBlocking { drain() } })
-                            ImportSource.LASTFM -> Unit
+                            ImportSource.LASTFM, ImportSource.SPOTIFY_LIVE -> Unit
                         }
                     }
                     drain()
                 }
                 val stats = session.finish()
+                // Plays the Spotify connection read live that this download has too count once (the download's).
+                if (source == ImportSource.SPOTIFY) runCatching { c.db.spotify().dropLiveTwins(com.prism.music.data.spotify.SpotifyRecent.TWIN_MS) }
                 if (!library.isEmpty) addLibrary(library, choice.library)
                 afterImport()
                 AudioDiagnostics.log("imports", "${source.key}: $stats")
