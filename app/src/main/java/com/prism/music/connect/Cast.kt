@@ -427,8 +427,9 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
         val first = TvCast.build(p, 1, p.currentPosition, c.queue.source.value.title)
         if (first.state.index < 0) { _events.tryEmit(tr(R.string.this_song_is_a_file_on)); return }
         _state.value = CastState.Connecting(r)
-        scope.launch {
-            val (link, why) = withContext(Dispatchers.IO) { c.handoff.openFollow(d, first.state) }
+        tvConnecting = scope.launch {
+            // Not cut off halfway (a connection it made would be left open): stopped meanwhile, it's closed below.
+            val (link, why) = withContext(Dispatchers.IO + NonCancellable) { c.handoff.openFollow(d, first.state) }
             if (state.value != CastState.Connecting(r)) { link?.let { l -> c.scope.launch(Dispatchers.IO) { l.close() } }; return@launch }
             if (link == null) {
                 _state.value = CastState.Idle
@@ -445,9 +446,14 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
             hooks?.remoteChanged()
             _state.value = CastState.Casting(r, null)
             t.start()
+            // What plays now and where: the first state was made before the connection (and any pairing's code).
+            t.resync()
             Log.i(TAG, "playing on ${d.name} (Prism TV)")
         }
     }
+
+    /** A Prism TV being connected to (its pairing code may be being asked for): stopped, it's let go. */
+    private var tvConnecting: Job? = null
 
     private fun onTvChanged() {
         val t = tv ?: return
@@ -485,6 +491,14 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
      */
     fun disconnect(message: String? = null, keepPlaying: Boolean = false) {
         tv?.let { t -> endTv(t, message, keepPlaying || message == null); return }
+        // Still connecting to a Prism TV: its pairing code isn't asked for any more, and the connection's let go.
+        if ((state.value as? CastState.Connecting)?.renderer?.kind == RendererKind.PRISM_TV) {
+            tvConnecting?.cancel()
+            tvConnecting = null
+            c.handoff.submitCode(null)
+            _state.value = CastState.Idle
+            return
+        }
         val s = session
         if (s == null) {
             if (state.value is CastState.Connecting) _state.value = CastState.Idle

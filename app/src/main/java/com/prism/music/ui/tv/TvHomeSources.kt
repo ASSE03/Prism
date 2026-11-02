@@ -48,13 +48,32 @@ import java.util.Calendar
 /** What the rows were last, for this run of Prism (coming back to Home shows them at once). */
 internal object TvHomeOwn {
     @Volatile var picks: List<Song>? = null
+    /** [picks] were made with YouTube's own Quick picks (not from your listening alone, before the shelves came). */
+    @Volatile var picksWithShelves = false
     @Volatile var yours: YourMusic.Sections? = null
     @Volatile var replay: TvReplay? = null
     @Volatile var moods: List<MoodItem>? = null
     @Volatile var genres: List<Pair<String, List<Song>>>? = null
+    private var account: String? = null
+    private var known = false
 
     /** Signing out: nothing of the account's is kept (its Quick picks, its moods). */
-    fun clear() { picks = null; yours = null; replay = null; moods = null; genres = null }
+    @Synchronized fun clear() { picks = null; picksWithShelves = false; yours = null; replay = null; moods = null; genres = null }
+
+    /**
+     * Home shows [now]'s rows (null: signed out). Another account than the last (signed in with the phone, switched):
+     * the last one's rows go, so one account never sees another's. True when they went.
+     */
+    @Synchronized fun forAccount(now: String?): Boolean {
+        val changed = known && now != account
+        account = now
+        known = true
+        if (changed) clear()
+        return changed
+    }
+
+    /** Quick picks are made (again): none yet, or made before YouTube's shelves came, and they're here now. */
+    fun picksDue(shelvesNow: Boolean): Boolean = picks == null || (!picksWithShelves && shelvesNow)
 }
 
 /**
@@ -102,7 +121,10 @@ internal fun TvHolidayAhead(seasonal: com.prism.music.data.seasonal.SeasonalMixe
 internal fun rememberTvOwnRows(
     c: AppContainer, settings: AppSettings, online: Boolean, recent: List<Song>,
     shelves: List<com.prism.music.data.model.Shelf> = emptyList(), owner: String? = null,
+    /** The account signed in (null: none): another than last time, and the last one's rows go. */
+    account: String? = null,
 ): List<TvOwnRow> {
+    TvHomeOwn.forAccount(account)
     val stored = settings.tv.homeLayout
     val phone = settings.homeLayout
     fun want(k: String) = TvHomeLayout.isShown(k, stored, phone, settings.autoAddSections)
@@ -115,12 +137,15 @@ internal fun rememberTvOwnRows(
     val youtubePicks = remember(shelves, owner) {
         shelves.quickPicks(owner)?.items?.filterIsInstance<com.prism.music.data.model.SongItem>()?.map { it.song }.orEmpty()
     }
-    val picks by produceState(TvHomeOwn.picks, wantPicks, youtubePicks.isNotEmpty() || recent.isNotEmpty()) {
-        if (!wantPicks || TvHomeOwn.picks != null || (youtubePicks.isEmpty() && recent.isEmpty())) return@produceState
+    // Made again for another account, and once YouTube's shelves come if they were first made without them.
+    val picks by produceState(TvHomeOwn.picks, wantPicks, youtubePicks.isNotEmpty(), recent.isNotEmpty(), account) {
+        value = TvHomeOwn.picks
+        if (!wantPicks || !TvHomeOwn.picksDue(youtubePicks.isNotEmpty()) || (youtubePicks.isEmpty() && recent.isEmpty())) return@produceState
+        val withShelves = youtubePicks.isNotEmpty()
         val made = withContext(Dispatchers.IO) {
             runCatching { c.yourMusic.quickPicks(youtubePicks, radioOf = { seed: Song -> c.ytm.next(seed.id, playlistId = "RDAMVM${seed.id}").songs }) }.getOrNull()
         }
-        if (!made.isNullOrEmpty()) { value = made; TvHomeOwn.picks = made }
+        if (!made.isNullOrEmpty()) { value = made; TvHomeOwn.picks = made; TvHomeOwn.picksWithShelves = withShelves }
     }
 
     // The season's holiday mixes (November and December), online as on the phone. Their covers are drawn once, off the
@@ -141,7 +166,7 @@ internal fun rememberTvOwnRows(
     val mixes by c.forYou.mixes.collectAsState()
     // Made when due (once a day, the time-of-day one as the day moves on), on the app's scope as the phone does.
     LaunchedEffect(wantMixes) { if (wantMixes) c.scope.launch { runCatching { c.forYou.refresh() } } }
-    val yours by produceState(TvHomeOwn.yours, wantYours, lastPlayed, online) {
+    val yours by produceState(TvHomeOwn.yours, wantYours, lastPlayed, online, account) {
         if (!wantYours) return@produceState
         runCatching { c.yourMusic.sections(offlineOnly = !online) }.getOrNull()?.let { value = it; TvHomeOwn.yours = it }
     }
@@ -157,7 +182,7 @@ internal fun rememberTvOwnRows(
 
     // The Replay card.
     val wantReplay = want(HomeSections.REPLAY)
-    val replay by produceState(TvHomeOwn.replay, wantReplay, lastPlayed) {
+    val replay by produceState(TvHomeOwn.replay, wantReplay, lastPlayed, account) {
         if (!wantReplay) return@produceState
         val have = TvHomeOwn.replay
         if (have != null && System.currentTimeMillis() - have.at < REPLAY_FRESH_MS) return@produceState
@@ -166,7 +191,8 @@ internal fun rememberTvOwnRows(
 
     // Moods & genres (online).
     val wantMoods = online && want(HomeSections.MOODS)
-    val moods by produceState(TvHomeOwn.moods, wantMoods) {
+    val moods by produceState(TvHomeOwn.moods, wantMoods, account) {
+        value = TvHomeOwn.moods
         if (!wantMoods || TvHomeOwn.moods != null) return@produceState
         withContext(Dispatchers.IO) { runCatching { c.taste.rank(c.ytm.moodsAndGenres()).picks }.getOrNull() }?.let { value = it; TvHomeOwn.moods = it }
     }
@@ -193,7 +219,9 @@ internal fun rememberTvOwnRows(
     val own = ownKeys.mapNotNull { k ->
         key(k) {
             val songs by OwnSections.rememberSongs(k, 0)
-            tvSongRow(k, tvRowTitle(phone, k), songs.filter(offline))
+            // Offline, each song is looked up in the downloads: once per change, not on every redraw.
+            val playable = remember(songs, online, dls.size) { songs.filter(offline) }
+            tvSongRow(k, tvRowTitle(phone, k), playable)
         }
     }
 

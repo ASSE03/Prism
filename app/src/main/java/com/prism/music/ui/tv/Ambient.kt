@@ -44,8 +44,33 @@ object Idle {
         listeners.forEach { it() }
     }
 
+    /** Coming back to Prism counts as the remote in hand: the quiet starts over (the ambient screen waits again). */
+    fun reset() { lastInput = System.currentTimeMillis() }
+
+    /** Pages that keep the ambient screen away while they're open ([HoldsAmbient]): pairing, typing a search. */
+    @Volatile var holds = 0
+        private set
+
+    @Synchronized internal fun hold(on: Boolean) {
+        holds = (holds + if (on) 1 else -1).coerceAtLeast(0)
+        // Let go: the quiet counts from now.
+        if (!on) reset()
+    }
+
     internal fun listen(l: () -> Unit) = listeners.add(l)
     internal fun stop(l: () -> Unit) = listeners.remove(l)
+}
+
+/**
+ * Keeps the ambient screen away while this is shown (it'd take the page's place: a pairing page closed, a search being
+ * typed on the TV's keyboard, whose keys don't come through Prism, lost).
+ */
+@Composable
+fun HoldsAmbient() {
+    androidx.compose.runtime.DisposableEffect(Unit) {
+        Idle.hold(true)
+        onDispose { Idle.hold(false) }
+    }
 }
 
 /** How often the ambient screen checks the time since the last input. */
@@ -115,10 +140,20 @@ fun AmbientHost(onTv: Boolean, content: (@Composable () -> Unit)? = null) {
         Idle.listen(l)
         onDispose { Idle.stop(l) }
     }
+    // The quiet only counts while Prism is on screen: away from it (another app, the TV's home) and back, it starts over
+    // (the release check: the ambient screen came up the moment Prism was back).
+    val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
+    androidx.compose.runtime.DisposableEffect(lifecycle) {
+        val o = androidx.lifecycle.LifecycleEventObserver { _, e -> if (e == androidx.lifecycle.Lifecycle.Event.ON_START) Idle.reset() }
+        lifecycle.addObserver(o)
+        onDispose { lifecycle.removeObserver(o) }
+    }
     LaunchedEffect(allowed, playing, settings.tv.ambientMinutes, input) {
         if (!allowed || !playing) { shown = false; return@LaunchedEffect }
         while (true) {
-            if (ambientDue(true, true, settings.tv.ambientMinutes, System.currentTimeMillis() - Idle.lastInput)) { shown = true; break }
+            val here = lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.STARTED)
+            if (here && Idle.holds == 0 && ambientDue(true, true, settings.tv.ambientMinutes, System.currentTimeMillis() - Idle.lastInput)) { shown = true; break }
+            if (!here || Idle.holds > 0) Idle.reset()
             delay(CHECK_MS)
         }
     }

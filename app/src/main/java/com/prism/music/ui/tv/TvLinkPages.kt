@@ -33,6 +33,8 @@ fun TvPairPage(signIn: Boolean, nav: TvNav, onDone: () -> Unit = { nav.back() })
     val handoff = c.handoff
     val first = remember { handoff.openPairing() }
     DisposableEffect(Unit) { onDispose { handoff.closePairing() } }
+    // The ambient screen would take this page's place, and closing it closes the pairing.
+    HoldsAmbient()
     // A new code after every try (on screen and in the QR code); once a phone has paired none is taken, and the last
     // one stays on screen.
     val inForce by handoff.tvCode.collectAsState()

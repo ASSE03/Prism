@@ -82,7 +82,7 @@ fun TvSettingsScreen(
         val firstSetting = androidx.compose.runtime.remember { androidx.compose.ui.focus.FocusRequester() }
         LazyColumn(
             Modifier.weight(1f).fillMaxHeight().tvGlass(TvShapes.panelStart).padding(20.dp)
-                .focusProperties { onEnter = { firstSetting.requestFocus() } }.focusGroup(),
+                .focusProperties { onEnter = { if (byDpad()) firstSetting.requestFocus() } }.focusGroup(),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             itemsIndexed(settings) { i, s ->

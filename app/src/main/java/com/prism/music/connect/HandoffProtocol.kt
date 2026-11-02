@@ -85,6 +85,11 @@ data class FollowState(
     val seq: Long = 0,
     val repeatOne: Boolean = false,
     val title: String = "",
+    /**
+     * The last of the TV's own [TvAct]s ([TvAct.n]) the phone had taken in when it sent this: one sent before the
+     * TV's latest act is out of date and the TV doesn't take it.
+     */
+    val acts: Long = 0,
 )
 
 /** What the TV says back, about once a second: the song it's on and where, as of when it sent it. */
@@ -113,6 +118,8 @@ data class TvAct(
     val index: Int = -1,
     val songId: String? = null,
     val songs: List<Song> = emptyList(),
+    /** Counts the TV's acts up from 1, for the phone to say which it has taken in ([FollowState.acts]). */
+    val n: Long = 0,
 ) {
     companion object {
         const val PLAY = "play"

@@ -128,7 +128,7 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
     // Every phone Home section the TV can show, from the same places the phone reads them (TvHomeSources): Prism's
     // mixes, your own lists, the Replay card, moods, tiles, pins… Only the rows Home shows are worked out.
     val online by c.network.online.collectAsState()
-    val own = rememberTvOwnRows(c, settings, online, recent, shelves, owner)
+    val own = rememberTvOwnRows(c, settings, online, recent, shelves, owner, account)
     val plays = remember(own) { own.flatMap { it.plays.entries }.associate { it.key to it.value } }
     val arranged = remember(shelves, recent, mostPlayed, owner, settings.tv.homeLayout, phoneLayout, own, settings.autoAddSections) {
         // A row Prism makes itself takes the place of YouTube's of the same kind (its Quick picks, made as the phone's).
@@ -137,11 +137,13 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
         TvHomeLayout.arrange(settings.tv.homeLayout, tvAllRows(own.map { it.row } + youtube), phoneLayout, settings.autoAddSections)
     }
     val rows = arranged.rows
-    val now = rememberTvNow(c)
+    // The song only, not its progress (which moves twice a second): Home's rows aren't worked out again as it plays;
+    // only the hero, which shows the progress, follows it (TvHomeNow below).
+    val playingSong by c.player.currentSong.collectAsState()
     // What Home shows, for the editor's Up and Down.
-    val heroOn = arranged.heroAt >= 0 && now != null
+    val heroOn = arranged.heroAt >= 0 && playingSong != null
     LaunchedEffect(arranged, heroOn) { TvHomeOnHome.keys = arranged.rows.map { it.key }.toSet() + if (heroOn) setOf(TvHomeLayout.HERO) else emptySet() }
-    val accent = rememberTvAccent(now?.art)
+    val accent = rememberTvAccent(playingSong?.thumbnail)
     // Updates on the TV (plan §2): the same banner and installer as the phone (Android asks once to allow installs).
     val update by c.updates.available.collectAsState()
     val progress by c.updates.progress.collectAsState()
@@ -152,7 +154,7 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
     }
     // Made once per change of rows, not on each tick of the progress (or every row would redraw twice a second).
     val tvShelves = remember(rows) { rows.map { r -> TvShelf(r.title, r.items.map { it.toTvItem() }) } }
-    TvHomeScreen(
+    TvHomeNow { now -> TvHomeScreen(
         greeting, now, tvShelves,
         onPlayPause = { c.player.togglePlay() },
         onOpenPlayer = { nav.go(TvRoute.Player) },
@@ -182,7 +184,16 @@ fun TvHomePlace(nav: TvNav, onSearch: () -> Unit) {
         onSearch = onSearch,
         heroAt = arranged.heroAt,
         onCustomize = { nav.go(TvRoute.HomeEditor) },
-    )
+    ) }
+}
+
+/**
+ * What's playing, with its progress, for [content] alone: the progress moves twice a second, and only what's drawn
+ * here is drawn again for it (the release check: Home's rows, with their offline checks, were worked out each time).
+ */
+@Composable
+private fun TvHomeNow(content: @Composable (TvNow?) -> Unit) {
+    content(rememberTvNow(LocalContainer.current))
 }
 
 /**
@@ -306,7 +317,9 @@ internal fun androidx.compose.foundation.layout.BoxScope.TvPanel(name: String, o
         Box(
             Modifier.matchParentSize().onPreviewKeyEvent { e ->
                 if (e.type == KeyEventType.KeyDown && e.key == Key.DirectionLeft) { onClose(); true } else false
-            },
+            }
+                // Up or Down past its ends stays in it: the player's controls behind it are out of reach.
+                .tvHoldsFocus(),
         ) { content() }
     }
 }

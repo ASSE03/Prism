@@ -46,7 +46,7 @@ class TvFollowLinkTest {
             link.send(HMsg.Where(TvWhere(first.songs[first.index].id, 12_000, playing = true, volume = 40, seq = first.seq)))
             while (true) {
                 when (val m = link.read() ?: break) {
-                    is HMsg.FollowNow -> { states += m.state; link.send(HMsg.Act(TvAct(TvAct.PAUSE))) }
+                    is HMsg.FollowNow -> { states += m.state; link.send(HMsg.Act(TvAct(TvAct.PAUSE, n = states.size.toLong() - 1))) }
                     is HMsg.FollowEnd -> { back = m.back; break }
                     else -> Unit
                 }
@@ -79,7 +79,12 @@ class TvFollowLinkTest {
             assertEquals(40, where.at.volume)
             // The phone moves on: the TV has it, and pauses from its own remote, which comes back.
             assertTrue(link.send(HMsg.FollowNow(first.copy(index = 3, seekTo = -1, seq = 2))))
-            assertEquals(TvAct.PAUSE, (link.read() as HMsg.Act).act.kind)
+            val act = (link.read() as HMsg.Act).act
+            assertEquals(TvAct.PAUSE, act.kind)
+            // The act's number, said back with the next state (the TV doesn't take states from before it).
+            assertEquals(1L, act.n)
+            assertTrue(link.send(HMsg.FollowNow(first.copy(index = 3, seekTo = -1, seq = 3, acts = act.n))))
+            link.read()
             // Stopped from the phone: the music comes back to it.
             link.send(HMsg.FollowEnd(back = true))
             assertTrue(tv.ended.await(5, TimeUnit.SECONDS))
@@ -90,11 +95,12 @@ class TvFollowLinkTest {
         }
         assertEquals(listOf("Davis's Pixel"), tv.from.toList())
         assertEquals(true, tv.back)
-        assertEquals(2, tv.states.size)
+        assertEquals(3, tv.states.size)
         // What the TV was handed is what the phone sent (the TV cleans it again itself, TvSync.cleaned).
         assertEquals(listOf(ids[0], "local:7", ids[1], ids[2]), tv.states[0].songs.map { it.id })
         assertEquals(42_000L, tv.states[0].seekTo)
         assertEquals(3, tv.states[1].index)
+        assertEquals(1L, tv.states[2].acts)
     }
 
     @Test fun onlyATvPlaysAlong() {

@@ -38,6 +38,7 @@ import com.prism.music.R
 import com.prism.music.data.model.BrowseItem
 import com.prism.music.tr
 import com.prism.music.ui.theme.PrismIcons
+import kotlinx.coroutines.launch
 
 /** Prism TV's top-level places, in the side navigation's order. */
 enum class TvSection(val label: () -> String, val icon: () -> ImageVector) {
@@ -132,7 +133,9 @@ fun TvRoot(link: kotlinx.coroutines.flow.MutableStateFlow<android.net.Uri?> = re
             val uri = pending ?: return@LaunchedEffect
             link.value = null
             when (val l = tvLinkFor(uri)) {
-                is TvLink.Song -> { nav.go(TvRoute.Player); TvPlay.single(c, l.id) }
+                // On the app's scope: clearing the link above starts this effect again, which cancelled the song's play
+                // halfway (the player said "One moment", then went back).
+                is TvLink.Song -> { nav.go(TvRoute.Player); c.scope.launch(kotlinx.coroutines.Dispatchers.Main) { TvPlay.single(c, l.id) } }
                 is TvLink.Page -> nav.go(l.route)
                 null -> Unit
             }

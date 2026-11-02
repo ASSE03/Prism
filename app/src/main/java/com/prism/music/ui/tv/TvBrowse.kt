@@ -14,6 +14,12 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -186,9 +192,11 @@ private fun TvSearchInput(query: String, onQueryChange: (String) -> Unit, onSubm
     val keyboard = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
     androidx.compose.runtime.LaunchedEffect(Unit) { runCatching { focus.requestFocus() }; keyboard?.show() }
     androidx.activity.compose.BackHandler { onStop() }
+    // Typing goes to the TV's keyboard, not through Prism: no ambient screen over a search being typed.
+    HoldsAmbient()
     androidx.compose.foundation.text.BasicTextField(
         value = query,
-        onValueChange = onQueryChange,
+        onValueChange = { Idle.touched(); onQueryChange(it) },
         singleLine = true,
         textStyle = MaterialTheme.typography.titleMedium.copy(color = scheme.onSurface),
         cursorBrush = androidx.compose.ui.graphics.SolidColor(scheme.primary),
@@ -297,7 +305,20 @@ fun TvCollectionScreen(
     val target = collectionEntry(last, playing, songs.size)
     val into = androidx.compose.runtime.remember { androidx.compose.ui.focus.FocusRequester() }
     val list = androidx.compose.foundation.lazy.rememberLazyListState(initialFirstVisibleItemIndex = (playing - 1).coerceIn(0, (songs.size - 1).coerceAtLeast(0)))
-    val down = Modifier.focusProperties { if (songs.isNotEmpty()) down = into }
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    // The row to go to may not be drawn yet (a long list, made before its songs came, opens at the top): it's scrolled
+    // to first, then focused (Down from Play did nothing, the release check).
+    val goIn: () -> Unit = goIn@{
+        if (songs.isEmpty() || target < 0) return@goIn
+        if (runCatching { into.requestFocus() }.getOrDefault(false)) return@goIn
+        scope.launch {
+            list.scrollToItem(target)
+            repeat(20) { if (runCatching { into.requestFocus() }.getOrDefault(false)) return@launch; kotlinx.coroutines.delay(16) }
+        }
+    }
+    val down = Modifier
+        .onPreviewKeyEvent { e -> if (e.type == KeyEventType.KeyDown && e.key == Key.DirectionDown && songs.isNotEmpty()) { goIn(); true } else false }
+        .focusProperties { if (songs.isNotEmpty()) down = into }
     Box(modifier.fillMaxSize()) {
     TvPictureBackdrop(art)
     Row(Modifier.fillMaxSize().padding(TvSafe).testTag(TAG_COLLECTION)) {
@@ -314,7 +335,9 @@ fun TvCollectionScreen(
         }
         Spacer(Modifier.width(48.dp))
         LazyColumn(
-            Modifier.weight(1f).focusProperties { onEnter = { if (songs.isNotEmpty()) into.requestFocus() } }.focusGroup().testTag("$TAG_COLLECTION/songs"),
+            Modifier.weight(1f).focusProperties {
+                onEnter = { if (byDpad() && songs.isNotEmpty() && !runCatching { into.requestFocus() }.getOrDefault(false)) { cancelFocusChange(); goIn() } }
+            }.focusGroup().testTag("$TAG_COLLECTION/songs"),
             state = list, verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             itemsIndexed(songs) { i, s ->

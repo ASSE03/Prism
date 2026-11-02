@@ -459,9 +459,13 @@ fun TvLyricsPlace(
     // Back to following the song: the lines take focus back (the chip or the timing may have had it).
     val follow: () -> Unit = { picked = null; runCatching { linesFocus.requestFocus() } }
     androidx.activity.compose.BackHandler(enabled = picked != null && !timing) { follow() }
+    // "Back to now" has focus: the release check found it taken away with focus on it when the pick ran out.
+    var nowFocused by remember { mutableStateOf(false) }
     LaunchedEffect(picked, lastKey) {
         if (picked == null) return@LaunchedEffect
         delay(TV_PICK_RETURN_MS)
+        // The button goes with the pick: focus onto the lines first, never left on nothing.
+        if (nowFocused) runCatching { linesFocus.requestFocus() }
         picked = null
     }
     if (lines.isEmpty()) {
@@ -538,7 +542,10 @@ fun TvLyricsPlace(
                     Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
                         // Fading out, they can't take focus.
                         val canFocus = Modifier.focusProperties { canFocus = chrome }
-                        if (picked != null) TvButton(tr(R.string.tv_back_to_now), follow, canFocus.tvItem("$TAG_LYRICS/now"), icon = com.prism.music.ui.theme.PrismIcons.Lyrics)
+                        if (picked != null) TvButton(
+                    tr(R.string.tv_back_to_now), follow,
+                    canFocus.onFocusChanged { nowFocused = it.isFocused }.tvItem("$TAG_LYRICS/now"), icon = com.prism.music.ui.theme.PrismIcons.Lyrics,
+                )
                         buttons()
                         TvButton(tr(R.string.lyrics_timing), { timing = true }, canFocus.tvItem("$TAG_LYRICS/timing"), icon = com.prism.music.ui.theme.PrismIcons.Timer)
                     }
@@ -676,7 +683,8 @@ fun TvSongLyrics(onGone: () -> Unit, overVideo: Boolean = false) {
     val s = song
     if (s == null || now == null) { TvStarting(onGone); return }
     val state = com.prism.music.ui.player.rememberLyricsState(s)
-    val clock = com.prism.music.ui.player.rememberLyricClock(now.playing)
+    // Always running (it idles while paused): a seek while paused still moves the lines (the release check).
+    val clock = com.prism.music.ui.player.rememberLyricClock(true)
     val accent = rememberTvAccent(now.art)
     val lines = state.lines
     val current by remember(lines) { androidx.compose.runtime.derivedStateOf { com.prism.music.playback.CarLyricsCard.lineAt(lines, clock.value).coerceAtLeast(0) } }

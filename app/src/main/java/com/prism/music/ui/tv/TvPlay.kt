@@ -29,7 +29,13 @@ object TvPlay {
 
     /** A station or mix: it only exists as a watch queue, started here (as on the phone; a station can open on a live stream). */
     suspend fun mix(c: AppContainer, mix: PlaylistItem): Boolean {
-        val r = runCatching { withContext(Dispatchers.IO) { c.radio(mix.seedVideoId, mix.id, mix.params, keepFirst = true) } }.getOrNull()
+        val r = try {
+            withContext(Dispatchers.IO) { c.radio(mix.seedVideoId, mix.id, mix.params, keepFirst = true) }
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            null
+        }
         if (r == null || r.songs.isEmpty()) return false
         val first = r.songs.first()
         val live = first.isLive || withContext(Dispatchers.IO) {
@@ -41,8 +47,20 @@ object TvPlay {
         return true
     }
 
+    /**
+     * [block]'s answer, or false when it failed; but a cancellation (the page left, a new pick) goes on up rather than
+     * counting as a failure ("Couldn't start" was said for a play that was only cancelled).
+     */
+    internal suspend fun tried(block: suspend () -> Boolean): Boolean = try {
+        block()
+    } catch (e: kotlinx.coroutines.CancellationException) {
+        throw e
+    } catch (_: Exception) {
+        false
+    }
+
     /** An album or playlist from its first song, or shuffled. */
-    suspend fun collection(c: AppContainer, item: BrowseItem, shuffle: Boolean = false, from: Int = 0): Boolean = runCatching {
+    suspend fun collection(c: AppContainer, item: BrowseItem, shuffle: Boolean = false, from: Int = 0): Boolean = tried tried@{
         val (kind, songs) = withContext<Pair<QueueKind, List<com.prism.music.data.model.Song>>?>(Dispatchers.IO) {
             when (item) {
                 is AlbumItem -> QueueKind.ALBUM to c.ytm.album(item.id).songs
@@ -51,24 +69,24 @@ object TvPlay {
                     )
                 else -> null
             }
-        } ?: return@runCatching false
-        if (songs.isEmpty()) return@runCatching false
+        } ?: return@tried false
+        if (songs.isEmpty()) return@tried false
         c.player.playQueue(songs, from.coerceIn(0, songs.lastIndex), QueueSource(kind, item.title, originId = item.id, page = item), shuffle = shuffle)
         true
-    }.getOrDefault(false)
+    }
 
     /** An artist, shuffled (YouTube's shuffle of their songs), or their radio ([radio]). */
-    suspend fun artist(c: AppContainer, id: String, radio: Boolean = false): Boolean = runCatching {
+    suspend fun artist(c: AppContainer, id: String, radio: Boolean = false): Boolean = tried tried@{
         val a = withContext(Dispatchers.IO) { c.ytm.artist(id) }
-        val list = (if (radio) a.radioPlaylistId ?: a.shufflePlaylistId else a.shufflePlaylistId ?: a.radioPlaylistId) ?: return@runCatching false
+        val list = (if (radio) a.radioPlaylistId ?: a.shufflePlaylistId else a.shufflePlaylistId ?: a.radioPlaylistId) ?: return@tried false
         val r = withContext(Dispatchers.IO) {
             if (radio) c.radio(a.radioVideoId ?: a.shuffleVideoId, list, a.radioParams ?: a.shuffleParams)
             else c.radio(a.shuffleVideoId ?: a.radioVideoId, list, a.shuffleParams ?: a.radioParams)
         }
-        if (r.songs.isEmpty()) return@runCatching false
+        if (r.songs.isEmpty()) return@tried false
         c.player.playQueue(r.songs, 0, QueueSource(QueueKind.RADIO, if (radio) tr(R.string.mix, a.name) else a.name, originId = id))
         true
-    }.getOrDefault(false)
+    }
 
     /** One song by its id (a link), as the phone plays a link's song: its details from YouTube, then it alone. */
     suspend fun single(c: AppContainer, id: String) {
