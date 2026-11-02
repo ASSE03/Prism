@@ -380,7 +380,11 @@ internal fun ReplayStoryDialog(story: ReplayStory, onDismiss: () -> Unit) {
         // A story is a phone-shaped thing: on a wide window it stays 9:16 in the middle, on black.
         androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxSize().background(Color.Black), contentAlignment = Alignment.Center) {
             val width = minOf(maxWidth, maxHeight * 9f / 16f)
-            Box(Modifier.width(width).fillMaxHeight()) { StoryContent(story, onDismiss) }
+            // #287: in the app's font when "Stories in your font" is on.
+            val own = if (com.prism.music.ui.theme.LocalAppSettings.current.view.replayStoryFont) (androidx.compose.material3.MaterialTheme.typography.displayLarge.fontFamily ?: androidx.compose.ui.text.font.FontFamily.Default) else null
+            Box(Modifier.width(width).fillMaxHeight()) {
+                androidx.compose.runtime.CompositionLocalProvider(LocalStoryFont provides own) { StoryContent(story, onDismiss) }
+            }
         }
     }
 }
@@ -552,14 +556,55 @@ private fun Backdrop(base: Color, c1: Color, c2: Color, c3: Color) {
 
 // ---------------------------------------------------------------- Type and motion
 
-private fun display(size: TextUnit, type: ArtistType = ArtistTypography.condensed) = TextStyle(
-    fontFamily = type.family, fontWeight = type.weight, fontSize = size, lineHeight = size * 0.94f,
-    letterSpacing = type.tracking.em, color = Color.White,
-)
+/**
+ * The app's font for the stories (#287, 1.8.1: "Stories in your font"), or null for Prism's poster type (condensed and
+ * extended display faces, as since 1.7). Provided by [StoryContent] from the settings.
+ */
+internal val LocalStoryFont = androidx.compose.runtime.staticCompositionLocalOf<androidx.compose.ui.text.font.FontFamily?> { null }
 
-private fun kicker(size: TextUnit = 14.sp) = TextStyle(
-    fontFamily = ArtistTypography.extended.family, fontWeight = FontWeight.Black, fontSize = size, letterSpacing = 0.06.em, color = Color.White,
-)
+/**
+ * A slide's big type. In the app's font (#287) it's bold and a touch tighter and smaller (an ordinary face runs wider
+ * than the condensed poster one), with a little more line height than the poster faces need.
+ */
+@Composable
+@androidx.compose.runtime.ReadOnlyComposable
+private fun display(size: TextUnit, type: ArtistType = ArtistTypography.condensed): TextStyle {
+    val own = LocalStoryFont.current ?: return TextStyle(
+        fontFamily = type.family, fontWeight = type.weight, fontSize = size, lineHeight = size * 0.94f,
+        letterSpacing = type.tracking.em, color = Color.White,
+    )
+    return TextStyle(fontFamily = own, fontWeight = FontWeight.Bold, fontSize = size * 0.9f, lineHeight = size, letterSpacing = (-0.02).em, color = Color.White)
+}
+
+/**
+ * A slide's type at a glance, for picking it in Settings (#287): the Minutes slide's words on Replay's colors, in
+ * Prism's poster type or ([own]) the app's font.
+ */
+@Composable
+internal fun StoryTypeSample(own: Boolean, modifier: Modifier = Modifier) {
+    val family = if (own) (androidx.compose.material3.MaterialTheme.typography.displayLarge.fontFamily ?: androidx.compose.ui.text.font.FontFamily.Default) else null
+    androidx.compose.runtime.CompositionLocalProvider(LocalStoryFont provides family) {
+        Column(
+            modifier.fillMaxWidth().height(112.dp).clip(RoundedCornerShape(12.dp)).background(Brush.linearGradient(replayGradient())).padding(12.dp),
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text(tr(R.string.you_listened_for), style = kicker(9.sp), maxLines = 1)
+            Text("1,204", style = display(40.sp), maxLines = 1)
+            Text(tr(R.string.of_music).uppercase(), style = display(16.sp, ArtistTypography.extended), maxLines = 1)
+        }
+    }
+}
+
+/** The small capitals over a slide's figure ("YOU LISTENED FOR"). */
+@Composable
+@androidx.compose.runtime.ReadOnlyComposable
+private fun kicker(size: TextUnit = 14.sp): TextStyle {
+    val own = LocalStoryFont.current
+    return TextStyle(
+        fontFamily = own ?: ArtistTypography.extended.family, fontWeight = if (own != null) FontWeight.SemiBold else FontWeight.Black,
+        fontSize = size, letterSpacing = if (own != null) 0.1.em else 0.06.em, color = Color.White,
+    )
+}
 
 private val body = TextStyle(fontSize = 19.sp, lineHeight = 26.sp, fontWeight = FontWeight.Medium, color = Color.White)
 
@@ -715,12 +760,14 @@ private fun TopArtist(s: ReplayStory, modifier: Modifier) {
         Column(modifier, verticalArrangement = Arrangement.Bottom) {
             Text(tr(R.string.your_top_artist_2), style = kicker(), modifier = Modifier.reveal(300))
             val type = s.topArtistType
+            // In your font (#287) the name is set in it too, at the artist's size, not in their signature's face.
+            val own = LocalStoryFont.current
             Text(
-                if (type.caps) a.artistName.uppercase() else a.artistName,
+                if (type.caps && own == null) a.artistName.uppercase() else a.artistName,
                 style = TextStyle(
-                    fontFamily = type.family, fontWeight = type.weight, fontSize = (type.size * 1.25f).coerceAtMost(72f).sp,
+                    fontFamily = own ?: type.family, fontWeight = if (own != null) FontWeight.Bold else type.weight, fontSize = (type.size * 1.25f).coerceAtMost(72f).sp,
                     lineHeight = (type.size * 1.25f * type.lineHeight).coerceAtMost(72f).sp, letterSpacing = type.tracking.em, color = Color.White,
-                    fontStyle = if (type.italic) androidx.compose.ui.text.font.FontStyle.Italic else androidx.compose.ui.text.font.FontStyle.Normal,
+                    fontStyle = if (type.italic && own == null) androidx.compose.ui.text.font.FontStyle.Italic else androidx.compose.ui.text.font.FontStyle.Normal,
                 ),
                 maxLines = 3, modifier = Modifier.reveal(600),
             )

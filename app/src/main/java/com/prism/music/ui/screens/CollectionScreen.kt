@@ -200,6 +200,8 @@ fun CollectionScreen(type: CollectionType, id: String, initialGenre: String?, bo
         }
     }
     val prismLists by c.prismLibrary.lists.collectAsState()
+    // A Spotify playlist's Prism playlist (1.8.1): kept in step with Spotify as it opens.
+    if (type == CollectionType.PRISM) LaunchedEffect(id) { c.spotify.opened(id) }
     val page: Load<LiveCollection> = when (type) {
         CollectionType.PRISM -> {
             val list = prismLists.firstOrNull { it.id == id }

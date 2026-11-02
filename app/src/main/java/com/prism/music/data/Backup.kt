@@ -308,7 +308,7 @@ class Backup(private val c: AppContainer) {
             listOf(
                 "dislikes", "exclusions", "for_you", "for_you_feedback", "release_radar", "search", "episode_progress", "episode_played", "best_part_mine",
                 "mix_tempo", "song_loudness", "song_peak", "song_key", "dj_quick", "loudness", "lyric_offsets", "lyrics_choice", "lyrics_search_as",
-                "romanize_songs", "video_sync", "local_album_tags", "local_lengths", "local_no_art",
+                "romanize_songs", "video_sync", "local_album_tags", "local_lengths", "local_no_art", "lyrics_word_shift",
                 // 1.8.1: Bring your history's choices (what Replay counts, what shapes the mixes).
                 "imports",
             ).forEach { put(it, BackupPart.HISTORY) }
@@ -318,6 +318,10 @@ class Backup(private val c: AppContainer) {
             ).forEach { put(it, BackupPart.DOWNLOADS) }
             // The Last.fm connection (and its waiting scrobbles) is the listener's account.
             put("lastfm", BackupPart.ACCOUNTS)
+            // 1.8.1: the Spotify connection's Client ID and switches go with the accounts (a Client ID is public in
+            // PKCE); its tokens never travel, as Discord's sign-in doesn't (sealed by a key only this phone has anyway).
+            put(com.prism.music.data.spotify.SpotifyStore.PREFS, BackupPart.ACCOUNTS)
+            put(com.prism.music.data.spotify.SpotifyStore.AUTH_PREFS, null)
             // The Discord sign-in is a key to the whole Discord account; Prism Connect's pairings belong to this phone.
             listOf("discord", "connect_remote", "connect_handoff").forEach { put(it, null) }
             // The song cache's formats describe this phone's cache, which a backup doesn't carry.
@@ -332,6 +336,8 @@ class Backup(private val c: AppContainer) {
             // 1.8.1: imports/ holds the library a data download is still bringing over (its plays are in the database).
             listOf("rewind", "waves", "queue.json", "imports").forEach { put(it, BackupPart.HISTORY) }
             put("account", BackupPart.ACCOUNTS)
+            // What the Spotify connection read (which Prism playlists show which Spotify ones, the likes' sync state).
+            put(com.prism.music.data.spotify.Spotify.DIR, BackupPart.ACCOUNTS)
             listOf("downloads", "canvas_saved").forEach { put(it, BackupPart.DOWNLOADS) }
             // Downloaded data files (models/) can always be downloaded again; stems are made again; staging is a restore's.
             listOf(STAGING, "models", "stems", REDOWNLOAD, RESTORED_SETTINGS).forEach { put(it, null) }

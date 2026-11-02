@@ -61,6 +61,7 @@ object SettingsIndex {
     private val C = SettingsSection.CONNECT
     private val DC = SettingsSection.DISCORD
     private val LF = SettingsSection.LASTFM
+    private val SP = SettingsSection.SPOTIFY
     private val YL = SettingsSection.LYRICS_LOOK
     private val CT = SettingsSection.CONTROLS
     private val DV = SettingsSection.DEVICES
@@ -199,7 +200,8 @@ object SettingsIndex {
         SettingEntry(P, tr(R.string.progress_bar), tr(R.string.progress_bar), tr(R.string.scrubber_seek_bar)),
         SettingEntry(P, tr(R.string.cover), tr(R.string.cover_size), tr(R.string.large_full_width)),
         SettingEntry(P, tr(R.string.cover), tr(R.string.corners), tr(R.string.cover_rounded)),
-        SettingEntry(P, tr(R.string.cover), tr(R.string.full_bleed_artwork), tr(R.string.edge_to_edge) + " " + tr(R.string.full_bleed_video) + " " + tr(R.string.music_video_edge_to_edge_fill)),
+        SettingEntry(P, tr(R.string.cover), tr(R.string.edge_to_edge_cover), tr(R.string.edge_to_edge) + " " + tr(R.string.full_bleed_artwork)),
+        SettingEntry(P, tr(R.string.cover), tr(R.string.edge_to_edge_video), tr(R.string.edge_to_edge) + " " + tr(R.string.full_bleed_video) + " " + tr(R.string.music_video_edge_to_edge_fill)),
         SettingEntry(P, tr(R.string.cover), tr(R.string.shrink_when_paused)),
         SettingEntry(I, tr(R.string.covers_shapes), tr(R.string.square_video_covers), tr(R.string.video_thumbnail_crop_black_bars_letterbox)),
         SettingEntry(P, tr(R.string.immersive_mode), tr(R.string.immersive_mode), tr(R.string.lyric_video_full_screen)),
@@ -278,6 +280,18 @@ object SettingsIndex {
         SettingEntry(LF, "Last.fm", tr(R.string.first_artist_only), tr(R.string.lastfm_featured_artists_main_artist)),
         SettingEntry(LF, "Last.fm", tr(R.string.love_when_i_like_a_song), tr(R.string.lastfm_love_like_heart)),
         SettingEntry(LF, "Last.fm", tr(R.string.disconnect), tr(R.string.lastfm_sign_out)),
+        // 1.8.1: Spotify, through the listener's own developer app.
+        SettingEntry(SP, tr(R.string.spotify), tr(R.string.spotify), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spot_set_up), tr(R.string.spot_open_dashboard), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spot_set_up), tr(R.string.spot_redirect_uri), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spot_set_up), tr(R.string.spot_client_id), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spotify), tr(R.string.spot_connected_as, "").trim(), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spotify), tr(R.string.spot_recent), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spotify), tr(R.string.spot_top), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spotify), tr(R.string.spot_playlists), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spotify), tr(R.string.spot_keep_in_step), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spotify), tr(R.string.spot_likes), tr(R.string.spot_keywords)),
+        SettingEntry(SP, tr(R.string.spot_connection), tr(R.string.disconnect), tr(R.string.spot_keywords)),
         SettingEntry(H, tr(R.string.home), tr(R.string.recently_played_shows), tr(R.string.recently_played_albums_playlists_songs_home)),
         SettingEntry(P, tr(R.string.lyrics_and_the_queue), tr(R.string.lyrics_and_the_queue), tr(R.string.player_controls_hide_full_screen_lyrics)),
         SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.hide_controls_over_videos), tr(R.string.music_video_controls_hide_tap_full)),
@@ -393,6 +407,7 @@ object SettingsIndex {
         SettingEntry(H, tr(R.string.home), tr(R.string.add_new_sections_automatically), "shelves"),
         SettingEntry(H, tr(R.string.home), tr(R.string.continue_line), tr(R.string.continue_album_resume_greeting_hide_context)),
         SettingEntry(H, tr(R.string.replay_card), tr(R.string.replay_card), tr(R.string.replay_teaser_look_style_design_quiet)),
+        SettingEntry(H, tr(R.string.replay_card), tr(R.string.replay_card_graph), tr(R.string.replay_card_graph_keywords)),
         SettingEntry(H, tr(R.string.home), tr(R.string.buttons_at_the_top_of_home), tr(R.string.podcasts_button) + " " + tr(R.string.customize_button_at_the_top)),
         SettingEntry(H, tr(R.string.search), tr(R.string.search)),
         SettingEntry(H, tr(R.string.home), tr(R.string.customize_button_at_the_bottom)),
@@ -425,6 +440,14 @@ object SettingsIndex {
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.show_time_in_hours), tr(R.string.stats_minutes)),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.use_theme_colors), tr(R.string.colors_stats)),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.rewind_notification), tr(R.string.rewind_wrapped_year_in_review_december)),
+        SettingEntry(LB, tr(R.string.replay_2), tr(R.string.replay_story_font), tr(R.string.replay_story_font_keywords)),
+        // 1.8.1: History (#296, #263).
+        SettingEntry(LB, tr(R.string.hist_title), tr(R.string.hist_pause), tr(R.string.hist_pause_keywords)),
+        SettingEntry(LB, tr(R.string.hist_title), tr(R.string.hist_count_after), tr(R.string.hist_count_keywords)),
+        SettingEntry(
+            LB, tr(R.string.hist_title), tr(R.string.hist_count_account), tr(R.string.hist_count_keywords),
+            needs = Needs(tr(R.string.hist_needs_account)) { it.isLoggedIn },
+        ),
         // 1.8.1: Bring your history.
         SettingEntry(LB, tr(R.string.imp_title), tr(R.string.imp_title), tr(R.string.imp_keywords)),
         SettingEntry(LB, tr(R.string.imp_title), tr(R.string.imp_shape_mixes), tr(R.string.imp_shape_mixes_keywords)),

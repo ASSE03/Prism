@@ -307,6 +307,15 @@ data class BehaviorPrefs(
     val tabBarPosition: TabBarPosition = TabBarPosition.SIDE,
     /** #216 (1.8.1): explicit songs shown and played (as before), skipped when they'd play, or hidden too. */
     val explicitContent: ExplicitContent = ExplicitContent.SHOW,
+    /**
+     * #296 (1.8.1): history is paused until this time (0: not paused; Long.MAX_VALUE: until turned back on). See
+     * [com.prism.music.data.HistoryPause].
+     */
+    val historyPausedUntil: Long = 0L,
+    /** #263 (1.8.1): seconds a song must be heard to count as a play (10, as always, unless changed). */
+    val playCountSeconds: Int = 10,
+    /** #263: YouTube Music's history waits for the same; off, it's told as a song starts (as before). */
+    val playCountOnAccount: Boolean = false,
 )
 
 /**
@@ -389,7 +398,16 @@ data class ViewLook(
     val artistLinks: Boolean = false,
     /** #283 (1.8.1): the "Now playing" background fades into the next song's cover (at "Between songs"' pace) instead of cutting. */
     val backdropFade: Boolean = false,
+    /** #286 (1.8.1): what the Replay card's bars show: this year's months (as before), the last weeks or the last days. */
+    val replayGraph: ReplayGraph = ReplayGraph.MONTHS,
+    /** #287 (1.8.1): Replay and Rewind stories in your app font, instead of Prism's poster type. */
+    val replayStoryFont: Boolean = false,
 )
+
+/** The Replay card's bars (#286): one for each month of this year so far, each of the last 12 weeks, or the last 14 days. */
+enum class ReplayGraph(val label: String, val count: Int) {
+    MONTHS(tr(R.string.replay_graph_months), 12), WEEKS(tr(R.string.replay_graph_weeks), 12), DAYS(tr(R.string.replay_graph_days), 14),
+}
 
 // 1.8.0 player editor
 /**
@@ -1874,6 +1892,12 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val backdropFade = booleanPreferencesKey("backdrop_fade")
         /** 1.8.1 (#216, [BehaviorPrefs.explicitContent]). */
         val explicitContent = stringPreferencesKey("explicit_content")
+        // 1.8.1 ([ViewLook.replayGraph], [ViewLook.replayStoryFont]; [BehaviorPrefs]' history choices).
+        val replayGraph = stringPreferencesKey("replay_card_graph")
+        val replayStoryFont = booleanPreferencesKey("replay_story_font")
+        val historyPausedUntil = longPreferencesKey("history_paused_until")
+        val playCountSeconds = intPreferencesKey("play_count_seconds")
+        val playCountOnAccount = booleanPreferencesKey("play_count_account")
         // 1.8.0 player editor ([PlayerParts]): the hidden parts are part of a Look, the menu's choices aren't.
         val playerHiddenParts = stringPreferencesKey("player_hidden_parts")
         val playerMenuHidden = stringPreferencesKey("player_menu_hidden")
@@ -1911,6 +1935,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 panelPlayer, queueHeadings, castMark, immersiveVideo, bleedFit, coverFlight, videoControlsHide,
                 crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape,
                 downloadsAlbums, artistLinks, backdropFade,
+                crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape, replayGraph, replayStoryFont,
             ) + lyricsLook.map { it.first }
         }
 
@@ -1947,6 +1972,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 videoControlsHide to 'b', crossfadeMark to 'b', blendCovers to 'b', buttonsPill to 'b', playerHiddenParts to 's',
                 crossfadeShape to 'b',
                 downloadsAlbums to 'b', artistLinks to 'b', backdropFade to 'b',
+                crossfadeShape to 'b', replayGraph to 's', replayStoryFont to 'b',
             ) + lyricsLook
         }
 
@@ -1988,6 +2014,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "own_lossy_files",
                 // 1.8.1 (#216): what plays and shows, not a look.
                 "explicit_content",
+                // 1.8.1 (#296, #263): what Prism keeps of your listening.
+                "history_paused_until", "play_count_seconds", "play_count_account",
             )
         }
     }
@@ -2065,10 +2093,10 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
             pageColors = p[K.pageColors] ?: d.pageColors,
             frostedGlass = p[K.frostedGlass] ?: d.frostedGlass,
             haptics = p[K.haptics] ?: d.haptics,
-            // 1.8.0 player editor: one switch for the cover and the video ("Full-bleed artwork"); on if either was on (a
-            // full-bleed cover with a framed video looked broken). Both keys are kept and always written together.
-            fullBleedArtwork = fullBleed(p),
-            videoFullBleed = fullBleed(p),
+            // Two switches again (1.8.1, owner): 1.8.0 made the cover and the video one, so the video's own button turned
+            // the cover's edge-to-edge look on and off too. Each key is its own setting, as before 1.8.0.
+            fullBleedArtwork = p[K.fullBleedArtwork] ?: d.fullBleedArtwork,
+            videoFullBleed = p[K.videoFullBleed] ?: d.videoFullBleed,
             immersivePlayer = p[K.immersivePlayer] ?: d.immersivePlayer,
             immersiveArt = p.enum(K.immersiveArt, d.immersiveArt),
             immersiveLyrics = p.enum(K.immersiveLyrics, d.immersiveLyrics),
@@ -2243,6 +2271,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 downloadsAlbums = p[K.downloadsAlbums] ?: d.view.downloadsAlbums,
                 artistLinks = p[K.artistLinks] ?: d.view.artistLinks,
                 backdropFade = p[K.backdropFade] ?: d.view.backdropFade,
+                replayGraph = p.enum(K.replayGraph, d.view.replayGraph),
+                replayStoryFont = p[K.replayStoryFont] ?: d.view.replayStoryFont,
             ),
             sound = SoundPrefs(
                 crossfadeCurve = p.enum(K.crossfadeCurve, d.sound.crossfadeCurve),
@@ -2270,6 +2300,9 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 pageSlide = p[K.pageSlide] ?: d.behavior.pageSlide,
                 tabBarPosition = p.enum(K.tabBarPosition, d.behavior.tabBarPosition),
                 explicitContent = p.enum(K.explicitContent, d.behavior.explicitContent),
+                historyPausedUntil = p[K.historyPausedUntil] ?: d.behavior.historyPausedUntil,
+                playCountSeconds = (p[K.playCountSeconds] ?: d.behavior.playCountSeconds).coerceIn(0, 600),
+                playCountOnAccount = p[K.playCountOnAccount] ?: d.behavior.playCountOnAccount,
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -2577,8 +2610,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     @Suppress("UNCHECKED_CAST")
     fun resetColors() = edit { p -> K.colors.forEach { p.remove(it as Preferences.Key<Any>) } }
     // 1.8.0 player editor: the cover and the video are one switch (see [fullBleed]).
-    fun setFullBleedArtwork(v: Boolean) = edit { it[K.fullBleedArtwork] = v; it[K.videoFullBleed] = v }
-    fun setVideoFullBleed(v: Boolean) = setFullBleedArtwork(v)
+    fun setFullBleedArtwork(v: Boolean) = edit { it[K.fullBleedArtwork] = v }
+    fun setVideoFullBleed(v: Boolean) = edit { it[K.videoFullBleed] = v }
     fun setImmersivePlayer(v: Boolean) = edit { it[K.immersivePlayer] = v }
     fun setImmersiveArt(v: ImmersiveArt) = edit { it[K.immersiveArt] = v.name }
     fun setImmersiveLyrics(v: ImmersiveLyrics) = edit { it[K.immersiveLyrics] = v.name }
@@ -2849,14 +2882,17 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setArtistLinks(v: Boolean) = edit { it[K.artistLinks] = v }
     fun setBackdropFade(v: Boolean) = edit { it[K.backdropFade] = v }
     fun setExplicitContent(v: ExplicitContent) = edit { it[K.explicitContent] = v.name }
+    fun setReplayGraph(v: ReplayGraph) = edit { it[K.replayGraph] = v.name }
+    fun setReplayStoryFont(v: Boolean) = edit { it[K.replayStoryFont] = v }
+    /** #296: history paused until [until] (0: on again). */
+    fun setHistoryPausedUntil(until: Long) = edit { if (until > 0) it[K.historyPausedUntil] = until else it.remove(K.historyPausedUntil) }
+    fun setPlayCountSeconds(v: Int) = edit { it[K.playCountSeconds] = v.coerceIn(0, 600) }
+    fun setPlayCountOnAccount(v: Boolean) = edit { it[K.playCountOnAccount] = v }
 
     // 1.8.0 player editor
     /** A comma-separated set of names (unknown ones skipped): a Look or backup from a later Prism still opens. */
     private inline fun <reified E : Enum<E>> namesOf(v: String?): List<E> =
         v.orEmpty().split(',').mapNotNull { n -> enumValues<E>().firstOrNull { it.name == n } }.distinct()
-
-    /** Full-bleed artwork and full-bleed video, one switch since 1.8.0: on if either was. */
-    private fun fullBleed(p: Preferences) = (p[K.fullBleedArtwork] ?: false) || (p[K.videoFullBleed] ?: false)
 
     private fun readParts(p: Preferences): PlayerParts {
         val d = PlayerParts()

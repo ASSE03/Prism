@@ -136,7 +136,8 @@ fun SearchScreen(bottomPadding: Dp) {
 
     fun saveQuery(q: String) {
         val v = q.trim()
-        if (v.isBlank()) return
+        // #296: nothing searched is kept while history is paused.
+        if (v.isBlank() || com.prism.music.data.HistoryPause.paused(c.settings.current.behavior)) return
         recents.remove(v); recents.add(0, v)
         while (recents.size > 12) recents.removeAt(recents.lastIndex)
         history(context).edit().putString("q", recents.joinToString("\n")).apply()

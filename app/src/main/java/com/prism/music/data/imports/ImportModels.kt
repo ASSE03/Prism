@@ -6,7 +6,9 @@ import kotlinx.serialization.Serializable
 enum class ImportSource(val key: String, val label: String) {
     SPOTIFY("spotify", "Spotify"),
     TAKEOUT("takeout", "YouTube Music"),
-    LASTFM("lastfm", "Last.fm");
+    LASTFM("lastfm", "Last.fm"),
+    /** Recently played, read from the listener's own Spotify connection (1.8.1, "bring your own key"). */
+    SPOTIFY_LIVE("spotify_live", "Spotify (live)");
 
     companion object {
         fun of(key: String): ImportSource? = entries.firstOrNull { it.key == key }

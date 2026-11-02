@@ -288,6 +288,7 @@ class AppContainer(val app: Application) {
     val lyrics = LyricsRepository(http, db.lyrics(), ytm) { settings.current }.apply {
         choices = app.getSharedPreferences("lyrics_choice", android.content.Context.MODE_PRIVATE)
         searchNames = app.getSharedPreferences("lyrics_search_as", android.content.Context.MODE_PRIVATE)
+        wordShifts = app.getSharedPreferences("lyrics_word_shift", android.content.Context.MODE_PRIVATE)
     }
     /** Search by a line of the lyrics, from the box itself (1.7.6). */
     val lyricSearch = com.prism.music.data.lyrics.LyricSearch(http, ytm, db.lyricsSearch(), db.songs(), lyrics::textLines)
@@ -519,6 +520,12 @@ class AppContainer(val app: Application) {
      * plays through [com.prism.music.data.imports.HistoryImports.replay], the mixes through its `taste`.
      */
     val imports by lazy { com.prism.music.data.imports.HistoryImports(this) }
+
+    /**
+     * The optional Spotify connection (1.8.1): Spotify's official Web API through the listener's own developer app.
+     * Made when first asked (Settings, the mixes' taste); never connected, it only reads its own preferences.
+     */
+    val spotify by lazy { com.prism.music.data.spotify.Spotify(this) }
 
     /** Prism Connect: playback moving between Prism devices on the same Wi-Fi. */
     val handoff by lazy { com.prism.music.connect.Handoff(app, this) }

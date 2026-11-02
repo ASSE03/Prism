@@ -260,7 +260,8 @@ fun LibraryScreen(bottomPadding: Dp) {
     // Signed out, YouTube playlists saved on the phone (H7) sit with Prism's own.
     val savedPlaylists by c.prismLibrary.playlists.collectAsState()
     val myPlaylists = remember(playlists, prismLists, savedPlaylists, settings.isLoggedIn) {
-        prismLists.map { it.item() } + (if (settings.isLoggedIn) emptyList() else savedPlaylists.map { it.item() }) + playlists.filter { it.id != "LM" }
+        // A Spotify playlist (1.8.1) says so where Prism's own say "Prism playlist".
+        prismLists.map { l -> l.item().let { if (c.spotify.isSpotifyPlaylist(l.id)) it.copy(subtitle = tr(R.string.spot_playlist_subtitle, com.prism.music.data.model.songCount(l.songs.size))) else it } } + (if (settings.isLoggedIn) emptyList() else savedPlaylists.map { it.item() }) + playlists.filter { it.id != "LM" }
     }
     var openingLink by remember { mutableStateOf(false) }
     if (openingLink) OpenPlaylistLinkDialog({ openingLink = false }) { id -> openingLink = false; nav.go(Routes.playlist(id)) }
@@ -317,7 +318,7 @@ fun LibraryScreen(bottomPadding: Dp) {
             var fromAccount by rememberSaveable { mutableStateOf(false) }
             var historyLimit by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(300) }
             val phoneHistory = if (tab == LibTab.HISTORY) {
-                val rows by remember(historyLimit) { c.db.plays().historyFlow(historyLimit, 10_000) }.collectAsState(null)
+                val rows by remember(historyLimit) { c.db.plays().historyFlow(historyLimit, 0) /* #263: every kept play (how long one takes is the listener's pick) */ }.collectAsState(null)
                 remember(rows) { rows?.let { it.size to historyByDay(it) } }
             } else null
             var accountReload by remember { androidx.compose.runtime.mutableIntStateOf(0) }

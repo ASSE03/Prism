@@ -129,6 +129,8 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
     CONNECT("connect", tr(R.string.speakers_tvs_browser), PrismIcons.Cast),
     DISCORD("discord", tr(R.string.discord), PrismIcons.Groups),
     LASTFM("lastfm", "Last.fm", PrismIcons.Replay),
+    /** 1.8.1: Spotify through the listener's own developer app. */
+    SPOTIFY("spotify", tr(R.string.spotify), PrismIcons.Library),
     /** Not on the hub: opened from About. */
     LICENSES("licenses", tr(R.string.open_source_licenses), PrismIcons.Info),
     /** Not on the hub: Customize Prism's pages. */
@@ -157,6 +159,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
         LIBRARY -> listOfNotNull(tr(R.string.your_artists_new_releases), if (s.contentCountry.isNotBlank()) countryName(s.contentCountry) else null, tr(R.string.replay_2)).joinToString(" · ")
         DISCORD -> if (s.discordPresence) tr(R.string.showing_what_you_play_on_your) else tr(R.string.show_what_you_re_playing_on)
         LASTFM -> tr(R.string.scrobble_what_you_play_to_your)
+        SPOTIFY -> tr(R.string.spot_summary)
         LANGUAGE -> java.util.Locale.getDefault().let { it.getDisplayName(it) }.replaceFirstChar { it.titlecase() }
         ABOUT -> tr(R.string.prism_backup_updates_diagnostics, com.prism.music.BuildConfig.VERSION_NAME)
         LICENSES -> tr(R.string.gpl_3_0_or_later)
@@ -374,6 +377,7 @@ private fun SettingsPage(
             SettingsSection.LIBRARY -> item { RecommendationsPage() }
             SettingsSection.DISCORD -> item { DiscordGroup() }
             SettingsSection.LASTFM -> item { LastFmGroup() }
+            SettingsSection.SPOTIFY -> item { SpotifyPage() }
             // 1.8.0: Region (the country Prism Music is asked as) beside the language, from Recommendations & Replay.
             SettingsSection.LANGUAGE -> item { Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { LanguageSettings(); ContentCountrySetting() } }
             SettingsSection.ABOUT -> item {
@@ -1769,11 +1773,9 @@ private fun PlayerCoverGroup() {
         Label(tr(R.string.cover_size))
         Chips(CoverSize.entries, s.coverSize, { it.label }) { prefs.setCoverSize(it) }
         SliderSetting(tr(R.string.corners), s.playerArtCorners.toFloat(), 0f..32f, { tr(R.string.dp, it.roundToInt()) }, steps = 7) { prefs.setPlayerArtCorners(it.roundToInt()) }
-        // 1.8.0: one switch for the cover and a music video (full-bleed video was its own; on if either was).
-        Toggle(
-            tr(R.string.full_bleed_artwork), tr(R.string.cover_and_video_fill_the_top), s.fullBleedArtwork,
-            info = tr(R.string.the_cover_runs_to_the_screen) + " " + tr(R.string.a_music_video_runs_to_the),
-        ) { prefs.setFullBleedArtwork(it) }
+        // Two switches again (1.8.1): one for the cover, one for a music video; the video's own button changes only the video.
+        Toggle(tr(R.string.edge_to_edge_cover), null, s.fullBleedArtwork, info = tr(R.string.the_cover_runs_to_the_screen)) { prefs.setFullBleedArtwork(it) }
+        Toggle(tr(R.string.edge_to_edge_video), null, s.videoFullBleed, info = tr(R.string.a_music_video_runs_to_the)) { prefs.setVideoFullBleed(it) }
         if (s.fullBleedArtwork) Chips(com.prism.music.data.prefs.BleedFit.entries, s.view.bleedFit, { it.label }) { prefs.setBleedFit(it) }
         // With full-bleed artwork the banner covers the cover that shrinks (Reddit, 1.7.9.3): it says so rather than seem broken.
         Toggle(
@@ -2169,7 +2171,7 @@ private fun DevicesPage() {
         }
         Group(tr(R.string.connections)) {
             val dark = com.prism.music.ui.theme.LocalIsDark.current
-            listOf(SettingsSection.CONNECT, SettingsSection.DISCORD, SettingsSection.LASTFM).forEach { sec ->
+            listOf(SettingsSection.CONNECT, SettingsSection.DISCORD, SettingsSection.LASTFM, SettingsSection.SPOTIFY).forEach { sec ->
                 NavRow(sec.icon, sec.title, sec.summary(s, dark)) { nav.go(Routes.settings(sec.key)) }
             }
         }
@@ -2405,6 +2407,9 @@ private fun HomeLibraryLook() {
         val look = ReplayCardStyle.entries.firstOrNull { it.name == s.replayCard } ?: ReplayCardStyle.WASH
         Group(tr(R.string.replay_card), info = tr(R.string.how_replay_looks_on_home_from, look.label, look.note)) {
             Chips(ReplayCardStyle.entries, look, { it.label }) { prefs.setReplayCard(it.name) }
+            // #286: what the bars are (the looks with bars show it below, as the card would).
+            Label(tr(R.string.replay_card_graph), info = tr(R.string.replay_card_graph_info))
+            Chips(com.prism.music.data.prefs.ReplayGraph.entries, s.view.replayGraph, { it.label }) { prefs.setReplayGraph(it) }
             ReplayCardPreview(look, Modifier.padding(top = 6.dp, bottom = 14.dp))
         }
         LibraryLookGroup()
@@ -2483,10 +2488,19 @@ private fun RecommendationsPage() {
                 tr(R.string.imp_shape_mixes), tr(R.string.imp_shape_mixes_detail), teach, info = tr(R.string.imp_shape_mixes_info),
             ) { c.imports.setTeach(it) }
         }
+        // 1.8.1: pause history (#296) and when a song counts as played (#263).
+        ListeningHistoryGroup()
         // 1.8.0: the Last.fm link here is gone (its page is in Devices & connections; Settings search finds it).
         Group(tr(R.string.replay_2)) {
             Toggle(tr(R.string.show_time_in_hours), if (s.replayHours) tr(R.string.like_20h_4m) else tr(R.string.like_1_204_min), s.replayHours) { prefs.setReplayHours(it) }
             Toggle(tr(R.string.use_theme_colors), tr(R.string.your_accent_instead_of_prism_s), s.replayThemeColors) { prefs.setReplayThemeColors(it) }
+            // #287: the stories' type, each shown as a slide would set it.
+            Label(tr(R.string.replay_story_font), info = tr(R.string.replay_story_font_info))
+            ChoiceCards(
+                listOf(false, true), s.view.replayStoryFont,
+                { if (it) tr(R.string.replay_story_font_own) else tr(R.string.replay_story_font_poster) }, { null },
+                onSelect = { prefs.setReplayStoryFont(it) },
+            ) { StoryTypeSample(it) }
             Toggle(tr(R.string.rewind_notification), tr(R.string.on_december_1_when_your_year), s.rewindNotification) { prefs.setRewindNotification(it) }
             // Prism's plays always count; each imported source only when switched on (off by default: Replay as before).
             if (imported.isNotEmpty()) {

@@ -1226,6 +1226,9 @@ private fun handleDeepLink(uri: Uri, nav: Navigator, c: AppContainer) {
                 }
             }
         }
+        // Back from Spotify's authorize page (1.8.1): the code already reached Prism on the phone's loopback address, so
+        // this only brings its page back (where the connection shows).
+        uri.scheme == "prism" && uri.host == "spotify" -> nav.go(Routes.settings(com.prism.music.ui.screens.SettingsSection.SPOTIFY.key))
         // A widget's cover or title: the player.
         uri.scheme == "prism" && uri.host == "player" -> nav.openPlayer()
         // Release Radar's notification.

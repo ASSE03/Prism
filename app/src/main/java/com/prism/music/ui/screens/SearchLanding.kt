@@ -118,6 +118,8 @@ object SearchMemory {
     }.getOrNull().orEmpty()
 
     fun remember(context: Context, item: BrowseItem) {
+        // #296: not while history is paused.
+        if (com.prism.music.data.HistoryPause.paused((context.applicationContext as com.prism.music.PrismApp).container.settings.current.behavior)) return
         val o = OpenedItem.of(item) ?: return
         val now = (listOf(o) + opened(context).filterNot { it.kind == o.kind && it.id == o.id }).take(MAX)
         prefs(context).edit().putString("opened", InnerTube.json.encodeToString(ListSerializer(OpenedItem.serializer()), now)).apply()
