@@ -4,6 +4,15 @@ What changed in each release. Older releases are described on the [Releases page
 
 ## 1.8.1 (unreleased)
 
+### New
+
+- **Your own MP3, AAC and Ogg files can play in place of the stream** (#314). Turn on Downloads, storage & data →
+  "Use your own song files" (off by default; it doesn't need lossless playback): files on your phone that are surely
+  the same song (same title, artist and length) play from the file and show in Downloads as "MP3 · 320 kbps, from your
+  file", as on the player. A lossless file of the same song still comes first, and a file worse than the stream (under
+  128 kbps, 96 for Opus, or under 44.1 kHz) is left alone. Your files are never changed; turn it off and those songs
+  stream again at once.
+
 ### Fixes
 
 - **Add to playlist only says "Added" when the songs got there.** It took an unclear answer from YouTube Music as
