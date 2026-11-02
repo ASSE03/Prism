@@ -141,6 +141,8 @@ object SettingsIndex {
         SettingEntry(T, tr(R.string.weight_and_spacing), tr(R.string.letter_spacing), tr(R.string.tracking_wide_tight_letters)),
         SettingEntry(T, tr(R.string.titles), tr(R.string.titles), tr(R.string.title_font_headings_different_font)),
         SettingEntry(T, tr(R.string.text), tr(R.string.remove_your_font)),
+        SettingEntry(T, tr(R.string.text), tr(R.string.installed_fonts), tr(R.string.installed_fonts_keywords)),
+        SettingEntry(T, tr(R.string.text), tr(R.string.installed_fonts_for_lyrics), tr(R.string.installed_fonts_keywords)),
         SettingEntry(T, tr(R.string.text), tr(R.string.lyrics_font), "typeface"),
         SettingEntry(T, tr(R.string.text), tr(R.string.lyrics_font_file)),
         SettingEntry(T, tr(R.string.text), tr(R.string.remove_the_lyrics_font_file)),

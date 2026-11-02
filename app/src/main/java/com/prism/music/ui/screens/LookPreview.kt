@@ -164,6 +164,7 @@ fun MiniPlayerScreen(c: ThemeColors, song: Song?) {
             }
             PlayerBackground.THEME -> Box(Modifier.fillMaxSize().background(c.scheme.background))
             PlayerBackground.BLACK -> {}
+            PlayerBackground.WHITE -> Box(Modifier.fillMaxSize().background(com.prism.music.ui.player.PlayerWhiteBackdrop))
         }
         // Settings → Player (1.7.4): the layout, the title, the parts under it in their order, the buttons.
         val layout = s.playerLayout
@@ -216,7 +217,9 @@ fun MiniPlayerScreen(c: ThemeColors, song: Song?) {
                     }
                 }
             } else StandIn(song, Modifier.padding(horizontal = side.coerceAtLeast(0.dp)).fillMaxWidth().aspectRatio(1f), coverShape, hues)
-            Column(Modifier.padding(horizontal = 28.dp).padding(top = 28.dp)) {
+            // #320: the title and controls dark over the White background, as the player draws them.
+            val inked = with(com.prism.music.ui.player.PlayerInk) { Modifier.inked { s.playerBackground == PlayerBackground.WHITE } }
+            Column(Modifier.padding(horizontal = 28.dp).padding(top = 28.dp).then(inked)) {
                 title()
                 when (layout) {
                     com.prism.music.data.prefs.PlayerLayout.COVER -> {}

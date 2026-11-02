@@ -23,6 +23,7 @@ import org.robolectric.annotation.Config
  * choice is off (today's way) until it's picked.
  */
 @RunWith(RobolectricTestRunner::class)
+@org.robolectric.annotation.GraphicsMode(org.robolectric.annotation.GraphicsMode.Mode.NATIVE)
 @Config(sdk = [34], application = android.app.Application::class)
 class Requests181Test {
     @get:org.junit.Rule val compose = androidx.compose.ui.test.junit4.createComposeRule()
@@ -284,6 +285,34 @@ class Requests181Test {
         )
         // The same picture in two sizes once; another song's, a video's and the song's own aren't offered.
         assertEquals(listOf("https://lh3.googleusercontent.com/one=w120-h120"), com.prism.music.ui.components.otherCovers(song, found))
+    }
+
+    // ------------------------------------------------ #318 a font installed on the phone
+
+    @Test fun anInstalledFontIsNamedAsItNamesItself() {
+        // Prism's own Outfit names its family in its 'name' table.
+        assertEquals("Outfit", com.prism.music.ui.theme.AppFonts.fontFamilyName(java.io.File("src/main/res/font/outfit.ttf")))
+        // Not a font: no name, no crash.
+        assertEquals(null, com.prism.music.ui.theme.AppFonts.fontFamilyName(java.io.File("src/main/res/values/strings.xml")))
+        assertEquals("Noto Serif Display", com.prism.music.ui.theme.AppFonts.familyFromFileName("NotoSerifDisplay-Italic.ttf"))
+        assertEquals("Roboto", com.prism.music.ui.theme.AppFonts.familyFromFileName("Roboto-Regular.ttf"))
+        assertEquals("Source Sans 3", com.prism.music.ui.theme.AppFonts.familyFromFileName("SourceSans3-Bold.otf"))
+    }
+
+    @Test fun anInstalledFontIsCopiedInLikeAPickedFile() {
+        val app = org.robolectric.RuntimeEnvironment.getApplication()
+        com.prism.music.ui.theme.AppFonts.init(app)
+        // The list itself is the phone's (Robolectric's is whatever it is): it never throws.
+        com.prism.music.ui.theme.AppFonts.installed()
+        val font = com.prism.music.ui.theme.AppFonts.InstalledFont("Outfit", java.io.File("src/main/res/font/outfit.ttf"))
+        assertEquals("Outfit", com.prism.music.ui.theme.AppFonts.importInstalled(app, font, com.prism.music.ui.theme.AppFonts.FontSlot.LYRICS))
+        val copied = com.prism.music.ui.theme.AppFonts.customFile(com.prism.music.ui.theme.AppFonts.FontSlot.LYRICS)!!
+        assertEquals(font.file.length(), copied.length())
+        com.prism.music.ui.theme.AppFonts.remove(com.prism.music.ui.theme.AppFonts.FontSlot.LYRICS)
+        // A file that isn't a font is turned away, and nothing is left behind.
+        val bad = com.prism.music.ui.theme.AppFonts.InstalledFont("Bad", java.io.File("src/main/res/values/strings.xml"))
+        assertTrue(runCatching { com.prism.music.ui.theme.AppFonts.importInstalled(app, bad, com.prism.music.ui.theme.AppFonts.FontSlot.LYRICS) }.isFailure)
+        assertEquals(null, com.prism.music.ui.theme.AppFonts.customFile(com.prism.music.ui.theme.AppFonts.FontSlot.LYRICS))
     }
 
     // ------------------------------------------------ #311 new releases from favorite artists

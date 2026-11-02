@@ -653,6 +653,11 @@ enum class PlayerBackground(val label: String) {
     /** The background picked for Home in Appearance → Backgrounds, in its dark version. */
     APPEARANCE(tr(R.string.your_background)),
     THEME(tr(R.string.theme)), BLACK(tr(R.string.black)),
+    /**
+     * #320 (1.8.1): a white player, its type and controls dark (for the light theme; the lyrics and the queue keep their
+     * dark blurred cover). Only when picked.
+     */
+    WHITE(tr(R.string.white)),
 }
 enum class TransportStyle(val label: String) { GLYPHS(tr(R.string.classic)), BUTTON(tr(R.string.play_button)), OUTLINE(tr(R.string.rings)) }
 /** How wide the player's cover is: [extra] is how far it reaches into each side margin. */

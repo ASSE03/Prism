@@ -909,6 +909,18 @@ private fun TypeSettings() {
             if (hasAppFont) tr(R.string.tap_to_pick_a_different_ttf) else tr(R.string.pick_a_ttf_or_otf_file),
             onClick = { pickApp.launch(fontTypes) },
         ) { Chevron() }
+        // #318 (1.8.1): a font installed on the phone, without a file to pick (Android 10 and later list them).
+        var installedFor by remember { mutableStateOf<AppFonts.FontSlot?>(null) }
+        installedFor?.let { slot ->
+            InstalledFontsSheet(slot, onPicked = { name ->
+                if (slot == AppFonts.FontSlot.APP) { prefs.setAppFont(name); prefs.setFontChoice(FontChoice.CUSTOM) }
+                else { prefs.setLyricsFontFile(name); prefs.setLyricsFont(FontChoice.CUSTOM.name) }
+            }) { installedFor = null }
+        }
+        if (android.os.Build.VERSION.SDK_INT >= 29) Item(
+            tr(R.string.installed_fonts), tr(R.string.installed_fonts_detail), info = tr(R.string.installed_fonts_info),
+            onClick = { installedFor = AppFonts.FontSlot.APP },
+        ) { Chevron() }
         if (hasAppFont) Item(tr(R.string.remove_your_font), tr(R.string.back_to_a_built_in_font), onClick = {
             AppFonts.remove(AppFonts.FontSlot.APP)
             if (s.fontChoice == FontChoice.CUSTOM) prefs.setFontChoice(FontChoice.PRISM)
@@ -924,6 +936,10 @@ private fun TypeSettings() {
                 else -> FontChoice.valueOf(v).label
             }
         }) { v -> if (v == FontChoice.CUSTOM.name && !hasLyricsFont) pickLyrics.launch(fontTypes) else prefs.setLyricsFont(v) }
+        if (android.os.Build.VERSION.SDK_INT >= 29) Item(
+            tr(R.string.installed_fonts_for_lyrics), tr(R.string.installed_fonts_detail),
+            onClick = { installedFor = AppFonts.FontSlot.LYRICS },
+        ) { Chevron() }
         if (hasLyricsFont) {
             Item(tr(R.string.lyrics_font_file_2, s.lyricsFontName), tr(R.string.tap_to_pick_a_different_file), onClick = { pickLyrics.launch(fontTypes) }) { Chevron() }
             Item(tr(R.string.remove_the_lyrics_font_file), null, onClick = {
@@ -1673,7 +1689,8 @@ private fun PlayerLookGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     Group(tr(R.string.look)) {
-        Label(tr(R.string.background))
+        // #320 (1.8.1): White is a white player with dark type, for the light theme.
+        Label(tr(R.string.background), info = tr(R.string.player_background_white_info))
         Chips(PlayerBackground.entries, s.playerBackground, { it.label }) { prefs.setPlayerBackground(it) }
         if (s.playerBackground == PlayerBackground.APPEARANCE) {
             val nav = LocalNavigator.current

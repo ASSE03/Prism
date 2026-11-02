@@ -1554,6 +1554,14 @@
     <string name="covers_of_other_versions">Covers of other versions</string>
     <string name="use_the_original">Use the original</string>
     <string name="its_own_cover_again">Its own cover again</string>
+    <string name="installed_fonts">A font installed on your phone</string>
+    <string name="installed_fonts_for_lyrics">An installed font for the lyrics</string>
+    <string name="installed_fonts_detail">Pick from the fonts your phone has, no file needed</string>
+    <string name="installed_fonts_info">Android 10 and later list the phone\'s own fonts to apps; the one you pick is copied into Prism like a font file. Fonts some phones add from their own font store (such as Samsung\'s) aren\'t listed by Android: to use the font you picked for your phone, choose the System font.</string>
+    <string name="installed_fonts_note">Each is written in itself. Only fonts with Latin letters are listed.</string>
+    <string name="installed_fonts_keywords">installed font system font phone font local font typeface no file samsung</string>
+    <string name="no_installed_fonts">Your phone doesn\'t list any fonts Prism can use.</string>
+    <string name="player_background_white_info">What\'s behind the player. White is a white player with dark type and controls, to go with the light theme; with the lyrics or the queue open it turns to the dark blurred cover, as Color mesh does. A tablet\'s or a turned phone\'s wide player keeps the color mesh.</string>
     <!-- end of 1.8.1 library, player look and settings requests -->
     <string name="controls">Controls</string>
     <string name="buttons_transport">buttons transport</string>

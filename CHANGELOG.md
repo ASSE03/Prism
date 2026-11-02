@@ -80,6 +80,14 @@ What changed in each release. Older releases are described on the [Releases page
   thumbnail swapped for the album's), or **Use the original** to go back. An album's cover shows on its songs too. It's
   used wherever the song shows: lists, the player and mini player, the notification and lock screen, widgets and
   Android Auto. Kept on your phone and in backups (with your library); nothing changes on YouTube Music.
+- **A White player background** (#320): Customize Prism → Player → Look → Background → White, for the light theme.
+  The player turns white with dark type and controls (the split light keeps its colors, a white play button turns
+  black), and the status bar's icons go dark over it. With the lyrics or the queue open it turns to the dark blurred
+  cover, as Color mesh does; a tablet's or a turned phone's wide player keeps the color mesh. Only when picked.
+- **A font installed on your phone** (#318): Customize Prism → Text → "A font installed on your phone" (and one for the
+  lyrics) lists the phone's own fonts, each written in itself, no file needed (Android 10 and later; fonts with Latin
+  letters). Fonts a phone adds from its own font store (Samsung's) aren't listed to apps by Android: the System font
+  is the font picked for the phone.
 ### Fixes
 
 - **Your own photo background stays in Performance mode** (Reddit: "only a black background now"). Performance mode
