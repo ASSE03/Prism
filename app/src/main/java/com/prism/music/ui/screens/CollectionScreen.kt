@@ -404,7 +404,9 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     val popular = remember(live.page) { if (type == CollectionType.ALBUM) live.page.popularIds else emptySet() }
     // Playlists (and Liked songs) can have a picture of the listener's choosing.
     val coverKey = when (type) { CollectionType.PLAYLIST, CollectionType.PRISM -> page.id; CollectionType.LIKED -> "liked"; CollectionType.DOWNLOADS -> "downloads"; else -> null }
-    val art = coverKey?.let { c.covers.art(it, page.thumbnail) } ?: page.thumbnail
+    // An album can have one of the listener's choosing too (#305), from its ⋯ menu (its cover's tap stays as it was).
+    val art = coverKey?.let { c.covers.art(it, page.thumbnail) }
+        ?: (if (type == CollectionType.ALBUM) c.covers.albumArt(page.id, page.thumbnail) else null) ?: page.thumbnail
     // Prism's own lists without a picture take their colors from their newest song.
     val frostUrl = art ?: songs.firstOrNull()?.thumbnail
     val palette = rememberArtPalette(frostUrl)
@@ -535,6 +537,10 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     }
     var coverSheet by remember { mutableStateOf(false) }
     if (coverSheet && coverKey != null) CoverSheet(coverKey, page.title, page.songs) { coverSheet = false }
+    var albumCover by remember { mutableStateOf(false) }
+    if (albumCover) com.prism.music.ui.components.CoverPickSheet(
+        com.prism.music.ui.components.CoverFor.OfAlbum(page.id, page.title, page.thumbnail, c.covers.albumKey(page.id)),
+    ) { albumCover = false }
     // Liked songs: made into (and kept in step with) a real YouTube Music playlist.
     var likedPlaylistSheet by remember { mutableStateOf(false) }
     val likedPlaylistId by c.likedPlaylist.playlistId.collectAsState()
@@ -842,6 +848,8 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     SheetItem(PrismIcons.PlaylistAdd, if (likedPlaylistId != null) tr(R.string.playlist_kept_up_to_date) else tr(R.string.make_it_a_playlist)) { likedPlaylistSheet = true },
                 )
                 if (coverKey != null) add(SheetItem(PrismIcons.Photo, tr(R.string.change_picture)) { coverSheet = true })
+                // #305: an album's own cover, kept on the phone, on its songs everywhere too.
+                if (type == CollectionType.ALBUM) add(SheetItem(PrismIcons.Photo, tr(R.string.change_cover)) { albumCover = true })
                 // A holiday mix: pinned to Home on its own, or kept as a Prism playlist (1.8.0).
                 if (type == CollectionType.MIX) com.prism.music.data.seasonal.HolidayMixes.byId(page.id)?.let { addAll(holidayActions(c, context, it)) }
                 if ((type == CollectionType.PLAYLIST && live.page.owned) || type == CollectionType.PRISM) add(SheetItem(PrismIcons.Edit, tr(R.string.edit_details)) { editing = true })

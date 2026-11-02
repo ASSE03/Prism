@@ -805,6 +805,9 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         _videoLoading.value = false
     }
 
+    /** #305: a cover was picked (or put back) for a song or an album: the queue's songs it shows on take it up. */
+    fun refreshCovers(shows: (Song) -> Boolean) = withPlayer { service?.refreshCovers(shows) }
+
     suspend fun videoIdFor(song: Song): String? = service?.videoIdFor(song)?.id ?: if (song.isVideo) song.id else null
 
     private val _sleepEndOfSong = MutableStateFlow(false)

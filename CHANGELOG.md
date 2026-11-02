@@ -75,6 +75,11 @@ What changed in each release. Older releases are described on the [Releases page
   them out, a tapped one gives way to the next clean song, and the queue passes over any that got in; **Hide them** also
   leaves them out of search, Home and album, playlist, Liked songs and Downloads lists. It goes by YouTube Music's own
   mark, so songs kept on the phone without it (older likes, your own files) still play.
+- **Change a song's or an album's cover** (#305, and Reddit): a song's menu (or the player's ⋯) → Change cover, and an
+  album's menu or its page's ⋯. Pick a photo, one of the covers of the song's other versions (a lyric video's
+  thumbnail swapped for the album's), or **Use the original** to go back. An album's cover shows on its songs too. It's
+  used wherever the song shows: lists, the player and mini player, the notification and lock screen, widgets and
+  Android Auto. Kept on your phone and in backups (with your library); nothing changes on YouTube Music.
 ### Fixes
 
 - **Your own photo background stays in Performance mode** (Reddit: "only a black background now"). Performance mode

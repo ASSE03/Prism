@@ -9,6 +9,7 @@ import com.prism.music.ui.screens.previewVeil
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.onNodeWithText
+import com.prism.music.playback.toMediaItem
 import kotlinx.coroutines.flow.first
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -220,6 +221,69 @@ class Requests181Test {
         kotlinx.coroutines.withTimeout(5_000) { repo.flow.first { it.behavior.explicitContent == HIDE } }
         repo.setExplicitContent(SHOW)
         kotlinx.coroutines.withTimeout(5_000) { repo.flow.first { it.behavior.explicitContent == SHOW } }
+    }
+
+    // ------------------------------------------------ #305 a song's or an album's own cover
+
+    @Test fun aPickedCoverShowsForTheSongAndItsAlbumsSongs() {
+        val app = org.robolectric.RuntimeEnvironment.getApplication()
+        app.getSharedPreferences("playlist_covers", android.content.Context.MODE_PRIVATE).edit().clear().commit()
+        val covers = com.prism.music.data.PlaylistCovers(app)
+        val a = com.prism.music.data.model.Song("a", "A", album = com.prism.music.data.model.AlbumRef("Polar", "MPREb_p"), thumbnail = "https://lh3.googleusercontent.com/a")
+        val b = com.prism.music.data.model.Song("b", "B", album = com.prism.music.data.model.AlbumRef("Polar", "MPREb_p"), thumbnail = "https://lh3.googleusercontent.com/b")
+        val other = com.prism.music.data.model.Song("c", "C", thumbnail = "https://i.ytimg.com/vi/c/hqdefault.jpg")
+        // Nothing picked: every song as it is.
+        assertEquals(a.thumbnail, covers.art(a))
+        assertEquals(other.thumbnail, com.prism.music.data.PlaylistCovers.artOf(other))
+        // An album's cover shows on its songs and its card.
+        covers.useImage(covers.albumKey("MPREb_p"), "https://example.org/album.jpg")
+        assertEquals("https://example.org/album.jpg", covers.art(a))
+        assertEquals("https://example.org/album.jpg", covers.art(com.prism.music.data.model.SongItem(b)))
+        assertEquals("https://example.org/album.jpg", covers.art(com.prism.music.data.model.AlbumItem("MPREb_p", "Polar", "Album", "https://lh3.googleusercontent.com/p", null)))
+        // A song's own beats its album's, and is everywhere the song is drawn (the session, the rows).
+        covers.useImage(covers.songKey("a"), "https://example.org/a.jpg")
+        assertEquals("https://example.org/a.jpg", covers.art(a))
+        assertEquals("https://example.org/a.jpg", com.prism.music.data.PlaylistCovers.artOf(a))
+        assertEquals("https://example.org/album.jpg", covers.art(b))
+        // "Use the original" puts each back.
+        covers.reset(covers.songKey("a"))
+        covers.reset(covers.albumKey("MPREb_p"))
+        assertEquals(a.thumbnail, covers.art(a))
+        assertEquals(b.thumbnail, covers.art(b))
+        // Kept on the phone: a new store reads them back.
+        covers.useImage(covers.songKey("c"), "https://example.org/c.jpg")
+        assertEquals("https://example.org/c.jpg", com.prism.music.data.PlaylistCovers(app).art(other))
+        covers.reset(covers.songKey("c"))
+    }
+
+    @Test fun pickedCoversGoInBackupsWithTheLibrary() {
+        assertEquals(com.prism.music.data.BackupPart.LIBRARY, com.prism.music.data.Backup.prefsPart("playlist_covers"))
+        assertEquals(com.prism.music.data.BackupPart.LIBRARY, com.prism.music.data.Backup.filePart("covers"))
+    }
+
+    @Test fun theSessionGetsAPickedPhotoThroughTheArtworkProvider() {
+        val app = org.robolectric.RuntimeEnvironment.getApplication()
+        val covers = com.prism.music.data.PlaylistCovers(app)
+        val song = com.prism.music.data.model.Song("s", "S", thumbnail = "https://lh3.googleusercontent.com/s=w120-h120")
+        assertEquals("https", song.toMediaItem().mediaMetadata.artworkUri?.scheme)
+        covers.useImage(covers.songKey("s"), "file:///data/user/0/com.prism.music/files/covers/song_s-1.jpg")
+        val uri = song.toMediaItem().mediaMetadata.artworkUri!!
+        assertEquals("content", uri.scheme)
+        assertTrue(uri.authority!!.endsWith(".artwork"))
+        covers.reset(covers.songKey("s"))
+    }
+
+    @Test fun otherVersionsGiveTheirCovers() {
+        val song = com.prism.music.data.model.Song("v", "Linger", thumbnail = "https://i.ytimg.com/vi/v/hqdefault.jpg", isVideo = true)
+        val found = listOf(
+            com.prism.music.data.model.Song("1", "Linger", thumbnail = "https://lh3.googleusercontent.com/one=w120-h120"),
+            com.prism.music.data.model.Song("2", "Linger", thumbnail = "https://lh3.googleusercontent.com/one=w544-h544"),
+            com.prism.music.data.model.Song("3", "Zombie", thumbnail = "https://lh3.googleusercontent.com/z"),
+            com.prism.music.data.model.Song("4", "Linger (Live)", thumbnail = "https://lh3.googleusercontent.com/live", isVideo = true),
+            com.prism.music.data.model.Song("v", "Linger", thumbnail = "https://i.ytimg.com/vi/v/hqdefault.jpg"),
+        )
+        // The same picture in two sizes once; another song's, a video's and the song's own aren't offered.
+        assertEquals(listOf("https://lh3.googleusercontent.com/one=w120-h120"), com.prism.music.ui.components.otherCovers(song, found))
     }
 
     // ------------------------------------------------ #311 new releases from favorite artists

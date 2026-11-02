@@ -444,7 +444,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     var canvasCover by remember(canvas) { mutableFloatStateOf(0f) }
 
     // ---------------------------------------------------------------- Artwork
-    val artUrl = hiRes(song.thumbnail, 1200)
+    // The cover picked for the song or its album (#305), else its own.
+    val songArt = c.covers.art(song)
+    val artUrl = hiRes(songArt, 1200)
     // Decoded at full size whatever size the cover is first laid out at (#86): opened mid-animation or with lyrics
     // open it starts out small, and the picture decoded for that size was then stretched over the whole cover.
     val artRequest = remember(artUrl) { coil3.request.ImageRequest.Builder(context).data(artUrl).size(1200).build() }
@@ -467,8 +469,8 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     LaunchedEffect(heroMode) { if (!heroMode) heroPicture = null }
     val heroT = animateFloatAsState(if (heroTarget(heroMode, artLoaded || heroPicture != null, canvasCover > 0f)) 1f else 0f, tween(420, easing = FastOutSlowInEasing), label = "hero")
     val heroVisible: () -> Float = { heroT.value * (1f - p()) }
-    val mesh = rememberArtworkMesh(song.thumbnail)
-    val blurImage = rememberFullArtworkBlur(song.thumbnail, settings.playerBlur)
+    val mesh = rememberArtworkMesh(songArt)
+    val blurImage = rememberFullArtworkBlur(songArt, settings.playerBlur)
     val fullBlur by animateFloatAsState(if (lyricsOpen || queueOpen || statsOpen) 1f else 0f, tween(360, easing = FastOutSlowInEasing), label = "fullBlur")
     val statusTop = statusBarRoom().asPaddingValues().calculateTopPadding()
     // Collapsed into the header thumbnail, the sleeve keeps gentle corners whatever the setting.
@@ -491,7 +493,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         vizStyle != com.prism.music.data.prefs.VisualizerStyle.OFF && !settings.reduceMotion && !covered && !videoMode && isPlaying,
     )
     val vizBrush: Brush = if (viz == null) androidx.compose.ui.graphics.SolidColor(Color.White) else
-        scrubberFill(settings.visualizerColor, song.thumbnail)
+        scrubberFill(settings.visualizerColor, songArt)
             ?: Brush.horizontalGradient(*com.prism.music.ui.theme.PrismTokens.spectrumColors(true).toTypedArray())
     val vizColor: Color = (vizBrush as? androidx.compose.ui.graphics.SolidColor)?.value
         ?: com.prism.music.ui.theme.PrismTokens.spectrumColors(true).let { it[it.size / 2].second }
@@ -618,7 +620,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             if (lyricsOpen && lyricsGround != com.prism.music.data.prefs.LyricsBackground.PLAYER) 1f else 0f, tween(420, easing = FastOutSlowInEasing), label = "lyricsGround",
         )
         if (lyricsGroundT > 0f) LyricsBackdrop(
-            lyricsGround, settings, song.thumbnail, blurImage, canvas, canvasSaved, isPlaying,
+            lyricsGround, settings, songArt, blurImage, canvas, canvasSaved, isPlaying,
             Modifier.fillMaxSize().graphicsLayer { alpha = lyricsGroundT }, hold = covered,
         )
         // The visualizer's Glow behind everything, and its Bars along the bottom, under the controls.

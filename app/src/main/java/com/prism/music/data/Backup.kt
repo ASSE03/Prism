@@ -302,6 +302,7 @@ class Backup(private val c: AppContainer) {
 
         /** Saved preferences by part; anything not named here counts as Settings. Some never go in a backup (null). */
         private val PREFS_PARTS: Map<String, BackupPart?> = buildMap {
+            // playlist_covers (with files/covers below) holds songs' and albums' own covers too (#305, 1.8.1).
             listOf("artist_prefs", "artist_thumbs", "playlist_covers", "library_order", "blend", "liked_playlist", "recent_collections", "song_versions")
                 .forEach { put(it, BackupPart.LIBRARY) }
             listOf(

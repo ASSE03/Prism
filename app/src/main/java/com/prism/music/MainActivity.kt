@@ -383,9 +383,12 @@ private fun rememberArtworkColor(song: Song?, settings: com.prism.music.data.pre
     val swatch = settings.artworkSwatch
     val vivid = settings.artworkVivid
     // "New albums only" (1.7.2): songs from the same album keep the color; otherwise every cover is looked at.
-    val key = if (settings.artworkChange == com.prism.music.data.prefs.ArtworkChange.ALBUM) song?.album?.id ?: song?.album?.title ?: song?.thumbnail else song?.thumbnail
+    // The cover picked for the song or its album (#305) gives the colors too.
+    val art = song?.let { com.prism.music.data.PlaylistCovers.artOf(it) }
+    val picked = song?.let { com.prism.music.data.PlaylistCovers.shared?.picked(it) }
+    val key = if (settings.artworkChange == com.prism.music.data.prefs.ArtworkChange.ALBUM) (song?.album?.id ?: song?.album?.title ?: art) to picked else art
     LaunchedEffect(key, swatch, vivid) {
-        val url = song?.thumbnail ?: return@LaunchedEffect
+        val url = art ?: return@LaunchedEffect
         // One palette for both: the accent's swatch, and the light "From the cover" (#123; also what its tile in Color shows).
         val made = withContext(Dispatchers.IO) {
             runCatching {
@@ -849,7 +852,7 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                     androidx.compose.runtime.DisposableEffect(Unit) { onDispose { playerCover.settled = false } }
                     Box(Modifier.customizable(com.prism.music.ui.components.CustomizeTarget.PLAYER)) { NowPlayingScreen { playerOpen = false } }
                 }
-                com.prism.music.ui.player.CoverFlightLayer(song?.thumbnail)
+                com.prism.music.ui.player.CoverFlightLayer(song?.let { com.prism.music.data.PlaylistCovers.artOf(it) })
 
                 // Looks (1.7.3): "Undo" after each change to the look, and "Customize this" while it's on.
                 com.prism.music.ui.components.LookUndoBar(

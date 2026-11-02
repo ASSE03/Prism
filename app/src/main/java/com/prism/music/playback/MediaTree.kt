@@ -83,7 +83,8 @@ class MediaTree(private val c: AppContainer) {
         songs[song.id] = song
         val item = song.toMediaItem()
         return item.buildUpon().setMediaMetadata(
-            item.mediaMetadata.buildUpon().setArtworkUri(artworkUri(song.thumbnail)).setSubtitle(song.artistText)
+            // The cover picked for the song or its album (#305) when there is one.
+            item.mediaMetadata.buildUpon().setArtworkUri(artworkUri(c.covers.art(song))).setSubtitle(song.artistText)
                 .apply { if (extras != null) setExtras(extras) }.build()
         ).build()
     }
@@ -262,8 +263,7 @@ class MediaTree(private val c: AppContainer) {
         val u = hiRes(url, 544)
         if (u != null && u.startsWith("android.resource:")) return Uri.parse(u)
         val target = u ?: fallback?.let { ArtworkProvider.RES + it } ?: return null
-        val encoded = Base64.encodeToString(target.toByteArray(), Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
-        val uri = Uri.parse("content://${BuildConfig.APPLICATION_ID}.artwork/$encoded")
+        val uri = ArtworkProvider.contentUri(target)
         return if (u != null && fallback != null) uri.buildUpon().appendQueryParameter(ArtworkProvider.OR, fallback).build() else uri
     }
 }
@@ -367,6 +367,12 @@ class ArtworkProvider : ContentProvider() {
         const val OR = "or"
         private const val LOCAL_ALBUM_ART = "content://media/external/audio/albumart/"
         private const val TILE_PX = 288
+
+        /** [url] served through this provider (a car can't open the app's own files, nor every web address). */
+        fun contentUri(url: String): Uri {
+            val encoded = Base64.encodeToString(url.toByteArray(), Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
+            return Uri.parse("content://${BuildConfig.APPLICATION_ID}.artwork/$encoded")
+        }
     }
 
     override fun getType(uri: Uri) = "image/jpeg"

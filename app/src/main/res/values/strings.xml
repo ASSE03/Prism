@@ -1548,6 +1548,12 @@
     <string name="explicit_hide">Hide them</string>
     <string name="explicit_skipped">Explicit songs are left out (Settings → Sound)</string>
     <string name="explicit_none_left">Nothing to play: every song here is explicit</string>
+    <string name="change_cover">Change cover</string>
+    <string name="cover_changed">Cover changed</string>
+    <string name="its_own_cover">Its own</string>
+    <string name="covers_of_other_versions">Covers of other versions</string>
+    <string name="use_the_original">Use the original</string>
+    <string name="its_own_cover_again">Its own cover again</string>
     <!-- end of 1.8.1 library, player look and settings requests -->
     <string name="controls">Controls</string>
     <string name="buttons_transport">buttons transport</string>

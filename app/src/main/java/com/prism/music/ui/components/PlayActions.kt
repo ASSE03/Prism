@@ -122,6 +122,9 @@ fun PlayActionsSheet(target: Playable, extra: List<SheetItem> = emptyList(), ext
         is Playable.Of -> c.covers.art(target.item)
     }
     adding?.let { songs -> PlaylistPicker(songs, title) { adding = null; onDismiss() }; return }
+    // #305: an album's own cover, in its place.
+    var coverFor by remember { mutableStateOf<CoverFor?>(null) }
+    coverFor?.let { t -> CoverPickSheet(t) { coverFor = null; onDismiss() }; return }
     fun play(shuffle: Boolean, mix: Boolean = false) = c.scope.launch(Dispatchers.Main) {
         val loaded = runCatching { withContext(Dispatchers.IO) { songsFor(c, target, shuffle, mix) } }.getOrNull()
         if (loaded == null || loaded.first.isEmpty()) {
@@ -229,10 +232,13 @@ fun PlayActionsSheet(target: Playable, extra: List<SheetItem> = emptyList(), ext
                 Toast.makeText(context, if (on) tr(R.string.taken_off_home) else tr(R.string.pinned_to_the_top_of_home), Toast.LENGTH_SHORT).show()
             })
         }.orEmpty()
+        val cover = if (item is AlbumItem) listOf(ActionItem(PrismIcons.Photo, tr(R.string.change_cover), active = c.covers.custom(c.covers.albumKey(item.id)) != null, keepOpen = true) {
+            coverFor = CoverFor.OfAlbum(item.id, item.title, item.thumbnail, c.covers.albumKey(item.id))
+        }) else emptyList()
         if (extraTitle != null) {
-            ActionGroup(null, addTo + djSet + copy + pin + remove) { runAction(it, close) }
+            ActionGroup(null, addTo + djSet + copy + pin + cover + remove) { runAction(it, close) }
             ActionGroup(extraTitle, extra.map { it.toAction() }) { runAction(it, close) }
-        } else ActionGroup(null, addTo + djSet + copy + pin + extra.map { it.toAction() } + remove) { runAction(it, close) }
+        } else ActionGroup(null, addTo + djSet + copy + pin + cover + extra.map { it.toAction() } + remove) { runAction(it, close) }
     }
 }
 

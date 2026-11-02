@@ -424,7 +424,10 @@ enum class MenuGroup(val label: String) { SONG(tr(R.string.this_song)), LYRICS(t
  */
 enum class MenuAction(val group: MenuGroup, val fromPlayer: Boolean = false) {
     ADD_TO_PLAYLIST(MenuGroup.SONG), RADIO(MenuGroup.SONG), DOWNLOAD(MenuGroup.SONG), ALBUM(MenuGroup.SONG), ARTIST(MenuGroup.SONG),
-    CREDITS(MenuGroup.SONG), VERSION(MenuGroup.SONG), NOT_FOR_ME(MenuGroup.SONG),
+    CREDITS(MenuGroup.SONG), VERSION(MenuGroup.SONG),
+    /** #305 (1.8.1): a cover of the listener's choosing for the song. */
+    COVER(MenuGroup.SONG),
+    NOT_FOR_ME(MenuGroup.SONG),
     SING(MenuGroup.LYRICS), LYRICS_SOURCE(MenuGroup.LYRICS), LYRICS_TIMING(MenuGroup.LYRICS), TRANSLATE(MenuGroup.LYRICS),
     ROMANIZE(MenuGroup.LYRICS), LYRICS_AGAIN(MenuGroup.LYRICS), LYRICS_INTO_FILE(MenuGroup.LYRICS),
     OPEN_LYRICS(MenuGroup.PLAYING, true), OPEN_QUEUE(MenuGroup.PLAYING, true), VIDEO_SWITCH(MenuGroup.PLAYING, true),

@@ -411,7 +411,7 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
     val blendMark = blend?.takeIf { settings.view.crossfadeMark && it.songId == current?.id && blendShape?.fadesOut != true }
         ?.let { (it.startMs.toFloat() / duration).takeIf { f -> f in 0.01f..0.99f } }
     val times = MaterialTheme.typography.labelMedium.copy(fontFeatureSettings = "tnum")
-    val fill = scrubberFill(settings.scrubberColor, current?.thumbnail)
+    val fill = scrubberFill(settings.scrubberColor, current?.let { com.prism.music.data.PlaylistCovers.artOf(it) })
     // Waveform: the song's outline from its scan (a plain bar until there is one).
     val waveStamp by c.waves.stamp.collectAsState()
     val wave by androidx.compose.runtime.produceState<FloatArray?>(null, style, current?.id, waveStamp) {

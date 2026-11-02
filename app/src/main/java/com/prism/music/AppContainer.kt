@@ -447,6 +447,8 @@ class AppContainer(val app: Application) {
     /** Music videos downloaded as their song, video id -> song id ([com.prism.music.download.forRow], #315). */
     val downloadStandIns = kotlinx.coroutines.flow.MutableStateFlow<Map<String, String>>(emptyMap())
     val covers by lazy { com.prism.music.data.PlaylistCovers(app) }
+    // Read at start, so the songs' own covers (#305) are there for the media session and Android Auto from the first song.
+    init { covers }
     /** Saves lyrics into your own music files' tags (#16). */
     val lyricsToFiles by lazy { com.prism.music.data.local.LyricsToFiles(app, this) }
     val updates by lazy { com.prism.music.data.UpdateChecker(app, http, scope) }

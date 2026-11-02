@@ -413,7 +413,7 @@ fun CurrentLyricStrip(state: LyricsState, isPlaying: Boolean, onClick: () -> Uni
     val instead = romanizeMode(state.song.id) == com.prism.music.data.prefs.RomanizeMode.INSTEAD
     // As the lyrics page draws them (1.8.0: always; "Same look everywhere" is gone).
     val settings = LocalAppSettings.current
-    val look = rememberLyricsLook(settings, state.song.thumbnail)
+    val look = rememberLyricsLook(settings, com.prism.music.data.PlaylistCovers.artOf(state.song))
     val lines = remember(state.lines, roman, instead, look.uppercase) {
         (if (instead && roman != null) state.lines.mapIndexed { i, l -> roman.getOrNull(i) ?: l } else state.lines).map(look::shown)
     }
@@ -895,7 +895,7 @@ fun LyricsPanel(
     val c = LocalContainer.current
     val settings by c.settings.flow.collectAsState()
     // How the lines are drawn (Settings → Lyrics, 1.7.5): style, colors, weight, spacing and the rest.
-    val look = rememberLyricsLook(settings, state.song.thumbnail).let { if (lyricsGround) it else it.withoutCard(settings.lyricsOthersAlpha) }
+    val look = rememberLyricsLook(settings, com.prism.music.data.PlaylistCovers.artOf(state.song)).let { if (lyricsGround) it else it.withoutCard(settings.lyricsOthersAlpha) }
     val lines = state.lines
     val synced = remember(lines) { lines.any { it.timeMs >= 0 } }
     val clock = rememberLyricClock(isPlaying)

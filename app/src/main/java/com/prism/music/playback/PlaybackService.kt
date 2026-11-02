@@ -1585,6 +1585,18 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
     }
 
+    /**
+     * #305: the queue's songs that [shows] the cover just picked (or put back) for, made again with it, so the
+     * notification, the lock screen and the car show it. Only the cover changes: the same address, so nothing pauses.
+     */
+    fun refreshCovers(shows: (Song) -> Boolean) {
+        for (i in 0 until player.mediaItemCount) {
+            val item = player.getMediaItemAt(i)
+            val song = item.toSong() ?: continue
+            if (shows(song)) swapInPlace(i, song.toMediaItem(item.videoModeId))
+        }
+    }
+
     private fun songCoverForVideo(song: Song) {
         if (!song.isVideo || song.isLive || song.isLocal || song.isEpisode || song.isUpload) return
         val item = player.currentMediaItem ?: return

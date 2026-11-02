@@ -189,7 +189,7 @@ class PlayerEditorTest {
         assertEquals(MenuAction.DEFAULT_TILES, today.tiles)
         assertEquals(listOf(MenuGroup.SONG, MenuGroup.LYRICS, MenuGroup.PLAYING, MenuGroup.HELP), today.groups.map { it.first })
         assertEquals(
-            listOf(MenuAction.ALBUM, MenuAction.ARTIST, MenuAction.CREDITS, MenuAction.VERSION, MenuAction.NOT_FOR_ME),
+            listOf(MenuAction.ALBUM, MenuAction.ARTIST, MenuAction.CREDITS, MenuAction.VERSION, MenuAction.COVER, MenuAction.NOT_FOR_ME),
             today.groups.first { it.first == MenuGroup.SONG }.second,
         )
         assertTrue(today.more.isEmpty())

@@ -231,7 +231,8 @@ fun SongRowLayout(
                 )
             }
         }
-        Artwork(song.thumbnail, Modifier.size(48.dp), art, size = 226)
+        // The cover picked for it or its album (#305), else its own.
+        Artwork(com.prism.music.data.PlaylistCovers.artOf(song), Modifier.size(48.dp), art, size = 226)
         Spacer(Modifier.width(14.dp))
         Column(Modifier.weight(1f)) {
             // The playing song's title is written in split light (deeper on light backgrounds), beside the spectrum bars;
@@ -601,6 +602,9 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
     if (sharing) { ShareSheet(song.shareTarget()) { sharing = false; onDismiss() }; return }
     if (credits) { SongCreditsSheet(song) { credits = false; onDismiss() }; return }
     if (versions) { SongVersionsSheet(song) { versions = false; onDismiss() }; return }
+    // #305: the song's own cover.
+    var cover by remember { mutableStateOf(false) }
+    if (cover) { CoverPickSheet(CoverFor.OfSong(song, c.covers.songKey(song.id))) { cover = false; onDismiss() }; return }
 
     // In someone's Listen Together session, songs go into their queue.
     val quick = listOf(
@@ -634,6 +638,9 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
         // Another recording of it in its place (Reddit 1.7.9: an album song played as someone's cover).
         if (song.isEpisode || local || song.isLive || guest != null) null
         else ActionItem(PrismIcons.SwapVertical, tr(R.string.play_a_different_version), active = song.id in picks, keepOpen = true) { versions = true },
+        // #305: a cover of your choosing (a photo, another version's, or back to its own).
+        if (song.isEpisode || song.isLive) null
+        else ActionItem(PrismIcons.Photo, tr(R.string.change_cover), active = c.covers.custom(c.covers.songKey(song.id)) != null, keepOpen = true) { cover = true },
         if (song.isEpisode || local) null else videoDownloadAction(song, videos[song.id]),
         if (song.isEpisode) null else if (song.id in disliked) ActionItem(PrismIcons.ThumbDownFilled, tr(R.string.not_for_me), active = true, keepOpen = true) { c.library.setDisliked(song, false) }
         else ActionItem(PrismIcons.ThumbDown, tr(R.string.not_for_me)) { c.library.setDisliked(song, true); toast(tr(R.string.got_it_prism_will_steer_clear)) },
@@ -647,9 +654,10 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
         },
     )
 
-    ActionSheet(song.thumbnail, onDismiss) { close ->
+    val songArt = c.covers.art(song)
+    ActionSheet(songArt, onDismiss) { close ->
         ActionHeader(
-            song.thumbnail, song.title,
+            songArt, song.title,
             listOfNotNull(song.artistText, formatDuration(song.durationSec).takeIf { it.isNotEmpty() }).joinToString(" · "),
             placeholderIcon = PrismIcons.Song,
         ) {
