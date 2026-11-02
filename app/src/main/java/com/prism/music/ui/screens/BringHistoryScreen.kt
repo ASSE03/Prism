@@ -63,6 +63,31 @@ import java.util.Date
 private fun count(n: Int): String = NumberFormat.getIntegerInstance().format(n)
 private fun day(ms: Long?): String = ms?.let { DateFormat.getDateInstance(DateFormat.MEDIUM).format(Date(it)) } ?: "–"
 
+/**
+ * What an import brought, said after it: its plays ("Brought 312 plays of 40 songs…"), what its library added ("Added 3
+ * liked songs and 12 playlist songs."), both, or that everything was already here.
+ */
+internal fun broughtMessage(stats: HistoryImporter.Stats?): String {
+    stats ?: return tr(R.string.imp_cant_read)
+    val lib = stats.library
+    val added = listOfNotNull(
+        lib.liked.takeIf { it > 0 }?.let { trp(R.plurals.imp_n_liked_songs, it) },
+        lib.playlists.takeIf { it > 0 }?.let { trp(R.plurals.imp_n_new_playlists, it) },
+        lib.playlistSongs.takeIf { it > 0 }?.let { trp(R.plurals.imp_n_playlist_songs, it) },
+        lib.albums.takeIf { it > 0 }?.let { trp(R.plurals.imp_n_saved_albums, it) },
+        lib.artists.takeIf { it > 0 }?.let { trp(R.plurals.imp_n_followed_artists, it) },
+    ).takeIf { it.isNotEmpty() }?.let { parts ->
+        val list = if (parts.size == 1) parts[0] else tr(R.string.imp_and, parts.dropLast(1).joinToString(", "), parts.last())
+        tr(R.string.imp_added, list)
+    }
+    return when {
+        stats.stored > 0 -> listOfNotNull(tr(R.string.imp_brought, count(stats.stored), count(stats.songs)), added).joinToString(" ")
+        added != null -> added
+        stats.alreadyThere > 0 -> tr(R.string.imp_already_there, count(stats.alreadyThere))
+        else -> tr(R.string.imp_brought, count(stats.stored), count(stats.songs))
+    }
+}
+
 /** "today", "1 day ago", "31 days ago": calendar days since [ms]. */
 private fun ago(ms: Long, now: Long = System.currentTimeMillis()): String {
     val zone = java.time.ZoneId.systemDefault()
@@ -103,13 +128,7 @@ fun BringHistoryScreen(bottomPadding: Dp) {
     var albums by remember { mutableStateOf(true) }
     var artists by remember { mutableStateOf(true) }
 
-    fun done(stats: HistoryImporter.Stats?) {
-        message = when {
-            stats == null -> tr(R.string.imp_cant_read)
-            stats.stored == 0 && stats.alreadyThere > 0 -> tr(R.string.imp_already_there, count(stats.alreadyThere))
-            else -> tr(R.string.imp_brought, count(stats.stored), count(stats.songs))
-        }
-    }
+    fun done(stats: HistoryImporter.Stats?) { message = broughtMessage(stats) }
 
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { picked ->
         val s = source ?: return@rememberLauncherForActivityResult

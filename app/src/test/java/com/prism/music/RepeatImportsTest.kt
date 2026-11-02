@@ -144,6 +144,46 @@ class RepeatImportsTest {
         assertEquals(listOf(at(a.iso), at(b.iso), at(c.iso)), times)
     }
 
+    @Test fun aFeaturedArtistsSongIsOnePlayWhicheverHistoryNamesWhom() = runBlocking {
+        // The extended history names the album's artist; the account data the song's own credit.
+        val ext = Play("2025-06-01T18:20:41Z", "Stay (with Justin Bieber)", "The Kid LAROI")
+        val acct = Play("2025-06-01T18:20:41Z", "Stay (with Justin Bieber)", "The Kid LAROI, Justin Bieber")
+        val feat = Play("2025-06-02T09:00:15Z", "Get Lucky", "Pharrell Williams")
+        val featAcct = Play("2025-06-02T09:00:15Z", "Get Lucky", "Daft Punk feat. Pharrell Williams")
+        assertTrue(com.prism.music.data.imports.ImportedIndex.related("The Kid LAROI", "The Kid LAROI, Justin Bieber"))
+        assertTrue(com.prism.music.data.imports.ImportedIndex.related("Daft Punk feat. Pharrell Williams", "Pharrell Williams"))
+        assertFalse(com.prism.music.data.imports.ImportedIndex.related("Rihanna", "Zedd"))
+        assertFalse("a name inside another counts as whole words only", com.prism.music.data.imports.ImportedIndex.related("Ye", "Kanye West"))
+
+        bring(ImportSource.SPOTIFY, parse("Streaming_History_Audio_2025_0.json", extended(ext, feat)))
+        val account = parse("StreamingHistory_music_0.json", account(acct, featAcct))
+        assertEquals(0, preview(ImportSource.SPOTIFY, account).plays)
+        assertEquals(0, bring(ImportSource.SPOTIFY, account).stored)
+        assertEquals(2, spotifyCount())
+    }
+
+    @Test fun anExtendedPlayFoundByARelatedArtistKeepsTheStoredSong() = runBlocking {
+        val acct = Play("2025-06-01T18:20:41Z", "Stay (with Justin Bieber)", "The Kid LAROI, Justin Bieber")
+        val ext = Play("2025-06-01T18:20:41Z", "Stay (with Justin Bieber)", "The Kid LAROI")
+        bring(ImportSource.SPOTIFY, parse("StreamingHistory_music_0.json", account(acct)))
+        val stats = bring(ImportSource.SPOTIFY, parse("Streaming_History_Audio_2025_0.json", extended(ext)))
+        assertEquals(0, stats.stored)
+        assertEquals(1, stats.upgraded)
+        assertEquals(1, spotifyCount())
+        assertEquals("the second time took the extended play's", at(ext.iso), db.counted().events(listOf("spotify"), 0, Long.MAX_VALUE).single().timestamp)
+        assertNull("no second song lined up for matching", db.imports().match(ImportKeys.songKey(ext.title, ext.artist)))
+    }
+
+    @Test fun twoSongsOfOneTitleByUnrelatedArtistsStayTwoPlays() = runBlocking {
+        val rihanna = Play("2025-07-01T21:15:20Z", "Stay", "Rihanna")
+        val zedd = Play("2025-07-01T21:15:50Z", "Stay", "Zedd")
+        bring(ImportSource.SPOTIFY, parse("Streaming_History_Audio_2025_0.json", extended(rihanna)))
+        val account = parse("StreamingHistory_music_0.json", account(zedd))
+        assertEquals(1, preview(ImportSource.SPOTIFY, account).plays)
+        assertEquals(1, bring(ImportSource.SPOTIFY, account).stored)
+        assertEquals(2, spotifyCount())
+    }
+
     @Test fun aSongPlayedTwiceInAMinuteStaysTwoPlays() = runBlocking {
         // Skipped after 15 s (Replay counts plays of 10 s and more), then played through.
         val skipped = Play("2025-01-10T08:00:12Z", "Africa", "TOTO", ms = 15_000)
