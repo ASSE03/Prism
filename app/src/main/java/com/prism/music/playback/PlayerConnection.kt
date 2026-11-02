@@ -573,6 +573,12 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         if (index !in 0 until p.mediaItemCount) return null
         val item = p.getMediaItemAt(index)
         val wasAuto = c.queue.autoplayStart.value.let { it in 0..index }
+        // Shuffled, the queue shows the play order: Undo puts the song back in its place there too, after the song it
+        // followed (or before the one that followed it), not wherever shuffle would put a newly added song (Reddit, 1.8.0).
+        val order = if (p.shuffleModeEnabled) playOrder(p) else emptyList()
+        val pos = order.indexOf(index)
+        val playedAfter = order.getOrNull(pos - 1)?.takeIf { pos > 0 }?.let { p.getMediaItemAt(it) }
+        val playedBefore = order.getOrNull(pos + 1)?.takeIf { pos >= 0 }?.let { p.getMediaItemAt(it) }
         removeAt(index)
         return {
             withPlayer { q ->
@@ -581,6 +587,13 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
                 val auto = c.queue.autoplayStart.value
                 // Back among the songs it was with: before autoplay's suggestions, or one of them.
                 if (auto >= 0 && (auto > at || auto == at && !wasAuto)) c.queue.autoplayStart.value = auto + 1
+                if (q.shuffleModeEnabled) {
+                    fun indexOf(m: androidx.media3.common.MediaItem?) = m?.let { mi -> (0 until q.mediaItemCount).filter { it != at && q.getMediaItemAt(it) == mi }.minByOrNull { kotlin.math.abs(it - at) } }
+                    val shuffle = q.shuffleOrder as? HistoryShuffleOrder ?: HistoryShuffleOrder(playOrder(q).toIntArray()) { q.currentMediaItemIndex }
+                    val placed = indexOf(playedAfter)?.let { shuffle.placed(at, it, after = true) }
+                        ?: indexOf(playedBefore)?.let { shuffle.placed(at, it, after = false) }
+                    placed?.let { q.setShuffleOrder(it) }
+                }
             }
         }
     }
