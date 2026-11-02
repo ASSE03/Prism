@@ -2,6 +2,10 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.8.1 (unreleased)
+
+### Fixes
+
 ## 1.8.0
 
 ### Prism TV
