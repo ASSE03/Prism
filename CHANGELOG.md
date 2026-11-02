@@ -4,6 +4,27 @@ What changed in each release. Older releases are described on the [Releases page
 
 ## 1.8.1 (unreleased)
 
+### Bring your history
+
+- **Bring your Spotify history and library, no Spotify sign-in needed.** Request your data on Spotify's Privacy page
+  (Account data, or Extended streaming history for every play since you joined) and pick the zip it comes in, or the
+  files in it: Settings → Recommendations & Replay → Bring your history. Prism shows what's in it (plays, songs, the
+  dates, Liked Songs, playlists, saved albums, followed artists) and you choose what to bring: your plays, Liked Songs
+  (liked here), playlists (as Prism playlists), saved albums (into your library) and followed artists (starred).
+- **Your YouTube Music history from Google Takeout** (watch-history.json) and **your Last.fm scrobbles** (through the
+  Last.fm account you connected) come in the same way. Plays Prism itself sent to YouTube or Last.fm aren't counted twice.
+- **Each song is found on YouTube Music** in the background, on Wi-Fi unless you allow mobile data, a few at a time
+  with a quiet notification. A sure match counts at once; one Prism isn't sure of (another length, a live or remixed
+  version) waits in **Needs a look**, where you play the top three and pick, or pass it over. Nothing found is tried
+  again weekly. Every match is remembered, so nothing is looked up twice and your picks stay.
+- **Replay and Rewind count Prism's own plays only, unless you say so**: "Count history from" has a switch per history
+  you brought in. With them off, Replay is exactly as before; with one on, Replay and its story say "Includes Spotify".
+- **Imported plays shape your mixes, radio and Quick picks** (turned on by your first import, a switch of its own), so
+  a long history helps from the first day.
+- Everything is read on your phone and kept there (it's in backups with your history); the only requests are the song
+  searches matching needs and Last.fm's own. Remove a history any time: its plays leave Replay and your mixes, and
+  what it added to your library stays.
+
 ### Fixes
 
 ## 1.8.0

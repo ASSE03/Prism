@@ -658,6 +658,9 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                         }
                         composable(Routes.NEW_RELEASES) { ScreenBackdrop(BackdropScreen.HOME) { com.prism.music.ui.screens.NewReleasesScreen(bottomPadding) } }
                         composable(Routes.EXCLUSIONS) { ScreenBackdrop(BackdropScreen.SETTINGS) { com.prism.music.ui.screens.ExclusionsScreen(bottomPadding) } }
+                        // 1.8.1: Bring your history, and its "Needs a look".
+                        composable(Routes.BRING_HISTORY) { ScreenBackdrop(BackdropScreen.SETTINGS) { com.prism.music.ui.screens.BringHistoryScreen(bottomPadding) } }
+                        composable(Routes.IMPORT_REVIEW) { ScreenBackdrop(BackdropScreen.SETTINGS) { com.prism.music.ui.screens.ImportReviewScreen(bottomPadding) } }
                         composable(
                             Routes.RECOGNIZE + "?start={start}",
                             listOf(navArgument("start") { type = NavType.BoolType; defaultValue = false }),
@@ -1219,6 +1222,8 @@ private fun handleDeepLink(uri: Uri, nav: Navigator, c: AppContainer) {
         // Release Radar's notification.
         uri.scheme == "prism" && uri.host == "releases" -> nav.go(Routes.NEW_RELEASES)
         uri.scheme == "prism" && uri.host == "blends" -> nav.go(Routes.BLENDS)
+        // Bring your history's matching notification (1.8.1).
+        uri.scheme == "prism" && uri.host == "bring" -> nav.go(Routes.BRING_HISTORY)
         // A Look shared to Prism: Appearance → Looks, which shows it first.
         uri.scheme == "prism" && uri.host == "looks" -> nav.go(Routes.settings(com.prism.music.ui.screens.SettingsSection.LOOKS.key))
         // The Quick Settings tile: straight to listening.
