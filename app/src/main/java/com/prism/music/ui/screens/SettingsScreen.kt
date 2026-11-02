@@ -2378,6 +2378,9 @@ private fun HomeLibraryLook() {
         val look = ReplayCardStyle.entries.firstOrNull { it.name == s.replayCard } ?: ReplayCardStyle.WASH
         Group(tr(R.string.replay_card), info = tr(R.string.how_replay_looks_on_home_from, look.label, look.note)) {
             Chips(ReplayCardStyle.entries, look, { it.label }) { prefs.setReplayCard(it.name) }
+            // #286: what the bars are (the looks with bars show it below, as the card would).
+            Label(tr(R.string.replay_card_graph), info = tr(R.string.replay_card_graph_info))
+            Chips(com.prism.music.data.prefs.ReplayGraph.entries, s.view.replayGraph, { it.label }) { prefs.setReplayGraph(it) }
             ReplayCardPreview(look, Modifier.padding(top = 6.dp, bottom = 14.dp))
         }
         LibraryLookGroup()
@@ -2456,10 +2459,19 @@ private fun RecommendationsPage() {
                 tr(R.string.imp_shape_mixes), tr(R.string.imp_shape_mixes_detail), teach, info = tr(R.string.imp_shape_mixes_info),
             ) { c.imports.setTeach(it) }
         }
+        // 1.8.1: pause history (#296) and when a song counts as played (#263).
+        ListeningHistoryGroup()
         // 1.8.0: the Last.fm link here is gone (its page is in Devices & connections; Settings search finds it).
         Group(tr(R.string.replay_2)) {
             Toggle(tr(R.string.show_time_in_hours), if (s.replayHours) tr(R.string.like_20h_4m) else tr(R.string.like_1_204_min), s.replayHours) { prefs.setReplayHours(it) }
             Toggle(tr(R.string.use_theme_colors), tr(R.string.your_accent_instead_of_prism_s), s.replayThemeColors) { prefs.setReplayThemeColors(it) }
+            // #287: the stories' type, each shown as a slide would set it.
+            Label(tr(R.string.replay_story_font), info = tr(R.string.replay_story_font_info))
+            ChoiceCards(
+                listOf(false, true), s.view.replayStoryFont,
+                { if (it) tr(R.string.replay_story_font_own) else tr(R.string.replay_story_font_poster) }, { null },
+                onSelect = { prefs.setReplayStoryFont(it) },
+            ) { StoryTypeSample(it) }
             Toggle(tr(R.string.rewind_notification), tr(R.string.on_december_1_when_your_year), s.rewindNotification) { prefs.setRewindNotification(it) }
             // Prism's plays always count; each imported source only when switched on (off by default: Replay as before).
             if (imported.isNotEmpty()) {

@@ -1820,6 +1820,63 @@
     <string name="continue_album_resume_greeting_hide_context">continue album resume greeting hide context rewind</string>
     <string name="replay_card">Replay card</string>
     <string name="replay_teaser_look_style_design_quiet">replay teaser look style design quiet ledger wash spectrum frame ring cover stripe bars aurora</string>
+    <!-- 1.8.1: History (#296 pause, #263 when a play counts) -->
+    <string name="hist_title">History</string>
+    <string name="hist_info">What Prism keeps of what you play and search, on this phone, and what it tells your YouTube Music history when you\'re signed in.</string>
+    <string name="hist_pause">Pause history</string>
+    <string name="hist_pause_info">While it\'s paused, nothing you play or search is kept: no plays for Replay, Rewind and History, no recent searches, nothing sent to your YouTube Music history or scrobbled to Last.fm, and skipped suggestions aren\'t learned from. What\'s already kept stays, and likes still count.</string>
+    <string name="hist_pause_keywords">private session incognito privacy stop recording listening history search history</string>
+    <string name="hist_pause_hour">1 hour</string>
+    <string name="hist_pause_day">1 day</string>
+    <string name="hist_pause_until_on">Until I turn it back on</string>
+    <string name="hist_paused_until">until %1$s</string>
+    <string name="hist_paused_until_on">until you turn it back on</string>
+    <string name="hist_paused_line">Paused %1$s</string>
+    <string name="hist_paused_title">History is paused</string>
+    <string name="hist_turn_on">Turn back on</string>
+    <string name="hist_count_after">Counts as a play after</string>
+    <string name="hist_count_after_info">How long a song has to play before it\'s kept in Replay, Rewind and History. Shorter plays are left out, so a song skipped at once doesn\'t count. Ten seconds unless you pick otherwise.</string>
+    <string name="hist_count_keywords">threshold minimum seconds skip play count counted listening history</string>
+    <string name="hist_count_any">At once</string>
+    <string name="hist_count_seconds">%1$d s</string>
+    <string name="hist_count_minutes">%1$d min</string>
+    <string name="hist_count_account">Same for your YouTube Music history</string>
+    <string name="hist_count_account_detail">Off: YouTube Music hears of a song as it starts</string>
+    <string name="hist_count_account_info">On, a play reaches your YouTube Music history only once it has played that long, so both histories match. Off, as before, YouTube Music is told as each song starts.</string>
+    <string name="hist_needs_account">Sign in to YouTube Music first</string>
+    <!-- 1.8.1: Replay graphs and type (#286, #287) -->
+    <string name="replay_card_graph">Bars on the card</string>
+    <string name="replay_card_graph_info">The Wash and Spectrum bars looks draw your listening as bars: one for each month of this year, or for each of the last 12 weeks or 14 days.</string>
+    <string name="replay_card_graph_keywords">graph chart bars days weeks months recent</string>
+    <string name="replay_graph_months">Months</string>
+    <string name="replay_graph_weeks">Weeks</string>
+    <string name="replay_graph_days">Days</string>
+    <string name="replay_last_weeks">Last %1$d weeks</string>
+    <string name="replay_last_days">Last %1$d days</string>
+    <string name="replay_story_font">Story type</string>
+    <string name="replay_story_font_info">How Replay and Rewind stories set their words: in Prism\'s poster type, or in the font you picked for Prism (Text).</string>
+    <string name="replay_story_font_keywords">font typography typeface stories rewind wrapped</string>
+    <string name="replay_story_font_poster">Poster type</string>
+    <string name="replay_story_font_own">Your font</string>
+    <string name="replay_by_hour">Listening by hour</string>
+    <string name="replay_by_day">Listening by day</string>
+    <string name="replay_by_week">Listening by week</string>
+    <string name="replay_by_month">Listening by month</string>
+    <string name="replay_busiest_hour">Busiest hour: %1$s · %2$s</string>
+    <string name="replay_busiest_day">Busiest day: %1$s · %2$s</string>
+    <string name="replay_busiest_week">Busiest week: from %1$s · %2$s</string>
+    <string name="replay_busiest_month">Busiest month: %1$s · %2$s</string>
+    <!-- 1.8.1: Last.fm preview before bringing -->
+    <plurals name="imp_lastfm_range">
+        <item quantity="one">%1$s scrobble, %2$s to %3$s</item>
+        <item quantity="other">%1$s scrobbles, %2$s to %3$s</item>
+    </plurals>
+    <plurals name="imp_lastfm_new">
+        <item quantity="one">%1$s new scrobble since %2$s</item>
+        <item quantity="other">%1$s new scrobbles since %2$s</item>
+    </plurals>
+    <string name="imp_lastfm_nothing_new">Nothing new on Last.fm since %1$s</string>
+    <string name="imp_lastfm_none">There are no scrobbles on this Last.fm account yet</string>
     <string name="podcasts_button">Podcasts button</string>
     <string name="customize_button_at_the_top">Customize button at the top</string>
     <string name="customize_button_at_the_bottom">Customize button at the bottom</string>

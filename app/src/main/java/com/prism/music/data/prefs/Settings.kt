@@ -305,6 +305,15 @@ data class BehaviorPrefs(
     val pageSlide: Boolean = false,
     /** #264 (1.8.0): on a tablet, the tabs along the bottom or down the side; phones always have them at the bottom. */
     val tabBarPosition: TabBarPosition = TabBarPosition.SIDE,
+    /**
+     * #296 (1.8.1): history is paused until this time (0: not paused; Long.MAX_VALUE: until turned back on). See
+     * [com.prism.music.data.HistoryPause].
+     */
+    val historyPausedUntil: Long = 0L,
+    /** #263 (1.8.1): seconds a song must be heard to count as a play (10, as always, unless changed). */
+    val playCountSeconds: Int = 10,
+    /** #263: YouTube Music's history waits for the same; off, it's told as a song starts (as before). */
+    val playCountOnAccount: Boolean = false,
 )
 
 /** Where the tabs sit on a tablet or a wide window (#264); phones always have them at the bottom. Side = as before 1.8.0. */
@@ -375,7 +384,16 @@ data class ViewLook(
      * the next song's bar grows in as it fades in, along the crossfade's own curve ([CrossfadeCurve.gains]).
      */
     val crossfadeShape: Boolean = false,
+    /** #286 (1.8.1): what the Replay card's bars show: this year's months (as before), the last weeks or the last days. */
+    val replayGraph: ReplayGraph = ReplayGraph.MONTHS,
+    /** #287 (1.8.1): Replay and Rewind stories in your app font, instead of Prism's poster type. */
+    val replayStoryFont: Boolean = false,
 )
+
+/** The Replay card's bars (#286): one for each month of this year so far, each of the last 12 weeks, or the last 14 days. */
+enum class ReplayGraph(val label: String, val count: Int) {
+    MONTHS(tr(R.string.replay_graph_months), 12), WEEKS(tr(R.string.replay_graph_weeks), 12), DAYS(tr(R.string.replay_graph_days), 14),
+}
 
 // 1.8.0 player editor
 /**
@@ -1843,6 +1861,12 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val buttonsPill = booleanPreferencesKey("player_buttons_pill")
         // 1.8.1 ([ViewLook.crossfadeShape]).
         val crossfadeShape = booleanPreferencesKey("crossfade_shape")
+        // 1.8.1 ([ViewLook.replayGraph], [ViewLook.replayStoryFont]; [BehaviorPrefs]' history choices).
+        val replayGraph = stringPreferencesKey("replay_card_graph")
+        val replayStoryFont = booleanPreferencesKey("replay_story_font")
+        val historyPausedUntil = longPreferencesKey("history_paused_until")
+        val playCountSeconds = intPreferencesKey("play_count_seconds")
+        val playCountOnAccount = booleanPreferencesKey("play_count_account")
         // 1.8.0 player editor ([PlayerParts]): the hidden parts are part of a Look, the menu's choices aren't.
         val playerHiddenParts = stringPreferencesKey("player_hidden_parts")
         val playerMenuHidden = stringPreferencesKey("player_menu_hidden")
@@ -1878,7 +1902,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 cornerScale, songShape, albumShape, artistShape, playerShape, buttonShape, playOutlined,
                 typeWeight, typeSpacing, titleFont, tabTint, playerTitleWeight, typeClassic, controlsClassic,
                 panelPlayer, queueHeadings, castMark, immersiveVideo, bleedFit, coverFlight, videoControlsHide,
-                crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape,
+                crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape, replayGraph, replayStoryFont,
             ) + lyricsLook.map { it.first }
         }
 
@@ -1913,7 +1937,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 typeWeight to 's', typeSpacing to 's', titleFont to 's', tabTint to 's', playerTitleWeight to 's', typeClassic to 'b', controlsClassic to 'b',
                 panelPlayer to 's', queueHeadings to 'b', castMark to 'b', immersiveVideo to 'b', bleedFit to 's', coverFlight to 'b',
                 videoControlsHide to 'b', crossfadeMark to 'b', blendCovers to 'b', buttonsPill to 'b', playerHiddenParts to 's',
-                crossfadeShape to 'b',
+                crossfadeShape to 'b', replayGraph to 's', replayStoryFont to 'b',
             ) + lyricsLook
         }
 
@@ -1953,6 +1977,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "skip_silence_episodes", "sleep_fade", "pause_fade",
                 // 1.8.1 (#314): your own song files in place of the stream.
                 "own_lossy_files",
+                // 1.8.1 (#296, #263): what Prism keeps of your listening.
+                "history_paused_until", "play_count_seconds", "play_count_account",
             )
         }
     }
@@ -2205,6 +2231,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 playingInPageColor = p[K.playingInPageColor] ?: d.view.playingInPageColor,
                 parts = readParts(p),
                 crossfadeShape = p[K.crossfadeShape] ?: d.view.crossfadeShape,
+                replayGraph = p.enum(K.replayGraph, d.view.replayGraph),
+                replayStoryFont = p[K.replayStoryFont] ?: d.view.replayStoryFont,
             ),
             sound = SoundPrefs(
                 crossfadeCurve = p.enum(K.crossfadeCurve, d.sound.crossfadeCurve),
@@ -2231,6 +2259,9 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 gesturesEverywhere = p[K.gesturesEverywhere] ?: d.behavior.gesturesEverywhere,
                 pageSlide = p[K.pageSlide] ?: d.behavior.pageSlide,
                 tabBarPosition = p.enum(K.tabBarPosition, d.behavior.tabBarPosition),
+                historyPausedUntil = p[K.historyPausedUntil] ?: d.behavior.historyPausedUntil,
+                playCountSeconds = (p[K.playCountSeconds] ?: d.behavior.playCountSeconds).coerceIn(0, 600),
+                playCountOnAccount = p[K.playCountOnAccount] ?: d.behavior.playCountOnAccount,
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -2805,6 +2836,12 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setBlendCovers(v: Boolean) = edit { it[K.blendCovers] = v }
     fun setButtonsPill(v: Boolean) = edit { it[K.buttonsPill] = v }
     fun setCrossfadeShape(v: Boolean) = edit { it[K.crossfadeShape] = v }
+    fun setReplayGraph(v: ReplayGraph) = edit { it[K.replayGraph] = v.name }
+    fun setReplayStoryFont(v: Boolean) = edit { it[K.replayStoryFont] = v }
+    /** #296: history paused until [until] (0: on again). */
+    fun setHistoryPausedUntil(until: Long) = edit { if (until > 0) it[K.historyPausedUntil] = until else it.remove(K.historyPausedUntil) }
+    fun setPlayCountSeconds(v: Int) = edit { it[K.playCountSeconds] = v.coerceIn(0, 600) }
+    fun setPlayCountOnAccount(v: Boolean) = edit { it[K.playCountOnAccount] = v }
 
     // 1.8.0 player editor
     /** A comma-separated set of names (unknown ones skipped): a Look or backup from a later Prism still opens. */

@@ -264,6 +264,7 @@ object LookLabels {
         "library_subtitles" to tr(R.string.library_details), "home_header" to tr(R.string.top_of_home), "home_header_height" to tr(R.string.top_of_home_s_height),
         "playlist_hero_cover" to tr(R.string.playlist_picture), "replay_theme_colors" to tr(R.string.replay_in_your_colors),
         "replay_card" to tr(R.string.replay_card),
+        "replay_card_graph" to tr(R.string.replay_card_graph), "replay_story_font" to tr(R.string.replay_story_font),
         "player_layout" to tr(R.string.player_layout), "vinyl_tonearm" to tr(R.string.tonearm), "player_deck" to tr(R.string.player_s_order), "player_buttons" to tr(R.string.player_buttons),
         "scrubber_color" to tr(R.string.progress_bar_color), "player_title_align" to tr(R.string.title_alignment), "player_title_size" to tr(R.string.title_size),
         "player_title_scroll" to tr(R.string.scrolling_titles), "player_times" to tr(R.string.times), "mesh_speed" to tr(R.string.mesh_motion), "mesh_intensity" to tr(R.string.mesh_colors),
@@ -348,6 +349,7 @@ object LookLabels {
             "library_columns" to e(com.prism.music.data.prefs.LibraryColumns.entries) { it.label },
             "home_header" to e(com.prism.music.data.prefs.HomeHeader.entries) { it.label },
             "home_header_height" to e(com.prism.music.data.prefs.HomeHeaderHeight.entries) { it.label },
+            "replay_card_graph" to e(com.prism.music.data.prefs.ReplayGraph.entries) { it.label },
             "player_layout" to e(com.prism.music.data.prefs.PlayerLayout.entries) { it.label },
             "scrubber_color" to e(com.prism.music.data.prefs.ScrubberColor.entries) { it.label },
             "player_title_align" to e(com.prism.music.data.prefs.PlayerTitleAlign.entries) { it.label },
@@ -423,6 +425,7 @@ object LookLabels {
         "layout" to setOf(
             "corners", "ui_density", "title_size", "card_size", "nav_style", "nav_labels", "nav_hide_on_scroll", "nav_tabs", "start_tab",
             "mini_player_style", "mini_skip_buttons", "mini_prev_button", "mini_play_button", "mini_progress", "mini_progress_color", "mini_fill_strength", "library_view", "library_views", "library_columns", "library_subtitles", "home_header", "home_header_height", "playlist_hero_cover", "replay_theme_colors", "replay_card",
+            "replay_card_graph", "replay_story_font",
             "hide_status_bar", "hide_status_bar_player", "tab_names", "nav_bar_size", "nav_bar_fill", "mini_player_joined", "controls_classic",
         ),
         "player" to setOf(

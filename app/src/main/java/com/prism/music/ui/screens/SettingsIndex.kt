@@ -388,6 +388,7 @@ object SettingsIndex {
         SettingEntry(H, tr(R.string.home), tr(R.string.add_new_sections_automatically), "shelves"),
         SettingEntry(H, tr(R.string.home), tr(R.string.continue_line), tr(R.string.continue_album_resume_greeting_hide_context)),
         SettingEntry(H, tr(R.string.replay_card), tr(R.string.replay_card), tr(R.string.replay_teaser_look_style_design_quiet)),
+        SettingEntry(H, tr(R.string.replay_card), tr(R.string.replay_card_graph), tr(R.string.replay_card_graph_keywords)),
         SettingEntry(H, tr(R.string.home), tr(R.string.buttons_at_the_top_of_home), tr(R.string.podcasts_button) + " " + tr(R.string.customize_button_at_the_top)),
         SettingEntry(H, tr(R.string.search), tr(R.string.search)),
         SettingEntry(H, tr(R.string.home), tr(R.string.customize_button_at_the_bottom)),
@@ -419,6 +420,14 @@ object SettingsIndex {
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.show_time_in_hours), tr(R.string.stats_minutes)),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.use_theme_colors), tr(R.string.colors_stats)),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.rewind_notification), tr(R.string.rewind_wrapped_year_in_review_december)),
+        SettingEntry(LB, tr(R.string.replay_2), tr(R.string.replay_story_font), tr(R.string.replay_story_font_keywords)),
+        // 1.8.1: History (#296, #263).
+        SettingEntry(LB, tr(R.string.hist_title), tr(R.string.hist_pause), tr(R.string.hist_pause_keywords)),
+        SettingEntry(LB, tr(R.string.hist_title), tr(R.string.hist_count_after), tr(R.string.hist_count_keywords)),
+        SettingEntry(
+            LB, tr(R.string.hist_title), tr(R.string.hist_count_account), tr(R.string.hist_count_keywords),
+            needs = Needs(tr(R.string.hist_needs_account)) { it.isLoggedIn },
+        ),
         // 1.8.1: Bring your history.
         SettingEntry(LB, tr(R.string.imp_title), tr(R.string.imp_title), tr(R.string.imp_keywords)),
         SettingEntry(LB, tr(R.string.imp_title), tr(R.string.imp_shape_mixes), tr(R.string.imp_shape_mixes_keywords)),
