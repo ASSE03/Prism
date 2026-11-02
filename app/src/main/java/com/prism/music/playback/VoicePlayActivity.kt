@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.SearchManager
 import android.content.ComponentName
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.core.content.ContextCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.session.MediaController
@@ -12,21 +11,23 @@ import androidx.media3.session.SessionToken
 
 /**
  * "Hey Google, play … on Prism" from the phone (Assistant / Gemini send `MEDIA_PLAY_FROM_SEARCH` to an
- * activity, and only list apps that declare it as music sources). No screen: the query goes to the
- * playback service as a search request — `onSetMediaItems` plays the top match, or the last queue when
- * there's no query — and this closes at once. In the car, Android Auto asks the session directly.
+ * activity, and only list apps that declare it as music sources). No screen: the query and the voice extras
+ * (what kind of thing was asked for, the artist, album or playlist made out: [VoiceSearch]) go to the playback
+ * service as a search request, and this closes at once. In the car, Android Auto asks the session directly
+ * (the same request, through its play-from-search). It may be started with the phone locked, as it is in the car:
+ * the manifest lets it run over the lock screen, where it shows nothing.
  */
 class VoicePlayActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val query = intent?.getStringExtra(SearchManager.QUERY)?.trim().orEmpty()
-            .ifEmpty { listOfNotNull(intent?.getStringExtra(MediaStore.EXTRA_MEDIA_TITLE), intent?.getStringExtra(MediaStore.EXTRA_MEDIA_ARTIST)).joinToString(" ") }
+        val extras = VoiceSearch.extrasOf(intent?.extras)
         val app = applicationContext
         val future = MediaController.Builder(app, SessionToken(app, ComponentName(app, PlaybackServices.target(app)))).buildAsync()
         future.addListener({
             val controller = runCatching { future.get() }.getOrNull() ?: return@addListener
             val item = MediaItem.Builder()
-                .setRequestMetadata(MediaItem.RequestMetadata.Builder().setSearchQuery(query).build())
+                .setRequestMetadata(MediaItem.RequestMetadata.Builder().setSearchQuery(query).setExtras(extras).build())
                 .build()
             controller.setMediaItem(item)
             controller.prepare()

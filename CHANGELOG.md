@@ -82,6 +82,13 @@ What changed in each release. Older releases are described on the [Releases page
 - **The update banner shows sooner** (Prism looks for a new version every hour, not every six), and a second tap while
   an update is downloading or waiting for Android's installer doesn't start another (#278).
 - **Swiping Prism away while it's paused** takes its notification with it (#274).
+- **"Hey Google, play … on Prism" plays what you asked for, in the car too** (Reddit: Android Auto's voice button did
+  nothing). Everything used to be looked up as one song: now an artist plays their top songs, an album the album, "my
+  road trip playlist" your own playlist by name, "my liked songs" and "my downloads" yours, "shuffle …" shuffles, a song
+  its radio, and anything else plays Search's top result. When nothing is found, what was playing keeps playing (it
+  used to stop) and the car says Prism couldn't find it. The car's search button lists your own playlists and liked
+  songs first, then Search's top results, songs, albums, artists and playlists. With the phone locked, the phone's
+  voice request plays too.
 - **Tapping a lyric line while the song is paused** moves the lyrics there too (the music moved, the lyrics stayed) (#308).
 - **The play button's triangle sits in the middle of its circle** (it looked a little to the right) (#313).
 - **The playing bars beside the current song stand still while it's paused** (#302).

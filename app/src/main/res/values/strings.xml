@@ -1600,6 +1600,8 @@
     <string name="haptics">Haptics</string>
     <string name="vibration_vibrate">vibration vibrate</string>
     <string name="autoplay">Autoplay</string>
+    <string name="voice_nothing_found">Prism couldn\'t find “%1$s”</string>
+    <string name="voice_search_offline">Prism couldn\'t search: check the connection</string>
     <string name="radio_continue_similar">radio continue similar</string>
     <string name="autoplay_from">Autoplay from</string>
     <string name="radio_your_music_prism_radio_youtube">radio your music prism radio youtube offline local</string>
