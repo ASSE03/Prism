@@ -24,6 +24,7 @@ import com.prism.music.ui.theme.LocalContainer
 import com.prism.music.ui.theme.PrismIcons
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 /** Settings → Prism Connect: speakers and TVs, the browser remote, and handoff between Prism devices. */
 @Composable
@@ -116,6 +117,26 @@ private fun TvInstallGroup() {
     var on by remember { mutableStateOf(false) }
     var failed by remember { mutableStateOf(false) }
     androidx.compose.runtime.DisposableEffect(share) { onDispose { share.stop() } }
+    // Prism put away with the page still open (another app, the screen off): sharing stops a little later, not at once
+    // (a TV may be part-way through taking it, the phone's screen gone dark meanwhile), and not if Prism comes back.
+    val pageLifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    androidx.compose.runtime.DisposableEffect(pageLifecycle, share) {
+        var later: kotlinx.coroutines.Job? = null
+        val o = androidx.lifecycle.LifecycleEventObserver { _, e ->
+            when (e) {
+                androidx.lifecycle.Lifecycle.Event.ON_STOP -> if (on) later = scope.launch {
+                    kotlinx.coroutines.delay(SHARE_AWAY_MS)
+                    share.stop()
+                    on = false
+                }
+                androidx.lifecycle.Lifecycle.Event.ON_START -> { later?.cancel(); later = null }
+                else -> Unit
+            }
+        }
+        pageLifecycle.addObserver(o)
+        onDispose { later?.cancel(); pageLifecycle.removeObserver(o) }
+    }
     fun copy(text: String) {
         clipboard.setText(AnnotatedString(text))
         android.widget.Toast.makeText(context, tr(R.string.copied), android.widget.Toast.LENGTH_SHORT).show()
@@ -146,6 +167,9 @@ private fun TvInstallGroup() {
         ) { Icon(PrismIcons.Copy, tr(R.string.copy), tint = MaterialTheme.colorScheme.onSurfaceVariant) }
     }
 }
+
+/** How long "Share Prism with a TV" goes on with Prism put away (a TV part-way through taking it finishes). */
+private const val SHARE_AWAY_MS = 2 * 60_000L
 
 private fun day(ms: Long): String {
     if (ms <= 0) return "never"

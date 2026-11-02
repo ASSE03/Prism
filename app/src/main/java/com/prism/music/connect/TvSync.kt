@@ -33,13 +33,24 @@ object TvSync {
         val wait: Boolean = false,
     )
 
-    fun plan(have: Have, f: FollowState): Plan {
+    /**
+     * Whether the TV takes [f] at all: not when the phone sent it before it had the TV's latest act ([actsDone], the
+     * TV's last [TvAct.n]); a Next or a Pause on the TV then a state from before it reloaded the song or played again.
+     */
+    fun current(f: FollowState, actsDone: Long): Boolean = f.acts >= actsDone
+
+    /**
+     * [reachedFrom]: the song the TV just played into the next from by itself, a moment ahead of the phone; a state
+     * still naming it (the phone's muted player not there yet) leaves the TV where it is rather than starting it over.
+     */
+    fun plan(have: Have, f: FollowState, reachedFrom: String? = null): Plan {
         // Nothing the TV can play (a file on the phone): it pauses, and the phone plays it itself.
         val target = f.songs.getOrNull(f.index)?.id ?: return Plan(playing = false)
         val ids = f.songs.map { it.id }
         val seek = f.seekTo.takeIf { it >= 0 }
         val current = have.ids.getOrNull(have.index)
         return when {
+            seek == null && reachedFrom != null && target == reachedFrom && current != null && current == ids.getOrNull(f.index + 1) -> Plan(f.playing)
             current == target -> Plan(f.playing, around = have.ids != ids, seekTo = seek)
             seek == null && have.ids.getOrNull(have.index + 1) == target && have.remainingMs in 0..LET_FINISH_MS -> Plan(f.playing, wait = true)
             else -> Plan(f.playing, load = true, startMs = seek ?: 0)
@@ -71,6 +82,24 @@ object TvSync {
         val tv = w.positionMs + ageMs.coerceIn(0, 2_000)
         return if (abs(phoneMs - tv) > DRIFT_MS) tv else null
     }
+
+    /**
+     * A song picked on the TV as the phone's queue index now: the sent window's ([picked]) if the phone's queue still
+     * has that song there ([idAt], of [count] songs); else the same song where it is now, the nearest to the one
+     * playing ([current]); null when it's gone (the review: a queue edit, then a pick, went to the wrong song).
+     */
+    fun pickIndex(act: TvAct, sent: List<Int>, sentIds: List<String>, idAt: (Int) -> String?, count: Int, current: Int): Int? {
+        val id = act.songId ?: return null
+        picked(act, sent, sentIds)?.let { i -> if (i < count && idAt(i) == id) return i }
+        if (act.kind != TvAct.PICK) return null
+        return (0 until count).filter { idAt(it) == id }.minByOrNull { abs(it - current) }
+    }
+
+    /** How long a volume set on the phone outranks what the TV last said its volume is. */
+    const val VOLUME_SETTLE_MS = 2_000L
+
+    /** Whether the TV's word on its volume is taken ([setAtMs]: when the phone last set it, 0 never; [nowMs]: now). */
+    fun takesVolume(nowMs: Long, setAtMs: Long): Boolean = setAtMs == 0L || nowMs - setAtMs > VOLUME_SETTLE_MS
 
     /** At most this many songs either way ([FollowState.songs], or a queue the TV started of its own). */
     const val MAX_SONGS = 200

@@ -134,6 +134,17 @@ class EdgeSilenceTest {
         assertEquals(3.0, out.size.toDouble() / rate, 0.01)
     }
 
+    /**
+     * The 1.8.0 review: a seek landing past a song's length as its timeline gives it (YouTube's lengths are a little
+     * short of the stream), with a shorter song after it, left less than nothing to cut up to: the audio was read back,
+     * or the buffer's limit set below its start (an exception on the playback thread).
+     */
+    @Test(timeout = 20_000) fun aSeekPastASongsStatedLengthGoesThrough() {
+        val out = play(processor(), tone(1.0), listOf(2.0, 0.5), startUs = 3_000_000)
+        // Its sound comes out once, none of it read back (the trimming only ever takes silence away).
+        assertTrue("${out.size.toDouble() / rate} s", out.size <= tone(1.0).size && out.size >= tone(0.5).size)
+    }
+
     @Test fun offItPassesEverything() {
         val song = cat(silence(1.0), tone(3.0), silence(2.0))
         val p = EdgeSilenceProcessor()

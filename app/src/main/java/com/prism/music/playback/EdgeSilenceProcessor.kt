@@ -140,8 +140,9 @@ class EdgeSilenceProcessor : BaseAudioProcessor() {
         var frames = bytes / frameBytes
         while (frames > 0) {
             if (periodFrames > 0 && position >= periodFrames) songEnded()
-            // Up to the end of this song, so the next one starts afresh.
-            val n = if (periodFrames > 0) minOf(frames.toLong(), periodFrames - position).toInt() else frames
+            // Up to the end of this song, so the next one starts afresh. At least a frame: still past the end (no song
+            // after it to move on to), none at all would loop for ever or read back (as VocalStemProcessor).
+            val n = if (periodFrames > 0) minOf(frames.toLong(), (periodFrames - position).coerceAtLeast(1)).toInt() else frames
             run(inputBuffer, out, n)
             frames -= n
         }

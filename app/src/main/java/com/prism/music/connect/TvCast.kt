@@ -57,6 +57,10 @@ internal class TvCast(
     private var followTarget: Long? = null
     private var lastWhere: TvWhere? = null
     private var lastWhereAt = 0L
+    /** The last of the TV's own acts taken in here, said back with every state ([FollowState.acts]). */
+    private var actsTaken = 0L
+    /** When the volume was last set here: the TV's word on it, sent before that reached it, is old for a moment. */
+    private var volumeSetAt = 0L
     private var closed = false
     private var soon: Job? = null
     private var keepalive: Job? = null
@@ -95,7 +99,17 @@ internal class TvCast(
 
     fun setVolume(level: Int) {
         volume = level.coerceIn(0, 100)
+        volumeSetAt = SystemClock.elapsedRealtime()
         post(HMsg.Volume(volume!!))
+    }
+
+    /**
+     * Sends what plays now and where (the connection is up): the first state was made before it, which can be minutes
+     * when the phone had to pair first (the review: the TV started the song and place from then).
+     */
+    fun resync() {
+        val p = player() ?: return
+        send(seekTo = p.currentPosition)
     }
 
     /** Where the TV was last heard to be in the song playing here, as of now (null: not known lately). */
@@ -141,7 +155,7 @@ internal class TvCast(
     private fun send(seekTo: Long = -1) {
         if (closed) return
         val p = player() ?: return
-        val b = build(p, ++seq, seekTo, c.queue.source.value.title)
+        val b = build(p, ++seq, seekTo, c.queue.source.value.title, actsTaken)
         sent = b.indices
         sentIds = b.state.songs.map { it.id }
         val song = sentIds.getOrNull(b.state.index)
@@ -172,7 +186,8 @@ internal class TvCast(
         val now = SystemClock.elapsedRealtime()
         lastWhere = w
         lastWhereAt = now
-        if (volume != w.volume) { volume = w.volume; changed() }
+        // Its volume, unless it's just been set here (a report sent before then would undo it while it's dragged).
+        if (volume != w.volume && TvSync.takesVolume(now, volumeSetAt)) { volume = w.volume; changed() }
         val p = player() ?: return
         if (local || w.songId != p.currentMediaItem?.mediaId || w.seq < syncSeq) return
         if (!p.playWhenReady || p.playbackState != Player.STATE_READY) return
@@ -184,13 +199,17 @@ internal class TvCast(
     }
 
     private fun onAct(a: TvAct) {
+        // Taken in (whatever comes of it), and said back at once: the TV doesn't take states from before it.
+        actsTaken = maxOf(actsTaken, a.n)
+        sendSoon()
         val p = player() ?: return
         lastCommandAt = SystemClock.elapsedRealtime()
         when (a.kind) {
             TvAct.PLAY -> if (!p.playWhenReady) c.player.setPlaying(true)
             TvAct.PAUSE -> if (p.playWhenReady) c.player.setPlaying(false)
             TvAct.SEEK -> { followTarget = a.positionMs; p.seekTo(a.positionMs.coerceAtLeast(0)) }
-            TvAct.PICK -> TvSync.picked(a, sent, sentIds)?.takeIf { it != p.currentMediaItemIndex && it < p.mediaItemCount }?.let { p.seekToDefaultPosition(it) }
+            TvAct.PICK -> TvSync.pickIndex(a, sent, sentIds, { i -> p.getMediaItemAt(i).mediaId }, p.mediaItemCount, p.currentMediaItemIndex)
+                ?.takeIf { it != p.currentMediaItemIndex }?.let { p.seekToDefaultPosition(it) }
             TvAct.REPLACE -> {
                 val songs = a.songs.take(TvSync.MAX_SONGS).mapNotNull(TvSync::goes)
                 val at = songs.indexOfFirst { it.id == a.songId }.takeIf { it >= 0 } ?: a.index.coerceIn(0, (songs.size - 1).coerceAtLeast(0))
@@ -213,7 +232,7 @@ internal class TvCast(
          * What's playing on [p] as the TV is sent it ([TvSync.window]): only what can play there (YouTube songs); a
          * song playing that can't is index -1.
          */
-        fun build(p: Player, seq: Long, seekTo: Long, title: String = ""): Built {
+        fun build(p: Player, seq: Long, seekTo: Long, title: String = "", acts: Long = 0): Built {
             val shuffle = p.shuffleModeEnabled
             // Repeat one plays the same song again: the window is the queue's order, the TV repeating it itself.
             val repeat = if (p.repeatMode == Player.REPEAT_MODE_ONE) Player.REPEAT_MODE_OFF else p.repeatMode
@@ -229,7 +248,7 @@ internal class TvCast(
             return Built(
                 FollowState(
                     songs = kept.map { it.second }, index = index, playing = p.playWhenReady, seekTo = seekTo, seq = seq,
-                    repeatOne = p.repeatMode == Player.REPEAT_MODE_ONE, title = title,
+                    repeatOne = p.repeatMode == Player.REPEAT_MODE_ONE, title = title, acts = acts,
                 ),
                 kept.map { it.first },
             )

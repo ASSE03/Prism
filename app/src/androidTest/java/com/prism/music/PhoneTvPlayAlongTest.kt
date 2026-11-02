@@ -47,7 +47,9 @@ class PhoneTvPlayAlongTest {
         override fun savePairing(device: String, name: String, secret: String) { keys[device] = secret }
         override fun forget(device: String) { keys.remove(device) }
         override fun showCode(code: String?, from: String) = Unit
-        override fun pairingCode(from: String): String? = null
+        /** The code it shows a phone pairing with it; null: not taking pairings. */
+        @Volatile var code: String? = null
+        override fun pairingCode(from: String): String? = code
         override fun snapshot(): HandoffSnapshot? = null
         override fun takeOver(s: HandoffSnapshot, from: String): String? = null
         override fun stepAside() = Unit
@@ -116,6 +118,8 @@ class PhoneTvPlayAlongTest {
         assertEquals("Test TV", (c.cast.state.value as CastState.Casting).renderer.name)
         assertEquals(songs[0].id, tv.playing)
         assertTrue("the TV starts where the phone was", tv.states.first().seekTo >= 0)
+        // And is told where the phone is once the connection is up (the first state was made before it).
+        waitFor(5_000, "the state sent once connected") { tv.states.size >= 2 && tv.states[1].seekTo >= 0 }
         assertEquals(0f, main { c.player.player!!.volume })
 
         // A skip on the phone reaches the TV.
@@ -149,5 +153,32 @@ class PhoneTvPlayAlongTest {
         waitFor(10_000, "the session ended") { c.cast.state.value is CastState.Idle }
         assertTrue("paused here", !main { c.player.playWhenReady })
         c.handoff.forget(tv.device)
+    }
+
+    /** The 1.8.0 review (6): stopped while the TV's pairing code is being asked for, the ask goes away and nothing connects. */
+    @Test fun stoppingWhileTheCodeIsAskedForLetsItGo() {
+        Fixture.ready()
+        instrumentation.uiAutomation.executeShellCommand("cmd media_session volume --stream 3 --set 0").close()
+        TestHooks.prismTvSong = { it }
+        // Not paired: it asks for a code.
+        val tv = Tv().apply { code = "123456" }
+        c.handoff.forget(tv.device)
+        thread { while (!server.isClosed) { val s = runCatching { server.accept() }.getOrNull() ?: break; thread { HLink(s).use { HandoffPeer(tv).serve(it) } } } }
+        val perm = if (android.os.Build.VERSION.SDK_INT >= 33) android.Manifest.permission.READ_MEDIA_AUDIO else android.Manifest.permission.READ_EXTERNAL_STORAGE
+        instrumentation.uiAutomation.grantRuntimePermission(Fixture.context.packageName, perm)
+        tones += Fixture.tone("Prism along code", 120)
+        runBlocking { c.localMusic.scan() }
+        val song = c.localMusic.tracks.value.first { it.song.title == "Prism along code" }.song
+        instrumentation.runOnMainSync { c.player.playQueue(listOf(song), 0, QueueSource(QueueKind.OTHER, "Play along test")) }
+        waitFor(20_000, "playing") { c.player.isPlaying.value }
+        val device = PrismDevice(tv.name, "127.0.0.1", server.localPort, tv.device, "test", paired = false, tv = true)
+        instrumentation.runOnMainSync { c.cast.connectTv(device) }
+        waitFor(10_000, "the code asked for") { c.handoff.askingCodeFor.value != null }
+        instrumentation.runOnMainSync { c.cast.disconnect() }
+        waitFor(5_000, "the ask gone") { c.handoff.askingCodeFor.value == null }
+        assertTrue(c.cast.state.value is CastState.Idle)
+        Thread.sleep(1_000)
+        assertTrue("nothing connected", c.cast.state.value is CastState.Idle && tv.states.isEmpty())
+        assertEquals(null, c.handoff.secretFor(tv.device))
     }
 }

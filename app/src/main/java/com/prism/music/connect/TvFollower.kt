@@ -26,6 +26,11 @@ internal class TvFollower(private val c: AppContainer, private val link: HLink, 
     /** Set while this applies the phone's state: what the player says then is the phone's doing, not the TV's. */
     private var applying = false
     private var appliedSeekAt = 0L
+    /** The TV's own acts so far ([TvAct.n]); a state the phone sent before the latest isn't taken ([TvSync.current]). */
+    private var acts = 0L
+    /** The song the TV last played into the next from by itself, until the phone has caught up ([TvSync.plan]). */
+    private var reachedFrom: String? = null
+    private var lastSong: String? = null
     @Volatile private var over = false
     private val out = Executors.newSingleThreadExecutor { r -> Thread(r, "tv-follow-out").apply { isDaemon = true } }
 
@@ -80,6 +85,8 @@ internal class TvFollower(private val c: AppContainer, private val link: HLink, 
 
     private fun apply(f: FollowState) {
         if (over) return
+        // Sent before the phone had the TV's last act (a keepalive crossing a Next or a Pause on the TV): out of date.
+        if (!TvSync.current(f, acts)) return
         seq = f.seq
         taken = f
         val p = c.player.player
@@ -87,7 +94,9 @@ internal class TvFollower(private val c: AppContainer, private val link: HLink, 
             (0 until p.mediaItemCount).map { p.getMediaItemAt(it).mediaId }, p.currentMediaItemIndex,
             if (p.duration > 0) (p.duration - p.currentPosition).coerceAtLeast(0) else -1,
         )
-        val plan = TvSync.plan(have, f)
+        val plan = TvSync.plan(have, f, reachedFrom)
+        // The phone has caught up with the song the TV went on to by itself.
+        if (f.songs.getOrNull(f.index)?.id != reachedFrom) reachedFrom = null
         applying = true
         try {
             when {
@@ -117,9 +126,12 @@ internal class TvFollower(private val c: AppContainer, private val link: HLink, 
     // ------------------------------------------------------------ What's done on the TV
 
     override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+        val before = lastSong
+        lastSong = mediaItem?.mediaId
         if (applying || over) return
-        // A song ending into the next: the phone gets there by itself.
-        if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO || reason == Player.MEDIA_ITEM_TRANSITION_REASON_REPEAT) return
+        // A song ending into the next: the phone gets there by itself (a moment later, its muted player being behind).
+        if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO) { if (before != mediaItem?.mediaId) reachedFrom = before; return }
+        if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_REPEAT) return
         val p = c.player.player ?: return
         val f = taken ?: return
         val id = mediaItem?.mediaId ?: return
@@ -143,6 +155,9 @@ internal class TvFollower(private val c: AppContainer, private val link: HLink, 
 
     override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
         if (applying || over || reason == Player.PLAY_WHEN_READY_CHANGE_REASON_END_OF_MEDIA_ITEM) return
+        // The phone is playing a file of its own (the TV can't have it): Play here would play the last song the TV had
+        // under it, so it's turned back at once.
+        if (playWhenReady && taken?.index == -1) { applying = true; try { c.player.setPlaying(false) } finally { applying = false }; return }
         act(TvAct(if (playWhenReady) TvAct.PLAY else TvAct.PAUSE))
     }
 
@@ -154,7 +169,7 @@ internal class TvFollower(private val c: AppContainer, private val link: HLink, 
     }
 
     private fun act(a: TvAct) {
-        send(HMsg.Act(a))
+        send(HMsg.Act(a.copy(n = ++acts)))
         out.execute { where()?.let { link.send(HMsg.Where(it)) } }
     }
 

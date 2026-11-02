@@ -77,6 +77,53 @@ class TvSyncTest {
         assertNull(TvSync.follow(10_000, w.copy(buffering = true), 0))
     }
 
+    /**
+     * The 1.8.0 review (1): the TV played into the next song a moment before the phone's muted player; a keepalive or a
+     * queue change still naming the song before started that over from 0 (about one song change in five).
+     */
+    @Test fun aSongTheTvPlayedIntoByItselfIsntStartedOverByALateState() {
+        // On C (index 2), reached by itself from B; the phone's state still names B, C next.
+        assertEquals(TvSync.Plan(true), TvSync.plan(TvSync.Have(ids, 2, 200_000), state(1), reachedFrom = ids[1]))
+        // Without that (a skip back on the phone), B is loaded, as before.
+        assertTrue(TvSync.plan(TvSync.Have(ids, 2, 200_000), state(1)).load)
+        // A seek on the phone into B is meant: it's loaded.
+        assertTrue(TvSync.plan(TvSync.Have(ids, 2, 200_000), state(1, seekTo = 30_000), reachedFrom = ids[1]).load)
+    }
+
+    /**
+     * The 1.8.0 review (2): Next or Pause on the TV's remote, then a keepalive sent before the phone had it, reloaded the
+     * song before or played again. A state is taken only once the phone has taken in the TV's latest act.
+     */
+    @Test fun aStateFromBeforeTheTvsLatestActIsntTaken() {
+        val f = state(1).copy(acts = 4)
+        assertTrue(TvSync.current(f, actsDone = 4))
+        assertTrue(TvSync.current(f, actsDone = 0))
+        assertFalse(TvSync.current(f, actsDone = 5))
+    }
+
+    /** The 1.8.0 review (4): a queue edit on the phone, then a pick on the TV: the song picked, wherever it is now. */
+    @Test fun aSongPickedOnTheTvIsFoundAfterTheQueueChanged() {
+        val sent = listOf(7, 8, 9)
+        val sentIds = listOf(ids[0], ids[1], ids[2])
+        val pick = TvAct(TvAct.PICK, index = 2, songId = ids[2])
+        // The queue as sent: index 9.
+        val same = { i: Int -> mapOf(7 to ids[0], 8 to ids[1], 9 to ids[2])[i] }
+        assertEquals(9, TvSync.pickIndex(pick, sent, sentIds, same, 20, 8))
+        // A song put in before it: it's at 10 now, not 9.
+        val moved = { i: Int -> mapOf(7 to ids[0], 8 to ids[1], 9 to "eeeeeeeeeee", 10 to ids[2])[i] }
+        assertEquals(10, TvSync.pickIndex(pick, sent, sentIds, moved, 20, 8))
+        // Taken out of the queue: nothing.
+        val gone = { i: Int -> mapOf(7 to ids[0], 8 to ids[1])[i] }
+        assertNull(TvSync.pickIndex(pick, sent, sentIds, gone, 20, 8))
+    }
+
+    /** The 1.8.0 review (7): the TV's word on its volume, sent before a change on the phone reached it, isn't taken. */
+    @Test fun aVolumeSetOnThePhoneIsntUndoneByAnOlderWordFromTheTv() {
+        assertTrue(TvSync.takesVolume(nowMs = 10_000, setAtMs = 0))
+        assertFalse(TvSync.takesVolume(nowMs = 10_000, setAtMs = 9_000))
+        assertTrue(TvSync.takesVolume(nowMs = 12_500, setAtMs = 10_000))
+    }
+
     @Test fun aSongPickedOnTheTvIsTheOneThePhoneSentThere() {
         val sent = listOf(7, 8, 9)
         val sentIds = listOf(ids[0], ids[1], ids[2])
