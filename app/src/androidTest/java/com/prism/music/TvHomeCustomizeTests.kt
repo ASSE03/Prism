@@ -236,7 +236,9 @@ class TvHomeCustomizeTests {
             compose.awaitFocusOn(hasTestTag("${com.prism.music.ui.tv.TAG_PLAYER}/playpause"), 15_000)
             val player = Fixture.container.player
             waitFor(15_000, "the mix playing") { player.currentSong.value?.id == songs[0].id }
-            assertEquals(2, player.queue.value.size)
+            // The mix's two songs, then only what autoplay adds (it tops a queue this short up from your own music).
+            assertEquals(songs.map { it.id }, player.queue.value.take(2).map { it.song.id })
+            assertEquals(true, player.queue.value.size == 2 || Fixture.container.queue.autoplayStart.value == 2)
         } finally {
             runCatching { instrumentation.runOnMainSync { Fixture.container.player.stop() } }
             tones.forEach { runCatching { Fixture.context.contentResolver.delete(it, null, null) } }

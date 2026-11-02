@@ -165,9 +165,9 @@ fun TvSingPage(nav: TvNav) {
         buttons = {
             // What Sing has for the song, honestly: the voice being taken out, the quick way standing in, or out.
             disk.status?.let { TvChip(it.words(), PrismIcons.Mic, scheme.primary, scheme.onPrimary) }
-            TvIconButton(PrismIcons.Remove, tr(R.string.tv_key_line, "−"), { c.sing.setSemitones(semitones - 1) }, Modifier.tvItem("$TAG_SING/keydown"))
+            TvIconButton(PrismIcons.Remove, tr(R.string.tv_key_line, "−"), { c.sing.setSemitones(c.sing.semitones.value - 1) }, Modifier.tvItem("$TAG_SING/keydown"))
             TvChip(tr(R.string.tv_key_line, if (semitones > 0) "+$semitones" else "$semitones"), null, scheme.surfaceVariant, scheme.onSurface)
-            TvIconButton(PrismIcons.Add, tr(R.string.tv_key_line, "+"), { c.sing.setSemitones(semitones + 1) }, Modifier.tvItem("$TAG_SING/keyup"))
+            TvIconButton(PrismIcons.Add, tr(R.string.tv_key_line, "+"), { c.sing.setSemitones(c.sing.semitones.value + 1) }, Modifier.tvItem("$TAG_SING/keyup"))
         },
     ) { ms -> c.player.seekToLyric(ms) }
 }

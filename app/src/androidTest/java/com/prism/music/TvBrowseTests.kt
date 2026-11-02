@@ -136,7 +136,9 @@ class TvBrowseTests {
         val end = System.currentTimeMillis() + 15_000
         while (player.currentSong.value?.id != songs[0].id && System.currentTimeMillis() < end) Thread.sleep(100)
         assertEquals(songs[0].id, player.currentSong.value?.id)
-        assertEquals(2, player.queue.value.size)
+        // The playlist's two songs, then only what autoplay adds (it tops a queue this short up from your own music).
+        assertEquals(songs.map { it.id }, player.queue.value.take(2).map { it.song.id })
+        org.junit.Assert.assertTrue("only autoplay's after the playlist", player.queue.value.size == 2 || Fixture.container.queue.autoplayStart.value == 2)
         // Back: the playlist's page, Play still focused, the playing song marked; Back again: Library, on the playlist.
         TvFixture.back()
         compose.awaitFocusOn(hasTestTag("$TAG_COLLECTION/play"), 10_000)

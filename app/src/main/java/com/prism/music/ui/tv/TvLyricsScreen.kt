@@ -597,11 +597,13 @@ private fun androidx.compose.foundation.layout.BoxScope.TvTimingPanel(focus: and
                 .onPreviewKeyEvent { e ->
                     if (e.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
                     val repeats = e.nativeKeyEvent.repeatCount
+                    // The timing as it is now, not as last drawn: presses faster than the screen redraws each count.
+                    val now = pc.lyricOffset.value
                     when (e.key) {
-                        Key.DirectionRight -> { pc.setLyricOffset(TvLyricTiming.nudged(offset, TvLyricTiming.stepFor(repeats))); true }
-                        Key.DirectionLeft -> { pc.setLyricOffset(TvLyricTiming.nudged(offset, -TvLyricTiming.stepFor(repeats))); true }
-                        Key.DirectionUp -> { pc.setLyricOffset(TvLyricTiming.nudged(offset, TvLyricTiming.BIG_STEP)); true }
-                        Key.DirectionDown -> { pc.setLyricOffset(TvLyricTiming.nudged(offset, -TvLyricTiming.BIG_STEP)); true }
+                        Key.DirectionRight -> { pc.setLyricOffset(TvLyricTiming.nudged(now, TvLyricTiming.stepFor(repeats))); true }
+                        Key.DirectionLeft -> { pc.setLyricOffset(TvLyricTiming.nudged(now, -TvLyricTiming.stepFor(repeats))); true }
+                        Key.DirectionUp -> { pc.setLyricOffset(TvLyricTiming.nudged(now, TvLyricTiming.BIG_STEP)); true }
+                        Key.DirectionDown -> { pc.setLyricOffset(TvLyricTiming.nudged(now, -TvLyricTiming.BIG_STEP)); true }
                         Key.DirectionCenter, Key.Enter -> { pc.setLyricOffset(0L); true }
                         else -> false
                     }
