@@ -155,7 +155,14 @@ fun BringHistoryScreen(bottomPadding: Dp) {
                         Toggle(tr(R.string.imp_history), tr(R.string.imp_history_detail), history) { history = it }
                     }
                     val lib = p.library
-                    if (lib.liked.isNotEmpty()) Toggle(tr(R.string.imp_liked_songs), tr(R.string.imp_liked_detail, count(lib.liked.size)), liked, info = tr(R.string.imp_liked_info)) { liked = it }
+                    if (lib.liked.isNotEmpty()) {
+                        Toggle(tr(R.string.imp_liked_songs), tr(R.string.imp_liked_detail, count(lib.liked.size)), liked, info = tr(R.string.imp_liked_info)) { liked = it }
+                        // Off unless asked for: the likes stay in Prism, and library sync leaves them be.
+                        if (liked && c.settings.current.isLoggedIn) {
+                            val onAccount by imports.likeOnAccount.collectAsState()
+                            Toggle(tr(R.string.imp_like_on_account), tr(R.string.imp_like_on_account_detail), onAccount, info = tr(R.string.imp_like_on_account_info)) { imports.setLikeOnAccount(it) }
+                        }
+                    }
                     if (lib.playlists.isNotEmpty()) Toggle(tr(R.string.imp_playlists), tr(R.string.imp_playlists_detail, count(lib.playlists.size)), playlists) { playlists = it }
                     if (lib.albums.isNotEmpty()) Toggle(tr(R.string.imp_albums), tr(R.string.imp_albums_detail, count(lib.albums.size)), albums) { albums = it }
                     if (lib.artists.isNotEmpty()) Toggle(tr(R.string.imp_artists), tr(R.string.imp_artists_detail, count(lib.artists.size)), artists) { artists = it }

@@ -107,7 +107,8 @@ class LibraryRepository(private val c: AppContainer) {
         c.settings.saveAccountInfo(a.name, listOfNotNull(a.byline, a.email).distinct().joinToString(" · "), a.avatar)
         // Before the likes go: the playlist mirror would take them out of the old channel's playlist.
         c.likedPlaylist.forget()
-        likedIds.value.filterNot { it.startsWith(Song.LOCAL_PREFIX) }.forEach { songs.setLiked(it, false, 0) }
+        val kept = c.imports.keptLikes() // imported likes kept in Prism are this phone's, not the channel's
+        likedIds.value.filterNot { it.startsWith(Song.LOCAL_PREFIX) || it in kept }.forEach { songs.setLiked(it, false, 0) }
         forgetAccount()
         syncInBackground()
     }
@@ -207,8 +208,9 @@ class LibraryRepository(private val c: AppContainer) {
             })
             if (remote.isNotEmpty()) {
                 val remoteIds = remote.map { it.id }.toSet()
-                // Local songs' likes are Prism's own; YouTube doesn't know them, so it can't take them away.
-                (before - remoteIds).filterNot { it.startsWith(Song.LOCAL_PREFIX) }.forEach { songs.setLiked(it, false, 0) }
+                // Local songs' likes are Prism's own, and so are imported likes kept off the account (1.8.1): YouTube
+                // doesn't know them, so it can't take them away.
+                likesToDrop(before, remoteIds, c.imports.keptLikes()).forEach { songs.setLiked(it, false, 0) }
             }
             if (c.settings.current.downloadLikes && before.isNotEmpty()) {
                 remote.filter { it.id !in before }.forEach { c.downloads.download(it) }
@@ -432,6 +434,13 @@ class LibraryRepository(private val c: AppContainer) {
     }
 
     companion object {
+        /**
+         * The likes a sync takes away: liked here before, no longer in the account's liked list, and not Prism's own
+         * (local files' likes, and imported likes kept off the account: [kept]).
+         */
+        internal fun likesToDrop(before: Set<String>, remote: Set<String>, kept: Set<String>): List<String> =
+            (before - remote).filterNot { it.startsWith(Song.LOCAL_PREFIX) || it in kept }
+
         /**
          * [items] in the listener's [order]; ones not placed yet (new playlists) lead, in the
          * order YouTube Music lists them.

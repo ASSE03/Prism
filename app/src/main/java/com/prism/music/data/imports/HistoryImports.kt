@@ -65,6 +65,26 @@ class HistoryImports(private val c: AppContainer) {
         c.scope.launch(Dispatchers.IO) { runCatching { c.forYou.refresh(force = true) } }
     }
 
+    private val _likeOnAccount = MutableStateFlow(prefs.getBoolean(LIKE_ON_ACCOUNT, false))
+    /** Imported Liked Songs are liked on the YouTube Music account too (signed in; off unless asked for, owner 1.8.1). */
+    val likeOnAccount: StateFlow<Boolean> = _likeOnAccount
+
+    fun setLikeOnAccount(on: Boolean) {
+        prefs.edit().putBoolean(LIKE_ON_ACCOUNT, on).apply()
+        _likeOnAccount.value = on
+    }
+
+    /**
+     * Imported likes kept in Prism only (not on the account, or the account's like failed): library sync leaves them
+     * liked, as it does local files' likes, although YouTube's liked list doesn't have them.
+     */
+    fun keptLikes(): Set<String> = prefs.getStringSet(KEPT_LIKES, emptySet()).orEmpty()
+
+    private fun keepLikes(ids: Collection<String>) {
+        if (ids.isEmpty()) return
+        synchronized(this) { prefs.edit().putStringSet(KEPT_LIKES, keptLikes() + ids).apply() }
+    }
+
     fun setMatchOnMobile(on: Boolean) {
         prefs.edit().putBoolean(MOBILE, on).apply()
         _matchOnMobile.value = on
@@ -307,16 +327,21 @@ class HistoryImports(private val c: AppContainer) {
 
         override suspend fun like(songs: List<Song>) {
             val now = System.currentTimeMillis()
+            val added = mutableListOf<Song>()
             songs.forEachIndexed { i, s ->
                 val existing = c.db.songs().get(s.id)
                 if (existing?.liked == true) return@forEachIndexed
-                // The download's order, first newest; liked here only (signed in, also on the account, a few at a time).
+                // The download's order, first newest.
                 c.db.songs().upsert(s.toEntity(existing).copy(liked = true, likedAt = now - i))
+                added += s
             }
-            if (c.settings.current.isLoggedIn) songs.forEach { s ->
-                runCatching { c.ytm.like(s.id, true) }
+            // On the account too only when asked (signed in, a few at a time); the rest stay Prism's own likes.
+            val onAccount = mutableSetOf<String>()
+            if (c.settings.current.isLoggedIn && _likeOnAccount.value) added.forEach { s ->
+                if (runCatching { c.ytm.like(s.id, true) }.isSuccess) onAccount += s.id
                 delay(PAUSE_MS / 2)
             }
+            keepLikes(added.map { it.id } - onAccount)
         }
 
         override fun createPlaylist(name: String, songs: List<Song>): String = c.prismLibrary.create(name, songs)
@@ -351,6 +376,8 @@ class HistoryImports(private val c: AppContainer) {
         private const val TEACH = "teach"
         private const val TEACH_SET = "teach_set"
         private const val MOBILE = "match_on_mobile"
+        private const val LIKE_ON_ACCOUNT = "like_on_account"
+        private const val KEPT_LIKES = "kept_likes"
         private fun countKey(s: ImportSource) = "count_${s.key}"
 
         /** Searches at once, and the pause after each few. */

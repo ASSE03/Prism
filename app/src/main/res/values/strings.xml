@@ -4295,7 +4295,10 @@
     <string name="imp_history_detail">For Replay and Rewind, when you count it</string>
     <string name="imp_liked_songs">Liked Songs</string>
     <string name="imp_liked_detail">%1$s songs, liked here</string>
-    <string name="imp_liked_info">Signed in to YouTube Music, they\'re liked on your account too, a few at a time.</string>
+    <string name="imp_liked_info">They\'re liked in Prism. Your YouTube Music account isn\'t changed unless you turn on the switch below, and syncing your library leaves them liked.</string>
+    <string name="imp_like_on_account">Also like them on YouTube Music</string>
+    <string name="imp_like_on_account_detail">On your account, a few at a time</string>
+    <string name="imp_like_on_account_info">Each song is liked on your YouTube Music account too, so it\'s in Liked Music in YouTube Music\'s own apps. Off, they stay liked in Prism only.</string>
     <string name="imp_playlists">Playlists</string>
     <string name="imp_playlists_detail">%1$s playlists, as Prism playlists</string>
     <string name="imp_albums">Saved albums</string>

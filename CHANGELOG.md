@@ -10,7 +10,8 @@ What changed in each release. Older releases are described on the [Releases page
   (Account data, or Extended streaming history for every play since you joined) and pick the zip it comes in, or the
   files in it: Settings → Recommendations & Replay → Bring your history. Prism shows what's in it (plays, songs, the
   dates, Liked Songs, playlists, saved albums, followed artists) and you choose what to bring: your plays, Liked Songs
-  (liked here), playlists (as Prism playlists), saved albums (into your library) and followed artists (starred).
+  (liked in Prism; signed in, a switch also likes them on your YouTube Music account, off unless you turn it on, and
+  syncing your library leaves them liked either way), playlists (as Prism playlists), saved albums (into your library) and followed artists (starred).
 - **Your YouTube Music history from Google Takeout** (watch-history.json) and **your Last.fm scrobbles** (through the
   Last.fm account you connected) come in the same way. Plays Prism itself sent to YouTube or Last.fm aren't counted twice.
 - **Each song is found on YouTube Music** in the background, on Wi-Fi unless you allow mobile data, a few at a time
