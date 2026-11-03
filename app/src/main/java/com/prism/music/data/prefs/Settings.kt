@@ -2024,7 +2024,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 // 1.7.8 ([BehaviorPrefs]).
                 "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres", "screen_fades", "player_gestures_everywhere", "page_slide", "tab_bar_position",
                 // 1.8.0 ([TvPrefs]): how Prism behaves on a TV and in desk mode.
-                "tv_ambient_minutes", "desk_mode", "tv_lyrics_scale", "tv_welcomed", "tv_home_layout",
+                "tv_ambient_minutes", "desk_mode", "tv_lyrics_scale", "tv_welcomed", "tv_home_layout", "tv_backdrop_dim",
                 // 1.7.8 ([SoundPrefs]).
                 "crossfade_curve", "normalize_target", "normalize_albums", "music_speed", "music_pitch",
                 "skip_silence_episodes", "sleep_fade", "pause_fade",
