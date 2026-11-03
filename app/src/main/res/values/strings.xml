@@ -4551,6 +4551,15 @@
     <string name="spot_forget_client_id">Forget the Client ID too</string>
     <string name="spot_keep_playlists">Keep the playlists as Prism playlists</string>
     <string name="spot_playlist_subtitle">Spotify · %1$s</string>
+    <string name="spot_followed_subtitle">%1$s · Not shared by Spotify</string>
+    <string name="spot_followed_why">Spotify only shares the songs of playlists you made.</string>
+    <string name="spot_followed_steps">In Spotify: open it → ⋯ → Add to other playlist → New playlist. Prism brings the copy over at the next refresh.</string>
+    <string name="spot_followed_tunemymusic">Or, for a simpler move: copy your Spotify playlists to YouTube Music with TuneMyMusic (Library → Import playlists). They show up in Prism once copied.</string>
+    <string name="spot_open_in_spotify">Open in Spotify</string>
+    <string name="spot_refresh_now">Refresh now</string>
+    <string name="spot_refreshing">Refreshing…</string>
+    <string name="spot_refreshed">Done</string>
+    <string name="spot_hide_from_library">Hide from Library</string>
     <string name="spot_keywords">spotify connect sign in web api developer app client id redirect playlists liked songs likes recently played top</string>
     <!-- 1.8.1: repeat imports and the fresh-download reminder -->
     <plurals name="imp_new_plays_since">

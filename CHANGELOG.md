@@ -62,6 +62,10 @@ What changed in each release. Older releases are described on the [Releases page
   radio and Quick picks (read on connecting, then weekly; Replay doesn't count it).
 - **Your Spotify playlists in Library**, marked Spotify, playing through their YouTube Music matches (Spotify's ISRCs
   make the matches surer). **Keep in step** reads one again when you open it, and all daily on Wi-Fi.
+- **Playlists you follow or saved show too** (Lofi Girl's, Spotify's own "Made for you" ones), greyed after yours with
+  "Not shared by Spotify": Spotify keeps their songs from developer apps. Tap one for the way to bring it (in Spotify,
+  ⋯ → Add to other playlist → New playlist, then Refresh now) or the simpler TuneMyMusic move (Library → Import
+  playlists), Open in Spotify, or Hide from Library.
 - **Liked Songs both ways** (off until you've seen its counts: "42 to like here, 17 to like on Spotify"): each like is
   carried over once, unliking never is, and likes you brought from a data download stay out of it.
 - **Quiet when Spotify is**: a feature Spotify doesn't answer says so and the rest of Prism carries on; a "too many

@@ -6,7 +6,10 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeRight
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.prism.music.data.spotify.SpotifyProfile
@@ -58,7 +61,7 @@ class SpotifyConnectTest {
         RecordedNetwork.answers["$API/me/playlists"] = """{"href":"","limit":50,"next":null,"offset":0,"previous":null,"total":2,"items":[
             {"collaborative":false,"description":"","id":"pl1","images":[],"name":"Spotify test list","owner":{"id":"tester","display_name":"Tester"},
              "public":false,"snapshot_id":"snap1","items":{"href":"","total":1},"type":"playlist","uri":"spotify:playlist:pl1"},
-            {"collaborative":false,"description":"","id":"pl2","images":[],"name":"Followed list","owner":{"id":"spotify"},
+            {"collaborative":false,"description":"","id":"pl2","images":[],"name":"Emo Forever","owner":{"id":"spotify","display_name":"Spotify"},
              "public":true,"snapshot_id":"snapX","items":{"href":"","total":50},"type":"playlist","uri":"spotify:playlist:pl2"}]}"""
         RecordedNetwork.answers["$API/playlists/pl1/items"] = """{"href":"","limit":50,"next":null,"offset":0,"previous":null,"total":1,"items":[
             {"added_at":"2026-01-01T00:00:00Z","is_local":false,"item":${track("t1", "Prism spot tone", "Test Artist")}}]}"""
@@ -98,7 +101,32 @@ class SpotifyConnectTest {
         val libraryTab = (hasText("Library") or androidx.compose.ui.test.hasContentDescription("Library")) and hasClickAction()
         compose.waitUntil(15_000) { compose.onAllNodes(libraryTab).fetchSemanticsNodes().isNotEmpty() }
         compose.onAllNodes(libraryTab).onFirst().performClick()
+        // Library remembers its page: back to the first (Playlists).
+        repeat(6) {
+            if (compose.onAllNodes(hasText("Spotify ·", substring = true)).fetchSemanticsNodes().isNotEmpty()) return@repeat
+            compose.onRoot().performTouchInput { swipeRight(startX = width * 0.15f, endX = width * 0.95f) }
+            compose.waitForIdle()
+        }
         compose.waitForText("Spotify ·", 15_000)
+
+        // The followed one (Spotify's own "Emo Forever"): listed after, with its note, never a Prism playlist.
+        compose.waitUntil(15_000) { c.spotify.followedShown.value.any { it.id == "pl2" } }
+        assertTrue("never mirrored", c.spotify.playlists.mirror().lists.none { it.playlist.id == "pl2" })
+        compose.waitForText("Spotify · Not shared by Spotify", 15_000)
+        compose.clickWhenFound(hasText("Emo Forever") and hasClickAction(), 15_000)
+        // Its sheet: why, the steps, Open in Spotify, Refresh now, and the TuneMyMusic way.
+        compose.waitForText("Spotify only shares the songs of playlists you made.")
+        compose.waitForText("Add to other playlist")
+        compose.clickWhenFound(hasText("Refresh now") and hasClickAction())
+        compose.waitForText("Done", 15_000)
+        assertTrue(compose.onAllNodes(hasText("Open in Spotify") and hasClickAction()).fetchSemanticsNodes().isNotEmpty())
+        compose.waitForText("TuneMyMusic")
+        // Its button opens the import page; Back returns to Library.
+        compose.clickWhenFound(hasText("Import playlists") and hasClickAction())
+        compose.waitForText("From Spotify, Apple Music and more", 15_000)
+        androidx.test.uiautomator.UiDevice.getInstance(instrumentation).pressBack()
+        compose.waitForText("Spotify ·", 15_000)
+
         compose.clickWhenFound(hasText("Spotify test list") and hasClickAction(), 15_000)
         compose.waitUntil(20_000) { c.prismLibrary.list(prismId)?.songs?.any { it.id == song.id } == true }
         compose.waitForText("Prism spot tone", 15_000)
@@ -132,6 +160,11 @@ class SpotifyConnectTest {
         assertTrue("the tokens are gone", c.spotify.store.tokens() == null)
         compose.waitUntil(10_000) { spotifyJobs().isEmpty() }
         compose.waitForText("Create app")
+        // The followed one is gone too, from the data and from Library.
+        compose.waitUntil(10_000) { c.spotify.followedShown.value.isEmpty() && c.spotify.playlists.followed.value.isEmpty() }
+        compose.onAllNodes(libraryTab).onFirst().performClick()
+        compose.waitForIdle()
+        compose.waitUntil(10_000) { compose.onAllNodes(hasText("Not shared by Spotify", substring = true)).fetchSemanticsNodes().isEmpty() }
     }
 
     /** Spotify's background job, unless cancelled or done. */

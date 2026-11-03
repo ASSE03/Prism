@@ -6,6 +6,8 @@ import com.prism.music.data.imports.MatchResult
 import com.prism.music.data.imports.TrackToMatch
 import com.prism.music.data.model.Song
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.Serializable
@@ -38,8 +40,9 @@ data class PlaylistMirror(
  * Wi-Fi. Matches are remembered with every other import's, so a song is found once; opening a playlist matches its
  * songs at once, a few at a time, and the background matching does the rest.
  *
- * Followed playlists aren't offered: since February 2026 a Development Mode app gets only their names, not their songs.
- * Spotify's own mixes (Discover Weekly, Daily Mix…) are Spotify's playlists, so they can't be read either.
+ * Followed playlists aren't mirrored: since February 2026 a Development Mode app gets only their names, not their songs.
+ * Spotify's own mixes (Discover Weekly, Daily Mix…) are Spotify's playlists, so they can't be read either. They're
+ * listed in Library all the same ([followed]), with how to bring one over as a copy of the listener's own.
  */
 class SpotifyPlaylists(
     private val api: SpotifyApi,
@@ -91,20 +94,46 @@ class SpotifyPlaylists(
         all += page.items
         var pages = 1
         while (pages < MAX_LIST_PAGES) { val next = page.next ?: break; page = SpotifyParse.playlists(api.next(next)); all += page.items; pages++ }
-        val (yours, others) = all.partition { it.ownerId == userId || it.collaborative }
+        val (yours, others) = split(all, userId)
         val old = mirror().lists.associateBy { it.playlist.id }
-        var refused = 0
+        val refused = ArrayList<SpotifyPlaylist>()
         val lists = yours.mapNotNull { p ->
             val before = old[p.id]
             if (before != null && before.playlist.snapshot == p.snapshot && before.readAt > 0) return@mapNotNull before.copy(playlist = p)
             // One Spotify won't let this app read (a collaborative one it treats as another's): left out, the rest go on.
-            val items = try { readItems(p.id) } catch (e: SpotifyError.Forbidden) { refused++; return@mapNotNull before }
+            val items = try { readItems(p.id) } catch (e: SpotifyError.Forbidden) { refused += p; return@mapNotNull before }
             MirroredPlaylist(p, items, before?.prismId, before?.removed ?: false, now)
         }
         // A playlist gone from Spotify (deleted there, or no longer shared with the listener) goes from Library too.
         old.values.filter { o -> lists.none { it.playlist.id == o.playlist.id } }.forEach { gone -> gone.prismId?.let { if (hands.exists(it)) hands.delete(it) } }
         SpotifyQueue.remember(db, lists.flatMap { it.tracks })
-        save(PlaylistMirror(apply(lists), others.size + refused, now))
+        save(PlaylistMirror(apply(lists), others.size + refused.size, now))
+        // The ones whose songs Spotify keeps to itself: only named in Library (never Prism playlists).
+        saveFollowed(others + refused.filter { r -> lists.none { it.playlist.id == r.id } })
+    }
+
+    // ---- Followed and saved playlists (1.8.1): listed, not mirrored
+
+    private val followedFile = File(dir, "followed.json")
+    private val _followed by lazy { MutableStateFlow(readFollowed()) }
+
+    /**
+     * The playlists the listener follows or saved (Lofi Girl's, Spotify's own "Made for you"…) as /me/playlists last
+     * named them: since February 2026 Spotify answers 403 for their songs, so Library shows them with a note and the way
+     * to bring one (a copy of your own), nothing more. Kept in files/spotify/followed.json (a small file, read once);
+     * gone with [forget].
+     */
+    val followed: StateFlow<List<SpotifyPlaylist>> get() = _followed
+
+    private fun readFollowed(): List<SpotifyPlaylist> =
+        runCatching { json.decodeFromString(FOLLOWED, followedFile.readText()) }.getOrNull().orEmpty()
+
+    private fun saveFollowed(list: List<SpotifyPlaylist>) {
+        dir.mkdirs()
+        val tmp = File(dir, "followed.json.tmp")
+        tmp.writeText(json.encodeToString(FOLLOWED, list))
+        if (!tmp.renameTo(followedFile)) { followedFile.delete(); tmp.renameTo(followedFile) }
+        _followed.value = list
     }
 
     /**
@@ -181,6 +210,8 @@ class SpotifyPlaylists(
         if (!keep) mirror().lists.forEach { l -> l.prismId?.let { if (hands.exists(it)) hands.delete(it) } }
         file.delete()
         cached = null
+        followedFile.delete()
+        _followed.value = emptyList()
     }
 
     companion object {
@@ -191,6 +222,17 @@ class SpotifyPlaylists(
         /** Only what a song needs, from each item (both the new "item" and the old "track"). */
         private const val TRACK_FIELDS = "type,uri,name,duration_ms,explicit,is_local,external_ids(isrc),artists(name),album(name,images)"
         const val ITEM_FIELDS = "next,total,items(is_local,item($TRACK_FIELDS),track($TRACK_FIELDS))"
+        private val FOLLOWED = kotlinx.serialization.builtins.ListSerializer(SpotifyPlaylist.serializer())
+
+        /**
+         * /me/playlists split into the ones Spotify lets this app read (the listener's own and collaborative ones) and
+         * the rest (followed or saved: their songs answer 403), each in Spotify's order.
+         */
+        fun split(all: List<SpotifyPlaylist>, userId: String): Pair<List<SpotifyPlaylist>, List<SpotifyPlaylist>> =
+            all.partition { it.ownerId == userId || it.collaborative }
+
+        /** Where Spotify's app opens a playlist (it catches the link; a browser shows the web player otherwise). */
+        fun openLink(id: String) = "https://open.spotify.com/playlist/$id"
 
         /** [tracks]' matched songs in their order, each once. */
         fun songsOf(tracks: List<SpotifyTrack>, matched: Map<String, Song>): List<Song> =
