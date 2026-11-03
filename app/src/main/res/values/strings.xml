@@ -4229,6 +4229,33 @@
     <string name="tour_180_silence">Trim silence only touches a song\'s start and end</string>
     <string name="tour_180_normalize">Same loudness evens out big jumps between songs</string>
     <string name="tour_180_size">A smaller download</string>
+    <!-- 1.8.1 tour -->
+    <string name="tour_181_history">Bring your history</string>
+    <string name="tour_181_history_body">Your plays from Spotify, YouTube Music or Last.fm, read on this phone.</string>
+    <string name="tour_181_history_spotify">Pick Spotify\'s data download: plays, Liked Songs, playlists and more</string>
+    <string name="tour_181_history_others">Or Google Takeout\'s YouTube Music history, or your Last.fm scrobbles</string>
+    <string name="tour_181_history_replay">Replay counts only Prism\'s own plays unless you choose</string>
+    <string name="tour_181_spotify">Spotify, with your own key</string>
+    <string name="tour_181_spotify_body">Optional: connect Spotify through a free developer app of your own.</string>
+    <string name="tour_181_spotify_lists">Your Spotify playlists in Library, played from YouTube Music</string>
+    <string name="tour_181_spotify_plays">Recent plays and top artists shape your mixes and radio</string>
+    <string name="tour_181_spotify_likes">Liked songs both ways, each one carried over once</string>
+    <string name="tour_181_replay">History &amp; Replay</string>
+    <string name="tour_181_replay_body">Choose what\'s kept, and when a song counts as played.</string>
+    <string name="tour_181_replay_pause">Pause history for an hour, a day or until you turn it back on</string>
+    <string name="tour_181_replay_counts">A song counts at once, or after 5 seconds up to a minute</string>
+    <string name="tour_181_replay_graphs">Replay graphs a day by its hours, a week or a month by its days</string>
+    <string name="tour_181_yours">Your way</string>
+    <string name="tour_181_yours_body">More of Prism to make your own.</string>
+    <string name="tour_181_yours_cover">Change a song\'s or an album\'s cover from its menu</string>
+    <string name="tour_181_yours_explicit">Show, skip or hide explicit songs</string>
+    <string name="tour_181_yours_white">A white player for the light theme</string>
+    <string name="tour_181_yours_fonts">Any font installed on your phone</string>
+    <string name="tour_181_yours_artists">Each artist\'s name on the player can open their page</string>
+    <string name="tour_181_files">Your own MP3, AAC and Ogg files can play in place of the stream</string>
+    <string name="tour_181_crossfade">A progress bar in the crossfade\'s shape</string>
+    <string name="tour_181_auto">Ask for an artist, album or playlist by voice, in Android Auto too</string>
+    <string name="tour_181_tv">On the TV, Sing never holds up the music, and pairing is easier</string>
     <!-- 1.8.0 TV -->
     <string name="compose_for_tv" translatable="false">Compose for TV (androidx.tv)</string>
     <string name="tv_update_ready">Prism %1$s is ready</string>
