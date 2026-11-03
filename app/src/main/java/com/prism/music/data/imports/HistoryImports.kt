@@ -97,6 +97,33 @@ class HistoryImports(private val c: AppContainer) {
         ImportMatchWorker.enqueue(c.app, on)
     }
 
+    /**
+     * YouTube Music (live) (1.8.1): the account's History page read every few hours while signed in and turned on
+     * (off by default). Its switch, state and last read are kept in its own preferences ("youtube_live", in backups
+     * with the history).
+     */
+    val youtubeLive = YouTubeLive(
+        c.app.getSharedPreferences(YouTubeLive.PREFS, Context.MODE_PRIVATE), c.db, importer,
+        read = { c.ytm.historySections() },
+        account = { c.settings.current.takeIf { it.isLoggedIn }?.let { YouTubeLive.accountOf(it.authUser, it.accountEmail, it.dataSyncId) } },
+        jobs = YouTubeLiveWorker.Jobs(c.app), scope = c.scope,
+        log = { AudioDiagnostics.log("youtube_live", it) },
+    )
+
+    /**
+     * Turns YouTube Music (live) on (the first read, at once, is only its starting point) or off (its plays stay until
+     * removed; with none, Replay stops being asked to count it).
+     */
+    fun setYouTubeLive(on: Boolean) {
+        youtubeLive.setOn(on)
+        if (!on && ImportSource.YOUTUBE_LIVE in _counted.value) c.scope.launch(Dispatchers.IO) {
+            if (c.db.imports().newest(ImportSource.YOUTUBE_LIVE.key) == null) setCounted(ImportSource.YOUTUBE_LIVE, false)
+        }
+    }
+
+    /** One read of the History page (the job's), if on, signed in and not paused. */
+    suspend fun runYouTubeLive(): Int? = withContext(Dispatchers.IO) { youtubeLive.run() }
+
     /** What Replay, Rewind and the Replay card count now. */
     fun replay(): PlayStats = stats(_counted.value)
 
@@ -177,7 +204,7 @@ class HistoryImports(private val c: AppContainer) {
                         library += r.library; kinds += r.kinds; skipped += r.skippedFiles
                     }
                     ImportSource.TAKEOUT -> if (TakeoutHistory.read(nameOf(u), s, count)) kinds += FileKind.TAKEOUT_HISTORY else skipped++
-                    ImportSource.LASTFM, ImportSource.SPOTIFY_LIVE -> Unit
+                    ImportSource.LASTFM, ImportSource.SPOTIFY_LIVE, ImportSource.YOUTUBE_LIVE -> Unit
                 }
             }
         }
@@ -223,7 +250,7 @@ class HistoryImports(private val c: AppContainer) {
                                     .let { library += it.library }
                             }
                             ImportSource.TAKEOUT -> if (choice.history) TakeoutHistory.read(nameOf(u), s, batched(sink, plays) { runBlocking { drain() } })
-                            ImportSource.LASTFM, ImportSource.SPOTIFY_LIVE -> Unit
+                            ImportSource.LASTFM, ImportSource.SPOTIFY_LIVE, ImportSource.YOUTUBE_LIVE -> Unit
                         }
                     }
                     drain()
@@ -232,6 +259,8 @@ class HistoryImports(private val c: AppContainer) {
                 val stats = session.finish().let { s -> if (library.isEmpty) s else s.copy(library = addLibrary(library, choice.library)) }
                 // Plays the Spotify connection read live that this download has too count once (the download's).
                 if (source == ImportSource.SPOTIFY) runCatching { c.db.spotify().dropLiveTwins(com.prism.music.data.spotify.SpotifyRecent.TWIN_MS) }
+                // And YouTube Music (live)'s that a Takeout has (Takeout is the complete history).
+                if (source == ImportSource.TAKEOUT) runCatching { c.db.imports().dropYouTubeLiveTwins(YouTubeLive.TWIN_MS) }
                 noteImport(source)
                 afterImport()
                 AudioDiagnostics.log("imports", "${source.key}: $stats")

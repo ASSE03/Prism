@@ -38,6 +38,14 @@ What changed in each release. Older releases are described on the [Releases page
 - **"Last Spotify import: Oct 3 (31 days ago)"** on the page, with **Request a fresh download** (Spotify's Privacy
   page, or Google Takeout), and a gentle reminder to bring a fresh one every 1, 3 or 6 months (3 unless you change it,
   or Off): a quiet notification, only once you've imported Spotify or YouTube Music history, never for anyone else.
+- **YouTube Music (live): keep your YouTube Music history in step** (signed in, off unless you turn it on in Bring
+  your history). Every few hours Prism reads your account's History page and counts the songs played since its last
+  look, in the YouTube Music app, on the website, on a speaker, as their own source; Prism's own plays (which it reports
+  to that history) and plays a Takeout already brought are left out. It starts when you turn it on (Takeout brings the
+  past); times are approximate, a song played twice between two looks may count once, and Takeout stays the complete
+  history (one brought later takes the live plays it has out). Signing out stops it; five failures running pause it for
+  a day. **"Count history from" now lists every source**: the ones you haven't brought in are greyed, with Bring it in
+  (or Turn on for the live ones).
 
 ### Spotify (optional, your own key)
 

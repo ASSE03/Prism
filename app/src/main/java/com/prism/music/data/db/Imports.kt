@@ -182,6 +182,22 @@ interface ImportDao {
     @Query("SELECT MAX(timestamp) FROM imported_plays WHERE origin = :origin")
     suspend fun newest(origin: String): Long?
 
+    /** When [key] was played in a Google Takeout history, between two times (YouTube Music (live) leaves those out). */
+    @Query("SELECT timestamp FROM imported_plays WHERE origin = 'takeout' AND songKey = :key AND timestamp BETWEEN :from AND :to")
+    suspend fun takeoutTimes(key: String, from: Long, to: Long): List<Long>
+
+    /**
+     * Takes away YouTube Music (live) plays a Takeout brought later (1.8.1): the same song within [slackMs] of the live
+     * play's estimated time, and no later than the Takeout's own newest play (a live play after it isn't in the Takeout).
+     */
+    @Query(
+        """DELETE FROM imported_plays WHERE origin = 'youtube_live'
+           AND timestamp <= (SELECT MAX(t.timestamp) FROM imported_plays t WHERE t.origin = 'takeout')
+           AND EXISTS (SELECT 1 FROM imported_plays d WHERE d.origin = 'takeout' AND d.songKey = imported_plays.songKey
+               AND d.timestamp BETWEEN imported_plays.timestamp - :slackMs AND imported_plays.timestamp + :slackMs)"""
+    )
+    suspend fun dropYouTubeLiveTwins(slackMs: Long): Int
+
     /** Matches no imported play refers to (the listener's own picks aside, kept for a later import). */
     @Query("SELECT songKey FROM import_matches WHERE status != 'FIXED' AND songKey NOT IN (SELECT DISTINCT songKey FROM imported_plays)")
     suspend fun orphanMatches(): List<String>

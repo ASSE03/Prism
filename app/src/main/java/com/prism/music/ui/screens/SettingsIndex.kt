@@ -453,6 +453,11 @@ object SettingsIndex {
         SettingEntry(LB, tr(R.string.imp_title), tr(R.string.imp_shape_mixes), tr(R.string.imp_shape_mixes_keywords)),
         // On the Bring your history page (opened from this group): the fresh-download reminder.
         SettingEntry(LB, tr(R.string.imp_title), tr(R.string.imp_remind), tr(R.string.imp_remind_keywords)),
+        // And YouTube Music (live): the account's History page every few hours (signed in).
+        SettingEntry(
+            LB, tr(R.string.imp_title), tr(R.string.ytlive_title), tr(R.string.ytlive_keywords),
+            needs = Needs(tr(R.string.ytlive_sign_in)) { it.isLoggedIn },
+        ),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.imp_count_history_from), tr(R.string.imp_count_keywords)),
         SettingEntry(LB, tr(R.string.replay_2), tr(R.string.imp_prism_plays)),
         SettingEntry(LB, tr(R.string.made_for_you), tr(R.string.exclusions), tr(R.string.taste_profile_exclude_artist_playlist_don)),

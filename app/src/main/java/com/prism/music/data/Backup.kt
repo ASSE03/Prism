@@ -311,6 +311,8 @@ class Backup(private val c: AppContainer) {
                 "romanize_songs", "video_sync", "local_album_tags", "local_lengths", "local_no_art", "lyrics_word_shift",
                 // 1.8.1: Bring your history's choices (what Replay counts, what shapes the mixes).
                 "imports",
+                // 1.8.1: YouTube Music (live): its switch, its kill switch and the History page as last read.
+                com.prism.music.data.imports.YouTubeLive.PREFS,
             ).forEach { put(it, BackupPart.HISTORY) }
             listOf(
                 "canvas_saved", "download_lyrics", "download_failures", "download_auto_retry", "download_formats", "smart_downloads", "download_standins",

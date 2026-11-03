@@ -8,10 +8,19 @@ enum class ImportSource(val key: String, private val name_: String) {
     TAKEOUT("takeout", "YouTube Music"),
     LASTFM("lastfm", "Last.fm"),
     /** Recently played, read from the listener's own Spotify connection (1.8.1, "bring your own key"). */
-    SPOTIFY_LIVE("spotify_live", "");
+    SPOTIFY_LIVE("spotify_live", ""),
+    /** Songs newly at the top of the account's YouTube Music History page, read every few hours ([YouTubeLive]). */
+    YOUTUBE_LIVE("youtube_live", "");
 
-    /** Shown to the listener: the services' own names, and "Spotify (live)" in the listener's language. */
-    val label: String get() = if (this == SPOTIFY_LIVE) com.prism.music.tr(com.prism.music.R.string.spotify_live_source) else name_
+    /** Shown to the listener: the services' own names, and the live ones ("Spotify (live)") in the listener's language. */
+    val label: String get() = when (this) {
+        SPOTIFY_LIVE -> com.prism.music.tr(com.prism.music.R.string.spotify_live_source)
+        YOUTUBE_LIVE -> com.prism.music.tr(com.prism.music.R.string.youtube_live_source)
+        else -> name_
+    }
+
+    /** Read every few hours on its own once turned on, rather than brought in from a file or an account. */
+    val isLive: Boolean get() = this == SPOTIFY_LIVE || this == YOUTUBE_LIVE
 
     companion object {
         fun of(key: String): ImportSource? = entries.firstOrNull { it.key == key }
