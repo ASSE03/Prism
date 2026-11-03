@@ -4437,7 +4437,6 @@
     <string name="imp_nothing_new">이 다운로드에 새로운 것이 없어요: 모두 이미 여기 있어요.</string>
     <string name="imp_nothing_new_range">이 다운로드(%1$s~%2$s)에 새로운 것이 없어요: 모두 이미 여기 있어요.</string>
     <string name="imp_liked_new_detail">새로 %1$s곡, 여기서 좋아요 표시</string>
-    <string name="imp_playlists_new_detail">새로 %1$s개 · 전에 가져온 재생목록에 추가할 곡 %2$s곡</string>
     <string name="imp_playlists_info">더 새로운 다운로드에서 다시 가져오면, 전에 만든 재생목록에는 새 곡이 추가되고 같은 재생목록이 두 번 만들어지지 않아요. Spotify에서 뺀 곡은 Prism의 사본에서 빠지지 않아요: 원하면 Prism에서 빼세요.</string>
     <string name="imp_albums_new_detail">새로 %1$s개, 보관함으로</string>
     <string name="imp_artists_new_detail">새로 %1$s명, 별표</string>
@@ -4550,4 +4549,8 @@
     <string name="ytlive_connection_on">기록을 최신 상태로 유지 중 · 켜짐</string>
     <string name="ytlive_connection_off">기록을 최신 상태로 유지 · 꺼짐</string>
     <string name="ytlive_connection_signed_out">기록을 최신 상태로 유지하려면 로그인하세요</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="other">새로 %1$s개 · 전에 가져온 재생목록에 추가할 곡 %2$s곡</item>
+    </plurals>
 </resources>

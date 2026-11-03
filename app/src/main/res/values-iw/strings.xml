@@ -4537,7 +4537,6 @@
     <string name="imp_nothing_new">אין שום דבר חדש בהורדה הזו: כל מה שיש בה כבר כאן.</string>
     <string name="imp_nothing_new_range">אין שום דבר חדש בהורדה הזו (מ-%1$s עד %2$s): כל מה שיש בה כבר כאן.</string>
     <string name="imp_liked_new_detail">%1$s חדשים, עם לייק כאן</string>
-    <string name="imp_playlists_new_detail">%1$s חדשים · %2$s שירים להוספה לאלה שהובאו קודם</string>
     <string name="imp_playlists_info">כשמביאים שוב מהורדה חדשה יותר, פלייליסט שכבר נוצר מקבל את השירים החדשים שלו, ושום פלייליסט לא נוצר פעמיים. שירים שהוסרו ממנו ב-Spotify לא מוסרים מהעותק ב-Prism: הסר אותם ב-Prism אם תרצה.</string>
     <string name="imp_albums_new_detail">%1$s חדשים, לספרייה שלך</string>
     <string name="imp_artists_new_detail">%1$s חדשים, מסומנים בכוכב</string>
@@ -4672,4 +4671,10 @@
     <string name="ytlive_connection_on">ההיסטוריה שלך, מעודכנת · פועל</string>
     <string name="ytlive_connection_off">שמור על עדכון ההיסטוריה שלך · כבוי</string>
     <string name="ytlive_connection_signed_out">היכנס כדי לשמור על עדכון ההיסטוריה שלך</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">%1$s חדשים · %2$s שיר להוספה לאלה שהובאו קודם</item>
+        <item quantity="two">%1$s חדשים · %2$s שירים להוספה לאלה שהובאו קודם</item>
+        <item quantity="other">%1$s חדשים · %2$s שירים להוספה לאלה שהובאו קודם</item>
+    </plurals>
 </resources>

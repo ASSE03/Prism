@@ -4437,7 +4437,6 @@
     <string name="imp_nothing_new">Tidak ada yang baru di unduhan ini: semua isinya sudah ada di sini.</string>
     <string name="imp_nothing_new_range">Tidak ada yang baru di unduhan ini (%1$s sampai %2$s): semua isinya sudah ada di sini.</string>
     <string name="imp_liked_new_detail">%1$s baru, disukai di sini</string>
-    <string name="imp_playlists_new_detail">%1$s baru · %2$s lagu untuk ditambahkan ke yang dibawa sebelumnya</string>
     <string name="imp_playlists_info">Jika dibawa lagi dari unduhan yang lebih baru, playlist yang sudah dibuat sebelumnya mendapat lagu barunya, dan tidak ada yang dibuat dua kali. Lagu yang dihapus darinya di Spotify tidak dihapus dari salinan Prism: keluarkan di Prism jika kamu mau.</string>
     <string name="imp_albums_new_detail">%1$s baru, ke koleksimu</string>
     <string name="imp_artists_new_detail">%1$s baru, diberi bintang</string>
@@ -4550,4 +4549,8 @@
     <string name="ytlive_connection_on">Riwayatmu, tetap diperbarui · Aktif</string>
     <string name="ytlive_connection_off">Jaga riwayatmu tetap diperbarui · Mati</string>
     <string name="ytlive_connection_signed_out">Login untuk menjaga riwayatmu tetap diperbarui</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="other">%1$s baru · %2$s lagu untuk ditambahkan ke yang dibawa sebelumnya</item>
+    </plurals>
 </resources>

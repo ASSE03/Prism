@@ -4487,7 +4487,6 @@
     <string name="imp_nothing_new">Niets nieuws in deze download: alles erin staat hier al.</string>
     <string name="imp_nothing_new_range">Niets nieuws in deze download (%1$s tot %2$s): alles erin staat hier al.</string>
     <string name="imp_liked_new_detail">%1$s nieuw, hier geliket</string>
-    <string name="imp_playlists_new_detail">%1$s nieuw · %2$s nummers om toe te voegen aan eerder meegenomen playlists</string>
     <string name="imp_playlists_info">Neem je ze opnieuw mee uit een nieuwere download, dan krijgt een eerder gemaakte playlist de nieuwe nummers erbij en wordt er geen enkele twee keer gemaakt. Nummers die er op Spotify uit zijn gehaald, worden niet uit de kopie in Prism gehaald: haal ze in Prism weg als je wilt.</string>
     <string name="imp_albums_new_detail">%1$s nieuw, in je bibliotheek</string>
     <string name="imp_artists_new_detail">%1$s nieuw, met een ster</string>
@@ -4611,4 +4610,9 @@
     <string name="ytlive_connection_on">Je geschiedenis wordt bijgehouden · Aan</string>
     <string name="ytlive_connection_off">Houd je geschiedenis bij · Uit</string>
     <string name="ytlive_connection_signed_out">Log in om je geschiedenis bij te houden</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">%1$s nieuw · %2$s nummer om toe te voegen aan eerder meegenomen playlists</item>
+        <item quantity="other">%1$s nieuw · %2$s nummers om toe te voegen aan eerder meegenomen playlists</item>
+    </plurals>
 </resources>

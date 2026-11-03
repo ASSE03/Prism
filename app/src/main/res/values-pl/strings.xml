@@ -4587,7 +4587,6 @@
     <string name="imp_nothing_new">Nic nowego w tych danych: wszystko z nich już tu jest.</string>
     <string name="imp_nothing_new_range">Nic nowego w tych danych (od %1$s do %2$s): wszystko z nich już tu jest.</string>
     <string name="imp_liked_new_detail">Nowe: %1$s, polubione tutaj</string>
-    <string name="imp_playlists_new_detail">Nowe: %1$s · utwory do dodania do przeniesionych wcześniej: %2$s</string>
     <string name="imp_playlists_info">Po ponownym przeniesieniu z nowszych danych playlista utworzona wcześniej dostaje swoje nowe utwory i żadna nie powstaje dwa razy. Utwory usunięte z niej w Spotify nie są usuwane z kopii w Prism: usuń je w Prism, jeśli chcesz.</string>
     <string name="imp_albums_new_detail">Nowe: %1$s, do twojej biblioteki</string>
     <string name="imp_artists_new_detail">Nowi: %1$s, z gwiazdką</string>
@@ -4733,4 +4732,11 @@
     <string name="ytlive_connection_on">Twoja historia na bieżąco · Włączone</string>
     <string name="ytlive_connection_off">Utrzymuj historię na bieżąco · Wyłączone</string>
     <string name="ytlive_connection_signed_out">Zaloguj się, aby utrzymywać historię na bieżąco</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">Nowe: %1$s · utwory do dodania do przeniesionych wcześniej: %2$s</item>
+        <item quantity="few">Nowe: %1$s · utwory do dodania do przeniesionych wcześniej: %2$s</item>
+        <item quantity="many">Nowe: %1$s · utwory do dodania do przeniesionych wcześniej: %2$s</item>
+        <item quantity="other">Nowe: %1$s · utwory do dodania do przeniesionych wcześniej: %2$s</item>
+    </plurals>
 </resources>

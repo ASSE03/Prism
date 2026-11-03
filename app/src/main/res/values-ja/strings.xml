@@ -4437,7 +4437,6 @@
     <string name="imp_nothing_new">このダウンロードに新しいものはありません。すべて取り込み済みです。</string>
     <string name="imp_nothing_new_range">このダウンロード (%1$s～%2$s) に新しいものはありません。すべて取り込み済みです。</string>
     <string name="imp_liked_new_detail">新規 %1$s 曲、ここでいいね</string>
-    <string name="imp_playlists_new_detail">新規 %1$s 件 · 以前取り込んだプレイリストに %2$s 曲を追加</string>
     <string name="imp_playlists_info">新しいダウンロードから再び取り込むと、以前作成したプレイリストには新しい曲が追加され、同じプレイリストが二重に作られることはありません。Spotify で削除された曲は Prism のコピーからは削除されません。必要なら Prism で削除してください。</string>
     <string name="imp_albums_new_detail">新規 %1$s 枚、ライブラリへ</string>
     <string name="imp_artists_new_detail">新規 %1$s 組、お気に入りに</string>
@@ -4550,4 +4549,8 @@
     <string name="ytlive_connection_on">履歴を同期中 · オン</string>
     <string name="ytlive_connection_off">履歴の同期を保つ · オフ</string>
     <string name="ytlive_connection_signed_out">履歴の同期を保つにはログインしてください</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="other">新規 %1$s 件 · 以前取り込んだプレイリストに %2$s 曲を追加</item>
+    </plurals>
 </resources>

@@ -4537,7 +4537,6 @@
     <string name="imp_nothing_new">Nimic nou în această descărcare: tot ce conține e deja aici.</string>
     <string name="imp_nothing_new_range">Nimic nou în această descărcare (din %1$s până în %2$s): tot ce conține e deja aici.</string>
     <string name="imp_liked_new_detail">Noi: %1$s, apreciate aici</string>
-    <string name="imp_playlists_new_detail">Noi: %1$s · melodii de adăugat la cele aduse înainte: %2$s</string>
     <string name="imp_playlists_info">Adus din nou dintr-o descărcare mai nouă, un playlist creat înainte primește melodiile noi, și niciunul nu e creat de două ori. Melodiile scoase din el pe Spotify nu sunt scoase din copia din Prism: scoate-le în Prism dacă vrei.</string>
     <string name="imp_albums_new_detail">Noi: %1$s, în biblioteca ta</string>
     <string name="imp_artists_new_detail">Noi: %1$s, marcați cu stea</string>
@@ -4672,4 +4671,10 @@
     <string name="ytlive_connection_on">Istoricul tău, ținut la zi · Pornit</string>
     <string name="ytlive_connection_off">Ține la zi istoricul tău · Oprit</string>
     <string name="ytlive_connection_signed_out">Conectează-te ca să-ți ții istoricul la zi</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">Noi: %1$s · melodii de adăugat la cele aduse înainte: %2$s</item>
+        <item quantity="few">Noi: %1$s · melodii de adăugat la cele aduse înainte: %2$s</item>
+        <item quantity="other">Noi: %1$s · melodii de adăugat la cele aduse înainte: %2$s</item>
+    </plurals>
 </resources>

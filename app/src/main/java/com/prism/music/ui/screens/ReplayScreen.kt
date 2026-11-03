@@ -481,9 +481,11 @@ private fun HeroCard(d: ReplayData, period: Period, notYet: Boolean, loading: Bo
             }
             Spacer(Modifier.height(18.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(22.dp)) {
-                Stat("${d.plays}", trp(R.plurals.plays_word, d.plays))
-                Stat("${d.songCount}", trp(R.plurals.songs_word, d.songCount))
-                Stat("${d.activeDays}", trp(R.plurals.days_word, d.activeDays))
+                // In the listener's own number format ("1,358", "1.358"), as the rest of Prism writes counts.
+                val n = java.text.NumberFormat.getIntegerInstance()
+                Stat(n.format(d.plays), trp(R.plurals.plays_word, d.plays))
+                Stat(n.format(d.songCount), trp(R.plurals.songs_word, d.songCount))
+                Stat(n.format(d.activeDays), trp(R.plurals.days_word, d.activeDays))
             }
             if (top != null) {
                 Spacer(Modifier.height(18.dp))

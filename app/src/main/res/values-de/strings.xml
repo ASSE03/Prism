@@ -4487,7 +4487,6 @@
     <string name="imp_nothing_new">Nichts Neues in diesem Download: Alles darin ist schon hier.</string>
     <string name="imp_nothing_new_range">Nichts Neues in diesem Download (%1$s bis %2$s): Alles darin ist schon hier.</string>
     <string name="imp_liked_new_detail">%1$s neu, hier geliked</string>
-    <string name="imp_playlists_new_detail">%1$s neu · %2$s Songs für schon mitgebrachte Playlists</string>
     <string name="imp_playlists_info">Wird sie aus einem neueren Download erneut mitgebracht, bekommt eine schon erstellte Playlist ihre neuen Songs dazu, und keine wird doppelt erstellt. Songs, die auf Spotify daraus entfernt wurden, werden aus der Kopie in Prism nicht entfernt: Nimm sie in Prism heraus, wenn du willst.</string>
     <string name="imp_albums_new_detail">%1$s neu, in deine Mediathek</string>
     <string name="imp_artists_new_detail">%1$s neu, mit Stern markiert</string>
@@ -4611,4 +4610,9 @@
     <string name="ytlive_connection_on">Dein Verlauf, auf dem Laufenden · An</string>
     <string name="ytlive_connection_off">Halte deinen Verlauf auf dem Laufenden · Aus</string>
     <string name="ytlive_connection_signed_out">Melde dich an, um deinen Verlauf auf dem Laufenden zu halten</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">%1$s neu · %2$s Song für schon mitgebrachte Playlists</item>
+        <item quantity="other">%1$s neu · %2$s Songs für schon mitgebrachte Playlists</item>
+    </plurals>
 </resources>

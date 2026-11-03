@@ -4487,7 +4487,6 @@
     <string name="imp_nothing_new">Walang bago sa download na ito: nandito na ang lahat ng laman nito.</string>
     <string name="imp_nothing_new_range">Walang bago sa download na ito (%1$s hanggang %2$s): nandito na ang lahat ng laman nito.</string>
     <string name="imp_liked_new_detail">%1$s bago, naka-like dito</string>
-    <string name="imp_playlists_new_detail">%1$s bago · %2$s kantang idaragdag sa mga dinala dati</string>
     <string name="imp_playlists_info">Kapag dinala ulit mula sa mas bagong download, madadagdagan ng mga bagong kanta ang playlist na nagawa na, at walang ginagawa nang dalawang beses. Hindi inaalis sa kopya ng Prism ang mga kantang inalis dito sa Spotify: alisin sila sa Prism kung gusto mo.</string>
     <string name="imp_albums_new_detail">%1$s bago, sa library mo</string>
     <string name="imp_artists_new_detail">%1$s bago, naka-star</string>
@@ -4611,4 +4610,9 @@
     <string name="ytlive_connection_on">Napapanahon ang history mo · Naka-on</string>
     <string name="ytlive_connection_off">Panatilihing napapanahon ang history mo · Naka-off</string>
     <string name="ytlive_connection_signed_out">Mag-sign in para mapanatiling napapanahon ang history mo</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">%1$s bago · %2$s kantang idaragdag sa mga dinala dati</item>
+        <item quantity="other">%1$s bago · %2$s kantang idaragdag sa mga dinala dati</item>
+    </plurals>
 </resources>

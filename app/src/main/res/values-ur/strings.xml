@@ -4487,7 +4487,6 @@
     <string name="imp_nothing_new">اس ڈاؤن لوڈ میں کچھ نیا نہیں: اس میں سب کچھ پہلے سے یہاں ہے۔</string>
     <string name="imp_nothing_new_range">اس ڈاؤن لوڈ میں کچھ نیا نہیں (%1$s سے %2$s تک): اس میں سب کچھ پہلے سے یہاں ہے۔</string>
     <string name="imp_liked_new_detail">%1$s نئے، یہاں پسند کیے جائیں گے</string>
-    <string name="imp_playlists_new_detail">%1$s نئی · پہلے لائی گئی پلے لسٹس میں شامل ہونے کے لیے %2$s گانے</string>
     <string name="imp_playlists_info">کسی نئے ڈاؤن لوڈ سے دوبارہ لانے پر، پہلے بنی پلے لسٹ میں اس کے نئے گانے شامل ہو جاتے ہیں، اور کوئی بھی دو بار نہیں بنتی۔ Spotify پر اس سے ہٹائے گئے گانے Prism کی کاپی سے نہیں ہٹتے: چاہیں تو انہیں Prism میں نکال دیں۔</string>
     <string name="imp_albums_new_detail">%1$s نئے، آپ کی لائبریری میں</string>
     <string name="imp_artists_new_detail">%1$s نئے، ستارہ لگا کر</string>
@@ -4611,4 +4610,9 @@
     <string name="ytlive_connection_on">آپ کی ہسٹری اپ ٹو ڈیٹ ہے · آن</string>
     <string name="ytlive_connection_off">اپنی ہسٹری کو اپ ٹو ڈیٹ رکھیں · آف</string>
     <string name="ytlive_connection_signed_out">اپنی ہسٹری کو اپ ٹو ڈیٹ رکھنے کے لیے سائن اِن کریں</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">%1$s نئی · پہلے لائی گئی پلے لسٹس میں شامل ہونے کے لیے %2$s گانا</item>
+        <item quantity="other">%1$s نئی · پہلے لائی گئی پلے لسٹس میں شامل ہونے کے لیے %2$s گانے</item>
+    </plurals>
 </resources>

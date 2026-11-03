@@ -4587,7 +4587,6 @@
     <string name="imp_nothing_new">У цьому архіві нічого нового: усе з нього вже тут.</string>
     <string name="imp_nothing_new_range">У цьому архіві нічого нового (з %1$s по %2$s): усе з нього вже тут.</string>
     <string name="imp_liked_new_detail">Нових: %1$s, позначаються тут як улюблені</string>
-    <string name="imp_playlists_new_detail">Нових: %1$s · пісень, які додадуться до перенесених раніше: %2$s</string>
     <string name="imp_playlists_info">Якщо перенести знову з новішого архіву, до вже створеного плейлиста додаються його нові пісні, і жоден не створюється двічі. Пісні, прибрані з нього в Spotify, не прибираються з копії в Prism: прибери їх у Prism, якщо хочеш.</string>
     <string name="imp_albums_new_detail">Нових: %1$s, у твою бібліотеку</string>
     <string name="imp_artists_new_detail">Нових: %1$s, із зірочкою</string>
@@ -4733,4 +4732,11 @@
     <string name="ytlive_connection_on">Твоя історія актуальна · Увімкнено</string>
     <string name="ytlive_connection_off">Підтримувати історію актуальною · Вимкнено</string>
     <string name="ytlive_connection_signed_out">Увійди, щоб підтримувати історію актуальною</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">Нових: %1$s · пісень, які додадуться до перенесених раніше: %2$s</item>
+        <item quantity="few">Нових: %1$s · пісень, які додадуться до перенесених раніше: %2$s</item>
+        <item quantity="many">Нових: %1$s · пісень, які додадуться до перенесених раніше: %2$s</item>
+        <item quantity="other">Нових: %1$s · пісень, які додадуться до перенесених раніше: %2$s</item>
+    </plurals>
 </resources>

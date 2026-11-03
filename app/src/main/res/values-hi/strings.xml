@@ -4487,7 +4487,6 @@
     <string name="imp_nothing_new">इस डाउनलोड में कुछ नया नहीं: इसमें सब कुछ पहले से यहां है।</string>
     <string name="imp_nothing_new_range">इस डाउनलोड (%1$s से %2$s तक) में कुछ नया नहीं: इसमें सब कुछ पहले से यहां है।</string>
     <string name="imp_liked_new_detail">%1$s नए, यहां पसंद किए गए</string>
-    <string name="imp_playlists_new_detail">%1$s नई · पहले लाई गई प्लेलिस्ट में जोड़ने के लिए %2$s गाने</string>
     <string name="imp_playlists_info">नए डाउनलोड से फिर से लाने पर, पहले बनी प्लेलिस्ट में उसके नए गाने जुड़ जाते हैं, और कोई प्लेलिस्ट दो बार नहीं बनती। Spotify पर उससे हटाए गए गाने Prism की कॉपी से नहीं हटते: चाहें तो उन्हें Prism में हटा दें।</string>
     <string name="imp_albums_new_detail">%1$s नए, आपकी लाइब्रेरी में</string>
     <string name="imp_artists_new_detail">%1$s नए, स्टार किए गए</string>
@@ -4611,4 +4610,9 @@
     <string name="ytlive_connection_on">आपका इतिहास अपडेट · चालू</string>
     <string name="ytlive_connection_off">अपना इतिहास अपडेट रखें · बंद</string>
     <string name="ytlive_connection_signed_out">इतिहास अपडेट रखने के लिए साइन इन करें</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">%1$s नई · पहले लाई गई प्लेलिस्ट में जोड़ने के लिए %2$s गाना</item>
+        <item quantity="other">%1$s नई · पहले लाई गई प्लेलिस्ट में जोड़ने के लिए %2$s गाने</item>
+    </plurals>
 </resources>

@@ -4437,7 +4437,6 @@
     <string name="imp_nothing_new">ไม่มีอะไรใหม่ในข้อมูลที่ดาวน์โหลดนี้: ทุกอย่างในนั้นมีอยู่ที่นี่แล้ว</string>
     <string name="imp_nothing_new_range">ไม่มีอะไรใหม่ในข้อมูลที่ดาวน์โหลดนี้ (%1$s ถึง %2$s): ทุกอย่างในนั้นมีอยู่ที่นี่แล้ว</string>
     <string name="imp_liked_new_detail">ใหม่ %1$s เพลง กดชอบไว้ที่นี่</string>
-    <string name="imp_playlists_new_detail">ใหม่ %1$s · %2$s เพลงที่จะเพิ่มในเพลย์ลิสต์ที่นำมาก่อนหน้า</string>
     <string name="imp_playlists_info">เมื่อนำมาอีกครั้งจากข้อมูลที่ดาวน์โหลดใหม่กว่า เพลย์ลิสต์ที่สร้างไว้ก่อนจะได้รับเพลงใหม่เพิ่ม และจะไม่มีเพลย์ลิสต์ใดถูกสร้างซ้ำ เพลงที่ถูกนำออกจากเพลย์ลิสต์ใน Spotify จะไม่ถูกนำออกจากสำเนาใน Prism: นำออกใน Prism เองได้หากต้องการ</string>
     <string name="imp_albums_new_detail">ใหม่ %1$s อัลบั้ม เข้าคลังเพลงของคุณ</string>
     <string name="imp_artists_new_detail">ใหม่ %1$s ศิลปิน ติดดาวไว้</string>
@@ -4550,4 +4549,8 @@
     <string name="ytlive_connection_on">ประวัติของคุณตรงกันอยู่เสมอ · เปิด</string>
     <string name="ytlive_connection_off">ให้ประวัติตรงกันอยู่เสมอ · ปิด</string>
     <string name="ytlive_connection_signed_out">เข้าสู่ระบบเพื่อให้ประวัติของคุณตรงกันอยู่เสมอ</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="other">ใหม่ %1$s · %2$s เพลงที่จะเพิ่มในเพลย์ลิสต์ที่นำมาก่อนหน้า</item>
+    </plurals>
 </resources>

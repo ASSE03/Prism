@@ -4687,7 +4687,6 @@
     <string name="imp_nothing_new">لا جديد في هذا التنزيل: كل ما فيه موجود هنا مسبقًا.</string>
     <string name="imp_nothing_new_range">لا جديد في هذا التنزيل (من %1$s إلى %2$s): كل ما فيه موجود هنا مسبقًا.</string>
     <string name="imp_liked_new_detail">جديدة: %1$s، يُسجَّل إعجابك بها هنا</string>
-    <string name="imp_playlists_new_detail">جديدة: %1$s · أغانٍ تُضاف إلى ما أُحضر من قبل: %2$s</string>
     <string name="imp_playlists_info">عند إحضارها مرة أخرى من تنزيل أحدث، تُضاف الأغاني الجديدة إلى قائمة التشغيل التي أُنشئت من قبل، ولا تُنشأ أي قائمة مرتين. والأغاني التي أُزيلت منها في Spotify لا تُزال من نسخة Prism: أزِلها في Prism إن شئت.</string>
     <string name="imp_albums_new_detail">جديدة: %1$s، إلى مكتبتك</string>
     <string name="imp_artists_new_detail">جدد: %1$s، مميزون بنجمة</string>
@@ -4855,4 +4854,13 @@
     <string name="ytlive_connection_on">سجلّك محدَّث · مفعّل</string>
     <string name="ytlive_connection_off">أبقِ سجلّك محدَّثًا · متوقف</string>
     <string name="ytlive_connection_signed_out">سجّل الدخول لإبقاء سجلّك محدَّثًا</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="zero">جديدة: %1$s · %2$s أغنية لإضافتها إلى ما أُحضر من قبل</item>
+        <item quantity="one">جديدة: %1$s · %2$s أغنية لإضافتها إلى ما أُحضر من قبل</item>
+        <item quantity="two">جديدة: %1$s · %2$s أغنيتان لإضافتهما إلى ما أُحضر من قبل</item>
+        <item quantity="few">جديدة: %1$s · %2$s أغانٍ لإضافتها إلى ما أُحضر من قبل</item>
+        <item quantity="many">جديدة: %1$s · %2$s أغنية لإضافتها إلى ما أُحضر من قبل</item>
+        <item quantity="other">جديدة: %1$s · %2$s أغنية لإضافتها إلى ما أُحضر من قبل</item>
+    </plurals>
 </resources>

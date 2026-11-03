@@ -4437,7 +4437,6 @@
     <string name="imp_nothing_new">此下载中没有新内容：其中的一切都已在这里。</string>
     <string name="imp_nothing_new_range">此下载中没有新内容（%1$s 至 %2$s）：其中的一切都已在这里。</string>
     <string name="imp_liked_new_detail">%1$s 首新歌，在这里标为喜欢</string>
-    <string name="imp_playlists_new_detail">%1$s 个新的 · %2$s 首歌将添加到之前导入的播放列表</string>
     <string name="imp_playlists_info">从较新的下载再次导入时，之前创建的播放列表会添加其新歌曲，不会重复创建。在 Spotify 上从中移除的歌曲不会从 Prism 的副本中移除：如果需要，请在 Prism 中自行移除。</string>
     <string name="imp_albums_new_detail">%1$s 张新专辑，加入你的音乐库</string>
     <string name="imp_artists_new_detail">%1$s 位新艺人，加星标</string>
@@ -4550,4 +4549,8 @@
     <string name="ytlive_connection_on">你的记录保持同步 · 已开启</string>
     <string name="ytlive_connection_off">让你的记录保持同步 · 已关闭</string>
     <string name="ytlive_connection_signed_out">登录后即可让你的记录保持同步</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="other">%1$s 个新的 · %2$s 首歌将添加到之前导入的播放列表</item>
+    </plurals>
 </resources>

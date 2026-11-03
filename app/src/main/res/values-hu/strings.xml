@@ -4487,7 +4487,6 @@
     <string name="imp_nothing_new">Nincs új ebben a letöltésben: minden benne lévő már itt van.</string>
     <string name="imp_nothing_new_range">Nincs új ebben a letöltésben (%1$s – %2$s): minden benne lévő már itt van.</string>
     <string name="imp_liked_new_detail">%1$s új, itt kedvelve</string>
-    <string name="imp_playlists_new_detail">%1$s új · %2$s dal a korábban áthozottakhoz</string>
     <string name="imp_playlists_info">Ha egy újabb letöltésből hozod át újra, a korábban létrehozott lejátszási lista megkapja az új dalait, és egyik sem jön létre kétszer. A Spotifyon belőle eltávolított dalok nem kerülnek ki a Prism másolatából: ha szeretnéd, vedd ki őket a Prismben.</string>
     <string name="imp_albums_new_detail">%1$s új, a könyvtáradba</string>
     <string name="imp_artists_new_detail">%1$s új, csillaggal</string>
@@ -4611,4 +4610,9 @@
     <string name="ytlive_connection_on">Naprakész előzmények · Be</string>
     <string name="ytlive_connection_off">Tartsd naprakészen az előzményeidet · Ki</string>
     <string name="ytlive_connection_signed_out">Jelentkezz be az előzményeid naprakészen tartásához</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">%1$s új · %2$s dal a korábban áthozottakhoz</item>
+        <item quantity="other">%1$s új · %2$s dal a korábban áthozottakhoz</item>
+    </plurals>
 </resources>

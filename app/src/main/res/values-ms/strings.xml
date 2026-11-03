@@ -4437,7 +4437,6 @@
     <string name="imp_nothing_new">Tiada yang baharu dalam muat turun ini: semua di dalamnya sudah ada di sini.</string>
     <string name="imp_nothing_new_range">Tiada yang baharu dalam muat turun ini (%1$s hingga %2$s): semua di dalamnya sudah ada di sini.</string>
     <string name="imp_liked_new_detail">%1$s baharu, disukai di sini</string>
-    <string name="imp_playlists_new_detail">%1$s baharu · %2$s lagu untuk ditambah ke senarai main yang dibawa sebelum ini</string>
     <string name="imp_playlists_info">Apabila dibawa semula daripada muat turun yang lebih baharu, senarai main yang dibuat sebelum ini mendapat lagu baharunya, dan tiada yang dibuat dua kali. Lagu yang dialih keluar daripadanya di Spotify tidak dialih keluar daripada salinan Prism: keluarkannya dalam Prism jika anda mahu.</string>
     <string name="imp_albums_new_detail">%1$s baharu, ke dalam pustaka anda</string>
     <string name="imp_artists_new_detail">%1$s baharu, dibintangkan</string>
@@ -4550,4 +4549,8 @@
     <string name="ytlive_connection_on">Sejarah anda, dikekalkan segerak · Hidup</string>
     <string name="ytlive_connection_off">Kekalkan sejarah anda segerak · Mati</string>
     <string name="ytlive_connection_signed_out">Log masuk untuk mengekalkan sejarah anda segerak</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="other">%1$s baharu · %2$s lagu untuk ditambah ke senarai main yang dibawa sebelum ini</item>
+    </plurals>
 </resources>

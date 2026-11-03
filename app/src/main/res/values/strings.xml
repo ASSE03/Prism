@@ -4579,7 +4579,10 @@
     <string name="imp_nothing_new">Nothing new in this download: everything in it is already here.</string>
     <string name="imp_nothing_new_range">Nothing new in this download (%1$s to %2$s): everything in it is already here.</string>
     <string name="imp_liked_new_detail">%1$s new, liked here</string>
-    <string name="imp_playlists_new_detail">%1$s new · %2$s songs to add to ones brought before</string>
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">%1$s new · %2$s song to add to ones brought before</item>
+        <item quantity="other">%1$s new · %2$s songs to add to ones brought before</item>
+    </plurals>
     <string name="imp_playlists_info">Brought again from a newer download, a playlist made before gets its new songs added, and none is made twice. Songs removed from it on Spotify aren\'t removed from Prism\'s copy: take them out in Prism if you like.</string>
     <string name="imp_albums_new_detail">%1$s new, into your library</string>
     <string name="imp_artists_new_detail">%1$s new, starred</string>

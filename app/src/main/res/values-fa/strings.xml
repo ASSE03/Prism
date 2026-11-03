@@ -4487,7 +4487,6 @@
     <string name="imp_nothing_new">چیز جدیدی در این دانلود نیست: هرچه در آن هست از قبل اینجاست.</string>
     <string name="imp_nothing_new_range">چیز جدیدی در این دانلود (از %1$s تا %2$s) نیست: هرچه در آن هست از قبل اینجاست.</string>
     <string name="imp_liked_new_detail">%1$s جدید، اینجا پسندیده می‌شوند</string>
-    <string name="imp_playlists_new_detail">%1$s جدید · %2$s آهنگ برای افزودن به آن‌هایی که قبلاً آورده شده</string>
     <string name="imp_playlists_info">وقتی دوباره از دانلودی تازه‌تر آورده شود، به فهرست پخشی که قبلاً ساخته شده آهنگ‌های جدیدش اضافه می‌شود، و هیچ‌کدام دو بار ساخته نمی‌شود. آهنگ‌هایی که در Spotify از آن برداشته شده‌اند از نسخهٔ Prism برداشته نمی‌شوند: اگر خواستید، خودتان در Prism برشان دارید.</string>
     <string name="imp_albums_new_detail">%1$s جدید، به کتابخانهٔ شما</string>
     <string name="imp_artists_new_detail">%1$s جدید، ستاره‌دار</string>
@@ -4611,4 +4610,9 @@
     <string name="ytlive_connection_on">سابقهٔ شما، همگام · روشن</string>
     <string name="ytlive_connection_off">سابقهٔ خود را همگام نگه دارید · خاموش</string>
     <string name="ytlive_connection_signed_out">برای همگام نگه داشتن سابقه، وارد شوید</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">%1$s جدید · %2$s آهنگ برای افزودن به آن‌هایی که قبلاً آورده شده</item>
+        <item quantity="other">%1$s جدید · %2$s آهنگ برای افزودن به آن‌هایی که قبلاً آورده شده</item>
+    </plurals>
 </resources>

@@ -4587,7 +4587,6 @@
     <string name="imp_nothing_new">V těchto datech nic nového: všechno z nich už tu je.</string>
     <string name="imp_nothing_new_range">V těchto datech (%1$s až %2$s) nic nového: všechno z nich už tu je.</string>
     <string name="imp_liked_new_detail">Nové: %1$s, označené tady jako oblíbené</string>
-    <string name="imp_playlists_new_detail">Nové: %1$s · skladby do dřív přenesených: %2$s</string>
     <string name="imp_playlists_info">Když ho přeneseš znovu z novějších dat, dřív vytvořený playlist dostane nové skladby a žádný se nevytvoří dvakrát. Skladby, které z něj byly odebrány ve Spotify, se z kopie v Prismu neodeberou: když chceš, vyndej je v Prismu.</string>
     <string name="imp_albums_new_detail">Nová: %1$s, do tvé knihovny</string>
     <string name="imp_artists_new_detail">Noví: %1$s, s hvězdičkou</string>
@@ -4733,4 +4732,11 @@
     <string name="ytlive_connection_on">Tvoje historie je aktuální · Zapnuto</string>
     <string name="ytlive_connection_off">Udržuj historii aktuální · Vypnuto</string>
     <string name="ytlive_connection_signed_out">Přihlas se, aby historie zůstala aktuální</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">Nové: %1$s · skladby do dřív přenesených: %2$s</item>
+        <item quantity="few">Nové: %1$s · skladby do dřív přenesených: %2$s</item>
+        <item quantity="many">Nové: %1$s · skladby do dřív přenesených: %2$s</item>
+        <item quantity="other">Nové: %1$s · skladby do dřív přenesených: %2$s</item>
+    </plurals>
 </resources>

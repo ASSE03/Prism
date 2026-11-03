@@ -4537,7 +4537,6 @@
     <string name="imp_nothing_new">Rien de nouveau dans ce téléchargement : tout ce qu’il contient est déjà ici.</string>
     <string name="imp_nothing_new_range">Rien de nouveau dans ce téléchargement (du %1$s au %2$s) : tout ce qu’il contient est déjà ici.</string>
     <string name="imp_liked_new_detail">%1$s nouveaux, likés ici</string>
-    <string name="imp_playlists_new_detail">%1$s nouvelles · %2$s titres à ajouter à celles importées avant</string>
     <string name="imp_playlists_info">Importée à nouveau depuis un téléchargement plus récent, une playlist déjà créée reçoit ses nouveaux titres, et aucune n’est créée deux fois. Les titres retirés sur Spotify ne sont pas retirés de la copie dans Prism : retirez-les dans Prism si vous le souhaitez.</string>
     <string name="imp_albums_new_detail">%1$s nouveaux, dans votre bibliothèque</string>
     <string name="imp_artists_new_detail">%1$s nouveaux, mis en favoris</string>
@@ -4672,4 +4671,10 @@
     <string name="ytlive_connection_on">Votre historique, à jour · Activé</string>
     <string name="ytlive_connection_off">Gardez votre historique à jour · Désactivé</string>
     <string name="ytlive_connection_signed_out">Connectez-vous pour garder votre historique à jour</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">%1$s nouvelles · %2$s titre à ajouter à celles importées avant</item>
+        <item quantity="many">%1$s nouvelles · %2$s de titres à ajouter à celles importées avant</item>
+        <item quantity="other">%1$s nouvelles · %2$s titres à ajouter à celles importées avant</item>
+    </plurals>
 </resources>

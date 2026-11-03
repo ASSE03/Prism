@@ -4487,7 +4487,6 @@
     <string name="imp_nothing_new">Bu indirmede yeni bir şey yok: içindeki her şey zaten burada.</string>
     <string name="imp_nothing_new_range">Bu indirmede yeni bir şey yok (%1$s – %2$s): içindeki her şey zaten burada.</string>
     <string name="imp_liked_new_detail">%1$s yeni, burada beğenilir</string>
-    <string name="imp_playlists_new_detail">%1$s yeni · daha önce getirilenlere eklenecek %2$s şarkı</string>
     <string name="imp_playlists_info">Daha yeni bir indirmeden yeniden getirildiğinde, önceden oluşturulmuş bir çalma listesine yeni şarkıları eklenir ve hiçbiri iki kez oluşturulmaz. Spotify\'da ondan kaldırılan şarkılar Prism\'deki kopyadan kaldırılmaz: istersen onları Prism\'de çıkar.</string>
     <string name="imp_albums_new_detail">%1$s yeni, kitaplığına</string>
     <string name="imp_artists_new_detail">%1$s yeni, yıldızlı</string>
@@ -4611,4 +4610,9 @@
     <string name="ytlive_connection_on">Geçmişin güncel tutuluyor · Açık</string>
     <string name="ytlive_connection_off">Geçmişini güncel tut · Kapalı</string>
     <string name="ytlive_connection_signed_out">Geçmişini güncel tutmak için giriş yap</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">%1$s yeni · daha önce getirilenlere eklenecek %2$s şarkı</item>
+        <item quantity="other">%1$s yeni · daha önce getirilenlere eklenecek %2$s şarkı</item>
+    </plurals>
 </resources>

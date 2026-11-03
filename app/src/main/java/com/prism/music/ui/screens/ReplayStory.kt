@@ -773,9 +773,10 @@ private fun TopArtist(s: ReplayStory, modifier: Modifier) {
             )
             Spacer(Modifier.height(18.dp))
             Row(Modifier.reveal(1_200), horizontalArrangement = Arrangement.spacedBy(26.dp)) {
-                listenTotal(a.ms).let { t -> Stat(t.text(t.value), t.unit.ifEmpty { "listened" }) }
-                Stat(fmt(a.plays.toLong()), "plays")
-                Stat("${s.songs.count { it.mainArtist == a.artistName }}", "songs")
+                listenTotal(a.ms).let { t -> Stat(t.text(t.value), t.unit.ifEmpty { tr(R.string.listened).lowercase() }) }
+                Stat(fmt(a.plays.toLong()), trp(R.plurals.plays_word, a.plays))
+                val theirs = s.songs.count { it.mainArtist == a.artistName }
+                Stat(fmt(theirs.toLong()), trp(R.plurals.songs_word, theirs))
             }
             val share = (a.ms * 100.0 / s.totalMs.coerceAtLeast(1)).toInt()
             Text(tr(R.string.of_everything_you_played_was_them, share), style = body, modifier = Modifier.reveal(1_800).padding(top = 16.dp))

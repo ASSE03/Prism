@@ -4437,7 +4437,6 @@
     <string name="imp_nothing_new">Không có gì mới trong bản tải này: mọi thứ trong đó đã có ở đây.</string>
     <string name="imp_nothing_new_range">Không có gì mới trong bản tải này (%1$s đến %2$s): mọi thứ trong đó đã có ở đây.</string>
     <string name="imp_liked_new_detail">%1$s bài mới, được thích tại đây</string>
-    <string name="imp_playlists_new_detail">%1$s danh sách mới · %2$s bài sẽ thêm vào các danh sách đã mang sang trước đó</string>
     <string name="imp_playlists_info">Khi mang sang lại từ một bản tải mới hơn, danh sách phát đã tạo trước đó sẽ được thêm các bài mới, và không danh sách nào bị tạo hai lần. Những bài đã bị xóa khỏi danh sách trên Spotify không bị xóa khỏi bản sao trong Prism: hãy tự xóa chúng trong Prism nếu muốn.</string>
     <string name="imp_albums_new_detail">%1$s album mới, vào thư viện của bạn</string>
     <string name="imp_artists_new_detail">%1$s nghệ sĩ mới, được gắn sao</string>
@@ -4550,4 +4549,8 @@
     <string name="ytlive_connection_on">Lịch sử của bạn luôn cập nhật · Bật</string>
     <string name="ytlive_connection_off">Luôn cập nhật lịch sử của bạn · Tắt</string>
     <string name="ytlive_connection_signed_out">Đăng nhập để luôn cập nhật lịch sử của bạn</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="other">%1$s danh sách mới · %2$s bài sẽ thêm vào các danh sách đã mang sang trước đó</item>
+    </plurals>
 </resources>

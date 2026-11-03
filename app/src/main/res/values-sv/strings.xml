@@ -4487,7 +4487,6 @@
     <string name="imp_nothing_new">Inget nytt i den här nedladdningen: allt i den finns redan här.</string>
     <string name="imp_nothing_new_range">Inget nytt i den här nedladdningen (%1$s till %2$s): allt i den finns redan här.</string>
     <string name="imp_liked_new_detail">%1$s nya, gillade här</string>
-    <string name="imp_playlists_new_detail">%1$s nya · %2$s låtar att lägga till i dem som tagits med tidigare</string>
     <string name="imp_playlists_info">När den tas med igen från en nyare nedladdning får en spellista som skapats tidigare sina nya låtar tillagda, och ingen skapas två gånger. Låtar som tagits bort från den på Spotify tas inte bort från Prisms kopia: ta bort dem i Prism om du vill.</string>
     <string name="imp_albums_new_detail">%1$s nya, in i ditt bibliotek</string>
     <string name="imp_artists_new_detail">%1$s nya, stjärnmärkta</string>
@@ -4611,4 +4610,9 @@
     <string name="ytlive_connection_on">Din historik, uppdaterad · På</string>
     <string name="ytlive_connection_off">Håll din historik uppdaterad · Av</string>
     <string name="ytlive_connection_signed_out">Logga in för att hålla din historik uppdaterad</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">%1$s nya · %2$s låt att lägga till i dem som tagits med tidigare</item>
+        <item quantity="other">%1$s nya · %2$s låtar att lägga till i dem som tagits med tidigare</item>
+    </plurals>
 </resources>

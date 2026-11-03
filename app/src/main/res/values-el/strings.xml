@@ -4487,7 +4487,6 @@
     <string name="imp_nothing_new">Τίποτα νέο σε αυτή τη λήψη: όλα όσα περιέχει είναι ήδη εδώ.</string>
     <string name="imp_nothing_new_range">Τίποτα νέο σε αυτή τη λήψη (%1$s έως %2$s): όλα όσα περιέχει είναι ήδη εδώ.</string>
     <string name="imp_liked_new_detail">%1$s νέα, στα αγαπημένα εδώ</string>
-    <string name="imp_playlists_new_detail">%1$s νέα · %2$s τραγούδια για όσα έφερες πριν</string>
     <string name="imp_playlists_info">Αν το φέρεις ξανά από νεότερη λήψη, ένα playlist που φτιάχτηκε πριν παίρνει τα νέα του τραγούδια, και κανένα δεν φτιάχνεται δύο φορές. Τραγούδια που αφαιρέθηκαν από αυτό στο Spotify δεν αφαιρούνται από το αντίγραφο του Prism: βγάλ’ τα στο Prism αν θέλεις.</string>
     <string name="imp_albums_new_detail">%1$s νέα, στη βιβλιοθήκη σου</string>
     <string name="imp_artists_new_detail">%1$s νέοι, στα αγαπημένα</string>
@@ -4611,4 +4610,9 @@
     <string name="ytlive_connection_on">Το ιστορικό σου, ενημερωμένο · Ενεργό</string>
     <string name="ytlive_connection_off">Κράτα το ιστορικό σου ενημερωμένο · Ανενεργό</string>
     <string name="ytlive_connection_signed_out">Συνδέσου για να κρατάς το ιστορικό σου ενημερωμένο</string>
+    <!-- 1.8.1 followed playlists, re-import plural -->
+    <plurals name="imp_playlists_new_count">
+        <item quantity="one">%1$s νέα · %2$s τραγούδι για όσα έφερες πριν</item>
+        <item quantity="other">%1$s νέα · %2$s τραγούδια για όσα έφερες πριν</item>
+    </plurals>
 </resources>

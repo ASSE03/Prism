@@ -260,7 +260,7 @@ fun BringHistoryScreen(bottomPadding: Dp) {
                         }
                     }
                     if (news.playlists > 0 || news.playlistSongs > 0) {
-                        val detail = if (again) tr(R.string.imp_playlists_new_detail, count(news.playlists), count(news.playlistSongs))
+                        val detail = if (again) trp(R.plurals.imp_playlists_new_count, news.playlistSongs, count(news.playlists), count(news.playlistSongs))
                             else tr(R.string.imp_playlists_detail, count(lib.playlists.size))
                         Toggle(tr(R.string.imp_playlists), detail, playlists, info = tr(R.string.imp_playlists_info)) { playlists = it }
                     }
