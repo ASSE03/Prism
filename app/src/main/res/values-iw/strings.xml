@@ -4637,4 +4637,29 @@
     <string name="tour_181_crossfade">סרגל התקדמות בצורת המעבר ההדרגתי</string>
     <string name="tour_181_auto">בקש אומן, אלבום או פלייליסט בקול, גם ב-Android Auto</string>
     <string name="tour_181_tv">בטלוויזיה, שירה אף פעם לא מעכבת את המוזיקה, וההתאמה קלה יותר</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · לא משותף על ידי Spotify</string>
+    <string name="spot_followed_why">‏Spotify משתף רק את השירים של פלייליסטים שיצרת בעצמך.</string>
+    <string name="spot_followed_steps">ב-Spotify: פתח אותו → ⋯ → הוספה לפלייליסט אחר → פלייליסט חדש. Prism מביא את העותק ברענון הבא.</string>
+    <string name="spot_followed_tunemymusic">או, להעברה פשוטה יותר: העתק את הפלייליסטים שלך מ-Spotify אל YouTube Music באמצעות TuneMyMusic (ספרייה → ייבוא פלייליסטים). הם יופיעו ב-Prism לאחר שיועתקו.</string>
+    <string name="spot_open_in_spotify">פתח ב-Spotify</string>
+    <string name="spot_refresh_now">רענן עכשיו</string>
+    <string name="spot_refreshing">מרענן…</string>
+    <string name="spot_refreshed">בוצע</string>
+    <string name="spot_hide_from_library">הסתר מהספרייה</string>
+    <string name="youtube_live_source">YouTube Music (חי)</string>
+    <string name="ytlive_group">שמור על עדכון</string>
+    <string name="ytlive_title">שמור על עדכון ההיסטוריה שלך ב-YouTube Music</string>
+    <string name="ytlive_sub_off">השמעות מהמכשירים האחרים שלך, כל כמה שעות</string>
+    <string name="ytlive_sub_first">פעיל. מתחיל מההיסטוריה שלך כפי שהיא עכשיו</string>
+    <string name="ytlive_sub_checked">פעיל. נבדק לאחרונה: %1$s</string>
+    <string name="ytlive_sub_paused">מושהה ליום: YouTube Music לא ענה</string>
+    <string name="ytlive_sub_retry">‏YouTube Music לא ענה. Prism ינסה שוב מאוחר יותר</string>
+    <string name="ytlive_sign_in">היכנס ל-YouTube Music כדי להשתמש בזה</string>
+    <string name="ytlive_info">כל כמה שעות, Prism קורא את ההיסטוריה שלך ב-YouTube Music (דף ההיסטוריה שלו) וסופר את השירים שהושמעו מאז הפעם האחרונה, באפליקציית YouTube Music, באתר, ברמקול, כהשמעות מ-YouTube Music (חי). ההשמעות של Prism עצמו לא נכללות. זה מתחיל ברגע שמפעילים אותו: כדי להביא את מה שהשמעת קודם, השתמש ב-YouTube Music למעלה (Google Takeout).\n\nהשעות משוערות: איפשהו בין שתי בדיקות. שיר שהושמע פעמיים בין שתי בדיקות עשוי להיספר פעם אחת. הכול תלוי בדף ההיסטוריה של YouTube. Google Takeout הוא ההיסטוריה המלאה, וההשמעות ש-Takeout מביא לא נספרות פעמיים.\n\n‏Replay סופר את ההשמעות האלה רק אם תפעיל אותן ב\"איזו היסטוריה לספור\", ואפשר להסיר אותן כאן כמו כל ייבוא.</string>
+    <string name="ytlive_keywords">youtube music חי היסטוריה מכשירים אחרים אפליקציה אתר רמקול סנכרון השמעות שמור על עדכון</string>
+    <string name="imp_bring_it_in">הבא</string>
+    <string name="imp_turn_on">הפעל</string>
+    <string name="imp_not_brought_in">עדיין לא הובאה</string>
+    <string name="imp_live_no_plays">פעיל. עדיין אין השמעות</string>
 </resources>

@@ -4517,4 +4517,29 @@
     <string name="tour_181_crossfade">クロスフェードの形をしたプログレスバー</string>
     <string name="tour_181_auto">音声でアーティスト、アルバム、プレイリストをリクエスト。Android Auto でも</string>
     <string name="tour_181_tv">テレビでは、シングで音楽が止まることはなく、ペア設定も簡単に</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Spotify から共有されていません</string>
+    <string name="spot_followed_why">Spotify が共有するのは、自分で作成したプレイリストの曲だけです。</string>
+    <string name="spot_followed_steps">Spotify で、プレイリストを開く → ⋯ → 他のプレイリストに追加 → 新しいプレイリスト。次回の更新時に、Prism がそのコピーを取り込みます。</string>
+    <string name="spot_followed_tunemymusic">もっと簡単な方法として、TuneMyMusic で Spotify のプレイリストを YouTube Music にコピーすることもできます (ライブラリ → プレイリストをインポート)。コピーが終わると Prism に表示されます。</string>
+    <string name="spot_open_in_spotify">Spotify で開く</string>
+    <string name="spot_refresh_now">今すぐ更新</string>
+    <string name="spot_refreshing">更新中…</string>
+    <string name="spot_refreshed">完了</string>
+    <string name="spot_hide_from_library">ライブラリから非表示</string>
+    <string name="youtube_live_source">YouTube Music (ライブ)</string>
+    <string name="ytlive_group">同期を保つ</string>
+    <string name="ytlive_title">YouTube Music の履歴を同期し続ける</string>
+    <string name="ytlive_sub_off">ほかのデバイスでの再生を数時間ごとに取り込みます</string>
+    <string name="ytlive_sub_first">オン。現在の履歴から開始します</string>
+    <string name="ytlive_sub_checked">オン。最終確認 %1$s</string>
+    <string name="ytlive_sub_paused">1 日停止中: YouTube Music が応答しませんでした</string>
+    <string name="ytlive_sub_retry">YouTube Music が応答しませんでした。Prism があとで再試行します</string>
+    <string name="ytlive_sign_in">この機能を使うには YouTube Music にログインしてください</string>
+    <string name="ytlive_info">数時間ごとに、Prism は YouTube Music の履歴 (その履歴ページ) を読み込み、前回の確認以降に再生された曲を、YouTube Music アプリ、ウェブサイト、スピーカーなどでの再生を問わず、YouTube Music (ライブ) の再生としてカウントします。Prism 自身の再生は除外されます。オンにした時点から始まります。それ以前に再生した分を取り込むには、上の YouTube Music (Google Takeout) を使ってください。\n\n時刻はおおよそのものです。2 回の確認の間のどこか、ということです。2 回の確認の間に 2 回再生した曲は 1 回としてカウントされることがあります。これは YouTube の履歴ページに依存します。Google Takeout は完全な履歴で、Takeout で取り込んだ再生は二重にカウントされません。\n\nReplay では「カウントする履歴」でオンにしたときだけこれらの再生がカウントされ、ほかの取り込みと同じようにここで削除できます。</string>
+    <string name="ytlive_keywords">youtube music ライブ 履歴 ほかのデバイス アプリ ウェブサイト スピーカー 同期 再生 同期を保つ</string>
+    <string name="imp_bring_it_in">取り込む</string>
+    <string name="imp_turn_on">オンにする</string>
+    <string name="imp_not_brought_in">まだ取り込んでいません</string>
+    <string name="imp_live_no_plays">オン。まだ再生はありません</string>
 </resources>

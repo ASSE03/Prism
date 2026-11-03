@@ -4577,4 +4577,29 @@
     <string name="tour_181_crossfade">Progress bar na kahugis ng crossfade</string>
     <string name="tour_181_auto">Humiling ng artist, album o playlist gamit ang boses, pati sa Android Auto</string>
     <string name="tour_181_tv">Sa TV, hindi kailanman pinapahinto ng Kumanta ang musika, at mas madali ang pag-pair</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Hindi ibinabahagi ng Spotify</string>
+    <string name="spot_followed_why">Ang mga kanta lang ng mga playlist na ikaw mismo ang gumawa ang ibinabahagi ng Spotify.</string>
+    <string name="spot_followed_steps">Sa Spotify: buksan ito → ⋯ → Idagdag sa ibang playlist → Bagong playlist. Dadalhin ng Prism ang kopya sa susunod na refresh.</string>
+    <string name="spot_followed_tunemymusic">O, mas simple: kopyahin ang mga Spotify playlist mo sa YouTube Music gamit ang TuneMyMusic (Library → Mag-import ng mga playlist). Lalabas ang mga ito sa Prism kapag nakopya na.</string>
+    <string name="spot_open_in_spotify">Buksan sa Spotify</string>
+    <string name="spot_refresh_now">I-refresh ngayon</string>
+    <string name="spot_refreshing">Nire-refresh…</string>
+    <string name="spot_refreshed">Tapos na</string>
+    <string name="spot_hide_from_library">Itago sa Library</string>
+    <string name="youtube_live_source">YouTube Music (live)</string>
+    <string name="ytlive_group">Panatilihing napapanahon</string>
+    <string name="ytlive_title">Panatilihing napapanahon ang YouTube Music history mo</string>
+    <string name="ytlive_sub_off">Mga play mula sa iba mong device, kada ilang oras</string>
+    <string name="ytlive_sub_first">Naka-on. Magsisimula ito sa history mo ngayon</string>
+    <string name="ytlive_sub_checked">Naka-on. Huling tiningnan %1$s</string>
+    <string name="ytlive_sub_paused">Naka-pause nang isang araw: hindi sumagot ang YouTube Music</string>
+    <string name="ytlive_sub_retry">Hindi sumagot ang YouTube Music. Susubukan ulit ng Prism mamaya</string>
+    <string name="ytlive_sign_in">Mag-sign in sa YouTube Music para magamit ito</string>
+    <string name="ytlive_info">Kada ilang oras, binabasa ng Prism ang YouTube Music history mo (ang History page nito) at binibilang ang mga kantang pinatugtog mula noong huli nitong tingin, sa YouTube Music app, sa website, o sa speaker, bilang mga play mula sa YouTube Music (live). Hindi isinasama ang mga play sa mismong Prism. Nagsisimula ito kapag in-on mo: para dalhin ang pinatugtog mo dati, gamitin ang YouTube Music sa itaas (Google Takeout).\n\nTinatayang oras lang ang mga ito: kung saan man sa pagitan ng dalawang tingin. Ang kantang dalawang beses pinatugtog sa pagitan ng dalawang tingin ay maaaring mabilang nang isang beses. Depende ito sa History page ng YouTube. Ang Google Takeout ang kumpletong history, at hindi binibilang nang dalawang beses ang mga play na dinadala ng isang Takeout.\n\nBinibilang lang ng Replay ang mga play na ito kapag in-on mo ang mga ito sa Bilangin ang history mula sa, at maaalis mo sila rito gaya ng anumang import.</string>
+    <string name="ytlive_keywords">youtube music live history iba pang device app website speaker sync play panatilihing napapanahon</string>
+    <string name="imp_bring_it_in">Dalhin ito</string>
+    <string name="imp_turn_on">I-on</string>
+    <string name="imp_not_brought_in">Hindi pa nadadala</string>
+    <string name="imp_live_no_plays">Naka-on. Wala pang play</string>
 </resources>

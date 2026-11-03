@@ -4517,4 +4517,29 @@
     <string name="tour_181_crossfade">呈交叉淡入淡出形状的进度条</string>
     <string name="tour_181_auto">用语音点播艺人、专辑或播放列表，在 Android Auto 中也可以</string>
     <string name="tour_181_tv">在电视上，跟唱再也不会让音乐卡住，配对也更简单</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Spotify 不提供</string>
+    <string name="spot_followed_why">Spotify 只提供你自己创建的播放列表中的歌曲。</string>
+    <string name="spot_followed_steps">在 Spotify 中：打开它 → ⋯ → 添加到其他播放列表 → 新建播放列表。Prism 会在下次刷新时带入这份副本。</string>
+    <string name="spot_followed_tunemymusic">或者用更简单的办法：通过 TuneMyMusic 把你的 Spotify 播放列表复制到 YouTube Music（音乐库 → 导入播放列表）。复制完成后它们会出现在 Prism 中。</string>
+    <string name="spot_open_in_spotify">在 Spotify 中打开</string>
+    <string name="spot_refresh_now">立即刷新</string>
+    <string name="spot_refreshing">正在刷新…</string>
+    <string name="spot_refreshed">完成</string>
+    <string name="spot_hide_from_library">从音乐库中隐藏</string>
+    <string name="youtube_live_source">YouTube Music（实时）</string>
+    <string name="ytlive_group">保持同步</string>
+    <string name="ytlive_title">让你的 YouTube Music 记录保持同步</string>
+    <string name="ytlive_sub_off">来自你其他设备的播放，每隔几小时同步一次</string>
+    <string name="ytlive_sub_first">已开启。从你现在的记录开始</string>
+    <string name="ytlive_sub_checked">已开启。上次检查：%1$s</string>
+    <string name="ytlive_sub_paused">已暂停一天：YouTube Music 没有响应</string>
+    <string name="ytlive_sub_retry">YouTube Music 没有响应。Prism 稍后会再试</string>
+    <string name="ytlive_sign_in">登录 YouTube Music 以使用此功能</string>
+    <string name="ytlive_info">Prism 每隔几小时会读取你的 YouTube Music 记录（它的“历史记录”页面），并统计自上次查看以来播放的歌曲，无论是在 YouTube Music 应用、网站还是音箱上播放，都作为来自 YouTube Music（实时）的播放。Prism 自己的播放不计入。它从你开启时开始：要导入你之前播放的内容，请使用上方的 YouTube Music（Google Takeout）。\n\n时间是大致的：介于两次查看之间。两次查看之间播放两次的歌曲可能只算一次。这取决于 YouTube 的历史记录页面。Google Takeout 是完整的记录，Takeout 导入的播放不会被重复计算。\n\n只有当你在“计入记录来源”下开启这些播放时，Replay 才会统计它们，你也可以像删除其他导入内容一样在这里将它们移除。</string>
+    <string name="ytlive_keywords">youtube music 实时 历史记录 其他设备 应用 网站 音箱 同步 播放 保持同步</string>
+    <string name="imp_bring_it_in">导入</string>
+    <string name="imp_turn_on">开启</string>
+    <string name="imp_not_brought_in">尚未导入</string>
+    <string name="imp_live_no_plays">已开启。还没有播放</string>
 </resources>

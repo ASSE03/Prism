@@ -4577,4 +4577,29 @@
     <string name="tour_181_crossfade">Een voortgangsbalk in de vorm van de crossfade</string>
     <string name="tour_181_auto">Vraag met je stem om een artiest, album of playlist, ook in Android Auto</string>
     <string name="tour_181_tv">Op de tv houdt Meezingen de muziek nooit meer op, en koppelen is makkelijker</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Niet gedeeld door Spotify</string>
+    <string name="spot_followed_why">Spotify deelt alleen de nummers van playlists die je zelf hebt gemaakt.</string>
+    <string name="spot_followed_steps">In Spotify: open de playlist → ⋯ → Toevoegen aan andere afspeellijst → Nieuwe afspeellijst. Prism neemt de kopie mee bij de volgende vernieuwing.</string>
+    <string name="spot_followed_tunemymusic">Of, voor een eenvoudigere verhuizing: kopieer je Spotify-playlists naar YouTube Music met TuneMyMusic (Bibliotheek → Playlists importeren). Ze verschijnen in Prism zodra ze gekopieerd zijn.</string>
+    <string name="spot_open_in_spotify">Openen in Spotify</string>
+    <string name="spot_refresh_now">Nu vernieuwen</string>
+    <string name="spot_refreshing">Vernieuwen…</string>
+    <string name="spot_refreshed">Klaar</string>
+    <string name="spot_hide_from_library">Verbergen in Bibliotheek</string>
+    <string name="youtube_live_source">YouTube Music (live)</string>
+    <string name="ytlive_group">Gelijk houden</string>
+    <string name="ytlive_title">Houd je YouTube Music-geschiedenis bij</string>
+    <string name="ytlive_sub_off">Afspelingen op je andere apparaten, om de paar uur</string>
+    <string name="ytlive_sub_first">Aan. Begint bij je geschiedenis zoals die nu is</string>
+    <string name="ytlive_sub_checked">Aan. Laatst gecontroleerd: %1$s</string>
+    <string name="ytlive_sub_paused">Een dag gepauzeerd: YouTube Music antwoordde niet</string>
+    <string name="ytlive_sub_retry">YouTube Music antwoordde niet. Prism probeert het later opnieuw</string>
+    <string name="ytlive_sign_in">Log in bij YouTube Music om dit te gebruiken</string>
+    <string name="ytlive_info">Om de paar uur leest Prism je YouTube Music-geschiedenis (de pagina Geschiedenis) en telt de nummers die sinds de vorige keer zijn afgespeeld, in de YouTube Music-app, op de website, op een speaker, als afspelingen uit YouTube Music (live). Afspelingen in Prism zelf blijven buiten beschouwing. Het begint wanneer je het aanzet: gebruik YouTube Music hierboven (Google Takeout) om mee te nemen wat je eerder hebt afgespeeld.\n\nTijden zijn bij benadering: ergens tussen twee controles. Een nummer dat tussen twee controles twee keer is afgespeeld, telt mogelijk één keer. Het hangt af van de pagina Geschiedenis van YouTube. Google Takeout is de volledige geschiedenis, en afspelingen die een Takeout meeneemt worden niet dubbel geteld.\n\nReplay telt deze afspelingen alleen mee als je ze aanzet onder Geschiedenis meetellen van, en je kunt ze hier verwijderen zoals elke import.</string>
+    <string name="ytlive_keywords">youtube music live geschiedenis andere apparaten app website speaker synchroniseren afspelingen bijhouden gelijk houden</string>
+    <string name="imp_bring_it_in">Meenemen</string>
+    <string name="imp_turn_on">Aanzetten</string>
+    <string name="imp_not_brought_in">Nog niet meegenomen</string>
+    <string name="imp_live_no_plays">Aan. Nog geen afspelingen</string>
 </resources>

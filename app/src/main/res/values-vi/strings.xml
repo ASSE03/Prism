@@ -4517,4 +4517,29 @@
     <string name="tour_181_crossfade">Thanh tiến trình theo hình chuyển tiếp mượt</string>
     <string name="tour_181_auto">Yêu cầu nghệ sĩ, album hoặc danh sách phát bằng giọng nói, cả trong Android Auto</string>
     <string name="tour_181_tv">Trên TV, Hát cùng không bao giờ làm nhạc phải chờ, và ghép nối dễ hơn</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Spotify không chia sẻ</string>
+    <string name="spot_followed_why">Spotify chỉ chia sẻ các bài hát trong danh sách phát do chính bạn tạo.</string>
+    <string name="spot_followed_steps">Trong Spotify: mở danh sách → ⋯ → Thêm vào playlist khác → Playlist mới. Prism sẽ mang bản sao sang ở lần làm mới tiếp theo.</string>
+    <string name="spot_followed_tunemymusic">Hoặc, cách đơn giản hơn: sao chép danh sách phát Spotify của bạn sang YouTube Music bằng TuneMyMusic (Thư viện → Nhập danh sách phát). Chúng sẽ xuất hiện trong Prism sau khi sao chép.</string>
+    <string name="spot_open_in_spotify">Mở trong Spotify</string>
+    <string name="spot_refresh_now">Làm mới ngay</string>
+    <string name="spot_refreshing">Đang làm mới…</string>
+    <string name="spot_refreshed">Xong</string>
+    <string name="spot_hide_from_library">Ẩn khỏi Thư viện</string>
+    <string name="youtube_live_source">YouTube Music (trực tiếp)</string>
+    <string name="ytlive_group">Luôn cập nhật</string>
+    <string name="ytlive_title">Luôn cập nhật lịch sử YouTube Music của bạn</string>
+    <string name="ytlive_sub_off">Lượt phát từ các thiết bị khác của bạn, vài giờ một lần</string>
+    <string name="ytlive_sub_first">Đã bật. Bắt đầu từ lịch sử của bạn như hiện tại</string>
+    <string name="ytlive_sub_checked">Đã bật. Kiểm tra lần cuối %1$s</string>
+    <string name="ytlive_sub_paused">Tạm dừng một ngày: YouTube Music không phản hồi</string>
+    <string name="ytlive_sub_retry">YouTube Music không phản hồi. Prism sẽ thử lại sau</string>
+    <string name="ytlive_sign_in">Đăng nhập YouTube Music để dùng tính năng này</string>
+    <string name="ytlive_info">Vài giờ một lần, Prism đọc lịch sử YouTube Music của bạn (trang Lịch sử của nó) và tính các bài đã phát kể từ lần xem trước, trong ứng dụng YouTube Music, trên trang web, trên loa, dưới dạng lượt phát từ YouTube Music (trực tiếp). Các lượt phát trong chính Prism được bỏ qua. Nó bắt đầu từ lúc bạn bật: để mang sang những gì bạn đã nghe trước đó, hãy dùng YouTube Music ở trên (Google Takeout).\n\nThời gian chỉ là ước chừng: đâu đó giữa hai lần xem. Một bài phát hai lần giữa hai lần xem có thể chỉ được tính một lần. Điều này phụ thuộc vào trang Lịch sử của YouTube. Google Takeout là lịch sử đầy đủ, và các lượt phát do Takeout mang sang sẽ không bị tính hai lần.\n\nReplay chỉ tính các lượt phát này khi bạn bật chúng trong Tính lịch sử từ, và bạn có thể xóa chúng tại đây như mọi nguồn nhập khác.</string>
+    <string name="ytlive_keywords">youtube music trực tiếp lịch sử thiết bị khác ứng dụng trang web loa đồng bộ lượt phát luôn cập nhật</string>
+    <string name="imp_bring_it_in">Mang sang</string>
+    <string name="imp_turn_on">Bật</string>
+    <string name="imp_not_brought_in">Chưa mang sang</string>
+    <string name="imp_live_no_plays">Đã bật. Chưa có lượt phát nào</string>
 </resources>

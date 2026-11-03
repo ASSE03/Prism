@@ -4577,4 +4577,29 @@
     <string name="tour_181_crossfade">क्रॉसफ़ेड के आकार में प्रोग्रेस बार</string>
     <string name="tour_181_auto">आवाज़ से कोई कलाकार, एल्बम या प्लेलिस्ट मांगें, Android Auto में भी</string>
     <string name="tour_181_tv">टीवी पर ‘साथ गाएं’ कभी संगीत को नहीं रोकता, और पेयर करना अब आसान है</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Spotify ने साझा नहीं किया</string>
+    <string name="spot_followed_why">Spotify सिर्फ़ उन प्लेलिस्ट के गाने साझा करता है जो आपने खुद बनाई हैं।</string>
+    <string name="spot_followed_steps">Spotify में: उसे खोलें → ⋯ → दूसरी प्लेलिस्ट में जोड़ें → नई प्लेलिस्ट। Prism अगले रीफ़्रेश पर कॉपी ले आता है।</string>
+    <string name="spot_followed_tunemymusic">या, ज़्यादा आसान तरीके से: TuneMyMusic से अपनी Spotify प्लेलिस्ट YouTube Music में कॉपी करें (लाइब्रेरी → प्लेलिस्ट इंपोर्ट करें)। कॉपी होते ही वे Prism में दिखने लगती हैं।</string>
+    <string name="spot_open_in_spotify">Spotify में खोलें</string>
+    <string name="spot_refresh_now">अभी रीफ़्रेश करें</string>
+    <string name="spot_refreshing">रीफ़्रेश हो रहा है…</string>
+    <string name="spot_refreshed">हो गया</string>
+    <string name="spot_hide_from_library">लाइब्रेरी से छिपाएं</string>
+    <string name="youtube_live_source">YouTube Music (लाइव)</string>
+    <string name="ytlive_group">अपडेट रखें</string>
+    <string name="ytlive_title">अपना YouTube Music इतिहास अपडेट रखें</string>
+    <string name="ytlive_sub_off">आपके दूसरे डिवाइस के प्ले, हर कुछ घंटों में</string>
+    <string name="ytlive_sub_first">चालू। यह आपके इतिहास से अभी की स्थिति से शुरू होता है</string>
+    <string name="ytlive_sub_checked">चालू। आखिरी जाँच: %1$s</string>
+    <string name="ytlive_sub_paused">एक दिन के लिए रुका: YouTube Music ने जवाब नहीं दिया</string>
+    <string name="ytlive_sub_retry">YouTube Music ने जवाब नहीं दिया। Prism बाद में फिर कोशिश करेगा</string>
+    <string name="ytlive_sign_in">इसका इस्तेमाल करने के लिए YouTube Music में साइन इन करें</string>
+    <string name="ytlive_info">हर कुछ घंटों में, Prism आपका YouTube Music इतिहास (उसका History पेज) पढ़ता है और पिछली बार देखने के बाद चले गानों को गिनता है, चाहे वे YouTube Music ऐप में, वेबसाइट पर या स्पीकर पर चले हों, YouTube Music (लाइव) के प्ले के रूप में। Prism के अपने प्ले छोड़ दिए जाते हैं। यह चालू करने के बाद से शुरू होता है: पहले जो सुना था उसे लाने के लिए ऊपर YouTube Music (Google Takeout) इस्तेमाल करें।\n\nसमय अनुमानित हैं: दो जाँचों के बीच कहीं का। दो जाँचों के बीच दो बार चला गाना एक ही बार गिना जा सकता है। यह YouTube के History पेज पर निर्भर है। Google Takeout पूरा इतिहास है, और Takeout से लाए गए प्ले दो बार नहीं गिने जाते।\n\nReplay इन प्ले को तभी गिनता है जब आप इन्हें इतिहास यहां से गिनें में चालू करें, और आप इन्हें किसी भी इंपोर्ट की तरह यहां से हटा सकते हैं।</string>
+    <string name="ytlive_keywords">youtube music लाइव इतिहास दूसरे डिवाइस ऐप वेबसाइट स्पीकर सिंक प्ले अपडेट रखें</string>
+    <string name="imp_bring_it_in">ले आएं</string>
+    <string name="imp_turn_on">चालू करें</string>
+    <string name="imp_not_brought_in">अभी तक नहीं लाया गया</string>
+    <string name="imp_live_no_plays">चालू। अभी कोई प्ले नहीं</string>
 </resources>

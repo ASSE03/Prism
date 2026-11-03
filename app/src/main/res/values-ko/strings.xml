@@ -4517,4 +4517,29 @@
     <string name="tour_181_crossfade">크로스페이드 모양의 진행 표시줄</string>
     <string name="tour_181_auto">음성으로 아티스트, 앨범, 재생목록을 요청하세요. Android Auto에서도요</string>
     <string name="tour_181_tv">TV에서 따라 부르기가 음악을 멈추지 않고, 페어링도 더 쉬워요</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Spotify에서 공유하지 않음</string>
+    <string name="spot_followed_why">Spotify는 내가 만든 재생목록의 곡만 공유해요.</string>
+    <string name="spot_followed_steps">Spotify에서: 재생목록 열기 → ⋯ → 다른 재생목록에 추가 → 새 재생목록. 다음 새로고침 때 Prism이 그 사본을 가져와요.</string>
+    <string name="spot_followed_tunemymusic">더 간단한 방법도 있어요. TuneMyMusic으로 Spotify 재생목록을 YouTube Music에 복사하세요 (보관함 → 재생목록 가져오기). 복사가 끝나면 Prism에 나타나요.</string>
+    <string name="spot_open_in_spotify">Spotify에서 열기</string>
+    <string name="spot_refresh_now">지금 새로고침</string>
+    <string name="spot_refreshing">새로고침 중…</string>
+    <string name="spot_refreshed">완료</string>
+    <string name="spot_hide_from_library">보관함에서 숨기기</string>
+    <string name="youtube_live_source">YouTube Music (live)</string>
+    <string name="ytlive_group">최신 상태 유지</string>
+    <string name="ytlive_title">YouTube Music 기록을 최신 상태로 유지</string>
+    <string name="ytlive_sub_off">다른 기기에서 재생한 곡을 몇 시간마다 가져와요</string>
+    <string name="ytlive_sub_first">켜짐. 지금의 기록부터 시작해요</string>
+    <string name="ytlive_sub_checked">켜짐. 마지막 확인 %1$s</string>
+    <string name="ytlive_sub_paused">하루 동안 일시중지: YouTube Music이 응답하지 않았어요</string>
+    <string name="ytlive_sub_retry">YouTube Music이 응답하지 않았어요. Prism이 나중에 다시 시도해요</string>
+    <string name="ytlive_sign_in">이 기능을 쓰려면 YouTube Music에 로그인하세요</string>
+    <string name="ytlive_info">몇 시간마다 Prism이 YouTube Music 기록(기록 페이지)을 읽고, 지난번 확인 이후에 재생된 곡을 YouTube Music 앱, 웹사이트, 스피커 등 어디서 재생했든 YouTube Music (live) 재생으로 세요. Prism 자체의 재생은 제외돼요. 켠 시점부터 시작해요. 그 이전에 들은 곡을 가져오려면 위의 YouTube Music(Google Takeout)을 사용하세요.\n\n시간은 대략적이에요. 두 번의 확인 사이 어딘가라는 뜻이에요. 두 번의 확인 사이에 두 번 재생한 곡은 한 번으로 셀 수 있어요. YouTube의 기록 페이지에 따라 달라져요. Google Takeout은 전체 기록이고, Takeout으로 가져온 재생은 두 번 세지 않아요.\n\nReplay는 기록 포함 대상에서 켰을 때만 이 재생을 세고, 다른 가져오기처럼 여기서 삭제할 수 있어요.</string>
+    <string name="ytlive_keywords">youtube music live 라이브 기록 다른 기기 앱 웹사이트 스피커 동기화 재생 최신 상태 유지</string>
+    <string name="imp_bring_it_in">가져오기</string>
+    <string name="imp_turn_on">켜기</string>
+    <string name="imp_not_brought_in">아직 가져오지 않음</string>
+    <string name="imp_live_no_plays">켜짐. 아직 재생 기록이 없어요</string>
 </resources>

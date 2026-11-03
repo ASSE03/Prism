@@ -4817,4 +4817,29 @@
     <string name="tour_181_crossfade">شريط تقدّم بشكل التلاشي المتداخل</string>
     <string name="tour_181_auto">اطلب فنانًا أو ألبومًا أو قائمة تشغيل بصوتك، في Android Auto أيضًا</string>
     <string name="tour_181_tv">على التلفاز، لا يؤخّر الغناء الموسيقى أبدًا، والإقران أسهل</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · لا يشاركها Spotify</string>
+    <string name="spot_followed_why">لا يشارك Spotify إلا أغاني قوائم التشغيل التي أنشأتها بنفسك.</string>
+    <string name="spot_followed_steps">في Spotify: افتحها → ⋯ → إضافة إلى قائمة تشغيل أخرى → قائمة تشغيل جديدة. سيُحضر Prism النسخة عند التحديث التالي.</string>
+    <string name="spot_followed_tunemymusic">أو بطريقة أبسط: انسخ قوائم تشغيلك في Spotify إلى YouTube Music عبر TuneMyMusic (المكتبة → استيراد قوائم التشغيل). تظهر في Prism بمجرد نسخها.</string>
+    <string name="spot_open_in_spotify">فتح في Spotify</string>
+    <string name="spot_refresh_now">حدّث الآن</string>
+    <string name="spot_refreshing">جارٍ التحديث…</string>
+    <string name="spot_refreshed">تم</string>
+    <string name="spot_hide_from_library">إخفاء من المكتبة</string>
+    <string name="youtube_live_source">YouTube Music (مباشر)</string>
+    <string name="ytlive_group">أبقِه محدَّثًا</string>
+    <string name="ytlive_title">أبقِ سجلّ YouTube Music محدَّثًا</string>
+    <string name="ytlive_sub_off">مرات التشغيل من أجهزتك الأخرى، كل بضع ساعات</string>
+    <string name="ytlive_sub_first">مفعّل. يبدأ من سجلّك كما هو الآن</string>
+    <string name="ytlive_sub_checked">مفعّل. آخر فحص %1$s</string>
+    <string name="ytlive_sub_paused">متوقف ليوم واحد: لم يستجب YouTube Music</string>
+    <string name="ytlive_sub_retry">لم يستجب YouTube Music. سيعيد Prism المحاولة لاحقًا</string>
+    <string name="ytlive_sign_in">سجّل الدخول إلى YouTube Music لاستخدام هذا</string>
+    <string name="ytlive_info">كل بضع ساعات، يقرأ Prism سجلّك في YouTube Music (صفحة السجل فيه) ويحتسب الأغاني التي شُغّلت منذ آخر نظرة له، في تطبيق YouTube Music أو على الموقع أو على مكبّر صوت، باعتبارها مرات تشغيل من YouTube Music (مباشر). أما مرات التشغيل في Prism نفسه فتُستثنى. يبدأ العمل حين تفعّله: ولإحضار ما شغّلته قبل ذلك، استخدم YouTube Music أعلاه (Google Takeout).\n\nالأوقات تقريبية: في مكان ما بين نظرتين. قد تُحتسب أغنية شُغّلت مرتين بين نظرتين مرة واحدة. ويعتمد ذلك على صفحة السجل في YouTube. أما Google Takeout فهو السجل الكامل، ولا تُحتسب مرتين مرات التشغيل التي يحضرها Takeout.\n\nلا يحتسب Replay مرات التشغيل هذه إلا إذا فعّلتها في «احتساب السجل من»، ويمكنك إزالتها من هنا مثل أي استيراد.</string>
+    <string name="ytlive_keywords">youtube music مباشر سجل أجهزة أخرى تطبيق موقع مكبر صوت مزامنة مرات تشغيل تحديث</string>
+    <string name="imp_bring_it_in">أحضِره</string>
+    <string name="imp_turn_on">تفعيل</string>
+    <string name="imp_not_brought_in">لم يُحضَر بعد</string>
+    <string name="imp_live_no_plays">مفعّل. لا مرات تشغيل بعد</string>
 </resources>

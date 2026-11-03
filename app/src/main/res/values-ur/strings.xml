@@ -4577,4 +4577,29 @@
     <string name="tour_181_crossfade">کراس فیڈ کی شکل میں پروگریس بار</string>
     <string name="tour_181_auto">آواز سے کوئی فنکار، البم یا پلے لسٹ مانگیں، Android Auto میں بھی</string>
     <string name="tour_181_tv">ٹی وی پر گائیں اب موسیقی کو کبھی نہیں روکتا، اور جوڑنا آسان ہے</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Spotify شیئر نہیں کرتا</string>
+    <string name="spot_followed_why">Spotify صرف انہی پلے لسٹس کے گانے شیئر کرتا ہے جو آپ نے خود بنائی ہوں۔</string>
+    <string name="spot_followed_steps">Spotify میں: اسے کھولیں → ⋯ → دوسری پلے لسٹ میں شامل کریں → نئی پلے لسٹ۔ Prism اگلے ریفریش پر کاپی لے آئے گا۔</string>
+    <string name="spot_followed_tunemymusic">یا آسان طریقہ: TuneMyMusic سے اپنی Spotify پلے لسٹس کو YouTube Music میں کاپی کریں (لائبریری → پلے لسٹس درآمد کریں)۔ کاپی ہونے کے بعد وہ Prism میں نظر آئیں گی۔</string>
+    <string name="spot_open_in_spotify">Spotify میں کھولیں</string>
+    <string name="spot_refresh_now">ابھی ریفریش کریں</string>
+    <string name="spot_refreshing">ریفریش ہو رہا ہے…</string>
+    <string name="spot_refreshed">ہو گیا</string>
+    <string name="spot_hide_from_library">لائبریری سے چھپائیں</string>
+    <string name="youtube_live_source">YouTube Music (لائیو)</string>
+    <string name="ytlive_group">اپ ٹو ڈیٹ رکھیں</string>
+    <string name="ytlive_title">اپنی YouTube Music ہسٹری کو اپ ٹو ڈیٹ رکھیں</string>
+    <string name="ytlive_sub_off">آپ کے دوسرے آلات کے پلے، ہر چند گھنٹے بعد</string>
+    <string name="ytlive_sub_first">آن ہے۔ یہ آپ کی ہسٹری سے شروع ہوتا ہے جیسی وہ اب ہے</string>
+    <string name="ytlive_sub_checked">آن ہے۔ آخری بار چیک کیا: %1$s</string>
+    <string name="ytlive_sub_paused">ایک دن کے لیے رکا ہوا ہے: YouTube Music نے جواب نہیں دیا</string>
+    <string name="ytlive_sub_retry">YouTube Music نے جواب نہیں دیا۔ Prism بعد میں دوبارہ کوشش کرے گا</string>
+    <string name="ytlive_sign_in">اسے استعمال کرنے کے لیے YouTube Music میں سائن ان کریں</string>
+    <string name="ytlive_info">ہر چند گھنٹے بعد، Prism آپ کی YouTube Music ہسٹری (اس کا ہسٹری صفحہ) پڑھتا ہے اور پچھلی نظر کے بعد چلائے گئے گانے گنتا ہے، چاہے YouTube Music ایپ میں، ویب سائٹ پر یا اسپیکر پر، YouTube Music (لائیو) کے پلے کے طور پر۔ Prism کے اپنے پلے شامل نہیں کیے جاتے۔ یہ اس وقت سے شروع ہوتا ہے جب آپ اسے آن کرتے ہیں: اس سے پہلے جو آپ نے سنا اسے لانے کے لیے اوپر YouTube Music (Google Takeout) استعمال کریں۔\n\nاوقات تقریبی ہیں: دو نظروں کے درمیان کہیں۔ دو نظروں کے درمیان دو بار چلایا گیا گانا ایک بار گنا جا سکتا ہے۔ یہ YouTube کے ہسٹری صفحے پر منحصر ہے۔ Google Takeout مکمل ہسٹری ہے، اور Takeout سے آنے والے پلے دو بار نہیں گنے جاتے۔\n\nReplay ان پلے کو صرف اسی صورت میں گنتا ہے جب آپ انہیں ہسٹری کہاں سے شمار کریں کے تحت آن کریں، اور آپ انہیں کسی بھی درآمد کی طرح یہاں سے ہٹا سکتے ہیں۔</string>
+    <string name="ytlive_keywords">youtube music لائیو ہسٹری دوسرے آلات ایپ ویب سائٹ اسپیکر سنک پلے اپ ٹو ڈیٹ</string>
+    <string name="imp_bring_it_in">لے آئیں</string>
+    <string name="imp_turn_on">آن کریں</string>
+    <string name="imp_not_brought_in">ابھی نہیں لایا گیا</string>
+    <string name="imp_live_no_plays">آن ہے۔ ابھی کوئی پلے نہیں</string>
 </resources>

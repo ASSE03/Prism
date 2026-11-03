@@ -4577,4 +4577,29 @@
     <string name="tour_181_crossfade">Çapraz geçişin şeklinde bir ilerleme çubuğu</string>
     <string name="tour_181_auto">Bir sanatçıyı, albümü veya çalma listesini sesle iste, Android Auto\'da da</string>
     <string name="tour_181_tv">TV\'de Söyle müziği hiç bekletmez ve eşleme daha kolay</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Spotify paylaşmıyor</string>
+    <string name="spot_followed_why">Spotify yalnızca senin oluşturduğun çalma listelerinin şarkılarını paylaşır.</string>
+    <string name="spot_followed_steps">Spotify\'da: listeyi aç → ⋯ → Başka bir çalma listesine ekle → Yeni çalma listesi. Prism kopyayı bir sonraki yenilemede getirir.</string>
+    <string name="spot_followed_tunemymusic">Ya da daha basit bir taşıma için: Spotify çalma listelerini TuneMyMusic ile YouTube Music\'e kopyala (Kitaplık → Çalma listelerini içe aktar). Kopyalandıktan sonra Prism\'de görünürler.</string>
+    <string name="spot_open_in_spotify">Spotify\'da aç</string>
+    <string name="spot_refresh_now">Şimdi yenile</string>
+    <string name="spot_refreshing">Yenileniyor…</string>
+    <string name="spot_refreshed">Bitti</string>
+    <string name="spot_hide_from_library">Kitaplık\'tan gizle</string>
+    <string name="youtube_live_source">YouTube Music (canlı)</string>
+    <string name="ytlive_group">Güncel tut</string>
+    <string name="ytlive_title">YouTube Music geçmişini güncel tut</string>
+    <string name="ytlive_sub_off">Diğer cihazlarındaki dinlemeler, birkaç saatte bir</string>
+    <string name="ytlive_sub_first">Açık. Geçmişinin şu anki hâlinden başlar</string>
+    <string name="ytlive_sub_checked">Açık. Son kontrol: %1$s</string>
+    <string name="ytlive_sub_paused">Bir günlüğüne durdu: YouTube Music yanıt vermedi</string>
+    <string name="ytlive_sub_retry">YouTube Music yanıt vermedi. Prism daha sonra yeniden dener</string>
+    <string name="ytlive_sign_in">Bunu kullanmak için YouTube Music\'te oturum aç</string>
+    <string name="ytlive_info">Prism birkaç saatte bir YouTube Music geçmişini (Geçmiş sayfasını) okur ve son bakışından bu yana çalınan şarkıları sayar: YouTube Music uygulamasında, web sitesinde, bir hoparlörde, YouTube Music (canlı) dinlemeleri olarak. Prism\'in kendi dinlemeleri hariç tutulur. Açtığın anda başlar: daha önce dinlediklerini getirmek için yukarıdaki YouTube Music\'i (Google Takeout) kullan.\n\nZamanlar yaklaşıktır: iki bakış arasında bir yerdedir. İki bakış arasında iki kez çalınan bir şarkı bir kez sayılabilir. Bu, YouTube\'un Geçmiş sayfasına bağlıdır. Google Takeout eksiksiz geçmiştir ve Takeout\'un getirdiği dinlemeler iki kez sayılmaz.\n\nReplay bu dinlemeleri yalnızca Geçmişi şuradan say bölümünde açarsan sayar ve diğer içe aktarmalar gibi bunları da buradan kaldırabilirsin.</string>
+    <string name="ytlive_keywords">youtube music canlı geçmiş diğer cihazlar uygulama web sitesi hoparlör senkron dinlemeler güncel tut</string>
+    <string name="imp_bring_it_in">Getir</string>
+    <string name="imp_turn_on">Aç</string>
+    <string name="imp_not_brought_in">Henüz getirilmedi</string>
+    <string name="imp_live_no_plays">Açık. Henüz dinleme yok</string>
 </resources>

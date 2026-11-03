@@ -4577,4 +4577,29 @@
     <string name="tour_181_crossfade">Γραμμή προόδου στο σχήμα της ομαλής μετάβασης</string>
     <string name="tour_181_auto">Ζήτα έναν καλλιτέχνη, ένα άλμπουμ ή ένα playlist με τη φωνή σου, και στο Android Auto</string>
     <string name="tour_181_tv">Στην τηλεόραση, το Τραγούδα δεν καθυστερεί ποτέ τη μουσική και η σύζευξη είναι πιο εύκολη</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Δεν κοινοποιείται από το Spotify</string>
+    <string name="spot_followed_why">Το Spotify κοινοποιεί μόνο τα τραγούδια των playlist που έφτιαξες εσύ.</string>
+    <string name="spot_followed_steps">Στο Spotify: άνοιξέ το → ⋯ → Προσθήκη σε άλλη playlist → Νέα playlist. Το Prism φέρνει το αντίγραφο στην επόμενη ανανέωση.</string>
+    <string name="spot_followed_tunemymusic">Ή, πιο απλά: αντίγραψε τα playlist σου από το Spotify στο YouTube Music με το TuneMyMusic (Βιβλιοθήκη → Εισαγωγή playlist). Εμφανίζονται στο Prism μόλις αντιγραφούν.</string>
+    <string name="spot_open_in_spotify">Άνοιγμα στο Spotify</string>
+    <string name="spot_refresh_now">Ανανέωση τώρα</string>
+    <string name="spot_refreshing">Ανανέωση…</string>
+    <string name="spot_refreshed">Έτοιμο</string>
+    <string name="spot_hide_from_library">Απόκρυψη από τη Βιβλιοθήκη</string>
+    <string name="youtube_live_source">YouTube Music (ζωντανά)</string>
+    <string name="ytlive_group">Να μένει ενημερωμένο</string>
+    <string name="ytlive_title">Κράτα το ιστορικό σου στο YouTube Music ενημερωμένο</string>
+    <string name="ytlive_sub_off">Αναπαραγωγές από τις άλλες συσκευές σου, κάθε λίγες ώρες</string>
+    <string name="ytlive_sub_first">Ενεργό. Ξεκινά από το ιστορικό σου όπως είναι τώρα</string>
+    <string name="ytlive_sub_checked">Ενεργό. Τελευταίος έλεγχος %1$s</string>
+    <string name="ytlive_sub_paused">Σε παύση για μία μέρα: το YouTube Music δεν απάντησε</string>
+    <string name="ytlive_sub_retry">Το YouTube Music δεν απάντησε. Το Prism θα ξαναδοκιμάσει αργότερα</string>
+    <string name="ytlive_sign_in">Συνδέσου στο YouTube Music για να το χρησιμοποιήσεις</string>
+    <string name="ytlive_info">Κάθε λίγες ώρες, το Prism διαβάζει το ιστορικό σου στο YouTube Music (τη σελίδα Ιστορικό του) και μετράει τα τραγούδια που έπαιξαν από την τελευταία του ματιά, στην εφαρμογή YouTube Music, στον ιστότοπο ή σε ηχείο, ως αναπαραγωγές από το YouTube Music (ζωντανά). Οι αναπαραγωγές του ίδιου του Prism δεν μετριούνται. Ξεκινά όταν το ενεργοποιήσεις: για να φέρεις ό,τι έπαιξες πριν, χρησιμοποίησε το YouTube Music παραπάνω (Google Takeout).\n\nΟι ώρες είναι κατά προσέγγιση: κάπου ανάμεσα σε δύο ματιές. Ένα τραγούδι που έπαιξε δύο φορές ανάμεσα σε δύο ματιές μπορεί να μετρηθεί μία. Εξαρτάται από τη σελίδα Ιστορικό του YouTube. Το Google Takeout είναι το πλήρες ιστορικό, και οι αναπαραγωγές που φέρνει ένα Takeout δεν μετριούνται δύο φορές.\n\nΤο Replay μετράει αυτές τις αναπαραγωγές μόνο όταν τις ενεργοποιήσεις στη Μέτρηση ιστορικού από, και μπορείς να τις αφαιρέσεις εδώ όπως κάθε εισαγωγή.</string>
+    <string name="ytlive_keywords">youtube music ζωντανά ιστορικό άλλες συσκευές εφαρμογή ιστότοπος ηχείο συγχρονισμός αναπαραγωγές ενημέρωση</string>
+    <string name="imp_bring_it_in">Φέρ’ το</string>
+    <string name="imp_turn_on">Ενεργοποίηση</string>
+    <string name="imp_not_brought_in">Δεν έχει έρθει ακόμα</string>
+    <string name="imp_live_no_plays">Ενεργό. Καμία αναπαραγωγή ακόμα</string>
 </resources>

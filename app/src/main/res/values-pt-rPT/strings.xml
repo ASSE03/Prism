@@ -4637,4 +4637,29 @@
     <string name="tour_181_crossfade">Uma barra de progresso com a forma do crossfade</string>
     <string name="tour_181_auto">Pede um artista, álbum ou playlist por voz, também no Android Auto</string>
     <string name="tour_181_tv">Na TV, o Cantar nunca atrasa a música, e emparelhar é mais fácil</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Não partilhada pelo Spotify</string>
+    <string name="spot_followed_why">O Spotify só partilha as músicas das playlists que criaste.</string>
+    <string name="spot_followed_steps">No Spotify: abre-a → ⋯ → Adicionar a outra playlist → Nova playlist. O Prism traz a cópia na próxima atualização.</string>
+    <string name="spot_followed_tunemymusic">Ou, para algo mais simples: copia as tuas playlists do Spotify para o YouTube Music com o TuneMyMusic (Biblioteca → Importar playlists). Aparecem no Prism depois de copiadas.</string>
+    <string name="spot_open_in_spotify">Abrir no Spotify</string>
+    <string name="spot_refresh_now">Atualizar agora</string>
+    <string name="spot_refreshing">A atualizar…</string>
+    <string name="spot_refreshed">Concluído</string>
+    <string name="spot_hide_from_library">Ocultar da Biblioteca</string>
+    <string name="youtube_live_source">YouTube Music (em direto)</string>
+    <string name="ytlive_group">Manter em dia</string>
+    <string name="ytlive_title">Mantém o teu histórico do YouTube Music em dia</string>
+    <string name="ytlive_sub_off">Reproduções dos teus outros dispositivos, de poucas em poucas horas</string>
+    <string name="ytlive_sub_first">Ligado. Começa pelo teu histórico tal como está agora</string>
+    <string name="ytlive_sub_checked">Ligado. Última verificação: %1$s</string>
+    <string name="ytlive_sub_paused">Em pausa durante um dia: o YouTube Music não respondeu</string>
+    <string name="ytlive_sub_retry">O YouTube Music não respondeu. O Prism tenta novamente mais tarde</string>
+    <string name="ytlive_sign_in">Inicia sessão no YouTube Music para usar isto</string>
+    <string name="ytlive_info">De poucas em poucas horas, o Prism lê o teu histórico do YouTube Music (a página Histórico) e conta as músicas ouvidas desde a última vez que olhou, na app YouTube Music, no site, numa coluna, como reproduções do YouTube Music (em direto). As reproduções do próprio Prism ficam de fora. Começa quando o ligares: para trazer o que ouviste antes, usa o YouTube Music acima (Google Takeout).\n\nOs horários são aproximados: algures entre duas verificações. Uma música ouvida duas vezes entre duas verificações pode contar uma vez. Depende da página Histórico do YouTube. O Google Takeout é o histórico completo, e as reproduções que um Takeout traz não são contadas duas vezes.\n\nO Replay só conta estas reproduções quando as ligares em Contar histórico de, e podes removê-las aqui como qualquer importação.</string>
+    <string name="ytlive_keywords">youtube music live em direto histórico outros dispositivos app site coluna sincronizar reproduções manter em dia</string>
+    <string name="imp_bring_it_in">Trazer</string>
+    <string name="imp_turn_on">Ligar</string>
+    <string name="imp_not_brought_in">Ainda não trazido</string>
+    <string name="imp_live_no_plays">Ligado. Ainda sem reproduções</string>
 </resources>

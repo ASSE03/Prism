@@ -4697,4 +4697,29 @@
     <string name="tour_181_crossfade">Lišta průběhu ve tvaru prolínání</string>
     <string name="tour_181_auto">Řekni si hlasem o interpreta, album nebo playlist, i v Android Auto</string>
     <string name="tour_181_tv">Na televizi Zpívání nikdy nezdrží hudbu a párování je snazší</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Spotify ho nesdílí</string>
+    <string name="spot_followed_why">Spotify sdílí jen skladby z tvých vlastních playlistů.</string>
+    <string name="spot_followed_steps">Ve Spotify: otevři ho → ⋯ → Přidat do jiného playlistu → Nový playlist. Prism kopii přenese při příštím obnovení.</string>
+    <string name="spot_followed_tunemymusic">Nebo jednodušeji: zkopíruj své playlisty ze Spotify do YouTube Music přes TuneMyMusic (Knihovna → Importovat playlisty). V Prismu se objeví, jakmile budou zkopírované.</string>
+    <string name="spot_open_in_spotify">Otevřít ve Spotify</string>
+    <string name="spot_refresh_now">Obnovit hned</string>
+    <string name="spot_refreshing">Obnovuje se…</string>
+    <string name="spot_refreshed">Hotovo</string>
+    <string name="spot_hide_from_library">Skrýt z Knihovny</string>
+    <string name="youtube_live_source">YouTube Music (živě)</string>
+    <string name="ytlive_group">Držet krok</string>
+    <string name="ytlive_title">Udržuj historii YouTube Music aktuální</string>
+    <string name="ytlive_sub_off">Přehrání z tvých dalších zařízení, každých pár hodin</string>
+    <string name="ytlive_sub_first">Zapnuto. Začíná z historie, jak vypadá teď</string>
+    <string name="ytlive_sub_checked">Zapnuto. Naposledy zkontrolováno %1$s</string>
+    <string name="ytlive_sub_paused">Pozastaveno na den: YouTube Music neodpověděl</string>
+    <string name="ytlive_sub_retry">YouTube Music neodpověděl. Prism to zkusí později</string>
+    <string name="ytlive_sign_in">Abys to mohl používat, přihlas se k YouTube Music</string>
+    <string name="ytlive_info">Každých pár hodin Prism načte tvou historii v YouTube Music (její stránku Historie) a započítá skladby přehrané od posledního náhledu, v aplikaci YouTube Music, na webu nebo na reproduktoru, jako přehrání z YouTube Music (živě). Přehrání v samotném Prismu se vynechávají. Začíná, když to zapneš: chceš-li přenést, co jsi přehrával dřív, použij YouTube Music výše (Google Takeout).\n\nČasy jsou přibližné: někde mezi dvěma náhledy. Skladba přehraná dvakrát mezi dvěma náhledy se může započítat jednou. Záleží na stránce Historie od YouTube. Google Takeout je úplná historie a přehrání, která Takeout přinese, se nepočítají dvakrát.\n\nReplay tato přehrání započítá, jen když je zapneš v Započítat historii z, a můžeš je odtud odebrat jako každý import.</string>
+    <string name="ytlive_keywords">youtube music živě historie další zařízení aplikace web reproduktor synchronizace přehrání aktualizace</string>
+    <string name="imp_bring_it_in">Přenést</string>
+    <string name="imp_turn_on">Zapnout</string>
+    <string name="imp_not_brought_in">Zatím nepřeneseno</string>
+    <string name="imp_live_no_plays">Zapnuto. Zatím žádná přehrání</string>
 </resources>

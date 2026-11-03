@@ -4637,4 +4637,29 @@
     <string name="tour_181_crossfade">Una barra di avanzamento con la forma della dissolvenza incrociata</string>
     <string name="tour_181_auto">Chiedi un artista, un album o una playlist a voce, anche in Android Auto</string>
     <string name="tour_181_tv">Sulla TV, Canta non blocca mai la musica e l\'associazione è più semplice</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Non condivisa da Spotify</string>
+    <string name="spot_followed_why">Spotify condivide solo i brani delle playlist che hai creato tu.</string>
+    <string name="spot_followed_steps">In Spotify: aprila → ⋯ → Aggiungi a un\'altra playlist → Nuova playlist. Prism porta la copia al prossimo aggiornamento.</string>
+    <string name="spot_followed_tunemymusic">Oppure, più semplice: copia le tue playlist di Spotify su YouTube Music con TuneMyMusic (Raccolta → Importa playlist). Compaiono in Prism una volta copiate.</string>
+    <string name="spot_open_in_spotify">Apri in Spotify</string>
+    <string name="spot_refresh_now">Aggiorna ora</string>
+    <string name="spot_refreshing">Aggiornamento…</string>
+    <string name="spot_refreshed">Fatto</string>
+    <string name="spot_hide_from_library">Nascondi dalla Raccolta</string>
+    <string name="youtube_live_source">YouTube Music (live)</string>
+    <string name="ytlive_group">Tieni tutto allineato</string>
+    <string name="ytlive_title">Tieni allineata la tua cronologia di YouTube Music</string>
+    <string name="ytlive_sub_off">Gli ascolti dai tuoi altri dispositivi, ogni poche ore</string>
+    <string name="ytlive_sub_first">Attivo. Parte dalla tua cronologia così com\'è ora</string>
+    <string name="ytlive_sub_checked">Attivo. Ultimo controllo %1$s</string>
+    <string name="ytlive_sub_paused">In pausa per un giorno: YouTube Music non ha risposto</string>
+    <string name="ytlive_sub_retry">YouTube Music non ha risposto. Prism riproverà più tardi</string>
+    <string name="ytlive_sign_in">Accedi a YouTube Music per usarlo</string>
+    <string name="ytlive_info">Ogni poche ore, Prism legge la tua cronologia di YouTube Music (la sua pagina Cronologia) e conta i brani ascoltati dall\'ultima volta, nell\'app YouTube Music, sul sito web, su un altoparlante, come ascolti di YouTube Music (live). Gli ascolti di Prism stesso sono esclusi. Parte da quando lo attivi: per portare ciò che hai ascoltato prima, usa YouTube Music qui sopra (Google Takeout).\n\nGli orari sono approssimativi: da qualche parte tra due controlli. Un brano ascoltato due volte tra due controlli può contare una volta sola. Dipende dalla pagina Cronologia di YouTube. Google Takeout è la cronologia completa, e gli ascolti portati da un Takeout non vengono contati due volte.\n\nReplay conta questi ascolti solo se li attivi in Conta la cronologia da, e puoi rimuoverli qui come qualsiasi importazione.</string>
+    <string name="ytlive_keywords">youtube music live cronologia altri dispositivi app sito web altoparlante sincronizzazione ascolti allineato</string>
+    <string name="imp_bring_it_in">Portala</string>
+    <string name="imp_turn_on">Attiva</string>
+    <string name="imp_not_brought_in">Non ancora portata</string>
+    <string name="imp_live_no_plays">Attivo. Ancora nessun ascolto</string>
 </resources>

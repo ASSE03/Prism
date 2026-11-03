@@ -4697,4 +4697,29 @@
     <string name="tour_181_crossfade">Смуга прогресу у формі плавного переходу</string>
     <string name="tour_181_auto">Попроси голосом виконавця, альбом чи плейлист, і в Android Auto теж</string>
     <string name="tour_181_tv">На телевізорі Спів більше не затримує музику, а підключення простіше</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Spotify не ділиться</string>
+    <string name="spot_followed_why">Spotify ділиться лише піснями з плейлистів, які створив ти сам.</string>
+    <string name="spot_followed_steps">У Spotify: відкрий його → ⋯ → Додати до іншого плейлиста → Новий плейлист. Prism підтягне копію під час наступного оновлення.</string>
+    <string name="spot_followed_tunemymusic">Або простіше: скопіюй свої плейлисти Spotify в YouTube Music через TuneMyMusic (Бібліотека → Імпортувати плейлисти). Після копіювання вони з\'являться в Prism.</string>
+    <string name="spot_open_in_spotify">Відкрити в Spotify</string>
+    <string name="spot_refresh_now">Оновити зараз</string>
+    <string name="spot_refreshing">Оновлення…</string>
+    <string name="spot_refreshed">Готово</string>
+    <string name="spot_hide_from_library">Сховати з Бібліотеки</string>
+    <string name="youtube_live_source">YouTube Music (наживо)</string>
+    <string name="ytlive_group">Підтримувати актуальним</string>
+    <string name="ytlive_title">Підтримувати історію YouTube Music актуальною</string>
+    <string name="ytlive_sub_off">Прослуховування з твоїх інших пристроїв, кілька разів на день</string>
+    <string name="ytlive_sub_first">Увімкнено. Починається з твоєї історії, якою вона є зараз</string>
+    <string name="ytlive_sub_checked">Увімкнено. Остання перевірка: %1$s</string>
+    <string name="ytlive_sub_paused">Призупинено на добу: YouTube Music не відповів</string>
+    <string name="ytlive_sub_retry">YouTube Music не відповів. Prism спробує пізніше</string>
+    <string name="ytlive_sign_in">Щоб це використовувати, ввійди в YouTube Music</string>
+    <string name="ytlive_info">Кожні кілька годин Prism читає твою історію YouTube Music (її сторінку «Історія») і враховує пісні, відтворені після попереднього перегляду: у застосунку YouTube Music, на сайті, на колонці, як прослуховування з YouTube Music (наживо). Власні прослуховування Prism не враховуються. Це починається з моменту, коли ти вмикаєш: щоб перенести те, що ти слухав раніше, скористайся YouTube Music вище (Google Takeout).\n\nЧас приблизний: десь між двома переглядами. Пісня, відтворена двічі між двома переглядами, може врахуватися один раз. Усе залежить від сторінки «Історія» в YouTube. Google Takeout — це повна історія, а прослуховування, які приносить Takeout, не рахуються двічі.\n\nReplay враховує ці прослуховування, лише коли ти вмикаєш їх у розділі «Враховувати історію з», і ти можеш видалити їх тут, як і будь-який імпорт.</string>
+    <string name="ytlive_keywords">youtube music наживо історія інші пристрої застосунок сайт колонка синхронізація прослуховування актуальним</string>
+    <string name="imp_bring_it_in">Перенести</string>
+    <string name="imp_turn_on">Увімкнути</string>
+    <string name="imp_not_brought_in">Ще не перенесено</string>
+    <string name="imp_live_no_plays">Увімкнено. Прослуховувань ще немає</string>
 </resources>

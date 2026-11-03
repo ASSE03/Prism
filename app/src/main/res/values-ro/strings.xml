@@ -4637,4 +4637,29 @@
     <string name="tour_181_crossfade">O bară de progres în forma tranziției</string>
     <string name="tour_181_auto">Cere vocal un artist, un album sau un playlist, și în Android Auto</string>
     <string name="tour_181_tv">Pe televizor, Cântă nu mai oprește niciodată muzica, iar asocierea e mai ușoară</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Nepartajată de Spotify</string>
+    <string name="spot_followed_why">Spotify partajează doar melodiile din playlisturile create de tine.</string>
+    <string name="spot_followed_steps">În Spotify: deschide-o → ⋯ → Adaugă în altă playlist → Playlist nou. Prism aduce copia la următoarea reîmprospătare.</string>
+    <string name="spot_followed_tunemymusic">Sau, pentru o mutare mai simplă: copiază-ți playlisturile din Spotify în YouTube Music cu TuneMyMusic (Bibliotecă → Importă playlisturi). Apar în Prism după ce sunt copiate.</string>
+    <string name="spot_open_in_spotify">Deschide în Spotify</string>
+    <string name="spot_refresh_now">Reîmprospătează acum</string>
+    <string name="spot_refreshing">Se reîmprospătează…</string>
+    <string name="spot_refreshed">Gata</string>
+    <string name="spot_hide_from_library">Ascunde din Bibliotecă</string>
+    <string name="youtube_live_source">YouTube Music (live)</string>
+    <string name="ytlive_group">Ține-l la zi</string>
+    <string name="ytlive_title">Ține la zi istoricul YouTube Music</string>
+    <string name="ytlive_sub_off">Redări de pe celelalte dispozitive, la câteva ore</string>
+    <string name="ytlive_sub_first">Pornit. Pornește de la istoricul tău așa cum este acum</string>
+    <string name="ytlive_sub_checked">Pornit. Ultima verificare: %1$s</string>
+    <string name="ytlive_sub_paused">Întrerupt pentru o zi: YouTube Music nu a răspuns</string>
+    <string name="ytlive_sub_retry">YouTube Music nu a răspuns. Prism încearcă din nou mai târziu</string>
+    <string name="ytlive_sign_in">Conectează-te la YouTube Music ca să folosești asta</string>
+    <string name="ytlive_info">La câteva ore, Prism citește istoricul tău YouTube Music (pagina Istoric) și numără melodiile redate de la ultima verificare, în aplicația YouTube Music, pe site, pe un difuzor, ca redări din YouTube Music (live). Redările din Prism nu sunt incluse. Pornește când o activezi: ca să aduci ce ai ascultat înainte, folosește YouTube Music de mai sus (Google Takeout).\n\nOrele sunt aproximative: undeva între două verificări. O melodie redată de două ori între două verificări poate fi numărată o dată. Depinde de pagina Istoric din YouTube. Google Takeout este istoricul complet, iar redările pe care le aduce un Takeout nu se numără de două ori.\n\nReplay numără aceste redări doar când le pornești la Numără istoricul din, și le poți elimina aici ca orice import.</string>
+    <string name="ytlive_keywords">youtube music live istoric alte dispozitive aplicație site difuzor sincronizare redări la zi</string>
+    <string name="imp_bring_it_in">Adu-l aici</string>
+    <string name="imp_turn_on">Pornește</string>
+    <string name="imp_not_brought_in">Încă nu a fost adus</string>
+    <string name="imp_live_no_plays">Pornit. Încă nicio redare</string>
 </resources>

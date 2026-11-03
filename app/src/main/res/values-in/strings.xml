@@ -4517,4 +4517,29 @@
     <string name="tour_181_crossfade">Bilah progres berbentuk crossfade</string>
     <string name="tour_181_auto">Minta artis, album, atau playlist dengan suara, juga di Android Auto</string>
     <string name="tour_181_tv">Di TV, Nyanyi tidak pernah menahan musik, dan menyambungkan jadi lebih mudah</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Tidak dibagikan oleh Spotify</string>
+    <string name="spot_followed_why">Spotify hanya membagikan lagu dari playlist yang kamu buat sendiri.</string>
+    <string name="spot_followed_steps">Di Spotify: buka playlist-nya → ⋯ → Tambahkan ke playlist lain → Playlist baru. Prism membawa salinannya saat penyegaran berikutnya.</string>
+    <string name="spot_followed_tunemymusic">Atau, cara yang lebih mudah: salin playlist Spotify-mu ke YouTube Music dengan TuneMyMusic (Koleksi → Impor playlist). Playlist akan muncul di Prism setelah disalin.</string>
+    <string name="spot_open_in_spotify">Buka di Spotify</string>
+    <string name="spot_refresh_now">Segarkan sekarang</string>
+    <string name="spot_refreshing">Menyegarkan…</string>
+    <string name="spot_refreshed">Selesai</string>
+    <string name="spot_hide_from_library">Sembunyikan dari Koleksi</string>
+    <string name="youtube_live_source">YouTube Music (live)</string>
+    <string name="ytlive_group">Tetap diperbarui</string>
+    <string name="ytlive_title">Jaga riwayat YouTube Music-mu tetap diperbarui</string>
+    <string name="ytlive_sub_off">Putaran dari perangkat lainmu, setiap beberapa jam</string>
+    <string name="ytlive_sub_first">Aktif. Dimulai dari riwayatmu saat ini</string>
+    <string name="ytlive_sub_checked">Aktif. Terakhir diperiksa %1$s</string>
+    <string name="ytlive_sub_paused">Dijeda sehari: YouTube Music tidak menjawab</string>
+    <string name="ytlive_sub_retry">YouTube Music tidak menjawab. Prism akan mencoba lagi nanti</string>
+    <string name="ytlive_sign_in">Login ke YouTube Music untuk memakai ini</string>
+    <string name="ytlive_info">Setiap beberapa jam, Prism membaca riwayat YouTube Music-mu (halaman Riwayatnya) dan menghitung lagu yang diputar sejak pemeriksaan terakhir, baik di aplikasi YouTube Music, di situs web, maupun di speaker, sebagai putaran dari YouTube Music (live). Putaran dari Prism sendiri dilewati. Ini mulai berjalan saat kamu menyalakannya: untuk membawa apa yang kamu putar sebelumnya, pakai YouTube Music di atas (Google Takeout).\n\nWaktunya perkiraan: di antara dua pemeriksaan. Lagu yang diputar dua kali di antara dua pemeriksaan bisa terhitung sekali saja. Semuanya bergantung pada halaman Riwayat YouTube. Google Takeout adalah riwayat lengkap, dan putaran yang dibawa Takeout tidak dihitung dua kali.\n\nReplay hanya menghitung putaran ini jika kamu menyalakannya di Hitung riwayat dari, dan kamu bisa menghapusnya di sini seperti impor lainnya.</string>
+    <string name="ytlive_keywords">youtube music live riwayat perangkat lain aplikasi situs web speaker sinkron putaran tetap diperbarui</string>
+    <string name="imp_bring_it_in">Bawa</string>
+    <string name="imp_turn_on">Aktifkan</string>
+    <string name="imp_not_brought_in">Belum dibawa</string>
+    <string name="imp_live_no_plays">Aktif. Belum ada putaran</string>
 </resources>

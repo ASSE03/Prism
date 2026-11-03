@@ -4517,4 +4517,29 @@
     <string name="tour_181_crossfade">แถบความคืบหน้าเป็นรูปตามครอสเฟด</string>
     <string name="tour_181_auto">ขอศิลปิน อัลบั้ม หรือเพลย์ลิสต์ด้วยเสียง ใน Android Auto ก็ได้</string>
     <string name="tour_181_tv">บนทีวี ร้องตามไม่ทำให้เพลงสะดุดอีกต่อไป และจับคู่ได้ง่ายขึ้น</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Spotify ไม่แบ่งปันให้</string>
+    <string name="spot_followed_why">Spotify แบ่งปันเฉพาะเพลงในเพลย์ลิสต์ที่คุณสร้างเองเท่านั้น</string>
+    <string name="spot_followed_steps">ใน Spotify: เปิดเพลย์ลิสต์ → ⋯ → เพิ่มไปยังเพลย์ลิสต์อื่น → เพลย์ลิสต์ใหม่ Prism จะนำสำเนามาให้ในการรีเฟรชครั้งถัดไป</string>
+    <string name="spot_followed_tunemymusic">หรือถ้าอยากให้ง่ายกว่านั้น: คัดลอกเพลย์ลิสต์ Spotify ของคุณไปยัง YouTube Music ด้วย TuneMyMusic (คลังเพลง → นำเข้าเพลย์ลิสต์) เมื่อคัดลอกแล้วเพลย์ลิสต์จะแสดงใน Prism</string>
+    <string name="spot_open_in_spotify">เปิดใน Spotify</string>
+    <string name="spot_refresh_now">รีเฟรชตอนนี้</string>
+    <string name="spot_refreshing">กำลังรีเฟรช…</string>
+    <string name="spot_refreshed">เสร็จ</string>
+    <string name="spot_hide_from_library">ซ่อนจากคลังเพลง</string>
+    <string name="youtube_live_source">YouTube Music (สด)</string>
+    <string name="ytlive_group">ให้ตรงกันอยู่เสมอ</string>
+    <string name="ytlive_title">ให้ประวัติ YouTube Music ของคุณตรงกันอยู่เสมอ</string>
+    <string name="ytlive_sub_off">การเล่นจากอุปกรณ์อื่นของคุณ ทุกไม่กี่ชั่วโมง</string>
+    <string name="ytlive_sub_first">เปิดอยู่ เริ่มจากประวัติของคุณตามที่เป็นตอนนี้</string>
+    <string name="ytlive_sub_checked">เปิดอยู่ ตรวจล่าสุด %1$s</string>
+    <string name="ytlive_sub_paused">หยุดไว้หนึ่งวัน: YouTube Music ไม่ตอบกลับ</string>
+    <string name="ytlive_sub_retry">YouTube Music ไม่ตอบกลับ Prism จะลองอีกครั้งภายหลัง</string>
+    <string name="ytlive_sign_in">ลงชื่อเข้าใช้ YouTube Music เพื่อใช้งานนี้</string>
+    <string name="ytlive_info">ทุกไม่กี่ชั่วโมง Prism จะอ่านประวัติ YouTube Music ของคุณ (หน้าประวัติ) และนับเพลงที่เล่นตั้งแต่ที่ดูครั้งล่าสุด ไม่ว่าจะเล่นในแอป YouTube Music บนเว็บไซต์ หรือบนลำโพง เป็นการเล่นจาก YouTube Music (สด) การเล่นใน Prism เองจะไม่ถูกนับ ฟีเจอร์นี้เริ่มทำงานตั้งแต่ตอนที่คุณเปิด: หากต้องการนำสิ่งที่คุณเล่นก่อนหน้านั้นมา ให้ใช้ YouTube Music ด้านบน (Google Takeout)\n\nเวลาเป็นค่าประมาณ: อยู่ระหว่างการดูสองครั้ง เพลงที่เล่นสองครั้งในช่วงระหว่างการดูสองครั้งอาจนับเพียงครั้งเดียว ขึ้นอยู่กับหน้าประวัติของ YouTube ส่วน Google Takeout คือประวัติฉบับสมบูรณ์ และการเล่นที่นำมาจาก Takeout จะไม่ถูกนับซ้ำ\n\nReplay จะนับการเล่นเหล่านี้ก็ต่อเมื่อคุณเปิดไว้ใต้ นับประวัติจาก และคุณลบออกได้ที่นี่เหมือนกับการนำเข้าอื่น ๆ</string>
+    <string name="ytlive_keywords">youtube music สด ประวัติ อุปกรณ์อื่น แอป เว็บไซต์ ลำโพง ซิงก์ การเล่น ให้ตรงกัน</string>
+    <string name="imp_bring_it_in">นำเข้ามา</string>
+    <string name="imp_turn_on">เปิด</string>
+    <string name="imp_not_brought_in">ยังไม่ได้นำเข้า</string>
+    <string name="imp_live_no_plays">เปิดอยู่ ยังไม่มีการเล่น</string>
 </resources>

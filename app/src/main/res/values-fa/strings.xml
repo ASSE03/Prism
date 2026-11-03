@@ -4577,4 +4577,29 @@
     <string name="tour_181_crossfade">نوار پیشرفتی به شکل کراس‌فید</string>
     <string name="tour_181_auto">هنرمند، آلبوم یا فهرست پخش را با صدایتان بخواهید، در Android Auto هم</string>
     <string name="tour_181_tv">روی تلویزیون، همخوانی هرگز موسیقی را معطل نمی‌کند و جفت کردن آسان‌تر است</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Spotify به اشتراک نمی‌گذارد</string>
+    <string name="spot_followed_why">Spotify فقط آهنگ‌های فهرست‌های پخشی را به اشتراک می‌گذارد که خودتان ساخته‌اید.</string>
+    <string name="spot_followed_steps">در Spotify: بازش کنید → ⋯ → افزودن به فهرست پخش دیگر → فهرست پخش جدید. Prism نسخه را در تازه‌سازی بعدی می‌آورد.</string>
+    <string name="spot_followed_tunemymusic">یا ساده‌تر: فهرست‌های پخش Spotify خود را با TuneMyMusic به YouTube Music کپی کنید (کتابخانه → وارد کردن فهرست‌های پخش). پس از کپی‌شدن در Prism نمایش داده می‌شوند.</string>
+    <string name="spot_open_in_spotify">باز کردن در Spotify</string>
+    <string name="spot_refresh_now">تازه‌سازی اکنون</string>
+    <string name="spot_refreshing">در حال تازه‌سازی…</string>
+    <string name="spot_refreshed">انجام شد</string>
+    <string name="spot_hide_from_library">پنهان کردن از کتابخانه</string>
+    <string name="youtube_live_source">YouTube Music (زنده)</string>
+    <string name="ytlive_group">همگام نگه داشتن</string>
+    <string name="ytlive_title">سابقهٔ YouTube Music خود را همگام نگه دارید</string>
+    <string name="ytlive_sub_off">پخش‌های دستگاه‌های دیگرتان، هر چند ساعت</string>
+    <string name="ytlive_sub_first">روشن. از سابقهٔ فعلی شما شروع می‌شود</string>
+    <string name="ytlive_sub_checked">روشن. آخرین بررسی %1$s</string>
+    <string name="ytlive_sub_paused">برای یک روز متوقف شد: YouTube Music پاسخ نداد</string>
+    <string name="ytlive_sub_retry">YouTube Music پاسخ نداد. Prism بعداً دوباره تلاش می‌کند</string>
+    <string name="ytlive_sign_in">برای استفاده از این، وارد YouTube Music شوید</string>
+    <string name="ytlive_info">هر چند ساعت، Prism سابقهٔ YouTube Music شما (صفحهٔ سابقهٔ آن) را می‌خواند و آهنگ‌هایی را که از آخرین بررسی‌اش پخش شده‌اند، در برنامهٔ YouTube Music، در وب‌سایت یا روی بلندگو، به‌عنوان پخش‌های YouTube Music (زنده) می‌شمارد. پخش‌های خود Prism کنار گذاشته می‌شوند. از وقتی روشنش کنید شروع می‌شود: برای آوردن آنچه پیش‌تر پخش کرده‌اید، از YouTube Music در بالا (Google Takeout) استفاده کنید.\n\nزمان‌ها تقریبی‌اند: جایی میان دو بررسی. آهنگی که میان دو بررسی دو بار پخش شده ممکن است یک بار شمرده شود. این به صفحهٔ سابقهٔ YouTube بستگی دارد. Google Takeout سابقهٔ کامل است و پخش‌هایی که Takeout می‌آورد دو بار شمرده نمی‌شوند.\n\nReplay این پخش‌ها را فقط وقتی می‌شمارد که در «شمردن سابقه از» روشنشان کنید، و می‌توانید مثل هر وارد کردن دیگری از همین‌جا حذفشان کنید.</string>
+    <string name="ytlive_keywords">youtube music زنده سابقه دستگاه‌های دیگر برنامه وب‌سایت بلندگو همگام‌سازی پخش‌ها به‌روز نگه داشتن</string>
+    <string name="imp_bring_it_in">آوردن</string>
+    <string name="imp_turn_on">روشن کردن</string>
+    <string name="imp_not_brought_in">هنوز آورده نشده</string>
+    <string name="imp_live_no_plays">روشن. هنوز پخشی نیست</string>
 </resources>

@@ -4517,4 +4517,29 @@
     <string name="tour_181_crossfade">Bar kemajuan dalam bentuk pudar silang</string>
     <string name="tour_181_auto">Minta artis, album atau senarai main dengan suara, dalam Android Auto juga</string>
     <string name="tour_181_tv">Di TV, Nyanyi tidak pernah menahan muzik, dan gandingan lebih mudah</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Tidak dikongsi oleh Spotify</string>
+    <string name="spot_followed_why">Spotify hanya berkongsi lagu bagi senarai main yang anda buat.</string>
+    <string name="spot_followed_steps">Dalam Spotify: buka senarai itu → ⋯ → Tambah ke senarai main lain → Senarai main baharu. Prism membawa salinan itu pada muat semula seterusnya.</string>
+    <string name="spot_followed_tunemymusic">Atau, untuk cara yang lebih mudah: salin senarai main Spotify anda ke YouTube Music dengan TuneMyMusic (Pustaka → Import senarai main). Ia muncul dalam Prism sebaik sahaja disalin.</string>
+    <string name="spot_open_in_spotify">Buka dalam Spotify</string>
+    <string name="spot_refresh_now">Muat semula sekarang</string>
+    <string name="spot_refreshing">Memuat semula…</string>
+    <string name="spot_refreshed">Selesai</string>
+    <string name="spot_hide_from_library">Sembunyikan daripada Pustaka</string>
+    <string name="youtube_live_source">YouTube Music (live)</string>
+    <string name="ytlive_group">Kekalkan segerak</string>
+    <string name="ytlive_title">Kekalkan sejarah YouTube Music anda segerak</string>
+    <string name="ytlive_sub_off">Main balik daripada peranti anda yang lain, setiap beberapa jam</string>
+    <string name="ytlive_sub_first">Hidup. Bermula daripada sejarah anda seperti sekarang</string>
+    <string name="ytlive_sub_checked">Hidup. Disemak kali terakhir %1$s</string>
+    <string name="ytlive_sub_paused">Dijeda selama sehari: YouTube Music tidak menjawab</string>
+    <string name="ytlive_sub_retry">YouTube Music tidak menjawab. Prism akan cuba lagi nanti</string>
+    <string name="ytlive_sign_in">Log masuk ke YouTube Music untuk menggunakannya</string>
+    <string name="ytlive_info">Setiap beberapa jam, Prism membaca sejarah YouTube Music anda (halaman Sejarahnya) dan mengira lagu yang dimainkan sejak semakan terakhirnya, dalam aplikasi YouTube Music, di laman web, pada pembesar suara, sebagai main balik daripada YouTube Music (live). Main balik Prism sendiri tidak disertakan. Ia bermula apabila anda menghidupkannya: untuk membawa masuk apa yang anda mainkan sebelum ini, gunakan YouTube Music di atas (Google Takeout).\n\nMasa adalah anggaran: di antara dua semakan. Lagu yang dimainkan dua kali di antara dua semakan mungkin dikira sekali. Ia bergantung pada halaman Sejarah YouTube. Google Takeout ialah sejarah yang lengkap, dan main balik yang dibawa oleh Takeout tidak dikira dua kali.\n\nReplay hanya mengira main balik ini apabila anda menghidupkannya di bawah Kira sejarah daripada, dan anda boleh mengalih keluarnya di sini seperti mana-mana import.</string>
+    <string name="ytlive_keywords">youtube music live sejarah peranti lain aplikasi laman web pembesar suara segerak main balik kekal segerak</string>
+    <string name="imp_bring_it_in">Bawa masuk</string>
+    <string name="imp_turn_on">Hidupkan</string>
+    <string name="imp_not_brought_in">Belum dibawa masuk</string>
+    <string name="imp_live_no_plays">Hidup. Belum ada main balik</string>
 </resources>

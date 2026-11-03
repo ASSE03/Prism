@@ -4577,4 +4577,29 @@
     <string name="tour_181_crossfade">Az áttűnés alakját követő folyamatjelző</string>
     <string name="tour_181_auto">Kérj hanggal előadót, albumot vagy lejátszási listát, az Android Autóban is</string>
     <string name="tour_181_tv">A tévén az Éneklés sosem tartja fel a zenét, és a párosítás is egyszerűbb</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · A Spotify nem osztja meg</string>
+    <string name="spot_followed_why">A Spotify csak a te általad készített lejátszási listák dalait osztja meg.</string>
+    <string name="spot_followed_steps">A Spotifyban: nyisd meg → ⋯ → Hozzáadás másik lejátszási listához → Új lejátszási lista. A Prism a következő frissítéskor áthozza a másolatot.</string>
+    <string name="spot_followed_tunemymusic">Vagy egyszerűbben: másold át a Spotify-lejátszási listáidat a YouTube Musicba a TuneMyMusic segítségével (Könyvtár → Lejátszási listák importálása). Átmásolás után megjelennek a Prismben.</string>
+    <string name="spot_open_in_spotify">Megnyitás a Spotifyban</string>
+    <string name="spot_refresh_now">Frissítés most</string>
+    <string name="spot_refreshing">Frissítés…</string>
+    <string name="spot_refreshed">Kész</string>
+    <string name="spot_hide_from_library">Elrejtés a Könyvtárból</string>
+    <string name="youtube_live_source">YouTube Music (élő)</string>
+    <string name="ytlive_group">Maradjon naprakész</string>
+    <string name="ytlive_title">Tartsd naprakészen a YouTube Music-előzményeidet</string>
+    <string name="ytlive_sub_off">A többi eszközödön hallgatott dalok, néhány óránként</string>
+    <string name="ytlive_sub_first">Bekapcsolva. Az előzményeid mostani állapotától indul</string>
+    <string name="ytlive_sub_checked">Bekapcsolva. Utoljára ellenőrizve: %1$s</string>
+    <string name="ytlive_sub_paused">Egy napra szünetel: a YouTube Music nem válaszolt</string>
+    <string name="ytlive_sub_retry">A YouTube Music nem válaszolt. A Prism később újra próbálkozik</string>
+    <string name="ytlive_sign_in">Jelentkezz be a YouTube Musicba a használatához</string>
+    <string name="ytlive_info">A Prism néhány óránként beolvassa a YouTube Music-előzményeidet (az Előzmények oldalát), és megszámolja az utolsó ellenőrzés óta lejátszott dalokat, legyen az a YouTube Music alkalmazásban, a weboldalon vagy egy hangszórón, YouTube Music (élő) lejátszásokként. A Prism saját lejátszásai kimaradnak. A bekapcsolás pillanatától indul: ha be szeretnéd hozni, amit korábban hallgattál, használd fent a YouTube Musicot (Google Takeout).\n\nAz időpontok megközelítőek: valahol két ellenőrzés között vannak. Az a dal, amelyet két ellenőrzés között kétszer játszottál le, csak egyszer számíthat. Mindez a YouTube Előzmények oldalától függ. A Google Takeout a teljes előzmény, és a Takeout által áthozott lejátszásokat nem számolja kétszer.\n\nA Replay ezeket a lejátszásokat csak akkor számolja, ha bekapcsolod őket az Előzmények beszámítása innen alatt, és itt eltávolíthatod őket, mint bármely importot.</string>
+    <string name="ytlive_keywords">youtube music élő előzmények másik eszköz alkalmazás weboldal hangszóró szinkron lejátszások naprakész</string>
+    <string name="imp_bring_it_in">Áthozás</string>
+    <string name="imp_turn_on">Bekapcsolás</string>
+    <string name="imp_not_brought_in">Még nincs áthozva</string>
+    <string name="imp_live_no_plays">Bekapcsolva. Még nincs lejátszás</string>
 </resources>

@@ -4577,4 +4577,29 @@
     <string name="tour_181_crossfade">Ett förloppsfält i övertoningens form</string>
     <string name="tour_181_auto">Be om en artist, ett album eller en spellista med rösten, även i Android Auto</string>
     <string name="tour_181_tv">På tv:n håller Sjung aldrig upp musiken, och parkopplingen är enklare</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Delas inte av Spotify</string>
+    <string name="spot_followed_why">Spotify delar bara låtarna i spellistor som du har skapat.</string>
+    <string name="spot_followed_steps">I Spotify: öppna den → ⋯ → Lägg till i annan spellista → Ny spellista. Prism tar med kopian vid nästa uppdatering.</string>
+    <string name="spot_followed_tunemymusic">Eller, för ett enklare sätt att flytta: kopiera dina Spotify-spellistor till YouTube Music med TuneMyMusic (Bibliotek → Importera spellistor). De dyker upp i Prism när de har kopierats.</string>
+    <string name="spot_open_in_spotify">Öppna i Spotify</string>
+    <string name="spot_refresh_now">Uppdatera nu</string>
+    <string name="spot_refreshing">Uppdaterar…</string>
+    <string name="spot_refreshed">Klart</string>
+    <string name="spot_hide_from_library">Dölj från Bibliotek</string>
+    <string name="youtube_live_source">YouTube Music (live)</string>
+    <string name="ytlive_group">Håll den uppdaterad</string>
+    <string name="ytlive_title">Håll din YouTube Music-historik uppdaterad</string>
+    <string name="ytlive_sub_off">Spelningar från dina andra enheter, med några timmars mellanrum</string>
+    <string name="ytlive_sub_first">På. Börjar från din historik som den är nu</string>
+    <string name="ytlive_sub_checked">På. Senast kontrollerad %1$s</string>
+    <string name="ytlive_sub_paused">Pausad en dag: YouTube Music svarade inte</string>
+    <string name="ytlive_sub_retry">YouTube Music svarade inte. Prism försöker igen senare</string>
+    <string name="ytlive_sign_in">Logga in på YouTube Music för att använda detta</string>
+    <string name="ytlive_info">Med några timmars mellanrum läser Prism din YouTube Music-historik (dess Historik-sida) och räknar låtarna som spelats sedan senaste titten, i YouTube Music-appen, på webbplatsen, på en högtalare, som spelningar från YouTube Music (live). Prisms egna spelningar lämnas utanför. Det börjar när du slår på det: för att ta med det du spelade tidigare, använd YouTube Music ovan (Google Takeout).\n\nTiderna är ungefärliga: någonstans mellan två titter. En låt som spelats två gånger mellan två titter kan räknas en gång. Det beror på YouTubes Historik-sida. Google Takeout är den fullständiga historiken, och spelningar som en Takeout tar med räknas inte två gånger.\n\nReplay räknar de här spelningarna bara när du slår på dem under Räkna historik från, och du kan ta bort dem här som vilken import som helst.</string>
+    <string name="ytlive_keywords">youtube music live historik andra enheter app webbplats högtalare synka spelningar uppdaterad</string>
+    <string name="imp_bring_it_in">Ta med</string>
+    <string name="imp_turn_on">Slå på</string>
+    <string name="imp_not_brought_in">Inte medtagen än</string>
+    <string name="imp_live_no_plays">På. Inga spelningar än</string>
 </resources>

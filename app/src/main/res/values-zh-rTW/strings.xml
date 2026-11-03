@@ -4517,4 +4517,29 @@
     <string name="tour_181_crossfade">呈淡入淡出形狀的進度列</string>
     <string name="tour_181_auto">用語音點播藝人、專輯或播放清單，在 Android Auto 中也可以</string>
     <string name="tour_181_tv">在電視上，歡唱再也不會讓音樂卡住，配對也更簡單</string>
+    <!-- 1.8.1 followed playlists, YouTube Music (live) -->
+    <string name="spot_followed_subtitle">%1$s · Spotify 不提供</string>
+    <string name="spot_followed_why">Spotify 只提供你自己建立的播放清單中的歌曲。</string>
+    <string name="spot_followed_steps">在 Spotify 中：開啟它 → ⋯ → 新增至其他播放清單 → 新增播放清單。Prism 會在下次重新整理時帶入這份副本。</string>
+    <string name="spot_followed_tunemymusic">或者用更簡單的辦法：透過 TuneMyMusic 把你的 Spotify 播放清單複製到 YouTube Music（音樂庫 → 匯入播放清單）。複製完成後它們會出現在 Prism 中。</string>
+    <string name="spot_open_in_spotify">在 Spotify 中開啟</string>
+    <string name="spot_refresh_now">立即重新整理</string>
+    <string name="spot_refreshing">正在重新整理…</string>
+    <string name="spot_refreshed">完成</string>
+    <string name="spot_hide_from_library">從音樂庫中隱藏</string>
+    <string name="youtube_live_source">YouTube Music（即時）</string>
+    <string name="ytlive_group">保持同步</string>
+    <string name="ytlive_title">讓你的 YouTube Music 記錄保持同步</string>
+    <string name="ytlive_sub_off">來自你其他裝置的播放，每隔幾小時同步一次</string>
+    <string name="ytlive_sub_first">已開啟。從你現在的記錄開始</string>
+    <string name="ytlive_sub_checked">已開啟。上次檢查：%1$s</string>
+    <string name="ytlive_sub_paused">已暫停一天：YouTube Music 沒有回應</string>
+    <string name="ytlive_sub_retry">YouTube Music 沒有回應。Prism 稍後會再試</string>
+    <string name="ytlive_sign_in">登入 YouTube Music 以使用此功能</string>
+    <string name="ytlive_info">Prism 每隔幾小時會讀取你的 YouTube Music 記錄（它的「記錄」頁面），並統計自上次查看以來播放的歌曲，無論是在 YouTube Music 應用程式、網站還是喇叭上播放，都作為來自 YouTube Music（即時）的播放。Prism 自己的播放不計入。它從你開啟時開始：若要匯入你之前播放的內容，請使用上方的 YouTube Music（Google Takeout）。\n\n時間是大致的：介於兩次查看之間。兩次查看之間播放兩次的歌曲可能只算一次。這取決於 YouTube 的記錄頁面。Google Takeout 是完整的記錄，Takeout 匯入的播放不會被重複計算。\n\n只有當你在「計入記錄來源」下開啟這些播放時，Replay 才會統計它們，你也可以像移除其他匯入內容一樣在這裡將它們移除。</string>
+    <string name="ytlive_keywords">youtube music 即時 記錄 其他裝置 應用程式 網站 喇叭 同步 播放 保持同步</string>
+    <string name="imp_bring_it_in">匯入</string>
+    <string name="imp_turn_on">開啟</string>
+    <string name="imp_not_brought_in">尚未匯入</string>
+    <string name="imp_live_no_plays">已開啟。還沒有播放</string>
 </resources>
