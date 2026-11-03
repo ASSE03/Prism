@@ -94,8 +94,10 @@ class SpotifyConnectTest {
         assertFalse("a feature on: its job is lined up", spotifyJobs().isEmpty())
 
         // In Library with its mark; opened, its song is matched and listed.
-        compose.waitUntil(15_000) { compose.onAllNodes(hasText("Library") and hasClickAction()).fetchSemanticsNodes().isNotEmpty() }
-        compose.onAllNodes(hasText("Library") and hasClickAction()).onFirst().performClick()
+        // The Library tab (its name may be hidden by the tab bar's label style; the tab still carries it).
+        val libraryTab = (hasText("Library") or androidx.compose.ui.test.hasContentDescription("Library")) and hasClickAction()
+        compose.waitUntil(15_000) { compose.onAllNodes(libraryTab).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(libraryTab).onFirst().performClick()
         compose.waitForText("Spotify ·", 15_000)
         compose.clickWhenFound(hasText("Spotify test list") and hasClickAction(), 15_000)
         compose.waitUntil(20_000) { c.prismLibrary.list(prismId)?.songs?.any { it.id == song.id } == true }
@@ -107,7 +109,15 @@ class SpotifyConnectTest {
 
         // Disconnect, from the page.
         instrumentation.runOnMainSync { c.player.stop() }
-        compose.openSettings()
+        // The song opened the player over the tab bar: Back closes it. The Settings tab then reopens where it was
+        // (tabs keep their pages), the Spotify page, so it's tapped directly rather than through openSettings().
+        val settingsTab = androidx.compose.ui.test.hasContentDescription("Settings") and hasClickAction()
+        repeat(3) {
+            if (compose.onAllNodes(settingsTab).fetchSemanticsNodes().isNotEmpty()) return@repeat
+            androidx.test.uiautomator.UiDevice.getInstance(instrumentation).pressBack()
+            compose.waitForIdle()
+        }
+        compose.clickWhenFound(settingsTab)
         if (compose.onAllNodes(hasText("Connected as Tester")).fetchSemanticsNodes().isEmpty()) {
             compose.clickWhenFound(hasText("Devices & connections") and hasClickAction())
             compose.clickWhenFound(hasText("Spotify") and hasClickAction())
@@ -116,7 +126,8 @@ class SpotifyConnectTest {
         compose.waitForText("Disconnect Spotify?")
         compose.clickWhenFound(hasText("Disconnect") and hasClickAction() and hasAnyAncestor(isDialog()))
         compose.waitUntil(10_000) { !c.spotify.connected }
-        assertTrue("its playlist left Library", c.prismLibrary.list(prismId) == null)
+        // Disconnect clears the sign-in first, then lets the features finish and takes the mirrored playlists away.
+        compose.waitUntil(10_000) { c.prismLibrary.list(prismId) == null }
         assertTrue(c.spotify.playlists.prismIds().isEmpty())
         assertTrue("the tokens are gone", c.spotify.store.tokens() == null)
         compose.waitUntil(10_000) { spotifyJobs().isEmpty() }

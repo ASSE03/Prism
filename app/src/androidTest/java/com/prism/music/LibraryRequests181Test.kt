@@ -1,5 +1,8 @@
 package com.prism.music
 
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollAction
@@ -59,6 +62,16 @@ class LibraryRequests181Test {
     private fun openLibraryPlaylist(title: String, first: String) {
         compose.waitUntil(15_000) { compose.onAllNodes(hasText("Library") and hasClickAction()).fetchSemanticsNodes().isNotEmpty() }
         compose.onAllNodes(hasText("Library") and hasClickAction()).onFirst().performClick()
+        // Library keeps the page it was on (an earlier test leaves it on Downloads or History): its own "Library" page,
+        // the topmost "Library" that can be tapped (the tab bar's is at the bottom), holds the playlists.
+        // Library keeps the page it was on (an earlier test leaves it on Downloads): its first page, left of Songs, holds
+        // the playlists. Swiped back there.
+        compose.waitUntil(10_000) { compose.onAllNodes(hasText("Songs")).fetchSemanticsNodes().isNotEmpty() }
+        repeat(6) {
+            if (compose.onAllNodes(hasText(title)).fetchSemanticsNodes().isNotEmpty()) return@repeat
+            compose.onRoot().performTouchInput { swipeRight(startX = width * 0.15f, endX = width * 0.95f) }
+            compose.waitForIdle()
+        }
         compose.clickWhenFound(hasText(title) and hasClickAction(), 15_000)
         compose.waitForText(first)
     }
