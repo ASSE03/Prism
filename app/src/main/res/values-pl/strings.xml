@@ -4669,4 +4669,32 @@
         <item quantity="many">%d obserwowanych wykonawców</item>
         <item quantity="other">%d obserwowanego wykonawcy</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (live)</string>
+    <string name="tour_181_history">Przenieś swoją historię</string>
+    <string name="tour_181_history_body">Twoje odtworzenia ze Spotify, YouTube Music lub Last.fm, odczytane w tym telefonie.</string>
+    <string name="tour_181_history_spotify">Wybierz pobrane dane Spotify: odtworzenia, Polubione utwory, playlisty i więcej</string>
+    <string name="tour_181_history_others">Albo historię YouTube Music z Google Takeout, albo swoje scrobble z Last.fm</string>
+    <string name="tour_181_history_replay">Replay liczy tylko odtworzenia w Prism, chyba że wybierzesz inaczej</string>
+    <string name="tour_181_spotify">Spotify z własnym kluczem</string>
+    <string name="tour_181_spotify_body">Opcjonalnie: połącz Spotify przez własną, darmową aplikację deweloperską.</string>
+    <string name="tour_181_spotify_lists">Twoje playlisty ze Spotify w Bibliotece, odtwarzane z YouTube Music</string>
+    <string name="tour_181_spotify_plays">Ostatnie odtworzenia i topowi wykonawcy kształtują miksy i radio</string>
+    <string name="tour_181_spotify_likes">Polubione utwory w obie strony, każde polubienie przenoszone raz</string>
+    <string name="tour_181_replay">Historia i Replay</string>
+    <string name="tour_181_replay_body">Wybierz, co zostaje zapisane i kiedy utwór liczy się jako odtworzony.</string>
+    <string name="tour_181_replay_pause">Wstrzymaj historię na godzinę, dzień albo dopóki jej nie włączysz</string>
+    <string name="tour_181_replay_counts">Utwór liczy się od razu albo po czasie od 5 sekund do minuty</string>
+    <string name="tour_181_replay_graphs">Replay pokazuje dzień na wykresie według godzin, a tydzień lub miesiąc według dni</string>
+    <string name="tour_181_yours">Po Twojemu</string>
+    <string name="tour_181_yours_body">Jeszcze więcej Prism do urządzenia po swojemu.</string>
+    <string name="tour_181_yours_cover">Zmień okładkę utworu lub albumu z jego menu</string>
+    <string name="tour_181_yours_explicit">Pokazuj, pomijaj albo ukrywaj utwory dla dorosłych</string>
+    <string name="tour_181_yours_white">Biały odtwarzacz do jasnego motywu</string>
+    <string name="tour_181_yours_fonts">Dowolna czcionka zainstalowana w telefonie</string>
+    <string name="tour_181_yours_artists">Nazwa każdego wykonawcy w odtwarzaczu może otworzyć jego stronę</string>
+    <string name="tour_181_files">Twoje własne pliki MP3, AAC i Ogg mogą grać zamiast strumienia</string>
+    <string name="tour_181_crossfade">Pasek postępu w kształcie przenikania</string>
+    <string name="tour_181_auto">Poproś głosem o wykonawcę, album lub playlistę, także w Android Auto</string>
+    <string name="tour_181_tv">Na telewizorze Śpiewaj nigdy nie wstrzymuje muzyki, a parowanie jest prostsze</string>
 </resources>

@@ -4669,4 +4669,32 @@
         <item quantity="many">%d исполнителей из подписок</item>
         <item quantity="other">%d исполнителя из подписок</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (онлайн)</string>
+    <string name="tour_181_history">Перенеси свою историю</string>
+    <string name="tour_181_history_body">Твои прослушивания из Spotify, YouTube Music или Last.fm, читаются на этом телефоне.</string>
+    <string name="tour_181_history_spotify">Выбери архив данных Spotify: прослушивания, любимые треки, плейлисты и не только</string>
+    <string name="tour_181_history_others">Или историю YouTube Music из Google Takeout, или свои скробблы Last.fm</string>
+    <string name="tour_181_history_replay">Replay учитывает только прослушивания в Prism, если ты не выберешь иначе</string>
+    <string name="tour_181_spotify">Spotify со своим ключом</string>
+    <string name="tour_181_spotify_body">По желанию: подключи Spotify через своё бесплатное приложение разработчика.</string>
+    <string name="tour_181_spotify_lists">Твои плейлисты Spotify в Библиотеке, звучат из YouTube Music</string>
+    <string name="tour_181_spotify_plays">Недавние прослушивания и топ исполнителей влияют на миксы и радио</string>
+    <string name="tour_181_spotify_likes">Любимые треки в обе стороны, каждый переносится один раз</string>
+    <string name="tour_181_replay">История и Replay</string>
+    <string name="tour_181_replay_body">Выбери, что сохраняется и когда песня считается прослушанной.</string>
+    <string name="tour_181_replay_pause">Приостанови историю на час, на день или пока не включишь снова</string>
+    <string name="tour_181_replay_counts">Песня засчитывается сразу или через время от 5 секунд до минуты</string>
+    <string name="tour_181_replay_graphs">Replay показывает день по часам, а неделю или месяц по дням</string>
+    <string name="tour_181_yours">По-своему</string>
+    <string name="tour_181_yours_body">Ещё больше Prism, чтобы сделать его своим.</string>
+    <string name="tour_181_yours_cover">Смени обложку песни или альбома в его меню</string>
+    <string name="tour_181_yours_explicit">Показывай, пропускай или скрывай песни с нецензурным содержанием</string>
+    <string name="tour_181_yours_white">Белый плеер для светлой темы</string>
+    <string name="tour_181_yours_fonts">Любой шрифт, установленный на телефоне</string>
+    <string name="tour_181_yours_artists">Имя каждого исполнителя в плеере может открыть его страницу</string>
+    <string name="tour_181_files">Твои собственные файлы MP3, AAC и Ogg могут играть вместо потока</string>
+    <string name="tour_181_crossfade">Полоса прогресса в форме плавного перехода</string>
+    <string name="tour_181_auto">Попроси голосом исполнителя, альбом или плейлист, и в Android Auto тоже</string>
+    <string name="tour_181_tv">На телевизоре Подпевай больше не задерживает музыку, а связать устройства проще</string>
 </resources>

@@ -4549,4 +4549,32 @@
         <item quantity="one">%d sinusundang artist</item>
         <item quantity="other">%d sinusundang artist</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (live)</string>
+    <string name="tour_181_history">Dalhin ang history mo</string>
+    <string name="tour_181_history_body">Ang mga play mo mula sa Spotify, YouTube Music o Last.fm, binabasa sa teleponong ito.</string>
+    <string name="tour_181_history_spotify">Piliin ang data download ng Spotify: mga play, Liked Songs, mga playlist at iba pa</string>
+    <string name="tour_181_history_others">O ang YouTube Music history mula sa Google Takeout, o ang mga Last.fm scrobble mo</string>
+    <string name="tour_181_history_replay">Sariling mga play lang ng Prism ang binibilang ng Replay maliban kung pumili ka</string>
+    <string name="tour_181_spotify">Spotify, gamit ang sarili mong key</string>
+    <string name="tour_181_spotify_body">Opsyonal: ikonekta ang Spotify gamit ang sarili mong libreng developer app.</string>
+    <string name="tour_181_spotify_lists">Ang mga Spotify playlist mo sa Library, pinapatugtog mula sa YouTube Music</string>
+    <string name="tour_181_spotify_plays">Hinuhubog ng mga kamakailang play at top artist ang mga mix at radio mo</string>
+    <string name="tour_181_spotify_likes">Liked Songs sa magkabilang panig, isang beses lang inililipat ang bawat isa</string>
+    <string name="tour_181_replay">History &amp; Replay</string>
+    <string name="tour_181_replay_body">Piliin kung ano ang itatabi, at kailan bibilangin bilang na-play ang kanta.</string>
+    <string name="tour_181_replay_pause">I-pause ang history nang isang oras, isang araw o hanggang i-on mo ulit</string>
+    <string name="tour_181_replay_counts">Binibilang agad ang kanta, o pagkalipas ng 5 segundo hanggang isang minuto</string>
+    <string name="tour_181_replay_graphs">Ipinapakita ng Replay ang isang araw ayon sa mga oras, at ang isang linggo o buwan ayon sa mga araw</string>
+    <string name="tour_181_yours">Ayon sa gusto mo</string>
+    <string name="tour_181_yours_body">Mas marami pang bahagi ng Prism na puwede mong gawing iyo.</string>
+    <string name="tour_181_yours_cover">Palitan ang cover ng kanta o album mula sa menu nito</string>
+    <string name="tour_181_yours_explicit">Ipakita, laktawan o itago ang mga explicit na kanta</string>
+    <string name="tour_181_yours_white">Puting player para sa light theme</string>
+    <string name="tour_181_yours_fonts">Kahit anong font na naka-install sa telepono mo</string>
+    <string name="tour_181_yours_artists">Mabubuksan ng pangalan ng bawat artist sa player ang page nila</string>
+    <string name="tour_181_files">Puwedeng tumugtog ang sarili mong MP3, AAC at Ogg file sa halip na ang stream</string>
+    <string name="tour_181_crossfade">Progress bar na kahugis ng crossfade</string>
+    <string name="tour_181_auto">Humiling ng artist, album o playlist gamit ang boses, pati sa Android Auto</string>
+    <string name="tour_181_tv">Sa TV, hindi kailanman pinapahinto ng Kumanta ang musika, at mas madali ang pag-pair</string>
 </resources>

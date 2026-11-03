@@ -4669,4 +4669,32 @@
         <item quantity="many">%d sledovaného interpreta</item>
         <item quantity="other">%d sledovaných interpretů</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (živě)</string>
+    <string name="tour_181_history">Přenes si svou historii</string>
+    <string name="tour_181_history_body">Tvoje přehrání ze Spotify, YouTube Music nebo Last.fm, načtená v tomto telefonu.</string>
+    <string name="tour_181_history_spotify">Vyber stažená data ze Spotify: přehrání, Oblíbené skladby, playlisty a další</string>
+    <string name="tour_181_history_others">Nebo historii YouTube Music z Google Takeout, nebo své scrobbly z Last.fm</string>
+    <string name="tour_181_history_replay">Replay počítá jen přehrání v Prismu, pokud nezvolíš jinak</string>
+    <string name="tour_181_spotify">Spotify s vlastním klíčem</string>
+    <string name="tour_181_spotify_body">Volitelné: připoj Spotify přes vlastní bezplatnou vývojářskou aplikaci.</string>
+    <string name="tour_181_spotify_lists">Tvoje playlisty ze Spotify v Knihovně, přehrávané z YouTube Music</string>
+    <string name="tour_181_spotify_plays">Nedávná přehrání a top interpreti utváří tvoje mixy a rádio</string>
+    <string name="tour_181_spotify_likes">Oblíbené skladby oběma směry, každá přenesená jen jednou</string>
+    <string name="tour_181_replay">Historie a Replay</string>
+    <string name="tour_181_replay_body">Vyber, co se uchová a kdy se skladba počítá jako přehraná.</string>
+    <string name="tour_181_replay_pause">Pozastav historii na hodinu, na den nebo dokud ji znovu nezapneš</string>
+    <string name="tour_181_replay_counts">Skladba se počítá hned, nebo po 5 sekundách až minutě</string>
+    <string name="tour_181_replay_graphs">Replay zobrazí den po hodinách, týden nebo měsíc po dnech</string>
+    <string name="tour_181_yours">Podle tebe</string>
+    <string name="tour_181_yours_body">Další kousky Prismu, které si můžeš přizpůsobit.</string>
+    <string name="tour_181_yours_cover">Obal skladby nebo alba změníš z jeho nabídky</string>
+    <string name="tour_181_yours_explicit">Zobraz, přeskoč nebo skryj explicitní skladby</string>
+    <string name="tour_181_yours_white">Bílý přehrávač ke světlému motivu</string>
+    <string name="tour_181_yours_fonts">Jakékoli písmo nainstalované v telefonu</string>
+    <string name="tour_181_yours_artists">Jméno každého interpreta v přehrávači může otevřít jeho stránku</string>
+    <string name="tour_181_files">Tvoje vlastní soubory MP3, AAC a Ogg se můžou přehrát místo streamu</string>
+    <string name="tour_181_crossfade">Lišta průběhu ve tvaru prolínání</string>
+    <string name="tour_181_auto">Řekni si hlasem o interpreta, album nebo playlist, i v Android Auto</string>
+    <string name="tour_181_tv">Na televizi Zpívání nikdy nezdrží hudbu a párování je snazší</string>
 </resources>

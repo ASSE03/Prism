@@ -4789,4 +4789,32 @@
         <item quantity="many">%d فنانًا متابَعًا</item>
         <item quantity="other">%d فنان متابَع</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (مباشر)</string>
+    <string name="tour_181_history">أحضِر سجلّك</string>
+    <string name="tour_181_history_body">مرات تشغيلك من Spotify أو YouTube Music أو Last.fm، تُقرأ على هذا الهاتف.</string>
+    <string name="tour_181_history_spotify">اختر تنزيل بيانات Spotify: مرات التشغيل، والأغاني التي نالت إعجابك، وقوائم التشغيل، والمزيد</string>
+    <string name="tour_181_history_others">أو سجل YouTube Music من Google Takeout، أو تسجيلات استماعك على Last.fm</string>
+    <string name="tour_181_history_replay">لا يحتسب Replay إلا مرات التشغيل في Prism نفسه، ما لم تختر غير ذلك</string>
+    <string name="tour_181_spotify">Spotify، بمفتاحك الخاص</string>
+    <string name="tour_181_spotify_body">اختياري: اربط Spotify عبر تطبيق مطوّر مجاني خاص بك.</string>
+    <string name="tour_181_spotify_lists">قوائم تشغيلك في Spotify داخل المكتبة، تُشغَّل من YouTube Music</string>
+    <string name="tour_181_spotify_plays">مرات التشغيل الأخيرة وأبرز الفنانين تشكّل ميكساتك والراديو</string>
+    <string name="tour_181_spotify_likes">الأغاني التي نالت إعجابك في الاتجاهين، ويُنقل كل إعجاب مرة واحدة</string>
+    <string name="tour_181_replay">السجلّ وReplay</string>
+    <string name="tour_181_replay_body">اختر ما يُحفظ، ومتى تُحتسب الأغنية مُشغَّلة.</string>
+    <string name="tour_181_replay_pause">أوقف السجلّ مؤقتًا لساعة أو يوم أو حتى تعيد تفعيله</string>
+    <string name="tour_181_replay_counts">تُحتسب الأغنية فورًا، أو بعد 5 ثوانٍ وحتى دقيقة</string>
+    <string name="tour_181_replay_graphs">يعرض Replay اليوم حسب ساعاته، والأسبوع أو الشهر حسب أيامه</string>
+    <string name="tour_181_yours">على طريقتك</string>
+    <string name="tour_181_yours_body">المزيد من Prism لتجعله خاصًا بك.</string>
+    <string name="tour_181_yours_cover">غيّر غلاف أغنية أو ألبوم من قائمته</string>
+    <string name="tour_181_yours_explicit">أظهِر الأغاني الفاضحة أو تخطَّها أو أخفِها</string>
+    <string name="tour_181_yours_white">مشغّل أبيض للمظهر الفاتح</string>
+    <string name="tour_181_yours_fonts">أي خط مثبّت على هاتفك</string>
+    <string name="tour_181_yours_artists">يمكن لاسم كل فنان على المشغّل أن يفتح صفحته</string>
+    <string name="tour_181_files">يمكن أن تُشغَّل ملفات MP3 وAAC وOgg الخاصة بك بدلًا من البث</string>
+    <string name="tour_181_crossfade">شريط تقدّم بشكل التلاشي المتداخل</string>
+    <string name="tour_181_auto">اطلب فنانًا أو ألبومًا أو قائمة تشغيل بصوتك، في Android Auto أيضًا</string>
+    <string name="tour_181_tv">على التلفاز، لا يؤخّر الغناء الموسيقى أبدًا، والإقران أسهل</string>
 </resources>

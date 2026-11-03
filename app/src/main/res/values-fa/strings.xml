@@ -4549,4 +4549,32 @@
         <item quantity="one">%d هنرمند دنبال‌شده</item>
         <item quantity="other">%d هنرمند دنبال‌شده</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (زنده)</string>
+    <string name="tour_181_history">سابقهٔ خود را بیاورید</string>
+    <string name="tour_181_history_body">پخش‌های شما از Spotify،‏ YouTube Music یا Last.fm، خوانده‌شده روی همین گوشی.</string>
+    <string name="tour_181_history_spotify">دادهٔ دانلودی Spotify را انتخاب کنید: پخش‌ها، آهنگ‌های پسندیده، فهرست‌های پخش و بیشتر</string>
+    <string name="tour_181_history_others">یا سابقهٔ YouTube Music از Google Takeout، یا اسکرابل‌های Last.fm شما</string>
+    <string name="tour_181_history_replay">‏Replay فقط پخش‌های خود Prism را می‌شمارد، مگر اینکه خودتان انتخاب کنید</string>
+    <string name="tour_181_spotify">‏Spotify، با کلید خودتان</string>
+    <string name="tour_181_spotify_body">اختیاری: Spotify را از طریق یک برنامهٔ توسعه‌دهندهٔ رایگانِ خودتان وصل کنید.</string>
+    <string name="tour_181_spotify_lists">فهرست‌های پخش Spotify شما در کتابخانه، پخش‌شده از YouTube Music</string>
+    <string name="tour_181_spotify_plays">پخش‌های اخیر و هنرمندان برتر، میکس‌ها و رادیوی شما را شکل می‌دهند</string>
+    <string name="tour_181_spotify_likes">آهنگ‌های پسندیده در هر دو طرف، هر کدام فقط یک بار منتقل می‌شود</string>
+    <string name="tour_181_replay">تاریخچه و Replay</string>
+    <string name="tour_181_replay_body">انتخاب کنید چه چیزی نگه داشته شود و آهنگ کِی پخش‌شده حساب شود.</string>
+    <string name="tour_181_replay_pause">تاریخچه را برای یک ساعت، یک روز یا تا وقتی دوباره روشنش کنید متوقف کنید</string>
+    <string name="tour_181_replay_counts">آهنگ بلافاصله حساب می‌شود، یا پس از ۵ ثانیه تا یک دقیقه</string>
+    <string name="tour_181_replay_graphs">‏Replay یک روز را بر اساس ساعت‌هایش و یک هفته یا ماه را بر اساس روزهایش نشان می‌دهد</string>
+    <string name="tour_181_yours">به سلیقهٔ شما</string>
+    <string name="tour_181_yours_body">بخش‌های بیشتری از Prism تا مال خودتان شود.</string>
+    <string name="tour_181_yours_cover">کاور یک آهنگ یا آلبوم را از منوی آن تغییر دهید</string>
+    <string name="tour_181_yours_explicit">آهنگ‌های صریح را نمایش دهید، رد کنید یا پنهان کنید</string>
+    <string name="tour_181_yours_white">پخش‌کننده‌ای سفید برای پوستهٔ روشن</string>
+    <string name="tour_181_yours_fonts">هر قلمی که روی گوشی‌تان نصب است</string>
+    <string name="tour_181_yours_artists">نام هر هنرمند روی پخش‌کننده می‌تواند صفحهٔ او را باز کند</string>
+    <string name="tour_181_files">فایل‌های MP3،‏ AAC و Ogg خودتان می‌توانند به‌جای پخش آنلاین پخش شوند</string>
+    <string name="tour_181_crossfade">نوار پیشرفتی به شکل کراس‌فید</string>
+    <string name="tour_181_auto">هنرمند، آلبوم یا فهرست پخش را با صدایتان بخواهید، در Android Auto هم</string>
+    <string name="tour_181_tv">روی تلویزیون، همخوانی هرگز موسیقی را معطل نمی‌کند و جفت کردن آسان‌تر است</string>
 </resources>

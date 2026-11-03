@@ -4489,4 +4489,32 @@
     <plurals name="imp_n_followed_artists">
         <item quantity="other">%d 位追蹤的藝人</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify（即時）</string>
+    <string name="tour_181_history">匯入你的播放記錄</string>
+    <string name="tour_181_history_body">你在 Spotify、YouTube Music 或 Last.fm 的播放，在這支手機上讀取。</string>
+    <string name="tour_181_history_spotify">選擇 Spotify 的資料下載：播放記錄、已按讚的歌曲、播放清單等</string>
+    <string name="tour_181_history_others">或 Google Takeout 中的 YouTube Music 記錄，或你的 Last.fm 播放記錄</string>
+    <string name="tour_181_history_replay">除非你另行選擇，Replay 只計入 Prism 自己的播放</string>
+    <string name="tour_181_spotify">Spotify，用你自己的金鑰</string>
+    <string name="tour_181_spotify_body">選用：透過你自己的免費開發人員應用程式連結 Spotify。</string>
+    <string name="tour_181_spotify_lists">你的 Spotify 播放清單在音樂庫中，透過 YouTube Music 播放</string>
+    <string name="tour_181_spotify_plays">最近播放和熱門藝人會影響你的合輯和電台</string>
+    <string name="tour_181_spotify_likes">雙向同步已按讚的歌曲，每首只同步一次</string>
+    <string name="tour_181_replay">記錄和 Replay</string>
+    <string name="tour_181_replay_body">選擇要保留哪些內容，以及歌曲何時算作播放過。</string>
+    <string name="tour_181_replay_pause">暫停記錄 1 小時、1 天，或直到你重新開啟</string>
+    <string name="tour_181_replay_counts">歌曲可立即計入，或在 5 秒到 1 分鐘之後計入</string>
+    <string name="tour_181_replay_graphs">Replay 依小時繪製一天的圖表，依天繪製一週或一個月的圖表</string>
+    <string name="tour_181_yours">依你的方式</string>
+    <string name="tour_181_yours_body">更多可以依你心意打造的 Prism。</string>
+    <string name="tour_181_yours_cover">從選單更換歌曲或專輯的封面</string>
+    <string name="tour_181_yours_explicit">顯示、略過或隱藏不雅內容歌曲</string>
+    <string name="tour_181_yours_white">適合淺色主題的白色播放器</string>
+    <string name="tour_181_yours_fonts">手機上已安裝的任何字型</string>
+    <string name="tour_181_yours_artists">輕觸播放器上的每位藝人名稱都能開啟其頁面</string>
+    <string name="tour_181_files">你自己的 MP3、AAC 和 Ogg 檔案可取代串流播放</string>
+    <string name="tour_181_crossfade">呈淡入淡出形狀的進度列</string>
+    <string name="tour_181_auto">用語音點播藝人、專輯或播放清單，在 Android Auto 中也可以</string>
+    <string name="tour_181_tv">在電視上，歡唱再也不會讓音樂卡住，配對也更簡單</string>
 </resources>

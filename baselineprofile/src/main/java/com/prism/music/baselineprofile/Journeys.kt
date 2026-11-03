@@ -96,8 +96,9 @@ object Journeys {
             flingPage(down = true, times = 1)
         }
         if (item?.tap() != true) return
-        // The page's song rows have a "More" button.
-        device.wait(Until.hasObject(By.desc("More")), WAIT)
+        // The page's song rows have a "More" button. No page opened (the text tapped wasn't a card): no Back, which
+        // would leave Prism and send every later journey's taps to the launcher (the 1.8.1 profile run, 2026-11-03).
+        if (device.wait(Until.hasObject(By.desc("More")), WAIT) != true) return
         flingPage(down = true, times = 2)
         device.pressBack()
         device.waitForIdle(2_000)
@@ -180,6 +181,15 @@ object Journeys {
     }
 
     private fun MacrobenchmarkScope.tab(name: String) {
+        // Prism no longer in front (a Back too many in an earlier journey): open it again, so this journey still runs.
+        if (!device.hasObject(By.desc("Home").pkg(PACKAGE)) && !device.hasObject(By.desc("Library").pkg(PACKAGE))) {
+            device.pressBack()
+            device.waitForIdle(1_000)
+            if (!device.hasObject(By.pkg(PACKAGE))) {
+                startActivityAndWait()
+                pastOnboarding()
+            }
+        }
         // A question that came up after pastOnboarding (the tour or Holiday Mode) would take the tap: answer it first.
         for (i in 1..3) if (!answerPrompts()) break
         // The tab bar's buttons carry their names as descriptions; Home's top bar has others, so take the lowest one.

@@ -4549,4 +4549,32 @@
         <item quantity="one">%d följd artist</item>
         <item quantity="other">%d följda artister</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (live)</string>
+    <string name="tour_181_history">Ta med din historik</string>
+    <string name="tour_181_history_body">Dina spelningar från Spotify, YouTube Music eller Last.fm, lästa på den här telefonen.</string>
+    <string name="tour_181_history_spotify">Välj Spotifys datanedladdning: spelningar, gillade låtar, spellistor och mer</string>
+    <string name="tour_181_history_others">Eller din YouTube Music-historik från Google Takeout, eller dina scrobblingar från Last.fm</string>
+    <string name="tour_181_history_replay">Replay räknar bara spelningar i Prism, om du inte väljer annat</string>
+    <string name="tour_181_spotify">Spotify, med din egen nyckel</string>
+    <string name="tour_181_spotify_body">Valfritt: anslut Spotify via en gratis utvecklarapp som är din egen.</string>
+    <string name="tour_181_spotify_lists">Dina Spotify-spellistor i Bibliotek, spelade från YouTube Music</string>
+    <string name="tour_181_spotify_plays">Senaste spelningar och toppartister formar dina mixar och din radio</string>
+    <string name="tour_181_spotify_likes">Gillade låtar åt båda hållen, var och en förs över en gång</string>
+    <string name="tour_181_replay">Historik &amp; Replay</string>
+    <string name="tour_181_replay_body">Välj vad som sparas, och när en låt räknas som spelad.</string>
+    <string name="tour_181_replay_pause">Pausa historiken i en timme, en dag eller tills du slår på den igen</string>
+    <string name="tour_181_replay_counts">En låt räknas direkt, eller efter 5 sekunder upp till en minut</string>
+    <string name="tour_181_replay_graphs">Replay visar en dag timme för timme, en vecka eller månad dag för dag</string>
+    <string name="tour_181_yours">På ditt sätt</string>
+    <string name="tour_181_yours_body">Mer av Prism att göra till ditt eget.</string>
+    <string name="tour_181_yours_cover">Byt omslag på en låt eller ett album från dess meny</string>
+    <string name="tour_181_yours_explicit">Visa, hoppa över eller dölj explicita låtar</string>
+    <string name="tour_181_yours_white">En vit spelare till det ljusa temat</string>
+    <string name="tour_181_yours_fonts">Vilket typsnitt som helst som finns på telefonen</string>
+    <string name="tour_181_yours_artists">Varje artistnamn på spelaren kan öppna artistens sida</string>
+    <string name="tour_181_files">Dina egna MP3-, AAC- och Ogg-filer kan spelas i stället för strömmen</string>
+    <string name="tour_181_crossfade">Ett förloppsfält i övertoningens form</string>
+    <string name="tour_181_auto">Be om en artist, ett album eller en spellista med rösten, även i Android Auto</string>
+    <string name="tour_181_tv">På tv:n håller Sjung aldrig upp musiken, och parkopplingen är enklare</string>
 </resources>

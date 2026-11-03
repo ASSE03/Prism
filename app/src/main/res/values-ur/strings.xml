@@ -4549,4 +4549,32 @@
         <item quantity="one">%d فالو کیا گیا فنکار</item>
         <item quantity="other">%d فالو کیے گئے فنکار</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (لائیو)</string>
+    <string name="tour_181_history">اپنی ہسٹری لائیں</string>
+    <string name="tour_181_history_body">Spotify، YouTube Music یا Last.fm سے آپ کے پلے، اسی فون پر پڑھے جاتے ہیں۔</string>
+    <string name="tour_181_history_spotify">Spotify کا ڈیٹا ڈاؤن لوڈ چنیں: پلے، پسندیدہ گانے، پلے لسٹس اور بہت کچھ</string>
+    <string name="tour_181_history_others">یا Google Takeout سے YouTube Music کی ہسٹری، یا آپ کے Last.fm اسکروبلز</string>
+    <string name="tour_181_history_replay">جب تک آپ نہ چنیں، Replay صرف Prism کے اپنے پلے شمار کرتا ہے</string>
+    <string name="tour_181_spotify">Spotify، آپ کی اپنی کی کے ساتھ</string>
+    <string name="tour_181_spotify_body">اختیاری: Spotify کو اپنی مفت ڈیولپر ایپ کے ذریعے جوڑیں۔</string>
+    <string name="tour_181_spotify_lists">آپ کی Spotify پلے لسٹس لائبریری میں، YouTube Music سے چلتی ہیں</string>
+    <string name="tour_181_spotify_plays">حالیہ پلے اور ٹاپ فنکار آپ کے مکسز اور ریڈیو کو شکل دیتے ہیں</string>
+    <string name="tour_181_spotify_likes">پسندیدہ گانے دونوں طرف، ہر ایک صرف ایک بار منتقل ہوتا ہے</string>
+    <string name="tour_181_replay">ہسٹری اور Replay</string>
+    <string name="tour_181_replay_body">چنیں کہ کیا رکھا جائے، اور گانا کب پلے شمار ہو۔</string>
+    <string name="tour_181_replay_pause">ہسٹری ایک گھنٹے، ایک دن یا دوبارہ آن کرنے تک روکیں</string>
+    <string name="tour_181_replay_counts">گانا فوراً شمار ہو، یا 5 سیکنڈ سے ایک منٹ تک کے بعد</string>
+    <string name="tour_181_replay_graphs">Replay ایک دن کو گھنٹوں کے حساب سے، ہفتے یا مہینے کو دنوں کے حساب سے گراف میں دکھاتا ہے</string>
+    <string name="tour_181_yours">آپ کے انداز میں</string>
+    <string name="tour_181_yours_body">Prism کو اپنا بنانے کے مزید طریقے۔</string>
+    <string name="tour_181_yours_cover">گانے یا البم کا کور اس کے مینو سے بدلیں</string>
+    <string name="tour_181_yours_explicit">نازیبا گانے دکھائیں، چھوڑیں یا چھپائیں</string>
+    <string name="tour_181_yours_white">لائٹ تھیم کے لیے سفید پلیئر</string>
+    <string name="tour_181_yours_fonts">آپ کے فون پر انسٹال کوئی بھی فونٹ</string>
+    <string name="tour_181_yours_artists">پلیئر پر ہر فنکار کا نام اس کا صفحہ کھول سکتا ہے</string>
+    <string name="tour_181_files">آپ کی اپنی MP3، AAC اور Ogg فائلیں اسٹریم کے بجائے چل سکتی ہیں</string>
+    <string name="tour_181_crossfade">کراس فیڈ کی شکل میں پروگریس بار</string>
+    <string name="tour_181_auto">آواز سے کوئی فنکار، البم یا پلے لسٹ مانگیں، Android Auto میں بھی</string>
+    <string name="tour_181_tv">ٹی وی پر گائیں اب موسیقی کو کبھی نہیں روکتا، اور جوڑنا آسان ہے</string>
 </resources>

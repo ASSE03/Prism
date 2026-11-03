@@ -4549,4 +4549,32 @@
         <item quantity="one">%d követett előadó</item>
         <item quantity="other">%d követett előadó</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (élő)</string>
+    <string name="tour_181_history">Hozd át az előzményeidet</string>
+    <string name="tour_181_history_body">A lejátszásaid a Spotify-ról, a YouTube Musicról vagy a Last.fm-ről, ezen a telefonon beolvasva.</string>
+    <string name="tour_181_history_spotify">Válaszd a Spotify adatletöltését: lejátszások, Kedvelt dalok, lejátszási listák és még sok más</string>
+    <string name="tour_181_history_others">Vagy a YouTube Music-előzményeidet a Google Takeoutból, vagy a Last.fm-scrobble-jaidat</string>
+    <string name="tour_181_history_replay">A Replay csak a Prism saját lejátszásait számolja, hacsak másként nem döntesz</string>
+    <string name="tour_181_spotify">Spotify, saját kulccsal</string>
+    <string name="tour_181_spotify_body">Nem kötelező: kapcsold össze a Spotifyt egy saját, ingyenes fejlesztői alkalmazással.</string>
+    <string name="tour_181_spotify_lists">Spotify-lejátszási listáid a Könyvtárban, a YouTube Musicról lejátszva</string>
+    <string name="tour_181_spotify_plays">A legutóbbi lejátszások és a kedvenc előadók alakítják a mixeidet és a rádiót</string>
+    <string name="tour_181_spotify_likes">Kedvelt dalok mindkét irányban, mindegyik csak egyszer kerül át</string>
+    <string name="tour_181_replay">Előzmények és Replay</string>
+    <string name="tour_181_replay_body">Válaszd ki, mi marad meg, és mikor számít lejátszottnak egy dal.</string>
+    <string name="tour_181_replay_pause">Szüneteltesd az előzményeket egy órára, egy napra vagy amíg vissza nem kapcsolod</string>
+    <string name="tour_181_replay_counts">Egy dal azonnal számít, vagy 5 másodperctől egy percig tartó lejátszás után</string>
+    <string name="tour_181_replay_graphs">A Replay egy napot óránként, egy hetet vagy hónapot naponként ábrázol</string>
+    <string name="tour_181_yours">Ahogy neked tetszik</string>
+    <string name="tour_181_yours_body">Még több a Prismből, amit a magadévá tehetsz.</string>
+    <string name="tour_181_yours_cover">Egy dal vagy album borítóját a menüjéből módosíthatod</string>
+    <string name="tour_181_yours_explicit">Szókimondó dalok megjelenítése, kihagyása vagy elrejtése</string>
+    <string name="tour_181_yours_white">Fehér lejátszó a világos témához</string>
+    <string name="tour_181_yours_fonts">Bármely, a telefonodra telepített betűtípus</string>
+    <string name="tour_181_yours_artists">A lejátszón minden előadó neve megnyithatja az előadó oldalát</string>
+    <string name="tour_181_files">A saját MP3, AAC és Ogg fájljaid szólhatnak a stream helyett</string>
+    <string name="tour_181_crossfade">Az áttűnés alakját követő folyamatjelző</string>
+    <string name="tour_181_auto">Kérj hanggal előadót, albumot vagy lejátszási listát, az Android Autóban is</string>
+    <string name="tour_181_tv">A tévén az Éneklés sosem tartja fel a zenét, és a párosítás is egyszerűbb</string>
 </resources>

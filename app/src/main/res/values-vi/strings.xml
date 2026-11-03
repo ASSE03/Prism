@@ -4489,4 +4489,32 @@
     <plurals name="imp_n_followed_artists">
         <item quantity="other">%d nghệ sĩ đã theo dõi</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (trực tiếp)</string>
+    <string name="tour_181_history">Mang lịch sử của bạn sang</string>
+    <string name="tour_181_history_body">Lượt nghe của bạn từ Spotify, YouTube Music hoặc Last.fm, đọc ngay trên điện thoại này.</string>
+    <string name="tour_181_history_spotify">Chọn bản tải dữ liệu của Spotify: lượt nghe, Bài hát đã thích, danh sách phát và hơn thế</string>
+    <string name="tour_181_history_others">Hoặc lịch sử YouTube Music từ Google Takeout, hay các lượt scrobble Last.fm của bạn</string>
+    <string name="tour_181_history_replay">Replay chỉ tính lượt nghe trong Prism, trừ khi bạn chọn khác</string>
+    <string name="tour_181_spotify">Spotify, với khóa của riêng bạn</string>
+    <string name="tour_181_spotify_body">Không bắt buộc: kết nối Spotify qua một ứng dụng nhà phát triển miễn phí của riêng bạn.</string>
+    <string name="tour_181_spotify_lists">Danh sách phát Spotify của bạn trong Thư viện, phát từ YouTube Music</string>
+    <string name="tour_181_spotify_plays">Lượt nghe gần đây và nghệ sĩ hàng đầu định hình mix và đài phát của bạn</string>
+    <string name="tour_181_spotify_likes">Bài hát đã thích hai chiều, mỗi bài chỉ chuyển sang một lần</string>
+    <string name="tour_181_replay">Lịch sử &amp; Replay</string>
+    <string name="tour_181_replay_body">Chọn những gì được giữ lại, và khi nào một bài được tính là đã nghe.</string>
+    <string name="tour_181_replay_pause">Tạm dừng lịch sử trong một giờ, một ngày hoặc đến khi bạn bật lại</string>
+    <string name="tour_181_replay_counts">Một bài được tính ngay, hoặc sau 5 giây đến một phút</string>
+    <string name="tour_181_replay_graphs">Replay vẽ biểu đồ một ngày theo giờ, một tuần hoặc một tháng theo ngày</string>
+    <string name="tour_181_yours">Theo cách của bạn</string>
+    <string name="tour_181_yours_body">Thêm nhiều phần của Prism để bạn biến thành của riêng mình.</string>
+    <string name="tour_181_yours_cover">Đổi ảnh bìa của bài hát hoặc album từ menu của nó</string>
+    <string name="tour_181_yours_explicit">Hiện, bỏ qua hoặc ẩn bài hát có nội dung tục tĩu</string>
+    <string name="tour_181_yours_white">Trình phát màu trắng cho giao diện sáng</string>
+    <string name="tour_181_yours_fonts">Bất kỳ phông chữ nào đã cài trên điện thoại</string>
+    <string name="tour_181_yours_artists">Tên từng nghệ sĩ trên trình phát có thể mở trang của họ</string>
+    <string name="tour_181_files">Tệp MP3, AAC và Ogg của riêng bạn có thể phát thay cho luồng phát</string>
+    <string name="tour_181_crossfade">Thanh tiến trình theo hình chuyển tiếp mượt</string>
+    <string name="tour_181_auto">Yêu cầu nghệ sĩ, album hoặc danh sách phát bằng giọng nói, cả trong Android Auto</string>
+    <string name="tour_181_tv">Trên TV, Hát cùng không bao giờ làm nhạc phải chờ, và ghép nối dễ hơn</string>
 </resources>

@@ -4489,4 +4489,32 @@
     <plurals name="imp_n_followed_artists">
         <item quantity="other">%d artis yang diikuti</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (live)</string>
+    <string name="tour_181_history">Bawa riwayatmu</string>
+    <string name="tour_181_history_body">Putaranmu dari Spotify, YouTube Music, atau Last.fm, dibaca di ponsel ini.</string>
+    <string name="tour_181_history_spotify">Pilih unduhan data Spotify: putaran, Lagu yang Disukai, playlist, dan lainnya</string>
+    <string name="tour_181_history_others">Atau riwayat YouTube Music dari Google Takeout, atau scrobble Last.fm-mu</string>
+    <string name="tour_181_history_replay">Replay hanya menghitung putaran Prism sendiri, kecuali kamu memilih lain</string>
+    <string name="tour_181_spotify">Spotify, dengan kuncimu sendiri</string>
+    <string name="tour_181_spotify_body">Opsional: hubungkan Spotify lewat aplikasi developer gratis milikmu sendiri.</string>
+    <string name="tour_181_spotify_lists">Playlist Spotify kamu di Koleksi, diputar dari YouTube Music</string>
+    <string name="tour_181_spotify_plays">Putaran terbaru dan artis teratas membentuk mix dan radiomu</string>
+    <string name="tour_181_spotify_likes">Lagu yang Disukai dua arah, masing-masing dibawa sekali saja</string>
+    <string name="tour_181_replay">Riwayat &amp; Replay</string>
+    <string name="tour_181_replay_body">Pilih apa yang disimpan, dan kapan lagu dihitung sudah diputar.</string>
+    <string name="tour_181_replay_pause">Jeda riwayat selama satu jam, satu hari, atau sampai kamu menyalakannya lagi</string>
+    <string name="tour_181_replay_counts">Lagu langsung dihitung, atau setelah 5 detik hingga satu menit</string>
+    <string name="tour_181_replay_graphs">Replay menampilkan grafik sehari per jam, seminggu atau sebulan per hari</string>
+    <string name="tour_181_yours">Sesuai keinginanmu</string>
+    <string name="tour_181_yours_body">Lebih banyak bagian Prism yang bisa kamu sesuaikan.</string>
+    <string name="tour_181_yours_cover">Ganti sampul lagu atau album dari menunya</string>
+    <string name="tour_181_yours_explicit">Tampilkan, lewati, atau sembunyikan lagu eksplisit</string>
+    <string name="tour_181_yours_white">Pemutar putih untuk tema terang</string>
+    <string name="tour_181_yours_fonts">Font apa pun yang terinstal di ponselmu</string>
+    <string name="tour_181_yours_artists">Nama setiap artis di pemutar bisa membuka halamannya</string>
+    <string name="tour_181_files">File MP3, AAC, dan Ogg milikmu bisa diputar sebagai ganti stream</string>
+    <string name="tour_181_crossfade">Bilah progres berbentuk crossfade</string>
+    <string name="tour_181_auto">Minta artis, album, atau playlist dengan suara, juga di Android Auto</string>
+    <string name="tour_181_tv">Di TV, Nyanyi tidak pernah menahan musik, dan menyambungkan jadi lebih mudah</string>
 </resources>

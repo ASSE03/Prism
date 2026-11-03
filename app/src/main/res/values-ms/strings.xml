@@ -4489,4 +4489,32 @@
     <plurals name="imp_n_followed_artists">
         <item quantity="other">%d artis yang diikuti</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (live)</string>
+    <string name="tour_181_history">Bawa sejarah anda</string>
+    <string name="tour_181_history_body">Main balik anda daripada Spotify, YouTube Music atau Last.fm, dibaca pada telefon ini.</string>
+    <string name="tour_181_history_spotify">Pilih muat turun data Spotify: main balik, Lagu yang disukai, senarai main dan banyak lagi</string>
+    <string name="tour_181_history_others">Atau sejarah YouTube Music daripada Google Takeout, atau scrobble Last.fm anda</string>
+    <string name="tour_181_history_replay">Replay hanya mengira main balik dalam Prism sendiri, melainkan anda memilih</string>
+    <string name="tour_181_spotify">Spotify, dengan kunci anda sendiri</string>
+    <string name="tour_181_spotify_body">Pilihan: sambungkan Spotify melalui aplikasi pembangun percuma milik anda sendiri.</string>
+    <string name="tour_181_spotify_lists">Senarai main Spotify anda dalam Pustaka, dimainkan daripada YouTube Music</string>
+    <string name="tour_181_spotify_plays">Main balik terkini dan artis teratas membentuk campuran dan radio anda</string>
+    <string name="tour_181_spotify_likes">Lagu yang disukai di kedua-dua belah, setiap satu dibawa sekali sahaja</string>
+    <string name="tour_181_replay">Sejarah &amp; Replay</string>
+    <string name="tour_181_replay_body">Pilih apa yang disimpan, dan bila lagu dikira sebagai dimainkan.</string>
+    <string name="tour_181_replay_pause">Jeda sejarah selama sejam, sehari atau sehingga anda menghidupkannya semula</string>
+    <string name="tour_181_replay_counts">Lagu dikira serta-merta, atau selepas 5 saat hingga seminit</string>
+    <string name="tour_181_replay_graphs">Replay memaparkan graf sehari mengikut jam, seminggu atau sebulan mengikut hari</string>
+    <string name="tour_181_yours">Ikut cara anda</string>
+    <string name="tour_181_yours_body">Lebih banyak bahagian Prism untuk dijadikan milik anda.</string>
+    <string name="tour_181_yours_cover">Tukar kulit lagu atau album daripada menunya</string>
+    <string name="tour_181_yours_explicit">Tunjukkan, langkau atau sembunyikan lagu eksplisit</string>
+    <string name="tour_181_yours_white">Pemain putih untuk tema cerah</string>
+    <string name="tour_181_yours_fonts">Mana-mana fon yang dipasang pada telefon anda</string>
+    <string name="tour_181_yours_artists">Nama setiap artis pada pemain boleh membuka halamannya</string>
+    <string name="tour_181_files">Fail MP3, AAC dan Ogg anda sendiri boleh dimainkan dan bukannya strim</string>
+    <string name="tour_181_crossfade">Bar kemajuan dalam bentuk pudar silang</string>
+    <string name="tour_181_auto">Minta artis, album atau senarai main dengan suara, dalam Android Auto juga</string>
+    <string name="tour_181_tv">Di TV, Nyanyi tidak pernah menahan muzik, dan gandingan lebih mudah</string>
 </resources>

@@ -4489,4 +4489,32 @@
     <plurals name="imp_n_followed_artists">
         <item quantity="other">팔로우한 아티스트 %d명</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (live)</string>
+    <string name="tour_181_history">내 기록 가져오기</string>
+    <string name="tour_181_history_body">Spotify, YouTube Music, Last.fm의 재생 기록을 이 휴대전화에서 읽어요.</string>
+    <string name="tour_181_history_spotify">Spotify 데이터 다운로드를 고르세요: 재생 기록, 좋아요 표시한 곡, 재생목록 등</string>
+    <string name="tour_181_history_others">또는 Google Takeout의 YouTube Music 기록이나 내 Last.fm 스크로블</string>
+    <string name="tour_181_history_replay">따로 고르지 않으면 Replay는 Prism에서 재생한 곡만 세요</string>
+    <string name="tour_181_spotify">내 키로 쓰는 Spotify</string>
+    <string name="tour_181_spotify_body">선택 사항: 무료로 만드는 내 개발자 앱으로 Spotify를 연결하세요.</string>
+    <string name="tour_181_spotify_lists">보관함에 내 Spotify 재생목록, YouTube Music으로 재생해요</string>
+    <string name="tour_181_spotify_plays">최근 재생과 인기 아티스트가 믹스와 라디오에 반영돼요</string>
+    <string name="tour_181_spotify_likes">좋아요 표시한 곡을 양쪽으로, 곡마다 한 번만 옮겨요</string>
+    <string name="tour_181_replay">기록 및 Replay</string>
+    <string name="tour_181_replay_body">무엇을 남길지, 곡을 언제 재생으로 셀지 고르세요.</string>
+    <string name="tour_181_replay_pause">기록을 1시간, 1일 또는 다시 켤 때까지 일시중지</string>
+    <string name="tour_181_replay_counts">곡을 바로, 또는 5초에서 1분 사이에 재생으로 세요</string>
+    <string name="tour_181_replay_graphs">Replay 그래프: 하루는 시간별로, 일주일이나 한 달은 일별로</string>
+    <string name="tour_181_yours">내 취향대로</string>
+    <string name="tour_181_yours_body">Prism을 더 내 것으로 만들어 보세요.</string>
+    <string name="tour_181_yours_cover">곡이나 앨범의 커버를 메뉴에서 변경</string>
+    <string name="tour_181_yours_explicit">청소년 유해 곡 표시, 건너뛰기 또는 숨기기</string>
+    <string name="tour_181_yours_white">밝은 테마에 어울리는 흰색 플레이어</string>
+    <string name="tour_181_yours_fonts">휴대전화에 설치된 모든 글꼴</string>
+    <string name="tour_181_yours_artists">플레이어의 아티스트 이름마다 해당 페이지를 열 수 있어요</string>
+    <string name="tour_181_files">내 MP3, AAC, Ogg 파일을 스트림 대신 재생할 수 있어요</string>
+    <string name="tour_181_crossfade">크로스페이드 모양의 진행 표시줄</string>
+    <string name="tour_181_auto">음성으로 아티스트, 앨범, 재생목록을 요청하세요. Android Auto에서도요</string>
+    <string name="tour_181_tv">TV에서 따라 부르기가 음악을 멈추지 않고, 페어링도 더 쉬워요</string>
 </resources>

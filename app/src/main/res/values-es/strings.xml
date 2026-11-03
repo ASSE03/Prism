@@ -4609,4 +4609,32 @@
         <item quantity="many">%d artistas seguidos</item>
         <item quantity="other">%d artistas seguidos</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (en vivo)</string>
+    <string name="tour_181_history">Trae tu historial</string>
+    <string name="tour_181_history_body">Tus reproducciones de Spotify, YouTube Music o Last.fm, leídas en este teléfono.</string>
+    <string name="tour_181_history_spotify">Elige la descarga de datos de Spotify: reproducciones, Canciones que te gustan, playlists y más</string>
+    <string name="tour_181_history_others">O tu historial de YouTube Music de Google Takeout, o tus scrobbles de Last.fm</string>
+    <string name="tour_181_history_replay">Replay solo cuenta las reproducciones de Prism, salvo que elijas otra cosa</string>
+    <string name="tour_181_spotify">Spotify, con tu propia clave</string>
+    <string name="tour_181_spotify_body">Opcional: conecta Spotify con una app de desarrollador propia y gratuita.</string>
+    <string name="tour_181_spotify_lists">Tus playlists de Spotify en Biblioteca, reproducidas desde YouTube Music</string>
+    <string name="tour_181_spotify_plays">Tus reproducciones recientes y artistas top guían tus mixes y la radio</string>
+    <string name="tour_181_spotify_likes">Canciones que te gustan en ambos sentidos, cada una pasada una sola vez</string>
+    <string name="tour_181_replay">Historial y Replay</string>
+    <string name="tour_181_replay_body">Elige qué se guarda y cuándo una canción cuenta como reproducida.</string>
+    <string name="tour_181_replay_pause">Pausa el historial una hora, un día o hasta que lo vuelvas a activar</string>
+    <string name="tour_181_replay_counts">Una canción cuenta al instante, o tras 5 segundos hasta un minuto</string>
+    <string name="tour_181_replay_graphs">Replay muestra un día por horas, y una semana o un mes por días</string>
+    <string name="tour_181_yours">A tu manera</string>
+    <string name="tour_181_yours_body">Más de Prism para hacerlo tuyo.</string>
+    <string name="tour_181_yours_cover">Cambia la portada de una canción o un álbum desde su menú</string>
+    <string name="tour_181_yours_explicit">Muestra, salta u oculta las canciones explícitas</string>
+    <string name="tour_181_yours_white">Un reproductor blanco para el tema claro</string>
+    <string name="tour_181_yours_fonts">Cualquier fuente instalada en tu teléfono</string>
+    <string name="tour_181_yours_artists">El nombre de cada artista en el reproductor puede abrir su página</string>
+    <string name="tour_181_files">Tus propios archivos MP3, AAC y Ogg pueden sonar en lugar de la transmisión</string>
+    <string name="tour_181_crossfade">Una barra de progreso con la forma del fundido</string>
+    <string name="tour_181_auto">Pide un artista, un álbum o una playlist con la voz, también en Android Auto</string>
+    <string name="tour_181_tv">En la TV, Cantar nunca detiene la música, y vincular es más fácil</string>
 </resources>

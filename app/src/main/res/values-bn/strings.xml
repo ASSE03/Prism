@@ -4549,4 +4549,32 @@
         <item quantity="one">%d জন ফলো করা শিল্পী</item>
         <item quantity="other">%d জন ফলো করা শিল্পী</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (লাইভ)</string>
+    <string name="tour_181_history">আপনার ইতিহাস নিয়ে আসুন</string>
+    <string name="tour_181_history_body">Spotify, YouTube Music বা Last.fm থেকে আপনার প্লে, এই ফোনেই পড়া হয়।</string>
+    <string name="tour_181_history_spotify">Spotify-এর ডেটা ডাউনলোড বাছুন: প্লে, পছন্দের গান, প্লেলিস্ট আর আরও অনেক কিছু</string>
+    <string name="tour_181_history_others">অথবা Google Takeout-এর YouTube Music ইতিহাস, বা আপনার Last.fm স্ক্রবল</string>
+    <string name="tour_181_history_replay">আপনি না বাছলে Replay শুধু Prism-এর নিজের প্লে গণনা করে</string>
+    <string name="tour_181_spotify">Spotify, আপনার নিজের কী দিয়ে</string>
+    <string name="tour_181_spotify_body">ঐচ্ছিক: আপনার নিজের একটি বিনামূল্যের ডেভেলপার অ্যাপ দিয়ে Spotify কানেক্ট করুন।</string>
+    <string name="tour_181_spotify_lists">লাইব্রেরিতে আপনার Spotify প্লেলিস্ট, বাজে YouTube Music থেকে</string>
+    <string name="tour_181_spotify_plays">সাম্প্রতিক প্লে আর শীর্ষ শিল্পীরা আপনার মিক্স আর রেডিও গড়ে তোলে</string>
+    <string name="tour_181_spotify_likes">পছন্দের গান দুই দিকেই, প্রতিটি একবারই আনা হয়</string>
+    <string name="tour_181_replay">ইতিহাস ও Replay</string>
+    <string name="tour_181_replay_body">কী রাখা হবে আর কখন একটি গান প্লে হিসেবে গণ্য হবে, বেছে নিন।</string>
+    <string name="tour_181_replay_pause">এক ঘণ্টা, এক দিন বা আবার চালু না করা পর্যন্ত ইতিহাস বিরতি দিন</string>
+    <string name="tour_181_replay_counts">একটি গান সঙ্গে সঙ্গে গণ্য হয়, অথবা 5 সেকেন্ড থেকে এক মিনিট পরে</string>
+    <string name="tour_181_replay_graphs">Replay একটি দিনকে ঘণ্টা ধরে, একটি সপ্তাহ বা মাসকে দিন ধরে গ্রাফে দেখায়</string>
+    <string name="tour_181_yours">আপনার মতো করে</string>
+    <string name="tour_181_yours_body">Prism-কে নিজের মতো করে তোলার আরও উপায়।</string>
+    <string name="tour_181_yours_cover">কোনো গান বা অ্যালবামের কভার তার মেনু থেকে বদলান</string>
+    <string name="tour_181_yours_explicit">অশালীন গান দেখান, এড়িয়ে যান বা লুকান</string>
+    <string name="tour_181_yours_white">লাইট থিমের জন্য সাদা প্লেয়ার</string>
+    <string name="tour_181_yours_fonts">আপনার ফোনে ইনস্টল করা যেকোনো ফন্ট</string>
+    <string name="tour_181_yours_artists">প্লেয়ারে প্রতিটি শিল্পীর নাম তার পেজ খুলতে পারে</string>
+    <string name="tour_181_files">আপনার নিজের MP3, AAC আর Ogg ফাইল স্ট্রিমের বদলে বাজতে পারে</string>
+    <string name="tour_181_crossfade">ক্রসফেডের আকারে একটি অগ্রগতি বার</string>
+    <string name="tour_181_auto">কণ্ঠে কোনো শিল্পী, অ্যালবাম বা প্লেলিস্ট চান, Android Auto-তেও</string>
+    <string name="tour_181_tv">টিভিতে ‘গলা মেলান’ কখনও গান আটকে রাখে না, আর পেয়ার করা আরও সহজ</string>
 </resources>

@@ -4549,4 +4549,32 @@
         <item quantity="one">%d takip edilen sanatçı</item>
         <item quantity="other">%d takip edilen sanatçı</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (canlı)</string>
+    <string name="tour_181_history">Geçmişini getir</string>
+    <string name="tour_181_history_body">Spotify, YouTube Music veya Last.fm\'deki dinlemelerin, bu telefonda okunur.</string>
+    <string name="tour_181_history_spotify">Spotify\'ın veri indirmesini seç: dinlemeler, Beğenilen Şarkılar, çalma listeleri ve daha fazlası</string>
+    <string name="tour_181_history_others">Ya da Google Takeout\'tan YouTube Music geçmişin veya Last.fm scrobble\'ların</string>
+    <string name="tour_181_history_replay">Sen seçmedikçe Replay yalnızca Prism\'deki dinlemeleri sayar</string>
+    <string name="tour_181_spotify">Kendi anahtarınla Spotify</string>
+    <string name="tour_181_spotify_body">İsteğe bağlı: Spotify\'ı kendine ait ücretsiz bir geliştirici uygulamasıyla bağla.</string>
+    <string name="tour_181_spotify_lists">Spotify çalma listelerin Kitaplık\'ta, YouTube Music\'ten çalınır</string>
+    <string name="tour_181_spotify_plays">Son dinlemeler ve en sevdiğin sanatçılar mix\'lerini ve radyonu şekillendirir</string>
+    <string name="tour_181_spotify_likes">İki yönlü Beğenilen Şarkılar, her biri yalnızca bir kez aktarılır</string>
+    <string name="tour_181_replay">Geçmiş ve Replay</string>
+    <string name="tour_181_replay_body">Neyin tutulacağını ve bir şarkının ne zaman dinlenmiş sayılacağını seç.</string>
+    <string name="tour_181_replay_pause">Geçmişi bir saatliğine, bir günlüğüne ya da yeniden açana kadar duraklat</string>
+    <string name="tour_181_replay_counts">Bir şarkı hemen ya da 5 saniyeden bir dakikaya kadar bir süre sonra sayılır</string>
+    <string name="tour_181_replay_graphs">Replay bir günü saatlerine, bir haftayı veya ayı günlerine göre grafikle gösterir</string>
+    <string name="tour_181_yours">Senin tarzında</string>
+    <string name="tour_181_yours_body">Prism\'i kendine göre yapmanın daha fazla yolu.</string>
+    <string name="tour_181_yours_cover">Bir şarkının veya albümün kapağını menüsünden değiştir</string>
+    <string name="tour_181_yours_explicit">Müstehcen şarkıları göster, atla veya gizle</string>
+    <string name="tour_181_yours_white">Açık tema için beyaz bir oynatıcı</string>
+    <string name="tour_181_yours_fonts">Telefonunda yüklü herhangi bir yazı tipi</string>
+    <string name="tour_181_yours_artists">Oynatıcıdaki her sanatçı adı o sanatçının sayfasını açabilir</string>
+    <string name="tour_181_files">Kendi MP3, AAC ve Ogg dosyaların akış yerine çalabilir</string>
+    <string name="tour_181_crossfade">Çapraz geçişin şeklinde bir ilerleme çubuğu</string>
+    <string name="tour_181_auto">Bir sanatçıyı, albümü veya çalma listesini sesle iste, Android Auto\'da da</string>
+    <string name="tour_181_tv">TV\'de Söyle müziği hiç bekletmez ve eşleme daha kolay</string>
 </resources>

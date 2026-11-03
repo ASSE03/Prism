@@ -4489,4 +4489,32 @@
     <plurals name="imp_n_followed_artists">
         <item quantity="other">ศิลปินที่ติดตาม %d คน</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (สด)</string>
+    <string name="tour_181_history">นำประวัติของคุณมา</string>
+    <string name="tour_181_history_body">การเล่นของคุณจาก Spotify, YouTube Music หรือ Last.fm อ่านในโทรศัพท์เครื่องนี้</string>
+    <string name="tour_181_history_spotify">เลือกข้อมูลที่ดาวน์โหลดจาก Spotify: การเล่น เพลงที่ชอบ เพลย์ลิสต์ และอื่น ๆ</string>
+    <string name="tour_181_history_others">หรือประวัติ YouTube Music จาก Google Takeout หรือการสครอบเบิล Last.fm ของคุณ</string>
+    <string name="tour_181_history_replay">Replay นับเฉพาะการเล่นใน Prism เว้นแต่คุณจะเลือกเอง</string>
+    <string name="tour_181_spotify">Spotify ด้วยคีย์ของคุณเอง</string>
+    <string name="tour_181_spotify_body">ไม่บังคับ: เชื่อมต่อ Spotify ผ่านแอปนักพัฒนาฟรีของคุณเอง</string>
+    <string name="tour_181_spotify_lists">เพลย์ลิสต์ Spotify ของคุณในคลังเพลง เล่นจาก YouTube Music</string>
+    <string name="tour_181_spotify_plays">การเล่นล่าสุดและศิลปินยอดนิยมช่วยกำหนดมิกซ์และวิทยุของคุณ</string>
+    <string name="tour_181_spotify_likes">เพลงที่ชอบทั้งสองทาง แต่ละเพลงย้ายข้ามไปเพียงครั้งเดียว</string>
+    <string name="tour_181_replay">ประวัติและ Replay</string>
+    <string name="tour_181_replay_body">เลือกว่าจะเก็บอะไรไว้ และเมื่อใดเพลงจะนับว่าเล่นแล้ว</string>
+    <string name="tour_181_replay_pause">หยุดประวัติชั่วคราว 1 ชั่วโมง 1 วัน หรือจนกว่าคุณจะเปิดอีกครั้ง</string>
+    <string name="tour_181_replay_counts">นับเพลงทันที หรือหลังจาก 5 วินาทีไปจนถึง 1 นาที</string>
+    <string name="tour_181_replay_graphs">Replay แสดงกราฟรายวันตามชั่วโมง และรายสัปดาห์หรือรายเดือนตามวัน</string>
+    <string name="tour_181_yours">ในแบบของคุณ</string>
+    <string name="tour_181_yours_body">Prism ที่ปรับให้เป็นของคุณได้มากขึ้น</string>
+    <string name="tour_181_yours_cover">เปลี่ยนปกของเพลงหรืออัลบั้มได้จากเมนู</string>
+    <string name="tour_181_yours_explicit">แสดง ข้าม หรือซ่อนเพลงที่มีเนื้อหาโจ่งแจ้ง</string>
+    <string name="tour_181_yours_white">เพลเยอร์สีขาวสำหรับธีมสว่าง</string>
+    <string name="tour_181_yours_fonts">ฟอนต์ใดก็ได้ที่ติดตั้งในโทรศัพท์</string>
+    <string name="tour_181_yours_artists">ชื่อศิลปินแต่ละคนบนเพลเยอร์เปิดหน้าของศิลปินได้</string>
+    <string name="tour_181_files">ไฟล์ MP3, AAC และ Ogg ของคุณเองเล่นแทนการสตรีมได้</string>
+    <string name="tour_181_crossfade">แถบความคืบหน้าเป็นรูปตามครอสเฟด</string>
+    <string name="tour_181_auto">ขอศิลปิน อัลบั้ม หรือเพลย์ลิสต์ด้วยเสียง ใน Android Auto ก็ได้</string>
+    <string name="tour_181_tv">บนทีวี ร้องตามไม่ทำให้เพลงสะดุดอีกต่อไป และจับคู่ได้ง่ายขึ้น</string>
 </resources>

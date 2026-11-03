@@ -4489,4 +4489,32 @@
     <plurals name="imp_n_followed_artists">
         <item quantity="other">%d 位关注的艺人</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify（实时）</string>
+    <string name="tour_181_history">导入你的听歌记录</string>
+    <string name="tour_181_history_body">你在 Spotify、YouTube Music 或 Last.fm 的播放，在这部手机上读取。</string>
+    <string name="tour_181_history_spotify">选择 Spotify 的数据下载：播放记录、已点赞的歌曲、播放列表等</string>
+    <string name="tour_181_history_others">或 Google Takeout 中的 YouTube Music 记录，或你的 Last.fm 播放记录</string>
+    <string name="tour_181_history_replay">除非你另行选择，Replay 只计入 Prism 自己的播放</string>
+    <string name="tour_181_spotify">Spotify，用你自己的密钥</string>
+    <string name="tour_181_spotify_body">可选：通过你自己的免费开发者应用连接 Spotify。</string>
+    <string name="tour_181_spotify_lists">你的 Spotify 播放列表在音乐库中，通过 YouTube Music 播放</string>
+    <string name="tour_181_spotify_plays">最近播放和热门艺人会影响你的合辑和电台</string>
+    <string name="tour_181_spotify_likes">双向同步已点赞的歌曲，每首只同步一次</string>
+    <string name="tour_181_replay">历史记录和 Replay</string>
+    <string name="tour_181_replay_body">选择保留哪些内容，以及歌曲何时算作播放过。</string>
+    <string name="tour_181_replay_pause">暂停历史记录 1 小时、1 天，或直到你重新开启</string>
+    <string name="tour_181_replay_counts">歌曲可立即计入，或在 5 秒到 1 分钟之后计入</string>
+    <string name="tour_181_replay_graphs">Replay 按小时绘制一天的图表，按天绘制一周或一个月的图表</string>
+    <string name="tour_181_yours">按你的方式</string>
+    <string name="tour_181_yours_body">更多可以按你心意定制的 Prism。</string>
+    <string name="tour_181_yours_cover">从菜单更换歌曲或专辑的封面</string>
+    <string name="tour_181_yours_explicit">显示、跳过或隐藏含露骨内容的歌曲</string>
+    <string name="tour_181_yours_white">适合浅色主题的白色播放器</string>
+    <string name="tour_181_yours_fonts">手机上已安装的任何字体</string>
+    <string name="tour_181_yours_artists">点按播放器上的每位艺人名字都可打开其页面</string>
+    <string name="tour_181_files">你自己的 MP3、AAC 和 Ogg 文件可代替在线串流播放</string>
+    <string name="tour_181_crossfade">呈交叉淡入淡出形状的进度条</string>
+    <string name="tour_181_auto">用语音点播艺人、专辑或播放列表，在 Android Auto 中也可以</string>
+    <string name="tour_181_tv">在电视上，跟唱再也不会让音乐卡住，配对也更简单</string>
 </resources>

@@ -4549,4 +4549,32 @@
         <item quantity="one">%d फ़ॉलो किया गया कलाकार</item>
         <item quantity="other">%d फ़ॉलो किए गए कलाकार</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (लाइव)</string>
+    <string name="tour_181_history">अपना इतिहास लाएं</string>
+    <string name="tour_181_history_body">Spotify, YouTube Music या Last.fm से आपके प्ले, इसी फ़ोन पर पढ़े जाते हैं।</string>
+    <string name="tour_181_history_spotify">Spotify का डेटा डाउनलोड चुनें: प्ले, पसंद किए गए गाने, प्लेलिस्ट और भी बहुत कुछ</string>
+    <string name="tour_181_history_others">या Google Takeout से YouTube Music का इतिहास, या आपके Last.fm स्क्रॉबल</string>
+    <string name="tour_181_history_replay">जब तक आप न चुनें, Replay सिर्फ़ Prism के अपने प्ले गिनता है</string>
+    <string name="tour_181_spotify">Spotify, आपकी अपनी कुंजी से</string>
+    <string name="tour_181_spotify_body">वैकल्पिक: अपने खुद के मुफ़्त डेवलपर ऐप से Spotify कनेक्ट करें।</string>
+    <string name="tour_181_spotify_lists">लाइब्रेरी में आपकी Spotify प्लेलिस्ट, YouTube Music से चलती हैं</string>
+    <string name="tour_181_spotify_plays">हाल के प्ले और टॉप कलाकार आपके मिक्स और रेडियो को आकार देते हैं</string>
+    <string name="tour_181_spotify_likes">पसंद किए गए गाने, दोनों तरफ़, हर एक सिर्फ़ एक बार ले जाया जाता है</string>
+    <string name="tour_181_replay">इतिहास और Replay</string>
+    <string name="tour_181_replay_body">चुनें कि क्या रखा जाए, और गाना कब प्ले गिना जाए।</string>
+    <string name="tour_181_replay_pause">इतिहास को एक घंटे, एक दिन या फिर से चालू करने तक रोकें</string>
+    <string name="tour_181_replay_counts">गाना तुरंत गिना जाता है, या 5 सेकंड से एक मिनट तक के बाद</string>
+    <string name="tour_181_replay_graphs">Replay किसी दिन को घंटों के हिसाब से, हफ़्ते या महीने को दिनों के हिसाब से ग्राफ़ में दिखाता है</string>
+    <string name="tour_181_yours">आपके अंदाज़ में</string>
+    <string name="tour_181_yours_body">Prism को अपना बनाने के और तरीके।</string>
+    <string name="tour_181_yours_cover">किसी गाने या एल्बम का कवर उसके मेन्यू से बदलें</string>
+    <string name="tour_181_yours_explicit">अश्लील गाने दिखाएं, छोड़ें या छिपाएं</string>
+    <string name="tour_181_yours_white">लाइट थीम के लिए सफ़ेद प्लेयर</string>
+    <string name="tour_181_yours_fonts">आपके फ़ोन में इंस्टॉल कोई भी फ़ॉन्ट</string>
+    <string name="tour_181_yours_artists">प्लेयर पर हर कलाकार का नाम उसका पेज खोल सकता है</string>
+    <string name="tour_181_files">आपकी अपनी MP3, AAC और Ogg फ़ाइलें स्ट्रीम के बजाय चल सकती हैं</string>
+    <string name="tour_181_crossfade">क्रॉसफ़ेड के आकार में प्रोग्रेस बार</string>
+    <string name="tour_181_auto">आवाज़ से कोई कलाकार, एल्बम या प्लेलिस्ट मांगें, Android Auto में भी</string>
+    <string name="tour_181_tv">टीवी पर ‘साथ गाएं’ कभी संगीत को नहीं रोकता, और पेयर करना अब आसान है</string>
 </resources>

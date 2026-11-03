@@ -4489,4 +4489,32 @@
     <plurals name="imp_n_followed_artists">
         <item quantity="other">フォロー中のアーティスト %d 組</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (ライブ)</string>
+    <string name="tour_181_history">履歴を持ってくる</string>
+    <string name="tour_181_history_body">Spotify、YouTube Music、Last.fm での再生を、このスマホで読み込みます。</string>
+    <string name="tour_181_history_spotify">Spotify のデータ ダウンロードを選択：再生、お気に入りの曲、プレイリストなど</string>
+    <string name="tour_181_history_others">または Google Takeout の YouTube Music 履歴や、Last.fm のスクロブル</string>
+    <string name="tour_181_history_replay">選ばない限り、Replay は Prism での再生だけをカウント</string>
+    <string name="tour_181_spotify">自分のキーで Spotify</string>
+    <string name="tour_181_spotify_body">オプション：自分の無料の開発者アプリで Spotify を接続できます。</string>
+    <string name="tour_181_spotify_lists">Spotify のプレイリストをライブラリに。再生は YouTube Music から</string>
+    <string name="tour_181_spotify_plays">最近の再生とトップアーティストをミックスとラジオに反映</string>
+    <string name="tour_181_spotify_likes">お気に入りの曲を双方向に。各曲は一度だけ反映</string>
+    <string name="tour_181_replay">履歴と Replay</string>
+    <string name="tour_181_replay_body">何を残すか、いつ再生としてカウントするかを選べます。</string>
+    <string name="tour_181_replay_pause">履歴を 1 時間、1 日、または再びオンにするまで一時停止</string>
+    <string name="tour_181_replay_counts">すぐにカウント、または 5 秒〜1 分の再生後にカウント</string>
+    <string name="tour_181_replay_graphs">Replay は 1 日を時間ごと、1 週間や 1 か月を日ごとにグラフ表示</string>
+    <string name="tour_181_yours">自分好みに</string>
+    <string name="tour_181_yours_body">Prism をもっと自分らしく。</string>
+    <string name="tour_181_yours_cover">曲やアルバムのジャケットをメニューから変更</string>
+    <string name="tour_181_yours_explicit">不適切な表現を含む曲を表示、スキップ、非表示に</string>
+    <string name="tour_181_yours_white">ライトテーマ用のホワイトプレーヤー</string>
+    <string name="tour_181_yours_fonts">スマホにインストールされた好きなフォント</string>
+    <string name="tour_181_yours_artists">プレーヤーのアーティスト名から、それぞれのページを開ける</string>
+    <string name="tour_181_files">自分の MP3、AAC、Ogg ファイルをストリームの代わりに再生</string>
+    <string name="tour_181_crossfade">クロスフェードの形をしたプログレスバー</string>
+    <string name="tour_181_auto">音声でアーティスト、アルバム、プレイリストをリクエスト。Android Auto でも</string>
+    <string name="tour_181_tv">テレビでは、シングで音楽が止まることはなく、ペア設定も簡単に</string>
 </resources>

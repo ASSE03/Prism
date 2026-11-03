@@ -4549,4 +4549,32 @@
         <item quantity="one">%d καλλιτέχνης που ακολουθείς</item>
         <item quantity="other">%d καλλιτέχνες που ακολουθείς</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (ζωντανά)</string>
+    <string name="tour_181_history">Φέρε το ιστορικό σου</string>
+    <string name="tour_181_history_body">Οι αναπαραγωγές σου από Spotify, YouTube Music ή Last.fm, με ανάγνωση σε αυτό το τηλέφωνο.</string>
+    <string name="tour_181_history_spotify">Διάλεξε τη λήψη δεδομένων του Spotify: αναπαραγωγές, Αγαπημένα τραγούδια, playlist και άλλα</string>
+    <string name="tour_181_history_others">Ή το ιστορικό του YouTube Music από το Google Takeout, ή τα scrobbles σου στο Last.fm</string>
+    <string name="tour_181_history_replay">Το Replay μετρά μόνο τις αναπαραγωγές του Prism, εκτός αν επιλέξεις αλλιώς</string>
+    <string name="tour_181_spotify">Spotify, με το δικό σου κλειδί</string>
+    <string name="tour_181_spotify_body">Προαιρετικό: σύνδεσε το Spotify μέσω μιας δικής σου δωρεάν εφαρμογής προγραμματιστή.</string>
+    <string name="tour_181_spotify_lists">Τα playlist σου στο Spotify στη Βιβλιοθήκη, με αναπαραγωγή από το YouTube Music</string>
+    <string name="tour_181_spotify_plays">Οι πρόσφατες αναπαραγωγές και οι κορυφαίοι καλλιτέχνες διαμορφώνουν τις μίξεις και το ραδιόφωνό σου</string>
+    <string name="tour_181_spotify_likes">Αγαπημένα τραγούδια και προς τις δύο πλευρές, το καθένα μεταφέρεται μία φορά</string>
+    <string name="tour_181_replay">Ιστορικό &amp; Replay</string>
+    <string name="tour_181_replay_body">Διάλεξε τι κρατιέται και πότε ένα τραγούδι μετράει ως αναπαραγωγή.</string>
+    <string name="tour_181_replay_pause">Παύση ιστορικού για μία ώρα, μία ημέρα ή μέχρι να το ενεργοποιήσεις ξανά</string>
+    <string name="tour_181_replay_counts">Ένα τραγούδι μετράει αμέσως ή μετά από 5 δευτερόλεπτα έως ένα λεπτό</string>
+    <string name="tour_181_replay_graphs">Το Replay δείχνει μια ημέρα ανά ώρα, μια εβδομάδα ή έναν μήνα ανά ημέρα</string>
+    <string name="tour_181_yours">Όπως το θέλεις</string>
+    <string name="tour_181_yours_body">Κι άλλο Prism για να το κάνεις δικό σου.</string>
+    <string name="tour_181_yours_cover">Άλλαξε το εξώφυλλο ενός τραγουδιού ή ενός άλμπουμ από το μενού του</string>
+    <string name="tour_181_yours_explicit">Εμφάνιση, παράλειψη ή απόκρυψη ακατάλληλων τραγουδιών</string>
+    <string name="tour_181_yours_white">Λευκή οθόνη αναπαραγωγής για το φωτεινό θέμα</string>
+    <string name="tour_181_yours_fonts">Οποιαδήποτε γραμματοσειρά είναι εγκατεστημένη στο τηλέφωνό σου</string>
+    <string name="tour_181_yours_artists">Το όνομα κάθε καλλιτέχνη στην οθόνη αναπαραγωγής μπορεί να ανοίξει τη σελίδα του</string>
+    <string name="tour_181_files">Τα δικά σου αρχεία MP3, AAC και Ogg μπορούν να παίζουν αντί για τη ροή</string>
+    <string name="tour_181_crossfade">Γραμμή προόδου στο σχήμα της ομαλής μετάβασης</string>
+    <string name="tour_181_auto">Ζήτα έναν καλλιτέχνη, ένα άλμπουμ ή ένα playlist με τη φωνή σου, και στο Android Auto</string>
+    <string name="tour_181_tv">Στην τηλεόραση, το Τραγούδα δεν καθυστερεί ποτέ τη μουσική και η σύζευξη είναι πιο εύκολη</string>
 </resources>

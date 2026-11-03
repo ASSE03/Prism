@@ -4609,4 +4609,32 @@
         <item quantity="two">שני אומנים במעקב</item>
         <item quantity="other">%d אומנים במעקב</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (חי)</string>
+    <string name="tour_181_history">הבא את ההיסטוריה שלך</string>
+    <string name="tour_181_history_body">ההשמעות שלך מ-Spotify,‏ YouTube Music או Last.fm, נקראות בטלפון הזה.</string>
+    <string name="tour_181_history_spotify">בחר את הורדת הנתונים של Spotify: השמעות, שירים שאהבת, פלייליסטים ועוד</string>
+    <string name="tour_181_history_others">או את היסטוריית YouTube Music מ-Google Takeout, או את הסקרובלים שלך ב-Last.fm</string>
+    <string name="tour_181_history_replay">‏Replay סופר רק את ההשמעות של Prism עצמו, אלא אם תבחר אחרת</string>
+    <string name="tour_181_spotify">‏Spotify, עם מפתח משלך</string>
+    <string name="tour_181_spotify_body">אופציונלי: חבר את Spotify דרך אפליקציית מפתחים חינמית משלך.</string>
+    <string name="tour_181_spotify_lists">הפלייליסטים שלך ב-Spotify בספרייה, מושמעים מ-YouTube Music</string>
+    <string name="tour_181_spotify_plays">השמעות אחרונות ואומנים מובילים מעצבים את המיקסים והרדיו שלך</string>
+    <string name="tour_181_spotify_likes">שירים שאהבתי בשני הכיוונים, כל אחד מועבר פעם אחת</string>
+    <string name="tour_181_replay">היסטוריה ו-Replay</string>
+    <string name="tour_181_replay_body">בחר מה נשמר ומתי שיר נספר כהשמעה.</string>
+    <string name="tour_181_replay_pause">השהה את ההיסטוריה לשעה, ליום או עד שתפעיל אותה שוב</string>
+    <string name="tour_181_replay_counts">שיר נספר מיד, או אחרי 5 שניות ועד דקה</string>
+    <string name="tour_181_replay_graphs">‏Replay מציג יום לפי שעות, ושבוע או חודש לפי ימים</string>
+    <string name="tour_181_yours">בדרך שלך</string>
+    <string name="tour_181_yours_body">עוד חלקים ב-Prism להתאים לעצמך.</string>
+    <string name="tour_181_yours_cover">החלף עטיפה של שיר או אלבום מהתפריט שלו</string>
+    <string name="tour_181_yours_explicit">הצג, דלג או הסתר שירים בוטים</string>
+    <string name="tour_181_yours_white">נגן לבן לערכת הנושא הבהירה</string>
+    <string name="tour_181_yours_fonts">כל גופן שמותקן בטלפון שלך</string>
+    <string name="tour_181_yours_artists">השם של כל אומן בנגן יכול לפתוח את הדף שלו</string>
+    <string name="tour_181_files">קובצי MP3,‏ AAC ו-Ogg משלך יכולים להתנגן במקום הסטרימינג</string>
+    <string name="tour_181_crossfade">סרגל התקדמות בצורת המעבר ההדרגתי</string>
+    <string name="tour_181_auto">בקש אומן, אלבום או פלייליסט בקול, גם ב-Android Auto</string>
+    <string name="tour_181_tv">בטלוויזיה, שירה אף פעם לא מעכבת את המוזיקה, וההתאמה קלה יותר</string>
 </resources>

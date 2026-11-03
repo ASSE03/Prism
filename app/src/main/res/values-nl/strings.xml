@@ -4549,4 +4549,32 @@
         <item quantity="one">%d gevolgde artiest</item>
         <item quantity="other">%d gevolgde artiesten</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (live)</string>
+    <string name="tour_181_history">Je geschiedenis meenemen</string>
+    <string name="tour_181_history_body">Wat je afspeelde in Spotify, YouTube Music of Last.fm, gelezen op deze telefoon.</string>
+    <string name="tour_181_history_spotify">Kies de gegevensdownload van Spotify: afgespeeld, Gelikete nummers, playlists en meer</string>
+    <string name="tour_181_history_others">Of je YouTube Music-geschiedenis uit Google Takeout, of je Last.fm-scrobbles</string>
+    <string name="tour_181_history_replay">Replay telt alleen wat je in Prism afspeelt, tenzij je anders kiest</string>
+    <string name="tour_181_spotify">Spotify, met je eigen sleutel</string>
+    <string name="tour_181_spotify_body">Optioneel: koppel Spotify via een gratis ontwikkelaarsapp van jezelf.</string>
+    <string name="tour_181_spotify_lists">Je Spotify-playlists in Bibliotheek, afgespeeld via YouTube Music</string>
+    <string name="tour_181_spotify_plays">Recent afgespeeld en topartiesten geven vorm aan je mixen en radio</string>
+    <string name="tour_181_spotify_likes">Gelikete nummers aan beide kanten, elk nummer één keer overgezet</string>
+    <string name="tour_181_replay">Geschiedenis &amp; Replay</string>
+    <string name="tour_181_replay_body">Kies wat bewaard blijft, en wanneer een nummer telt als afgespeeld.</string>
+    <string name="tour_181_replay_pause">Pauzeer de geschiedenis een uur, een dag of tot je hem weer aanzet</string>
+    <string name="tour_181_replay_counts">Een nummer telt meteen, of na 5 seconden tot een minuut</string>
+    <string name="tour_181_replay_graphs">Replay toont een dag per uur, een week of maand per dag</string>
+    <string name="tour_181_yours">Op jouw manier</string>
+    <string name="tour_181_yours_body">Nog meer van Prism om je eigen te maken.</string>
+    <string name="tour_181_yours_cover">Wijzig de cover van een nummer of album via het menu</string>
+    <string name="tour_181_yours_explicit">Expliciete nummers tonen, overslaan of verbergen</string>
+    <string name="tour_181_yours_white">Een witte speler bij het lichte thema</string>
+    <string name="tour_181_yours_fonts">Elk lettertype dat op je telefoon staat</string>
+    <string name="tour_181_yours_artists">Elke artiestennaam in de speler kan de artiestenpagina openen</string>
+    <string name="tour_181_files">Je eigen MP3-, AAC- en Ogg-bestanden kunnen spelen in plaats van de stream</string>
+    <string name="tour_181_crossfade">Een voortgangsbalk in de vorm van de crossfade</string>
+    <string name="tour_181_auto">Vraag met je stem om een artiest, album of playlist, ook in Android Auto</string>
+    <string name="tour_181_tv">Op de tv houdt Meezingen de muziek nooit meer op, en koppelen is makkelijker</string>
 </resources>

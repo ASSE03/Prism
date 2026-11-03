@@ -4609,4 +4609,32 @@
         <item quantity="few">%d artiști urmăriți</item>
         <item quantity="other">%d de artiști urmăriți</item>
     </plurals>
+    <!-- 1.8.1 tour -->
+    <string name="spotify_live_source">Spotify (live)</string>
+    <string name="tour_181_history">Adu-ți istoricul</string>
+    <string name="tour_181_history_body">Redările tale de pe Spotify, YouTube Music sau Last.fm, citite pe acest telefon.</string>
+    <string name="tour_181_history_spotify">Alege datele descărcate de pe Spotify: redări, melodii apreciate, playlisturi și altele</string>
+    <string name="tour_181_history_others">Sau istoricul YouTube Music din Google Takeout, sau scrobble-urile tale Last.fm</string>
+    <string name="tour_181_history_replay">Replay numără doar redările din Prism, dacă nu alegi altfel</string>
+    <string name="tour_181_spotify">Spotify, cu propria ta cheie</string>
+    <string name="tour_181_spotify_body">Opțional: conectează Spotify printr-o aplicație de dezvoltator gratuită, a ta.</string>
+    <string name="tour_181_spotify_lists">Playlisturile tale Spotify în Bibliotecă, redate din YouTube Music</string>
+    <string name="tour_181_spotify_plays">Redările recente și artiștii de top îți modelează mixurile și radioul</string>
+    <string name="tour_181_spotify_likes">Melodii apreciate în ambele sensuri, fiecare adusă o singură dată</string>
+    <string name="tour_181_replay">Istoric și Replay</string>
+    <string name="tour_181_replay_body">Alege ce se păstrează și când o melodie contează ca redată.</string>
+    <string name="tour_181_replay_pause">Pune istoricul pe pauză o oră, o zi sau până îl pornești din nou</string>
+    <string name="tour_181_replay_counts">O melodie contează imediat sau după 5 secunde până la un minut</string>
+    <string name="tour_181_replay_graphs">Replay arată o zi pe ore, iar o săptămână sau o lună pe zile</string>
+    <string name="tour_181_yours">Cum vrei tu</string>
+    <string name="tour_181_yours_body">Și mai mult din Prism de făcut al tău.</string>
+    <string name="tour_181_yours_cover">Schimbă coperta unei melodii sau a unui album din meniul lor</string>
+    <string name="tour_181_yours_explicit">Arată, sari peste sau ascunde melodiile explicite</string>
+    <string name="tour_181_yours_white">Un player alb pentru tema luminoasă</string>
+    <string name="tour_181_yours_fonts">Orice font instalat pe telefon</string>
+    <string name="tour_181_yours_artists">Numele fiecărui artist din player îi poate deschide pagina</string>
+    <string name="tour_181_files">Propriile tale fișiere MP3, AAC și Ogg se pot reda în locul streamului</string>
+    <string name="tour_181_crossfade">O bară de progres în forma tranziției</string>
+    <string name="tour_181_auto">Cere vocal un artist, un album sau un playlist, și în Android Auto</string>
+    <string name="tour_181_tv">Pe televizor, Cântă nu mai oprește niciodată muzica, iar asocierea e mai ușoară</string>
 </resources>
