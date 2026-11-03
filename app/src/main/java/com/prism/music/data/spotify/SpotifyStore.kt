@@ -90,7 +90,7 @@ class SpotifyStore(private val auth: SharedPreferences, val prefs: SharedPrefere
         get() = auth.getBoolean(REVOKED, false)
         set(v) { auth.edit().putBoolean(REVOKED, v).apply() }
 
-    val connected: Boolean get() = auth.contains(ACCESS) && !revoked
+    val connected: Boolean get() = connectedIn(auth)
 
     /** Only the tokens and the account go (a sign-in that didn't finish): the switches and the Client ID stay. */
     fun clearTokens() { auth.edit().clear().commit() }
@@ -114,5 +114,8 @@ class SpotifyStore(private val auth: SharedPreferences, val prefs: SharedPrefere
         private const val USER_ID = "user_id"
         private const val USER_NAME = "user_name"
         private const val REVOKED = "revoked"
+
+        /** Connected, read from [auth] ([AUTH_PREFS]) alone: nothing is unsealed, no keystore is touched. */
+        fun connectedIn(auth: SharedPreferences): Boolean = auth.contains(ACCESS) && !auth.getBoolean(REVOKED, false)
     }
 }

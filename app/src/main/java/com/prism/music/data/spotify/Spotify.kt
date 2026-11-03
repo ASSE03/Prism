@@ -358,5 +358,14 @@ class Spotify(private val c: AppContainer) {
         private const val WAIT_MS = 10 * 60_000L
         /** A little under a day, so a job that runs every few hours reads them once a day. */
         const val DAILY_MS = 20 * 3_600_000L
+
+        /**
+         * A Prism playlist's page opened: [spotify] (AppContainer's lazy one) hears of it only when Spotify is connected,
+         * read from its sign-in preferences without building it. Most listeners never connect, and building it (its
+         * keystore box, client and four helpers) on the main thread for every playlist page cost them for nothing.
+         */
+        fun pageOpened(context: Context, prismId: String, spotify: () -> Spotify) {
+            if (SpotifyStore.connectedIn(context.getSharedPreferences(SpotifyStore.AUTH_PREFS, Context.MODE_PRIVATE))) spotify().opened(prismId)
+        }
     }
 }
