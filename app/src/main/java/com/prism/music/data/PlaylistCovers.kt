@@ -58,7 +58,11 @@ class PlaylistCovers(private val context: Context) {
     fun art(song: com.prism.music.data.model.Song): String? = picked(song) ?: song.thumbnail
 
     /** The cover picked for [song] (or its album), if any. */
-    fun picked(song: com.prism.music.data.model.Song): String? = covers[songKey(song.id)] ?: song.album?.id?.let { covers[albumKey(it)] }
+    fun picked(song: com.prism.music.data.model.Song): String? =
+        // With no covers picked (most phones), no keys are made for each row drawn (the empty check is read too, so a
+        // first pick still shows at once).
+        if (covers.isEmpty()) null
+        else covers[songKey(song.id)] ?: song.album?.id?.let { covers[albumKey(it)] }
 
     /** An album's picture: the one picked for it (#305), else [fallback]. */
     fun albumArt(id: String, fallback: String?): String? = covers[albumKey(id)] ?: fallback
