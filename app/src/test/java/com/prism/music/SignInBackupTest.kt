@@ -45,6 +45,11 @@ class SignInBackupTest {
         // Phone to phone too, not only the cloud.
         val extraction = File(res, "data_extraction_rules.xml").readText()
         assertTrue(extraction.substringAfter("<device-transfer>").contains("discord.xml"))
+        // The sign-in page's cookie jar (Google's session) stays out of every list: restored, Sign in let it back in.
+        val webview = """exclude domain="root" path="app_webview/""""
+        assertTrue(extraction.substringBefore("</cloud-backup>").contains(webview))
+        assertTrue(extraction.substringAfter("<device-transfer>").contains(webview))
+        assertTrue(File(res, "backup_rules.xml").readText().contains(webview))
         val manifest = listOf(File("src/main/AndroidManifest.xml"), File("app/src/main/AndroidManifest.xml")).first { it.isFile }.readText()
         assertTrue(manifest.contains("@xml/data_extraction_rules") && manifest.contains("@xml/backup_rules"))
     }

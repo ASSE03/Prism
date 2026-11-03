@@ -289,6 +289,8 @@ internal fun FadingCover(url: String?, fadeMs: Int, modifier: Modifier) {
     val fade = remember { androidx.compose.animation.core.Animatable(0f) }
     androidx.compose.runtime.LaunchedEffect(url) {
         if (url == shown) { incoming = null; return@LaunchedEffect }
+        // Nothing playing any more: the last cover doesn't stay behind every screen.
+        if (url == null) { shown = null; incoming = null; return@LaunchedEffect }
         // A fade cut short: what had come in so far stays as the picture under the next one.
         incoming?.takeIf { loaded && fade.value > 0.5f }?.let { shown = it }
         loaded = false

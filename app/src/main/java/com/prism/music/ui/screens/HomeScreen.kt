@@ -139,6 +139,9 @@ internal fun quickPicksToShow(locked: List<Song>?, curated: List<Song>, youtube:
     ready -> youtube.filter(keep)
     else -> emptyList()
 }
+
+/** The set made around your artists, only when it was made for this pull to refresh ([madeFor]): an older one isn't kept. */
+internal fun curatedFor(curated: List<Song>, madeFor: Int, refresh: Int): List<Song> = if (madeFor == refresh) curated else emptyList()
 private val speedDialMine = MutableStateFlow<List<BrowseItem>>(emptyList())
 /** The last lists and mixes made from your music, shown while the next are made. */
 private val lastYours = MutableStateFlow<com.prism.music.data.foryou.YourMusic.Sections?>(null)
@@ -295,19 +298,20 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
         if (made.isNotEmpty()) { value = made; curatedPicks.value = made; curatedAt.value = refreshes }
         picksTried.value = refreshes
     }
-    // Never waiting for long: after a few seconds YouTube's own show.
-    val waited by produceState(picksTried.value == refreshes, refreshes) {
-        if (value) return@produceState
-        kotlinx.coroutines.delay(QUICK_PICKS_WAIT_MS)
-        value = true
+    // Never waiting for long: after a few seconds YouTube's own show. Kept as the pull to refresh it waited for:
+    // produceState keeps its value when the keys change, so a plain "waited" stayed true after a refresh.
+    val waitedFor by produceState(if (picksTried.value == refreshes) refreshes else -1, refreshes) {
+        if (picksTried.value != refreshes) kotlinx.coroutines.delay(QUICK_PICKS_WAIT_MS)
+        value = refreshes
     }
     val tried by picksTried.collectAsState()
-    val picksReady = waited || tried == refreshes
+    val madeFor by curatedAt.collectAsState()
+    val picksReady = waitedFor == refreshes || tried == refreshes
     // Songs already on a Speed dial tile aren't repeated in Quick picks. Once shown, the set stays for the session
     // (until pull to refresh), whatever loads after it.
-    val pickSongs = remember(curated, youtubePicks, dialItems, picksReady, refreshes) {
+    val pickSongs = remember(curated, madeFor, youtubePicks, dialItems, picksReady, refreshes) {
         val onDial = if (dialItems.size >= 3) dialItems.map { it.id }.toSet() else emptySet()
-        quickPicksToShow(shownPicks.value?.takeIf { it.first == refreshes }?.second, curated, youtubePicks, picksReady) { it.id !in onDial }
+        quickPicksToShow(shownPicks.value?.takeIf { it.first == refreshes }?.second, curatedFor(curated, madeFor, refreshes), youtubePicks, picksReady) { it.id !in onDial }
             .also { if (it.isNotEmpty()) shownPicks.value = refreshes to it }
     }
 

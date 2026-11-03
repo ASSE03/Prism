@@ -14,6 +14,7 @@ import com.prism.music.data.model.SongItem
 import com.prism.music.download.DownloadInfo
 import com.prism.music.download.forRow
 import com.prism.music.playback.AlbumFill
+import com.prism.music.ui.screens.curatedFor
 import com.prism.music.ui.screens.matchShelves
 import com.prism.music.ui.screens.quickPicksToShow
 import com.prism.music.ui.screens.shelfKey
@@ -63,6 +64,17 @@ class IssueFixes181Test {
         // Shown already: what loads after doesn't replace it.
         assertEquals(yt, quickPicksToShow(yt, mine, listOf(song("fresh")), ready = true))
         assertEquals(listOf(song("m2")), quickPicksToShow(null, mine, yt, ready = true) { it.id != "m1" })
+    }
+
+    /** #297: pull to refresh shows new Quick picks, not the set made for the last refresh. */
+    @Test fun pullToRefreshChangesQuickPicks() {
+        val yt = listOf(song("y1"))
+        val before = listOf(song("old"))
+        assertEquals(before, quickPicksToShow(null, curatedFor(before, madeFor = 0, refresh = 0), yt, ready = false))
+        // Refreshed (1): the old set isn't shown (or locked in) again while the new one is made.
+        assertEquals(emptyList<Song>(), quickPicksToShow(null, curatedFor(before, madeFor = 0, refresh = 1), yt, ready = false))
+        val after = listOf(song("new"))
+        assertEquals(after, quickPicksToShow(null, curatedFor(after, madeFor = 1, refresh = 1), yt, ready = false))
     }
 
     /** #295: Speed dial's last page is filled from your own plays instead of being cut (18–26 tiles gave 2 pages). */

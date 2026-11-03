@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -79,19 +80,27 @@ class LibraryRepository(private val c: AppContainer) {
     val syncState = MutableStateFlow(SyncState.IDLE)
     val lastError = MutableStateFlow<String?>(null)
 
+    private val keptLoad: kotlinx.coroutines.Job
+
     init {
         // The library as last synced, so it's all there offline (#55) and before the first sync of a launch finishes.
-        c.scope.launch(Dispatchers.IO) {
+        // A restored copy signs out right after start ([forgetAccount] stops this, so the old account's lists don't
+        // land after they were cleared).
+        keptLoad = c.scope.launch(Dispatchers.IO) {
             if (!c.settings.current.isLoggedIn) return@launch
             val saved = c.offline.library() ?: return@launch
-            if (playlists.value.isEmpty()) playlists.value = saved.playlists
-            if (albums.value.isEmpty()) albums.value = saved.albums
-            if (artists.value.isEmpty()) artists.value = saved.artists
+            synchronized(this@LibraryRepository) {
+                if (!isActive) return@launch
+                if (playlists.value.isEmpty()) playlists.value = saved.playlists
+                if (albums.value.isEmpty()) albums.value = saved.albums
+                if (artists.value.isEmpty()) artists.value = saved.artists
+            }
         }
     }
 
     /** Signed out: the account's lists, and its playlists and albums kept for offline, are gone from the phone. */
     fun forgetAccount() {
+        synchronized(this) { keptLoad.cancel() }
         playlists.value = emptyList(); albums.value = emptyList(); artists.value = emptyList()
         c.scope.launch(Dispatchers.IO) { c.offline.clear(); c.homeCache.clear() }
     }
