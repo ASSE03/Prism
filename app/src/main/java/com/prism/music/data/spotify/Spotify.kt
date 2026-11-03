@@ -22,7 +22,10 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -194,6 +197,7 @@ class Spotify(private val c: AppContainer) {
         dir.deleteRecursively()
         guards.values.forEach { it.reset() }
         _options.value = optionsNow()
+        _hidden.value = hiddenNow()
         _connection.value = Connection.None
         log("disconnected")
     }
@@ -248,6 +252,31 @@ class Spotify(private val c: AppContainer) {
             }
         }
     }
+
+    // ---- Followed and saved playlists (1.8.1): named in Library, songs not shared by Spotify
+
+    private fun hiddenNow(): Set<String> = store.prefs.getStringSet(FOLLOWED_HIDDEN, null).orEmpty().toSet()
+    private val _hidden = MutableStateFlow(hiddenNow())
+
+    /**
+     * What Library lists after the mirrored playlists while "Your playlists" is on and connected: the playlists the
+     * listener follows or saved, less the ones hidden from Library. Never Prism playlists.
+     */
+    val followedShown: StateFlow<List<SpotifyPlaylist>> by lazy {
+        combine(playlists.followed, _options, _hidden, _connection) { list, o, hidden, _ ->
+            if (o.playlists && store.connected) list.filter { it.id !in hidden } else emptyList()
+        }.stateIn(c.scope, SharingStarted.Eagerly, emptyList())
+    }
+
+    /** "Hide from Library" on one: kept in the Spotify prefs (they go with Disconnect). */
+    fun hideFollowed(id: String) {
+        val now = hiddenNow() + id
+        store.prefs.edit().putStringSet(FOLLOWED_HIDDEN, now).apply()
+        _hidden.value = now
+    }
+
+    /** "Refresh now": the playlists read again at once (a copy just made in Spotify appears), whatever the day's run did. */
+    fun refreshPlaylistsNow(): Job = c.scope.launch { run(SpotifyFeature.PLAYLISTS) }
 
     fun setKeepInStep(on: Boolean) {
         store.prefs.edit().putBoolean("keep_in_step", on).apply()
@@ -352,6 +381,7 @@ class Spotify(private val c: AppContainer) {
 
     companion object {
         const val DIR = "spotify"
+        private const val FOLLOWED_HIDDEN = "followed_hidden"
         /** Where the browser comes back to Prism (the manifest's prism://spotify filter). */
         const val BACK_TO = "prism://spotify"
         const val DASHBOARD = "https://developer.spotify.com/dashboard"

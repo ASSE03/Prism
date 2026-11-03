@@ -154,7 +154,10 @@ private fun SpotifyFeatures(name: String) {
             o.playlists, info = tr(R.string.spot_playlists_info),
         ) { spotify.setEnabled(SpotifyFeature.PLAYLISTS, it) }
         if (o.playlists) {
-            if (mirror.notYours > 0) Note(tr(R.string.spot_playlists_not_yours, mirror.notYours))
+            if (mirror.notYours > 0) NoteWithInfo(
+                tr(R.string.spot_playlists_not_yours, mirror.notYours),
+                tr(R.string.spot_followed_why) + "\n" + tr(R.string.spot_followed_steps) + "\n" + tr(R.string.spot_followed_tunemymusic),
+            )
             Toggle(tr(R.string.spot_keep_in_step), tr(R.string.spot_keep_in_step_sub), o.keepInStep, info = tr(R.string.spot_keep_in_step_info)) { spotify.setKeepInStep(it) }
         }
         Toggle(
@@ -183,6 +186,22 @@ private fun SpotifyFeatures(name: String) {
             },
             dismissButton = { PrismTextButton(onClick = { dryRun = null }) { Text(tr(R.string.cancel)) } },
         )
+    }
+}
+
+/** A [Note] (a figure) with an ⓘ that opens what to do about it. */
+@Composable
+private fun NoteWithInfo(text: String, info: String) {
+    var open by androidx.compose.runtime.saveable.rememberSaveable(text, "note") { mutableStateOf(false) }
+    androidx.compose.foundation.layout.Column(Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
+        androidx.compose.foundation.layout.Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+            Text(
+                text, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.weight(1f, fill = false),
+            )
+            InfoMark(open, text) { open = !open }
+        }
+        InfoText(open, info, Modifier.padding(top = 4.dp))
     }
 }
 
