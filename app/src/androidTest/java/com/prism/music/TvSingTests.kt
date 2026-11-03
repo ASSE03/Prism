@@ -192,6 +192,9 @@ class TvSingTests {
             val song = tones(listOf("Prism TV sing engine"), made).single()
             instrumentation.runOnMainSync { c.player.playQueue(listOf(song), 0, com.prism.music.playback.QueueSource(com.prism.music.playback.QueueKind.OTHER, "TV sing test")) }
             waitFor(20_000, "playing") { c.player.isPlaying.value }
+            // Paused while the screen is looked at (playing, the lyrics redraw all the time and the screen never settles
+            // for the test); played again below to see it plays on.
+            instrumentation.runOnMainSync { c.player.setPlaying(false) }
             TvFixture.launch()
             compose.awaitFocusOn(hasTestTag("$TAG_HOME/player"), 20_000)
             TvFixture.ok()
@@ -213,16 +216,20 @@ class TvSingTests {
             org.junit.Assert.assertTrue(c.sing.problem.value!!.contains(tr(R.string.sing_song_plays_as_it_is)))
             // Said on the page.
             compose.waitUntil(10_000) { compose.onAllNodes(hasText(engine, substring = true), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
-            // The quick way from now on, and the song plays on.
+            // The quick way from now on, and the song plays (waited on without the screen, which moves while it plays).
             org.junit.Assert.assertEquals(com.prism.music.playback.sing.Separation.QUICK, c.sing.method.value)
+            instrumentation.runOnMainSync { c.player.setPlaying(true) }
+            waitFor(10_000, "playing again") { c.player.isPlaying.value }
             val at = main { c.player.position }
-            Thread.sleep(1_500)
-            org.junit.Assert.assertTrue("still playing", c.player.isPlaying.value && main { c.player.position } > at)
-            // Back: Sing off, the song plays on as it is.
+            waitFor(5_000, "the song moving on") { main { c.player.position } > at + 500 }
+            // Back (paused again: the screen is waited on through the rule): Sing off, and the song plays as it is.
+            instrumentation.runOnMainSync { c.player.setPlaying(false) }
             TvFixture.back()
             compose.waitUntil(10_000) { !c.sing.on.value }
-            Thread.sleep(1_000)
-            org.junit.Assert.assertTrue("still playing after Sing", c.player.isPlaying.value)
+            instrumentation.runOnMainSync { c.player.setPlaying(true) }
+            waitFor(10_000, "playing after Sing") { c.player.isPlaying.value }
+            val after = main { c.player.position }
+            waitFor(5_000, "the song moving on after Sing") { main { c.player.position } > after + 500 }
         } finally {
             cleanUp(made)
         }

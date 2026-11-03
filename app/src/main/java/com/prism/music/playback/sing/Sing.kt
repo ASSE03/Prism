@@ -77,7 +77,7 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
      * Sing's engine can run on this processor (otherwise only the quick way, [Separation.QUICK]), and didn't take Prism
      * down as it loaded on this version ([SingWatch.engineBroken]).
      */
-    val fullEngine: Boolean get() = ModelStore.Model.singRuntime() != null && !engineFailedNow && !engineBroken
+    val fullEngine: Boolean get() = (ModelStore.Model.singRuntime() != null || TestHooks.singEngineFails) && !engineFailedNow && !engineBroken
 
     private val enginePrefs by lazy { c.app.getSharedPreferences("sing_engine", android.content.Context.MODE_PRIVATE) }
     private val version: Int get() = com.prism.music.BuildConfig.VERSION_CODE
@@ -453,7 +453,7 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
     /** The networks [way] needs, loaded (none for the quick way; the backing's for the full way only). */
     private fun networks(way: Separation): Pair<OrtSession?, OrtSession?> {
         if (way == Separation.QUICK) return null to null
-        val runtime = ModelStore.Model.singRuntime() ?: throw IOException(tr(R.string.sing_doesn_t_run_on_this_2))
+        val runtime = ModelStore.Model.singRuntime() ?: if (TestHooks.singEngineFails) ModelStore.Model.SING_MODEL else throw IOException(tr(R.string.sing_doesn_t_run_on_this_2))
         if (vocalsNet != null && (way != Separation.FULL || backingNet != null)) return vocalsNet to backingNet
         // Kept as the engine loads, cleared once it's in (or failed in the usual way): a load that took Prism down with
         // it is found as Prism starts again ([engineBroken]).
