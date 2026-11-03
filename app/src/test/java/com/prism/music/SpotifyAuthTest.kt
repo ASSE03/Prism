@@ -50,7 +50,9 @@ class SpotifyAuthTest {
         // Spaces as %20, not "+".
         assertTrue(url.contains("user-read-recently-played%20user-top-read"))
         // What the listener registers has no port (Spotify adds the request's own for loopback addresses).
-        assertEquals("http://127.0.0.1/callback", SpotifyOAuth.REDIRECT_TO_REGISTER)
+        // With a port: Spotify's dashboard refused the bare address as "not secure" (owner, 2026-11-02).
+        assertEquals("http://127.0.0.1:43827/callback", SpotifyOAuth.REDIRECT_TO_REGISTER)
+        assertEquals(SpotifyOAuth.REDIRECT_TO_REGISTER, SpotifyOAuth.redirectUri(SpotifyOAuth.PORT))
     }
 
     @Test fun clientIdsAre32HexCharacters() {

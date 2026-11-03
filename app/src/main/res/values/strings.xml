@@ -4471,7 +4471,7 @@
     <string name="spot_browser_back">Back to Prism</string>
     <string name="spot_failed_receiver">Prism couldn\'t get ready for Spotify\'s answer. Try again.</string>
     <string name="spot_failed_denied">You didn\'t agree on Spotify\'s page, so nothing is connected.</string>
-    <string name="spot_failed_refused">Spotify refused the sign-in (%1$s). Check the Client ID, and that the redirect URI in your app is exactly http://127.0.0.1/callback.</string>
+    <string name="spot_failed_refused">Spotify refused the sign-in (%1$s). Check the Client ID, and that the redirect URI in your app is exactly http://127.0.0.1:43827/callback.</string>
     <string name="spot_failed_forbidden">Spotify didn\'t let this account in. In your app\'s User Management, add your Spotify name and email, and check the app owner has Premium.</string>
     <string name="spot_failed_client">Spotify didn\'t accept your app. Check the Client ID and the redirect URI, then try again.</string>
     <string name="spot_failed_network">Couldn\'t reach Spotify. Check your connection and try again.</string>

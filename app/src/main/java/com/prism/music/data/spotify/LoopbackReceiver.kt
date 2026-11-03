@@ -8,16 +8,20 @@ import java.net.SocketTimeoutException
 
 /**
  * Where Spotify's authorize page sends the browser back (RFC 8252's loopback redirect): a one-request web server on the
- * phone's own 127.0.0.1, on a port Android picks, open only while a sign-in waits. Nothing outside the phone can reach
- * it. Its answer sends the browser on to [backTo] (prism://spotify, Prism's own intent filter), with a page and a link
- * for browsers that don't follow.
+ * phone's own 127.0.0.1, on [port] (0 = one Android picks), open only while a sign-in waits. Nothing outside the phone
+ * can reach it. Its answer sends the browser on to [backTo] (prism://spotify, Prism's own intent filter), with a page and
+ * a link for browsers that don't follow.
  */
 class LoopbackReceiver(
     private val backTo: String,
     private val message: String = "Spotify answered. You can go back to Prism.",
     private val link: String = "Back to Prism",
+    port: Int = 0,
 ) : Closeable {
-    private val server = ServerSocket(0, 4, InetAddress.getByName("127.0.0.1"))
+    private val server = ServerSocket().apply {
+        reuseAddress = true // a sign-in started again soon after the last one gets the same port back
+        bind(java.net.InetSocketAddress(InetAddress.getByName("127.0.0.1"), port), 4)
+    }
     val port: Int get() = server.localPort
 
     /**

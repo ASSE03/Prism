@@ -38,17 +38,20 @@ data class SpotifyTokens(val access: String, val refresh: String?, val expiresAt
 
 /**
  * Spotify's official authorization (Authorization Code with PKCE), for the listener's own developer app ("bring your
- * own key"). The redirect is a loopback address on the phone ([LoopbackReceiver]): Spotify accepts `http://127.0.0.1`
- * registered without a port and the port named in each request (its redirect URI rules since April 2025), which works
- * for every app made today, while custom schemes are reported refused for new apps.
+ * own key"). The redirect is a loopback address on the phone ([LoopbackReceiver]) on a fixed port: Spotify's rules allow
+ * `http://127.0.0.1` without a port, but its dashboard refused that as "not secure" (owner, 2026-11-02) while it takes
+ * one with a port, like its own `http://127.0.0.1:8000/callback` example. Custom schemes are refused for new apps.
  */
 object SpotifyOAuth {
     const val AUTHORIZE = "https://accounts.spotify.com/authorize"
     const val TOKEN = "https://accounts.spotify.com/api/token"
     const val API = "https://api.spotify.com/v1"
 
-    /** What the listener registers in the dashboard, exactly (no port). */
-    const val REDIRECT_TO_REGISTER = "http://127.0.0.1/callback"
+    /** The phone's port the sign-in comes back to (high, unassigned, so another app is very unlikely to hold it). */
+    const val PORT = 43827
+
+    /** What the listener registers in the dashboard, exactly. */
+    const val REDIRECT_TO_REGISTER = "http://127.0.0.1:$PORT/callback"
 
     /** The redirect for one sign-in, on the port the phone opened. */
     fun redirectUri(port: Int) = "http://127.0.0.1:$port/callback"

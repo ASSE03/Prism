@@ -80,7 +80,7 @@ class SpotifyConnectTest {
         compose.clickWhenFound(hasText("Devices & connections") and hasClickAction())
         compose.clickWhenFound(hasText("Spotify") and hasClickAction())
         compose.waitForText("Create app")
-        compose.waitForText("http://127.0.0.1/callback")
+        compose.waitForText("http://127.0.0.1:43827/callback")
         compose.waitForText("Client ID")
         compose.waitForText("Spotify Premium")
 

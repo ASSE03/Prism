@@ -105,7 +105,7 @@ class Spotify(private val c: AppContainer) {
         cancelConnect()
         val verifier = Pkce.verifier()
         val state = Pkce.state()
-        val r = runCatching { LoopbackReceiver(BACK_TO, tr(R.string.spot_browser_done), tr(R.string.spot_browser_back)) }.getOrElse {
+        val r = runCatching { LoopbackReceiver(BACK_TO, tr(R.string.spot_browser_done), tr(R.string.spot_browser_back), SpotifyOAuth.PORT) }.getOrElse {
             _connection.value = Connection.Failed(tr(R.string.spot_failed_receiver)); return true
         }
         receiver = r
