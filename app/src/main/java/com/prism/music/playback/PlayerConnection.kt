@@ -423,6 +423,9 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         if (at + 1 < p.mediaItemCount) p.removeMediaItems(at + 1, p.mediaItemCount)
         if (at > 0) p.removeMediaItems(0, at)
         if (!p.isPlaying) { ensureStarted(); if (p.playbackState == Player.STATE_IDLE) p.prepare(); p.play() }
+        // An autoplay load still out for the old queue drops its songs when it lands (the source changed): the radio
+        // asks now rather than wait on it.
+        c.queue.autoplayLoading = false
         service?.maybeAutoplay()
     }
 

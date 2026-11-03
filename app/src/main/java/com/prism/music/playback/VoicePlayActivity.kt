@@ -29,9 +29,9 @@ class VoicePlayActivity : Activity() {
             val item = MediaItem.Builder()
                 .setRequestMetadata(MediaItem.RequestMetadata.Builder().setSearchQuery(query).setExtras(extras).build())
                 .build()
+            // The service starts playing once the request's songs are in: a queued prepare/play here would also run
+            // after a request that found nothing, and resume the old queue.
             controller.setMediaItem(item)
-            controller.prepare()
-            controller.play()
             // Let the service pick up the request before this controller goes away.
             controller.addListener(object : androidx.media3.common.Player.Listener {
                 override fun onIsPlayingChanged(isPlaying: Boolean) { if (isPlaying) controller.release() }

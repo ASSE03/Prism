@@ -220,10 +220,9 @@ class Sing(private val c: AppContainer) : VocalStemProcessor.Source {
                 while (onNow || busy) {
                     delay(500)
                     val p = c.player.player ?: continue
-                    // Counted while a song is being worked on (Sing's sound processing never holds the player), or while
-                    // the player has stopped on an error (a decoder it couldn't have, say, while Sing had it).
-                    val error = p.playbackState == androidx.media3.common.Player.STATE_IDLE && p.playerError != null
-                    val stuck = (busy || error) && SingWatch.stuck(p.playWhenReady, p.playbackState, p.playerError != null)
+                    // Counted while a song is being worked on (Sing's sound processing never holds the player): loading, or
+                    // stopped on an error (a decoder it couldn't have, say, while Sing had it). Other errors are the service's.
+                    val stuck = SingWatch.counts(busy, p.playWhenReady, p.playbackState, p.playerError != null)
                     if (watching.check(stuck, android.os.SystemClock.elapsedRealtime())) {
                         rescue(p)
                         watching.reset()

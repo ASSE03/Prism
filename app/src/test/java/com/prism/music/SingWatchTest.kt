@@ -41,6 +41,14 @@ class SingWatchTest {
         assertFalse(SingWatch.stuck(playWhenReady = true, state = Player.STATE_ENDED, error = false))
     }
 
+    @Test fun onlyAPlayerStuckWhileSingWorksIsCounted() {
+        assertTrue(SingWatch.counts(busy = true, playWhenReady = true, state = Player.STATE_BUFFERING, error = false))
+        assertTrue(SingWatch.counts(busy = true, playWhenReady = true, state = Player.STATE_IDLE, error = true))
+        // An error with Sing idle (offline, a 403) is the playback service's to retry or skip: Sing stays out of it.
+        assertFalse(SingWatch.counts(busy = false, playWhenReady = true, state = Player.STATE_IDLE, error = true))
+        assertFalse(SingWatch.counts(busy = false, playWhenReady = true, state = Player.STATE_BUFFERING, error = false))
+    }
+
     @Test fun anEngineThatTookPrismDownTwiceIsntLoadedAgainOnThisVersion() {
         assertFalse(SingWatch.engineBroken(unfinished = 0, brokenOn = 0, version = 55))
         // Once could be Android ending Prism for memory as the engine loaded: tried again.
