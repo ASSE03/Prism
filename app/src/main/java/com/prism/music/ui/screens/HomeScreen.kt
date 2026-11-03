@@ -1079,14 +1079,14 @@ private fun ReplayTeaser(cfg: HomeSectionConfig) {
     // Spotlight (the default) is the big card below; the other styles show the year so far as a few cards or rows:
     // the time listened, the top song and the top artist, each opening Replay.
     val top = soFar.topSong to soFar.topArtist
-    // "Includes Spotify" (1.8.1): the card counts imported histories too, so it says so, as Replay itself does.
-    val includes = replayIncludes(soFar.counted)
+    // The card counts imported histories too when they're switched on, but doesn't say "Includes Spotify" (owner,
+    // 1.8.1): Replay itself and its story still do.
     if (cfg.style != SectionStyle.HERO) {
         val open: () -> Unit = { if (rewind) c.rewindRequest.value = year; nav.go(Routes.REPLAY) }
         val dark = com.prism.music.ui.theme.LocalIsDark.current
         SectionHeader(if (rewind) tr(R.string.rewind, year) else tr(R.string.replay, year), strapline = tr(R.string.your_year_so_far), onMore = open)
         StyledEntries(cfg.style, listOfNotNull(
-            HomeEntry("replay:time", total.full, listOfNotNull(if (rewind) tr(R.string.your_year_in_music) else tr(R.string.listened_this_year), includes).joinToString(" · "), icon = PrismIcons.ReplayFilled,
+            HomeEntry("replay:time", total.full, listOfNotNull(if (rewind) tr(R.string.your_year_in_music) else tr(R.string.listened_this_year)).joinToString(" · "), icon = PrismIcons.ReplayFilled,
                 fill = com.prism.music.ui.theme.PrismTokens.spectrum(dark), onFill = true, onClick = open),
             top.first?.let { s -> HomeEntry("replay:song", s.title, tr(R.string.your_top_song, s.artistName), image = s.thumbnail, onClick = open) },
             top.second?.let { a -> HomeEntry("replay:artist", a.artistName, tr(R.string.your_top_artist), image = a.thumbnail, icon = PrismIcons.Person, onClick = open) },
@@ -1111,7 +1111,7 @@ private fun ReplayTeaser(cfg: HomeSectionConfig) {
         }
         ReplayCard(
             look,
-            ReplayCardData(year, total.full, months, top.first?.title, top.first?.artistName, top.second?.artistName, yearDone, 0, soFar.graph, includes),
+            ReplayCardData(year, total.full, months, top.first?.title, top.first?.artistName, top.second?.artistName, yearDone, 0, soFar.graph),
             art, Modifier.padding(vertical = ui.gap(16.dp)),
         ) { nav.go(Routes.REPLAY) }
         return
@@ -1144,8 +1144,7 @@ private fun ReplayTeaser(cfg: HomeSectionConfig) {
             if (rewind) Text(tr(R.string.your_year_in_music), style = big, color = scheme.onSurface, maxLines = 1)
             else Text(total.full, Modifier.toggleListenUnit(), style = big, color = scheme.onSurface, maxLines = 1)
             Text(
-                (if (rewind) tr(R.string.your_top_songs_and_artists_your, total.full) else tr(R.string.your_top_songs_artists_and_genres)) +
-                    (includes?.let { " · $it" } ?: ""),
+                (if (rewind) tr(R.string.your_top_songs_and_artists_your, total.full) else tr(R.string.your_top_songs_artists_and_genres)),
                 color = scheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium, maxLines = 2,
             )
         }

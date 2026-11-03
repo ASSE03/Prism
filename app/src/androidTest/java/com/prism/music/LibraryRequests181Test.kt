@@ -93,7 +93,9 @@ class LibraryRequests181Test {
         compose.waitForText("Test Artist · Polar", 15_000)
         runBlocking { c.settings.setDownloadsAlbums(false) }
         compose.waitUntil(10_000) { compose.onAllNodes(hasText("Test Artist · Polar")).fetchSemanticsNodes().isEmpty() }
-        assertTrue(compose.onAllNodes(hasText("Test Artist")).fetchSemanticsNodes().isNotEmpty())
+        val shown = compose.onAllNodes(hasText("", substring = true)).fetchSemanticsNodes()
+            .mapNotNull { it.config.getOrElseNullable(androidx.compose.ui.semantics.SemanticsProperties.Text) { null }?.joinToString() }
+        assertTrue("no row reads just Test Artist; on screen: ${shown.joinToString(" | ").take(1500)}", compose.onAllNodes(hasText("Test Artist")).fetchSemanticsNodes().isNotEmpty())
     }
 
     /** #246: Add to playlist marks the playlist that has the song already, and not the one without it. */

@@ -323,8 +323,8 @@ fun ReplayCardPreview(style: ReplayCardStyle, modifier: Modifier = Modifier) {
         value = if (graph == com.prism.music.data.prefs.ReplayGraph.MONTHS) y.months
         else kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { runCatching { replayCardBars(c.imports.replay(), graph) }.getOrDefault(emptyList()) }
     }
-    val counted by c.imports.counted.collectAsState()
-    val data = ReplayCardData(year, listenTotal(y.ms).full, bars, y.song, y.songArtist, y.artist, y.yearDone, 0, graph, replayIncludes(counted))
+    // As Home's card: no "Includes Spotify" line (owner, 1.8.1).
+    val data = ReplayCardData(year, listenTotal(y.ms).full, bars, y.song, y.songArtist, y.artist, y.yearDone, 0, graph)
     ReplayCard(style, data, art, modifier) {}
 }
 

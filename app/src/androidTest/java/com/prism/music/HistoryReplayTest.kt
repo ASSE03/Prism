@@ -101,14 +101,15 @@ class HistoryReplayTest {
         seeText("Busiest hour")
     }
 
-    @Test fun homesCardShowsTheLastDaysAndWhatItCounts() {
+    /** The card shows the last days; it counts Spotify when switched on but doesn't say so (owner, 1.8.1: Replay does). */
+    @Test fun homesCardShowsTheLastDaysWithoutSayingWhatItCounts() {
         listened()
         c.settings.setReplayGraph(ReplayGraph.DAYS)
         c.imports.setCounted(ImportSource.SPOTIFY, true)
         compose.waitUntil(5_000) { c.settings.current.view.replayGraph == ReplayGraph.DAYS }
         Fixture.launch()
         seeText("Last 14 days")
-        seeText("Includes Spotify")
+        assertTrue(compose.onAllNodes(hasText("Includes Spotify", substring = true)).fetchSemanticsNodes().isEmpty())
     }
 
     /** Waits for [text], scrolling the page's lists to it (as BringHistoryTest's). */

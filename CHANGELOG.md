@@ -138,8 +138,6 @@ What changed in each release. Older releases are described on the [Releases page
   Customize Prism → Home & Library → Replay card → "Bars on the card" (Months unless changed).
 - **Replay and Rewind stories in your font** (#287, #269): Recommendations & Replay → Replay → Story type, "Your font"
   sets the stories in the font you picked for Prism instead of the poster type (Poster type unless changed).
-- **Home's Replay card says "Includes Spotify"** (or the other histories it counts) when Replay counts an imported
-  history, as Replay and its story do.
 - **Last.fm: see what's there before bringing it.** Tapping Last.fm now shows how many scrobbles there are and their
   dates ("4,210 scrobbles, Mar 3, 2019 to Nov 1, 2026", or the new ones since your last import), from two small
   requests, then Bring them.
