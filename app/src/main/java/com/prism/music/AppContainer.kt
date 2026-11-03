@@ -137,6 +137,19 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
             // was imported; a restored backup brings the dates with it).
             runCatching { com.prism.music.data.imports.ImportReminders.schedule(this@PrismApp) }
         }
+        // YouTube Music (live), 1.8.1: its job only while signed in and turned on; signing out stops it (read from its
+        // preferences, so nothing is built for the many who never turn it on).
+        container.scope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            var was: Boolean? = null
+            container.settings.flow.map { it.isLoggedIn }.distinctUntilChanged().collect { signedIn ->
+                runCatching {
+                    com.prism.music.data.imports.YouTubeLive.signInChanged(
+                        this@PrismApp, signedIn, was, com.prism.music.data.imports.YouTubeLiveWorker.Jobs(this@PrismApp),
+                    )
+                }
+                was = signedIn
+            }
+        }
         container.scope.launch(kotlinx.coroutines.Dispatchers.IO) {
             kotlinx.coroutines.delay(45_000)
             container.quietNetwork()

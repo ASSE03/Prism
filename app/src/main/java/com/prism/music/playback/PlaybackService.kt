@@ -1211,7 +1211,11 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 if (after > 0) while (trackedSong?.id == song.id && heardMs() < after) delay(500)
                 // #296: nothing goes to the account's history while history is paused.
                 if (trackedSong?.id == song.id && !com.prism.music.data.HistoryPause.paused(c.settings.current.behavior)) {
-                    withContext(Dispatchers.IO) { runCatching { c.ytm.registerPlayback(ex) } }
+                    withContext(Dispatchers.IO) {
+                        runCatching { c.ytm.registerPlayback(ex) }
+                        // YouTube Music (live) then knows this one at the top of the account's history as Prism's own.
+                        runCatching { com.prism.music.data.imports.YouTubeLive.noteSent(c.app, song.id, com.prism.music.data.imports.YouTubeLive.keyOf(song)) }
+                    }
                 }
             }
         }

@@ -201,6 +201,8 @@ fun BringHistoryScreen(bottomPadding: Dp) {
                 )
             }
         }
+        // 1.8.1: YouTube Music (live), the account's History page every few hours (off unless turned on here).
+        item(key = "live") { YouTubeLiveGroup() }
         reading?.let { r ->
             item(key = "reading") {
                 Column(Modifier.fillMaxWidth().padding(horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -339,6 +341,34 @@ fun BringHistoryScreen(bottomPadding: Dp) {
                 }
             }
         }
+    }
+}
+
+/**
+ * "Keep your YouTube Music history in step" (1.8.1): signed in, a switch (off by default) and how its last look went;
+ * signed out, what it needs. The limits are behind its ⓘ.
+ */
+@Composable
+private fun YouTubeLiveGroup() {
+    val c = LocalContainer.current
+    val live = c.imports.youtubeLive
+    val signedIn = com.prism.music.ui.theme.LocalAppSettings.current.isLoggedIn
+    val on by live.on.collectAsState()
+    val last by live.lastCheck.collectAsState()
+    val guard by live.guard.state.collectAsState()
+    Group(tr(R.string.ytlive_group)) {
+        if (!signedIn) {
+            Item(tr(R.string.ytlive_title), tr(R.string.ytlive_sign_in), onClick = {}, icon = PrismIcons.History, info = tr(R.string.ytlive_info))
+            return@Group
+        }
+        val detail = when {
+            !on -> tr(R.string.ytlive_sub_off)
+            guard == com.prism.music.data.imports.LiveGuard.State.PAUSED -> tr(R.string.ytlive_sub_paused)
+            guard == com.prism.music.data.imports.LiveGuard.State.NOT_ANSWERING -> tr(R.string.ytlive_sub_retry)
+            last == null -> tr(R.string.ytlive_sub_first)
+            else -> tr(R.string.ytlive_sub_checked, android.text.format.DateUtils.getRelativeTimeSpanString(last!!, System.currentTimeMillis(), android.text.format.DateUtils.MINUTE_IN_MILLIS).toString())
+        }
+        Toggle(tr(R.string.ytlive_title), detail, on, icon = PrismIcons.History, info = tr(R.string.ytlive_info)) { c.imports.setYouTubeLive(it) }
     }
 }
 

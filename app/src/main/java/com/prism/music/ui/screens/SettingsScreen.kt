@@ -2503,20 +2503,68 @@ private fun RecommendationsPage() {
             ) { StoryTypeSample(it) }
             Toggle(tr(R.string.rewind_notification), tr(R.string.on_december_1_when_your_year), s.rewindNotification) { prefs.setRewindNotification(it) }
             // Prism's plays always count; each imported source only when switched on (off by default: Replay as before).
-            if (imported.isNotEmpty()) {
-                Label(tr(R.string.imp_count_history_from), info = tr(R.string.imp_count_history_info))
-                Item(tr(R.string.imp_prism_plays), tr(R.string.imp_always_counted), onClick = {}) {
-                    Icon(PrismIcons.Check, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-                imported.forEach { sum ->
-                    val source = com.prism.music.data.imports.ImportSource.of(sum.origin) ?: return@forEach
-                    Toggle(source.label, tr(R.string.imp_n_plays, java.text.NumberFormat.getIntegerInstance().format(sum.plays)), source in counted) {
-                        c.imports.setCounted(source, it)
-                    }
-                }
-            }
+            // 1.8.1 (owner): every source is listed; one not brought in (or a live one that's off) is greyed, with the way to it.
+            CountHistoryFrom(imported, counted)
         }
         // Region moved to the Language page (1.8.0).
+    }
+}
+
+/**
+ * "Count history from" (1.8.1): Prism's plays (always), then every source in order. One with plays here (or a live one
+ * that's on) has its switch; the others are greyed with "Bring it in" (Bring your history) or "Turn on" (the live ones'
+ * own switches), and never count.
+ */
+@Composable
+private fun CountHistoryFrom(imported: List<com.prism.music.data.db.ImportSummary>, counted: Set<com.prism.music.data.imports.ImportSource>) {
+    val c = LocalContainer.current
+    val nav = LocalNavigator.current
+    val context = LocalContext.current
+    val ytLive by c.imports.youtubeLive.on.collectAsState()
+    // Spotify's connection is only built when it's connected (most never connect; see Spotify.pageOpened).
+    val spotifyConnected = remember {
+        com.prism.music.data.spotify.SpotifyStore.connectedIn(
+            context.getSharedPreferences(com.prism.music.data.spotify.SpotifyStore.AUTH_PREFS, android.content.Context.MODE_PRIVATE),
+        )
+    }
+    val spotifyLive = if (spotifyConnected) c.spotify.options.collectAsState().value.recent else false
+    val liveOn = buildSet {
+        if (ytLive) add(com.prism.music.data.imports.ImportSource.YOUTUBE_LIVE)
+        if (spotifyLive) add(com.prism.music.data.imports.ImportSource.SPOTIFY_LIVE)
+    }
+    val count = java.text.NumberFormat.getIntegerInstance()
+    Label(tr(R.string.imp_count_history_from), info = tr(R.string.imp_count_history_info))
+    Item(tr(R.string.imp_prism_plays), tr(R.string.imp_always_counted), onClick = {}) {
+        Icon(PrismIcons.Check, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+    com.prism.music.data.imports.CountSources.rows(imported, liveOn, counted).forEach { row ->
+        val source = row.source
+        if (row.state == com.prism.music.data.imports.CountSources.State.COUNTABLE) {
+            val detail = if (row.plays > 0) tr(R.string.imp_n_plays, count.format(row.plays)) else tr(R.string.imp_live_no_plays)
+            Toggle(source.label, detail, row.counted) { c.imports.setCounted(source, it) }
+        } else {
+            val go = {
+                if (source == com.prism.music.data.imports.ImportSource.SPOTIFY_LIVE) nav.go(Routes.settings(SettingsSection.SPOTIFY.key))
+                else nav.go(Routes.BRING_HISTORY)
+            }
+            MissingSource(source.label, if (source.isLive) tr(R.string.off) else tr(R.string.imp_not_brought_in), if (source.isLive) tr(R.string.imp_turn_on) else tr(R.string.imp_bring_it_in), go)
+        }
+    }
+}
+
+/** A source with nothing to count yet: its name greyed, and the way to bring it in. */
+@Composable
+private fun MissingSource(title: String, detail: String, action: String, onClick: () -> Unit) {
+    val ui = com.prism.music.ui.theme.LocalUi.current
+    Row(
+        Modifier.fillMaxWidth().clickable(onClick = onClick).padding(start = 16.dp, end = 8.dp, top = ui.gap(8.dp), bottom = ui.gap(8.dp)),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f).alpha(0.5f)) {
+            Text(title, style = MaterialTheme.typography.bodyLarge)
+            Text(detail, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        com.prism.music.ui.components.PrismTextButton(onClick = onClick) { Text(action) }
     }
 }
 
