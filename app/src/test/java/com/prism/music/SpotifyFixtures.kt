@@ -48,10 +48,10 @@ object SpotifyFixtures {
         """{"external_urls":{"spotify":""},"href":"","id":"a2","images":[],"name":"Radiohead","type":"artist","uri":"spotify:artist:a2"}""",
     ))
 
-    fun playlist(id: String, name: String, owner: String, total: Int, collaborative: Boolean = false, snapshot: String = "s1") = """
+    fun playlist(id: String, name: String, owner: String, total: Int, collaborative: Boolean = false, snapshot: String = "s1", ownerName: String = owner) = """
         {"collaborative":$collaborative,"description":"Made by $owner","external_urls":{"spotify":"https://open.spotify.com/playlist/$id"},
          "href":"https://api.spotify.com/v1/playlists/$id","id":"$id","images":[{"url":"https://mosaic.scdn.co/640/$id","height":640,"width":640}],
-         "name":"$name","owner":{"external_urls":{"spotify":""},"href":"","id":"$owner","type":"user","uri":"spotify:user:$owner","display_name":"$owner"},
+         "name":"$name","owner":{"external_urls":{"spotify":""},"href":"","id":"$owner","type":"user","uri":"spotify:user:$owner","display_name":"$ownerName"},
          "public":false,"snapshot_id":"$snapshot","items":{"href":"https://api.spotify.com/v1/playlists/$id/items","total":$total},
          "tracks":{"href":"https://api.spotify.com/v1/playlists/$id/tracks","total":$total},"type":"playlist","uri":"spotify:playlist:$id"}
     """.trimIndent()

@@ -45,6 +45,8 @@ data class SpotifyPlaylist(
     val image: String? = null,
     val total: Int = 0,
     val description: String = "",
+    /** Its owner as Spotify shows them ("Lofi Girl", "Spotify"); the id when they have no name. */
+    val ownerName: String = "",
 )
 
 /** One page of a Spotify list and where the next one is (null: the last). */
@@ -113,8 +115,10 @@ object SpotifyParse {
         val list = o.arr("items").mapNotNull { e ->
             val p = e as? JsonObject ?: return@mapNotNull null
             val id = p.str("id") ?: return@mapNotNull null
+            val owner = p.o("owner")
             SpotifyPlaylist(
-                id = id, name = p.str("name").orEmpty().ifBlank { id }, ownerId = p.o("owner")?.str("id").orEmpty(),
+                id = id, name = p.str("name").orEmpty().ifBlank { id }, ownerId = owner?.str("id").orEmpty(),
+                ownerName = owner?.str("display_name")?.takeIf { it.isNotBlank() } ?: owner?.str("id").orEmpty(),
                 collaborative = p["collaborative"]?.jsonPrimitive?.booleanOrNull ?: false, snapshot = p.str("snapshot_id").orEmpty(),
                 image = image(p.arr("images")),
                 // "items" holds the count since February 2026 ("tracks" before, deprecated).

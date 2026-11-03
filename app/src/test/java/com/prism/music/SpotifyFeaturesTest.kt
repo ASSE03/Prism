@@ -233,6 +233,56 @@ class SpotifyFeaturesTest {
         assertEquals(listOf("p1"), playlists.mirror().lists.map { it.playlist.id })
         assertEquals(1, playlists.mirror().notYours)
         assertEquals(1, hands.lists.size)
+        assertEquals("named in Library with the followed ones", listOf("p3"), playlists.followed.value.map { it.id })
+    }
+
+    @Test fun followedPlaylistsAreListedNeverMirroredAndForgotten() = runBlocking {
+        val body = SpotifyFixtures.page(listOf(
+            SpotifyFixtures.playlist("p1", "Self Care", "samr", 1),
+            SpotifyFixtures.playlist("lofi", "lofi beats", "lofigirl", 400, ownerName = "Lofi Girl"),
+            SpotifyFixtures.playlist("emo", "Emo Forever", "spotify", 100, ownerName = "Spotify"),
+            SpotifyFixtures.playlist("p4", "Shared", "friend", 1, collaborative = true),
+        ))
+        // Parsed: the owner's name comes along; split into what this app can read and the rest.
+        val parsed = SpotifyParse.playlists(body).items
+        assertEquals(listOf("samr", "Lofi Girl", "Spotify", "friend"), parsed.map { it.ownerName })
+        val (yours, others) = SpotifyPlaylists.split(parsed, "samr")
+        assertEquals(listOf("p1", "p4"), yours.map { it.id })
+        assertEquals(listOf("lofi", "emo"), others.map { it.id })
+        assertEquals("https://open.spotify.com/playlist/lofi", SpotifyPlaylists.openLink("lofi"))
+
+        net.routes["https://api.spotify.com/v1/me/playlists"] = { 200 to body }
+        net.routes["https://api.spotify.com/v1/playlists/p1/items"] = { 200 to SpotifyFixtures.page(listOf(SpotifyFixtures.playlistItem(blinding))) }
+        net.routes["https://api.spotify.com/v1/playlists/p4/items"] = { 200 to SpotifyFixtures.page(listOf(SpotifyFixtures.playlistItem(creep))) }
+        val hands = FakeHands()
+        val playlists = SpotifyPlaylists(api, db, importer, dir, hands, matchOf(), pause = {})
+        playlists.refreshAll("samr", now = 1)
+        assertEquals(listOf("lofi", "emo"), playlists.followed.value.map { it.id })
+        assertEquals(listOf("Lofi Girl", "Spotify"), playlists.followed.value.map { it.ownerName })
+        assertEquals("their songs are never asked for", 0, net.count("https://api.spotify.com/v1/playlists/lofi") + net.count("https://api.spotify.com/v1/playlists/emo"))
+        assertEquals("no mirror entry for them", listOf("p1", "p4"), playlists.mirror().lists.map { it.playlist.id })
+        assertEquals("no Prism playlist for them", listOf("Self Care", "Shared"), hands.lists.values.map { it.first })
+        assertEquals(2, playlists.mirror().notYours)
+        assertTrue(File(dir, "followed.json").exists())
+        // Read back from the file by a new instance (the app's next start).
+        assertEquals(listOf("lofi", "emo"), SpotifyPlaylists(api, db, importer, dir, FakeHands(), matchOf(), pause = {}).followed.value.map { it.id })
+
+        // A copy made in Spotify (yours now) is mirrored at the next refresh; the followed one stays listed.
+        net.routes["https://api.spotify.com/v1/me/playlists"] = {
+            200 to SpotifyFixtures.page(listOf(
+                SpotifyFixtures.playlist("p1", "Self Care", "samr", 1), SpotifyFixtures.playlist("lofi", "lofi beats", "lofigirl", 400, ownerName = "Lofi Girl"),
+                SpotifyFixtures.playlist("copy", "lofi beats", "samr", 1),
+            ))
+        }
+        net.routes["https://api.spotify.com/v1/playlists/copy/items"] = { 200 to SpotifyFixtures.page(listOf(SpotifyFixtures.playlistItem(antiHero))) }
+        playlists.refreshAll("samr", now = 2)
+        assertEquals(listOf("p1", "copy"), playlists.mirror().lists.map { it.playlist.id })
+        assertEquals(listOf("lofi"), playlists.followed.value.map { it.id })
+
+        // Disconnect (or the switch off): gone.
+        playlists.forget(keep = false)
+        assertTrue(playlists.followed.value.isEmpty())
+        assertFalse(File(dir, "followed.json").exists())
     }
 
     // ---- Liked Songs both ways
