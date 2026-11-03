@@ -34,6 +34,13 @@ internal class SingWatch(private val limitMs: Long) {
             playWhenReady && (state == Player.STATE_BUFFERING || (state == Player.STATE_IDLE && error))
 
         /**
+         * What the watchdog counts: [stuck] only while Sing is [busy] with a song. An error with Sing idle (offline, a
+         * refused link) is the player's own, retried or skipped by the playback service: Sing letting go would race it.
+         */
+        fun counts(busy: Boolean, playWhenReady: Boolean, state: Int, error: Boolean): Boolean =
+            busy && stuck(playWhenReady, state, error)
+
+        /**
          * Sing's engine isn't loaded on this version: it took Prism down as it loaded twice running ([unfinished] loads
          * that never finished), or did so before on this same version ([brokenOn]). A new version tries it again.
          */

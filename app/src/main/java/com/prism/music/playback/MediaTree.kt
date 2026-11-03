@@ -244,16 +244,18 @@ class MediaTree(private val c: AppContainer) {
     suspend fun searchItems(query: String): List<MediaItem> {
         val key = query.trim().lowercase()
         synchronized(searches) { searches[key] }?.let { return it }
-        val items = buildSearch(query.trim())
-        synchronized(searches) {
+        val (items, complete) = buildSearch(query.trim())
+        // A search that couldn't reach Prism Music isn't kept: asked again, it tries again.
+        if (complete) synchronized(searches) {
             searches[key] = items
             while (searches.size > KEPT_SEARCHES) searches.remove(searches.keys.first())
         }
         return items
     }
 
-    private suspend fun buildSearch(query: String): List<MediaItem> {
-        if (query.isEmpty()) return emptyList()
+    /** The items, and whether Prism Music's own search answered (else they're only the listener's own). */
+    private suspend fun buildSearch(query: String): Pair<List<MediaItem>, Boolean> {
+        if (query.isEmpty()) return emptyList<MediaItem>() to true
         val yours = grouped(tr(R.string.your_music))
         val lists = ownPlaylists().filter { VoiceSearch.names(it.title, query) > 0 }.take(SEARCH_EACH)
             .map { folder(it.folderId, it.title, it.subtitle, it.art, MediaMetadata.MEDIA_TYPE_PLAYLIST, yours) }
@@ -272,7 +274,7 @@ class MediaTree(private val c: AppContainer) {
             found?.sections.orEmpty().firstOrNull { it.first == SearchFilter.SONGS }?.second.orEmpty().filterIsInstance<SongItem>().map { it.song })
             .distinctBy { it.id }
         if (foundSongs.isNotEmpty()) folders[SEARCH] = query to foundSongs
-        return (lists + liked + listOfNotNull(top) + sections).distinctBy { it.mediaId }
+        return (lists + liked + listOfNotNull(top) + sections).distinctBy { it.mediaId } to (found != null)
     }
 
     /** A playlist of the listener's own, for the car: Prism's, then their YouTube library's. */

@@ -577,6 +577,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val picked = c.queue.source.value.kind == QueueKind.RADIO || player.currentMediaItemIndex >= c.queue.autoplayStart.value.let { if (it < 0) Int.MAX_VALUE else it }
         val unwanted = c.library.isDisliked(song.id) || (picked && c.exclusions.blocks(song))
         if (reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO && !c.queue.followingHost && unwanted && player.hasNextMediaItem()) {
+            untrack()
             player.seekToNextMediaItem()
             return
         }
@@ -584,6 +585,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // shuffle) is passed over for the next one that may play; with none left, the music stops there.
         val explicitMode = c.settings.current.behavior.explicitContent
         if (!c.queue.followingHost && !com.prism.music.data.ExplicitFilter.plays(explicitMode, song)) {
+            // Passed over unheard: the seek's own transition mustn't count the song that just finished a second time,
+            // and with none left nothing is credited while the explicit song sits there ([onPlayWhenReadyChanged] keeps it paused).
+            untrack()
             val tl = player.currentTimeline
             var i = tl.getNextWindowIndex(player.currentMediaItemIndex, Player.REPEAT_MODE_OFF, player.shuffleModeEnabled)
             while (i != C.INDEX_UNSET) {
@@ -603,7 +607,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             var i = tl.getNextWindowIndex(player.currentMediaItemIndex, Player.REPEAT_MODE_OFF, player.shuffleModeEnabled)
             while (i != C.INDEX_UNSET) {
                 val next = player.getMediaItemAt(i)
-                if (next.toSong()?.isLive == true || c.availableOffline(next.mediaId)) { player.seekTo(i, 0); return }
+                if (next.toSong()?.isLive == true || c.availableOffline(next.mediaId)) { untrack(); player.seekTo(i, 0); return }
                 i = tl.getNextWindowIndex(i, Player.REPEAT_MODE_OFF, player.shuffleModeEnabled)
             }
         }
@@ -828,6 +832,16 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
     }
 
+    override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+        // #216: the explicit song left current when none that may play came after it stays paused, whatever presses Play.
+        if (!playWhenReady || c.queue.followingHost) return
+        val song = player.currentMediaItem?.toSong() ?: return
+        if (!com.prism.music.data.ExplicitFilter.plays(c.settings.current.behavior.explicitContent, song)) {
+            player.pause()
+            c.player.reportError(tr(R.string.explicit_none_left))
+        }
+    }
+
     /** The song [prefetchNext] last got ready. */
     private var warmedNext: String? = null
 
@@ -842,6 +856,12 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         edges.timelineChanged(timeline)
         vocals.timelineChanged(timeline)
         if (reason != Player.TIMELINE_CHANGE_REASON_PLAYLIST_CHANGED) return
+        // A spoken request's songs are in: they play (the phone's VoicePlayActivity leaves that to here, so a request
+        // that found nothing doesn't resume the old queue).
+        if (voiceAnsweredAt > 0 && SystemClock.elapsedRealtime() - voiceAnsweredAt < VOICE_START_MS) {
+            voiceAnsweredAt = 0
+            scope.launch { if (player.playbackState == Player.STATE_IDLE) player.prepare(); player.play() }
+        }
         // What's lined up changed (songs added, moved, removed, the queue emptied): kept for the next start. It was only
         // saved on a song change, play / pause, shuffle or repeat, so an emptied or edited queue could come back as it was.
         scheduleSave()
@@ -854,6 +874,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             djSoon = scope.launch { delay(1_500); djAhead() }
         }
     }
+
+    /** When a spoken request last found something to play (elapsed realtime), till its songs are in; 0: none waiting. */
+    private var voiceAnsweredAt = 0L
 
     /** When playback stalled waiting for data (logged with how long, tag PrismStream). */
     private var stalledAt = 0L
@@ -1212,9 +1235,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 // #296: nothing goes to the account's history while history is paused.
                 if (trackedSong?.id == song.id && !com.prism.music.data.HistoryPause.paused(c.settings.current.behavior)) {
                     withContext(Dispatchers.IO) {
-                        runCatching { c.ytm.registerPlayback(ex) }
-                        // YouTube Music (live) then knows this one at the top of the account's history as Prism's own.
-                        runCatching { com.prism.music.data.imports.YouTubeLive.noteSent(c.app, song.id, com.prism.music.data.imports.YouTubeLive.keyOf(song)) }
+                        val sent = runCatching { c.ytm.registerPlayback(ex) }.getOrDefault(false)
+                        // YouTube Music (live) then knows this one at the top of the account's history as Prism's own
+                        // (only when YouTube took it: else a play elsewhere would be taken for Prism's).
+                        if (sent) runCatching { com.prism.music.data.imports.YouTubeLive.noteSent(c.app, song.id, com.prism.music.data.imports.YouTubeLive.keyOf(song)) }
                     }
                 }
             }
@@ -1698,6 +1722,12 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     /** How long the song being tracked has been heard so far (what [flushPlayTime] would count now). */
     private fun heardMs(): Long = accumulatedMs + (if (playStartedAt > 0) SystemClock.elapsedRealtime() - playStartedAt else 0L)
+
+    /** Nothing is being heard as a play: a song passed over at once ([onMediaItemTransition]) isn't tracked. */
+    private fun untrack() {
+        trackedSong = null
+        trackedRecommended = false
+    }
 
     private fun flushPlayTime(skipped: Boolean = false) {
         val now = SystemClock.elapsedRealtime()
@@ -2362,6 +2392,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             // session's play-from-search): words and voice extras instead of an id.
             if (single != null && single.mediaId.isBlank() && single.toSong() == null) {
                 return@future playVoice(mediaSession, controller, single.requestMetadata.searchQuery, single.requestMetadata.extras)
+                    .also { voiceAnsweredAt = SystemClock.elapsedRealtime() }
             }
             // "Shuffle play" at the top of a list.
             if (single != null && single.mediaId.startsWith(MediaTree.SHUFFLE)) {
@@ -2705,6 +2736,8 @@ private const val LENGTH_MISMATCH_SEC = 8
 
 /** Songs heard this recently aren't added by radio or autoplay again (1.7.9, Reddit: "the same songs over and over"). */
 private const val RADIO_REST_MS = 4 * 3_600_000L
+/** How long after a spoken request found its songs they may still come in and start playing. */
+private const val VOICE_START_MS = 10_000L
 /** How many songs ahead DJ mode scans and orders (a quick scan each: three stretches of the song, a few at once). */
 private const val DJ_WINDOW = 40
 /** How long DJ mode waits for more scans before putting the queue in order again. */

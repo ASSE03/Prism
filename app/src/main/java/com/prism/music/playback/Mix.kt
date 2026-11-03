@@ -151,6 +151,9 @@ class MixEngine(
     private var rushMs = RUSH_MS
     /** Since when the ending song has been stopped to load mid-blend (0 when it's playing). */
     private var tailStalledAt = 0L
+    /** The fade-in [MixState.into] last looked at, and the furthest the song has played since ([wentBack]). */
+    private var intoSeen: BlendIn? = null
+    private var intoFurthest = 0L
 
     /** One step; returns how long to wait before the next. */
     private fun tick(): Long {
@@ -177,6 +180,12 @@ class MixEngine(
         val item = main.currentMediaItem ?: return 500
         // How the song playing came in is only its own: another song (skipped to, or the next without a blend) has none.
         if (state.into.value?.let { it.songId != item.mediaId } == true) state.into.value = null
+        // Nor once the same song starts over (repeat one, Previous) or is taken back into its fade-in: that's not heard again.
+        state.into.value?.let { into ->
+            if (intoSeen !== into) { intoSeen = into; intoFurthest = main.currentPosition }
+            intoFurthest = maxOf(intoFurthest, main.currentPosition)
+            if (wentBack(into, main.currentPosition, intoFurthest)) state.into.value = null
+        }
         val dur = main.duration.takeIf { it != C.TIME_UNSET && it > 0 } ?: return 500
         // Counted to where the music ends, not the file: a song with a long silent tail blends that much earlier (counted
         // from the file's end, the blend's moment had passed before it was even planned, and the song just stopped).
@@ -601,6 +610,20 @@ class MixEngine(
 
     companion object {
         private const val TAG = "PrismMix"
+        /** How far back a reading may be from the furthest seen before it counts as the song going back (readings lag). */
+        private const val WENT_BACK_SLACK_MS = 1_000L
+        /** The longest [idle] waits between looks: a song started over may have played this far on by the next one. */
+        private const val IDLE_LOOK_MS = 2_500L
+
+        /**
+         * Whether the song that came in from a crossfade ([into]) is at [positionMs] from before it: behind where its
+         * fade-in began, or taken back (from [furthestMs], the furthest it's played) to about its fade-in's end or before,
+         * as repeat one or Previous starting it over does. A blend brought in early (its ending song went quiet) ends
+         * short of that end without going back, so it keeps its shape.
+         */
+        fun wentBack(into: BlendIn, positionMs: Long, furthestMs: Long): Boolean =
+            positionMs < into.inMs ||
+                (positionMs < furthestMs - WENT_BACK_SLACK_MS && positionMs < into.inMs + into.lengthMs + IDLE_LOOK_MS)
 
         /**
          * Auto crossfade's length for [ending] running into [next] (their scans; null or [Tempo.edgesUnknown] when not

@@ -736,13 +736,17 @@ class YouTubeMusic(
         }
     }
 
-    /** Registers a play in the user's YouTube Music history so recommendations stay in sync. */
-    suspend fun registerPlayback(extras: PlayerExtras) {
-        val base = extras.trackingUrl ?: return
+    /**
+     * Registers a play in the user's YouTube Music history so recommendations stay in sync. Whether YouTube took it
+     * (a 2xx answer): no tracking URL, no answer or a refusal is false.
+     */
+    suspend fun registerPlayback(extras: PlayerExtras): Boolean {
+        val base = extras.trackingUrl ?: return false
         val cpn = (1..16).map { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_".random() }.joinToString("")
         val sep = if (base.contains("?")) "&" else "?"
         val code = api.ping("$base${sep}ver=2&c=WEB_REMIX&cver=${api.clientVersion}&cpn=$cpn")
         android.util.Log.i("PrismHistory", "play sent to YouTube Music: HTTP $code")
+        return code != null && code in 200..299
     }
 
     // ---------------------------------------------------------------- Account & library
