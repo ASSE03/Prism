@@ -168,25 +168,55 @@ fun SongRow(
     showAlbum: Boolean = true,
     onClick: () -> Unit,
 ) {
-    val c = LocalContainer.current
-    val likedIds = c.library.likedIds.collectAsState()
-    val downloads = c.downloadState.collectAsState()
-    val standIns = c.downloadStandIns.collectAsState()
-    val videos = c.videoState.collectAsState()
+    // The likes, downloads and saved videos, collected once for the whole app (PrismRoot) rather than by each row: a
+    // row coming into view during a fling started four collectors of its own (1.8.1).
+    val marks = LocalRowMarks.current ?: LocalContainer.current.let { c ->
+        rememberRowMarks(c.library.likedIds, c.downloadState, c.downloadStandIns, c.videoState)
+    }
     var menu by remember { mutableStateOf(false) }
     val done = androidx.media3.exoplayer.offline.Download.STATE_COMPLETED
     // Each row recomposes only when its own marks change, not every time any download, like or video changes anywhere
     // (a list on screen while Smart Downloads ran was rebuilt row by row at each step).
-    val liked by remember(song.id) { derivedStateOf { song.id in likedIds.value } }
+    val liked by remember(song.id, marks) { derivedStateOf { song.id in marks.liked.value } }
     // A music video downloaded as its song shows as downloaded (#315).
-    val downloaded by remember(song.id) { derivedStateOf { downloads.value.forRow(song.id, standIns.value)?.state == done } }
-    val videoSaved by remember(song.id) { derivedStateOf { videos.value[song.id]?.state == done } }
+    val downloaded by remember(song.id, marks) { derivedStateOf { marks.downloads.value.forRow(song.id, marks.standIns.value)?.state == done } }
+    val videoSaved by remember(song.id, marks) { derivedStateOf { marks.videos.value[song.id]?.state == done } }
     SongRowLayout(
         song, modifier, index, playing, trailingInfo, starred,
         liked = liked, downloaded = downloaded, videoSaved = videoSaved, showAlbum = showAlbum,
         onLongClick = onLongClick ?: { menu = true }, onMore = { menu = true }, onClick = onClick,
     )
     if (menu) SongActionsSheet(song, extraActions) { menu = false }
+}
+
+/**
+ * What every [SongRow] marks: the liked songs, the downloads (+ the videos downloaded as their song, #315) and the saved
+ * music videos, as states. Only their values are read, inside each row's own derivedStateOf.
+ */
+@androidx.compose.runtime.Stable
+class RowMarks(
+    val liked: androidx.compose.runtime.State<Set<String>>,
+    val downloads: androidx.compose.runtime.State<Map<String, com.prism.music.download.DownloadInfo>>,
+    val standIns: androidx.compose.runtime.State<Map<String, String>>,
+    val videos: androidx.compose.runtime.State<Map<String, com.prism.music.download.VideoDownload>>,
+)
+
+/** The app's [RowMarks], provided once at its root; null (a TV, a test) makes each row collect its own. */
+val LocalRowMarks = androidx.compose.runtime.staticCompositionLocalOf<RowMarks?> { null }
+
+/** The four flows collected here, once, as [RowMarks]. */
+@Composable
+fun rememberRowMarks(
+    liked: kotlinx.coroutines.flow.StateFlow<Set<String>>,
+    downloads: kotlinx.coroutines.flow.StateFlow<Map<String, com.prism.music.download.DownloadInfo>>,
+    standIns: kotlinx.coroutines.flow.StateFlow<Map<String, String>>,
+    videos: kotlinx.coroutines.flow.StateFlow<Map<String, com.prism.music.download.VideoDownload>>,
+): RowMarks {
+    val l = liked.collectAsState()
+    val d = downloads.collectAsState()
+    val s = standIns.collectAsState()
+    val v = videos.collectAsState()
+    return remember(l, d, s, v) { RowMarks(l, d, s, v) }
 }
 
 /** [SongRow]'s look, given what it shows (so it can be drawn without the app around it: the Design gallery, tests). */
