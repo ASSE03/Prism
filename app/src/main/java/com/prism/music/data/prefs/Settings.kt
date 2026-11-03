@@ -345,7 +345,24 @@ data class TvPrefs(
      * own now-playing hero. Empty: Home as it comes (see `TvHomeLayout`).
      */
     val homeLayout: List<HomeSectionConfig> = emptyList(),
-)
+    /**
+     * How dark the background behind the TV's player and lyrics is (1.8.1, Reddit: "options on TV to change background
+     * opacity, especially in lyrics mode"): [DIM_LIGHTER] (a music video shows through more) to [DIM_DARKEST]; 0 is
+     * Prism as it comes.
+     */
+    val backdropDim: Int = 0,
+) {
+    companion object {
+        const val DIM_LIGHTER = -1
+        const val DIM_DARKEST = 3
+
+        /** Black laid over the cover's backdrop at [dim]: none as it comes (and lighter: the cover's own can't be). */
+        fun coverShade(dim: Int): Float = when (dim.coerceIn(DIM_LIGHTER, DIM_DARKEST)) { 1 -> 0.25f; 2 -> 0.5f; 3 -> 0.75f; else -> 0f }
+
+        /** How much of the shade over a music video (its lyrics' scrim) stays, at [dim]: 1 as it comes. */
+        fun videoShade(dim: Int): Float = when (dim.coerceIn(DIM_LIGHTER, DIM_DARKEST)) { -1 -> 0.6f; 1 -> 1.2f; 2 -> 1.4f; 3 -> 1.6f; else -> 1f }
+    }
+}
 
 /** Picture-in-picture for a playing video (1.7.8, #167). */
 enum class PipMode(val label: String) { AUTO(tr(R.string.when_you_leave_prism)), MENU(tr(R.string.only_with_its_button)) }
@@ -1873,6 +1890,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val tvLyricsScale = floatPreferencesKey("tv_lyrics_scale")
     val tvWelcomed = booleanPreferencesKey("tv_welcomed")
         val tvHomeLayout = stringPreferencesKey("tv_home_layout")
+        val tvBackdropDim = intPreferencesKey("tv_backdrop_dim")
         val pauseOnMute = booleanPreferencesKey("pause_on_mute")
         val pipMode = stringPreferencesKey("pip_mode")
         val panelSwipes = booleanPreferencesKey("panel_swipes")
@@ -2310,6 +2328,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 lyricsScale = (p[K.tvLyricsScale] ?: d.tv.lyricsScale).coerceIn(0.75f, 1.5f),
             welcomed = p[K.tvWelcomed] ?: d.tv.welcomed,
                 homeLayout = p[K.tvHomeLayout]?.let { runCatching { json.decodeFromString<List<HomeSectionConfig>>(it) }.getOrNull() } ?: d.tv.homeLayout,
+                backdropDim = (p[K.tvBackdropDim] ?: d.tv.backdropDim).coerceIn(TvPrefs.DIM_LIGHTER, TvPrefs.DIM_DARKEST),
             ),
             uiDensity = p.enum(K.uiDensity, d.uiDensity),
             titleSize = p.enum(K.titleSize, d.titleSize),
@@ -2860,6 +2879,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setTvAmbientMinutes(v: Int) = edit { it[K.tvAmbientMinutes] = v.coerceIn(0, 60) }
     fun setDeskMode(v: Boolean) = edit { it[K.deskMode] = v }
     fun setTvLyricsScale(v: Float) = edit { it[K.tvLyricsScale] = v.coerceIn(0.75f, 1.5f) }
+    fun setTvBackdropDim(v: Int) = edit { it[K.tvBackdropDim] = v.coerceIn(TvPrefs.DIM_LIGHTER, TvPrefs.DIM_DARKEST) }
     fun setTvWelcomed() = edit { it[K.tvWelcomed] = true }
     /** The TV Home's rows ([TvPrefs.homeLayout]); an empty list is Home as it comes (Back to default). */
     fun setTvHomeLayout(v: List<HomeSectionConfig>) = edit {

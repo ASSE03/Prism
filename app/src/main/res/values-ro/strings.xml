@@ -4360,4 +4360,20 @@
     <string name="imp_channel_desc">Cât timp Prism potrivește melodiile pe care le-ai adus</string>
     <string name="imp_matching_notice">Se potrivește istoricul tău</string>
     <string name="imp_matching_n_of_n">Melodii: %1$d din %2$d</string>
+    <string name="sing_stopped_for_the_song">Sing s-a oprit ca melodia să poată cânta: rămânea în încărcare cât timp Sing o pregătea. Acum cântă așa cum este.</string>
+    <string name="sing_engine_didn_t_start">Motorul Sing nu a pornit pe acest dispozitiv. În schimb, modul rapid scoate vocea.</string>
+    <string name="sing_song_plays_as_it_is">Melodia continuă așa cum este.</string>
+    <string name="link_refused">%1$s a răspuns, dar Prism de acolo nu acceptă conexiuni. Deschide Prism pe el, apoi încearcă din nou.</string>
+    <string name="link_other_network">Acest telefon nu este în aceeași rețea cu %1$s. Sunt amândouă pe același Wi-Fi?</string>
+    <string name="link_no_answer">%1$s este pe acest Wi-Fi, dar nu a răspuns. Este Prism deschis acolo? Dacă da, Wi-Fi-ul tău poate împiedica dispozitivele să comunice între ele (izolarea clienților, frecventă în rețelele pentru oaspeți).</string>
+    <string name="link_tap_to_try_again">Nu a răspuns. Atinge pentru a încerca din nou</string>
+    <string name="tv_pair_step_where">Pe telefon, în playerul Prism, atinge rândul cu semnul de proiectare de sub comenzi (o atingere, nu apăsare lungă) sau ⋯ → Redă pe o boxă sau pe un televizor. Apoi atinge Telecomandă lângă %1$s</string>
+    <string name="tv_pair_step_sign_in">Apoi atinge „Conectează-te pe acest televizor” pe telefon. După aceea îți propune să aduci și biblioteca și playlisturile (mai târziu: Telecomandă → Adu-mi Prism-ul)</string>
+    <string name="tv_backdrop">Întunecarea fundalului</string>
+    <string name="tv_backdrop_info">Cât de întunecat este fundalul din spatele playerului și al versurilor. Mai deschis lasă videoclipul să se vadă mai mult sub versuri.</string>
+    <string name="tv_backdrop_lighter">Mai deschis</string>
+    <string name="tv_backdrop_as_it_comes">Așa cum este</string>
+    <string name="tv_backdrop_darker">Mai închis</string>
+    <string name="tv_backdrop_much_darker">Mult mai închis</string>
+    <string name="tv_backdrop_darkest">Aproape negru</string>
 </resources>

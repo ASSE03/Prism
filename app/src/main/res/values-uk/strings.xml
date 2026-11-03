@@ -4410,4 +4410,20 @@
     <string name="imp_channel_desc">Поки Prism зіставляє перенесені тобою пісні</string>
     <string name="imp_matching_notice">Зіставляємо твою історію</string>
     <string name="imp_matching_n_of_n">Пісні: %1$d з %2$d</string>
+    <string name="sing_stopped_for_the_song">Sing зупинено, щоб пісня могла грати: вона весь час завантажувалася, поки Sing її готував. Тепер вона грає як є.</string>
+    <string name="sing_engine_didn_t_start">Рушій Sing не запустився на цьому пристрої. Натомість голос прибирає швидкий спосіб.</string>
+    <string name="sing_song_plays_as_it_is">Пісня грає далі як є.</string>
+    <string name="link_refused">%1$s відповів, але Prism на ньому не приймає підключень. Відкрийте на ньому Prism і спробуйте ще раз.</string>
+    <string name="link_other_network">Цей телефон не в тій самій мережі, що %1$s. Обидва пристрої в одній мережі Wi-Fi?</string>
+    <string name="link_no_answer">%1$s у цій мережі Wi-Fi, але не відповів. Prism там відкрито? Якщо так, можливо, ваш Wi-Fi не дає пристроям зв\'язуватися між собою (ізоляція клієнтів, часто в гостьових мережах).</string>
+    <string name="link_tap_to_try_again">Немає відповіді. Торкніться, щоб повторити</string>
+    <string name="tv_pair_step_where">На телефоні, у плеєрі Prism, торкніться рядка зі значком трансляції під кнопками (звичайне торкання, не довге) або ⋯ → Відтворити на колонці чи телевізорі. Потім торкніться «Пульт» поруч із %1$s</string>
+    <string name="tv_pair_step_sign_in">Потім торкніться на телефоні «Увійти на цьому телевізорі». Після цього він запропонує перенести й медіатеку та плейлисти (пізніше: Пульт → Перенести мій Prism)</string>
+    <string name="tv_backdrop">Затемнення фону</string>
+    <string name="tv_backdrop_info">Наскільки темний фон за плеєром і текстом пісні. «Світліше» більше показує кліп під текстом.</string>
+    <string name="tv_backdrop_lighter">Світліше</string>
+    <string name="tv_backdrop_as_it_comes">Як є</string>
+    <string name="tv_backdrop_darker">Темніше</string>
+    <string name="tv_backdrop_much_darker">Набагато темніше</string>
+    <string name="tv_backdrop_darkest">Майже чорний</string>
 </resources>

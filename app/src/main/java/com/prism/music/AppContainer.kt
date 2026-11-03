@@ -682,6 +682,21 @@ class AppContainer(val app: Application) {
         cacheFormats.edit().putInt(id, itag).apply()
     }
 
+    /**
+     * [itag] may be saved under [key]: nothing of it is cached yet, or what is came in that format (recorded for it, as
+     * the player's stream does). Blocking (the cache's own lock).
+     */
+    private fun sameFormat(key: String, itag: Int): Boolean {
+        val before = cacheFormats.getInt(key, 0)
+        val cached = playerCache.getCachedBytes(key, 0, Long.MAX_VALUE) > 0
+        if (!mayAddFormat(before, itag, cached)) {
+            com.prism.music.playback.AudioDiagnostics.log("stream", "$key: not saved ahead as format $itag, its cached part is format $before")
+            return false
+        }
+        if (before != itag) cacheFormats.edit().putInt(key, itag).apply()
+        return true
+    }
+
     /** [id]'s cached part can't be read: it goes, with its format. Blocking (the cache's own lock). */
     fun forgetCachedAudio(id: String) {
         val key = songCacheKey(id)
@@ -704,6 +719,12 @@ class AppContainer(val app: Application) {
          * request without one (a song played through); Load ahead's request names its length, so a song it saved whole
          * didn't count as whole, and offline Prism asked the network for it and skipped it (#213).
          */
+        /**
+         * Bytes in format [itag] may join what's cached of a song: nothing is ([cached] false), or it came in the same
+         * format ([before]; 0 when it wasn't recorded, which isn't taken on trust).
+         */
+        internal fun mayAddFormat(before: Int, itag: Int, cached: Boolean): Boolean = !cached || before == itag
+
         fun markWhole(cache: Cache, id: String, length: Long) {
             if (length <= 0 || !cache.isCached(id, 0, length)) return
             runCatching { cache.applyContentMetadataMutations(id, ContentMetadataMutations().also { ContentMetadataMutations.setContentLength(it, length) }) }
@@ -718,10 +739,16 @@ class AppContainer(val app: Application) {
      * NewPipe) and, on Wi-Fi, its first ~10 seconds are saved into the song cache, so playback opens on bytes
      * already here instead of waiting on googlevideo. Blocking; call it off the main thread.
      */
-    fun warmUp(id: String, whole: Boolean = false, cellular: Boolean = false) {
+    fun warmUp(
+        id: String, whole: Boolean = false, cellular: Boolean = false,
+        /** For Sing: waits while the player loads even the song itself, so the two never fetch it side by side. */
+        forSing: Boolean = false,
+        /** Handed the download as it starts (Sing stops it when it lets go of the song). */
+        writer: ((androidx.media3.datasource.cache.CacheWriter) -> Unit)? = null,
+    ) {
         if (id.startsWith(com.prism.music.data.model.Song.LOCAL_PREFIX)) return // a file on the phone is ready already
         if (downloadCache.fullyCached(id, 0, C.LENGTH_UNSET.toLong())) return
-        yieldToPlaying(id)
+        yieldToPlaying(if (forSing) null else id)
         val s = runCatching { streams.resolve(id) }.getOrNull() ?: return // live streams and failures: nothing to save
         val metered = app.getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered != false
         // On mobile data only when allowed (Settings → Load ahead on mobile data).
@@ -733,9 +760,13 @@ class AppContainer(val app: Application) {
         if (!whole && prebuffered.containsKey(key)) return
         val bytes = if (whole) s.contentLength else PREBUFFER_BYTES.let { if (s.contentLength > 0) minOf(it, s.contentLength) else it }
         if (playerCache.isCached(key, 0, bytes)) return
+        // Never added to a part cached in another format (1.8.1): the player's own stream keeps to the format it began
+        // in ([cacheFormat]); saving the rest from another one joined two files into one nothing could read, kept till the
+        // cache was cleared (Sing on a TV, Reddit: "I have to uninstall and reinstall the app to restore playback").
+        if (!sameFormat(key, s.itag)) return
         val spec = DataSpec.Builder().setUri(s.audioUrl).setKey(key).setPosition(0).setLength(bytes).build()
         val source = CacheDataSource(playerCache, OkHttpDataSource.Factory(streamHttp).createDataSource())
-        runCatching { androidx.media3.datasource.cache.CacheWriter(source, spec, null, null).cache() }
+        runCatching { androidx.media3.datasource.cache.CacheWriter(source, spec, null, null).also { writer?.invoke(it) }.cache() }
             .onSuccess {
                 prebuffered[key] = s.itag
                 // Saved whole: say so, so it plays from here offline too (#213).

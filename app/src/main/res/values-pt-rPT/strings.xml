@@ -4360,4 +4360,20 @@
     <string name="imp_channel_desc">Enquanto o Prism faz a correspondência das músicas que trouxeste</string>
     <string name="imp_matching_notice">A fazer a correspondência do teu histórico</string>
     <string name="imp_matching_n_of_n">%1$d de %2$d músicas</string>
+    <string name="sing_stopped_for_the_song">O Sing parou para a música poder tocar: ficava a carregar enquanto o Sing a preparava. Agora toca tal como é.</string>
+    <string name="sing_engine_didn_t_start">O motor do Sing não arrancou neste dispositivo. Em vez disso, o modo rápido retira a voz.</string>
+    <string name="sing_song_plays_as_it_is">A música continua a tocar tal como é.</string>
+    <string name="link_refused">%1$s respondeu, mas o Prism nesse dispositivo não está a aceitar ligações. Abra o Prism nele e tente novamente.</string>
+    <string name="link_other_network">Este telemóvel não está na mesma rede que %1$s. Estão ambos na mesma rede Wi-Fi?</string>
+    <string name="link_no_answer">%1$s está nesta rede Wi-Fi, mas não respondeu. O Prism está aberto lá? Se estiver, a sua rede Wi-Fi pode estar a impedir os dispositivos de comunicarem entre si (isolamento de clientes, comum em redes de convidados).</string>
+    <string name="link_tap_to_try_again">Não respondeu. Toque para tentar novamente</string>
+    <string name="tv_pair_step_where">No telemóvel, no leitor do Prism, toque na linha com o símbolo de transmitir por baixo dos controlos (um toque, sem manter premido), ou ⋯ → Reproduzir num altifalante ou TV. Depois toque em Comando ao lado de %1$s</string>
+    <string name="tv_pair_step_sign_in">Depois toque em “Iniciar sessão nesta TV” no telemóvel. A seguir propõe levar também a sua biblioteca e playlists (mais tarde: Comando → Levar o meu Prism)</string>
+    <string name="tv_backdrop">Escurecimento do fundo</string>
+    <string name="tv_backdrop_info">Quão escuro é o fundo atrás do leitor e das letras. Mais claro deixa ver mais o videoclipe por baixo da letra.</string>
+    <string name="tv_backdrop_lighter">Mais claro</string>
+    <string name="tv_backdrop_as_it_comes">Tal como vem</string>
+    <string name="tv_backdrop_darker">Mais escuro</string>
+    <string name="tv_backdrop_much_darker">Muito mais escuro</string>
+    <string name="tv_backdrop_darkest">Quase preto</string>
 </resources>

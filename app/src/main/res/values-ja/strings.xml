@@ -4260,4 +4260,20 @@
     <string name="imp_channel_desc">Prism が取り込んだ曲を照合している間</string>
     <string name="imp_matching_notice">履歴を照合しています</string>
     <string name="imp_matching_n_of_n">%1$d / %2$d 曲</string>
+    <string name="sing_stopped_for_the_song">曲を再生できるよう Sing を停止しました：Sing の準備中、曲が読み込み中のままでした。今はそのまま再生しています。</string>
+    <string name="sing_engine_didn_t_start">このデバイスでは Sing のエンジンが起動しませんでした。代わりにクイック方式で声を取り除きます。</string>
+    <string name="sing_song_plays_as_it_is">曲はそのまま再生を続けます。</string>
+    <string name="link_refused">%1$s は応答しましたが、そこの Prism が接続を受け付けていません。そちらで Prism を開いてから、もう一度お試しください。</string>
+    <string name="link_other_network">このスマートフォンは %1$s と同じネットワークにありません。両方とも同じ Wi-Fi に接続していますか？</string>
+    <string name="link_no_answer">%1$s はこの Wi-Fi 上にありますが、応答しませんでした。そちらで Prism は開いていますか？開いている場合、Wi-Fi がデバイス同士の通信を妨げている可能性があります（クライアント分離、ゲストネットワークでよくあります）。</string>
+    <string name="link_tap_to_try_again">応答なし。タップしてもう一度試す</string>
+    <string name="tv_pair_step_where">スマートフォンの Prism のプレーヤーで、操作ボタンの下にあるキャストマーク付きの行をタップします（長押しではなく、タップ）。または ⋯ → スピーカーやテレビで再生。次に %1$s の横の「リモコン」をタップします</string>
+    <string name="tv_pair_step_sign_in">次にスマートフォンで「このテレビでログイン」をタップします。続けてライブラリとプレイリストも移すか尋ねられます（あとからでも：リモコン → Prism を移す）</string>
+    <string name="tv_backdrop">背景の暗さ</string>
+    <string name="tv_backdrop_info">プレーヤーと歌詞の後ろの背景の暗さです。「明るめ」にすると、歌詞の下のミュージックビデオがよく見えます。</string>
+    <string name="tv_backdrop_lighter">明るめ</string>
+    <string name="tv_backdrop_as_it_comes">そのまま</string>
+    <string name="tv_backdrop_darker">暗め</string>
+    <string name="tv_backdrop_much_darker">かなり暗め</string>
+    <string name="tv_backdrop_darkest">ほぼ黒</string>
 </resources>

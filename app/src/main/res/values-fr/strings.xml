@@ -4360,4 +4360,20 @@
     <string name="imp_channel_desc">Pendant que Prism associe les titres que vous avez importés</string>
     <string name="imp_matching_notice">Association de votre historique</string>
     <string name="imp_matching_n_of_n">%1$d titres sur %2$d</string>
+    <string name="sing_stopped_for_the_song">Sing s\'est arrêté pour que le titre puisse jouer : il restait en chargement pendant que Sing le préparait. Il joue maintenant tel quel.</string>
+    <string name="sing_engine_didn_t_start">Le moteur de Sing n\'a pas démarré sur cet appareil. La méthode rapide retire la voix à la place.</string>
+    <string name="sing_song_plays_as_it_is">Le titre continue tel quel.</string>
+    <string name="link_refused">%1$s a répondu, mais Prism n\'y accepte pas de connexions. Ouvrez Prism dessus, puis réessayez.</string>
+    <string name="link_other_network">Ce téléphone n\'est pas sur le même réseau que %1$s. Les deux sont-ils sur le même Wi-Fi ?</string>
+    <string name="link_no_answer">%1$s est sur ce Wi-Fi mais n\'a pas répondu. Prism y est-il ouvert ? Si oui, votre Wi-Fi empêche peut-être les appareils de communiquer entre eux (isolation des clients, courante sur les réseaux invités).</string>
+    <string name="link_tap_to_try_again">Pas de réponse. Touchez pour réessayer</string>
+    <string name="tv_pair_step_where">Sur votre téléphone, dans le lecteur de Prism, touchez la ligne avec le symbole de diffusion sous les commandes (un simple appui, pas un appui long), ou ⋯ → Lire sur une enceinte ou une TV. Touchez ensuite Télécommande à côté de %1$s</string>
+    <string name="tv_pair_step_sign_in">Touchez ensuite « Se connecter sur ce téléviseur » sur votre téléphone. Il propose ensuite d\'apporter aussi votre bibliothèque et vos playlists (plus tard : Télécommande → Apporter mon Prism)</string>
+    <string name="tv_backdrop">Assombrissement du fond</string>
+    <string name="tv_backdrop_info">L\'obscurité du fond derrière le lecteur et les paroles. Plus clair laisse mieux voir un clip sous ses paroles.</string>
+    <string name="tv_backdrop_lighter">Plus clair</string>
+    <string name="tv_backdrop_as_it_comes">Tel quel</string>
+    <string name="tv_backdrop_darker">Plus sombre</string>
+    <string name="tv_backdrop_much_darker">Beaucoup plus sombre</string>
+    <string name="tv_backdrop_darkest">Presque noir</string>
 </resources>

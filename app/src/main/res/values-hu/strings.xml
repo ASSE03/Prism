@@ -4310,4 +4310,20 @@
     <string name="imp_channel_desc">Amíg a Prism párosítja az áthozott dalokat</string>
     <string name="imp_matching_notice">Előzményeid párosítása</string>
     <string name="imp_matching_n_of_n">%1$d / %2$d dal</string>
+    <string name="sing_stopped_for_the_song">A Sing leállt, hogy a dal szólhasson: töltésben maradt, amíg a Sing előkészítette. Most úgy szól, ahogy van.</string>
+    <string name="sing_engine_didn_t_start">A Sing motorja nem indult el ezen az eszközön. Helyette a gyors mód veszi ki az éneket.</string>
+    <string name="sing_song_plays_as_it_is">A dal úgy szól tovább, ahogy van.</string>
+    <string name="link_refused">%1$s válaszolt, de az ottani Prism nem fogad kapcsolatokat. Nyisd meg rajta a Prismet, aztán próbáld újra.</string>
+    <string name="link_other_network">Ez a telefon nincs ugyanazon a hálózaton, mint %1$s. Mindkettő ugyanazon a Wi-Fin van?</string>
+    <string name="link_no_answer">%1$s ezen a Wi-Fin van, de nem válaszolt. Nyitva van ott a Prism? Ha igen, a Wi-Fi talán nem engedi, hogy az eszközök elérjék egymást (kliensizoláció, vendéghálózatokon gyakori).</string>
+    <string name="link_tap_to_try_again">Nem válaszolt. Koppints az újrapróbáláshoz</string>
+    <string name="tv_pair_step_where">A telefonon, a Prism lejátszójában koppints a vezérlők alatti, átküldés jelű sorra (egy koppintás, nem hosszú nyomás), vagy ⋯ → Lejátszás hangszórón vagy tévén. Aztán koppints a Távirányítóra a(z) %1$s mellett</string>
+    <string name="tv_pair_step_sign_in">Aztán koppints a telefonon a „Bejelentkezés ezen a tévén” gombra. Utána felajánlja a könyvtárad és a lejátszási listáid átvitelét is (később: Távirányító → A Prismem átvitele)</string>
+    <string name="tv_backdrop">Háttér sötétsége</string>
+    <string name="tv_backdrop_info">Milyen sötét a háttér a lejátszó és a dalszöveg mögött. A Világosabb jobban átengedi a videoklipet a dalszöveg alatt.</string>
+    <string name="tv_backdrop_lighter">Világosabb</string>
+    <string name="tv_backdrop_as_it_comes">Ahogy van</string>
+    <string name="tv_backdrop_darker">Sötétebb</string>
+    <string name="tv_backdrop_much_darker">Sokkal sötétebb</string>
+    <string name="tv_backdrop_darkest">Majdnem fekete</string>
 </resources>

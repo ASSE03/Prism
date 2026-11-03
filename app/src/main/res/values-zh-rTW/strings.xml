@@ -4260,4 +4260,20 @@
     <string name="imp_channel_desc">Prism 配對你匯入的歌曲時</string>
     <string name="imp_matching_notice">正在配對你的記錄</string>
     <string name="imp_matching_n_of_n">%1$d / %2$d 首歌</string>
+    <string name="sing_stopped_for_the_song">為了讓歌曲播放，Sing 已停止：Sing 準備歌曲時，歌曲一直在載入。現在照原樣播放。</string>
+    <string name="sing_engine_didn_t_start">Sing 的引擎無法在這部裝置上啟動。改用快速方式去除人聲。</string>
+    <string name="sing_song_plays_as_it_is">歌曲照原樣繼續播放。</string>
+    <string name="link_refused">%1$s 有回應，但那裡的 Prism 不接受連線。請在該裝置上開啟 Prism，然後再試一次。</string>
+    <string name="link_other_network">這支手機和 %1$s 不在同一個網路。兩者是否連上同一個 Wi-Fi？</string>
+    <string name="link_no_answer">%1$s 在這個 Wi-Fi 上，但沒有回應。那裡的 Prism 開著嗎？如果開著，可能是你的 Wi-Fi 不讓裝置互相連線（用戶端隔離，訪客網路常見）。</string>
+    <string name="link_tap_to_try_again">沒有回應。輕觸即可重試</string>
+    <string name="tv_pair_step_where">在手機上的 Prism 播放器中，輕觸控制按鈕下方有投放標誌的那一行（輕觸即可，不是長按），或 ⋯ → 在喇叭或電視上播放。然後輕觸 %1$s 旁邊的「遙控器」</string>
+    <string name="tv_pair_step_sign_in">然後在手機上輕觸「在這台電視上登入」。接著它會提議把你的音樂庫和播放清單也帶過去（之後也可以：遙控器 → 帶上我的 Prism）</string>
+    <string name="tv_backdrop">背景暗度</string>
+    <string name="tv_backdrop_info">播放器和歌詞後方背景的暗度。「更亮」會讓歌詞下的音樂影片更清楚地透出來。</string>
+    <string name="tv_backdrop_lighter">更亮</string>
+    <string name="tv_backdrop_as_it_comes">預設</string>
+    <string name="tv_backdrop_darker">更暗</string>
+    <string name="tv_backdrop_much_darker">暗得多</string>
+    <string name="tv_backdrop_darkest">近乎全黑</string>
 </resources>

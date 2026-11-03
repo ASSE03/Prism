@@ -4310,4 +4310,20 @@
     <string name="imp_channel_desc">Prism যখন আপনার নিয়ে আসা গানগুলো মেলায়</string>
     <string name="imp_matching_notice">আপনার ইতিহাস মেলানো হচ্ছে</string>
     <string name="imp_matching_n_of_n">%2$dটি গানের মধ্যে %1$dটি</string>
+    <string name="sing_stopped_for_the_song">গানটি চালানোর জন্য Sing থেমে গেছে: Sing এটি তৈরি করার সময় এটি লোড হতেই থাকছিল। এখন এটি যেমন আছে তেমন বাজছে।</string>
+    <string name="sing_engine_didn_t_start">এই ডিভাইসে Sing-এর ইঞ্জিন চালু হয়নি। তার বদলে দ্রুত পদ্ধতিতে কণ্ঠ সরানো হবে।</string>
+    <string name="sing_song_plays_as_it_is">গানটি যেমন আছে তেমনই বাজতে থাকবে।</string>
+    <string name="link_refused">%1$s সাড়া দিয়েছে, কিন্তু সেখানে Prism সংযোগ নিচ্ছে না। সেখানে Prism খুলুন, তারপর আবার চেষ্টা করুন।</string>
+    <string name="link_other_network">এই ফোনটি %1$s-এর মতো একই নেটওয়ার্কে নেই। দুটিই কি একই Wi-Fi-তে আছে?</string>
+    <string name="link_no_answer">%1$s এই Wi-Fi-তে আছে কিন্তু সাড়া দেয়নি। সেখানে কি Prism খোলা আছে? থাকলে, আপনার Wi-Fi হয়তো ডিভাইসগুলোকে একে অপরের কাছে পৌঁছাতে দিচ্ছে না (ক্লায়েন্ট আইসোলেশন, গেস্ট নেটওয়ার্কে সাধারণ)।</string>
+    <string name="link_tap_to_try_again">সাড়া দেয়নি। আবার চেষ্টা করতে ট্যাপ করুন</string>
+    <string name="tv_pair_step_where">আপনার ফোনে, Prism-এর প্লেয়ারে, কন্ট্রোলের নিচে কাস্ট চিহ্ন থাকা লাইনটিতে ট্যাপ করুন (শুধু ট্যাপ, লং প্রেস নয়), অথবা ⋯ → স্পিকার বা টিভিতে চালান। তারপর %1$s-এর পাশে রিমোট ট্যাপ করুন</string>
+    <string name="tv_pair_step_sign_in">তারপর ফোনে “এই টিভিতে সাইন ইন করুন” ট্যাপ করুন। এরপর এটি আপনার লাইব্রেরি ও প্লেলিস্টও নিয়ে যাওয়ার প্রস্তাব দেবে (পরে: রিমোট → আমার Prism নিয়ে যান)</string>
+    <string name="tv_backdrop">পটভূমির অন্ধকার</string>
+    <string name="tv_backdrop_info">প্লেয়ার ও লিরিক্সের পেছনের পটভূমি কতটা গাঢ়। হালকা করলে লিরিক্সের নিচে মিউজিক ভিডিও বেশি দেখা যায়।</string>
+    <string name="tv_backdrop_lighter">হালকা</string>
+    <string name="tv_backdrop_as_it_comes">যেমন আছে</string>
+    <string name="tv_backdrop_darker">গাঢ়</string>
+    <string name="tv_backdrop_much_darker">অনেক গাঢ়</string>
+    <string name="tv_backdrop_darkest">প্রায় কালো</string>
 </resources>

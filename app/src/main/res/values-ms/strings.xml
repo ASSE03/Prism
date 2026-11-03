@@ -4260,4 +4260,20 @@
     <string name="imp_channel_desc">Semasa Prism memadankan lagu yang anda bawa masuk</string>
     <string name="imp_matching_notice">Memadankan sejarah anda</string>
     <string name="imp_matching_n_of_n">%1$d daripada %2$d lagu</string>
+    <string name="sing_stopped_for_the_song">Sing berhenti supaya lagu boleh dimainkan: lagu terus dimuatkan semasa Sing menyediakannya. Kini ia dimainkan seadanya.</string>
+    <string name="sing_engine_didn_t_start">Enjin Sing tidak bermula pada peranti ini. Sebaliknya, cara pantas akan membuang suara.</string>
+    <string name="sing_song_plays_as_it_is">Lagu terus dimainkan seadanya.</string>
+    <string name="link_refused">%1$s menjawab, tetapi Prism di sana tidak menerima sambungan. Buka Prism padanya, kemudian cuba lagi.</string>
+    <string name="link_other_network">Telefon ini tidak berada pada rangkaian yang sama dengan %1$s. Adakah kedua-duanya pada Wi-Fi yang sama?</string>
+    <string name="link_no_answer">%1$s ada pada Wi-Fi ini tetapi tidak menjawab. Adakah Prism dibuka di sana? Jika ya, Wi-Fi anda mungkin menghalang peranti daripada berhubung antara satu sama lain (pengasingan klien, biasa pada rangkaian tetamu).</string>
+    <string name="link_tap_to_try_again">Tiada jawapan. Ketik untuk cuba lagi</string>
+    <string name="tv_pair_step_where">Pada telefon anda, dalam pemain Prism, ketik baris dengan tanda cast di bawah kawalan (ketik sahaja, bukan tekan lama), atau ⋯ → Main pada pembesar suara atau TV. Kemudian ketik Alat kawalan jauh di sebelah %1$s</string>
+    <string name="tv_pair_step_sign_in">Kemudian ketik “Log masuk pada TV ini” pada telefon. Selepas itu ia menawarkan untuk membawa pustaka dan senarai main anda juga (kemudian: Alat kawalan jauh → Bawa Prism saya)</string>
+    <string name="tv_backdrop">Kegelapan latar</string>
+    <string name="tv_backdrop_info">Betapa gelap latar di belakang pemain dan lirik. Lebih cerah membolehkan video muzik lebih kelihatan di bawah liriknya.</string>
+    <string name="tv_backdrop_lighter">Lebih cerah</string>
+    <string name="tv_backdrop_as_it_comes">Seadanya</string>
+    <string name="tv_backdrop_darker">Lebih gelap</string>
+    <string name="tv_backdrop_much_darker">Jauh lebih gelap</string>
+    <string name="tv_backdrop_darkest">Hampir hitam</string>
 </resources>

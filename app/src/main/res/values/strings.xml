@@ -4446,6 +4446,22 @@
     <string name="imp_channel_desc">While Prism matches the songs you brought in</string>
     <string name="imp_matching_notice">Matching your history</string>
     <string name="imp_matching_n_of_n">%1$d of %2$d songs</string>
+    <string name="sing_stopped_for_the_song">Sing stopped so the song could play: it sat loading while Sing got it ready. It plays as it is now.</string>
+    <string name="sing_engine_didn_t_start">Sing\'s engine didn\'t start on this device. The quick way takes the voice out instead.</string>
+    <string name="sing_song_plays_as_it_is">The song plays on as it is.</string>
+    <string name="link_refused">%1$s answered, but Prism there isn\'t taking connections. Open Prism on it, then try again.</string>
+    <string name="link_other_network">This phone isn\'t on the same network as %1$s. Are both on the same Wi-Fi?</string>
+    <string name="link_no_answer">%1$s is on this Wi-Fi but didn\'t answer. Is Prism open there? If it is, your Wi-Fi may keep devices from reaching each other (client isolation, common on guest networks).</string>
+    <string name="link_tap_to_try_again">Didn\'t answer. Tap to try again</string>
+    <string name="tv_pair_step_where">On your phone, in Prism\'s player, tap the line with the cast mark under the controls (a tap, not a long press), or ⋯ → Play on a speaker or TV. Then tap Remote next to %1$s</string>
+    <string name="tv_pair_step_sign_in">Then tap “Sign in on this TV” on your phone. It offers to bring your library and playlists next (later: Remote → Bring my Prism)</string>
+    <string name="tv_backdrop">Background darkness</string>
+    <string name="tv_backdrop_info">How dark the background is behind the player and the lyrics. Lighter lets a music video show through more under its lyrics.</string>
+    <string name="tv_backdrop_lighter">Lighter</string>
+    <string name="tv_backdrop_as_it_comes">As it comes</string>
+    <string name="tv_backdrop_darker">Darker</string>
+    <string name="tv_backdrop_much_darker">Much darker</string>
+    <string name="tv_backdrop_darkest">Nearly black</string>
     <!-- 1.8.1: Spotify, through the listener's own developer app (Settings, Devices and connections, Spotify) -->
     <string name="spotify">Spotify</string>
     <string name="spot_summary">Your playlists, plays and likes, with your own Spotify app</string>

@@ -4360,4 +4360,20 @@
     <string name="imp_channel_desc">בזמן ש-Prism מתאים את השירים שהבאת</string>
     <string name="imp_matching_notice">מתאים את ההיסטוריה שלך</string>
     <string name="imp_matching_n_of_n">%1$d מתוך %2$d שירים</string>
+    <string name="sing_stopped_for_the_song">Sing נעצר כדי שהשיר יוכל להתנגן: הוא נשאר בטעינה בזמן ש-Sing הכין אותו. עכשיו הוא מתנגן כמו שהוא.</string>
+    <string name="sing_engine_didn_t_start">המנוע של Sing לא התחיל במכשיר הזה. במקום זאת, הדרך המהירה מסירה את הקול.</string>
+    <string name="sing_song_plays_as_it_is">השיר ממשיך כמו שהוא.</string>
+    <string name="link_refused">%1$s ענה, אבל Prism שם לא מקבל חיבורים. פתחו את Prism עליו ונסו שוב.</string>
+    <string name="link_other_network">הטלפון הזה לא נמצא באותה רשת כמו %1$s. האם שניהם באותה רשת Wi-Fi?</string>
+    <string name="link_no_answer">%1$s נמצא ב-Wi-Fi הזה אבל לא ענה. האם Prism פתוח שם? אם כן, ייתכן שה-Wi-Fi שלכם לא מאפשר למכשירים להגיע זה לזה (בידוד לקוחות, נפוץ ברשתות אורחים).</string>
+    <string name="link_tap_to_try_again">אין מענה. הקישו כדי לנסות שוב</string>
+    <string name="tv_pair_step_where">בטלפון, בנגן של Prism, הקישו על השורה עם סמל ההעברה מתחת לפקדים (הקשה רגילה, לא לחיצה ארוכה), או ⋯ ← השמעה ברמקול או בטלוויזיה. אחר כך הקישו על שלט ליד %1$s</string>
+    <string name="tv_pair_step_sign_in">אחר כך הקישו בטלפון על „התחברות בטלוויזיה הזו”. לאחר מכן הוא יציע להעביר גם את הספרייה והפלייליסטים (מאוחר יותר: שלט ← להעביר את ה-Prism שלי)</string>
+    <string name="tv_backdrop">כהות הרקע</string>
+    <string name="tv_backdrop_info">כמה כהה הרקע מאחורי הנגן והמילים. בהיר יותר מראה יותר את הקליפ מתחת למילים.</string>
+    <string name="tv_backdrop_lighter">בהיר יותר</string>
+    <string name="tv_backdrop_as_it_comes">כמו שהוא</string>
+    <string name="tv_backdrop_darker">כהה יותר</string>
+    <string name="tv_backdrop_much_darker">כהה הרבה יותר</string>
+    <string name="tv_backdrop_darkest">כמעט שחור</string>
 </resources>

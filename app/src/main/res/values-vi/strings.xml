@@ -4260,4 +4260,20 @@
     <string name="imp_channel_desc">Khi Prism ghép các bài hát bạn đã mang sang</string>
     <string name="imp_matching_notice">Đang ghép lịch sử của bạn</string>
     <string name="imp_matching_n_of_n">%1$d / %2$d bài hát</string>
+    <string name="sing_stopped_for_the_song">Sing đã dừng để bài hát có thể phát: bài hát cứ tải mãi trong lúc Sing chuẩn bị. Giờ bài hát phát như bình thường.</string>
+    <string name="sing_engine_didn_t_start">Bộ máy của Sing không khởi động trên thiết bị này. Thay vào đó, cách nhanh sẽ bỏ giọng hát.</string>
+    <string name="sing_song_plays_as_it_is">Bài hát tiếp tục phát như bình thường.</string>
+    <string name="link_refused">%1$s đã trả lời, nhưng Prism ở đó không nhận kết nối. Hãy mở Prism trên thiết bị đó rồi thử lại.</string>
+    <string name="link_other_network">Điện thoại này không ở cùng mạng với %1$s. Cả hai có đang dùng cùng Wi-Fi không?</string>
+    <string name="link_no_answer">%1$s ở trên Wi-Fi này nhưng không trả lời. Prism có đang mở ở đó không? Nếu có, Wi-Fi của bạn có thể ngăn các thiết bị kết nối với nhau (cách ly máy khách, thường gặp ở mạng khách).</string>
+    <string name="link_tap_to_try_again">Không trả lời. Nhấn để thử lại</string>
+    <string name="tv_pair_step_where">Trên điện thoại, trong trình phát của Prism, nhấn vào dòng có dấu truyền bên dưới các nút điều khiển (nhấn thường, không nhấn giữ), hoặc ⋯ → Phát trên loa hoặc TV. Sau đó nhấn Điều khiển bên cạnh %1$s</string>
+    <string name="tv_pair_step_sign_in">Sau đó nhấn “Đăng nhập trên TV này” trên điện thoại. Tiếp theo nó sẽ đề nghị mang cả thư viện và danh sách phát của bạn (sau này: Điều khiển → Mang Prism của tôi)</string>
+    <string name="tv_backdrop">Độ tối của nền</string>
+    <string name="tv_backdrop_info">Nền phía sau trình phát và lời bài hát tối đến mức nào. Sáng hơn cho video nhạc hiện rõ hơn dưới lời bài hát.</string>
+    <string name="tv_backdrop_lighter">Sáng hơn</string>
+    <string name="tv_backdrop_as_it_comes">Như mặc định</string>
+    <string name="tv_backdrop_darker">Tối hơn</string>
+    <string name="tv_backdrop_much_darker">Tối hơn nhiều</string>
+    <string name="tv_backdrop_darkest">Gần như đen</string>
 </resources>

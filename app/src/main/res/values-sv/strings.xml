@@ -4310,4 +4310,20 @@
     <string name="imp_channel_desc">Medan Prism matchar låtarna du tog med</string>
     <string name="imp_matching_notice">Matchar din historik</string>
     <string name="imp_matching_n_of_n">%1$d av %2$d låtar</string>
+    <string name="sing_stopped_for_the_song">Sing stoppades så att låten kunde spelas: den låg kvar och laddade medan Sing förberedde den. Nu spelas den som den är.</string>
+    <string name="sing_engine_didn_t_start">Sings motor startade inte på den här enheten. I stället tar det snabba sättet bort rösten.</string>
+    <string name="sing_song_plays_as_it_is">Låten spelas vidare som den är.</string>
+    <string name="link_refused">%1$s svarade, men Prism där tar inte emot anslutningar. Öppna Prism på den och försök sedan igen.</string>
+    <string name="link_other_network">Den här telefonen är inte på samma nätverk som %1$s. Är båda på samma wifi?</string>
+    <string name="link_no_answer">%1$s är på det här wifi-nätverket men svarade inte. Är Prism öppet där? I så fall kanske ditt wifi hindrar enheter från att nå varandra (klientisolering, vanligt på gästnätverk).</string>
+    <string name="link_tap_to_try_again">Inget svar. Tryck för att försöka igen</string>
+    <string name="tv_pair_step_where">På telefonen, i Prisms spelare, tryck på raden med cast-tecknet under kontrollerna (ett tryck, inte ett långt tryck), eller ⋯ → Spela på en högtalare eller tv. Tryck sedan på Fjärrkontroll bredvid %1$s</string>
+    <string name="tv_pair_step_sign_in">Tryck sedan på ”Logga in på den här tv:n” på telefonen. Därefter erbjuder den att ta med ditt bibliotek och dina spellistor också (senare: Fjärrkontroll → Ta med mitt Prism)</string>
+    <string name="tv_backdrop">Bakgrundens mörker</string>
+    <string name="tv_backdrop_info">Hur mörk bakgrunden är bakom spelaren och låttexten. Ljusare låter en musikvideo synas mer under texten.</string>
+    <string name="tv_backdrop_lighter">Ljusare</string>
+    <string name="tv_backdrop_as_it_comes">Som den är</string>
+    <string name="tv_backdrop_darker">Mörkare</string>
+    <string name="tv_backdrop_much_darker">Mycket mörkare</string>
+    <string name="tv_backdrop_darkest">Nästan svart</string>
 </resources>

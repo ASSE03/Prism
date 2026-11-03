@@ -4310,4 +4310,20 @@
     <string name="imp_channel_desc">Όσο το Prism αντιστοιχίζει τα τραγούδια που έφερες</string>
     <string name="imp_matching_notice">Αντιστοίχιση του ιστορικού σου</string>
     <string name="imp_matching_n_of_n">%1$d από %2$d τραγούδια</string>
+    <string name="sing_stopped_for_the_song">Το Sing σταμάτησε για να παίξει το τραγούδι: έμενε σε φόρτωση όσο το Sing το ετοίμαζε. Τώρα παίζει όπως είναι.</string>
+    <string name="sing_engine_didn_t_start">Η μηχανή του Sing δεν ξεκίνησε σε αυτή τη συσκευή. Αντί γι\' αυτό, ο γρήγορος τρόπος αφαιρεί τη φωνή.</string>
+    <string name="sing_song_plays_as_it_is">Το τραγούδι συνεχίζει όπως είναι.</string>
+    <string name="link_refused">Το %1$s απάντησε, αλλά το Prism εκεί δεν δέχεται συνδέσεις. Άνοιξε το Prism εκεί και δοκίμασε ξανά.</string>
+    <string name="link_other_network">Αυτό το τηλέφωνο δεν είναι στο ίδιο δίκτυο με το %1$s. Είναι και τα δύο στο ίδιο Wi-Fi;</string>
+    <string name="link_no_answer">Το %1$s είναι σε αυτό το Wi-Fi αλλά δεν απάντησε. Είναι ανοιχτό το Prism εκεί; Αν ναι, το Wi-Fi σου ίσως δεν αφήνει τις συσκευές να επικοινωνούν (απομόνωση πελατών, συνηθισμένη σε δίκτυα επισκεπτών).</string>
+    <string name="link_tap_to_try_again">Δεν απάντησε. Πάτα για να δοκιμάσεις ξανά</string>
+    <string name="tv_pair_step_where">Στο τηλέφωνό σου, στο πρόγραμμα αναπαραγωγής του Prism, πάτα τη γραμμή με το σήμα μετάδοσης κάτω από τα χειριστήρια (απλό πάτημα, όχι παρατεταμένο) ή ⋯ → Αναπαραγωγή σε ηχείο ή τηλεόραση. Μετά πάτα Τηλεχειριστήριο δίπλα στο %1$s</string>
+    <string name="tv_pair_step_sign_in">Μετά πάτα «Σύνδεση σε αυτή την τηλεόραση» στο τηλέφωνο. Έπειτα προτείνει να φέρει και τη βιβλιοθήκη και τις λίστες σου (αργότερα: Τηλεχειριστήριο → Φέρε το Prism μου)</string>
+    <string name="tv_backdrop">Σκοτεινότητα φόντου</string>
+    <string name="tv_backdrop_info">Πόσο σκοτεινό είναι το φόντο πίσω από το πρόγραμμα αναπαραγωγής και τους στίχους. Το Πιο ανοιχτό αφήνει το μουσικό βίντεο να φαίνεται περισσότερο κάτω από τους στίχους.</string>
+    <string name="tv_backdrop_lighter">Πιο ανοιχτό</string>
+    <string name="tv_backdrop_as_it_comes">Όπως είναι</string>
+    <string name="tv_backdrop_darker">Πιο σκούρο</string>
+    <string name="tv_backdrop_much_darker">Πολύ πιο σκούρο</string>
+    <string name="tv_backdrop_darkest">Σχεδόν μαύρο</string>
 </resources>

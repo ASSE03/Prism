@@ -1373,6 +1373,7 @@ private fun PrismDevices() {
     val devices by handoff.devices.collectAsState()
     val busy by handoff.busy.collectAsState()
     val castState by cast.state.collectAsState()
+    val unreachable by handoff.unreachable.collectAsState()
     // A Prism TV the music plays on now (or is going to): it shows as playing, as a speaker cast to does.
     val tvNow = ((castState as? com.prism.music.connect.CastState.Casting)?.renderer ?: (castState as? com.prism.music.connect.CastState.Connecting)?.renderer)
         ?.takeIf { it.kind == com.prism.music.connect.RendererKind.PRISM_TV }
@@ -1395,6 +1396,9 @@ private fun PrismDevices() {
                 when {
                     connecting -> tvNow!!.detail + tr(R.string.connecting)
                     thisTv -> tvNow!!.detail
+                    // It didn't answer last time (1.8.1): said on its row, and a tap tries again (afresh: its addresses
+                    // are looked up again if the ones known don't answer).
+                    d.key in unreachable -> tr(R.string.link_tap_to_try_again)
                     else -> tr(R.string.move_the_music_there) + if (d.paired) "" else tr(R.string.pairs_the_first_time)
                 },
                 selected = thisTv && !connecting, busy = connecting, enabled = busy == null,
@@ -1427,7 +1431,7 @@ private fun SpeakersAndTvs(castState: com.prism.music.connect.CastState, casting
         val playing = (castState as? com.prism.music.connect.CastState.Casting)?.renderer ?: (castState as? com.prism.music.connect.CastState.Connecting)?.renderer
         val all = if (playing != null && playing.kind != com.prism.music.connect.RendererKind.PRISM_TV && list.none { it.id == playing.id }) listOf(playing) + list else list
         // A TV whose Prism is listed under Prism devices isn't listed again as its own Cast or DLNA player.
-        all.filter { r -> r.id == castingTo || prismTvs.none { it.tv && it.host == rendererHost(r) } }
+        all.filter { r -> r.id == castingTo || prismTvs.none { it.tv && rendererHost(r) in it.hosts } }
     }
     // A TV that had Prism on it, not open now: the TV's own player still works, and Prism plays there once opened.
     val closedPrismTv = shown.firstNotNullOfOrNull { r -> handoff.prismTvAt(rendererHost(r)) }

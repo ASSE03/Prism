@@ -4310,4 +4310,20 @@
     <string name="imp_channel_desc">Während Prism die mitgebrachten Songs zuordnet</string>
     <string name="imp_matching_notice">Dein Verlauf wird zugeordnet</string>
     <string name="imp_matching_n_of_n">%1$d von %2$d Songs</string>
+    <string name="sing_stopped_for_the_song">Sing wurde beendet, damit der Song spielen kann: Er lud weiter, während Sing ihn vorbereitete. Er spielt jetzt so, wie er ist.</string>
+    <string name="sing_engine_didn_t_start">Die Engine von Sing ist auf diesem Gerät nicht gestartet. Stattdessen nimmt der schnelle Weg die Stimme heraus.</string>
+    <string name="sing_song_plays_as_it_is">Der Song spielt so weiter, wie er ist.</string>
+    <string name="link_refused">%1$s hat geantwortet, aber Prism nimmt dort keine Verbindungen an. Öffne dort Prism und versuch es dann noch einmal.</string>
+    <string name="link_other_network">Dieses Telefon ist nicht im selben Netzwerk wie %1$s. Sind beide im selben WLAN?</string>
+    <string name="link_no_answer">%1$s ist in diesem WLAN, hat aber nicht geantwortet. Ist Prism dort geöffnet? Falls ja, lässt dein WLAN die Geräte vielleicht nicht miteinander sprechen (Client-Isolation, häufig in Gastnetzen).</string>
+    <string name="link_tap_to_try_again">Keine Antwort. Tippe, um es noch einmal zu versuchen</string>
+    <string name="tv_pair_step_where">Tippe auf deinem Telefon im Player von Prism auf die Zeile mit dem Cast-Symbol unter den Steuerelementen (ein Tippen, kein langes Drücken) oder auf ⋯ → Auf Lautsprecher oder Fernseher abspielen. Tippe dann neben %1$s auf Fernbedienung</string>
+    <string name="tv_pair_step_sign_in">Tippe dann auf dem Telefon auf „Auf diesem Fernseher anmelden“. Danach bietet es an, auch deine Mediathek und Playlists mitzubringen (später: Fernbedienung → Mein Prism mitbringen)</string>
+    <string name="tv_backdrop">Hintergrund-Abdunklung</string>
+    <string name="tv_backdrop_info">Wie dunkel der Hintergrund hinter dem Player und den Songtexten ist. Heller lässt ein Musikvideo unter seinem Songtext stärker durchscheinen.</string>
+    <string name="tv_backdrop_lighter">Heller</string>
+    <string name="tv_backdrop_as_it_comes">Wie vorgesehen</string>
+    <string name="tv_backdrop_darker">Dunkler</string>
+    <string name="tv_backdrop_much_darker">Viel dunkler</string>
+    <string name="tv_backdrop_darkest">Fast schwarz</string>
 </resources>
