@@ -103,7 +103,11 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
         // Android's own backup restored onto another install: its sign-ins aren't this phone's (RestoredInstall).
         runCatching {
             com.prism.music.data.RestoredInstall.check(this) {
+                // Signed out as Settings does: the account's library and Home kept for offline, and the sign-in page's
+                // cookies (Android's backup leaves those out now, but an older backup may have brought them).
                 container.settings.logout()
+                runCatching { container.library.forgetAccount() }
+                runCatching { android.webkit.CookieManager.getInstance().removeAllCookies(null) }
                 runCatching { container.lastFm.signOut() }
                 runCatching { container.discord.signOut() }
             }

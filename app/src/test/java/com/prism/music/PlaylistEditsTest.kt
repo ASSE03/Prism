@@ -73,6 +73,19 @@ class PlaylistEditsTest {
         assertEquals(1, r.refused)
     }
 
+    @Test fun aConnectionDroppedOnALaterBatchKeepsTheSongsAlreadyAdded() = runBlocking {
+        // The first 50 go in; the connection drops on the next 50.
+        val yt = FakeYouTube { endpoint, body ->
+            if (endpoint != "browse/edit_playlist") return@FakeYouTube 404 to "{}"
+            val ids = (body["actions"] as JsonArray).map { it.jsonObject.str("addedVideoId")!! }
+            if ("s50" in ids) throw java.io.IOException("connection reset")
+            200 to added(*ids.toTypedArray())
+        }
+        val r = yt.ytm.addSongsToPlaylist("PLmine", (0 until 100).map { "s$it" })
+        assertEquals(50, r.added)
+        assertEquals(50, r.refused)
+    }
+
     @Test fun theMessageSaysWhatHappened() {
         val ok = com.prism.music.data.innertube.YouTubeMusic.PlaylistAdd(added = 3, alreadyThere = 0)
         assertTrue(com.prism.music.ui.components.addedMessage(ok, "Road trip", many = true).contains("3"))

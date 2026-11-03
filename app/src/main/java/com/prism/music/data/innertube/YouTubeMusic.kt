@@ -950,6 +950,10 @@ class YouTubeMusic(
                 if (e.code == 400 && chunk.size > 1) { chunk.forEach { send(listOf(it)) }; return }
                 lastError = e
                 PlaylistEdits.Outcome.Refused(e.message ?: "")
+            } catch (e: java.io.IOException) {
+                // The connection dropped on a later batch: the ones before it went in, so they still count.
+                lastError = e
+                PlaylistEdits.Outcome.Refused(e.message ?: "")
             }
             when (outcome) {
                 is PlaylistEdits.Outcome.Done -> { added += outcome.added; there += chunk.size - outcome.added }
