@@ -40,6 +40,25 @@ Your listening history from Spotify, YouTube Music and Last.fm, matched to YouTu
 - **Your own song files** in place of the stream (#314, off by default), a progress bar shaped like the crossfade, a White player background (#320), fonts installed on your phone (#318), an explicit filter (#216), your own covers for songs and albums (#305), Pause history (#296) and when a song counts as played (#263).
 - **Also:** Replay graphs for days and weeks, favorite artists' new releases (#311), Add to playlist marks the playlists that have the song (#246), "Hey Google, play … on Prism" plays artists, albums and your playlists, word-by-word lyrics line up more often (#301), edge-to-edge cover and video are two switches again, and a long list of fixes. See the [changelog](CHANGELOG.md).
 
+<p align="center">
+<img src="docs/screenshots/bring-history.jpg" width="32%" alt="Bring your history: Spotify, YouTube Music and Last.fm, with your imports and the last Spotify import">
+<img src="docs/screenshots/needs-a-look.jpg" width="32%" alt="Needs a look: play the top three matches and pick the right one">
+<img src="docs/screenshots/replay-spotify.jpg" width="32%" alt="Replay counting Spotify too: Includes Spotify">
+<img src="docs/screenshots/spotify-connect.jpg" width="32%" alt="Connect Spotify with your own developer app, step by step">
+<img src="docs/screenshots/crossfade-bar.jpg" width="32%" alt="A progress bar shaped like the crossfade into the next song">
+<img src="docs/screenshots/white-player.jpg" width="32%" alt="The White player background in the light theme">
+</p>
+
+**Prism on your TV** (new in 1.8.0):
+
+<p align="center">
+<img src="docs/screenshots/tv-home.jpg" width="49%" alt="Prism TV's Home: Quick picks and holiday mixes">
+<img src="docs/screenshots/tv-player.jpg" width="49%" alt="Prism TV's full-screen player">
+<img src="docs/screenshots/tv-search.jpg" width="49%" alt="Prism TV's Search: top result and songs">
+<img src="docs/screenshots/tv-ambient.jpg" width="49%" alt="The TV dims to the song when the remote is put down">
+<img src="docs/screenshots/tv-pair.jpg" width="49%" alt="Pair your phone with the TV by a code or a QR code">
+</p>
+
 ## 1.8.0: Prism TV, and Settings made clearer
 
 The first 1.8 update: Prism on your TV, with your phone as its remote, and every Settings page gone through so each choice is in one place. Nothing you had set changes on the update.
