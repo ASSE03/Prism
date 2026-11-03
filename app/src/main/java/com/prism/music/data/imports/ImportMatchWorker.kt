@@ -85,11 +85,12 @@ class ImportMatchWorker(context: Context, params: WorkerParameters) : CoroutineW
                 OneTimeWorkRequestBuilder<ImportMatchWorker>().setConstraints(constraints(mobile))
                     .setBackoffCriteria(BackoffPolicy.LINEAR, 30, TimeUnit.SECONDS).build(),
             )
-            wm.enqueueUniquePeriodicWork(
-                WEEKLY, ExistingPeriodicWorkPolicy.UPDATE,
-                PeriodicWorkRequestBuilder<ImportMatchWorker>(7, TimeUnit.DAYS).setConstraints(constraints(mobile)).build(),
-            )
+            wm.enqueueUniquePeriodicWork(WEEKLY, ExistingPeriodicWorkPolicy.UPDATE, weekly(mobile))
         }
+
+        /** The weekly retry: its first run a week on (at once, it would match beside the one-time run just started). */
+        internal fun weekly(mobile: Boolean) = PeriodicWorkRequestBuilder<ImportMatchWorker>(7, TimeUnit.DAYS)
+            .setInitialDelay(7, TimeUnit.DAYS).setConstraints(constraints(mobile)).build()
 
         fun workName() = NAME
     }

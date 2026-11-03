@@ -25,7 +25,7 @@ class SpotifyRecent(
     suspend fun sync(): Int {
         val plays = SpotifyParse.recentlyPlayed(api.get("/me/player/recently-played", mapOf("limit" to "50")))
         db.spotify().dropLiveTwins(TWIN_MS)
-        val fresh = withoutTwins(plays) { key, from, to -> db.spotify().downloadTimes(key, from, to) }
+        val fresh = withoutTwins(plays) { key, uri, from, to -> db.spotify().downloadTimes(key, uri, from, to) }
         val session = importer.session(ImportSource.SPOTIFY_LIVE)
         fresh.forEach { session.add(toParsed(it)) }
         val stats = session.finish()
@@ -44,10 +44,13 @@ class SpotifyRecent(
             album = p.track.album, sourceId = p.track.uri, fullPlay = p.track.durationMs > 0, estimated = true,
         )
 
-        /** [plays] without the ones a data download already has ([times]: the download's plays of a song in a window). */
-        suspend fun withoutTwins(plays: List<RecentPlay>, times: suspend (String, Long, Long) -> List<Long>): List<RecentPlay> = plays.filter { p ->
+        /**
+         * [plays] without the ones a data download already has ([times]: the download's plays of a song, by its key or
+         * its Spotify URI, in a window).
+         */
+        suspend fun withoutTwins(plays: List<RecentPlay>, times: suspend (String, String, Long, Long) -> List<Long>): List<RecentPlay> = plays.filter { p ->
             val key = ImportKeys.songKey(p.track.title, p.track.artist)
-            times(key, p.playedAt - TWIN_MS, p.playedAt + p.track.durationMs + TWIN_MS).isEmpty()
+            times(key, p.track.uri, p.playedAt - TWIN_MS, p.playedAt + p.track.durationMs + TWIN_MS).isEmpty()
         }
     }
 }

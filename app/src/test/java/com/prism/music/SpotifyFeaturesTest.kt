@@ -109,7 +109,7 @@ class SpotifyFeaturesTest {
     @Test fun twinsAreFoundAroundThePlaysStartOrEnd() = runBlocking {
         val p = SpotifyParse.recentlyPlayed(SpotifyFixtures.recentlyPlayed(blinding to "2026-10-30T20:40:00Z"))
         val start = p[0].playedAt
-        suspend fun twins(times: List<Long>) = SpotifyRecent.withoutTwins(p) { _, from, to -> times.filter { it in from..to } }.isEmpty()
+        suspend fun twins(times: List<Long>) = SpotifyRecent.withoutTwins(p) { _, _, from, to -> times.filter { it in from..to } }.isEmpty()
         assertTrue("at the same time", twins(listOf(start)))
         assertTrue("at its end", twins(listOf(start + 200_040)))
         assertTrue("a minute after its end", twins(listOf(start + 260_000)))
@@ -118,6 +118,21 @@ class SpotifyFeaturesTest {
         assertTrue("its length is only Spotify's", parsed.estimated)
         assertEquals(200_040L, parsed.playedMs)
         assertEquals("spotify:track:0VjIjW4GlUZAMYd2vXMi3b", parsed.sourceId)
+    }
+
+    @Test fun aDownloadThatNamesTheAlbumsArtistIsStillATwin() = runBlocking {
+        // The extended history names a compilation's song by the album's artist: another name, the same Spotify URI.
+        val s = importer.session(ImportSource.SPOTIFY)
+        s.add(ParsedPlay(at("2026-10-30T20:44:04Z"), 200_040, "Blinding Lights", "Various Artists", sourceId = "spotify:track:0VjIjW4GlUZAMYd2vXMi3b", fullPlay = true))
+        s.finish()
+        net.routes["https://api.spotify.com/v1/me/player/recently-played"] = {
+            200 to SpotifyFixtures.recentlyPlayed(blinding to "2026-10-30T20:44:30.000Z", creep to "2026-10-31T09:00:00Z")
+        }
+        assertEquals("only Creep is new", 1, SpotifyRecent(api, db, importer, store).sync())
+        // And a download brought later takes the live one out by its URI too.
+        importer.session(ImportSource.SPOTIFY).apply { add(ParsedPlay(at("2026-10-31T09:03:58Z"), 238_000, "Creep", "Various Artists", sourceId = "spotify:track:70LcF31zb1H0PyJoS1Sx1r", fullPlay = true)) }.finish()
+        assertEquals(1, db.spotify().dropLiveTwins(SpotifyRecent.TWIN_MS))
+        assertEquals(0, db.spotify().livePlays())
     }
 
     // ---- Top songs and artists
@@ -219,6 +234,32 @@ class SpotifyFeaturesTest {
         playlists.forget(keep = false)
         assertTrue(playlists.mirror().lists.isEmpty())
         assertFalse(File(dir, "playlists.json").exists())
+    }
+
+    @Test fun removingAnImportKeepsTheMatchesTheConnectionNeeds() = runBlocking {
+        net.routes["https://api.spotify.com/v1/me/playlists"] = { 200 to SpotifyFixtures.page(listOf(SpotifyFixtures.playlist("p1", "Road trip", "samr", 2))) }
+        net.routes["https://api.spotify.com/v1/playlists/p1/items"] = {
+            200 to SpotifyFixtures.page(listOf(SpotifyFixtures.playlistItem(blinding), SpotifyFixtures.playlistItem(creep)))
+        }
+        val hands = FakeHands()
+        val song = ytSong("fHI8X4OXluQ", "Blinding Lights", "The Weeknd", 201)
+        val playlists = SpotifyPlaylists(api, db, importer, dir, hands, matchOf("Blinding Lights" to song), pause = {})
+        playlists.refreshAll("samr", now = 1)
+        val prismId = playlists.mirror().lists.single().prismId!!
+        playlists.refreshOne(prismId, readAgain = false)
+        assertEquals(listOf("fHI8X4OXluQ"), hands.songIds(prismId))
+        // A data download had Blinding Lights and Africa; the listener removes it.
+        importer.session(ImportSource.SPOTIFY).apply {
+            add(ParsedPlay(at("2026-10-30T20:44:04Z"), 200_040, "Blinding Lights", "The Weeknd", fullPlay = true))
+            add(ParsedPlay(at("2026-10-30T21:00:00Z"), 295_000, "Africa", "TOTO", fullPlay = true))
+        }.finish()
+        importer.remove(ImportSource.SPOTIFY, keep = playlists.matchKeys())
+        assertEquals("the playlist's songs keep their matches", MatchStatus.SURE.name, db.imports().match(ImportKeys.songKey("Blinding Lights", "The Weeknd"))?.status)
+        assertTrue(db.imports().match(ImportKeys.songKey("Creep", "Radiohead")) != null)
+        assertEquals("the download's own song goes", null, db.imports().match(ImportKeys.songKey("Africa", "TOTO")))
+        // So the playlist isn't emptied at its next run.
+        playlists.reapply()
+        assertEquals(listOf("fHI8X4OXluQ"), hands.songIds(prismId))
     }
 
     @Test fun aPlaylistSpotifyWontLetTheAppReadIsLeftOut() = runBlocking {

@@ -28,6 +28,15 @@ object LastFmHistory {
      */
     fun fromSeconds(newestStoredMs: Long?): Long? = newestStoredMs?.takeIf { it > 0 }?.div(1000)
 
+    /**
+     * [fromSeconds], unless the last reading stopped before its oldest page ([lastFinished] false): then everything is
+     * asked again, the scrobbles already here passed over, so the pages it never read are read at last.
+     */
+    fun fromSeconds(newestStoredMs: Long?, lastFinished: Boolean): Long? = if (lastFinished) fromSeconds(newestStoredMs) else null
+
+    /** [readAll]'s answer: the scrobbles read, and whether every page was ([finished] false: one kept failing). */
+    data class Read(val plays: Int, val finished: Boolean)
+
     /** One page of `user.getRecentTracks` (JSON); [laterAt]: the time of the play read before this page's first. */
     fun page(text: String, laterAt: Long? = null): Page? {
         val root = runCatching { ImportFiles.json.parseToJsonElement(text) as? JsonObject }.getOrNull() ?: return null
@@ -65,14 +74,14 @@ object LastFmHistory {
 
     /**
      * Every page, newest first: [fetch] asks for one page (1-based), [onPlay] gets each scrobble, [onProgress] the
-     * pages read of all. A page that fails is asked again twice, then reading stops with what was read.
+     * pages read of all. A page that fails is asked again twice, then reading stops with what was read (not [Read.finished]).
      */
     suspend fun readAll(
         fetch: suspend (Int) -> String,
         onPlay: (ParsedPlay) -> Unit,
         onProgress: (Int, Int) -> Unit = { _, _ -> },
         pause: Long = PAUSE_MS,
-    ): Int {
+    ): Read {
         var page = 1
         var pages = 1
         var later: Long? = null
@@ -84,7 +93,7 @@ object LastFmHistory {
                 if (p != null) break
                 delay(pause * attempt * 4)
             }
-            p ?: break
+            p ?: return Read(read, finished = false)
             pages = p.totalPages.coerceAtLeast(1)
             p.plays.forEach { onPlay(it); read++ }
             p.plays.lastOrNull()?.let { later = it.timestamp }
@@ -92,6 +101,6 @@ object LastFmHistory {
             page++
             if (page <= pages) delay(pause)
         }
-        return read
+        return Read(read, finished = true)
     }
 }

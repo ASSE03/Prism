@@ -76,6 +76,9 @@ class SpotifyPlaylists(
 
     fun isMirror(prismId: String) = prismId in prismIds()
 
+    /** The mirrored playlists' songs: their matches stay when an import is removed ([com.prism.music.data.imports.HistoryImporter.remove]). */
+    fun matchKeys(): Set<String> = mirror().lists.flatMap { l -> l.tracks.map(SpotifyQueue::key) }.toSet()
+
     private fun save(m: PlaylistMirror) {
         dir.mkdirs()
         val tmp = File(dir, "playlists.json.tmp")

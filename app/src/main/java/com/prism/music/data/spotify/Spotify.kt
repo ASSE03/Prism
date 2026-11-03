@@ -21,6 +21,7 @@ import com.prism.music.tr
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -185,8 +186,10 @@ class Spotify(private val c: AppContainer) {
      * Forgets the connection: tokens (and their key), jobs, what was read and cached; the Client ID too when
      * [clientIdToo]; the Spotify playlists leave Library unless [keepPlaylists] (then they stay as Prism's own). The
      * plays already brought in as "Spotify (live)" stay, as every import does, until removed in Bring your history.
+     * Not cancellable once begun: the tokens go first, so the page switches to the set-up form at once and leaves, and
+     * a half-done disconnect would keep the playlists, likes, files and switches.
      */
-    suspend fun disconnect(clientIdToo: Boolean, keepPlaylists: Boolean) = withContext(Dispatchers.IO) {
+    suspend fun disconnect(clientIdToo: Boolean, keepPlaylists: Boolean) = withContext(Dispatchers.IO + NonCancellable) {
         cancelConnect()
         SpotifyWorker.cancel(c.app)
         // The tokens first, so a feature running now stops at its next request; then each waits for its run to end.
@@ -362,6 +365,12 @@ class Spotify(private val c: AppContainer) {
     /** The mixes' extra taste while "Top songs and artists" is on (null otherwise: nothing is read). */
     fun taste(): TasteBoost? = if (store.connected && _options.value.top) topBoost else null
     private val topBoost by lazy { top.boost { store.connected && _options.value.top } }
+
+    /**
+     * The songs the connection still needs matched, though no imported play may name them: mirrored playlists', likes
+     * waiting, the top. Removing an import in Bring your history keeps their match lines.
+     */
+    fun matchKeys(): Set<String> = playlists.matchKeys() + likes.matchKeys() + top.matchKeys()
 
     /** Library's mark: this Prism playlist shows a Spotify one. */
     fun isSpotifyPlaylist(prismId: String): Boolean = _options.value.playlists && playlists.isMirror(prismId)

@@ -141,15 +141,20 @@ class ImportParsersTest {
         val all = ArrayList<ParsedPlay>()
         val n = LastFmHistory.readAll({ p -> asked += p; res("lastfm-page$p.json").decodeToString() }, { all += it }, pause = 0)
         assertEquals(listOf(1, 2), asked)
-        assertEquals(3, n)
+        assertEquals(3, n.plays)
+        assertTrue(n.finished)
         val lucky = all.last()
         assertEquals("a page with one scrobble", "Get Lucky (feat. Pharrell Williams & Nile Rodgers)", lucky.title)
         assertEquals("capped across pages", TakeoutHistory.CAP_MS, lucky.playedMs)
         // A page that keeps failing ends the reading with what was read.
         var tries = 0
         val partial = LastFmHistory.readAll({ p -> if (p == 1) res("lastfm-page1.json").decodeToString() else { tries++; throw java.io.IOException("offline") } }, {}, pause = 0)
-        assertEquals(2, partial)
+        assertEquals(2, partial.plays)
         assertEquals(3, tries)
+        // It says so, and the next import asks for everything again (not only since the newest scrobble it got).
+        assertFalse(partial.finished)
+        assertNull(LastFmHistory.fromSeconds(1_714_557_600_000L, lastFinished = false))
+        assertEquals(1_714_557_600L, LastFmHistory.fromSeconds(1_714_557_600_000L, lastFinished = true))
         assertNull(LastFmHistory.page("{\"error\":6,\"message\":\"User not found\"}"))
     }
 
