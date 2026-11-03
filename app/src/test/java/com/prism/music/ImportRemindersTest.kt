@@ -26,6 +26,14 @@ class ImportRemindersTest {
     private fun at(iso: String) = Instant.parse(iso).toEpochMilli()
     private val prefs = RuntimeEnvironment.getApplication().getSharedPreferences(HistoryImports.PREFS, Context.MODE_PRIVATE).also { it.edit().clear().commit() }
 
+    @Test fun theWeeklyMatchingRetryWaitsAWeek() {
+        // Started at once, it would match beside the one-time run every import starts (both making the same playlists).
+        val week = 7 * 86_400_000L
+        val weekly = com.prism.music.data.imports.ImportMatchWorker.weekly(mobile = false)
+        assertEquals(week, weekly.workSpec.initialDelay)
+        assertEquals(week, weekly.workSpec.intervalDuration)
+    }
+
     @Test fun neverWithoutAnImport() {
         val now = at("2030-01-01T00:00:00Z")
         assertEquals(emptyList<ImportSource>(), ImportReminders.due(now, 3, emptyMap(), emptyMap(), utc))

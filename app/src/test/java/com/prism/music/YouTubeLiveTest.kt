@@ -217,6 +217,22 @@ class YouTubeLiveTest {
         assertEquals("only x, not the whole page", 1, live.sync())
     }
 
+    @Test fun aReadThatFailsToStoreIsComparedAgainNotLost() = runBlocking {
+        page = historyPage("Today" to listOf("a", "b", "c"))
+        live().sync()
+        val first = live().snapshot()
+        now += 3_600_000L
+        page = historyPage("Today" to listOf("x", "a", "b", "c"))
+        // Storing fails (a closed database here): the read before stays the one to compare with.
+        val gone = Room.inMemoryDatabaseBuilder(app, PrismDatabase::class.java).allowMainThreadQueries().build().also { it.close() }
+        val failing = YouTubeLive(prefs, db, HistoryImporter(gone), read = { yt.ytm.historySections() }, account = { account }, jobs = jobs, clock = { now }, zone = { utc })
+        assertTrue(runCatching { failing.sync() }.isFailure)
+        assertEquals("kept", first, live().snapshot())
+        now += 3_600_000L
+        assertEquals("x is brought in next time", 1, live().sync())
+        assertEquals(1, livePlays())
+    }
+
     // ---- Kill switch and scheduling
 
     @Test fun failuresPauseItForADay() = runBlocking {

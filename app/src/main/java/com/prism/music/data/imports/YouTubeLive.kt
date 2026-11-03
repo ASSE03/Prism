@@ -230,22 +230,24 @@ class YouTubeLive(
         // one to compare with, so a page read again later is never taken as all new.
         if (entries.isEmpty()) { log("the History page had no songs"); return@withLock 0 }
         val before = snapshot()
-        save(HistorySnapshot(entries.take(KEEP).map { it.first }, t, who))
+        val next = HistorySnapshot(entries.take(KEEP).map { it.first }, t, who)
         val why = when {
             before == null -> "starting point"
             !sameAccount(before.account, who) -> "another account: a new starting point"
             t <= before.at || t - before.at > MAX_GAP_MS -> "a new starting point after ${(t - before.at) / 3_600_000} h"
             else -> null
         }
-        if (why != null || before == null) { log("${entries.size} on the History page, $why"); return@withLock 0 }
+        if (why != null || before == null) { save(next); log("${entries.size} on the History page, $why"); return@withLock 0 }
         val k = HistoryDiff.newOnTop(before.entries.map { it.id }, entries.map { it.first.id })
-        if (k == null) { log("the History page changed beyond recognition: a new starting point"); return@withLock 0 }
-        if (k == 0) return@withLock 0
+        if (k == null) { save(next); log("the History page changed beyond recognition: a new starting point"); return@withLock 0 }
+        if (k == 0) { save(next); return@withLock 0 }
         val fresh = entries.take(k)
         val times = HistoryDiff.times(fresh.map { it.first.section }, entries.getOrNull(k)?.first?.section, before.at, t, zone())
         val plays = fresh.mapIndexed { i, (_, song) -> song to times[i] }.filter { (s, _) -> !s.isEpisode && !s.isLocal && !s.isLive }
         val outside = withContext(Dispatchers.IO) { outsidePrism(plays, before.at, t) }
         val stored = withContext(Dispatchers.IO) { store(outside) }
+        // Only once they're stored: a read that failed on the way compares with the last one again, its plays not lost.
+        save(next)
         log("$k new at the top, ${plays.size - outside.size} were Prism's own or a Takeout's, $stored stored")
         stored
     }

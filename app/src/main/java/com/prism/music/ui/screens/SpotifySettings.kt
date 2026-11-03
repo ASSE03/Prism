@@ -209,7 +209,6 @@ private fun NoteWithInfo(text: String, info: String) {
 @Composable
 private fun SpotifyAccount(name: String?) {
     val c = LocalContainer.current
-    val scope = rememberCoroutineScope()
     var asking by remember { mutableStateOf(false) }
     var clientIdToo by remember { mutableStateOf(false) }
     var keepPlaylists by remember { mutableStateOf(false) }
@@ -233,7 +232,7 @@ private fun SpotifyAccount(name: String?) {
             }
         },
         confirmButton = {
-            PrismTextButton(onClick = { asking = false; scope.launch { c.spotify.disconnect(clientIdToo, keepPlaylists) } }) { Text(tr(R.string.disconnect)) }
+            PrismTextButton(onClick = { asking = false; c.scope.launch { c.spotify.disconnect(clientIdToo, keepPlaylists) } }) { Text(tr(R.string.disconnect)) }
         },
         dismissButton = { PrismTextButton(onClick = { asking = false }) { Text(tr(R.string.cancel)) } },
     )

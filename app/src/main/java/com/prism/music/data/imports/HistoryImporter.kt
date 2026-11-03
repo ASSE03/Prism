@@ -64,6 +64,8 @@ class HistoryImporter(private val db: PrismDatabase) {
     inner class Session internal constructor(private val source: ImportSource) {
         private val buffer = ArrayList<ImportedPlayEntity>(BATCH)
         private val seeds = HashMap<String, Seed>()
+        /** Songs seen since their match lines were last written ([writeSeeds]). */
+        private val unwritten = HashSet<String>()
         private var prism: PrismIndex? = null
         private var earlier: ImportedIndex? = null
         private val upgrades = ArrayList<Pair<Long, ParsedPlay>>()
@@ -71,6 +73,7 @@ class HistoryImporter(private val db: PrismDatabase) {
         private var stored = 0
         private var dropped = 0
         private var upgraded = 0
+        private var fresh = 0
 
         /** One play read from the file. */
         suspend fun add(p: ParsedPlay) {
@@ -108,10 +111,13 @@ class HistoryImporter(private val db: PrismDatabase) {
             val seed = seeds.getOrPut(key) { Seed(p.title.take(MAX_TEXT), p.artist.take(MAX_TEXT), p.album?.take(MAX_TEXT), p.sourceId, p.youtubeId) }
             if (p.fullPlay) seed.full = maxOf(seed.full, p.playedMs)
             if (!p.estimated) seed.longest = maxOf(seed.longest, p.playedMs)
+            unwritten += key
         }
 
         private suspend fun flush() {
             if (buffer.isEmpty() && upgrades.isEmpty()) return
+            // The songs' match lines before their plays: an import stopped half way never leaves plays with none.
+            writeSeeds()
             kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
                 if (buffer.isNotEmpty()) stored += insertRows(buffer)
                 if (upgrades.isNotEmpty()) upgraded += upgradeRows(upgrades)
@@ -120,16 +126,12 @@ class HistoryImporter(private val db: PrismDatabase) {
             upgrades.clear()
         }
 
-        /**
-         * Stores what's left and lines the songs up for matching (songs matched before get their plays at once). A song
-         * matched before keeps its match and the listener's pick; only songs never seen are new to matching.
-         */
-        suspend fun finish(): Stats {
-            flush()
+        /** Lines up the songs seen since the last time (a song matched before keeps its match and the listener's pick). */
+        private suspend fun writeSeeds() {
+            if (unwritten.isEmpty()) return
             val dao = db.imports()
-            var fresh = 0
             db.withTransaction {
-                seeds.keys.chunked(500).forEach { keys ->
+                unwritten.toList().chunked(500).forEach { keys ->
                     val known = dao.matches(keys).associateBy { it.songKey }
                     val changed = keys.mapNotNull { k ->
                         val s = seeds.getValue(k)
@@ -146,6 +148,19 @@ class HistoryImporter(private val db: PrismDatabase) {
                     }
                     if (changed.isNotEmpty()) dao.putMatches(changed)
                 }
+            }
+            unwritten.clear()
+        }
+
+        /**
+         * Stores what's left and lines the songs up for matching (songs matched before get their plays at once). A song
+         * matched before keeps its match and the listener's pick; only songs never seen are new to matching.
+         */
+        suspend fun finish(): Stats {
+            flush()
+            writeSeeds()
+            val dao = db.imports()
+            db.withTransaction {
                 // Nothing stored (the same download again): nothing to link or cap.
                 if (stored > 0 || upgraded > 0) {
                     dao.linkKnown(source.key)

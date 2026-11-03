@@ -219,6 +219,20 @@ class RepeatImportsTest {
         assertEquals(2, top.first { it.songId == "africa" }.plays)
     }
 
+    @Test fun anImportStoppedHalfWayLeavesNoPlayWithoutItsMatchLine() = runBlocking {
+        // More than a batch read, then the import is killed before finish(): the plays stored have their songs lined up,
+        // so a re-import (which passes these plays over as already here) never leaves them unmatched for good.
+        val s = importer.session(ImportSource.SPOTIFY)
+        repeat(HistoryImporter.BATCH + 10) { i -> s.add(ParsedPlay(at("2025-01-01T00:00:00Z") + i * 300_000L, 200_000, "Song $i", "Artist ${i % 40}")) }
+        val stored = db.imports().summaries().single().plays
+        assertEquals(HistoryImporter.BATCH, stored)
+        val unlined = db.query("SELECT COUNT(*) FROM imported_plays p WHERE NOT EXISTS (SELECT 1 FROM import_matches m WHERE m.songKey = p.songKey)", null)
+            .use { it.moveToFirst(); it.getInt(0) }
+        assertEquals(0, unlined)
+        // Finishing still counts every song as new once.
+        assertEquals(HistoryImporter.BATCH + 10, s.finish().newSongs)
+    }
+
     @Test fun lastFmIsAskedOnlyForWhatCameSince() = runBlocking {
         assertNull("a first import asks for everything", LastFmHistory.fromSeconds(null))
         val first = listOf(

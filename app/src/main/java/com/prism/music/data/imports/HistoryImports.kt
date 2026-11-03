@@ -91,6 +91,10 @@ class HistoryImports(private val c: AppContainer) {
         synchronized(this) { prefs.edit().putStringSet(KEPT_LIKES, keptLikes() + ids).apply() }
     }
 
+    private fun unkeepLike(id: String) {
+        synchronized(this) { prefs.edit().putStringSet(KEPT_LIKES, keptLikes() - id).apply() }
+    }
+
     fun setMatchOnMobile(on: Boolean) {
         prefs.edit().putBoolean(MOBILE, on).apply()
         _matchOnMobile.value = on
@@ -142,6 +146,12 @@ class HistoryImports(private val c: AppContainer) {
     data class Reading(val source: ImportSource, val plays: Int, val pages: Pair<Int, Int>? = null)
 
     private val lock = Mutex()
+
+    /**
+     * One matching or library run at a time: the one-time and weekly jobs, or a pick in "Needs a look", would otherwise
+     * match the same songs and both make the library's playlists and likes.
+     */
+    private val matching = Mutex()
 
     /** Files the listener picked, waiting for the page to look at them ([preview]); the page takes them off. */
     val picked = MutableStateFlow<Picked?>(null)
@@ -286,9 +296,11 @@ class HistoryImports(private val c: AppContainer) {
      */
     suspend fun previewLastFm(): LastFmPeek.Peek? = withContext(Dispatchers.IO) {
         if (c.lastFm.user.value == null) return@withContext null
-        val from = LastFmHistory.fromSeconds(c.db.imports().newest(ImportSource.LASTFM.key))
+        val from = LastFmHistory.fromSeconds(c.db.imports().newest(ImportSource.LASTFM.key), lastFmFinished())
         runCatching { LastFmPeek.peek({ page, per -> c.lastFm.recentTracksPage(page, per, from) }, from) }.getOrNull()
     }
+
+    private fun lastFmFinished() = !prefs.getBoolean(LASTFM_UNFINISHED, false)
 
     /** The connected Last.fm account's scrobbles, page by page. */
     suspend fun bringLastFm(): HistoryImporter.Stats? = lock.withLock {
@@ -296,12 +308,13 @@ class HistoryImports(private val c: AppContainer) {
             if (c.lastFm.user.value == null) return@withContext null
             val session = importer.session(ImportSource.LASTFM)
             val page = ArrayList<ParsedPlay>()
-            // Again: only the scrobbles since the newest one brought before (that one, at its second, is passed over).
-            val from = LastFmHistory.fromSeconds(c.db.imports().newest(ImportSource.LASTFM.key))
+            // Again: only the scrobbles since the newest one brought before (that one, at its second, is passed over);
+            // everything when the last reading stopped short, so its unread older pages aren't left out for good.
+            val from = LastFmHistory.fromSeconds(c.db.imports().newest(ImportSource.LASTFM.key), lastFmFinished())
             reading.value = Reading(ImportSource.LASTFM, 0, 0 to 1)
             try {
                 var n = 0
-                LastFmHistory.readAll(
+                val read = LastFmHistory.readAll(
                     fetch = { p -> c.lastFm.recentTracksPage(p, LastFmHistory.PER_PAGE, from) },
                     onPlay = { page += it },
                     // Each page stored as it comes: a long scrobble history is never held whole.
@@ -314,6 +327,7 @@ class HistoryImports(private val c: AppContainer) {
                 )
                 page.forEach { session.add(it) }
                 val stats = session.finish()
+                prefs.edit().putBoolean(LASTFM_UNFINISHED, !read.finished).apply()
                 noteImport(ImportSource.LASTFM)
                 afterImport()
                 AudioDiagnostics.log("imports", "lastfm: $stats")
@@ -359,7 +373,9 @@ class HistoryImports(private val c: AppContainer) {
                 if (job == LibraryJob()) jobFile.delete() else LibraryJob.save(jobFile, job)
                 emptySet()
             } else LibraryJob.load(jobFile).keys
-            importer.remove(source, keep)
+            // The Spotify connection's songs (its files only exist while it's connected) keep their matches too.
+            val spotify = if (File(c.app.filesDir, com.prism.music.data.spotify.Spotify.DIR).exists()) c.spotify.matchKeys() else emptySet()
+            importer.remove(source, keep + spotify)
             setCounted(source, false)
             prefs.edit().remove(ImportReminders.lastKey(source)).remove(ImportReminders.remindedKey(source)).apply()
             _lastImports.value = lastImportsNow()
@@ -371,6 +387,7 @@ class HistoryImports(private val c: AppContainer) {
     suspend fun fix(key: String, song: Song?) = withContext(Dispatchers.IO) {
         val m = c.db.imports().match(key) ?: return@withContext
         importer.fix(m, song)
+        // The library after a running match is done with it (else both would make the same playlists).
         if (song != null) applyLibrary()
     }
 
@@ -384,7 +401,7 @@ class HistoryImports(private val c: AppContainer) {
      * Matches songs until none are left or [until] (a time), a few searches at a time with a pause between, so YouTube
      * sees about what a person searching would send. [progress]: songs done, and how many were waiting.
      */
-    suspend fun matchSome(until: Long, stopped: () -> Boolean, progress: suspend (Int, Int) -> Unit): Boolean = withContext(Dispatchers.IO) {
+    suspend fun matchSome(until: Long, stopped: () -> Boolean, progress: suspend (Int, Int) -> Unit): Boolean = matching.withLock { withContext(Dispatchers.IO) {
         val dao = c.db.imports()
         val week = System.currentTimeMillis() - WEEK_MS
         val total = dao.toMatchCount(week)
@@ -411,12 +428,14 @@ class HistoryImports(private val c: AppContainer) {
                 if (System.currentTimeMillis() >= until || stopped()) break
             }
         }
-        runCatching { applyLibrary() }.onFailure { AudioDiagnostics.log("imports", "library: $it") }
+        runCatching { applyLibraryNow() }.onFailure { AudioDiagnostics.log("imports", "library: $it") }
         dao.toMatchCount(week) == 0
-    }
+    } }
 
     /** Songs, albums and artists of the library job, as far as matching has got. */
-    suspend fun applyLibrary() = withContext(Dispatchers.IO) {
+    suspend fun applyLibrary() = matching.withLock { applyLibraryNow() }
+
+    private suspend fun applyLibraryNow() = withContext(Dispatchers.IO) {
         val job = LibraryJob.load(jobFile)
         if (job == LibraryJob()) return@withContext
         LibraryJob.save(jobFile, job.apply(hands))
@@ -435,21 +454,17 @@ class HistoryImports(private val c: AppContainer) {
 
         override suspend fun like(songs: List<Song>) {
             val now = System.currentTimeMillis()
-            val added = mutableListOf<Song>()
-            songs.forEachIndexed { i, s ->
-                val existing = c.db.songs().get(s.id)
-                if (existing?.liked == true) return@forEachIndexed
-                // The download's order, first newest.
-                c.db.songs().upsert(s.toEntity(existing).copy(liked = true, likedAt = now - i))
-                added += s
-            }
-            // On the account too only when asked (signed in, a few at a time); the rest stay Prism's own likes.
-            val onAccount = mutableSetOf<String>()
-            if (c.settings.current.isLoggedIn && _likeOnAccount.value) added.forEach { s ->
-                if (runCatching { c.ytm.like(s.id, true) }.isSuccess) onAccount += s.id
-                delay(PAUSE_MS / 2)
-            }
-            keepLikes(added.map { it.id } - onAccount)
+            likeAll(
+                songs,
+                likeHere = { i, s ->
+                    val existing = c.db.songs().get(s.id)
+                    // The download's order, first newest.
+                    (existing?.liked != true).also { if (it) c.db.songs().upsert(s.toEntity(existing).copy(liked = true, likedAt = now - i)) }
+                },
+                onAccount = c.settings.current.isLoggedIn && _likeOnAccount.value,
+                likeThere = { id -> runCatching { c.ytm.like(id, true) }.isSuccess },
+                keep = ::keepLikes, unkeep = ::unkeepLike,
+            )
         }
 
         override fun createPlaylist(name: String, songs: List<Song>): String = c.prismLibrary.create(name, songs)
@@ -486,11 +501,30 @@ class HistoryImports(private val c: AppContainer) {
         private const val MOBILE = "match_on_mobile"
         private const val LIKE_ON_ACCOUNT = "like_on_account"
         private const val KEPT_LIKES = "kept_likes"
+        /** The last Last.fm reading stopped before its oldest page: the next asks for everything again. */
+        private const val LASTFM_UNFINISHED = "lastfm_unfinished"
         private fun countKey(s: ImportSource) = "count_${s.key}"
 
         /** Searches at once, and the pause after each few. */
         const val AT_ONCE = 3
         const val PAUSE_MS = 1_200L
         const val WEEK_MS = 7 * 86_400_000L
+
+        /**
+         * Imported likes: each liked here ([likeHere]: false when it already was), then kept in Prism ([keep]) before
+         * the account is asked at all, and taken out of that once the account has it ([likeThere], a few at a time). So
+         * a run stopped half way (the match job's ten minutes) leaves the rest kept, never un-liked by the next sync.
+         */
+        internal suspend fun likeAll(
+            songs: List<Song>, likeHere: suspend (Int, Song) -> Boolean, onAccount: Boolean, likeThere: suspend (String) -> Boolean,
+            keep: (Collection<String>) -> Unit, unkeep: (String) -> Unit, pause: suspend (Long) -> Unit = { delay(it) },
+        ) {
+            val added = songs.filterIndexed { i, s -> likeHere(i, s) }.map { it.id }
+            keep(added)
+            if (onAccount) added.forEach { id ->
+                if (likeThere(id)) unkeep(id)
+                pause(PAUSE_MS / 2)
+            }
+        }
     }
 }

@@ -55,6 +55,9 @@ class SpotifyTop(private val api: SpotifyApi, private val db: PrismDatabase, pri
 
     fun forget() { file.delete(); cached = null }
 
+    /** The top songs, whose matches the taste needs (kept when an import is removed). */
+    fun matchKeys(): Set<String> = items().tracks.values.flatten().map(SpotifyQueue::key).toSet()
+
     /** What the mixes learn from, while [on] says so. */
     fun boost(on: () -> Boolean): TasteBoost = object : TasteBoost {
         override suspend fun songs(): List<SongPlays> {

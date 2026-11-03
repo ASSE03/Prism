@@ -137,6 +137,9 @@ class SpotifyLikes(
 
     fun forget() { file.delete() }
 
+    /** Spotify likes waiting for their match (kept when an import is removed, or they'd never be liked here). */
+    fun matchKeys(): Set<String> = state().waitingHere.values.toSet()
+
     /** Spotify's Liked Songs, page by page (up to [MAX_LIKES]). */
     suspend fun spotifyLikes(): List<SavedTrack> {
         val out = ArrayList<SavedTrack>()
