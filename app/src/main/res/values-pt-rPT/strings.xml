@@ -4337,7 +4337,6 @@
     <string name="imp_matching">Correspondência</string>
     <string name="imp_matching_line">%1$s encontradas · faltam %2$s · %3$s não encontradas (nova tentativa semanal)</string>
     <string name="imp_needs_a_look">Precisa de uma vista de olhos</string>
-    <string name="imp_needs_a_look_n">%1$s músicas para escolher</string>
     <string name="imp_needs_a_look_subtitle">Escolhe a música certa para cada uma, ou passa à frente</string>
     <string name="imp_match_on_mobile">Corresponder com dados móveis</string>
     <string name="imp_match_on_mobile_detail">Desligado: só por Wi-Fi</string>
@@ -4662,4 +4661,15 @@
     <string name="imp_turn_on">Ligar</string>
     <string name="imp_not_brought_in">Ainda não trazido</string>
     <string name="imp_live_no_plays">Ligado. Ainda sem reproduções</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">%1$s música para escolher</item>
+        <item quantity="many">%1$s de músicas para escolher</item>
+        <item quantity="other">%1$s músicas para escolher</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Liga o Spotify para usares isto</string>
+    <string name="ytlive_spotify_recent_off">Desligado: liga Reproduções recentes na página do Spotify</string>
+    <string name="ytlive_connection_on">O teu histórico, em dia · Ligado</string>
+    <string name="ytlive_connection_off">Mantém o teu histórico em dia · Desligado</string>
+    <string name="ytlive_connection_signed_out">Inicia sessão para manteres o teu histórico em dia</string>
 </resources>

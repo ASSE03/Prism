@@ -4287,7 +4287,6 @@
     <string name="imp_matching">Eşleştirme</string>
     <string name="imp_matching_line">%1$s bulundu · %2$s kaldı · %3$s bulunamadı (her hafta yeniden denenir)</string>
     <string name="imp_needs_a_look">Göz atılmalı</string>
-    <string name="imp_needs_a_look_n">Seçilecek %1$s şarkı</string>
     <string name="imp_needs_a_look_subtitle">Her birinin hangi şarkı olduğunu seç ya da geç</string>
     <string name="imp_match_on_mobile">Mobil veride eşleştir</string>
     <string name="imp_match_on_mobile_detail">Kapalı: yalnızca Wi-Fi\'de</string>
@@ -4602,4 +4601,14 @@
     <string name="imp_turn_on">Aç</string>
     <string name="imp_not_brought_in">Henüz getirilmedi</string>
     <string name="imp_live_no_plays">Açık. Henüz dinleme yok</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">Seçilecek %1$s şarkı</item>
+        <item quantity="other">Seçilecek %1$s şarkı</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Bunu kullanmak için Spotify\'ı bağla</string>
+    <string name="ytlive_spotify_recent_off">Kapalı: Spotify sayfasında Son dinlemeler seçeneğini aç</string>
+    <string name="ytlive_connection_on">Geçmişin güncel tutuluyor · Açık</string>
+    <string name="ytlive_connection_off">Geçmişini güncel tut · Kapalı</string>
+    <string name="ytlive_connection_signed_out">Geçmişini güncel tutmak için giriş yap</string>
 </resources>

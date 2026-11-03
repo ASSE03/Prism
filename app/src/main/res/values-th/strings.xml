@@ -4237,7 +4237,6 @@
     <string name="imp_matching">การจับคู่</string>
     <string name="imp_matching_line">พบ %1$s · เหลือ %2$s · ไม่พบ %3$s (ลองใหม่ทุกสัปดาห์)</string>
     <string name="imp_needs_a_look">รอตรวจดู</string>
-    <string name="imp_needs_a_look_n">%1$s เพลงให้เลือก</string>
     <string name="imp_needs_a_look_subtitle">เลือกเพลงที่ถูกต้องของแต่ละรายการ หรือข้ามไป</string>
     <string name="imp_match_on_mobile">จับคู่ผ่านอินเทอร์เน็ตมือถือ</string>
     <string name="imp_match_on_mobile_detail">ปิด: เฉพาะผ่าน Wi-Fi</string>
@@ -4542,4 +4541,13 @@
     <string name="imp_turn_on">เปิด</string>
     <string name="imp_not_brought_in">ยังไม่ได้นำเข้า</string>
     <string name="imp_live_no_plays">เปิดอยู่ ยังไม่มีการเล่น</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="other">%1$s เพลงให้เลือก</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">เชื่อมต่อ Spotify เพื่อใช้งานส่วนนี้</string>
+    <string name="ytlive_spotify_recent_off">ปิดอยู่: เปิด การเล่นล่าสุด ในหน้า Spotify</string>
+    <string name="ytlive_connection_on">ประวัติของคุณตรงกันอยู่เสมอ · เปิด</string>
+    <string name="ytlive_connection_off">ให้ประวัติตรงกันอยู่เสมอ · ปิด</string>
+    <string name="ytlive_connection_signed_out">เข้าสู่ระบบเพื่อให้ประวัติของคุณตรงกันอยู่เสมอ</string>
 </resources>

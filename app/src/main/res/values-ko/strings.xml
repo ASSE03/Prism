@@ -4237,7 +4237,6 @@
     <string name="imp_matching">매칭</string>
     <string name="imp_matching_line">%1$s곡 찾음 · %2$s곡 남음 · %3$s곡 못 찾음(매주 다시 시도)</string>
     <string name="imp_needs_a_look">확인 필요</string>
-    <string name="imp_needs_a_look_n">고를 곡 %1$s개</string>
     <string name="imp_needs_a_look_subtitle">각 항목이 어떤 곡인지 고르거나 건너뛰세요</string>
     <string name="imp_match_on_mobile">모바일 데이터로 매칭</string>
     <string name="imp_match_on_mobile_detail">끄면 Wi-Fi에서만</string>
@@ -4542,4 +4541,13 @@
     <string name="imp_turn_on">켜기</string>
     <string name="imp_not_brought_in">아직 가져오지 않음</string>
     <string name="imp_live_no_plays">켜짐. 아직 재생 기록이 없어요</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="other">고를 곡 %1$s개</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">이 기능을 쓰려면 Spotify를 연결하세요</string>
+    <string name="ytlive_spotify_recent_off">꺼짐: Spotify 페이지에서 최근 재생을 켜세요</string>
+    <string name="ytlive_connection_on">기록을 최신 상태로 유지 중 · 켜짐</string>
+    <string name="ytlive_connection_off">기록을 최신 상태로 유지 · 꺼짐</string>
+    <string name="ytlive_connection_signed_out">기록을 최신 상태로 유지하려면 로그인하세요</string>
 </resources>

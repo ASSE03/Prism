@@ -4287,7 +4287,6 @@
     <string name="imp_matching">मिलान</string>
     <string name="imp_matching_line">%1$s मिले · %2$s बाकी · %3$s नहीं मिले (हर हफ़्ते फिर से कोशिश)</string>
     <string name="imp_needs_a_look">एक नज़र डालें</string>
-    <string name="imp_needs_a_look_n">चुनने के लिए %1$s गाने</string>
     <string name="imp_needs_a_look_subtitle">हर एक के लिए सही गाना चुनें, या उसे छोड़ दें</string>
     <string name="imp_match_on_mobile">मोबाइल डेटा पर मिलान करें</string>
     <string name="imp_match_on_mobile_detail">बंद: सिर्फ़ Wi-Fi पर</string>
@@ -4602,4 +4601,14 @@
     <string name="imp_turn_on">चालू करें</string>
     <string name="imp_not_brought_in">अभी तक नहीं लाया गया</string>
     <string name="imp_live_no_plays">चालू। अभी कोई प्ले नहीं</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">चुनने के लिए %1$s गाना</item>
+        <item quantity="other">चुनने के लिए %1$s गाने</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">इसका इस्तेमाल करने के लिए Spotify कनेक्ट करें</string>
+    <string name="ytlive_spotify_recent_off">बंद: Spotify पेज पर ‘हाल के प्ले’ चालू करें</string>
+    <string name="ytlive_connection_on">आपका इतिहास अपडेट · चालू</string>
+    <string name="ytlive_connection_off">अपना इतिहास अपडेट रखें · बंद</string>
+    <string name="ytlive_connection_signed_out">इतिहास अपडेट रखने के लिए साइन इन करें</string>
 </resources>

@@ -4287,7 +4287,6 @@
     <string name="imp_matching">ملان</string>
     <string name="imp_matching_line">%1$s ملے · %2$s باقی · %3$s نہیں ملے (ہر ہفتے دوبارہ کوشش)</string>
     <string name="imp_needs_a_look">دیکھنا ضروری ہے</string>
-    <string name="imp_needs_a_look_n">چننے کے لیے %1$s گانے</string>
     <string name="imp_needs_a_look_subtitle">ہر ایک کے لیے صحیح گانا چنیں، یا اسے چھوڑ دیں</string>
     <string name="imp_match_on_mobile">موبائل ڈیٹا پر ملان کریں</string>
     <string name="imp_match_on_mobile_detail">بند: صرف Wi-Fi پر</string>
@@ -4602,4 +4601,14 @@
     <string name="imp_turn_on">آن کریں</string>
     <string name="imp_not_brought_in">ابھی نہیں لایا گیا</string>
     <string name="imp_live_no_plays">آن ہے۔ ابھی کوئی پلے نہیں</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">چننے کے لیے %1$s گانا</item>
+        <item quantity="other">چننے کے لیے %1$s گانے</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">اسے استعمال کرنے کے لیے Spotify کنیکٹ کریں</string>
+    <string name="ytlive_spotify_recent_off">آف: Spotify صفحے پر حالیہ پلے آن کریں</string>
+    <string name="ytlive_connection_on">آپ کی ہسٹری اپ ٹو ڈیٹ ہے · آن</string>
+    <string name="ytlive_connection_off">اپنی ہسٹری کو اپ ٹو ڈیٹ رکھیں · آف</string>
+    <string name="ytlive_connection_signed_out">اپنی ہسٹری کو اپ ٹو ڈیٹ رکھنے کے لیے سائن اِن کریں</string>
 </resources>

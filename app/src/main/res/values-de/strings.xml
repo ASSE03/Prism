@@ -4287,7 +4287,6 @@
     <string name="imp_matching">Zuordnung</string>
     <string name="imp_matching_line">%1$s gefunden · %2$s ausstehend · %3$s nicht gefunden (wöchentlich neu versucht)</string>
     <string name="imp_needs_a_look">Bitte ansehen</string>
-    <string name="imp_needs_a_look_n">%1$s Songs zum Auswählen</string>
     <string name="imp_needs_a_look_subtitle">Wähle für jeden den richtigen Song oder überspring ihn</string>
     <string name="imp_match_on_mobile">Über mobile Daten zuordnen</string>
     <string name="imp_match_on_mobile_detail">Aus: nur im WLAN</string>
@@ -4602,4 +4601,14 @@
     <string name="imp_turn_on">Einschalten</string>
     <string name="imp_not_brought_in">Noch nicht mitgebracht</string>
     <string name="imp_live_no_plays">An. Noch keine Wiedergaben</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">%1$s Song zum Auswählen</item>
+        <item quantity="other">%1$s Songs zum Auswählen</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Verbinde Spotify, um das zu nutzen</string>
+    <string name="ytlive_spotify_recent_off">Aus: Schalte „Zuletzt gespielt“ auf der Spotify-Seite ein</string>
+    <string name="ytlive_connection_on">Dein Verlauf, auf dem Laufenden · An</string>
+    <string name="ytlive_connection_off">Halte deinen Verlauf auf dem Laufenden · Aus</string>
+    <string name="ytlive_connection_signed_out">Melde dich an, um deinen Verlauf auf dem Laufenden zu halten</string>
 </resources>

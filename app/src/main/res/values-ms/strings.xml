@@ -4237,7 +4237,6 @@
     <string name="imp_matching">Memadankan</string>
     <string name="imp_matching_line">%1$s ditemui · %2$s lagi · %3$s tidak ditemui (dicuba semula setiap minggu)</string>
     <string name="imp_needs_a_look">Perlu disemak</string>
-    <string name="imp_needs_a_look_n">%1$s lagu untuk dipilih</string>
     <string name="imp_needs_a_look_subtitle">Pilih lagu yang betul bagi setiap satu, atau langkaukannya</string>
     <string name="imp_match_on_mobile">Padankan menggunakan data mudah alih</string>
     <string name="imp_match_on_mobile_detail">Mati: hanya melalui Wi-Fi</string>
@@ -4542,4 +4541,13 @@
     <string name="imp_turn_on">Hidupkan</string>
     <string name="imp_not_brought_in">Belum dibawa masuk</string>
     <string name="imp_live_no_plays">Hidup. Belum ada main balik</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="other">%1$s lagu untuk dipilih</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Sambungkan Spotify untuk menggunakannya</string>
+    <string name="ytlive_spotify_recent_off">Mati: hidupkan Main balik terkini pada halaman Spotify</string>
+    <string name="ytlive_connection_on">Sejarah anda, dikekalkan segerak · Hidup</string>
+    <string name="ytlive_connection_off">Kekalkan sejarah anda segerak · Mati</string>
+    <string name="ytlive_connection_signed_out">Log masuk untuk mengekalkan sejarah anda segerak</string>
 </resources>

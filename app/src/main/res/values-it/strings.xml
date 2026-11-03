@@ -4337,7 +4337,6 @@
     <string name="imp_matching">Abbinamento</string>
     <string name="imp_matching_line">%1$s trovati · %2$s mancanti · %3$s non trovati (riprova ogni settimana)</string>
     <string name="imp_needs_a_look">Da controllare</string>
-    <string name="imp_needs_a_look_n">%1$s brani da scegliere</string>
     <string name="imp_needs_a_look_subtitle">Scegli il brano giusto per ciascuno, o lascialo perdere</string>
     <string name="imp_match_on_mobile">Abbina con i dati mobili</string>
     <string name="imp_match_on_mobile_detail">Disattivato: solo con il Wi-Fi</string>
@@ -4662,4 +4661,15 @@
     <string name="imp_turn_on">Attiva</string>
     <string name="imp_not_brought_in">Non ancora portata</string>
     <string name="imp_live_no_plays">Attivo. Ancora nessun ascolto</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">%1$s brano da scegliere</item>
+        <item quantity="many">%1$s di brani da scegliere</item>
+        <item quantity="other">%1$s brani da scegliere</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Collega Spotify per usarlo</string>
+    <string name="ytlive_spotify_recent_off">Disattivato: attiva Ascolti recenti nella pagina Spotify</string>
+    <string name="ytlive_connection_on">La tua cronologia, allineata · Attivo</string>
+    <string name="ytlive_connection_off">Tieni allineata la tua cronologia · Disattivato</string>
+    <string name="ytlive_connection_signed_out">Accedi per tenere allineata la tua cronologia</string>
 </resources>

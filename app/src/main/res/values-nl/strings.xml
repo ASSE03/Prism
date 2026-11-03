@@ -4287,7 +4287,6 @@
     <string name="imp_matching">Bezig met opzoeken</string>
     <string name="imp_matching_line">%1$s gevonden · nog %2$s te gaan · %3$s niet gevonden (elke week opnieuw geprobeerd)</string>
     <string name="imp_needs_a_look">Even naar kijken</string>
-    <string name="imp_needs_a_look_n">%1$s nummers om te kiezen</string>
     <string name="imp_needs_a_look_subtitle">Kies welk nummer het telkens is, of sla het over</string>
     <string name="imp_match_on_mobile">Opzoeken via mobiele data</string>
     <string name="imp_match_on_mobile_detail">Uit: alleen via wifi</string>
@@ -4602,4 +4601,14 @@
     <string name="imp_turn_on">Aanzetten</string>
     <string name="imp_not_brought_in">Nog niet meegenomen</string>
     <string name="imp_live_no_plays">Aan. Nog geen afspelingen</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">%1$s nummer om te kiezen</item>
+        <item quantity="other">%1$s nummers om te kiezen</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Verbind Spotify om dit te gebruiken</string>
+    <string name="ytlive_spotify_recent_off">Uit: zet Onlangs afgespeeld aan op de Spotify-pagina</string>
+    <string name="ytlive_connection_on">Je geschiedenis wordt bijgehouden · Aan</string>
+    <string name="ytlive_connection_off">Houd je geschiedenis bij · Uit</string>
+    <string name="ytlive_connection_signed_out">Log in om je geschiedenis bij te houden</string>
 </resources>

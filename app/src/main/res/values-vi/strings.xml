@@ -4237,7 +4237,6 @@
     <string name="imp_matching">Đang ghép</string>
     <string name="imp_matching_line">Đã tìm thấy %1$s · còn %2$s · không tìm thấy %3$s (thử lại hằng tuần)</string>
     <string name="imp_needs_a_look">Cần xem lại</string>
-    <string name="imp_needs_a_look_n">%1$s bài hát cần chọn</string>
     <string name="imp_needs_a_look_subtitle">Chọn đúng bài cho từng mục, hoặc bỏ qua</string>
     <string name="imp_match_on_mobile">Ghép khi dùng dữ liệu di động</string>
     <string name="imp_match_on_mobile_detail">Tắt: chỉ khi có Wi-Fi</string>
@@ -4542,4 +4541,13 @@
     <string name="imp_turn_on">Bật</string>
     <string name="imp_not_brought_in">Chưa mang sang</string>
     <string name="imp_live_no_plays">Đã bật. Chưa có lượt phát nào</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="other">%1$s bài hát cần chọn</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Kết nối Spotify để dùng tính năng này</string>
+    <string name="ytlive_spotify_recent_off">Đã tắt: bật Lượt nghe gần đây trên trang Spotify</string>
+    <string name="ytlive_connection_on">Lịch sử của bạn luôn cập nhật · Bật</string>
+    <string name="ytlive_connection_off">Luôn cập nhật lịch sử của bạn · Tắt</string>
+    <string name="ytlive_connection_signed_out">Đăng nhập để luôn cập nhật lịch sử của bạn</string>
 </resources>

@@ -4287,7 +4287,6 @@
     <string name="imp_matching">Αντιστοίχιση</string>
     <string name="imp_matching_line">%1$s βρέθηκαν · %2$s απομένουν · %3$s δεν βρέθηκαν (νέα προσπάθεια κάθε εβδομάδα)</string>
     <string name="imp_needs_a_look">Θέλουν μια ματιά</string>
-    <string name="imp_needs_a_look_n">%1$s τραγούδια για επιλογή</string>
     <string name="imp_needs_a_look_subtitle">Διάλεξε ποιο τραγούδι είναι το καθένα ή προσπέρασέ το</string>
     <string name="imp_match_on_mobile">Αντιστοίχιση με δεδομένα κινητής</string>
     <string name="imp_match_on_mobile_detail">Ανενεργό: μόνο μέσω Wi-Fi</string>
@@ -4602,4 +4601,14 @@
     <string name="imp_turn_on">Ενεργοποίηση</string>
     <string name="imp_not_brought_in">Δεν έχει έρθει ακόμα</string>
     <string name="imp_live_no_plays">Ενεργό. Καμία αναπαραγωγή ακόμα</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">%1$s τραγούδι για επιλογή</item>
+        <item quantity="other">%1$s τραγούδια για επιλογή</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Σύνδεσε το Spotify για να το χρησιμοποιήσεις</string>
+    <string name="ytlive_spotify_recent_off">Ανενεργό: ενεργοποίησε τις Πρόσφατες αναπαραγωγές στη σελίδα του Spotify</string>
+    <string name="ytlive_connection_on">Το ιστορικό σου, ενημερωμένο · Ενεργό</string>
+    <string name="ytlive_connection_off">Κράτα το ιστορικό σου ενημερωμένο · Ανενεργό</string>
+    <string name="ytlive_connection_signed_out">Συνδέσου για να κρατάς το ιστορικό σου ενημερωμένο</string>
 </resources>

@@ -334,7 +334,7 @@ fun BringHistoryScreen(bottomPadding: Dp) {
                     val found = (byStatus[MatchStatus.SURE] ?: 0) + (byStatus[MatchStatus.FIXED] ?: 0)
                     Note(tr(R.string.imp_matching_line, count(found), count(byStatus[MatchStatus.PENDING] ?: 0), count(byStatus[MatchStatus.NONE] ?: 0)))
                     val review = byStatus[MatchStatus.REVIEW] ?: 0
-                    if (review > 0) Item(tr(R.string.imp_needs_a_look), tr(R.string.imp_needs_a_look_n, count(review)), onClick = { nav.go(Routes.IMPORT_REVIEW) }) {
+                    if (review > 0) Item(tr(R.string.imp_needs_a_look), trp(R.plurals.imp_needs_a_look_count, review, count(review)), onClick = { nav.go(Routes.IMPORT_REVIEW) }) {
                         Icon(PrismIcons.ChevronRight, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     Toggle(tr(R.string.imp_match_on_mobile), tr(R.string.imp_match_on_mobile_detail), mobile) { imports.setMatchOnMobile(it) }
@@ -359,17 +359,42 @@ private fun YouTubeLiveGroup() {
     Group(tr(R.string.ytlive_group)) {
         if (!signedIn) {
             Item(tr(R.string.ytlive_title), tr(R.string.ytlive_sign_in), onClick = {}, icon = PrismIcons.History, info = tr(R.string.ytlive_info))
-            return@Group
+        } else {
+            val detail = when {
+                !on -> tr(R.string.ytlive_sub_off)
+                guard == com.prism.music.data.imports.LiveGuard.State.PAUSED -> tr(R.string.ytlive_sub_paused)
+                guard == com.prism.music.data.imports.LiveGuard.State.NOT_ANSWERING -> tr(R.string.ytlive_sub_retry)
+                last == null -> tr(R.string.ytlive_sub_first)
+                else -> tr(R.string.ytlive_sub_checked, android.text.format.DateUtils.getRelativeTimeSpanString(last!!, System.currentTimeMillis(), android.text.format.DateUtils.MINUTE_IN_MILLIS).toString())
+            }
+            Toggle(tr(R.string.ytlive_title), detail, on, icon = PrismIcons.History, info = tr(R.string.ytlive_info)) { c.imports.setYouTubeLive(it) }
         }
-        val detail = when {
-            !on -> tr(R.string.ytlive_sub_off)
-            guard == com.prism.music.data.imports.LiveGuard.State.PAUSED -> tr(R.string.ytlive_sub_paused)
-            guard == com.prism.music.data.imports.LiveGuard.State.NOT_ANSWERING -> tr(R.string.ytlive_sub_retry)
-            last == null -> tr(R.string.ytlive_sub_first)
-            else -> tr(R.string.ytlive_sub_checked, android.text.format.DateUtils.getRelativeTimeSpanString(last!!, System.currentTimeMillis(), android.text.format.DateUtils.MINUTE_IN_MILLIS).toString())
-        }
-        Toggle(tr(R.string.ytlive_title), detail, on, icon = PrismIcons.History, info = tr(R.string.ytlive_info)) { c.imports.setYouTubeLive(it) }
+        SpotifyLiveRow()
     }
+}
+
+/**
+ * Spotify's live history beside YouTube Music's (owner, 1.8.1): its switch lives on the Spotify page (Recent plays,
+ * with the connection), so here it says where it stands and opens that page.
+ */
+@Composable
+private fun SpotifyLiveRow() {
+    val c = LocalContainer.current
+    val nav = LocalNavigator.current
+    val context = androidx.compose.ui.platform.LocalContext.current
+    // Spotify's connection is only built when it's connected (most never connect; see Spotify.pageOpened).
+    val connected = remember {
+        com.prism.music.data.spotify.SpotifyStore.connectedIn(
+            context.getSharedPreferences(com.prism.music.data.spotify.SpotifyStore.AUTH_PREFS, android.content.Context.MODE_PRIVATE),
+        )
+    }
+    val recent = if (connected) c.spotify.options.collectAsState().value.recent else false
+    val detail = when {
+        !connected -> tr(R.string.ytlive_spotify_connect)
+        recent -> tr(R.string.on_2)
+        else -> tr(R.string.ytlive_spotify_recent_off)
+    }
+    NavRow(PrismIcons.Library, tr(R.string.spotify_live_source), detail) { nav.go(Routes.settings(SettingsSection.SPOTIFY.key)) }
 }
 
 /** "Needs a look" (1.8.1): each song Prism wasn't sure of, with up to three candidates to play and pick, or none. */

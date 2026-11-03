@@ -4287,7 +4287,6 @@
     <string name="imp_matching">Itinutugma</string>
     <string name="imp_matching_line">%1$s nahanap · %2$s natitira · %3$s hindi nahanap (sinusubukan ulit linggu-linggo)</string>
     <string name="imp_needs_a_look">Kailangang tingnan</string>
-    <string name="imp_needs_a_look_n">%1$s kantang pipiliin</string>
     <string name="imp_needs_a_look_subtitle">Piliin kung aling kanta ang bawat isa, o laktawan ito</string>
     <string name="imp_match_on_mobile">Itugma sa mobile data</string>
     <string name="imp_match_on_mobile_detail">Naka-off: sa Wi-Fi lang</string>
@@ -4602,4 +4601,14 @@
     <string name="imp_turn_on">I-on</string>
     <string name="imp_not_brought_in">Hindi pa nadadala</string>
     <string name="imp_live_no_plays">Naka-on. Wala pang play</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">%1$s kantang pipiliin</item>
+        <item quantity="other">%1$s kantang pipiliin</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Ikonekta ang Spotify para magamit ito</string>
+    <string name="ytlive_spotify_recent_off">Naka-off: i-on ang Mga recent play sa Spotify page</string>
+    <string name="ytlive_connection_on">Napapanahon ang history mo · Naka-on</string>
+    <string name="ytlive_connection_off">Panatilihing napapanahon ang history mo · Naka-off</string>
+    <string name="ytlive_connection_signed_out">Mag-sign in para mapanatiling napapanahon ang history mo</string>
 </resources>

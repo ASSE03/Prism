@@ -74,6 +74,24 @@ class YouTubeLiveInAppTest {
         assertTrue(c.imports.youtubeLive.on.value)
     }
 
+    /**
+     * Both live histories where people look for them (owner, 1.8.1): Devices & connections has a YouTube Music row that
+     * opens Bring your history, whose "Keep it in step" lists Spotify (live) too, opening the Spotify page.
+     */
+    @Test fun bothLiveHistoriesAreFoundFromConnectionsAndKeepItInStep() {
+        Fixture.launch()
+        compose.openSettings()
+        compose.clickWhenFound(hasText("Devices & connections") and hasClickAction())
+        seeText("Sign in to keep your history in step")
+        // By its line: the Sharing cards below are also named YouTube Music.
+        compose.clickWhenFound(hasText("Sign in to keep your history in step") and hasClickAction())
+        seeText("Keep it in step")
+        seeText("Spotify (live)")
+        seeText("Connect Spotify to use this")
+        compose.clickWhenFound(hasText("Spotify (live)") and hasClickAction())
+        seeText("Create app")
+    }
+
     /** Waits for [text], scrolling the page's lists to it (as BringHistoryTest's). */
     private fun seeText(text: String, timeoutMs: Long = 15_000) {
         val matcher = hasText(text, substring = true, ignoreCase = true)

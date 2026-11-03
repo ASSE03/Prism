@@ -4237,7 +4237,6 @@
     <string name="imp_matching">照合</string>
     <string name="imp_matching_line">%1$s 曲見つかりました · 残り %2$s 曲 · %3$s 曲見つかりません (毎週再試行)</string>
     <string name="imp_needs_a_look">確認が必要</string>
-    <string name="imp_needs_a_look_n">選ぶ曲が %1$s 曲</string>
     <string name="imp_needs_a_look_subtitle">それぞれどの曲か選ぶか、スキップしてください</string>
     <string name="imp_match_on_mobile">モバイルデータで照合</string>
     <string name="imp_match_on_mobile_detail">オフ：Wi-Fi のみ</string>
@@ -4542,4 +4541,13 @@
     <string name="imp_turn_on">オンにする</string>
     <string name="imp_not_brought_in">まだ取り込んでいません</string>
     <string name="imp_live_no_plays">オン。まだ再生はありません</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="other">選ぶ曲が %1$s 曲</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">これを使うには Spotify を接続してください</string>
+    <string name="ytlive_spotify_recent_off">オフ: Spotify のページで「最近の再生」をオンにしてください</string>
+    <string name="ytlive_connection_on">履歴を同期中 · オン</string>
+    <string name="ytlive_connection_off">履歴の同期を保つ · オフ</string>
+    <string name="ytlive_connection_signed_out">履歴の同期を保つにはログインしてください</string>
 </resources>

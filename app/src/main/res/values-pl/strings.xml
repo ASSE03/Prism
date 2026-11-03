@@ -4387,7 +4387,6 @@
     <string name="imp_matching">Dopasowywanie</string>
     <string name="imp_matching_line">Znaleziono: %1$s · zostało: %2$s · nie znaleziono: %3$s (ponowna próba co tydzień)</string>
     <string name="imp_needs_a_look">Do sprawdzenia</string>
-    <string name="imp_needs_a_look_n">Utwory do wybrania: %1$s</string>
     <string name="imp_needs_a_look_subtitle">Wybierz, który to utwór, albo go pomiń</string>
     <string name="imp_match_on_mobile">Dopasowuj przez dane mobilne</string>
     <string name="imp_match_on_mobile_detail">Wyłączone: tylko przez Wi-Fi</string>
@@ -4722,4 +4721,16 @@
     <string name="imp_turn_on">Włącz</string>
     <string name="imp_not_brought_in">Jeszcze nie przeniesiono</string>
     <string name="imp_live_no_plays">Włączone. Jeszcze brak odtworzeń</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">Utwory do wybrania: %1$s</item>
+        <item quantity="few">Utwory do wybrania: %1$s</item>
+        <item quantity="many">Utwory do wybrania: %1$s</item>
+        <item quantity="other">Utwory do wybrania: %1$s</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Połącz Spotify, aby z tego korzystać</string>
+    <string name="ytlive_spotify_recent_off">Wyłączone: włącz Ostatnio odtwarzane na stronie Spotify</string>
+    <string name="ytlive_connection_on">Twoja historia na bieżąco · Włączone</string>
+    <string name="ytlive_connection_off">Utrzymuj historię na bieżąco · Wyłączone</string>
+    <string name="ytlive_connection_signed_out">Zaloguj się, aby utrzymywać historię na bieżąco</string>
 </resources>

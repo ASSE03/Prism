@@ -4237,7 +4237,6 @@
     <string name="imp_matching">Mencocokkan</string>
     <string name="imp_matching_line">%1$s ditemukan · %2$s lagi · %3$s tidak ditemukan (dicoba lagi tiap minggu)</string>
     <string name="imp_needs_a_look">Perlu dicek</string>
-    <string name="imp_needs_a_look_n">%1$s lagu untuk dipilih</string>
     <string name="imp_needs_a_look_subtitle">Pilih lagu yang tepat untuk masing-masing, atau lewati</string>
     <string name="imp_match_on_mobile">Cocokkan dengan data seluler</string>
     <string name="imp_match_on_mobile_detail">Nonaktif: hanya lewat Wi-Fi</string>
@@ -4542,4 +4541,13 @@
     <string name="imp_turn_on">Aktifkan</string>
     <string name="imp_not_brought_in">Belum dibawa</string>
     <string name="imp_live_no_plays">Aktif. Belum ada putaran</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="other">%1$s lagu untuk dipilih</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Hubungkan Spotify untuk memakai ini</string>
+    <string name="ytlive_spotify_recent_off">Mati: nyalakan Putaran terbaru di halaman Spotify</string>
+    <string name="ytlive_connection_on">Riwayatmu, tetap diperbarui · Aktif</string>
+    <string name="ytlive_connection_off">Jaga riwayatmu tetap diperbarui · Mati</string>
+    <string name="ytlive_connection_signed_out">Login untuk menjaga riwayatmu tetap diperbarui</string>
 </resources>

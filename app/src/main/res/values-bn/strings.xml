@@ -4287,7 +4287,6 @@
     <string name="imp_matching">মেলানো হচ্ছে</string>
     <string name="imp_matching_line">%1$sটি পাওয়া গেছে · %2$sটি বাকি · %3$sটি পাওয়া যায়নি (প্রতি সপ্তাহে আবার চেষ্টা করা হয়)</string>
     <string name="imp_needs_a_look">একবার দেখে নিন</string>
-    <string name="imp_needs_a_look_n">বাছার জন্য %1$sটি গান</string>
     <string name="imp_needs_a_look_subtitle">প্রতিটির জন্য সঠিক গানটি বাছুন, অথবা এড়িয়ে যান</string>
     <string name="imp_match_on_mobile">মোবাইল ডেটায় মেলান</string>
     <string name="imp_match_on_mobile_detail">বন্ধ: শুধু Wi-Fi-তে</string>
@@ -4602,4 +4601,14 @@
     <string name="imp_turn_on">চালু করুন</string>
     <string name="imp_not_brought_in">এখনও আনা হয়নি</string>
     <string name="imp_live_no_plays">চালু। এখনও কোনো প্লে নেই</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">বাছার জন্য %1$sটি গান</item>
+        <item quantity="other">বাছার জন্য %1$sটি গান</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">এটি ব্যবহার করতে Spotify কানেক্ট করুন</string>
+    <string name="ytlive_spotify_recent_off">বন্ধ: Spotify পেজে ‘সাম্প্রতিক প্লে’ চালু করুন</string>
+    <string name="ytlive_connection_on">আপনার ইতিহাস হালনাগাদ · চালু</string>
+    <string name="ytlive_connection_off">আপনার ইতিহাস হালনাগাদ রাখুন · বন্ধ</string>
+    <string name="ytlive_connection_signed_out">ইতিহাস হালনাগাদ রাখতে সাইন ইন করুন</string>
 </resources>

@@ -4287,7 +4287,6 @@
     <string name="imp_matching">Matchning</string>
     <string name="imp_matching_line">%1$s hittade · %2$s kvar · %3$s hittades inte (försöker igen varje vecka)</string>
     <string name="imp_needs_a_look">Behöver kollas</string>
-    <string name="imp_needs_a_look_n">%1$s låtar att välja</string>
     <string name="imp_needs_a_look_subtitle">Välj vilken låt varje är, eller hoppa över den</string>
     <string name="imp_match_on_mobile">Matcha via mobildata</string>
     <string name="imp_match_on_mobile_detail">Av: bara via Wi-Fi</string>
@@ -4602,4 +4601,14 @@
     <string name="imp_turn_on">Slå på</string>
     <string name="imp_not_brought_in">Inte medtagen än</string>
     <string name="imp_live_no_plays">På. Inga spelningar än</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">%1$s låt att välja</item>
+        <item quantity="other">%1$s låtar att välja</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Anslut Spotify för att använda det här</string>
+    <string name="ytlive_spotify_recent_off">Av: slå på Senaste spelningar på Spotify-sidan</string>
+    <string name="ytlive_connection_on">Din historik, uppdaterad · På</string>
+    <string name="ytlive_connection_off">Håll din historik uppdaterad · Av</string>
+    <string name="ytlive_connection_signed_out">Logga in för att hålla din historik uppdaterad</string>
 </resources>

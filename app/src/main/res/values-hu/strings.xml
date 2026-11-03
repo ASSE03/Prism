@@ -4287,7 +4287,6 @@
     <string name="imp_matching">Párosítás</string>
     <string name="imp_matching_line">%1$s megtalálva · %2$s hátravan · %3$s nem található (hetente újra próbálja)</string>
     <string name="imp_needs_a_look">Nézd meg</string>
-    <string name="imp_needs_a_look_n">%1$s dal vár választásra</string>
     <string name="imp_needs_a_look_subtitle">Válaszd ki, melyik dal az egyes tételek, vagy hagyd ki</string>
     <string name="imp_match_on_mobile">Párosítás mobiladaton</string>
     <string name="imp_match_on_mobile_detail">Kikapcsolva: csak Wi-Fi-n</string>
@@ -4602,4 +4601,14 @@
     <string name="imp_turn_on">Bekapcsolás</string>
     <string name="imp_not_brought_in">Még nincs áthozva</string>
     <string name="imp_live_no_plays">Bekapcsolva. Még nincs lejátszás</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">%1$s dal vár választásra</item>
+        <item quantity="other">%1$s dal vár választásra</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">A használatához csatlakoztasd a Spotifyt</string>
+    <string name="ytlive_spotify_recent_off">Kikapcsolva: kapcsold be a Legutóbbi lejátszásokat a Spotify oldalán</string>
+    <string name="ytlive_connection_on">Naprakész előzmények · Be</string>
+    <string name="ytlive_connection_off">Tartsd naprakészen az előzményeidet · Ki</string>
+    <string name="ytlive_connection_signed_out">Jelentkezz be az előzményeid naprakészen tartásához</string>
 </resources>

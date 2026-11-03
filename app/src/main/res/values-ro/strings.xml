@@ -4337,7 +4337,6 @@
     <string name="imp_matching">Potrivire</string>
     <string name="imp_matching_line">Găsite: %1$s · rămase: %2$s · negăsite: %3$s (se reîncearcă săptămânal)</string>
     <string name="imp_needs_a_look">De verificat</string>
-    <string name="imp_needs_a_look_n">Melodii de ales: %1$s</string>
     <string name="imp_needs_a_look_subtitle">Alege melodia potrivită pentru fiecare sau sari peste ea</string>
     <string name="imp_match_on_mobile">Potrivește prin date mobile</string>
     <string name="imp_match_on_mobile_detail">Oprit: doar prin Wi-Fi</string>
@@ -4662,4 +4661,15 @@
     <string name="imp_turn_on">Pornește</string>
     <string name="imp_not_brought_in">Încă nu a fost adus</string>
     <string name="imp_live_no_plays">Pornit. Încă nicio redare</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">Melodie de ales: %1$s</item>
+        <item quantity="few">Melodii de ales: %1$s</item>
+        <item quantity="other">Melodii de ales: %1$s</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Conectează Spotify ca să folosești asta</string>
+    <string name="ytlive_spotify_recent_off">Oprit: pornește Redări recente în pagina Spotify</string>
+    <string name="ytlive_connection_on">Istoricul tău, ținut la zi · Pornit</string>
+    <string name="ytlive_connection_off">Ține la zi istoricul tău · Oprit</string>
+    <string name="ytlive_connection_signed_out">Conectează-te ca să-ți ții istoricul la zi</string>
 </resources>

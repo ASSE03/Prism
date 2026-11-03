@@ -4337,7 +4337,6 @@
     <string name="imp_matching">Emparejando</string>
     <string name="imp_matching_line">%1$s encontradas · faltan %2$s · %3$s no encontradas (se reintenta cada semana)</string>
     <string name="imp_needs_a_look">Por revisar</string>
-    <string name="imp_needs_a_look_n">%1$s canciones por elegir</string>
     <string name="imp_needs_a_look_subtitle">Elige qué canción es cada una, o sáltala</string>
     <string name="imp_match_on_mobile">Emparejar con datos móviles</string>
     <string name="imp_match_on_mobile_detail">Desactivado: solo con Wi-Fi</string>
@@ -4662,4 +4661,15 @@
     <string name="imp_turn_on">Activar</string>
     <string name="imp_not_brought_in">Aún sin traer</string>
     <string name="imp_live_no_plays">Activado. Aún sin reproducciones</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">%1$s canción por elegir</item>
+        <item quantity="many">%1$s de canciones por elegir</item>
+        <item quantity="other">%1$s canciones por elegir</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Conecta Spotify para usar esto</string>
+    <string name="ytlive_spotify_recent_off">Desactivado: activa Reproducciones recientes en la página de Spotify</string>
+    <string name="ytlive_connection_on">Tu historial, al día · Activado</string>
+    <string name="ytlive_connection_off">Mantén al día tu historial · Desactivado</string>
+    <string name="ytlive_connection_signed_out">Inicia sesión para mantener al día tu historial</string>
 </resources>

@@ -4487,7 +4487,6 @@
     <string name="imp_matching">المطابقة</string>
     <string name="imp_matching_line">عُثر عليها: %1$s · المتبقي: %2$s · لم يُعثر عليها: %3$s (تُعاد المحاولة أسبوعيًا)</string>
     <string name="imp_needs_a_look">تحتاج إلى نظرة</string>
-    <string name="imp_needs_a_look_n">أغانٍ للاختيار: %1$s</string>
     <string name="imp_needs_a_look_subtitle">اختر الأغنية الصحيحة لكل واحدة، أو تجاوزها</string>
     <string name="imp_match_on_mobile">المطابقة عبر بيانات الجوّال</string>
     <string name="imp_match_on_mobile_detail">عند الإيقاف: عبر Wi-Fi فقط</string>
@@ -4842,4 +4841,18 @@
     <string name="imp_turn_on">تفعيل</string>
     <string name="imp_not_brought_in">لم يُحضَر بعد</string>
     <string name="imp_live_no_plays">مفعّل. لا مرات تشغيل بعد</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="zero">%1$s أغنية للاختيار</item>
+        <item quantity="one">أغنية واحدة للاختيار</item>
+        <item quantity="two">أغنيتان للاختيار</item>
+        <item quantity="few">%1$s أغانٍ للاختيار</item>
+        <item quantity="many">%1$s أغنية للاختيار</item>
+        <item quantity="other">%1$s أغنية للاختيار</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">اربط Spotify لاستخدام هذا</string>
+    <string name="ytlive_spotify_recent_off">متوقف: فعّل «مرات التشغيل الأخيرة» في صفحة Spotify</string>
+    <string name="ytlive_connection_on">سجلّك محدَّث · مفعّل</string>
+    <string name="ytlive_connection_off">أبقِ سجلّك محدَّثًا · متوقف</string>
+    <string name="ytlive_connection_signed_out">سجّل الدخول لإبقاء سجلّك محدَّثًا</string>
 </resources>

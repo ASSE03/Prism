@@ -4287,7 +4287,6 @@
     <string name="imp_matching">تطبیق</string>
     <string name="imp_matching_line">%1$s پیدا شد · %2$s مانده · %3$s پیدا نشد (هر هفته دوباره امتحان می‌شود)</string>
     <string name="imp_needs_a_look">نیاز به بررسی</string>
-    <string name="imp_needs_a_look_n">%1$s آهنگ برای انتخاب</string>
     <string name="imp_needs_a_look_subtitle">برای هرکدام آهنگ درست را انتخاب کنید، یا از آن بگذرید</string>
     <string name="imp_match_on_mobile">تطبیق با دادهٔ تلفن همراه</string>
     <string name="imp_match_on_mobile_detail">خاموش: فقط روی Wi-Fi</string>
@@ -4602,4 +4601,14 @@
     <string name="imp_turn_on">روشن کردن</string>
     <string name="imp_not_brought_in">هنوز آورده نشده</string>
     <string name="imp_live_no_plays">روشن. هنوز پخشی نیست</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">%1$s آهنگ برای انتخاب</item>
+        <item quantity="other">%1$s آهنگ برای انتخاب</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">برای استفاده از این، Spotify را متصل کنید</string>
+    <string name="ytlive_spotify_recent_off">خاموش: «پخش‌های اخیر» را در صفحهٔ Spotify روشن کنید</string>
+    <string name="ytlive_connection_on">سابقهٔ شما، همگام · روشن</string>
+    <string name="ytlive_connection_off">سابقهٔ خود را همگام نگه دارید · خاموش</string>
+    <string name="ytlive_connection_signed_out">برای همگام نگه داشتن سابقه، وارد شوید</string>
 </resources>

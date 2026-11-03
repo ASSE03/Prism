@@ -2174,6 +2174,15 @@ private fun DevicesPage() {
             listOf(SettingsSection.CONNECT, SettingsSection.DISCORD, SettingsSection.LASTFM, SettingsSection.SPOTIFY).forEach { sec ->
                 NavRow(sec.icon, sec.title, sec.summary(s, dark)) { nav.go(Routes.settings(sec.key)) }
             }
+            // YouTube Music (live) beside Spotify's own (owner, 1.8.1): the switch stays in Bring your history, next to
+            // Takeout, which brings the past; this row is where people look for a connection's history.
+            val ytLive by LocalContainer.current.imports.youtubeLive.on.collectAsState()
+            val detail = when {
+                !s.isLoggedIn -> tr(R.string.ytlive_connection_signed_out)
+                ytLive -> tr(R.string.ytlive_connection_on)
+                else -> tr(R.string.ytlive_connection_off)
+            }
+            NavRow(PrismIcons.History, tr(R.string.youtube_music_2), detail) { nav.go(Routes.BRING_HISTORY) }
         }
         SharingGroup()
     }

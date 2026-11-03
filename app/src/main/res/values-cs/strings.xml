@@ -4387,7 +4387,6 @@
     <string name="imp_matching">Přiřazování</string>
     <string name="imp_matching_line">Nalezeno: %1$s · zbývá: %2$s · nenalezeno: %3$s (zkouší se znovu každý týden)</string>
     <string name="imp_needs_a_look">Ke kontrole</string>
-    <string name="imp_needs_a_look_n">Skladby k výběru: %1$s</string>
     <string name="imp_needs_a_look_subtitle">U každé vyber správnou skladbu, nebo ji přeskoč</string>
     <string name="imp_match_on_mobile">Přiřazovat přes mobilní data</string>
     <string name="imp_match_on_mobile_detail">Vypnuto: jen přes Wi-Fi</string>
@@ -4722,4 +4721,16 @@
     <string name="imp_turn_on">Zapnout</string>
     <string name="imp_not_brought_in">Zatím nepřeneseno</string>
     <string name="imp_live_no_plays">Zapnuto. Zatím žádná přehrání</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">%1$s skladba k výběru</item>
+        <item quantity="few">%1$s skladby k výběru</item>
+        <item quantity="many">%1$s skladby k výběru</item>
+        <item quantity="other">%1$s skladeb k výběru</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Abys to mohl používat, připoj Spotify</string>
+    <string name="ytlive_spotify_recent_off">Vypnuto: zapni Nedávno přehrané na stránce Spotify</string>
+    <string name="ytlive_connection_on">Tvoje historie je aktuální · Zapnuto</string>
+    <string name="ytlive_connection_off">Udržuj historii aktuální · Vypnuto</string>
+    <string name="ytlive_connection_signed_out">Přihlas se, aby historie zůstala aktuální</string>
 </resources>

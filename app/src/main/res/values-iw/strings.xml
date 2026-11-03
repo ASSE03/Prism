@@ -4337,7 +4337,6 @@
     <string name="imp_matching">התאמה</string>
     <string name="imp_matching_line">%1$s נמצאו · %2$s נותרו · %3$s לא נמצאו (ניסיון חוזר כל שבוע)</string>
     <string name="imp_needs_a_look">דורש בדיקה</string>
-    <string name="imp_needs_a_look_n">%1$s שירים לבחירה</string>
     <string name="imp_needs_a_look_subtitle">בחר איזה שיר כל אחד הוא, או דלג עליו</string>
     <string name="imp_match_on_mobile">התאמה בחבילת גלישה</string>
     <string name="imp_match_on_mobile_detail">כבוי: רק ב-Wi-Fi</string>
@@ -4662,4 +4661,15 @@
     <string name="imp_turn_on">הפעל</string>
     <string name="imp_not_brought_in">עדיין לא הובאה</string>
     <string name="imp_live_no_plays">פעיל. עדיין אין השמעות</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">שיר אחד לבחירה</item>
+        <item quantity="two">שני שירים לבחירה</item>
+        <item quantity="other">%1$s שירים לבחירה</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">חבר את Spotify כדי להשתמש בזה</string>
+    <string name="ytlive_spotify_recent_off">כבוי: הפעל את ״השמעות אחרונות״ בדף Spotify</string>
+    <string name="ytlive_connection_on">ההיסטוריה שלך, מעודכנת · פועל</string>
+    <string name="ytlive_connection_off">שמור על עדכון ההיסטוריה שלך · כבוי</string>
+    <string name="ytlive_connection_signed_out">היכנס כדי לשמור על עדכון ההיסטוריה שלך</string>
 </resources>

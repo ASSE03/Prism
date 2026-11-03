@@ -4451,7 +4451,15 @@
     <string name="imp_matching">Matching</string>
     <string name="imp_matching_line">%1$s found · %2$s to go · %3$s not found (tried again weekly)</string>
     <string name="imp_needs_a_look">Needs a look</string>
-    <string name="imp_needs_a_look_n">%1$s songs to pick</string>
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">%1$s song to pick</item>
+        <item quantity="other">%1$s songs to pick</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Connect Spotify to use this</string>
+    <string name="ytlive_spotify_recent_off">Off: turn on Recent plays on the Spotify page</string>
+    <string name="ytlive_connection_on">Your history, kept in step · On</string>
+    <string name="ytlive_connection_off">Keep your history in step · Off</string>
+    <string name="ytlive_connection_signed_out">Sign in to keep your history in step</string>
     <string name="imp_needs_a_look_subtitle">Pick the song each one is, or pass it over</string>
     <string name="imp_match_on_mobile">Match on mobile data</string>
     <string name="imp_match_on_mobile_detail">Off: only on Wi-Fi</string>

@@ -4387,7 +4387,6 @@
     <string name="imp_matching">Зіставлення</string>
     <string name="imp_matching_line">Знайдено %1$s · лишилося %2$s · не знайдено %3$s (повторна спроба щотижня)</string>
     <string name="imp_needs_a_look">Варто глянути</string>
-    <string name="imp_needs_a_look_n">Пісень для вибору: %1$s</string>
     <string name="imp_needs_a_look_subtitle">Вибери, яка це пісня, або пропусти</string>
     <string name="imp_match_on_mobile">Зіставляти через мобільні дані</string>
     <string name="imp_match_on_mobile_detail">Вимкнено: лише через Wi-Fi</string>
@@ -4722,4 +4721,16 @@
     <string name="imp_turn_on">Увімкнути</string>
     <string name="imp_not_brought_in">Ще не перенесено</string>
     <string name="imp_live_no_plays">Увімкнено. Прослуховувань ще немає</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">Пісень для вибору: %1$s</item>
+        <item quantity="few">Пісень для вибору: %1$s</item>
+        <item quantity="many">Пісень для вибору: %1$s</item>
+        <item quantity="other">Пісень для вибору: %1$s</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Підключи Spotify, щоб користуватися цим</string>
+    <string name="ytlive_spotify_recent_off">Вимкнено: увімкни «Недавні прослуховування» на сторінці Spotify</string>
+    <string name="ytlive_connection_on">Твоя історія актуальна · Увімкнено</string>
+    <string name="ytlive_connection_off">Підтримувати історію актуальною · Вимкнено</string>
+    <string name="ytlive_connection_signed_out">Увійди, щоб підтримувати історію актуальною</string>
 </resources>

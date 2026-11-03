@@ -4387,7 +4387,6 @@
     <string name="imp_matching">Сопоставление</string>
     <string name="imp_matching_line">Найдено: %1$s · осталось: %2$s · не найдено: %3$s (повтор раз в неделю)</string>
     <string name="imp_needs_a_look">Нужно проверить</string>
-    <string name="imp_needs_a_look_n">Песен на выбор: %1$s</string>
     <string name="imp_needs_a_look_subtitle">Выбери, какая это песня, или пропусти</string>
     <string name="imp_match_on_mobile">Сопоставлять через мобильный интернет</string>
     <string name="imp_match_on_mobile_detail">Выключено: только по Wi-Fi</string>
@@ -4722,4 +4721,16 @@
     <string name="imp_turn_on">Включить</string>
     <string name="imp_not_brought_in">Ещё не перенесено</string>
     <string name="imp_live_no_plays">Включено. Прослушиваний пока нет</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="one">Песен на выбор: %1$s</item>
+        <item quantity="few">Песен на выбор: %1$s</item>
+        <item quantity="many">Песен на выбор: %1$s</item>
+        <item quantity="other">Песен на выбор: %1$s</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">Подключи Spotify, чтобы пользоваться этим</string>
+    <string name="ytlive_spotify_recent_off">Выключено: включи «Недавние прослушивания» на странице Spotify</string>
+    <string name="ytlive_connection_on">Твоя история в актуальном виде · Включено</string>
+    <string name="ytlive_connection_off">Держать историю в актуальном виде · Выключено</string>
+    <string name="ytlive_connection_signed_out">Войди, чтобы держать историю в актуальном виде</string>
 </resources>

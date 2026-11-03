@@ -4237,7 +4237,6 @@
     <string name="imp_matching">匹配中</string>
     <string name="imp_matching_line">已找到 %1$s · 剩余 %2$s · 未找到 %3$s（每周重试）</string>
     <string name="imp_needs_a_look">需要确认</string>
-    <string name="imp_needs_a_look_n">%1$s 首歌待选择</string>
     <string name="imp_needs_a_look_subtitle">为每一项选出对应的歌曲，或跳过</string>
     <string name="imp_match_on_mobile">使用移动数据匹配</string>
     <string name="imp_match_on_mobile_detail">关闭：仅在 Wi-Fi 下</string>
@@ -4542,4 +4541,13 @@
     <string name="imp_turn_on">开启</string>
     <string name="imp_not_brought_in">尚未导入</string>
     <string name="imp_live_no_plays">已开启。还没有播放</string>
+    <!-- 1.8.1 followed playlists, live history rows -->
+    <plurals name="imp_needs_a_look_count">
+        <item quantity="other">%1$s 首歌待选择</item>
+    </plurals>
+    <string name="ytlive_spotify_connect">连接 Spotify 后才能使用</string>
+    <string name="ytlive_spotify_recent_off">已关闭：请在 Spotify 页面开启“最近播放”</string>
+    <string name="ytlive_connection_on">你的记录保持同步 · 已开启</string>
+    <string name="ytlive_connection_off">让你的记录保持同步 · 已关闭</string>
+    <string name="ytlive_connection_signed_out">登录后即可让你的记录保持同步</string>
 </resources>
