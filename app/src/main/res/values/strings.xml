@@ -4229,6 +4229,7 @@
     <string name="tour_180_silence">Trim silence only touches a song\'s start and end</string>
     <string name="tour_180_normalize">Same loudness evens out big jumps between songs</string>
     <string name="tour_180_size">A smaller download</string>
+    <string name="spotify_live_source">Spotify (live)</string>
     <!-- 1.8.1 tour -->
     <string name="tour_181_history">Bring your history</string>
     <string name="tour_181_history_body">Your plays from Spotify, YouTube Music or Last.fm, read on this phone.</string>

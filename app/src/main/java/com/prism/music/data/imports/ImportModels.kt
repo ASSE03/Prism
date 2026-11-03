@@ -3,12 +3,15 @@ package com.prism.music.data.imports
 import kotlinx.serialization.Serializable
 
 /** Where an imported history came from (1.8.1). [key] is what's stored with each play: never rename one. */
-enum class ImportSource(val key: String, val label: String) {
+enum class ImportSource(val key: String, private val name_: String) {
     SPOTIFY("spotify", "Spotify"),
     TAKEOUT("takeout", "YouTube Music"),
     LASTFM("lastfm", "Last.fm"),
     /** Recently played, read from the listener's own Spotify connection (1.8.1, "bring your own key"). */
-    SPOTIFY_LIVE("spotify_live", "Spotify (live)");
+    SPOTIFY_LIVE("spotify_live", "");
+
+    /** Shown to the listener: the services' own names, and "Spotify (live)" in the listener's language. */
+    val label: String get() = if (this == SPOTIFY_LIVE) com.prism.music.tr(com.prism.music.R.string.spotify_live_source) else name_
 
     companion object {
         fun of(key: String): ImportSource? = entries.firstOrNull { it.key == key }
