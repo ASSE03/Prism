@@ -34,6 +34,7 @@ import com.prism.music.ui.components.rememberArtPalette
 import com.prism.music.ui.components.rememberFrost
 import com.prism.music.ui.player.ArtworkMeshBackdrop
 import com.prism.music.ui.player.rememberArtworkMesh
+import com.prism.music.ui.theme.LocalAppSettings
 import com.prism.music.ui.theme.LocalContainer
 import com.prism.music.ui.theme.PrismTokens
 
@@ -144,8 +145,7 @@ fun TvPictureBackdrop(url: String?, modifier: Modifier = Modifier) {
 fun TvMeshBackdrop(url: String?, modifier: Modifier = Modifier) {
     val mesh = rememberArtworkMesh(url)
     // Settings → Look → Background (1.8.1): darker, as the listener likes it behind the lyrics.
-    val settings by LocalContainer.current.settings.flow.collectAsState()
-    val shade = com.prism.music.data.prefs.TvPrefs.coverShade(settings.tv.backdropDim)
+    val shade = com.prism.music.data.prefs.TvPrefs.coverShade(LocalAppSettings.current.tv.backdropDim)
     if (mesh == null) androidx.compose.foundation.layout.Box(modifier.fillMaxSize()) {
         TvAuraFrom(url)
         // A moment, till the mesh is made.

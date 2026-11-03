@@ -329,8 +329,7 @@ internal object TvLyricsCounts {
 @Composable
 private fun TvVideoScrim() {
     // Settings → Look → Background (1.8.1): the video more see-through, or darker.
-    val settings by LocalContainer.current.settings.flow.collectAsState()
-    val k = com.prism.music.data.prefs.TvPrefs.videoShade(settings.tv.backdropDim)
+    val k = com.prism.music.data.prefs.TvPrefs.videoShade(LocalAppSettings.current.tv.backdropDim)
     fun a(v: Float) = Color.Black.copy(alpha = (v * k).coerceAtMost(0.95f))
     Box(
         Modifier.fillMaxSize().testTag("$TAG_LYRICS/scrim").background(
