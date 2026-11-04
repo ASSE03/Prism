@@ -21,6 +21,21 @@ A bug-fix update.
   menu, the notification, Android Auto and widgets. The song is still the one you liked, saved and played; "Use the
   original" puts everything back. A music video that plays as itself (no song of its length) gets its song's cover
   before it starts, and its song's album.
+- **"Show lyrics" can leave the player's menu (#345).** With the Lyrics button off the player, the ⋯ menu's "Show
+  lyrics" couldn't be hidden. Edit this menu lists it now: switched off, it waits under More, as long as the player
+  opens the lyrics another way (the current lyric, a swipe up on the controls or a cover gesture); while it's the only
+  way, it stays and says so.
+- **Lyrics in the middle stay clear of the progress bar (#341).** A long sung line, placed in the middle of a page made
+  short by a taller progress bar (Ribbons, the waveform), ran down to the bar; it now moves up into the room above as
+  far as it needs to, and settles again when the controls come or go.
+- **Even gaps under the player when parts are hidden (#329).** The hidden volume bar left a blank band between the
+  controls and the buttons; its room is shared evenly between the gaps now, so nothing else moves.
+- **Undo in the queue puts the song back where you can see it** (Reddit). Taken out and put back after the song before
+  it had finished, or while shuffled once the next song had been lined up, it could land among the songs already played
+  or at the end of the shuffled order. It goes back beside the songs it was with, on its side of the playing song.
+- **The band behind the navigation buttons works on Android 15 and later (#250).** Android 15 ignores the color Prism
+  gave it, so "Band behind the navigation buttons" did nothing there; the player draws the band itself now, only behind
+  three-button navigation (none with gestures).
 
 ## 1.8.1
 

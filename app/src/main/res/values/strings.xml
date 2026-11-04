@@ -4119,6 +4119,7 @@
     <string name="no_quick_tiles">No tiles: pin an action below to add one</string>
     <string name="back_to_prism_s_menu">Back to Prism\'s menu</string>
     <string name="under_more">Under More</string>
+    <string name="menu_lyrics_only_way">Stays while it\'s the player\'s only way to the lyrics</string>
     <string name="quick_tile_s">Quick tile: %1$s</string>
     <string name="what_s_on_the_player">What\'s on the player</string>
     <string name="tap_a_part_of_the_player_to_hide_or_show_it">Tap a part of the player to hide or show it; a hidden part stays here, faint, to tap back. Only play and pause always stay. Nothing you hide is gone: what it did is in the player\'s ⋯ menu. With the ⋯ button hidden, a long press on the title or the artist opens the menu.</string>

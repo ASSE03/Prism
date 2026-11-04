@@ -154,14 +154,15 @@ class PlayerEditorTest {
         runBlocking {
             store.editNow {
                 it[stringPreferencesKey("player_hidden_parts")] = "COVER,SPARKLES,HANDLE,,MENU"
-                it[stringPreferencesKey("player_menu_hidden")] = "STATS,OPEN_LYRICS,NOPE"
+                it[stringPreferencesKey("player_menu_hidden")] = "STATS,OPEN_LYRICS,OPEN_QUEUE,NOPE"
                 it[stringPreferencesKey("player_menu_tiles")] = "SING,NEXT,STATS,SING,RADIO,OUTPUT,SLEEP"
             }
         }
         val s = settled { it.view.parts.hidden.isNotEmpty() }
         assertEquals(setOf(PlayerPart.COVER, PlayerPart.MENU), s.view.parts.hidden)
         assertTrue("the handle keeps its own switch", s.shows(PlayerPart.HANDLE))
-        assertEquals(setOf(MenuAction.STATS), s.view.parts.menuHidden)
+        // "Show lyrics" may be folded away too (#345, while the player opens the lyrics another way: menuFolds).
+        assertEquals(setOf(MenuAction.STATS, MenuAction.OPEN_LYRICS), s.view.parts.menuHidden)
         assertEquals(listOf(MenuAction.SING, MenuAction.STATS, MenuAction.RADIO, MenuAction.OUTPUT), s.view.parts.menuTiles)
     }
 

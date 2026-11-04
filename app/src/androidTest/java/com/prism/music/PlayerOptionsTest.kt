@@ -86,13 +86,35 @@ class PlayerOptionsTest {
 
     /** #250: the dark band behind three-button navigation on the player can go (the player shows through). */
     @Test fun theBandBehindTheNavigationButtonsCanGo() {
-        // Android 15+ ignores a window's navigation bar color for apps targeting 35+ (edge to edge is enforced; the
-        // system draws its own scrim behind three-button navigation), so there's no band to take away there.
-        org.junit.Assume.assumeTrue(android.os.Build.VERSION.SDK_INT < 35)
         openPlayer()
-        compose.waitUntil(5_000) { navBarColor() != android.graphics.Color.TRANSPARENT }
+        if (android.os.Build.VERSION.SDK_INT < 35) {
+            compose.waitUntil(5_000) { navBarColor() != android.graphics.Color.TRANSPARENT }
+            runBlocking { Fixture.container.settings.setPlayerNavBand(false) }
+            compose.waitUntil(10_000) { navBarColor() == android.graphics.Color.TRANSPARENT }
+            return
+        }
+        // Android 15+ ignores a window's navigation bar color for apps targeting 35+ (edge to edge is enforced): the
+        // player draws the band itself (1.8.1.1), only behind three-button navigation, never with gestures.
+        fun band() = compose.onAllNodes(hasTestTag("playerNavBand"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
+        if (threeButtonNavigation()) compose.waitUntil(5_000) { band() }
+        else {
+            compose.waitForIdle()
+            org.junit.Assert.assertFalse("gesture navigation: no band", band())
+        }
         runBlocking { Fixture.container.settings.setPlayerNavBand(false) }
-        compose.waitUntil(10_000) { navBarColor() == android.graphics.Color.TRANSPARENT }
+        compose.waitUntil(10_000) { !band() }
+    }
+
+    /** Three-button navigation: its bar takes taps (the gesture handle's doesn't, so its tappable inset is 0). */
+    private fun threeButtonNavigation(): Boolean {
+        var bottom = 0
+        instrumentation.runOnMainSync {
+            val activity = androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry.getInstance()
+                .getActivitiesInStage(androidx.test.runner.lifecycle.Stage.RESUMED).firstOrNull()
+            bottom = activity?.window?.decorView?.let { androidx.core.view.ViewCompat.getRootWindowInsets(it) }
+                ?.getInsets(androidx.core.view.WindowInsetsCompat.Type.tappableElement())?.bottom ?: 0
+        }
+        return bottom > 0
     }
 
     private fun navBarColor(): Int {

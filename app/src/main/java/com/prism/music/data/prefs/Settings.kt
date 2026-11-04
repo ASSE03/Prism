@@ -457,9 +457,10 @@ enum class MenuGroup(val label: String) { SONG(tr(R.string.this_song)), LYRICS(t
 /**
  * An action in the player's ⋯ menu (1.8.0), in its group's order. Any of them can be one of the four quick tiles or be
  * hidden ("Edit this menu"); a hidden one folds under "More" at the menu's end, never gone. "Player settings" and "Edit
- * this menu" aren't here: they always stay. [fromPlayer] actions only show while their part of the player is hidden.
+ * this menu" aren't here: they always stay. [fromPlayer] actions only show while their part of the player is hidden;
+ * a [foldable] one of them can still go under "More" while the player has another way to it ([menuFolds]).
  */
-enum class MenuAction(val group: MenuGroup, val fromPlayer: Boolean = false) {
+enum class MenuAction(val group: MenuGroup, val fromPlayer: Boolean = false, val foldable: Boolean = !fromPlayer) {
     ADD_TO_PLAYLIST(MenuGroup.SONG), RADIO(MenuGroup.SONG), DOWNLOAD(MenuGroup.SONG), ALBUM(MenuGroup.SONG), ARTIST(MenuGroup.SONG),
     CREDITS(MenuGroup.SONG), VERSION(MenuGroup.SONG),
     /** #305 (1.8.1): a cover of the listener's choosing for the song. */
@@ -467,7 +468,8 @@ enum class MenuAction(val group: MenuGroup, val fromPlayer: Boolean = false) {
     NOT_FOR_ME(MenuGroup.SONG),
     SING(MenuGroup.LYRICS), LYRICS_SOURCE(MenuGroup.LYRICS), LYRICS_TIMING(MenuGroup.LYRICS), TRANSLATE(MenuGroup.LYRICS),
     ROMANIZE(MenuGroup.LYRICS), LYRICS_AGAIN(MenuGroup.LYRICS), LYRICS_INTO_FILE(MenuGroup.LYRICS),
-    OPEN_LYRICS(MenuGroup.PLAYING, true), OPEN_QUEUE(MenuGroup.PLAYING, true), VIDEO_SWITCH(MenuGroup.PLAYING, true),
+    /** #345: "Show lyrics" can be folded away while the current lyric (or a cover gesture) opens them too. */
+    OPEN_LYRICS(MenuGroup.PLAYING, true, foldable = true), OPEN_QUEUE(MenuGroup.PLAYING, true), VIDEO_SWITCH(MenuGroup.PLAYING, true),
     PREVIOUS(MenuGroup.PLAYING, true), NEXT(MenuGroup.PLAYING, true), DJ(MenuGroup.PLAYING, true), EQUALIZER(MenuGroup.PLAYING, true),
     SLEEP(MenuGroup.PLAYING), SPEED_PITCH(MenuGroup.PLAYING), OUTPUT(MenuGroup.PLAYING), IMMERSIVE(MenuGroup.PLAYING),
     VIDEO_DOWNLOAD(MenuGroup.PLAYING), LISTEN_TOGETHER(MenuGroup.PLAYING), BEST_PART(MenuGroup.PLAYING),
@@ -555,20 +557,38 @@ fun AppSettings.menuFromPlayer(): List<MenuAction> {
     )
 }
 
+/**
+ * #345: the player opens its lyrics without the menu's "Show lyrics": a tap on the current lyric, a swipe up on the
+ * controls ("Swipe up for the queue"), or a gesture on the cover (while the cover's there, or gestures work anywhere).
+ */
+fun AppSettings.lyricsElsewhere(): Boolean = shows(PlayerPart.LYRIC_LINE) || behavior.panelSwipes ||
+    ((shows(PlayerPart.COVER) || behavior.gesturesEverywhere) &&
+        PlayerGesture.LYRICS in listOf(coverSwipeLeft, coverSwipeRight, coverSwipeUp, coverDoubleTap, coverLongPress))
+
+/**
+ * The [MenuAction.fromPlayer] actions the listener may fold under "More" now (#345): "Show lyrics" while the lyrics are
+ * reachable another way ([lyricsElsewhere]); while it's the only way, it stays in the menu whatever was picked.
+ */
+fun AppSettings.menuFolds(): Set<MenuAction> = setOfNotNull(MenuAction.OPEN_LYRICS.takeIf { lyricsElsewhere() })
+
 /** The ⋯ menu laid out (1.8.0): the quick tiles, each group's shown actions, and the hidden ones folded under "More". */
 data class MenuLayout(val tiles: List<MenuAction>, val groups: List<Pair<MenuGroup, List<MenuAction>>>, val more: List<MenuAction>)
 
-/** [available]: the actions this song has (a file on the phone has no radio…), in any order. */
-fun PlayerParts.menuLayout(available: Collection<MenuAction>): MenuLayout {
+/**
+ * [available]: the actions this song has (a file on the phone has no radio…), in any order. [folds]: the actions from
+ * the player that may be folded away now ([menuFolds]).
+ */
+fun PlayerParts.menuLayout(available: Collection<MenuAction>, folds: Set<MenuAction> = emptySet()): MenuLayout {
     val here = available.toSet()
     val tiles = menuTiles.filter { it in here }.distinct().take(MenuAction.MAX_TILES)
-    // An action from the player is never folded away: it's there because its part is hidden.
+    // An action from the player isn't folded away (it's there because its part is hidden), unless the player has
+    // another way to it (#345).
+    fun folds(a: MenuAction) = (!a.fromPlayer || a in folds) && a in menuHidden
     val rest = MenuAction.entries.filter { it in here && it !in tiles }
-    val shown = rest.filter { it.fromPlayer || it !in menuHidden }
     return MenuLayout(
         tiles,
-        MenuGroup.entries.map { g -> g to shown.filter { it.group == g } }.filter { it.second.isNotEmpty() },
-        rest.filter { !it.fromPlayer && it in menuHidden },
+        MenuGroup.entries.map { g -> g to rest.filter { it.group == g && !folds(it) } }.filter { it.second.isNotEmpty() },
+        rest.filter(::folds),
     )
 }
 
@@ -2923,7 +2943,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val d = PlayerParts()
         return PlayerParts(
             hidden = namesOf<PlayerPart>(p[K.playerHiddenParts]).filter { it in PlayerPart.NEW }.toSet(),
-            menuHidden = namesOf<MenuAction>(p[K.playerMenuHidden]).filter { !it.fromPlayer }.toSet(),
+            menuHidden = namesOf<MenuAction>(p[K.playerMenuHidden]).filter { it.foldable }.toSet(),
             // Set (even to none): as picked; never set: the menu's own four.
             menuTiles = p[K.playerMenuTiles]?.let { v -> namesOf<MenuAction>(v).filter { !it.fromPlayer }.take(MenuAction.MAX_TILES) } ?: d.menuTiles,
         )
