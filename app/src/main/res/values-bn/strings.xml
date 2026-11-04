@@ -4009,7 +4009,6 @@
     <string name="tabs_on_a_tablet_info">ট্যাবলেটে বা চওড়া উইন্ডোতে। ফোনে ট্যাব সবসময় নিচে থাকে।</string>
     <string name="same_as_your_accent">আপনার অ্যাকসেন্টের মতোই</string>
     <string name="use_the_same">একই রাখুন</string>
-    <string name="glass_choice_info">ঝাপসা কাচ: বার আর কন্ট্রোলের পেছনে নরম ঝাপসা ভাব। লিকুইড গ্লাস: সত্যিকারের কাচের মতো পেছনের জিনিস বাঁকিয়ে দেখায় (Android 12 বা পরের সংস্করণ; পুরোনো ফোনে ঝাপসা কাচ)। সাধারণ বেশি ভরাট, স্বচ্ছ পেছনের জিনিস বেশি দেখতে দেয়।</string>
     <string name="start_from">যেখান থেকে শুরু</string>
     <string name="start_from_info">এটি একটি শুরুর জায়গা, বাঁধন নয়: নিচের অ্যানিমেশন, লেখার ধরন, কার্ড আর আভা ঠিক করে দেয়। পরে যেকোনো অংশ বদলান; আপনার রং, আকার আর বাকি সব যেমন আছে তেমনই থাকে।</string>
     <string name="with_your_changes">আপনার বদলসহ</string>
@@ -4615,4 +4614,13 @@
         <item quantity="one">%1$sটি নতুন · আগে আনা প্লেলিস্টে যোগ করার জন্য %2$sটি গান</item>
         <item quantity="other">%1$sটি নতুন · আগে আনা প্লেলিস্টে যোগ করার জন্য %2$sটি গান</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">সারিতে DJ বোতাম</string>
+    <string name="dj_in_the_queue_detail">সারির উপরে, সেভ ও মুছুনের পাশে</string>
+    <string name="dj_in_the_queue_info">বন্ধ থাকলে সারির উপরে আরও জায়গা থাকে। DJ মোড তবুও প্লেয়ারের একটি বোতাম হতে পারে (প্লেয়ারে কী থাকবে)।</string>
+    <string name="dj_in_the_queue_keywords">dj মোড বোতাম সারি উপরে জায়গা লুকান</string>
+    <string name="menu_lyrics_only_way">প্লেয়ার থেকে লিরিক্সে যাওয়ার একমাত্র পথ থাকলে এটি থাকে</string>
+    <string name="glass_kinds_info">ঝাপসা কাচ: বার ও কন্ট্রোলের পেছনে হালকা ব্লার। লিকুইড গ্লাস: এগুলো পেছনের জিনিসকে আসল কাচের মতো বাঁকিয়ে দেখায় (Android 12 ও পরের সংস্করণ; পুরনো ফোনে ঝাপসা কাচ পাবেন)। সাধারণ পেছনের অংশ ঝাপসা করে, ঝাপসা কাচ যেমন করে। স্বচ্ছ পেছনের অংশ পরিষ্কার রাখে, শুধু হালকা রঙের ছোঁয়া থাকে।</string>
+    <string name="smart_downloads_offer_title">দরকারের আগেই গান ডাউনলোড করে রাখবেন?</string>
+    <string name="smart_downloads_offer_body">স্মার্ট ডাউনলোড আপনি যে গানগুলো চালাতে পারেন সেগুলো অফলাইনের জন্য তৈরি রাখে: 1 GB পর্যন্ত, Wi-Fi-তে। যখন খুশি \"ডাউনলোড, স্টোরেজ ও ডেটা\"-তে বদলাতে পারবেন।</string>
 </resources>

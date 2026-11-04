@@ -3959,7 +3959,6 @@
     <string name="tabs_on_a_tablet_info">适用于平板或宽窗口。手机上的标签始终在底部。</string>
     <string name="same_as_your_accent">与强调色相同</string>
     <string name="use_the_same">设为相同</string>
-    <string name="glass_choice_info">磨砂玻璃：在栏和控件后方形成柔和的模糊。液态玻璃：像真正的玻璃一样弯折后方的画面（Android 12 及更高版本；较旧的手机会使用磨砂玻璃）。“常规”更饱满，“清除”更通透。</string>
     <string name="start_from">起点模板</string>
     <string name="start_from_info">这只是起点，不会锁定：它会设置下方的动画、文字、卡片和发光效果。之后可以随意更改任何部分；你的颜色、大小等其他设置保持不变。</string>
     <string name="with_your_changes">已修改</string>
@@ -4553,4 +4552,13 @@
     <plurals name="imp_playlists_new_count">
         <item quantity="other">%1$s 个新的 · %2$s 首歌将添加到之前导入的播放列表</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">队列中的 DJ 按钮</string>
+    <string name="dj_in_the_queue_detail">位于队列顶部，在“保存”和“清除”旁</string>
+    <string name="dj_in_the_queue_info">关闭后，队列顶部会有更多空间。DJ 模式仍可作为播放器的按钮之一（在播放器上显示）。</string>
+    <string name="dj_in_the_queue_keywords">dj 模式 按钮 队列 顶部 标题 空间 隐藏</string>
+    <string name="menu_lyrics_only_way">只要它是播放器通往歌词的唯一途径，就会保留</string>
+    <string name="glass_kinds_info">磨砂玻璃：栏和控件后面的柔和模糊。液态玻璃：它们像真玻璃一样折射后面的内容（Android 12 及更高版本；较旧的手机使用磨砂玻璃）。常规会模糊后面的内容，就像磨砂玻璃一样。透明则保持清晰，仅带淡淡的色调。</string>
+    <string name="smart_downloads_offer_title">在需要之前先下载歌曲？</string>
+    <string name="smart_downloads_offer_body">智能下载会把你可能会播放的歌曲准备好供离线使用：最多 1 GB，通过 Wi-Fi。随时可在“下载、存储和流量”中更改。</string>
 </resources>

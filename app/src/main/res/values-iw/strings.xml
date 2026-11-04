@@ -4059,7 +4059,6 @@
     <string name="tabs_on_a_tablet_info">בטאבלט או בחלון רחב. בטלפונים הכרטיסיות תמיד למטה.</string>
     <string name="same_as_your_accent">זהה לצבע ההדגשה שלך</string>
     <string name="use_the_same">להשתמש באותו צבע</string>
-    <string name="glass_choice_info">זכוכית חלבית: טשטוש רך מאחורי הסרגלים והפקדים. Liquid Glass: הם מכופפים את מה שמאחוריהם כמו זכוכית אמיתית (Android 12 ואילך; טלפונים ישנים יותר מקבלים זכוכית חלבית). ״רגיל״ מלא יותר, ״שקוף״ מעביר יותר.</string>
     <string name="start_from">נקודת התחלה</string>
     <string name="start_from_info">נקודת התחלה, לא נעילה: היא קובעת את האנימציה, הגופן, הכרטיס והזוהר שלמטה. אפשר לשנות כל חלק אחר כך; הצבעים, הגודל וכל השאר נשארים כפי שהם.</string>
     <string name="with_your_changes">עם השינויים שלך</string>
@@ -4677,4 +4676,13 @@
         <item quantity="two">%1$s חדשים · %2$s שירים להוספה לאלה שהובאו קודם</item>
         <item quantity="other">%1$s חדשים · %2$s שירים להוספה לאלה שהובאו קודם</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">כפתור DJ בתור</string>
+    <string name="dj_in_the_queue_detail">בראש התור, ליד שמירה וניקוי</string>
+    <string name="dj_in_the_queue_info">כשהוא כבוי, יש יותר מקום בראש התור. מצב DJ עדיין יכול להיות אחד מכפתורי הנגן (מה מופיע בנגן).</string>
+    <string name="dj_in_the_queue_keywords">dj מצב כפתור תור ראש מקום הסתרה</string>
+    <string name="menu_lyrics_only_way">נשאר כל עוד זו הדרך היחידה מהנגן אל המילים</string>
+    <string name="glass_kinds_info">זכוכית חלבית: טשטוש רך מאחורי הסרגלים ופקדי ההפעלה. Liquid Glass: הם מעקמים את מה שמאחוריהם כמו זכוכית אמיתית (Android 12 ואילך; בטלפונים ישנים יותר מקבלים זכוכית חלבית). רגיל מטשטש את מה שמאחוריו, כמו זכוכית חלבית. שקוף משאיר אותו חד, עם גוון קל בלבד.</string>
+    <string name="smart_downloads_offer_title">להוריד שירים לפני שצריך אותם?</string>
+    <string name="smart_downloads_offer_body">הורדות חכמות מכינות למצב לא מקוון את השירים שסביר שתשמיעו: עד 1 GB, ב-Wi-Fi. אפשר לשנות זאת בכל זמן תחת הורדות, אחסון ונתונים.</string>
 </resources>

@@ -4059,7 +4059,6 @@
     <string name="tabs_on_a_tablet_info">Su un tablet o in una finestra larga. Sui telefoni le schede sono sempre in basso.</string>
     <string name="same_as_your_accent">Uguale al tuo accento</string>
     <string name="use_the_same">Usa lo stesso</string>
-    <string name="glass_choice_info">Vetro smerigliato: una sfocatura morbida dietro barre e controlli. Vetro liquido: piegano ciò che c\'è dietro come vero vetro (Android 12 e successivi; i telefoni più vecchi hanno il Vetro smerigliato). Normale è più pieno, Trasparente lascia passare di più.</string>
     <string name="start_from">Parti da</string>
     <string name="start_from_info">Un punto di partenza, non un vincolo: imposta l\'animazione, il carattere, la scheda e il bagliore qui sotto. Poi cambia qualsiasi parte; i tuoi colori, la dimensione e il resto restano come sono.</string>
     <string name="with_your_changes">Con le tue modifiche</string>
@@ -4677,4 +4676,13 @@
         <item quantity="many">%1$s nuove · %2$s di brani da aggiungere a quelle portate in precedenza</item>
         <item quantity="other">%1$s nuove · %2$s brani da aggiungere a quelle portate in precedenza</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">Pulsante DJ nella coda</string>
+    <string name="dj_in_the_queue_detail">In cima alla coda, accanto a Salva e Cancella</string>
+    <string name="dj_in_the_queue_info">Se è disattivato, la parte alta della coda ha più spazio. La modalità DJ può comunque restare uno dei pulsanti del player (Cosa c\'è sul player).</string>
+    <string name="dj_in_the_queue_keywords">dj modalità pulsante coda intestazione alto spazio nascondere</string>
+    <string name="menu_lyrics_only_way">Resta finché è l\'unico modo per arrivare ai testi dal player</string>
+    <string name="glass_kinds_info">Vetro smerigliato: una sfocatura morbida dietro barre e controlli. Vetro liquido: piegano ciò che hanno dietro come vero vetro (Android 12 e successivi; i telefoni più vecchi usano il Vetro smerigliato). Normale sfoca ciò che sta dietro, come il vetro smerigliato. Trasparente lo lascia nitido, con solo una leggera tinta.</string>
+    <string name="smart_downloads_offer_title">Scaricare i brani prima che ti servano?</string>
+    <string name="smart_downloads_offer_body">I Download intelligenti tengono pronti offline i brani che ascolterai più probabilmente: fino a 1 GB, con Wi-Fi. Cambialo quando vuoi in Download, spazio e dati.</string>
 </resources>

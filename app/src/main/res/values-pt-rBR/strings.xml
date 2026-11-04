@@ -4059,7 +4059,6 @@
     <string name="tabs_on_a_tablet_info">Em um tablet ou numa janela larga. No celular, as abas ficam sempre embaixo.</string>
     <string name="same_as_your_accent">Igual ao seu destaque</string>
     <string name="use_the_same">Usar o mesmo</string>
-    <string name="glass_choice_info">Vidro fosco: um desfoque suave atrás das barras e dos controles. Liquid Glass: eles curvam o que está atrás como vidro de verdade (Android 12 ou mais recente; celulares mais antigos ficam com o Vidro fosco). Normal é mais denso; a versão transparente deixa passar mais.</string>
     <string name="start_from">Começar de</string>
     <string name="start_from_info">Um ponto de partida, não uma trava: ele define a animação, o texto, o cartão e o brilho abaixo. Mude qualquer parte depois; suas cores, o tamanho e o resto continuam como estão.</string>
     <string name="with_your_changes">Com suas alterações</string>
@@ -4677,4 +4676,13 @@
         <item quantity="many">%1$s novas · %2$s de músicas para adicionar às trazidas antes</item>
         <item quantity="other">%1$s novas · %2$s músicas para adicionar às trazidas antes</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">Botão DJ na fila</string>
+    <string name="dj_in_the_queue_detail">No topo da fila, ao lado de Salvar e Limpar</string>
+    <string name="dj_in_the_queue_info">Desativado, o topo da fila ganha mais espaço. O modo DJ ainda pode ser um dos botões do player (Mostrar no player).</string>
+    <string name="dj_in_the_queue_keywords">dj modo botão fila cabeçalho topo espaço ocultar</string>
+    <string name="menu_lyrics_only_way">Fica enquanto for o único caminho do player até a letra</string>
+    <string name="glass_kinds_info">Vidro fosco: um desfoque suave atrás das barras e dos controles. Liquid Glass: eles curvam o que está atrás, como vidro de verdade (Android 12 ou superior; celulares mais antigos recebem Vidro fosco). Normal desfoca o que está atrás, como o vidro fosco. Transparente mantém tudo nítido, só com um leve tom.</string>
+    <string name="smart_downloads_offer_title">Baixar músicas antes de precisar delas?</string>
+    <string name="smart_downloads_offer_body">Os Downloads inteligentes deixam prontas offline as músicas que você provavelmente vai ouvir: até 1 GB, no Wi-Fi. Mude quando quiser em Downloads, armazenamento e dados.</string>
 </resources>

@@ -4009,7 +4009,6 @@
     <string name="tabs_on_a_tablet_info">टैबलेट या चौड़ी विंडो पर। फ़ोन पर टैब हमेशा नीचे रहते हैं।</string>
     <string name="same_as_your_accent">आपके एक्सेंट जैसा</string>
     <string name="use_the_same">वही इस्तेमाल करें</string>
-    <string name="glass_choice_info">फ़्रॉस्टेड ग्लास: बार और कंट्रोल के पीछे हल्का धुंधलापन। लिक्विड ग्लास: वे अपने पीछे की चीज़ों को असली कांच की तरह मोड़ते हैं (Android 12 और बाद के वर्शन; पुराने फ़ोन को फ़्रॉस्टेड मिलता है)। सामान्य ज़्यादा भरा हुआ है, साफ़ ज़्यादा आर-पार दिखाता है।</string>
     <string name="start_from">यहां से शुरू करें</string>
     <string name="start_from_info">यह एक शुरुआत है, बंधन नहीं: यह नीचे का एनिमेशन, टाइप, कार्ड और चमक सेट करता है। बाद में कोई भी हिस्सा बदलें; आपके रंग, साइज़ और बाकी सब वैसे ही रहते हैं।</string>
     <string name="with_your_changes">आपके बदलावों के साथ</string>
@@ -4615,4 +4614,13 @@
         <item quantity="one">%1$s नई · पहले लाई गई प्लेलिस्ट में जोड़ने के लिए %2$s गाना</item>
         <item quantity="other">%1$s नई · पहले लाई गई प्लेलिस्ट में जोड़ने के लिए %2$s गाने</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">कतार में DJ बटन</string>
+    <string name="dj_in_the_queue_detail">कतार के ऊपर, सेव करें और साफ़ करें के बगल में</string>
+    <string name="dj_in_the_queue_info">बंद होने पर कतार के ऊपर ज़्यादा जगह रहती है। DJ मोड फिर भी प्लेयर के बटनों में से एक हो सकता है (प्लेयर पर क्या दिखे)।</string>
+    <string name="dj_in_the_queue_keywords">dj मोड बटन कतार ऊपर जगह छिपाएं</string>
+    <string name="menu_lyrics_only_way">जब तक प्लेयर से बोल तक पहुंचने का यही अकेला रास्ता है, तब तक यह रहता है</string>
+    <string name="glass_kinds_info">फ़्रॉस्टेड ग्लास: बार और कंट्रोल के पीछे हल्का ब्लर। लिक्विड ग्लास: ये अपने पीछे की चीज़ को असली कांच की तरह मोड़ते हैं (Android 12 और उसके बाद; पुराने फ़ोन में फ़्रॉस्टेड मिलता है)। सामान्य पीछे की चीज़ को ब्लर करता है, जैसे फ़्रॉस्टेड ग्लास करता है। साफ़ उसे तेज़ रखता है, बस हल्का सा रंग रहता है।</string>
+    <string name="smart_downloads_offer_title">ज़रूरत से पहले गाने डाउनलोड कर लें?</string>
+    <string name="smart_downloads_offer_body">स्मार्ट डाउनलोड वे गाने ऑफ़लाइन तैयार रखता है जिन्हें आप शायद चलाएंगे: 1 GB तक, Wi-Fi पर। इसे कभी भी डाउनलोड, स्टोरेज &amp; डेटा में बदलें।</string>
 </resources>

@@ -4009,7 +4009,6 @@
     <string name="tabs_on_a_tablet_info">Sa tablet o malapad na window. Laging nasa ibaba ang mga tab sa mga phone.</string>
     <string name="same_as_your_accent">Kapareho ng accent mo</string>
     <string name="use_the_same">Gamitin ang pareho</string>
-    <string name="glass_choice_info">Frosted Glass: malambot na blur sa likod ng mga bar at control. Liquid Glass: binabaluktot nila ang nasa likod nila na parang tunay na salamin (Android 12 pataas; Frosted ang mga lumang phone). Mas buo ang Regular, mas nakakalusot ang Clear.</string>
     <string name="start_from">Magsimula sa</string>
     <string name="start_from_info">Panimulang punto, hindi lock: itinatakda nito ang animation, ang font, ang card at ang glow sa ibaba. Baguhin ang anumang bahagi pagkatapos; mananatili ang mga kulay, laki at iba pa mo.</string>
     <string name="with_your_changes">May mga pagbabago mo</string>
@@ -4615,4 +4614,13 @@
         <item quantity="one">%1$s bago · %2$s kantang idaragdag sa mga dinala dati</item>
         <item quantity="other">%1$s bago · %2$s kantang idaragdag sa mga dinala dati</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">DJ button sa queue</string>
+    <string name="dj_in_the_queue_detail">Sa itaas ng queue, katabi ng I-save at I-clear</string>
+    <string name="dj_in_the_queue_info">Kapag naka-off, mas maluwag ang itaas ng queue. Puwede pa ring maging isa sa mga button ng player ang DJ mode (Ano ang nasa player).</string>
+    <string name="dj_in_the_queue_keywords">dj mode button queue itaas espasyo itago</string>
+    <string name="menu_lyrics_only_way">Nananatili habang ito ang tanging daan papunta sa lyrics mula sa player</string>
+    <string name="glass_kinds_info">Frosted Glass: banayad na blur sa likod ng mga bar at kontrol. Liquid Glass: binabaluktot nila ang nasa likod nila na parang totoong salamin (Android 12 at mas bago; Frosted Glass ang makukuha ng mas lumang phone). Binu-blur ng Regular ang nasa likod, tulad ng frosted glass. Pinapanatiling malinaw ng Malinaw ang nasa likod, na may bahagyang tint lang.</string>
+    <string name="smart_downloads_offer_title">I-download ang mga kanta bago mo pa kailanganin?</string>
+    <string name="smart_downloads_offer_body">Pinapanatiling handa offline ng Smart Downloads ang mga kantang malamang mong pakinggan: hanggang 1 GB, sa Wi-Fi. Baguhin ito anumang oras sa Mga download, storage at data.</string>
 </resources>

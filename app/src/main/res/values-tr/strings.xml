@@ -4009,7 +4009,6 @@
     <string name="tabs_on_a_tablet_info">Tablette ya da geniş bir pencerede. Telefonlarda sekmeler her zaman alttadır.</string>
     <string name="same_as_your_accent">Vurgu rengiyle aynı</string>
     <string name="use_the_same">Aynısını kullan</string>
-    <string name="glass_choice_info">Buzlu Cam: çubukların ve kontrollerin arkasında yumuşak bir bulanıklık. Sıvı Cam: arkalarındakini gerçek cam gibi büker (Android 12 ve sonrası; eski telefonlarda Buzlu Cam). Normal daha dolgundur, şeffaf olan daha çok geçirir.</string>
     <string name="start_from">Başlangıç noktası</string>
     <string name="start_from_info">Bir başlangıç noktası, kilit değil: aşağıdaki animasyonu, yazıyı, kartı ve parıltıyı ayarlar. Sonra istediğin parçayı değiştir; renklerin, boyut ve geri kalanı olduğu gibi kalır.</string>
     <string name="with_your_changes">Değişikliklerinle</string>
@@ -4615,4 +4614,13 @@
         <item quantity="one">%1$s yeni · daha önce getirilenlere eklenecek %2$s şarkı</item>
         <item quantity="other">%1$s yeni · daha önce getirilenlere eklenecek %2$s şarkı</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">Sırada DJ düğmesi</string>
+    <string name="dj_in_the_queue_detail">Sıranın en üstünde, Kaydet ve Temizle\'nin yanında</string>
+    <string name="dj_in_the_queue_info">Kapalıyken sıranın üstünde daha fazla yer olur. DJ modu yine de oynatıcının düğmelerinden biri olabilir (Oynatıcıda göster).</string>
+    <string name="dj_in_the_queue_keywords">dj modu düğme sıra başlık üst yer gizle</string>
+    <string name="menu_lyrics_only_way">Oynatıcının şarkı sözlerine tek yolu olduğu sürece kalır</string>
+    <string name="glass_kinds_info">Buzlu Cam: çubukların ve kontrollerin arkasında yumuşak bir bulanıklık. Sıvı Cam: arkalarındakini gerçek cam gibi büker (Android 12 ve üstü; eski telefonlarda Buzlu Cam olur). Normal, arkasındakini buzlu cam gibi bulanıklaştırır. Şeffaf, yalnızca hafif bir tonla net tutar.</string>
+    <string name="smart_downloads_offer_title">Şarkıları ihtiyacın olmadan önce indirelim mi?</string>
+    <string name="smart_downloads_offer_body">Akıllı İndirmeler, çalma ihtimalin yüksek şarkıları çevrimdışı hazır tutar: 1 GB\'a kadar, Wi-Fi\'da. İstediğin zaman İndirmeler, depolama ve veri bölümünden değiştir.</string>
 </resources>

@@ -4168,7 +4168,6 @@
     <string name="glass_clear">Clear</string>
     <string name="same_as_your_accent">The same as your accent</string>
     <string name="use_the_same">Use the same</string>
-    <string name="glass_choice_info">Frosted Glass: a soft blur behind the bars and controls. Liquid Glass: they bend what\'s behind them like real glass (Android 12 and later; older phones get Frosted). Regular is fuller, Clear lets more through.</string>
     <!-- #324 (1.8.1.1): replaces glass_choice_info, which didn't say which of the two blurs. -->
     <string name="glass_kinds_info">Frosted Glass: a soft blur behind the bars and controls. Liquid Glass: they bend what\'s behind them like real glass (Android 12 and later; older phones get Frosted). Regular blurs what\'s behind it, as frosted glass does. Clear keeps it sharp, with only a light tint.</string>
     <!-- 1.8.0 lyrics look -->

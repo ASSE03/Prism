@@ -4009,7 +4009,6 @@
     <string name="tabs_on_a_tablet_info">Táblagépen vagy széles ablakban. A telefonokon a lapok mindig alul vannak.</string>
     <string name="same_as_your_accent">Ugyanaz, mint a kiemelőszíned</string>
     <string name="use_the_same">Ugyanaz legyen</string>
-    <string name="glass_choice_info">Matt üveg: lágy elmosás a sávok és a vezérlők mögött. Folyékony üveg: úgy hajlítják meg a mögöttük lévőt, mint az igazi üveg (Android 12 vagy újabb; a régebbi telefonok Matt üveget kapnak). A Normál teltebb, az Átlátszó többet enged át.</string>
     <string name="start_from">Kiindulás</string>
     <string name="start_from_info">Kiindulópont, nem zár: beállítja a lenti animációt, betűket, kártyát és ragyogást. Utána bármelyik részt megváltoztathatod; a színeid, a méret és a többi marad, ahogy van.</string>
     <string name="with_your_changes">A módosításaiddal</string>
@@ -4615,4 +4614,13 @@
         <item quantity="one">%1$s új · %2$s dal a korábban áthozottakhoz</item>
         <item quantity="other">%1$s új · %2$s dal a korábban áthozottakhoz</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">DJ-gomb a lejátszási sorban</string>
+    <string name="dj_in_the_queue_detail">A lejátszási sor tetején, a Mentés és a Törlés mellett</string>
+    <string name="dj_in_the_queue_info">Kikapcsolva a lejátszási sor teteje több helyet kap. A DJ mód továbbra is lehet a lejátszó egyik gombja (Mi van a lejátszón).</string>
+    <string name="dj_in_the_queue_keywords">dj mód gomb lejátszási sor fejléc felül hely elrejtés</string>
+    <string name="menu_lyrics_only_way">Addig marad, amíg ez a lejátszó egyetlen útja a dalszöveghez</string>
+    <string name="glass_kinds_info">Matt üveg: lágy elmosás a sávok és a vezérlők mögött. Folyékony üveg: ezek úgy hajlítják el a mögöttük lévőt, mint az igazi üveg (Android 12 vagy újabb; a régebbi telefonok a Matt üveget kapják). A Normál elmossa a mögötte lévőt, ahogy a matt üveg is. Az Átlátszó élesen hagyja, csak enyhe árnyalattal.</string>
+    <string name="smart_downloads_offer_title">Letöltöd a dalokat, mielőtt szükséged lenne rájuk?</string>
+    <string name="smart_downloads_offer_body">Az Okos letöltések offline készenlétben tartják a dalokat, amelyeket valószínűleg meghallgatsz: legfeljebb 1 GB, Wi-Fi-n. Bármikor módosíthatod a Letöltések, tárhely és adatforgalom alatt.</string>
 </resources>

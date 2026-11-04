@@ -3959,7 +3959,6 @@
     <string name="tabs_on_a_tablet_info">適用於平板或寬視窗。手機上的分頁一律在底部。</string>
     <string name="same_as_your_accent">與強調色相同</string>
     <string name="use_the_same">設為相同</string>
-    <string name="glass_choice_info">毛玻璃：在列和控制項後方形成柔和的模糊。液態玻璃：像真正的玻璃一樣折彎後方的畫面（Android 12 以上版本；較舊的手機會使用毛玻璃）。「一般」較飽滿，「清除」較通透。</string>
     <string name="start_from">起點範本</string>
     <string name="start_from_info">這只是起點，不會鎖定：它會設定下方的動畫、文字、卡片和光暈。之後可以隨意變更任何部分；你的顏色、大小等其他設定都會維持原樣。</string>
     <string name="with_your_changes">已修改</string>
@@ -4553,4 +4552,13 @@
     <plurals name="imp_playlists_new_count">
         <item quantity="other">%1$s 個新的 · %2$s 首歌將加入之前匯入的播放清單</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">待播清單中的 DJ 按鈕</string>
+    <string name="dj_in_the_queue_detail">位於待播清單頂端，在「儲存」和「清除」旁</string>
+    <string name="dj_in_the_queue_info">關閉後，待播清單頂端會有更多空間。DJ 模式仍可作為播放器的按鈕之一（在播放器上顯示）。</string>
+    <string name="dj_in_the_queue_keywords">dj 模式 按鈕 待播清單 頂端 標題 空間 隱藏</string>
+    <string name="menu_lyrics_only_way">只要它是播放器通往歌詞的唯一途徑，就會保留</string>
+    <string name="glass_kinds_info">毛玻璃：列和控制項後方的柔和模糊。液態玻璃：它們像真正的玻璃一樣折射後方的內容（Android 12 以上；較舊的手機會使用毛玻璃）。一般會模糊後方的內容，就像毛玻璃一樣。透明則保持清晰，僅帶淡淡的色調。</string>
+    <string name="smart_downloads_offer_title">在需要之前先下載歌曲？</string>
+    <string name="smart_downloads_offer_body">智慧下載會把你可能會播放的歌曲準備好供離線使用：最多 1 GB，透過 Wi-Fi。隨時可在「下載、儲存空間和數據」中變更。</string>
 </resources>

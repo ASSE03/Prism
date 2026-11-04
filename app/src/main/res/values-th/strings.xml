@@ -3959,7 +3959,6 @@
     <string name="tabs_on_a_tablet_info">บนแท็บเล็ตหรือหน้าต่างกว้าง โทรศัพท์จะมีแท็บอยู่ด้านล่างเสมอ</string>
     <string name="same_as_your_accent">เหมือนสีเน้นของคุณ</string>
     <string name="use_the_same">ใช้สีเดียวกัน</string>
-    <string name="glass_choice_info">กระจกฝ้า: เบลอนุ่มๆ หลังแถบและปุ่มควบคุม กระจกเหลว: หักเหสิ่งที่อยู่ด้านหลังเหมือนกระจกจริง (Android 12 ขึ้นไป โทรศัพท์รุ่นเก่าจะได้กระจกฝ้า) แบบปกติจะทึบกว่า แบบใสจะมองทะลุได้มากกว่า</string>
     <string name="start_from">เริ่มจาก</string>
     <string name="start_from_info">เป็นจุดเริ่มต้น ไม่ได้ล็อกไว้: จะตั้งแอนิเมชัน ตัวอักษร การ์ด และการเรืองแสงด้านล่าง เปลี่ยนส่วนใดก็ได้ภายหลัง สี ขนาด และอื่นๆ ของคุณยังคงเดิม</string>
     <string name="with_your_changes">มีการเปลี่ยนแปลงของคุณ</string>
@@ -4553,4 +4552,13 @@
     <plurals name="imp_playlists_new_count">
         <item quantity="other">ใหม่ %1$s · %2$s เพลงที่จะเพิ่มในเพลย์ลิสต์ที่นำมาก่อนหน้า</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">ปุ่ม DJ ในคิว</string>
+    <string name="dj_in_the_queue_detail">ด้านบนของคิว ข้างปุ่มบันทึกและล้าง</string>
+    <string name="dj_in_the_queue_info">เมื่อปิด ด้านบนของคิวจะมีพื้นที่มากขึ้น โหมด DJ ยังเป็นหนึ่งในปุ่มของเพลเยอร์ได้ (แสดงบนเพลเยอร์)</string>
+    <string name="dj_in_the_queue_keywords">dj โหมด ปุ่ม คิว ส่วนหัว ด้านบน พื้นที่ ซ่อน</string>
+    <string name="menu_lyrics_only_way">จะคงอยู่ตราบที่เป็นทางเดียวของเพลเยอร์ไปยังเนื้อเพลง</string>
+    <string name="glass_kinds_info">กระจกฝ้า: เบลอนุ่ม ๆ หลังแถบและปุ่มควบคุม กระจกเหลว: สิ่งเหล่านี้หักเหสิ่งที่อยู่ด้านหลังเหมือนกระจกจริง (Android 12 ขึ้นไป โทรศัพท์รุ่นเก่าจะได้กระจกฝ้า) ปกติ เบลอสิ่งที่อยู่ด้านหลังเหมือนกระจกฝ้า ใส ทำให้คมชัด มีเพียงสีจาง ๆ</string>
+    <string name="smart_downloads_offer_title">ดาวน์โหลดเพลงไว้ก่อนที่จะต้องใช้ไหม</string>
+    <string name="smart_downloads_offer_body">ดาวน์โหลดอัจฉริยะจะเตรียมเพลงที่คุณน่าจะฟังไว้ใช้แบบออฟไลน์ สูงสุด 1 GB ผ่าน Wi-Fi เปลี่ยนได้ทุกเมื่อใน ดาวน์โหลด พื้นที่เก็บข้อมูล และอินเทอร์เน็ต</string>
 </resources>

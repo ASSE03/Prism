@@ -4059,7 +4059,6 @@
     <string name="tabs_on_a_tablet_info">Pe o tabletă sau într-o fereastră lată. Telefoanele au mereu filele jos.</string>
     <string name="same_as_your_accent">La fel ca accentul tău</string>
     <string name="use_the_same">Folosește același</string>
-    <string name="glass_choice_info">Sticlă mată: o estompare fină în spatele barelor și al comenzilor. Sticlă lichidă: acestea curbează ce e în spatele lor ca sticla adevărată (Android 12 și mai nou; telefoanele mai vechi primesc Sticlă mată). Normal e mai plină, Transparent lasă să treacă mai mult.</string>
     <string name="start_from">Pornește de la</string>
     <string name="start_from_info">Un punct de pornire, nu o blocare: setează animația, scrisul, cardul și strălucirea de mai jos. Schimbă apoi orice parte; culorile, dimensiunea și restul rămân cum sunt.</string>
     <string name="with_your_changes">Cu modificările tale</string>
@@ -4677,4 +4676,13 @@
         <item quantity="few">Noi: %1$s · melodii de adăugat la cele aduse înainte: %2$s</item>
         <item quantity="other">Noi: %1$s · melodii de adăugat la cele aduse înainte: %2$s</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">Butonul DJ din coadă</string>
+    <string name="dj_in_the_queue_detail">Sus în coadă, lângă Salvează și Șterge</string>
+    <string name="dj_in_the_queue_info">Dezactivat, partea de sus a cozii are mai mult spațiu. Modul DJ poate rămâne unul dintre butoanele playerului (Afișează pe player).</string>
+    <string name="dj_in_the_queue_keywords">dj mod buton coadă antet sus spațiu ascunde</string>
+    <string name="menu_lyrics_only_way">Rămâne cât timp este singura cale a playerului spre versuri</string>
+    <string name="glass_kinds_info">Sticlă mată: o estompare ușoară în spatele barelor și al comenzilor. Sticlă lichidă: acestea îndoaie ce se află în spatele lor, ca sticla adevărată (Android 12 și mai nou; telefoanele mai vechi primesc Sticlă mată). Normal estompează ce se află în spate, ca sticla mată. Transparent păstrează totul clar, doar cu o nuanță ușoară.</string>
+    <string name="smart_downloads_offer_title">Descarci melodii înainte să ai nevoie de ele?</string>
+    <string name="smart_downloads_offer_body">Descărcările inteligente țin pregătite offline melodiile pe care probabil le vei asculta: până la 1 GB, pe Wi-Fi. Schimbă oricând în Descărcări, stocare și date.</string>
 </resources>

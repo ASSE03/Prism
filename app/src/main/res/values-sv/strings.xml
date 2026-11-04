@@ -4009,7 +4009,6 @@
     <string name="tabs_on_a_tablet_info">På en surfplatta eller i ett brett fönster. Telefoner har alltid flikarna längst ned.</string>
     <string name="same_as_your_accent">Samma som din accent</string>
     <string name="use_the_same">Använd samma</string>
-    <string name="glass_choice_info">Frostat glas: en mjuk oskärpa bakom fälten och kontrollerna. Flytande glas: de böjer det som finns bakom dem som riktigt glas (Android 12 och senare; äldre telefoner får Frostat glas). Normal är fylligare, Klar släpper igenom mer.</string>
     <string name="start_from">Utgå från</string>
     <string name="start_from_info">En startpunkt, inget lås: den ställer in animationen, typsnittet, kortet och glöden nedan. Ändra vilken del som helst efteråt; dina färger, storleken och resten förblir som de är.</string>
     <string name="with_your_changes">Med dina ändringar</string>
@@ -4615,4 +4614,13 @@
         <item quantity="one">%1$s nya · %2$s låt att lägga till i dem som tagits med tidigare</item>
         <item quantity="other">%1$s nya · %2$s låtar att lägga till i dem som tagits med tidigare</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">DJ-knapp i kön</string>
+    <string name="dj_in_the_queue_detail">Överst i kön, bredvid Spara och Rensa</string>
+    <string name="dj_in_the_queue_info">Av ger kön mer plats överst. DJ-läget kan fortfarande vara en av spelarens knappar (Visa i spelaren).</string>
+    <string name="dj_in_the_queue_keywords">dj läge knapp kö rubrik topp plats dölj</string>
+    <string name="menu_lyrics_only_way">Finns kvar så länge det är spelarens enda väg till låttexten</string>
+    <string name="glass_kinds_info">Frostat glas: en mjuk oskärpa bakom fälten och kontrollerna. Flytande glas: de böjer det som finns bakom dem, som riktigt glas (Android 12 och senare; äldre telefoner får Frostat glas). Normal gör det bakom suddigt, som frostat glas. Klar håller det skarpt, med bara en lätt ton.</string>
+    <string name="smart_downloads_offer_title">Ladda ner låtar innan du behöver dem?</string>
+    <string name="smart_downloads_offer_body">Smarta nedladdningar håller de låtar du troligen spelar redo offline: upp till 1 GB, på Wi-Fi. Ändra när du vill under Nedladdningar, lagring &amp; data.</string>
 </resources>

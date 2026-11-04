@@ -3959,7 +3959,6 @@
     <string name="tabs_on_a_tablet_info">Di tablet atau jendela lebar. Di ponsel, tab selalu di bawah.</string>
     <string name="same_as_your_accent">Sama dengan aksenmu</string>
     <string name="use_the_same">Gunakan yang sama</string>
-    <string name="glass_choice_info">Kaca Buram: blur lembut di belakang bilah dan kontrol. Kaca Cair: membiaskan yang ada di belakangnya seperti kaca sungguhan (Android 12 ke atas; ponsel lama mendapat Kaca Buram). Reguler lebih pekat, Bening lebih tembus pandang.</string>
     <string name="start_from">Mulai dari</string>
     <string name="start_from_info">Titik awal, bukan kunci: mengatur animasi, huruf, kartu, dan pendar di bawah. Ubah bagian mana pun setelahnya; warna, ukuran, dan lainnya tetap seperti semula.</string>
     <string name="with_your_changes">Dengan perubahanmu</string>
@@ -4553,4 +4552,13 @@
     <plurals name="imp_playlists_new_count">
         <item quantity="other">%1$s baru · %2$s lagu untuk ditambahkan ke yang dibawa sebelumnya</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">Tombol DJ di antrean</string>
+    <string name="dj_in_the_queue_detail">Di atas antrean, di samping Simpan dan Hapus</string>
+    <string name="dj_in_the_queue_info">Jika nonaktif, bagian atas antrean punya lebih banyak ruang. Mode DJ tetap bisa menjadi salah satu tombol pemutar (Yang ada di pemutar).</string>
+    <string name="dj_in_the_queue_keywords">dj mode tombol antrean atas ruang sembunyikan</string>
+    <string name="menu_lyrics_only_way">Tetap ada selama menjadi satu-satunya jalan ke lirik dari pemutar</string>
+    <string name="glass_kinds_info">Kaca Buram: blur lembut di belakang bilah dan kontrol. Kaca Cair: keduanya membelokkan apa yang ada di belakangnya seperti kaca sungguhan (Android 12 dan yang lebih baru; ponsel lama mendapat Kaca Buram). Reguler mengaburkan yang ada di belakangnya, seperti kaca buram. Bening menjaganya tetap tajam, hanya dengan sedikit rona.</string>
+    <string name="smart_downloads_offer_title">Download lagu sebelum dibutuhkan?</string>
+    <string name="smart_downloads_offer_body">Download Pintar menyiapkan lagu yang kemungkinan besar diputar agar siap offline: hingga 1 GB, lewat Wi-Fi. Ubah kapan saja di Download, penyimpanan &amp; data.</string>
 </resources>

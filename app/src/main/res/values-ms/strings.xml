@@ -3959,7 +3959,6 @@
     <string name="tabs_on_a_tablet_info">Pada tablet atau tetingkap yang lebar. Telefon sentiasa mempunyai tab di bawah.</string>
     <string name="same_as_your_accent">Sama seperti aksen anda</string>
     <string name="use_the_same">Guna yang sama</string>
-    <string name="glass_choice_info">Kaca Kabur: kabur lembut di belakang bar dan kawalan. Kaca Cecair: ia membengkokkan apa yang ada di belakangnya seperti kaca sebenar (Android 12 dan lebih baharu; telefon lama mendapat Kaca Kabur). Biasa lebih padat, Jernih lebih lut sinar.</string>
     <string name="start_from">Mula daripada</string>
     <string name="start_from_info">Titik permulaan, bukan kunci: ia menetapkan animasi, huruf, kad dan cahaya di bawah. Ubah mana-mana bahagian selepas itu; warna, saiz dan yang lain kekal seperti sedia ada.</string>
     <string name="with_your_changes">Dengan perubahan anda</string>
@@ -4553,4 +4552,13 @@
     <plurals name="imp_playlists_new_count">
         <item quantity="other">%1$s baharu · %2$s lagu untuk ditambah ke senarai main yang dibawa sebelum ini</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">Butang DJ dalam baris gilir</string>
+    <string name="dj_in_the_queue_detail">Di atas baris gilir, di sebelah Simpan dan Kosongkan</string>
+    <string name="dj_in_the_queue_info">Jika dimatikan, bahagian atas baris gilir mempunyai lebih banyak ruang. Mod DJ masih boleh menjadi salah satu butang pemain (Tunjukkan pada pemain).</string>
+    <string name="dj_in_the_queue_keywords">dj mod butang baris gilir kepala atas ruang sembunyi</string>
+    <string name="menu_lyrics_only_way">Kekal selagi ia satu-satunya cara pemain ke lirik</string>
+    <string name="glass_kinds_info">Kaca Kabur: kabur lembut di belakang bar dan kawalan. Kaca Cecair: ia membengkokkan apa yang ada di belakangnya seperti kaca sebenar (Android 12 dan lebih baharu; telefon lama mendapat Kaca Kabur). Biasa mengaburkan apa yang ada di belakangnya, seperti kaca kabur. Jernih memastikannya tajam, dengan hanya sedikit rona.</string>
+    <string name="smart_downloads_offer_title">Muat turun lagu sebelum anda memerlukannya?</string>
+    <string name="smart_downloads_offer_body">Muat Turun Pintar menyediakan lagu yang mungkin anda mainkan untuk kegunaan luar talian: sehingga 1 GB, melalui Wi-Fi. Tukar pada bila-bila masa dalam Muat turun, storan &amp; data.</string>
 </resources>

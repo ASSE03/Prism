@@ -4009,7 +4009,6 @@
     <string name="tabs_on_a_tablet_info">Op een tablet of in een breed venster. Telefoons hebben de tabbladen altijd onderaan.</string>
     <string name="same_as_your_accent">Hetzelfde als je accent</string>
     <string name="use_the_same">Hetzelfde gebruiken</string>
-    <string name="glass_choice_info">Matglas: een zachte vervaging achter de balken en bedieningselementen. Liquid Glass: ze buigen wat erachter ligt, net als echt glas (Android 12 en later; oudere telefoons krijgen Matglas). Normaal is voller, Helder laat meer door.</string>
     <string name="start_from">Begin met</string>
     <string name="start_from_info">Een beginpunt, geen vaste keuze: het stelt de animatie, de letter, de kaart en de gloed hieronder in. Verander daarna elk onderdeel; je kleuren, de grootte en de rest blijven zoals ze zijn.</string>
     <string name="with_your_changes">Met je wijzigingen</string>
@@ -4615,4 +4614,13 @@
         <item quantity="one">%1$s nieuw · %2$s nummer om toe te voegen aan eerder meegenomen playlists</item>
         <item quantity="other">%1$s nieuw · %2$s nummers om toe te voegen aan eerder meegenomen playlists</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">DJ-knop in de wachtrij</string>
+    <string name="dj_in_the_queue_detail">Bovenaan de wachtrij, naast Opslaan en Wissen</string>
+    <string name="dj_in_the_queue_info">Uit, dan heeft de bovenkant van de wachtrij meer ruimte. De DJ-modus kan nog steeds een van de knoppen van de speler zijn (Tonen in de speler).</string>
+    <string name="dj_in_the_queue_keywords">dj modus knop wachtrij kop boven ruimte verbergen</string>
+    <string name="menu_lyrics_only_way">Blijft staan zolang het de enige weg van de speler naar de songtekst is</string>
+    <string name="glass_kinds_info">Matglas: een zachte vervaging achter de balken en bediening. Liquid Glass: ze buigen wat erachter zit, als echt glas (Android 12 en later; oudere telefoons krijgen Matglas). Normaal vervaagt wat erachter zit, zoals matglas dat doet. Helder houdt het scherp, met alleen een lichte tint.</string>
+    <string name="smart_downloads_offer_title">Songs downloaden voordat je ze nodig hebt?</string>
+    <string name="smart_downloads_offer_body">Slimme downloads houdt de songs die je waarschijnlijk gaat afspelen offline klaar: tot 1 GB, via Wi-Fi. Wijzig het altijd in Downloads, opslag &amp; data.</string>
 </resources>

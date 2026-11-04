@@ -4059,7 +4059,6 @@
     <string name="tabs_on_a_tablet_info">Sur une tablette ou une fenêtre large. Sur un téléphone, les onglets sont toujours en bas.</string>
     <string name="same_as_your_accent">Identique à votre accent</string>
     <string name="use_the_same">Utiliser le même</string>
-    <string name="glass_choice_info">Verre dépoli : un flou doux derrière les barres et les commandes. Liquid Glass : elles courbent ce qui se trouve derrière comme du vrai verre (Android 12 ou version ultérieure ; les téléphones plus anciens ont le Verre dépoli). Normale est plus dense ; la version transparente laisse davantage passer.</string>
     <string name="start_from">Partir de</string>
     <string name="start_from_info">Un point de départ, pas un verrou : il règle l’animation, le texte, la carte et le halo ci-dessous. Modifiez ensuite n’importe quelle partie ; vos couleurs, la taille et le reste ne changent pas.</string>
     <string name="with_your_changes">Avec vos modifications</string>
@@ -4677,4 +4676,13 @@
         <item quantity="many">%1$s nouvelles · %2$s de titres à ajouter à celles importées avant</item>
         <item quantity="other">%1$s nouvelles · %2$s titres à ajouter à celles importées avant</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">Bouton DJ dans la file d’attente</string>
+    <string name="dj_in_the_queue_detail">En haut de la file d’attente, à côté d’Enregistrer et d’Effacer</string>
+    <string name="dj_in_the_queue_info">Désactivé, le haut de la file d’attente a plus de place. Le mode DJ peut rester l’un des boutons du lecteur (Ce qui figure sur le lecteur).</string>
+    <string name="dj_in_the_queue_keywords">dj mode bouton file attente haut place masquer</string>
+    <string name="menu_lyrics_only_way">Reste tant que c’est le seul accès aux paroles depuis le lecteur</string>
+    <string name="glass_kinds_info">Verre dépoli : un flou doux derrière les barres et les commandes. Liquid Glass : elles déforment ce qui est derrière comme du vrai verre (Android 12 et ultérieur ; les téléphones plus anciens ont le verre dépoli). Normale floute ce qui est derrière, comme le verre dépoli. Transparent le garde net, avec seulement une légère teinte.</string>
+    <string name="smart_downloads_offer_title">Télécharger des titres avant d’en avoir besoin ?</string>
+    <string name="smart_downloads_offer_body">Les Téléchargements intelligents gardent prêts hors ligne les titres que vous écouterez probablement : jusqu’à 1 GB, en Wi-Fi. Modifiez cela à tout moment dans Téléchargements, stockage et données.</string>
 </resources>

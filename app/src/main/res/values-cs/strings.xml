@@ -4109,7 +4109,6 @@
     <string name="tabs_on_a_tablet_info">Na tabletu nebo v širokém okně. Telefony mají karty vždy dole.</string>
     <string name="same_as_your_accent">Stejné jako tvoje zvýraznění</string>
     <string name="use_the_same">Použít stejné</string>
-    <string name="glass_choice_info">Matné sklo: jemné rozmazání za lištami a ovládacími prvky. Tekuté sklo: ohýbají to, co je za nimi, jako skutečné sklo (Android 12 a novější; starší telefony dostanou Matné sklo). Normální je plnější, Průhledné propustí víc.</string>
     <string name="start_from">Začít od</string>
     <string name="start_from_info">Výchozí bod, ne zámek: nastaví animaci, písmo, kartu a záři níže. Kteroukoli část pak změň; tvoje barvy, velikost a ostatní zůstanou, jak jsou.</string>
     <string name="with_your_changes">S tvými změnami</string>
@@ -4739,4 +4738,13 @@
         <item quantity="many">Nové: %1$s · skladby do dřív přenesených: %2$s</item>
         <item quantity="other">Nové: %1$s · skladby do dřív přenesených: %2$s</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">Tlačítko DJ ve frontě</string>
+    <string name="dj_in_the_queue_detail">Nahoře ve frontě, vedle Uložit a Vymazat</string>
+    <string name="dj_in_the_queue_info">Když je vypnuté, má horní část fronty víc místa. Režim DJ může být dál jedním z tlačítek přehrávače (Co je v přehrávači).</string>
+    <string name="dj_in_the_queue_keywords">dj režim tlačítko fronta záhlaví nahoře místo skrýt</string>
+    <string name="menu_lyrics_only_way">Zůstává, dokud je to jediná cesta z přehrávače k textům</string>
+    <string name="glass_kinds_info">Matné sklo: jemné rozostření za lištami a ovládacími prvky. Tekuté sklo: ohýbají to, co je za nimi, jako skutečné sklo (Android 12 a novější; starší telefony dostanou matné). Normální rozostří to, co je za ním, stejně jako matné sklo. Průhledné to nechá ostré, jen s lehkým zabarvením.</string>
+    <string name="smart_downloads_offer_title">Stáhnout písně dřív, než je budeš potřebovat?</string>
+    <string name="smart_downloads_offer_body">Chytré stahování připraví offline písně, které budeš nejspíš přehrávat: až 1 GB, přes Wi-Fi. Kdykoli to změníš ve Stahování, úložiště a data.</string>
 </resources>

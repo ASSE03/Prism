@@ -4009,7 +4009,6 @@
     <string name="tabs_on_a_tablet_info">ٹیبلیٹ یا چوڑی ونڈو پر۔ فونز پر ٹیبز ہمیشہ نیچے ہوتے ہیں۔</string>
     <string name="same_as_your_accent">آپ کے ایکسنٹ جیسا</string>
     <string name="use_the_same">وہی استعمال کریں</string>
-    <string name="glass_choice_info">دھندلا شیشہ: بارز اور کنٹرولز کے پیچھے نرم دھندلاہٹ۔ مائع شیشہ: یہ اپنے پیچھے کی چیز کو اصلی شیشے کی طرح موڑ دیتے ہیں (Android 12 اور بعد کے؛ پرانے فونز کو دھندلا شیشہ ملتا ہے)۔ عام زیادہ بھرا ہوا ہے، شفاف زیادہ آر پار دکھاتا ہے۔</string>
     <string name="start_from">یہاں سے شروع کریں</string>
     <string name="start_from_info">ایک نقطۂ آغاز، تالا نہیں: یہ نیچے اینیمیشن، فونٹ، کارڈ اور چمک طے کرتا ہے۔ بعد میں کوئی بھی حصہ بدلیں؛ آپ کے رنگ، سائز اور باقی سب ویسے ہی رہتے ہیں۔</string>
     <string name="with_your_changes">آپ کی تبدیلیوں کے ساتھ</string>
@@ -4615,4 +4614,13 @@
         <item quantity="one">%1$s نئی · پہلے لائی گئی پلے لسٹس میں شامل ہونے کے لیے %2$s گانا</item>
         <item quantity="other">%1$s نئی · پہلے لائی گئی پلے لسٹس میں شامل ہونے کے لیے %2$s گانے</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">قطار میں DJ بٹن</string>
+    <string name="dj_in_the_queue_detail">قطار کے اوپر، محفوظ کریں اور صاف کریں کے ساتھ</string>
+    <string name="dj_in_the_queue_info">بند ہو تو قطار کے اوپر زیادہ جگہ ہوتی ہے۔ DJ موڈ پھر بھی پلیئر کے بٹنوں میں سے ایک ہو سکتا ہے (پلیئر پر دکھائیں)۔</string>
+    <string name="dj_in_the_queue_keywords">dj موڈ بٹن قطار ہیڈر اوپر جگہ چھپائیں</string>
+    <string name="menu_lyrics_only_way">جب تک یہ پلیئر کا بول تک پہنچنے کا واحد راستہ ہے، یہ رہتا ہے</string>
+    <string name="glass_kinds_info">دھندلا شیشہ: بارز اور کنٹرولز کے پیچھے ہلکی دھندلاہٹ۔ مائع شیشہ: یہ اپنے پیچھے کی چیزوں کو اصلی شیشے کی طرح موڑتے ہیں (Android 12 اور بعد کے ورژن؛ پرانے فونز کو دھندلا شیشہ ملتا ہے)۔ عام اپنے پیچھے کی چیزوں کو دھندلا کرتا ہے، جیسے دھندلا شیشہ کرتا ہے۔ شفاف اسے صاف رکھتا ہے، صرف ہلکی سی رنگت کے ساتھ۔</string>
+    <string name="smart_downloads_offer_title">گانے ضرورت سے پہلے ڈاؤن لوڈ کریں؟</string>
+    <string name="smart_downloads_offer_body">سمارٹ ڈاؤن لوڈز وہ گانے آف لائن تیار رکھتا ہے جنہیں آپ کے چلانے کا امکان ہے: 1 GB تک، Wi-Fi پر۔ اسے کسی بھی وقت ڈاؤن لوڈز، اسٹوریج اور ڈیٹا میں بدلیں۔</string>
 </resources>

@@ -3959,7 +3959,6 @@
     <string name="tabs_on_a_tablet_info">タブレットや幅の広いウィンドウの場合です。スマホでは常にタブが下部に表示されます。</string>
     <string name="same_as_your_accent">アクセントと同じ</string>
     <string name="use_the_same">同じにする</string>
-    <string name="glass_choice_info">すりガラス：バーやコントロールの背後をやわらかくぼかします。リキッドグラス：本物のガラスのように背後の景色を曲げて見せます（Android 12 以降。それより古いスマホではすりガラスになります）。「標準」はしっかりした質感で、「消去」はより透けて見えます。</string>
     <string name="start_from">ベース</string>
     <string name="start_from_info">出発点であって固定ではありません。下のアニメーション、文字、カード、グローを設定します。どのパーツもあとから変更でき、色やサイズなどほかの設定はそのまま残ります。</string>
     <string name="with_your_changes">変更あり</string>
@@ -4553,4 +4552,13 @@
     <plurals name="imp_playlists_new_count">
         <item quantity="other">新規 %1$s 件 · 以前取り込んだプレイリストに %2$s 曲を追加</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">キューの DJ ボタン</string>
+    <string name="dj_in_the_queue_detail">キューの上部、「保存」と「消去」の横</string>
+    <string name="dj_in_the_queue_info">オフにすると、キューの上部が広くなります。DJ モードはプレーヤーのボタンの 1 つとして引き続き使えます（「プレーヤーに表示するもの」）。</string>
+    <string name="dj_in_the_queue_keywords">dj モード ボタン キュー 上部 スペース 非表示</string>
+    <string name="menu_lyrics_only_way">プレーヤーから歌詞を開く唯一の方法である間は、表示されたままになります</string>
+    <string name="glass_kinds_info">すりガラス：バーやコントロールの背後をやわらかくぼかします。リキッドグラス：背後のものを本物のガラスのように曲げて見せます（Android 12 以降。それより古いスマホではすりガラス）。標準は背後をすりガラスのようにぼかします。クリアは背後をくっきり見せ、わずかに色を付けるだけです。</string>
+    <string name="smart_downloads_offer_title">曲が必要になる前にダウンロードしておきますか？</string>
+    <string name="smart_downloads_offer_body">スマートダウンロードは、よく再生しそうな曲をオフライン用に準備しておきます（最大 1 GB、Wi-Fi 接続時）。「ダウンロード、ストレージ、データ」でいつでも変更できます。</string>
 </resources>

@@ -3959,7 +3959,6 @@
     <string name="tabs_on_a_tablet_info">Trên máy tính bảng hoặc cửa sổ rộng. Điện thoại luôn có thẻ ở dưới cùng.</string>
     <string name="same_as_your_accent">Giống màu nhấn của bạn</string>
     <string name="use_the_same">Dùng màu giống</string>
-    <string name="glass_choice_info">Kính mờ: một lớp làm mờ nhẹ phía sau các thanh và nút điều khiển. Kính lỏng: chúng bẻ cong những gì phía sau như kính thật (Android 12 trở lên; điện thoại cũ hơn dùng Kính mờ). Thường thì đặc hơn, Trong thì cho thấy nhiều hơn.</string>
     <string name="start_from">Bắt đầu từ</string>
     <string name="start_from_info">Một điểm khởi đầu, không phải khóa cứng: nó đặt hoạt ảnh, kiểu chữ, thẻ và phát sáng bên dưới. Sau đó hãy đổi bất kỳ phần nào; màu sắc, cỡ chữ và mọi thứ khác của bạn vẫn giữ nguyên.</string>
     <string name="with_your_changes">Có thay đổi của bạn</string>
@@ -4553,4 +4552,13 @@
     <plurals name="imp_playlists_new_count">
         <item quantity="other">%1$s danh sách mới · %2$s bài sẽ thêm vào các danh sách đã mang sang trước đó</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">Nút DJ trong danh sách chờ</string>
+    <string name="dj_in_the_queue_detail">Ở đầu danh sách chờ, cạnh Lưu và Xóa</string>
+    <string name="dj_in_the_queue_info">Khi tắt, phần đầu danh sách chờ có thêm chỗ. Chế độ DJ vẫn có thể là một trong các nút của trình phát (Hiện trên trình phát).</string>
+    <string name="dj_in_the_queue_keywords">dj chế độ nút danh sách chờ tiêu đề đầu chỗ ẩn</string>
+    <string name="menu_lyrics_only_way">Được giữ lại khi đây là cách duy nhất để vào lời bài hát từ trình phát</string>
+    <string name="glass_kinds_info">Kính mờ: làm mờ nhẹ phía sau các thanh và nút điều khiển. Kính lỏng: chúng bẻ cong những gì ở phía sau như kính thật (Android 12 trở lên; điện thoại cũ hơn dùng Kính mờ). Thường làm mờ những gì ở phía sau, giống kính mờ. Trong giữ mọi thứ sắc nét, chỉ phủ một lớp màu nhẹ.</string>
+    <string name="smart_downloads_offer_title">Tải nhạc xuống trước khi bạn cần?</string>
+    <string name="smart_downloads_offer_body">Tải xuống thông minh giữ sẵn các bài bạn có thể sẽ nghe để dùng ngoại tuyến: tối đa 1 GB, qua Wi-Fi. Đổi bất cứ lúc nào trong Tải xuống, bộ nhớ &amp; dữ liệu.</string>
 </resources>

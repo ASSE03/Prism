@@ -4009,7 +4009,6 @@
     <string name="tabs_on_a_tablet_info">در تبلت یا پنجره‌ای پهن. در گوشی‌ها زبانه‌ها همیشه پایین هستند.</string>
     <string name="same_as_your_accent">همان رنگ شاخص شما</string>
     <string name="use_the_same">استفاده از همان</string>
-    <string name="glass_choice_info">شیشه مات: محوشدگی نرمی پشت نوارها و کنترل‌ها. شیشه مایع: آنچه پشتشان است را مثل شیشهٔ واقعی خم می‌کنند (Android 12 و بالاتر؛ گوشی‌های قدیمی‌تر شیشه مات می‌گیرند). «معمولی» پرتر است و «شفاف» بیشتر را نشان می‌دهد.</string>
     <string name="start_from">شروع از</string>
     <string name="start_from_info">یک نقطهٔ شروع، نه قفل: انیمیشن، قلم، کارت و درخشش پایین را تنظیم می‌کند. بعد هر بخشی را عوض کنید؛ رنگ‌ها، اندازه و بقیه همان‌طور که هستند می‌مانند.</string>
     <string name="with_your_changes">با تغییرات شما</string>
@@ -4615,4 +4614,13 @@
         <item quantity="one">%1$s جدید · %2$s آهنگ برای افزودن به آن‌هایی که قبلاً آورده شده</item>
         <item quantity="other">%1$s جدید · %2$s آهنگ برای افزودن به آن‌هایی که قبلاً آورده شده</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">دکمه DJ در صف</string>
+    <string name="dj_in_the_queue_detail">بالای صف، کنار ذخیره و پاک کردن</string>
+    <string name="dj_in_the_queue_info">وقتی خاموش باشد، بالای صف جای بیشتری دارد. حالت DJ همچنان می‌تواند یکی از دکمه‌های پخش‌کننده باشد (آنچه روی پخش‌کننده است).</string>
+    <string name="dj_in_the_queue_keywords">dj حالت دکمه صف بالا جا پنهان</string>
+    <string name="menu_lyrics_only_way">تا وقتی تنها راه رسیدن به متن آهنگ از پخش‌کننده است، می‌ماند</string>
+    <string name="glass_kinds_info">شیشه مات: محوی نرم پشت نوارها و کنترل‌ها. شیشه مایع: آن‌ها آنچه را پشتشان است مثل شیشهٔ واقعی خم می‌کنند (Android 12 و بالاتر؛ گوشی‌های قدیمی‌تر شیشه مات می‌گیرند). معمولی آنچه را پشتش است محو می‌کند، مثل شیشه مات. شفاف آن را واضح نگه می‌دارد، فقط با رنگ‌مایه‌ای ملایم.</string>
+    <string name="smart_downloads_offer_title">آهنگ‌ها را پیش از نیاز دانلود کنیم؟</string>
+    <string name="smart_downloads_offer_body">دانلود هوشمند آهنگ‌هایی را که احتمالاً پخش می‌کنید برای شنیدن بدون اینترنت آماده نگه می‌دارد: تا 1 GB، با Wi-Fi. هر زمان خواستید در «دانلودها، فضای ذخیره‌سازی و داده» تغییرش دهید.</string>
 </resources>

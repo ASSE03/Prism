@@ -4059,7 +4059,6 @@
     <string name="tabs_on_a_tablet_info">Num tablet ou numa janela larga. Nos telemóveis, os separadores ficam sempre em baixo.</string>
     <string name="same_as_your_accent">Igual ao teu destaque</string>
     <string name="use_the_same">Usar o mesmo</string>
-    <string name="glass_choice_info">Vidro fosco: um desfoque suave atrás das barras e dos controlos. Liquid Glass: curvam o que está por trás como vidro a sério (Android 12 ou posterior; os telemóveis mais antigos ficam com Vidro fosco). Normal é mais denso; a versão transparente deixa passar mais.</string>
     <string name="start_from">Partir de</string>
     <string name="start_from_info">Um ponto de partida, não um cadeado: define a animação, o texto, o cartão e o brilho abaixo. Muda qualquer parte depois; as tuas cores, o tamanho e o resto ficam como estão.</string>
     <string name="with_your_changes">Com as tuas alterações</string>
@@ -4677,4 +4676,13 @@
         <item quantity="many">%1$s novas · %2$s de músicas para juntar às trazidas antes</item>
         <item quantity="other">%1$s novas · %2$s músicas para juntar às trazidas antes</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">Botão DJ na fila</string>
+    <string name="dj_in_the_queue_detail">No topo da fila, junto a Guardar e Limpar</string>
+    <string name="dj_in_the_queue_info">Desativado, o topo da fila tem mais espaço. O modo DJ continua a poder ser um dos botões do leitor (Mostrar no leitor).</string>
+    <string name="dj_in_the_queue_keywords">dj modo botão fila cabeçalho topo espaço ocultar</string>
+    <string name="menu_lyrics_only_way">Fica enquanto for a única forma de o leitor chegar à letra</string>
+    <string name="glass_kinds_info">Vidro fosco: um desfoque suave atrás das barras e dos controlos. Liquid Glass: dobram o que está atrás, como vidro a sério (Android 12 ou posterior; os telemóveis mais antigos recebem Vidro fosco). Normal desfoca o que está atrás, tal como o vidro fosco. Transparente mantém tudo nítido, só com uma tonalidade leve.</string>
+    <string name="smart_downloads_offer_title">Transferir músicas antes de precisares delas?</string>
+    <string name="smart_downloads_offer_body">As Transferências inteligentes deixam prontas offline as músicas que provavelmente vais ouvir: até 1 GB, por Wi-Fi. Altera quando quiseres em Transferências, armazenamento e dados.</string>
 </resources>

@@ -4209,7 +4209,6 @@
     <string name="tabs_on_a_tablet_info">على جهاز لوحي أو في نافذة عريضة. على الهواتف تكون علامات التبويب في الأسفل دائمًا.</string>
     <string name="same_as_your_accent">مثل لون التمييز</string>
     <string name="use_the_same">استخدام اللون نفسه</string>
-    <string name="glass_choice_info">الزجاج المصنفر: ضبابية ناعمة خلف الأشرطة وعناصر التحكم. الزجاج السائل: تحني ما خلفها كالزجاج الحقيقي (Android 12 والأحدث؛ الهواتف الأقدم تحصل على الزجاج المصنفر). «عادي» أكثر امتلاءً، و«شفاف» يُظهر ما خلفه أكثر.</string>
     <string name="start_from">البدء من</string>
     <string name="start_from_info">نقطة بداية، لا قيد: تضبط الحركة والخط والبطاقة والتوهج أدناه. غيّر أي جزء بعد ذلك؛ تبقى ألوانك والحجم والباقي كما هي.</string>
     <string name="with_your_changes">مع تغييراتك</string>
@@ -4863,4 +4862,13 @@
         <item quantity="many">جديدة: %1$s · %2$s أغنية لإضافتها إلى ما أُحضر من قبل</item>
         <item quantity="other">جديدة: %1$s · %2$s أغنية لإضافتها إلى ما أُحضر من قبل</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">زر DJ في قائمة الانتظار</string>
+    <string name="dj_in_the_queue_detail">أعلى قائمة الانتظار، بجانب حفظ ومحو</string>
+    <string name="dj_in_the_queue_info">عند إيقافه تصبح لأعلى قائمة الانتظار مساحة أكبر. ويمكن أن يبقى وضع DJ أحد أزرار المشغّل (ما يظهر على المشغّل).</string>
+    <string name="dj_in_the_queue_keywords">dj وضع زر قائمة الانتظار أعلى مساحة إخفاء</string>
+    <string name="menu_lyrics_only_way">يبقى ما دام الطريقة الوحيدة للوصول إلى الكلمات من المشغّل</string>
+    <string name="glass_kinds_info">الزجاج المصنفر: تمويه ناعم خلف الأشرطة وعناصر التحكم. الزجاج السائل: تنثني الخلفية خلفها كالزجاج الحقيقي (Android 12 وما بعده؛ الهواتف الأقدم تحصل على المصنفر). عادي يموّه ما خلفه كما يفعل الزجاج المصنفر. شفاف يُبقيه واضحًا مع لمسة لون خفيفة فقط.</string>
+    <string name="smart_downloads_offer_title">هل تريد تنزيل الأغاني قبل أن تحتاج إليها؟</string>
+    <string name="smart_downloads_offer_body">تُبقي التنزيلات الذكية الأغاني التي ستشغّلها غالبًا جاهزة دون اتصال: حتى 1 GB، عبر Wi-Fi. غيّر ذلك في أي وقت من «التنزيلات والتخزين والبيانات».</string>
 </resources>

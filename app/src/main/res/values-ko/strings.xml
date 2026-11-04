@@ -3959,7 +3959,6 @@
     <string name="tabs_on_a_tablet_info">태블릿이나 넓은 창에서 적용돼요. 휴대전화에서는 탭이 항상 아래쪽에 있어요.</string>
     <string name="same_as_your_accent">강조 색상과 같게</string>
     <string name="use_the_same">같게 하기</string>
-    <string name="glass_choice_info">반투명 유리: 바와 컨트롤 뒤를 부드럽게 흐려요. 리퀴드 글래스: 진짜 유리처럼 뒤에 있는 것을 휘어 보여 줘요(Android 12 이상, 이전 휴대전화에서는 반투명 유리로 표시돼요). 보통은 더 진하고, 지우기는 더 많이 비쳐요.</string>
     <string name="start_from">시작 템플릿</string>
     <string name="start_from_info">고정이 아닌 출발점이에요. 아래의 애니메이션, 글자, 카드, 글로우를 정해 줘요. 어느 부분이든 나중에 바꿀 수 있고, 색상과 크기 등 나머지는 그대로 남아요.</string>
     <string name="with_your_changes">변경됨</string>
@@ -4553,4 +4552,13 @@
     <plurals name="imp_playlists_new_count">
         <item quantity="other">새로 %1$s개 · 전에 가져온 재생목록에 추가할 곡 %2$s곡</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">대기열의 DJ 버튼</string>
+    <string name="dj_in_the_queue_detail">대기열 맨 위, 저장 및 지우기 옆</string>
+    <string name="dj_in_the_queue_info">꺼 두면 대기열 맨 위에 공간이 더 생겨요. DJ 모드는 플레이어 버튼 중 하나로 계속 둘 수 있어요(플레이어에 표시할 항목).</string>
+    <string name="dj_in_the_queue_keywords">dj 모드 버튼 대기열 상단 공간 숨기기</string>
+    <string name="menu_lyrics_only_way">플레이어에서 가사로 가는 유일한 방법인 동안은 그대로 있어요</string>
+    <string name="glass_kinds_info">반투명 유리: 바와 컨트롤 뒤를 부드럽게 흐려 줘요. 리퀴드 글래스: 뒤에 있는 것을 진짜 유리처럼 휘어 보이게 해요(Android 12 이상, 이전 휴대전화는 반투명 유리 적용). 보통은 뒤에 있는 것을 반투명 유리처럼 흐리게 해요. 투명은 뒤를 선명하게 두고 옅은 색조만 더해요.</string>
+    <string name="smart_downloads_offer_title">필요하기 전에 곡을 다운로드해 둘까요?</string>
+    <string name="smart_downloads_offer_body">스마트 다운로드는 들을 가능성이 높은 곡을 오프라인용으로 준비해 둬요: 최대 1 GB, Wi-Fi에서요. 다운로드, 저장공간, 데이터에서 언제든 바꿀 수 있어요.</string>
 </resources>

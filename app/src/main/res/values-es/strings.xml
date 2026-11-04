@@ -4059,7 +4059,6 @@
     <string name="tabs_on_a_tablet_info">En una tablet o una ventana ancha. En los teléfonos, las pestañas siempre van abajo.</string>
     <string name="same_as_your_accent">Igual que tu acento</string>
     <string name="use_the_same">Usar el mismo</string>
-    <string name="glass_choice_info">Cristal esmerilado: un desenfoque suave detrás de las barras y los controles. Liquid Glass: doblan lo que hay detrás como un cristal de verdad (Android 12 o posterior; los teléfonos más antiguos usan el esmerilado). Normal es más denso; la variante clara deja pasar más.</string>
     <string name="start_from">Partir de</string>
     <string name="start_from_info">Un punto de partida, no un candado: fija la animación, el texto, la tarjeta y el brillo de abajo. Cambia cualquier parte después; tus colores, el tamaño y lo demás se quedan como están.</string>
     <string name="with_your_changes">Con tus cambios</string>
@@ -4677,4 +4676,13 @@
         <item quantity="many">%1$s nuevas · %2$s de canciones para añadir a las que trajiste antes</item>
         <item quantity="other">%1$s nuevas · %2$s canciones para añadir a las que trajiste antes</item>
     </plurals>
+    <!-- 1.8.1 followed playlists, 1.8.1.1 -->
+    <string name="dj_in_the_queue">Botón DJ en la cola</string>
+    <string name="dj_in_the_queue_detail">En la parte superior de la cola, junto a Guardar y Borrar</string>
+    <string name="dj_in_the_queue_info">Si lo desactivas, la parte superior de la cola tiene más espacio. El modo DJ puede seguir siendo uno de los botones del reproductor (Qué hay en el reproductor).</string>
+    <string name="dj_in_the_queue_keywords">dj modo botón cola cabecera arriba espacio ocultar</string>
+    <string name="menu_lyrics_only_way">Se queda mientras sea la única forma de llegar a la letra desde el reproductor</string>
+    <string name="glass_kinds_info">Cristal esmerilado: un desenfoque suave detrás de las barras y los controles. Liquid Glass: curvan lo que hay detrás como un cristal de verdad (Android 12 o posterior; los móviles más antiguos usan Cristal esmerilado). Normal desenfoca lo que hay detrás, como el cristal esmerilado. Transparente lo deja nítido, solo con un tinte ligero.</string>
+    <string name="smart_downloads_offer_title">¿Descargar canciones antes de que las necesites?</string>
+    <string name="smart_downloads_offer_body">Descargas inteligentes mantiene listas sin conexión las canciones que probablemente escucharás: hasta 1 GB, con Wi-Fi. Cámbialo cuando quieras en Descargas, almacenamiento y datos.</string>
 </resources>
