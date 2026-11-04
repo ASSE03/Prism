@@ -338,6 +338,8 @@ internal fun PlayerCredits(song: Song, onMore: () -> Unit, onCollapse: () -> Uni
     val menuHeld: (() -> Unit)? = if (settings.shows(PlayerPart.MENU)) null else onMore
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
+            // #328: the title, artists and album of the version picked to play in its place, if any.
+            @Suppress("NAME_SHADOWING") val song = com.prism.music.data.SongVersions.shownOf(song)
             if (settings.shows(PlayerPart.TITLE)) PlayerMarquee(
                 song.title, MaterialTheme.typography.titleLarge.copy(fontSize = 22.sp, lineHeight = 28.sp), Color.White, true,
                 Modifier.combinedClickable(enabled = song.album?.id != null || menuHeld != null, onLongClick = menuHeld) {

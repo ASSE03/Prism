@@ -91,7 +91,7 @@ class MediaTree(private val c: AppContainer) {
         val item = song.toMediaItem()
         return item.buildUpon().setMediaMetadata(
             // The cover picked for the song or its album (#305) when there is one.
-            item.mediaMetadata.buildUpon().setArtworkUri(artworkUri(c.covers.art(song))).setSubtitle(song.artistText)
+            item.mediaMetadata.buildUpon().setArtworkUri(artworkUri(c.covers.art(song))).setSubtitle(com.prism.music.data.SongVersions.shownOf(song).artistText)
                 .apply { if (extras != null) setExtras(extras) }.build()
         ).build()
     }

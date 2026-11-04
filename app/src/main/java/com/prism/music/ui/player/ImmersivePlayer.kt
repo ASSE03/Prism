@@ -351,8 +351,9 @@ fun ImmersivePlayer(
                     .padding(horizontal = 18.dp, vertical = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(song.title, color = Color.White, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(song.artistText, color = Color.White.copy(alpha = 0.65f), style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                val shown = com.prism.music.data.SongVersions.shownOf(song)
+                Text(shown.title, color = Color.White, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(shown.artistText, color = Color.White.copy(alpha = 0.65f), style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
         // "Keep controls on screen" (Reddit 1.7): the capsule stays; a tap still brings up the song's name.
@@ -485,6 +486,8 @@ private fun LineAtATime(song: Song, state: LyricsState, active: Boolean, align: 
 
 @Composable
 private fun TitleCard(song: Song) {
+    // #328: as the version picked to play in its place, if any.
+    @Suppress("NAME_SHADOWING") val song = com.prism.music.data.SongVersions.shownOf(song)
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             song.title, color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis,

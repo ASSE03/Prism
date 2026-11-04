@@ -1072,6 +1072,8 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                             val titleScale = settings.playerTitleSize.scale
                             // With the ⋯ button hidden (1.8.0), a long press on the title or the artist opens the menu.
                             val menuHeld: (() -> Unit)? = if (settings.shows(PlayerPart.MENU)) null else ({ showActions = true })
+                            // #328: the title, artists and album of the version picked to play in its place, if any.
+                            @Suppress("NAME_SHADOWING") val song = com.prism.music.data.SongVersions.shownOf(song)
                             if (inHeader(PlayerPart.TITLE)) PlayerMarquee(
                                 // The title leads, the artist under it a size smaller (#41). Spectrum: large and light
                                 // (a tenth under headlineMedium, so longer titles fit before they scroll).
