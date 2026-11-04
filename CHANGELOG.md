@@ -43,6 +43,8 @@ A bug-fix update.
   far as it needs to, and settles again when the controls come or go.
 - **Even gaps under the player when parts are hidden (#329).** The hidden volume bar left a blank band between the
   controls and the buttons; its room is shared evenly between the gaps now, so nothing else moves.
+- **The Undo bar stays off the Play button.** Changing the look with the player open brought up its Undo bar over the
+  lower half of the Play button for a few seconds, on many phones. Over the player it now sits at the top.
 - **Undo in the queue puts the song back where you can see it** (Reddit). Taken out and put back after the song before
   it had finished, or while shuffled once the next song had been lined up, it could land among the songs already played
   or at the end of the shuffled order. It goes back beside the songs it was with, on its side of the playing song.

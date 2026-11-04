@@ -874,9 +874,10 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 com.prism.music.ui.player.CoverFlightLayer(song?.let { com.prism.music.data.PlaylistCovers.artOf(it) })
 
                 // Looks (1.7.3): "Undo" after each change to the look, and "Customize this" while it's on.
+                // Over the player it sits at the top, under "Customize this": lower down it covered the Play button.
                 com.prism.music.ui.components.LookUndoBar(
-                    Modifier.align(Alignment.BottomCenter).padding(horizontal = 16.dp)
-                        .padding(bottom = if (playerOpen && song != null) navInset + 120.dp else bottomPadding + 8.dp),
+                    if (playerOpen && song != null) Modifier.align(Alignment.TopCenter).padding(horizontal = 16.dp).statusBarsPadding().padding(top = 56.dp)
+                    else Modifier.align(Alignment.BottomCenter).padding(horizontal = 16.dp).padding(bottom = bottomPadding + 8.dp),
                 )
                 if (!(playerOpen && song != null)) com.prism.music.ui.components.ScheduleKeptBar(
                     Modifier.align(Alignment.BottomCenter).padding(horizontal = 16.dp).padding(bottom = bottomPadding + 8.dp),

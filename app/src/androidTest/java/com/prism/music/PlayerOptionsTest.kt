@@ -172,6 +172,7 @@ class PlayerOptionsTest {
         val playingOn = player.isPlaying.value
         val on = disc()
         runBlocking { Fixture.container.settings.setPlayRing(false) }
+        // The change also brings up the Look's Undo bar, which must stay off the button: it used to cover its lower half.
         compose.waitForIdle(); Thread.sleep(600)
         val off = disc()
         // The glyph swaps with the state (play, pause): the same state in both pictures, or this says nothing about the ring.
