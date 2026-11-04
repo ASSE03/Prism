@@ -184,7 +184,7 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
             }
         } else Row(pullToClose, verticalAlignment = Alignment.CenterVertically) {
             Text(tr(R.string.queue), style = MaterialTheme.typography.titleLarge, color = Color.White, modifier = Modifier.weight(1f))
-            if (order.size > 1) {
+            if (order.size > 1 && settings.view.queueDjChip) {
                 QueueChip("DJ", selected = dj) { pc.setDjMode(!dj) }
                 Spacer(Modifier.width(8.dp))
             }

@@ -284,7 +284,7 @@ object LookLabels {
         // 1.8.0 lyrics look
         "lyrics_motion" to tr(R.string.lyrics_animation), "lyrics_word_by_word" to tr(R.string.lyrics_word_by_word),
         "lyrics_card" to tr(R.string.lyrics_on_bold_card), "lyrics_halo" to tr(R.string.lyrics_glow), "lyrics_bold_lines" to tr(R.string.bold_card_s_bold_lines),
-        "panel_player" to tr(R.string.player_over_lyrics_queue), "queue_headings" to tr(R.string.queue_headings), "cast_mark" to tr(R.string.cast_mark_under_the_player),
+        "panel_player" to tr(R.string.player_over_lyrics_queue), "queue_headings" to tr(R.string.queue_headings), "queue_dj_chip" to tr(R.string.dj_in_the_queue), "cast_mark" to tr(R.string.cast_mark_under_the_player),
         "immersive_video" to tr(R.string.video_in_immersive_mode), "bleed_fit" to tr(R.string.full_bleed_artwork_s_fit), "cover_flight" to tr(R.string.cover_flies_into_the_player),
         "video_controls_hide" to tr(R.string.controls_hide_over_videos), "crossfade_mark" to tr(R.string.crossfade_mark), "blend_covers" to tr(R.string.covers_blend_in_a_crossfade), "player_buttons_pill" to tr(R.string.player_buttons_in_a_capsule),
         "crossfade_shape" to tr(R.string.crossfade_on_the_progress_bar),
@@ -442,7 +442,7 @@ object LookLabels {
             "player_layout", "vinyl_tonearm", "player_deck", "player_buttons", "scrubber_color", "player_title_align", "player_title_size",
             "player_title_weight", "player_title_scroll", "player_times", "mesh_speed", "mesh_intensity", "player_blur", "canvas_fills_background",
             "scrubber_thickness", "scrubber_thumb", "volume_matches_progress", "player_handle", "player_nav_band", "play_ring", "visualizer", "visualizer_color",
-            "panel_player", "queue_headings", "cast_mark", "immersive_video", "bleed_fit", "cover_flight", "video_controls_hide", "crossfade_mark", "blend_covers", "player_buttons_pill",
+            "panel_player", "queue_headings", "queue_dj_chip", "cast_mark", "immersive_video", "bleed_fit", "cover_flight", "video_controls_hide", "crossfade_mark", "blend_covers", "player_buttons_pill",
             "player_hidden_parts", "crossfade_shape", "player_artist_links",
         ),
         "lyrics" to setOf(

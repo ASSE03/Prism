@@ -1691,6 +1691,11 @@
     <string name="animation_transition_open_player_cover_mini">animation transition open player cover mini player apple music</string>
     <string name="queue_headings">Queue headings</string>
     <string name="played_now_playing_up_next_headings">played now playing up next headings list</string>
+    <!-- #275 (1.8.1.1): the DJ button at the top of the queue, shown or not. -->
+    <string name="dj_in_the_queue">DJ button in the queue</string>
+    <string name="dj_in_the_queue_detail">At the top of the queue, beside Save and Clear</string>
+    <string name="dj_in_the_queue_info">Off, the queue\'s top has more room. DJ mode can still be one of the player\'s buttons (What\'s on the player).</string>
+    <string name="dj_in_the_queue_keywords">dj mode button queue header top room hide</string>
     <string name="scrolling_up_shows_the_controls">Scrolling up shows the controls</string>
     <string name="scroll_swipe_down_lyrics_seek_bar">scroll swipe down lyrics seek bar controls pop up panel</string>
     <string name="pick_hide_after_a_moment_first">Pick \"Hide after a moment\" first</string>
@@ -4163,6 +4168,8 @@
     <string name="same_as_your_accent">The same as your accent</string>
     <string name="use_the_same">Use the same</string>
     <string name="glass_choice_info">Frosted Glass: a soft blur behind the bars and controls. Liquid Glass: they bend what\'s behind them like real glass (Android 12 and later; older phones get Frosted). Regular is fuller, Clear lets more through.</string>
+    <!-- #324 (1.8.1.1): replaces glass_choice_info, which didn't say which of the two blurs. -->
+    <string name="glass_kinds_info">Frosted Glass: a soft blur behind the bars and controls. Liquid Glass: they bend what\'s behind them like real glass (Android 12 and later; older phones get Frosted). Regular blurs what\'s behind it, as frosted glass does. Clear keeps it sharp, with only a light tint.</string>
     <!-- 1.8.0 lyrics look -->
     <string name="start_from">Start from</string>
     <string name="start_from_info">A starting point, not a lock: it sets the animation, the type, the card and the glow below. Change any part afterward; your colors, size and the rest stay as they are.</string>

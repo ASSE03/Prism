@@ -297,6 +297,7 @@ object SettingsIndex {
         SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.hide_controls_over_videos), tr(R.string.music_video_controls_hide_tap_full)),
         SettingEntry(P, tr(R.string.cover), tr(R.string.cover_flies_into_place), tr(R.string.animation_transition_open_player_cover_mini)),
         SettingEntry(P, tr(R.string.lyrics_and_the_queue), tr(R.string.queue_headings), tr(R.string.played_now_playing_up_next_headings)),
+        SettingEntry(P, tr(R.string.lyrics_and_the_queue), tr(R.string.dj_in_the_queue), tr(R.string.dj_in_the_queue_keywords)),
         SettingEntry(P, tr(R.string.lyrics_and_the_queue), tr(R.string.scrolling_up_shows_the_controls), tr(R.string.scroll_swipe_down_lyrics_seek_bar),
             needs = Needs(tr(R.string.pick_hide_after_a_moment_first)) { it.view.panelPlayer == com.prism.music.data.prefs.PanelPlayer.AUTO_HIDE }),
         SettingEntry(P, tr(R.string.immersive_mode), tr(R.string.show_the_video), tr(R.string.immersive_music_video_behind_lyrics), needs = immersive),

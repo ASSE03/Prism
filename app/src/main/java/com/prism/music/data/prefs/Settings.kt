@@ -376,6 +376,8 @@ data class ViewLook(
     val panelPlayer: PanelPlayer = PanelPlayer.AUTO_HIDE,
     /** The queue's "Played" and "Up next" headings (#197). */
     val queueHeadings: Boolean = true,
+    /** #275 (1.8.1.1): the DJ button in the queue's header (off: more room there; DJ can be one of the player's buttons). */
+    val queueDjChip: Boolean = true,
     /** The cast mark after the output's name under the player (#149, R13). */
     val castMark: Boolean = true,
     /** Immersive mode shows the playing video behind the lyrics instead of the cover (#170). */
@@ -1875,6 +1877,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         // 1.7.8: the player's look ([ViewLook]) and Prism's behaviour ([BehaviorPrefs]).
         val panelPlayer = stringPreferencesKey("panel_player")
         val queueHeadings = booleanPreferencesKey("queue_headings")
+        val queueDjChip = booleanPreferencesKey("queue_dj_chip")
         val castMark = booleanPreferencesKey("cast_mark")
         val immersiveVideo = booleanPreferencesKey("immersive_video")
         val bleedFit = stringPreferencesKey("bleed_fit")
@@ -1950,7 +1953,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 homeHeader, homeHeaderHeight,
                 cornerScale, songShape, albumShape, artistShape, playerShape, buttonShape, playOutlined,
                 typeWeight, typeSpacing, titleFont, tabTint, playerTitleWeight, typeClassic, controlsClassic,
-                panelPlayer, queueHeadings, castMark, immersiveVideo, bleedFit, coverFlight, videoControlsHide,
+                panelPlayer, queueHeadings, queueDjChip, castMark, immersiveVideo, bleedFit, coverFlight, videoControlsHide,
                 crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape,
                 downloadsAlbums, artistLinks, backdropFade,
                 crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape, replayGraph, replayStoryFont,
@@ -1986,7 +1989,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 homeHeader to 's', homeHeaderHeight to 's', replayThemeColors to 'b', replayCard to 's', hideStatusBar to 'b',
                 cornerScale to 'f', songShape to 's', albumShape to 's', artistShape to 's', playerShape to 's', buttonShape to 's', playOutlined to 'b',
                 typeWeight to 's', typeSpacing to 's', titleFont to 's', tabTint to 's', playerTitleWeight to 's', typeClassic to 'b', controlsClassic to 'b',
-                panelPlayer to 's', queueHeadings to 'b', castMark to 'b', immersiveVideo to 'b', bleedFit to 's', coverFlight to 'b',
+                panelPlayer to 's', queueHeadings to 'b', queueDjChip to 'b', castMark to 'b', immersiveVideo to 'b', bleedFit to 's', coverFlight to 'b',
                 videoControlsHide to 'b', crossfadeMark to 'b', blendCovers to 'b', buttonsPill to 'b', playerHiddenParts to 's',
                 crossfadeShape to 'b',
                 downloadsAlbums to 'b', artistLinks to 'b', backdropFade to 'b',
@@ -2271,6 +2274,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
             view = ViewLook(
                 panelPlayer = p.enum(K.panelPlayer, d.view.panelPlayer),
                 queueHeadings = p[K.queueHeadings] ?: d.view.queueHeadings,
+                queueDjChip = p[K.queueDjChip] ?: d.view.queueDjChip,
                 castMark = p[K.castMark] ?: d.view.castMark,
                 immersiveVideo = p[K.immersiveVideo] ?: d.view.immersiveVideo,
                 bleedFit = p.enum(K.bleedFit, d.view.bleedFit),
@@ -2867,6 +2871,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     // 1.7.8
     fun setPanelPlayer(v: PanelPlayer) = edit { it[K.panelPlayer] = v.name }
     fun setQueueHeadings(v: Boolean) = edit { it[K.queueHeadings] = v }
+    fun setQueueDjChip(v: Boolean) = edit { it[K.queueDjChip] = v }
     fun setCastMark(v: Boolean) = edit { it[K.castMark] = v }
     fun setImmersiveVideo(v: Boolean) = edit { it[K.immersiveVideo] = v }
     fun setBleedFit(v: BleedFit) = edit { it[K.bleedFit] = v.name }

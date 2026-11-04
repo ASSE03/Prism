@@ -308,9 +308,10 @@ fun SearchScreen(bottomPadding: Dp) {
         if (focused) {
             LazyColumn(contentPadding = PaddingValues(top = 2.dp, bottom = bottomPadding + 16.dp)) {
                 item("search-for") { SuggestionRow(PrismIcons.Search, tr(R.string.search_for, query.trim()), onFill = null, strong = true) { submit(query) } }
-                items(suggestions.filterNot { it.equals(query.trim(), true) }, key = { "s:$it" }) { s -> SuggestionRow(PrismIcons.Search, s, onFill = { query = it }) { submit(s) } }
+                // Each once (#330/#346: a row repeated crashed the list with "Key was already used").
+                items(suggestions.filterNot { it.equals(query.trim(), true) }.distinct(), key = { "s:$it" }) { s -> SuggestionRow(PrismIcons.Search, s, onFill = { query = it }) { submit(s) } }
                 // A tap opens or plays one straight away.
-                items(suggestedItems, key = { "i:" + it.id }) { item -> ResultRow(item) { saveQuery(query); open(item) } }
+                items(suggestedItems.distinctBy { it.id }, key = { "i:" + it.id }) { item -> ResultRow(item) { saveQuery(query); open(item) } }
             }
             return@Column
         }
@@ -342,7 +343,7 @@ fun SearchScreen(bottomPadding: Dp) {
             null, Load.Loading -> LoadingState()
             is Load.Err -> ErrorState(r.message)
             is Load.Ok -> LazyColumn(contentPadding = PaddingValues(top = 4.dp, bottom = bottomPadding + 16.dp)) {
-                items(r.value, key = { it.id + it.title }) { item -> ResultRow(item) { open(item) } }
+                items(r.value.distinctBy { it.id + it.title }, key = { it.id + it.title }) { item -> ResultRow(item) { open(item) } }
                 if (continuation != null) item {
                     LaunchedEffect(continuation) {
                         val token = continuation ?: return@LaunchedEffect
@@ -384,10 +385,10 @@ private fun PhoneResults(query: String, bottomPadding: Dp, onPlay: () -> Unit) {
         return
     }
     LazyColumn(contentPadding = PaddingValues(top = 4.dp, bottom = bottomPadding + 16.dp)) {
-        listOf(tr(R.string.your_music_files) to files, tr(R.string.downloads) to downloads).forEach { (title, songs) ->
-            if (songs.isEmpty()) return@forEach
-            item(key = "h:$title") { SectionHeader(title, strapline = com.prism.music.data.model.songCount(songs.size)) }
-            items(songs.size, key = { "$title:" + songs[it].id }) { i ->
+        listOf(tr(R.string.your_music_files) to files, tr(R.string.downloads) to downloads).forEachIndexed { g, (title, songs) ->
+            if (songs.isEmpty()) return@forEachIndexed
+            item(key = "h:$g") { SectionHeader(title, strapline = com.prism.music.data.model.songCount(songs.size)) }
+            items(songs.size, key = { "$g:$it:" + songs[it].id }) { i ->
                 com.prism.music.ui.components.SwipeToQueue(songs[i]) {
                     SongRow(songs[i], playing = current?.id == songs[i].id) {
                         onPlay()
@@ -462,7 +463,7 @@ private fun TopResults(
     val titleFits = r.top?.let { t -> com.prism.music.data.lyrics.LyricSearch.coverage(q, com.prism.music.data.lyrics.LyricSearch.words(t.title)) >= 0.5f } == true
     val shownIds = (listOfNotNull(r.top?.id) + r.sections.flatMap { (_, items) -> items.map { it.id } }).toSet()
     val shownTitles = listOfNotNull(r.top?.title) + r.sections.flatMap { (_, items) -> items.map { it.title } }
-    val hits = if (titleFits) emptyList() else com.prism.music.data.lyrics.LyricSearch.toShow(lyricHits, shownIds, shownTitles)
+    val hits = if (titleFits) emptyList() else com.prism.music.data.lyrics.LyricSearch.toShow(lyricHits, shownIds, shownTitles).distinctBy { it.song.id }
     if (r.isEmpty && inLibrary.isEmpty() && onPhoneHits.isEmpty() && hits.isEmpty()) { ErrorState(tr(R.string.no_results)); return }
     // A line typed nearly word for word: the song it's from comes first.
     val lyricsFirst = hits.firstOrNull()?.sure == true
@@ -489,7 +490,7 @@ private fun TopResults(
             item("h:${f.name}") { SectionHeader(f.label, onMore = { onSeeAll(f) }) }
             when (f) {
                 SearchFilter.SONGS -> {
-                    val songs = items.filterIsInstance<SongItem>().map { it.song }
+                    val songs = items.filterIsInstance<SongItem>().map { it.song }.distinctBy { it.id }
                     items(songs.take(4), key = { "s:" + it.id }) { s ->
                         SongRow(s) { onSongs(songs, songs.indexOf(s)) }
                     }

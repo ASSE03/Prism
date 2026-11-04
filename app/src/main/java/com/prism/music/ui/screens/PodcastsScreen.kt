@@ -178,7 +178,7 @@ fun PodcastsScreen(bottomPadding: Dp) {
                         modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
                     )
                 }
-                home.shelves.forEach { shelf -> shelfItems(shelf) { nav.open(it, onSong) } }
+                home.shelves.forEachIndexed { place, shelf -> shelfItems(shelf, place = place) { nav.open(it, onSong) } }
                 if (home.shelves.isEmpty() && home.yourShows.isEmpty()) item {
                     EmptyState(PrismIcons.Podcasts, tr(R.string.no_podcasts_page_here), tr(R.string.prism_music_s_podcasts_page_isn))
                 }

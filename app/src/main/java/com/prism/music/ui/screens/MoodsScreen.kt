@@ -36,16 +36,17 @@ fun MoodsScreen(bottomPadding: Dp) {
             is Load.Err -> item { ErrorState(s.message) { moods.reload(false) } }
             is Load.Ok -> {
                 val groups = listOf(tr(R.string.picked_for_you) to s.value.picks.take(12)) + s.value.sections
-                groups.forEach { (title, tiles) ->
-                    if (tiles.isEmpty()) return@forEach
-                    item(key = "h:$title") {
+                // Keyed by place: two sections can share a title (#346, "Per te" twice in Italian).
+                groups.forEachIndexed { g, (title, tiles) ->
+                    if (tiles.isEmpty()) return@forEachIndexed
+                    item(key = "h:$g") {
                         Text(
                             title, style = MaterialTheme.typography.titleLarge,
                             modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 10.dp),
                         )
                     }
                     tiles.chunked(2).forEachIndexed { r, pair ->
-                        item(key = "r:$title:$r") {
+                        item(key = "r:$g:$r") {
                             Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                                 pair.forEach { mood ->
                                     MoodTile(mood, Modifier.weight(1f).height(84.dp)) { nav.open(mood) { c.player.playSingle(it.song) } }
