@@ -8,6 +8,7 @@ import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -112,7 +113,17 @@ class SpotifyConnectTest {
         // The followed one (Spotify's own "Emo Forever"): listed after, with its note, never a Prism playlist.
         compose.waitUntil(15_000) { c.spotify.followedShown.value.any { it.id == "pl2" } }
         assertTrue("never mirrored", c.spotify.playlists.mirror().lists.none { it.playlist.id == "pl2" })
-        compose.waitForText("Spotify · Not shared by Spotify", 15_000)
+        // Below your own playlists: on a short screen the list has to come to it.
+        val followedRow = hasText("Spotify · Not shared by Spotify")
+        val until = System.currentTimeMillis() + 15_000
+        while (compose.onAllNodes(followedRow).fetchSemanticsNodes().isEmpty() && System.currentTimeMillis() < until) {
+            compose.onAllNodes(androidx.compose.ui.test.hasScrollToNodeAction()).fetchSemanticsNodes().indices.forEach { i ->
+                runCatching { compose.onAllNodes(androidx.compose.ui.test.hasScrollToNodeAction())[i].performScrollToNode(followedRow) }
+            }
+            compose.waitForIdle()
+            Thread.sleep(200)
+        }
+        compose.waitForText("Spotify · Not shared by Spotify", 5_000)
         compose.clickWhenFound(hasText("Emo Forever") and hasClickAction(), 15_000)
         // Its sheet: why, the steps, Open in Spotify, Refresh now, and the TuneMyMusic way.
         compose.waitForText("Spotify only shares the songs of playlists you made.")

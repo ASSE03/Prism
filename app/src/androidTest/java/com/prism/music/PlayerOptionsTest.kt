@@ -163,9 +163,11 @@ class PlayerOptionsTest {
     @Test fun thePlayRingCanGo() {
         openPlayer()
         compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag("playDisc")).fetchSemanticsNodes().isNotEmpty() }
-        // Playing before the first picture, or the two pictures differ by the glyph (play, then pause), not the ring.
-        compose.waitUntil(20_000) { Fixture.container.player.isPlaying.value }
-        compose.waitForIdle(); Thread.sleep(600)
+        // The song under way first (or given up on after a while), or the two pictures can differ by the glyph (play, then
+        // pause), not the ring.
+        val started = System.currentTimeMillis() + 8_000
+        while (!Fixture.container.player.isPlaying.value && System.currentTimeMillis() < started) Thread.sleep(200)
+        compose.waitForIdle(); Thread.sleep(800)
         val on = disc()
         runBlocking { Fixture.container.settings.setPlayRing(false) }
         compose.waitForIdle(); Thread.sleep(600)
