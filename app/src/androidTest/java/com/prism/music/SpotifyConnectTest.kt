@@ -8,9 +8,9 @@ import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
+import androidx.compose.ui.test.swipeUp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.prism.music.data.spotify.SpotifyProfile
@@ -115,13 +115,12 @@ class SpotifyConnectTest {
         assertTrue("never mirrored", c.spotify.playlists.mirror().lists.none { it.playlist.id == "pl2" })
         // Below your own playlists: on a short screen the list has to come to it.
         val followedRow = hasText("Spotify · Not shared by Spotify")
-        val until = System.currentTimeMillis() + 15_000
-        while (compose.onAllNodes(followedRow).fetchSemanticsNodes().isEmpty() && System.currentTimeMillis() < until) {
-            compose.onAllNodes(androidx.compose.ui.test.hasScrollToNodeAction()).fetchSemanticsNodes().indices.forEach { i ->
-                runCatching { compose.onAllNodes(androidx.compose.ui.test.hasScrollToNodeAction())[i].performScrollToNode(followedRow) }
-            }
+        // (Swipes up, not a scroll-to on every list: that also turned Library's pages, to History.)
+        repeat(8) {
+            if (compose.onAllNodes(followedRow).fetchSemanticsNodes().isNotEmpty()) return@repeat
+            compose.onRoot().performTouchInput { swipeUp(startY = height * 0.7f, endY = height * 0.35f) }
             compose.waitForIdle()
-            Thread.sleep(200)
+            Thread.sleep(300)
         }
         if (compose.onAllNodes(followedRow).fetchSemanticsNodes().isEmpty()) {
             val shown = compose.onAllNodes(hasText("", substring = true)).fetchSemanticsNodes()
