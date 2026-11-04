@@ -366,7 +366,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 }
             },
             allowed = ::mayBlend,
-            scanFromPhone = { id -> scope.launch { c.mixTempo.measure(id, network = false) } },
+            // Its song's end is waiting for it: no scan makes way for the listener's touches meanwhile (#343).
+            scanFromPhone = { id -> scope.launch { MixTempo.urgently { c.mixTempo.measure(id, network = false) } } },
             buildTail = ::buildTailPlayer,
             onSettled = ::restoreMusicSpeed,
             pitch = ::pitchNow,
