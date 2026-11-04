@@ -2,7 +2,7 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
-## 1.8.1 (unreleased)
+## 1.8.1
 
 ### Bring your history
 
@@ -49,7 +49,9 @@ What changed in each release. Older releases are described on the [Releases page
 
 ### Spotify (optional, your own key)
 
-- **Connect Spotify through its official Web API, with a developer app of your own.** Spotify lets a developer app in
+- **Connect Spotify through its official Web API, with a developer app of your own.** Not a regular "Sign in with
+  Spotify" but a workaround: a developer app can only be connected by five people until Spotify approves it for full
+  access, which only large companies get, so Prism can't have one Spotify login for everyone. Spotify lets a developer app in
   Development Mode have only five users, and its owner needs Spotify Premium, so each listener makes one for themselves
   (free, about three minutes): Settings → Devices & connections → Spotify walks you through it (the dashboard link,
   the redirect address to copy), then you paste its Client ID and sign in on Spotify's own page. Prism never sees your
