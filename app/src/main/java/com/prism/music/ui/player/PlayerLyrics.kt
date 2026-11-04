@@ -23,6 +23,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.gestures.animateScrollBy
+import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.interaction.DragInteraction
@@ -128,6 +130,32 @@ import kotlin.math.abs
 // change in about three frames, as a jump. 500 ms that start at once give it seven or eight.
 private val LYRIC_EASING = CubicBezierEasing(0.2f, 0.6f, 0.25f, 1f)
 private const val LYRIC_SETTLE_MS = 500
+/** How long the page's height holds still (the controls done coming or going) before the sung line settles again. */
+private const val LYRIC_RESETTLE_MS = 150L
+/** Where the page's fade at its foot starts (its mask), and where the fade at its head ends, as shares of its height. */
+private const val LYRIC_FOOT = 0.86f
+private const val LYRIC_HEAD = 0.08f
+
+/**
+ * #341: how far (px) the sung line goes above its settling place ([settleAt] down the page, [viewport] tall) so it ends
+ * clear of the page's faded foot, and so of the progress bar under the page however tall the deck is (Ribbons, the
+ * waveform): a long line wrapped over three rows, in the middle of a page the controls leave short, ran down to the bar.
+ * Never further than the page's head allows; 0 when it fits, as before.
+ */
+internal fun lyricLineLift(settleAt: Float, lineHeight: Float, viewport: Float): Float {
+    val over = settleAt + lineHeight - viewport * LYRIC_FOOT
+    return over.coerceIn(0f, (settleAt - viewport * LYRIC_HEAD).coerceAtLeast(0f))
+}
+
+/** Scrolls the sung line ([lead]) to its place: at the page's settling point, lifted when [lifts] as [lyricLineLift] says. */
+private suspend fun LazyListState.settleLine(lead: Int, lifts: Boolean, animate: Boolean) {
+    val info = layoutInfo
+    val item = info.visibleItemsInfo.firstOrNull { it.index == lead } ?: return
+    val lift = if (lifts) lyricLineLift(info.beforeContentPadding.toFloat(), item.size.toFloat(), info.viewportSize.height.toFloat()) else 0f
+    val by = item.offset + lift
+    if (abs(by) < 1f) return
+    if (animate) animateScrollBy(by, tween(LYRIC_SETTLE_MS, easing = LYRIC_EASING)) else scrollBy(by)
+}
 private val FALLOFF_ALPHA = floatArrayOf(1f, 0.8f, 0.7f, 0.58f, 0.46f)
 private val FALLOFF_BLUR = arrayOf(0.dp, 1.dp, 1.dp, 1.7.dp, 2.4.dp)
 private const val UNSUNG_ALPHA = 0.38f
@@ -920,8 +948,8 @@ fun LyricsPanel(
         snapshotFlow { listState.layoutInfo.viewportSize.height }.first { it > 0 }
         val visible = listState.layoutInfo.visibleItemsInfo.firstOrNull { it.index == lead }
         when {
-            !placed -> { listState.scrollToItem(lead); placed = true }
-            visible != null -> listState.animateScrollBy(visible.offset.toFloat(), tween(LYRIC_SETTLE_MS, easing = LYRIC_EASING))
+            !placed -> { listState.scrollToItem(lead); placed = true; withFrameNanos { }; listState.settleLine(lead, look.position > 0f, animate = false) }
+            visible != null -> listState.settleLine(lead, look.position > 0f, animate = true)
             else -> listState.animateScrollToItem(lead)
         }
     }
@@ -995,6 +1023,12 @@ fun LyricsPanel(
     androidx.compose.foundation.layout.BoxWithConstraints(modifier) {
     // Where the sung line settles: near the top (as before), a third down or in the middle.
     val settleAt = maxOf(30.dp, maxHeight * look.position)
+    // #341: the page grows and shrinks as the controls come and go (a taller progress bar, Ribbons or the waveform, takes
+    // more): once it's settled, the sung line finds its place in the room there is now.
+    LaunchedEffect(maxHeight) {
+        delay(LYRIC_RESETTLE_MS)
+        if (synced && !browsing && placed && lead >= 0) listState.settleLine(lead, look.position > 0f, animate = true)
+    }
     LazyColumn(
         state = listState,
         modifier = Modifier
@@ -1006,7 +1040,8 @@ fun LyricsPanel(
                 drawContent()
                 drawRect(Brush.verticalGradient(0f to Color.Transparent, 0.06f to Color.Black, 0.88f to Color.Black, 1f to Color.Transparent), blendMode = BlendMode.DstIn)
             },
-        contentPadding = PaddingValues(top = settleAt, bottom = if (look.position == 0f) 400.dp else maxOf(400.dp, maxHeight - settleAt)),
+        // Lower down, room for the last line to settle (lifted, #341, it needs a little more than the rest of the page).
+        contentPadding = PaddingValues(top = settleAt, bottom = if (look.position == 0f) 400.dp else maxOf(400.dp, maxHeight)),
     ) {
         itemsIndexed(lines) { index, line ->
             if (!synced && line.text.startsWith("[") && line.text.endsWith("]")) {

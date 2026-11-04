@@ -25,4 +25,27 @@ object QueueEdit {
         val auto = if (autoplayStart < 0) -1 else list.indexOfFirst { it >= autoplayStart && it !in moved }.let { if (it < 0) list.size else it }
         return Plan(moves, list, auto)
     }
+
+    /**
+     * Where Undo puts a song taken out of the queue back (#149; Reddit, 1.8.1.1: "Undo does nothing"): its place in the
+     * play order as it is when Undo is tapped. [order]: the songs' ids in play order now (the shuffled order while
+     * shuffled); [now]: the playing song's place in it (-1: none). [after] / [before]: the songs it played after and
+     * before when it went; [ahead]: it was still to come then; [near]: its place in the play order then.
+     *
+     * It goes back beside those songs (the nearest, for a song in the queue twice), on its own side of the playing song.
+     * It used to go back by its old index, or (shuffled, 1.8.0) beside its neighbours matched as the player's items, so
+     * once the song before it had finished (or a neighbour's item changed, as the next song's does when its stream is
+     * lined up) it landed among the songs already played, or at the end of the shuffled order: out of sight.
+     */
+    fun undoSpot(order: List<String>, now: Int, after: String?, before: String?, ahead: Boolean, near: Int): Int {
+        fun nearest(id: String?) = id?.let { order.indices.filter { i -> order[i] == it }.minByOrNull { i -> kotlin.math.abs(i - near) } }
+        fun fits(spot: Int) = now < 0 || (if (ahead) spot > now else spot <= now)
+        nearest(after)?.let { it + 1 }?.takeIf(::fits)?.let { return it }
+        nearest(before)?.takeIf(::fits)?.let { return it }
+        return when {
+            now < 0 -> near.coerceIn(0, order.size)
+            ahead -> near.coerceIn(now + 1, order.size)
+            else -> near.coerceIn(0, now)
+        }
+    }
 }

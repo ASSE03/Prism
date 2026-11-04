@@ -36,6 +36,7 @@ import com.prism.music.data.prefs.MenuAction
 import com.prism.music.data.prefs.MenuGroup
 import com.prism.music.data.prefs.PlayerButton
 import com.prism.music.data.prefs.episodeMenuFromPlayer
+import com.prism.music.data.prefs.menuFolds
 import com.prism.music.data.prefs.menuFromPlayer
 import com.prism.music.data.prefs.menuLayout
 import com.prism.music.ui.LocalNavigator
@@ -278,7 +279,7 @@ fun PlayerOptionsSheet(
         toast(tr(R.string.marked_at_d_02d).format(at / 60_000, at / 1000 % 60))
     })
 
-    val layout = settings.view.parts.menuLayout(items.keys)
+    val layout = settings.view.parts.menuLayout(items.keys, settings.menuFolds())
     var moreOpen by remember { mutableStateOf(false) }
     ActionSheet(com.prism.music.data.PlaylistCovers.artOf(song), onDismiss) { close ->
         ActionHeader(com.prism.music.data.PlaylistCovers.artOf(song), song.title, song.artistText) {
@@ -405,9 +406,11 @@ fun MenuEditorSheet(onDismiss: () -> Unit) {
 @Composable
 fun MenuEditor(onDone: () -> Unit) {
     val prefs = LocalContainer.current.settings
+    val s = prefs.flow.collectAsState().value
     MenuEditorContent(
-        prefs.flow.collectAsState().value.view.parts, onDone,
+        s.view.parts, onDone,
         onShown = prefs::setMenuShown, onTiles = prefs::setMenuTiles, onReset = prefs::resetMenu,
+        fromPlayer = s.menuFromPlayer(), folds = s.menuFolds(),
     )
 }
 
@@ -419,6 +422,10 @@ fun MenuEditorContent(
     onShown: (MenuAction, Boolean) -> Unit,
     onTiles: (List<MenuAction>) -> Unit,
     onReset: () -> Unit,
+    /** What the player's hidden parts bring to the menu now ([menuFromPlayer]): the foldable ones are listed too (#345). */
+    fromPlayer: Collection<MenuAction> = emptyList(),
+    /** Of those, the ones that may go under "More" now ([menuFolds]); the others stay, as the player's only way there. */
+    folds: Set<MenuAction> = emptySet(),
 ) {
     val tiles = parts.menuTiles
     val scheme = MaterialTheme.colorScheme
@@ -434,18 +441,21 @@ fun MenuEditorContent(
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
         ) else QuickActions(tiles.map { a -> ActionItem(menuIcon(a), menuLabel(a)) { onTiles(tiles - a) } }) { it.onClick() }
         MenuGroup.entries.forEach { g ->
-            val actions = MenuAction.entries.filter { it.group == g && !it.fromPlayer }
+            val actions = MenuAction.entries.filter { it.group == g && (!it.fromPlayer || (it.foldable && it in fromPlayer)) }
             Column(Modifier.fillMaxWidth().padding(start = 14.dp, end = 14.dp, top = 14.dp)) {
                 Eyebrow(g.label, Modifier.padding(start = 8.dp, bottom = 8.dp))
                 Column(Modifier.fillMaxWidth().pane(LocalUi.current.card)) {
                     actions.forEachIndexed { i, a ->
                         if (i > 0) HorizontalDivider(Modifier.padding(start = 54.dp), color = scheme.onSurface.copy(alpha = 0.07f))
                         val tile = a in tiles
+                        // From the player (#345): never a tile; while it's the player's only way there, it stays.
+                        val stays = a.fromPlayer && a !in folds
                         MenuEditRow(
-                            a, shown = tile || a !in parts.menuHidden, tile = tile,
-                            canTile = tile || tiles.size < MenuAction.MAX_TILES,
+                            a, shown = tile || stays || a !in parts.menuHidden, tile = tile,
+                            canTile = !a.fromPlayer && (tile || tiles.size < MenuAction.MAX_TILES),
                             onShown = { onShown(a, it) },
                             onTile = { on -> onTiles(if (on) tiles + a else tiles - a); if (on) onShown(a, true) },
+                            stays = stays,
                         )
                     }
                 }
@@ -460,12 +470,16 @@ fun MenuEditorContent(
 
 /** One action in Edit this menu: the row shows or hides it, the pin makes it a tile. */
 @Composable
-private fun MenuEditRow(a: MenuAction, shown: Boolean, tile: Boolean, canTile: Boolean, onShown: (Boolean) -> Unit, onTile: (Boolean) -> Unit) {
+private fun MenuEditRow(
+    a: MenuAction, shown: Boolean, tile: Boolean, canTile: Boolean, onShown: (Boolean) -> Unit, onTile: (Boolean) -> Unit,
+    /** The player's only way to what it does (#345): it stays in the menu, its switch on and still. */
+    stays: Boolean = false,
+) {
     val scheme = MaterialTheme.colorScheme
     val label = menuLabel(a)
     Row(
         // A tile is in the menu already: its switch stays on until it's unpinned.
-        Modifier.fillMaxWidth().toggleable(shown, enabled = !tile, role = Role.Switch, onValueChange = onShown)
+        Modifier.fillMaxWidth().testTag("menuEdit:${a.name}").toggleable(shown, enabled = !tile && !stays, role = Role.Switch, onValueChange = onShown)
             .padding(start = 16.dp, end = 8.dp, top = 6.dp, bottom = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -474,6 +488,7 @@ private fun MenuEditRow(a: MenuAction, shown: Boolean, tile: Boolean, canTile: B
         Column(Modifier.weight(1f)) {
             Text(label, style = MaterialTheme.typography.bodyLarge, color = if (shown) scheme.onSurface else scheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
             if (!shown) Text(tr(R.string.under_more), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
+            else if (stays) Text(tr(R.string.menu_lyrics_only_way), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
         }
         val pinLabel = tr(R.string.quick_tile_s, label)
         Icon(

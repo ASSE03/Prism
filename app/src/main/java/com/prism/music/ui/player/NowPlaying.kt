@@ -52,6 +52,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsIgnoringVisibility
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.tappableElement
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -152,11 +153,53 @@ private val DECK_GAP_AFTER = mapOf(
 )
 private const val HERO_FADE = 0.42f
 
+/** The deck's parts as they show, the gap after each one but the last, and room added under the last one. */
+internal class DeckSpacing(val parts: List<com.prism.music.data.prefs.DeckPart>, val gaps: List<Dp>, val below: Dp)
+
+/**
+ * #329: the deck laid out from [shown] (its parts in the listener's order, the ones hidden from the player left out
+ * already). A hidden volume bar leaves no hole of its own any more (its blank room sat between the controls and the
+ * buttons row, so the gaps looked uneven): its room, kept so the controls and the cover above stay where they were
+ * (1.6.5), is shared evenly between the gaps. [small]: Small over the lyrics or the queue, tight as before.
+ */
+internal fun deckSpacing(shown: List<com.prism.music.data.prefs.DeckPart>, volumeShown: Boolean, small: Boolean): DeckSpacing {
+    val volume = com.prism.music.data.prefs.DeckPart.VOLUME
+    if (small) return DeckSpacing(shown, List((shown.size - 1).coerceAtLeast(0)) { 2.dp }, 0.dp)
+    val hiddenVolume = !volumeShown && volume in shown
+    val parts = if (hiddenVolume) shown - volume else shown
+    // The room it had: the bar's own, and the gap under it when something followed.
+    val spare = if (!hiddenVolume) 0.dp else VOLUME_ROW_HEIGHT + if (shown.last() != volume) DECK_GAP_AFTER.getValue(volume) else 0.dp
+    val gaps = parts.dropLast(1).map { DECK_GAP_AFTER[it] ?: 8.dp }
+    if (gaps.isEmpty()) return DeckSpacing(parts, gaps, spare)
+    return DeckSpacing(parts, gaps.map { it + spare / gaps.size }, 0.dp)
+}
+
 /**
  * Whether the full-bleed cover is up: in full-bleed mode, once there's a picture to show, this song's or (#244) the
  * last one's while this one loads, or an animated cover.
  */
 internal fun heroTarget(heroMode: Boolean, picture: Boolean, canvas: Boolean): Boolean = heroMode && (picture || canvas)
+
+/**
+ * #250: the player draws the band behind the navigation buttons itself on Android 15 and later ([sdk] 35+), where a
+ * window's navigation bar color is ignored for apps targeting 35+; below that the window's color is the band.
+ */
+internal fun drawsNavBand(sdk: Int, on: Boolean): Boolean = on && sdk >= 35
+
+/** The band's color: dark under the player, light over its White background (as the window's color below Android 15). */
+internal fun navBandColor(light: Boolean): Color = if (light) Color(0x80F2F2F4) else Color(0x801B1B1B)
+
+/**
+ * The band behind three-button navigation (#250, Android 15+): as tall as the buttons' bar, from the tappable-element
+ * insets, which are zero with gesture navigation (its handle isn't tappable), so there's no band there.
+ */
+@Composable
+private fun PlayerNavBand(light: Boolean, modifier: Modifier = Modifier) {
+    val density = LocalDensity.current
+    val buttons = WindowInsets.tappableElement.getBottom(density)
+    if (buttons <= 0) return
+    Box(modifier.fillMaxWidth().height(with(density) { buttons.toDp() }).background(navBandColor(light)).testTag("playerNavBand"))
+}
 
 /**
  * The cover's size: a little smaller while paused when asked, unless the listener chose Reduce motion themselves. A
@@ -289,9 +332,10 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         val previousNavColor = window?.navigationBarColor
         @Suppress("DEPRECATION")
         window?.navigationBarColor = if (navBand) android.graphics.Color.argb(0x80, 0x1b, 0x1b, 0x1b) else android.graphics.Color.TRANSPARENT
-        // Android's own scrim behind three buttons (10+) would put a band back.
+        // Android's own scrim behind three buttons (10+) would put a band back. On 15+ the color above isn't drawn (edge to
+        // edge is enforced) and the player draws its band itself ([PlayerNavBand]), so the system's scrim stays off there.
         val previousEnforced = if (android.os.Build.VERSION.SDK_INT >= 29) window?.isNavigationBarContrastEnforced else null
-        if (android.os.Build.VERSION.SDK_INT >= 29 && !navBand) window?.isNavigationBarContrastEnforced = false
+        if (android.os.Build.VERSION.SDK_INT >= 29 && (!navBand || android.os.Build.VERSION.SDK_INT >= 35)) window?.isNavigationBarContrastEnforced = false
         onDispose {
             if (previous != null) ctl.isAppearanceLightStatusBars = previous
             if (previousNav != null) ctl.isAppearanceLightNavigationBars = previousNav
@@ -1202,7 +1246,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                 // What's on the player (1.8.0): the progress bar and the buttons row can go too.
                                 .filter { it != com.prism.music.data.prefs.DeckPart.SCRUBBER || settings.shows(PlayerPart.PROGRESS) }
                                 .filter { it != com.prism.music.data.prefs.DeckPart.BUTTONS || settings.shows(PlayerPart.BUTTONS) }
-                            parts.forEachIndexed { i, part ->
+                            // #329: what's hidden leaves no hole; the hidden volume bar's room is shared between the gaps.
+                            val spacing = deckSpacing(parts, settings.shows(PlayerPart.VOLUME), small)
+                            spacing.parts.forEachIndexed { i, part ->
                                 when (part) {
                                     com.prism.music.data.prefs.DeckPart.STRIP -> CurrentLyricStrip(lyricsState, isPlaying && !covered, openLyrics)
                                     com.prism.music.data.prefs.DeckPart.SCRUBBER -> PlayheadScrubber(position, pc.duration) {
@@ -1215,9 +1261,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                             isPlaying, buffering, previousEnabled = hasPrevious || pastStart, nextEnabled = hasNext, compact = small, episode = song.isEpisode,
                                             skips = settings.shows(PlayerPart.PREV_NEXT),
                                         )
-                                    // A hidden volume bar keeps its room, so the transport sits where it always has (giving it
-                                    // to a Large / Full width cover in 1.6.4 dropped the controls toward the bottom row).
-                                    com.prism.music.data.prefs.DeckPart.VOLUME -> if (settings.shows(com.prism.music.data.prefs.PlayerPart.VOLUME)) VolumeRow(volume) else Spacer(Modifier.height(VOLUME_ROW_HEIGHT))
+                                    com.prism.music.data.prefs.DeckPart.VOLUME -> VolumeRow(volume)
                                     com.prism.music.data.prefs.DeckPart.BUTTONS -> PlayerActionRow(
                                         lyricsOpen, queueOpen, videoMode, videoAvailable,
                                         onToggleLyrics = { if (lyricsOpen) closeLyrics() else openLyrics() },
@@ -1228,9 +1272,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                     )
                                 }
                                 // The gaps the deck always had after each part (none after the last); Small keeps them tight.
-                                if (i < parts.lastIndex) Spacer(Modifier.height(if (small) 2.dp else DECK_GAP_AFTER[part] ?: 8.dp))
+                                spacing.gaps.getOrNull(i)?.let { Spacer(Modifier.height(it)) }
                             }
-                            Spacer(Modifier.height(if (small) 6.dp else deckGap))
+                            Spacer(Modifier.height((if (small) 6.dp else deckGap) + spacing.below))
                         }
                         val smallDeck = (lyricsOpen || queueOpen) && panelPlayer == com.prism.music.data.prefs.PanelPlayer.SMALL
                         // The device line, with the sleep timer beside it while one is set (on its own when the line is hidden).
@@ -1258,6 +1302,8 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 )
             }
         }
+        // #250 on Android 15 and later, where a window's navigation bar color isn't drawn: the band is the player's own.
+        if (drawsNavBand(android.os.Build.VERSION.SDK_INT, navBand)) PlayerNavBand(inkLight, Modifier.align(Alignment.BottomCenter))
     }
     }
 
