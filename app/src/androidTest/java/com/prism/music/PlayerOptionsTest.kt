@@ -168,10 +168,14 @@ class PlayerOptionsTest {
         val started = System.currentTimeMillis() + 8_000
         while (!Fixture.container.player.isPlaying.value && System.currentTimeMillis() < started) Thread.sleep(200)
         compose.waitForIdle(); Thread.sleep(800)
+        val player = Fixture.container.player
+        val playingOn = player.isPlaying.value
         val on = disc()
         runBlocking { Fixture.container.settings.setPlayRing(false) }
         compose.waitForIdle(); Thread.sleep(600)
         val off = disc()
+        // The glyph swaps with the state (play, pause): the same state in both pictures, or this says nothing about the ring.
+        org.junit.Assume.assumeTrue("the song started or stopped between the pictures (playing $playingOn, then ${player.isPlaying.value})", playingOn == player.isPlaying.value)
         val w = on.width
         val ringR = (w - 14 * density()) / 2f - 1 * density()
         val ring = meanDiff(on, off, ringR)

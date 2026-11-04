@@ -123,7 +123,11 @@ class SpotifyConnectTest {
             compose.waitForIdle()
             Thread.sleep(200)
         }
-        compose.waitForText("Spotify · Not shared by Spotify", 5_000)
+        if (compose.onAllNodes(followedRow).fetchSemanticsNodes().isEmpty()) {
+            val shown = compose.onAllNodes(hasText("", substring = true)).fetchSemanticsNodes()
+                .mapNotNull { it.config.getOrElseNullable(androidx.compose.ui.semantics.SemanticsProperties.Text) { null }?.joinToString() }
+            throw AssertionError("no followed row; followed=${c.spotify.followedShown.value.map { it.id }}; on screen: ${shown.joinToString(" | ").take(1500)}")
+        }
         compose.clickWhenFound(hasText("Emo Forever") and hasClickAction(), 15_000)
         // Its sheet: why, the steps, Open in Spotify, Refresh now, and the TuneMyMusic way.
         compose.waitForText("Spotify only shares the songs of playlists you made.")
