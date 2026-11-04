@@ -176,17 +176,16 @@ class PlayerOptionsTest {
         val off = disc()
         // The glyph swaps with the state (play, pause): the same state in both pictures, or this says nothing about the ring.
         org.junit.Assume.assumeTrue("the song started or stopped between the pictures (playing $playingOn, then ${player.isPlaying.value})", playingOn == player.isPlaying.value)
-        // Both pictures kept for a look when this fails: adb pull <external files>/ring-on.png, ring-off.png.
-        Fixture.context.getExternalFilesDir(null)?.let { dir ->
-            listOf("ring-on" to on, "ring-off" to off).forEach { (name, picture) ->
-                java.io.File(dir, "$name.png").outputStream().use { picture.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it) }
-            }
-        }
         val w = on.width
         val ringR = (w - 14 * density()) / 2f - 1 * density()
         val ring = meanDiff(on, off, ringR)
         val inside = meanDiff(on, off, ringR * 0.75f)
-        assertTrue("the ring's pixels changed ($ring vs $inside inside)", ring > 40f && ring > inside * 3f)
+        // What the two pictures hold across the disc's middle, for when this fails.
+        val across = (0..8).joinToString(" ") { i ->
+            val x = (on.width * i / 8).coerceAtMost(on.width - 1); val y = on.height / 2
+            "%06x/%06x".format(on.getPixel(x, y) and 0xFFFFFF, off.getPixel(x, y) and 0xFFFFFF)
+        }
+        assertTrue("the ring's pixels changed ($ring vs $inside inside; playing $playingOn; ${on.width}x${on.height}, on/off across: $across)", ring > 40f && ring > inside * 3f)
     }
 
     /** #231: the mini player's Fill in your accent instead of the split light, as strong as asked. */
