@@ -317,7 +317,12 @@ class AppContainer(val app: Application) {
     }
     val videoSync by lazy { com.prism.music.playback.VideoSync(app, streamHttp, streams, scope) }
     /** Songs' tempo and edges, for Mix, and their loudness, for normalization. */
-    val mixTempo by lazy { com.prism.music.playback.MixTempo(app, streamHttp, streams, ::audioOnPhone, { yieldToPlaying(null) }, { player.isPlaying.value }, waves) }
+    val mixTempo by lazy {
+        // Phones with few cores (or little memory, or Performance mode on): scans make way while the listener scrolls (#343).
+        val slow = com.prism.music.playback.MixTempo.isSlowPhone(Runtime.getRuntime().availableProcessors(), com.prism.music.data.DevicePower.mayBeSlow(app), false)
+        com.prism.music.playback.MixTempo.slowPhone = { slow || settings.current.performanceMode }
+        com.prism.music.playback.MixTempo(app, streamHttp, streams, ::audioOnPhone, { yieldToPlaying(null) }, { player.isPlaying.value }, waves)
+    }
     /** Songs' loudness outlines, for the waveform progress bar (made by the song scan). */
     val waves by lazy { com.prism.music.data.SongWaves(app) }
 

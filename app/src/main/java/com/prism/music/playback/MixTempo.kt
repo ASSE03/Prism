@@ -368,24 +368,24 @@ class MixTempo(
      * DJ mode's look at a song: its key, tempo and loudness from three stretches of it ([QuickScan]), fetched by range
      * when it isn't on the phone ([network] allowing). A song already scanned for its key is [QuickResult.KEYED] at once.
      */
-    suspend fun quickScan(id: String, network: Boolean): QuickResult {
+    suspend fun quickScan(id: String, network: Boolean, priority: Int = android.os.Process.THREAD_PRIORITY_BACKGROUND): QuickResult {
         if (keyed(id)) return QuickResult.KEYED
         if (id in failed) return QuickResult.FAILED
         // While music plays, one at a time (Reddit 1.7: "DJ mode is so laggy": three decodes beside playback were too
         // much for mid-range phones); while paused, a few at once.
-        return quickGate.withPermit { if (playing()) playingGate.withLock { quickScanNow(id, network) } else quickScanNow(id, network) }
+        return quickGate.withPermit { if (playing()) playingGate.withLock { quickScanNow(id, network, priority) } else quickScanNow(id, network, priority) }
     }
 
     /** One quick scan at a time while music plays ([quickScan]). */
     private val playingGate = kotlinx.coroutines.sync.Mutex()
 
-    private suspend fun quickScanNow(id: String, network: Boolean): QuickResult {
+    private suspend fun quickScanNow(id: String, network: Boolean, priority: Int): QuickResult {
         if (keyed(id)) return QuickResult.KEYED
         return run {
             withContext(Dispatchers.IO) {
                 val started = System.nanoTime()
                 val before = android.os.Process.getThreadPriority(android.os.Process.myTid())
-                android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND)
+                android.os.Process.setThreadPriority(priority)
                 runCatching { yieldToPlaying() }
                 AudioDiagnostics.log("background", "DJ quick scan of $id started")
                 try {
@@ -520,9 +520,13 @@ class MixTempo(
                     File(dir, "mix_${id}_$rate.f32").writeBytes(bb.array())
                 }
             }
+            // The analysis steps are seconds of work each on a slow phone: each waits its turn too ([ease]).
+            ease()
             val bands = VideoSync.bandFeatures(pcm, rate)
             val frameMs = (rate / 100) * 1000.0 / rate
+            ease()
             val key = runCatching { KeyDetector.detect(pcm, rate) }.getOrNull()
+            ease()
             val peakDb = peak.takeIf { it > 0f }?.let { (20 * kotlin.math.log10(it.toDouble())).toFloat() }
             return Scan(Tempo.analyze(bands, frameMs, offsetMs = VideoSync.WINDOW / 2 * 1000.0 / rate), lufs, key, peakDb)
         } finally {
@@ -630,7 +634,49 @@ class MixTempo(
             while (android.os.SystemClock.elapsedRealtime() - lastUnderrunAt < EASE_AFTER_UNDERRUN_MS && waited < MAX_EASE_MS) {
                 Thread.sleep(250); waited += 250
             }
+            // And on a phone with few cores, while the listener scrolls or taps (GitHub #343: a Redmi A3 lagged
+            // scrolling playlists while the next songs were decoded beside it).
+            waited = 0
+            while (waited < MAX_TOUCH_WAIT_MS && stepsAside(slowPhone, touchDown, android.os.SystemClock.uptimeMillis() - touchedAt, urgentScans.get())) {
+                Thread.sleep(100); waited += 100
+            }
         }
+
+        /** Whether this phone's scans make way for the listener's touches: few cores, little memory or Performance mode. */
+        @Volatile var slowPhone: () -> Boolean = { false }
+        @Volatile private var touchDown = false
+        @Volatile private var touchedAt = -TOUCH_QUIET_MS
+        /** Scans the song's end is waiting for (Crossfade near the end of a song): no scan steps aside meanwhile. */
+        private val urgentScans = java.util.concurrent.atomic.AtomicInteger()
+
+        /** Every touch on Prism's screen (MainActivity.dispatchTouchEvent): a volatile write or two, nothing more. */
+        fun touched(action: Int) {
+            touchedAt = android.os.SystemClock.uptimeMillis()
+            when (action) {
+                android.view.MotionEvent.ACTION_DOWN -> touchDown = true
+                android.view.MotionEvent.ACTION_UP, android.view.MotionEvent.ACTION_CANCEL -> touchDown = false
+            }
+        }
+
+        /**
+         * A scan waits while a finger is on the screen and for [TOUCH_QUIET_MS] after the last touch (a fling goes on
+         * after the finger's lifted), on slow phones only, and never while a song's end is waiting for a scan.
+         */
+        internal fun stepsAside(slow: () -> Boolean, down: Boolean, sinceTouchMs: Long, urgent: Int): Boolean =
+            (down || sinceTouchMs < TOUCH_QUIET_MS) && urgent == 0 && slow()
+
+        /** Cores, memory and Performance mode, as [slowPhone] reads them. */
+        internal fun isSlowPhone(cores: Int, mayBeSlow: Boolean, performanceMode: Boolean) = cores <= 4 || mayBeSlow || performanceMode
+
+        /** [block] is a scan a song's end waits for: other scans stop stepping aside for touches until it's done. */
+        internal suspend fun <T> urgently(block: suspend () -> T): T {
+            urgentScans.incrementAndGet()
+            try { return block() } finally { urgentScans.decrementAndGet() }
+        }
+
+        private const val TOUCH_QUIET_MS = 2_000L
+        /** A minute at most per step: a scan still finishes while someone scrolls on and on. */
+        private const val MAX_TOUCH_WAIT_MS = 60_000
 
         private const val EASE_AFTER_UNDERRUN_MS = 4_000L
         /** At most this long per step, so a scan still finishes on a phone that keeps running dry. */

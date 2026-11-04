@@ -49,6 +49,19 @@ A bug-fix update.
 - **The band behind the navigation buttons works on Android 15 and later (#250).** Android 15 ignores the color Prism
   gave it, so "Band behind the navigation buttons" did nothing there; the player draws the band itself now, only behind
   three-button navigation (none with gestures).
+- **Song scans make way for your scrolling on slower phones (#343).** On phones with few cores or little memory, or with
+  Performance mode on, Prism's song scans (loudness and tempo, for Normalize and Crossfade) wait while you touch or scroll
+  the screen and for 2 seconds after. A scan that a Crossfade needs near the end of a song still goes straight on.
+- **DJ mode's head start only runs when the phone is left alone (#343).** While charging on Wi-Fi it scans one song at a
+  time, at the lowest priority, and stops as soon as the screen comes on or music plays. It used to scan three at once.
+- **Opening the player is lighter with animated covers (#343).** The player carries on with the same video decoder
+  instead of making a new one each time it opens: 10 opens used to make 10 decoders, now 1.
+- **No glass work when glass is off (#343).** With Performance mode on or glass turned off, Prism no longer copies the
+  page for glass that isn't drawn.
+- **No see-through glass below Android 12.** Android 9 to 11 have no blur, so the tab bar and mini player are solid there,
+  with no glass work behind them.
+- **Screen readers settle on Android 8 and 9.** A moving background made Prism report a screen change about 4 times a
+  second on every tab, with nothing changing. A still screen now reports nothing.
 
 ## 1.8.1
 

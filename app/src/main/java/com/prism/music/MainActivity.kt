@@ -1,5 +1,6 @@
 package com.prism.music
 
+import com.prism.music.ui.components.quietGraphicsLayers
 import com.prism.music.ui.components.tabTint
 import android.Manifest
 import android.content.Intent
@@ -214,6 +215,7 @@ open class MainActivity : ComponentActivity() {
                 PrismRoot(deepLink)
             }
         }
+        quietGraphicsLayers()
     }
 
     // ---------------------------------------------------------------- Picture-in-picture
@@ -257,6 +259,12 @@ open class MainActivity : ComponentActivity() {
     override fun onUserInteraction() {
         super.onUserInteraction()
         com.prism.music.ui.tv.Idle.touched()
+    }
+
+    /** Every touch: on slow phones background song scans wait while the listener scrolls (#343). */
+    override fun dispatchTouchEvent(ev: android.view.MotionEvent): Boolean {
+        com.prism.music.playback.MixTempo.touched(ev.actionMasked)
+        return super.dispatchTouchEvent(ev)
     }
 
     override fun onUserLeaveHint() {
@@ -619,7 +627,9 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
             }
             Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
                 Box(
-                    Modifier.fillMaxSize().then(underPlayer).nestedScroll(barScroll).hazeSource(haze)
+                    Modifier.fillMaxSize().then(underPlayer).nestedScroll(barScroll)
+                        // The page is copied only when glass will sample it (#343).
+                        .then(if (com.prism.music.ui.theme.glassSamplesThePage(Build.VERSION.SDK_INT, settings.liquidGlass, settings.frostedGlass)) Modifier.hazeSource(haze) else Modifier)
                         .then(if (settings.swipeTabs && !useRail) swipeBetweenTabs(tabs, route, selectTab) else Modifier),
                 ) {
                   CompositionLocalProvider(com.prism.music.ui.components.LocalHiddenByPlayer provides hiddenByPlayer) {
