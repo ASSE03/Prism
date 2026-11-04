@@ -6,6 +6,13 @@ What changed in each release. Older releases are described on the [Releases page
 
 A bug-fix update.
 
+### Update banner
+
+- **The update banner shows up more reliably, on phones and TVs.** Prism now looks for a new version each time it comes
+  to the front (at most hourly): it used to look only when Home was first drawn, and an app that stays open for days
+  might not look again. And when GitHub's service turns the check away, which happens on shared connections (mobile
+  networks, VPNs), Prism reads the version from GitHub's release page instead of quietly showing nothing.
+
 ### Changed
 
 - **Smart Downloads starts off on a new install** (#339). It downloads the songs you're likely to play ahead (up to

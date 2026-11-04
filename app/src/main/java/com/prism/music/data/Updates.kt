@@ -116,9 +116,17 @@ class UpdateChecker(private val context: Context, private val http: OkHttpClient
             // against its hourly limit), so asking every hour costs next to nothing.
             .apply { prefs.getString("etag", null)?.takeIf { _available.value != null || prefs.contains("latest_version") }?.let { header("If-None-Match", it) } }
             .build()
-        http.newCall(req).execute().use { r ->
+        val answer = runCatching { http.newCall(req).execute() }
+        // GitHub's API allows 60 requests an hour per address, and carriers and VPNs share addresses: refused or
+        // unreachable, the release page's own redirect says the same thing with no such limit (1.8.1.1).
+        if (answer.getOrNull()?.let { it.code == 304 || it.isSuccessful } != true) {
+            answer.getOrNull()?.close()
+            if (fetchFromReleasePage()) return
+            answer.exceptionOrNull()?.let { throw it }
+            error(tr(R.string.github_answered, answer.getOrNull()?.code ?: 0))
+        }
+        answer.getOrThrow().use { r ->
             if (r.code == 304) { prefs.edit().putLong("checked_at", System.currentTimeMillis()).apply(); _available.value = saved(); return }
-            if (!r.isSuccessful) error(tr(R.string.github_answered, r.code))
             r.header("ETag")?.let { prefs.edit().putString("etag", it).apply() }
             val json = InnerTube.json.parseToJsonElement(r.body.string())
             val version = json.str("tag_name")?.removePrefix("v")?.trim() ?: error("GitHub's answer had no version")
@@ -128,6 +136,19 @@ class UpdateChecker(private val context: Context, private val http: OkHttpClient
             _available.value = saved()
         }
     }
+
+    /** The latest version from where github.com/…/releases/latest redirects to. False when it can't tell. */
+    private fun fetchFromReleasePage(): Boolean = runCatching {
+        val req = Request.Builder().url("https://github.com/$REPO/releases/latest").header("User-Agent", "Prism/${BuildConfig.VERSION_NAME}").build()
+        http.newBuilder().followRedirects(false).followSslRedirects(false).build().newCall(req).execute().use { r ->
+            val version = versionFromLatestRedirect(r.header("Location")) ?: return@use false
+            prefs.edit().putString("latest_version", version)
+                .putString("latest_url", "https://github.com/$REPO/releases/download/v$version/Prism.apk")
+                .putLong("checked_at", System.currentTimeMillis()).apply()
+            _available.value = saved()
+            true
+        }
+    }.getOrDefault(false)
 
     /** Hides the banner until a version newer than this one comes out. */
     fun dismiss() {
@@ -368,6 +389,11 @@ class UpdateChecker(private val context: Context, private val http: OkHttpClient
         const val CHECK_EVERY_MS = 3_600_000L
 
         fun dueToCheck(now: Long, checkedAt: Long): Boolean = now - checkedAt !in 0 until CHECK_EVERY_MS
+
+        /** "1.8.1" from a redirect to ".../releases/tag/v1.8.1"; null for anywhere else (no release yet, a sign-in page). */
+        fun versionFromLatestRedirect(location: String?): String? =
+            location?.substringAfter("/releases/tag/", "")?.substringBefore('?')?.removePrefix("v")?.trim()
+                ?.takeIf { it.isNotEmpty() && it.first().isDigit() }
 
         /**
          * A tap on the update while one is under way (#278): downloading, nothing new starts; handed to Android's

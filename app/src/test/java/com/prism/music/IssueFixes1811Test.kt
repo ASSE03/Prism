@@ -145,4 +145,20 @@ class IssueFixes1811Test {
         assertNotEquals(navBandColor(light = true), navBandColor(light = false))
         assertEquals(0.5f, navBandColor(light = false).alpha, 0.01f)
     }
+
+    /** The update check's way round GitHub's API limit: the version from where "latest" redirects to. */
+    @Test fun theLatestVersionIsReadFromTheReleasePagesRedirect() {
+        val read = com.prism.music.data.UpdateChecker.Companion::versionFromLatestRedirect
+        assertEquals("1.8.1", read("https://github.com/Yigder/Prism/releases/tag/v1.8.1"))
+        assertEquals("1.8.1.1", read("https://github.com/Yigder/Prism/releases/tag/v1.8.1.1"))
+        assertEquals(null, read("https://github.com/Yigder/Prism/releases"))
+        assertEquals(null, read("https://github.com/login"))
+        assertEquals(null, read(null))
+    }
+
+    @Test fun aHotfixCountsAsNewerThanItsRelease() {
+        assertTrue(com.prism.music.data.UpdateChecker.isNewer("1.8.1.1", "1.8.1"))
+        assertFalse(com.prism.music.data.UpdateChecker.isNewer("1.8.1", "1.8.1.1"))
+        assertFalse(com.prism.music.data.UpdateChecker.isNewer("1.8.1.1", "1.8.1.1"))
+    }
 }

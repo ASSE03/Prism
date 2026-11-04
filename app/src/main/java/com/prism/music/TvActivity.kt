@@ -19,6 +19,12 @@ class TvActivity : ComponentActivity() {
     // Prism's language, when picked in Prism (below Android 13; AppLanguage).
     override fun attachBaseContext(base: android.content.Context) = super.attachBaseContext(AppLanguage.wrap(base))
 
+    // Each time Prism comes to the front (at most hourly): it can stay alive for days, with Home never built again (1.8.1.1).
+    override fun onResume() {
+        super.onResume()
+        container.updates.check()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val c = container

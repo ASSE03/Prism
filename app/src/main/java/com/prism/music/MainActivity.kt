@@ -162,6 +162,12 @@ private const val LOOK_MIME = "application/zip"
 open class MainActivity : ComponentActivity() {
     // Prism's language, when picked in Prism (below Android 13; AppLanguage).
     override fun attachBaseContext(base: android.content.Context) = super.attachBaseContext(com.prism.music.AppLanguage.wrap(base))
+
+    // Each time Prism comes to the front (at most hourly): it can stay alive for days, with Home never built again (1.8.1.1).
+    override fun onResume() {
+        super.onResume()
+        container.updates.check()
+    }
     private val deepLink = MutableStateFlow<Uri?>(null)
 
     private val notificationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
