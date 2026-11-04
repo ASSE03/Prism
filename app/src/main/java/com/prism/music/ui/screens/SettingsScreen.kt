@@ -857,7 +857,8 @@ private fun GlassSettings() {
                 val prefs = LocalContainer.current.settings
                 Group(tr(R.string.glass)) {
                     // 1.8.0: one choice over liquidGlass + glassKind + frostedGlass (LookChoices).
-                    Label(tr(R.string.glass), info = tr(R.string.glass_choice_info))
+                    // #324: says which of Regular and Clear blurs (Glass.kt: Haze's regular glass blurs, its clear one doesn't).
+                    Label(tr(R.string.glass), info = tr(R.string.glass_kinds_info))
                     Chips(GlassChoice.entries, LookChoices.glass(s), { it.label }) { LookChoices.setGlass(prefs, it) }
                     Toggle(tr(R.string.frosted_pages), tr(R.string.pages_frosted_with_their_picture), s.frostedPages, info = tr(R.string.artist_album_and_playlist_pages_sit)) { prefs.setFrostedPages(it) }
                 }
@@ -1612,6 +1613,11 @@ private fun PlayerSettings() {
                 tr(R.string.queue_headings), tr(R.string.played_now_playing_and_up_next), s.view.queueHeadings,
                 info = tr(R.string.off_the_queue_is_one_list),
             ) { prefs.setQueueHeadings(it) }
+            // #275: room in the queue's header; DJ can be one of the player's buttons instead.
+            Toggle(
+                tr(R.string.dj_in_the_queue), tr(R.string.dj_in_the_queue_detail), s.view.queueDjChip,
+                info = tr(R.string.dj_in_the_queue_info),
+            ) { prefs.setQueueDjChip(it) }
         }
         Group(tr(R.string.animated_covers)) {
             Toggle(

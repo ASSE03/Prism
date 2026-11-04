@@ -401,7 +401,8 @@ private fun Color.compositeOverBlack(): Color = Color(red * alpha, green * alpha
 fun ItemCarousel(items: List<BrowseItem>, onClick: (BrowseItem) -> Unit, cardWidth: Dp = Dp.Unspecified) {
     val w = if (cardWidth == Dp.Unspecified) com.prism.music.ui.theme.LocalUi.current.cardWidth else cardWidth
     LazyRow(contentPadding = PaddingValues(horizontal = 14.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        items(items, key = { it.id + it.title }) { item ->
+        // Each once: a shelf listing one twice crashed the row ("Key was already used", #346's kind).
+        items(items.distinctBy { it.id + it.title }, key = { it.id + it.title }) { item ->
             ItemCard(item, width = if (item is SongItem && item.song.isVideo) w * 1.5f else w) { onClick(item) }
         }
     }

@@ -164,7 +164,7 @@ internal fun SearchLanding(
         settings.searchSections.forEach { section ->
             when (section) {
                 SearchSection.RECENT -> {
-                    val items = opened.mapNotNull { o -> o.item()?.let { o to it } }
+                    val items = opened.distinctBy { it.kind + it.id }.mapNotNull { o -> o.item()?.let { o to it } }
                     if (items.isNotEmpty()) {
                         item(key = "opened-h") { SectionHeader(tr(R.string.recently_opened)) }
                         item(key = "opened") {
@@ -197,24 +197,7 @@ internal fun SearchLanding(
                 }
                 SearchSection.MOODS -> {
                     val ranked = (moods.state as? Load.Ok)?.value ?: return@forEach
-                    // "For you" is Prism's own ranking; the groups after it leave out what it already shows.
-                    val shown = HashSet<String>()
-                    val forYou = ranked.picks.take(8).onEach { shown += it.id + "|" + it.params }
-                    val groups = listOf(tr(R.string.for_you) to forYou) + ranked.sections.filterNot { it.first.contains("for you", true) }.map { (title, tiles) ->
-                        title to tiles.filter { shown.add(it.id + "|" + it.params) }.take(6)
-                    }
-                    groups.forEach { (title, tiles) ->
-                        if (tiles.isEmpty()) return@forEach
-                        item(key = "mh:$title") { SectionHeader(if (title == "For you") tr(R.string.moods_genres_for_you) else title, onMore = { nav.go(Routes.MOODS) }) }
-                        tiles.chunked(2).forEachIndexed { i, pair ->
-                            item(key = "m:$title:$i") {
-                                Row(Modifier.padding(horizontal = 16.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                                    pair.forEach { mood -> PrismMoodTile(mood, Modifier.weight(1f)) { onMood(mood) } }
-                                    if (pair.size == 1) Spacer(Modifier.weight(1f))
-                                }
-                            }
-                        }
-                    }
+                    moodSections(moodGroups(ranked, tr(R.string.for_you)), onMore = { nav.go(Routes.MOODS) }, onMood = onMood)
                 }
             }
         }
@@ -222,6 +205,41 @@ internal fun SearchLanding(
             Box(Modifier.fillMaxWidth().padding(top = 18.dp), contentAlignment = Alignment.Center) {
                 PrismTextButton(onClick = { arranging = true }) {
                     Icon(PrismIcons.SwapVertical, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(tr(R.string.arrange_this_page))
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Search's mood groups: Prism's own "For you" ranking ([forYou] = its name in the listener's language) first, then
+ * YouTube's sections, each leaving out what an earlier group already shows.
+ */
+internal fun moodGroups(ranked: com.prism.music.data.RankedCategories, forYou: String): List<Pair<String, List<MoodItem>>> {
+    val shown = HashSet<String>()
+    val picks = ranked.picks.take(8).onEach { shown += it.id + "|" + it.params }
+    // #346: YouTube names its own "For you" section in the listener's language ("Per te"), as Prism's is.
+    val theirs = ranked.sections.filterNot { it.first.contains("for you", true) || it.first.equals(forYou, true) }
+    return listOf(forYou to picks) + theirs.map { (title, tiles) -> title to tiles.filter { shown.add(it.id + "|" + it.params) }.take(6) }
+}
+
+/**
+ * The mood groups as rows of two tiles under their headings. Keyed by the group's place, not its title (#346: two
+ * groups both titled "Per te" crashed Search with "Key was already used").
+ */
+internal fun androidx.compose.foundation.lazy.LazyListScope.moodSections(
+    groups: List<Pair<String, List<MoodItem>>>,
+    onMore: () -> Unit,
+    onMood: (MoodItem) -> Unit,
+) {
+    groups.forEachIndexed { g, (title, tiles) ->
+        if (tiles.isEmpty()) return@forEachIndexed
+        item(key = "mh:$g") { SectionHeader(if (g == 0) tr(R.string.moods_genres_for_you) else title, onMore = onMore) }
+        tiles.chunked(2).forEachIndexed { i, pair ->
+            item(key = "m:$g:$i") {
+                Row(Modifier.padding(horizontal = 16.dp, vertical = 5.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    pair.forEach { mood -> PrismMoodTile(mood, Modifier.weight(1f)) { onMood(mood) } }
+                    if (pair.size == 1) Spacer(Modifier.weight(1f))
                 }
             }
         }

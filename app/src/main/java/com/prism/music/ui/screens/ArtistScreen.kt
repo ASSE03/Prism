@@ -294,7 +294,7 @@ private fun ArtistContent(fromYouTube: ArtistPage, bottomPadding: Dp) {
                 sections.live?.let { s -> item("live") { AppleHeader(tr(R.string.live), more(s)); CardRow(s.items, 260.dp, aspect = 16f / 9f, open = open) } }
                 sections.featured?.let { s -> item("featured") { AppleHeader(tr(R.string.appears_on), more(s)); CardRow(s.items, 150.dp, open = open) } }
                 sections.playlists?.let { s -> item("playlists") { AppleHeader(tr(R.string.artist_playlists), more(s)); CardRow(s.items, 150.dp, open = open) } }
-                sections.others.forEach { shelf -> shelfItems(shelf, open = open) }
+                sections.others.forEachIndexed { place, shelf -> shelfItems(shelf, place = place, open = open) }
                 sections.similar?.let { s -> item("similar") { AppleHeader(tr(R.string.similar_artists), more(s)); CardRow(s.items, 128.dp, round = true, open = open) } }
                 item("about") { AboutCard(page, genre) { showInfo = true } }
             }
@@ -619,7 +619,7 @@ private fun CardRow(items: List<BrowseItem>, width: Dp, aspect: Float = 1f, roun
     val ui = LocalUi.current
     val menu = rememberPlayMenu()
     LazyRow(contentPadding = PaddingValues(horizontal = 20.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-        items(items, key = { it.id + it.title }) { item ->
+        items(items.distinctBy { it.id + it.title }, key = { it.id + it.title }) { item ->
             Column(
                 Modifier.width(width).clip(ui.shape(10.dp))
                     .combinedClickable(onClick = { open(item) }, onLongClick = item.playable()?.let { p -> { menu(p) } }),
@@ -758,21 +758,24 @@ private fun SignatureOption(name: String, label: String, type: com.prism.music.u
  * page), so every song is listed and the page's own title stands for the heading (#69: it showed the first six under
  * an empty heading).
  */
-fun androidx.compose.foundation.lazy.LazyListScope.shelfItems(shelf: Shelf, whole: Boolean = false, open: (BrowseItem) -> Unit) {
+fun androidx.compose.foundation.lazy.LazyListScope.shelfItems(shelf: Shelf, whole: Boolean = false, place: Int = 0, open: (BrowseItem) -> Unit) {
     val songs = shelf.items.filterIsInstance<SongItem>().map { it.song }
+    // Keys carry the shelf's [place] on the page and each row's own: two shelves can share a title, and a shelf can list
+    // a song twice (#346's "Key was already used" crash).
     if (songs.size == shelf.items.size && songs.none { it.isVideo }) {
-        if (!whole) item(key = "h:" + shelf.title) {
+        if (!whole) item(key = "h:$place:" + shelf.title) {
             val nav = LocalNavigator.current
             SectionHeader(shelf.title, onMore = shelf.moreBrowseId?.let { id ->
                 { if (id.startsWith("VL")) nav.go(Routes.playlist(id)) else nav.go(Routes.browse(id, shelf.moreParams, shelf.title)) }
             })
         }
-        items(if (whole) songs else songs.take(6), key = { "s:" + shelf.title + it.id }) { s ->
+        val shown = if (whole) songs else songs.take(6)
+        items(shown.size, key = { i -> "s:$place:$i:" + shown[i].id }) { i ->
             val c = LocalContainer.current
-            SongRow(s) { c.player.playQueue(songs, songs.indexOf(s), QueueSource(QueueKind.OTHER, shelf.title)) }
+            SongRow(shown[i]) { c.player.playQueue(songs, i, QueueSource(QueueKind.OTHER, shelf.title)) }
         }
     } else {
-        item(key = "c:" + shelf.title) {
+        item(key = "c:$place:" + shelf.title) {
             val nav = LocalNavigator.current
             SectionHeader(shelf.title, strapline = shelf.strapline, onMore = shelf.moreBrowseId?.let { id -> { nav.go(Routes.browse(id, shelf.moreParams, shelf.title)) } })
             ItemCarousel(shelf.items, open)
@@ -806,16 +809,16 @@ fun BrowseScreen(id: String, params: String?, title: String, bottomPadding: Dp) 
         when (val s = load.state) {
             Load.Loading -> item { LoadingState() }
             is Load.Err -> item { ErrorState(s.message) { load.reload(false) } }
-            is Load.Ok -> s.value.forEach { shelf ->
+            is Load.Ok -> s.value.forEachIndexed { place, shelf ->
                 when {
                     // An artist's "See all" albums or singles: big covers, two to a row, like YouTube Music's own grid.
                     shelf.grid && shelf.items.count { it is AlbumItem } * 2 > shelf.items.size ->
-                        releaseGrid(shelf, sort, { sort = it }) { nav.open(it, onSong) }
+                        releaseGrid(shelf, place, sort, { sort = it }) { nav.open(it, onSong) }
                     // Any other page of cards ("Mixed for you", a shelf's "See all" playlists): the same big covers
                     // down the page, rather than one sideways carousel.
                     shelf.items.none { it is SongItem } && (shelf.grid || s.value.size == 1) ->
-                        cardGrid(shelf, showTitle = s.value.size > 1) { nav.open(it, onSong) }
-                    else -> shelfItems(shelf, whole = s.value.size == 1) { nav.open(it, onSong) }
+                        cardGrid(shelf, place, showTitle = s.value.size > 1) { nav.open(it, onSong) }
+                    else -> shelfItems(shelf, whole = s.value.size == 1, place = place) { nav.open(it, onSong) }
                 }
             }
         }
@@ -831,7 +834,7 @@ private enum class ReleaseSort(val label: String) { NEWEST(tr(R.string.newest)),
 
 /** A discography as a vertical grid of large covers, with Newest / Oldest / A–Z. */
 private fun androidx.compose.foundation.lazy.LazyListScope.releaseGrid(
-    shelf: Shelf, sort: ReleaseSort, onSort: (ReleaseSort) -> Unit, open: (BrowseItem) -> Unit,
+    shelf: Shelf, place: Int, sort: ReleaseSort, onSort: (ReleaseSort) -> Unit, open: (BrowseItem) -> Unit,
 ) {
     val items = when (sort) {
         ReleaseSort.NEWEST -> Releases.newestFirst(shelf.items)
@@ -841,7 +844,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.releaseGrid(
     // An artist's own discography leaves their name out; a grid of many artists' releases (YouTube's "New releases")
     // needs it, or every card just said "Album".
     val showArtist = shelf.items.mapNotNull { releaseArtist(it) }.distinct().size > 1
-    item(key = "sort:" + shelf.title) {
+    item(key = "sort:$place:" + shelf.title) {
         Row(
             Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically,
@@ -855,7 +858,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.releaseGrid(
         }
     }
     items.chunked(2).forEachIndexed { r, pair ->
-        item(key = "g:${shelf.title}:${sort.name}:$r") {
+        item(key = "g:$place:${shelf.title}:${sort.name}:$r") {
             Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                 pair.forEach { ReleaseCard(it, Modifier.weight(1f), open, showArtist) }
                 if (pair.size == 1) Spacer(Modifier.weight(1f))
@@ -872,10 +875,10 @@ private fun releaseArtist(item: BrowseItem): String? =
         .firstOrNull { it.isNotBlank() && it !in com.prism.music.data.model.RELEASE_KINDS && it != tr(R.string.album) && it != tr(R.string.single) && !(it.length == 4 && it.all(Char::isDigit)) }
 
 /** Playlists, mixes or artists as a vertical grid of large covers, two to a row. */
-private fun androidx.compose.foundation.lazy.LazyListScope.cardGrid(shelf: Shelf, showTitle: Boolean, open: (BrowseItem) -> Unit) {
-    if (showTitle && shelf.title.isNotBlank()) item(key = "gt:" + shelf.title) { SectionHeader(shelf.title, strapline = shelf.strapline) }
+private fun androidx.compose.foundation.lazy.LazyListScope.cardGrid(shelf: Shelf, place: Int, showTitle: Boolean, open: (BrowseItem) -> Unit) {
+    if (showTitle && shelf.title.isNotBlank()) item(key = "gt:$place:" + shelf.title) { SectionHeader(shelf.title, strapline = shelf.strapline) }
     shelf.items.chunked(2).forEachIndexed { r, pair ->
-        item(key = "cg:${shelf.title}:$r") {
+        item(key = "cg:$place:${shelf.title}:$r") {
             Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                 pair.forEach { ReleaseCard(it, Modifier.weight(1f), open) }
                 if (pair.size == 1) Spacer(Modifier.weight(1f))

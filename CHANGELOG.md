@@ -8,6 +8,15 @@ A bug-fix update.
 
 ### Fixes
 
+- **Search no longer closes as it opens** (#346, #330): in some languages Prism's own "For you" moods and YouTube's had
+  the same name, and two headings with one name closed the app. Moods & genres, artist and genre pages, podcasts and
+  Search's lists were made safe the same way.
+- **The Glass setting says what Regular and Clear do** (#324): Regular blurs what's behind it, Clear keeps it sharp
+  with only a light tint (it said "Regular is fuller", which read the other way round).
+- **The DJ button can leave the queue** (#275): Customize Prism → Player → Lyrics and the queue → "DJ button in the
+  queue", for more room at the queue's top. DJ mode can still be one of the player's buttons. On, as before, until
+  turned off.
+
 ## 1.8.1
 
 ### Bring your history
