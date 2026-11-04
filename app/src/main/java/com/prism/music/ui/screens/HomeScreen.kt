@@ -346,6 +346,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
             item { HomeTopBar() }
             item(key = "update") { UpdateBanner() }
             item(key = "performance") { PerformanceOffer() }
+            item(key = "smartDownloads") { SmartDownloadsOffer() }
             if (!online) item(key = "offline") { OfflineNote() }
             if (online && home.state is Load.Loading && shelves.isEmpty()) item { LoadingState() }
             // With the last Home on show, a failed refresh leaves it there (pull to refresh tries again).
@@ -480,6 +481,40 @@ private fun PerformanceOffer() {
         Row(Modifier.align(Alignment.End)) {
             com.prism.music.ui.components.PrismTextButton(onClick = { c.settings.setPerformanceOffered() }) { Text(tr(R.string.no_thanks)) }
             com.prism.music.ui.components.PrismTextButton(onClick = { c.settings.setPerformanceMode(true) }) { Text(tr(R.string.turn_on)) }
+        }
+    }
+}
+
+/**
+ * Once, after setting up (#339, 1.8.1.1): Smart Downloads is off on a new install, so Home offers it. Either answer puts
+ * the card away for good (Downloads, storage & data has the switch); it never shows to anyone who had it before.
+ */
+@Composable
+private fun SmartDownloadsOffer() {
+    val c = LocalContainer.current
+    val settings = LocalAppSettings.current
+    var answered by remember { mutableStateOf<Boolean?>(null) }
+    LaunchedEffect(Unit) { answered = c.settings.smartDownloadsChosen() }
+    if (answered != false || !settings.onboarded) return
+    val ui = com.prism.music.ui.theme.LocalUi.current
+    val answer = { on: Boolean -> c.settings.setSmartDownloads(on); answered = true }
+    Column(
+        Modifier.padding(start = 16.dp, end = 16.dp, top = ui.gap(14.dp)).fillMaxWidth().pane(ui.shape(16.dp)).padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 4.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(PrismIcons.Download, null, tint = MaterialTheme.colorScheme.onSurface)
+            Spacer(Modifier.width(14.dp))
+            Column(Modifier.weight(1f)) {
+                Text(tr(R.string.smart_downloads_offer_title), style = MaterialTheme.typography.titleSmall)
+                Text(
+                    tr(R.string.smart_downloads_offer_body),
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+        Row(Modifier.align(Alignment.End)) {
+            com.prism.music.ui.components.PrismTextButton(onClick = { answer(false) }) { Text(tr(R.string.not_now)) }
+            com.prism.music.ui.components.PrismTextButton(onClick = { answer(true) }) { Text(tr(R.string.turn_on)) }
         }
     }
 }

@@ -6,6 +6,12 @@ What changed in each release. Older releases are described on the [Releases page
 
 A bug-fix update.
 
+### Changed
+
+- **Smart Downloads starts off on a new install** (#339). It downloads the songs you're likely to play ahead (up to
+  1 GB, on Wi-Fi), so it now asks first: Home offers it once after setting up. If you already use Prism nothing
+  changes: it stays on, or off, as you had it.
+
 ### Fixes
 
 - **Search no longer closes as it opens** (#346, #330): in some languages Prism's own "For you" moods and YouTube's had

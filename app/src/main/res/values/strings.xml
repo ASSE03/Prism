@@ -4655,4 +4655,6 @@
     <string name="imp_turn_on">Turn on</string>
     <string name="imp_not_brought_in">Not brought in yet</string>
     <string name="imp_live_no_plays">On. No plays yet</string>
+    <string name="smart_downloads_offer_title">Download songs before you need them?</string>
+    <string name="smart_downloads_offer_body">Smart Downloads keeps the songs you\'re likely to play ready offline: up to 1 GB, on Wi-Fi. Change it any time in Downloads, storage &amp; data.</string>
 </resources>

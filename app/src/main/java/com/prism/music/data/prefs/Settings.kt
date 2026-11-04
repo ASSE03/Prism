@@ -1319,8 +1319,11 @@ data class AppSettings(
     val cacheSizeMb: Int = 4096,
     val downloadWifiOnly: Boolean = true,
     val downloadLikes: Boolean = true,
-    /** Smart Downloads' picks: the songs you're most likely to play are downloaded ahead. */
-    val smartDownloads: Boolean = true,
+    /**
+     * Smart Downloads' picks: the songs you're most likely to play are downloaded ahead. Off on a new install (#339,
+     * 1.8.1.1: Home offers it once); listeners who had it on before keep it ([addNewHomeSections]).
+     */
+    val smartDownloads: Boolean = false,
     /** Space smart downloads may fill, in GB (before 1.6.3; now part of [offlineGb]). */
     val smartDownloadGb: Float = 1f,
     /**
@@ -2592,7 +2595,25 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         once("home_replay_top") { HomeSections.replayOnTop(it) }
         // The holiday mixes' section (1.8.0), after Quick picks: it only shows in November and December.
         once("home_holiday_1_8") { HomeSections.withNewSections(it, listOf(HomeSectionConfig(HomeSections.SEASONAL, "Holiday music"))) }
+        keepSmartDownloads(p)
     }
+
+    companion object {
+        private val smartDownloadsKept = booleanPreferencesKey("smart_downloads_kept_1811")
+
+        /**
+         * Once (#339, 1.8.1.1): Smart Downloads became off by default for new installs. Someone already using Prism
+         * (set up or signed in) who never touched the switch had it on by the old default, so it's written down as on.
+         */
+        internal fun keepSmartDownloads(p: MutablePreferences) {
+            if (p[smartDownloadsKept] == true) return
+            if (p[K.smartDownloads] == null && (p[K.onboarded] == true || !p[K.cookie].isNullOrBlank())) p[K.smartDownloads] = true
+            p[smartDownloadsKept] = true
+        }
+    }
+
+    /** Whether the listener has an answer for Smart Downloads (#339): Home offers it once until they do. */
+    suspend fun smartDownloadsChosen(): Boolean = context.dataStore.data.first()[K.smartDownloads] != null
 
     suspend fun saveAccount(cookie: String, visitorData: String, dataSyncId: String) = editNow {
         it[K.cookie] = cookie
