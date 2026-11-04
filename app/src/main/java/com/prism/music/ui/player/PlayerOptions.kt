@@ -42,6 +42,7 @@ import com.prism.music.data.prefs.menuLayout
 import com.prism.music.ui.LocalNavigator
 import com.prism.music.ui.Routes
 import com.prism.music.ui.components.ActionGroup
+import com.prism.music.data.shown
 import com.prism.music.ui.components.ActionHeader
 import com.prism.music.ui.components.ActionItem
 import com.prism.music.ui.components.ActionSheet
@@ -157,7 +158,7 @@ fun PlayerOptionsSheet(
             statsItem,
         )
         ActionSheet(com.prism.music.data.PlaylistCovers.artOf(song), onDismiss) { close ->
-            ActionHeader(com.prism.music.data.PlaylistCovers.artOf(song), song.title, song.artistText) {
+            ActionHeader(com.prism.music.data.PlaylistCovers.artOf(song), song.shown.title, song.shown.artistText) {
                 SheetIconButton(PrismIcons.Share, tr(R.string.share)) { sharing = true }
             }
             // An episode has no radio and goes in no playlist: download and sleep.
@@ -189,7 +190,7 @@ fun PlayerOptionsSheet(
     put(MenuAction.ADD_TO_PLAYLIST, ActionItem(PrismIcons.PlaylistAdd, tr(R.string.add_to_playlist), keepOpen = true) { pickPlaylist = true })
     if (!local) put(MenuAction.RADIO, ActionItem(PrismIcons.Radio, tr(R.string.start_radio)) { c.player.playRadio(song) })
     if (!local) put(MenuAction.DOWNLOAD, downloadItem)
-    put(MenuAction.ALBUM, song.album?.id?.let { id -> ActionItem(PrismIcons.Album, tr(R.string.go_to_album)) { onCollapse(); nav.go(Routes.album(id)) } })
+    put(MenuAction.ALBUM, song.shown.album?.id?.let { id -> ActionItem(PrismIcons.Album, tr(R.string.go_to_album)) { onCollapse(); nav.go(Routes.album(id)) } })
     com.prism.music.ui.components.goToArtists(song) { route -> onCollapse(); nav.go(route) }.takeIf { it.isNotEmpty() }?.let { items[MenuAction.ARTIST] = it }
     if (!song.isEpisode && !local && !song.isLive) put(MenuAction.CREDITS, ActionItem(PrismIcons.Info, tr(R.string.song_credits), keepOpen = true) { credits = true })
     // Another recording in its place (Reddit 1.7.9: an album song played as someone's cover).
@@ -282,7 +283,7 @@ fun PlayerOptionsSheet(
     val layout = settings.view.parts.menuLayout(items.keys, settings.menuFolds())
     var moreOpen by remember { mutableStateOf(false) }
     ActionSheet(com.prism.music.data.PlaylistCovers.artOf(song), onDismiss) { close ->
-        ActionHeader(com.prism.music.data.PlaylistCovers.artOf(song), song.title, song.artistText) {
+        ActionHeader(com.prism.music.data.PlaylistCovers.artOf(song), song.shown.title, song.shown.artistText) {
             SheetIconButton(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) tr(R.string.remove_from_liked) else tr(R.string.widget_like), active = isLiked) {
                 c.library.toggleLike(song)
             }
