@@ -240,6 +240,8 @@ fun SongRowLayout(
     val scheme = MaterialTheme.colorScheme
     val ui = com.prism.music.ui.theme.LocalUi.current
     val art = ui.songArt
+    // #328: shown as the version picked to play in its place, if any.
+    @Suppress("NAME_SHADOWING") val song = com.prism.music.data.SongVersions.shownOf(song)
     val pageMark = if (com.prism.music.ui.theme.LocalAppSettings.current.view.playingInPageColor) LocalPageColor.current else null
     Row(
         modifier
@@ -636,6 +638,8 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
     var cover by remember { mutableStateOf(false) }
     if (cover) { CoverPickSheet(CoverFor.OfSong(song, c.covers.songKey(song.id))) { cover = false; onDismiss() }; return }
 
+    // #328: as the version picked to play in its place, if any (the actions still act on the song itself).
+    val shown = com.prism.music.data.SongVersions.shownOf(song)
     // In someone's Listen Together session, songs go into their queue.
     val quick = listOf(
         if (guest != null) ActionItem(PrismIcons.Groups, tr(R.string.play_next)) { c.together.suggest(song, next = true); toast(tr(R.string.sent_to, guest.hostName)) }
@@ -657,8 +661,9 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
         if (song.isEpisode && song.id in c.episodes.played.value) ActionItem(PrismIcons.Refresh, tr(R.string.mark_as_unplayed)) { c.episodes.forget(song.id); c.episodes.unmarkPlayed(song.id) }
         else if (song.isEpisode) ActionItem(PrismIcons.DoneAll, tr(R.string.mark_as_played)) { c.episodes.markPlayed(song.id) } else null,
         ActionItem(PrismIcons.PlaylistAdd, tr(R.string.add_to_playlist), keepOpen = true) { pickPlaylist = true },
-        song.album?.id?.let { id -> ActionItem(PrismIcons.Album, tr(R.string.go_to_album), value = song.album?.title?.takeIf { it.length <= 22 }) { nav.go(Routes.album(id)) } },
-    ) + goToArtists(song) { route -> nav.go(route) } + listOfNotNull(
+        // A picked version's album and artists (#328): it plays as that recording.
+        shown.album?.id?.let { id -> ActionItem(PrismIcons.Album, tr(R.string.go_to_album), value = shown.album?.title?.takeIf { it.length <= 22 }) { nav.go(Routes.album(id)) } },
+    ) + goToArtists(shown) { route -> nav.go(route) } + listOfNotNull(
         // Who performed, wrote and produced it (Reddit 1.7).
         if (song.isEpisode || local || song.isLive) null else ActionItem(PrismIcons.Info, tr(R.string.song_credits), keepOpen = true) { credits = true },
     )
@@ -687,8 +692,8 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
     val songArt = c.covers.art(song)
     ActionSheet(songArt, onDismiss) { close ->
         ActionHeader(
-            songArt, song.title,
-            listOfNotNull(song.artistText, formatDuration(song.durationSec).takeIf { it.isNotEmpty() }).joinToString(" · "),
+            songArt, shown.title,
+            listOfNotNull(shown.artistText, formatDuration(shown.durationSec).takeIf { it.isNotEmpty() }).joinToString(" · "),
             placeholderIcon = PrismIcons.Song,
         ) {
             SheetIconButton(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) tr(R.string.remove_from_liked_songs) else tr(R.string.add_to_liked_songs), active = isLiked) {

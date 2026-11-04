@@ -218,7 +218,8 @@ object Widgets {
 
     private fun views(context: Context, style: WidgetStyle, s: State, art: Art?, o: WidgetOptions = WidgetOptions()): RemoteViews {
         val v = RemoteViews(context.packageName, style.layout)
-        val song = s.song
+        // As the version picked to play in its place (#328).
+        val song = s.song?.let { com.prism.music.data.SongVersions.shownOf(it) }
         v.setTextViewText(R.id.widget_title, song?.title ?: com.prism.music.tr(R.string.widget_nothing))
         v.setTextViewText(R.id.widget_artist, song?.artistText ?: com.prism.music.tr(R.string.widget_tap_to_play))
         val cover = art?.square?.get(style)

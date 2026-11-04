@@ -1470,11 +1470,22 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         if (!findingSongs.add(video.id)) return
         scope.launch {
             try {
-                val song = c.player.songFor(video) ?: return@launch
-                if (!c.network.online.value && !c.availableOffline(song.id)) return@launch
-                val at = (0 until player.mediaItemCount).firstOrNull {
+                fun queued() = (0 until player.mediaItemCount).firstOrNull {
                     it != player.currentMediaItemIndex && player.getMediaItemAt(it).let { m -> m.mediaId == video.id && m.videoModeId == null }
-                } ?: return@launch
+                }
+                val song = c.player.songFor(video) ?: run {
+                    // #328: no song of its length, so its own sound plays; its song's cover and album are there from
+                    // the start, not seconds after it begins ([songCoverForVideo]). Same address: nothing reloads.
+                    if (c.versions.of(video.id) != null) return@launch
+                    val found = runCatching { withContext(Dispatchers.IO) { c.ytm.songForVideo(video, anyLength = true) } }.getOrNull() ?: return@launch
+                    val cover = found.thumbnail?.takeIf { it != video.thumbnail } ?: return@launch
+                    val at = queued() ?: return@launch
+                    val now = player.getMediaItemAt(at).toSong() ?: return@launch
+                    player.replaceMediaItem(at, VideoCover.withSong(now, found, cover).toMediaItem())
+                    return@launch
+                }
+                if (!c.network.online.value && !c.availableOffline(song.id)) return@launch
+                val at = queued() ?: return@launch
                 player.replaceMediaItem(at, song.toMediaItem())
             } finally {
                 findingSongs.remove(video.id)
@@ -1636,6 +1647,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     private fun songCoverForVideo(song: Song) {
         if (!song.isVideo || song.isLive || song.isLocal || song.isEpisode || song.isUpload) return
+        // A version picked to play in its place shows as that one already (#328).
+        if (c.versions.of(song.id) != null) return
         val item = player.currentMediaItem ?: return
         // A video found as a song's video already shows its song's cover; a video with no song found when it was
         // tapped (PlayerConnection.playQueue waits 4 s for it) is the item itself, shown as its video or, after Song, as its sound.
@@ -1645,13 +1658,14 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             // only for the cover, so it's never kept as the song to play in its place.
             val found = c.player.songFor(song) ?: runCatching { withContext(Dispatchers.IO) { c.ytm.songForVideo(song, anyLength = true) } }.getOrNull()
             android.util.Log.i("PrismVideo", "cover for video ${song.id} \"${song.title}\": song ${found?.id} ${found?.thumbnail}")
-            val cover = found?.thumbnail?.takeIf { it != song.thumbnail } ?: return@launch
+            if (found == null) return@launch
+            val cover = found.thumbnail?.takeIf { it != song.thumbnail } ?: return@launch
             val idx = player.currentMediaItemIndex
             val now = player.currentMediaItem
             // Still this video; its picture or sound goes on as it is (the same address: same video mode).
             if (now?.mediaId != song.id) return@launch
             val current = now.toSong() ?: return@launch
-            swapInPlace(idx, current.copy(thumbnail = cover).toMediaItem(now.videoModeId))
+            swapInPlace(idx, VideoCover.withSong(current, found, cover).toMediaItem(now.videoModeId))
         }
     }
 

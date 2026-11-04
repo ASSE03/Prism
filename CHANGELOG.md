@@ -8,6 +8,12 @@ A bug-fix update.
 
 ### Fixes
 
+- **Play a different version shows the version you picked (#328).** Its cover, title, artists, album (the player's
+  album link too) and length now show wherever the song does: the player, the mini player, the queue, lists, the song
+  menu, the notification, Android Auto and widgets. The song is still the one you liked, saved and played; "Use the
+  original" puts everything back. A music video that plays as itself (no song of its length) gets its song's cover
+  before it starts, and its song's album.
+
 ## 1.8.1
 
 ### Bring your history

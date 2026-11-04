@@ -17,3 +17,15 @@ object AlbumFill {
         return song.copy(album = album)
     }
 }
+
+/**
+ * A music video playing as its own sound (no song of its length was found to play in its place) shows its song's cover
+ * once that's found (Reddit 1.7.9); #328: its song's album too, when the video has none, so the player's title and
+ * "Go to album" lead to it. Its title, artists and length stay the video's: that's what plays.
+ */
+object VideoCover {
+    fun withSong(video: Song, song: Song, cover: String): Song = video.copy(
+        thumbnail = cover,
+        album = video.album?.takeIf { it.id != null } ?: song.album?.takeIf { it.id != null && it.title.isNotBlank() } ?: video.album,
+    )
+}

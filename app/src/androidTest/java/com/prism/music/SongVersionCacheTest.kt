@@ -119,6 +119,45 @@ class SongVersionCacheTest {
         instrumentation.runOnMainSync { player.stop() }
     }
 
+    /**
+     * #328: a version picked for the song playing shows in its place in the session (the notification, the car,
+     * widgets) at once, while the queue still holds the song itself; "Use the original" puts it back.
+     */
+    @Test fun aPickedVersionShowsInTheSession() {
+        Fixture.ready()
+        Fixture.launch()
+        val c = Fixture.container
+        val song = Fixture.songs(1).first()
+        CacheWriter(
+            CacheDataSource(c.playerCache, ByteArrayDataSource(wav(60))),
+            DataSpec.Builder().setUri("prism://audio/${song.id}").setKey(song.id).build(), null, null,
+        ).cache()
+        val player = c.player
+        val instrumentation = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation()
+        instrumentation.runOnMainSync {
+            player.playQueue(listOf(song), 0, com.prism.music.playback.QueueSource(com.prism.music.playback.QueueKind.OTHER, "Version test"))
+        }
+        fun title(): String? { var t: String? = null; instrumentation.runOnMainSync { t = player.player?.currentMediaItem?.mediaMetadata?.title?.toString() }; return t }
+        fun waitFor(want: String) { val end = System.currentTimeMillis() + 10_000; while (System.currentTimeMillis() < end && title() != want) Thread.sleep(200) }
+        waitFor(song.title)
+        val version = com.prism.music.data.model.Song(
+            "tst_other_1", "${song.title} (Studio)", listOf(com.prism.music.data.model.ArtistRef("Test Artist")),
+            com.prism.music.data.model.AlbumRef("Test Album", "MPREb_test"), 181,
+        )
+        try {
+            c.pickVersion(song, SongVersions.Pick(version.id, "Test Artist · Test Album · 3:01", version))
+            waitFor(version.title)
+            assertEquals("the session shows the version", version.title, title())
+            assertEquals("the queue still holds the song", song.id, player.currentSong.value?.id)
+            assertEquals(version.title, com.prism.music.data.SongVersions.shownOf(song).title)
+        } finally {
+            c.pickVersion(song, null)
+        }
+        waitFor(song.title)
+        assertEquals("back as itself", song.title, title())
+        instrumentation.runOnMainSync { player.stop() }
+    }
+
     /** A WAV of [seconds] of silence the player reads (8 kHz mono). */
     private fun wav(seconds: Int): ByteArray {
         val rate = 8_000

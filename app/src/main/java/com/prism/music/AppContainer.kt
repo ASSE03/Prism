@@ -607,6 +607,8 @@ class AppContainer(val app: Application) {
         soundFrom.remove(song.id)
         com.prism.music.playback.AudioDiagnostics.log("song", "${song.id} plays as ${pick?.id ?: "itself"} from now on (picked by the listener)")
         scope.launch(Dispatchers.Main) {
+            // #328: the queue's copies of it show the version (or the song again) in the notification, the car and widgets.
+            player.refreshCovers { it.id == song.id }
             player.reloadIfCurrent(song.id) {
                 kotlinx.coroutines.withContext(Dispatchers.IO) {
                     mixTempo.forget(song.id)

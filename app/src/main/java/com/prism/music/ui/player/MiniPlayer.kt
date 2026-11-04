@@ -240,7 +240,9 @@ fun MiniPlayer(
                 transitionSpec = { (slideInHorizontally { it / 3 } + fadeIn()) togetherWith (slideOutHorizontally { -it / 3 } + fadeOut()) },
                 modifier = Modifier.weight(1f),
                 label = "mini",
-            ) { song ->
+            ) { playing ->
+                // #328: as the version picked to play in its place, if any.
+                val song = com.prism.music.data.SongVersions.shownOf(playing)
                 Column {
                     Text(song.title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleSmall)
                     if (style != MiniPlayerStyle.SLIM || song.artistText.isNotBlank()) Text(

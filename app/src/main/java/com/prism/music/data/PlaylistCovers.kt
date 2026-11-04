@@ -53,9 +53,10 @@ class PlaylistCovers(private val context: Context) {
 
     /**
      * #305: the picture to show for [song] wherever it shows: the one picked for it, else the one picked for its album,
-     * else its own. Read in a composable, it follows a change at once.
+     * else the cover of the version picked to play in its place (#328), else its own. Read in a composable, it follows a
+     * change at once.
      */
-    fun art(song: com.prism.music.data.model.Song): String? = picked(song) ?: song.thumbnail
+    fun art(song: com.prism.music.data.model.Song): String? = picked(song) ?: SongVersions.shared?.coverOf(song.id) ?: song.thumbnail
 
     /** The cover picked for [song] (or its album), if any. */
     fun picked(song: com.prism.music.data.model.Song): String? =

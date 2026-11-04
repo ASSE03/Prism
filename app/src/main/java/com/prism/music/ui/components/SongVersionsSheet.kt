@@ -91,7 +91,8 @@ fun SongVersionsSheet(song: Song, onDismiss: () -> Unit) {
                 r.getOrThrow().isEmpty() -> Quiet(tr(R.string.youtube_has_no_other_version_of))
                 else -> r.getOrThrow().forEach { v ->
                     VersionRow(v, if (SongVersions.sameRecording(song, v)) tr(R.string.another_upload) else null, picked == v.id, Modifier.testTag("version:${v.id}")) {
-                        choose(SongVersions.Pick(v.id, versionLabel(v)))
+                        // The version itself is kept too: the song shows as it from now on (#328).
+                        choose(SongVersions.Pick(v.id, versionLabel(v), v))
                     }
                 }
             }
