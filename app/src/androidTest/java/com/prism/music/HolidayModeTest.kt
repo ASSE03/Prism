@@ -65,7 +65,8 @@ class HolidayModeTest {
     @Test fun turnOnPutsTheSeasonsLookOn() {
         Fixture.launch()
         compose.waitUntil(20_000) { dialogShown() }
-        compose.onAllNodes(hasText("Turn on") and hasClickAction()).onFirst().performClick()
+        // The dialog's own: Home's Smart Downloads card (1.8.1.1) has a "Turn on" too.
+        compose.onAllNodes(hasText("Turn on") and hasClickAction() and androidx.compose.ui.test.hasAnyAncestor(androidx.compose.ui.test.isDialog())).onFirst().performClick()
         compose.waitUntil(10_000) { Fixture.container.looks.currentId.value == "harvest" }
         assertEquals("s:HARVEST", Fixture.container.settings.lookValues.value["spectrum_preset"])
         assertTrue(SeasonPrompt.key(Season.HARVEST, november) in SeasonPrompt.asked(Fixture.context))
