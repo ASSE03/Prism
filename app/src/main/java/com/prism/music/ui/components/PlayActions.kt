@@ -167,9 +167,10 @@ fun PlayActionsSheet(target: Playable, extra: List<SheetItem> = emptyList(), ext
 
     /** The whole list after the current song ([next]) or at the end of the queue. */
     fun queue(next: Boolean) = queuePlayable(c, context, target, title, next)
-    val quick = if (item is ArtistItem) listOf(
+    val quick = if (item is ArtistItem) listOfNotNull(
         ActionItem(PrismIcons.Shuffle, tr(R.string.shuffle)) { play(shuffle = true) },
-        ActionItem(PrismIcons.Radio, tr(R.string.mix_2)) { play(shuffle = false, mix = true) },
+        // YouTube makes no mix of what's only yours.
+        ActionItem(PrismIcons.Radio, tr(R.string.mix_2)) { play(shuffle = false, mix = true) }.takeUnless { com.prism.music.data.innertube.Parser.isUploadArtist(item.id) },
     ) else listOf(
         ActionItem(PrismIcons.Play, tr(R.string.widget_play)) { play(shuffle = false) },
         ActionItem(PrismIcons.Shuffle, tr(R.string.shuffle)) { play(shuffle = true) },
@@ -404,7 +405,10 @@ private suspend fun songsFor(c: AppContainer, target: Playable, shuffle: Boolean
                 QueueSource(QueueKind.PLAYLIST, item.title, originId = item.id.removePrefix("VL"), page = item)
         is ArtistItem -> {
             val a = c.ytm.artist(item.id)
-            if (shuffle && !mix && a.shufflePlaylistId != null) radio(c, a.shuffleVideoId, a.shufflePlaylistId, a.shuffleParams, a.name)
+            // Your own upload has no list of YouTube's to shuffle: their songs, here (playPlayable leaves an artist's order as it comes).
+            if (com.prism.music.data.innertube.Parser.isUploadArtist(item.id)) a.shelves.flatMap { it.items }.filterIsInstance<SongItem>().map { it.song }
+                .let { songs -> (if (shuffle) songs.shuffled() else songs) to QueueSource(QueueKind.LIBRARY, a.name) }
+            else if (shuffle && !mix && a.shufflePlaylistId != null) radio(c, a.shuffleVideoId, a.shufflePlaylistId, a.shuffleParams, a.name)
             else radio(c, a.radioVideoId, a.radioPlaylistId ?: throw java.io.IOException(tr(R.string.no_mix)), a.radioParams, tr(R.string.mix, a.name))
         }
         else -> emptyList<Song>() to QueueSource(QueueKind.OTHER, item.title)

@@ -3,7 +3,9 @@ package com.prism.music.data
 import android.content.Context
 import com.prism.music.AppContainer
 import com.prism.music.data.model.AlbumItem
+import com.prism.music.data.innertube.Parser
 import com.prism.music.data.model.ArtistItem
+import com.prism.music.data.model.BrowseItem
 import com.prism.music.data.model.Song
 import com.prism.music.data.prefs.LibraryTile
 import com.prism.music.playback.AudioDiagnostics
@@ -31,7 +33,7 @@ class Uploads(private val c: AppContainer) {
         data object Idle : State
         /** Nothing to show yet. */
         data object Loading : State
-        /** What's in [lists]; [more]: the rest of the songs are still coming. */
+        /** What's in [lists]; [more]: the rest is still coming, or was left off or didn't come, so the next look asks again. */
         data class Ready(val more: Boolean) : State
         data class Failed(val message: String) : State
     }
@@ -83,15 +85,17 @@ class Uploads(private val c: AppContainer) {
 
     /**
      * Lists everything, the first songs as soon as they're in and the rest behind them. Offline, or when asking fails,
-     * the lists as last kept. Albums and artists YouTube won't list are read from the songs.
+     * the lists as last kept. Albums and artists YouTube won't list are read from the songs. A list that stopped on a
+     * failure isn't kept: it would replace a fuller copy.
      */
     suspend fun load(force: Boolean = false): Unit = withContext(Dispatchers.IO) {
         if (!c.settings.current.isLoggedIn) { state.value = State.Idle; lists.value = Lists(); return@withContext }
-        if (!loading.tryLock()) return@withContext
+        // A visit waits for a look that's still letting go (its page was left a moment ago), then reads on from there.
+        if (force) { if (!loading.tryLock()) return@withContext } else loading.lock()
         try {
             // Another account's lists don't stay on show.
             if (listedFor != account()) { lists.value = Lists(); state.value = State.Idle }
-            if (!force && state.value is State.Ready) return@withContext
+            if (!force && (state.value as? State.Ready)?.more == false) return@withContext
             listedFor = account()
             val kept = c.offline.uploads()
             if (kept != null) lists.value = Lists(kept.songs, kept.albums, kept.artists)
@@ -102,8 +106,8 @@ class Uploads(private val c: AppContainer) {
             if (kept == null) state.value = State.Loading
             val account = account()
             coroutineScope {
-                val albums = async { runCatching { c.ytm.uploadedAlbums() }.onSuccess { noted("albums", it.rows, it.items.size) }.onFailure { log("albums failed: ${it.javaClass.simpleName}: ${it.message}") }.getOrNull()?.items.orEmpty() }
-                val artists = async { runCatching { c.ytm.uploadedArtists() }.onSuccess { noted("artists", it.rows, it.items.size) }.onFailure { log("artists failed: ${it.javaClass.simpleName}: ${it.message}") }.getOrNull()?.items.orEmpty() }
+                val albums = async { runCatching { c.ytm.uploadedAlbums() }.onSuccess { noted("albums", it.rows, it.items.size) }.onFailure { log("albums failed: ${it.javaClass.simpleName}: ${it.message}") }.getOrNull() }
+                val artists = async { runCatching { c.ytm.uploadedArtists() }.onSuccess { noted("artists", it.rows, it.items.size) }.onFailure { log("artists failed: ${it.javaClass.simpleName}: ${it.message}") }.getOrNull() }
                 var page = try {
                     c.ytm.uploadedSongsPage()
                 } catch (e: Exception) {
@@ -115,24 +119,47 @@ class Uploads(private val c: AppContainer) {
                 noted("songs", page.rows, page.items.size)
                 val songs = page.items.toMutableList()
                 lists.value = Lists(songs.toList(), kept?.albums.orEmpty(), kept?.artists.orEmpty())
-                state.value = State.Ready(page.next != null)
+                state.value = State.Ready(true)
                 var pages = 1
+                var stopped = false
                 while (page.next != null && songs.size < OfflineLibrary.MAX_UPLOADS && pages++ < MAX_PAGES) {
-                    page = runCatching { c.ytm.uploadedSongsPage(page.next) }.getOrNull() ?: break
+                    page = try {
+                        c.ytm.uploadedSongsPage(page.next)
+                    } catch (e: Exception) {
+                        if (e is CancellationException) throw e
+                        log("songs stopped at ${songs.size}: ${e.javaClass.simpleName}: ${e.message}")
+                        stopped = true
+                        break
+                    }
                     songs += page.items
                     lists.value = lists.value.copy(songs = songs.distinctBy { it.id })
                 }
                 val all = songs.distinctBy { it.id }
-                val final = Lists(all, albums.await().ifEmpty { LibraryRepository.albumsFrom(all) }, artists.await().ifEmpty { LibraryRepository.artistsFrom(all) })
+                val albumRows = albums.await()
+                val artistRows = artists.await()
+                val final = Lists(
+                    // What was kept that this look didn't reach stays on show until one does.
+                    if (stopped) (all + kept?.songs.orEmpty()).distinctBy { it.id } else all,
+                    settled(albumRows, kept?.albums) { LibraryRepository.albumsFrom(all) },
+                    settled(artistRows, kept?.artists) { LibraryRepository.artistsFrom(all) },
+                )
+                val whole = !stopped && albumRows?.next == null && artistRows?.next == null
                 lists.value = final
-                state.value = State.Ready(false)
+                state.value = State.Ready(!whole)
                 found(account, all.isNotEmpty())
-                c.offline.saveUploads(final.songs, final.albums, final.artists)
-                log("listed ${final.songs.size} songs, ${final.albums.size} albums, ${final.artists.size} artists")
+                if (whole) c.offline.saveUploads(final.songs, final.albums, final.artists)
+                log("listed ${final.songs.size} songs, ${final.albums.size} albums, ${final.artists.size} artists" + if (whole) "" else ", not all of it")
             }
         } finally {
             loading.unlock()
         }
+    }
+
+    /** A list as it came: read from the songs when YouTube lists none; what was kept, if asking failed or stopped partway. */
+    private fun <T : BrowseItem> settled(rows: Parser.UploadRows<T>?, kept: List<T>?, fromSongs: () -> List<T>): List<T> = when {
+        rows == null -> kept.orEmpty().ifEmpty(fromSongs)
+        rows.next != null -> (rows.items + kept.orEmpty()).distinctBy { it.id }
+        else -> rows.items.ifEmpty(fromSongs)
     }
 
     private companion object {
