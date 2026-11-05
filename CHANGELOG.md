@@ -31,6 +31,9 @@ What changed in each release. Older releases are described on the [Releases page
 - **Lyrics from your own music files** (#344). Settings → Lyrics → Your music files → "Read lyrics from your music files"
   (off until you turn it on). Lyrics saved in a file's tags, synced or plain, work with no internet: FLAC, Ogg, Opus, MP3
   and M4A. They take their place in your lyrics sources' order, last to start with: move them up to use them first.
+- **Leave folders out of Local files** (#207, #249). Local files → Edit → Choose folders, or Settings → Downloads,
+  storage & data → Folders in Local files. Untick a folder and it stops showing, with the folders inside it. Nothing
+  happens to the files themselves.
 
 ### Fixes
 

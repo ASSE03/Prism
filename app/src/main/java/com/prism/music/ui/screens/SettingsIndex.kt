@@ -400,6 +400,7 @@ object SettingsIndex {
         // #314 (1.8.1).
         SettingEntry(D, tr(R.string.your_own_song_files), tr(R.string.use_your_own_song_files), tr(R.string.own_files_keywords)),
         SettingEntry(D, tr(R.string.your_own_song_files), tr(R.string.scan_your_song_files_again), tr(R.string.own_files_keywords), needs = ownFiles),
+        SettingEntry(D, tr(R.string.local_files), tr(R.string.folders_in_local_files), tr(R.string.local_folders_keywords)),
         SettingEntry(D, tr(R.string.smart_downloads), tr(R.string.smart_downloads), tr(R.string.offline_cache_storage_space)),
         SettingEntry(D, tr(R.string.smart_downloads), tr(R.string.space_to_use), tr(R.string.storage_cache_size_gb)),
         SettingEntry(D, tr(R.string.mobile_data), tr(R.string.smart_downloads_on_mobile_data), "cellular", needs = smart),

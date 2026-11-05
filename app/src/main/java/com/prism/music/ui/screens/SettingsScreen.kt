@@ -2349,6 +2349,18 @@ private fun DownloadSettings() {
             }
         }
         OwnSongFiles()
+        // #207, #249 (1.8.2).
+        Group(tr(R.string.local_files)) {
+            var choosing by remember { mutableStateOf(false) }
+            val skipped = s.behavior.localSkipFolders.size
+            Item(
+                tr(R.string.folders_in_local_files),
+                if (skipped == 0) tr(R.string.every_folder_with_music) else trp(R.plurals.n_folders_left_out, skipped),
+                info = tr(R.string.untick_a_folder_to_leave_it_out),
+                onClick = { choosing = true },
+            ) { Chevron() }
+            if (choosing) LocalFoldersSheet { choosing = false }
+        }
         Group(tr(R.string.smart_downloads)) {
             Toggle(
                 tr(R.string.smart_downloads), tr(R.string.songs_you_ll_likely_play_ready), s.smartDownloads,

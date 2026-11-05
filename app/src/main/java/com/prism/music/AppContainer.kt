@@ -410,7 +410,11 @@ class AppContainer(val app: Application) {
     val likedPlaylist = com.prism.music.data.LikedPlaylist(this)
     val localLossless = com.prism.music.data.local.LocalLossless(app)
     /** Library → Local music: the phone's own music files. */
-    val localMusic = com.prism.music.data.local.LocalMusic(app, scope).also { it.start() }
+    val localMusic = com.prism.music.data.local.LocalMusic(app, scope) { settings.current.behavior.localSkipFolders }.also { music ->
+        music.start()
+        // #207, #249: folders ticked or unticked (or brought back by a restored backup).
+        scope.launch { settings.flow.map { it.behavior.localSkipFolders }.distinctUntilChanged().drop(1).collect { music.rescan() } }
+    }
     val losslessSync by lazy { com.prism.music.download.LosslessSync(app, this) }
     // Started only after localLossless exists: a launch from an earlier init block can run on a
     // background thread before this property is assigned.

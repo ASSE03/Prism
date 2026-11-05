@@ -336,6 +336,8 @@ data class BehaviorPrefs(
     val quickPicksSource: QuickPicksSource = QuickPicksSource.PRISM,
     /** #344 (1.8.2): lyrics stored in the song's own file are a lyrics source, in its place in the listener's order. */
     val embeddedLyrics: Boolean = false,
+    /** #207, #249 (1.8.2): folders Local files leaves out ([com.prism.music.data.local.LocalMusic.folderOf]). The files stay as they are. */
+    val localSkipFolders: Set<String> = emptySet(),
 )
 
 /** The lock screen's layouts (1.8.2). */
@@ -1976,6 +1978,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val recentShows = stringPreferencesKey("recent_shows")
         val quickPicksSource = stringPreferencesKey("quick_picks_source")
         val embeddedLyrics = booleanPreferencesKey("embedded_lyrics")
+        val localSkipFolders = stringPreferencesKey("local_skip_folders")
         val queueLocked = booleanPreferencesKey("queue_locked")
         val scrollShowsControls = booleanPreferencesKey("scroll_shows_controls")
         val playlistGenres = booleanPreferencesKey("playlist_genres")
@@ -2125,6 +2128,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "quick_picks_source",
                 // 1.8.2 (#344): where lyrics come from.
                 "embedded_lyrics",
+                // 1.8.2 (#207, #249): this phone's folders.
+                "local_skip_folders",
                 // 1.8.1 (#296, #263): what Prism keeps of your listening.
                 "history_paused_until", "play_count_seconds", "play_count_account",
             )
@@ -2424,6 +2429,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 lockScreenHideSong = p[K.lockScreenHideSong] ?: d.behavior.lockScreenHideSong,
                 quickPicksSource = p.enum(K.quickPicksSource, d.behavior.quickPicksSource),
                 embeddedLyrics = p[K.embeddedLyrics] ?: d.behavior.embeddedLyrics,
+                localSkipFolders = p[K.localSkipFolders]?.split('\n')?.filter { it.isNotBlank() }?.toSet() ?: d.behavior.localSkipFolders,
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -3014,6 +3020,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setRecentShows(v: RecentShows) = edit { it[K.recentShows] = v.name }
     fun setQuickPicksSource(v: QuickPicksSource) = edit { it[K.quickPicksSource] = v.name }
     fun setEmbeddedLyrics(v: Boolean) = edit { it[K.embeddedLyrics] = v }
+    fun setLocalSkipFolders(v: Set<String>) = edit { it[K.localSkipFolders] = v.joinToString("\n") }
     fun setQueueLocked(v: Boolean) = edit { it[K.queueLocked] = v }
     fun setScrollShowsControls(v: Boolean) = edit { it[K.scrollShowsControls] = v }
     fun setPlaylistGenres(v: Boolean) = edit { it[K.playlistGenres] = v }
