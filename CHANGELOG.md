@@ -88,17 +88,6 @@ What changed in each release. Older releases are described on the [Releases page
   Downloads, storage & data → Keep playlists downloaded. New songs come down by themselves, following Download on Wi-Fi
   only, and skipped or failed songs are left alone. Nothing is deleted when a song leaves the playlist.
 
-### Fixes
-
-- **"Player stuck playing with no progress"**: when a song's position stops moving (seen at 0:00 over Bluetooth), Prism now
-  tries the song again from the same place, twice, instead of giving up on it, and says what to try in plain words if it
-  still won't go. The cause on that phone isn't known yet; Share diagnostics now records it.
-- A song YouTube offers in copy-protected formats no longer tries to play them, it uses a format that can play (idea from
-  CodeWormer's PR #240).
-- **Speakers and TVs on your network can be found again, Sonos among them** (#239). Android stopped Prism reading what a
-  speaker says about itself, because speakers only speak plain HTTP, so none of them were listed. Prism now reads them
-  on the local network only; everything else it asks for stays secure. There's no Sonos here to try it on: this was
-  checked against a real Sonos One SL's own description. If a speaker still doesn't show, Share diagnostics now says why.
 - **Cover gradient, a new player background** (#232, #338). The cover's own colors as a solid gradient, with nothing blurred:
   its main color at the top, deepening toward the bottom. "Darkness at the bottom" sets how far it goes, and the colors stay
   dark enough for the white text whatever the cover. Customize Prism, Player, Look, where the backgrounds are now example cards.
@@ -110,6 +99,15 @@ What changed in each release. Older releases are described on the [Releases page
 
 ### Fixes
 
+- **"Player stuck playing with no progress"**: when a song's position stops moving (seen at 0:00 over Bluetooth), Prism now
+  tries the song again from the same place, twice, instead of giving up on it, and says what to try in plain words if it
+  still won't go. The cause on that phone isn't known yet; Share diagnostics now records it.
+- A song YouTube offers in copy-protected formats no longer tries to play them, it uses a format that can play (idea from
+  CodeWormer's PR #240).
+- **Speakers and TVs on your network can be found again, Sonos among them** (#239). Android stopped Prism reading what a
+  speaker says about itself, because speakers only speak plain HTTP, so none of them were listed. Prism now reads them
+  on the local network only; everything else it asks for stays secure. There's no Sonos here to try it on: this was
+  checked against a real Sonos One SL's own description. If a speaker still doesn't show, Share diagnostics now says why.
 - **Liquid Glass · Clear and Regular no longer draw the same on the docked tab bar** (#252). There Clear is now a thin frost that
   lets what's behind it show. In dark mode Clear also loses the extra black Prism laid over it everywhere. Regular is unchanged.
 - **Liquid Glass follows Prism's theme, not the phone's dark mode.** With Prism in dark and the phone in light (or the other way
