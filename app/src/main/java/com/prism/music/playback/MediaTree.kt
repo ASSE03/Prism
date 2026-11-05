@@ -12,7 +12,9 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.prism.music.AppContainer
 import com.prism.music.BuildConfig
+import com.prism.music.data.artistSongsOnPhone
 import com.prism.music.data.innertube.SearchFilter
+import com.prism.music.data.openArtist
 import com.prism.music.data.model.AlbumItem
 import com.prism.music.data.model.ArtistItem
 import com.prism.music.data.model.PlaylistItem
@@ -189,8 +191,13 @@ class MediaTree(private val c: AppContainer) {
             c.radio(parts.getOrNull(1)?.ifBlank { null }, parts[0], parts.getOrNull(2)?.ifBlank { null }, keepFirst = true)
         }.getOrNull()
             ?.let { r -> songList(parentId, tr(R.string.mix_2), r.songs) } ?: emptyList()
-        parentId.startsWith("ar:") -> runCatching { c.ytm.artist(parentId.removePrefix("ar:")) }.getOrNull()
-            ?.let { a -> songList(parentId, a.name, a.shelves.flatMap { s -> s.items.filterIsInstance<SongItem>().map { it.song } }.distinctBy { it.id }) }
+        // Without a network, the songs of the artist's kept page and on the phone, those that play (1.8.2).
+        parentId.startsWith("ar:") -> runCatching { c.openArtist(parentId.removePrefix("ar:")) }.getOrNull()
+            ?.let { o ->
+                val listed = o.page.shelves.flatMap { s -> s.items.filterIsInstance<SongItem>().map { it.song } }
+                val songs = if (!o.kept) listed else c.artistSongsOnPhone(o.page.id, o.page.name) + listed
+                songList(parentId, o.page.name, songs.distinctBy { it.id }.filter { !o.kept || c.availableOffline(it.id) })
+            }
             ?: emptyList()
         else -> emptyList()
     }

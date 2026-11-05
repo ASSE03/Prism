@@ -2612,7 +2612,7 @@ private fun LibraryLookGroup() {
             ) { prefs.setDownloadsAlbums(it) }
             var editingTiles by remember { mutableStateOf(false) }
             Item(
-                tr(R.string.library_tiles), tr(R.string.of_shown_pick_and_order_them, s.libraryTiles.size, com.prism.music.data.prefs.LibraryTile.entries.size),
+                tr(R.string.library_tiles), tr(R.string.of_shown_pick_and_order_them, s.libraryTiles.size, com.prism.music.data.prefs.LibraryTile.offered(com.prism.music.ui.theme.LocalContainer.current.uploads.has.value).size),
                 onClick = { editingTiles = true },
             ) { Chevron() }
             if (editingTiles) LibraryTilesSheet { editingTiles = false }

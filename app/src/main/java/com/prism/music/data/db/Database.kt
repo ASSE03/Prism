@@ -301,6 +301,21 @@ interface SongDao {
 
     @Query("SELECT * FROM songs WHERE smartDownload = 1")
     suspend fun smartDownloads(): List<SongEntity>
+
+    /**
+     * Liked or played songs that may be by the artist with this id (their id in the row, or among its credited artists'):
+     * the caller reads the row's artists to be sure. For an artist's page without a network (1.8.2).
+     */
+    @Query("SELECT * FROM songs WHERE (liked = 1 OR lastPlayed > 0) AND (artistId = :id OR artistsJson LIKE '%' || :id || '%') ORDER BY liked DESC, lastPlayed DESC LIMIT :limit")
+    suspend fun mineWithArtistId(id: String, limit: Int = 1000): List<SongEntity>
+
+    /** The same by the artist's name, which can sit anywhere in the row's artist text: the caller checks here too. */
+    @Query("SELECT * FROM songs WHERE (liked = 1 OR lastPlayed > 0) AND artistName LIKE '%' || :name || '%' ORDER BY liked DESC, lastPlayed DESC LIMIT :limit")
+    suspend fun mineWithArtistName(name: String, limit: Int = 1000): List<SongEntity>
+
+    /** Liked or played songs of one album. */
+    @Query("SELECT * FROM songs WHERE (liked = 1 OR lastPlayed > 0) AND albumId = :id ORDER BY liked DESC, lastPlayed DESC")
+    suspend fun mineOnAlbum(id: String): List<SongEntity>
 }
 
 /** One play in Library → History (#118): when, for how long, and the song. */

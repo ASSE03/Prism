@@ -2,6 +2,20 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.8.2 (unreleased)
+
+### New
+
+- **Artist pages work offline.** A page you've opened stays on your phone, so it opens without a connection as it was
+  when you last saw it, with a note saying so. What isn't on your phone is dimmed and doesn't play. For an artist you
+  haven't opened, Prism makes a page from your downloaded, liked and played songs and their albums. Android Auto's
+  artist folders list what can play offline too.
+- **Your uploads in Library** (#332, #101). If you've uploaded music to YouTube Music, an Uploads tile shows up in Library
+  (signed in) with your songs, albums and artists, to browse, sort and search. If you have no uploads, nothing changes.
+  This one was built without an account that has uploads, so if it's missing or looks wrong for you, please tell us.
+
+### Fixes
+
 ## 1.8.1.1
 
 A bug-fix update.

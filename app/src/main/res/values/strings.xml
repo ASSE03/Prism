@@ -3590,6 +3590,19 @@
     <string name="easy_to_read">Easy to read</string>
     <string name="ok_for_big_text">OK for big text</string>
     <string name="hard_to_read">Hard to read</string>
+    <string name="uploads">Uploads</string>
+    <string name="uploads_tile_subtitle">Music you uploaded</string>
+    <string name="uploads_search">Search your uploads</string>
+    <string name="uploads_none_title">No uploads found</string>
+    <string name="uploads_none_body">Music you upload to YouTube Music shows up here.</string>
+    <string name="uploads_sign_in_body">Sign in to see the music you uploaded to YouTube Music.</string>
+    <string name="uploads_couldn_t_load">Couldn\'t load your uploads</string>
+    <string name="refresh_uploads">Look for new uploads</string>
+    <string name="artist_offline_kept">Kept on this phone · as it was when you last opened it</string>
+    <string name="artist_offline_from_phone">Made from what\'s on this phone</string>
+    <string name="artist_nothing_on_phone">Nothing by %1$s is on this phone yet</string>
+    <string name="offline_not_on_phone">You\'re offline, and this isn\'t on this phone</string>
+    <string name="your_songs_by_artist">Your songs</string>
     <!-- Counts (1.7.9): each language gives its own forms (Polish and Arabic have more than English). -->
     <plurals name="n_songs">
         <item quantity="one">%d song</item>

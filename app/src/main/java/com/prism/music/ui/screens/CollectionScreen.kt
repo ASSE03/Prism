@@ -9,6 +9,7 @@ import androidx.compose.foundation.border
 import com.prism.music.ui.components.PrismTextButton
 import com.prism.music.ui.theme.PrismIcons
 import com.prism.music.data.friendlyMessage
+import com.prism.music.data.albumFromPhone
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -239,7 +240,9 @@ fun CollectionScreen(type: CollectionType, id: String, initialGenre: String?, bo
  * the kept copy stands in only if that fails.
  */
 private suspend fun orSaved(c: com.prism.music.AppContainer, id: String, load: suspend () -> LiveCollection): LiveCollection {
-    fun saved() = c.offline.page(id)?.let { LiveCollection(it, c.scope, null, offline = true) }
+    // No copy of an album: its songs on the phone (1.8.2; an artist's page and Downloads list such albums).
+    suspend fun saved() = c.offline.page(id)?.let { LiveCollection(it, c.scope, null, offline = true) }
+        ?: c.albumFromPhone(id)?.let { LiveCollection(it, c.scope, null, offline = true, fromPhone = true) }
     if (!c.network.isOnline()) saved()?.let { return it }
     return try { load() } catch (e: Exception) { saved() ?: throw e }
 }
@@ -251,6 +254,8 @@ class LiveCollection(
     loadMore: (suspend (String) -> YouTubeMusic.PlaylistChunk)?,
     /** The copy kept on the phone, shown without a network. */
     val offline: Boolean = false,
+    /** Not a kept copy: made from the album's songs on the phone. */
+    val fromPhone: Boolean = false,
 ) {
     val songs = kotlinx.coroutines.flow.MutableStateFlow(page.songs.distinctBy { it.id })
     /** Each song's slot in an owned playlist, for taking it out again. */
@@ -689,7 +694,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                 if (ready != null && type != CollectionType.DOWNLOADS) item("offline") {
                     Text(
                         trp(R.plurals.offline_n_of_songs, songs.size, ready.size, songs.size) +
-                            if (live.offline) tr(R.string.as_it_was_when_you_last) else "",
+                            if (live.offline && !live.fromPhone) tr(R.string.as_it_was_when_you_last) else "",
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 6.dp),
                     )
