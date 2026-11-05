@@ -43,14 +43,16 @@ fun SongDetailsSheet(song: Song, onDismiss: () -> Unit) {
     // As a picked version plays (#328): that recording's numbers, under that recording's name.
     val shown = com.prism.music.data.SongVersions.shownOf(song)
     val id = c.versions.of(song.id) ?: song.id
-    val facts by produceState<Result<SongFacts>?>(null, id) {
-        value = withContext(Dispatchers.IO) { runCatching { c.ytm.songFacts(id) } }
-    }
-    // Your own plays need no network, and count what Replay counts.
-    val mine by produceState(0, song.id) {
-        value = withContext(Dispatchers.IO) { runCatching { c.db.counted().songPlays(c.imports.countedOrigins(), song.id) }.getOrDefault(0) }
-    }
     PrismSheet(onDismiss) { _ ->
+        // Asked from inside the sheet, whose content composes apart from this page: an answer can't arrive before what
+        // shows it is watching for it (under test one did, and the spinner stayed).
+        val facts by produceState<Result<SongFacts>?>(null, id) {
+            value = withContext(Dispatchers.IO) { runCatching { c.ytm.songFacts(id) } }
+        }
+        // Your own plays need no network, and count what Replay counts.
+        val mine by produceState(0, song.id) {
+            value = withContext(Dispatchers.IO) { runCatching { c.db.counted().songPlays(c.imports.countedOrigins(), song.id) }.getOrDefault(0) }
+        }
         Column(
             Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = 22.dp).padding(bottom = 24.dp).navigationBarsPadding(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
