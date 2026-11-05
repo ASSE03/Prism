@@ -43,6 +43,10 @@ What changed in each release. Older releases are described on the [Releases page
 
 ### Fixes
 
+- **Speakers and TVs on your network can be found again, Sonos among them** (#239). Android stopped Prism reading what a
+  speaker says about itself, because speakers only speak plain HTTP, so none of them were listed. Prism now reads them
+  on the local network only; everything else it asks for stays secure. There's no Sonos here to try it on: this was
+  checked against a real Sonos One SL's own description. If a speaker still doesn't show, Share diagnostics now says why.
 - **Typing in Search and in Settings' search keeps up on slower phones** (#355).
 - **A song YouTube won't play no longer stops the music.** Prism says which song it was and goes on to the next, also
   when the next songs are still on their way from Autoplay; Next, Previous and the scrubber work again if it did have to stop.
