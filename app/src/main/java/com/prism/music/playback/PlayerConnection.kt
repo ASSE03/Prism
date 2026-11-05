@@ -339,7 +339,8 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         // With the Song / Video switch off the player is audio only (#48): a music video plays as its song, or as
         // the video's sound when it has no song, never with its picture (there'd be no switch to turn it off).
         // "Songs, not videos" everywhere (#80) plays it as its song too, and so does a shuffled start.
-        val audioOnly = !c.settings.current.showVideoSwitch || everywhere || shuffle
+        // On mobile data with "No videos on mobile data" (#281) too, unless the picture's kept on the phone.
+        val audioOnly = !c.settings.current.showVideoSwitch || everywhere || shuffle || (VideoOnData.off(c) && !c.downloads.videoSaved(tapped.id))
         // A music video or live performance opens as the song it's of, already showing the video
         // (the Song button then plays the track itself). With no song to match, the video plays as it is.
         if (!audioOnly) _showPlayer.tryEmit(Unit)
@@ -354,6 +355,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
     /**
      * Holds a place for a queue still being looked up (a long press's Play or Shuffle, #356). [stillStarting] says no
      * once something else was played or the queue stopped meanwhile: that wins, and the lookup's songs aren't played.
+     * The queue playing carries on as it was until there's a new one ([fillQueue] included): the lookup may come to nothing.
      */
     fun queueStarting(): Int = ++playToken
     fun stillStarting(token: Int) = token == playToken
@@ -374,13 +376,15 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
      * started here, a car, a watch or a spoken request. Added a batch at a time, as each one makes the player rebuild
      * its timeline and the UI re-read the whole queue.
      */
-    private fun fillQueue(rest: suspend () -> List<Song>?, source: QueueSource, have: List<Song>, token: Int) {
+    private fun fillQueue(rest: suspend () -> List<Song>?, source: QueueSource, have: List<Song>) {
         stopFill()
         c.queue.filling = true
         val mode = c.settings.current.behavior.explicitContent
         val seen = have.mapTo(HashSet()) { it.id }
-        fun wanted() = token == playToken && c.queue.source.value == source
         var job: kotlinx.coroutines.Job? = null
+        // Not by [playToken], which moves as soon as anything is asked for, even what then fails to load: Prism's own
+        // new queues end this with [stopFill], and what replaces the queue from outside changes its source.
+        fun wanted() = job?.isActive == true && c.queue.source.value == source
         job = scope.launch {
             try {
                 val waiting = ArrayList<Song>()
@@ -457,6 +461,8 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         c.queue.userQueued.value = emptySet()
         ensureStarted()
         withPlayer { p ->
+            // Whatever Autoplay was still finding was for the queue going now: this one asks for its own, below.
+            service?.dropAutoplay()
             p.shuffleModeEnabled = shuffle
             val start = startIndex.coerceIn(0, songs.lastIndex)
             p.setMediaItems(songs.mapIndexed { i, s -> s.toMediaItem(if (i == start) startVideo else null) }, start, startMs.coerceAtLeast(0))
@@ -465,7 +471,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
             p.play()
             service?.maybeAutoplay()
             if (dj) c.dj.setOn(true)
-            if (rest != null && token == playToken) fillQueue(rest, source, songs, token)
+            if (rest != null && token == playToken) fillQueue(rest, source, songs)
         }
     }
 
@@ -524,9 +530,8 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         if (at + 1 < p.mediaItemCount) p.removeMediaItems(at + 1, p.mediaItemCount)
         if (at > 0) p.removeMediaItems(0, at)
         if (!p.isPlaying) { ensureStarted(); if (p.playbackState == Player.STATE_IDLE) p.prepare(); p.play() }
-        // An autoplay load still out for the old queue drops its songs when it lands (the source changed): the radio
-        // asks now rather than wait on it.
-        c.queue.autoplayLoading = false
+        // An autoplay load still out for the old queue is dropped: the radio asks now rather than wait on it.
+        service?.dropAutoplay()
         service?.maybeAutoplay()
     }
 

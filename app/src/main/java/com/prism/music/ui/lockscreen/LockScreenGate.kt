@@ -24,11 +24,12 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.media3.common.Player
-import com.prism.music.AppContainer
+import com.prism.music.data.prefs.AppSettings
 import com.prism.music.data.prefs.LockLayout
 import com.prism.music.data.prefs.LockPaused
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -46,15 +47,15 @@ internal object LockScreenRules {
         else -> chosen
     }
 
-    /** Whether it stays, given when the music was paused ([pausedSince]; 0: it's playing), at [now]. */
-    fun stays(stay: LockPaused, pausedSince: Long, now: Long): Boolean {
+    /** Whether it stays, given when the music was paused ([pausedSince]; 0: it's playing), at [now]. [slept]: the phone has slept since the pause. */
+    fun stays(stay: LockPaused, pausedSince: Long, now: Long, slept: Boolean = false): Boolean {
         if (pausedSince == 0L) return true
         val paused = now - pausedSince
         return when (stay) {
             LockPaused.OFF -> paused < OFF_GRACE_MS
             LockPaused.TEN_MINUTES -> paused < TEN_MINUTES_MS
             // The gate closes it as the screen goes off.
-            LockPaused.UNTIL_SLEEP -> true
+            LockPaused.UNTIL_SLEEP -> !slept
         }
     }
 
@@ -76,7 +77,7 @@ internal object LockScreenRules {
  * is off but a slow look for the phone having locked, on the main thread's clock, while the music is keeping the phone
  * awake anyway.
  */
-class LockScreenGate(private val context: Context, private val c: AppContainer, private val player: Player, private val scope: CoroutineScope) : Player.Listener {
+class LockScreenGate(private val context: Context, private val settings: Flow<AppSettings>, private val player: Player, private val scope: CoroutineScope) : Player.Listener {
     companion object {
         const val TAG = "PrismLock"
         private const val CHANNEL = "lock_screen"
@@ -103,6 +104,21 @@ class LockScreenGate(private val context: Context, private val c: AppContainer, 
             }
         }
 
+        /** On the notification's intent: this start says nothing about whether a direct one works. */
+        internal const val FROM_NOTIFICATION = "from_notification"
+
+        /**
+         * A direct start has gone out and nothing has come of it yet: when the screen comes on with it still unanswered,
+         * the phone quietly refused, and the notification's way is used until the next sleep.
+         */
+        @Volatile
+        private var triedDirect = false
+
+        /** The screen came up from a direct start: that way works, however long ago it was and whatever's closed it since. */
+        internal fun directStartWorked() {
+            triedDirect = false
+        }
+
         internal fun cancelFallback(context: Context) {
             NotificationManagerCompat.from(context).cancel(FALLBACK_ID)
         }
@@ -118,7 +134,8 @@ class LockScreenGate(private val context: Context, private val c: AppContainer, 
     private var registered = false
     /** The screen went off at (0: it's on), for the looks at the keyguard. */
     private var offAt = 0L
-    private var triedDirect = false
+    /** "Until the phone sleeps", and it has with the music paused: it stays away until the music plays again. */
+    private var sleptPaused = false
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(c: Context, intent: Intent) {
@@ -143,7 +160,7 @@ class LockScreenGate(private val context: Context, private val c: AppContainer, 
     fun start() {
         player.addListener(this)
         settingsJob = scope.launch(kotlinx.coroutines.Dispatchers.Main) {
-            c.settings.flow.map { it.behavior.lockScreen to it.behavior.lockScreenPaused }.distinctUntilChanged().collect { (on, paused) ->
+            settings.map { it.behavior.lockScreen to it.behavior.lockScreenPaused }.distinctUntilChanged().collect { (on, paused) ->
                 enabled = on
                 stay = paused
                 update()
@@ -157,6 +174,8 @@ class LockScreenGate(private val context: Context, private val c: AppContainer, 
         enabled = false
         played = false
         pausedSince = 0L
+        sleptPaused = false
+        triedDirect = false
         handler.removeCallbacksAndMessages(null)
         unregister()
         cancelFallback(context)
@@ -181,10 +200,10 @@ class LockScreenGate(private val context: Context, private val c: AppContainer, 
     private fun update() {
         handler.removeCallbacks(pausedTooLong)
         val now = SystemClock.elapsedRealtime()
-        if (player.mediaItemCount == 0) { played = false; pausedSince = 0L }
-        else if (wantsToPlay()) { played = true; pausedSince = 0L }
+        if (player.mediaItemCount == 0) { played = false; pausedSince = 0L; sleptPaused = false }
+        else if (wantsToPlay()) { played = true; pausedSince = 0L; sleptPaused = false }
         else if (played && pausedSince == 0L) pausedSince = now
-        val wanted = enabled && played && LockScreenRules.stays(stay, pausedSince, now)
+        val wanted = enabled && played && LockScreenRules.stays(stay, pausedSince, now, sleptPaused)
         if (wanted) {
             register()
             if (pausedSince != 0L) when (stay) {
@@ -217,6 +236,7 @@ class LockScreenGate(private val context: Context, private val c: AppContainer, 
     private fun screenOff() {
         if (pausedSince != 0L && stay == LockPaused.UNTIL_SLEEP) {
             // "Until the phone sleeps": it just has.
+            sleptPaused = true
             LockScreenActivity.live?.finish()
             unregister()
             return
@@ -259,7 +279,7 @@ class LockScreenGate(private val context: Context, private val c: AppContainer, 
             triedDirect = true
             runCatching { context.startActivity(start) }.onFailure { Log.w(TAG, "couldn't start: $it") }
         } else if (woken) {
-            postFallback(start)
+            postFallback(start.putExtra(FROM_NOTIFICATION, true))
         }
     }
 

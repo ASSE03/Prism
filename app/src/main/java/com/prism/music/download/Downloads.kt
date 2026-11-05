@@ -571,6 +571,9 @@ class DownloadRepository(private val context: Context, private val c: AppContain
     /** The video saved for [songId], once all of it is here (what video mode plays offline). */
     fun downloadedVideoId(songId: String): String? = _videos.value[songId]?.takeIf { it.state == Download.STATE_COMPLETED }?.videoId
 
+    /** Whether the video [videoId] is all here, whichever song it was saved for. */
+    fun videoSaved(videoId: String): Boolean = _videos.value.values.any { it.videoId == videoId && it.state == Download.STATE_COMPLETED }
+
     /**
      * Saves the song's music video for offline: the song itself (so it's in Downloads), the video's picture
      * and, when the video isn't the song, the video's own audio, which its picture is timed to. The player's

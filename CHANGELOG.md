@@ -93,6 +93,8 @@ What changed in each release. Older releases are described on the [Releases page
 - **"Player stuck playing with no progress"**: when a song's position stops moving (seen at 0:00 over Bluetooth), Prism now
   tries the song again from the same place, twice, instead of giving up on it, and says what to try in plain words if it
   still won't go. The cause on that phone isn't known yet; Share diagnostics now records it.
+- A skip just as a song was recovering from a failure (a lost decoder, a cached part or download that couldn't be read) no
+  longer starts the next song partway through, at the place the last one had reached.
 - A song YouTube offers in copy-protected formats no longer tries to play them, it uses a format that can play (idea from
   CodeWormer's PR #240).
 - **Speakers and TVs on your network can be found again, Sonos among them** (#239). Android stopped Prism reading what a
