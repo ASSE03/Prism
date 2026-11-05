@@ -28,6 +28,11 @@
     <uses-permission android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION" />
     <!-- Only to open Android's "uninstall Prism?" prompt when moving to the newly signed Prism. -->
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <!-- Prism's lock screen (off by default; asked for only when it's turned on). Android lets a screen start from the
+         background only with "Display over other apps", which is the only reason it's here: Prism never draws over
+         other apps. The full-screen intent is the fallback when that isn't allowed: it comes up later, as the phone wakes. -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <!-- Prism TV (1.8.0): the same APK on Android TV and Google TV. A TV has no touchscreen, often no Wi-Fi (Ethernet),
          camera or autofocus; none of them is needed (microphone and camera are declared above). -->
@@ -209,6 +214,18 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.lockscreen.LockScreenActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:screenOrientation="userPortrait"
+            android:showWhenLocked="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Prism.LockScreen"
+            tools:targetApi="27" />
 
         <!-- The playback service, once per app icon (Android Auto shows the media service's icon); only the one for the
              chosen icon is enabled (PlaybackServices.target). -->

@@ -132,6 +132,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private var saveJob: Job? = null
     private var extrasJob: Job? = null
 
+    private lateinit var lockScreen: com.prism.music.ui.lockscreen.LockScreenGate
 
     override fun onCreate() {
         super.onCreate()
@@ -223,6 +224,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         player.addAnalyticsListener(StatsListener())
         player.addAnalyticsListener(DiagnosticsListener())
         applySkipSilence()
+        lockScreen = com.prism.music.ui.lockscreen.LockScreenGate(this, c, player, scope).also { it.start() }
 
         sessionPlayer = LyricsOverlayPlayer(player)
         carLyrics = CarLyrics(this, c, player, sessionPlayer, scope)
@@ -525,6 +527,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     }
 
     override fun onDestroy() {
+        lockScreen.stop()
         if (PlaybackServices.running == this::class.java) PlaybackServices.running = null
         PlaybackServices.failForTest = null
         PlaybackServices.taskRemovedForTest = null

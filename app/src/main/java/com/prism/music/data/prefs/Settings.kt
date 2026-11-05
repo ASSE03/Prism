@@ -316,7 +316,36 @@ data class BehaviorPrefs(
     val playCountSeconds: Int = 10,
     /** #263: YouTube Music's history waits for the same; off, it's told as a song starts (as before). */
     val playCountOnAccount: Boolean = false,
+    /**
+     * 1.8.2: Prism's own lock screen while something plays. Off by default, and not part of a Look: turning it on asks
+     * for a permission. See [com.prism.music.ui.lockscreen.LockScreenGate].
+     */
+    val lockScreen: Boolean = false,
+    /** Which of the four layouts. Performance mode always uses [LockLayout.QUIET]. */
+    val lockScreenLayout: LockLayout = LockLayout.COVER,
+    val lockScreenVolume: Boolean = true,
+    val lockScreenLike: Boolean = true,
+    val lockScreenOutput: Boolean = true,
+    /** How long it stays once the music is paused, before Android's own lock screen takes over. */
+    val lockScreenPaused: LockPaused = LockPaused.TEN_MINUTES,
+    /** No title, artist, cover or lyrics while locked: someone picking the phone up only sees that music is playing. */
+    val lockScreenHideSong: Boolean = false,
 )
+
+/** The lock screen's layouts (1.8.2). */
+enum class LockLayout(val label: String, val detail: String) {
+    COVER(tr(R.string.lock_screen_layout_cover), tr(R.string.lock_screen_layout_cover_detail)),
+    FULL(tr(R.string.lock_screen_layout_full), tr(R.string.lock_screen_layout_full_detail)),
+    LYRICS(tr(R.string.lock_screen_layout_lyrics), tr(R.string.lock_screen_layout_lyrics_detail)),
+    QUIET(tr(R.string.lock_screen_layout_quiet), tr(R.string.lock_screen_layout_quiet_detail)),
+}
+
+/** How long the lock screen stays once the music is paused (1.8.2). */
+enum class LockPaused(val label: String) {
+    OFF(tr(R.string.lock_screen_paused_off)),
+    TEN_MINUTES(tr(R.string.lock_screen_paused_ten)),
+    UNTIL_SLEEP(tr(R.string.lock_screen_paused_sleep)),
+}
 
 /**
  * Explicit songs (#216, 1.8.1): YouTube Music marks them "E". [SHOW] is as before; [SKIP] leaves them out of what plays
@@ -1942,6 +1971,13 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val historyPausedUntil = longPreferencesKey("history_paused_until")
         val playCountSeconds = intPreferencesKey("play_count_seconds")
         val playCountOnAccount = booleanPreferencesKey("play_count_account")
+        val lockScreen = booleanPreferencesKey("lock_screen_player")
+        val lockScreenLayout = stringPreferencesKey("lock_screen_layout")
+        val lockScreenVolume = booleanPreferencesKey("lock_screen_volume")
+        val lockScreenLike = booleanPreferencesKey("lock_screen_like")
+        val lockScreenOutput = booleanPreferencesKey("lock_screen_output")
+        val lockScreenPaused = stringPreferencesKey("lock_screen_paused")
+        val lockScreenHideSong = booleanPreferencesKey("lock_screen_hide_song")
         // 1.8.0 player editor ([PlayerParts]): the hidden parts are part of a Look, the menu's choices aren't.
         val playerHiddenParts = stringPreferencesKey("player_hidden_parts")
         val playerMenuHidden = stringPreferencesKey("player_menu_hidden")
@@ -2048,6 +2084,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "session_buttons", "cover_swipe_left", "cover_swipe_right", "cover_swipe_up", "cover_double_tap", "cover_long_press",
                 "mini_swipe_left", "mini_swipe_right", "mini_swipe_down", "mini_swipe_up",
                 // 1.7.8 ([BehaviorPrefs]).
+                "lock_screen_player", "lock_screen_layout", "lock_screen_volume", "lock_screen_like", "lock_screen_output", "lock_screen_paused", "lock_screen_hide_song",
                 "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres", "screen_fades", "player_gestures_everywhere", "page_slide", "tab_bar_position",
                 // 1.8.0 ([TvPrefs]): how Prism behaves on a TV and in desk mode.
                 "tv_ambient_minutes", "desk_mode", "tv_lyrics_scale", "tv_welcomed", "tv_home_layout", "tv_backdrop_dim",
@@ -2348,6 +2385,13 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 historyPausedUntil = p[K.historyPausedUntil] ?: d.behavior.historyPausedUntil,
                 playCountSeconds = (p[K.playCountSeconds] ?: d.behavior.playCountSeconds).coerceIn(0, 600),
                 playCountOnAccount = p[K.playCountOnAccount] ?: d.behavior.playCountOnAccount,
+                lockScreen = p[K.lockScreen] ?: d.behavior.lockScreen,
+                lockScreenLayout = p.enum(K.lockScreenLayout, d.behavior.lockScreenLayout),
+                lockScreenVolume = p[K.lockScreenVolume] ?: d.behavior.lockScreenVolume,
+                lockScreenLike = p[K.lockScreenLike] ?: d.behavior.lockScreenLike,
+                lockScreenOutput = p[K.lockScreenOutput] ?: d.behavior.lockScreenOutput,
+                lockScreenPaused = p.enum(K.lockScreenPaused, d.behavior.lockScreenPaused),
+                lockScreenHideSong = p[K.lockScreenHideSong] ?: d.behavior.lockScreenHideSong,
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -2954,6 +2998,13 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setHistoryPausedUntil(until: Long) = edit { if (until > 0) it[K.historyPausedUntil] = until else it.remove(K.historyPausedUntil) }
     fun setPlayCountSeconds(v: Int) = edit { it[K.playCountSeconds] = v.coerceIn(0, 600) }
     fun setPlayCountOnAccount(v: Boolean) = edit { it[K.playCountOnAccount] = v }
+    fun setLockScreen(v: Boolean) = edit { it[K.lockScreen] = v }
+    fun setLockScreenLayout(v: LockLayout) = edit { it[K.lockScreenLayout] = v.name }
+    fun setLockScreenVolume(v: Boolean) = edit { it[K.lockScreenVolume] = v }
+    fun setLockScreenLike(v: Boolean) = edit { it[K.lockScreenLike] = v }
+    fun setLockScreenOutput(v: Boolean) = edit { it[K.lockScreenOutput] = v }
+    fun setLockScreenPaused(v: LockPaused) = edit { it[K.lockScreenPaused] = v.name }
+    fun setLockScreenHideSong(v: Boolean) = edit { it[K.lockScreenHideSong] = v }
 
     // 1.8.0 player editor
     /** A comma-separated set of names (unknown ones skipped): a Look or backup from a later Prism still opens. */
