@@ -31,6 +31,9 @@ What changed in each release. Older releases are described on the [Releases page
 - **Song details** (#211). A song's menu → Song details: its plays on YouTube Music (views, for a music video), the date
   it was released and how many times you've played it. Only what YouTube really says shows up: a video has the day it
   went up on YouTube instead of a release date, and anything it doesn't say isn't there.
+- **Saved while playing** (#159). Songs that reached your phone in full as they played, listed in one place so you can
+  play them with no connection. Open it from the Downloads page's ⋯, or add its tile to Library with the edit button.
+  Prism still clears these as it needs the room; download a song to keep it for good.
 
 ### Fixes
 

@@ -251,6 +251,11 @@
     <string name="song_details_your_plays">Your plays</string>
     <string name="song_details_couldnt_load">Couldn\'t ask YouTube. Check your connection.</string>
     <string name="song_details_none">YouTube shares no details for this one.</string>
+    <string name="saved_while_playing">Saved while playing</string>
+    <string name="saved_while_playing_tile">Plays without a connection</string>
+    <string name="saved_while_playing_info">Songs that reached this phone in full as they played, so they play without a connection. Prism clears them as it needs the room. Download a song to keep it for good.</string>
+    <string name="saved_while_playing_none_title">Nothing saved yet</string>
+    <string name="saved_while_playing_none_body">Songs show up here once they\'ve reached this phone in full as they play.</string>
     <string name="couldn_t_load_the_credits_check">Couldn\'t load the credits. Check your connection and try again.</string>
     <string name="music_videos_don_t_come_with">Music videos don\'t come with credits. The song\'s own version usually has them.</string>
     <string name="youtube_music_has_no_credits_for">YouTube Music has no credits for this one.</string>

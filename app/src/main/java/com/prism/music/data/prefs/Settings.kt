@@ -940,11 +940,13 @@ enum class LibraryTile(val label: String) {
     HISTORY(tr(R.string.history)), PODCASTS(tr(R.string.podcasts)),
     TOGETHER(tr(R.string.listen_together)), BLEND(tr(R.string.blend)), RECOGNIZED(tr(R.string.recognized)), NEW_PLAYLIST(tr(R.string.new_playlist)), IMPORT(tr(R.string.import_playlists)),
     /** The account's uploads (#332, 1.8.2): only for an account that has some, added once when Prism finds them ([withUploads]). */
-    UPLOADS(tr(R.string.uploads));
+    UPLOADS(tr(R.string.uploads)),
+    /** Songs in the song cache whole (#159, 1.8.2); not shown until ticked. */
+    SAVED(tr(R.string.saved_while_playing));
 
     companion object {
         /** A new install's tiles: all but those added later, so nobody's Library changes on its own. */
-        val initial = entries - HISTORY - UPLOADS
+        val initial = entries - HISTORY - UPLOADS - SAVED
 
         /** What the tile editor offers: Uploads only to an account that has some. */
         fun offered(hasUploads: Boolean) = if (hasUploads) entries else entries - UPLOADS
