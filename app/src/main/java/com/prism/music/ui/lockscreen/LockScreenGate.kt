@@ -90,7 +90,7 @@ class LockScreenGate(private val context: Context, private val c: AppContainer, 
         /** Whether a screen can be started as the phone goes to sleep: "Display over other apps", from Android 10. */
         fun canStartDirectly(context: Context): Boolean = Build.VERSION.SDK_INT < 29 || Settings.canDrawOverlays(context)
 
-        /** Android's page for that permission (Prism's own row), else Prism's App info. */
+        /** Android's page for that permission (from Android 11 the whole list of apps, whatever is asked for), else Prism's App info. */
         fun openPermissionPage(context: Context) {
             val page = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${context.packageName}")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             runCatching { context.startActivity(page) }.onFailure { openAppInfo(context) }

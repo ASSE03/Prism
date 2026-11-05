@@ -4662,7 +4662,7 @@
     <string name="lock_screen_keywords">lock screen player locked keyguard cover lyrics clock swipe unlock over other apps media controls</string>
     <string name="lock_screen_needs_permission">To be ready the moment your phone wakes, this needs \"Display over other apps\". Prism never draws over other apps with it.</string>
     <string name="lock_screen_allow">Allow it</string>
-    <string name="lock_screen_allow_detail">Opens Android\'s page for Prism</string>
+    <string name="lock_screen_allow_detail">Opens Android\'s list: find Prism and turn it on</string>
     <string name="lock_screen_allow_info">Android only lets a screen start in the background with this permission. Without it, the player can still come up over a locked phone, a moment after it wakes.</string>
     <string name="lock_screen_app_info">Greyed out? Open App info</string>
     <string name="lock_screen_app_info_detail">⋮ → Allow restricted settings, then try again</string>
