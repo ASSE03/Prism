@@ -170,11 +170,18 @@ class LockScreenTest {
         compose.onAllNodes(hasTestTag(LockTags.PLAY), useUnmergedTree = true).onFirst().performClick()
         compose.waitUntil(5_000) { player.isPlaying.value }
 
-        compose.waitUntil(5_000) { player.duration > 0 }
+        // The player only answers on the main thread.
+        fun <T> onMain(read: () -> T): T {
+            var value: T? = null
+            instrumentation.runOnMainSync { value = read() }
+            @Suppress("UNCHECKED_CAST")
+            return value as T
+        }
+        compose.waitUntil(5_000) { onMain { player.duration } > 0 }
         compose.onAllNodes(hasTestTag(LockTags.SEEK), useUnmergedTree = true).onFirst()
             .performSemanticsAction(SemanticsActions.SetProgress) { it(0.5f) }
-        val half = player.duration / 2
-        compose.waitUntil(5_000) { abs(player.position - half) < 6_000 }
+        val half = onMain { player.duration } / 2
+        compose.waitUntil(5_000) { abs(onMain { player.position } - half) < 6_000 }
     }
 
     @Test fun performanceModeIsQuiet() {
