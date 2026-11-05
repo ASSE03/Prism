@@ -267,6 +267,7 @@ object SettingsIndex {
         // 1.8.0 (#210): merged choices; the old titles stay as search words.
         SettingEntry(S, tr(R.string.what_plays_next), tr(R.string.what_plays_next)),
         SettingEntry(S, tr(R.string.what_plays_next), tr(R.string.when_the_queue_ends), tr(R.string.radio_continue_similar) + " " + tr(R.string.autoplay) + " " + tr(R.string.autoplay_from) + " " + tr(R.string.radio_your_music_prism_radio_youtube)),
+        SettingEntry(S, tr(R.string.what_plays_next), tr(R.string.no_repeats_title), tr(R.string.no_repeats_detail)),
         SettingEntry(S, tr(R.string.what_plays_next), tr(R.string.music_videos_label), tr(R.string.music_videos_audio) + " " + tr(R.string.songs_not_videos) + " " + tr(R.string.songs_not_videos_everywhere)),
         SettingEntry(S, tr(R.string.what_plays_next), tr(R.string.keep_playing_videos), tr(R.string.music_video_2)),
         SettingEntry(S, tr(R.string.what_plays_next), tr(R.string.explicit_songs), tr(R.string.explicit_songs_keywords)),
@@ -435,6 +436,9 @@ object SettingsIndex {
         SettingEntry(LB, tr(R.string.made_for_you), tr(R.string.your_artists), tr(R.string.onboarding_pick_artists_favourites_starred_recom)),
         SettingEntry(LB, tr(R.string.made_for_you), tr(R.string.new_release_notifications), tr(R.string.release_radar_new_music_alerts)),
         SettingEntry(LB, tr(R.string.made_for_you), tr(R.string.make_my_mixes_again), tr(R.string.daily_mix_refresh_recommendations)),
+        SettingEntry(LB, tr(R.string.tune_radios), tr(R.string.tune_familiar_new), tr(R.string.tune_radios) + " " + tr(R.string.autoplay)),
+        SettingEntry(LB, tr(R.string.tune_radios), tr(R.string.tune_hits_deep), tr(R.string.tune_radios) + " " + tr(R.string.autoplay)),
+        SettingEntry(LB, tr(R.string.tune_radios), tr(R.string.tune_calm_energetic), tr(R.string.tune_radios) + " " + tr(R.string.autoplay)),
         // Library & Replay
         SettingEntry(H, tr(R.string.library), tr(R.string.playlists_as), tr(R.string.grid_list_view)),
         SettingEntry(H, tr(R.string.library), tr(R.string.albums_as), tr(R.string.grid_list_view)),

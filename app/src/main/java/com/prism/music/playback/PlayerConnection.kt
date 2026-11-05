@@ -312,12 +312,21 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
      */
     fun playQueue(songs: List<Song>, startIndex: Int = 0, source: QueueSource, shuffle: Boolean = false, rest: (suspend () -> List<Song>?)? = null) {
         if (songs.isEmpty()) return
+        // "No repeats this session" (#159): a radio starts without what's been heard, on the song it starts on.
+        if (source.kind == QueueKind.RADIO && c.settings.current.behavior.autoplayNoRepeats) {
+            val (kept, at) = c.sessionHeard.radioStart(songs, startIndex)
+            if (kept.size < songs.size) { startFiltered(kept, at, source, shuffle, rest); return }
+        }
+        startFiltered(songs, startIndex, source, shuffle, rest)
+    }
+
+    private fun startFiltered(songs: List<Song>, startIndex: Int, source: QueueSource, shuffle: Boolean, rest: (suspend () -> List<Song>?)?) {
         // #216: with the explicit filter on, explicit songs don't go in (a tapped one gives way to the next that may play).
         val mode = c.settings.current.behavior.explicitContent
         if (mode != com.prism.music.data.prefs.ExplicitContent.SHOW && songs.any { it.explicit }) {
             val (kept, at) = com.prism.music.data.ExplicitFilter.queue(mode, songs, startIndex) ?: run { reportError(tr(R.string.explicit_none_left)); return }
             if (!shuffle && songs.getOrNull(startIndex)?.explicit == true) reportError(tr(R.string.explicit_skipped))
-            playQueue(kept, at, source, shuffle, rest)
+            startFiltered(kept, at, source, shuffle, rest)
             return
         }
         source.page?.let { c.recentCollections.played(it) }

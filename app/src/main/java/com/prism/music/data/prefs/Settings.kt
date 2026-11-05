@@ -332,6 +332,13 @@ data class BehaviorPrefs(
     val lockScreenHideSong: Boolean = false,
     /** #349 (1.8.2): Home's Quick picks as Prism makes them around your artists (as before), or YouTube Music's own. */
     val quickPicksSource: QuickPicksSource = QuickPicksSource.PRISM,
+    /**
+     * #159 (1.8.2): autoplay and radios leave out what's played this session ([com.prism.music.playback.SessionHeard]).
+     * Off, as before: only what's in the queue and what was heard in the last hours is left out.
+     */
+    val autoplayNoRepeats: Boolean = false,
+    /** 1.8.2: how radios and autoplay are tuned ([com.prism.music.data.foryou.RadioTune]); all at 0, as before. */
+    val radioTune: com.prism.music.data.foryou.RadioTune = com.prism.music.data.foryou.RadioTune(),
 )
 
 /** The lock screen's layouts (1.8.2). */
@@ -1011,6 +1018,13 @@ object HomeSections {
      * at all outside them ([inSeason]). Moved, renamed or hidden like any other section.
      */
     const val SEASONAL = "local:holiday"
+    /**
+     * Discover (1.8.2): songs never played, new each Monday; songs never played by artists you love; what you played a
+     * year ago today. Not on anyone's Home until added from Customize Home, so an existing or new Home stays as it was.
+     */
+    const val NEW_TO_YOU = "local:new_to_you"
+    const val DEEP_CUTS = "local:deep_cuts"
+    const val ON_THIS_DAY = "local:on_this_day"
     /** A holiday mix pinned on its own: "pin:holiday:<mix key>". */
     const val HOLIDAY_PIN = "holiday"
     const val YT_PREFIX = "yt:shelf:"
@@ -1042,6 +1056,9 @@ object HomeSections {
             REPEAT_REWIND -> com.prism.music.R.string.section_repeat_rewind
             FORGOTTEN -> com.prism.music.R.string.section_forgotten_favorites
             SEASONAL -> com.prism.music.R.string.section_holiday_music
+            NEW_TO_YOU -> com.prism.music.R.string.section_new_to_you
+            DEEP_CUTS -> com.prism.music.R.string.section_deep_cuts
+            ON_THIS_DAY -> com.prism.music.R.string.section_on_this_day
             else -> return s
         }
         return s.copy(title = com.prism.music.tr(id))
@@ -1077,6 +1094,9 @@ object HomeSections {
         HomeSectionConfig(REPEAT_REWIND, "Repeat rewind"),
         HomeSectionConfig(FORGOTTEN, "Forgotten favorites"),
         HomeSectionConfig(SEASONAL, "Holiday music"),
+        HomeSectionConfig(NEW_TO_YOU, "New to you"),
+        HomeSectionConfig(DEEP_CUTS, "Deep cuts"),
+        HomeSectionConfig(ON_THIS_DAY, "On this day"),
     )
 
     /** What a fresh install's Home shows (and what Reset goes back to). */
@@ -1968,6 +1988,10 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val panelSwipes = booleanPreferencesKey("panel_swipes")
         val recentShows = stringPreferencesKey("recent_shows")
         val quickPicksSource = stringPreferencesKey("quick_picks_source")
+        val autoplayNoRepeats = booleanPreferencesKey("autoplay_no_repeats")
+        val radioNewness = floatPreferencesKey("radio_tune_newness")
+        val radioDepth = floatPreferencesKey("radio_tune_depth")
+        val radioEnergy = floatPreferencesKey("radio_tune_energy")
         val queueLocked = booleanPreferencesKey("queue_locked")
         val scrollShowsControls = booleanPreferencesKey("scroll_shows_controls")
         val playlistGenres = booleanPreferencesKey("playlist_genres")
@@ -2115,6 +2139,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "explicit_content",
                 // 1.8.2 (#349): where Home's Quick picks come from.
                 "quick_picks_source",
+                // 1.8.2 (#159): what radios play, not a look.
+                "autoplay_no_repeats", "radio_tune_newness", "radio_tune_depth", "radio_tune_energy",
                 // 1.8.1 (#296, #263): what Prism keeps of your listening.
                 "history_paused_until", "play_count_seconds", "play_count_account",
             )
@@ -2413,6 +2439,10 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 lockScreenPaused = p.enum(K.lockScreenPaused, d.behavior.lockScreenPaused),
                 lockScreenHideSong = p[K.lockScreenHideSong] ?: d.behavior.lockScreenHideSong,
                 quickPicksSource = p.enum(K.quickPicksSource, d.behavior.quickPicksSource),
+                autoplayNoRepeats = p[K.autoplayNoRepeats] ?: d.behavior.autoplayNoRepeats,
+                radioTune = com.prism.music.data.foryou.RadioTune(
+                    (p[K.radioNewness] ?: 0f).coerceIn(-1f, 1f), (p[K.radioDepth] ?: 0f).coerceIn(-1f, 1f), (p[K.radioEnergy] ?: 0f).coerceIn(-1f, 1f),
+                ),
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -3002,6 +3032,12 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setPanelSwipes(v: Boolean) = edit { it[K.panelSwipes] = v }
     fun setRecentShows(v: RecentShows) = edit { it[K.recentShows] = v.name }
     fun setQuickPicksSource(v: QuickPicksSource) = edit { it[K.quickPicksSource] = v.name }
+    fun setAutoplayNoRepeats(v: Boolean) = edit { it[K.autoplayNoRepeats] = v }
+    fun setRadioTune(v: com.prism.music.data.foryou.RadioTune) = edit {
+        it[K.radioNewness] = v.newness
+        it[K.radioDepth] = v.depth
+        it[K.radioEnergy] = v.energy
+    }
     fun setQueueLocked(v: Boolean) = edit { it[K.queueLocked] = v }
     fun setScrollShowsControls(v: Boolean) = edit { it[K.scrollShowsControls] = v }
     fun setPlaylistGenres(v: Boolean) = edit { it[K.playlistGenres] = v }

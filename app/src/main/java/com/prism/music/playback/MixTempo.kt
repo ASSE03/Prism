@@ -322,6 +322,9 @@ class MixTempo(
 
     fun cached(id: String): Tempo? = prefs.getString(id, null)?.let(Tempo::decode)
 
+    /** How many songs have been measured so far, whole or by a quick scan: what a calm ↔ energetic radio has to go by. */
+    fun measuredCount(): Int = (loudPrefs.all.keys + quickPrefs.all.keys).size
+
     /** The song's measured loudness (integrated LUFS), once it's been scanned. */
     fun loudness(id: String): Float? = loudPrefs.getFloat(id, Float.NaN).takeIf { !it.isNaN() }
 

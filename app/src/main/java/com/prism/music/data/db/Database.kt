@@ -557,6 +557,29 @@ interface MixDao {
     suspend fun deleteOthers(pattern: String, keep: List<String>)
 }
 
+/** A song's id and name, to tell what the listener has heard (1.8.2). */
+data class HeardSong(val id: String, val title: String, val primaryArtist: String, val artistName: String)
+
+/** An imported play's song by its name, and what it was matched to. */
+data class ImportedSong(val title: String, val artist: String, val matchedId: String?)
+
+/**
+ * Everything ever heard, for New to you and Deep cuts: all of it, however old, excluded from taste or not, and imported
+ * histories whether Replay counts them or not. Its own DAO so test fakes of the others stay small.
+ */
+@Dao
+interface DiscoverDao {
+    @Query("SELECT DISTINCT songId FROM play_events")
+    suspend fun playedIds(): List<String>
+
+    /** Songs played, started (a song skipped at once never reaches [PlayEventEntity]) or liked. */
+    @Query("SELECT id, title, primaryArtist, artistName FROM songs WHERE lastPlayed > 0 OR liked = 1 OR id IN (SELECT songId FROM play_events)")
+    suspend fun heardSongs(): List<HeardSong>
+
+    @Query("SELECT DISTINCT title, artist, matchedId FROM imported_plays")
+    suspend fun importedSongs(): List<ImportedSong>
+}
+
 @Dao
 interface LyricsDao {
     @Query("SELECT * FROM lyrics WHERE songId = :songId AND source = :source")
@@ -641,6 +664,7 @@ abstract class PrismDatabase : RoomDatabase() {
     abstract fun romanized(): RomanizedDao
     abstract fun releases(): ReleaseDao
     abstract fun mixes(): MixDao
+    abstract fun discover(): DiscoverDao
     abstract fun blends(): BlendDao
     abstract fun recognitions(): RecognitionDao
     /** Histories brought in from Spotify, Google Takeout and Last.fm (1.8.1). */

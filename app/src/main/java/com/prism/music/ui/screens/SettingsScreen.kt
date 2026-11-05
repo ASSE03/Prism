@@ -1911,6 +1911,11 @@ private fun SoundPage() {
         Group(tr(R.string.what_plays_next)) {
             Label(tr(R.string.when_the_queue_ends), info = tr(R.string.when_the_queue_ends_info))
             Chips(QueueEnd.entries, SoundChoices.queueEnd(s), { it.label }) { SoundChoices.setQueueEnd(prefs, it) }
+            // #159: as asked for, a choice; off, what's left out is what's in the queue and what was heard in the last hours.
+            Toggle(
+                tr(R.string.no_repeats_title), tr(R.string.no_repeats_detail), s.behavior.autoplayNoRepeats,
+                info = tr(R.string.no_repeats_info),
+            ) { prefs.setAutoplayNoRepeats(it) }
             Label(tr(R.string.music_videos_label), info = tr(R.string.music_videos_label_info))
             Chips(VideoPolicy.entries, SoundChoices.videoPolicy(s), { it.label }) { SoundChoices.setVideoPolicy(prefs, it) }
             Toggle(tr(R.string.keep_playing_videos), tr(R.string.after_a_video_the_next_song), s.videoContinues) { prefs.setVideoContinues(it) }
@@ -2540,6 +2545,8 @@ private fun RecommendationsPage() {
                 android.widget.Toast.makeText(context, tr(R.string.suggestions_start_fresh), android.widget.Toast.LENGTH_SHORT).show()
             })
         }
+        // 1.8.2: each slider goes by what the phone really knows, and says so behind its ⓘ.
+        Group(tr(R.string.tune_radios), info = tr(R.string.tune_radios_info)) { RadioTuneSliders() }
         Group(tr(R.string.liked_songs)) {
             Toggle(
                 tr(R.string.a_song_and_its_video_as), tr(R.string.liked_both_they_show_once_as), s.mergeLikedVideos,
@@ -2575,6 +2582,40 @@ private fun RecommendationsPage() {
             CountHistoryFrom(imported, counted)
         }
         // Region moved to the Language page (1.8.0).
+    }
+}
+
+/**
+ * Tune a radio (1.8.2): three sliders over every radio and autoplay, each with both its ends named. In the middle (where
+ * they start) a radio plays as it comes. Halfway to an end is a real step: see [com.prism.music.data.foryou.RadioTuner].
+ */
+@Composable
+private fun RadioTuneSliders() {
+    val c = LocalContainer.current
+    val tune = LocalAppSettings.current.behavior.radioTune
+    fun word(v: Float, low: String, high: String) = when {
+        kotlin.math.abs(v) < 0.05f -> tr(R.string.tune_as_it_comes)
+        v < 0 -> worded(low, -v)
+        else -> worded(high, v)
+    }
+    // Close to the middle is the middle: "as it comes" has to be easy to get back to.
+    fun snap(v: Float) = if (kotlin.math.abs(v) < 0.05f) 0f else v
+    SliderSetting(
+        tr(R.string.tune_familiar_new), tune.newness, -1f..1f, { word(it, tr(R.string.tune_familiar), tr(R.string.tune_new)) }, steps = 7,
+        info = tr(R.string.tune_familiar_new_info),
+    ) { c.settings.setRadioTune(tune.copy(newness = snap(it))) }
+    SliderSetting(
+        tr(R.string.tune_hits_deep), tune.depth, -1f..1f, { word(it, tr(R.string.tune_hits), tr(R.string.tune_deep)) }, steps = 7,
+        info = tr(R.string.tune_hits_deep_info),
+    ) { c.settings.setRadioTune(tune.copy(depth = snap(it))) }
+    SliderSetting(
+        tr(R.string.tune_calm_energetic), tune.energy, -1f..1f, { word(it, tr(R.string.tune_calm), tr(R.string.tune_energetic)) }, steps = 7,
+        info = tr(R.string.tune_calm_energetic_info),
+    ) { c.settings.setRadioTune(tune.copy(energy = snap(it))) }
+    // How much the last one has to go by: a figure, not an explanation.
+    if (tune.energy != 0f) {
+        val measured = remember { c.mixTempo.measuredCount() }
+        Note(tr(R.string.tune_measured_songs, measured))
     }
 }
 
