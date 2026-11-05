@@ -316,7 +316,12 @@ data class BehaviorPrefs(
     val playCountSeconds: Int = 10,
     /** #263: YouTube Music's history waits for the same; off, it's told as a song starts (as before). */
     val playCountOnAccount: Boolean = false,
+    /** #349 (1.8.2): Home's Quick picks as Prism makes them around your artists (as before), or YouTube Music's own. */
+    val quickPicksSource: QuickPicksSource = QuickPicksSource.PRISM,
 )
+
+/** Whose Quick picks Home shows (#349). */
+enum class QuickPicksSource(val label: String) { PRISM(tr(R.string.quick_picks_from_prism)), YOUTUBE(tr(R.string.quick_picks_from_youtube)) }
 
 /**
  * Explicit songs (#216, 1.8.1): YouTube Music marks them "E". [SHOW] is as before; [SKIP] leaves them out of what plays
@@ -1921,6 +1926,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val pipMode = stringPreferencesKey("pip_mode")
         val panelSwipes = booleanPreferencesKey("panel_swipes")
         val recentShows = stringPreferencesKey("recent_shows")
+        val quickPicksSource = stringPreferencesKey("quick_picks_source")
         val queueLocked = booleanPreferencesKey("queue_locked")
         val scrollShowsControls = booleanPreferencesKey("scroll_shows_controls")
         val playlistGenres = booleanPreferencesKey("playlist_genres")
@@ -2058,6 +2064,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "own_lossy_files",
                 // 1.8.1 (#216): what plays and shows, not a look.
                 "explicit_content",
+                // 1.8.2 (#349): where Home's Quick picks come from.
+                "quick_picks_source",
                 // 1.8.1 (#296, #263): what Prism keeps of your listening.
                 "history_paused_until", "play_count_seconds", "play_count_account",
             )
@@ -2348,6 +2356,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 historyPausedUntil = p[K.historyPausedUntil] ?: d.behavior.historyPausedUntil,
                 playCountSeconds = (p[K.playCountSeconds] ?: d.behavior.playCountSeconds).coerceIn(0, 600),
                 playCountOnAccount = p[K.playCountOnAccount] ?: d.behavior.playCountOnAccount,
+                quickPicksSource = p.enum(K.quickPicksSource, d.behavior.quickPicksSource),
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -2936,6 +2945,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setPipMode(v: PipMode) = edit { it[K.pipMode] = v.name }
     fun setPanelSwipes(v: Boolean) = edit { it[K.panelSwipes] = v }
     fun setRecentShows(v: RecentShows) = edit { it[K.recentShows] = v.name }
+    fun setQuickPicksSource(v: QuickPicksSource) = edit { it[K.quickPicksSource] = v.name }
     fun setQueueLocked(v: Boolean) = edit { it[K.queueLocked] = v }
     fun setScrollShowsControls(v: Boolean) = edit { it[K.scrollShowsControls] = v }
     fun setPlaylistGenres(v: Boolean) = edit { it[K.playlistGenres] = v }

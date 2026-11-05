@@ -198,6 +198,9 @@ private fun CataloguePage(bottomPadding: Dp) {
                 Toggle(
                     tr(R.string.leave_off_podcast_sections), tr(R.string.youtube_music_s_sections_of_shows), HomeSections.KIND_PODCASTS in settings.homeHideKinds,
                 ) { c.settings.setHomeHideKind(HomeSections.KIND_PODCASTS, it) }
+                // #349: Prism's, made around your artists, or YouTube Music's own as they come.
+                Label(tr(R.string.quick_picks_from), info = tr(R.string.quick_picks_from_info))
+                Chips(com.prism.music.data.prefs.QuickPicksSource.entries, settings.behavior.quickPicksSource, { it.label }) { c.settings.setQuickPicksSource(it) }
                 Toggle(
                     tr(R.string.quick_picks_start_a_radio),
                     if (settings.quickPicksRadio) tr(R.string.tapping_a_pick_plays_it_then) else tr(R.string.tapping_a_pick_plays_quick_picks),
@@ -205,7 +208,7 @@ private fun CataloguePage(bottomPadding: Dp) {
                 ) { c.settings.setQuickPicksRadio(it) }
                 Toggle(
                     tr(R.string.speed_dial_youtube_music_s_only), tr(R.string.without_the_albums_and_songs_prism), settings.speedDialYouTubeOnly,
-                    info = tr(R.string.speed_dial_starts_with_youtube_music),
+                    info = tr(R.string.speed_dial_starts_with_youtube_music) + " " + tr(R.string.speed_dial_only_short_page),
                 ) { c.settings.setSpeedDialYouTubeOnly(it) }
                 Toggle(tr(R.string.customize_button_on_home), null, settings.homeCustomizeButton) { c.settings.setHomeCustomizeButton(it) }
             }
