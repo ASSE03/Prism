@@ -864,8 +864,7 @@ private fun GlassSettings() {
                 val prefs = LocalContainer.current.settings
                 Group(tr(R.string.glass)) {
                     // 1.8.0: one choice over liquidGlass + glassKind + frostedGlass (LookChoices).
-                    // #324: says which of Regular and Clear blurs (Glass.kt: Haze's regular glass blurs, its clear one doesn't).
-                    Label(tr(R.string.glass), info = tr(R.string.glass_kinds_info))
+                    Label(tr(R.string.glass), info = tr(R.string.glass_kinds_what_differs))
                     // #252 (1.8.2): each as a real piece of that glass, over the cover playing.
                     val choice = LookChoices.glass(s)
                     ChoiceCards(GlassChoice.entries, choice, { it.label }, { null }, onSelect = { LookChoices.setGlass(prefs, it) }) { GlassSample(it) }
@@ -874,13 +873,13 @@ private fun GlassSettings() {
                         // Both need Android 12's blur: below it the bars are solid, so there's nothing for them to change.
                         if (android.os.Build.VERSION.SDK_INT < 31) Note(tr(R.string.glass_needs_android_12))
                         else {
-                            // Clear keeps what's behind it sharp: it has no blur to turn up.
+                            // Not on Clear: it has next to no blur to set.
                             if (choice != GlassChoice.LIQUID_CLEAR) SliderSetting(
-                                tr(R.string.glass_blur), look.blur, com.prism.music.data.prefs.GlassLook.BLUR_RANGE, { "${(it * 100).roundToInt()}%" },
+                                tr(R.string.glass_blur), look.blur, com.prism.music.data.prefs.GlassLook.BLUR_RANGE, { "${(com.prism.music.ui.theme.glassSnap(it) * 100).roundToInt()}%" },
                                 info = tr(R.string.glass_blur_info),
                             ) { prefs.setGlassBlur(com.prism.music.ui.theme.glassSnap(it)) }
                             SliderSetting(
-                                tr(R.string.glass_frost), look.frost, com.prism.music.data.prefs.GlassLook.FROST_RANGE, { "${(it * 100).roundToInt()}%" },
+                                tr(R.string.glass_frost), look.frost, com.prism.music.data.prefs.GlassLook.FROST_RANGE, { "${(com.prism.music.ui.theme.glassSnap(it) * 100).roundToInt()}%" },
                                 info = tr(R.string.glass_frost_info),
                             ) { prefs.setGlassFrost(com.prism.music.ui.theme.glassSnap(it)) }
                         }

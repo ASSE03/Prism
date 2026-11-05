@@ -31,8 +31,9 @@ What changed in each release. Older releases are described on the [Releases page
 - **Cover gradient, a new player background** (#232, #338). The cover's own colors as a solid gradient, with nothing blurred:
   its main color at the top, deepening toward the bottom. "Darkness at the bottom" sets how far it goes, and the colors stay
   dark enough for the white text whatever the cover. Customize Prism, Player, Look, where the backgrounds are now example cards.
-- **Set your glass** (#252). Blur and Frost sliders on the Glass page, whose choices are now real pieces of each glass. At
-  100% they're what you have today. They need Android 12's blur; below it the bars are solid and the sliders don't show.
+- **Set your glass** (#252). A Frost slider for every glass and a Blur slider for Frosted Glass, on the Glass page, whose choices
+  are now real pieces of each glass. At 100% they're what you have today. They need Android 12's blur; below it the bars are solid
+  and the sliders don't show.
 - **Glass on more of the screen** (#326, off unless you turn it on). Cards, chips and round buttons get a lit edge and follow
   Frost, without a live blur, and the Undo bar becomes real glass while it's up. Performance mode turns it off. A first step.
 

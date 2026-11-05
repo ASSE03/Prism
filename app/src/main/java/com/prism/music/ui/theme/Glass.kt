@@ -63,10 +63,15 @@ internal fun glassSamplesThePage(sdk: Int, liquid: Boolean, frosted: Boolean): B
 internal fun hiddenByKeyboard(keyboardPx: Int, heightPx: Float): Boolean = keyboardPx > 0 && keyboardPx >= heightPx
 
 /**
- * What Regular and Clear really are (Haze 2.0.1's own styles, read from its code). Regular: a 20-25 dp blur and a veil of 22%
+ * What Regular and Clear are set to (Haze 2.0.1's own styles, read from its code). Regular: a 20-25 dp blur and a veil of 22%
  * black (55% white in light mode). Clear: a 1.25 dp blur, 18% black (17% white), stronger bending at the edges and a
  * brighter rim. Haze chooses between its dark and light values from the phone's dark mode, not from Prism's theme, so
  * [glassValues] gives it Prism's when the two differ.
+ *
+ * And what they look like (#252, on a Galaxy A16 with Android 16 and an Android 13 emulator): behind Regular colors spread
+ * further the higher the radius, but small things like text stay a faint sharp outline at every radius from 6 to 40 dp. Behind
+ * Clear colors keep their edges and small things soften. Why Regular keeps that outline isn't known: Haze's refraction detail
+ * (already 0) and an opaque background made no difference.
  */
 internal data class GlassValues(
     val specular: Float, val edgeShadow: Float, val ambient: Float, val contrast: Float, val whitePoint: Float, val chroma: Float,

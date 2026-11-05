@@ -11,6 +11,8 @@ import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.core.graphics.ColorUtils
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.prism.music.data.prefs.GlassKind
@@ -18,6 +20,8 @@ import com.prism.music.data.prefs.GlassLook
 import com.prism.music.data.prefs.PlayerBackground
 import com.prism.music.playback.QueueKind
 import com.prism.music.playback.QueueSource
+import com.prism.music.ui.player.GRADIENT_MIDDLE_AT
+import com.prism.music.ui.player.GradientStops
 import com.prism.music.ui.player.coverGradientOf
 import com.prism.music.ui.player.stops
 import com.prism.music.ui.screens.GlassChoice
@@ -93,6 +97,22 @@ class GlassAndGradientTest {
         }
     }
 
+    /**
+     * What the gradient's line (see `gradientPaint`) has at [x], [y] (0..1 across and down) on this screen. The margins are read,
+     * where nothing of the player sits: its status bar strip darkens the very top and the cover fills the middle.
+     */
+    private fun expected(stops: GradientStops, x: Float, y: Float): Int {
+        val map = compose.onRoot().captureToImage().toPixelMap()
+        val w = map.width.toFloat()
+        val h = map.height.toFloat()
+        val dx = 0.72f * w
+        val t = (((x - 0.14f) * w) * dx + (y * h) * h) / (dx * dx + h * h)
+        return if (t < GRADIENT_MIDDLE_AT) ColorUtils.blendARGB(stops.top, stops.middle, t / GRADIENT_MIDDLE_AT)
+        else ColorUtils.blendARGB(stops.middle, stops.foot, (t - GRADIENT_MIDDLE_AT) / (1f - GRADIENT_MIDDLE_AT))
+    }
+
+    private fun gradientShows(stops: GradientStops, x: Float, y: Float) = near(pixel(x, y), expected(stops, x, y), 8)
+
     @Test fun thePlayerDrawsTheCoversGradient() {
         Fixture.ready()
         val (cover, bmp) = onePictureCover(0xFF1F6F5C.toInt())
@@ -102,17 +122,15 @@ class GlassAndGradientTest {
         }
         val wanted = coverGradientOf(bmp)!!.stops(1f)
         openPlayerOn(cover)
-        // The very top of the line the gradient runs along: its top color, once the cover is read and the fade is over.
-        compose.waitUntil(10_000) { near(pixel(0.14f, 0.001f), wanted.top, 10) }
-        // And the foot, at the slider's full darkness: near black. A little above the bar at the very foot of the screen.
-        compose.waitUntil(5_000) { near(pixel(0.86f, 0.97f), wanted.foot, 24) }
+        // The upper left and the lower right, once the cover is read and the fade is over.
+        compose.waitUntil(10_000) { gradientShows(wanted, 0.02f, 0.2f) && gradientShows(wanted, 0.98f, 0.85f) }
         Fixture.screenshot("cover-gradient-dark-foot")
-        // The slider moves the foot, not the top.
+        // The slider darkens the foot and leaves the top alone.
         runBlocking { c.settings.setGradientDepth(0f) }
         val lighter = coverGradientOf(bmp)!!.stops(0f)
         assertEquals(wanted.top, lighter.top)
-        compose.waitUntil(5_000) { near(pixel(0.86f, 0.97f), lighter.foot, 24) }
-        assertTrue(near(pixel(0.14f, 0.001f), wanted.top, 10))
+        assertFalse("the two depths have to differ for this to mean anything", near(expected(wanted, 0.98f, 0.85f), expected(lighter, 0.98f, 0.85f), 16))
+        compose.waitUntil(5_000) { gradientShows(lighter, 0.98f, 0.85f) }
         Fixture.screenshot("cover-gradient-light-foot")
         // Lyrics open over it: a veil, nothing that needs a blur.
         compose.clickWhenFound(hasContentDescription(tr(R.string.lyrics)) and hasClickAction(), 15_000)
@@ -129,7 +147,7 @@ class GlassAndGradientTest {
         }
         val wanted = coverGradientOf(bmp)!!.stops(c.settings.current.view.gradientDepth)
         openPlayerOn(cover)
-        compose.waitUntil(10_000) { near(pixel(0.14f, 0.001f), wanted.top, 10) }
+        compose.waitUntil(10_000) { gradientShows(wanted, 0.02f, 0.2f) }
     }
 
     private fun openGlassPage() {
@@ -144,7 +162,7 @@ class GlassAndGradientTest {
 
     @Test fun theSlidersAreThereWhenTheyCanDoSomething() {
         Fixture.ready()
-        runBlocking { c.settings.setLiquidGlass(true); c.settings.setGlassKind(GlassKind.REGULAR) }
+        runBlocking { c.settings.setFrostedGlass(true) }
         Fixture.launch()
         openGlassPage()
         Fixture.screenshot("glass-page")
@@ -156,7 +174,10 @@ class GlassAndGradientTest {
             return
         }
         compose.waitUntil(5_000) { shown(tr(R.string.glass_blur)) && shown(tr(R.string.glass_frost)) }
-        // Clear, picked by its card: it keeps what's behind it sharp, so it has no blur to set.
+        // Regular, picked by its card: the same two.
+        compose.onAllNodes(hasText(GlassChoice.LIQUID_REGULAR.label) and hasClickAction()).onFirst().performClick()
+        compose.waitUntil(5_000) { c.settings.current.liquidGlass && c.settings.current.glassKind == GlassKind.REGULAR && shown(tr(R.string.glass_blur)) && shown(tr(R.string.glass_frost)) }
+        // Clear has next to no blur to set.
         compose.onAllNodes(hasText(GlassChoice.LIQUID_CLEAR.label) and hasClickAction()).onFirst().performClick()
         compose.waitUntil(5_000) { c.settings.current.glassKind == GlassKind.CLEAR && !shown(tr(R.string.glass_blur)) }
         assertTrue(shown(tr(R.string.glass_frost)))
@@ -170,7 +191,7 @@ class GlassAndGradientTest {
         Fixture.launch()
         assertEquals("off on a fresh install", GlassLook(), c.settings.current.view.glass)
         openGlassPage()
-        compose.onAllNodes(hasText(tr(R.string.glass_on_more_of_the_screen)) and hasClickAction()).onFirst().performClick()
+        compose.onAllNodes(hasText(tr(R.string.glass_on_more_of_the_screen)) and hasClickAction()).onFirst().performScrollTo().performClick()
         compose.waitUntil(5_000) { c.settings.current.glassEverywhere }
         // The Undo bar over a page is real glass with this on. Picking a Look brings it up, and its button still answers.
         val before = c.settings.lookValues.value

@@ -208,9 +208,8 @@ fun rememberCoverGradient(url: String?): CoverGradient? {
 
 /**
  * The background itself: three colors in one shader, built once and only built again while a new song's colors fade in. No
- * blur and no drifting. In a layer of its own: repainting a dithered full-screen gradient every frame the player draws (the
- * lyric sweep's, say) measured 2-5 ms more GPU a frame than the mesh on a Galaxy A16. In a layer it's painted once and then
- * only placed.
+ * blur and no drifting. In a layer of its own, so that it's painted once and then only placed while the rest of the player
+ * draws every frame (the lyric sweep, say). On a Galaxy A16, drawn this way, it costs the same as the mesh.
  */
 @Composable
 fun CoverGradientBackdrop(gradient: CoverGradient?, depth: Float, modifier: Modifier = Modifier) {

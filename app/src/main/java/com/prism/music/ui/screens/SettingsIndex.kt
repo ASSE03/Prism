@@ -167,7 +167,7 @@ object SettingsIndex {
         // 1.8.0: one Glass choice; Motion moved to the Customize Prism page. Old titles stay as search words.
         SettingEntry(G, tr(R.string.glass), tr(R.string.glass), tr(R.string.blur_transparent) + " " + tr(R.string.liquid_glass) + " " + tr(R.string.frosted_glass) + " " + tr(R.string.glass_style)),
         SettingEntry(G, tr(R.string.glass), tr(R.string.frosted_pages), tr(R.string.blur_artist_album_playlist)),
-        SettingEntry(G, tr(R.string.glass), tr(R.string.glass_blur), tr(R.string.glass_blur_info)),
+        SettingEntry(G, tr(R.string.glass), tr(R.string.glass_blur), tr(R.string.glass_blur_info), needs = turnOn(tr(R.string.frosted_glass)) { (it.frostedGlass || it.liquidGlass) && !(it.liquidGlass && it.glassKind == com.prism.music.data.prefs.GlassKind.CLEAR) }),
         SettingEntry(G, tr(R.string.glass), tr(R.string.glass_frost), tr(R.string.glass_frost_info)),
         SettingEntry(G, tr(R.string.glass), tr(R.string.glass_on_more_of_the_screen), tr(R.string.glass_on_more_of_the_screen_detail)),
         SettingEntry(A, tr(R.string.motion), tr(R.string.motion)),
