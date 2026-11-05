@@ -511,6 +511,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
     fun download(song: Song, asIs: Boolean = false) {
         // A file on the phone is already offline. (Episodes from a feed don't download yet.)
         if (song.isLocal || song.isRss) return
+        c.keptPlaylists.forgive(setOf(song.id, keptAs(song.id)) + _standIns.value.filterValues { it == song.id }.keys)
         // A lossless file that was taken out of Downloads just comes back.
         if (c.losslessSync.unhide(song.id)) return
         // (A music video already downloaded as its song counts as downloaded.)
@@ -601,10 +602,12 @@ class DownloadRepository(private val context: Context, private val c: AppContain
         _videoParts.value.keys.filter { partSongId(it) == songId }.forEach { manager.removeDownload(it) }
     }
 
-    fun remove(asked: String) {
+    /** [byListener]: their choice, so a kept playlist doesn't fetch it back; Smart Downloads tidying up isn't that. */
+    fun remove(asked: String, byListener: Boolean = true) {
         // A video row's download is its song's (#315).
         val id = keptAs(asked)
         if (isLosslessOnly(id)) { c.losslessSync.hide(listOf(id)); return }
+        if (byListener) c.keptPlaylists.noteDeleted(setOf(asked, id))
         DownloadService.sendRemoveDownload(context, PrismDownloadService::class.java, id, false)
         removeVideo(id)
         c.scope.launch(Dispatchers.IO) { c.db.songs().setSmart(id, false); refreshSmartIds() }
@@ -613,12 +616,14 @@ class DownloadRepository(private val context: Context, private val c: AppContain
     /** Deletes many downloads at once, straight through the manager (no intent per song). */
     fun removeMany(asked: Collection<String>) {
         val ids = asked.map(::keptAs).distinct()
+        c.keptPlaylists.noteDeleted(asked.toSet() + ids)
         c.losslessSync.hide(ids.filter(::isLosslessOnly))
         ids.forEach { manager.removeDownload(it); removeVideo(it) }
         c.scope.launch(Dispatchers.IO) { ids.forEach { c.db.songs().setSmart(it, false) }; refreshSmartIds() }
     }
 
     fun removeAll() {
+        c.keptPlaylists.stopAll()
         val ids = _media.value.keys.toList()
         c.losslessSync.hide(_lossless.value.keys)
         manager.removeAllDownloads()

@@ -67,6 +67,18 @@ class PlaylistDownloadsTest {
         assertEquals(listOf("a"), ids(PlaylistDownloads.toFetch(listOf(local, live, song("a")), emptySet(), emptyMap(), emptySet(), emptySet())))
     }
 
+    /** Deleted while the list was kept: not fetched back, by the row's id or, for a video row, by its song's. New ones still are. */
+    @Test fun keepingLeavesWhatWasDeleted() {
+        val noOne = emptySet<String>()
+        assertEquals(listOf("a", "c"), ids(PlaylistDownloads.toFetch(songs, noOne, emptyMap(), noOne, noOne, deleted = setOf("b"))))
+        assertEquals(listOf("a", "c"), ids(PlaylistDownloads.toFetch(songs, noOne, mapOf("b" to "songOfB"), noOne, noOne, deleted = setOf("songOfB"))))
+    }
+
+    /** The record stays small: what's left the list goes from it, and what's on it stays, by the row or the song it came down as. */
+    @Test fun theDeletedRecordFollowsTheList() {
+        assertEquals(setOf("a", "songOfB"), PlaylistDownloads.stillDeleted(setOf("a", "songOfB", "gone"), songs, mapOf("b" to "songOfB")))
+    }
+
     @Test fun theWifiRule() {
         assertTrue(PlaylistDownloads.mayFetch(online = true, metered = false, wifiOnly = true))
         assertTrue(PlaylistDownloads.mayFetch(online = true, metered = true, wifiOnly = false))
