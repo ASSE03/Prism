@@ -292,7 +292,11 @@ private fun SettingsPage(
     // is found here; one on a page opens that page at its group.
     var query by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf("") }
     var foundHere by remember { mutableStateOf<String?>(null) }
-    val results = remember(query) { SettingsIndex.search(query) }
+    val results = remember(query) { if (query.isBlank()) emptyList() else SettingsIndex.search(query) }
+    // The hub only: its search is ready before the first letter, without the main thread reading the whole index (#355).
+    if (section == null) androidx.compose.runtime.LaunchedEffect(Unit) {
+        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { SettingsIndex.prepare() }
+    }
 
     androidx.compose.runtime.CompositionLocalProvider(LocalSettingsFind provides (find ?: foundHere)) {
     SubPage(
@@ -320,16 +324,19 @@ private fun SettingsPage(
                             modifier = Modifier.padding(horizontal = 8.dp),
                         ) else Group("") {
                             results.take(30).forEach { e ->
-                                // Hidden until another switch is on: the result says so, and opens at that switch's group.
-                                val hidden = e.needs?.takeIf { !it.on(s) }
-                                NavRow(
-                                    e.section?.icon ?: PrismIcons.Settings, e.shown,
-                                    listOf(e.section?.title ?: tr(R.string.settings), e.group).filter { it != e.title }.joinToString(" › "),
-                                    hint = hidden?.hint,
-                                ) {
-                                    if (e.section == null) { query = ""; foundHere = e.group }
-                                    else if (onOpen != null) onOpen(e.section, e.group)
-                                    else nav.go(Routes.settings(e.section.key, e.group))
+                                // Keyed: a result still there after the next letter keeps its row, so its text isn't laid out again.
+                                androidx.compose.runtime.key(e.section, e.group, e.title) {
+                                    // Hidden until another switch is on: the result says so, and opens at that switch's group.
+                                    val hidden = e.needs?.takeIf { !it.on(s) }
+                                    NavRow(
+                                        e.section?.icon ?: PrismIcons.Settings, e.shown,
+                                        listOf(e.section?.title ?: tr(R.string.settings), e.group).filter { it != e.title }.joinToString(" › "),
+                                        hint = hidden?.hint,
+                                    ) {
+                                        if (e.section == null) { query = ""; foundHere = e.group }
+                                        else if (onOpen != null) onOpen(e.section, e.group)
+                                        else nav.go(Routes.settings(e.section.key, e.group))
+                                    }
                                 }
                             }
                         }

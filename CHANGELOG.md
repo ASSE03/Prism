@@ -2,6 +2,12 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.8.2 (unreleased)
+
+### Fixes
+
+- **Typing in Search and in Settings' search keeps up on slower phones** (#355).
+
 ## 1.8.1.1
 
 A bug-fix update.

@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -198,7 +199,10 @@ fun ScreenBackdrop(screen: BackdropScreen, content: @Composable BoxScope.() -> U
     }
     val page = remember(style, photo, frosted, height, s.backdropDim, motion) { PageBackdrop(height, draw) }
     Box(Modifier.fillMaxSize().onSizeChanged { height = with(density) { it.height.toDp() } }) {
-        if (style != Backdrop.DEFAULT || frosted) draw(Modifier.fillMaxSize())
+        // The frost only changes with the song, so it's kept as a picture in a layer: drawn afresh, its gradients and grain
+        // over the whole screen cost a Galaxy A16's GPU about 15 ms of every frame, even a blinking cursor's (#355).
+        if (style != Backdrop.DEFAULT) draw(Modifier.fillMaxSize())
+        else if (frosted) draw(Modifier.fillMaxSize().graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen })
         // The background reaches under the navigation rail (wide windows); the page itself starts beside it.
         Box(Modifier.fillMaxSize().padding(start = LocalChromeStart.current)) {
             // Over any background (the ambient frost or a picked one), the page's panels and buttons are glass.

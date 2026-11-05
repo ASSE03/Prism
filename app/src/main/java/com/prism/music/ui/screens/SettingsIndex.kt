@@ -486,11 +486,18 @@ object SettingsIndex {
         val q = SearchRank.norm(query)
         if (q.isBlank()) return emptyList()
         val words = q.split(' ')
-        fun hay(e: SettingEntry) = SearchRank.norm("${e.title} ${e.group} ${e.section?.title ?: "Settings"} ${e.keywords}")
-        return entries.filter { e -> hay(e).let { h -> words.all { it in h } } }
-            .sortedBy { e ->
-                val t = SearchRank.norm(e.title)
-                when { t.startsWith(q) -> 0; q in t -> 1; else -> 2 }
-            }
+        return prepared.filter { p -> words.all { it in p.hay } }
+            .sortedBy { p -> when { p.title.startsWith(q) -> 0; q in p.title -> 1; else -> 2 } }
+            .map { it.entry }
     }
+
+    /** An entry's words as [search] compares them, read once: it runs while composing, for every letter typed (#355). */
+    private class Prepared(val entry: SettingEntry, val title: String, val hay: String)
+
+    private val prepared: List<Prepared> by lazy {
+        entries.map { e -> Prepared(e, SearchRank.norm(e.title), SearchRank.norm("${e.title} ${e.group} ${e.section?.title ?: "Settings"} ${e.keywords}")) }
+    }
+
+    /** Reads every entry's words now, so that a first letter doesn't. For a background thread. */
+    fun prepare() { prepared.size }
 }

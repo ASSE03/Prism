@@ -54,6 +54,12 @@ internal fun glassPath(sdk: Int, liquid: Boolean, frosted: Boolean, haze: Boolea
 internal fun glassSamplesThePage(sdk: Int, liquid: Boolean, frosted: Boolean): Boolean = sdk >= BLUR_SDK && (liquid || frosted)
 
 /**
+ * Whether the tab bar and mini player sit wholly behind the keyboard, so nobody can see them. Their glass cost a Galaxy
+ * A16's GPU about 10 ms of every frame there, for each letter typed (#355). A floating keyboard takes no room ([keyboardPx] 0).
+ */
+internal fun hiddenByKeyboard(keyboardPx: Int, heightPx: Float): Boolean = keyboardPx > 0 && keyboardPx >= heightPx
+
+/**
  * A surface that renders as refractive Liquid Glass when enabled in
  * Appearance settings, or as a soft translucent card otherwise.
  *
