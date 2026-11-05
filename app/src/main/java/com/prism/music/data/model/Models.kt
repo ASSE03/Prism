@@ -37,10 +37,17 @@ data class Song(
     val primaryArtist: String get() = artists.firstOrNull()?.name ?: ""
     /** A music file on the phone (Library → Local music), not a YouTube Music song: it plays from the file. */
     val isLocal: Boolean get() = id.startsWith(LOCAL_PREFIX)
+    /**
+     * An episode of a show added by its RSS feed (Podcasts → Add a podcast by RSS): an episode ([isEpisode]) that YouTube
+     * knows nothing of, so its id never goes there, and it can't be liked, downloaded, shared or put in a playlist.
+     */
+    val isRss: Boolean get() = id.startsWith(RSS_PREFIX)
 
     companion object {
         /** Local songs' ids: this, then the file's MediaStore id. */
         const val LOCAL_PREFIX = "local:"
+        /** Feed episodes' ids, and their shows': this, then hashes of the feed ([com.prism.music.data.podcast.RssPodcasts]). */
+        const val RSS_PREFIX = "rss:"
     }
 }
 

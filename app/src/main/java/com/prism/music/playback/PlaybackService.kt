@@ -1133,9 +1133,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val index = player.currentMediaItemIndex
         val item = player.currentMediaItem
         val id = item?.mediaId
-        val title = item?.toSong()?.title.orEmpty()
+        val song = item?.toSong()
+        val title = song?.title.orEmpty()
         val cause = error.cause ?: error
-        val why = cause.friendlyMessage(tr(R.string.playback_failed)).trimEnd('.', ' ')
+        val why = (com.prism.music.data.podcast.episodeFailureText(song, error) ?: cause.friendlyMessage(tr(R.string.playback_failed))).trimEnd('.', ' ')
         AudioDiagnostics.log("error", "$id won't play (${error.errorCodeName}: ${cause.message?.take(120)})")
         fun stillThere() = player.playbackState == Player.STATE_IDLE && player.currentMediaItemIndex == index && player.currentMediaItem?.mediaId == id
         skipJob?.cancel()
@@ -1270,8 +1271,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // Remembered loudness applies straight away (and offline); the network refreshes it.
         songLoudness = c.loudness.getFloat(song.id, Float.NaN).takeIf { !it.isNaN() }
         applyNormalization()
-        // A file on the phone has nothing on YouTube to fetch or report.
-        if (song.isLocal) return
+        // A file on the phone (or an episode from its own feed) has nothing on YouTube to fetch or report.
+        if (song.isLocal || song.isRss) return
         extrasJob = scope.launch {
             val ex = runCatching { withContext(Dispatchers.IO) { c.ytm.playerExtras(song.id, c.streams.signatureTimestamp()) } }.getOrNull()
             ex?.loudnessDb?.toFloat()?.let { loud ->
@@ -1385,6 +1386,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      * couldn't be reached (worth trying again); otherwise there simply isn't one.
      */
     suspend fun videoIdFor(song: Song): VideoLookup {
+        // An episode from a feed is only sound.
+        if (song.isRss) return VideoLookup(null)
         // An episode is a YouTube video already: its video is itself.
         if (song.isVideo || song.isEpisode) return VideoLookup(song.id)
         // A file on the phone has no music video, and neither has the listener's own upload (#101: the lookup found the
@@ -1475,7 +1478,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 for (id in ids) withContext(Dispatchers.IO) { c.warmUp(id, whole = true, cellular = c.settings.current.preloadCellular) }
             }
         }
-        if (next.startsWith(Song.LOCAL_PREFIX)) return
+        if (next.startsWith(Song.LOCAL_PREFIX) || next.startsWith(Song.RSS_PREFIX)) return
         // Its "Most replayed" curve (for the best part), ready before it plays, and the one after's (a double skip).
         val coming = listOfNotNull(player.getMediaItemAt(i).toSong(), upcoming(2).getOrNull(1)?.toSong())
         scope.launch { coming.forEach { s -> c.bestParts.prefetch(s) } }
@@ -1483,7 +1486,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // The song after it is resolved too (no audio fetched): skipping twice used to land on one that wasn't, which
         // took ~2 s to start. Each song is resolved once either way, only earlier.
         val afterNext = upcoming(2).getOrNull(1)?.mediaId
-            ?.takeIf { it.isNotBlank() && !it.startsWith(Song.LOCAL_PREFIX) && !c.downloads.isDownloaded(it) }
+            ?.takeIf { it.isNotBlank() && !it.startsWith(Song.LOCAL_PREFIX) && !it.startsWith(Song.RSS_PREFIX) && !c.downloads.isDownloaded(it) }
         scope.launch(Dispatchers.IO) {
             c.warmUp(next, cellular = c.settings.current.preloadCellular)
             afterNext?.let { c.streams.prefetch(it) }

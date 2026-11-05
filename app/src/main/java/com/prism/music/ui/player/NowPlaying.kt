@@ -1158,7 +1158,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                             Spacer(Modifier.width(8.dp))
                         }
                         val isLiked = song.id in liked
-                        if (!heartBelow && inHeader(PlayerPart.LIKE)) {
+                        if (!heartBelow && inHeader(PlayerPart.LIKE) && !song.isRss) {
                             CircleGlyph(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) tr(R.string.remove_from_liked) else tr(R.string.widget_like), isLiked) {
                                 c.library.toggleLike(song)
                             }

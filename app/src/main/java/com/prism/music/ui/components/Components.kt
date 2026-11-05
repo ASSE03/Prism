@@ -627,7 +627,9 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
     val together by c.together.state.collectAsState()
     // A file on the phone isn't on YouTube: no radio, download, sharing, YouTube playlists, or sending it to a session.
     val local = song.isLocal
-    val guest = (together as? com.prism.music.playback.together.TogetherState.Guest)?.takeIf { !local }
+    // An episode from a feed isn't on YouTube either: no download, sharing, likes or playlists for it.
+    val rss = song.isRss
+    val guest = (together as? com.prism.music.playback.together.TogetherState.Guest)?.takeIf { !local && !rss }
     fun toast(text: String) = android.widget.Toast.makeText(context, text, android.widget.Toast.LENGTH_SHORT).show()
 
     // The playlist picker and the share sheet take over from the sheet.
@@ -649,7 +651,7 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
         else ActionItem(PrismIcons.QueueMusic, tr(R.string.add_to_queue)) { c.player.addToQueue(song) },
         // A radio of a podcast episode is music radio: not offered for episodes.
         if (song.isEpisode || local) null else ActionItem(PrismIcons.Radio, tr(R.string.radio_2)) { c.player.playRadio(song) },
-        if (local) null else ActionItem(
+        if (local || rss) null else ActionItem(
             if (downloaded) PrismIcons.DownloadDone else PrismIcons.Download, tr(R.string.download),
             value = when { downloaded -> tr(R.string.downloaded); dl != null -> "${dl.percent.toInt().coerceAtLeast(0)}%"; else -> null },
             active = downloaded, keepOpen = true,
@@ -661,7 +663,7 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
         song.podcastId?.let { id -> ActionItem(PrismIcons.Podcasts, tr(R.string.go_to_podcast)) { nav.go(Routes.podcast(id)) } },
         if (song.isEpisode && song.id in c.episodes.played.value) ActionItem(PrismIcons.Refresh, tr(R.string.mark_as_unplayed)) { c.episodes.forget(song.id); c.episodes.unmarkPlayed(song.id) }
         else if (song.isEpisode) ActionItem(PrismIcons.DoneAll, tr(R.string.mark_as_played)) { c.episodes.markPlayed(song.id) } else null,
-        ActionItem(PrismIcons.PlaylistAdd, tr(R.string.add_to_playlist), keepOpen = true) { pickPlaylist = true },
+        if (rss) null else ActionItem(PrismIcons.PlaylistAdd, tr(R.string.add_to_playlist), keepOpen = true) { pickPlaylist = true },
         // A picked version's album and artists (#328): it plays as that recording.
         shown.album?.id?.let { id -> ActionItem(PrismIcons.Album, tr(R.string.go_to_album), value = shown.album?.title?.takeIf { it.length <= 22 }) { nav.go(Routes.album(id)) } },
     ) + goToArtists(shown) { route -> nav.go(route) } + listOfNotNull(
@@ -697,10 +699,10 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
             listOfNotNull(shown.artistText, formatDuration(shown.durationSec).takeIf { it.isNotEmpty() }).joinToString(" · "),
             placeholderIcon = PrismIcons.Song,
         ) {
-            SheetIconButton(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) tr(R.string.remove_from_liked_songs) else tr(R.string.add_to_liked_songs), active = isLiked) {
+            if (!rss) SheetIconButton(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) tr(R.string.remove_from_liked_songs) else tr(R.string.add_to_liked_songs), active = isLiked) {
                 c.library.toggleLike(song)
             }
-            if (!local) SheetIconButton(PrismIcons.Share, tr(R.string.share)) { sharing = true }
+            if (!local && !rss) SheetIconButton(PrismIcons.Share, tr(R.string.share)) { sharing = true }
         }
         if (guest != null) Text(
             tr(R.string.adding_to_s_session, guest.hostName), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary,
@@ -947,7 +949,7 @@ fun <T> SortButton(options: List<T>, selected: T, label: (T) -> String, modifier
  * name ([com.prism.music.ui.Routes.artist]). A file on the phone has no YouTube artists.
  */
 fun openableArtists(song: Song): List<com.prism.music.data.model.ArtistRef> =
-    if (song.isLocal) emptyList()
+    if (song.isLocal || song.isRss) emptyList()
     else song.artists.filter { it.name.isNotBlank() }.distinctBy { it.id ?: com.prism.music.data.innertube.SearchRank.norm(it.name) }
 
 /**

@@ -393,6 +393,13 @@ class AppContainer(val app: Application) {
     val savedColors = com.prism.music.data.prefs.SavedColors(app)
     /** Where each podcast episode was left off. */
     val episodes = com.prism.music.data.EpisodeProgress(app)
+    /** Podcasts added by their RSS feeds: on the phone, no YouTube (Podcasts → Add a podcast by RSS). */
+    val rssPodcasts by lazy {
+        com.prism.music.data.podcast.RssPodcasts(
+            File(app.filesDir, com.prism.music.data.podcast.RssPodcasts.DIR),
+            com.prism.music.data.podcast.RssGuard.feedClient(TestHooks.network),
+        )
+    }
     val library = LibraryRepository(this)
     /** Liked songs mirrored into a real YouTube Music playlist, when the listener turns that on. */
     val likedPlaylist = com.prism.music.data.LikedPlaylist(this)
@@ -773,6 +780,7 @@ class AppContainer(val app: Application) {
         writer: ((androidx.media3.datasource.cache.CacheWriter) -> Unit)? = null,
     ) {
         if (id.startsWith(com.prism.music.data.model.Song.LOCAL_PREFIX)) return // a file on the phone is ready already
+        if (id.startsWith(com.prism.music.data.model.Song.RSS_PREFIX)) return // an hour of a feed's audio isn't fetched on the chance
         if (downloadCache.fullyCached(id, 0, C.LENGTH_UNSET.toLong())) return
         yieldToPlaying(if (forSing) null else id)
         val s = runCatching { streams.resolve(id) }.getOrNull() ?: return // live streams and failures: nothing to save
@@ -836,7 +844,29 @@ class AppContainer(val app: Application) {
             .setUpstreamDataSourceFactory(songCache)
             .setCacheWriteDataSinkFactory(null)
             .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
-        return ResolvingDataSource.Factory(downloadsFirst) { spec -> resolveAudio(spec, true) }
+        val songs = ResolvingDataSource.Factory(downloadsFirst) { spec -> resolveAudio(spec, true) }
+        val rss = rssDataSourceFactory()
+        return DataSource.Factory { com.prism.music.data.podcast.RssOrSongSource(rss.createDataSource(), songs.createDataSource()) }
+    }
+
+    /**
+     * An episode from a feed: the song cache (it's seeked around in, as any episode is), then its own audio link through
+     * [com.prism.music.data.podcast.RssGuard]'s client, which holds nothing of YouTube's.
+     */
+    private fun rssDataSourceFactory(): DataSource.Factory {
+        val feedHttp = OkHttpDataSource.Factory(com.prism.music.data.podcast.RssGuard.audioClient(TestHooks.network))
+            .setUserAgent(com.prism.music.data.podcast.RssGuard.userAgent)
+        val cached = CacheDataSource.Factory()
+            .setCache(playerCache)
+            .setUpstreamDataSourceFactory(feedHttp)
+            .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
+        return ResolvingDataSource.Factory(cached) { spec ->
+            val id = spec.uri.lastPathSegment.orEmpty()
+            val link = rssPodcasts.audioUrl(id) ?: throw com.prism.music.data.podcast.RssException(com.prism.music.data.podcast.RssProblem.EPISODE_GONE)
+            streamDetails[id] = "Podcast feed" to null
+            onStreamResolved?.invoke(id)
+            spec.buildUpon().setUri(link).setKey(id).build()
+        }
     }
 
     /** A music video's picture: from Downloads when it's saved there (key `video:<id>`), else streamed (never cached). */

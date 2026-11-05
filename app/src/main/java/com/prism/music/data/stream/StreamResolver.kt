@@ -467,6 +467,9 @@ class StreamResolver(
     private fun account() = settings.current.let { "${it.cookie.hashCode()}/${it.authUser}" }
 
     private fun formats(videoId: String): Formats {
+        // An episode from a feed is no YouTube video, and its id never goes there (everything asked of YouTube comes
+        // through here). It plays through AppContainer's own route; a prefetch or a scan asking for it just gets nothing.
+        if (videoId.startsWith(com.prism.music.data.model.Song.RSS_PREFIX)) throw StreamException(tr(R.string.no_playable_audio_stream_was_found))
         cache[videoId]?.let { if (System.currentTimeMillis() < it.expiresAtMs) return it }
         refusedSongs.reasonFor(videoId, account())?.let { throw StreamException(it) }
         val mine = CompletableFuture<Formats>()
