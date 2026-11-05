@@ -43,6 +43,7 @@ object SettingsIndex {
     private val smart = turnOn(tr(R.string.smart_downloads)) { it.smartDownloads }
     private val webRemote = turnOn(tr(R.string.control_from_a_browser)) { it.webRemote }
     private val ownFiles = turnOn(tr(R.string.use_your_own_song_files)) { it.sound.ownLossyFiles }
+    private val lockScreen = turnOn(tr(R.string.lock_screen_title)) { it.behavior.lockScreen }
 
     private val A = SettingsSection.APPEARANCE
     private val CO = SettingsSection.COLOR
@@ -168,7 +169,7 @@ object SettingsIndex {
         SettingEntry(G, tr(R.string.glass), tr(R.string.glass), tr(R.string.blur_transparent) + " " + tr(R.string.liquid_glass) + " " + tr(R.string.frosted_glass) + " " + tr(R.string.glass_style)),
         SettingEntry(G, tr(R.string.glass), tr(R.string.frosted_pages), tr(R.string.blur_artist_album_playlist)),
         SettingEntry(G, tr(R.string.glass), tr(R.string.glass_blur), tr(R.string.glass_blur_info), needs = turnOn(tr(R.string.frosted_glass)) { (it.frostedGlass || it.liquidGlass) && !(it.liquidGlass && it.glassKind == com.prism.music.data.prefs.GlassKind.CLEAR) }),
-        SettingEntry(G, tr(R.string.glass), tr(R.string.glass_frost), tr(R.string.glass_frost_info)),
+        SettingEntry(G, tr(R.string.glass), tr(R.string.glass_frost), tr(R.string.glass_frost_info), needs = turnOn(tr(R.string.frosted_glass)) { it.frostedGlass || it.liquidGlass }),
         SettingEntry(G, tr(R.string.glass), tr(R.string.glass_on_more_of_the_screen), tr(R.string.glass_on_more_of_the_screen_detail)),
         SettingEntry(A, tr(R.string.motion), tr(R.string.motion)),
         SettingEntry(A, tr(R.string.motion), tr(R.string.reduce_motion), tr(R.string.animations_accessibility)),
@@ -438,12 +439,12 @@ object SettingsIndex {
         SettingEntry(C, tr(R.string.speakers_tvs), tr(R.string.play_on_a_speaker_or_tv), tr(R.string.cast_casting_google_cast_google_tv)),
         SettingEntry(SettingsSection.PLAYER, tr(R.string.desk_mode), tr(R.string.desk_mode), tr(R.string.desk_mode_keywords)),
         SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_title), tr(R.string.lock_screen_keywords)),
-        SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_allow), tr(R.string.lock_screen_keywords)),
-        SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_app_info), tr(R.string.lock_screen_keywords)),
-        SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_layout_label), tr(R.string.lock_screen_keywords)),
-        SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_show), tr(R.string.lock_screen_keywords)),
-        SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_paused_label), tr(R.string.lock_screen_keywords)),
-        SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_hide), tr(R.string.lock_screen_keywords)),
+        SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_allow), tr(R.string.lock_screen_keywords), needs = lockScreen),
+        SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_app_info), tr(R.string.lock_screen_keywords), needs = lockScreen),
+        SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_layout_label), tr(R.string.lock_screen_keywords), needs = lockScreen),
+        SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_show), tr(R.string.lock_screen_keywords), needs = lockScreen),
+        SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_paused_label), tr(R.string.lock_screen_keywords), needs = lockScreen),
+        SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_hide), tr(R.string.lock_screen_keywords), needs = lockScreen),
         SettingEntry(C, tr(R.string.prism_on_a_tv), tr(R.string.share_prism_with_a_tv), tr(R.string.tv_install_keywords)),
         SettingEntry(C, tr(R.string.prism_on_a_tv), tr(R.string.downloader_code), tr(R.string.tv_install_keywords)),
         SettingEntry(C, tr(R.string.control_from_a_browser), tr(R.string.control_from_a_browser), tr(R.string.web_remote_computer_laptop_tablet_browser)),

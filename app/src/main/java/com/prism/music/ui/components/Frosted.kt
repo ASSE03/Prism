@@ -541,9 +541,11 @@ fun Modifier.dissolveBottom(start: Float = 0.5f): Modifier = graphicsLayer { com
 /** The see-through fill of frosted panels and buttons on a frosted page. */
 @Composable
 fun frostFill(strength: Float = 1f): Color {
-    // #326: with "Glass on more of the screen" on, the Frost slider reaches the page's glass too.
+    // #326: with "Glass on more of the screen" on, the Frost slider reaches the page's glass too; where the slider can't
+    // be reached (Glass off, below Android 12) a value set earlier doesn't quietly thin the panels.
     val s = com.prism.music.ui.theme.LocalAppSettings.current
-    val k = strength * (if (s.glassEverywhere) s.view.glass.frost else 1f)
+    val sliderHere = s.glassEverywhere && (s.liquidGlass || s.frostedGlass) && android.os.Build.VERSION.SDK_INT >= 31
+    val k = strength * (if (sliderHere) s.view.glass.frost else 1f)
     return if (LocalIsDark.current) Color.White.copy(alpha = 0.10f * k) else Color.White.copy(alpha = 0.55f * k)
 }
 

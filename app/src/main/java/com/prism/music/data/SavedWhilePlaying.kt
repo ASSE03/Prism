@@ -35,8 +35,13 @@ object SavedWhilePlaying {
         (whole + picks.filterValues { it in whole }.keys)
             .filterTo(LinkedHashSet()) { (picks[it] ?: it) in whole && !it.startsWith(Song.LOCAL_PREFIX) && !it.startsWith(Song.RSS_PREFIX) }
 
-    /** What [scan] finds; nothing when it fails. */
-    suspend fun orNone(scan: suspend () -> List<Song>): List<Song> = runCatching { scan() }.getOrDefault(emptyList())
+    /** What [scan] finds; nothing when it fails. Leaving the page isn't failing: that says nothing yet. */
+    suspend fun orNone(scan: suspend () -> List<Song>): List<Song> = try {
+        scan()
+    } catch (e: Exception) {
+        if (e is kotlinx.coroutines.CancellationException) throw e
+        emptyList()
+    }
 
     /** Most recently played first, without what Downloads lists already or what Prism has no name for. Off the main thread. */
     suspend fun list(c: AppContainer): List<Song> = withContext(Dispatchers.IO) {

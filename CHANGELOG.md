@@ -90,6 +90,20 @@ What changed in each release. Older releases are described on the [Releases page
 
 ### Fixes
 
+- **A download you delete stays deleted**, even when its playlist is kept downloaded; new songs on that list still come down.
+  Deleting every download now also stops keeping every playlist, so they don't all come back.
+- **Your uploads**: leaving the page while it loads no longer leaves the list cut short, a page that fails doesn't replace a
+  fuller copy, an album or artist listed twice no longer closes the page, and Shuffle on an uploaded artist plays their songs
+  (Mix isn't offered: YouTube makes none).
+- Speakers and TVs can only speak for themselves: Prism takes an answer on the network only for the address it came from,
+  and sends a device's actions only to that device. A device that sends its answer a byte at a time can't hold Prism past the time limit.
+- Saved while playing no longer flashes "nothing saved" when you leave the page mid-look. A lost connection while reading an
+  artist's biography is tried again later, instead of counting as "no article" for 30 days.
+- "Read lyrics from your music files" can't switch off the last lyrics source any more. "Quick picks from" is on the Home &
+  Library page, where Settings' search opens it, and search says what to turn on first for Frost and the lock screen player's options.
+- The Frost slider's value doesn't thin the page's panels where the slider can't be reached (Glass off, below Android 12).
+  Backups no longer carry what today's mixes have played. Podcasts added by RSS read and remove off the main thread, and a
+  feed full of "&" no longer takes long to read.
 - **"Player stuck playing with no progress"**: when a song's position stops moving (seen at 0:00 over Bluetooth), Prism now
   tries the song again from the same place, twice, instead of giving up on it, and says what to try in plain words if it
   still won't go. The cause on that phone isn't known yet; Share diagnostics now records it.
