@@ -55,6 +55,8 @@ private const val V1_7_9_2 = 51
 private const val V1_8_0 = 53
 /** Prism 1.8.1 (build 55): your history brought in, Spotify with your own key, History & Replay, your requests. */
 private const val V1_8_1 = 55
+/** Prism 1.8.2 (build 57): the lock screen player. */
+private const val V1_8_2 = 57
 
     /** Every step, in the order they're shown. */
     val steps: List<TourStep> = listOf(
@@ -516,6 +518,12 @@ private const val V1_8_1 = 55
                 tr(R.string.tour_181_tv),
             ),
             listOf(PrismIcons.Car, PrismIcons.Tv),
+        ),
+        TourStep(
+            V1_8_2, PrismIcons.Lock, tr(R.string.tour_182_lock_title),
+            tr(R.string.tour_182_lock_body),
+            listOf(tr(R.string.tour_182_lock_point_1), tr(R.string.tour_182_lock_point_2), tr(R.string.tour_182_lock_point_3)),
+            showMe = Routes.settings("player", find = tr(R.string.lock_screen_title)),
         ),
         TourStep(
             V1_7, PrismIcons.Update, tr(R.string.stay_in_the_loop),

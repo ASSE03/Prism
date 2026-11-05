@@ -1594,6 +1594,51 @@ private fun RenameTabDialog(tab: NavTab, current: String, onDismiss: () -> Unit,
 // ---------------------------------------------------------------------------- Player
 
 @Composable
+private fun LockScreenGroup() {
+    // 1.8.2: Prism's own lock screen ([com.prism.music.ui.lockscreen.LockScreenActivity]); off unless switched on.
+    val s = LocalAppSettings.current
+    val container = LocalContainer.current
+    val prefs = container.settings
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val b = s.behavior
+    val gate = com.prism.music.ui.lockscreen.LockScreenGate
+    val resumed = com.prism.music.ui.components.rememberResumeCount()
+    // Read again on coming back from Android's page.
+    val canStart = remember(resumed, b.lockScreen) { gate.canStartDirectly(context) }
+    val song by container.player.currentSong.collectAsState()
+    Group(tr(R.string.lock_screen_title)) {
+        Toggle(tr(R.string.lock_screen_title), tr(R.string.lock_screen_detail), b.lockScreen, info = tr(R.string.lock_screen_info)) { on ->
+            prefs.setLockScreen(on)
+            if (on && !gate.canStartDirectly(context)) gate.openPermissionPage(context)
+        }
+        if (b.lockScreen) {
+            if (!canStart) {
+                Note(tr(R.string.lock_screen_needs_permission))
+                Item(tr(R.string.lock_screen_allow), tr(R.string.lock_screen_allow_detail), onClick = { gate.openPermissionPage(context) }, info = tr(R.string.lock_screen_allow_info))
+                Item(tr(R.string.lock_screen_app_info), tr(R.string.lock_screen_app_info_detail), onClick = { gate.openAppInfo(context) }, info = tr(R.string.lock_screen_app_info_info))
+            }
+            Label(tr(R.string.lock_screen_layout_label))
+            if (s.performanceMode) Note(tr(R.string.lock_screen_performance))
+            ChoiceCards(
+                com.prism.music.data.prefs.LockLayout.entries, b.lockScreenLayout, title = { it.label }, detail = { it.detail }, columns = 2,
+                onSelect = { prefs.setLockScreenLayout(it) },
+            ) { com.prism.music.ui.lockscreen.LockScreenSample(it, song) }
+            Label(tr(R.string.lock_screen_show), info = tr(R.string.lock_screen_show_info))
+            ShowChips(
+                listOf(
+                    ShowOption(tr(R.string.volume), b.lockScreenVolume) { prefs.setLockScreenVolume(it) },
+                    ShowOption(tr(R.string.lock_screen_show_like), b.lockScreenLike) { prefs.setLockScreenLike(it) },
+                    ShowOption(tr(R.string.lock_screen_show_output), b.lockScreenOutput) { prefs.setLockScreenOutput(it) },
+                ),
+            )
+            Label(tr(R.string.lock_screen_paused_label), info = tr(R.string.lock_screen_paused_info))
+            Chips(com.prism.music.data.prefs.LockPaused.entries, b.lockScreenPaused, { it.label }) { prefs.setLockScreenPaused(it) }
+            Toggle(tr(R.string.lock_screen_hide), tr(R.string.lock_screen_hide_detail), b.lockScreenHideSong, info = tr(R.string.lock_screen_hide_info)) { prefs.setLockScreenHideSong(it) }
+        }
+    }
+}
+
+@Composable
 private fun PlayerSettings() {
     val s = LocalAppSettings.current
     val container = LocalContainer.current
@@ -1640,6 +1685,7 @@ private fun PlayerSettings() {
         Group(tr(R.string.desk_mode)) {
             Toggle(tr(R.string.desk_mode), tr(R.string.desk_mode_detail), s.tv.deskMode, info = tr(R.string.desk_mode_info)) { prefs.setDeskMode(it) }
         }
+        LockScreenGroup()
         MoreOptions(listOf(tr(R.string.title_and_times), tr(R.string.visualizer), tr(R.string.immersive_mode))) {
         PlayerTitleGroup()
         PlayerVisualizerGroup()

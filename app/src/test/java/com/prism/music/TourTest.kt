@@ -43,7 +43,7 @@ class TourTest {
     /** 1.8.1 (build 55): someone updating from 1.8.0 (build 54) sees its five pages, in order, and nothing older. */
     @Test
     fun anUpdateFrom180ShowsThe181Pages() {
-        val new = Tour.stepsAfter(54)
+        val new = Tour.stepsAfter(54).filter { it.since <= 55 }
         assertTrue(new.all { it.since == 55 && it.kind == TourStep.Kind.PLAIN })
         assertEquals(
             listOf(R.string.tour_181_history, R.string.tour_181_spotify, R.string.tour_181_replay, R.string.tour_181_yours, R.string.also_new)
@@ -55,6 +55,14 @@ class TourTest {
         assertEquals("settings/library?find=History", new[2].showMe)
         // Short pages: a few points each.
         assertTrue(new.all { it.points.size in 3..5 })
+    }
+
+    /** 1.8.2 (build 57): the lock screen player has its page, which opens where it's switched on. */
+    @Test
+    fun anUpdateFrom181ShowsTheLockScreenPage() {
+        val page = Tour.stepsAfter(56).first { it.title == tr(R.string.tour_182_lock_title) }
+        assertEquals(57, page.since)
+        assertTrue(page.showMe!!.startsWith("settings/player"))
     }
 
     /** Every "Show me" opens a page that exists: a settings page by a key Settings knows, or one of the app's routes. */
