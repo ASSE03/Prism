@@ -244,6 +244,11 @@ fun PlayerPartsGroup() {
             tr(R.string.hide_controls_over_videos), tr(R.string.they_come_back_with_a_tap), s.view.videoControlsHide,
             info = tr(R.string.while_a_music_video_plays_the),
         ) { prefs.setVideoControlsHide(it) }
+        // #293: the small buttons on the video itself.
+        Toggle(
+            tr(R.string.buttons_on_videos_wait_for_a_tap), null, s.view.videoButtonsHide,
+            info = tr(R.string.buttons_on_videos_wait_for_a_tap_info),
+        ) { prefs.setVideoButtonsHide(it) }
         // The ⋯ menu: its tiles and what it shows (also from the menu itself).
         Item(tr(R.string.edit_this_menu), tr(R.string.the_player_s_menu_its_tiles_and_actions), onClick = { editMenu = true }, icon = PrismIcons.More) { Chevron() }
     }
@@ -1000,6 +1005,11 @@ fun PlayerGesturesGroup() {
             tr(R.string.gestures_anywhere_on_the_player), tr(R.string.not_only_on_the_cover_around_the_controls_too), s.behavior.gesturesEverywhere,
             info = tr(R.string.your_swipes_double_tap_and_long_press_work_below_the_title_too),
         ) { prefs.setGesturesEverywhere(it) }
+        // #282: the Lyrics layout has no cover to swipe, so the controls below the lyrics take the gestures.
+        Toggle(
+            tr(R.string.gestures_under_the_lyrics), null, s.behavior.gesturesUnderLyrics,
+            info = tr(R.string.gestures_under_the_lyrics_info),
+        ) { prefs.setGesturesUnderLyrics(it) }
         Label(tr(R.string.mini_player))
         GestureRow(tr(R.string.swipe_left), s.miniSwipeLeft, PlayerGesture.choices(mini = true)) { prefs.setGesture("mini_swipe_left", it) }
         GestureRow(tr(R.string.swipe_right), s.miniSwipeRight, PlayerGesture.choices(mini = true)) { prefs.setGesture("mini_swipe_right", it) }
