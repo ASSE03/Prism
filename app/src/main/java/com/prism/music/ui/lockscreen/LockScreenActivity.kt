@@ -129,6 +129,9 @@ class LockScreenActivity : ComponentActivity() {
         enableEdgeToEdge(statusBarStyle = darkBars, navigationBarStyle = darkBars)
         super.onCreate(savedInstanceState)
         live = this
+        // The manifest's showWhenLocked starts at Android 8.1; Android 8.0 only has the window flag.
+        @Suppress("DEPRECATION")
+        if (android.os.Build.VERSION.SDK_INT < 27) window.addFlags(android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
         // Upright on a phone, as Android's lock screen is; a tablet stays however it's standing.
         if (resources.configuration.smallestScreenWidthDp >= 600) requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         LockScreenGate.cancelFallback(this)
