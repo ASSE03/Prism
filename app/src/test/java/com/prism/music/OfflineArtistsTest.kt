@@ -145,6 +145,17 @@ class OfflineArtistsTest {
         assertNull(store.artistNamed("Test Artist"))
     }
 
+    /** A kept list from before duplicates were weeded out: read back as it was, its page crashed on the repeated key, every time, offline too. */
+    @Test fun aKeptUploadsListWithRepeatsComesBackWithout() {
+        val album = AlbumItem("MPREb_one", "Album One", "Album", null)
+        val artist = ArtistItem("UCartist", "Test Artist", "3 songs", null)
+        store.saveUploads(listOf(song(1), song(1), song(2)), listOf(album, album), listOf(artist, artist))
+        val kept = store.uploads()!!
+        assertEquals(listOf("song1", "song2"), kept.songs.map { it.id })
+        assertEquals(listOf("MPREb_one"), kept.albums.map { it.id })
+        assertEquals(listOf("UCartist"), kept.artists.map { it.id })
+    }
+
     @Test fun uploadsListsComeBack() {
         val upload = song(7).copy(isUpload = true)
         store.saveUploads(listOf(upload), listOf(AlbumItem("A", "Alb", "Album • X", null, "ML")), listOf(ArtistItem("R", "Art", "1 song", null)))

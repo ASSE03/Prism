@@ -55,7 +55,7 @@ fun SavedWhilePlayingScreen(bottomPadding: Dp) {
     val nav = LocalNavigator.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val songs by produceState<List<Song>?>(null) {
-        lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) { value = runCatching { SavedWhilePlaying.list(c) }.getOrDefault(emptyList()) }
+        lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) { value = SavedWhilePlaying.orNone { SavedWhilePlaying.list(c) } }
     }
     val source = QueueSource(QueueKind.LIBRARY, tr(R.string.saved_while_playing))
     var info by remember { mutableStateOf(false) }

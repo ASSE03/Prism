@@ -126,6 +126,45 @@ class LanHttpTest {
         }
     }
 
+    /**
+     * A byte every so often resets the socket's own timeout each time, so only the call's limit can end this. One that trickles
+     * its first line or its headers used to hold the thread for as long as it cared to.
+     */
+    private fun trickling(first: String, assertInTime: (Int) -> Unit) {
+        ServerSocket(0, 1, java.net.InetAddress.getByName("127.0.0.1")).use { server ->
+            val t = thread(isDaemon = true) {
+                runCatching {
+                    server.accept().use { s ->
+                        s.getOutputStream().apply { write(first.toByteArray()); flush() }
+                        repeat(100) { write(s) }
+                    }
+                }
+            }
+            assertInTime(server.localPort)
+            t.interrupt()
+        }
+    }
+
+    private fun write(s: java.net.Socket) {
+        Thread.sleep(100)
+        s.getOutputStream().apply { write('x'.code); flush() }
+    }
+
+    private fun refusedInTime(port: Int) {
+        val quick = client.newBuilder().callTimeout(800, TimeUnit.MILLISECONDS).build()
+        val started = System.currentTimeMillis()
+        val failed = runCatching { quick.newCall(Request.Builder().url("http://127.0.0.1:$port/").build()).execute() }.exceptionOrNull()
+        val took = System.currentTimeMillis() - started
+        assertTrue("$failed", failed is IOException)
+        assertTrue("held for $took ms past a limit of 800", took < 3_000)
+    }
+
+    @Test fun aDeviceTricklingItsFirstLineDoesntHoldTheCall() = trickling("HTTP/1.1 200 ", ::refusedInTime)
+
+    @Test fun aDeviceTricklingItsHeadersDoesntHoldTheCall() = trickling("HTTP/1.1 200 OK\r\nX-Slow: ", ::refusedInTime)
+
+    @Test fun aDeviceTricklingAChunkSizeDoesntHoldTheCall() = trickling("HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n", ::refusedInTime)
+
     /** Nothing leaves the local network this way: the rest of Prism keeps OkHttp's own rules (https, and no cleartext). */
     @Test fun onlyLocalAddressesComeThisWay() {
         val passed = ArrayList<String>()

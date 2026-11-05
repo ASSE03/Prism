@@ -103,6 +103,8 @@ class BackupPartsTest {
         assertEquals(BackupPart.LIBRARY, Backup.prefsPart("artist_prefs"))
         assertEquals(BackupPart.SETTINGS, Backup.prefsPart("icon_style"))
         assertEquals(null, Backup.prefsPart("discord"))
+        // Last session's songs, by id and name: not a setting, and over in six hours anyway.
+        assertEquals(null, Backup.prefsPart("session_heard"))
         assertEquals(BackupPart.ACCOUNTS, Backup.filePart("account"))
         assertEquals(null, Backup.filePart("models"))
     }

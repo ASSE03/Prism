@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
+import okio.buffer
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -149,6 +150,64 @@ class ArtistBiosTest {
     @Test fun aFailedAskIsAnErrorNotNoArticle() {
         val failed = runCatching { runBlocking { wikipedia(search, code = 503).find("Muse", titles, "en") } }
         assertTrue(failed.exceptionOrNull() is IOException)
+    }
+
+    /** Wikipedia's answers, but for [broken] answers (each a body that dies partway through, or isn't an answer at all). */
+    private fun answering(broken: () -> okhttp3.ResponseBody?, vararg answers: Pair<String, String>): WikipediaBios {
+        val http = OkHttpClient.Builder().addInterceptor { chain ->
+            val url = chain.request().url.toString()
+            val cut = broken()
+            val typed = answers.firstOrNull { url.contains(it.first) }?.second
+            Response.Builder().request(chain.request()).protocol(Protocol.HTTP_1_1).message("Test").code(if (cut != null || typed != null) 200 else 404)
+                .body(cut ?: (typed ?: "{}").toResponseBody("application/json".toMediaType())).build()
+        }.build()
+        return WikipediaBios(http, "test")
+    }
+
+    /** The first bytes arrive, then the connection goes. */
+    private fun dying(): okhttp3.ResponseBody {
+        val source = object : okio.Source {
+            private var sent = false
+            override fun read(sink: okio.Buffer, byteCount: Long): Long {
+                if (sent) throw IOException("connection lost")
+                sent = true
+                sink.writeUtf8("{\"pages\":[{\"key\":")
+                return 17
+            }
+            override fun timeout() = okio.Timeout.NONE
+            override fun close() = Unit
+        }
+        return object : okhttp3.ResponseBody() {
+            private val buffered = source.buffer()
+            override fun contentType() = "application/json".toMediaType()
+            override fun contentLength() = -1L
+            override fun source() = buffered
+        }
+    }
+
+    private val whole = arrayOf(search, "summary/Muse_(band)" to summary(), isArtist, article)
+
+    /** The class promises a bad connection is never remembered as "no article": it would stay that way for a month. */
+    @Test fun aConnectionLostMidAnswerIsAFailureNotNoArticle() = runBlocking {
+        var broken = true
+        val wiki = answering({ if (broken) dying() else null }, *whole)
+        val failed = runCatching { wiki.find("Muse", titles, "en") }
+        assertTrue("${failed.getOrNull()} / ${failed.exceptionOrNull()}", failed.exceptionOrNull() is IOException)
+
+        val bios = ArtistBios(Files.createTempDirectory("bios").toFile(), wiki::find)
+        assertNull(bios.bio("id", "Muse", titles, "en", mayAsk = true))
+        broken = false
+        assertEquals("nothing was remembered: asked again, and found", "Muse (band)", bios.bio("id", "Muse", titles, "en", mayAsk = true)?.title)
+    }
+
+    /** A Wi-Fi sign-in page answers 200 with its own HTML: nothing to do with what Wikipedia has. */
+    @Test fun aPageThatIsntAnAnswerIsAFailureToo() = runBlocking {
+        var broken = true
+        val wiki = answering({ if (broken) "<html>Sign in to this Wi-Fi</html>".toResponseBody("text/html".toMediaType()) else null }, *whole)
+        val bios = ArtistBios(Files.createTempDirectory("bios").toFile(), wiki::find)
+        assertNull(bios.bio("id", "Muse", titles, "en", mayAsk = true))
+        broken = false
+        assertEquals("Muse (band)", bios.bio("id", "Muse", titles, "en", mayAsk = true)?.title)
     }
 
     @Test fun anAddressFromElsewhereIsNotLinked() = runBlocking {
