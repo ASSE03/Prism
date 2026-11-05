@@ -4775,10 +4775,10 @@
     <string name="lock_screen_detail">De eigen speler van Prism op het vergrendelscherm terwijl er muziek speelt</string>
     <string name="lock_screen_info">Hij vervangt wat je ziet als je telefoon vergrendeld is, alleen terwijl er iets speelt, en kan alleen bedienen wat speelt: je kunt er geen bibliotheek, zoekfunctie of instellingen mee openen. Ontgrendelen sluit hem en brengt je terug waar je was. De eigen mediabediening van Android blijft zoals ze is. Gesprekken en wekkers blijven erboven.</string>
     <string name="lock_screen_keywords">vergrendelscherm speler vergrendeld keyguard cover songtekst klok vegen ontgrendelen over andere apps mediabediening</string>
-    <string name="lock_screen_needs_permission">Om klaar te zijn zodra je telefoon wakker wordt, heeft dit \"Weergeven over andere apps\" nodig. Prism tekent daarmee nooit over andere apps.</string>
+    <string name="lock_screen_needs_permission">Om vanzelf te verschijnen terwijl er muziek speelt, heeft dit \"Weergeven over andere apps\" nodig. Prism tekent daarmee nooit over andere apps.</string>
     <string name="lock_screen_allow">Toestaan</string>
     <string name="lock_screen_allow_detail">Opent de lijst van Android: zoek Prism en zet het aan</string>
-    <string name="lock_screen_allow_info">Android laat een scherm alleen op de achtergrond starten met deze toestemming. Zonder kan de speler nog steeds boven een vergrendelde telefoon verschijnen, een moment nadat hij wakker wordt.</string>
+    <string name="lock_screen_allow_info">Android laat een scherm alleen op de achtergrond starten met deze toestemming. Zonder kunnen sommige telefoons de speler nog steeds een moment na het wakker worden tonen, en andere tonen hem helemaal niet.</string>
     <string name="lock_screen_app_info">Grijs? Open App-info</string>
     <string name="lock_screen_app_info_detail">⋮ → Beperkte instellingen toestaan, probeer het daarna opnieuw</string>
     <string name="lock_screen_app_info_info">Android houdt deze instelling tegen voor apps die vanuit een bestand zijn geïnstalleerd. In App-info heeft het ⋮-menu \"Beperkte instellingen toestaan\". Daarna werkt de schakelaar.</string>

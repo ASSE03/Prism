@@ -4711,10 +4711,10 @@
     <string name="lock_screen_detail">Trình phát riêng của Prism trên màn hình khóa khi đang phát nhạc</string>
     <string name="lock_screen_info">Nó thay thế những gì bạn thấy khi khóa máy, chỉ khi có nội dung đang phát, và chỉ điều khiển được nội dung đang phát: không mở được thư viện, tìm kiếm hay cài đặt từ đây. Mở khóa sẽ đóng nó và đưa bạn về chỗ cũ. Các nút điều khiển phương tiện của Android vẫn như cũ. Cuộc gọi và báo thức nằm trên nó.</string>
     <string name="lock_screen_keywords">màn hình khóa trình phát khóa keyguard ảnh bìa lời bài hát đồng hồ vuốt mở khóa hiển thị trên các ứng dụng khác điều khiển phương tiện</string>
-    <string name="lock_screen_needs_permission">Để sẵn sàng ngay khi điện thoại thức dậy, tính năng này cần \"Hiển thị trên các ứng dụng khác\". Prism không bao giờ vẽ đè lên ứng dụng khác bằng quyền này.</string>
+    <string name="lock_screen_needs_permission">Để tự hiện lên khi đang phát nhạc, tính năng này cần \"Hiển thị trên các ứng dụng khác\". Prism không bao giờ vẽ đè lên ứng dụng khác bằng quyền này.</string>
     <string name="lock_screen_allow">Cho phép</string>
     <string name="lock_screen_allow_detail">Mở danh sách của Android: tìm Prism và bật lên</string>
-    <string name="lock_screen_allow_info">Android chỉ cho một màn hình khởi chạy trong nền khi có quyền này. Nếu không có, trình phát vẫn có thể hiện lên trên điện thoại đang khóa, một lúc sau khi máy thức dậy.</string>
+    <string name="lock_screen_allow_info">Android chỉ cho một màn hình khởi chạy trong nền khi có quyền này. Nếu không có, một số điện thoại vẫn có thể hiện trình phát một lúc sau khi thức dậy, còn một số khác sẽ không hiện nó.</string>
     <string name="lock_screen_app_info">Bị mờ? Mở Thông tin ứng dụng</string>
     <string name="lock_screen_app_info_detail">⋮ → Cho phép cài đặt bị hạn chế, rồi thử lại</string>
     <string name="lock_screen_app_info_info">Android giữ cài đặt này lại với các ứng dụng cài từ tệp. Trong Thông tin ứng dụng, menu ⋮ có \"Cho phép cài đặt bị hạn chế\". Sau đó công tắc sẽ hoạt động.</string>

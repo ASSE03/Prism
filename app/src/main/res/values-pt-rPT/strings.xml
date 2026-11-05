@@ -4839,10 +4839,10 @@
     <string name="lock_screen_detail">O leitor do próprio Prism no ecrã de bloqueio enquanto a música toca</string>
     <string name="lock_screen_info">Substitui o que vês com o telemóvel bloqueado, só enquanto algo toca, e só controla o que está a tocar: não dá para abrir biblioteca, pesquisa nem definições a partir dele. Ao desbloquear, fecha-se e voltas ao sítio onde estavas. Os controlos multimédia do Android ficam como estão. Chamadas e alarmes ficam por cima.</string>
     <string name="lock_screen_keywords">ecrã de bloqueio leitor bloqueado keyguard capa letra relógio deslizar desbloquear sobrepor outras aplicações controlos multimédia</string>
-    <string name="lock_screen_needs_permission">Para estar pronto assim que o telemóvel acorda, isto precisa de \"Apresentar sobre outras aplicações\". O Prism nunca desenha sobre outras aplicações com isso.</string>
+    <string name="lock_screen_needs_permission">Para aparecer sozinho enquanto a música toca, isto precisa de \"Apresentar sobre outras aplicações\". O Prism nunca desenha sobre outras aplicações com isso.</string>
     <string name="lock_screen_allow">Permitir</string>
     <string name="lock_screen_allow_detail">Abre a lista do Android: encontra o Prism e ativa</string>
-    <string name="lock_screen_allow_info">O Android só deixa um ecrã iniciar em segundo plano com esta autorização. Sem ela, o leitor ainda pode aparecer sobre o telemóvel bloqueado, um instante depois de ele acordar.</string>
+    <string name="lock_screen_allow_info">O Android só deixa um ecrã iniciar em segundo plano com esta autorização. Sem ela, alguns telemóveis ainda podem mostrar o leitor um instante depois de acordarem, e outros não o mostrarão de todo.</string>
     <string name="lock_screen_app_info">Está esbatido? Abre Informações da app</string>
     <string name="lock_screen_app_info_detail">⋮ → Permitir definições restritas, depois tenta de novo</string>
     <string name="lock_screen_app_info_info">O Android retém esta definição em apps instaladas a partir de um ficheiro. Em Informações da app, o menu ⋮ tem \"Permitir definições restritas\". Depois disso o interruptor funciona.</string>

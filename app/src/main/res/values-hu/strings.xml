@@ -4775,10 +4775,10 @@
     <string name="lock_screen_detail">A Prism saját lejátszója a zárolási képernyőn, amíg zene szól</string>
     <string name="lock_screen_info">Lecseréli, amit zároláskor látsz, csak amíg valami szól, és csak a lejátszott tartalmat vezérelheti: belőle nem nyitható meg a könyvtár, a keresés vagy a beállítások. A feloldás bezárja, és ott hagy, ahol voltál. Az Android saját médiavezérlői változatlanok maradnak. A hívások és az ébresztők fölötte maradnak.</string>
     <string name="lock_screen_keywords">zárolási képernyő zárképernyő lejátszó zárolva keyguard borító dalszöveg óra csúsztatás feloldás más alkalmazások felett médiavezérlők</string>
-    <string name="lock_screen_needs_permission">Ahhoz, hogy a telefon felébredésekor azonnal kész legyen, szüksége van a „Megjelenítés más alkalmazások felett” engedélyre. A Prism ezzel soha nem rajzol más alkalmazások fölé.</string>
+    <string name="lock_screen_needs_permission">Ahhoz, hogy magától megjelenjen, amíg zene szól, szüksége van a „Megjelenítés más alkalmazások felett” engedélyre. A Prism ezzel soha nem rajzol más alkalmazások fölé.</string>
     <string name="lock_screen_allow">Engedélyezés</string>
     <string name="lock_screen_allow_detail">Megnyitja az Android listáját: keresd meg a Prismet, és kapcsold be</string>
-    <string name="lock_screen_allow_info">Az Android csak ezzel az engedéllyel enged egy képernyőt a háttérből elindulni. Nélküle a lejátszó így is megjelenhet a zárolt telefonon, egy pillanattal az ébredés után.</string>
+    <string name="lock_screen_allow_info">Az Android csak ezzel az engedéllyel enged egy képernyőt a háttérből elindulni. Nélküle egyes telefonok így is megjelenítik a lejátszót egy pillanattal az ébredés után, mások viszont egyáltalán nem.</string>
     <string name="lock_screen_app_info">Szürke? Nyisd meg az Alkalmazásinfót</string>
     <string name="lock_screen_app_info_detail">⋮ → Korlátozott beállítások engedélyezése, aztán próbáld újra</string>
     <string name="lock_screen_app_info_info">Az Android visszatartja ezt a beállítást a fájlból telepített alkalmazásoknál. Az Alkalmazásinfóban a ⋮ menüben van a „Korlátozott beállítások engedélyezése”. Utána a kapcsoló működik.</string>

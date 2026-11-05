@@ -4839,10 +4839,10 @@
     <string name="lock_screen_detail">Playerul Prism pe ecranul de blocare cât timp se redă muzică</string>
     <string name="lock_screen_info">Înlocuiește ce vezi când telefonul e blocat, doar cât timp se redă ceva, și poate controla doar ce se redă: din el nu se poate deschide biblioteca, căutarea sau setările. Deblocarea îl închide și te lasă unde erai. Controalele media Android rămân cum sunt. Apelurile și alarmele rămân deasupra lui.</string>
     <string name="lock_screen_keywords">ecran de blocare player blocat keyguard copertă versuri ceas glisare deblocare peste alte aplicații controale media</string>
-    <string name="lock_screen_needs_permission">Ca să fie gata în clipa în care se trezește telefonul, are nevoie de „Afișare peste alte aplicații”. Prism nu desenează niciodată peste alte aplicații cu ea.</string>
+    <string name="lock_screen_needs_permission">Ca să apară singur cât timp se redă muzică, are nevoie de „Afișare peste alte aplicații”. Prism nu desenează niciodată peste alte aplicații cu ea.</string>
     <string name="lock_screen_allow">Permite</string>
     <string name="lock_screen_allow_detail">Deschide lista Android: găsește Prism și pornește-l</string>
-    <string name="lock_screen_allow_info">Android lasă un ecran să pornească în fundal doar cu această permisiune. Fără ea, playerul poate apărea totuși peste un telefon blocat, la scurt timp după ce se trezește.</string>
+    <string name="lock_screen_allow_info">Android lasă un ecran să pornească în fundal doar cu această permisiune. Fără ea, unele telefoane pot afișa totuși playerul la scurt timp după trezire, iar altele nu îl vor afișa deloc.</string>
     <string name="lock_screen_app_info">E inactiv? Deschide Informații despre aplicație</string>
     <string name="lock_screen_app_info_detail">⋮ → Permite setările restricționate, apoi încearcă din nou</string>
     <string name="lock_screen_app_info_info">Android ține în rezervă această setare pentru aplicațiile instalate dintr-un fișier. În Informații despre aplicație, meniul ⋮ are „Permite setările restricționate”. După aceea comutatorul funcționează.</string>

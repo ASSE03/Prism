@@ -4839,10 +4839,10 @@
     <string name="lock_screen_detail">Le lecteur propre à Prism sur l’écran de verrouillage pendant la musique</string>
     <string name="lock_screen_info">Il remplace ce que vous voyez quand le téléphone est verrouillé, uniquement pendant une lecture, et ne peut contrôler que ce qui est lu : impossible d’ouvrir la bibliothèque, la recherche ou les paramètres depuis lui. Le déverrouillage le ferme et vous laisse où vous étiez. Les commandes multimédias d’Android restent telles quelles. Les appels et les alarmes passent au-dessus.</string>
     <string name="lock_screen_keywords">écran de verrouillage lecteur verrouillé keyguard pochette paroles horloge balayer déverrouiller par-dessus autres applications commandes multimédias</string>
-    <string name="lock_screen_needs_permission">Pour être prêt dès que votre téléphone se réveille, il faut « Affichage par-dessus d’autres applications ». Prism ne dessine jamais par-dessus d’autres applications avec cette autorisation.</string>
+    <string name="lock_screen_needs_permission">Pour apparaître tout seul pendant la musique, il faut « Affichage par-dessus d’autres applications ». Prism ne dessine jamais par-dessus d’autres applications avec cette autorisation.</string>
     <string name="lock_screen_allow">L’autoriser</string>
     <string name="lock_screen_allow_detail">Ouvre la liste d’Android : trouvez Prism et activez-le</string>
-    <string name="lock_screen_allow_info">Android ne laisse un écran démarrer en arrière-plan qu’avec cette autorisation. Sans elle, le lecteur peut quand même apparaître sur un téléphone verrouillé, un instant après son réveil.</string>
+    <string name="lock_screen_allow_info">Android ne laisse un écran démarrer en arrière-plan qu’avec cette autorisation. Sans elle, certains téléphones peuvent quand même afficher le lecteur un instant après leur réveil, et d’autres ne l’afficheront pas du tout.</string>
     <string name="lock_screen_app_info">Grisé ? Ouvrez Infos sur l’appli</string>
     <string name="lock_screen_app_info_detail">⋮ → Autoriser les paramètres restreints, puis réessayez</string>
     <string name="lock_screen_app_info_info">Android bloque ce paramètre pour les applis installées depuis un fichier. Dans Infos sur l’appli, le menu ⋮ propose « Autoriser les paramètres restreints ». Ensuite, l’interrupteur fonctionne.</string>

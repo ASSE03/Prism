@@ -4839,10 +4839,10 @@
     <string name="lock_screen_detail">El reproductor propio de Prism en la pantalla de bloqueo mientras suena música</string>
     <string name="lock_screen_info">Sustituye lo que ves con el teléfono bloqueado, solo mientras suena algo, y solo puede controlar lo que se reproduce: desde él no se puede abrir la biblioteca, la búsqueda ni los ajustes. Al desbloquear se cierra y te deja donde estabas. Los controles multimedia de Android siguen como están. Las llamadas y las alarmas quedan por encima.</string>
     <string name="lock_screen_keywords">pantalla de bloqueo reproductor bloqueado keyguard portada letra reloj deslizar desbloquear sobre otras apps controles multimedia</string>
-    <string name="lock_screen_needs_permission">Para estar listo en cuanto el teléfono se active, necesita \"Mostrar sobre otras apps\". Prism nunca dibuja sobre otras apps con él.</string>
+    <string name="lock_screen_needs_permission">Para aparecer por sí solo mientras suena música, necesita \"Mostrar sobre otras apps\". Prism nunca dibuja sobre otras apps con él.</string>
     <string name="lock_screen_allow">Permitirlo</string>
     <string name="lock_screen_allow_detail">Abre la lista de Android: busca Prism y actívalo</string>
-    <string name="lock_screen_allow_info">Android solo deja que una pantalla se inicie en segundo plano con este permiso. Sin él, el reproductor aún puede aparecer sobre un teléfono bloqueado, un momento después de que se active.</string>
+    <string name="lock_screen_allow_info">Android solo deja que una pantalla se inicie en segundo plano con este permiso. Sin él, algunos teléfonos aún pueden mostrar el reproductor un momento después de activarse, y otros no lo mostrarán en absoluto.</string>
     <string name="lock_screen_app_info">¿Aparece atenuado? Abre Información de la app</string>
     <string name="lock_screen_app_info_detail">⋮ → Permitir ajustes restringidos y vuelve a intentarlo</string>
     <string name="lock_screen_app_info_info">Android bloquea este ajuste en las apps instaladas desde un archivo. En Información de la app, el menú ⋮ tiene \"Permitir ajustes restringidos\". Después, el interruptor funciona.</string>

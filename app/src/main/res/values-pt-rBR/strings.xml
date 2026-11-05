@@ -4839,10 +4839,10 @@
     <string name="lock_screen_detail">O player do próprio Prism na tela de bloqueio enquanto a música toca</string>
     <string name="lock_screen_info">Ele substitui o que você vê com o celular bloqueado, só enquanto algo toca, e só controla o que está tocando: não dá para abrir biblioteca, busca nem configurações por ele. Ao desbloquear, ele se fecha e você volta de onde estava. Os controles de mídia do Android continuam como são. Chamadas e alarmes ficam acima dele.</string>
     <string name="lock_screen_keywords">tela de bloqueio player bloqueado keyguard capa letra relógio deslizar desbloquear sobrepor outros apps controles de mídia</string>
-    <string name="lock_screen_needs_permission">Para estar pronto assim que o celular acorda, isto precisa de \"Exibir sobre outros apps\". O Prism nunca desenha sobre outros apps com isso.</string>
+    <string name="lock_screen_needs_permission">Para aparecer sozinho enquanto a música toca, isto precisa de \"Exibir sobre outros apps\". O Prism nunca desenha sobre outros apps com isso.</string>
     <string name="lock_screen_allow">Permitir</string>
     <string name="lock_screen_allow_detail">Abre a lista do Android: encontre o Prism e ative</string>
-    <string name="lock_screen_allow_info">O Android só deixa uma tela iniciar em segundo plano com esta permissão. Sem ela, o player ainda pode aparecer sobre o celular bloqueado, um instante depois de ele acordar.</string>
+    <string name="lock_screen_allow_info">O Android só deixa uma tela iniciar em segundo plano com esta permissão. Sem ela, alguns celulares ainda podem mostrar o player um instante depois de acordar, e outros não vão mostrá-lo de jeito nenhum.</string>
     <string name="lock_screen_app_info">Está esmaecido? Abra Informações do app</string>
     <string name="lock_screen_app_info_detail">⋮ → Permitir configurações restritas, depois tente de novo</string>
     <string name="lock_screen_app_info_info">O Android segura esta configuração em apps instalados a partir de um arquivo. Em Informações do app, o menu ⋮ tem \"Permitir configurações restritas\". Depois disso a chave funciona.</string>
