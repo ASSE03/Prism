@@ -193,9 +193,10 @@ class GlassAndGradientTest {
         openGlassPage()
         compose.onAllNodes(hasText(tr(R.string.glass_on_more_of_the_screen)) and hasClickAction()).onFirst().performScrollTo().performClick()
         compose.waitUntil(5_000) { c.settings.current.glassEverywhere }
-        // The Undo bar over a page is real glass with this on. Picking a Look brings it up, and its button still answers.
+        // The Undo bar over a page is real glass with this on. A change on the page brings it up, and its button still answers.
         val before = c.settings.lookValues.value
-        runBlocking { c.looks.apply(com.prism.music.data.looks.BuiltInLooks.of("midnight")!!) }
+        val other = if (c.settings.current.glassKind == GlassKind.CLEAR) GlassChoice.LIQUID_REGULAR else GlassChoice.LIQUID_CLEAR
+        compose.onAllNodes(hasText(other.label) and hasClickAction()).onFirst().performScrollTo().performClick()
         compose.waitForText(tr(R.string.undo))
         Fixture.screenshot("undo-bar-glass")
         compose.onAllNodes(hasText(tr(R.string.undo)) and hasClickAction()).onFirst().performClick()
