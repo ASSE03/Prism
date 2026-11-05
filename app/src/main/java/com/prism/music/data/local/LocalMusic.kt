@@ -18,6 +18,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 /**
@@ -26,7 +28,12 @@ import kotlinx.coroutines.withContext
  * artwork; nothing is looked up online for it, and Prism never moves or deletes the files. Local songs' ids are
  * `local:<MediaStore id>` ([Song.isLocal]).
  */
-class LocalMusic(private val context: Context, private val scope: CoroutineScope) {
+class LocalMusic(
+    private val context: Context,
+    private val scope: CoroutineScope,
+    /** Folders left out (#207, #249), by [folderOf]: their files and those below them aren't read or listed. */
+    private val skipFolders: () -> Set<String> = { emptySet() },
+) {
     data class Track(
         val song: Song,
         val uri: Uri,
@@ -44,9 +51,14 @@ class LocalMusic(private val context: Context, private val scope: CoroutineScope
     private val _scanned = MutableStateFlow(false)
     /** True once a scan has run with the permission (so an empty list means there's no music, not no access). */
     val scanned: StateFlow<Boolean> = _scanned
+    private val _folders = MutableStateFlow<Map<String, Int>>(emptyMap())
+    /** Every folder with music in it ([folderOf]) and how many files it holds itself, left out or not. */
+    val folders: StateFlow<Map<String, Int>> = _folders
     @Volatile private var byId: Map<String, Track> = emptyMap()
     private var pending: Job? = null
     private var watching = false
+    // One at a time, so the last one asked for is the last one shown (a folder ticked while another scan is running).
+    private val scanning = Mutex()
 
     fun hasPermission() = context.checkSelfPermission(LocalLossless.permission) == android.content.pm.PackageManager.PERMISSION_GRANTED
 
@@ -71,9 +83,19 @@ class LocalMusic(private val context: Context, private val scope: CoroutineScope
         runCatching { context.contentResolver.registerContentObserver(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, true, observer) }
     }
 
-    suspend fun scan() = withContext(Dispatchers.IO) {
+    /** The folders to leave out changed: the list follows. Nothing happens to the files. */
+    fun rescan() {
+        pending?.cancel()
+        pending = scope.launch { scan() }
+    }
+
+    suspend fun scan() = scanning.withLock { scanNow() }
+
+    private suspend fun scanNow() = withContext(Dispatchers.IO) {
         if (!hasPermission()) { _scanned.value = false; return@withContext }
         val out = ArrayList<Track>()
+        val skips = skipFolders()
+        val inFolders = HashMap<String, Int>()
         val projection = arrayOf(
             MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.ALBUM, MediaStore.Audio.Media.ALBUM_ID, MediaStore.Audio.Media.DURATION,
@@ -81,6 +103,8 @@ class LocalMusic(private val context: Context, private val scope: CoroutineScope
             MediaStore.Audio.Media.MIME_TYPE, MediaStore.Audio.Media.SIZE,
             // The folder: Android names an untagged song's album after it (#143).
             if (android.os.Build.VERSION.SDK_INT >= 29) MediaStore.Audio.Media.RELATIVE_PATH else @Suppress("DEPRECATION") MediaStore.Audio.Media.DATA,
+            // Which storage it's on (a memory card's folder isn't the phone's of the same name).
+            if (android.os.Build.VERSION.SDK_INT >= 29) MediaStore.Audio.Media.VOLUME_NAME else MediaStore.Audio.Media._ID,
         )
         val folders = HashMap<Long, String>()
         // Music only (not ringtones, recordings or podcasts' downloads), and long enough to be a song. Some FLACs come in
@@ -104,6 +128,9 @@ class LocalMusic(private val context: Context, private val scope: CoroutineScope
                 while (c.moveToNext()) {
                     val id = c.getLong(0)
                     val title = c.getString(1)?.takeIf { it.isNotBlank() } ?: continue
+                    val folder = folderOf(c.getString(11), if (android.os.Build.VERSION.SDK_INT >= 29) c.getString(12) else null)
+                    if (folder.isNotEmpty()) inFolders[folder] = (inFolders[folder] ?: 0) + 1
+                    if (isSkipped(folder, skips)) continue
                     val albumId = c.getLong(4)
                     val uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id)
                     val lengthMs = c.getLong(5).takeIf { it > 0 } ?: lengthOf(uri, "$id:${c.getLong(10)}") ?: continue
@@ -124,6 +151,7 @@ class LocalMusic(private val context: Context, private val scope: CoroutineScope
                 }
             }
         }.onFailure { Log.w(TAG, "scan failed", it) }
+        _folders.value = inFolders
         // Songs whose "album" is only their folder's name (no album tag): shown without an album, and never given
         // another file's cover as "the album's" (#143: M4As in a "Quick Share" folder all showing one song's cover).
         untagged(out, folders).takeIf { it.isNotEmpty() }?.let { ids ->
@@ -274,6 +302,60 @@ class LocalMusic(private val context: Context, private val scope: CoroutineScope
             // A file path ends with the file's name; a relative path ends with the folder.
             val folder = if (path.endsWith("/")) parts.lastOrNull() else parts.getOrNull(parts.size - 2)
             return folder?.takeIf { it.isNotBlank() }
+        }
+
+        /**
+         * A file's folder, the same way on every Android: "Music/Audiobooks/" on the phone's own storage, with the
+         * storage in front on any other ("1234-ABCD:Music/"). [path] is RELATIVE_PATH (a folder, with [volume]) on Android
+         * 10 and up, and below that the file's whole path. "": at the top of a storage, which can't be left out.
+         */
+        internal fun folderOf(path: String?, volume: String?): String {
+            if (path.isNullOrBlank()) return ""
+            if (volume != null) {
+                val rel = path.trim('/').let { if (it.isEmpty()) return "" else "$it/" }
+                return if (volume == "external_primary") rel else "$volume:$rel"
+            }
+            val parent = path.substringBeforeLast('/', "")
+            val own = parent.removePrefix("/storage/emulated/0")
+            if (own != parent) return own.trim('/').let { if (it.isEmpty()) "" else "$it/" }
+            val card = Regex("^/storage/([^/]+)/?(.*)$").find(parent) ?: return parent.trim('/').let { if (it.isEmpty()) "" else "$it/" }
+            return if (card.groupValues[2].isEmpty()) "" else "${card.groupValues[1]}:${card.groupValues[2].trim('/')}/"
+        }
+
+        /** Whether [folder] is one of [skips] or inside one. Folder names' capitals don't count on phone storage. */
+        internal fun isSkipped(folder: String, skips: Set<String>): Boolean =
+            folder.isNotEmpty() && skips.any { folder.startsWith(it, ignoreCase = true) }
+
+        /** A row of the folder list: [songs] counts those below it too. */
+        data class FolderRow(val path: String, val name: String, val depth: Int, val songs: Int, val skipped: Boolean, val parentSkipped: Boolean)
+
+        /**
+         * The folders with music in them as a tree in order, each under the folders above it, so a whole "Music/Old/" can
+         * be left out when its files are all further down. A folder left out earlier that's gone from the phone is listed
+         * as well (with no songs), so it can be ticked back.
+         */
+        internal fun folderRows(counts: Map<String, Int>, skips: Set<String>): List<FolderRow> {
+            val totals = java.util.TreeMap<String, Int>(String.CASE_INSENSITIVE_ORDER)
+            fun storage(p: String) = p.substringBefore(':', "").let { if (it.isEmpty()) "" else "$it:" }
+            for ((path, n) in counts) {
+                var at = path
+                while (at.isNotEmpty()) {
+                    totals[at] = (totals[at] ?: 0) + n
+                    val body = at.removePrefix(storage(at)).trimEnd('/')
+                    at = if ('/' in body) storage(at) + body.substringBeforeLast('/') + "/" else ""
+                }
+            }
+            skips.forEach { if (it !in totals) totals[it] = 0 }
+            return totals.map { (path, n) ->
+                val body = path.removePrefix(storage(path)).trimEnd('/')
+                val depth = body.count { it == '/' }
+                FolderRow(
+                    // A memory card's top folders say so ("1234-ABCD: Music").
+                    path, if (depth == 0 && storage(path).isNotEmpty()) "${storage(path)} $body" else body.substringAfterLast('/'), depth, n,
+                    skipped = isSkipped(path, skips),
+                    parentSkipped = skips.any { !it.equals(path, ignoreCase = true) && path.startsWith(it, ignoreCase = true) },
+                )
+            }
         }
 
         /** "A; B" or "A / B" in a tag are several artists; "<unknown>" is none. */

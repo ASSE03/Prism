@@ -62,9 +62,25 @@ What changed in each release. Older releases are described on the [Releases page
 - **Explore.** At the end of Search, before you type: YouTube Music's charts by country, moods and genres, new releases
   and what's trending, in one place. Which charts there are depends on the country. Search's Arrange moves or hides the
   line that leads here; if you've arranged Search before, turn it on there.
+- **Lyrics from your own music files** (#344). Settings → Lyrics → Your music files → "Read lyrics from your music files"
+  (off until you turn it on). Lyrics saved in a file's tags, synced or plain, work with no internet: FLAC, Ogg, Opus, MP3
+  and M4A. They take their place in your lyrics sources' order, last to start with: move them up to use them first.
+- **Leave folders out of Local files** (#207, #249). Local files → Edit → Choose folders, or Settings → Downloads,
+  storage & data → Folders in Local files. Untick a folder and it stops showing, with the folders inside it. Nothing
+  happens to the files themselves.
+- **Skip songs when a playlist downloads** (#221). A song's ⋯ on a playlist or album → Skip in downloads, or the new
+  button in Failed downloads. A skipped song stays out of whole-list downloads and isn't tried again, and the list counts
+  as downloaded without it. You can still download that song by itself.
+- **Keep a playlist downloaded** (#298, thanks to stuntsnakee, PR #304). A playlist's ⋯ → Keep downloaded, or Settings →
+  Downloads, storage & data → Keep playlists downloaded. New songs come down by themselves, following Download on Wi-Fi
+  only, and skipped or failed songs are left alone. Nothing is deleted when a song leaves the playlist.
 
 ### Fixes
 
+- **Speakers and TVs on your network can be found again, Sonos among them** (#239). Android stopped Prism reading what a
+  speaker says about itself, because speakers only speak plain HTTP, so none of them were listed. Prism now reads them
+  on the local network only; everything else it asks for stays secure. There's no Sonos here to try it on: this was
+  checked against a real Sonos One SL's own description. If a speaker still doesn't show, Share diagnostics now says why.
 - **Typing in Search and in Settings' search keeps up on slower phones** (#355).
 - **A song YouTube won't play no longer stops the music.** Prism says which song it was and goes on to the next, also
   when the next songs are still on their way from Autoplay; Next, Previous and the scrubber work again if it did have to stop.

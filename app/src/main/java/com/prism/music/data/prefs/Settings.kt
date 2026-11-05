@@ -64,6 +64,8 @@ enum class LyricsSource(val label: String, val detail: String) {
     UNISON(tr(R.string.unison), tr(R.string.lyrics_listeners_submit_few_songs_so)),
     YTMUSIC(tr(R.string.prism_music), tr(R.string.lyricfind_lines_or_plain)),
     GENIUS(tr(R.string.genius), tr(R.string.plain_text_also_fills_in_starred)),
+    /** #344 (1.8.2): the lyrics in the song's own file's tags. Off until asked for ([AppSettings.lyricsSourceOn]). Keep it last. */
+    EMBEDDED(tr(R.string.your_music_files), tr(R.string.the_lyrics_saved_inside_the_song_s_file)),
 }
 
 /** Tiles in Home's greeting section. */
@@ -351,6 +353,12 @@ data class BehaviorPrefs(
      * the sung line sooner the nearer it is.
      */
     val lyricsSteady: Boolean = false,
+    /** #344 (1.8.2): lyrics stored in the song's own file are a lyrics source, in its place in the listener's order. */
+    val embeddedLyrics: Boolean = false,
+    /** #207, #249 (1.8.2): folders Local files leaves out ([com.prism.music.data.local.LocalMusic.folderOf]). The files stay as they are. */
+    val localSkipFolders: Set<String> = emptySet(),
+    /** #298 (1.8.2): playlists whose new songs download by themselves, by [com.prism.music.download.PlaylistDownloads.keepKey]. */
+    val keptPlaylists: Set<String> = emptySet(),
 )
 
 /** The lock screen's layouts (1.8.2). */
@@ -1182,7 +1190,7 @@ object HomeSections {
 /** The order lyric sources are tried in on a fresh install. */
 val defaultLyricsOrder = listOf(
     LyricsSource.KUGOU, LyricsSource.QQ, LyricsSource.APPLE, LyricsSource.LYRICSPLUS, LyricsSource.BINI, LyricsSource.YTMUSIC,
-    LyricsSource.NETEASE, LyricsSource.LRCLIB, LyricsSource.UNISON, LyricsSource.GENIUS,
+    LyricsSource.NETEASE, LyricsSource.LRCLIB, LyricsSource.UNISON, LyricsSource.GENIUS, LyricsSource.EMBEDDED,
 )
 
 /** "Room for sung songs" at its last step: no limit (#238). */
@@ -1675,7 +1683,10 @@ data class AppSettings(
     )
 
     /** The lyric sources Prism asks, in the listener's order: the ones turned off are left out (#51). */
-    val lyricsSources: List<LyricsSource> get() = lyricsOrder.filter { it !in lyricsOff }.ifEmpty { lyricsOrder }
+    val lyricsSources: List<LyricsSource> get() = lyricsOrder.filter(::lyricsSourceOn).ifEmpty { lyricsOrder.filter { it != LyricsSource.EMBEDDED } }
+
+    /** Whether [src] is asked: every source until it's switched off, but a file's own lyrics only once they're switched on (#344). */
+    fun lyricsSourceOn(src: LyricsSource) = if (src == LyricsSource.EMBEDDED) behavior.embeddedLyrics else src !in lyricsOff
 }
 
 class SettingsRepository(private val context: Context, scope: CoroutineScope) {
@@ -2018,6 +2029,9 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val queueLengths = booleanPreferencesKey("queue_lengths")
         val queuePlayedMoves = booleanPreferencesKey("queue_played_moves")
         val queueTidy = booleanPreferencesKey("queue_tidy")
+        val embeddedLyrics = booleanPreferencesKey("embedded_lyrics")
+        val localSkipFolders = stringPreferencesKey("local_skip_folders")
+        val keptPlaylists = stringPreferencesKey("kept_playlists")
         val queueLocked = booleanPreferencesKey("queue_locked")
         val scrollShowsControls = booleanPreferencesKey("scroll_shows_controls")
         val playlistGenres = booleanPreferencesKey("playlist_genres")
@@ -2172,6 +2186,12 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "quick_picks_source",
                 // 1.8.2 (#299, #281, #282, #280): how Prism behaves, not how it looks.
                 "autoplay_max_minutes", "no_video_on_data", "player_gestures_under_lyrics", "player_remembers_page", "lyrics_steady",
+                // 1.8.2 (#344): where lyrics come from.
+                "embedded_lyrics",
+                // 1.8.2 (#207, #249): this phone's folders.
+                "local_skip_folders",
+                // 1.8.2 (#298): what stays downloaded.
+                "kept_playlists",
                 // 1.8.1 (#296, #263): what Prism keeps of your listening.
                 "history_paused_until", "play_count_seconds", "play_count_account",
             )
@@ -2484,6 +2504,9 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 gesturesUnderLyrics = p[K.gesturesUnderLyrics] ?: d.behavior.gesturesUnderLyrics,
                 playerRemembersPage = p[K.playerRemembersPage] ?: d.behavior.playerRemembersPage,
                 lyricsSteady = p[K.lyricsSteady] ?: d.behavior.lyricsSteady,
+                embeddedLyrics = p[K.embeddedLyrics] ?: d.behavior.embeddedLyrics,
+                localSkipFolders = p[K.localSkipFolders]?.split('\n')?.filter { it.isNotBlank() }?.toSet() ?: d.behavior.localSkipFolders,
+                keptPlaylists = p[K.keptPlaylists]?.split('\n')?.filter { it.isNotBlank() }?.toSet() ?: d.behavior.keptPlaylists,
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -3084,6 +3107,13 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setPanelSwipes(v: Boolean) = edit { it[K.panelSwipes] = v }
     fun setRecentShows(v: RecentShows) = edit { it[K.recentShows] = v.name }
     fun setQuickPicksSource(v: QuickPicksSource) = edit { it[K.quickPicksSource] = v.name }
+    fun setEmbeddedLyrics(v: Boolean) = edit { it[K.embeddedLyrics] = v }
+    fun setLocalSkipFolders(v: Set<String>) = edit { it[K.localSkipFolders] = v.joinToString("\n") }
+    /** One at a time, read in the same edit, so quick ticks in a row don't undo one another. */
+    fun setKeptPlaylist(key: String, keep: Boolean) = edit {
+        val now = it[K.keptPlaylists]?.split('\n')?.filter { k -> k.isNotBlank() }?.toSet().orEmpty()
+        it[K.keptPlaylists] = (if (keep) now + key else now - key).joinToString("\n")
+    }
     fun setQueueLocked(v: Boolean) = edit { it[K.queueLocked] = v }
     fun setScrollShowsControls(v: Boolean) = edit { it[K.scrollShowsControls] = v }
     fun setPlaylistGenres(v: Boolean) = edit { it[K.playlistGenres] = v }

@@ -226,6 +226,7 @@ fun LocalMusicScreen(bottomPadding: Dp) {
     var openAlbum by rememberSaveable { mutableStateOf<Long?>(null) }
     var openRecent by rememberSaveable { mutableStateOf(false) }
     var editing by remember { mutableStateOf(false) }
+    var choosingFolders by remember { mutableStateOf(false) }
     BackHandler(openArtist != null || openAlbum != null || openRecent) {
         // An album opened from an artist goes back to the artist.
         when {
@@ -344,6 +345,10 @@ fun LocalMusicScreen(bottomPadding: Dp) {
             tracks.isEmpty() -> Column(Modifier.fillMaxWidth().padding(top = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 if (scanned) EmptyState(PrismIcons.Phone, tr(R.string.no_music_files_found), tr(R.string.songs_you_copy_onto_your_phone))
                 else com.prism.music.ui.components.PrismSpinner(Modifier.padding(32.dp).size(30.dp))
+                // Every folder left out: the way back can't be behind the chips, which aren't shown now.
+                if (scanned && settings.behavior.localSkipFolders.isNotEmpty()) {
+                    PrismButton(onClick = { choosingFolders = true }) { Text(tr(R.string.choose_folders)) }
+                }
             }
             album != null -> TrackList(album.tracks.map { it.song }, album.title, bottomPadding, numbered = true)
             artist != null -> ArtistPage(artist, bottomPadding) { openAlbum = it.id }
@@ -378,7 +383,49 @@ fun LocalMusicScreen(bottomPadding: Dp) {
             }
         }
     }
-    if (editing) SectionsEditor(sections) { editing = false }
+    if (editing) SectionsEditor(sections, onFolders = { choosingFolders = true }) { editing = false }
+    if (choosingFolders) LocalFoldersSheet { choosingFolders = false }
+}
+
+/**
+ * Which folders Local files lists (#207, #249): ticked ones show, and unticking a folder leaves it and everything below
+ * it out. Only the list changes: the files stay where they are, and nothing else on the phone is touched.
+ */
+@Composable
+fun LocalFoldersSheet(onDismiss: () -> Unit) {
+    val c = LocalContainer.current
+    val skips = com.prism.music.ui.theme.LocalAppSettings.current.behavior.localSkipFolders
+    val counts by c.localMusic.folders.collectAsState()
+    val rows = remember(counts, skips) { LocalMusic.folderRows(counts, skips) }
+    com.prism.music.ui.components.PrismSheet(onDismiss = onDismiss) {
+        Text(tr(R.string.folders_in_local_files), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 20.dp))
+        Text(
+            tr(R.string.untick_a_folder_to_leave_it_out), style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 4.dp, bottom = 8.dp),
+        )
+        if (rows.isEmpty()) {
+            Text(tr(R.string.no_music_files_found), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(20.dp))
+        }
+        LazyColumn(Modifier.fillMaxWidth().padding(bottom = 24.dp)) {
+            itemsIndexed(rows, key = { _, r -> r.path }) { _, r ->
+                Row(Modifier.fillMaxWidth().padding(start = 8.dp + 16.dp * r.depth.coerceAtMost(4), end = 16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    PrismCheck(!r.skipped, enabled = !r.parentSkipped, label = r.name) { show ->
+                        c.settings.setLocalSkipFolders(
+                            // A folder given back brings back those below it that were only out because of it, not ones left out by name.
+                            if (show) skips.filterNot { it.equals(r.path, ignoreCase = true) }.toSet() else skips + r.path,
+                        )
+                    }
+                    Column(Modifier.weight(1f)) {
+                        Text(
+                            r.name, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                            color = if (r.skipped) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+                        )
+                        Text(songCount(r.songs), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+        }
+    }
 }
 
 /** The section chips, then an Edit chip that opens [SectionsEditor]. */
@@ -398,9 +445,9 @@ private fun SectionChips(sections: List<LocalSection>, pager: androidx.compose.f
 
 /** Which sections Local files shows, and in what order (#29). At least one stays. */
 @Composable
-private fun SectionsEditor(sections: List<LocalSection>, onDismiss: () -> Unit) {
+private fun SectionsEditor(sections: List<LocalSection>, onFolders: () -> Unit, onDismiss: () -> Unit) {
     val prefs = LocalContainer.current.settings
-    com.prism.music.ui.components.PrismSheet(onDismiss = onDismiss) {
+    com.prism.music.ui.components.PrismSheet(onDismiss = onDismiss) { close ->
         Text(tr(R.string.sections), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 20.dp))
         Text(
             tr(R.string.tick_the_sections_you_want_hold), style = MaterialTheme.typography.bodyMedium,
@@ -426,6 +473,14 @@ private fun SectionsEditor(sections: List<LocalSection>, onDismiss: () -> Unit) 
         }
         com.prism.music.ui.components.ReorderList(sections, { it }, { prefs.setLocalSections(it) }) { s, i, held, mod -> SectionRow(s, i, mod, Modifier.dragHandle(), held) }
         LocalSection.entries.filter { it !in sections }.forEach { s -> SectionRow(s, -1, Modifier, null, false) }
+        Row(
+            Modifier.fillMaxWidth().padding(top = 8.dp).clickable { close(onFolders) }.padding(horizontal = 20.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            androidx.compose.material3.Icon(PrismIcons.Folder, null)
+            Spacer(Modifier.width(16.dp))
+            Text(tr(R.string.choose_folders), Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+        }
         Spacer(Modifier.height(24.dp))
     }
 }

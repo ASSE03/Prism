@@ -544,7 +544,27 @@ class DownloadRepository(private val context: Context, private val c: AppContain
         if (appOnScreen()) c.askNotifications()
     }
 
-    fun downloadAll(songs: List<Song>) = songs.forEach(::download)
+    /** A list's download: everything on it, but for the songs marked to skip (#221). */
+    fun downloadAll(songs: List<Song>) = PlaylistDownloads.wanted(songs, c.downloadSkips.ids.value, _standIns.value).forEach(::download)
+
+    /**
+     * Marks a song to skip in lists' downloads, or takes that back (#221). One still to come or failed stops there, so it
+     * leaves Failed downloads and isn't tried again; one already here stays, since nothing asked for it to be deleted.
+     */
+    fun setSkipped(id: String, skip: Boolean) {
+        c.downloadSkips.set(id, skip)
+        if (!skip) return
+        val here = _downloads.value[keptAs(id)] ?: return
+        if (here.state != Download.STATE_COMPLETED) removeMany(listOf(id))
+    }
+
+    /** Every song with a download of any kind, whatever state it's in, from the download list itself; null if it can't be read. */
+    fun knownIds(): Set<String>? = runCatching {
+        buildSet {
+            manager.downloadIndex.getDownloads().use { cursor -> while (cursor.moveToNext()) add(cursor.download.request.id) }
+            addAll(_downloads.value.keys)
+        }
+    }.getOrNull()
 
     // ------------------------------------------------------------ Music videos
 
