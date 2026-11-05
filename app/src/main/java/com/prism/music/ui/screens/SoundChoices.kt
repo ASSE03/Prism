@@ -15,8 +15,8 @@ enum class VideoPolicy(val label: String) { PLAY(tr(R.string.play_them)), RADIOS
 /** Crossfade (1.8.0, #210): its switch and "Automatic length" as one choice; Fixed shows the length slider. */
 enum class Crossfade(val label: String) { OFF(tr(R.string.off)), AUTO(tr(R.string.automatic_plain)), FIXED(tr(R.string.fixed_length)) }
 
-/** Trim silence (1.8.0, #210): skip silence for songs and for podcast episodes as one choice. */
-enum class TrimSilence(val label: String) { OFF(tr(R.string.off)), PODCASTS(tr(R.string.podcasts_only)), ALL(tr(R.string.songs_and_podcasts)) }
+/** Skip silence (1.8.0, #210; "Songs only" #325): skip silence for songs and for podcast episodes as one choice. */
+enum class TrimSilence(val label: String) { OFF(tr(R.string.off)), SONGS(tr(R.string.songs_only)), PODCASTS(tr(R.string.podcasts_only)), ALL(tr(R.string.songs_and_podcasts)) }
 
 /**
  * The merged choices on Playback & sound, each read from and written to the settings Prism already keeps, so nobody's
@@ -83,11 +83,12 @@ object SoundChoices {
     }
 
     /**
-     * Songs trimmed implies podcasts trimmed too: songs-only isn't a choice, and an old songs-only setting reads as both
-     * (PlaybackService.applySkipSilence trims episodes then too, so the page says what plays).
+     * #325: the two settings say it as they're stored. Songs on with podcasts off is "Songs only" again, as it was picked
+     * with 1.7.8's two switches (1.8.0's one choice had no such place, and read and played it as both).
      */
     fun trimSilence(s: AppSettings): TrimSilence = when {
-        s.skipSilence -> TrimSilence.ALL
+        s.skipSilence && s.sound.skipSilenceEpisodes -> TrimSilence.ALL
+        s.skipSilence -> TrimSilence.SONGS
         s.sound.skipSilenceEpisodes -> TrimSilence.PODCASTS
         else -> TrimSilence.OFF
     }
@@ -95,6 +96,7 @@ object SoundChoices {
     /** skipSilence (songs), skipSilenceEpisodes. */
     fun trimSilenceValues(t: TrimSilence): Pair<Boolean, Boolean> = when (t) {
         TrimSilence.OFF -> false to false
+        TrimSilence.SONGS -> true to false
         TrimSilence.PODCASTS -> false to true
         TrimSilence.ALL -> true to true
     }

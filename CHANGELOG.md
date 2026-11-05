@@ -16,6 +16,10 @@ What changed in each release. Older releases are described on the [Releases page
 
 ### New
 
+- **Crossfades up to 30 seconds** (#351). Playback & sound → Crossfade → Length now goes past 12. Automatic length is unchanged.
+- **"Songs only" for skipping silence** (#325). Off, Songs only, Podcasts only or Songs and podcasts; the ⓘ says what each one does.
+- **Longest song for Autoplay** (#299). Playback & sound → What plays next: keep hour-long mixes out of Autoplay. Songs you pick
+  or queue yourself, and radios you start, play whatever their length.
 - **Artist pages work offline.** A page you've opened stays on your phone, so it opens without a connection as it was
   when you last saw it, with a note saying so. What isn't on your phone is dimmed and doesn't play. For an artist you
   haven't opened, Prism makes a page from your downloaded, liked and played songs and their albums. Android Auto's

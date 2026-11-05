@@ -332,6 +332,19 @@ data class BehaviorPrefs(
     val lockScreenHideSong: Boolean = false,
     /** #349 (1.8.2): Home's Quick picks as Prism makes them around your artists (as before), or YouTube Music's own. */
     val quickPicksSource: QuickPicksSource = QuickPicksSource.PRISM,
+    /** #299 (1.8.2): Autoplay leaves out songs longer than this many minutes (0: no limit, as before). */
+    val autoplayMaxMinutes: Int = 0,
+    /** #281 (1.8.2): with Data saver on, no music videos on mobile data ([com.prism.music.playback.VideoOnData]). */
+    val noVideoOnData: Boolean = false,
+    /** #282 (1.8.2): the cover's gestures work on the controls below the lyrics too, never on the lyrics themselves. */
+    val gesturesUnderLyrics: Boolean = false,
+    /** #280 (1.8.2): the player opens on the page it was closed on: the cover, the lyrics or the queue. */
+    val playerRemembersPage: Boolean = false,
+    /**
+     * #280 (1.8.2): the lyrics' controls take a longer swipe to come and go, and after you've scrolled the lyrics go back to
+     * the sung line sooner the nearer it is.
+     */
+    val lyricsSteady: Boolean = false,
 )
 
 /** The lock screen's layouts (1.8.2). */
@@ -455,6 +468,18 @@ data class ViewLook(
     val replayGraph: ReplayGraph = ReplayGraph.MONTHS,
     /** #287 (1.8.1): Replay and Rewind stories in your app font, instead of Prism's poster type. */
     val replayStoryFont: Boolean = false,
+    /** #223 (1.8.2): with [coverFlight], closing the player the cover flies back into the mini player. */
+    val coverFlightBack: Boolean = false,
+    /** #293 (1.8.2): the buttons on a music video (fit, full-bleed, picture-in-picture, full screen) wait for a tap on it. */
+    val videoButtonsHide: Boolean = false,
+    /** #293 (1.8.2): over a full-bleed cover or video, smaller controls, the picture reaching further down and fading later. */
+    val bleedRoomy: Boolean = false,
+    /** #331 (1.8.2): each song's length in the queue. */
+    val queueLengths: Boolean = false,
+    /** #294, #331 (1.8.2): songs already played can be dragged among themselves too. */
+    val queuePlayedMoves: Boolean = false,
+    /** #294 (1.8.2): no × on each song (swipe it away, or its ⋯) and no Queue button in the bottom row while the queue's open. */
+    val queueTidy: Boolean = false,
 )
 
 /** The Replay card's bars (#286): one for each month of this year so far, each of the last 12 weeks, or the last 14 days. */
@@ -653,6 +678,9 @@ data class SoundPrefs(
      */
     val ownLossyFiles: Boolean = false,
 )
+
+/** The longest fixed crossfade, in seconds (#351; it was 12). [com.prism.music.playback.MixEngine] and its tail player are good for it. */
+const val MAX_CROSSFADE_SECONDS = 30
 
 /** How a crossfade's two volumes cross (1.7.8, A1). */
 enum class CrossfadeCurve(val label: String, val detail: String) {
@@ -1968,6 +1996,18 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val panelSwipes = booleanPreferencesKey("panel_swipes")
         val recentShows = stringPreferencesKey("recent_shows")
         val quickPicksSource = stringPreferencesKey("quick_picks_source")
+        // 1.8.2 requests ([BehaviorPrefs.autoplayMaxMinutes] and on; [ViewLook.coverFlightBack] and on).
+        val autoplayMaxMinutes = intPreferencesKey("autoplay_max_minutes")
+        val noVideoOnData = booleanPreferencesKey("no_video_on_data")
+        val gesturesUnderLyrics = booleanPreferencesKey("player_gestures_under_lyrics")
+        val playerRemembersPage = booleanPreferencesKey("player_remembers_page")
+        val lyricsSteady = booleanPreferencesKey("lyrics_steady")
+        val coverFlightBack = booleanPreferencesKey("cover_flight_back")
+        val videoButtonsHide = booleanPreferencesKey("video_buttons_hide")
+        val bleedRoomy = booleanPreferencesKey("bleed_roomy")
+        val queueLengths = booleanPreferencesKey("queue_lengths")
+        val queuePlayedMoves = booleanPreferencesKey("queue_played_moves")
+        val queueTidy = booleanPreferencesKey("queue_tidy")
         val queueLocked = booleanPreferencesKey("queue_locked")
         val scrollShowsControls = booleanPreferencesKey("scroll_shows_controls")
         val playlistGenres = booleanPreferencesKey("playlist_genres")
@@ -2031,6 +2071,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 cornerScale, songShape, albumShape, artistShape, playerShape, buttonShape, playOutlined,
                 typeWeight, typeSpacing, titleFont, tabTint, playerTitleWeight, typeClassic, controlsClassic,
                 panelPlayer, queueHeadings, queueDjChip, castMark, immersiveVideo, bleedFit, coverFlight, videoControlsHide,
+                coverFlightBack, videoButtonsHide, bleedRoomy, queueLengths, queuePlayedMoves, queueTidy,
                 crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape,
                 downloadsAlbums, artistLinks, backdropFade,
                 crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape, replayGraph, replayStoryFont,
@@ -2069,6 +2110,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 panelPlayer to 's', queueHeadings to 'b', queueDjChip to 'b', castMark to 'b', immersiveVideo to 'b', bleedFit to 's', coverFlight to 'b',
                 videoControlsHide to 'b', crossfadeMark to 'b', blendCovers to 'b', buttonsPill to 'b', playerHiddenParts to 's',
                 crossfadeShape to 'b',
+                coverFlightBack to 'b', videoButtonsHide to 'b', bleedRoomy to 'b', queueLengths to 'b', queuePlayedMoves to 'b', queueTidy to 'b',
                 downloadsAlbums to 'b', artistLinks to 'b', backdropFade to 'b',
                 crossfadeShape to 'b', replayGraph to 's', replayStoryFont to 'b',
             ) + lyricsLook
@@ -2115,6 +2157,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "explicit_content",
                 // 1.8.2 (#349): where Home's Quick picks come from.
                 "quick_picks_source",
+                // 1.8.2 (#299, #281, #282, #280): how Prism behaves, not how it looks.
+                "autoplay_max_minutes", "no_video_on_data", "player_gestures_under_lyrics", "player_remembers_page", "lyrics_steady",
                 // 1.8.1 (#296, #263): what Prism keeps of your listening.
                 "history_paused_until", "play_count_seconds", "play_count_account",
             )
@@ -2278,7 +2322,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
             losslessLocal = p[K.losslessLocal] ?: d.losslessLocal,
             normalize = p[K.normalize] ?: d.normalize,
             mix = p[K.mix] ?: d.mix,
-            mixSeconds = (p[K.mixSeconds] ?: d.mixSeconds).coerceIn(1, 12),
+            mixSeconds = (p[K.mixSeconds] ?: d.mixSeconds).coerceIn(1, MAX_CROSSFADE_SECONDS),
             mixAuto = p[K.mixAuto] ?: d.mixAuto,
             mixBeatMatch = p[K.mixBeatMatch] ?: d.mixBeatMatch,
             mixKeepAlbums = p[K.mixKeepAlbums] ?: d.mixKeepAlbums,
@@ -2360,6 +2404,12 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 bleedFit = p.enum(K.bleedFit, d.view.bleedFit),
                 coverFlight = p[K.coverFlight] ?: d.view.coverFlight,
                 videoControlsHide = p[K.videoControlsHide] ?: d.view.videoControlsHide,
+                coverFlightBack = p[K.coverFlightBack] ?: d.view.coverFlightBack,
+                videoButtonsHide = p[K.videoButtonsHide] ?: d.view.videoButtonsHide,
+                bleedRoomy = p[K.bleedRoomy] ?: d.view.bleedRoomy,
+                queueLengths = p[K.queueLengths] ?: d.view.queueLengths,
+                queuePlayedMoves = p[K.queuePlayedMoves] ?: d.view.queuePlayedMoves,
+                queueTidy = p[K.queueTidy] ?: d.view.queueTidy,
                 crossfadeMark = p[K.crossfadeMark] ?: d.view.crossfadeMark,
                 blendCovers = p[K.blendCovers] ?: d.view.blendCovers,
                 buttonsPill = p[K.buttonsPill] ?: d.view.buttonsPill,
@@ -2413,6 +2463,11 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 lockScreenPaused = p.enum(K.lockScreenPaused, d.behavior.lockScreenPaused),
                 lockScreenHideSong = p[K.lockScreenHideSong] ?: d.behavior.lockScreenHideSong,
                 quickPicksSource = p.enum(K.quickPicksSource, d.behavior.quickPicksSource),
+                autoplayMaxMinutes = (p[K.autoplayMaxMinutes] ?: d.behavior.autoplayMaxMinutes).coerceIn(0, com.prism.music.data.AutoplayLength.MAX_MINUTES),
+                noVideoOnData = p[K.noVideoOnData] ?: d.behavior.noVideoOnData,
+                gesturesUnderLyrics = p[K.gesturesUnderLyrics] ?: d.behavior.gesturesUnderLyrics,
+                playerRemembersPage = p[K.playerRemembersPage] ?: d.behavior.playerRemembersPage,
+                lyricsSteady = p[K.lyricsSteady] ?: d.behavior.lyricsSteady,
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -2814,7 +2869,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setLosslessLocal(v: Boolean) = edit { it[K.losslessLocal] = v }
     fun setNormalize(v: Boolean) = edit { it[K.normalize] = v }
     fun setMix(v: Boolean) = edit { it[K.mix] = v }
-    fun setMixSeconds(v: Int) = edit { it[K.mixSeconds] = v.coerceIn(1, 12) }
+    fun setMixSeconds(v: Int) = edit { it[K.mixSeconds] = v.coerceIn(1, MAX_CROSSFADE_SECONDS) }
     fun setMixAuto(v: Boolean) = edit { it[K.mixAuto] = v }
     fun setMixBeatMatch(v: Boolean) = edit { it[K.mixBeatMatch] = v }
     fun setMixKeepAlbums(v: Boolean) = edit { it[K.mixKeepAlbums] = v }
@@ -2983,6 +3038,17 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setBleedFit(v: BleedFit) = edit { it[K.bleedFit] = v.name }
     fun setCoverFlight(v: Boolean) = edit { it[K.coverFlight] = v }
     fun setVideoControlsHide(v: Boolean) = edit { it[K.videoControlsHide] = v }
+    fun setCoverFlightBack(v: Boolean) = edit { it[K.coverFlightBack] = v }
+    fun setVideoButtonsHide(v: Boolean) = edit { it[K.videoButtonsHide] = v }
+    fun setBleedRoomy(v: Boolean) = edit { it[K.bleedRoomy] = v }
+    fun setQueueLengths(v: Boolean) = edit { it[K.queueLengths] = v }
+    fun setQueuePlayedMoves(v: Boolean) = edit { it[K.queuePlayedMoves] = v }
+    fun setQueueTidy(v: Boolean) = edit { it[K.queueTidy] = v }
+    fun setAutoplayMaxMinutes(v: Int) = edit { it[K.autoplayMaxMinutes] = v.coerceIn(0, com.prism.music.data.AutoplayLength.MAX_MINUTES) }
+    fun setNoVideoOnData(v: Boolean) = edit { it[K.noVideoOnData] = v }
+    fun setGesturesUnderLyrics(v: Boolean) = edit { it[K.gesturesUnderLyrics] = v }
+    fun setPlayerRemembersPage(v: Boolean) = edit { it[K.playerRemembersPage] = v }
+    fun setLyricsSteady(v: Boolean) = edit { it[K.lyricsSteady] = v }
     fun setLockPortrait(v: Boolean) = edit { it[K.lockPortrait] = v }
     fun setGesturesEverywhere(v: Boolean) = edit { it[K.gesturesEverywhere] = v }
     fun setPageSlide(v: Boolean) = edit { it[K.pageSlide] = v }

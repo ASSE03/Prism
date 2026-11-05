@@ -288,6 +288,10 @@ object LookLabels {
         "immersive_video" to tr(R.string.video_in_immersive_mode), "bleed_fit" to tr(R.string.full_bleed_artwork_s_fit), "cover_flight" to tr(R.string.cover_flies_into_the_player),
         "video_controls_hide" to tr(R.string.controls_hide_over_videos), "crossfade_mark" to tr(R.string.crossfade_mark), "blend_covers" to tr(R.string.covers_blend_in_a_crossfade), "player_buttons_pill" to tr(R.string.player_buttons_in_a_capsule),
         "crossfade_shape" to tr(R.string.crossfade_on_the_progress_bar),
+        // 1.8.2 requests (#223, #293, #294, #331).
+        "cover_flight_back" to tr(R.string.cover_flies_back_too), "video_buttons_hide" to tr(R.string.buttons_on_videos_wait_for_a_tap),
+        "bleed_roomy" to tr(R.string.more_room_for_the_picture), "queue_lengths" to tr(R.string.song_lengths_in_the_queue),
+        "queue_played_moves" to tr(R.string.move_songs_you_have_played), "queue_tidy" to tr(R.string.tidier_queue),
         // 1.8.1 requests (#310, #289, #283).
         "downloads_albums" to tr(R.string.album_names_in_downloads), "player_artist_links" to tr(R.string.each_artist_its_own_link),
         "backdrop_fade" to tr(R.string.now_playing_background_fades),
@@ -444,6 +448,7 @@ object LookLabels {
             "scrubber_thickness", "scrubber_thumb", "volume_matches_progress", "player_handle", "player_nav_band", "play_ring", "visualizer", "visualizer_color",
             "panel_player", "queue_headings", "queue_dj_chip", "cast_mark", "immersive_video", "bleed_fit", "cover_flight", "video_controls_hide", "crossfade_mark", "blend_covers", "player_buttons_pill",
             "player_hidden_parts", "crossfade_shape", "player_artist_links",
+            "cover_flight_back", "video_buttons_hide", "bleed_roomy", "queue_lengths", "queue_played_moves", "queue_tidy",
         ),
         "lyrics" to setOf(
             "lyrics_align", "lyrics_blur", "lyrics_progress_line", "lyrics_source_button", "lyrics_scale", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",

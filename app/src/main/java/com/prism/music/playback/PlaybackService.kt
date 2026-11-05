@@ -466,9 +466,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                     liveDsf = c.liveDataSourceFactory(),
                 )
             )
-            // The whole ending (a blend plus its lead-in is under 20 s) is loaded as soon as the tail is made, seconds before
-            // it plays along: with only part of it loaded, a slow connection made the tail stop to load mid-blend.
-            .setLoadControl(androidx.media3.exoplayer.DefaultLoadControl.Builder().setBufferDurationsMs(60_000, 60_000, 1_500, 1_500).build())
+            // The whole ending (a blend plus its lead-in is at most 35 s, #351) is loaded as soon as the tail is made, seconds
+            // before it plays along: with only part of it loaded, a slow connection made the tail stop to load mid-blend.
+            .setLoadControl(androidx.media3.exoplayer.DefaultLoadControl.Builder().setBufferDurationsMs(MixEngine.TAIL_BUFFER_MS.toInt(), MixEngine.TAIL_BUFFER_MS.toInt(), 1_500, 1_500).build())
             .setAudioAttributes(
                 AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MUSIC).build(),
                 false,
@@ -725,8 +725,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private fun applySkipSilence() {
         val s = c.settings.current
         edges.enabled = s.skipSilence
-        // 1.8.0's one choice has no "songs only": songs trimmed reads as "Songs and podcasts" (SoundChoices), so it is.
-        val on = player.currentMediaItem?.toSong()?.isEpisode == true && (s.sound.skipSilenceEpisodes || s.skipSilence)
+        // #325: "Songs only" leaves episodes alone ([EdgeSilenceProcessor.trims] never touches them).
+        val on = EdgeSilenceProcessor.pausesSkipped(player.currentMediaItem?.toSong()?.isEpisode == true, s.sound.skipSilenceEpisodes)
         if (player.skipSilenceEnabled != on) player.skipSilenceEnabled = on
     }
 
@@ -1358,7 +1358,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             val explicit = c.settings.current.behavior.explicitContent
             val add = songs.distinctBy { it.id }.filter {
                 it.id !in existing && !c.library.isDisliked(it.id) && !c.exclusions.blocks(it) && com.prism.music.data.ExplicitFilter.plays(explicit, it)
-            }
+            // #299: Autoplay's own songs only: a radio the listener started is left as it is.
+            }.let { if (radio) it else com.prism.music.data.AutoplayLength.keep(it, c.settings.current.behavior.autoplayMaxMinutes) }
             if (add.isNotEmpty()) {
                 if (c.queue.autoplayStart.value < 0) c.queue.autoplayStart.value = player.mediaItemCount
                 player.addMediaItems(add.map { it.toMediaItem() })
