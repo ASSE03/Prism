@@ -40,6 +40,8 @@ class QueueState {
     }
     @Volatile var autoplayContinuation: String? = null
     @Volatile var autoplayLoading = false
+    /** A long list's later pages are still on their way into the queue (#356): autoplay's suggestions wait for them. */
+    @Volatile var filling = false
     /** Index in the queue where autoplay suggestions begin (-1 when none). */
     val autoplayStart = MutableStateFlow(-1)
     /** Songs the listener added themselves (Play next, Add to queue) and hasn't reached yet: "Next in queue". */

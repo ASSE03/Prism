@@ -88,6 +88,19 @@ class HistoryShuffleOrder(private val order: IntArray, private val current: () -
         return HistoryShuffleOrder(list.toIntArray(), current)
     }
 
+    /**
+     * The order with [added] (songs just put in the queue) scattered among the songs still to come, each at a random
+     * place after [playing] and the [keep] songs straight after it: a long list started from its first page shuffles
+     * across all of it as the rest arrives (#356). What's been heard stays where it is.
+     */
+    fun scattered(added: Collection<Int>, playing: Int, keep: Int = 0, random: kotlin.random.Random = kotlin.random.Random.Default): HistoryShuffleOrder {
+        val adding = added.toHashSet()
+        val list = order.filterNot { it in adding }.toMutableList()
+        val first = (list.indexOf(playing) + 1 + keep).coerceAtMost(list.size)
+        added.shuffled(random).forEach { list.add(random.nextInt(first, list.size + 1), it) }
+        return HistoryShuffleOrder(list.toIntArray(), current)
+    }
+
     companion object {
         /** A fresh random order of [count] songs with [first] (if it's one of them) at the start. */
         fun shuffled(count: Int, first: Int, current: () -> Int): HistoryShuffleOrder {

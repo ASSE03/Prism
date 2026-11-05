@@ -220,6 +220,7 @@
     <string name="pinned_to_the_top_of_home">Pinned to the top of Home</string>
     <string name="added_to_your_library">Added to your library</string>
     <string name="copying">Copying \"%1$s\"…</string>
+    <string name="loading_list">Loading \"%1$s\"…</string>
     <string name="has_no_songs_to_copy">\"%1$s\" has no songs to copy</string>
     <string name="saved_as_a_prism_playlist">Saved \"%1$s\" as a Prism playlist (%2$s)</string>
     <string name="no_mix">No mix</string>
@@ -447,6 +448,12 @@
     <string name="tapping_a_pick_plays_it_then">Tapping a pick plays it, then songs like it</string>
     <string name="tapping_a_pick_plays_quick_picks">Tapping a pick plays Quick picks in order from it</string>
     <string name="speed_dial_youtube_music_s_only">Speed dial: YouTube Music\'s only</string>
+    <string name="speed_dial_only_short_page">YouTube Music decides how many it sends, so the last page can be short.</string>
+    <string name="quick_picks_from">Quick picks from</string>
+    <string name="quick_picks_from_prism">Prism</string>
+    <string name="quick_picks_from_youtube">YouTube Music</string>
+    <string name="quick_picks_from_info">Prism makes yours around the artists you play, with some of YouTube Music\'s in between. YouTube Music\'s are the ones it sends for your account, as they come.</string>
+    <string name="quick_picks_from_keywords">quick picks source youtube music own recommendations prism</string>
     <string name="without_the_albums_and_songs_prism">Without the albums and songs Prism adds from your plays</string>
     <string name="speed_dial_starts_with_youtube_music">Speed dial starts with YouTube Music\'s own tiles and fills up with what you play most on this phone. On, it keeps to YouTube Music\'s. When YouTube Music has none (signed out, or offline), yours still show.</string>
     <string name="customize_button_on_home">Customize button on Home</string>

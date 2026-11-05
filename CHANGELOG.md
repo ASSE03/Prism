@@ -2,6 +2,17 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.8.2 (unreleased)
+
+### Fixes
+
+- **Play and Shuffle from a playlist's long-press menu start right away** (#356): they used to wait for the whole playlist
+  to load, showing nothing. Now they start on its first songs and the rest follows, shuffled in among what's to come.
+- **Covers inside your own music files show in the notification and in the car** (#350), not just in the player.
+- **Speed dial shows all of YouTube Music's tiles** with "YouTube Music's only" on (#349): a short last page stays.
+- **New choice: Quick picks from Prism or YouTube Music** (#349, Settings → Home & Library); YouTube's start a radio too
+  with "Quick picks start a radio" on.
+
 ## 1.8.1.1
 
 A bug-fix update.

@@ -1255,7 +1255,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val src = c.queue.source.value
         // A song's radio (Quick picks, "Radio" in a song's menu) keeps going whether or not Autoplay is on: that's what it is.
         val radio = src.isSongRadio
-        if ((!c.settings.current.autoplay && !radio) || player.mediaItemCount == 0 || c.queue.followingHost) return
+        if ((!c.settings.current.autoplay && !radio) || player.mediaItemCount == 0 || c.queue.followingHost || c.queue.filling) return
         // No music radio after a podcast episode.
         if (player.currentMediaItem?.toSong()?.isEpisode == true) return
         if (src.kind != QueueKind.SINGLE && !radio && player.repeatMode != Player.REPEAT_MODE_OFF) return
