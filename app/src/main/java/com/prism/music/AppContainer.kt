@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.serialization.builtins.serializer
 import okhttp3.OkHttpClient
 import okio.Path.Companion.toPath
 import java.io.File
@@ -535,6 +536,21 @@ class AppContainer(val app: Application) {
     val blends by lazy { com.prism.music.data.blend.Blends(this) }
     /** Prism's radio and Home's lists and mixes, from the listener's own music on the phone. */
     val yourMusic by lazy { com.prism.music.data.foryou.YourMusic(this) }
+    /** New to you, Deep cuts and On this day (1.8.2): only made while they're on Home, and what tuned radios go by. */
+    val discover by lazy { com.prism.music.data.foryou.Discover(this) }
+    /** The songs heard this session, for "No repeats this session" (1.8.2, #159). */
+    val sessionHeard by lazy {
+        val prefs = app.getSharedPreferences("session_heard", android.content.Context.MODE_PRIVATE)
+        val serializer = kotlinx.serialization.builtins.MapSerializer(String.serializer(), Long.serializer())
+        com.prism.music.playback.SessionHeard(
+            load = { runCatching { kotlinx.serialization.json.Json.decodeFromString(serializer, prefs.getString("heard", null) ?: "{}") }.getOrDefault(emptyMap()) },
+            // Kept through a restart only while the switch is on, and never while history is paused (#296): then it's in memory only.
+            save = {
+                val b = settings.current.behavior
+                if (b.autoplayNoRepeats && !com.prism.music.data.HistoryPause.paused(b)) prefs.edit().putString("heard", kotlinx.serialization.json.Json.encodeToString(serializer, it)).apply()
+            },
+        )
+    }
     /** Prism's holiday mixes, Thanksgiving and Christmas (1.8.0), made when first opened in their season, or ahead on Wi-Fi. */
     val seasonal by lazy { com.prism.music.data.seasonal.SeasonalMixes(this) }
     /** Sends a Blend's other half back over Wi-Fi, so both phones have it ([com.prism.music.data.blend.BlendExchange]). */

@@ -403,6 +403,8 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
                         HomeSections.MADE_FOR_YOU -> MadeForYouSection(cfg, offline = !online, yours = yours?.mixes.orEmpty())
                         HomeSections.NEW_RELEASES -> if (online) NewReleasesSection(cfg)
                         HomeSections.SEASONAL -> if (online) HolidaySection(cfg)
+                        HomeSections.NEW_TO_YOU, HomeSections.DEEP_CUTS -> DiscoverMixSection(cfg, online)
+                        HomeSections.ON_THIS_DAY -> OnThisDaySection(cfg, online)
                         HomeSections.REPLAY -> ReplayTeaser(cfg)
                         HomeSections.GENRES -> TopGenresSection(cfg)
                         HomeSections.MOODS -> if (online) {
@@ -853,7 +855,7 @@ private fun GreetingSection(cfg: HomeSectionConfig, recent: List<Song>) {
 }
 
 @Composable
-private fun SongSection(
+internal fun SongSection(
     cfg: HomeSectionConfig, title: String, strapline: String?, listed: List<Song>,
     /** Swipes stop on each column of rows, as YouTube Music's Quick picks do. */
     snap: Boolean = false,

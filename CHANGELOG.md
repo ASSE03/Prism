@@ -16,6 +16,19 @@ What changed in each release. Older releases are described on the [Releases page
 
 ### New
 
+- **No repeats this session** (#159). Settings → Playback & sound → What plays next. Off until you turn it on. Autoplay and
+  radios then skip every song that's played this session, even one you skipped after a few seconds. When a radio has
+  nothing new left it moves on to the radio of another song you played, then your own music; only after that do the songs
+  you heard longest ago come round again, and Prism tells you.
+- **New to you.** About 30 songs you've never played, new every Monday, found on your phone from the radios of your
+  favorites. Never played means ever, including imported histories. Add it from Customize Home.
+- **Deep cuts.** Album tracks you've never played by artists you love, leaving out their top songs and live or remixed
+  versions. Add it from Customize Home.
+- **On this day.** What you played a year ago today. With nothing played that day, the section doesn't show. Add it from
+  Customize Home.
+- **Tune your radios.** Settings → Recommendations & Replay. Sliders for familiar or new, hits or deep cuts, calm or
+  energetic, all in the middle (as before) until you move them. Calm or energetic can only go by songs Prism has already
+  scanned, so most songs you haven't heard stay where they are.
 - **Crossfades up to 30 seconds** (#351). Playback & sound → Crossfade → Length now goes past 12. Automatic length is unchanged.
 - **"Songs only" for skipping silence** (#325). Off, Songs only, Podcasts only or Songs and podcasts; the ⓘ says what each one does.
 - **Longest song for Autoplay** (#299). Playback & sound → What plays next: keep hour-long mixes out of Autoplay. Songs you pick

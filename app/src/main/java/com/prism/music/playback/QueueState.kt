@@ -39,6 +39,11 @@ class QueueState {
         private companion object { const val RETRY_MS = 60 * 60_000L }
     }
     @Volatile var autoplayContinuation: String? = null
+    /** The other song's radio this queue moved on to when its own ran dry (No repeats this session), and for which queue. */
+    @Volatile private var reseeded: Pair<QueueSource, String>? = null
+    fun reseed(source: QueueSource, seed: String) { reseeded = source to seed }
+    /** The radio [source] moved on to, if it did. A new queue is a new source, so it starts from its own again. */
+    fun reseededFor(source: QueueSource): String? = reseeded?.takeIf { it.first === source }?.second
     @Volatile var autoplayLoading = false
     /** A long list's later pages are still on their way into the queue (#356): autoplay's suggestions wait for them. */
     @Volatile var filling = false
