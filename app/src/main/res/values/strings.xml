@@ -4118,6 +4118,10 @@
     <string name="an_album_playing_through_never_blends">An album playing through never blends. This also keeps two of its songs whole when a playlist or shuffle puts them side by side.</string>
     <string name="keep_albums_keywords">album gapless seamless transition crossfade off</string>
     <string name="grid_3x3">3 × 3</string>
+    <string name="read_lyrics_from_your_music_files">Read lyrics from your music files</string>
+    <string name="synced_or_plain_with_no_internet">Synced or plain, with no internet</string>
+    <string name="flac_ogg_opus_mp3_and_m4a_their">FLAC, Ogg, Opus, MP3 and M4A files, when their tags hold lyrics. They take their place in the order under Sources: move them up to use them before the online sources.</string>
+    <string name="the_lyrics_saved_inside_the_song_s_file">The lyrics saved inside the song\'s file</string>
     <string name="keep_word_timings">Keep word timings</string>
     <string name="karaoke_lyrics_light_word_by_word">Karaoke lyrics light up word by word in other players too</string>
     <string name="saved_as_enhanced_lrc_players">Saved as enhanced LRC, which Poweramp and other karaoke-capable players read. Players that don\'t read it show the word times as text.</string>

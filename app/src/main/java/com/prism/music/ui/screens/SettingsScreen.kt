@@ -2142,6 +2142,11 @@ private fun LyricsSettings() {
         MoreOptions(listOf(tr(R.string.your_music_files))) {
             Group(tr(R.string.your_music_files)) {
                 val c = LocalContainer.current
+                // #344 (1.8.2): the same switch as its row in Order above.
+                Toggle(
+                    tr(R.string.read_lyrics_from_your_music_files), tr(R.string.synced_or_plain_with_no_internet), s.behavior.embeddedLyrics,
+                    info = tr(R.string.flac_ogg_opus_mp3_and_m4a_their),
+                ) { prefs.setEmbeddedLyrics(it) }
                 Item(
                     tr(R.string.save_lyrics_into_your_music_files), tr(R.string.so_other_players_show_them_too),
                     info = tr(R.string.synced_lyrics_go_into_your_flac),
@@ -2167,7 +2172,7 @@ private fun LyricSourcesOrder() {
     val prefs = LocalContainer.current.settings
     Label(tr(R.string.order), info = tr(R.string.tried_top_to_bottom_hold_one))
     com.prism.music.ui.components.ReorderList(s.lyricsOrder, { it }, { prefs.setLyricsOrder(it) }) { src, i, held, mod ->
-        val on = src !in s.lyricsOff
+        val on = s.lyricsSourceOn(src)
         Row(mod.fillMaxWidth().padding(horizontal = 16.dp, vertical = 2.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(
                 Modifier.size(26.dp).clip(CircleShape).background(if (i == 0 && on) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHighest),
@@ -2182,8 +2187,8 @@ private fun LyricSourcesOrder() {
             }
             // Turned off, a source is never asked (#51); at least one stays on.
             com.prism.music.ui.components.PrismSwitch(
-                on, { v -> prefs.setLyricsOff(if (v) s.lyricsOff - src else s.lyricsOff + src) },
-                enabled = !on || s.lyricsOrder.count { it !in s.lyricsOff } > 1,
+                on, { v -> if (src == com.prism.music.data.prefs.LyricsSource.EMBEDDED) prefs.setEmbeddedLyrics(v) else prefs.setLyricsOff(if (v) s.lyricsOff - src else s.lyricsOff + src) },
+                enabled = !on || s.lyricsOrder.count(s::lyricsSourceOn) > 1,
                 modifier = Modifier.scale(0.8f),
             )
             if (!held) {

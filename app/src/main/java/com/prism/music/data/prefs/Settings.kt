@@ -64,6 +64,8 @@ enum class LyricsSource(val label: String, val detail: String) {
     UNISON(tr(R.string.unison), tr(R.string.lyrics_listeners_submit_few_songs_so)),
     YTMUSIC(tr(R.string.prism_music), tr(R.string.lyricfind_lines_or_plain)),
     GENIUS(tr(R.string.genius), tr(R.string.plain_text_also_fills_in_starred)),
+    /** #344 (1.8.2): the lyrics in the song's own file's tags. Off until asked for ([AppSettings.lyricsSourceOn]). Keep it last. */
+    EMBEDDED(tr(R.string.your_music_files), tr(R.string.the_lyrics_saved_inside_the_song_s_file)),
 }
 
 /** Tiles in Home's greeting section. */
@@ -332,6 +334,8 @@ data class BehaviorPrefs(
     val lockScreenHideSong: Boolean = false,
     /** #349 (1.8.2): Home's Quick picks as Prism makes them around your artists (as before), or YouTube Music's own. */
     val quickPicksSource: QuickPicksSource = QuickPicksSource.PRISM,
+    /** #344 (1.8.2): lyrics stored in the song's own file are a lyrics source, in its place in the listener's order. */
+    val embeddedLyrics: Boolean = false,
 )
 
 /** The lock screen's layouts (1.8.2). */
@@ -1144,7 +1148,7 @@ object HomeSections {
 /** The order lyric sources are tried in on a fresh install. */
 val defaultLyricsOrder = listOf(
     LyricsSource.KUGOU, LyricsSource.QQ, LyricsSource.APPLE, LyricsSource.LYRICSPLUS, LyricsSource.BINI, LyricsSource.YTMUSIC,
-    LyricsSource.NETEASE, LyricsSource.LRCLIB, LyricsSource.UNISON, LyricsSource.GENIUS,
+    LyricsSource.NETEASE, LyricsSource.LRCLIB, LyricsSource.UNISON, LyricsSource.GENIUS, LyricsSource.EMBEDDED,
 )
 
 /** "Room for sung songs" at its last step: no limit (#238). */
@@ -1637,7 +1641,10 @@ data class AppSettings(
     )
 
     /** The lyric sources Prism asks, in the listener's order: the ones turned off are left out (#51). */
-    val lyricsSources: List<LyricsSource> get() = lyricsOrder.filter { it !in lyricsOff }.ifEmpty { lyricsOrder }
+    val lyricsSources: List<LyricsSource> get() = lyricsOrder.filter(::lyricsSourceOn).ifEmpty { lyricsOrder.filter { it != LyricsSource.EMBEDDED } }
+
+    /** Whether [src] is asked: every source until it's switched off, but a file's own lyrics only once they're switched on (#344). */
+    fun lyricsSourceOn(src: LyricsSource) = if (src == LyricsSource.EMBEDDED) behavior.embeddedLyrics else src !in lyricsOff
 }
 
 class SettingsRepository(private val context: Context, scope: CoroutineScope) {
@@ -1968,6 +1975,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val panelSwipes = booleanPreferencesKey("panel_swipes")
         val recentShows = stringPreferencesKey("recent_shows")
         val quickPicksSource = stringPreferencesKey("quick_picks_source")
+        val embeddedLyrics = booleanPreferencesKey("embedded_lyrics")
         val queueLocked = booleanPreferencesKey("queue_locked")
         val scrollShowsControls = booleanPreferencesKey("scroll_shows_controls")
         val playlistGenres = booleanPreferencesKey("playlist_genres")
@@ -2115,6 +2123,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "explicit_content",
                 // 1.8.2 (#349): where Home's Quick picks come from.
                 "quick_picks_source",
+                // 1.8.2 (#344): where lyrics come from.
+                "embedded_lyrics",
                 // 1.8.1 (#296, #263): what Prism keeps of your listening.
                 "history_paused_until", "play_count_seconds", "play_count_account",
             )
@@ -2413,6 +2423,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 lockScreenPaused = p.enum(K.lockScreenPaused, d.behavior.lockScreenPaused),
                 lockScreenHideSong = p[K.lockScreenHideSong] ?: d.behavior.lockScreenHideSong,
                 quickPicksSource = p.enum(K.quickPicksSource, d.behavior.quickPicksSource),
+                embeddedLyrics = p[K.embeddedLyrics] ?: d.behavior.embeddedLyrics,
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -3002,6 +3013,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setPanelSwipes(v: Boolean) = edit { it[K.panelSwipes] = v }
     fun setRecentShows(v: RecentShows) = edit { it[K.recentShows] = v.name }
     fun setQuickPicksSource(v: QuickPicksSource) = edit { it[K.quickPicksSource] = v.name }
+    fun setEmbeddedLyrics(v: Boolean) = edit { it[K.embeddedLyrics] = v }
     fun setQueueLocked(v: Boolean) = edit { it[K.queueLocked] = v }
     fun setScrollShowsControls(v: Boolean) = edit { it[K.scrollShowsControls] = v }
     fun setPlaylistGenres(v: Boolean) = edit { it[K.playlistGenres] = v }

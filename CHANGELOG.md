@@ -28,6 +28,9 @@ What changed in each release. Older releases are described on the [Releases page
   server, no YouTube and no account needed, with everything episodes do here: they pick up where you left off, speed from
   the player's menu, 15 and 30 second skips. New episodes show up when you open the show. Secure (https) servers on the
   public internet only. Not yet: downloading these episodes, new-episode alerts.
+- **Lyrics from your own music files** (#344). Settings → Lyrics → Your music files → "Read lyrics from your music files"
+  (off until you turn it on). Lyrics saved in a file's tags, synced or plain, work with no internet: FLAC, Ogg, Opus, MP3
+  and M4A. They take their place in your lyrics sources' order, last to start with: move them up to use them first.
 
 ### Fixes
 
