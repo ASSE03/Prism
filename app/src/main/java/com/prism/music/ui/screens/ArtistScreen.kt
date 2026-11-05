@@ -79,7 +79,9 @@ import com.prism.music.data.ArtistOpened
 import com.prism.music.data.FavoriteArtist
 import com.prism.music.data.ShareLinks
 import com.prism.music.data.albumFromPhone
+import com.prism.music.data.artistEssentials
 import com.prism.music.data.artistSongsOnPhone
+import com.prism.music.data.artistYou
 import com.prism.music.data.keepArtist
 import com.prism.music.data.openArtist
 import com.prism.music.data.opensOffline
@@ -268,6 +270,26 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
             else fromYouTube.copy(shelves = fromYouTube.shelves.map { s -> if (s == sections.topSongs) s.copy(items = top.map { SongItem(it) }) else s }),
         )
     }
+    // The page's own extras (1.8.2), each with its switch: from the plays on this phone, and Wikipedia's bio.
+    val behavior = com.prism.music.ui.theme.LocalAppSettings.current.behavior
+    val you by produceState<com.prism.music.data.ArtistYou?>(null, page.id, page.name, behavior.artistYou) {
+        value = if (behavior.artistYou) runCatching { c.artistYou(page.id, page.name) }.getOrNull() else null
+    }
+    val essentials by produceState(emptyList<Song>(), page.id, page.name, topSongs, behavior.artistEssentials) {
+        value = if (!behavior.artistEssentials || opened.fromPhone || uploads) emptyList()
+        else runCatching { c.artistEssentials(page.id, page.name, topSongs) }.getOrDefault(emptyList())
+    }
+    val essentialsReady = if (!offline) null else remember(essentials, dls) { essentials.filter { c.availableOffline(it.id) }.map { it.id }.toSet() }
+    val bio by produceState<com.prism.music.data.ArtistBio?>(null, page.id, behavior.artistBio, offline) {
+        val lang = com.prism.music.data.ArtistBioCheck.wikiLanguage(java.util.Locale.getDefault())
+        // YouTube's own description being Wikipedia's text, the page already has it (with its credit), so nothing's asked.
+        value = if (!behavior.artistBio || lang == null || uploads || com.prism.music.data.ArtistBioCheck.youTubeQuotesIt(page.description)) null
+        else runCatching {
+            // A page made from the phone can't be told apart well enough to ask with, but what was kept still shows.
+            val mayAsk = !offline && !opened.kept && !c.dataSaving()
+            c.artistBios.bio(page.id, page.name, com.prism.music.data.ArtistBioCheck.titlesOf(page), lang, mayAsk)
+        }.getOrNull()
+    }
     // Streams on air on the artist's channel (YouTube Music doesn't show them; youtube.com's Live tab does).
     val streams by produceState(emptyList<SongItem>(), page.id, offline) {
         if (offline || uploads) { value = emptyList(); return@produceState }
@@ -347,6 +369,7 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
                     AppleHeader(tr(R.string.on_this_phone), null)
                     TopSongsGrid(phoneReady, page.name)
                 }
+                you?.let { y -> item("you") { ArtistYouPanel(y) } }
                 sections.topSongs?.let { shelf ->
                     item("top") {
                         AppleHeader(
@@ -355,6 +378,10 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
                         )
                         TopSongsGrid(topSongs, tr(R.string.top_songs, page.name), ready)
                     }
+                }
+                if (essentials.isNotEmpty()) item("essentials") {
+                    AppleHeader(tr(R.string.artist_essentials_title), null)
+                    TopSongsGrid(essentials, tr(R.string.artist_essentials_title), essentialsReady)
                 }
                 if (streams.isNotEmpty()) item("streams") {
                     AppleHeader(tr(R.string.livestreams), null)
@@ -372,6 +399,7 @@ private fun ArtistContent(opened: ArtistOpened, bottomPadding: Dp) {
                     if (shown.items.isNotEmpty()) shelfItems(shown, place = place, open = open)
                 }
                 sections.similar?.let { s -> item("similar") { AppleHeader(tr(R.string.similar_artists), more(s)); CardRow(s.items, 128.dp, round = true, open = open, dim = dimmed) } }
+                bio?.let { b -> item("bio") { ArtistBioPanel(b) } }
                 item("about") { AboutCard(page, genre) { showInfo = true } }
             }
 
@@ -738,6 +766,79 @@ private fun CardRow(items: List<BrowseItem>, width: Dp, aspect: Float = 1f, roun
                     maxLines = 1, overflow = TextOverflow.Ellipsis,
                 )
             }
+        }
+    }
+}
+
+/** "You and this artist" (1.8.2): from the plays on this phone. The top song plays when tapped. */
+@Composable
+private fun ArtistYouPanel(you: com.prism.music.data.ArtistYou) {
+    val c = LocalContainer.current
+    val scope = rememberCoroutineScope()
+    fun time(ms: Long): String {
+        val minutes = ms / 60_000
+        return if (minutes < 60) tr(R.string.min, minutes.coerceAtLeast(1).toString()) else tr(R.string.hr, com.prism.music.ui.components.wholeNumber(minutes / 60))
+    }
+    val first = remember(you.firstPlayedAt) {
+        com.prism.music.ui.components.longDate(java.time.Instant.ofEpochMilli(you.firstPlayedAt).atZone(java.time.ZoneId.systemDefault()).toLocalDate())
+    }
+    Text(
+        tr(R.string.artist_you_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium,
+        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 24.dp, bottom = 10.dp),
+    )
+    FrostedPanel(Modifier.padding(horizontal = 16.dp).fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                ArtistYouFact(tr(R.string.artist_you_plays), com.prism.music.ui.components.wholeNumber(you.plays.toLong()), Modifier.weight(1f))
+                ArtistYouFact(tr(R.string.artist_you_time), time(you.ms), Modifier.weight(1f))
+            }
+            ArtistYouFact(tr(R.string.artist_you_first_play), first)
+            ArtistYouFact(
+                tr(R.string.artist_you_top_song), "${you.topSongTitle} · ${com.prism.music.ui.components.wholeNumber(you.topSongPlays.toLong())}",
+                Modifier.fillMaxWidth().clickable {
+                    scope.launch {
+                        val song = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { c.db.songs().getAll(listOf(you.topSongId)).firstOrNull()?.toSong() }
+                        if (song != null) c.player.playSingle(song)
+                    }
+                },
+            )
+        }
+    }
+}
+
+@Composable
+private fun ArtistYouFact(label: String, value: String, modifier: Modifier = Modifier) {
+    Column(modifier) {
+        Text(label.uppercase(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Medium)
+        Text(value, style = MaterialTheme.typography.bodyLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
+    }
+}
+
+/**
+ * Wikipedia's bio (1.8.2), its credit beside it as the licence asks: the article by name and link, its writers, the
+ * licence by name and link. Tapped, the whole of what's kept shows.
+ */
+@Composable
+private fun ArtistBioPanel(bio: com.prism.music.data.ArtistBio) {
+    var whole by remember { mutableStateOf(false) }
+    val link = androidx.compose.ui.text.TextLinkStyles(androidx.compose.ui.text.SpanStyle(color = MaterialTheme.colorScheme.primary))
+    val creditText = tr(R.string.artist_bio_credit, bio.title, bio.licenseName)
+    val credit = remember(creditText, bio, link) {
+        androidx.compose.ui.text.AnnotatedString.Builder(creditText).apply {
+            creditText.indexOf(bio.title).takeIf { it >= 0 }?.let { addLink(androidx.compose.ui.text.LinkAnnotation.Url(bio.url, link), it, it + bio.title.length) }
+            creditText.lastIndexOf(bio.licenseName).takeIf { it >= 0 }?.let { addLink(androidx.compose.ui.text.LinkAnnotation.Url(bio.licenseUrl, link), it, it + bio.licenseName.length) }
+        }.toAnnotatedString()
+    }
+    FrostedPanel(Modifier.padding(start = 16.dp, end = 16.dp, top = 28.dp).fillMaxWidth(), onClick = { whole = !whole }) {
+        Column(Modifier.padding(16.dp).animateContentSize()) {
+            Eyebrow(tr(R.string.artist_bio_from_wikipedia))
+            Text(
+                bio.text, Modifier.padding(top = 6.dp),
+                // Its own language's direction, whatever Prism's is.
+                style = MaterialTheme.typography.bodyMedium.copy(textDirection = androidx.compose.ui.text.style.TextDirection.Content),
+                maxLines = if (whole) Int.MAX_VALUE else 5, overflow = TextOverflow.Ellipsis,
+            )
+            Text(credit, Modifier.padding(top = 8.dp), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

@@ -335,4 +335,33 @@ interface CountedPlayDao {
     /** How many times a song's been played, as Replay counts it (#211's "Your plays"). */
     @Query("SELECT COUNT(*) FROM counted_plays WHERE origin IN (:o) AND songId = :id")
     suspend fun songPlays(o: List<String>, id: String): Int
+
+    // An artist's page (1.8.2): their songs by the artist's id or their main artist's name, as Replay names artists.
+
+    @Query(
+        """SELECT e.songId AS songId, COUNT(*) AS plays, SUM(e.playedMs) AS ms, s.title AS title,
+           s.artistName AS artistName, s.thumbnail AS thumbnail, s.albumTitle AS albumTitle,
+           s.durationSec AS durationSec, s.artistId AS artistId, s.primaryArtist AS primaryArtist
+           FROM counted_plays e JOIN songs s ON s.id = e.songId
+           WHERE e.origin IN (:o) AND (s.artistId = :id OR (:name != '' AND s.primaryArtist = :name COLLATE NOCASE))
+           GROUP BY e.songId ORDER BY ms DESC, plays DESC"""
+    )
+    suspend fun artistSongs(o: List<String>, id: String, name: String): List<SongPlays>
+
+    /** [artistSongs] without the plays the listener left out of their taste. */
+    @Query(
+        """SELECT e.songId AS songId, COUNT(*) AS plays, SUM(e.playedMs) AS ms, s.title AS title,
+           s.artistName AS artistName, s.thumbnail AS thumbnail, s.albumTitle AS albumTitle,
+           s.durationSec AS durationSec, s.artistId AS artistId, s.primaryArtist AS primaryArtist
+           FROM counted_plays e JOIN songs s ON s.id = e.songId
+           WHERE e.origin IN (:o) AND e.excluded = 0 AND (s.artistId = :id OR (:name != '' AND s.primaryArtist = :name COLLATE NOCASE))
+           GROUP BY e.songId ORDER BY ms DESC, plays DESC"""
+    )
+    suspend fun artistTasteSongs(o: List<String>, id: String, name: String): List<SongPlays>
+
+    @Query(
+        """SELECT MIN(e.timestamp) FROM counted_plays e JOIN songs s ON s.id = e.songId
+           WHERE e.origin IN (:o) AND (s.artistId = :id OR (:name != '' AND s.primaryArtist = :name COLLATE NOCASE))"""
+    )
+    suspend fun artistFirstPlay(o: List<String>, id: String, name: String): Long?
 }

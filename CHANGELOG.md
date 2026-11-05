@@ -34,6 +34,11 @@ What changed in each release. Older releases are described on the [Releases page
 - **Saved while playing** (#159). Songs that reached your phone in full as they played, listed in one place so you can
   play them with no connection. Open it from the Downloads page's ⋯, or add its tile to Library with the edit button.
   Prism still clears these as it needs the room; download a song to keep it for good.
+- **More on artist pages, if you want it.** Three new switches in Customize Prism → Home & Library → Artist pages, all off
+  until you turn them on. *You and this artist:* your first play, plays, time and top song, counted on your phone and
+  never sent anywhere. *Essentials for you:* their top songs, moved by what you play. *Bio from Wikipedia:* a short bio in
+  your language, credited and linked, kept for offline. It only shows when Prism is sure it's the right article (the
+  article has to be about a musician and name that artist's own albums or songs), so some artists won't have one.
 
 ### Fixes
 
