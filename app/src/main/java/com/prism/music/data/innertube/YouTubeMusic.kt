@@ -272,6 +272,7 @@ class YouTubeMusic(
         res.findAll("musicResponsiveListItemRenderer").mapNotNull { (Parser.responsive(it) as? SongItem)?.song }
 
     suspend fun album(browseId: String): CollectionPage {
+        if (Parser.isUploadAlbum(browseId)) return uploadAlbum(browseId)
         val res = browse(browseId)
         val header = res.findFirst("musicResponsiveHeaderRenderer") ?: res.findFirst("musicDetailHeaderRenderer")
         val title = header.obj("title").text() ?: "Album"
@@ -482,6 +483,7 @@ class YouTubeMusic(
             val name = browseId.removePrefix(ARTIST_BY_NAME)
             return artist(artistIdByName(name) ?: throw java.io.IOException("Couldn't find $name in Prism Music"))
         }
+        if (Parser.isUploadArtist(browseId)) return uploadArtist(browseId)
         val res = browse(browseId)
         val header = res.findFirst("musicImmersiveHeaderRenderer") ?: res.findFirst("musicVisualHeaderRenderer")
             ?: res.findFirst("musicResponsiveHeaderRenderer")
@@ -821,6 +823,61 @@ class YouTubeMusic(
         val tracks = runCatching { libraryItems("FEmusic_library_corpus_track_artists") }.getOrDefault(emptyList())
         val subs = runCatching { libraryItems("FEmusic_library_corpus_artists") }.getOrDefault(emptyList())
         return (tracks + subs).filterIsInstance<com.prism.music.data.model.ArtistItem>().distinctBy { it.id }
+    }
+
+    // ---------------------------------------------------------------- The listener's uploads (#332, #101)
+    //
+    // Browse ids as ytmusicapi uses them (mixins/uploads.py). Not yet checked against an account with uploads: see Parser.
+
+    /** A page of the account's uploaded songs; [token] from the page before. */
+    suspend fun uploadedSongsPage(token: String? = null): Parser.UploadRows<Song> =
+        Parser.uploadSongRows(if (token == null) browse("FEmusic_library_privately_owned_tracks") else continueBrowse(token))
+
+    /** Every card of the account's uploaded albums (they come a page at a time). */
+    suspend fun uploadedAlbums(maxPages: Int = 40): Parser.UploadRows<com.prism.music.data.model.AlbumItem> =
+        allUploadPages(maxPages, browse("FEmusic_library_privately_owned_releases"), Parser::uploadAlbumCards)
+
+    /** Every row of the account's uploaded artists. */
+    suspend fun uploadedArtists(maxPages: Int = 40): Parser.UploadRows<ArtistItem> =
+        allUploadPages(maxPages, browse("FEmusic_library_privately_owned_artists"), Parser::uploadArtistRows)
+
+    private suspend fun <T> allUploadPages(maxPages: Int, first: JsonObject, read: (JsonElement) -> Parser.UploadRows<T>): Parser.UploadRows<T> {
+        var page = read(first)
+        val items = page.items.toMutableList()
+        var rows = page.rows
+        var pages = 1
+        while (page.next != null && pages++ < maxPages) {
+            page = runCatching { read(continueBrowse(page.next!!)) }.getOrNull() ?: break
+            items += page.items
+            rows += page.rows
+        }
+        return Parser.UploadRows(items, rows, null)
+    }
+
+    private suspend fun uploadAlbum(browseId: String): CollectionPage {
+        val page = Parser.uploadAlbumPage(browseId, browse(browseId))
+        val ref = com.prism.music.data.model.AlbumRef(page.title, browseId)
+        val songs = page.songs.toMutableList()
+        var token = page.continuation
+        var pages = 1
+        while (token != null && pages++ < 20) {
+            val more = runCatching { Parser.uploadSongRows(continueBrowse(token!!), ref) }.getOrNull() ?: break
+            songs += more.items.map { s -> s.copy(thumbnail = s.thumbnail ?: page.thumbnail, artists = s.artists.ifEmpty { page.artists }) }
+            token = more.next
+        }
+        return page.copy(songs = songs.distinctBy { it.id }, continuation = null)
+    }
+
+    private suspend fun uploadArtist(browseId: String): ArtistPage {
+        val res = browse(browseId)
+        var page = Parser.uploadSongRows(res)
+        val songs = page.items.toMutableList()
+        var pages = 1
+        while (page.next != null && pages++ < 200) {
+            page = runCatching { Parser.uploadSongRows(continueBrowse(page.next!!)) }.getOrNull() ?: break
+            songs += page.items
+        }
+        return Parser.uploadArtistPage(browseId, res, songs.distinctBy { it.id })
     }
 
     /**

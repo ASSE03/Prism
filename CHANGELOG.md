@@ -14,6 +14,16 @@ What changed in each release. Older releases are described on the [Releases page
 - **Light on the phone:** Performance mode always uses Quiet, with no blur or movement. It draws nothing with the screen off.
 - **It asks for "Display over other apps" when you turn it on** (Android 10 and up), because Android only lets an app come up by itself as the screen goes off with that permission. Prism never draws over other apps with it. Without it, the player comes up a moment after you wake a locked phone instead of being ready.
 
+### New
+
+- **Artist pages work offline.** A page you've opened stays on your phone, so it opens without a connection as it was
+  when you last saw it, with a note saying so. What isn't on your phone is dimmed and doesn't play. For an artist you
+  haven't opened, Prism makes a page from your downloaded, liked and played songs and their albums. Android Auto's
+  artist folders list what can play offline too.
+- **Your uploads in Library** (#332, #101). If you've uploaded music to YouTube Music, an Uploads tile shows up in Library
+  (signed in) with your songs, albums and artists, to browse, sort and search. If you have no uploads, nothing changes.
+  This one was built without an account that has uploads, so if it's missing or looks wrong for you, please tell us.
+
 ### Fixes
 
 - **Typing in Search and in Settings' search keeps up on slower phones** (#355).

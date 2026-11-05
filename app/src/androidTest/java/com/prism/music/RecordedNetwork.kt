@@ -45,6 +45,11 @@ class RecordedNetwork(private val record: Boolean) : Interceptor {
             return Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(200).message("Test")
                 .body(body.toResponseBody("application/json".toMediaTypeOrNull())).build()
         }
+        // And its own answer to one of YouTube's pages, by what's asked for (no account here has what those tests need).
+        pageAsked(request)?.let { body ->
+            return Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(200).message("Test")
+                .body(body.toResponseBody("application/json".toMediaTypeOrNull())).build()
+        }
         if (record) return chain.proceed(request).also { keep(key, it) }
         val saved = runCatching {
             instrumentation.context.assets.open("recorded/$key.json").use { json.decodeFromString(Recording.serializer(), it.readBytes().decodeToString()) }
@@ -90,7 +95,16 @@ class RecordedNetwork(private val record: Boolean) : Interceptor {
 
         /** Answers a test sets for itself, by the start of the address (each test runs in a fresh app). */
         val answers: MutableMap<String, String> = java.util.concurrent.ConcurrentHashMap()
+        /** Answers a test sets for itself to YouTube's `browse`, by the browseId or continuation asked for. */
+        val pages: MutableMap<String, String> = java.util.concurrent.ConcurrentHashMap()
         private val NAMING = listOf("browseId", "query", "videoId", "params", "continuation", "playlistId", "input")
+
+        private fun pageAsked(request: Request): String? {
+            if (pages.isEmpty() || !request.url.encodedPath.endsWith("/browse")) return null
+            val body = request.body?.let { b -> Buffer().also { b.writeTo(it) }.readUtf8() } ?: return null
+            val obj = runCatching { Json.parseToJsonElement(body).jsonObject }.getOrNull() ?: return null
+            return (find(obj, "browseId") ?: find(obj, "continuation"))?.let { pages[it] }
+        }
 
         fun keyOf(request: Request): String {
             val url = request.url

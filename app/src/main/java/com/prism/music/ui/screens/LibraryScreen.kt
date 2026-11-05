@@ -295,6 +295,9 @@ fun LibraryScreen(bottomPadding: Dp) {
         // Once per session (Prism also syncs at launch); the refresh button forces another.
         if (settings.isLoggedIn && (playlists.isEmpty() || sync == SyncState.IDLE)) c.library.sync()
     }
+    // Whether the account has uploads (#332): one request every few hours, whatever comes of it.
+    val hasUploads by c.uploads.has.collectAsState()
+    LaunchedEffect(settings.isLoggedIn, settings.dataSyncId) { c.uploads.check() }
 
     Column(Modifier.fillMaxSize()) {
         com.prism.music.ui.components.ScreenHeader(tr(R.string.library)) {
@@ -393,6 +396,8 @@ fun LibraryScreen(bottomPadding: Dp) {
                                 LibraryTile.RECOGNIZED -> item(key = "tile-recognized") { ShortcutTile(tr(R.string.recognized), tr(R.string.songs_found_by_listening), PrismIcons.Recognize, asList) { nav.go(Routes.RECOGNIZED) } }
                                 LibraryTile.NEW_PLAYLIST -> item(key = "tile-new") { ShortcutTile(tr(R.string.new_playlist), if (settings.isLoggedIn) tr(R.string.make_one_on_youtube_music) else tr(R.string.kept_on_this_phone), PrismIcons.Add, asList) { creating = true } }
                                 LibraryTile.IMPORT -> if (settings.isLoggedIn) item(key = "tile-import") { ShortcutTile(tr(R.string.import_playlists), tr(R.string.from_spotify_apple_music), PrismIcons.PlaylistAdd, asList) { nav.go(Routes.IMPORT) } }
+                                // Only for an account with uploads (#332): for anyone else there's nothing behind it.
+                                LibraryTile.UPLOADS -> if (settings.isLoggedIn && hasUploads) item(key = "tile-uploads") { ShortcutTile(tr(R.string.uploads), tr(R.string.uploads_tile_subtitle), PrismIcons.Upload, asList) { nav.go(Routes.UPLOADS) } }
                             }
                         }
                       }
@@ -675,6 +680,7 @@ private fun shortcutHue(icon: ImageVector): Int = when (icon) {
     PrismIcons.Groups -> 3
     PrismIcons.Blend -> 4
     PrismIcons.Recognize -> 5
+    PrismIcons.Upload -> 1
     else -> 6
 }
 
@@ -726,6 +732,7 @@ fun LibraryTilesSheet(onDismiss: () -> Unit) {
     val s = com.prism.music.ui.theme.LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     val tiles = s.libraryTiles
+    val offered = LibraryTile.offered(LocalContainer.current.uploads.has.collectAsState().value)
     com.prism.music.ui.components.PrismSheet(onDismiss) { _ ->
         Column(Modifier.fillMaxWidth().verticalScroll(androidx.compose.foundation.rememberScrollState()).padding(bottom = 24.dp)) {
             Text(tr(R.string.library_tiles), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 20.dp))
@@ -755,8 +762,8 @@ fun LibraryTilesSheet(onDismiss: () -> Unit) {
                 }
             }
             com.prism.music.ui.components.ReorderList(tiles, { it }, { prefs.setLibraryTiles(it) }) { t, i, held, mod -> TileRow(t, i, mod, Modifier.dragHandle(), held) }
-            LibraryTile.entries.filter { it !in tiles }.forEach { t -> TileRow(t, -1, Modifier, null, false) }
-            PrismTextButton({ prefs.setLibraryTiles(LibraryTile.entries) }, Modifier.padding(start = 12.dp, top = 8.dp)) { Text(tr(R.string.show_all_in_prism_s_order)) }
+            offered.filter { it !in tiles }.forEach { t -> TileRow(t, -1, Modifier, null, false) }
+            PrismTextButton({ prefs.setLibraryTiles(offered) }, Modifier.padding(start = 12.dp, top = 8.dp)) { Text(tr(R.string.show_all_in_prism_s_order)) }
             Text(
                 tr(R.string.where_your_playlists_go), style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 16.dp),

@@ -933,11 +933,23 @@ enum class LibraryTile(val label: String) {
     LIKED(tr(R.string.liked_songs)), DOWNLOADS(tr(R.string.downloads)), LOCAL(tr(R.string.local_files)), REPLAY(tr(R.string.replay_2)),
     /** Library's own History tab as a tile (#136, 1.7.7); not shown until ticked. */
     HISTORY(tr(R.string.history)), PODCASTS(tr(R.string.podcasts)),
-    TOGETHER(tr(R.string.listen_together)), BLEND(tr(R.string.blend)), RECOGNIZED(tr(R.string.recognized)), NEW_PLAYLIST(tr(R.string.new_playlist)), IMPORT(tr(R.string.import_playlists));
+    TOGETHER(tr(R.string.listen_together)), BLEND(tr(R.string.blend)), RECOGNIZED(tr(R.string.recognized)), NEW_PLAYLIST(tr(R.string.new_playlist)), IMPORT(tr(R.string.import_playlists)),
+    /** The account's uploads (#332, 1.8.2): only for an account that has some, added once when Prism finds them ([withUploads]). */
+    UPLOADS(tr(R.string.uploads));
 
     companion object {
         /** A new install's tiles: all but those added later, so nobody's Library changes on its own. */
-        val initial = entries - HISTORY
+        val initial = entries - HISTORY - UPLOADS
+
+        /** What the tile editor offers: Uploads only to an account that has some. */
+        fun offered(hasUploads: Boolean) = if (hasUploads) entries else entries - UPLOADS
+
+        /** [tiles] with Uploads, after Local files (or Downloads, or Liked songs) when those are shown; last otherwise. */
+        fun withUploads(tiles: List<LibraryTile>): List<LibraryTile> {
+            if (UPLOADS in tiles) return tiles
+            val after = listOf(LOCAL, DOWNLOADS, LIKED).firstOrNull { it in tiles } ?: return tiles + UPLOADS
+            return tiles.toMutableList().apply { add(indexOf(after) + 1, UPLOADS) }
+        }
     }
 }
 

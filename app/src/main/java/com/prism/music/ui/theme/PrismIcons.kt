@@ -312,6 +312,7 @@ object PrismIcons {
     val FolderFilled = drawn("Folder", filled = true)
     val Pin = drawn("Pin")
     val PinFilled = drawn("Pin", filled = true)
+    val Upload = drawn("Upload")
     val Download = drawn("Download").or { Cupertino.Download }
     val DownloadDone = drawn("DownloadDone").or { Cupertino.DownloadDone }
     val DownloadCircle = drawn("DownloadCircle")

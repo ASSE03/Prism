@@ -41,6 +41,8 @@ object Routes {
     const val IMPORT = "import"
     const val TOGETHER = "together"
     const val PODCASTS = "podcasts"
+    /** Library → Uploads: the music the listener uploaded to YouTube Music (#332). */
+    const val UPLOADS = "uploads"
     /** Release Radar's page: new albums, singles and EPs from the listener's artists. */
     const val NEW_RELEASES = "new_releases"
     /** "Pick artists you like" (after the welcome screen, or Settings → Home screen → Your artists). */
