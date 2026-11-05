@@ -3,11 +3,13 @@ package com.prism.music
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasScrollToIndexAction
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipe
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -175,26 +177,21 @@ class PlayerRequests182AppTest {
         openPlayer()
         compose.waitUntil(5_000) { !CoverFlight.flying && CoverFlight.player != null }
 
-        androidx.test.uiautomator.UiDevice.getInstance(instrumentation).pressBack()
-        val until = System.currentTimeMillis() + 1_500
-        while (System.currentTimeMillis() < until) {
+        // On its own thread: pressBack waits up to a second for the screen to change, longer than the flight.
+        fun pressBack() = Thread { androidx.test.uiautomator.UiDevice.getInstance(instrumentation).pressBack() }.start()
+        pressBack()
+        // Frames only run while the test waits on Compose, so what happens is watched from inside its wait.
+        compose.waitUntil(5_000) {
             assertFalse("off: the player slides away, as before", CoverFlight.returning)
-            Thread.sleep(20)
+            !playerOpen()
         }
-        compose.waitUntil(5_000) { !playerOpen() }
 
         runBlocking { settings.setCoverFlightBack(true) }
         settle()
         openPlayer()
         compose.waitUntil(5_000) { !CoverFlight.flying && CoverFlight.player != null }
-        var flew = false
-        androidx.test.uiautomator.UiDevice.getInstance(instrumentation).pressBack()
-        val limit = System.currentTimeMillis() + 3_000
-        while (System.currentTimeMillis() < limit && !flew) {
-            flew = CoverFlight.returning
-            Thread.sleep(10)
-        }
-        assertTrue("it flew back", flew)
+        pressBack()
+        compose.waitUntil(5_000) { CoverFlight.returning }
         compose.waitUntil(5_000) { !playerOpen() && !CoverFlight.returning && CoverFlight.player == null }
         assertTrue("the mini player's back", shown("miniPlayer"))
     }
@@ -251,10 +248,14 @@ class PlayerRequests182AppTest {
 
     /** #294, #331: played songs get handles when asked for, moving among themselves and never past what's playing. */
     @Test fun playedSongsCanBeMovedWhenAsked() {
-        runBlocking { settings.setPanelPlayer(PanelPlayer.ALWAYS) }
+        // The whole screen for the list, so all four rows are there at once.
+        runBlocking { settings.setPanelPlayer(PanelPlayer.HIDDEN) }
         val all = songs("Prism played A", "Prism played B", "Prism played C", "Prism played D", start = 2)
         openPlayer()
         tapDescribed(tr(R.string.up_next))
+        // The queue opens at what's playing, with the played songs above it.
+        compose.onAllNodes(hasScrollToIndexAction()).onFirst().performScrollToIndex(0)
+        settle()
         // One handle: the song still to come.
         compose.waitUntil(5_000) { described(tr(R.string.drag_to_reorder)).fetchSemanticsNodes().size == 1 }
 

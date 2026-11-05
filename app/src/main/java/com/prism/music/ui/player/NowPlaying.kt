@@ -430,6 +430,8 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         // #223: the cover flies back from where it is, and the player fades around it, instead of sliding away.
         if (CoverFlight.returnsWith(settings.view.coverFlight, settings.view.coverFlightBack, settings.reduceMotion) && CoverFlight.canReturn()) {
             onCollapse()
+            // Opened again while it fades, this is the same player still: it has to be able to close again.
+            scope.launch { delay(CoverFlight.FLIGHT_MS + 100L); closing = false }
             return
         }
         scope.launch {
