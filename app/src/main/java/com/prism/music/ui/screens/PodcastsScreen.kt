@@ -76,6 +76,7 @@ import com.prism.music.ui.theme.LocalContainer
 import com.prism.music.ui.theme.LocalUi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.launch
 
 /** A search on the Podcasts page: null lists while it's asking. */
@@ -109,7 +110,7 @@ fun PodcastsScreen(bottomPadding: Dp) {
         }
     }
     val resume by c.episodes.inProgress.collectAsState()
-    val rssShows by c.rssPodcasts.shows.collectAsState()
+    val rssShows by remember { rssShowsFlow(c) }.collectAsState(null)
     var addingRss by remember { mutableStateOf(false) }
     val onSong: (SongItem) -> Unit = { playEpisode(c, it.song, tr(R.string.podcasts)) }
     // Search right here: shows and episodes only, as you type (a moment after the last key).
@@ -162,7 +163,7 @@ fun PodcastsScreen(bottomPadding: Dp) {
             }
         }
         // On the phone, so here whatever YouTube's page below does.
-        item(key = "rss") { RssShowsSection(rssShows) { addingRss = true } }
+        item(key = "rss") { RssShowsSection(rssShows.orEmpty()) { addingRss = true } }
         when (val st = load.state) {
             Load.Loading -> item { LoadingState() }
             is Load.Err -> item { ErrorState(st.message) { load.reload(false) } }
@@ -374,7 +375,7 @@ private fun AddRssShowDialog(onDismiss: () -> Unit, onAdded: (com.prism.music.da
             problem = null
             scope.launch {
                 try {
-                    onAdded(c.rssPodcasts.add(address))
+                    onAdded(c.rssPodcastsReady().add(address))
                 } catch (e: com.prism.music.data.podcast.RssException) {
                     problem = e.message
                 }
@@ -413,6 +414,14 @@ private fun AddRssShowDialog(onDismiss: () -> Unit, onAdded: (com.prism.music.da
     )
 }
 
+/** The RSS shows' store, first made off the main thread: making it reads their one file, however many shows are in it. */
+private suspend fun com.prism.music.AppContainer.rssPodcastsReady() = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { rssPodcasts }
+
+/** The shows, null until that first read is done. */
+private fun rssShowsFlow(c: com.prism.music.AppContainer) = kotlinx.coroutines.flow.flow<List<com.prism.music.data.podcast.RssShow>?> {
+    emitAll(c.rssPodcastsReady().shows)
+}
+
 /**
  * The page of a show added by its feed: as a YouTube show's, from what's kept on the phone, so it opens at once and works
  * offline. The feed is asked for what's new on opening; if it can't answer, the page says so and shows what it has.
@@ -422,8 +431,8 @@ private fun RssShowScreen(id: String, bottomPadding: Dp) {
     val c = LocalContainer.current
     val nav = LocalNavigator.current
     val ui = LocalUi.current
-    val shows by c.rssPodcasts.shows.collectAsState()
-    val show = shows.firstOrNull { it.id == id }
+    val shows by remember { rssShowsFlow(c) }.collectAsState(null)
+    val show = shows?.firstOrNull { it.id == id }
     val current by c.player.currentSong.collectAsState()
     val played by c.episodes.played.collectAsState()
     val resume by c.episodes.inProgress.collectAsState()
@@ -432,7 +441,7 @@ private fun RssShowScreen(id: String, bottomPadding: Dp) {
     var removing by remember { mutableStateOf(false) }
     androidx.compose.runtime.LaunchedEffect(id) {
         try {
-            c.rssPodcasts.refresh(id) { ep -> c.episodes.positionOf(ep) > 0 || c.player.currentSong.value?.id == ep }
+            c.rssPodcastsReady().refresh(id) { ep -> c.episodes.positionOf(ep) > 0 || c.player.currentSong.value?.id == ep }
         } catch (e: com.prism.music.data.podcast.RssException) {
             refreshProblem = e.message
         }
@@ -441,6 +450,8 @@ private fun RssShowScreen(id: String, bottomPadding: Dp) {
     SubPage(show?.title ?: tr(R.string.podcast), bottomPadding, actions = {
         if (show != null) RoundAction(PrismIcons.Delete, tr(R.string.rss_remove_show)) { removing = true }
     }) {
+        // Still being read: not "gone" yet.
+        if (shows == null) return@SubPage
         if (show == null) {
             item { EmptyState(PrismIcons.Podcasts, tr(R.string.rss_show_gone), tr(R.string.rss_show_gone_detail)) }
             return@SubPage
@@ -505,7 +516,10 @@ private fun RssShowScreen(id: String, bottomPadding: Dp) {
             PrismTextButton(onClick = {
                 removing = false
                 // Your place in its episodes goes with it (a place in an episode that can't be played would stay on the list).
-                c.rssPodcasts.remove(id).forEach { ep -> c.episodes.forget(ep); c.episodes.unmarkPlayed(ep) }
+                // Written whole off the main thread, and on c.scope: leaving the page doesn't stop it.
+                c.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
+                    c.rssPodcastsReady().remove(id).forEach { ep -> c.episodes.forget(ep); c.episodes.unmarkPlayed(ep) }
+                }
                 nav.back()
             }) { Text(tr(R.string.remove)) }
         },

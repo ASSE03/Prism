@@ -135,11 +135,11 @@ class RssPodcasts(private val dir: File, private val client: OkHttpClient) {
     }
 
     /** The show goes, with its episodes. Their ids, for what else remembers them. */
-    fun remove(id: String): List<String> {
+    suspend fun remove(id: String): List<String> = withContext(Dispatchers.IO) {
         val gone = show(id)?.episodes.orEmpty()
         gone.forEach { goneLinks[it.id] = it.audioUrl }
         change { list -> list.filterNot { it.id == id } }
-        return gone.map { it.id }
+        gone.map { it.id }
     }
 
     private class Fetched(val parsed: ParsedFeed, val etag: String?, val lastModified: String?)

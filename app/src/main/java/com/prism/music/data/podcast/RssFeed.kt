@@ -340,7 +340,8 @@ object RssFeed {
         var i = 0
         while (i < s.length) {
             val ch = s[i]
-            val semi = if (ch == '&') s.indexOf(';', i + 1).takeIf { it in (i + 2)..(i + 11) } else null
+            // Looked for only as far as an entity can reach: a feed of bare ampersands doesn't walk to the end for each.
+            val semi = if (ch == '&') (i + 2..minOf(i + 11, s.length - 1)).firstOrNull { s[it] == ';' } else null
             if (semi == null) { out.append(ch); i++; continue }
             val body = s.substring(i + 1, semi)
             val decoded = when {
