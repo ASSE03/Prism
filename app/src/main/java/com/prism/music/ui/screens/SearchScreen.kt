@@ -98,6 +98,7 @@ import com.prism.music.ui.theme.GlassSurface
 import com.prism.music.ui.theme.LocalContainer
 import com.prism.music.playback.QueueKind
 import com.prism.music.playback.QueueSource
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -133,6 +134,14 @@ fun SearchScreen(bottomPadding: Dp) {
     var loading by remember { mutableStateOf(false) }
     var continuation by remember { mutableStateOf<String?>(null) }
     val scope = androidx.compose.runtime.rememberCoroutineScope()
+    // Worked out once from the first letter, apart from the typing: the next letter would cancel it and start it over.
+    val typingTaste = remember {
+        lazy {
+            c.scope.async {
+                runCatching { c.taste.searchTaste() }.getOrDefault(com.prism.music.data.innertube.SearchRank.Taste.NONE)
+            }
+        }
+    }
 
     fun saveQuery(q: String) {
         val v = q.trim()
@@ -160,8 +169,12 @@ fun SearchScreen(bottomPadding: Dp) {
     LaunchedEffect(query) {
         if (query.isBlank()) { suggestions.clear(); suggestedItems.clear(); live = ""; return@LaunchedEffect }
         // The listener's own artists and searches come first (from the phone, at once), then YouTube's completions.
-        val taste = runCatching { c.taste.searchTaste() }.getOrDefault(com.prism.music.data.innertube.SearchRank.Taste.NONE)
-        val mine = com.prism.music.data.innertube.SearchRank.predict(query, taste, recents.toList(), limit = 2)
+        val taste = typingTaste.value.await()
+        val mySearches = recents.toList()
+        // Off the main thread (#355): this looks through every artist the listener knows, for each letter.
+        val mine = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+            com.prism.music.data.innertube.SearchRank.predict(query, taste, mySearches, limit = 2)
+        }
         suggestions.clear(); suggestions.addAll(mine)
         delay(140)
         val (s, items) = runCatching { kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { c.ytm.searchSuggestionsWithItems(query) } }

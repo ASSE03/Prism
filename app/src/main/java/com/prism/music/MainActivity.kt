@@ -45,6 +45,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -825,8 +826,10 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 // Floating chrome: mini player + tab bar
                 if (showChrome && !useRail) {
                     val docked = settings.navStyle == NavBarStyle.DOCKED
+                    val keyboard = WindowInsets.ime
                     Column(
                         Modifier.align(Alignment.BottomCenter).fillMaxWidth().then(underPlayer)
+                            .graphicsLayer { alpha = if (com.prism.music.ui.theme.hiddenByKeyboard(keyboard.getBottom(this), size.height)) 0f else 1f }
                             .then(if (docked) Modifier else Modifier.navigationBarsPadding().padding(horizontal = 12.dp, vertical = 8.dp)),
                     ) {
                         AnimatedVisibility(inSession && !playerOpen && route != Routes.TOGETHER, enter = slideInVertically { it } + fadeIn(), exit = slideOutVertically { it } + fadeOut()) {

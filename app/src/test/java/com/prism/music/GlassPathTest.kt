@@ -44,6 +44,17 @@ class GlassPathTest {
         for (sdk in 26..30) assertFalse("sdk $sdk", glassSamplesThePage(sdk, liquid = true, frosted = true))
     }
 
+    /** #355: the tab bar and mini player aren't drawn only while the keyboard covers all of them. */
+    @Test fun theBarsGoOnlyWhenTheKeyboardCoversThemWhole() {
+        assertTrue(com.prism.music.ui.theme.hiddenByKeyboard(900, 200f))
+        assertTrue(com.prism.music.ui.theme.hiddenByKeyboard(200, 200f))
+        // Still coming up, or a small bar for a hardware keyboard.
+        assertFalse(com.prism.music.ui.theme.hiddenByKeyboard(120, 200f))
+        // No keyboard, or a floating one, which takes no room.
+        assertFalse(com.prism.music.ui.theme.hiddenByKeyboard(0, 200f))
+        assertFalse(com.prism.music.ui.theme.hiddenByKeyboard(0, 0f))
+    }
+
     /** Every surface that samples the page finds it copied: the two agree on every setting and Android version. */
     @Test fun glassIsOnlyDrawnWhereThePageIsCopied() {
         for (sdk in 26..36) for (liquid in listOf(false, true)) for (frosted in listOf(false, true)) for (refract in listOf(false, true)) {
