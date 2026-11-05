@@ -4884,7 +4884,6 @@
     <string name="tune_energetic">Energetic</string>
     <string name="tune_calm_energetic_info">Goes by the tempo and loudness of songs Prism has already scanned, and nothing else. Most songs you haven\'t heard aren\'t scanned yet, so they stay where they are: expect this one to matter most for music you know. While it\'s away from the middle, songs you play get scanned too.</string>
     <string name="tune_measured_songs">Songs measured so far: %1$d</string>
-</resources>
     <string name="cover_gradient">Cover gradient</string>
     <string name="cover_gradient_info">Cover gradient is the cover\'s own colors as a solid gradient, nothing blurred, deepening toward the bottom. The lyrics and the queue stay on it, a little darker.</string>
     <string name="gradient_depth">Darkness at the bottom</string>
