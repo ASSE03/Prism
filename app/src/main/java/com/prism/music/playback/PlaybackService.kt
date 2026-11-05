@@ -657,6 +657,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // Already playing: a seamless move on (gapless, or a Mix blend); nothing to time.
         startedLoading = if (player.isPlaying) null else song.id to SystemClock.elapsedRealtime()
         retries.remove(song.id)
+        retries.remove("stuck:${song.id}")
         // A queued song that's playing now isn't "next in queue" any more.
         if (song.id in c.queue.userQueued.value) c.queue.userQueued.value = c.queue.userQueued.value - song.id
         if (player.isPlaying) playStartedAt = SystemClock.elapsedRealtime()
@@ -977,6 +978,23 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             player.seekToNextMediaItem()
             player.prepare()
             player.play()
+            return
+        }
+        // Media3 gives up on a "playing" song whose position hasn't moved for 10 s (Reddit, 1.8.1.1: stuck at 0:00 over
+        // Bluetooth, with its English message). The song isn't at fault: the sound isn't getting out, or the decoder stopped.
+        // It plays on from there with a new decoder and audio track, twice at most, before it counts as a failed song.
+        val stuckKey = "stuck:$id"
+        val stuckTries = retries[stuckKey] ?: 0
+        if (stuckPlaying(error) && stuckTries < STUCK_TRIES) {
+            retries[stuckKey] = stuckTries + 1
+            val pos = player.currentPosition
+            AudioDiagnostics.log("song", "$id: no progress for 10 s at ${pos / 1000} s on ${AudioEffects.outputDevice(this)} (${player.audioFormat?.sampleMimeType}): trying it again")
+            scope.launch {
+                delay(300)
+                player.prepare()
+                player.seekTo(pos)
+                player.play()
+            }
             return
         }
         // An Apple Lossless file this phone has no decoder for (#135): the lossless add-on's file is set aside and the
@@ -2864,6 +2882,13 @@ private const val AUTOPLAY_WAIT_MS = 15_000L
  * app's codecs when another one needs them (1.7.9's night check). Unreadable bytes are a [androidx.media3.common.ParserException],
  * handled on their own; a format this phone can't decode has its own error codes and isn't retried.
  */
+internal fun stuckPlaying(error: Throwable): Boolean = generateSequence(error) { it.cause }.any {
+    it is androidx.media3.common.util.StuckPlayerException && it.stuckType == androidx.media3.common.util.StuckPlayerException.STUCK_PLAYING_NO_PROGRESS
+}
+
+/** How many times a song whose position stopped moving is tried again ([stuckPlaying]) before it counts as failed. */
+private const val STUCK_TRIES = 2
+
 internal fun decoderLost(error: PlaybackException): Boolean =
     (error.errorCode == PlaybackException.ERROR_CODE_DECODING_FAILED || error.errorCode == PlaybackException.ERROR_CODE_DECODER_INIT_FAILED) &&
         generateSequence(error as Throwable) { it.cause }.none { it is androidx.media3.common.ParserException }
