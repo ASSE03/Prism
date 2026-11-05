@@ -297,6 +297,12 @@ data class BehaviorPrefs(
     val scrollShowsControls: Boolean = true,
     /** Playlists' genre chips, each song's genre and Group by genre (1.7.9, Reddit); off, a playlist is just its songs in order. */
     val playlistGenres: Boolean = true,
+    /** Artist pages (1.8.2): a short Wikipedia bio. Off, nothing is ever asked of Wikipedia. */
+    val artistBio: Boolean = false,
+    /** Artist pages (1.8.2): "You and this artist", from the plays on this phone. */
+    val artistYou: Boolean = false,
+    /** Artist pages (1.8.2): their top songs moved by what the listener plays. */
+    val artistEssentials: Boolean = false,
     /** Pages fade into each other (#227: off, a page swaps at once, so a tap can't land on the one fading out). */
     val screenFades: Boolean = true,
     /** #259 (1.7.9.2): the cover's swipes, double tap and long press work around the controls too. */
@@ -945,7 +951,9 @@ enum class HomeHeaderHeight(val label: String, val dp: Int) { SHORT(tr(R.string.
 enum class SearchSection(val label: String) {
     // The shortcut tiles (Recognize, Find by lyrics, Podcasts, Your files) went before release: the search box has
     // Recognize, a line of lyrics finds its song, and podcasts and your files are searched with everything else.
-    RECENT(tr(R.string.recent)), ARTISTS(tr(R.string.your_artists)), MOODS(tr(R.string.moods_genres));
+    RECENT(tr(R.string.recent)), ARTISTS(tr(R.string.your_artists)), MOODS(tr(R.string.moods_genres)),
+    /** One line leading to the Explore page (1.8.2). A list arranged before it came doesn't have it; Arrange offers it. */
+    EXPLORE(tr(R.string.explore));
 
     companion object {
         fun parse(v: String?): List<SearchSection> =
@@ -968,11 +976,13 @@ enum class LibraryTile(val label: String) {
     HISTORY(tr(R.string.history)), PODCASTS(tr(R.string.podcasts)),
     TOGETHER(tr(R.string.listen_together)), BLEND(tr(R.string.blend)), RECOGNIZED(tr(R.string.recognized)), NEW_PLAYLIST(tr(R.string.new_playlist)), IMPORT(tr(R.string.import_playlists)),
     /** The account's uploads (#332, 1.8.2): only for an account that has some, added once when Prism finds them ([withUploads]). */
-    UPLOADS(tr(R.string.uploads));
+    UPLOADS(tr(R.string.uploads)),
+    /** Songs in the song cache whole (#159, 1.8.2); not shown until ticked. */
+    SAVED(tr(R.string.saved_while_playing));
 
     companion object {
         /** A new install's tiles: all but those added later, so nobody's Library changes on its own. */
-        val initial = entries - HISTORY - UPLOADS
+        val initial = entries - HISTORY - UPLOADS - SAVED
 
         /** What the tile editor offers: Uploads only to an account that has some. */
         fun offered(hasUploads: Boolean) = if (hasUploads) entries else entries - UPLOADS
@@ -2011,6 +2021,9 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val queueLocked = booleanPreferencesKey("queue_locked")
         val scrollShowsControls = booleanPreferencesKey("scroll_shows_controls")
         val playlistGenres = booleanPreferencesKey("playlist_genres")
+        val artistBio = booleanPreferencesKey("artist_bio")
+        val artistYou = booleanPreferencesKey("artist_you")
+        val artistEssentials = booleanPreferencesKey("artist_essentials")
         val screenFades = booleanPreferencesKey("screen_fades")
         val crossfadeMark = booleanPreferencesKey("crossfade_mark")
         val blendCovers = booleanPreferencesKey("blend_covers")
@@ -2145,7 +2158,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "mini_swipe_left", "mini_swipe_right", "mini_swipe_down", "mini_swipe_up",
                 // 1.7.8 ([BehaviorPrefs]).
                 "lock_screen_player", "lock_screen_layout", "lock_screen_volume", "lock_screen_like", "lock_screen_output", "lock_screen_paused", "lock_screen_hide_song",
-                "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres", "screen_fades", "player_gestures_everywhere", "page_slide", "tab_bar_position",
+                "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres", "artist_bio", "artist_you", "artist_essentials", "screen_fades", "player_gestures_everywhere", "page_slide", "tab_bar_position",
                 // 1.8.0 ([TvPrefs]): how Prism behaves on a TV and in desk mode.
                 "tv_ambient_minutes", "desk_mode", "tv_lyrics_scale", "tv_welcomed", "tv_home_layout", "tv_backdrop_dim",
                 // 1.7.8 ([SoundPrefs]).
@@ -2447,6 +2460,9 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 queueLocked = p[K.queueLocked] ?: d.behavior.queueLocked,
                 scrollShowsControls = p[K.scrollShowsControls] ?: d.behavior.scrollShowsControls,
                 playlistGenres = p[K.playlistGenres] ?: d.behavior.playlistGenres,
+                artistBio = p[K.artistBio] ?: d.behavior.artistBio,
+                artistYou = p[K.artistYou] ?: d.behavior.artistYou,
+                artistEssentials = p[K.artistEssentials] ?: d.behavior.artistEssentials,
                 screenFades = p[K.screenFades] ?: d.behavior.screenFades,
                 gesturesEverywhere = p[K.gesturesEverywhere] ?: d.behavior.gesturesEverywhere,
                 pageSlide = p[K.pageSlide] ?: d.behavior.pageSlide,
@@ -3071,6 +3087,9 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setQueueLocked(v: Boolean) = edit { it[K.queueLocked] = v }
     fun setScrollShowsControls(v: Boolean) = edit { it[K.scrollShowsControls] = v }
     fun setPlaylistGenres(v: Boolean) = edit { it[K.playlistGenres] = v }
+    fun setArtistBio(v: Boolean) = edit { it[K.artistBio] = v }
+    fun setArtistYou(v: Boolean) = edit { it[K.artistYou] = v }
+    fun setArtistEssentials(v: Boolean) = edit { it[K.artistEssentials] = v }
     fun setScreenFades(v: Boolean) = edit { it[K.screenFades] = v }
     fun setCrossfadeMark(v: Boolean) = edit { it[K.crossfadeMark] = v }
     fun setBlendCovers(v: Boolean) = edit { it[K.blendCovers] = v }

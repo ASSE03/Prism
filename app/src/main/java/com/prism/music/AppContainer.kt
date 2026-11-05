@@ -291,6 +291,11 @@ class AppContainer(val app: Application) {
     val versions = com.prism.music.data.SongVersions(app.getSharedPreferences("song_versions", android.content.Context.MODE_PRIVATE))
     val streams by lazy { StreamResolver(app, http, settings, innerTube).apply { versionOf = versions::of } }
     val translator = com.prism.music.data.lyrics.LyricsTranslator(http, File(app.filesDir, "translations"))
+    /** Artist pages' Wikipedia bios (1.8.2), kept with the artist pages. Asks nothing unless that switch is on. */
+    val artistBios by lazy {
+        val wikipedia = com.prism.music.data.WikipediaBios(http, "Prism/${BuildConfig.VERSION_NAME} (https://github.com/Yigder/Prism)")
+        com.prism.music.data.ArtistBios(File(app.filesDir, "offline/bios"), wikipedia::find)
+    }
     val network = com.prism.music.data.NetworkState(app)
     /** Covers kept on the phone for downloads and the library, so they show offline. */
     val artwork = com.prism.music.data.ArtworkStore(app, http) { quietNetwork() }

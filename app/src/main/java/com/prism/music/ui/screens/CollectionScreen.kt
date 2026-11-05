@@ -1692,7 +1692,10 @@ private fun downloadsSheetItems(ask: (String, () -> Unit) -> Unit): List<SheetIt
         below = if (!settings.premiumStream || !settings.isLoggedIn) emptyList()
         else kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { c.downloads.belowPremium() }
     }
+    val nav = LocalNavigator.current
     return buildList {
+        // What's on the phone without having been downloaded (#159).
+        add(SheetItem(PrismIcons.DownloadDone, tr(R.string.saved_while_playing)) { nav.go(Routes.SAVED) })
         add(SheetItem(PrismIcons.Lyrics, tr(R.string.get_missing_lyrics)) { c.downloads.backfillLyrics(force = true) })
         if (below.isNotEmpty()) add(SheetItem(PrismIcons.Download, tr(R.string.download_again_in_premium_quality, below.size)) {
             ask(

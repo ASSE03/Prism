@@ -2714,6 +2714,11 @@ private fun LibraryLookGroup() {
             ) { Chevron() }
             if (editingTiles) LibraryTilesSheet { editingTiles = false }
         }
+        Group(tr(R.string.artist_pages)) {
+            Toggle(tr(R.string.artist_you_title), tr(R.string.artist_you_detail), s.behavior.artistYou, info = tr(R.string.artist_you_info)) { prefs.setArtistYou(it) }
+            Toggle(tr(R.string.artist_essentials_title), tr(R.string.artist_essentials_detail), s.behavior.artistEssentials, info = tr(R.string.artist_essentials_info)) { prefs.setArtistEssentials(it) }
+            Toggle(tr(R.string.artist_bio_title), tr(R.string.artist_bio_detail), s.behavior.artistBio, info = tr(R.string.artist_bio_info)) { prefs.setArtistBio(it) }
+        }
     }
 }
 

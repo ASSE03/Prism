@@ -48,6 +48,20 @@ What changed in each release. Older releases are described on the [Releases page
   server, no YouTube and no account needed, with everything episodes do here: they pick up where you left off, speed from
   the player's menu, 15 and 30 second skips. New episodes show up when you open the show. Secure (https) servers on the
   public internet only. Not yet: downloading these episodes, new-episode alerts.
+- **Song details** (#211). A song's menu → Song details: its plays on YouTube Music (views, for a music video), the date
+  it was released and how many times you've played it. Only what YouTube really says shows up: a video has the day it
+  went up on YouTube instead of a release date, and anything it doesn't say isn't there.
+- **Saved while playing** (#159). Songs that reached your phone in full as they played, listed in one place so you can
+  play them with no connection. Open it from the Downloads page's ⋯, or add its tile to Library with the edit button.
+  Prism still clears these as it needs the room; download a song to keep it for good.
+- **More on artist pages, if you want it.** Three new switches in Customize Prism → Home & Library → Artist pages, all off
+  until you turn them on. *You and this artist:* your first play, plays, time and top song, counted on your phone and
+  never sent anywhere. *Essentials for you:* their top songs, moved by what you play. *Bio from Wikipedia:* a short bio in
+  your language, credited and linked, kept for offline. It only shows when Prism is sure it's the right article (the
+  article has to be about a musician and name that artist's own albums or songs), so some artists won't have one.
+- **Explore.** At the end of Search, before you type: YouTube Music's charts by country, moods and genres, new releases
+  and what's trending, in one place. Which charts there are depends on the country. Search's Arrange moves or hides the
+  line that leads here; if you've arranged Search before, turn it on there.
 
 ### Fixes
 
