@@ -6,15 +6,18 @@ import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.prism.music.data.prefs.LibraryTile
 import com.prism.music.playback.AudioDiagnostics
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import org.junit.After
@@ -68,6 +71,7 @@ class UploadsAppTest {
     @After fun end() {
         runCatching { InstrumentationRegistry.getInstrumentation().runOnMainSync { c.player.stop() } }
         RecordedNetwork.pages.clear()
+        RecordedNetwork.answering = null
         runBlocking { c.settings.fromBackup(emptyMap(), settings = false, accounts = true) }
     }
 
@@ -231,6 +235,95 @@ class UploadsAppTest {
         compose.clickWhenFound(hasText("A Sky Full Of Stars", substring = true) and hasClickAction())
         compose.waitUntil(15_000) { c.player.currentSong.value?.id == "Uise6RPKoek" }
         assertTrue(c.player.currentSong.value?.isUpload == true)
+    }
+
+    private val songIds get() = c.uploads.lists.value.songs.map { it.id }
+    private val pageTwoSong = "pageTwo0001"
+
+    /** Leaving the page while it loads: back on it, the list comes in whole, rather than stopping where it was left. */
+    @Test fun leavingDuringALoadDoesntLeaveTheListCutShort() {
+        theFullAccount()
+        val letGo = java.util.concurrent.CountDownLatch(1)
+        RecordedNetwork.answering = { url, body ->
+            if ("HAND-TOKEN-2" in url || "HAND-TOKEN-2" in body) { letGo.await(20, java.util.concurrent.TimeUnit.SECONDS); answer("tracks-next") } else null
+        }
+        Fixture.ready()
+        signIn()
+        runBlocking {
+            val visit = launch(kotlinx.coroutines.Dispatchers.Default) { c.uploads.load() }
+            withTimeout(15_000) { while (c.uploads.state.value !is com.prism.music.data.Uploads.State.Ready) delay(20) }
+            visit.cancel()
+            letGo.countDown()
+            visit.join()
+        }
+        RecordedNetwork.answering = null
+        runBlocking { c.uploads.load() }
+        assertTrue("the rest of the songs: $songIds", pageTwoSong in songIds)
+        assertEquals(listOf("Ghost Stories", "18 Months"), c.uploads.lists.value.albums.map { it.title })
+        assertEquals(listOf("Coldplay"), c.uploads.lists.value.artists.map { it.title })
+        assertEquals("kept for offline too", songIds, c.offline.uploads()?.songs?.map { it.id })
+    }
+
+    /** A page that doesn't come: the fuller list kept offline stays, and stays on show; the next look asks again. */
+    @Test fun aFailedPageDoesntReplaceAFullerCopy() {
+        theFullAccount()
+        Fixture.ready()
+        signIn()
+        runBlocking { c.uploads.load() }
+        assertTrue(pageTwoSong in c.offline.uploads()!!.songs.map { it.id })
+
+        RecordedNetwork.pages.remove("HAND-TOKEN-2")
+        runBlocking { c.uploads.load(force = true) }
+        assertTrue("the kept copy keeps it", pageTwoSong in c.offline.uploads()!!.songs.map { it.id })
+        assertTrue("and it's still listed: $songIds", pageTwoSong in songIds)
+
+        RecordedNetwork.pages["HAND-TOKEN-2"] = answer("tracks-next")
+        assertEquals("the page knows it isn't done", com.prism.music.data.Uploads.State.Ready(true), c.uploads.state.value)
+        runBlocking { c.uploads.load() }
+        assertEquals(com.prism.music.data.Uploads.State.Ready(false), c.uploads.state.value)
+    }
+
+    /** The same album or artist twice from YouTube: "Key was already used", and the page closed the app. */
+    @Test fun aRepeatedAlbumOrArtistDoesntCrash() {
+        theFullAccount()
+        RecordedNetwork.pages[releases] = answer("releases")
+            .replace("FEmusic_library_privately_owned_release_detailb_po_18M", "FEmusic_library_privately_owned_release_detailb_po_GHOST")
+        RecordedNetwork.pages["HAND-ARTISTS-2"] = answer("artists").replace("HAND-ARTISTS-2", "HAND-ARTISTS-3")
+        RecordedNetwork.pages["HAND-ARTISTS-3"] = answer("no-uploads")
+        Fixture.ready()
+        signIn()
+        Fixture.launch()
+        openLibrary()
+        openUploads()
+        compose.seeText("A Sky Full Of Stars")
+        compose.clickWhenFound(hasText("Albums") and hasClickAction())
+        compose.seeText("Ghost Stories")
+        compose.clickWhenFound(hasText("Artists") and hasClickAction())
+        compose.seeText("12 songs")
+        val shown = c.uploads.lists.value
+        assertEquals(shown.albums.map { it.id }.distinct(), shown.albums.map { it.id })
+        assertEquals(shown.artists.map { it.id }.distinct(), shown.artists.map { it.id })
+    }
+
+    /** No radio or shuffle list of YouTube's for these: Shuffle plays their songs, and no Mix is offered that can't start. */
+    @Test fun anUploadedArtistShufflesTheirOwnSongs() {
+        theFullAccount()
+        RecordedNetwork.pages[coldplay] = answer("tracks")
+        Fixture.ready()
+        signIn()
+        Fixture.launch()
+        openLibrary()
+        openUploads()
+        compose.seeText("A Sky Full Of Stars")
+        compose.clickWhenFound(hasText("Artists") and hasClickAction())
+        compose.seeText("12 songs")
+        compose.onAllNodes(hasText("Coldplay") and hasClickAction()).onFirst().performTouchInput { longClick() }
+        compose.waitForText(tr(R.string.shuffle))
+        assertTrue("no Mix", compose.onAllNodes(hasText(tr(R.string.mix_2))).fetchSemanticsNodes().isEmpty())
+        Fixture.screenshot("uploads-artist-menu")
+        compose.onAllNodes(hasText(tr(R.string.shuffle)) and hasClickAction()).onFirst().performClick()
+        compose.waitUntil(15_000) { c.player.currentSong.value?.isUpload == true }
+        assertTrue(c.player.currentSong.value?.id in setOf("Uise6RPKoek", "Dtffhy8WJgw"))
     }
 
     /** YouTube answers some other way: no tile, a line in the diagnostics, nothing broken. */

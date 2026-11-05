@@ -2213,6 +2213,8 @@ private fun LyricsSettings() {
                 Toggle(
                     tr(R.string.read_lyrics_from_your_music_files), tr(R.string.synced_or_plain_with_no_internet), s.behavior.embeddedLyrics,
                     info = tr(R.string.flac_ogg_opus_mp3_and_m4a_their),
+                    // And its guard: one source stays on.
+                    enabled = !s.behavior.embeddedLyrics || s.lyricsOrder.count(s::lyricsSourceOn) > 1,
                 ) { prefs.setEmbeddedLyrics(it) }
                 Item(
                     tr(R.string.save_lyrics_into_your_music_files), tr(R.string.so_other_players_show_them_too),
@@ -2601,6 +2603,9 @@ private fun HomeLibraryLook() {
                 tr(R.string.continue_line), tr(R.string.continue_under_the_greeting), s.homeContinue,
                 info = tr(R.string.the_album_you_were_last_playing),
             ) { prefs.setHomeContinue(it) }
+            // #349: also on Customize Home; here too, where Settings' search opens it.
+            Label(tr(R.string.quick_picks_from), info = tr(R.string.quick_picks_from_info))
+            Chips(com.prism.music.data.prefs.QuickPicksSource.entries, s.behavior.quickPicksSource, { it.label }) { prefs.setQuickPicksSource(it) }
             Label(tr(R.string.recently_played_shows), info = tr(R.string.every_song_you_played_or_the))
             Chips(com.prism.music.data.prefs.RecentShows.entries, s.behavior.recentShows, { it.label }) { prefs.setRecentShows(it) }
             // 1.8.0: the two top-bar switches as one choice (same stored settings, HomeChoices).

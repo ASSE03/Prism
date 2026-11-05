@@ -169,7 +169,7 @@ class LibraryRepository(private val c: AppContainer) {
         if (disliked && isLiked(song.id)) setLiked(song, false)
         c.scope.launch(Dispatchers.IO) {
             if (disliked && c.downloads.downloads.value.containsKey(song.id) && songs.get(song.id)?.smartDownload == true) {
-                c.downloads.remove(song.id)
+                c.downloads.remove(song.id, byListener = false)
             }
             // Tells YouTube Music too, so its recommendations learn from it.
             if (c.settings.current.isLoggedIn) runCatching { c.ytm.dislike(song.id, disliked) }

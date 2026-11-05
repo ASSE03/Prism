@@ -229,7 +229,7 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
                 if (m.byebye) {
                     val udn = m.usn?.substringBefore("::")
                     if (udn != null && found.remove(udn) != null) publishFound()
-                } else m.location?.let { describe(it) }
+                } else if (Ssdp.speaksForItself(m, p.address)) m.location?.let { describe(it) }
             }
         } finally {
             runCatching { socket.leaveGroup(InetSocketAddress(group, Ssdp.PORT), iface) }

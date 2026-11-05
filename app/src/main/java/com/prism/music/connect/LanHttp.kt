@@ -63,8 +63,8 @@ object LanHttp : Interceptor {
             val check = { if (cancelled()) throw IOException("Canceled"); if (left(until) <= 1) throw SocketTimeoutException("No whole answer from ${url.host}") }
             while (true) {
                 check()
-                val status = statusLine(line(input))
-                val headers = headers(input)
+                val status = statusLine(line(input, check))
+                val headers = headers(input, check)
                 // 100 Continue and the like: the real answer follows.
                 if (status.code in 100..199) continue
                 val noBody = request.method == "HEAD" || status.code == 204 || status.code == 304
@@ -110,11 +110,11 @@ object LanHttp : Interceptor {
         return Status(code, parts.getOrNull(2).orEmpty())
     }
 
-    private fun headers(input: InputStream): Headers {
+    private fun headers(input: InputStream, check: () -> Unit): Headers {
         val b = Headers.Builder()
         var read = 0
         while (true) {
-            val l = line(input)
+            val l = line(input, check)
             if (l.isEmpty()) return b.build()
             read += l.length
             if (read > MAX_HEAD) throw IOException("Answer's headers are too long")
@@ -123,10 +123,11 @@ object LanHttp : Interceptor {
         }
     }
 
-    /** One line, without its line end (some devices end lines with \n alone). */
-    private fun line(input: InputStream): String {
+    /** One line, without its line end (some devices end lines with \n alone). A byte a second doesn't outlast the call's limit. */
+    private fun line(input: InputStream, check: () -> Unit): String {
         val b = ByteArrayOutputStream()
         while (true) {
+            check()
             val c = input.read()
             if (c < 0) { if (b.size() == 0) throw EOFException("The device closed the connection"); break }
             if (c == '\n'.code) break
@@ -148,10 +149,10 @@ object LanHttp : Interceptor {
             headers["Transfer-Encoding"]?.contains("chunked", ignoreCase = true) == true -> {
                 while (true) {
                     check()
-                    val size = line(input).substringBefore(';').trim().toIntOrNull(16)?.takeIf { it >= 0 } ?: throw IOException("Bad chunk size")
+                    val size = line(input, check).substringBefore(';').trim().toIntOrNull(16)?.takeIf { it >= 0 } ?: throw IOException("Bad chunk size")
                     if (size == 0) break
                     copy(input, out, size.toLong(), exact = true, check = check)
-                    line(input)
+                    line(input, check)
                 }
             }
             length != null -> copy(input, out, length, exact = true, check = check)

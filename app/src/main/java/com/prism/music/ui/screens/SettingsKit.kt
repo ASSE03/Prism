@@ -175,18 +175,18 @@ private fun ColumnScope.SettingText(title: String, subtitle: String?, info: Stri
 }
 
 @Composable
-fun Toggle(title: String, subtitle: String?, checked: Boolean, icon: ImageVector? = null, info: String? = null, onChange: (Boolean) -> Unit) {
+fun Toggle(title: String, subtitle: String?, checked: Boolean, icon: ImageVector? = null, info: String? = null, enabled: Boolean = true, onChange: (Boolean) -> Unit) {
     val ui = LocalUi.current
     // The whole row is the switch (one target for TalkBack too); the switch itself only shows the state.
     Row(
-        Modifier.fillMaxWidth().toggleable(checked, role = androidx.compose.ui.semantics.Role.Switch, onValueChange = onChange)
+        Modifier.fillMaxWidth().toggleable(checked, enabled = enabled, role = androidx.compose.ui.semantics.Role.Switch, onValueChange = onChange)
             .padding(horizontal = 16.dp, vertical = ui.gap(13.dp)),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (icon != null) { Icon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant); Spacer(Modifier.width(16.dp)) }
         Column(Modifier.weight(1f)) { SettingText(title, subtitle, info) }
         Spacer(Modifier.width(12.dp))
-        PrismSwitch(checked, null)
+        PrismSwitch(checked, null, enabled = enabled)
     }
 }
 

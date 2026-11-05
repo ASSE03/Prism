@@ -32,6 +32,25 @@ class RssFeedTest {
 
     private fun problemOf(xml: String): RssProblem? = runCatching { parse(xml) }.exceptionOrNull().let { (it as? RssException)?.problem }
 
+    /** Every "&" looked for its ";" to the far end of the text: minutes of work for a feed that's nothing but "&". */
+    @Test fun textFullOfAmpersandsTakesNoTime() {
+        val text = "&".repeat(1_000_000)
+        val started = System.nanoTime()
+        assertEquals(text, RssFeed.decodeEntities(text))
+        val ms = (System.nanoTime() - started) / 1_000_000
+        assertTrue("took $ms ms", ms < 3_000)
+    }
+
+    @Test fun entitiesReadAsTheyDidBefore() {
+        assertEquals("a & b < c", RssFeed.decodeEntities("a &amp; b &lt; c"))
+        assertEquals("AAé…", RssFeed.decodeEntities("&#65;&#x41;&eacute;&hellip;"))
+        assertEquals("fish & chips; R&B", RssFeed.decodeEntities("fish & chips; R&B"))
+        assertEquals("&; &nosuch; &", RssFeed.decodeEntities("&; &nosuch; &"))
+        // The longest it reads, and one past that.
+        assertEquals("A", RssFeed.decodeEntities("&#000000065;"))
+        assertEquals("&#0000000065;", RssFeed.decodeEntities("&#0000000065;"))
+    }
+
     @Test fun anRss2FeedWithITunesTags() {
         val f = parse(
             """<?xml version="1.0" encoding="UTF-8"?>

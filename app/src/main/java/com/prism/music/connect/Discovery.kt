@@ -40,7 +40,7 @@ object SsdpSearch {
                 val p = DatagramPacket(buf, buf.size)
                 try { s.receive(p) } catch (_: SocketTimeoutException) { continue }
                 val m = SsdpMessage.parse(String(p.data, 0, p.length, Charsets.UTF_8)) ?: continue
-                if (Ssdp.isRenderer(m)) onFound(m, p.address)
+                if (Ssdp.isRenderer(m) && Ssdp.speaksForItself(m, p.address)) onFound(m, p.address)
             }
         }
     }

@@ -224,8 +224,12 @@ class WikipediaBios(private val http: OkHttpClient, private val userAgent: Strin
         http.newCall(request).execute().use { r ->
             if (r.code == 404) return null
             if (!r.isSuccessful) throw IOException("Wikipedia answered ${r.code}")
-            // A cut-off answer doesn't parse, and so says nothing.
-            return runCatching { Json.parseToJsonElement(r.peekBody(MAX_ANSWER).string()) }.getOrNull()
+            // Read outside the parsing: this is what waits on the network, and a connection lost here is a failed ask.
+            val bytes = r.peekBody(MAX_ANSWER).bytes()
+            return runCatching { Json.parseToJsonElement(bytes.decodeToString()) }.getOrElse {
+                // An answer cut off at the limit says nothing; anything shorter that isn't an answer is a Wi-Fi's sign-in page or the like.
+                if (bytes.size >= MAX_ANSWER) null else throw IOException("Not an answer from Wikipedia", it)
+            }
         }
     }
 

@@ -189,7 +189,8 @@ class OfflineLibrary(context: Context) {
 
     fun uploads(): Uploads? = runCatching {
         val k = InnerTube.json.decodeFromString(KeptUploads.serializer(), uploadsFile.readText())
-        Uploads(k.songs, k.albums.mapNotNull { it.toBrowse() as? AlbumItem }, k.artists.mapNotNull { it.toBrowse() as? ArtistItem })
+        // A list kept before repeats were weeded out mustn't crash its page offline.
+        Uploads(k.songs.distinctBy { it.id }, k.albums.mapNotNull { it.toBrowse() as? AlbumItem }.distinctBy { it.id }, k.artists.mapNotNull { it.toBrowse() as? ArtistItem }.distinctBy { it.id })
     }.getOrNull()
 
     /** Forgets everything kept (after signing out). */

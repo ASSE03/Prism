@@ -87,6 +87,7 @@ What changed in each release. Older releases are described on the [Releases page
 - **Keep a playlist downloaded** (#298, thanks to stuntsnakee, PR #304). A playlist's ⋯ → Keep downloaded, or Settings →
   Downloads, storage & data → Keep playlists downloaded. New songs come down by themselves, following Download on Wi-Fi
   only, and skipped or failed songs are left alone. Nothing is deleted when a song leaves the playlist.
+  A download you delete stays deleted; deleting every download also stops keeping every playlist, so they don't all come back.
 
 - **Cover gradient, a new player background** (#232, #338). The cover's own colors as a solid gradient, with nothing blurred:
   its main color at the top, deepening toward the bottom. "Darkness at the bottom" sets how far it goes, and the colors stay
@@ -110,6 +111,7 @@ What changed in each release. Older releases are described on the [Releases page
   speaker says about itself, because speakers only speak plain HTTP, so none of them were listed. Prism now reads them
   on the local network only; everything else it asks for stays secure. There's no Sonos here to try it on: this was
   checked against a real Sonos One SL's own description. If a speaker still doesn't show, Share diagnostics now says why.
+  A device can only speak for itself: Prism takes an answer only for the address it came from and sends a device's actions only to it.
 - **Liquid Glass · Clear and Regular no longer draw the same on the docked tab bar** (#252). There Clear is now a thin frost that
   lets what's behind it show. In dark mode Clear also loses the extra black Prism laid over it everywhere. Regular is unchanged.
 - **Liquid Glass follows Prism's theme, not the phone's dark mode.** With Prism in dark and the phone in light (or the other way

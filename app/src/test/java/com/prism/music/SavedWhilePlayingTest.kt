@@ -9,6 +9,7 @@ import androidx.media3.datasource.cache.SimpleCache
 import androidx.media3.database.StandaloneDatabaseProvider
 import com.prism.music.data.SavedWhilePlaying
 import com.prism.music.data.model.Song
+import kotlinx.coroutines.launch
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -24,6 +25,21 @@ import org.robolectric.RuntimeEnvironment
 class SavedWhilePlayingTest {
     private lateinit var cache: SimpleCache
     private val song = ByteArray(50_000) { (it % 251).toByte() }
+
+    /** Leaving the page mid-scan isn't "nothing saved": the page stays as it was until it's back, and scans again. */
+    @Test fun aScanCutShortByLeavingSaysNothing() = kotlinx.coroutines.runBlocking {
+        var shown: List<Song>? = null
+        val job = launch(start = kotlinx.coroutines.CoroutineStart.UNDISPATCHED) {
+            shown = SavedWhilePlaying.orNone { kotlinx.coroutines.awaitCancellation() }
+        }
+        job.cancel()
+        job.join()
+        assertEquals("still loading", null, shown)
+    }
+
+    @Test fun aScanThatFailsIsAnEmptyList() = kotlinx.coroutines.runBlocking {
+        assertEquals(emptyList<Song>(), SavedWhilePlaying.orNone { error("no database") })
+    }
 
     @Before fun open() {
         val app = RuntimeEnvironment.getApplication()

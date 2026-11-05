@@ -466,7 +466,7 @@ class YouTubeMusic(
     }
 
     /** Loads every song of a playlist, following continuations up to [limit]. */
-    suspend fun playlistAll(playlistId: String, limit: Int = 2000): CollectionPage {
+    suspend fun playlistAll(playlistId: String, limit: Int = 2000, notAll: () -> Unit = {}): CollectionPage {
         val first = playlist(playlistId)
         val songs = first.songs.toMutableList()
         var token = first.continuation
@@ -476,6 +476,7 @@ class YouTubeMusic(
             songs += more
             token = next
         }
+        if (token != null) notAll()
         return first.copy(songs = songs.distinctBy { it.id }, continuation = null)
     }
 
@@ -848,25 +849,28 @@ class YouTubeMusic(
     suspend fun uploadedSongsPage(token: String? = null): Parser.UploadRows<Song> =
         Parser.uploadSongRows(if (token == null) browse("FEmusic_library_privately_owned_tracks") else continueBrowse(token))
 
-    /** Every card of the account's uploaded albums (they come a page at a time). */
+    /** Every card of the account's uploaded albums (they come a page at a time). [Parser.UploadRows.next]: a page didn't come. */
     suspend fun uploadedAlbums(maxPages: Int = 40): Parser.UploadRows<com.prism.music.data.model.AlbumItem> =
         allUploadPages(maxPages, browse("FEmusic_library_privately_owned_releases"), Parser::uploadAlbumCards)
 
-    /** Every row of the account's uploaded artists. */
+    /** Every row of the account's uploaded artists. [Parser.UploadRows.next]: a page didn't come. */
     suspend fun uploadedArtists(maxPages: Int = 40): Parser.UploadRows<ArtistItem> =
         allUploadPages(maxPages, browse("FEmusic_library_privately_owned_artists"), Parser::uploadArtistRows)
 
-    private suspend fun <T> allUploadPages(maxPages: Int, first: JsonObject, read: (JsonElement) -> Parser.UploadRows<T>): Parser.UploadRows<T> {
+    private suspend fun <T : com.prism.music.data.model.BrowseItem> allUploadPages(maxPages: Int, first: JsonObject, read: (JsonElement) -> Parser.UploadRows<T>): Parser.UploadRows<T> {
         var page = read(first)
         val items = page.items.toMutableList()
         var rows = page.rows
         var pages = 1
+        var stoppedAt: String? = null
         while (page.next != null && pages++ < maxPages) {
-            page = runCatching { read(continueBrowse(page.next!!)) }.getOrNull() ?: break
+            val token = page.next!!
+            page = runCatching { read(continueBrowse(token)) }.getOrNull() ?: run { stoppedAt = token; null } ?: break
             items += page.items
             rows += page.rows
         }
-        return Parser.UploadRows(items, rows, null)
+        // Repeated across pages, one would crash a list keyed by id.
+        return Parser.UploadRows(items.distinctBy { it.id }, rows, stoppedAt)
     }
 
     private suspend fun uploadAlbum(browseId: String): CollectionPage {

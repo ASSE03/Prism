@@ -40,13 +40,21 @@ object PlaylistDownloads {
     /**
      * What keeping a list downloaded still has to fetch: its wanted songs with no download of any kind yet. One that
      * failed before is left for Failed downloads ([failed] and failed entries in [known]), so a song YouTube won't serve
-     * isn't asked for again each time the list is looked at.
+     * isn't asked for again each time the list is looked at. Nor is one the listener [deleted] while the list was kept.
      */
     fun toFetch(
         songs: List<Song>, skipped: Set<String>, standIns: Map<String, String>, known: Set<String>, failed: Set<String>,
+        deleted: Set<String> = emptySet(),
     ): List<Song> = wanted(songs, skipped, standIns).filter { s ->
         val kept = standIns[s.id] ?: s.id
-        !s.isLocal && !s.isRss && !s.isLive && s.id !in known && kept !in known && s.id !in failed && kept !in failed
+        !s.isLocal && !s.isRss && !s.isLive && s.id !in known && kept !in known && s.id !in failed && kept !in failed &&
+            s.id !in deleted && kept !in deleted
+    }
+
+    /** A list's record of what was deleted, once all of the list has been read: what's left the list needn't stay in it. */
+    fun stillDeleted(deleted: Set<String>, songs: List<Song>, standIns: Map<String, String>): Set<String> {
+        val on = songs.flatMapTo(HashSet()) { listOfNotNull(it.id, standIns[it.id]) }
+        return deleted.filterTo(HashSet()) { it in on }
     }
 
     /** May a kept list be read and fetched now: online, and on Wi-Fi if downloads wait for that. */
@@ -83,10 +91,15 @@ class DownloadSkips(context: Context) {
  * Playlists kept downloaded (#298, idea and first version by stuntsnakee in PR #304): new songs in a chosen playlist come
  * down by themselves. Following the Wi-Fi-only setting, this doesn't even read the playlist while it would have to wait.
  * Skipped songs ([DownloadSkips]) and failed ones are left alone. Nothing is ever deleted here: a song taken out of the
- * playlist keeps its download.
+ * playlist keeps its download. And a download the listener deleted stays deleted: each kept list has a short record of
+ * those, in the same prefs as its reads (so it's in backups with Downloads), until the song leaves the list, is
+ * downloaded again, or the list stops being kept.
  */
 class KeptPlaylists(private val c: AppContainer) {
     private val reads by lazy { c.app.getSharedPreferences("kept_playlists", Context.MODE_PRIVATE) }
+    private val deletedLock = Any()
+    /** Goes up as every download is deleted: a read that started before that doesn't bring any of them back. */
+    @Volatile private var stops = 0
 
     private fun kept() = c.settings.current.behavior.keptPlaylists
 
@@ -94,9 +107,58 @@ class KeptPlaylists(private val c: AppContainer) {
 
     /** Keeps [id] from now on, starting with what it has now (or stops, leaving its downloads as they are). */
     fun set(id: String, keep: Boolean) {
-        c.settings.setKeptPlaylist(PlaylistDownloads.keepKey(id), keep)
-        if (keep) c.scope.launch(Dispatchers.IO) { runCatching { sync(PlaylistDownloads.keepKey(id), now = true) } }
+        val key = PlaylistDownloads.keepKey(id)
+        c.settings.setKeptPlaylist(key, keep)
+        // Asked to keep it: all of it, what was deleted before included.
+        synchronized(deletedLock) { reads.edit().remove(DELETED + key).apply() }
+        if (keep) c.scope.launch(Dispatchers.IO) { runCatching { sync(key, now = true) } }
     }
+
+    /** Every download deleted: nothing stays kept, or the next look at each list would fetch all of it again. */
+    fun stopAll() {
+        stops++
+        val lists = kept()
+        lists.forEach { c.settings.setKeptPlaylist(it, false) }
+        if (lists.isEmpty()) return
+        synchronized(deletedLock) {
+            val e = reads.edit()
+            reads.all.keys.filter { it.startsWith(DELETED) }.forEach(e::remove)
+            e.apply()
+        }
+    }
+
+    /** The listener deleted these downloads: the lists kept now leave them out from here on. */
+    fun noteDeleted(ids: Set<String>) {
+        val lists = kept()
+        if (lists.isEmpty() || ids.isEmpty()) return
+        val standIns = c.downloadStandIns.value
+        synchronized(deletedLock) {
+            val e = reads.edit()
+            for (id in lists) {
+                // One of Prism's own says what's on it. A YouTube one isn't asked here: its next read drops what isn't.
+                val mine = id.startsWith(PrismLibrary.PREFIX)
+                if (mine && c.prismLibrary.list(id)?.songs?.any { it.id in ids || standIns[it.id] in ids } != true) continue
+                e.putStringSet(DELETED + id, deleted(id) + ids)
+            }
+            e.apply()
+        }
+    }
+
+    /** Downloaded again: wanted after all, on every list. */
+    fun forgive(ids: Set<String>) {
+        if (kept().isEmpty()) return
+        synchronized(deletedLock) {
+            val e = reads.edit()
+            for (key in reads.all.keys) {
+                if (!key.startsWith(DELETED)) continue
+                val had = reads.getStringSet(key, null).orEmpty()
+                if (had.any { it in ids }) e.putStringSet(key, had - ids)
+            }
+            e.apply()
+        }
+    }
+
+    private fun deleted(id: String): Set<String> = reads.getStringSet(DELETED + id, null).orEmpty()
 
     /** While any playlist is kept: each time downloads may run again, and when a song goes into one of Prism's own. */
     suspend fun watch(): Unit = coroutineScope {
@@ -118,41 +180,53 @@ class KeptPlaylists(private val c: AppContainer) {
     /** Every kept playlist, those on YouTube only when they haven't been read lately. */
     suspend fun syncAll() = withContext(Dispatchers.IO) {
         if (!mayFetch()) return@withContext
+        val since = stops
         for (id in kept()) {
-            try { sync(id) } catch (e: CancellationException) { throw e } catch (_: Exception) { /* Next time. */ }
+            try { sync(id, since = since) } catch (e: CancellationException) { throw e } catch (_: Exception) { /* Next time. */ }
         }
     }
 
     /** The songs an open page has loaded already: no request for the playlist, just what's on it. */
     fun fromPage(id: String, songs: List<Song>) {
-        if (PlaylistDownloads.keepKey(id) !in kept() || !mayFetch()) return
-        fetch(songs)
+        val key = PlaylistDownloads.keepKey(id)
+        if (key !in kept() || !mayFetch()) return
+        fetch(key, songs)
     }
 
-    private suspend fun sync(id: String, now: Boolean = false) {
+    private suspend fun sync(id: String, now: Boolean = false, since: Int = stops) {
         if (!mayFetch()) return
+        var whole = true
         val songs = if (id.startsWith(PrismLibrary.PREFIX)) {
             // One of Prism's own, deleted: nothing left to keep.
             val list = c.prismLibrary.list(id)
-            if (list == null) c.settings.setKeptPlaylist(id, false)
+            if (list == null) set(id, false)
             list?.songs.orEmpty()
         } else {
             val time = System.currentTimeMillis()
             if (!now && !PlaylistDownloads.readDue(reads.getLong(id, 0L), time)) return
             reads.edit().putLong(id, time).apply()
-            c.ytm.playlistAll(id).songs
+            c.ytm.playlistAll(id, notAll = { whole = false }).songs
         }
-        fetch(songs)
+        if (since != stops) return
+        if (whole && songs.isNotEmpty()) synchronized(deletedLock) {
+            val had = deleted(id)
+            val left = PlaylistDownloads.stillDeleted(had, songs, c.downloadStandIns.value)
+            if (left.size != had.size) reads.edit().putStringSet(DELETED + id, left).apply()
+        }
+        fetch(id, songs)
     }
 
-    private fun fetch(songs: List<Song>) {
+    private fun fetch(id: String, songs: List<Song>) {
         val d = c.downloads
         // What the download list says, not what's been loaded of it yet: a finished song added again would be fetched again.
         val known = d.knownIds() ?: return
-        PlaylistDownloads.toFetch(songs, c.downloadSkips.ids.value, c.downloadStandIns.value, known, d.failures.value.keys).forEach(d::download)
+        val deleted = synchronized(deletedLock) { deleted(id) }
+        PlaylistDownloads.toFetch(songs, c.downloadSkips.ids.value, c.downloadStandIns.value, known, d.failures.value.keys, deleted).forEach(d::download)
     }
 
     private companion object {
         const val START_WAIT_MS = 20_000L
+        /** Before a list's key in the prefs: the ids deleted from it. */
+        const val DELETED = "deleted:"
     }
 }

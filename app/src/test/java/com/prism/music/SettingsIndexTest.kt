@@ -46,6 +46,35 @@ class SettingsIndexTest {
         assertTrue("Groups not in SettingsIndex: $missing", missing.isEmpty())
     }
 
+    /** A setting that's hidden says what to turn on first, and stops saying it once that's on. */
+    @Test
+    fun hiddenSettingsSayWhatToTurnOn() {
+        fun entry(id: Int) = SettingsIndex.entries.first { it.title == com.prism.music.tr(id) }
+        val plain = com.prism.music.data.prefs.AppSettings(frostedGlass = false)
+        val frost = entry(R.string.glass_frost).needs
+        assertTrue("Frost's hint", frost != null && !frost.on(plain))
+        assertTrue(frost!!.on(plain.copy(frostedGlass = true)))
+        assertTrue(frost.on(plain.copy(liquidGlass = true)))
+        for (id in listOf(R.string.lock_screen_layout_label, R.string.lock_screen_show, R.string.lock_screen_paused_label, R.string.lock_screen_hide, R.string.lock_screen_allow, R.string.lock_screen_app_info)) {
+            // By its group too: other pages have a "Layout".
+            val needs = SettingsIndex.entries.first { it.title == com.prism.music.tr(id) && it.group == com.prism.music.tr(R.string.lock_screen_title) }.needs
+            assertTrue(com.prism.music.tr(id), needs != null && !needs.on(plain))
+            assertTrue(com.prism.music.tr(id), needs!!.on(plain.copy(behavior = plain.behavior.copy(lockScreen = true))))
+        }
+        // The lock screen's own switch isn't hidden by anything.
+        assertTrue(entry(R.string.lock_screen_title).needs == null)
+    }
+
+    /** Its search result opens Home & Library, group Home: the row has to be there, not only under Customize Home. */
+    @Test
+    fun quickPicksFromIsWhereItsResultOpens() {
+        val e = SettingsIndex.entries.first { it.title == com.prism.music.tr(R.string.quick_picks_from) }
+        assertTrue(e.section == com.prism.music.ui.screens.SettingsSection.HOME && e.group == com.prism.music.tr(R.string.home))
+        val page = File("src/main/java/com/prism/music/ui/screens/SettingsScreen.kt").readText()
+        val group = page.substringAfter("private fun HomeLibraryLook()").substringAfter("Group(tr(R.string.home))").substringBefore("Group(")
+        assertTrue("Quick picks from isn't in that group", "R.string.quick_picks_from" in group)
+    }
+
     @Test
     fun findsBySynonymAndTitle() {
         assertTrue(SettingsIndex.search("vibration").any { it.title == "Haptics" })
