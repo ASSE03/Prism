@@ -199,6 +199,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
             "player_hidden_parts", "player_buttons", "player_buttons_pill", "player_times", "scrubber_color", "scrubber_thickness",
             "scrubber_thumb", "cover_flight", "crossfade_mark", "blend_covers", "video_controls_hide", "mesh_speed", "mesh_intensity",
             "player_blur", "crossfade_shape",
+            "cover_flight_back", "video_buttons_hide", "bleed_roomy", "queue_lengths", "queue_played_moves", "queue_tidy",
         )
         LYRICS_LOOK -> listOf(
             "lyrics_align", "lyrics_scale", "lyrics_blur", "lyrics_progress_line", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",
@@ -1670,6 +1671,25 @@ private fun PlayerSettings() {
                 tr(R.string.dj_in_the_queue), tr(R.string.dj_in_the_queue_detail), s.view.queueDjChip,
                 info = tr(R.string.dj_in_the_queue_info),
             ) { prefs.setQueueDjChip(it) }
+            // #331, #294: the queue's rows.
+            Toggle(tr(R.string.song_lengths_in_the_queue), null, s.view.queueLengths) { prefs.setQueueLengths(it) }
+            Toggle(
+                tr(R.string.move_songs_you_have_played), null, s.view.queuePlayedMoves,
+                info = tr(R.string.move_songs_you_have_played_info),
+            ) { prefs.setQueuePlayedMoves(it) }
+            Toggle(
+                tr(R.string.tidier_queue), null, s.view.queueTidy,
+                info = tr(R.string.tidier_queue_info),
+            ) { prefs.setQueueTidy(it) }
+            // #280: which page the player opens on, and how readily the lyrics' controls move.
+            Toggle(
+                tr(R.string.reopen_on_the_last_page), null, s.behavior.playerRemembersPage,
+                info = tr(R.string.reopen_on_the_last_page_info),
+            ) { prefs.setPlayerRemembersPage(it) }
+            Toggle(
+                tr(R.string.steadier_lyrics), null, s.behavior.lyricsSteady,
+                info = tr(R.string.steadier_lyrics_info),
+            ) { prefs.setLyricsSteady(it) }
         }
         Group(tr(R.string.animated_covers)) {
             Toggle(
@@ -1836,6 +1856,11 @@ private fun PlayerCoverGroup() {
         Toggle(tr(R.string.edge_to_edge_cover), null, s.fullBleedArtwork, info = tr(R.string.the_cover_runs_to_the_screen)) { prefs.setFullBleedArtwork(it) }
         Toggle(tr(R.string.edge_to_edge_video), null, s.videoFullBleed, info = tr(R.string.a_music_video_runs_to_the)) { prefs.setVideoFullBleed(it) }
         if (s.fullBleedArtwork) Chips(com.prism.music.data.prefs.BleedFit.entries, s.view.bleedFit, { it.label }) { prefs.setBleedFit(it) }
+        // #293: over a full-bleed picture, smaller controls and a later fade.
+        if (s.fullBleedArtwork || s.videoFullBleed) Toggle(
+            tr(R.string.more_room_for_the_picture), null, s.view.bleedRoomy,
+            info = tr(R.string.more_room_for_the_picture_info),
+        ) { prefs.setBleedRoomy(it) }
         // With full-bleed artwork the banner covers the cover that shrinks (Reddit, 1.7.9.3): it says so rather than seem broken.
         Toggle(
             tr(R.string.shrink_when_paused),
@@ -1847,6 +1872,11 @@ private fun PlayerCoverGroup() {
             tr(R.string.cover_flies_into_place), tr(R.string.opening_the_player_the_mini_player), s.view.coverFlight,
             info = tr(R.string.instead_of_the_whole_player_sliding),
         ) { prefs.setCoverFlight(it) }
+        // #223: and back the same way.
+        if (s.view.coverFlight) Toggle(
+            tr(R.string.cover_flies_back_too), null, s.view.coverFlightBack,
+            info = tr(R.string.cover_flies_back_too_info),
+        ) { prefs.setCoverFlightBack(it) }
     }
 }
 
@@ -1916,6 +1946,13 @@ private fun SoundPage() {
                 tr(R.string.no_repeats_title), tr(R.string.no_repeats_detail), s.behavior.autoplayNoRepeats,
                 info = tr(R.string.no_repeats_info),
             ) { prefs.setAutoplayNoRepeats(it) }
+            // #299: long mixes and compilations stay out of Autoplay.
+            if (s.autoplay) SliderSetting(
+                tr(R.string.longest_song_for_autoplay), s.behavior.autoplayMaxMinutes.toFloat(), 0f..com.prism.music.data.AutoplayLength.MAX_MINUTES.toFloat(),
+                { if (it < 0.5f) tr(R.string.autoplay_no_length_limit) else tr(R.string.min, it.roundToInt()) },
+                steps = com.prism.music.data.AutoplayLength.MAX_MINUTES / com.prism.music.data.AutoplayLength.STEP_MINUTES - 1,
+                info = tr(R.string.longest_song_for_autoplay_info),
+            ) { prefs.setAutoplayMaxMinutes(it.roundToInt()) }
             Label(tr(R.string.music_videos_label), info = tr(R.string.music_videos_label_info))
             Chips(VideoPolicy.entries, SoundChoices.videoPolicy(s), { it.label }) { SoundChoices.setVideoPolicy(prefs, it) }
             Toggle(tr(R.string.keep_playing_videos), tr(R.string.after_a_video_the_next_song), s.videoContinues) { prefs.setVideoContinues(it) }
@@ -1926,7 +1963,8 @@ private fun SoundPage() {
         Group(tr(R.string.crossfade)) {
             Label(tr(R.string.crossfade), info = tr(R.string.crossfade_choice_info))
             Chips(Crossfade.entries, SoundChoices.crossfade(s), { it.label }) { SoundChoices.setCrossfade(prefs, it) }
-            if (s.mix && !s.mixAuto) SliderSetting(tr(R.string.length), s.mixSeconds.toFloat(), 1f..12f, { "${it.roundToInt()} s" }, steps = 10) { prefs.setMixSeconds(it.roundToInt()) }
+            // #351: up to 30 s (a song's blend is still at most a third of it: MixEngine.makePlan).
+            if (s.mix && !s.mixAuto) SliderSetting(tr(R.string.length), s.mixSeconds.toFloat(), 1f..com.prism.music.data.prefs.MAX_CROSSFADE_SECONDS.toFloat(), { "${it.roundToInt()} s" }, steps = com.prism.music.data.prefs.MAX_CROSSFADE_SECONDS - 2) { prefs.setMixSeconds(it.roundToInt()) }
             if (s.mix) {
                 Toggle(
                     tr(R.string.match_tempo_and_beats_dj_style), tr(R.string.beats_line_up_while_songs_overlap), s.mixBeatMatch,
@@ -1990,7 +2028,8 @@ private fun SoundPage() {
         Group(tr(R.string.sound)) {
             // Normalize's switch and its level are one choice: Off, or how loud (#210).
             NormalizeLevel()
-            Label(tr(R.string.trim_silence), info = tr(R.string.trim_silence_info))
+            // #325: plainer names, and "Songs only".
+            Label(tr(R.string.skip_silence), info = tr(R.string.skip_silence_choice_info))
             Chips(TrimSilence.entries, SoundChoices.trimSilence(s), { it.label }) { SoundChoices.setTrimSilence(prefs, it) }
             SoundSettings(onOpenEq = { nav.go(Routes.EQ) })
         }
@@ -2147,6 +2186,11 @@ private fun LyricsSettings() {
         MoreOptions(listOf(tr(R.string.your_music_files))) {
             Group(tr(R.string.your_music_files)) {
                 val c = LocalContainer.current
+                // #344 (1.8.2): the same switch as its row in Order above.
+                Toggle(
+                    tr(R.string.read_lyrics_from_your_music_files), tr(R.string.synced_or_plain_with_no_internet), s.behavior.embeddedLyrics,
+                    info = tr(R.string.flac_ogg_opus_mp3_and_m4a_their),
+                ) { prefs.setEmbeddedLyrics(it) }
                 Item(
                     tr(R.string.save_lyrics_into_your_music_files), tr(R.string.so_other_players_show_them_too),
                     info = tr(R.string.synced_lyrics_go_into_your_flac),
@@ -2172,7 +2216,7 @@ private fun LyricSourcesOrder() {
     val prefs = LocalContainer.current.settings
     Label(tr(R.string.order), info = tr(R.string.tried_top_to_bottom_hold_one))
     com.prism.music.ui.components.ReorderList(s.lyricsOrder, { it }, { prefs.setLyricsOrder(it) }) { src, i, held, mod ->
-        val on = src !in s.lyricsOff
+        val on = s.lyricsSourceOn(src)
         Row(mod.fillMaxWidth().padding(horizontal = 16.dp, vertical = 2.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(
                 Modifier.size(26.dp).clip(CircleShape).background(if (i == 0 && on) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHighest),
@@ -2187,8 +2231,8 @@ private fun LyricSourcesOrder() {
             }
             // Turned off, a source is never asked (#51); at least one stays on.
             com.prism.music.ui.components.PrismSwitch(
-                on, { v -> prefs.setLyricsOff(if (v) s.lyricsOff - src else s.lyricsOff + src) },
-                enabled = !on || s.lyricsOrder.count { it !in s.lyricsOff } > 1,
+                on, { v -> if (src == com.prism.music.data.prefs.LyricsSource.EMBEDDED) prefs.setEmbeddedLyrics(v) else prefs.setLyricsOff(if (v) s.lyricsOff - src else s.lyricsOff + src) },
+                enabled = !on || s.lyricsOrder.count(s::lyricsSourceOn) > 1,
                 modifier = Modifier.scale(0.8f),
             )
             if (!held) {
@@ -2331,6 +2375,47 @@ private fun OwnSongFiles() {
     }
 }
 
+/** Which playlists stay downloaded as they grow (#298; this list's shape is stuntsnakee's, from PR #304). */
+@Composable
+private fun KeptPlaylistsSheet(onDismiss: () -> Unit) {
+    val c = LocalContainer.current
+    val s = LocalAppSettings.current
+    val library by c.library.playlists.collectAsState()
+    val prismLists by c.prismLibrary.lists.collectAsState()
+    val savedLists by c.prismLibrary.playlists.collectAsState()
+    val signedIn = s.isLoggedIn
+    val mine = remember(library, prismLists, savedLists, signedIn) {
+        (prismLists.map { it.item() } + savedLists.map { it.item() } + if (signedIn) library.filterIsInstance<com.prism.music.data.model.PlaylistItem>() else emptyList())
+            .filter { com.prism.music.download.PlaylistDownloads.canKeep(it.id) && !it.isMix }
+            .distinctBy { com.prism.music.download.PlaylistDownloads.keepKey(it.id) }
+    }
+    var query by remember { mutableStateOf("") }
+    val shown = remember(mine, query) { if (query.isBlank()) mine else mine.filter { it.title.contains(query.trim(), ignoreCase = true) } }
+    com.prism.music.ui.components.PrismSheet(onDismiss = onDismiss) {
+        Text(tr(R.string.keep_playlists_downloaded), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 20.dp))
+        if (mine.size > 8) com.prism.music.ui.components.SearchField(query, tr(R.string.find_a_playlist), { query = it }, Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp))
+        if (mine.isEmpty()) Text(tr(R.string.no_playlists_yet), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(20.dp))
+        androidx.compose.foundation.lazy.LazyColumn(Modifier.fillMaxWidth().padding(top = 4.dp, bottom = 24.dp)) {
+            items(shown.size, key = { shown[it].id }) { i ->
+                val p = shown[i]
+                val on = com.prism.music.download.PlaylistDownloads.keepKey(p.id) in s.behavior.keptPlaylists
+                Row(
+                    Modifier.fillMaxWidth().padding(start = 20.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    com.prism.music.ui.components.Artwork(c.covers.art(p), Modifier.size(46.dp), LocalUi.current.smallArt, size = 120, placeholderIcon = PrismIcons.QueueMusic)
+                    Spacer(Modifier.width(14.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(p.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        if (p.subtitle.isNotBlank()) Text(p.subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
+                    PrismCheck(on, label = p.title) { c.keptPlaylists.set(p.id, it) }
+                }
+            }
+        }
+    }
+}
+
 @Composable
 private fun DownloadSettings() {
     val c = LocalContainer.current
@@ -2347,8 +2432,30 @@ private fun DownloadSettings() {
                 prefs.setDownloadLikes(it)
                 if (it) c.downloads.downloadAll(c.library.liked.value)
             }
+            // #298 (1.8.2).
+            var choosingKept by remember { mutableStateOf(false) }
+            val keptCount = s.behavior.keptPlaylists.size
+            Item(
+                tr(R.string.keep_playlists_downloaded),
+                if (keptCount == 0) tr(R.string.none_chosen) else trp(R.plurals.n_playlists_kept, keptCount),
+                info = tr(R.string.new_songs_in_these_playlists_download),
+                onClick = { choosingKept = true },
+            ) { Chevron() }
+            if (choosingKept) KeptPlaylistsSheet { choosingKept = false }
         }
         OwnSongFiles()
+        // #207, #249 (1.8.2).
+        Group(tr(R.string.local_files)) {
+            var choosing by remember { mutableStateOf(false) }
+            val skipped = s.behavior.localSkipFolders.size
+            Item(
+                tr(R.string.folders_in_local_files),
+                if (skipped == 0) tr(R.string.every_folder_with_music) else trp(R.plurals.n_folders_left_out, skipped),
+                info = tr(R.string.untick_a_folder_to_leave_it_out),
+                onClick = { choosing = true },
+            ) { Chevron() }
+            if (choosing) LocalFoldersSheet { choosing = false }
+        }
         Group(tr(R.string.smart_downloads)) {
             Toggle(
                 tr(R.string.smart_downloads), tr(R.string.songs_you_ll_likely_play_ready), s.smartDownloads,
@@ -2413,6 +2520,11 @@ private fun DownloadSettings() {
                 tr(R.string.data_saver), tr(R.string.uses_much_less_data_off_wi), s.dataSaver,
                 info = tr(R.string.on_mobile_data_pictures_at_the),
             ) { prefs.setDataSaver(it) }
+            // #281: a video is what uses the most data of all.
+            if (s.dataSaver) Toggle(
+                tr(R.string.no_videos_on_mobile_data), null, s.behavior.noVideoOnData,
+                info = tr(R.string.no_videos_on_mobile_data_info),
+            ) { prefs.setNoVideoOnData(it) }
             Toggle(
                 tr(R.string.load_ahead_on_mobile_data),
                 if (s.preload == com.prism.music.data.prefs.Preload.START) tr(R.string.the_next_song_s_start_about) else tr(R.string.whole_songs_about_3_8_mb),
@@ -2710,6 +2822,11 @@ private fun LibraryLookGroup() {
                 onClick = { editingTiles = true },
             ) { Chevron() }
             if (editingTiles) LibraryTilesSheet { editingTiles = false }
+        }
+        Group(tr(R.string.artist_pages)) {
+            Toggle(tr(R.string.artist_you_title), tr(R.string.artist_you_detail), s.behavior.artistYou, info = tr(R.string.artist_you_info)) { prefs.setArtistYou(it) }
+            Toggle(tr(R.string.artist_essentials_title), tr(R.string.artist_essentials_detail), s.behavior.artistEssentials, info = tr(R.string.artist_essentials_info)) { prefs.setArtistEssentials(it) }
+            Toggle(tr(R.string.artist_bio_title), tr(R.string.artist_bio_detail), s.behavior.artistBio, info = tr(R.string.artist_bio_info)) { prefs.setArtistBio(it) }
         }
     }
 }

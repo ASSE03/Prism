@@ -246,7 +246,11 @@ class Cast(private val app: Application, private val c: AppContainer) : Player.L
         }
         if (!describing.add(location)) return
         try {
-            val r = Describe.fetch(c.http, location) ?: return
+            val r = Describe.fetch(c.http, location) { why ->
+                Log.w(TAG, why)
+                // Share diagnostics says why a speaker wasn't listed (#239: nothing did, while another app found them).
+                com.prism.music.playback.AudioDiagnostics.log("connect", why)
+            } ?: return
             locationSeen[location] = now
             found[r.id] = r to now
             publishFound()

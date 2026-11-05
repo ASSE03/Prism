@@ -64,6 +64,8 @@ enum class LyricsSource(val label: String, val detail: String) {
     UNISON(tr(R.string.unison), tr(R.string.lyrics_listeners_submit_few_songs_so)),
     YTMUSIC(tr(R.string.prism_music), tr(R.string.lyricfind_lines_or_plain)),
     GENIUS(tr(R.string.genius), tr(R.string.plain_text_also_fills_in_starred)),
+    /** #344 (1.8.2): the lyrics in the song's own file's tags. Off until asked for ([AppSettings.lyricsSourceOn]). Keep it last. */
+    EMBEDDED(tr(R.string.your_music_files), tr(R.string.the_lyrics_saved_inside_the_song_s_file)),
 }
 
 /** Tiles in Home's greeting section. */
@@ -297,6 +299,12 @@ data class BehaviorPrefs(
     val scrollShowsControls: Boolean = true,
     /** Playlists' genre chips, each song's genre and Group by genre (1.7.9, Reddit); off, a playlist is just its songs in order. */
     val playlistGenres: Boolean = true,
+    /** Artist pages (1.8.2): a short Wikipedia bio. Off, nothing is ever asked of Wikipedia. */
+    val artistBio: Boolean = false,
+    /** Artist pages (1.8.2): "You and this artist", from the plays on this phone. */
+    val artistYou: Boolean = false,
+    /** Artist pages (1.8.2): their top songs moved by what the listener plays. */
+    val artistEssentials: Boolean = false,
     /** Pages fade into each other (#227: off, a page swaps at once, so a tap can't land on the one fading out). */
     val screenFades: Boolean = true,
     /** #259 (1.7.9.2): the cover's swipes, double tap and long press work around the controls too. */
@@ -339,6 +347,25 @@ data class BehaviorPrefs(
     val autoplayNoRepeats: Boolean = false,
     /** 1.8.2: how radios and autoplay are tuned ([com.prism.music.data.foryou.RadioTune]); all at 0, as before. */
     val radioTune: com.prism.music.data.foryou.RadioTune = com.prism.music.data.foryou.RadioTune(),
+    /** #299 (1.8.2): Autoplay leaves out songs longer than this many minutes (0: no limit, as before). */
+    val autoplayMaxMinutes: Int = 0,
+    /** #281 (1.8.2): with Data saver on, no music videos on mobile data ([com.prism.music.playback.VideoOnData]). */
+    val noVideoOnData: Boolean = false,
+    /** #282 (1.8.2): the cover's gestures work on the controls below the lyrics too, never on the lyrics themselves. */
+    val gesturesUnderLyrics: Boolean = false,
+    /** #280 (1.8.2): the player opens on the page it was closed on: the cover, the lyrics or the queue. */
+    val playerRemembersPage: Boolean = false,
+    /**
+     * #280 (1.8.2): the lyrics' controls take a longer swipe to come and go, and after you've scrolled the lyrics go back to
+     * the sung line sooner the nearer it is.
+     */
+    val lyricsSteady: Boolean = false,
+    /** #344 (1.8.2): lyrics stored in the song's own file are a lyrics source, in its place in the listener's order. */
+    val embeddedLyrics: Boolean = false,
+    /** #207, #249 (1.8.2): folders Local files leaves out ([com.prism.music.data.local.LocalMusic.folderOf]). The files stay as they are. */
+    val localSkipFolders: Set<String> = emptySet(),
+    /** #298 (1.8.2): playlists whose new songs download by themselves, by [com.prism.music.download.PlaylistDownloads.keepKey]. */
+    val keptPlaylists: Set<String> = emptySet(),
 )
 
 /** The lock screen's layouts (1.8.2). */
@@ -462,6 +489,18 @@ data class ViewLook(
     val replayGraph: ReplayGraph = ReplayGraph.MONTHS,
     /** #287 (1.8.1): Replay and Rewind stories in your app font, instead of Prism's poster type. */
     val replayStoryFont: Boolean = false,
+    /** #223 (1.8.2): with [coverFlight], closing the player the cover flies back into the mini player. */
+    val coverFlightBack: Boolean = false,
+    /** #293 (1.8.2): the buttons on a music video (fit, full-bleed, picture-in-picture, full screen) wait for a tap on it. */
+    val videoButtonsHide: Boolean = false,
+    /** #293 (1.8.2): over a full-bleed cover or video, smaller controls, the picture reaching further down and fading later. */
+    val bleedRoomy: Boolean = false,
+    /** #331 (1.8.2): each song's length in the queue. */
+    val queueLengths: Boolean = false,
+    /** #294, #331 (1.8.2): songs already played can be dragged among themselves too. */
+    val queuePlayedMoves: Boolean = false,
+    /** #294 (1.8.2): no × on each song (swipe it away, or its ⋯) and no Queue button in the bottom row while the queue's open. */
+    val queueTidy: Boolean = false,
 )
 
 /** The Replay card's bars (#286): one for each month of this year so far, each of the last 12 weeks, or the last 14 days. */
@@ -660,6 +699,9 @@ data class SoundPrefs(
      */
     val ownLossyFiles: Boolean = false,
 )
+
+/** The longest fixed crossfade, in seconds (#351; it was 12). [com.prism.music.playback.MixEngine] and its tail player are good for it. */
+const val MAX_CROSSFADE_SECONDS = 30
 
 /** How a crossfade's two volumes cross (1.7.8, A1). */
 enum class CrossfadeCurve(val label: String, val detail: String) {
@@ -924,7 +966,9 @@ enum class HomeHeaderHeight(val label: String, val dp: Int) { SHORT(tr(R.string.
 enum class SearchSection(val label: String) {
     // The shortcut tiles (Recognize, Find by lyrics, Podcasts, Your files) went before release: the search box has
     // Recognize, a line of lyrics finds its song, and podcasts and your files are searched with everything else.
-    RECENT(tr(R.string.recent)), ARTISTS(tr(R.string.your_artists)), MOODS(tr(R.string.moods_genres));
+    RECENT(tr(R.string.recent)), ARTISTS(tr(R.string.your_artists)), MOODS(tr(R.string.moods_genres)),
+    /** One line leading to the Explore page (1.8.2). A list arranged before it came doesn't have it; Arrange offers it. */
+    EXPLORE(tr(R.string.explore));
 
     companion object {
         fun parse(v: String?): List<SearchSection> =
@@ -947,11 +991,13 @@ enum class LibraryTile(val label: String) {
     HISTORY(tr(R.string.history)), PODCASTS(tr(R.string.podcasts)),
     TOGETHER(tr(R.string.listen_together)), BLEND(tr(R.string.blend)), RECOGNIZED(tr(R.string.recognized)), NEW_PLAYLIST(tr(R.string.new_playlist)), IMPORT(tr(R.string.import_playlists)),
     /** The account's uploads (#332, 1.8.2): only for an account that has some, added once when Prism finds them ([withUploads]). */
-    UPLOADS(tr(R.string.uploads));
+    UPLOADS(tr(R.string.uploads)),
+    /** Songs in the song cache whole (#159, 1.8.2); not shown until ticked. */
+    SAVED(tr(R.string.saved_while_playing));
 
     companion object {
         /** A new install's tiles: all but those added later, so nobody's Library changes on its own. */
-        val initial = entries - HISTORY - UPLOADS
+        val initial = entries - HISTORY - UPLOADS - SAVED
 
         /** What the tile editor offers: Uploads only to an account that has some. */
         fun offered(hasUploads: Boolean) = if (hasUploads) entries else entries - UPLOADS
@@ -1164,7 +1210,7 @@ object HomeSections {
 /** The order lyric sources are tried in on a fresh install. */
 val defaultLyricsOrder = listOf(
     LyricsSource.KUGOU, LyricsSource.QQ, LyricsSource.APPLE, LyricsSource.LYRICSPLUS, LyricsSource.BINI, LyricsSource.YTMUSIC,
-    LyricsSource.NETEASE, LyricsSource.LRCLIB, LyricsSource.UNISON, LyricsSource.GENIUS,
+    LyricsSource.NETEASE, LyricsSource.LRCLIB, LyricsSource.UNISON, LyricsSource.GENIUS, LyricsSource.EMBEDDED,
 )
 
 /** "Room for sung songs" at its last step: no limit (#238). */
@@ -1657,7 +1703,10 @@ data class AppSettings(
     )
 
     /** The lyric sources Prism asks, in the listener's order: the ones turned off are left out (#51). */
-    val lyricsSources: List<LyricsSource> get() = lyricsOrder.filter { it !in lyricsOff }.ifEmpty { lyricsOrder }
+    val lyricsSources: List<LyricsSource> get() = lyricsOrder.filter(::lyricsSourceOn).ifEmpty { lyricsOrder.filter { it != LyricsSource.EMBEDDED } }
+
+    /** Whether [src] is asked: every source until it's switched off, but a file's own lyrics only once they're switched on (#344). */
+    fun lyricsSourceOn(src: LyricsSource) = if (src == LyricsSource.EMBEDDED) behavior.embeddedLyrics else src !in lyricsOff
 }
 
 class SettingsRepository(private val context: Context, scope: CoroutineScope) {
@@ -1992,9 +2041,27 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val radioNewness = floatPreferencesKey("radio_tune_newness")
         val radioDepth = floatPreferencesKey("radio_tune_depth")
         val radioEnergy = floatPreferencesKey("radio_tune_energy")
+        // 1.8.2 requests ([BehaviorPrefs.autoplayMaxMinutes] and on; [ViewLook.coverFlightBack] and on).
+        val autoplayMaxMinutes = intPreferencesKey("autoplay_max_minutes")
+        val noVideoOnData = booleanPreferencesKey("no_video_on_data")
+        val gesturesUnderLyrics = booleanPreferencesKey("player_gestures_under_lyrics")
+        val playerRemembersPage = booleanPreferencesKey("player_remembers_page")
+        val lyricsSteady = booleanPreferencesKey("lyrics_steady")
+        val coverFlightBack = booleanPreferencesKey("cover_flight_back")
+        val videoButtonsHide = booleanPreferencesKey("video_buttons_hide")
+        val bleedRoomy = booleanPreferencesKey("bleed_roomy")
+        val queueLengths = booleanPreferencesKey("queue_lengths")
+        val queuePlayedMoves = booleanPreferencesKey("queue_played_moves")
+        val queueTidy = booleanPreferencesKey("queue_tidy")
+        val embeddedLyrics = booleanPreferencesKey("embedded_lyrics")
+        val localSkipFolders = stringPreferencesKey("local_skip_folders")
+        val keptPlaylists = stringPreferencesKey("kept_playlists")
         val queueLocked = booleanPreferencesKey("queue_locked")
         val scrollShowsControls = booleanPreferencesKey("scroll_shows_controls")
         val playlistGenres = booleanPreferencesKey("playlist_genres")
+        val artistBio = booleanPreferencesKey("artist_bio")
+        val artistYou = booleanPreferencesKey("artist_you")
+        val artistEssentials = booleanPreferencesKey("artist_essentials")
         val screenFades = booleanPreferencesKey("screen_fades")
         val crossfadeMark = booleanPreferencesKey("crossfade_mark")
         val blendCovers = booleanPreferencesKey("blend_covers")
@@ -2055,6 +2122,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 cornerScale, songShape, albumShape, artistShape, playerShape, buttonShape, playOutlined,
                 typeWeight, typeSpacing, titleFont, tabTint, playerTitleWeight, typeClassic, controlsClassic,
                 panelPlayer, queueHeadings, queueDjChip, castMark, immersiveVideo, bleedFit, coverFlight, videoControlsHide,
+                coverFlightBack, videoButtonsHide, bleedRoomy, queueLengths, queuePlayedMoves, queueTidy,
                 crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape,
                 downloadsAlbums, artistLinks, backdropFade,
                 crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape, replayGraph, replayStoryFont,
@@ -2093,6 +2161,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 panelPlayer to 's', queueHeadings to 'b', queueDjChip to 'b', castMark to 'b', immersiveVideo to 'b', bleedFit to 's', coverFlight to 'b',
                 videoControlsHide to 'b', crossfadeMark to 'b', blendCovers to 'b', buttonsPill to 'b', playerHiddenParts to 's',
                 crossfadeShape to 'b',
+                coverFlightBack to 'b', videoButtonsHide to 'b', bleedRoomy to 'b', queueLengths to 'b', queuePlayedMoves to 'b', queueTidy to 'b',
                 downloadsAlbums to 'b', artistLinks to 'b', backdropFade to 'b',
                 crossfadeShape to 'b', replayGraph to 's', replayStoryFont to 'b',
             ) + lyricsLook
@@ -2127,7 +2196,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "mini_swipe_left", "mini_swipe_right", "mini_swipe_down", "mini_swipe_up",
                 // 1.7.8 ([BehaviorPrefs]).
                 "lock_screen_player", "lock_screen_layout", "lock_screen_volume", "lock_screen_like", "lock_screen_output", "lock_screen_paused", "lock_screen_hide_song",
-                "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres", "screen_fades", "player_gestures_everywhere", "page_slide", "tab_bar_position",
+                "lock_portrait", "pause_on_mute", "pip_mode", "panel_swipes", "recent_shows", "queue_locked", "scroll_shows_controls", "playlist_genres", "artist_bio", "artist_you", "artist_essentials", "screen_fades", "player_gestures_everywhere", "page_slide", "tab_bar_position",
                 // 1.8.0 ([TvPrefs]): how Prism behaves on a TV and in desk mode.
                 "tv_ambient_minutes", "desk_mode", "tv_lyrics_scale", "tv_welcomed", "tv_home_layout", "tv_backdrop_dim",
                 // 1.7.8 ([SoundPrefs]).
@@ -2141,6 +2210,14 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 "quick_picks_source",
                 // 1.8.2 (#159): what radios play, not a look.
                 "autoplay_no_repeats", "radio_tune_newness", "radio_tune_depth", "radio_tune_energy",
+                // 1.8.2 (#299, #281, #282, #280): how Prism behaves, not how it looks.
+                "autoplay_max_minutes", "no_video_on_data", "player_gestures_under_lyrics", "player_remembers_page", "lyrics_steady",
+                // 1.8.2 (#344): where lyrics come from.
+                "embedded_lyrics",
+                // 1.8.2 (#207, #249): this phone's folders.
+                "local_skip_folders",
+                // 1.8.2 (#298): what stays downloaded.
+                "kept_playlists",
                 // 1.8.1 (#296, #263): what Prism keeps of your listening.
                 "history_paused_until", "play_count_seconds", "play_count_account",
             )
@@ -2304,7 +2381,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
             losslessLocal = p[K.losslessLocal] ?: d.losslessLocal,
             normalize = p[K.normalize] ?: d.normalize,
             mix = p[K.mix] ?: d.mix,
-            mixSeconds = (p[K.mixSeconds] ?: d.mixSeconds).coerceIn(1, 12),
+            mixSeconds = (p[K.mixSeconds] ?: d.mixSeconds).coerceIn(1, MAX_CROSSFADE_SECONDS),
             mixAuto = p[K.mixAuto] ?: d.mixAuto,
             mixBeatMatch = p[K.mixBeatMatch] ?: d.mixBeatMatch,
             mixKeepAlbums = p[K.mixKeepAlbums] ?: d.mixKeepAlbums,
@@ -2386,6 +2463,12 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 bleedFit = p.enum(K.bleedFit, d.view.bleedFit),
                 coverFlight = p[K.coverFlight] ?: d.view.coverFlight,
                 videoControlsHide = p[K.videoControlsHide] ?: d.view.videoControlsHide,
+                coverFlightBack = p[K.coverFlightBack] ?: d.view.coverFlightBack,
+                videoButtonsHide = p[K.videoButtonsHide] ?: d.view.videoButtonsHide,
+                bleedRoomy = p[K.bleedRoomy] ?: d.view.bleedRoomy,
+                queueLengths = p[K.queueLengths] ?: d.view.queueLengths,
+                queuePlayedMoves = p[K.queuePlayedMoves] ?: d.view.queuePlayedMoves,
+                queueTidy = p[K.queueTidy] ?: d.view.queueTidy,
                 crossfadeMark = p[K.crossfadeMark] ?: d.view.crossfadeMark,
                 blendCovers = p[K.blendCovers] ?: d.view.blendCovers,
                 buttonsPill = p[K.buttonsPill] ?: d.view.buttonsPill,
@@ -2423,6 +2506,9 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 queueLocked = p[K.queueLocked] ?: d.behavior.queueLocked,
                 scrollShowsControls = p[K.scrollShowsControls] ?: d.behavior.scrollShowsControls,
                 playlistGenres = p[K.playlistGenres] ?: d.behavior.playlistGenres,
+                artistBio = p[K.artistBio] ?: d.behavior.artistBio,
+                artistYou = p[K.artistYou] ?: d.behavior.artistYou,
+                artistEssentials = p[K.artistEssentials] ?: d.behavior.artistEssentials,
                 screenFades = p[K.screenFades] ?: d.behavior.screenFades,
                 gesturesEverywhere = p[K.gesturesEverywhere] ?: d.behavior.gesturesEverywhere,
                 pageSlide = p[K.pageSlide] ?: d.behavior.pageSlide,
@@ -2443,6 +2529,14 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 radioTune = com.prism.music.data.foryou.RadioTune(
                     (p[K.radioNewness] ?: 0f).coerceIn(-1f, 1f), (p[K.radioDepth] ?: 0f).coerceIn(-1f, 1f), (p[K.radioEnergy] ?: 0f).coerceIn(-1f, 1f),
                 ),
+                autoplayMaxMinutes = (p[K.autoplayMaxMinutes] ?: d.behavior.autoplayMaxMinutes).coerceIn(0, com.prism.music.data.AutoplayLength.MAX_MINUTES),
+                noVideoOnData = p[K.noVideoOnData] ?: d.behavior.noVideoOnData,
+                gesturesUnderLyrics = p[K.gesturesUnderLyrics] ?: d.behavior.gesturesUnderLyrics,
+                playerRemembersPage = p[K.playerRemembersPage] ?: d.behavior.playerRemembersPage,
+                lyricsSteady = p[K.lyricsSteady] ?: d.behavior.lyricsSteady,
+                embeddedLyrics = p[K.embeddedLyrics] ?: d.behavior.embeddedLyrics,
+                localSkipFolders = p[K.localSkipFolders]?.split('\n')?.filter { it.isNotBlank() }?.toSet() ?: d.behavior.localSkipFolders,
+                keptPlaylists = p[K.keptPlaylists]?.split('\n')?.filter { it.isNotBlank() }?.toSet() ?: d.behavior.keptPlaylists,
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -2844,7 +2938,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setLosslessLocal(v: Boolean) = edit { it[K.losslessLocal] = v }
     fun setNormalize(v: Boolean) = edit { it[K.normalize] = v }
     fun setMix(v: Boolean) = edit { it[K.mix] = v }
-    fun setMixSeconds(v: Int) = edit { it[K.mixSeconds] = v.coerceIn(1, 12) }
+    fun setMixSeconds(v: Int) = edit { it[K.mixSeconds] = v.coerceIn(1, MAX_CROSSFADE_SECONDS) }
     fun setMixAuto(v: Boolean) = edit { it[K.mixAuto] = v }
     fun setMixBeatMatch(v: Boolean) = edit { it[K.mixBeatMatch] = v }
     fun setMixKeepAlbums(v: Boolean) = edit { it[K.mixKeepAlbums] = v }
@@ -3013,6 +3107,17 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setBleedFit(v: BleedFit) = edit { it[K.bleedFit] = v.name }
     fun setCoverFlight(v: Boolean) = edit { it[K.coverFlight] = v }
     fun setVideoControlsHide(v: Boolean) = edit { it[K.videoControlsHide] = v }
+    fun setCoverFlightBack(v: Boolean) = edit { it[K.coverFlightBack] = v }
+    fun setVideoButtonsHide(v: Boolean) = edit { it[K.videoButtonsHide] = v }
+    fun setBleedRoomy(v: Boolean) = edit { it[K.bleedRoomy] = v }
+    fun setQueueLengths(v: Boolean) = edit { it[K.queueLengths] = v }
+    fun setQueuePlayedMoves(v: Boolean) = edit { it[K.queuePlayedMoves] = v }
+    fun setQueueTidy(v: Boolean) = edit { it[K.queueTidy] = v }
+    fun setAutoplayMaxMinutes(v: Int) = edit { it[K.autoplayMaxMinutes] = v.coerceIn(0, com.prism.music.data.AutoplayLength.MAX_MINUTES) }
+    fun setNoVideoOnData(v: Boolean) = edit { it[K.noVideoOnData] = v }
+    fun setGesturesUnderLyrics(v: Boolean) = edit { it[K.gesturesUnderLyrics] = v }
+    fun setPlayerRemembersPage(v: Boolean) = edit { it[K.playerRemembersPage] = v }
+    fun setLyricsSteady(v: Boolean) = edit { it[K.lyricsSteady] = v }
     fun setLockPortrait(v: Boolean) = edit { it[K.lockPortrait] = v }
     fun setGesturesEverywhere(v: Boolean) = edit { it[K.gesturesEverywhere] = v }
     fun setPageSlide(v: Boolean) = edit { it[K.pageSlide] = v }
@@ -3038,9 +3143,19 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         it[K.radioDepth] = v.depth
         it[K.radioEnergy] = v.energy
     }
+    fun setEmbeddedLyrics(v: Boolean) = edit { it[K.embeddedLyrics] = v }
+    fun setLocalSkipFolders(v: Set<String>) = edit { it[K.localSkipFolders] = v.joinToString("\n") }
+    /** One at a time, read in the same edit, so quick ticks in a row don't undo one another. */
+    fun setKeptPlaylist(key: String, keep: Boolean) = edit {
+        val now = it[K.keptPlaylists]?.split('\n')?.filter { k -> k.isNotBlank() }?.toSet().orEmpty()
+        it[K.keptPlaylists] = (if (keep) now + key else now - key).joinToString("\n")
+    }
     fun setQueueLocked(v: Boolean) = edit { it[K.queueLocked] = v }
     fun setScrollShowsControls(v: Boolean) = edit { it[K.scrollShowsControls] = v }
     fun setPlaylistGenres(v: Boolean) = edit { it[K.playlistGenres] = v }
+    fun setArtistBio(v: Boolean) = edit { it[K.artistBio] = v }
+    fun setArtistYou(v: Boolean) = edit { it[K.artistYou] = v }
+    fun setArtistEssentials(v: Boolean) = edit { it[K.artistEssentials] = v }
     fun setScreenFades(v: Boolean) = edit { it[K.screenFades] = v }
     fun setCrossfadeMark(v: Boolean) = edit { it[K.crossfadeMark] = v }
     fun setBlendCovers(v: Boolean) = edit { it[K.blendCovers] = v }

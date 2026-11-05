@@ -148,6 +148,21 @@ class YouTubeMusic(
 
     suspend fun moodsAndGenres(): List<Shelf> = Parser.shelves(browse("FEmusic_moods_and_genres"))
 
+    /**
+     * Explore's new releases, moods and genres, and trending. Asked without the account: it's the same public page, and
+     * what was checked is what everyone gets.
+     */
+    suspend fun explore(): List<Shelf> =
+        Explore.music(Parser.shelves(api.postAnonymous("browse", buildJsonObject { put("browseId", "FEmusic_explore") })))
+
+    /** The charts of [country] (a [ChartCountry.code]), or of the country YouTube picks for the listener when null. */
+    suspend fun charts(country: String? = null): ChartsPage = Explore.charts(
+        api.postAnonymous("browse", buildJsonObject {
+            put("browseId", "FEmusic_charts")
+            if (country != null) putJsonObject("formData") { putJsonArray("selectedValues") { add(country) } }
+        }),
+    )
+
     suspend fun browseShelves(browseId: String, params: String? = null): List<Shelf> {
         val res = browse(browseId, params)
         val shelves = Parser.shelves(res)
@@ -902,6 +917,24 @@ class YouTubeMusic(
             val names = runs(sec["subtitle"] as? kotlinx.serialization.json.JsonObject).joinToString("").split('\n').map { it.trim() }.filter { it.isNotEmpty() }
             if (title.isEmpty() || names.isEmpty()) null else title to names
         }
+    }
+
+    /**
+     * A song's or video's plays and dates (#211). Asked without the account: these are public, and only the plain web
+     * client's answer carries the description with the release date. YouTube Music's own answer fills in what that one
+     * lacks (it can refuse with a bot check). Fails only if neither could be asked.
+     */
+    suspend fun songFacts(videoId: String): SongFacts {
+        val body = buildJsonObject {
+            put("videoId", videoId)
+            put("racyCheckOk", true)
+            put("contentCheckOk", true)
+        }
+        val web = runCatching { SongFacts.parse(videoId, api.webPost("player", body)) }
+        if (web.getOrNull()?.let { it.count != null && (it.releasedOn ?: it.publishedOn) != null } == true) return web.getOrThrow()
+        val music = runCatching { SongFacts.parse(videoId, api.postAnonymous("player", body)) }
+        if (web.isFailure && music.isFailure) throw music.exceptionOrNull()!!
+        return (web.getOrNull() ?: SongFacts()).orElse(music.getOrNull() ?: SongFacts())
     }
 
     /** Only the artists the account subscribes to (follows) on YouTube Music. */

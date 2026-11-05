@@ -169,7 +169,8 @@ class OfflineArtistsTest {
     @Test fun theTileChangesNobodysLibrary() {
         assertFalse(LibraryTile.UPLOADS in LibraryTile.initial)
         assertFalse(LibraryTile.HISTORY in LibraryTile.initial)
-        assertEquals(LibraryTile.entries.size - 2, LibraryTile.initial.size)
+        assertFalse(LibraryTile.SAVED in LibraryTile.initial)
+        assertEquals(LibraryTile.entries.size - 3, LibraryTile.initial.size)
         assertFalse(LibraryTile.UPLOADS in LibraryTile.offered(false))
         assertTrue(LibraryTile.UPLOADS in LibraryTile.offered(true))
         val standard = listOf(LibraryTile.LIKED, LibraryTile.DOWNLOADS, LibraryTile.LOCAL, LibraryTile.REPLAY)

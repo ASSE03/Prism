@@ -43,6 +43,7 @@ import com.prism.music.ui.theme.hairline
 import com.prism.music.ui.theme.ink3
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.stateDescription
@@ -308,7 +309,9 @@ fun worded(word: String, v: Float) = "$word · ${kotlin.math.round(v * 100).toIn
 fun PrismCheck(checked: Boolean, enabled: Boolean = true, label: String, onChange: (Boolean) -> Unit) {
     val scheme = MaterialTheme.colorScheme
     androidx.compose.foundation.layout.Box(
-        Modifier.size(48.dp).toggleable(checked, enabled = enabled, role = androidx.compose.ui.semantics.Role.Checkbox, onValueChange = onChange),
+        // Named on and off alike (off, it used to have no name for a screen reader).
+        Modifier.size(48.dp).toggleable(checked, enabled = enabled, role = androidx.compose.ui.semantics.Role.Checkbox, onValueChange = onChange)
+            .semantics { contentDescription = label },
         contentAlignment = Alignment.Center,
     ) {
         androidx.compose.foundation.layout.Box(
@@ -319,7 +322,7 @@ fun PrismCheck(checked: Boolean, enabled: Boolean = true, label: String, onChang
                 ),
             contentAlignment = Alignment.Center,
         ) {
-            if (checked) Icon(PrismIcons.Check, label, Modifier.size(14.dp), tint = scheme.surface)
+            if (checked) Icon(PrismIcons.Check, null, Modifier.size(14.dp), tint = scheme.surface)
         }
     }
 }

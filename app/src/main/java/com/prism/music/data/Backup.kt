@@ -317,6 +317,8 @@ class Backup(private val c: AppContainer) {
             listOf(
                 "canvas_saved", "download_lyrics", "download_failures", "download_auto_retry", "download_formats", "smart_downloads", "download_standins",
                 "lossless_links", "lossless_misses", "lossless_hidden", "lossless_alac",
+                // 1.8.2: songs skipped in lists' downloads (#221), when kept playlists were last read (#298).
+                "download_skips", "kept_playlists",
             ).forEach { put(it, BackupPart.DOWNLOADS) }
             // The Last.fm connection (and its waiting scrobbles) is the listener's account.
             put("lastfm", BackupPart.ACCOUNTS)

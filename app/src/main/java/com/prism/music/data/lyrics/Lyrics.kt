@@ -237,8 +237,26 @@ object Lrc {
     private val tag = Regex("\\[(\\d{1,3}):(\\d{1,2})(?:[.:](\\d{1,3}))?]")
     private val meta = Regex("^\\[(ar|ti|al|by|offset|length|re|ve|id|au|la|tool|#):.*]$", RegexOption.IGNORE_CASE)
     private val offsetTag = Regex("^\\[offset:\\s*([+-]?\\d+)\\s*]$", RegexOption.IGNORE_CASE)
+    /** A word's start in enhanced LRC: "[00:12.00]<00:12.00>Word <00:12.48>by". */
+    private val wordTag = Regex("<(\\d{1,3}):(\\d{1,2})(?:[.:](\\d{1,3}))?>")
 
     fun isLrc(text: String) = tag.containsMatchIn(text)
+
+    private fun ms(min: String, sec: String, frac: String): Long =
+        min.toLong() * 60_000 + sec.toLong() * 1000 + when (frac.length) { 0 -> 0L; 1 -> frac.toLong() * 100; 2 -> frac.toLong() * 10; else -> frac.take(3).toLong() }
+
+    /** Enhanced LRC's line as its words ("Word " keeps the space after it), each to the next one's start; empty for a plain line. */
+    private fun words(content: String, lineEndMs: Long): List<LyricWord> {
+        val tags = wordTag.findAll(content).toList()
+        if (tags.isEmpty()) return emptyList()
+        return tags.mapIndexedNotNull { i, m ->
+            val text = content.substring(m.range.last + 1, tags.getOrNull(i + 1)?.range?.first ?: content.length)
+            if (text.isEmpty()) return@mapIndexedNotNull null
+            val start = ms(m.groupValues[1], m.groupValues[2], m.groupValues[3])
+            val next = tags.getOrNull(i + 1)?.let { ms(it.groupValues[1], it.groupValues[2], it.groupValues[3]) }
+            LyricWord(start, maxOf(start, next ?: lineEndMs), text)
+        }
+    }
 
     /** An ID tag's value ("[ti:Thriller(Single Version)]" → "Thriller(Single Version)"), or null. */
     fun metaTag(text: String, name: String): String? =
@@ -256,19 +274,18 @@ object Lrc {
             val stamps = tag.findAll(line).toList()
             if (stamps.isEmpty()) continue
             val content = line.substring(stamps.last().range.last + 1).trim()
-            if (creditLine.matches(content)) continue
-            for (m in stamps) {
-                val min = m.groupValues[1].toLong()
-                val sec = m.groupValues[2].toLong()
-                val frac = m.groupValues[3]
-                val ms = when (frac.length) { 0 -> 0L; 1 -> frac.toLong() * 100; 2 -> frac.toLong() * 10; else -> frac.take(3).toLong() }
-                raw += (min * 60_000 + sec * 1000 + ms) to content
-            }
+            if (creditLine.matches(content.replace(wordTag, ""))) continue
+            for (m in stamps) raw += ms(m.groupValues[1], m.groupValues[2], m.groupValues[3]) to content
         }
         val sorted = raw.map { (t, s) -> (t - offset).coerceAtLeast(0) to s }.sortedBy { it.first }
         return sorted.mapIndexed { i, (t, s) ->
             val end = sorted.getOrNull(i + 1)?.first ?: (t + 5000)
-            LyricLine(t, s, end, isGap = s.isBlank())
+            val text = s.replace(wordTag, "")
+            // Enhanced LRC ([words]), as [com.prism.music.data.local.LyricsTags] writes it into files: the stamps never show.
+            val words = if (text.length == s.length) emptyList() else words(s, end + offset).map { w ->
+                w.copy(startMs = (w.startMs - offset).coerceAtLeast(0), endMs = (w.endMs - offset).coerceAtLeast(0))
+            }
+            LyricLine(t, text.trim(), end, words = words, isGap = text.isBlank())
         }.withLeadingGap()
     }
 
@@ -831,7 +848,8 @@ class LyricsRepository(
      * it, only line-timed lyrics already on the phone are compared with.
      */
     private suspend fun linedUp(song: Song, l: Lyrics, network: Boolean = true): Lyrics {
-        if (!l.wordSynced) return l
+        // A file's own lyrics are timed to that file, and no service gets asked about them.
+        if (!l.wordSynced || l.source == LyricsSource.EMBEDDED) return l
         val prefs = wordShifts ?: return l
         val key = shiftKey(song, l.source)
         val kept = prefs.getString(key, null)
@@ -853,7 +871,7 @@ class LyricsRepository(
     }
 
     /** Whether [l]'s words were compared with the song's line timing already ([linedUp]). */
-    private fun shiftKnown(song: Song, l: Lyrics) = wordShifts?.getString(shiftKey(song, l.source), null)?.toLongOrNull() != null
+    private fun shiftKnown(song: Song, l: Lyrics) = l.source == LyricsSource.EMBEDDED || wordShifts?.getString(shiftKey(song, l.source), null)?.toLongOrNull() != null
 
     private fun shiftKey(song: Song, source: LyricsSource) = "${song.id}|${source.name}"
 
@@ -901,6 +919,8 @@ class LyricsRepository(
     }
 
     private suspend fun fetchRaw(song: Song, source: LyricsSource, force: Boolean = false): Lyrics? = withContext(Dispatchers.IO) {
+        // Never saved in the database: the file is the copy, and it may change.
+        if (source == LyricsSource.EMBEDDED) return@withContext inFile(song)
         if (!force) dao.get(song.id, source.name)?.let { cached ->
             // A real answer is kept; a "not found" is retried after a day.
             // NetEase and KuGou answers from before they went word-by-word are fetched again once.
@@ -931,6 +951,7 @@ class LyricsRepository(
                 LyricsSource.KUGOU -> fetchKuGou(asked)
                 LyricsSource.UNISON -> fetchUnison(asked)
                 LyricsSource.GENIUS -> fetchGenius(asked)
+                LyricsSource.EMBEDDED -> null
             }
         } catch (e: kotlinx.coroutines.CancellationException) {
             // Never record a cancelled lookup as "no lyrics".
@@ -969,6 +990,12 @@ class LyricsRepository(
             LyricsSource.NETEASE, LyricsSource.KUGOU, LyricsSource.UNISON,
         )
     }
+
+    /** The lyrics text in the file [Song] plays from, if it has one (#344). Blocking: only called on IO. */
+    var fileLyrics: ((Song) -> String?)? = null
+
+    private fun inFile(song: Song): Lyrics? =
+        runCatching { fileLyrics?.invoke(song) }.getOrNull()?.let { build(LyricsSource.EMBEDDED, it) }
 
     /** Remembers which source the listener picked for a song (song id -> source name). */
     var choices: android.content.SharedPreferences? = null
@@ -1016,7 +1043,7 @@ class LyricsRepository(
         val reference = if (!s.skipCensored) null else REFERENCE_SOURCES.firstNotNullOfOrNull { src ->
             rows[src.name]?.let { build(src, it.content) }?.takeIf { !it.censored }?.plain
         }
-        val all = s.lyricsSources.mapNotNull { src -> rows[src.name]?.let { build(src, it.content) } }
+        val all = s.lyricsSources.mapNotNull { src -> if (src == LyricsSource.EMBEDDED) inFile(song) else rows[src.name]?.let { build(src, it.content) } }
             .map { if (it.source == LyricsSource.GENIUS) it else Uncensor.fill(it, reference) }
             .filterNot { skipCensored() && it.censored }
         if (!s.preferSynced) return@withContext all.firstOrNull()
@@ -1045,7 +1072,10 @@ class LyricsRepository(
     /** Lyrics already on the phone (the source picked for the song first), with no lyric service asked (#95). */
     suspend fun savedOnly(song: Song): Lyrics? {
         if (song.isEpisode) return null
-        val picked = chosen(song)?.let { src -> withContext(Dispatchers.IO) { dao.allFor(song.id) }.firstOrNull { it.source == src.name }?.let { build(src, it.content) } }
+        val picked = chosen(song)?.let { src ->
+            if (src == LyricsSource.EMBEDDED) withContext(Dispatchers.IO) { inFile(song) }
+            else withContext(Dispatchers.IO) { dao.allFor(song.id) }.firstOrNull { it.source == src.name }?.let { build(src, it.content) }
+        }
         return (picked ?: saved(song))?.let { linedUp(song, it, network = false) }
     }
 

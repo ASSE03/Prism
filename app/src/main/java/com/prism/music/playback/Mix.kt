@@ -683,7 +683,13 @@ class MixEngine(
         /** How quickly the next song comes up when the ending song is let go. */
         private const val STALL_RUSH_MS = 1500L
 
-        /** Auto's longest crossfade, as Spotify's slider's. */
+        /** How much of the ending song the tail holds loaded: a whole blend and its lead-in, however long ([tailNeedsMs]). */
+        const val TAIL_BUFFER_MS = 60_000L
+
+        /** What the tail plays of the ending song for a blend of [lengthMs]: the lead-in, then the blend. */
+        fun tailNeedsMs(lengthMs: Long): Long = LEAD_MS + lengthMs
+
+        /** Auto's longest crossfade, as Spotify's slider's. (A fixed length may be longer: MAX_CROSSFADE_SECONDS, #351.) */
         const val AUTO_MAX_MS = 12_000L
         /** DJ mode: songs in keys that sit together blend at least this long (within [AUTO_MAX_MS], which DJ mode plans by). */
         private const val HARMONIC_LONG_MS = 10_000L

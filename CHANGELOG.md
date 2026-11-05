@@ -29,6 +29,26 @@ What changed in each release. Older releases are described on the [Releases page
 - **Tune your radios.** Settings → Recommendations & Replay. Sliders for familiar or new, hits or deep cuts, calm or
   energetic, all in the middle (as before) until you move them. Calm or energetic can only go by songs Prism has already
   scanned, so most songs you haven't heard stay where they are.
+- **Crossfades up to 30 seconds** (#351). Playback & sound → Crossfade → Length now goes past 12. Automatic length is unchanged.
+- **"Songs only" for skipping silence** (#325). Off, Songs only, Podcasts only or Songs and podcasts; the ⓘ says what each one does.
+- **Longest song for Autoplay** (#299). Playback & sound → What plays next: keep hour-long mixes out of Autoplay. Songs you pick
+  or queue yourself, and radios you start, play whatever their length.
+- **No videos on mobile data** (#281). With Data saver on, Downloads, storage & data → Mobile data. Music videos show as
+  unavailable there, except ones you've downloaded, and a video playing when Wi-Fi drops carries on as audio. The next song on Wi-Fi
+  is a video again.
+- **Gestures below the lyrics** (#282). Controls → Gestures: while the lyrics are open, your swipes, double tap and long press
+  work on the controls below them. Scrolling the lyrics stays just that.
+- **The lyrics, steadier** (#280). Player → Lyrics and the queue. "Reopen on the last page": the player opens on the cover, the
+  lyrics or the queue, whichever you left it on, and Back closes the player from those pages. "Steadier lyrics": the controls take a
+  longer swipe to come and go, and after a scroll the lyrics go back to the sung line sooner when it's close.
+- **The cover flies back too** (#223). With "Cover flies into place" on, a second switch: closing the player, the cover flies back
+  into the mini player the way it came.
+- **More room for a full-bleed picture** (#293). Player → Cover: over a full-bleed cover or video, the controls close up, a hidden
+  volume bar leaves no blank space, and the picture reaches further down and fades later. And "Video buttons wait for a tap": the small
+  buttons on a music video stay hidden until you tap it.
+- **A tidier queue** (#294, #331). Player → Lyrics and the queue, each its own switch: "Song lengths in the queue"; "Move songs you've
+  played", with handles among the played songs; "Tidier queue", which takes the × off every song (swipe it away, or use its ⋯)
+  and the Queue button off the bottom row while the queue's open (Back or pulling its title down leaves it).
 - **Artist pages work offline.** A page you've opened stays on your phone, so it opens without a connection as it was
   when you last saw it, with a note saying so. What isn't on your phone is dimmed and doesn't play. For an artist you
   haven't opened, Prism makes a page from your downloaded, liked and played songs and their albums. Android Auto's
@@ -41,9 +61,41 @@ What changed in each release. Older releases are described on the [Releases page
   server, no YouTube and no account needed, with everything episodes do here: they pick up where you left off, speed from
   the player's menu, 15 and 30 second skips. New episodes show up when you open the show. Secure (https) servers on the
   public internet only. Not yet: downloading these episodes, new-episode alerts.
+- **Song details** (#211). A song's menu → Song details: its plays on YouTube Music (views, for a music video), the date
+  it was released and how many times you've played it. Only what YouTube really says shows up: a video has the day it
+  went up on YouTube instead of a release date, and anything it doesn't say isn't there.
+- **Saved while playing** (#159). Songs that reached your phone in full as they played, listed in one place so you can
+  play them with no connection. Open it from the Downloads page's ⋯, or add its tile to Library with the edit button.
+  Prism still clears these as it needs the room; download a song to keep it for good.
+- **More on artist pages, if you want it.** Three new switches in Customize Prism → Home & Library → Artist pages, all off
+  until you turn them on. *You and this artist:* your first play, plays, time and top song, counted on your phone and
+  never sent anywhere. *Essentials for you:* their top songs, moved by what you play. *Bio from Wikipedia:* a short bio in
+  your language, credited and linked, kept for offline. It only shows when Prism is sure it's the right article (the
+  article has to be about a musician and name that artist's own albums or songs), so some artists won't have one.
+- **Explore.** At the end of Search, before you type: YouTube Music's charts by country, moods and genres, new releases
+  and what's trending, in one place. Which charts there are depends on the country. Search's Arrange moves or hides the
+  line that leads here; if you've arranged Search before, turn it on there.
+- **Lyrics from your own music files** (#344). Settings → Lyrics → Your music files → "Read lyrics from your music files"
+  (off until you turn it on). Lyrics saved in a file's tags, synced or plain, work with no internet: FLAC, Ogg, Opus, MP3
+  and M4A. They take their place in your lyrics sources' order, last to start with: move them up to use them first.
+- **Leave folders out of Local files** (#207, #249). Local files → Edit → Choose folders, or Settings → Downloads,
+  storage & data → Folders in Local files. Untick a folder and it stops showing, with the folders inside it. Nothing
+  happens to the files themselves.
+- **Skip songs when a playlist downloads** (#221). A song's ⋯ on a playlist or album → Skip in downloads, or the new
+  button in Failed downloads. A skipped song stays out of whole-list downloads and isn't tried again, and the list counts
+  as downloaded without it. You can still download that song by itself.
+- **Keep a playlist downloaded** (#298, thanks to stuntsnakee, PR #304). A playlist's ⋯ → Keep downloaded, or Settings →
+  Downloads, storage & data → Keep playlists downloaded. New songs come down by themselves, following Download on Wi-Fi
+  only, and skipped or failed songs are left alone. Nothing is deleted when a song leaves the playlist.
 
 ### Fixes
 
+- A song YouTube offers in copy-protected formats no longer tries to play them, it uses a format that can play (idea from
+  CodeWormer's PR #240).
+- **Speakers and TVs on your network can be found again, Sonos among them** (#239). Android stopped Prism reading what a
+  speaker says about itself, because speakers only speak plain HTTP, so none of them were listed. Prism now reads them
+  on the local network only; everything else it asks for stays secure. There's no Sonos here to try it on: this was
+  checked against a real Sonos One SL's own description. If a speaker still doesn't show, Share diagnostics now says why.
 - **Typing in Search and in Settings' search keeps up on slower phones** (#355).
 - **A song YouTube won't play no longer stops the music.** Prism says which song it was and goes on to the next, also
   when the next songs are still on their way from Autoplay; Next, Previous and the scrubber work again if it did have to stop.

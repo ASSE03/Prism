@@ -398,6 +398,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                                 LibraryTile.IMPORT -> if (settings.isLoggedIn) item(key = "tile-import") { ShortcutTile(tr(R.string.import_playlists), tr(R.string.from_spotify_apple_music), PrismIcons.PlaylistAdd, asList) { nav.go(Routes.IMPORT) } }
                                 // Only for an account with uploads (#332): for anyone else there's nothing behind it.
                                 LibraryTile.UPLOADS -> if (settings.isLoggedIn && hasUploads) item(key = "tile-uploads") { ShortcutTile(tr(R.string.uploads), tr(R.string.uploads_tile_subtitle), PrismIcons.Upload, asList) { nav.go(Routes.UPLOADS) } }
+                                LibraryTile.SAVED -> item(key = "tile-saved") { ShortcutTile(tr(R.string.saved_while_playing), tr(R.string.saved_while_playing_tile), PrismIcons.DownloadDone, asList) { nav.go(Routes.SAVED) } }
                             }
                         }
                       }

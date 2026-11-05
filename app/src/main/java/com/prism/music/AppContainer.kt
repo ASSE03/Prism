@@ -292,6 +292,11 @@ class AppContainer(val app: Application) {
     val versions = com.prism.music.data.SongVersions(app.getSharedPreferences("song_versions", android.content.Context.MODE_PRIVATE))
     val streams by lazy { StreamResolver(app, http, settings, innerTube).apply { versionOf = versions::of } }
     val translator = com.prism.music.data.lyrics.LyricsTranslator(http, File(app.filesDir, "translations"))
+    /** Artist pages' Wikipedia bios (1.8.2), kept with the artist pages. Asks nothing unless that switch is on. */
+    val artistBios by lazy {
+        val wikipedia = com.prism.music.data.WikipediaBios(http, "Prism/${BuildConfig.VERSION_NAME} (https://github.com/Yigder/Prism)")
+        com.prism.music.data.ArtistBios(File(app.filesDir, "offline/bios"), wikipedia::find)
+    }
     val network = com.prism.music.data.NetworkState(app)
     /** Covers kept on the phone for downloads and the library, so they show offline. */
     val artwork = com.prism.music.data.ArtworkStore(app, http) { quietNetwork() }
@@ -309,6 +314,11 @@ class AppContainer(val app: Application) {
         choices = app.getSharedPreferences("lyrics_choice", android.content.Context.MODE_PRIVATE)
         searchNames = app.getSharedPreferences("lyrics_search_as", android.content.Context.MODE_PRIVATE)
         wordShifts = app.getSharedPreferences("lyrics_word_shift", android.content.Context.MODE_PRIVATE)
+        // #344: the same files "Save lyrics into your music files" writes to, read only once they're switched on.
+        val files = com.prism.music.data.local.EmbeddedLyricsFiles(app) { s ->
+            if (s.isLocal) localMusic.uriFor(s.id) else localLossless.match(s)?.uri
+        }
+        fileLyrics = { s -> if (settings.current.behavior.embeddedLyrics) files.lyricsOf(s) else null }
     }
     /** Search by a line of the lyrics, from the box itself (1.7.6). */
     val lyricSearch = com.prism.music.data.lyrics.LyricSearch(http, ytm, db.lyricsSearch(), db.songs(), lyrics::textLines)
@@ -406,7 +416,11 @@ class AppContainer(val app: Application) {
     val likedPlaylist = com.prism.music.data.LikedPlaylist(this)
     val localLossless = com.prism.music.data.local.LocalLossless(app)
     /** Library → Local music: the phone's own music files. */
-    val localMusic = com.prism.music.data.local.LocalMusic(app, scope).also { it.start() }
+    val localMusic = com.prism.music.data.local.LocalMusic(app, scope) { settings.current.behavior.localSkipFolders }.also { music ->
+        music.start()
+        // #207, #249: folders ticked or unticked (or brought back by a restored backup).
+        scope.launch { settings.flow.map { it.behavior.localSkipFolders }.distinctUntilChanged().drop(1).collect { music.rescan() } }
+    }
     val losslessSync by lazy { com.prism.music.download.LosslessSync(app, this) }
     // Started only after localLossless exists: a launch from an earlier init block can run on a
     // background thread before this property is assigned.
@@ -479,6 +493,16 @@ class AppContainer(val app: Application) {
     val videoState = kotlinx.coroutines.flow.MutableStateFlow<Map<String, com.prism.music.download.VideoDownload>>(emptyMap())
     /** Music videos downloaded as their song, video id -> song id ([com.prism.music.download.forRow], #315). */
     val downloadStandIns = kotlinx.coroutines.flow.MutableStateFlow<Map<String, String>>(emptyMap())
+    /** Songs left out when a whole list downloads (#221). */
+    val downloadSkips by lazy { com.prism.music.download.DownloadSkips(app) }
+    /** Playlists that stay downloaded as they grow (#298). */
+    val keptPlaylists by lazy { com.prism.music.download.KeptPlaylists(this) }
+    init {
+        // Nothing runs for it until a playlist is kept.
+        scope.launch {
+            settings.flow.map { it.behavior.keptPlaylists.isNotEmpty() }.distinctUntilChanged().collectLatest { any -> if (any) keptPlaylists.watch() }
+        }
+    }
     val covers by lazy { com.prism.music.data.PlaylistCovers(app) }
     // Read at start, so the songs' own covers (#305) are there for the media session and Android Auto from the first song.
     init { covers }

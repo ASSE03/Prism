@@ -199,6 +199,10 @@ internal fun SearchLanding(
                     val ranked = (moods.state as? Load.Ok)?.value ?: return@forEach
                     moodSections(moodGroups(ranked, tr(R.string.for_you)), onMore = { nav.go(Routes.MOODS) }, onMood = onMood)
                 }
+                // One line, so the page people know stays as it is: it can be moved or hidden with the rest (Arrange).
+                SearchSection.EXPLORE -> item(key = "explore") {
+                    SectionHeader(tr(R.string.explore), strapline = tr(R.string.explore_strapline), onMore = { nav.go(Routes.EXPLORE) })
+                }
             }
         }
         item(key = "arrange") {

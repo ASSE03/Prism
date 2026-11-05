@@ -762,12 +762,16 @@ class StreamResolver(
          */
         fun realKbps(bytes: Long, durationMs: Long, nominal: Int): Int =
             if (bytes > 0 && durationMs > 1000) (bytes * 8 / durationMs).toInt().takeIf { it in 8..5000 } ?: nominal else nominal
+
+        /** A format YouTube has copy-protected: its link can't be played, so it's never picked (idea from PR #240, by CodeWormer). */
+        internal fun isProtected(format: JsonObject): Boolean = format.arr("drmFamilies")?.isNotEmpty() == true
     }
 
     /** [playerId] is the player JS whose signature timestamp the request sent; its ciphers are solved with it. */
     private fun parsePlayer(res: JsonObject, playerId: String?, via: String = "visionOS"): Formats {
         val data = res.obj("streamingData")
         fun fmt(o: JsonObject): Fmt? {
+            if (isProtected(o)) return null
             val mimeFull = o.str("mimeType") ?: return null
             val mime = mimeFull.substringBefore(";").trim()
             val codec = Regex("codecs=\"([^\"]+)\"").find(mimeFull)?.groupValues?.get(1)?.substringBefore(",")?.trim()

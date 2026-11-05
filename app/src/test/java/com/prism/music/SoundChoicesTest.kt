@@ -145,11 +145,53 @@ class SoundChoicesTest {
         assertEquals(TrimSilence.OFF, SoundChoices.trimSilence(s(false, false)))
         assertEquals(TrimSilence.PODCASTS, SoundChoices.trimSilence(s(false, true)))
         assertEquals(TrimSilence.ALL, SoundChoices.trimSilence(s(true, true)))
-        // Songs on with podcasts off (possible before 1.8.0) reads as both: what songs got stays the same.
-        assertEquals(TrimSilence.ALL, SoundChoices.trimSilence(s(true, false)))
+        // #325: songs on with podcasts off is what it says.
+        assertEquals(TrimSilence.SONGS, SoundChoices.trimSilence(s(true, false)))
         for (t in TrimSilence.entries) {
             val (songs, episodes) = SoundChoices.trimSilenceValues(t)
             assertEquals(t, SoundChoices.trimSilence(s(songs, episodes)))
         }
+    }
+
+    /** #325: "Songs only" leaves an episode's pauses alone; "Podcasts only" and "Songs and podcasts" shorten them, and never a song's. */
+    @Test fun onlyPodcastsPicksShortenAnEpisodesPauses() {
+        val pauses = com.prism.music.playback.EdgeSilenceProcessor
+        for (t in TrimSilence.entries) {
+            val (_, episodes) = SoundChoices.trimSilenceValues(t)
+            assertEquals(t.name, t == TrimSilence.PODCASTS || t == TrimSilence.ALL, pauses.pausesSkipped(isEpisode = true, episodesOn = episodes))
+            assertEquals(t.name, false, pauses.pausesSkipped(isEpisode = false, episodesOn = episodes))
+        }
+    }
+
+    /** #325: the choice nobody changed is still Off, and "Songs only" is stored as songs on, podcasts off. */
+    @Test fun songsOnlyIsStoredAsItReads() {
+        assertEquals(TrimSilence.OFF, SoundChoices.trimSilence(base))
+        val repo = com.prism.music.data.prefs.SettingsRepository(
+            org.robolectric.RuntimeEnvironment.getApplication(),
+            kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + kotlinx.coroutines.Dispatchers.Default),
+        )
+        SoundChoices.setTrimSilence(repo, TrimSilence.SONGS)
+        val songs = kotlinx.coroutines.runBlocking { kotlinx.coroutines.withTimeout(10_000) { repo.flow.first { SoundChoices.trimSilence(it) == TrimSilence.SONGS } } }
+        assertEquals(true, songs.skipSilence)
+        assertEquals(false, songs.sound.skipSilenceEpisodes)
+        SoundChoices.setTrimSilence(repo, TrimSilence.OFF)
+        kotlinx.coroutines.runBlocking { kotlinx.coroutines.withTimeout(10_000) { repo.flow.first { SoundChoices.trimSilence(it) == TrimSilence.OFF } } }
+    }
+
+    /** #351: a fixed crossfade goes up to 30 s and is kept, and its tail holds the whole of it. */
+    @Test fun aCrossfadeCanRunToThirtySeconds() {
+        assertEquals(30, com.prism.music.data.prefs.MAX_CROSSFADE_SECONDS)
+        assertEquals(6, base.mixSeconds)
+        val tailHolds = com.prism.music.playback.MixEngine.TAIL_BUFFER_MS
+        org.junit.Assert.assertTrue(com.prism.music.playback.MixEngine.tailNeedsMs(30_000) <= tailHolds)
+        val repo = com.prism.music.data.prefs.SettingsRepository(
+            org.robolectric.RuntimeEnvironment.getApplication(),
+            kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + kotlinx.coroutines.Dispatchers.Default),
+        )
+        val was = kotlinx.coroutines.runBlocking { repo.flow.first() }.mixSeconds
+        fun readBack(wanted: Int) = kotlinx.coroutines.runBlocking { kotlinx.coroutines.withTimeout(10_000) { repo.flow.first { it.mixSeconds == wanted } } }.mixSeconds
+        repo.setMixSeconds(30); assertEquals(30, readBack(30))
+        repo.setMixSeconds(45); assertEquals(30, readBack(30))
+        repo.setMixSeconds(was); assertEquals(was, readBack(was))
     }
 }
