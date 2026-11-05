@@ -55,6 +55,7 @@ class ListsAndFilesAppTest {
     }
 
     private fun addFile(name: String, folder: String, bytes: ByteArray): Uri {
+        org.junit.Assume.assumeTrue("the media store takes files from an app from Android 10", android.os.Build.VERSION.SDK_INT >= 29)
         val values = ContentValues().apply {
             put(MediaStore.Audio.Media.DISPLAY_NAME, "$name-${System.currentTimeMillis()}.mp3")
             put(MediaStore.Audio.Media.MIME_TYPE, "audio/mpeg")

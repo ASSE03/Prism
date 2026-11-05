@@ -293,6 +293,7 @@ private fun SettingsPage(
     // is found here; one on a page opens that page at its group.
     var query by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf("") }
     var foundHere by remember { mutableStateOf<String?>(null) }
+    val keyboard = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
     val results = remember(query) { if (query.isBlank()) emptyList() else SettingsIndex.search(query) }
     // The hub only: its search is ready before the first letter, without the main thread reading the whole index (#355).
     if (section == null) androidx.compose.runtime.LaunchedEffect(Unit) {
@@ -334,6 +335,8 @@ private fun SettingsPage(
                                         listOf(e.section?.title ?: tr(R.string.settings), e.group).filter { it != e.title }.joinToString(" › "),
                                         hint = hidden?.hint,
                                     ) {
+                                        // The keyboard goes with the search: left up, the page's first Back only closed it.
+                                        keyboard?.hide()
                                         if (e.section == null) { query = ""; foundHere = e.group }
                                         else if (onOpen != null) onOpen(e.section, e.group)
                                         else nav.go(Routes.settings(e.section.key, e.group))

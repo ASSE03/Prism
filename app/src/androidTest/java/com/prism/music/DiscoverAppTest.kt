@@ -5,6 +5,8 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.test.onLast
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -259,8 +261,16 @@ class DiscoverAppTest {
         Fixture.launch()
         compose.clickWhenFound(hasContentDescription(tr(R.string.customize_home_2)), 20_000)
         compose.clickWhenFound(hasText(tr(R.string.add_a_section)) and hasClickAction())
+        // The list is longer than a small phone's screen (the Android 9 emulator): each is scrolled to.
+        fun scrolledTo(title: String) {
+            compose.waitUntil(5_000) { compose.onAllNodes(androidx.compose.ui.test.hasScrollToNodeAction()).fetchSemanticsNodes().isNotEmpty() }
+            compose.onAllNodes(androidx.compose.ui.test.hasScrollToNodeAction()).onLast().performScrollToNode(hasText(title))
+        }
+        scrolledTo(tr(R.string.section_new_to_you))
         compose.waitForText(tr(R.string.section_new_to_you))
+        scrolledTo(tr(R.string.section_deep_cuts))
         compose.waitForText(tr(R.string.section_deep_cuts))
+        scrolledTo(tr(R.string.section_on_this_day))
         compose.clickWhenFound(hasText(tr(R.string.section_on_this_day)) and hasClickAction())
         compose.waitUntil(5_000) { c.settings.current.homeLayout.any { it.key == HomeSections.ON_THIS_DAY && it.visible } }
     }

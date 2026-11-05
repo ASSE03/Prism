@@ -47,6 +47,7 @@ class LocalCoverEverywhereTest {
     private fun grant(permission: String) = instrumentation.uiAutomation.grantRuntimePermission(context.packageName, permission)
 
     private fun addFile(asset: String) {
+        org.junit.Assume.assumeTrue("the media store takes files from an app from Android 10", android.os.Build.VERSION.SDK_INT >= 29)
         val values = ContentValues().apply {
             put(MediaStore.Audio.Media.DISPLAY_NAME, "${asset.removeSuffix(".mp3")}-${System.currentTimeMillis()}.mp3")
             put(MediaStore.Audio.Media.MIME_TYPE, "audio/mpeg")
