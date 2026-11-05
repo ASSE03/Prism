@@ -55,7 +55,9 @@ class TvInstallAppTest {
         assertEquals("the whole installed APK", apk.length(), length)
         compose.waitForText("Sent. Finish installing on the TV.")
 
-        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressBack()
+        // On a freshly started emulator the keyboard, opening for the first time, can come up after the page has opened:
+        // the first Back then only closes it (a screenshot from inside the app doesn't show it).
+        repeat(2) { if (share.running) { UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressBack(); Thread.sleep(2_000) } }
         compose.waitUntil(5_000) { !share.running }
         assertFalse(share.running)
     }
