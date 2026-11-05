@@ -40,6 +40,13 @@ class RecordedNetwork(private val record: Boolean) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val key = keyOf(request)
+        // A test's own answers by what's asked for (a playlist's pages share one address).
+        answering?.let { answer ->
+            answer(request.url.toString(), request.body?.let { b -> Buffer().also { b.writeTo(it) }.readUtf8() }.orEmpty())?.let { body ->
+                return Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(200).message("Test")
+                    .body(body.toResponseBody("application/json".toMediaTypeOrNull())).build()
+            }
+        }
         // A test's own answer comes first (GitHub announcing a newer Prism, for one test only).
         answers.entries.firstOrNull { (url, _) -> request.url.toString().startsWith(url) }?.let { (_, body) ->
             return Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(200).message("Test")
@@ -97,6 +104,9 @@ class RecordedNetwork(private val record: Boolean) : Interceptor {
         val answers: MutableMap<String, String> = java.util.concurrent.ConcurrentHashMap()
         /** Answers a test sets for itself to YouTube's `browse`, by the browseId or continuation asked for. */
         val pages: MutableMap<String, String> = java.util.concurrent.ConcurrentHashMap()
+
+        /** A test's answer from a request's address and body (null: the usual answer). It may wait, as a slow page does. */
+        @Volatile var answering: ((url: String, body: String) -> String?)? = null
         private val NAMING = listOf("browseId", "query", "videoId", "params", "continuation", "playlistId", "input")
 
         private fun pageAsked(request: Request): String? {

@@ -125,6 +125,8 @@ private val curatedAt = MutableStateFlow(-1)
 /** Which pull to refresh Quick picks were last tried for, and the set shown for it (kept: #297). */
 private val picksTried = MutableStateFlow(-1)
 private val shownPicks = MutableStateFlow<Pair<Int, List<Song>>?>(null)
+/** Whose the set shown is (#349): switching in Customize Home shows the other set at once. */
+private val shownPicksYouTube = MutableStateFlow(false)
 /** How long Quick picks wait for the set made around the listener's artists before YouTube's own show. */
 private const val QUICK_PICKS_WAIT_MS = 6_000L
 
@@ -289,8 +291,10 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
     // #297 / #277 (1.7.9.3): the section showed the kept Home's picks, then the fresh feed's, then these. Now they're
     // made once, from the fresh feed (not the copy kept from last time), and the section waits for them.
     val homeSettled = home.state !is Load.Loading
-    val curated by produceState(curatedPicks.value, homeSettled, refreshes, onlineNow) {
-        if (!onlineNow || (curatedPicks.value.isNotEmpty() && curatedAt.value == refreshes)) return@produceState
+    // #349: YouTube Music's own, as they come (Customize Home): then Prism makes none of its own, and nothing is waited for.
+    val picksFromYouTube = settings.behavior.quickPicksSource == com.prism.music.data.prefs.QuickPicksSource.YOUTUBE
+    val curated by produceState(curatedPicks.value, homeSettled, refreshes, onlineNow, picksFromYouTube) {
+        if (picksFromYouTube || !onlineNow || (curatedPicks.value.isNotEmpty() && curatedAt.value == refreshes)) return@produceState
         if (!homeSettled) return@produceState
         val made = if (youtubePicks.isEmpty() && recent.isEmpty()) emptyList() else kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
             runCatching { c.yourMusic.quickPicks(youtubePicks, radioOf = { seed: Song -> c.ytm.next(seed.id, playlistId = "RDAMVM${seed.id}").songs }) }.getOrDefault(youtubePicks)
@@ -309,10 +313,16 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
     val picksReady = waitedFor == refreshes || tried == refreshes
     // Songs already on a Speed dial tile aren't repeated in Quick picks. Once shown, the set stays for the session
     // (until pull to refresh), whatever loads after it.
-    val pickSongs = remember(curated, madeFor, youtubePicks, dialItems, picksReady, refreshes) {
+    // YouTube's own come from the fresh feed, not the Home kept from last time, so they come in once too.
+    val youtubeReady = homeSettled && !home.refreshing
+    val pickSongs = remember(curated, madeFor, youtubePicks, dialItems, picksReady, refreshes, picksFromYouTube, youtubeReady) {
         val onDial = if (dialItems.size >= 3) dialItems.map { it.id }.toSet() else emptySet()
-        quickPicksToShow(shownPicks.value?.takeIf { it.first == refreshes }?.second, curatedFor(curated, madeFor, refreshes), youtubePicks, picksReady) { it.id !in onDial }
-            .also { if (it.isNotEmpty()) shownPicks.value = refreshes to it }
+        quickPicksToShow(
+            shownPicks.value?.takeIf { it.first == refreshes && shownPicksYouTube.value == picksFromYouTube }?.second,
+            if (picksFromYouTube) emptyList() else curatedFor(curated, madeFor, refreshes),
+            youtubePicks, if (picksFromYouTube) youtubeReady else picksReady,
+        ) { it.id !in onDial }
+            .also { if (it.isNotEmpty()) { shownPicks.value = refreshes to it; shownPicksYouTube.value = picksFromYouTube } }
     }
 
     // Offline, Home is what's on the phone: no YouTube shelves, and lists keep to songs that play without a connection.
@@ -389,7 +399,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
                             val songs = remember(dls) { if (dls.isEmpty()) emptyList() else c.downloads.completedSongs() }
                             if (songs.isNotEmpty()) SongSection(cfg, cfg.titled(tr(R.string.downloads)), null, songs.take(20)) { nav.go(Routes.DOWNLOADS) }
                         }
-                        HomeSections.SPEED_DIAL -> SpeedDialSection(cfg, if (online) dialItems else dialItems.filter { it is SongItem && c.availableOffline(it.id) }, openItem)
+                        HomeSections.SPEED_DIAL -> SpeedDialSection(cfg, if (online) dialItems else dialItems.filter { it is SongItem && c.availableOffline(it.id) }, youtubeDialOnly, openItem)
                         HomeSections.MADE_FOR_YOU -> MadeForYouSection(cfg, offline = !online, yours = yours?.mixes.orEmpty())
                         HomeSections.NEW_RELEASES -> if (online) NewReleasesSection(cfg)
                         HomeSections.SEASONAL -> if (online) HolidaySection(cfg)
@@ -891,7 +901,7 @@ private fun SongSection(
         }
         SectionStyle.HERO -> HeroRow(songs.map { SongItem(it) }) { item -> start(indexOf(item)) }
         SectionStyle.CAROUSEL -> ItemCarousel(songs.map { SongItem(it) }, { item -> start(indexOf(item)) })
-        SectionStyle.DIAL -> SpeedDialPages(songs.map { SongItem(it) }) { item -> start(indexOf(item)) }
+        SectionStyle.DIAL -> SpeedDialPages(songs.map { SongItem(it) }, open = { item -> start(indexOf(item)) })
     }
 }
 
@@ -916,14 +926,14 @@ private fun ShelfSection(cfg: HomeSectionConfig, shelf: Shelf, open: (BrowseItem
  * (and stand in on their own when YouTube has none, signed out or offline).
  */
 @Composable
-private fun SpeedDialSection(cfg: HomeSectionConfig, items: List<BrowseItem>, open: (BrowseItem) -> Unit) {
+private fun SpeedDialSection(cfg: HomeSectionConfig, items: List<BrowseItem>, youtubeOnly: Boolean, open: (BrowseItem) -> Unit) {
     if (items.size < 3) return
     SectionHeader(cfg.title, strapline = tr(R.string.your_go_to_music))
     when (cfg.style) {
         SectionStyle.CAROUSEL -> ItemCarousel(items, open)
         SectionStyle.HERO -> HeroRow(items, open)
         SectionStyle.LIST -> StyledItems(SectionStyle.LIST, items, open)
-        SectionStyle.GRID, SectionStyle.DIAL -> SpeedDialPages(items, open)
+        SectionStyle.GRID, SectionStyle.DIAL -> SpeedDialPages(items, open, keepShortPage = youtubeOnly)
     }
 }
 
@@ -933,7 +943,7 @@ private const val SPEED_DIAL_SIZE = 27
  * Speed dial's tiles: YouTube's first, then the listener's own most played ([mine]) and, while the last page still has
  * gaps, their recent plays and likes ([more]). #295 (1.7.9.3): with only the most played to fill in from, 18–26 tiles
  * were cut to whole pages, two of them; now the last page is filled. With "YouTube Music's only" ([youtubeOnly]) only
- * YouTube's own tiles show, cut to whole pages.
+ * YouTube's own tiles show, all of them ([speedDialPages]).
  */
 internal fun speedDialTiles(youtube: List<BrowseItem>, mine: List<BrowseItem>, more: List<BrowseItem>, youtubeOnly: Boolean): List<BrowseItem> {
     val theirs = youtube.filter { it !is MoodItem }
@@ -949,10 +959,12 @@ internal fun speedDialTiles(youtube: List<BrowseItem>, mine: List<BrowseItem>, m
 
 /**
  * Speed dial's pages of 3 × 3: whole pages only (#267, 1.7.9.3: 19 tiles left a last page with one), unless there's
- * less than a page, which shows as it is.
+ * less than a page, which shows as it is. With "YouTube Music's only" ([keepShortPage], #349) nothing can fill the last
+ * page without going against the setting, and cutting it hid YouTube's own tiles (20 of them gave 2 pages, where they
+ * make 3): it stays, short.
  */
-internal fun <T> speedDialPages(items: List<T>): List<List<T>> {
-    val whole = if (items.size > 9) items.size - items.size % 9 else items.size
+internal fun <T> speedDialPages(items: List<T>, keepShortPage: Boolean = false): List<List<T>> {
+    val whole = if (items.size > 9 && !keepShortPage) items.size - items.size % 9 else items.size
     return items.take(whole).chunked(9)
 }
 
@@ -976,8 +988,8 @@ internal suspend fun speedDialFromHistory(c: com.prism.music.AppContainer): List
 
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-internal fun SpeedDialPages(items: List<BrowseItem>, open: (BrowseItem) -> Unit) {
-    val pages = remember(items) { speedDialPages(items) }
+internal fun SpeedDialPages(items: List<BrowseItem>, open: (BrowseItem) -> Unit, keepShortPage: Boolean = false) {
+    val pages = remember(items, keepShortPage) { speedDialPages(items, keepShortPage) }
     val pager = androidx.compose.foundation.pager.rememberPagerState { pages.size }
     val ui = com.prism.music.ui.theme.LocalUi.current
     val menu = rememberPlayMenu()
@@ -999,6 +1011,10 @@ internal fun SpeedDialPages(items: List<BrowseItem>, open: (BrowseItem) -> Unit)
                         }
                         repeat(3 - row.size) { Spacer(Modifier.weight(1f)) }
                     }
+                }
+                // A short last page (#349) takes a full page's height, so what's under it stays put while swiping.
+                if (pages.size > 1) repeat(3 - (pages[p].size + 2) / 3) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) { repeat(3) { Spacer(Modifier.weight(1f).aspectRatio(1f)) } }
                 }
             }
         }

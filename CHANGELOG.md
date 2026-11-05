@@ -34,6 +34,12 @@ What changed in each release. Older releases are described on the [Releases page
   instead, as if the buttons had stopped working.
 - **Prism TV: the song's title in the side menu is no longer cut off at the bottom.** Now playing also fits every song
   title and text size now, with all its buttons on screen, and the side panels no longer let it show through.
+- **Play and Shuffle from a playlist's long-press menu start right away** (#356): they used to wait for the whole playlist
+  to load, showing nothing. Now they start on its first songs and the rest follows, shuffled in among what's to come.
+- **Covers inside your own music files show in the notification and in the car** (#350), not just in the player.
+- **Speed dial shows all of YouTube Music's tiles** with "YouTube Music's only" on (#349): a short last page stays.
+- **New choice: Quick picks from Prism or YouTube Music** (#349, Customize Home → Options); YouTube's start a radio too
+  with "Quick picks start a radio" on.
 
 ## 1.8.1.1
 

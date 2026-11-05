@@ -26,8 +26,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 data class QueueEntry(val index: Int, val song: Song, val uid: String)
+
+/** A long list's later pages join the queue this many songs at a time (#356). */
+private const val FILL_BATCH = 400
+/** With this little of the song left, the song after it stays where it is while a list fills in (#356). */
+private const val SOON_MS = 30_000L
 
 /** Outputs that take over when they connect (not microphones, call channels or the phone's own parts). */
 private val NEW_OUTPUTS = setOf(
@@ -300,14 +306,18 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
     private val videoSongs = java.util.concurrent.ConcurrentHashMap<String, Song>()
     private var playToken = 0
 
-    fun playQueue(songs: List<Song>, startIndex: Int = 0, source: QueueSource, shuffle: Boolean = false) {
+    /**
+     * [rest]: for a long list started from its first page (#356), gives the next page's songs each time it's asked, null
+     * when there are no more. They join the queue behind the songs playing ([fillQueue]).
+     */
+    fun playQueue(songs: List<Song>, startIndex: Int = 0, source: QueueSource, shuffle: Boolean = false, rest: (suspend () -> List<Song>?)? = null) {
         if (songs.isEmpty()) return
         // #216: with the explicit filter on, explicit songs don't go in (a tapped one gives way to the next that may play).
         val mode = c.settings.current.behavior.explicitContent
         if (mode != com.prism.music.data.prefs.ExplicitContent.SHOW && songs.any { it.explicit }) {
             val (kept, at) = com.prism.music.data.ExplicitFilter.queue(mode, songs, startIndex) ?: run { reportError(tr(R.string.explicit_none_left)); return }
             if (!shuffle && songs.getOrNull(startIndex)?.explicit == true) reportError(tr(R.string.explicit_skipped))
-            playQueue(kept, at, source, shuffle)
+            playQueue(kept, at, source, shuffle, rest)
             return
         }
         source.page?.let { c.recentCollections.played(it) }
@@ -316,7 +326,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         val tapped = songs[first]
         val everywhere = songsEverywhere()
         // Live streams play as they are: they have no "song version" to swap in.
-        if ((shuffle && !everywhere) || !tapped.isVideo || tapped.isLive || tapped.isEpisode) { startQueue(songs, first, source, shuffle, null); return }
+        if ((shuffle && !everywhere) || !tapped.isVideo || tapped.isLive || tapped.isEpisode) { startQueue(songs, first, source, shuffle, null, rest = rest); return }
         // With the Song / Video switch off the player is audio only (#48): a music video plays as its song, or as
         // the video's sound when it has no song, never with its picture (there'd be no switch to turn it off).
         // "Songs, not videos" everywhere (#80) plays it as its song too, and so does a shuffled start.
@@ -328,8 +338,84 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
             val song = songFor(tapped, 4_000)
             if (token != playToken) return@launch
             val list = if (song == null) songs else songs.toMutableList().also { it[first] = song }
-            startQueue(list, first, source, shuffle, tapped.id.takeUnless { audioOnly })
+            startQueue(list, first, source, shuffle, tapped.id.takeUnless { audioOnly }, rest = rest)
         }
+    }
+
+    /**
+     * Holds a place for a queue still being looked up (a long press's Play or Shuffle, #356). [stillStarting] says no
+     * once something else was played or the queue stopped meanwhile: that wins, and the lookup's songs aren't played.
+     */
+    fun queueStarting(): Int = ++playToken
+    fun stillStarting(token: Int) = token == playToken
+
+    /** The job adding a long list's later pages to the queue (#356). */
+    private var fill: kotlinx.coroutines.Job? = null
+
+    private fun stopFill() {
+        fill?.cancel()
+        fill = null
+        c.queue.filling = false
+    }
+
+    /**
+     * Adds what [rest] gives to the queue behind the playing song: the rest of a long list, started from its first page
+     * so nothing waits on the whole of it (#356). Songs the queue started with ([have]) aren't added twice and the
+     * explicit filter applies as it did to them. Stops by itself when the queue is replaced, whoever replaces it: what's
+     * started here, a car, a watch or a spoken request. Added a batch at a time, as each one makes the player rebuild
+     * its timeline and the UI re-read the whole queue.
+     */
+    private fun fillQueue(rest: suspend () -> List<Song>?, source: QueueSource, have: List<Song>, token: Int) {
+        stopFill()
+        c.queue.filling = true
+        val mode = c.settings.current.behavior.explicitContent
+        val seen = have.mapTo(HashSet()) { it.id }
+        fun wanted() = token == playToken && c.queue.source.value == source
+        var job: kotlinx.coroutines.Job? = null
+        job = scope.launch {
+            try {
+                val waiting = ArrayList<Song>()
+                while (true) {
+                    val page = try {
+                        withContext(Dispatchers.IO) { rest() }
+                    } catch (e: kotlinx.coroutines.CancellationException) {
+                        throw e
+                    } catch (e: Exception) {
+                        // What came so far stays; the queue just ends sooner than the list.
+                        AudioDiagnostics.log("queue", "the rest of \"${source.title}\" didn't load: ${e.message}")
+                        null
+                    } ?: break
+                    if (!wanted()) return@launch
+                    page.filterTo(waiting) { com.prism.music.data.ExplicitFilter.plays(mode, it) && seen.add(it.id) }
+                    if (waiting.size >= FILL_BATCH) { addFilled(waiting); waiting.clear() }
+                }
+                if (wanted() && waiting.isNotEmpty()) addFilled(waiting)
+            } finally {
+                if (fill === job) { fill = null; c.queue.filling = false }
+            }
+            // The list is all in: only now can autoplay tell the queue is nearly over.
+            if (wanted()) service?.maybeAutoplay()
+        }
+        fill = job
+    }
+
+    /** [songs] at the end of the queue (before autoplay's suggestions), and shuffled in among what's still to come. */
+    private suspend fun addFilled(songs: List<Song>) {
+        val items = withContext(Dispatchers.Default) { songs.map { it.toMediaItem() } }
+        val p = player ?: return
+        val auto = c.queue.autoplayStart.value
+        val at = if (auto in 0..p.mediaItemCount) auto else p.mediaItemCount
+        p.addMediaItems(at, items)
+        if (auto >= 0) c.queue.autoplayStart.value = auto + items.size
+        if (!p.shuffleModeEnabled) return
+        val order = p.shuffleOrder as? HistoryShuffleOrder ?: return
+        val playing = p.currentMediaItemIndex
+        val ahead = playOrder(p).let { o -> o.drop(o.indexOf(playing) + 1) }
+        // What the listener lined up with Play next stays next; so does a next song that's about to start (its stream
+        // is ready, and a crossfade may be under way).
+        val queued = ahead.takeWhile { p.getMediaItemAt(it).mediaId in c.queue.userQueued.value }.size
+        val soon = p.duration > 0 && p.duration - p.currentPosition < SOON_MS
+        p.setShuffleOrder(order.scattered((at until at + items.size).toList(), playing, keep = queued + if (soon) 1 else 0))
     }
 
     /** Settings → Playback → "Songs, not videos" → Everywhere (#80). */
@@ -344,7 +430,11 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
             runCatching { kotlinx.coroutines.withContext(Dispatchers.IO) { c.ytm.songForVideo(video) } }.getOrNull()
         }?.also { videoSongs[video.id] = it })?.also { c.queue.counterparts[it.id] = video.id }
 
-    private fun startQueue(songs: List<Song>, startIndex: Int, source: QueueSource, shuffle: Boolean, startVideo: String?, startMs: Long = 0) {
+    private fun startQueue(songs: List<Song>, startIndex: Int, source: QueueSource, shuffle: Boolean, startVideo: String?, startMs: Long = 0, rest: (suspend () -> List<Song>?)? = null) {
+        stopFill()
+        // Before the player starts: autoplay would otherwise see a short first page as a queue nearly over.
+        c.queue.filling = rest != null
+        val token = playToken
         // DJ mode is for the queue it was turned on in; "Play as a DJ set" turns it on for the new one.
         val dj = djNext && !shuffle
         djNext = false
@@ -366,6 +456,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
             p.play()
             service?.maybeAutoplay()
             if (dj) c.dj.setOn(true)
+            if (rest != null && token == playToken) fillQueue(rest, source, songs, token)
         }
     }
 
@@ -409,6 +500,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         val p = player
         if (p == null || p.mediaItemCount == 0 || p.currentMediaItem?.mediaId != song.id) { playQueue(listOf(song), 0, source); return }
         ++playToken
+        stopFill()
         // As a new queue would be: just this song (what came before stays in Played), in order, the radio to follow.
         djNext = false
         c.dj.setOn(false)
@@ -501,6 +593,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
     fun follow(songs: List<Song>, positionMs: Long, title: String, playing: Boolean, index: Int = 0) {
         if (songs.isEmpty()) return
         ++playToken
+        stopFill()
         c.queue.source.value = QueueSource(QueueKind.OTHER, title)
         c.queue.autoplayContinuation = null
         c.queue.autoplayStart.value = -1
@@ -522,6 +615,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
     fun takeOver(songs: List<Song>, index: Int, positionMs: Long, playing: Boolean, order: List<Int>?, repeat: Int, title: String) {
         if (songs.isEmpty()) return
         ++playToken
+        stopFill()
         djNext = false
         c.dj.setOn(false)
         c.queue.smartShuffle.value = false
@@ -566,6 +660,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
 
     /** Takes everything after the current song out of the queue. */
     fun clearUpcoming() = withPlayer { p ->
+        stopFill()
         val i = p.currentMediaItemIndex
         if (i + 1 < p.mediaItemCount) p.removeMediaItems(i + 1, p.mediaItemCount)
         c.queue.autoplayStart.value = -1
@@ -574,6 +669,8 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
 
     /** Stops and empties the queue, so the mini player goes (#59: swiped down). */
     fun stop() = withPlayer { p ->
+        ++playToken
+        stopFill()
         p.stop()
         p.clearMediaItems()
         c.queue.autoplayStart.value = -1
@@ -717,6 +814,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         val order = playOrder(p)
         val at = order.indexOf(index)
         if (at < 0) return@withPlayer
+        stopFill()
         removeMany(order.drop(at + 1))
     }
 
