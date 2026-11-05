@@ -542,7 +542,10 @@ enum class MenuGroup(val label: String) { SONG(tr(R.string.this_song)), LYRICS(t
  */
 enum class MenuAction(val group: MenuGroup, val fromPlayer: Boolean = false, val foldable: Boolean = !fromPlayer) {
     ADD_TO_PLAYLIST(MenuGroup.SONG), RADIO(MenuGroup.SONG), DOWNLOAD(MenuGroup.SONG), ALBUM(MenuGroup.SONG), ARTIST(MenuGroup.SONG),
-    CREDITS(MenuGroup.SONG), VERSION(MenuGroup.SONG),
+    CREDITS(MenuGroup.SONG),
+    /** #211 (1.8.2): its plays and dates. */
+    DETAILS(MenuGroup.SONG),
+    VERSION(MenuGroup.SONG),
     /** #305 (1.8.1): a cover of the listener's choosing for the song. */
     COVER(MenuGroup.SONG),
     NOT_FOR_ME(MenuGroup.SONG),

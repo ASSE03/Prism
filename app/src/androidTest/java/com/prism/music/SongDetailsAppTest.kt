@@ -8,6 +8,7 @@ import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.prism.music.data.db.PlayEventEntity
@@ -98,6 +99,29 @@ class SongDetailsAppTest {
         openDetails()
         compose.waitForText("YouTube shares no details", 15_000)
         absent("999")
+    }
+
+    /** The player's ⋯ has the same row, in the menu's own group, and opens the same sheet. */
+    @Test fun thePlayersMenuHasItToo() {
+        answerPlayer("""{"videoDetails":{"videoId":"${song.id}","viewCount":"1234567"}}""")
+        Fixture.launch()
+        val main = InstrumentationRegistry.getInstrumentation()
+        main.runOnMainSync { c.player.playQueue(listOf(song), 0, com.prism.music.playback.QueueSource(com.prism.music.playback.QueueKind.OTHER, "Details test")) }
+        Fixture.context.startActivity(
+            android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("prism://player"))
+                .setClass(Fixture.context, PrismActivity::class.java)
+                .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP),
+        )
+        Thread.sleep(2_000)
+        main.runOnMainSync { c.player.setPlaying(false) }
+        compose.waitUntil(15_000) { compose.onAllNodes(androidx.compose.ui.test.hasTestTag("playerDeck")).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(hasContentDescription(tr(R.string.song_options))).onFirst()
+            .performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
+        val row = hasText("Song details") and hasClickAction()
+        compose.waitUntil(10_000) { compose.onAllNodes(row).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(row).onFirst().performScrollTo().performClick()
+        compose.waitForText("1,234,567", 15_000)
+        compose.waitForText("PLAYS ON YOUTUBE MUSIC")
     }
 
     @Test fun failingToAskSaysSoAndNotThatThereIsNothing() {
