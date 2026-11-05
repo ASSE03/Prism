@@ -13,15 +13,15 @@ import java.net.InetSocketAddress
 /**
  * #239, against what a Sonos One SL really sent: the reporter's own device_description.xml (MAC and serial changed,
  * the shared in-app test's copy). There's no Sonos here, so everything past the description is [FakeRenderer] behaving
- * the way Sonos's are documented to: only answering a search for its ZonePlayer, refusing seeks with milliseconds
- * (402) and a next song. That a real one plays what it's sent isn't proven by this.
+ * as a Sonos is remembered to, not as one was seen to: only answering a search for its ZonePlayer, refusing seeks with
+ * milliseconds (402) and a next song. That a real one plays what it's sent isn't proven by this.
  */
 class SonosSpeakerTest {
     private val xml = File("src/androidTest/assets/sonos-one-sl.xml").readText()
     private val http = OkHttpClient()
     private val path = "/xml/device_description.xml"
 
-    /** As listed on the speakers Sonos documents (not read from a real one: the reporter's file doesn't include this). */
+    /** A guess at what a Sonos lists, from memory: the reporter's file doesn't include this, and none was asked here. */
     private val sink = "http-get:*:audio/mpeg:*,x-file-cifs:*:audio/mpeg:*,http-get:*:audio/mp4:*,x-file-cifs:*:audio/mp4:*," +
         "http-get:*:audio/wav:*,x-file-cifs:*:audio/wav:*,http-get:*:audio/flac:*,x-file-cifs:*:audio/flac:*," +
         "x-rincon-stream:*:*:*,x-rincon-queue:*:*:*,x-sonos-http:*:*:*"
