@@ -2331,6 +2331,47 @@ private fun OwnSongFiles() {
     }
 }
 
+/** Which playlists stay downloaded as they grow (#298; this list's shape is stuntsnakee's, from PR #304). */
+@Composable
+private fun KeptPlaylistsSheet(onDismiss: () -> Unit) {
+    val c = LocalContainer.current
+    val s = LocalAppSettings.current
+    val library by c.library.playlists.collectAsState()
+    val prismLists by c.prismLibrary.lists.collectAsState()
+    val savedLists by c.prismLibrary.playlists.collectAsState()
+    val signedIn = s.isLoggedIn
+    val mine = remember(library, prismLists, savedLists, signedIn) {
+        (prismLists.map { it.item() } + savedLists.map { it.item() } + if (signedIn) library.filterIsInstance<com.prism.music.data.model.PlaylistItem>() else emptyList())
+            .filter { com.prism.music.download.PlaylistDownloads.canKeep(it.id) && !it.isMix }
+            .distinctBy { com.prism.music.download.PlaylistDownloads.keepKey(it.id) }
+    }
+    var query by remember { mutableStateOf("") }
+    val shown = remember(mine, query) { if (query.isBlank()) mine else mine.filter { it.title.contains(query.trim(), ignoreCase = true) } }
+    com.prism.music.ui.components.PrismSheet(onDismiss = onDismiss) {
+        Text(tr(R.string.keep_playlists_downloaded), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 20.dp))
+        if (mine.size > 8) com.prism.music.ui.components.SearchField(query, tr(R.string.find_a_playlist), { query = it }, Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp))
+        if (mine.isEmpty()) Text(tr(R.string.no_playlists_yet), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(20.dp))
+        androidx.compose.foundation.lazy.LazyColumn(Modifier.fillMaxWidth().padding(top = 4.dp, bottom = 24.dp)) {
+            items(shown.size, key = { shown[it].id }) { i ->
+                val p = shown[i]
+                val on = com.prism.music.download.PlaylistDownloads.keepKey(p.id) in s.behavior.keptPlaylists
+                Row(
+                    Modifier.fillMaxWidth().padding(start = 20.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    com.prism.music.ui.components.Artwork(c.covers.art(p), Modifier.size(46.dp), LocalUi.current.smallArt, size = 120, placeholderIcon = PrismIcons.QueueMusic)
+                    Spacer(Modifier.width(14.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(p.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        if (p.subtitle.isNotBlank()) Text(p.subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
+                    PrismCheck(on, label = p.title) { c.keptPlaylists.set(p.id, it) }
+                }
+            }
+        }
+    }
+}
+
 @Composable
 private fun DownloadSettings() {
     val c = LocalContainer.current
@@ -2347,6 +2388,16 @@ private fun DownloadSettings() {
                 prefs.setDownloadLikes(it)
                 if (it) c.downloads.downloadAll(c.library.liked.value)
             }
+            // #298 (1.8.2).
+            var choosingKept by remember { mutableStateOf(false) }
+            val keptCount = s.behavior.keptPlaylists.size
+            Item(
+                tr(R.string.keep_playlists_downloaded),
+                if (keptCount == 0) tr(R.string.none_chosen) else trp(R.plurals.n_playlists_kept, keptCount),
+                info = tr(R.string.new_songs_in_these_playlists_download),
+                onClick = { choosingKept = true },
+            ) { Chevron() }
+            if (choosingKept) KeptPlaylistsSheet { choosingKept = false }
         }
         OwnSongFiles()
         // #207, #249 (1.8.2).

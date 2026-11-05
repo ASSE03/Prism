@@ -493,22 +493,44 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
             }
         }
     }
-    val allDownloaded = downloadedCount == page.songs.size && page.songs.isNotEmpty()
+    // Songs marked to skip don't stand between a list and counting as downloaded (#221).
+    val skipped by c.downloadSkips.ids.collectAsState()
+    val skippedCount = page.songs.count { com.prism.music.download.PlaylistDownloads.isSkipped(it.id, skipped, standIns) }
+    val allDownloaded = com.prism.music.download.PlaylistDownloads.allDownloaded(page.songs, skipped, standIns) { downloads.forRow(it, standIns)?.state == Download.STATE_COMPLETED }
+    // Kept downloaded (#298): whatever the open page has loaded comes down as it loads.
+    val keepable = type == CollectionType.PRISM || (type == CollectionType.PLAYLIST && com.prism.music.download.PlaylistDownloads.canKeep(page.id))
+    val keptNow = keepable && com.prism.music.download.PlaylistDownloads.keepKey(page.id) in settings.behavior.keptPlaylists
+    LaunchedEffect(page.id, page.songs.size, keptNow) { if (keptNow) c.keptPlaylists.fromPage(page.id, page.songs) }
     // "Delete downloads": what's about to go, and Delete to go ahead.
     var confirm by remember { mutableStateOf<Pair<String, () -> Unit>?>(null) }
     val toggleDownloads: () -> Unit = {
         if (allDownloaded) {
             // The same button downloads and removes, so removing asks first (#212: a whole playlist's downloads went
             // with one tap).
-            val n = page.songs.size
+            val n = downloadedCount
             confirm = tr(R.string.delete_the_of_from_this_phone, com.prism.music.data.model.songCount(n), page.title) to {
+                // Asked to take them off the phone, it shouldn't fetch them again.
+                if (keptNow) c.keptPlaylists.set(page.id, false)
                 c.downloads.removeMany(page.songs.map { it.id })
                 Toast.makeText(context, trp(R.plurals.removed_n_downloads, n), Toast.LENGTH_SHORT).show()
             }
+        } else if (skippedCount == page.songs.size) {
+            Toast.makeText(context, tr(R.string.every_song_here_is_skipped), Toast.LENGTH_SHORT).show()
         } else {
             c.downloads.downloadAll(page.songs)
-            Toast.makeText(context, tr(R.string.downloading, com.prism.music.data.model.songCount(page.songs.size - downloadedCount)), Toast.LENGTH_SHORT).show()
+            val left = com.prism.music.download.PlaylistDownloads.wanted(page.songs, skipped, standIns).count { downloads.forRow(it.id, standIns)?.state != Download.STATE_COMPLETED }
+            Toast.makeText(context, tr(R.string.downloading, com.prism.music.data.model.songCount(left)), Toast.LENGTH_SHORT).show()
         }
+    }
+    /** A playlist's or album's song can be left out when all of it downloads (#221). */
+    fun skipAction(s: Song): List<SheetItem> {
+        if (s.isLocal || s.isRss || (type != CollectionType.PLAYLIST && type != CollectionType.PRISM && type != CollectionType.ALBUM)) return emptyList()
+        val out = com.prism.music.download.PlaylistDownloads.isSkipped(s.id, skipped, standIns)
+        return listOf(SheetItem(if (out) PrismIcons.Download else PrismIcons.Block, if (out) tr(R.string.include_in_downloads) else tr(R.string.skip_in_downloads)) {
+            // Taken back from the id it was marked by, the row's or its song's.
+            if (out) { c.downloads.setSkipped(s.id, false); standIns[s.id]?.let { c.downloads.setSkipped(it, false) } }
+            else c.downloads.setSkipped(s.id, true)
+        })
     }
 
     // Owned playlists: a song can be taken out of it.
@@ -761,7 +783,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                             }
                             itemsIndexed(songs, key = { i, s -> "g:$g:${s.id}:$i" }) { _, s ->
                                 com.prism.music.ui.components.SwipeToQueue(s) {
-                                    SongRow(s, dim(s), playing = current?.id == s.id, trailingInfo = null, extraActions = removeAction(s), showAlbum = showAlbums) {
+                                    SongRow(s, dim(s), playing = current?.id == s.id, trailingInfo = null, extraActions = removeAction(s) + skipAction(s), showAlbum = showAlbums) {
                                         playFrom(songs, s, source.copy(title = "$title · $g"))
                                     }
                                 }
@@ -778,10 +800,11 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                                 starred = s.id in popular,
                                 playing = current?.id == s.id,
                                 // #314: a song playing from one of your own files says so ("MP3 · 320 kbps, from your file").
-                                trailingInfo = if (type == CollectionType.ALBUM) formatDuration(s.durationSec)
+                                trailingInfo = if (skippedCount > 0 && type != CollectionType.DOWNLOADS && com.prism.music.download.PlaylistDownloads.isSkipped(s.id, skipped, standIns)) tr(R.string.skipped_in_downloads)
+                                else if (type == CollectionType.ALBUM) formatDuration(s.durationSec)
                                 else if (type == CollectionType.DOWNLOADS && downloads[s.id]?.ownFile != null) tr(R.string.x_from_your_file, downloads[s.id]?.ownFile)
                                 else genreVersion.let { genres[s.id] }?.takeIf { sort == SortMode.GENRE || genreFilter == null && showGenres }?.let { g -> listOfNotNull(s.album?.title?.takeIf { showAlbums }, com.prism.music.data.meta.Genres.shown(g)).joinToString(" • ") },
-                                extraActions = removeAction(s),
+                                extraActions = removeAction(s) + skipAction(s),
                                 showAlbum = showAlbums,
                             ) { playFrom(visible, s, source) }
                         }
@@ -793,6 +816,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                             page.year?.toString(),
                             trp(R.plurals.n_songs, visible.size) + (if (totalSec > 0) ", ${durationText(totalSec)}" else ""),
                             if (downloadedCount > 0) tr(R.string.downloaded_2, downloadedCount) else null,
+                            if (skippedCount > 0 && type != CollectionType.DOWNLOADS) tr(R.string.n_skipped, skippedCount) else null,
                         ).joinToString(" · ") + if (loadingMore) tr(R.string.loading_more) else "",
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 8.dp),
@@ -850,6 +874,12 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                 )
                 if (type != CollectionType.DOWNLOADS) add(
                     SheetItem(if (allDownloaded) PrismIcons.Delete else PrismIcons.Download, if (allDownloaded) tr(R.string.remove_downloads) else tr(R.string.download_all)) { toggleDownloads() },
+                )
+                if (keepable) add(
+                    SheetItem(if (keptNow) PrismIcons.SyncOff else PrismIcons.Sync, if (keptNow) tr(R.string.stop_keeping_downloaded) else tr(R.string.keep_downloaded)) {
+                        c.keptPlaylists.set(page.id, !keptNow)
+                        Toast.makeText(context, if (keptNow) tr(R.string.new_songs_here_won_t_download) else tr(R.string.new_songs_here_will_download), Toast.LENGTH_SHORT).show()
+                    },
                 )
                 live.page.artists.firstOrNull { it.id != null }?.let { a -> add(SheetItem(PrismIcons.Person, tr(R.string.go_to, a.name)) { nav.go(Routes.artist(a.id!!)) }) }
                 if (type == CollectionType.LIKED) add(
@@ -915,6 +945,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
         confirmButton = {
             PrismTextButton(onClick = {
                 deleting = false
+                if (keptNow) c.keptPlaylists.set(page.id, false)
                 if (type == CollectionType.PRISM) { c.prismLibrary.delete(page.id); nav.back(); return@PrismTextButton }
                 scope.launch {
                     c.library.deletePlaylist(PlaylistItem(page.id, title, "", page.thumbnail))
@@ -1206,16 +1237,19 @@ private fun DownloadedCollections(visible: List<Song>, sort: SortMode, query: St
     val all by c.downloadState.collectAsState()
     // Only a finished download changes this (not every progress tick), so the rows aren't worked out again for those.
     val done = remember(all) { all.filterValues { it.state == Download.STATE_COMPLETED }.keys }
+    val skipped by c.downloadSkips.ids.collectAsState()
+    val standIns by c.downloadStandIns.collectAsState()
     val kept by produceState<List<Pair<String, CollectionPage>>?>(null) {
         value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { c.offline.pages() }
     }
-    val (albums, playlists) = remember(kept, done, visible, sort, query, filtered) {
+    val (albums, playlists) = remember(kept, done, visible, sort, query, filtered, skipped, standIns) {
         val words = query.trim().lowercase().split(Regex("\\s+")).filter { it.isNotEmpty() }
         fun matches(p: CollectionPage) = words.isEmpty() ||
             "${p.title} ${p.artists.joinToString(" ") { it.name }}".lowercase().let { hay -> words.all { it in hay } }
         // A single's page is one song: that's already in the list below.
         val (keptAlbums, keptPlaylists) = kept.orEmpty()
-            .filter { (_, p) -> p.songs.size >= 2 && p.songs.all { it.id in done } && matches(p) }
+            // Songs marked to skip don't keep a list out of here (#221).
+            .filter { (_, p) -> p.songs.size >= 2 && com.prism.music.download.PlaylistDownloads.allDownloaded(p.songs, skipped, standIns) { it in done || standIns[it] in done } && matches(p) }
             .distinctBy { it.second.id }
             .partition { it.second.kind == CollectionKind.ALBUM }
         // One card per album name and artist: YouTube lists some albums twice (two editions, two ids), and the songs
@@ -1656,6 +1690,8 @@ fun FailedDownloadsSheet(onDismiss: () -> Unit) {
                         )
                     }
                     IconButton(onClick = { c.downloads.retryFailed(setOf(id)) }) { Icon(PrismIcons.Refresh, tr(R.string.try_again)) }
+                    // #221: gone from here, and left out the next time a list it's on downloads.
+                    IconButton(onClick = { c.downloads.setSkipped(id, true) }) { Icon(PrismIcons.Block, tr(R.string.skip_in_downloads)) }
                     IconButton(onClick = { c.downloads.removeMany(setOf(id)) }) { Icon(PrismIcons.Delete, tr(R.string.remove)) }
                 }
             }

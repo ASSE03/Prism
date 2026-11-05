@@ -34,6 +34,12 @@ What changed in each release. Older releases are described on the [Releases page
 - **Leave folders out of Local files** (#207, #249). Local files → Edit → Choose folders, or Settings → Downloads,
   storage & data → Folders in Local files. Untick a folder and it stops showing, with the folders inside it. Nothing
   happens to the files themselves.
+- **Skip songs when a playlist downloads** (#221). A song's ⋯ on a playlist or album → Skip in downloads, or the new
+  button in Failed downloads. A skipped song stays out of whole-list downloads and isn't tried again, and the list counts
+  as downloaded without it. You can still download that song by itself.
+- **Keep a playlist downloaded** (#298, thanks to stuntsnakee, PR #304). A playlist's ⋯ → Keep downloaded, or Settings →
+  Downloads, storage & data → Keep playlists downloaded. New songs come down by themselves, following Download on Wi-Fi
+  only, and skipped or failed songs are left alone. Nothing is deleted when a song leaves the playlist.
 
 ### Fixes
 

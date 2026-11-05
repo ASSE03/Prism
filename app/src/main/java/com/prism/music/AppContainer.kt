@@ -487,6 +487,16 @@ class AppContainer(val app: Application) {
     val videoState = kotlinx.coroutines.flow.MutableStateFlow<Map<String, com.prism.music.download.VideoDownload>>(emptyMap())
     /** Music videos downloaded as their song, video id -> song id ([com.prism.music.download.forRow], #315). */
     val downloadStandIns = kotlinx.coroutines.flow.MutableStateFlow<Map<String, String>>(emptyMap())
+    /** Songs left out when a whole list downloads (#221). */
+    val downloadSkips by lazy { com.prism.music.download.DownloadSkips(app) }
+    /** Playlists that stay downloaded as they grow (#298). */
+    val keptPlaylists by lazy { com.prism.music.download.KeptPlaylists(this) }
+    init {
+        // Nothing runs for it until a playlist is kept.
+        scope.launch {
+            settings.flow.map { it.behavior.keptPlaylists.isNotEmpty() }.distinctUntilChanged().collectLatest { any -> if (any) keptPlaylists.watch() }
+        }
+    }
     val covers by lazy { com.prism.music.data.PlaylistCovers(app) }
     // Read at start, so the songs' own covers (#305) are there for the media session and Android Auto from the first song.
     init { covers }

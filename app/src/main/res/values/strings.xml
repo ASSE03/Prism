@@ -1954,6 +1954,10 @@
     <string name="replay_busiest_week">Busiest week: from %1$s · %2$s</string>
     <string name="replay_busiest_month">Busiest month: %1$s · %2$s</string>
     <!-- 1.8.1: Last.fm preview before bringing -->
+    <plurals name="n_playlists_kept">
+        <item quantity="one">%1$d playlist kept</item>
+        <item quantity="other">%1$d playlists kept</item>
+    </plurals>
     <plurals name="n_folders_left_out">
         <item quantity="one">%1$d folder left out</item>
         <item quantity="other">%1$d folders left out</item>
@@ -4122,6 +4126,20 @@
     <string name="an_album_playing_through_never_blends">An album playing through never blends. This also keeps two of its songs whole when a playlist or shuffle puts them side by side.</string>
     <string name="keep_albums_keywords">album gapless seamless transition crossfade off</string>
     <string name="grid_3x3">3 × 3</string>
+    <string name="skip_in_downloads">Skip in downloads</string>
+    <string name="include_in_downloads">Include in downloads</string>
+    <string name="skipped_in_downloads">Skipped in downloads</string>
+    <string name="n_skipped">%1$d skipped</string>
+    <string name="every_song_here_is_skipped">Every song here is skipped in downloads</string>
+    <string name="keep_downloaded">Keep downloaded</string>
+    <string name="stop_keeping_downloaded">Stop keeping downloaded</string>
+    <string name="keep_playlists_downloaded">Keep playlists downloaded</string>
+    <string name="none_chosen">None chosen</string>
+    <string name="new_songs_in_these_playlists_download">New songs in these playlists download by themselves, following Download on Wi-Fi only. Songs you skip and songs that failed are left alone. A download you remove from one of them comes back, so use Skip in downloads for a song you don\'t want.</string>
+    <string name="new_songs_here_will_download">New songs here will download by themselves</string>
+    <string name="new_songs_here_won_t_download">New songs here won\'t download by themselves</string>
+    <string name="no_playlists_yet">No playlists yet</string>
+    <string name="keep_playlists_keywords">sync automatic auto download new songs playlist offline</string>
     <string name="folders_in_local_files">Folders in Local files</string>
     <string name="choose_folders">Choose folders</string>
     <string name="every_folder_with_music">Every folder with music</string>
