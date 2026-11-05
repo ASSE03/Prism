@@ -11,6 +11,20 @@ import java.net.UnknownHostException
 import javax.net.ssl.SSLException
 
 /**
+ * [read], or [fallback] when it fails, for a read of the phone's own data on a scope with nothing to catch it: the
+ * playback service's, or a page's produceState, where a failure (#103's CursorWindow, on a low-memory phone) closes Prism.
+ * A cancelled coroutine stays cancelled.
+ */
+inline fun <T> readOrElse(what: String, fallback: T, read: () -> T): T = try {
+    read()
+} catch (e: kotlinx.coroutines.CancellationException) {
+    throw e
+} catch (e: Exception) {
+    android.util.Log.w("PrismRead", "couldn't read $what", e)
+    fallback
+}
+
+/**
  * What to tell the listener when something failed: plain words for connection trouble (instead of
  * `Unable to resolve host "music.youtube.com"…`), Prism's and YouTube's own messages otherwise.
  */
