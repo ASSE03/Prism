@@ -19,6 +19,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
@@ -206,7 +208,9 @@ fun rememberCoverGradient(url: String?): CoverGradient? {
 
 /**
  * The background itself: three colors in one shader, built once and only built again while a new song's colors fade in. No
- * layer, no blur and no drifting, so it costs a full-screen gradient however long it stays up.
+ * blur and no drifting. In a layer of its own: repainting a dithered full-screen gradient every frame the player draws (the
+ * lyric sweep's, say) measured 2-5 ms more GPU a frame than the mesh on a Galaxy A16. In a layer it's painted once and then
+ * only placed.
  */
 @Composable
 fun CoverGradientBackdrop(gradient: CoverGradient?, depth: Float, modifier: Modifier = Modifier) {
@@ -217,7 +221,7 @@ fun CoverGradientBackdrop(gradient: CoverGradient?, depth: Float, modifier: Modi
     val middle by animateColorAsState(Color(stops?.middle ?: PlayerFallbackBackdrop.toArgb()), spec, label = "gradientMiddle")
     val foot by animateColorAsState(Color(stops?.foot ?: PlayerFallbackBackdrop.toArgb()), spec, label = "gradientFoot")
     Spacer(
-        modifier.fillMaxSize().drawWithCache {
+        modifier.fillMaxSize().graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }.drawWithCache {
             val paint = gradientPaint(top.toArgb(), middle.toArgb(), foot.toArgb(), size.width, size.height)
             onDrawBehind { drawIntoCanvas { it.nativeCanvas.drawRect(0f, 0f, size.width, size.height, paint) } }
         },
