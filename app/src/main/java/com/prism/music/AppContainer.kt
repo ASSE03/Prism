@@ -520,8 +520,11 @@ class AppContainer(val app: Application) {
         val serializer = kotlinx.serialization.builtins.MapSerializer(String.serializer(), Long.serializer())
         com.prism.music.playback.SessionHeard(
             load = { runCatching { kotlinx.serialization.json.Json.decodeFromString(serializer, prefs.getString("heard", null) ?: "{}") }.getOrDefault(emptyMap()) },
-            // Kept through a restart only while the switch is on: nothing is written for anyone else.
-            save = { if (settings.current.behavior.autoplayNoRepeats) prefs.edit().putString("heard", kotlinx.serialization.json.Json.encodeToString(serializer, it)).apply() },
+            // Kept through a restart only while the switch is on, and never while history is paused (#296): then it's in memory only.
+            save = {
+                val b = settings.current.behavior
+                if (b.autoplayNoRepeats && !com.prism.music.data.HistoryPause.paused(b)) prefs.edit().putString("heard", kotlinx.serialization.json.Json.encodeToString(serializer, it)).apply()
+            },
         )
     }
     /** Prism's holiday mixes, Thanksgiving and Christmas (1.8.0), made when first opened in their season, or ahead on Wi-Fi. */
