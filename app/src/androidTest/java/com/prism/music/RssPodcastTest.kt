@@ -243,7 +243,8 @@ class RssPodcastTest {
         try {
             Thread.sleep(500)
             instrumentation.runOnMainSync { player.playQueue(listOf(broken, fine), 0, QueueSource(QueueKind.OTHER, "RSS test")) }
-            waitFor("it says so", 45_000) { tr(R.string.rss_episode_wont_play) in said }
+            // Within "“Broken”: …. On to the next song.", so it's found without its last full stop.
+            waitFor("it says so", 45_000) { said.any { tr(R.string.rss_episode_wont_play).trimEnd('.') in it && "Broken" in it } }
             waitFor("it goes on to the next one", 15_000) { player.currentSong.value?.id == fine.id && position() > 500 }
 
             // Alone in the queue (and a show that's gone, as a queue saved before removing it brings back): the words,
@@ -251,7 +252,7 @@ class RssPodcastTest {
             said.clear()
             val gone = Song(id = "rss:000000000000:0000000000000000", title = "Gone", artists = listOf(ArtistRef("Gone show")), isEpisode = true, podcastId = "rss:000000000000")
             instrumentation.runOnMainSync { player.playQueue(listOf(gone), 0, QueueSource(QueueKind.OTHER, "RSS test")) }
-            waitFor("it says it's gone", 45_000) { tr(R.string.rss_episode_gone) in said }
+            waitFor("it says it's gone", 45_000) { said.any { tr(R.string.rss_episode_gone).trimEnd('.') in it } }
         } finally {
             listening.cancel()
         }
