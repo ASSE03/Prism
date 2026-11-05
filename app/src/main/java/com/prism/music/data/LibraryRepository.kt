@@ -181,6 +181,8 @@ class LibraryRepository(private val c: AppContainer) {
     fun toggleLike(song: Song) = setLiked(song, !isLiked(song.id))
 
     fun setLiked(song: Song, liked: Boolean) {
+        // An episode from a feed: nothing Liked songs, the account or a Replay list could do anything with.
+        if (song.isRss) return
         c.scope.launch(Dispatchers.IO) {
             val existing = songs.get(song.id)
             songs.upsert(song.toEntity(existing).copy(liked = liked, likedAt = if (liked) System.currentTimeMillis() else 0))
@@ -196,6 +198,8 @@ class LibraryRepository(private val c: AppContainer) {
     }
 
     suspend fun recordPlayed(song: Song) {
+        // The song list doesn't keep what makes one an episode: a feed's would come back as a song, with no way to play.
+        if (song.isRss) return
         val existing = songs.get(song.id)
         songs.upsert(song.toEntity(existing).copy(lastPlayed = System.currentTimeMillis()))
     }

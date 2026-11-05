@@ -187,6 +187,8 @@ class CanvasRepository(private val http: OkHttpClient) {
     fun cached(song: Song): CanvasArtwork? = synchronized(cache) { entry(song)?.art }
 
     suspend fun canvasFor(song: Song): CanvasArtwork? {
+        // A feed's episode: its name isn't sent around looking for a clip of a song it isn't.
+        if (song.isRss) return null
         val now = System.currentTimeMillis()
         synchronized(cache) {
             entry(song)?.let { e ->

@@ -17,6 +17,18 @@ import okhttp3.ResponseBody.Companion.toResponseBody
 import okio.Buffer
 import java.security.MessageDigest
 
+/** A test's own answer of any kind, [RecordedNetwork.byteAnswers]. */
+class ByteAnswer(private val type: String, private val bytes: ByteArray, private val code: Int = 200) {
+    fun respond(request: Request): Response {
+        val from = request.header("Range")?.let { Regex("bytes=(\\d+)-").find(it)?.groupValues?.get(1)?.toIntOrNull() }
+        val builder = Response.Builder().request(request).protocol(Protocol.HTTP_1_1).message("Test")
+        if (code != 200 || from == null) return builder.code(code).body(bytes.toResponseBody(type.toMediaTypeOrNull())).build()
+        if (from >= bytes.size) return builder.code(416).header("Content-Range", "bytes */${bytes.size}").body(ByteArray(0).toResponseBody(null)).build()
+        return builder.code(206).header("Content-Range", "bytes $from-${bytes.size - 1}/${bytes.size}")
+            .body(bytes.copyOfRange(from, bytes.size).toResponseBody(type.toMediaTypeOrNull())).build()
+    }
+}
+
 /**
  * Prism's network in the in-app tests: every request is answered from a recording in the test APK's assets
  * (`recorded/<key>.json`), the same on every run. A request with no recording gets a 503 ("offline"), logged under
@@ -44,6 +56,10 @@ class RecordedNetwork(private val record: Boolean) : Interceptor {
         answers.entries.firstOrNull { (url, _) -> request.url.toString().startsWith(url) }?.let { (_, body) ->
             return Response.Builder().request(request).protocol(Protocol.HTTP_1_1).code(200).message("Test")
                 .body(body.toResponseBody("application/json".toMediaTypeOrNull())).build()
+        }
+        byteAnswers.entries.firstOrNull { (url, _) -> request.url.toString().startsWith(url) }?.let { (_, answer) ->
+            asked += request
+            return answer.respond(request)
         }
         if (record) return chain.proceed(request).also { keep(key, it) }
         val saved = runCatching {
@@ -90,6 +106,12 @@ class RecordedNetwork(private val record: Boolean) : Interceptor {
 
         /** Answers a test sets for itself, by the start of the address (each test runs in a fresh app). */
         val answers: MutableMap<String, String> = java.util.concurrent.ConcurrentHashMap()
+
+        /** Like [answers], for what isn't JSON: a server that also answers ranges, the way ExoPlayer asks for audio. */
+        val byteAnswers: MutableMap<String, ByteAnswer> = java.util.concurrent.ConcurrentHashMap()
+
+        /** The requests [byteAnswers] answered, for a test to see what was sent (its headers). */
+        val asked: MutableList<Request> = java.util.concurrent.CopyOnWriteArrayList()
         private val NAMING = listOf("browseId", "query", "videoId", "params", "continuation", "playlistId", "input")
 
         fun keyOf(request: Request): String {

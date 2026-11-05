@@ -159,10 +159,11 @@ fun PlayerOptionsSheet(
         )
         ActionSheet(com.prism.music.data.PlaylistCovers.artOf(song), onDismiss) { close ->
             ActionHeader(com.prism.music.data.PlaylistCovers.artOf(song), song.shown.title, song.shown.artistText) {
-                SheetIconButton(PrismIcons.Share, tr(R.string.share)) { sharing = true }
+                // (A feed's episode has no address on YouTube to share, and doesn't download.)
+                if (!song.isRss) SheetIconButton(PrismIcons.Share, tr(R.string.share)) { sharing = true }
             }
             // An episode has no radio and goes in no playlist: download and sleep.
-            QuickActions(listOf(downloadItem, sleepItem.tile(MenuAction.SLEEP))) { runAction(it, close) }
+            QuickActions(listOfNotNull(downloadItem.takeIf { !song.isRss }, sleepItem.tile(MenuAction.SLEEP))) { runAction(it, close) }
             ActionGroup(tr(R.string.episode), episode) { runAction(it, close) }
         }
         return

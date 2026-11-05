@@ -2,6 +2,22 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.8.2 (unreleased)
+
+### New
+
+- **Podcasts by RSS.** Podcasts → Add a podcast by RSS: paste a show's feed address, and it's kept on your phone and in
+  your backups, with its cover, description and episodes, newest first. Episodes play straight from the podcast's own
+  server, no YouTube and no account needed, with everything episodes do here: they pick up where you left off, speed from
+  the player's menu, 15 and 30 second skips. New episodes show up when you open the show. Secure (https) servers on the
+  public internet only. Not yet: downloading these episodes, new-episode alerts.
+
+### Fixes
+
+- **An episode YouTube won't play now says what to do**: a show you added to your YouTube Music account by RSS can stop
+  with "Video not available". Prism says so plainly, offers the RSS way above, and moves on to the next thing in your
+  queue if there is one.
+
 ## 1.8.1.1
 
 A bug-fix update.

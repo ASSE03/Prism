@@ -470,7 +470,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
      * those (your own artwork), else the one YouTube Music shows, at full size.
      */
     private suspend fun saveCover(song: Song) {
-        if (song.isLocal) return
+        if (song.isLocal || song.isRss) return
         val lossless = isLosslessOnly(song.id)
         // A cover kept small for the library (an album's, 544 px) is fetched again at full size (#86).
         if (if (lossless) c.artwork.has(song.thumbnail) else c.artwork.hasFull(song.thumbnail)) return
@@ -509,8 +509,8 @@ class DownloadRepository(private val context: Context, private val c: AppContain
     fun isLosslessOnly(id: String) = id in _lossless.value && id !in _media.value
 
     fun download(song: Song, asIs: Boolean = false) {
-        // A file on the phone is already offline.
-        if (song.isLocal) return
+        // A file on the phone is already offline. (Episodes from a feed don't download yet.)
+        if (song.isLocal || song.isRss) return
         // A lossless file that was taken out of Downloads just comes back.
         if (c.losslessSync.unhide(song.id)) return
         // (A music video already downloaded as its song counts as downloaded.)
