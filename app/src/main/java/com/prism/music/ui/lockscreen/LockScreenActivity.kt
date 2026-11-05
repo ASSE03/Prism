@@ -106,6 +106,9 @@ class LockScreenActivity : ComponentActivity() {
     /** What to do once the phone is unlocked (opening the full player, after a tap on the cover). */
     private var afterUnlock: (() -> Unit)? = null
 
+    /** Android's unlock prompt is up: this may stop behind it, and the prompt says what comes next. */
+    private var asking = false
+
     override fun attachBaseContext(base: Context) = super.attachBaseContext(com.prism.music.AppLanguage.wrap(base))
 
     // Fingerprint, face or the code: the phone is the listener's again, and they carry on where they were.
@@ -136,7 +139,9 @@ class LockScreenActivity : ComponentActivity() {
         // Upright on a phone, as Android's lock screen is; a tablet stays however it's standing.
         if (resources.configuration.smallestScreenWidthDp >= 600) requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         LockScreenGate.cancelFallback(this)
-        ContextCompat.registerReceiver(this, unlocked, IntentFilter(Intent.ACTION_USER_PRESENT), ContextCompat.RECEIVER_NOT_EXPORTED)
+        // Exported on purpose: System UI sends this one, not the system's own id, so a not-exported receiver never hears it
+        // (a Pixel on Android 17, 1.8.2's check). It's a protected broadcast: no other app can send it.
+        ContextCompat.registerReceiver(this, unlocked, IntentFilter(Intent.ACTION_USER_PRESENT), ContextCompat.RECEIVER_EXPORTED)
         c.player.connect()
         window.decorView.viewTreeObserver.addOnDrawListener(firstDraw)
         setContent {
@@ -155,6 +160,15 @@ class LockScreenActivity : ComponentActivity() {
         if (!mayShow()) finishNow()
     }
 
+    override fun onStop() {
+        super.onStop()
+        // Stopped with the screen off: that's going to sleep, ready for the next wake. With the screen on, something took its
+        // place (Home, the camera, a call): left alive, the gate would take it for still up and never bring it back.
+        val covered = power.isInteractive && !asking && !isChangingConfigurations
+        Log.i(LockScreenGate.TAG, "stopped, covered=$covered asking=$asking interactive=${power.isInteractive}")
+        if (covered) finishNow()
+    }
+
     private fun mayShow(): Boolean {
         val b = c.settings.current.behavior
         if (!b.lockScreen && !pretendLocked) return false
@@ -168,12 +182,26 @@ class LockScreenActivity : ComponentActivity() {
      */
     private fun unlock(then: (() -> Unit)?) {
         afterUnlock = then
+        asking = true
         keyguard.requestDismissKeyguard(this, object : KeyguardManager.KeyguardDismissCallback() {
-            override fun onDismissSucceeded() = done()
-            override fun onDismissCancelled() { afterUnlock = null }
+            override fun onDismissSucceeded() { asking = false; done() }
+            override fun onDismissCancelled() {
+                Log.i(LockScreenGate.TAG, "unlock prompt cancelled")
+                asking = false
+                afterUnlock = null
+                promptGone()
+            }
             // Not locked after all (a lock delay, or unlocked a moment ago): nothing stands in the way.
-            override fun onDismissError() { if (pretendLocked || !keyguard.isKeyguardLocked) done() else afterUnlock = null }
+            override fun onDismissError() {
+                asking = false
+                if (pretendLocked || !keyguard.isKeyguardLocked) done() else { afterUnlock = null; promptGone() }
+            }
         })
+    }
+
+    /** The prompt went without unlocking, and took this off screen with it: Android's lock screen is what's left. */
+    private fun promptGone() {
+        if (!lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED) && power.isInteractive) finishNow()
     }
 
     private fun done() {

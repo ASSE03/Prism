@@ -513,6 +513,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private fun inForeground(): Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.Q || foregroundServiceType != 0
 
     override fun onTaskRemoved(rootIntent: Intent?) {
+        // The lock screen player has a task of its own, and Android tells the service when any of Prism's tasks goes: every
+        // unlock closing it isn't the listener closing Prism (it stopped the music with "Stop when swiped away" on, and a
+        // paused song's notification with it; 1.8.2's check on a real lock screen).
+        if (rootIntent?.component?.className == com.prism.music.ui.lockscreen.LockScreenActivity::class.java.name) return
         android.util.Log.i("PrismControl", "swiped away: wants to play ${player.playWhenReady}, ${player.mediaItemCount} songs, stop on swipe ${c.settings.current.stopOnSwipeAway}")
         saveQueue(now = true)
         // Settings → Playback → "Stop when swiped away" (#45): closing Prism from Recents ends the music too (some

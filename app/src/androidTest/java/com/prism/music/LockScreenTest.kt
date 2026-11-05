@@ -239,6 +239,57 @@ class LockScreenTest {
         assertTrue("music keeps playing", Fixture.container.player.isPlaying.value || Fixture.container.player.buffering.value)
     }
 
+    /**
+     * Android tells the service when any of Prism's tasks goes, as if Prism had been swiped away. On a real lock screen every
+     * unlock stopped the music that way with "Stop when swiped away" on (1.8.2's check on a Pixel).
+     */
+    @Test fun closingItLeavesTheMusicPlaying() {
+        LockScreenActivity.pretendLocked = true
+        settings.setLockScreen(true)
+        settings.setStopOnSwipeAway(true)
+        try {
+            playTone("Prism lock close tone")
+            startLockScreen()
+            waitUntilShown()
+            val player = Fixture.container.player
+            compose.waitUntil(20_000) { player.isPlaying.value }
+            instrumentation.runOnMainSync { LockScreenActivity.live!!.finishAndRemoveTask() }
+            waitUntilClosed()
+            Thread.sleep(3_000)
+            assertTrue("closing the lock screen stopped the music", player.isPlaying.value)
+        } finally {
+            settings.setStopOnSwipeAway(false)
+        }
+    }
+
+    /** Paused, the service would otherwise take the player and its notification with it. */
+    @Test fun closingItWhilePausedKeepsTheSong() {
+        LockScreenActivity.pretendLocked = true
+        settings.setLockScreen(true)
+        playTone("Prism lock paused close tone")
+        startLockScreen()
+        waitUntilShown()
+        val player = Fixture.container.player
+        compose.waitUntil(20_000) { player.isPlaying.value }
+        compose.onAllNodes(hasTestTag(LockTags.PLAY), useUnmergedTree = true).onFirst().performClick()
+        compose.waitUntil(5_000) { !player.isPlaying.value }
+        instrumentation.runOnMainSync { LockScreenActivity.live!!.finishAndRemoveTask() }
+        waitUntilClosed()
+        Thread.sleep(3_000)
+        assertTrue("closing the lock screen emptied the player", player.currentSong.value != null)
+    }
+
+    /** Home on the lock screen: Android's own is what's left, and this closes so the next wake can bring it up again. */
+    @Test fun homeClosesItSoItCanComeBack() {
+        LockScreenActivity.pretendLocked = true
+        settings.setLockScreen(true)
+        playTone("Prism lock home tone")
+        startLockScreen()
+        waitUntilShown()
+        instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_HOME)
+        waitUntilClosed()
+    }
+
     @Test fun tappingTheCoverOpensThePlayer() {
         val secure = Fixture.context.getSystemService(android.app.KeyguardManager::class.java).isDeviceSecure
         org.junit.Assume.assumeFalse("needs the phone's own code", secure)
