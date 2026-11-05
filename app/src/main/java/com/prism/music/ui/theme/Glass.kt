@@ -24,7 +24,10 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.blur.HazeBlurStyle
 import dev.chrisbanes.haze.blur.HazeColorEffect
 import dev.chrisbanes.haze.blur.hazeBlur
+import dev.chrisbanes.haze.glass.GlassDefaults
 import dev.chrisbanes.haze.glass.GlassStyle
+import dev.chrisbanes.haze.glass.OpticalSizePoint
+import dev.chrisbanes.haze.glass.OpticalSizeValue
 import dev.chrisbanes.haze.glass.hazeGlass
 
 /** The backdrop that glass surfaces in the current subtree refract. */
@@ -58,6 +61,56 @@ internal fun glassSamplesThePage(sdk: Int, liquid: Boolean, frosted: Boolean): B
  * A16's GPU about 10 ms of every frame there, for each letter typed (#355). A floating keyboard takes no room ([keyboardPx] 0).
  */
 internal fun hiddenByKeyboard(keyboardPx: Int, heightPx: Float): Boolean = keyboardPx > 0 && keyboardPx >= heightPx
+
+/**
+ * What Regular and Clear are set to (Haze 2.0.1's own styles, read from its code). Regular: a 20-25 dp blur and a veil of 22%
+ * black (55% white in light mode). Clear: a 1.25 dp blur, 18% black (17% white), stronger bending at the edges and a
+ * brighter rim. Haze chooses between its dark and light values from the phone's dark mode, not from Prism's theme, so
+ * [glassValues] gives it Prism's when the two differ.
+ *
+ * And what they look like (#252, on a Galaxy A16 with Android 16 and an Android 13 emulator): behind Regular colors spread
+ * further the higher the radius, but small things like text stay a faint sharp outline at every radius from 6 to 40 dp. Behind
+ * Clear colors keep their edges and small things soften. Why Regular keeps that outline isn't known: Haze's refraction detail
+ * (already 0) and an opaque background made no difference.
+ */
+internal data class GlassValues(
+    val specular: Float, val edgeShadow: Float, val ambient: Float, val contrast: Float, val whitePoint: Float, val chroma: Float,
+)
+
+internal fun glassValues(dark: Boolean, clear: Boolean): GlassValues = when {
+    clear && dark -> GlassValues(0.42f, 0.25f, 0.22f, 0.12f, -0.18f, 1f)
+    clear -> GlassValues(0.55f, 0.10f, 0.42f, 0.08f, 0.17f, 1.05f)
+    dark -> GlassValues(0.38f, 0.32f, 0.08f, 0.08f, -0.22f, 1.1f)
+    else -> GlassValues(0.48f, 0.14f, 0.15f, 0f, 0.55f, 1.5f)
+}
+
+/** Frosted Glass's blur, in dp; [thin] is Liquid Glass · Clear on a flat bar, which keeps what's behind it nearly sharp. */
+internal fun frostedBlurDp(blur: Float, thin: Boolean): Float = if (thin) 6f else 28f * blur
+
+/** Frosted Glass's own veil at the Frost slider's [frost] (1 = 0.55 dark, 0.62 light, as it has always been). */
+internal fun frostedWash(dark: Boolean, frost: Float, thin: Boolean): Float =
+    ((if (thin) (if (dark) 0.24f else 0.30f) else if (dark) 0.55f else 0.62f) * frost).coerceAtMost(0.95f)
+
+/** Liquid Glass's veil toward black or white at the Frost slider's [frost]. */
+internal fun liquidWhitePoint(dark: Boolean, clear: Boolean, frost: Float): Float =
+    (glassValues(dark, clear).whitePoint * frost).coerceIn(-0.95f, 0.95f)
+
+/**
+ * Prism's own tint over Liquid Glass · Clear. None in dark mode since 1.8.2: 12% black over Clear's 18% made it darker than
+ * Regular's 22%, so over a soft background the two came out about the same (#252).
+ */
+internal fun clearTint(dark: Boolean, frost: Float): Color =
+    if (dark) Color.Transparent else Color.White.copy(alpha = (0.10f * frost).coerceAtMost(0.9f))
+
+/** A slider's value, landing on Prism's own 100% when it's let go close to it. */
+internal fun glassSnap(v: Float): Float = if (kotlin.math.abs(v - 1f) < 0.04f) 1f else v
+
+/** Haze's Regular optics, its blur [scale] times as strong. */
+private fun regularOptics(scale: Float) = GlassDefaults.optics.copy(
+    blurRadius = OpticalSizeValue.Responsive(
+        OpticalSizePoint(64.dp, 20.dp * scale), OpticalSizePoint(176.dp, 24.dp * scale), OpticalSizePoint(220.dp, 25.dp * scale),
+    ),
+)
 
 /**
  * A surface that renders as refractive Liquid Glass when enabled in
@@ -99,12 +152,29 @@ fun GlassSurface(
         )
     } else if (glassPath(android.os.Build.VERSION.SDK_INT, settings.liquidGlass, settings.frostedGlass, haze != null, refract) == GlassPath.LIQUID) {
         val clear = onMedia || settings.glassKind == GlassKind.CLEAR
-        val style = remember(shape, tint, clear, dark) {
+        val look = settings.view.glass
+        val phoneDark = (androidx.compose.ui.platform.LocalConfiguration.current.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK) == android.content.res.Configuration.UI_MODE_NIGHT_YES
+        val style = remember(shape, tint, clear, dark, phoneDark, onMedia, look.blur, look.frost) {
             val baseStyle = if (clear) GlassStyle.clear else GlassStyle.regular
             baseStyle.then {
                 shape(shape)
+                // Prism's theme, where the phone's dark mode says otherwise.
+                if (dark != phoneDark) glassValues(dark, clear).let { v ->
+                    specularIntensity(v.specular)
+                    edgeShadow(Color.Black.copy(alpha = v.edgeShadow))
+                    ambientResponse(v.ambient)
+                    contrast(v.contrast)
+                    whitePoint(v.whitePoint)
+                    chromaMultiplier(v.chroma)
+                }
                 if (tint.isSpecified) tint(tint)
-                else if (clear) tint(if (dark || onMedia) Color.Black.copy(alpha = 0.12f) else Color.White.copy(alpha = 0.10f))
+                else if (onMedia) tint(Color.Black.copy(alpha = 0.12f))
+                else {
+                    if (clear) clearTint(dark, look.frost).let { if (it.alpha > 0f) tint(it) }
+                    // #252: the Frost slider. The bar's own Background (Light, Solid) and glass over a picture keep theirs.
+                    if (look.frost != 1f) whitePoint(liquidWhitePoint(dark, clear, look.frost))
+                }
+                if (!clear && look.blur != 1f) optics(regularOptics(look.blur))
             }
         }
         Box(
@@ -116,14 +186,19 @@ fun GlassSurface(
         )
     } else if (glassPath(android.os.Build.VERSION.SDK_INT, settings.liquidGlass, settings.frostedGlass, haze != null, refract) == GlassPath.FROSTED) {
         val scheme = MaterialTheme.colorScheme
+        val look = settings.view.glass
+        // Liquid Glass reaches this path only on a flat bar (the docked tab bar). Regular and Clear drew exactly the same
+        // here, so on that bar there was nothing to tell them apart (#252): Clear's is a thin frost.
+        val thin = settings.liquidGlass && settings.glassKind == GlassKind.CLEAR
         val wash = when {
             tint.isSpecified -> tint
             onMedia -> Color.Black.copy(alpha = 0.28f)
-            else -> scheme.surfaceContainerHigh.copy(alpha = if (dark) 0.55f else 0.62f)
+            else -> scheme.surfaceContainerHigh.copy(alpha = frostedWash(dark, look.frost, thin))
         }
-        val style = remember(wash) {
+        val blurDp = frostedBlurDp(look.blur, thin)
+        val style = remember(wash, blurDp) {
             HazeBlurStyle {
-                blurRadius(28.dp)
+                blurRadius(blurDp.dp)
                 noiseFactor(0.12f)
                 colorEffects(listOf(HazeColorEffect.tint(wash)))
             }

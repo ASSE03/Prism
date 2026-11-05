@@ -134,7 +134,7 @@ private val blurCache = object : LinkedHashMap<String, ImageBitmap>(0, 0.75f, tr
     override fun removeEldestEntry(eldest: Map.Entry<String, ImageBitmap>) = size > 8
 }
 
-private suspend fun decodeSmall(context: android.content.Context, url: String, px: Int): Bitmap? {
+internal suspend fun decodeSmall(context: android.content.Context, url: String, px: Int): Bitmap? {
     val req = ImageRequest.Builder(context).data(hiRes(url, 544)).size(px).allowHardware(false).build()
     return (SingletonImageLoader.get(context).execute(req) as? SuccessResult)?.image?.toBitmap()
 }

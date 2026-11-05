@@ -501,7 +501,29 @@ data class ViewLook(
     val queuePlayedMoves: Boolean = false,
     /** #294 (1.8.2): no × on each song (swipe it away, or its ⋯) and no Queue button in the bottom row while the queue's open. */
     val queueTidy: Boolean = false,
+    /** #252, #326 (1.8.2): how the glass looks, and where else it goes. */
+    val glass: GlassLook = GlassLook(),
+    /** #338 (1.8.2): how dark [PlayerBackground.GRADIENT] gets toward the bottom (0 nearly the same color all the way, 1 black). */
+    val gradientDepth: Float = 0.7f,
 )
+
+/**
+ * #252, #326 (1.8.2). [blur] and [frost] are multiples of what Prism draws, so at their defaults (1) the glass is what it
+ * was in 1.8.1; [more] is off. All of it needs Android 12's blur, except that [more]'s cards and chips use no blur at all.
+ */
+data class GlassLook(
+    /** How strongly Frosted Glass and Liquid Glass · Regular blur what's behind them. Clear has no blur to change. */
+    val blur: Float = 1f,
+    /** How much of the glass's own milky or dark veil is laid over what's behind it (0 none). */
+    val frost: Float = 1f,
+    /** #326: the look on cards, chips, round buttons and the Undo bars too. */
+    val more: Boolean = false,
+) {
+    companion object {
+        val BLUR_RANGE = 0.3f..2f
+        val FROST_RANGE = 0f..2f
+    }
+}
 
 /** The Replay card's bars (#286): one for each month of this year so far, each of the last 12 weeks, or the last 14 days. */
 enum class ReplayGraph(val label: String, val count: Int) {
@@ -801,6 +823,11 @@ enum class PlayerBackground(val label: String) {
      * dark blurred cover). Only when picked.
      */
     WHITE(tr(R.string.white)),
+    /**
+     * #232, #338 (1.8.2): the cover's own colors as a solid gradient, nothing blurred, deepening down the screen
+     * ([ViewLook.gradientDepth]). Only when picked.
+     */
+    GRADIENT(tr(R.string.cover_gradient)),
 }
 enum class TransportStyle(val label: String) { GLYPHS(tr(R.string.classic)), BUTTON(tr(R.string.play_button)), OUTLINE(tr(R.string.rings)) }
 /** How wide the player's cover is: [extra] is how far it reaches into each side margin. */
@@ -1702,8 +1729,14 @@ data class AppSettings(
             immersiveBackground = if (immersiveBackground == LyricsBackground.CANVAS) LyricsBackground.PLAYER else immersiveBackground,
         ),
         homeHeader = if (homeHeader == HomeHeader.PICTURE || homeHeader == HomeHeader.NOW_PLAYING) HomeHeader.GREETING else homeHeader,
-        view = view.copy(crossfadeShape = false),
+        view = view.copy(crossfadeShape = false, glass = GlassLook()),
     )
+
+    /**
+     * #326: the glass look on cards, chips and round buttons. Asked for here too, not only through [effective], because the
+     * settings pages are given the settings as stored, and they'd draw it under Performance mode otherwise.
+     */
+    val glassEverywhere: Boolean get() = view.glass.more && !performanceMode
 
     /** The lyric sources Prism asks, in the listener's order: the ones turned off are left out (#51). */
     val lyricsSources: List<LyricsSource> get() = lyricsOrder.filter(::lyricsSourceOn).ifEmpty { lyricsOrder.filter { it != LyricsSource.EMBEDDED } }
@@ -2080,6 +2113,11 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         // 1.8.1 ([ViewLook.replayGraph], [ViewLook.replayStoryFont]; [BehaviorPrefs]' history choices).
         val replayGraph = stringPreferencesKey("replay_card_graph")
         val replayStoryFont = booleanPreferencesKey("replay_story_font")
+        // 1.8.2 ([ViewLook.glass], [ViewLook.gradientDepth]).
+        val glassBlur = floatPreferencesKey("glass_blur")
+        val glassFrost = floatPreferencesKey("glass_frost")
+        val glassMore = booleanPreferencesKey("glass_more")
+        val gradientDepth = floatPreferencesKey("player_gradient_depth")
         val historyPausedUntil = longPreferencesKey("history_paused_until")
         val playCountSeconds = intPreferencesKey("play_count_seconds")
         val playCountOnAccount = booleanPreferencesKey("play_count_account")
@@ -2129,6 +2167,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape,
                 downloadsAlbums, artistLinks, backdropFade,
                 crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape, replayGraph, replayStoryFont,
+                glassBlur, glassFrost, glassMore, gradientDepth,
             ) + lyricsLook.map { it.first }
         }
 
@@ -2167,6 +2206,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 coverFlightBack to 'b', videoButtonsHide to 'b', bleedRoomy to 'b', queueLengths to 'b', queuePlayedMoves to 'b', queueTidy to 'b',
                 downloadsAlbums to 'b', artistLinks to 'b', backdropFade to 'b',
                 crossfadeShape to 'b', replayGraph to 's', replayStoryFont to 'b',
+                glassBlur to 'f', glassFrost to 'f', glassMore to 'b', gradientDepth to 'f',
             ) + lyricsLook
         }
 
@@ -2487,6 +2527,13 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 backdropFade = p[K.backdropFade] ?: d.view.backdropFade,
                 replayGraph = p.enum(K.replayGraph, d.view.replayGraph),
                 replayStoryFont = p[K.replayStoryFont] ?: d.view.replayStoryFont,
+                glass = GlassLook(
+                    // A Look shared by someone else can hold any number.
+                    blur = (p[K.glassBlur] ?: d.view.glass.blur).coerceIn(GlassLook.BLUR_RANGE),
+                    frost = (p[K.glassFrost] ?: d.view.glass.frost).coerceIn(GlassLook.FROST_RANGE),
+                    more = p[K.glassMore] ?: d.view.glass.more,
+                ),
+                gradientDepth = (p[K.gradientDepth] ?: d.view.gradientDepth).coerceIn(0f, 1f),
             ),
             sound = SoundPrefs(
                 crossfadeCurve = p.enum(K.crossfadeCurve, d.sound.crossfadeCurve),
@@ -3170,6 +3217,10 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setExplicitContent(v: ExplicitContent) = edit { it[K.explicitContent] = v.name }
     fun setReplayGraph(v: ReplayGraph) = edit { it[K.replayGraph] = v.name }
     fun setReplayStoryFont(v: Boolean) = edit { it[K.replayStoryFont] = v }
+    fun setGlassBlur(v: Float) = edit { it[K.glassBlur] = v }
+    fun setGlassFrost(v: Float) = edit { it[K.glassFrost] = v }
+    fun setGlassMore(v: Boolean) = edit { it[K.glassMore] = v }
+    fun setGradientDepth(v: Float) = edit { it[K.gradientDepth] = v }
     /** #296: history paused until [until] (0: on again). */
     fun setHistoryPausedUntil(until: Long) = edit { if (until > 0) it[K.historyPausedUntil] = until else it.remove(K.historyPausedUntil) }
     fun setPlayCountSeconds(v: Int) = edit { it[K.playCountSeconds] = v.coerceIn(0, 600) }

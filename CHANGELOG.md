@@ -99,6 +99,21 @@ What changed in each release. Older releases are described on the [Releases page
   speaker says about itself, because speakers only speak plain HTTP, so none of them were listed. Prism now reads them
   on the local network only; everything else it asks for stays secure. There's no Sonos here to try it on: this was
   checked against a real Sonos One SL's own description. If a speaker still doesn't show, Share diagnostics now says why.
+- **Cover gradient, a new player background** (#232, #338). The cover's own colors as a solid gradient, with nothing blurred:
+  its main color at the top, deepening toward the bottom. "Darkness at the bottom" sets how far it goes, and the colors stay
+  dark enough for the white text whatever the cover. Customize Prism, Player, Look, where the backgrounds are now example cards.
+- **Set your glass** (#252). Blur and Frost sliders on the Glass page, whose choices are now real pieces of each glass, and an
+  explanation of what really differs between them. Clear has no Blur: it has next to none to set. At 100% they're what you have
+  today. They need Android 12's blur; below it the bars are solid and the sliders don't show.
+- **Glass on more of the screen** (#326, off unless you turn it on). Cards, chips and round buttons get a lit edge and follow
+  Frost, without a live blur, and the Undo bar becomes real glass while it's up. Performance mode turns it off. A first step.
+
+### Fixes
+
+- **Liquid Glass · Clear and Regular no longer draw the same on the docked tab bar** (#252). There Clear is now a thin frost that
+  lets what's behind it show. In dark mode Clear also loses the extra black Prism laid over it everywhere. Regular is unchanged.
+- **Liquid Glass follows Prism's theme, not the phone's dark mode.** With Prism in dark and the phone in light (or the other way
+  round) it picked the other theme's values.
 - **Typing in Search and in Settings' search keeps up on slower phones** (#355).
 - **A song YouTube won't play no longer stops the music.** Prism says which song it was and goes on to the next, also
   when the next songs are still on their way from Autoplay; Next, Previous and the scrubber work again if it did have to stop.

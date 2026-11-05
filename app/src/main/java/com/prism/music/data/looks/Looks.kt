@@ -240,6 +240,7 @@ object BuiltInLooks {
 /** How a look setting and its value read in the undo bar and History ("Corners → Sharp"). */
 object LookLabels {
     private val titles = mapOf(
+        "glass_blur" to tr(R.string.glass_blur), "glass_frost" to tr(R.string.glass_frost), "glass_more" to tr(R.string.glass_on_more_of_the_screen), "player_gradient_depth" to tr(R.string.gradient_depth),
         "theme_mode" to tr(R.string.theme), "pure_black" to tr(R.string.pure_black), "color_source" to tr(R.string.accent_from), "accent" to tr(R.string.accent_color),
         "light_style" to tr(R.string.light), "accent_exact" to tr(R.string.exactly_as_picked), "accent_light" to tr(R.string.light_mode_accent), "spectrum_preset" to tr(R.string.spectrum),
         "spectrum_stops" to tr(R.string.your_light_s_colors), "spectrum_bands" to tr(R.string.spectrum_in_bands), "surface_tint" to tr(R.string.page_background),
@@ -386,7 +387,7 @@ object LookLabels {
     private val percent = setOf(
         "text_scale", "lyrics_scale", "backdrop_dim", "player_backdrop_show", "surface_tint_strength", "mesh_speed", "mesh_intensity", "player_blur",
         "scrubber_thickness", "mini_fill_strength", "lyrics_blur_amount", "lyrics_spacing", "lyrics_others_alpha", "lyrics_backing_size", "lyrics_extra_size",
-        "corner_scale",
+        "corner_scale", "glass_blur", "glass_frost", "player_gradient_depth",
     )
     private val colors = setOf("accent", "accent_light", "surface_color", "lyrics_sung_custom", "lyrics_other_custom", "lyrics_bg_color", "lyrics_bg_color2")
 
@@ -432,7 +433,7 @@ object LookLabels {
             "surface_tint", "surface_tint_strength", "surface_color", "contrast_level", "artwork_swatch", "artwork_vivid", "artwork_change", "page_picture_accent", "playing_page_color",
         ),
         "type" to setOf("font_choice", "app_font_name", "lyrics_font", "text_scale", "type_classic"),
-        "backgrounds" to setOf("liquid_glass", "glass_kind", "frosted_glass", "frosted_pages", "backdrops", "backdrop_dim", "backdrop_motion", "reduce_motion", "backdrop_fade"),
+        "backgrounds" to setOf("liquid_glass", "glass_kind", "frosted_glass", "frosted_pages", "backdrops", "backdrop_dim", "backdrop_motion", "reduce_motion", "backdrop_fade", "glass_blur", "glass_frost", "glass_more"),
         "layout" to setOf(
             "corners", "ui_density", "title_size", "card_size", "nav_style", "nav_labels", "nav_hide_on_scroll", "nav_tabs", "start_tab",
             "mini_player_style", "mini_skip_buttons", "mini_prev_button", "mini_play_button", "mini_progress", "mini_progress_color", "mini_fill_strength", "library_view", "library_views", "library_columns", "library_subtitles", "home_header", "home_header_height", "playlist_hero_cover", "replay_theme_colors", "replay_card",
@@ -447,7 +448,7 @@ object LookLabels {
             "player_title_weight", "player_title_scroll", "player_times", "mesh_speed", "mesh_intensity", "player_blur", "canvas_fills_background",
             "scrubber_thickness", "scrubber_thumb", "volume_matches_progress", "player_handle", "player_nav_band", "play_ring", "visualizer", "visualizer_color",
             "panel_player", "queue_headings", "queue_dj_chip", "cast_mark", "immersive_video", "bleed_fit", "cover_flight", "video_controls_hide", "crossfade_mark", "blend_covers", "player_buttons_pill",
-            "player_hidden_parts", "crossfade_shape", "player_artist_links",
+            "player_hidden_parts", "crossfade_shape", "player_artist_links", "player_gradient_depth",
             "cover_flight_back", "video_buttons_hide", "bleed_roomy", "queue_lengths", "queue_played_moves", "queue_tidy",
         ),
         "lyrics" to setOf(

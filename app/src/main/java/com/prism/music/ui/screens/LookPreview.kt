@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -165,6 +166,11 @@ fun MiniPlayerScreen(c: ThemeColors, song: Song?) {
             PlayerBackground.THEME -> Box(Modifier.fillMaxSize().background(c.scheme.background))
             PlayerBackground.BLACK -> {}
             PlayerBackground.WHITE -> Box(Modifier.fillMaxSize().background(com.prism.music.ui.player.PlayerWhiteBackdrop))
+            PlayerBackground.GRADIENT -> com.prism.music.ui.player.CoverGradientBackdrop(
+                com.prism.music.ui.player.rememberCoverGradient(song?.thumbnail)
+                    ?: com.prism.music.ui.player.CoverGradient(hues[0].toArgb(), hues[1].toArgb()),
+                s.view.gradientDepth,
+            )
         }
         // Settings → Player (1.7.4): the layout, the title, the parts under it in their order, the buttons.
         val layout = s.playerLayout

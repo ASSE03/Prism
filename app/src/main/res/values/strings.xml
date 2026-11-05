@@ -4886,3 +4886,17 @@
     <string name="tune_calm_energetic_info">Goes by the tempo and loudness of songs Prism has already scanned, and nothing else. Most songs you haven\'t heard aren\'t scanned yet, so they stay where they are: expect this one to matter most for music you know. While it\'s away from the middle, songs you play get scanned too.</string>
     <string name="tune_measured_songs">Songs measured so far: %1$d</string>
 </resources>
+    <string name="cover_gradient">Cover gradient</string>
+    <string name="cover_gradient_info">Cover gradient is the cover\'s own colors as a solid gradient, nothing blurred, deepening toward the bottom. The lyrics and the queue stay on it, a little darker.</string>
+    <string name="gradient_depth">Darkness at the bottom</string>
+    <string name="gradient_depth_info">How dark the gradient gets toward the bottom. Low keeps nearly the same color all the way down, 100% ends in black. Colors stay dark enough for the white text at any setting.</string>
+    <string name="glass_kinds_what_differs">Frosted Glass: a soft blur behind the bars and controls. Liquid Glass: they bend what\'s behind them like real glass. Regular spreads the colors behind it and dims them, and small things like text stay a faint sharp outline. Clear leaves the colors as they are and softens the small things a little. Glass needs Android 12; below it the bars are solid.</string>
+    <string name="glass_blur">Blur</string>
+    <string name="glass_blur_info">How far the colors behind the glass spread. Small things like text keep a faint outline behind Liquid Glass however far this goes; Frosted Glass melts them too. 100% is Prism\'s own. Above that it\'s harder work for a slower phone.</string>
+    <string name="glass_frost">Frost</string>
+    <string name="glass_frost_info">How thick the veil over the glass is: less lets more of what\'s behind it through, more makes it milkier in light mode and darker in dark mode, and easier to read over busy pictures. 100% is Prism\'s own. A tab bar with its own background (Layout, Tab bar) keeps that background instead.</string>
+    <string name="glass_needs_android_12">These need the blur that came with Android 12. On this phone the bars are solid, so there\'s nothing for a blur or frost setting to change.</string>
+    <string name="glass_on_more_of_the_screen">Glass on more of the screen</string>
+    <string name="glass_on_more_of_the_screen_detail">Cards, chips, round buttons and the Undo bar</string>
+    <string name="glass_on_more_of_the_screen_info">Cards and settings panels get a light falling on them and a brighter edge, chips and round buttons a brighter edge, and Frost reaches them all. They use no live blur, so they cost next to nothing, and they show on pages with a background behind them. The Undo bar is real glass while it\'s up. Performance mode turns this off. More places may follow.</string>
+</resources>

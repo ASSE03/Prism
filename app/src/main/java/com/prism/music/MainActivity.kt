@@ -891,6 +891,7 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 com.prism.music.ui.components.LookUndoBar(
                     if (playerOpen && song != null) Modifier.align(Alignment.TopCenter).padding(horizontal = 16.dp).statusBarsPadding().padding(top = 56.dp)
                     else Modifier.align(Alignment.BottomCenter).padding(horizontal = 16.dp).padding(bottom = bottomPadding + 8.dp),
+                    overPlayer = playerOpen && song != null,
                 )
                 if (!(playerOpen && song != null)) com.prism.music.ui.components.ScheduleKeptBar(
                     Modifier.align(Alignment.BottomCenter).padding(horizontal = 16.dp).padding(bottom = bottomPadding + 8.dp),

@@ -541,7 +541,10 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     LaunchedEffect(heroMode) { if (!heroMode) heroPicture = null }
     val heroT = animateFloatAsState(if (heroTarget(heroMode, artLoaded || heroPicture != null, canvasCover > 0f)) 1f else 0f, tween(420, easing = FastOutSlowInEasing), label = "hero")
     val heroVisible: () -> Float = { heroT.value * (1f - p()) }
-    val mesh = rememberArtworkMesh(songArt)
+    // #232, #338: only one of the two is worked out, for the background that's up.
+    val onGradient = settings.playerBackground == com.prism.music.data.prefs.PlayerBackground.GRADIENT
+    val mesh = rememberArtworkMesh(songArt.takeUnless { onGradient })
+    val coverGradient = rememberCoverGradient(songArt.takeIf { onGradient })
     val blurImage = rememberFullArtworkBlur(songArt, settings.playerBlur)
     val fullBlur by animateFloatAsState(if (lyricsOpen || queueOpen || statsOpen) 1f else 0f, tween(360, easing = FastOutSlowInEasing), label = "fullBlur")
     // #320: over the White background the type and controls are dark ([PlayerInk]); over the lyrics and the queue (their
@@ -714,6 +717,11 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             com.prism.music.data.prefs.PlayerBackground.WHITE -> if (wide) ArtworkMeshBackdrop(mesh, speed = 0f, intensity = settings.meshIntensity, blur = settings.playerBlur) else {
                 Box(Modifier.fillMaxSize().background(PlayerWhiteBackdrop))
                 if (fullBlur > 0f) FullArtworkBlurBackdrop(blurImage, Modifier.graphicsLayer { alpha = fullBlur })
+            }
+            // #232 ("not blurry at all"): the lyrics and the queue stay on the gradient, a little darker under their lines.
+            com.prism.music.data.prefs.PlayerBackground.GRADIENT -> {
+                CoverGradientBackdrop(coverGradient, settings.view.gradientDepth)
+                if (fullBlur > 0f) Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.35f * fullBlur)))
             }
         }
         // Settings → Lyrics → Background (1.7.5): while the lyrics are open, their own background over the player's.

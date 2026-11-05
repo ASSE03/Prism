@@ -28,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -960,11 +961,75 @@ internal fun meshHeldBy(s: com.prism.music.data.prefs.AppSettings, context: andr
     else -> null
 }
 
+/** The player's backgrounds as cards (#232, #338): each a small player on it, made from what's playing. */
+@Composable
+fun PlayerBackgroundCards() {
+    val s = LocalAppSettings.current
+    val c = LocalContainer.current
+    val song by c.player.currentSong.collectAsState()
+    val art = song?.let { com.prism.music.data.PlaylistCovers.artOf(it) }
+    ChoiceCards(
+        com.prism.music.data.prefs.PlayerBackground.entries, s.playerBackground, { it.label }, { null }, columns = 3,
+        onSelect = { c.settings.setPlayerBackground(it) },
+    ) { PlayerBackgroundSample(it, art) }
+}
+
+/** A cover's colors for the examples while nothing's playing. */
+private val SAMPLE_GRADIENT = com.prism.music.ui.player.CoverGradient(0xFF8A6BFF.toInt(), 0xFFFF7A59.toInt())
+
+@Composable
+private fun PlayerBackgroundSample(bg: com.prism.music.data.prefs.PlayerBackground, art: String?) {
+    val s = LocalAppSettings.current
+    val scheme = MaterialTheme.colorScheme
+    val standIn = Brush.linearGradient(listOf(Color(SAMPLE_GRADIENT.lead), Color(SAMPLE_GRADIENT.second)))
+    Box(Modifier.fillMaxWidth().aspectRatio(0.66f).clip(RoundedCornerShape(10.dp)).background(com.prism.music.ui.player.PlayerFallbackBackdrop)) {
+        when (bg) {
+            com.prism.music.data.prefs.PlayerBackground.MESH ->
+                if (art == null) Box(Modifier.fillMaxSize().background(standIn).background(Color.Black.copy(alpha = 0.35f)))
+                // Still, and with no live blur: a page of small examples isn't the place to pay for it.
+                else com.prism.music.ui.player.ArtworkMeshBackdrop(com.prism.music.ui.player.rememberArtworkMesh(art), intensity = s.meshIntensity, liveBlur = false)
+            com.prism.music.data.prefs.PlayerBackground.BLUR ->
+                if (art == null) Box(Modifier.fillMaxSize().background(standIn).background(Color.Black.copy(alpha = 0.5f)))
+                else com.prism.music.ui.player.FullArtworkBlurBackdrop(com.prism.music.ui.player.rememberFullArtworkBlur(art, s.playerBlur))
+            com.prism.music.data.prefs.PlayerBackground.APPEARANCE -> {
+                val (style, photo) = com.prism.music.ui.theme.Backdrop.parse(
+                    s.backdrops[com.prism.music.ui.theme.PLAYER_BACKDROP] ?: s.backdrops[com.prism.music.ui.theme.BackdropScreen.HOME.name],
+                )
+                com.prism.music.ui.theme.BackdropLayer(style, photo, dim = 0.5f, motion = false, modifier = Modifier.fillMaxSize())
+            }
+            com.prism.music.data.prefs.PlayerBackground.THEME -> Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(scheme.primary.copy(alpha = 0.55f), Color.Black))))
+            com.prism.music.data.prefs.PlayerBackground.BLACK -> Box(Modifier.fillMaxSize().background(Color.Black))
+            com.prism.music.data.prefs.PlayerBackground.WHITE -> Box(Modifier.fillMaxSize().background(com.prism.music.ui.player.PlayerWhiteBackdrop))
+            com.prism.music.data.prefs.PlayerBackground.GRADIENT -> com.prism.music.ui.player.CoverGradientBackdrop(
+                com.prism.music.ui.player.rememberCoverGradient(art) ?: SAMPLE_GRADIENT, s.view.gradientDepth,
+            )
+        }
+        val white = bg == com.prism.music.data.prefs.PlayerBackground.WHITE
+        val ink = if (white) Color(0xFF1C1C1E) else Color.White
+        Column(Modifier.fillMaxSize().padding(10.dp), verticalArrangement = Arrangement.Bottom) {
+            Box(Modifier.fillMaxWidth(0.72f).height(6.dp).clip(CircleShape).background(ink.copy(alpha = 0.9f)))
+            Spacer(Modifier.height(4.dp))
+            Box(Modifier.fillMaxWidth(0.46f).height(4.dp).clip(CircleShape).background(ink.copy(alpha = 0.55f)))
+            Spacer(Modifier.height(8.dp))
+            Box(Modifier.fillMaxWidth().height(3.dp).clip(CircleShape).background(ink.copy(alpha = 0.35f)))
+            Spacer(Modifier.height(8.dp))
+            Box(Modifier.size(16.dp).align(Alignment.CenterHorizontally).clip(CircleShape).background(ink))
+        }
+    }
+}
+
 /** The color mesh's movement, and how soft the blurred cover is (under Look → Background). */
 @Composable
 fun PlayerBackgroundTuning() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
+    // #338: how dark it gets toward the bottom.
+    if (s.playerBackground == com.prism.music.data.prefs.PlayerBackground.GRADIENT) {
+        SliderSetting(
+            tr(R.string.gradient_depth), s.view.gradientDepth, 0f..1f, { "${(it * 100).roundToInt()}%" },
+            info = tr(R.string.gradient_depth_info),
+        ) { prefs.setGradientDepth(it) }
+    }
     if (s.playerBackground == com.prism.music.data.prefs.PlayerBackground.MESH) {
         // 1.8.0: Motion and Colors as one feeling, still → lively: the mesh drifts faster and its colors grow richer
         // together. The slider stands where the motion is; colors set apart before keep until it's moved.

@@ -183,7 +183,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
             "button_shape", "play_outlined",
         )
         // 1.8.0: Reduce motion is on the Customize Prism page now (MotionGroup), so this page's reset leaves it.
-        GLASS -> listOf("liquid_glass", "glass_kind", "frosted_glass", "frosted_pages", "backdrops", "backdrop_dim", "backdrop_motion")
+        GLASS -> listOf("liquid_glass", "glass_kind", "frosted_glass", "frosted_pages", "backdrops", "backdrop_dim", "backdrop_motion", "glass_blur", "glass_frost", "glass_more")
         INTERFACE -> listOf(
             // 1.8.0: the tab you're on's tint is with the tab bar now (from Icons & shapes).
             "tab_icon_tint",
@@ -198,7 +198,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
             // 1.8.0: what the page now holds (What's on the player, the progress bar, the crossfade's marks from Sound).
             "player_hidden_parts", "player_buttons", "player_buttons_pill", "player_times", "scrubber_color", "scrubber_thickness",
             "scrubber_thumb", "cover_flight", "crossfade_mark", "blend_covers", "video_controls_hide", "mesh_speed", "mesh_intensity",
-            "player_blur", "crossfade_shape",
+            "player_blur", "crossfade_shape", "player_gradient_depth",
             "cover_flight_back", "video_buttons_hide", "bleed_roomy", "queue_lengths", "queue_played_moves", "queue_tidy",
         )
         LYRICS_LOOK -> listOf(
@@ -865,9 +865,31 @@ private fun GlassSettings() {
                 val prefs = LocalContainer.current.settings
                 Group(tr(R.string.glass)) {
                     // 1.8.0: one choice over liquidGlass + glassKind + frostedGlass (LookChoices).
-                    // #324: says which of Regular and Clear blurs (Glass.kt: Haze's regular glass blurs, its clear one doesn't).
-                    Label(tr(R.string.glass), info = tr(R.string.glass_kinds_info))
-                    Chips(GlassChoice.entries, LookChoices.glass(s), { it.label }) { LookChoices.setGlass(prefs, it) }
+                    Label(tr(R.string.glass), info = tr(R.string.glass_kinds_what_differs))
+                    // #252 (1.8.2): each as a real piece of that glass, over the cover playing.
+                    val choice = LookChoices.glass(s)
+                    ChoiceCards(GlassChoice.entries, choice, { it.label }, { null }, onSelect = { LookChoices.setGlass(prefs, it) }) { GlassSample(it) }
+                    val look = s.view.glass
+                    if (choice != GlassChoice.OFF) {
+                        // Both need Android 12's blur: below it the bars are solid, so there's nothing for them to change.
+                        if (android.os.Build.VERSION.SDK_INT < 31) Note(tr(R.string.glass_needs_android_12))
+                        else {
+                            // Not on Clear: it has next to no blur to set.
+                            if (choice != GlassChoice.LIQUID_CLEAR) SliderSetting(
+                                tr(R.string.glass_blur), look.blur, com.prism.music.data.prefs.GlassLook.BLUR_RANGE, { "${(com.prism.music.ui.theme.glassSnap(it) * 100).roundToInt()}%" },
+                                info = tr(R.string.glass_blur_info),
+                            ) { prefs.setGlassBlur(com.prism.music.ui.theme.glassSnap(it)) }
+                            SliderSetting(
+                                tr(R.string.glass_frost), look.frost, com.prism.music.data.prefs.GlassLook.FROST_RANGE, { "${(com.prism.music.ui.theme.glassSnap(it) * 100).roundToInt()}%" },
+                                info = tr(R.string.glass_frost_info),
+                            ) { prefs.setGlassFrost(com.prism.music.ui.theme.glassSnap(it)) }
+                        }
+                    }
+                    // #326: only what costs next to nothing, for now.
+                    Toggle(
+                        tr(R.string.glass_on_more_of_the_screen), tr(R.string.glass_on_more_of_the_screen_detail), look.more,
+                        info = tr(R.string.glass_on_more_of_the_screen_info),
+                    ) { prefs.setGlassMore(it) }
                     Toggle(tr(R.string.frosted_pages), tr(R.string.pages_frosted_with_their_picture), s.frostedPages, info = tr(R.string.artist_album_and_playlist_pages_sit)) { prefs.setFrostedPages(it) }
                 }
             }
@@ -1773,8 +1795,9 @@ private fun PlayerLookGroup() {
     val prefs = LocalContainer.current.settings
     Group(tr(R.string.look)) {
         // #320 (1.8.1): White is a white player with dark type, for the light theme.
-        Label(tr(R.string.background), info = tr(R.string.player_background_white_info))
-        Chips(PlayerBackground.entries, s.playerBackground, { it.label }) { prefs.setPlayerBackground(it) }
+        Label(tr(R.string.background), info = tr(R.string.player_background_white_info) + " " + tr(R.string.cover_gradient_info))
+        // #232, #338 (1.8.2): each as a small player on that background, with the song playing.
+        PlayerBackgroundCards()
         if (s.playerBackground == PlayerBackground.APPEARANCE) {
             val nav = LocalNavigator.current
             val own = s.backdrops[com.prism.music.ui.theme.PLAYER_BACKDROP]

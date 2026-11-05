@@ -41,6 +41,8 @@ class PerformanceModeTest {
         assertEquals(VisualizerStyle.OFF, e.visualizer)
         assertEquals(0f, e.meshSpeed)
         assertEquals(PlayerBackground.MESH, e.playerBackground)
+        // 1.8.2: the Cover gradient stays, with nothing in it that's live: one still shader, not a blur.
+        assertEquals(PlayerBackground.GRADIENT, heavy.copy(performanceMode = true, playerBackground = PlayerBackground.GRADIENT).effective().playerBackground)
         // 1.8.0: Glow's halo goes; its sweep (no layer, no blur) stays.
         assertEquals(false, e.lyricsLook.haloNow)
         assertEquals(com.prism.music.data.prefs.LyricsMotion.SWEEP, e.lyricsLook.motionNow)
