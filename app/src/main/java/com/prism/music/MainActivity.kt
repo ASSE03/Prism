@@ -880,8 +880,9 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                     // Settled once it's done sliding in; no longer the moment it starts to leave.
                     val settled = transition.currentState == androidx.compose.animation.EnterExitState.Visible &&
                         transition.targetState == androidx.compose.animation.EnterExitState.Visible
-                    androidx.compose.runtime.SideEffect { playerCover.settled = settled }
-                    androidx.compose.runtime.DisposableEffect(Unit) { onDispose { playerCover.settled = false } }
+                    val leaving = transition.targetState != androidx.compose.animation.EnterExitState.Visible
+                    androidx.compose.runtime.SideEffect { playerCover.settled = settled; playerCover.leaving = leaving }
+                    androidx.compose.runtime.DisposableEffect(Unit) { onDispose { playerCover.settled = false; playerCover.leaving = false } }
                     Box(Modifier.customizable(com.prism.music.ui.components.CustomizeTarget.PLAYER)) { NowPlayingScreen { playerOpen = false } }
                 }
                 com.prism.music.ui.player.CoverFlightLayer(song?.let { com.prism.music.data.PlaylistCovers.artOf(it) })

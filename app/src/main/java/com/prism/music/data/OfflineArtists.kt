@@ -77,7 +77,10 @@ suspend fun AppContainer.artistOffline(id: String): ArtistOpened? = withContext(
 suspend fun AppContainer.artistSongsOnPhone(id: String, name: String): List<Song> = withContext(Dispatchers.IO) {
     val realId = id.takeUnless { it.startsWith(YouTubeMusic.ARTIST_BY_NAME) }
     fun by(s: Song) = s.artists.any { sameArtist(it, realId, name) }
-    val rows = (realId?.let { db.songs().mineWithArtistId(it) }.orEmpty() + (if (name.isBlank()) emptyList() else db.songs().mineWithArtistName(name))).map { it.toSong() }
+    // A failed read leaves what's on the phone: the artist's page asks with nothing to catch it.
+    val rows = readOrElse("$name's songs", emptyList()) {
+        (realId?.let { db.songs().mineWithArtistId(it) }.orEmpty() + (if (name.isBlank()) emptyList() else db.songs().mineWithArtistName(name))).map { it.toSong() }
+    }
     val all = (downloads.completedSongs() + localMusic.tracks.value.map { it.song } + rows).filter(::by).distinctBy { it.id }
     val (here, elsewhere) = all.partition { availableOffline(it.id) }
     here + elsewhere

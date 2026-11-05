@@ -38,6 +38,8 @@ class LockScreenRulesTest {
         assertTrue(LockScreenRules.stays(LockPaused.TEN_MINUTES, now - 9 * 60_000, now))
         assertFalse(LockScreenRules.stays(LockPaused.TEN_MINUTES, now - 10 * 60_000, now))
         assertTrue(LockScreenRules.stays(LockPaused.UNTIL_SLEEP, now - 60 * 60_000, now))
+        assertFalse("the phone has slept", LockScreenRules.stays(LockPaused.UNTIL_SLEEP, now - 60 * 60_000, now, slept = true))
+        assertTrue("the others don't go by the sleep", LockScreenRules.stays(LockPaused.TEN_MINUTES, now - 60_000, now, slept = true))
         // Off still lets a pause just pressed be undone.
         assertTrue(LockScreenRules.stays(LockPaused.OFF, now - 1_000, now))
         assertFalse(LockScreenRules.stays(LockPaused.OFF, now - 3_000, now))

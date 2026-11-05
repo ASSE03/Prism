@@ -225,7 +225,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         player.addAnalyticsListener(StatsListener())
         player.addAnalyticsListener(DiagnosticsListener())
         applySkipSilence()
-        lockScreen = com.prism.music.ui.lockscreen.LockScreenGate(this, c, player, scope).also { it.start() }
+        lockScreen = com.prism.music.ui.lockscreen.LockScreenGate(this, c.settings.flow, player, scope).also { it.start() }
 
         sessionPlayer = LyricsOverlayPlayer(player)
         carLyrics = CarLyrics(this, c, player, sessionPlayer, scope)
@@ -988,12 +988,11 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         if (stuckPlaying(error) && stuckTries < STUCK_TRIES) {
             retries[stuckKey] = stuckTries + 1
             val pos = player.currentPosition
+            val index = player.currentMediaItemIndex
             AudioDiagnostics.log("song", "$id: no progress for 10 s at ${pos / 1000} s on ${AudioEffects.outputDevice(this)} (${player.audioFormat?.sampleMimeType}): trying it again")
             scope.launch {
                 delay(300)
-                player.prepare()
-                player.seekTo(pos)
-                player.play()
+                playOnFrom(index, id, pos)
             }
             return
         }
@@ -1069,14 +1068,13 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             retries["file:$id"] = 1
             AudioDiagnostics.log("song", "$id: its download can't be read (${(error.cause ?: error).message?.take(80)}); downloading it again and streaming it now")
             val pos = player.currentPosition
+            val index = player.currentMediaItemIndex
             scope.launch {
                 // The download's removal lands on the download manager's thread first, so the player reads from the
                 // network. A fixed 0.6 s wasn't always enough (the owner's phone, 1.7.9's check): the broken file was
                 // read again and the song skipped.
                 withTimeoutOrNull(8_000) { while (withContext(Dispatchers.IO) { c.downloadedWhole(id) }) delay(100) }
-                player.prepare()
-                player.seekTo(pos)
-                player.play()
+                playOnFrom(index, id, pos)
             }
             return
         }
@@ -1087,12 +1085,11 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             retries["cache:$id"] = 1
             AudioDiagnostics.log("song", "$id: its cached part can't be read (${(error.cause ?: error).message?.take(80)}); playing it afresh")
             val pos = player.currentPosition
+            val index = player.currentMediaItemIndex
             scope.launch {
                 withContext(Dispatchers.IO) { c.forgetCachedAudio(id) }
                 c.streams.invalidate(id)
-                player.prepare()
-                player.seekTo(pos)
-                player.play()
+                playOnFrom(index, id, pos)
             }
             return
         }
@@ -1105,11 +1102,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             retries[codecKey] = codecTries + 1
             AudioDiagnostics.log("song", "$id: the phone released its decoder (${error.errorCodeName}); playing on from ${player.currentPosition / 1000} s")
             val pos = player.currentPosition
+            val index = player.currentMediaItemIndex
             scope.launch {
                 delay(300)
-                player.prepare()
-                player.seekTo(pos)
-                player.play()
+                playOnFrom(index, id, pos)
             }
             return
         }
@@ -1151,6 +1147,17 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             return
         }
         failAndSkip(error)
+    }
+
+    /**
+     * After a moment's wait, a song that failed plays on from [pos]: unless the listener has gone somewhere else meanwhile,
+     * and a song they skipped to would be sent to the old one's place.
+     */
+    private fun playOnFrom(index: Int, id: String, pos: Long) {
+        if (player.playbackState != Player.STATE_IDLE || player.currentMediaItemIndex != index || player.currentMediaItem?.mediaId != id) return
+        player.prepare()
+        player.seekTo(pos)
+        player.play()
     }
 
     /** The move to the next song after one that wouldn't play, while it's waiting. */
@@ -1339,6 +1346,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      */
     fun maybeAutoplay() {
         val src = c.queue.source.value
+        // Still looking for a queue that's been replaced, whoever replaced it (a car, a watch, a spoken request).
+        if (autoplayJob != null && autoplayFor !== src) dropAutoplay()
         // A song's radio (Quick picks, "Radio" in a song's menu) keeps going whether or not Autoplay is on: that's what it is.
         val radio = src.isSongRadio
         if ((!c.settings.current.autoplay && !radio) || player.mediaItemCount == 0 || c.queue.followingHost || c.queue.filling) return
@@ -1362,7 +1371,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val useYouTube = !offline && !seedLocal && (radio || mode != com.prism.music.data.prefs.AutoplaySource.YOURS)
         val seeds = (maxOf(0, player.mediaItemCount - 3) until player.mediaItemCount).map { player.getMediaItemAt(it).mediaId }.filter { it.isNotBlank() }
         c.queue.autoplayLoading = true
-        scope.launch {
+        autoplayFor = src
+        val job = scope.launch {
             val existing = (0 until player.mediaItemCount).map { player.getMediaItemAt(it).mediaId }.toSet()
             val session = c.sessionHeard
             // With no repeats on, a wider draw: most of Prism's best picks for a song may well have played by now.
@@ -1417,8 +1427,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                     heardAt = session::heardAt,
                 ),
             )
-            // Replaced or switched off while it looked further.
-            if (c.queue.source.value !== src || (!c.settings.current.autoplay && !radio)) return@launch
+            // Replaced or switched off while it looked further. (Its asks swallow a cancellation, so that's checked too.)
+            if (!isActive || c.queue.source.value !== src || (!c.settings.current.autoplay && !radio)) return@launch
             c.queue.autoplayContinuation = answer.continuation
             if (answer.seed != seed) c.queue.reseed(src, answer.seed)
             android.util.Log.i("PrismRadio", "autoplay after ${answer.seed}: ${mine.size} of yours, ${r?.songs?.size ?: 0} from YouTube, adding ${answer.add.size} ($mode${if (offline) ", offline" else ""}${if (noRepeats) ", no repeats" else ""}${if (answer.cameRound) ", coming round" else ""})")
@@ -1428,8 +1438,28 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 fb.served(answer.add.map { it.id })
                 if (answer.cameRound) c.player.reportError(tr(R.string.no_repeats_ran_out))
             }
-        // Loading until the songs are in, or it's known none are coming (a song that wouldn't play waits on this).
-        }.invokeOnCompletion { c.queue.autoplayLoading = false }
+        }
+        autoplayJob = job
+        // Loading until the songs are in, or it's known none are coming (a song that wouldn't play waits on this). A job
+        // dropped for a new queue may end long after the new queue's own started (it's in a network request): that isn't this.
+        job.invokeOnCompletion {
+            if (autoplayJob === job) {
+                autoplayJob = null
+                c.queue.autoplayLoading = false
+            }
+        }
+    }
+
+    /** Autoplay's look for more songs, while it's out, and the queue it's for. */
+    @Volatile private var autoplayJob: kotlinx.coroutines.Job? = null
+    private var autoplayFor: QueueSource? = null
+
+    /** The queue is being replaced: what's being found for this one won't join the next, or hold back the next's own. */
+    fun dropAutoplay() {
+        val job = autoplayJob
+        autoplayJob = null
+        job?.cancel()
+        c.queue.autoplayLoading = false
     }
 
     /** Switching Autoplay off takes its suggestions back out of the queue; on, fetches them. */
