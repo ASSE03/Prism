@@ -855,8 +855,8 @@ class AppContainer(val app: Application) {
     }
 
     private fun resolveVideoUrl(id: String): android.net.Uri {
-        val s = try { streams.resolve(id, withVideo = true) } catch (e: Exception) { throw IOException(e.message, e) }
-        return android.net.Uri.parse(s.videoUrl ?: throw IOException("No video stream available"))
+        val s = try { streams.resolve(id, withVideo = true) } catch (e: Exception) { throw com.prism.music.data.stream.SongStreamException(id, e.message ?: tr(R.string.couldn_t_resolve_stream), e) }
+        return android.net.Uri.parse(s.videoUrl ?: throw com.prism.music.data.stream.SongStreamException(id, "No video stream available"))
     }
 
     /**

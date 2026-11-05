@@ -111,8 +111,8 @@ class TvSkipLiveTests {
             compose.pump((at * 1000L - (System.currentTimeMillis() - started)).coerceAtLeast(0))
             Fixture.screenshot("sing-left-alone-${at}s")
             android.util.Log.i("PrismTest", "at $at s: Sing on ${c.sing.on.value}, playing ${player.isPlaying.value}, problem ${c.sing.problem.value}")
+            org.junit.Assert.assertFalse("the ambient screen over Sing at $at s", com.prism.music.ui.tv.Idle.ambient)
         }
-        org.junit.Assert.assertEquals("the ambient screen over Sing", 0, compose.onAllNodes(hasTestTag(com.prism.music.ui.tv.TAG_AMBIENT), useUnmergedTree = true).fetchSemanticsNodes().size)
     }
 
     /**

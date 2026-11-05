@@ -291,10 +291,10 @@ data class ResolvedStream(
 class StreamException(message: String, cause: Throwable? = null) : Exception(message, cause)
 
 /**
- * [songId]'s stream couldn't be looked up. It says which song: the player reports a failure while reading ahead for the
- * next song as the playing song's own ([com.prism.music.playback.readAheadFailed]).
+ * The stream of [songId] (a song's id, or its music video's) couldn't be looked up. It says which: the player reports a
+ * failure while reading ahead for the next song as the playing song's own ([com.prism.music.playback.readAheadFailed]).
  */
-class SongStreamException(val songId: String, message: String, cause: Throwable) : IOException(message, cause)
+class SongStreamException(val songId: String, message: String, cause: Throwable? = null) : IOException(message, cause)
 
 /**
  * Songs every one of the account's clients just refused, and no other way played (from PR #240, CodeWormer): a song is

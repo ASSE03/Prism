@@ -12,12 +12,18 @@ import org.junit.Test
 class PlaybackErrorsTest {
     /** Only the next song's own failure is passed on to it: anything else is the playing song's, as the player says. */
     @Test fun aFailureIsTheNextSongsOnlyWhenItNamesIt() {
-        assertTrue(readAheadFailed("b", current = "a", next = "b"))
-        assertFalse("its own failure", readAheadFailed("a", current = "a", next = "b"))
-        assertFalse("repeat one: next is itself", readAheadFailed("a", current = "a", next = "a"))
-        assertFalse("not a lookup at all", readAheadFailed(null, current = "a", next = "b"))
-        assertFalse("nothing next", readAheadFailed("b", current = "a", next = null))
-        assertFalse("a song no longer next", readAheadFailed("c", current = "a", next = "b"))
+        assertTrue(readAheadFailed("b", current = setOf("a"), next = setOf("b")))
+        assertFalse("its own failure", readAheadFailed("a", current = setOf("a"), next = setOf("b")))
+        assertFalse("repeat one: next is itself", readAheadFailed("a", current = setOf("a"), next = setOf("a")))
+        assertFalse("not a lookup at all", readAheadFailed(null, current = setOf("a"), next = setOf("b")))
+        assertFalse("nothing next", readAheadFailed("b", current = setOf("a"), next = emptySet()))
+        assertFalse("a song no longer next", readAheadFailed("c", current = setOf("a"), next = setOf("b")))
+    }
+
+    /** With Keep playing videos, the next song's lined up as its video, whose id may not be the song's. */
+    @Test fun theNextSongsVideoCounts() {
+        assertTrue(readAheadFailed("bv", current = setOf("a", "av"), next = setOf("b", "bv")))
+        assertFalse("the playing song's own video", readAheadFailed("av", current = setOf("a", "av"), next = setOf("b", "bv")))
     }
 
     @Test fun aRefusedSongIsNotAskedForAgainForFiveMinutes() {

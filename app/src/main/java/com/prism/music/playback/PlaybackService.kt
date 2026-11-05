@@ -954,8 +954,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // playing song's failure, which would then have its music video looked up and be retried for what isn't its fault.
         // On to the song it's about, whose failure this then is.
         val failedSong = generateSequence(error as Throwable) { it.cause }.filterIsInstance<com.prism.music.data.stream.SongStreamException>().firstOrNull()?.songId
-        val nextSong = player.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET }?.let { player.getMediaItemAt(it).mediaId }
-        if (readAheadFailed(failedSong, id, nextSong)) {
+        val nextItem = player.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET }?.let { player.getMediaItemAt(it) }
+        if (readAheadFailed(failedSong, setOfNotNull(id, player.currentMediaItem?.videoModeId), setOfNotNull(nextItem?.mediaId, nextItem?.videoModeId))) {
             AudioDiagnostics.log("song", "$failedSong couldn't be had as $id ends (${(error.cause ?: error).message?.take(80)}): on to it")
             player.seekToNextMediaItem()
             player.prepare()
@@ -2767,11 +2767,11 @@ internal fun wontPlayHere(error: Throwable, refused: Boolean = false): Boolean {
 }
 
 /**
- * Whether a failure the player reports as the [current] song's is really about the [next] one: [failedSong]'s stream, the
- * song the failed lookup was for, read ahead for as the current one ends.
+ * Whether a failure the player reports as the current song's is really about the next one: [failedSong]'s stream, the id
+ * the failed lookup was for, read ahead for as the current one ends. [current] and [next]: each song's id and its video's.
  */
-internal fun readAheadFailed(failedSong: String?, current: String, next: String?): Boolean =
-    failedSong != null && failedSong != current && failedSong == next
+internal fun readAheadFailed(failedSong: String?, current: Set<String>, next: Set<String>): Boolean =
+    failedSong != null && failedSong !in current && failedSong in next
 
 /** How long a song that wouldn't play is shown, with its reason, before the next one starts. */
 private const val SKIP_AFTER_FAILURE_MS = 1_500L

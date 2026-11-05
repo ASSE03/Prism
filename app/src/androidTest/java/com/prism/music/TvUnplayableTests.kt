@@ -93,6 +93,21 @@ class TvUnplayableTests {
         assertTrue("of the refused song ($said)", said[0].contains(bare.title))
     }
 
+    /**
+     * The same with a music video on (Keep playing videos): the next song is lined up as its video, and that's refused
+     * too. It falls back to the song; refused as well, it's passed over; the song that ended isn't touched.
+     */
+    @Test fun aRefusedNextVideoIsPassedOverToo() {
+        val one = tones("Prism TV refused video ends", seconds = 24).single()
+        val two = tones("Prism TV refused video then").single()
+        play(listOf(one, bare, two))
+        TvStress.waitFor(20_000, "the first song playing") { player.isPlaying.value && onNow() == one.title }
+        instrumentation.runOnMainSync { player.player!!.replaceMediaItem(1, bare.toMediaItem("unplayablevideo")) }
+        TvStress.waitFor(120_000, { "the song after the refused one, on ${onNow()}, said $said" }) { onNow() == two.title && player.isPlaying.value }
+        assertTrue("of the refused song ($said)", said.any { it.contains(bare.title) })
+        assertTrue("nothing said of the song that ended ($said)", said.none { it.contains(one.title) })
+    }
+
     /** Back onto a song refused a moment ago (the refusal's remembered: [PlaybackErrorsTest]): said again, on again. */
     @Test fun aRefusedSongGoneBackToMovesOnAgain() {
         signIn()
