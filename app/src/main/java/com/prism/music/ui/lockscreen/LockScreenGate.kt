@@ -169,7 +169,9 @@ class LockScreenGate(private val context: Context, private val c: AppContainer, 
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         // Started from headphones or a watch with the phone locked: up it comes, whether the screen is on or off.
-        if (isPlaying && registered && keyguard.isKeyguardLocked && LockScreenActivity.live == null) show(woken = offAt == 0L)
+        if (isPlaying && registered && keyguard.isKeyguardLocked && LockScreenActivity.live == null) {
+            show(woken = context.getSystemService(android.os.PowerManager::class.java).isInteractive)
+        }
     }
 
     /** Playing, or about to be: a song loading isn't a pause. */

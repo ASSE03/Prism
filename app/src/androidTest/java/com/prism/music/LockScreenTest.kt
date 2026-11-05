@@ -204,8 +204,8 @@ class LockScreenTest {
     }
 
     @Test fun swipingUpLeaves() {
-        val locked = Fixture.context.getSystemService(android.app.KeyguardManager::class.java).isKeyguardDeviceSecure()
-        org.junit.Assume.assumeFalse("needs the phone's own code", locked)
+        val secure = Fixture.context.getSystemService(android.app.KeyguardManager::class.java).isDeviceSecure
+        org.junit.Assume.assumeFalse("needs the phone's own code", secure)
         LockScreenActivity.pretendLocked = true
         settings.setLockScreen(true)
         playTone("Prism lock swipe tone")
