@@ -443,6 +443,16 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     val cover = com.prism.music.ui.components.LocalPlayerCover.current
     LaunchedEffect(cover) { snapshotFlow { dismiss.value > 0f || closing }.collect { cover.pulled = it } }
     DisposableEffect(cover) { onDispose { cover.pulled = false } }
+    // Opened again before it had gone, this is the same player still, pulled down or slid away: it comes back to its place,
+    // and can close again. (While it leaves it stays where it is: the cover flies back from there.)
+    LaunchedEffect(cover) {
+        snapshotFlow { cover.leaving }.collect { leaving ->
+            if (!leaving && (closing || dismiss.value != 0f)) {
+                closing = false
+                dismiss.animateTo(0f, spring())
+            }
+        }
+    }
     BackHandler {
         when {
             fullscreenVideo || (videoMode && sidewaysFull) -> leaveFullscreenVideo()
