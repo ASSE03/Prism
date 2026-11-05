@@ -59,7 +59,7 @@ class DiscoverAppTest {
     // ---- A radio as YouTube answers it.
 
     private fun row(s: Song) = """{"playlistPanelVideoRenderer":{"videoId":"${s.id}","title":{"runs":[{"text":"${s.title}"}]},
-        "longBylineText":{"runs":[{"text":"${s.primaryArtist}"}]},"lengthText":{"runs":[{"text":"3:10"}]}}}"""
+        "longBylineText":{"runs":[{"text":"${s.primaryArtist}"}]},"lengthText":{"runs":[{"text":"${s.durationSec / 60}:${(s.durationSec % 60).toString().padStart(2, '0')}"}]}}}"""
 
     private fun page(list: List<Song>) =
         """{"contents":{"playlistPanelRenderer":{"contents":[${list.joinToString(",", transform = ::row)}]}}}"""
@@ -180,6 +180,28 @@ class DiscoverAppTest {
         Thread.sleep(4_000)
         assertTrue("nothing came round: ${queue()}", queue().none { it.startsWith("hear") })
     }
+
+    /** #299's limit lives in the top-up's rules now: Autoplay's own songs only, switch on or off. */
+    private fun lengthLimit(noRepeats: Boolean) {
+        start(noRepeats)
+        c.settings.setAutoplayMaxMinutes(10)
+        compose.waitUntil(5_000) { c.settings.current.behavior.autoplayMaxMinutes == 10 }
+        val long = songs("long", 4).map { it.copy(durationSec = 3_000) }
+        val fresh = songs("frsh", 12)
+        radios { long + fresh }
+        // Autoplay after a playlist: the long songs stay out.
+        main { c.player.playQueue(songs("list", 2), 0, QueueSource(QueueKind.PLAYLIST, "Mine")) }
+        compose.waitUntil(20_000) { queue().any { it.startsWith("frsh") } }
+        assertTrue("Autoplay added a long song: ${queue()}", queue().none { it.startsWith("long") })
+        compose.waitUntil(10_000) { !c.queue.autoplayLoading }
+        // A radio the listener started: left as it is.
+        radioOn(song("seed0001"))
+        compose.waitUntil(20_000) { queue().any { it.startsWith("long") } }
+    }
+
+    @Test fun autoplaysLengthLimitHoldsAndARadioIsLeftAsItIs() = lengthLimit(noRepeats = false)
+
+    @Test fun autoplaysLengthLimitHoldsWithNoRepeatsToo() = lengthLimit(noRepeats = true)
 
     // ---- The switch and the sliders.
 
