@@ -39,7 +39,17 @@ class LongListStartTest {
     private fun main(block: () -> Unit) = instrumentation.runOnMainSync(block)
     private fun <T> onMain(read: () -> T): T { var out: T? = null; main { out = read() }; @Suppress("UNCHECKED_CAST") return out as T }
     private fun count() = onMain { c.player.player?.mediaItemCount ?: 0 }
-    private fun inPlayOrder(): List<String> = onMain { c.player.queue.value.map { it.song.id } }
+    private fun inPlayOrder(): List<String> = onMain {
+        val p = c.player.player!!
+        val t = p.currentTimeline
+        val out = ArrayList<String>()
+        var i = t.getFirstWindowIndex(p.shuffleModeEnabled)
+        while (i != androidx.media3.common.C.INDEX_UNSET && out.size < t.windowCount) {
+            out += p.getMediaItemAt(i).mediaId
+            i = t.getNextWindowIndex(i, androidx.media3.common.Player.REPEAT_MODE_OFF, p.shuffleModeEnabled)
+        }
+        out
+    }
     private fun tones(n: Int, prefix: String) = Fixture.songs(n, prefix).map { it.copy(id = "$prefix${it.id}".replace(" ", "")) }
 
     @After fun cleanUp() {
