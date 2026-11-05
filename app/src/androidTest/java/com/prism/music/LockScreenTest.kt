@@ -272,10 +272,20 @@ class LockScreenTest {
         val player = Fixture.container.player
         compose.waitUntil(20_000) { player.isPlaying.value }
         compose.onAllNodes(hasTestTag(LockTags.PLAY), useUnmergedTree = true).onFirst().performClick()
-        compose.waitUntil(5_000) { !player.isPlaying.value }
+        // Paused for real: a pause fades out, and the player only stops wanting to play once the fade is done.
+        compose.waitUntil(10_000) {
+            var wants = true
+            instrumentation.runOnMainSync { wants = player.playWhenReady }
+            !wants && !player.isPlaying.value
+        }
+        fun notifications() = Fixture.context.getSystemService(android.app.NotificationManager::class.java).activeNotifications.count {
+            it.notification.extras.getString(android.app.Notification.EXTRA_TEMPLATE)?.contains("MediaStyle") == true
+        }
+        compose.waitUntil(10_000) { notifications() > 0 }
         instrumentation.runOnMainSync { LockScreenActivity.live!!.finishAndRemoveTask() }
         waitUntilClosed()
         Thread.sleep(3_000)
+        assertTrue("closing the lock screen took the paused song's notification", notifications() > 0)
         assertTrue("closing the lock screen emptied the player", player.currentSong.value != null)
     }
 
