@@ -437,6 +437,11 @@ class ArtworkProvider : ContentProvider() {
             // ...or a holiday mix's cover, drawn by Prism (1.8.0).
             val holiday = File(ctx.filesDir, "seasonal").canonicalPath
             val path = file.canonicalPath
+            // ...or the cover inside a file on the phone (#350), which the scan kept as it found it: a PNG goes out as a JPEG too.
+            if (path.startsWith(File(ctx.filesDir, "artwork/local").canonicalPath + File.separator)) {
+                if (!file.exists()) return null
+                return cached(ctx, "local:$path:${file.lastModified()}:${file.length()}") { file.readBytes() }
+            }
             if (!(path.startsWith(covers + File.separator) || path.startsWith(holiday + File.separator)) || !file.exists()) return null
             return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
         }
@@ -494,7 +499,7 @@ class ArtworkProvider : ContentProvider() {
         const val RES = "res:"
         /** The query parameter naming the tile shown when the picture can't be had. */
         const val OR = "or"
-        private const val LOCAL_ALBUM_ART = "content://media/external/audio/albumart/"
+        const val LOCAL_ALBUM_ART = "content://media/external/audio/albumart/"
         private const val TILE_PX = 288
 
         /** [url] served through this provider (a car can't open the app's own files, nor every web address). */
