@@ -126,15 +126,22 @@ class TvSkipStressTests {
         }
     }
 
-    /** Past the end of the queue: Next on the last song does nothing, and nothing breaks. */
+    /**
+     * Past the end of the queue: Next on the last song does nothing, and nothing breaks. Autoplay may add songs from the
+     * TV's own files as the end nears (a device with other music on it does), so "the end" is wherever the queue ends.
+     */
     @Test fun nextOnTheLastSongStaysPut() {
         lineUp(3)
         openPlayer()
         TvFixture.right()
         compose.awaitFocusOn(hasTestTag("$TAG_PLAYER/next"))
-        repeat(10) { TvFixture.ok(); compose.pump(150) }
-        compose.until(10_000, "on the last song") { player.currentIndex.value == 2 }
-        assertEquals(2, player.currentIndex.value)
+        fun atTheEnd() = player.currentIndex.value == player.queue.value.size - 1 && !Fixture.container.queue.autoplayLoading
+        var presses = 0
+        while (presses < 10 || (!atTheEnd() && presses < 60)) { TvFixture.ok(); compose.pump(150); presses++ }
+        compose.until(10_000, { "at the end (index ${player.currentIndex.value} of ${player.queue.value.size})" }) { atTheEnd() }
+        val last = player.currentIndex.value
+        repeat(5) { TvFixture.ok(); compose.pump(150) }
+        assertEquals(last, player.currentIndex.value)
         assertTrue(player.currentSong.value != null)
     }
 }
