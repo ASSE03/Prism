@@ -148,6 +148,21 @@ class YouTubeMusic(
 
     suspend fun moodsAndGenres(): List<Shelf> = Parser.shelves(browse("FEmusic_moods_and_genres"))
 
+    /**
+     * Explore's new releases, moods and genres, and trending. Asked without the account: it's the same public page, and
+     * what was checked is what everyone gets.
+     */
+    suspend fun explore(): List<Shelf> =
+        Explore.music(Parser.shelves(api.postAnonymous("browse", buildJsonObject { put("browseId", "FEmusic_explore") })))
+
+    /** The charts of [country] (a [ChartCountry.code]), or of the country YouTube picks for the listener when null. */
+    suspend fun charts(country: String? = null): ChartsPage = Explore.charts(
+        api.postAnonymous("browse", buildJsonObject {
+            put("browseId", "FEmusic_charts")
+            if (country != null) putJsonObject("formData") { putJsonArray("selectedValues") { add(country) } }
+        }),
+    )
+
     suspend fun browseShelves(browseId: String, params: String? = null): List<Shelf> {
         val res = browse(browseId, params)
         val shelves = Parser.shelves(res)

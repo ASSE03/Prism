@@ -39,6 +39,9 @@ What changed in each release. Older releases are described on the [Releases page
   never sent anywhere. *Essentials for you:* their top songs, moved by what you play. *Bio from Wikipedia:* a short bio in
   your language, credited and linked, kept for offline. It only shows when Prism is sure it's the right article (the
   article has to be about a musician and name that artist's own albums or songs), so some artists won't have one.
+- **Explore.** At the end of Search, before you type: YouTube Music's charts by country, moods and genres, new releases
+  and what's trending, in one place. Which charts there are depends on the country. Search's Arrange moves or hides the
+  line that leads here; if you've arranged Search before, turn it on there.
 
 ### Fixes
 

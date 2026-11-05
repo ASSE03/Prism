@@ -923,7 +923,9 @@ enum class HomeHeaderHeight(val label: String, val dp: Int) { SHORT(tr(R.string.
 enum class SearchSection(val label: String) {
     // The shortcut tiles (Recognize, Find by lyrics, Podcasts, Your files) went before release: the search box has
     // Recognize, a line of lyrics finds its song, and podcasts and your files are searched with everything else.
-    RECENT(tr(R.string.recent)), ARTISTS(tr(R.string.your_artists)), MOODS(tr(R.string.moods_genres));
+    RECENT(tr(R.string.recent)), ARTISTS(tr(R.string.your_artists)), MOODS(tr(R.string.moods_genres)),
+    /** One line leading to the Explore page (1.8.2). A list arranged before it came doesn't have it; Arrange offers it. */
+    EXPLORE(tr(R.string.explore));
 
     companion object {
         fun parse(v: String?): List<SearchSection> =

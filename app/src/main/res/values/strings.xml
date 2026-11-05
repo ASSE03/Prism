@@ -251,6 +251,11 @@
     <string name="song_details_your_plays">Your plays</string>
     <string name="song_details_couldnt_load">Couldn\'t ask YouTube. Check your connection.</string>
     <string name="song_details_none">YouTube shares no details for this one.</string>
+    <string name="explore">Explore</string>
+    <string name="explore_strapline">Charts, new releases and what\'s trending</string>
+    <string name="explore_charts">Charts</string>
+    <string name="explore_pick_country">Choose a country</string>
+    <string name="explore_no_charts">No charts for this country right now.</string>
     <string name="artist_pages">Artist pages</string>
     <string name="artist_you_title">You and this artist</string>
     <string name="artist_you_detail">Your first play, plays, time and top song</string>
