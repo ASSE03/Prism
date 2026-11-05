@@ -375,7 +375,9 @@ private fun AddRssShowDialog(onDismiss: () -> Unit, onAdded: (com.prism.music.da
             problem = null
             scope.launch {
                 try {
-                    onAdded(c.rssPodcastsReady().add(address))
+                    val show = c.rssPodcastsReady().add(address)
+                    // onAdded opens the show's page, and navigating has to happen on the main thread.
+                    kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main.immediate) { onAdded(show) }
                 } catch (e: com.prism.music.data.podcast.RssException) {
                     problem = e.message
                 }
