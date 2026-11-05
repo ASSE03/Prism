@@ -4839,10 +4839,10 @@
     <string name="lock_screen_detail">Il player di Prism nella schermata di blocco mentre suona la musica</string>
     <string name="lock_screen_info">Sostituisce ciò che vedi a telefono bloccato, solo mentre qualcosa è in riproduzione, e può controllare solo ciò che suona: da lì non si possono aprire raccolta, ricerca o impostazioni. Sbloccando si chiude e ti lascia dove eri. I controlli multimediali di Android restano come sono. Chiamate e sveglie restano sopra.</string>
     <string name="lock_screen_keywords">schermata di blocco player bloccato keyguard copertina testi orologio scorri sblocca sopra altre app controlli multimediali</string>
-    <string name="lock_screen_needs_permission">Per essere pronto appena il telefono si accende, serve \"Visualizza sopra altre app\". Prism non disegna mai sopra altre app con questa autorizzazione.</string>
+    <string name="lock_screen_needs_permission">Per comparire da solo mentre suona la musica, serve \"Visualizza sopra altre app\". Prism non disegna mai sopra altre app con questa autorizzazione.</string>
     <string name="lock_screen_allow">Consentilo</string>
     <string name="lock_screen_allow_detail">Apre l\'elenco di Android: trova Prism e attivalo</string>
-    <string name="lock_screen_allow_info">Android permette a una schermata di partire in background solo con questa autorizzazione. Senza, il player può comunque comparire su un telefono bloccato, un istante dopo che si è acceso.</string>
+    <string name="lock_screen_allow_info">Android permette a una schermata di partire in background solo con questa autorizzazione. Senza, alcuni telefoni possono comunque mostrare il player un istante dopo essersi accesi, altri non lo mostreranno affatto.</string>
     <string name="lock_screen_app_info">Disattivato? Apri Info app</string>
     <string name="lock_screen_app_info_detail">⋮ → Consenti impostazioni con limitazioni, poi riprova</string>
     <string name="lock_screen_app_info_info">Android blocca questa impostazione per le app installate da un file. In Info app, il menu ⋮ ha \"Consenti impostazioni con limitazioni\". Dopo, l\'interruttore funziona.</string>

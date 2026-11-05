@@ -4711,10 +4711,10 @@
     <string name="lock_screen_detail">음악을 재생하는 동안 잠금 화면에 Prism 자체 플레이어를 표시해요</string>
     <string name="lock_screen_info">잠금 상태에서 보이는 화면을 대체하며, 재생 중일 때만 표시되고 재생 중인 곡만 제어할 수 있어요. 여기서는 보관함, 검색, 설정을 열 수 없어요. 잠금을 해제하면 닫히고 원래 있던 곳으로 돌아가요. Android 기본 미디어 컨트롤은 그대로예요. 전화와 알람은 그 위에 표시돼요.</string>
     <string name="lock_screen_keywords">잠금 화면 플레이어 잠금 키가드 커버 가사 시계 스와이프 잠금 해제 다른 앱 위에 표시 미디어 컨트롤</string>
-    <string name="lock_screen_needs_permission">휴대전화가 켜지는 순간 바로 준비되려면 \"다른 앱 위에 표시\" 권한이 필요해요. Prism은 이 권한으로 다른 앱 위에 화면을 그리지 않아요.</string>
+    <string name="lock_screen_needs_permission">음악을 재생하는 동안 저절로 나타나려면 \"다른 앱 위에 표시\" 권한이 필요해요. Prism은 이 권한으로 다른 앱 위에 화면을 그리지 않아요.</string>
     <string name="lock_screen_allow">허용하기</string>
     <string name="lock_screen_allow_detail">Android 목록이 열려요. Prism을 찾아 켜세요</string>
-    <string name="lock_screen_allow_info">Android는 이 권한이 있어야 백그라운드에서 화면을 시작할 수 있게 해요. 없어도 휴대전화가 켜지고 잠시 뒤 잠금 화면 위에 플레이어가 나타날 수 있어요.</string>
+    <string name="lock_screen_allow_info">Android는 이 권한이 있어야 백그라운드에서 화면을 시작할 수 있게 해요. 권한이 없어도 일부 휴대전화는 켜지고 잠시 뒤 플레이어를 띄울 수 있지만, 아예 표시하지 못하는 휴대전화도 있어요.</string>
     <string name="lock_screen_app_info">회색으로 나오나요? 앱 정보 열기</string>
     <string name="lock_screen_app_info_detail">⋮ → 제한된 설정 허용, 그다음 다시 시도하세요</string>
     <string name="lock_screen_app_info_info">Android는 파일로 설치한 앱에서 이 설정을 막아 둬요. 앱 정보의 ⋮ 메뉴에 \"제한된 설정 허용\"이 있어요. 그다음에는 스위치가 작동해요.</string>

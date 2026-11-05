@@ -4711,10 +4711,10 @@
     <string name="lock_screen_detail">播放音乐时在锁屏上显示 Prism 自己的播放器</string>
     <string name="lock_screen_info">它只在播放时取代锁定时看到的界面，并且只能控制正在播放的内容：无法从中打开音乐库、搜索或设置。解锁后它会关闭，并让你回到原来的位置。Android 自带的媒体控件保持不变。来电和闹钟仍会显示在它上面。</string>
     <string name="lock_screen_keywords">锁屏 播放器 已锁定 键盘锁 封面 歌词 时钟 滑动 解锁 显示在其他应用上层 媒体控件</string>
-    <string name="lock_screen_needs_permission">要在手机唤醒的瞬间就绪，需要“显示在其他应用的上层”权限。Prism 绝不会借此在其他应用上绘制内容。</string>
+    <string name="lock_screen_needs_permission">要在播放音乐时自动出现，需要“显示在其他应用的上层”权限。Prism 绝不会借此在其他应用上绘制内容。</string>
     <string name="lock_screen_allow">允许</string>
     <string name="lock_screen_allow_detail">打开 Android 的列表：找到 Prism 并将其开启</string>
-    <string name="lock_screen_allow_info">Android 只允许拥有此权限的应用在后台启动界面。没有它，播放器仍可能在手机唤醒片刻之后显示在锁定的手机上。</string>
+    <string name="lock_screen_allow_info">Android 只允许拥有此权限的应用在后台启动界面。没有它，部分手机仍可在唤醒片刻之后显示播放器，另一些手机则完全不会显示。</string>
     <string name="lock_screen_app_info">是灰色的？打开应用信息</string>
     <string name="lock_screen_app_info_detail">⋮ → 允许受限制的设置，然后重试</string>
     <string name="lock_screen_app_info_info">对于通过文件安装的应用，Android 会限制此设置。在应用信息中，⋮ 菜单里有“允许受限制的设置”。之后开关就可以使用了。</string>

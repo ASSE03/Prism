@@ -4775,10 +4775,10 @@
     <string name="lock_screen_detail">Sariling player ng Prism sa lock screen habang nagpe-play ang musika</string>
     <string name="lock_screen_info">Pinapalitan nito ang nakikita mo habang naka-lock, habang may nagpe-play lang, at ang pinapatugtog lang ang makokontrol: walang library, paghahanap, o setting na mabubuksan mula rito. Isinasara ito ng pag-unlock at ibinabalik ka kung nasaan ka. Nananatili ang sariling media control ng Android. Nasa ibabaw nito ang mga tawag at alarm.</string>
     <string name="lock_screen_keywords">lock screen player naka-lock keyguard cover lyrics orasan swipe unlock sa ibabaw ng ibang app media control</string>
-    <string name="lock_screen_needs_permission">Para handa agad pagkagising ng phone mo, kailangan nito ng \"Display over other apps\". Hindi kailanman gumuguhit ang Prism sa ibabaw ng ibang app gamit ito.</string>
+    <string name="lock_screen_needs_permission">Para kusang lumabas habang nagpe-play ang musika, kailangan nito ng \"Display over other apps\". Hindi kailanman gumuguhit ang Prism sa ibabaw ng ibang app gamit ito.</string>
     <string name="lock_screen_allow">Payagan ito</string>
     <string name="lock_screen_allow_detail">Bubuksan ang listahan ng Android: hanapin ang Prism at i-on</string>
-    <string name="lock_screen_allow_info">Pinapayagan lang ng Android na magsimula ang screen sa background gamit ang permission na ito. Kung wala ito, puwede pa ring lumabas ang player sa naka-lock na phone, ilang sandali pagkagising nito.</string>
+    <string name="lock_screen_allow_info">Pinapayagan lang ng Android na magsimula ang screen sa background gamit ang permission na ito. Kung wala ito, may ilang phone na puwede pa ring maglabas ng player ilang sandali pagkagising, at may iba namang hindi ito ipapakita kahit kailan.</string>
     <string name="lock_screen_app_info">Naka-grey? Buksan ang App info</string>
     <string name="lock_screen_app_info_detail">⋮ → Allow restricted settings, saka subukan ulit</string>
     <string name="lock_screen_app_info_info">Pinipigilan ng Android ang setting na ito para sa mga app na na-install mula sa file. Sa App info, may \"Allow restricted settings\" ang ⋮ menu. Pagkatapos nito, gagana na ang switch.</string>

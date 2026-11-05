@@ -4839,10 +4839,10 @@
     <string name="lock_screen_detail">הנגן של Prism עצמו על מסך הנעילה בזמן שמוזיקה מתנגנת</string>
     <string name="lock_screen_info">הוא מחליף את מה שאתה רואה כשהמכשיר נעול, רק כשמשהו מתנגן, ויכול לשלוט רק במה שמתנגן: אי אפשר לפתוח ממנו ספרייה, חיפוש או הגדרות. פתיחת הנעילה סוגרת אותו ומחזירה אותך למקום שבו היית. פקדי המדיה של Android עצמו נשארים כפי שהם. שיחות והתראות שעון נשארות מעליו.</string>
     <string name="lock_screen_keywords">מסך נעילה נגן נעול נעילת מסך עטיפה מילים שעון החלקה פתיחת נעילה מעל אפליקציות אחרות פקדי מדיה</string>
-    <string name="lock_screen_needs_permission">כדי להיות מוכן ברגע שהטלפון מתעורר, זה דורש את ״הצגה מעל אפליקציות אחרות״. Prism אף פעם לא מצייר מעל אפליקציות אחרות בעזרתה.</string>
+    <string name="lock_screen_needs_permission">כדי לעלות מעצמו בזמן שמוזיקה מתנגנת, זה דורש את ״הצגה מעל אפליקציות אחרות״. Prism אף פעם לא מצייר מעל אפליקציות אחרות בעזרתה.</string>
     <string name="lock_screen_allow">אפשר זאת</string>
     <string name="lock_screen_allow_detail">פותח את הרשימה של Android: מצא את Prism והפעל</string>
-    <string name="lock_screen_allow_info">Android מאפשר למסך להתחיל ברקע רק עם ההרשאה הזאת. בלעדיה הנגן עדיין יכול לעלות מעל טלפון נעול, רגע אחרי שהוא מתעורר.</string>
+    <string name="lock_screen_allow_info">Android מאפשר למסך להתחיל ברקע רק עם ההרשאה הזאת. בלעדיה חלק מהטלפונים עדיין יכולים להעלות את הנגן רגע אחרי שהם מתעוררים, ואחרים לא יציגו אותו בכלל.</string>
     <string name="lock_screen_app_info">מופיע באפור? פתח את פרטי האפליקציה</string>
     <string name="lock_screen_app_info_detail">⋮ ← אפשר הגדרות מוגבלות, ואז נסה שוב</string>
     <string name="lock_screen_app_info_info">Android מונע את ההגדרה הזאת מאפליקציות שהותקנו מקובץ. בפרטי האפליקציה, בתפריט ⋮ יש ״אפשר הגדרות מוגבלות״. אחר כך המתג עובד.</string>

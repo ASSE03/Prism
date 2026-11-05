@@ -4903,10 +4903,10 @@
     <string name="lock_screen_detail">Vlastní přehrávač Prism na zamykací obrazovce, dokud hraje hudba</string>
     <string name="lock_screen_info">Nahradí to, co vidíš na zamčeném telefonu, jen když něco hraje, a ovládá jen to, co hraje: nedá se z něj otevřít knihovna, hledání ani nastavení. Odemčení ho zavře a zůstaneš tam, kde jsi byl(a). Vlastní ovládání médií v Androidu zůstává, jak je. Hovory a budíky se zobrazí nad ním.</string>
     <string name="lock_screen_keywords">zamykací obrazovka přehrávač zamčeno obal texty hodiny přejetí odemknutí přes ostatní aplikace ovládání médií</string>
-    <string name="lock_screen_needs_permission">Aby byl připravený ve chvíli, kdy se telefon probudí, potřebuje oprávnění „Zobrazení přes ostatní aplikace“. Prism s ním nikdy nekreslí přes jiné aplikace.</string>
+    <string name="lock_screen_needs_permission">Aby se objevil sám, když hraje hudba, potřebuje oprávnění „Zobrazení přes ostatní aplikace“. Prism s ním nikdy nekreslí přes jiné aplikace.</string>
     <string name="lock_screen_allow">Povolit</string>
     <string name="lock_screen_allow_detail">Otevře seznam Androidu: najdi Prism a zapni ho</string>
-    <string name="lock_screen_allow_info">Android dovolí spustit obrazovku na pozadí jen s tímto oprávněním. Bez něj se přehrávač může na zamčeném telefonu objevit i tak, chvíli po jeho probuzení.</string>
+    <string name="lock_screen_allow_info">Android dovolí spustit obrazovku na pozadí jen s tímto oprávněním. Bez něj některé telefony přehrávač i tak ukážou chvíli po probuzení, jiné ho neukážou vůbec.</string>
     <string name="lock_screen_app_info">Je to zašedlé? Otevři Informace o aplikaci</string>
     <string name="lock_screen_app_info_detail">⋮ → Povolit omezená nastavení, pak to zkus znovu</string>
     <string name="lock_screen_app_info_info">Android toto nastavení zadržuje u aplikací nainstalovaných ze souboru. V Informacích o aplikaci je v nabídce ⋮ položka „Povolit omezená nastavení“. Poté přepínač začne fungovat.</string>
