@@ -77,6 +77,8 @@ What changed in each release. Older releases are described on the [Releases page
 
 ### Fixes
 
+- A song YouTube offers in copy-protected formats no longer tries to play them, it uses a format that can play (idea from
+  CodeWormer's PR #240).
 - **Speakers and TVs on your network can be found again, Sonos among them** (#239). Android stopped Prism reading what a
   speaker says about itself, because speakers only speak plain HTTP, so none of them were listed. Prism now reads them
   on the local network only; everything else it asks for stays secure. There's no Sonos here to try it on: this was
