@@ -7,6 +7,13 @@ What changed in each release. Older releases are described on the [Releases page
 ### Fixes
 
 - **Typing in Search and in Settings' search keeps up on slower phones** (#355).
+- **A song YouTube won't play no longer stops the music.** Prism says which song it was and goes on to the next, also
+  when the next songs are still on their way from Autoplay; Next, Previous and the scrubber work again if it did have to stop.
+- **Prism TV: Sing's lyrics stay on screen.** The album cover could take their place and stay there.
+- **Prism TV: leaving Sing goes back to the player.** After a long song with the remote put down, the cover could come up
+  instead, as if the buttons had stopped working.
+- **Prism TV: the song's title in the side menu is no longer cut off at the bottom.** Now playing also fits every song
+  title and text size now, with all its buttons on screen, and the side panels no longer let it show through.
 
 ## 1.8.1.1
 

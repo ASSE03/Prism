@@ -654,7 +654,7 @@ class AppContainer(val app: Application) {
             // The song's id, not its version's: the resolver plays the version for it.
             streams.resolve(sound ?: song)
         } catch (e: Exception) {
-            throw IOException(e.message ?: tr(R.string.couldn_t_resolve_stream), e)
+            throw com.prism.music.data.stream.SongStreamException(song, e.message ?: tr(R.string.couldn_t_resolve_stream), e)
         }
         // The song's start was saved ahead from another format (the network changed since, so another quality
         // was picked): bytes of two formats can't be stitched together, so that start goes.
@@ -855,8 +855,8 @@ class AppContainer(val app: Application) {
     }
 
     private fun resolveVideoUrl(id: String): android.net.Uri {
-        val s = try { streams.resolve(id, withVideo = true) } catch (e: Exception) { throw IOException(e.message, e) }
-        return android.net.Uri.parse(s.videoUrl ?: throw IOException("No video stream available"))
+        val s = try { streams.resolve(id, withVideo = true) } catch (e: Exception) { throw com.prism.music.data.stream.SongStreamException(id, e.message ?: tr(R.string.couldn_t_resolve_stream), e) }
+        return android.net.Uri.parse(s.videoUrl ?: throw com.prism.music.data.stream.SongStreamException(id, "No video stream available"))
     }
 
     /**

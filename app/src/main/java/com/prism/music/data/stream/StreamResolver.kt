@@ -290,6 +290,37 @@ data class ResolvedStream(
 
 class StreamException(message: String, cause: Throwable? = null) : Exception(message, cause)
 
+/**
+ * The stream of [songId] (a song's id, or its music video's) couldn't be looked up. It says which: the player reports a
+ * failure while reading ahead for the next song as the playing song's own ([com.prism.music.playback.readAheadFailed]).
+ */
+class SongStreamException(val songId: String, message: String, cause: Throwable? = null) : IOException(message, cause)
+
+/**
+ * Songs every one of the account's clients just refused, and no other way played (from PR #240, CodeWormer): a song is
+ * asked for several times by the player, each time of five clients, so it's not asked again for [FOR_MS]. For the
+ * [account] it was refused to; signing in to another one asks afresh.
+ */
+internal class RefusedSongs(private val now: () -> Long = System::currentTimeMillis) {
+    private class Entry(val until: Long, val reason: String, val account: String)
+
+    private val entries = ConcurrentHashMap<String, Entry>()
+
+    fun note(id: String, reason: String, account: String) { entries[id] = Entry(now() + FOR_MS, reason, account) }
+
+    /** Why [id] was refused to [account] a moment ago; null: ask. */
+    fun reasonFor(id: String, account: String): String? {
+        val e = entries[id] ?: return null
+        if (now() < e.until && e.account == account) return e.reason
+        entries.remove(id, e)
+        return null
+    }
+
+    fun forget(id: String) { entries.remove(id) }
+
+    companion object { const val FOR_MS = 5 * 60_000L }
+}
+
 /** [videoId] turned out to be live: it plays from its HLS manifest (`prism://live/…`), not as a file. */
 class LiveStreamException(val videoId: String) : IOException("$videoId is a live stream")
 
@@ -387,6 +418,7 @@ class StreamResolver(
      */
     fun invalidate(songId: String, refused: Boolean = false) {
         val videoId = versionOf(songId) ?: songId
+        refusedSongs.forget(videoId)
         val was = cache.remove(videoId)
         // The account's own link was the one turned away (its web client's links stop after the first megabyte without
         // a PO token, GitHub #188 #192): asking as the account again gets the same, so the other ways are tried first
@@ -426,8 +458,17 @@ class StreamResolver(
         runCatching { formats(versionOf(videoId) ?: videoId) }
     }
 
+    /** Songs refused by every account client a moment ago, and no other way played them ([RefusedSongs]). */
+    private val refusedSongs = RefusedSongs()
+
+    /** Every account client refused the song being looked up now; kept in [refusedSongs] if no other way plays it either. */
+    private val refusedNow = ConcurrentHashMap.newKeySet<String>()
+
+    private fun account() = settings.current.let { "${it.cookie.hashCode()}/${it.authUser}" }
+
     private fun formats(videoId: String): Formats {
         cache[videoId]?.let { if (System.currentTimeMillis() < it.expiresAtMs) return it }
+        refusedSongs.reasonFor(videoId, account())?.let { throw StreamException(it) }
         val mine = CompletableFuture<Formats>()
         val running = inflight.putIfAbsent(videoId, mine)
         if (running != null) {
@@ -440,6 +481,7 @@ class StreamResolver(
         try {
             val started = System.nanoTime()
             val f = load(videoId)
+            refusedNow -= videoId
             val took = (System.nanoTime() - started) / 1_000_000
             Log.i("PrismStream", "$videoId resolved via ${f.via} in $took ms")
             runCatching { com.prism.music.playback.AudioDiagnostics.log("stream", "$videoId resolved via ${f.via} in $took ms") }
@@ -447,6 +489,7 @@ class StreamResolver(
             mine.complete(f)
             return f
         } catch (e: Throwable) {
+            if (refusedNow.remove(videoId)) e.message?.let { refusedSongs.note(videoId, it, account()) }
             mine.completeExceptionally(e)
             throw e
         } finally {
@@ -543,6 +586,7 @@ class StreamResolver(
         if (status != "OK") {
             val reason = res.str("playabilityStatus", "reason")
             Log.i("StreamResolver", "Direct lookup of $videoId: $status ($reason)")
+            runCatching { com.prism.music.playback.AudioDiagnostics.log("stream", "$videoId, asked directly: $status ($reason)") }
             if (reason?.contains("bot", ignoreCase = true) == true) {
                 directOffUntil = System.currentTimeMillis() + BLOCK_BACKOFF_MS
             } else if (signedIn && status == "LOGIN_REQUIRED") {
@@ -618,6 +662,8 @@ class StreamResolver(
         var reason: String? = null
         // A live answer without an HLS manifest is kept only until a client gives one ([liveManifest] fills it in).
         var liveWithoutHls: Formats? = null
+        // Each client said UNPLAYABLE (not a failed request, nor an answer another moment could change).
+        var allRefused = true
         for (client in AccountClients.order) {
             val res = try {
                 var answer = innerTube.signedInPlayer(client, videoId, player?.second)
@@ -629,11 +675,13 @@ class StreamResolver(
                 }
                 answer
             } catch (e: Exception) {
+                allRefused = false
                 reason = reason ?: e.message
                 noteClient(client, "request failed: ${e.message}")
                 continue
             }
             val status = res.str("playabilityStatus", "status")
+            if (status != "UNPLAYABLE") allRefused = false
             if (status != "OK") {
                 reason = res.str("playabilityStatus", "reason") ?: reason
                 noteClient(client, "$status (${res.str("playabilityStatus", "reason")})")
@@ -645,6 +693,7 @@ class StreamResolver(
             noteClient(client, "OK but no audio links (${linkless(res)})")
         }
         liveWithoutHls?.let { return it }
+        if (allRefused) refusedNow += videoId
         throw StreamException(reason ?: tr(R.string.couldn_t_load_this_track))
     }
 

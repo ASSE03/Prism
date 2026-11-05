@@ -939,8 +939,29 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         effects.attach(audioSessionId)
     }
 
+    /**
+     * Next, Previous, a song picked or the scrubber moved while the player stands stopped on an error: Media3 moves the
+     * place but stays stopped, so the new song sat at 0:00 and every button seemed dead (Reddit, Prism TV, 1.8.1). Whoever
+     * did the moving (the remote, the notification, a car), the song there starts loading.
+     */
+    override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
+        if (reason == Player.DISCONTINUITY_REASON_SEEK && player.playbackState == Player.STATE_IDLE && player.playerError != null) player.prepare()
+    }
+
     override fun onPlayerError(error: PlaybackException) {
         val id = player.currentMediaItem?.mediaId ?: return
+        // The next song couldn't be had, found as the playing one's last sound is read: the player reports that as the
+        // playing song's failure, which would then have its music video looked up and be retried for what isn't its fault.
+        // On to the song it's about, whose failure this then is.
+        val failedSong = generateSequence(error as Throwable) { it.cause }.filterIsInstance<com.prism.music.data.stream.SongStreamException>().firstOrNull()?.songId
+        val nextItem = player.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET }?.let { player.getMediaItemAt(it) }
+        if (readAheadFailed(failedSong, setOfNotNull(id, player.currentMediaItem?.videoModeId), setOfNotNull(nextItem?.mediaId, nextItem?.videoModeId))) {
+            AudioDiagnostics.log("song", "$failedSong couldn't be had as $id ends (${(error.cause ?: error).message?.take(80)}): on to it")
+            player.seekToNextMediaItem()
+            player.prepare()
+            player.play()
+            return
+        }
         // An Apple Lossless file this phone has no decoder for (#135): the lossless add-on's file is set aside and the
         // song's stream plays; a file of your own says so and stays put rather than being skipped.
         val format = (error as? androidx.media3.exoplayer.ExoPlaybackException)?.takeIf { it.type == androidx.media3.exoplayer.ExoPlaybackException.TYPE_RENDERER }?.rendererFormat
@@ -996,6 +1017,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 player.play()
                 return
             }
+            AudioDiagnostics.log("video", "video $videoId failed (${httpCode ?: error.errorCodeName}: ${(error.cause ?: error).message?.take(80)}): back to the song")
             scope.launch { revertVideo(id) }
             return
         }
@@ -1096,16 +1118,43 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         failAndSkip(error)
     }
 
-    /** Says why a song didn't play, and moves on to the next one. */
+    /** The move to the next song after one that wouldn't play, while it's waiting. */
+    private var skipJob: kotlinx.coroutines.Job? = null
+
+    /**
+     * Says why a song didn't play, and moves on to the next one (Reddit, Prism TV, 1.8.1: the player sat at 0:00 with
+     * YouTube's "Video unavailable"). With nothing queued after it, Autoplay's songs are waited for; with none of those
+     * either it says so and stops. If the listener has gone somewhere else meanwhile, that stands.
+     */
     private fun failAndSkip(error: PlaybackException) {
-        c.player.reportError((error.cause ?: error).friendlyMessage(tr(R.string.playback_failed)))
-        if (player.hasNextMediaItem()) {
-            scope.launch {
-                delay(1500)
-                player.seekToNextMediaItem()
-                player.prepare()
-                player.play()
+        val index = player.currentMediaItemIndex
+        val item = player.currentMediaItem
+        val id = item?.mediaId
+        val title = item?.toSong()?.title.orEmpty()
+        val cause = error.cause ?: error
+        val why = cause.friendlyMessage(tr(R.string.playback_failed)).trimEnd('.', ' ')
+        AudioDiagnostics.log("error", "$id won't play (${error.errorCodeName}: ${cause.message?.take(120)})")
+        fun stillThere() = player.playbackState == Player.STATE_IDLE && player.currentMediaItemIndex == index && player.currentMediaItem?.mediaId == id
+        skipJob?.cancel()
+        if (player.hasNextMediaItem()) c.player.reportError(tr(R.string.moving_on_after_refusal, title, why))
+        else {
+            maybeAutoplay()
+            if (c.queue.autoplayLoading) c.player.reportError(why)
+        }
+        skipJob = scope.launch {
+            if (player.hasNextMediaItem()) delay(SKIP_AFTER_FAILURE_MS)
+            else {
+                val until = SystemClock.elapsedRealtime() + AUTOPLAY_WAIT_MS
+                while (!player.hasNextMediaItem() && c.queue.autoplayLoading && SystemClock.elapsedRealtime() < until) delay(200)
             }
+            if (!stillThere()) return@launch
+            if (!player.hasNextMediaItem()) {
+                c.player.reportError(tr(R.string.stopped_after_refusal, title, why))
+                return@launch
+            }
+            player.seekToNextMediaItem()
+            player.prepare()
+            player.play()
         }
     }
 
@@ -1283,7 +1332,6 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             val r = if (!wantYouTube) null else runCatching {
                 withContext(Dispatchers.IO) { c.radio(seed, "RDAMVM$seed", continuation = c.queue.autoplayContinuation) }
             }.getOrNull()
-            c.queue.autoplayLoading = false
             // Dropped if the queue was replaced, or Autoplay was switched off, while loading.
             if ((r == null && mine.isEmpty()) || c.queue.source.value !== src || (!c.settings.current.autoplay && !radio)) return@launch
             if (r != null) c.queue.autoplayContinuation = r.continuation
@@ -1312,7 +1360,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 player.addMediaItems(add.map { it.toMediaItem() })
                 fb.served(add.map { it.id })
             }
-        }
+        // Loading until the songs are in, or it's known none are coming (a song that wouldn't play waits on this).
+        }.invokeOnCompletion { c.queue.autoplayLoading = false }
     }
 
     /** Switching Autoplay off takes its suggestions back out of the queue; on, fetches them. */
@@ -1711,6 +1760,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         videoWatchdog?.cancel()
         val idx = player.currentMediaItemIndex
         val current = player.currentMediaItem ?: return
+        // The listener has moved on from the song whose video failed (from PR #240, CodeWormer): this one's left as it is.
+        if (current.mediaId != songId) return
         val song = current.toSong() ?: return
         if (song.isLive) {
             swapInPlace(idx, song.toMediaItem(null))
@@ -2714,6 +2765,18 @@ internal fun wontPlayHere(error: Throwable, refused: Boolean = false): Boolean {
         }) return false
     return unavailableHere(error) || refused || chain.any { it is com.prism.music.data.stream.StreamException }
 }
+
+/**
+ * Whether a failure the player reports as the current song's is really about the next one: [failedSong]'s stream, the id
+ * the failed lookup was for, read ahead for as the current one ends. [current] and [next]: each song's id and its video's.
+ */
+internal fun readAheadFailed(failedSong: String?, current: Set<String>, next: Set<String>): Boolean =
+    failedSong != null && failedSong !in current && failedSong in next
+
+/** How long a song that wouldn't play is shown, with its reason, before the next one starts. */
+private const val SKIP_AFTER_FAILURE_MS = 1_500L
+/** How long Autoplay's songs are waited for after a last song that wouldn't play. */
+private const val AUTOPLAY_WAIT_MS = 15_000L
 
 /**
  * Whether [error] is the audio decoder failing or going away rather than the song's bytes: Android releases a background

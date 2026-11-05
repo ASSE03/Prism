@@ -3063,6 +3063,8 @@
     <string name="this_phone_can_t_play_apple">This phone can\'t play Apple Lossless (ALAC) files</string>
     <string name="so_its_music_video_s_sound">%1$s %2$s, so its music video\'s sound plays</string>
     <string name="playback_failed">Playback failed</string>
+    <string name="moving_on_after_refusal">“%1$s”: %2$s. On to the next song.</string>
+    <string name="stopped_after_refusal">“%1$s”: %2$s. There\'s nothing after it in the queue.</string>
     <string name="the_live_video_didn_t_load">The live video didn\'t load, so it\'s playing as audio. Tap the video button to try again.</string>
     <string name="the_music_video_didn_t_load">The music video didn\'t load, so the song is playing. Tap the video button to try again.</string>
     <string name="hide_lyrics">Hide lyrics</string>
