@@ -8,6 +8,8 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeUp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.prism.music.data.db.toEntity
@@ -105,6 +107,18 @@ class OfflineArtistAppTest {
         }
     }
 
+    /** Lets the page's clock run: under test it only moves while the rule is waiting for idle, not during a sleep. */
+    private fun settle(ms: Long = 4_000) {
+        val end = System.currentTimeMillis() + ms
+        while (System.currentTimeMillis() < end) { compose.waitForIdle(); Thread.sleep(100) }
+    }
+
+    /** The page's first list, moved up so the song rows clear the tab bar for the picture. */
+    private fun rowsIntoView() {
+        compose.onAllNodes(hasScrollToNodeAction())[0].performTouchInput { swipeUp() }
+        settle(1_000)
+    }
+
     /** What YouTube's artist page looks like to [com.prism.music.data.innertube.Parser], TYPED BY HAND: songs and an album. */
     private fun artistAnswer(songs: List<Song>, albumTitle: String, albumId: String): String {
         val rows = songs.joinToString(",") { s ->
@@ -161,7 +175,10 @@ class OfflineArtistAppTest {
         compose.seeText("Kept on this phone")
         compose.seeText("On this phone")
         compose.seeText("Kept Song One")
+        settle() // the name is written on once the genre lookup gives up (1.5 s) and takes 1.3 s
         Fixture.screenshot("offline-artist-kept")
+        rowsIntoView()
+        Fixture.screenshot("offline-artist-kept-rows")
 
         // What isn't here says so and doesn't play; what is, plays.
         compose.clickWhenFound(hasText("Not Here Song") and hasClickAction())
@@ -188,7 +205,10 @@ class OfflineArtistAppTest {
         compose.seeText("Your songs")
         compose.seeText("Kept Song One")
         compose.seeText("Only Liked Song")
+        settle() // as above: the name is written on
         Fixture.screenshot("offline-artist-from-phone")
+        rowsIntoView()
+        Fixture.screenshot("offline-artist-from-phone-rows")
 
         compose.clickWhenFound(hasText("Only Liked Song") and hasClickAction())
         Thread.sleep(1_500)
@@ -210,7 +230,9 @@ class OfflineArtistAppTest {
         compose.waitUntil(15_000) { compose.onAllNodes(hasText("Made from what's on this phone")).fetchSemanticsNodes().isEmpty() }
         compose.seeText("Kept Song One")
         compose.seeText("Phone Album")
-        assertTrue("no error page", compose.onAllNodes(hasText("You're offline", substring = true)).fetchSemanticsNodes().isEmpty())
+        // The page's own note says "You're offline · 1 of 1 song…"; the error page is the one that asks to check the connection.
+        compose.seeText("1 of 1 song")
+        assertTrue("no error page", compose.onAllNodes(hasText("Check your connection", substring = true)).fetchSemanticsNodes().isEmpty())
     }
 
     @Test fun anArtistPrismKnowsNothingAboutSaysItsOffline() {

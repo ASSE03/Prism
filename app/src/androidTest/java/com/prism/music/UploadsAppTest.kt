@@ -190,9 +190,12 @@ class UploadsAppTest {
         assertTrue("library order first", left("Ghost Stories") < left("18 Months"))
         Fixture.screenshot("uploads-albums")
 
-        // The album list's sort, once the songs' page has gone.
-        compose.waitUntil(5_000) { compose.onAllNodes(hasText("Library order") and hasClickAction()).fetchSemanticsNodes().size == 1 }
-        compose.clickWhenFound(hasText("Library order") and hasClickAction())
+        // The album list's sort: the pager keeps the page beside it too, so the button that's on the screen.
+        val sort = hasText("Library order") and hasClickAction()
+        val screen = Fixture.context.resources.displayMetrics.widthPixels.toFloat()
+        val shown = compose.onAllNodes(sort).fetchSemanticsNodes().indexOfFirst { it.boundsInRoot.left in 0f..screen }
+        assertTrue("the sort button is on the screen", shown >= 0)
+        compose.onAllNodes(sort)[shown].performClick()
         compose.clickWhenFound(hasText("Title") and hasClickAction())
         compose.waitUntil(5_000) { left("18 Months") < left("Ghost Stories") }
 
