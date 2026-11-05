@@ -54,7 +54,7 @@ object EmbeddedLyrics {
 
     /** Of what a file holds: the first with LRC timing, else the first with any text. */
     internal fun pick(found: List<String>): String? {
-        val texts = found.map { it.trim('\u0000', ' ', '\n', '\r', '\t', '﻿') }.filter { it.isNotEmpty() }
+        val texts = found.map { it.trim('\u0000', ' ', '\n', '\r', '\t', '\uFEFF') }.filter { it.isNotEmpty() }
         return texts.firstOrNull(Lrc::isLrc) ?: texts.firstOrNull()
     }
 

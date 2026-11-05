@@ -372,7 +372,7 @@ object RssFeed {
                     space = false
                 }
                 c == ' ' || c == '\t' || c == ' ' -> space = lineHasText
-                c == '\r' || c.code < 0x20 || c.code in 0x7F..0x9F || c == '﻿' -> Unit
+                c == '\r' || c.code < 0x20 || c.code in 0x7F..0x9F || c == '\uFEFF' -> Unit
                 c in '‪'..'‮' || c in '⁦'..'⁩' -> Unit
                 else -> {
                     if (space) out.append(' ')
