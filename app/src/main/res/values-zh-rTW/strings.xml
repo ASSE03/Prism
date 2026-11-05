@@ -4558,7 +4558,6 @@
     <string name="dj_in_the_queue_info">關閉後，待播清單頂端會有更多空間。DJ 模式仍可作為播放器的按鈕之一（在播放器上顯示）。</string>
     <string name="dj_in_the_queue_keywords">dj 模式 按鈕 待播清單 頂端 標題 空間 隱藏</string>
     <string name="menu_lyrics_only_way">只要它是播放器通往歌詞的唯一途徑，就會保留</string>
-    <string name="glass_kinds_info">毛玻璃：列和控制項後方的柔和模糊。液態玻璃：它們像真正的玻璃一樣折射後方的內容（Android 12 以上；較舊的手機會使用毛玻璃）。一般會模糊後方的內容，就像毛玻璃一樣。透明則保持清晰，僅帶淡淡的色調。</string>
     <string name="smart_downloads_offer_title">在需要之前先下載歌曲？</string>
     <string name="smart_downloads_offer_body">智慧下載會把你可能會播放的歌曲準備好供離線使用：最多 1 GB，透過 Wi-Fi。隨時可在「下載、儲存空間和數據」中變更。</string>
     <!-- 1.8.2 -->
@@ -4789,4 +4788,18 @@
     <string name="tune_energetic">激昂</string>
     <string name="tune_calm_energetic_info">只依據 Prism 已掃描過的歌曲的節奏和音量。你沒聽過的歌大多還沒被掃描，所以不會受影響：這個滑桿對你熟悉的音樂作用最大。滑桿偏離中間時，你播放的歌曲也會被掃描。</string>
     <string name="tune_measured_songs">目前已測量的歌曲：%1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">封面漸層</string>
+    <string name="cover_gradient_info">封面漸層由封面本身的顏色組成，是不帶模糊的純色漸層，越往下越深。歌詞和播放佇列會顯示在它上面，顏色稍暗一些。</string>
+    <string name="gradient_depth">底部暗度</string>
+    <string name="gradient_depth_info">漸層往底部變暗的程度。調低則一直到底部顏色幾乎不變，100% 則以黑色收尾。無論怎麼設定，顏色都會保持足夠深，讓白色文字清楚易讀。</string>
+    <string name="glass_kinds_what_differs">毛玻璃：在列和控制項後面做柔和的模糊。液態玻璃：像真正的玻璃一樣折射它們後面的內容。一般會把後面的顏色擴散開並調暗，文字等細小的內容只留下淡淡的清晰輪廓。透明保持顏色不變，只把細小的內容稍微柔化。玻璃效果需要 Android 12；低於此版本時，列為純色。</string>
+    <string name="glass_blur">模糊</string>
+    <string name="glass_blur_info">玻璃後面的顏色擴散的範圍。無論調到多大，文字等細小的內容在液態玻璃後面仍會保留淡淡的輪廓；毛玻璃則會把它們也融掉。100% 為 Prism 預設值。超過此值，較慢的手機會更吃力。</string>
+    <string name="glass_frost">霧面</string>
+    <string name="glass_frost_info">玻璃上那層薄霧的厚度：調低可以透出更多後面的內容，調高則在淺色模式下更乳白、在深色模式下更暗，在複雜的圖片上也更容易閱讀。100% 為 Prism 預設值。有自己背景的分頁列（版面配置，分頁列）會保留它自己的背景。</string>
+    <string name="glass_needs_android_12">這些設定需要 Android 12 內建的模糊功能。這支手機上的列是純色的，所以模糊或霧面設定沒有可更改的內容。</string>
+    <string name="glass_on_more_of_the_screen">更多位置使用玻璃效果</string>
+    <string name="glass_on_more_of_the_screen_detail">卡片、標籤、圓形按鈕和復原列</string>
+    <string name="glass_on_more_of_the_screen_info">卡片和設定面板會有光線照射和更亮的邊緣，標籤和圓形按鈕會有更亮的邊緣，霧面設定對它們全部生效。它們不使用即時模糊，所以幾乎不耗電，並且會顯示在帶背景的頁面上。復原列在顯示期間是真正的玻璃。效能模式會關閉此功能。之後可能會有更多位置支援。</string>
 </resources>

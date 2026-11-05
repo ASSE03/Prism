@@ -4558,7 +4558,6 @@
     <string name="dj_in_the_queue_info">Jika dimatikan, bahagian atas baris gilir mempunyai lebih banyak ruang. Mod DJ masih boleh menjadi salah satu butang pemain (Tunjukkan pada pemain).</string>
     <string name="dj_in_the_queue_keywords">dj mod butang baris gilir kepala atas ruang sembunyi</string>
     <string name="menu_lyrics_only_way">Kekal selagi ia satu-satunya cara pemain ke lirik</string>
-    <string name="glass_kinds_info">Kaca Kabur: kabur lembut di belakang bar dan kawalan. Kaca Cecair: ia membengkokkan apa yang ada di belakangnya seperti kaca sebenar (Android 12 dan lebih baharu; telefon lama mendapat Kaca Kabur). Biasa mengaburkan apa yang ada di belakangnya, seperti kaca kabur. Jernih memastikannya tajam, dengan hanya sedikit rona.</string>
     <string name="smart_downloads_offer_title">Muat turun lagu sebelum anda memerlukannya?</string>
     <string name="smart_downloads_offer_body">Muat Turun Pintar menyediakan lagu yang mungkin anda mainkan untuk kegunaan luar talian: sehingga 1 GB, melalui Wi-Fi. Tukar pada bila-bila masa dalam Muat turun, storan &amp; data.</string>
     <!-- 1.8.2 -->
@@ -4789,4 +4788,18 @@
     <string name="tune_energetic">Bertenaga</string>
     <string name="tune_calm_energetic_info">Mengikut tempo dan kekuatan bunyi lagu yang telah diimbas Prism, dan tiada yang lain. Kebanyakan lagu yang belum anda dengar belum diimbas, jadi kekal di tempatnya: jangkakan ini paling berkesan untuk muzik yang anda kenali. Semasa ia bukan di tengah, lagu yang anda main turut diimbas.</string>
     <string name="tune_measured_songs">Lagu yang telah diukur setakat ini: %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Gradien sampul</string>
+    <string name="cover_gradient_info">Gradien sampul ialah warna sampul itu sendiri sebagai gradien pepejal, tanpa kabur, makin gelap ke arah bawah. Lirik dan baris gilir kekal di atasnya, sedikit lebih gelap.</string>
+    <string name="gradient_depth">Kegelapan di bahagian bawah</string>
+    <string name="gradient_depth_info">Sejauh mana gradien menjadi gelap ke arah bawah. Rendah mengekalkan warna hampir sama sehingga ke bawah, 100% berakhir hitam. Warna kekal cukup gelap untuk teks putih pada mana-mana tetapan.</string>
+    <string name="glass_kinds_what_differs">Kaca Kabur: kabur lembut di belakang bar dan kawalan. Kaca Cecair: membengkokkan apa yang ada di belakangnya seperti kaca sebenar. Biasa menyebarkan warna di belakangnya dan menggelapkannya, dan perkara kecil seperti teks kekal sebagai garis luar tajam yang samar. Jernih membiarkan warna seperti sedia ada dan melembutkan perkara kecil sedikit. Kaca memerlukan Android 12; di bawahnya bar berwarna pepejal.</string>
+    <string name="glass_blur">Kabur</string>
+    <string name="glass_blur_info">Sejauh mana warna di belakang kaca menyebar. Perkara kecil seperti teks tetap mempunyai garis luar samar di belakang Kaca Cecair walau setinggi mana pun nilainya; Kaca Kabur melenyapkannya juga. 100% ialah lalai Prism. Melebihi itu, kerjanya lebih berat untuk telefon yang lebih perlahan.</string>
+    <string name="glass_frost">Fros</string>
+    <string name="glass_frost_info">Setebal mana tirai di atas kaca: lebih rendah membenarkan lebih banyak yang di belakangnya kelihatan, lebih tinggi menjadikannya lebih keruh dalam mod cerah dan lebih gelap dalam mod gelap, serta lebih mudah dibaca di atas gambar yang sibuk. 100% ialah lalai Prism. Bar tab dengan latar belakangnya sendiri (Susun atur, Bar tab) mengekalkan latar belakang itu.</string>
+    <string name="glass_needs_android_12">Ini memerlukan kabur yang datang bersama Android 12. Pada telefon ini bar berwarna pepejal, jadi tiada apa yang boleh diubah oleh tetapan kabur atau fros.</string>
+    <string name="glass_on_more_of_the_screen">Kaca pada lebih banyak bahagian skrin</string>
+    <string name="glass_on_more_of_the_screen_detail">Kad, cip, butang bulat dan bar Buat asal</string>
+    <string name="glass_on_more_of_the_screen_info">Kad dan panel tetapan mendapat cahaya yang jatuh ke atasnya dan tepi yang lebih terang, cip dan butang bulat mendapat tepi yang lebih terang, dan Fros meliputi kesemuanya. Ia tidak menggunakan kabur langsung, jadi hampir tidak membebankan, dan ia dipaparkan pada halaman yang mempunyai latar belakang. Bar Buat asal ialah kaca sebenar semasa dipaparkan. Mod Prestasi mematikannya. Lebih banyak tempat mungkin menyusul.</string>
 </resources>

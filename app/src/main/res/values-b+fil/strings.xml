@@ -4620,7 +4620,6 @@
     <string name="dj_in_the_queue_info">Kapag naka-off, mas maluwag ang itaas ng queue. Puwede pa ring maging isa sa mga button ng player ang DJ mode (Ano ang nasa player).</string>
     <string name="dj_in_the_queue_keywords">dj mode button queue itaas espasyo itago</string>
     <string name="menu_lyrics_only_way">Nananatili habang ito ang tanging daan papunta sa lyrics mula sa player</string>
-    <string name="glass_kinds_info">Frosted Glass: banayad na blur sa likod ng mga bar at kontrol. Liquid Glass: binabaluktot nila ang nasa likod nila na parang totoong salamin (Android 12 at mas bago; Frosted Glass ang makukuha ng mas lumang phone). Binu-blur ng Regular ang nasa likod, tulad ng frosted glass. Pinapanatiling malinaw ng Malinaw ang nasa likod, na may bahagyang tint lang.</string>
     <string name="smart_downloads_offer_title">I-download ang mga kanta bago mo pa kailanganin?</string>
     <string name="smart_downloads_offer_body">Pinapanatiling handa offline ng Smart Downloads ang mga kantang malamang mong pakinggan: hanggang 1 GB, sa Wi-Fi. Baguhin ito anumang oras sa Mga download, storage at data.</string>
     <!-- 1.8.2 -->
@@ -4853,4 +4852,18 @@
     <string name="tune_energetic">Masigla</string>
     <string name="tune_calm_energetic_info">Sumusunod sa tempo at lakas ng tunog ng mga kantang na-scan na ng Prism, at wala nang iba. Hindi pa na-scan ang karamihan sa mga kantang hindi mo pa naririnig, kaya nananatili sila sa kinaroroonan: asahang pinakamalaki ang epekto nito sa musikang kilala mo. Habang wala ito sa gitna, ini-scan din ang mga kantang pinapatugtog mo.</string>
     <string name="tune_measured_songs">Mga kantang nasukat na: %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Cover gradient</string>
+    <string name="cover_gradient_info">Ang Cover gradient ay ang sariling mga kulay ng cover bilang solidong gradient, walang blur, na dumidilim pababa. Nasa ibabaw nito ang lyrics at ang queue, medyo mas madilim.</string>
+    <string name="gradient_depth">Dilim sa ibaba</string>
+    <string name="gradient_depth_info">Kung gaano dumidilim ang gradient pababa. Kapag mababa, halos pareho ang kulay hanggang sa ibaba; ang 100% ay nagtatapos sa itim. Nananatiling sapat ang dilim ng mga kulay para sa puting text sa anumang setting.</string>
+    <string name="glass_kinds_what_differs">Frosted Glass: banayad na blur sa likod ng mga bar at control. Liquid Glass: binabaluktot nito ang nasa likod nila na parang totoong salamin. Ang Regular ay nagpapalaganap ng mga kulay sa likod nito at nagdidilim sa mga ito, at ang maliliit na bagay tulad ng text ay nananatiling mahinang matalas na balangkas. Ang Clear ay iniiwan ang mga kulay at bahagyang pinapalambot ang maliliit na bagay. Kailangan ng Android 12 ang glass; kapag mas mababa rito, solid ang mga bar.</string>
+    <string name="glass_blur">Blur</string>
+    <string name="glass_blur_info">Kung gaano kalayo kumakalat ang mga kulay sa likod ng glass. Ang maliliit na bagay tulad ng text ay may mahinang balangkas sa likod ng Liquid Glass gaano man kataas ito; tinutunaw din sila ng Frosted Glass. Ang 100% ang sariling default ng Prism. Higit pa roon, mas mabigat ito para sa mas mabagal na telepono.</string>
+    <string name="glass_frost">Frost</string>
+    <string name="glass_frost_info">Kung gaano kakapal ang tabing sa ibabaw ng glass: kapag mas mababa, mas marami ang lumulusot mula sa likod nito; kapag mas mataas, mas maputi ito sa light mode at mas madilim sa dark mode, at mas madaling basahin sa ibabaw ng magugulong larawan. Ang 100% ang sariling default ng Prism. Ang tab bar na may sariling background (Layout, Tab bar) ay pinananatili ang background na iyon.</string>
+    <string name="glass_needs_android_12">Kailangan nito ang blur na dumating kasama ng Android 12. Sa teleponong ito, solid ang mga bar, kaya walang mababago ang setting ng blur o frost.</string>
+    <string name="glass_on_more_of_the_screen">Glass sa mas maraming bahagi ng screen</string>
+    <string name="glass_on_more_of_the_screen_detail">Mga card, chip, bilog na button, at ang Undo bar</string>
+    <string name="glass_on_more_of_the_screen_info">Ang mga card at settings panel ay nakakakuha ng liwanag na bumabagsak sa kanila at mas maliwanag na gilid, ang mga chip at bilog na button ay mas maliwanag na gilid, at saklaw silang lahat ng Frost. Hindi sila gumagamit ng live blur, kaya halos walang bigat, at lumalabas sila sa mga pahinang may background sa likod. Ang Undo bar ay totoong glass habang nakikita ito. Ino-off ito ng Performance mode. Maaaring madagdagan pa ang mga lugar.</string>
 </resources>

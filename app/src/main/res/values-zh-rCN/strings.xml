@@ -4558,7 +4558,6 @@
     <string name="dj_in_the_queue_info">关闭后，队列顶部会有更多空间。DJ 模式仍可作为播放器的按钮之一（在播放器上显示）。</string>
     <string name="dj_in_the_queue_keywords">dj 模式 按钮 队列 顶部 标题 空间 隐藏</string>
     <string name="menu_lyrics_only_way">只要它是播放器通往歌词的唯一途径，就会保留</string>
-    <string name="glass_kinds_info">磨砂玻璃：栏和控件后面的柔和模糊。液态玻璃：它们像真玻璃一样折射后面的内容（Android 12 及更高版本；较旧的手机使用磨砂玻璃）。常规会模糊后面的内容，就像磨砂玻璃一样。透明则保持清晰，仅带淡淡的色调。</string>
     <string name="smart_downloads_offer_title">在需要之前先下载歌曲？</string>
     <string name="smart_downloads_offer_body">智能下载会把你可能会播放的歌曲准备好供离线使用：最多 1 GB，通过 Wi-Fi。随时可在“下载、存储和流量”中更改。</string>
     <!-- 1.8.2 -->
@@ -4789,4 +4788,18 @@
     <string name="tune_energetic">激昂</string>
     <string name="tune_calm_energetic_info">只依据 Prism 已扫描过的歌曲的节奏和响度。你没听过的歌大多还没被扫描，所以不会受影响：这个滑块对你熟悉的音乐作用最大。滑块偏离中间时，你播放的歌曲也会被扫描。</string>
     <string name="tune_measured_songs">目前已测量的歌曲：%1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">封面渐变</string>
+    <string name="cover_gradient_info">封面渐变由封面自身的颜色组成，是不带模糊的纯色渐变，越往下越深。歌词和播放队列会显示在它上面，颜色稍暗一些。</string>
+    <string name="gradient_depth">底部暗度</string>
+    <string name="gradient_depth_info">渐变向底部变暗的程度。调低则一直到底部颜色几乎不变，100% 则以黑色收尾。无论怎么设置，颜色都会保持足够深，让白色文字清晰可读。</string>
+    <string name="glass_kinds_what_differs">磨砂玻璃：在栏和控件后面做柔和的模糊。液态玻璃：像真正的玻璃一样折射它们后面的内容。常规会把后面的颜色扩散开并调暗，文字等细小的内容只留下淡淡的清晰轮廓。透明保持颜色不变，只把细小的内容稍微柔化。玻璃效果需要 Android 12；低于此版本时，栏为纯色。</string>
+    <string name="glass_blur">模糊</string>
+    <string name="glass_blur_info">玻璃后面的颜色扩散的范围。无论调到多大，文字等细小的内容在液态玻璃后面仍会保留淡淡的轮廓；磨砂玻璃则会把它们也融掉。100% 为 Prism 默认值。超过此值，较慢的手机会更吃力。</string>
+    <string name="glass_frost">磨砂</string>
+    <string name="glass_frost_info">玻璃上那层薄雾的厚度：调低可以透出更多后面的内容，调高则在浅色模式下更乳白、在深色模式下更暗，在复杂的图片上也更容易阅读。100% 为 Prism 默认值。有自己背景的标签栏（布局，标签栏）会保留它自己的背景。</string>
+    <string name="glass_needs_android_12">这些设置需要 Android 12 自带的模糊功能。这部手机上的栏是纯色的，所以模糊或磨砂设置没有可更改的内容。</string>
+    <string name="glass_on_more_of_the_screen">更多位置使用玻璃效果</string>
+    <string name="glass_on_more_of_the_screen_detail">卡片、标签、圆形按钮和撤销栏</string>
+    <string name="glass_on_more_of_the_screen_info">卡片和设置面板会有光线照射和更亮的边缘，标签和圆形按钮会有更亮的边缘，磨砂设置对它们全部生效。它们不使用实时模糊，所以几乎不耗电，并且会显示在带背景的页面上。撤销栏在显示期间是真正的玻璃。性能模式会关闭此功能。以后可能会有更多位置支持。</string>
 </resources>

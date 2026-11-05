@@ -4558,7 +4558,6 @@
     <string name="dj_in_the_queue_info">Jika nonaktif, bagian atas antrean punya lebih banyak ruang. Mode DJ tetap bisa menjadi salah satu tombol pemutar (Yang ada di pemutar).</string>
     <string name="dj_in_the_queue_keywords">dj mode tombol antrean atas ruang sembunyikan</string>
     <string name="menu_lyrics_only_way">Tetap ada selama menjadi satu-satunya jalan ke lirik dari pemutar</string>
-    <string name="glass_kinds_info">Kaca Buram: blur lembut di belakang bilah dan kontrol. Kaca Cair: keduanya membelokkan apa yang ada di belakangnya seperti kaca sungguhan (Android 12 dan yang lebih baru; ponsel lama mendapat Kaca Buram). Reguler mengaburkan yang ada di belakangnya, seperti kaca buram. Bening menjaganya tetap tajam, hanya dengan sedikit rona.</string>
     <string name="smart_downloads_offer_title">Download lagu sebelum dibutuhkan?</string>
     <string name="smart_downloads_offer_body">Download Pintar menyiapkan lagu yang kemungkinan besar diputar agar siap offline: hingga 1 GB, lewat Wi-Fi. Ubah kapan saja di Download, penyimpanan &amp; data.</string>
     <!-- 1.8.2 -->
@@ -4789,4 +4788,18 @@
     <string name="tune_energetic">Energik</string>
     <string name="tune_calm_energetic_info">Menurut tempo dan kenyaringan lagu yang sudah dipindai Prism, dan tidak ada yang lain. Sebagian besar lagu yang belum kamu dengar belum dipindai, jadi tetap di tempatnya: ini paling berpengaruh untuk musik yang kamu kenal. Selama penggeser ini tidak di tengah, lagu yang kamu putar juga dipindai.</string>
     <string name="tune_measured_songs">Lagu yang sudah diukur: %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Gradien sampul</string>
+    <string name="cover_gradient_info">Gradien sampul adalah warna sampul itu sendiri sebagai gradien solid, tanpa buram, makin gelap ke arah bawah. Lirik dan antrean tetap di atasnya, sedikit lebih gelap.</string>
+    <string name="gradient_depth">Kegelapan di bagian bawah</string>
+    <string name="gradient_depth_info">Seberapa gelap gradien ke arah bawah. Rendah menjaga warna hampir sama sampai ke bawah, 100% berakhir hitam. Warna tetap cukup gelap untuk teks putih di setiap pengaturan.</string>
+    <string name="glass_kinds_what_differs">Kaca Buram: buram lembut di belakang bilah dan kontrol. Kaca Cair: membelokkan apa yang ada di belakangnya seperti kaca sungguhan. Reguler menyebarkan warna di belakangnya dan meredupkannya, dan hal kecil seperti teks tetap berupa garis tepi tajam yang samar. Bening membiarkan warna apa adanya dan sedikit melembutkan hal-hal kecil. Kaca memerlukan Android 12; di bawahnya bilah berwarna solid.</string>
+    <string name="glass_blur">Buram</string>
+    <string name="glass_blur_info">Seberapa jauh warna di belakang kaca menyebar. Hal kecil seperti teks tetap punya garis tepi samar di belakang Kaca Cair seberapa pun nilainya; Kaca Buram melelehkannya juga. 100% adalah bawaan Prism. Di atas itu, kerjanya lebih berat untuk ponsel yang lebih lambat.</string>
+    <string name="glass_frost">Embun</string>
+    <string name="glass_frost_info">Seberapa tebal selubung di atas kaca: lebih rendah meloloskan lebih banyak dari belakangnya, lebih tinggi membuatnya lebih keruh di mode terang dan lebih gelap di mode gelap, serta lebih mudah dibaca di atas gambar yang ramai. 100% adalah bawaan Prism. Bilah tab dengan latar belakangnya sendiri (Tata letak, Bilah tab) tetap memakai latar belakang itu.</string>
+    <string name="glass_needs_android_12">Ini memerlukan buram yang hadir sejak Android 12. Di ponsel ini bilah berwarna solid, jadi tidak ada yang bisa diubah oleh pengaturan buram atau embun.</string>
+    <string name="glass_on_more_of_the_screen">Kaca di lebih banyak bagian layar</string>
+    <string name="glass_on_more_of_the_screen_detail">Kartu, chip, tombol bulat, dan bilah Urungkan</string>
+    <string name="glass_on_more_of_the_screen_info">Kartu dan panel pengaturan mendapat cahaya yang jatuh di atasnya dan tepi yang lebih terang, chip dan tombol bulat mendapat tepi yang lebih terang, dan Embun berlaku untuk semuanya. Semua ini tidak memakai buram langsung, jadi hampir tidak membebani, dan tampil di halaman yang punya latar belakang. Bilah Urungkan adalah kaca sungguhan selama tampil. Mode Performa mematikan ini. Bagian lain mungkin menyusul.</string>
 </resources>

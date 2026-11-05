@@ -4682,7 +4682,6 @@
     <string name="dj_in_the_queue_info">Désactivé, le haut de la file d’attente a plus de place. Le mode DJ peut rester l’un des boutons du lecteur (Ce qui figure sur le lecteur).</string>
     <string name="dj_in_the_queue_keywords">dj mode bouton file attente haut place masquer</string>
     <string name="menu_lyrics_only_way">Reste tant que c’est le seul accès aux paroles depuis le lecteur</string>
-    <string name="glass_kinds_info">Verre dépoli : un flou doux derrière les barres et les commandes. Liquid Glass : elles déforment ce qui est derrière comme du vrai verre (Android 12 et ultérieur ; les téléphones plus anciens ont le verre dépoli). Normale floute ce qui est derrière, comme le verre dépoli. Transparent le garde net, avec seulement une légère teinte.</string>
     <string name="smart_downloads_offer_title">Télécharger des titres avant d’en avoir besoin ?</string>
     <string name="smart_downloads_offer_body">Les Téléchargements intelligents gardent prêts hors ligne les titres que vous écouterez probablement : jusqu’à 1 GB, en Wi-Fi. Modifiez cela à tout moment dans Téléchargements, stockage et données.</string>
     <!-- 1.8.2 -->
@@ -4917,4 +4916,18 @@
     <string name="tune_energetic">Énergique</string>
     <string name="tune_calm_energetic_info">Se base sur le tempo et le volume des titres que Prism a déjà analysés, et rien d’autre. La plupart des titres que vous n’avez pas écoutés ne sont pas encore analysés, donc ils restent où ils sont : attendez-vous à ce que ce réglage compte surtout pour la musique que vous connaissez. Tant qu’il est éloigné du milieu, les titres que vous écoutez sont aussi analysés.</string>
     <string name="tune_measured_songs">Titres mesurés jusqu’ici : %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Dégradé de la pochette</string>
+    <string name="cover_gradient_info">Le dégradé de la pochette reprend les couleurs de la pochette sous forme de dégradé plein, sans flou, qui s’assombrit vers le bas. Les paroles et la file d’attente restent dessus, un peu plus sombres.</string>
+    <string name="gradient_depth">Obscurité en bas</string>
+    <string name="gradient_depth_info">À quel point le dégradé s’assombrit vers le bas. Une valeur faible garde presque la même couleur jusqu’en bas, 100% : noir complet. Les couleurs restent assez sombres pour le texte blanc, quel que soit le réglage.</string>
+    <string name="glass_kinds_what_differs">Verre dépoli : un flou doux derrière les barres et les commandes. Liquid Glass : elles déforment ce qui est derrière comme du vrai verre. Normale étale les couleurs derrière et les atténue, et les petits éléments, comme le texte, restent un contour net et discret. Transparent laisse les couleurs telles quelles et adoucit un peu les petits éléments. Le verre nécessite Android 12 ; en dessous, les barres sont pleines.</string>
+    <string name="glass_blur">Flou</string>
+    <string name="glass_blur_info">Jusqu’où les couleurs derrière le verre s’étalent. Les petits éléments, comme le texte, gardent un contour discret derrière Liquid Glass quelle que soit la valeur ; le verre dépoli les fond aussi. 100% est la valeur propre à Prism. Au-delà, c’est plus de travail pour un téléphone lent.</string>
+    <string name="glass_frost">Givre</string>
+    <string name="glass_frost_info">Épaisseur du voile sur le verre : moins laisse passer davantage de ce qui est derrière, plus le rend plus laiteux en mode clair et plus sombre en mode sombre, et plus facile à lire sur des images chargées. 100% est la valeur propre à Prism. Une barre d’onglets avec son propre arrière-plan (Disposition, Barre d’onglets) garde cet arrière-plan.</string>
+    <string name="glass_needs_android_12">Cela nécessite le flou apparu avec Android 12. Sur ce téléphone, les barres sont pleines : il n’y a donc rien que le flou ou le givre puisse changer.</string>
+    <string name="glass_on_more_of_the_screen">Du verre sur plus de l’écran</string>
+    <string name="glass_on_more_of_the_screen_detail">Cartes, pastilles, boutons ronds et la barre Annuler</string>
+    <string name="glass_on_more_of_the_screen_info">Les cartes et les panneaux de réglages reçoivent une lumière dessus et un bord plus brillant, les pastilles et les boutons ronds un bord plus brillant, et le givre les atteint tous. Ils n’utilisent aucun flou en direct, donc ils ne coûtent presque rien, et ils se voient sur les pages qui ont un arrière-plan derrière. La barre Annuler est du vrai verre tant qu’elle est affichée. Le mode Performance désactive cette option. D’autres endroits pourraient suivre.</string>
 </resources>

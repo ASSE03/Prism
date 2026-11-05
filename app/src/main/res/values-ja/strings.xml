@@ -4558,7 +4558,6 @@
     <string name="dj_in_the_queue_info">オフにすると、キューの上部が広くなります。DJ モードはプレーヤーのボタンの 1 つとして引き続き使えます（「プレーヤーに表示するもの」）。</string>
     <string name="dj_in_the_queue_keywords">dj モード ボタン キュー 上部 スペース 非表示</string>
     <string name="menu_lyrics_only_way">プレーヤーから歌詞を開く唯一の方法である間は、表示されたままになります</string>
-    <string name="glass_kinds_info">すりガラス：バーやコントロールの背後をやわらかくぼかします。リキッドグラス：背後のものを本物のガラスのように曲げて見せます（Android 12 以降。それより古いスマホではすりガラス）。標準は背後をすりガラスのようにぼかします。クリアは背後をくっきり見せ、わずかに色を付けるだけです。</string>
     <string name="smart_downloads_offer_title">曲が必要になる前にダウンロードしておきますか？</string>
     <string name="smart_downloads_offer_body">スマートダウンロードは、よく再生しそうな曲をオフライン用に準備しておきます（最大 1 GB、Wi-Fi 接続時）。「ダウンロード、ストレージ、データ」でいつでも変更できます。</string>
     <!-- 1.8.2 -->
@@ -4789,4 +4788,18 @@
     <string name="tune_energetic">エネルギッシュ</string>
     <string name="tune_calm_energetic_info">Prism がすでにスキャンした曲のテンポと音量だけで判断します。まだ聴いていない曲の多くは未スキャンのため動かず、知っている曲で最も効果が出ます。真ん中から離れている間は、再生した曲もスキャンされます。</string>
     <string name="tune_measured_songs">これまでに測定した曲：%1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">カバーグラデーション</string>
+    <string name="cover_gradient_info">カバーグラデーションは、カバーの色だけで作る、ぼかしのないグラデーションです。下に向かって濃くなります。歌詞とキューはその上に、少し暗めで表示されます。</string>
+    <string name="gradient_depth">下の暗さ</string>
+    <string name="gradient_depth_info">下に向かってグラデーションがどこまで暗くなるかを決めます。低いと下までほぼ同じ色のまま、100% では黒で終わります。どの設定でも、白い文字が読める暗さに保たれます。</string>
+    <string name="glass_kinds_what_differs">すりガラス: バーやコントロールの後ろをやわらかくぼかします。リキッドグラス: 後ろにあるものを本物のガラスのように曲げて見せます。標準は後ろの色を広げて暗くし、文字のような小さなものはうっすらとした輪郭で残ります。クリアは色をそのままにして、小さなものを少しだけやわらげます。ガラスは Android 12 以降で使えます。それより前では、バーは単色になります。</string>
+    <string name="glass_blur">ぼかし</string>
+    <string name="glass_blur_info">ガラスの後ろの色をどこまで広げるかを決めます。リキッドグラスでは、どこまで上げても文字のような小さなものにうっすらと輪郭が残ります。すりガラスではそれも溶けます。100% が Prism 標準です。それより上げると処理が重くなり、動作の遅いスマートフォンでは負担になります。</string>
+    <string name="glass_frost">フロスト</string>
+    <string name="glass_frost_info">ガラスにかかるベールの厚さを決めます。下げると後ろがより透けて見え、上げるとライトモードでは白っぽく、ダークモードではより暗くなり、にぎやかな画像の上でも読みやすくなります。100% が Prism 標準です。独自の背景を持つタブバー (レイアウト、タブバー) は、その背景がそのまま使われます。</string>
+    <string name="glass_needs_android_12">これらには Android 12 で追加されたぼかしが必要です。このスマートフォンではバーが単色のため、ぼかしやフロストの設定で変わるものはありません。</string>
+    <string name="glass_on_more_of_the_screen">画面のより多くの場所にガラス</string>
+    <string name="glass_on_more_of_the_screen_detail">カード、チップ、丸いボタン、元に戻すバー</string>
+    <string name="glass_on_more_of_the_screen_info">カードと設定パネルには光が当たり、縁が明るくなります。チップと丸いボタンは縁が明るくなり、フロストはそのすべてに効きます。リアルタイムのぼかしは使わないので負荷はほとんどなく、背景のあるページに表示されます。元に戻すバーは、表示中は本物のガラスになります。パフォーマンスモードではオフになります。対象は今後増えるかもしれません。</string>
 </resources>

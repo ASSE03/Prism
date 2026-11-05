@@ -4620,7 +4620,6 @@
     <string name="dj_in_the_queue_info">Av ger kön mer plats överst. DJ-läget kan fortfarande vara en av spelarens knappar (Visa i spelaren).</string>
     <string name="dj_in_the_queue_keywords">dj läge knapp kö rubrik topp plats dölj</string>
     <string name="menu_lyrics_only_way">Finns kvar så länge det är spelarens enda väg till låttexten</string>
-    <string name="glass_kinds_info">Frostat glas: en mjuk oskärpa bakom fälten och kontrollerna. Flytande glas: de böjer det som finns bakom dem, som riktigt glas (Android 12 och senare; äldre telefoner får Frostat glas). Normal gör det bakom suddigt, som frostat glas. Klar håller det skarpt, med bara en lätt ton.</string>
     <string name="smart_downloads_offer_title">Ladda ner låtar innan du behöver dem?</string>
     <string name="smart_downloads_offer_body">Smarta nedladdningar håller de låtar du troligen spelar redo offline: upp till 1 GB, på Wi-Fi. Ändra när du vill under Nedladdningar, lagring &amp; data.</string>
     <!-- 1.8.2 -->
@@ -4853,4 +4852,18 @@
     <string name="tune_energetic">Energiskt</string>
     <string name="tune_calm_energetic_info">Utgår från tempo och ljudstyrka hos låtar som Prism redan har skannat, och inget annat. De flesta låtar du inte har hört är inte skannade än, så de stannar där de är: räkna med att det här spelar störst roll för musik du känner till. Medan det står utanför mitten skannas även låtar du spelar.</string>
     <string name="tune_measured_songs">Låtar uppmätta hittills: %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Omslagsgradient</string>
+    <string name="cover_gradient_info">Omslagsgradienten är omslagets egna färger som en heltäckande gradient, inget suddat, som blir mörkare mot botten. Låttexten och kön ligger kvar på den, lite mörkare.</string>
+    <string name="gradient_depth">Mörker i botten</string>
+    <string name="gradient_depth_info">Hur mörk gradienten blir mot botten. Lågt behåller nästan samma färg hela vägen ner, 100% ger helt svart. Färgerna är mörka nog för den vita texten oavsett inställning.</string>
+    <string name="glass_kinds_what_differs">Frostat glas: en mjuk oskärpa bakom fälten och reglagen. Flytande glas: de böjer det som finns bakom som riktigt glas. Normal sprider ut färgerna bakom och dämpar dem, och små saker som text blir en svag skarp kontur. Klar låter färgerna vara som de är och mjukar upp de små sakerna lite. Glas kräver Android 12; under det är fälten solida.</string>
+    <string name="glass_blur">Oskärpa</string>
+    <string name="glass_blur_info">Hur långt färgerna bakom glaset sprids. Små saker som text behåller en svag kontur bakom Flytande glas hur högt du än sätter detta; Frostat glas smälter ihop dem också. 100% är Prisms eget värde. Över det blir det tyngre för en långsammare telefon.</string>
+    <string name="glass_frost">Frost</string>
+    <string name="glass_frost_info">Hur tjock slöjan över glaset är: mindre släpper igenom mer av det som finns bakom, mer gör den mjölkigare i ljust läge och mörkare i mörkt läge, och lättare att läsa över röriga bilder. 100% är Prisms eget värde. Ett flikfält med egen bakgrund (Layout, Flikfält) behåller i stället den bakgrunden.</string>
+    <string name="glass_needs_android_12">Det här kräver den oskärpa som kom med Android 12. På den här telefonen är fälten solida, så det finns inget som en oskärpe- eller frostinställning kan ändra.</string>
+    <string name="glass_on_more_of_the_screen">Glas på mer av skärmen</string>
+    <string name="glass_on_more_of_the_screen_detail">Kort, chips, runda knappar och Ångra-fältet</string>
+    <string name="glass_on_more_of_the_screen_info">Kort och inställningspaneler får ett ljus som faller på dem och en ljusare kant, chips och runda knappar en ljusare kant, och frosten når dem alla. De använder ingen live-oskärpa, så de kostar nästan ingenting, och de syns på sidor som har en bakgrund bakom sig. Ångra-fältet är riktigt glas medan det visas. Prestandaläget stänger av detta. Fler platser kan följa.</string>
 </resources>

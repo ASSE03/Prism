@@ -4620,7 +4620,6 @@
     <string name="dj_in_the_queue_info">Uit, dan heeft de bovenkant van de wachtrij meer ruimte. De DJ-modus kan nog steeds een van de knoppen van de speler zijn (Tonen in de speler).</string>
     <string name="dj_in_the_queue_keywords">dj modus knop wachtrij kop boven ruimte verbergen</string>
     <string name="menu_lyrics_only_way">Blijft staan zolang het de enige weg van de speler naar de songtekst is</string>
-    <string name="glass_kinds_info">Matglas: een zachte vervaging achter de balken en bediening. Liquid Glass: ze buigen wat erachter zit, als echt glas (Android 12 en later; oudere telefoons krijgen Matglas). Normaal vervaagt wat erachter zit, zoals matglas dat doet. Helder houdt het scherp, met alleen een lichte tint.</string>
     <string name="smart_downloads_offer_title">Songs downloaden voordat je ze nodig hebt?</string>
     <string name="smart_downloads_offer_body">Slimme downloads houdt de songs die je waarschijnlijk gaat afspelen offline klaar: tot 1 GB, via Wi-Fi. Wijzig het altijd in Downloads, opslag &amp; data.</string>
     <!-- 1.8.2 -->
@@ -4853,4 +4852,18 @@
     <string name="tune_energetic">Energiek</string>
     <string name="tune_calm_energetic_info">Gaat af op het tempo en het volume van nummers die Prism al heeft gescand, en niets anders. De meeste nummers die je nog niet hebt gehoord zijn nog niet gescand, dus die blijven waar ze zijn: verwacht dat deze het meest uitmaakt voor muziek die je kent. Zolang hij niet in het midden staat, worden ook nummers die je afspeelt gescand.</string>
     <string name="tune_measured_songs">Tot nu toe gemeten nummers: %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Coververloop</string>
+    <string name="cover_gradient_info">Coververloop gebruikt de kleuren van de cover zelf als een vlakke kleurverloop, niets vervaagd, dat naar onderen donkerder wordt. De songtekst en de wachtrij blijven erop staan, iets donkerder.</string>
+    <string name="gradient_depth">Donkerte onderaan</string>
+    <string name="gradient_depth_info">Hoe donker het verloop naar onderen wordt. Laag houdt bijna dezelfde kleur tot onderaan, 100% eindigt in zwart. De kleuren blijven bij elke instelling donker genoeg voor de witte tekst.</string>
+    <string name="glass_kinds_what_differs">Matglas: een zachte vervaging achter de balken en bediening. Liquid Glass: ze buigen wat erachter zit als echt glas. Normaal spreidt de kleuren erachter uit en dempt ze, en kleine dingen zoals tekst blijven een vage scherpe omlijning. Helder laat de kleuren zoals ze zijn en maakt kleine dingen een beetje zachter. Glas heeft Android 12 nodig; daaronder zijn de balken ondoorzichtig.</string>
+    <string name="glass_blur">Vervaging</string>
+    <string name="glass_blur_info">Hoe ver de kleuren achter het glas uitspreiden. Kleine dingen zoals tekst houden achter Liquid Glass een vage omlijning, hoe hoog je dit ook zet; Matglas laat ze ook smelten. 100% is de eigen waarde van Prism. Daarboven is het zwaarder voor een tragere telefoon.</string>
+    <string name="glass_frost">Matheid</string>
+    <string name="glass_frost_info">Hoe dik de sluier over het glas is: minder laat meer door van wat erachter zit, meer maakt het melkachtiger in de lichte modus en donkerder in de donkere modus, en beter leesbaar boven drukke afbeeldingen. 100% is de eigen waarde van Prism. Een tabbalk met een eigen achtergrond (Indeling, Tabbalk) houdt in plaats daarvan die achtergrond.</string>
+    <string name="glass_needs_android_12">Hiervoor is de vervaging nodig die met Android 12 kwam. Op deze telefoon zijn de balken ondoorzichtig, dus er valt niets te veranderen met een vervagings- of matheidsinstelling.</string>
+    <string name="glass_on_more_of_the_screen">Glas op meer van het scherm</string>
+    <string name="glass_on_more_of_the_screen_detail">Kaarten, chips, ronde knoppen en de balk Ongedaan maken</string>
+    <string name="glass_on_more_of_the_screen_info">Kaarten en instellingenpanelen krijgen een lichtinval en een helderdere rand, chips en ronde knoppen een helderdere rand, en de matheid bereikt ze allemaal. Ze gebruiken geen live vervaging, dus ze kosten bijna niets, en ze zijn te zien op pagina\'s met een achtergrond erachter. De balk Ongedaan maken is echt glas zolang hij in beeld is. De prestatiemodus zet dit uit. Er kunnen meer plekken volgen.</string>
 </resources>

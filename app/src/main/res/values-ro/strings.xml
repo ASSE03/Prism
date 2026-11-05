@@ -4682,7 +4682,6 @@
     <string name="dj_in_the_queue_info">Dezactivat, partea de sus a cozii are mai mult spațiu. Modul DJ poate rămâne unul dintre butoanele playerului (Afișează pe player).</string>
     <string name="dj_in_the_queue_keywords">dj mod buton coadă antet sus spațiu ascunde</string>
     <string name="menu_lyrics_only_way">Rămâne cât timp este singura cale a playerului spre versuri</string>
-    <string name="glass_kinds_info">Sticlă mată: o estompare ușoară în spatele barelor și al comenzilor. Sticlă lichidă: acestea îndoaie ce se află în spatele lor, ca sticla adevărată (Android 12 și mai nou; telefoanele mai vechi primesc Sticlă mată). Normal estompează ce se află în spate, ca sticla mată. Transparent păstrează totul clar, doar cu o nuanță ușoară.</string>
     <string name="smart_downloads_offer_title">Descarci melodii înainte să ai nevoie de ele?</string>
     <string name="smart_downloads_offer_body">Descărcările inteligente țin pregătite offline melodiile pe care probabil le vei asculta: până la 1 GB, pe Wi-Fi. Schimbă oricând în Descărcări, stocare și date.</string>
     <!-- 1.8.2 -->
@@ -4917,4 +4916,18 @@
     <string name="tune_energetic">Energic</string>
     <string name="tune_calm_energetic_info">Merge după tempoul și volumul melodiilor deja scanate de Prism, nimic altceva. Cele mai multe melodii pe care nu le-ai auzit încă nu sunt scanate, așa că rămân pe loc: așteaptă-te ca acesta să conteze cel mai mult pentru muzica pe care o cunoști. Cât timp e departe de mijloc, se scanează și melodiile pe care le asculți.</string>
     <string name="tune_measured_songs">Melodii măsurate până acum: %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Gradient din copertă</string>
+    <string name="cover_gradient_info">Gradientul din copertă sunt culorile propriu-zise ale copertei, ca un gradient plin, fără nimic estompat, tot mai închis spre partea de jos. Versurile și coada rămân pe el, puțin mai închise.</string>
+    <string name="gradient_depth">Întunecare jos</string>
+    <string name="gradient_depth_info">Cât de închis devine gradientul spre partea de jos. Valoarea mică păstrează aproape aceeași culoare până jos, la maxim (100%) ajunge la negru. Culorile rămân destul de închise pentru textul alb la orice setare.</string>
+    <string name="glass_kinds_what_differs">Sticlă mată: o estompare fină în spatele barelor și butoanelor. Sticlă lichidă: ele îndoaie ce e în spatele lor, ca sticla adevărată. Normal întinde culorile din spatele lui și le întunecă, iar lucrurile mici, cum e textul, rămân un contur subțire și clar. Transparent lasă culorile cum sunt și înmoaie puțin lucrurile mici. Sticla are nevoie de Android 12; sub el barele sunt pline.</string>
+    <string name="glass_blur">Estompare</string>
+    <string name="glass_blur_info">Cât de departe se întind culorile din spatele sticlei. Lucrurile mici, cum e textul, păstrează un contur subțire în spatele Sticlei lichide oricât de mare ar fi valoarea; Sticla mată le topește și pe ele. 100% e valoarea Prism. Peste ea, un telefon mai lent muncește mai mult.</string>
+    <string name="glass_frost">Mat</string>
+    <string name="glass_frost_info">Cât de gros e vălul peste sticlă: mai puțin lasă să treacă mai mult din ce e în spate, mai mult o face mai lăptoasă în modul luminos și mai întunecată în cel întunecat și mai ușor de citit peste imagini încărcate. 100% este valoarea Prism. O bară de file cu fundal propriu (Aspect, Bara de file) își păstrează fundalul.</string>
+    <string name="glass_needs_android_12">Acestea au nevoie de estomparea apărută odată cu Android 12. Pe acest telefon barele sunt pline, așa că setările de estompare și mat nu au ce schimba.</string>
+    <string name="glass_on_more_of_the_screen">Sticlă pe mai mult din ecran</string>
+    <string name="glass_on_more_of_the_screen_detail">Carduri, chip-uri, butoane rotunde și bara Anulează</string>
+    <string name="glass_on_more_of_the_screen_info">Cardurile și panourile de setări primesc o lumină care cade pe ele și o margine mai luminoasă, chip-urile și butoanele rotunde o margine mai luminoasă, iar Matul le cuprinde pe toate. Nu folosesc estompare în direct, așa că costă aproape nimic, și se văd pe paginile cu un fundal în spate. Bara Anulează este sticlă adevărată cât timp e afișată. Modul de performanță dezactivează asta. Pot urma și alte locuri.</string>
 </resources>

@@ -4682,7 +4682,6 @@
     <string name="dj_in_the_queue_info">Si lo desactivas, la parte superior de la cola tiene más espacio. El modo DJ puede seguir siendo uno de los botones del reproductor (Qué hay en el reproductor).</string>
     <string name="dj_in_the_queue_keywords">dj modo botón cola cabecera arriba espacio ocultar</string>
     <string name="menu_lyrics_only_way">Se queda mientras sea la única forma de llegar a la letra desde el reproductor</string>
-    <string name="glass_kinds_info">Cristal esmerilado: un desenfoque suave detrás de las barras y los controles. Liquid Glass: curvan lo que hay detrás como un cristal de verdad (Android 12 o posterior; los móviles más antiguos usan Cristal esmerilado). Normal desenfoca lo que hay detrás, como el cristal esmerilado. Transparente lo deja nítido, solo con un tinte ligero.</string>
     <string name="smart_downloads_offer_title">¿Descargar canciones antes de que las necesites?</string>
     <string name="smart_downloads_offer_body">Descargas inteligentes mantiene listas sin conexión las canciones que probablemente escucharás: hasta 1 GB, con Wi-Fi. Cámbialo cuando quieras en Descargas, almacenamiento y datos.</string>
     <!-- 1.8.2 -->
@@ -4917,4 +4916,18 @@
     <string name="tune_energetic">Enérgico</string>
     <string name="tune_calm_energetic_info">Se guía por el tempo y el volumen de las canciones que Prism ya analizó, y nada más. La mayoría de las canciones que no has escuchado aún no están analizadas, así que se quedan donde están: espera que influya sobre todo en la música que conoces. Mientras está lejos del medio, las canciones que escuchas también se analizan.</string>
     <string name="tune_measured_songs">Canciones medidas hasta ahora: %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Degradado de la portada</string>
+    <string name="cover_gradient_info">El degradado de la portada usa los colores de la propia portada como un degradado sólido, sin desenfoque, que se oscurece hacia abajo. La letra y la cola siguen sobre él, un poco más oscuros.</string>
+    <string name="gradient_depth">Oscuridad abajo</string>
+    <string name="gradient_depth_info">Cuánto se oscurece el degradado hacia abajo. Con un valor bajo casi mantiene el mismo color hasta el final; al 100 % acaba en negro. Los colores siguen siendo lo bastante oscuros para el texto blanco con cualquier ajuste.</string>
+    <string name="glass_kinds_what_differs">Cristal esmerilado: un desenfoque suave detrás de las barras y los controles. Liquid Glass: curvan lo que hay detrás como un cristal de verdad. Normal extiende los colores de detrás y los atenúa, y las cosas pequeñas, como el texto, quedan como un contorno nítido y tenue. Transparente deja los colores tal cual y suaviza un poco las cosas pequeñas. El cristal necesita Android 12; en versiones anteriores las barras son sólidas.</string>
+    <string name="glass_blur">Desenfoque</string>
+    <string name="glass_blur_info">Cuánto se extienden los colores detrás del cristal. Las cosas pequeñas, como el texto, mantienen un contorno tenue detrás de Liquid Glass por mucho que subas esto; el cristal esmerilado también las funde. El 100 % es el valor propio de Prism. Por encima, cuesta más trabajo a un teléfono lento.</string>
+    <string name="glass_frost">Escarcha</string>
+    <string name="glass_frost_info">Qué tan espeso es el velo sobre el cristal: menos deja pasar más de lo que hay detrás; más lo vuelve más lechoso en modo claro y más oscuro en modo oscuro, y más fácil de leer sobre imágenes recargadas. El 100 % es el valor propio de Prism. Una barra de pestañas con fondo propio (Diseño, Barra de pestañas) conserva ese fondo.</string>
+    <string name="glass_needs_android_12">Esto necesita el desenfoque que llegó con Android 12. En este teléfono las barras son sólidas, así que no hay nada que un ajuste de desenfoque o escarcha pueda cambiar.</string>
+    <string name="glass_on_more_of_the_screen">Cristal en más partes de la pantalla</string>
+    <string name="glass_on_more_of_the_screen_detail">Tarjetas, chips, botones redondos y la barra de Deshacer</string>
+    <string name="glass_on_more_of_the_screen_info">Las tarjetas y los paneles de ajustes reciben una luz encima y un borde más brillante, los chips y los botones redondos un borde más brillante, y la escarcha llega a todos. No usan desenfoque en vivo, así que cuestan casi nada, y se ven en las páginas que tienen un fondo detrás. La barra de Deshacer es cristal de verdad mientras está visible. El modo Rendimiento lo desactiva. Puede que lleguen más lugares.</string>
 </resources>

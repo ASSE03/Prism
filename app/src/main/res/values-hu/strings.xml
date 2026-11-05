@@ -4620,7 +4620,6 @@
     <string name="dj_in_the_queue_info">Kikapcsolva a lejátszási sor teteje több helyet kap. A DJ mód továbbra is lehet a lejátszó egyik gombja (Mi van a lejátszón).</string>
     <string name="dj_in_the_queue_keywords">dj mód gomb lejátszási sor fejléc felül hely elrejtés</string>
     <string name="menu_lyrics_only_way">Addig marad, amíg ez a lejátszó egyetlen útja a dalszöveghez</string>
-    <string name="glass_kinds_info">Matt üveg: lágy elmosás a sávok és a vezérlők mögött. Folyékony üveg: ezek úgy hajlítják el a mögöttük lévőt, mint az igazi üveg (Android 12 vagy újabb; a régebbi telefonok a Matt üveget kapják). A Normál elmossa a mögötte lévőt, ahogy a matt üveg is. Az Átlátszó élesen hagyja, csak enyhe árnyalattal.</string>
     <string name="smart_downloads_offer_title">Letöltöd a dalokat, mielőtt szükséged lenne rájuk?</string>
     <string name="smart_downloads_offer_body">Az Okos letöltések offline készenlétben tartják a dalokat, amelyeket valószínűleg meghallgatsz: legfeljebb 1 GB, Wi-Fi-n. Bármikor módosíthatod a Letöltések, tárhely és adatforgalom alatt.</string>
     <!-- 1.8.2 -->
@@ -4853,4 +4852,18 @@
     <string name="tune_energetic">Energikus</string>
     <string name="tune_calm_energetic_info">A Prism által már átvizsgált dalok tempója és hangereje alapján megy, semmi más szerint. A legtöbb, még nem hallott dalt még nem vizsgálta át, ezért azok a helyükön maradnak: ez főleg az ismert zenéknél számít majd. Amíg nincs középen, a lejátszott dalokat is átvizsgálja.</string>
     <string name="tune_measured_songs">Eddig mért dalok: %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Borítóátmenet</string>
+    <string name="cover_gradient_info">A borítóátmenet a borító saját színei egyszínű átmenetként, semmi sem elmosott, lefelé mélyül. A dalszöveg és a sor rajta marad, kicsit sötétebben.</string>
+    <string name="gradient_depth">Sötétség alul</string>
+    <string name="gradient_depth_info">Mennyire sötétedik az átmenet lefelé. Alacsony értéknél majdnem ugyanaz a szín marad egészen lent, 100%-nál feketében végződik. A színek bármilyen beállításnál elég sötétek maradnak a fehér szöveghez.</string>
+    <string name="glass_kinds_what_differs">Matt üveg: lágy elmosás a sávok és vezérlők mögött. Folyékony üveg: elhajlítják, ami mögöttük van, mint egy igazi üveg. A Normál szétkeni a mögötte lévő színeket és elsötétíti őket, az apró dolgok, például a szöveg halvány, éles körvonalként maradnak. Az Átlátszó érintetlenül hagyja a színeket, az apró dolgokat kicsit lágyítja. Az üveghez Android 12 kell; alatta a sávok tömörek.</string>
+    <string name="glass_blur">Elmosás</string>
+    <string name="glass_blur_info">Milyen messzire kenődnek szét az üveg mögötti színek. Az apró dolgok, például a szöveg, a Folyékony üveg mögött halvány körvonalat őriznek, akármekkora is ez; a Matt üveg ezeket is elolvasztja. A 100% a Prism saját értéke. Felette egy lassabb telefonnak nehezebb dolga van.</string>
+    <string name="glass_frost">Mattság</string>
+    <string name="glass_frost_info">Milyen vastag a fátyol az üveg fölött: kevesebb több mindent átenged abból, ami mögötte van, több tejesebbé teszi világos módban és sötétebbé sötétben, és könnyebb olvasni a zsúfolt képek fölött. A 100% a Prism saját értéke. A saját háttérrel rendelkező fülsáv (Elrendezés, Fülsáv) megtartja a hátterét.</string>
+    <string name="glass_needs_android_12">Ezekhez az Android 12-vel érkezett elmosás kell. Ezen a telefonon a sávok tömörek, így az elmosás és a mattság beállításának nincs mit módosítania.</string>
+    <string name="glass_on_more_of_the_screen">Üveg a képernyő nagyobb részén</string>
+    <string name="glass_on_more_of_the_screen_detail">Kártyák, chipek, kerek gombok és a Visszavonás sáv</string>
+    <string name="glass_on_more_of_the_screen_info">A kártyák és a beállítási panelek rájuk eső fényt és világosabb szegélyt kapnak, a chipek és a kerek gombok világosabb szegélyt, a Mattság pedig mindegyikre kihat. Nem használnak élő elmosást, így szinte semmibe sem kerülnek, és a mögöttük hátteret mutató oldalakon látszanak. A Visszavonás sáv valódi üveg, amíg fent van. A teljesítmény mód kikapcsolja ezt. Más helyek is jöhetnek.</string>
 </resources>

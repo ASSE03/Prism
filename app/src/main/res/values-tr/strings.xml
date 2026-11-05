@@ -4620,7 +4620,6 @@
     <string name="dj_in_the_queue_info">Kapalıyken sıranın üstünde daha fazla yer olur. DJ modu yine de oynatıcının düğmelerinden biri olabilir (Oynatıcıda göster).</string>
     <string name="dj_in_the_queue_keywords">dj modu düğme sıra başlık üst yer gizle</string>
     <string name="menu_lyrics_only_way">Oynatıcının şarkı sözlerine tek yolu olduğu sürece kalır</string>
-    <string name="glass_kinds_info">Buzlu Cam: çubukların ve kontrollerin arkasında yumuşak bir bulanıklık. Sıvı Cam: arkalarındakini gerçek cam gibi büker (Android 12 ve üstü; eski telefonlarda Buzlu Cam olur). Normal, arkasındakini buzlu cam gibi bulanıklaştırır. Şeffaf, yalnızca hafif bir tonla net tutar.</string>
     <string name="smart_downloads_offer_title">Şarkıları ihtiyacın olmadan önce indirelim mi?</string>
     <string name="smart_downloads_offer_body">Akıllı İndirmeler, çalma ihtimalin yüksek şarkıları çevrimdışı hazır tutar: 1 GB\'a kadar, Wi-Fi\'da. İstediğin zaman İndirmeler, depolama ve veri bölümünden değiştir.</string>
     <!-- 1.8.2 -->
@@ -4853,4 +4852,18 @@
     <string name="tune_energetic">Enerjik</string>
     <string name="tune_calm_energetic_info">Yalnızca Prism\'in daha önce taradığı şarkıların temposuna ve ses yüksekliğine göre çalışır. Henüz duymadığın şarkıların çoğu taranmadığı için yerinde kalır: bunun en çok tanıdığın müzikte işe yaramasını bekle. Ortadan uzaktayken, çaldığın şarkılar da taranır.</string>
     <string name="tune_measured_songs">Şimdiye kadar ölçülen şarkılar: %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Kapak geçişi</string>
+    <string name="cover_gradient_info">Kapak geçişi, kapağın kendi renklerinin düz bir geçiş olarak kullanılmasıdır; hiçbir şey bulanık değildir, alta doğru koyulaşır. Sözler ve sıra üzerinde kalır, biraz daha koyu.</string>
+    <string name="gradient_depth">Alttaki koyuluk</string>
+    <string name="gradient_depth_info">Geçişin alta doğru ne kadar koyulaşacağı. Düşük değer en alta kadar neredeyse aynı rengi korur, %100 siyahta biter. Renkler her ayarda beyaz metin için yeterince koyu kalır.</string>
+    <string name="glass_kinds_what_differs">Buzlu Cam: çubukların ve kontrollerin arkasında yumuşak bir bulanıklık. Sıvı Cam: arkalarındakini gerçek cam gibi bükerler. Normal, arkasındaki renkleri yayar ve karartır; metin gibi küçük şeyler soluk, net bir çerçeve olarak kalır. Şeffaf renkleri olduğu gibi bırakır ve küçük şeyleri biraz yumuşatır. Cam için Android 12 gerekir; daha eskisinde çubuklar düzdür.</string>
+    <string name="glass_blur">Bulanıklık</string>
+    <string name="glass_blur_info">Camın arkasındaki renklerin ne kadar yayılacağı. Metin gibi küçük şeyler, bu değer ne olursa olsun Sıvı Cam arkasında soluk bir çerçeve korur; Buzlu Cam onları da eritir. %100 Prism\'in kendi değeridir. Bunun üstünde yavaş bir telefon için iş daha zordur.</string>
+    <string name="glass_frost">Buzlanma</string>
+    <string name="glass_frost_info">Camın üstündeki perdenin ne kadar kalın olduğu: azı arkasındakinin daha çoğunu geçirir, çoğu açık temada daha sütlü, koyu temada daha koyu yapar ve yoğun resimlerin üzerinde okumayı kolaylaştırır. %100 Prism\'in kendi değeridir. Kendi arka planı olan bir sekme çubuğu (Düzen, Sekme çubuğu) o arka planı korur.</string>
+    <string name="glass_needs_android_12">Bunlar için Android 12 ile gelen bulanıklık gerekir. Bu telefonda çubuklar düz olduğundan bulanıklık ve buzlanma ayarlarının değiştirecek bir şeyi yok.</string>
+    <string name="glass_on_more_of_the_screen">Ekranın daha fazlasında cam</string>
+    <string name="glass_on_more_of_the_screen_detail">Kartlar, çipler, yuvarlak düğmeler ve Geri al çubuğu</string>
+    <string name="glass_on_more_of_the_screen_info">Kartlar ve ayar panelleri üzerlerine düşen bir ışık ve daha parlak bir kenar, çipler ve yuvarlak düğmeler daha parlak bir kenar alır; Buzlanma hepsine uygulanır. Canlı bulanıklık kullanmazlar, bu yüzden neredeyse hiçbir şeye mal olmazlar ve arkalarında arka plan olan sayfalarda görünürler. Geri al çubuğu ekrandayken gerçek camdır. Performans modu bunu kapatır. Başka yerler de eklenebilir.</string>
 </resources>

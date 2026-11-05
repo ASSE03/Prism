@@ -27,7 +27,7 @@ class GlassKindsTest {
     }
 
     @Test fun theSettingSaysWhatEachDoes() {
-        val info = tr(R.string.glass_kinds_info)
-        assertTrue(info, info.contains("Regular blurs") && info.contains("Clear keeps it sharp"))
+        val info = tr(R.string.glass_kinds_what_differs)
+        assertTrue(info, info.contains("Regular spreads the colors") && info.contains("Clear leaves the colors"))
     }
 }

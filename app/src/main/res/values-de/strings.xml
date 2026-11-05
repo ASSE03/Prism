@@ -4620,7 +4620,6 @@
     <string name="dj_in_the_queue_info">Ist er aus, hat der Kopf der Warteschlange mehr Platz. Der DJ-Modus kann trotzdem einer der Player-Buttons bleiben (Was der Player zeigt).</string>
     <string name="dj_in_the_queue_keywords">dj modus button knopf warteschlange kopf oben platz ausblenden</string>
     <string name="menu_lyrics_only_way">Bleibt, solange es der einzige Weg vom Player zum Songtext ist</string>
-    <string name="glass_kinds_info">Milchglas: ein weicher Blur hinter Leisten und Bedienelementen. Liquid Glass: Sie verbiegen, was dahinter liegt, wie echtes Glas (Android 12 und neuer; ältere Handys bekommen Milchglas). Normal verwischt, was dahinter liegt, wie Milchglas. Klar lässt es scharf, nur mit einem leichten Farbton.</string>
     <string name="smart_downloads_offer_title">Songs herunterladen, bevor du sie brauchst?</string>
     <string name="smart_downloads_offer_body">Smart Downloads hält die Songs, die du wahrscheinlich hörst, offline bereit: bis zu 1 GB, über Wi-Fi. Ändere das jederzeit unter Downloads, Speicher &amp; Daten.</string>
     <!-- 1.8.2 -->
@@ -4853,4 +4852,18 @@
     <string name="tune_energetic">Energiegeladen</string>
     <string name="tune_calm_energetic_info">Richtet sich nach Tempo und Lautstärke der Songs, die Prism schon analysiert hat, und nach nichts anderem. Die meisten Songs, die du noch nicht gehört hast, sind noch nicht analysiert und bleiben deshalb, wo sie sind: Rechne damit, dass dieser Regler vor allem bei Musik wirkt, die du kennst. Solange er von der Mitte entfernt ist, werden auch Songs, die du hörst, analysiert.</string>
     <string name="tune_measured_songs">Bisher vermessene Songs: %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Cover-Verlauf</string>
+    <string name="cover_gradient_info">Der Cover-Verlauf besteht aus den Farben des Covers als durchgehender Verlauf, ohne Unschärfe, der nach unten hin dunkler wird. Songtext und Warteschlange bleiben darauf, etwas dunkler.</string>
+    <string name="gradient_depth">Dunkelheit unten</string>
+    <string name="gradient_depth_info">Wie dunkel der Verlauf nach unten wird. Niedrig behält fast die gleiche Farbe bis nach unten, 100 % endet in Schwarz. Die Farben bleiben bei jeder Einstellung dunkel genug für den weißen Text.</string>
+    <string name="glass_kinds_what_differs">Milchglas: eine weiche Unschärfe hinter den Leisten und Bedienelementen. Liquid Glass: Sie brechen, was dahinter liegt, wie echtes Glas. Normal verteilt die Farben dahinter und dunkelt sie ab, und kleine Dinge wie Text bleiben als schwache scharfe Kontur. Klar lässt die Farben, wie sie sind, und macht kleine Dinge etwas weicher. Glas braucht Android 12; darunter sind die Leisten undurchsichtig.</string>
+    <string name="glass_blur">Unschärfe</string>
+    <string name="glass_blur_info">Wie weit sich die Farben hinter dem Glas verteilen. Kleine Dinge wie Text behalten hinter Liquid Glass eine schwache Kontur, egal wie weit du das aufdrehst; Milchglas lässt sie auch verschwimmen. 100 % ist der Wert von Prism. Darüber ist es mehr Arbeit für ein langsameres Handy.</string>
+    <string name="glass_frost">Milchigkeit</string>
+    <string name="glass_frost_info">Wie dick der Schleier über dem Glas ist: weniger lässt mehr von dem durch, was dahinter liegt, mehr macht es im hellen Modus milchiger und im dunklen Modus dunkler und über unruhigen Bildern leichter lesbar. 100 % ist der Wert von Prism. Eine Tab-Leiste mit eigenem Hintergrund (Layout, Tab-Leiste) behält stattdessen diesen Hintergrund.</string>
+    <string name="glass_needs_android_12">Dafür braucht es die Unschärfe, die mit Android 12 kam. Auf diesem Handy sind die Leisten undurchsichtig, also gibt es nichts, was eine Unschärfe- oder Milchigkeits-Einstellung ändern könnte.</string>
+    <string name="glass_on_more_of_the_screen">Glas auf mehr Teilen des Bildschirms</string>
+    <string name="glass_on_more_of_the_screen_detail">Karten, Chips, runde Buttons und die Rückgängig-Leiste</string>
+    <string name="glass_on_more_of_the_screen_info">Karten und Einstellungsfelder bekommen einen Lichteinfall und einen helleren Rand, Chips und runde Buttons einen helleren Rand, und die Milchigkeit wirkt auf alle. Sie nutzen keine Live-Unschärfe, kosten also fast nichts, und sie sind auf Seiten mit einem Hintergrund dahinter zu sehen. Die Rückgängig-Leiste ist echtes Glas, solange sie eingeblendet ist. Der Leistungsmodus schaltet das aus. Weitere Stellen könnten folgen.</string>
 </resources>

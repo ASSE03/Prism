@@ -4744,7 +4744,6 @@
     <string name="dj_in_the_queue_info">Když je vypnuté, má horní část fronty víc místa. Režim DJ může být dál jedním z tlačítek přehrávače (Co je v přehrávači).</string>
     <string name="dj_in_the_queue_keywords">dj režim tlačítko fronta záhlaví nahoře místo skrýt</string>
     <string name="menu_lyrics_only_way">Zůstává, dokud je to jediná cesta z přehrávače k textům</string>
-    <string name="glass_kinds_info">Matné sklo: jemné rozostření za lištami a ovládacími prvky. Tekuté sklo: ohýbají to, co je za nimi, jako skutečné sklo (Android 12 a novější; starší telefony dostanou matné). Normální rozostří to, co je za ním, stejně jako matné sklo. Průhledné to nechá ostré, jen s lehkým zabarvením.</string>
     <string name="smart_downloads_offer_title">Stáhnout písně dřív, než je budeš potřebovat?</string>
     <string name="smart_downloads_offer_body">Chytré stahování připraví offline písně, které budeš nejspíš přehrávat: až 1 GB, přes Wi-Fi. Kdykoli to změníš ve Stahování, úložiště a data.</string>
     <!-- 1.8.2 -->
@@ -4981,4 +4980,18 @@
     <string name="tune_energetic">Energické</string>
     <string name="tune_calm_energetic_info">Řídí se tempem a hlasitostí skladeb, které už Prism prohledal, a ničím jiným. Většina skladeb, které jsi ještě neslyšel(a), zatím prohledaná není, takže zůstávají, kde jsou: tento posuvník bude nejvíc znát u hudby, kterou znáš. Dokud je mimo střed, prohledávají se i skladby, které hraješ.</string>
     <string name="tune_measured_songs">Dosud změřených skladeb: %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Přechod z obalu</string>
+    <string name="cover_gradient_info">Přechod z obalu jsou vlastní barvy obalu jako plný přechod, nic se nerozmazává, ke spodku tmavne. Text písní a fronta na něm zůstávají, o něco tmavší.</string>
+    <string name="gradient_depth">Tma dole</string>
+    <string name="gradient_depth_info">Jak moc přechod ke spodku ztmavne. Nízká hodnota nechává téměř stejnou barvu až dolů, 100% končí černou. Barvy zůstávají dost tmavé pro bílý text při jakémkoli nastavení.</string>
+    <string name="glass_kinds_what_differs">Matné sklo: jemné rozmazání za lištami a ovládacími prvky. Tekuté sklo: ohýbají to, co je za nimi, jako skutečné sklo. Normální rozlévá barvy za sebou a tlumí je, drobné věci jako text zůstávají slabým ostrým obrysem. Průhledné nechává barvy, jaké jsou, a drobné věci trochu změkčí. Sklo potřebuje Android 12; na starších jsou lišty plné.</string>
+    <string name="glass_blur">Rozmazání</string>
+    <string name="glass_blur_info">Jak daleko se rozlévají barvy za sklem. Drobné věci jako text si za Tekutým sklem drží slabý obrys, ať je tahle hodnota jakákoli; Matné sklo rozpustí i ty. 100% je výchozí hodnota Prism. Nad ní má pomalejší telefon víc práce.</string>
+    <string name="glass_frost">Matnost</string>
+    <string name="glass_frost_info">Jak hustý je závoj nad sklem: méně propouští víc z toho, co je za ním, více ho ve světlém režimu dělá mléčnějším a v tmavém tmavším a text se lépe čte přes rušné obrázky. 100% je výchozí hodnota Prism. Lišta karet s vlastním pozadím (Rozvržení, Lišta karet) si své pozadí ponechá.</string>
+    <string name="glass_needs_android_12">Tohle potřebuje rozmazání, které přišlo s Androidem 12. Na tomto telefonu jsou lišty plné, takže nastavení rozmazání a matnosti nemá co měnit.</string>
+    <string name="glass_on_more_of_the_screen">Sklo na větší části obrazovky</string>
+    <string name="glass_on_more_of_the_screen_detail">Karty, čipy, kulatá tlačítka a lišta Zpět</string>
+    <string name="glass_on_more_of_the_screen_info">Karty a panely nastavení dostanou dopadající světlo a jasnější okraj, čipy a kulatá tlačítka jasnější okraj a Matnost se týká všech. Nepoužívají živé rozmazání, takže stojí skoro nic, a vidět je na stránkách s pozadím za nimi. Lišta Zpět je skutečné sklo, dokud je na obrazovce. Úsporný režim to vypíná. Další místa mohou přibýt.</string>
 </resources>

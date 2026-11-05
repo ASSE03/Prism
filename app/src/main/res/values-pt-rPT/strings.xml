@@ -4682,7 +4682,6 @@
     <string name="dj_in_the_queue_info">Desativado, o topo da fila tem mais espaço. O modo DJ continua a poder ser um dos botões do leitor (Mostrar no leitor).</string>
     <string name="dj_in_the_queue_keywords">dj modo botão fila cabeçalho topo espaço ocultar</string>
     <string name="menu_lyrics_only_way">Fica enquanto for a única forma de o leitor chegar à letra</string>
-    <string name="glass_kinds_info">Vidro fosco: um desfoque suave atrás das barras e dos controlos. Liquid Glass: dobram o que está atrás, como vidro a sério (Android 12 ou posterior; os telemóveis mais antigos recebem Vidro fosco). Normal desfoca o que está atrás, tal como o vidro fosco. Transparente mantém tudo nítido, só com uma tonalidade leve.</string>
     <string name="smart_downloads_offer_title">Transferir músicas antes de precisares delas?</string>
     <string name="smart_downloads_offer_body">As Transferências inteligentes deixam prontas offline as músicas que provavelmente vais ouvir: até 1 GB, por Wi-Fi. Altera quando quiseres em Transferências, armazenamento e dados.</string>
     <!-- 1.8.2 -->
@@ -4917,4 +4916,18 @@
     <string name="tune_energetic">Enérgico</string>
     <string name="tune_calm_energetic_info">Segue o andamento e o volume das músicas que o Prism já analisou, e mais nada. A maioria das músicas que ainda não ouviste não foi analisada, por isso ficam onde estão: conta que este importe mais para a música que conheces. Enquanto estiver fora do meio, as músicas que ouves também são analisadas.</string>
     <string name="tune_measured_songs">Músicas medidas até agora: %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Gradiente da capa</string>
+    <string name="cover_gradient_info">O gradiente da capa usa as cores da própria capa como um gradiente sólido, sem desfoque, que escurece em direção à parte de baixo. A letra e a fila continuam sobre ele, um pouco mais escuras.</string>
+    <string name="gradient_depth">Escuridão em baixo</string>
+    <string name="gradient_depth_info">Quanto o gradiente escurece em direção à parte de baixo. Baixo mantém quase a mesma cor até ao fim, 100% termina em preto. As cores continuam escuras o suficiente para o texto branco com qualquer definição.</string>
+    <string name="glass_kinds_what_differs">Vidro fosco: um desfoque suave por trás das barras e dos controlos. Liquid Glass: curvam o que está por trás como um vidro a sério. Normal espalha as cores de trás e escurece-as, e as coisas pequenas, como o texto, ficam como um contorno nítido e discreto. Transparente deixa as cores como estão e suaviza um pouco as coisas pequenas. O vidro precisa do Android 12; abaixo dele, as barras são sólidas.</string>
+    <string name="glass_blur">Desfoque</string>
+    <string name="glass_blur_info">Até onde as cores por trás do vidro se espalham. As coisas pequenas, como o texto, mantêm um contorno discreto por trás do Liquid Glass, por mais que aumentes isto; o vidro fosco também as dissolve. 100% é o valor próprio do Prism. Acima disso, dá mais trabalho a um telemóvel mais lento.</string>
+    <string name="glass_frost">Fosco</string>
+    <string name="glass_frost_info">Quão espesso é o véu sobre o vidro: menos deixa passar mais do que está por trás, mais torna-o mais leitoso no modo claro e mais escuro no modo escuro, e mais fácil de ler sobre imagens carregadas. 100% é o valor próprio do Prism. Uma barra de separadores com fundo próprio (Disposição, Barra de separadores) mantém esse fundo.</string>
+    <string name="glass_needs_android_12">Isto precisa do desfoque que chegou com o Android 12. Neste telemóvel as barras são sólidas, por isso não há nada que uma definição de desfoque ou fosco possa mudar.</string>
+    <string name="glass_on_more_of_the_screen">Vidro em mais partes do ecrã</string>
+    <string name="glass_on_more_of_the_screen_detail">Cartões, chips, botões redondos e a barra de Anular</string>
+    <string name="glass_on_more_of_the_screen_info">Os cartões e os painéis de definições recebem uma luz por cima e uma borda mais brilhante, os chips e os botões redondos uma borda mais brilhante, e o fosco chega a todos. Não usam desfoque em direto, por isso custam quase nada, e aparecem nas páginas que têm um fundo por trás. A barra de Anular é vidro a sério enquanto está visível. O modo Desempenho desativa isto. Podem vir mais locais.</string>
 </resources>

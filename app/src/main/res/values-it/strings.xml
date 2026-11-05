@@ -4682,7 +4682,6 @@
     <string name="dj_in_the_queue_info">Se è disattivato, la parte alta della coda ha più spazio. La modalità DJ può comunque restare uno dei pulsanti del player (Cosa c\'è sul player).</string>
     <string name="dj_in_the_queue_keywords">dj modalità pulsante coda intestazione alto spazio nascondere</string>
     <string name="menu_lyrics_only_way">Resta finché è l\'unico modo per arrivare ai testi dal player</string>
-    <string name="glass_kinds_info">Vetro smerigliato: una sfocatura morbida dietro barre e controlli. Vetro liquido: piegano ciò che hanno dietro come vero vetro (Android 12 e successivi; i telefoni più vecchi usano il Vetro smerigliato). Normale sfoca ciò che sta dietro, come il vetro smerigliato. Trasparente lo lascia nitido, con solo una leggera tinta.</string>
     <string name="smart_downloads_offer_title">Scaricare i brani prima che ti servano?</string>
     <string name="smart_downloads_offer_body">I Download intelligenti tengono pronti offline i brani che ascolterai più probabilmente: fino a 1 GB, con Wi-Fi. Cambialo quando vuoi in Download, spazio e dati.</string>
     <!-- 1.8.2 -->
@@ -4917,4 +4916,18 @@
     <string name="tune_energetic">Energico</string>
     <string name="tune_calm_energetic_info">Si basa sul tempo e sul volume dei brani che Prism ha già analizzato, e nient\'altro. La maggior parte dei brani che non hai ascoltato non è ancora analizzata, quindi resta dov\'è: aspettati che conti soprattutto per la musica che conosci. Finché è lontano dal centro, vengono analizzati anche i brani che ascolti.</string>
     <string name="tune_measured_songs">Brani misurati finora: %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Gradiente della copertina</string>
+    <string name="cover_gradient_info">Il gradiente della copertina usa i colori della copertina stessa come gradiente pieno, senza sfocatura, che si scurisce verso il basso. Testo e coda restano sopra, un po\' più scuri.</string>
+    <string name="gradient_depth">Scuro in basso</string>
+    <string name="gradient_depth_info">Quanto si scurisce il gradiente verso il basso. Un valore basso mantiene quasi lo stesso colore fino in fondo, 100%: nero completo. I colori restano abbastanza scuri per il testo bianco con qualsiasi impostazione.</string>
+    <string name="glass_kinds_what_differs">Vetro smerigliato: una sfocatura morbida dietro le barre e i controlli. Vetro liquido: piegano ciò che hanno dietro come un vero vetro. Normale spande i colori dietro e li attenua, e le cose piccole, come il testo, restano un contorno nitido e tenue. Trasparente lascia i colori così come sono e ammorbidisce un po\' le cose piccole. Il vetro richiede Android 12; sotto, le barre sono piene.</string>
+    <string name="glass_blur">Sfocatura</string>
+    <string name="glass_blur_info">Quanto si spandono i colori dietro il vetro. Le cose piccole, come il testo, mantengono un contorno tenue dietro il Vetro liquido per quanto si alzi questo valore; il Vetro smerigliato le scioglie anche. 100% è il valore di Prism. Oltre, è più lavoro per un telefono lento.</string>
+    <string name="glass_frost">Smerigliatura</string>
+    <string name="glass_frost_info">Quanto è spesso il velo sul vetro: meno lascia passare di più ciò che c\'è dietro, più lo rende più lattiginoso in modalità chiara e più scuro in modalità scura, e più leggibile sopra immagini cariche. 100% è il valore di Prism. Una barra delle schede con uno sfondo suo (Layout, Barra delle schede) mantiene invece quello sfondo.</string>
+    <string name="glass_needs_android_12">Servono la sfocatura arrivata con Android 12. Su questo telefono le barre sono piene, quindi non c\'è nulla che un\'impostazione di sfocatura o smerigliatura possa cambiare.</string>
+    <string name="glass_on_more_of_the_screen">Vetro su più parti dello schermo</string>
+    <string name="glass_on_more_of_the_screen_detail">Schede, chip, pulsanti rotondi e la barra Annulla</string>
+    <string name="glass_on_more_of_the_screen_info">Le schede e i pannelli delle impostazioni ricevono una luce addosso e un bordo più luminoso, i chip e i pulsanti rotondi un bordo più luminoso, e la smerigliatura li raggiunge tutti. Non usano sfocatura dal vivo, quindi costano quasi nulla, e si vedono nelle pagine che hanno uno sfondo dietro. La barra Annulla è vetro vero finché è visibile. La modalità Prestazioni lo disattiva. Potrebbero aggiungersi altri punti.</string>
 </resources>

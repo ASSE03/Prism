@@ -4558,7 +4558,6 @@
     <string name="dj_in_the_queue_info">꺼 두면 대기열 맨 위에 공간이 더 생겨요. DJ 모드는 플레이어 버튼 중 하나로 계속 둘 수 있어요(플레이어에 표시할 항목).</string>
     <string name="dj_in_the_queue_keywords">dj 모드 버튼 대기열 상단 공간 숨기기</string>
     <string name="menu_lyrics_only_way">플레이어에서 가사로 가는 유일한 방법인 동안은 그대로 있어요</string>
-    <string name="glass_kinds_info">반투명 유리: 바와 컨트롤 뒤를 부드럽게 흐려 줘요. 리퀴드 글래스: 뒤에 있는 것을 진짜 유리처럼 휘어 보이게 해요(Android 12 이상, 이전 휴대전화는 반투명 유리 적용). 보통은 뒤에 있는 것을 반투명 유리처럼 흐리게 해요. 투명은 뒤를 선명하게 두고 옅은 색조만 더해요.</string>
     <string name="smart_downloads_offer_title">필요하기 전에 곡을 다운로드해 둘까요?</string>
     <string name="smart_downloads_offer_body">스마트 다운로드는 들을 가능성이 높은 곡을 오프라인용으로 준비해 둬요: 최대 1 GB, Wi-Fi에서요. 다운로드, 저장공간, 데이터에서 언제든 바꿀 수 있어요.</string>
     <!-- 1.8.2 -->
@@ -4789,4 +4788,18 @@
     <string name="tune_energetic">에너지</string>
     <string name="tune_calm_energetic_info">Prism이 이미 분석한 곡의 템포와 음량만 따르고 다른 것은 보지 않아요. 아직 듣지 않은 대부분의 곡은 분석되지 않아서 제자리에 남아요. 그래서 이 슬라이더는 내가 아는 음악에서 가장 크게 작동해요. 가운데에서 벗어나 있는 동안에는 재생한 곡도 분석해요.</string>
     <string name="tune_measured_songs">지금까지 측정한 곡: %1$d곡</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">커버 그라데이션</string>
+    <string name="cover_gradient_info">커버 그라데이션은 커버 자체의 색으로 만든, 흐림 없는 단색 그라데이션으로 아래로 갈수록 짙어집니다. 가사와 재생 대기열은 그 위에 조금 더 어둡게 표시됩니다.</string>
+    <string name="gradient_depth">아래쪽 어두움</string>
+    <string name="gradient_depth_info">그라데이션이 아래로 갈수록 얼마나 어두워질지 정합니다. 낮추면 아래까지 거의 같은 색을 유지하고, 100%는 검은색으로 끝납니다. 어떤 설정에서도 흰색 글자가 보일 만큼은 어둡게 유지됩니다.</string>
+    <string name="glass_kinds_what_differs">반투명 유리: 바와 컨트롤 뒤를 부드럽게 흐립니다. 리퀴드 글래스: 뒤에 있는 것을 진짜 유리처럼 휘어 보여 줍니다. 보통은 뒤의 색을 퍼뜨려 어둡게 하며, 글자 같은 작은 것은 희미하고 선명한 윤곽으로 남습니다. 투명은 색을 그대로 두고 작은 것만 살짝 부드럽게 합니다. 유리 효과는 Android 12 이상에서 사용할 수 있으며, 그보다 낮으면 바가 단색으로 표시됩니다.</string>
+    <string name="glass_blur">흐림</string>
+    <string name="glass_blur_info">유리 뒤의 색이 얼마나 퍼질지 정합니다. 리퀴드 글래스에서는 아무리 높여도 글자 같은 작은 것이 희미한 윤곽으로 남고, 반투명 유리에서는 그것도 녹아 사라집니다. 100%가 Prism 기본값입니다. 그보다 높이면 처리가 무거워져 느린 휴대전화에서는 부담이 됩니다.</string>
+    <string name="glass_frost">서리</string>
+    <string name="glass_frost_info">유리 위에 덮인 막의 두께를 정합니다. 낮추면 뒤가 더 비쳐 보이고, 높이면 라이트 모드에서는 더 뽀얗게, 다크 모드에서는 더 어둡게 되어 복잡한 이미지 위에서도 읽기 쉬워집니다. 100%가 Prism 기본값입니다. 자체 배경이 있는 탭 바(레이아웃, 탭 바)는 그 배경을 그대로 유지합니다.</string>
+    <string name="glass_needs_android_12">이 설정에는 Android 12부터 제공되는 흐림 효과가 필요합니다. 이 휴대전화에서는 바가 단색이라 흐림이나 서리 설정으로 바뀌는 것이 없습니다.</string>
+    <string name="glass_on_more_of_the_screen">화면 곳곳에 유리 효과</string>
+    <string name="glass_on_more_of_the_screen_detail">카드, 칩, 둥근 버튼, 실행취소 바</string>
+    <string name="glass_on_more_of_the_screen_info">카드와 설정 패널에는 빛이 비치고 가장자리가 더 밝아지며, 칩과 둥근 버튼은 가장자리가 더 밝아지고, 서리 설정은 이 모두에 적용됩니다. 실시간 흐림을 쓰지 않아 부담이 거의 없고, 배경이 있는 페이지에 표시됩니다. 실행취소 바는 표시되는 동안 진짜 유리입니다. 성능 모드에서는 꺼집니다. 앞으로 더 많은 곳에 적용될 수 있습니다.</string>
 </resources>

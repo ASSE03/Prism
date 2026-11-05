@@ -4558,7 +4558,6 @@
     <string name="dj_in_the_queue_info">Khi tắt, phần đầu danh sách chờ có thêm chỗ. Chế độ DJ vẫn có thể là một trong các nút của trình phát (Hiện trên trình phát).</string>
     <string name="dj_in_the_queue_keywords">dj chế độ nút danh sách chờ tiêu đề đầu chỗ ẩn</string>
     <string name="menu_lyrics_only_way">Được giữ lại khi đây là cách duy nhất để vào lời bài hát từ trình phát</string>
-    <string name="glass_kinds_info">Kính mờ: làm mờ nhẹ phía sau các thanh và nút điều khiển. Kính lỏng: chúng bẻ cong những gì ở phía sau như kính thật (Android 12 trở lên; điện thoại cũ hơn dùng Kính mờ). Thường làm mờ những gì ở phía sau, giống kính mờ. Trong giữ mọi thứ sắc nét, chỉ phủ một lớp màu nhẹ.</string>
     <string name="smart_downloads_offer_title">Tải nhạc xuống trước khi bạn cần?</string>
     <string name="smart_downloads_offer_body">Tải xuống thông minh giữ sẵn các bài bạn có thể sẽ nghe để dùng ngoại tuyến: tối đa 1 GB, qua Wi-Fi. Đổi bất cứ lúc nào trong Tải xuống, bộ nhớ &amp; dữ liệu.</string>
     <!-- 1.8.2 -->
@@ -4789,4 +4788,18 @@
     <string name="tune_energetic">Sôi động</string>
     <string name="tune_calm_energetic_info">Dựa vào nhịp độ và độ lớn của các bài Prism đã quét, và không gì khác. Hầu hết bài bạn chưa nghe chưa được quét, nên chúng giữ nguyên vị trí: hãy kỳ vọng thanh này có tác dụng nhất với nhạc bạn đã biết. Khi nó lệch khỏi giữa, các bài bạn phát cũng được quét.</string>
     <string name="tune_measured_songs">Số bài đã đo đến giờ: %1$d</string>
+    <!-- 1.8.2 gradient and glass -->
+    <string name="cover_gradient">Chuyển màu từ bìa</string>
+    <string name="cover_gradient_info">Chuyển màu từ bìa là chính các màu của bìa dưới dạng dải chuyển màu liền mạch, không làm mờ, đậm dần về phía dưới. Lời bài hát và hàng đợi nằm trên nền này, tối hơn một chút.</string>
+    <string name="gradient_depth">Độ tối ở phía dưới</string>
+    <string name="gradient_depth_info">Dải chuyển màu tối đến mức nào ở phía dưới. Mức thấp giữ gần như cùng một màu xuống tận đáy, còn 100% kết thúc bằng màu đen. Ở mọi mức, màu vẫn đủ tối để chữ trắng dễ đọc.</string>
+    <string name="glass_kinds_what_differs">Kính mờ: làm mờ nhẹ phía sau các thanh và nút điều khiển. Kính lỏng: chúng bẻ cong những gì phía sau như kính thật. Thường trải màu phía sau và làm dịu đi, còn những thứ nhỏ như chữ vẫn giữ một đường viền sắc mờ nhạt. Trong giữ nguyên màu và làm mềm nhẹ những thứ nhỏ. Kính cần Android 12; thấp hơn thì các thanh là nền đặc.</string>
+    <string name="glass_blur">Làm mờ</string>
+    <string name="glass_blur_info">Màu phía sau kính lan ra xa đến đâu. Những thứ nhỏ như chữ vẫn giữ đường viền mờ nhạt sau Kính lỏng dù tăng bao nhiêu; Kính mờ thì làm tan cả chúng. 100% là mức của riêng Prism. Cao hơn thế, máy chậm sẽ phải làm việc vất vả hơn.</string>
+    <string name="glass_frost">Sương mờ</string>
+    <string name="glass_frost_info">Lớp màn phủ trên kính dày đến đâu: ít hơn thì thấy rõ hơn những gì phía sau, nhiều hơn thì đục như sữa hơn ở chế độ sáng và tối hơn ở chế độ tối, đồng thời dễ đọc hơn trên những hình ảnh rối mắt. 100% là mức của riêng Prism. Thanh tab có nền riêng (Bố cục, Thanh tab) sẽ giữ nền đó.</string>
+    <string name="glass_needs_android_12">Các tùy chọn này cần tính năng làm mờ có từ Android 12. Trên điện thoại này các thanh là nền đặc, nên cài đặt làm mờ hay sương mờ không có gì để thay đổi.</string>
+    <string name="glass_on_more_of_the_screen">Kính trên nhiều phần màn hình hơn</string>
+    <string name="glass_on_more_of_the_screen_detail">Thẻ, chip, nút tròn và thanh Hoàn tác</string>
+    <string name="glass_on_more_of_the_screen_info">Thẻ và bảng cài đặt có ánh sáng chiếu lên và viền sáng hơn, chip và nút tròn có viền sáng hơn, và Sương mờ áp dụng cho tất cả. Chúng không dùng làm mờ trực tiếp nên gần như không tốn tài nguyên, và hiện ở các trang có nền phía sau. Thanh Hoàn tác là kính thật khi đang hiển thị. Chế độ hiệu năng sẽ tắt mục này. Có thể sẽ có thêm nhiều nơi nữa.</string>
 </resources>
