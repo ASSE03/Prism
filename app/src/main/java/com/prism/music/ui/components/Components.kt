@@ -636,6 +636,8 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
     if (pickPlaylist) { PlaylistPicker(song) { pickPlaylist = false; onDismiss() }; return }
     if (sharing) { ShareSheet(song.shareTarget()) { sharing = false; onDismiss() }; return }
     if (credits) { SongCreditsSheet(song) { credits = false; onDismiss() }; return }
+    var details by remember { mutableStateOf(false) }
+    if (details) { SongDetailsSheet(song) { details = false; onDismiss() }; return }
     if (versions) { SongVersionsSheet(song) { versions = false; onDismiss() }; return }
     // #305: the song's own cover.
     var cover by remember { mutableStateOf(false) }
@@ -669,6 +671,8 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
     ) + goToArtists(shown) { route -> nav.go(route) } + listOfNotNull(
         // Who performed, wrote and produced it (Reddit 1.7).
         if (song.isEpisode || local || song.isLive) null else ActionItem(PrismIcons.Info, tr(R.string.song_credits), keepOpen = true) { credits = true },
+        // Its plays and dates (#211). The listener's own uploads aren't public: YouTube has nothing to say about them.
+        if (song.isEpisode || local || song.isLive || song.isUpload) null else ActionItem(PrismIcons.Replay, tr(R.string.song_details), keepOpen = true) { details = true },
     )
     val more = extra.map { it.toAction() } + listOfNotNull(
         // Your own FLAC / MP3 files (a Local file, or the lossless file played for this song) can keep its lyrics (#16).

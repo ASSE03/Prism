@@ -331,4 +331,8 @@ interface CountedPlayDao {
 
     @Query("SELECT COUNT(*) FROM counted_plays WHERE origin IN (:o) AND timestamp BETWEEN :from AND :to AND songId IS NOT NULL")
     suspend fun matchedCount(o: List<String>, from: Long, to: Long): Int
+
+    /** How many times a song's been played, as Replay counts it (#211's "Your plays"). */
+    @Query("SELECT COUNT(*) FROM counted_plays WHERE origin IN (:o) AND songId = :id")
+    suspend fun songPlays(o: List<String>, id: String): Int
 }

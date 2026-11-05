@@ -904,6 +904,24 @@ class YouTubeMusic(
         }
     }
 
+    /**
+     * A song's or video's plays and dates (#211). Asked without the account: these are public, and only the plain web
+     * client's answer carries the description with the release date. YouTube Music's own answer fills in what that one
+     * lacks (it can refuse with a bot check). Fails only if neither could be asked.
+     */
+    suspend fun songFacts(videoId: String): SongFacts {
+        val body = buildJsonObject {
+            put("videoId", videoId)
+            put("racyCheckOk", true)
+            put("contentCheckOk", true)
+        }
+        val web = runCatching { SongFacts.parse(videoId, api.webPost("player", body)) }
+        if (web.getOrNull()?.let { it.count != null && (it.releasedOn ?: it.publishedOn) != null } == true) return web.getOrThrow()
+        val music = runCatching { SongFacts.parse(videoId, api.postAnonymous("player", body)) }
+        if (web.isFailure && music.isFailure) throw music.exceptionOrNull()!!
+        return (web.getOrNull() ?: SongFacts()).orElse(music.getOrNull() ?: SongFacts())
+    }
+
     /** Only the artists the account subscribes to (follows) on YouTube Music. */
     suspend fun librarySubscriptions(): List<com.prism.music.data.model.ArtistItem> =
         libraryItems("FEmusic_library_corpus_artists").filterIsInstance<com.prism.music.data.model.ArtistItem>().distinctBy { it.id }

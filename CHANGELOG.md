@@ -28,6 +28,9 @@ What changed in each release. Older releases are described on the [Releases page
   server, no YouTube and no account needed, with everything episodes do here: they pick up where you left off, speed from
   the player's menu, 15 and 30 second skips. New episodes show up when you open the show. Secure (https) servers on the
   public internet only. Not yet: downloading these episodes, new-episode alerts.
+- **Song details** (#211). A song's menu → Song details: its plays on YouTube Music (views, for a music video), the date
+  it was released and how many times you've played it. Only what YouTube really says shows up: a video has the day it
+  went up on YouTube instead of a release date, and anything it doesn't say isn't there.
 
 ### Fixes
 
