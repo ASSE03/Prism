@@ -65,6 +65,14 @@ class TourTest {
         assertTrue(page.showMe!!.startsWith("settings/player"))
     }
 
+    /** 1.8.2: the new Home sections are only offered in Customize Home, so this page is how listeners hear of them. */
+    @Test
+    fun anUpdateFrom181HearsOfTheNewHomeSections() {
+        val page = Tour.stepsAfter(56).first { it.title == tr(R.string.tour_182_discover_title) }
+        assertEquals(57, page.since)
+        assertTrue(page.showMe!!.startsWith("settings/library"))
+    }
+
     /** Every "Show me" opens a page that exists: a settings page by a key Settings knows, or one of the app's routes. */
     @Test
     fun everyShowMeOpensARealPage() {

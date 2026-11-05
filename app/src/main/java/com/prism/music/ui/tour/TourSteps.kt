@@ -526,6 +526,28 @@ private const val V1_8_2 = 57
             showMe = Routes.settings("player", find = tr(R.string.lock_screen_title)),
         ),
         TourStep(
+            V1_8_2, PrismIcons.Radio, tr(R.string.tour_182_discover_title),
+            tr(R.string.tour_182_discover_body),
+            listOf(
+                tr(R.string.tour_182_discover_new),
+                tr(R.string.tour_182_discover_deep),
+                tr(R.string.tour_182_discover_day),
+                tr(R.string.tour_182_discover_tune),
+            ),
+            showMe = Routes.settings("library", find = tr(R.string.tune_radios)),
+        ),
+        TourStep(
+            V1_8_2, PrismIcons.QueueMusic, tr(R.string.also_new),
+            tr(R.string.from_your_requests),
+            listOf(
+                tr(R.string.tour_182_also_shows),
+                tr(R.string.tour_182_also_offline),
+                tr(R.string.tour_182_also_pages),
+                tr(R.string.tour_182_also_files),
+                tr(R.string.tour_182_also_crossfade),
+            ),
+        ),
+        TourStep(
             V1_7, PrismIcons.Update, tr(R.string.stay_in_the_loop),
             tr(R.string.let_prism_tell_you_when_something),
             listOf(

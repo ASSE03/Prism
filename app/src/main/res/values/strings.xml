@@ -4848,6 +4848,17 @@
     <string name="tour_182_lock_point_1">Four layouts: Cover, Full cover, Lyrics and Quiet</string>
     <string name="tour_182_lock_point_2">Only controls what\'s playing: nothing else opens while locked</string>
     <string name="tour_182_lock_point_3">Can hide the song\'s name and cover</string>
+    <string name="tour_182_discover_title">Find something new</string>
+    <string name="tour_182_discover_body">Three new sections to add in Customize Home, and radios you can steer.</string>
+    <string name="tour_182_discover_new">New to you: songs you\'ve never played, new every Monday</string>
+    <string name="tour_182_discover_deep">Deep cuts: album tracks by artists you love</string>
+    <string name="tour_182_discover_day">On this day: what you played on this date in past years</string>
+    <string name="tour_182_discover_tune">Tune your radios, and turn on no repeats</string>
+    <string name="tour_182_also_shows">Podcasts by RSS, and your uploads in Library</string>
+    <string name="tour_182_also_offline">Artists open offline, and Saved while playing</string>
+    <string name="tour_182_also_pages">Song details, Explore and more on artist pages</string>
+    <string name="tour_182_also_files">Lyrics from your music files, and folders in Local files</string>
+    <string name="tour_182_also_crossfade">Crossfade up to 30 seconds</string>
     <string name="section_new_to_you">New to you</string>
     <string name="section_deep_cuts">Deep cuts</string>
     <string name="section_on_this_day">On this day</string>
