@@ -14,6 +14,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeUp
+import androidx.core.view.WindowCompat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.prism.music.data.prefs.LockLayout
@@ -182,6 +183,21 @@ class LockScreenTest {
             .performSemanticsAction(SemanticsActions.SetProgress) { it(0.5f) }
         val half = onMain { player.duration } / 2
         compose.waitUntil(5_000) { abs(onMain { player.position } - half) < 6_000 }
+    }
+
+    @Test fun theBarsIconsAreLightEvenOnALightPhone() {
+        LockScreenActivity.pretendLocked = true
+        settings.setLockScreen(true)
+        playTone("Prism lock bars tone")
+        startLockScreen()
+        waitUntilShown()
+        var lightIcons = false
+        instrumentation.runOnMainSync {
+            val window = LockScreenActivity.live!!.window
+            val bars = WindowCompat.getInsetsController(window, window.decorView)
+            lightIcons = !bars.isAppearanceLightStatusBars && !bars.isAppearanceLightNavigationBars
+        }
+        assertTrue("the page is dark, so dark icons wouldn't show", lightIcons)
     }
 
     @Test fun performanceModeIsQuiet() {

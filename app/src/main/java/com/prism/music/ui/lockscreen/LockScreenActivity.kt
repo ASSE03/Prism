@@ -15,6 +15,7 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.ViewTreeObserver
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.VisibleForTesting
@@ -123,7 +124,9 @@ class LockScreenActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         startedAt = SystemClock.elapsedRealtime()
-        enableEdgeToEdge()
+        // The page is always dark, so the bars' icons are always light, even when the phone is in light mode.
+        val darkBars = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+        enableEdgeToEdge(statusBarStyle = darkBars, navigationBarStyle = darkBars)
         super.onCreate(savedInstanceState)
         live = this
         // Upright on a phone, as Android's lock screen is; a tablet stays however it's standing.
