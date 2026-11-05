@@ -20,6 +20,22 @@ What changed in each release. Older releases are described on the [Releases page
 - **"Songs only" for skipping silence** (#325). Off, Songs only, Podcasts only or Songs and podcasts; the ⓘ says what each one does.
 - **Longest song for Autoplay** (#299). Playback & sound → What plays next: keep hour-long mixes out of Autoplay. Songs you pick
   or queue yourself, and radios you start, play whatever their length.
+- **No videos on mobile data** (#281). With Data saver on, Downloads, storage & data → Mobile data. Music videos show as
+  unavailable there, except ones you've downloaded, and a video playing when Wi-Fi drops carries on as audio. The next song on Wi-Fi
+  is a video again.
+- **Gestures below the lyrics** (#282). Controls → Gestures: while the lyrics are open, your swipes, double tap and long press
+  work on the controls below them. Scrolling the lyrics stays just that.
+- **The lyrics, steadier** (#280). Player → Lyrics and the queue. "Reopen on the last page": the player opens on the cover, the
+  lyrics or the queue, whichever you left it on, and Back closes the player from those pages. "Steadier lyrics": the controls take a
+  longer swipe to come and go, and after a scroll the lyrics go back to the sung line sooner when it's close.
+- **The cover flies back too** (#223). With "Cover flies into place" on, a second switch: closing the player, the cover flies back
+  into the mini player the way it came.
+- **More room for a full-bleed picture** (#293). Player → Cover: over a full-bleed cover or video, the controls close up, a hidden
+  volume bar leaves no blank space, and the picture reaches further down and fades later. And "Video buttons wait for a tap": the small
+  buttons on a music video stay hidden until you tap it.
+- **A tidier queue** (#294, #331). Player → Lyrics and the queue, each its own switch: "Song lengths in the queue"; "Move songs you've
+  played", with handles among the played songs; "Tidier queue", which takes the × off every song (swipe it away, or use its ⋯)
+  and the Queue button off the bottom row while the queue's open (Back or pulling its title down leaves it).
 - **Artist pages work offline.** A page you've opened stays on your phone, so it opens without a connection as it was
   when you last saw it, with a note saying so. What isn't on your phone is dimmed and doesn't play. For an artist you
   haven't opened, Prism makes a page from your downloaded, liked and played songs and their albums. Android Auto's

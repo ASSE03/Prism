@@ -152,6 +152,8 @@ private val DECK_GAP_AFTER = mapOf(
     com.prism.music.data.prefs.DeckPart.BUTTONS to 10.dp,
 )
 private const val HERO_FADE = 0.42f
+/** #293: "More room for the picture": the last quarter fades, not the last ~two fifths. */
+private const val HERO_FADE_ROOMY = 0.24f
 
 /** The deck's parts as they show, the gap after each one but the last, and room added under the last one. */
 internal class DeckSpacing(val parts: List<com.prism.music.data.prefs.DeckPart>, val gaps: List<Dp>, val below: Dp)
@@ -161,12 +163,14 @@ internal class DeckSpacing(val parts: List<com.prism.music.data.prefs.DeckPart>,
  * already). A hidden volume bar leaves no hole of its own any more (its blank room sat between the controls and the
  * buttons row, so the gaps looked uneven): its room, kept so the controls and the cover above stay where they were
  * (1.6.5), is shared evenly between the gaps. [small]: Small over the lyrics or the queue, tight as before.
+ * [tight] (#293): over a full-bleed picture that wants the room: a hidden volume bar keeps none, and the gaps are halved.
  */
-internal fun deckSpacing(shown: List<com.prism.music.data.prefs.DeckPart>, volumeShown: Boolean, small: Boolean): DeckSpacing {
+internal fun deckSpacing(shown: List<com.prism.music.data.prefs.DeckPart>, volumeShown: Boolean, small: Boolean, tight: Boolean = false): DeckSpacing {
     val volume = com.prism.music.data.prefs.DeckPart.VOLUME
     if (small) return DeckSpacing(shown, List((shown.size - 1).coerceAtLeast(0)) { 2.dp }, 0.dp)
     val hiddenVolume = !volumeShown && volume in shown
     val parts = if (hiddenVolume) shown - volume else shown
+    if (tight) return DeckSpacing(parts, parts.dropLast(1).map { (DECK_GAP_AFTER[it] ?: 8.dp) / 2 }, 0.dp)
     // The room it had: the bar's own, and the gap under it when something followed.
     val spare = if (!hiddenVolume) 0.dp else VOLUME_ROW_HEIGHT + if (shown.last() != volume) DECK_GAP_AFTER.getValue(volume) else 0.dp
     val gaps = parts.dropLast(1).map { DECK_GAP_AFTER[it] ?: 8.dp }
@@ -278,10 +282,15 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     val hasPrevious by pc.hasPrevious.collectAsState()
     val liked by c.library.likedIds.collectAsState()
 
-    var lyricsOpen by rememberSaveable { mutableStateOf(false) }
-    var queueOpen by rememberSaveable { mutableStateOf(false) }
-    var lyricsControlsOpen by remember { mutableStateOf(true) }
-    var queueControlsOpen by remember { mutableStateOf(true) }
+    // #280: "Reopen on the last page". Nothing's read or written with it off.
+    val pageMemory = remember(settings.behavior.playerRemembersPage) { if (settings.behavior.playerRemembersPage) PlayerPageMemory(view.context) else null }
+    val opensOn = remember { pageMemory?.opensOn(song.isEpisode) ?: PlayerPage.COVER }
+    // Opened on a page, its controls start as opening that page would start them ("Full screen" hides them).
+    val openPanelControls = opensOn == PlayerPage.COVER || settings.view.panelPlayer != com.prism.music.data.prefs.PanelPlayer.HIDDEN
+    var lyricsOpen by rememberSaveable { mutableStateOf(opensOn == PlayerPage.LYRICS) }
+    var queueOpen by rememberSaveable { mutableStateOf(opensOn == PlayerPage.QUEUE) }
+    var lyricsControlsOpen by remember { mutableStateOf(openPanelControls) }
+    var queueControlsOpen by remember { mutableStateOf(openPanelControls) }
     var showProviders by remember { mutableStateOf(false) }
     var statsOpen by rememberSaveable { mutableStateOf(false) }
     var showActions by remember { mutableStateOf(false) }
@@ -316,6 +325,8 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     // A wide window (tablet, foldable, phone on its side) shows the cover and controls beside lyrics / the queue.
     val window = com.prism.music.ui.theme.LocalWindowLayout.current
     val wide = window.twoPanePlayer || window.shortLandscape || window.tabletop
+    // A wide player has its own panes, always showing one of them: only a phone's page is remembered.
+    LaunchedEffect(lyricsOpen, queueOpen, pageMemory, wide) { if (!wide) pageMemory?.keep(PlayerPage.of(lyricsOpen, queueOpen)) }
 
     // The player is always dark, so it owns light system-bar icons, and the navigation bar's scrim (three-button
     // navigation) is a dark one: in light mode a light grey strip sat under the player.
@@ -389,6 +400,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     LaunchedEffect(coverDeck, isPlaying, volume.dragging, deckOnTap) {
         if (coverDeck && isPlaying && !volume.dragging && deckOnTap) { delay(5000); coverDeck = false }
     }
+    // #293: "Video buttons wait for a tap": shown by a tap on the video, gone again after a moment.
+    var videoChips by remember { mutableStateOf(false) }
+    LaunchedEffect(videoChips) { if (videoChips) { delay(5000); videoChips = false } }
     // Lyrics layout: each song opens on its lyrics once they're in (a song without any stays on the cover).
     val hasLyrics = lyricsState.lyrics != null
     LaunchedEffect(song.id, hasLyrics, layout) {
@@ -413,6 +427,11 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     fun slideClosed() {
         if (closing) return
         closing = true
+        // #223: the cover flies back from where it is, and the player fades around it, instead of sliding away.
+        if (CoverFlight.returnsWith(settings.view.coverFlight, settings.view.coverFlightBack, settings.reduceMotion) && CoverFlight.canReturn()) {
+            onCollapse()
+            return
+        }
         scope.launch {
             dismiss.animateTo(screenPx, tween(if (settings.reduceMotion) 240 else 340, easing = FastOutSlowInEasing))
             onCollapse()
@@ -426,8 +445,10 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         when {
             fullscreenVideo || (videoMode && sidewaysFull) -> leaveFullscreenVideo()
             // A wide player always shows its lyrics pane: "open" (left from portrait) isn't something Back undoes there.
-            lyricsOpen && !wide -> closeLyrics()
-            queueOpen -> queueOpen = false
+            // #280: with "Reopen on the last page", Back leaves the player on that page: stepping back to the cover first
+            // would make the cover the last page every time.
+            lyricsOpen && !wide -> if (pageMemory != null) slideClosed() else closeLyrics()
+            queueOpen -> if (pageMemory != null && !wide) slideClosed() else queueOpen = false
             statsOpen -> statsOpen = false
             else -> slideClosed()
         }
@@ -507,6 +528,10 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     // Full-bleed video (#120): the video runs edge to edge from the top of the screen and fades into the background,
     // in the full-bleed cover's place; the box it would sit in keeps only its buttons.
     val videoBehind = settings.videoFullBleed && videoMode && !wide
+    // #293: "More room for the picture": over a full-bleed picture the controls close up, the picture takes what they
+    // give back, and it fades later.
+    val bleedRoomy = settings.view.bleedRoomy && (heroMode || videoBehind)
+    val heroFade = if (bleedRoomy) HERO_FADE_ROOMY else HERO_FADE
     var heroHeight by remember { mutableStateOf(0.dp) }
     // #244 (1.7.9.3): once the full-bleed cover has shown it stays up while the next song's picture loads, over the last
     // one (it used to drop to the square cover for every new song, then grow back, a jump on each skip).
@@ -718,7 +743,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         }
         if (videoBehind && heroHeight > 0.dp && !collapsePastHalf) {
             MusicVideoSurface(
-                Modifier.fillMaxWidth().height(heroHeight), fill = true, bottomFade = HERO_FADE,
+                Modifier.fillMaxWidth().height(heroHeight), fill = true, bottomFade = heroFade,
                 alpha = { (1f - 2f * p()).coerceIn(0f, 1f) },
             )
         }
@@ -739,7 +764,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                     .drawWithContent {
                         drawContent()
                         drawRect(
-                            Brush.verticalGradient(listOf(Color.Black, Color.Transparent), startY = size.height * (1f - HERO_FADE), endY = size.height),
+                            Brush.verticalGradient(listOf(Color.Black, Color.Transparent), startY = size.height * (1f - heroFade), endY = size.height),
                             blendMode = BlendMode.DstIn,
                         )
                     },
@@ -763,7 +788,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 CanvasPlayer(
                     clip, canvasSaved, isPlaying,
                     Modifier.fillMaxWidth().height(heroHeight),
-                    bottomFade = HERO_FADE,
+                    bottomFade = heroFade,
                     presentationAlpha = { heroT.value * (1f - 2f * p()).coerceIn(0f, 1f) },
                     onCoverChanged = { canvasCover = it },
                 )
@@ -807,11 +832,11 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             }
         }
         // Drag on the sleeve: down closes the player, up does what's set (the queue comes in, by default).
-        val sleeveGesture = Modifier.pointerInput(lyricsOpen, queueOpen, statsOpen) {
-            if (lyricsOpen || statsOpen) return@pointerInput
+        fun sleeveDrag(lyrics: Boolean, queue: Boolean, stats: Boolean) = Modifier.pointerInput(lyrics, queue, stats) {
+            if (lyrics || stats) return@pointerInput
             var total = 0f
             // With the queue open, pulling the header down closes the queue (#149), as swiping up brought it.
-            if (queueOpen) {
+            if (queue) {
                 detectVerticalDragGestures(
                     onDragStart = { total = 0f },
                     onDragEnd = { if (total > 90f) { haptics.gestureEnd(); toggleQueue() } },
@@ -837,6 +862,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 if (!closing) scope.launch { dismiss.snapTo(total.coerceAtLeast(0f)) }
             }
         }
+        val sleeveGesture = sleeveDrag(lyricsOpen, queueOpen, statsOpen)
         // Double-tap the cover: by default its left or right half seeks back or ahead (#79, as on YouTube Music); long
         // press: nothing unless one's set. A double tap set to nothing leaves single taps instant.
         val seekStep = settings.doubleTapSeekSeconds
@@ -844,11 +870,11 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             ?: com.prism.music.data.prefs.PlayerGesture.NONE
         val longPress = settings.coverLongPress
         val tapForDeck = deckOnTap
-        val doubleTapSeek = Modifier.pointerInput(lyricsOpen, queueOpen, statsOpen, seekStep, doubleTap, longPress, tapForDeck) {
-            if (lyricsOpen || queueOpen || statsOpen) return@pointerInput
-            if (doubleTap == com.prism.music.data.prefs.PlayerGesture.NONE && longPress == com.prism.music.data.prefs.PlayerGesture.NONE && !tapForDeck) return@pointerInput
+        fun tapsAndHolds(panelOpen: Boolean, tapShowsDeck: Boolean) = Modifier.pointerInput(panelOpen, seekStep, doubleTap, longPress, tapShowsDeck) {
+            if (panelOpen) return@pointerInput
+            if (doubleTap == com.prism.music.data.prefs.PlayerGesture.NONE && longPress == com.prism.music.data.prefs.PlayerGesture.NONE && !tapShowsDeck) return@pointerInput
             detectTapGestures(
-                onTap = if (!tapForDeck) null else { _ -> coverDeck = !coverDeck },
+                onTap = if (!tapShowsDeck) null else { _ -> coverDeck = !coverDeck },
                 onDoubleTap = if (doubleTap == com.prism.music.data.prefs.PlayerGesture.NONE) null else { at ->
                     haptics.gestureEnd()
                     if (doubleTap == com.prism.music.data.prefs.PlayerGesture.SEEK_SIDES) {
@@ -861,8 +887,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 onLongPress = if (longPress == com.prism.music.data.prefs.PlayerGesture.NONE) null else { _ -> haptics.click(); runGesture(longPress) },
             )
         }
-        val skipGesture = Modifier.pointerInput(lyricsOpen, queueOpen, statsOpen) {
-            if (lyricsOpen || queueOpen || statsOpen) return@pointerInput
+        val doubleTapSeek = tapsAndHolds(lyricsOpen || queueOpen || statsOpen, tapForDeck)
+        fun sideSwipe(panelOpen: Boolean) = Modifier.pointerInput(panelOpen) {
+            if (panelOpen) return@pointerInput
             var total = 0f
             val threshold = 72.dp.toPx()
             detectHorizontalDragGestures(
@@ -887,6 +914,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 scope.launch { swipe.snapTo(if (off) 0f else total * 0.35f) }
             }
         }
+        val skipGesture = sideSwipe(lyricsOpen || queueOpen || statsOpen)
 
         if (wide) WidePlayerContent(
             song, isPlaying, buffering, position, hasNext, hasPrevious, videoMode, videoAvailable, lyricsState, covered,
@@ -949,8 +977,10 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                     // band opens up between the artist and the scrubber (issue #9).
                     val slack = (maxHeight - fullArt - ART_TITLE_GAP - HEADER_HEIGHT).coerceAtLeast(0.dp)
                     val groupTop = slack / 2
-                    val titleDrop = minOf(slack / 2, TITLE_DROP_MAX)
-                    val bannerBottom = statusTop + DISMISS_STRIP + ART_BOX_TOP_PAD + groupTop + fullArt + ART_TITLE_GAP / 2
+                    // #293: the title sits right above the controls, and the picture runs down to it.
+                    val titleDrop = if (bleedRoomy) slack - groupTop else minOf(slack / 2, TITLE_DROP_MAX)
+                    val bannerBottom = statusTop + DISMISS_STRIP + ART_BOX_TOP_PAD + groupTop + fullArt + ART_TITLE_GAP / 2 +
+                        if (bleedRoomy) titleDrop + ART_TITLE_GAP / 2 else 0.dp
                     if (!lyricsOpen && !queueOpen && !statsOpen && bannerBottom != heroHeight) SideEffect { heroHeight = bannerBottom }
                     val sleeveMaxWidth = maxWidth
                     fun artSize(): Dp = lerp(fullArt, THUMB_SIZE, p())
@@ -972,13 +1002,18 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                 .graphicsLayer { alpha = 1f - 2f * p() }
                                 .then(sleeveGesture)
                                 // Controls hidden over the video (#166): a tap on it brings them, another sends them away.
+                                // #293: the video's own buttons wait for a tap too; with the controls hiding as well, they go together.
                                 .then(
-                                    if (videoHidesDeck) Modifier.pointerInput(Unit) { detectTapGestures(onTap = { coverDeck = !coverDeck }) } else Modifier
+                                    if (videoHidesDeck || settings.view.videoButtonsHide) Modifier.pointerInput(videoHidesDeck) {
+                                        detectTapGestures(onTap = { if (videoHidesDeck) coverDeck = !coverDeck else videoChips = !videoChips })
+                                    } else Modifier
                                 ),
                         ) {
                             // One video view at a time: full-bleed, it's drawn behind the player (see videoBehind).
                             if (!videoBehind) MusicVideoSurface(Modifier.fillMaxSize(), fill = videoFill)
-                            Row(Modifier.align(Alignment.BottomEnd).padding(10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            val chipsShown = !settings.view.videoButtonsHide || (if (videoHidesDeck) coverDeck else videoChips)
+                            val chipsAlpha by animateFloatAsState(if (chipsShown) 1f else 0f, tween(180), label = "videoChips")
+                            if (chipsShown || chipsAlpha > 0f) Row(Modifier.align(Alignment.BottomEnd).graphicsLayer { alpha = chipsAlpha }.padding(10.dp).testTag("videoChips"), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 if (!videoBehind) VideoChip(PrismIcons.AspectRatio, if (videoFill) tr(R.string.fit_video) else tr(R.string.fill)) { videoFill = !videoFill }
                                 if (!wide) VideoChip(PrismIcons.FillIn, if (videoBehind) tr(R.string.video_in_a_box) else tr(R.string.full_bleed_video)) {
                                     c.settings.setVideoFullBleed(!settings.videoFullBleed)
@@ -1023,6 +1058,8 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                         }
                         // The cover flying in from the mini player lands here (#199): where it is, and unseen until then.
                         val flightTarget = !vinyl && !cassette && !heroMode && !videoMode
+                        // #223: nothing to fly back from when it isn't this cover that's showing.
+                        LaunchedEffect(flightTarget) { if (!flightTarget) CoverFlight.player = null }
                         Box(
                             Modifier
                                 .fillMaxSize()
@@ -1226,10 +1263,21 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                     }
                     // #259 (1.7.9.2): "Gestures anywhere on the player": the cover's swipes, double tap and long press work
                     // around the controls too (the buttons and bars keep their own taps and drags).
-                    val coverGestures = if (settings.behavior.panelSwipes || !settings.behavior.gesturesEverywhere || lyricsOpen || queueOpen || statsOpen) Modifier
-                        else sleeveGesture.then(doubleTapSeek)
+                    val coverGestures = when {
+                        settings.behavior.panelSwipes -> Modifier
+                        // #282: below the lyrics, the deck takes the cover's gestures. The lyrics are their own list above it,
+                        // so scrolling them never reaches this.
+                        lyricsOpen && !queueOpen && !statsOpen && settings.behavior.gesturesUnderLyrics ->
+                            sleeveDrag(lyrics = false, queue = false, stats = false)
+                                .then(tapsAndHolds(panelOpen = false, tapShowsDeck = false))
+                                .then(sideSwipe(panelOpen = false))
+                        !settings.behavior.gesturesEverywhere || lyricsOpen || queueOpen || statsOpen -> Modifier
+                        else -> sleeveGesture.then(doubleTapSeek)
+                    }
                     Column(swipes.then(coverGestures).testTag("playerDeck").inked(), horizontalAlignment = Alignment.CenterHorizontally) {
-                        val deckGap = if (roomyCover) 12.dp else 18.dp
+                        // #293: closer together over a full-bleed picture ("More room for the picture").
+                        val tightDeck = bleedRoomy && !lyricsOpen && !queueOpen && !statsOpen
+                        val deckGap = if (tightDeck) 8.dp else if (roomyCover) 12.dp else 18.dp
                         // With the lyrics open: Sing's one button at their lower right (1.7.8, V; their source is a line
                         // at their end), and the source as a button at the lower left when asked for (1.7.9).
                         if (lyricsOpen) LyricsButtonsRow(song, lyricsState, onChangeSource = { showProviders = true }, onNeedsDownload = { showSing = true }, modifier = Modifier.padding(bottom = 6.dp))
@@ -1249,7 +1297,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                 .filter { it != com.prism.music.data.prefs.DeckPart.SCRUBBER || settings.shows(PlayerPart.PROGRESS) }
                                 .filter { it != com.prism.music.data.prefs.DeckPart.BUTTONS || settings.shows(PlayerPart.BUTTONS) }
                             // #329: what's hidden leaves no hole; the hidden volume bar's room is shared between the gaps.
-                            val spacing = deckSpacing(parts, settings.shows(PlayerPart.VOLUME), small)
+                            val spacing = deckSpacing(parts, settings.shows(PlayerPart.VOLUME), small, tight = tightDeck)
                             spacing.parts.forEachIndexed { i, part ->
                                 when (part) {
                                     com.prism.music.data.prefs.DeckPart.STRIP -> CurrentLyricStrip(lyricsState, isPlaying && !covered, openLyrics)
@@ -1260,7 +1308,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                     }
                                     com.prism.music.data.prefs.DeckPart.TRANSPORT ->
                                         TransportRow(
-                                            isPlaying, buffering, previousEnabled = hasPrevious || pastStart, nextEnabled = hasNext, compact = small, episode = song.isEpisode,
+                                            isPlaying, buffering, previousEnabled = hasPrevious || pastStart, nextEnabled = hasNext, compact = small || tightDeck, episode = song.isEpisode,
                                             skips = settings.shows(PlayerPart.PREV_NEXT),
                                         )
                                     com.prism.music.data.prefs.DeckPart.VOLUME -> VolumeRow(volume)
@@ -1286,7 +1334,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                             SleepBadge(Modifier.padding(start = 8.dp))
                         } else {
                             SleepBadge()
-                            if (!roomyCover) Spacer(Modifier.height(14.dp))
+                            if (!roomyCover && !tightDeck) Spacer(Modifier.height(14.dp))
                         }
                         Spacer(Modifier.height(if (smallDeck) 6.dp else deckGap))
                     }

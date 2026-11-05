@@ -900,7 +900,8 @@ fun PlayerActionRow(
                         PillDivider()
                         PillSegment(PrismIcons.Autoplay, tr(R.string.autoplay), settings.autoplay, width = PILL_SEGMENT_WIDTH_TRIPLE) { c.settings.setAutoplay(!settings.autoplay) }
                     }
-                    BottomGlyph(PrismIcons.Queue, tr(R.string.up_next), true, onToggleQueue)
+                    // #294: "Tidier queue": Back or pulling its title down closes it.
+                    if (!settings.view.queueTidy) BottomGlyph(PrismIcons.Queue, tr(R.string.up_next), true, onToggleQueue)
                 } else Row(
                     if (pill) Modifier else Modifier.fillMaxWidth(),
                     horizontalArrangement = if (pill) Arrangement.spacedBy(4.dp) else Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically,
@@ -935,7 +936,12 @@ private fun PlayerButtonGlyph(
         // One Video toggle: on (marked) plays the music video; tapping again goes back to the song.
         PlayerButton.VIDEO -> PillSegment(
             PrismIcons.Video,
-            when { videoMode -> tr(R.string.back_to_the_song); videoAvailable -> tr(R.string.music_video_3); else -> tr(R.string.no_music_video_for_this_song) },
+            when {
+                videoMode -> tr(R.string.back_to_the_song)
+                videoAvailable -> tr(R.string.music_video_3)
+                pc.videoOffOnData.collectAsState().value -> tr(R.string.videos_are_off_on_mobile_data)
+                else -> tr(R.string.no_music_video_for_this_song)
+            },
             videoMode || videoLoading, enabled = videoAvailable || videoMode, loading = videoLoading, width = width,
         ) { onVideoMode(!(videoMode || videoLoading)) }
         PlayerButton.QUEUE -> BottomGlyph(PrismIcons.Queue, tr(R.string.up_next), false, onToggleQueue, width)

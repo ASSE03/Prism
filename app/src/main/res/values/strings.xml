@@ -4208,10 +4208,10 @@
     <string name="move_songs_you_have_played_info">Songs you\'ve already played get a handle too, so you can drag them around among themselves.</string>
     <string name="move_songs_you_have_played_keywords">queue played history drag handle reorder</string>
     <string name="tidier_queue">Tidier queue</string>
-    <string name="tidier_queue_info">Takes the × off every song and the Queue button off the bottom row while the queue\'s open. Swipe a song left or use its ⋯ to remove it. Pull the title down or press Back to close the queue.</string>
+    <string name="tidier_queue_info">Takes the × off every song and the Queue button off the bottom row while the queue\'s open. Swipe a song left or use its ⋯ to remove it. Pull the title down or press Back to leave the queue.</string>
     <string name="tidier_queue_keywords">queue fewer buttons remove close cleaner simple</string>
     <string name="reopen_on_the_last_page">Reopen on the last page</string>
-    <string name="reopen_on_the_last_page_info">The player opens on what you had open when you left it: the cover, the lyrics or the queue.</string>
+    <string name="reopen_on_the_last_page_info">The player opens on what you had open when you left it: the cover, the lyrics or the queue. Back closes the player from the lyrics or the queue too, leaving it there; their own buttons go back to the cover.</string>
     <string name="reopen_on_the_last_page_keywords">player remember lyrics queue open start page</string>
     <string name="steadier_lyrics">Steadier lyrics</string>
     <string name="steadier_lyrics_info">The controls take a longer swipe to come and go. After you scroll, the lyrics go back to the sung line sooner when it\'s close, and take their usual time when it\'s far.</string>

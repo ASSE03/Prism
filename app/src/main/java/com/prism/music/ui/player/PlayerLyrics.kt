@@ -871,11 +871,13 @@ class ControlsOnScroll(private val onHide: () -> Unit, private val onReveal: () 
     private var switched = false
     /** Whether scrolling back up brings the controls (Settings → Player, #214); hiding them on the way down always works. */
     var reveals = true
+    /** How far a drag goes (px) before the controls follow it. #280's "Steadier lyrics" sets it longer. */
+    var threshold = 40f
 
     override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
         if (source != NestedScrollSource.UserInput || switched) return Offset.Zero
         acc = if ((acc > 0) == (available.y > 0)) acc + available.y else available.y
-        if (acc < -40f) { onHide(); switched = true } else if (acc > 40f) { if (reveals) onReveal(); switched = true }
+        if (acc < -threshold) { onHide(); switched = true } else if (acc > threshold) { if (reveals) onReveal(); switched = true }
         return Offset.Zero
     }
 
@@ -886,6 +888,20 @@ class ControlsOnScroll(private val onHide: () -> Unit, private val onReveal: () 
         return androidx.compose.ui.unit.Velocity.Zero
     }
 }
+
+/**
+ * #280 ("Steadier lyrics"): how long the lyrics wait after a scroll before going back to the sung line, by how many lines
+ * away it is: a small nudge comes back almost at once, and reading far up or down keeps the usual time.
+ */
+fun lyricsReturnDelayMs(linesAway: Int): Long = when {
+    linesAway <= 1 -> 800L
+    linesAway <= 3 -> 1_500L
+    linesAway <= 6 -> 2_500L
+    else -> LYRICS_RETURN_MS
+}
+
+/** How long the lyrics wait after a scroll, as they always have. */
+const val LYRICS_RETURN_MS = 4_000L
 
 /**
  * Whether scrolling back up the lyrics or the queue brings the controls: the listener's switch (#214), and never with
@@ -940,8 +956,23 @@ fun LyricsPanel(
     LaunchedEffect(listState) {
         listState.interactionSource.interactions.collect { if (it is DragInteraction.Start) browsing = true }
     }
-    LaunchedEffect(browsing, listState.isScrollInProgress, isPlaying) {
-        if (browsing && !listState.isScrollInProgress && isPlaying) { delay(4000); browsing = false }
+    val steady = settings.behavior.lyricsSteady
+    LaunchedEffect(browsing, listState.isScrollInProgress, isPlaying, steady) {
+        if (browsing && !listState.isScrollInProgress && isPlaying) {
+            if (steady) {
+                // Looked at as it waits: the sung line moves on, and may come to where the list was left.
+                var waited = 0L
+                while (waited < LYRICS_RETURN_MS) {
+                    val info = listState.layoutInfo
+                    val middle = (info.viewportStartOffset + info.viewportEndOffset) / 2
+                    val shown = info.visibleItemsInfo.minByOrNull { kotlin.math.abs(it.offset + it.size / 2 - middle) }?.index
+                    if (shown != null && lead >= 0 && waited >= lyricsReturnDelayMs(kotlin.math.abs(shown - lead))) break
+                    delay(100)
+                    waited += 100
+                }
+            } else delay(LYRICS_RETURN_MS)
+            browsing = false
+        }
     }
     LaunchedEffect(lead, browsing, lines) {
         if (!synced || browsing || lead < 0) return@LaunchedEffect
@@ -955,6 +986,8 @@ fun LyricsPanel(
     }
     val controlsOnScroll = remember { ControlsOnScroll(onHide = onHideControls, onReveal = onRevealControls) }
     controlsOnScroll.reveals = scrollReveals(com.prism.music.ui.theme.LocalAppSettings.current)
+    // #280: a long, deliberate swipe, not a nudge while reading. The queue keeps the usual distance.
+    controlsOnScroll.threshold = if (steady) with(androidx.compose.ui.platform.LocalDensity.current) { 56.dp.toPx() } else 40f
 
     // A translation under each line, when it's turned on and the song isn't already in that language.
     val translateTo = settings.lyricsTranslateTo.ifBlank { defaultTranslateTarget() }

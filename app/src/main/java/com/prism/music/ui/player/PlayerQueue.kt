@@ -239,14 +239,18 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
         val headings = settings.view.queueHeadings
         LazyColumn(state = listState, modifier = Modifier.fillMaxWidth().nestedScroll(controlsOnScroll), contentPadding = PaddingValues(bottom = 24.dp)) {
             if (!headings) item(key = "h-gap") { Spacer(Modifier.height(8.dp)) }
+            val rows = SectionRows(selected, toggle, startSelecting, { menuFor = it }, locked, onDragStart = onHidePlayer, settings.view.queueLengths, settings.view.queueTidy)
             if (played.isNotEmpty()) {
                 if (headings) item(key = "h-played") { Heading(tr(R.string.played), Modifier.padding(top = 12.dp, bottom = 6.dp)) }
-                items(played, key = { "played-" + it.uid }) { entry ->
+                // #294, #331: "Move songs you've played": handles here too, moving only among themselves.
+                if (settings.view.queuePlayedMoves) queueSection(played, shuffled, onRemove = remove, rows = rows, played = true)
+                else items(played, key = { "played-" + it.uid }) { entry ->
                     QueueRow(
                         entry.song, isCurrent = false, onClick = { if (selecting) toggle(entry) else pc.skipTo(entry.index) },
                         onRemove = if (selecting) null else { { remove(entry) } },
                         modifier = Modifier.alpha(0.6f),
                         pick = selected?.let { entry.uid in it }, onLongClick = { startSelecting(entry) }, onMore = { menuFor = entry }, swipeable = !locked,
+                        showLength = rows.lengths, removeButton = !rows.tidy,
                     )
                 }
             }
@@ -256,10 +260,10 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
                     QueueRow(
                         now.song, isCurrent = true, onClick = { if (selecting) toggle(now) }, onRemove = null, badge = badge(now.song),
                         pick = selected?.let { now.uid in it }, onLongClick = { startSelecting(now) }, onMore = { menuFor = now },
+                        showLength = rows.lengths,
                     )
                 }
             }
-            val rows = SectionRows(selected, toggle, startSelecting, { menuFor = it }, locked, onDragStart = onHidePlayer)
             if (queued.isNotEmpty()) {
                 if (headings) item(key = "h-queued") { Heading(tr(R.string.next_in_queue), Modifier.padding(top = 16.dp, bottom = 6.dp)) }
                 queueSection(queued, shuffled, badge = badge, onRemove = remove, rows = rows)
@@ -291,17 +295,26 @@ private class SectionRows(
     val onMore: (QueueEntry) -> Unit,
     val locked: Boolean,
     val onDragStart: () -> Unit,
+    /** #331: each song's length on its row. */
+    val lengths: Boolean,
+    /** #294: no × on the rows. */
+    val tidy: Boolean,
 )
 
+/**
+ * [played]: the songs already played (#294, #331): dimmed as ever, and moving only among themselves, so nothing played
+ * can be dragged into what's still to come by accident.
+ */
 private fun LazyListScope.queueSection(
     entries: List<QueueEntry>,
     shuffled: Boolean,
     badge: (Song) -> String? = { null },
     onRemove: (QueueEntry) -> Unit,
     rows: SectionRows,
+    played: Boolean = false,
 ) {
     val selecting = rows.selected != null
-    items(entries, key = { it.uid }) { entry ->
+    items(entries, key = { (if (played) "played-" else "") + it.uid }) { entry ->
         val pc = LocalContainer.current.player
         val rowPx = with(LocalDensity.current) { 56.dp.toPx() }
         var drag by remember { mutableFloatStateOf(0f) }
@@ -315,6 +328,7 @@ private fun LazyListScope.queueSection(
             if (!shuffleOn) {
                 if (!down && position == 0) return false
                 val to = if (down) position + 1 else position - 1
+                if (played && section.none { it.index == to }) return false
                 pc.move(position, to); position = to
                 return true
             }
@@ -329,11 +343,13 @@ private fun LazyListScope.queueSection(
             onClick = { if (selecting) rows.toggle(entry) else pc.skipTo(entry.index) },
             onRemove = if (selecting) null else { { onRemove(entry) } },
             badge = badge(entry.song),
-            modifier = Modifier.offset { IntOffset(0, drag.roundToInt()) },
+            modifier = Modifier.offset { IntOffset(0, drag.roundToInt()) }.then(if (played) Modifier.alpha(0.6f) else Modifier),
             pick = rows.selected?.let { entry.uid in it },
             onLongClick = { rows.startSelecting(entry) },
             onMore = { rows.onMore(entry) },
             swipeable = !rows.locked,
+            showLength = rows.lengths,
+            removeButton = !rows.tidy,
             // Locked (or picking songs), there's nothing to grab: scrolling can't move a song.
             dragHandle = if (rows.locked || selecting) null else Modifier.pointerInput(entry.uid) {
                 detectDragGestures(
@@ -406,6 +422,10 @@ private fun QueueRow(
     onMore: (() -> Unit)? = null,
     /** Swiping it away is on (off while the order is locked). */
     swipeable: Boolean = true,
+    /** #331: the song's length, when it's known. */
+    showLength: Boolean = false,
+    /** #294: the × ([onRemove] still goes with a swipe; the ⋯ has it too). */
+    removeButton: Boolean = true,
 ) {
     // Swiped left past a third of the row, it slides out and goes (#149); short of that it springs back. Moved in the
     // drawing layer, so a swipe doesn't lay the row out again each frame.
@@ -462,6 +482,14 @@ private fun QueueRow(
             Text(shown.title, style = MaterialTheme.typography.titleMedium, color = if (isCurrent) Color.White else Color.White.copy(alpha = 0.92f), maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text(shown.artistText, style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.55f), maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
+        if (showLength && song.durationSec > 0) {
+            Spacer(Modifier.width(8.dp))
+            Text(
+                com.prism.music.data.model.formatDuration(song.durationSec), style = MaterialTheme.typography.labelMedium,
+                color = Color.White.copy(alpha = 0.55f), maxLines = 1,
+            )
+            Spacer(Modifier.width(8.dp))
+        }
         if (badge != null) {
             Text(
                 badge, style = MaterialTheme.typography.labelMedium, color = Color.White.copy(alpha = 0.8f), maxLines = 1,
@@ -476,7 +504,7 @@ private fun QueueRow(
         if (onMore != null && pick == null) Box(Modifier.size(32.dp).clip(CircleShape).clickable(onClick = onMore), contentAlignment = Alignment.Center) {
             Icon(PrismIcons.More, tr(R.string.more_for, song.title), tint = Color.White.copy(alpha = 0.55f), modifier = Modifier.size(18.dp))
         }
-        if (onRemove != null) Box(Modifier.size(32.dp).clip(CircleShape).clickable(onClick = onRemove), contentAlignment = Alignment.Center) {
+        if (onRemove != null && removeButton) Box(Modifier.size(32.dp).clip(CircleShape).clickable(onClick = onRemove), contentAlignment = Alignment.Center) {
             Icon(PrismIcons.Close, tr(R.string.remove), tint = Color.White.copy(alpha = 0.55f), modifier = Modifier.size(18.dp))
         }
     }

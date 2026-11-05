@@ -858,15 +858,22 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
 
                 // "Cover flies into place" (#199): the player fades in while the mini player's cover flies to its spot.
                 val flight = settings.view.coverFlight && !settings.reduceMotion
+                // #223: and back the same way, when it's the player's cover that's showing. Watched through derivedStateOf as
+                // the cover's place changes with every frame of a drag, and this scope mustn't recompose for each one.
+                val coverKnown by remember { androidx.compose.runtime.derivedStateOf { com.prism.music.ui.player.CoverFlight.player != null } }
+                val flyBack = com.prism.music.ui.player.CoverFlight.returnsWith(settings.view.coverFlight, settings.view.coverFlightBack, settings.reduceMotion) && coverKnown
                 LaunchedEffect(playerOpen) {
-                    if (!playerOpen) com.prism.music.ui.player.CoverFlight.player = null
-                    else if (flight) com.prism.music.ui.player.CoverFlight.fly()
+                    if (!playerOpen) {
+                        if (flyBack) com.prism.music.ui.player.CoverFlight.flyBack()
+                        com.prism.music.ui.player.CoverFlight.player = null
+                    } else if (flight) com.prism.music.ui.player.CoverFlight.fly()
                 }
                 AnimatedVisibility(
                     playerOpen && song != null,
                     enter = if (flight) fadeIn(tween(com.prism.music.ui.player.CoverFlight.FLIGHT_MS))
                         else slideInVertically(tween(if (settings.reduceMotion) 260 else 420)) { it } + fadeIn(tween(200)),
-                    exit = slideOutVertically(tween(if (settings.reduceMotion) 240 else 360)) { it } + fadeOut(tween(300)),
+                    exit = if (flyBack) fadeOut(tween(com.prism.music.ui.player.CoverFlight.FLIGHT_MS))
+                        else slideOutVertically(tween(if (settings.reduceMotion) 240 else 360)) { it } + fadeOut(tween(300)),
                 ) {
                     // Settled once it's done sliding in; no longer the moment it starts to leave.
                     val settled = transition.currentState == androidx.compose.animation.EnterExitState.Visible &&

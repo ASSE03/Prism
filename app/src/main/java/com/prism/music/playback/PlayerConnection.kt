@@ -899,6 +899,11 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
             _errors.tryEmit(tr(R.string.videos_play_on_this_phone_while))
             return
         }
+        // #281: asked for some way other than the button (a gesture, the web remote).
+        if (enabled && _videoOffOnData.value) {
+            _errors.tryEmit(tr(R.string.videos_are_off_on_mobile_data))
+            return
+        }
         _videoLoading.value = enabled
         // An episode's picture is that episode's own choice; only music turns "keep playing videos" on.
         if (s.player.currentMediaItem?.toSong()?.isEpisode != true || !enabled) s.videoWanted = enabled
@@ -1020,6 +1025,15 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
      */
     val videoFailedFor: StateFlow<String?> = _videoFailedFor
 
+    private val _videoOffOnData = MutableStateFlow(false)
+    /** #281: the song playing has no video for now, because videos are off on mobile data ([VideoOnData]). */
+    val videoOffOnData: StateFlow<Boolean> = _videoOffOnData
+
+    /** #281: the network or the setting changed, so the Video button may have too. */
+    internal fun recheckVideo() {
+        _current.value?.let { checkVideo(it) }
+    }
+
     /**
      * Finds the song's music video as it starts (and warms it up), so the
      * button is ready. Greyed out only when there definitely isn't a video;
@@ -1027,9 +1041,12 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
      */
     private fun checkVideo(song: Song) {
         _videoLoading.value = false
+        val saved = c.downloads.downloadedVideoId(song.id)
+        // #281: nothing's looked up or warmed up either: that's data too.
+        _videoOffOnData.value = VideoOnData.stops(VideoOnData.off(c), saved != null)
+        if (_videoOffOnData.value) { _videoAvailable.value = false; return }
         // A live stream carries its own picture (the same HLS stream), so there's nothing to look up.
         if (song.isLive) { _videoAvailable.value = true; return }
-        val saved = c.downloads.downloadedVideoId(song.id)
         if (saved == null && song.id in c.queue.noVideo) { _videoAvailable.value = false; return }
         val known = if (song.isVideo) song.id else saved ?: c.queue.counterparts[song.id]
         _videoAvailable.value = known != null

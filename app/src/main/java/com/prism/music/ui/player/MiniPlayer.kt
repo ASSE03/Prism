@@ -233,7 +233,7 @@ fun MiniPlayer(
                 .padding(start = if (style == MiniPlayerStyle.PILL) 6.dp else if (bar) 16.dp else 8.dp, end = if (style == MiniPlayerStyle.PILL) 8.dp else if (bar) 8.dp else 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Artwork(com.prism.music.data.PlaylistCovers.artOf(s), with(CoverFlight) { Modifier.size(artSize).miniCover() }, artShape, size = 226)
+            Artwork(com.prism.music.data.PlaylistCovers.artOf(s), with(CoverFlight) { Modifier.size(artSize).miniCover().graphicsLayer { alpha = if (returning) 0f else 1f } }, artShape, size = 226)
             Spacer(Modifier.width(12.dp))
             AnimatedContent(
                 s,

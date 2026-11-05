@@ -53,6 +53,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.isActive
@@ -291,6 +292,17 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         scope.launch { c.settings.flow.map { it.autoplay }.distinctUntilChanged().drop(1).collect { onAutoplayChanged(it) } }
         // "Keep playing videos" switched off: songs already lined up as their videos go back to songs.
         scope.launch { c.settings.flow.map { it.videoContinues }.distinctUntilChanged().drop(1).collect { if (it) armNextVideo() else disarmVideos() } }
+        // #281: videos off on mobile data. Nothing happens here for anyone who hasn't chosen it: it never changes.
+        scope.launch {
+            kotlinx.coroutines.flow.combine(
+                c.settings.flow.map { it.behavior.noVideoOnData && it.dataSaver }.distinctUntilChanged(), c.network.online, c.network.metered,
+            ) { chosen, online, metered -> VideoOnData.off(chosen, true, online, metered) }
+                .distinctUntilChanged().drop(1)
+                .collectLatest { off ->
+                    if (off) delay(VideoOnData.SETTLE_MS)
+                    onVideosOffChanged(off)
+                }
+        }
         scope.launch { c.settings.flow.map { it.spatial to it.spatialAmount }.distinctUntilChanged().collect { (on, amount) -> spatial.configure(on, amount) } }
         scope.launch { c.settings.flow.map { it.normalize }.distinctUntilChanged().collect { applyNormalization() } }
         // Prism's own volume (#116), when the player's slider is set to it; full otherwise (the phone's volume rules).
@@ -1562,6 +1574,30 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     private fun keepVideos() = videoWanted && c.settings.current.videoContinues && c.settings.current.showVideoSwitch
 
+    /** #281: whether [song]'s video can't play now: videos are off on mobile data, and it isn't downloaded. */
+    private fun videoOffFor(song: Song) = VideoOnData.stops(VideoOnData.off(c), c.downloads.downloadedVideoId(song.id) != null)
+
+    /**
+     * #281: the phone moved onto mobile data, or off it. On it, a video playing carries on as audio, keeping what the
+     * listener asked for ([videoWanted]): the next song on Wi-Fi is a video again. The song playing stays as it is when
+     * Wi-Fi comes back, as jumping into the video by itself would be a surprise.
+     */
+    private fun onVideosOffChanged(off: Boolean) {
+        if (off) {
+            val song = player.currentMediaItem?.takeIf { it.videoModeId != null }?.toSong()
+            if (song != null && videoOffFor(song)) scope.launch {
+                setVideoMode(false)
+                c.player.reportError(tr(R.string.video_stopped_on_mobile_data))
+            }
+            for (i in 0 until player.mediaItemCount) {
+                if (i == player.currentMediaItemIndex) continue
+                val other = player.getMediaItemAt(i)
+                if (other.videoModeId != null) other.toSong()?.takeIf { videoOffFor(it) }?.let { player.replaceMediaItem(i, it.toMediaItem(null)) }
+            }
+        } else armNextVideo()
+        c.player.recheckVideo()
+    }
+
     /**
      * A new song started while videos are wanted. The next song is usually lined up as its video
      * already ([armNextVideo]); if it wasn't ready (a quick skip), it switches here. Songs without a
@@ -1572,6 +1608,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val item = player.currentMediaItem ?: return
         val song = item.toSong() ?: return
         if (item.videoModeId != null) { watchVideo(song.id); return }
+        if (videoOffFor(song)) return
         scope.launch { setVideoMode(true) }
     }
 
@@ -1583,11 +1620,12 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val item = player.getMediaItemAt(i)
         if (item.videoModeId != null) return
         val song = item.toSong() ?: return
+        if (videoOffFor(song)) return
         scope.launch {
             val vid = if (song.isLive) song.id else videoIdFor(song).id ?: return@launch
             val at = player.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET } ?: return@launch
             val next = player.getMediaItemAt(at)
-            if (!keepVideos() || next.mediaId != song.id || next.videoModeId != null) return@launch
+            if (!keepVideos() || next.mediaId != song.id || next.videoModeId != null || videoOffFor(song)) return@launch
             val nextSong = next.toSong() ?: return@launch
             if (failedVideos.remove(vid)) c.streams.invalidate(vid)
             player.replaceMediaItem(at, nextSong.toMediaItem(if (nextSong.isLive) nextSong.id else vid))
@@ -1614,6 +1652,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val item = player.currentMediaItem ?: return null
         val song = item.toSong() ?: return null
         if (enabled == (item.videoModeId != null)) return null
+        if (enabled && videoOffFor(song)) return tr(R.string.videos_are_off_on_mobile_data)
         if (song.isLive) {
             // The picture is already in the stream: same item, video track on (or off), no seeking about.
             swapInPlace(idx, song.toMediaItem(if (enabled) song.id else null))
