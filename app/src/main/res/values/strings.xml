@@ -4746,4 +4746,16 @@
     <string name="tour_182_lock_point_1">Four layouts: Cover, Full cover, Lyrics and Quiet</string>
     <string name="tour_182_lock_point_2">Only controls what\'s playing: nothing else opens while locked</string>
     <string name="tour_182_lock_point_3">Can hide the song\'s name and cover</string>
+    <string name="cover_gradient">Cover gradient</string>
+    <string name="cover_gradient_info">Cover gradient is the cover\'s own colors as a solid gradient, nothing blurred, deepening toward the bottom. The lyrics and the queue stay on it, a little darker.</string>
+    <string name="gradient_depth">Darkness at the bottom</string>
+    <string name="gradient_depth_info">How dark the gradient gets toward the bottom. Low keeps nearly the same color all the way down, 100% ends in black. Colors stay dark enough for the white text at any setting.</string>
+    <string name="glass_blur">Blur</string>
+    <string name="glass_blur_info">How much what\'s behind the glass is blurred. 100% is Prism\'s own. Clear glass keeps what\'s behind it sharp, so it has none to change.</string>
+    <string name="glass_frost">Frost</string>
+    <string name="glass_frost_info">How thick the veil over the glass is: less lets more of what\'s behind it through, more makes it milkier in light mode and darker in dark mode, and easier to read over busy pictures. 100% is Prism\'s own. A tab bar with its own background (Layout, Tab bar) keeps that background instead.</string>
+    <string name="glass_needs_android_12">These need the blur that came with Android 12. On this phone the bars are solid, so there\'s nothing for a blur or frost setting to change.</string>
+    <string name="glass_on_more_of_the_screen">Glass on more of the screen</string>
+    <string name="glass_on_more_of_the_screen_detail">Cards, chips, round buttons and the Undo bar</string>
+    <string name="glass_on_more_of_the_screen_info">Cards and settings panels get a light falling on them and a brighter edge, chips and round buttons a brighter edge, and Frost reaches them all. They use no live blur, so they cost next to nothing, and they show on pages with a background behind them. The Undo bar is real glass while it\'s up. Performance mode turns this off. More places may follow.</string>
 </resources>

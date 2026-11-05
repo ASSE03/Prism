@@ -28,9 +28,20 @@ What changed in each release. Older releases are described on the [Releases page
   server, no YouTube and no account needed, with everything episodes do here: they pick up where you left off, speed from
   the player's menu, 15 and 30 second skips. New episodes show up when you open the show. Secure (https) servers on the
   public internet only. Not yet: downloading these episodes, new-episode alerts.
+- **Cover gradient, a new player background** (#232, #338). The cover's own colors as a solid gradient, with nothing blurred:
+  its main color at the top, deepening toward the bottom. "Darkness at the bottom" sets how far it goes, and the colors stay
+  dark enough for the white text whatever the cover. Customize Prism, Player, Look, where the backgrounds are now example cards.
+- **Set your glass** (#252). Blur and Frost sliders on the Glass page, whose choices are now real pieces of each glass. At
+  100% they're what you have today. They need Android 12's blur; below it the bars are solid and the sliders don't show.
+- **Glass on more of the screen** (#326, off unless you turn it on). Cards, chips and round buttons get a lit edge and follow
+  Frost, without a live blur, and the Undo bar becomes real glass while it's up. Performance mode turns it off. A first step.
 
 ### Fixes
 
+- **Liquid Glass · Clear now looks clear** (#252). In dark mode it was laid under more black than Regular, so the two came out
+  nearly alike, and on the docked tab bar they drew exactly the same. Regular is unchanged.
+- **Liquid Glass follows Prism's theme, not the phone's dark mode.** With Prism in dark and the phone in light (or the other way
+  round) it picked the other theme's values.
 - **Typing in Search and in Settings' search keeps up on slower phones** (#355).
 - **A song YouTube won't play no longer stops the music.** Prism says which song it was and goes on to the next, also
   when the next songs are still on their way from Autoplay; Next, Previous and the scrubber work again if it did have to stop.

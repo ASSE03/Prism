@@ -64,6 +64,10 @@ internal fun glassFill(strength: Float = 1f): Color = frostFill(strength)
 @Composable
 internal fun glassEdge(): Brush {
     val dark = LocalIsDark.current
+    // #326, "Glass on more of the screen": a brighter lit edge, on chips, round buttons and cards.
+    if (com.prism.music.ui.theme.LocalAppSettings.current.glassEverywhere) {
+        return Brush.verticalGradient(listOf(Color.White.copy(alpha = if (dark) 0.42f else 1f), Color.White.copy(alpha = if (dark) 0.08f else 0.45f)))
+    }
     return Brush.verticalGradient(listOf(Color.White.copy(alpha = if (dark) 0.22f else 0.85f), Color.White.copy(alpha = if (dark) 0.05f else 0.3f)))
 }
 
