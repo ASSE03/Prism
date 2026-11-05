@@ -121,6 +121,60 @@ class TvSkipLiveTests {
      * in hand is finished for a while yet (Sing's grace), with the network busy on every core: the player's buttons must
      * answer through it. The log says which threads were working, at what priority.
      */
+    @Test fun leavingSingWhileItSeparatesAFileLeavesTheButtonsAnswering() {
+        assumeTrue("Sing's engine runs here", c.sing.fullEngine)
+        assumeTrue("Sing's engine downloaded", runBlocking { c.sing.engineReady() || c.sing.downloadEngine() })
+        c.sing.rechoose()
+        TvStress.grantAudio()
+        val title = "Prism TV Sing engine"
+        val file = Fixture.tone(title, 240)
+        try {
+            val song = TvStress.songs(listOf(title)).first()
+            instrumentation.runOnMainSync { player.playQueue(listOf(song), 0, QueueSource(QueueKind.OTHER, "TV Sing engine")) }
+            compose.until(20_000, "the file playing") { player.isPlaying.value }
+            instrumentation.runOnMainSync { c.sing.setOn(true) }
+            TvFixture.launch()
+            compose.awaitFocusOn(hasTestTag("$TAG_HOME/player"), 30_000)
+            TvFixture.ok()
+            compose.awaitFocusOn(hasTestTag("$TAG_PLAYER/playpause"), 20_000)
+            // The networks at work on this very song, not the quick way's stand-in or the decoder alone.
+            compose.until(180_000, { "separating (${c.sing.method.value}, ${c.sing.progress.value})" }) { (c.sing.progress.value[song.id] ?: 0f) > 0.02f }
+            val busy = TvStress.busiestThreads(4_000) { compose.pump(it) }
+            android.util.Log.i("PrismTest", "method ${c.sing.method.value}, progress ${c.sing.progress.value}; busiest as it separates:\n${busy.joinToString("\n")}")
+            TvStress.MainWatch().use { watch ->
+                repeat(6) { round ->
+                    instrumentation.runOnMainSync { c.sing.setOn(false) }
+                    compose.pump(2_000)
+                    org.junit.Assert.assertTrue("playing after Sing off, round $round", player.isPlaying.value)
+                    instrumentation.runOnMainSync { c.sing.setOn(true) }
+                    compose.pump(2_000)
+                    android.util.Log.i("PrismTest", "round $round: main thread held at most ${watch.longestMs} ms; progress ${c.sing.progress.value}")
+                }
+                instrumentation.runOnMainSync { c.sing.setOn(false) }
+                val threads = TvStress.busiestThreads(10_000) { compose.pump(it) }
+                android.util.Log.i("PrismTest", "Sing off, busiest (name, nice, ms of CPU in 10 s):\n${threads.joinToString("\n")}")
+                repeat(12) { i ->
+                    val started = android.os.SystemClock.uptimeMillis()
+                    if (i % 2 == 0) TvFixture.right() else TvFixture.left()
+                    compose.pump(100)
+                    android.util.Log.i("PrismTest", "key $i answered within ${android.os.SystemClock.uptimeMillis() - started} ms")
+                }
+                android.util.Log.i("PrismTest", "main thread held at most ${watch.longestMs} ms; ${watch.worstStack}")
+                org.junit.Assert.assertTrue("the main thread froze ${watch.longestMs} ms:\n${watch.worstStack}", watch.longestMs < 2_000)
+            }
+            fun position(): Long { var ms = 0L; instrumentation.runOnMainSync { ms = player.position }; return ms }
+            val at = position()
+            compose.pump(3_000)
+            val later = position()
+            org.junit.Assert.assertTrue("the song plays on ($later after $at)", later > at)
+            TvFixture.press(KeyEvent.KEYCODE_MEDIA_PAUSE)
+            compose.until(10_000, "paused") { !player.isPlaying.value }
+        } finally {
+            runCatching { instrumentation.runOnMainSync { c.sing.setOn(false); player.stop() } }
+            runCatching { Fixture.context.contentResolver.delete(file, null, null) }
+        }
+    }
+
     @Test fun leavingSingWhileItsEngineWorksLeavesTheButtonsAnswering() {
         assumeTrue("Sing's engine runs here", c.sing.fullEngine)
         assumeTrue("Sing's engine downloaded", runBlocking { c.sing.engineReady() || c.sing.downloadEngine() })
