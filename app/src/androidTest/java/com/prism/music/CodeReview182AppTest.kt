@@ -28,7 +28,6 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import org.junit.Assume.assumeTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,7 +46,6 @@ class CodeReview182AppTest {
     private val player get() = Fixture.container.player
     private val settings get() = Fixture.container.settings
     private val tones = ArrayList<android.net.Uri>()
-    private var wifiOff = false
     private val released = CountDownLatch(1)
 
     private fun main(block: () -> Unit) = instrumentation.runOnMainSync(block)
@@ -57,7 +55,6 @@ class CodeReview182AppTest {
     @After fun cleanUp() {
         released.countDown()
         RecordedNetwork.answering = null
-        if (wifiOff) shell("svc wifi enable")
         runCatching { main { player.stop() } }
         tones.forEach { runCatching { Fixture.context.contentResolver.delete(it, null, null) } }
     }
@@ -88,12 +85,12 @@ class CodeReview182AppTest {
     // ---- "No videos on mobile data" (#281) and a music video tapped in Search.
 
     @Test fun aTappedVideoIsOnlyItsSoundOnMobileData() {
-        shell("svc wifi disable")
-        wifiOff = true
         start()
-        val until = System.currentTimeMillis() + 15_000
-        while (System.currentTimeMillis() < until && !(c.network.online.value && c.network.metered.value)) Thread.sleep(200)
-        assumeTrue("needs mobile data", c.network.online.value && c.network.metered.value)
+        // On mobile data, whatever this phone is on (not every test phone has any). Each test has a fresh app.
+        listOf("_online", "_metered").forEach { name ->
+            val field = c.network.javaClass.getDeclaredField(name).apply { isAccessible = true }
+            @Suppress("UNCHECKED_CAST") (field.get(c.network) as kotlinx.coroutines.flow.MutableStateFlow<Boolean>).value = true
+        }
         runBlocking { settings.setDataSaver(true); settings.setNoVideoOnData(true) }
         compose.waitUntil(5_000) { VideoOnData.off(c) }
         var picture = false
@@ -247,10 +244,8 @@ class CodeReview182AppTest {
     /** On its own thread: pressBack waits up to a second for the screen to change, longer than what's being watched. */
     private fun pressBack() = Thread { androidx.test.uiautomator.UiDevice.getInstance(instrumentation).pressBack() }.start()
 
-    /** Its link, delivered while the frames wait (they only run while the test waits on Compose); then it must be where it was and close as usual. */
-    private fun openAgainAndCheck(top: Float) {
-        link()
-        Thread.sleep(600)
+    /** It must be where it was, and close as usual. */
+    private fun backInPlace(top: Float) {
         compose.waitUntil(8_000) { shown("playerDeck") && abs(deckTop() - top) < 3f }
         compose.waitForIdle()
         Thread.sleep(800)
@@ -271,7 +266,11 @@ class CodeReview182AppTest {
         val top = deckTop()
         compose.onAllNodes(hasTestTag("playerDeck")).onFirst().performTouchInput { swipe(Offset(width / 2f, -400f), Offset(width / 2f, 500f), 300) }
         compose.waitUntil(5_000) { CoverFlight.returning }
-        openAgainAndCheck(top)
+        // By its link (the player, still fading, lies over the mini player). Delivered while the frames wait: they only run
+        // while the test waits on Compose.
+        link()
+        Thread.sleep(600)
+        backInPlace(top)
     }
 
     @Test fun slidingClosedThenOpenedAgainItsInPlace() {
@@ -281,9 +280,15 @@ class CodeReview182AppTest {
         Thread.sleep(600)
         compose.waitForIdle()
         val top = deckTop()
+        // By the clock, as anything that reads the screen first waits for the exit to finish: 340 ms of sliding away, then
+        // 360 of leaving, and it's opened again in that second part.
+        compose.mainClock.autoAdvance = false
         pressBack()
-        // The mini player's back: it has slid away and is only finishing its exit.
-        compose.waitUntil(5_000) { shown("miniPlayer") }
-        openAgainAndCheck(top)
+        Thread.sleep(800)
+        compose.mainClock.advanceTimeBy(480)
+        link()
+        Thread.sleep(600)
+        compose.mainClock.autoAdvance = true
+        backInPlace(top)
     }
 }
