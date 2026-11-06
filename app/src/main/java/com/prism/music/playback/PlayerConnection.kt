@@ -567,7 +567,20 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         withPlayer { p ->
             if (p.mediaItemCount == 0) {
                 if (source == null) playSingle(songs.first()) else playQueue(songs, 0, source)
-            } else insertQueued(p, p.currentMediaItemIndex + 1, songs)
+            } else {
+                // #368: a song already coming up moves up (it used to go in a second time). Next already: nothing moves,
+                // so a stream or a blend being got ready for it carries on.
+                val order = playOrder(p)
+                val ahead = order.drop(order.indexOf(p.currentMediaItemIndex) + 1)
+                val aheadIds = ahead.map { p.getMediaItemAt(it).mediaId }
+                val ids = songs.map { it.id }
+                if (aheadIds.take(ids.size) == ids) {
+                    c.queue.userQueued.value = c.queue.userQueued.value + ids
+                    return@withPlayer
+                }
+                QueueEdit.copiesMovingUp(aheadIds, ids).map { ahead[it] }.sortedDescending().forEach { removeAt(it) }
+                insertQueued(p, p.currentMediaItemIndex + 1, songs)
+            }
         }
     }
 

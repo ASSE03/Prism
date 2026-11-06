@@ -83,10 +83,11 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
     // In play order, so with shuffle on this is the shuffled order.
     val order = upNext.mapNotNull { queue.getOrNull(it) }
     val userQueued by c.queue.userQueued.collectAsState()
-    // What the listener added (Play next, Add to queue) comes first, under its own heading.
-    val queued = order.filter { it.song.id in userQueued }
-    val upcoming = order.filter { it.index < autoplayFrom && it.song.id !in userQueued }
-    val autoplay = order.filter { it.index >= autoplayFrom && it.song.id !in userQueued }
+    // What the listener lined up next has its own heading; every song is listed where it plays (#368).
+    val sections = com.prism.music.playback.QueueEdit.sections(order, { it.song.id in userQueued }, { it.index >= autoplayFrom })
+    val queued = sections.queued
+    val upcoming = sections.upcoming
+    val autoplay = sections.autoplay
 
     val controlsOnScroll = remember { ControlsOnScroll(onHide = onHidePlayer, onReveal = onRevealPlayer) }
     controlsOnScroll.reveals = scrollReveals(settings)

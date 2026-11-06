@@ -73,7 +73,8 @@ class MixEngine(
     private class Plan(
         val fromId: String,
         val toId: String,
-        val toIndex: Int,
+        /** Its place in the queue, kept up to date as the queue changes ([following]). */
+        var toIndex: Int,
         /** Where in the ending song the blend starts (later, and the blend shorter, when it's put off: [postponeMs]). */
         var startMs: Long,
         /** Where in the next song it starts playing. */
@@ -151,6 +152,18 @@ class MixEngine(
     private var rushMs = RUSH_MS
     /** Since when the ending song has been stopped to load mid-blend (0 when it's playing). */
     private var tailStalledAt = 0L
+    /**
+     * #364, for a blend heard as "the first song pauses and lags": how each blend went, said at its end. Since when the
+     * tail has stopped while the main player plays, in the lead-in (0: it hasn't), and how long that came to.
+     */
+    private var tailStoppedAt = 0L
+    private var tailStoppedMs = 0L
+    private var tailStops = 0
+    /** The next song's wait to start, from the hand-over (0 until it's playing). */
+    private var nextWaitedMs = 0L
+    /** The ending song's time against the clock in the lead-in ([watchMain]): what it's lost, and the last stretch's reading. */
+    private val mainLost = LostTime()
+
     /** The fade-in [MixState.into] last looked at, and the furthest the song has played since ([wentBack]). */
     private var intoSeen: BlendIn? = null
     private var intoFurthest = 0L
@@ -226,6 +239,7 @@ class MixEngine(
         t.prepare()
         tail = t
         plan = p
+        mainLost.reset()
         state.mark.value = BlendMark(p.fromId, p.startMs, p.lengthMs)
         phase = Phase.PREPARED
         note("planned ${p.fromId} -> ${p.toId}: blend at ${p.startMs} ms for ${p.lengthMs} ms, next from ${p.inMs} ms" +
@@ -317,13 +331,37 @@ class MixEngine(
         return Plan(item.mediaId, next.mediaId, toIndex, start, inMs, len, ratio, beats, beatMs)
     }
 
+    /**
+     * #368: the plan as the queue is now. The queue can change after a blend is planned (Play next, a song taken out,
+     * Add to queue while shuffled): the plan's place in the queue is kept up to date, as the blend seeked to a place that
+     * by then held another song, and a new next song takes over the blend, at the same moment and for as long (without
+     * the old one's tempo and beats). It used to run into the song it planned for, or be cut off when that wasn't the one
+     * that came. Null when there's nothing now to blend into.
+     */
+    private fun following(p: Plan): Plan? {
+        val at = main.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET } ?: return null
+        val next = main.getMediaItemAt(at)
+        if (next.mediaId == p.toId) { p.toIndex = at; return p }
+        val from = main.currentMediaItem ?: return null
+        if (next.mediaId.isBlank() || next.mediaId == from.mediaId || !allowed(from, next)) return null
+        val nextDur = (next.mediaMetadata.durationMs ?: 0L).takeIf { it > 0 } ?: Long.MAX_VALUE
+        val length = minOf(p.lengthMs, nextDur / 3)
+        if (length < 1000) return null
+        note("the next song changed to ${next.mediaId} (was ${p.toId}): the blend goes into it")
+        val inMs = (tempo.cached(next.mediaId)?.firstSoundMs ?: 0L).coerceIn(0, 10_000)
+        state.mark.value = BlendMark(p.fromId, p.startMs, length)
+        return Plan(p.fromId, next.mediaId, at, p.startMs, inMs, length, 1f, false).also { it.postponed = p.postponed; plan = it }
+    }
+
     /** The tail is getting ready; it starts playing along (muted) just before the blend. */
     private fun prepared(): Long {
-        val p = plan ?: return abort("no plan")
+        val planned = plan ?: return abort("no plan")
         val t = tail ?: return abort("no tail")
-        if (main.currentMediaItem?.mediaId != p.fromId) return abort("song changed")
+        if (main.currentMediaItem?.mediaId != planned.fromId) return abort("song changed")
+        val p = following(planned) ?: return abort("nothing next to blend into")
         val pos = main.currentPosition
         if (pos > p.startMs + 200 || pos < p.startMs - LEAD_MS - PREPARE_MS - 15_000) return abort("seeked away")
+        watchMain(pos, "while the tail got ready")
         if (pos < p.startMs - LEAD_MS) return if (p.startMs - LEAD_MS - pos > 400) 100 else 10
         if (t.playbackState != Player.STATE_READY) {
             // Still loading the ending (slow network): it can wait as long as there's time left to get in step.
@@ -340,8 +378,29 @@ class MixEngine(
         clockLead = Long.MIN_VALUE
         handoverMs = 0
         syncActionAt = SystemClock.elapsedRealtime()
+        tailStoppedAt = 0L; tailStoppedMs = 0L; tailStops = 0; nextWaitedMs = 0L
         phase = Phase.SYNCING
+        note("the tail starts playing along, ${p.startMs - pos} ms before the blend")
         return 20
+    }
+
+    /**
+     * #364 "the first song pauses and lags before eventually crossfading": whether the song being listened to really loses
+     * time as the tail is made and starts (a second player loading, its audio track joining the same session). Said at once,
+     * with how far from the blend.
+     */
+    private fun watchMain(pos: Long, doing: String) {
+        if (!main.isPlaying) { mainLost.reset(); return }
+        if (main.playbackParameters.speed != 1f) return
+        val lost = mainLost.read(pos, SystemClock.elapsedRealtime())
+        if (lost > 0) note("the ending song lost $lost ms $doing, at $pos ms")
+    }
+
+    /** Counts the tail stopping to load while it should be playing along (its data late, or a slow phone), said at the blend's end. */
+    private fun watchTail(t: ExoPlayer, now: Long) {
+        val stopped = main.isPlaying && !t.isPlaying && t.playbackState != Player.STATE_ENDED
+        if (stopped && tailStoppedAt == 0L) { tailStoppedAt = now; tailStops++ }
+        if (!stopped && tailStoppedAt != 0L) { tailStoppedMs += now - tailStoppedAt; tailStoppedAt = 0L }
     }
 
     /** The tail's place in the song: its reported position plus however far [ShiftProcessor] has moved it. */
@@ -354,13 +413,16 @@ class MixEngine(
      * again once the shifted audio has reached the speaker.
      */
     private fun syncing(): Long {
-        val p = plan ?: return abort("no plan")
+        val planned = plan ?: return abort("no plan")
         val t = tail ?: return abort("no tail")
-        if (main.currentMediaItem?.mediaId != p.fromId) return abort("song changed")
+        if (main.currentMediaItem?.mediaId != planned.fromId) return abort("song changed")
+        val p = following(planned) ?: return abort("nothing next to blend into")
         t.playWhenReady = main.playWhenReady
         val pos = main.currentPosition
         if (pos > p.startMs + 500 || pos < p.startMs - LEAD_MS - 2000) return abort("seeked away")
         val now = SystemClock.elapsedRealtime()
+        if (now - syncActionAt > SETTLE_READINGS_MS) watchTail(t, now)
+        watchMain(pos, "as the tail played along")
         val drift = tailPosition(t) - pos
         // A player's reported position isn't worked out afresh on every read: it's the position as of its last update,
         // which comes every few hundred ms while it's busy loading, so a reading can be that stale (never early). Each
@@ -453,7 +515,7 @@ class MixEngine(
         rushedAt = 0L
         tailStalledAt = 0L
         phase = Phase.BLENDING
-        note("blend ${p.fromId} -> ${p.toId} started (tail $d ms off)")
+        note("blend ${p.fromId} -> ${p.toId} started (tail $d ms off, crossed over in $handoverMs ms, put off ${p.postponed} times; tail stopped $tailStops times in the lead-in, $tailStoppedMs ms)")
         return 20
     }
     private fun blending(): Long {
@@ -469,6 +531,11 @@ class MixEngine(
         // The ending song has gone quiet (its music is over: a fade-out's end, a silent tail) while the next one is
         // still fading in: it comes up the rest of the way now, instead of the blend fading out over silence.
         val now = SystemClock.elapsedRealtime()
+        if (nextWaitedMs == 0L && main.isPlaying) {
+            nextWaitedMs = now - blendStartedAt
+            // Long enough to hear: the ending song carries on alone at full volume meanwhile, past where its fade should start.
+            if (nextWaitedMs > NEXT_WAIT_WORTH_SAYING_MS) note("${p.toId} took $nextWaitedMs ms to start after the hand-over")
+        }
         if (rushedAt == 0L && main.isPlaying && (shifter?.quietMs ?: 0L) >= QUIET_HANDOFF_MS && progress < 0.9f) {
             rushedAt = now
             rushFrom = progress
@@ -678,6 +745,8 @@ class MixEngine(
         private const val POSTPONE_MS = 2000L
         private const val MAX_POSTPONES = 2
         private const val MIN_POSTPONED_MS = 3000L
+        /** The next song starting later than this after the hand-over goes in the log. */
+        private const val NEXT_WAIT_WORTH_SAYING_MS = 300L
         /** The ending song stopped to load this long mid-blend: it's let go ([STALL_RUSH_MS]). */
         private const val TAIL_STALL_MS = 500L
         /** How quickly the next song comes up when the ending song is let go. */
@@ -734,6 +803,32 @@ class MixEngine(
         private const val MAX_STRETCH = 0.06
         /** How long the next song takes to ease back to its own tempo after a tempo-matched blend. */
         private const val SETTLE_MS = 4000L
+    }
+}
+
+/**
+ * How much time a playing song has lost against the clock (#364's diagnostics). A player's position is as of its last
+ * update, so a reading can be a few hundred ms stale, never early: each stretch counts at its freshest reading, and a later
+ * stretch behind an earlier one has really lost that much.
+ */
+internal class LostTime(private val stretchMs: Long = 600, private val worthSayingMs: Long = 60) {
+    private var last = Long.MIN_VALUE
+    private var best = Long.MIN_VALUE
+    private var from = 0L
+
+    fun reset() { last = Long.MIN_VALUE; best = Long.MIN_VALUE; from = 0L }
+
+    /** A reading: [pos] at [now]. The time lost, when a stretch has just shown some, else 0. */
+    fun read(pos: Long, now: Long): Long {
+        if (from == 0L) from = now
+        best = maxOf(best, pos - now)
+        if (now - from < stretchMs) return 0
+        val lost = if (last == Long.MIN_VALUE) 0 else last - best
+        // (Ahead of the last stretch is only that one's readings having been stale: it's the new mark.)
+        last = best
+        best = Long.MIN_VALUE
+        from = now
+        return lost.takeIf { it >= worthSayingMs } ?: 0
     }
 }
 
