@@ -323,7 +323,7 @@ private fun HeaderPicturePicker() {
         if (uri == null) return@rememberLauncherForActivityResult
         scope.launch {
             val file = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { savePhoto(context, uri, "home-header") }
-            if (file != null) c.settings.setHomeHeaderPicture(tr(R.string.photo, file.absolutePath))
+            if (file != null) c.settings.setHomeHeaderPicture(com.prism.music.ui.theme.Backdrop.photoValue(file.absolutePath))
         }
     }
     val current = com.prism.music.ui.theme.Backdrop.parse(settings.homeHeaderPicture).first

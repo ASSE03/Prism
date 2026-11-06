@@ -112,7 +112,7 @@ fun BackgroundsScreen(bottomPadding: Dp, forPlayer: Boolean = false) {
         scope.launch {
             val name = if (forPlayer) "player" else if (everywhere) "all" else screen.name.lowercase()
             val file = withContext(Dispatchers.IO) { savePhoto(context, uri, name) }
-            if (file != null) apply(tr(R.string.photo, file.absolutePath))
+            if (file != null) apply(Backdrop.photoValue(file.absolutePath))
         }
     }
 

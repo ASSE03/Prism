@@ -2769,6 +2769,15 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                     .onFailure { android.util.Log.w("PrismSettings", "a settings write failed", it) }
             }
         }
+        // #378: photos saved under a translated word get their right name back, for everything that reads them
+        // (Looks, Performance mode, backups). Only writes when there's one to put right.
+        val fix = com.prism.music.data.looks.Backgrounds::photoKeyFixed
+        raw[K.backdrops]?.let { saved ->
+            val map = runCatching { json.decodeFromString<Map<String, String>>(saved) }.getOrNull() ?: return@let
+            val fixed = map.mapValues { fix(it.value) }
+            if (fixed != map) edit { it[K.backdrops] = json.encodeToString<Map<String, String>>(fixed) }
+        }
+        raw[K.homeHeaderPicture]?.let { saved -> if (fix(saved) != saved) edit { it[K.homeHeaderPicture] = fix(saved) } }
     }
 
     private fun edit(block: (MutablePreferences) -> Unit) {

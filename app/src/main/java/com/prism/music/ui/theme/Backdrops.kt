@@ -170,9 +170,15 @@ enum class Backdrop(
         fun parse(v: String?): Pair<Backdrop, String?> {
             if (v.isNullOrBlank()) return DEFAULT to null
             val name = v.substringBefore('|')
-            val style = entries.firstOrNull { it.name == name } ?: DEFAULT
-            return style to v.substringAfter('|', "").ifBlank { null }
+            val path = v.substringAfter('|', "").ifBlank { null }
+            // #378: a word this isn't, with a file after it, is a photo saved under a translated name ("FOTO|…").
+            val style = entries.firstOrNull { it.name == name } ?: if (path?.startsWith("/") == true) PHOTO else DEFAULT
+            return style to path
         }
+
+        /** What's saved for a photo of your own. The word is a key, not text: it's the same in every language (#378). */
+        fun photoValue(path: String) = "${PHOTO.name}|$path"
+
     }
 }
 
