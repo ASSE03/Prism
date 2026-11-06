@@ -218,6 +218,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
         val picksOn = signedIn && layoutNow.any { it.visible && it.key == HomeSections.QUICK_PICKS }
         val dialWanted = signedIn && layoutNow.any { it.visible && it.key == HomeSections.SPEED_DIAL }
         val known = knownShelves()
+        earlyPicks.value = null
         val (fresh, pages) = c.ytm.fullHomePages(
             pages = 3, maxPages = 8,
             satisfied = { got -> matchShelves(wanted, got, known).size == wanted.size && (!picksOn || got.quickPicks(owner) != null) && (!dialWanted || got.speedDial(owner) != null) },
@@ -332,7 +333,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
         }
         if (made.isNotEmpty()) {
             value = made; curatedPicks.value = made; curatedAt.value = refreshes
-            c.homeCache.writePicks(day, whose, made)
+            c.scope.launch { c.homeCache.writePicks(day, whose, made) }
         }
         picksTried.value = refreshes
     }
