@@ -15,7 +15,7 @@ A free, open-source YouTube Music client for Android, with word-by-word lyrics, 
 
 ### [⬇ Download Prism.apk](../../releases/latest/download/Prism.apk)
 
-[What's new in 1.8.1.1](../../releases/tag/v1.8.1.1) · [Changelog](CHANGELOG.md) · [Watch the film](../../releases/download/v1.7.0/Prism-1.7-film.mp4)
+[What's new in 1.8.2](../../releases/tag/v1.8.2) · [Changelog](CHANGELOG.md) · [Watch the film](../../releases/download/v1.7.0/Prism-1.7-film.mp4)
 
 <a href="../../releases/download/v1.7.0/Prism-1.7-film.mp4"><img src="docs/screenshots/preview.gif" width="720" alt="Prism 1.7: word-by-word lyrics on the player. Click to watch the full film."></a>
 
@@ -29,7 +29,30 @@ A free, open-source YouTube Music client for Android, with word-by-word lyrics, 
 > [!NOTE]
 > Prism is an independent, unofficial app. It is not affiliated with, endorsed by, or connected to Google, YouTube or YouTube Music.
 
-## New in 1.8.1: bring your history
+## New in 1.8.2: a player on your lock screen
+
+Prism's own player on your lock screen, RSS podcasts, your uploads, and Explore in Search. New options are off until you turn them on, unless it says otherwise, and nothing you've set changes on the update.
+
+- **Lock screen player** (Customize Prism → Player → Lock screen player): Cover, Full cover, Lyrics or Quiet, following your Look. It only controls what's playing, so nothing else in Prism can be reached while the phone is locked. You can hide the song's name and cover too. It asks for "Display over other apps" (Android 10 and up), the only way Android lets a screen come up by itself; Prism never draws over other apps with it.
+- **New on Home:** New to you, Deep cuts and On this day, from Customize Home. **Tune your radios** (familiar or new, hits or deep cuts, calm or energetic) and **No repeats this session** (#159).
+- **Explore,** at the end of Search: YouTube Music's charts by country, moods and genres, new releases and what's trending.
+- **Podcasts by RSS:** paste a show's feed address. Episodes play straight from the podcast's own server, with no YouTube and no account.
+- **Your uploads in Library** (#332, #101), signed in. Built without an account that has uploads, so if it's missing or looks wrong for you, please tell me.
+- **Offline:** artist pages work offline, **Saved while playing** lists songs that reached your phone in full (#159), a playlist can **stay downloaded** (#298, thanks to stuntsnakee) and **skip songs you don't want** when it downloads (#221).
+- **Your files:** lyrics from your own music files (#344), and folders left out of Local files (#207, #249).
+- **Your look:** the Cover gradient player background (#232, #338), Blur and Frost sliders (#252) and glass on more of the screen (#326).
+- **Also:** Song details (#211), artist pages with You and this artist, Essentials for you and a Bio (if you want them), crossfades up to 30 seconds (#351), and Sonos and other speakers found again (#239). A song YouTube won't play no longer stops the music. See the [changelog](CHANGELOG.md).
+
+<p align="center">
+<img src="docs/screenshots/lock-cover.jpg" width="32%" alt="The lock screen player, Cover layout: clock, cover, seek bar, controls and volume">
+<img src="docs/screenshots/lock-full.jpg" width="32%" alt="The lock screen player, Full cover layout: the cover fills the top of the screen">
+<img src="docs/screenshots/lock-quiet.jpg" width="32%" alt="The lock screen player, Quiet layout: a big clock, a small cover and the controls">
+<img src="docs/screenshots/explore.jpg" width="32%" alt="Explore in Search: charts, moods and genres, new releases and trending">
+<img src="docs/screenshots/cover-gradient.jpg" width="32%" alt="The Cover gradient player background">
+<img src="docs/screenshots/lock-layouts.jpg" width="32%" alt="Picking the lock screen layout in Settings, each with its own example">
+</p>
+
+## 1.8.1: bring your history
 
 Your listening history from Spotify, YouTube Music and Last.fm, matched to YouTube Music on your phone, and Spotify connected through its official API with a key of your own. Everything stays on your phone, and Replay counts only Prism's own plays unless you say so.
 
@@ -39,15 +62,6 @@ Your listening history from Spotify, YouTube Music and Last.fm, matched to YouTu
 - **Spotify, through your own developer app** (optional). Not a regular "Sign in with Spotify": a Spotify developer app can only be connected by five people until Spotify approves it for full access (only given to large companies), so instead each listener makes their own free app on Spotify's developer dashboard, pastes its Client ID into Prism and approves it on Spotify's own page (Spotify requires Premium for that). About three minutes, walked through in Settings → Devices & connections → Spotify; official API, Prism never sees your password. Without it, Spotify's data download still brings your history. Recent plays, your top songs and artists, your playlists in Library (playing through their YouTube Music matches) and Liked Songs both ways, each with its own switch. Playlists you only follow show too, with the way to bring them (a copy in Spotify, or TuneMyMusic).
 - **Your own song files** in place of the stream (#314, off by default), a progress bar shaped like the crossfade, a White player background (#320), fonts installed on your phone (#318), an explicit filter (#216), your own covers for songs and albums (#305), Pause history (#296) and when a song counts as played (#263).
 - **Also:** Replay graphs for days and weeks, favorite artists' new releases (#311), Add to playlist marks the playlists that have the song (#246), "Hey Google, play … on Prism" plays artists, albums and your playlists, word-by-word lyrics line up more often (#301), edge-to-edge cover and video are two switches again, and a long list of fixes. See the [changelog](CHANGELOG.md).
-
-<p align="center">
-<img src="docs/screenshots/bring-history.jpg" width="32%" alt="Bring your history: Spotify, YouTube Music and Last.fm, with your imports and the last Spotify import">
-<img src="docs/screenshots/needs-a-look.jpg" width="32%" alt="Needs a look: play the top three matches and pick the right one">
-<img src="docs/screenshots/replay-spotify.jpg" width="32%" alt="Replay counting Spotify too: Includes Spotify">
-<img src="docs/screenshots/spotify-connect.jpg" width="32%" alt="Connect Spotify through your own Spotify developer app (not a regular sign-in), step by step">
-<img src="docs/screenshots/crossfade-bar.jpg" width="32%" alt="A progress bar shaped like the crossfade into the next song">
-<img src="docs/screenshots/white-player.jpg" width="32%" alt="The White player background in the light theme">
-</p>
 
 **Prism on your TV** (new in 1.8.0):
 
