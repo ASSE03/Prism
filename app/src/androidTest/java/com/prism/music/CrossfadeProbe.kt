@@ -29,11 +29,12 @@ class CrossfadeProbe {
     private fun blends(
         auto: Boolean,
         blends: Int,
+        beats: Boolean = false,
         queries: List<String> = listOf("Blinding Lights The Weeknd", "Dreams Fleetwood Mac", "Levitating Dua Lipa", "Mr. Brightside The Killers", "Take on Me a-ha", "Billie Jean Michael Jackson", "Espresso Sabrina Carpenter", "Beat It Michael Jackson"),
     ) {
         Fixture.ready()
         runBlocking {
-            settings.setMix(true); settings.setMixAuto(auto); settings.setMixSeconds(8); settings.setMixBeatMatch(false)
+            settings.setMix(true); settings.setMixAuto(auto); settings.setMixSeconds(8); settings.setMixBeatMatch(beats)
             settings.setAudioDiagnostics(true)
         }
         Fixture.launch()
@@ -64,6 +65,9 @@ class CrossfadeProbe {
     @Test fun fixedLength() = blends(auto = false, blends = 5)
 
     @Test fun automaticLength() = blends(auto = true, blends = 3)
+
+    /** Automatic length and "Match tempo and beats": the next song stretched, and nudged during the blend. */
+    @Test fun onTheBeat() = blends(auto = true, blends = 4, beats = true)
 
     /** Songs [fixedLength] hasn't left in the song cache, for a run on a slow connection (the cached ones load at once). */
     @Test fun otherSongs() = blends(auto = false, blends = 4, queries = listOf("Bohemian Rhapsody Queen", "Hotel California Eagles", "Smells Like Teen Spirit Nirvana", "Rolling in the Deep Adele", "Shape of You Ed Sheeran", "Uptown Funk Bruno Mars"))

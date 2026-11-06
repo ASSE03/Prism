@@ -16,6 +16,7 @@ What changed in each release. Older releases are described on the [Releases page
 - The queue now lists songs in the order they really play: a song you added to the queue was shown first, but played after the rest of the list, so Next seemed to skip it (#368)
 - Play next, or taking a song out of the queue, just before a crossfade no longer sends the blend to the wrong song or cuts it off (#368)
 - The current lyric, when you move it away from the progress bar, sits midway between its neighbors on the player instead of low down against the next one (#361)
+- Playback diagnostics say more about each crossfade: whether the ending song lost time, how the two crossed over, and how long the next one took to start, to find the stutter some phones hear (#364)
 
 ## 1.8.2
 
