@@ -48,6 +48,16 @@ import org.robolectric.annotation.Config
 class IssueFixes1821AccountTest {
     @get:Rule val tmp = TemporaryFolder()
 
+    private var signedIn: SettingsRepository? = null
+
+    /** The settings store is shared with the JVM's other tests: this sign-in doesn't stay in it. */
+    @org.junit.After fun signOut() {
+        val s = signedIn ?: return
+        s.logout()
+        s.setPremiumStream(false)
+        runBlocking { withTimeout(10_000) { s.flow.first { !it.isLoggedIn && !it.premiumStream } } }
+    }
+
     /** A YouTube that answers the player as each client is told to: which itags each has for a song. */
     private inner class FakeStreams(val itagsFor: (client: String, id: String) -> List<Int>?) {
         val asked = java.util.Collections.synchronizedList(mutableListOf<Pair<String, String>>())
@@ -70,6 +80,7 @@ class IssueFixes1821AccountTest {
         val streams: StreamResolver
 
         init {
+            signedIn = settings
             runBlocking {
                 settings.saveAccount("SAPISID=abc; __Secure-3PAPISID=abc", "visitor", "user||")
                 settings.setPremiumStream(true)
