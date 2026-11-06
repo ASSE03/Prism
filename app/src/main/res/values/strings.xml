@@ -899,6 +899,7 @@
     <string name="rearrange">Rearrange</string>
     <string name="search_liked_songs">Search liked songs</string>
     <string name="show_more">Show more</string>
+    <string name="show_less">Show less</string>
     <string name="will_be_deleted_from_your_youtube_2">\"%1$s\" will be deleted from your YouTube Music account. If it\'s someone else\'s playlist, it\'s only removed from your library.</string>
     <string name="library_tiles">Library tiles</string>
     <string name="tick_the_tiles_to_show_at">Tick the tiles to show at the top of Library; hold one to move it.</string>

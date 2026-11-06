@@ -167,8 +167,10 @@ internal class ReplayStory(
     /** "Includes Spotify" when an imported history is counted (1.8.1): every card says so. */
     val includes: String? = null,
 ) {
-    /** "PRISM REWIND" for a year, "PRISM REPLAY" otherwise (and what else it counts). */
-    val brand: String get() = (if (rewind) tr(R.string.prism_rewind) else tr(R.string.prism_replay)) + (includes?.let { " · " + it.uppercase() } ?: "")
+    /** "PRISM REWIND" for a year, "PRISM REPLAY" otherwise. */
+    val brandName: String get() = if (rewind) tr(R.string.prism_rewind) else tr(R.string.prism_replay)
+    /** [brandName] and what else it counts. */
+    val brand: String get() = brandName + (includes?.let { " · " + it.uppercase() } ?: "")
 }
 
 /** The facts [StoryParts.pick] chooses this story's slides by. */
@@ -608,6 +610,47 @@ private fun kicker(size: TextUnit = 14.sp): TextStyle {
 
 private val body = TextStyle(fontSize = 19.sp, lineHeight = 26.sp, fontWeight = FontWeight.Medium, color = Color.White)
 
+/**
+ * A slide's big type, at [style]'s size or smaller, so a word is never broken or cut off whatever the language, the
+ * font or the phone's width (Reddit: the card's "TODAY" came out as "TODA"). [oneLine] keeps all of it on one line; else
+ * it may wrap between words, and the longest word has to fit. [widest] is the text to fit when it changes as it's shown
+ * (a figure counting up): the size stays put meanwhile.
+ */
+@Composable
+private fun FitText(text: String, style: TextStyle, modifier: Modifier = Modifier, widest: String = text, oneLine: Boolean = true) {
+    val measurer = androidx.compose.ui.text.rememberTextMeasurer()
+    androidx.compose.foundation.layout.BoxWithConstraints(modifier) {
+        val room = constraints.maxWidth
+        val size = remember(widest, style, room, oneLine) {
+            fittedSize(style.fontSize.value, room) { s ->
+                val sized = style.copy(fontSize = s.sp)
+                (if (oneLine) listOf(widest) else widest.split(Regex("\\s+")).filter { it.isNotEmpty() })
+                    .maxOfOrNull { measurer.measure(it, sized, maxLines = 1, softWrap = false).size.width } ?: 0
+            }
+        }
+        val scale = size / style.fontSize.value
+        Text(
+            text, style = style.copy(fontSize = size.sp, lineHeight = style.lineHeight * scale),
+            maxLines = if (oneLine) 1 else Int.MAX_VALUE, softWrap = !oneLine,
+        )
+    }
+}
+
+/** The biggest size up to [start] at which [width] fits in [room]. Type's width goes almost in step with its size. */
+internal fun fittedSize(start: Float, room: Int, width: (Float) -> Int): Float {
+    if (room == androidx.compose.ui.unit.Constraints.Infinity) return start
+    var size = start
+    repeat(4) {
+        val w = width(size)
+        if (w <= room) return size
+        size = (size * room / w * 0.98f).coerceAtLeast(FIT_MIN_SP)
+    }
+    return size
+}
+
+/** Below this, a title stops being one. */
+private const val FIT_MIN_SP = 12f
+
 /** Rises and fades in after [delayMs]. */
 @Composable
 private fun Modifier.reveal(delayMs: Int): Modifier {
@@ -665,7 +708,7 @@ private fun Intro(s: ReplayStory, modifier: Modifier) {
         }
         Spacer(Modifier.height(36.dp))
         Text(s.brand, style = kicker(), modifier = Modifier.reveal(350))
-        Text(s.title.uppercase(), style = display(if (s.title.length > 6) 76.sp else 120.sp), modifier = Modifier.reveal(550))
+        FitText(s.title.uppercase(), display(if (s.title.length > 6) 76.sp else 120.sp), Modifier.reveal(550))
         Text(
             when (s.period.kind) {
                 Period.Kind.YEAR -> tr(R.string.your_year_in_music_2)
@@ -690,9 +733,10 @@ private fun Minutes(s: ReplayStory, modifier: Modifier) {
     Column(modifier, verticalArrangement = Arrangement.Center) {
         Text(tr(R.string.you_listened_for), style = kicker(), modifier = Modifier.reveal(100))
         val text = total.text(count.value.toLong())
-        val longest = total.text(total.value).length
-        Text(text, style = display(if (longest > 8) 72.sp else if (longest > 6) 96.sp else 130.sp), maxLines = 1, modifier = Modifier.reveal(200))
-        Text(total.unit.ifEmpty { tr(R.string.of_music) }.uppercase(),style = display(46.sp, ArtistTypography.extended), modifier = Modifier.reveal(400))
+        val final = total.text(total.value)
+        val longest = final.length
+        FitText(text, display(if (longest > 8) 72.sp else if (longest > 6) 96.sp else 130.sp), Modifier.reveal(200), widest = final)
+        FitText(total.unit.ifEmpty { tr(R.string.of_music) }.uppercase(), display(46.sp, ArtistTypography.extended), Modifier.reveal(400), oneLine = false)
         Spacer(Modifier.height(28.dp))
         val hours = s.totalMs / 3_600_000.0
         Text(
@@ -728,7 +772,7 @@ private fun Genres(s: ReplayStory, modifier: Modifier) {
     val total = s.genres.sumOf { it.second }.coerceAtLeast(1)
     Column(modifier, verticalArrangement = Arrangement.Center) {
         Text(tr(R.string.your_top_genre), style = kicker(), modifier = Modifier.reveal(100))
-        Text(com.prism.music.data.meta.Genres.shown(s.genres.first().first).uppercase(), style = display(72.sp), modifier = Modifier.reveal(300))
+        FitText(com.prism.music.data.meta.Genres.shown(s.genres.first().first).uppercase(), display(72.sp), Modifier.reveal(300), oneLine = false)
         Spacer(Modifier.height(30.dp))
         s.genres.forEachIndexed { i, (g, ms) ->
             val share = ms.toFloat() / total
@@ -919,8 +963,8 @@ private fun Discovery(s: ReplayStory, modifier: Modifier) {
     val thumbs by lib.artistThumbs.collectAsState()
     Column(modifier, verticalArrangement = Arrangement.Center) {
         Text(tr(R.string.new_to_you), style = kicker(), modifier = Modifier.reveal(100))
-        Text(fmt(found.size.toLong()), style = display(140.sp), modifier = Modifier.reveal(250))
-        Text(trp(R.plurals.new_artists_title, found.size), style = display(44.sp, ArtistTypography.extended), modifier = Modifier.reveal(450))
+        FitText(fmt(found.size.toLong()), display(140.sp), Modifier.reveal(250))
+        FitText(trp(R.plurals.new_artists_title, found.size), display(44.sp, ArtistTypography.extended), Modifier.reveal(450), oneLine = false)
         Text(tr(R.string.found_their_way_into_your_rotation), style = body, modifier = Modifier.reveal(700).padding(top = 8.dp))
         Spacer(Modifier.height(26.dp))
         Row(Modifier.reveal(1_000)) {
@@ -956,7 +1000,7 @@ private fun PersonalitySlide(p: Personality, modifier: Modifier) {
             drawPath(tri, Color.White.copy(alpha = 0.6f), style = Stroke(3.dp.toPx()))
         }
         Spacer(Modifier.height(28.dp))
-        Text(p.name.uppercase(), style = display(64.sp), modifier = Modifier.reveal(700))
+        FitText(p.name.uppercase(), display(64.sp), Modifier.reveal(700), oneLine = false)
         Text(p.line, style = body, modifier = Modifier.reveal(1_200).padding(top = 14.dp))
     }
 }
@@ -1020,7 +1064,7 @@ private fun Months(s: ReplayStory, modifier: Modifier) {
     val letters = listOf("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")
     Column(modifier, verticalArrangement = Arrangement.Center) {
         Text(tr(R.string.your_biggest_month), style = kicker(), modifier = Modifier.reveal(100))
-        Text(names.getOrElse(peak) { "" }.uppercase(), style = display(72.sp), maxLines = 1, modifier = Modifier.reveal(300))
+        FitText(names.getOrElse(peak) { "" }.uppercase(), display(72.sp), Modifier.reveal(300))
         Text(tr(R.string.that_month, listenTime(byMonth[peak])), style = body, modifier = Modifier.reveal(600).padding(top = 6.dp))
         Spacer(Modifier.height(30.dp))
         Canvas(Modifier.fillMaxWidth().height(200.dp).reveal(400)) {
@@ -1078,7 +1122,7 @@ private fun PrismYearSlide(s: ReplayStory, modifier: Modifier) {
     )
     Column(modifier, verticalArrangement = Arrangement.Center) {
         Text(tr(R.string.your_year_in_prism), style = kicker(), modifier = Modifier.reveal(100))
-        Text(tr(R.string.more_than_listening), style = display(56.sp), modifier = Modifier.reveal(300).padding(top = 6.dp))
+        FitText(tr(R.string.more_than_listening), display(56.sp), Modifier.reveal(300).padding(top = 6.dp), oneLine = false)
         Spacer(Modifier.height(24.dp))
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             rows.forEachIndexed { i, (label, value) -> Fact(label, value, 700 + i * 220) }
@@ -1094,8 +1138,8 @@ private fun YearCompare(s: ReplayStory, modifier: Modifier) {
     val change = ((s.totalMs - prev) * 100.0 / prev).toInt()
     Column(modifier, verticalArrangement = Arrangement.Center) {
         Text("${year?.minus(1) ?: "LAST YEAR"} → ${s.title}", style = kicker(), modifier = Modifier.reveal(100))
-        Text(if (change >= 0) "+$change%" else "$change%", style = display(130.sp), maxLines = 1, modifier = Modifier.reveal(300))
-        Text(if (change >= 0) tr(R.string.more_music) else tr(R.string.less_music), style = display(44.sp, ArtistTypography.extended), modifier = Modifier.reveal(500))
+        FitText(if (change >= 0) "+$change%" else "$change%", display(130.sp), Modifier.reveal(300))
+        FitText(if (change >= 0) tr(R.string.more_music) else tr(R.string.less_music), display(44.sp, ArtistTypography.extended), Modifier.reveal(500), oneLine = false)
         Spacer(Modifier.height(26.dp))
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Fact(tr(R.string.listening), "${listenTime(prev)} → ${listenTime(s.totalMs)}", 900)
@@ -1117,48 +1161,11 @@ private fun Summary(s: ReplayStory, modifier: Modifier, onReplay: () -> Unit, on
     val thumbs by c.library.artistThumbs.collectAsState()
     Column(modifier.padding(top = 0.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         // The card that gets shared, drawn into a layer so it can be saved as an image.
-        Column(
-            Modifier.reveal(100).fillMaxWidth()
-                .recordInto(card)
-                .clip(RoundedCornerShape(26.dp))
-                .background(Brush.linearGradient(listOf(Color(0xFF1B0F3B), Color(0xFF5B3DD6), Color(0xFFE0335A))))
-                .padding(20.dp),
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                val lead = s.artists.firstOrNull()
-                AsyncImage(
-                    hiRes(s.topArtistImage ?: lead?.let { c.library.artistPhoto(thumbs, it.artistId, it.artistName) } ?: s.songs.firstOrNull()?.thumbnail, 600), null,
-                    Modifier.size(104.dp).clip(RoundedCornerShape(16.dp)), contentScale = ContentScale.Crop,
-                )
-                Spacer(Modifier.width(16.dp))
-                Column {
-                    Text(s.brand, style = kicker(12.sp))
-                    Text(s.title.uppercase(), style = display(if (s.title.length > 6) 34.sp else 52.sp), maxLines = 1)
-                }
-            }
-            Spacer(Modifier.height(18.dp))
-            Row {
-                SummaryList(tr(R.string.top_artists), s.artists.take(5).map { it.artistName }, Modifier.weight(1f))
-                Spacer(Modifier.width(12.dp))
-                SummaryList(tr(R.string.top_songs_3), s.songs.take(5).map { it.title }, Modifier.weight(1f))
-            }
-            Spacer(Modifier.height(16.dp))
-            Row {
-                Column(Modifier.weight(1f)) {
-                    val total = listenTotal(s.totalMs)
-                    Text(tr(R.string.listened_2, total.unit).trim().uppercase(), style = kicker(10.sp).copy(color = Color.White.copy(alpha = 0.75f)))
-                    Text(total.text(total.value), style = display(36.sp), maxLines = 1)
-                }
-                s.genres.firstOrNull()?.let { (g, _) ->
-                    Column(Modifier.weight(1f).padding(start = 12.dp)) {
-                        Text(tr(R.string.top_genre), style = kicker(10.sp).copy(color = Color.White.copy(alpha = 0.75f)))
-                        Text(g, style = body.copy(fontSize = 20.sp, fontWeight = FontWeight.Bold), maxLines = 2)
-                    }
-                }
-            }
-            Spacer(Modifier.height(8.dp))
-            Text(s.personality.name, style = body.copy(fontSize = 13.sp, color = Color.White.copy(alpha = 0.75f)))
-        }
+        val lead = s.artists.firstOrNull()
+        SummaryCard(
+            s, hiRes(s.topArtistImage ?: lead?.let { c.library.artistPhoto(thumbs, it.artistId, it.artistName) } ?: s.songs.firstOrNull()?.thumbnail, 600),
+            Modifier.reveal(100).fillMaxWidth().recordInto(card),
+        )
         Spacer(Modifier.height(18.dp))
         Row(Modifier.reveal(500), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Pill(tr(R.string.share), PrismIcons.Share, primary = true) {
@@ -1182,6 +1189,57 @@ private fun Summary(s: ReplayStory, modifier: Modifier, onReplay: () -> Unit, on
             }
             Pill(tr(R.string.watch_again), PrismIcons.Refresh, onClick = onReplay)
         }
+    }
+}
+
+/** The summary slide's card: what gets shared. */
+@Composable
+internal fun SummaryCard(s: ReplayStory, image: Any?, modifier: Modifier = Modifier) {
+    Column(
+        modifier
+            .clip(RoundedCornerShape(26.dp))
+            .background(Brush.linearGradient(listOf(Color(0xFF1B0F3B), Color(0xFF5B3DD6), Color(0xFFE0335A))))
+            .padding(20.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            AsyncImage(image, null, Modifier.size(104.dp).clip(RoundedCornerShape(16.dp)), contentScale = ContentScale.Crop)
+            Spacer(Modifier.width(16.dp))
+            Column(Modifier.weight(1f)) {
+                Text(s.brandName, style = kicker(12.sp), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                // What else it counts can run long ("Includes Spotify, Last.fm"): smaller, on its own lines, clear of the title.
+                s.includes?.let {
+                    Text(
+                        it.uppercase(), style = kicker(9.sp).copy(lineHeight = 12.sp, color = Color.White.copy(alpha = 0.8f)),
+                        maxLines = 3, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 2.dp),
+                    )
+                }
+                Spacer(Modifier.height(4.dp))
+                // Shrinks to fit beside the cover (Reddit: "TODA").
+                FitText(s.title.uppercase(), display(52.sp))
+            }
+        }
+        Spacer(Modifier.height(18.dp))
+        Row {
+            SummaryList(tr(R.string.top_artists), s.artists.take(5).map { it.artistName }, Modifier.weight(1f))
+            Spacer(Modifier.width(12.dp))
+            SummaryList(tr(R.string.top_songs_3), s.songs.take(5).map { it.title }, Modifier.weight(1f))
+        }
+        Spacer(Modifier.height(16.dp))
+        Row {
+            Column(Modifier.weight(1f)) {
+                val total = listenTotal(s.totalMs)
+                Text(tr(R.string.listened_2, total.unit).trim().uppercase(), style = kicker(10.sp).copy(color = Color.White.copy(alpha = 0.75f)))
+                FitText(total.text(total.value), display(36.sp))
+            }
+            s.genres.firstOrNull()?.let { (g, _) ->
+                Column(Modifier.weight(1f).padding(start = 12.dp)) {
+                    Text(tr(R.string.top_genre), style = kicker(10.sp).copy(color = Color.White.copy(alpha = 0.75f)))
+                    Text(g, style = body.copy(fontSize = 20.sp, fontWeight = FontWeight.Bold), maxLines = 2)
+                }
+            }
+        }
+        Spacer(Modifier.height(8.dp))
+        Text(s.personality.name, style = body.copy(fontSize = 13.sp, color = Color.White.copy(alpha = 0.75f)))
     }
 }
 

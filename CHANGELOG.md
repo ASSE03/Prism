@@ -11,6 +11,8 @@ What changed in each release. Older releases are described on the [Releases page
 - **Your own photo as a background works in every language** (#378). In German, Italian, Russian, Polish, Swedish, Hungarian, Malay and Filipino, the picture was saved under a translated name, so Prism didn't see it as a picture and showed Ambient (black with Pure black on). Photos you already picked come back by themselves.
 - **Google Takeout's history is recognized in any language** (#375). The file's name changes with your account's language (`historial-de-reproducciones.json` in Spanish), so Prism now goes by what's in it.
 - **Japanese kanji no longer turn into Chinese pinyin in romanized lyrics** (#370). Some sources, KuGou above all, write a Japanese song's kanji in Chinese forms, and a line of only kanji could pass for Chinese. Prism now decides for the whole song and reads them as Japanese.
+- **Replay's summary card no longer cuts its title off** ("TODA" for Today). The title now shrinks until it fits on its line, in every period and language, and so do the story's big words.
+- **An album's description is easier to read.** Left-aligned in its own quiet box, closed to a few lines with Show more, and the Wikipedia and license credit on its own small line with tappable links instead of raw addresses.
 
 ## 1.8.2
 
