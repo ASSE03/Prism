@@ -102,14 +102,20 @@ class LibraryFolderSearchTest {
         compose.onAllNodes(hasSetTextAction()).onFirst().performTextClearance()
         compose.onAllNodes(hasSetTextAction()).onFirst().performTextInput("zzzz")
         compose.waitForText("No matches")
-        compose.onAllNodes(hasSetTextAction()).onFirst().performTextClearance()
+        // Cleared with its own button, which puts the keyboard away too.
+        compose.clickWhenFound(hasContentDescription("Clear search"))
 
-        // The thumb, once the list moves.
+        // The thumb, once the list moves; held, its bubble says where.
         scrollTo("Test list 3")
         compose.onRoot().performTouchInput { swipeUp(startY = centerY + height * 0.2f, endY = centerY - height * 0.2f) }
         compose.waitUntil(5_000) { compose.onAllNodes(hasContentDescription("Scroll through the list")).fetchSemanticsNodes().isNotEmpty() }
+        val thumb = compose.onAllNodes(hasContentDescription("Scroll through the list")).onFirst()
+        thumb.performTouchInput { down(center); moveBy(androidx.compose.ui.geometry.Offset(0f, 300f)); moveBy(androidx.compose.ui.geometry.Offset(0f, 300f)) }
+        compose.waitForIdle()
         Fixture.screenshot("library-scroller")
-        compose.onAllNodes(hasContentDescription("Scroll through the list")).onFirst().performTouchInput { swipeDown(startY = centerY, endY = centerY + 1500f) }
+        thumb.performTouchInput { up() }
+        compose.waitForIdle()
+        compose.onAllNodes(hasContentDescription("Scroll through the list")).onFirst().performTouchInput { swipeDown(startY = centerY, endY = centerY + 900f) }
         // A long way down in one move, far past where a swipe of the list would land.
         compose.waitUntil(5_000) { (50..100).any { compose.onAllNodes(hasText("Test list $it")).fetchSemanticsNodes().isNotEmpty() } }
     }
