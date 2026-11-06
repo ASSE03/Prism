@@ -6,7 +6,16 @@ What changed in each release. Older releases are described on the [Releases page
 
 ### Faster and lighter
 
+### New
+
+- Immersive mode shows your lyric translation under the lines, as the lyrics page does, with the switch in its menu too (#358)
+
 ### Fixes
+
+- Play next on a song already in your queue moves it up instead of adding a second copy (#368)
+- The queue now lists songs in the order they really play: a song you added to the queue was shown first, but played after the rest of the list, so Next seemed to skip it (#368)
+- Play next, or taking a song out of the queue, just before a crossfade no longer sends the blend to the wrong song or cuts it off (#368)
+- The current lyric, when you move it away from the progress bar, sits midway between its neighbors on the player instead of low down against the next one (#361)
 
 ## 1.8.2
 
