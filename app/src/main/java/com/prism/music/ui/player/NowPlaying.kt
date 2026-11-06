@@ -164,18 +164,35 @@ internal class DeckSpacing(val parts: List<com.prism.music.data.prefs.DeckPart>,
  * buttons row, so the gaps looked uneven): its room, kept so the controls and the cover above stay where they were
  * (1.6.5), is shared evenly between the gaps. [small]: Small over the lyrics or the queue, tight as before.
  * [tight] (#293): over a full-bleed picture that wants the room: a hidden volume bar keeps none, and the gaps are halved.
+ * #361: the current lyric moved anywhere but over the progress bar sits midway between its neighbours.
  */
 internal fun deckSpacing(shown: List<com.prism.music.data.prefs.DeckPart>, volumeShown: Boolean, small: Boolean, tight: Boolean = false): DeckSpacing {
     val volume = com.prism.music.data.prefs.DeckPart.VOLUME
     if (small) return DeckSpacing(shown, List((shown.size - 1).coerceAtLeast(0)) { 2.dp }, 0.dp)
     val hiddenVolume = !volumeShown && volume in shown
     val parts = if (hiddenVolume) shown - volume else shown
-    if (tight) return DeckSpacing(parts, parts.dropLast(1).map { (DECK_GAP_AFTER[it] ?: 8.dp) / 2 }, 0.dp)
+    if (tight) return DeckSpacing(parts, stripBalanced(parts, parts.dropLast(1).map { (DECK_GAP_AFTER[it] ?: 8.dp) / 2 }), 0.dp)
     // The room it had: the bar's own, and the gap under it when something followed.
     val spare = if (!hiddenVolume) 0.dp else VOLUME_ROW_HEIGHT + if (shown.last() != volume) DECK_GAP_AFTER.getValue(volume) else 0.dp
     val gaps = parts.dropLast(1).map { DECK_GAP_AFTER[it] ?: 8.dp }
     if (gaps.isEmpty()) return DeckSpacing(parts, gaps, spare)
-    return DeckSpacing(parts, gaps.map { it + spare / gaps.size }, 0.dp)
+    return DeckSpacing(parts, stripBalanced(parts, gaps.map { it + spare / gaps.size }), 0.dp)
+}
+
+/** Whether the current lyric at [index] of [parts] is in its first place, right over the progress bar, where it hugs the bar. */
+internal fun stripOverScrubber(parts: List<com.prism.music.data.prefs.DeckPart>, index: Int): Boolean =
+    parts.getOrNull(index + 1) == com.prism.music.data.prefs.DeckPart.SCRUBBER
+
+/**
+ * #361: [gaps] with the current lyric's two shared out evenly. Its own gap is none, to hug the progress bar beneath it, so
+ * moved above anything else it stayed against that (1.8.1.1's shared-out room moved it further down still). The deck's
+ * height stays the same, so nothing else moves.
+ */
+private fun stripBalanced(parts: List<com.prism.music.data.prefs.DeckPart>, gaps: List<Dp>): List<Dp> {
+    val at = parts.indexOf(com.prism.music.data.prefs.DeckPart.STRIP)
+    if (at !in 1 until parts.lastIndex || stripOverScrubber(parts, at)) return gaps
+    val even = (gaps[at - 1] + gaps[at]) / 2
+    return gaps.toMutableList().also { it[at - 1] = even; it[at] = even }
 }
 
 /**
@@ -1320,7 +1337,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                             val spacing = deckSpacing(parts, settings.shows(PlayerPart.VOLUME), small, tight = tightDeck)
                             spacing.parts.forEachIndexed { i, part ->
                                 when (part) {
-                                    com.prism.music.data.prefs.DeckPart.STRIP -> CurrentLyricStrip(lyricsState, isPlaying && !covered, openLyrics)
+                                    com.prism.music.data.prefs.DeckPart.STRIP -> CurrentLyricStrip(lyricsState, isPlaying && !covered, overScrubber = stripOverScrubber(spacing.parts, i), onClick = openLyrics)
                                     com.prism.music.data.prefs.DeckPart.SCRUBBER -> PlayheadScrubber(position, pc.duration) {
                                         // Settings → Player → "Stream quality" hides it (the full stats stay in the ⋯ menu).
                                         // In a song's opening seconds the middle offers its best part instead, while it's still ahead.

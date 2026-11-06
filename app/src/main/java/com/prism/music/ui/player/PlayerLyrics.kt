@@ -433,9 +433,12 @@ internal fun List<LyricLine>.activeAt(ms: Long): List<Int> {
     return out
 }
 
-/** Current lyric, one line, directly above the scrubber. */
+/**
+ * Current lyric, one line, directly above the scrubber. [overScrubber] false: the listener moved it elsewhere in the
+ * deck, so it sits in the middle of its room rather than down against what follows it (#361).
+ */
 @Composable
-fun CurrentLyricStrip(state: LyricsState, isPlaying: Boolean, onClick: () -> Unit) {
+fun CurrentLyricStrip(state: LyricsState, isPlaying: Boolean, overScrubber: Boolean = true, onClick: () -> Unit) {
     // Romanized "instead": the strip sings the Latin spelling too (same timings).
     val roman = rememberRomanized(state)
     val instead = romanizeMode(state.song.id) == com.prism.music.data.prefs.RomanizeMode.INSTEAD
@@ -456,7 +459,12 @@ fun CurrentLyricStrip(state: LyricsState, isPlaying: Boolean, onClick: () -> Uni
         val line = baseStyle.lineHeight.takeIf { it.isSp } ?: (baseStyle.fontSize * 1.35f)
         Modifier.heightIn(min = with(density) { line.toDp() } * rows + 8.dp)
     } else Modifier
-    Box(Modifier.fillMaxWidth().then(room).offset(y = 6.dp), contentAlignment = if (centered) Alignment.BottomCenter else Alignment.BottomStart) {
+    val place = when {
+        !overScrubber -> if (centered) Alignment.Center else Alignment.CenterStart
+        centered -> Alignment.BottomCenter
+        else -> Alignment.BottomStart
+    }
+    Box(Modifier.fillMaxWidth().then(room).offset(y = if (overScrubber) 6.dp else 0.dp), contentAlignment = place) {
         when {
             // A podcast episode has no lyrics to look for: the line keeps its room, empty.
             state.song.isEpisode -> Text(" ", style = baseStyle, modifier = Modifier.padding(vertical = 4.dp))
@@ -922,6 +930,55 @@ fun defaultTranslateTarget(): String {
     }
 }
 
+/**
+ * The song's lines in the listener's language (lined up with [LyricsState.lines]), with the lyrics page's translation
+ * turned on; null until it's in, or with it off. The lyrics page and Immersive mode (#358) both show it.
+ */
+@Composable
+internal fun rememberLyricTranslation(state: LyricsState): com.prism.music.data.lyrics.LyricsTranslator.Translation? {
+    val c = LocalContainer.current
+    val settings by c.settings.flow.collectAsState()
+    val lines = state.lines
+    val translateTo = settings.lyricsTranslateTo.ifBlank { defaultTranslateTarget() }
+    var translation by remember(lines, settings.lyricsTranslate, translateTo) { mutableStateOf<com.prism.music.data.lyrics.LyricsTranslator.Translation?>(null) }
+    val translateContext = androidx.compose.ui.platform.LocalContext.current
+    LaunchedEffect(lines, settings.lyricsTranslate, translateTo) {
+        if (!settings.lyricsTranslate || lines.isEmpty()) return@LaunchedEffect
+        val texts = lines.map { l -> if (l.isGap || (l.text.startsWith("[") && l.text.endsWith("]"))) "" else l.text }
+        // Asked again while the lyrics stay open when Google isn't answering (#198), instead of showing nothing for good.
+        for (attempt in 0 until TRANSLATE_TRIES) {
+            val result = try {
+                c.translator.translate(texts, translateTo)
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                android.util.Log.w("PrismLyrics", "Couldn't translate the lyrics: $e")
+                com.prism.music.playback.AudioDiagnostics.log("translate", "couldn't translate ${state.song.id}: $e")
+                if (e is com.prism.music.data.lyrics.LyricsTranslator.Unavailable) TranslateNotice.show(translateContext)
+                val wait = (e as? com.prism.music.data.lyrics.LyricsTranslator.Unavailable)?.retryAtMs?.minus(System.currentTimeMillis())
+                kotlinx.coroutines.delay((wait ?: (20_000L shl attempt)).coerceIn(15_000L, 10 * 60_000L))
+                continue
+            }
+            translation = result
+            break
+        }
+    }
+    return translation
+}
+
+/** The language lyrics are translated into, by name in the phone's own. */
+internal fun translateTargetName(settings: com.prism.music.data.prefs.AppSettings): String =
+    settings.lyricsTranslateTo.ifBlank { defaultTranslateTarget() }.let { tag ->
+        java.util.Locale.forLanguageTag(tag).getDisplayLanguage(java.util.Locale.getDefault()).ifBlank { tag }
+    }
+
+/**
+ * What [translation] has to show under the line at [index] reading [text]: nothing for a song already in that language,
+ * a line with no translation, or one that comes back the same.
+ */
+internal fun translatedLine(translation: com.prism.music.data.lyrics.LyricsTranslator.Translation?, index: Int, text: String): String? =
+    translation?.takeUnless { it.sameLanguage }?.translations?.getOrNull(index)?.takeUnless { it.equals(text.trim(), ignoreCase = true) }
+
 /** Full lyrics inside the player: big tight type, the sung line crisp, the rest falling out of focus. */
 @Composable
 fun LyricsPanel(
@@ -990,31 +1047,7 @@ fun LyricsPanel(
     controlsOnScroll.threshold = if (steady) with(androidx.compose.ui.platform.LocalDensity.current) { 56.dp.toPx() } else 40f
 
     // A translation under each line, when it's turned on and the song isn't already in that language.
-    val translateTo = settings.lyricsTranslateTo.ifBlank { defaultTranslateTarget() }
-    var translation by remember(lines, settings.lyricsTranslate, translateTo) { mutableStateOf<com.prism.music.data.lyrics.LyricsTranslator.Translation?>(null) }
-    val translateContext = androidx.compose.ui.platform.LocalContext.current
-    LaunchedEffect(lines, settings.lyricsTranslate, translateTo) {
-        if (!settings.lyricsTranslate || lines.isEmpty()) return@LaunchedEffect
-        val texts = lines.map { l -> if (l.isGap || (l.text.startsWith("[") && l.text.endsWith("]"))) "" else l.text }
-        // Asked again while the lyrics stay open when Google isn't answering (#198), instead of showing nothing for good.
-        for (attempt in 0 until TRANSLATE_TRIES) {
-            val result = try {
-                c.translator.translate(texts, translateTo)
-            } catch (e: kotlinx.coroutines.CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                android.util.Log.w("PrismLyrics", "Couldn't translate the lyrics: $e")
-                com.prism.music.playback.AudioDiagnostics.log("translate", "couldn't translate ${state.song.id}: $e")
-                if (e is com.prism.music.data.lyrics.LyricsTranslator.Unavailable) TranslateNotice.show(translateContext)
-                val wait = (e as? com.prism.music.data.lyrics.LyricsTranslator.Unavailable)?.retryAtMs?.minus(System.currentTimeMillis())
-                kotlinx.coroutines.delay((wait ?: (20_000L shl attempt)).coerceIn(15_000L, 10 * 60_000L))
-                continue
-            }
-            translation = result
-            break
-        }
-    }
-    val translations = translation?.takeUnless { it.sameLanguage }?.translations
+    val translation = rememberLyricTranslation(state)
     // Turned on for a song already in that language, nothing changes: say why, once, right after it's turned on.
     val context = androidx.compose.ui.platform.LocalContext.current
     var translateWasOn by remember { mutableStateOf(settings.lyricsTranslate) }
@@ -1151,7 +1184,7 @@ fun LyricsPanel(
                 val extraAlpha = if (isActive) 0.8f else lineAlpha * 0.8f
                 val textAlign = if (rtl && !centred) TextAlign.End else style.textAlign
                 // A translation, as the look sets it.
-                val translated = translations?.getOrNull(index)?.takeUnless { it.equals(line.text.trim(), ignoreCase = true) }
+                val translated = translatedLine(translation, index, line.text)
                 val translationLine = @Composable { padTop: Boolean ->
                     translated?.let { t ->
                         Text(
