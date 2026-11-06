@@ -7,6 +7,7 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import com.prism.music.data.innertube.InnerTube
 import com.prism.music.data.innertube.arr
+import com.prism.music.data.innertube.describePlayerAnswer
 import com.prism.music.data.innertube.obj
 import com.prism.music.data.innertube.str
 import com.prism.music.data.prefs.AudioQuality
@@ -374,6 +375,10 @@ class StreamResolver(
         val hlsUrl: String? = null,
         /** Which way it was asked for (NewPipe, visionOS, or the account's client), for the diagnostics. */
         val via: String = "",
+        /** The account's client it came from, when it did. */
+        val client: InnerTube.PlayerClient? = null,
+        /** YouTube says it's a music video or an upload, which never has Premium's formats. */
+        val notASong: Boolean = false,
     )
 
     private val solver = PlayerJsSolver(context, http)
@@ -466,7 +471,8 @@ class StreamResolver(
 
     private fun account() = settings.current.let { "${it.cookie.hashCode()}/${it.authUser}" }
 
-    private fun formats(videoId: String): Formats {
+    /** [forVideo]: looked up for its picture (a music video), which never has Premium's formats ([load]). */
+    private fun formats(videoId: String, forVideo: Boolean = false): Formats {
         // An episode from a feed is no YouTube video, and its id never goes there (everything asked of YouTube comes
         // through here). It plays through AppContainer's own route; a prefetch or a scan asking for it just gets nothing.
         if (videoId.startsWith(com.prism.music.data.model.Song.RSS_PREFIX)) throw StreamException(tr(R.string.no_playable_audio_stream_was_found))
@@ -483,11 +489,11 @@ class StreamResolver(
         }
         try {
             val started = System.nanoTime()
-            val f = load(videoId)
+            val f = load(videoId, forVideo)
             refusedNow -= videoId
             val took = (System.nanoTime() - started) / 1_000_000
             Log.i("PrismStream", "$videoId resolved via ${f.via} in $took ms")
-            runCatching { com.prism.music.playback.AudioDiagnostics.log("stream", "$videoId resolved via ${f.via} in $took ms") }
+            runCatching { com.prism.music.playback.AudioDiagnostics.log("stream", "$videoId resolved via ${f.via} in $took ms (audio ${f.audio.joinToString(",") { it.itag.toString() }})") }
             cache[videoId] = f
             mine.complete(f)
             return f
@@ -516,25 +522,74 @@ class StreamResolver(
      */
     private fun premiumFormats(videoId: String): Formats? {
         val s = settings.current
-        if (!s.premiumStream || !s.isLoggedIn || !premiumBackoff.asking()) return null
-        if (s.dataSaver && isMetered()) return null
-        val f = runCatching { signedInFormats(videoId) }.getOrNull() ?: return null
+        val metered = isMetered()
+        // A change of network starts afresh: the same account was answered both ways within a day (#373's log).
+        premiumBackoff.onNetwork(metered)
+        val skip = premiumSkip(s.premiumStream, s.isLoggedIn, s.dataSaver, metered, premiumBackoff.minutesPaused())
+        if (skip != null) { notePremiumSkip(skip); return null }
+        notePremiumSkip(null)
+        // The first ask after a pause (and at the start) goes on to the account's other clients when the first has
+        // links but no Premium formats: "first with links wins" would hide that another one has them.
+        val walk = premiumBackoff.walkNow()
+        val answers = ArrayList<String>()
+        val f = try {
+            signedInFormats(videoId, AccountClients.order(premiumClient), if (walk) { fs -> fs.audio.any { it.itag in PREMIUM_ITAGS } } else null, answers)
+        } catch (e: Exception) {
+            premiumLog("$videoId: couldn't ask (${e.message?.take(120)}). ${answers.joinToString("; ")}")
+            return null
+        }
         if (f.live) return f
         val premium = f.audio.filter { it.itag in PREMIUM_ITAGS }
         if (premium.isEmpty()) {
-            if (f.audio.isNotEmpty() && premiumBackoff.missed()) Log.i("PrismStream", "No Premium formats ${PremiumBackoff.MISSES_TO_PAUSE} times in a row: not asking for an hour")
-            Log.i("PrismStream", "$videoId: no Premium formats for this account (${f.audio.map { it.itag }})")
+            val counted = f.audio.isNotEmpty() && !f.notASong
+            premiumLog("$videoId: no 256 kbps${if (counted) "" else " (not counted: not a song)"}. ${answers.joinToString("; ")}")
+            if (counted) {
+                premiumState.value = PremiumState.MISSING
+                if (premiumBackoff.missed(premiumSeenHere())) premiumLog("${PremiumBackoff.MISSES_TO_PAUSE} songs in a row without 256 kbps: not asking for ${premiumBackoff.minutesPaused()} min")
+            }
             return null
         }
         premiumBackoff.found()
-        Log.i("PrismStream", "$videoId resolved as the account (Premium formats ${premium.map { it.itag }})")
+        premiumClient = f.client
+        premiumState.value = PremiumState.GETTING
+        premiumPrefs.edit().putString(SEEN_FOR, account()).apply()
+        premiumLog("$videoId: 256 kbps (${premium.joinToString(",") { it.itag.toString() }}) from ${f.client?.name}")
         return f
     }
 
-    private fun load(videoId: String): Formats {
+    /** Whether the listener is getting Premium's 256 kbps, as far as the last songs asked can say (Settings shows it). */
+    enum class PremiumState { NOT_KNOWN, GETTING, MISSING }
+    val premiumState = kotlinx.coroutines.flow.MutableStateFlow(PremiumState.NOT_KNOWN)
+
+    /** The client that last had Premium's formats: asked first from then on. */
+    @Volatile private var premiumClient: InnerTube.PlayerClient? = null
+    private val premiumPrefs by lazy { context.getSharedPreferences("premium_quality", Context.MODE_PRIVATE) }
+
+    /** This sign-in has had Premium's formats on this phone: a run of songs without them doesn't mean it isn't Premium. */
+    private fun premiumSeenHere() = premiumPrefs.getString(SEEN_FOR, null) == account()
+
+    @Volatile private var lastPremiumSkip: String? = null
+
+    private fun notePremiumSkip(why: String?) {
+        // One line when the reason changes; a paused ask's minutes aren't a change.
+        val key = why?.substringBefore(" (")
+        if (key == lastPremiumSkip) return
+        lastPremiumSkip = key
+        if (why != null) premiumLog("not asked: $why")
+    }
+
+    private fun premiumLog(line: String) {
+        Log.i("PrismStream", "Premium quality: $line")
+        runCatching { com.prism.music.playback.AudioDiagnostics.log("premium", line) }
+    }
+
+    private fun load(videoId: String, forVideo: Boolean = false): Formats {
         val signedIn = settings.current.isLoggedIn
         if (signedIn && videoId in needsAccount) return signedInFormats(videoId)
-        if (videoId !in accountRefused) premiumFormats(videoId)?.let { return it }
+        // A music video looked up for its picture or its length (each song's, ahead of time) never has Premium's formats:
+        // its ask slowed it down for nothing and counted as a miss, so that songs in the cache with videos asked for
+        // around them paused Premium for the next hour.
+        if (!forVideo && videoId !in accountRefused) premiumFormats(videoId)?.let { return it }
         // While YouTube is blocking NewPipe here, signed-in playback goes straight to the account's own clients
         // (each song would otherwise wait for NewPipe to be refused first).
         if (signedIn && System.currentTimeMillis() < newPipeBlockedUntil) {
@@ -651,11 +706,21 @@ class StreamResolver(
         fun retries(client: InnerTube.PlayerClient): Int =
             if (client == InnerTube.PlayerClient.TV_SAMSUNG || client == InnerTube.PlayerClient.TV_OLD) 1 else 0
 
+        /** [order] with [first] (the one that last had what's wanted) at its head. */
+        fun order(first: InnerTube.PlayerClient?): List<InnerTube.PlayerClient> =
+            if (first == null) order else listOf(first) + order.filter { it != first }
+
         const val RETRY_PAUSE_MS = 300L
     }
 
-    /** The player response as the signed-in user: [AccountClients.order], the first with links wins. */
-    private fun signedInFormats(videoId: String): Formats {
+    /**
+     * The player response as the signed-in user: [order], the first with links wins. With [wanted], the first with links
+     * that it likes wins, else the first with links. What each client answered goes in [answers], with no links in it.
+     */
+    private fun signedInFormats(
+        videoId: String, order: List<InnerTube.PlayerClient> = AccountClients.order,
+        wanted: ((Formats) -> Boolean)? = null, answers: MutableList<String>? = null,
+    ): Formats {
         val player = try {
             solver.currentPlayer()
         } catch (e: Exception) {
@@ -667,7 +732,9 @@ class StreamResolver(
         var liveWithoutHls: Formats? = null
         // Each client said UNPLAYABLE (not a failed request, nor an answer another moment could change).
         var allRefused = true
-        for (client in AccountClients.order) {
+        var firstWithLinks: Formats? = null
+        if (player == null) answers?.add("no player JS, so no signature timestamp")
+        for (client in order) {
             val res = try {
                 var answer = innerTube.signedInPlayer(client, videoId, player?.second)
                 // "The page needs to be reloaded" (GitHub #260) is often gone on the next ask.
@@ -680,21 +747,30 @@ class StreamResolver(
             } catch (e: Exception) {
                 allRefused = false
                 reason = reason ?: e.message
-                noteClient(client, "request failed: ${e.message}")
+                noteClient(videoId, client, "request failed: ${e.message}")
+                answers?.add("${client.name}: request failed")
                 continue
             }
             val status = res.str("playabilityStatus", "status")
             if (status != "UNPLAYABLE") allRefused = false
             if (status != "OK") {
                 reason = res.str("playabilityStatus", "reason") ?: reason
-                noteClient(client, "$status (${res.str("playabilityStatus", "reason")})")
+                noteClient(videoId, client, "$status (${res.str("playabilityStatus", "reason")})")
+                answers?.add("${client.name}: $status")
                 continue
             }
-            val f = parsePlayer(res, player?.first, via = "account (${client.name})")
+            val f = parsePlayer(res, player?.first, via = "account (${client.name})", client = client)
             if (f.live && f.hlsUrl == null) { liveWithoutHls = liveWithoutHls ?: f; continue }
-            if (f.audio.isNotEmpty() || (f.live && f.hlsUrl != null)) return f
-            noteClient(client, "OK but no audio links (${linkless(res)})")
+            answers?.add("${client.name}: ${describePlayerAnswer(res)}")
+            if (f.live && f.hlsUrl != null) return f
+            if (f.audio.isNotEmpty()) {
+                if (wanted == null || wanted(f)) return f
+                firstWithLinks = firstWithLinks ?: f
+                continue
+            }
+            noteClient(videoId, client, "OK but no audio links (${linkless(res)})")
         }
+        firstWithLinks?.let { return it }
         liveWithoutHls?.let { return it }
         if (allRefused) refusedNow += videoId
         throw StreamException(reason ?: tr(R.string.couldn_t_load_this_track))
@@ -703,10 +779,11 @@ class StreamResolver(
     /**
      * Why one of the account's clients gave nothing, into the diagnostics once per client and answer (GitHub #188,
      * #192: every account song came from the web client, whose links YouTube cuts off after the first megabyte without
-     * a PO token, while the TV client, which needs none, never answered; the logs couldn't say why).
+     * a PO token, while the TV client, which needs none, never answered; the logs couldn't say why). It names the song:
+     * #372's log couldn't say which song it was about (one that isn't on YouTube any more, a download tried at each start).
      */
-    private fun noteClient(client: InnerTube.PlayerClient, what: String) {
-        val line = "${client.name}: ${what.take(160)}"
+    private fun noteClient(videoId: String, client: InnerTube.PlayerClient, what: String) {
+        val line = "$videoId, ${client.name}: ${what.take(160)}"
         if (clientNotes.add(line)) {
             Log.i("PrismStream", "account client $line")
             runCatching { com.prism.music.playback.AudioDiagnostics.log("stream", "account client $line") }
@@ -726,33 +803,63 @@ class StreamResolver(
 
     /**
      * Premium quality's pause: answers without Premium formats are counted in a row, and only [MISSES_TO_PAUSE] of them
-     * (not a Premium account, most likely) pause asking for [PAUSE_MS]. A Premium answer starts the count again.
+     * (not a Premium account, most likely) pause asking for [PAUSE_MS]; for [KNOWN_PAUSE_MS] when this sign-in has had
+     * them before, since then it's YouTube's answer that changed (#373: the same songs came both ways on one day, and
+     * the hour's pause then hid every song after three misses). A Premium answer starts the count again. So does a
+     * change of network ([onNetwork]).
      */
     internal class PremiumBackoff(private val now: () -> Long = System::currentTimeMillis) {
         private var misses = 0
         private var pausedUntil = 0L
+        private var walked = false
+        private var metered: Boolean? = null
 
         @Synchronized fun asking(): Boolean = now() >= pausedUntil
 
-        /** One answer without Premium formats; true when it starts a pause. */
-        @Synchronized fun missed(): Boolean {
+        /** Minutes left of the pause, 0 when asking (a part of a minute counts as one). */
+        @Synchronized fun minutesPaused(): Int = ((pausedUntil - now()).coerceAtLeast(0) + 59_999).div(60_000).toInt()
+
+        /** One answer without Premium formats; true when it starts a pause. [known]: this sign-in has had them before. */
+        @Synchronized fun missed(known: Boolean = false): Boolean {
             if (++misses < MISSES_TO_PAUSE) return false
             misses = 0
-            pausedUntil = now() + PAUSE_MS
+            walked = false
+            pausedUntil = now() + if (known) KNOWN_PAUSE_MS else PAUSE_MS
             return true
         }
 
         @Synchronized fun found() { misses = 0 }
 
+        /** Whether this ask should go through all the account's clients: the first since the start or a pause. */
+        @Synchronized fun walkNow(): Boolean = !walked.also { walked = true }
+
+        /** The network now; a change from the one last seen ends the pause. */
+        @Synchronized fun onNetwork(isMetered: Boolean) {
+            if (metered != null && metered != isMetered) { misses = 0; pausedUntil = 0; walked = false }
+            metered = isMetered
+        }
+
         companion object {
             const val MISSES_TO_PAUSE = 3
             const val PAUSE_MS = 60 * 60_000L
+            const val KNOWN_PAUSE_MS = 10 * 60_000L
         }
     }
 
     companion object {
         /** YouTube Music Premium's 256 kbps audio: AAC (141) and Opus (774). */
         val PREMIUM_ITAGS = setOf(141, 774)
+        private const val SEEN_FOR = "seen_for"
+
+        /** Why Premium's formats won't be asked for now, for the diagnostics; null: they will. */
+        internal fun premiumSkip(on: Boolean, signedIn: Boolean, dataSaver: Boolean, metered: Boolean, pausedMinutes: Int): String? = when {
+            !on -> "Premium quality is off"
+            !signedIn -> "signed out"
+            dataSaver && metered -> "Data saver on a metered network"
+            pausedMinutes > 0 -> "paused after songs without 256 kbps ($pausedMinutes min left)"
+            else -> null
+        }
+
         private const val BLOCK_BACKOFF_MS = 30 * 60_000L
         val BLOCKED: String get() = com.prism.music.tr(com.prism.music.R.string.youtube_is_limiting_playback)
 
@@ -768,7 +875,7 @@ class StreamResolver(
     }
 
     /** [playerId] is the player JS whose signature timestamp the request sent; its ciphers are solved with it. */
-    private fun parsePlayer(res: JsonObject, playerId: String?, via: String = "visionOS"): Formats {
+    private fun parsePlayer(res: JsonObject, playerId: String?, via: String = "visionOS", client: InnerTube.PlayerClient? = null): Formats {
         val data = res.obj("streamingData")
         fun fmt(o: JsonObject): Fmt? {
             if (isProtected(o)) return null
@@ -808,11 +915,13 @@ class StreamResolver(
             ),
             hlsUrl = data.str("hlsManifestUrl"),
             via = via,
+            client = client,
+            notASong = res.str("videoDetails", "musicVideoType").let { it != null && it != "MUSIC_VIDEO_TYPE_ATV" },
         )
     }
 
     /** [videoId]'s length in seconds as YouTube gives it (resolving it if it hasn't been), 0 when unknown. Blocking. */
-    fun durationSec(videoId: String): Long = formats(versionOf(videoId) ?: videoId).durationSec
+    fun durationSec(videoId: String, video: Boolean = false): Long = formats(versionOf(videoId) ?: videoId, forVideo = video).durationSec
 
     /** Whether [videoId] is a live stream (resolving it if it hasn't been). Blocking. */
     fun isLive(videoId: String): Boolean = formats(videoId).live
@@ -874,8 +983,8 @@ class StreamResolver(
     data class AnalysisStream(val url: String, val contentLength: Long, val durationSec: Long)
 
     /** The smallest audio stream (AAC preferred, which decodes from a partial file), for analysis. */
-    fun analysisAudio(videoId: String): AnalysisStream {
-        val f = formats(versionOf(videoId) ?: videoId)
+    fun analysisAudio(videoId: String, video: Boolean = false): AnalysisStream {
+        val f = formats(versionOf(videoId) ?: videoId, forVideo = video)
         val usable = f.audio.filter { it.original }.ifEmpty { f.audio }
         val pick = usable.filter { it.mime.contains("mp4") }.minByOrNull { it.kbps }
             ?: usable.minByOrNull { it.kbps } ?: throw StreamException(tr(R.string.no_audio_stream))
@@ -898,7 +1007,7 @@ class StreamResolver(
     fun resolve(songId: String, withVideo: Boolean = false): ResolvedStream {
         // A picked version's sound plays under the song's own key (a song's video keeps its own picture).
         val videoId = if (withVideo) songId else versionOf(songId) ?: songId
-        val f = formats(videoId)
+        val f = formats(videoId, forVideo = withVideo)
         // A live stream's "file" is only its newest few seconds: the player has to take it as HLS instead.
         if (f.live) throw LiveStreamException(videoId)
         val audio = pickAudio(f.audio, currentQuality())

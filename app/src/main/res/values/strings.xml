@@ -4896,6 +4896,11 @@
     <string name="glass_frost_info">How thick the veil over the glass is: less lets more of what\'s behind it through, more makes it milkier in light mode and darker in dark mode, and easier to read over busy pictures. 100% is Prism\'s own. A tab bar with its own background (Layout, Tab bar) keeps that background instead.</string>
     <string name="glass_needs_android_12">These need the blur that came with Android 12. On this phone the bars are solid, so there\'s nothing for a blur or frost setting to change.</string>
     <string name="glass_on_more_of_the_screen">Glass on more of the screen</string>
+    <string name="speed_dial_your_plays_first">Speed dial: your plays first</string>
+    <string name="speed_dial_your_plays_first_sub">Tiles that change as you listen</string>
+    <string name="speed_dial_your_plays_first_info">YouTube sends Prism its website\'s tiles, which aren\'t the ones in its app and don\'t always follow what you play. On, what you\'ve played most on this phone in the last three months comes first, and YouTube\'s fill in after them.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube no longer takes this sign-in. Sign out and in again.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube isn\'t sending this account 256 kbps right now, so songs play at the usual quality</string>
     <string name="glass_on_more_of_the_screen_detail">Cards, chips, round buttons and the Undo bar</string>
     <string name="glass_on_more_of_the_screen_info">Cards and settings panels get a light falling on them and a brighter edge, chips and round buttons a brighter edge, and Frost reaches them all. They use no live blur, so they cost next to nothing, and they show on pages with a background behind them. The Undo bar is real glass while it\'s up. Performance mode turns this off. More places may follow.</string>
 </resources>

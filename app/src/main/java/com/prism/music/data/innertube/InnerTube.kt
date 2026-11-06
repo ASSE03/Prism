@@ -258,8 +258,21 @@ class InnerTube(
                 val msg = runCatching { json.parseToJsonElement(text).str("error", "message") }.getOrNull()
                 throw InnerTubeException(msg ?: "YouTube Music returned HTTP ${resp.code}", resp.code)
             }
-            json.parseToJsonElement(text).jsonObject
+            json.parseToJsonElement(text).jsonObject.also { if (!anonymous && current.isLoggedIn) noteSeen(it) }
         }
+    }
+
+    /**
+     * YouTube's own word on the last signed-in request: taken as the account or not (#372, #373, #377). Null until an
+     * answer says. Settings tells the listener when it's no, so they aren't silently treated as signed out.
+     */
+    val seen = kotlinx.coroutines.flow.MutableStateFlow<YouTubeSeen?>(null)
+
+    private fun noteSeen(answer: JsonObject) {
+        val now = YouTubeSeen.of(answer)
+        if (now.signedIn == null || now == seen.value) return
+        seen.value = now
+        runCatching { com.prism.music.playback.AudioDiagnostics.log("account", "YouTube takes Prism's requests as: ${now.text}") }
     }
 
     /**

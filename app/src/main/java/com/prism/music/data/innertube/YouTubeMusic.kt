@@ -128,18 +128,22 @@ class YouTubeMusic(
     /** [fullHome], with the pages as YouTube sent them (Home keeps those to show straight away at the next start, #126). */
     suspend fun fullHomePages(
         pages: Int = 3, maxPages: Int = pages, satisfied: (List<Shelf>) -> Boolean = { true },
+        /** Each page's shelves as they come (#371: Quick picks needn't wait for the pages after theirs). */
+        onPage: (List<Shelf>) -> Unit = {},
     ): Pair<List<Shelf>, List<JsonObject>> {
         val all = mutableListOf<Shelf>()
         val raw = mutableListOf<JsonObject>()
         var res = browse("FEmusic_home")
         raw += res
         all += Parser.shelves(res)
+        onPage(all)
         var next = Parser.continuation(res.obj("continuationContents") ?: res.obj("contents"))
         var n = 1
         while (next != null && (n < pages || (n < maxPages && !satisfied(all)))) {
             res = runCatching { continueBrowse(next!!) }.getOrNull() ?: break
             raw += res
             all += Parser.shelves(res)
+            onPage(all)
             next = Parser.continuation(res.obj("continuationContents") ?: res.obj("contents"))
             n++
         }
@@ -748,9 +752,13 @@ class YouTubeMusic(
             loudnessDb = res.str("playerConfig", "audioConfig", "loudnessDb")?.toDoubleOrNull(),
             trackingUrl = res.str("playbackTracking", "videostatsPlaybackUrl", "baseUrl"),
             watchtimeUrl = res.str("playbackTracking", "videostatsWatchtimeUrl", "baseUrl"),
+            seen = YouTubeSeen.of(res).text,
         ).also {
-            if (it.trackingUrl == null) android.util.Log.w("PrismHistory", "no tracking URL for $videoId: " +
-                "${res.str("playabilityStatus", "status")} ${res.str("playabilityStatus", "reason")} (sts $signatureTimestamp)")
+            if (it.trackingUrl == null) {
+                val why = "no tracking URL: ${res.str("playabilityStatus", "status")} ${res.str("playabilityStatus", "reason")} (signature timestamp ${if (signatureTimestamp != null) "known" else "NOT known"}), ${it.seen}"
+                android.util.Log.w("PrismHistory", "$videoId: $why")
+                com.prism.music.playback.AudioDiagnostics.log("history", "$videoId: not sent: $why")
+            }
         }
     }
 
@@ -758,12 +766,14 @@ class YouTubeMusic(
      * Registers a play in the user's YouTube Music history so recommendations stay in sync. Whether YouTube took it
      * (a 2xx answer): no tracking URL, no answer or a refusal is false.
      */
-    suspend fun registerPlayback(extras: PlayerExtras): Boolean {
+    suspend fun registerPlayback(extras: PlayerExtras, songId: String = "?"): Boolean {
         val base = extras.trackingUrl ?: return false
         val cpn = (1..16).map { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_".random() }.joinToString("")
         val sep = if (base.contains("?")) "&" else "?"
         val code = api.ping("$base${sep}ver=2&c=WEB_REMIX&cver=${api.clientVersion}&cpn=$cpn")
         android.util.Log.i("PrismHistory", "play sent to YouTube Music: HTTP $code")
+        // #377: a 204 taken for a request that isn't the account's would still not be in its history; so it says both.
+        com.prism.music.playback.AudioDiagnostics.log("history", "$songId: sent, YouTube answered ${code?.let { "HTTP $it" } ?: "nothing (no connection?)"}; ${extras.seen ?: "not said if signed in"}")
         return code != null && code in 200..299
     }
 

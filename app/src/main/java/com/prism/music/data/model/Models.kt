@@ -341,6 +341,8 @@ data class PlayerExtras(
     val loudnessDb: Double?,
     val trackingUrl: String?,
     val watchtimeUrl: String?,
+    /** How YouTube took the request, for the diagnostics ([com.prism.music.data.innertube.YouTubeSeen]). */
+    val seen: String? = null,
 )
 
 /** Rewrites a YouTube / Google image URL to request a given square size. */

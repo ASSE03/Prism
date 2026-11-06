@@ -1135,7 +1135,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 val video = videoIdFor(song).id?.takeIf { it != id }
                 // Only a video of the same length: one with a long intro or a second song in it (Reddit R1, "Death &
                 // Romance" as its 8-minute video) would play something else under this song's title and lyrics.
-                val videoSec = video?.let { v -> withContext(Dispatchers.IO) { runCatching { c.streams.durationSec(v) }.getOrDefault(0L) } } ?: 0L
+                val videoSec = video?.let { v -> withContext(Dispatchers.IO) { runCatching { c.streams.durationSec(v, video = true) }.getOrDefault(0L) } } ?: 0L
                 // The video must resolve too (offline or blocked, it wouldn't play either, and it'd stay swapped in).
                 val fits = videoSec > 0 && (song.durationSec <= 0 || kotlin.math.abs(videoSec - song.durationSec) <= SOUND_FROM_SLACK_SEC)
                 if (player.currentMediaItemIndex != idx || player.currentMediaItem?.mediaId != id) return@launch
@@ -1318,7 +1318,12 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // A file on the phone (or an episode from its own feed) has nothing on YouTube to fetch or report.
         if (song.isLocal || song.isRss) return
         extrasJob = scope.launch {
-            val ex = runCatching { withContext(Dispatchers.IO) { c.ytm.playerExtras(song.id, c.streams.signatureTimestamp()) } }.getOrNull()
+            val asked = runCatching { withContext(Dispatchers.IO) { c.ytm.playerExtras(song.id, c.streams.signatureTimestamp()) } }
+            val ex = asked.getOrNull()
+            // #377: where a play's way to the account's history ends, for a diagnostics log.
+            if (ex == null && c.settings.current.isLoggedIn && asked.exceptionOrNull() !is kotlinx.coroutines.CancellationException) {
+                AudioDiagnostics.log("history", "${song.id}: not sent: couldn't ask YouTube (${asked.exceptionOrNull()?.message?.take(120)})")
+            }
             ex?.loudnessDb?.toFloat()?.let { loud ->
                 c.loudness.edit().putFloat(song.id, loud).apply()
                 // Only while the song is just starting: later, the volume jumping mid-song is worse than a figure
@@ -1331,9 +1336,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 val after = com.prism.music.data.PlayCount.accountAfterMs(c.settings.current.behavior)
                 if (after > 0) while (trackedSong?.id == song.id && heardMs() < after) delay(500)
                 // #296: nothing goes to the account's history while history is paused.
+                if (com.prism.music.data.HistoryPause.paused(c.settings.current.behavior)) AudioDiagnostics.log("history", "${song.id}: not sent: history is paused in Prism")
                 if (trackedSong?.id == song.id && !com.prism.music.data.HistoryPause.paused(c.settings.current.behavior)) {
                     withContext(Dispatchers.IO) {
-                        val sent = runCatching { c.ytm.registerPlayback(ex) }.getOrDefault(false)
+                        val sent = runCatching { c.ytm.registerPlayback(ex, song.id) }.getOrDefault(false)
                         // YouTube Music (live) then knows this one at the top of the account's history as Prism's own
                         // (only when YouTube took it: else a play elsewhere would be taken for Prism's).
                         if (sent) runCatching { com.prism.music.data.imports.YouTubeLive.noteSent(c.app, song.id, com.prism.music.data.imports.YouTubeLive.keyOf(song)) }

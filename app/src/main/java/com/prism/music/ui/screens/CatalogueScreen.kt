@@ -210,6 +210,11 @@ private fun CataloguePage(bottomPadding: Dp) {
                     tr(R.string.speed_dial_youtube_music_s_only), tr(R.string.without_the_albums_and_songs_prism), settings.speedDialYouTubeOnly,
                     info = tr(R.string.speed_dial_starts_with_youtube_music) + " " + tr(R.string.speed_dial_only_short_page),
                 ) { c.settings.setSpeedDialYouTubeOnly(it) }
+                // #372: tiles that change as you listen. Under "YouTube Music's only" there are none of yours to put first.
+                if (!settings.speedDialYouTubeOnly) Toggle(
+                    tr(R.string.speed_dial_your_plays_first), tr(R.string.speed_dial_your_plays_first_sub), settings.behavior.speedDialYoursFirst,
+                    info = tr(R.string.speed_dial_your_plays_first_info),
+                ) { c.settings.setSpeedDialYoursFirst(it) }
                 Toggle(tr(R.string.customize_button_on_home), null, settings.homeCustomizeButton) { c.settings.setHomeCustomizeButton(it) }
             }
         }

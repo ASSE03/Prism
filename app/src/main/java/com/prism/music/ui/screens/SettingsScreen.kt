@@ -688,6 +688,12 @@ private fun AccountCard() {
             Icon(PrismIcons.Add, null, Modifier.size(18.dp), tint = ink); Spacer(Modifier.width(6.dp)); Text(tr(R.string.add_a_google_account), color = ink)
         }
     }
+    // #372, #373, #377: YouTube's own answers say it isn't taking Prism's requests as this account.
+    val accountSeen by c.innerTube.seen.collectAsState()
+    if (s.isLoggedIn && accountSeen?.signedIn == false) Text(
+        tr(R.string.youtube_no_longer_takes_this_sign_in), Modifier.padding(start = 20.dp, end = 20.dp, bottom = 12.dp),
+        style = MaterialTheme.typography.bodySmall, color = ink,
+    )
     }
 }
 
@@ -2048,10 +2054,22 @@ private fun SoundPage() {
                 Chips(AudioQuality.entries, s.cellularQuality, { it.label }) { prefs.setCellularQuality(it) }
             }
             // Reddit 1.7: "am I getting the quality Premium offers?"
-            if (s.isLoggedIn) Toggle(
-                tr(R.string.premium_quality), tr(R.string.t_256_kbps_with_youtube_music_premium), s.premiumStream,
-                info = tr(R.string.prism_normally_fetches_songs_without_your),
-            ) { prefs.setPremiumStream(it) }
+            if (s.isLoggedIn) {
+                // #373: said plainly when YouTube isn't sending it, rather than songs just playing at the usual quality.
+                val premium by c.streams.premiumState.collectAsState()
+                val seen by c.innerTube.seen.collectAsState()
+                Toggle(
+                    tr(R.string.premium_quality),
+                    when {
+                        !s.premiumStream -> tr(R.string.t_256_kbps_with_youtube_music_premium)
+                        seen?.signedIn == false -> tr(R.string.youtube_no_longer_takes_this_sign_in)
+                        premium == com.prism.music.data.stream.StreamResolver.PremiumState.MISSING -> tr(R.string.youtube_isnt_sending_256_kbps)
+                        else -> tr(R.string.t_256_kbps_with_youtube_music_premium)
+                    },
+                    s.premiumStream,
+                    info = tr(R.string.prism_normally_fetches_songs_without_your),
+                ) { prefs.setPremiumStream(it) }
+            }
             Label(tr(R.string.music_video_quality))
             Chips(listOf(480, 720, 1080, 1440), s.videoMaxHeight, { "${it}p" }) { prefs.setVideoMaxHeight(it) }
             Spacer(Modifier.height(6.dp))

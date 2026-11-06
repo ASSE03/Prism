@@ -428,6 +428,7 @@ object SettingsIndex {
         SettingEntry(H, tr(R.string.home), tr(R.string.customize_home), tr(R.string.sections_order_shortcuts_quick_picks_speed)),
         SettingEntry(H, tr(R.string.home), tr(R.string.add_new_sections_automatically), "shelves"),
         SettingEntry(H, tr(R.string.home), tr(R.string.quick_picks_from), tr(R.string.quick_picks_from_keywords)),
+        SettingEntry(H, tr(R.string.home), tr(R.string.speed_dial_your_plays_first), tr(R.string.speed_dial_your_plays_first_sub)),
         SettingEntry(H, tr(R.string.home), tr(R.string.continue_line), tr(R.string.continue_album_resume_greeting_hide_context)),
         SettingEntry(H, tr(R.string.replay_card), tr(R.string.replay_card), tr(R.string.replay_teaser_look_style_design_quiet)),
         SettingEntry(H, tr(R.string.replay_card), tr(R.string.replay_card_graph), tr(R.string.replay_card_graph_keywords)),
