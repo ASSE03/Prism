@@ -101,6 +101,15 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
         com.prism.music.ui.theme.IconStyle.load(this)
         com.prism.music.ui.theme.AppFonts.init(this)
         container = AppContainer(this)
+        // How much of the processor heavy work may take: see BackgroundBudget.
+        com.prism.music.playback.BackgroundBudget.where = {
+            when {
+                container.visible.value -> com.prism.music.playback.BackgroundBudget.Where.ON_SCREEN
+                container.player.isPlaying.value || container.player.buffering.value -> com.prism.music.playback.BackgroundBudget.Where.PLAYING
+                else -> com.prism.music.playback.BackgroundBudget.Where.AWAY
+            }
+        }
+        com.prism.music.playback.BackgroundBudget.slowPhone = { com.prism.music.playback.MixTempo.slowPhone() }
         // Android's own backup restored onto another install: its sign-ins aren't this phone's (RestoredInstall).
         runCatching {
             com.prism.music.data.RestoredInstall.check(this) {
@@ -228,7 +237,20 @@ internal object MemoryLine {
         val rt = Runtime.getRuntime()
         return "total ${mb("summary.total-pss")} MB (Java ${mb("summary.java-heap")}, native ${mb("summary.native-heap")}, " +
             "graphics ${mb("summary.graphics")}, code ${mb("summary.code")}, other ${mb("summary.private-other")}, swapped ${mb("summary.total-swap")}); " +
-            "Java heap ${(rt.totalMemory() - rt.freeMemory()) / 1_048_576} of ${rt.maxMemory() / 1_048_576} MB; $threads threads"
+            "Java heap ${(rt.totalMemory() - rt.freeMemory()) / 1_048_576} of ${rt.maxMemory() / 1_048_576} MB; $threads threads; " +
+            "processor since the last line ${cpuShare()}"
+    }
+
+    private var cpuAt = 0L
+    private var wallAt = 0L
+
+    /** Prism's whole process, as a share of one core (#373: Android closes a background app for this figure). */
+    @Synchronized private fun cpuShare(): String {
+        val cpu = android.os.Process.getElapsedCpuTime()
+        val wall = android.os.SystemClock.elapsedRealtime()
+        val share = if (wallAt > 0 && wall > wallAt) "${(cpu - cpuAt) * 100 / (wall - wallAt)}% of a core" else "not known yet"
+        cpuAt = cpu; wallAt = wall
+        return share
     }
 }
 

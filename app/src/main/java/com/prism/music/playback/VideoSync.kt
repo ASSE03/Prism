@@ -54,6 +54,16 @@ class VideoSync(
 
     private fun key(songId: String, videoId: String) = "$songId|$videoId"
 
+    /** The listener watched a music video just now. */
+    fun noteWatched() = prefs.edit().putLong(WATCHED_AT, System.currentTimeMillis()).apply()
+
+    /**
+     * Whether the listener watches music videos, so songs are measured against theirs ahead of time. For someone who
+     * doesn't, a measure for every song on Wi-Fi was minutes of audio fetched and decoded for a button never tapped
+     * (A16: about as much work as the song's own scan); the first tap measures it then, and corrects the place.
+     */
+    fun watchesVideos(): Boolean = watchesLately(prefs.getLong(WATCHED_AT, 0L), System.currentTimeMillis())
+
     /** Forgets any result for this pair so the next request measures again. */
     fun forget(songId: String, videoId: String) {
         failed -= key(songId, videoId)
@@ -130,6 +140,7 @@ class VideoSync(
     }.asCoroutineDispatcher()
 
     private fun fingerprintOf(id: String, seconds: Int): Array<FloatArray>? {
+        MixTempo.ease()
         val a = streams.analysisAudio(id)
         val want = if (a.durationSec > 0) (a.contentLength * (seconds + 5) / a.durationSec * 1.15).toLong() + 96_000 else 2_500_000
         val end = if (a.contentLength > 0) minOf(a.contentLength, want) - 1 else want
@@ -139,16 +150,21 @@ class VideoSync(
                 if (!r.isSuccessful) return null
                 file.outputStream().use { out -> r.body.byteStream().copyTo(out) }
             }
-            val (pcm, rate) = decodePcm(file, seconds) ?: return null
-            frameMs = (rate / 100) * 1000.0 / rate
-            return bandFeatures(pcm, rate)
+            val pcm = decodePcm(file, seconds) ?: return null
+            frameMs = (pcm.rate / 100) * 1000.0 / pcm.rate
+            return bandFeatures(pcm.samples, pcm.rate, pcm.count)
         } finally {
             file.delete()
         }
     }
 
-    /** The first [seconds] of audio as mono PCM, decimated to roughly 11–12 kHz. */
-    private fun decodePcm(file: File, seconds: Int): Pair<FloatArray, Int>? {
+    private class Pcm(val samples: FloatArray, val count: Int, val rate: Int)
+
+    /**
+     * The first [seconds] of audio as mono PCM, decimated to roughly 11–12 kHz. One array for it (it used to be made
+     * twice over and copied once more: 27 MB for a 190-second video).
+     */
+    private fun decodePcm(file: File, seconds: Int): Pcm? {
         val ex = MediaExtractor()
         var codec: MediaCodec? = null
         try {
@@ -166,8 +182,7 @@ class VideoSync(
             var factor = max(1, rate / 11025)
             var out = FloatArray(seconds * (rate / factor) + 1)
             var count = 0
-            var acc = 0f
-            var n = 0
+            val mono = Downmix()
             val info = MediaCodec.BufferInfo()
             var inputDone = false
             while (count < out.size) {
@@ -193,22 +208,15 @@ class VideoSync(
                     isFloat = f.containsKey(MediaFormat.KEY_PCM_ENCODING) && f.getInteger(MediaFormat.KEY_PCM_ENCODING) == AudioFormat.ENCODING_PCM_FLOAT
                     if (count == 0) {
                         factor = max(1, rate / 11025)
-                        out = FloatArray(seconds * (rate / factor) + 1)
+                        val size = seconds * (rate / factor) + 1
+                        if (out.size != size) out = FloatArray(size)
                     }
                 } else if (o >= 0) {
                     val buf = dec.getOutputBuffer(o)!!.order(ByteOrder.nativeOrder())
                     buf.position(info.offset)
                     buf.limit(info.offset + info.size)
                     val frames = info.size / (channels * (if (isFloat) 4 else 2))
-                    for (f in 0 until frames) {
-                        var m = 0f
-                        for (c in 0 until channels) m += if (isFloat) buf.float else buf.short / 32768f
-                        acc += m / channels
-                        if (++n == factor) {
-                            if (count < out.size) out[count++] = acc / factor
-                            acc = 0f; n = 0
-                        }
-                    }
+                    mono.add(buf, frames, channels, isFloat, factor) { v -> if (count < out.size) out[count++] = v }
                     dec.releaseOutputBuffer(o, false)
                     if (info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0) break
                 } else if (inputDone && o == MediaCodec.INFO_TRY_AGAIN_LATER && count > 0) {
@@ -223,7 +231,7 @@ class VideoSync(
                 for (i in 0 until count) bb.putFloat(out[i])
                 File(context.getExternalFilesDir(null), "pcm_${file.nameWithoutExtension}_$sr.f32").writeBytes(bb.array())
             }
-            return out.copyOf(count) to sr
+            return Pcm(out, count, sr)
         } finally {
             runCatching { codec?.stop() }
             runCatching { codec?.release() }
@@ -247,6 +255,11 @@ class VideoSync(
             val extra = (videoSec - songSec) * 1000
             return lagMs <= maxOf(0L, extra) + LENGTH_SLACK_MS && lagMs >= -(maxOf(0L, -extra) + LENGTH_SLACK_MS)
         }
+
+        /** Watched a video in the last [WATCHED_LATELY_MS]. */
+        internal fun watchesLately(watchedAt: Long, now: Long) = watchedAt > 0 && now - watchedAt < WATCHED_LATELY_MS
+        private const val WATCHED_AT = "watched_at"
+        private const val WATCHED_LATELY_MS = 14 * 86_400_000L
 
         private const val LENGTH_SLACK_MS = 8_000L
         const val SONG_SECONDS = 70
@@ -299,9 +312,9 @@ class VideoSync(
         }
 
         /** Log energy in 16 log-spaced bands (80 Hz – 5 kHz), every 10 ms. Indexed [band][frame]. */
-        fun bandFeatures(pcm: FloatArray, sr: Int): Array<FloatArray> {
+        fun bandFeatures(pcm: FloatArray, sr: Int, count: Int = pcm.size): Array<FloatArray> {
             val hop = sr / 100
-            val frames = max(0, (pcm.size - WINDOW) / hop)
+            val frames = max(0, (count - WINDOW) / hop)
             val edges = IntArray(BANDS + 1) { b ->
                 val f = 80.0 * (5000.0 / 80.0).pow(b.toDouble() / BANDS)
                 (f * WINDOW / sr).toInt().coerceIn(1, WINDOW / 2)

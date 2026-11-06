@@ -394,6 +394,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             override fun setVolume(v: Int) = c.cast.setVolume(v)
             override fun adjust(delta: Int) = c.cast.adjustVolume(delta)
         }
+        scope.launch { kotlinx.coroutines.flow.combine(c.cast.state, c.together.state) { _, _ -> }.collect { applyWakeMode() } }
         c.cast.attach(player, object : com.prism.music.connect.Cast.Hooks {
             override fun beforeCasting() {
                 mix.stopBlend()
@@ -835,6 +836,20 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         saveEpisodePosition()
         saveQueue(now = true)
         pauseAllPlayersAndStopSelf()
+    }
+
+    override fun onIsLoadingChanged(isLoading: Boolean) = applyWakeMode()
+
+    private var wakeModeNow = C.WAKE_MODE_NETWORK
+
+    /** See [wakeModeFor]. */
+    private fun applyWakeMode() {
+        val mode = wakeModeFor(
+            loading = player.isLoading,
+            live = player.currentMediaItem?.toSong()?.isLive == true,
+            sharing = c.cast.casting || c.together.state.value !is com.prism.music.playback.together.TogetherState.Idle,
+        )
+        if (mode != wakeModeNow) { wakeModeNow = mode; player.setWakeMode(mode) }
     }
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
@@ -1284,11 +1299,13 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // A radio tuned calm or energetic goes by what's been scanned, so songs heard are scanned for it too.
         if (!s.mix && !s.normalize && !wave && s.behavior.radioTune.energy == 0f) return
         val network = s.mixTempoOnCellular || getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered == false
-        val songs = items.mapNotNull { it?.toSong() }.filter { !it.isLive && !it.isEpisode }.distinctBy { it.id }
+        val playing = player.currentMediaItem?.mediaId
+        val all = items.mapNotNull { it?.toSong() }.filter { !it.isLive && !it.isEpisode }.distinctBy { it.id }
+        val worth = MixTempo.worthScanning(all.map { it.id }, playing, c.visible.value, s.mix || wave, QUEUE_AHEAD)
+        val songs = all.filter { it.id in worth }
         if (songs.isEmpty()) return
         // Songs scanned before fade-outs and intros were measured are scanned again only for Crossfade's automatic length.
         val edges = s.mix && s.mixAuto
-        val playing = player.currentMediaItem?.mediaId
         scanJob?.cancel()
         scanJob = scope.launch {
             if (playing != null) untilUnderWay(playing, UNDER_WAY_MS)
@@ -1509,13 +1526,16 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      */
     fun prefetchVideo(song: Song, videoId: String) {
         if (song.isLocal || videoId in prefetched) return
+        // Nobody taps Video on a screen that isn't showing, unless videos are what they watch.
+        val watches = videoWanted || c.videoSync.watchesVideos()
+        if (!watches && !c.visible.value) return
         prefetched += videoId
         scope.launch(Dispatchers.IO) {
             // Not alongside the song's own start: it was one of the resolves slowing that down.
             c.yieldToPlaying(null)
             runCatching { c.streams.resolve(videoId, withVideo = true) }.onFailure { prefetched -= videoId }
             val metered = getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered != false
-            if (metered || videoId == song.id || c.videoSync.cached(song.id, videoId) != null) return@launch
+            if (!watches || metered || videoId == song.id || c.videoSync.cached(song.id, videoId) != null) return@launch
             // Measured once the song is under way: a long video ("Alright" runs three minutes past its song) means
             // minutes of audio to fetch and analyse, which slowed the song's own start when it ran at once.
             withContext(Dispatchers.Main) { untilUnderWay(song.id) }
@@ -1772,6 +1792,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         if (player.playbackState == Player.STATE_IDLE) player.prepare()
         videoWatchdog?.cancel()
         if (vid != null) {
+            c.videoSync.noteWatched()
             val switchedAt = android.os.SystemClock.elapsedRealtime()
             if (known == null && vid != song.id && now > 1_500) scope.launch {
                 val lag = c.videoSync.lagMs(song.id, vid) ?: return@launch
@@ -2964,5 +2985,14 @@ private const val RESEQUENCE_GAP_MS = 1_500L
 private const val SMART_LOOK_AHEAD = 12
 /** How many queued songs ahead are got ready (their loudness and edges). */
 private const val QUEUE_AHEAD = 3
+
+/**
+ * What the player keeps awake: the processor while it plays, always; Wi-Fi at full power only while it's loading. A song
+ * is loaded whole soon after it starts (and the next one), so for most of its length the radio has nothing to do and can
+ * doze between beacons; the lock used to be held for as long as music played. Kept on for what never stops needing the
+ * network: a live stream, and casting or Listen Together (the phone serves those over Wi-Fi itself).
+ */
+internal fun wakeModeFor(loading: Boolean, live: Boolean, sharing: Boolean): Int =
+    if (loading || live || sharing) C.WAKE_MODE_NETWORK else C.WAKE_MODE_LOCAL
 /** How far ahead the player loads: a whole song (and the start of the next, near its end). */
 private const val WHOLE_SONG_MS = 300_000
