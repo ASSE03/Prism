@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.horizontalScroll
 import com.prism.music.ui.components.pane
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -214,6 +215,10 @@ fun LibraryScreen(bottomPadding: Dp) {
     // ---- Sorting (each tab remembers its own, kept between visits)
     var songSort by remember { mutableStateOf(SongSort.entries.firstOrNull { it.name == c.library.sortOf("library:songs") } ?: SongSort.RECENT) }
     var songQuery by rememberSaveable { mutableStateOf("") }
+    // What's typed in each tab's search (#357), as the Songs tab has had since #184.
+    var playlistQuery by rememberSaveable { mutableStateOf("") }
+    var albumQuery by rememberSaveable { mutableStateOf("") }
+    var artistQuery by rememberSaveable { mutableStateOf("") }
     var albumSort by remember { mutableStateOf(AlbumSort.entries.firstOrNull { it.name == c.library.sortOf("library:albums") } ?: AlbumSort.LIBRARY) }
     var artistSort by remember { mutableStateOf(ArtistSort.entries.firstOrNull { it.name == c.library.sortOf("library:artists") } ?: ArtistSort.LIBRARY) }
     val sortedSongs = remember(liked, songSort) {
@@ -224,6 +229,9 @@ fun LibraryScreen(bottomPadding: Dp) {
             SongSort.ALBUM -> liked.sortedWith(compareBy<com.prism.music.data.model.Song> { it.album?.title?.lowercase() ?: "\uFFFF" }.thenBy { it.title.lowercase() })
         }
     }
+    val shownSongs = remember(sortedSongs, songQuery) {
+        if (songQuery.isBlank()) sortedSongs else sortedSongs.filter { s -> libraryMatches(songQuery, s.title, s.artistText, s.album?.title.orEmpty()) }
+    }
     val albumSongs = remember(mine) { mine.filter { it.album?.id != null }.groupBy { it.album!!.id!! } }
     // Downloaded songs per album: by the album's id, and by its title for albums YouTube lists under another edition's id.
     val downloadedPerAlbum = remember(dls) {
@@ -231,8 +239,8 @@ fun LibraryScreen(bottomPadding: Dp) {
         done.mapNotNull { s -> s.album?.id?.let { it to s } }.groupingBy { it.first }.eachCount() to
             done.mapNotNull { s -> s.album?.title?.lowercase()?.let { it to s } }.groupingBy { it.first }.eachCount()
     }
+    fun artistOf(a: com.prism.music.data.model.BrowseItem) = albumSongs[a.id]?.first()?.primaryArtist ?: a.subtitle.split(" • ").firstOrNull { it != "Album" && it != "Single" && it != "EP" } ?: ""
     val sortedAlbums = remember(albums, albumSort, albumSongs, downloadedPerAlbum) {
-        fun artistOf(a: com.prism.music.data.model.BrowseItem) = albumSongs[a.id]?.first()?.primaryArtist ?: a.subtitle.split(" • ").firstOrNull { it != "Album" && it != "Single" && it != "EP" } ?: ""
         fun downloaded(a: com.prism.music.data.model.BrowseItem) = downloadedPerAlbum.first[a.id] ?: downloadedPerAlbum.second[a.title.lowercase()] ?: 0
         when (albumSort) {
             AlbumSort.LIBRARY -> albums
@@ -244,6 +252,10 @@ fun LibraryScreen(bottomPadding: Dp) {
     }
     var albumKind by remember { mutableStateOf(AlbumKind.entries.firstOrNull { it.name == c.library.sortOf("library:albums:kind") } ?: AlbumKind.ALL) }
     val albumKinds = remember(albums) { albums.map { AlbumKind.ALBUMS.shows(it) }.toSet() }
+    val shownAlbums = remember(sortedAlbums, albumKind, albumQuery, pinned) {
+        val single = tr(R.string.single)
+        pinnedFirst(sortedAlbums.filter { a -> albumKind.shows(a) && (albumQuery.isBlank() || libraryMatches(albumQuery, a.title, *albumNames(a.subtitle, single).toTypedArray())) })
+    }
     val artistSongs = remember(mine) { mine.flatMap { s -> s.artists.mapNotNull { it.id } }.groupingBy { it }.eachCount() }
     val sortedArtists = remember(artists, artistSort, artistSongs, favorites) {
         val fav = favorites.map { it.id }.toSet()
@@ -252,6 +264,9 @@ fun LibraryScreen(bottomPadding: Dp) {
             ArtistSort.MOST -> artists.sortedWith(compareByDescending<com.prism.music.data.model.BrowseItem> { it.id in fav }.thenByDescending { artistSongs[it.id] ?: 0 })
             ArtistSort.NAME -> artists.sortedWith(compareByDescending<com.prism.music.data.model.BrowseItem> { it.id in fav }.thenBy { it.title.lowercase().removePrefix("the ") })
         }
+    }
+    val shownArtists = remember(sortedArtists, artistQuery, pinned) {
+        pinnedFirst(if (artistQuery.isBlank()) sortedArtists else sortedArtists.filter { libraryMatches(artistQuery, it.title) })
     }
     // Playlists: YouTube Music's order, by title, or the listener's own (arranged in Rearrange mode).
     val playlistOrder by c.library.playlistOrder.collectAsState()
@@ -280,6 +295,17 @@ fun LibraryScreen(bottomPadding: Dp) {
         }).filterNot { it.id.removePrefix("VL") in inFolders }
     }
     var rearranging by rememberSaveable { mutableStateOf(false) }
+    // A search goes through every playlist, the ones in folders too, and the folders by name.
+    val searchingPlaylists = playlistQuery.isNotBlank() && !rearranging
+    val foundFolders = remember(folders, playlistQuery) { if (playlistQuery.isBlank()) folders else folders.filter { libraryMatches(playlistQuery, it.name) } }
+    val foundPlaylists = remember(myPlaylists, sortedPlaylists, playlistQuery, pinned) {
+        if (playlistQuery.isBlank()) sortedPlaylists
+        else {
+            val inList = sortedPlaylists.map { it.id }.toSet()
+            pinnedFirst(sortedPlaylists + myPlaylists.filter { it.id !in inList }).filter { libraryMatches(playlistQuery, it.title) }
+        }
+    }
+    val foundFollowed = remember(spotifyFollowed, playlistQuery) { if (playlistQuery.isBlank()) spotifyFollowed else spotifyFollowed.filter { libraryMatches(playlistQuery, it.name) } }
     // Moving one (or starting to) saves the whole order as shown, and switches to it.
     fun saveOrder(list: List<com.prism.music.data.model.BrowseItem>) {
         c.library.setPlaylistOrder(list.map { it.id })
@@ -337,6 +363,35 @@ fun LibraryScreen(bottomPadding: Dp) {
                 }.value
             } else null
             val fromAccountShown = fromAccount && settings.isLoggedIn
+            /** The search at the top of a tab; once typed in, it stays whatever's left of the list. */
+            fun androidx.compose.foundation.lazy.grid.LazyGridScope.findField(query: String, hint: String, count: Int, onChange: (String) -> Unit) {
+                if (query.isEmpty() && count < LIBRARY_SEARCH_FROM) return
+                item(key = "find", span = { GridItemSpan(maxLineSpan) }) {
+                    com.prism.music.ui.components.SearchField(query, hint, onChange, Modifier.padding(horizontal = if (asList) 16.dp else 4.dp, vertical = 4.dp))
+                }
+            }
+            fun androidx.compose.foundation.lazy.grid.LazyGridScope.nothingFound(tabName: String, query: String) {
+                item(key = "none", span = { GridItemSpan(maxLineSpan) }) {
+                    EmptyState(PrismIcons.Search, tr(R.string.no_matches), tr(R.string.nothing_in_matches, tabName, query.trim()) + ".")
+                }
+            }
+            // What the slider's bubble says for each row (#376): the letter when the list goes by name, else its place.
+            val rowMarks = remember(tab, shownSongs, shownAlbums, shownArtists, foundPlaylists, songSort, albumSort, artistSort, playlistSort) {
+                lazy {
+                    when (tab) {
+                        LibTab.PLAYLISTS -> scrollMarks(foundPlaylists, { "p" + it.id }) { p -> p.title.takeIf { playlistSort == PlaylistSort.TITLE } }
+                        LibTab.SONGS -> scrollMarks(shownSongs, { "s" + it.id }) { s ->
+                            when (songSort) { SongSort.RECENT -> null; SongSort.TITLE -> s.title; SongSort.ARTIST -> s.primaryArtist; SongSort.ALBUM -> s.album?.title }
+                        }
+                        LibTab.ALBUMS -> scrollMarks(shownAlbums, { "a" + it.id }) { a ->
+                            when (albumSort) { AlbumSort.TITLE -> a.title; AlbumSort.ARTIST -> artistOf(a); else -> null }
+                        }
+                        LibTab.ARTISTS -> scrollMarks(shownArtists, { "r" + it.id }) { a -> a.title.removePrefix("The ").removePrefix("the ").takeIf { artistSort == ArtistSort.NAME } }
+                        else -> emptyMap()
+                    }
+                }
+            }
+            Box(Modifier.fillMaxSize()) {
             LazyVerticalGrid(
                 when {
                     asList -> GridCells.Fixed(1)
@@ -402,6 +457,23 @@ fun LibraryScreen(bottomPadding: Dp) {
                             }
                         }
                       }
+                      val playlistRows: androidx.compose.foundation.lazy.grid.LazyGridScope.() -> Unit = {
+                            // Folders first (1.7.6), each opening its playlists.
+                            items(foundFolders, key = { "f" + it.id }) { f ->
+                                val first = f.playlists.firstNotNullOfOrNull { id -> myPlaylists.firstOrNull { com.prism.music.data.PrismLibrary.samePlaylist(it.id, id) } }
+                                ShortcutTile(
+                                    f.name, if (!settings.librarySubtitles) "" else trp(R.plurals.folder_n_playlists, f.playlists.size),
+                                    PrismIcons.Folder, asList, art = first?.let { c.covers.art(it) },
+                                ) { nav.go(Routes.folder(f.id)) }
+                            }
+                            items(foundPlaylists, key = { "p" + it.id }) { p ->
+                                LibraryItem(shown(p), asList, onLongClick = { menuFor = p }) { nav.open(p, onSong) }
+                            }
+                            items(foundFollowed, key = { "sf" + it.id }) { p ->
+                                val item = com.prism.music.data.model.PlaylistItem("spotify-followed:${p.id}", p.name, tr(R.string.spot_followed_subtitle, p.ownerName.ifBlank { tr(R.string.spotify) }), p.image)
+                                Box(Modifier.alpha(0.6f)) { LibraryItem(item, asList) { followedOpen = p } }
+                            }
+                      }
                       val playlistsPart: androidx.compose.foundation.lazy.grid.LazyGridScope.() -> Unit = {
                         // Signed out: playlists made here are kept on the phone; signing in brings YouTube Music's too.
                         if (!settings.isLoggedIn && myPlaylists.isEmpty() && spotifyFollowed.isEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
@@ -420,9 +492,11 @@ fun LibraryScreen(bottomPadding: Dp) {
                             ) else if (myPlaylists.size > 1) SortBar(trp(R.plurals.n_playlists, myPlaylists.size), PlaylistSort.entries, playlistSort, { it.label }) {
                                 c.library.setPlaylistSort(it.name)
                             }
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(start = 8.dp, top = 4.dp, bottom = 4.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.horizontalScroll(androidx.compose.foundation.rememberScrollState()).padding(start = 8.dp, top = 4.dp, bottom = 4.dp)) {
                                 // A playlist from a link (H7), without YouTube's share menu.
                                 if (!rearranging) com.prism.music.ui.components.PrismChip(false, { openingLink = true }, tr(R.string.open_a_link), icon = PrismIcons.Link)
+                                // A folder with nothing in it yet: until now one could only be made while moving a playlist.
+                                if (!rearranging) com.prism.music.ui.components.PrismChip(false, { newFolder = true }, tr(R.string.new_folder), icon = PrismIcons.Folder)
                                 if (myPlaylists.size > 1) com.prism.music.ui.components.PrismChip(
                                     rearranging,
                                     {
@@ -437,24 +511,14 @@ fun LibraryScreen(bottomPadding: Dp) {
                         }
                         if (rearranging) item(span = { GridItemSpan(maxLineSpan) }) {
                             RearrangePlaylists(sortedPlaylists, ::saveOrder)
-                        } else {
-                            // Folders first (1.7.6), each opening its playlists.
-                            items(folders, key = { "f" + it.id }) { f ->
-                                val first = f.playlists.firstNotNullOfOrNull { id -> myPlaylists.firstOrNull { com.prism.music.data.PrismLibrary.samePlaylist(it.id, id) } }
-                                ShortcutTile(
-                                    f.name, if (!settings.librarySubtitles) "" else trp(R.plurals.folder_n_playlists, f.playlists.size),
-                                    PrismIcons.Folder, asList, art = first?.let { c.covers.art(it) },
-                                ) { nav.go(Routes.folder(f.id)) }
-                            }
-                            items(sortedPlaylists, key = { "p" + it.id }) { p ->
-                                LibraryItem(shown(p), asList, onLongClick = { menuFor = p }) { nav.open(p, onSong) }
-                            }
-                            items(spotifyFollowed, key = { "sf" + it.id }) { p ->
-                                val item = com.prism.music.data.model.PlaylistItem("spotify-followed:${p.id}", p.name, tr(R.string.spot_followed_subtitle, p.ownerName.ifBlank { tr(R.string.spotify) }), p.image)
-                                Box(Modifier.alpha(0.6f)) { LibraryItem(item, asList) { followedOpen = p } }
-                            }
-                        }
+                        } else playlistRows()
                       }
+                      if (!rearranging) findField(playlistQuery, tr(R.string.search_playlists), myPlaylists.size + spotifyFollowed.size + folders.size) { playlistQuery = it }
+                      if (searchingPlaylists) {
+                          // Only what matches: the tiles, the sort and the buttons are back when the search is cleared.
+                          playlistRows()
+                          if (foundFolders.isEmpty() && foundPlaylists.isEmpty() && foundFollowed.isEmpty()) nothingFound(tr(R.string.playlists), playlistQuery)
+                      } else
                       // Playlists above the tiles, or below them as Prism ships (Edit tiles → "Playlists first").
                       if (settings.libraryPlaylistsFirst && myPlaylists.isNotEmpty()) {
                           playlistsPart()
@@ -469,9 +533,6 @@ fun LibraryScreen(bottomPadding: Dp) {
                         // As the Liked songs page has them (#184: the tab had no search, Shuffle or Play): a search through
                         // your liked songs, and Shuffle / Play for what's shown.
                         val source = com.prism.music.playback.QueueSource(com.prism.music.playback.QueueKind.LIBRARY, tr(R.string.liked_songs))
-                        val shownSongs = if (songQuery.isBlank()) sortedSongs else sortedSongs.filter { s ->
-                            listOf(s.title, s.artistText, s.album?.title.orEmpty()).any { it.contains(songQuery.trim(), ignoreCase = true) }
-                        }
                         if (liked.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
                             Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                                 com.prism.music.ui.components.SearchField(songQuery, tr(R.string.search_liked_songs), { q -> songQuery = q }, Modifier.weight(1f))
@@ -487,10 +548,12 @@ fun LibraryScreen(bottomPadding: Dp) {
                         items(shownSongs, key = { "s" + it.id }, span = { GridItemSpan(maxLineSpan) }) { s ->
                             SongRow(s) { c.player.playQueue(shownSongs, shownSongs.indexOf(s), source) }
                         }
+                        if (liked.isNotEmpty() && shownSongs.isEmpty() && songQuery.isNotBlank()) nothingFound(tr(R.string.songs), songQuery)
                     }
                     LibTab.ALBUMS -> {
+                        findField(albumQuery, tr(R.string.search_albums), albums.size) { albumQuery = it }
                         if (albums.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
-                            SortBar(trp(R.plurals.n_albums, albums.size), AlbumSort.entries, albumSort, { it.label }) { albumSort = it; c.library.setSort("library:albums", it.name) }
+                            SortBar(trp(R.plurals.n_albums, if (albumQuery.isBlank()) albums.size else shownAlbums.size), AlbumSort.entries, albumSort, { it.label }) { albumSort = it; c.library.setSort("library:albums", it.name) }
                         }
                         // Albums or singles and EPs (Reddit, 1.7.9.1: YouTube's library fills with singles), when there are both.
                         if (albumKinds.size > 1) item(span = { GridItemSpan(maxLineSpan) }) {
@@ -500,13 +563,16 @@ fun LibraryScreen(bottomPadding: Dp) {
                                 }
                             }
                         }
-                        items(pinnedFirst(sortedAlbums.filter { albumKind.shows(it) }), key = { "a" + it.id }) { a -> LibraryItem(shown(a), asList, onLongClick = { itemMenu = a }) { nav.open(a, onSong) } }
+                        items(shownAlbums, key = { "a" + it.id }) { a -> LibraryItem(shown(a), asList, onLongClick = { itemMenu = a }) { nav.open(a, onSong) } }
+                        if (albums.isNotEmpty() && shownAlbums.isEmpty() && albumQuery.isNotBlank()) nothingFound(tr(R.string.albums), albumQuery)
                     }
                     LibTab.ARTISTS -> {
+                        findField(artistQuery, tr(R.string.search_artists), artists.size) { artistQuery = it }
                         if (artists.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
-                            SortBar(trp(R.plurals.n_artists, artists.size), ArtistSort.entries, artistSort, { it.label }) { artistSort = it; c.library.setSort("library:artists", it.name) }
+                            SortBar(trp(R.plurals.n_artists, if (artistQuery.isBlank()) artists.size else shownArtists.size), ArtistSort.entries, artistSort, { it.label }) { artistSort = it; c.library.setSort("library:artists", it.name) }
                         }
-                        items(pinnedFirst(sortedArtists), key = { "r" + it.id }) { a -> LibraryItem(shown(a), asList, onLongClick = { itemMenu = a }) { nav.open(a, onSong) } }
+                        items(shownArtists, key = { "r" + it.id }) { a -> LibraryItem(shown(a), asList, onLongClick = { itemMenu = a }) { nav.open(a, onSong) } }
+                        if (artists.isNotEmpty() && shownArtists.isEmpty() && artistQuery.isNotBlank()) nothingFound(tr(R.string.artists), artistQuery)
                     }
                     LibTab.HISTORY -> {
                         if (settings.isLoggedIn) item(span = { GridItemSpan(maxLineSpan) }) {
@@ -561,6 +627,13 @@ fun LibraryScreen(bottomPadding: Dp) {
                     }
                     LibTab.DOWNLOADS -> item(span = { GridItemSpan(maxLineSpan) }) { DownloadsSummary() }
                 }
+            }
+            // #376: a thumb a finger can hold on Library's long lists. Only its own grip takes touches, and only while it's
+            // showing, so it needs no switch: the rows along the edge and the swipes between tabs are all still there.
+            if (tab != LibTab.HISTORY && tab != LibTab.DOWNLOADS && !rearranging) com.prism.music.ui.components.FastScroller(
+                gridState, Modifier.align(Alignment.CenterEnd).padding(bottom = bottomPadding),
+                description = tr(R.string.scroll_through_the_list), thumbOnly = true,
+            ) { _ -> gridState.layoutInfo.visibleItemsInfo.firstNotNullOfOrNull { rowMarks.value[it.key as? String] } }
             }
         }
     }

@@ -355,18 +355,26 @@ fun SearchScreen(bottomPadding: Dp) {
         } else when (val r = list) {
             null, Load.Loading -> LoadingState()
             is Load.Err -> ErrorState(r.message)
-            is Load.Ok -> LazyColumn(contentPadding = PaddingValues(top = 4.dp, bottom = bottomPadding + 16.dp)) {
-                items(r.value.distinctBy { it.id + it.title }, key = { it.id + it.title }) { item -> ResultRow(item) { open(item) } }
-                if (continuation != null) item {
-                    LaunchedEffect(continuation) {
-                        val token = continuation ?: return@LaunchedEffect
-                        runCatching { kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { c.ytm.search(live, filter, token) } }.onSuccess { more ->
-                            continuation = more.continuation
-                            list = Load.Ok(r.value + com.prism.music.data.ExplicitFilter.items(c.settings.current.behavior.explicitContent, more.items).filter { n -> r.value.none { it.id == n.id } })
-                        }.onFailure { continuation = null }
+            is Load.Ok -> Box(Modifier.fillMaxSize()) {
+                val resultsState = androidx.compose.foundation.lazy.rememberLazyListState()
+                LazyColumn(state = resultsState, contentPadding = PaddingValues(top = 4.dp, bottom = bottomPadding + 16.dp)) {
+                    items(r.value.distinctBy { it.id + it.title }, key = { it.id + it.title }) { item -> ResultRow(item) { open(item) } }
+                    if (continuation != null) item {
+                        LaunchedEffect(continuation) {
+                            val token = continuation ?: return@LaunchedEffect
+                            runCatching { kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { c.ytm.search(live, filter, token) } }.onSuccess { more ->
+                                continuation = more.continuation
+                                list = Load.Ok(r.value + com.prism.music.data.ExplicitFilter.items(c.settings.current.behavior.explicitContent, more.items).filter { n -> r.value.none { it.id == n.id } })
+                            }.onFailure { continuation = null }
+                        }
+                        LoadingState()
                     }
-                    LoadingState()
                 }
+                // A long list of results (#376), which only grows as it's scrolled.
+                com.prism.music.ui.components.FastScroller(
+                    resultsState, Modifier.align(Alignment.CenterEnd).padding(bottom = bottomPadding),
+                    description = tr(R.string.scroll_through_the_list), thumbOnly = true,
+                ) { _ -> (resultsState.firstVisibleItemIndex + 1).toString() }
             }
         }
     }
@@ -397,19 +405,26 @@ private fun PhoneResults(query: String, bottomPadding: Dp, onPlay: () -> Unit) {
         )
         return
     }
-    LazyColumn(contentPadding = PaddingValues(top = 4.dp, bottom = bottomPadding + 16.dp)) {
-        listOf(tr(R.string.your_music_files) to files, tr(R.string.downloads) to downloads).forEachIndexed { g, (title, songs) ->
-            if (songs.isEmpty()) return@forEachIndexed
-            item(key = "h:$g") { SectionHeader(title, strapline = com.prism.music.data.model.songCount(songs.size)) }
-            items(songs.size, key = { "$g:$it:" + songs[it].id }) { i ->
-                com.prism.music.ui.components.SwipeToQueue(songs[i]) {
-                    SongRow(songs[i], playing = current?.id == songs[i].id) {
-                        onPlay()
-                        c.player.playQueue(songs, i, QueueSource(QueueKind.LIBRARY, tr(R.string.search_2, query)))
+    Box(Modifier.fillMaxSize()) {
+        val resultsState = androidx.compose.foundation.lazy.rememberLazyListState()
+        LazyColumn(state = resultsState, contentPadding = PaddingValues(top = 4.dp, bottom = bottomPadding + 16.dp)) {
+            listOf(tr(R.string.your_music_files) to files, tr(R.string.downloads) to downloads).forEachIndexed { g, (title, songs) ->
+                if (songs.isEmpty()) return@forEachIndexed
+                item(key = "h:$g") { SectionHeader(title, strapline = com.prism.music.data.model.songCount(songs.size)) }
+                items(songs.size, key = { "$g:$it:" + songs[it].id }) { i ->
+                    com.prism.music.ui.components.SwipeToQueue(songs[i]) {
+                        SongRow(songs[i], playing = current?.id == songs[i].id) {
+                            onPlay()
+                            c.player.playQueue(songs, i, QueueSource(QueueKind.LIBRARY, tr(R.string.search_2, query)))
+                        }
                     }
                 }
             }
         }
+        com.prism.music.ui.components.FastScroller(
+            resultsState, Modifier.align(Alignment.CenterEnd).padding(bottom = bottomPadding),
+            description = tr(R.string.scroll_through_the_list), thumbOnly = true,
+        ) { _ -> null }
     }
 }
 
@@ -437,7 +452,7 @@ private fun phoneMatches(query: String, songs: List<com.prism.music.data.model.S
 }
 
 /** Lower case, without accents or punctuation, so "Beyonce" finds "Beyoncé" and "ac dc" finds "AC/DC". */
-private fun phoneNorm(s: String): String = java.text.Normalizer.normalize(s.lowercase(), java.text.Normalizer.Form.NFD)
+internal fun phoneNorm(s: String): String = java.text.Normalizer.normalize(s.lowercase(), java.text.Normalizer.Form.NFD)
     .replace(MARKS, "").replace(NOT_WORDS, " ").trim()
 
 private val MARKS = Regex("\\p{Mn}+")

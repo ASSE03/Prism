@@ -6,6 +6,12 @@ What changed in each release. Older releases are described on the [Releases page
 
 ### Faster and lighter
 
+### New
+
+- **New folder in Library.** Playlists → New folder makes a folder before anything's in it; until now one could only be made while moving a playlist.
+- **Search in Library** (#357). Playlists, Albums and Artists get a search at the top once there are 8 or more. Playlists finds the ones inside folders too, and folders by name.
+- **A scrollbar you can hold, on Library's long lists and Search's results** (#376). It shows while the list moves, is wide enough for a finger, and only the bar itself takes touches, so everything else along the edge still works.
+
 ### Fixes
 
 - **Your own photo as a background works in every language** (#378). In German, Italian, Russian, Polish, Swedish, Hungarian, Malay and Filipino, the picture was saved under a translated name, so Prism didn't see it as a picture and showed Ambient (black with Pure black on). Photos you already picked come back by themselves.
