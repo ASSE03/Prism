@@ -11,7 +11,6 @@ import com.prism.music.ui.theme.PrismIcons
 import com.prism.music.data.friendlyMessage
 import com.prism.music.data.albumFromPhone
 import android.widget.Toast
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -1167,14 +1166,7 @@ private fun HeaderDetails(page: CollectionPage, centred: Boolean, privacy: Strin
                 Text(if (saved) tr(R.string.in_your_library) else tr(R.string.add_to_library), style = MaterialTheme.typography.labelLarge, color = scheme.onSurface)
             }
         }
-        page.description?.takeIf { it.isNotBlank() }?.let {
-            var expanded by remember { mutableStateOf(false) }
-            Text(
-                it, style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant, maxLines = if (expanded) Int.MAX_VALUE else 3,
-                overflow = TextOverflow.Ellipsis, textAlign = align,
-                modifier = Modifier.padding(top = 10.dp).clip(RoundedCornerShape(8.dp)).clickable { expanded = !expanded }.animateContentSize(),
-            )
-        }
+        page.description?.takeIf { it.isNotBlank() }?.let { AboutBox(it, Modifier.padding(top = 12.dp)) }
     }
 }
 

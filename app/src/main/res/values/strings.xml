@@ -898,7 +898,11 @@
     <string name="open_a_link">Open a link</string>
     <string name="rearrange">Rearrange</string>
     <string name="search_liked_songs">Search liked songs</string>
+    <string name="search_playlists">Search playlists</string>
+    <string name="search_albums">Search albums</string>
+    <string name="search_artists">Search artists</string>
     <string name="show_more">Show more</string>
+    <string name="show_less">Show less</string>
     <string name="will_be_deleted_from_your_youtube_2">\"%1$s\" will be deleted from your YouTube Music account. If it\'s someone else\'s playlist, it\'s only removed from your library.</string>
     <string name="library_tiles">Library tiles</string>
     <string name="tick_the_tiles_to_show_at">Tick the tiles to show at the top of Library; hold one to move it.</string>
@@ -4127,6 +4131,7 @@
     <string name="licensor_square" translatable="false">Square</string>
     <string name="show_genres">Show genres</string>
     <string name="scroll_through_the_songs">Scroll through the songs</string>
+    <string name="scroll_through_the_list">Scroll through the list</string>
     <string name="genres_on_playlists">Genres on playlists</string>
     <string name="genres_on_playlists_detail">Genre chips, each song\'s genre and Group by genre</string>
     <string name="genres_on_playlists_keywords">genre chips categories group order playlist</string>

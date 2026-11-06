@@ -65,6 +65,16 @@ object Backgrounds {
     fun assetOf(v: String): String? = v.takeIf { it.startsWith("PHOTO|$ASSET") }?.substringAfter(ASSET)?.takeIf(::isHash)
 
     fun isHash(s: String) = s.length == 40 && s.all { it in '0'..'9' || it in 'a'..'f' }
+
+    /**
+     * #378: from 1.7.9 until 1.8.2.1 a photo was saved under the word's translation in 8 languages ("FOTO|/…/all-1.jpg").
+     * [v] with the saved word put right; anything else as it is.
+     */
+    fun photoKeyFixed(v: String): String {
+        val word = v.substringBefore('|', "")
+        val path = v.substringAfter('|', "")
+        return if (word.isNotEmpty() && word != "PHOTO" && path.startsWith("/")) "PHOTO|$path" else v
+    }
 }
 
 /**

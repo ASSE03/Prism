@@ -198,8 +198,8 @@
             </intent-filter>
         </service>
 
-        <!-- "Hey Google, play … on Prism": Assistant / Gemini only offer apps that take this as music sources. It runs
-             over the lock screen (the phone sits locked in the car), where it shows nothing and closes at once. -->
+        <!-- "Hey Google, play … on Prism": Assistant only offers apps that take this as music sources (Gemini keeps its own
+             short list of linked services, and doesn't use it: #362). It runs over the lock screen (the phone sits locked in the car), where it shows nothing and closes at once. -->
         <activity
             android:name=".playback.VoicePlayActivity"
             android:exported="true"
