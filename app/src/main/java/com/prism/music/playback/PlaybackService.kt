@@ -488,6 +488,11 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             .build()
             .also {
                 it.skipSilenceEnabled = false
+                // #364: the main player's underruns are logged; the ending song's, heard through the blend, too.
+                it.addAnalyticsListener(object : AnalyticsListener {
+                    override fun onAudioUnderrun(eventTime: AnalyticsListener.EventTime, bufferSize: Int, bufferSizeMs: Long, elapsedSinceLastFeedMs: Long) =
+                        AudioDiagnostics.log("underrun", "the ending song's player ran dry: buffer $bufferSizeMs ms, last fed $elapsedSinceLastFeedMs ms before")
+                })
                 // The ending song in the key it was playing in (Sing): the blend used to drop back to the original key.
                 pitchNow().takeIf { p -> p != 1f }?.let { p -> it.playbackParameters = androidx.media3.common.PlaybackParameters(1f, p) }
                 // With the equalizer on, the tail gets its own audio session and its own copy of the equalizer (Reddit R3:

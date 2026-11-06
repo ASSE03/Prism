@@ -174,9 +174,7 @@ fun PlayerOptionsSheet(
     val settings = c.settings.flow.collectAsState().value
     val translating = settings.lyricsTranslate
     // Says which language, so turning it on for a song already in it explains itself.
-    val translateInto = settings.lyricsTranslateTo.ifBlank { defaultTranslateTarget() }.let { tag ->
-        java.util.Locale.forLanguageTag(tag).getDisplayLanguage(java.util.Locale.getDefault()).ifBlank { tag }
-    }
+    val translateInto = translateTargetName(settings)
     val singOn = c.sing.on.collectAsState().value
     val djOn = c.dj.on.collectAsState().value
     val cover = com.prism.music.data.canvas.CanvasRepository.albumKey(song)

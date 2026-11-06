@@ -17,6 +17,10 @@ What changed in each release. Older releases are described on the [Releases page
 - **Search in Library** (#357). Playlists, Albums and Artists get a search at the top once there are 8 or more. Playlists finds the ones inside folders too, and folders by name.
 - **A scrollbar you can hold, on Library's long lists and Search's results** (#376). It shows while the list moves, is wide enough for a finger, and only the bar itself takes touches, so everything else along the edge still works.
 
+### New
+
+- Immersive mode shows your lyric translation under the lines, as the lyrics page does, with the switch in its menu too (#358)
+
 ### Fixes
 - Quick picks: pulling down to refresh now really gives you other songs, and the section stays on screen while the new ones load (#371).
 - Premium quality: music videos looked up in the background could stop Prism asking for 256 kbps for an hour. They don't count any more, the pause is much shorter on an account that has had 256 kbps, and it ends when you change networks. If one of your account's ways of asking has no 256 kbps, Prism tries the others once (#373).
@@ -28,6 +32,12 @@ What changed in each release. Older releases are described on the [Releases page
 - **Japanese kanji no longer turn into Chinese pinyin in romanized lyrics** (#370). Some sources, KuGou above all, write a Japanese song's kanji in Chinese forms, and a line of only kanji could pass for Chinese. Prism now decides for the whole song and reads them as Japanese.
 - **Replay's summary card no longer cuts its title off** ("TODA" for Today). The title now shrinks until it fits on its line, in every period and language, and so do the story's big words.
 - **An album's description is easier to read.** Left-aligned in its own quiet box, closed to a few lines with Show more, and the Wikipedia and license credit on its own small line with tappable links instead of raw addresses.
+
+- Play next on a song already in your queue moves it up instead of adding a second copy (#368)
+- The queue now lists songs in the order they really play: a song you added to the queue was shown first, but played after the rest of the list, so Next seemed to skip it (#368)
+- Play next, or taking a song out of the queue, just before a crossfade no longer sends the blend to the wrong song or cuts it off (#368)
+- The current lyric, when you move it away from the progress bar, sits midway between its neighbors on the player instead of low down against the next one (#361)
+- Playback diagnostics say more about each crossfade: whether the ending song lost time, how the two crossed over, and how long the next one took to start, to find the stutter some phones hear (#364)
 
 ## 1.8.2
 
