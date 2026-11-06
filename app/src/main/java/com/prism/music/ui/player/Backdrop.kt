@@ -167,6 +167,18 @@ private suspend fun buildMesh(context: android.content.Context, url: String): Ar
 }
 
 /**
+ * The player slides in and out, with no fade on top (#354, #343). A fade draws the whole player into a picture of its own
+ * every frame and then draws that on the screen, which on a phone's graphics chip was most of the stutter: an A16 had six
+ * frames over 34 ms each time the player opened, whatever was on the player (Performance mode or not, blur or not). The
+ * player covers the whole screen, so the fade was barely seen.
+ */
+internal fun playerSlideIn(reduceMotion: Boolean): androidx.compose.animation.EnterTransition =
+    androidx.compose.animation.slideInVertically(tween(if (reduceMotion) 260 else 420)) { it }
+
+internal fun playerSlideOut(reduceMotion: Boolean): androidx.compose.animation.ExitTransition =
+    androidx.compose.animation.slideOutVertically(tween(if (reduceMotion) 240 else 360)) { it }
+
+/**
  * The size the player's cover is decoded at (#86: whatever size it's first laid out at), no bigger than the screen shows
  * it: the screen's short side, or its long side for a full-bleed picture (cropped to fill it). A Redmi A3's 720 px screen
  * has no use for 1200 px, which is near three times the memory to fill and hand to the graphics chip.

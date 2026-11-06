@@ -15,6 +15,12 @@ import org.junit.Test
 class GlassPathTest {
     @Test fun liquidGlassWithBlur() = assertEquals(GlassPath.LIQUID, glassPath(31, liquid = true, frosted = false, haze = true))
 
+    /** 1.8.2.1: up to a sixth off the graphics chip's frame on an A16, on the look most people have. */
+    @Test fun frostSamplesAtHalfSizeExceptAThinOne() {
+        assertEquals(dev.chrisbanes.haze.HazePerformanceMode.Performance, com.prism.music.ui.theme.frostedInput(thin = false))
+        assertEquals(dev.chrisbanes.haze.HazePerformanceMode.Default, com.prism.music.ui.theme.frostedInput(thin = true))
+    }
+
     @Test fun noGlassBelowAndroid12() {
         for (sdk in 26..30) {
             assertEquals("sdk $sdk", GlassPath.SOLID, glassPath(sdk, liquid = true, frosted = false, haze = true))

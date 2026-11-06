@@ -889,9 +889,9 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 AnimatedVisibility(
                     playerOpen && song != null,
                     enter = if (flight) fadeIn(tween(com.prism.music.ui.player.CoverFlight.FLIGHT_MS))
-                        else slideInVertically(tween(if (settings.reduceMotion) 260 else 420)) { it } + fadeIn(tween(200)),
+                        else com.prism.music.ui.player.playerSlideIn(settings.reduceMotion),
                     exit = if (flyBack) fadeOut(tween(com.prism.music.ui.player.CoverFlight.FLIGHT_MS))
-                        else slideOutVertically(tween(if (settings.reduceMotion) 240 else 360)) { it } + fadeOut(tween(300)),
+                        else com.prism.music.ui.player.playerSlideOut(settings.reduceMotion),
                 ) {
                     // Settled once it's done sliding in; no longer the moment it starts to leave.
                     val settled = transition.currentState == androidx.compose.animation.EnterExitState.Visible &&

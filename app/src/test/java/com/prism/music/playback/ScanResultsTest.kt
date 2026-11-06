@@ -52,6 +52,18 @@ class ScanResultsTest {
     }
 
     /** #354: 1200 px for a 720 px screen is near three times the memory to fill and hand to the graphics chip. */
+    /** A fade over the slide draws the whole player into a layer each frame: most of the stutter on an A16 (#354, #343). */
+    @Test fun thePlayerSlidesWithNoFadeOnTop() {
+        for (reduce in listOf(false, true)) {
+            val enter = com.prism.music.ui.player.playerSlideIn(reduce).toString()
+            val exit = com.prism.music.ui.player.playerSlideOut(reduce).toString()
+            assert("Fade - null" in enter) { enter }
+            assert("Fade - null" in exit) { exit }
+            assert("Slide - null" !in enter) { enter }
+            assert("Slide - null" !in exit) { exit }
+        }
+    }
+
     @Test fun thePlayersCoverIsNoBiggerThanTheScreenShowsIt() {
         assertEquals(720, com.prism.music.ui.player.playerCoverPx(720, 1600, fullBleed = false))
         // Full-bleed crops it to fill its height.
