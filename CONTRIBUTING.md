@@ -27,6 +27,29 @@ To try your build without touching an installed Prism, build a side-by-side copy
 ./gradlew :app:assembleDebug -PsideBySide
 ```
 
+For a release build, the APK lands in `app/build/outputs/apk/release/`:
+
+```bash
+./gradlew :app:assembleRelease
+```
+
+Without a `keystore.properties` (and its keystore) in the project root, release builds are signed with the debug key so they install directly. Official releases use Prism's own key, so to install a self-built APK you first need to uninstall the official one. Release builds are deliberately unminified, because NewPipe Extractor and Rhino rely on reflection.
+
+## Where things are
+
+| Area | Where (`app/src/main/java/com/prism/music/`) |
+|---|---|
+| YouTube Music API, parsing and search ranking | `data/innertube/` |
+| Stream resolving | `data/stream/` |
+| Lyric providers and TTML / LRC / QRC / YRC / KRC parsers | `data/lyrics/` |
+| Made for you, Blend and song recognition | `data/foryou/`, `data/blend/`, `data/recognize/` |
+| Playback service, audio effects, Sing, DJ mode, Android Auto | `playback/` |
+| Prism Connect (casting, browser remote, handoff) | `connect/` |
+| Downloads and Smart Downloads | `download/` |
+| Compose UI and design kit | `ui/` |
+
+Stack: Kotlin, Jetpack Compose (Material 3), Media3 ExoPlayer and MediaSession, Room, DataStore, OkHttp, kotlinx.serialization, Coil, WorkManager, NewPipe Extractor, ONNX Runtime (downloaded on first use of Sing).
+
 ## Tests
 
 ```bash
