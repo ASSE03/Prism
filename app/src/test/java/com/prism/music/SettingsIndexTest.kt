@@ -55,7 +55,7 @@ class SettingsIndexTest {
         assertTrue("Frost's hint", frost != null && !frost.on(plain))
         assertTrue(frost!!.on(plain.copy(frostedGlass = true)))
         assertTrue(frost.on(plain.copy(liquidGlass = true)))
-        for (id in listOf(R.string.lock_screen_layout_label, R.string.lock_screen_show, R.string.lock_screen_paused_label, R.string.lock_screen_hide, R.string.lock_screen_allow, R.string.lock_screen_app_info)) {
+        for (id in listOf(R.string.lock_screen_layout_label, R.string.lock_screen_show, R.string.lock_screen_paused_label, R.string.lock_screen_hide, R.string.lock_screen_allow, R.string.lock_screen_allow_step, R.string.lock_screen_app_info)) {
             // By its group too: other pages have a "Layout".
             val needs = SettingsIndex.entries.first { it.title == com.prism.music.tr(id) && it.group == com.prism.music.tr(R.string.lock_screen_title) }.needs
             assertTrue(com.prism.music.tr(id), needs != null && !needs.on(plain))

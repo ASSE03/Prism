@@ -1635,13 +1635,18 @@ private fun LockScreenGroup() {
     Group(tr(R.string.lock_screen_title)) {
         Toggle(tr(R.string.lock_screen_title), tr(R.string.lock_screen_detail), b.lockScreen, info = tr(R.string.lock_screen_info)) { on ->
             prefs.setLockScreen(on)
-            if (on && !gate.canStartDirectly(context)) gate.openPermissionPage(context)
+            // From Android 13 an app installed from a file only gets "App was denied access" on that page: the steps come first.
+            if (on && !gate.canStartDirectly(context) && !gate.mayBeRestricted) gate.openPermissionPage(context)
         }
         if (b.lockScreen) {
             if (!canStart) {
                 Note(tr(R.string.lock_screen_needs_permission))
-                Item(tr(R.string.lock_screen_allow), tr(R.string.lock_screen_allow_detail), onClick = { gate.openPermissionPage(context) }, info = tr(R.string.lock_screen_allow_info))
-                Item(tr(R.string.lock_screen_app_info), tr(R.string.lock_screen_app_info_detail), onClick = { gate.openAppInfo(context) }, info = tr(R.string.lock_screen_app_info_info))
+                if (gate.mayBeRestricted) {
+                    Item(tr(R.string.lock_screen_app_info), tr(R.string.lock_screen_app_info_detail), onClick = { gate.openAppInfo(context) }, info = tr(R.string.lock_screen_app_info_info))
+                    Item(tr(R.string.lock_screen_allow_step), tr(R.string.lock_screen_allow_detail), onClick = { gate.openPermissionPage(context) }, info = tr(R.string.lock_screen_allow_info))
+                } else {
+                    Item(tr(R.string.lock_screen_allow), tr(R.string.lock_screen_allow_detail), onClick = { gate.openPermissionPage(context) }, info = tr(R.string.lock_screen_allow_info))
+                }
             }
             Label(tr(R.string.lock_screen_layout_label))
             if (s.performanceMode) Note(tr(R.string.lock_screen_performance))

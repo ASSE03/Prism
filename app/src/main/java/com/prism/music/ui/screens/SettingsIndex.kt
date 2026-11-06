@@ -441,6 +441,7 @@ object SettingsIndex {
         SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_title), tr(R.string.lock_screen_keywords)),
         SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_allow), tr(R.string.lock_screen_keywords), needs = lockScreen),
         SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_app_info), tr(R.string.lock_screen_keywords), needs = lockScreen),
+        SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_allow_step), tr(R.string.lock_screen_keywords), needs = lockScreen),
         SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_layout_label), tr(R.string.lock_screen_keywords), needs = lockScreen),
         SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_show), tr(R.string.lock_screen_keywords), needs = lockScreen),
         SettingEntry(SettingsSection.PLAYER, tr(R.string.lock_screen_title), tr(R.string.lock_screen_paused_label), tr(R.string.lock_screen_keywords), needs = lockScreen),

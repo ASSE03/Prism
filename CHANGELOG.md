@@ -12,7 +12,7 @@ What changed in each release. Older releases are described on the [Releases page
 - **Leaving it:** swipe up to unlock, or tap the cover to unlock and open the full player. On a phone with an under-screen fingerprint reader, Android only takes your finger after that swipe or tap. It closes once you've unlocked, leaving you where you were, with the music still playing. Calls and alarms stay above it.
 - **Your choices:** show or hide volume, the heart and where the sound is going; stay while paused for 10 minutes, until the phone sleeps, or not at all; "Hide the song's name and cover while locked".
 - **Light on the phone:** Performance mode always uses Quiet, with no blur or movement. It draws nothing with the screen off.
-- **It asks for "Display over other apps" when you turn it on** (Android 10 and up), because Android only lets an app come up by itself as the screen goes off with that permission. Prism never draws over other apps with it. Without it, some phones can still bring the player up a moment after waking, and others won't show it at all (a Pixel doesn't).
+- **It asks for "Display over other apps" when you turn it on** (Android 10 and up), because Android only lets an app come up by itself as the screen goes off with that permission. Prism never draws over other apps with it. Without it, some phones can still bring the player up a moment after waking, and others won't show it at all (a Pixel doesn't). From Android 13, Android may first say "App was denied access", because Prism doesn't come from a store. The way through is on the setting's page: Prism's App info → ⋮ at the top right → Allow restricted settings, then allow the permission.
 
 ### New
 

@@ -91,18 +91,23 @@ class LockScreenGate(private val context: Context, private val settings: Flow<Ap
         /** Whether a screen can be started as the phone goes to sleep: "Display over other apps", from Android 10. */
         fun canStartDirectly(context: Context): Boolean = Build.VERSION.SDK_INT < 29 || Settings.canDrawOverlays(context)
 
+        /** From Android 13 that permission is a "restricted setting" for an app installed from a file, as Prism always is. */
+        val mayBeRestricted: Boolean get() = Build.VERSION.SDK_INT >= 33
+
         /** Android's page for that permission (from Android 11 the whole list of apps, whatever is asked for), else Prism's App info. */
         fun openPermissionPage(context: Context) {
-            val page = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${context.packageName}")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            runCatching { context.startActivity(page) }.onFailure { openAppInfo(context) }
+            val page = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${context.packageName}"))
+            openOverPrism(context, page).onFailure { openAppInfo(context) }
         }
 
         /** Prism's App info: where a phone's "restricted setting" is lifted for an app that wasn't installed from a store. */
         fun openAppInfo(context: Context) {
-            runCatching {
-                context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${context.packageName}")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-            }
+            openOverPrism(context, Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${context.packageName}")))
         }
+
+        /** In Prism's own task, so Back comes straight back to the steps (in its own, a phone's Back can stay in Settings). */
+        private fun openOverPrism(context: Context, page: Intent) = runCatching { context.startActivity(page) }
+            .recoverCatching { context.startActivity(page.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
 
         /** On the notification's intent: this start says nothing about whether a direct one works. */
         internal const val FROM_NOTIFICATION = "from_notification"

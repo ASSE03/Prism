@@ -6,12 +6,15 @@ import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performSemanticsAction
+import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeUp
 import androidx.core.view.WindowCompat
@@ -298,6 +301,52 @@ class LockScreenTest {
         waitUntilShown()
         instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_HOME)
         waitUntilClosed()
+    }
+
+    /**
+     * From Android 13, Android answers an app installed from a file with "App was denied access" on its permission page,
+     * and that dialog doesn't say what to do. So turning the switch on stays here, with the way through in order.
+     */
+    @Test fun withoutThePermissionTheStepsComeFirst() {
+        org.junit.Assume.assumeTrue("restricted settings start at Android 13", android.os.Build.VERSION.SDK_INT >= 33)
+        val app = Fixture.context.packageName
+        instrumentation.uiAutomation.executeShellCommand("appops set $app SYSTEM_ALERT_WINDOW default").use { java.io.FileInputStream(it.fileDescriptor).readBytes() }
+        org.junit.Assume.assumeFalse("needs a phone where it isn't allowed yet", android.provider.Settings.canDrawOverlays(Fixture.context))
+        fun inFront() = instrumentation.uiAutomation.rootInActiveWindow?.packageName?.toString()
+        fun back() { instrumentation.uiAutomation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK) }
+        fun leavesThenComesBack(row: Int) {
+            compose.clickWhenFound(hasText(tr(row)) and hasClickAction(), 15_000)
+            val end = System.currentTimeMillis() + 10_000
+            while (inFront() == app && System.currentTimeMillis() < end) Thread.sleep(200)
+            assertTrue("${tr(row)} should open Android's page, in front: ${inFront()}", inFront() != app)
+            back()
+            // In front isn't resumed yet, and the rule throws until it is.
+            val home = System.currentTimeMillis() + 15_000
+            fun stepsShown() = runCatching { compose.onAllNodes(hasText(tr(row))).fetchSemanticsNodes().isNotEmpty() }.getOrDefault(false)
+            while (!stepsShown() && System.currentTimeMillis() < home) Thread.sleep(200)
+            assertTrue("back on Prism's page with the steps, in front: ${inFront()}", stepsShown())
+        }
+
+        Fixture.launch()
+        compose.openSettings()
+        // Not its name: the search box would then match too.
+        compose.onNode(hasSetTextAction()).performTextInput("keyguard")
+        compose.clickWhenFound(hasText(tr(R.string.lock_screen_title)) and hasClickAction(), 15_000)
+        compose.waitUntil(10_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isEmpty() }
+        compose.clickWhenFound(hasText(tr(R.string.lock_screen_title)) and hasClickAction(), 15_000)
+        compose.waitUntil(10_000) { settings.current.behavior.lockScreen }
+
+        // Android's own page would have taken over by now.
+        Thread.sleep(2_000)
+        assertEquals("turning it on stays on Prism's page", app, inFront())
+        compose.waitForText(tr(R.string.lock_screen_app_info))
+        compose.waitForText(tr(R.string.lock_screen_allow_step))
+        Fixture.screenshot("lock-screen-steps")
+
+        // Each opens its page, and coming back finds the steps still there.
+        leavesThenComesBack(R.string.lock_screen_app_info)
+        leavesThenComesBack(R.string.lock_screen_allow_step)
+        compose.waitForText(tr(R.string.lock_screen_app_info))
     }
 
     @Test fun tappingTheCoverOpensThePlayer() {
