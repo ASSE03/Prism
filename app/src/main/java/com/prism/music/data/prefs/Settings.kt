@@ -340,6 +340,10 @@ data class BehaviorPrefs(
     val lockScreenHideSong: Boolean = false,
     /** #349 (1.8.2): Home's Quick picks as Prism makes them around your artists (as before), or YouTube Music's own. */
     val quickPicksSource: QuickPicksSource = QuickPicksSource.PRISM,
+    /** #372: Speed dial's tiles from your own plays first, which change as you listen; off, YouTube's own come first, as before. */
+    val speedDialYoursFirst: Boolean = false,
+    /** When this sign-in's cookies were saved (0: before 1.8.2.1), for the diagnostics: Prism never renews them. */
+    val accountSavedAt: Long = 0,
     /**
      * #159 (1.8.2): autoplay and radios leave out what's played this session ([com.prism.music.playback.SessionHeard]).
      * Off, as before: only what's in the queue and what was heard in the last hours is left out.
@@ -2073,6 +2077,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         val panelSwipes = booleanPreferencesKey("panel_swipes")
         val recentShows = stringPreferencesKey("recent_shows")
         val quickPicksSource = stringPreferencesKey("quick_picks_source")
+        val speedDialYoursFirst = booleanPreferencesKey("speed_dial_yours_first")
+        val accountSavedAt = longPreferencesKey("account_saved_at")
         val autoplayNoRepeats = booleanPreferencesKey("autoplay_no_repeats")
         val radioNewness = floatPreferencesKey("radio_tune_newness")
         val radioDepth = floatPreferencesKey("radio_tune_depth")
@@ -2250,7 +2256,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 // 1.8.1 (#216): what plays and shows, not a look.
                 "explicit_content",
                 // 1.8.2 (#349): where Home's Quick picks come from.
-                "quick_picks_source",
+                "quick_picks_source", "speed_dial_yours_first", "account_saved_at",
                 // 1.8.2 (#159): what radios play, not a look.
                 "autoplay_no_repeats", "radio_tune_newness", "radio_tune_depth", "radio_tune_energy",
                 // 1.8.2 (#299, #281, #282, #280): how Prism behaves, not how it looks.
@@ -2575,6 +2581,8 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
                 lockScreenPaused = p.enum(K.lockScreenPaused, d.behavior.lockScreenPaused),
                 lockScreenHideSong = p[K.lockScreenHideSong] ?: d.behavior.lockScreenHideSong,
                 quickPicksSource = p.enum(K.quickPicksSource, d.behavior.quickPicksSource),
+                speedDialYoursFirst = p[K.speedDialYoursFirst] ?: d.behavior.speedDialYoursFirst,
+                accountSavedAt = p[K.accountSavedAt] ?: 0,
                 autoplayNoRepeats = p[K.autoplayNoRepeats] ?: d.behavior.autoplayNoRepeats,
                 radioTune = com.prism.music.data.foryou.RadioTune(
                     (p[K.radioNewness] ?: 0f).coerceIn(-1f, 1f), (p[K.radioDepth] ?: 0f).coerceIn(-1f, 1f), (p[K.radioEnergy] ?: 0f).coerceIn(-1f, 1f),
@@ -2860,6 +2868,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
         it[K.dataSyncId] = dataSyncId
         // A fresh sign-in is the session's first Google account.
         it[K.authUser] = 0
+        it[K.accountSavedAt] = System.currentTimeMillis()
     }
 
     fun saveAccountInfo(name: String, email: String?, avatar: String?) = edit {
@@ -2872,7 +2881,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     suspend fun saveIdentity(authUser: Int, dataSyncId: String, cookie: String? = null) = editNow {
         it[K.authUser] = authUser
         it[K.dataSyncId] = dataSyncId
-        if (cookie != null) it[K.cookie] = cookie
+        if (cookie != null) { it[K.cookie] = cookie; it[K.accountSavedAt] = System.currentTimeMillis() }
     }
 
     fun setVisitorData(v: String) = edit { it[K.visitorData] = v }
@@ -3187,6 +3196,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setPanelSwipes(v: Boolean) = edit { it[K.panelSwipes] = v }
     fun setRecentShows(v: RecentShows) = edit { it[K.recentShows] = v.name }
     fun setQuickPicksSource(v: QuickPicksSource) = edit { it[K.quickPicksSource] = v.name }
+    fun setSpeedDialYoursFirst(v: Boolean) = edit { it[K.speedDialYoursFirst] = v }
     fun setAutoplayNoRepeats(v: Boolean) = edit { it[K.autoplayNoRepeats] = v }
     fun setRadioTune(v: com.prism.music.data.foryou.RadioTune) = edit {
         it[K.radioNewness] = v.newness

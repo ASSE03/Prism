@@ -5,8 +5,17 @@ What changed in each release. Older releases are described on the [Releases page
 ## 1.8.2.1 (unreleased)
 
 ### Faster and lighter
+- Quick picks come sooner: Prism asks for what it needs at once, instead of one thing after another, and today's set is kept for the next time you open Prism (#371).
+- Looking up a song's music video ahead of time no longer asks for your account's Premium stream, which it never has, so it's quicker (#373).
+
+### New
+- Customize Home → Speed dial: your plays first. Tiles that change as you listen. Off by default (#372).
 
 ### Fixes
+- Quick picks: pulling down to refresh now really gives you other songs, and the section stays on screen while the new ones load (#371).
+- Premium quality: music videos looked up in the background could stop Prism asking for 256 kbps for an hour. They don't count any more, the pause is much shorter on an account that has had 256 kbps, and it ends when you change networks. If one of your account's ways of asking has no 256 kbps, Prism tries the others once (#373).
+- Premium quality now says so in Settings when YouTube isn't sending your account 256 kbps, and Settings says when YouTube no longer takes your sign-in, instead of songs just playing at the usual quality (#373).
+- Playback diagnostics now show what Premium quality asked for and got, a summary of your sign-in (never its secrets) and what happened to each play sent to your YouTube history (#372, #373, #377).
 
 ## 1.8.2
 

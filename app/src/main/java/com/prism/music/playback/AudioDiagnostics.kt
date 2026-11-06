@@ -162,7 +162,11 @@ object AudioDiagnostics {
         return buildString {
             append("Phone: ${Build.MANUFACTURER} ${Build.MODEL}, Android ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})\n")
             append("Prism: ${com.prism.music.BuildConfig.VERSION_NAME} (${com.prism.music.BuildConfig.VERSION_CODE}) ${com.prism.music.BuildConfig.APPLICATION_ID}\n")
-            append("Settings: quality ${s.audioQuality}, lossless ${s.lossless}, normalize ${s.normalize}, ")
+            val metered = c.app.getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered
+            // #372, #373, #377: with no secrets in it (cookie names, never their values).
+            append("Account: ${com.prism.music.data.innertube.AccountSummary.of(s.cookie, s.authUser, s.dataSyncId, s.visitorData, s.behavior.accountSavedAt)}; YouTube takes requests as: ${c.innerTube.seen.value?.text ?: "not asked yet"}\n")
+            append("Settings: Premium quality ${s.premiumStream} (${c.streams.premiumState.value}), Data saver ${s.dataSaver}, network metered $metered, history paused ${com.prism.music.data.HistoryPause.paused(s.behavior)}, ")
+            append("quality ${s.audioQuality}, lossless ${s.lossless}, normalize ${s.normalize}, ")
             append("skip silence ${s.skipSilence}, crossfade ${s.mix} (${s.mixSeconds} s), spatial ${s.spatial} (${(s.spatialAmount * 100).toInt()}%), ")
             append("EQ ${s.eq.enabled}, Sing ${c.sing.on.value}, DJ ${c.dj.onNow}, ")
             append("headphone correction ${c.headphoneEq.active.value?.let { "'${it.profile.name}' at ${(it.strength * 100).toInt()}%" } ?: "none"}\n")

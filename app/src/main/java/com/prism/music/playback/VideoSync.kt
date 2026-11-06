@@ -99,11 +99,11 @@ class VideoSync(
 
     private suspend fun measure(songId: String, videoId: String): Long? = coroutineScope {
         val (songSec, videoSec) = withContext(analysis) {
-            runCatching { streams.analysisAudio(songId).durationSec }.getOrDefault(0) to runCatching { streams.analysisAudio(videoId).durationSec }.getOrDefault(0)
+            runCatching { streams.analysisAudio(songId).durationSec }.getOrDefault(0) to runCatching { streams.analysisAudio(videoId, video = true).durationSec }.getOrDefault(0)
         }
         val seconds = videoSeconds(songSec, videoSec)
         val song = async(analysis) { fingerprintOf(songId, SONG_SECONDS) }
-        val video = async(analysis) { fingerprintOf(videoId, seconds) }
+        val video = async(analysis) { fingerprintOf(videoId, seconds, video = true) }
         val s = song.await() ?: return@coroutineScope null
         val v = video.await() ?: return@coroutineScope null
         ensureActive()
@@ -129,8 +129,8 @@ class VideoSync(
         Thread({ android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND); r.run() }, "VideoSync")
     }.asCoroutineDispatcher()
 
-    private fun fingerprintOf(id: String, seconds: Int): Array<FloatArray>? {
-        val a = streams.analysisAudio(id)
+    private fun fingerprintOf(id: String, seconds: Int, video: Boolean = false): Array<FloatArray>? {
+        val a = streams.analysisAudio(id, video)
         val want = if (a.durationSec > 0) (a.contentLength * (seconds + 5) / a.durationSec * 1.15).toLong() + 96_000 else 2_500_000
         val end = if (a.contentLength > 0) minOf(a.contentLength, want) - 1 else want
         val file = File(context.cacheDir, "sync_$id.part")
