@@ -51,14 +51,16 @@ class ScanResultsTest {
         assertEquals(false, VideoSync.watchesLately(now - 15 * day, now))
     }
 
-    @Test fun wiFiIsHeldAwakeOnlyWhileItsNeeded() {
-        val local = androidx.media3.common.C.WAKE_MODE_LOCAL
-        val network = androidx.media3.common.C.WAKE_MODE_NETWORK
-        assertEquals(network, wakeModeFor(loading = true, live = false, sharing = false))
-        assertEquals(local, wakeModeFor(loading = false, live = false, sharing = false))
-        assertEquals(network, wakeModeFor(loading = false, live = true, sharing = false))
-        assertEquals(network, wakeModeFor(loading = false, live = false, sharing = true))
+    /** #354: 1200 px for a 720 px screen is near three times the memory to fill and hand to the graphics chip. */
+    @Test fun thePlayersCoverIsNoBiggerThanTheScreenShowsIt() {
+        assertEquals(720, com.prism.music.ui.player.playerCoverPx(720, 1600, fullBleed = false))
+        // Full-bleed crops it to fill its height.
+        assertEquals(1200, com.prism.music.ui.player.playerCoverPx(720, 1600, fullBleed = true))
+        assertEquals(1000, com.prism.music.ui.player.playerCoverPx(600, 1000, fullBleed = true))
+        assertEquals(1200, com.prism.music.ui.player.playerCoverPx(1344, 2992, fullBleed = false))
+        assertEquals(720, com.prism.music.ui.player.playerCoverPx(1600, 720, fullBleed = false))
     }
+
 
     @Test fun onlyTheFirstCountSamplesAreRead() {
         val pcm = music()

@@ -86,16 +86,17 @@ object BackgroundBudget {
     fun pace(goOn: () -> Boolean = { true }) {
         if (inJob.get() == true) return
         while (goOn()) {
-            val rest = gauge.rest(where(), slowPhone())
+            val place = where()
+            val rest = gauge.rest(place, slowPhone())
+            if (place != Where.AWAY) saidHeld = false
             if (rest <= 0) break
-            if (rest >= HOLD_MS && !saidHeld) {
+            if (place == Where.AWAY && !saidHeld) {
                 saidHeld = true
-                AudioDiagnostics.log("background", "held: nothing playing and nothing on screen, so song scans and the like wait")
-                Log.i(TAG, "held until the listener is back")
+                AudioDiagnostics.log("background", "nothing playing and nothing on screen: song scans and the like go slowly, then wait")
+                Log.i(TAG, "out of sight with nothing playing: waiting")
             }
             Thread.sleep(rest)
         }
-        saidHeld = false
     }
 
     private const val TAG = "PrismBudget"

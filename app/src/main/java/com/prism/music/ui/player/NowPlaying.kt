@@ -527,7 +527,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     val artUrl = hiRes(songArt, 1200)
     // Decoded at full size whatever size the cover is first laid out at (#86): opened mid-animation or with lyrics
     // open it starts out small, and the picture decoded for that size was then stretched over the whole cover.
-    val artRequest = remember(artUrl) { coil3.request.ImageRequest.Builder(context).data(artUrl).size(1200).build() }
+    val artRequest = remember(artUrl, settings.fullBleedArtwork) { playerCoverRequest(context, artUrl, settings.fullBleedArtwork) }
     var artLoaded by remember(artUrl) { mutableStateOf(false) }
     // Vinyl: the cover is a record (its own shape, no edge-to-edge banner).
     val vinyl = layout == com.prism.music.data.prefs.PlayerLayout.VINYL && !videoMode

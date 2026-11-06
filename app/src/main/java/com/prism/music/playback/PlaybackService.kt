@@ -394,7 +394,6 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             override fun setVolume(v: Int) = c.cast.setVolume(v)
             override fun adjust(delta: Int) = c.cast.adjustVolume(delta)
         }
-        scope.launch { kotlinx.coroutines.flow.combine(c.cast.state, c.together.state) { _, _ -> }.collect { applyWakeMode() } }
         c.cast.attach(player, object : com.prism.music.connect.Cast.Hooks {
             override fun beforeCasting() {
                 mix.stopBlend()
@@ -836,20 +835,6 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         saveEpisodePosition()
         saveQueue(now = true)
         pauseAllPlayersAndStopSelf()
-    }
-
-    override fun onIsLoadingChanged(isLoading: Boolean) = applyWakeMode()
-
-    private var wakeModeNow = C.WAKE_MODE_NETWORK
-
-    /** See [wakeModeFor]. */
-    private fun applyWakeMode() {
-        val mode = wakeModeFor(
-            loading = player.isLoading,
-            live = player.currentMediaItem?.toSong()?.isLive == true,
-            sharing = c.cast.casting || c.together.state.value !is com.prism.music.playback.together.TogetherState.Idle,
-        )
-        if (mode != wakeModeNow) { wakeModeNow = mode; player.setWakeMode(mode) }
     }
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
@@ -1320,6 +1305,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             // Crossfade needs it, near its end).
             // With the waveform bar, the playing song goes first: its bar is waiting for it.
             for (song in songs.sortedBy { if (wave) it.id != playing else it.id == playing }) {
+                // Asked again for each: the listener may have left since these were lined up.
+                if (song.id !in MixTempo.worthScanning(all.map { it.id }, playing, c.visible.value, s.mix || wave, QUEUE_AHEAD)) continue
                 c.mixTempo.measure(song.id, network, edges, wave = wave, peak = s.normalize)
                 // Measured while it's just begun: its own figure takes over (later in the song, a jump would be heard).
                 if (trackedSong?.id == song.id && settling()) applyNormalization()
@@ -2985,14 +2972,5 @@ private const val RESEQUENCE_GAP_MS = 1_500L
 private const val SMART_LOOK_AHEAD = 12
 /** How many queued songs ahead are got ready (their loudness and edges). */
 private const val QUEUE_AHEAD = 3
-
-/**
- * What the player keeps awake: the processor while it plays, always; Wi-Fi at full power only while it's loading. A song
- * is loaded whole soon after it starts (and the next one), so for most of its length the radio has nothing to do and can
- * doze between beacons; the lock used to be held for as long as music played. Kept on for what never stops needing the
- * network: a live stream, and casting or Listen Together (the phone serves those over Wi-Fi itself).
- */
-internal fun wakeModeFor(loading: Boolean, live: Boolean, sharing: Boolean): Int =
-    if (loading || live || sharing) C.WAKE_MODE_NETWORK else C.WAKE_MODE_LOCAL
 /** How far ahead the player loads: a whole song (and the start of the next, near its end). */
 private const val WHOLE_SONG_MS = 300_000

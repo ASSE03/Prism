@@ -870,6 +870,22 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                         com.prism.music.ui.player.CoverFlight.player = null
                     } else if (flight) com.prism.music.ui.player.CoverFlight.fly()
                 }
+                // #354: what the player shows for this song, ready before it's opened.
+                val artAhead = song?.takeIf { !playerOpen }?.let { c.covers.art(it) }
+                if (artAhead != null) {
+                    val warmContext = androidx.compose.ui.platform.LocalContext.current
+                    LaunchedEffect(artAhead, settings.fullBleedArtwork, settings.playerBackground, settings.playerBlur) {
+                        // Not as the song starts, whose own start comes first, nor for a song skipped straight past.
+                        kotlinx.coroutines.delay(1_500)
+                        runCatching {
+                            com.prism.music.ui.player.warmPlayerArt(
+                                warmContext, artAhead, settings.fullBleedArtwork,
+                                meshToo = settings.playerBackground != com.prism.music.data.prefs.PlayerBackground.GRADIENT,
+                                blurStrength = settings.playerBlur,
+                            )
+                        }
+                    }
+                }
                 AnimatedVisibility(
                     playerOpen && song != null,
                     enter = if (flight) fadeIn(tween(com.prism.music.ui.player.CoverFlight.FLIGHT_MS))
