@@ -606,7 +606,7 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
         val musicPlaying = c.player.isPlaying.collectAsState()
         val playingNow = remember(musicPlaying) { { musicPlaying.value } }
         // What the song rows mark (liked, downloaded, video saved): collected here once, not by every row in view.
-        val rowMarks = com.prism.music.ui.components.rememberRowMarks(c.library.likedIds, c.downloadState, c.downloadStandIns, c.videoState)
+        val rowMarks = com.prism.music.ui.components.rememberRowMarks(c.library.likedIds, c.downloadState, c.downloadStandIns, c.videoState) { s -> c.downloads.playsFromPhone(s) }
         CompositionLocalProvider(
             com.prism.music.ui.components.LocalRowMarks provides rowMarks,
             com.prism.music.ui.components.LocalPlayerCover provides playerCover,

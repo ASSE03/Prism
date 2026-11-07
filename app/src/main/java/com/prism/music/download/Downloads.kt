@@ -54,6 +54,17 @@ data class DownloadInfo(val song: Song?, val state: Int, val percent: Float, val
  */
 fun Map<String, DownloadInfo>.forRow(id: String, standIns: Map<String, String>): DownloadInfo? = this[id] ?: standIns[id]?.let { this[it] }
 
+/**
+ * A song row's downloaded mark (#385, 1.8.3): downloaded under its id or its song's (#315), or it plays from a file on
+ * the phone. Playing matches a file by the song (title, artist, length), while the mark went by id only, so another
+ * playlist's id for the same song played the FLAC with no mark. [fromPhone] is asked only while lossless sync has
+ * files at all.
+ */
+fun rowDownloaded(song: Song, downloads: Map<String, DownloadInfo>, standIns: Map<String, String>, fromPhone: (Song) -> Boolean): Boolean {
+    if (downloads.forRow(song.id, standIns)?.state == Download.STATE_COMPLETED) return true
+    return !song.isLocal && !song.isVideo && downloads.values.any { it.lossless } && fromPhone(song)
+}
+
 /** A song's music video saved for offline: its picture, plus the video's own audio when that isn't the song's. */
 data class VideoDownload(val videoId: String, val state: Int, val percent: Float, val bytes: Long)
 
@@ -512,6 +523,12 @@ class DownloadRepository(private val context: Context, private val c: AppContain
     )
 
     fun isDownloaded(id: String) = _downloads.value[id]?.state == Download.STATE_COMPLETED
+
+    /** #385: this song plays from a file on the phone, by the same matcher and settings playback uses. */
+    fun playsFromPhone(song: Song): Boolean {
+        val kinds = com.prism.music.data.local.OwnFiles.kinds(c.settings.current)
+        return kinds.any && c.localLossless.match(song, lossless = kinds.lossless, lossy = kinds.lossy, note = false) != null
+    }
 
     /** True when this song is only here as a lossless file on the phone (not downloaded by Prism). */
     fun isLosslessOnly(id: String) = id in _lossless.value && id !in _media.value

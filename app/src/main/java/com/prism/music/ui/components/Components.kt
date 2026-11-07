@@ -171,7 +171,7 @@ fun SongRow(
     // The likes, downloads and saved videos, collected once for the whole app (PrismRoot) rather than by each row: a
     // row coming into view during a fling started four collectors of its own (1.8.1).
     val marks = LocalRowMarks.current ?: LocalContainer.current.let { c ->
-        rememberRowMarks(c.library.likedIds, c.downloadState, c.downloadStandIns, c.videoState)
+        rememberRowMarks(c.library.likedIds, c.downloadState, c.downloadStandIns, c.videoState) { s -> c.downloads.playsFromPhone(s) }
     }
     var menu by remember { mutableStateOf(false) }
     val done = androidx.media3.exoplayer.offline.Download.STATE_COMPLETED
@@ -179,7 +179,9 @@ fun SongRow(
     // (a list on screen while Smart Downloads ran was rebuilt row by row at each step).
     val liked by remember(song.id, marks) { derivedStateOf { song.id in marks.liked.value } }
     // A music video downloaded as its song shows as downloaded (#315).
-    val downloaded by remember(song.id, marks) { derivedStateOf { marks.downloads.value.forRow(song.id, marks.standIns.value)?.state == done } }
+    // #385: a row whose song plays from a file on the phone too, whatever id the list gives it (read again whenever
+    // the downloads change, which they do as lossless sync finds files).
+    val downloaded by remember(song.id, marks) { derivedStateOf { com.prism.music.download.rowDownloaded(song, marks.downloads.value, marks.standIns.value, marks.fromPhone) } }
     val videoSaved by remember(song.id, marks) { derivedStateOf { marks.videos.value[song.id]?.state == done } }
     SongRowLayout(
         song, modifier, index, playing, trailingInfo, starred,
@@ -199,6 +201,8 @@ class RowMarks(
     val downloads: androidx.compose.runtime.State<Map<String, com.prism.music.download.DownloadInfo>>,
     val standIns: androidx.compose.runtime.State<Map<String, String>>,
     val videos: androidx.compose.runtime.State<Map<String, com.prism.music.download.VideoDownload>>,
+    /** #385 (1.8.3): the song plays from a file on the phone (lossless sync's matcher, as playback asks it). */
+    val fromPhone: (Song) -> Boolean = { false },
 )
 
 /** The app's [RowMarks], provided once at its root; null (a TV, a test) makes each row collect its own. */
@@ -211,12 +215,13 @@ fun rememberRowMarks(
     downloads: kotlinx.coroutines.flow.StateFlow<Map<String, com.prism.music.download.DownloadInfo>>,
     standIns: kotlinx.coroutines.flow.StateFlow<Map<String, String>>,
     videos: kotlinx.coroutines.flow.StateFlow<Map<String, com.prism.music.download.VideoDownload>>,
+    fromPhone: (Song) -> Boolean = { false },
 ): RowMarks {
     val l = liked.collectAsState()
     val d = downloads.collectAsState()
     val s = standIns.collectAsState()
     val v = videos.collectAsState()
-    return remember(l, d, s, v) { RowMarks(l, d, s, v) }
+    return remember(l, d, s, v) { RowMarks(l, d, s, v, fromPhone) }
 }
 
 /** [SongRow]'s look, given what it shows (so it can be drawn without the app around it: the Design gallery, tests). */
