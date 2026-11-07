@@ -21,6 +21,14 @@ What changed in each release. Older releases are described on the [Releases page
 
 - Immersive mode shows your lyric translation under the lines, as the lyrics page does, with the switch in its menu too (#358)
 
+- **Background work keeps to a budget** (#373). Song scans, video sync and Sing getting songs ready now slow down when nobody needs them: about one core's worth while music plays out of sight, a little for a minute after you pause and leave, then nothing until you're back. A OnePlus 11 had Prism closed by Android three times for using the processor in the background; on a Galaxy A16, leaving Prism paused right after starting a new album went from 96% of a core in the first minute to 12%, and the first minute of a new album playing with the screen off from 144% to 39%.
+- **Fewer scans out of sight.** With the screen off, Prism scans only the next song, not the next three. The rest wait until you're back or until they're next.
+- **Videos are measured ahead only if you watch them.** A listener who hasn't picked Video in 14 days no longer pays for it; the first tap on Video measures then.
+- **Far less memory churned by scans.** The loudness step uses 0.2 MB instead of 24 MB, the key step 8 MB instead of 23 MB, with the same results. The phone's garbage collector ran about a quarter as much during scans.
+- **Sing's helper thread sleeps while Sing is off.** It woke about four times a second for nothing.
+- **The player opens more smoothly** (#354, #343). Its cover and background are ready before it opens, and it slides without a fade on top: the fade made the phone's graphics chip draw the whole player twice each frame. On a Galaxy A16 the worst frame of an opening went from 66 to 46 ms (75 to 48 ms in Performance mode).
+- **Frosted glass costs less.** It works from a smaller copy of what's behind it and looks the same. Scrolling a long playlist on a Galaxy A16, the typical frame went from 31 to 27 ms; Home barely moved.
+
 ### Fixes
 - Quick picks: pulling down to refresh now really gives you other songs, and the section stays on screen while the new ones load (#371).
 - Premium quality: music videos looked up in the background could stop Prism asking for 256 kbps for an hour. They don't count any more, the pause is much shorter on an account that has had 256 kbps, and it ends when you change networks. If one of your account's ways of asking has no 256 kbps, Prism tries the others once (#373).

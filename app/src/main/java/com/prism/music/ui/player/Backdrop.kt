@@ -147,20 +147,63 @@ fun rememberArtworkMesh(url: String?): ArtworkMesh? {
     LaunchedEffect(mesh) { held.value = mesh }
     LaunchedEffect(url) {
         if (url == null || meshCache[url] != null) return@LaunchedEffect
-        repeat(3) { attempt ->
-            if (attempt > 0) kotlinx.coroutines.delay(1500)
-            val bmp = runCatching { decodeSmall(context, url, 120) }.getOrNull()
-            if (bmp != null) {
-                val built = withContext(Dispatchers.Default) { meshOf(bmp, url.hashCode()) }
-                if (built != null) {
-                    meshCache[url] = built
-                    mesh = built
-                }
-                return@LaunchedEffect
-            }
-        }
+        buildMesh(context, url)?.let { mesh = it }
     }
     return mesh
+}
+
+/** Works out and keeps [url]'s mesh. On the main thread (the cache isn't shared), with the work off it. */
+private suspend fun buildMesh(context: android.content.Context, url: String): ArtworkMesh? {
+    repeat(3) { attempt ->
+        if (attempt > 0) kotlinx.coroutines.delay(1500)
+        val bmp = runCatching { decodeSmall(context, url, 120) }.getOrNull()
+        if (bmp != null) {
+            val built = withContext(Dispatchers.Default) { meshOf(bmp, url.hashCode()) }
+            if (built != null) meshCache[url] = built
+            return built
+        }
+    }
+    return null
+}
+
+/**
+ * The player slides in and out, with no fade on top (#354, #343). A fade draws the whole player into a picture of its own
+ * every frame and then draws that on the screen, which on a phone's graphics chip was most of the stutter: an A16 had six
+ * frames over 34 ms each time the player opened, whatever was on the player (Performance mode or not, blur or not). The
+ * player covers the whole screen, so the fade was barely seen.
+ */
+internal fun playerSlideIn(reduceMotion: Boolean): androidx.compose.animation.EnterTransition =
+    androidx.compose.animation.slideInVertically(tween(if (reduceMotion) 260 else 420)) { it }
+
+internal fun playerSlideOut(reduceMotion: Boolean): androidx.compose.animation.ExitTransition =
+    androidx.compose.animation.slideOutVertically(tween(if (reduceMotion) 240 else 360)) { it }
+
+/**
+ * The size the player's cover is decoded at (#86: whatever size it's first laid out at), no bigger than the screen shows
+ * it: the screen's short side, or its long side for a full-bleed picture (cropped to fill it). A Redmi A3's 720 px screen
+ * has no use for 1200 px, which is near three times the memory to fill and hand to the graphics chip.
+ */
+internal fun playerCoverPx(widthPx: Int, heightPx: Int, fullBleed: Boolean): Int =
+    minOf(1200, if (fullBleed) maxOf(widthPx, heightPx) else minOf(widthPx, heightPx))
+
+internal fun playerCoverRequest(context: android.content.Context, url: String?, fullBleed: Boolean): ImageRequest {
+    val m = context.resources.displayMetrics
+    return ImageRequest.Builder(context).data(url).size(playerCoverPx(m.widthPixels, m.heightPixels, fullBleed)).build()
+}
+
+/**
+ * Gets what the player shows for a song ready while it isn't open (#354, a Redmi A3: "a noticeable single stutter" opening
+ * the player, as the artwork loads): the cover at the player's size, in memory, and the backdrop worked out from it. The
+ * player then has them in its first frame rather than taking them mid-slide. Only while Prism is on screen (nothing
+ * here runs for a song that changes with the phone in a pocket). On the main thread, the work off it.
+ */
+internal suspend fun warmPlayerArt(context: android.content.Context, art: String, fullBleed: Boolean, meshToo: Boolean, blurStrength: Float) {
+    if (meshToo && meshCache[art] == null) buildMesh(context, art)
+    val step = blurStep(blurStrength)
+    val key = blurKey(art, step)
+    if (blurCache[key] == null) buildBlur(context, art, step)?.let { blurCache[key] = it }
+    // Last: a picture with one address whatever the size (a file's cover) keeps one copy in memory, the last one asked for.
+    SingletonImageLoader.get(context).execute(playerCoverRequest(context, hiRes(art, 1200), fullBleed))
 }
 
 /**
@@ -383,19 +426,26 @@ private fun meshOf(src: Bitmap, seed: Int): ArtworkMesh? {
 @Composable
 fun rememberFullArtworkBlur(url: String?, strength: Float = 1f): ImageBitmap? {
     val context = LocalContext.current
-    val step = (strength.coerceIn(0.4f, 1.8f) * 10).roundToInt()
-    val key = url?.let { if (step == 10) it else "$it@$step" }
+    val step = blurStep(strength)
+    val key = url?.let { blurKey(it, step) }
     var image by remember(key) { mutableStateOf(key?.let(blurCache::get)) }
     LaunchedEffect(key) {
         if (url == null || key == null || image != null) return@LaunchedEffect
-        val bmp = runCatching { decodeSmall(context, url, 128) }.getOrNull() ?: return@LaunchedEffect
-        val blurred = withContext(Dispatchers.Default) {
-            capLuminance(boxBlur(bmp, 3, ((minOf(bmp.width, bmp.height) / 12f) * step / 10f).roundToInt().coerceAtLeast(1)), BLUR_CEILING)
-        }.asImageBitmap()
+        val blurred = buildBlur(context, url, step) ?: return@LaunchedEffect
         blurCache[key] = blurred
         image = blurred
     }
     return image
+}
+
+private fun blurStep(strength: Float) = (strength.coerceIn(0.4f, 1.8f) * 10).roundToInt()
+private fun blurKey(url: String, step: Int) = if (step == 10) url else "$url@$step"
+
+private suspend fun buildBlur(context: android.content.Context, url: String, step: Int): ImageBitmap? {
+    val bmp = runCatching { decodeSmall(context, url, 128) }.getOrNull() ?: return null
+    return withContext(Dispatchers.Default) {
+        capLuminance(boxBlur(bmp, 3, ((minOf(bmp.width, bmp.height) / 12f) * step / 10f).roundToInt().coerceAtLeast(1)), BLUR_CEILING)
+    }.asImageBitmap()
 }
 
 @Composable

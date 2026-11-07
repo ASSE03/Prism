@@ -50,6 +50,7 @@ object QuickScan {
             var isFloat = false
             var factor = max(1, rate / 11025)
             val pieces = ArrayList<FloatArray>()
+            val mono = Downmix()
             val info = MediaCodec.BufferInfo()
             for ((startMs, lengthMs) in windows) {
                 val from = startMs * 1000
@@ -58,8 +59,7 @@ object QuickScan {
                 dec.flush()
                 var out = FloatArray(((lengthMs / 1000.0 + 1) * rate / factor).toInt().coerceAtLeast(1024))
                 var count = 0
-                var acc = 0f
-                var n = 0
+                mono.restart()
                 var inputDone = false
                 var idle = 0
                 while (true) {
@@ -90,15 +90,9 @@ object QuickScan {
                             buf.position(info.offset)
                             buf.limit(info.offset + info.size)
                             val frames = info.size / (channels * (if (isFloat) 4 else 2))
-                            for (f in 0 until frames) {
-                                var m = 0f
-                                for (c in 0 until channels) m += if (isFloat) buf.float else buf.short / 32768f
-                                acc += m / channels
-                                if (++n == factor) {
-                                    if (count == out.size) out = out.copyOf(out.size * 2)
-                                    out[count++] = acc / factor
-                                    acc = 0f; n = 0
-                                }
+                            mono.add(buf, frames, channels, isFloat, factor) { v ->
+                                if (count == out.size) out = out.copyOf(out.size * 2)
+                                out[count++] = v
                             }
                         }
                         dec.releaseOutputBuffer(o, false)

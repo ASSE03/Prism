@@ -1289,11 +1289,13 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // A radio tuned calm or energetic goes by what's been scanned, so songs heard are scanned for it too.
         if (!s.mix && !s.normalize && !wave && s.behavior.radioTune.energy == 0f) return
         val network = s.mixTempoOnCellular || getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered == false
-        val songs = items.mapNotNull { it?.toSong() }.filter { !it.isLive && !it.isEpisode }.distinctBy { it.id }
+        val playing = player.currentMediaItem?.mediaId
+        val all = items.mapNotNull { it?.toSong() }.filter { !it.isLive && !it.isEpisode }.distinctBy { it.id }
+        val worth = MixTempo.worthScanning(all.map { it.id }, playing, c.visible.value, s.mix || wave, QUEUE_AHEAD)
+        val songs = all.filter { it.id in worth }
         if (songs.isEmpty()) return
         // Songs scanned before fade-outs and intros were measured are scanned again only for Crossfade's automatic length.
         val edges = s.mix && s.mixAuto
-        val playing = player.currentMediaItem?.mediaId
         scanJob?.cancel()
         scanJob = scope.launch {
             if (playing != null) untilUnderWay(playing, UNDER_WAY_MS)
@@ -1308,6 +1310,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             // Crossfade needs it, near its end).
             // With the waveform bar, the playing song goes first: its bar is waiting for it.
             for (song in songs.sortedBy { if (wave) it.id != playing else it.id == playing }) {
+                // Asked again for each: the listener may have left since these were lined up.
+                if (song.id !in MixTempo.worthScanning(all.map { it.id }, playing, c.visible.value, s.mix || wave, QUEUE_AHEAD)) continue
                 c.mixTempo.measure(song.id, network, edges, wave = wave, peak = s.normalize)
                 // Measured while it's just begun: its own figure takes over (later in the song, a jump would be heard).
                 if (trackedSong?.id == song.id && settling()) applyNormalization()
@@ -1520,13 +1524,16 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      */
     fun prefetchVideo(song: Song, videoId: String) {
         if (song.isLocal || videoId in prefetched) return
+        // Nobody taps Video on a screen that isn't showing, unless videos are what they watch.
+        val watches = videoWanted || c.videoSync.watchesVideos()
+        if (!watches && !c.visible.value) return
         prefetched += videoId
         scope.launch(Dispatchers.IO) {
             // Not alongside the song's own start: it was one of the resolves slowing that down.
             c.yieldToPlaying(null)
             runCatching { c.streams.resolve(videoId, withVideo = true) }.onFailure { prefetched -= videoId }
             val metered = getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered != false
-            if (metered || videoId == song.id || c.videoSync.cached(song.id, videoId) != null) return@launch
+            if (!watches || metered || videoId == song.id || c.videoSync.cached(song.id, videoId) != null) return@launch
             // Measured once the song is under way: a long video ("Alright" runs three minutes past its song) means
             // minutes of audio to fetch and analyse, which slowed the song's own start when it ran at once.
             withContext(Dispatchers.Main) { untilUnderWay(song.id) }
@@ -1783,6 +1790,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         if (player.playbackState == Player.STATE_IDLE) player.prepare()
         videoWatchdog?.cancel()
         if (vid != null) {
+            c.videoSync.noteWatched()
             val switchedAt = android.os.SystemClock.elapsedRealtime()
             if (known == null && vid != song.id && now > 1_500) scope.launch {
                 val lag = c.videoSync.lagMs(song.id, vid) ?: return@launch

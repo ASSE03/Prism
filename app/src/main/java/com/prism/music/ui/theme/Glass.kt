@@ -87,6 +87,14 @@ internal fun glassValues(dark: Boolean, clear: Boolean): GlassValues = when {
 /** Frosted Glass's blur, in dp; [thin] is Liquid Glass · Clear on a flat bar, which keeps what's behind it nearly sharp. */
 internal fun frostedBlurDp(blur: Float, thin: Boolean): Float = if (thin) 6f else 28f * blur
 
+/**
+ * What's behind Frosted Glass is sampled at half size (Haze's own default is 0.79) on its usual blur: at 28 dp the two look the
+ * same, and an A16's graphics chip does up to a sixth less for each frame on a playlist (Home: a little). A [thin] frost keeps
+ * what's behind it nearly sharp, so it keeps the finer sampling.
+ */
+internal fun frostedInput(thin: Boolean): dev.chrisbanes.haze.HazePerformanceMode =
+    if (thin) dev.chrisbanes.haze.HazePerformanceMode.Default else dev.chrisbanes.haze.HazePerformanceMode.Performance
+
 /** Frosted Glass's own veil at the Frost slider's [frost] (1 = 0.55 dark, 0.62 light, as it has always been). */
 internal fun frostedWash(dark: Boolean, frost: Float, thin: Boolean): Float =
     ((if (thin) (if (dark) 0.24f else 0.30f) else if (dark) 0.55f else 0.62f) * frost).coerceAtMost(0.95f)
@@ -207,7 +215,7 @@ fun GlassSurface(
             modifier
                 .shadow(elevation * 0.6f, shape, ambientColor = Color.Black.copy(alpha = 0.25f), spotColor = Color.Black.copy(alpha = 0.25f))
                 .clip(shape)
-                .hazeBlur(input = HazeInput.Backdrop(haze), style = style)
+                .hazeBlur(input = HazeInput.Backdrop(haze), style = style, performanceMode = frostedInput(thin))
                 .rim(Color.White.copy(alpha = if (dark || onMedia) 0.18f else 0.55f), Color.White.copy(alpha = 0.03f), shape, all = refract),
             content = content,
         )
