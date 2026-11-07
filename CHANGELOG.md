@@ -27,6 +27,7 @@ What changed in each release. Older releases are described on the [Releases page
 ### Fixes
 
 - **Quick picks:** pulling down to refresh now really gives you other songs, and the section stays on screen while the new ones load, or if they can't be made (#371). After signing out or switching accounts, Home no longer keeps showing the last account's lists.
+- **Undo after picking a glass style** now takes all of it back. It could leave part of the choice behind.
 - **Premium quality:** music videos looked up in the background could stop Prism asking for 256 kbps for an hour. They don't count any more, the pause is much shorter on an account that has had 256 kbps, and it ends when you change networks or sign-ins. If one of your account's ways of asking has no 256 kbps, Prism tries the others (#373).
 - **Premium quality says what's happening.** Settings tells you when YouTube isn't sending your account 256 kbps, and when YouTube no longer takes your sign-in, instead of songs just playing at the usual quality (#373).
 - **Your own photo as a background works in every language** (#378). In German, Italian, Russian, Polish, Swedish, Hungarian, Malay and Filipino, the picture was saved under a translated name, so Prism didn't see it as a picture and showed Ambient (black with Pure black on). Photos you already picked come back by themselves, in your saved Looks too.
