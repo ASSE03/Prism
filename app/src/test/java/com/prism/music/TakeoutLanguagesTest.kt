@@ -75,7 +75,7 @@ class TakeoutLanguagesTest {
 
     /** Two history files in one zip each start fresh: a play's length isn't measured from the other file's. */
     @Test fun aSecondFileDoesntMeasureFromTheFirst() {
-        val (_, plays) = read("takeout.zip", zip("a.json" to "[$play]", "b.json" to "[$play]"))
+        val (_, plays) = read("takeout.zip", zip("a.json" to "[$play]", "b.json" to "[${play.replace("abcdefghijk", "bcdefghijkl")}]"))
         assertEquals(2, plays.size)
         assertEquals(plays[0].playedMs, plays[1].playedMs)
     }

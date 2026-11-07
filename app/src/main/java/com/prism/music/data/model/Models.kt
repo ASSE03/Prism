@@ -175,6 +175,10 @@ fun List<Shelf>.quickPicks(owner: String? = null): Shelf? = firstOrNull { it.tit
 fun List<Shelf>.speedDial(owner: String? = null): Shelf? = firstOrNull { it.title.equals("Speed dial", true) } ?: firstOrNull { it.title.equals("Listen again", true) }
     ?: speedDialByShape(owner)
 
+/** For the diagnostics log (#372): Speed dial's tiles in YouTube's own order, by kind. */
+fun List<Shelf>.speedDialOrderLine(owner: String? = null): String =
+    "; Speed dial's order: " + speedDial(owner)?.items.orEmpty().take(12).joinToString(" ") { it.javaClass.simpleName.removeSuffix("Item").lowercase() }
+
 /**
  * Found by its shape (another language): a shelf headed with your name, else one stacked a few per column; of several,
  * the one with songs in it (#266: an account in English (India) got only saved playlists and albums, never a song, as if

@@ -7,6 +7,7 @@ import com.prism.music.ui.theme.lit
 import androidx.compose.foundation.border
 import com.prism.music.data.model.quickPicks
 import com.prism.music.data.model.speedDial
+import com.prism.music.data.model.speedDialOrderLine
 import com.prism.music.ui.theme.PrismIcons
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -279,7 +280,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
             } + tr(R.string.quick_picks_speed_dial, fresh.quickPicks(owner)?.title ?: "none", fresh.speedDial(owner)?.title ?: "none") +
                 (if (kept.isNotEmpty()) tr(R.string.kept_from_before, kept.joinToString { it.title }) else "") +
                 // #372: the tiles in YouTube's own order, by kind: is a first page of playlists how YouTube sent it?
-                "; Speed dial's order: " + fresh.speedDial(owner)?.items.orEmpty().take(12).joinToString(" ") { it.javaClass.simpleName.removeSuffix("Item").lowercase() },
+                fresh.speedDialOrderLine(owner),
         )
         (fresh + kept).also { homeShelfCache.value = it }
     }

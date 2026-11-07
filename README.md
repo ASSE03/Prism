@@ -39,6 +39,16 @@ Updates: when there's a new version, tap the banner on Home. Your downloads, his
 
 **On a TV** (Android TV or Google TV): type code **8986606** into the Downloader app on the TV. Or, on your phone, turn on Settings → Speakers, TVs & browser → Share Prism with a TV, then type the address it shows into the TV.
 
+### If Android says "App was denied access"
+
+The optional lock screen player needs a permission called "Display over other apps". From Android 13, Android may refuse it at first, because Prism doesn't come from a store. To allow it:
+
+1. Open Prism's App info page, and tap ⋮ at the top right.
+2. Tap **Allow restricted settings**.
+3. Go back and allow the permission.
+
+Prism walks you through this on the setting's page. It uses the permission only to bring its player up on your lock screen, and never draws over other apps.
+
 ## New in 1.8.2.1
 
 Fixes, and lighter on your battery.
@@ -57,16 +67,6 @@ See every change in the [changelog](CHANGELOG.md).
 <img src="docs/screenshots/library-scrollbar.jpg" width="32%" alt="A scrollbar you can hold on a long list, with a bubble showing where you are">
 <img src="docs/screenshots/album-about.jpg" width="32%" alt="An album's description in its own box, with Show less and a small credit line">
 </p>
-
-### If Android says "App was denied access"
-
-The lock screen player needs a permission called "Display over other apps". From Android 13, Android may refuse it at first, because Prism doesn't come from a store. To allow it:
-
-1. Open Prism's App info page, and tap ⋮ at the top right.
-2. Tap **Allow restricted settings**.
-3. Go back and allow the permission.
-
-Prism walks you through this on the setting's page. It uses the permission only to bring its player up on your lock screen, and never draws over other apps.
 
 ## What Prism does
 
@@ -147,7 +147,8 @@ Big lyrics, music videos and Sing, with screens made for a remote. Your phone ca
 | | |
 |---|---|
 | **Make it yours** | Colors, fonts, icons, backgrounds, and layouts for the player and lyrics. Save them as a Look, share it, or try one from the community. |
-| **Offline** | Download songs with their lyrics and covers. Prism can also download songs you'll likely play next, and it plays your own music files. |
+| **Lock screen player** | Turn it on to see the cover, controls and lyrics on your lock screen. |
+| **Offline** | Download songs with their lyrics and covers. Prism can also download songs you'll likely play next, and it plays your own music files. Artist pages work offline too. |
 | **Sound** | Equalizer, headphone correction, even volume between songs, crossfades, speed and pitch, and lossless playback of your own files. |
 | **Play anywhere** | Send music to Chromecast, Google TV and other speakers and TVs on your Wi-Fi. Control Prism from a browser, or move playback to another phone. |
 | **Listen together** | Phones on the same Wi-Fi play in step, and friends can add songs to your queue. Make a shared Blend playlist with a friend from a QR code. |
