@@ -150,7 +150,11 @@ class YouTubeMusic(
         return all.distinctBy { it.title } to raw
     }
 
-    suspend fun moodsAndGenres(): List<Shelf> = Parser.shelves(browse("FEmusic_moods_and_genres"))
+    /** D40 (1.8.3): kept for a day when the app gives a [moodsCache] (Home, Search and the Moods page all ask). */
+    var moodsCache: com.prism.music.data.MoodsCache? = null
+
+    suspend fun moodsAndGenres(): List<Shelf> = moodsCache?.get(api.pageLanguage, { browse("FEmusic_moods_and_genres") }, Parser::shelves)
+        ?: Parser.shelves(browse("FEmusic_moods_and_genres"))
 
     /**
      * Explore's new releases, moods and genres, and trending. Asked without the account: it's the same public page, and

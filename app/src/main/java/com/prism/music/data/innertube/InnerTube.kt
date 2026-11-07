@@ -96,6 +96,9 @@ class InnerTube(
         return parts[0].takeIf { parts.size > 1 && parts[1].isNotBlank() && it.isNotBlank() }
     }
 
+    /** The language and country pages are asked in ("en-US"): what's kept of a page is only reused for the same. */
+    val pageLanguage: String get() = "$hl-$gl"
+
     /** Signed in with a brand channel in use (for the diagnostics). */
     val brandChannel: Boolean get() = current.isLoggedIn && onBehalfOfUser() != null
 

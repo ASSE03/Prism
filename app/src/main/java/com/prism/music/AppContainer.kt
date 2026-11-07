@@ -331,7 +331,7 @@ class AppContainer(val app: Application) {
         innerTube,
         songsEverywhere = { settings.current.let { it.radioSongsOnly && it.songsEverywhere } },
         onPairs = { queue.counterparts.putAll(it) },
-    )
+    ).apply { moodsCache = com.prism.music.data.MoodsCache(app.filesDir) }
     val db = PrismDatabase.build(app)
     /** Versions of songs the listener picked to hear instead (1.7.9, "Play a different version"). */
     val versions = com.prism.music.data.SongVersions(app.getSharedPreferences("song_versions", android.content.Context.MODE_PRIVATE))
