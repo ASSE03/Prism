@@ -34,6 +34,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -96,6 +97,14 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
      */
     override fun onTerminate() {
         if (::container.isInitialized) {
+            // Cancelled and waited for (briefly): a read already inside SQLite finishes before the database closes. Work
+            // waiting for the main thread can't finish while this holds it, hence the short wait (2 s made the unit tests
+            // four times as long).
+            runCatching {
+                kotlinx.coroutines.runBlocking {
+                    kotlinx.coroutines.withTimeoutOrNull(300) { container.scope.coroutineContext[kotlinx.coroutines.Job]?.cancelAndJoin() }
+                }
+            }
             container.scope.cancel()
             runCatching { container.db.close() }
         }
