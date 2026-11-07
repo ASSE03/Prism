@@ -69,6 +69,14 @@ private const val AUTO_RETRY_GAP_MS = 6 * 60 * 60_000L
 private fun isVideoPart(id: String) = id.startsWith(VIDEO_PICTURE) || id.startsWith(VIDEO_AUDIO)
 private fun partSongId(id: String) = id.substringAfter(':')
 
+/**
+ * Whether a music video downloads as its song (#186). #390 (1.8.3): only when it would also play as its song ("Songs, not
+ * videos: Everywhere"); with "Radios" a video picked from search plays with its own sound, so it downloads that way too,
+ * not as the album track.
+ */
+internal fun downloadsAsSong(song: Song, s: com.prism.music.data.prefs.AppSettings): Boolean =
+    song.isVideo && !song.isUpload && !song.isLive && !song.isEpisode && s.radioSongsOnly && s.songsEverywhere
+
 @OptIn(UnstableApi::class)
 class DownloadRepository(private val context: Context, private val c: AppContainer, scope: CoroutineScope) {
 
@@ -516,9 +524,9 @@ class DownloadRepository(private val context: Context, private val c: AppContain
         if (c.losslessSync.unhide(song.id)) return
         // (A music video already downloaded as its song counts as downloaded.)
         if (_downloads.value[keptAs(song.id)]?.state.let { it == Download.STATE_COMPLETED || it == Download.STATE_DOWNLOADING || it == Download.STATE_QUEUED }) return
-        // A music video comes down as its song (#186), with "Songs, not videos" on: the audio, without the video's intro
-        // and outro. When there's no song for it, the video's own sound, as before.
-        if (!asIs && song.isVideo && !song.isUpload && !song.isLive && !song.isEpisode && c.settings.current.radioSongsOnly) {
+        // A music video comes down as its song (#186) when it would play as its song: the audio, without the video's
+        // intro and outro. When there's no song for it, the video's own sound, as before.
+        if (!asIs && downloadsAsSong(song, c.settings.current)) {
             c.scope.launch {
                 val audio = c.player.songFor(song)
                 if (audio != null) {
