@@ -773,7 +773,7 @@ class YouTubeMusic(
         val code = api.ping("$base${sep}ver=2&c=WEB_REMIX&cver=${api.clientVersion}&cpn=$cpn")
         android.util.Log.i("PrismHistory", "play sent to YouTube Music: HTTP $code")
         // #377: a 204 taken for a request that isn't the account's would still not be in its history; so it says both.
-        com.prism.music.playback.AudioDiagnostics.log("history", "$songId: sent, YouTube answered ${code?.let { "HTTP $it" } ?: "nothing (no connection?)"}; ${extras.seen ?: "not said if signed in"}")
+        com.prism.music.playback.AudioDiagnostics.log("history", "$songId: sent${if (api.brandChannel) " for the brand channel" else ""}, YouTube answered ${code?.let { "HTTP $it" } ?: "nothing (no connection?)"}; ${extras.seen ?: "not said if signed in"}")
         return code != null && code in 200..299
     }
 

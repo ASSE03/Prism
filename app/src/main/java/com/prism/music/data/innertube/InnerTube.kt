@@ -96,6 +96,9 @@ class InnerTube(
         return parts[0].takeIf { parts.size > 1 && parts[1].isNotBlank() && it.isNotBlank() }
     }
 
+    /** Signed in with a brand channel in use (for the diagnostics). */
+    val brandChannel: Boolean get() = current.isLoggedIn && onBehalfOfUser() != null
+
     private fun cookieMap(): Map<String, String> = current.cookie.split(";")
         .mapNotNull { part ->
             val i = part.indexOf('=')
@@ -523,10 +526,15 @@ class InnerTube(
         return visionOsPost("player", body, visionVisitor())
     }
 
-    /** Fire-and-forget GET used for playback-history pings. */
+    /**
+     * Fire-and-forget GET used for playback-history pings. #377 (1.8.3): with a brand channel in use the ping also
+     * names the channel (`X-Goog-PageId`, as YouTube's own pages do), else the cookies alone credit the Google
+     * account's own channel and the play never shows in the brand channel's history.
+     */
     suspend fun ping(url: String): Int? = withContext(Dispatchers.IO) {
         runCatching {
-            val req = Request.Builder().url(url).get().applyHeaders().build()
+            val req = Request.Builder().url(url).get().applyHeaders()
+                .apply { if (current.isLoggedIn) onBehalfOfUser()?.let { header("X-Goog-PageId", it) } }.build()
             http.newCall(req).execute().use { it.code }
         }.getOrNull()
     }
