@@ -311,7 +311,6 @@
     <string name="browse">Explorar</string>
     <string name="newest">Mais recentes</string>
     <string name="oldest">Mais antigos</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">Fundo do leitor</string>
     <string name="backgrounds">Fundos</string>
     <string name="behind_the_player_darkened_so_its">Atrás do leitor, escurecido para o texto branco se ler bem</string>
@@ -4931,4 +4930,15 @@
     <string name="glass_on_more_of_the_screen">Vidro em mais partes do ecrã</string>
     <string name="glass_on_more_of_the_screen_detail">Cartões, chips, botões redondos e a barra de Anular</string>
     <string name="glass_on_more_of_the_screen_info">Os cartões e os painéis de definições recebem uma luz por cima e uma borda mais brilhante, os chips e os botões redondos uma borda mais brilhante, e o fosco chega a todos. Não usam desfoque em direto, por isso custam quase nada, e aparecem nas páginas que têm um fundo por trás. A barra de Anular é vidro a sério enquanto está visível. O modo Desempenho desativa isto. Podem vir mais locais.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Procurar listas</string>
+    <string name="search_albums">Procurar álbuns</string>
+    <string name="search_artists">Procurar artistas</string>
+    <string name="show_less">Mostrar menos</string>
+    <string name="scroll_through_the_list">Deslocar pela lista</string>
+    <string name="speed_dial_your_plays_first">Marcação rápida: primeiro o que ouves</string>
+    <string name="speed_dial_your_plays_first_sub">Mosaicos que mudam conforme ouves</string>
+    <string name="speed_dial_your_plays_first_info">O YouTube envia ao Prism os mosaicos do site, que não são os da app e nem sempre seguem o que ouves. Se estiver ativo, primeiro aparece o que mais ouviste neste telemóvel nos últimos três meses, e os do YouTube preenchem o resto.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">O YouTube já não aceita este início de sessão. Termina a sessão e volta a iniciá-la.</string>
+    <string name="youtube_isnt_sending_256_kbps">O YouTube não está a enviar 256 kbps para esta conta de momento, por isso as músicas tocam na qualidade habitual</string>
 </resources>

@@ -5,47 +5,40 @@ What changed in each release. Older releases are described on the [Releases page
 ## 1.8.2.1 (unreleased)
 
 ### Faster and lighter
-- Quick picks come sooner: Prism asks for what it needs at once, instead of one thing after another, and today's set is kept for the next time you open Prism (#371).
-- Looking up a song's music video ahead of time no longer asks for your account's Premium stream, which it never has, so it's quicker (#373).
-
-### New
-- Customize Home → Speed dial: your plays first. Tiles that change as you listen. Off by default (#372).
-
-### New
-
-- **New folder in Library.** Playlists → New folder makes a folder before anything's in it; until now one could only be made while moving a playlist.
-- **Search in Library** (#357). Playlists, Albums and Artists get a search at the top once there are 8 or more. Playlists finds the ones inside folders too, and folders by name.
-- **A scrollbar you can hold, on Library's long lists and Search's results** (#376). It shows while the list moves, is wide enough for a finger, and only the bar itself takes touches, so everything else along the edge still works.
-
-### New
-
-- Immersive mode shows your lyric translation under the lines, as the lyrics page does, with the switch in its menu too (#358)
 
 - **Background work keeps to a budget** (#373). Song scans, video sync and Sing getting songs ready now slow down when nobody needs them: about one core's worth while music plays out of sight, a little for a minute after you pause and leave, then nothing until you're back. A OnePlus 11 had Prism closed by Android three times for using the processor in the background; on a Galaxy A16, leaving Prism paused right after starting a new album went from 96% of a core in the first minute to 12%, and the first minute of a new album playing with the screen off from 144% to 39%.
 - **Fewer scans out of sight.** With the screen off, Prism scans only the next song, not the next three. The rest wait until you're back or until they're next.
 - **Videos are measured ahead only if you watch them.** A listener who hasn't picked Video in 14 days no longer pays for it; the first tap on Video measures then.
 - **Far less memory churned by scans.** The loudness step uses 0.2 MB instead of 24 MB, the key step 8 MB instead of 23 MB, with the same results. The phone's garbage collector ran about a quarter as much during scans.
 - **Sing's helper thread sleeps while Sing is off.** It woke about four times a second for nothing.
-- **The player opens more smoothly** (#354, #343). Its cover and background are ready before it opens, and it slides without a fade on top: the fade made the phone's graphics chip draw the whole player twice each frame. On a Galaxy A16 the worst frame of an opening went from 66 to 46 ms (75 to 48 ms in Performance mode).
-- **Frosted glass costs less.** It works from a smaller copy of what's behind it and looks the same. Scrolling a long playlist on a Galaxy A16, the typical frame went from 31 to 27 ms; Home barely moved.
+- **The player opens more smoothly** (#354, #343). Its cover and background are ready before it opens, and it now slides without a fade on top. On a Galaxy A16 the worst frame of an opening went from 66 to 46 ms (75 to 48 ms in Performance mode).
+- **Frosted glass costs less.** It works from a smaller copy of what's behind it. Scrolling a long playlist on a Galaxy A16, the typical frame went from 31 to 27 ms; Home barely moved.
+- **Quick picks come sooner** (#371). Prism asks for what it needs at once, instead of one thing after another, and today's set is kept for the next time you open Prism.
+- **Music video lookups are quicker** (#373). Looking one up ahead of time no longer asks for your account's Premium stream, which a video never has.
+
+### New
+
+- **Speed dial: your plays first** (#372). Customize Home. Tiles that change as you listen. Off by default.
+- **New folder in Library.** Playlists → New folder makes a folder before anything's in it; until now one could only be made while moving a playlist.
+- **Search in Library** (#357). Playlists, Albums and Artists get a search at the top once there are 8 or more. Playlists finds the ones inside folders too, and folders by name.
+- **A scrollbar you can hold, on Library's long lists and Search's results** (#376). It shows while the list moves, is wide enough for a finger, and only the bar itself takes touches, so everything else along the edge still works.
+- **Translations in Immersive mode** (#358). Your lyric translation shows under the lines, as on the lyrics page, with the switch in its menu too.
 
 ### Fixes
-- Quick picks: pulling down to refresh now really gives you other songs, and the section stays on screen while the new ones load (#371).
-- Premium quality: music videos looked up in the background could stop Prism asking for 256 kbps for an hour. They don't count any more, the pause is much shorter on an account that has had 256 kbps, and it ends when you change networks. If one of your account's ways of asking has no 256 kbps, Prism tries the others once (#373).
-- Premium quality now says so in Settings when YouTube isn't sending your account 256 kbps, and Settings says when YouTube no longer takes your sign-in, instead of songs just playing at the usual quality (#373).
-- Playback diagnostics now show what Premium quality asked for and got, a summary of your sign-in (never its secrets) and what happened to each play sent to your YouTube history (#372, #373, #377).
 
+- **Quick picks:** pulling down to refresh now really gives you other songs, and the section stays on screen while the new ones load (#371).
+- **Premium quality:** music videos looked up in the background could stop Prism asking for 256 kbps for an hour. They don't count any more, the pause is much shorter on an account that has had 256 kbps, and it ends when you change networks. If one of your account's ways of asking has no 256 kbps, Prism tries the others once (#373).
+- **Premium quality says what's happening.** Settings tells you when YouTube isn't sending your account 256 kbps, and when YouTube no longer takes your sign-in, instead of songs just playing at the usual quality (#373).
 - **Your own photo as a background works in every language** (#378). In German, Italian, Russian, Polish, Swedish, Hungarian, Malay and Filipino, the picture was saved under a translated name, so Prism didn't see it as a picture and showed Ambient (black with Pure black on). Photos you already picked come back by themselves.
 - **Google Takeout's history is recognized in any language** (#375). The file's name changes with your account's language (`historial-de-reproducciones.json` in Spanish), so Prism now goes by what's in it.
 - **Japanese kanji no longer turn into Chinese pinyin in romanized lyrics** (#370). Some sources, KuGou above all, write a Japanese song's kanji in Chinese forms, and a line of only kanji could pass for Chinese. Prism now decides for the whole song and reads them as Japanese.
 - **Replay's summary card no longer cuts its title off** ("TODA" for Today). The title now shrinks until it fits on its line, in every period and language, and so do the story's big words.
 - **An album's description is easier to read.** Left-aligned in its own quiet box, closed to a few lines with Show more, and the Wikipedia and license credit on its own small line with tappable links instead of raw addresses.
-
-- Play next on a song already in your queue moves it up instead of adding a second copy (#368)
-- The queue now lists songs in the order they really play: a song you added to the queue was shown first, but played after the rest of the list, so Next seemed to skip it (#368)
-- Play next, or taking a song out of the queue, just before a crossfade no longer sends the blend to the wrong song or cuts it off (#368)
-- The current lyric, when you move it away from the progress bar, sits midway between its neighbors on the player instead of low down against the next one (#361)
-- Playback diagnostics say more about each crossfade: whether the ending song lost time, how the two crossed over, and how long the next one took to start, to find the stutter some phones hear (#364)
+- **Play next on a song already in your queue** moves it up instead of adding a second copy (#368).
+- **The queue lists songs in the order they really play.** A song you added to the queue was shown first, but played after the rest of the list, so Next seemed to skip it (#368).
+- **Crossfade:** Play next, or taking a song out of the queue, just before a blend no longer sends it to the wrong song or cuts it off (#368).
+- **The current lyric,** when you move it away from the progress bar, sits midway between its neighbors on the player instead of low down against the next one (#361).
+- **Playback diagnostics say more:** what Premium quality asked for and got, a summary of your sign-in (never its secrets), what happened to each play sent to your YouTube history, and for each crossfade whether the ending song lost time, how the two crossed over and how long the next one took to start (#364, #372, #373, #377).
 
 ## 1.8.2
 

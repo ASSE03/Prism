@@ -311,7 +311,6 @@
     <string name="browse">Böngészés</string>
     <string name="newest">Legújabb</string>
     <string name="oldest">Legrégebbi</string>
-    <string name="photo">FOTÓ|%1$s</string>
     <string name="player_background">Lejátszó háttere</string>
     <string name="backgrounds">Hátterek</string>
     <string name="behind_the_player_darkened_so_its">A lejátszó mögött, elsötétítve, hogy a fehér szöveg olvasható legyen</string>
@@ -4867,4 +4866,15 @@
     <string name="glass_on_more_of_the_screen">Üveg a képernyő nagyobb részén</string>
     <string name="glass_on_more_of_the_screen_detail">Kártyák, chipek, kerek gombok és a Visszavonás sáv</string>
     <string name="glass_on_more_of_the_screen_info">A kártyák és a beállítási panelek rájuk eső fényt és világosabb szegélyt kapnak, a chipek és a kerek gombok világosabb szegélyt, a Mattság pedig mindegyikre kihat. Nem használnak élő elmosást, így szinte semmibe sem kerülnek, és a mögöttük hátteret mutató oldalakon látszanak. A Visszavonás sáv valódi üveg, amíg fent van. A teljesítmény mód kikapcsolja ezt. Más helyek is jöhetnek.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Lejátszási listák keresése</string>
+    <string name="search_albums">Albumok keresése</string>
+    <string name="search_artists">Előadók keresése</string>
+    <string name="show_less">Kevesebb</string>
+    <string name="scroll_through_the_list">Görgetés a listában</string>
+    <string name="speed_dial_your_plays_first">Gyorstárcsázó: előbb, amit hallgatsz</string>
+    <string name="speed_dial_your_plays_first_sub">Csempék, amelyek a hallgatásoddal változnak</string>
+    <string name="speed_dial_your_plays_first_info">A YouTube a webhelye csempéit küldi a Prismnek, amelyek nem azonosak az alkalmazáséval, és nem mindig követik azt, amit hallgatsz. Ha be van kapcsolva, előbb az jön, amit az elmúlt három hónapban a legtöbbet hallgattál ezen a telefonon, a többit a YouTube csempéi töltik ki.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">A YouTube már nem fogadja el ezt a bejelentkezést. Jelentkezz ki, majd be újra.</string>
+    <string name="youtube_isnt_sending_256_kbps">A YouTube most nem küld 256 kbps-t ennek a fióknak, ezért a dalok a szokásos minőségben szólnak</string>
 </resources>

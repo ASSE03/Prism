@@ -311,7 +311,6 @@
     <string name="browse">Duyệt</string>
     <string name="newest">Mới nhất</string>
     <string name="oldest">Cũ nhất</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">Nền trình phát</string>
     <string name="backgrounds">Hình nền</string>
     <string name="behind_the_player_darkened_so_its">Phía sau trình phát, được làm tối để chữ trắng dễ đọc</string>
@@ -4803,4 +4802,15 @@
     <string name="glass_on_more_of_the_screen">Kính trên nhiều phần màn hình hơn</string>
     <string name="glass_on_more_of_the_screen_detail">Thẻ, chip, nút tròn và thanh Hoàn tác</string>
     <string name="glass_on_more_of_the_screen_info">Thẻ và bảng cài đặt có ánh sáng chiếu lên và viền sáng hơn, chip và nút tròn có viền sáng hơn, và Sương mờ áp dụng cho tất cả. Chúng không dùng làm mờ trực tiếp nên gần như không tốn tài nguyên, và hiện ở các trang có nền phía sau. Thanh Hoàn tác là kính thật khi đang hiển thị. Chế độ hiệu năng sẽ tắt mục này. Có thể sẽ có thêm nhiều nơi nữa.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Tìm danh sách phát</string>
+    <string name="search_albums">Tìm album</string>
+    <string name="search_artists">Tìm nghệ sĩ</string>
+    <string name="show_less">Thu gọn</string>
+    <string name="scroll_through_the_list">Cuộn danh sách</string>
+    <string name="speed_dial_your_plays_first">Quay số nhanh: bài bạn phát trước</string>
+    <string name="speed_dial_your_plays_first_sub">Các ô thay đổi theo những gì bạn nghe</string>
+    <string name="speed_dial_your_plays_first_info">YouTube gửi cho Prism các ô của trang web, không phải các ô trong ứng dụng và không phải lúc nào cũng theo những gì bạn phát. Khi bật, những gì bạn phát nhiều nhất trên điện thoại này trong ba tháng qua sẽ xuất hiện trước, các ô của YouTube lấp phần còn lại.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube không còn chấp nhận lần đăng nhập này. Hãy đăng xuất rồi đăng nhập lại.</string>
+    <string name="youtube_isnt_sending_256_kbps">Hiện YouTube không gửi 256 kbps cho tài khoản này, nên bài hát phát ở chất lượng thông thường</string>
 </resources>

@@ -311,7 +311,6 @@
     <string name="browse">Przeglądaj</string>
     <string name="newest">Najnowsze</string>
     <string name="oldest">Najstarsze</string>
-    <string name="photo">ZDJĘCIE|%1$s</string>
     <string name="player_background">Tło odtwarzacza</string>
     <string name="backgrounds">Tła</string>
     <string name="behind_the_player_darkened_so_its">Za odtwarzaczem, przyciemnione, by biały tekst był czytelny</string>
@@ -4995,4 +4994,15 @@
     <string name="glass_on_more_of_the_screen">Szkło na większej części ekranu</string>
     <string name="glass_on_more_of_the_screen_detail">Karty, chipy, okrągłe przyciski i pasek Cofnij</string>
     <string name="glass_on_more_of_the_screen_info">Karty i panele ustawień dostają padające na nie światło i jaśniejszą krawędź, chipy i okrągłe przyciski jaśniejszą krawędź, a Mat obejmuje je wszystkie. Nie używają rozmycia na żywo, więc kosztują prawie nic, i widać je na stronach z tłem za nimi. Pasek Cofnij jest prawdziwym szkłem, gdy jest na ekranie. Tryb wydajności to wyłącza. Mogą dojść kolejne miejsca.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Szukaj playlist</string>
+    <string name="search_albums">Szukaj albumów</string>
+    <string name="search_artists">Szukaj wykonawców</string>
+    <string name="show_less">Pokaż mniej</string>
+    <string name="scroll_through_the_list">Przewijaj listę</string>
+    <string name="speed_dial_your_plays_first">Szybkie wybieranie: najpierw to, co grasz</string>
+    <string name="speed_dial_your_plays_first_sub">Kafelki zmieniające się razem z tym, czego słuchasz</string>
+    <string name="speed_dial_your_plays_first_info">YouTube wysyła do Prism kafelki ze swojej strony, a nie te z aplikacji, i nie zawsze odpowiadają one temu, co grasz. Po włączeniu najpierw pojawia się to, co w ostatnich trzech miesiącach grałeś najczęściej na tym telefonie, a resztę uzupełniają kafelki YouTube.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube nie akceptuje już tego logowania. Wyloguj się i zaloguj ponownie.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube nie wysyła teraz 256 kb/s na to konto, więc utwory grają w zwykłej jakości</string>
 </resources>

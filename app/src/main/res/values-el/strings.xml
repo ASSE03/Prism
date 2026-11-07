@@ -311,7 +311,6 @@
     <string name="browse">Περιήγηση</string>
     <string name="newest">Νεότερα</string>
     <string name="oldest">Παλαιότερα</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">Φόντο οθόνης αναπαραγωγής</string>
     <string name="backgrounds">Φόντα</string>
     <string name="behind_the_player_darkened_so_its">Πίσω από την οθόνη αναπαραγωγής, σκουρόχρωμο για να διαβάζεται το λευκό κείμενο</string>
@@ -4867,4 +4866,15 @@
     <string name="glass_on_more_of_the_screen">Γυαλί σε μεγαλύτερο μέρος της οθόνης</string>
     <string name="glass_on_more_of_the_screen_detail">Κάρτες, chips, στρογγυλά κουμπιά και η μπάρα Αναίρεσης</string>
     <string name="glass_on_more_of_the_screen_info">Οι κάρτες και τα πάνελ ρυθμίσεων παίρνουν φως που πέφτει πάνω τους και πιο φωτεινή άκρη, τα chips και τα στρογγυλά κουμπιά πιο φωτεινή άκρη, και το Θάμπωμα επιφάνειας τα αγγίζει όλα. Δεν χρησιμοποιούν ζωντανό θάμπωμα, οπότε κοστίζουν σχεδόν τίποτα, και φαίνονται σε σελίδες με φόντο πίσω τους. Η μπάρα Αναίρεσης είναι πραγματικό γυαλί όσο εμφανίζεται. Η λειτουργία απόδοσης το απενεργοποιεί. Μπορεί να προστεθούν κι άλλα σημεία.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Αναζήτηση playlist</string>
+    <string name="search_albums">Αναζήτηση άλμπουμ</string>
+    <string name="search_artists">Αναζήτηση καλλιτεχνών</string>
+    <string name="show_less">Εμφάνιση λιγότερων</string>
+    <string name="scroll_through_the_list">Κύλιση στη λίστα</string>
+    <string name="speed_dial_your_plays_first">Γρήγορη κλήση: πρώτα ό,τι ακούς</string>
+    <string name="speed_dial_your_plays_first_sub">Πλαίσια που αλλάζουν καθώς ακούς</string>
+    <string name="speed_dial_your_plays_first_info">Το YouTube στέλνει στο Prism τα πλαίσια του ιστότοπού του, που δεν είναι ίδια με της εφαρμογής του και δεν ακολουθούν πάντα ό,τι ακούς. Όταν είναι ενεργό, πρώτα εμφανίζεται ό,τι άκουσες περισσότερο σε αυτό το τηλέφωνο τους τελευταίους τρεις μήνες και ακολουθούν του YouTube.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">Το YouTube δεν δέχεται πια αυτή τη σύνδεση. Αποσυνδέσου και συνδέσου ξανά.</string>
+    <string name="youtube_isnt_sending_256_kbps">Το YouTube δεν στέλνει τώρα 256 kbps σε αυτόν τον λογαριασμό, οπότε τα τραγούδια παίζουν στη συνηθισμένη ποιότητα</string>
 </resources>

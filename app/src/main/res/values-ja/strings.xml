@@ -311,7 +311,6 @@
     <string name="browse">見つける</string>
     <string name="newest">新しい順</string>
     <string name="oldest">古い順</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">プレーヤーの背景</string>
     <string name="backgrounds">背景</string>
     <string name="behind_the_player_darkened_so_its">プレーヤーの背後に、白い文字が読めるよう暗くして表示</string>
@@ -4803,4 +4802,15 @@
     <string name="glass_on_more_of_the_screen">画面のより多くの場所にガラス</string>
     <string name="glass_on_more_of_the_screen_detail">カード、チップ、丸いボタン、元に戻すバー</string>
     <string name="glass_on_more_of_the_screen_info">カードと設定パネルには光が当たり、縁が明るくなります。チップと丸いボタンは縁が明るくなり、フロストはそのすべてに効きます。リアルタイムのぼかしは使わないので負荷はほとんどなく、背景のあるページに表示されます。元に戻すバーは、表示中は本物のガラスになります。パフォーマンスモードではオフになります。対象は今後増えるかもしれません。</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">プレイリストを検索</string>
+    <string name="search_albums">アルバムを検索</string>
+    <string name="search_artists">アーティストを検索</string>
+    <string name="show_less">閉じる</string>
+    <string name="scroll_through_the_list">リストをスクロール</string>
+    <string name="speed_dial_your_plays_first">スピード ダイヤル: よく聴く曲を先に</string>
+    <string name="speed_dial_your_plays_first_sub">聴くほど変わるタイル</string>
+    <string name="speed_dial_your_plays_first_info">YouTube が Prism に送るのはウェブサイト用のタイルで、アプリのものとは異なり、聴いている曲に沿うとは限りません。オンにすると、過去 3 か月にこのスマホでよく聴いたものが先に並び、残りを YouTube のタイルが埋めます。</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube はこのログインを受け付けなくなりました。ログアウトしてもう一度ログインしてください。</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube は現在このアカウントに 256 kbps を送っていないため、曲は通常の音質で再生されます</string>
 </resources>

@@ -311,7 +311,6 @@
     <string name="browse">Sfoglia</string>
     <string name="newest">Più recenti</string>
     <string name="oldest">Meno recenti</string>
-    <string name="photo">FOTO|%1$s</string>
     <string name="player_background">Sfondo del player</string>
     <string name="backgrounds">Sfondi</string>
     <string name="behind_the_player_darkened_so_its">Dietro il player, scurito perché il testo bianco si legga</string>
@@ -4931,4 +4930,15 @@
     <string name="glass_on_more_of_the_screen">Vetro su più parti dello schermo</string>
     <string name="glass_on_more_of_the_screen_detail">Schede, chip, pulsanti rotondi e la barra Annulla</string>
     <string name="glass_on_more_of_the_screen_info">Le schede e i pannelli delle impostazioni ricevono una luce addosso e un bordo più luminoso, i chip e i pulsanti rotondi un bordo più luminoso, e la smerigliatura li raggiunge tutti. Non usano sfocatura dal vivo, quindi costano quasi nulla, e si vedono nelle pagine che hanno uno sfondo dietro. La barra Annulla è vetro vero finché è visibile. La modalità Prestazioni lo disattiva. Potrebbero aggiungersi altri punti.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Cerca playlist</string>
+    <string name="search_albums">Cerca album</string>
+    <string name="search_artists">Cerca artisti</string>
+    <string name="show_less">Mostra meno</string>
+    <string name="scroll_through_the_list">Scorri l\'elenco</string>
+    <string name="speed_dial_your_plays_first">Selezione rapida: prima ciò che ascolti</string>
+    <string name="speed_dial_your_plays_first_sub">Riquadri che cambiano con i tuoi ascolti</string>
+    <string name="speed_dial_your_plays_first_info">YouTube invia a Prism i riquadri del suo sito, che non sono quelli della sua app e non sempre seguono ciò che ascolti. Se è attivo, prima appare ciò che hai ascoltato di più su questo telefono negli ultimi tre mesi, poi quelli di YouTube riempiono il resto.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube non accetta più questo accesso. Esci e accedi di nuovo.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube non sta inviando 256 kbps a questo account, quindi i brani vengono riprodotti nella qualità consueta</string>
 </resources>

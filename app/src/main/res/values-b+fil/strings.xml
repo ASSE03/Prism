@@ -311,7 +311,6 @@
     <string name="browse">Mag-browse</string>
     <string name="newest">Pinakabago</string>
     <string name="oldest">Pinakaluma</string>
-    <string name="photo">LARAWAN|%1$s</string>
     <string name="player_background">Background ng player</string>
     <string name="backgrounds">Mga background</string>
     <string name="behind_the_player_darkened_so_its">Sa likod ng player, pinadilim para mabasa ang puting text nito</string>
@@ -4867,4 +4866,15 @@
     <string name="glass_on_more_of_the_screen">Glass sa mas maraming bahagi ng screen</string>
     <string name="glass_on_more_of_the_screen_detail">Mga card, chip, bilog na button, at ang Undo bar</string>
     <string name="glass_on_more_of_the_screen_info">Ang mga card at settings panel ay nakakakuha ng liwanag na bumabagsak sa kanila at mas maliwanag na gilid, ang mga chip at bilog na button ay mas maliwanag na gilid, at saklaw silang lahat ng Frost. Hindi sila gumagamit ng live blur, kaya halos walang bigat, at lumalabas sila sa mga pahinang may background sa likod. Ang Undo bar ay totoong glass habang nakikita ito. Ino-off ito ng Performance mode. Maaaring madagdagan pa ang mga lugar.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Maghanap ng mga playlist</string>
+    <string name="search_albums">Maghanap ng mga album</string>
+    <string name="search_artists">Maghanap ng mga artist</string>
+    <string name="show_less">Ipakita ang mas kaunti</string>
+    <string name="scroll_through_the_list">Mag-scroll sa listahan</string>
+    <string name="speed_dial_your_plays_first">Speed dial: ang mga pinapatugtog mo muna</string>
+    <string name="speed_dial_your_plays_first_sub">Mga tile na nagbabago habang nakikinig ka</string>
+    <string name="speed_dial_your_plays_first_info">Ang ipinapadala ng YouTube sa Prism ay ang mga tile ng website nito, na hindi katulad ng nasa app nito at hindi laging sumusunod sa pinapatugtog mo. Kapag naka-on, mauuna ang pinakamadalas mong pinatugtog sa teleponong ito sa nakaraang tatlong buwan, at pupunuin ng sa YouTube ang natitira.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">Hindi na tinatanggap ng YouTube ang sign-in na ito. Mag-sign out at mag-sign in ulit.</string>
+    <string name="youtube_isnt_sending_256_kbps">Hindi nagpapadala ang YouTube ng 256 kbps sa account na ito ngayon, kaya sa karaniwang kalidad tumutugtog ang mga kanta</string>
 </resources>

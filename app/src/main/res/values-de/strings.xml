@@ -311,7 +311,6 @@
     <string name="browse">Durchsuchen</string>
     <string name="newest">Neueste</string>
     <string name="oldest">Älteste</string>
-    <string name="photo">FOTO|%1$s</string>
     <string name="player_background">Player-Hintergrund</string>
     <string name="backgrounds">Hintergründe</string>
     <string name="behind_the_player_darkened_so_its">Hinter dem Player, abgedunkelt, damit der weiße Text lesbar bleibt</string>
@@ -4867,4 +4866,15 @@
     <string name="glass_on_more_of_the_screen">Glas auf mehr Teilen des Bildschirms</string>
     <string name="glass_on_more_of_the_screen_detail">Karten, Chips, runde Buttons und die Rückgängig-Leiste</string>
     <string name="glass_on_more_of_the_screen_info">Karten und Einstellungsfelder bekommen einen Lichteinfall und einen helleren Rand, Chips und runde Buttons einen helleren Rand, und die Milchigkeit wirkt auf alle. Sie nutzen keine Live-Unschärfe, kosten also fast nichts, und sie sind auf Seiten mit einem Hintergrund dahinter zu sehen. Die Rückgängig-Leiste ist echtes Glas, solange sie eingeblendet ist. Der Leistungsmodus schaltet das aus. Weitere Stellen könnten folgen.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Playlists suchen</string>
+    <string name="search_albums">Alben suchen</string>
+    <string name="search_artists">Künstler suchen</string>
+    <string name="show_less">Weniger anzeigen</string>
+    <string name="scroll_through_the_list">Durch die Liste scrollen</string>
+    <string name="speed_dial_your_plays_first">Schnellwahl: zuerst, was du hörst</string>
+    <string name="speed_dial_your_plays_first_sub">Kacheln, die sich mit deinem Hören ändern</string>
+    <string name="speed_dial_your_plays_first_info">YouTube schickt Prism die Kacheln seiner Website. Sie sind nicht dieselben wie in der App und folgen nicht immer dem, was du hörst. Wenn das an ist, steht zuerst, was du in den letzten drei Monaten auf diesem Handy am meisten gehört hast, danach folgen die Kacheln von YouTube.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube akzeptiert diese Anmeldung nicht mehr. Melde dich ab und wieder an.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube sendet diesem Konto gerade keine 256 kbit/s, deshalb laufen Songs in der üblichen Qualität</string>
 </resources>

@@ -348,7 +348,6 @@
     <string name="browse">Browse</string>
     <string name="newest">Newest</string>
     <string name="oldest">Oldest</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">Player background</string>
     <string name="backgrounds">Backgrounds</string>
     <string name="behind_the_player_darkened_so_its">Behind the player, darkened so its white text reads</string>

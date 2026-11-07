@@ -311,7 +311,6 @@
     <string name="browse">Jelajahi</string>
     <string name="newest">Terbaru</string>
     <string name="oldest">Terlama</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">Latar pemutar</string>
     <string name="backgrounds">Latar</string>
     <string name="behind_the_player_darkened_so_its">Di belakang pemutar, digelapkan agar teks putihnya terbaca</string>
@@ -4803,4 +4802,15 @@
     <string name="glass_on_more_of_the_screen">Kaca di lebih banyak bagian layar</string>
     <string name="glass_on_more_of_the_screen_detail">Kartu, chip, tombol bulat, dan bilah Urungkan</string>
     <string name="glass_on_more_of_the_screen_info">Kartu dan panel pengaturan mendapat cahaya yang jatuh di atasnya dan tepi yang lebih terang, chip dan tombol bulat mendapat tepi yang lebih terang, dan Embun berlaku untuk semuanya. Semua ini tidak memakai buram langsung, jadi hampir tidak membebani, dan tampil di halaman yang punya latar belakang. Bilah Urungkan adalah kaca sungguhan selama tampil. Mode Performa mematikan ini. Bagian lain mungkin menyusul.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Cari playlist</string>
+    <string name="search_albums">Cari album</string>
+    <string name="search_artists">Cari artis</string>
+    <string name="show_less">Tampilkan lebih sedikit</string>
+    <string name="scroll_through_the_list">Gulir daftar</string>
+    <string name="speed_dial_your_plays_first">Panggilan cepat: yang Anda putar dulu</string>
+    <string name="speed_dial_your_plays_first_sub">Kotak yang berubah saat Anda mendengarkan</string>
+    <string name="speed_dial_your_plays_first_info">YouTube mengirim kotak dari situs webnya ke Prism, yang bukan kotak di aplikasinya dan tidak selalu mengikuti yang Anda putar. Jika aktif, yang paling sering Anda putar di ponsel ini dalam tiga bulan terakhir muncul lebih dulu, lalu sisanya diisi kotak YouTube.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube tidak lagi menerima login ini. Logout lalu login lagi.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube sedang tidak mengirim 256 kbps ke akun ini, jadi lagu diputar dengan kualitas biasa</string>
 </resources>

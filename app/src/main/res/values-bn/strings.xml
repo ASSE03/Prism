@@ -311,7 +311,6 @@
     <string name="browse">ব্রাউজ</string>
     <string name="newest">নতুনতম</string>
     <string name="oldest">পুরনোতম</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">প্লেয়ারের ব্যাকগ্রাউন্ড</string>
     <string name="backgrounds">ব্যাকগ্রাউন্ড</string>
     <string name="behind_the_player_darkened_so_its">প্লেয়ারের পেছনে, গাঢ় করা যাতে সাদা লেখা পড়া যায়</string>
@@ -4867,4 +4866,15 @@
     <string name="glass_on_more_of_the_screen">স্ক্রিনের আরও বেশি জায়গায় গ্লাস</string>
     <string name="glass_on_more_of_the_screen_detail">কার্ড, চিপ, গোল বোতাম আর পূর্বাবস্থায় ফিরুন বার</string>
     <string name="glass_on_more_of_the_screen_info">কার্ড ও সেটিংস প্যানেলে আলো পড়ে আর প্রান্ত আরও উজ্জ্বল হয়, চিপ ও গোল বোতামের প্রান্ত আরও উজ্জ্বল হয়, আর ফ্রস্ট সবগুলোতে পৌঁছায়। এতে লাইভ ব্লার নেই, তাই খরচ প্রায় নেই, আর এগুলো সেসব পেজে দেখা যায় যেগুলোর পেছনে ব্যাকগ্রাউন্ড আছে। পূর্বাবস্থায় ফিরুন বার যতক্ষণ ওপরে থাকে ততক্ষণ আসল কাচ। পারফরম্যান্স মোড এটি বন্ধ করে দেয়। আরও জায়গা পরে যোগ হতে পারে।</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">প্লেলিস্ট খুঁজুন</string>
+    <string name="search_albums">অ্যালবাম খুঁজুন</string>
+    <string name="search_artists">শিল্পী খুঁজুন</string>
+    <string name="show_less">কম দেখান</string>
+    <string name="scroll_through_the_list">তালিকা স্ক্রল করুন</string>
+    <string name="speed_dial_your_plays_first">স্পিড ডায়াল: আপনার শোনা গান আগে</string>
+    <string name="speed_dial_your_plays_first_sub">যে টাইল আপনার শোনার সাথে বদলায়</string>
+    <string name="speed_dial_your_plays_first_info">YouTube, Prism-কে তার ওয়েবসাইটের টাইল পাঠায়, যা তার অ্যাপের টাইল নয় এবং সবসময় আপনার শোনা গান অনুসরণ করে না। চালু থাকলে, গত তিন মাসে এই ফোনে আপনি যা সবচেয়ে বেশি শুনেছেন তা আগে আসে, আর বাকিটা YouTube-এর টাইল দিয়ে ভরে।</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube আর এই সাইন-ইন গ্রহণ করছে না। সাইন আউট করে আবার সাইন ইন করুন।</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube এখন এই অ্যাকাউন্টে 256 kbps পাঠাচ্ছে না, তাই গান সাধারণ মানে বাজছে</string>
 </resources>

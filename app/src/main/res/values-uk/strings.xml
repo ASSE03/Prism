@@ -311,7 +311,6 @@
     <string name="browse">Огляд</string>
     <string name="newest">Найновіші</string>
     <string name="oldest">Найстаріші</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">Фон плеєра</string>
     <string name="backgrounds">Фони</string>
     <string name="behind_the_player_darkened_so_its">Під плеєром, затемнений, щоб білий текст читався</string>
@@ -4995,4 +4994,15 @@
     <string name="glass_on_more_of_the_screen">Скло на більшій частині екрана</string>
     <string name="glass_on_more_of_the_screen_detail">Картки, чипи, круглі кнопки та панель «Скасувати»</string>
     <string name="glass_on_more_of_the_screen_info">Картки й панелі налаштувань отримують світло, що падає на них, і яскравіший край, чипи й круглі кнопки — яскравіший край, а Матовість діє на все це. Живого розмиття вони не використовують, тож майже нічого не коштують, і видні на сторінках із тлом позаду. Панель «Скасувати» — справжнє скло, поки вона на екрані. У режимі продуктивності це вимикається. Можливо, з\'являться й інші місця.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Шукати плейлисти</string>
+    <string name="search_albums">Шукати альбоми</string>
+    <string name="search_artists">Шукати виконавців</string>
+    <string name="show_less">Показати менше</string>
+    <string name="scroll_through_the_list">Прокручування списку</string>
+    <string name="speed_dial_your_plays_first">Швидкий набір: спершу те, що ви слухаєте</string>
+    <string name="speed_dial_your_plays_first_sub">Плитки, що змінюються разом із тим, що ви слухаєте</string>
+    <string name="speed_dial_your_plays_first_info">YouTube надсилає в Prism плитки зі свого сайту. Вони відрізняються від плиток у застосунку й не завжди відповідають тому, що ви слухаєте. Якщо ввімкнено, спершу йде те, що ви найчастіше слухали на цьому телефоні за останні три місяці, а решту заповнюють плитки YouTube.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube більше не приймає цей вхід. Вийдіть з облікового запису й увійдіть знову.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube зараз не надсилає на цей обліковий запис 256 кбіт/с, тому пісні грають у звичайній якості</string>
 </resources>

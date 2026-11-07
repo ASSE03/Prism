@@ -311,7 +311,6 @@
     <string name="browse">Explorar</string>
     <string name="newest">Mais recentes</string>
     <string name="oldest">Mais antigos</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">Fundo do player</string>
     <string name="backgrounds">Fundos</string>
     <string name="behind_the_player_darkened_so_its">Atrás do player, escurecido para o texto branco ficar legível</string>
@@ -4931,4 +4930,15 @@
     <string name="glass_on_more_of_the_screen">Vidro em mais partes da tela</string>
     <string name="glass_on_more_of_the_screen_detail">Cartões, chips, botões redondos e a barra de Desfazer</string>
     <string name="glass_on_more_of_the_screen_info">Cartões e painéis de ajustes recebem uma luz por cima e uma borda mais brilhante, chips e botões redondos uma borda mais brilhante, e o fosco chega a todos eles. Eles não usam desfoque ao vivo, então custam quase nada, e aparecem em páginas que têm um fundo atrás. A barra de Desfazer é vidro de verdade enquanto está na tela. O modo Desempenho desativa isto. Mais lugares podem vir.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Buscar playlists</string>
+    <string name="search_albums">Buscar álbuns</string>
+    <string name="search_artists">Buscar artistas</string>
+    <string name="show_less">Mostrar menos</string>
+    <string name="scroll_through_the_list">Rolar pela lista</string>
+    <string name="speed_dial_your_plays_first">Discagem rápida: primeiro o que você toca</string>
+    <string name="speed_dial_your_plays_first_sub">Blocos que mudam conforme você ouve</string>
+    <string name="speed_dial_your_plays_first_info">O YouTube envia ao Prism os blocos do site dele, que não são os do app e nem sempre acompanham o que você toca. Ativado, o que você mais tocou neste celular nos últimos três meses vem primeiro, e os do YouTube completam o resto.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">O YouTube não aceita mais este login. Saia da conta e entre de novo.</string>
+    <string name="youtube_isnt_sending_256_kbps">O YouTube não está enviando 256 kbps para esta conta agora, então as músicas tocam na qualidade normal</string>
 </resources>

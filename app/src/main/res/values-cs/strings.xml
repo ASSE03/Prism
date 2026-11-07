@@ -311,7 +311,6 @@
     <string name="browse">Procházet</string>
     <string name="newest">Nejnovější</string>
     <string name="oldest">Nejstarší</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">Pozadí přehrávače</string>
     <string name="backgrounds">Pozadí</string>
     <string name="behind_the_player_darkened_so_its">Za přehrávačem, ztmavené, aby byl bílý text čitelný</string>
@@ -4995,4 +4994,15 @@
     <string name="glass_on_more_of_the_screen">Sklo na větší části obrazovky</string>
     <string name="glass_on_more_of_the_screen_detail">Karty, čipy, kulatá tlačítka a lišta Zpět</string>
     <string name="glass_on_more_of_the_screen_info">Karty a panely nastavení dostanou dopadající světlo a jasnější okraj, čipy a kulatá tlačítka jasnější okraj a Matnost se týká všech. Nepoužívají živé rozmazání, takže stojí skoro nic, a vidět je na stránkách s pozadím za nimi. Lišta Zpět je skutečné sklo, dokud je na obrazovce. Úsporný režim to vypíná. Další místa mohou přibýt.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Hledat playlisty</string>
+    <string name="search_albums">Hledat alba</string>
+    <string name="search_artists">Hledat interprety</string>
+    <string name="show_less">Zobrazit méně</string>
+    <string name="scroll_through_the_list">Posouvat seznamem</string>
+    <string name="speed_dial_your_plays_first">Rychlá volba: nejdřív to, co hrajete</string>
+    <string name="speed_dial_your_plays_first_sub">Dlaždice, které se mění podle poslechu</string>
+    <string name="speed_dial_your_plays_first_info">YouTube posílá Prismu dlaždice ze svého webu, které nejsou stejné jako v jeho aplikaci a ne vždy odpovídají tomu, co hrajete. Když je to zapnuté, nejdřív se zobrazí to, co jste na tomto telefonu za poslední tři měsíce hráli nejvíc, a zbytek doplní dlaždice YouTube.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube už toto přihlášení nepřijímá. Odhlaste se a znovu se přihlaste.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube teď tomuto účtu neposílá 256 kb/s, takže skladby hrají v obvyklé kvalitě</string>
 </resources>

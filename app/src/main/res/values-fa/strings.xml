@@ -311,7 +311,6 @@
     <string name="browse">مرور</string>
     <string name="newest">جدیدترین</string>
     <string name="oldest">قدیمی‌ترین</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">پس‌زمینه پخش‌کننده</string>
     <string name="backgrounds">پس‌زمینه‌ها</string>
     <string name="behind_the_player_darkened_so_its">پشت پخش‌کننده، تیره‌شده تا متن سفیدش خوانا باشد</string>
@@ -4867,4 +4866,15 @@
     <string name="glass_on_more_of_the_screen">شیشه در بخش بیشتری از صفحه</string>
     <string name="glass_on_more_of_the_screen_detail">کارت‌ها، چیپ‌ها، دکمه‌های گرد و نوار واگرد</string>
     <string name="glass_on_more_of_the_screen_info">کارت‌ها و پنل‌های تنظیمات نوری می‌گیرند که روی‌شان می‌افتد و لبه‌ای روشن‌تر؛ چیپ‌ها و دکمه‌های گرد لبه‌ای روشن‌تر؛ و مه به همهٔ آن‌ها می‌رسد. محوسازی زنده ندارند، پس تقریباً هزینه‌ای ندارند و در صفحه‌هایی دیده می‌شوند که پس‌زمینه‌ای پشت‌شان باشد. نوار واگرد تا وقتی نمایش داده می‌شود شیشهٔ واقعی است. حالت عملکرد این گزینه را خاموش می‌کند. شاید جاهای بیشتری هم اضافه شود.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">جستجوی پلی‌لیست‌ها</string>
+    <string name="search_albums">جستجوی آلبوم‌ها</string>
+    <string name="search_artists">جستجوی هنرمندان</string>
+    <string name="show_less">نمایش کمتر</string>
+    <string name="scroll_through_the_list">پیمایش در فهرست</string>
+    <string name="speed_dial_your_plays_first">دسترسی سریع: اول آنچه پخش می‌کنید</string>
+    <string name="speed_dial_your_plays_first_sub">کاشی‌هایی که با شنیدن شما تغییر می‌کنند</string>
+    <string name="speed_dial_your_plays_first_info">YouTube کاشی‌های وب‌سایتش را برای Prism می‌فرستد که با کاشی‌های برنامه‌اش یکی نیستند و همیشه از آنچه پخش می‌کنید پیروی نمی‌کنند. اگر روشن باشد، اول آنچه در سه ماه گذشته در این گوشی بیشتر پخش کرده‌اید می‌آید و بقیه با کاشی‌های YouTube پر می‌شود.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube دیگر این ورود را نمی‌پذیرد. از حساب خارج شوید و دوباره وارد شوید.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube فعلاً برای این حساب ۲۵۶ کیلوبیت‌برثانیه نمی‌فرستد، پس آهنگ‌ها با کیفیت معمول پخش می‌شوند</string>
 </resources>

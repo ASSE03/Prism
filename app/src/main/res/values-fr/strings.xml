@@ -311,7 +311,6 @@
     <string name="browse">Parcourir</string>
     <string name="newest">Plus récents</string>
     <string name="oldest">Plus anciens</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">Arrière-plan du lecteur</string>
     <string name="backgrounds">Arrière-plans</string>
     <string name="behind_the_player_darkened_so_its">Derrière le lecteur, assombri pour que le texte blanc reste lisible</string>
@@ -4931,4 +4930,15 @@
     <string name="glass_on_more_of_the_screen">Du verre sur plus de l’écran</string>
     <string name="glass_on_more_of_the_screen_detail">Cartes, pastilles, boutons ronds et la barre Annuler</string>
     <string name="glass_on_more_of_the_screen_info">Les cartes et les panneaux de réglages reçoivent une lumière dessus et un bord plus brillant, les pastilles et les boutons ronds un bord plus brillant, et le givre les atteint tous. Ils n’utilisent aucun flou en direct, donc ils ne coûtent presque rien, et ils se voient sur les pages qui ont un arrière-plan derrière. La barre Annuler est du vrai verre tant qu’elle est affichée. Le mode Performance désactive cette option. D’autres endroits pourraient suivre.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Rechercher des playlists</string>
+    <string name="search_albums">Rechercher des albums</string>
+    <string name="search_artists">Rechercher des artistes</string>
+    <string name="show_less">Afficher moins</string>
+    <string name="scroll_through_the_list">Faire défiler la liste</string>
+    <string name="speed_dial_your_plays_first">Accès rapide : vos écoutes d\'abord</string>
+    <string name="speed_dial_your_plays_first_sub">Des tuiles qui changent selon vos écoutes</string>
+    <string name="speed_dial_your_plays_first_info">YouTube envoie à Prism les tuiles de son site, qui ne sont pas celles de son appli et ne suivent pas toujours ce que vous écoutez. Si c\'est activé, ce que vous avez le plus écouté sur ce téléphone ces trois derniers mois passe en premier, et celles de YouTube complètent le reste.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube n\'accepte plus cette connexion. Déconnectez-vous puis reconnectez-vous.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube n\'envoie pas de 256 kbit/s à ce compte pour le moment : les titres sont lus en qualité habituelle</string>
 </resources>

@@ -311,7 +311,6 @@
     <string name="browse">둘러보기</string>
     <string name="newest">최신순</string>
     <string name="oldest">오래된순</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">플레이어 배경</string>
     <string name="backgrounds">배경</string>
     <string name="behind_the_player_darkened_so_its">플레이어 뒤에 표시되며, 흰 글자가 잘 보이도록 어둡게 처리돼요</string>
@@ -4803,4 +4802,15 @@
     <string name="glass_on_more_of_the_screen">화면 곳곳에 유리 효과</string>
     <string name="glass_on_more_of_the_screen_detail">카드, 칩, 둥근 버튼, 실행취소 바</string>
     <string name="glass_on_more_of_the_screen_info">카드와 설정 패널에는 빛이 비치고 가장자리가 더 밝아지며, 칩과 둥근 버튼은 가장자리가 더 밝아지고, 서리 설정은 이 모두에 적용됩니다. 실시간 흐림을 쓰지 않아 부담이 거의 없고, 배경이 있는 페이지에 표시됩니다. 실행취소 바는 표시되는 동안 진짜 유리입니다. 성능 모드에서는 꺼집니다. 앞으로 더 많은 곳에 적용될 수 있습니다.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">재생목록 검색</string>
+    <string name="search_albums">앨범 검색</string>
+    <string name="search_artists">아티스트 검색</string>
+    <string name="show_less">간략히 보기</string>
+    <string name="scroll_through_the_list">목록 스크롤</string>
+    <string name="speed_dial_your_plays_first">스피드 다이얼: 내가 듣는 곡 먼저</string>
+    <string name="speed_dial_your_plays_first_sub">듣는 대로 바뀌는 타일</string>
+    <string name="speed_dial_your_plays_first_info">YouTube는 Prism에 웹사이트용 타일을 보내는데, 앱의 타일과 다르고 내가 듣는 곡을 항상 따르지는 않습니다. 켜면 지난 3개월 동안 이 휴대전화에서 가장 많이 들은 곡이 먼저 나오고 나머지는 YouTube 타일로 채워집니다.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube에서 더 이상 이 로그인을 받지 않습니다. 로그아웃한 후 다시 로그인하세요.</string>
+    <string name="youtube_isnt_sending_256_kbps">지금은 YouTube가 이 계정에 256kbps를 보내지 않아 곡이 일반 음질로 재생됩니다</string>
 </resources>

@@ -311,7 +311,6 @@
     <string name="browse">Răsfoiește</string>
     <string name="newest">Cele mai noi</string>
     <string name="oldest">Cele mai vechi</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">Fundalul playerului</string>
     <string name="backgrounds">Fundaluri</string>
     <string name="behind_the_player_darkened_so_its">În spatele playerului, întunecat ca textul alb să se citească</string>
@@ -4931,4 +4930,15 @@
     <string name="glass_on_more_of_the_screen">Sticlă pe mai mult din ecran</string>
     <string name="glass_on_more_of_the_screen_detail">Carduri, chip-uri, butoane rotunde și bara Anulează</string>
     <string name="glass_on_more_of_the_screen_info">Cardurile și panourile de setări primesc o lumină care cade pe ele și o margine mai luminoasă, chip-urile și butoanele rotunde o margine mai luminoasă, iar Matul le cuprinde pe toate. Nu folosesc estompare în direct, așa că costă aproape nimic, și se văd pe paginile cu un fundal în spate. Bara Anulează este sticlă adevărată cât timp e afișată. Modul de performanță dezactivează asta. Pot urma și alte locuri.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Caută playlisturi</string>
+    <string name="search_albums">Caută albume</string>
+    <string name="search_artists">Caută artiști</string>
+    <string name="show_less">Afișează mai puțin</string>
+    <string name="scroll_through_the_list">Derulează lista</string>
+    <string name="speed_dial_your_plays_first">Apelare rapidă: mai întâi ce asculți</string>
+    <string name="speed_dial_your_plays_first_sub">Plăci care se schimbă pe măsură ce asculți</string>
+    <string name="speed_dial_your_plays_first_info">YouTube îi trimite lui Prism plăcile de pe site-ul său, care nu sunt cele din aplicație și nu urmăresc mereu ce asculți. Când este activat, mai întâi apare ce ai ascultat cel mai mult pe acest telefon în ultimele trei luni, iar plăcile YouTube completează restul.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube nu mai acceptă această conectare. Deconectează-te și conectează-te din nou.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube nu trimite acum 256 kbps către acest cont, așa că melodiile se aud la calitatea obișnuită</string>
 </resources>

@@ -311,7 +311,6 @@
     <string name="browse">Explorar</string>
     <string name="newest">Más recientes</string>
     <string name="oldest">Más antiguos</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">Fondo del reproductor</string>
     <string name="backgrounds">Fondos</string>
     <string name="behind_the_player_darkened_so_its">Detrás del reproductor, oscurecido para que su texto blanco se lea</string>
@@ -4931,4 +4930,15 @@
     <string name="glass_on_more_of_the_screen">Cristal en más partes de la pantalla</string>
     <string name="glass_on_more_of_the_screen_detail">Tarjetas, chips, botones redondos y la barra de Deshacer</string>
     <string name="glass_on_more_of_the_screen_info">Las tarjetas y los paneles de ajustes reciben una luz encima y un borde más brillante, los chips y los botones redondos un borde más brillante, y la escarcha llega a todos. No usan desenfoque en vivo, así que cuestan casi nada, y se ven en las páginas que tienen un fondo detrás. La barra de Deshacer es cristal de verdad mientras está visible. El modo Rendimiento lo desactiva. Puede que lleguen más lugares.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Buscar listas</string>
+    <string name="search_albums">Buscar álbumes</string>
+    <string name="search_artists">Buscar artistas</string>
+    <string name="show_less">Mostrar menos</string>
+    <string name="scroll_through_the_list">Desplazarse por la lista</string>
+    <string name="speed_dial_your_plays_first">Marcación rápida: primero lo que escuchas</string>
+    <string name="speed_dial_your_plays_first_sub">Mosaicos que cambian según lo que escuchas</string>
+    <string name="speed_dial_your_plays_first_info">YouTube le envía a Prism los mosaicos de su sitio web, que no son los de su app y no siempre siguen lo que escuchas. Si lo activas, primero aparece lo que más has escuchado en este teléfono en los últimos tres meses, y los de YouTube completan el resto.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube ya no acepta este inicio de sesión. Cierra sesión y vuelve a iniciarla.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube no le está enviando 256 kbps a esta cuenta por ahora, así que las canciones suenan con la calidad habitual</string>
 </resources>

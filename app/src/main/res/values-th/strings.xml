@@ -311,7 +311,6 @@
     <string name="browse">เรียกดู</string>
     <string name="newest">ใหม่สุด</string>
     <string name="oldest">เก่าสุด</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">พื้นหลังเพลเยอร์</string>
     <string name="backgrounds">พื้นหลัง</string>
     <string name="behind_the_player_darkened_so_its">อยู่ด้านหลังเพลเยอร์ ทำให้มืดลงเพื่อให้อ่านข้อความสีขาวได้</string>
@@ -4803,4 +4802,15 @@
     <string name="glass_on_more_of_the_screen">กระจกบนพื้นที่หน้าจอมากขึ้น</string>
     <string name="glass_on_more_of_the_screen_detail">การ์ด ชิป ปุ่มกลม และแถบเลิกทำ</string>
     <string name="glass_on_more_of_the_screen_info">การ์ดและแผงการตั้งค่าจะมีแสงตกกระทบและขอบที่สว่างขึ้น ชิปและปุ่มกลมมีขอบที่สว่างขึ้น และฝ้าจะส่งไปถึงทั้งหมด ไม่ใช้การเบลอสด จึงแทบไม่เปลืองเครื่อง และจะเห็นในหน้าที่มีพื้นหลังอยู่ข้างหลัง แถบเลิกทำเป็นกระจกจริงตลอดเวลาที่แสดงอยู่ โหมดประสิทธิภาพจะปิดตัวเลือกนี้ อาจมีที่อื่นเพิ่มตามมา</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">ค้นหาเพลย์ลิสต์</string>
+    <string name="search_albums">ค้นหาอัลบั้ม</string>
+    <string name="search_artists">ค้นหาศิลปิน</string>
+    <string name="show_less">แสดงน้อยลง</string>
+    <string name="scroll_through_the_list">เลื่อนดูรายการ</string>
+    <string name="speed_dial_your_plays_first">เข้าถึงด่วน: เพลงที่คุณเล่นก่อน</string>
+    <string name="speed_dial_your_plays_first_sub">ช่องที่เปลี่ยนไปตามการฟังของคุณ</string>
+    <string name="speed_dial_your_plays_first_info">YouTube ส่งช่องจากเว็บไซต์มาให้ Prism ซึ่งไม่ใช่ช่องในแอปและไม่ได้ตามสิ่งที่คุณเล่นเสมอไป เมื่อเปิดไว้ สิ่งที่คุณเล่นมากที่สุดในโทรศัพท์เครื่องนี้ในสามเดือนที่ผ่านมาจะมาก่อน แล้วช่องของ YouTube จะเติมส่วนที่เหลือ</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube ไม่รับการลงชื่อเข้าใช้นี้อีกต่อไป โปรดออกจากระบบแล้วลงชื่อเข้าใช้อีกครั้ง</string>
+    <string name="youtube_isnt_sending_256_kbps">ขณะนี้ YouTube ไม่ได้ส่ง 256 kbps ให้บัญชีนี้ เพลงจึงเล่นในคุณภาพปกติ</string>
 </resources>

@@ -311,7 +311,6 @@
     <string name="browse">Bladeren</string>
     <string name="newest">Nieuwste</string>
     <string name="oldest">Oudste</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">Achtergrond van de speler</string>
     <string name="backgrounds">Achtergronden</string>
     <string name="behind_the_player_darkened_so_its">Achter de speler, donkerder gemaakt zodat de witte tekst leesbaar blijft</string>
@@ -4867,4 +4866,15 @@
     <string name="glass_on_more_of_the_screen">Glas op meer van het scherm</string>
     <string name="glass_on_more_of_the_screen_detail">Kaarten, chips, ronde knoppen en de balk Ongedaan maken</string>
     <string name="glass_on_more_of_the_screen_info">Kaarten en instellingenpanelen krijgen een lichtinval en een helderdere rand, chips en ronde knoppen een helderdere rand, en de matheid bereikt ze allemaal. Ze gebruiken geen live vervaging, dus ze kosten bijna niets, en ze zijn te zien op pagina\'s met een achtergrond erachter. De balk Ongedaan maken is echt glas zolang hij in beeld is. De prestatiemodus zet dit uit. Er kunnen meer plekken volgen.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Afspeellijsten zoeken</string>
+    <string name="search_albums">Albums zoeken</string>
+    <string name="search_artists">Artiesten zoeken</string>
+    <string name="show_less">Minder tonen</string>
+    <string name="scroll_through_the_list">Door de lijst scrollen</string>
+    <string name="speed_dial_your_plays_first">Snelkiezen: eerst wat jij afspeelt</string>
+    <string name="speed_dial_your_plays_first_sub">Tegels die veranderen terwijl je luistert</string>
+    <string name="speed_dial_your_plays_first_info">YouTube stuurt Prism de tegels van zijn website. Die zijn anders dan in de app en volgen niet altijd wat je afspeelt. Als dit aan staat, komt eerst wat je de afgelopen drie maanden het meest op deze telefoon hebt afgespeeld, en vullen de tegels van YouTube de rest aan.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube accepteert deze aanmelding niet meer. Meld je af en weer aan.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube stuurt op dit moment geen 256 kbps naar dit account, dus nummers spelen in de gewone kwaliteit</string>
 </resources>

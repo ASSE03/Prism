@@ -311,7 +311,6 @@
     <string name="browse">براؤز کریں</string>
     <string name="newest">سب سے نیا</string>
     <string name="oldest">سب سے پرانا</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">پلیئر کا پس منظر</string>
     <string name="backgrounds">پس منظر</string>
     <string name="behind_the_player_darkened_so_its">پلیئر کے پیچھے، گہرا کیا ہوا تاکہ اس کا سفید متن پڑھا جا سکے</string>
@@ -4867,4 +4866,15 @@
     <string name="glass_on_more_of_the_screen">اسکرین کے زیادہ حصے پر شیشہ</string>
     <string name="glass_on_more_of_the_screen_detail">کارڈز، چپس، گول بٹن اور واپس کریں بار</string>
     <string name="glass_on_more_of_the_screen_info">کارڈز اور سیٹنگز پینلز پر روشنی پڑتی ہے اور کنارہ زیادہ روشن ہوتا ہے، چپس اور گول بٹنوں کا کنارہ زیادہ روشن ہوتا ہے، اور پالا سب تک پہنچتا ہے۔ ان میں لائیو دھندلاہٹ نہیں ہوتی، اس لیے لاگت نہ ہونے کے برابر ہے، اور یہ ان صفحات پر نظر آتے ہیں جن کے پیچھے پس منظر ہو۔ واپس کریں بار جب تک اوپر ہے اصلی شیشہ ہے۔ پرفارمنس موڈ اسے بند کر دیتا ہے۔ مزید جگہیں بعد میں آ سکتی ہیں۔</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">پلے لسٹس تلاش کریں</string>
+    <string name="search_albums">البمز تلاش کریں</string>
+    <string name="search_artists">فنکار تلاش کریں</string>
+    <string name="show_less">کم دکھائیں</string>
+    <string name="scroll_through_the_list">فہرست میں اسکرول کریں</string>
+    <string name="speed_dial_your_plays_first">اسپیڈ ڈائل: پہلے جو آپ چلاتے ہیں</string>
+    <string name="speed_dial_your_plays_first_sub">ٹائلیں جو آپ کے سننے کے ساتھ بدلتی ہیں</string>
+    <string name="speed_dial_your_plays_first_info">YouTube، Prism کو اپنی ویب سائٹ کی ٹائلیں بھیجتا ہے، جو اس کی ایپ والی نہیں ہوتیں اور ہمیشہ آپ کے چلائے ہوئے گانوں کے مطابق نہیں ہوتیں۔ آن ہونے پر، پچھلے تین مہینوں میں اس فون پر آپ نے جو سب سے زیادہ چلایا وہ پہلے آتا ہے، اور باقی جگہ YouTube کی ٹائلیں بھرتی ہیں۔</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube اب یہ سائن ان قبول نہیں کرتا۔ سائن آؤٹ کر کے دوبارہ سائن ان کریں۔</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube اس وقت اس اکاؤنٹ کو 256 kbps نہیں بھیج رہا، اس لیے گانے عام کوالٹی میں چل رہے ہیں</string>
 </resources>

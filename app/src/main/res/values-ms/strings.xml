@@ -311,7 +311,6 @@
     <string name="browse">Layari</string>
     <string name="newest">Terbaharu</string>
     <string name="oldest">Terlama</string>
-    <string name="photo">FOTO|%1$s</string>
     <string name="player_background">Latar belakang pemain</string>
     <string name="backgrounds">Latar belakang</string>
     <string name="behind_the_player_darkened_so_its">Di belakang pemain, digelapkan supaya teks putihnya mudah dibaca</string>
@@ -4803,4 +4802,15 @@
     <string name="glass_on_more_of_the_screen">Kaca pada lebih banyak bahagian skrin</string>
     <string name="glass_on_more_of_the_screen_detail">Kad, cip, butang bulat dan bar Buat asal</string>
     <string name="glass_on_more_of_the_screen_info">Kad dan panel tetapan mendapat cahaya yang jatuh ke atasnya dan tepi yang lebih terang, cip dan butang bulat mendapat tepi yang lebih terang, dan Fros meliputi kesemuanya. Ia tidak menggunakan kabur langsung, jadi hampir tidak membebankan, dan ia dipaparkan pada halaman yang mempunyai latar belakang. Bar Buat asal ialah kaca sebenar semasa dipaparkan. Mod Prestasi mematikannya. Lebih banyak tempat mungkin menyusul.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Cari senarai main</string>
+    <string name="search_albums">Cari album</string>
+    <string name="search_artists">Cari artis</string>
+    <string name="show_less">Tunjukkan kurang</string>
+    <string name="scroll_through_the_list">Tatal senarai</string>
+    <string name="speed_dial_your_plays_first">Dail pantas: yang anda main dahulu</string>
+    <string name="speed_dial_your_plays_first_sub">Petak yang berubah semasa anda mendengar</string>
+    <string name="speed_dial_your_plays_first_info">YouTube menghantar petak laman webnya kepada Prism, yang bukan petak dalam aplikasinya dan tidak selalu mengikut apa yang anda mainkan. Jika dihidupkan, apa yang paling kerap anda mainkan pada telefon ini dalam tiga bulan lalu muncul dahulu, dan petak YouTube mengisi selebihnya.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube tidak lagi menerima log masuk ini. Log keluar dan log masuk semula.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube tidak menghantar 256 kbps kepada akaun ini buat masa ini, jadi lagu dimainkan pada kualiti biasa</string>
 </resources>

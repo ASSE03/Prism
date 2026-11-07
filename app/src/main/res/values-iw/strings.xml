@@ -311,7 +311,6 @@
     <string name="browse">עיון</string>
     <string name="newest">החדש ביותר</string>
     <string name="oldest">הישן ביותר</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">רקע הנגן</string>
     <string name="backgrounds">רקעים</string>
     <string name="behind_the_player_darkened_so_its">מאחורי הנגן, מוחשך כדי שהטקסט הלבן יהיה קריא</string>
@@ -4931,4 +4930,15 @@
     <string name="glass_on_more_of_the_screen">זכוכית על חלק גדול יותר מהמסך</string>
     <string name="glass_on_more_of_the_screen_detail">כרטיסים, צ\'יפים, כפתורים עגולים וסרגל הביטול</string>
     <string name="glass_on_more_of_the_screen_info">כרטיסים ולוחות הגדרות מקבלים אור שנופל עליהם וקצה בהיר יותר, צ\'יפים וכפתורים עגולים מקבלים קצה בהיר יותר, והכפור מגיע לכולם. הם לא משתמשים בטשטוש חי, ולכן כמעט לא עולים בביצועים, והם נראים בדפים שיש מאחוריהם רקע. סרגל הביטול הוא זכוכית אמיתית כל עוד הוא מוצג. מצב ביצועים מכבה את זה. ייתכן שיתווספו עוד מקומות.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">חיפוש פלייליסטים</string>
+    <string name="search_albums">חיפוש אלבומים</string>
+    <string name="search_artists">חיפוש אמנים</string>
+    <string name="show_less">הצגת פחות</string>
+    <string name="scroll_through_the_list">גלילה ברשימה</string>
+    <string name="speed_dial_your_plays_first">חיוג מהיר: קודם מה שאתה מנגן</string>
+    <string name="speed_dial_your_plays_first_sub">משבצות שמשתנות לפי ההאזנה שלך</string>
+    <string name="speed_dial_your_plays_first_info">YouTube שולח ל-Prism את המשבצות של האתר שלו, שאינן אלה שבאפליקציה שלו ולא תמיד עוקבות אחרי מה שאתה מנגן. כשזה פועל, קודם מופיע מה שניגנת הכי הרבה בטלפון הזה בשלושת החודשים האחרונים, ומשבצות YouTube משלימות את השאר.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube כבר לא מקבל את הכניסה הזו. צריך לצאת מהחשבון ולהיכנס שוב.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube לא שולח כרגע 256 kbps לחשבון הזה, ולכן השירים מתנגנים באיכות הרגילה</string>
 </resources>

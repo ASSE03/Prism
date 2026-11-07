@@ -311,7 +311,6 @@
     <string name="browse">瀏覽</string>
     <string name="newest">最新</string>
     <string name="oldest">最舊</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">播放器背景</string>
     <string name="backgrounds">背景</string>
     <string name="behind_the_player_darkened_so_its">顯示在播放器後方，並調暗讓白色文字清楚易讀</string>
@@ -4803,4 +4802,15 @@
     <string name="glass_on_more_of_the_screen">更多位置使用玻璃效果</string>
     <string name="glass_on_more_of_the_screen_detail">卡片、標籤、圓形按鈕和復原列</string>
     <string name="glass_on_more_of_the_screen_info">卡片和設定面板會有光線照射和更亮的邊緣，標籤和圓形按鈕會有更亮的邊緣，霧面設定對它們全部生效。它們不使用即時模糊，所以幾乎不耗電，並且會顯示在帶背景的頁面上。復原列在顯示期間是真正的玻璃。效能模式會關閉此功能。之後可能會有更多位置支援。</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">搜尋播放清單</string>
+    <string name="search_albums">搜尋專輯</string>
+    <string name="search_artists">搜尋藝人</string>
+    <string name="show_less">收合</string>
+    <string name="scroll_through_the_list">捲動清單</string>
+    <string name="speed_dial_your_plays_first">快速撥號：你常聽的優先</string>
+    <string name="speed_dial_your_plays_first_sub">隨你聆聽而變化的方塊</string>
+    <string name="speed_dial_your_plays_first_info">YouTube 傳給 Prism 的是其網站上的方塊，與其應用程式中的不同，也不一定會跟著你的聆聽內容。開啟後，最近三個月你在這支手機上聽得最多的內容會排在前面，其餘由 YouTube 的方塊補上。</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube 不再接受這個登入。請登出後重新登入。</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube 目前沒有傳送 256 kbps 給這個帳戶，因此歌曲會以一般音質播放</string>
 </resources>

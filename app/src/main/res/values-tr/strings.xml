@@ -311,7 +311,6 @@
     <string name="browse">Göz at</string>
     <string name="newest">En yeni</string>
     <string name="oldest">En eski</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">Oynatıcı arka planı</string>
     <string name="backgrounds">Arka planlar</string>
     <string name="behind_the_player_darkened_so_its">Oynatıcının arkasında, beyaz yazısı okunsun diye koyulaştırılmış</string>
@@ -4867,4 +4866,15 @@
     <string name="glass_on_more_of_the_screen">Ekranın daha fazlasında cam</string>
     <string name="glass_on_more_of_the_screen_detail">Kartlar, çipler, yuvarlak düğmeler ve Geri al çubuğu</string>
     <string name="glass_on_more_of_the_screen_info">Kartlar ve ayar panelleri üzerlerine düşen bir ışık ve daha parlak bir kenar, çipler ve yuvarlak düğmeler daha parlak bir kenar alır; Buzlanma hepsine uygulanır. Canlı bulanıklık kullanmazlar, bu yüzden neredeyse hiçbir şeye mal olmazlar ve arkalarında arka plan olan sayfalarda görünürler. Geri al çubuğu ekrandayken gerçek camdır. Performans modu bunu kapatır. Başka yerler de eklenebilir.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Çalma listelerinde ara</string>
+    <string name="search_albums">Albümlerde ara</string>
+    <string name="search_artists">Sanatçılarda ara</string>
+    <string name="show_less">Daha az göster</string>
+    <string name="scroll_through_the_list">Listede kaydır</string>
+    <string name="speed_dial_your_plays_first">Hızlı erişim: önce çaldıkların</string>
+    <string name="speed_dial_your_plays_first_sub">Dinledikçe değişen kutular</string>
+    <string name="speed_dial_your_plays_first_info">YouTube, Prism\'e web sitesinin kutularını gönderir; bunlar uygulamasındakiler değildir ve her zaman çaldıklarını takip etmez. Açıkken, son üç ayda bu telefonda en çok çaldıkların önce gelir, kalanını YouTube\'unkiler doldurur.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube artık bu oturum açmayı kabul etmiyor. Çıkış yapıp yeniden oturum açın.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube şu anda bu hesaba 256 kbps göndermiyor, bu yüzden şarkılar normal kalitede çalıyor</string>
 </resources>

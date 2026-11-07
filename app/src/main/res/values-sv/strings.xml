@@ -311,7 +311,6 @@
     <string name="browse">Bläddra</string>
     <string name="newest">Nyast</string>
     <string name="oldest">Äldst</string>
-    <string name="photo">FOTO|%1$s</string>
     <string name="player_background">Spelarens bakgrund</string>
     <string name="backgrounds">Bakgrunder</string>
     <string name="behind_the_player_darkened_so_its">Bakom spelaren, mörkad så att den vita texten syns</string>
@@ -4867,4 +4866,15 @@
     <string name="glass_on_more_of_the_screen">Glas på mer av skärmen</string>
     <string name="glass_on_more_of_the_screen_detail">Kort, chips, runda knappar och Ångra-fältet</string>
     <string name="glass_on_more_of_the_screen_info">Kort och inställningspaneler får ett ljus som faller på dem och en ljusare kant, chips och runda knappar en ljusare kant, och frosten når dem alla. De använder ingen live-oskärpa, så de kostar nästan ingenting, och de syns på sidor som har en bakgrund bakom sig. Ångra-fältet är riktigt glas medan det visas. Prestandaläget stänger av detta. Fler platser kan följa.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">Sök spellistor</string>
+    <string name="search_albums">Sök album</string>
+    <string name="search_artists">Sök artister</string>
+    <string name="show_less">Visa mindre</string>
+    <string name="scroll_through_the_list">Bläddra i listan</string>
+    <string name="speed_dial_your_plays_first">Kortnummer: det du spelar först</string>
+    <string name="speed_dial_your_plays_first_sub">Rutor som ändras när du lyssnar</string>
+    <string name="speed_dial_your_plays_first_info">YouTube skickar rutorna från sin webbplats till Prism. De är inte samma som i appen och följer inte alltid det du spelar. När det är på kommer det du har spelat mest på den här telefonen de senaste tre månaderna först, och YouTubes rutor fyller på resten.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube godkänner inte längre den här inloggningen. Logga ut och logga in igen.</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube skickar inte 256 kbit/s till det här kontot just nu, så låtar spelas i vanlig kvalitet</string>
 </resources>

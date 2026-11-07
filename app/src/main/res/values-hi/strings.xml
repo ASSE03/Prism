@@ -311,7 +311,6 @@
     <string name="browse">ब्राउज़ करें</string>
     <string name="newest">सबसे नया</string>
     <string name="oldest">सबसे पुराना</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">प्लेयर बैकग्राउंड</string>
     <string name="backgrounds">बैकग्राउंड</string>
     <string name="behind_the_player_darkened_so_its">प्लेयर के पीछे, गहरा किया गया ताकि इसका सफ़ेद टेक्स्ट पढ़ा जा सके</string>
@@ -4867,4 +4866,15 @@
     <string name="glass_on_more_of_the_screen">स्क्रीन के ज़्यादा हिस्से पर ग्लास</string>
     <string name="glass_on_more_of_the_screen_detail">कार्ड, चिप, गोल बटन और पहले जैसा करें बार</string>
     <string name="glass_on_more_of_the_screen_info">कार्ड और सेटिंग पैनल पर रोशनी पड़ती है और किनारा ज़्यादा चमकीला होता है, चिप और गोल बटन का किनारा ज़्यादा चमकीला होता है, और फ़्रॉस्ट इन सब तक पहुँचता है। इनमें लाइव ब्लर नहीं होता, इसलिए लागत लगभग नहीं के बराबर है, और ये उन पेजों पर दिखते हैं जिनके पीछे बैकग्राउंड हो। पहले जैसा करें बार जब तक ऊपर है, असली काँच है। परफ़ॉर्मेंस मोड इसे बंद कर देता है। आगे और जगहें जुड़ सकती हैं।</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">प्लेलिस्ट खोजें</string>
+    <string name="search_albums">एल्बम खोजें</string>
+    <string name="search_artists">कलाकार खोजें</string>
+    <string name="show_less">कम दिखाएं</string>
+    <string name="scroll_through_the_list">सूची में स्क्रॉल करें</string>
+    <string name="speed_dial_your_plays_first">स्पीड डायल: पहले आपके सुने गाने</string>
+    <string name="speed_dial_your_plays_first_sub">टाइलें जो आपके सुनने के साथ बदलती हैं</string>
+    <string name="speed_dial_your_plays_first_info">YouTube, Prism को अपनी वेबसाइट की टाइलें भेजता है, जो उसके ऐप वाली नहीं होतीं और हमेशा आपके सुने गानों के हिसाब से नहीं चलतीं। चालू होने पर, पिछले तीन महीनों में इस फ़ोन पर आपने जो सबसे ज़्यादा सुना वह पहले आता है, और बाकी जगह YouTube की टाइलें भरती हैं।</string>
+    <string name="youtube_no_longer_takes_this_sign_in">YouTube अब यह साइन-इन स्वीकार नहीं करता। साइन आउट करके फिर से साइन इन करें।</string>
+    <string name="youtube_isnt_sending_256_kbps">YouTube अभी इस खाते को 256 kbps नहीं भेज रहा, इसलिए गाने सामान्य क्वालिटी में चल रहे हैं</string>
 </resources>

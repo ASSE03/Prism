@@ -311,7 +311,6 @@
     <string name="browse">تصفّح</string>
     <string name="newest">الأحدث</string>
     <string name="oldest">الأقدم</string>
-    <string name="photo">PHOTO|%1$s</string>
     <string name="player_background">خلفية المشغّل</string>
     <string name="backgrounds">الخلفيات</string>
     <string name="behind_the_player_darkened_so_its">خلف المشغّل، معتمة ليسهل قراءة نصه الأبيض</string>
@@ -5123,4 +5122,15 @@
     <string name="glass_on_more_of_the_screen">الزجاج على مساحة أكبر من الشاشة</string>
     <string name="glass_on_more_of_the_screen_detail">البطاقات والرقائق والأزرار الدائرية وشريط التراجع</string>
     <string name="glass_on_more_of_the_screen_info">تحصل البطاقات ولوحات الإعدادات على ضوء يسقط عليها وحافة أكثر سطوعًا، والرقائق والأزرار الدائرية على حافة أكثر سطوعًا، ويصل الصقيع إليها جميعًا. لا تستخدم تمويهًا مباشرًا، لذا تكاد لا تكلّف شيئًا، وتظهر في الصفحات التي لها خلفية. أما شريط التراجع فهو زجاج حقيقي ما دام ظاهرًا. يوقف وضع الأداء هذا الخيار. وقد تُضاف أماكن أخرى لاحقًا.</string>
+    <!-- 1.8.2.1 -->
+    <string name="search_playlists">البحث في قوائم التشغيل</string>
+    <string name="search_albums">البحث في الألبومات</string>
+    <string name="search_artists">البحث في الفنانين</string>
+    <string name="show_less">عرض أقل</string>
+    <string name="scroll_through_the_list">التمرير عبر القائمة</string>
+    <string name="speed_dial_your_plays_first">الطلب السريع: ما تشغّله أولًا</string>
+    <string name="speed_dial_your_plays_first_sub">مربعات تتغير مع استماعك</string>
+    <string name="speed_dial_your_plays_first_info">يرسل YouTube إلى Prism مربعات موقعه، وهي ليست نفس مربعات تطبيقه ولا تتبع دائمًا ما تشغّله. عند التفعيل، يظهر أولًا أكثر ما شغّلته على هذا الهاتف في الأشهر الثلاثة الماضية، ثم تكمل مربعات YouTube الباقي.</string>
+    <string name="youtube_no_longer_takes_this_sign_in">لم يعد YouTube يقبل تسجيل الدخول هذا. سجّل الخروج ثم سجّل الدخول مرة أخرى.</string>
+    <string name="youtube_isnt_sending_256_kbps">لا يرسل YouTube حاليًا 256 كيلوبت/ث إلى هذا الحساب، لذا تُشغَّل الأغاني بالجودة المعتادة</string>
 </resources>
