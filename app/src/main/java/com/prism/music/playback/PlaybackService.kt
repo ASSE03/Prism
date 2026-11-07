@@ -852,6 +852,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
         if (!isPlaying) saveEpisodePosition()
         pushWidgets()
+        // #388: the place in the song is kept every 10 s while playing, for a restart after a crash.
+        placeJob?.cancel()
+        placeJob = if (isPlaying) scope.launch { while (true) { delay(PlaceKeeper.EVERY_MS); placeKeeper.tick(currentPlace()) } } else null
         if (isPlaying) playStartedAt = now
         else if (playStartedAt > 0) {
             accumulatedMs += now - playStartedAt
@@ -2355,6 +2358,25 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     // ------------------------------------------------------------ Queue persistence
 
     private val queueFile get() = File(filesDir, "queue.json")
+    private val placeFile get() = File(filesDir, "queue-place.json")
+    private var placeJob: Job? = null
+    private val placeKeeper = PlaceKeeper { p ->
+        val text = InnerTube.json.encodeToString(QueuePlace.serializer(), p)
+        scope.launch(queueWriter) { runCatching { placeFile.writeText(text) } }
+    }
+
+    private fun currentPlace(): QueuePlace? {
+        if (!::player.isInitialized) return null
+        val id = player.currentMediaItem?.mediaId ?: return null
+        return QueuePlace(id, player.currentMediaItemIndex, player.currentPosition)
+    }
+
+    /** The kept place, when it was written after queue.json (else the queue file's own place is the newer one). */
+    private fun keptPlace(): QueuePlace? = runCatching {
+        val f = placeFile
+        if (!f.exists() || f.lastModified() < queueFile.lastModified()) null
+        else InnerTube.json.decodeFromString(QueuePlace.serializer(), f.readText())
+    }.getOrNull()
 
     private fun scheduleSave() {
         saveJob?.cancel()
@@ -2380,6 +2402,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             shuffle = player.shuffleModeEnabled, shuffleOrder = order, repeat = player.repeatMode,
         )
         val text = InnerTube.json.encodeToString(SavedQueue.serializer(), q)
+        placeKeeper.saved(currentPlace())
         if (now) writeQueue(text) else scope.launch(queueWriter) { writeQueue(text) }
     }
 
@@ -2403,7 +2426,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             return
         }
         c.queue.source.value = QueueSource(QueueKind.OTHER, q.title)
-        player.setMediaItems(q.songs.map { it.toMediaItem() }, q.index.coerceIn(0, q.songs.lastIndex), q.positionMs)
+        val (index, position) = PlaceKeeper.start(q.songs.map { it.id }, q.index, q.positionMs, keptPlace(), placeIsNewer = true)
+        player.setMediaItems(q.songs.map { it.toMediaItem() }, index.coerceIn(0, q.songs.lastIndex), position)
         // Shuffle and repeat as they were, in the same order.
         if (q.shuffle) {
             if (q.shuffleOrder.size == q.songs.size && q.shuffleOrder.sorted() == q.songs.indices.toList()) {
@@ -2712,14 +2736,15 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             controller: MediaSession.ControllerInfo,
             isForPlayback: Boolean,
         ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> = scope.future {
-            val q = withContext(Dispatchers.IO) {
-                runCatching { InnerTube.json.decodeFromString(SavedQueue.serializer(), queueFile.readText()) }.getOrNull()
+            val (q, place) = withContext(Dispatchers.IO) {
+                runCatching { InnerTube.json.decodeFromString(SavedQueue.serializer(), queueFile.readText()) }.getOrNull() to keptPlace()
             }
             if (q == null || q.songs.isEmpty()) {
                 MediaSession.MediaItemsWithStartPosition(emptyList(), 0, C.TIME_UNSET)
             } else {
                 c.queue.source.value = QueueSource(QueueKind.OTHER, q.title)
-                MediaSession.MediaItemsWithStartPosition(q.songs.map { it.toMediaItem() }, q.index.coerceIn(0, q.songs.lastIndex), q.positionMs)
+                val (index, position) = PlaceKeeper.start(q.songs.map { it.id }, q.index, q.positionMs, place, placeIsNewer = true)
+                MediaSession.MediaItemsWithStartPosition(q.songs.map { it.toMediaItem() }, index.coerceIn(0, q.songs.lastIndex), position)
             }
         }
     }
