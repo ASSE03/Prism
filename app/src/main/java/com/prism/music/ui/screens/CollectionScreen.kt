@@ -693,6 +693,10 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     onShuffle = { c.player.playQueue(playable, 0, source, shuffle = true) },
                 )
             }
+            // Under Play and Shuffle: above them, a long description pushed Play behind the mini player.
+            val about: @Composable () -> Unit = {
+                shown.description?.takeIf { it.isNotBlank() }?.let { AboutBox(it, Modifier.padding(start = 20.dp, end = 20.dp, bottom = 8.dp)) }
+            }
             val sideWidth = (pageWidth * 0.4f).coerceIn(320.dp, 460.dp)
             if (sideBySide) Column(
                 Modifier.width(sideWidth).fillMaxHeight().verticalScroll(rememberScrollState())
@@ -700,6 +704,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
             ) {
                 header()
                 playRow()
+                about()
             }
             LazyColumn(
                 state = listState,
@@ -726,6 +731,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     rearrangeSongs(reorder, onDone = { rearranging = false }, onReorder = ::reorderTo)
                     return@LazyColumn
                 }
+                if (!sideBySide) item("about") { about() }
                 if (showSearch || sortable) item(key = "search") {
                     Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 4.dp, bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
                         if (showSearch) com.prism.music.ui.components.SearchField(
@@ -1166,7 +1172,6 @@ private fun HeaderDetails(page: CollectionPage, centred: Boolean, privacy: Strin
                 Text(if (saved) tr(R.string.in_your_library) else tr(R.string.add_to_library), style = MaterialTheme.typography.labelLarge, color = scheme.onSurface)
             }
         }
-        page.description?.takeIf { it.isNotBlank() }?.let { AboutBox(it, Modifier.padding(top = 12.dp)) }
     }
 }
 

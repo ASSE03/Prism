@@ -35,7 +35,7 @@ What changed in each release. Older releases are described on the [Releases page
 - **Google Takeout's history is recognized in any language** (#375). The file's name changes with your account's language (`historial-de-reproducciones.json` in Spanish), so Prism now goes by what's in it.
 - **Japanese kanji no longer turn into Chinese pinyin in romanized lyrics** (#370). Some sources, KuGou above all, write a Japanese song's kanji in Chinese forms, and a line of only kanji could pass for Chinese. Prism now decides for the whole song and reads them as Japanese.
 - **Replay's summary card no longer cuts its title off** ("TODA" for Today). The title now shrinks until it fits on its line, in every period and language, and so do the story's big words.
-- **An album's description is easier to read.** Left-aligned in its own quiet box, closed to a few lines with Show more, and the Wikipedia and license credit on its own small line with tappable links instead of raw addresses.
+- **An album's description is easier to read.** Left-aligned in its own quiet box under Play and Shuffle, closed to a few lines with Show more, and the Wikipedia and license credit on its own small line with tappable links instead of raw addresses.
 - **Play next on a song already in your queue** moves it up instead of adding a second copy (#368).
 - **The queue lists songs in the order they really play.** A song you added to the queue was shown first, but played after the rest of the list, so Next seemed to skip it (#368).
 - **Crossfade:** Play next, or taking a song out of the queue, just before a blend no longer sends it to the wrong song or cuts it off (#368).

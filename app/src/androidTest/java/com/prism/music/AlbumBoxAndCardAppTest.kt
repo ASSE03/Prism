@@ -99,6 +99,10 @@ class AlbumBoxInPrismTest {
         }
         compose.clickWhenFound(hasText("Test long player") and hasClickAction(), 15_000)
         compose.waitForText("Show more")
+        // Play stays above the box: under it, a long description pushed Play behind the mini player.
+        val play = compose.onAllNodes(hasText("Play") and hasClickAction()).fetchSemanticsNodes().single().boundsInRoot
+        val more = compose.onAllNodes(hasText("Show more", substring = true)).fetchSemanticsNodes().first().boundsInRoot
+        assertTrue("Play at ${play.bottom}, the box's Show more at ${more.top}", play.bottom <= more.top)
         assertTrue("the credit's there", compose.onAllNodes(hasText("From Wikipedia", substring = true)).fetchSemanticsNodes().isNotEmpty())
         assertTrue("its address isn't read out", compose.onAllNodes(hasText("https", substring = true)).fetchSemanticsNodes().isEmpty())
         Fixture.screenshot("album-box-closed")
