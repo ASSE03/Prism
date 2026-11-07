@@ -33,6 +33,7 @@ import com.prism.music.playback.QueueState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -86,6 +87,19 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
         // Menus' labels and other text read once would stay in the old language (seen after a change in the phone's
         // Settings → Apps → Prism → Language): Prism starts again in the new one, as its own Language page does.
         if (AppLanguage.changed(this, language, newConfig)) AppLanguage.restart(this)
+    }
+
+    /**
+     * Never called on a phone (Android just ends the process); Robolectric calls it after each test. The app's work stops
+     * and its database closes then: the library's lists kept reading a database Robolectric had already let go of, and
+     * the test JVM crashed in SQLite's native code (2026-11-07, two full runs in a row).
+     */
+    override fun onTerminate() {
+        if (::container.isInitialized) {
+            container.scope.cancel()
+            runCatching { container.db.close() }
+        }
+        super.onTerminate()
     }
 
     override fun onCreate() {

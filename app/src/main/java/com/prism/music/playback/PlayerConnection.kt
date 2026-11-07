@@ -993,9 +993,29 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         }
     }
 
-    val position: Long get() = player?.currentPosition ?: 0
-    val duration: Long get() = player?.duration?.takeIf { it > 0 } ?: ((_current.value?.durationSec ?: 0) * 1000L)
-    val bufferedPosition: Long get() = player?.bufferedPosition ?: 0
+    // The player may only be asked on its own thread (main). Asked from anywhere else (Compose's test clock can run a frame
+    // on a worker, which made QuickPicksPlayingTest fail now and then), these give the last value read on that thread.
+    @Volatile private var lastPosition = 0L
+    @Volatile private var lastDuration = 0L
+    @Volatile private var lastBuffered = 0L
+
+    val position: Long get() {
+        val p = player ?: return 0
+        return if (android.os.Looper.myLooper() == p.applicationLooper) p.currentPosition.also { lastPosition = it } else lastPosition
+    }
+    val duration: Long get() {
+        val p = player
+        val d = when {
+            p == null -> 0L
+            android.os.Looper.myLooper() == p.applicationLooper -> p.duration.also { lastDuration = it }
+            else -> lastDuration
+        }
+        return d.takeIf { it > 0 } ?: ((_current.value?.durationSec ?: 0) * 1000L)
+    }
+    val bufferedPosition: Long get() {
+        val p = player ?: return 0
+        return if (android.os.Looper.myLooper() == p.applicationLooper) p.bufferedPosition.also { lastBuffered = it } else lastBuffered
+    }
 
     // ------------------------------------------------------------ State mirroring
 

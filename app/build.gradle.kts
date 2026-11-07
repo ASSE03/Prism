@@ -702,6 +702,23 @@ androidComponents {
 }
 
 tasks.withType<Test>().configureEach {
+    // Conscrypt (the phone's TLS, made the JVM's default by Robolectric) reads InetAddress's internals for its handshake.
+    jvmArgs("--add-opens=java.base/java.net=ALL-UNNAMED")
+    // Unit tests that reach real services are @Category(LiveNetwork::class) (app/src/test/.../LiveNetwork.kt): left out
+    // of normal runs; -Plive runs everything, -PliveOnly only them. -PnoNetwork sends the test JVM's HTTP(S) through a
+    // dead proxy, which shows any test that reaches the network without the mark.
+    useJUnit {
+        when {
+            project.hasProperty("liveOnly") -> includeCategories("com.prism.music.LiveNetwork")
+            !project.hasProperty("live") -> excludeCategories("com.prism.music.LiveNetwork")
+        }
+    }
+    if (project.hasProperty("noNetwork")) {
+        listOf("http", "https").forEach {
+            systemProperty("$it.proxyHost", "127.0.0.1")
+            systemProperty("$it.proxyPort", "9")
+        }
+    }
     testLogging {
         showStandardStreams = true
         events("passed", "failed")
