@@ -2799,7 +2799,7 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     // ---- Backups that hold only some parts (1.7.8, #149): settings and the sign-in share this store.
 
     /** The YouTube Music sign-in's own settings (a backup's "Accounts"). */
-    private val accountKeys = setOf("cookie", "visitor_data", "data_sync_id", "auth_user", "account_name", "account_email", "account_avatar")
+    private val accountKeys = setOf("cookie", "visitor_data", "data_sync_id", "auth_user", "account_name", "account_email", "account_avatar", "account_saved_at")
 
     /** Every setting now, as tagged text by name: the settings ([settings]) and/or the sign-in ([accounts]). */
     suspend fun forBackup(settings: Boolean, accounts: Boolean): Map<String, String> =

@@ -64,7 +64,8 @@ internal fun splitCredit(text: String): AboutText {
     }
     val start = lineStart + sentence
     val credit = text.substring(start).trim()
-    if (credit.isEmpty()) return AboutText(text.trim(), null)
+    // YouTube's credit is the last line. A link to Wikipedia in the middle of someone's own description isn't one.
+    if (credit.isEmpty() || '\n' in credit) return AboutText(text.trim(), null)
     val parts = ArrayList<CreditPart>()
     var at = 0
     for (m in LINK.findAll(credit)) {

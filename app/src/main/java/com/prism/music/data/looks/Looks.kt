@@ -139,7 +139,8 @@ object LookCode {
         val values = look.values.filter { (k, v) -> kinds[k]?.let { LookValue.untag(v, it) } != null }.toMutableMap()
         values[Look.BACKDROPS]?.let { b ->
             val kept = Backgrounds.parse(b).filter { (screen, v) ->
-                screen.length <= 16 && (v.startsWith("PHOTO|").not() && v.length <= 32 || Backgrounds.assetOf(v) != null)
+                // "|" only ever comes with a photo, under any word (#378): a design's name never has one.
+                screen.length <= 16 && ('|' !in v && v.length <= 32 || Backgrounds.assetOf(v) != null)
             }
             if (kept.isEmpty()) values.remove(Look.BACKDROPS) else values[Look.BACKDROPS] = Backgrounds.tag(kept)
         }

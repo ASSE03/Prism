@@ -133,9 +133,10 @@ private fun Scroller(list: ScrolledList, modifier: Modifier, minItems: Int, desc
                             change.consume()
                             dragFraction = (dragFraction + amount / travel).coerceIn(0f, 1f)
                             // As the thumb reads the list, so it doesn't jump when the finger first moves or lifts.
+                            // Not below 0: the list can be emptied under the finger.
                             val target = if (dragFraction >= 0.999f) list.total() - 1
                             else (dragFraction * (list.total() - list.visible().coerceAtLeast(1)).coerceAtLeast(1)).roundToInt()
-                            scope.launch { list.jump(target) }
+                            scope.launch { list.jump(target.coerceIn(0, (list.total() - 1).coerceAtLeast(0))) }
                         }
                     },
             ) {
@@ -154,7 +155,7 @@ private fun Scroller(list: ScrolledList, modifier: Modifier, minItems: Int, desc
                         ) { change, _ ->
                             change.consume()
                             dragFraction = (change.position.y / travel).coerceIn(0f, 1f)
-                            val target = (dragFraction * (list.total() - 1)).roundToInt()
+                            val target = (dragFraction * (list.total() - 1).coerceAtLeast(0)).roundToInt()
                             scope.launch { list.jump(target) }
                         }
                     },

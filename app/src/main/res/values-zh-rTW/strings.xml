@@ -974,7 +974,6 @@
     <string name="z_to_a">Z 到 A</string>
     <string name="most_first">最多的在前</string>
     <string name="fewest_first">最少的在前</string>
-    <string name="songs_albums">songs:%1$s:%2$s|albums:%3$s:%4$s|</string>
     <string name="unknown_album">不明專輯</string>
     <string name="unknown_artist">不明藝人</string>
     <string name="recently_played">最近播放</string>
@@ -2902,8 +2901,6 @@
     <string name="recents">最近使用</string>
     <string name="shuffle_play">隨機播放</string>
     <string name="in_the_order_that_blends_best">依最適合融合的順序混音</string>
-    <string name="sha_1">SHA-1</string>
-    <string name="mix_3">mix:%1$s|%2$s|%3$s</string>
     <string name="dj_mode_reading_keys_and_tempos">DJ 模式：正在讀取調性和速度… %1$s／%2$s</string>
     <string name="wait_for_wi_fi">%1$s，%2$s 首等待 Wi-Fi 連線</string>
     <string name="dj_mode_no_clear_keys_to">DJ 模式：沒有明確的調性可用來排序</string>

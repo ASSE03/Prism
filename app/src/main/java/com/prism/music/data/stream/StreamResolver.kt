@@ -408,6 +408,10 @@ class StreamResolver(
         return cm.isActiveNetworkMetered
     }
 
+    /** Which network this is, for telling one from another (Wi-Fi to another Wi-Fi too). */
+    private fun networkNow(): String =
+        context.getSystemService(ConnectivityManager::class.java)?.activeNetwork?.toString().orEmpty()
+
     fun currentQuality(): AudioQuality = when {
         // Data saver on mobile data (#40) wins over lossless: the mobile data quality, at most Normal.
         settings.current.dataSaver && isMetered() -> settings.current.cellularQuality.takeIf { it != AudioQuality.HIGH } ?: AudioQuality.NORMAL
@@ -523,13 +527,21 @@ class StreamResolver(
     private fun premiumFormats(videoId: String): Formats? {
         val s = settings.current
         val metered = isMetered()
+        // Another sign-in starts afresh: what's been learned, and any pause, was about the last one.
+        val who = account()
+        if (who != premiumFor) {
+            premiumFor = who
+            premiumBackoff.reset()
+            premiumClient = null
+            premiumState.value = PremiumState.NOT_KNOWN
+        }
         // A change of network starts afresh: the same account was answered both ways within a day (#373's log).
-        premiumBackoff.onNetwork(metered)
+        premiumBackoff.onNetwork(networkNow())
         val skip = premiumSkip(s.premiumStream, s.isLoggedIn, s.dataSaver, metered, premiumBackoff.minutesPaused())
         if (skip != null) { notePremiumSkip(skip); return null }
         notePremiumSkip(null)
-        // The first ask after a pause (and at the start) goes on to the account's other clients when the first has
-        // links but no Premium formats: "first with links wins" would hide that another one has them.
+        // Until an answer has Premium formats, an ask goes on to the account's other clients when the first has links
+        // but no Premium formats: "first with links wins" would hide that another one has them.
         val walk = premiumBackoff.walkNow()
         val answers = ArrayList<String>()
         val f = try {
@@ -543,9 +555,10 @@ class StreamResolver(
         if (premium.isEmpty()) {
             val counted = f.audio.isNotEmpty() && !f.notASong
             premiumLog("$videoId: no 256 kbps${if (counted) "" else " (not counted: not a song)"}. ${answers.joinToString("; ")}")
-            if (counted) {
+            // Said only after several in a row: one song without them says nothing about the account.
+            if (counted && premiumBackoff.missed(premiumSeenHere())) {
                 premiumState.value = PremiumState.MISSING
-                if (premiumBackoff.missed(premiumSeenHere())) premiumLog("${PremiumBackoff.MISSES_TO_PAUSE} songs in a row without 256 kbps: not asking for ${premiumBackoff.minutesPaused()} min")
+                premiumLog("${PremiumBackoff.MISSES_TO_PAUSE} songs in a row without 256 kbps: not asking for ${premiumBackoff.minutesPaused()} min")
             }
             return null
         }
@@ -560,6 +573,12 @@ class StreamResolver(
     /** Whether the listener is getting Premium's 256 kbps, as far as the last songs asked can say (Settings shows it). */
     enum class PremiumState { NOT_KNOWN, GETTING, MISSING }
     val premiumState = kotlinx.coroutines.flow.MutableStateFlow(PremiumState.NOT_KNOWN)
+
+    /** Whether [premiumState] is about the sign-in there is now: it's only looked at again with the next song. */
+    fun premiumStateIsCurrent() = premiumFor == account()
+
+    /** The sign-in the pause, [premiumClient] and [premiumState] are about. */
+    @Volatile private var premiumFor: String? = null
 
     /** The client that last had Premium's formats: asked first from then on. */
     @Volatile private var premiumClient: InnerTube.PlayerClient? = null
@@ -805,14 +824,14 @@ class StreamResolver(
      * Premium quality's pause: answers without Premium formats are counted in a row, and only [MISSES_TO_PAUSE] of them
      * (not a Premium account, most likely) pause asking for [PAUSE_MS]; for [KNOWN_PAUSE_MS] when this sign-in has had
      * them before, since then it's YouTube's answer that changed (#373: the same songs came both ways on one day, and
-     * the hour's pause then hid every song after three misses). A Premium answer starts the count again. So does a
-     * change of network ([onNetwork]).
+     * the hour's pause then hid every song after three misses). A Premium answer starts the count again and ends a
+     * pause. So does a change of network ([onNetwork]).
      */
     internal class PremiumBackoff(private val now: () -> Long = System::currentTimeMillis) {
         private var misses = 0
         private var pausedUntil = 0L
-        private var walked = false
-        private var metered: Boolean? = null
+        private var hadThem = false
+        private var network: String? = null
 
         @Synchronized fun asking(): Boolean = now() >= pausedUntil
 
@@ -821,23 +840,30 @@ class StreamResolver(
 
         /** One answer without Premium formats; true when it starts a pause. [known]: this sign-in has had them before. */
         @Synchronized fun missed(known: Boolean = false): Boolean {
+            hadThem = false
             if (++misses < MISSES_TO_PAUSE) return false
             misses = 0
-            walked = false
             pausedUntil = now() + if (known) KNOWN_PAUSE_MS else PAUSE_MS
             return true
         }
 
-        @Synchronized fun found() { misses = 0 }
+        /** An answer with Premium formats, which may be an ask still under way when others started a pause. */
+        @Synchronized fun found() { misses = 0; pausedUntil = 0; hadThem = true }
 
-        /** Whether this ask should go through all the account's clients: the first since the start or a pause. */
-        @Synchronized fun walkNow(): Boolean = !walked.also { walked = true }
+        /**
+         * Whether this ask should go through all the account's clients: unless the last answer had Premium formats.
+         * So for a song or two at most after a pause or the start, on an account that really has none.
+         */
+        @Synchronized fun walkNow(): Boolean = !hadThem
 
         /** The network now; a change from the one last seen ends the pause. */
-        @Synchronized fun onNetwork(isMetered: Boolean) {
-            if (metered != null && metered != isMetered) { misses = 0; pausedUntil = 0; walked = false }
-            metered = isMetered
+        @Synchronized fun onNetwork(id: String) {
+            if (network != null && network != id) reset()
+            network = id
         }
+
+        /** As at the start. */
+        @Synchronized fun reset() { misses = 0; pausedUntil = 0; hadThem = false }
 
         companion object {
             const val MISSES_TO_PAUSE = 3

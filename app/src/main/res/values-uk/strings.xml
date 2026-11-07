@@ -974,7 +974,6 @@
     <string name="z_to_a">Я–А</string>
     <string name="most_first">Спершу найбільше</string>
     <string name="fewest_first">Спершу найменше</string>
-    <string name="songs_albums">songs:%1$s:%2$s|albums:%3$s:%4$s|</string>
     <string name="unknown_album">Невідомий альбом</string>
     <string name="unknown_artist">Невідомий виконавець</string>
     <string name="recently_played">Нещодавно відтворені</string>
@@ -2902,8 +2901,6 @@
     <string name="recents">Недавні</string>
     <string name="shuffle_play">Перемішати й відтворити</string>
     <string name="in_the_order_that_blends_best">У порядку, що найкраще поєднується, зведено</string>
-    <string name="sha_1">SHA-1</string>
-    <string name="mix_3">mix:%1$s|%2$s|%3$s</string>
     <string name="dj_mode_reading_keys_and_tempos">Режим DJ: аналіз тональностей і темпів… %1$s з %2$s</string>
     <string name="wait_for_wi_fi">%1$s, %2$s чекають на Wi-Fi</string>
     <string name="dj_mode_no_clear_keys_to">Режим DJ: немає чітких тональностей, щоб їх упорядкувати</string>

@@ -974,7 +974,6 @@
     <string name="z_to_a">Z hanggang A</string>
     <string name="most_first">Pinakamarami muna</string>
     <string name="fewest_first">Pinakakaunti muna</string>
-    <string name="songs_albums">songs:%1$s:%2$s|albums:%3$s:%4$s|</string>
     <string name="unknown_album">Hindi kilalang album</string>
     <string name="unknown_artist">Hindi kilalang artist</string>
     <string name="recently_played">Kamakailang pinakinggan</string>
@@ -2902,8 +2901,6 @@
     <string name="recents">Mga kamakailan</string>
     <string name="shuffle_play">I-shuffle ang pag-play</string>
     <string name="in_the_order_that_blends_best">Sa ayos na pinakamagandang maghalo, naka-mix</string>
-    <string name="sha_1">SHA-1</string>
-    <string name="mix_3">mix:%1$s|%2$s|%3$s</string>
     <string name="dj_mode_reading_keys_and_tempos">DJ mode: binabasa ang mga key at tempo… %1$s sa %2$s</string>
     <string name="wait_for_wi_fi">%1$s, %2$s naghihintay ng Wi-Fi</string>
     <string name="dj_mode_no_clear_keys_to">DJ mode: walang malinaw na key para ayusin ang mga ito</string>

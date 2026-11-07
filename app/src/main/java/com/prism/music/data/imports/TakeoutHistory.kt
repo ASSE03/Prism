@@ -34,6 +34,8 @@ object TakeoutHistory {
      */
     fun read(name: String, input: InputStream, onPlay: (ParsedPlay) -> Unit): Boolean {
         var found = false
+        // A Takeout with My Activity in it too lists the same plays there: each counts once, whichever file it's in.
+        val seen = HashSet<Long>()
         ImportFiles.forEachFile(name, input) { file, stream ->
             if (!file.endsWith(".json", ignoreCase = true)) return@forEachFile
             if (isHistoryFile(file)) found = true
@@ -43,7 +45,7 @@ object TakeoutHistory {
                 found = true
                 // Newest first: this play's "next" is the one read before it (out of order: no gap known).
                 if (later == null || p.timestamp <= later!!) later = p.timestamp
-                onPlay(p)
+                if (seen.add(p.timestamp * 31 + p.sourceId.hashCode())) onPlay(p)
             }
         }
         return found

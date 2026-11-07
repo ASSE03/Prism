@@ -974,7 +974,6 @@
     <string name="z_to_a">가나다 역순</string>
     <string name="most_first">많은 순서</string>
     <string name="fewest_first">적은 순서</string>
-    <string name="songs_albums">songs:%1$s:%2$s|albums:%3$s:%4$s|</string>
     <string name="unknown_album">알 수 없는 앨범</string>
     <string name="unknown_artist">알 수 없는 아티스트</string>
     <string name="recently_played">최근 재생</string>
@@ -2902,8 +2901,6 @@
     <string name="recents">최근 항목</string>
     <string name="shuffle_play">셔플 재생</string>
     <string name="in_the_order_that_blends_best">가장 잘 어울리는 순서로 믹스</string>
-    <string name="sha_1">SHA-1</string>
-    <string name="mix_3">mix:%1$s|%2$s|%3$s</string>
     <string name="dj_mode_reading_keys_and_tempos">DJ 모드: 키와 템포 읽는 중… %2$s곡 중 %1$s곡</string>
     <string name="wait_for_wi_fi">%1$s, %2$s곡은 Wi-Fi 대기 중</string>
     <string name="dj_mode_no_clear_keys_to">DJ 모드: 순서를 정할 만큼 뚜렷한 키가 없어요</string>

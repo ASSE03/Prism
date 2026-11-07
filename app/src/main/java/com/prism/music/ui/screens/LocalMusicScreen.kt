@@ -97,7 +97,7 @@ private data class Order<K>(val key: K, val reversed: Boolean = false)
  * #35 it held the songs' order alone ("TITLE", "ADDED", "ARTIST", "ALBUM"), which still reads.
  */
 private data class LocalOrders(val songs: Order<SongKey>, val albums: Order<AlbumKey>, val artists: Order<ArtistKey>) {
-    fun encode() = tr(R.string.songs_albums, songs.key, if (songs.reversed) 1 else 0, albums.key, if (albums.reversed) 1 else 0) +
+    fun encode() = "songs:${songs.key}:${if (songs.reversed) 1 else 0}|albums:${albums.key}:${if (albums.reversed) 1 else 0}|" +
         "artists:${artists.key}:${if (artists.reversed) 1 else 0}"
 
     companion object {
@@ -142,7 +142,8 @@ private fun sorted(tracks: List<LocalMusic.Track>, o: Order<SongKey>): List<Loca
 
 private fun sortedAlbums(albums: List<LocalAlbum>, o: Order<AlbumKey>): List<LocalAlbum> {
     val r = o.reversed
-    val unknownLast = compareBy<LocalAlbum> { it.title == "Unknown album" }
+    val unknownAlbum = tr(R.string.unknown_album)
+    val unknownLast = compareBy<LocalAlbum> { it.title == unknownAlbum }
     val byTitle = compareBy<LocalAlbum> { it.title.lowercase() }
     return albums.sortedWith(
         when (o.key) {
@@ -183,7 +184,10 @@ private fun inTrackOrder(tracks: List<LocalMusic.Track>) =
 private fun albumsOf(tracks: List<LocalMusic.Track>): List<LocalAlbum> = tracks.groupBy { it.albumId }.map { (id, t) ->
     val artist = t.groupingBy { it.song.primaryArtist }.eachCount().maxByOrNull { it.value }?.key.orEmpty()
     LocalAlbum(id, t.firstNotNullOfOrNull { it.song.album?.title?.takeIf(String::isNotBlank) } ?: tr(R.string.unknown_album), artist, t.maxOf { it.year }, inTrackOrder(t))
-}.sortedWith(compareBy<LocalAlbum> { it.title == "Unknown album" }.thenBy { it.title.lowercase() })
+}.let { albums ->
+    val unknown = tr(R.string.unknown_album)
+    albums.sortedWith(compareBy<LocalAlbum> { it.title == unknown }.thenBy { it.title.lowercase() })
+}
 
 /**
  * Library → Local files: the phone's own music files ([LocalMusic]), playing from the files, by song, artist or album.

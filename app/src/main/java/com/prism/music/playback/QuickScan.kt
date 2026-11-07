@@ -129,6 +129,9 @@ class RangedSource(private val http: OkHttpClient, private val url: String, priv
     /** Bytes downloaded so far. */
     var fetched = 0L
         private set
+    /** A read that failed, if one did. */
+    @Volatile var failure: IOException? = null
+        private set
 
     override fun getSize(): Long = length
 
@@ -146,9 +149,14 @@ class RangedSource(private val http: OkHttpClient, private val url: String, priv
     private fun fetch(index: Long): ByteArray {
         val from = index * BLOCK
         val to = minOf(length, from + BLOCK) - 1
-        http.newCall(Request.Builder().url(url).header("Range", "bytes=$from-$to").build()).execute().use { r ->
-            if (!r.isSuccessful) throw IOException("audio returned HTTP ${r.code}")
-            return r.body.bytes().also { fetched += it.size }
+        try {
+            http.newCall(Request.Builder().url(url).header("Range", "bytes=$from-$to").build()).execute().use { r ->
+                if (!r.isSuccessful) throw IOException("audio returned HTTP ${r.code}")
+                return r.body.bytes().also { fetched += it.size }
+            }
+        } catch (e: IOException) {
+            failure = e
+            throw e
         }
     }
 

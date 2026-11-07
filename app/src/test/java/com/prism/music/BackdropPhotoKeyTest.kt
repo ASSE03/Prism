@@ -38,17 +38,13 @@ class BackdropPhotoKeyTest {
         assertEquals("PHOTO|/x", Backdrop.photoValue("/x"))
     }
 
-    /** What's saved never comes from a translation again; the other saved strings stay the same in every language. */
+    /** What's saved never comes from a translation again: stored formats aren't translatable strings. */
     @Test fun whatsSavedIsntTranslated() {
-        val sources = File("src/main/java").walkTopDown().filter { it.extension == "kt" }
-        assertFalse(sources.any { it.readText().contains("R.string.photo,") })
-        val res = File("src/main/res")
-        for (key in listOf("songs_albums", "mix_3")) {
-            val line = Regex("<string name=\"$key\">([^<]*)</string>")
-            val own = line.find(File(res, "values/strings.xml").readText())!!.groupValues[1]
-            res.listFiles { f -> f.name.startsWith("values-") }!!.mapNotNull { File(it, "strings.xml").takeIf(File::isFile) }.forEach { f ->
-                line.find(f.readText())?.let { assertEquals("$key in ${f.parentFile!!.name}", own, it.groupValues[1]) }
-            }
+        val sources = File("src/main/java").walkTopDown().filter { it.extension == "kt" }.toList()
+        val base = File("src/main/res/values/strings.xml").readText()
+        for (key in listOf("photo", "songs_albums", "mix_3", "sha_1")) {
+            assertFalse(key, sources.any { it.readText().contains("R.string.$key,") || it.readText().contains("R.string.$key)") })
+            assertFalse(key, base.contains("<string name=\"$key\">"))
         }
     }
 }

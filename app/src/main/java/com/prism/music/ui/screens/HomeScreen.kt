@@ -132,6 +132,38 @@ private val earlyPicks = MutableStateFlow<Shelf?>(null)
 /** How long Quick picks wait for the set made around the listener's artists before YouTube's own show. */
 private const val QUICK_PICKS_WAIT_MS = 6_000L
 
+/** The sign-in Home's lists above were made for. */
+private var homeSignIn: String? = null
+
+/** Another sign-in: nothing kept for this session was made for it. */
+private fun forgetHomeLists() {
+    homeShelfCache.value = emptyList()
+    lastQuickPicks.value = null
+    standInPicks.value = emptyList()
+    curatedPicks.value = emptyList()
+    curatedAt.value = -1
+    picksTried.value = -1
+    shownPicks.value = null
+    earlyPicks.value = null
+}
+
+/**
+ * The YouTube shelves Home adds as sections of their own (Customize Home's "add new sections"). Neither Quick picks is one:
+ * [picks] may be this load's early copy or the last one kept, and then isn't the feed's own, [feedPicks].
+ */
+internal fun extraShelves(shelves: List<Shelf>, known: Set<String>, placed: Collection<Shelf>, picks: Shelf?, feedPicks: Shelf?, dial: Shelf?, hiddenKinds: Set<String>): List<Shelf> =
+    shelves.filter { s ->
+        shelfKey(s.title) !in known && placed.none { it === s } && s !== picks && s !== feedPicks && s !== dial && shelfKind(s) !in hiddenKinds
+    }
+
+/**
+ * What YouTube's own Quick picks may offer while the set made around your artists is made: nothing on a pull to refresh
+ * with a set on show. It stays until the new set is in, or if making one fails, rather than swapping to YouTube's after
+ * the wait and staying there (the new set would never have shown).
+ */
+internal fun youtubePicksNow(youtube: List<Song>, picksFromYouTube: Boolean, shown: Pair<Int, List<Song>>?, refresh: Int, sameSource: Boolean): List<Song> =
+    if (!picksFromYouTube && shown != null && shown.first < refresh && sameSource) emptyList() else youtube
+
 /**
  * The Quick picks to show (#297): the set already shown ([locked]) stays; else the one made around your artists
  * ([curated]); else, once that's been tried or waited for ([ready]), YouTube's own. Nothing before that, so the section
@@ -200,6 +232,11 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
     val c = LocalContainer.current
     val nav = LocalNavigator.current
     val settings = LocalAppSettings.current
+    // Signed out, signed in or switched while Home was kept: another account's lists don't stay on show.
+    val signIn = "${settings.cookie.hashCode()}/${settings.authUser}"
+    val signInChanged = remember(signIn) {
+        (homeSignIn != null && homeSignIn != signIn).also { if (it) forgetHomeLists(); homeSignIn = signIn }
+    }
     val layoutNow by rememberUpdatedState(settings.homeLayout)
     // Where each YouTube section's More button goes, by its key: the section is found again under another language's title.
     val shelfIds = remember { c.app.getSharedPreferences("home_shelf_ids", android.content.Context.MODE_PRIVATE) }
@@ -251,6 +288,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
         if (value == null) value = c.homeCache.read()?.also { if (homeShelfCache.value.isEmpty()) homeShelfCache.value = it }
     }
     val moods = rememberLoad("moods") { c.taste.rank(runCatching { c.ytm.moodsAndGenres() }.getOrDefault(emptyList())) }
+    LaunchedEffect(signIn) { if (signInChanged) home.reload(false) }
     val recent by c.library.recent.collectAsState()
     val liked by c.library.likedShown.collectAsState()
 
@@ -270,8 +308,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
     val layout = remember(settings.homeLayout, shelves, settings.autoAddSections, picks, settings.homeHideKinds, today, ytShelves) {
         val known = settings.homeLayout.map { it.key }.toSet()
         val placed = ytShelves.values
-        val extra = if (settings.autoAddSections) shelves
-            .filter { shelfKey(it.title) !in known && placed.none { p -> p === it } && it !== picks && it !== dial && shelfKind(it) !in settings.homeHideKinds }
+        val extra = if (settings.autoAddSections) extraShelves(shelves, known, placed, picks, shelves.quickPicks(settings.accountName), dial, settings.homeHideKinds)
             .map { HomeSectionConfig(shelfKey(it.title), it.title) } else emptyList()
         HomeSections.inSeason(settings.homeLayout, today).filter { it.visible } + extra
     }
@@ -314,7 +351,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
     // #371: not waiting for all of Home when YouTube's picks are in already (kept from last time, or this load's first
     // page): they're one in five of the set, and all of Home first was most of the 5 s the section took to come.
     val canMakePicks = homeSettled || youtubePicks.isNotEmpty()
-    val curated by produceState(curatedPicks.value, canMakePicks, refreshes, onlineNow, picksFromYouTube) {
+    val curated by produceState(curatedPicks.value, canMakePicks, refreshes, onlineNow, picksFromYouTube, signIn) {
         if (picksFromYouTube || !onlineNow || (curatedPicks.value.isNotEmpty() && curatedAt.value == refreshes)) return@produceState
         val day = java.time.LocalDate.now().toString()
         val whose = c.settings.current.let { "${it.authUser}|${it.dataSyncId}|${it.accountName}" }
@@ -328,12 +365,23 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
         if (!canMakePicks) return@produceState
         // #371: each pull to refresh is a new draw, without what's on show, where there's enough else.
         val onShow = if (refreshes > 0) shownPicks.value?.second.orEmpty().map { it.id }.toSet() else emptySet()
+        val asked = java.util.concurrent.atomic.AtomicInteger()
+        val failed = java.util.concurrent.atomic.AtomicInteger()
         val made = if (youtubePicks.isEmpty() && recent.isEmpty()) emptyList() else kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-            runCatching { c.yourMusic.quickPicks(youtubePicks, radioOf = { seed: Song -> c.ytm.next(seed.id, playlistId = "RDAMVM${seed.id}").songs }, draw = refreshes, shown = onShow) }.getOrDefault(youtubePicks)
+            runCatching {
+                c.yourMusic.quickPicks(youtubePicks, radioOf = { seed: Song ->
+                    asked.incrementAndGet()
+                    try { c.ytm.next(seed.id, playlistId = "RDAMVM${seed.id}").songs }
+                    catch (e: Exception) { failed.incrementAndGet(); throw e }
+                }, draw = refreshes, shown = onShow)
+            }.getOrDefault(youtubePicks)
         }
-        if (made.isNotEmpty()) {
+        // No radio answered (a bad connection): this set is only part of one, so it doesn't replace the one on show or
+        // stand for the rest of today.
+        val partial = asked.get() > 0 && failed.get() == asked.get()
+        if (made.isNotEmpty() && !(partial && refreshes > 0)) {
             value = made; curatedPicks.value = made; curatedAt.value = refreshes
-            c.scope.launch { c.homeCache.writePicks(day, whose, made) }
+            if (!partial) c.scope.launch { c.homeCache.writePicks(day, whose, made) }
         }
         picksTried.value = refreshes
     }
@@ -358,7 +406,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
         val fresh = quickPicksToShow(
             before?.takeIf { it.first == refreshes && sameSource }?.second,
             if (picksFromYouTube) emptyList() else curatedFor(curated, madeFor, refreshes),
-            youtubePicks, if (picksFromYouTube) youtubeReady else picksReady,
+            youtubePicksNow(youtubePicks, picksFromYouTube, before, refreshes, sameSource), if (picksFromYouTube) youtubeReady else picksReady,
         ) { it.id !in onDial }
             .also { if (it.isNotEmpty()) { shownPicks.value = refreshes to it; shownPicksYouTube.value = picksFromYouTube } }
         picksDuringRefresh(fresh, before, refreshes, sameSource)

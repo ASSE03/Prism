@@ -974,7 +974,6 @@
     <string name="z_to_a">Z\'den A\'ya</string>
     <string name="most_first">Önce en çok</string>
     <string name="fewest_first">Önce en az</string>
-    <string name="songs_albums">songs:%1$s:%2$s|albums:%3$s:%4$s|</string>
     <string name="unknown_album">Bilinmeyen albüm</string>
     <string name="unknown_artist">Bilinmeyen sanatçı</string>
     <string name="recently_played">Son çalınanlar</string>
@@ -2902,8 +2901,6 @@
     <string name="recents">Son kullanılanlar</string>
     <string name="shuffle_play">Karışık çal</string>
     <string name="in_the_order_that_blends_best">En iyi karışan sırayla, mikslenmiş</string>
-    <string name="sha_1">SHA-1</string>
-    <string name="mix_3">mix:%1$s|%2$s|%3$s</string>
     <string name="dj_mode_reading_keys_and_tempos">DJ modu: tonlar ve tempolar okunuyor… %1$s / %2$s</string>
     <string name="wait_for_wi_fi">%1$s, %2$s Wi-Fi bekliyor</string>
     <string name="dj_mode_no_clear_keys_to">DJ modu: bunları sıralamak için belirgin ton yok</string>

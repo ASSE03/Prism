@@ -39,27 +39,23 @@ Updates: when there's a new version, tap the banner on Home. Your downloads, his
 
 **On a TV** (Android TV or Google TV): type code **8986606** into the Downloader app on the TV. Or, on your phone, turn on Settings → Speakers, TVs & browser → Share Prism with a TV, then type the address it shows into the TV.
 
-## New in 1.8.2
+## New in 1.8.2.1
 
-New options stay off until you turn them on, unless it says otherwise. Nothing you've set changes when you update.
+Fixes, and lighter on your battery.
 
-- **A player on your lock screen.** Four layouts, with the controls for what's playing and nothing else. Turn it on in Customize Prism → Player → Lock screen player.
-- **New on Home:** New to you, Deep cuts and On this day. Add them from Customize Home.
-- **Explore,** at the end of Search: charts by country, moods and genres, new releases and what's trending.
-- **Podcasts by RSS.** Paste a show's feed address. No YouTube or account needed.
-- **Your YouTube Music uploads** in Library, when you're signed in. I built this without an account that has uploads, so please tell me if it looks wrong.
-- **More for offline:** artist pages work with no connection, and a playlist can stay downloaded as it changes.
-- **Better radios:** no repeats in a session, and sliders for familiar or new, hits or deep cuts, calm or energetic.
+- **Less work in the background.** Prism now slows or stops its song scans when you've left it, and they create far less work for your phone's memory.
+- **The player opens more smoothly,** with its cover ready before it slides up.
+- **Quick picks** come sooner, and pulling down really gives you new songs.
+- **Search in Library,** and a scrollbar you can hold on long lists.
+- **New folder** in Library, and an easier-to-read album description.
+- **Your photo background is back** if your phone is in German, Italian, Russian, Polish, Swedish, Hungarian, Malay or Filipino.
 
 See every change in the [changelog](CHANGELOG.md).
 
 <p align="center">
-<img src="docs/screenshots/lock-cover.jpg" width="32%" alt="The lock screen player, Cover layout: clock, cover, seek bar, controls and volume">
-<img src="docs/screenshots/lock-full.jpg" width="32%" alt="The lock screen player, Full cover layout: the cover fills the top of the screen">
-<img src="docs/screenshots/lock-quiet.jpg" width="32%" alt="The lock screen player, Quiet layout: a big clock, a small cover and the controls">
-<img src="docs/screenshots/explore.jpg" width="32%" alt="Explore in Search: charts, moods and genres, new releases and trending">
-<img src="docs/screenshots/cover-gradient.jpg" width="32%" alt="The Cover gradient player background">
-<img src="docs/screenshots/lock-layouts.jpg" width="32%" alt="Picking the lock screen layout in Settings, each with its own example">
+<img src="docs/screenshots/library-search.jpg" width="32%" alt="Search at the top of Library's playlists">
+<img src="docs/screenshots/library-scrollbar.jpg" width="32%" alt="A scrollbar you can hold on a long list, with a bubble showing where you are">
+<img src="docs/screenshots/album-about.jpg" width="32%" alt="An album's description in its own box, with Show less and a small credit line">
 </p>
 
 ### If Android says "App was denied access"

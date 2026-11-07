@@ -974,7 +974,6 @@
     <string name="z_to_a">Z سے A</string>
     <string name="most_first">زیادہ پہلے</string>
     <string name="fewest_first">کم پہلے</string>
-    <string name="songs_albums">songs:%1$s:%2$s|albums:%3$s:%4$s|</string>
     <string name="unknown_album">نامعلوم البم</string>
     <string name="unknown_artist">نامعلوم فنکار</string>
     <string name="recently_played">حال ہی میں چلائے گئے</string>
@@ -2902,8 +2901,6 @@
     <string name="recents">حالیہ</string>
     <string name="shuffle_play">شفل کر کے چلائیں</string>
     <string name="in_the_order_that_blends_best">اس ترتیب میں جو سب سے اچھا ملتا ہے، مکس کر کے</string>
-    <string name="sha_1">SHA-1</string>
-    <string name="mix_3">mix:%1$s|%2$s|%3$s</string>
     <string name="dj_mode_reading_keys_and_tempos">DJ موڈ: کیز اور ٹیمپو پڑھے جا رہے ہیں… %2$s میں سے %1$s</string>
     <string name="wait_for_wi_fi">%1$s، %2$s Wi-Fi کے انتظار میں</string>
     <string name="dj_mode_no_clear_keys_to">DJ موڈ: انہیں ترتیب دینے کے لیے کوئی واضح کیز نہیں</string>

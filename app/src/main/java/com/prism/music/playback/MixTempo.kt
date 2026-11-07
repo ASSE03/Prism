@@ -380,6 +380,8 @@ class MixTempo(
         if (id in failed) return QuickResult.FAILED
         // While music plays, one at a time (Reddit 1.7: "DJ mode is so laggy": three decodes beside playback were too
         // much for mid-range phones); while paused, a few at once.
+        // A scheduled job does one at a time, with music off, and doesn't wait behind scans held while the listener's away.
+        if (scheduled) return quickScanNow(id, network, priority, scheduled = true)
         return quickGate.withPermit { if (playing()) playingGate.withLock { quickScanNow(id, network, priority, scheduled) } else quickScanNow(id, network, priority, scheduled) }
     }
 
@@ -441,6 +443,9 @@ class MixTempo(
             if (fmt.containsKey(MediaFormat.KEY_DURATION)) durationMs = fmt.getLong(MediaFormat.KEY_DURATION) / 1000
             if (durationMs <= 0) throw java.io.IOException("the song's length is unknown")
             val (pieces, sr) = QuickScan.decode(ex, track, QuickScan.windows(durationMs)) ?: throw java.io.IOException("couldn't decode its audio")
+            // The extractor takes a failed read for the end of the song. A key from part of one isn't kept (a link that
+            // ran out while the scan waited for the listener to come back, say); it's asked again another time.
+            ranged?.failure?.let { throw it }
             return QuickScan.analyse(pieces, sr) to (ranged?.fetched ?: 0L)
         } finally {
             ex.release()

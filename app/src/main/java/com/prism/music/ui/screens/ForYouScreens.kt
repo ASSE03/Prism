@@ -600,7 +600,7 @@ fun ExclusionsScreen(bottomPadding: Dp) {
     val playlists by c.exclusions.playlists.collectAsState()
     val songs by c.exclusions.songs.collectAsState()
     SubPage(tr(R.string.exclusions), bottomPadding, subtitle = tr(R.string.what_prism_leaves_out_of_your)) {
-        fun section(title: String, note: String, list: List<Excluded>, bring: (Excluded) -> Unit) {
+        fun section(title: String, note: String, list: List<Excluded>, artists: Boolean = false, bring: (Excluded) -> Unit) {
             item("h:$title") {
                 Column(Modifier.padding(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 6.dp)) {
                     Text(title, style = MaterialTheme.typography.titleMedium)
@@ -612,14 +612,14 @@ fun ExclusionsScreen(bottomPadding: Dp) {
             }
             items(list, key = { "$title:${it.id}" }) { e ->
                 Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Artwork(e.thumbnail, Modifier.size(44.dp), if (title.startsWith("Artists")) LocalUi.current.artistArt else LocalUi.current.songArt, placeholderIcon = PrismIcons.Song)
+                    Artwork(e.thumbnail, Modifier.size(44.dp), if (artists) LocalUi.current.artistArt else LocalUi.current.songArt, placeholderIcon = PrismIcons.Song)
                     Spacer(Modifier.width(12.dp))
                     Text(e.name, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     PrismTextButton({ bring(e) }) { Text(tr(R.string.bring_back)) }
                 }
             }
         }
-        section(tr(R.string.artists_not_to_play), tr(R.string.never_in_radios_autoplay_smart_shuffle), artists) { c.exclusions.setArtist(it, false) }
+        section(tr(R.string.artists_not_to_play), tr(R.string.never_in_radios_autoplay_smart_shuffle), artists, artists = true) { c.exclusions.setArtist(it, false) }
         section(tr(R.string.playlists_left_out_of_your_taste), tr(R.string.they_play_as_usual_but_don), playlists) { c.exclusions.setPlaylist(it, false) }
         section(tr(R.string.songs_left_out_of_your_taste), tr(R.string.the_same_for_single_songs), songs) { c.exclusions.setSong(it, false) }
     }

@@ -456,7 +456,8 @@ internal fun phoneNorm(s: String): String = java.text.Normalizer.normalize(s.low
     .replace(MARKS, "").replace(NOT_WORDS, " ").trim()
 
 private val MARKS = Regex("\\p{Mn}+")
-private val NOT_WORDS = Regex("[^\\p{L}\\p{N}]+")
+// Marks that stay (Hindi's and Bengali's vowel signs) are part of the word, not a gap in it.
+private val NOT_WORDS = Regex("[^\\p{L}\\p{M}\\p{N}]+")
 
 /** The top card's play button: plays the song, the album or playlist from the start, or shuffles the artist. */
 private suspend fun playTop(c: com.prism.music.AppContainer, item: BrowseItem) {

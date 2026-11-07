@@ -15,8 +15,10 @@ import com.prism.music.data.model.Song
 import com.prism.music.data.model.SongItem
 import com.prism.music.data.prefs.SettingsRepository
 import com.prism.music.data.stream.StreamResolver
+import com.prism.music.ui.screens.extraShelves
 import com.prism.music.ui.screens.picksDuringRefresh
 import com.prism.music.ui.screens.speedDialTiles
+import com.prism.music.ui.screens.youtubePicksNow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -125,23 +127,79 @@ class IssueFixes1821AccountTest {
     @Test fun withoutPremiumFormatsThreeSongsPauseAskingAndItIsSaid() {
         val fake = FakeStreams { _, _ -> listOf(251) }
         fake.streams.resolve("song1")
-        // The first ask went round every client, to no avail; the next ask only the first.
+        // Every client asked, to no avail. One song without them says nothing about the account yet.
         assertEquals(StreamResolver.AccountClients.order.size, fake.account().size)
-        assertEquals(StreamResolver.PremiumState.MISSING, fake.streams.premiumState.value)
+        assertEquals(StreamResolver.PremiumState.NOT_KNOWN, fake.streams.premiumState.value)
         fake.asked.clear()
+        // Nothing's had them yet, so the next song goes round too: the first song may just not have had them anywhere.
         fake.streams.resolve("song2")
-        assertEquals(listOf("TV_SAMSUNG" to "song2"), fake.account())
+        assertEquals(StreamResolver.AccountClients.order.size, fake.account().size)
         fake.streams.resolve("song3")
+        assertEquals(StreamResolver.PremiumState.MISSING, fake.streams.premiumState.value)
         fake.asked.clear()
         // Paused: played the usual way, without asking.
         assertEquals(251, fake.streams.resolve("song4").itag)
         assertEquals(emptyList<Pair<String, String>>(), fake.account())
     }
 
+    @Test fun aSongWithoutThemAnywhereDoesNotStopTheNextOneGoingRound() {
+        // Only WEB_REMIX has them, and not for the first song.
+        val fake = FakeStreams { client, id -> if (client == "WEB_REMIX" && id != "song1") listOf(251, 141) else listOf(251) }
+        assertEquals(251, fake.streams.resolve("song1").itag)
+        assertEquals(141, fake.streams.resolve("song2").itag)
+        assertEquals(StreamResolver.PremiumState.GETTING, fake.streams.premiumState.value)
+    }
+
+    @Test fun anotherSignInStartsAfresh() {
+        val fake = FakeStreams { _, _ -> listOf(251) }
+        repeat(3) { fake.streams.resolve("song$it") }
+        assertEquals(StreamResolver.PremiumState.MISSING, fake.streams.premiumState.value)
+        fake.asked.clear()
+        runBlocking {
+            fake.settings.saveAccount("SAPISID=other; __Secure-3PAPISID=other", "visitor", "other||")
+            withTimeout(10_000) { fake.settings.flow.first { it.cookie.contains("other") } }
+        }
+        assertFalse("the note was about the last sign-in", fake.streams.premiumStateIsCurrent())
+        fake.streams.resolve("song9")
+        assertTrue("the pause was too", fake.account().any { it.second == "song9" })
+        assertTrue(fake.streams.premiumStateIsCurrent())
+        assertEquals(StreamResolver.PremiumState.NOT_KNOWN, fake.streams.premiumState.value)
+    }
+
+    @Test fun aPremiumAnswerEndsAPauseOthersStartedWhileItWasAsked() {
+        var now = 1_000L
+        val b = StreamResolver.PremiumBackoff { now }
+        repeat(StreamResolver.PremiumBackoff.MISSES_TO_PAUSE) { b.missed() }
+        assertFalse(b.asking())
+        b.found()
+        assertTrue(b.asking())
+        assertFalse("the client that had them is enough", b.walkNow())
+        b.missed()
+        assertTrue("a miss goes round again", b.walkNow())
+    }
+
+    @Test fun onlyTheFeedsOwnQuickPicksStayOutOfTheAddedSections() {
+        fun shelf(title: String) = com.prism.music.data.model.Shelf(title = title, items = emptyList())
+        val feeds = shelf("Quick picks")
+        val other = shelf("From the community")
+        val early = shelf("Quick picks")
+        // The section shows this load's early copy, so the feed's isn't the same object, and came in as a second section.
+        assertEquals(listOf(other), extraShelves(listOf(feeds, other), emptySet(), emptyList(), early, feeds, null, emptySet()))
+    }
+
+    @Test fun aRefreshKeepsTheSetOnShowInsteadOfYouTubesAfterTheWait() {
+        val youtube = listOf(com.prism.music.data.model.Song(id = "yt", title = "YouTube's"))
+        val shown = 0 to listOf(com.prism.music.data.model.Song(id = "mine", title = "On show"))
+        assertEquals(emptyList<com.prism.music.data.model.Song>(), youtubePicksNow(youtube, false, shown, 1, true))
+        assertEquals("the first load has nothing to keep", youtube, youtubePicksNow(youtube, false, null, 0, true))
+        assertEquals("YouTube's own, chosen", youtube, youtubePicksNow(youtube, true, shown, 1, true))
+        assertEquals("the source was switched", youtube, youtubePicksNow(youtube, false, shown, 1, false))
+    }
+
     @Test fun thePauseIsShortForASignInThatHasHadPremiumAndEndsWithTheNetwork() {
         var now = 1_000L
         val b = StreamResolver.PremiumBackoff { now }
-        b.onNetwork(false)
+        b.onNetwork("wifi-1")
         repeat(StreamResolver.PremiumBackoff.MISSES_TO_PAUSE - 1) { assertFalse(b.missed(known = true)) }
         assertTrue(b.missed(known = true))
         assertEquals(10, b.minutesPaused())
@@ -149,13 +207,12 @@ class IssueFixes1821AccountTest {
         assertTrue(b.asking())
         repeat(StreamResolver.PremiumBackoff.MISSES_TO_PAUSE) { b.missed() }
         assertEquals(60, b.minutesPaused())
-        // Same network: still paused. From Wi-Fi to mobile data: asked again, at once.
-        b.onNetwork(false)
+        // Same network: still paused. Another one, Wi-Fi or mobile data: asked again, at once.
+        b.onNetwork("wifi-1")
         assertFalse(b.asking())
-        b.onNetwork(true)
+        b.onNetwork("wifi-2")
         assertTrue(b.asking())
         assertTrue("and all the clients again", b.walkNow())
-        assertFalse(b.walkNow())
     }
 
     @Test fun theDiagnosticsSayWhyPremiumWasNotAsked() {

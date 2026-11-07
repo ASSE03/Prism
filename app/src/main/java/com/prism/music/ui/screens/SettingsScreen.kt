@@ -2063,7 +2063,7 @@ private fun SoundPage() {
                     when {
                         !s.premiumStream -> tr(R.string.t_256_kbps_with_youtube_music_premium)
                         seen?.signedIn == false -> tr(R.string.youtube_no_longer_takes_this_sign_in)
-                        premium == com.prism.music.data.stream.StreamResolver.PremiumState.MISSING -> tr(R.string.youtube_isnt_sending_256_kbps)
+                        premium == com.prism.music.data.stream.StreamResolver.PremiumState.MISSING && c.streams.premiumStateIsCurrent() -> tr(R.string.youtube_isnt_sending_256_kbps)
                         else -> tr(R.string.t_256_kbps_with_youtube_music_premium)
                     },
                     s.premiumStream,

@@ -137,9 +137,28 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
     // ---------------------------------------------------------------- Keeping Looks
 
     private fun loadMine(): List<Look> = (dir.listFiles { f -> f.isFile && f.name.endsWith(".json") && f.name.startsWith("my-") } ?: emptyArray())
-        .mapNotNull { f -> runCatching { json.decodeFromString(Look.serializer(), f.readText()) }.getOrNull() }
+        .mapNotNull { f -> runCatching { json.decodeFromString(Look.serializer(), f.readText()).let { photosRepaired(it, f) } }.getOrNull() }
         .map { LookCode.sanitized(it, settings.lookKinds).copy(builtIn = false) }
         .sortedBy { it.created }
+
+    /**
+     * #378: a Look saved in one of the 8 languages holds its photo as "FOTO|/…/all-1.jpg", which wasn't seen as a photo, so
+     * it wasn't kept with the Look and [LookCode.sanitized] would leave it out. Kept with it now, and saved, if the file's
+     * still there.
+     */
+    private fun photosRepaired(look: Look, file: File): Look {
+        val tagged = look.values[Look.BACKDROPS] ?: return look
+        val saved = Backgrounds.parse(tagged)
+        val fixed = saved.mapNotNull { (screen, v) ->
+            val right = Backgrounds.photoKeyFixed(v)
+            if (right == v) screen to v
+            else keep(File(right.substringAfter('|')))?.let { h -> screen to "PHOTO|${Backgrounds.ASSET}$h" }
+        }.toMap()
+        if (fixed == saved) return look
+        val repaired = look.copy(values = if (fixed.isEmpty()) look.values - Look.BACKDROPS else look.values + (Look.BACKDROPS to Backgrounds.tag(fixed)))
+        runCatching { file.writeText(json.encodeToString(Look.serializer(), repaired)) }
+        return repaired
+    }
 
     private fun write(look: Look) {
         dir.mkdirs()

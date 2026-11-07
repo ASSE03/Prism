@@ -60,7 +60,9 @@ class VideoSync(
     /**
      * Whether the listener watches music videos, so songs are measured against theirs ahead of time. For someone who
      * doesn't, a measure for every song on Wi-Fi was minutes of audio fetched and decoded for a button never tapped
-     * (A16: about as much work as the song's own scan); the first tap measures it then, and corrects the place.
+     * (A16: about as much work as the song's own scan). The first tap measures it then, for the lyrics; the measure takes
+     * longer than the seconds in which [PlaybackService] will still move the video (#203), so that video starts at the
+     * song's own time. Songs after it are measured ahead again.
      */
     fun watchesVideos(): Boolean = watchesLately(prefs.getLong(WATCHED_AT, 0L), System.currentTimeMillis())
 

@@ -265,9 +265,9 @@ fun ReplayScreen(bottomPadding: Dp) {
         val top = dao.topSongs(from, to, 300).mergeUploads().take(250)
         val songs = top.take(100)
         val genreMap = c.meta.cachedGenres(songs.map { it.toSong() })
-        val genres = songs.groupBy { genreMap[it.songId] ?: tr(R.string.unknown) }
+        val genres = songs.filter { genreMap[it.songId] != null }.groupBy { genreMap.getValue(it.songId) }
             .mapValues { (_, v) -> v.sumOf { it.ms } }
-            .filterKeys { it != "Unknown" }.toList().sortedByDescending { it.second }.take(6)
+            .toList().sortedByDescending { it.second }.take(6)
         value = ReplayData(
             totalMs = dao.totalMs(from, to), plays = dao.count(from, to), activeDays = dao.activeDays(from, to),
             songCount = dao.songCount(from, to), songs = songs, artists = dao.topArtists(from, to, 12), months = dao.monthly(from, to), genres = genres,

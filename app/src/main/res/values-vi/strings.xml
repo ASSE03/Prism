@@ -974,7 +974,6 @@
     <string name="z_to_a">Z đến A</string>
     <string name="most_first">Nhiều nhất trước</string>
     <string name="fewest_first">Ít nhất trước</string>
-    <string name="songs_albums">songs:%1$s:%2$s|albums:%3$s:%4$s|</string>
     <string name="unknown_album">Album không rõ</string>
     <string name="unknown_artist">Nghệ sĩ không rõ</string>
     <string name="recently_played">Đã phát gần đây</string>
@@ -2902,8 +2901,6 @@
     <string name="recents">Gần đây</string>
     <string name="shuffle_play">Phát ngẫu nhiên</string>
     <string name="in_the_order_that_blends_best">Theo thứ tự hòa hợp nhất, đã mix</string>
-    <string name="sha_1">SHA-1</string>
-    <string name="mix_3">mix:%1$s|%2$s|%3$s</string>
     <string name="dj_mode_reading_keys_and_tempos">Chế độ DJ: đang đọc tông và nhịp độ… %1$s trên %2$s</string>
     <string name="wait_for_wi_fi">%1$s, %2$s chờ Wi-Fi</string>
     <string name="dj_mode_no_clear_keys_to">Chế độ DJ: không có tông rõ ràng để sắp xếp các bài này</string>

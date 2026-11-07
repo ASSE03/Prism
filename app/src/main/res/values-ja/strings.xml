@@ -974,7 +974,6 @@
     <string name="z_to_a">Z〜A</string>
     <string name="most_first">多い順</string>
     <string name="fewest_first">少ない順</string>
-    <string name="songs_albums">songs:%1$s:%2$s|albums:%3$s:%4$s|</string>
     <string name="unknown_album">不明なアルバム</string>
     <string name="unknown_artist">不明なアーティスト</string>
     <string name="recently_played">最近再生した項目</string>
@@ -2902,8 +2901,6 @@
     <string name="recents">最近</string>
     <string name="shuffle_play">シャッフル再生</string>
     <string name="in_the_order_that_blends_best">最もきれいにつながる順でミックス</string>
-    <string name="sha_1">SHA-1</string>
-    <string name="mix_3">mix:%1$s|%2$s|%3$s</string>
     <string name="dj_mode_reading_keys_and_tempos">DJ モード：キーとテンポを読み取り中… %2$s 曲中 %1$s 曲</string>
     <string name="wait_for_wi_fi">%1$s、%2$s 曲は Wi-Fi 待ち</string>
     <string name="dj_mode_no_clear_keys_to">DJ モード：並べ替えに使えるはっきりしたキーがありません</string>

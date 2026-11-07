@@ -974,7 +974,6 @@
     <string name="z_to_a">ฮ ถึง ก</string>
     <string name="most_first">มากสุดก่อน</string>
     <string name="fewest_first">น้อยสุดก่อน</string>
-    <string name="songs_albums">songs:%1$s:%2$s|albums:%3$s:%4$s|</string>
     <string name="unknown_album">อัลบั้มที่ไม่รู้จัก</string>
     <string name="unknown_artist">ศิลปินที่ไม่รู้จัก</string>
     <string name="recently_played">เล่นล่าสุด</string>
@@ -2902,8 +2901,6 @@
     <string name="recents">ล่าสุด</string>
     <string name="shuffle_play">เล่นแบบสุ่ม</string>
     <string name="in_the_order_that_blends_best">ตามลำดับที่ผสานกันได้ดีที่สุด แบบมิกซ์</string>
-    <string name="sha_1">SHA-1</string>
-    <string name="mix_3">mix:%1$s|%2$s|%3$s</string>
     <string name="dj_mode_reading_keys_and_tempos">โหมด DJ: กำลังอ่านคีย์และจังหวะ… %1$s จาก %2$s</string>
     <string name="wait_for_wi_fi">%1$s, %2$s รอ Wi-Fi</string>
     <string name="dj_mode_no_clear_keys_to">โหมด DJ: ไม่มีคีย์ที่ชัดเจนพอจะเรียงลำดับ</string>

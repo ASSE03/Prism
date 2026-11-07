@@ -974,7 +974,6 @@
     <string name="z_to_a">Od Z do A</string>
     <string name="most_first">Od największej liczby</string>
     <string name="fewest_first">Od najmniejszej liczby</string>
-    <string name="songs_albums">songs:%1$s:%2$s|albums:%3$s:%4$s|</string>
     <string name="unknown_album">Nieznany album</string>
     <string name="unknown_artist">Nieznany wykonawca</string>
     <string name="recently_played">Ostatnio odtwarzane</string>
@@ -2902,8 +2901,6 @@
     <string name="recents">Ostatnie</string>
     <string name="shuffle_play">Odtwarzaj losowo</string>
     <string name="in_the_order_that_blends_best">W kolejności, która najlepiej się łączy, zmiksowane</string>
-    <string name="sha_1">SHA-1</string>
-    <string name="mix_3">mix:%1$s|%2$s|%3$s</string>
     <string name="dj_mode_reading_keys_and_tempos">Tryb DJ: odczytuję tonacje i tempa… %1$s z %2$s</string>
     <string name="wait_for_wi_fi">%1$s, %2$s czeka na Wi-Fi</string>
     <string name="dj_mode_no_clear_keys_to">Tryb DJ: brak wyraźnych tonacji, by je uporządkować</string>

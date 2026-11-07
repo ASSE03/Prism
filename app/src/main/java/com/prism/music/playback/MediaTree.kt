@@ -489,7 +489,7 @@ class ArtworkProvider : ContentProvider() {
      * a JPEG, as [getType] says: YouTube's own mixes and "Liked Music" come as PNGs, and those were left blank.
      */
     private fun cached(ctx: android.content.Context, key: String, make: () -> ByteArray?): ParcelFileDescriptor? {
-        val name = MessageDigest.getInstance(tr(R.string.sha_1)).digest(key.toByteArray()).joinToString("") { "%02x".format(it) }
+        val name = MessageDigest.getInstance("SHA-1").digest(key.toByteArray()).joinToString("") { "%02x".format(it) }
         val dir = File(ctx.cacheDir, "auto_art2").apply { mkdirs() }
         val file = File(dir, "$name.jpg")
         if (!file.exists()) {
@@ -541,4 +541,4 @@ internal fun asJpeg(bytes: ByteArray): ByteArray? {
 private fun mixOrPlaylistId(item: PlaylistItem): String =
     if (!item.isMix) "pl:${item.id}"
     else if (item.seedVideoId == null && item.params == null) "mix:${item.id}"
-    else tr(R.string.mix_3, item.id, item.seedVideoId.orEmpty(), item.params.orEmpty())
+    else "mix:${item.id}|${item.seedVideoId.orEmpty()}|${item.params.orEmpty()}"

@@ -974,7 +974,6 @@
     <string name="z_to_a">ی تا الف</string>
     <string name="most_first">اول بیشترین</string>
     <string name="fewest_first">اول کمترین</string>
-    <string name="songs_albums">songs:%1$s:%2$s|albums:%3$s:%4$s|</string>
     <string name="unknown_album">آلبوم ناشناخته</string>
     <string name="unknown_artist">هنرمند ناشناخته</string>
     <string name="recently_played">اخیراً پخش‌شده</string>
@@ -2902,8 +2901,6 @@
     <string name="recents">اخیر</string>
     <string name="shuffle_play">پخش تصادفی</string>
     <string name="in_the_order_that_blends_best">به ترتیبی که بهترین ترکیب را دارد، میکس‌شده</string>
-    <string name="sha_1">SHA-1</string>
-    <string name="mix_3">mix:%1$s|%2$s|%3$s</string>
     <string name="dj_mode_reading_keys_and_tempos">حالت DJ: در حال خواندن کلیدها و تمپوها… %1$s از %2$s</string>
     <string name="wait_for_wi_fi">%1$s، %2$s منتظر Wi-Fi</string>
     <string name="dj_mode_no_clear_keys_to">حالت DJ: کلید مشخصی برای مرتب کردن این‌ها نیست</string>
