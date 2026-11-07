@@ -6,13 +6,13 @@ What changed in each release. Older releases are described on the [Releases page
 
 ### Faster and lighter
 
-- **Background work keeps to a budget** (#373). Song scans, video sync and Sing getting songs ready now slow down when nobody needs them: about one core's worth while music plays out of sight, a little for a minute after you pause and leave, then nothing until you're back. A OnePlus 11 had Prism closed by Android three times for using the processor in the background; on a Galaxy A16, leaving Prism paused right after starting a new album went from 96% of a core in the first minute to 12%, and the first minute of a new album playing with the screen off from 144% to 39%.
+- **Background work keeps to a budget** (#373). Song scans, video sync and Sing getting songs ready now slow down when nobody needs them: about one core's worth while music plays out of sight, a little for a minute after you pause and leave, then nothing until you're back. A OnePlus 11 had Prism closed by Android three times for using the processor in the background; on a Galaxy A16, leaving Prism paused right after starting a new album went from about 115% of a core in the first minute to 14%, and the first minute of a new album playing with the screen off from about 145% to between 60% and 90%.
 - **Fewer scans out of sight.** With the screen off, Prism scans only the next song, not the next three. The rest wait until you're back or until they're next.
 - **Videos are measured ahead only if you watch them.** A listener who hasn't picked Video in 14 days no longer pays for it. The first video after that starts at the song's own time, which can be off by the video's intro; the songs after it are measured ahead again.
 - **Far less memory churned by scans.** The loudness step uses 0.2 MB instead of 24 MB, the key step 8 MB instead of 23 MB, with the same results. The phone's garbage collector ran about a quarter as much during scans.
 - **Sing's helper thread sleeps while Sing is off.** It woke about four times a second for nothing.
-- **The player opens more smoothly** (#354, #343). Its cover and background are ready before it opens, and it now slides without a fade on top. On a Galaxy A16 the worst frame of an opening went from 66 to 46 ms (75 to 48 ms in Performance mode).
-- **Frosted glass costs less.** It works from a smaller copy of what's behind it. Scrolling a long playlist on a Galaxy A16, the typical frame went from 31 to 27 ms; Home barely moved.
+- **The player opens more smoothly** (#354, #343). Its cover and background are ready before it opens, and it now slides without a fade on top. On a Galaxy A16 the worst frame of an opening went from about 60 to about 50 ms (63 to 47 ms in Performance mode).
+- **Frosted glass costs less.** It works from a smaller copy of what's behind it. Scrolling a long playlist on a Galaxy A16, the typical frame went from about 32 to 25 ms and the share of slow frames from about 30% to under 10%; Home barely moved.
 - **Quick picks come sooner** (#371). Prism asks for what it needs at once, instead of one thing after another, and today's set is kept for the next time you open Prism.
 - **Music video lookups are quicker** (#373). Looking one up ahead of time no longer asks for your account's Premium stream, which a video never has.
 
