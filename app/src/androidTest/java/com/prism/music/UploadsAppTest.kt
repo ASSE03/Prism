@@ -323,7 +323,8 @@ class UploadsAppTest {
         Fixture.screenshot("uploads-artist-menu")
         compose.onAllNodes(hasText(tr(R.string.shuffle)) and hasClickAction()).onFirst().performClick()
         compose.waitUntil(15_000) { c.player.currentSong.value?.isUpload == true }
-        assertTrue(c.player.currentSong.value?.id in setOf("Uise6RPKoek", "Dtffhy8WJgw"))
+        // Their songs from both pages: shuffling starts on any of them.
+        assertTrue(c.player.currentSong.value?.id in setOf("Uise6RPKoek", "Dtffhy8WJgw", "pageTwo0001"))
     }
 
     /** YouTube answers some other way: no tile, a line in the diagnostics, nothing broken. */

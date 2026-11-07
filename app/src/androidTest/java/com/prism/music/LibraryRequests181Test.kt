@@ -95,7 +95,12 @@ class LibraryRequests181Test {
         compose.waitUntil(10_000) { compose.onAllNodes(hasText("Test Artist · Polar")).fetchSemanticsNodes().isEmpty() }
         val shown = compose.onAllNodes(hasText("", substring = true)).fetchSemanticsNodes()
             .mapNotNull { it.config.getOrElseNullable(androidx.compose.ui.semantics.SemanticsProperties.Text) { null }?.joinToString() }
-        assertTrue("no row reads just Test Artist; on screen: ${shown.joinToString(" | ").take(1500)}", compose.onAllNodes(hasText("Test Artist")).fetchSemanticsNodes().isNotEmpty())
+        // (Once the songs' genre is known, it follows the artist: "Test Artist · Pop". The album stays out either way.)
+        assertTrue(
+            "no row with the artist and no album; on screen: ${shown.joinToString(" | ").take(1500)}",
+            compose.onAllNodes(hasText("Test Artist", substring = true)).fetchSemanticsNodes().isNotEmpty() &&
+                compose.onAllNodes(hasText("Polar", substring = true)).fetchSemanticsNodes().isEmpty(),
+        )
     }
 
     /** #246: Add to playlist marks the playlist that has the song already, and not the one without it. */

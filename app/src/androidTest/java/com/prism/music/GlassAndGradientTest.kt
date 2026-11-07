@@ -191,8 +191,11 @@ class GlassAndGradientTest {
         Fixture.launch()
         assertEquals("off on a fresh install", GlassLook(), c.settings.current.view.glass)
         openGlassPage()
+        val offValues = c.settings.lookValues.value
         compose.onAllNodes(hasText(tr(R.string.glass_on_more_of_the_screen)) and hasClickAction()).onFirst().performScrollTo().performClick()
         compose.waitUntil(5_000) { c.settings.current.glassEverywhere }
+        // (lookValues is a flow of its own: it may not have this change yet.)
+        compose.waitUntil(5_000) { c.settings.lookValues.value != offValues }
         // The Undo bar over a page is real glass with this on. A change on the page brings it up, and its button still answers.
         val before = c.settings.lookValues.value
         val other = if (c.settings.current.glassKind == GlassKind.CLEAR) GlassChoice.LIQUID_REGULAR else GlassChoice.LIQUID_CLEAR

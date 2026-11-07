@@ -2909,6 +2909,13 @@ class SettingsRepository(private val context: Context, scope: CoroutineScope) {
     fun setFrostedGlass(v: Boolean) = edit { it[K.frostedGlass] = v; if (v) it[K.liquidGlass] = false }
     fun setHaptics(v: Boolean) = edit { it[K.haptics] = v }
     fun setGlassKind(v: GlassKind) = edit { it[K.glassKind] = v.name }
+    /** A glass choice in one write, so Undo takes all of it back: as separate writes it could leave the kind behind. */
+    fun setGlassChoice(liquid: Boolean, kind: GlassKind?, frosted: Boolean?) = edit { p ->
+        kind?.let { p[K.glassKind] = it.name }
+        frosted?.let { p[K.frostedGlass] = it }
+        p[K.liquidGlass] = liquid
+        if (liquid) p[K.frostedGlass] = false
+    }
     fun setLightStyle(v: LightStyle) = edit { it[K.lightStyle] = v.name }
     fun setAccentExact(v: Boolean) = edit { it[K.accentExact] = v }
     fun setAccentLight(v: Int) = edit { it[K.accentLight] = v }

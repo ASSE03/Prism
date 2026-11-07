@@ -48,6 +48,9 @@ class PhotoBackgroundLanguageTest {
         c.settings.setBackdrops(mapOf(BackdropScreen.HOME.name to "$value|${file.path}"))
         Fixture.launch()
         compose.waitUntil(20_000) { greenShare() > 0.25f }
+        // Still there once Prism has settled (a screenshot in the first moments can catch the start-up: 3 of 12 runs on mid).
+        Thread.sleep(3_000)
+        compose.waitUntil(10_000) { greenShare() > 0.25f }
         Fixture.screenshot(shot)
         assertTrue(greenShare() > 0.25f)
     }
