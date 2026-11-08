@@ -435,6 +435,7 @@ class AppContainer(val app: Application) {
         com.prism.music.download.SmartCacheEvictor(
             maxBytes = { (settings.current.offlineGb * 1_073_741_824.0).toLong() - smartPickBytes },
             favoured = { id -> runCatching { id in library.likedIds.value }.getOrDefault(false) },
+            totalBytes = { (settings.current.offlineGb * 1_073_741_824.0).toLong() },
         )
     }
     val playerCache: SimpleCache by lazy {

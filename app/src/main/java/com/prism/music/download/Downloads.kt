@@ -801,7 +801,7 @@ private const val PREMIUM_KBPS = 200
 private const val STALL_STOP = 7
 
 /** Sizes offered for Smart Downloads' space (its picks and the songs you've streamed), in GB. */
-val SMART_DOWNLOAD_SIZES = listOf(1f, 2f, 3f, 5f, 7.5f, 10f, 15f, 20f, 30f, 50f)
+val SMART_DOWNLOAD_SIZES = listOf(0.25f, 0.5f, 1f, 2f, 3f, 5f, 7.5f, 10f, 15f, 20f, 30f, 50f)
 
 fun formatGb(gb: Float): String = when {
     gb < 1f -> "${(gb * 1024).roundToInt()} MB"
