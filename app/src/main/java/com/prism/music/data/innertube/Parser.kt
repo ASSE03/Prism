@@ -35,6 +35,15 @@ object Parser {
      * which are songs too (#101: as "videos", "Songs, not videos" swapped an upload for YouTube's own, shorter, recording).
      */
     fun isVideoType(vt: String?): Boolean = vt != null && vt != "MUSIC_VIDEO_TYPE_ATV" && vt != UPLOAD
+
+    /**
+     * #383 (1.8.3): YouTube files some songs' videos as podcast episodes (Telugu film songs in a playlist: "Episode will
+     * play next", no show, the singer linked as an artist). Read as episodes they had no artist, played with the episode
+     * controls (15 s / 30 s) and were never swapped for their songs. A real episode names its show (linked); one that
+     * names none is a song's video (its singer linked or not: "Mukesh" came as plain text).
+     */
+    @Suppress("UNUSED_PARAMETER")
+    private fun songMarkedEpisode(show: JsonObject?, runs: List<JsonObject>): Boolean = show == null
     private val typeLabels = setOf(
         "Song", "Video", "Album", "Single", "EP", "Artist", "Playlist", "Episode", "Podcast", "Profile", "Station",
     )
@@ -145,8 +154,9 @@ object Parser {
         val browse = r.obj("navigationEndpoint")
 
         // A podcast episode (search's Episodes): "Sep 30 • The Show", the show linked.
-        if (videoId != null && videoType(watch) == EPISODE_VIDEO) {
-            val show = restRuns.firstOrNull { pageType(it["navigationEndpoint"]) == PODCAST }
+        val episodeShow = restRuns.firstOrNull { pageType(it["navigationEndpoint"]) == PODCAST }
+        if (videoId != null && videoType(watch) == EPISODE_VIDEO && !songMarkedEpisode(episodeShow, restRuns)) {
+            val show = episodeShow
             return SongItem(
                 Song(
                     id = videoId, title = title,
@@ -160,6 +170,7 @@ object Parser {
             val duration = r.arr("fixedColumns")?.firstOrNull()
                 ?.obj("musicResponsiveListItemFixedColumnRenderer", "text").text()
                 ?: restRuns.map { it.str("text") ?: "" }.lastOrNull { durationRegex.matches(it.trim()) }
+            // #383: a song YouTube files as an "episode" counts as the video it is ([isVideoType]), so it can be swapped.
             val vt = videoType(watch)
             val explicit = r.arr("badges")?.any {
                 it.str("musicInlineBadgeRenderer", "icon", "iconType") == "MUSIC_EXPLICIT_BADGE"
@@ -283,9 +294,10 @@ object Parser {
                 return PlaylistItem(pid, title, subtitle, thumb, isMix = true, seedVideoId = id, params = w.str("params"))
             }
             id ?: return null
+            val show = subtitleRuns.firstOrNull { pageType(it["navigationEndpoint"]) == PODCAST }
+            val episode = videoType(w) == EPISODE_VIDEO && !songMarkedEpisode(show, subtitleRuns)
             val vt = videoType(w)
-            if (vt == EPISODE_VIDEO) {
-                val show = subtitleRuns.firstOrNull { pageType(it["navigationEndpoint"]) == PODCAST }
+            if (episode) {
                 return SongItem(
                     Song(
                         id = id, title = title, artists = listOfNotNull(show?.str("text")?.let { ArtistRef(it) }),
