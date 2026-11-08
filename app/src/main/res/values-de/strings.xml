@@ -4961,4 +4961,8 @@
     <string name="songs_from">Songs aus</string>
     <string name="your_likes_stay_as_they_are">Nur die Anzeige dieses Tabs ändert sich. Deine Likes bleiben, wie sie sind.</string>
     <string name="search_these_songs">Diese Songs durchsuchen</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Mediathek durchsuchen</string>
+    <string name="nothing_in_your_library_matches">Nichts in deiner Mediathek passt</string>
+    <string name="try_fewer_words_or_another_filter">Versuch es mit weniger Wörtern oder einem anderen Filter.</string>
 </resources>

@@ -4961,4 +4961,8 @@
     <string name="songs_from">Şuradaki şarkılar</string>
     <string name="your_likes_stay_as_they_are">Yalnızca bu sekmenin gösterdiği değişir. Beğenilerin olduğu gibi kalır.</string>
     <string name="search_these_songs">Bu şarkılarda ara</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Kitaplığında ara</string>
+    <string name="nothing_in_your_library_matches">Kitaplığında eşleşen bir şey yok</string>
+    <string name="try_fewer_words_or_another_filter">Daha az kelime ya da başka bir filtre dene.</string>
 </resources>

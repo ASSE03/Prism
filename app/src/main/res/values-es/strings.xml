@@ -5029,4 +5029,8 @@
     <string name="songs_from">Canciones de</string>
     <string name="your_likes_stay_as_they_are">Solo cambia lo que muestra esta pestaña. Tus me gusta quedan igual.</string>
     <string name="search_these_songs">Buscar en estas canciones</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Buscar en tu biblioteca</string>
+    <string name="nothing_in_your_library_matches">Nada de tu biblioteca coincide</string>
+    <string name="try_fewer_words_or_another_filter">Prueba con menos palabras u otro filtro.</string>
 </resources>

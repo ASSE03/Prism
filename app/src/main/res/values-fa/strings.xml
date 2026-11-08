@@ -4961,4 +4961,8 @@
     <string name="songs_from">آهنگ‌ها از</string>
     <string name="your_likes_stay_as_they_are">فقط آنچه این زبانه نشان می‌دهد عوض می‌شود. پسندهای شما همان‌طور می‌مانند.</string>
     <string name="search_these_songs">جست‌وجو در این آهنگ‌ها</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">جست‌وجو در کتابخانهٔ شما</string>
+    <string name="nothing_in_your_library_matches">چیزی در کتابخانهٔ شما پیدا نشد</string>
+    <string name="try_fewer_words_or_another_filter">کلمه‌های کمتر یا فیلتر دیگری را امتحان کنید.</string>
 </resources>

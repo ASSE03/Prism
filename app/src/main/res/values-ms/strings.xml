@@ -4893,4 +4893,8 @@
     <string name="songs_from">Lagu daripada</string>
     <string name="your_likes_stay_as_they_are">Hanya paparan tab ini yang berubah. Suka anda kekal seperti biasa.</string>
     <string name="search_these_songs">Cari dalam lagu-lagu ini</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Cari dalam pustaka anda</string>
+    <string name="nothing_in_your_library_matches">Tiada yang sepadan dalam pustaka anda</string>
+    <string name="try_fewer_words_or_another_filter">Cuba kurangkan perkataan atau penapis lain.</string>
 </resources>

@@ -5029,4 +5029,8 @@
     <string name="songs_from">Melodii din</string>
     <string name="your_likes_stay_as_they_are">Se schimbă doar ce arată această filă. Aprecierile tale rămân la fel.</string>
     <string name="search_these_songs">Caută în aceste melodii</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Caută în biblioteca ta</string>
+    <string name="nothing_in_your_library_matches">Nimic din biblioteca ta nu se potrivește</string>
+    <string name="try_fewer_words_or_another_filter">Încearcă mai puține cuvinte sau alt filtru.</string>
 </resources>

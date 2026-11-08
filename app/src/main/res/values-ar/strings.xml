@@ -5233,4 +5233,8 @@
     <string name="songs_from">أغانٍ من</string>
     <string name="your_likes_stay_as_they_are">يتغير ما يعرضه هذا التبويب فقط. تبقى إعجاباتك كما هي.</string>
     <string name="search_these_songs">البحث في هذه الأغاني</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">البحث في مكتبتك</string>
+    <string name="nothing_in_your_library_matches">لا شيء في مكتبتك يطابق</string>
+    <string name="try_fewer_words_or_another_filter">جرّب كلمات أقل أو عامل تصفية آخر.</string>
 </resources>

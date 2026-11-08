@@ -353,6 +353,8 @@ fun LibraryScreen(bottomPadding: Dp) {
 
     Column(Modifier.fillMaxSize()) {
         com.prism.music.ui.components.ScreenHeader(tr(R.string.library)) {
+            // All of the library at once, with filters (1.8.3).
+            com.prism.music.ui.components.RoundAction(PrismIcons.Search, tr(R.string.search_your_library), Modifier.testTag("librarySearch")) { nav.go(Routes.librarySearch()) }
             if (settings.isLoggedIn) {
                 if (sync == SyncState.SYNCING) Box(Modifier.size(42.dp), contentAlignment = Alignment.Center) { com.prism.music.ui.components.PrismSpinner(Modifier.size(22.dp), stroke = 2.dp) }
                 else com.prism.music.ui.components.RoundAction(PrismIcons.Sync, tr(R.string.sync_with_youtube_music)) { scope.launch { c.library.sync() } }

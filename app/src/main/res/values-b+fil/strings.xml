@@ -4961,4 +4961,8 @@
     <string name="songs_from">Mga kanta mula sa</string>
     <string name="your_likes_stay_as_they_are">Ang ipinapakita lang ng tab na ito ang nagbabago. Hindi nagbabago ang mga like mo.</string>
     <string name="search_these_songs">Maghanap sa mga kantang ito</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Maghanap sa library mo</string>
+    <string name="nothing_in_your_library_matches">Walang tugma sa library mo</string>
+    <string name="try_fewer_words_or_another_filter">Subukan ang mas kaunting salita o ibang filter.</string>
 </resources>

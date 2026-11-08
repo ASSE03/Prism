@@ -4961,4 +4961,8 @@
     <string name="songs_from">Nummers uit</string>
     <string name="your_likes_stay_as_they_are">Alleen wat dit tabblad toont verandert. Je likes blijven zoals ze zijn.</string>
     <string name="search_these_songs">Zoek in deze nummers</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Zoek in je bibliotheek</string>
+    <string name="nothing_in_your_library_matches">Niets in je bibliotheek komt overeen</string>
+    <string name="try_fewer_words_or_another_filter">Probeer minder woorden of een ander filter.</string>
 </resources>

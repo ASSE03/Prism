@@ -4961,4 +4961,8 @@
     <string name="songs_from">गाने यहां से</string>
     <string name="your_likes_stay_as_they_are">सिर्फ़ यह टैब जो दिखाता है वह बदलता है। आपकी पसंद वैसी ही रहती है।</string>
     <string name="search_these_songs">इन गानों में खोजें</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">अपनी लाइब्रेरी में खोजें</string>
+    <string name="nothing_in_your_library_matches">आपकी लाइब्रेरी में कुछ मेल नहीं खाता</string>
+    <string name="try_fewer_words_or_another_filter">कम शब्द या कोई और फ़िल्टर आज़माएं।</string>
 </resources>

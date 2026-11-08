@@ -235,7 +235,10 @@ fun SearchScreen(bottomPadding: Dp) {
     val inLibrary by androidx.compose.runtime.produceState(emptyList<BrowseItem>(), live, onPhone) {
         value = if (live.isBlank() || onPhone) emptyList() else kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
             val words = phoneNorm(live).split(' ').filter { it.isNotBlank() }
-            fun has(vararg parts: String) = phoneNorm(parts.joinToString(" ")).let { hay -> words.isNotEmpty() && words.all { it in hay } }
+            // Titles in other scripts by their Latin spelling too (1.8.3, #363), once spelled (in the background).
+            val spelled = c.titleSpellings.known.value
+            c.titleSpellings.want(c.library.likedShown.value.map { it.title })
+            fun has(vararg parts: String) = phoneNorm(parts.joinToString(" ") { p -> spelled[p]?.let { "$p $it" } ?: p }).let { hay -> words.isNotEmpty() && words.all { it in hay } }
             val songs = c.library.likedShown.value.filter { has(it.title, it.artistText) }.take(3).map { SongItem(it) }
             val lists = (c.prismLibrary.lists.value.map { it.item() } + c.library.playlists.value + c.library.albums.value + c.library.artists.value)
                 .filter { has(it.title) }.distinctBy { it.id }.take(4)
@@ -460,12 +463,7 @@ private fun phoneMatches(query: String, songs: List<com.prism.music.data.model.S
 }
 
 /** Lower case, without accents or punctuation, so "Beyonce" finds "Beyoncé" and "ac dc" finds "AC/DC". */
-internal fun phoneNorm(s: String): String = java.text.Normalizer.normalize(s.lowercase(), java.text.Normalizer.Form.NFD)
-    .replace(MARKS, "").replace(NOT_WORDS, " ").trim()
-
-private val MARKS = Regex("\\p{Mn}+")
-// Marks that stay (Hindi's and Bengali's vowel signs) are part of the word, not a gap in it.
-private val NOT_WORDS = Regex("[^\\p{L}\\p{M}\\p{N}]+")
+internal fun phoneNorm(s: String): String = com.prism.music.data.LibrarySearch.norm(s)
 
 /** The top card's play button: plays the song, the album or playlist from the start, or shuffles the artist. */
 private suspend fun playTop(c: com.prism.music.AppContainer, item: BrowseItem) {
@@ -521,7 +519,8 @@ private fun TopResults(
         if (!lyricsFirst) fromTheLyrics()
         // Already yours (1.7.6): what in your library matches, before the rest.
         if (inLibrary.isNotEmpty()) {
-            item("lib-h") { SectionHeader(tr(R.string.in_your_library)) }
+            // All of it, with filters (1.8.3).
+            item("lib-h") { val nav = com.prism.music.ui.LocalNavigator.current; SectionHeader(tr(R.string.in_your_library), onMore = { nav.go(com.prism.music.ui.Routes.librarySearch(query)) }) }
             items(inLibrary, key = { "lib:" + it.id }) { item -> ResultRow(item) { open(item) } }
         }
         if (onPhoneHits.isNotEmpty()) {

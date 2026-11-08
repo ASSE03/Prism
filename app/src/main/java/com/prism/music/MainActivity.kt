@@ -788,6 +788,9 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                         composable("tag/{name}", listOf(navArgument("name") { type = NavType.StringType })) {
                             Beside { CollectionScreen(CollectionType.TAG, it.arguments?.getString("name")!!, null, bottomPadding) }
                         }
+                        composable("librarySearch?q={q}", listOf(navArgument("q") { type = NavType.StringType; nullable = true; defaultValue = null })) {
+                            Beside { com.prism.music.ui.screens.LibrarySearchScreen(it.arguments?.getString("q").orEmpty(), bottomPadding) }
+                        }
                         composable("liked?genre={genre}", listOf(navArgument("genre") { type = NavType.StringType; nullable = true; defaultValue = null })) {
                             Beside { CollectionScreen(CollectionType.LIKED, "liked", it.arguments?.getString("genre"), bottomPadding) }
                         }

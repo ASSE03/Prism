@@ -4893,4 +4893,8 @@
     <string name="songs_from">歌曲来源</string>
     <string name="your_likes_stay_as_they_are">只改变此标签页显示的内容，你的点赞保持不变。</string>
     <string name="search_these_songs">在这些歌曲中搜索</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">搜索你的音乐库</string>
+    <string name="nothing_in_your_library_matches">你的音乐库中没有匹配的内容</string>
+    <string name="try_fewer_words_or_another_filter">试试少一些词或换个筛选条件。</string>
 </resources>

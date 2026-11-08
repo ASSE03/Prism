@@ -4961,4 +4961,8 @@
     <string name="songs_from">Dalok innen</string>
     <string name="your_likes_stay_as_they_are">Csak az változik, amit ez a lap mutat. A kedvelt dalaid maradnak.</string>
     <string name="search_these_songs">Keresés ezekben a dalokban</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Keresés a könyvtáradban</string>
+    <string name="nothing_in_your_library_matches">A könyvtáradban semmi sem egyezik</string>
+    <string name="try_fewer_words_or_another_filter">Próbálj kevesebb szót vagy másik szűrőt.</string>
 </resources>

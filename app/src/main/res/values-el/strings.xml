@@ -4961,4 +4961,8 @@
     <string name="songs_from">Τραγούδια από</string>
     <string name="your_likes_stay_as_they_are">Αλλάζει μόνο ό,τι δείχνει αυτή η καρτέλα. Τα «μου αρέσει» σου μένουν ως έχουν.</string>
     <string name="search_these_songs">Αναζήτηση σε αυτά τα τραγούδια</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Αναζήτηση στη βιβλιοθήκη σου</string>
+    <string name="nothing_in_your_library_matches">Τίποτα στη βιβλιοθήκη σου δεν ταιριάζει</string>
+    <string name="try_fewer_words_or_another_filter">Δοκίμασε λιγότερες λέξεις ή άλλο φίλτρο.</string>
 </resources>

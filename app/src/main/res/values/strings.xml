@@ -4990,4 +4990,8 @@
     <string name="songs_from">Songs from</string>
     <string name="your_likes_stay_as_they_are">Only what this tab shows changes. Your likes stay as they are.</string>
     <string name="search_these_songs">Search these songs</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Search your library</string>
+    <string name="nothing_in_your_library_matches">Nothing in your library matches</string>
+    <string name="try_fewer_words_or_another_filter">Try fewer words or another filter.</string>
 </resources>

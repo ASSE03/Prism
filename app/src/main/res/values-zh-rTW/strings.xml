@@ -4893,4 +4893,8 @@
     <string name="songs_from">歌曲來源</string>
     <string name="your_likes_stay_as_they_are">只會改變此分頁顯示的內容，你的喜歡維持不變。</string>
     <string name="search_these_songs">在這些歌曲中搜尋</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">搜尋你的音樂庫</string>
+    <string name="nothing_in_your_library_matches">你的音樂庫中沒有相符的內容</string>
+    <string name="try_fewer_words_or_another_filter">試試少一些字詞或換個篩選條件。</string>
 </resources>

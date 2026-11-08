@@ -5029,4 +5029,8 @@
     <string name="songs_from">Titres de</string>
     <string name="your_likes_stay_as_they_are">Seul ce qu’affiche cet onglet change. Vos titres aimés restent tels quels.</string>
     <string name="search_these_songs">Rechercher dans ces titres</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Rechercher dans votre bibliothèque</string>
+    <string name="nothing_in_your_library_matches">Rien dans votre bibliothèque ne correspond</string>
+    <string name="try_fewer_words_or_another_filter">Essayez avec moins de mots ou un autre filtre.</string>
 </resources>

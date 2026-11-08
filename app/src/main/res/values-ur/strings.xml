@@ -4961,4 +4961,8 @@
     <string name="songs_from">گانے یہاں سے</string>
     <string name="your_likes_stay_as_they_are">صرف وہ بدلتا ہے جو یہ ٹیب دکھاتا ہے۔ آپ کی پسند ویسی ہی رہتی ہے۔</string>
     <string name="search_these_songs">ان گانوں میں تلاش کریں</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">اپنی لائبریری میں تلاش کریں</string>
+    <string name="nothing_in_your_library_matches">آپ کی لائبریری میں کچھ نہیں ملا</string>
+    <string name="try_fewer_words_or_another_filter">کم الفاظ یا کوئی اور فلٹر آزمائیں۔</string>
 </resources>

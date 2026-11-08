@@ -5029,4 +5029,8 @@
     <string name="songs_from">Brani da</string>
     <string name="your_likes_stay_as_they_are">Cambia solo ciò che mostra questa scheda. I tuoi Mi piace restano come sono.</string>
     <string name="search_these_songs">Cerca in questi brani</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Cerca nella tua raccolta</string>
+    <string name="nothing_in_your_library_matches">Nella tua raccolta non c’è niente che corrisponda</string>
+    <string name="try_fewer_words_or_another_filter">Prova con meno parole o un altro filtro.</string>
 </resources>

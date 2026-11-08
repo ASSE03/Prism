@@ -4893,4 +4893,8 @@
     <string name="songs_from">曲の取得元</string>
     <string name="your_likes_stay_as_they_are">変わるのはこのタブの表示だけです。高評価はそのままです。</string>
     <string name="search_these_songs">これらの曲を検索</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">ライブラリを検索</string>
+    <string name="nothing_in_your_library_matches">ライブラリに一致するものがありません</string>
+    <string name="try_fewer_words_or_another_filter">言葉を減らすか、別のフィルタをお試しください。</string>
 </resources>

@@ -5097,4 +5097,8 @@
     <string name="songs_from">Skladby z</string>
     <string name="your_likes_stay_as_they_are">Mění se jen to, co ukazuje tato karta. Tvoje oblíbené zůstanou, jak jsou.</string>
     <string name="search_these_songs">Hledat v těchto skladbách</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Hledat v knihovně</string>
+    <string name="nothing_in_your_library_matches">V tvé knihovně nic neodpovídá</string>
+    <string name="try_fewer_words_or_another_filter">Zkus méně slov nebo jiný filtr.</string>
 </resources>

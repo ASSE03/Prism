@@ -4961,4 +4961,8 @@
     <string name="songs_from">Låtar från</string>
     <string name="your_likes_stay_as_they_are">Bara det fliken visar ändras. Dina gillade låtar förblir som de är.</string>
     <string name="search_these_songs">Sök i de här låtarna</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Sök i ditt bibliotek</string>
+    <string name="nothing_in_your_library_matches">Inget i ditt bibliotek matchar</string>
+    <string name="try_fewer_words_or_another_filter">Prova färre ord eller ett annat filter.</string>
 </resources>

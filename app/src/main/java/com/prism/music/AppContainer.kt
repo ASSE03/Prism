@@ -526,6 +526,10 @@ class AppContainer(val app: Application) {
     val romanizer = com.prism.music.data.lyrics.Romanizer(
         http, db.romanized(), models, scope, app.getSharedPreferences("romanize_songs", android.content.Context.MODE_PRIVATE),
     )
+    /** Titles in other scripts in Latin letters, for searching the library (1.8.3, #363); spelled when a search wants them. */
+    val titleSpellings by lazy {
+        com.prism.music.data.TitleSpellings(db.romanized(), scope, { romanizer.japaneseReady }) { romanizer.spellTitle(it) }
+    }
     /** Songs' best parts, from YouTube's "Most replayed" curves (and the chorus in the lyrics). */
     val bestParts = com.prism.music.data.BestParts(this)
 

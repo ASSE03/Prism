@@ -4961,4 +4961,8 @@
     <string name="songs_from">যেখান থেকে গান</string>
     <string name="your_likes_stay_as_they_are">শুধু এই ট্যাবে যা দেখায় তা বদলায়। আপনার পছন্দগুলো যেমন আছে তেমনই থাকে।</string>
     <string name="search_these_songs">এই গানগুলোতে খুঁজুন</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">আপনার লাইব্রেরিতে খুঁজুন</string>
+    <string name="nothing_in_your_library_matches">আপনার লাইব্রেরিতে কিছুই মেলেনি</string>
+    <string name="try_fewer_words_or_another_filter">কম শব্দ বা অন্য ফিল্টার দিয়ে চেষ্টা করুন।</string>
 </resources>

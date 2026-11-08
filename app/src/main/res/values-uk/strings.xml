@@ -5097,4 +5097,8 @@
     <string name="songs_from">Пісні з</string>
     <string name="your_likes_stay_as_they_are">Змінюється лише те, що показує ця вкладка. Твої вподобання лишаються як є.</string>
     <string name="search_these_songs">Шукати в цих піснях</string>
+    <!-- 1.8.3 Search your library -->
+    <string name="search_your_library">Пошук у бібліотеці</string>
+    <string name="nothing_in_your_library_matches">У твоїй бібліотеці нічого не знайдено</string>
+    <string name="try_fewer_words_or_another_filter">Спробуй менше слів або інший фільтр.</string>
 </resources>
