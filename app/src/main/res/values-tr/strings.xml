@@ -4992,4 +4992,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">Tek kutu</string>
     <string name="pin_to_home_as_one_tile">Ana sayfaya tek kutu olarak sabitle</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Şarkı yükle</string>
+    <string name="uploading_s">%1$s yükleniyor…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s yüklendi. YouTube Music hazırladığında burada görünür, genellikle birkaç dakika içinde.</string>
+    <string name="couldn_t_upload_it_s">Yüklenemedi: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music, 300 MB\'a kadar MP3, M4A, WMA, FLAC ve Ogg dosyalarını kabul eder.</string>
+    <string name="delete_from_your_uploads">Yüklemelerinden sil</string>
+    <string name="delete_s_from_youtube_music">\"%1$s\" YouTube Music\'ten silinsin mi?</string>
+    <string name="it_goes_from_your_uploads_for_good">Tüm cihazlarında yüklemelerinden kalıcı olarak kaldırılır. Geri alınamaz.</string>
+    <string name="deleted_from_your_uploads">Yüklemelerinden silindi</string>
+    <string name="couldn_t_delete_it_s">Silinemedi: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music artık bunu listelemiyor</string>
 </resources>

@@ -4992,4 +4992,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">ایک ٹائل</string>
     <string name="pin_to_home_as_one_tile">ہوم پر ایک ٹائل کے طور پر پن کریں</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">گانا اپ لوڈ کریں</string>
+    <string name="uploading_s">%1$s اپ لوڈ ہو رہا ہے…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s اپ لوڈ ہو گیا۔ YouTube Music کے تیار کرتے ہی یہ یہاں دکھے گا، عموماً چند منٹ میں۔</string>
+    <string name="couldn_t_upload_it_s">اپ لوڈ نہیں ہو سکا: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music زیادہ سے زیادہ 300 MB کی MP3، M4A، WMA، FLAC اور Ogg فائلیں لیتا ہے۔</string>
+    <string name="delete_from_your_uploads">اپنے اپ لوڈز سے حذف کریں</string>
+    <string name="delete_s_from_youtube_music">YouTube Music سے “%1$s” حذف کریں؟</string>
+    <string name="it_goes_from_your_uploads_for_good">یہ آپ کے تمام آلات پر اپ لوڈز سے ہمیشہ کے لیے ہٹ جائے گا۔ اسے واپس نہیں کیا جا سکتا۔</string>
+    <string name="deleted_from_your_uploads">آپ کے اپ لوڈز سے حذف ہو گیا</string>
+    <string name="couldn_t_delete_it_s">حذف نہیں ہو سکا: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music اب اسے نہیں دکھاتا</string>
 </resources>

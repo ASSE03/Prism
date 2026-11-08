@@ -4992,4 +4992,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">یک کاشی</string>
     <string name="pin_to_home_as_one_tile">سنجاق به خانه به‌صورت یک کاشی</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">بارگذاری آهنگ</string>
+    <string name="uploading_s">در حال بارگذاری %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s بارگذاری شد. وقتی YouTube Music آماده‌اش کند اینجا نشان داده می‌شود، معمولاً تا چند دقیقه.</string>
+    <string name="couldn_t_upload_it_s">بارگذاری نشد: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music فایل‌های MP3، M4A، WMA، FLAC و Ogg تا ۳۰۰ مگابایت را می‌پذیرد.</string>
+    <string name="delete_from_your_uploads">حذف از بارگذاری‌های شما</string>
+    <string name="delete_s_from_youtube_music">«%1$s» از YouTube Music حذف شود؟</string>
+    <string name="it_goes_from_your_uploads_for_good">از بارگذاری‌های شما در همهٔ دستگاه‌ها برای همیشه حذف می‌شود. قابل بازگشت نیست.</string>
+    <string name="deleted_from_your_uploads">از بارگذاری‌های شما حذف شد</string>
+    <string name="couldn_t_delete_it_s">حذف نشد: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music دیگر آن را نشان نمی‌دهد</string>
 </resources>

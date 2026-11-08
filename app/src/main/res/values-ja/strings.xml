@@ -4920,4 +4920,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">1つのタイル</string>
     <string name="pin_to_home_as_one_tile">ホームに1つのタイルとして固定</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">曲をアップロード</string>
+    <string name="uploading_s">%1$s をアップロード中…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s をアップロードしました。YouTube Music の準備ができるとここに表示されます。通常は数分です。</string>
+    <string name="couldn_t_upload_it_s">アップロードできませんでした: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music にアップロードできるのは 300 MB までの MP3、M4A、WMA、FLAC、Ogg ファイルです。</string>
+    <string name="delete_from_your_uploads">アップロードから削除</string>
+    <string name="delete_s_from_youtube_music">「%1$s」を YouTube Music から削除しますか？</string>
+    <string name="it_goes_from_your_uploads_for_good">すべてのデバイスのアップロードから完全に削除されます。元に戻せません。</string>
+    <string name="deleted_from_your_uploads">アップロードから削除しました</string>
+    <string name="couldn_t_delete_it_s">削除できませんでした: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music に表示されなくなっています</string>
 </resources>

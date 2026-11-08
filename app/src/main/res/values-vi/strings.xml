@@ -4920,4 +4920,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">Một ô</string>
     <string name="pin_to_home_as_one_tile">Ghim vào Trang chủ dưới dạng một ô</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Tải lên bài hát</string>
+    <string name="uploading_s">Đang tải lên %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">Đã tải lên %1$s. Bài sẽ hiện ở đây khi YouTube Music chuẩn bị xong, thường trong vài phút.</string>
+    <string name="couldn_t_upload_it_s">Không tải lên được: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music nhận tệp MP3, M4A, WMA, FLAC và Ogg tối đa 300 MB.</string>
+    <string name="delete_from_your_uploads">Xóa khỏi nội dung bạn tải lên</string>
+    <string name="delete_s_from_youtube_music">Xóa \"%1$s\" khỏi YouTube Music?</string>
+    <string name="it_goes_from_your_uploads_for_good">Bài sẽ bị xóa vĩnh viễn khỏi nội dung bạn tải lên trên mọi thiết bị. Không thể hoàn tác.</string>
+    <string name="deleted_from_your_uploads">Đã xóa khỏi nội dung bạn tải lên</string>
+    <string name="couldn_t_delete_it_s">Không xóa được: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music không còn liệt kê bài này</string>
 </resources>

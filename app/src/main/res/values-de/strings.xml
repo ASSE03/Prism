@@ -4992,4 +4992,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">Eine Kachel</string>
     <string name="pin_to_home_as_one_tile">Als eine Kachel an Start anheften</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Song hochladen</string>
+    <string name="uploading_s">%1$s wird hochgeladen…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s ist hochgeladen. Es erscheint hier, sobald YouTube Music es bereit hat, meist in ein paar Minuten.</string>
+    <string name="couldn_t_upload_it_s">Hochladen nicht möglich: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music nimmt MP3-, M4A-, WMA-, FLAC- und Ogg-Dateien bis 300 MB.</string>
+    <string name="delete_from_your_uploads">Aus deinen Uploads löschen</string>
+    <string name="delete_s_from_youtube_music">„%1$s“ aus YouTube Music löschen?</string>
+    <string name="it_goes_from_your_uploads_for_good">Es verschwindet auf allen Geräten aus deinen Uploads, für immer. Das lässt sich nicht rückgängig machen.</string>
+    <string name="deleted_from_your_uploads">Aus deinen Uploads gelöscht</string>
+    <string name="couldn_t_delete_it_s">Löschen nicht möglich: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music führt es nicht mehr</string>
 </resources>

@@ -5064,4 +5064,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">אריח אחד</string>
     <string name="pin_to_home_as_one_tile">הצמדה לדף הבית כאריח אחד</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">העלאת שיר</string>
+    <string name="uploading_s">מעלה את %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s הועלה. הוא יופיע כאן כש-YouTube Music יכין אותו, בדרך כלל תוך כמה דקות.</string>
+    <string name="couldn_t_upload_it_s">לא ניתן להעלות: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music מקבל קובצי MP3,‏ M4A,‏ WMA,‏ FLAC ו-Ogg עד 300MB.</string>
+    <string name="delete_from_your_uploads">מחיקה מההעלאות שלך</string>
+    <string name="delete_s_from_youtube_music">למחוק את „%1$s” מ-YouTube Music?</string>
+    <string name="it_goes_from_your_uploads_for_good">הוא יימחק מההעלאות שלך בכל המכשירים, לתמיד. אי אפשר לבטל.</string>
+    <string name="deleted_from_your_uploads">נמחק מההעלאות שלך</string>
+    <string name="couldn_t_delete_it_s">לא ניתן למחוק: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music כבר לא מציג אותו</string>
 </resources>

@@ -5064,4 +5064,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">O singură casetă</string>
     <string name="pin_to_home_as_one_tile">Fixează pe Acasă ca o casetă</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Încarcă o melodie</string>
+    <string name="uploading_s">Se încarcă %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s a fost încărcat. Apare aici după ce YouTube Music îl pregătește, de obicei în câteva minute.</string>
+    <string name="couldn_t_upload_it_s">Nu s-a putut încărca: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music acceptă fișiere MP3, M4A, WMA, FLAC și Ogg de până la 300 MB.</string>
+    <string name="delete_from_your_uploads">Șterge din încărcările tale</string>
+    <string name="delete_s_from_youtube_music">Ștergi „%1$s” din YouTube Music?</string>
+    <string name="it_goes_from_your_uploads_for_good">Dispare din încărcările tale pe toate dispozitivele, definitiv. Nu se poate anula.</string>
+    <string name="deleted_from_your_uploads">Șters din încărcările tale</string>
+    <string name="couldn_t_delete_it_s">Nu s-a putut șterge: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music nu-l mai afișează</string>
 </resources>

@@ -4920,4 +4920,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">單一卡片</string>
     <string name="pin_to_home_as_one_tile">以單一卡片釘選到首頁</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">上傳歌曲</string>
+    <string name="uploading_s">正在上傳 %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">已上傳 %1$s。YouTube Music 處理完成後就會顯示在這裡，通常只需幾分鐘。</string>
+    <string name="couldn_t_upload_it_s">無法上傳：%1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music 接受 300 MB 以內的 MP3、M4A、WMA、FLAC 和 Ogg 檔案。</string>
+    <string name="delete_from_your_uploads">從你的上傳內容中刪除</string>
+    <string name="delete_s_from_youtube_music">要從 YouTube Music 刪除「%1$s」嗎？</string>
+    <string name="it_goes_from_your_uploads_for_good">它會從你所有裝置上的上傳內容中永久刪除，無法復原。</string>
+    <string name="deleted_from_your_uploads">已從你的上傳內容中刪除</string>
+    <string name="couldn_t_delete_it_s">無法刪除：%1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music 已不再列出它</string>
 </resources>

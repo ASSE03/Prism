@@ -4992,4 +4992,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">Egy csempe</string>
     <string name="pin_to_home_as_one_tile">Kitűzés a Kezdőlapra egy csempeként</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Dal feltöltése</string>
+    <string name="uploading_s">%1$s feltöltése…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s feltöltve. Akkor jelenik meg itt, amikor a YouTube Music elkészül vele, általában pár perc alatt.</string>
+    <string name="couldn_t_upload_it_s">Nem sikerült feltölteni: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">A YouTube Music MP3, M4A, WMA, FLAC és Ogg fájlokat fogad el, legfeljebb 300 MB-ig.</string>
+    <string name="delete_from_your_uploads">Törlés a feltöltéseid közül</string>
+    <string name="delete_s_from_youtube_music">Törlöd a(z) „%1$s” dalt a YouTube Musicból?</string>
+    <string name="it_goes_from_your_uploads_for_good">Minden eszközödön eltűnik a feltöltéseid közül, végleg. Nem vonható vissza.</string>
+    <string name="deleted_from_your_uploads">Törölve a feltöltéseid közül</string>
+    <string name="couldn_t_delete_it_s">Nem sikerült törölni: %1$s</string>
+    <string name="uploads_couldn_t_find_it">A YouTube Music már nem listázza</string>
 </resources>

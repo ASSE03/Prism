@@ -4920,4 +4920,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">ไทล์เดียว</string>
     <string name="pin_to_home_as_one_tile">ปักหมุดที่หน้าแรกเป็นไทล์เดียว</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">อัปโหลดเพลง</string>
+    <string name="uploading_s">กำลังอัปโหลด %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">อัปโหลด %1$s แล้ว จะแสดงที่นี่เมื่อ YouTube Music เตรียมเสร็จ ปกติภายในไม่กี่นาที</string>
+    <string name="couldn_t_upload_it_s">อัปโหลดไม่ได้: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music รับไฟล์ MP3, M4A, WMA, FLAC และ Ogg ขนาดไม่เกิน 300 MB</string>
+    <string name="delete_from_your_uploads">ลบออกจากรายการที่อัปโหลด</string>
+    <string name="delete_s_from_youtube_music">ลบ \"%1$s\" ออกจาก YouTube Music ไหม</string>
+    <string name="it_goes_from_your_uploads_for_good">เพลงจะหายไปจากรายการที่อัปโหลดในทุกอุปกรณ์อย่างถาวร ย้อนกลับไม่ได้</string>
+    <string name="deleted_from_your_uploads">ลบออกจากรายการที่อัปโหลดแล้ว</string>
+    <string name="couldn_t_delete_it_s">ลบไม่ได้: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music ไม่แสดงเพลงนี้แล้ว</string>
 </resources>

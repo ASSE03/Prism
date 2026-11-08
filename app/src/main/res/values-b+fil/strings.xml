@@ -4992,4 +4992,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">Isang tile</string>
     <string name="pin_to_home_as_one_tile">I-pin sa Home bilang isang tile</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Mag-upload ng kanta</string>
+    <string name="uploading_s">Ina-upload ang %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">Na-upload na ang %1$s. Lalabas ito rito kapag handa na ito sa YouTube Music, kadalasan sa loob ng ilang minuto.</string>
+    <string name="couldn_t_upload_it_s">Hindi ma-upload: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">Tumatanggap ang YouTube Music ng MP3, M4A, WMA, FLAC at Ogg na file na hanggang 300 MB.</string>
+    <string name="delete_from_your_uploads">Burahin sa mga upload mo</string>
+    <string name="delete_s_from_youtube_music">Burahin ang \"%1$s\" sa YouTube Music?</string>
+    <string name="it_goes_from_your_uploads_for_good">Mawawala ito sa mga upload mo sa lahat ng device, nang tuluyan. Hindi na ito maibabalik.</string>
+    <string name="deleted_from_your_uploads">Nabura sa mga upload mo</string>
+    <string name="couldn_t_delete_it_s">Hindi mabura: %1$s</string>
+    <string name="uploads_couldn_t_find_it">Hindi na ito nakalista sa YouTube Music</string>
 </resources>

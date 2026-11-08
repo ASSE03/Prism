@@ -4920,4 +4920,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">타일 하나</string>
     <string name="pin_to_home_as_one_tile">홈에 타일 하나로 고정</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">노래 업로드</string>
+    <string name="uploading_s">%1$s 업로드 중…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s 업로드 완료. YouTube Music에서 준비되면 여기에 표시됩니다. 보통 몇 분 걸립니다.</string>
+    <string name="couldn_t_upload_it_s">업로드하지 못했습니다: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music은 300MB 이하의 MP3, M4A, WMA, FLAC, Ogg 파일을 받습니다.</string>
+    <string name="delete_from_your_uploads">업로드에서 삭제</string>
+    <string name="delete_s_from_youtube_music">YouTube Music에서 \'%1$s\'을(를) 삭제할까요?</string>
+    <string name="it_goes_from_your_uploads_for_good">모든 기기의 업로드에서 영구히 삭제됩니다. 되돌릴 수 없습니다.</string>
+    <string name="deleted_from_your_uploads">업로드에서 삭제했습니다</string>
+    <string name="couldn_t_delete_it_s">삭제하지 못했습니다: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music에 더 이상 표시되지 않습니다</string>
 </resources>

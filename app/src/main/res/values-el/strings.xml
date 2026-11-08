@@ -4992,4 +4992,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">Ένα πλακίδιο</string>
     <string name="pin_to_home_as_one_tile">Καρφίτσωμα στην Αρχική ως ένα πλακίδιο</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Μεταφόρτωση τραγουδιού</string>
+    <string name="uploading_s">Μεταφόρτωση %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">Το %1$s μεταφορτώθηκε. Θα εμφανιστεί εδώ μόλις το ετοιμάσει το YouTube Music, συνήθως σε λίγα λεπτά.</string>
+    <string name="couldn_t_upload_it_s">Δεν ήταν δυνατή η μεταφόρτωση: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">Το YouTube Music δέχεται αρχεία MP3, M4A, WMA, FLAC και Ogg έως 300 MB.</string>
+    <string name="delete_from_your_uploads">Διαγραφή από τις μεταφορτώσεις σου</string>
+    <string name="delete_s_from_youtube_music">Διαγραφή του «%1$s» από το YouTube Music;</string>
+    <string name="it_goes_from_your_uploads_for_good">Φεύγει από τις μεταφορτώσεις σου σε όλες τις συσκευές, οριστικά. Δεν αναιρείται.</string>
+    <string name="deleted_from_your_uploads">Διαγράφηκε από τις μεταφορτώσεις σου</string>
+    <string name="couldn_t_delete_it_s">Δεν ήταν δυνατή η διαγραφή: %1$s</string>
+    <string name="uploads_couldn_t_find_it">Το YouTube Music δεν το εμφανίζει πια</string>
 </resources>

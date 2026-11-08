@@ -5064,4 +5064,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">Une vignette</string>
     <string name="pin_to_home_as_one_tile">Épingler à l\'accueil en une vignette</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Importer un titre</string>
+    <string name="uploading_s">Importation de %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s est importé. Il apparaîtra ici dès que YouTube Music l\'aura préparé, en général en quelques minutes.</string>
+    <string name="couldn_t_upload_it_s">Impossible de l\'importer : %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music accepte les fichiers MP3, M4A, WMA, FLAC et Ogg jusqu\'à 300 Mo.</string>
+    <string name="delete_from_your_uploads">Supprimer de vos importations</string>
+    <string name="delete_s_from_youtube_music">Supprimer « %1$s » de YouTube Music ?</string>
+    <string name="it_goes_from_your_uploads_for_good">Il disparaît de vos importations sur tous vos appareils, définitivement. C\'est irréversible.</string>
+    <string name="deleted_from_your_uploads">Supprimé de vos importations</string>
+    <string name="couldn_t_delete_it_s">Impossible de le supprimer : %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music ne le liste plus</string>
 </resources>

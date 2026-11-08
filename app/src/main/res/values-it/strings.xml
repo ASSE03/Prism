@@ -5064,4 +5064,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">Un riquadro</string>
     <string name="pin_to_home_as_one_tile">Fissa nella Home come un riquadro</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Carica un brano</string>
+    <string name="uploading_s">Caricamento di %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s è caricato. Comparirà qui quando YouTube Music lo avrà pronto, di solito in pochi minuti.</string>
+    <string name="couldn_t_upload_it_s">Impossibile caricarlo: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music accetta file MP3, M4A, WMA, FLAC e Ogg fino a 300 MB.</string>
+    <string name="delete_from_your_uploads">Elimina dai tuoi caricamenti</string>
+    <string name="delete_s_from_youtube_music">Eliminare «%1$s» da YouTube Music?</string>
+    <string name="it_goes_from_your_uploads_for_good">Sparisce dai tuoi caricamenti su tutti i dispositivi, per sempre. Non si può annullare.</string>
+    <string name="deleted_from_your_uploads">Eliminato dai tuoi caricamenti</string>
+    <string name="couldn_t_delete_it_s">Impossibile eliminarlo: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music non lo elenca più</string>
 </resources>

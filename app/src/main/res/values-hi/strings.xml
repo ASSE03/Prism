@@ -4992,4 +4992,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">एक टाइल</string>
     <string name="pin_to_home_as_one_tile">होम पर एक टाइल के रूप में पिन करें</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">गाना अपलोड करें</string>
+    <string name="uploading_s">%1$s अपलोड हो रहा है…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s अपलोड हो गया। YouTube Music के तैयार करते ही यह यहाँ दिखेगा, आमतौर पर कुछ मिनटों में।</string>
+    <string name="couldn_t_upload_it_s">अपलोड नहीं हो सका: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music 300 MB तक की MP3, M4A, WMA, FLAC और Ogg फ़ाइलें लेता है।</string>
+    <string name="delete_from_your_uploads">आपके अपलोड से हटाएँ</string>
+    <string name="delete_s_from_youtube_music">YouTube Music से “%1$s” हटाएँ?</string>
+    <string name="it_goes_from_your_uploads_for_good">यह आपके सभी डिवाइस पर आपके अपलोड से हमेशा के लिए हट जाएगा। इसे वापस नहीं किया जा सकता।</string>
+    <string name="deleted_from_your_uploads">आपके अपलोड से हटा दिया गया</string>
+    <string name="couldn_t_delete_it_s">हटाया नहीं जा सका: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music अब इसे नहीं दिखाता</string>
 </resources>

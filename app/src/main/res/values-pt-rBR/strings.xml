@@ -5064,4 +5064,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">Um bloco</string>
     <string name="pin_to_home_as_one_tile">Fixar no Início como um bloco</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Enviar uma música</string>
+    <string name="uploading_s">Enviando %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s foi enviado. Ele aparece aqui quando o YouTube Music terminar de prepará-lo, geralmente em alguns minutos.</string>
+    <string name="couldn_t_upload_it_s">Não foi possível enviar: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">O YouTube Music aceita arquivos MP3, M4A, WMA, FLAC e Ogg de até 300 MB.</string>
+    <string name="delete_from_your_uploads">Excluir dos seus envios</string>
+    <string name="delete_s_from_youtube_music">Excluir \"%1$s\" do YouTube Music?</string>
+    <string name="it_goes_from_your_uploads_for_good">Some dos seus envios em todos os dispositivos, para sempre. Não dá para desfazer.</string>
+    <string name="deleted_from_your_uploads">Excluído dos seus envios</string>
+    <string name="couldn_t_delete_it_s">Não foi possível excluir: %1$s</string>
+    <string name="uploads_couldn_t_find_it">O YouTube Music não lista mais</string>
 </resources>

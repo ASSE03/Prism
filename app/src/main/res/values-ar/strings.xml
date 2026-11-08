@@ -5280,4 +5280,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">مربع واحد</string>
     <string name="pin_to_home_as_one_tile">تثبيت في الرئيسية كمربع واحد</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">رفع أغنية</string>
+    <string name="uploading_s">جارٍ رفع %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">تم رفع %1$s. ستظهر هنا عندما يجهّزها YouTube Music، عادةً خلال دقائق.</string>
+    <string name="couldn_t_upload_it_s">تعذّر الرفع: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">يقبل YouTube Music ملفات MP3 وM4A وWMA وFLAC وOgg حتى 300 ميغابايت.</string>
+    <string name="delete_from_your_uploads">حذف من ملفاتك المرفوعة</string>
+    <string name="delete_s_from_youtube_music">حذف «%1$s» من YouTube Music؟</string>
+    <string name="it_goes_from_your_uploads_for_good">تُحذف من ملفاتك المرفوعة على كل أجهزتك نهائيًا. لا يمكن التراجع عن ذلك.</string>
+    <string name="deleted_from_your_uploads">حُذفت من ملفاتك المرفوعة</string>
+    <string name="couldn_t_delete_it_s">تعذّر الحذف: %1$s</string>
+    <string name="uploads_couldn_t_find_it">لم يعد YouTube Music يعرضها</string>
 </resources>

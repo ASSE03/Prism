@@ -5136,4 +5136,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">Jeden kafelek</string>
     <string name="pin_to_home_as_one_tile">Przypnij do strony głównej jako kafelek</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Prześlij utwór</string>
+    <string name="uploading_s">Przesyłanie: %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">Przesłano %1$s. Pojawi się tutaj, gdy YouTube Music go przygotuje, zwykle za kilka minut.</string>
+    <string name="couldn_t_upload_it_s">Nie udało się przesłać: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music przyjmuje pliki MP3, M4A, WMA, FLAC i Ogg do 300 MB.</string>
+    <string name="delete_from_your_uploads">Usuń z przesłanych</string>
+    <string name="delete_s_from_youtube_music">Usunąć „%1$s” z YouTube Music?</string>
+    <string name="it_goes_from_your_uploads_for_good">Zniknie z przesłanych na wszystkich urządzeniach, na zawsze. Nie da się tego cofnąć.</string>
+    <string name="deleted_from_your_uploads">Usunięto z przesłanych</string>
+    <string name="couldn_t_delete_it_s">Nie udało się usunąć: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music już tego nie wyświetla</string>
 </resources>

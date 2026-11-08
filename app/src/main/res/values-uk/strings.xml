@@ -5136,4 +5136,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">Одна плитка</string>
     <string name="pin_to_home_as_one_tile">Закріпити на головній однією плиткою</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Завантажити трек</string>
+    <string name="uploading_s">Завантаження: %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s завантажено. Він з\'явиться тут, коли YouTube Music його підготує, зазвичай за кілька хвилин.</string>
+    <string name="couldn_t_upload_it_s">Не вдалося завантажити: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music приймає файли MP3, M4A, WMA, FLAC і Ogg розміром до 300 МБ.</string>
+    <string name="delete_from_your_uploads">Видалити із завантажень</string>
+    <string name="delete_s_from_youtube_music">Видалити «%1$s» з YouTube Music?</string>
+    <string name="it_goes_from_your_uploads_for_good">Він зникне із завантажень на всіх пристроях назавжди. Скасувати це не можна.</string>
+    <string name="deleted_from_your_uploads">Видалено із завантажень</string>
+    <string name="couldn_t_delete_it_s">Не вдалося видалити: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music його більше не показує</string>
 </resources>

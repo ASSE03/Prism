@@ -4992,4 +4992,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">En ruta</string>
     <string name="pin_to_home_as_one_tile">Fäst på Hem som en ruta</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Ladda upp en låt</string>
+    <string name="uploading_s">Laddar upp %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s är uppladdad. Den visas här när YouTube Music har gjort den klar, oftast inom några minuter.</string>
+    <string name="couldn_t_upload_it_s">Kunde inte ladda upp: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music tar MP3-, M4A-, WMA-, FLAC- och Ogg-filer på upp till 300 MB.</string>
+    <string name="delete_from_your_uploads">Ta bort från dina uppladdningar</string>
+    <string name="delete_s_from_youtube_music">Ta bort ”%1$s” från YouTube Music?</string>
+    <string name="it_goes_from_your_uploads_for_good">Den försvinner från dina uppladdningar på alla enheter, för gott. Det går inte att ångra.</string>
+    <string name="deleted_from_your_uploads">Borttagen från dina uppladdningar</string>
+    <string name="couldn_t_delete_it_s">Kunde inte ta bort: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music visar den inte längre</string>
 </resources>

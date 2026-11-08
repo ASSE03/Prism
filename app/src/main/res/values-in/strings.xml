@@ -4920,4 +4920,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">Satu ubin</string>
     <string name="pin_to_home_as_one_tile">Sematkan ke Beranda sebagai satu ubin</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Unggah lagu</string>
+    <string name="uploading_s">Mengunggah %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s sudah diunggah. Lagu muncul di sini setelah YouTube Music menyiapkannya, biasanya dalam beberapa menit.</string>
+    <string name="couldn_t_upload_it_s">Tidak bisa mengunggah: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music menerima file MP3, M4A, WMA, FLAC, dan Ogg hingga 300 MB.</string>
+    <string name="delete_from_your_uploads">Hapus dari unggahan kamu</string>
+    <string name="delete_s_from_youtube_music">Hapus \"%1$s\" dari YouTube Music?</string>
+    <string name="it_goes_from_your_uploads_for_good">Lagu hilang dari unggahan kamu di semua perangkat, selamanya. Tidak bisa dibatalkan.</string>
+    <string name="deleted_from_your_uploads">Dihapus dari unggahan kamu</string>
+    <string name="couldn_t_delete_it_s">Tidak bisa menghapus: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music sudah tidak menampilkannya</string>
 </resources>

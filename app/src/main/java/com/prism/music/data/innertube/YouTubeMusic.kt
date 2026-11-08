@@ -871,6 +871,20 @@ class YouTubeMusic(
     suspend fun uploadedArtists(maxPages: Int = 40): Parser.UploadRows<ArtistItem> =
         allUploadPages(maxPages, browse("FEmusic_library_privately_owned_artists"), Parser::uploadArtistRows)
 
+    /**
+     * Deletes an upload from the account for good (1.8.3, D49), as ytmusicapi's delete_upload_entity: a song's entity id
+     * ([Parser.UploadRows.entities]) or an uploaded album's page id. Throws when YouTube refuses.
+     */
+    suspend fun deleteUpload(entityId: String) {
+        val id = entityId.removePrefix("FEmusic_library_privately_owned_release_detail")
+        val res = api.post("music/delete_privately_owned_entity", buildJsonObject { put("entityId", id) })
+        res["error"]?.let { e -> throw InnerTubeException(e.str("message") ?: "YouTube Music didn't delete it") }
+    }
+
+    /** Uploads a music file to the account (1.8.3, D49): see [InnerTube.uploadSong]. */
+    suspend fun uploadSong(fileName: String, size: Long, body: okhttp3.RequestBody) =
+        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { api.uploadSong(fileName, size, body) }
+
     private suspend fun <T : com.prism.music.data.model.BrowseItem> allUploadPages(maxPages: Int, first: JsonObject, read: (JsonElement) -> Parser.UploadRows<T>): Parser.UploadRows<T> {
         var page = read(first)
         val items = page.items.toMutableList()

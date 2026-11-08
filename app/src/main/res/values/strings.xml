@@ -5021,4 +5021,16 @@
     <!-- 1.8.3 Pin as one tile -->
     <string name="one_tile">One tile</string>
     <string name="pin_to_home_as_one_tile">Pin to Home as one tile</string>
+    <!-- 1.8.3 Uploads: delete and upload -->
+    <string name="upload_a_song">Upload a song</string>
+    <string name="uploading_s">Uploading %1$s…</string>
+    <string name="uploaded_s_it_shows_up_here">%1$s is uploaded. It shows up here once YouTube Music has it ready, usually in a few minutes.</string>
+    <string name="couldn_t_upload_it_s">Couldn\'t upload it: %1$s</string>
+    <string name="youtube_music_takes_mp3_m4a">YouTube Music takes MP3, M4A, WMA, FLAC and Ogg files of up to 300 MB.</string>
+    <string name="delete_from_your_uploads">Delete from your uploads</string>
+    <string name="delete_s_from_youtube_music">Delete “%1$s” from YouTube Music?</string>
+    <string name="it_goes_from_your_uploads_for_good">It goes from your uploads on every device, for good. This can\'t be undone.</string>
+    <string name="deleted_from_your_uploads">Deleted from your uploads</string>
+    <string name="couldn_t_delete_it_s">Couldn\'t delete it: %1$s</string>
+    <string name="uploads_couldn_t_find_it">YouTube Music didn\'t list it any more</string>
 </resources>

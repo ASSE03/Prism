@@ -461,12 +461,24 @@ object Parser {
         return ArtistItem(id, name, flexColumn(r, 1).joinToString("") { it.str("text") ?: "" }, r.obj("thumbnail").bestThumbnail())
     }
 
-    /** One page of uploaded songs. [rows]: how many rows the answer had, so a shape Prism can't read tells from an empty list. */
-    class UploadRows<T>(val items: List<T>, val rows: Int, val next: String?)
+    /**
+     * One page of uploaded songs. [rows]: how many rows the answer had, so a shape Prism can't read tells from an empty list.
+     * [entities]: each song's id to delete it by (1.8.3, D49), where its row's menu had one.
+     */
+    class UploadRows<T>(val items: List<T>, val rows: Int, val next: String?, val entities: Map<String, String> = emptyMap())
+
+    /**
+     * What an uploaded song is deleted by (1.8.3, D49): the entity id in its row's "Delete" confirm, where ytmusicapi
+     * reads it (parsers/uploads.py: the menu's last item, confirmDialogEndpoint → musicDeletePrivatelyOwnedEntityCommand).
+     */
+    fun uploadEntityId(r: JsonObject): String? =
+        r.arr("menu", "menuRenderer", "items")?.firstNotNullOfOrNull { it.findFirst("musicDeletePrivatelyOwnedEntityCommand").str("entityId") }
 
     fun uploadSongRows(root: JsonElement, album: AlbumRef? = null): UploadRows<Song> {
         val rows = root.findAll("musicResponsiveListItemRenderer")
-        return UploadRows(rows.mapNotNull { uploadSong(it, album) }.distinctBy { it.id }, rows.size, continuation(root))
+        val entities = HashMap<String, String>()
+        val songs = rows.mapNotNull { r -> uploadSong(r, album)?.also { s -> uploadEntityId(r)?.let { entities[s.id] = it } } }.distinctBy { it.id }
+        return UploadRows(songs, rows.size, continuation(root), entities)
     }
 
     fun uploadAlbumCards(root: JsonElement): UploadRows<AlbumItem> {
