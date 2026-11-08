@@ -5130,4 +5130,7 @@
         <item quantity="many">Tím z playlistu zmizí %d skladby i na YouTube Music.</item>
         <item quantity="other">Tím z playlistu zmizí %d skladeb i na YouTube Music.</item>
     </plurals>
+    <!-- 1.8.3 Your file as a version -->
+    <string name="your_file">Tvůj soubor</string>
+    <string name="choose_a_file_on_this_phone">Vybrat soubor v tomto telefonu</string>
 </resources>

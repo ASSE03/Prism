@@ -5058,4 +5058,7 @@
         <item quantity="many">Isso tira %d músicas da playlist também no YouTube Music.</item>
         <item quantity="other">Isso tira %d músicas da playlist também no YouTube Music.</item>
     </plurals>
+    <!-- 1.8.3 Your file as a version -->
+    <string name="your_file">Seu arquivo</string>
+    <string name="choose_a_file_on_this_phone">Escolher um arquivo deste celular</string>
 </resources>

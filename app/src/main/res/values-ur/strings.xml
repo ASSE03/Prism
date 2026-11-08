@@ -4986,4 +4986,7 @@
         <item quantity="one">اس سے %d گانا YouTube Music پر بھی پلے لسٹ سے نکل جائے گا۔</item>
         <item quantity="other">اس سے %d گانے YouTube Music پر بھی پلے لسٹ سے نکل جائیں گے۔</item>
     </plurals>
+    <!-- 1.8.3 Your file as a version -->
+    <string name="your_file">آپ کی فائل</string>
+    <string name="choose_a_file_on_this_phone">اس فون سے فائل چنیں</string>
 </resources>

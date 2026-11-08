@@ -5058,4 +5058,7 @@
         <item quantity="many">Cela retire %d titres de la playlist sur YouTube Music aussi.</item>
         <item quantity="other">Cela retire %d titres de la playlist sur YouTube Music aussi.</item>
     </plurals>
+    <!-- 1.8.3 Your file as a version -->
+    <string name="your_file">Votre fichier</string>
+    <string name="choose_a_file_on_this_phone">Choisir un fichier de ce téléphone</string>
 </resources>

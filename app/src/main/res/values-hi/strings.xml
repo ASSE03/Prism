@@ -4986,4 +4986,7 @@
         <item quantity="one">इससे %d गाना YouTube Music पर भी प्लेलिस्ट से हट जाएगा।</item>
         <item quantity="other">इससे %d गाने YouTube Music पर भी प्लेलिस्ट से हट जाएंगे।</item>
     </plurals>
+    <!-- 1.8.3 Your file as a version -->
+    <string name="your_file">आपकी फ़ाइल</string>
+    <string name="choose_a_file_on_this_phone">इस फ़ोन से फ़ाइल चुनें</string>
 </resources>

@@ -335,7 +335,7 @@ class AppContainer(val app: Application) {
     val db = PrismDatabase.build(app)
     /** Versions of songs the listener picked to hear instead (1.7.9, "Play a different version"). */
     val versions = com.prism.music.data.SongVersions(app.getSharedPreferences("song_versions", android.content.Context.MODE_PRIVATE))
-    val streams by lazy { StreamResolver(app, http, settings, innerTube).apply { versionOf = versions::of } }
+    val streams by lazy { StreamResolver(app, http, settings, innerTube).apply { versionOf = versions::streamedOf } }
     val translator = com.prism.music.data.lyrics.LyricsTranslator(http, File(app.filesDir, "translations"))
     /** Artist pages' Wikipedia bios (1.8.2), kept with the artist pages. Asks nothing unless that switch is on. */
     val artistBios by lazy {
@@ -750,7 +750,7 @@ class AppContainer(val app: Application) {
      * still saving the one it had been playing: what it saved after went in under the song, and back on its own
      * recording the song couldn't be read and stopped playing (1.7.9's check, "Woke Up Older").
      */
-    fun songCacheKey(id: String): String = versions.of(id) ?: id
+    fun songCacheKey(id: String): String = versions.streamedOf(id) ?: id
 
     /**
      * Plays [pick] in [song]'s place from now on (null: its own sound again). The version's measurements go, and a
@@ -769,7 +769,8 @@ class AppContainer(val app: Application) {
                 kotlinx.coroutines.withContext(Dispatchers.IO) {
                     mixTempo.forget(song.id)
                     waves.forget(song.id)
-                    downloads.redownload(song.id, unfinished = true)
+                    // A file on the phone (1.8.3) is there already: a download stays the song's own.
+                    if (pick?.id?.startsWith(com.prism.music.data.model.Song.LOCAL_PREFIX) != true) downloads.redownload(song.id, unfinished = true)
                 }
             }
         }

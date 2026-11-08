@@ -4914,4 +4914,7 @@
     <plurals name="this_takes_n_songs_out_on_youtube">
         <item quantity="other">Thao tác này cũng đưa %d bài ra khỏi danh sách phát trên YouTube Music.</item>
     </plurals>
+    <!-- 1.8.3 Your file as a version -->
+    <string name="your_file">Tệp của bạn</string>
+    <string name="choose_a_file_on_this_phone">Chọn một tệp trên điện thoại này</string>
 </resources>

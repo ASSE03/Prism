@@ -2346,6 +2346,17 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             scope.launch { applyStreamStats(item.mediaId) }
             return uri
         }
+        // A file on the phone picked as this song's version (1.8.3, #243): played from the file, whatever the lossless
+        // switches say. A file that's gone plays the song as usual.
+        c.versions.fileOf(item.mediaId)?.let { file ->
+            // Once the phone's files have been read, only one that's still there (before that, its MediaStore address).
+            (c.localMusic.track(file)?.uri ?: c.localMusic.uriFor(file).takeIf { !c.localMusic.scanned.value })?.let { uri ->
+                val format = c.localMusic.track(file)?.mime?.let(::fileFormatName)
+                c.streamDetails[item.mediaId] = "Your file on this phone" + (format?.let { " · $it" } ?: "") to null
+                scope.launch { applyStreamStats(item.mediaId) }
+                return uri
+            }
+        }
         // Lossless files need lossless playback, as in 1.8.0; your own MP3/AAC/Ogg files (#314) need only their switch,
         // and give way to a lossless file of the same song ([com.prism.music.data.local.PlaySourceRule]).
         val kinds = com.prism.music.data.local.OwnFiles.kinds(c.settings.current)

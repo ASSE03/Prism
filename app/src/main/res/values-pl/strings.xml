@@ -5130,4 +5130,7 @@
         <item quantity="many">To usunie %d utworów z playlisty także w YouTube Music.</item>
         <item quantity="other">To usunie %d utworu z playlisty także w YouTube Music.</item>
     </plurals>
+    <!-- 1.8.3 Your file as a version -->
+    <string name="your_file">Twój plik</string>
+    <string name="choose_a_file_on_this_phone">Wybierz plik z tego telefonu</string>
 </resources>

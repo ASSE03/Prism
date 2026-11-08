@@ -4986,4 +4986,7 @@
         <item quantity="one">এতে YouTube Music-এও প্লেলিস্ট থেকে %dটি গান সরে যাবে।</item>
         <item quantity="other">এতে YouTube Music-এও প্লেলিস্ট থেকে %dটি গান সরে যাবে।</item>
     </plurals>
+    <!-- 1.8.3 Your file as a version -->
+    <string name="your_file">আপনার ফাইল</string>
+    <string name="choose_a_file_on_this_phone">এই ফোন থেকে একটি ফাইল বাছুন</string>
 </resources>

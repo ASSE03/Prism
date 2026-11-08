@@ -5130,4 +5130,7 @@
         <item quantity="many">%d песен будут убраны из плейлиста и в YouTube Music.</item>
         <item quantity="other">%d песни будут убраны из плейлиста и в YouTube Music.</item>
     </plurals>
+    <!-- 1.8.3 Your file as a version -->
+    <string name="your_file">Твой файл</string>
+    <string name="choose_a_file_on_this_phone">Выбрать файл на этом телефоне</string>
 </resources>
