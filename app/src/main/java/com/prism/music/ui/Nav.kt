@@ -79,7 +79,7 @@ object Routes {
     /** One of the listener's tags (1.8.3), by its name. */
     fun tag(name: String) = "tag/${Uri.encode(name)}"
     /** Searching your library (1.8.3), with [query] typed in. */
-    fun librarySearch(query: String = "") = "librarySearch?q=${Uri.encode(query)}"
+    fun librarySearch(query: String = "") = "library-search?q=${Uri.encode(query)}"
     fun artist(id: String) = "artist/${Uri.encode(id)}"
     /** An artist's page; one a song names without a link (#78) is looked up by name when it opens. */
     fun artist(ref: com.prism.music.data.model.ArtistRef) =
