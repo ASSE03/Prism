@@ -4889,4 +4889,8 @@
     <string name="rule_days">วันที่ผ่านมา</string>
     <string name="genre_example">ป๊อป ฮิปฮอป ร็อก…</string>
     <string name="your_listening">การฟังของคุณ</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">เพลงจาก</string>
+    <string name="your_likes_stay_as_they_are">เปลี่ยนแค่สิ่งที่แท็บนี้แสดง เพลงที่คุณถูกใจยังคงเหมือนเดิม</string>
+    <string name="search_these_songs">ค้นหาในเพลงเหล่านี้</string>
 </resources>

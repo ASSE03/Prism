@@ -4957,4 +4957,8 @@
     <string name="rule_days">araw</string>
     <string name="genre_example">Pop, hip-hop, rock…</string>
     <string name="your_listening">Ang pinapakinggan mo</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">Mga kanta mula sa</string>
+    <string name="your_likes_stay_as_they_are">Ang ipinapakita lang ng tab na ito ang nagbabago. Hindi nagbabago ang mga like mo.</string>
+    <string name="search_these_songs">Maghanap sa mga kantang ito</string>
 </resources>

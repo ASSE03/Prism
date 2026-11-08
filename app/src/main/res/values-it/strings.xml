@@ -5025,4 +5025,8 @@
     <string name="rule_days">giorni</string>
     <string name="genre_example">Pop, hip hop, rock…</string>
     <string name="your_listening">I tuoi ascolti</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">Brani da</string>
+    <string name="your_likes_stay_as_they_are">Cambia solo ciò che mostra questa scheda. I tuoi Mi piace restano come sono.</string>
+    <string name="search_these_songs">Cerca in questi brani</string>
 </resources>

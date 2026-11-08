@@ -5025,4 +5025,8 @@
     <string name="rule_days">días</string>
     <string name="genre_example">Pop, hip hop, rock…</string>
     <string name="your_listening">Lo que escuchas</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">Canciones de</string>
+    <string name="your_likes_stay_as_they_are">Solo cambia lo que muestra esta pestaña. Tus me gusta quedan igual.</string>
+    <string name="search_these_songs">Buscar en estas canciones</string>
 </resources>

@@ -4957,4 +4957,8 @@
     <string name="rule_days">দিনে</string>
     <string name="genre_example">পপ, হিপ-হপ, রক…</string>
     <string name="your_listening">আপনার শোনা</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">যেখান থেকে গান</string>
+    <string name="your_likes_stay_as_they_are">শুধু এই ট্যাবে যা দেখায় তা বদলায়। আপনার পছন্দগুলো যেমন আছে তেমনই থাকে।</string>
+    <string name="search_these_songs">এই গানগুলোতে খুঁজুন</string>
 </resources>

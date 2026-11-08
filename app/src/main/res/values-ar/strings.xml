@@ -5229,4 +5229,8 @@
     <string name="rule_days">يومًا</string>
     <string name="genre_example">بوب، هيب هوب، روك…</string>
     <string name="your_listening">ما تستمع إليه</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">أغانٍ من</string>
+    <string name="your_likes_stay_as_they_are">يتغير ما يعرضه هذا التبويب فقط. تبقى إعجاباتك كما هي.</string>
+    <string name="search_these_songs">البحث في هذه الأغاني</string>
 </resources>

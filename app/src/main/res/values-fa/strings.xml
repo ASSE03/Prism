@@ -4957,4 +4957,8 @@
     <string name="rule_days">روز</string>
     <string name="genre_example">پاپ، هیپ‌هاپ، راک…</string>
     <string name="your_listening">شنیده‌های شما</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">آهنگ‌ها از</string>
+    <string name="your_likes_stay_as_they_are">فقط آنچه این زبانه نشان می‌دهد عوض می‌شود. پسندهای شما همان‌طور می‌مانند.</string>
+    <string name="search_these_songs">جست‌وجو در این آهنگ‌ها</string>
 </resources>

@@ -4957,4 +4957,8 @@
     <string name="rule_days">दिनों में</string>
     <string name="genre_example">पॉप, हिप-हॉप, रॉक…</string>
     <string name="your_listening">आपकी सुनाई</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">गाने यहां से</string>
+    <string name="your_likes_stay_as_they_are">सिर्फ़ यह टैब जो दिखाता है वह बदलता है। आपकी पसंद वैसी ही रहती है।</string>
+    <string name="search_these_songs">इन गानों में खोजें</string>
 </resources>

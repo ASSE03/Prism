@@ -4889,4 +4889,8 @@
     <string name="rule_days">hari terakhir</string>
     <string name="genre_example">Pop, hip-hop, rock…</string>
     <string name="your_listening">Yang kamu dengar</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">Lagu dari</string>
+    <string name="your_likes_stay_as_they_are">Hanya yang ditampilkan tab ini yang berubah. Lagu yang kamu sukai tetap seperti semula.</string>
+    <string name="search_these_songs">Cari di lagu-lagu ini</string>
 </resources>

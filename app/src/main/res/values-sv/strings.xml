@@ -4957,4 +4957,8 @@
     <string name="rule_days">dagarna</string>
     <string name="genre_example">Pop, hiphop, rock …</string>
     <string name="your_listening">Ditt lyssnande</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">Låtar från</string>
+    <string name="your_likes_stay_as_they_are">Bara det fliken visar ändras. Dina gillade låtar förblir som de är.</string>
+    <string name="search_these_songs">Sök i de här låtarna</string>
 </resources>

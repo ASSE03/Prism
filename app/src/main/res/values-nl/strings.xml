@@ -4957,4 +4957,8 @@
     <string name="rule_days">dagen</string>
     <string name="genre_example">Pop, hiphop, rock…</string>
     <string name="your_listening">Wat je luistert</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">Nummers uit</string>
+    <string name="your_likes_stay_as_they_are">Alleen wat dit tabblad toont verandert. Je likes blijven zoals ze zijn.</string>
+    <string name="search_these_songs">Zoek in deze nummers</string>
 </resources>

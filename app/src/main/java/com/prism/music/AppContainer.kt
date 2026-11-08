@@ -483,6 +483,28 @@ class AppContainer(val app: Application) {
     val smart by lazy {
         com.prism.music.data.SmartPlaylists(db, { downloads.completedSongs() }, { localMusic.tracks.value.map { it.song } }, { meta.cachedGenres(it) })
     }
+    /**
+     * Whole playlists for Library → Songs' "From" (1.8.3, #382): Prism's own from the phone, YouTube's page after page
+     * (the copy kept on the phone without a network).
+     */
+    val playlistSongs by lazy {
+        com.prism.music.data.PlaylistSongs { id ->
+            prismLibrary.list(id)?.songs ?: run {
+                val page = try { ytm.playlist(id) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (e: Exception) {
+                    offline.page(id) ?: offline.page("VL$id") ?: throw e
+                }
+                val songs = page.songs.toMutableList()
+                var token = page.continuation
+                while (token != null && songs.size < com.prism.music.data.PlaylistSongs.MAX) {
+                    val chunk = runCatching { ytm.playlistPage(token!!) }.getOrNull() ?: break
+                    if (chunk.songs.isEmpty()) break
+                    songs += chunk.songs
+                    token = chunk.next
+                }
+                songs.distinctBy { it.id }
+            }
+        }
+    }
     /** "Measure now" on a smart playlist: the songs its Sound rules can't see yet, scanned one by one (Wi-Fi for streams). */
     val smartMeasure by lazy {
         com.prism.music.data.SmartMeasure(scope, { id, network -> mixTempo.measure(id, network = network, key = true) }) {

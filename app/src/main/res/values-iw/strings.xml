@@ -5025,4 +5025,8 @@
     <string name="rule_days">הימים האחרונים</string>
     <string name="genre_example">פופ, היפ-הופ, רוק…</string>
     <string name="your_listening">ההאזנה שלך</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">שירים מתוך</string>
+    <string name="your_likes_stay_as_they_are">רק מה שהכרטיסייה הזו מציגה משתנה. הלייקים שלך נשארים כמו שהם.</string>
+    <string name="search_these_songs">חיפוש בשירים האלה</string>
 </resources>

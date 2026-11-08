@@ -227,12 +227,26 @@ fun LibraryScreen(bottomPadding: Dp) {
     var artistQuery by rememberSaveable { mutableStateOf("") }
     var albumSort by remember { mutableStateOf(AlbumSort.entries.firstOrNull { it.name == c.library.sortOf("library:albums") } ?: AlbumSort.LIBRARY) }
     var artistSort by remember { mutableStateOf(ArtistSort.entries.firstOrNull { it.name == c.library.sortOf("library:artists") } ?: ArtistSort.LIBRARY) }
-    val sortedSongs = remember(liked, songSort) {
+    // Songs "From" (1.8.3, #382): liked songs and the songs of playlists the listener picks, once each. Prism's own
+    // lists are read as they are now; YouTube's are loaded whole once per session.
+    var songsFrom by remember { mutableStateOf(com.prism.music.data.SongsFrom.decode(c.library.sortOf(com.prism.music.data.SongsFrom.KEY))) }
+    val fromLoaded by androidx.compose.runtime.produceState(emptyMap<String, List<com.prism.music.data.model.Song>>(), songsFrom.playlists) {
+        songsFrom.playlists.filter { !com.prism.music.data.PrismLibrary.isPrismList(it) }.forEach { id ->
+            c.playlistSongs.songs(id)?.let { value = value + (id to it) }
+        }
+    }
+    val fromLoading = songsFrom.playlists.any { !com.prism.music.data.PrismLibrary.isPrismList(it) && it !in fromLoaded }
+    val songsBase = remember(liked, songsFrom, prismLists, fromLoaded) {
+        if (songsFrom.isDefault) liked
+        else com.prism.music.data.SongsFrom.merge(liked, songsFrom.playlists.map { id -> prismLists.firstOrNull { it.id == id }?.songs ?: fromLoaded[id].orEmpty() }, songsFrom)
+    }
+    var choosingFrom by remember { mutableStateOf(false) }
+    val sortedSongs = remember(songsBase, songSort) {
         when (songSort) {
-            SongSort.RECENT -> liked
-            SongSort.TITLE -> liked.sortedBy { it.title.lowercase() }
-            SongSort.ARTIST -> liked.sortedWith(compareBy<com.prism.music.data.model.Song> { it.primaryArtist.lowercase() }.thenBy { it.album?.title?.lowercase() ?: "" })
-            SongSort.ALBUM -> liked.sortedWith(compareBy<com.prism.music.data.model.Song> { it.album?.title?.lowercase() ?: "\uFFFF" }.thenBy { it.title.lowercase() })
+            SongSort.RECENT -> songsBase
+            SongSort.TITLE -> songsBase.sortedBy { it.title.lowercase() }
+            SongSort.ARTIST -> songsBase.sortedWith(compareBy<com.prism.music.data.model.Song> { it.primaryArtist.lowercase() }.thenBy { it.album?.title?.lowercase() ?: "" })
+            SongSort.ALBUM -> songsBase.sortedWith(compareBy<com.prism.music.data.model.Song> { it.album?.title?.lowercase() ?: "\uFFFF" }.thenBy { it.title.lowercase() })
         }
     }
     val shownSongs = remember(sortedSongs, songQuery) {
@@ -284,6 +298,12 @@ fun LibraryScreen(bottomPadding: Dp) {
     val myPlaylists = remember(playlists, prismLists, savedPlaylists, settings.isLoggedIn) {
         // A Spotify playlist (1.8.1) says so where Prism's own say "Prism playlist".
         prismLists.map { l -> l.item().let { if (c.spotify.isSpotifyPlaylist(l.id)) it.copy(subtitle = tr(R.string.spot_playlist_subtitle, com.prism.music.data.model.songCount(l.songs.size))) else it } } + (if (settings.isLoggedIn) emptyList() else savedPlaylists.map { it.item() }) + playlists.filter { it.id != "LM" }
+    }
+    if (choosingFrom) SongsFromSheet(songsFrom, myPlaylists, { choosingFrom = false }) { chosen ->
+        // Opened again: a YouTube playlist picked anew is read afresh.
+        chosen.playlists.filter { it !in songsFrom.playlists }.forEach { c.playlistSongs.refresh(it) }
+        songsFrom = chosen
+        c.library.setSort(com.prism.music.data.SongsFrom.KEY, if (chosen.isDefault) null else chosen.encode())
     }
     // Spotify playlists the listener follows or saved (1.8.1): named after the playlists, greyed, their songs not shared.
     val spotifyFollowed by c.spotify.followedShown.collectAsState()
@@ -421,7 +441,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                 val empty = when (tab) {
                     LibTab.ALBUMS -> albums.isEmpty()
                     LibTab.ARTISTS -> artists.isEmpty()
-                    LibTab.SONGS -> liked.isEmpty()
+                    LibTab.SONGS -> songsBase.isEmpty() && songsFrom.isDefault
                     else -> false
                 }
                 if (empty) item(span = { GridItemSpan(maxLineSpan) }) {
@@ -550,23 +570,39 @@ fun LibraryScreen(bottomPadding: Dp) {
                     LibTab.SONGS -> {
                         // As the Liked songs page has them (#184: the tab had no search, Shuffle or Play): a search through
                         // your liked songs, and Shuffle / Play for what's shown.
-                        val source = com.prism.music.playback.QueueSource(com.prism.music.playback.QueueKind.LIBRARY, tr(R.string.liked_songs))
-                        if (liked.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
+                        val source = com.prism.music.playback.QueueSource(com.prism.music.playback.QueueKind.LIBRARY, if (songsFrom.isDefault) tr(R.string.liked_songs) else tr(R.string.songs))
+                        // Where the songs come from (1.8.3, #382): liked songs, and playlists of the listener's choosing.
+                        item(span = { GridItemSpan(maxLineSpan) }, key = "songsFrom") {
+                            Row(Modifier.padding(horizontal = 12.dp, vertical = 2.dp), verticalAlignment = Alignment.CenterVertically) {
+                                com.prism.music.ui.components.PrismChip(
+                                    !songsFrom.isDefault, { choosingFrom = true }, songsFromLabel(songsFrom),
+                                    Modifier.testTag("songsFrom"), icon = PrismIcons.QueueMusic,
+                                )
+                                if (fromLoading) {
+                                    Spacer(Modifier.width(10.dp))
+                                    androidx.compose.material3.CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
+                                }
+                            }
+                        }
+                        if (songsBase.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
                             Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                                com.prism.music.ui.components.SearchField(songQuery, tr(R.string.search_liked_songs), { q -> songQuery = q }, Modifier.weight(1f))
+                                com.prism.music.ui.components.SearchField(songQuery, if (songsFrom.isDefault) tr(R.string.search_liked_songs) else tr(R.string.search_these_songs), { q -> songQuery = q }, Modifier.weight(1f))
                                 Spacer(Modifier.width(8.dp))
                                 com.prism.music.ui.components.RoundAction(PrismIcons.Shuffle, tr(R.string.shuffle)) { if (shownSongs.isNotEmpty()) c.player.playQueue(shownSongs, 0, source, shuffle = true) }
                                 Spacer(Modifier.width(8.dp))
                                 com.prism.music.ui.components.RoundAction(PrismIcons.Play, tr(R.string.widget_play)) { if (shownSongs.isNotEmpty()) c.player.playQueue(shownSongs, 0, source) }
                             }
                         }
-                        if (liked.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
-                            SortBar(com.prism.music.data.model.songCount(shownSongs.size), SongSort.entries, songSort, { it.label }) { songSort = it; c.library.setSort("library:songs", it.name) }
+                        if (songsBase.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
+                            // With playlists' songs too, the first order is liked songs, then each playlist's own order.
+                            SortBar(com.prism.music.data.model.songCount(shownSongs.size), SongSort.entries, songSort, {
+                                if (it == SongSort.RECENT && !songsFrom.isDefault) tr(R.string.original_order) else it.label
+                            }) { songSort = it; c.library.setSort("library:songs", it.name) }
                         }
                         items(shownSongs, key = { "s" + it.id }, span = { GridItemSpan(maxLineSpan) }) { s ->
                             SongRow(s) { c.player.playQueue(shownSongs, shownSongs.indexOf(s), source) }
                         }
-                        if (liked.isNotEmpty() && shownSongs.isEmpty() && songQuery.isNotBlank()) nothingFound(tr(R.string.songs), songQuery)
+                        if (songsBase.isNotEmpty() && shownSongs.isEmpty() && songQuery.isNotBlank()) nothingFound(tr(R.string.songs), songQuery)
                     }
                     LibTab.ALBUMS -> {
                         findField(albumQuery, tr(R.string.search_albums), albums.size) { albumQuery = it }
@@ -987,4 +1023,53 @@ private fun OpenPlaylistLinkDialog(onDismiss: () -> Unit, onOpen: (String) -> Un
         confirmButton = { PrismTextButton(onClick = { id?.let(onOpen) }, enabled = id != null) { Text(tr(R.string.open)) } },
         dismissButton = { PrismTextButton(onClick = onDismiss) { Text(tr(R.string.cancel)) } },
     )
+}
+
+/** Songs' "From" chip: "Liked songs", "Liked songs + 2 playlists", "3 playlists". */
+internal fun songsFromLabel(from: com.prism.music.data.SongsFrom): String = listOfNotNull(
+    tr(R.string.liked_songs).takeIf { from.liked },
+    from.playlists.size.takeIf { it > 0 }?.let { trp(R.plurals.n_playlists, it) },
+).joinToString(" + ")
+
+/** Library → Songs → From (1.8.3, #382): liked songs and any of the listener's playlists, ticked. Only a view. */
+@Composable
+private fun SongsFromSheet(
+    current: com.prism.music.data.SongsFrom,
+    playlists: List<com.prism.music.data.model.BrowseItem>,
+    onDismiss: () -> Unit,
+    onDone: (com.prism.music.data.SongsFrom) -> Unit,
+) {
+    var liked by remember { mutableStateOf(current.liked) }
+    val picked = remember { androidx.compose.runtime.mutableStateListOf<String>().apply { addAll(current.playlists) } }
+    @Composable
+    fun Tick(label: String, sub: String?, on: Boolean, tag: String, toggle: () -> Unit) = Row(
+        Modifier.fillMaxWidth().clickable(onClick = toggle).padding(horizontal = 12.dp, vertical = 6.dp).testTag(tag),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        androidx.compose.material3.Checkbox(on, { toggle() })
+        Column(Modifier.weight(1f).padding(start = 6.dp)) {
+            Text(label, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
+            if (!sub.isNullOrBlank()) Text(sub, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
+        }
+    }
+    com.prism.music.ui.components.PrismSheet(onDismiss = onDismiss) {
+        Column(Modifier.padding(bottom = 16.dp).testTag("songsFromSheet")) {
+            Text(tr(R.string.songs_from), style = MaterialTheme.typography.titleLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.Medium, modifier = Modifier.padding(horizontal = 20.dp))
+            Text(tr(R.string.your_likes_stay_as_they_are), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 2.dp, bottom = 8.dp))
+            androidx.compose.foundation.lazy.LazyColumn(Modifier.weight(1f, fill = false)) {
+                item { Tick(tr(R.string.liked_songs), null, liked, "from:liked") { liked = !liked } }
+                items(playlists.size, key = { playlists[it].id }) { i ->
+                    val p = playlists[i]
+                    Tick(p.title, p.subtitle, p.id in picked, "from:${p.id}") { if (p.id in picked) picked.remove(p.id) else picked.add(p.id) }
+                }
+            }
+            Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp), horizontalArrangement = Arrangement.End) {
+                PrismTextButton(onClick = onDismiss) { Text(tr(R.string.cancel)) }
+                // Nothing ticked would be an empty tab: it needs one or the other.
+                PrismTextButton(onClick = { onDone(com.prism.music.data.SongsFrom(liked, picked.toList())); onDismiss() }, enabled = liked || picked.isNotEmpty(), modifier = Modifier.testTag("fromDone")) {
+                    Text(tr(R.string.done))
+                }
+            }
+        }
+    }
 }

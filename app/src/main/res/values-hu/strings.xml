@@ -4957,4 +4957,8 @@
     <string name="rule_days">napban</string>
     <string name="genre_example">Pop, hiphop, rock…</string>
     <string name="your_listening">Hallgatásaid</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">Dalok innen</string>
+    <string name="your_likes_stay_as_they_are">Csak az változik, amit ez a lap mutat. A kedvelt dalaid maradnak.</string>
+    <string name="search_these_songs">Keresés ezekben a dalokban</string>
 </resources>

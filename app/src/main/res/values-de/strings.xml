@@ -4957,4 +4957,8 @@
     <string name="rule_days">Tagen</string>
     <string name="genre_example">Pop, Hip-Hop, Rock …</string>
     <string name="your_listening">Dein Hören</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">Songs aus</string>
+    <string name="your_likes_stay_as_they_are">Nur die Anzeige dieses Tabs ändert sich. Deine Likes bleiben, wie sie sind.</string>
+    <string name="search_these_songs">Diese Songs durchsuchen</string>
 </resources>

@@ -4889,4 +4889,8 @@
     <string name="rule_days">日間</string>
     <string name="genre_example">ポップ、ヒップホップ、ロック…</string>
     <string name="your_listening">あなたの再生</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">曲の取得元</string>
+    <string name="your_likes_stay_as_they_are">変わるのはこのタブの表示だけです。高評価はそのままです。</string>
+    <string name="search_these_songs">これらの曲を検索</string>
 </resources>

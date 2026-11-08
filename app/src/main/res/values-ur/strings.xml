@@ -4957,4 +4957,8 @@
     <string name="rule_days">دنوں میں</string>
     <string name="genre_example">پاپ، ہپ ہاپ، راک…</string>
     <string name="your_listening">آپ کا سننا</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">گانے یہاں سے</string>
+    <string name="your_likes_stay_as_they_are">صرف وہ بدلتا ہے جو یہ ٹیب دکھاتا ہے۔ آپ کی پسند ویسی ہی رہتی ہے۔</string>
+    <string name="search_these_songs">ان گانوں میں تلاش کریں</string>
 </resources>

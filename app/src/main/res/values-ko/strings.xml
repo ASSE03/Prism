@@ -4889,4 +4889,8 @@
     <string name="rule_days">일</string>
     <string name="genre_example">팝, 힙합, 록…</string>
     <string name="your_listening">내 감상</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">곡 가져올 곳</string>
+    <string name="your_likes_stay_as_they_are">이 탭에 보이는 것만 바뀌어요. 좋아요는 그대로예요.</string>
+    <string name="search_these_songs">이 곡들에서 검색</string>
 </resources>

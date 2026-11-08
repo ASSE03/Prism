@@ -5025,4 +5025,8 @@
     <string name="rule_days">zile</string>
     <string name="genre_example">Pop, hip-hop, rock…</string>
     <string name="your_listening">Ce asculți</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">Melodii din</string>
+    <string name="your_likes_stay_as_they_are">Se schimbă doar ce arată această filă. Aprecierile tale rămân la fel.</string>
+    <string name="search_these_songs">Caută în aceste melodii</string>
 </resources>

@@ -5025,4 +5025,8 @@
     <string name="rule_days">dias</string>
     <string name="genre_example">Pop, hip-hop, rock…</string>
     <string name="your_listening">O que você ouve</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">Músicas de</string>
+    <string name="your_likes_stay_as_they_are">Só muda o que esta aba mostra. Suas curtidas continuam como estão.</string>
+    <string name="search_these_songs">Pesquisar nestas músicas</string>
 </resources>

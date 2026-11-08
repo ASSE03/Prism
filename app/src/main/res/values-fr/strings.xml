@@ -5025,4 +5025,8 @@
     <string name="rule_days">jours</string>
     <string name="genre_example">Pop, hip-hop, rock…</string>
     <string name="your_listening">Vos écoutes</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">Titres de</string>
+    <string name="your_likes_stay_as_they_are">Seul ce qu’affiche cet onglet change. Vos titres aimés restent tels quels.</string>
+    <string name="search_these_songs">Rechercher dans ces titres</string>
 </resources>

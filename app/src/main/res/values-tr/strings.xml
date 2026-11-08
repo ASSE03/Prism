@@ -4957,4 +4957,8 @@
     <string name="rule_days">gün</string>
     <string name="genre_example">Pop, hip hop, rock…</string>
     <string name="your_listening">Dinlediklerin</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">Şuradaki şarkılar</string>
+    <string name="your_likes_stay_as_they_are">Yalnızca bu sekmenin gösterdiği değişir. Beğenilerin olduğu gibi kalır.</string>
+    <string name="search_these_songs">Bu şarkılarda ara</string>
 </resources>

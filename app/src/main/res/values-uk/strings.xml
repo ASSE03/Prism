@@ -5093,4 +5093,8 @@
     <string name="rule_days">дн.</string>
     <string name="genre_example">Поп, хіп-хоп, рок…</string>
     <string name="your_listening">Твоє слухання</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">Пісні з</string>
+    <string name="your_likes_stay_as_they_are">Змінюється лише те, що показує ця вкладка. Твої вподобання лишаються як є.</string>
+    <string name="search_these_songs">Шукати в цих піснях</string>
 </resources>

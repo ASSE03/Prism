@@ -4889,4 +4889,8 @@
     <string name="rule_days">ngày qua</string>
     <string name="genre_example">Pop, hip-hop, rock…</string>
     <string name="your_listening">Bạn nghe gì</string>
+    <!-- 1.8.3 Songs from -->
+    <string name="songs_from">Bài hát từ</string>
+    <string name="your_likes_stay_as_they_are">Chỉ những gì thẻ này hiển thị thay đổi. Lượt thích của bạn vẫn giữ nguyên.</string>
+    <string name="search_these_songs">Tìm trong các bài này</string>
 </resources>
