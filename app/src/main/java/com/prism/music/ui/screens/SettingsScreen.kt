@@ -1675,6 +1675,9 @@ private fun LockScreenGroup() {
                     ShowOption(tr(R.string.volume), b.lockScreenVolume) { prefs.setLockScreenVolume(it) },
                     ShowOption(tr(R.string.lock_screen_show_like), b.lockScreenLike) { prefs.setLockScreenLike(it) },
                     ShowOption(tr(R.string.lock_screen_show_output), b.lockScreenOutput) { prefs.setLockScreenOutput(it) },
+                    // 1.8.3 (D47): off by default; the cards above show them once on.
+                    ShowOption(tr(R.string.repeat), b.lockScreenRepeat) { prefs.setLockScreenRepeat(it) },
+                    ShowOption(tr(R.string.up_next), b.lockScreenUpNext) { prefs.setLockScreenUpNext(it) },
                 ),
             )
             Label(tr(R.string.lock_screen_paused_label), info = tr(R.string.lock_screen_paused_info))

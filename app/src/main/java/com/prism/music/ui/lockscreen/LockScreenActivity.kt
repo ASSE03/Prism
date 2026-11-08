@@ -262,6 +262,13 @@ private fun LockScreenHost(settings: AppSettings, close: () -> Unit, unlock: (((
     val (time, date) = rememberClockText()
     val output = lockOutput(settings)
     val lyrics = if (layout == com.prism.music.data.prefs.LockLayout.LYRICS) rememberLockLyrics(current, art) else null
+    // 1.8.3 (D47): read only when switched on, so the queue isn't watched otherwise.
+    val repeat = if (settings.behavior.lockScreenRepeat) pc.repeatMode.collectAsState().value else null
+    val upNext = if (settings.behavior.lockScreenUpNext && !hide) {
+        val queue by pc.queue.collectAsState()
+        val order by pc.upNext.collectAsState()
+        remember(queue, order) { LockScreenRules.upNextLines(queue, order, hideSong = false) }
+    } else emptyList()
     val content = LockScreenContent(
         title = if (hide) tr(R.string.lock_screen_hidden_title) else current.title,
         artist = if (hide) "" else current.artistText,
@@ -282,6 +289,8 @@ private fun LockScreenHost(settings: AppSettings, close: () -> Unit, unlock: (((
         time = time,
         date = date,
         lyrics = lyrics,
+        repeat = repeat,
+        upNext = upNext,
     )
     val actions = remember(current.id, duration) {
         LockScreenActions(
@@ -293,6 +302,7 @@ private fun LockScreenHost(settings: AppSettings, close: () -> Unit, unlock: (((
             onSeek = { f -> pc.seekTo((f * pc.duration).toLong()) },
             onVolume = { v -> volume.drag(v) },
             onVolumeDone = { volume.release() },
+            onRepeat = { pc.cycleRepeat() },
         )
     }
     SwipeToUnlock(onUnlock = { unlock(null) }) { LockScreenLayout(layout, content, actions) }

@@ -40,6 +40,17 @@ internal object LockScreenRules {
     /** "Off" while paused still lets a pause be undone: it isn't taken away from under the finger that pressed it. */
     const val OFF_GRACE_MS = 3_000L
 
+    /**
+     * "Up next" (1.8.3, D47): the next [count] songs in the order they'll play (shuffle followed), as "Title · Artist".
+     * None while the song is hidden: the songs ahead would say what's playing.
+     */
+    fun upNextLines(queue: List<com.prism.music.playback.QueueEntry>, order: List<Int>, hideSong: Boolean, count: Int = 3): List<String> {
+        if (hideSong) return emptyList()
+        val byIndex = queue.associateBy { it.index }
+        return order.asSequence().mapNotNull { byIndex[it]?.song }.take(count)
+            .map { s -> listOf(s.title, s.artistText).filter { it.isNotBlank() }.joinToString(" · ") }.toList()
+    }
+
     /** Performance mode always gets Quiet; a hidden song has no lyrics to show, so the Lyrics layout falls back to Cover. */
     fun layoutFor(chosen: LockLayout, performanceMode: Boolean, hideSong: Boolean): LockLayout = when {
         performanceMode -> LockLayout.QUIET

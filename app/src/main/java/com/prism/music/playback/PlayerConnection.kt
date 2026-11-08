@@ -30,6 +30,13 @@ import kotlinx.coroutines.withContext
 
 data class QueueEntry(val index: Int, val song: Song, val uid: String)
 
+/** Repeat's next state, the player's and the lock screen's (1.8.3, D47) alike: off → all → one → off. */
+fun nextRepeatMode(mode: Int): Int = when (mode) {
+    Player.REPEAT_MODE_OFF -> Player.REPEAT_MODE_ALL
+    Player.REPEAT_MODE_ALL -> Player.REPEAT_MODE_ONE
+    else -> Player.REPEAT_MODE_OFF
+}
+
 /** A long list's later pages join the queue this many songs at a time (#356). */
 private const val FILL_BATCH = 400
 /** With this little of the song left, the song after it stays where it is while a list fills in (#356). */
@@ -919,13 +926,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         val cur = p.currentMediaItemIndex.coerceIn(0, n - 1)
         p.setShuffleOrder(HistoryShuffleOrder.shuffled(n, cur) { p.currentMediaItemIndex })
     }
-    fun cycleRepeat() = withPlayer {
-        it.repeatMode = when (it.repeatMode) {
-            Player.REPEAT_MODE_OFF -> Player.REPEAT_MODE_ALL
-            Player.REPEAT_MODE_ALL -> Player.REPEAT_MODE_ONE
-            else -> Player.REPEAT_MODE_OFF
-        }
-    }
+    fun cycleRepeat() = withPlayer { it.repeatMode = nextRepeatMode(it.repeatMode) }
 
     private val _videoLoading = MutableStateFlow(false)
     /** True from tapping the video button until its first frame shows. */
