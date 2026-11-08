@@ -4932,4 +4932,29 @@
     <string name="deleted_from_your_uploads">Đã xóa khỏi nội dung bạn tải lên</string>
     <string name="couldn_t_delete_it_s">Không xóa được: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music không còn liệt kê bài này</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Danh sách phát thông minh</string>
+    <string name="tour_183_smart_body">Danh sách tự điền theo quy tắc bạn đặt và luôn theo kịp thư viện của bạn.</string>
+    <string name="tour_183_smart_point_1">Quy tắc theo bài bạn thích, nghe, tải xuống hoặc gắn thẻ</string>
+    <string name="tour_183_smart_point_2">Nhịp độ, giọng và năng lượng, đo ngay trên điện thoại</string>
+    <string name="tour_183_smart_point_3">Lưu bản sao thành danh sách thường bất cứ lúc nào</string>
+    <string name="tour_183_tags_title">Thẻ</string>
+    <string name="tour_183_tags_body">Nhãn của riêng bạn cho bài hát, từ menu của bất kỳ bài nào.</string>
+    <string name="tour_183_tags_point_1">Mỗi thẻ có trang riêng trong Thư viện</string>
+    <string name="tour_183_tags_point_2">Dùng chúng trong danh sách thông minh</string>
+    <string name="tour_183_tags_point_3">Gắn thẻ nhiều bài cùng lúc</string>
+    <string name="tour_183_select_title">Chọn nhiều</string>
+    <string name="tour_183_select_body">Nhấn giữ một bài trong danh sách để chọn thêm, rồi làm cho tất cả cùng lúc.</string>
+    <string name="tour_183_select_point_1">Thêm vào danh sách hoặc hàng đợi, gắn thẻ, thích hoặc tải xuống</string>
+    <string name="tour_183_select_point_2">Bỏ khỏi danh sách, có hỏi lại trước</string>
+    <string name="tour_183_search_title">Tìm trong thư viện</string>
+    <string name="tour_183_search_body">Mọi thứ bạn có, hiện ra khi bạn gõ, có bộ lọc.</string>
+    <string name="tour_183_search_point_1">Bài hát, danh sách, thẻ, nghệ sĩ và album</string>
+    <string name="tour_183_search_point_2">Chỉ bài đã thích, đã tải hoặc có trên điện thoại này</string>
+    <string name="tour_183_search_point_3">Tìm được tên tiếng Nhật, Hàn, Nga và Hy Lạp bằng chữ Latinh</string>
+    <string name="tour_183_also_file">Một tệp trên điện thoại làm phiên bản của bài hát</string>
+    <string name="tour_183_also_duplicates">Tìm bài xuất hiện hai lần trong danh sách</string>
+    <string name="tour_183_also_songs_from">Bài hát trong Thư viện từ các danh sách bạn chọn</string>
+    <string name="tour_183_also_lock">Lặp lại và Tiếp theo trên màn hình khóa</string>
+    <string name="tour_183_also_uploads">Tải lên và xóa trong Nội dung tải lên</string>
 </resources>

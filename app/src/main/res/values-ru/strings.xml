@@ -5148,4 +5148,29 @@
     <string name="deleted_from_your_uploads">Удалено из загрузок</string>
     <string name="couldn_t_delete_it_s">Не удалось удалить: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music его больше не показывает</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Умные плейлисты</string>
+    <string name="tour_183_smart_body">Плейлисты, которые сами наполняются по вашим правилам и следят за медиатекой.</string>
+    <string name="tour_183_smart_point_1">Правила по тому, что вы лайкаете, слушаете, скачиваете или помечаете</string>
+    <string name="tour_183_smart_point_2">Темп, тональность и энергия, измеренные на телефоне</string>
+    <string name="tour_183_smart_point_3">В любой момент сохраните копию как обычный плейлист</string>
+    <string name="tour_183_tags_title">Метки</string>
+    <string name="tour_183_tags_body">Ваши собственные метки на треках, из меню любого трека.</string>
+    <string name="tour_183_tags_point_1">У каждой метки своя страница в Медиатеке</string>
+    <string name="tour_183_tags_point_2">Используйте их в умных плейлистах</string>
+    <string name="tour_183_tags_point_3">Помечайте много треков сразу</string>
+    <string name="tour_183_select_title">Выбрать несколько</string>
+    <string name="tour_183_select_body">Удерживайте трек в списке, выберите ещё и действуйте со всеми сразу.</string>
+    <string name="tour_183_select_point_1">Добавить в плейлист или очередь, пометить, лайкнуть или скачать</string>
+    <string name="tour_183_select_point_2">Убрать из плейлиста, с подтверждением</string>
+    <string name="tour_183_search_title">Поиск по медиатеке</string>
+    <string name="tour_183_search_body">Всё, что у вас есть, находится по мере ввода, с фильтрами.</string>
+    <string name="tour_183_search_point_1">Треки, плейлисты, метки, исполнители и альбомы</string>
+    <string name="tour_183_search_point_2">Только понравившиеся, скачанные или на этом телефоне</string>
+    <string name="tour_183_search_point_3">Японские, корейские, русские и греческие названия находятся и латиницей</string>
+    <string name="tour_183_also_file">Файл на телефоне как версия трека</string>
+    <string name="tour_183_also_duplicates">Найдите треки, которые есть в плейлисте дважды</string>
+    <string name="tour_183_also_songs_from">Треки Медиатеки из выбранных плейлистов</string>
+    <string name="tour_183_also_lock">Повтор и «Далее» на экране блокировки</string>
+    <string name="tour_183_also_uploads">Загрузка и удаление в Загрузках</string>
 </resources>

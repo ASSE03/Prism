@@ -4932,4 +4932,29 @@
     <string name="deleted_from_your_uploads">업로드에서 삭제했습니다</string>
     <string name="couldn_t_delete_it_s">삭제하지 못했습니다: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music에 더 이상 표시되지 않습니다</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">스마트 재생목록</string>
+    <string name="tour_183_smart_body">내가 정한 규칙대로 알아서 채워지고 보관함에 맞춰 바뀌는 재생목록.</string>
+    <string name="tour_183_smart_point_1">좋아요, 재생, 저장, 태그한 곡을 기준으로 규칙 설정</string>
+    <string name="tour_183_smart_point_2">템포, 키, 에너지를 휴대전화에서 측정</string>
+    <string name="tour_183_smart_point_3">언제든 일반 재생목록으로 사본 저장</string>
+    <string name="tour_183_tags_title">태그</string>
+    <string name="tour_183_tags_body">어느 곡의 메뉴에서나 붙이는 나만의 라벨.</string>
+    <string name="tour_183_tags_point_1">태그마다 보관함에 페이지가 있습니다</string>
+    <string name="tour_183_tags_point_2">스마트 재생목록에서 사용</string>
+    <string name="tour_183_tags_point_3">여러 곡에 한 번에 태그</string>
+    <string name="tour_183_select_title">여러 개 선택</string>
+    <string name="tour_183_select_body">목록에서 곡을 길게 눌러 더 고른 뒤 한 번에 처리하세요.</string>
+    <string name="tour_183_select_point_1">재생목록이나 대기열에 추가, 태그, 좋아요, 저장</string>
+    <string name="tour_183_select_point_2">확인 후 재생목록에서 삭제</string>
+    <string name="tour_183_search_title">보관함 검색</string>
+    <string name="tour_183_search_body">입력하는 대로 찾아 주는 필터 있는 검색.</string>
+    <string name="tour_183_search_point_1">곡, 재생목록, 태그, 아티스트, 앨범</string>
+    <string name="tour_183_search_point_2">좋아요한 곡, 저장한 곡, 이 휴대전화의 곡만</string>
+    <string name="tour_183_search_point_3">일본어, 한국어, 러시아어, 그리스어 제목을 로마자로도 검색</string>
+    <string name="tour_183_also_file">휴대전화의 파일을 곡의 다른 버전으로</string>
+    <string name="tour_183_also_duplicates">재생목록에 두 번 들어간 곡 찾기</string>
+    <string name="tour_183_also_songs_from">선택한 재생목록으로 보관함 노래 보기</string>
+    <string name="tour_183_also_lock">잠금 화면의 반복 및 다음 곡</string>
+    <string name="tour_183_also_uploads">업로드에서 업로드 및 삭제</string>
 </resources>

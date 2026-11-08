@@ -5004,4 +5004,29 @@
     <string name="deleted_from_your_uploads">Yüklemelerinden silindi</string>
     <string name="couldn_t_delete_it_s">Silinemedi: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music artık bunu listelemiyor</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Akıllı çalma listeleri</string>
+    <string name="tour_183_smart_body">Koyduğun kurallarla kendiliğinden dolan ve kitaplığınla birlikte güncellenen listeler.</string>
+    <string name="tour_183_smart_point_1">Beğendiğin, dinlediğin, indirdiğin ya da etiketlediğin şeylere göre kurallar</string>
+    <string name="tour_183_smart_point_2">Tempo, ton ve enerji, telefonunda ölçülür</string>
+    <string name="tour_183_smart_point_3">İstediğin an düz bir liste olarak kopyasını kaydet</string>
+    <string name="tour_183_tags_title">Etiketler</string>
+    <string name="tour_183_tags_body">Şarkılara kendi etiketlerin, her şarkının menüsünden.</string>
+    <string name="tour_183_tags_point_1">Her etiketin Kitaplık\'ta kendi sayfası var</string>
+    <string name="tour_183_tags_point_2">Akıllı listelerde kullan</string>
+    <string name="tour_183_tags_point_3">Birçok şarkıyı aynı anda etiketle</string>
+    <string name="tour_183_select_title">Birden çok seç</string>
+    <string name="tour_183_select_body">Listede bir şarkıya basılı tutup başkalarını da seç, sonra hepsine birden uygula.</string>
+    <string name="tour_183_select_point_1">Listeye ya da sıraya ekle, etiketle, beğen veya indir</string>
+    <string name="tour_183_select_point_2">Önce sorarak bir listeden çıkar</string>
+    <string name="tour_183_search_title">Kitaplığında ara</string>
+    <string name="tour_183_search_body">Sahip olduğun her şey, yazarken bulunur, filtrelerle.</string>
+    <string name="tour_183_search_point_1">Şarkılar, listeler, etiketler, sanatçılar ve albümler</string>
+    <string name="tour_183_search_point_2">Sadece beğenilen, indirilen veya bu telefondakiler</string>
+    <string name="tour_183_search_point_3">Japonca, Korece, Rusça ve Yunanca adlar Latin harfleriyle de bulunur</string>
+    <string name="tour_183_also_file">Telefonundaki bir dosya, şarkının bir sürümü olarak</string>
+    <string name="tour_183_also_duplicates">Bir listede iki kez geçen şarkıları bul</string>
+    <string name="tour_183_also_songs_from">Kitaplık\'taki şarkılar, seçtiğin listelerden</string>
+    <string name="tour_183_also_lock">Kilit ekranında Tekrarla ve Sıradaki</string>
+    <string name="tour_183_also_uploads">Yüklemeler\'de yükleme ve silme</string>
 </resources>

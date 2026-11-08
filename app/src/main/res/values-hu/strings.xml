@@ -5004,4 +5004,29 @@
     <string name="deleted_from_your_uploads">Törölve a feltöltéseid közül</string>
     <string name="couldn_t_delete_it_s">Nem sikerült törölni: %1$s</string>
     <string name="uploads_couldn_t_find_it">A YouTube Music már nem listázza</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Okos lejátszási listák</string>
+    <string name="tour_183_smart_body">Listák, amelyek a szabályaid szerint maguktól telnek meg, és követik a könyvtáradat.</string>
+    <string name="tour_183_smart_point_1">Szabályok arra, amit kedvelsz, hallgatsz, letöltesz vagy címkézel</string>
+    <string name="tour_183_smart_point_2">Tempó, hangnem és energia, a telefonon mérve</string>
+    <string name="tour_183_smart_point_3">Bármikor menthetsz egy másolatot sima listaként</string>
+    <string name="tour_183_tags_title">Címkék</string>
+    <string name="tour_183_tags_body">Saját címkéid a dalokon, bármelyik dal menüjéből.</string>
+    <string name="tour_183_tags_point_1">Minden címkének saját oldala van a Könyvtárban</string>
+    <string name="tour_183_tags_point_2">Használd őket okos listákban</string>
+    <string name="tour_183_tags_point_3">Sok dal felcímkézése egyszerre</string>
+    <string name="tour_183_select_title">Több kijelölése</string>
+    <string name="tour_183_select_body">Tarts nyomva egy dalt a listában, válassz többet, és intézd el egyszerre.</string>
+    <string name="tour_183_select_point_1">Listához vagy sorhoz adás, címkézés, kedvelés vagy letöltés</string>
+    <string name="tour_183_select_point_2">Eltávolítás egy listáról, megerősítéssel</string>
+    <string name="tour_183_search_title">Keresés a könyvtáradban</string>
+    <string name="tour_183_search_body">Minden, ami a tiéd, gépelés közben megtalálva, szűrőkkel.</string>
+    <string name="tour_183_search_point_1">Dalok, listák, címkék, előadók és albumok</string>
+    <string name="tour_183_search_point_2">Csak kedvelt, letöltött vagy ezen a telefonon lévő</string>
+    <string name="tour_183_search_point_3">Japán, koreai, orosz és görög címek latin betűkkel is megtalálva</string>
+    <string name="tour_183_also_file">Egy fájl a telefonodról mint a dal egy változata</string>
+    <string name="tour_183_also_duplicates">Kétszer szereplő dalok keresése egy listában</string>
+    <string name="tour_183_also_songs_from">A Könyvtár dalai a választott listákból</string>
+    <string name="tour_183_also_lock">Ismétlés és Következő a lezárási képernyőn</string>
+    <string name="tour_183_also_uploads">Feltöltés és törlés a Feltöltésekben</string>
 </resources>

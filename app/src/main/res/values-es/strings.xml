@@ -5076,4 +5076,29 @@
     <string name="deleted_from_your_uploads">Eliminado de tus subidas</string>
     <string name="couldn_t_delete_it_s">No se pudo eliminar: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music ya no lo muestra</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Listas inteligentes</string>
+    <string name="tour_183_smart_body">Listas que se llenan solas con las reglas que pongas y se actualizan con tu biblioteca.</string>
+    <string name="tour_183_smart_point_1">Reglas según lo que te gusta, escuchas, descargas o etiquetas</string>
+    <string name="tour_183_smart_point_2">Tempo, tonalidad y energía, medidos en tu teléfono</string>
+    <string name="tour_183_smart_point_3">Guarda una copia como lista normal cuando quieras</string>
+    <string name="tour_183_tags_title">Etiquetas</string>
+    <string name="tour_183_tags_body">Tus propias etiquetas en canciones, desde el menú de cualquier canción.</string>
+    <string name="tour_183_tags_point_1">Cada etiqueta tiene su propia página en Biblioteca</string>
+    <string name="tour_183_tags_point_2">Úsalas en listas inteligentes</string>
+    <string name="tour_183_tags_point_3">Etiqueta muchas canciones a la vez</string>
+    <string name="tour_183_select_title">Seleccionar varias</string>
+    <string name="tour_183_select_body">Mantén pulsada una canción en una lista para elegir más y actúa sobre todas a la vez.</string>
+    <string name="tour_183_select_point_1">Añadir a una lista o a la cola, etiquetar, dar me gusta o descargar</string>
+    <string name="tour_183_select_point_2">Quitarlas de una lista, con confirmación</string>
+    <string name="tour_183_search_title">Busca en tu biblioteca</string>
+    <string name="tour_183_search_body">Todo lo que tienes, encontrado mientras escribes, con filtros.</string>
+    <string name="tour_183_search_point_1">Canciones, listas, etiquetas, artistas y álbumes</string>
+    <string name="tour_183_search_point_2">Solo las que te gustan, descargadas o en este teléfono</string>
+    <string name="tour_183_search_point_3">Títulos en japonés, coreano, ruso y griego encontrados con letras latinas</string>
+    <string name="tour_183_also_file">Un archivo de tu teléfono como versión de una canción</string>
+    <string name="tour_183_also_duplicates">Encuentra canciones repetidas en una lista</string>
+    <string name="tour_183_also_songs_from">Canciones de Biblioteca desde las listas que elijas</string>
+    <string name="tour_183_also_lock">Repetir y A continuación en la pantalla de bloqueo</string>
+    <string name="tour_183_also_uploads">Subir y eliminar en Subidas</string>
 </resources>

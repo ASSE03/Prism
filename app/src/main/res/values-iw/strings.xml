@@ -5076,4 +5076,29 @@
     <string name="deleted_from_your_uploads">נמחק מההעלאות שלך</string>
     <string name="couldn_t_delete_it_s">לא ניתן למחוק: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music כבר לא מציג אותו</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">פלייליסטים חכמים</string>
+    <string name="tour_183_smart_body">פלייליסטים שמתמלאים מעצמם לפי הכללים שלך ומתעדכנים עם הספרייה.</string>
+    <string name="tour_183_smart_point_1">כללים לפי מה שאהבת, השמעת, הורדת או תייגת</string>
+    <string name="tour_183_smart_point_2">קצב, סולם ואנרגיה, נמדדים בטלפון</string>
+    <string name="tour_183_smart_point_3">שמירת עותק כפלייליסט רגיל בכל עת</string>
+    <string name="tour_183_tags_title">תגים</string>
+    <string name="tour_183_tags_body">תגים משלך על שירים, מהתפריט של כל שיר.</string>
+    <string name="tour_183_tags_point_1">לכל תג יש דף משלו בספרייה</string>
+    <string name="tour_183_tags_point_2">אפשר להשתמש בהם בפלייליסטים חכמים</string>
+    <string name="tour_183_tags_point_3">תיוג שירים רבים בבת אחת</string>
+    <string name="tour_183_select_title">בחירה מרובה</string>
+    <string name="tour_183_select_body">לוחצים לחיצה ארוכה על שיר ברשימה, בוחרים עוד ופועלים על כולם יחד.</string>
+    <string name="tour_183_select_point_1">הוספה לפלייליסט או לתור, תיוג, לייק או הורדה</string>
+    <string name="tour_183_select_point_2">הסרה מפלייליסט, אחרי אישור</string>
+    <string name="tour_183_search_title">חיפוש בספרייה</string>
+    <string name="tour_183_search_body">כל מה שיש לך, נמצא תוך כדי הקלדה, עם מסננים.</string>
+    <string name="tour_183_search_point_1">שירים, פלייליסטים, תגים, אמנים ואלבומים</string>
+    <string name="tour_183_search_point_2">רק אהובים, שהורדו או בטלפון הזה</string>
+    <string name="tour_183_search_point_3">כותרים ביפנית, קוריאנית, רוסית ויוונית נמצאים גם באותיות לטיניות</string>
+    <string name="tour_183_also_file">קובץ בטלפון כגרסה של שיר</string>
+    <string name="tour_183_also_duplicates">מציאת שירים שמופיעים פעמיים בפלייליסט</string>
+    <string name="tour_183_also_songs_from">שירים בספרייה מהפלייליסטים שבחרת</string>
+    <string name="tour_183_also_lock">חזרה והבא בתור במסך הנעילה</string>
+    <string name="tour_183_also_uploads">העלאה ומחיקה בהעלאות</string>
 </resources>

@@ -4932,4 +4932,29 @@
     <string name="deleted_from_your_uploads">アップロードから削除しました</string>
     <string name="couldn_t_delete_it_s">削除できませんでした: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music に表示されなくなっています</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">スマートプレイリスト</string>
+    <string name="tour_183_smart_body">決めたルールで自動的に曲が入り、ライブラリに合わせて更新されるプレイリスト。</string>
+    <string name="tour_183_smart_point_1">高く評価・再生・ダウンロード・タグ付けした曲でルールを設定</string>
+    <string name="tour_183_smart_point_2">テンポ、キー、エネルギーはスマホで計測</string>
+    <string name="tour_183_smart_point_3">いつでも普通のプレイリストとしてコピーを保存</string>
+    <string name="tour_183_tags_title">タグ</string>
+    <string name="tour_183_tags_body">どの曲のメニューからでも付けられる自分だけのラベル。</string>
+    <string name="tour_183_tags_point_1">タグごとにライブラリに専用ページ</string>
+    <string name="tour_183_tags_point_2">スマートプレイリストで使える</string>
+    <string name="tour_183_tags_point_3">たくさんの曲にまとめてタグ付け</string>
+    <string name="tour_183_select_title">まとめて選択</string>
+    <string name="tour_183_select_body">リストの曲を長押ししてほかの曲も選び、まとめて操作できます。</string>
+    <string name="tour_183_select_point_1">プレイリストやキューに追加、タグ付け、高く評価、ダウンロード</string>
+    <string name="tour_183_select_point_2">確認してからプレイリストから削除</string>
+    <string name="tour_183_search_title">ライブラリを検索</string>
+    <string name="tour_183_search_body">入力するそばから見つかる、フィルター付きの検索。</string>
+    <string name="tour_183_search_point_1">曲、プレイリスト、タグ、アーティスト、アルバム</string>
+    <string name="tour_183_search_point_2">高く評価した曲、ダウンロード済み、このスマホ内だけに絞り込み</string>
+    <string name="tour_183_search_point_3">日本語・韓国語・ロシア語・ギリシャ語のタイトルもローマ字で見つかる</string>
+    <string name="tour_183_also_file">スマホのファイルを曲の別バージョンとして</string>
+    <string name="tour_183_also_duplicates">プレイリスト内の重複した曲を見つける</string>
+    <string name="tour_183_also_songs_from">選んだプレイリストからライブラリの曲を表示</string>
+    <string name="tour_183_also_lock">ロック画面にリピートと次の曲</string>
+    <string name="tour_183_also_uploads">アップロードでアップロードと削除</string>
 </resources>

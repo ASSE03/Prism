@@ -5076,4 +5076,29 @@
     <string name="deleted_from_your_uploads">Supprimé de vos importations</string>
     <string name="couldn_t_delete_it_s">Impossible de le supprimer : %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music ne le liste plus</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Playlists intelligentes</string>
+    <string name="tour_183_smart_body">Des playlists qui se remplissent selon vos règles et suivent votre bibliothèque.</string>
+    <string name="tour_183_smart_point_1">Des règles sur ce que vous aimez, écoutez, téléchargez ou taguez</string>
+    <string name="tour_183_smart_point_2">Tempo, tonalité et énergie, mesurés sur votre téléphone</string>
+    <string name="tour_183_smart_point_3">Enregistrez une copie en playlist classique à tout moment</string>
+    <string name="tour_183_tags_title">Tags</string>
+    <string name="tour_183_tags_body">Vos propres étiquettes sur les titres, depuis le menu de n\'importe quel titre.</string>
+    <string name="tour_183_tags_point_1">Chaque tag a sa propre page dans la Bibliothèque</string>
+    <string name="tour_183_tags_point_2">Utilisez-les dans les playlists intelligentes</string>
+    <string name="tour_183_tags_point_3">Taguez plusieurs titres à la fois</string>
+    <string name="tour_183_select_title">Sélection multiple</string>
+    <string name="tour_183_select_body">Maintenez un titre dans une liste pour en choisir d\'autres, puis agissez sur tous à la fois.</string>
+    <string name="tour_183_select_point_1">Ajouter à une playlist ou à la file, taguer, aimer ou télécharger</string>
+    <string name="tour_183_select_point_2">Les retirer d\'une playlist, après confirmation</string>
+    <string name="tour_183_search_title">Chercher dans votre bibliothèque</string>
+    <string name="tour_183_search_body">Tout ce que vous avez, trouvé pendant la saisie, avec des filtres.</string>
+    <string name="tour_183_search_point_1">Titres, playlists, tags, artistes et albums</string>
+    <string name="tour_183_search_point_2">Seulement aimés, téléchargés ou sur ce téléphone</string>
+    <string name="tour_183_search_point_3">Titres japonais, coréens, russes et grecs trouvés en lettres latines</string>
+    <string name="tour_183_also_file">Un fichier de votre téléphone comme version d\'un titre</string>
+    <string name="tour_183_also_duplicates">Trouver les titres présents deux fois dans une playlist</string>
+    <string name="tour_183_also_songs_from">Les titres de la Bibliothèque depuis les playlists choisies</string>
+    <string name="tour_183_also_lock">Répéter et À suivre sur l\'écran de verrouillage</string>
+    <string name="tour_183_also_uploads">Importer et supprimer dans Importations</string>
 </resources>

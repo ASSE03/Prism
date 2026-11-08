@@ -5292,4 +5292,29 @@
     <string name="deleted_from_your_uploads">حُذفت من ملفاتك المرفوعة</string>
     <string name="couldn_t_delete_it_s">تعذّر الحذف: %1$s</string>
     <string name="uploads_couldn_t_find_it">لم يعد YouTube Music يعرضها</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">قوائم تشغيل ذكية</string>
+    <string name="tour_183_smart_body">قوائم تمتلئ تلقائيًا وفق القواعد التي تضعها وتواكب مكتبتك.</string>
+    <string name="tour_183_smart_point_1">قواعد حسب ما تعجب به أو تشغّله أو تنزّله أو تضع له وسمًا</string>
+    <string name="tour_183_smart_point_2">الإيقاع والمقام والطاقة، تُقاس على هاتفك</string>
+    <string name="tour_183_smart_point_3">احفظ نسخة كقائمة عادية متى شئت</string>
+    <string name="tour_183_tags_title">الوسوم</string>
+    <string name="tour_183_tags_body">وسومك الخاصة على الأغاني، من قائمة أي أغنية.</string>
+    <string name="tour_183_tags_point_1">لكل وسم صفحته الخاصة في المكتبة</string>
+    <string name="tour_183_tags_point_2">استخدمها في القوائم الذكية</string>
+    <string name="tour_183_tags_point_3">ضع وسمًا لأغانٍ كثيرة دفعة واحدة</string>
+    <string name="tour_183_select_title">تحديد عدة عناصر</string>
+    <string name="tour_183_select_body">اضغط مطولًا على أغنية في قائمة لاختيار المزيد، ثم نفّذ على الجميع معًا.</string>
+    <string name="tour_183_select_point_1">أضف إلى قائمة أو إلى قائمة الانتظار، ضع وسمًا، أعجب أو نزّل</string>
+    <string name="tour_183_select_point_2">أزلها من قائمة بعد التأكيد</string>
+    <string name="tour_183_search_title">ابحث في مكتبتك</string>
+    <string name="tour_183_search_body">كل ما لديك، يظهر أثناء الكتابة، مع عوامل تصفية.</string>
+    <string name="tour_183_search_point_1">الأغاني والقوائم والوسوم والفنانون والألبومات</string>
+    <string name="tour_183_search_point_2">المعجب بها أو المنزّلة أو الموجودة على هذا الهاتف فقط</string>
+    <string name="tour_183_search_point_3">عناوين يابانية وكورية وروسية ويونانية تُعثر عليها بحروف لاتينية</string>
+    <string name="tour_183_also_file">ملف على هاتفك كنسخة من أغنية</string>
+    <string name="tour_183_also_duplicates">اعثر على الأغاني المكررة في قائمة</string>
+    <string name="tour_183_also_songs_from">أغاني المكتبة من القوائم التي تختارها</string>
+    <string name="tour_183_also_lock">التكرار والتالي على شاشة القفل</string>
+    <string name="tour_183_also_uploads">الرفع والحذف في الملفات المرفوعة</string>
 </resources>

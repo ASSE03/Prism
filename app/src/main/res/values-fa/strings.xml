@@ -5004,4 +5004,29 @@
     <string name="deleted_from_your_uploads">از بارگذاری‌های شما حذف شد</string>
     <string name="couldn_t_delete_it_s">حذف نشد: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music دیگر آن را نشان نمی‌دهد</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">فهرست‌های پخش هوشمند</string>
+    <string name="tour_183_smart_body">فهرست‌هایی که با قانون‌های شما خودشان پر می‌شوند و با کتابخانه‌تان پیش می‌روند.</string>
+    <string name="tour_183_smart_point_1">قانون بر اساس آنچه می‌پسندید، پخش می‌کنید، بارگیری یا برچسب می‌زنید</string>
+    <string name="tour_183_smart_point_2">تمپو، گام و انرژی، اندازه‌گیری‌شده روی گوشی شما</string>
+    <string name="tour_183_smart_point_3">هر وقت خواستید یک نسخه را به‌صورت فهرست ساده ذخیره کنید</string>
+    <string name="tour_183_tags_title">برچسب‌ها</string>
+    <string name="tour_183_tags_body">برچسب‌های خودتان روی آهنگ‌ها، از منوی هر آهنگ.</string>
+    <string name="tour_183_tags_point_1">هر برچسب صفحهٔ خودش را در کتابخانه دارد</string>
+    <string name="tour_183_tags_point_2">در فهرست‌های هوشمند از آن‌ها استفاده کنید</string>
+    <string name="tour_183_tags_point_3">به چند آهنگ با هم برچسب بزنید</string>
+    <string name="tour_183_select_title">انتخاب چندتایی</string>
+    <string name="tour_183_select_body">آهنگی را در فهرست نگه دارید تا موارد بیشتری انتخاب کنید و یکجا روی همه عمل کنید.</string>
+    <string name="tour_183_select_point_1">افزودن به فهرست یا صف، برچسب زدن، پسندیدن یا بارگیری</string>
+    <string name="tour_183_select_point_2">برداشتن از فهرست، با تأیید</string>
+    <string name="tour_183_search_title">جست‌وجو در کتابخانه</string>
+    <string name="tour_183_search_body">هرچه دارید، هنگام تایپ پیدا می‌شود، با فیلترها.</string>
+    <string name="tour_183_search_point_1">آهنگ‌ها، فهرست‌ها، برچسب‌ها، هنرمندان و آلبوم‌ها</string>
+    <string name="tour_183_search_point_2">فقط پسندیده، بارگیری‌شده یا روی این گوشی</string>
+    <string name="tour_183_search_point_3">عنوان‌های ژاپنی، کره‌ای، روسی و یونانی با حروف لاتین هم پیدا می‌شوند</string>
+    <string name="tour_183_also_file">فایلی روی گوشی به‌عنوان نسخه‌ای از آهنگ</string>
+    <string name="tour_183_also_duplicates">یافتن آهنگ‌هایی که دو بار در یک فهرست هستند</string>
+    <string name="tour_183_also_songs_from">آهنگ‌های کتابخانه از فهرست‌هایی که انتخاب می‌کنید</string>
+    <string name="tour_183_also_lock">تکرار و بعدی در صفحهٔ قفل</string>
+    <string name="tour_183_also_uploads">بارگذاری و حذف در بارگذاری‌ها</string>
 </resources>

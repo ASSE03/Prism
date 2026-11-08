@@ -5004,4 +5004,29 @@
     <string name="deleted_from_your_uploads">Διαγράφηκε από τις μεταφορτώσεις σου</string>
     <string name="couldn_t_delete_it_s">Δεν ήταν δυνατή η διαγραφή: %1$s</string>
     <string name="uploads_couldn_t_find_it">Το YouTube Music δεν το εμφανίζει πια</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Έξυπνες λίστες</string>
+    <string name="tour_183_smart_body">Λίστες που γεμίζουν μόνες τους με τους κανόνες σου και ακολουθούν τη βιβλιοθήκη σου.</string>
+    <string name="tour_183_smart_point_1">Κανόνες για ό,τι σου αρέσει, ακούς, κατεβάζεις ή βάζεις ετικέτα</string>
+    <string name="tour_183_smart_point_2">Ρυθμός, τονικότητα και ενέργεια, μετρημένα στο τηλέφωνο</string>
+    <string name="tour_183_smart_point_3">Αποθήκευσε αντίγραφο ως απλή λίστα όποτε θες</string>
+    <string name="tour_183_tags_title">Ετικέτες</string>
+    <string name="tour_183_tags_body">Οι δικές σου ετικέτες στα τραγούδια, από το μενού κάθε τραγουδιού.</string>
+    <string name="tour_183_tags_point_1">Κάθε ετικέτα έχει δική της σελίδα στη Βιβλιοθήκη</string>
+    <string name="tour_183_tags_point_2">Χρησιμοποίησέ τες σε έξυπνες λίστες</string>
+    <string name="tour_183_tags_point_3">Βάλε ετικέτα σε πολλά τραγούδια μαζί</string>
+    <string name="tour_183_select_title">Επιλογή πολλών</string>
+    <string name="tour_183_select_body">Κράτησε πατημένο ένα τραγούδι σε λίστα για να διαλέξεις κι άλλα και κάνε τα όλα μαζί.</string>
+    <string name="tour_183_select_point_1">Προσθήκη σε λίστα ή ουρά, ετικέτα, μου αρέσει ή λήψη</string>
+    <string name="tour_183_select_point_2">Αφαίρεση από λίστα, με επιβεβαίωση</string>
+    <string name="tour_183_search_title">Αναζήτηση στη βιβλιοθήκη σου</string>
+    <string name="tour_183_search_body">Ό,τι έχεις, καθώς πληκτρολογείς, με φίλτρα.</string>
+    <string name="tour_183_search_point_1">Τραγούδια, λίστες, ετικέτες, καλλιτέχνες και άλμπουμ</string>
+    <string name="tour_183_search_point_2">Μόνο αγαπημένα, ληφθέντα ή σε αυτό το τηλέφωνο</string>
+    <string name="tour_183_search_point_3">Ιαπωνικοί, κορεατικοί, ρωσικοί και ελληνικοί τίτλοι και με λατινικά γράμματα</string>
+    <string name="tour_183_also_file">Ένα αρχείο του τηλεφώνου ως εκδοχή τραγουδιού</string>
+    <string name="tour_183_also_duplicates">Βρες τραγούδια που υπάρχουν δύο φορές σε μια λίστα</string>
+    <string name="tour_183_also_songs_from">Τραγούδια της Βιβλιοθήκης από τις λίστες που διαλέγεις</string>
+    <string name="tour_183_also_lock">Επανάληψη και Επόμενα στην οθόνη κλειδώματος</string>
+    <string name="tour_183_also_uploads">Μεταφόρτωση και διαγραφή στις Μεταφορτώσεις</string>
 </resources>

@@ -5004,4 +5004,29 @@
     <string name="deleted_from_your_uploads">Nabura sa mga upload mo</string>
     <string name="couldn_t_delete_it_s">Hindi mabura: %1$s</string>
     <string name="uploads_couldn_t_find_it">Hindi na ito nakalista sa YouTube Music</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Mga smart playlist</string>
+    <string name="tour_183_smart_body">Mga playlist na kusang napupuno ayon sa mga rule mo at sumasabay sa library mo.</string>
+    <string name="tour_183_smart_point_1">Mga rule ayon sa gusto mo, pinapatugtog, dina-download o tina-tag</string>
+    <string name="tour_183_smart_point_2">Tempo, key at energy, sinusukat sa phone mo</string>
+    <string name="tour_183_smart_point_3">Mag-save ng kopya bilang karaniwang playlist anumang oras</string>
+    <string name="tour_183_tags_title">Mga tag</string>
+    <string name="tour_183_tags_body">Sarili mong mga label sa mga kanta, mula sa menu ng anumang kanta.</string>
+    <string name="tour_183_tags_point_1">May sariling page sa Library ang bawat tag</string>
+    <string name="tour_183_tags_point_2">Gamitin ang mga ito sa smart playlist</string>
+    <string name="tour_183_tags_point_3">Mag-tag ng maraming kanta nang sabay</string>
+    <string name="tour_183_select_title">Pumili ng marami</string>
+    <string name="tour_183_select_body">Pindutin nang matagal ang kanta sa listahan para pumili pa, saka gawin sa lahat nang sabay.</string>
+    <string name="tour_183_select_point_1">Idagdag sa playlist o queue, i-tag, i-like o i-download</string>
+    <string name="tour_183_select_point_2">Alisin sa playlist, may kumpirmasyon muna</string>
+    <string name="tour_183_search_title">Maghanap sa library mo</string>
+    <string name="tour_183_search_body">Lahat ng meron ka, nahahanap habang nagta-type, may mga filter.</string>
+    <string name="tour_183_search_point_1">Mga kanta, playlist, tag, artist at album</string>
+    <string name="tour_183_search_point_2">Ang mga na-like, na-download o nasa phone na ito lang</string>
+    <string name="tour_183_search_point_3">Mahahanap ang mga pamagat na Japanese, Korean, Russian at Greek sa letrang Latin</string>
+    <string name="tour_183_also_file">Isang file sa phone bilang bersyon ng kanta</string>
+    <string name="tour_183_also_duplicates">Hanapin ang mga kantang dalawang beses sa isang playlist</string>
+    <string name="tour_183_also_songs_from">Mga kanta sa Library mula sa mga playlist na pinili mo</string>
+    <string name="tour_183_also_lock">Ulitin at Susunod sa lock screen</string>
+    <string name="tour_183_also_uploads">Mag-upload at magbura sa Mga Upload</string>
 </resources>

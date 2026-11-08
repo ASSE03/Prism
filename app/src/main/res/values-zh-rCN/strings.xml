@@ -4932,4 +4932,29 @@
     <string name="deleted_from_your_uploads">已从你的上传中删除</string>
     <string name="couldn_t_delete_it_s">无法删除：%1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music 已不再列出它</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">智能播放列表</string>
+    <string name="tour_183_smart_body">按你设定的规则自动填充，并随着你的音乐库更新。</string>
+    <string name="tour_183_smart_point_1">按你喜欢、播放、下载或加标签的歌曲设定规则</string>
+    <string name="tour_183_smart_point_2">速度、调性和能量，在手机上测量</string>
+    <string name="tour_183_smart_point_3">随时另存为普通播放列表</string>
+    <string name="tour_183_tags_title">标签</string>
+    <string name="tour_183_tags_body">给歌曲加上你自己的标签，在任意歌曲的菜单里。</string>
+    <string name="tour_183_tags_point_1">每个标签在音乐库都有自己的页面</string>
+    <string name="tour_183_tags_point_2">可用于智能播放列表</string>
+    <string name="tour_183_tags_point_3">一次给多首歌曲加标签</string>
+    <string name="tour_183_select_title">多选</string>
+    <string name="tour_183_select_body">在列表中长按一首歌，再选更多，然后一起处理。</string>
+    <string name="tour_183_select_point_1">添加到播放列表或队列、加标签、喜欢或下载</string>
+    <string name="tour_183_select_point_2">确认后从播放列表移除</string>
+    <string name="tour_183_search_title">搜索你的音乐库</string>
+    <string name="tour_183_search_body">你拥有的一切，边输入边找到，还能筛选。</string>
+    <string name="tour_183_search_point_1">歌曲、播放列表、标签、艺人和专辑</string>
+    <string name="tour_183_search_point_2">只看喜欢的、已下载的或这台手机上的</string>
+    <string name="tour_183_search_point_3">日文、韩文、俄文和希腊文标题也能用拉丁字母找到</string>
+    <string name="tour_183_also_file">把手机上的文件作为歌曲的一个版本</string>
+    <string name="tour_183_also_duplicates">找出播放列表里重复的歌曲</string>
+    <string name="tour_183_also_songs_from">音乐库的歌曲来自你选择的播放列表</string>
+    <string name="tour_183_also_lock">锁屏上的重复播放和接下来播放</string>
+    <string name="tour_183_also_uploads">在上传内容中上传和删除</string>
 </resources>

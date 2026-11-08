@@ -5004,4 +5004,29 @@
     <string name="deleted_from_your_uploads">Verwijderd uit je uploads</string>
     <string name="couldn_t_delete_it_s">Verwijderen lukte niet: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music toont het niet meer</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Slimme playlists</string>
+    <string name="tour_183_smart_body">Playlists die zichzelf vullen met jouw regels en meegaan met je bibliotheek.</string>
+    <string name="tour_183_smart_point_1">Regels over wat je leuk vindt, afspeelt, downloadt of tagt</string>
+    <string name="tour_183_smart_point_2">Tempo, toonsoort en energie, gemeten op je telefoon</string>
+    <string name="tour_183_smart_point_3">Bewaar altijd een kopie als gewone playlist</string>
+    <string name="tour_183_tags_title">Tags</string>
+    <string name="tour_183_tags_body">Je eigen labels op nummers, via het menu van elk nummer.</string>
+    <string name="tour_183_tags_point_1">Elke tag heeft een eigen pagina in Bibliotheek</string>
+    <string name="tour_183_tags_point_2">Gebruik ze in slimme playlists</string>
+    <string name="tour_183_tags_point_3">Tag veel nummers tegelijk</string>
+    <string name="tour_183_select_title">Meerdere selecteren</string>
+    <string name="tour_183_select_body">Houd een nummer in een lijst vast om er meer te kiezen en doe dan alles in één keer.</string>
+    <string name="tour_183_select_point_1">Toevoegen aan een playlist of de wachtrij, taggen, liken of downloaden</string>
+    <string name="tour_183_select_point_2">Uit een playlist halen, na een check</string>
+    <string name="tour_183_search_title">Zoek in je bibliotheek</string>
+    <string name="tour_183_search_body">Alles wat je hebt, gevonden terwijl je typt, met filters.</string>
+    <string name="tour_183_search_point_1">Nummers, playlists, tags, artiesten en albums</string>
+    <string name="tour_183_search_point_2">Alleen geliket, gedownload of op deze telefoon</string>
+    <string name="tour_183_search_point_3">Japanse, Koreaanse, Russische en Griekse titels gevonden in Latijnse letters</string>
+    <string name="tour_183_also_file">Een bestand op je telefoon als versie van een nummer</string>
+    <string name="tour_183_also_duplicates">Vind nummers die twee keer in een playlist staan</string>
+    <string name="tour_183_also_songs_from">Nummers in Bibliotheek uit de playlists die je kiest</string>
+    <string name="tour_183_also_lock">Herhalen en Hierna op het vergrendelscherm</string>
+    <string name="tour_183_also_uploads">Uploaden en verwijderen in Uploads</string>
 </resources>

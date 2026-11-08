@@ -5004,4 +5004,29 @@
     <string name="deleted_from_your_uploads">Aus deinen Uploads gelöscht</string>
     <string name="couldn_t_delete_it_s">Löschen nicht möglich: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music führt es nicht mehr</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Intelligente Playlists</string>
+    <string name="tour_183_smart_body">Playlists, die sich nach deinen Regeln selbst füllen und mit deiner Mediathek mitgehen.</string>
+    <string name="tour_183_smart_point_1">Regeln nach dem, was du likest, hörst, herunterlädst oder taggst</string>
+    <string name="tour_183_smart_point_2">Tempo, Tonart und Energie, gemessen auf deinem Handy</string>
+    <string name="tour_183_smart_point_3">Jederzeit als normale Playlist kopieren</string>
+    <string name="tour_183_tags_title">Tags</string>
+    <string name="tour_183_tags_body">Deine eigenen Etiketten für Songs, aus dem Menü jedes Songs.</string>
+    <string name="tour_183_tags_point_1">Jeder Tag hat eine eigene Seite in der Mediathek</string>
+    <string name="tour_183_tags_point_2">Nutze sie in intelligenten Playlists</string>
+    <string name="tour_183_tags_point_3">Viele Songs auf einmal taggen</string>
+    <string name="tour_183_select_title">Mehrere auswählen</string>
+    <string name="tour_183_select_body">Halte einen Song in einer Liste, um weitere auszuwählen, und mach dann alles auf einmal.</string>
+    <string name="tour_183_select_point_1">Zu einer Playlist oder Warteschlange hinzufügen, taggen, liken oder herunterladen</string>
+    <string name="tour_183_select_point_2">Aus einer Playlist entfernen, mit Rückfrage</string>
+    <string name="tour_183_search_title">Deine Mediathek durchsuchen</string>
+    <string name="tour_183_search_body">Alles, was du hast, beim Tippen gefunden, mit Filtern.</string>
+    <string name="tour_183_search_point_1">Songs, Playlists, Tags, Künstler und Alben</string>
+    <string name="tour_183_search_point_2">Nur gelikte, heruntergeladene oder auf diesem Handy</string>
+    <string name="tour_183_search_point_3">Japanische, koreanische, russische und griechische Titel in lateinischen Buchstaben gefunden</string>
+    <string name="tour_183_also_file">Eine Datei auf deinem Handy als Version eines Songs</string>
+    <string name="tour_183_also_duplicates">Songs finden, die doppelt in einer Playlist sind</string>
+    <string name="tour_183_also_songs_from">Songs in der Mediathek aus Playlists deiner Wahl</string>
+    <string name="tour_183_also_lock">Wiederholen und Als Nächstes auf dem Sperrbildschirm</string>
+    <string name="tour_183_also_uploads">Hochladen und Löschen in Uploads</string>
 </resources>

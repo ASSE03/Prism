@@ -4932,4 +4932,29 @@
     <string name="deleted_from_your_uploads">Dipadam daripada muat naik anda</string>
     <string name="couldn_t_delete_it_s">Tidak dapat memadam: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music tidak lagi menyenaraikannya</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Senarai main pintar</string>
+    <string name="tour_183_smart_body">Senarai main yang terisi sendiri mengikut peraturan anda dan seiring dengan pustaka anda.</string>
+    <string name="tour_183_smart_point_1">Peraturan tentang apa yang anda suka, main, muat turun atau tag</string>
+    <string name="tour_183_smart_point_2">Tempo, kunci dan tenaga, diukur pada telefon anda</string>
+    <string name="tour_183_smart_point_3">Simpan salinan sebagai senarai main biasa bila-bila masa</string>
+    <string name="tour_183_tags_title">Tag</string>
+    <string name="tour_183_tags_body">Label anda sendiri pada lagu, daripada menu mana-mana lagu.</string>
+    <string name="tour_183_tags_point_1">Setiap tag ada halaman sendiri dalam Pustaka</string>
+    <string name="tour_183_tags_point_2">Gunakannya dalam senarai main pintar</string>
+    <string name="tour_183_tags_point_3">Tag banyak lagu sekali gus</string>
+    <string name="tour_183_select_title">Pilih banyak</string>
+    <string name="tour_183_select_body">Tekan lama lagu dalam senarai untuk memilih lagi, kemudian buat semuanya sekali gus.</string>
+    <string name="tour_183_select_point_1">Tambah ke senarai main atau baris gilir, tag, suka atau muat turun</string>
+    <string name="tour_183_select_point_2">Keluarkan daripada senarai main, dengan pengesahan</string>
+    <string name="tour_183_search_title">Cari dalam pustaka anda</string>
+    <string name="tour_183_search_body">Semua yang anda ada, ditemui semasa menaip, dengan penapis.</string>
+    <string name="tour_183_search_point_1">Lagu, senarai main, tag, artis dan album</string>
+    <string name="tour_183_search_point_2">Hanya yang disukai, dimuat turun atau pada telefon ini</string>
+    <string name="tour_183_search_point_3">Tajuk Jepun, Korea, Rusia dan Greek ditemui dalam huruf Latin</string>
+    <string name="tour_183_also_file">Fail pada telefon sebagai versi lagu</string>
+    <string name="tour_183_also_duplicates">Cari lagu yang ada dua kali dalam senarai main</string>
+    <string name="tour_183_also_songs_from">Lagu Pustaka daripada senarai main yang anda pilih</string>
+    <string name="tour_183_also_lock">Ulang dan Seterusnya pada skrin kunci</string>
+    <string name="tour_183_also_uploads">Muat naik dan padam dalam Muat naik</string>
 </resources>

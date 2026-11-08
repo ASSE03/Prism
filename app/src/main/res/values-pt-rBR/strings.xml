@@ -5076,4 +5076,29 @@
     <string name="deleted_from_your_uploads">Excluído dos seus envios</string>
     <string name="couldn_t_delete_it_s">Não foi possível excluir: %1$s</string>
     <string name="uploads_couldn_t_find_it">O YouTube Music não lista mais</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Playlists inteligentes</string>
+    <string name="tour_183_smart_body">Playlists que se enchem sozinhas com as regras que você define e acompanham sua biblioteca.</string>
+    <string name="tour_183_smart_point_1">Regras sobre o que você curte, ouve, baixa ou marca</string>
+    <string name="tour_183_smart_point_2">Andamento, tom e energia, medidos no seu celular</string>
+    <string name="tour_183_smart_point_3">Salve uma cópia como playlist comum quando quiser</string>
+    <string name="tour_183_tags_title">Marcadores</string>
+    <string name="tour_183_tags_body">Seus próprios marcadores nas músicas, pelo menu de qualquer música.</string>
+    <string name="tour_183_tags_point_1">Cada marcador tem sua página na Biblioteca</string>
+    <string name="tour_183_tags_point_2">Use-os em playlists inteligentes</string>
+    <string name="tour_183_tags_point_3">Marque várias músicas de uma vez</string>
+    <string name="tour_183_select_title">Selecionar várias</string>
+    <string name="tour_183_select_body">Toque e segure uma música numa lista para escolher mais e agir em todas de uma vez.</string>
+    <string name="tour_183_select_point_1">Adicionar a uma playlist ou à fila, marcar, curtir ou baixar</string>
+    <string name="tour_183_select_point_2">Tirar de uma playlist, com confirmação</string>
+    <string name="tour_183_search_title">Pesquise na sua biblioteca</string>
+    <string name="tour_183_search_body">Tudo o que você tem, encontrado enquanto digita, com filtros.</string>
+    <string name="tour_183_search_point_1">Músicas, playlists, marcadores, artistas e álbuns</string>
+    <string name="tour_183_search_point_2">Só curtidas, baixadas ou neste celular</string>
+    <string name="tour_183_search_point_3">Títulos em japonês, coreano, russo e grego encontrados com letras latinas</string>
+    <string name="tour_183_also_file">Um arquivo do celular como versão de uma música</string>
+    <string name="tour_183_also_duplicates">Encontre músicas repetidas numa playlist</string>
+    <string name="tour_183_also_songs_from">Músicas da Biblioteca a partir das playlists que você escolher</string>
+    <string name="tour_183_also_lock">Repetir e A seguir na tela de bloqueio</string>
+    <string name="tour_183_also_uploads">Enviar e excluir em Envios</string>
 </resources>

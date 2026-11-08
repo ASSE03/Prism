@@ -5076,4 +5076,29 @@
     <string name="deleted_from_your_uploads">Eliminado dos teus carregamentos</string>
     <string name="couldn_t_delete_it_s">Não foi possível eliminar: %1$s</string>
     <string name="uploads_couldn_t_find_it">O YouTube Music já não o lista</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Playlists inteligentes</string>
+    <string name="tour_183_smart_body">Playlists que se enchem sozinhas com as regras que definires e acompanham a tua biblioteca.</string>
+    <string name="tour_183_smart_point_1">Regras sobre o que gostas, ouves, transferes ou etiquetas</string>
+    <string name="tour_183_smart_point_2">Andamento, tom e energia, medidos no teu telemóvel</string>
+    <string name="tour_183_smart_point_3">Guarda uma cópia como playlist normal quando quiseres</string>
+    <string name="tour_183_tags_title">Etiquetas</string>
+    <string name="tour_183_tags_body">As tuas próprias etiquetas nas músicas, a partir do menu de qualquer música.</string>
+    <string name="tour_183_tags_point_1">Cada etiqueta tem a sua página na Biblioteca</string>
+    <string name="tour_183_tags_point_2">Usa-as em playlists inteligentes</string>
+    <string name="tour_183_tags_point_3">Etiqueta várias músicas de uma vez</string>
+    <string name="tour_183_select_title">Selecionar várias</string>
+    <string name="tour_183_select_body">Mantém premida uma música numa lista para escolher mais e age sobre todas de uma vez.</string>
+    <string name="tour_183_select_point_1">Adicionar a uma playlist ou à fila, etiquetar, gostar ou transferir</string>
+    <string name="tour_183_select_point_2">Tirá-las de uma playlist, com confirmação</string>
+    <string name="tour_183_search_title">Pesquisa na tua biblioteca</string>
+    <string name="tour_183_search_body">Tudo o que tens, encontrado enquanto escreves, com filtros.</string>
+    <string name="tour_183_search_point_1">Músicas, playlists, etiquetas, artistas e álbuns</string>
+    <string name="tour_183_search_point_2">Só gostos, transferidas ou neste telemóvel</string>
+    <string name="tour_183_search_point_3">Títulos em japonês, coreano, russo e grego encontrados em letras latinas</string>
+    <string name="tour_183_also_file">Um ficheiro do telemóvel como versão de uma música</string>
+    <string name="tour_183_also_duplicates">Encontra músicas repetidas numa playlist</string>
+    <string name="tour_183_also_songs_from">Músicas da Biblioteca a partir das playlists que escolheres</string>
+    <string name="tour_183_also_lock">Repetir e A seguir no ecrã de bloqueio</string>
+    <string name="tour_183_also_uploads">Carregar e eliminar em Carregamentos</string>
 </resources>

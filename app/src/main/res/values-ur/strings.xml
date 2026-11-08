@@ -5004,4 +5004,29 @@
     <string name="deleted_from_your_uploads">آپ کے اپ لوڈز سے حذف ہو گیا</string>
     <string name="couldn_t_delete_it_s">حذف نہیں ہو سکا: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music اب اسے نہیں دکھاتا</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">اسمارٹ پلے لسٹس</string>
+    <string name="tour_183_smart_body">آپ کے اصولوں سے خود بھرنے والی پلے لسٹس، جو آپ کی لائبریری کے ساتھ اپ ڈیٹ رہتی ہیں۔</string>
+    <string name="tour_183_smart_point_1">جو آپ پسند کریں، سنیں، ڈاؤن لوڈ کریں یا ٹیگ کریں اس پر اصول</string>
+    <string name="tour_183_smart_point_2">ٹیمپو، اسکیل اور انرجی، آپ کے فون پر ناپی گئی</string>
+    <string name="tour_183_smart_point_3">جب چاہیں عام پلے لسٹ کے طور پر کاپی محفوظ کریں</string>
+    <string name="tour_183_tags_title">ٹیگز</string>
+    <string name="tour_183_tags_body">گانوں پر آپ کے اپنے لیبل، کسی بھی گانے کے مینو سے۔</string>
+    <string name="tour_183_tags_point_1">ہر ٹیگ کا لائبریری میں اپنا صفحہ ہے</string>
+    <string name="tour_183_tags_point_2">انہیں اسمارٹ پلے لسٹس میں استعمال کریں</string>
+    <string name="tour_183_tags_point_3">بہت سے گانوں کو ایک ساتھ ٹیگ کریں</string>
+    <string name="tour_183_select_title">کئی منتخب کریں</string>
+    <string name="tour_183_select_body">فہرست میں کسی گانے کو دبائے رکھیں، مزید چنیں، پھر سب پر ایک ساتھ عمل کریں۔</string>
+    <string name="tour_183_select_point_1">پلے لسٹ یا قطار میں شامل کریں، ٹیگ، پسند یا ڈاؤن لوڈ کریں</string>
+    <string name="tour_183_select_point_2">تصدیق کے بعد پلے لسٹ سے ہٹائیں</string>
+    <string name="tour_183_search_title">اپنی لائبریری میں تلاش کریں</string>
+    <string name="tour_183_search_body">آپ کا سب کچھ، ٹائپ کرتے ہی مل جاتا ہے، فلٹرز کے ساتھ۔</string>
+    <string name="tour_183_search_point_1">گانے، پلے لسٹس، ٹیگز، فنکار اور البمز</string>
+    <string name="tour_183_search_point_2">صرف پسندیدہ، ڈاؤن لوڈ شدہ یا اس فون پر</string>
+    <string name="tour_183_search_point_3">جاپانی، کوریائی، روسی اور یونانی عنوان لاطینی حروف میں بھی ملتے ہیں</string>
+    <string name="tour_183_also_file">فون کی ایک فائل گانے کے ورژن کے طور پر</string>
+    <string name="tour_183_also_duplicates">پلے لسٹ میں دو بار موجود گانے تلاش کریں</string>
+    <string name="tour_183_also_songs_from">آپ کی چنی ہوئی پلے لسٹس سے لائبریری کے گانے</string>
+    <string name="tour_183_also_lock">لاک اسکرین پر دہرائیں اور اگلا</string>
+    <string name="tour_183_also_uploads">اپ لوڈز میں اپ لوڈ اور حذف</string>
 </resources>

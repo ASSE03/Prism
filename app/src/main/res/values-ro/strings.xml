@@ -5076,4 +5076,29 @@
     <string name="deleted_from_your_uploads">Șters din încărcările tale</string>
     <string name="couldn_t_delete_it_s">Nu s-a putut șterge: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music nu-l mai afișează</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Playlisturi inteligente</string>
+    <string name="tour_183_smart_body">Playlisturi care se umplu singure după regulile tale și țin pasul cu biblioteca.</string>
+    <string name="tour_183_smart_point_1">Reguli după ce apreciezi, asculți, descarci sau etichetezi</string>
+    <string name="tour_183_smart_point_2">Tempo, tonalitate și energie, măsurate pe telefon</string>
+    <string name="tour_183_smart_point_3">Salvează oricând o copie ca playlist obișnuit</string>
+    <string name="tour_183_tags_title">Etichete</string>
+    <string name="tour_183_tags_body">Etichetele tale pe melodii, din meniul oricărei melodii.</string>
+    <string name="tour_183_tags_point_1">Fiecare etichetă are pagina ei în Bibliotecă</string>
+    <string name="tour_183_tags_point_2">Folosește-le în playlisturi inteligente</string>
+    <string name="tour_183_tags_point_3">Etichetează multe melodii deodată</string>
+    <string name="tour_183_select_title">Selectează mai multe</string>
+    <string name="tour_183_select_body">Ține apăsat pe o melodie dintr-o listă ca să alegi mai multe, apoi acționează asupra tuturor.</string>
+    <string name="tour_183_select_point_1">Adaugă într-un playlist sau în coadă, etichetează, apreciază sau descarcă</string>
+    <string name="tour_183_select_point_2">Scoate-le dintr-un playlist, cu confirmare</string>
+    <string name="tour_183_search_title">Caută în biblioteca ta</string>
+    <string name="tour_183_search_body">Tot ce ai, găsit pe măsură ce scrii, cu filtre.</string>
+    <string name="tour_183_search_point_1">Melodii, playlisturi, etichete, artiști și albume</string>
+    <string name="tour_183_search_point_2">Doar apreciate, descărcate sau pe acest telefon</string>
+    <string name="tour_183_search_point_3">Titluri japoneze, coreene, rusești și grecești găsite cu litere latine</string>
+    <string name="tour_183_also_file">Un fișier de pe telefon ca versiune a unei melodii</string>
+    <string name="tour_183_also_duplicates">Găsește melodiile care apar de două ori într-un playlist</string>
+    <string name="tour_183_also_songs_from">Melodiile din Bibliotecă din playlisturile alese</string>
+    <string name="tour_183_also_lock">Repetă și Urmează pe ecranul de blocare</string>
+    <string name="tour_183_also_uploads">Încărcare și ștergere în Încărcări</string>
 </resources>

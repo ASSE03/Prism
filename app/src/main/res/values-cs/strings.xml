@@ -5148,4 +5148,29 @@
     <string name="deleted_from_your_uploads">Smazáno z nahraných</string>
     <string name="couldn_t_delete_it_s">Smazání se nezdařilo: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music už to neuvádí</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Chytré playlisty</string>
+    <string name="tour_183_smart_body">Playlisty, které se samy plní podle vašich pravidel a drží krok s knihovnou.</string>
+    <string name="tour_183_smart_point_1">Pravidla podle toho, co se vám líbí, co hrajete, stahujete nebo štítkujete</string>
+    <string name="tour_183_smart_point_2">Tempo, tónina a energie změřené v telefonu</string>
+    <string name="tour_183_smart_point_3">Kdykoli uložte kopii jako běžný playlist</string>
+    <string name="tour_183_tags_title">Štítky</string>
+    <string name="tour_183_tags_body">Vlastní štítky na skladbách, z nabídky kterékoli skladby.</string>
+    <string name="tour_183_tags_point_1">Každý štítek má v Knihovně vlastní stránku</string>
+    <string name="tour_183_tags_point_2">Použijte je v chytrých playlistech</string>
+    <string name="tour_183_tags_point_3">Označte mnoho skladeb najednou</string>
+    <string name="tour_183_select_title">Vybrat více</string>
+    <string name="tour_183_select_body">Podržte skladbu v seznamu, vyberte další a pracujte se všemi najednou.</string>
+    <string name="tour_183_select_point_1">Přidat do playlistu nebo fronty, označit, dát To se mi líbí nebo stáhnout</string>
+    <string name="tour_183_select_point_2">Odebrat z playlistu, s potvrzením</string>
+    <string name="tour_183_search_title">Hledejte ve své knihovně</string>
+    <string name="tour_183_search_body">Vše, co máte, nalezené během psaní, s filtry.</string>
+    <string name="tour_183_search_point_1">Skladby, playlisty, štítky, interpreti a alba</string>
+    <string name="tour_183_search_point_2">Jen oblíbené, stažené nebo v tomto telefonu</string>
+    <string name="tour_183_search_point_3">Japonské, korejské, ruské a řecké názvy nalezené latinkou</string>
+    <string name="tour_183_also_file">Soubor v telefonu jako verze skladby</string>
+    <string name="tour_183_also_duplicates">Najděte skladby, které jsou v playlistu dvakrát</string>
+    <string name="tour_183_also_songs_from">Skladby v Knihovně z vybraných playlistů</string>
+    <string name="tour_183_also_lock">Opakování a Další na zamykací obrazovce</string>
+    <string name="tour_183_also_uploads">Nahrávání a mazání v Nahraných</string>
 </resources>

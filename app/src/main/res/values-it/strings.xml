@@ -5076,4 +5076,29 @@
     <string name="deleted_from_your_uploads">Eliminato dai tuoi caricamenti</string>
     <string name="couldn_t_delete_it_s">Impossibile eliminarlo: %1$s</string>
     <string name="uploads_couldn_t_find_it">YouTube Music non lo elenca più</string>
+    <!-- 1.8.3 Tour -->
+    <string name="tour_183_smart_title">Playlist intelligenti</string>
+    <string name="tour_183_smart_body">Playlist che si riempiono da sole con le regole che scegli e seguono la tua libreria.</string>
+    <string name="tour_183_smart_point_1">Regole su ciò che ti piace, ascolti, scarichi o tagghi</string>
+    <string name="tour_183_smart_point_2">Tempo, tonalità ed energia, misurati sul telefono</string>
+    <string name="tour_183_smart_point_3">Salvane una copia come playlist normale quando vuoi</string>
+    <string name="tour_183_tags_title">Tag</string>
+    <string name="tour_183_tags_body">Le tue etichette sui brani, dal menu di qualsiasi brano.</string>
+    <string name="tour_183_tags_point_1">Ogni tag ha la sua pagina in Libreria</string>
+    <string name="tour_183_tags_point_2">Usali nelle playlist intelligenti</string>
+    <string name="tour_183_tags_point_3">Tagga tanti brani insieme</string>
+    <string name="tour_183_select_title">Selezione multipla</string>
+    <string name="tour_183_select_body">Tieni premuto un brano in un elenco per sceglierne altri, poi agisci su tutti insieme.</string>
+    <string name="tour_183_select_point_1">Aggiungi a una playlist o alla coda, tagga, metti Mi piace o scarica</string>
+    <string name="tour_183_select_point_2">Toglili da una playlist, con conferma</string>
+    <string name="tour_183_search_title">Cerca nella tua libreria</string>
+    <string name="tour_183_search_body">Tutto ciò che hai, trovato mentre scrivi, con i filtri.</string>
+    <string name="tour_183_search_point_1">Brani, playlist, tag, artisti e album</string>
+    <string name="tour_183_search_point_2">Solo Mi piace, scaricati o su questo telefono</string>
+    <string name="tour_183_search_point_3">Titoli giapponesi, coreani, russi e greci trovati in lettere latine</string>
+    <string name="tour_183_also_file">Un file del telefono come versione di un brano</string>
+    <string name="tour_183_also_duplicates">Trova i brani doppi in una playlist</string>
+    <string name="tour_183_also_songs_from">I brani della Libreria dalle playlist che scegli</string>
+    <string name="tour_183_also_lock">Ripeti e A seguire nella schermata di blocco</string>
+    <string name="tour_183_also_uploads">Carica ed elimina in Caricamenti</string>
 </resources>
