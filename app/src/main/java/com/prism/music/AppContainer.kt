@@ -621,7 +621,10 @@ class AppContainer(val app: Application) {
     val together by lazy { com.prism.music.playback.together.Together(app, this) }
 
     /** Prism Connect: speakers and TVs on the network (UPnP / DLNA). */
-    val cast by lazy { com.prism.music.connect.Cast(app, this) }
+    private val castHolder = lazy { com.prism.music.connect.Cast(app, this) }
+    val cast by castHolder
+    /** Casting right now; asking doesn't set up Prism Connect's casting (the notification asks at every update). */
+    val castingNow: Boolean get() = castHolder.isInitialized() && cast.casting
     private val webRemoteMade = lazy { com.prism.music.connect.WebRemote(app, this) }
     /** Prism Connect: Prism played from a browser on the same Wi-Fi (Settings → Prism Connect). */
     val webRemote by webRemoteMade

@@ -514,6 +514,14 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession = session
 
+    /**
+     * #239 (1.8.3): while casting, the service stays in the foreground whatever the muted phone player is doing. Out of
+     * it, Android blocks a background app's network a few seconds after it leaves the screen: the speaker could no longer
+     * be reached (or fetch the song from the phone), and casting ended as "lost the connection" ~30 s later.
+     */
+    override fun onUpdateNotification(session: MediaSession, startInForegroundRequired: Boolean) =
+        super.onUpdateNotification(session, startInForegroundRequired || c.castingNow)
+
     /** Whether this service is in the foreground now (only known on Android 10+; below, it says yes). */
     private fun inForeground(): Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.Q || foregroundServiceType != 0
 
