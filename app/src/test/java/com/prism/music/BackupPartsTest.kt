@@ -55,6 +55,26 @@ class BackupPartsTest {
         assertFalse(File(files, "restore_pending").exists())
     }
 
+    /**
+     * 1.8.3's library: smart playlists live in the library file, the Songs view's playlists ("Songs from") in
+     * library_order: both come back with Library. Traits (tempo, key, energy) and romanized titles are in the database:
+     * they stay with History.
+     */
+    @Test fun the183LibraryComesBackWithLibrary() {
+        phone()
+        write("shared_prefs/library_order.xml", "old songs-from")
+        stage(
+            """{"format":2,"app":"${app.packageName}","parts":["LIBRARY"]}""",
+            "files/library/prism.json" to """{"playlists":[{"id":"smart-1","smart":{"rules":[]}}]}""",
+            "shared_prefs/library_order.xml" to "new songs-from",
+        )
+        Backup.applyPending(app)
+        assertTrue("smart playlists", read("files/library/prism.json")!!.contains("smart-1"))
+        assertEquals("the Songs view's playlists", "new songs-from", read("shared_prefs/library_order.xml"))
+        assertEquals("traits stay with the history", "old history", read("databases/prism.db"))
+        assertEquals("old settings", read("shared_prefs/icon_style.xml"))
+    }
+
     @Test fun anOldBackupReplacesEverythingButDownloads() {
         phone()
         write("datastore/prism_settings.preferences_pb", "old store")
