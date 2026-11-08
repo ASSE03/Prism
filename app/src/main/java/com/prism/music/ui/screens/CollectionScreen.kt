@@ -1,5 +1,6 @@
 package com.prism.music.ui.screens
 
+import kotlinx.coroutines.flow.runningFold
 import com.prism.music.R
 import com.prism.music.tr
 import com.prism.music.trp
@@ -213,9 +214,12 @@ fun CollectionScreen(type: CollectionType, id: String, initialGenre: String?, bo
             val rules = list?.smart
             // A smart playlist (1.8.3): what its rules find, again whenever the library's songs, plays, tags or
             // measurements change; the last of them shows meanwhile.
+            // Counted, not the changed tables' names: two changes to the same table in a row are equal sets, and the
+            // state would skip the second.
             val changes by remember(rules != null) {
-                if (rules != null) c.db.invalidationTracker.createFlow("songs", "song_traits", "song_tags", "play_events") else kotlinx.coroutines.flow.flowOf(null)
-            }.collectAsState(null)
+                if (rules != null) c.db.invalidationTracker.createFlow("songs", "song_traits", "song_tags", "play_events")
+                    .runningFold(0) { n, _ -> n + 1 } else kotlinx.coroutines.flow.flowOf(0)
+            }.collectAsState(0)
             val downloadsNow = if (rules != null) downloads.size else 0
             val found by androidx.compose.runtime.produceState<com.prism.music.data.SmartResult?>(null, rules, changes, downloadsNow) {
                 if (rules != null) value = runCatching { c.smart.run(rules) }.onFailure { android.util.Log.w("PrismSmart", "smart playlist didn't run", it) }.getOrNull() ?: value
@@ -615,10 +619,14 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                 val failed = gone.filter { s ->
                     runCatching { c.ytm.removeFromPlaylist(page.id, s.id, slots[s.id]!!) }.onFailure { if (error == null) error = it }.isFailure
                 }
-                if (failed.isEmpty()) Toast.makeText(context, tr(R.string.removed_from, page.title), Toast.LENGTH_SHORT).show()
+                // Picked songs without the playlist's id for removing them (not loaded: offline, or a kept copy) weren't
+                // removed either: said, not "Removed".
+                val skipped = gone.size < picked.size
+                if (failed.isEmpty() && !skipped) Toast.makeText(context, tr(R.string.removed_from, page.title), Toast.LENGTH_SHORT).show()
                 else {
                     live.songs.value = before.filter { s -> gone.none { it.id == s.id } || failed.any { it.id == s.id } }
-                    Toast.makeText(context, tr(R.string.couldn_t_remove_it, error?.friendlyMessage().orEmpty()), Toast.LENGTH_SHORT).show()
+                    val why = error?.friendlyMessage() ?: tr(R.string.try_again_in_a_moment)
+                    Toast.makeText(context, tr(R.string.couldn_t_remove_it, why), Toast.LENGTH_SHORT).show()
                 }
             }
         }

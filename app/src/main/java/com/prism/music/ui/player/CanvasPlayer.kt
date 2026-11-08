@@ -187,6 +187,9 @@ internal class ClipState(first: CanvasArtwork) {
     /** The song's clip changed: start over with it. */
     fun show(next: CanvasArtwork) {
         if (next == canvas) return
+        // The same clip under another song (an album's one video for all its tracks): it plays on as it is; resetting
+        // here would hide it for good, since nothing loads again to show it.
+        if (next.url == canvas.url) { canvas = next; return }
         canvas = next; url = next.url; rendered = false; aspect = 0f
     }
 

@@ -118,6 +118,9 @@ fun SelectableSongs(songs: List<Song>, remover: SelectionRemover? = null, resetK
     // Leaving the page ends the picking that started in it.
     DisposableEffect(scope) { onDispose { if (selection.scope === scope) selection.clear() } }
     androidx.compose.runtime.LaunchedEffect(resetKey) { if (selection.scope === scope) selection.clear() }
+    // Back ends the picking here, inside the page: a handler outside the NavHost is registered before the NavHost's
+    // own, which then takes Back first and leaves the page.
+    androidx.activity.compose.BackHandler(selection.selecting && selection.scope === scope) { selection.clear() }
     CompositionLocalProvider(LocalSelectScope provides scope, content = content)
 }
 

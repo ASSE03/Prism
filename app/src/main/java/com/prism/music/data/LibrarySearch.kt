@@ -146,6 +146,10 @@ class TitleSpellings(
                 }
             }
             if (found.isNotEmpty()) _known.value = _known.value + found
+        }.also { j ->
+            // Titles queued after the loop found it empty, but while the job still counted as active, would wait for the
+            // next search: once it's done, it starts again for them (not after a cancel: the scope is closing).
+            j.invokeOnCompletion { cause -> if (cause == null && queue.isNotEmpty()) want(emptyList()) }
         }
     }
 

@@ -136,6 +136,8 @@ fun SmartEditorSheet(listId: String?, onDismiss: () -> Unit) {
     val existing = remember(listId) { listId?.let { c.prismLibrary.list(it) } }
     var name by remember { mutableStateOf(existing?.title.orEmpty()) }
     var rules by remember { mutableStateOf(existing?.smart ?: SmartRules()) }
+    // Bumped when a starter replaces the rules: the cards start over from its numbers (they keep their own typing).
+    var starts by remember { androidx.compose.runtime.mutableIntStateOf(0) }
     val playing by c.player.currentSong.collectAsState()
     val playingTraits by produceState<SongTraitsEntity?>(null, playing?.id) { value = playing?.id?.let { runCatching { c.db.traits().get(it) }.getOrNull() } }
     val found by produceState<Int?>(null, rules) {
@@ -155,11 +157,11 @@ fun SmartEditorSheet(listId: String?, onDismiss: () -> Unit) {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     val goes = SmartStarters.goesWith(playingTraits)
                     listOfNotNull(SmartStarters.fastAndLiked(), SmartStarters.notPlayedInAWhile()).forEach { s ->
-                        PrismChip(false, { name = s.name; rules = s.rules }, s.name, icon = PrismIcons.Add)
+                        PrismChip(false, { name = s.name; rules = s.rules; starts++ }, s.name, icon = PrismIcons.Add)
                     }
                     PrismChip(false, {
                         if (goes == null) android.widget.Toast.makeText(context, tr(R.string.the_song_playing_isn_t_measured_yet), android.widget.Toast.LENGTH_SHORT).show()
-                        else { name = goes.name; rules = goes.rules }
+                        else { name = goes.name; rules = goes.rules; starts++ }
                     }, tr(R.string.smart_goes_with_what_s_playing), icon = PrismIcons.Add)
                 }
             }
@@ -171,7 +173,7 @@ fun SmartEditorSheet(listId: String?, onDismiss: () -> Unit) {
             Spacer(Modifier.height(10.dp))
             rules.rules.forEachIndexed { i, r ->
                 // Each card keeps its typing while others come and go.
-                androidx.compose.runtime.key(rules.rules.size, i, r.field) { RuleCard(
+                androidx.compose.runtime.key(starts, rules.rules.size, i, r.field) { RuleCard(
                     r, i,
                     onChange = { nr -> rules = rules.copy(rules = rules.rules.toMutableList().also { it[i] = nr }) },
                     onRemove = { rules = rules.copy(rules = rules.rules.toMutableList().also { it.removeAt(i) }) },

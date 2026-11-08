@@ -39,6 +39,16 @@ class CanvasClipStateTest {
         assertTrue(clip.rendered)
     }
 
+    /** Review of 1.8.3: an album's one clip for every track (another title, the same address) plays on, still shown. */
+    @Test fun theSameClipUnderTheNextSongStaysShown() {
+        val album = CanvasArtwork("https://clips/album.mp4", title = "Track 1")
+        val clip = ClipState(album)
+        clip.videoSize(720f, 1280); clip.frame()
+        clip.show(album.copy(title = "Track 2"))
+        assertTrue("nothing loads again to show it, so it mustn't hide", clip.rendered)
+        assertEquals(album.url, clip.url)
+    }
+
     @Test fun aFailedClipTriesItsOtherRenditionThenGivesUp() {
         val clip = ClipState(a)
         clip.show(b)

@@ -123,13 +123,15 @@ object SmartQuery {
                 if (keys.isEmpty()) "0" else { args.addAll(keys); "tr.camelot IN (${keys.joinToString(",") { "?" }})" }
             }
             SmartField.LIKED -> "s.liked = 1"
-            SmartField.DOWNLOADED -> "h.down = 1"
+            // A song with no row in the flags table has NULLs there: COALESCE, or "isn't" (NOT NULL) would drop it.
+            SmartField.DOWNLOADED -> "COALESCE(h.down, 0) = 1"
             // What the phone's files are now (a file's songs row outlives the file).
-            SmartField.ON_PHONE -> "h.local = 1"
+            SmartField.ON_PHONE -> "COALESCE(h.local, 0) = 1"
             SmartField.TAG -> { args += r.text.orEmpty().trim(); "EXISTS (SELECT 1 FROM song_tags t WHERE t.songId = s.id AND t.tag = ? COLLATE NOCASE)" }
-            SmartField.GENRE -> "h.genre = 1"
-            SmartField.ARTIST -> { args += like(r.text); "s.artistName LIKE ? ESCAPE '\\'" }
-            SmartField.ALBUM -> { args += like(r.text); "s.albumTitle LIKE ? ESCAPE '\\'" }
+            // Each song's own genre (when it's one a rule asks for), so each Genre rule tests its own.
+            SmartField.GENRE -> { args += r.text.orEmpty().trim().lowercase(); "COALESCE(h.genre, '') = ?" }
+            SmartField.ARTIST -> { args += like(r.text); "COALESCE(s.artistName, '') LIKE ? ESCAPE '\\'" }
+            SmartField.ALBUM -> { args += like(r.text); "COALESCE(s.albumTitle, '') LIKE ? ESCAPE '\\'" }
             SmartField.PLAYS -> {
                 val parts = mutableListOf<String>()
                 r.min?.let { parts += "COALESCE(p.n, 0) >= ?"; args += it.toLong() }
@@ -253,8 +255,11 @@ class SmartPlaylists(
     /** Downloads and files known to have a songs row. */
     private val hasRow: MutableSet<String> = java.util.concurrent.ConcurrentHashMap.newKeySet()
 
-    /** The hash of the flags the temporary table holds (set and read inside the writer's transaction). */
-    @Volatile private var filled: Int? = null
+    /** What the temporary table holds (set and read inside the writer's transaction); compared whole, not by hash. */
+    @Volatile private var filled: Map<String, Have>? = null
+
+    /** A song's row in the temporary table: downloaded, a file on the phone, its genre when a rule asks for it. */
+    private data class Have(val down: Boolean = false, val local: Boolean = false, val genre: String? = null)
 
     suspend fun run(rules: SmartRules, now: Long = System.currentTimeMillis()): SmartResult = withContext(Dispatchers.IO) {
         val down = downloaded()
@@ -269,32 +274,32 @@ class SmartPlaylists(
         // Genres come from what Prism saved of them (several lookups per song): worked out before the query, for the
         // listener's songs only, and only when a rule asks.
         val genreRules = rules.rules.filter { it.field == SmartField.GENRE }
-        val inGenre: Set<String> = if (genreRules.isEmpty()) emptySet() else {
+        val genreOf: Map<String, String> = if (genreRules.isEmpty()) emptyMap() else {
             val known = rows(db.openHelper.readableDatabase, androidx.sqlite.db.SimpleSQLiteQuery(SmartQuery.KNOWN)).map { it.toSong() }
             val wanted = genreRules.mapNotNull { it.text?.trim()?.lowercase() }.toSet()
-            genres((known + down + files).distinctBy { it.id }).filterValues { it.lowercase() in wanted }.keys
+            genres((known + down + files).distinctBy { it.id }).mapValues { it.value.trim().lowercase() }.filterValues { it in wanted }
         }
         db.runInTransaction<SmartResult> {
             val sql = db.openHelper.writableDatabase
-            sql.execSQL("CREATE TEMP TABLE IF NOT EXISTS ${SmartQuery.HAVE} (id TEXT PRIMARY KEY, down INTEGER NOT NULL DEFAULT 0, local INTEGER NOT NULL DEFAULT 0, genre INTEGER NOT NULL DEFAULT 0)")
-            // Each song's flags worked out here. The table (on the one writer connection) is refilled only when they
+            sql.execSQL("CREATE TEMP TABLE IF NOT EXISTS ${SmartQuery.HAVE} (id TEXT PRIMARY KEY, down INTEGER NOT NULL DEFAULT 0, local INTEGER NOT NULL DEFAULT 0, genre TEXT)")
+            // Each song's row worked out here. The table (on the one writer connection) is refilled only when they
             // changed or it lost its rows; in rows of 200 per statement (4 arguments each, under old SQLite's 999).
-            val flags = HashMap<String, Int>()
-            down.forEach { flags.merge(it.id, 1, Int::or) }
-            files.forEach { flags.merge(it.id, 2, Int::or) }
-            inGenre.forEach { flags.merge(it, 4, Int::or) }
+            val flags = HashMap<String, Have>()
+            down.forEach { flags[it.id] = Have(down = true) }
+            files.forEach { flags[it.id] = (flags[it.id] ?: Have()).copy(local = true) }
+            genreOf.forEach { (id, g) -> flags[id] = (flags[id] ?: Have()).copy(genre = g) }
             val rowsNow = sql.query("SELECT COUNT(*) FROM ${SmartQuery.HAVE}").use { c -> if (c.moveToFirst()) c.getInt(0) else -1 }
-            if (flags.hashCode() != filled || rowsNow != flags.size) {
+            if (flags != filled || rowsNow != flags.size) {
                 sql.execSQL("DELETE FROM ${SmartQuery.HAVE}")
                 flags.entries.chunked(200).forEach { part ->
-                    val args = ArrayList<Any>(part.size * 4)
-                    part.forEach { (id, f) -> args += id; args += f and 1; args += f shr 1 and 1; args += f shr 2 and 1 }
+                    val args = ArrayList<Any?>(part.size * 4)
+                    part.forEach { (id, h) -> args += id; args += if (h.down) 1 else 0; args += if (h.local) 1 else 0; args += h.genre }
                     sql.execSQL(
                         "INSERT INTO ${SmartQuery.HAVE} (id, down, local, genre) VALUES " + part.joinToString(",") { "(?,?,?,?)" },
                         args.toTypedArray(),
                     )
                 }
-                filled = flags.hashCode()
+                filled = HashMap(flags)
             }
             val q = SmartQuery.songs(rules, now)
             val found = rows(sql, androidx.sqlite.db.SimpleSQLiteQuery(q.sql, q.args.toTypedArray())).map { it.toSong() }

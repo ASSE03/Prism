@@ -171,10 +171,12 @@ fun UploadsScreen(bottomPadding: Dp) {
     // account, and only on a tap.
     val uploading by c.uploads.uploading.collectAsState()
     val pickFile = androidx.activity.compose.rememberLauncherForActivityResult(androidx.activity.result.contract.ActivityResultContracts.OpenDocument()) { uri ->
-        if (uri != null) scope.launch {
+        // In the app's scope: leaving the page doesn't cut an upload off halfway, and its result is still said.
+        val app = context.applicationContext
+        if (uri != null) c.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
             c.uploads.upload(uri)
-                .onSuccess { name -> Toast.makeText(context, tr(R.string.uploaded_s_it_shows_up_here, name), Toast.LENGTH_LONG).show() }
-                .onFailure { e -> Toast.makeText(context, tr(R.string.couldn_t_upload_it_s, e.message ?: e.javaClass.simpleName), Toast.LENGTH_LONG).show() }
+                .onSuccess { name -> Toast.makeText(app, tr(R.string.uploaded_s_it_shows_up_here, name), Toast.LENGTH_LONG).show() }
+                .onFailure { e -> Toast.makeText(app, tr(R.string.couldn_t_upload_it_s, e.message ?: e.javaClass.simpleName), Toast.LENGTH_LONG).show() }
         }
     }
     var deleting by remember { mutableStateOf<Song?>(null) }
@@ -186,10 +188,11 @@ fun UploadsScreen(bottomPadding: Dp) {
             confirmButton = {
                 com.prism.music.ui.components.PrismTextButton(onClick = {
                     deleting = null
-                    scope.launch {
+                    val app = context.applicationContext
+                    c.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
                         c.uploads.delete(s)
-                            .onSuccess { Toast.makeText(context, tr(R.string.deleted_from_your_uploads), Toast.LENGTH_SHORT).show() }
-                            .onFailure { e -> Toast.makeText(context, tr(R.string.couldn_t_delete_it_s, e.message ?: e.javaClass.simpleName), Toast.LENGTH_LONG).show() }
+                            .onSuccess { Toast.makeText(app, tr(R.string.deleted_from_your_uploads), Toast.LENGTH_SHORT).show() }
+                            .onFailure { e -> Toast.makeText(app, tr(R.string.couldn_t_delete_it_s, e.message ?: e.javaClass.simpleName), Toast.LENGTH_LONG).show() }
                     }
                 }, modifier = Modifier.testTag("confirmDeleteUpload")) { Text(tr(R.string.delete), color = MaterialTheme.colorScheme.error) }
             },

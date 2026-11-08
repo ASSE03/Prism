@@ -99,6 +99,34 @@ class SmartPlaylistsTest {
         assertEquals(listOf("a", "f"), ids(SmartRule(SmartField.GENRE, text = "pop")))
     }
 
+    /** Review of 1.8.3: songs with no row in the downloads/files/genres table, or no album, still count for "isn't". */
+    @Test fun isntKeepsSongsTheFlagsTableDoesntList() {
+        assertEquals(listOf("a", "b", "c", "d", file.id), ids(SmartRule(SmartField.DOWNLOADED, not = true)))
+        assertEquals(listOf("a", "b", "c", "d", "f"), ids(SmartRule(SmartField.ON_PHONE, not = true)))
+        assertEquals(listOf("b", "c", "d", file.id), ids(SmartRule(SmartField.GENRE, not = true, text = "pop")))
+        assertEquals("songs without an album aren't in Morning either", listOf("b", "c", "d", file.id, "f"), ids(SmartRule(SmartField.ALBUM, not = true, text = "morn")))
+    }
+
+    /** Review of 1.8.3: each Genre rule tests its own genre, not "any genre a rule names". */
+    @Test fun genreRulesAreEachTheirOwn() {
+        assertEquals(listOf("c"), ids(SmartRule(SmartField.GENRE, text = "Rock"), SmartRule(SmartField.GENRE, not = true, text = "Pop")))
+        assertEquals("a song has one genre", emptyList<String>(), ids(SmartRule(SmartField.GENRE, text = "rock"), SmartRule(SmartField.GENRE, text = "pop")))
+        assertEquals(listOf("a", "c", "f"), ids(SmartRule(SmartField.GENRE, text = "rock"), SmartRule(SmartField.GENRE, text = "pop"), match = SmartMatch.ANY))
+    }
+
+    /**
+     * Review of 1.8.3: the table was refilled only when the flags' hash or count changed. A download moving from b to d,
+     * both Jazz, kept both ("b" 98 xor 5 + "d" 100 xor 4 = 98 xor 4 + 100 xor 5): the old table, b still downloaded.
+     */
+    @Test fun aDownloadMovingBetweenTwoSongsIsSeen() {
+        genres = genres + mapOf("b" to "Jazz", "d" to "Jazz")
+        val rules = arrayOf(SmartRule(SmartField.GENRE, text = "jazz"), SmartRule(SmartField.DOWNLOADED))
+        downloads = listOf(down, b)
+        assertEquals(listOf("b"), ids(*rules))
+        downloads = listOf(down, d)
+        assertEquals(listOf("d"), ids(*rules))
+    }
+
     @Test fun listeningRules() {
         assertEquals(listOf("b"), ids(SmartRule(SmartField.PLAYS, min = 2.0)))
         assertEquals(listOf("a", "c", "d", file.id, "f"), ids(SmartRule(SmartField.PLAYS, max = 1.0)))

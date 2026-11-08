@@ -75,10 +75,29 @@ class SongTraitsTest {
         val store = TraitsStore(dao, CoroutineScope(Dispatchers.Unconfined))
         dao.put(whole("newer", energy = 0.9f).entity())
         val read = { id: String -> if (id == "gone") null else whole(id, energy = 0.1f) }
-        assertEquals(2, store.copyMissing(listOf("newer", "old", "gone"), read))
+        assertEquals("only the missing are read and copied", 1, store.copyMissing(listOf("newer", "old", "gone"), read))
         assertEquals("a newer row stays", 0.9f, dao.get("newer")!!.energy!!, 0f)
         assertNotNull(dao.get("old"))
         assertEquals("nothing to do when the table has them all", 0, store.copyMissing(listOf("newer", "old"), read))
+    }
+
+    /**
+     * Review of 1.8.3: a restored history can hold more rows than the prefs list songs, but for other songs. The copy
+     * went by the count and skipped, and Measure now couldn't help (the prefs say they're measured).
+     */
+    @Test fun theCopyGoesBySongsNotByCount() = runBlocking {
+        val store = TraitsStore(dao, CoroutineScope(Dispatchers.Unconfined))
+        (1..5).forEach { dao.put(whole("restored$it").entity()) }
+        assertEquals(2, store.copyMissing(listOf("p1", "p2"), { whole(it) }))
+        assertNotNull(dao.get("p1"))
+        assertNotNull(dao.get("p2"))
+    }
+
+    /** Review of 1.8.3: a key under the clear mark is kept as a guess, but isn't a Camelot hour rules match. */
+    @Test fun anUnclearKeyIsntFiltered() {
+        val e = SongTraits("a", steady, MusicKey(9, minor = true, confidence = 0.01f), -8f, 0.5f, whole = true).entity()
+        assertNull(e.camelot)
+        assertNotNull("the guess stays", e.key)
     }
 
     @Test fun earlierVersionsMeasurementsReadFromThePrefs() {

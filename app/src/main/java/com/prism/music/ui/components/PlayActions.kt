@@ -116,7 +116,12 @@ private suspend fun <T> whileLoading(context: android.content.Context, title: St
 }
 
 /** Moods and genres are pages of shelves, not something to play. */
-fun BrowseItem.playable(): Playable? = if (this is MoodItem) null else Playable.Of(this)
+fun BrowseItem.playable(): Playable? = when {
+    this is MoodItem -> null
+    // A tag shown as a result (1.8.3) isn't a YouTube playlist: its menu would load, save or pin "tag:…" from YouTube.
+    this is PlaylistItem && id.startsWith(com.prism.music.ui.screens.TAG_PAGE) -> null
+    else -> Playable.Of(this)
+}
 
 /**
  * A long-press menu for cards and tiles: call the returned function with what was pressed and the

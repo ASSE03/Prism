@@ -68,7 +68,9 @@ class SelectManyAppTest {
         assertTrue("All on 500 songs took $ms ms", ms < 2_000)
         Thread { androidx.test.uiautomator.UiDevice.getInstance(instrumentation).pressBack() }.start()
         compose.waitUntil(5_000) { bar().isEmpty() }
-        assertTrue("still on the playlist after Back ended the picking", compose.onAllNodes(hasText("Five hundred")).fetchSemanticsNodes().isNotEmpty())
+        // A song row, not the playlist's name: Library lists the name too, so that would pass after leaving the page.
+        compose.waitForIdle()
+        assertTrue("still on the playlist after Back ended the picking", compose.onAllNodes(hasText("Test song 1")).fetchSemanticsNodes().isNotEmpty())
     }
 
     @Test fun pickedSongsLeaveAPrismPlaylistTogether() {

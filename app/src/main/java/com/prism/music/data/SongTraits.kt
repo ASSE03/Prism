@@ -24,7 +24,8 @@ data class SongTraits(
         bpm = tempo?.bpm?.takeIf { it > 0 },
         bpmSure = tempo?.steady == true,
         key = key?.encode(),
-        camelot = key?.camelot,
+        // Only a clear key is filterable (DJ mode goes by the same line); the guess stays in [key].
+        camelot = key?.takeIf { it.sure }?.camelot,
         lufs = lufs?.takeIf { !it.isNaN() },
         energy = energy,
         whole = whole,
@@ -59,9 +60,12 @@ class TraitsStore(private val dao: TraitsDao, private val scope: CoroutineScope)
      * table never loses a newer row this way. [ids] are the songs measured; [read] what the prefs say of one.
      */
     suspend fun copyMissing(ids: Collection<String>, read: (String) -> SongTraits?): Int {
-        if (ids.isEmpty() || dao.count() >= ids.size) return 0
+        if (ids.isEmpty()) return 0
+        // Which songs have no row (not how many rows there are: a restored history can hold other songs than the prefs).
+        val have = dao.ids().toHashSet()
+        val missing = ids.filter { it !in have }
         var copied = 0
-        for (chunk in ids.chunked(200)) {
+        for (chunk in missing.chunked(200)) {
             val rows = chunk.mapNotNull { id -> runCatching { read(id) }.getOrNull()?.entity() }
             dao.putMissing(rows)
             copied += rows.size

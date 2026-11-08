@@ -429,7 +429,8 @@ fun LibraryScreen(bottomPadding: Dp) {
                     else -> emptyList()
                 }
             }
-            com.prism.music.ui.components.SelectableSongs(pickList, resetKey = tab to fromAccountShown) {
+            // The page showing, not this page's own tab (fixed for it, and the next page stays composed beside it).
+            com.prism.music.ui.components.SelectableSongs(pickList, resetKey = pager.settledPage to fromAccountShown) {
             LazyVerticalGrid(
                 when {
                     asList -> GridCells.Fixed(1)

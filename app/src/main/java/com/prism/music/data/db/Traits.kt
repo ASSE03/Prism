@@ -50,4 +50,7 @@ interface TraitsDao {
 
     @Query("SELECT COUNT(*) FROM song_traits")
     suspend fun count(): Int
+
+    @Query("SELECT songId FROM song_traits")
+    suspend fun ids(): List<String>
 }

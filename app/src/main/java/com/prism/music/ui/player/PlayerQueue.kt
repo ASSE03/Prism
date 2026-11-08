@@ -343,11 +343,16 @@ private fun LazyListScope.queueSection(
         }
         /** Moves the song one place down ([down]) or up; false where it can't go further. */
         fun step(down: Boolean): Boolean {
-            val d = rows.drag.value?.takeIf { it.uid == current.uid && !it.settled } ?: com.prism.music.playback.QueueDrag(current.uid, 0)
+            val mine = rows.drag.value?.takeIf { it.uid == current.uid }
+            // Moved in the player, not yet back in this list: the indices here are old, so nothing moves until it is.
+            if (mine?.settled == true) return false
+            val d = mine ?: com.prism.music.playback.QueueDrag(current.uid, 0)
             com.prism.music.playback.QueueDrag.step(section, d, down) { it.uid }?.let { rows.drag.value = it; return true }
-            // At the section's end: what 1.8.2 did there, after the drag so far is in the player.
             if (shuffleOn || played) return false
-            commit()
+            // At the section's end with a drag so far: that goes into the player first, and the next step goes on from
+            // where the queue then has it (moving `current.index` now would move whichever song took its old place).
+            if (d.offset != 0) { commit(); return false }
+            // From the section's edge: what 1.8.2 did there.
             val from = current.index
             if (!down && from == 0) return false
             pc.move(from, if (down) from + 1 else from - 1)

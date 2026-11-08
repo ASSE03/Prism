@@ -76,7 +76,8 @@ class Uploads(private val c: AppContainer) {
         val (name, size) = resolver.query(uri, arrayOf(android.provider.OpenableColumns.DISPLAY_NAME, android.provider.OpenableColumns.SIZE), null, null, null)?.use { cur ->
             if (cur.moveToFirst()) (cur.getString(0) ?: "song") to (if (cur.isNull(1)) -1L else cur.getLong(1)) else null
         } ?: ("song" to -1L)
-        runCatching {
+        // Cleared however it ends, a cancel too (rethrown below: the line and the button would stay "uploading" otherwise).
+        try { runCatching {
             uploadable(name, size)?.let { why -> throw java.io.IOException(why) }
             uploading.value = name
             val type = "application/x-www-form-urlencoded;charset=utf-8".toMediaType()
@@ -91,7 +92,7 @@ class Uploads(private val c: AppContainer) {
             log("uploaded a ${name.substringAfterLast('.', "").lowercase()} file of ${size / 1_048_576} MB")
             name
         }.onFailure { if (it is CancellationException) throw it; log("upload failed: ${it.javaClass.simpleName}: ${it.message}") }
-            .also { uploading.value = null }
+        } finally { uploading.value = null }
     }
 
     companion object {
