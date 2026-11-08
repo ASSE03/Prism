@@ -239,7 +239,9 @@ fun SearchScreen(bottomPadding: Dp) {
             val songs = c.library.likedShown.value.filter { has(it.title, it.artistText) }.take(3).map { SongItem(it) }
             val lists = (c.prismLibrary.lists.value.map { it.item() } + c.library.playlists.value + c.library.albums.value + c.library.artists.value)
                 .filter { has(it.title) }.distinctBy { it.id }.take(4)
-            songs + lists
+            // The listener's tags (1.8.3), opening their songs.
+            val tags = c.db.tags().summaries().filter { has(it.tag) }.take(3).map { tagItem(it) }
+            songs + tags + lists
         }
     }
     // Your music files and downloads that match, a few of them in Top results (all of them under "On this phone").

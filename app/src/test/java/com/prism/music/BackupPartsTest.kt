@@ -98,6 +98,36 @@ class BackupPartsTest {
         assertEquals("s:SID=mine", now["cookie"])
     }
 
+    /**
+     * Tags (1.8.3) are the library's but live in the database: restoring the history alone keeps this phone's tags
+     * (read from its database before the backup's replaces it, and read back in at the start); with the library they're
+     * the backup's.
+     */
+    @Test fun historyAloneKeepsThisPhonesTags() {
+        fun phoneWithTags() {
+            app.deleteDatabase("prism.db")
+            val db = androidx.room.Room.databaseBuilder(app, com.prism.music.data.db.PrismDatabase::class.java, "prism.db").allowMainThreadQueries().build()
+            kotlinx.coroutines.runBlocking {
+                com.prism.music.data.TagStore(db, kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Default), File(files, "library"))
+                    .add("gym", listOf(com.prism.music.data.model.Song("a", "Alpha")))
+            }
+            db.close()
+            File(files, "library/tags.json").delete()
+        }
+        phoneWithTags()
+        stage("""{"format":2,"app":"${app.packageName}","parts":["HISTORY"]}""", "databases/prism.db" to "new history")
+        Backup.applyPending(app)
+        assertEquals("new history", read("databases/prism.db"))
+        val kept = read("files/library/tags.json")!!
+        assertTrue(kept, kept.contains("gym") && kept.contains("Alpha"))
+
+        phoneWithTags()
+        stage("""{"format":2,"app":"${app.packageName}","parts":["HISTORY","LIBRARY"]}""", "databases/prism.db" to "new history", "files/library/tags.json" to """{"tags":[]}""")
+        Backup.applyPending(app)
+        assertEquals("the backup's tags", """{"tags":[]}""", read("files/library/tags.json"))
+        app.deleteDatabase("prism.db")
+    }
+
     @Test fun everyPrefsFileHasAPart() {
         assertEquals(BackupPart.HISTORY, Backup.prefsPart("search"))
         assertEquals(BackupPart.LIBRARY, Backup.prefsPart("artist_prefs"))

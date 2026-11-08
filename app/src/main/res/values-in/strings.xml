@@ -4825,4 +4825,68 @@
     <plurals name="remove_n_from_youtube_playlist_q">
         <item quantity="other">Hapus %1$d lagu dari “%2$s” di YouTube Music?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">Tag</string>
+    <string name="add_a_tag">Tambahkan tag</string>
+    <string name="new_tag">Tag baru</string>
+    <string name="tags_are_your_own_labels">Label buatanmu sendiri untuk lagu, seperti “gym” atau “hari hujan”. Temukan di Koleksi → Tag.</string>
+    <string name="your_tag">Tag-mu di ponsel ini</string>
+    <string name="remove_this_tag">Hapus tag ini</string>
+    <string name="rename_tag">Ganti nama tag</string>
+    <string name="delete_tag">Hapus tag</string>
+    <string name="delete_the_tag_its_songs_stay">Hapus tag “%s”? Lagu-lagunya tetap di tempatnya.</string>
+    <string name="tag_songs_from_any_song_s">Beri tag pada lagu dari menu lagu mana pun (⋯ atau tekan lama) → Tambahkan tag.</string>
+    <string name="tag_n_songs">Tag · %s</string>
+    <plurals name="n_tags">
+        <item quantity="other">%d tag</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">Playlist pintar</string>
+    <string name="smart_playlist_n">Playlist pintar · %s</string>
+    <string name="smart_playlist_updates_itself">Playlist pintar · diperbarui sendiri</string>
+    <string name="new_smart_playlist">Playlist pintar baru</string>
+    <string name="edit_rules">Edit aturan</string>
+    <string name="save_a_copy_as_a_playlist">Simpan salinan sebagai playlist</string>
+    <string name="saved_as_a_playlist">“%s” disimpan sebagai playlist</string>
+    <string name="no_song_meets_these_rules">Belum ada lagu yang cocok dengan aturan ini. Ubah lewat menu ⋯ → Edit aturan.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="other">%d lagu belum diukur</item>
+    </plurals>
+    <string name="measuring_n_of_n">Mengukur %1$d dari %2$d…</string>
+    <string name="measure_now">Ukur sekarang</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">Lagu di ponsel ini sedang diukur. Lewat Wi-Fi, yang lain juga.</string>
+    <string name="smart_fast_and_liked">Cepat dan disukai</string>
+    <string name="smart_not_played_in_a_while">Lama tak diputar</string>
+    <string name="smart_goes_with_what_s_playing">Cocok dengan yang diputar</string>
+    <string name="the_song_playing_isn_t_measured_yet">Lagu yang diputar belum diukur.</string>
+    <string name="match_all_rules">Memenuhi semua aturan</string>
+    <string name="match_any_rule">Memenuhi salah satu aturan</string>
+    <string name="add_a_rule">Tambahkan aturan</string>
+    <string name="add_a_rule_to_begin">Tambahkan aturan untuk mulai.</string>
+    <string name="finds_n">Menemukan %s</string>
+    <string name="up_to">Hingga</string>
+    <string name="sort_most_played">Paling sering diputar</string>
+    <string name="sort_not_played_lately">Belakangan tak diputar</string>
+    <string name="sort_random">Acak</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">Kunci yang cocok dengan</string>
+    <string name="rule_energy">Energi</string>
+    <string name="rule_loudness">Kenyaringan (LUFS)</string>
+    <string name="rule_on_phone">File di ponsel ini</string>
+    <string name="rule_tag">Tag</string>
+    <string name="rule_times_played">Jumlah diputar</string>
+    <string name="rule_last_played">Terakhir diputar</string>
+    <string name="rule_added">Ditambahkan ke koleksi</string>
+    <string name="rule_never_played">Belum pernah diputar</string>
+    <string name="rule_is">Ya</string>
+    <string name="rule_isn_t">Bukan</string>
+    <string name="rule_from">Dari</string>
+    <string name="rule_to">Sampai</string>
+    <string name="rule_at_least">Minimal</string>
+    <string name="rule_at_most">Maksimal</string>
+    <string name="rule_within">Dalam</string>
+    <string name="rule_not_within">Tidak dalam</string>
+    <string name="rule_days">hari terakhir</string>
+    <string name="genre_example">Pop, hip-hop, rock…</string>
+    <string name="your_listening">Yang kamu dengar</string>
 </resources>

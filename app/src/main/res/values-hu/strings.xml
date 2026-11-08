@@ -4891,4 +4891,70 @@
         <item quantity="one">Eltávolítasz %1$d dalt a(z) „%2$s” listából a YouTube Musicon?</item>
         <item quantity="other">Eltávolítasz %1$d dalt a(z) „%2$s” listából a YouTube Musicon?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">Címkék</string>
+    <string name="add_a_tag">Címke hozzáadása</string>
+    <string name="new_tag">Új címke</string>
+    <string name="tags_are_your_own_labels">Saját címkék a dalaidhoz, például „edzés” vagy „esős nap”. A Könyvtár → Címkék alatt találod őket.</string>
+    <string name="your_tag">A címkéd ezen a telefonon</string>
+    <string name="remove_this_tag">Címke eltávolítása</string>
+    <string name="rename_tag">Címke átnevezése</string>
+    <string name="delete_tag">Címke törlése</string>
+    <string name="delete_the_tag_its_songs_stay">Törlöd a(z) „%s” címkét? A dalai ott maradnak, ahol vannak.</string>
+    <string name="tag_songs_from_any_song_s">Címkézz dalokat bármely dal menüjéből (⋯ vagy hosszú nyomás) → Címke hozzáadása.</string>
+    <string name="tag_n_songs">Címke · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d címke</item>
+        <item quantity="other">%d címke</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">Okos lejátszási lista</string>
+    <string name="smart_playlist_n">Okos lejátszási lista · %s</string>
+    <string name="smart_playlist_updates_itself">Okos lejátszási lista · magától frissül</string>
+    <string name="new_smart_playlist">Új okos lejátszási lista</string>
+    <string name="edit_rules">Szabályok szerkesztése</string>
+    <string name="save_a_copy_as_a_playlist">Másolat mentése lejátszási listaként</string>
+    <string name="saved_as_a_playlist">„%s” elmentve lejátszási listaként</string>
+    <string name="no_song_meets_these_rules">Még egy dal sem felel meg ezeknek a szabályoknak. Módosítsd őket a ⋯ menüben → Szabályok szerkesztése.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d dal még nincs lemérve</item>
+        <item quantity="other">%d dal még nincs lemérve</item>
+    </plurals>
+    <string name="measuring_n_of_n">Mérés: %1$d / %2$d…</string>
+    <string name="measure_now">Mérés most</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">A telefonon lévő dalok mérése folyik. Wi-Fin a többié is.</string>
+    <string name="smart_fast_and_liked">Gyors és kedvelt</string>
+    <string name="smart_not_played_in_a_while">Régóta nem játszott</string>
+    <string name="smart_goes_with_what_s_playing">Illik ahhoz, ami szól</string>
+    <string name="the_song_playing_isn_t_measured_yet">Az éppen szóló dal még nincs lemérve.</string>
+    <string name="match_all_rules">Minden szabálynak megfelel</string>
+    <string name="match_any_rule">Valamelyik szabálynak megfelel</string>
+    <string name="add_a_rule">Szabály hozzáadása</string>
+    <string name="add_a_rule_to_begin">A kezdéshez adj hozzá egy szabályt.</string>
+    <string name="finds_n">Talál: %s</string>
+    <string name="up_to">Legfeljebb</string>
+    <string name="sort_most_played">Legtöbbet játszott</string>
+    <string name="sort_not_played_lately">Mostanában nem játszott</string>
+    <string name="sort_random">Véletlenszerű</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">Hozzá illő hangnem</string>
+    <string name="rule_energy">Energia</string>
+    <string name="rule_loudness">Hangosság (LUFS)</string>
+    <string name="rule_on_phone">Fájl ezen a telefonon</string>
+    <string name="rule_tag">Címke</string>
+    <string name="rule_times_played">Lejátszások száma</string>
+    <string name="rule_last_played">Utoljára játszva</string>
+    <string name="rule_added">Könyvtárhoz adva</string>
+    <string name="rule_never_played">Soha nem játszott</string>
+    <string name="rule_is">Igen</string>
+    <string name="rule_isn_t">Nem</string>
+    <string name="rule_from">Ettől</string>
+    <string name="rule_to">Eddig</string>
+    <string name="rule_at_least">Legalább</string>
+    <string name="rule_at_most">Legfeljebb</string>
+    <string name="rule_within">Az elmúlt</string>
+    <string name="rule_not_within">Nem az elmúlt</string>
+    <string name="rule_days">napban</string>
+    <string name="genre_example">Pop, hiphop, rock…</string>
+    <string name="your_listening">Hallgatásaid</string>
 </resources>

@@ -660,6 +660,10 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
 
     // The playlist picker and the share sheet take over from the sheet.
     if (pickPlaylist) { PlaylistPicker(song) { pickPlaylist = false; onDismiss() }; return }
+    // 1.8.3: the listener's own tags on it.
+    var tagging by remember { mutableStateOf(false) }
+    if (tagging) { TagPicker(listOf(song), song.title) { tagging = false; onDismiss() }; return }
+    val songTags by remember(song.id) { c.tags.tagsOf(song.id) }.collectAsState(emptyList())
     if (sharing) { ShareSheet(song.shareTarget()) { sharing = false; onDismiss() }; return }
     if (credits) { SongCreditsSheet(song) { credits = false; onDismiss() }; return }
     var details by remember { mutableStateOf(false) }
@@ -692,6 +696,7 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
         if (song.isEpisode && song.id in c.episodes.played.value) ActionItem(PrismIcons.Refresh, tr(R.string.mark_as_unplayed)) { c.episodes.forget(song.id); c.episodes.unmarkPlayed(song.id) }
         else if (song.isEpisode) ActionItem(PrismIcons.DoneAll, tr(R.string.mark_as_played)) { c.episodes.markPlayed(song.id) } else null,
         if (rss) null else ActionItem(PrismIcons.PlaylistAdd, tr(R.string.add_to_playlist), keepOpen = true) { pickPlaylist = true },
+        if (rss) null else ActionItem(PrismIcons.Tag, tr(R.string.add_a_tag), value = tagsValue(songTags), active = songTags.isNotEmpty(), keepOpen = true) { tagging = true },
         // A picked version's album and artists (#328): it plays as that recording.
         shown.album?.id?.let { id -> ActionItem(PrismIcons.Album, tr(R.string.go_to_album), value = shown.album?.title?.takeIf { it.length <= 22 }) { nav.go(Routes.album(id)) } },
     ) + goToArtists(shown) { route -> nav.go(route) } + listOfNotNull(
@@ -804,7 +809,8 @@ fun PlaylistPicker(songs: List<Song>, what: String, onDismiss: () -> Unit) {
         }
         return
     }
-    val mine = prismLists.map { it.item() } +
+    // A smart playlist (1.8.3) takes what its rules find, nothing added by hand.
+    val mine = prismLists.filter { it.smart == null }.map { it.item() } +
         (if (signedIn) playlists.filterIsInstance<PlaylistItem>().filter { !it.id.startsWith("LM") && !it.isMix } else emptyList())
     val shown = if (query.isBlank()) mine else mine.filter { it.title.contains(query.trim(), ignoreCase = true) }
     // #246 (1.8.1): the playlists that already have it, from what's on the phone (Prism playlists, the kept copies of

@@ -76,6 +76,8 @@ object Routes {
     fun playlist(id: String) = "playlist/${Uri.encode(id)}"
     /** A folder of playlists in Library (1.7.6). */
     fun folder(id: String) = "folder/${Uri.encode(id)}"
+    /** One of the listener's tags (1.8.3), by its name. */
+    fun tag(name: String) = "tag/${Uri.encode(name)}"
     fun artist(id: String) = "artist/${Uri.encode(id)}"
     /** An artist's page; one a song names without a link (#78) is looked up by name when it opens. */
     fun artist(ref: com.prism.music.data.model.ArtistRef) =

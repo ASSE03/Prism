@@ -5023,4 +5023,74 @@
         <item quantity="many">Видалити %1$d треків із «%2$s» у YouTube Music?</item>
         <item quantity="other">Видалити %1$d трека із «%2$s» у YouTube Music?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">Теги</string>
+    <string name="add_a_tag">Додати тег</string>
+    <string name="new_tag">Новий тег</string>
+    <string name="tags_are_your_own_labels">Твої власні мітки для пісень, як-от «спортзал» чи «дощовий день». Вони в Бібліотеці → Теги.</string>
+    <string name="your_tag">Твій тег на цьому телефоні</string>
+    <string name="remove_this_tag">Прибрати цей тег</string>
+    <string name="rename_tag">Перейменувати тег</string>
+    <string name="delete_tag">Видалити тег</string>
+    <string name="delete_the_tag_its_songs_stay">Видалити тег «%s»? Його пісні залишаться на своїх місцях.</string>
+    <string name="tag_songs_from_any_song_s">Став теги пісням з меню будь-якої пісні (⋯ або довге натискання) → Додати тег.</string>
+    <string name="tag_n_songs">Тег · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d тег</item>
+        <item quantity="few">%d теги</item>
+        <item quantity="many">%d тегів</item>
+        <item quantity="other">%d тега</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">Розумний плейлист</string>
+    <string name="smart_playlist_n">Розумний плейлист · %s</string>
+    <string name="smart_playlist_updates_itself">Розумний плейлист · оновлюється сам</string>
+    <string name="new_smart_playlist">Новий розумний плейлист</string>
+    <string name="edit_rules">Змінити правила</string>
+    <string name="save_a_copy_as_a_playlist">Зберегти копію як плейлист</string>
+    <string name="saved_as_a_playlist">«%s» збережено як плейлист</string>
+    <string name="no_song_meets_these_rules">Поки жодна пісня не підходить під ці правила. Зміни їх у меню ⋯ → Змінити правила.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d пісня ще не виміряна</item>
+        <item quantity="few">%d пісні ще не виміряні</item>
+        <item quantity="many">%d пісень ще не виміряні</item>
+        <item quantity="other">%d пісні ще не виміряні</item>
+    </plurals>
+    <string name="measuring_n_of_n">Вимірюю %1$d з %2$d…</string>
+    <string name="measure_now">Виміряти зараз</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">Вимірюються пісні на цьому телефоні. Через Wi-Fi — і решта.</string>
+    <string name="smart_fast_and_liked">Швидкі й улюблені</string>
+    <string name="smart_not_played_in_a_while">Давно не слухав</string>
+    <string name="smart_goes_with_what_s_playing">Пасує до того, що грає</string>
+    <string name="the_song_playing_isn_t_measured_yet">Пісня, що грає, ще не виміряна.</string>
+    <string name="match_all_rules">Відповідає всім правилам</string>
+    <string name="match_any_rule">Відповідає будь-якому правилу</string>
+    <string name="add_a_rule">Додати правило</string>
+    <string name="add_a_rule_to_begin">Додай правило, щоб почати.</string>
+    <string name="finds_n">Знаходить %s</string>
+    <string name="up_to">До</string>
+    <string name="sort_most_played">Найчастіше слухані</string>
+    <string name="sort_not_played_lately">Давно не грали</string>
+    <string name="sort_random">Випадково</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">Тональність, що пасує до</string>
+    <string name="rule_energy">Енергія</string>
+    <string name="rule_loudness">Гучність (LUFS)</string>
+    <string name="rule_on_phone">Файл на цьому телефоні</string>
+    <string name="rule_tag">Тег</string>
+    <string name="rule_times_played">Скільки разів зіграна</string>
+    <string name="rule_last_played">Востаннє зіграна</string>
+    <string name="rule_added">Додана до бібліотеки</string>
+    <string name="rule_never_played">Жодного разу не грала</string>
+    <string name="rule_is">Так</string>
+    <string name="rule_isn_t">Ні</string>
+    <string name="rule_from">Від</string>
+    <string name="rule_to">До</string>
+    <string name="rule_at_least">Не менше</string>
+    <string name="rule_at_most">Не більше</string>
+    <string name="rule_within">За останні</string>
+    <string name="rule_not_within">Не за останні</string>
+    <string name="rule_days">дн.</string>
+    <string name="genre_example">Поп, хіп-хоп, рок…</string>
+    <string name="your_listening">Твоє слухання</string>
 </resources>

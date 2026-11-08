@@ -4825,4 +4825,68 @@
     <plurals name="remove_n_from_youtube_playlist_q">
         <item quantity="other">ลบ %1$d เพลงออกจาก “%2$s” ใน YouTube Music ไหม</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">แท็ก</string>
+    <string name="add_a_tag">เพิ่มแท็ก</string>
+    <string name="new_tag">แท็กใหม่</string>
+    <string name="tags_are_your_own_labels">ป้ายกำกับเพลงของคุณเอง เช่น “ยิม” หรือ “วันฝนตก” ดูได้ที่ คลังเพลง → แท็ก</string>
+    <string name="your_tag">แท็กของคุณในโทรศัพท์เครื่องนี้</string>
+    <string name="remove_this_tag">เอาแท็กนี้ออก</string>
+    <string name="rename_tag">เปลี่ยนชื่อแท็ก</string>
+    <string name="delete_tag">ลบแท็ก</string>
+    <string name="delete_the_tag_its_songs_stay">ลบแท็ก “%s” ไหม เพลงในแท็กจะยังอยู่ที่เดิม</string>
+    <string name="tag_songs_from_any_song_s">ติดแท็กเพลงได้จากเมนูของเพลงใดก็ได้ (⋯ หรือกดค้าง) → เพิ่มแท็ก</string>
+    <string name="tag_n_songs">แท็ก · %s</string>
+    <plurals name="n_tags">
+        <item quantity="other">%d แท็ก</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">เพลย์ลิสต์อัจฉริยะ</string>
+    <string name="smart_playlist_n">เพลย์ลิสต์อัจฉริยะ · %s</string>
+    <string name="smart_playlist_updates_itself">เพลย์ลิสต์อัจฉริยะ · อัปเดตตัวเอง</string>
+    <string name="new_smart_playlist">เพลย์ลิสต์อัจฉริยะใหม่</string>
+    <string name="edit_rules">แก้ไขกฎ</string>
+    <string name="save_a_copy_as_a_playlist">บันทึกสำเนาเป็นเพลย์ลิสต์</string>
+    <string name="saved_as_a_playlist">บันทึก “%s” เป็นเพลย์ลิสต์แล้ว</string>
+    <string name="no_song_meets_these_rules">ยังไม่มีเพลงที่ตรงกับกฎเหล่านี้ เปลี่ยนได้ที่เมนู ⋯ → แก้ไขกฎ</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="other">ยังไม่ได้วัด %d เพลง</item>
+    </plurals>
+    <string name="measuring_n_of_n">กำลังวัด %1$d จาก %2$d…</string>
+    <string name="measure_now">วัดเลย</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">กำลังวัดเพลงในโทรศัพท์นี้ เมื่อใช้ Wi-Fi จะวัดเพลงอื่นด้วย</string>
+    <string name="smart_fast_and_liked">เร็วและถูกใจ</string>
+    <string name="smart_not_played_in_a_while">ไม่ได้ฟังมานาน</string>
+    <string name="smart_goes_with_what_s_playing">เข้ากับเพลงที่เล่นอยู่</string>
+    <string name="the_song_playing_isn_t_measured_yet">เพลงที่เล่นอยู่ยังไม่ได้วัด</string>
+    <string name="match_all_rules">ตรงทุกกฎ</string>
+    <string name="match_any_rule">ตรงกฎใดก็ได้</string>
+    <string name="add_a_rule">เพิ่มกฎ</string>
+    <string name="add_a_rule_to_begin">เพิ่มกฎเพื่อเริ่มต้น</string>
+    <string name="finds_n">พบ %s</string>
+    <string name="up_to">สูงสุด</string>
+    <string name="sort_most_played">เล่นมากที่สุด</string>
+    <string name="sort_not_played_lately">ไม่ได้เล่นช่วงนี้</string>
+    <string name="sort_random">สุ่ม</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">คีย์ที่เข้ากับ</string>
+    <string name="rule_energy">พลัง</string>
+    <string name="rule_loudness">ความดัง (LUFS)</string>
+    <string name="rule_on_phone">ไฟล์ในโทรศัพท์นี้</string>
+    <string name="rule_tag">แท็ก</string>
+    <string name="rule_times_played">จำนวนครั้งที่เล่น</string>
+    <string name="rule_last_played">เล่นล่าสุด</string>
+    <string name="rule_added">เพิ่มในคลังเพลง</string>
+    <string name="rule_never_played">ไม่เคยเล่น</string>
+    <string name="rule_is">ใช่</string>
+    <string name="rule_isn_t">ไม่ใช่</string>
+    <string name="rule_from">ตั้งแต่</string>
+    <string name="rule_to">ถึง</string>
+    <string name="rule_at_least">อย่างน้อย</string>
+    <string name="rule_at_most">ไม่เกิน</string>
+    <string name="rule_within">ใน</string>
+    <string name="rule_not_within">ไม่ใช่ใน</string>
+    <string name="rule_days">วันที่ผ่านมา</string>
+    <string name="genre_example">ป๊อป ฮิปฮอป ร็อก…</string>
+    <string name="your_listening">การฟังของคุณ</string>
 </resources>

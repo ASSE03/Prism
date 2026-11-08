@@ -4891,4 +4891,70 @@
         <item quantity="one">%1$d Song aus „%2$s“ in YouTube Music entfernen?</item>
         <item quantity="other">%1$d Songs aus „%2$s“ in YouTube Music entfernen?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">Tags</string>
+    <string name="add_a_tag">Tag hinzufügen</string>
+    <string name="new_tag">Neuer Tag</string>
+    <string name="tags_are_your_own_labels">Deine eigenen Labels für Songs, etwa „Gym“ oder „Regentag“. Du findest sie unter Mediathek → Tags.</string>
+    <string name="your_tag">Dein Tag auf diesem Handy</string>
+    <string name="remove_this_tag">Diesen Tag entfernen</string>
+    <string name="rename_tag">Tag umbenennen</string>
+    <string name="delete_tag">Tag löschen</string>
+    <string name="delete_the_tag_its_songs_stay">Den Tag „%s“ löschen? Seine Songs bleiben, wo sie sind.</string>
+    <string name="tag_songs_from_any_song_s">Vergib Tags über das Menü eines Songs (⋯ oder lange drücken) → Tag hinzufügen.</string>
+    <string name="tag_n_songs">Tag · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d Tag</item>
+        <item quantity="other">%d Tags</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">Smarte Playlist</string>
+    <string name="smart_playlist_n">Smarte Playlist · %s</string>
+    <string name="smart_playlist_updates_itself">Smarte Playlist · hält sich selbst aktuell</string>
+    <string name="new_smart_playlist">Neue smarte Playlist</string>
+    <string name="edit_rules">Regeln bearbeiten</string>
+    <string name="save_a_copy_as_a_playlist">Kopie als Playlist speichern</string>
+    <string name="saved_as_a_playlist">„%s“ als Playlist gespeichert</string>
+    <string name="no_song_meets_these_rules">Noch passt kein Song zu diesen Regeln. Ändere sie über das ⋯-Menü → Regeln bearbeiten.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d Song ist noch nicht gemessen</item>
+        <item quantity="other">%d Songs sind noch nicht gemessen</item>
+    </plurals>
+    <string name="measuring_n_of_n">Messe %1$d von %2$d …</string>
+    <string name="measure_now">Jetzt messen</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">Die Songs auf diesem Handy werden gemessen. Im WLAN auch die anderen.</string>
+    <string name="smart_fast_and_liked">Schnell und gelikt</string>
+    <string name="smart_not_played_in_a_while">Lange nicht gespielt</string>
+    <string name="smart_goes_with_what_s_playing">Passt zum aktuellen Song</string>
+    <string name="the_song_playing_isn_t_measured_yet">Der laufende Song ist noch nicht gemessen.</string>
+    <string name="match_all_rules">Erfüllt alle Regeln</string>
+    <string name="match_any_rule">Erfüllt eine Regel</string>
+    <string name="add_a_rule">Regel hinzufügen</string>
+    <string name="add_a_rule_to_begin">Füge eine Regel hinzu, um anzufangen.</string>
+    <string name="finds_n">Findet %s</string>
+    <string name="up_to">Bis zu</string>
+    <string name="sort_most_played">Am meisten gespielt</string>
+    <string name="sort_not_played_lately">Lange nicht gespielt</string>
+    <string name="sort_random">Zufällig</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">Tonart passend zu</string>
+    <string name="rule_energy">Energie</string>
+    <string name="rule_loudness">Lautheit (LUFS)</string>
+    <string name="rule_on_phone">Datei auf diesem Handy</string>
+    <string name="rule_tag">Tag</string>
+    <string name="rule_times_played">Wie oft gespielt</string>
+    <string name="rule_last_played">Zuletzt gespielt</string>
+    <string name="rule_added">Zur Mediathek hinzugefügt</string>
+    <string name="rule_never_played">Nie gespielt</string>
+    <string name="rule_is">Ist</string>
+    <string name="rule_isn_t">Ist nicht</string>
+    <string name="rule_from">Von</string>
+    <string name="rule_to">Bis</string>
+    <string name="rule_at_least">Mindestens</string>
+    <string name="rule_at_most">Höchstens</string>
+    <string name="rule_within">In den letzten</string>
+    <string name="rule_not_within">Nicht in den letzten</string>
+    <string name="rule_days">Tagen</string>
+    <string name="genre_example">Pop, Hip-Hop, Rock …</string>
+    <string name="your_listening">Dein Hören</string>
 </resources>

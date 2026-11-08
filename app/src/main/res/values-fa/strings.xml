@@ -4891,4 +4891,70 @@
         <item quantity="one">%1$d آهنگ از «%2$s» در YouTube Music حذف شود؟</item>
         <item quantity="other">%1$d آهنگ از «%2$s» در YouTube Music حذف شود؟</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">برچسب‌ها</string>
+    <string name="add_a_tag">افزودن برچسب</string>
+    <string name="new_tag">برچسب تازه</string>
+    <string name="tags_are_your_own_labels">برچسب‌های خودتان برای آهنگ‌ها، مثل «باشگاه» یا «روز بارانی». آن‌ها را در کتابخانه ← برچسب‌ها پیدا کنید.</string>
+    <string name="your_tag">برچسب شما در این گوشی</string>
+    <string name="remove_this_tag">برداشتن این برچسب</string>
+    <string name="rename_tag">تغییر نام برچسب</string>
+    <string name="delete_tag">حذف برچسب</string>
+    <string name="delete_the_tag_its_songs_stay">برچسب «%s» حذف شود؟ آهنگ‌هایش سر جایشان می‌مانند.</string>
+    <string name="tag_songs_from_any_song_s">از منوی هر آهنگ (⋯ یا لمس طولانی) ← افزودن برچسب، به آهنگ‌ها برچسب بزنید.</string>
+    <string name="tag_n_songs">برچسب · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d برچسب</item>
+        <item quantity="other">%d برچسب</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">فهرست پخش هوشمند</string>
+    <string name="smart_playlist_n">فهرست پخش هوشمند · %s</string>
+    <string name="smart_playlist_updates_itself">فهرست پخش هوشمند · خودش به‌روز می‌ماند</string>
+    <string name="new_smart_playlist">فهرست پخش هوشمند تازه</string>
+    <string name="edit_rules">ویرایش قانون‌ها</string>
+    <string name="save_a_copy_as_a_playlist">ذخیرهٔ یک نسخه به‌عنوان فهرست پخش</string>
+    <string name="saved_as_a_playlist">«%s» به‌عنوان فهرست پخش ذخیره شد</string>
+    <string name="no_song_meets_these_rules">هنوز هیچ آهنگی با این قانون‌ها جور نیست. از منوی ⋯ ← ویرایش قانون‌ها عوضشان کنید.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d آهنگ هنوز اندازه‌گیری نشده</item>
+        <item quantity="other">%d آهنگ هنوز اندازه‌گیری نشده‌اند</item>
+    </plurals>
+    <string name="measuring_n_of_n">اندازه‌گیری %1$d از %2$d…</string>
+    <string name="measure_now">اکنون اندازه بگیر</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">آهنگ‌های این گوشی اندازه‌گیری می‌شوند. با Wi-Fi بقیه هم.</string>
+    <string name="smart_fast_and_liked">تند و پسندیده</string>
+    <string name="smart_not_played_in_a_while">مدتی پخش نشده</string>
+    <string name="smart_goes_with_what_s_playing">جور با آنچه پخش می‌شود</string>
+    <string name="the_song_playing_isn_t_measured_yet">آهنگ در حال پخش هنوز اندازه‌گیری نشده.</string>
+    <string name="match_all_rules">همهٔ قانون‌ها</string>
+    <string name="match_any_rule">هر قانونی</string>
+    <string name="add_a_rule">افزودن قانون</string>
+    <string name="add_a_rule_to_begin">برای شروع یک قانون بیفزایید.</string>
+    <string name="finds_n">%s پیدا می‌کند</string>
+    <string name="up_to">تا</string>
+    <string name="sort_most_played">پرپخش‌ترین</string>
+    <string name="sort_not_played_lately">اخیراً پخش‌نشده</string>
+    <string name="sort_random">تصادفی</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">گامِ جور با</string>
+    <string name="rule_energy">انرژی</string>
+    <string name="rule_loudness">بلندی (LUFS)</string>
+    <string name="rule_on_phone">فایلی در این گوشی</string>
+    <string name="rule_tag">برچسب</string>
+    <string name="rule_times_played">دفعات پخش</string>
+    <string name="rule_last_played">آخرین پخش</string>
+    <string name="rule_added">افزوده به کتابخانه</string>
+    <string name="rule_never_played">هرگز پخش نشده</string>
+    <string name="rule_is">هست</string>
+    <string name="rule_isn_t">نیست</string>
+    <string name="rule_from">از</string>
+    <string name="rule_to">تا</string>
+    <string name="rule_at_least">دست‌کم</string>
+    <string name="rule_at_most">حداکثر</string>
+    <string name="rule_within">در آخرین</string>
+    <string name="rule_not_within">نه در آخرین</string>
+    <string name="rule_days">روز</string>
+    <string name="genre_example">پاپ، هیپ‌هاپ، راک…</string>
+    <string name="your_listening">شنیده‌های شما</string>
 </resources>

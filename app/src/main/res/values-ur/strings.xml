@@ -4891,4 +4891,70 @@
         <item quantity="one">YouTube Music پر “%2$s” سے %1$d گانا ہٹائیں؟</item>
         <item quantity="other">YouTube Music پر “%2$s” سے %1$d گانے ہٹائیں؟</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">ٹیگ</string>
+    <string name="add_a_tag">ٹیگ شامل کریں</string>
+    <string name="new_tag">نیا ٹیگ</string>
+    <string name="tags_are_your_own_labels">گانوں کے لیے آپ کے اپنے لیبل، جیسے “جم” یا “بارش کا دن”۔ یہ لائبریری ← ٹیگ میں ملیں گے۔</string>
+    <string name="your_tag">اس فون پر آپ کا ٹیگ</string>
+    <string name="remove_this_tag">یہ ٹیگ ہٹائیں</string>
+    <string name="rename_tag">ٹیگ کا نام بدلیں</string>
+    <string name="delete_tag">ٹیگ حذف کریں</string>
+    <string name="delete_the_tag_its_songs_stay">ٹیگ “%s” حذف کریں؟ اس کے گانے جہاں ہیں وہیں رہیں گے۔</string>
+    <string name="tag_songs_from_any_song_s">کسی بھی گانے کے مینو (⋯ یا دبا کر رکھیں) ← ٹیگ شامل کریں سے گانوں کو ٹیگ کریں۔</string>
+    <string name="tag_n_songs">ٹیگ · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d ٹیگ</item>
+        <item quantity="other">%d ٹیگ</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">اسمارٹ پلے لسٹ</string>
+    <string name="smart_playlist_n">اسمارٹ پلے لسٹ · %s</string>
+    <string name="smart_playlist_updates_itself">اسمارٹ پلے لسٹ · خود اپ ڈیٹ رہتی ہے</string>
+    <string name="new_smart_playlist">نئی اسمارٹ پلے لسٹ</string>
+    <string name="edit_rules">قواعد بدلیں</string>
+    <string name="save_a_copy_as_a_playlist">کاپی کو پلے لسٹ کے طور پر محفوظ کریں</string>
+    <string name="saved_as_a_playlist">“%s” پلے لسٹ کے طور پر محفوظ ہو گئی</string>
+    <string name="no_song_meets_these_rules">ابھی کوئی گانا ان قواعد پر پورا نہیں اترتا۔ ⋯ مینو ← قواعد بدلیں سے انہیں بدلیں۔</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d گانا ابھی ناپا نہیں گیا</item>
+        <item quantity="other">%d گانے ابھی ناپے نہیں گئے</item>
+    </plurals>
+    <string name="measuring_n_of_n">%2$d میں سے %1$d ناپ رہے ہیں…</string>
+    <string name="measure_now">ابھی ناپیں</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">اس فون کے گانے ناپے جا رہے ہیں۔ Wi-Fi پر باقی بھی۔</string>
+    <string name="smart_fast_and_liked">تیز اور پسندیدہ</string>
+    <string name="smart_not_played_in_a_while">کافی دیر سے نہیں چلے</string>
+    <string name="smart_goes_with_what_s_playing">جو چل رہا ہے اس سے میل کھاتے</string>
+    <string name="the_song_playing_isn_t_measured_yet">چلنے والا گانا ابھی ناپا نہیں گیا۔</string>
+    <string name="match_all_rules">تمام قواعد پورے کرے</string>
+    <string name="match_any_rule">کوئی بھی قاعدہ پورا کرے</string>
+    <string name="add_a_rule">قاعدہ شامل کریں</string>
+    <string name="add_a_rule_to_begin">شروع کرنے کے لیے ایک قاعدہ شامل کریں۔</string>
+    <string name="finds_n">%s ملے</string>
+    <string name="up_to">زیادہ سے زیادہ</string>
+    <string name="sort_most_played">سب سے زیادہ چلے</string>
+    <string name="sort_not_played_lately">حال میں نہیں چلے</string>
+    <string name="sort_random">بے ترتیب</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">اس سے میل کھاتا اسکیل</string>
+    <string name="rule_energy">توانائی</string>
+    <string name="rule_loudness">بلندی (LUFS)</string>
+    <string name="rule_on_phone">اس فون کی فائل</string>
+    <string name="rule_tag">ٹیگ</string>
+    <string name="rule_times_played">کتنی بار چلا</string>
+    <string name="rule_last_played">آخری بار چلا</string>
+    <string name="rule_added">آپ کی لائبریری میں شامل</string>
+    <string name="rule_never_played">کبھی نہیں چلا</string>
+    <string name="rule_is">ہاں</string>
+    <string name="rule_isn_t">نہیں</string>
+    <string name="rule_from">سے</string>
+    <string name="rule_to">تک</string>
+    <string name="rule_at_least">کم از کم</string>
+    <string name="rule_at_most">زیادہ سے زیادہ</string>
+    <string name="rule_within">پچھلے</string>
+    <string name="rule_not_within">پچھلے … میں نہیں</string>
+    <string name="rule_days">دنوں میں</string>
+    <string name="genre_example">پاپ، ہپ ہاپ، راک…</string>
+    <string name="your_listening">آپ کا سننا</string>
 </resources>

@@ -5023,4 +5023,74 @@
         <item quantity="many">Odstranit %1$d skladby z „%2$s“ v YouTube Music?</item>
         <item quantity="other">Odstranit %1$d skladeb z „%2$s“ v YouTube Music?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">Štítky</string>
+    <string name="add_a_tag">Přidat štítek</string>
+    <string name="new_tag">Nový štítek</string>
+    <string name="tags_are_your_own_labels">Vlastní štítky pro skladby, třeba „posilovna“ nebo „deštivý den“. Najdeš je v Knihovně → Štítky.</string>
+    <string name="your_tag">Tvůj štítek v tomto telefonu</string>
+    <string name="remove_this_tag">Odebrat tento štítek</string>
+    <string name="rename_tag">Přejmenovat štítek</string>
+    <string name="delete_tag">Smazat štítek</string>
+    <string name="delete_the_tag_its_songs_stay">Smazat štítek „%s“? Jeho skladby zůstanou, kde jsou.</string>
+    <string name="tag_songs_from_any_song_s">Štítky přidáš z nabídky kterékoli skladby (⋯ nebo dlouhé podržení) → Přidat štítek.</string>
+    <string name="tag_n_songs">Štítek · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d štítek</item>
+        <item quantity="few">%d štítky</item>
+        <item quantity="many">%d štítku</item>
+        <item quantity="other">%d štítků</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">Chytrý playlist</string>
+    <string name="smart_playlist_n">Chytrý playlist · %s</string>
+    <string name="smart_playlist_updates_itself">Chytrý playlist · aktualizuje se sám</string>
+    <string name="new_smart_playlist">Nový chytrý playlist</string>
+    <string name="edit_rules">Upravit pravidla</string>
+    <string name="save_a_copy_as_a_playlist">Uložit kopii jako playlist</string>
+    <string name="saved_as_a_playlist">„%s“ uloženo jako playlist</string>
+    <string name="no_song_meets_these_rules">Zatím žádná skladba nesplňuje tato pravidla. Změň je v nabídce ⋯ → Upravit pravidla.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d skladba ještě není změřená</item>
+        <item quantity="few">%d skladby ještě nejsou změřené</item>
+        <item quantity="many">%d skladby ještě není změřeno</item>
+        <item quantity="other">%d skladeb ještě není změřeno</item>
+    </plurals>
+    <string name="measuring_n_of_n">Měřím %1$d z %2$d…</string>
+    <string name="measure_now">Změřit teď</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">Měří se skladby v tomto telefonu. Na Wi-Fi i ostatní.</string>
+    <string name="smart_fast_and_liked">Rychlé a oblíbené</string>
+    <string name="smart_not_played_in_a_while">Dlouho nehrané</string>
+    <string name="smart_goes_with_what_s_playing">Ladí s tím, co hraje</string>
+    <string name="the_song_playing_isn_t_measured_yet">Hrající skladba ještě není změřená.</string>
+    <string name="match_all_rules">Splňuje všechna pravidla</string>
+    <string name="match_any_rule">Splňuje některé pravidlo</string>
+    <string name="add_a_rule">Přidat pravidlo</string>
+    <string name="add_a_rule_to_begin">Začni přidáním pravidla.</string>
+    <string name="finds_n">Najde %s</string>
+    <string name="up_to">Až</string>
+    <string name="sort_most_played">Nejhranější</string>
+    <string name="sort_not_played_lately">Poslední dobou nehrané</string>
+    <string name="sort_random">Náhodně</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">Tónina, která ladí s</string>
+    <string name="rule_energy">Energie</string>
+    <string name="rule_loudness">Hlasitost (LUFS)</string>
+    <string name="rule_on_phone">Soubor v tomto telefonu</string>
+    <string name="rule_tag">Štítek</string>
+    <string name="rule_times_played">Kolikrát přehráno</string>
+    <string name="rule_last_played">Naposledy přehráno</string>
+    <string name="rule_added">Přidáno do knihovny</string>
+    <string name="rule_never_played">Nikdy nepřehráno</string>
+    <string name="rule_is">Je</string>
+    <string name="rule_isn_t">Není</string>
+    <string name="rule_from">Od</string>
+    <string name="rule_to">Do</string>
+    <string name="rule_at_least">Aspoň</string>
+    <string name="rule_at_most">Nanejvýš</string>
+    <string name="rule_within">Za posledních</string>
+    <string name="rule_not_within">Ne za posledních</string>
+    <string name="rule_days">dní</string>
+    <string name="genre_example">Pop, hip hop, rock…</string>
+    <string name="your_listening">Tvoje poslouchání</string>
 </resources>

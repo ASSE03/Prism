@@ -567,7 +567,10 @@ enum class MenuGroup(val label: String) { SONG(tr(R.string.this_song)), LYRICS(t
  * a [foldable] one of them can still go under "More" while the player has another way to it ([menuFolds]).
  */
 enum class MenuAction(val group: MenuGroup, val fromPlayer: Boolean = false, val foldable: Boolean = !fromPlayer) {
-    ADD_TO_PLAYLIST(MenuGroup.SONG), RADIO(MenuGroup.SONG), DOWNLOAD(MenuGroup.SONG), ALBUM(MenuGroup.SONG), ARTIST(MenuGroup.SONG),
+    ADD_TO_PLAYLIST(MenuGroup.SONG),
+    /** 1.8.3: the listener's own tags on the song. */
+    TAGS(MenuGroup.SONG),
+    RADIO(MenuGroup.SONG), DOWNLOAD(MenuGroup.SONG), ALBUM(MenuGroup.SONG), ARTIST(MenuGroup.SONG),
     CREDITS(MenuGroup.SONG),
     /** #211 (1.8.2): its plays and dates. */
     DETAILS(MenuGroup.SONG),

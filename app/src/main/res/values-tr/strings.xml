@@ -4891,4 +4891,70 @@
         <item quantity="one">YouTube Music\'teki “%2$s” listesinden %1$d şarkı kaldırılsın mı?</item>
         <item quantity="other">YouTube Music\'teki “%2$s” listesinden %1$d şarkı kaldırılsın mı?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">Etiketler</string>
+    <string name="add_a_tag">Etiket ekle</string>
+    <string name="new_tag">Yeni etiket</string>
+    <string name="tags_are_your_own_labels">Şarkılar için kendi etiketlerin, örneğin “spor” ya da “yağmurlu gün”. Kitaplık → Etiketler’de bulabilirsin.</string>
+    <string name="your_tag">Bu telefondaki etiketin</string>
+    <string name="remove_this_tag">Bu etiketi kaldır</string>
+    <string name="rename_tag">Etiketi yeniden adlandır</string>
+    <string name="delete_tag">Etiketi sil</string>
+    <string name="delete_the_tag_its_songs_stay">“%s” etiketi silinsin mi? Şarkıları oldukları yerde kalır.</string>
+    <string name="tag_songs_from_any_song_s">Herhangi bir şarkının menüsünden (⋯ ya da uzun basma) → Etiket ekle ile şarkılara etiket koy.</string>
+    <string name="tag_n_songs">Etiket · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d etiket</item>
+        <item quantity="other">%d etiket</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">Akıllı çalma listesi</string>
+    <string name="smart_playlist_n">Akıllı çalma listesi · %s</string>
+    <string name="smart_playlist_updates_itself">Akıllı çalma listesi · kendini güncel tutar</string>
+    <string name="new_smart_playlist">Yeni akıllı çalma listesi</string>
+    <string name="edit_rules">Kuralları düzenle</string>
+    <string name="save_a_copy_as_a_playlist">Kopyasını çalma listesi olarak kaydet</string>
+    <string name="saved_as_a_playlist">“%s” çalma listesi olarak kaydedildi</string>
+    <string name="no_song_meets_these_rules">Henüz bu kurallara uyan şarkı yok. ⋯ menüsü → Kuralları düzenle ile değiştir.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d şarkı henüz ölçülmedi</item>
+        <item quantity="other">%d şarkı henüz ölçülmedi</item>
+    </plurals>
+    <string name="measuring_n_of_n">%1$d / %2$d ölçülüyor…</string>
+    <string name="measure_now">Şimdi ölç</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">Bu telefondaki şarkılar ölçülüyor. Wi-Fi’da diğerleri de.</string>
+    <string name="smart_fast_and_liked">Hızlı ve beğenilen</string>
+    <string name="smart_not_played_in_a_while">Uzun süredir çalınmayan</string>
+    <string name="smart_goes_with_what_s_playing">Çalana uyanlar</string>
+    <string name="the_song_playing_isn_t_measured_yet">Çalan şarkı henüz ölçülmedi.</string>
+    <string name="match_all_rules">Tüm kurallara uyar</string>
+    <string name="match_any_rule">Herhangi bir kurala uyar</string>
+    <string name="add_a_rule">Kural ekle</string>
+    <string name="add_a_rule_to_begin">Başlamak için bir kural ekle.</string>
+    <string name="finds_n">%s buluyor</string>
+    <string name="up_to">En fazla</string>
+    <string name="sort_most_played">En çok çalınan</string>
+    <string name="sort_not_played_lately">Son zamanlarda çalınmayan</string>
+    <string name="sort_random">Rastgele</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">Uyumlu ton</string>
+    <string name="rule_energy">Enerji</string>
+    <string name="rule_loudness">Ses yüksekliği (LUFS)</string>
+    <string name="rule_on_phone">Bu telefondaki bir dosya</string>
+    <string name="rule_tag">Etiket</string>
+    <string name="rule_times_played">Çalınma sayısı</string>
+    <string name="rule_last_played">Son çalınma</string>
+    <string name="rule_added">Kitaplığına eklenme</string>
+    <string name="rule_never_played">Hiç çalınmamış</string>
+    <string name="rule_is">Evet</string>
+    <string name="rule_isn_t">Hayır</string>
+    <string name="rule_from">En az</string>
+    <string name="rule_to">En çok</string>
+    <string name="rule_at_least">En az</string>
+    <string name="rule_at_most">En çok</string>
+    <string name="rule_within">Son</string>
+    <string name="rule_not_within">Son … içinde değil</string>
+    <string name="rule_days">gün</string>
+    <string name="genre_example">Pop, hip hop, rock…</string>
+    <string name="your_listening">Dinlediklerin</string>
 </resources>

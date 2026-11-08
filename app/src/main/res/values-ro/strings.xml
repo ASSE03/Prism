@@ -4957,4 +4957,72 @@
         <item quantity="few">Elimini %1$d melodii din „%2$s” pe YouTube Music?</item>
         <item quantity="other">Elimini %1$d de melodii din „%2$s” pe YouTube Music?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">Etichete</string>
+    <string name="add_a_tag">Adaugă o etichetă</string>
+    <string name="new_tag">Etichetă nouă</string>
+    <string name="tags_are_your_own_labels">Etichetele tale pentru melodii, cum ar fi „sală” sau „zi ploioasă”. Le găsești în Bibliotecă → Etichete.</string>
+    <string name="your_tag">Eticheta ta pe acest telefon</string>
+    <string name="remove_this_tag">Scoate această etichetă</string>
+    <string name="rename_tag">Redenumește eticheta</string>
+    <string name="delete_tag">Șterge eticheta</string>
+    <string name="delete_the_tag_its_songs_stay">Ștergi eticheta „%s”? Melodiile ei rămân unde sunt.</string>
+    <string name="tag_songs_from_any_song_s">Etichetează melodii din meniul oricărei melodii (⋯ sau apăsare lungă) → Adaugă o etichetă.</string>
+    <string name="tag_n_songs">Etichetă · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d etichetă</item>
+        <item quantity="few">%d etichete</item>
+        <item quantity="other">%d de etichete</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">Playlist inteligent</string>
+    <string name="smart_playlist_n">Playlist inteligent · %s</string>
+    <string name="smart_playlist_updates_itself">Playlist inteligent · se actualizează singur</string>
+    <string name="new_smart_playlist">Playlist inteligent nou</string>
+    <string name="edit_rules">Editează regulile</string>
+    <string name="save_a_copy_as_a_playlist">Salvează o copie ca playlist</string>
+    <string name="saved_as_a_playlist">„%s” a fost salvat ca playlist</string>
+    <string name="no_song_meets_these_rules">Încă nicio melodie nu îndeplinește aceste reguli. Schimbă-le din meniul ⋯ → Editează regulile.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d melodie nu e încă măsurată</item>
+        <item quantity="few">%d melodii nu sunt încă măsurate</item>
+        <item quantity="other">%d de melodii nu sunt încă măsurate</item>
+    </plurals>
+    <string name="measuring_n_of_n">Se măsoară %1$d din %2$d…</string>
+    <string name="measure_now">Măsoară acum</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">Se măsoară melodiile de pe acest telefon. Pe Wi-Fi, și celelalte.</string>
+    <string name="smart_fast_and_liked">Rapide și apreciate</string>
+    <string name="smart_not_played_in_a_while">Neascultate de ceva vreme</string>
+    <string name="smart_goes_with_what_s_playing">Se potrivește cu ce se aude</string>
+    <string name="the_song_playing_isn_t_measured_yet">Melodia care se aude nu e încă măsurată.</string>
+    <string name="match_all_rules">Îndeplinește toate regulile</string>
+    <string name="match_any_rule">Îndeplinește o regulă</string>
+    <string name="add_a_rule">Adaugă o regulă</string>
+    <string name="add_a_rule_to_begin">Adaugă o regulă ca să începi.</string>
+    <string name="finds_n">Găsește %s</string>
+    <string name="up_to">Până la</string>
+    <string name="sort_most_played">Cele mai ascultate</string>
+    <string name="sort_not_played_lately">Neascultate în ultima vreme</string>
+    <string name="sort_random">Aleatoriu</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">Tonalitate potrivită cu</string>
+    <string name="rule_energy">Energie</string>
+    <string name="rule_loudness">Intensitate (LUFS)</string>
+    <string name="rule_on_phone">Un fișier de pe acest telefon</string>
+    <string name="rule_tag">Etichetă</string>
+    <string name="rule_times_played">De câte ori ascultată</string>
+    <string name="rule_last_played">Ascultată ultima dată</string>
+    <string name="rule_added">Adăugată în bibliotecă</string>
+    <string name="rule_never_played">Niciodată ascultată</string>
+    <string name="rule_is">Este</string>
+    <string name="rule_isn_t">Nu este</string>
+    <string name="rule_from">De la</string>
+    <string name="rule_to">Până la</string>
+    <string name="rule_at_least">Cel puțin</string>
+    <string name="rule_at_most">Cel mult</string>
+    <string name="rule_within">În ultimele</string>
+    <string name="rule_not_within">Nu în ultimele</string>
+    <string name="rule_days">zile</string>
+    <string name="genre_example">Pop, hip-hop, rock…</string>
+    <string name="your_listening">Ce asculți</string>
 </resources>

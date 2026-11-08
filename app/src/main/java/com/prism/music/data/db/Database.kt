@@ -649,9 +649,9 @@ interface RomanizedDao {
 @Database(
     entities = [SongEntity::class, PlayEventEntity::class, LyricsEntity::class, GenreEntity::class, MotionArtEntity::class, HeatmapEntity::class,
         RomanizedEntity::class, ReleaseEntity::class, MixEntity::class, BlendEntity::class, RecognitionEntity::class,
-        ImportedPlayEntity::class, ImportMatchEntity::class, SongTraitsEntity::class],
+        ImportedPlayEntity::class, ImportMatchEntity::class, SongTraitsEntity::class, SongTagEntity::class],
     views = [CountedPlay::class],
-    version = 10,
+    version = 11,
     exportSchema = true,
 )
 abstract class PrismDatabase : RoomDatabase() {
@@ -675,6 +675,8 @@ abstract class PrismDatabase : RoomDatabase() {
     abstract fun spotify(): com.prism.music.data.spotify.SpotifyDao
     /** What's been measured of songs: tempo, key, loudness, energy (1.8.3). */
     abstract fun traits(): TraitsDao
+    /** The listener's own labels on songs (1.8.3). */
+    abstract fun tags(): TagDao
 
     companion object {
         /**
@@ -752,6 +754,13 @@ abstract class PrismDatabase : RoomDatabase() {
                     db.execSQL("CREATE TABLE IF NOT EXISTS `song_traits` (`songId` TEXT NOT NULL, `bpm` REAL, `bpmSure` INTEGER NOT NULL, `key` TEXT, `camelot` TEXT, `lufs` REAL, `energy` REAL, `whole` INTEGER NOT NULL, `measuredAt` INTEGER NOT NULL, PRIMARY KEY(`songId`))")
                     db.execSQL("CREATE INDEX IF NOT EXISTS `index_song_traits_bpm` ON `song_traits` (`bpm`)")
                     db.execSQL("CREATE INDEX IF NOT EXISTS `index_song_traits_energy` ON `song_traits` (`energy`)")
+                }
+            },
+            // 1.8.3: the listener's own tags on songs.
+            object : Migration(10, 11) {
+                override fun migrate(db: SupportSQLiteDatabase) {
+                    db.execSQL("CREATE TABLE IF NOT EXISTS `song_tags` (`tag` TEXT NOT NULL, `songId` TEXT NOT NULL, `addedAt` INTEGER NOT NULL, PRIMARY KEY(`tag`, `songId`))")
+                    db.execSQL("CREATE INDEX IF NOT EXISTS `index_song_tags_songId` ON `song_tags` (`songId`)")
                 }
             },
         )

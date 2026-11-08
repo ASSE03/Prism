@@ -5023,4 +5023,74 @@
         <item quantity="many">Удалить %1$d треков из «%2$s» в YouTube Music?</item>
         <item quantity="other">Удалить %1$d трека из «%2$s» в YouTube Music?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">Теги</string>
+    <string name="add_a_tag">Добавить тег</string>
+    <string name="new_tag">Новый тег</string>
+    <string name="tags_are_your_own_labels">Твои собственные метки для песен, например «спортзал» или «дождливый день». Они в Библиотеке → Теги.</string>
+    <string name="your_tag">Твой тег на этом телефоне</string>
+    <string name="remove_this_tag">Убрать этот тег</string>
+    <string name="rename_tag">Переименовать тег</string>
+    <string name="delete_tag">Удалить тег</string>
+    <string name="delete_the_tag_its_songs_stay">Удалить тег «%s»? Его песни останутся на своих местах.</string>
+    <string name="tag_songs_from_any_song_s">Ставь теги песням из меню любой песни (⋯ или долгое нажатие) → Добавить тег.</string>
+    <string name="tag_n_songs">Тег · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d тег</item>
+        <item quantity="few">%d тега</item>
+        <item quantity="many">%d тегов</item>
+        <item quantity="other">%d тега</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">Умный плейлист</string>
+    <string name="smart_playlist_n">Умный плейлист · %s</string>
+    <string name="smart_playlist_updates_itself">Умный плейлист · обновляется сам</string>
+    <string name="new_smart_playlist">Новый умный плейлист</string>
+    <string name="edit_rules">Изменить правила</string>
+    <string name="save_a_copy_as_a_playlist">Сохранить копию как плейлист</string>
+    <string name="saved_as_a_playlist">«%s» сохранён как плейлист</string>
+    <string name="no_song_meets_these_rules">Пока ни одна песня не подходит под эти правила. Измени их в меню ⋯ → Изменить правила.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d песня ещё не измерена</item>
+        <item quantity="few">%d песни ещё не измерены</item>
+        <item quantity="many">%d песен ещё не измерены</item>
+        <item quantity="other">%d песни ещё не измерены</item>
+    </plurals>
+    <string name="measuring_n_of_n">Измеряю %1$d из %2$d…</string>
+    <string name="measure_now">Измерить сейчас</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">Измеряются песни на этом телефоне. По Wi-Fi — и остальные.</string>
+    <string name="smart_fast_and_liked">Быстрые и любимые</string>
+    <string name="smart_not_played_in_a_while">Давно не слушал</string>
+    <string name="smart_goes_with_what_s_playing">Подходит к тому, что играет</string>
+    <string name="the_song_playing_isn_t_measured_yet">Играющая песня ещё не измерена.</string>
+    <string name="match_all_rules">Подходит под все правила</string>
+    <string name="match_any_rule">Подходит под любое правило</string>
+    <string name="add_a_rule">Добавить правило</string>
+    <string name="add_a_rule_to_begin">Добавь правило, чтобы начать.</string>
+    <string name="finds_n">Находит %s</string>
+    <string name="up_to">До</string>
+    <string name="sort_most_played">Самые прослушиваемые</string>
+    <string name="sort_not_played_lately">Давно не играли</string>
+    <string name="sort_random">Случайно</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">Тональность, подходящая к</string>
+    <string name="rule_energy">Энергия</string>
+    <string name="rule_loudness">Громкость (LUFS)</string>
+    <string name="rule_on_phone">Файл на этом телефоне</string>
+    <string name="rule_tag">Тег</string>
+    <string name="rule_times_played">Сколько раз сыграна</string>
+    <string name="rule_last_played">Последнее прослушивание</string>
+    <string name="rule_added">Добавлена в библиотеку</string>
+    <string name="rule_never_played">Ни разу не играла</string>
+    <string name="rule_is">Да</string>
+    <string name="rule_isn_t">Нет</string>
+    <string name="rule_from">От</string>
+    <string name="rule_to">До</string>
+    <string name="rule_at_least">Не меньше</string>
+    <string name="rule_at_most">Не больше</string>
+    <string name="rule_within">За последние</string>
+    <string name="rule_not_within">Не за последние</string>
+    <string name="rule_days">дн.</string>
+    <string name="genre_example">Поп, хип-хоп, рок…</string>
+    <string name="your_listening">Твоё прослушивание</string>
 </resources>

@@ -4957,4 +4957,72 @@
         <item quantity="two">להסיר %1$d שירים מ„%2$s” ב-YouTube Music?</item>
         <item quantity="other">להסיר %1$d שירים מ„%2$s” ב-YouTube Music?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">תגיות</string>
+    <string name="add_a_tag">הוספת תגית</string>
+    <string name="new_tag">תגית חדשה</string>
+    <string name="tags_are_your_own_labels">תוויות משלך לשירים, כמו „חדר כושר” או „יום גשום”. אפשר למצוא אותן בספרייה ← תגיות.</string>
+    <string name="your_tag">התגית שלך בטלפון הזה</string>
+    <string name="remove_this_tag">הסרת התגית הזו</string>
+    <string name="rename_tag">שינוי שם התגית</string>
+    <string name="delete_tag">מחיקת התגית</string>
+    <string name="delete_the_tag_its_songs_stay">למחוק את התגית „%s”? השירים שלה נשארים במקומם.</string>
+    <string name="tag_songs_from_any_song_s">תייגו שירים מהתפריט של כל שיר (⋯ או לחיצה ארוכה) ← הוספת תגית.</string>
+    <string name="tag_n_songs">תגית · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">תגית %d</item>
+        <item quantity="two">%d תגיות</item>
+        <item quantity="other">%d תגיות</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">פלייליסט חכם</string>
+    <string name="smart_playlist_n">פלייליסט חכם · %s</string>
+    <string name="smart_playlist_updates_itself">פלייליסט חכם · מתעדכן מעצמו</string>
+    <string name="new_smart_playlist">פלייליסט חכם חדש</string>
+    <string name="edit_rules">עריכת הכללים</string>
+    <string name="save_a_copy_as_a_playlist">שמירת עותק כפלייליסט</string>
+    <string name="saved_as_a_playlist">„%s” נשמר כפלייליסט</string>
+    <string name="no_song_meets_these_rules">עדיין אין שיר שעומד בכללים האלה. אפשר לשנות אותם בתפריט ⋯ ← עריכת הכללים.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">שיר %d עדיין לא נמדד</item>
+        <item quantity="two">%d שירים עדיין לא נמדדו</item>
+        <item quantity="other">%d שירים עדיין לא נמדדו</item>
+    </plurals>
+    <string name="measuring_n_of_n">מודד %1$d מתוך %2$d…</string>
+    <string name="measure_now">למדוד עכשיו</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">השירים שבטלפון הזה נמדדים. ב-Wi-Fi גם השאר.</string>
+    <string name="smart_fast_and_liked">מהירים ואהובים</string>
+    <string name="smart_not_played_in_a_while">לא הושמעו מזמן</string>
+    <string name="smart_goes_with_what_s_playing">מתאים למה שמתנגן</string>
+    <string name="the_song_playing_isn_t_measured_yet">השיר שמתנגן עדיין לא נמדד.</string>
+    <string name="match_all_rules">עומד בכל הכללים</string>
+    <string name="match_any_rule">עומד באחד הכללים</string>
+    <string name="add_a_rule">הוספת כלל</string>
+    <string name="add_a_rule_to_begin">כדי להתחיל, הוסיפו כלל.</string>
+    <string name="finds_n">מוצא %s</string>
+    <string name="up_to">עד</string>
+    <string name="sort_most_played">הכי מושמעים</string>
+    <string name="sort_not_played_lately">לא הושמעו לאחרונה</string>
+    <string name="sort_random">אקראי</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">סולם שמתאים ל</string>
+    <string name="rule_energy">אנרגיה</string>
+    <string name="rule_loudness">עוצמה (LUFS)</string>
+    <string name="rule_on_phone">קובץ בטלפון הזה</string>
+    <string name="rule_tag">תגית</string>
+    <string name="rule_times_played">מספר השמעות</string>
+    <string name="rule_last_played">הושמע לאחרונה</string>
+    <string name="rule_added">נוסף לספרייה</string>
+    <string name="rule_never_played">אף פעם לא הושמע</string>
+    <string name="rule_is">כן</string>
+    <string name="rule_isn_t">לא</string>
+    <string name="rule_from">מ</string>
+    <string name="rule_to">עד</string>
+    <string name="rule_at_least">לפחות</string>
+    <string name="rule_at_most">לכל היותר</string>
+    <string name="rule_within">ב-</string>
+    <string name="rule_not_within">לא ב-</string>
+    <string name="rule_days">הימים האחרונים</string>
+    <string name="genre_example">פופ, היפ-הופ, רוק…</string>
+    <string name="your_listening">ההאזנה שלך</string>
 </resources>

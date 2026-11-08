@@ -477,6 +477,18 @@ class AppContainer(val app: Application) {
     val models = com.prism.music.data.ModelStore(app, http)
     /** Playlists and saved albums kept on the phone (no account needed). */
     val prismLibrary = com.prism.music.data.PrismLibrary(java.io.File(app.filesDir, "library"))
+    /** The listener's own tags on songs (1.8.3). */
+    val tags by lazy { com.prism.music.data.TagStore(db, scope, java.io.File(app.filesDir, "library")) }
+    /** Smart playlists' songs (1.8.3): asked for when one opens, never at start. */
+    val smart by lazy {
+        com.prism.music.data.SmartPlaylists(db, { downloads.completedSongs() }, { localMusic.tracks.value.map { it.song } }, { meta.cachedGenres(it) })
+    }
+    /** "Measure now" on a smart playlist: the songs its Sound rules can't see yet, scanned one by one (Wi-Fi for streams). */
+    val smartMeasure by lazy {
+        com.prism.music.data.SmartMeasure(scope, { id, network -> mixTempo.measure(id, network = network, key = true) }) {
+            app.getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered == false
+        }
+    }
     /** The listener's Prism Account: a name and picture kept on this phone ([com.prism.music.data.PrismAccount]). */
     val account by lazy { com.prism.music.data.PrismAccount(this) }
 
@@ -528,6 +540,10 @@ class AppContainer(val app: Application) {
                 val copied = traits.copyMissing(m.measuredIds(), m::traitsFromPrefs)
                 if (copied > 0) android.util.Log.i("PrismTraits", "copied $copied songs' measurements into song_traits")
             }
+        }
+        // 1.8.3: a restored backup's tags, read in once (a file check otherwise).
+        scope.launch(Dispatchers.IO) {
+            if (java.io.File(app.filesDir, "library/" + com.prism.music.data.TagStore.PENDING).isFile) tags.readPending()
         }
         // GitHub #182: bringing the library over had starred every library song's artist; those come off once, unless the
         // account follows them. Retried on a later launch when the account's follows couldn't be asked for.

@@ -4891,4 +4891,70 @@
         <item quantity="one">%1$d nummer uit ‘%2$s’ op YouTube Music verwijderen?</item>
         <item quantity="other">%1$d nummers uit ‘%2$s’ op YouTube Music verwijderen?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">Tags</string>
+    <string name="add_a_tag">Tag toevoegen</string>
+    <string name="new_tag">Nieuwe tag</string>
+    <string name="tags_are_your_own_labels">Je eigen labels voor nummers, zoals ‘sportschool’ of ‘regenachtige dag’. Je vindt ze in Bibliotheek → Tags.</string>
+    <string name="your_tag">Je tag op deze telefoon</string>
+    <string name="remove_this_tag">Deze tag weghalen</string>
+    <string name="rename_tag">Tag hernoemen</string>
+    <string name="delete_tag">Tag verwijderen</string>
+    <string name="delete_the_tag_its_songs_stay">De tag ‘%s’ verwijderen? De nummers blijven waar ze zijn.</string>
+    <string name="tag_songs_from_any_song_s">Tag nummers via het menu van een nummer (⋯ of lang indrukken) → Tag toevoegen.</string>
+    <string name="tag_n_songs">Tag · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d tag</item>
+        <item quantity="other">%d tags</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">Slimme playlist</string>
+    <string name="smart_playlist_n">Slimme playlist · %s</string>
+    <string name="smart_playlist_updates_itself">Slimme playlist · houdt zichzelf bij</string>
+    <string name="new_smart_playlist">Nieuwe slimme playlist</string>
+    <string name="edit_rules">Regels bewerken</string>
+    <string name="save_a_copy_as_a_playlist">Kopie als playlist opslaan</string>
+    <string name="saved_as_a_playlist">‘%s’ als playlist opgeslagen</string>
+    <string name="no_song_meets_these_rules">Nog geen nummer voldoet aan deze regels. Pas ze aan via het ⋯-menu → Regels bewerken.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d nummer is nog niet gemeten</item>
+        <item quantity="other">%d nummers zijn nog niet gemeten</item>
+    </plurals>
+    <string name="measuring_n_of_n">%1$d van %2$d meten…</string>
+    <string name="measure_now">Nu meten</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">De nummers op deze telefoon worden gemeten. Op wifi ook de andere.</string>
+    <string name="smart_fast_and_liked">Snel en geliket</string>
+    <string name="smart_not_played_in_a_while">Al een tijd niet gespeeld</string>
+    <string name="smart_goes_with_what_s_playing">Past bij wat er speelt</string>
+    <string name="the_song_playing_isn_t_measured_yet">Het nummer dat speelt is nog niet gemeten.</string>
+    <string name="match_all_rules">Voldoet aan alle regels</string>
+    <string name="match_any_rule">Voldoet aan een regel</string>
+    <string name="add_a_rule">Regel toevoegen</string>
+    <string name="add_a_rule_to_begin">Voeg een regel toe om te beginnen.</string>
+    <string name="finds_n">Vindt %s</string>
+    <string name="up_to">Tot</string>
+    <string name="sort_most_played">Meest gespeeld</string>
+    <string name="sort_not_played_lately">Lang niet gespeeld</string>
+    <string name="sort_random">Willekeurig</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">Toonsoort die past bij</string>
+    <string name="rule_energy">Energie</string>
+    <string name="rule_loudness">Luidheid (LUFS)</string>
+    <string name="rule_on_phone">Een bestand op deze telefoon</string>
+    <string name="rule_tag">Tag</string>
+    <string name="rule_times_played">Keer gespeeld</string>
+    <string name="rule_last_played">Laatst gespeeld</string>
+    <string name="rule_added">Toegevoegd aan je bibliotheek</string>
+    <string name="rule_never_played">Nooit gespeeld</string>
+    <string name="rule_is">Is</string>
+    <string name="rule_isn_t">Is niet</string>
+    <string name="rule_from">Van</string>
+    <string name="rule_to">Tot</string>
+    <string name="rule_at_least">Minstens</string>
+    <string name="rule_at_most">Hooguit</string>
+    <string name="rule_within">In de laatste</string>
+    <string name="rule_not_within">Niet in de laatste</string>
+    <string name="rule_days">dagen</string>
+    <string name="genre_example">Pop, hiphop, rock…</string>
+    <string name="your_listening">Wat je luistert</string>
 </resources>

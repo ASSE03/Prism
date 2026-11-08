@@ -4825,4 +4825,68 @@
     <plurals name="remove_n_from_youtube_playlist_q">
         <item quantity="other">Xóa %1$d bài hát khỏi “%2$s” trên YouTube Music?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">Thẻ</string>
+    <string name="add_a_tag">Thêm thẻ</string>
+    <string name="new_tag">Thẻ mới</string>
+    <string name="tags_are_your_own_labels">Nhãn riêng của bạn cho bài hát, như “tập gym” hay “ngày mưa”. Xem trong Thư viện → Thẻ.</string>
+    <string name="your_tag">Thẻ của bạn trên điện thoại này</string>
+    <string name="remove_this_tag">Bỏ thẻ này</string>
+    <string name="rename_tag">Đổi tên thẻ</string>
+    <string name="delete_tag">Xóa thẻ</string>
+    <string name="delete_the_tag_its_songs_stay">Xóa thẻ “%s”? Các bài hát của thẻ vẫn ở nguyên chỗ cũ.</string>
+    <string name="tag_songs_from_any_song_s">Gắn thẻ bài hát từ trình đơn của bất kỳ bài nào (⋯ hoặc nhấn giữ) → Thêm thẻ.</string>
+    <string name="tag_n_songs">Thẻ · %s</string>
+    <plurals name="n_tags">
+        <item quantity="other">%d thẻ</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">Danh sách phát thông minh</string>
+    <string name="smart_playlist_n">Danh sách phát thông minh · %s</string>
+    <string name="smart_playlist_updates_itself">Danh sách phát thông minh · tự cập nhật</string>
+    <string name="new_smart_playlist">Danh sách phát thông minh mới</string>
+    <string name="edit_rules">Sửa quy tắc</string>
+    <string name="save_a_copy_as_a_playlist">Lưu bản sao thành danh sách phát</string>
+    <string name="saved_as_a_playlist">Đã lưu “%s” thành danh sách phát</string>
+    <string name="no_song_meets_these_rules">Chưa có bài nào khớp các quy tắc này. Đổi chúng trong trình đơn ⋯ → Sửa quy tắc.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="other">%d bài chưa được đo</item>
+    </plurals>
+    <string name="measuring_n_of_n">Đang đo %1$d / %2$d…</string>
+    <string name="measure_now">Đo ngay</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">Đang đo các bài trên điện thoại này. Khi có Wi-Fi, các bài khác cũng được đo.</string>
+    <string name="smart_fast_and_liked">Nhanh và đã thích</string>
+    <string name="smart_not_played_in_a_while">Lâu rồi chưa nghe</string>
+    <string name="smart_goes_with_what_s_playing">Hợp với bài đang phát</string>
+    <string name="the_song_playing_isn_t_measured_yet">Bài đang phát chưa được đo.</string>
+    <string name="match_all_rules">Khớp mọi quy tắc</string>
+    <string name="match_any_rule">Khớp một quy tắc bất kỳ</string>
+    <string name="add_a_rule">Thêm quy tắc</string>
+    <string name="add_a_rule_to_begin">Thêm một quy tắc để bắt đầu.</string>
+    <string name="finds_n">Tìm thấy %s</string>
+    <string name="up_to">Tối đa</string>
+    <string name="sort_most_played">Nghe nhiều nhất</string>
+    <string name="sort_not_played_lately">Gần đây chưa nghe</string>
+    <string name="sort_random">Ngẫu nhiên</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">Giọng hợp với</string>
+    <string name="rule_energy">Năng lượng</string>
+    <string name="rule_loudness">Độ lớn (LUFS)</string>
+    <string name="rule_on_phone">Tệp trên điện thoại này</string>
+    <string name="rule_tag">Thẻ</string>
+    <string name="rule_times_played">Số lần nghe</string>
+    <string name="rule_last_played">Lần nghe cuối</string>
+    <string name="rule_added">Thêm vào thư viện</string>
+    <string name="rule_never_played">Chưa từng nghe</string>
+    <string name="rule_is">Có</string>
+    <string name="rule_isn_t">Không</string>
+    <string name="rule_from">Từ</string>
+    <string name="rule_to">Đến</string>
+    <string name="rule_at_least">Ít nhất</string>
+    <string name="rule_at_most">Nhiều nhất</string>
+    <string name="rule_within">Trong</string>
+    <string name="rule_not_within">Không trong</string>
+    <string name="rule_days">ngày qua</string>
+    <string name="genre_example">Pop, hip-hop, rock…</string>
+    <string name="your_listening">Bạn nghe gì</string>
 </resources>

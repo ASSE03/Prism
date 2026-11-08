@@ -95,9 +95,9 @@ class SelectScope {
 
 /**
  * Taking songs out of the list they were picked in: a Prism playlist ([asks] false), or an own YouTube playlist, which
- * writes to the account, so it asks first.
+ * writes to the account, so it asks first. [label] names the button when it isn't "Remove from this playlist" (a tag).
  */
-class SelectionRemover(val listName: String, val asks: Boolean, val remove: (List<Song>) -> Unit)
+class SelectionRemover(val listName: String, val asks: Boolean, val label: String? = null, val remove: (List<Song>) -> Unit)
 
 /** The app's selection; null (a TV, a test without one) leaves every list as it was. */
 val LocalSongSelection = staticCompositionLocalOf<SongSelection?> { null }
@@ -164,6 +164,8 @@ fun SelectionBar(selection: SongSelection, modifier: Modifier = Modifier) {
     addingTo?.let { list ->
         PlaylistPicker(list, trp(R.plurals.n_songs, list.size)) { addingTo = null; selection.clear() }
     }
+    var tagging by remember { mutableStateOf<List<Song>?>(null) }
+    tagging?.let { list -> TagPicker(list, null) { tagging = null; selection.clear() } }
     asking?.let { (text, go) ->
         AlertDialog(
             onDismissRequest = { asking = null },
@@ -210,6 +212,8 @@ fun SelectionBar(selection: SongSelection, modifier: Modifier = Modifier) {
                 }
                 val forList = SelectionPlan.forPlaylist(songs)
                 BarButton(PrismIcons.PlaylistAdd, tr(R.string.add_to_playlist), ink, enabled = forList.isNotEmpty()) { addingTo = forList }
+                val forTags = songs.filter(com.prism.music.data.TagStore::taggable)
+                BarButton(PrismIcons.Tag, tr(R.string.add_a_tag), ink, enabled = forTags.isNotEmpty()) { tagging = forTags }
                 val (likeThem, likeWhich) = SelectionPlan.like(songs, liked)
                 BarButton(
                     if (likeThem) PrismIcons.Heart else PrismIcons.HeartFilled, if (likeThem) tr(R.string.like) else tr(R.string.unlike), ink,
@@ -233,7 +237,7 @@ fun SelectionBar(selection: SongSelection, modifier: Modifier = Modifier) {
                     }
                 }
                 selection.scope?.remover?.let { r ->
-                    BarButton(PrismIcons.PlaylistRemove, tr(R.string.remove_from_this_playlist), ink, enabled = !none) {
+                    BarButton(PrismIcons.PlaylistRemove, r.label ?: tr(R.string.remove_from_this_playlist), ink, enabled = !none) {
                         if (r.asks) asking = trp(R.plurals.remove_n_from_youtube_playlist_q, songs.size, songs.size, r.listName) to { r.remove(songs) }
                         else { r.remove(songs); selection.clear() }
                     }

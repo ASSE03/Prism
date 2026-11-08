@@ -76,9 +76,11 @@ import com.prism.music.ui.components.featurePane
 import com.prism.music.ui.theme.LocalAppSettings
 import com.prism.music.ui.theme.LocalContainer
 import kotlinx.coroutines.launch
+import androidx.compose.ui.platform.testTag
 
 // The phone's own music files have their own page (Local files, from Playlists), with Songs, Artists and Albums.
-private enum class LibTab(val label: String) { PLAYLISTS(tr(R.string.playlists)), SONGS(tr(R.string.songs)), ALBUMS(tr(R.string.albums)), ARTISTS(tr(R.string.artists)), HISTORY(tr(R.string.history)), DOWNLOADS(tr(R.string.downloads)) }
+// Tags (1.8.3) last, and only once there's a tag: the other tabs keep their places.
+private enum class LibTab(val label: String) { PLAYLISTS(tr(R.string.playlists)), SONGS(tr(R.string.songs)), ALBUMS(tr(R.string.albums)), ARTISTS(tr(R.string.artists)), HISTORY(tr(R.string.history)), DOWNLOADS(tr(R.string.downloads)), TAGS(tr(R.string.tags)) }
 
 /** One row of History (#118): a play, or a run of plays of the same song one after another. */
 private data class HistoryEntry(val song: com.prism.music.data.model.Song, val at: Long, val times: Int)
@@ -154,8 +156,12 @@ fun LibraryScreen(bottomPadding: Dp) {
     val savedAlbums by c.prismLibrary.albums.collectAsState()
     val scope = rememberCoroutineScope()
     var creating by remember { mutableStateOf(false) }
-    val startPage = remember { LibTab.entries.indexOfFirst { it.name == settings.libraryStartTab }.coerceAtLeast(0) }
-    val pager = rememberPagerState(initialPage = startPage) { LibTab.entries.size }
+    var newSmart by remember { mutableStateOf(false) }
+    if (newSmart) com.prism.music.ui.components.SmartEditorSheet(null) { newSmart = false }
+    val tagList by c.tags.summaries.collectAsState()
+    val tabs = if (tagList.isEmpty()) LibTab.entries - LibTab.TAGS else LibTab.entries
+    val startPage = remember { LibTab.entries.indexOfFirst { it.name == settings.libraryStartTab }.coerceAtLeast(0).coerceAtMost(LibTab.DOWNLOADS.ordinal) }
+    val pager = rememberPagerState(initialPage = startPage) { tabs.size }
     // Each of Playlists, Albums and Artists can be a list or a grid of its own (1.7.6).
     fun listFor(tab: LibTab) = (settings.libraryViews[tab.name] ?: settings.libraryView) == com.prism.music.data.prefs.LibraryView.LIST
     val viewTab = LibTab.entries[pager.currentPage].takeIf { it == LibTab.PLAYLISTS || it == LibTab.ALBUMS || it == LibTab.ARTISTS }
@@ -340,7 +346,7 @@ fun LibraryScreen(bottomPadding: Dp) {
             ) { c.settings.setLibraryTabView(viewTab.name, if (asList) com.prism.music.data.prefs.LibraryView.GRID else com.prism.music.data.prefs.LibraryView.LIST) }
             if (com.prism.music.data.prefs.NavTab.SETTINGS !in settings.navTabs) com.prism.music.ui.components.RoundAction(PrismIcons.SettingsFilled, tr(R.string.settings)) { nav.go(Routes.SETTINGS) }
         }
-        PagerChips(LibTab.entries.map { it.label }, pager)
+        PagerChips(tabs.map { it.label }, pager)
 
         HorizontalPager(pager, Modifier.weight(1f), beyondViewportPageCount = 1) { page ->
             val tab = LibTab.entries[page]
@@ -507,6 +513,8 @@ fun LibraryScreen(bottomPadding: Dp) {
                                 if (!rearranging) com.prism.music.ui.components.PrismChip(false, { openingLink = true }, tr(R.string.open_a_link), icon = PrismIcons.Link)
                                 // A folder with nothing in it yet: until now one could only be made while moving a playlist.
                                 if (!rearranging) com.prism.music.ui.components.PrismChip(false, { newFolder = true }, tr(R.string.new_folder), icon = PrismIcons.Folder)
+                                // 1.8.3: a playlist made of rules, kept up to date by itself.
+                                if (!rearranging) com.prism.music.ui.components.PrismChip(false, { newSmart = true }, tr(R.string.smart_playlist), Modifier.testTag("newSmart"), icon = PrismIcons.SmartShuffle)
                                 if (myPlaylists.size > 1) com.prism.music.ui.components.PrismChip(
                                     rearranging,
                                     {
@@ -636,6 +644,20 @@ fun LibraryScreen(bottomPadding: Dp) {
                         }
                     }
                     LibTab.DOWNLOADS -> item(span = { GridItemSpan(maxLineSpan) }) { DownloadsSummary() }
+                    // 1.8.3: the listener's tags, each opening its songs (to play, shuffle, rename or delete).
+                    LibTab.TAGS -> {
+                        item(span = { GridItemSpan(maxLineSpan) }) {
+                            Text(
+                                trp(R.plurals.n_tags, tagList.size), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(start = if (asList) 16.dp else 8.dp, top = 4.dp, bottom = 4.dp),
+                            )
+                        }
+                        items(tagList, key = { "t" + it.tag }) { t ->
+                            ShortcutTile(
+                                t.tag, if (settings.librarySubtitles) com.prism.music.data.model.songCount(t.songs) else "", PrismIcons.Tag, asList, art = t.thumbnail,
+                            ) { nav.go(Routes.tag(t.tag)) }
+                        }
+                    }
                 }
             }
             }

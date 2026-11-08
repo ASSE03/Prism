@@ -4920,4 +4920,70 @@
         <item quantity="one">Remove %1$d song from “%2$s” on YouTube Music?</item>
         <item quantity="other">Remove %1$d songs from “%2$s” on YouTube Music?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">Tags</string>
+    <string name="add_a_tag">Add a tag</string>
+    <string name="new_tag">New tag</string>
+    <string name="tags_are_your_own_labels">Your own labels for songs, like “gym” or “rainy day”. Find them in Library → Tags.</string>
+    <string name="your_tag">Your tag on this phone</string>
+    <string name="remove_this_tag">Remove this tag</string>
+    <string name="rename_tag">Rename tag</string>
+    <string name="delete_tag">Delete tag</string>
+    <string name="delete_the_tag_its_songs_stay">Delete the tag “%s”? Its songs stay where they are.</string>
+    <string name="tag_songs_from_any_song_s">Tag songs from any song\'s menu (⋯ or a long press) → Add a tag.</string>
+    <string name="tag_n_songs">Tag · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d tag</item>
+        <item quantity="other">%d tags</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">Smart playlist</string>
+    <string name="smart_playlist_n">Smart playlist · %s</string>
+    <string name="smart_playlist_updates_itself">Smart playlist · keeps itself up to date</string>
+    <string name="new_smart_playlist">New smart playlist</string>
+    <string name="edit_rules">Edit rules</string>
+    <string name="save_a_copy_as_a_playlist">Save a copy as a playlist</string>
+    <string name="saved_as_a_playlist">Saved “%s” as a playlist</string>
+    <string name="no_song_meets_these_rules">No song meets these rules yet. Change them from the ⋯ menu → Edit rules.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d song isn\'t measured yet</item>
+        <item quantity="other">%d songs aren\'t measured yet</item>
+    </plurals>
+    <string name="measuring_n_of_n">Measuring %1$d of %2$d…</string>
+    <string name="measure_now">Measure now</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">Measuring the songs on this phone. On Wi-Fi, the others are measured too.</string>
+    <string name="smart_fast_and_liked">Fast and liked</string>
+    <string name="smart_not_played_in_a_while">Not played in a while</string>
+    <string name="smart_goes_with_what_s_playing">Goes with what\'s playing</string>
+    <string name="the_song_playing_isn_t_measured_yet">The song playing isn\'t measured yet.</string>
+    <string name="match_all_rules">Meets all rules</string>
+    <string name="match_any_rule">Meets any rule</string>
+    <string name="add_a_rule">Add a rule</string>
+    <string name="add_a_rule_to_begin">Add a rule to begin.</string>
+    <string name="finds_n">Finds %s</string>
+    <string name="up_to">Up to</string>
+    <string name="sort_most_played">Most played</string>
+    <string name="sort_not_played_lately">Not played lately</string>
+    <string name="sort_random">Random</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">Key that goes with</string>
+    <string name="rule_energy">Energy</string>
+    <string name="rule_loudness">Loudness (LUFS)</string>
+    <string name="rule_on_phone">A file on this phone</string>
+    <string name="rule_tag">Tag</string>
+    <string name="rule_times_played">Times played</string>
+    <string name="rule_last_played">Last played</string>
+    <string name="rule_added">Added to your library</string>
+    <string name="rule_never_played">Never played</string>
+    <string name="rule_is">Is</string>
+    <string name="rule_isn_t">Isn\'t</string>
+    <string name="rule_from">From</string>
+    <string name="rule_to">To</string>
+    <string name="rule_at_least">At least</string>
+    <string name="rule_at_most">At most</string>
+    <string name="rule_within">In the last</string>
+    <string name="rule_not_within">Not in the last</string>
+    <string name="rule_days">days</string>
+    <string name="genre_example">Pop, Hip-hop, Rock…</string>
+    <string name="your_listening">Your listening</string>
 </resources>

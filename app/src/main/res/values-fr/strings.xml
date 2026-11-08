@@ -4957,4 +4957,72 @@
         <item quantity="many">Retirer %1$d titres de « %2$s » sur YouTube Music ?</item>
         <item quantity="other">Retirer %1$d titres de « %2$s » sur YouTube Music ?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">Tags</string>
+    <string name="add_a_tag">Ajouter un tag</string>
+    <string name="new_tag">Nouveau tag</string>
+    <string name="tags_are_your_own_labels">Vos propres étiquettes pour vos titres, comme « sport » ou « jour de pluie ». Retrouvez-les dans Bibliothèque → Tags.</string>
+    <string name="your_tag">Votre tag sur ce téléphone</string>
+    <string name="remove_this_tag">Retirer ce tag</string>
+    <string name="rename_tag">Renommer le tag</string>
+    <string name="delete_tag">Supprimer le tag</string>
+    <string name="delete_the_tag_its_songs_stay">Supprimer le tag « %s » ? Ses titres restent là où ils sont.</string>
+    <string name="tag_songs_from_any_song_s">Taguez des titres depuis le menu de n’importe quel titre (⋯ ou appui long) → Ajouter un tag.</string>
+    <string name="tag_n_songs">Tag · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d tag</item>
+        <item quantity="many">%d tags</item>
+        <item quantity="other">%d tags</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">Playlist intelligente</string>
+    <string name="smart_playlist_n">Playlist intelligente · %s</string>
+    <string name="smart_playlist_updates_itself">Playlist intelligente · se tient à jour toute seule</string>
+    <string name="new_smart_playlist">Nouvelle playlist intelligente</string>
+    <string name="edit_rules">Modifier les règles</string>
+    <string name="save_a_copy_as_a_playlist">Enregistrer une copie comme playlist</string>
+    <string name="saved_as_a_playlist">« %s » enregistrée comme playlist</string>
+    <string name="no_song_meets_these_rules">Aucun titre ne remplit encore ces règles. Modifiez-les depuis le menu ⋯ → Modifier les règles.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d titre n’est pas encore mesuré</item>
+        <item quantity="many">%d titres ne sont pas encore mesurés</item>
+        <item quantity="other">%d titres ne sont pas encore mesurés</item>
+    </plurals>
+    <string name="measuring_n_of_n">Mesure %1$d sur %2$d…</string>
+    <string name="measure_now">Mesurer maintenant</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">Les titres de ce téléphone sont mesurés. En Wi-Fi, les autres aussi.</string>
+    <string name="smart_fast_and_liked">Rapides et aimés</string>
+    <string name="smart_not_played_in_a_while">Pas écoutés depuis un moment</string>
+    <string name="smart_goes_with_what_s_playing">Va avec le titre en cours</string>
+    <string name="the_song_playing_isn_t_measured_yet">Le titre en cours n’est pas encore mesuré.</string>
+    <string name="match_all_rules">Remplit toutes les règles</string>
+    <string name="match_any_rule">Remplit une des règles</string>
+    <string name="add_a_rule">Ajouter une règle</string>
+    <string name="add_a_rule_to_begin">Ajoutez une règle pour commencer.</string>
+    <string name="finds_n">Trouve %s</string>
+    <string name="up_to">Jusqu’à</string>
+    <string name="sort_most_played">Les plus écoutés</string>
+    <string name="sort_not_played_lately">Pas écoutés récemment</string>
+    <string name="sort_random">Au hasard</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">Tonalité qui va avec</string>
+    <string name="rule_energy">Énergie</string>
+    <string name="rule_loudness">Volume (LUFS)</string>
+    <string name="rule_on_phone">Un fichier de ce téléphone</string>
+    <string name="rule_tag">Tag</string>
+    <string name="rule_times_played">Nombre d’écoutes</string>
+    <string name="rule_last_played">Dernière écoute</string>
+    <string name="rule_added">Ajouté à votre bibliothèque</string>
+    <string name="rule_never_played">Jamais écouté</string>
+    <string name="rule_is">Est</string>
+    <string name="rule_isn_t">N’est pas</string>
+    <string name="rule_from">De</string>
+    <string name="rule_to">À</string>
+    <string name="rule_at_least">Au moins</string>
+    <string name="rule_at_most">Au plus</string>
+    <string name="rule_within">Ces derniers</string>
+    <string name="rule_not_within">Pas ces derniers</string>
+    <string name="rule_days">jours</string>
+    <string name="genre_example">Pop, hip-hop, rock…</string>
+    <string name="your_listening">Vos écoutes</string>
 </resources>

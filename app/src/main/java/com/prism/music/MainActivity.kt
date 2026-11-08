@@ -781,7 +781,12 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                             val id = it.arguments?.getString("id")!!
                             // A playlist made in Prism (kept on the phone) opens on the same page, from the phone.
                             val type = if (com.prism.music.data.PrismLibrary.isPrismList(id)) CollectionType.PRISM else CollectionType.PLAYLIST
-                            Beside { CollectionScreen(type, id, null, bottomPadding) }
+                            // A tag found by Search (1.8.3) comes as a playlist: its own page.
+                            if (id.startsWith(com.prism.music.ui.screens.TAG_PAGE)) Beside { CollectionScreen(CollectionType.TAG, id.removePrefix(com.prism.music.ui.screens.TAG_PAGE), null, bottomPadding) }
+                            else Beside { CollectionScreen(type, id, null, bottomPadding) }
+                        }
+                        composable("tag/{name}", listOf(navArgument("name") { type = NavType.StringType })) {
+                            Beside { CollectionScreen(CollectionType.TAG, it.arguments?.getString("name")!!, null, bottomPadding) }
                         }
                         composable("liked?genre={genre}", listOf(navArgument("genre") { type = NavType.StringType; nullable = true; defaultValue = null })) {
                             Beside { CollectionScreen(CollectionType.LIKED, "liked", it.arguments?.getString("genre"), bottomPadding) }

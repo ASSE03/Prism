@@ -4891,4 +4891,70 @@
         <item quantity="one">Αφαίρεση %1$d τραγουδιού από το «%2$s» στο YouTube Music;</item>
         <item quantity="other">Αφαίρεση %1$d τραγουδιών από το «%2$s» στο YouTube Music;</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">Ετικέτες</string>
+    <string name="add_a_tag">Προσθήκη ετικέτας</string>
+    <string name="new_tag">Νέα ετικέτα</string>
+    <string name="tags_are_your_own_labels">Οι δικές σου ετικέτες για τραγούδια, όπως «γυμναστήριο» ή «βροχερή μέρα». Θα τις βρεις στη Βιβλιοθήκη → Ετικέτες.</string>
+    <string name="your_tag">Η ετικέτα σου σε αυτό το τηλέφωνο</string>
+    <string name="remove_this_tag">Αφαίρεση αυτής της ετικέτας</string>
+    <string name="rename_tag">Μετονομασία ετικέτας</string>
+    <string name="delete_tag">Διαγραφή ετικέτας</string>
+    <string name="delete_the_tag_its_songs_stay">Διαγραφή της ετικέτας «%s»; Τα τραγούδια της μένουν εκεί που είναι.</string>
+    <string name="tag_songs_from_any_song_s">Βάλε ετικέτες από το μενού οποιουδήποτε τραγουδιού (⋯ ή παρατεταμένο πάτημα) → Προσθήκη ετικέτας.</string>
+    <string name="tag_n_songs">Ετικέτα · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d ετικέτα</item>
+        <item quantity="other">%d ετικέτες</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">Έξυπνη playlist</string>
+    <string name="smart_playlist_n">Έξυπνη playlist · %s</string>
+    <string name="smart_playlist_updates_itself">Έξυπνη playlist · ενημερώνεται μόνη της</string>
+    <string name="new_smart_playlist">Νέα έξυπνη playlist</string>
+    <string name="edit_rules">Επεξεργασία κανόνων</string>
+    <string name="save_a_copy_as_a_playlist">Αποθήκευση αντιγράφου ως playlist</string>
+    <string name="saved_as_a_playlist">Το «%s» αποθηκεύτηκε ως playlist</string>
+    <string name="no_song_meets_these_rules">Κανένα τραγούδι δεν ταιριάζει ακόμα σε αυτούς τους κανόνες. Άλλαξέ τους από το μενού ⋯ → Επεξεργασία κανόνων.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d τραγούδι δεν έχει μετρηθεί ακόμα</item>
+        <item quantity="other">%d τραγούδια δεν έχουν μετρηθεί ακόμα</item>
+    </plurals>
+    <string name="measuring_n_of_n">Μέτρηση %1$d από %2$d…</string>
+    <string name="measure_now">Μέτρηση τώρα</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">Μετριούνται τα τραγούδια αυτού του τηλεφώνου. Με Wi-Fi και τα υπόλοιπα.</string>
+    <string name="smart_fast_and_liked">Γρήγορα και αγαπημένα</string>
+    <string name="smart_not_played_in_a_while">Καιρό δεν έπαιξαν</string>
+    <string name="smart_goes_with_what_s_playing">Ταιριάζει με αυτό που παίζει</string>
+    <string name="the_song_playing_isn_t_measured_yet">Το τραγούδι που παίζει δεν έχει μετρηθεί ακόμα.</string>
+    <string name="match_all_rules">Πληροί όλους τους κανόνες</string>
+    <string name="match_any_rule">Πληροί κάποιον κανόνα</string>
+    <string name="add_a_rule">Προσθήκη κανόνα</string>
+    <string name="add_a_rule_to_begin">Πρόσθεσε έναν κανόνα για να ξεκινήσεις.</string>
+    <string name="finds_n">Βρίσκει %s</string>
+    <string name="up_to">Έως</string>
+    <string name="sort_most_played">Τα πιο ακουσμένα</string>
+    <string name="sort_not_played_lately">Δεν έπαιξαν πρόσφατα</string>
+    <string name="sort_random">Τυχαία</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">Τονικότητα που ταιριάζει με</string>
+    <string name="rule_energy">Ενέργεια</string>
+    <string name="rule_loudness">Ένταση (LUFS)</string>
+    <string name="rule_on_phone">Αρχείο σε αυτό το τηλέφωνο</string>
+    <string name="rule_tag">Ετικέτα</string>
+    <string name="rule_times_played">Φορές που έπαιξε</string>
+    <string name="rule_last_played">Τελευταία φορά που έπαιξε</string>
+    <string name="rule_added">Προστέθηκε στη βιβλιοθήκη σου</string>
+    <string name="rule_never_played">Δεν έπαιξε ποτέ</string>
+    <string name="rule_is">Είναι</string>
+    <string name="rule_isn_t">Δεν είναι</string>
+    <string name="rule_from">Από</string>
+    <string name="rule_to">Έως</string>
+    <string name="rule_at_least">Τουλάχιστον</string>
+    <string name="rule_at_most">Το πολύ</string>
+    <string name="rule_within">Τις τελευταίες</string>
+    <string name="rule_not_within">Όχι τις τελευταίες</string>
+    <string name="rule_days">ημέρες</string>
+    <string name="genre_example">Pop, hip-hop, rock…</string>
+    <string name="your_listening">Τι ακούς</string>
 </resources>

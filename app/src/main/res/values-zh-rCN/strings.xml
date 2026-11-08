@@ -4825,4 +4825,68 @@
     <plurals name="remove_n_from_youtube_playlist_q">
         <item quantity="other">要从 YouTube Music 上的“%2$s”中移除 %1$d 首歌曲吗？</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">标签</string>
+    <string name="add_a_tag">添加标签</string>
+    <string name="new_tag">新标签</string>
+    <string name="tags_are_your_own_labels">你给歌曲起的标签，比如“健身”或“下雨天”。在音乐库 → 标签里找到它们。</string>
+    <string name="your_tag">你在这台手机上的标签</string>
+    <string name="remove_this_tag">移除此标签</string>
+    <string name="rename_tag">重命名标签</string>
+    <string name="delete_tag">删除标签</string>
+    <string name="delete_the_tag_its_songs_stay">删除标签“%s”？其中的歌曲会留在原处。</string>
+    <string name="tag_songs_from_any_song_s">从任意歌曲的菜单（⋯ 或长按）→“添加标签”来给歌曲加标签。</string>
+    <string name="tag_n_songs">标签 · %s</string>
+    <plurals name="n_tags">
+        <item quantity="other">%d 个标签</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">智能播放列表</string>
+    <string name="smart_playlist_n">智能播放列表 · %s</string>
+    <string name="smart_playlist_updates_itself">智能播放列表 · 自动保持更新</string>
+    <string name="new_smart_playlist">新建智能播放列表</string>
+    <string name="edit_rules">编辑规则</string>
+    <string name="save_a_copy_as_a_playlist">另存为普通播放列表</string>
+    <string name="saved_as_a_playlist">已将“%s”存为播放列表</string>
+    <string name="no_song_meets_these_rules">还没有歌曲符合这些规则。可在 ⋯ 菜单 →“编辑规则”中修改。</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="other">%d 首歌还没有测量</item>
+    </plurals>
+    <string name="measuring_n_of_n">正在测量第 %1$d 首，共 %2$d 首…</string>
+    <string name="measure_now">立即测量</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">正在测量这台手机上的歌曲。连上 Wi-Fi 时也会测量其他歌曲。</string>
+    <string name="smart_fast_and_liked">快节奏且已喜欢</string>
+    <string name="smart_not_played_in_a_while">有阵子没听</string>
+    <string name="smart_goes_with_what_s_playing">与正在播放的相配</string>
+    <string name="the_song_playing_isn_t_measured_yet">正在播放的歌曲还没有测量。</string>
+    <string name="match_all_rules">符合全部规则</string>
+    <string name="match_any_rule">符合任一规则</string>
+    <string name="add_a_rule">添加规则</string>
+    <string name="add_a_rule_to_begin">添加一条规则开始。</string>
+    <string name="finds_n">找到 %s</string>
+    <string name="up_to">最多</string>
+    <string name="sort_most_played">播放最多</string>
+    <string name="sort_not_played_lately">最近没听</string>
+    <string name="sort_random">随机</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">相配的调</string>
+    <string name="rule_energy">能量</string>
+    <string name="rule_loudness">响度（LUFS）</string>
+    <string name="rule_on_phone">这台手机上的文件</string>
+    <string name="rule_tag">标签</string>
+    <string name="rule_times_played">播放次数</string>
+    <string name="rule_last_played">上次播放</string>
+    <string name="rule_added">加入音乐库</string>
+    <string name="rule_never_played">从未播放</string>
+    <string name="rule_is">是</string>
+    <string name="rule_isn_t">不是</string>
+    <string name="rule_from">从</string>
+    <string name="rule_to">到</string>
+    <string name="rule_at_least">至少</string>
+    <string name="rule_at_most">至多</string>
+    <string name="rule_within">最近</string>
+    <string name="rule_not_within">不在最近</string>
+    <string name="rule_days">天内</string>
+    <string name="genre_example">流行、嘻哈、摇滚…</string>
+    <string name="your_listening">你的收听</string>
 </resources>

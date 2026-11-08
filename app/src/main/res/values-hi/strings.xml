@@ -4891,4 +4891,70 @@
         <item quantity="one">YouTube Music पर “%2$s” से %1$d गाना हटाएं?</item>
         <item quantity="other">YouTube Music पर “%2$s” से %1$d गाने हटाएं?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">टैग</string>
+    <string name="add_a_tag">टैग जोड़ें</string>
+    <string name="new_tag">नया टैग</string>
+    <string name="tags_are_your_own_labels">गानों के लिए आपके अपने लेबल, जैसे “जिम” या “बारिश का दिन”। ये लाइब्रेरी → टैग में मिलेंगे।</string>
+    <string name="your_tag">इस फ़ोन पर आपका टैग</string>
+    <string name="remove_this_tag">यह टैग हटाएं</string>
+    <string name="rename_tag">टैग का नाम बदलें</string>
+    <string name="delete_tag">टैग मिटाएं</string>
+    <string name="delete_the_tag_its_songs_stay">टैग “%s” मिटाएं? इसके गाने जहां हैं वहीं रहेंगे।</string>
+    <string name="tag_songs_from_any_song_s">किसी भी गाने के मेन्यू (⋯ या दबाकर रखें) → टैग जोड़ें से गानों को टैग करें।</string>
+    <string name="tag_n_songs">टैग · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d टैग</item>
+        <item quantity="other">%d टैग</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">स्मार्ट प्लेलिस्ट</string>
+    <string name="smart_playlist_n">स्मार्ट प्लेलिस्ट · %s</string>
+    <string name="smart_playlist_updates_itself">स्मार्ट प्लेलिस्ट · खुद अपडेट रहती है</string>
+    <string name="new_smart_playlist">नई स्मार्ट प्लेलिस्ट</string>
+    <string name="edit_rules">नियम बदलें</string>
+    <string name="save_a_copy_as_a_playlist">कॉपी को प्लेलिस्ट के रूप में सेव करें</string>
+    <string name="saved_as_a_playlist">“%s” प्लेलिस्ट के रूप में सेव हुई</string>
+    <string name="no_song_meets_these_rules">अभी कोई गाना इन नियमों पर खरा नहीं उतरता। ⋯ मेन्यू → नियम बदलें से इन्हें बदलें।</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d गाना अभी मापा नहीं गया</item>
+        <item quantity="other">%d गाने अभी मापे नहीं गए</item>
+    </plurals>
+    <string name="measuring_n_of_n">%2$d में से %1$d माप रहे हैं…</string>
+    <string name="measure_now">अभी मापें</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">इस फ़ोन के गाने मापे जा रहे हैं। Wi-Fi पर बाकी भी।</string>
+    <string name="smart_fast_and_liked">तेज़ और पसंद किए</string>
+    <string name="smart_not_played_in_a_while">काफ़ी समय से नहीं बजे</string>
+    <string name="smart_goes_with_what_s_playing">जो बज रहा है उससे मेल खाते</string>
+    <string name="the_song_playing_isn_t_measured_yet">बज रहा गाना अभी मापा नहीं गया।</string>
+    <string name="match_all_rules">सभी नियम पूरे करे</string>
+    <string name="match_any_rule">कोई भी नियम पूरा करे</string>
+    <string name="add_a_rule">नियम जोड़ें</string>
+    <string name="add_a_rule_to_begin">शुरू करने के लिए एक नियम जोड़ें।</string>
+    <string name="finds_n">%s मिले</string>
+    <string name="up_to">अधिकतम</string>
+    <string name="sort_most_played">सबसे ज़्यादा बजे</string>
+    <string name="sort_not_played_lately">हाल में नहीं बजे</string>
+    <string name="sort_random">बेतरतीब</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">इससे मेल खाता स्केल</string>
+    <string name="rule_energy">ऊर्जा</string>
+    <string name="rule_loudness">लाउडनेस (LUFS)</string>
+    <string name="rule_on_phone">इस फ़ोन की फ़ाइल</string>
+    <string name="rule_tag">टैग</string>
+    <string name="rule_times_played">कितनी बार बजा</string>
+    <string name="rule_last_played">आख़िरी बार बजा</string>
+    <string name="rule_added">आपकी लाइब्रेरी में जोड़ा गया</string>
+    <string name="rule_never_played">कभी नहीं बजा</string>
+    <string name="rule_is">हां</string>
+    <string name="rule_isn_t">नहीं</string>
+    <string name="rule_from">से</string>
+    <string name="rule_to">तक</string>
+    <string name="rule_at_least">कम से कम</string>
+    <string name="rule_at_most">ज़्यादा से ज़्यादा</string>
+    <string name="rule_within">पिछले</string>
+    <string name="rule_not_within">पिछले … में नहीं</string>
+    <string name="rule_days">दिनों में</string>
+    <string name="genre_example">पॉप, हिप-हॉप, रॉक…</string>
+    <string name="your_listening">आपकी सुनाई</string>
 </resources>

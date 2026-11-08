@@ -4891,4 +4891,70 @@
         <item quantity="one">Alisin ang %1$d kanta sa “%2$s” sa YouTube Music?</item>
         <item quantity="other">Alisin ang %1$d kanta sa “%2$s” sa YouTube Music?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">Mga tag</string>
+    <string name="add_a_tag">Magdagdag ng tag</string>
+    <string name="new_tag">Bagong tag</string>
+    <string name="tags_are_your_own_labels">Sarili mong mga label sa mga kanta, gaya ng “gym” o “maulang araw”. Makikita sila sa Library → Mga tag.</string>
+    <string name="your_tag">Ang tag mo sa phone na ito</string>
+    <string name="remove_this_tag">Alisin ang tag na ito</string>
+    <string name="rename_tag">Palitan ang pangalan ng tag</string>
+    <string name="delete_tag">Burahin ang tag</string>
+    <string name="delete_the_tag_its_songs_stay">Burahin ang tag na “%s”? Mananatili ang mga kanta nito kung nasaan sila.</string>
+    <string name="tag_songs_from_any_song_s">Mag-tag ng kanta mula sa menu ng kahit anong kanta (⋯ o pindot nang matagal) → Magdagdag ng tag.</string>
+    <string name="tag_n_songs">Tag · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%d tag</item>
+        <item quantity="other">%d tag</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">Smart playlist</string>
+    <string name="smart_playlist_n">Smart playlist · %s</string>
+    <string name="smart_playlist_updates_itself">Smart playlist · kusang nag-a-update</string>
+    <string name="new_smart_playlist">Bagong smart playlist</string>
+    <string name="edit_rules">I-edit ang mga patakaran</string>
+    <string name="save_a_copy_as_a_playlist">I-save ang kopya bilang playlist</string>
+    <string name="saved_as_a_playlist">Na-save ang “%s” bilang playlist</string>
+    <string name="no_song_meets_these_rules">Wala pang kantang tugma sa mga patakarang ito. Palitan sila sa ⋯ menu → I-edit ang mga patakaran.</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%d kanta ang hindi pa nasusukat</item>
+        <item quantity="other">%d kanta ang hindi pa nasusukat</item>
+    </plurals>
+    <string name="measuring_n_of_n">Sinusukat ang %1$d sa %2$d…</string>
+    <string name="measure_now">Sukatin ngayon</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">Sinusukat ang mga kanta sa phone na ito. Sa Wi-Fi, pati ang iba.</string>
+    <string name="smart_fast_and_liked">Mabilis at gusto</string>
+    <string name="smart_not_played_in_a_while">Matagal nang hindi pinapatugtog</string>
+    <string name="smart_goes_with_what_s_playing">Bagay sa tumutugtog</string>
+    <string name="the_song_playing_isn_t_measured_yet">Hindi pa nasusukat ang tumutugtog na kanta.</string>
+    <string name="match_all_rules">Tugma sa lahat ng patakaran</string>
+    <string name="match_any_rule">Tugma sa alinmang patakaran</string>
+    <string name="add_a_rule">Magdagdag ng patakaran</string>
+    <string name="add_a_rule_to_begin">Magdagdag ng patakaran para magsimula.</string>
+    <string name="finds_n">Nakakita ng %s</string>
+    <string name="up_to">Hanggang</string>
+    <string name="sort_most_played">Pinakamadalas patugtugin</string>
+    <string name="sort_not_played_lately">Hindi napatugtog kamakailan</string>
+    <string name="sort_random">Random</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">Key na bagay sa</string>
+    <string name="rule_energy">Enerhiya</string>
+    <string name="rule_loudness">Lakas (LUFS)</string>
+    <string name="rule_on_phone">File sa phone na ito</string>
+    <string name="rule_tag">Tag</string>
+    <string name="rule_times_played">Ilang beses pinatugtog</string>
+    <string name="rule_last_played">Huling pinatugtog</string>
+    <string name="rule_added">Idinagdag sa library mo</string>
+    <string name="rule_never_played">Hindi pa napatugtog</string>
+    <string name="rule_is">Oo</string>
+    <string name="rule_isn_t">Hindi</string>
+    <string name="rule_from">Mula</string>
+    <string name="rule_to">Hanggang</string>
+    <string name="rule_at_least">Hindi bababa sa</string>
+    <string name="rule_at_most">Hindi lalampas sa</string>
+    <string name="rule_within">Sa nakaraang</string>
+    <string name="rule_not_within">Hindi sa nakaraang</string>
+    <string name="rule_days">araw</string>
+    <string name="genre_example">Pop, hip-hop, rock…</string>
+    <string name="your_listening">Ang pinapakinggan mo</string>
 </resources>

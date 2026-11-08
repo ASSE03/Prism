@@ -4891,4 +4891,70 @@
         <item quantity="one">YouTube Music-এ “%2$s” থেকে %1$dটি গান সরাবেন?</item>
         <item quantity="other">YouTube Music-এ “%2$s” থেকে %1$dটি গান সরাবেন?</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">ট্যাগ</string>
+    <string name="add_a_tag">ট্যাগ যোগ করুন</string>
+    <string name="new_tag">নতুন ট্যাগ</string>
+    <string name="tags_are_your_own_labels">গানের জন্য আপনার নিজের লেবেল, যেমন “জিম” বা “বৃষ্টির দিন”। লাইব্রেরি → ট্যাগ-এ পাবেন।</string>
+    <string name="your_tag">এই ফোনে আপনার ট্যাগ</string>
+    <string name="remove_this_tag">এই ট্যাগ সরান</string>
+    <string name="rename_tag">ট্যাগের নাম বদলান</string>
+    <string name="delete_tag">ট্যাগ মুছুন</string>
+    <string name="delete_the_tag_its_songs_stay">“%s” ট্যাগটি মুছবেন? এর গানগুলো যেখানে আছে সেখানেই থাকবে।</string>
+    <string name="tag_songs_from_any_song_s">যেকোনো গানের মেনু (⋯ বা টিপে ধরে রাখুন) → ট্যাগ যোগ করুন থেকে গানে ট্যাগ দিন।</string>
+    <string name="tag_n_songs">ট্যাগ · %s</string>
+    <plurals name="n_tags">
+        <item quantity="one">%dটি ট্যাগ</item>
+        <item quantity="other">%dটি ট্যাগ</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">স্মার্ট প্লেলিস্ট</string>
+    <string name="smart_playlist_n">স্মার্ট প্লেলিস্ট · %s</string>
+    <string name="smart_playlist_updates_itself">স্মার্ট প্লেলিস্ট · নিজে থেকেই হালনাগাদ থাকে</string>
+    <string name="new_smart_playlist">নতুন স্মার্ট প্লেলিস্ট</string>
+    <string name="edit_rules">নিয়ম বদলান</string>
+    <string name="save_a_copy_as_a_playlist">একটি কপি প্লেলিস্ট হিসেবে সেভ করুন</string>
+    <string name="saved_as_a_playlist">“%s” প্লেলিস্ট হিসেবে সেভ হয়েছে</string>
+    <string name="no_song_meets_these_rules">এখনো কোনো গান এই নিয়মগুলোর সাথে মেলে না। ⋯ মেনু → নিয়ম বদলান থেকে বদলান।</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="one">%dটি গান এখনো মাপা হয়নি</item>
+        <item quantity="other">%dটি গান এখনো মাপা হয়নি</item>
+    </plurals>
+    <string name="measuring_n_of_n">%2$dটির মধ্যে %1$dটি মাপা হচ্ছে…</string>
+    <string name="measure_now">এখনই মাপুন</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">এই ফোনের গানগুলো মাপা হচ্ছে। Wi-Fi-তে বাকিগুলোও।</string>
+    <string name="smart_fast_and_liked">দ্রুত ও পছন্দের</string>
+    <string name="smart_not_played_in_a_while">অনেকদিন বাজানো হয়নি</string>
+    <string name="smart_goes_with_what_s_playing">যা বাজছে তার সাথে মানানসই</string>
+    <string name="the_song_playing_isn_t_measured_yet">যে গানটি বাজছে সেটি এখনো মাপা হয়নি।</string>
+    <string name="match_all_rules">সব নিয়ম মেলে</string>
+    <string name="match_any_rule">যেকোনো নিয়ম মেলে</string>
+    <string name="add_a_rule">নিয়ম যোগ করুন</string>
+    <string name="add_a_rule_to_begin">শুরু করতে একটি নিয়ম যোগ করুন।</string>
+    <string name="finds_n">%s পাওয়া যায়</string>
+    <string name="up_to">সর্বোচ্চ</string>
+    <string name="sort_most_played">সবচেয়ে বেশি বাজানো</string>
+    <string name="sort_not_played_lately">সম্প্রতি বাজানো হয়নি</string>
+    <string name="sort_random">এলোমেলো</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">যে স্কেলের সাথে মানায়</string>
+    <string name="rule_energy">এনার্জি</string>
+    <string name="rule_loudness">লাউডনেস (LUFS)</string>
+    <string name="rule_on_phone">এই ফোনের একটি ফাইল</string>
+    <string name="rule_tag">ট্যাগ</string>
+    <string name="rule_times_played">কতবার বাজানো</string>
+    <string name="rule_last_played">শেষ বাজানো</string>
+    <string name="rule_added">লাইব্রেরিতে যোগ হয়েছে</string>
+    <string name="rule_never_played">কখনো বাজানো হয়নি</string>
+    <string name="rule_is">হ্যাঁ</string>
+    <string name="rule_isn_t">না</string>
+    <string name="rule_from">থেকে</string>
+    <string name="rule_to">পর্যন্ত</string>
+    <string name="rule_at_least">কমপক্ষে</string>
+    <string name="rule_at_most">সর্বোচ্চ</string>
+    <string name="rule_within">গত</string>
+    <string name="rule_not_within">গত … এর মধ্যে নয়</string>
+    <string name="rule_days">দিনে</string>
+    <string name="genre_example">পপ, হিপ-হপ, রক…</string>
+    <string name="your_listening">আপনার শোনা</string>
 </resources>

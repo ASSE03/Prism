@@ -4825,4 +4825,68 @@
     <plurals name="remove_n_from_youtube_playlist_q">
         <item quantity="other">YouTube Music の「%2$s」から %1$d 曲を削除しますか？</item>
     </plurals>
+    <!-- 1.8.3 Tags -->
+    <string name="tags">タグ</string>
+    <string name="add_a_tag">タグを追加</string>
+    <string name="new_tag">新しいタグ</string>
+    <string name="tags_are_your_own_labels">「ジム」「雨の日」のような、曲につける自分だけのラベルです。ライブラリ →「タグ」にあります。</string>
+    <string name="your_tag">このスマホのあなたのタグ</string>
+    <string name="remove_this_tag">このタグを外す</string>
+    <string name="rename_tag">タグの名前を変更</string>
+    <string name="delete_tag">タグを削除</string>
+    <string name="delete_the_tag_its_songs_stay">タグ「%s」を削除しますか？曲はそのまま残ります。</string>
+    <string name="tag_songs_from_any_song_s">曲のメニュー（⋯ または長押し）→「タグを追加」で曲にタグをつけられます。</string>
+    <string name="tag_n_songs">タグ · %s</string>
+    <plurals name="n_tags">
+        <item quantity="other">%d 個のタグ</item>
+    </plurals>
+    <!-- 1.8.3 Smart playlists -->
+    <string name="smart_playlist">スマートプレイリスト</string>
+    <string name="smart_playlist_n">スマートプレイリスト · %s</string>
+    <string name="smart_playlist_updates_itself">スマートプレイリスト · 自動で更新</string>
+    <string name="new_smart_playlist">新しいスマートプレイリスト</string>
+    <string name="edit_rules">ルールを編集</string>
+    <string name="save_a_copy_as_a_playlist">コピーをプレイリストとして保存</string>
+    <string name="saved_as_a_playlist">「%s」をプレイリストとして保存しました</string>
+    <string name="no_song_meets_these_rules">まだルールに合う曲がありません。⋯ メニュー →「ルールを編集」で変更できます。</string>
+    <plurals name="n_songs_aren_t_measured_yet">
+        <item quantity="other">%d 曲がまだ測定されていません</item>
+    </plurals>
+    <string name="measuring_n_of_n">%2$d 曲中 %1$d 曲を測定中…</string>
+    <string name="measure_now">今すぐ測定</string>
+    <string name="on_wi_fi_songs_not_on_the_phone_are_measured_too">このスマホにある曲を測定しています。Wi-Fi ではほかの曲も測定します。</string>
+    <string name="smart_fast_and_liked">速くてお気に入り</string>
+    <string name="smart_not_played_in_a_while">しばらく聴いていない</string>
+    <string name="smart_goes_with_what_s_playing">再生中の曲に合う</string>
+    <string name="the_song_playing_isn_t_measured_yet">再生中の曲はまだ測定されていません。</string>
+    <string name="match_all_rules">すべてのルールに一致</string>
+    <string name="match_any_rule">いずれかのルールに一致</string>
+    <string name="add_a_rule">ルールを追加</string>
+    <string name="add_a_rule_to_begin">ルールを追加して始めましょう。</string>
+    <string name="finds_n">%s が見つかりました</string>
+    <string name="up_to">最大</string>
+    <string name="sort_most_played">再生回数順</string>
+    <string name="sort_not_played_lately">最近聴いていない順</string>
+    <string name="sort_random">ランダム</string>
+    <string name="rule_bpm">BPM</string>
+    <string name="rule_goes_with">合うキー</string>
+    <string name="rule_energy">エネルギー</string>
+    <string name="rule_loudness">ラウドネス（LUFS）</string>
+    <string name="rule_on_phone">このスマホのファイル</string>
+    <string name="rule_tag">タグ</string>
+    <string name="rule_times_played">再生回数</string>
+    <string name="rule_last_played">最終再生</string>
+    <string name="rule_added">ライブラリに追加</string>
+    <string name="rule_never_played">未再生</string>
+    <string name="rule_is">はい</string>
+    <string name="rule_isn_t">いいえ</string>
+    <string name="rule_from">から</string>
+    <string name="rule_to">まで</string>
+    <string name="rule_at_least">以上</string>
+    <string name="rule_at_most">以下</string>
+    <string name="rule_within">過去</string>
+    <string name="rule_not_within">過去 … 以外</string>
+    <string name="rule_days">日間</string>
+    <string name="genre_example">ポップ、ヒップホップ、ロック…</string>
+    <string name="your_listening">あなたの再生</string>
 </resources>
