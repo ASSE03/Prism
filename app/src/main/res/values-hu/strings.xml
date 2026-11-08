@@ -4874,4 +4874,10 @@
     <string name="speed_dial_your_plays_first_info">A YouTube a webhelye csempéit küldi a Prismnek, amelyek nem azonosak az alkalmazáséval, és nem mindig követik azt, amit hallgatsz. Ha be van kapcsolva, előbb az jön, amit az elmúlt három hónapban a legtöbbet hallgattál ezen a telefonon, a többit a YouTube csempéi töltik ki.</string>
     <string name="youtube_no_longer_takes_this_sign_in">A YouTube már nem fogadja el ezt a bejelentkezést. Jelentkezz ki, majd be újra.</string>
     <string name="youtube_isnt_sending_256_kbps">A YouTube most nem küld 256 kbps-t ennek a fióknak, ezért a dalok a szokásos minőségben szólnak</string>
+    <!-- 1.8.3 -->
+    <string name="lock_screen_maker_step">Engedélyezés a lezárási képernyőn</string>
+    <string name="lock_screen_maker_xiaomi_detail">Megnyitja a Prism engedélyeit: kapcsold be a „Megjelenítés a lezárási képernyőn” és a „Új ablakok nyitása háttérben futás közben” lehetőséget</string>
+    <string name="lock_screen_maker_vivo_detail">Megnyitja a Prism engedélyeit: kapcsold be a „Megjelenítés a lezárási képernyőn” és a „Háttérben felugró ablakok” lehetőséget</string>
+    <string name="lock_screen_maker_info">A telefonod gyártója ezeket az engedélyeket az Android sajátjai mellé teszi, és az Android nem tudja megmondani a Prismnek, hogy be vannak-e kapcsolva. Nélkülük előfordulhat, hogy a lejátszó nem jelenik meg a lezárási képernyőn.</string>
+    <string name="lock_screen_refused">Legutóbb a telefonod nem engedte megjelenni a lejátszót. Nézd meg a fenti engedélyeket.</string>
 </resources>

@@ -4938,4 +4938,10 @@
     <string name="speed_dial_your_plays_first_info">O YouTube envia ao Prism os mosaicos do site, que não são os da app e nem sempre seguem o que ouves. Se estiver ativo, primeiro aparece o que mais ouviste neste telemóvel nos últimos três meses, e os do YouTube preenchem o resto.</string>
     <string name="youtube_no_longer_takes_this_sign_in">O YouTube já não aceita este início de sessão. Termina a sessão e volta a iniciá-la.</string>
     <string name="youtube_isnt_sending_256_kbps">O YouTube não está a enviar 256 kbps para esta conta de momento, por isso as músicas tocam na qualidade habitual</string>
+    <!-- 1.8.3 -->
+    <string name="lock_screen_maker_step">Permitir no ecrã de bloqueio</string>
+    <string name="lock_screen_maker_xiaomi_detail">Abre as permissões do Prism: ative “Mostrar no ecrã de bloqueio” e “Abrir novas janelas durante a execução em segundo plano”</string>
+    <string name="lock_screen_maker_vivo_detail">Abre as permissões do Prism: ative “Mostrar no ecrã de bloqueio” e “Pop-ups em segundo plano”</string>
+    <string name="lock_screen_maker_info">O fabricante do seu telemóvel acrescenta estas permissões às do Android, e o Android não consegue dizer ao Prism se estão ativas. Sem elas, o leitor pode não aparecer no ecrã de bloqueio.</string>
+    <string name="lock_screen_refused">Da última vez, o seu telemóvel não deixou o leitor aparecer. Verifique as permissões acima.</string>
 </resources>

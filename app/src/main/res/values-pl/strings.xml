@@ -5002,4 +5002,10 @@
     <string name="speed_dial_your_plays_first_info">YouTube wysyła do Prism kafelki ze swojej strony, a nie te z aplikacji, i nie zawsze odpowiadają one temu, co grasz. Po włączeniu najpierw pojawia się to, co w ostatnich trzech miesiącach grałeś najczęściej na tym telefonie, a resztę uzupełniają kafelki YouTube.</string>
     <string name="youtube_no_longer_takes_this_sign_in">YouTube nie akceptuje już tego logowania. Wyloguj się i zaloguj ponownie.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube nie wysyła teraz 256 kb/s na to konto, więc utwory grają w zwykłej jakości</string>
+    <!-- 1.8.3 -->
+    <string name="lock_screen_maker_step">Zezwól na ekranie blokady</string>
+    <string name="lock_screen_maker_xiaomi_detail">Otwiera uprawnienia Prism: włącz „Pokazuj na ekranie blokady” i „Otwieraj nowe okna podczas działania w tle”</string>
+    <string name="lock_screen_maker_vivo_detail">Otwiera uprawnienia Prism: włącz „Pokazuj na ekranie blokady” i „Wyskakujące okna w tle”</string>
+    <string name="lock_screen_maker_info">Producent telefonu dodaje te uprawnienia do uprawnień Androida, a Android nie może powiedzieć Prism, czy są włączone. Bez nich odtwarzacz może nie pojawić się na ekranie blokady.</string>
+    <string name="lock_screen_refused">Ostatnim razem telefon nie pozwolił pokazać odtwarzacza. Sprawdź uprawnienia powyżej.</string>
 </resources>

@@ -4874,4 +4874,10 @@
     <string name="speed_dial_your_plays_first_info">YouTube کاشی‌های وب‌سایتش را برای Prism می‌فرستد که با کاشی‌های برنامه‌اش یکی نیستند و همیشه از آنچه پخش می‌کنید پیروی نمی‌کنند. اگر روشن باشد، اول آنچه در سه ماه گذشته در این گوشی بیشتر پخش کرده‌اید می‌آید و بقیه با کاشی‌های YouTube پر می‌شود.</string>
     <string name="youtube_no_longer_takes_this_sign_in">YouTube دیگر این ورود را نمی‌پذیرد. از حساب خارج شوید و دوباره وارد شوید.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube فعلاً برای این حساب ۲۵۶ کیلوبیت‌برثانیه نمی‌فرستد، پس آهنگ‌ها با کیفیت معمول پخش می‌شوند</string>
+    <!-- 1.8.3 -->
+    <string name="lock_screen_maker_step">اجازه در صفحه قفل</string>
+    <string name="lock_screen_maker_xiaomi_detail">مجوزهای Prism را باز می‌کند: «نمایش در صفحه قفل» و «باز کردن پنجره‌های جدید هنگام اجرا در پس‌زمینه» را روشن کنید</string>
+    <string name="lock_screen_maker_vivo_detail">مجوزهای Prism را باز می‌کند: «نمایش در صفحه قفل» و «پنجره‌های بازشو در پس‌زمینه» را روشن کنید</string>
+    <string name="lock_screen_maker_info">سازنده گوشی شما این مجوزها را به مجوزهای خود Android اضافه می‌کند و Android نمی‌تواند به Prism بگوید روشن هستند یا نه. بدون آن‌ها ممکن است پخش‌کننده روی صفحه قفل نیاید.</string>
+    <string name="lock_screen_refused">دفعه قبل، گوشی شما اجازه نداد پخش‌کننده نمایش داده شود. مجوزهای بالا را بررسی کنید.</string>
 </resources>

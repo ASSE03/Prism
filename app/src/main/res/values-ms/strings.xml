@@ -4810,4 +4810,10 @@
     <string name="speed_dial_your_plays_first_info">YouTube menghantar petak laman webnya kepada Prism, yang bukan petak dalam aplikasinya dan tidak selalu mengikut apa yang anda mainkan. Jika dihidupkan, apa yang paling kerap anda mainkan pada telefon ini dalam tiga bulan lalu muncul dahulu, dan petak YouTube mengisi selebihnya.</string>
     <string name="youtube_no_longer_takes_this_sign_in">YouTube tidak lagi menerima log masuk ini. Log keluar dan log masuk semula.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube tidak menghantar 256 kbps kepada akaun ini buat masa ini, jadi lagu dimainkan pada kualiti biasa</string>
+    <!-- 1.8.3 -->
+    <string name="lock_screen_maker_step">Benarkan pada skrin kunci</string>
+    <string name="lock_screen_maker_xiaomi_detail">Membuka kebenaran Prism: hidupkan “Tunjukkan pada skrin kunci” dan “Buka tetingkap baharu semasa berjalan di latar belakang”</string>
+    <string name="lock_screen_maker_vivo_detail">Membuka kebenaran Prism: hidupkan “Tunjukkan pada skrin kunci” dan “Pop timbul latar belakang”</string>
+    <string name="lock_screen_maker_info">Pengeluar telefon anda menambah kebenaran ini pada kebenaran Android sendiri, dan Android tidak dapat memberitahu Prism sama ada ia dihidupkan. Tanpanya, pemain mungkin tidak muncul pada skrin kunci.</string>
+    <string name="lock_screen_refused">Kali terakhir, telefon anda tidak membenarkan pemain muncul. Semak kebenaran di atas.</string>
 </resources>

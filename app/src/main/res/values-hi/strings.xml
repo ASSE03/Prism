@@ -4874,4 +4874,10 @@
     <string name="speed_dial_your_plays_first_info">YouTube, Prism को अपनी वेबसाइट की टाइलें भेजता है, जो उसके ऐप वाली नहीं होतीं और हमेशा आपके सुने गानों के हिसाब से नहीं चलतीं। चालू होने पर, पिछले तीन महीनों में इस फ़ोन पर आपने जो सबसे ज़्यादा सुना वह पहले आता है, और बाकी जगह YouTube की टाइलें भरती हैं।</string>
     <string name="youtube_no_longer_takes_this_sign_in">YouTube अब यह साइन-इन स्वीकार नहीं करता। साइन आउट करके फिर से साइन इन करें।</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube अभी इस खाते को 256 kbps नहीं भेज रहा, इसलिए गाने सामान्य क्वालिटी में चल रहे हैं</string>
+    <!-- 1.8.3 -->
+    <string name="lock_screen_maker_step">लॉक स्क्रीन पर इसकी अनुमति दें</string>
+    <string name="lock_screen_maker_xiaomi_detail">Prism की अनुमतियां खोलता है: “लॉक स्क्रीन पर दिखाएं” और “बैकग्राउंड में चलते समय नई विंडो खोलें” चालू करें</string>
+    <string name="lock_screen_maker_vivo_detail">Prism की अनुमतियां खोलता है: “लॉक स्क्रीन पर दिखाएं” और “बैकग्राउंड पॉप-अप” चालू करें</string>
+    <string name="lock_screen_maker_info">आपके फ़ोन का निर्माता Android की अपनी अनुमतियों में ये अनुमतियां जोड़ता है, और Android, Prism को नहीं बता सकता कि ये चालू हैं या नहीं। इनके बिना प्लेयर लॉक स्क्रीन पर शायद न आए।</string>
+    <string name="lock_screen_refused">पिछली बार आपके फ़ोन ने प्लेयर को आने नहीं दिया। ऊपर दी गई अनुमतियां देखें।</string>
 </resources>

@@ -4938,4 +4938,10 @@
     <string name="speed_dial_your_plays_first_info">O YouTube envia ao Prism os blocos do site dele, que não são os do app e nem sempre acompanham o que você toca. Ativado, o que você mais tocou neste celular nos últimos três meses vem primeiro, e os do YouTube completam o resto.</string>
     <string name="youtube_no_longer_takes_this_sign_in">O YouTube não aceita mais este login. Saia da conta e entre de novo.</string>
     <string name="youtube_isnt_sending_256_kbps">O YouTube não está enviando 256 kbps para esta conta agora, então as músicas tocam na qualidade normal</string>
+    <!-- 1.8.3 -->
+    <string name="lock_screen_maker_step">Permitir na tela de bloqueio</string>
+    <string name="lock_screen_maker_xiaomi_detail">Abre as permissões do Prism: ative “Mostrar na tela de bloqueio” e “Abrir novas janelas enquanto executa em segundo plano”</string>
+    <string name="lock_screen_maker_vivo_detail">Abre as permissões do Prism: ative “Mostrar na tela de bloqueio” e “Pop-ups em segundo plano”</string>
+    <string name="lock_screen_maker_info">O fabricante do seu celular adiciona essas permissões às do Android, e o Android não consegue dizer ao Prism se elas estão ativadas. Sem elas, o player pode não aparecer na tela de bloqueio.</string>
+    <string name="lock_screen_refused">Da última vez, seu celular não deixou o player aparecer. Confira as permissões acima.</string>
 </resources>

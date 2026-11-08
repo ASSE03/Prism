@@ -4938,4 +4938,10 @@
     <string name="speed_dial_your_plays_first_info">YouTube îi trimite lui Prism plăcile de pe site-ul său, care nu sunt cele din aplicație și nu urmăresc mereu ce asculți. Când este activat, mai întâi apare ce ai ascultat cel mai mult pe acest telefon în ultimele trei luni, iar plăcile YouTube completează restul.</string>
     <string name="youtube_no_longer_takes_this_sign_in">YouTube nu mai acceptă această conectare. Deconectează-te și conectează-te din nou.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube nu trimite acum 256 kbps către acest cont, așa că melodiile se aud la calitatea obișnuită</string>
+    <!-- 1.8.3 -->
+    <string name="lock_screen_maker_step">Permite pe ecranul de blocare</string>
+    <string name="lock_screen_maker_xiaomi_detail">Deschide permisiunile Prism: activează „Afișează pe ecranul de blocare” și „Deschide ferestre noi în timp ce rulează în fundal”</string>
+    <string name="lock_screen_maker_vivo_detail">Deschide permisiunile Prism: activează „Afișează pe ecranul de blocare” și „Ferestre pop-up în fundal”</string>
+    <string name="lock_screen_maker_info">Producătorul telefonului adaugă aceste permisiuni la cele ale Android, iar Android nu poate spune Prism dacă sunt activate. Fără ele, playerul s-ar putea să nu apară pe ecranul de blocare.</string>
+    <string name="lock_screen_refused">Data trecută, telefonul nu a lăsat playerul să apară. Verifică permisiunile de mai sus.</string>
 </resources>

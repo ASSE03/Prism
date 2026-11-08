@@ -4874,4 +4874,10 @@
     <string name="speed_dial_your_plays_first_info">YouTube, Prism\'e web sitesinin kutularını gönderir; bunlar uygulamasındakiler değildir ve her zaman çaldıklarını takip etmez. Açıkken, son üç ayda bu telefonda en çok çaldıkların önce gelir, kalanını YouTube\'unkiler doldurur.</string>
     <string name="youtube_no_longer_takes_this_sign_in">YouTube artık bu oturum açmayı kabul etmiyor. Çıkış yapıp yeniden oturum açın.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube şu anda bu hesaba 256 kbps göndermiyor, bu yüzden şarkılar normal kalitede çalıyor</string>
+    <!-- 1.8.3 -->
+    <string name="lock_screen_maker_step">Kilit ekranında izin ver</string>
+    <string name="lock_screen_maker_xiaomi_detail">Prism\'in izinlerini açar: “Kilit ekranında göster” ve “Arka planda çalışırken yeni pencere aç” seçeneklerini açın</string>
+    <string name="lock_screen_maker_vivo_detail">Prism\'in izinlerini açar: “Kilit ekranında göster” ve “Arka plan açılır pencereleri” seçeneklerini açın</string>
+    <string name="lock_screen_maker_info">Telefonunuzun üreticisi bu izinleri Android\'in kendi izinlerine ekler ve Android, açık olup olmadıklarını Prism\'e söyleyemez. Bunlar olmadan oynatıcı kilit ekranında görünmeyebilir.</string>
+    <string name="lock_screen_refused">Geçen sefer telefonunuz oynatıcının görünmesine izin vermedi. Yukarıdaki izinleri kontrol edin.</string>
 </resources>

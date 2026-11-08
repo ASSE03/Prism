@@ -4874,4 +4874,10 @@
     <string name="speed_dial_your_plays_first_info">YouTube skickar rutorna från sin webbplats till Prism. De är inte samma som i appen och följer inte alltid det du spelar. När det är på kommer det du har spelat mest på den här telefonen de senaste tre månaderna först, och YouTubes rutor fyller på resten.</string>
     <string name="youtube_no_longer_takes_this_sign_in">YouTube godkänner inte längre den här inloggningen. Logga ut och logga in igen.</string>
     <string name="youtube_isnt_sending_256_kbps">YouTube skickar inte 256 kbit/s till det här kontot just nu, så låtar spelas i vanlig kvalitet</string>
+    <!-- 1.8.3 -->
+    <string name="lock_screen_maker_step">Tillåt på låsskärmen</string>
+    <string name="lock_screen_maker_xiaomi_detail">Öppnar Prisms behörigheter: slå på ”Visa på låsskärmen” och ”Öppna nya fönster när appen körs i bakgrunden”</string>
+    <string name="lock_screen_maker_vivo_detail">Öppnar Prisms behörigheter: slå på ”Visa på låsskärmen” och ”Popup-fönster i bakgrunden”</string>
+    <string name="lock_screen_maker_info">Telefonens tillverkare lägger till de här behörigheterna utöver Androids egna, och Android kan inte tala om för Prism om de är på. Utan dem kanske spelaren inte visas på låsskärmen.</string>
+    <string name="lock_screen_refused">Förra gången lät telefonen inte spelaren visas. Kontrollera behörigheterna ovan.</string>
 </resources>
