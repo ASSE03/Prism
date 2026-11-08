@@ -62,6 +62,13 @@ Your library, smarter.
 
 See every change in the [changelog](CHANGELOG.md).
 
+<p align="center">
+<img src="docs/screenshots/smart-playlist.jpg" width="24%" alt="A new smart playlist: starters to pick from, a Tag rule, sorted by most played, up to 50 songs">
+<img src="docs/screenshots/tags.jpg" width="24%" alt="A tag's page in Library, with Play and Shuffle and its songs">
+<img src="docs/screenshots/select-many.jpg" width="24%" alt="Two songs picked in a playlist, with Play next, Add to queue and Add to playlist in the bar at the bottom">
+<img src="docs/screenshots/lock-up-next.jpg" width="24%" alt="The lock screen player with a Repeat button and the next two songs under Up next">
+</p>
+
 ## What Prism does
 
 <table>
