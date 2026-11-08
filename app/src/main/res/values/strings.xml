@@ -4813,6 +4813,11 @@
     <string name="lock_screen_allow_step">2. Allow it</string>
     <string name="lock_screen_allow_detail">Opens Android\'s list: find Prism and turn it on</string>
     <string name="lock_screen_allow_info">Android only lets a screen start in the background with this permission. Without it, some phones can still bring up the player a moment after waking, and others won\'t show it at all.</string>
+    <string name="lock_screen_maker_step">Allow it on the lock screen</string>
+    <string name="lock_screen_maker_xiaomi_detail">Opens Prism\'s permissions: turn on “Show on Lock screen” and “Open new windows while running in the background”</string>
+    <string name="lock_screen_maker_vivo_detail">Opens Prism\'s permissions: turn on “Display on lock screen” and “Background pop-ups”</string>
+    <string name="lock_screen_maker_info">Your phone\'s maker adds these permissions to Android\'s own, and Android can\'t tell Prism whether they\'re on. Without them the player may not come up on the lock screen.</string>
+    <string name="lock_screen_refused">Last time, your phone didn\'t let the player come up. Check the permissions above.</string>
     <string name="lock_screen_app_info">1. Open App info</string>
     <string name="lock_screen_app_info_detail">⋮ at the top right → Allow restricted settings. Nothing there? Go on to 2</string>
     <string name="lock_screen_app_info_info">Android holds this permission back for apps that weren\'t installed from a store, and says the app was denied access. Allowing restricted settings in App info lifts that, after you confirm it\'s you.</string>

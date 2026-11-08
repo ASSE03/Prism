@@ -120,8 +120,9 @@ class LockScreenGate(private val context: Context, private val settings: Flow<Ap
         private var triedDirect = false
 
         /** The screen came up from a direct start: that way works, however long ago it was and whatever's closed it since. */
-        internal fun directStartWorked() {
+        internal fun directStartWorked(context: Context) {
             triedDirect = false
+            LockScreenRefusals.clear(context)
         }
 
         internal fun cancelFallback(context: Context) {
@@ -277,8 +278,11 @@ class LockScreenGate(private val context: Context, private val settings: Flow<Ap
      */
     private fun show(woken: Boolean) {
         if (LockScreenActivity.live != null || somethingMoreImportant()) return
-        val direct = canStartDirectly(context) && !(woken && triedDirect)
+        val refused = woken && triedDirect
+        val direct = canStartDirectly(context) && !refused
         Log.i(TAG, "showing, way=${if (direct) "direct" else "full-screen"} woken=$woken")
+        // D43: allowed, started, and still not up as the phone wakes: the phone refused it. The settings page says so.
+        if (refused && canStartDirectly(context)) LockScreenRefusals.note(context)
         val start = Intent(context, LockScreenActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION)
         if (direct) {
             triedDirect = true

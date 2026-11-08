@@ -132,7 +132,7 @@ class LockScreenActivity : ComponentActivity() {
         enableEdgeToEdge(statusBarStyle = darkBars, navigationBarStyle = darkBars)
         super.onCreate(savedInstanceState)
         live = this
-        if (!intent.getBooleanExtra(LockScreenGate.FROM_NOTIFICATION, false)) LockScreenGate.directStartWorked()
+        if (!intent.getBooleanExtra(LockScreenGate.FROM_NOTIFICATION, false)) LockScreenGate.directStartWorked(this)
         // The manifest's showWhenLocked starts at Android 8.1; Android 8.0 only has the window flag.
         @Suppress("DEPRECATION")
         if (android.os.Build.VERSION.SDK_INT < 27) window.addFlags(android.view.WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
