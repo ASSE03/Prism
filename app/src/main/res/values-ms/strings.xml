@@ -4816,4 +4816,13 @@
     <string name="lock_screen_maker_vivo_detail">Membuka kebenaran Prism: hidupkan “Tunjukkan pada skrin kunci” dan “Pop timbul latar belakang”</string>
     <string name="lock_screen_maker_info">Pengeluar telefon anda menambah kebenaran ini pada kebenaran Android sendiri, dan Android tidak dapat memberitahu Prism sama ada ia dihidupkan. Tanpanya, pemain mungkin tidak muncul pada skrin kunci.</string>
     <string name="lock_screen_refused">Kali terakhir, telefon anda tidak membenarkan pemain muncul. Semak kebenaran di atas.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">Suka</string>
+    <string name="unlike">Batal suka</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="other">Alih keluar %d muat turun daripada telefon ini?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="other">Alih keluar %1$d lagu daripada “%2$s” di YouTube Music?</item>
+    </plurals>
 </resources>

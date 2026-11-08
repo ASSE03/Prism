@@ -4880,4 +4880,15 @@
     <string name="lock_screen_maker_vivo_detail">Prism की अनुमतियां खोलता है: “लॉक स्क्रीन पर दिखाएं” और “बैकग्राउंड पॉप-अप” चालू करें</string>
     <string name="lock_screen_maker_info">आपके फ़ोन का निर्माता Android की अपनी अनुमतियों में ये अनुमतियां जोड़ता है, और Android, Prism को नहीं बता सकता कि ये चालू हैं या नहीं। इनके बिना प्लेयर लॉक स्क्रीन पर शायद न आए।</string>
     <string name="lock_screen_refused">पिछली बार आपके फ़ोन ने प्लेयर को आने नहीं दिया। ऊपर दी गई अनुमतियां देखें।</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">पसंद करें</string>
+    <string name="unlike">पसंद हटाएं</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">इस फ़ोन से %d डाउनलोड हटाएं?</item>
+        <item quantity="other">इस फ़ोन से %d डाउनलोड हटाएं?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">YouTube Music पर “%2$s” से %1$d गाना हटाएं?</item>
+        <item quantity="other">YouTube Music पर “%2$s” से %1$d गाने हटाएं?</item>
+    </plurals>
 </resources>

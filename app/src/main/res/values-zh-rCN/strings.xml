@@ -4816,4 +4816,13 @@
     <string name="lock_screen_maker_vivo_detail">打开 Prism 的权限：开启“锁屏显示”和“后台弹出界面”</string>
     <string name="lock_screen_maker_info">手机厂商在 Android 自带的权限之外加了这些权限，Android 无法告诉 Prism 它们是否已开启。不开启的话，播放器可能不会出现在锁屏上。</string>
     <string name="lock_screen_refused">上次手机没有让播放器显示出来。请检查上面的权限。</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">喜欢</string>
+    <string name="unlike">取消喜欢</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="other">要从这部手机移除 %d 个下载吗？</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="other">要从 YouTube Music 上的“%2$s”中移除 %1$d 首歌曲吗？</item>
+    </plurals>
 </resources>

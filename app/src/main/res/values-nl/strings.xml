@@ -4880,4 +4880,15 @@
     <string name="lock_screen_maker_vivo_detail">Opent de machtigingen van Prism: zet ‘Op vergrendelscherm tonen’ en ‘Pop-ups op de achtergrond’ aan</string>
     <string name="lock_screen_maker_info">De maker van je telefoon voegt deze machtigingen toe aan die van Android, en Android kan Prism niet vertellen of ze aan staan. Zonder deze verschijnt de speler misschien niet op het vergrendelscherm.</string>
     <string name="lock_screen_refused">De vorige keer liet je telefoon de speler niet verschijnen. Controleer de machtigingen hierboven.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">Leuk vinden</string>
+    <string name="unlike">Niet meer leuk vinden</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">%d download van deze telefoon verwijderen?</item>
+        <item quantity="other">%d downloads van deze telefoon verwijderen?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">%1$d nummer uit ‘%2$s’ op YouTube Music verwijderen?</item>
+        <item quantity="other">%1$d nummers uit ‘%2$s’ op YouTube Music verwijderen?</item>
+    </plurals>
 </resources>

@@ -4880,4 +4880,15 @@
     <string name="lock_screen_maker_vivo_detail">Ανοίγει τα δικαιώματα του Prism: ενεργοποίησε «Εμφάνιση στην οθόνη κλειδώματος» και «Αναδυόμενα στο παρασκήνιο»</string>
     <string name="lock_screen_maker_info">Ο κατασκευαστής του τηλεφώνου σου προσθέτει αυτά τα δικαιώματα σε εκείνα του Android, και το Android δεν μπορεί να πει στο Prism αν είναι ενεργά. Χωρίς αυτά, η αναπαραγωγή ίσως δεν εμφανιστεί στην οθόνη κλειδώματος.</string>
     <string name="lock_screen_refused">Την τελευταία φορά το τηλέφωνό σου δεν άφησε να εμφανιστεί η αναπαραγωγή. Έλεγξε τα δικαιώματα παραπάνω.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">Μου αρέσει</string>
+    <string name="unlike">Δεν μου αρέσει πια</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">Αφαίρεση %d λήψης από αυτό το τηλέφωνο;</item>
+        <item quantity="other">Αφαίρεση %d λήψεων από αυτό το τηλέφωνο;</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">Αφαίρεση %1$d τραγουδιού από το «%2$s» στο YouTube Music;</item>
+        <item quantity="other">Αφαίρεση %1$d τραγουδιών από το «%2$s» στο YouTube Music;</item>
+    </plurals>
 </resources>

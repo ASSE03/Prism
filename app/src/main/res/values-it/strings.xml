@@ -4944,4 +4944,17 @@
     <string name="lock_screen_maker_vivo_detail">Apre le autorizzazioni di Prism: attiva «Mostra nella schermata di blocco» e «Pop-up in background»</string>
     <string name="lock_screen_maker_info">Il produttore del tuo telefono aggiunge queste autorizzazioni a quelle di Android, e Android non può dire a Prism se sono attive. Senza di esse il player potrebbe non comparire nella schermata di blocco.</string>
     <string name="lock_screen_refused">L\'ultima volta il tuo telefono non ha lasciato comparire il player. Controlla le autorizzazioni qui sopra.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">Mi piace</string>
+    <string name="unlike">Non mi piace più</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">Rimuovere %d download da questo telefono?</item>
+        <item quantity="many">Rimuovere %d download da questo telefono?</item>
+        <item quantity="other">Rimuovere %d download da questo telefono?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">Rimuovere %1$d brano da «%2$s» su YouTube Music?</item>
+        <item quantity="many">Rimuovere %1$d brani da «%2$s» su YouTube Music?</item>
+        <item quantity="other">Rimuovere %1$d brani da «%2$s» su YouTube Music?</item>
+    </plurals>
 </resources>

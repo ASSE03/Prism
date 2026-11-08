@@ -5,6 +5,7 @@ import com.prism.music.tr
 import com.prism.music.download.forRow
 import com.prism.music.ui.theme.lit
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -183,10 +184,22 @@ fun SongRow(
     // the downloads change, which they do as lossless sync finds files).
     val downloaded by remember(song.id, marks) { derivedStateOf { com.prism.music.download.rowDownloaded(song, marks.downloads.value, marks.standIns.value, marks.fromPhone) } }
     val videoSaved by remember(song.id, marks) { derivedStateOf { marks.videos.value[song.id]?.state == done } }
+    // Select many (1.8.3): in a list that takes part, long-press starts picking and a tap picks; elsewhere as before.
+    val selection = LocalSongSelection.current
+    val selectScope = LocalSelectScope.current
+    val pickable = selection != null && selectScope != null && onLongClick == null
+    val pick by remember(song.id, selection, pickable) { derivedStateOf { if (pickable) selection?.picked?.let { song.id in it } else null } }
+    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
     SongRowLayout(
         song, modifier, index, playing, trailingInfo, starred,
         liked = liked, downloaded = downloaded, videoSaved = videoSaved, showAlbum = showAlbum,
-        onLongClick = onLongClick ?: { menu = true }, onMore = { menu = true }, onClick = onClick,
+        onLongClick = when {
+            pick != null -> ({ selection!!.toggle(song) })
+            pickable -> ({ haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); selection!!.start(song, selectScope) })
+            else -> onLongClick ?: { menu = true }
+        },
+        onMore = { menu = true }, onClick = if (pick != null) ({ selection!!.toggle(song) }) else onClick,
+        pick = pick,
     )
     if (menu) SongActionsSheet(song, extraActions) { menu = false }
 }
@@ -241,6 +254,8 @@ fun SongRowLayout(
     onLongClick: (() -> Unit)? = null,
     onMore: () -> Unit = {},
     onClick: () -> Unit = {},
+    /** Select many: null when not picking, else whether this song is picked (a check in place of the ⋯). */
+    pick: Boolean? = null,
 ) {
     val scheme = MaterialTheme.colorScheme
     val ui = com.prism.music.ui.theme.LocalUi.current
@@ -251,7 +266,9 @@ fun SongRowLayout(
     Row(
         modifier
             .fillMaxWidth()
+            .then(if (pick == true) Modifier.background(scheme.onSurface.copy(alpha = 0.08f)) else Modifier)
             .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+            .then(if (pick != null) Modifier.semantics { selected = pick } else Modifier)
             // The playing song says so to TalkBack too, not only in color and the bars.
             .then(if (playing) Modifier.semantics { stateDescription = tr(R.string.now_playing) } else Modifier)
             .padding(start = 16.dp, end = 4.dp, top = ui.gap(6.dp), bottom = ui.gap(6.dp)),
@@ -301,7 +318,11 @@ fun SongRowLayout(
             Modifier.padding(start = 8.dp).size(13.dp, 14.dp).then(if (pageMark != null) Modifier.testTag("pageColorBars") else Modifier),
             color = pageMark ?: Color.White, spectrum = pageMark == null,
         )
-        IconButton(onClick = onMore) { Icon(PrismIcons.More, tr(R.string.more), Modifier.size(20.dp), tint = scheme.ink3) }
+        if (pick == null) IconButton(onClick = onMore) { Icon(PrismIcons.More, tr(R.string.more), Modifier.size(20.dp), tint = scheme.ink3) }
+        else Box(Modifier.size(48.dp).testTag("pick"), contentAlignment = Alignment.Center) {
+            if (pick) Icon(PrismIcons.CheckCircle, tr(R.string.picked), Modifier.size(22.dp), tint = scheme.onSurface)
+            else Box(Modifier.size(20.dp).border(1.5.dp, scheme.ink3, androidx.compose.foundation.shape.CircleShape))
+        }
     }
 }
 

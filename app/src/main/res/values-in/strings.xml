@@ -4816,4 +4816,13 @@
     <string name="lock_screen_maker_vivo_detail">Membuka izin Prism: aktifkan “Tampilkan di layar kunci” dan “Pop-up latar belakang”</string>
     <string name="lock_screen_maker_info">Produsen ponsel Anda menambahkan izin ini ke izin Android sendiri, dan Android tidak bisa memberi tahu Prism apakah izin ini aktif. Tanpanya, pemutar mungkin tidak muncul di layar kunci.</string>
     <string name="lock_screen_refused">Terakhir kali, ponsel Anda tidak mengizinkan pemutar muncul. Periksa izin di atas.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">Suka</string>
+    <string name="unlike">Batal suka</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="other">Hapus %d unduhan dari ponsel ini?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="other">Hapus %1$d lagu dari “%2$s” di YouTube Music?</item>
+    </plurals>
 </resources>

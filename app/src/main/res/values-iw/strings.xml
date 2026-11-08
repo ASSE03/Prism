@@ -4944,4 +4944,17 @@
     <string name="lock_screen_maker_vivo_detail">פותח את ההרשאות של Prism: צריך להפעיל את „הצגה במסך הנעילה” ואת „חלונות קופצים ברקע”</string>
     <string name="lock_screen_maker_info">יצרן הטלפון מוסיף את ההרשאות האלה להרשאות של Android, ו-Android לא יכול לדעת אם הן מופעלות. בלעדיהן ייתכן שהנגן לא יופיע במסך הנעילה.</string>
     <string name="lock_screen_refused">בפעם האחרונה הטלפון לא נתן לנגן להופיע. כדאי לבדוק את ההרשאות שלמעלה.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">אהבתי</string>
+    <string name="unlike">ביטול אהבתי</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">להסיר %d הורדה מהטלפון הזה?</item>
+        <item quantity="two">להסיר %d הורדות מהטלפון הזה?</item>
+        <item quantity="other">להסיר %d הורדות מהטלפון הזה?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">להסיר %1$d שיר מ„%2$s” ב-YouTube Music?</item>
+        <item quantity="two">להסיר %1$d שירים מ„%2$s” ב-YouTube Music?</item>
+        <item quantity="other">להסיר %1$d שירים מ„%2$s” ב-YouTube Music?</item>
+    </plurals>
 </resources>

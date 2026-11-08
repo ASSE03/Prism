@@ -5136,4 +5136,23 @@
     <string name="lock_screen_maker_vivo_detail">يفتح أذونات Prism: فعّل «العرض على شاشة القفل» و«النوافذ المنبثقة في الخلفية»</string>
     <string name="lock_screen_maker_info">تضيف الشركة المصنّعة لهاتفك هذه الأذونات إلى أذونات Android، ولا يستطيع Android إخبار Prism بما إذا كانت مفعّلة. من دونها قد لا يظهر المشغّل على شاشة القفل.</string>
     <string name="lock_screen_refused">في المرة الأخيرة لم يسمح هاتفك بظهور المشغّل. تحقّق من الأذونات أعلاه.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">أعجبني</string>
+    <string name="unlike">إلغاء الإعجاب</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="zero">إزالة التنزيلات (%d) من هذا الهاتف؟</item>
+        <item quantity="one">إزالة التنزيلات (%d) من هذا الهاتف؟</item>
+        <item quantity="two">إزالة التنزيلات (%d) من هذا الهاتف؟</item>
+        <item quantity="few">إزالة التنزيلات (%d) من هذا الهاتف؟</item>
+        <item quantity="many">إزالة التنزيلات (%d) من هذا الهاتف؟</item>
+        <item quantity="other">إزالة التنزيلات (%d) من هذا الهاتف؟</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="zero">إزالة الأغاني (%1$d) من «%2$s» على YouTube Music؟</item>
+        <item quantity="one">إزالة الأغاني (%1$d) من «%2$s» على YouTube Music؟</item>
+        <item quantity="two">إزالة الأغاني (%1$d) من «%2$s» على YouTube Music؟</item>
+        <item quantity="few">إزالة الأغاني (%1$d) من «%2$s» على YouTube Music؟</item>
+        <item quantity="many">إزالة الأغاني (%1$d) من «%2$s» على YouTube Music؟</item>
+        <item quantity="other">إزالة الأغاني (%1$d) من «%2$s» على YouTube Music؟</item>
+    </plurals>
 </resources>

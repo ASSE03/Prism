@@ -607,8 +607,12 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
         val playingNow = remember(musicPlaying) { { musicPlaying.value } }
         // What the song rows mark (liked, downloaded, video saved): collected here once, not by every row in view.
         val rowMarks = com.prism.music.ui.components.rememberRowMarks(c.library.likedIds, c.downloadState, c.downloadStandIns, c.videoState) { s -> c.downloads.playsFromPhone(s) }
+        // Select many (1.8.3): the songs picked in a list, one selection for the app; Back ends it.
+        val selection = remember { com.prism.music.ui.components.SongSelection() }
+        androidx.activity.compose.BackHandler(selection.selecting && !playerOpen) { selection.clear() }
         CompositionLocalProvider(
             com.prism.music.ui.components.LocalRowMarks provides rowMarks,
+            com.prism.music.ui.components.LocalSongSelection provides selection,
             com.prism.music.ui.components.LocalPlayerCover provides playerCover,
             com.prism.music.ui.components.LocalMusicPlaying provides playingNow,
             LocalNavigator provides navigator,
@@ -821,13 +825,20 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                         AnimatedVisibility(inSession && !playerOpen && route != Routes.TOGETHER, enter = slideInVertically { it } + fadeIn(), exit = slideOutVertically { it } + fadeOut()) {
                             TogetherPill(together, Modifier.padding(bottom = 8.dp)) { navigator.go(Routes.TOGETHER) }
                         }
-                        AnimatedVisibility(song != null && !playerOpen, enter = slideInVertically { it } + fadeIn(), exit = slideOutVertically { it } + fadeOut()) {
+                        AnimatedVisibility(song != null && !playerOpen && !selection.selecting, enter = slideInVertically { it } + fadeIn(), exit = slideOutVertically { it } + fadeOut()) {
                             MiniPlayer(Modifier.widthIn(max = 720.dp).customizable(com.prism.music.ui.components.CustomizeTarget.MINI_PLAYER)) { playerOpen = true }
                         }
                     }
                 }
+                // Select many: its bar in the place of the mini player and tabs while songs are picked.
+                val picking = selection.selecting && showChrome
+                if (picking) com.prism.music.ui.components.SelectionBar(
+                    selection,
+                    Modifier.align(Alignment.BottomCenter).then(underPlayer).padding(start = if (useRail) railInset else 0.dp)
+                        .navigationBarsPadding().padding(horizontal = 12.dp, vertical = 8.dp),
+                )
                 // Floating chrome: mini player + tab bar
-                if (showChrome && !useRail) {
+                if (showChrome && !useRail && !picking) {
                     val docked = settings.navStyle == NavBarStyle.DOCKED
                     val keyboard = WindowInsets.ime
                     Column(

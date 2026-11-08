@@ -4944,4 +4944,17 @@
     <string name="lock_screen_maker_vivo_detail">Abre los permisos de Prism: activa «Mostrar en pantalla de bloqueo» y «Ventanas emergentes en segundo plano»</string>
     <string name="lock_screen_maker_info">El fabricante de tu teléfono añade estos permisos a los de Android, y Android no puede decirle a Prism si están activados. Sin ellos, puede que el reproductor no aparezca en la pantalla de bloqueo.</string>
     <string name="lock_screen_refused">La última vez, tu teléfono no dejó que apareciera el reproductor. Revisa los permisos de arriba.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">Me gusta</string>
+    <string name="unlike">Ya no me gusta</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">¿Quitar %d descarga de este teléfono?</item>
+        <item quantity="many">¿Quitar %d descargas de este teléfono?</item>
+        <item quantity="other">¿Quitar %d descargas de este teléfono?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">¿Quitar %1$d canción de «%2$s» en YouTube Music?</item>
+        <item quantity="many">¿Quitar %1$d canciones de «%2$s» en YouTube Music?</item>
+        <item quantity="other">¿Quitar %1$d canciones de «%2$s» en YouTube Music?</item>
+    </plurals>
 </resources>

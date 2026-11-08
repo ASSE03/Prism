@@ -4944,4 +4944,17 @@
     <string name="lock_screen_maker_vivo_detail">Deschide permisiunile Prism: activează „Afișează pe ecranul de blocare” și „Ferestre pop-up în fundal”</string>
     <string name="lock_screen_maker_info">Producătorul telefonului adaugă aceste permisiuni la cele ale Android, iar Android nu poate spune Prism dacă sunt activate. Fără ele, playerul s-ar putea să nu apară pe ecranul de blocare.</string>
     <string name="lock_screen_refused">Data trecută, telefonul nu a lăsat playerul să apară. Verifică permisiunile de mai sus.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">Apreciază</string>
+    <string name="unlike">Anulează aprecierea</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">Elimini %d descărcare de pe acest telefon?</item>
+        <item quantity="few">Elimini %d descărcări de pe acest telefon?</item>
+        <item quantity="other">Elimini %d de descărcări de pe acest telefon?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">Elimini %1$d melodie din „%2$s” pe YouTube Music?</item>
+        <item quantity="few">Elimini %1$d melodii din „%2$s” pe YouTube Music?</item>
+        <item quantity="other">Elimini %1$d de melodii din „%2$s” pe YouTube Music?</item>
+    </plurals>
 </resources>

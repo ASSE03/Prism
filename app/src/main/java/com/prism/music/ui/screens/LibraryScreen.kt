@@ -392,6 +392,16 @@ fun LibraryScreen(bottomPadding: Dp) {
                 }
             }
             Box(Modifier.fillMaxSize()) {
+            // Select many (1.8.3): the songs shown on Songs or History are what "All" picks; another tab ends the picking.
+            val pickList = remember(tab, shownSongs, fromAccountShown, accountHistory, phoneHistory) {
+                when (tab) {
+                    LibTab.SONGS -> shownSongs
+                    LibTab.HISTORY -> if (fromAccountShown) accountHistory?.getOrNull().orEmpty().flatMap { it.second }.distinctBy { it.id }
+                        else phoneHistory?.second.orEmpty().flatMap { day -> day.second.map { it.song } }.distinctBy { it.id }
+                    else -> emptyList()
+                }
+            }
+            com.prism.music.ui.components.SelectableSongs(pickList, resetKey = tab to fromAccountShown) {
             LazyVerticalGrid(
                 when {
                     asList -> GridCells.Fixed(1)
@@ -627,6 +637,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                     }
                     LibTab.DOWNLOADS -> item(span = { GridItemSpan(maxLineSpan) }) { DownloadsSummary() }
                 }
+            }
             }
             // #376: a thumb a finger can hold on Library's long lists. Only its own grip takes touches, and only while it's
             // showing, so it needs no switch: the rows along the edge and the swipes between tabs are all still there.

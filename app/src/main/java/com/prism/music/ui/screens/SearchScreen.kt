@@ -357,6 +357,9 @@ fun SearchScreen(bottomPadding: Dp) {
             is Load.Err -> ErrorState(r.message)
             is Load.Ok -> Box(Modifier.fillMaxSize()) {
                 val resultsState = androidx.compose.foundation.lazy.rememberLazyListState()
+                // Select many (1.8.3): the songs among the results.
+                val resultSongs = remember(r.value) { r.value.filterIsInstance<SongItem>().map { it.song }.distinctBy { it.id } }
+                com.prism.music.ui.components.SelectableSongs(resultSongs) {
                 LazyColumn(state = resultsState, contentPadding = PaddingValues(top = 4.dp, bottom = bottomPadding + 16.dp)) {
                     items(r.value.distinctBy { it.id + it.title }, key = { it.id + it.title }) { item -> ResultRow(item) { open(item) } }
                     if (continuation != null) item {
@@ -369,6 +372,7 @@ fun SearchScreen(bottomPadding: Dp) {
                         }
                         LoadingState()
                     }
+                }
                 }
                 // A long list of results (#376), which only grows as it's scrolled.
                 com.prism.music.ui.components.FastScroller(
@@ -407,6 +411,7 @@ private fun PhoneResults(query: String, bottomPadding: Dp, onPlay: () -> Unit) {
     }
     Box(Modifier.fillMaxSize()) {
         val resultsState = androidx.compose.foundation.lazy.rememberLazyListState()
+        com.prism.music.ui.components.SelectableSongs(files + downloads) {
         LazyColumn(state = resultsState, contentPadding = PaddingValues(top = 4.dp, bottom = bottomPadding + 16.dp)) {
             listOf(tr(R.string.your_music_files) to files, tr(R.string.downloads) to downloads).forEachIndexed { g, (title, songs) ->
                 if (songs.isEmpty()) return@forEachIndexed
@@ -420,6 +425,7 @@ private fun PhoneResults(query: String, bottomPadding: Dp, onPlay: () -> Unit) {
                     }
                 }
             }
+        }
         }
         com.prism.music.ui.components.FastScroller(
             resultsState, Modifier.align(Alignment.CenterEnd).padding(bottom = bottomPadding),
@@ -502,6 +508,11 @@ private fun TopResults(
         item("lyr-h") { SectionHeader(tr(R.string.from_the_lyrics)) }
         items(hits, key = { "lyr:" + it.song.id }) { h -> LyricHitRow(h) { onSongs(hitSongs, hitSongs.indexOf(h.song)) } }
     }
+    // Select many (1.8.3): every song row shown here is what "All" picks.
+    val shownSongs = (hitSongs + inLibrary.filterIsInstance<SongItem>().map { it.song } + onPhoneHits +
+        r.sections.filter { it.first == SearchFilter.SONGS }.flatMap { (_, items) -> items.filterIsInstance<SongItem>().map { it.song }.distinctBy { it.id }.take(4) })
+        .distinctBy { it.id }
+    com.prism.music.ui.components.SelectableSongs(shownSongs) {
     LazyColumn(contentPadding = PaddingValues(top = 4.dp, bottom = bottomPadding + 16.dp)) {
         if (lyricsFirst) fromTheLyrics()
         r.top?.let { t -> item("top") { TopCard(t, { open(t) }, { onPlay(t) }) } }
@@ -529,6 +540,7 @@ private fun TopResults(
                 }
             }
         }
+    }
     }
 }
 

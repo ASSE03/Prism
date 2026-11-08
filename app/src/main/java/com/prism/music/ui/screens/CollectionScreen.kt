@@ -555,6 +555,32 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
         })
     }
 
+    // Select many (1.8.3): picked songs out of an own playlist at once; a YouTube one is asked first (the bar does).
+    val selectRemover = when {
+        type == CollectionType.PRISM -> com.prism.music.ui.components.SelectionRemover(page.title, asks = false) { picked ->
+            picked.forEach { c.prismLibrary.remove(page.id, it.id) }
+            Toast.makeText(context, tr(R.string.removed_from, page.title), Toast.LENGTH_SHORT).show()
+        }
+        type == CollectionType.PLAYLIST && live.page.owned -> com.prism.music.ui.components.SelectionRemover(page.title, asks = true) { picked ->
+            val gone = picked.filter { slots[it.id] != null }
+            val before = live.songs.value
+            live.songs.value = before.filterNot { s -> gone.any { it.id == s.id } }
+            scope.launch {
+                // One after another, as the song's own menu does it; any that fail come back.
+                var error: Throwable? = null
+                val failed = gone.filter { s ->
+                    runCatching { c.ytm.removeFromPlaylist(page.id, s.id, slots[s.id]!!) }.onFailure { if (error == null) error = it }.isFailure
+                }
+                if (failed.isEmpty()) Toast.makeText(context, tr(R.string.removed_from, page.title), Toast.LENGTH_SHORT).show()
+                else {
+                    live.songs.value = before.filter { s -> gone.none { it.id == s.id } || failed.any { it.id == s.id } }
+                    Toast.makeText(context, tr(R.string.couldn_t_remove_it, error?.friendlyMessage().orEmpty()), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        else -> null
+    }
+
     confirm?.let { (text, action) ->
         AlertDialog(
             onDismissRequest = { confirm = null },
@@ -577,6 +603,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     // Rearranging an owned playlist's songs (#140): each drop goes to YouTube Music at once (one move each, in order) or
     // straight into a Prism playlist; the page shows it moved, and puts it back if YouTube refuses.
     var rearranging by remember(page.id) { mutableStateOf(false) }
+    val selection = com.prism.music.ui.components.LocalSongSelection.current
     val canRearrange = (type == CollectionType.PLAYLIST && live.page.owned || type == CollectionType.PRISM) && songs.size > 1
     val moves = remember(page.id) { kotlinx.coroutines.sync.Mutex() }
     val reorder = rememberLazyReorder(listState, songs)
@@ -590,6 +617,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                 if (sort != SortMode.DEFAULT) pickSort(SortMode.DEFAULT)
                 if (groupByGenre) toggleGenreGroups()
                 genreFilter = null; query = ""
+                selection?.clear()
                 rearranging = true
             }
         }
@@ -706,6 +734,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                 playRow()
                 about()
             }
+            com.prism.music.ui.components.SelectableSongs(visible, selectRemover) {
             LazyColumn(
                 state = listState,
                 modifier = (if (sideBySide) Modifier.padding(start = sideWidth) else Modifier)
@@ -834,6 +863,7 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     }
                     live.page.artists.firstOrNull { it.id != null }?.let { a -> item("moreby") { MoreBy(a.name, a.id!!, page.id) } }
                 }
+            }
             }
 
             if (likedRefresh) androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator(

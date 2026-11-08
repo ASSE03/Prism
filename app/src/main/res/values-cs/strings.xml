@@ -5008,4 +5008,19 @@
     <string name="lock_screen_maker_vivo_detail">Otevře oprávnění Prismu: zapněte „Zobrazit na zamykací obrazovce“ a „Vyskakovací okna na pozadí“</string>
     <string name="lock_screen_maker_info">Výrobce vašeho telefonu přidává tato oprávnění k těm z Androidu a Android nedokáže Prismu říct, zda jsou zapnutá. Bez nich se přehrávač na zamykací obrazovce nemusí objevit.</string>
     <string name="lock_screen_refused">Minule váš telefon přehrávač nenechal zobrazit. Zkontrolujte oprávnění výše.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">Líbí se</string>
+    <string name="unlike">Už se nelíbí</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">Odstranit %d stažení z tohoto telefonu?</item>
+        <item quantity="few">Odstranit %d stažení z tohoto telefonu?</item>
+        <item quantity="many">Odstranit %d stažení z tohoto telefonu?</item>
+        <item quantity="other">Odstranit %d stažení z tohoto telefonu?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">Odstranit %1$d skladbu z „%2$s“ v YouTube Music?</item>
+        <item quantity="few">Odstranit %1$d skladby z „%2$s“ v YouTube Music?</item>
+        <item quantity="many">Odstranit %1$d skladby z „%2$s“ v YouTube Music?</item>
+        <item quantity="other">Odstranit %1$d skladeb z „%2$s“ v YouTube Music?</item>
+    </plurals>
 </resources>

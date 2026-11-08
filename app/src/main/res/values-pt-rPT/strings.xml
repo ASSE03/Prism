@@ -4944,4 +4944,17 @@
     <string name="lock_screen_maker_vivo_detail">Abre as permissões do Prism: ative “Mostrar no ecrã de bloqueio” e “Pop-ups em segundo plano”</string>
     <string name="lock_screen_maker_info">O fabricante do seu telemóvel acrescenta estas permissões às do Android, e o Android não consegue dizer ao Prism se estão ativas. Sem elas, o leitor pode não aparecer no ecrã de bloqueio.</string>
     <string name="lock_screen_refused">Da última vez, o seu telemóvel não deixou o leitor aparecer. Verifique as permissões acima.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">Gostar</string>
+    <string name="unlike">Deixar de gostar</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">Remover %d transferência deste telemóvel?</item>
+        <item quantity="many">Remover %d transferências deste telemóvel?</item>
+        <item quantity="other">Remover %d transferências deste telemóvel?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">Remover %1$d música de “%2$s” no YouTube Music?</item>
+        <item quantity="many">Remover %1$d músicas de “%2$s” no YouTube Music?</item>
+        <item quantity="other">Remover %1$d músicas de “%2$s” no YouTube Music?</item>
+    </plurals>
 </resources>

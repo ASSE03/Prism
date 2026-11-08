@@ -4880,4 +4880,15 @@
     <string name="lock_screen_maker_vivo_detail">Prism کی اجازتیں کھولتا ہے: “لاک اسکرین پر دکھائیں” اور “پس منظر کے پاپ اپ” آن کریں</string>
     <string name="lock_screen_maker_info">آپ کے فون کا بنانے والا Android کی اپنی اجازتوں میں یہ اجازتیں شامل کرتا ہے، اور Android، Prism کو نہیں بتا سکتا کہ یہ آن ہیں یا نہیں۔ ان کے بغیر پلیئر شاید لاک اسکرین پر نہ آئے۔</string>
     <string name="lock_screen_refused">پچھلی بار آپ کے فون نے پلیئر کو آنے نہیں دیا۔ اوپر دی گئی اجازتیں دیکھیں۔</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">پسند کریں</string>
+    <string name="unlike">پسند ہٹائیں</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">اس فون سے %d ڈاؤن لوڈ ہٹائیں؟</item>
+        <item quantity="other">اس فون سے %d ڈاؤن لوڈز ہٹائیں؟</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">YouTube Music پر “%2$s” سے %1$d گانا ہٹائیں؟</item>
+        <item quantity="other">YouTube Music پر “%2$s” سے %1$d گانے ہٹائیں؟</item>
+    </plurals>
 </resources>

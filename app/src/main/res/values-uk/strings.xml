@@ -5008,4 +5008,19 @@
     <string name="lock_screen_maker_vivo_detail">Відкриває дозволи Prism: увімкніть «Показувати на екрані блокування» і «Спливні вікна у фоні»</string>
     <string name="lock_screen_maker_info">Виробник телефона додає ці дозволи до дозволів Android, і Android не може повідомити Prism, чи вони ввімкнені. Без них плеєр може не з\'явитися на екрані блокування.</string>
     <string name="lock_screen_refused">Минулого разу телефон не дав плеєру з\'явитися. Перевірте дозволи вище.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">Подобається</string>
+    <string name="unlike">Більше не подобається</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">Видалити %d завантаження з цього телефона?</item>
+        <item quantity="few">Видалити %d завантаження з цього телефона?</item>
+        <item quantity="many">Видалити %d завантажень з цього телефона?</item>
+        <item quantity="other">Видалити %d завантаження з цього телефона?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">Видалити %1$d трек із «%2$s» у YouTube Music?</item>
+        <item quantity="few">Видалити %1$d треки із «%2$s» у YouTube Music?</item>
+        <item quantity="many">Видалити %1$d треків із «%2$s» у YouTube Music?</item>
+        <item quantity="other">Видалити %1$d трека із «%2$s» у YouTube Music?</item>
+    </plurals>
 </resources>

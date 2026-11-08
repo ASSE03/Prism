@@ -4880,4 +4880,15 @@
     <string name="lock_screen_maker_vivo_detail">Öppnar Prisms behörigheter: slå på ”Visa på låsskärmen” och ”Popup-fönster i bakgrunden”</string>
     <string name="lock_screen_maker_info">Telefonens tillverkare lägger till de här behörigheterna utöver Androids egna, och Android kan inte tala om för Prism om de är på. Utan dem kanske spelaren inte visas på låsskärmen.</string>
     <string name="lock_screen_refused">Förra gången lät telefonen inte spelaren visas. Kontrollera behörigheterna ovan.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">Gilla</string>
+    <string name="unlike">Sluta gilla</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">Ta bort %d nedladdning från den här telefonen?</item>
+        <item quantity="other">Ta bort %d nedladdningar från den här telefonen?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">Ta bort %1$d låt från ”%2$s” på YouTube Music?</item>
+        <item quantity="other">Ta bort %1$d låtar från ”%2$s” på YouTube Music?</item>
+    </plurals>
 </resources>

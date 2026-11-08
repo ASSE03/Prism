@@ -5008,4 +5008,19 @@
     <string name="lock_screen_maker_vivo_detail">Otwiera uprawnienia Prism: włącz „Pokazuj na ekranie blokady” i „Wyskakujące okna w tle”</string>
     <string name="lock_screen_maker_info">Producent telefonu dodaje te uprawnienia do uprawnień Androida, a Android nie może powiedzieć Prism, czy są włączone. Bez nich odtwarzacz może nie pojawić się na ekranie blokady.</string>
     <string name="lock_screen_refused">Ostatnim razem telefon nie pozwolił pokazać odtwarzacza. Sprawdź uprawnienia powyżej.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">Polub</string>
+    <string name="unlike">Cofnij polubienie</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">Usunąć %d pobrany utwór z tego telefonu?</item>
+        <item quantity="few">Usunąć %d pobrane utwory z tego telefonu?</item>
+        <item quantity="many">Usunąć %d pobranych utworów z tego telefonu?</item>
+        <item quantity="other">Usunąć %d pobranych utworów z tego telefonu?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">Usunąć %1$d utwór z „%2$s” w YouTube Music?</item>
+        <item quantity="few">Usunąć %1$d utwory z „%2$s” w YouTube Music?</item>
+        <item quantity="many">Usunąć %1$d utworów z „%2$s” w YouTube Music?</item>
+        <item quantity="other">Usunąć %1$d utworów z „%2$s” w YouTube Music?</item>
+    </plurals>
 </resources>

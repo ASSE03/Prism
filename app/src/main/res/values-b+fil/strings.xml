@@ -4880,4 +4880,15 @@
     <string name="lock_screen_maker_vivo_detail">Binubuksan ang mga pahintulot ng Prism: i-on ang “Display on lock screen” at “Background pop-ups”</string>
     <string name="lock_screen_maker_info">Nagdaragdag ang gumawa ng telepono mo ng mga pahintulot na ito sa sariling pahintulot ng Android, at hindi masasabi ng Android sa Prism kung naka-on ang mga ito. Kung wala ang mga ito, maaaring hindi lumabas ang player sa lock screen.</string>
     <string name="lock_screen_refused">Noong huli, hindi pinayagan ng telepono mo na lumabas ang player. Tingnan ang mga pahintulot sa itaas.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">I-like</string>
+    <string name="unlike">I-unlike</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">Alisin ang %d download sa teleponong ito?</item>
+        <item quantity="other">Alisin ang %d download sa teleponong ito?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">Alisin ang %1$d kanta sa “%2$s” sa YouTube Music?</item>
+        <item quantity="other">Alisin ang %1$d kanta sa “%2$s” sa YouTube Music?</item>
+    </plurals>
 </resources>

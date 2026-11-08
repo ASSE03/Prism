@@ -4880,4 +4880,15 @@
     <string name="lock_screen_maker_vivo_detail">Megnyitja a Prism engedélyeit: kapcsold be a „Megjelenítés a lezárási képernyőn” és a „Háttérben felugró ablakok” lehetőséget</string>
     <string name="lock_screen_maker_info">A telefonod gyártója ezeket az engedélyeket az Android sajátjai mellé teszi, és az Android nem tudja megmondani a Prismnek, hogy be vannak-e kapcsolva. Nélkülük előfordulhat, hogy a lejátszó nem jelenik meg a lezárási képernyőn.</string>
     <string name="lock_screen_refused">Legutóbb a telefonod nem engedte megjelenni a lejátszót. Nézd meg a fenti engedélyeket.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">Kedvelés</string>
+    <string name="unlike">Kedvelés visszavonása</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">Eltávolítasz %d letöltést erről a telefonról?</item>
+        <item quantity="other">Eltávolítasz %d letöltést erről a telefonról?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">Eltávolítasz %1$d dalt a(z) „%2$s” listából a YouTube Musicon?</item>
+        <item quantity="other">Eltávolítasz %1$d dalt a(z) „%2$s” listából a YouTube Musicon?</item>
+    </plurals>
 </resources>

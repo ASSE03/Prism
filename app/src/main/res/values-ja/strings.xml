@@ -4816,4 +4816,13 @@
     <string name="lock_screen_maker_vivo_detail">Prism の権限を開きます:「ロック画面に表示」と「バックグラウンドのポップアップ」をオンにしてください</string>
     <string name="lock_screen_maker_info">スマートフォンのメーカーが Android の権限にこれらを加えており、Android からはオンかどうかを Prism に伝えられません。オフのままだと、ロック画面にプレーヤーが出ないことがあります。</string>
     <string name="lock_screen_refused">前回はスマートフォンがプレーヤーの表示を許可しませんでした。上の権限を確認してください。</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">高評価</string>
+    <string name="unlike">高評価を取り消す</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="other">このスマートフォンから %d 件のダウンロードを削除しますか？</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="other">YouTube Music の「%2$s」から %1$d 曲を削除しますか？</item>
+    </plurals>
 </resources>

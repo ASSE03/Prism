@@ -4816,4 +4816,13 @@
     <string name="lock_screen_maker_vivo_detail">Mở quyền của Prism: bật “Hiển thị trên màn hình khóa” và “Cửa sổ bật lên trong nền”</string>
     <string name="lock_screen_maker_info">Nhà sản xuất điện thoại của bạn thêm các quyền này vào quyền của Android, và Android không thể cho Prism biết chúng có đang bật hay không. Không có chúng, trình phát có thể không hiện trên màn hình khóa.</string>
     <string name="lock_screen_refused">Lần trước, điện thoại của bạn không cho trình phát hiện lên. Hãy kiểm tra các quyền ở trên.</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">Thích</string>
+    <string name="unlike">Bỏ thích</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="other">Xóa %d bản tải xuống khỏi điện thoại này?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="other">Xóa %1$d bài hát khỏi “%2$s” trên YouTube Music?</item>
+    </plurals>
 </resources>

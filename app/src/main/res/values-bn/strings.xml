@@ -4880,4 +4880,15 @@
     <string name="lock_screen_maker_vivo_detail">Prism-এর অনুমতিগুলো খোলে: “লক স্ক্রিনে দেখান” এবং “ব্যাকগ্রাউন্ড পপ-আপ” চালু করুন</string>
     <string name="lock_screen_maker_info">আপনার ফোনের নির্মাতা Android-এর নিজের অনুমতির সঙ্গে এই অনুমতিগুলো যোগ করে, আর সেগুলো চালু কিনা Android তা Prism-কে জানাতে পারে না। এগুলো ছাড়া প্লেয়ার লক স্ক্রিনে না-ও আসতে পারে।</string>
     <string name="lock_screen_refused">গতবার আপনার ফোন প্লেয়ারটিকে আসতে দেয়নি। উপরের অনুমতিগুলো দেখে নিন।</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">লাইক</string>
+    <string name="unlike">লাইক সরান</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="one">এই ফোন থেকে %dটি ডাউনলোড সরাবেন?</item>
+        <item quantity="other">এই ফোন থেকে %dটি ডাউনলোড সরাবেন?</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="one">YouTube Music-এ “%2$s” থেকে %1$dটি গান সরাবেন?</item>
+        <item quantity="other">YouTube Music-এ “%2$s” থেকে %1$dটি গান সরাবেন?</item>
+    </plurals>
 </resources>

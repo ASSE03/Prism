@@ -4816,4 +4816,13 @@
     <string name="lock_screen_maker_vivo_detail">เปิดสิทธิ์ของ Prism: เปิด “แสดงบนหน้าจอล็อก” และ “ป๊อปอัปในเบื้องหลัง”</string>
     <string name="lock_screen_maker_info">ผู้ผลิตโทรศัพท์ของคุณเพิ่มสิทธิ์เหล่านี้นอกเหนือจากสิทธิ์ของ Android และ Android บอก Prism ไม่ได้ว่าเปิดอยู่หรือไม่ หากไม่เปิด เพลเยอร์อาจไม่ขึ้นบนหน้าจอล็อก</string>
     <string name="lock_screen_refused">ครั้งที่แล้ว โทรศัพท์ของคุณไม่ให้เพลเยอร์ขึ้นมา ตรวจสอบสิทธิ์ด้านบน</string>
+    <!-- 1.8.3 Select many -->
+    <string name="like">ถูกใจ</string>
+    <string name="unlike">เลิกถูกใจ</string>
+    <plurals name="remove_n_downloads_q">
+        <item quantity="other">ลบการดาวน์โหลด %d รายการออกจากโทรศัพท์นี้ไหม</item>
+    </plurals>
+    <plurals name="remove_n_from_youtube_playlist_q">
+        <item quantity="other">ลบ %1$d เพลงออกจาก “%2$s” ใน YouTube Music ไหม</item>
+    </plurals>
 </resources>
