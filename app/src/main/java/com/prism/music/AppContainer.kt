@@ -379,8 +379,10 @@ class AppContainer(val app: Application) {
         // Phones with few cores (or little memory, or Performance mode on): scans make way while the listener scrolls (#343).
         val slow = com.prism.music.playback.MixTempo.isSlowPhone(Runtime.getRuntime().availableProcessors(), com.prism.music.data.DevicePower.mayBeSlow(app), false)
         com.prism.music.playback.MixTempo.slowPhone = { slow || settings.current.performanceMode }
-        com.prism.music.playback.MixTempo(app, streamHttp, streams, ::audioOnPhone, { yieldToPlaying(null) }, { player.isPlaying.value }, waves)
+        com.prism.music.playback.MixTempo(app, streamHttp, streams, ::audioOnPhone, { yieldToPlaying(null) }, { player.isPlaying.value }, waves, traits)
     }
+    /** What's measured of songs (tempo, key, loudness, energy), in one table that smart playlists filter on (1.8.3). */
+    val traits by lazy { com.prism.music.data.TraitsStore(db.traits(), scope) }
     /** Songs' loudness outlines, for the waveform progress bar (made by the song scan). */
     val waves by lazy { com.prism.music.data.SongWaves(app) }
 
@@ -516,6 +518,16 @@ class AppContainer(val app: Application) {
                 .filter { !it.isLocal && !it.isEpisode }.distinctBy { it.id }.groupBy { it.primaryArtist }
             (played + mine.keys).filter { it.isNotBlank() }.distinct().forEach { meta.refineLater(it, mine[it].orEmpty()) }
             migrations.edit().putBoolean("genres_itunes_1", true).apply()
+        }
+        // 1.8.3: what earlier versions measured (in the scans' prefs) goes into the song_traits table, for the songs it has
+        // no row for. Again after a restore that brought one without the other; nothing to do otherwise (a count).
+        scope.launch(Dispatchers.IO) {
+            kotlinx.coroutines.delay(25_000)
+            runCatching {
+                val m = mixTempo
+                val copied = traits.copyMissing(m.measuredIds(), m::traitsFromPrefs)
+                if (copied > 0) android.util.Log.i("PrismTraits", "copied $copied songs' measurements into song_traits")
+            }
         }
         // GitHub #182: bringing the library over had starred every library song's artist; those come off once, unless the
         // account follows them. Retried on a later launch when the account's follows couldn't be asked for.

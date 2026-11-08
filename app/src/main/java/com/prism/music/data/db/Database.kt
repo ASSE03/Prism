@@ -649,9 +649,9 @@ interface RomanizedDao {
 @Database(
     entities = [SongEntity::class, PlayEventEntity::class, LyricsEntity::class, GenreEntity::class, MotionArtEntity::class, HeatmapEntity::class,
         RomanizedEntity::class, ReleaseEntity::class, MixEntity::class, BlendEntity::class, RecognitionEntity::class,
-        ImportedPlayEntity::class, ImportMatchEntity::class],
+        ImportedPlayEntity::class, ImportMatchEntity::class, SongTraitsEntity::class],
     views = [CountedPlay::class],
-    version = 9,
+    version = 10,
     exportSchema = true,
 )
 abstract class PrismDatabase : RoomDatabase() {
@@ -673,6 +673,8 @@ abstract class PrismDatabase : RoomDatabase() {
     abstract fun counted(): CountedPlayDao
     /** The Spotify connection's questions of the imported plays (1.8.1; no table of its own). */
     abstract fun spotify(): com.prism.music.data.spotify.SpotifyDao
+    /** What's been measured of songs: tempo, key, loudness, energy (1.8.3). */
+    abstract fun traits(): TraitsDao
 
     companion object {
         /**
@@ -741,6 +743,15 @@ abstract class PrismDatabase : RoomDatabase() {
                     db.execSQL("CREATE TABLE IF NOT EXISTS `import_matches` (`songKey` TEXT NOT NULL, `title` TEXT NOT NULL, `artist` TEXT NOT NULL, `album` TEXT, `durationMs` INTEGER NOT NULL, `atLeastMs` INTEGER NOT NULL, `sourceId` TEXT, `isrc` TEXT, `youtubeId` TEXT, `status` TEXT NOT NULL, `matchedId` TEXT, `candidates` TEXT, `checkedAt` INTEGER NOT NULL, `tries` INTEGER NOT NULL, PRIMARY KEY(`songKey`))")
                     db.execSQL("CREATE INDEX IF NOT EXISTS `index_import_matches_status` ON `import_matches` (`status`)")
                     db.execSQL("CREATE VIEW `counted_plays` AS $COUNTED_PLAYS_SQL")
+                }
+            },
+            // 1.8.3: what's measured of songs, in one table (smart playlists filter on it). Filled from the scans' prefs
+            // in the background after start (AppContainer), not here.
+            object : Migration(9, 10) {
+                override fun migrate(db: SupportSQLiteDatabase) {
+                    db.execSQL("CREATE TABLE IF NOT EXISTS `song_traits` (`songId` TEXT NOT NULL, `bpm` REAL, `bpmSure` INTEGER NOT NULL, `key` TEXT, `camelot` TEXT, `lufs` REAL, `energy` REAL, `whole` INTEGER NOT NULL, `measuredAt` INTEGER NOT NULL, PRIMARY KEY(`songId`))")
+                    db.execSQL("CREATE INDEX IF NOT EXISTS `index_song_traits_bpm` ON `song_traits` (`bpm`)")
+                    db.execSQL("CREATE INDEX IF NOT EXISTS `index_song_traits_energy` ON `song_traits` (`energy`)")
                 }
             },
         )
