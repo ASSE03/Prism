@@ -4989,4 +4989,7 @@
     <!-- 1.8.3 Your file as a version -->
     <string name="your_file">Saját fájl</string>
     <string name="choose_a_file_on_this_phone">Fájl választása a telefonról</string>
+    <!-- 1.8.3 Pin as one tile -->
+    <string name="one_tile">Egy csempe</string>
+    <string name="pin_to_home_as_one_tile">Kitűzés a Kezdőlapra egy csempeként</string>
 </resources>

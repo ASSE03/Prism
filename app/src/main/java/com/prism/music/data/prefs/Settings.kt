@@ -1058,6 +1058,8 @@ data class HomeSectionConfig(
     val name: String? = null,
     /** A pinned album's, playlist's or artist's picture (1.7.6), for Customize Home's list. */
     val art: String? = null,
+    /** A pinned album or playlist as one tile (cover, name, play) in place of its songs (1.8.3, D48). Off by default. */
+    val tile: Boolean = false,
 ) {
     /** What Home calls it: the listener's name for it, else [default] (or its own title). */
     fun titled(default: String = title) = name ?: default

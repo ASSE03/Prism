@@ -261,7 +261,13 @@ fun PlayActionsSheet(target: Playable, extra: List<SheetItem> = emptyList(), ext
             listOf(ActionItem(if (on) PrismIcons.PinFilled else PrismIcons.Pin, if (on) tr(R.string.unpin_from_home) else tr(R.string.pin_to_home)) {
                 c.settings.setHomeLayout(if (on) layout.filterNot { it.key == cfg.key } else listOf(cfg) + layout)
                 Toast.makeText(context, if (on) tr(R.string.taken_off_home) else tr(R.string.pinned_to_the_top_of_home), Toast.LENGTH_SHORT).show()
-            })
+            }) + (
+                // Or as one tile: its cover, name and a play button (1.8.3, D48); the songs stay the default.
+                if (!on && com.prism.music.ui.screens.OwnSections.canTile(cfg.key)) listOf(ActionItem(PrismIcons.Album, tr(R.string.pin_to_home_as_one_tile)) {
+                    c.settings.setHomeLayout(listOf(cfg.copy(tile = true)) + layout)
+                    Toast.makeText(context, tr(R.string.pinned_to_the_top_of_home), Toast.LENGTH_SHORT).show()
+                }) else emptyList()
+            )
         }.orEmpty()
         val cover = if (item is AlbumItem) listOf(ActionItem(PrismIcons.Photo, tr(R.string.change_cover), active = c.covers.custom(c.covers.albumKey(item.id)) != null, keepOpen = true) {
             coverFor = CoverFor.OfAlbum(item.id, item.title, item.thumbnail, c.covers.albumKey(item.id))

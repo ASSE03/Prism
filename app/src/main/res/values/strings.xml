@@ -5018,4 +5018,7 @@
     <!-- 1.8.3 Your file as a version -->
     <string name="your_file">Your file</string>
     <string name="choose_a_file_on_this_phone">Choose a file on this phone</string>
+    <!-- 1.8.3 Pin as one tile -->
+    <string name="one_tile">One tile</string>
+    <string name="pin_to_home_as_one_tile">Pin to Home as one tile</string>
 </resources>

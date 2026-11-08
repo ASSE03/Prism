@@ -4989,4 +4989,7 @@
     <!-- 1.8.3 Your file as a version -->
     <string name="your_file">Je bestand</string>
     <string name="choose_a_file_on_this_phone">Kies een bestand op deze telefoon</string>
+    <!-- 1.8.3 Pin as one tile -->
+    <string name="one_tile">Eén tegel</string>
+    <string name="pin_to_home_as_one_tile">Vastzetten op Start als één tegel</string>
 </resources>

@@ -5133,4 +5133,7 @@
     <!-- 1.8.3 Your file as a version -->
     <string name="your_file">Твій файл</string>
     <string name="choose_a_file_on_this_phone">Вибрати файл на цьому телефоні</string>
+    <!-- 1.8.3 Pin as one tile -->
+    <string name="one_tile">Одна плитка</string>
+    <string name="pin_to_home_as_one_tile">Закріпити на головній однією плиткою</string>
 </resources>

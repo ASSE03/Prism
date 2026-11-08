@@ -4917,4 +4917,7 @@
     <!-- 1.8.3 Your file as a version -->
     <string name="your_file">你的檔案</string>
     <string name="choose_a_file_on_this_phone">選擇這支手機上的檔案</string>
+    <!-- 1.8.3 Pin as one tile -->
+    <string name="one_tile">單一卡片</string>
+    <string name="pin_to_home_as_one_tile">以單一卡片釘選到首頁</string>
 </resources>

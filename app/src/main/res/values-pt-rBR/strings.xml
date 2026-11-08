@@ -5061,4 +5061,7 @@
     <!-- 1.8.3 Your file as a version -->
     <string name="your_file">Seu arquivo</string>
     <string name="choose_a_file_on_this_phone">Escolher um arquivo deste celular</string>
+    <!-- 1.8.3 Pin as one tile -->
+    <string name="one_tile">Um bloco</string>
+    <string name="pin_to_home_as_one_tile">Fixar no Início como um bloco</string>
 </resources>

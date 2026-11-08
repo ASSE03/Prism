@@ -5061,4 +5061,7 @@
     <!-- 1.8.3 Your file as a version -->
     <string name="your_file">O teu ficheiro</string>
     <string name="choose_a_file_on_this_phone">Escolher um ficheiro deste telemóvel</string>
+    <!-- 1.8.3 Pin as one tile -->
+    <string name="one_tile">Um mosaico</string>
+    <string name="pin_to_home_as_one_tile">Afixar no Início como um mosaico</string>
 </resources>
