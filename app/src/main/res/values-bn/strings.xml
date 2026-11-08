@@ -4965,4 +4965,25 @@
     <string name="search_your_library">আপনার লাইব্রেরিতে খুঁজুন</string>
     <string name="nothing_in_your_library_matches">আপনার লাইব্রেরিতে কিছুই মেলেনি</string>
     <string name="try_fewer_words_or_another_filter">কম শব্দ বা অন্য ফিল্টার দিয়ে চেষ্টা করুন।</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">একই গান খুঁজুন</string>
+    <string name="no_song_is_here_twice">এখানে কোনো গান দুবার নেই</string>
+    <string name="extra_copy">অতিরিক্ত কপি</string>
+    <string name="keeping_s">“%s” থাকছে</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%dটি গান এখানে একাধিকবার আছে</item>
+        <item quantity="other">%dটি গান এখানে একাধিকবার আছে</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">%dটি অতিরিক্ত কপি সরান</item>
+        <item quantity="other">%dটি অতিরিক্ত কপি সরান</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">এতে এই প্লেলিস্ট থেকে %dটি গান সরে যাবে।</item>
+        <item quantity="other">এতে এই প্লেলিস্ট থেকে %dটি গান সরে যাবে।</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">এতে YouTube Music-এও প্লেলিস্ট থেকে %dটি গান সরে যাবে।</item>
+        <item quantity="other">এতে YouTube Music-এও প্লেলিস্ট থেকে %dটি গান সরে যাবে।</item>
+    </plurals>
 </resources>

@@ -5101,4 +5101,33 @@
     <string name="search_your_library">Hledat v knihovně</string>
     <string name="nothing_in_your_library_matches">V tvé knihovně nic neodpovídá</string>
     <string name="try_fewer_words_or_another_filter">Zkus méně slov nebo jiný filtr.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Najít duplicity</string>
+    <string name="no_song_is_here_twice">Žádná skladba tu není dvakrát</string>
+    <string name="extra_copy">Kopie navíc</string>
+    <string name="keeping_s">Zůstává „%s“</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d skladba je tu víckrát</item>
+        <item quantity="few">%d skladby jsou tu víckrát</item>
+        <item quantity="many">%d skladby je tu víckrát</item>
+        <item quantity="other">%d skladeb je tu víckrát</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">Odebrat %d kopii navíc</item>
+        <item quantity="few">Odebrat %d kopie navíc</item>
+        <item quantity="many">Odebrat %d kopie navíc</item>
+        <item quantity="other">Odebrat %d kopií navíc</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">Tím z playlistu zmizí %d skladba.</item>
+        <item quantity="few">Tím z playlistu zmizí %d skladby.</item>
+        <item quantity="many">Tím z playlistu zmizí %d skladby.</item>
+        <item quantity="other">Tím z playlistu zmizí %d skladeb.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">Tím z playlistu zmizí %d skladba i na YouTube Music.</item>
+        <item quantity="few">Tím z playlistu zmizí %d skladby i na YouTube Music.</item>
+        <item quantity="many">Tím z playlistu zmizí %d skladby i na YouTube Music.</item>
+        <item quantity="other">Tím z playlistu zmizí %d skladeb i na YouTube Music.</item>
+    </plurals>
 </resources>

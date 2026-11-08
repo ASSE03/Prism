@@ -5033,4 +5033,29 @@
     <string name="search_your_library">Buscar en tu biblioteca</string>
     <string name="nothing_in_your_library_matches">Nada de tu biblioteca coincide</string>
     <string name="try_fewer_words_or_another_filter">Prueba con menos palabras u otro filtro.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Buscar duplicadas</string>
+    <string name="no_song_is_here_twice">Ninguna canción está dos veces</string>
+    <string name="extra_copy">Copia de más</string>
+    <string name="keeping_s">Se queda «%s»</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d canción está más de una vez</item>
+        <item quantity="many">%d canciones están más de una vez</item>
+        <item quantity="other">%d canciones están más de una vez</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">Quitar %d copia de más</item>
+        <item quantity="many">Quitar %d copias de más</item>
+        <item quantity="other">Quitar %d copias de más</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">Esto quita %d canción de esta playlist.</item>
+        <item quantity="many">Esto quita %d canciones de esta playlist.</item>
+        <item quantity="other">Esto quita %d canciones de esta playlist.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">Esto quita %d canción de la playlist también en YouTube Music.</item>
+        <item quantity="many">Esto quita %d canciones de la playlist también en YouTube Music.</item>
+        <item quantity="other">Esto quita %d canciones de la playlist también en YouTube Music.</item>
+    </plurals>
 </resources>

@@ -4897,4 +4897,21 @@
     <string name="search_your_library">搜索你的音乐库</string>
     <string name="nothing_in_your_library_matches">你的音乐库中没有匹配的内容</string>
     <string name="try_fewer_words_or_another_filter">试试少一些词或换个筛选条件。</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">查找重复</string>
+    <string name="no_song_is_here_twice">没有重复的歌曲</string>
+    <string name="extra_copy">多余副本</string>
+    <string name="keeping_s">保留“%s”</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="other">%d 首歌曲出现了不止一次</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="other">移除 %d 个多余副本</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="other">这会从此播放列表中移除 %d 首歌曲。</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="other">这也会从 YouTube Music 上的播放列表中移除 %d 首歌曲。</item>
+    </plurals>
 </resources>

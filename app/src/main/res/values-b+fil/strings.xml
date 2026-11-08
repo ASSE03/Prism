@@ -4965,4 +4965,25 @@
     <string name="search_your_library">Maghanap sa library mo</string>
     <string name="nothing_in_your_library_matches">Walang tugma sa library mo</string>
     <string name="try_fewer_words_or_another_filter">Subukan ang mas kaunting salita o ibang filter.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Hanapin ang mga doble</string>
+    <string name="no_song_is_here_twice">Walang kantang dalawang beses dito</string>
+    <string name="extra_copy">Sobrang kopya</string>
+    <string name="keeping_s">Mananatili ang “%s”</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d kanta ang higit sa isang beses dito</item>
+        <item quantity="other">%d kanta ang higit sa isang beses dito</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">Alisin ang %d sobrang kopya</item>
+        <item quantity="other">Alisin ang %d sobrang kopya</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">Aalisin nito ang %d kanta sa playlist na ito.</item>
+        <item quantity="other">Aalisin nito ang %d kanta sa playlist na ito.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">Aalisin din nito ang %d kanta sa playlist sa YouTube Music.</item>
+        <item quantity="other">Aalisin din nito ang %d kanta sa playlist sa YouTube Music.</item>
+    </plurals>
 </resources>

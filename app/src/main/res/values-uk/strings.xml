@@ -5101,4 +5101,33 @@
     <string name="search_your_library">Пошук у бібліотеці</string>
     <string name="nothing_in_your_library_matches">У твоїй бібліотеці нічого не знайдено</string>
     <string name="try_fewer_words_or_another_filter">Спробуй менше слів або інший фільтр.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Знайти дублікати</string>
+    <string name="no_song_is_here_twice">Жодна пісня не повторюється</string>
+    <string name="extra_copy">Зайва копія</string>
+    <string name="keeping_s">Лишається «%s»</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d пісня трапляється більше одного разу</item>
+        <item quantity="few">%d пісні трапляються більше одного разу</item>
+        <item quantity="many">%d пісень трапляються більше одного разу</item>
+        <item quantity="other">%d пісні трапляються більше одного разу</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">Прибрати %d зайву копію</item>
+        <item quantity="few">Прибрати %d зайві копії</item>
+        <item quantity="many">Прибрати %d зайвих копій</item>
+        <item quantity="other">Прибрати %d зайвої копії</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">З плейлиста буде прибрано %d пісню.</item>
+        <item quantity="few">З плейлиста буде прибрано %d пісні.</item>
+        <item quantity="many">З плейлиста буде прибрано %d пісень.</item>
+        <item quantity="other">З плейлиста буде прибрано %d пісні.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">%d пісню буде прибрано з плейлиста і в YouTube Music.</item>
+        <item quantity="few">%d пісні буде прибрано з плейлиста і в YouTube Music.</item>
+        <item quantity="many">%d пісень буде прибрано з плейлиста і в YouTube Music.</item>
+        <item quantity="other">%d пісні буде прибрано з плейлиста і в YouTube Music.</item>
+    </plurals>
 </resources>

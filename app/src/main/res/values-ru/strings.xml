@@ -5101,4 +5101,33 @@
     <string name="search_your_library">Поиск в библиотеке</string>
     <string name="nothing_in_your_library_matches">В твоей библиотеке ничего не найдено</string>
     <string name="try_fewer_words_or_another_filter">Попробуй меньше слов или другой фильтр.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Найти дубликаты</string>
+    <string name="no_song_is_here_twice">Ни одна песня не повторяется</string>
+    <string name="extra_copy">Лишняя копия</string>
+    <string name="keeping_s">Остаётся «%s»</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d песня встречается больше одного раза</item>
+        <item quantity="few">%d песни встречаются больше одного раза</item>
+        <item quantity="many">%d песен встречаются больше одного раза</item>
+        <item quantity="other">%d песни встречаются больше одного раза</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">Убрать %d лишнюю копию</item>
+        <item quantity="few">Убрать %d лишние копии</item>
+        <item quantity="many">Убрать %d лишних копий</item>
+        <item quantity="other">Убрать %d лишней копии</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">Из плейлиста будет убрана %d песня.</item>
+        <item quantity="few">Из плейлиста будут убраны %d песни.</item>
+        <item quantity="many">Из плейлиста будут убраны %d песен.</item>
+        <item quantity="other">Из плейлиста будут убраны %d песни.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">%d песня будет убрана из плейлиста и в YouTube Music.</item>
+        <item quantity="few">%d песни будут убраны из плейлиста и в YouTube Music.</item>
+        <item quantity="many">%d песен будут убраны из плейлиста и в YouTube Music.</item>
+        <item quantity="other">%d песни будут убраны из плейлиста и в YouTube Music.</item>
+    </plurals>
 </resources>

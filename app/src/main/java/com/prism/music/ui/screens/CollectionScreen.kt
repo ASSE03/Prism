@@ -698,6 +698,8 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
     var sharing by remember { mutableStateOf(false) }
     var editing by remember { mutableStateOf(false) }
     var deleting by remember { mutableStateOf(false) }
+    // Duplicates found (1.8.3), shown in a sheet to take the extra copies out.
+    var dupes by remember { mutableStateOf<List<com.prism.music.data.Duplicates.Group>?>(null) }
     var title by remember(page.id) { mutableStateOf(page.title) }
     // A smart playlist renamed in its rules' editor.
     LaunchedEffect(live.page.title) { title = live.page.title }
@@ -999,6 +1001,11 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                     add(SheetItem(PrismIcons.Edit, tr(R.string.rename_tag)) { editing = true })
                     add(SheetItem(PrismIcons.Delete, tr(R.string.delete_tag), danger = true) { deleting = true })
                 }
+                // 1.8.3: the same song twice (a video and its song, two uploads), from a list one can take songs out of.
+                if (selectRemover != null && type != CollectionType.TAG) add(SheetItem(PrismIcons.Copy, tr(R.string.find_duplicates)) {
+                    val found = com.prism.music.data.Duplicates.find(songs)
+                    if (found.isEmpty()) Toast.makeText(context, tr(R.string.no_song_is_here_twice), Toast.LENGTH_SHORT).show() else dupes = found
+                })
                 if ((type == CollectionType.PLAYLIST && live.page.owned) || type == CollectionType.PRISM) add(SheetItem(PrismIcons.Delete, tr(R.string.delete_playlist_2), danger = true) { deleting = true })
             }
             // The songs as the page shows them (filtered, sorted; offline only those on the phone).
@@ -1011,6 +1018,13 @@ private fun CollectionContent(type: CollectionType, live: LiveCollection, initia
                 target, items,
                 extraTitle = when (type) { CollectionType.ALBUM -> tr(R.string.this_album); CollectionType.DOWNLOADS -> tr(R.string.downloads); else -> tr(R.string.this_playlist) },
             ) { pageMenu = false }
+        }
+
+        dupes?.let { groups ->
+            DuplicatesSheet(groups, youTube = type == CollectionType.PLAYLIST, onDismiss = { dupes = null }) { extras ->
+                selectRemover?.remove?.invoke(extras)
+                dupes = null
+            }
         }
 
         if (editing && type == CollectionType.TAG) RenameTagDialog(page.title, onDismiss = { editing = false }) { to ->

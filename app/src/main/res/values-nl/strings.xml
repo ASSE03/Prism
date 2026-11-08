@@ -4965,4 +4965,25 @@
     <string name="search_your_library">Zoek in je bibliotheek</string>
     <string name="nothing_in_your_library_matches">Niets in je bibliotheek komt overeen</string>
     <string name="try_fewer_words_or_another_filter">Probeer minder woorden of een ander filter.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Dubbele zoeken</string>
+    <string name="no_song_is_here_twice">Geen nummer staat hier twee keer</string>
+    <string name="extra_copy">Dubbel</string>
+    <string name="keeping_s">‘%s’ blijft</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d nummer staat hier vaker</item>
+        <item quantity="other">%d nummers staan hier vaker</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">%d dubbele verwijderen</item>
+        <item quantity="other">%d dubbele verwijderen</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">Dit haalt %d nummer uit deze playlist.</item>
+        <item quantity="other">Dit haalt %d nummers uit deze playlist.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">Dit haalt %d nummer ook op YouTube Music uit de playlist.</item>
+        <item quantity="other">Dit haalt %d nummers ook op YouTube Music uit de playlist.</item>
+    </plurals>
 </resources>

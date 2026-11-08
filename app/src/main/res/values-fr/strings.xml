@@ -5033,4 +5033,29 @@
     <string name="search_your_library">Rechercher dans votre bibliothèque</string>
     <string name="nothing_in_your_library_matches">Rien dans votre bibliothèque ne correspond</string>
     <string name="try_fewer_words_or_another_filter">Essayez avec moins de mots ou un autre filtre.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Trouver les doublons</string>
+    <string name="no_song_is_here_twice">Aucun titre n’est là deux fois</string>
+    <string name="extra_copy">Doublon</string>
+    <string name="keeping_s">On garde « %s »</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d titre est là plusieurs fois</item>
+        <item quantity="many">%d titres sont là plusieurs fois</item>
+        <item quantity="other">%d titres sont là plusieurs fois</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">Retirer %d doublon</item>
+        <item quantity="many">Retirer %d doublons</item>
+        <item quantity="other">Retirer %d doublons</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">Cela retire %d titre de cette playlist.</item>
+        <item quantity="many">Cela retire %d titres de cette playlist.</item>
+        <item quantity="other">Cela retire %d titres de cette playlist.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">Cela retire %d titre de la playlist sur YouTube Music aussi.</item>
+        <item quantity="many">Cela retire %d titres de la playlist sur YouTube Music aussi.</item>
+        <item quantity="other">Cela retire %d titres de la playlist sur YouTube Music aussi.</item>
+    </plurals>
 </resources>

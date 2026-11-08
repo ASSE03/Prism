@@ -4897,4 +4897,21 @@
     <string name="search_your_library">ライブラリを検索</string>
     <string name="nothing_in_your_library_matches">ライブラリに一致するものがありません</string>
     <string name="try_fewer_words_or_another_filter">言葉を減らすか、別のフィルタをお試しください。</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">重複を探す</string>
+    <string name="no_song_is_here_twice">重複している曲はありません</string>
+    <string name="extra_copy">重複</string>
+    <string name="keeping_s">「%s」を残す</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="other">%d 曲が重複しています</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="other">重複 %d 件を削除</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="other">このプレイリストから %d 曲を外します。</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="other">YouTube Music のプレイリストからも %d 曲を外します。</item>
+    </plurals>
 </resources>

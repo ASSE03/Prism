@@ -4897,4 +4897,21 @@
     <string name="search_your_library">Cari di koleksimu</string>
     <string name="nothing_in_your_library_matches">Tidak ada yang cocok di koleksimu</string>
     <string name="try_fewer_words_or_another_filter">Coba lebih sedikit kata atau filter lain.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Cari duplikat</string>
+    <string name="no_song_is_here_twice">Tidak ada lagu yang muncul dua kali</string>
+    <string name="extra_copy">Salinan lebih</string>
+    <string name="keeping_s">“%s” tetap</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="other">%d lagu ada di sini lebih dari sekali</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="other">Hapus %d salinan lebih</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="other">Ini mengeluarkan %d lagu dari playlist ini.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="other">Ini mengeluarkan %d lagu dari playlist di YouTube Music juga.</item>
+    </plurals>
 </resources>

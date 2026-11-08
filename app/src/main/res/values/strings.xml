@@ -4994,4 +4994,25 @@
     <string name="search_your_library">Search your library</string>
     <string name="nothing_in_your_library_matches">Nothing in your library matches</string>
     <string name="try_fewer_words_or_another_filter">Try fewer words or another filter.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Find duplicates</string>
+    <string name="no_song_is_here_twice">No song is here twice</string>
+    <string name="extra_copy">Extra copy</string>
+    <string name="keeping_s">Keeping “%s”</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d song is here more than once</item>
+        <item quantity="other">%d songs are here more than once</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">Remove %d extra copy</item>
+        <item quantity="other">Remove %d extra copies</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">This takes %d song out of this playlist.</item>
+        <item quantity="other">This takes %d songs out of this playlist.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">This takes %d song out of the playlist on YouTube Music too.</item>
+        <item quantity="other">This takes %d songs out of the playlist on YouTube Music too.</item>
+    </plurals>
 </resources>

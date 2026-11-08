@@ -4965,4 +4965,25 @@
     <string name="search_your_library">अपनी लाइब्रेरी में खोजें</string>
     <string name="nothing_in_your_library_matches">आपकी लाइब्रेरी में कुछ मेल नहीं खाता</string>
     <string name="try_fewer_words_or_another_filter">कम शब्द या कोई और फ़िल्टर आज़माएं।</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">दोहराए गाने खोजें</string>
+    <string name="no_song_is_here_twice">यहां कोई गाना दो बार नहीं है</string>
+    <string name="extra_copy">अतिरिक्त कॉपी</string>
+    <string name="keeping_s">“%s” रहेगा</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d गाना यहां एक से ज़्यादा बार है</item>
+        <item quantity="other">%d गाने यहां एक से ज़्यादा बार हैं</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">%d अतिरिक्त कॉपी हटाएं</item>
+        <item quantity="other">%d अतिरिक्त कॉपी हटाएं</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">इससे %d गाना इस प्लेलिस्ट से हट जाएगा।</item>
+        <item quantity="other">इससे %d गाने इस प्लेलिस्ट से हट जाएंगे।</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">इससे %d गाना YouTube Music पर भी प्लेलिस्ट से हट जाएगा।</item>
+        <item quantity="other">इससे %d गाने YouTube Music पर भी प्लेलिस्ट से हट जाएंगे।</item>
+    </plurals>
 </resources>

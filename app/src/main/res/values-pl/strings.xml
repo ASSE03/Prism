@@ -5101,4 +5101,33 @@
     <string name="search_your_library">Szukaj w bibliotece</string>
     <string name="nothing_in_your_library_matches">Nic w twojej bibliotece nie pasuje</string>
     <string name="try_fewer_words_or_another_filter">Spróbuj mniej słów albo innego filtra.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Znajdź duplikaty</string>
+    <string name="no_song_is_here_twice">Żaden utwór nie jest tu dwa razy</string>
+    <string name="extra_copy">Dodatkowa kopia</string>
+    <string name="keeping_s">Zostaje „%s”</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d utwór jest tu więcej niż raz</item>
+        <item quantity="few">%d utwory są tu więcej niż raz</item>
+        <item quantity="many">%d utworów jest tu więcej niż raz</item>
+        <item quantity="other">%d utworu jest tu więcej niż raz</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">Usuń %d dodatkową kopię</item>
+        <item quantity="few">Usuń %d dodatkowe kopie</item>
+        <item quantity="many">Usuń %d dodatkowych kopii</item>
+        <item quantity="other">Usuń %d dodatkowej kopii</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">To usunie %d utwór z tej playlisty.</item>
+        <item quantity="few">To usunie %d utwory z tej playlisty.</item>
+        <item quantity="many">To usunie %d utworów z tej playlisty.</item>
+        <item quantity="other">To usunie %d utworu z tej playlisty.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">To usunie %d utwór z playlisty także w YouTube Music.</item>
+        <item quantity="few">To usunie %d utwory z playlisty także w YouTube Music.</item>
+        <item quantity="many">To usunie %d utworów z playlisty także w YouTube Music.</item>
+        <item quantity="other">To usunie %d utworu z playlisty także w YouTube Music.</item>
+    </plurals>
 </resources>

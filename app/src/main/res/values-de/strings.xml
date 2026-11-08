@@ -4965,4 +4965,25 @@
     <string name="search_your_library">Mediathek durchsuchen</string>
     <string name="nothing_in_your_library_matches">Nichts in deiner Mediathek passt</string>
     <string name="try_fewer_words_or_another_filter">Versuch es mit weniger Wörtern oder einem anderen Filter.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Doppelte finden</string>
+    <string name="no_song_is_here_twice">Kein Song ist doppelt</string>
+    <string name="extra_copy">Doppelt</string>
+    <string name="keeping_s">„%s“ bleibt</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d Song ist mehrfach hier</item>
+        <item quantity="other">%d Songs sind mehrfach hier</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">%d doppelten entfernen</item>
+        <item quantity="other">%d doppelte entfernen</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">Damit kommt %d Song aus dieser Playlist.</item>
+        <item quantity="other">Damit kommen %d Songs aus dieser Playlist.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">Damit kommt %d Song auch auf YouTube Music aus der Playlist.</item>
+        <item quantity="other">Damit kommen %d Songs auch auf YouTube Music aus der Playlist.</item>
+    </plurals>
 </resources>

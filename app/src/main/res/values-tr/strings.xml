@@ -4965,4 +4965,25 @@
     <string name="search_your_library">Kitaplığında ara</string>
     <string name="nothing_in_your_library_matches">Kitaplığında eşleşen bir şey yok</string>
     <string name="try_fewer_words_or_another_filter">Daha az kelime ya da başka bir filtre dene.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Tekrarlananları bul</string>
+    <string name="no_song_is_here_twice">Burada iki kez olan şarkı yok</string>
+    <string name="extra_copy">Fazla kopya</string>
+    <string name="keeping_s">“%s” kalıyor</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d şarkı burada birden fazla kez var</item>
+        <item quantity="other">%d şarkı burada birden fazla kez var</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">%d fazla kopyayı kaldır</item>
+        <item quantity="other">%d fazla kopyayı kaldır</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">Bu, %d şarkıyı bu çalma listesinden çıkarır.</item>
+        <item quantity="other">Bu, %d şarkıyı bu çalma listesinden çıkarır.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">Bu, %d şarkıyı YouTube Music’teki listeden de çıkarır.</item>
+        <item quantity="other">Bu, %d şarkıyı YouTube Music’teki listeden de çıkarır.</item>
+    </plurals>
 </resources>

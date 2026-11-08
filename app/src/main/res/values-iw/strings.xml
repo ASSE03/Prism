@@ -5033,4 +5033,29 @@
     <string name="search_your_library">חיפוש בספרייה שלך</string>
     <string name="nothing_in_your_library_matches">שום דבר בספרייה שלך לא תואם</string>
     <string name="try_fewer_words_or_another_filter">כדאי לנסות פחות מילים או מסנן אחר.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">חיפוש כפילויות</string>
+    <string name="no_song_is_here_twice">אין כאן שיר פעמיים</string>
+    <string name="extra_copy">עותק מיותר</string>
+    <string name="keeping_s">„%s” נשאר</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">שיר %d מופיע כאן יותר מפעם אחת</item>
+        <item quantity="two">%d שירים מופיעים כאן יותר מפעם אחת</item>
+        <item quantity="other">%d שירים מופיעים כאן יותר מפעם אחת</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">הסרת עותק מיותר %d</item>
+        <item quantity="two">הסרת %d עותקים מיותרים</item>
+        <item quantity="other">הסרת %d עותקים מיותרים</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">פעולה זו תוציא שיר %d מהפלייליסט.</item>
+        <item quantity="two">פעולה זו תוציא %d שירים מהפלייליסט.</item>
+        <item quantity="other">פעולה זו תוציא %d שירים מהפלייליסט.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">פעולה זו תוציא שיר %d מהפלייליסט גם ב-YouTube Music.</item>
+        <item quantity="two">פעולה זו תוציא %d שירים מהפלייליסט גם ב-YouTube Music.</item>
+        <item quantity="other">פעולה זו תוציא %d שירים מהפלייליסט גם ב-YouTube Music.</item>
+    </plurals>
 </resources>

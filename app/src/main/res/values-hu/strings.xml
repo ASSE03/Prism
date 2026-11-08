@@ -4965,4 +4965,25 @@
     <string name="search_your_library">Keresés a könyvtáradban</string>
     <string name="nothing_in_your_library_matches">A könyvtáradban semmi sem egyezik</string>
     <string name="try_fewer_words_or_another_filter">Próbálj kevesebb szót vagy másik szűrőt.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Ismétlődések keresése</string>
+    <string name="no_song_is_here_twice">Egy dal sincs itt kétszer</string>
+    <string name="extra_copy">Felesleges példány</string>
+    <string name="keeping_s">Marad: „%s”</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d dal többször is szerepel</item>
+        <item quantity="other">%d dal többször is szerepel</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">%d felesleges példány eltávolítása</item>
+        <item quantity="other">%d felesleges példány eltávolítása</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">Ezzel %d dal kikerül a lejátszási listából.</item>
+        <item quantity="other">Ezzel %d dal kikerül a lejátszási listából.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">Ezzel %d dal a YouTube Musicon is kikerül a listából.</item>
+        <item quantity="other">Ezzel %d dal a YouTube Musicon is kikerül a listából.</item>
+    </plurals>
 </resources>

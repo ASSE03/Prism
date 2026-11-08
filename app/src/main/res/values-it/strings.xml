@@ -5033,4 +5033,29 @@
     <string name="search_your_library">Cerca nella tua raccolta</string>
     <string name="nothing_in_your_library_matches">Nella tua raccolta non c’è niente che corrisponda</string>
     <string name="try_fewer_words_or_another_filter">Prova con meno parole o un altro filtro.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Trova doppioni</string>
+    <string name="no_song_is_here_twice">Nessun brano è presente due volte</string>
+    <string name="extra_copy">Copia in più</string>
+    <string name="keeping_s">Resta «%s»</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d brano è presente più volte</item>
+        <item quantity="many">%d brani sono presenti più volte</item>
+        <item quantity="other">%d brani sono presenti più volte</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">Rimuovi %d copia in più</item>
+        <item quantity="many">Rimuovi %d copie in più</item>
+        <item quantity="other">Rimuovi %d copie in più</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">Questo toglie %d brano da questa playlist.</item>
+        <item quantity="many">Questo toglie %d brani da questa playlist.</item>
+        <item quantity="other">Questo toglie %d brani da questa playlist.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">Questo toglie %d brano dalla playlist anche su YouTube Music.</item>
+        <item quantity="many">Questo toglie %d brani dalla playlist anche su YouTube Music.</item>
+        <item quantity="other">Questo toglie %d brani dalla playlist anche su YouTube Music.</item>
+    </plurals>
 </resources>

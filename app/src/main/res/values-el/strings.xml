@@ -4965,4 +4965,25 @@
     <string name="search_your_library">Αναζήτηση στη βιβλιοθήκη σου</string>
     <string name="nothing_in_your_library_matches">Τίποτα στη βιβλιοθήκη σου δεν ταιριάζει</string>
     <string name="try_fewer_words_or_another_filter">Δοκίμασε λιγότερες λέξεις ή άλλο φίλτρο.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Εύρεση διπλότυπων</string>
+    <string name="no_song_is_here_twice">Κανένα τραγούδι δεν είναι εδώ δύο φορές</string>
+    <string name="extra_copy">Επιπλέον αντίγραφο</string>
+    <string name="keeping_s">Μένει το «%s»</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d τραγούδι είναι εδώ πάνω από μία φορά</item>
+        <item quantity="other">%d τραγούδια είναι εδώ πάνω από μία φορά</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">Αφαίρεση %d επιπλέον αντιγράφου</item>
+        <item quantity="other">Αφαίρεση %d επιπλέον αντιγράφων</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">Αυτό βγάζει %d τραγούδι από αυτή την playlist.</item>
+        <item quantity="other">Αυτό βγάζει %d τραγούδια από αυτή την playlist.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">Αυτό βγάζει %d τραγούδι από την playlist και στο YouTube Music.</item>
+        <item quantity="other">Αυτό βγάζει %d τραγούδια από την playlist και στο YouTube Music.</item>
+    </plurals>
 </resources>

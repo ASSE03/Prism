@@ -4897,4 +4897,21 @@
     <string name="search_your_library">ค้นหาในคลังเพลงของคุณ</string>
     <string name="nothing_in_your_library_matches">ไม่มีอะไรในคลังเพลงที่ตรงกัน</string>
     <string name="try_fewer_words_or_another_filter">ลองใช้คำน้อยลงหรือตัวกรองอื่น</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">หาเพลงซ้ำ</string>
+    <string name="no_song_is_here_twice">ไม่มีเพลงที่ซ้ำกัน</string>
+    <string name="extra_copy">สำเนาเกิน</string>
+    <string name="keeping_s">เก็บ “%s” ไว้</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="other">มี %d เพลงที่อยู่ที่นี่มากกว่าหนึ่งครั้ง</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="other">ลบสำเนาเกิน %d รายการ</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="other">จะนำ %d เพลงออกจากเพลย์ลิสต์นี้</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="other">จะนำ %d เพลงออกจากเพลย์ลิสต์ใน YouTube Music ด้วย</item>
+    </plurals>
 </resources>

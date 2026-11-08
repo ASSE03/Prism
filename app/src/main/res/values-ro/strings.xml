@@ -5033,4 +5033,29 @@
     <string name="search_your_library">Caută în biblioteca ta</string>
     <string name="nothing_in_your_library_matches">Nimic din biblioteca ta nu se potrivește</string>
     <string name="try_fewer_words_or_another_filter">Încearcă mai puține cuvinte sau alt filtru.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Găsește dublurile</string>
+    <string name="no_song_is_here_twice">Nicio melodie nu e aici de două ori</string>
+    <string name="extra_copy">Copie în plus</string>
+    <string name="keeping_s">Rămâne „%s”</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d melodie e aici de mai multe ori</item>
+        <item quantity="few">%d melodii sunt aici de mai multe ori</item>
+        <item quantity="other">%d de melodii sunt aici de mai multe ori</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">Elimină %d copie în plus</item>
+        <item quantity="few">Elimină %d copii în plus</item>
+        <item quantity="other">Elimină %d de copii în plus</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">Asta scoate %d melodie din acest playlist.</item>
+        <item quantity="few">Asta scoate %d melodii din acest playlist.</item>
+        <item quantity="other">Asta scoate %d de melodii din acest playlist.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">Asta scoate %d melodie din playlist și pe YouTube Music.</item>
+        <item quantity="few">Asta scoate %d melodii din playlist și pe YouTube Music.</item>
+        <item quantity="other">Asta scoate %d de melodii din playlist și pe YouTube Music.</item>
+    </plurals>
 </resources>

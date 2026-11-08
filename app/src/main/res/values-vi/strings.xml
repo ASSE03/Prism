@@ -4897,4 +4897,21 @@
     <string name="search_your_library">Tìm trong thư viện</string>
     <string name="nothing_in_your_library_matches">Không có gì trong thư viện khớp</string>
     <string name="try_fewer_words_or_another_filter">Thử ít từ hơn hoặc bộ lọc khác.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Tìm bài trùng</string>
+    <string name="no_song_is_here_twice">Không có bài nào lặp lại</string>
+    <string name="extra_copy">Bản thừa</string>
+    <string name="keeping_s">Giữ lại “%s”</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="other">%d bài xuất hiện hơn một lần</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="other">Xóa %d bản thừa</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="other">Thao tác này đưa %d bài ra khỏi danh sách phát.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="other">Thao tác này cũng đưa %d bài ra khỏi danh sách phát trên YouTube Music.</item>
+    </plurals>
 </resources>

@@ -4965,4 +4965,25 @@
     <string name="search_your_library">Sök i ditt bibliotek</string>
     <string name="nothing_in_your_library_matches">Inget i ditt bibliotek matchar</string>
     <string name="try_fewer_words_or_another_filter">Prova färre ord eller ett annat filter.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Hitta dubbletter</string>
+    <string name="no_song_is_here_twice">Ingen låt finns här två gånger</string>
+    <string name="extra_copy">Dubblett</string>
+    <string name="keeping_s">”%s” blir kvar</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d låt finns här flera gånger</item>
+        <item quantity="other">%d låtar finns här flera gånger</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">Ta bort %d dubblett</item>
+        <item quantity="other">Ta bort %d dubbletter</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">Det här tar bort %d låt från spellistan.</item>
+        <item quantity="other">Det här tar bort %d låtar från spellistan.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">Det här tar bort %d låt från spellistan på YouTube Music också.</item>
+        <item quantity="other">Det här tar bort %d låtar från spellistan på YouTube Music också.</item>
+    </plurals>
 </resources>

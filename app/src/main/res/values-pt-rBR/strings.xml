@@ -5033,4 +5033,29 @@
     <string name="search_your_library">Pesquisar na sua biblioteca</string>
     <string name="nothing_in_your_library_matches">Nada na sua biblioteca corresponde</string>
     <string name="try_fewer_words_or_another_filter">Tente menos palavras ou outro filtro.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Encontrar duplicadas</string>
+    <string name="no_song_is_here_twice">Nenhuma música está aqui duas vezes</string>
+    <string name="extra_copy">Cópia a mais</string>
+    <string name="keeping_s">Fica “%s”</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d música está aqui mais de uma vez</item>
+        <item quantity="many">%d músicas estão aqui mais de uma vez</item>
+        <item quantity="other">%d músicas estão aqui mais de uma vez</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">Remover %d cópia a mais</item>
+        <item quantity="many">Remover %d cópias a mais</item>
+        <item quantity="other">Remover %d cópias a mais</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">Isso tira %d música desta playlist.</item>
+        <item quantity="many">Isso tira %d músicas desta playlist.</item>
+        <item quantity="other">Isso tira %d músicas desta playlist.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">Isso tira %d música da playlist também no YouTube Music.</item>
+        <item quantity="many">Isso tira %d músicas da playlist também no YouTube Music.</item>
+        <item quantity="other">Isso tira %d músicas da playlist também no YouTube Music.</item>
+    </plurals>
 </resources>

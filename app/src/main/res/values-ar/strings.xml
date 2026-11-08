@@ -5237,4 +5237,41 @@
     <string name="search_your_library">البحث في مكتبتك</string>
     <string name="nothing_in_your_library_matches">لا شيء في مكتبتك يطابق</string>
     <string name="try_fewer_words_or_another_filter">جرّب كلمات أقل أو عامل تصفية آخر.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">العثور على المكرر</string>
+    <string name="no_song_is_here_twice">لا توجد أغنية مكررة هنا</string>
+    <string name="extra_copy">نسخة زائدة</string>
+    <string name="keeping_s">ستبقى «%s»</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="zero">%d أغنية مكررة هنا</item>
+        <item quantity="one">أغنية واحدة مكررة هنا</item>
+        <item quantity="two">أغنيتان مكررتان هنا</item>
+        <item quantity="few">%d أغانٍ مكررة هنا</item>
+        <item quantity="many">%d أغنية مكررة هنا</item>
+        <item quantity="other">%d أغنية مكررة هنا</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="zero">إزالة %d نسخة زائدة</item>
+        <item quantity="one">إزالة نسخة زائدة واحدة</item>
+        <item quantity="two">إزالة نسختين زائدتين</item>
+        <item quantity="few">إزالة %d نسخ زائدة</item>
+        <item quantity="many">إزالة %d نسخة زائدة</item>
+        <item quantity="other">إزالة %d نسخة زائدة</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="zero">سيُزيل هذا %d أغنية من قائمة التشغيل.</item>
+        <item quantity="one">سيُزيل هذا أغنية واحدة من قائمة التشغيل.</item>
+        <item quantity="two">سيُزيل هذا أغنيتين من قائمة التشغيل.</item>
+        <item quantity="few">سيُزيل هذا %d أغانٍ من قائمة التشغيل.</item>
+        <item quantity="many">سيُزيل هذا %d أغنية من قائمة التشغيل.</item>
+        <item quantity="other">سيُزيل هذا %d أغنية من قائمة التشغيل.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="zero">سيُزيل هذا %d أغنية من القائمة على YouTube Music أيضًا.</item>
+        <item quantity="one">سيُزيل هذا أغنية واحدة من القائمة على YouTube Music أيضًا.</item>
+        <item quantity="two">سيُزيل هذا أغنيتين من القائمة على YouTube Music أيضًا.</item>
+        <item quantity="few">سيُزيل هذا %d أغانٍ من القائمة على YouTube Music أيضًا.</item>
+        <item quantity="many">سيُزيل هذا %d أغنية من القائمة على YouTube Music أيضًا.</item>
+        <item quantity="other">سيُزيل هذا %d أغنية من القائمة على YouTube Music أيضًا.</item>
+    </plurals>
 </resources>

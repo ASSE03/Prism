@@ -4965,4 +4965,25 @@
     <string name="search_your_library">جست‌وجو در کتابخانهٔ شما</string>
     <string name="nothing_in_your_library_matches">چیزی در کتابخانهٔ شما پیدا نشد</string>
     <string name="try_fewer_words_or_another_filter">کلمه‌های کمتر یا فیلتر دیگری را امتحان کنید.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">یافتن تکراری‌ها</string>
+    <string name="no_song_is_here_twice">هیچ آهنگی اینجا دو بار نیست</string>
+    <string name="extra_copy">نسخهٔ اضافه</string>
+    <string name="keeping_s">«%s» می‌ماند</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="one">%d آهنگ بیش از یک بار اینجاست</item>
+        <item quantity="other">%d آهنگ بیش از یک بار اینجا هستند</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="one">حذف %d نسخهٔ اضافه</item>
+        <item quantity="other">حذف %d نسخهٔ اضافه</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="one">این کار %d آهنگ را از این فهرست پخش برمی‌دارد.</item>
+        <item quantity="other">این کار %d آهنگ را از این فهرست پخش برمی‌دارد.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="one">این کار %d آهنگ را در YouTube Music هم از فهرست برمی‌دارد.</item>
+        <item quantity="other">این کار %d آهنگ را در YouTube Music هم از فهرست برمی‌دارد.</item>
+    </plurals>
 </resources>

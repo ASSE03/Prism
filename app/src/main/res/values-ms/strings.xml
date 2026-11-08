@@ -4897,4 +4897,21 @@
     <string name="search_your_library">Cari dalam pustaka anda</string>
     <string name="nothing_in_your_library_matches">Tiada yang sepadan dalam pustaka anda</string>
     <string name="try_fewer_words_or_another_filter">Cuba kurangkan perkataan atau penapis lain.</string>
+    <!-- 1.8.3 Duplicates -->
+    <string name="find_duplicates">Cari pendua</string>
+    <string name="no_song_is_here_twice">Tiada lagu yang ada dua kali</string>
+    <string name="extra_copy">Salinan lebihan</string>
+    <string name="keeping_s">“%s” kekal</string>
+    <plurals name="n_songs_are_here_more_than_once">
+        <item quantity="other">%d lagu ada di sini lebih daripada sekali</item>
+    </plurals>
+    <plurals name="remove_n_extra_copies">
+        <item quantity="other">Alih keluar %d salinan lebihan</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out">
+        <item quantity="other">Ini mengeluarkan %d lagu daripada senarai main ini.</item>
+    </plurals>
+    <plurals name="this_takes_n_songs_out_on_youtube">
+        <item quantity="other">Ini mengeluarkan %d lagu daripada senarai main di YouTube Music juga.</item>
+    </plurals>
 </resources>
