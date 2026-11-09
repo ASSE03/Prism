@@ -2,6 +2,19 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.8.3.1
+
+### Fixes
+
+- **A new playlist shows in Library at once** (#414). YouTube takes a minute or two to list it, and until now Library waited for that. Its cover comes in once YouTube has it.
+- **Add to playlist's list stays put on a fast swipe** (#401), instead of pushing the whole sheet up and bouncing.
+- **The screen stays on while a Replay story plays** (#412).
+- **Opening a song's menu from Search's typed list keeps the list** (#395). It closed behind the menu.
+- **Search finds songs and videos where YouTube Music needs Premium** (#396, South Korea). Signed in, a song or video search that comes back empty is asked again with your account.
+- **KuGou finds lyrics when the artist's name is written in another case** (#403), like KAIRO.
+- **Synced lyrics no longer jump at each new line** (#399), and the sung line's letters (the tails of g and y, accents, Glow's light) are no longer cut off.
+- **Restoring a backup, applying a Look or signing in** no longer has a setting changed a moment before undo part of it.
+
 ## 1.8.3
 
 ### Your library, smarter
