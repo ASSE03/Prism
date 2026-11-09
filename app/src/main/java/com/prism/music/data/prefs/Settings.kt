@@ -2791,7 +2791,7 @@ class SettingsRepository(
     private class Write(val block: (MutablePreferences) -> Unit, val done: kotlinx.coroutines.CompletableDeferred<Unit>? = null)
 
     /** An editNow's writer has stopped (its scope ended): the caller writes it itself. */
-    private class WriterGone : IllegalStateException("the settings writer has stopped")
+    private class WriterGone : IllegalStateException()
 
     private val writes = kotlinx.coroutines.channels.Channel<Write>(kotlinx.coroutines.channels.Channel.UNLIMITED)
 

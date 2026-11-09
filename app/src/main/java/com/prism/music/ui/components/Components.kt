@@ -851,7 +851,7 @@ fun PlaylistPicker(songs: List<Song>, what: String, onDismiss: () -> Unit) {
                         has >= ids.distinct().size -> tr(R.string.already_has_all_of_these)
                         else -> tr(R.string.already_has_n_of_these, has, ids.distinct().size)
                     }
-                    PickerRow(c.covers.art(p), p.title, line, has > 0, if (has > 0) tr(R.string.already_in, p.title) else null, "inPlaylist:${p.id}") {
+                    PickerRow(c.covers.art(p), p.title, line, has > 0, if (has > 0) tr(R.string.already_in, p.title) else null, p.id) {
                         close {
                             if (com.prism.music.data.PrismLibrary.isPrismList(p.id)) {
                                 val added = c.prismLibrary.add(p.id, songs)
@@ -883,10 +883,10 @@ fun PlaylistPicker(songs: List<Song>, what: String, onDismiss: () -> Unit) {
 
 /**
  * One playlist in [PlaylistPicker]: its cover, its name, [line] under it (null: none; [strong] when it says the songs are
- * in there), and a ✓ described as [mark] (tagged [markTag]) when they are.
+ * in there), and a ✓ described as [mark] (tagged with the playlist's [id]) when they are.
  */
 @Composable
-internal fun PickerRow(art: String?, title: String, line: String?, strong: Boolean, mark: String?, markTag: String, onClick: () -> Unit) {
+internal fun PickerRow(art: String?, title: String, line: String?, strong: Boolean, mark: String?, id: String, onClick: () -> Unit) {
     Row(
         Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 20.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -906,7 +906,7 @@ internal fun PickerRow(art: String?, title: String, line: String?, strong: Boole
         }
         if (mark != null) Icon(
             PrismIcons.Check, mark,
-            Modifier.padding(start = 8.dp).size(20.dp).testTag(markTag), tint = MaterialTheme.colorScheme.onSurface,
+            Modifier.padding(start = 8.dp).size(20.dp).testTag("inPlaylist:$id"), tint = MaterialTheme.colorScheme.onSurface,
         )
     }
 }
