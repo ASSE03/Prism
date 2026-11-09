@@ -903,6 +903,14 @@ class AppContainer(val app: Application) {
          */
         internal fun mayAddFormat(before: Int, itag: Int, cached: Boolean): Boolean = !cached || before == itag
 
+        /**
+         * The key a music video's picture is read by ([videoDataSourceFactory]); [whole]: all of it is saved in Downloads.
+         * One that isn't streams under a key Downloads never holds, as a song does: read under the download's own key, a
+         * part saved at another quality was read as far as it reached and the stream went on from there, two files
+         * joined into one nothing could read (#411: "Skipping atom with length > 2147483647" at ~1:08, every retry).
+         */
+        internal fun pictureKey(id: String, whole: Boolean): String = if (whole) "video:$id" else "${STREAMED}video:$id"
+
         fun markWhole(cache: Cache, id: String, length: Long) {
             if (length <= 0 || !cache.isCached(id, 0, length)) return
             runCatching { cache.applyContentMetadataMutations(id, ContentMetadataMutations().also { ContentMetadataMutations.setContentLength(it, length) }) }
@@ -1014,20 +1022,20 @@ class AppContainer(val app: Application) {
         }
     }
 
-    /** A music video's picture: from Downloads when it's saved there (key `video:<id>`), else streamed (never cached). */
+    /** A music video's picture: from Downloads when all of it is saved there (key `video:<id>`), else streamed (never cached, [pictureKey]). */
     fun videoDataSourceFactory(): DataSource.Factory {
         val http = OkHttpDataSource.Factory(streamHttp)
         val downloadsFirst = CacheDataSource.Factory()
             .setCache(downloadCache)
             // A link YouTube turns away is forgotten (and its next lookup goes through NewPipe), as for songs.
-            .setUpstreamDataSourceFactory { ForgetOnForbidden(http.createDataSource()) { key, code -> streams.invalidate(key.removePrefix("video:"), refused = code == 403) } }
+            .setUpstreamDataSourceFactory { ForgetOnForbidden(http.createDataSource()) { key, code -> streams.invalidate(key.removePrefix(STREAMED).removePrefix("video:"), refused = code == 403) } }
             .setCacheWriteDataSinkFactory(null)
             .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
         return ResolvingDataSource.Factory(downloadsFirst) { spec ->
             val id = spec.uri.lastPathSegment
             if (spec.uri.scheme != "prism" || id == null) spec
-            else if (downloadCache.fullyCached("video:$id", spec.position, spec.length)) spec.buildUpon().setKey("video:$id").build()
-            else spec.buildUpon().setUri(resolveVideoUrl(id)).setKey("video:$id").build()
+            else if (downloadCache.fullyCached("video:$id", spec.position, spec.length)) spec.buildUpon().setKey(pictureKey(id, whole = true)).build()
+            else spec.buildUpon().setUri(resolveVideoUrl(id)).setKey(pictureKey(id, whole = false)).build()
         }
     }
 
