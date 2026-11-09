@@ -371,13 +371,20 @@ private fun PositionSample(fraction: Float, ahead: Int) {
 
 // ---------------------------------------------------------------------------- Translation & romanization
 
+/** Where a translation or romanized line goes: under or over its line. Under its own label since 1.8.4 (the chips stood alone). */
+@Composable
+internal fun TranslationPlaceChoice(place: LyricsExtraPlace, onSelect: (LyricsExtraPlace) -> Unit) {
+    Label(tr(R.string.translation_place))
+    Chips(LyricsExtraPlace.entries, place, { it.label }, onSelect)
+}
+
 @Composable
 fun LyricsExtrasGroup() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     Group(tr(R.string.translations_romanized_lines), info = tr(R.string.how_a_translation_or_a_line)) {
         LyricsSample(currentLook(), Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp), lines = 1, extra = tr(R.string.cada_color_encuentra_su_camino))
-        Chips(LyricsExtraPlace.entries, s.lyricsExtraPlace, { it.label }) { prefs.setLyricsExtraPlace(it) }
+        TranslationPlaceChoice(s.lyricsExtraPlace) { prefs.setLyricsExtraPlace(it) }
         SliderSetting(tr(R.string.size), s.lyricsExtraSize, 0.7f..1.4f, { "${(it * 100).roundToInt()}%" }) { prefs.setLyricsExtraSize(it) }
         Label(tr(R.string.color_2), info = if (s.lyricsExtraColor == LyricsColor.CUSTOM) tr(R.string.your_color_here_is_the_one) else null)
         LyricsColorSwatches(s.lyricsExtraColor, s.lyricsOtherCustom, { prefs.setLyricsExtraColor(it) }) { prefs.setLyricsExtraColor(LyricsColor.CUSTOM) }

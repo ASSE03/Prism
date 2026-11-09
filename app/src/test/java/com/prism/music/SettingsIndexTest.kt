@@ -16,10 +16,10 @@ class SettingsIndexTest {
     private val sources = listOf("SettingsScreen.kt", "SoundSettings.kt", "BackupUi.kt", "ConnectSettings.kt", "ColorSettings.kt", "LookSettings.kt", "SpotifySettings.kt", "HistorySettings.kt")
         .map { File("src/main/java/com/prism/music/ui/screens/$it").readText() }
 
-    /** strings.xml's English: name → text. */
+    /** The English strings (strings.xml and, until they're folded in, a release's own strings_*.xml): name → text. */
     private val strings: Map<String, String> by lazy {
-        Regex("<string name=\"([^\"]+)\"[^>]*>(.*?)</string>", RegexOption.DOT_MATCHES_ALL)
-            .findAll(File("src/main/res/values/strings.xml").readText())
+        File("src/main/res/values").listFiles().orEmpty().filter { it.name.startsWith("strings") && it.name.endsWith(".xml") }.sortedBy { it.name }
+            .flatMap { Regex("<string name=\"([^\"]+)\"[^>]*>(.*?)</string>", RegexOption.DOT_MATCHES_ALL).findAll(it.readText()) }
             .associate { it.groupValues[1] to I18nConvert.xmlUnescape(it.groupValues[2]) }
     }
 
@@ -73,6 +73,42 @@ class SettingsIndexTest {
         val page = File("src/main/java/com/prism/music/ui/screens/SettingsScreen.kt").readText()
         val group = page.substringAfter("private fun HomeLibraryLook()").substringAfter("Group(tr(R.string.home))").substringBefore("Group(")
         assertTrue("Quick picks from isn't in that group", "R.string.quick_picks_from" in group)
+    }
+
+    /**
+     * 1.8.4: "Speed dial: your plays first" is only on Customize Home (its own page, not one of Settings'), so its result
+     * opens that page: it used to open Home & Library, which has no such row.
+     */
+    @Test
+    fun speedDialYoursFirstOpensThePageItIsOn() {
+        val row = "R.string.speed_dial_your_plays_first)"
+        assertTrue("the row is on Customize Home", row in File("src/main/java/com/prism/music/ui/screens/CatalogueScreen.kt").readText())
+        assertTrue("and on no settings page", sources.none { row in it })
+        val e = SettingsIndex.entries.single { it.title == com.prism.music.tr(R.string.speed_dial_your_plays_first) }
+        org.junit.Assert.assertEquals(com.prism.music.ui.Routes.CATALOGUE, e.opens)
+        org.junit.Assert.assertEquals(com.prism.music.tr(R.string.customize_home), e.page)
+        // Still found by the page's name, and still says what to turn off first.
+        assertTrue(SettingsIndex.search("customize home speed dial").contains(e))
+        assertTrue(e.needs != null)
+        // Every other result opens a settings page at its group, as before.
+        val haptics = SettingsIndex.entries.first { it.title == "Haptics" }
+        org.junit.Assert.assertEquals(com.prism.music.ui.Routes.settings("controls", haptics.group), haptics.opens)
+        org.junit.Assert.assertEquals(null, SettingsIndex.entries.first { it.section == null }.opens)
+    }
+
+    /**
+     * 1.8.4: no setting is listed twice. A double is two entries that make the same result: the same page, the same
+     * group and the same words shown ("Buttons in the row" was there twice, so a search showed two identical rows).
+     * The same title in two groups of a page (Speakers' and Handoff's "Pairing code") is two settings, not a double.
+     */
+    @Test
+    fun noSettingIsListedTwice() {
+        val doubles = SettingsIndex.entries.groupBy { Triple(it.page, it.group, it.shown) }.filter { it.value.size > 1 }
+        assertTrue("Listed more than once in SettingsIndex: ${doubles.map { (k, v) -> "${k.first} › ${k.second} › ${k.third} ×${v.size}" }}", doubles.isEmpty())
+        // What each of the two had as search words still finds the one that's left.
+        val row = com.prism.music.tr(R.string.buttons_in_the_row)
+        assertTrue(SettingsIndex.search("audio only").any { it.title == row })
+        assertTrue(SettingsIndex.search("bottom row lyrics").any { it.title == row })
     }
 
     @Test

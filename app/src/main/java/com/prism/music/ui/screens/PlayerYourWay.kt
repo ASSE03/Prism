@@ -649,19 +649,28 @@ fun PlayerProgressGroup() {
             detail = { if (it == com.prism.music.data.prefs.ScrubberThumb.AUTO) tr(R.string.a_dot_with_the_thumb_style) else null },
             onSelect = { prefs.setScrubberThumb(it) },
         ) { KnobSample(it, s.scrubberThickness) }
-        // 1.8.1 (the owner's): the bar shaped by the crossfade, an option; off it's the bar as before.
-        Label(tr(R.string.crossfade_on_the_progress_bar), info = tr(R.string.crossfade_shape_info))
-        ChoiceCards(
-            listOf(false, true), s.view.crossfadeShape,
-            title = { if (it) tr(R.string.shaped_by_the_crossfade) else tr(R.string.plain) },
-            detail = { if (it) tr(R.string.the_end_tapers_as_the_song_fades) else tr(R.string.as_now) },
-            onSelect = { prefs.setCrossfadeShape(it) },
-        ) { CrossfadeShapeSample(it, s.sound.crossfadeCurve, s.scrubberColor) }
+        CrossfadeOnBarChoice(s, LocalContainer.current.player.currentSong.value?.thumbnail) { prefs.setCrossfadeShape(it) }
         // Reddit, 1.7.9.1: the volume bar as thick as the progress bar (its style's height and this thickness).
         Toggle(tr(R.string.volume_bar_like_the_progress_bar), tr(R.string.same_style_and_thickness), s.volumeMatchesProgress) {
             prefs.setVolumeMatchesProgress(it)
         }
     }
+}
+
+/**
+ * 1.8.1 (the owner's): the bar shaped by the crossfade, an option; off it's the bar as before. The bar only takes the
+ * shape while Crossfade is on, so the choice only shows then (1.8.4; Settings' search says to turn Crossfade on first).
+ */
+@Composable
+internal fun CrossfadeOnBarChoice(s: com.prism.music.data.prefs.AppSettings, cover: String?, onSelect: (Boolean) -> Unit) {
+    if (!s.mix) return
+    Label(tr(R.string.crossfade_on_the_progress_bar), info = tr(R.string.crossfade_shape_info))
+    ChoiceCards(
+        listOf(false, true), s.view.crossfadeShape,
+        title = { if (it) tr(R.string.shaped_by_the_crossfade) else tr(R.string.plain) },
+        detail = { if (it) tr(R.string.the_end_tapers_as_the_song_fades) else tr(R.string.as_now) },
+        onSelect = onSelect,
+    ) { CrossfadeShapeSample(it, s.sound.crossfadeCurve, s.scrubberColor, cover) }
 }
 
 @Composable
@@ -694,8 +703,8 @@ private fun KnobSample(knob: com.prism.music.data.prefs.ScrubberThumb, thickness
  * along [curve], the knob riding it; else the plain bar).
  */
 @Composable
-private fun CrossfadeShapeSample(shaped: Boolean, curve: com.prism.music.data.prefs.CrossfadeCurve, color: ScrubberColor) {
-    val fill = com.prism.music.ui.player.scrubberFill(color, LocalContainer.current.player.currentSong.value?.thumbnail)
+private fun CrossfadeShapeSample(shaped: Boolean, curve: com.prism.music.data.prefs.CrossfadeCurve, color: ScrubberColor, cover: String?) {
+    val fill = com.prism.music.ui.player.scrubberFill(color, cover)
         ?: Brush.horizontalGradient(*PrismTokens.spectrumColors(true).toTypedArray())
     val outline = remember { com.prism.music.ui.player.BlendBarPath() }
     val shape = remember(curve) { com.prism.music.ui.player.BlendShape(curve, outFrom = 0.75f, outTo = 1f) }

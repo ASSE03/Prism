@@ -597,6 +597,10 @@ private fun ScheduleGroup() {
     }
 }
 
+/** A history step's line under its name: how long [ago], and what a tap does (the newest one is an undo). */
+internal fun lookStepLine(ago: String, newest: Boolean): String =
+    if (newest) tr(R.string.look_step_tap_to_undo, ago) else tr(R.string.look_step_tap_to_go_back, ago)
+
 /** The last changes to the look, newest first: tap one to go back to before it. */
 @Composable
 private fun HistoryGroup() {
@@ -608,7 +612,7 @@ private fun HistoryGroup() {
         steps.forEachIndexed { i, step ->
             val ago = android.text.format.DateUtils.getRelativeTimeSpanString(step.at, System.currentTimeMillis(), android.text.format.DateUtils.MINUTE_IN_MILLIS).toString()
             Item(
-                step.label, "$ago · ${if (i == 0) "tap to undo" else "tap to go back to before this"}",
+                step.label, lookStepLine(ago, newest = i == 0),
                 icon = PrismIcons.Undo, onClick = { c.looks.goBack(i) },
             )
         }

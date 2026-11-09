@@ -156,7 +156,8 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
         DEVICES -> tr(R.string.android_auto_speakers_tvs_discord_last)
         CONNECT -> listOfNotNull(tr(R.string.speakers_tvs), if (s.webRemote) tr(R.string.browser_remote_on) else null, if (s.handoffAvailable) tr(R.string.available_for_handoff) else null).joinToString(" · ")
         HOME -> tr(R.string.home_s_sections_and_top_library)
-        LIBRARY -> listOfNotNull(tr(R.string.your_artists_new_releases), if (s.contentCountry.isNotBlank()) countryName(s.contentCountry) else null, tr(R.string.replay_2)).joinToString(" · ")
+        // Only what's on the page itself (1.8.4: it showed the content country, which is on Language).
+        LIBRARY -> listOfNotNull(tr(R.string.your_artists_new_releases), if (com.prism.music.data.HistoryPause.paused(s.behavior)) tr(R.string.hist_paused_title) else null, tr(R.string.replay_2)).joinToString(" · ")
         DISCORD -> if (s.discordPresence) tr(R.string.showing_what_you_play_on_your) else tr(R.string.show_what_you_re_playing_on)
         LASTFM -> tr(R.string.scrobble_what_you_play_to_your)
         SPOTIFY -> tr(R.string.spot_summary)
@@ -332,14 +333,17 @@ private fun SettingsPage(
                                     val hidden = e.needs?.takeIf { !it.on(s) }
                                     NavRow(
                                         e.section?.icon ?: PrismIcons.Settings, e.shown,
-                                        listOf(e.section?.title ?: tr(R.string.settings), e.group).filter { it != e.title }.joinToString(" › "),
+                                        listOf(e.page, e.group).filter { it != e.title }.joinToString(" › "),
                                         hint = hidden?.hint,
                                     ) {
                                         // The keyboard goes with the search: left up, the page's first Back only closed it.
                                         keyboard?.hide()
-                                        if (e.section == null) { query = ""; foundHere = e.group }
+                                        val opens = e.opens
+                                        // A page outside Settings' own (Customize Home) opens as itself, beside the hub or not.
+                                        if (e.route != null) nav.go(e.route)
+                                        else if (e.section == null || opens == null) { query = ""; foundHere = e.group }
                                         else if (onOpen != null) onOpen(e.section, e.group)
-                                        else nav.go(Routes.settings(e.section.key, e.group))
+                                        else nav.go(opens)
                                     }
                                 }
                             }
@@ -1893,6 +1897,13 @@ private fun PanelPlayerSample(mode: com.prism.music.data.prefs.PanelPlayer) {
     }
 }
 
+/** How an edge-to-edge cover fits: filling the screen or whole. Under its own label since 1.8.4 (the chips stood alone). */
+@Composable
+internal fun CoverFitChoice(fit: com.prism.music.data.prefs.BleedFit, onSelect: (com.prism.music.data.prefs.BleedFit) -> Unit) {
+    Label(tr(R.string.how_the_cover_fits))
+    Chips(com.prism.music.data.prefs.BleedFit.entries, fit, { it.label }, onSelect)
+}
+
 @Composable
 private fun PlayerCoverGroup() {
     val s = LocalAppSettings.current
@@ -1904,7 +1915,7 @@ private fun PlayerCoverGroup() {
         // Two switches again (1.8.1): one for the cover, one for a music video; the video's own button changes only the video.
         Toggle(tr(R.string.edge_to_edge_cover), null, s.fullBleedArtwork, info = tr(R.string.the_cover_runs_to_the_screen)) { prefs.setFullBleedArtwork(it) }
         Toggle(tr(R.string.edge_to_edge_video), null, s.videoFullBleed, info = tr(R.string.a_music_video_runs_to_the)) { prefs.setVideoFullBleed(it) }
-        if (s.fullBleedArtwork) Chips(com.prism.music.data.prefs.BleedFit.entries, s.view.bleedFit, { it.label }) { prefs.setBleedFit(it) }
+        if (s.fullBleedArtwork) CoverFitChoice(s.view.bleedFit) { prefs.setBleedFit(it) }
         // #293: over a full-bleed picture, smaller controls and a later fade.
         if (s.fullBleedArtwork || s.videoFullBleed) Toggle(
             tr(R.string.more_room_for_the_picture), null, s.view.bleedRoomy,
@@ -2592,7 +2603,7 @@ private fun DownloadSettings() {
                 tr(R.string.load_ahead_on_mobile_data),
                 if (s.preload == com.prism.music.data.prefs.Preload.START) tr(R.string.the_next_song_s_start_about) else tr(R.string.whole_songs_about_3_8_mb),
                 s.preloadCellular,
-                info = tr(R.string.off_songs_are_only_loaded_ahead),
+                info = tr(R.string.off_songs_are_only_loaded_ahead_here),
             ) { prefs.setPreloadCellular(it) }
             if (s.smartDownloads) Toggle(tr(R.string.smart_downloads_on_mobile_data), tr(R.string.about_3_8_mb_a_song), s.smartDownloadsCellular) {
                 prefs.setSmartDownloadsCellular(it)

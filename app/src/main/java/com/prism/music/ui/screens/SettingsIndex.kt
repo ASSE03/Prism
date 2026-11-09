@@ -19,7 +19,19 @@ data class SettingEntry(
     val shown: String = title,
     /** The switch it only shows under (Crossfade's Length needs Crossfade on); the result says to turn that on first. */
     val needs: Needs? = null,
-)
+    /**
+     * For a setting on a page that isn't one of Settings' own (Customize Home): that page's route, which the result opens
+     * in place of [section]'s page, and its title ([routeTitle]) for the result's line.
+     */
+    val route: String? = null,
+    val routeTitle: String? = null,
+) {
+    /** The page the result names and opens: [routeTitle]'s, or [section]'s, or the Settings hub itself. */
+    val page: String get() = routeTitle ?: section?.title ?: tr(R.string.settings)
+
+    /** Where a tap on the result goes; null for the hub's own (the account), which is found in place. */
+    val opens: String? get() = route ?: section?.let { com.prism.music.ui.Routes.settings(it.key, group) }
+}
 
 /** A setting that only shows while [on] holds; [hint] says what to change first ("Turn on Crossfade songs first"). */
 class Needs(val hint: String, val on: (com.prism.music.data.prefs.AppSettings) -> Boolean)
@@ -208,6 +220,7 @@ object SettingsIndex {
         SettingEntry(P, tr(R.string.cover), tr(R.string.corners), tr(R.string.cover_rounded)),
         SettingEntry(P, tr(R.string.cover), tr(R.string.edge_to_edge_cover), tr(R.string.edge_to_edge) + " " + tr(R.string.full_bleed_artwork)),
         SettingEntry(P, tr(R.string.cover), tr(R.string.edge_to_edge_video), tr(R.string.edge_to_edge) + " " + tr(R.string.full_bleed_video) + " " + tr(R.string.music_video_edge_to_edge_fill)),
+        SettingEntry(P, tr(R.string.cover), tr(R.string.how_the_cover_fits), tr(R.string.how_the_cover_fits_keywords), needs = turnOn(tr(R.string.edge_to_edge_cover)) { it.fullBleedArtwork }),
         SettingEntry(P, tr(R.string.cover), tr(R.string.shrink_when_paused)),
         SettingEntry(I, tr(R.string.covers_shapes), tr(R.string.square_video_covers), tr(R.string.video_thumbnail_crop_black_bars_letterbox)),
         SettingEntry(P, tr(R.string.immersive_mode), tr(R.string.immersive_mode), tr(R.string.lyric_video_full_screen)),
@@ -225,7 +238,6 @@ object SettingsIndex {
         SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.best_part), tr(R.string.skip_chorus_hook_highlight_most_replayed)),
         SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.times), tr(R.string.duration_time_left_remaining)),
         SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.shuffle_repeat)),
-        SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.buttons_in_the_row), tr(R.string.music_video_audio_only)),
         SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.output_device), tr(R.string.bluetooth_speaker_headphones)),
         // The player, your way (1.7.4)
         SettingEntry(P, tr(R.string.layout), tr(R.string.layout), tr(R.string.player_layout_standard_cover_lyrics_minimal)),
@@ -236,7 +248,8 @@ object SettingsIndex {
         SettingEntry(P, tr(R.string.look), tr(R.string.buttons), tr(R.string.player_bottom_row_buttons_lyrics_video)),
         // 1.8.0: one editor for what's on the player (it took in Show on the player, Under the title and the buttons) and the ⋯ menu.
         SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.what_s_on_the_player), tr(R.string.what_s_on_the_player_keywords)),
-        SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.buttons_in_the_row), tr(R.string.player_bottom_row_buttons_lyrics_video)),
+        // One line for the row (1.8.4: it was listed twice), with both lines' search words.
+        SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.buttons_in_the_row), tr(R.string.player_bottom_row_buttons_lyrics_video) + " " + tr(R.string.music_video_audio_only)),
         SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.edit_this_menu), tr(R.string.edit_this_menu_keywords)),
         SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.crossfade_mark), tr(R.string.crossfade_songs), needs = crossfade),
         SettingEntry(P, tr(R.string.what_s_on_the_player), tr(R.string.covers_blend_too), tr(R.string.crossfade_songs), needs = crossfade),
@@ -428,8 +441,10 @@ object SettingsIndex {
         SettingEntry(H, tr(R.string.home), tr(R.string.customize_home), tr(R.string.sections_order_shortcuts_quick_picks_speed)),
         SettingEntry(H, tr(R.string.home), tr(R.string.add_new_sections_automatically), "shelves"),
         SettingEntry(H, tr(R.string.home), tr(R.string.quick_picks_from), tr(R.string.quick_picks_from_keywords)),
-        SettingEntry(H, tr(R.string.home), tr(R.string.speed_dial_your_plays_first), tr(R.string.speed_dial_your_plays_first_sub),
-            needs = Needs(tr(R.string.turn_off) + " · " + tr(R.string.speed_dial_youtube_music_s_only)) { !it.speedDialYouTubeOnly }),
+        // On Customize Home only (its Options), which isn't a settings page: the result opens that page itself (1.8.4).
+        SettingEntry(H, tr(R.string.options), tr(R.string.speed_dial_your_plays_first), tr(R.string.speed_dial_your_plays_first_sub),
+            needs = Needs(tr(R.string.turn_off) + " · " + tr(R.string.speed_dial_youtube_music_s_only)) { !it.speedDialYouTubeOnly },
+            route = com.prism.music.ui.Routes.CATALOGUE, routeTitle = tr(R.string.customize_home)),
         SettingEntry(H, tr(R.string.home), tr(R.string.continue_line), tr(R.string.continue_album_resume_greeting_hide_context)),
         SettingEntry(H, tr(R.string.replay_card), tr(R.string.replay_card), tr(R.string.replay_teaser_look_style_design_quiet)),
         SettingEntry(H, tr(R.string.replay_card), tr(R.string.replay_card_graph), tr(R.string.replay_card_graph_keywords)),
@@ -533,7 +548,7 @@ object SettingsIndex {
     private class Prepared(val entry: SettingEntry, val title: String, val hay: String)
 
     private val prepared: List<Prepared> by lazy {
-        entries.map { e -> Prepared(e, SearchRank.norm(e.title), SearchRank.norm("${e.title} ${e.group} ${e.section?.title ?: "Settings"} ${e.keywords}")) }
+        entries.map { e -> Prepared(e, SearchRank.norm(e.title), SearchRank.norm("${e.title} ${e.group} ${e.routeTitle ?: e.section?.title ?: "Settings"} ${e.keywords}")) }
     }
 
     /** Reads every entry's words now, so that a first letter doesn't. For a background thread. */
