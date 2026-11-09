@@ -52,7 +52,8 @@ class PlaylistPickerFlingTest {
         compose.onAllNodes(hasContentDescription("More") and hasClickAction()).onFirst().performClick()
         compose.clickWhenFound(hasText("Add to playlist") and hasClickAction())
         compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag("playlistPickerList")).fetchSemanticsNodes().isNotEmpty() }
-        compose.waitForText("Fling list 01")
+        // Newest first: list 40 is at the top, 01 far down and not yet drawn.
+        compose.waitUntil(10_000) { compose.onAllNodes(hasText("Fling list", substring = true)).fetchSemanticsNodes().isNotEmpty() }
         compose.waitForIdle()
         val settled = sheetTop()
 

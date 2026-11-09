@@ -72,6 +72,9 @@ class SearchTypedMenuAppTest {
         compose.onNode(hasSetTextAction()).performClick()
         compose.onNode(hasSetTextAction()).performTextInput("beat")
         compose.waitForText("Search for “beat”")
+        // The typed list waits a moment before asking YouTube (SearchScreen's delay), on the test's clock: nothing moves
+        // that clock on while the keyboard keeps Compose busy, so it's moved here.
+        compose.mainClock.advanceTimeBy(1_000)
         // The bug needs the keyboard that a menu's window takes away.
         val end = System.currentTimeMillis() + 5_000
         while (!keyboardUp(scenario) && System.currentTimeMillis() < end) Thread.sleep(100)
