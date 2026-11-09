@@ -804,7 +804,7 @@ fun PlaylistPicker(songs: List<Song>, what: String, onDismiss: () -> Unit) {
                     c.ytm.createPlaylist(name, ids.take(50), privacy = privacy)?.also { if (ids.size > 50) runCatching { c.ytm.addAllToPlaylist(it, ids.drop(50)) } }
                 }.getOrNull()
                 toast(if (id != null) tr(R.string.added_to, name) else tr(R.string.couldn_t_make_the_playlist))
-                if (id != null) c.library.refreshCollections()
+                if (id != null) c.library.created(id, name, ids.size)
             }
         }
         return

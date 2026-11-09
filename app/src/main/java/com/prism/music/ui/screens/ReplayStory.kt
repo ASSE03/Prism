@@ -1185,6 +1185,7 @@ private fun Summary(s: ReplayStory, modifier: Modifier, onReplay: () -> Unit, on
                     val name = if (s.rewind) tr(R.string.top_100_of, s.title) else tr(R.string.replay, s.title)
                     val id = runCatching { c.ytm.createPlaylist(name, s.songs.take(100).map { it.songId }, if (s.rewind) tr(R.string.made_with_prism_rewind) else tr(R.string.made_with_prism_replay)) }.getOrNull()
                     Toast.makeText(context, if (id != null) tr(R.string.saved_to_youtube_music, name) else tr(R.string.couldn_t_create_playlist), Toast.LENGTH_SHORT).show()
+                    if (id != null) c.library.created(id, name, minOf(s.songs.size, 100))
                 }
             }
             Pill(tr(R.string.watch_again), PrismIcons.Refresh, onClick = onReplay)
