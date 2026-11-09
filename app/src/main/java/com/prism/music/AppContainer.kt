@@ -26,6 +26,7 @@ import com.prism.music.data.prefs.SettingsRepository
 import com.prism.music.data.stream.ResolvedStream
 import com.prism.music.data.stream.StreamResolver
 import com.prism.music.data.stream.YouTubeStreamInterceptor
+import com.prism.music.data.stream.ForgetOnForbidden
 import com.prism.music.download.DownloadRepository
 import com.prism.music.playback.NerdStats
 import com.prism.music.playback.PlayerConnection
@@ -1082,16 +1083,5 @@ class AppContainer(val app: Application) {
 
     fun clearSongCache() {
         runCatching { playerCache.keys.toList().forEach { playerCache.removeResource(it) } }
-    }
-}
-
-/** Tells [onForbidden] the stream's key (and the code) when YouTube refuses its link (403 / 410), then fails as usual. */
-@OptIn(UnstableApi::class)
-private class ForgetOnForbidden(private val inner: DataSource, private val onForbidden: (String, Int) -> Unit) : DataSource by inner {
-    override fun open(dataSpec: DataSpec): Long = try {
-        inner.open(dataSpec)
-    } catch (e: androidx.media3.datasource.HttpDataSource.InvalidResponseCodeException) {
-        if (e.responseCode == 403 || e.responseCode == 410) dataSpec.key?.let { onForbidden(it, e.responseCode) }
-        throw e
     }
 }

@@ -207,6 +207,19 @@ class YouTubeStreamInterceptor(
             return f
         }
 
+        /**
+         * A later chunk turned away fails as a turned-away first one does (#408): as the player's own HTTP error, with its
+         * code. As a plain IOException it read as a dropped connection, so playback asked the same client again rather
+         * than another one, and a download kept its refused link through all its retries.
+         */
+        @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+        private fun refused(resp: Response, message: String): IOException = runCatching {
+            androidx.media3.datasource.HttpDataSource.InvalidResponseCodeException(
+                resp.code, resp.message, IOException(message), resp.headers.toMultimap(),
+                androidx.media3.datasource.DataSpec.Builder().setUri(base.url.toString()).setPosition(pos).build(), ByteArray(0),
+            )
+        }.getOrElse { IOException(message) }
+
         private fun prefetch() {
             val from = currentEnd + 1
             if (from <= end && next == null) next = from to fetch(from)
@@ -233,7 +246,7 @@ class YouTubeStreamInterceptor(
                 val what = "HTTP ${resp.code} at byte $pos of ${u.queryParameter("id") ?: "?"} (itag ${u.queryParameter("itag")}, client ${u.queryParameter("c")}, " +
                     "${if (u.queryParameter("pot") != null) "with" else "no"} PO token, chunk ${chunkSize / 1024} KB)"
                 runCatching { com.prism.music.playback.AudioDiagnostics.log("stream", "refused: $what") }
-                throw IOException("Stream chunk at $pos failed: $what")
+                throw refused(resp, "Stream chunk at $pos failed: $what")
             }
             current = resp
             currentEnd = minOf(end, pos + chunkSize - 1)
