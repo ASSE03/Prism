@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.8.4 (D58, D59): Replay's Yesterday, Last week and Last month. English only; the coordinator folds these into strings.xml. -->
+<resources>
+    <string name="last_week">Last week</string>
+    <string name="last_month">Last month</string>
+    <string name="your_yesterday_in_music">Your yesterday in music.</string>
+    <string name="the_day_before">the day before</string>
+    <string name="the_week_before">the week before</string>
+</resources>
