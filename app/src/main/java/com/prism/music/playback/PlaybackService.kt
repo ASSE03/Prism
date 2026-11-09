@@ -229,6 +229,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
         sessionPlayer = LyricsOverlayPlayer(player)
         carLyrics = CarLyrics(this, c, player, sessionPlayer, scope)
+        // The lyrics button works the car's switch in a car and the notification's elsewhere (#392).
+        carLyrics.onPlaceChange = { updateButtons() }
         carLyrics.start()
         session = MediaLibrarySession.Builder(this, sessionPlayer, LibraryCallback())
             // Covers for the notification, lock screen and car come through Prism's image loader, so saved ones show offline (#54).
@@ -334,7 +336,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         scope.launch { c.dj.rescan.drop(1).collect { if (c.dj.onNow) djAhead() } }
         scope.launch { c.settings.flow.map { it.djFlow }.distinctUntilChanged().drop(1).collect { resequence() } }
         scope.launch {
-            c.settings.flow.map { Triple(it.carLyrics, it.carLyricsStyle, it.carLyricsOnPhone) }.distinctUntilChanged().collect {
+            c.settings.flow.map { listOf(it.carLyrics, it.carLyricsStyle, it.carLyricsOnPhone, it.behavior.carLyricsLines) }.distinctUntilChanged().collect {
                 carLyrics.refresh(); updateButtons()
             }
         }
@@ -2238,7 +2240,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                     Player.REPEAT_MODE_ONE -> button(CommandButton.ICON_REPEAT_ONE, tr(R.string.repeat_off), repeatCommand)
                     else -> button(CommandButton.ICON_REPEAT_OFF, tr(R.string.repeat), repeatCommand)
                 }
-                SessionButton.CAR_LYRICS -> if (c.settings.current.carLyrics) button(CommandButton.ICON_SUBTITLES, tr(R.string.hide_lyrics), lyricsCommand)
+                SessionButton.CAR_LYRICS -> if (carLyrics.button.showing) button(CommandButton.ICON_SUBTITLES, tr(R.string.hide_lyrics), lyricsCommand)
                     else button(CommandButton.ICON_SUBTITLES_OFF, tr(R.string.show_lyrics), lyricsCommand)
                 SessionButton.RADIO -> button(CommandButton.ICON_RADIO, tr(R.string.start_radio), radioCommand)
                 SessionButton.DISLIKE -> button(CommandButton.ICON_THUMB_DOWN_UNFILLED, tr(R.string.not_for_me), dislikeCommand)
@@ -2561,7 +2563,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                     Player.REPEAT_MODE_ALL -> Player.REPEAT_MODE_ONE
                     else -> Player.REPEAT_MODE_OFF
                 }
-                lyricsCommand.customAction -> c.settings.setCarLyrics(!c.settings.current.carLyrics)
+                lyricsCommand.customAction -> carLyrics.toggle()
                 radioCommand.customAction -> startRadio()
                 dislikeCommand.customAction -> player.currentMediaItem?.toSong()?.let { song ->
                     c.library.setDisliked(song, true)
