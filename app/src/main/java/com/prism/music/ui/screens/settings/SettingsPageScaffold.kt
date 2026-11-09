@@ -1,0 +1,338 @@
+package com.prism.music.ui.screens.settings
+
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
+import com.prism.music.R
+import com.prism.music.tr
+import com.prism.music.ui.LocalNavigator
+import com.prism.music.ui.components.LocalFrosted
+import com.prism.music.ui.components.LocalPageBackdrop
+import com.prism.music.ui.components.PrismChip
+import com.prism.music.ui.components.PrismTextButton
+import com.prism.music.ui.components.RoundAction
+import com.prism.music.ui.components.SUBPAGE_MAX_WIDTH
+import com.prism.music.ui.components.TopScrollEdge
+import com.prism.music.ui.components.pageTitleStyle
+import com.prism.music.ui.theme.LocalUi
+import com.prism.music.ui.theme.PrismIcons
+import com.prism.music.ui.theme.PrismTokens
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
+
+/**
+ * "Reset this page" (⋯ in the bar): [changes] is one line per row that would change, as the confirm lists them (build
+ * each with [resetLine]); [onReset] puts those rows back. With nothing changed the menu entry is there but can't be
+ * tapped.
+ */
+class PageReset(val changes: List<String>, val onReset: () -> Unit)
+
+/** One more entry under ⋯, after "Reset this page" (Looks' "Reset everything"). */
+class PageMenuItem(val label: String, val onClick: () -> Unit)
+
+/** A line for [PageReset.changes]: "Content country: Germany → Automatic". */
+fun resetLine(title: String, now: String, default: String): String = tr(R.string.settings_reset_line, title, now, default)
+
+/** What a settings page holds, top to bottom ([SettingsPageScaffold]'s `content`). */
+class SettingsPageScope internal constructor() {
+    internal class Entry(val key: String, val title: String?, val info: String?, val isGroup: Boolean, val content: @Composable () -> Unit)
+
+    internal val entries = ArrayList<Entry>()
+
+    /**
+     * A [SettingsGroup]: [title] above one card of rows ([content]). Titled groups get a jump chip when the page has
+     * four or more. [key] names the group for search and links ("find"); it must be unique on the page, and defaults
+     * to the title. Budget: at most 6 groups a page.
+     */
+    fun group(title: String?, key: String = title.orEmpty(), info: String? = null, content: @Composable () -> Unit) {
+        entries += Entry(key.ifBlank { "group-${entries.size}" }, title, info, true, content)
+    }
+
+    /** Something that isn't a group of rows (the account card, a state note), in its place among the groups. */
+    fun item(key: String, content: @Composable () -> Unit) {
+        entries += Entry(key, null, null, false, content)
+    }
+}
+
+/** The pinned preview's height once the page has scrolled. */
+val PreviewStripHeight = 72.dp
+
+/** The preview is never taller than this. */
+val PreviewMaxHeight = 200.dp
+
+private val BAR = 60.dp
+private const val TITLE_KEY = "settings:page:title"
+private const val PREVIEW_KEY = "settings:page:preview"
+private const val JUMP_KEY = "settings:page:jump"
+
+/**
+ * A settings page: a large [title] that scrolls away into the top bar (where it shows small), the bar's back, search
+ * and ⋯ buttons, an optional pinned preview, jump chips, then the groups.
+ *
+ * - [onSearch]: shows the search button (every page has one); the caller opens Settings search.
+ * - [reset] / [menu]: what ⋯ holds. "Reset this page" asks first, listing [PageReset.changes].
+ * - [preview]: a live example pinned at the top, [previewHeight] tall (at most 200 dp), that shrinks to a 72 dp strip
+ *   as the page scrolls and stays under the bar; a tap on the strip opens it again until the next scroll. It's told
+ *   when it is a strip, to draw itself smaller.
+ * - Pages with four or more titled groups get a row of jump chips under the title; a tap scrolls to that group.
+ * - [find]: a group's key or title to open the page at (a search result), ringed for a moment.
+ * - [showBack] false: no back button (the page beside the list on a wide window). [onBack] replaces the navigator's
+ *   back.
+ *
+ * Motion follows Reduce motion (jumps and the bar's title don't animate); nothing here blurs.
+ */
+@Composable
+fun SettingsPageScaffold(
+    title: String,
+    bottomPadding: Dp,
+    modifier: Modifier = Modifier,
+    showBack: Boolean = true,
+    onBack: (() -> Unit)? = null,
+    onSearch: (() -> Unit)? = null,
+    reset: PageReset? = null,
+    menu: List<PageMenuItem> = emptyList(),
+    find: String? = null,
+    preview: (@Composable (strip: Boolean) -> Unit)? = null,
+    previewHeight: Dp = PreviewMaxHeight,
+    listState: LazyListState = rememberLazyListState(),
+    content: SettingsPageScope.() -> Unit,
+) {
+    val entries = SettingsPageScope().apply(content).entries
+    val jump = entries.filter { it.isGroup && !it.title.isNullOrBlank() }
+    val showJump = jump.size >= 4
+    val hasPreview = preview != null
+    // The list: the title, (the preview's room), (the jump chips), then the entries.
+    val first = 1 + (if (hasPreview) 1 else 0) + (if (showJump) 1 else 0)
+    val ui = LocalUi.current
+    val scheme = MaterialTheme.colorScheme
+    val density = LocalDensity.current
+    val scope = rememberCoroutineScope()
+    val nav = if (showBack && onBack == null) LocalNavigator.current else null
+    val statusTop = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    val full = previewHeight.coerceIn(PreviewStripHeight, PreviewMaxHeight)
+    // A group jumped to lands under the bar, or under the preview's strip.
+    val landing = if (hasPreview) -with(density) { (PreviewStripHeight + 14.dp).roundToPx() } else 0
+    val goTo: (Int) -> Unit = { entry ->
+        scope.launch { if (ui.reduceMotion) listState.scrollToItem(first + entry, landing) else listState.animateScrollToItem(first + entry, landing) }
+    }
+    val found = find?.let { f -> entries.indexOfFirst { it.key == f || it.title == f } }?.takeIf { it >= 0 }
+    if (found != null) LaunchedEffect(find) { listState.scrollToItem(first + found, landing) }
+
+    val scrolled by remember(listState) { derivedStateOf { listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 60 } }
+    val bar by animateFloatAsState(if (scrolled) 1f else 0f, if (ui.reduceMotion) snap() else tween(220), label = "bar")
+    // The preview's room in the list: how far below the bar's foot it starts (below 0: passing under the bar); null
+    // until the list is laid out.
+    val previewOffset = remember(listState, hasPreview) {
+        derivedStateOf {
+            if (!hasPreview) null
+            else listState.layoutInfo.visibleItemsInfo.firstOrNull { it.key == PREVIEW_KEY }?.offset
+                ?: if (listState.firstVisibleItemIndex > 1) Int.MIN_VALUE / 2 else null
+        }
+    }
+    val pinned by remember(previewOffset) { derivedStateOf { (previewOffset.value ?: 0) < 0 } }
+    // The group at the top of the page now (its jump chip is the lit one). Only worked out while the chips are in view.
+    val current = remember(listState, first, landing) {
+        derivedStateOf {
+            val shown = listState.layoutInfo.visibleItemsInfo.filter { it.index >= first }
+            (shown.lastOrNull { it.offset <= -landing + 4 } ?: shown.firstOrNull())?.let { it.index - first } ?: 0
+        }
+    }
+    var menuOpen by remember { mutableStateOf(false) }
+    var asking by remember { mutableStateOf(false) }
+    val melts = LocalFrosted.current && LocalPageBackdrop.current != null
+
+    BoxWithConstraints(modifier.fillMaxSize()) {
+        // On a wide window the page keeps a readable width in the middle.
+        val side = 16.dp + ((maxWidth - SUBPAGE_MAX_WIDTH) / 2).coerceAtLeast(0.dp)
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.fillMaxSize().testTag(SettingsTags.PAGE_LIST),
+            contentPadding = PaddingValues(start = side, end = side, top = statusTop + BAR, bottom = bottomPadding + 28.dp),
+        ) {
+            item(key = TITLE_KEY) {
+                Text(
+                    title, Modifier.padding(start = 4.dp, end = 4.dp, bottom = 14.dp).testTag(SettingsTags.PAGE_TITLE).semantics { heading() },
+                    style = pageTitleStyle(),
+                )
+            }
+            if (hasPreview) item(key = PREVIEW_KEY) { Spacer(Modifier.height(full + 12.dp)) }
+            if (showJump) item(key = JUMP_KEY) {
+                Row(
+                    Modifier.padding(bottom = 14.dp).horizontalScroll(rememberScrollState()).testTag(SettingsTags.JUMP_CHIPS),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                ) {
+                    jump.forEach { e ->
+                        val at = entries.indexOf(e)
+                        PrismChip(current.value == at, { goTo(at) }, e.title.orEmpty())
+                    }
+                }
+            }
+            items(entries.size, key = { "entry:" + entries[it].key }) { i ->
+                val e = entries[i]
+                Box(Modifier.padding(bottom = 18.dp)) {
+                    if (e.isGroup) SettingsGroup(e.title, info = e.info, highlight = found == i, content = e.content) else e.content()
+                }
+            }
+        }
+        if (melts) TopScrollEdge({ bar }, BAR)
+        if (preview != null) PinnedPreview(previewOffset, listState, full, statusTop + BAR, side, pinned, preview)
+        // On the ambient frost the content melts away under the bar; on a plain page the bar turns solid once scrolled
+        // (fully, while the preview is pinned under it).
+        Box(
+            Modifier.fillMaxWidth()
+                .background(if (pinned) scheme.surface else if (melts) Color.Transparent else scheme.surface.copy(alpha = 0.92f * bar))
+                .statusBarsPadding().height(BAR),
+        ) {
+            if (showBack) RoundAction(PrismIcons.ArrowBack, tr(R.string.back), Modifier.align(Alignment.CenterStart).padding(start = 12.dp), glass = true) {
+                if (onBack != null) onBack() else nav?.back()
+            }
+            Text(
+                title, Modifier.align(Alignment.Center).padding(horizontal = 116.dp).graphicsLayer { alpha = bar },
+                style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
+            )
+            Row(Modifier.align(Alignment.CenterEnd).padding(end = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                if (onSearch != null) RoundAction(PrismIcons.Search, tr(R.string.search_settings), Modifier.testTag(SettingsTags.PAGE_SEARCH), glass = true, onClick = onSearch)
+                if (reset != null || menu.isNotEmpty()) Box {
+                    RoundAction(PrismIcons.More, tr(R.string.more), Modifier.testTag(SettingsTags.PAGE_MORE), glass = true) { menuOpen = true }
+                    DropdownMenu(menuOpen, { menuOpen = false }) {
+                        if (reset != null) DropdownMenuItem(
+                            text = { Text(tr(R.string.reset_this_page)) }, enabled = reset.changes.isNotEmpty(),
+                            onClick = { menuOpen = false; asking = true }, modifier = Modifier.testTag(SettingsTags.RESET_ITEM),
+                        )
+                        menu.forEach { m -> DropdownMenuItem(text = { Text(m.label) }, onClick = { menuOpen = false; m.onClick() }) }
+                    }
+                }
+            }
+        }
+    }
+    if (asking && reset != null) ResetPageDialog(title, reset) { asking = false }
+}
+
+/**
+ * The confirm behind "Reset this page": names the page, lists every row that changes ([PageReset.changes]), and only
+ * then resets. Cancel, back or a tap outside changes nothing.
+ */
+@Composable
+fun ResetPageDialog(pageTitle: String, reset: PageReset, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(tr(R.string.reset_2, pageTitle)) },
+        text = {
+            Column(Modifier.heightIn(max = 320.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text(tr(R.string.settings_reset_lists), style = MaterialTheme.typography.bodyMedium)
+                reset.changes.forEach { line ->
+                    Text(line, Modifier.testTag(SettingsTags.RESET_CHANGE), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
+                }
+            }
+        },
+        confirmButton = {
+            PrismTextButton(onClick = { onDismiss(); reset.onReset() }, Modifier.testTag(SettingsTags.RESET_CONFIRM)) { Text(tr(R.string.reset)) }
+        },
+        dismissButton = { PrismTextButton(onClick = onDismiss) { Text(tr(R.string.cancel)) } },
+    )
+}
+
+/**
+ * The preview over the list: it rides with its room in the list until that reaches the bar, then stays under the bar
+ * and gives up height as the page scrolls on, down to [PreviewStripHeight]. Heights and places are read while laying
+ * out, so scrolling doesn't recompose it.
+ */
+@Composable
+private fun PinnedPreview(
+    offset: State<Int?>,
+    listState: LazyListState,
+    full: Dp,
+    top: Dp,
+    side: Dp,
+    pinned: Boolean,
+    content: @Composable (strip: Boolean) -> Unit,
+) {
+    val ui = LocalUi.current
+    val density = LocalDensity.current
+    val fullPx = with(density) { full.roundToPx() }
+    val stripPx = with(density) { PreviewStripHeight.roundToPx() }
+    // Opened again by a tap on the strip, until the page is scrolled.
+    var expanded by remember { mutableStateOf(false) }
+    LaunchedEffect(listState) { snapshotFlow { listState.isScrollInProgress }.collect { if (it) expanded = false } }
+    val grow by animateFloatAsState(if (expanded) 1f else 0f, if (ui.reduceMotion) snap() else tween(PrismTokens.Motion.STANDARD), label = "preview")
+    val strip by remember(offset, fullPx, stripPx) { derivedStateOf { offset.value.let { it != null && -it >= (fullPx - stripPx) / 2 } } }
+    val laidOut by remember(offset) { derivedStateOf { offset.value != null } }
+    if (!laidOut) return
+    Box(
+        Modifier.fillMaxWidth().padding(top = top)
+            .offset { IntOffset(0, (offset.value ?: 0).coerceAtLeast(0)) }
+            // Pinned, it sits on the page's own color edge to edge, so rows passing under it don't show beside it.
+            .then(if (pinned) Modifier.background(MaterialTheme.colorScheme.surface) else Modifier)
+            // A drag that starts on the preview still scrolls the page.
+            .scrollable(listState, Orientation.Vertical, reverseDirection = true)
+            .padding(start = side, end = side, bottom = if (pinned) 6.dp else 0.dp),
+    ) {
+        Box(
+            Modifier.fillMaxWidth()
+                .layout { measurable, constraints ->
+                    val scrolledTo = fullPx - (-(offset.value ?: 0)).coerceIn(0, fullPx - stripPx)
+                    val h = (scrolledTo + (fullPx - scrolledTo) * grow).roundToInt()
+                    val p = measurable.measure(Constraints.fixed(constraints.maxWidth, h))
+                    layout(p.width, h) { p.place(0, 0) }
+                }
+                .settingsCard(ui.shape(22.dp), SettingsTags.PREVIEW)
+                .clickable(enabled = strip && !expanded, onClickLabel = tr(R.string.settings_show_preview)) { expanded = true },
+        ) { content(strip && !expanded) }
+    }
+}

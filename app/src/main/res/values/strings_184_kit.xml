@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.8.4 settings kit (helper "kit"): English only; the coordinator folds these into strings.xml and translates once. -->
+<resources>
+    <string name="settings_reset_lists">These go back to how Prism comes:</string>
+    <string name="settings_reset_line">%1$s: %2$s → %3$s</string>
+    <string name="settings_show_preview">Show the whole preview</string>
+    <string name="language_and_region">Language &amp; region</string>
+</resources>
