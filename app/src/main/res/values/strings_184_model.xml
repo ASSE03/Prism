@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.8.4, helper "model": English only; the coordinator folds these into strings.xml and translates them. -->
+<resources>
+    <!-- How the two new look settings read in the Looks undo bar and History (LookLabels). -->
+    <string name="look_lock_screen_like_player">Lock screen with the player\'s look</string>
+    <string name="look_album_picture">Album picture</string>
+    <!-- D55: the third choice of Full-width pictures (Off and Playlists use the existing words). -->
+    <string name="full_width_albums_and_playlists">Albums and playlists</string>
+    <!-- D57: the Shuffle button's two choices. -->
+    <string name="shuffle_button_both">Shuffle and Smart Shuffle</string>
+    <string name="shuffle_button_only">Shuffle only</string>
+    <!-- PR #400: long lyric lines in the car. -->
+    <string name="car_lines_one">One line</string>
+    <string name="car_lines_wrap_two">Wrap to two</string>
+</resources>

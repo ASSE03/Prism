@@ -173,6 +173,14 @@ class LyricsOverlayPlayer(player: Player) : ForwardingSimpleBasePlayer(player) {
 }
 
 /**
+ * Whether the playing line is put in the session's title and cover (#392, 1.8.4). Two switches, each on its own:
+ * "Lyrics in the car" ([inCar]) while a car is connected and the phone is really in one, and "Lyrics in the
+ * notification" ([onPhone]) always. Before 1.8.4 the phone's switch only worked with the car's on.
+ */
+internal fun carLyricsActive(inCar: Boolean, onPhone: Boolean, carConnected: Boolean, driving: Boolean): Boolean =
+    (inCar && carConnected && driving) || onPhone
+
+/**
  * Lyrics on Android Auto's player. The car only shows a title, an artist and a cover, so the line
  * being sung becomes the title and the cover becomes a lyric card — in karaoke style, each word
  * lights up as it's sung (word-timed lyrics are looked for first).
@@ -194,7 +202,7 @@ class CarLyrics(
      */
     private val car = CarState(context, scope) { refresh() }
 
-    val active: Boolean get() = c.settings.current.let { it.carLyrics && ((carConnected && car.driving) || it.carLyricsOnPhone) }
+    val active: Boolean get() = c.settings.current.let { carLyricsActive(it.carLyrics, it.carLyricsOnPhone, carConnected, car.driving) }
 
     fun start() = car.start()
     fun stop() = car.stop()

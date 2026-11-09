@@ -307,6 +307,8 @@ object LookLabels {
         // 1.8.1 requests (#310, #289, #283).
         "downloads_albums" to tr(R.string.album_names_in_downloads), "player_artist_links" to tr(R.string.each_artist_its_own_link),
         "backdrop_fade" to tr(R.string.now_playing_background_fades),
+        // 1.8.4 (D53, D55).
+        "lock_screen_player_look" to tr(R.string.look_lock_screen_like_player), "album_hero_cover" to tr(R.string.look_album_picture),
         "hide_status_bar" to tr(R.string.hide_the_status_bar),
         "hide_status_bar_player" to tr(R.string.hide_status_bar_on_the_player),
         "volume_matches_progress" to tr(R.string.volume_bar_like_the_progress_bar),
@@ -450,7 +452,7 @@ object LookLabels {
             "mini_player_style", "mini_skip_buttons", "mini_prev_button", "mini_play_button", "mini_progress", "mini_progress_color", "mini_fill_strength", "library_view", "library_views", "library_columns", "library_subtitles", "home_header", "home_header_height", "playlist_hero_cover", "replay_theme_colors", "replay_card",
             "replay_card_graph", "replay_story_font",
             "hide_status_bar", "hide_status_bar_player", "tab_names", "nav_bar_size", "nav_bar_fill", "mini_player_joined", "controls_classic",
-            "downloads_albums",
+            "downloads_albums", "album_hero_cover",
         ),
         "player" to setOf(
             "player_background", "player_backdrop_show", "player_art_corners", "transport_style", "cover_size", "scrubber_style", "art_shrink_on_pause",
@@ -461,6 +463,7 @@ object LookLabels {
             "panel_player", "queue_headings", "queue_dj_chip", "cast_mark", "immersive_video", "bleed_fit", "cover_flight", "video_controls_hide", "crossfade_mark", "blend_covers", "player_buttons_pill",
             "player_hidden_parts", "crossfade_shape", "player_artist_links", "player_gradient_depth",
             "cover_flight_back", "video_buttons_hide", "bleed_roomy", "queue_lengths", "queue_played_moves", "queue_tidy",
+            "lock_screen_player_look",
         ),
         "lyrics" to setOf(
             "lyrics_align", "lyrics_blur", "lyrics_progress_line", "lyrics_source_button", "lyrics_scale", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",

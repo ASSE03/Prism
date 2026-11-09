@@ -374,7 +374,48 @@ data class BehaviorPrefs(
     val localSkipFolders: Set<String> = emptySet(),
     /** #298 (1.8.2): playlists whose new songs download by themselves, by [com.prism.music.download.PlaylistDownloads.keepKey]. */
     val keptPlaylists: Set<String> = emptySet(),
-)
+    /** #406 (1.8.4): swiping a song row adds it to the queue (as before); off, a row is just a row. */
+    val rowSwipes: Boolean = true,
+    /**
+     * #404 (1.8.4): every song's lyrics this many ms earlier (positive) or later (negative), on top of each song's own
+     * nudge; within [LYRICS_OFFSET_MS].
+     */
+    val lyricsOffsetMs: Int = 0,
+    /** #416 (1.8.4): with the last queue shuffled, the next list a song is tapped in plays shuffled too. */
+    val keepShuffle: Boolean = false,
+    /** D57 (1.8.4): what the Shuffle button steps through. */
+    val shuffleButton: ShuffleButton = ShuffleButton.SHUFFLE_AND_SMART,
+    /** PR #400 (1.8.4): a lyric line too long for the car's title. */
+    val carLyricsLines: CarLyricsLines = CarLyricsLines.ONE_LINE,
+    /** D54 (1.8.4): a button above the mini player that scrolls a list to the playing song while it's off screen. */
+    val locatePlaying: Boolean = false,
+) {
+    companion object {
+        /** #404: how far [lyricsOffsetMs] goes either way. */
+        val LYRICS_OFFSET_MS = -500..500
+    }
+}
+
+/** D57 (1.8.4): the Shuffle button goes off → shuffle → Smart Shuffle → off (as before), or only on and off. */
+enum class ShuffleButton(val label: String) {
+    SHUFFLE_AND_SMART(tr(R.string.shuffle_button_both)), SHUFFLE_ONLY(tr(R.string.shuffle_button_only)),
+}
+
+/** PR #400 (1.8.4): a long lyric line on the car's player stays on one line (as before), or wraps onto a second. */
+enum class CarLyricsLines(val label: String) { ONE_LINE(tr(R.string.car_lines_one)), WRAP_TWO(tr(R.string.car_lines_wrap_two)) }
+
+/**
+ * D55 (1.8.4): which pages have their picture across the whole width. Kept as two switches ([AppSettings.playlistHeroCover],
+ * as always, and [ViewLook.albumHeroCover]), so what was stored before 1.8.4 reads as it did: on is [PLAYLISTS].
+ */
+enum class FullWidthPictures(val label: String) {
+    OFF(tr(R.string.off)), PLAYLISTS(tr(R.string.playlists)), ALBUMS_AND_PLAYLISTS(tr(R.string.full_width_albums_and_playlists));
+
+    companion object {
+        /** Albums only come with playlists: there's no "albums only". */
+        fun of(playlists: Boolean, albums: Boolean) = when { !playlists -> OFF; albums -> ALBUMS_AND_PLAYLISTS; else -> PLAYLISTS }
+    }
+}
 
 /** The lock screen's layouts (1.8.2). */
 enum class LockLayout(val label: String, val detail: String) {
@@ -513,6 +554,10 @@ data class ViewLook(
     val glass: GlassLook = GlassLook(),
     /** #338 (1.8.2): how dark [PlayerBackground.GRADIENT] gets toward the bottom (0 nearly the same color all the way, 1 black). */
     val gradientDepth: Float = 0.7f,
+    /** D53 (1.8.4): Prism's lock screen takes the player's background, progress bar and accent. */
+    val lockScreenPlayerLook: Boolean = false,
+    /** D55 (1.8.4): album pages have their picture across the whole width too ([AppSettings.fullWidthPictures]). */
+    val albumHeroCover: Boolean = false,
 )
 
 /**
@@ -1751,6 +1796,9 @@ data class AppSettings(
      */
     val glassEverywhere: Boolean get() = view.glass.more && !performanceMode
 
+    /** D55 (1.8.4): the pages with their picture across the whole width. */
+    val fullWidthPictures: FullWidthPictures get() = FullWidthPictures.of(playlistHeroCover, view.albumHeroCover)
+
     /** The lyric sources Prism asks, in the listener's order: the ones turned off are left out (#51). */
     val lyricsSources: List<LyricsSource> get() = lyricsOrder.filter(::lyricsSourceOn).ifEmpty { lyricsOrder.filter { it != LyricsSource.EMBEDDED } }
 
@@ -2150,6 +2198,15 @@ class SettingsRepository(
         val lockScreenUpNext = booleanPreferencesKey("lock_screen_up_next")
         val lockScreenPaused = stringPreferencesKey("lock_screen_paused")
         val lockScreenHideSong = booleanPreferencesKey("lock_screen_hide_song")
+        // 1.8.4 ([BehaviorPrefs.rowSwipes] and on; [ViewLook.lockScreenPlayerLook], [ViewLook.albumHeroCover]).
+        val rowSwipes = booleanPreferencesKey("row_swipes")
+        val lyricsOffsetMs = intPreferencesKey("lyrics_offset_ms")
+        val keepShuffle = booleanPreferencesKey("keep_shuffle")
+        val shuffleButton = stringPreferencesKey("shuffle_button")
+        val carLyricsLines = stringPreferencesKey("car_lyrics_lines")
+        val locatePlaying = booleanPreferencesKey("locate_playing")
+        val lockScreenPlayerLook = booleanPreferencesKey("lock_screen_player_look")
+        val albumHeroCover = booleanPreferencesKey("album_hero_cover")
         // 1.8.0 player editor ([PlayerParts]): the hidden parts are part of a Look, the menu's choices aren't.
         val playerHiddenParts = stringPreferencesKey("player_hidden_parts")
         val playerMenuHidden = stringPreferencesKey("player_menu_hidden")
@@ -2190,6 +2247,7 @@ class SettingsRepository(
                 downloadsAlbums, artistLinks, backdropFade,
                 crossfadeMark, blendCovers, buttonsPill, playerHiddenParts, crossfadeShape, replayGraph, replayStoryFont,
                 glassBlur, glassFrost, glassMore, gradientDepth,
+                lockScreenPlayerLook, albumHeroCover,
             ) + lyricsLook.map { it.first }
         }
 
@@ -2229,6 +2287,8 @@ class SettingsRepository(
                 downloadsAlbums to 'b', artistLinks to 'b', backdropFade to 'b',
                 crossfadeShape to 'b', replayGraph to 's', replayStoryFont to 'b',
                 glassBlur to 'f', glassFrost to 'f', glassMore to 'b', gradientDepth to 'f',
+                // 1.8.4 (D53, D55).
+                lockScreenPlayerLook to 'b', albumHeroCover to 'b',
             ) + lyricsLook
         }
 
@@ -2286,6 +2346,8 @@ class SettingsRepository(
                 "kept_playlists",
                 // 1.8.1 (#296, #263): what Prism keeps of your listening.
                 "history_paused_until", "play_count_seconds", "play_count_account",
+                // 1.8.4 (#406, #404, #416, D57, PR #400, D54): how Prism behaves, not how it looks.
+                "row_swipes", "lyrics_offset_ms", "keep_shuffle", "shuffle_button", "car_lyrics_lines", "locate_playing",
             )
         }
     }
@@ -2557,6 +2619,8 @@ class SettingsRepository(
                     more = p[K.glassMore] ?: d.view.glass.more,
                 ),
                 gradientDepth = (p[K.gradientDepth] ?: d.view.gradientDepth).coerceIn(0f, 1f),
+                lockScreenPlayerLook = p[K.lockScreenPlayerLook] ?: d.view.lockScreenPlayerLook,
+                albumHeroCover = p[K.albumHeroCover] ?: d.view.albumHeroCover,
             ),
             sound = SoundPrefs(
                 crossfadeCurve = p.enum(K.crossfadeCurve, d.sound.crossfadeCurve),
@@ -2614,6 +2678,13 @@ class SettingsRepository(
                 embeddedLyrics = p[K.embeddedLyrics] ?: d.behavior.embeddedLyrics,
                 localSkipFolders = p[K.localSkipFolders]?.split('\n')?.filter { it.isNotBlank() }?.toSet() ?: d.behavior.localSkipFolders,
                 keptPlaylists = p[K.keptPlaylists]?.split('\n')?.filter { it.isNotBlank() }?.toSet() ?: d.behavior.keptPlaylists,
+                rowSwipes = p[K.rowSwipes] ?: d.behavior.rowSwipes,
+                // A restored backup can hold any number.
+                lyricsOffsetMs = (p[K.lyricsOffsetMs] ?: d.behavior.lyricsOffsetMs).coerceIn(BehaviorPrefs.LYRICS_OFFSET_MS),
+                keepShuffle = p[K.keepShuffle] ?: d.behavior.keepShuffle,
+                shuffleButton = p.enum(K.shuffleButton, d.behavior.shuffleButton),
+                carLyricsLines = p.enum(K.carLyricsLines, d.behavior.carLyricsLines),
+                locatePlaying = p[K.locatePlaying] ?: d.behavior.locatePlaying,
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -2921,9 +2992,23 @@ class SettingsRepository(
         // The holiday mixes' section (1.8.0), after Quick picks: it only shows in November and December.
         once("home_holiday_1_8") { HomeSections.withNewSections(it, listOf(HomeSectionConfig(HomeSections.SEASONAL, "Holiday music"))) }
         keepSmartDownloads(p)
+        splitLyricsOnPhone(p)
     }
 
     companion object {
+        private val lyricsOnPhoneSplit = booleanPreferencesKey("car_lyrics_on_phone_split_184")
+
+        /**
+         * Once (#392, 1.8.4): lyrics in the notification no longer need "Lyrics in the car". Someone who had "On this
+         * phone too" on under a car switch that's off saw no lyrics: theirs is turned off, so nothing changes for them
+         * until they turn the new row on. With the car switch on (or never touched: it's on by default) it stays.
+         */
+        internal fun splitLyricsOnPhone(p: MutablePreferences) {
+            if (p[lyricsOnPhoneSplit] == true) return
+            if (p[K.carLyricsOnPhone] == true && p[K.carLyrics] == false) p[K.carLyricsOnPhone] = false
+            p[lyricsOnPhoneSplit] = true
+        }
+
         private val smartDownloadsKept = booleanPreferencesKey("smart_downloads_kept_1811")
 
         /**
@@ -3329,6 +3414,19 @@ class SettingsRepository(
     fun setLockScreenUpNext(v: Boolean) = edit { it[K.lockScreenUpNext] = v }
     fun setLockScreenPaused(v: LockPaused) = edit { it[K.lockScreenPaused] = v.name }
     fun setLockScreenHideSong(v: Boolean) = edit { it[K.lockScreenHideSong] = v }
+    // 1.8.4 (#406, #404, #416, D57, PR #400, D54, D53, D55).
+    fun setRowSwipes(v: Boolean) = edit { it[K.rowSwipes] = v }
+    fun setLyricsOffsetMs(v: Int) = edit { it[K.lyricsOffsetMs] = v.coerceIn(BehaviorPrefs.LYRICS_OFFSET_MS) }
+    fun setKeepShuffle(v: Boolean) = edit { it[K.keepShuffle] = v }
+    fun setShuffleButton(v: ShuffleButton) = edit { it[K.shuffleButton] = v.name }
+    fun setCarLyricsLines(v: CarLyricsLines) = edit { it[K.carLyricsLines] = v.name }
+    fun setLocatePlaying(v: Boolean) = edit { it[K.locatePlaying] = v }
+    fun setLockScreenPlayerLook(v: Boolean) = edit { it[K.lockScreenPlayerLook] = v }
+    /** D55: both switches in one edit ([FullWidthPictures]). */
+    fun setFullWidthPictures(v: FullWidthPictures) = edit {
+        it[K.playlistHeroCover] = v != FullWidthPictures.OFF
+        it[K.albumHeroCover] = v == FullWidthPictures.ALBUMS_AND_PLAYLISTS
+    }
 
     // 1.8.0 player editor
     /** A comma-separated set of names (unknown ones skipped): a Look or backup from a later Prism still opens. */
