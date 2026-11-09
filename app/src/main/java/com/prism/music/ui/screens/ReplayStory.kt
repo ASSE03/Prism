@@ -378,15 +378,27 @@ private class StoryAudio(context: Context, c: AppContainer) {
 
 @Composable
 internal fun ReplayStoryDialog(story: ReplayStory, onDismiss: () -> Unit) {
+    StoryDialog(onDismiss) {
+        // #287: in the app's font when "Stories in your font" is on.
+        val own = if (com.prism.music.ui.theme.LocalAppSettings.current.view.replayStoryFont) (androidx.compose.material3.MaterialTheme.typography.displayLarge.fontFamily ?: androidx.compose.ui.text.font.FontFamily.Default) else null
+        androidx.compose.runtime.CompositionLocalProvider(LocalStoryFont provides own) { StoryContent(story, onDismiss) }
+    }
+}
+
+/** The story's full-screen window. The screen stays on while it's open (#412): its slides run on a timer, untouched. */
+@Composable
+internal fun StoryDialog(onDismiss: () -> Unit, content: @Composable () -> Unit) {
     Dialog(onDismiss, DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
+        // The dialog's own view: its window is the one on top while the story plays.
+        val view = androidx.compose.ui.platform.LocalView.current
+        DisposableEffect(view) {
+            view.keepScreenOn = true
+            onDispose { view.keepScreenOn = false }
+        }
         // A story is a phone-shaped thing: on a wide window it stays 9:16 in the middle, on black.
         androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxSize().background(Color.Black), contentAlignment = Alignment.Center) {
             val width = minOf(maxWidth, maxHeight * 9f / 16f)
-            // #287: in the app's font when "Stories in your font" is on.
-            val own = if (com.prism.music.ui.theme.LocalAppSettings.current.view.replayStoryFont) (androidx.compose.material3.MaterialTheme.typography.displayLarge.fontFamily ?: androidx.compose.ui.text.font.FontFamily.Default) else null
-            Box(Modifier.width(width).fillMaxHeight()) {
-                androidx.compose.runtime.CompositionLocalProvider(LocalStoryFont provides own) { StoryContent(story, onDismiss) }
-            }
+            Box(Modifier.width(width).fillMaxHeight()) { content() }
         }
     }
 }
