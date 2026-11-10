@@ -460,7 +460,7 @@ private fun SectionChips(sections: List<LocalSection>, pager: androidx.compose.f
 
 /** Which sections Local files shows, and in what order (#29). At least one stays. */
 @Composable
-private fun SectionsEditor(sections: List<LocalSection>, onFolders: () -> Unit, onDismiss: () -> Unit) {
+internal fun SectionsEditor(sections: List<LocalSection>, onFolders: () -> Unit, onDismiss: () -> Unit) {
     val prefs = LocalContainer.current.settings
     com.prism.music.ui.components.PrismSheet(onDismiss = onDismiss) { close ->
         Text(tr(R.string.sections), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Medium, modifier = Modifier.padding(horizontal = 20.dp))

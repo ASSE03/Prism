@@ -117,6 +117,8 @@ class SettingsIndexTest {
         assertTrue("the old Looks page is rebuilt (LooksPage.kt): $read", "OldLooks.kt" !in read)
         assertTrue("the old Controls & gestures page is rebuilt (GesturesButtonsPage.kt): $read", "OldGestures.kt" !in read)
         assertTrue("the old Devices & connections page is rebuilt (CarPage.kt): $read", "OldCar.kt" !in read)
+        assertTrue("the old Downloads, storage & data page is rebuilt (DownloadsDataPage.kt): $read", "OldDownloads.kt" !in read)
+        assertTrue("the old Recommendations & Replay page is rebuilt (RecommendationsHistoryPage.kt): $read", "OldRecommendations.kt" !in read)
         assertTrue("the old Home & Library page is rebuilt (HomeLibraryPage.kt): $read", "OldHomeLibrary.kt" !in read)
         assertTrue("the old Backup & about page is rebuilt (BackupAboutPage.kt): $read", "OldBackupAbout.kt" !in read)
         // One per line, so pages rebuilt side by side each take their own line out.
@@ -138,6 +140,8 @@ class SettingsIndexTest {
             "TabsMiniPlayerPage.kt",
             "ThemeColorsPage.kt",
             "LooksPage.kt",
+            "DownloadsDataPage.kt",
+            "RecommendationsHistoryPage.kt",
             "HomeLibraryPage.kt",
         )
         for (name in stillRead) {
