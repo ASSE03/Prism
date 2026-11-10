@@ -276,6 +276,18 @@ class DownloadsDataPageTest : ListeningPageHarness(SettingsPageId.DOWNLOADS_DATA
 
     private fun downloadsLine(): String = com.prism.music.ui.screens.settings.downloadsDataValue(stored, dark = true)
 
+    /**
+     * A16, 1.8.4: a new install (Smart Downloads off, "Not now" on Home's offer) read "Smart Downloads 5 GB · Wi-Fi only"
+     * on the root, as if it were on. Off, the root doesn't name it; on, it says how much room it has.
+     */
+    @Test fun theRootNamesSmartDownloadsOnlyWhileItsOn() {
+        val off = com.prism.music.ui.screens.settings.downloadsDataValue(AppSettings(), dark = true)
+        assertTrue(off, t(R.string.smart_downloads) !in off && formatGb(5f) !in off)
+        assertTrue("the rest of the line stays: $off", t(R.string.wi_fi_only) in off)
+        val on = com.prism.music.ui.screens.settings.downloadsDataValue(AppSettings(smartDownloads = true), dark = true)
+        assertTrue(on, t(R.string.smart_downloads) in on && formatGb(5f) in on)
+    }
+
     /** §2.5: the eight "… on mobile data" switches as chips of one row; each chip writes its own stored switch and no other. */
     @Test fun useMobileDataForIsChipsOverTheEightSwitches() {
         // As Prism comes, the chips whose switch was hidden are hidden: Videos (Data saver) and Smart Downloads.

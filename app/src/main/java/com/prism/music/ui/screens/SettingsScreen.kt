@@ -132,7 +132,8 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
         LYRICS -> listOfNotNull(tr(R.string.first, s.lyricsSources.first().label), if (s.lyricsTranslate) tr(R.string.translated) else null, tr(R.string.sing)).joinToString(" · ")
         LYRICS_LOOK -> tr(R.string.style_2, s.lyricsStyle.label, s.lyricsPosition.label)
         CONTROLS -> tr(R.string.swipes_and_taps_on_the_player)
-        DOWNLOADS -> listOfNotNull(tr(R.string.smart_downloads_2, formatGb(s.offlineGb)), if (s.downloadWifiOnly) tr(R.string.wi_fi_only) else tr(R.string.any_network), if (s.dataSaver) tr(R.string.data_saver) else null).joinToString(" · ")
+        // Smart Downloads named only while it's on (a new install has it off: "5 GB" read as if it were on).
+        DOWNLOADS -> listOfNotNull(if (s.smartDownloads) tr(R.string.smart_downloads_2, formatGb(s.offlineGb)) else null, if (s.downloadWifiOnly) tr(R.string.wi_fi_only) else tr(R.string.any_network), if (s.dataSaver) tr(R.string.data_saver) else null).joinToString(" · ")
         DEVICES -> tr(R.string.android_auto_speakers_tvs_discord_last)
         // 1.8.4: the pages' own lines (short enough for one line on the root).
         CONNECT -> com.prism.music.ui.screens.settings.speakersTvsBrowserValue(s, dark)
