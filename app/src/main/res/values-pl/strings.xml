@@ -4979,7 +4979,7 @@
     <string name="cover_gradient_info">Gradient okładki to jej własne kolory jako pełny gradient, bez rozmycia, ciemniejący ku dołowi. Teksty i kolejka zostają na nim, trochę ciemniejsze.</string>
     <string name="gradient_depth">Ciemność na dole</string>
     <string name="gradient_depth_info">Jak ciemny robi się gradient ku dołowi. Niska wartość zachowuje prawie ten sam kolor aż do dołu, 100% kończy się czernią. Kolory pozostają dość ciemne dla białego tekstu przy każdym ustawieniu.</string>
-    <string name="glass_kinds_what_differs">Matowe szkło: miękkie rozmycie za paskami i przyciskami. Liquid Glass: uginają to, co za nimi, jak prawdziwe szkło. Zwykła rozlewa kolory zza siebie i przyciemnia je, a drobne rzeczy, jak tekst, zostają słabym, ostrym konturem. Przezroczysta zostawia kolory bez zmian i trochę zmiękcza drobne rzeczy. Szkło wymaga Androida 12; na starszych paski są pełne.</string>
+    <string name="glass_kinds_what_differs">Matowe szkło: miękkie rozmycie za paskami i przyciskami. Liquid Glass: uginają to, co za nimi, jak prawdziwe szkło. Zwykła rozlewa kolory zza siebie i przyciemnia je; Przezroczysta zostawia kolory bez zmian. Przy obu tekstu za paskiem nie da się odczytać. Szkło wymaga Androida 12; na starszych paski są pełne.</string>
     <string name="glass_blur">Rozmycie</string>
     <string name="glass_blur_info">Jak daleko rozlewają się kolory za szkłem. Drobne rzeczy, jak tekst, zachowują słaby kontur za Liquid Glass bez względu na wartość; Matowe szkło rozpuszcza i je. 100% to ustawienie Prism. Powyżej tego wolniejszy telefon ma więcej pracy.</string>
     <string name="glass_frost">Mat</string>

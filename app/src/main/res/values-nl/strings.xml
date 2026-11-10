@@ -4851,7 +4851,7 @@
     <string name="cover_gradient_info">Coververloop gebruikt de kleuren van de cover zelf als een vlakke kleurverloop, niets vervaagd, dat naar onderen donkerder wordt. De songtekst en de wachtrij blijven erop staan, iets donkerder.</string>
     <string name="gradient_depth">Donkerte onderaan</string>
     <string name="gradient_depth_info">Hoe donker het verloop naar onderen wordt. Laag houdt bijna dezelfde kleur tot onderaan, 100% eindigt in zwart. De kleuren blijven bij elke instelling donker genoeg voor de witte tekst.</string>
-    <string name="glass_kinds_what_differs">Matglas: een zachte vervaging achter de balken en bediening. Liquid Glass: ze buigen wat erachter zit als echt glas. Normaal spreidt de kleuren erachter uit en dempt ze, en kleine dingen zoals tekst blijven een vage scherpe omlijning. Helder laat de kleuren zoals ze zijn en maakt kleine dingen een beetje zachter. Glas heeft Android 12 nodig; daaronder zijn de balken ondoorzichtig.</string>
+    <string name="glass_kinds_what_differs">Matglas: een zachte vervaging achter de balken en bediening. Liquid Glass: ze buigen wat erachter zit als echt glas. Normaal spreidt de kleuren erachter uit en dempt ze; Helder laat de kleuren zoals ze zijn. Bij allebei is tekst achter een balk niet te lezen. Glas heeft Android 12 nodig; daaronder zijn de balken ondoorzichtig.</string>
     <string name="glass_blur">Vervaging</string>
     <string name="glass_blur_info">Hoe ver de kleuren achter het glas uitspreiden. Kleine dingen zoals tekst houden achter Liquid Glass een vage omlijning, hoe hoog je dit ook zet; Matglas laat ze ook smelten. 100% is de eigen waarde van Prism. Daarboven is het zwaarder voor een tragere telefoon.</string>
     <string name="glass_frost">Matheid</string>

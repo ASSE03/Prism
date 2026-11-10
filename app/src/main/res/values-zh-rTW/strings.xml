@@ -4787,7 +4787,7 @@
     <string name="cover_gradient_info">封面漸層由封面本身的顏色組成，是不帶模糊的純色漸層，越往下越深。歌詞和播放佇列會顯示在它上面，顏色稍暗一些。</string>
     <string name="gradient_depth">底部暗度</string>
     <string name="gradient_depth_info">漸層往底部變暗的程度。調低則一直到底部顏色幾乎不變，100% 則以黑色收尾。無論怎麼設定，顏色都會保持足夠深，讓白色文字清楚易讀。</string>
-    <string name="glass_kinds_what_differs">毛玻璃：在列和控制項後面做柔和的模糊。液態玻璃：像真正的玻璃一樣折射它們後面的內容。一般會把後面的顏色擴散開並調暗，文字等細小的內容只留下淡淡的清晰輪廓。透明保持顏色不變，只把細小的內容稍微柔化。玻璃效果需要 Android 12；低於此版本時，列為純色。</string>
+    <string name="glass_kinds_what_differs">毛玻璃：在列和控制項後面做柔和的模糊。液態玻璃：像真正的玻璃一樣折射它們後面的內容。一般會把後面的顏色擴散開並調暗；透明保持顏色不變。無論哪種，列後面的文字都無法看清。玻璃效果需要 Android 12；低於此版本時，列為純色。</string>
     <string name="glass_blur">模糊</string>
     <string name="glass_blur_info">玻璃後面的顏色擴散的範圍。無論調到多大，文字等細小的內容在液態玻璃後面仍會保留淡淡的輪廓；毛玻璃則會把它們也融掉。100% 為 Prism 預設值。超過此值，較慢的手機會更吃力。</string>
     <string name="glass_frost">霧面</string>

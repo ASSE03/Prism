@@ -4851,7 +4851,7 @@
     <string name="cover_gradient_info">Omslagsgradienten är omslagets egna färger som en heltäckande gradient, inget suddat, som blir mörkare mot botten. Låttexten och kön ligger kvar på den, lite mörkare.</string>
     <string name="gradient_depth">Mörker i botten</string>
     <string name="gradient_depth_info">Hur mörk gradienten blir mot botten. Lågt behåller nästan samma färg hela vägen ner, 100% ger helt svart. Färgerna är mörka nog för den vita texten oavsett inställning.</string>
-    <string name="glass_kinds_what_differs">Frostat glas: en mjuk oskärpa bakom fälten och reglagen. Flytande glas: de böjer det som finns bakom som riktigt glas. Normal sprider ut färgerna bakom och dämpar dem, och små saker som text blir en svag skarp kontur. Klar låter färgerna vara som de är och mjukar upp de små sakerna lite. Glas kräver Android 12; under det är fälten solida.</string>
+    <string name="glass_kinds_what_differs">Frostat glas: en mjuk oskärpa bakom fälten och reglagen. Flytande glas: de böjer det som finns bakom som riktigt glas. Normal sprider ut färgerna bakom och dämpar dem; Klar låter färgerna vara som de är. Med båda går text bakom ett fält inte att läsa. Glas kräver Android 12; under det är fälten solida.</string>
     <string name="glass_blur">Oskärpa</string>
     <string name="glass_blur_info">Hur långt färgerna bakom glaset sprids. Små saker som text behåller en svag kontur bakom Flytande glas hur högt du än sätter detta; Frostat glas smälter ihop dem också. 100% är Prisms eget värde. Över det blir det tyngre för en långsammare telefon.</string>
     <string name="glass_frost">Frost</string>

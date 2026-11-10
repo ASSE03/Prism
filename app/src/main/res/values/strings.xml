@@ -4892,7 +4892,7 @@
     <string name="cover_gradient_info">Cover gradient is the cover\'s own colors as a solid gradient, nothing blurred, deepening toward the bottom. The lyrics and the queue stay on it, a little darker.</string>
     <string name="gradient_depth">Darkness at the bottom</string>
     <string name="gradient_depth_info">How dark the gradient gets toward the bottom. Low keeps nearly the same color all the way down, 100% ends in black. Colors stay dark enough for the white text at any setting.</string>
-    <string name="glass_kinds_what_differs">Frosted Glass: a soft blur behind the bars and controls. Liquid Glass: they bend what\'s behind them like real glass. Regular spreads the colors behind it and dims them, and small things like text stay a faint sharp outline. Clear leaves the colors as they are and softens the small things a little. Glass needs Android 12; below it the bars are solid.</string>
+    <string name="glass_kinds_what_differs">Frosted Glass: a soft blur behind the bars and controls. Liquid Glass: they bend what\'s behind them like real glass. Regular spreads the colors behind it and dims them; Clear leaves the colors as they are. With either, text behind a bar can\'t be read. Glass needs Android 12; below it the bars are solid.</string>
     <string name="glass_blur">Blur</string>
     <string name="glass_blur_info">How far the colors behind the glass spread. Small things like text keep a faint outline behind Liquid Glass however far this goes; Frosted Glass melts them too. 100% is Prism\'s own. Above that it\'s harder work for a slower phone.</string>
     <string name="glass_frost">Frost</string>

@@ -4787,7 +4787,7 @@
     <string name="cover_gradient_info">Gradien sampul adalah warna sampul itu sendiri sebagai gradien solid, tanpa buram, makin gelap ke arah bawah. Lirik dan antrean tetap di atasnya, sedikit lebih gelap.</string>
     <string name="gradient_depth">Kegelapan di bagian bawah</string>
     <string name="gradient_depth_info">Seberapa gelap gradien ke arah bawah. Rendah menjaga warna hampir sama sampai ke bawah, 100% berakhir hitam. Warna tetap cukup gelap untuk teks putih di setiap pengaturan.</string>
-    <string name="glass_kinds_what_differs">Kaca Buram: buram lembut di belakang bilah dan kontrol. Kaca Cair: membelokkan apa yang ada di belakangnya seperti kaca sungguhan. Reguler menyebarkan warna di belakangnya dan meredupkannya, dan hal kecil seperti teks tetap berupa garis tepi tajam yang samar. Bening membiarkan warna apa adanya dan sedikit melembutkan hal-hal kecil. Kaca memerlukan Android 12; di bawahnya bilah berwarna solid.</string>
+    <string name="glass_kinds_what_differs">Kaca Buram: buram lembut di belakang bilah dan kontrol. Kaca Cair: membelokkan apa yang ada di belakangnya seperti kaca sungguhan. Reguler menyebarkan warna di belakangnya dan meredupkannya; Bening membiarkan warna apa adanya. Dengan keduanya, teks di belakang bilah tidak bisa dibaca. Kaca memerlukan Android 12; di bawahnya bilah berwarna solid.</string>
     <string name="glass_blur">Buram</string>
     <string name="glass_blur_info">Seberapa jauh warna di belakang kaca menyebar. Hal kecil seperti teks tetap punya garis tepi samar di belakang Kaca Cair seberapa pun nilainya; Kaca Buram melelehkannya juga. 100% adalah bawaan Prism. Di atas itu, kerjanya lebih berat untuk ponsel yang lebih lambat.</string>
     <string name="glass_frost">Embun</string>

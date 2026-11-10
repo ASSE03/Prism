@@ -4979,7 +4979,7 @@
     <string name="cover_gradient_info">Přechod z obalu jsou vlastní barvy obalu jako plný přechod, nic se nerozmazává, ke spodku tmavne. Text písní a fronta na něm zůstávají, o něco tmavší.</string>
     <string name="gradient_depth">Tma dole</string>
     <string name="gradient_depth_info">Jak moc přechod ke spodku ztmavne. Nízká hodnota nechává téměř stejnou barvu až dolů, 100% končí černou. Barvy zůstávají dost tmavé pro bílý text při jakémkoli nastavení.</string>
-    <string name="glass_kinds_what_differs">Matné sklo: jemné rozmazání za lištami a ovládacími prvky. Tekuté sklo: ohýbají to, co je za nimi, jako skutečné sklo. Normální rozlévá barvy za sebou a tlumí je, drobné věci jako text zůstávají slabým ostrým obrysem. Průhledné nechává barvy, jaké jsou, a drobné věci trochu změkčí. Sklo potřebuje Android 12; na starších jsou lišty plné.</string>
+    <string name="glass_kinds_what_differs">Matné sklo: jemné rozmazání za lištami a ovládacími prvky. Tekuté sklo: ohýbají to, co je za nimi, jako skutečné sklo. Normální rozlévá barvy za sebou a tlumí je; Průhledné nechává barvy, jaké jsou. U obou nejde text za lištou přečíst. Sklo potřebuje Android 12; na starších jsou lišty plné.</string>
     <string name="glass_blur">Rozmazání</string>
     <string name="glass_blur_info">Jak daleko se rozlévají barvy za sklem. Drobné věci jako text si za Tekutým sklem drží slabý obrys, ať je tahle hodnota jakákoli; Matné sklo rozpustí i ty. 100% je výchozí hodnota Prism. Nad ní má pomalejší telefon víc práce.</string>
     <string name="glass_frost">Matnost</string>

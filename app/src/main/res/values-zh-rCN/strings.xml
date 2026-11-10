@@ -4787,7 +4787,7 @@
     <string name="cover_gradient_info">封面渐变由封面自身的颜色组成，是不带模糊的纯色渐变，越往下越深。歌词和播放队列会显示在它上面，颜色稍暗一些。</string>
     <string name="gradient_depth">底部暗度</string>
     <string name="gradient_depth_info">渐变向底部变暗的程度。调低则一直到底部颜色几乎不变，100% 则以黑色收尾。无论怎么设置，颜色都会保持足够深，让白色文字清晰可读。</string>
-    <string name="glass_kinds_what_differs">磨砂玻璃：在栏和控件后面做柔和的模糊。液态玻璃：像真正的玻璃一样折射它们后面的内容。常规会把后面的颜色扩散开并调暗，文字等细小的内容只留下淡淡的清晰轮廓。透明保持颜色不变，只把细小的内容稍微柔化。玻璃效果需要 Android 12；低于此版本时，栏为纯色。</string>
+    <string name="glass_kinds_what_differs">磨砂玻璃：在栏和控件后面做柔和的模糊。液态玻璃：像真正的玻璃一样折射它们后面的内容。常规会把后面的颜色扩散开并调暗；透明保持颜色不变。无论哪种，栏后面的文字都无法看清。玻璃效果需要 Android 12；低于此版本时，栏为纯色。</string>
     <string name="glass_blur">模糊</string>
     <string name="glass_blur_info">玻璃后面的颜色扩散的范围。无论调到多大，文字等细小的内容在液态玻璃后面仍会保留淡淡的轮廓；磨砂玻璃则会把它们也融掉。100% 为 Prism 默认值。超过此值，较慢的手机会更吃力。</string>
     <string name="glass_frost">磨砂</string>

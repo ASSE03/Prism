@@ -4787,7 +4787,7 @@
     <string name="cover_gradient_info">Chuyển màu từ bìa là chính các màu của bìa dưới dạng dải chuyển màu liền mạch, không làm mờ, đậm dần về phía dưới. Lời bài hát và hàng đợi nằm trên nền này, tối hơn một chút.</string>
     <string name="gradient_depth">Độ tối ở phía dưới</string>
     <string name="gradient_depth_info">Dải chuyển màu tối đến mức nào ở phía dưới. Mức thấp giữ gần như cùng một màu xuống tận đáy, còn 100% kết thúc bằng màu đen. Ở mọi mức, màu vẫn đủ tối để chữ trắng dễ đọc.</string>
-    <string name="glass_kinds_what_differs">Kính mờ: làm mờ nhẹ phía sau các thanh và nút điều khiển. Kính lỏng: chúng bẻ cong những gì phía sau như kính thật. Thường trải màu phía sau và làm dịu đi, còn những thứ nhỏ như chữ vẫn giữ một đường viền sắc mờ nhạt. Trong giữ nguyên màu và làm mềm nhẹ những thứ nhỏ. Kính cần Android 12; thấp hơn thì các thanh là nền đặc.</string>
+    <string name="glass_kinds_what_differs">Kính mờ: làm mờ nhẹ phía sau các thanh và nút điều khiển. Kính lỏng: chúng bẻ cong những gì phía sau như kính thật. Thường trải màu phía sau và làm dịu đi; Trong giữ nguyên màu. Với cả hai, chữ nằm sau thanh đều không đọc được. Kính cần Android 12; thấp hơn thì các thanh là nền đặc.</string>
     <string name="glass_blur">Làm mờ</string>
     <string name="glass_blur_info">Màu phía sau kính lan ra xa đến đâu. Những thứ nhỏ như chữ vẫn giữ đường viền mờ nhạt sau Kính lỏng dù tăng bao nhiêu; Kính mờ thì làm tan cả chúng. 100% là mức của riêng Prism. Cao hơn thế, máy chậm sẽ phải làm việc vất vả hơn.</string>
     <string name="glass_frost">Sương mờ</string>

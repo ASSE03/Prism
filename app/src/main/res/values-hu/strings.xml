@@ -4851,7 +4851,7 @@
     <string name="cover_gradient_info">A borítóátmenet a borító saját színei egyszínű átmenetként, semmi sem elmosott, lefelé mélyül. A dalszöveg és a sor rajta marad, kicsit sötétebben.</string>
     <string name="gradient_depth">Sötétség alul</string>
     <string name="gradient_depth_info">Mennyire sötétedik az átmenet lefelé. Alacsony értéknél majdnem ugyanaz a szín marad egészen lent, 100%-nál feketében végződik. A színek bármilyen beállításnál elég sötétek maradnak a fehér szöveghez.</string>
-    <string name="glass_kinds_what_differs">Matt üveg: lágy elmosás a sávok és vezérlők mögött. Folyékony üveg: elhajlítják, ami mögöttük van, mint egy igazi üveg. A Normál szétkeni a mögötte lévő színeket és elsötétíti őket, az apró dolgok, például a szöveg halvány, éles körvonalként maradnak. Az Átlátszó érintetlenül hagyja a színeket, az apró dolgokat kicsit lágyítja. Az üveghez Android 12 kell; alatta a sávok tömörek.</string>
+    <string name="glass_kinds_what_differs">Matt üveg: lágy elmosás a sávok és vezérlők mögött. Folyékony üveg: elhajlítják, ami mögöttük van, mint egy igazi üveg. A Normál szétkeni a mögötte lévő színeket és elsötétíti őket; az Átlátszó érintetlenül hagyja a színeket. Mindkettőnél olvashatatlan a sáv mögötti szöveg. Az üveghez Android 12 kell; alatta a sávok tömörek.</string>
     <string name="glass_blur">Elmosás</string>
     <string name="glass_blur_info">Milyen messzire kenődnek szét az üveg mögötti színek. Az apró dolgok, például a szöveg, a Folyékony üveg mögött halvány körvonalat őriznek, akármekkora is ez; a Matt üveg ezeket is elolvasztja. A 100% a Prism saját értéke. Felette egy lassabb telefonnak nehezebb dolga van.</string>
     <string name="glass_frost">Mattság</string>

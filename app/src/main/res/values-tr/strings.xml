@@ -4851,7 +4851,7 @@
     <string name="cover_gradient_info">Kapak geçişi, kapağın kendi renklerinin düz bir geçiş olarak kullanılmasıdır; hiçbir şey bulanık değildir, alta doğru koyulaşır. Sözler ve sıra üzerinde kalır, biraz daha koyu.</string>
     <string name="gradient_depth">Alttaki koyuluk</string>
     <string name="gradient_depth_info">Geçişin alta doğru ne kadar koyulaşacağı. Düşük değer en alta kadar neredeyse aynı rengi korur, %100 siyahta biter. Renkler her ayarda beyaz metin için yeterince koyu kalır.</string>
-    <string name="glass_kinds_what_differs">Buzlu Cam: çubukların ve kontrollerin arkasında yumuşak bir bulanıklık. Sıvı Cam: arkalarındakini gerçek cam gibi bükerler. Normal, arkasındaki renkleri yayar ve karartır; metin gibi küçük şeyler soluk, net bir çerçeve olarak kalır. Şeffaf renkleri olduğu gibi bırakır ve küçük şeyleri biraz yumuşatır. Cam için Android 12 gerekir; daha eskisinde çubuklar düzdür.</string>
+    <string name="glass_kinds_what_differs">Buzlu Cam: çubukların ve kontrollerin arkasında yumuşak bir bulanıklık. Sıvı Cam: arkalarındakini gerçek cam gibi bükerler. Normal, arkasındaki renkleri yayar ve karartır; Şeffaf renkleri olduğu gibi bırakır. İkisinde de bir çubuğun arkasındaki metin okunamaz. Cam için Android 12 gerekir; daha eskisinde çubuklar düzdür.</string>
     <string name="glass_blur">Bulanıklık</string>
     <string name="glass_blur_info">Camın arkasındaki renklerin ne kadar yayılacağı. Metin gibi küçük şeyler, bu değer ne olursa olsun Sıvı Cam arkasında soluk bir çerçeve korur; Buzlu Cam onları da eritir. %100 Prism\'in kendi değeridir. Bunun üstünde yavaş bir telefon için iş daha zordur.</string>
     <string name="glass_frost">Buzlanma</string>
