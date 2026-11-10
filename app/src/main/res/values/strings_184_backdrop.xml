@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- 1.8.4 #413: a solid color as a screen's background (English only here; the coordinator folds in and translates). -->
-<resources>
-    <string name="solid_color">Solid color</string>
-</resources>

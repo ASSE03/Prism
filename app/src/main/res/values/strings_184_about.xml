@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- 1.8.4, helper "page-about" (Settings → Backup & about): English only; the coordinator folds these into strings.xml and translates them. -->
-<resources>
-    <!-- Backup & about: the group that holds "Check for updates" (and, under it, the update when there is one). -->
-    <string name="about_updates">Updates</string>
-    <!-- Backup & about → About: the group's ⓘ (the old "Your data stays here" row's words). -->
-    <string name="about_data_info">Your data stays here: Prism has no server. Your history, Replay and settings live only on this phone.</string>
-</resources>
