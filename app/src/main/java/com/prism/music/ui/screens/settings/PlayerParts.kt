@@ -36,8 +36,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.prism.music.R
@@ -73,8 +71,6 @@ import com.prism.music.data.prefs.shows
 import com.prism.music.tr
 import com.prism.music.ui.components.KeepUpwardScroll
 import com.prism.music.ui.components.PrismSheet
-import com.prism.music.ui.screens.InfoMark
-import com.prism.music.ui.screens.InfoText
 import com.prism.music.ui.screens.LookTheme
 import com.prism.music.ui.screens.MiniPlayerScreen
 import com.prism.music.ui.screens.PreviewPhone
@@ -436,41 +432,10 @@ internal fun resetPlayerPage(prefs: SettingsRepository, s: AppSettings) {
 
 // ---------------------------------------------------------------------------- Sheets
 
-/** Test tag of a sheet a Player row opens ([PlayerSheet]). */
-const val PLAYER_SHEET = "settings:player:sheet"
-
 /**
- * A sheet of rows that one row of the page opens (the lock screen's options, Immersive's, the editors of what's on the
- * player): the pick sheet's look (grab handle, [title] and ⓘ), with kit rows or an editor under it, at most 85% of the
- * screen tall. Kit gap: the kit has sheets for one choice ([PickSheet], [PickListSheet]) but none that holds rows.
+ * A Link row that opens a sheet of its own: the kit's [RowsSheet] titled [sheetTitle]. [sheetTitle] null: the content
+ * brings its own heading ([UntitledSheet]).
  */
-@Composable
-internal fun PlayerSheet(title: String?, info: String?, onDismiss: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
-    val scheme = MaterialTheme.colorScheme
-    PrismSheet(onDismiss, containerColor = scheme.surfaceContainerLow, contentColor = scheme.onSurface, dragHandle = null) { _ ->
-        Box(Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 12.dp), contentAlignment = Alignment.Center) {
-            Box(Modifier.size(40.dp, 4.dp).clip(CircleShape).background(scheme.onSurface.copy(alpha = 0.3f)))
-        }
-        Column(Modifier.fillMaxWidth().heightIn(max = LocalConfiguration.current.screenHeightDp.dp * 0.85f).testTag(PLAYER_SHEET)) {
-            if (title != null) {
-                var open by rememberSaveable(title, "player-sheet-info") { mutableStateOf(false) }
-                Column(Modifier.padding(start = 20.dp, end = 16.dp, bottom = 6.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(title, Modifier.weight(1f, fill = false).semantics { heading() }, style = MaterialTheme.typography.titleLarge)
-                        if (info != null) InfoMark(open, title) { open = !open }
-                    }
-                    InfoText(open && info != null, info, Modifier.padding(top = 4.dp))
-                }
-            }
-            Column(
-                Modifier.fillMaxWidth().weight(1f, fill = false).nestedScroll(KeepUpwardScroll).verticalScroll(rememberScrollState()).padding(bottom = 22.dp),
-                content = content,
-            )
-        }
-    }
-}
-
-/** A Link row that opens a [PlayerSheet] of its own ([sheetTitle] null: the content brings its own heading). */
 @Composable
 internal fun SheetRow(
     title: String,
@@ -483,7 +448,29 @@ internal fun SheetRow(
 ) {
     var open by rememberSaveable(title, "player-sheet") { mutableStateOf(false) }
     LinkRow(title, value = value, icon = icon, info = info, changed = changed) { open = true }
-    if (open) PlayerSheet(sheetTitle, info, { open = false }, content)
+    if (open) {
+        if (sheetTitle != null) RowsSheet(sheetTitle, { open = false }, info, content)
+        else UntitledSheet({ open = false }, content)
+    }
+}
+
+/**
+ * [RowsSheet] without its title, for an editor that heads itself (`RowButtons`: its "Buttons in the row" label carries
+ * its own ⓘ). Kit gap: [RowsSheet] always draws a title. The same grab handle, height, scrolling and tag as the kit's.
+ */
+@Composable
+private fun UntitledSheet(onDismiss: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
+    val scheme = MaterialTheme.colorScheme
+    PrismSheet(onDismiss, containerColor = scheme.surfaceContainerLow, contentColor = scheme.onSurface, dragHandle = null) { _ ->
+        Box(Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 12.dp), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(40.dp, 4.dp).clip(CircleShape).background(scheme.onSurface.copy(alpha = 0.3f)))
+        }
+        Column(
+            Modifier.fillMaxWidth().heightIn(max = LocalConfiguration.current.screenHeightDp.dp * 0.85f).testTag(SettingsTags.SHEET)
+                .nestedScroll(KeepUpwardScroll).verticalScroll(rememberScrollState()).padding(bottom = 22.dp),
+            content = content,
+        )
+    }
 }
 
 // ---------------------------------------------------------------------------- The pinned preview

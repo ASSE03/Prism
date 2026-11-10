@@ -218,7 +218,7 @@ private fun CataloguePage(bottomPadding: Dp, find: String?) {
                         prefs.setHomeShortcuts(if (on) settings.homeShortcuts - sc else settings.homeShortcuts + sc)
                     }
                 },
-                modifier = faint.then(noneValue(settings.homeShortcuts.isEmpty())), changed = shortcutsChanged,
+                modifier = faint, changed = shortcutsChanged,
             )
             LinkRow(
                 tr(R.string.pinned_playlists), faint, value = settings.homePlaylists.takeIf { it.isNotEmpty() }?.joinToString(", ") { it.title } ?: tr(R.string.none),
@@ -238,7 +238,7 @@ private fun CataloguePage(bottomPadding: Dp, find: String?) {
             ShowChipsRow(
                 tr(R.string.ch_hide_from_home),
                 HomeHiddenKind.entries.map { kind -> ShowOption(kind.label, kind in hidden) { prefs.setHomeHideKind(kind.key, it) } },
-                modifier = noneValue(hidden.isEmpty()), info = tr(R.string.ch_hide_from_home_info), changed = hiddenChanged,
+                info = tr(R.string.ch_hide_from_home_info), changed = hiddenChanged,
             )
             // #349: Prism's, made around your artists, or YouTube Music's own as they come.
             ChoiceRow(
@@ -270,9 +270,6 @@ private fun CataloguePage(bottomPadding: Dp, find: String?) {
     }
     if (pinning) PinPlaylistsSheet { pinning = false }
 }
-
-/** A row of show-chips with none ticked says "None" (the kit's row would say nothing). */
-private fun noneValue(empty: Boolean): Modifier = if (empty) Modifier.semantics { settingsRowValue = tr(R.string.none) } else Modifier
 
 // ---------------------------------------------------------------------------- One control instead of two (plan §2.11)
 
@@ -371,8 +368,8 @@ private fun HeadlineRow(changed: Boolean) {
 private fun headerPictureLabel(stored: String): String =
     com.prism.music.ui.theme.Backdrop.parse(stored).first.let { if (it == com.prism.music.ui.theme.Backdrop.PHOTO) tr(R.string.your_photo) else it.label }
 
-/** One line of the picture's list: a design, your photo ([design] null), or picking another photo while one is set. */
-private data class HeaderPicture(val design: com.prism.music.ui.theme.Backdrop?, val another: Boolean = false)
+/** One line of the picture's list: a design, or your photo ([design] null). */
+private data class HeaderPicture(val design: com.prism.music.ui.theme.Backdrop?)
 
 /** The picture behind the greeting: one of the background designs, or a photo of your own (the phone's picker). */
 @Composable
@@ -394,14 +391,17 @@ private fun HeaderPictureRow(changed: Boolean) {
         (it.group == com.prism.music.ui.theme.BackdropGroup.COLOR || it.group == com.prism.music.ui.theme.BackdropGroup.DESIGNS) &&
             (it.offeredOn(com.prism.music.data.looks.Seasons.today()) || it == current)
     }
-    // A pick of the current line does nothing (the kit's sheets), so with a photo set there is a line for another one.
-    val options = listOfNotNull(HeaderPicture(null), HeaderPicture(null, another = true).takeIf { photo }) + designs.map { HeaderPicture(it) }
+    val choosePhoto = { picker.launch(androidx.activity.result.PickVisualMediaRequest(androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly)) }
+    val options = listOf(HeaderPicture(null)) + designs.map { HeaderPicture(it) }
     PickListRow(
         tr(R.string.picture), options, if (photo) HeaderPicture(null) else HeaderPicture(current),
-        { o -> if (o.another) tr(R.string.ch_another_photo) else o.design?.label ?: tr(R.string.your_photo) },
+        { o -> o.design?.label ?: tr(R.string.your_photo) },
         changed = changed,
+        // With a photo set, its line says a tap chooses another, and a tap on it (the current pick) does.
+        detail = { o -> if (o.design == null && photo) tr(R.string.ch_another_photo) else null },
+        onRepick = { if (photo) choosePhoto() },
     ) { o ->
-        if (o.design == null) picker.launch(androidx.activity.result.PickVisualMediaRequest(androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly))
+        if (o.design == null) choosePhoto()
         else c.settings.setHomeHeaderPicture(o.design.name)
     }
 }

@@ -31,7 +31,6 @@ import com.prism.music.data.prefs.shows
 import com.prism.music.ui.LocalNavigator
 import com.prism.music.ui.Navigator
 import com.prism.music.ui.screens.StoredSettings
-import com.prism.music.ui.screens.settings.PLAYER_SHEET
 import com.prism.music.ui.screens.settings.PlayerSetting
 import com.prism.music.ui.screens.settings.SettingsPageContent
 import com.prism.music.ui.screens.settings.SettingsPageId
@@ -116,8 +115,8 @@ class PlayerPageTest {
     }
 
     private fun closeSheet() {
-        compose.onNodeWithTag(PLAYER_SHEET).performTouchInput { swipeDown() }
-        compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag(PLAYER_SHEET)).fetchSemanticsNodes().isEmpty() }
+        compose.onNodeWithTag(SettingsTags.SHEET).performTouchInput { swipeDown() }
+        compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag(SettingsTags.SHEET)).fetchSemanticsNodes().isEmpty() }
         compose.waitForIdle()
     }
 
@@ -254,8 +253,8 @@ class PlayerPageTest {
         val inSheet = HashMap<String, Set<String>>()
         for (sheet in playerSettings.mapNotNull { it.sheet }.distinct()) {
             tap(sheet)
-            compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag(PLAYER_SHEET)).fetchSemanticsNodes().isNotEmpty() }
-            inSheet[sheet] = rowsIn(compose.onNodeWithTag(PLAYER_SHEET, useUnmergedTree = true).fetchSemanticsNode()).mapNotNull { firstText(it) }.toSet()
+            compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag(SettingsTags.SHEET)).fetchSemanticsNodes().isNotEmpty() }
+            inSheet[sheet] = rowsIn(compose.onNodeWithTag(SettingsTags.SHEET, useUnmergedTree = true).fetchSemanticsNode()).mapNotNull { firstText(it) }.toSet()
             closeSheet()
         }
         assertEquals(setOf("Immersive options", "Lock screen options"), inSheet.keys)
@@ -354,7 +353,7 @@ class PlayerPageTest {
         until("lock screen on") { it.behavior.lockScreen }
         assertEquals("Modes stays within its budget", true, rowsIn(tagged(SettingsTags.GROUP).last()).size <= 7)
         tap("Lock screen options")
-        compose.waitUntil(10_000) { tagged(PLAYER_SHEET).isNotEmpty() }
+        compose.waitUntil(10_000) { tagged(SettingsTags.SHEET).isNotEmpty() }
         val same = rows().getValue("Same look as the player")
         assertEquals(SettingsTags.ROW_SWITCH, same.config[SemanticsProperties.TestTag])
         assertFalse("off by default", stored.view.lockScreenPlayerLook)

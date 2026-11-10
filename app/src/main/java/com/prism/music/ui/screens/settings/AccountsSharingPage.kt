@@ -48,7 +48,6 @@ import com.prism.music.ui.screens.PrismCheck
 import com.prism.music.ui.screens.SettingEntry
 import com.prism.music.ui.theme.LocalAppSettings
 import com.prism.music.ui.theme.LocalContainer
-import com.prism.music.ui.theme.PrismIcons
 import kotlinx.coroutines.launch
 
 private val page = SettingsPageId.ACCOUNTS_SHARING
@@ -193,7 +192,7 @@ fun AccountsSharingPage(bottomPadding: Dp, find: String? = null, showBack: Boole
                 // The first time, it signs in on Discord's own page; the switch is turned on from there.
                 if (on && !signedIn) nav.go(Routes.DISCORD_LOGIN) else c.settings.setDiscordPresence(on)
             }
-            if (signedIn) LinkRow(tr(R.string.sign_out_of_discord), info = tr(R.string.forgets_the_sign_in_on_this)) {
+            if (signedIn) LinkRow(tr(R.string.sign_out_of_discord), info = tr(R.string.forgets_the_sign_in_on_this), action = true) {
                 c.settings.setDiscordPresence(false)
                 c.discord.signOut()
             }
@@ -273,7 +272,7 @@ internal fun LastFmRows(
             SwitchRow(tr(R.string.love_when_i_like_a_song), options.loveOnLike, info = tr(R.string.liking_here_loves_it_on_last), changed = loveChanged) {
                 onOptions(options.copy(loveOnLike = it))
             }
-            LinkRow(tr(R.string.cn_disconnect_lastfm), info = tr(R.string.stops_scrobbling_and_forgets_the_connection), onClick = onDisconnect)
+            LinkRow(tr(R.string.cn_disconnect_lastfm), info = tr(R.string.stops_scrobbling_and_forgets_the_connection), action = true, onClick = onDisconnect)
         }
     }
 }
@@ -306,35 +305,30 @@ private fun SpotifyConnectSheet(reconnect: Boolean, onDismiss: () -> Unit) {
     val connection by spotify.connection.collectAsState()
     var clientId by rememberSaveable { mutableStateOf(spotify.store.clientId) }
     val valid = SpotifyOAuth.validClientId(clientId)
-    ConnectSheet(tr(R.string.cn_how_to_connect), onDismiss, info = tr(R.string.spot_set_up_info)) {
+    RowsSheet(tr(R.string.cn_how_to_connect), onDismiss, info = tr(R.string.spot_set_up_info)) {
         if (reconnect) ConnectSheetText(tr(R.string.spot_revoked)) else {
             ConnectSheetText(tr(R.string.spot_intro))
             ConnectSheetText(tr(R.string.spot_premium_note))
         }
         ConnectSheetText(tr(R.string.spot_step_1))
-        ConnectSheetLine(
-            tr(R.string.spot_open_dashboard), Spotify.DASHBOARD.removePrefix("https://"), onClick = { runCatching { uri.openUri(Spotify.DASHBOARD) } },
-            icon = PrismIcons.OpenInNew,
-        )
+        // The kit's rows: a link out of Prism, and an action (a tap copies the address).
+        LinkRow(tr(R.string.spot_open_dashboard), value = Spotify.DASHBOARD.removePrefix("https://"), external = true) { runCatching { uri.openUri(Spotify.DASHBOARD) } }
         ConnectSheetText(tr(R.string.spot_step_2))
         ConnectSheetText(tr(R.string.spot_step_3))
-        ConnectSheetLine(
-            tr(R.string.spot_redirect_uri), SpotifyOAuth.REDIRECT_TO_REGISTER, onClick = { copy(SpotifyOAuth.REDIRECT_TO_REGISTER) },
-            icon = PrismIcons.Copy, iconLabel = tr(R.string.copy),
-        )
+        LinkRow(tr(R.string.spot_redirect_uri), value = SpotifyOAuth.REDIRECT_TO_REGISTER, action = true) { copy(SpotifyOAuth.REDIRECT_TO_REGISTER) }
         ConnectSheetText(tr(R.string.spot_step_4))
         ConnectSheetText(tr(R.string.spot_step_5))
         ConnectSheetText(tr(R.string.spot_step_6))
         PrismTextField(
             clientId, { clientId = it.trim() },
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 6.dp).testTag(ConnectTags.SPOTIFY_CLIENT_ID),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp).testTag(ConnectTags.SPOTIFY_CLIENT_ID),
             label = { Text(tr(R.string.spot_client_id)) },
             singleLine = true,
             isError = clientId.isNotEmpty() && !valid,
             supportingText = if (clientId.isNotEmpty() && !valid) ({ Text(tr(R.string.spot_client_id_invalid)) }) else null,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         )
-        Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
             if (connection == Spotify.Connection.Waiting) {
                 Text(tr(R.string.spot_waiting), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
                 PrismOutlinedButton(onClick = { spotify.cancelConnect() }) { Text(tr(R.string.cancel)) }
@@ -417,7 +411,7 @@ private fun SpotifyDisconnectRow(name: String?) {
     var asking by remember { mutableStateOf(false) }
     var clientIdToo by remember { mutableStateOf(false) }
     var keepPlaylists by remember { mutableStateOf(false) }
-    LinkRow(tr(R.string.cn_disconnect_spotify), value = name?.let { tr(R.string.spot_connected_as, it) }, info = tr(R.string.spot_disconnect_sub)) { asking = true }
+    LinkRow(tr(R.string.cn_disconnect_spotify), value = name?.let { tr(R.string.spot_connected_as, it) }, info = tr(R.string.spot_disconnect_sub), action = true) { asking = true }
     if (asking) AlertDialog(
         onDismissRequest = { asking = false },
         title = { Text(tr(R.string.spot_disconnect_title)) },

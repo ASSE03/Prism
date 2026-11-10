@@ -20,6 +20,7 @@ import androidx.compose.ui.test.performTextInput
 import com.prism.music.data.prefs.AppSettings
 import com.prism.music.data.prefs.ThemeMode
 import com.prism.music.data.spotify.Spotify
+import com.prism.music.data.spotify.SpotifyOAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.prism.music.ui.screens.SettingsIndex
 import com.prism.music.ui.screens.settings.SettingsMap
@@ -235,12 +236,15 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         assertEquals("the steps, in order", steps, said.filter { it in steps })
         assertEquals(steps.indices.map { "${it + 1}." }, steps.map { it.take(2) })
         assertEquals(listOf(t(R.string.spot_intro), t(R.string.spot_premium_note)), said.take(2))
-        // The dashboard and the redirect address are lines to tap, between their steps.
-        assertEquals(2, compose.onAllNodes(hasTestTag(line)).fetchSemanticsNodes().size)
-        assertTrue(texts(line).toString(), texts(line).containsAll(listOf(t(R.string.spot_open_dashboard), t(R.string.spot_redirect_uri))))
+        // The dashboard (a link out of Prism) and the redirect address (a tap copies it) are the kit's rows, between
+        // their steps; nothing else in the sheet is a line of its own.
+        assertEquals(0, compose.onAllNodes(hasTestTag(line)).fetchSemanticsNodes().size)
+        val links = compose.onAllNodes(hasTestTag(SettingsTags.ROW_LINK) and hasAnyAncestor(hasTestTag(SettingsTags.SHEET))).fetchSemanticsNodes()
+            .flatMap { n -> n.config.getOrNull(SemanticsProperties.Text).orEmpty().map { it.text } }
+        assertTrue(links.toString(), links.containsAll(listOf(t(R.string.spot_open_dashboard), t(R.string.spot_redirect_uri), SpotifyOAuth.REDIRECT_TO_REGISTER)))
 
         // The wording rules, over everything Spotify says here and behind its ⓘs.
-        val words = (said + texts(line) + listOf(R.string.spot_about, R.string.spot_set_up_info, R.string.cn_how_to_connect, R.string.spot_client_id, R.string.spot_connect).map { t(it) })
+        val words = (said + links + listOf(R.string.spot_about, R.string.spot_set_up_info, R.string.cn_how_to_connect, R.string.spot_client_id, R.string.spot_connect).map { t(it) })
             .joinToString("\n").lowercase()
         assertFalse("never \"sign in with Spotify\"", "sign in with spotify" in words || "log in with spotify" in words || "login with spotify" in words)
         assertFalse("nothing about a web player", "web player" in words || "web-player" in words || "webplayer" in words || "open.spotify.com" in words)

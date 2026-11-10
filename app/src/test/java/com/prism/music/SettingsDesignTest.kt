@@ -38,7 +38,6 @@ import com.prism.music.ui.components.LocalFrosted
 import com.prism.music.ui.screens.CatalogueScreen
 import com.prism.music.ui.screens.SettingsIndex
 import com.prism.music.ui.screens.settings.ConnectTags
-import com.prism.music.ui.screens.settings.PLAYER_SHEET
 import com.prism.music.ui.screens.settings.SettingsMap
 import com.prism.music.ui.screens.settings.SettingsPageContent
 import com.prism.music.ui.screens.settings.SettingsPageId
@@ -149,13 +148,11 @@ class SettingsDesignTest {
                 "backupAbout:foot" to "the \"not affiliated\" line under the groups",
                 "backupAbout:update" to "the update card above the groups, when there is an update",
             ),
-            SettingsPageId.PLAYER.title to mapOf(PLAYER_SHEET to "a sheet of rows that a Player row opens (the lock screen's options, Immersive's, the editors)"),
             SettingsPageId.SPEAKERS_TVS_BROWSER.title to mapOf(
                 ConnectTags.LINE to "a line in one of the page's sheets (a paired browser or device, a code)",
                 ConnectTags.TEXT to "a paragraph in one of the page's sheets",
             ),
             SettingsPageId.ACCOUNTS_SHARING.title to mapOf(
-                ConnectTags.LINE to "a line in one of the page's sheets",
                 ConnectTags.TEXT to "a paragraph in one of the page's sheets (Spotify's \"How to connect\")",
                 ConnectTags.SPOTIFY_CLIENT_ID to "the Client ID field in Spotify's sheet",
                 ConnectTags.SPOTIFY_CONNECT to "Connect in Spotify's sheet",

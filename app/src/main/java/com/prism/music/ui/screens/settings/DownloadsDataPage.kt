@@ -307,7 +307,7 @@ fun DownloadsDataPage(bottomPadding: Dp, find: String? = null, showBack: Boolean
             ) { setSpace(size(it)) }
             LinkRow(
                 tr(R.string.clear_smart_downloads), value = tr(R.string.dd_space_used, usedText),
-                info = tr(R.string.removes_the_songs_it_downloaded_ahead) + "\n" + tr(R.string.your_own_downloads_stay),
+                info = tr(R.string.removes_the_songs_it_downloaded_ahead) + "\n" + tr(R.string.your_own_downloads_stay), action = true,
             ) {
                 c.downloads.clearSmartDownloads()
                 cacheBytes = c.songCacheBytes()
@@ -372,7 +372,7 @@ private fun DdOwnSongFiles(changed: Boolean) {
         else if (c.localLossless.hasPermission()) prefs.setOwnLossyFiles(true)
         else askFiles.launch(LocalLossless.permission)
     }
-    if (on) LinkRow(tr(R.string.scan_your_song_files_again), info = tr(R.string.also_checked_every_few_hours)) { scope.launch { c.losslessSync.sync() } }
+    if (on) LinkRow(tr(R.string.scan_your_song_files_again), info = tr(R.string.also_checked_every_few_hours), action = true) { scope.launch { c.losslessSync.sync() } }
 }
 
 /** Animated covers kept on the phone: the ones saved from the player, and the recently played ones. A tap empties one. */
@@ -389,14 +389,14 @@ private fun DdCanvasStorage() {
     LinkRow(
         tr(R.string.saved_animated_covers),
         value = if (saved.count == 0) tr(R.string.none_yet) else tr(R.string.tap_to_remove_all, saved.count, mb(sizes.first)),
-        info = tr(R.string.save_one_from_the_player_s),
+        info = tr(R.string.save_one_from_the_player_s), action = true,
     ) {
         if (saved.count > 0) scope.launch {
             withContext(Dispatchers.IO) { c.canvasStore.clearSaved() }
             version++
         }
     }
-    LinkRow(tr(R.string.recently_played_covers), value = tr(R.string.tap_to_clear, mb(sizes.second)), info = tr(R.string.kept_up_to_400_mb_so)) {
+    LinkRow(tr(R.string.recently_played_covers), value = tr(R.string.tap_to_clear, mb(sizes.second)), info = tr(R.string.kept_up_to_400_mb_so), action = true) {
         scope.launch {
             withContext(Dispatchers.IO) { c.canvasStore.clearRecent() }
             version++

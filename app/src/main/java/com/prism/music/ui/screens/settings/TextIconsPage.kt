@@ -192,7 +192,7 @@ fun TextIconsPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = t
                 changed = icons.appIcon != AppIcon.CLASSIC, columns = 3, thumbnail = { AppIconPicture(it, 30.dp) },
                 onPick = { icons.saveAppIcon(it) },
             ) { Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { AppIconPicture(it, 60.dp) } }
-            if (icons.restart) LinkRow(tr(R.string.restart_prism_to_see_them), value = tr(R.string.playback_stops_for_a_moment)) {
+            if (icons.restart) LinkRow(tr(R.string.restart_prism_to_see_them), value = tr(R.string.playback_stops_for_a_moment), action = true) {
                 val launch = context.packageManager.getLaunchIntentForPackage(context.packageName)
                 if (launch != null) {
                     context.startActivity(android.content.Intent.makeRestartActivityTask(launch.component).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))

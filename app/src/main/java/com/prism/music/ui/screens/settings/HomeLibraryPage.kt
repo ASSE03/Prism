@@ -1,17 +1,6 @@
 package com.prism.music.ui.screens.settings
 
 import android.net.Uri
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -19,14 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.prism.music.R
 import com.prism.music.data.prefs.AppSettings
 import com.prism.music.data.prefs.FullWidthPictures
@@ -40,7 +22,6 @@ import com.prism.music.data.prefs.SearchSection
 import com.prism.music.tr
 import com.prism.music.ui.LocalNavigator
 import com.prism.music.ui.Routes
-import com.prism.music.ui.components.PrismSheet
 import com.prism.music.ui.screens.ArrangeSearchSheet
 import com.prism.music.ui.screens.HomeChoices
 import com.prism.music.ui.screens.LibraryTilesSheet
@@ -199,7 +180,7 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
                     ShowOption(listsShowLabel(ListsShow.GENRES), ListsShow.GENRES in listsShow) { prefs.setPlaylistGenres(it) },
                     ShowOption(listsShowLabel(ListsShow.ALBUM_NAMES), ListsShow.ALBUM_NAMES in listsShow) { prefs.setDownloadsAlbums(it) },
                 ),
-                modifier = noneWhenEmpty(listsShow.isEmpty()), info = tr(R.string.hl_lists_show_info), changed = listsShowChanged,
+                info = tr(R.string.hl_lists_show_info), changed = listsShowChanged,
             )
             // D55 (1.8.4): albums can have it too; the old switch's "on" is Playlists.
             ChoiceRow(
@@ -218,7 +199,7 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
                     ShowOption(artistShowLabel(ArtistShow.ESSENTIALS), ArtistShow.ESSENTIALS in artistShow) { prefs.setArtistEssentials(it) },
                     ShowOption(artistShowLabel(ArtistShow.BIO), ArtistShow.BIO in artistShow) { prefs.setArtistBio(it) },
                 ),
-                modifier = noneWhenEmpty(artistShow.isEmpty()), info = tr(R.string.hl_artist_show_info), changed = artistShowChanged,
+                info = tr(R.string.hl_artist_show_info), changed = artistShowChanged,
             )
         }
     }
@@ -229,7 +210,7 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
 /**
  * The one row for the three Library tabs' "show as": it says them, and a tap opens a sheet with a Choice row for each.
  * A pick in the sheet is stored at once; the sheet stays for the other tabs and goes with a swipe down, Back or a tap
- * outside. (A sheet of rows, as Sound & quality's streaming quality: the kit's pick sheets hold one choice.)
+ * outside (the kit's [RowsSheet]).
  */
 @Composable
 private fun LibraryViewRow(views: LibraryViews, changed: Boolean) {
@@ -237,20 +218,10 @@ private fun LibraryViewRow(views: LibraryViews, changed: Boolean) {
     val title = tr(R.string.hl_view)
     var open by rememberSaveable(title, "library-view") { mutableStateOf(false) }
     PickRow(title, libraryViewsText(views), info = tr(R.string.hl_view_info), changed = changed) { open = true }
-    if (open) {
-        val scheme = MaterialTheme.colorScheme
-        PrismSheet({ open = false }, containerColor = scheme.surfaceContainerLow, contentColor = scheme.onSurface, dragHandle = null) {
-            Box(Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 12.dp), contentAlignment = Alignment.Center) {
-                Box(Modifier.size(40.dp, 4.dp).clip(CircleShape).background(scheme.onSurface.copy(alpha = 0.3f)))
-            }
-            Column(Modifier.fillMaxWidth().testTag(SettingsTags.SHEET)) {
-                Text(title, Modifier.padding(start = 20.dp, end = 16.dp, bottom = 6.dp).semantics { heading() }, style = MaterialTheme.typography.titleLarge)
-                // Each tab its own way (1.7.6); the names are the ones the three rows had.
-                libraryViewTabs.forEach { (tab, name, now) ->
-                    ChoiceRow(tr(name), LibraryView.entries, now(views), { it.label }) { prefs.setLibraryTabView(tab, it) }
-                }
-                Spacer(Modifier.height(16.dp))
-            }
+    if (open) RowsSheet(title, { open = false }) {
+        // Each tab its own way (1.7.6); the names are the ones the three rows had.
+        libraryViewTabs.forEach { (tab, name, now) ->
+            ChoiceRow(tr(name), LibraryView.entries, now(views), { it.label }) { prefs.setLibraryTabView(tab, it) }
         }
     }
 }
@@ -261,9 +232,6 @@ private val libraryViewTabs: List<Triple<String, Int, (LibraryViews) -> LibraryV
     Triple(LibraryViews.ALBUMS, R.string.albums_as) { it.albums },
     Triple(LibraryViews.ARTISTS, R.string.artists_as) { it.artists },
 )
-
-/** A row of show-chips with none ticked says "None" (the kit's row would say nothing). */
-private fun noneWhenEmpty(empty: Boolean): Modifier = if (empty) Modifier.semantics { settingsRowValue = tr(R.string.none) } else Modifier
 
 /** What is ticked, in words, for a reset line. */
 private fun shownWords(labels: List<String>): String = labels.joinToString(" · ").ifEmpty { tr(R.string.none) }

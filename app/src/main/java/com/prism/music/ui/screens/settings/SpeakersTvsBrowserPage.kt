@@ -1,10 +1,7 @@
 package com.prism.music.ui.screens.settings
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,9 +9,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,9 +26,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -53,11 +45,7 @@ import com.prism.music.connect.ShownCode
 import com.prism.music.connect.TvInstall
 import com.prism.music.data.prefs.AppSettings
 import com.prism.music.tr
-import com.prism.music.ui.components.KeepUpwardScroll
-import com.prism.music.ui.components.PrismSheet
 import com.prism.music.ui.components.tickWhileShown
-import com.prism.music.ui.screens.InfoMark
-import com.prism.music.ui.screens.InfoText
 import com.prism.music.ui.screens.SettingEntry
 import com.prism.music.ui.screens.SettingNeeds
 import com.prism.music.ui.screens.SettingsSection
@@ -76,10 +64,10 @@ private val page = SettingsPageId.SPEAKERS_TVS_BROWSER
  * budget.
  */
 internal object ConnectTags {
-    /** A line of content in a [ConnectSheet]. */
+    /** A line of content in a sheet ([ConnectSheetLine]). */
     const val LINE = "settings:connect:line"
 
-    /** A paragraph in a [ConnectSheet] (a step of "How to connect"). */
+    /** A paragraph in a sheet (a step of "How to connect"). */
     const val TEXT = "settings:connect:text"
     const val SPOTIFY_CLIENT_ID = "settings:connect:spotify-client-id"
     const val SPOTIFY_CONNECT = "settings:connect:spotify-connect"
@@ -205,11 +193,11 @@ private fun TvRows(tv: TvShare) {
         LaunchedEffect(lifecycle) { lifecycle.tickWhileShown(2_000) { tick++ } }
         val address = remember(tick) { tv.share.address }
         // A tap copies it.
-        LinkRow(tr(R.string.address), value = address ?: tr(R.string.connect_to_wi_fi_to_use)) { address?.let(copy) }
+        LinkRow(tr(R.string.address), value = address ?: tr(R.string.connect_to_wi_fi_to_use), action = true) { address?.let(copy) }
     }
     val code = TvInstall.DOWNLOADER_CODE
     if (code.isNotBlank()) LinkRow(
-        tr(R.string.downloader_code), value = tr(R.string.downloader_code_detail, code), info = tr(R.string.downloader_code_info),
+        tr(R.string.downloader_code), value = tr(R.string.downloader_code_detail, code), info = tr(R.string.downloader_code_info), action = true,
     ) { copy(code) }
 }
 
@@ -233,13 +221,12 @@ private fun BrowserRemoteRow() {
     var open by rememberSaveable(title, "browser-remote") { mutableStateOf(false) }
     val addressLine = address ?: if (running) tr(R.string.connect_to_wi_fi_to_use) else tr(R.string.couldn_t_start_try_switching_it)
     PickRow(title, addressLine) { open = true }
-    if (open) ConnectSheet(title, { open = false }) {
+    if (open) RowsSheet(title, { open = false }) {
         val code = remember(tick) { remote.auth.code }
         val browsers: List<PairedBrowser> = remember(tick) { remote.auth.browsers() }
-        ConnectSheetLine(
-            tr(R.string.address), addressLine, onClick = address?.let { { copy(it) } },
-            icon = if (address != null) PrismIcons.Copy else null, iconLabel = tr(R.string.copy),
-        )
+        // A tap copies it (as the page's own address row does).
+        LinkRow(tr(R.string.address), value = addressLine, action = true) { address?.let(copy) }
+        // Content with its own button: a tap on the code gives a new one (the ⟳ says so).
         ConnectSheetLine(
             tr(R.string.pairing_code), tr(R.string.one_browser_per_code, code.take(3), code.drop(3)),
             onClick = { remote.auth.newCode(); tick++ }, icon = PrismIcons.Refresh, iconLabel = tr(R.string.new_code),
@@ -252,9 +239,9 @@ private fun BrowserRemoteRow() {
                 icon = PrismIcons.Close, iconLabel = tr(R.string.unpair, b.name), onIcon = { remote.auth.forget(b.id); tick++ },
             )
         }
-        if (browsers.size > 1) ConnectSheetLine(
-            tr(R.string.unpair_all_browsers), tr(R.string.they_ll_need_a_new_code), onClick = { remote.auth.forgetAll(); tick++ },
-        )
+        if (browsers.size > 1) LinkRow(tr(R.string.unpair_all_browsers), value = tr(R.string.they_ll_need_a_new_code), action = true) {
+            remote.auth.forgetAll(); tick++
+        }
     }
 }
 
@@ -284,7 +271,7 @@ private fun PairedDevicesRow(shown: ShownCode?, paired: List<Pair<String, String
     val title = tr(R.string.cn_paired_devices)
     var open by rememberSaveable(title, "paired-devices") { mutableStateOf(false) }
     PickRow(title, pairedDevicesValue(shown, paired)) { open = true }
-    if (open) ConnectSheet(title, { open = false }) {
+    if (open) RowsSheet(title, { open = false }) {
         shown?.let { ConnectSheetLine(tr(R.string.pairing_code), tr(R.string.type_it_on, it.code.take(3), it.code.drop(3), it.from)) }
         paired.forEach { (id, name) ->
             ConnectSheetLine(name, tr(R.string.paired), icon = PrismIcons.Close, iconLabel = tr(R.string.forget, name), onIcon = { forget(id) })
@@ -292,42 +279,12 @@ private fun PairedDevicesRow(shown: ShownCode?, paired: List<Pair<String, String
     }
 }
 
-// ---------------------------------------------------------------------------- A sheet of content
+// ---------------------------------------------------------------------------- What the sheets hold besides rows
 
 /**
- * A sheet that holds content, not a choice (the kit's pick sheets hold one choice): the app's sheet with the kit's grab
- * handle, a [title] with its ⓘ ([info]), then [content], scrolling when it's taller than the sheet. Tagged
- * [SettingsTags.SHEET] like the kit's. Swiping it down, Back or a tap outside closes it.
- *
- * (Not in the kit. Speakers, TVs & browser and Accounts & sharing use it; Sound & quality has one of its own for the
- * two streaming qualities. If the kit gets a sheet of rows, these can move there.)
- */
-@Composable
-internal fun ConnectSheet(title: String, onDismiss: () -> Unit, info: String? = null, content: @Composable ColumnScope.() -> Unit) {
-    val scheme = MaterialTheme.colorScheme
-    PrismSheet(onDismiss, containerColor = scheme.surfaceContainerLow, contentColor = scheme.onSurface, dragHandle = null) { _ ->
-        Box(Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 12.dp), contentAlignment = Alignment.Center) {
-            Box(Modifier.size(40.dp, 4.dp).clip(CircleShape).background(scheme.onSurface.copy(alpha = 0.3f)))
-        }
-        var open by rememberSaveable(title, "connect-sheet-info") { mutableStateOf(false) }
-        Column(
-            Modifier.fillMaxWidth().testTag(SettingsTags.SHEET).nestedScroll(KeepUpwardScroll).verticalScroll(rememberScrollState()).padding(bottom = 22.dp),
-        ) {
-            Column(Modifier.padding(start = 20.dp, end = 16.dp, bottom = 6.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(title, Modifier.weight(1f, fill = false).semantics { heading() }, style = MaterialTheme.typography.titleLarge)
-                    if (info != null) InfoMark(open, title) { open = !open }
-                }
-                InfoText(open && info != null, info, Modifier.padding(top = 4.dp))
-            }
-            content()
-        }
-    }
-}
-
-/**
- * A line of a [ConnectSheet]: a [title] over its [value], and an [icon] at the end. [onClick]: what a tap on the line
- * does (copy it, a new code); with [onIcon] only the icon is tapped (unpair this one).
+ * A line of content in a [RowsSheet] (not a row): a [title] over its [value], and an [icon] at the end. [onClick]: what
+ * a tap on the line does (a new code: the icon says so); with [onIcon] only the icon is tapped (unpair this one).
+ * Actions with nothing to show but their name and line (copy the address, unpair all) are the kit's action rows.
  */
 @Composable
 internal fun ConnectSheetLine(
@@ -342,7 +299,7 @@ internal fun ConnectSheetLine(
     Row(
         Modifier.fillMaxWidth().testTag(ConnectTags.LINE)
             .then(if (onClick != null) Modifier.clickable(role = Role.Button, onClickLabel = iconLabel, onClick = onClick) else Modifier)
-            .heightIn(min = 56.dp).padding(start = 20.dp, end = if (onIcon != null) 8.dp else 20.dp, top = 6.dp, bottom = 6.dp),
+            .heightIn(min = 56.dp).padding(start = 16.dp, end = if (onIcon != null) 4.dp else 16.dp, top = 6.dp, bottom = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(Modifier.weight(1f)) {
@@ -358,20 +315,20 @@ internal fun ConnectSheetLine(
     }
 }
 
-/** A small heading inside a [ConnectSheet]. */
+/** A small heading inside a sheet of the Connections pages. */
 @Composable
 internal fun ConnectSheetHeader(text: String) {
     Text(
-        text, Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 2.dp).semantics { heading() },
+        text, Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 2.dp).semantics { heading() },
         style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
 }
 
-/** A paragraph inside a [ConnectSheet]. */
+/** A paragraph inside a sheet of the Connections pages. */
 @Composable
 internal fun ConnectSheetText(text: String) {
     Text(
-        text, Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 5.dp).testTag(ConnectTags.TEXT),
+        text, Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 5.dp).testTag(ConnectTags.TEXT),
         style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f),
     )
 }

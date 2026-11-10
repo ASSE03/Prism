@@ -334,7 +334,7 @@ internal fun FontSheet(
             if (android.os.Build.VERSION.SDK_INT >= 29) LinkRow(
                 tr(R.string.installed_fonts), value = tr(R.string.installed_fonts_detail), info = tr(R.string.installed_fonts_info),
             ) { close { onInstalled() } }
-            if (hasFile) LinkRow(tr(R.string.remove_your_font), value = tr(R.string.back_to_a_built_in_font)) { onRemove(); close {} }
+            if (hasFile) LinkRow(tr(R.string.remove_your_font), value = tr(R.string.back_to_a_built_in_font), action = true) { onRemove(); close {} }
         }
     }
 }

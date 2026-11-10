@@ -4,9 +4,12 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasAnyDescendant
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
@@ -161,8 +164,13 @@ class SpeakersTvsBrowserPageTest : ListeningPageHarness(SettingsPageId.SPEAKERS_
 
             tap(addressAndCode)
             assertEquals(1, sheets())
-            // Address, pairing code, three browsers, Unpair all browsers.
-            assertEquals(6, lines())
+            // The pairing code and three browsers are lines; the address (a tap copies it) and "Unpair all browsers"
+            // are the kit's action rows, in the sheet.
+            assertEquals(4, lines())
+            val inSheet = hasAnyAncestor(hasTestTag(SettingsTags.SHEET))
+            for (action in listOf(t(R.string.address), t(R.string.unpair_all_browsers))) {
+                assertEquals(action, SettingsTags.ROW_LINK, compose.onNode(rowIs(action) and inSheet).fetchSemanticsNode().config[SemanticsProperties.TestTag])
+            }
             val code = auth.code
             assertEquals(1, compose.onAllNodes(hasText(t(R.string.one_browser_per_code, code.take(3), code.drop(3)))).fetchSemanticsNodes().size)
             // What the sheet holds are lines, not rows: the page's rows are the same as before it opened.
@@ -175,12 +183,13 @@ class SpeakersTvsBrowserPageTest : ListeningPageHarness(SettingsPageId.SPEAKERS_
             compose.onNode(hasContentDescription(t(R.string.unpair, "Safari on the tablet"))).performClick()
             compose.waitForIdle()
             assertEquals(listOf("Chrome on the desk", "Firefox on the laptop"), auth.browsers().map { it.name }.sorted())
-            assertEquals(5, lines())
+            assertEquals(3, lines())
             // Unpair all.
-            lineWith(t(R.string.unpair_all_browsers)).performClick()
+            compose.onNode(rowIs(t(R.string.unpair_all_browsers)) and inSheet).performSemanticsAction(SemanticsActions.OnClick)
             compose.waitForIdle()
             assertEquals(0, auth.browsers().size)
-            assertEquals(2, lines())
+            assertEquals(1, lines())
+            assertFalse("it goes with the browsers", hasRow(t(R.string.unpair_all_browsers)))
             assertEquals(1, compose.onAllNodes(hasText(t(R.string.cn_no_browsers))).fetchSemanticsNodes().size)
             swipeSheetAway()
             assertTrue(stored.webRemote)

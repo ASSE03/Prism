@@ -528,7 +528,7 @@ private fun CustomizeSheetContent(target: com.prism.music.ui.components.Customiz
                         PickListRow(tr(R.string.style), com.prism.music.data.prefs.SectionStyle.entries, section.style, { it.label }, searchable = false) { st ->
                             c.settings.setHomeLayout(s.homeLayout.map { if (it.key == section.key) it.copy(style = st) else it })
                         }
-                        LinkRow(tr(R.string.hide_this_section), value = tr(R.string.bring_it_back_from_customize_home)) {
+                        LinkRow(tr(R.string.hide_this_section), value = tr(R.string.bring_it_back_from_customize_home), action = true) {
                             c.settings.setHomeLayout(s.homeLayout.map { if (it.key == section.key) it.copy(visible = false) else it })
                             close {}
                         }

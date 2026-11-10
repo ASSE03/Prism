@@ -159,13 +159,13 @@ internal fun BackupAboutContent(
 
     SettingsPageScaffold(page.title, bottomPadding, showBack = showBack, onSearch = onSearch, find = find, reset = reset.pageReset()) {
         group(tr(R.string.backup)) {
-            LinkRow(tr(R.string.back_up), info = tr(R.string.settings_library_replay_sign_in_you), onClick = backup)
-            LinkRow(tr(R.string.restore_from_a_backup), info = tr(R.string.replaces_what_the_backup_holds_then), onClick = restore)
+            LinkRow(tr(R.string.back_up), info = tr(R.string.settings_library_replay_sign_in_you), action = true, onClick = backup)
+            LinkRow(tr(R.string.restore_from_a_backup), info = tr(R.string.replaces_what_the_backup_holds_then), action = true, onClick = restore)
         }
         group(tr(R.string.about_updates)) {
             LinkRow(
                 tr(R.string.check_for_updates), value = updateCheckValue(check, offered?.version),
-                info = tr(R.string.prism_also_checks_on_its_own), enabled = check != UpdateCheck.Asking,
+                info = tr(R.string.prism_also_checks_on_its_own), enabled = check != UpdateCheck.Asking, action = true,
             ) {
                 scope.launch {
                     check = UpdateCheck.Asking
@@ -203,13 +203,13 @@ internal fun BackupAboutContent(
                 LinkRow(
                     tr(R.string.last_crash),
                     value = tr(R.string.tap_to_share_its_details, DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(at))),
-                    info = tr(R.string.prism_closed_unexpectedly_what_went_wrong), onClick = shareDiagnostics,
+                    info = tr(R.string.prism_closed_unexpectedly_what_went_wrong), action = true, onClick = shareDiagnostics,
                 )
-                LinkRow(tr(R.string.forget_crashes)) { CrashLog.clear(context); crashAt = null }
+                LinkRow(tr(R.string.forget_crashes), action = true) { CrashLog.clear(context); crashAt = null }
             }
             if (s.audioDiagnostics) {
-                LinkRow(tr(R.string.share_diagnostics), info = tr(R.string.the_log_and_audio_settings_as), onClick = shareDiagnostics)
-                LinkRow(tr(R.string.clear_diagnostics), info = tr(R.string.starts_the_log_again)) {
+                LinkRow(tr(R.string.share_diagnostics), info = tr(R.string.the_log_and_audio_settings_as), action = true, onClick = shareDiagnostics)
+                LinkRow(tr(R.string.clear_diagnostics), info = tr(R.string.starts_the_log_again), action = true) {
                     scope.launch(Dispatchers.IO) { AudioDiagnostics.clear { AudioDiagnostics.about(c) } }
                     Toast.makeText(context, tr(R.string.diagnostics_cleared), Toast.LENGTH_SHORT).show()
                 }

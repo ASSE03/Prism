@@ -2,17 +2,6 @@ package com.prism.music.ui.screens.settings
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,15 +9,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.prism.music.R
 import com.prism.music.data.HistoryPause
 import com.prism.music.data.PlayCount
@@ -39,7 +21,6 @@ import com.prism.music.data.spotify.SpotifyStore
 import com.prism.music.tr
 import com.prism.music.ui.LocalNavigator
 import com.prism.music.ui.Routes
-import com.prism.music.ui.components.PrismSheet
 import com.prism.music.ui.screens.Needs
 import com.prism.music.ui.screens.SettingEntry
 import com.prism.music.ui.screens.SettingsSection
@@ -139,13 +120,13 @@ fun RecommendationsHistoryPage(bottomPadding: Dp, find: String? = null, showBack
                 tr(R.string.new_release_notifications), s.releaseNotifications,
                 info = tr(R.string.when_a_starred_artist_puts_out), changed = releasesChanged,
             ) { prefs.setReleaseNotifications(it) }
-            LinkRow(tr(R.string.make_my_mixes_again), info = tr(R.string.fresh_daily_mixes_now)) {
+            LinkRow(tr(R.string.make_my_mixes_again), info = tr(R.string.fresh_daily_mixes_now), action = true) {
                 c.scope.launch { c.forYou.refresh(force = true) }
                 Toast.makeText(context, tr(R.string.making_your_mixes), Toast.LENGTH_SHORT).show()
             }
             LinkRow(tr(R.string.exclusions), info = tr(R.string.artists_not_to_play_and_playlists)) { nav.go(Routes.EXCLUSIONS) }
             // Suggestions skipped at once stay out of mixes and radio for a while (1.7.9): this lets them all back.
-            LinkRow(tr(R.string.forget_skipped_suggestions), info = tr(R.string.forget_skipped_suggestions_info)) {
+            LinkRow(tr(R.string.forget_skipped_suggestions), info = tr(R.string.forget_skipped_suggestions_info), action = true) {
                 c.recFeedback.clear()
                 Toast.makeText(context, tr(R.string.suggestions_start_fresh), Toast.LENGTH_SHORT).show()
             }
@@ -172,9 +153,12 @@ fun RecommendationsHistoryPage(bottomPadding: Dp, find: String? = null, showBack
         // 1.8.1: pause history (#296), when a song counts as played (#263), and histories from elsewhere.
         group(tr(R.string.hist_title), info = tr(R.string.hist_info)) {
             // A list in a sheet: "Until I turn it back on" doesn't fit a chip beside three more, and the row says until when.
+            // A timed pause picked again starts again from now (with 20 minutes left, "1 hour" is the current pick).
+            val pauseChoice = HistoryPause.choiceOf(b.historyPausedUntil)
             PickListRow(
-                tr(R.string.hist_pause), HistoryPause.Choice.entries, HistoryPause.choiceOf(b.historyPausedUntil), { it.label },
+                tr(R.string.hist_pause), HistoryPause.Choice.entries, pauseChoice, { it.label },
                 value = pauseText(b.historyPausedUntil), info = tr(R.string.hist_pause_info), changed = pauseChanged,
+                onRepick = { prefs.setHistoryPausedUntil(HistoryPause.until(pauseChoice, System.currentTimeMillis())) },
             ) { prefs.setHistoryPausedUntil(HistoryPause.until(it, System.currentTimeMillis())) }
             ChoiceRow(
                 tr(R.string.hist_count_after), PlayCount.CHOICES, countAfter, PlayCount::label,
@@ -209,8 +193,7 @@ fun RecommendationsHistoryPage(bottomPadding: Dp, find: String? = null, showBack
  * "Count history from" (1.8.1) as one row: it says what Replay counts (Prism's plays always, then each history that is
  * switched on), and a tap opens every source in a sheet. One with plays here (or a live one that's on) has its switch;
  * the others lead to where they are brought in (Bring your history) or turned on (Spotify's page), and never count.
- *
- * (Not in the kit: its pick sheets hold one choice. Sound & quality's streaming quality row is the same shape.)
+ * The sheet is the kit's [RowsSheet].
  */
 @Composable
 private fun RhCountHistoryFrom(sources: List<CountSources.Row>, value: String, changed: Boolean) {
@@ -220,27 +203,17 @@ private fun RhCountHistoryFrom(sources: List<CountSources.Row>, value: String, c
     val count = remember { java.text.NumberFormat.getIntegerInstance() }
     var open by rememberSaveable(title, "count-history") { mutableStateOf(false) }
     PickRow(title, value, info = tr(R.string.imp_count_history_info), changed = changed) { open = true }
-    if (open) {
-        val scheme = MaterialTheme.colorScheme
-        PrismSheet({ open = false }, containerColor = scheme.surfaceContainerLow, contentColor = scheme.onSurface, dragHandle = null) { close ->
-            Box(Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 12.dp), contentAlignment = Alignment.Center) {
-                Box(Modifier.size(40.dp, 4.dp).clip(CircleShape).background(scheme.onSurface.copy(alpha = 0.3f)))
-            }
-            Column(Modifier.fillMaxWidth().testTag(SettingsTags.SHEET)) {
-                Text(title, Modifier.padding(start = 20.dp, end = 16.dp, bottom = 6.dp).semantics { heading() }, style = MaterialTheme.typography.titleLarge)
-                sources.forEach { row ->
-                    val source = row.source
-                    if (row.state == CountSources.State.COUNTABLE) SwitchRow(
-                        source.label, row.counted,
-                        value = if (row.plays > 0) tr(R.string.imp_n_plays, count.format(row.plays)) else tr(R.string.imp_live_no_plays),
-                    ) { c.imports.setCounted(source, it) }
-                    else LinkRow(source.label, value = if (source.isLive) tr(R.string.off) else tr(R.string.imp_not_brought_in)) {
-                        close {
-                            if (source == ImportSource.SPOTIFY_LIVE) nav.go(Routes.settings(SettingsSection.SPOTIFY.key)) else nav.go(Routes.BRING_HISTORY)
-                        }
-                    }
-                }
-                Spacer(Modifier.height(16.dp))
+    if (open) RowsSheet(title, { open = false }) {
+        sources.forEach { row ->
+            val source = row.source
+            if (row.state == CountSources.State.COUNTABLE) SwitchRow(
+                source.label, row.counted,
+                value = if (row.plays > 0) tr(R.string.imp_n_plays, count.format(row.plays)) else tr(R.string.imp_live_no_plays),
+            ) { c.imports.setCounted(source, it) }
+            // Leaves for another screen: the sheet goes with it.
+            else LinkRow(source.label, value = if (source.isLive) tr(R.string.off) else tr(R.string.imp_not_brought_in)) {
+                open = false
+                if (source == ImportSource.SPOTIFY_LIVE) nav.go(Routes.settings(SettingsSection.SPOTIFY.key)) else nav.go(Routes.BRING_HISTORY)
             }
         }
     }

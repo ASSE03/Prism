@@ -3,15 +3,10 @@ package com.prism.music.ui.screens.settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,13 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.prism.music.R
@@ -42,7 +32,6 @@ import com.prism.music.playback.EqPresets
 import com.prism.music.tr
 import com.prism.music.ui.LocalNavigator
 import com.prism.music.ui.Routes
-import com.prism.music.ui.components.PrismSheet
 import com.prism.music.ui.screens.Needs
 import com.prism.music.ui.screens.SettingEntry
 import com.prism.music.ui.screens.SettingNeeds
@@ -133,8 +122,8 @@ fun SoundQualityPage(bottomPadding: Dp, find: String? = null, showBack: Boolean 
                 else askFiles.launch(LocalLossless.permission)
             }
             if (s.lossless) {
-                if (s.losslessLocal) LinkRow(tr(R.string.scan_for_lossless_files_again), value = tr(R.string.also_checked_every_few_hours)) { scope.launch { c.losslessSync.sync() } }
-                else LinkRow(tr(R.string.allow_access_to_lossless_files)) { askFiles.launch(LocalLossless.permission) }
+                if (s.losslessLocal) LinkRow(tr(R.string.scan_for_lossless_files_again), value = tr(R.string.also_checked_every_few_hours), action = true) { scope.launch { c.losslessSync.sync() } }
+                else LinkRow(tr(R.string.allow_access_to_lossless_files), action = true) { askFiles.launch(LocalLossless.permission) }
                 // Data saver plays songs at this quality on mobile data, lossless or not (#40).
                 if (s.dataSaver) ChoiceRow(
                     tr(R.string.streaming_quality_on_mobile_data), AudioQuality.entries.filter { it != AudioQuality.HIGH }, saverQuality, { it.label },
@@ -262,28 +251,17 @@ private fun LoudnessSample(level: Int) {
 
 /**
  * The one row for the two streaming qualities: it says both, and a tap opens a sheet with a Choice row for each. A pick
- * in the sheet is stored at once; the sheet stays for the other one and goes with a swipe down, Back or a tap outside.
- *
- * (Not in the kit: its pick sheets hold one choice. If another page needs a sheet of rows, this can move there.)
+ * in the sheet is stored at once; the sheet stays for the other one and goes with a swipe down, Back or a tap outside
+ * (the kit's [RowsSheet]).
  */
 @Composable
 private fun StreamingQualityRow(quality: StreamingQuality, changed: Boolean, onWifi: (AudioQuality) -> Unit, onMobile: (AudioQuality) -> Unit) {
     val title = tr(R.string.sound_streaming_quality)
     var open by rememberSaveable(title, "streaming-quality") { mutableStateOf(false) }
     PickRow(title, quality.text, changed = changed) { open = true }
-    if (open) {
-        val scheme = MaterialTheme.colorScheme
-        PrismSheet({ open = false }, containerColor = scheme.surfaceContainerLow, contentColor = scheme.onSurface, dragHandle = null) {
-            Box(Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 12.dp), contentAlignment = Alignment.Center) {
-                Box(Modifier.size(40.dp, 4.dp).clip(CircleShape).background(scheme.onSurface.copy(alpha = 0.3f)))
-            }
-            Column(Modifier.fillMaxWidth().testTag(SettingsTags.SHEET)) {
-                Text(title, Modifier.padding(start = 20.dp, end = 16.dp, bottom = 6.dp).semantics { heading() }, style = MaterialTheme.typography.titleLarge)
-                ChoiceRow(tr(R.string.sound_wifi), AudioQuality.entries, quality.wifi, { it.label }, onSelect = onWifi)
-                ChoiceRow(tr(R.string.mobile_data), AudioQuality.entries, quality.mobile, { it.label }, onSelect = onMobile)
-                Spacer(Modifier.height(16.dp))
-            }
-        }
+    if (open) RowsSheet(title, { open = false }) {
+        ChoiceRow(tr(R.string.sound_wifi), AudioQuality.entries, quality.wifi, { it.label }, onSelect = onWifi)
+        ChoiceRow(tr(R.string.mobile_data), AudioQuality.entries, quality.mobile, { it.label }, onSelect = onMobile)
     }
 }
 

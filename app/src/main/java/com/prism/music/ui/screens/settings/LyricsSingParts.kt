@@ -418,7 +418,7 @@ private fun LsKanjiRow() {
         is ModelStore.State.Failed -> tr(R.string.couldn_t_download_it_tap_to)
         else -> tr(R.string.only_for_japanese_songs, ModelStore.Model.sizeText(m))
     }
-    LinkRow(tr(R.string.japanese_kanji_readings), value = value, info = tr(R.string.only_japanese_needs_this_its_kanji)) {
+    LinkRow(tr(R.string.japanese_kanji_readings), value = value, info = tr(R.string.only_japanese_needs_this_its_kanji), action = true) {
         when (state) {
             ModelStore.State.Ready -> c.models.delete(m)
             is ModelStore.State.Downloading -> {}
@@ -525,7 +525,7 @@ internal fun LsSingRows(d: AppSettings) {
                 downloading != null -> tr(R.string.downloading_5, (downloading.fraction * 100).toInt())
                 else -> tr(R.string.needed_for_sing, ModelStore.Model.sizeText(runtime, model))
             },
-            info = tr(R.string.takes_the_singer_s_voice_out),
+            info = tr(R.string.takes_the_singer_s_voice_out), action = true,
         ) {
             if (ready) { c.sing.setOn(false); c.models.delete(runtime); c.models.delete(model) }
             else if (downloading == null) scope.launch { c.sing.downloadEngine() }
@@ -538,10 +538,10 @@ internal fun LsSingRows(d: AppSettings) {
             tr(R.string.room_for_sung_songs), s.singCacheMb.toFloat().coerceAtMost(LS_SING_ROOM_TOP), 256f..LS_SING_ROOM_TOP, ::lsSingRoomText, steps = 15,
             changed = s.singCacheMb != d.singCacheMb,
         ) { prefs.setSingCacheMb(if (it >= LS_SING_ROOM_TOP - 1f) SING_ROOM_UNLIMITED else it.roundToInt()) }
-        LinkRow(tr(R.string.clear_sung_songs), value = tr(R.string.using, formatMb(used)), info = tr(R.string.songs_are_worked_out_again_the)) { c.sing.store.clear(); used = 0 }
+        LinkRow(tr(R.string.clear_sung_songs), value = tr(R.string.using, formatMb(used)), info = tr(R.string.songs_are_worked_out_again_the), action = true) { c.sing.store.clear(); used = 0 }
     }
     LinkRow(
-        tr(R.string.save_lyrics_into_your_music_files), value = tr(R.string.so_other_players_show_them_too), info = tr(R.string.synced_lyrics_go_into_your_flac),
+        tr(R.string.save_lyrics_into_your_music_files), value = tr(R.string.so_other_players_show_them_too), info = tr(R.string.synced_lyrics_go_into_your_flac), action = true,
     ) { c.lyricsToFiles.request(null) }
     val with = savedWithToMerged(s.lyricsFileWords, s.lyricsFileTranslation)
     fun save(w: SavedWith, on: Boolean) {

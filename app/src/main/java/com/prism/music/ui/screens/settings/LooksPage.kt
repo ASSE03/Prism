@@ -184,10 +184,10 @@ fun LooksPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = true,
             when (val g = shown) {
                 Gallery.Closed -> LinkRow(
                     tr(R.string.browse_community_looks), value = tr(R.string.looks_people_shared_on_github), icon = PrismIcons.Globe,
-                    info = tr(R.string.the_list_is_downloaded_from_prism),
+                    info = tr(R.string.the_list_is_downloaded_from_prism), action = true,
                 ) { load(false) }
                 Gallery.Loading -> Row(Modifier.fillMaxWidth().padding(24.dp), horizontalArrangement = Arrangement.Center) { PrismSpinner(Modifier.size(28.dp)) }
-                is Gallery.Failed -> LinkRow(tr(R.string.couldn_t_load_the_gallery), value = tr(R.string.tap_to_try_again, g.why), icon = PrismIcons.Globe) { load(true) }
+                is Gallery.Failed -> LinkRow(tr(R.string.couldn_t_load_the_gallery), value = tr(R.string.tap_to_try_again, g.why), icon = PrismIcons.Globe, action = true) { load(true) }
                 is Gallery.Shown -> {
                     if (g.looks.isEmpty()) StateLine(tr(R.string.no_community_looks_yet_yours_could))
                     else LookGrid(
@@ -205,7 +205,7 @@ fun LooksPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = true,
                         onMore = null,
                     )
                     if (opening != null) StateLine(tr(R.string.downloading_its_photos))
-                    LinkRow(tr(R.string.refresh_the_list), value = tr(R.string.from_github), icon = PrismIcons.Refresh) { load(true) }
+                    LinkRow(tr(R.string.refresh_the_list), value = tr(R.string.from_github), icon = PrismIcons.Refresh, action = true) { load(true) }
                 }
             }
             LinkRow(
@@ -215,8 +215,8 @@ fun LooksPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = true,
         }
         group(tr(R.string.get_a_look), info = tr(R.string.you_see_a_look_first_and)) {
             LinkRow(tr(R.string.scan_a_look_s_qr_code), value = tr(R.string.from_a_friend_s_prism), icon = PrismIcons.Camera) { nav.go(Routes.LOOK_SCAN) }
-            LinkRow(tr(R.string.paste_a_look_code), value = tr(R.string.a_code_someone_sent_you), icon = PrismIcons.Copy) { take(c.looks.decode(clipboard.getText()?.text)) }
-            LinkRow(tr(R.string.open_a_look_file), value = tr(R.string.a_prismlook_file_with_its_photos), icon = PrismIcons.Photo) {
+            LinkRow(tr(R.string.paste_a_look_code), value = tr(R.string.a_code_someone_sent_you), icon = PrismIcons.Copy, action = true) { take(c.looks.decode(clipboard.getText()?.text)) }
+            LinkRow(tr(R.string.open_a_look_file), value = tr(R.string.a_prismlook_file_with_its_photos), icon = PrismIcons.Photo, action = true) {
                 openFile.launch(arrayOf("application/zip", "application/octet-stream"))
             }
         }
@@ -246,10 +246,10 @@ fun LooksPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = true,
             if (steps.isEmpty()) StateLine(tr(R.string.your_last_changes_to_the_look, LookStore.MAX_STEPS))
             steps.forEachIndexed { i, step ->
                 val ago = android.text.format.DateUtils.getRelativeTimeSpanString(step.at, System.currentTimeMillis(), android.text.format.DateUtils.MINUTE_IN_MILLIS).toString()
-                LinkRow(step.label, value = lookStepLine(ago, newest = i == 0), icon = PrismIcons.Undo) { c.looks.goBack(i) }
+                LinkRow(step.label, value = lookStepLine(ago, newest = i == 0), icon = PrismIcons.Undo, action = true) { c.looks.goBack(i) }
             }
             // #152: the list can go; the look itself stays as it is.
-            if (steps.isNotEmpty()) LinkRow(tr(R.string.clear_history), value = tr(R.string.your_look_stays_as_it_is), icon = PrismIcons.Delete) { clearing = true }
+            if (steps.isNotEmpty()) LinkRow(tr(R.string.clear_history), value = tr(R.string.your_look_stays_as_it_is), icon = PrismIcons.Delete, action = true) { clearing = true }
             // "Customize this" (1.7.3): tap the mini player, tab bar, player or a Home section to change it there.
             SwitchRow(
                 tr(R.string.customize_by_tapping), customizing, value = tr(R.string.tap_the_mini_player_tab_bar),
