@@ -68,6 +68,8 @@ import com.prism.music.ui.LocalNavigator
 import com.prism.music.ui.Routes
 import com.prism.music.ui.components.EmptyState
 import com.prism.music.ui.components.ItemCard
+import com.prism.music.ui.components.LocatePlayingRow
+import com.prism.music.ui.components.locatePulse
 import com.prism.music.ui.components.PagerChips
 import com.prism.music.ui.components.SortBar
 import com.prism.music.ui.components.SongRow
@@ -412,6 +414,10 @@ fun LibraryScreen(bottomPadding: Dp) {
                 }.value
             } else null
             val fromAccountShown = fromAccount && settings.isLoggedIn
+            // "Go to the playing song" (D54) on Songs: its place among the songs shown (-1: not one of them).
+            val locate = remember { com.prism.music.ui.components.LocateState() }
+            val playingId = if (tab == LibTab.SONGS) c.player.currentSong.collectAsState().value?.id else null
+            val playingAt = remember(shownSongs, playingId) { com.prism.music.ui.components.LocatePlaying.indexIn(shownSongs, playingId) }
             /** The search at the top of a tab; once typed in, it stays whatever's left of the list. */
             fun androidx.compose.foundation.lazy.grid.LazyGridScope.findField(query: String, hint: String, count: Int, onChange: (String) -> Unit) {
                 if (query.isEmpty() && count < LIBRARY_SEARCH_FROM) return
@@ -611,6 +617,11 @@ fun LibraryScreen(bottomPadding: Dp) {
                         if (songsBase.isNotEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
                             Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                                 com.prism.music.ui.components.SearchField(songQuery, if (songsFrom.isDefault) tr(R.string.search_liked_songs) else tr(R.string.search_these_songs), { q -> songQuery = q }, Modifier.weight(1f))
+                                // D54: the tab has no ⋯ menu, so it's a button here, only while the playing song is one of the songs shown.
+                                locate.go?.let { go ->
+                                    Spacer(Modifier.width(8.dp))
+                                    com.prism.music.ui.components.RoundAction(PrismIcons.Song, tr(R.string.go_to_the_playing_song)) { go() }
+                                }
                                 Spacer(Modifier.width(8.dp))
                                 com.prism.music.ui.components.RoundAction(PrismIcons.Shuffle, tr(R.string.shuffle)) { if (shownSongs.isNotEmpty()) c.player.playQueue(shownSongs, 0, source, shuffle = true) }
                                 Spacer(Modifier.width(8.dp))
@@ -624,7 +635,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                             }) { songSort = it; c.library.setSort("library:songs", it.name) }
                         }
                         items(shownSongs, key = { "s" + it.id }, span = { GridItemSpan(maxLineSpan) }) { s ->
-                            SongRow(s) { c.player.playQueue(shownSongs, shownSongs.indexOf(s), source) }
+                            SongRow(s, Modifier.locatePulse(locate, s.id)) { c.player.playQueue(shownSongs, shownSongs.indexOf(s), source) }
                         }
                         if (songsBase.isNotEmpty() && shownSongs.isEmpty() && songQuery.isNotBlank()) nothingFound(tr(R.string.songs), songQuery)
                     }
@@ -727,6 +738,10 @@ fun LibraryScreen(bottomPadding: Dp) {
                 gridState, Modifier.align(Alignment.CenterEnd).padding(bottom = bottomPadding),
                 description = tr(R.string.scroll_through_the_list), thumbOnly = true,
             ) { _ -> gridState.layoutInfo.visibleItemsInfo.firstNotNullOfOrNull { rowMarks.value[it.key as? String] } }
+            // D54. Above the songs: where they're from, then (with any songs) the search and the sort.
+            if (tab == LibTab.SONGS) LocatePlayingRow(locate, gridState, inList = playingAt >= 0, songId = playingId, bottomPadding = bottomPadding) {
+                playingAt + 1 + (if (songsBase.isNotEmpty()) 2 else 0)
+            }
             }
         }
     }

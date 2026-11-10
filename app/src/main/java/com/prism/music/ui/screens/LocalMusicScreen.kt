@@ -59,6 +59,10 @@ import com.prism.music.playback.QueueSource
 import com.prism.music.ui.LocalNavigator
 import com.prism.music.ui.components.Artwork
 import com.prism.music.ui.components.EmptyState
+import com.prism.music.ui.components.LocatePlaying
+import com.prism.music.ui.components.LocatePlayingRow
+import com.prism.music.ui.components.LocateState
+import com.prism.music.ui.components.locatePulse
 import com.prism.music.ui.components.PagerChips
 import com.prism.music.ui.components.PrismChip
 import com.prism.music.ui.components.RoundAction
@@ -271,6 +275,8 @@ fun LocalMusicScreen(bottomPadding: Dp) {
         else sorted(tracks, sort).map { it.song }.filter { s -> "${s.title} ${s.artistText} ${s.album?.title.orEmpty()}".lowercase().let { hay -> words.all { it in hay } } }
     }
     val section = sections.getOrNull(pager.currentPage)
+    // "Go to the playing song" (D54) for whichever list of songs is showing.
+    val locate = remember { LocateState() }
     fun playable(): Pair<List<Song>, String> = when {
         query.isNotBlank() && album == null && artist == null && !openRecent -> found to tr(R.string.local_files)
         album != null -> album.tracks.map { it.song } to album.title
@@ -317,6 +323,11 @@ fun LocalMusicScreen(bottomPadding: Dp) {
                     RoundAction(PrismIcons.History, tr(R.string.recently_played)) { openRecent = true }
                     Spacer(Modifier.width(8.dp))
                 }
+                // D54: the page has no ⋯ menu, so it's a button here, only while the playing song is in the list shown.
+                locate.go?.let { go ->
+                    RoundAction(PrismIcons.Song, tr(R.string.go_to_the_playing_song)) { go() }
+                    Spacer(Modifier.width(8.dp))
+                }
                 RoundAction(PrismIcons.Shuffle, tr(R.string.shuffle)) {
                     val (list, title) = playable()
                     if (list.isNotEmpty()) c.player.playQueue(list, 0, source(title), shuffle = true)
@@ -354,10 +365,10 @@ fun LocalMusicScreen(bottomPadding: Dp) {
                     PrismButton(onClick = { choosingFolders = true }) { Text(tr(R.string.choose_folders)) }
                 }
             }
-            album != null -> TrackList(album.tracks.map { it.song }, album.title, bottomPadding, numbered = true)
+            album != null -> TrackList(album.tracks.map { it.song }, album.title, bottomPadding, locate, numbered = true)
             artist != null -> ArtistPage(artist, bottomPadding) { openAlbum = it.id }
             openRecent -> if (recent.isEmpty()) EmptyState(PrismIcons.History, tr(R.string.nothing_played_yet), tr(R.string.songs_from_your_phone_that_you))
-                else TrackList(recent, tr(R.string.recently_played), bottomPadding)
+                else TrackList(recent, tr(R.string.recently_played), bottomPadding, locate)
             else -> {
                 com.prism.music.ui.components.SearchField(
                     query, tr(R.string.search_in_local_files), { query = it },
@@ -365,21 +376,21 @@ fun LocalMusicScreen(bottomPadding: Dp) {
                 )
                 if (query.isNotBlank()) {
                     if (found.isEmpty()) EmptyState(PrismIcons.Search, tr(R.string.no_matches), tr(R.string.nothing_in_matches, tr(R.string.local_files), query.trim()) + ".")
-                    else TrackList(found, tr(R.string.local_files), bottomPadding)
+                    else TrackList(found, tr(R.string.local_files), bottomPadding, locate)
                 } else {
                     SectionChips(sections, pager) { editing = true }
                     // Sideways swipes on a song queue it (SwipeToQueue), so the sections change from the chips.
                     HorizontalPager(pager, Modifier.weight(1f), userScrollEnabled = false) { page ->
                         when (sections.getOrNull(page)) {
-                            LocalSection.SONGS -> SongsPage(songsSorted, sort, { saveOrders(orders.copy(songs = it)) }, tr(R.string.local_files), bottomPadding)
+                            LocalSection.SONGS -> SongsPage(songsSorted, sort, { saveOrders(orders.copy(songs = it)) }, tr(R.string.local_files), bottomPadding, locate)
                             LocalSection.FAVOURITES -> if (favourites.isEmpty()) EmptyState(PrismIcons.Heart, tr(R.string.no_favorites_yet), tr(R.string.like_songs_from_your_phone_on))
-                                else SongsPage(favourites, sort, { saveOrders(orders.copy(songs = it)) }, tr(R.string.favorites), bottomPadding)
+                                else SongsPage(favourites, sort, { saveOrders(orders.copy(songs = it)) }, tr(R.string.favorites), bottomPadding, locate)
                             LocalSection.ARTISTS -> ArtistsPage(sortedArtists(artists, orders.artists), bottomPadding, orders.artists, { saveOrders(orders.copy(artists = it)) }) { openArtist = it.key }
                             LocalSection.ALBUMS -> AlbumsPage(sortedAlbums(albums, orders.albums), bottomPadding, orders.albums, { saveOrders(orders.copy(albums = it)) }) { openAlbum = it.id }
-                            LocalSection.ADDED_SONGS -> TrackList(addedSongs, tr(R.string.recently_added), bottomPadding)
+                            LocalSection.ADDED_SONGS -> TrackList(addedSongs, tr(R.string.recently_added), bottomPadding, locate)
                             LocalSection.ADDED_ALBUMS -> AlbumsPage(addedAlbums, bottomPadding) { openAlbum = it.id }
                             LocalSection.DOWNLOADS -> if (downloads.isEmpty()) EmptyState(PrismIcons.DownloadDone, tr(R.string.no_downloads_yet), tr(R.string.songs_you_download_in_prism_show))
-                                else TrackList(downloads, tr(R.string.downloads), bottomPadding)
+                                else TrackList(downloads, tr(R.string.downloads), bottomPadding, locate)
                             null -> {}
                         }
                     }
@@ -493,32 +504,44 @@ private fun source(title: String) = QueueSource(QueueKind.LIBRARY, title)
 
 /** Songs that play as a list from the one tapped; swipe one to queue it. Play and Shuffle are at the top of the page. */
 @Composable
-private fun TrackList(songs: List<Song>, title: String, bottomPadding: Dp, numbered: Boolean = false) {
+private fun TrackList(songs: List<Song>, title: String, bottomPadding: Dp, locate: LocateState, numbered: Boolean = false) {
     val c = LocalContainer.current
     val current by c.player.currentSong.collectAsState()
-    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(top = 4.dp, bottom = bottomPadding + 16.dp)) {
-        itemsIndexed(songs, key = { i, s -> "t" + s.id + ":" + i }) { i, s ->
-            SwipeToQueue(s) {
-                SongRow(s, index = if (numbered) i + 1 else null, playing = current?.id == s.id) { c.player.playQueue(songs, i, source(title)) }
+    val list = androidx.compose.foundation.lazy.rememberLazyListState()
+    val playingAt = remember(songs, current?.id) { LocatePlaying.indexIn(songs, current?.id) }
+    androidx.compose.foundation.layout.Box(Modifier.fillMaxSize()) {
+        LazyColumn(Modifier.fillMaxSize(), list, contentPadding = PaddingValues(top = 4.dp, bottom = bottomPadding + 16.dp)) {
+            itemsIndexed(songs, key = { i, s -> "t" + s.id + ":" + i }) { i, s ->
+                SwipeToQueue(s, Modifier.locatePulse(locate, s.id)) {
+                    SongRow(s, index = if (numbered) i + 1 else null, playing = current?.id == s.id) { c.player.playQueue(songs, i, source(title)) }
+                }
             }
         }
+        // D54: the rows are all the list holds, so the playing song's row is its place among the songs.
+        LocatePlayingRow(locate, list, inList = playingAt >= 0, songId = current?.id, bottomPadding = bottomPadding) { playingAt }
     }
 }
 
 /** Songs (or Favourites) in the chosen order; the sort is kept (Title unless changed). */
 @Composable
-private fun SongsPage(songs: List<Song>, sort: Order<SongKey>, onSort: (Order<SongKey>) -> Unit, title: String, bottomPadding: Dp) {
+private fun SongsPage(songs: List<Song>, sort: Order<SongKey>, onSort: (Order<SongKey>) -> Unit, title: String, bottomPadding: Dp, locate: LocateState) {
     val c = LocalContainer.current
     val current by c.player.currentSong.collectAsState()
-    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(top = 0.dp, bottom = bottomPadding + 16.dp)) {
-        item {
-            SortRow(songCount(songs.size), tr(R.string.sort_songs), SongKey.entries, sort, { it.label }, { it.dirs }, onSort)
-        }
-        itemsIndexed(songs, key = { _, s -> "l" + s.id }) { i, s ->
-            SwipeToQueue(s) {
-                SongRow(s, playing = current?.id == s.id) { c.player.playQueue(songs, i, source(title)) }
+    val list = androidx.compose.foundation.lazy.rememberLazyListState()
+    val playingAt = remember(songs, current?.id) { LocatePlaying.indexIn(songs, current?.id) }
+    androidx.compose.foundation.layout.Box(Modifier.fillMaxSize()) {
+        LazyColumn(Modifier.fillMaxSize(), list, contentPadding = PaddingValues(top = 0.dp, bottom = bottomPadding + 16.dp)) {
+            item {
+                SortRow(songCount(songs.size), tr(R.string.sort_songs), SongKey.entries, sort, { it.label }, { it.dirs }, onSort)
+            }
+            itemsIndexed(songs, key = { _, s -> "l" + s.id }) { i, s ->
+                SwipeToQueue(s, Modifier.locatePulse(locate, s.id)) {
+                    SongRow(s, playing = current?.id == s.id) { c.player.playQueue(songs, i, source(title)) }
+                }
             }
         }
+        // D54: one row (the sort) is above the songs.
+        LocatePlayingRow(locate, list, inList = playingAt >= 0, songId = current?.id, bottomPadding = bottomPadding) { playingAt + 1 }
     }
 }
 
