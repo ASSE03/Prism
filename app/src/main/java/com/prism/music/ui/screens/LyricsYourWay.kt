@@ -134,7 +134,7 @@ private fun sampleAxis(): androidx.compose.ui.text.font.FontFamily? {
 
 /** The look as the settings have it now, for the song playing (its cover's colors). */
 @Composable
-private fun currentLook(): LyricsLook {
+internal fun currentLook(): LyricsLook {
     val s = LocalAppSettings.current
     return rememberLyricsLook(s, LocalContainer.current.player.currentSong.value?.thumbnail)
 }

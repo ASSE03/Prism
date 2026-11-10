@@ -36,7 +36,9 @@ class SettingsIndexTest {
             live += used
             waiting -= used
         }
-        live.filter { it.parentFile.name == "settings" }.sortedBy { it.name }
+        // OldPlayer.kt: the Player page is rebuilt (PlayerPage.kt, PlayerParts.kt) and draws none of it; only the
+        // Customize sheet over the player (SettingsScreen.kt) still shows its Look and Cover groups, which are on no page.
+        live.filter { it.parentFile.name == "settings" && it.name != "OldPlayer.kt" }.sortedBy { it.name }
     }
     private val sources = listOf("SettingsScreen.kt", "SoundSettings.kt", "BackupUi.kt", "ConnectSettings.kt", "ColorSettings.kt", "LookSettings.kt", "SpotifySettings.kt", "HistorySettings.kt")
         .map { File("src/main/java/com/prism/music/ui/screens/$it").readText() } + pageFiles.map { it.readText() }
@@ -91,9 +93,9 @@ class SettingsIndexTest {
         assertTrue("the old Language page is rebuilt (LanguageRegionPage.kt): $read", "OldLanguageRegion.kt" !in read)
         assertTrue("the old Lyrics pages are rebuilt (LyricsSingPage.kt): $read", "OldLyrics.kt" !in read)
         assertTrue("the old Playback & sound page is rebuilt (PlaybackPage.kt, SoundQualityPage.kt): $read", "OldSound.kt" !in read)
+        assertTrue("the old Player page is rebuilt (PlayerPage.kt, PlayerParts.kt): $read", "OldPlayer.kt" !in read)
         // One per line, so pages rebuilt side by side each take their own line out.
         val stillRead = listOf(
-            "OldPlayer.kt",
             "OldTheme.kt",
             "OldTabs.kt",
             "OldCar.kt",
@@ -102,6 +104,7 @@ class SettingsIndexTest {
             "OldBackupAbout.kt",
             "LanguageRegionPage.kt",
             "PlayerPage.kt",
+            "PlayerParts.kt",
             "LyricsSingPage.kt",
             "LyricsSingParts.kt",
             "PlaybackPage.kt",
@@ -122,8 +125,8 @@ class SettingsIndexTest {
         assertTrue(frost!!.on(plain.copy(frostedGlass = true)))
         assertTrue(frost.on(plain.copy(liquidGlass = true)))
         for (id in listOf(R.string.lock_screen_layout_label, R.string.lock_screen_show, R.string.lock_screen_paused_label, R.string.lock_screen_hide, R.string.lock_screen_allow, R.string.lock_screen_allow_step, R.string.lock_screen_app_info)) {
-            // By its group too: other pages have a "Layout".
-            val needs = SettingsIndex.entries.first { it.title == com.prism.music.tr(id) && it.group == com.prism.music.tr(R.string.lock_screen_title) }.needs
+            // By its group too: other pages have a "Layout". (1.8.4: the lock screen's rows are in Player's Modes group.)
+            val needs = SettingsIndex.entries.first { it.title == com.prism.music.tr(id) && it.group == com.prism.music.tr(R.string.settings_player_modes) }.needs
             assertTrue(com.prism.music.tr(id), needs != null && !needs.on(plain))
             assertTrue(com.prism.music.tr(id), needs!!.on(plain.copy(behavior = plain.behavior.copy(lockScreen = true))))
         }

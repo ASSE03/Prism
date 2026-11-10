@@ -107,7 +107,7 @@ fun PlayerLayoutGroup() {
 
 /** A tiny dark phone showing where things sit in [layout]. */
 @Composable
-private fun LayoutSample(layout: PlayerLayout) {
+internal fun LayoutSample(layout: PlayerLayout) {
     val light = Brush.horizontalGradient(*PrismTokens.spectrumColors(true).toTypedArray())
     SampleScreen(Modifier.fillMaxWidth().height(150.dp)) {
         Column(Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -188,7 +188,7 @@ private fun Bar(fraction: Float, height: Dp, color: Color, align: Alignment.Hori
 
 /** The player's dark, for an example to sit on. */
 @Composable
-private fun SampleScreen(modifier: Modifier, content: @Composable BoxScope.() -> Unit) {
+internal fun SampleScreen(modifier: Modifier, content: @Composable BoxScope.() -> Unit) {
     Box(modifier.clip(RoundedCornerShape(12.dp)).background(Brush.verticalGradient(listOf(Color(0xFF2A2140), PlayerDark))), content = content)
 }
 
@@ -259,7 +259,7 @@ fun PlayerPartsGroup() {
 /** The row's buttons (three to six), in their order, to drag; the others to add. */
 @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
-private fun RowButtons() {
+internal fun RowButtons() {
     val s = LocalAppSettings.current
     val c = LocalContainer.current
     val prefs = c.settings
@@ -323,7 +323,7 @@ fun ButtonsPillCards() {
     }
 }
 
-private fun deckPart(d: DeckPart): PlayerPart? = when (d) {
+internal fun deckPart(d: DeckPart): PlayerPart? = when (d) {
     DeckPart.STRIP -> PlayerPart.LYRIC_LINE
     DeckPart.SCRUBBER -> PlayerPart.PROGRESS
     DeckPart.VOLUME -> PlayerPart.VOLUME
@@ -519,7 +519,7 @@ fun SessionButtonsGroup() {
  * it also takes the list's [modifier] (hold to carry it) and shows a [grip] to drag it at once.
  */
 @Composable
-private fun OrderRow(
+internal fun OrderRow(
     label: String, icon: ImageVector, on: Boolean, canCheck: Boolean,
     onCheck: (Boolean) -> Unit, onUp: (() -> Unit)?, onDown: (() -> Unit)?,
     modifier: Modifier = Modifier, grip: Modifier? = null, held: Boolean = false,
@@ -567,7 +567,7 @@ private fun sessionIcon(b: SessionButton): ImageVector = when (b) {
     SessionButton.AHEAD_30 -> PrismIcons.Forward
 }
 
-private fun deckIcon(p: DeckPart): ImageVector = when (p) {
+internal fun deckIcon(p: DeckPart): ImageVector = when (p) {
     DeckPart.STRIP -> PrismIcons.Lyrics
     DeckPart.SCRUBBER -> PrismIcons.Timer
     DeckPart.TRANSPORT -> PrismIcons.PlayCircle
@@ -674,7 +674,7 @@ internal fun CrossfadeOnBarChoice(s: com.prism.music.data.prefs.AppSettings, cov
 }
 
 @Composable
-private fun KnobSample(knob: com.prism.music.data.prefs.ScrubberThumb, thickness: Float) {
+internal fun KnobSample(knob: com.prism.music.data.prefs.ScrubberThumb, thickness: Float) {
     val light = Brush.horizontalGradient(*PrismTokens.spectrumColors(true).toTypedArray())
     SampleScreen(Modifier.fillMaxWidth().height(40.dp)) {
         androidx.compose.foundation.Canvas(Modifier.align(Alignment.Center).padding(horizontal = 14.dp).fillMaxWidth().height(16.dp)) {
@@ -756,7 +756,7 @@ fun PlayerVisualizerGroup() {
 }
 
 @Composable
-private fun VisualizerSample(style: com.prism.music.data.prefs.VisualizerStyle, color: ScrubberColor) {
+internal fun VisualizerSample(style: com.prism.music.data.prefs.VisualizerStyle, color: ScrubberColor) {
     val fill = com.prism.music.ui.player.scrubberFill(color, LocalContainer.current.player.currentSong.value?.thumbnail)
         ?: Brush.horizontalGradient(*PrismTokens.spectrumColors(true).toTypedArray())
     // A still frame of each, from a made-up spectrum.
@@ -816,7 +816,7 @@ private fun VisualizerSample(style: com.prism.music.data.prefs.VisualizerStyle, 
 }
 
 @Composable
-private fun TitleSample(align: PlayerTitleAlign, weight: com.prism.music.data.prefs.PlayerTitleWeight = LocalAppSettings.current.type.playerTitleWeight) {
+internal fun TitleSample(align: PlayerTitleAlign, weight: com.prism.music.data.prefs.PlayerTitleWeight = LocalAppSettings.current.type.playerTitleWeight) {
     SampleScreen(Modifier.fillMaxWidth().height(56.dp)) {
         Row(Modifier.fillMaxSize().padding(horizontal = 10.dp), verticalAlignment = Alignment.CenterVertically) {
             if (align == PlayerTitleAlign.CENTER) Spacer(Modifier.width(22.dp))
@@ -840,7 +840,7 @@ private fun TitleSample(align: PlayerTitleAlign, weight: com.prism.music.data.pr
  * else the whole line one target, a small menu of the names under it.
  */
 @Composable
-private fun ArtistLinksSample(separate: Boolean) {
+internal fun ArtistLinksSample(separate: Boolean) {
     SampleScreen(Modifier.fillMaxWidth().height(72.dp)) {
         Column(Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 8.dp)) {
             Text(tr(R.string.northern_lights), color = Color.White, fontSize = 12.sp, maxLines = 1, fontWeight = androidx.compose.ui.text.font.FontWeight.Light)
@@ -865,7 +865,7 @@ private fun ArtistLinksSample(separate: Boolean) {
 }
 
 @Composable
-private fun TimesSample(times: PlayerTimes) {
+internal fun TimesSample(times: PlayerTimes) {
     SampleScreen(Modifier.fillMaxWidth().height(44.dp)) {
         Column(Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 9.dp)) {
             Box(Modifier.fillMaxWidth().height(3.dp).clip(CircleShape).background(Faint)) {
@@ -901,7 +901,7 @@ fun ScrubberStyleCards() {
 }
 
 @Composable
-private fun ScrubberStyleSample(style: com.prism.music.data.prefs.ScrubberStyle, color: ScrubberColor) {
+internal fun ScrubberStyleSample(style: com.prism.music.data.prefs.ScrubberStyle, color: ScrubberColor) {
     val fill = com.prism.music.ui.player.scrubberFill(color, LocalContainer.current.player.currentSong.value?.thumbnail)
         ?: Brush.horizontalGradient(*PrismTokens.spectrumColors(true).toTypedArray())
     val paths = remember { List(3) { androidx.compose.ui.graphics.Path() } }
@@ -987,7 +987,7 @@ fun PlayerBackgroundCards() {
 private val SAMPLE_GRADIENT = com.prism.music.ui.player.CoverGradient(0xFF8A6BFF.toInt(), 0xFFFF7A59.toInt())
 
 @Composable
-private fun PlayerBackgroundSample(bg: com.prism.music.data.prefs.PlayerBackground, art: String?) {
+internal fun PlayerBackgroundSample(bg: com.prism.music.data.prefs.PlayerBackground, art: String?) {
     val s = LocalAppSettings.current
     val scheme = MaterialTheme.colorScheme
     val standIn = Brush.linearGradient(listOf(Color(SAMPLE_GRADIENT.lead), Color(SAMPLE_GRADIENT.second)))
