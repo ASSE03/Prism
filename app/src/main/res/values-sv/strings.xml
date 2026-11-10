@@ -5279,4 +5279,11 @@
     <string name="tour_184_also_color">En enfärgad bakgrund på en skärm</string>
     <string name="tour_184_also_crossfade">Att spola tappar inte längre en låts övertoning</string>
     <string name="tour_184_also_glass">Text syns inte längre igenom Flytande glas-fälten</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">Flytta längst upp</string>
+    <string name="move_to_bottom">Flytta längst ned</string>
+    <string name="reorder_position">%1$d av %2$d</string>
+    <string name="reorder_picked_up">Upplockad, %1$d av %2$d. Upp och ned flyttar den, Enter släpper den</string>
+    <string name="reorder_put_down">Släppt, %1$d av %2$d</string>
+    <string name="hold_and_drag_or_the_grip">Håll ned och dra, eller dra i handtaget</string>
 </resources>

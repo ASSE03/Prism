@@ -5279,4 +5279,11 @@
     <string name="tour_184_also_color">یک رنگ یکدست به‌عنوان پس‌زمینهٔ صفحه</string>
     <string name="tour_184_also_crossfade">جابه‌جا شدن در آهنگ دیگر کراس‌فید آن را از بین نمی‌برد</string>
     <string name="tour_184_also_glass">متن دیگر از پشت نوارهای شیشه مایع پیدا نیست</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">انتقال به ابتدا</string>
+    <string name="move_to_bottom">انتقال به انتها</string>
+    <string name="reorder_position">%1$d از %2$d</string>
+    <string name="reorder_picked_up">برداشته شد، %1$d از %2$d. با بالا و پایین جابه‌جا کنید، Enter آن را رها می‌کند</string>
+    <string name="reorder_put_down">رها شد، %1$d از %2$d</string>
+    <string name="hold_and_drag_or_the_grip">نگه دارید و بکشید، یا دستگیره را بکشید</string>
 </resources>

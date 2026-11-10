@@ -5425,4 +5425,11 @@
     <string name="tour_184_also_color">Jednolitá barva jako pozadí obrazovky</string>
     <string name="tour_184_also_crossfade">Posun ve skladbě už neruší její prolínání</string>
     <string name="tour_184_also_glass">Text už neprosvítá lištami Tekutého skla</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">Posunout na začátek</string>
+    <string name="move_to_bottom">Posunout na konec</string>
+    <string name="reorder_position">%1$d z %2$d</string>
+    <string name="reorder_picked_up">Zvednuto, %1$d z %2$d. Šipky nahoru a dolů posouvají, Enter položí</string>
+    <string name="reorder_put_down">Položeno, %1$d z %2$d</string>
+    <string name="hold_and_drag_or_the_grip">Podrž a táhni, nebo táhni za úchyt</string>
 </resources>

@@ -5279,4 +5279,11 @@
     <string name="tour_184_also_color">Eine einfarbige Fläche als Hintergrund eines Bildschirms</string>
     <string name="tour_184_also_crossfade">Spulen nimmt einem Song nicht mehr seinen Crossfade</string>
     <string name="tour_184_also_glass">Text scheint nicht mehr durch Liquid-Glass-Leisten</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">Ganz nach oben</string>
+    <string name="move_to_bottom">Ganz nach unten</string>
+    <string name="reorder_position">%1$d von %2$d</string>
+    <string name="reorder_picked_up">Aufgenommen, %1$d von %2$d. Mit Hoch und Runter verschieben, mit Enter ablegen</string>
+    <string name="reorder_put_down">Abgelegt, %1$d von %2$d</string>
+    <string name="hold_and_drag_or_the_grip">Gedrückt halten und ziehen oder den Griff ziehen</string>
 </resources>

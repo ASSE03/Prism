@@ -5206,4 +5206,11 @@
     <string name="tour_184_also_color">สีพื้นเป็นพื้นหลังของหน้าจอ</string>
     <string name="tour_184_also_crossfade">การเลื่อนตำแหน่งเพลงไม่ทำให้ครอสเฟดหายอีกต่อไป</string>
     <string name="tour_184_also_glass">ข้อความไม่ทะลุผ่านแถบกระจกเหลวอีกต่อไป</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">เลื่อนไปบนสุด</string>
+    <string name="move_to_bottom">เลื่อนไปล่างสุด</string>
+    <string name="reorder_position">%1$d จาก %2$d</string>
+    <string name="reorder_picked_up">หยิบขึ้นแล้ว %1$d จาก %2$d ใช้ปุ่มขึ้นและลงเพื่อเลื่อน กด Enter เพื่อวาง</string>
+    <string name="reorder_put_down">วางแล้ว %1$d จาก %2$d</string>
+    <string name="hold_and_drag_or_the_grip">กดค้างแล้วลาก หรือลากที่จับ</string>
 </resources>

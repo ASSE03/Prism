@@ -5206,4 +5206,11 @@
     <string name="tour_184_also_color">画面の背景に単色</string>
     <string name="tour_184_also_crossfade">シークしても曲のクロスフェードが消えなくなりました</string>
     <string name="tour_184_also_glass">リキッドグラスのバー越しに文字が透けなくなりました</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">一番上へ移動</string>
+    <string name="move_to_bottom">一番下へ移動</string>
+    <string name="reorder_position">%2$d件中%1$d件目</string>
+    <string name="reorder_picked_up">持ち上げました。%2$d件中%1$d件目。上下キーで移動、Enter キーで置きます</string>
+    <string name="reorder_put_down">置きました。%2$d件中%1$d件目</string>
+    <string name="hold_and_drag_or_the_grip">長押ししてドラッグするか、ハンドルをドラッグします</string>
 </resources>

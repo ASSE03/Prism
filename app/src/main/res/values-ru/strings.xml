@@ -5425,4 +5425,11 @@
     <string name="tour_184_also_color">Сплошной цвет как фон экрана</string>
     <string name="tour_184_also_crossfade">Перемотка больше не сбивает плавный переход песни</string>
     <string name="tour_184_also_glass">Текст больше не просвечивает сквозь панели «Жидкое стекло»</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">Переместить в начало</string>
+    <string name="move_to_bottom">Переместить в конец</string>
+    <string name="reorder_position">%1$d из %2$d</string>
+    <string name="reorder_picked_up">Взято, %1$d из %2$d. Вверх и вниз перемещают, Enter отпускает</string>
+    <string name="reorder_put_down">Отпущено, %1$d из %2$d</string>
+    <string name="hold_and_drag_or_the_grip">Удерживай и перетаскивай или перетаскивай за ручку</string>
 </resources>

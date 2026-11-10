@@ -5206,4 +5206,11 @@
     <string name="tour_184_also_color">Warna polos sebagai latar layar</string>
     <string name="tour_184_also_crossfade">Menggeser posisi lagu tak lagi menghilangkan crossfade-nya</string>
     <string name="tour_184_also_glass">Teks tak lagi tembus terlihat di bilah Kaca Cair</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">Pindahkan ke paling atas</string>
+    <string name="move_to_bottom">Pindahkan ke paling bawah</string>
+    <string name="reorder_position">%1$d dari %2$d</string>
+    <string name="reorder_picked_up">Diangkat, %1$d dari %2$d. Atas dan bawah memindahkannya, Enter meletakkannya</string>
+    <string name="reorder_put_down">Diletakkan, %1$d dari %2$d</string>
+    <string name="hold_and_drag_or_the_grip">Tahan dan geser, atau geser pegangannya</string>
 </resources>

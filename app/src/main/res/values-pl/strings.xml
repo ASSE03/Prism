@@ -5425,4 +5425,11 @@
     <string name="tour_184_also_color">Jednolity kolor jako tło ekranu</string>
     <string name="tour_184_also_crossfade">Przewijanie nie gubi już przenikania utworu</string>
     <string name="tour_184_also_glass">Tekst nie prześwituje już przez paski Liquid Glass</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">Przenieś na górę</string>
+    <string name="move_to_bottom">Przenieś na dół</string>
+    <string name="reorder_position">%1$d z %2$d</string>
+    <string name="reorder_picked_up">Podniesiono, %1$d z %2$d. Strzałki w górę i w dół przesuwają, Enter odkłada</string>
+    <string name="reorder_put_down">Odłożono, %1$d z %2$d</string>
+    <string name="hold_and_drag_or_the_grip">Przytrzymaj i przeciągnij lub przeciągnij uchwyt</string>
 </resources>

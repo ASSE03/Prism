@@ -5279,4 +5279,11 @@
     <string name="tour_184_also_color">Egyszínű háttér egy képernyőhöz</string>
     <string name="tour_184_also_crossfade">A tekerés már nem veszi el a dal áttűnését</string>
     <string name="tour_184_also_glass">A szöveg már nem látszik át a Folyékony üveg sávokon</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">Legfelülre</string>
+    <string name="move_to_bottom">Legalulra</string>
+    <string name="reorder_position">%1$d. hely, összesen %2$d</string>
+    <string name="reorder_picked_up">Felvéve, %1$d. hely, összesen %2$d. A fel és le nyíl mozgatja, az Enter leteszi</string>
+    <string name="reorder_put_down">Letéve, %1$d. hely, összesen %2$d</string>
+    <string name="hold_and_drag_or_the_grip">Tartsd lenyomva és húzd, vagy húzd a fogantyút</string>
 </resources>

@@ -5206,4 +5206,11 @@
     <string name="tour_184_also_color">화면 배경으로 단색 사용</string>
     <string name="tour_184_also_crossfade">탐색해도 곡의 크로스페이드가 사라지지 않음</string>
     <string name="tour_184_also_glass">리퀴드 글래스 바 뒤로 텍스트가 더 이상 비치지 않음</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">맨 위로 이동</string>
+    <string name="move_to_bottom">맨 아래로 이동</string>
+    <string name="reorder_position">%2$d개 중 %1$d번째</string>
+    <string name="reorder_picked_up">들어 올림, %2$d개 중 %1$d번째. 위아래 키로 옮기고 Enter 키로 내려놓으세요</string>
+    <string name="reorder_put_down">내려놓음, %2$d개 중 %1$d번째</string>
+    <string name="hold_and_drag_or_the_grip">길게 눌러 드래그하거나 핸들을 드래그하세요</string>
 </resources>

@@ -5279,4 +5279,11 @@
     <string name="tour_184_also_color">Iisang kulay bilang background ng isang screen</string>
     <string name="tour_184_also_crossfade">Hindi na nawawala ang crossfade ng kanta kapag nag-seek</string>
     <string name="tour_184_also_glass">Hindi na tumatagos ang text sa mga Liquid Glass bar</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">Ilipat sa pinakaitaas</string>
+    <string name="move_to_bottom">Ilipat sa pinakaibaba</string>
+    <string name="reorder_position">%1$d sa %2$d</string>
+    <string name="reorder_picked_up">Naangat, %1$d sa %2$d. Ilipat ito gamit ang pataas at pababa, ibaba ito gamit ang Enter</string>
+    <string name="reorder_put_down">Naibaba, %1$d sa %2$d</string>
+    <string name="hold_and_drag_or_the_grip">Pindutin nang matagal at i-drag, o i-drag ang hawakan</string>
 </resources>

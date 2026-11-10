@@ -5206,4 +5206,11 @@
     <string name="tour_184_also_color">Màu trơn làm hình nền của màn hình</string>
     <string name="tour_184_also_crossfade">Tua không còn làm mất chuyển tiếp mượt của bài hát</string>
     <string name="tour_184_also_glass">Chữ không còn hiện xuyên qua thanh Kính lỏng</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">Di chuyển lên đầu</string>
+    <string name="move_to_bottom">Di chuyển xuống cuối</string>
+    <string name="reorder_position">%1$d trên %2$d</string>
+    <string name="reorder_picked_up">Đã nhấc lên, %1$d trên %2$d. Phím lên và xuống để di chuyển, Enter để đặt xuống</string>
+    <string name="reorder_put_down">Đã đặt xuống, %1$d trên %2$d</string>
+    <string name="hold_and_drag_or_the_grip">Nhấn giữ và kéo, hoặc kéo tay nắm</string>
 </resources>

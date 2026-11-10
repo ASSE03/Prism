@@ -5352,4 +5352,11 @@
     <string name="tour_184_also_color">Uma cor sólida como fundo de uma tela</string>
     <string name="tour_184_also_crossfade">Avançar ou voltar não faz mais a música perder o crossfade</string>
     <string name="tour_184_also_glass">O texto não aparece mais através das barras Liquid Glass</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">Mover para o topo</string>
+    <string name="move_to_bottom">Mover para o final</string>
+    <string name="reorder_position">%1$d de %2$d</string>
+    <string name="reorder_picked_up">Levantado, %1$d de %2$d. As setas para cima e para baixo movem, Enter solta</string>
+    <string name="reorder_put_down">Solto, %1$d de %2$d</string>
+    <string name="hold_and_drag_or_the_grip">Segure e arraste, ou arraste a alça</string>
 </resources>

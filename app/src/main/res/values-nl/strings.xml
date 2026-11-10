@@ -5279,4 +5279,11 @@
     <string name="tour_184_also_color">Een effen kleur als achtergrond van een scherm</string>
     <string name="tour_184_also_crossfade">Spoelen laat de crossfade van een nummer niet meer wegvallen</string>
     <string name="tour_184_also_glass">Tekst schijnt niet meer door Liquid Glass-balken heen</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">Naar boven</string>
+    <string name="move_to_bottom">Naar onderen</string>
+    <string name="reorder_position">%1$d van %2$d</string>
+    <string name="reorder_picked_up">Opgepakt, %1$d van %2$d. Omhoog en omlaag verplaatsen het, Enter zet het neer</string>
+    <string name="reorder_put_down">Neergezet, %1$d van %2$d</string>
+    <string name="hold_and_drag_or_the_grip">Houd ingedrukt en sleep, of sleep de greep</string>
 </resources>

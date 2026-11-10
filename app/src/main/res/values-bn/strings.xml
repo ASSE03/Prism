@@ -5279,4 +5279,11 @@
     <string name="tour_184_also_color">স্ক্রিনের ব্যাকগ্রাউন্ড হিসেবে একটি রং</string>
     <string name="tour_184_also_crossfade">গানে সামনে-পেছনে গেলেও আর ক্রসফেড হারায় না</string>
     <string name="tour_184_also_glass">লিকুইড গ্লাস বারের ভেতর দিয়ে আর লেখা দেখা যায় না</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">একদম ওপরে সরান</string>
+    <string name="move_to_bottom">একদম নিচে সরান</string>
+    <string name="reorder_position">%2$d-এর মধ্যে %1$d</string>
+    <string name="reorder_picked_up">তোলা হয়েছে, %2$d-এর মধ্যে %1$d। ওপর ও নিচ দিয়ে সরান, Enter দিয়ে নামিয়ে রাখুন</string>
+    <string name="reorder_put_down">নামিয়ে রাখা হয়েছে, %2$d-এর মধ্যে %1$d</string>
+    <string name="hold_and_drag_or_the_grip">ধরে রেখে টানুন, বা হাতলটি টানুন</string>
 </resources>

@@ -5279,4 +5279,11 @@
     <string name="tour_184_also_color">اسکرین کے پس منظر کے طور پر سادہ رنگ</string>
     <string name="tour_184_also_crossfade">آگے پیچھے کرنے سے اب گانے کا کراس فیڈ ضائع نہیں ہوتا</string>
     <string name="tour_184_also_glass">مائع شیشہ کی بارز کے پیچھے سے اب متن نظر نہیں آتا</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">سب سے اوپر لے جائیں</string>
+    <string name="move_to_bottom">سب سے نیچے لے جائیں</string>
+    <string name="reorder_position">%2$d میں سے %1$d</string>
+    <string name="reorder_picked_up">اٹھا لیا، %2$d میں سے %1$d۔ اوپر اور نیچے سے ہلائیں، Enter سے رکھ دیں</string>
+    <string name="reorder_put_down">رکھ دیا، %2$d میں سے %1$d</string>
+    <string name="hold_and_drag_or_the_grip">دبا کر کھینچیں، یا ہینڈل کو کھینچیں</string>
 </resources>

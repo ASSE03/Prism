@@ -5206,4 +5206,11 @@
     <string name="tour_184_also_color">用纯色作为屏幕背景</string>
     <string name="tour_184_also_crossfade">拖动进度不再丢失歌曲的交叉淡入淡出</string>
     <string name="tour_184_also_glass">文字不再透过液态玻璃栏显示</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">移到顶部</string>
+    <string name="move_to_bottom">移到底部</string>
+    <string name="reorder_position">第 %1$d 项，共 %2$d 项</string>
+    <string name="reorder_picked_up">已拿起，第 %1$d 项，共 %2$d 项。按上下键移动，按 Enter 放下</string>
+    <string name="reorder_put_down">已放下，第 %1$d 项，共 %2$d 项</string>
+    <string name="hold_and_drag_or_the_grip">按住拖动，或拖动手柄</string>
 </resources>

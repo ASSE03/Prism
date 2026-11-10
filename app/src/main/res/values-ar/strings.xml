@@ -5571,4 +5571,11 @@
     <string name="tour_184_also_color">لون ثابت كخلفية للشاشة</string>
     <string name="tour_184_also_crossfade">التنقّل داخل الأغنية لم يعد يُفقدها التلاشي المتداخل</string>
     <string name="tour_184_also_glass">لم يعد النص يظهر عبر أشرطة الزجاج السائل</string>
+    <!-- 1.8.4 Reorder -->
+    <string name="move_to_top">نقل إلى البداية</string>
+    <string name="move_to_bottom">نقل إلى النهاية</string>
+    <string name="reorder_position">%1$d من %2$d</string>
+    <string name="reorder_picked_up">تم الالتقاط، %1$d من %2$d. حرّكه بالسهمين لأعلى ولأسفل، واضغط Enter لإفلاته</string>
+    <string name="reorder_put_down">تم الإفلات، %1$d من %2$d</string>
+    <string name="hold_and_drag_or_the_grip">اضغط مطولًا واسحب، أو اسحب المقبض</string>
 </resources>
