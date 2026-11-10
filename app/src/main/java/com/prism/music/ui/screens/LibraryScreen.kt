@@ -417,7 +417,10 @@ fun LibraryScreen(bottomPadding: Dp) {
             // "Go to the playing song" (D54) on Songs: its place among the songs shown (-1: not one of them).
             val locate = remember { com.prism.music.ui.components.LocateState() }
             val playingId = if (tab == LibTab.SONGS) c.player.currentSong.collectAsState().value?.id else null
-            val playingAt = remember(shownSongs, playingId) { com.prism.music.ui.components.LocatePlaying.indexIn(shownSongs, playingId) }
+            // A music video row played as its song (Songs in radios) counts too: the queue knows the pair.
+            val playingVideo = playingId?.let { c.queue.counterparts[it] }
+            val playingAt = remember(shownSongs, playingId, playingVideo) { com.prism.music.ui.components.LocatePlaying.indexIn(shownSongs, playingId, playingVideo) }
+            val playingRowId = com.prism.music.ui.components.LocatePlaying.rowId(shownSongs, playingAt, playingId)
             /** The search at the top of a tab; once typed in, it stays whatever's left of the list. */
             fun androidx.compose.foundation.lazy.grid.LazyGridScope.findField(query: String, hint: String, count: Int, onChange: (String) -> Unit) {
                 if (query.isEmpty() && count < LIBRARY_SEARCH_FROM) return
@@ -739,7 +742,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                 description = tr(R.string.scroll_through_the_list), thumbOnly = true,
             ) { _ -> gridState.layoutInfo.visibleItemsInfo.firstNotNullOfOrNull { rowMarks.value[it.key as? String] } }
             // D54. Above the songs: where they're from, then (with any songs) the search and the sort.
-            if (tab == LibTab.SONGS) LocatePlayingRow(locate, gridState, inList = playingAt >= 0, songId = playingId, bottomPadding = bottomPadding) {
+            if (tab == LibTab.SONGS) LocatePlayingRow(locate, gridState, inList = playingAt >= 0, songId = playingRowId, bottomPadding = bottomPadding) {
                 playingAt + 1 + (if (songsBase.isNotEmpty()) 2 else 0)
             }
             }

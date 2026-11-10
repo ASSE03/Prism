@@ -457,7 +457,10 @@ internal fun CollectionContent(type: CollectionType, live: LiveCollection, initi
     // "Go to the playing song" (D54): its place among the songs shown (-1 once a search, filter or Hide explicit leaves
     // it out), and where the songs' rows are in the list.
     val locate = remember { com.prism.music.ui.components.LocateState() }
-    val playingAt = remember(visible, current?.id) { com.prism.music.ui.components.LocatePlaying.indexIn(visible, current?.id) }
+    // A music video row played as its song (Songs in radios) is the playing row too: the queue knows the pair.
+    val playingVideo = current?.id?.let { c.queue.counterparts[it] }
+    val playingAt = remember(visible, current?.id, playingVideo) { com.prism.music.ui.components.LocatePlaying.indexIn(visible, current?.id, playingVideo) }
+    val playingRowId = com.prism.music.ui.components.LocatePlaying.rowId(visible, playingAt, current?.id)
     val songRows = remember { com.prism.music.ui.components.SongRowPlaces() }
     // A video row downloaded as its song counts as downloaded (#315).
     val standIns by c.downloadStandIns.collectAsState()
@@ -904,7 +907,7 @@ internal fun CollectionContent(type: CollectionType, live: LiveCollection, initi
                             songs.forEachIndexed { i, s -> if (s.id !in firstRows) firstRows[s.id] = from + i }
                             itemsIndexed(songs, key = { i, s -> "g:$g:${s.id}:$i" }) { _, s ->
                                 com.prism.music.ui.components.SwipeToQueue(s, Modifier.locatePulse(locate, s.id)) {
-                                    SongRow(s, dim(s), playing = current?.id == s.id, trailingInfo = null, extraActions = removeAction(s) + skipAction(s), showAlbum = showAlbums) {
+                                    SongRow(s, dim(s), playing = playingRowId == s.id, trailingInfo = null, extraActions = removeAction(s) + skipAction(s), showAlbum = showAlbums) {
                                         playFrom(songs, s, source.copy(title = "$title · $g"))
                                     }
                                 }
@@ -921,7 +924,7 @@ internal fun CollectionContent(type: CollectionType, live: LiveCollection, initi
                                 dim(s),
                                 index = if (type == CollectionType.ALBUM) i + 1 else null,
                                 starred = s.id in popular,
-                                playing = current?.id == s.id,
+                                playing = playingRowId == s.id,
                                 // #314: a song playing from one of your own files says so ("MP3 · 320 kbps, from your file").
                                 trailingInfo = if (skippedCount > 0 && type != CollectionType.DOWNLOADS && com.prism.music.download.PlaylistDownloads.isSkipped(s.id, skipped, standIns)) tr(R.string.skipped_in_downloads)
                                 else if (type == CollectionType.ALBUM) formatDuration(s.durationSec)
@@ -968,9 +971,9 @@ internal fun CollectionContent(type: CollectionType, live: LiveCollection, initi
             // D54: the ⋯ menu's "Go to the playing song" while that song is one of the rows shown, and (Settings) a small
             // button above the mini player while its row is out of sight.
             LocatePlayingRow(
-                locate, listState, inList = playingAt >= 0 && !rearranging, songId = current?.id,
+                locate, listState, inList = playingAt >= 0 && !rearranging, songId = playingRowId,
                 bottomPadding = bottomPadding, topInset = statusTop + 60.dp,
-            ) { songRows.of(current?.id, playingAt) }
+            ) { songRows.of(playingRowId, playingAt) }
 
             // Content melts away under the bar into the page's own frost.
             ScrollEdge({ solid }, statusTop + 60.dp + 34.dp, pageHeight) { m ->

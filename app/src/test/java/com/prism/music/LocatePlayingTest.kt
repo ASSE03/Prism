@@ -60,13 +60,15 @@ class LocatePlayingTest {
     private fun settings(button: Boolean, still: Boolean) = AppSettings().let { it.copy(reduceMotion = still, behavior = it.behavior.copy(locatePlaying = button)) }
 
     /** A page as a playlist's is built: a header and Play above the songs, the rows counted as the list is made. */
-    private fun show(playingId: String?, button: Boolean, still: Boolean = false, shown: List<Song> = songs) {
+    private fun show(playingId: String?, button: Boolean, still: Boolean = false, shown: List<Song> = songs, playingVideoId: String? = null) {
         compose.setContent {
             PrismTheme(settings(button, still), artworkColor = null) {
                 val state = remember { LocateState() }.also { locate = it }
                 val lazy = rememberLazyListState().also { list = it }
                 val places = remember { SongRowPlaces() }
-                val at = LocatePlaying.indexIn(shown, playingId)
+                val at = LocatePlaying.indexIn(shown, playingId, playingVideoId)
+                // As the pages do: the row found is the one gone to and pulsed (its own id, which a video row's isn't the song's).
+                val rowId = LocatePlaying.rowId(shown, at, playingId)
                 Box(Modifier.fillMaxSize()) {
                     LazyColumn(Modifier.fillMaxSize(), lazy, contentPadding = PaddingValues(bottom = mini + 24.dp)) {
                         with(CountingLazyListScope(this)) {
@@ -78,7 +80,7 @@ class LocatePlayingTest {
                             }
                         }
                     }
-                    LocatePlayingRow(state, lazy, inList = at >= 0, songId = playingId, bottomPadding = mini) { places.of(playingId, at) }
+                    LocatePlayingRow(state, lazy, inList = at >= 0, songId = rowId, bottomPadding = mini) { places.of(rowId, at) }
                 }
             }
         }
@@ -174,6 +176,26 @@ class LocatePlayingTest {
         compose.onNodeWithTag("locatePlaying").assertIsDisplayed()
         go()
         assertInView(playing)
+    }
+
+    /**
+     * A16, 1.8.4: a Prism mix (Thanksgiving Dinner) lists "Give It To Me Baby" as its music video; Music videos → Songs in
+     * radios plays the song instead, under the song's own id (the queue's counterparts: song id → video id). The list
+     * didn't count it as playing: no "Go to the playing song", no button, no playing row.
+     */
+    @Test fun aVideoRowPlayedAsItsSongIsFoundGoneToAndPulsed() {
+        val shown = songs.map { if (it.id == playing) it.copy(id = "v380") else it }
+        assertEquals("the video's row", 379, LocatePlaying.indexIn(shown, playing, playingVideoId = "v380"))
+        assertEquals("without the pairing it isn't found", -1, LocatePlaying.indexIn(shown, playing, playingVideoId = null))
+        assertEquals("a row that is the song itself comes first", 2, LocatePlaying.indexIn(listOf(songs[0], shown[379], songs[379]), playing, "v380"))
+        assertEquals("v380", LocatePlaying.rowId(shown, 379, playing))
+        assertEquals("not in the list: the playing id", playing, LocatePlaying.rowId(shown, -1, playing))
+
+        show(playing, button = true, shown = shown, playingVideoId = "v380")
+        compose.onNodeWithTag("locatePlaying").assertIsDisplayed()
+        go()
+        assertInView("v380")
+        assertEquals("it pulsed once", 1, locate.beat)
     }
 
     @Test fun whereARowIs() {

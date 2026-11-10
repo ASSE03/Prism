@@ -52,8 +52,20 @@ import kotlinx.coroutines.launch
  * screen. The decisions are here on their own, so they can be checked without a screen.
  */
 object LocatePlaying {
-    /** The playing song's place in the songs a list is showing (after its search, filter and sort); -1: not one of them. */
-    fun indexIn(shown: List<Song>, playingId: String?): Int = if (playingId == null) -1 else shown.indexOfFirst { it.id == playingId }
+    /**
+     * The playing song's place in the songs a list is showing (after its search, filter and sort); -1: not one of them.
+     * [playingVideoId]: the music video the playing song stands in for (Music videos → Songs in radios plays a video row
+     * as its song, under the song's id: the queue's counterparts). Its row counts when the song's own isn't there.
+     */
+    fun indexIn(shown: List<Song>, playingId: String?, playingVideoId: String? = null): Int {
+        if (playingId == null) return -1
+        val at = shown.indexOfFirst { it.id == playingId }
+        if (at >= 0 || playingVideoId == null) return at
+        return shown.indexOfFirst { it.id == playingVideoId }
+    }
+
+    /** The id of the row that is the playing song ([at] from [indexIn]): the row's own, or, not in the list, [playingId]. */
+    fun rowId(shown: List<Song>, at: Int, playingId: String?): String? = shown.getOrNull(at)?.id ?: playingId
 
     /**
      * Where a row is against the part of the list that can be seen ([top] to [bottom]: under the page's bar, above the
