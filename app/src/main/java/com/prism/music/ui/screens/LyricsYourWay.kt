@@ -141,7 +141,7 @@ private fun currentLook(): LyricsLook {
 
 /** The look [p] would draw, for the song playing: how each choice's example shows it, with the rest of your settings. */
 @Composable
-private fun lookFor(p: LyricsLookPrefs): LyricsLook {
+internal fun lookFor(p: LyricsLookPrefs): LyricsLook {
     val cover = LocalContainer.current.player.currentSong.value?.thumbnail
     val sung = lyricsFill(p.sungColor, p.sungCustom, cover)
     val others = lyricsFill(p.otherColor, p.otherCustom, cover).solid()
@@ -349,7 +349,7 @@ private fun LyricsColorSwatches(selected: LyricsColor, custom: Int, onSelect: (L
 
 /** A tall dark screen of lyrics as bars: the sung one bright at [fraction] of the way down, then [ahead] lines to come. */
 @Composable
-private fun PositionSample(fraction: Float, ahead: Int) {
+internal fun PositionSample(fraction: Float, ahead: Int) {
     val light = Brush.horizontalGradient(*com.prism.music.ui.theme.PrismTokens.spectrumColors(true).toTypedArray())
     Box(Modifier.fillMaxWidth().height(112.dp).clip(RoundedCornerShape(12.dp)).background(Brush.verticalGradient(listOf(Color(0xFF2A2140), SampleDark)))) {
         androidx.compose.foundation.Canvas(Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 8.dp)) {
@@ -470,7 +470,7 @@ private fun ColorDot(label: String, color: Color?, onClick: () -> Unit) {
 
 /** What each background looks like, drawn small (the cover's colors from the song playing, or Prism's own). */
 @Composable
-private fun backgroundSample(kind: LyricsBackground, immersive: Boolean = false): Brush {
+internal fun backgroundSample(kind: LyricsBackground, immersive: Boolean = false): Brush {
     val s = LocalAppSettings.current
     val cover = LocalContainer.current.player.currentSong.value?.thumbnail
     val palette = com.prism.music.ui.components.rememberArtPalette(cover)
@@ -530,7 +530,7 @@ fun LyricsEffectsGroup() {
 
 /** An instrumental break as the lyrics page draws it: dots or a note, half lit, where the lines sit. */
 @Composable
-private fun GapSample(note: Boolean, centered: Boolean) {
+internal fun GapSample(note: Boolean, centered: Boolean) {
     Box(Modifier.fillMaxWidth().height(56.dp).padding(horizontal = 12.dp), contentAlignment = if (centered) Alignment.Center else Alignment.CenterStart) {
         androidx.compose.foundation.Canvas(Modifier.size(width = if (note) 24.dp else 42.dp, height = if (note) 24.dp else 10.dp)) {
             if (note) {
@@ -567,7 +567,7 @@ fun LyricsOnThePlayerGroup() {
 
 /** The player's foot as bars: the lyric line ([rows] lines, left or [centered]) over the progress bar. */
 @Composable
-private fun StripSample(centered: Boolean, rows: Int) {
+internal fun StripSample(centered: Boolean, rows: Int) {
     val light = Brush.horizontalGradient(*com.prism.music.ui.theme.PrismTokens.spectrumColors(true).toTypedArray())
     Box(Modifier.fillMaxWidth().height(64.dp).clip(RoundedCornerShape(12.dp)).background(Brush.verticalGradient(listOf(Color(0xFF2A2140), SampleDark)))) {
         androidx.compose.foundation.Canvas(Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 10.dp)) {

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 1.8.4, Settings → Lyrics & Sing rebuilt with the kit. -->
+    <string name="ls_color_and_effects">Color and effects</string>
+    <string name="ls_language_and_translations">Language and translations</string>
+    <string name="ls_sources_and_timing">Sources and timing</string>
+    <string name="ls_sing_and_music_files">Sing and music files</string>
+    <!-- The lyric line on the player: "Left · two lines". -->
+    <string name="ls_two_lines">%1$s · two lines</string>
+    <string name="ls_top_and_bottom">Top and bottom</string>
+    <string name="ls_pick_an_animation_first">Pick an animation first</string>
+    <string name="ls_pick_your_colors_first">Pick Your colors as the background first</string>
+    <string name="ls_offset_keywords">timing sync delay offset late early bluetooth speaker headphones lag</string>
+    <string name="ls_source_order">Source order</string>
+    <string name="ls_offset">Lyrics earlier / later</string>
+    <string name="ls_offset_earlier">%1$d ms earlier</string>
+    <string name="ls_offset_later">%1$d ms later</string>
+    <string name="ls_offset_none">As timed</string>
+    <string name="ls_offset_info">Moves every song\'s lyrics a little earlier or later, on top of a song\'s own timing. For a phone, speaker or headphones that play the sound late, so the words light up with the voice again. It changes at once, also for the song playing.</string>
+    <string name="ls_when_saving">When saving</string>
+    <string name="ls_word_timings">Word timings</string>
+    <string name="ls_translation">Translation</string>
+    <string name="ls_when_saving_info">What goes into your files with the lyrics. Word timings are saved as enhanced LRC, which Poweramp and other karaoke-capable players read; players that don\'t read it show the word times as text. The translation goes under each line, in your translation language.</string>
+    <string name="ls_sing_quick_way">The quick way on this phone</string>
+    <string name="ls_pick_a_lyrics_font_file">Pick a font file…</string>
+</resources>

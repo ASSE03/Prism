@@ -23,7 +23,10 @@ class SettingsIndexTest {
         val all = File("src/main/java/com/prism/music/ui/screens/settings").listFiles().orEmpty().filter { it.extension == "kt" }.sortedBy { it.name }
         val (old, current) = all.partition { it.name.startsWith("Old") }
         val live = (current + File("src/main/java/com/prism/music/ui/screens/SettingsScreen.kt")).toMutableList()
-        val waiting = old.toMutableList()
+        // Lyrics & Sing is rebuilt (LyricsSingPage.kt + LyricsSingParts.kt). Of OldLyrics.kt only `LyricsLookGroup` is
+        // still called, by the player's Customize sheet (SettingsScreen.kt): a title around LyricsYourWay.kt's animation
+        // choices, no row of a settings page. So its old rows and groups are on no page, and aren't read.
+        val waiting = old.filter { it.name != "OldLyrics.kt" }.toMutableList()
         // What an old file offers the others: its composables that aren't private.
         fun offers(f: File) = Regex("""^internal fun (?:[\w.]+\.)?(\w+)\(""", RegexOption.MULTILINE).findAll(f.readText()).map { it.groupValues[1] }.toList()
         while (true) {
@@ -86,7 +89,8 @@ class SettingsIndexTest {
     fun oldFilesAreReadWhileAPageDrawsThem() {
         val read = pageFiles.map { it.name }
         assertTrue("the old Language page is rebuilt (LanguageRegionPage.kt): $read", "OldLanguageRegion.kt" !in read)
-        for (name in listOf("OldPlayer.kt", "OldSound.kt", "OldTheme.kt", "OldTabs.kt", "OldCar.kt", "OldAccounts.kt", "OldLyrics.kt", "OldLooks.kt", "OldBackupAbout.kt", "LanguageRegionPage.kt", "PlayerPage.kt")) {
+        assertTrue("the old Lyrics pages are rebuilt (LyricsSingPage.kt): $read", "OldLyrics.kt" !in read)
+        for (name in listOf("OldPlayer.kt", "OldSound.kt", "OldTheme.kt", "OldTabs.kt", "OldCar.kt", "OldAccounts.kt", "OldLooks.kt", "OldBackupAbout.kt", "LanguageRegionPage.kt", "PlayerPage.kt", "LyricsSingPage.kt", "LyricsSingParts.kt")) {
             assertTrue("$name is read: $read", name in read)
         }
     }
