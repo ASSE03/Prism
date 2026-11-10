@@ -5318,4 +5318,41 @@
     <string name="tl_pick_a_split_light">Choisissez d’abord une lumière autre que Blanc</string>
     <string name="tl_history_and_editing">Historique et modification</string>
     <string name="tl_reset_everything">Tout réinitialiser</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Looks complets, jour et nuit</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord activé · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · sauvegarde, mises à jour</string>
+    <string name="root_connect_short">Lire sur enceintes et TV</string>
+    <string name="root_handoff_on">Transfert activé</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Les paramètres, en plus simple</string>
+    <string name="tour_184_settings_body">Une nouvelle première page, et chaque page en petits groupes.</string>
+    <string name="tour_184_settings_point_1">La recherche, votre compte et le Mode Performance tout en haut</string>
+    <string name="tour_184_settings_point_2">17 pages en cinq groupes, chacune avec une ligne qui dit comment elle est réglée</string>
+    <string name="tour_184_settings_point_3">Les choix s’ouvrent dans un panneau, avec un exemple de chacun</string>
+    <string name="tour_184_settings_point_4">« Réinitialiser cette page » remet une page comme à l’origine</string>
+    <string name="tour_184_settings_point_5">Touchez ⓘ pour lire ce que fait un réglage</string>
+    <string name="tour_184_lyrics_title">Les paroles, pile à l’heure</string>
+    <string name="tour_184_lyrics_body">Les paroles sont en retard dans votre casque ? Décalez un peu les paroles de tous les titres, plus tôt ou plus tard.</string>
+    <string name="tour_184_lyrics_point_1">Jusqu’à une demi-seconde dans un sens ou l’autre, appliqué aussitôt</string>
+    <string name="tour_184_lyrics_point_2">Les paroles dans la notification, sans voiture</string>
+    <string name="tour_184_lyrics_point_3">En voiture, une longue ligne peut continuer sur une deuxième ligne</string>
+    <string name="tour_184_lock_title">L’écran de verrouillage, au look du lecteur</string>
+    <string name="tour_184_lock_body">Le lecteur de l’écran de verrouillage peut reprendre l’arrière-plan, la barre de progression et l’accent du lecteur.</string>
+    <string name="tour_184_lock_point_1">Activez « %1$s » dans %2$s</string>
+    <string name="tour_184_lock_point_2">Les arrière-plans animés y restent fixes</string>
+    <string name="tour_184_lock_point_3">Un cœur dans la disposition Paroles quand J’aime est affiché</string>
+    <string name="tour_184_lists_title">Trouver le titre en cours</string>
+    <string name="tour_184_lists_body">Dans une longue liste, allez directement au titre en cours de lecture.</string>
+    <string name="tour_184_lists_point_1">« %1$s » dans le menu ⋯ d’une liste de titres</string>
+    <string name="tour_184_lists_point_2">Ou un bouton au-dessus du mini-lecteur : activez « %1$s »</string>
+    <string name="tour_184_lists_point_3">Images pleine largeur aussi sur les albums</string>
+    <string name="tour_184_lists_point_4">Trier les albums de la Bibliothèque par date d’ajout</string>
+    <string name="tour_184_lists_point_5">Le balayage des titres vers la file d’attente peut être désactivé</string>
+    <string name="tour_184_also_shuffle">Lecture aléatoire sans la version intelligente, et l’aléatoire gardé pour la liste suivante</string>
+    <string name="tour_184_also_replay">Replay pour hier, la semaine dernière et le mois dernier</string>
+    <string name="tour_184_also_color">Une couleur unie comme arrière-plan d’un écran</string>
+    <string name="tour_184_also_crossfade">Avancer dans un titre ne lui fait plus perdre son fondu enchaîné</string>
+    <string name="tour_184_also_glass">Le texte ne transparaît plus à travers les barres Liquid Glass</string>
 </resources>

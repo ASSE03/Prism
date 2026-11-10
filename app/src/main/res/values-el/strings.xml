@@ -5245,4 +5245,41 @@
     <string name="tl_pick_a_split_light">Διάλεξε πρώτα φως διαφορετικό από το Λευκό</string>
     <string name="tl_history_and_editing">Ιστορικό και επεξεργασία</string>
     <string name="tl_reset_everything">Επαναφορά όλων</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Ολόκληρα στυλ, μέρα και νύχτα</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord ενεργό · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · αντίγραφα, ενημερώσεις</string>
+    <string name="root_connect_short">Παίξε σε ηχεία και τηλεοράσεις</string>
+    <string name="root_handoff_on">Μεταφορά ενεργή</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Ρυθμίσεις, απλά</string>
+    <string name="tour_184_settings_body">Μια νέα πρώτη σελίδα, και κάθε σελίδα σε σύντομες ομάδες.</string>
+    <string name="tour_184_settings_point_1">Αναζήτηση, ο λογαριασμός σου και Λειτουργία απόδοσης στην κορυφή</string>
+    <string name="tour_184_settings_point_2">17 σελίδες σε πέντε ομάδες, η καθεμία με μια γραμμή που λέει πώς είναι ρυθμισμένη</string>
+    <string name="tour_184_settings_point_3">Οι επιλογές ανοίγουν σε ένα φύλλο, με παράδειγμα για την καθεμία</string>
+    <string name="tour_184_settings_point_4">Η «Επαναφορά αυτής της σελίδας» φέρνει μια σελίδα πίσω όπως ήταν αρχικά</string>
+    <string name="tour_184_settings_point_5">Πάτα το ⓘ για να διαβάσεις τι κάνει μια ρύθμιση</string>
+    <string name="tour_184_lyrics_title">Στίχοι, ακριβώς στην ώρα τους</string>
+    <string name="tour_184_lyrics_body">Οι στίχοι αργούν στα ακουστικά σου; Μετακίνησε τους στίχους όλων των τραγουδιών λίγο νωρίτερα ή αργότερα.</string>
+    <string name="tour_184_lyrics_point_1">Έως μισό δευτερόλεπτο προς κάθε κατεύθυνση, αλλάζει αμέσως</string>
+    <string name="tour_184_lyrics_point_2">Στίχοι στην ειδοποίηση, χωρίς αυτοκίνητο</string>
+    <string name="tour_184_lyrics_point_3">Στο αυτοκίνητο, μια μεγάλη γραμμή μπορεί να συνεχίσει σε δεύτερη γραμμή</string>
+    <string name="tour_184_lock_title">Η οθόνη κλειδώματος, με το στυλ της οθόνης αναπαραγωγής</string>
+    <string name="tour_184_lock_body">Το πρόγραμμα αναπαραγωγής στην οθόνη κλειδώματος μπορεί να πάρει το φόντο, τη γραμμή προόδου και την έμφαση της οθόνης αναπαραγωγής.</string>
+    <string name="tour_184_lock_point_1">Ενεργοποίησε το «%1$s» στις %2$s</string>
+    <string name="tour_184_lock_point_2">Τα κινούμενα φόντα μένουν ακίνητα εκεί</string>
+    <string name="tour_184_lock_point_3">Μια καρδιά στη διάταξη Στίχοι όταν φαίνεται το Μου αρέσει</string>
+    <string name="tour_184_lists_title">Βρες το τραγούδι που παίζει</string>
+    <string name="tour_184_lists_body">Σε μια μεγάλη λίστα, πήγαινε κατευθείαν στο τραγούδι που παίζει.</string>
+    <string name="tour_184_lists_point_1">«%1$s» στο μενού ⋯ μιας λίστας τραγουδιών</string>
+    <string name="tour_184_lists_point_2">Ή ένα κουμπί πάνω από το μίνι player: ενεργοποίησε το «%1$s»</string>
+    <string name="tour_184_lists_point_3">Εικόνες σε όλο το πλάτος και στα άλμπουμ</string>
+    <string name="tour_184_lists_point_4">Ταξινόμηση των άλμπουμ της Βιβλιοθήκης κατά το πότε τα πρόσθεσες</string>
+    <string name="tour_184_lists_point_5">Το σύρσιμο τραγουδιών στην ουρά μπορεί να απενεργοποιηθεί</string>
+    <string name="tour_184_also_shuffle">Τυχαία αναπαραγωγή χωρίς την έξυπνη, και τυχαία αναπαραγωγή και στην επόμενη λίστα</string>
+    <string name="tour_184_also_replay">Replay για χθες, την προηγούμενη εβδομάδα και τον προηγούμενο μήνα</string>
+    <string name="tour_184_also_color">Ένα συμπαγές χρώμα ως φόντο μιας οθόνης</string>
+    <string name="tour_184_also_crossfade">Η μετακίνηση μέσα στο τραγούδι δεν χαλάει πια την ομαλή μετάβαση</string>
+    <string name="tour_184_also_glass">Το κείμενο δεν φαίνεται πια μέσα από τις μπάρες Υγρό γυαλί</string>
 </resources>

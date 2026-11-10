@@ -5172,4 +5172,41 @@
     <string name="tl_pick_a_split_light">먼저 흰색이 아닌 빛을 선택하세요</string>
     <string name="tl_history_and_editing">기록 및 편집</string>
     <string name="tl_reset_everything">모두 초기화</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">낮과 밤을 위한 전체 룩</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord 켜짐 · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · 백업, 업데이트</string>
+    <string name="root_connect_short">스피커와 TV에서 재생</string>
+    <string name="root_handoff_on">이어 듣기 켜짐</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">더 간단해진 설정</string>
+    <string name="tour_184_settings_body">새로운 첫 페이지, 그리고 모든 페이지를 짧은 그룹으로 정리했어요.</string>
+    <string name="tour_184_settings_point_1">맨 위에 검색, 내 계정, 성능 모드</string>
+    <string name="tour_184_settings_point_2">5개 그룹에 17개 페이지, 각 페이지에 현재 설정을 알려 주는 한 줄</string>
+    <string name="tour_184_settings_point_3">선택지는 시트에서 열리고, 각각 예시를 보여 줌</string>
+    <string name="tour_184_settings_point_4">이 페이지 초기화로 한 페이지를 처음 상태로 되돌리기</string>
+    <string name="tour_184_settings_point_5">ⓘ를 탭하면 설정이 하는 일을 읽을 수 있음</string>
+    <string name="tour_184_lyrics_title">타이밍이 딱 맞는 가사</string>
+    <string name="tour_184_lyrics_body">헤드폰에서 가사가 늦나요? 모든 곡의 가사를 조금 빠르게 또는 늦게 옮겨 보세요.</string>
+    <string name="tour_184_lyrics_point_1">어느 쪽으로든 최대 0.5초, 바로 적용</string>
+    <string name="tour_184_lyrics_point_2">차 없이도 알림에 가사 표시</string>
+    <string name="tour_184_lyrics_point_3">차에서는 긴 줄이 두 번째 줄로 이어질 수 있음</string>
+    <string name="tour_184_lock_title">플레이어와 같은 룩의 잠금 화면</string>
+    <string name="tour_184_lock_body">잠금 화면 플레이어에 플레이어의 배경, 진행 표시줄, 강조 색상을 쓸 수 있어요.</string>
+    <string name="tour_184_lock_point_1">%2$s에서 ‘%1$s’ 켜기</string>
+    <string name="tour_184_lock_point_2">움직이는 배경은 그곳에서 멈춰 있음</string>
+    <string name="tour_184_lock_point_3">좋아요가 표시되면 가사 레이아웃에 하트 표시</string>
+    <string name="tour_184_lists_title">재생 중인 곡 찾기</string>
+    <string name="tour_184_lists_body">긴 목록에서 재생 중인 곡으로 바로 이동하세요.</string>
+    <string name="tour_184_lists_point_1">곡 목록의 ⋯ 메뉴에 있는 ‘%1$s’</string>
+    <string name="tour_184_lists_point_2">또는 미니 플레이어 위의 버튼: ‘%1$s’ 켜기</string>
+    <string name="tour_184_lists_point_3">앨범에서도 전체 너비 사진</string>
+    <string name="tour_184_lists_point_4">보관함의 앨범을 추가한 날짜순으로 정렬</string>
+    <string name="tour_184_lists_point_5">곡 행을 스와이프해서 대기열에 추가하는 기능을 끌 수 있음</string>
+    <string name="tour_184_also_shuffle">스마트 셔플 없이 셔플, 다음 목록에서도 셔플 유지</string>
+    <string name="tour_184_also_replay">어제, 지난주, 지난달의 Replay</string>
+    <string name="tour_184_also_color">화면 배경으로 단색 사용</string>
+    <string name="tour_184_also_crossfade">탐색해도 곡의 크로스페이드가 사라지지 않음</string>
+    <string name="tour_184_also_glass">리퀴드 글래스 바 뒤로 텍스트가 더 이상 비치지 않음</string>
 </resources>

@@ -5245,4 +5245,41 @@
     <string name="tl_pick_a_split_light">Előbb válassz a Fehértől eltérő fényt</string>
     <string name="tl_history_and_editing">Előzmények és szerkesztés</string>
     <string name="tl_reset_everything">Minden visszaállítása</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Teljes arculatok, éjjel-nappal</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord be · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · mentés, frissítések</string>
+    <string name="root_connect_short">Lejátszás hangszórón és tévén</string>
+    <string name="root_handoff_on">Átadás bekapcsolva</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Beállítások, egyszerűen</string>
+    <string name="tour_184_settings_body">Új első oldal, és minden oldal rövid csoportokban.</string>
+    <string name="tour_184_settings_point_1">Keresés, a fiókod és a Teljesítmény mód legfelül</string>
+    <string name="tour_184_settings_point_2">17 oldal öt csoportban, mindegyiknél egy sor, amely megmutatja, hogyan van beállítva</string>
+    <string name="tour_184_settings_point_3">A választások egy panelen nyílnak meg, mindegyikhez példával</string>
+    <string name="tour_184_settings_point_4">Az „Oldal visszaállítása” egy oldalt az eredeti állapotába hoz</string>
+    <string name="tour_184_settings_point_5">Koppints az ⓘ-re, és olvasd el, mit csinál egy beállítás</string>
+    <string name="tour_184_lyrics_title">Dalszöveg, pont időben</string>
+    <string name="tour_184_lyrics_body">Késik a dalszöveg a fejhallgatón? Told egy kicsit korábbra vagy későbbre minden dal szövegét.</string>
+    <string name="tour_184_lyrics_point_1">Akár fél másodperccel bármelyik irányba, azonnal</string>
+    <string name="tour_184_lyrics_point_2">Dalszöveg az értesítésben, autó nélkül is</string>
+    <string name="tour_184_lyrics_point_3">Autóban egy hosszú sor a második sorban folytatódhat</string>
+    <string name="tour_184_lock_title">A zárolási képernyő a lejátszó arculatában</string>
+    <string name="tour_184_lock_body">A zárolási képernyő lejátszója átveheti a lejátszó hátterét, folyamatjelzőjét és kiemelőszínét.</string>
+    <string name="tour_184_lock_point_1">Kapcsold be: „%1$s” (%2$s)</string>
+    <string name="tour_184_lock_point_2">A mozgó hátterek ott mozdulatlanok</string>
+    <string name="tour_184_lock_point_3">Egy szív a Dalszöveg elrendezésen, ha a Kedvelés látszik</string>
+    <string name="tour_184_lists_title">Találd meg a szóló dalt</string>
+    <string name="tour_184_lists_body">Egy hosszú listában ugorj egyenesen a most szóló dalhoz.</string>
+    <string name="tour_184_lists_point_1">„%1$s” egy dallista ⋯ menüjében</string>
+    <string name="tour_184_lists_point_2">Vagy egy gomb a minilejátszó fölött: kapcsold be: „%1$s”</string>
+    <string name="tour_184_lists_point_3">Teljes szélességű képek az albumoknál is</string>
+    <string name="tour_184_lists_point_4">A Könyvtár albumai rendezhetők a hozzáadás ideje szerint</string>
+    <string name="tour_184_lists_point_5">A dalsorok sorhoz húzása kikapcsolható</string>
+    <string name="tour_184_also_shuffle">Keverés Okos keverés nélkül, és a keverés megmarad a következő listánál</string>
+    <string name="tour_184_also_replay">Replay a tegnapra, a múlt hétre és a múlt hónapra</string>
+    <string name="tour_184_also_color">Egyszínű háttér egy képernyőhöz</string>
+    <string name="tour_184_also_crossfade">A tekerés már nem veszi el a dal áttűnését</string>
+    <string name="tour_184_also_glass">A szöveg már nem látszik át a Folyékony üveg sávokon</string>
 </resources>

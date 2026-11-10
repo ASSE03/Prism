@@ -5245,4 +5245,41 @@
     <string name="tl_pick_a_split_light">पहले सफ़ेद के अलावा कोई रोशनी चुनें</string>
     <string name="tl_history_and_editing">इतिहास और एडिटिंग</string>
     <string name="tl_reset_everything">सब कुछ रीसेट करें</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">पूरे लुक, दिन और रात</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord चालू · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · बैकअप, अपडेट</string>
+    <string name="root_connect_short">स्पीकर और टीवी पर चलाएं</string>
+    <string name="root_handoff_on">हैंडऑफ़ चालू</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">सेटिंग, अब आसान</string>
+    <string name="tour_184_settings_body">नया पहला पेज, और हर पेज छोटे-छोटे ग्रुप में।</string>
+    <string name="tour_184_settings_point_1">खोज, आपका खाता और परफ़ॉर्मेंस मोड सबसे ऊपर</string>
+    <string name="tour_184_settings_point_2">पांच ग्रुप में 17 पेज, हर एक के साथ एक लाइन जो बताती है कि वह कैसे सेट है</string>
+    <string name="tour_184_settings_point_3">विकल्प एक शीट में खुलते हैं, हर एक के उदाहरण के साथ</string>
+    <string name="tour_184_settings_point_4">\"यह पेज रीसेट करें\" एक पेज को वैसा कर देता है जैसा वह शुरू में था</string>
+    <string name="tour_184_settings_point_5">कोई सेटिंग क्या करती है, यह पढ़ने के लिए ⓘ पर टैप करें</string>
+    <string name="tour_184_lyrics_title">बोल, बिल्कुल सही समय पर</string>
+    <string name="tour_184_lyrics_body">हेडफ़ोन पर बोल देर से आते हैं? सभी गानों के बोल थोड़ा पहले या बाद में करें।</string>
+    <string name="tour_184_lyrics_point_1">किसी भी तरफ़ आधे सेकंड तक, तुरंत लागू</string>
+    <string name="tour_184_lyrics_point_2">नोटिफ़िकेशन में बोल, कार की ज़रूरत नहीं</string>
+    <string name="tour_184_lyrics_point_3">कार में लंबी लाइन दूसरी लाइन तक जा सकती है</string>
+    <string name="tour_184_lock_title">लॉक स्क्रीन, प्लेयर के लुक में</string>
+    <string name="tour_184_lock_body">लॉक स्क्रीन प्लेयर, प्लेयर का बैकग्राउंड, प्रोग्रेस बार और एक्सेंट ले सकता है।</string>
+    <string name="tour_184_lock_point_1">%2$s में \"%1$s\" चालू करें</string>
+    <string name="tour_184_lock_point_2">वहां चलते बैकग्राउंड स्थिर रहते हैं</string>
+    <string name="tour_184_lock_point_3">पसंद दिखने पर बोल लेआउट में एक दिल</string>
+    <string name="tour_184_lists_title">चल रहा गाना ढूंढें</string>
+    <string name="tour_184_lists_body">लंबी सूची में सीधे उस गाने पर जाएं जो चल रहा है।</string>
+    <string name="tour_184_lists_point_1">गानों की सूची के ⋯ मेन्यू में \"%1$s\"</string>
+    <string name="tour_184_lists_point_2">या मिनी प्लेयर के ऊपर एक बटन: \"%1$s\" चालू करें</string>
+    <string name="tour_184_lists_point_3">एल्बम पर भी पूरी चौड़ाई वाली तस्वीरें</string>
+    <string name="tour_184_lists_point_4">लाइब्रेरी के एल्बम जोड़ने के समय के हिसाब से क्रम में लगाएं</string>
+    <string name="tour_184_lists_point_5">गाने स्वाइप करके कतार में जोड़ना बंद किया जा सकता है</string>
+    <string name="tour_184_also_shuffle">स्मार्ट शफ़ल के बिना शफ़ल, और अगली सूची के लिए शफ़ल चालू रखना</string>
+    <string name="tour_184_also_replay">कल, पिछले हफ़्ते और पिछले महीने का Replay</string>
+    <string name="tour_184_also_color">स्क्रीन के बैकग्राउंड के रूप में सादा रंग</string>
+    <string name="tour_184_also_crossfade">गाने में आगे-पीछे करने से अब उसका क्रॉसफ़ेड नहीं छूटता</string>
+    <string name="tour_184_also_glass">लिक्विड ग्लास बार के आर-पार अब टेक्स्ट नहीं दिखता</string>
 </resources>

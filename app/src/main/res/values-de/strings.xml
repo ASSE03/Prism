@@ -5245,4 +5245,41 @@
     <string name="tl_pick_a_split_light">Wähl zuerst ein anderes Licht als Weiß</string>
     <string name="tl_history_and_editing">Verlauf und Bearbeiten</string>
     <string name="tl_reset_everything">Alles zurücksetzen</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Ganze Looks, Tag und Nacht</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord an · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · Backup, Updates</string>
+    <string name="root_connect_short">Auf Lautsprechern und TVs abspielen</string>
+    <string name="root_handoff_on">Übergabe an</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Einstellungen, ganz einfach</string>
+    <string name="tour_184_settings_body">Eine neue erste Seite, und jede Seite in kurzen Gruppen.</string>
+    <string name="tour_184_settings_point_1">Suche, dein Konto und Leistungsmodus ganz oben</string>
+    <string name="tour_184_settings_point_2">17 Seiten in fünf Gruppen, jede mit einer Zeile, die sagt, wie sie eingestellt ist</string>
+    <string name="tour_184_settings_point_3">Auswahlen öffnen sich in einem Blatt, mit einem Beispiel für jede</string>
+    <string name="tour_184_settings_point_4">„Diese Seite zurücksetzen“ bringt eine Seite in den Ausgangszustand</string>
+    <string name="tour_184_settings_point_5">Tippe auf ⓘ, um zu lesen, was eine Einstellung macht</string>
+    <string name="tour_184_lyrics_title">Songtext, genau im Takt</string>
+    <string name="tour_184_lyrics_body">Songtext kommt auf deinen Kopfhörern zu spät? Verschiebe den Songtext aller Songs ein wenig früher oder später.</string>
+    <string name="tour_184_lyrics_point_1">Bis zu einer halben Sekunde in jede Richtung, sofort wirksam</string>
+    <string name="tour_184_lyrics_point_2">Songtext in der Benachrichtigung, auch ohne Auto</string>
+    <string name="tour_184_lyrics_point_3">Im Auto kann eine lange Zeile in einer zweiten Zeile weiterlaufen</string>
+    <string name="tour_184_lock_title">Der Sperrbildschirm im Look des Players</string>
+    <string name="tour_184_lock_body">Dein Player auf dem Sperrbildschirm kann Hintergrund, Fortschrittsleiste und Akzent des Players übernehmen.</string>
+    <string name="tour_184_lock_point_1">Schalte „%1$s“ in %2$s ein</string>
+    <string name="tour_184_lock_point_2">Bewegte Hintergründe stehen dort still</string>
+    <string name="tour_184_lock_point_3">Ein Herz im Layout Songtext, wenn Gefällt mir angezeigt wird</string>
+    <string name="tour_184_lists_title">Den laufenden Song finden</string>
+    <string name="tour_184_lists_body">Spring in einer langen Liste direkt zum Song, der gerade läuft.</string>
+    <string name="tour_184_lists_point_1">„%1$s“ im ⋯-Menü einer Songliste</string>
+    <string name="tour_184_lists_point_2">Oder eine Taste über dem Miniplayer: schalte „%1$s“ ein</string>
+    <string name="tour_184_lists_point_3">Bilder in voller Breite jetzt auch bei Alben</string>
+    <string name="tour_184_lists_point_4">Alben in der Mediathek danach sortieren, wann du sie hinzugefügt hast</string>
+    <string name="tour_184_lists_point_5">Songzeilen in die Warteschlange wischen lässt sich ausschalten</string>
+    <string name="tour_184_also_shuffle">Shuffle ohne Smart Shuffle, und Shuffle für die nächste Liste anlassen</string>
+    <string name="tour_184_also_replay">Replay für gestern, letzte Woche und letzten Monat</string>
+    <string name="tour_184_also_color">Eine einfarbige Fläche als Hintergrund eines Bildschirms</string>
+    <string name="tour_184_also_crossfade">Spulen nimmt einem Song nicht mehr seinen Crossfade</string>
+    <string name="tour_184_also_glass">Text scheint nicht mehr durch Liquid-Glass-Leisten</string>
 </resources>

@@ -5318,4 +5318,41 @@
     <string name="tl_pick_a_split_light">Scegli prima una luce diversa da Bianco</string>
     <string name="tl_history_and_editing">Cronologia e modifica</string>
     <string name="tl_reset_everything">Ripristina tutto</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Look completi, giorno e notte</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord attivo · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · backup, aggiornamenti</string>
+    <string name="root_connect_short">Riproduci su altoparlanti e TV</string>
+    <string name="root_handoff_on">Passaggio attivo</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Impostazioni, più semplici</string>
+    <string name="tour_184_settings_body">Una nuova prima pagina, e ogni pagina in gruppi brevi.</string>
+    <string name="tour_184_settings_point_1">Cerca, il tuo account e la Modalità Prestazioni in alto</string>
+    <string name="tour_184_settings_point_2">17 pagine in cinque gruppi, ognuna con una riga che dice com\'è impostata</string>
+    <string name="tour_184_settings_point_3">Le scelte si aprono in un pannello, con un esempio per ciascuna</string>
+    <string name="tour_184_settings_point_4">«Ripristina questa pagina» riporta una pagina com\'era all\'inizio</string>
+    <string name="tour_184_settings_point_5">Tocca ⓘ per leggere cosa fa un\'impostazione</string>
+    <string name="tour_184_lyrics_title">Testi, sempre a tempo</string>
+    <string name="tour_184_lyrics_body">I testi arrivano in ritardo nelle cuffie? Sposta un po\' prima o dopo i testi di tutti i brani.</string>
+    <string name="tour_184_lyrics_point_1">Fino a mezzo secondo in entrambe le direzioni, subito</string>
+    <string name="tour_184_lyrics_point_2">Testi nella notifica, senza bisogno dell\'auto</string>
+    <string name="tour_184_lyrics_point_3">In auto, una riga lunga può continuare su una seconda riga</string>
+    <string name="tour_184_lock_title">La schermata di blocco, con il look del player</string>
+    <string name="tour_184_lock_body">Il player della schermata di blocco può prendere lo sfondo, la barra di avanzamento e l\'accento del player.</string>
+    <string name="tour_184_lock_point_1">Attiva «%1$s» in %2$s</string>
+    <string name="tour_184_lock_point_2">Lì gli sfondi animati restano fermi</string>
+    <string name="tour_184_lock_point_3">Un cuore nel layout Testi quando Mi piace è mostrato</string>
+    <string name="tour_184_lists_title">Trova il brano in riproduzione</string>
+    <string name="tour_184_lists_body">In un elenco lungo, vai dritto al brano in riproduzione.</string>
+    <string name="tour_184_lists_point_1">«%1$s» nel menu ⋯ di un elenco di brani</string>
+    <string name="tour_184_lists_point_2">Oppure un pulsante sopra il mini player: attiva «%1$s»</string>
+    <string name="tour_184_lists_point_3">Immagini a tutta larghezza anche sugli album</string>
+    <string name="tour_184_lists_point_4">Ordina gli album della Raccolta per data di aggiunta</string>
+    <string name="tour_184_lists_point_5">Lo scorrimento dei brani in coda si può disattivare</string>
+    <string name="tour_184_also_shuffle">Casuale senza Casuale intelligente, e Casuale mantenuto per l\'elenco successivo</string>
+    <string name="tour_184_also_replay">Replay per ieri, la settimana scorsa e il mese scorso</string>
+    <string name="tour_184_also_color">Una tinta unita come sfondo di una schermata</string>
+    <string name="tour_184_also_crossfade">Spostarsi nel brano non fa più perdere la dissolvenza incrociata</string>
+    <string name="tour_184_also_glass">Il testo non traspare più attraverso le barre in Vetro liquido</string>
 </resources>

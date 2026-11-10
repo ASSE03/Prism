@@ -5245,4 +5245,41 @@
     <string name="tl_pick_a_split_light">پہلے سفید کے علاوہ کوئی روشنی منتخب کریں</string>
     <string name="tl_history_and_editing">ہسٹری اور ترمیم</string>
     <string name="tl_reset_everything">سب کچھ ری سیٹ کریں</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">پوری لُکس، دن اور رات</string>
+    <string name="root_accounts_short">Last.fm، Spotify، Discord</string>
+    <string name="root_accounts_discord_on">Discord آن · Last.fm، Spotify</string>
+    <string name="root_backup_short">Prism %1$s · بیک اپ، اپ ڈیٹس</string>
+    <string name="root_connect_short">اسپیکرز اور TVs پر چلائیں</string>
+    <string name="root_handoff_on">ہینڈ آف آن</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">ترتیبات، آسان</string>
+    <string name="tour_184_settings_body">نیا پہلا صفحہ، اور ہر صفحہ مختصر گروپس میں۔</string>
+    <string name="tour_184_settings_point_1">تلاش، آپ کا اکاؤنٹ اور پرفارمنس موڈ سب سے اوپر</string>
+    <string name="tour_184_settings_point_2">پانچ گروپس میں 17 صفحات، ہر ایک کے ساتھ ایک لائن جو بتائے کہ وہ کیسے سیٹ ہے</string>
+    <string name="tour_184_settings_point_3">اختیارات ایک شیٹ میں کھلتے ہیں، ہر ایک کی مثال کے ساتھ</string>
+    <string name="tour_184_settings_point_4">یہ صفحہ ری سیٹ کریں ایک صفحے کو اس کی اصل حالت میں لے آتا ہے</string>
+    <string name="tour_184_settings_point_5">کوئی ترتیب کیا کرتی ہے، یہ پڑھنے کے لیے ⓘ پر ٹیپ کریں</string>
+    <string name="tour_184_lyrics_title">بول، بالکل وقت پر</string>
+    <string name="tour_184_lyrics_body">ہیڈ فون پر بول دیر سے آتے ہیں؟ ہر گانے کے بول تھوڑا پہلے یا بعد میں کر دیں۔</string>
+    <string name="tour_184_lyrics_point_1">دونوں طرف آدھے سیکنڈ تک، فوراً لاگو</string>
+    <string name="tour_184_lyrics_point_2">اطلاع میں بول، گاڑی کی ضرورت نہیں</string>
+    <string name="tour_184_lyrics_point_3">گاڑی میں لمبی لائن دوسری لائن تک جا سکتی ہے</string>
+    <string name="tour_184_lock_title">لاک اسکرین، پلیئر کی لُک میں</string>
+    <string name="tour_184_lock_body">آپ کی لاک اسکرین کا پلیئر، پلیئر کا پس منظر، پروگریس بار اور ایکسنٹ لے سکتا ہے۔</string>
+    <string name="tour_184_lock_point_1">%2$s میں \"%1$s\" آن کریں</string>
+    <string name="tour_184_lock_point_2">حرکت کرتے پس منظر وہاں ساکن رہتے ہیں</string>
+    <string name="tour_184_lock_point_3">جب پسند دکھایا جائے تو بول کے لے آؤٹ پر ایک دل</string>
+    <string name="tour_184_lists_title">چلتا گانا ڈھونڈیں</string>
+    <string name="tour_184_lists_body">لمبی فہرست میں سیدھا اس گانے پر جائیں جو چل رہا ہے۔</string>
+    <string name="tour_184_lists_point_1">گانوں کی فہرست کے ⋯ مینو میں \"%1$s\"</string>
+    <string name="tour_184_lists_point_2">یا منی پلیئر کے اوپر ایک بٹن: \"%1$s\" آن کریں</string>
+    <string name="tour_184_lists_point_3">البمز پر بھی پوری چوڑائی کی تصاویر</string>
+    <string name="tour_184_lists_point_4">لائبریری کے البمز کو اس وقت کے حساب سے ترتیب دیں جب آپ نے انہیں شامل کیا</string>
+    <string name="tour_184_lists_point_5">گانوں کی قطاریں سوائپ کر کے قطار میں ڈالنا بند کیا جا سکتا ہے</string>
+    <string name="tour_184_also_shuffle">سمارٹ شفل کے بغیر شفل، اور اگلی فہرست کے لیے شفل آن رکھیں</string>
+    <string name="tour_184_also_replay">کل، پچھلے ہفتے اور پچھلے مہینے کا Replay</string>
+    <string name="tour_184_also_color">اسکرین کے پس منظر کے طور پر سادہ رنگ</string>
+    <string name="tour_184_also_crossfade">آگے پیچھے کرنے سے اب گانے کا کراس فیڈ ضائع نہیں ہوتا</string>
+    <string name="tour_184_also_glass">مائع شیشہ کی بارز کے پیچھے سے اب متن نظر نہیں آتا</string>
 </resources>

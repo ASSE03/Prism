@@ -5245,4 +5245,41 @@
     <string name="tl_pick_a_split_light">Pumili muna ng liwanag na hindi Puti</string>
     <string name="tl_history_and_editing">History at pag-edit</string>
     <string name="tl_reset_everything">I-reset lahat</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Buong look, araw at gabi</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Naka-on ang Discord · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · backup, mga update</string>
+    <string name="root_connect_short">I-play sa mga speaker at TV</string>
+    <string name="root_handoff_on">Naka-on ang handoff</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Mga Setting, pinasimple</string>
+    <string name="tour_184_settings_body">Bagong unang page, at bawat page sa maiikling grupo.</string>
+    <string name="tour_184_settings_point_1">Search, ang account mo at Performance mode sa itaas</string>
+    <string name="tour_184_settings_point_2">17 page sa limang grupo, bawat isa may linyang nagsasabi kung paano ito naka-set</string>
+    <string name="tour_184_settings_point_3">Bumubukas ang mga pagpipilian sa isang sheet, may halimbawa ng bawat isa</string>
+    <string name="tour_184_settings_point_4">Ibinabalik ng \"I-reset ang page na ito\" ang isang page sa dati nitong ayos</string>
+    <string name="tour_184_settings_point_5">I-tap ang ⓘ para mabasa kung ano ang ginagawa ng isang setting</string>
+    <string name="tour_184_lyrics_title">Lyrics, sakto sa oras</string>
+    <string name="tour_184_lyrics_body">Nahuhuli ang lyrics sa headphone mo? Ilipat nang kaunti nang mas maaga o mas huli ang lyrics ng bawat kanta.</string>
+    <string name="tour_184_lyrics_point_1">Hanggang kalahating segundo sa alinmang direksyon, agad na nagbabago</string>
+    <string name="tour_184_lyrics_point_2">Lyrics sa notification, kahit walang kotse</string>
+    <string name="tour_184_lyrics_point_3">Sa kotse, puwedeng tumuloy sa ikalawang linya ang mahabang linya</string>
+    <string name="tour_184_lock_title">Ang lock screen, sa look ng player</string>
+    <string name="tour_184_lock_body">Puwedeng gamitin ng player sa lock screen ang background, progress bar at accent ng player.</string>
+    <string name="tour_184_lock_point_1">I-on ang \"%1$s\" sa %2$s</string>
+    <string name="tour_184_lock_point_2">Hindi gumagalaw doon ang mga gumagalaw na background</string>
+    <string name="tour_184_lock_point_3">May puso sa Lyrics na layout kapag ipinapakita ang Like</string>
+    <string name="tour_184_lists_title">Hanapin ang tumutugtog na kanta</string>
+    <string name="tour_184_lists_body">Sa mahabang listahan, tumalon agad sa kantang tumutugtog.</string>
+    <string name="tour_184_lists_point_1">\"%1$s\" sa ⋯ menu ng listahan ng kanta</string>
+    <string name="tour_184_lists_point_2">O isang button sa itaas ng mini player: i-on ang \"%1$s\"</string>
+    <string name="tour_184_lists_point_3">Mga larawang buong lapad sa mga album din</string>
+    <string name="tour_184_lists_point_4">Ayusin ang mga album sa Library ayon sa kung kailan mo idinagdag</string>
+    <string name="tour_184_lists_point_5">Puwedeng i-off ang pag-swipe ng mga kanta papunta sa queue</string>
+    <string name="tour_184_also_shuffle">Shuffle nang walang Smart Shuffle, at naka-shuffle pa rin sa susunod na listahan</string>
+    <string name="tour_184_also_replay">Replay para sa kahapon, nakaraang linggo at nakaraang buwan</string>
+    <string name="tour_184_also_color">Iisang kulay bilang background ng isang screen</string>
+    <string name="tour_184_also_crossfade">Hindi na nawawala ang crossfade ng kanta kapag nag-seek</string>
+    <string name="tour_184_also_glass">Hindi na tumatagos ang text sa mga Liquid Glass bar</string>
 </resources>

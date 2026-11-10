@@ -5172,4 +5172,41 @@
     <string name="tl_pick_a_split_light">Hãy chọn dải sáng khác Trắng trước</string>
     <string name="tl_history_and_editing">Lịch sử và chỉnh sửa</string>
     <string name="tl_reset_everything">Đặt lại tất cả</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Cả phong cách, ngày và đêm</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord bật · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · sao lưu, cập nhật</string>
+    <string name="root_connect_short">Phát trên loa và TV</string>
+    <string name="root_handoff_on">Chuyển tiếp bật</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Cài đặt, gọn gàng hơn</string>
+    <string name="tour_184_settings_body">Trang đầu mới, và mọi trang chia thành các nhóm ngắn.</string>
+    <string name="tour_184_settings_point_1">Tìm kiếm, tài khoản của bạn và Chế độ hiệu năng ở trên cùng</string>
+    <string name="tour_184_settings_point_2">17 trang trong năm nhóm, mỗi trang có một dòng cho biết đang cài thế nào</string>
+    <string name="tour_184_settings_point_3">Các lựa chọn mở trong một bảng, kèm ví dụ cho từng lựa chọn</string>
+    <string name="tour_184_settings_point_4">Đặt lại trang này đưa một trang về như ban đầu</string>
+    <string name="tour_184_settings_point_5">Nhấn ⓘ để đọc một cài đặt làm gì</string>
+    <string name="tour_184_lyrics_title">Lời bài hát, đúng lúc</string>
+    <string name="tour_184_lyrics_body">Lời bài hát bị trễ trên tai nghe? Dời lời của mọi bài hát sớm hơn hoặc muộn hơn một chút.</string>
+    <string name="tour_184_lyrics_point_1">Tối đa nửa giây mỗi chiều, áp dụng ngay</string>
+    <string name="tour_184_lyrics_point_2">Lời bài hát trong thông báo, không cần ô tô</string>
+    <string name="tour_184_lyrics_point_3">Trên ô tô, một dòng dài có thể xuống dòng thứ hai</string>
+    <string name="tour_184_lock_title">Màn hình khóa, theo phong cách trình phát</string>
+    <string name="tour_184_lock_body">Trình phát trên màn hình khóa có thể dùng hình nền, thanh tiến trình và màu nhấn của trình phát.</string>
+    <string name="tour_184_lock_point_1">Bật \"%1$s\" trong %2$s</string>
+    <string name="tour_184_lock_point_2">Hình nền chuyển động sẽ đứng yên ở đó</string>
+    <string name="tour_184_lock_point_3">Một trái tim trên bố cục Lời bài hát khi hiện Thích</string>
+    <string name="tour_184_lists_title">Tìm bài đang phát</string>
+    <string name="tour_184_lists_body">Trong danh sách dài, nhảy thẳng tới bài đang phát.</string>
+    <string name="tour_184_lists_point_1">\"%1$s\" trong menu ⋯ của danh sách bài hát</string>
+    <string name="tour_184_lists_point_2">Hoặc một nút phía trên trình phát thu nhỏ: bật \"%1$s\"</string>
+    <string name="tour_184_lists_point_3">Ảnh toàn chiều rộng cho cả album</string>
+    <string name="tour_184_lists_point_4">Sắp xếp album trong Thư viện theo lúc bạn thêm</string>
+    <string name="tour_184_lists_point_5">Có thể tắt việc vuốt hàng bài hát để thêm vào danh sách chờ</string>
+    <string name="tour_184_also_shuffle">Phát ngẫu nhiên không cần Trộn bài thông minh, và giữ phát ngẫu nhiên cho danh sách tiếp theo</string>
+    <string name="tour_184_also_replay">Replay cho hôm qua, tuần trước và tháng trước</string>
+    <string name="tour_184_also_color">Màu trơn làm hình nền của màn hình</string>
+    <string name="tour_184_also_crossfade">Tua không còn làm mất chuyển tiếp mượt của bài hát</string>
+    <string name="tour_184_also_glass">Chữ không còn hiện xuyên qua thanh Kính lỏng</string>
 </resources>

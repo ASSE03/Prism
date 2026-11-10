@@ -5245,4 +5245,41 @@
     <string name="tl_pick_a_split_light">Kies eerst een ander licht dan Wit</string>
     <string name="tl_history_and_editing">Geschiedenis en bewerken</string>
     <string name="tl_reset_everything">Alles herstellen</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Hele looks, dag en nacht</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord aan · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · back-up, updates</string>
+    <string name="root_connect_short">Afspelen op speakers en tv\'s</string>
+    <string name="root_handoff_on">Doorgeven aan</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Instellingen, eenvoudig gemaakt</string>
+    <string name="tour_184_settings_body">Een nieuwe eerste pagina, en elke pagina in korte groepen.</string>
+    <string name="tour_184_settings_point_1">Zoeken, je account en Prestatiemodus bovenaan</string>
+    <string name="tour_184_settings_point_2">17 pagina\'s in vijf groepen, elk met een regel die zegt hoe het is ingesteld</string>
+    <string name="tour_184_settings_point_3">Keuzes openen in een blad, met een voorbeeld van elke keuze</string>
+    <string name="tour_184_settings_point_4">Deze pagina herstellen zet één pagina terug zoals hij was</string>
+    <string name="tour_184_settings_point_5">Tik op ⓘ om te lezen wat een instelling doet</string>
+    <string name="tour_184_lyrics_title">Songtekst, precies op tijd</string>
+    <string name="tour_184_lyrics_body">Loopt de songtekst achter op je koptelefoon? Zet de songtekst van elk nummer iets eerder of later.</string>
+    <string name="tour_184_lyrics_point_1">Tot een halve seconde beide kanten op, meteen aangepast</string>
+    <string name="tour_184_lyrics_point_2">Songtekst in de melding, geen auto nodig</string>
+    <string name="tour_184_lyrics_point_3">In de auto kan een lange regel doorlopen op een tweede regel</string>
+    <string name="tour_184_lock_title">Het vergrendelscherm, in de look van de speler</string>
+    <string name="tour_184_lock_body">De speler op je vergrendelscherm kan de achtergrond, voortgangsbalk en accentkleur van de speler overnemen.</string>
+    <string name="tour_184_lock_point_1">Zet \"%1$s\" aan in %2$s</string>
+    <string name="tour_184_lock_point_2">Bewegende achtergronden staan daar stil</string>
+    <string name="tour_184_lock_point_3">Een hartje in de Songtekst-indeling als Vind ik leuk wordt getoond</string>
+    <string name="tour_184_lists_title">Vind het spelende nummer</string>
+    <string name="tour_184_lists_body">Spring in een lange lijst meteen naar het nummer dat speelt.</string>
+    <string name="tour_184_lists_point_1">\"%1$s\" in het ⋯-menu van een nummerlijst</string>
+    <string name="tour_184_lists_point_2">Of een knop boven de minispeler: zet \"%1$s\" aan</string>
+    <string name="tour_184_lists_point_3">Afbeeldingen over de volle breedte ook bij albums</string>
+    <string name="tour_184_lists_point_4">Sorteer de albums in Bibliotheek op wanneer je ze toevoegde</string>
+    <string name="tour_184_lists_point_5">Nummers naar de wachtrij vegen kan uit</string>
+    <string name="tour_184_also_shuffle">Shuffle zonder Slimme shuffle, en shuffle aan houden voor de volgende lijst</string>
+    <string name="tour_184_also_replay">Replay voor gisteren, vorige week en vorige maand</string>
+    <string name="tour_184_also_color">Een effen kleur als achtergrond van een scherm</string>
+    <string name="tour_184_also_crossfade">Spoelen laat de crossfade van een nummer niet meer wegvallen</string>
+    <string name="tour_184_also_glass">Tekst schijnt niet meer door Liquid Glass-balken heen</string>
 </resources>

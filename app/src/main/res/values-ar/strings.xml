@@ -5537,4 +5537,41 @@
     <string name="tl_pick_a_split_light">اختر ضوءًا غير الأبيض أولًا</string>
     <string name="tl_history_and_editing">السجلّ والتعديل</string>
     <string name="tl_reset_everything">إعادة ضبط كل شيء</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">مظاهر كاملة، نهارًا وليلًا</string>
+    <string name="root_accounts_short">Last.fm وSpotify وDiscord</string>
+    <string name="root_accounts_discord_on">Discord مفعّل · Last.fm وSpotify</string>
+    <string name="root_backup_short">Prism %1$s · نسخ احتياطي، تحديثات</string>
+    <string name="root_connect_short">التشغيل على مكبرات الصوت والتلفزيون</string>
+    <string name="root_handoff_on">التسليم مفعّل</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">الإعدادات، بكل بساطة</string>
+    <string name="tour_184_settings_body">صفحة أولى جديدة، وكل صفحة في مجموعات قصيرة.</string>
+    <string name="tour_184_settings_point_1">البحث وحسابك ووضع الأداء في الأعلى</string>
+    <string name="tour_184_settings_point_2">17 صفحة في خمس مجموعات، لكل منها سطر يوضح إعدادها</string>
+    <string name="tour_184_settings_point_3">تُفتح الخيارات في لوحة، مع مثال لكل منها</string>
+    <string name="tour_184_settings_point_4">«إعادة ضبط هذه الصفحة» تعيد صفحة واحدة كما كانت في البداية</string>
+    <string name="tour_184_settings_point_5">اضغط ⓘ لتقرأ ما يفعله الإعداد</string>
+    <string name="tour_184_lyrics_title">الكلمات في وقتها تمامًا</string>
+    <string name="tour_184_lyrics_body">الكلمات متأخرة في سماعات الرأس؟ قدّم كلمات كل الأغاني أو أخّرها قليلًا.</string>
+    <string name="tour_184_lyrics_point_1">حتى نصف ثانية في أي اتجاه، ويسري فورًا</string>
+    <string name="tour_184_lyrics_point_2">الكلمات في الإشعار، دون الحاجة إلى سيارة</string>
+    <string name="tour_184_lyrics_point_3">في السيارة، يمكن أن يمتد السطر الطويل إلى سطر ثانٍ</string>
+    <string name="tour_184_lock_title">شاشة القفل بمظهر المشغّل</string>
+    <string name="tour_184_lock_body">يمكن لمشغّل شاشة القفل أن يأخذ خلفية المشغّل وشريط التقدّم ولون التمييز.</string>
+    <string name="tour_184_lock_point_1">فعّل «%1$s» في %2$s</string>
+    <string name="tour_184_lock_point_2">تبقى الخلفيات المتحركة ثابتة هناك</string>
+    <string name="tour_184_lock_point_3">قلب في تخطيط الكلمات عند إظهار الإعجاب</string>
+    <string name="tour_184_lists_title">اعثر على الأغنية قيد التشغيل</string>
+    <string name="tour_184_lists_body">في قائمة طويلة، انتقل مباشرة إلى الأغنية قيد التشغيل.</string>
+    <string name="tour_184_lists_point_1">«%1$s» في قائمة ⋯ لقائمة الأغاني</string>
+    <string name="tour_184_lists_point_2">أو زر فوق المشغّل المصغّر: فعّل «%1$s»</string>
+    <string name="tour_184_lists_point_3">صور بعرض كامل في الألبومات أيضًا</string>
+    <string name="tour_184_lists_point_4">رتّب ألبومات المكتبة حسب وقت إضافتها</string>
+    <string name="tour_184_lists_point_5">يمكن إيقاف سحب صفوف الأغاني إلى قائمة الانتظار</string>
+    <string name="tour_184_also_shuffle">ترتيب عشوائي دون الترتيب العشوائي الذكي، وإبقاؤه للقائمة التالية</string>
+    <string name="tour_184_also_replay">Replay لأمس والأسبوع الماضي والشهر الماضي</string>
+    <string name="tour_184_also_color">لون ثابت كخلفية للشاشة</string>
+    <string name="tour_184_also_crossfade">التنقّل داخل الأغنية لم يعد يُفقدها التلاشي المتداخل</string>
+    <string name="tour_184_also_glass">لم يعد النص يظهر عبر أشرطة الزجاج السائل</string>
 </resources>

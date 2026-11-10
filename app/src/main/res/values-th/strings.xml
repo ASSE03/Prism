@@ -5172,4 +5172,41 @@
     <string name="tl_pick_a_split_light">เลือกแสงอื่นที่ไม่ใช่ขาวก่อน</string>
     <string name="tl_history_and_editing">ประวัติและการแก้ไข</string>
     <string name="tl_reset_everything">รีเซ็ตทั้งหมด</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">ลุคทั้งชุด ทั้งกลางวันและกลางคืน</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord เปิด · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · สำรองข้อมูล อัปเดต</string>
+    <string name="root_connect_short">เล่นบนลำโพงและทีวี</string>
+    <string name="root_handoff_on">ส่งต่อเปิดอยู่</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">การตั้งค่าที่ง่ายขึ้น</string>
+    <string name="tour_184_settings_body">หน้าแรกแบบใหม่ และทุกหน้าจัดเป็นกลุ่มสั้นๆ</string>
+    <string name="tour_184_settings_point_1">ค้นหา บัญชีของคุณ และโหมดประสิทธิภาพอยู่ด้านบน</string>
+    <string name="tour_184_settings_point_2">17 หน้าในห้ากลุ่ม แต่ละหน้ามีบรรทัดบอกว่าตั้งค่าไว้อย่างไร</string>
+    <string name="tour_184_settings_point_3">ตัวเลือกเปิดในแผ่นด้านล่าง พร้อมตัวอย่างของแต่ละตัวเลือก</string>
+    <string name="tour_184_settings_point_4">รีเซ็ตหน้านี้ คืนค่าหน้าเดียวกลับเป็นแบบเดิม</string>
+    <string name="tour_184_settings_point_5">แตะ ⓘ เพื่ออ่านว่าการตั้งค่านั้นทำอะไร</string>
+    <string name="tour_184_lyrics_title">เนื้อเพลงตรงจังหวะพอดี</string>
+    <string name="tour_184_lyrics_body">เนื้อเพลงช้ากว่าเสียงในหูฟังใช่ไหม เลื่อนเนื้อเพลงของทุกเพลงให้เร็วขึ้นหรือช้าลงเล็กน้อย</string>
+    <string name="tour_184_lyrics_point_1">สูงสุดครึ่งวินาทีทั้งสองทาง เปลี่ยนทันที</string>
+    <string name="tour_184_lyrics_point_2">เนื้อเพลงในการแจ้งเตือน ไม่ต้องใช้รถ</string>
+    <string name="tour_184_lyrics_point_3">ในรถ บรรทัดยาวต่อไปยังบรรทัดที่สองได้</string>
+    <string name="tour_184_lock_title">หน้าจอล็อกในลุคของเพลเยอร์</string>
+    <string name="tour_184_lock_body">เพลเยอร์บนหน้าจอล็อกใช้พื้นหลัง แถบความคืบหน้า และสีเน้นของเพลเยอร์ได้</string>
+    <string name="tour_184_lock_point_1">เปิด \"%1$s\" ใน %2$s</string>
+    <string name="tour_184_lock_point_2">พื้นหลังแบบเคลื่อนไหวจะหยุดนิ่งที่นั่น</string>
+    <string name="tour_184_lock_point_3">มีหัวใจบนเลย์เอาต์เนื้อเพลงเมื่อแสดงปุ่มถูกใจ</string>
+    <string name="tour_184_lists_title">หาเพลงที่กำลังเล่น</string>
+    <string name="tour_184_lists_body">ในรายการยาวๆ ข้ามไปยังเพลงที่กำลังเล่นได้ทันที</string>
+    <string name="tour_184_lists_point_1">\"%1$s\" ในเมนู ⋯ ของรายการเพลง</string>
+    <string name="tour_184_lists_point_2">หรือปุ่มเหนือมินิเพลเยอร์: เปิด \"%1$s\"</string>
+    <string name="tour_184_lists_point_3">ภาพเต็มความกว้างในอัลบั้มด้วย</string>
+    <string name="tour_184_lists_point_4">จัดเรียงอัลบั้มในคลังเพลงตามเวลาที่คุณเพิ่ม</string>
+    <string name="tour_184_lists_point_5">ปิดการปัดแถวเพลงเพื่อเข้าคิวได้</string>
+    <string name="tour_184_also_shuffle">สุ่มเพลงโดยไม่ใช้สุ่มเพลงอัจฉริยะ และสุ่มเพลงต่อในรายการถัดไป</string>
+    <string name="tour_184_also_replay">Replay ของเมื่อวาน สัปดาห์ที่แล้ว และเดือนที่แล้ว</string>
+    <string name="tour_184_also_color">สีพื้นเป็นพื้นหลังของหน้าจอ</string>
+    <string name="tour_184_also_crossfade">การเลื่อนตำแหน่งเพลงไม่ทำให้ครอสเฟดหายอีกต่อไป</string>
+    <string name="tour_184_also_glass">ข้อความไม่ทะลุผ่านแถบกระจกเหลวอีกต่อไป</string>
 </resources>

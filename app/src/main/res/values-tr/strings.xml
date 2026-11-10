@@ -5245,4 +5245,41 @@
     <string name="tl_pick_a_split_light">Önce Beyaz dışında bir ışık seç</string>
     <string name="tl_history_and_editing">Geçmiş ve düzenleme</string>
     <string name="tl_reset_everything">Her şeyi sıfırla</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Tüm görünümler, gece ve gündüz</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord açık · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · yedek, güncellemeler</string>
+    <string name="root_connect_short">Hoparlörlerde ve TV\'lerde çal</string>
+    <string name="root_handoff_on">Aktarma açık</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Ayarlar, artık daha basit</string>
+    <string name="tour_184_settings_body">Yeni bir ilk sayfa ve her sayfa kısa gruplar halinde.</string>
+    <string name="tour_184_settings_point_1">Arama, hesabın ve Performans modu en üstte</string>
+    <string name="tour_184_settings_point_2">Beş grupta 17 sayfa, her birinde nasıl ayarlandığını söyleyen bir satır</string>
+    <string name="tour_184_settings_point_3">Seçenekler, her birinin örneğiyle bir sayfada açılır</string>
+    <string name="tour_184_settings_point_4">Bu sayfayı sıfırla, tek bir sayfayı ilk haline döndürür</string>
+    <string name="tour_184_settings_point_5">Bir ayarın ne yaptığını okumak için ⓘ simgesine dokun</string>
+    <string name="tour_184_lyrics_title">Sözler, tam zamanında</string>
+    <string name="tour_184_lyrics_body">Kulaklığında sözler geç mi kalıyor? Tüm şarkıların sözlerini biraz daha erkene veya geçe kaydır.</string>
+    <string name="tour_184_lyrics_point_1">İki yöne de yarım saniyeye kadar, hemen uygulanır</string>
+    <string name="tour_184_lyrics_point_2">Bildirimde şarkı sözleri, araba gerekmez</string>
+    <string name="tour_184_lyrics_point_3">Arabada uzun bir satır ikinci satıra devam edebilir</string>
+    <string name="tour_184_lock_title">Oynatıcı görünümünde kilit ekranı</string>
+    <string name="tour_184_lock_body">Kilit ekranı oynatıcın, oynatıcının arka planını, ilerleme çubuğunu ve vurgusunu alabilir.</string>
+    <string name="tour_184_lock_point_1">%2$s içinde \"%1$s\" seçeneğini aç</string>
+    <string name="tour_184_lock_point_2">Hareketli arka planlar orada sabit durur</string>
+    <string name="tour_184_lock_point_3">Beğen gösterildiğinde Sözler düzeninde bir kalp</string>
+    <string name="tour_184_lists_title">Çalan şarkıyı bul</string>
+    <string name="tour_184_lists_body">Uzun bir listede doğrudan çalan şarkıya atla.</string>
+    <string name="tour_184_lists_point_1">Şarkı listesinin ⋯ menüsünde \"%1$s\"</string>
+    <string name="tour_184_lists_point_2">Ya da mini oynatıcının üstünde bir düğme: \"%1$s\" seçeneğini aç</string>
+    <string name="tour_184_lists_point_3">Albümlerde de tam genişlikte resimler</string>
+    <string name="tour_184_lists_point_4">Kitaplıktaki albümleri eklediğin zamana göre sırala</string>
+    <string name="tour_184_lists_point_5">Şarkı satırlarını sıraya kaydırma kapatılabilir</string>
+    <string name="tour_184_also_shuffle">Akıllı Karıştırma olmadan karıştır ve sonraki liste için karıştırmayı açık tut</string>
+    <string name="tour_184_also_replay">Dün, geçen hafta ve geçen ay için Replay</string>
+    <string name="tour_184_also_color">Ekran arka planı olarak düz renk</string>
+    <string name="tour_184_also_crossfade">İleri geri sarmak artık şarkının çapraz geçişini bozmuyor</string>
+    <string name="tour_184_also_glass">Yazılar artık Sıvı Cam çubuklarının arkasından görünmüyor</string>
 </resources>

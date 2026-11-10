@@ -5318,4 +5318,41 @@
     <string name="tl_pick_a_split_light">Primero elige una luz que no sea Blanco</string>
     <string name="tl_history_and_editing">Historial y edición</string>
     <string name="tl_reset_everything">Restablecer todo</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Looks completos, de día y de noche</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord activado · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · copia, actualizaciones</string>
+    <string name="root_connect_short">Reproducir en altavoces y TV</string>
+    <string name="root_handoff_on">Traspaso activado</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Configuración, más sencilla</string>
+    <string name="tour_184_settings_body">Una nueva primera página, y cada página en grupos cortos.</string>
+    <string name="tour_184_settings_point_1">Buscar, tu cuenta y Modo rendimiento arriba del todo</string>
+    <string name="tour_184_settings_point_2">17 páginas en cinco grupos, cada una con una línea que dice cómo está configurada</string>
+    <string name="tour_184_settings_point_3">Las opciones se abren en una hoja, con un ejemplo de cada una</string>
+    <string name="tour_184_settings_point_4">«Restablecer esta página» deja una página como venía</string>
+    <string name="tour_184_settings_point_5">Toca ⓘ para leer qué hace un ajuste</string>
+    <string name="tour_184_lyrics_title">La letra, justo a tiempo</string>
+    <string name="tour_184_lyrics_body">¿La letra va con retraso en tus auriculares? Adelanta o atrasa un poco la letra de todas las canciones.</string>
+    <string name="tour_184_lyrics_point_1">Hasta medio segundo en cada sentido, al instante</string>
+    <string name="tour_184_lyrics_point_2">Letra en la notificación, sin necesidad de auto</string>
+    <string name="tour_184_lyrics_point_3">En el auto, una línea larga puede seguir en una segunda línea</string>
+    <string name="tour_184_lock_title">La pantalla de bloqueo, con el look del reproductor</string>
+    <string name="tour_184_lock_body">El reproductor de la pantalla de bloqueo puede tomar el fondo, la barra de progreso y el acento del reproductor.</string>
+    <string name="tour_184_lock_point_1">Activa «%1$s» en %2$s</string>
+    <string name="tour_184_lock_point_2">Los fondos en movimiento se quedan quietos ahí</string>
+    <string name="tour_184_lock_point_3">Un corazón en el diseño Letra cuando se muestra Me gusta</string>
+    <string name="tour_184_lists_title">Encuentra la canción que suena</string>
+    <string name="tour_184_lists_body">En una lista larga, salta directo a la canción que está sonando.</string>
+    <string name="tour_184_lists_point_1">«%1$s» en el menú ⋯ de una lista de canciones</string>
+    <string name="tour_184_lists_point_2">O un botón encima del minirreproductor: activa «%1$s»</string>
+    <string name="tour_184_lists_point_3">Imágenes a todo lo ancho también en los álbumes</string>
+    <string name="tour_184_lists_point_4">Ordena los álbumes de Biblioteca por cuándo los añadiste</string>
+    <string name="tour_184_lists_point_5">Deslizar canciones a la cola se puede desactivar</string>
+    <string name="tour_184_also_shuffle">Aleatorio sin Aleatorio inteligente, y mantener el aleatorio en la siguiente lista</string>
+    <string name="tour_184_also_replay">Replay de ayer, la semana pasada y el mes pasado</string>
+    <string name="tour_184_also_color">Un color sólido como fondo de una pantalla</string>
+    <string name="tour_184_also_crossfade">Saltar dentro de una canción ya no le quita el fundido</string>
+    <string name="tour_184_also_glass">El texto ya no se transparenta a través de las barras Liquid Glass</string>
 </resources>

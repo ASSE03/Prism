@@ -5245,4 +5245,41 @@
     <string name="tl_pick_a_split_light">اول نوری به‌جز سفید انتخاب کنید</string>
     <string name="tl_history_and_editing">تاریخچه و ویرایش</string>
     <string name="tl_reset_everything">بازنشانی همه</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">پوسته‌های کامل، روز و شب</string>
+    <string name="root_accounts_short">Last.fm، Spotify، Discord</string>
+    <string name="root_accounts_discord_on">Discord روشن · Last.fm، Spotify</string>
+    <string name="root_backup_short">Prism %1$s · پشتیبان، به‌روزرسانی</string>
+    <string name="root_connect_short">پخش روی بلندگو و تلویزیون</string>
+    <string name="root_handoff_on">انتقال پخش روشن</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">تنظیمات، ساده شد</string>
+    <string name="tour_184_settings_body">یک صفحهٔ اول تازه، و هر صفحه در گروه‌های کوتاه.</string>
+    <string name="tour_184_settings_point_1">جستجو، حساب شما و حالت کارایی در بالا</string>
+    <string name="tour_184_settings_point_2">۱۷ صفحه در پنج گروه، هرکدام با سطری که می‌گوید چطور تنظیم شده</string>
+    <string name="tour_184_settings_point_3">گزینه‌ها در یک برگه باز می‌شوند، با نمونه‌ای از هرکدام</string>
+    <string name="tour_184_settings_point_4">«بازنشانی این صفحه» یک صفحه را به حالت اول برمی‌گرداند</string>
+    <string name="tour_184_settings_point_5">روی ⓘ بزنید تا بخوانید هر تنظیم چه می‌کند</string>
+    <string name="tour_184_lyrics_title">متن آهنگ، درست سر وقت</string>
+    <string name="tour_184_lyrics_body">متن آهنگ در هدفون دیر می‌رسد؟ متن همهٔ آهنگ‌ها را کمی زودتر یا دیرتر کنید.</string>
+    <string name="tour_184_lyrics_point_1">تا نیم ثانیه به هر طرف، فوراً اعمال می‌شود</string>
+    <string name="tour_184_lyrics_point_2">متن آهنگ در اعلان، بدون نیاز به ماشین</string>
+    <string name="tour_184_lyrics_point_3">در ماشین، یک سطر بلند می‌تواند در سطر دوم ادامه پیدا کند</string>
+    <string name="tour_184_lock_title">صفحهٔ قفل، با پوستهٔ پخش‌کننده</string>
+    <string name="tour_184_lock_body">پخش‌کنندهٔ صفحهٔ قفل می‌تواند پس‌زمینه، نوار پیشرفت و رنگ شاخص پخش‌کننده را بگیرد.</string>
+    <string name="tour_184_lock_point_1">«%1$s» را در %2$s روشن کنید</string>
+    <string name="tour_184_lock_point_2">پس‌زمینه‌های متحرک آنجا ثابت می‌مانند</string>
+    <string name="tour_184_lock_point_3">یک قلب در چیدمان متن آهنگ وقتی پسند نمایش داده شود</string>
+    <string name="tour_184_lists_title">آهنگ در حال پخش را پیدا کنید</string>
+    <string name="tour_184_lists_body">در یک فهرست بلند، مستقیم به آهنگی بروید که در حال پخش است.</string>
+    <string name="tour_184_lists_point_1">«%1$s» در منوی ⋯ فهرست آهنگ‌ها</string>
+    <string name="tour_184_lists_point_2">یا دکمه‌ای بالای پخش‌کننده کوچک: «%1$s» را روشن کنید</string>
+    <string name="tour_184_lists_point_3">تصاویر تمام‌عرض برای آلبوم‌ها هم</string>
+    <string name="tour_184_lists_point_4">مرتب‌سازی آلبوم‌های کتابخانه بر اساس زمان افزودن</string>
+    <string name="tour_184_lists_point_5">کشیدن آهنگ‌ها به صف را می‌شود خاموش کرد</string>
+    <string name="tour_184_also_shuffle">پخش تصادفی بدون پخش تصادفی هوشمند، و روشن ماندن آن برای فهرست بعدی</string>
+    <string name="tour_184_also_replay">Replay برای دیروز، هفته گذشته و ماه گذشته</string>
+    <string name="tour_184_also_color">یک رنگ یکدست به‌عنوان پس‌زمینهٔ صفحه</string>
+    <string name="tour_184_also_crossfade">جابه‌جا شدن در آهنگ دیگر کراس‌فید آن را از بین نمی‌برد</string>
+    <string name="tour_184_also_glass">متن دیگر از پشت نوارهای شیشه مایع پیدا نیست</string>
 </resources>

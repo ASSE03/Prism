@@ -5172,4 +5172,41 @@
     <string name="tl_pick_a_split_light">先にホワイト以外の光を選んでください</string>
     <string name="tl_history_and_editing">履歴と編集</string>
     <string name="tl_reset_everything">すべてリセット</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">昼も夜も、まるごとのルック</string>
+    <string name="root_accounts_short">Last.fm、Spotify、Discord</string>
+    <string name="root_accounts_discord_on">Discord オン · Last.fm、Spotify</string>
+    <string name="root_backup_short">Prism %1$s · バックアップ、アップデート</string>
+    <string name="root_connect_short">スピーカーやテレビで再生</string>
+    <string name="root_handoff_on">Handoff オン</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">設定を、シンプルに</string>
+    <string name="tour_184_settings_body">新しい最初のページと、短いグループにまとまった各ページ。</string>
+    <string name="tour_184_settings_point_1">検索、アカウント、パフォーマンス モードをいちばん上に</string>
+    <string name="tour_184_settings_point_2">17 ページを 5 つのグループに。各ページに今の設定を示す 1 行</string>
+    <string name="tour_184_settings_point_3">選択肢はシートで開き、それぞれに見本つき</string>
+    <string name="tour_184_settings_point_4">「このページをリセット」で 1 ページだけ最初の状態に戻せます</string>
+    <string name="tour_184_settings_point_5">ⓘ をタップすると設定の働きを読めます</string>
+    <string name="tour_184_lyrics_title">歌詞を、ぴったりのタイミングで</string>
+    <string name="tour_184_lyrics_body">ヘッドホンで歌詞が遅れる？すべての曲の歌詞を少し早く、または遅くできます。</string>
+    <string name="tour_184_lyrics_point_1">前後に最大 0.5 秒、すぐに反映</string>
+    <string name="tour_184_lyrics_point_2">車がなくても通知に歌詞を表示</string>
+    <string name="tour_184_lyrics_point_3">車では、長い行を 2 行目に続けて表示できます</string>
+    <string name="tour_184_lock_title">ロック画面を、プレーヤーのルックで</string>
+    <string name="tour_184_lock_body">ロック画面プレーヤーに、プレーヤーの背景、プログレスバー、アクセントを使えます。</string>
+    <string name="tour_184_lock_point_1">%2$s で「%1$s」をオンに</string>
+    <string name="tour_184_lock_point_2">動く背景はそこでは止まったまま</string>
+    <string name="tour_184_lock_point_3">高評価を表示すると、歌詞レイアウトにハート</string>
+    <string name="tour_184_lists_title">再生中の曲を探す</string>
+    <string name="tour_184_lists_body">長いリストでも、再生中の曲へすぐにジャンプ。</string>
+    <string name="tour_184_lists_point_1">曲リストの ⋯ メニューに「%1$s」</string>
+    <string name="tour_184_lists_point_2">またはミニプレーヤーの上のボタン:「%1$s」をオンに</string>
+    <string name="tour_184_lists_point_3">アルバムでも画面幅いっぱいの画像</string>
+    <string name="tour_184_lists_point_4">ライブラリのアルバムを追加した日時で並べ替え</string>
+    <string name="tour_184_lists_point_5">曲の行をスワイプしてキューに追加する操作をオフにできます</string>
+    <string name="tour_184_also_shuffle">スマートシャッフルなしのシャッフルと、次のリストでもシャッフルを続ける設定</string>
+    <string name="tour_184_also_replay">昨日、先週、先月の Replay</string>
+    <string name="tour_184_also_color">画面の背景に単色</string>
+    <string name="tour_184_also_crossfade">シークしても曲のクロスフェードが消えなくなりました</string>
+    <string name="tour_184_also_glass">リキッドグラスのバー越しに文字が透けなくなりました</string>
 </resources>

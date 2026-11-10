@@ -5172,4 +5172,41 @@
     <string name="tl_pick_a_split_light">请先选择白色以外的光线</string>
     <string name="tl_history_and_editing">历史记录和编辑</string>
     <string name="tl_reset_everything">全部重置</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">整套风格，白天和夜间</string>
+    <string name="root_accounts_short">Last.fm、Spotify、Discord</string>
+    <string name="root_accounts_discord_on">Discord 已开启 · Last.fm、Spotify</string>
+    <string name="root_backup_short">Prism %1$s · 备份、更新</string>
+    <string name="root_connect_short">在音箱和电视上播放</string>
+    <string name="root_handoff_on">接力已开启</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">设置，更简单了</string>
+    <string name="tour_184_settings_body">全新的首页，每个页面都分成简短的分组。</string>
+    <string name="tour_184_settings_point_1">搜索、你的账号和性能模式都在顶部</string>
+    <string name="tour_184_settings_point_2">五个分组共 17 个页面，每个都有一行说明当前设置</string>
+    <string name="tour_184_settings_point_3">选项在面板中打开，每个都有示例</string>
+    <string name="tour_184_settings_point_4">“重置此页面”让单个页面恢复原样</string>
+    <string name="tour_184_settings_point_5">点按 ⓘ 了解某项设置的作用</string>
+    <string name="tour_184_lyrics_title">歌词，准时出现</string>
+    <string name="tour_184_lyrics_body">耳机里歌词慢了？把所有歌曲的歌词稍微提前或延后。</string>
+    <string name="tour_184_lyrics_point_1">前后最多半秒，立即生效</string>
+    <string name="tour_184_lyrics_point_2">通知中的歌词，无需车载</string>
+    <string name="tour_184_lyrics_point_3">车载时，长句可以续到第二行</string>
+    <string name="tour_184_lock_title">锁屏，用播放器的风格</string>
+    <string name="tour_184_lock_body">锁屏播放器可以使用播放器的背景、进度条和强调色。</string>
+    <string name="tour_184_lock_point_1">在“%2$s”中开启“%1$s”</string>
+    <string name="tour_184_lock_point_2">动态背景在锁屏上保持静止</string>
+    <string name="tour_184_lock_point_3">显示“喜欢”时，歌词布局上会有一颗心</string>
+    <string name="tour_184_lists_title">找到正在播放的歌曲</string>
+    <string name="tour_184_lists_body">在长列表中，直接跳到正在播放的歌曲。</string>
+    <string name="tour_184_lists_point_1">歌曲列表 ⋯ 菜单中的“%1$s”</string>
+    <string name="tour_184_lists_point_2">或迷你播放器上方的按钮：开启“%1$s”</string>
+    <string name="tour_184_lists_point_3">专辑也支持全宽图片</string>
+    <string name="tour_184_lists_point_4">音乐库中的专辑可按添加时间排序</string>
+    <string name="tour_184_lists_point_5">可以关闭滑动歌曲行加入队列</string>
+    <string name="tour_184_also_shuffle">不用智能随机播放也能随机播放，并可在下一个列表继续随机播放</string>
+    <string name="tour_184_also_replay">昨天、上周和上个月的 Replay</string>
+    <string name="tour_184_also_color">用纯色作为屏幕背景</string>
+    <string name="tour_184_also_crossfade">拖动进度不再丢失歌曲的交叉淡入淡出</string>
+    <string name="tour_184_also_glass">文字不再透过液态玻璃栏显示</string>
 </resources>

@@ -5391,4 +5391,41 @@
     <string name="tl_pick_a_split_light">Сначала выбери свет, отличный от белого</string>
     <string name="tl_history_and_editing">История и правка</string>
     <string name="tl_reset_everything">Сбросить всё</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Целые стили, днём и ночью</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord вкл. · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · копия, обновления</string>
+    <string name="root_connect_short">На колонках и телевизорах</string>
+    <string name="root_handoff_on">Передача вкл.</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Настройки стали проще</string>
+    <string name="tour_184_settings_body">Новая первая страница, и каждая страница разбита на короткие группы.</string>
+    <string name="tour_184_settings_point_1">Поиск, ваш аккаунт и Режим производительности наверху</string>
+    <string name="tour_184_settings_point_2">17 страниц в пяти группах, у каждой строка о том, как она настроена</string>
+    <string name="tour_184_settings_point_3">Варианты открываются в панели, с примером каждого</string>
+    <string name="tour_184_settings_point_4">«Сбросить эту страницу» возвращает одну страницу к исходному виду</string>
+    <string name="tour_184_settings_point_5">Нажмите ⓘ, чтобы узнать, что делает настройка</string>
+    <string name="tour_184_lyrics_title">Текст точно вовремя</string>
+    <string name="tour_184_lyrics_body">Текст отстаёт в наушниках? Сдвиньте текст всех песен чуть раньше или позже.</string>
+    <string name="tour_184_lyrics_point_1">До полсекунды в любую сторону, сразу же</string>
+    <string name="tour_184_lyrics_point_2">Текст в уведомлении, машина не нужна</string>
+    <string name="tour_184_lyrics_point_3">В машине длинная строка может переноситься на вторую строку</string>
+    <string name="tour_184_lock_title">Экран блокировки в стиле плеера</string>
+    <string name="tour_184_lock_body">Плеер на экране блокировки может взять фон, полосу прогресса и акцент плеера.</string>
+    <string name="tour_184_lock_point_1">Включите «%1$s» в разделе «%2$s»</string>
+    <string name="tour_184_lock_point_2">Движущиеся фоны там стоят на месте</string>
+    <string name="tour_184_lock_point_3">Сердечко в макете «Текст», когда показан «Лайк»</string>
+    <string name="tour_184_lists_title">Найдите играющую песню</string>
+    <string name="tour_184_lists_body">В длинном списке переходите сразу к песне, которая играет.</string>
+    <string name="tour_184_lists_point_1">«%1$s» в меню ⋯ списка песен</string>
+    <string name="tour_184_lists_point_2">Или кнопка над мини-плеером: включите «%1$s»</string>
+    <string name="tour_184_lists_point_3">Картинки во всю ширину и у альбомов</string>
+    <string name="tour_184_lists_point_4">Сортировка альбомов в Библиотеке по дате добавления</string>
+    <string name="tour_184_lists_point_5">Свайп песен в очередь можно отключить</string>
+    <string name="tour_184_also_shuffle">Перемешивание без Умного перемешивания и сохранение перемешивания для следующего списка</string>
+    <string name="tour_184_also_replay">Replay за вчера, прошлую неделю и прошлый месяц</string>
+    <string name="tour_184_also_color">Сплошной цвет как фон экрана</string>
+    <string name="tour_184_also_crossfade">Перемотка больше не сбивает плавный переход песни</string>
+    <string name="tour_184_also_glass">Текст больше не просвечивает сквозь панели «Жидкое стекло»</string>
 </resources>

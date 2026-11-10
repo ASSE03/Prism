@@ -5318,4 +5318,41 @@
     <string name="tl_pick_a_split_light">Alege mai întâi o lumină alta decât Alb</string>
     <string name="tl_history_and_editing">Istoric și editare</string>
     <string name="tl_reset_everything">Resetează tot</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Look-uri întregi, zi și noapte</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord pornit · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · backup, actualizări</string>
+    <string name="root_connect_short">Redă pe boxe și televizoare</string>
+    <string name="root_handoff_on">Transfer pornit</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Setări, mai simple</string>
+    <string name="tour_184_settings_body">O primă pagină nouă și fiecare pagină în grupuri scurte.</string>
+    <string name="tour_184_settings_point_1">Căutarea, contul tău și Modul performanță sus</string>
+    <string name="tour_184_settings_point_2">17 pagini în cinci grupuri, fiecare cu un rând care spune cum e setată</string>
+    <string name="tour_184_settings_point_3">Opțiunile se deschid într-o foaie, cu un exemplu pentru fiecare</string>
+    <string name="tour_184_settings_point_4">Resetează această pagină readuce o pagină cum era la început</string>
+    <string name="tour_184_settings_point_5">Atinge ⓘ ca să citești ce face o setare</string>
+    <string name="tour_184_lyrics_title">Versuri, exact la timp</string>
+    <string name="tour_184_lyrics_body">Versurile întârzie în căști? Mută versurile fiecărei melodii puțin mai devreme sau mai târziu.</string>
+    <string name="tour_184_lyrics_point_1">Până la o jumătate de secundă în orice direcție, aplicat imediat</string>
+    <string name="tour_184_lyrics_point_2">Versuri în notificare, fără mașină</string>
+    <string name="tour_184_lyrics_point_3">În mașină, un rând lung poate continua pe al doilea rând</string>
+    <string name="tour_184_lock_title">Ecranul de blocare, cu aspectul playerului</string>
+    <string name="tour_184_lock_body">Playerul de pe ecranul de blocare poate prelua fundalul, bara de progres și accentul playerului.</string>
+    <string name="tour_184_lock_point_1">Activează „%1$s” în %2$s</string>
+    <string name="tour_184_lock_point_2">Fundalurile animate stau nemișcate acolo</string>
+    <string name="tour_184_lock_point_3">O inimă în aspectul Versuri când Apreciază e afișat</string>
+    <string name="tour_184_lists_title">Găsește melodia redată</string>
+    <string name="tour_184_lists_body">Într-o listă lungă, sari direct la melodia care se redă.</string>
+    <string name="tour_184_lists_point_1">„%1$s” în meniul ⋯ al unei liste de melodii</string>
+    <string name="tour_184_lists_point_2">Sau un buton deasupra mini playerului: activează „%1$s”</string>
+    <string name="tour_184_lists_point_3">Imagini pe toată lățimea și la albume</string>
+    <string name="tour_184_lists_point_4">Sortează albumele din Bibliotecă după data adăugării</string>
+    <string name="tour_184_lists_point_5">Glisarea melodiilor spre coadă se poate dezactiva</string>
+    <string name="tour_184_also_shuffle">Amestecă fără Amestecare inteligentă și păstrează amestecarea pentru lista următoare</string>
+    <string name="tour_184_also_replay">Replay pentru ieri, săptămâna trecută și luna trecută</string>
+    <string name="tour_184_also_color">O culoare uniformă ca fundal al unui ecran</string>
+    <string name="tour_184_also_crossfade">Derularea nu mai pierde tranziția unei melodii</string>
+    <string name="tour_184_also_glass">Textul nu se mai vede prin barele de Sticlă lichidă</string>
 </resources>

@@ -5391,4 +5391,41 @@
     <string name="tl_pick_a_split_light">Nejdřív vyber jiné světlo než Bílá</string>
     <string name="tl_history_and_editing">Historie a úpravy</string>
     <string name="tl_reset_everything">Obnovit vše</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Celé vzhledy, ve dne i v noci</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord zapnutý · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · záloha, aktualizace</string>
+    <string name="root_connect_short">Přehrávání na reproduktorech a TV</string>
+    <string name="root_handoff_on">Předání zapnuto</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Nastavení, jednoduše</string>
+    <string name="tour_184_settings_body">Nová první stránka a každá stránka v krátkých skupinách.</string>
+    <string name="tour_184_settings_point_1">Hledání, tvůj účet a Režim výkonu nahoře</string>
+    <string name="tour_184_settings_point_2">17 stránek v pěti skupinách, každá s řádkem, který říká, jak je nastavená</string>
+    <string name="tour_184_settings_point_3">Volby se otevírají v panelu, s ukázkou každé z nich</string>
+    <string name="tour_184_settings_point_4">„Obnovit tuto stránku“ vrátí jednu stránku do původního stavu</string>
+    <string name="tour_184_settings_point_5">Klepni na ⓘ a přečti si, co nastavení dělá</string>
+    <string name="tour_184_lyrics_title">Texty přesně načas</string>
+    <string name="tour_184_lyrics_body">Texty ve sluchátkách zaostávají? Posuň texty všech skladeb o kousek dříve nebo později.</string>
+    <string name="tour_184_lyrics_point_1">Až o půl sekundy oběma směry, změna hned</string>
+    <string name="tour_184_lyrics_point_2">Texty v oznámení, i bez auta</string>
+    <string name="tour_184_lyrics_point_3">V autě může dlouhý řádek pokračovat na druhém řádku</string>
+    <string name="tour_184_lock_title">Zamykací obrazovka ve vzhledu přehrávače</string>
+    <string name="tour_184_lock_body">Přehrávač na zamykací obrazovce může převzít pozadí, lištu průběhu a zvýraznění přehrávače.</string>
+    <string name="tour_184_lock_point_1">%2$s: zapni „%1$s“</string>
+    <string name="tour_184_lock_point_2">Pohyblivá pozadí tam zůstávají v klidu</string>
+    <string name="tour_184_lock_point_3">Srdce v rozložení Texty, když je zobrazeno Líbí se mi</string>
+    <string name="tour_184_lists_title">Najdi hrající skladbu</string>
+    <string name="tour_184_lists_body">V dlouhém seznamu skoč rovnou na skladbu, která právě hraje.</string>
+    <string name="tour_184_lists_point_1">„%1$s“ v nabídce ⋯ seznamu skladeb</string>
+    <string name="tour_184_lists_point_2">Nebo tlačítko nad minipřehrávačem: zapni „%1$s“</string>
+    <string name="tour_184_lists_point_3">Obrázky přes celou šířku i u alb</string>
+    <string name="tour_184_lists_point_4">Alba v Knihovně jdou řadit podle data přidání</string>
+    <string name="tour_184_lists_point_5">Přejetí skladeb do fronty jde vypnout</string>
+    <string name="tour_184_also_shuffle">Náhodně bez Chytrého náhodného přehrávání a náhodně i pro další seznam</string>
+    <string name="tour_184_also_replay">Replay za včerejšek, minulý týden a minulý měsíc</string>
+    <string name="tour_184_also_color">Jednolitá barva jako pozadí obrazovky</string>
+    <string name="tour_184_also_crossfade">Posun ve skladbě už neruší její prolínání</string>
+    <string name="tour_184_also_glass">Text už neprosvítá lištami Tekutého skla</string>
 </resources>

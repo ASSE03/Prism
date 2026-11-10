@@ -5318,4 +5318,41 @@
     <string name="tl_pick_a_split_light">יש לבחור קודם אור שאינו לבן</string>
     <string name="tl_history_and_editing">היסטוריה ועריכה</string>
     <string name="tl_reset_everything">איפוס הכול</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">מראות שלמים, ביום ובלילה</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord מופעל · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · גיבוי, עדכונים</string>
+    <string name="root_connect_short">השמעה ברמקולים ובטלוויזיות</string>
+    <string name="root_handoff_on">העברה מופעלת</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">הגדרות, בפשטות</string>
+    <string name="tour_184_settings_body">דף ראשון חדש, וכל דף בקבוצות קצרות.</string>
+    <string name="tour_184_settings_point_1">חיפוש, החשבון שלך ומצב ביצועים בראש הדף</string>
+    <string name="tour_184_settings_point_2">17 דפים בחמש קבוצות, לכל אחד שורה שמראה איך הוא מוגדר</string>
+    <string name="tour_184_settings_point_3">האפשרויות נפתחות בגיליון, עם דוגמה לכל אחת</string>
+    <string name="tour_184_settings_point_4">\"איפוס הדף הזה\" מחזיר דף אחד למצבו המקורי</string>
+    <string name="tour_184_settings_point_5">הקשה על ⓘ מסבירה מה הגדרה עושה</string>
+    <string name="tour_184_lyrics_title">מילים, בדיוק בזמן</string>
+    <string name="tour_184_lyrics_body">המילים מאחרות באוזניות? אפשר להקדים או לאחר מעט את המילים של כל השירים.</string>
+    <string name="tour_184_lyrics_point_1">עד חצי שנייה לכל כיוון, משתנה מיד</string>
+    <string name="tour_184_lyrics_point_2">מילים בהתראה, גם בלי רכב</string>
+    <string name="tour_184_lyrics_point_3">ברכב, שורה ארוכה יכולה להמשיך לשורה שנייה</string>
+    <string name="tour_184_lock_title">מסך הנעילה, במראה של הנגן</string>
+    <string name="tour_184_lock_body">הנגן על מסך הנעילה יכול לקבל את הרקע, סרגל ההתקדמות וצבע ההדגשה של הנגן.</string>
+    <string name="tour_184_lock_point_1">יש להפעיל את \"%1$s\" ב%2$s</string>
+    <string name="tour_184_lock_point_2">רקעים נעים נשארים שם קפואים</string>
+    <string name="tour_184_lock_point_3">לב בפריסת המילים כשהלייק מוצג</string>
+    <string name="tour_184_lists_title">מציאת השיר שמתנגן</string>
+    <string name="tour_184_lists_body">ברשימה ארוכה, קפיצה ישר לשיר שמתנגן.</string>
+    <string name="tour_184_lists_point_1">\"%1$s\" בתפריט ⋯ של רשימת שירים</string>
+    <string name="tour_184_lists_point_2">או כפתור מעל המיני-נגן: יש להפעיל את \"%1$s\"</string>
+    <string name="tour_184_lists_point_3">תמונות ברוחב מלא גם באלבומים</string>
+    <string name="tour_184_lists_point_4">מיון האלבומים בספרייה לפי מתי הוספת אותם</string>
+    <string name="tour_184_lists_point_5">אפשר לכבות את החלקת השירים לתור</string>
+    <string name="tour_184_also_shuffle">ערבוב בלי ערבוב חכם, והשארת הערבוב גם לרשימה הבאה</string>
+    <string name="tour_184_also_replay">Replay של אתמול, השבוע שעבר והחודש שעבר</string>
+    <string name="tour_184_also_color">צבע אחיד כרקע של מסך</string>
+    <string name="tour_184_also_crossfade">דילוג בתוך שיר כבר לא מבטל את המעבר ההדרגתי שלו</string>
+    <string name="tour_184_also_glass">הטקסט כבר לא נראה דרך סרגלי Liquid Glass</string>
 </resources>

@@ -5391,4 +5391,41 @@
     <string name="tl_pick_a_split_light">Najpierw wybierz światło inne niż Białe</string>
     <string name="tl_history_and_editing">Historia i edycja</string>
     <string name="tl_reset_everything">Resetuj wszystko</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Całe looki, na dzień i noc</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord wł. · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · kopia, aktualizacje</string>
+    <string name="root_connect_short">Graj na głośnikach i TV</string>
+    <string name="root_handoff_on">Przekazywanie wł.</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Ustawienia, po prostu</string>
+    <string name="tour_184_settings_body">Nowa pierwsza strona, a każda strona w krótkich grupach.</string>
+    <string name="tour_184_settings_point_1">Wyszukiwanie, Twoje konto i Tryb wydajności na górze</string>
+    <string name="tour_184_settings_point_2">17 stron w pięciu grupach, każda z wierszem, który mówi, jak jest ustawiona</string>
+    <string name="tour_184_settings_point_3">Opcje otwierają się w arkuszu, z przykładem każdej z nich</string>
+    <string name="tour_184_settings_point_4">Resetuj tę stronę przywraca jedną stronę do stanu początkowego</string>
+    <string name="tour_184_settings_point_5">Kliknij ⓘ, aby przeczytać, co robi dane ustawienie</string>
+    <string name="tour_184_lyrics_title">Tekst, idealnie na czas</string>
+    <string name="tour_184_lyrics_body">Tekst spóźnia się w słuchawkach? Przesuń tekst każdego utworu trochę wcześniej lub później.</string>
+    <string name="tour_184_lyrics_point_1">Do pół sekundy w każdą stronę, zmiana od razu</string>
+    <string name="tour_184_lyrics_point_2">Tekst w powiadomieniu, bez samochodu</string>
+    <string name="tour_184_lyrics_point_3">W samochodzie długi wiersz może przejść do drugiego wiersza</string>
+    <string name="tour_184_lock_title">Ekran blokady w looku odtwarzacza</string>
+    <string name="tour_184_lock_body">Odtwarzacz na ekranie blokady może przejąć tło, pasek postępu i akcent odtwarzacza.</string>
+    <string name="tour_184_lock_point_1">%2$s: włącz „%1$s”</string>
+    <string name="tour_184_lock_point_2">Ruchome tła stoją tam w miejscu</string>
+    <string name="tour_184_lock_point_3">Serce w układzie Tekst, gdy Polubienie jest widoczne</string>
+    <string name="tour_184_lists_title">Znajdź grany utwór</string>
+    <string name="tour_184_lists_body">Na długiej liście przejdź od razu do utworu, który gra.</string>
+    <string name="tour_184_lists_point_1">„%1$s” w menu ⋯ listy utworów</string>
+    <string name="tour_184_lists_point_2">Albo przycisk nad miniodtwarzaczem: włącz „%1$s”</string>
+    <string name="tour_184_lists_point_3">Obrazy na całą szerokość także w albumach</string>
+    <string name="tour_184_lists_point_4">Sortuj albumy w Bibliotece według daty dodania</string>
+    <string name="tour_184_lists_point_5">Przesuwanie utworów do kolejki można wyłączyć</string>
+    <string name="tour_184_also_shuffle">Losowo bez Inteligentnego losowania i Losowo także dla następnej listy</string>
+    <string name="tour_184_also_replay">Replay za wczoraj, zeszły tydzień i zeszły miesiąc</string>
+    <string name="tour_184_also_color">Jednolity kolor jako tło ekranu</string>
+    <string name="tour_184_also_crossfade">Przewijanie nie gubi już przenikania utworu</string>
+    <string name="tour_184_also_glass">Tekst nie prześwituje już przez paski Liquid Glass</string>
 </resources>

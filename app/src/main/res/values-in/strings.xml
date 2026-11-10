@@ -5172,4 +5172,41 @@
     <string name="tl_pick_a_split_light">Pilih cahaya selain Putih dulu</string>
     <string name="tl_history_and_editing">Riwayat dan pengeditan</string>
     <string name="tl_reset_everything">Reset semuanya</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Look lengkap, siang dan malam</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord aktif · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · cadangan, update</string>
+    <string name="root_connect_short">Putar di speaker dan TV</string>
+    <string name="root_handoff_on">Handoff aktif</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Setelan, jadi sederhana</string>
+    <string name="tour_184_settings_body">Halaman pertama yang baru, dan setiap halaman dalam grup-grup singkat.</string>
+    <string name="tour_184_settings_point_1">Telusuri, akunmu, dan Mode performa di paling atas</string>
+    <string name="tour_184_settings_point_2">17 halaman dalam lima grup, masing-masing dengan satu baris yang menunjukkan setelannya</string>
+    <string name="tour_184_settings_point_3">Pilihan terbuka di sebuah sheet, dengan contoh untuk masing-masing</string>
+    <string name="tour_184_settings_point_4">\"Reset halaman ini\" mengembalikan satu halaman seperti semula</string>
+    <string name="tour_184_settings_point_5">Ketuk ⓘ untuk membaca fungsi sebuah setelan</string>
+    <string name="tour_184_lyrics_title">Lirik, tepat waktu</string>
+    <string name="tour_184_lyrics_body">Lirik terlambat di headphone-mu? Geser lirik semua lagu sedikit lebih awal atau lebih lambat.</string>
+    <string name="tour_184_lyrics_point_1">Hingga setengah detik ke dua arah, langsung berlaku</string>
+    <string name="tour_184_lyrics_point_2">Lirik di notifikasi, tanpa perlu mobil</string>
+    <string name="tour_184_lyrics_point_3">Di mobil, baris panjang bisa berlanjut ke baris kedua</string>
+    <string name="tour_184_lock_title">Layar kunci, dengan tampilan pemutar</string>
+    <string name="tour_184_lock_body">Pemutar layar kuncimu bisa memakai latar, bilah progres, dan aksen pemutar.</string>
+    <string name="tour_184_lock_point_1">Aktifkan \"%1$s\" di %2$s</string>
+    <string name="tour_184_lock_point_2">Latar bergerak diam di sana</string>
+    <string name="tour_184_lock_point_3">Ikon hati di tata letak Lirik saat Suka ditampilkan</string>
+    <string name="tour_184_lists_title">Temukan lagu yang diputar</string>
+    <string name="tour_184_lists_body">Di daftar panjang, langsung lompat ke lagu yang sedang diputar.</string>
+    <string name="tour_184_lists_point_1">\"%1$s\" di menu ⋯ daftar lagu</string>
+    <string name="tour_184_lists_point_2">Atau tombol di atas pemutar mini: aktifkan \"%1$s\"</string>
+    <string name="tour_184_lists_point_3">Gambar selebar layar juga di album</string>
+    <string name="tour_184_lists_point_4">Urutkan album di Koleksi menurut kapan kamu menambahkannya</string>
+    <string name="tour_184_lists_point_5">Geser baris lagu ke antrean bisa dimatikan</string>
+    <string name="tour_184_also_shuffle">Acak tanpa Acak Pintar, dan tetap acak untuk daftar berikutnya</string>
+    <string name="tour_184_also_replay">Replay untuk kemarin, minggu lalu, dan bulan lalu</string>
+    <string name="tour_184_also_color">Warna polos sebagai latar layar</string>
+    <string name="tour_184_also_crossfade">Menggeser posisi lagu tak lagi menghilangkan crossfade-nya</string>
+    <string name="tour_184_also_glass">Teks tak lagi tembus terlihat di bilah Kaca Cair</string>
 </resources>

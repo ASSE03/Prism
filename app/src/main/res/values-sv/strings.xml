@@ -5245,4 +5245,41 @@
     <string name="tl_pick_a_split_light">Välj ett annat ljus än Vit först</string>
     <string name="tl_history_and_editing">Historik och redigering</string>
     <string name="tl_reset_everything">Återställ allt</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Hela looks, dag och natt</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord på · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · säkerhetskopia, uppdateringar</string>
+    <string name="root_connect_short">Spela på högtalare och tv</string>
+    <string name="root_handoff_on">Överlämning på</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Inställningar, enkelt</string>
+    <string name="tour_184_settings_body">En ny första sida, och varje sida i korta grupper.</string>
+    <string name="tour_184_settings_point_1">Sök, ditt konto och Prestandaläge högst upp</string>
+    <string name="tour_184_settings_point_2">17 sidor i fem grupper, var och en med en rad som säger hur den är inställd</string>
+    <string name="tour_184_settings_point_3">Val öppnas i ett ark, med ett exempel på varje</string>
+    <string name="tour_184_settings_point_4">Återställ den här sidan sätter tillbaka en sida som den kom</string>
+    <string name="tour_184_settings_point_5">Tryck på ⓘ för att läsa vad en inställning gör</string>
+    <string name="tour_184_lyrics_title">Låttext, i rätt tid</string>
+    <string name="tour_184_lyrics_body">Ligger låttexten efter i hörlurarna? Flytta varje låts text lite tidigare eller senare.</string>
+    <string name="tour_184_lyrics_point_1">Upp till en halv sekund åt vardera hållet, ändras direkt</string>
+    <string name="tour_184_lyrics_point_2">Låttext i aviseringen, ingen bil behövs</string>
+    <string name="tour_184_lyrics_point_3">I bilen kan en lång rad fortsätta på en andra rad</string>
+    <string name="tour_184_lock_title">Låsskärmen, med spelarens look</string>
+    <string name="tour_184_lock_body">Spelaren på låsskärmen kan ta spelarens bakgrund, förloppsfält och accent.</string>
+    <string name="tour_184_lock_point_1">Slå på \"%1$s\" i %2$s</string>
+    <string name="tour_184_lock_point_2">Rörliga bakgrunder står stilla där</string>
+    <string name="tour_184_lock_point_3">Ett hjärta i Låttext-layouten när Gilla visas</string>
+    <string name="tour_184_lists_title">Hitta låten som spelas</string>
+    <string name="tour_184_lists_body">Hoppa direkt till låten som spelas i en lång lista.</string>
+    <string name="tour_184_lists_point_1">\"%1$s\" i en låtlistas ⋯-meny</string>
+    <string name="tour_184_lists_point_2">Eller en knapp ovanför minispelaren: slå på \"%1$s\"</string>
+    <string name="tour_184_lists_point_3">Bilder i full bredd på album också</string>
+    <string name="tour_184_lists_point_4">Sortera Bibliotekets album efter när du lade till dem</string>
+    <string name="tour_184_lists_point_5">Att svepa låtrader till kön kan stängas av</string>
+    <string name="tour_184_also_shuffle">Blanda utan Smart blandning, och behåll blandning för nästa lista</string>
+    <string name="tour_184_also_replay">Replay för igår, förra veckan och förra månaden</string>
+    <string name="tour_184_also_color">En enfärgad bakgrund på en skärm</string>
+    <string name="tour_184_also_crossfade">Att spola tappar inte längre en låts övertoning</string>
+    <string name="tour_184_also_glass">Text syns inte längre igenom Flytande glas-fälten</string>
 </resources>

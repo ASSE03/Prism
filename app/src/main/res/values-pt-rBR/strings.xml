@@ -5318,4 +5318,41 @@
     <string name="tl_pick_a_split_light">Primeiro escolha uma luz diferente de Branco</string>
     <string name="tl_history_and_editing">Histórico e edição</string>
     <string name="tl_reset_everything">Redefinir tudo</string>
+    <!-- 1.8.4 root lines -->
+    <string name="root_looks_short">Looks inteiros, de dia e de noite</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord ativado · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · backup, atualizações</string>
+    <string name="root_connect_short">Tocar em alto-falantes e TVs</string>
+    <string name="root_handoff_on">Transferência ativada</string>
+    <!-- 1.8.4 Tour -->
+    <string name="tour_184_settings_title">Configurações, simplificadas</string>
+    <string name="tour_184_settings_body">Uma nova primeira página, e cada página em grupos curtos.</string>
+    <string name="tour_184_settings_point_1">Busca, sua conta e Modo desempenho no topo</string>
+    <string name="tour_184_settings_point_2">17 páginas em cinco grupos, cada uma com uma linha que diz como está configurada</string>
+    <string name="tour_184_settings_point_3">As opções abrem numa folha, com um exemplo de cada</string>
+    <string name="tour_184_settings_point_4">Redefinir esta página deixa uma página como ela veio</string>
+    <string name="tour_184_settings_point_5">Toque em ⓘ para ler o que uma configuração faz</string>
+    <string name="tour_184_lyrics_title">Letra, bem na hora</string>
+    <string name="tour_184_lyrics_body">A letra atrasa nos seus fones? Mova a letra de todas as músicas um pouco antes ou depois.</string>
+    <string name="tour_184_lyrics_point_1">Até meio segundo para qualquer lado, na hora</string>
+    <string name="tour_184_lyrics_point_2">Letra na notificação, sem precisar de carro</string>
+    <string name="tour_184_lyrics_point_3">No carro, uma linha longa pode continuar numa segunda linha</string>
+    <string name="tour_184_lock_title">A tela de bloqueio, com o look do player</string>
+    <string name="tour_184_lock_body">O player da tela de bloqueio pode usar o fundo, a barra de progresso e o destaque do player.</string>
+    <string name="tour_184_lock_point_1">Ative \"%1$s\" em %2$s</string>
+    <string name="tour_184_lock_point_2">Fundos animados ficam parados lá</string>
+    <string name="tour_184_lock_point_3">Um coração no layout Letra quando Curtir aparece</string>
+    <string name="tour_184_lists_title">Ache a música tocando</string>
+    <string name="tour_184_lists_body">Numa lista longa, vá direto para a música que está tocando.</string>
+    <string name="tour_184_lists_point_1">\"%1$s\" no menu ⋯ de uma lista de músicas</string>
+    <string name="tour_184_lists_point_2">Ou um botão acima do miniplayer: ative \"%1$s\"</string>
+    <string name="tour_184_lists_point_3">Imagens em largura total também nos álbuns</string>
+    <string name="tour_184_lists_point_4">Ordene os álbuns da Biblioteca por quando você os adicionou</string>
+    <string name="tour_184_lists_point_5">Deslizar músicas para a fila pode ser desativado</string>
+    <string name="tour_184_also_shuffle">Aleatório sem o Aleatório inteligente, e manter o aleatório na próxima lista</string>
+    <string name="tour_184_also_replay">Replay de ontem, da semana passada e do mês passado</string>
+    <string name="tour_184_also_color">Uma cor sólida como fundo de uma tela</string>
+    <string name="tour_184_also_crossfade">Avançar ou voltar não faz mais a música perder o crossfade</string>
+    <string name="tour_184_also_glass">O texto não aparece mais através das barras Liquid Glass</string>
 </resources>
