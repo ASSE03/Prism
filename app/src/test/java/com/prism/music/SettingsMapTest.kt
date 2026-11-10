@@ -156,7 +156,8 @@ class SettingsMapTest {
         fun to(key: String, find: String? = null) = SettingsMap.resolve(key, find)
         // Customize Prism's own page held the theme and Motion.
         assertEquals(SettingsPageId.THEME_COLORS, to("appearance")!!.page)
-        assertEquals(SettingsTarget(SettingsPageId.THEME_COLORS, tr(R.string.motion)), to("appearance", tr(R.string.motion)))
+        // (Theme & colors is rebuilt: the old Motion group is in "Theme and motion" now.)
+        assertEquals(SettingsTarget(SettingsPageId.THEME_COLORS, tr(R.string.tl_theme_and_motion)), to("appearance", tr(R.string.motion)))
         assertEquals(SettingsPageId.THEME_COLORS, to("color")!!.page)
         assertEquals(SettingsPageId.THEME_COLORS, to("glass")!!.page)
         assertEquals(SettingsPageId.TEXT_ICONS, to("text")!!.page)

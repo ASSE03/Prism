@@ -27,6 +27,9 @@ class SettingsIndexTest {
         // still called, by the player's Customize sheet (SettingsScreen.kt): a title around LyricsYourWay.kt's animation
         // choices, no row of a settings page. So its old rows and groups are on no page, and aren't read.
         val waiting = old.filter { it.name != "OldLyrics.kt" }.toMutableList()
+        // Theme & colors and Looks are rebuilt: nothing calls their old files' composables any more (a comment in
+        // SettingsInterim.kt still names `appearance()`, which would read as a call below).
+        waiting.removeAll { it.name == "OldTheme.kt" || it.name == "OldLooks.kt" }
         // What an old file offers the others: its composables that aren't private.
         fun offers(f: File) = Regex("""^internal fun (?:[\w.]+\.)?(\w+)\(""", RegexOption.MULTILINE).findAll(f.readText()).map { it.groupValues[1] }.toList()
         while (true) {
@@ -40,7 +43,7 @@ class SettingsIndexTest {
         // Customize sheet over the player (SettingsScreen.kt) still shows its Look and Cover groups, which are on no page.
         live.filter { it.parentFile.name == "settings" && it.name != "OldPlayer.kt" }.sortedBy { it.name }
     }
-    private val sources = listOf("SettingsScreen.kt", "SoundSettings.kt", "BackupUi.kt", "ConnectSettings.kt", "ColorSettings.kt", "LookSettings.kt", "SpotifySettings.kt", "HistorySettings.kt")
+    private val sources = listOf("SettingsScreen.kt", "SoundSettings.kt", "BackupUi.kt", "ConnectSettings.kt", "SpotifySettings.kt", "HistorySettings.kt")
         .map { File("src/main/java/com/prism/music/ui/screens/$it").readText() } + pageFiles.map { it.readText() }
 
     /** The old rows, and the kit's five (1.8.4), by the composable that draws them. */
@@ -110,13 +113,13 @@ class SettingsIndexTest {
         assertTrue("the old Lyrics pages are rebuilt (LyricsSingPage.kt): $read", "OldLyrics.kt" !in read)
         assertTrue("the old Playback & sound page is rebuilt (PlaybackPage.kt, SoundQualityPage.kt): $read", "OldSound.kt" !in read)
         assertTrue("the old Player page is rebuilt (PlayerPage.kt, PlayerParts.kt): $read", "OldPlayer.kt" !in read)
+        assertTrue("the old Theme page is rebuilt (ThemeColorsPage.kt): $read", "OldTheme.kt" !in read)
+        assertTrue("the old Looks page is rebuilt (LooksPage.kt): $read", "OldLooks.kt" !in read)
         // One per line, so pages rebuilt side by side each take their own line out.
         val stillRead = listOf(
-            "OldTheme.kt",
             "OldTabs.kt",
             "OldCar.kt",
             "OldAccounts.kt",
-            "OldLooks.kt",
             "OldBackupAbout.kt",
             "LanguageRegionPage.kt",
             "PlayerPage.kt",
@@ -128,6 +131,8 @@ class SettingsIndexTest {
             "TextIconsPage.kt",
             "TextIconsParts.kt",
             "TabsMiniPlayerPage.kt",
+            "ThemeColorsPage.kt",
+            "LooksPage.kt",
         )
         for (name in stillRead) {
             assertTrue("$name is read: $read", name in read)

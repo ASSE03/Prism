@@ -295,7 +295,7 @@ private fun CommunityGroup(current: String?) {
 
 /** [looks] two to a row, each a card with the Look on two small phones; [current] is ringed. */
 @Composable
-private fun LookGrid(looks: List<Look>, current: String?, onPick: (Look) -> Unit, onMore: ((Look) -> Unit)?) {
+internal fun LookGrid(looks: List<Look>, current: String?, onPick: (Look) -> Unit, onMore: ((Look) -> Unit)?) {
     val edited by LocalContainer.current.looks.edited.collectAsState()
     Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         looks.chunked(2).forEach { row ->
@@ -353,7 +353,7 @@ fun LookCard(look: Look, selected: Boolean, modifier: Modifier = Modifier, onCli
 
 /** A Look's ⋯: switch to it, share it, and (yours) rename, copy or delete it; Prism's own can be copied to make your own. */
 @Composable
-private fun LookActions(look: Look, onDismiss: () -> Unit, onApply: () -> Unit, onShare: () -> Unit, onRename: () -> Unit) {
+internal fun LookActions(look: Look, onDismiss: () -> Unit, onApply: () -> Unit, onShare: () -> Unit, onRename: () -> Unit) {
     val c = LocalContainer.current
     val scope = rememberCoroutineScope()
     ActionSheet(null, onDismiss) { close ->
@@ -386,7 +386,7 @@ private fun LookActions(look: Look, onDismiss: () -> Unit, onApply: () -> Unit, 
 
 /** A name to type ([initial] picked), for saving or renaming a Look. */
 @Composable
-private fun NameDialog(title: String, label: String, initial: String, onDismiss: () -> Unit, onDone: (String) -> Unit) {
+internal fun NameDialog(title: String, label: String, initial: String, onDismiss: () -> Unit, onDone: (String) -> Unit) {
     var name by remember { mutableStateOf(initial) }
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -406,7 +406,7 @@ private fun NameDialog(title: String, label: String, initial: String, onDismiss:
  * a file can carry them, if you tick them.
  */
 @Composable
-private fun ShareLookSheet(look: Look, onDismiss: () -> Unit) {
+internal fun ShareLookSheet(look: Look, onDismiss: () -> Unit) {
     val c = LocalContainer.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -466,7 +466,7 @@ private fun ShareLookSheet(look: Look, onDismiss: () -> Unit) {
 
 /** A Look someone shared, shown before anything changes: try it, keep it, or not. */
 @Composable
-private fun PendingLookDialog(look: Look) {
+internal fun PendingLookDialog(look: Look) {
     val c = LocalContainer.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -504,7 +504,7 @@ private fun PendingLookDialog(look: Look) {
  * the ⓘ says it's only for the month and what happens when it ends.
  */
 @Composable
-private fun SeasonCard(look: Look, onUse: () -> Unit) {
+internal fun SeasonCard(look: Look, onUse: () -> Unit) {
     val c = LocalContainer.current
     val app = LocalAppSettings.current
     val ui = LocalUi.current

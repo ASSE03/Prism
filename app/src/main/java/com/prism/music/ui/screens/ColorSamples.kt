@@ -91,7 +91,10 @@ fun PageGround(c: ThemeColors, modifier: Modifier = Modifier, player: Boolean = 
     ) {
         MaterialTheme(colorScheme = c.scheme) {
             when {
-                style != com.prism.music.ui.theme.Backdrop.DEFAULT -> com.prism.music.ui.theme.BackdropLayer(style, photo, s.backdropDim, false, modifier)
+                // A solid color (#413) is that color exactly, as its screen draws it: nothing washed over it.
+                style != com.prism.music.ui.theme.Backdrop.DEFAULT -> com.prism.music.ui.theme.BackdropLayer(
+                    style, photo, if (style == com.prism.music.ui.theme.Backdrop.COLOR) 0f else s.backdropDim, false, modifier,
+                )
                 com.prism.music.ui.theme.ambientFrostShown(s, c.dark) -> com.prism.music.ui.components.AmbientFrost(modifier)
                 else -> Box(modifier.background(c.scheme.background))
             }

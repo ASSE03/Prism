@@ -516,7 +516,7 @@ private fun AccentPair(s: AppSettings) {
 
 /** The light alone: a progress line and a switch. */
 @Composable
-private fun LightStrip(c: ThemeColors) {
+internal fun LightStrip(c: ThemeColors) {
     val shape = RoundedCornerShape(12.dp)
     Row(
         Modifier.fillMaxWidth().height(40.dp).clip(shape).background(c.scheme.background).border(1.dp, c.line, shape).padding(horizontal = 10.dp),
@@ -529,7 +529,7 @@ private fun LightStrip(c: ThemeColors) {
 }
 
 /** What Prism does with an accent, when it doesn't use it exactly as picked. */
-private fun accentNote(c: Int, exact: Boolean): String? = when {
+internal fun accentNote(c: Int, exact: Boolean): String? = when {
     isNeutralSeed(c) -> tr(R.string.white_black_and_greys_give_prism)
     !exact -> tr(R.string.shown_softened_lighter_on_dark_pages)
     ColorMath.contrast(c, 0xFF0E0E12.toInt()) < 4.5 || ColorMath.contrast(c, 0xFFFAFAFB.toInt()) < 4.5 ->
@@ -624,7 +624,7 @@ fun whiteName(dark: Boolean) = if (dark) tr(R.string.white) else tr(R.string.bla
 
 /** Your own light's colors in order: tap one to change (or remove) it, + to add one, and a way to flip the order. */
 @Composable
-private fun StopEditor(stops: List<Int>, onEdit: (Int) -> Unit, onReverse: () -> Unit) {
+internal fun StopEditor(stops: List<Int>, onEdit: (Int) -> Unit, onReverse: () -> Unit) {
     val scheme = MaterialTheme.colorScheme
     Column(Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
         Text(tr(R.string.your_own_light_s_colors_left), style = MaterialTheme.typography.bodyMedium)
