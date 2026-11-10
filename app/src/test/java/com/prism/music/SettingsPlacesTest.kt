@@ -26,6 +26,21 @@ class SettingsPlacesTest {
         assertTrue("Text naming a Settings page that's gone since 1.8.4:\n" + found.joinToString("\n"), found.isEmpty())
     }
 
+    /**
+     * The root's "Listening" heading had borrowed Replay's `listening`, which is the listening time in a story: Japanese
+     * says 再生時間 ("play time") there, so the heading read as play time. It has its own string now, in every language.
+     */
+    @Test fun theListeningHeadingHasItsOwnStringInEveryLanguage() {
+        val map = File("src/main/java/com/prism/music/ui/screens/settings/SettingsMap.kt").readText()
+        assertTrue("the Listening heading uses root_listening", "LISTENING(tr(R.string.root_listening))" in map)
+        val files = File("src/main/res").listFiles { f -> f.name.startsWith("values") }!!.map { File(it, "strings.xml") }.filter { it.exists() }
+        assertTrue(files.size >= 32)
+        val missing = files.filter { "name=\"root_listening\"" !in it.readText() }.map { it.parentFile.name }
+        assertTrue("root_listening missing in $missing", missing.isEmpty())
+        val ja = Regex("""name="root_listening">([^<]*)<""").find(File("src/main/res/values-ja/strings.xml").readText())!!.groupValues[1]
+        assertTrue("Japanese heading isn't play time: $ja", ja != "再生時間")
+    }
+
     companion object {
         /** The pages of before 1.8.4, as their names were written. */
         val OLD_PAGES = listOf(

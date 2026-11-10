@@ -5230,6 +5230,7 @@
     <string name="the_week_before">the week before</string>
     <!-- root -->
     <string name="root_app">App</string>
+    <string name="root_listening">Listening</string>
     <string name="root_theme_colors">Theme &amp; colors</string>
     <string name="root_text_icons">Text &amp; icons</string>
     <string name="root_sound_quality">Sound &amp; quality</string>

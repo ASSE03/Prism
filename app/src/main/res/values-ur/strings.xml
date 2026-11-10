@@ -102,7 +102,7 @@
     <string name="save">محفوظ کریں</string>
     <string name="cancel">منسوخ کریں</string>
     <string name="share_2">%1$s شیئر کریں</string>
-    <string name="scan_it_in_prism_settings_customize">اسے Prism میں اسکین کریں: ترتیبات ← Prism کو حسبِ منشا بنائیں ← لُکس ← اسکین</string>
+    <string name="scan_it_in_prism_settings_customize">اسے Prism میں اسکین کریں: ترتیبات ← لُکس ← لُک حاصل کریں</string>
     <string name="too_much_for_a_qr_code">QR کوڈ کے لیے بہت زیادہ ہے: اسے متن یا فائل کے طور پر بھیجیں</string>
     <string name="codes_leave_out_photos_and_your">کوڈز میں تصاویر اور آپ کا اپنا فونٹ شامل نہیں ہوتا؛ فائل میں یہ آ سکتے ہیں۔</string>
     <string name="here_s_my_prism_look_share">یہ رہا میرا Prism لُک، \"%1$s\"۔ اسے دیکھنے کے لیے یہ پیغام Prism پر شیئر کریں:\n\n%2$s</string>
@@ -652,7 +652,7 @@
     <string name="remove_this_color">یہ رنگ ہٹائیں</string>
     <string name="changes">%1$s\n\nتبدیلیاں: %2$s</string>
     <string name="white_black_and_greys_give_prism">سفید، سیاہ اور سرمئی سے Prism کی سادہ شکل بنتی ہے: گہرے صفحات پر سفید، ہلکے صفحات پر سیاہ</string>
-    <string name="shown_softened_lighter_on_dark_pages">نرم کر کے دکھایا گیا (گہرے صفحات پر ہلکا، ہلکے صفحات پر گہرا)۔ اسے جیسا ہے ویسا استعمال کرنے کے لیے رنگ کے صفحے پر \"بالکل جیسا چنا\" منتخب کریں</string>
+    <string name="shown_softened_lighter_on_dark_pages">نرم کر کے دکھایا گیا (گہرے صفحات پر ہلکا، ہلکے صفحات پر گہرا)۔ اسے جیسا ہے ویسا استعمال کرنے کے لیے ایکسنٹ کے تحت \"بالکل جیسا چنا\" منتخب کریں</string>
     <string name="made_a_little_lighter_or_darker">جہاں اس پر متن پڑھا نہ جاتا وہاں تھوڑا ہلکا یا گہرا کیا گیا</string>
     <string name="tint_strength">جھلک کی شدت</string>
     <string name="faint">مدھم</string>
@@ -1098,7 +1098,7 @@
     <string name="in_the_middle">درمیان میں</string>
     <string name="title_size">عنوان کا سائز</string>
     <string name="title_weight">عنوان کی موٹائی</string>
-    <string name="light_is_prism_s_own_and">باریک Prism کا اپنا ہے، اور متن ← موٹائی کی پیروی کرتا ہے۔ موٹا فنکار کا نام بھی موٹا کر دیتا ہے۔</string>
+    <string name="light_is_prism_s_own_and">باریک Prism کا اپنا ہے، اور متن اور آئیکنز ← موٹائی کی پیروی کرتا ہے۔ موٹا فنکار کا نام بھی موٹا کر دیتا ہے۔</string>
     <string name="scrolling_titles">چلتے عنوانات</string>
     <string name="a_long_title_scrolls_across_off">لمبا عنوان چلتا ہے (آف: یہ … پر ختم ہوتا ہے)</string>
     <string name="times_under_the_progress_bar">پروگریس بار کے نیچے اوقات</string>
@@ -1963,7 +1963,7 @@
     <string name="refractive_bars_and_controls">روشنی موڑنے والی بارز اور کنٹرولز</string>
     <string name="soft_blur_no_refraction">نرم دھندلاہٹ، روشنی کا موڑ نہیں</string>
     <string name="pages_frosted_with_their_picture">اپنی تصویر سے دھندلے صفحات</string>
-    <string name="artist_album_and_playlist_pages_sit">فنکار، البم اور پلے لسٹ کے صفحات اپنی تصویر سے بنے دھندلے شیشے پر ہوتے ہیں؛ ہوم، لائبریری، تلاش اور ترتیبات جو چل رہا ہے اس کی دھند پر ہوتے ہیں۔ صفحات اپنی تصویر کا رنگ لیں یا نہیں، یہ رنگ کے تحت ہے۔</string>
+    <string name="artist_album_and_playlist_pages_sit">فنکار، البم اور پلے لسٹ کے صفحات اپنی تصویر سے بنے دھندلے شیشے پر ہوتے ہیں؛ ہوم، لائبریری، تلاش اور ترتیبات جو چل رہا ہے اس کی دھند پر ہوتے ہیں۔ صفحات اپنی تصویر کا رنگ لیں یا نہیں، یہ صفحات کے تحت ہے۔</string>
     <string name="calmer_quicker_animations">پرسکون، تیز اینیمیشنز</string>
     <string name="no_drifting_backgrounds_no_artwork_bounce">نہ بہتے پس منظر، نہ آرٹ ورک کا اچھلنا، تیز منتقلیاں۔</string>
     <string name="that_font_couldn_t_be_used">وہ فونٹ استعمال نہیں ہو سکا</string>
@@ -2005,7 +2005,7 @@
     <string name="more_room_swipe_down_from_the">زیادہ جگہ؛ دیکھنے کے لیے اوپر سے نیچے سوائپ کریں</string>
     <string name="the_clock_battery_and_notification_icons">جب Prism کھلا ہو تو اوپر گھڑی، بیٹری اور اطلاعات کے آئیکنز چھپے رہتے ہیں۔ اوپری کنارے سے نیچے سوائپ کریں اور وہ کچھ دیر کے لیے دکھائی دیں گے۔ امرسیو موڈ اور پوری اسکرین ویڈیو پہلے کی طرح باقی بارز بھی چھپاتے ہیں۔</string>
     <string name="never_shows_only_the_icons_words">\"کبھی نہیں\" صرف آئیکنز دکھاتا ہے؛ \"صرف الفاظ\" صرف نام دکھاتا ہے۔</string>
-    <string name="see_through_lets_the_page_show">\"آر پار\" سے صفحہ بار کے پیچھے سے دکھائی دیتا ہے؛ \"ٹھوس\" اسے چھپاتا ہے۔ دھندلاہٹ شیشے سے آتی ہے (Prism کو حسبِ منشا بنائیں ← شیشہ اور پس منظر)۔</string>
+    <string name="see_through_lets_the_page_show">\"آر پار\" سے صفحہ بار کے پیچھے سے دکھائی دیتا ہے؛ \"ٹھوس\" اسے چھپاتا ہے۔ دھندلاہٹ شیشے سے آتی ہے (تھیم اور رنگ ← شیشہ)۔</string>
     <string name="slims_down_as_you_scroll">اسکرول کرتے وقت پتلا ہو جاتا ہے</string>
     <string name="swipe_sideways_on_a_tab_s">ٹیب کے صفحے پر دائیں بائیں سوائپ کریں</string>
     <string name="a_sideways_swipe_on_a_tab">کسی ٹیب کے صفحے پر دائیں بائیں سوائپ کرنے سے ساتھ والے ٹیب پر جاتے ہیں۔ دائیں بائیں اسکرول ہونے والی قطاریں (اور لائبریری کے اپنے صفحات) اپنے سوائپ رکھتی ہیں۔</string>
@@ -2034,7 +2034,7 @@
     <string name="played_now_playing_and_up_next">\"چلائے گئے\"، \"ابھی چل رہا ہے\" اور \"آگے کیا ہے\"</string>
     <string name="off_the_queue_is_one_list">آف ہونے پر قطار گانوں کی ایک فہرست ہوتی ہے، چلائے گئے گانوں سے آنے والوں تک۔</string>
     <string name="moving_artwork_when_a_song_has">متحرک آرٹ ورک، جب گانے میں ہو</string>
-    <string name="motion_artwork_and_video_covers_turn">متحرک آرٹ ورک اور ویڈیو کورز۔ کسی ایک گانے کے لیے انہیں پلیئر کے ⋯ مینو سے بند کریں۔ یہ موبائل ڈیٹا پر چلیں یا نہیں، اور فون پر رکھے گئے، ڈاؤن لوڈز، اسٹوریج اور ڈیٹا میں ہیں۔</string>
+    <string name="motion_artwork_and_video_covers_turn">متحرک آرٹ ورک اور ویڈیو کورز۔ کسی ایک گانے کے لیے انہیں پلیئر کے ⋯ مینو سے بند کریں۔ یہ موبائل ڈیٹا پر چلیں یا نہیں، اور فون پر رکھے گئے، ڈاؤن لوڈز اور ڈیٹا میں ہیں۔</string>
     <string name="the_animated_cover_plays_behind_everything">اینیمیٹڈ کور ہر چیز کے پیچھے چلتا ہے</string>
     <string name="the_moving_artwork_fills_the_whole">متحرک آرٹ ورک پورے پلیئر کو بھرتا ہے، کنٹرولز کے نیچے گہرا کیا ہوا، اور کور خود ساکن تصویر دکھاتا ہے۔ کنارے تک آرٹ ورک کے ساتھ نہیں، جو اسے پہلے ہی کنارے سے کنارے تک دکھاتا ہے۔</string>
     <string name="the_cover_fills_the_screen_lyrics">کور اسکرین بھرتا ہے، بول اس کے اوپر</string>
@@ -2137,7 +2137,7 @@
     <string name="needed_for_sing">گائیں کے لیے درکار · %1$s</string>
     <string name="takes_the_singer_s_voice_out">کراؤکی کے لیے گانوں سے گلوکار کی آواز نکالتا ہے، آپ کے فون پر۔ ایک بار ڈاؤن لوڈ ہوتا ہے۔</string>
     <string name="so_sing_starts_at_once_when">تاکہ آن کرتے ہی گائیں فوراً شروع ہو</string>
-    <string name="the_playing_song_and_the_next">گائیں آف ہونے پر بھی چلتا ہوا اور اگلا گانا پس منظر میں الگ کیے جاتے ہیں۔ موسیقی چلتے وقت زیادہ بیٹری استعمال ہوتی ہے؛ موبائل ڈیٹا پر یہ ڈاؤن لوڈز، اسٹوریج اور ڈیٹا ← موبائل ڈیٹا کی پیروی کرتا ہے۔</string>
+    <string name="the_playing_song_and_the_next">گائیں آف ہونے پر بھی چلتا ہوا اور اگلا گانا پس منظر میں الگ کیے جاتے ہیں۔ موسیقی چلتے وقت زیادہ بیٹری استعمال ہوتی ہے؛ موبائل ڈیٹا پر یہ ڈاؤن لوڈز اور ڈیٹا ← موبائل ڈیٹا کی پیروی کرتا ہے۔</string>
     <string name="using">%1$s استعمال ہو رہا ہے</string>
     <string name="songs_are_worked_out_again_the">اگلی بار گانے پر گانے دوبارہ تیار کیے جاتے ہیں۔</string>
     <string name="word_by_word_first_then_by">پہلے لفظ بہ لفظ، پھر سطر بہ سطر</string>
@@ -2495,7 +2495,7 @@
     <string name="allow_notifications">اطلاعات کی اجازت دیں</string>
     <string name="turn_them_on_in_android_s">انہیں Android کی ترتیبات میں Prism کے لیے آن کریں۔</string>
     <string name="your_starting_point_made_from_what">آپ کا نقطۂ آغاز، آپ کے چلائے گئے گانوں سے بنا۔</string>
-    <string name="the_replay_card_at_the_top">اوپر Replay کارڈ: آپ کا اب تک کا سال (اس کی شکل ترتیبات ← Prism کو حسبِ منشا بنائیں ← ہوم اور لائبریری میں چنیں)</string>
+    <string name="the_replay_card_at_the_top">اوپر Replay کارڈ: آپ کا اب تک کا سال (اس کی شکل ترتیبات ← ہوم اور لائبریری ← Replay کارڈ میں چنیں)</string>
     <string name="quick_picks_songs_around_the_artists">فوری انتخاب: آپ کے چلائے گئے فنکاروں کے آس پاس کے گانے، مزید کے لیے سوائپ کریں</string>
     <string name="made_for_you_daily_mixes_your">آپ کے لیے تیار کردہ: ڈیلی مکسز، دن کے وقت کا مکس اور ریلیز ریڈار</string>
     <string name="the_grid_button_at_the_top">اوپر گرڈ بٹن ہوم کے سیکشنز ترتیب دیتا ہے</string>
@@ -2516,12 +2516,12 @@
     <string name="let_prism_mix_your_music_songs">Prism کو اپنی موسیقی مکس کرنے دیں: گانے ایک دوسرے میں گھلتے ہیں، کی اور بیٹ کے مطابق۔</string>
     <string name="in_the_queue_tap_dj_then">قطار میں DJ پر ٹیپ کریں، پھر یکساں، بتدریج تیز یا آہستہ آہستہ دھیما چنیں</string>
     <string name="long_press_an_album_or_playlist">کسی البم یا پلے لسٹ کو دبا کر رکھیں ← DJ سیٹ کے طور پر چلائیں</string>
-    <string name="crossfade_settings_playback_sound_blends_any">کراس فیڈ (ترتیبات ← پلے بیک اور آواز) کوئی بھی دو گانے ملاتا ہے</string>
+    <string name="crossfade_settings_playback_sound_blends_any">کراس فیڈ (ترتیبات ← پلے بیک) کوئی بھی دو گانے ملاتا ہے</string>
     <string name="mixes_made_on_your_phone_from">آپ کے فون پر آپ کے چلائے گئے گانوں سے بنے مکسز۔ آپ کی سماعت کے بارے میں کچھ بھی باہر نہیں جاتا۔</string>
     <string name="daily_mixes_group_the_artists_you">ڈیلی مکسز آپ کے چلائے گئے فنکاروں کو اس لحاظ سے گروپ کرتے ہیں کہ کون ساتھ اچھا لگتا ہے</string>
     <string name="release_radar_finds_new_music_from">ریلیز ریڈار آپ کے فالو کیے گئے فنکاروں کی نئی موسیقی ڈھونڈتا ہے</string>
     <string name="made_for_you_also_has_mixes">آپ کے لیے تیار کردہ میں آپ کی اپنی موسیقی کے مکسز اور بار بار بھی ہیں: یہ صرف آپ کے پلے سے بنتے ہیں اور آف لائن کام کرتے ہیں</string>
-    <string name="when_the_queue_ends_prism_s">قطار ختم ہونے پر Prism کا ریڈیو آپ کی موسیقی سے چنتا ہے (ترتیبات ← پلے بیک اور آواز ← آٹو پلے یہاں سے)</string>
+    <string name="when_the_queue_ends_prism_s">قطار ختم ہونے پر Prism کا ریڈیو آپ کی موسیقی سے چنتا ہے (ترتیبات ← پلے بیک ← جب قطار ختم ہو)</string>
     <string name="tap_shuffle_twice_on_a_playlist">سمارٹ شفل کے لیے پلے لسٹ پر شفل دو بار ٹیپ کریں: نئے گانے شامل ہو جاتے ہیں</string>
     <string name="not_for_me_and_leave_out">\"میرے لیے نہیں\" اور \"میرے ذوق سے باہر رکھیں\" چیزوں کو دور رکھتے ہیں</string>
     <string name="find_anything_in_prism_music_or">Prism Music میں کچھ بھی ڈھونڈیں، یا اپنے آس پاس چلتے گانے کا نام جانیں۔</string>
@@ -2545,11 +2545,11 @@
     <string name="control_prism_from_a_browser_on">اپنے کمپیوٹر کے براؤزر سے Prism کنٹرول کریں</string>
     <string name="hand_what_s_playing_to_another">جو چل رہا ہے اسے Prism والے کسی اور فون یا ٹیبلیٹ کو دیں</string>
     <string name="prism_takes_its_color_from_what">Prism اپنا رنگ اس سے لیتا ہے جو چل رہا ہو۔ جتنا چاہیں بدلیں۔</string>
-    <string name="appearance_the_spectrum_s_colors_or">ظاہری شکل: اسپیکٹرم کے رنگ (یا سادہ سفید)، آپ کا ایکسنٹ، فونٹس، آئیکنز اور پس منظر</string>
-    <string name="layout_the_tab_bar_your_tabs">ترتیب: ٹیب بار، آپ کے ٹیبز اور منی پلیئر</string>
+    <string name="appearance_the_spectrum_s_colors_or">تھیم اور رنگ، متن اور آئیکنز: روشنی کے رنگ (یا سادہ سفید)، آپ کا ایکسنٹ، فونٹس، آئیکنز اور پس منظر</string>
+    <string name="layout_the_tab_bar_your_tabs">ٹیبز اور منی پلیئر: ٹیب بار، آپ کے ٹیبز اور منی پلیئر</string>
     <string name="player_its_background_the_cover_and">پلیئر: اس کا پس منظر، کور اور اس پر کیا دکھائی دے</string>
     <string name="search_settings_from_the_box_at">ترتیبات کے اوپر والے خانے سے ترتیبات تلاش کریں</string>
-    <string name="settings_customize_prism_color_every_choice">ترتیبات ← Prism کو حسبِ منشا بنائیں ← رنگ: ہر انتخاب چننے سے پہلے دکھاتا ہے کہ وہ کیسا لگتا ہے۔</string>
+    <string name="settings_customize_prism_color_every_choice">ترتیبات ← تھیم اور رنگ: ہر انتخاب چننے سے پہلے دکھاتا ہے کہ وہ کیسا لگتا ہے۔</string>
     <string name="the_light_12_presets_white_black">روشنی: 12 پری سیٹس، سفید (لائٹ موڈ میں سیاہ)، یا آپ کے اپنے رنگ</string>
     <string name="your_accent_any_color_from_a">آپ کا ایکسنٹ: کوئی بھی رنگ، پہیے، کوڈ یا آئی ڈراپر سے</string>
     <string name="the_page_background_plain_tinted_with">صفحے کا پس منظر: سادہ، آپ کے ایکسنٹ کی جھلک کے ساتھ، یا آپ کا اپنا رنگ</string>
@@ -2560,14 +2560,14 @@
     <string name="pin_prism_playlists_to_home_customize">Prism پلے لسٹس ہوم پر پِن کریں (ہوم کو حسبِ منشا بنائیں ← پِن کی گئی پلے لسٹس)</string>
     <string name="song_credits_in_any_song_s">کسی بھی گانے کے مینو میں گانے کے کریڈٹس</string>
     <string name="see_which_downloads_failed_and_why">دیکھیں کون سے ڈاؤن لوڈز ناکام ہوئے، اور کیوں</string>
-    <string name="settings_customize_prism_looks_your_whole">ترتیبات ← Prism کو حسبِ منشا بنائیں ← لُکس: آپ کا پورا لُک، ایک ٹیپ میں محفوظ، تبدیل اور شیئر۔</string>
+    <string name="settings_customize_prism_looks_your_whole">ترتیبات ← لُکس: آپ کا پورا لُک، ایک ٹیپ میں محفوظ، تبدیل اور شیئر۔</string>
     <string name="try_prism_s_own_paper_midnight">Prism کے اپنے آزمائیں: کاغذ، آدھی رات، نیون، نرم، اسٹوڈیو اور وینائل</string>
     <string name="save_yours_update_it_when_you">اپنا محفوظ کریں، بدلنے پر اسے اپ ڈیٹ کریں، اور QR کوڈ، کوڈ یا فائل کے طور پر شیئر کریں</string>
     <string name="browse_looks_people_shared_under_from">لوگوں کے شیئر کیے گئے لُکس \"کمیونٹی سے\" میں دیکھیں</string>
     <string name="one_look_by_day_and_another">دن میں ایک لُک اور رات میں دوسرا، طلوع اور غروبِ آفتاب پر</string>
     <string name="every_look_page_shows_home_the">ہر لُک کا صفحہ ہوم، پلیئر اور بول دکھاتا ہے جیسے آپ انہیں بدلتے ہیں؛ واپس کریں تبدیلی کو لوٹا دیتا ہے</string>
-    <string name="customize_by_tapping_hold_the_settings">ٹیپ کر کے حسبِ منشا بنائیں: ترتیبات کا ٹیب دبا کر رکھیں، یا ظاہری شکل میں آن کریں، پھر منی پلیئر، ٹیب بار، پلیئر یا ہوم کے کسی سیکشن پر ٹیپ کریں</string>
-    <string name="settings_customize_prism_player_or_player">ترتیبات ← Prism کو حسبِ منشا بنائیں ← پلیئر، یا خود پلیئر پر ⋯ ← پلیئر کی ترتیبات۔</string>
+    <string name="customize_by_tapping_hold_the_settings">ٹیپ کر کے حسبِ منشا بنائیں: ترتیبات کا ٹیب دبا کر رکھیں، یا لُکس میں آن کریں، پھر منی پلیئر، ٹیب بار، پلیئر یا ہوم کے کسی سیکشن پر ٹیپ کریں</string>
+    <string name="settings_customize_prism_player_or_player">ترتیبات ← پلیئر، یا خود پلیئر پر ⋯ ← پلیئر کی ترتیبات۔</string>
     <string name="layouts_standard_a_big_cover_lyrics">ترتیبیں: معیاری، بڑا کور، پہلے بول، کم سے کم، وینائل یا کیسٹ (یہ چلتے وقت گھومتے ہیں)</string>
     <string name="a_visualizer_if_you_d_like">اگر چاہیں تو ویژولائزر: پٹیاں، لہر، حلقہ، نبض یا چمک (جب تک آپ نہ چنیں بند رہتا ہے)</string>
     <string name="pick_the_buttons_under_the_controls">کنٹرولز کے نیچے کے بٹن چنیں (رفتار بھی ان میں ہے)، اور اطلاع اور گاڑی میں پلے کے ساتھ والے دو</string>
@@ -2578,7 +2578,7 @@
     <string name="prism_tells_android_which_of_its">Prism Android کو بتاتا ہے کہ اس کے کون سے حصے پہلے سے تیار کرے، اور بینر سے اپ ڈیٹس تیار حالت میں آتی ہیں، اس لیے اب سست نہیں چلتیں</string>
     <string name="less_work_while_lists_scroll_while">فہرستیں اسکرول کرتے، تلاش میں ٹائپ کرتے، اور گانا چلتے وقت کم کام</string>
     <string name="if_something_still_stutters_settings_backup">اگر کچھ اب بھی اٹکے تو ترتیبات ← بیک اپ اور بارے میں ← تشخیص یہ نوٹ کرتا ہے کہ کہاں ہوا، شیئر کرنے کے لیے</string>
-    <string name="settings_customize_prism_lyrics_how_your">ترتیبات ← Prism کو حسبِ منشا بنائیں ← بول: آپ کے بول کیسے دکھیں، ہر انتخاب کی مثال کے ساتھ۔</string>
+    <string name="settings_customize_prism_lyrics_how_your">ترتیبات ← بول اور گائیں: آپ کے بول کیسے دکھیں، ہر انتخاب کی مثال کے ساتھ۔</string>
     <string name="six_styles_prism_classic_karaoke_bold">چھ انداز: Prism، کلاسک کراؤکی، نمایاں کارڈ، چمک، ٹائپ رائٹر اور پرسکون</string>
     <string name="the_sung_line_and_the_others">گائی جا رہی سطر اور باقی سفید، آپ کی روشنی، ایکسنٹ، کور کے رنگ یا آپ کے اپنے رنگ میں</string>
     <string name="weight_line_spacing_how_dim_the">موٹائی، سطروں کا فاصلہ، دوسری سطریں کتنی مدھم ہوں، دھندلاہٹ کی شدت، بڑے حروف اور سایہ</string>
@@ -2588,8 +2588,8 @@
     <string name="a_few_things_you_asked_for">چند چیزیں جو آپ نے مانگیں۔</string>
     <string name="library_history_what_you_played_by">لائبریری ← ہسٹری: آپ نے کیا چلایا، دن کے حساب سے، اس فون پر یا آپ کے اکاؤنٹ پر</string>
     <string name="liked_a_song_and_its_video">گانا اور اس کی ویڈیو دونوں پسند کیے؟ یہ ایک بار، گانے کے طور پر دکھائی دیتے ہیں</string>
-    <string name="prism_s_own_volume_apart_from">Prism کا اپنا والیوم، فون سے الگ (ترتیبات ← Prism کو حسبِ منشا بنائیں ← پلیئر)</string>
-    <string name="hide_the_status_bar_customize_prism">اسٹیٹس بار چھپائیں (Prism کو حسبِ منشا بنائیں ← ٹیبز اور منی پلیئر)</string>
+    <string name="prism_s_own_volume_apart_from">Prism کا اپنا والیوم، فون سے الگ (ترتیبات ← پلیئر)</string>
+    <string name="hide_the_status_bar_customize_prism">اسٹیٹس بار چھپائیں (ترتیبات ← ٹیبز اور منی پلیئر)</string>
     <string name="settings_pages_are_tidier_tap_beside">ترتیبات کے صفحات زیادہ صاف ہیں: تفصیلات کے لیے کسی ترتیب کے ساتھ ⓘ پر ٹیپ کریں</string>
     <string name="library_s_tiles_the_edit_button">لائبریری کی ٹائلز: لائبریری کے اوپر ترمیم کا بٹن</string>
     <string name="customize_home_the_button_at_the">ہوم کو حسبِ منشا بنائیں (ہوم کے اوپر کا بٹن) میں اور بھی بہت کچھ ہے۔</string>
@@ -2610,10 +2610,10 @@
     <string name="artists_and_songs_with_their_pictures">ٹائپ کرتے وقت فنکار اور گانے ان کی تصاویر کے ساتھ</string>
     <string name="results_already_in_your_library_right">نتائج جو پہلے سے آپ کی لائبریری میں ہیں، سب سے اوپر والے کے فوراً بعد</string>
     <string name="settings_are_sorted_by_what_they">ترتیبات اپنے کام کے لحاظ سے ترتیب دی گئی ہیں۔</string>
-    <string name="everything_about_how_prism_looks_is">Prism کی شکل کے بارے میں سب کچھ \"Prism کو حسبِ منشا بنائیں\" کے تحت ہے</string>
-    <string name="gestures_and_buttons_in_controls_gestures">اشارے اور بٹن کنٹرولز اور اشارے میں</string>
+    <string name="everything_about_how_prism_looks_is">Prism کی شکل کے بارے میں سب کچھ \"اسے اپنا بنائیں\" کے تحت ہے</string>
+    <string name="gestures_and_buttons_in_controls_gestures">اشارے اور بٹن \"سماعت\" کے تحت</string>
     <string name="every_mobile_data_choice_on_one">موبائل ڈیٹا کا ہر انتخاب ایک صفحے پر</string>
-    <string name="android_auto_speakers_discord_and_last">Android Auto، اسپیکرز، Discord اور Last.fm ڈیوائسز اور کنکشنز میں</string>
+    <string name="android_auto_speakers_discord_and_last">Android Auto، اسپیکرز، Discord اور Last.fm \"کنکشنز\" کے تحت</string>
     <string name="performance_mode_at_the_top_for">پرفارمنس موڈ، سب سے اوپر، سست فونز کے لیے</string>
     <string name="make_the_pieces_of_prism_yours">Prism کے حصوں کو اپنا بنائیں۔</string>
     <string name="covers_as_circles_squircles_flowers_arches">کورز دائرے، squircle، پھول، محراب… کی شکل میں، گانوں، البمز، فنکاروں اور پلیئر کے لیے</string>
@@ -2624,20 +2624,20 @@
     <string name="from_your_requests">آپ کی فرمائشوں سے۔</string>
     <string name="rearrange_your_playlists_songs_rearrange_songs">اپنی پلے لسٹس کے گانوں کی ترتیب بدلیں: ⋯ ← گانوں کی ترتیب بدلیں</string>
     <string name="swipe_a_song_out_of_the">قطار سے گانا ہٹانے کے لیے سوائپ کریں، منی پلیئر کھولنے کے لیے اوپر سوائپ کریں</string>
-    <string name="the_light_from_the_playing_cover">چلتے کور سے روشنی: رنگ ← کور سے</string>
+    <string name="the_light_from_the_playing_cover">چلتے کور سے روشنی: تھیم اور رنگ ← روشنی ← کور سے</string>
     <string name="ribbons_a_progress_bar_with_strands">ربن، ایک پروگریس بار جس کے ساتھ دھاگے بہتے ہیں</string>
     <string name="a_bold_title_on_the_player">پلیئر پر موٹا عنوان، پورے البمز پلے لسٹ میں، اور شیئر کرنے کے لیے YouTube لنکس</string>
-    <string name="settings_playback_sound">ترتیبات ← پلے بیک اور آواز۔</string>
+    <string name="settings_playback_sound">ترتیبات ← پلے بیک، اور ترتیبات ← آواز اور کوالٹی۔</string>
     <string name="speed_pitch_slowed_sped_up_or">رفتار اور پچ: آہستہ، تیز، یا کوئی بھی کی، پلیئر کے ⋯ سے</string>
     <string name="how_songs_cross_in_a_crossfade">کراس فیڈ میں گانے کیسے ملتے ہیں، جہاں اگلا شروع ہو وہاں نشان، اور گھلتے کورز</string>
     <string name="normalize_volume_s_level_and_albums">والیوم یکساں کرنے کی سطح، اور البمز جیسے ہیں ویسے</string>
     <string name="your_own_equalizer_presets_shared_as">آپ کے اپنے ایکوالائزر پری سیٹس، کوڈز کے طور پر شیئر، ایک گاڑی کے لیے اور ایک ایئربڈز کے لیے</string>
     <string name="fades_for_the_sleep_timer_and">سلیپ ٹائمر اور روکنے اور چلانے کے لیے فیڈز</string>
     <string name="liked_how_prism_1_6_looked">Prism 1.6 کی شکل پسند تھی؟ یہ واپس آ گئی ہے، ایک انتخاب کے طور پر۔</string>
-    <string name="the_classic_look_customize_prism_looks">کلاسک لُک: Prism کو حسبِ منشا بنائیں ← لُکس</string>
+    <string name="the_classic_look_customize_prism_looks">کلاسک لُک: ترتیبات ← لُکس</string>
     <string name="or_only_its_icons_its_bold">یا صرف اس کے آئیکنز، موٹا فونٹ یا سادہ کنٹرولز</string>
     <string name="the_player_s_buttons_apart_instead">پلیئر کے بٹن کیپسول کی بجائے الگ الگ</string>
-    <string name="last_fm_scrobbling_devices_connections_and">Last.fm اسکروبلنگ (ڈیوائسز اور کنکشنز)، اور کسی بھی تاریخوں کے لیے Replay</string>
+    <string name="last_fm_scrobbling_devices_connections_and">Last.fm اسکروبلنگ (اکاؤنٹس اور شیئرنگ)، اور کسی بھی تاریخوں کے لیے Replay</string>
     <string name="pick_several_songs_in_the_queue">قطار میں کئی گانے چنیں تاکہ ایک ساتھ منتقل یا ہٹائیں، یا اس کی ترتیب لاک کریں</string>
     <string name="choose_what_goes_in_a_backup">چنیں کہ بیک اپ میں کیا جائے</string>
     <string name="swipe_up_on_the_player_for">قطار کے لیے پلیئر پر اوپر سوائپ کریں، عمودی رخ پر لاک کریں، آواز بند ہونے پر روکیں</string>
@@ -3794,7 +3794,7 @@
     <string name="the_ambient_frost_behind_home_search_all">ہوم، تلاش، لائبریری، Replay اور ترتیبات کے پیچھے ایمبیئنٹ دھند (خودکار اس میں کور کے رنگ رکھتا ہے، سادہ اسے سرمئی کرتا ہے، جھلک اسے رنگین کرتی ہے)، دھندلا شیشہ بند ہونے پر یہی صفحات، اور شیٹس اور ڈائیلاگز۔ پلیئر نہیں، نہ البم، فنکار اور پلے لسٹ کے صفحات، جو اپنی تصویر کے رنگ لیتے ہیں۔</string>
     <string name="home_has_the_background_glass_backgrounds_all">ہوم کا پس منظر %1$s ہے (شیشہ اور پس منظر)، جو اس رنگ کے اوپر بنتا ہے، اس لیے وہاں یہ تھوڑا ہی دکھائی دیتا ہے۔ اسے پوری طرح دیکھنے کے لیے وہاں ایمبیئنٹ چنیں</string>
     <string name="secondary_text_artists_times_notes_dividers_all">ثانوی متن (فنکار، اوقات، نوٹس)، صفحات، شیٹس اور مینوز پر تقسیم کرنے والی لکیریں اور خاکے۔ درمیانہ اور زیادہ ایکسنٹ کو بھی واضح کرتے ہیں تاکہ آسانی سے پڑھا جائے۔ کور پر پلیئر کا اپنا سفید متن ویسا ہی رہتا ہے۔</string>
-    <string name="the_accent_on_artist_album_and_all">فنکار، البم اور پلے لسٹ کے صفحات پر، اور گانے، البم یا فنکار سے کھلنے والے مینوز (دبا کر رکھیں یا ⋯) میں ایکسنٹ۔ ان کے دھندلے پس منظر ہر صورت تصویر کے رنگ لیتے ہیں (شیشہ اور پس منظر)۔</string>
+    <string name="the_accent_on_artist_album_and_all">فنکار، البم اور پلے لسٹ کے صفحات پر، اور گانے، البم یا فنکار سے کھلنے والے مینوز (دبا کر رکھیں یا ⋯) میں ایکسنٹ۔ ان کے دھندلے پس منظر ہر صورت تصویر کے رنگ لیتے ہیں (شیشہ)۔</string>
     <string name="tap_the_line_under_the_player_all">پلیئر کے کنٹرولز کے نیچے والی لائن پر ٹیپ کریں (یہ بتاتی ہے کہ کون سی ڈیوائس چل رہی ہے) اور کوئی اسپیکر، TV یا ریسیور چنیں۔ اسے اسی Wi-Fi پر Google Cast (Chromecast، Google TV، Cast والے اسپیکرز) یا DLNA / UPnP (کبھی کبھی میڈیا شیئرنگ کہلاتا ہے) کے ساتھ ہونا چاہیے۔ آپ کی قطار، بول اور کنٹرولز فون پر رہتے ہیں، اور اس کے والیوم بٹن اسپیکر کا والیوم بدلتے ہیں۔ ایکوالائزر، کراس فیڈ، گائیں اور ویڈیوز فون کے اپنے ہیں، اس لیے کاسٹ کرتے وقت بند رہتے ہیں۔</string>
     <string name="nothing_new_from_your_artists_in_all">پچھلے تین مہینوں میں آپ کے فنکاروں کی طرف سے کچھ نیا نہیں۔ Prism ہر چند دن بعد آپ کے ستارہ لگائے، محفوظ کیے اور سب سے زیادہ چلائے گئے فنکاروں کو دیکھتا ہے؛ پہلی بار صرف یہ جانتا ہے کہ پہلے سے کیا جاری ہو چکا ہے، اس لیے نئی موسیقی اگلی بار سے دکھائی دیتی ہے۔</string>
     <string name="tunemymusic_copies_your_playlists_liked_songs_all">TuneMyMusic آپ کی پلے لسٹس، پسندیدہ گانوں سمیت، آپ کے YouTube Music اکاؤنٹ میں کاپی کرتا ہے۔ یہ وہی سروس ہے جو YouTube Music کی اپنی ایپ منتقلی کے لیے استعمال کرتی ہے۔</string>
@@ -4237,14 +4237,14 @@
     <string name="shaped_by_the_crossfade">کراس فیڈ کی شکل میں</string>
     <string name="crossfade_shape_keywords">کراس فیڈ بلینڈ فیڈ آؤٹ فیڈ اِن پتلا شکل خم پروگریس بار سیک بار</string>
     <string name="the_end_tapers_as_the_song_fades">گانا مدھم ہوتے ہوئے آخر پتلا ہوتا جاتا ہے</string>
-    <string name="crossfade_shape_info">بار کا آخری حصہ اس شکل کا ہو جاتا ہے جیسے گانا مدھم ہوتا ہے، اور اگلے گانے کا بار اس کے ابھرنے کے ساتھ بڑھتا ہے، آپ کے کراس فیڈ کی قسم کے مطابق (آواز ← کراس فیڈ)۔ صرف تب جب کراس فیڈ آنے والا ہو: کسی البم کے ٹریکس کے درمیان، کاسٹنگ کے دوران، ایپیسوڈز یا لائیو اسٹریمز کے لیے نہیں۔ خودکار دورانیے کے ساتھ یہ بلینڈ طے ہونے کے بعد دکھائی دیتا ہے۔ ویوفارم اور ربن اس کے بجائے نشان برقرار رکھتے ہیں۔</string>
+    <string name="crossfade_shape_info">بار کا آخری حصہ اس شکل کا ہو جاتا ہے جیسے گانا مدھم ہوتا ہے، اور اگلے گانے کا بار اس کے ابھرنے کے ساتھ بڑھتا ہے، آپ کے کراس فیڈ کی قسم کے مطابق (پلے بیک ← کراس فیڈ)۔ صرف تب جب کراس فیڈ آنے والا ہو: کسی البم کے ٹریکس کے درمیان، کاسٹنگ کے دوران، ایپیسوڈز یا لائیو اسٹریمز کے لیے نہیں۔ خودکار دورانیے کے ساتھ یہ بلینڈ طے ہونے کے بعد دکھائی دیتا ہے۔ ویوفارم اور ربن اس کے بجائے نشان برقرار رکھتے ہیں۔</string>
     <string name="imp_title">اپنی ہسٹری لائیں</string>
     <string name="imp_subtitle">Spotify، YouTube Music اور Last.fm سے، اسی فون پر پڑھی جاتی ہے</string>
     <string name="imp_row_detail">Spotify، YouTube Music، Last.fm</string>
     <string name="imp_group_info">Spotify کے ڈیٹا ڈاؤن لوڈ سے اپنے پلے، پسندیدہ گانے اور پلے لسٹس، Google Takeout سے اپنی YouTube Music ہسٹری، یا اپنے Last.fm اسکروبلز لائیں۔ فائلیں اسی فون پر پڑھی جاتی ہیں؛ ہر گانا ڈھونڈنے کے لیے Prism اسے اسی طرح تلاش کرتا ہے جیسے اس کی سرچ کرتی ہے۔</string>
     <string name="imp_keywords">امپورٹ spotify ڈیٹا ڈاؤن لوڈ takeout google youtube music ہسٹری last.fm اسکروبلز پسندیدہ گانے پلے لسٹس منتقلی منتقل</string>
     <string name="imp_bring_from">کہاں سے لائیں</string>
-    <string name="imp_bring_from_info">Spotify: spotify.com پر، Account ← Privacy ← Download your data۔ اکاؤنٹ ڈیٹا چند دنوں میں آتا ہے (ایک سال کے پلے، پسندیدہ گانے، پلے لسٹس)؛ توسیع شدہ اسٹریمنگ ہسٹری 30 دن تک میں آتی ہے (شامل ہونے کے بعد سے ہر پلے)۔ جس zip میں یہ آئے اسے، یا اس کے اندر کی فائلیں چنیں۔\n\nYouTube Music: takeout.google.com پر YouTube اور YouTube Music چنیں، صرف ہسٹری، JSON کے طور پر۔ zip یا watch-history.json چنیں۔\n\nLast.fm: اسے ڈیوائسز اور کنکشنز میں جوڑیں، اور Prism آپ کے اسکروبلز پڑھ لے گا۔\n\nکچھ بھی کہیں نہیں بھیجا جاتا۔ ہر گانا ڈھونڈنے کے لیے Prism اسے اسی طرح تلاش کرتا ہے جیسے اس کی سرچ کرتی ہے۔</string>
+    <string name="imp_bring_from_info">Spotify: spotify.com پر، Account ← Privacy ← Download your data۔ اکاؤنٹ ڈیٹا چند دنوں میں آتا ہے (ایک سال کے پلے، پسندیدہ گانے، پلے لسٹس)؛ توسیع شدہ اسٹریمنگ ہسٹری 30 دن تک میں آتی ہے (شامل ہونے کے بعد سے ہر پلے)۔ جس zip میں یہ آئے اسے، یا اس کے اندر کی فائلیں چنیں۔\n\nYouTube Music: takeout.google.com پر YouTube اور YouTube Music چنیں، صرف ہسٹری، JSON کے طور پر۔ zip یا watch-history.json چنیں۔\n\nLast.fm: اسے ترتیبات ← اکاؤنٹس اور شیئرنگ میں جوڑیں، اور Prism آپ کے اسکروبلز پڑھ لے گا۔\n\nکچھ بھی کہیں نہیں بھیجا جاتا۔ ہر گانا ڈھونڈنے کے لیے Prism اسے اسی طرح تلاش کرتا ہے جیسے اس کی سرچ کرتی ہے۔</string>
     <string name="imp_spotify_detail">اس کا ڈیٹا ڈاؤن لوڈ: پلے، پسندیدہ گانے، پلے لسٹس</string>
     <string name="imp_takeout_detail">Google Takeout کی واچ ہسٹری</string>
     <string name="imp_lastfm_detail">آپ کے اسکروبلز، بطور %1$s</string>
@@ -4349,7 +4349,7 @@
     <string name="explicit_show">دکھائیں</string>
     <string name="explicit_skip">چھوڑیں</string>
     <string name="explicit_hide">چھپائیں</string>
-    <string name="explicit_skipped">نازیبا گانے شامل نہیں کیے جا رہے (ترتیبات ← پلے بیک اور آواز)</string>
+    <string name="explicit_skipped">نازیبا گانے شامل نہیں کیے جا رہے (ترتیبات ← پلے بیک)</string>
     <string name="explicit_none_left">چلانے کو کچھ نہیں: یہاں ہر گانا نازیبا ہے</string>
     <string name="change_cover">کور بدلیں</string>
     <string name="cover_changed">کور بدل گیا</string>
@@ -4399,7 +4399,7 @@
     <string name="replay_last_weeks">پچھلے %1$d ہفتے</string>
     <string name="replay_last_days">پچھلے %1$d دن</string>
     <string name="replay_story_font">اسٹوری کا فونٹ</string>
-    <string name="replay_story_font_info">Replay اور Rewind اسٹوریز اپنے الفاظ کیسے لکھتی ہیں: Prism کے پوسٹر فونٹ میں، یا اس فونٹ میں جو آپ نے Prism کے لیے چنا ہے (متن)۔</string>
+    <string name="replay_story_font_info">Replay اور Rewind اسٹوریز اپنے الفاظ کیسے لکھتی ہیں: Prism کے پوسٹر فونٹ میں، یا اس فونٹ میں جو آپ نے Prism کے لیے چنا ہے (متن اور آئیکنز)۔</string>
     <string name="replay_story_font_keywords">فونٹ ٹائپوگرافی ٹائپ فیس اسٹوریز rewind wrapped</string>
     <string name="replay_story_font_poster">پوسٹر فونٹ</string>
     <string name="replay_story_font_own">آپ کا فونٹ</string>
@@ -4598,7 +4598,7 @@
         <item quantity="other">چننے کے لیے %1$s گانے</item>
     </plurals>
     <string name="ytlive_spotify_connect">اسے استعمال کرنے کے لیے Spotify کنیکٹ کریں</string>
-    <string name="ytlive_spotify_recent_off">آف: Spotify صفحے پر حالیہ پلے آن کریں</string>
+    <string name="ytlive_spotify_recent_off">آف: ترتیبات ← اکاؤنٹس اور شیئرنگ ← Spotify میں حالیہ پلے آن کریں</string>
     <string name="ytlive_connection_on">آپ کی ہسٹری اپ ٹو ڈیٹ ہے · آن</string>
     <string name="ytlive_connection_off">اپنی ہسٹری کو اپ ٹو ڈیٹ رکھیں · آف</string>
     <string name="ytlive_connection_signed_out">اپنی ہسٹری کو اپ ٹو ڈیٹ رکھنے کے لیے سائن اِن کریں</string>
@@ -4614,7 +4614,7 @@
     <string name="dj_in_the_queue_keywords">dj موڈ بٹن قطار ہیڈر اوپر جگہ چھپائیں</string>
     <string name="menu_lyrics_only_way">جب تک یہ پلیئر کا بول تک پہنچنے کا واحد راستہ ہے، یہ رہتا ہے</string>
     <string name="smart_downloads_offer_title">گانے ضرورت سے پہلے ڈاؤن لوڈ کریں؟</string>
-    <string name="smart_downloads_offer_body">سمارٹ ڈاؤن لوڈز وہ گانے آف لائن تیار رکھتا ہے جنہیں آپ کے چلانے کا امکان ہے: 1 GB تک، Wi-Fi پر۔ اسے کسی بھی وقت ڈاؤن لوڈز، اسٹوریج اور ڈیٹا میں بدلیں۔</string>
+    <string name="smart_downloads_offer_body">سمارٹ ڈاؤن لوڈز وہ گانے آف لائن تیار رکھتا ہے جنہیں آپ کے چلانے کا امکان ہے: 1 GB تک، Wi-Fi پر۔ اسے کسی بھی وقت ترتیبات ← ڈاؤن لوڈز اور ڈیٹا میں بدلیں۔</string>
     <!-- 1.8.2 -->
     <string name="loading_list">\"%1$s\" لوڈ ہو رہی ہے…</string>
     <string name="song_details">گانے کی تفصیلات</string>
@@ -4855,7 +4855,7 @@
     <string name="glass_blur">دھندلاہٹ</string>
     <string name="glass_blur_info">شیشے کے پیچھے کے رنگ کتنے پھیلتے ہیں۔ متن جیسی چھوٹی چیزیں مائع شیشے کے پیچھے ہلکا سا کنارہ برقرار رکھتی ہیں چاہے یہ کتنا بھی بڑھا دیں؛ دھندلا شیشہ انہیں بھی گھلا دیتا ہے۔ 100% Prism کی اپنی قدر ہے۔ اس سے اوپر سست فون کے لیے زیادہ محنت ہے۔</string>
     <string name="glass_frost">پالا</string>
-    <string name="glass_frost_info">شیشے پر پردہ کتنا موٹا ہے: کم ہو تو اس کے پیچھے کا زیادہ حصہ نظر آتا ہے، زیادہ ہو تو روشن موڈ میں دودھیا اور گہرے موڈ میں تاریک ہو جاتا ہے، اور بھری ہوئی تصویروں پر پڑھنا آسان ہوتا ہے۔ 100% Prism کی اپنی قدر ہے۔ جس ٹیب بار کا اپنا پس منظر ہو (لے آؤٹ، ٹیب بار) وہ اسی پس منظر کو رکھتا ہے۔</string>
+    <string name="glass_frost_info">شیشے پر پردہ کتنا موٹا ہے: کم ہو تو اس کے پیچھے کا زیادہ حصہ نظر آتا ہے، زیادہ ہو تو روشن موڈ میں دودھیا اور گہرے موڈ میں تاریک ہو جاتا ہے، اور بھری ہوئی تصویروں پر پڑھنا آسان ہوتا ہے۔ 100% Prism کی اپنی قدر ہے۔ جس ٹیب بار کا اپنا پس منظر ہو (ٹیبز اور منی پلیئر ← نیویگیشن بار) وہ اسی پس منظر کو رکھتا ہے۔</string>
     <string name="glass_needs_android_12">ان کے لیے وہ دھندلاہٹ درکار ہے جو Android 12 کے ساتھ آئی۔ اس فون پر بارز ٹھوس ہیں، اس لیے دھندلاہٹ یا پالے کی سیٹنگ کے بدلنے کو کچھ نہیں۔</string>
     <string name="glass_on_more_of_the_screen">اسکرین کے زیادہ حصے پر شیشہ</string>
     <string name="glass_on_more_of_the_screen_detail">کارڈز، چپس، گول بٹن اور واپس کریں بار</string>
@@ -5187,6 +5187,7 @@
     <string name="the_day_before">اس سے پچھلا دن</string>
     <string name="the_week_before">اس سے پچھلا ہفتہ</string>
     <string name="root_app">ایپ</string>
+    <string name="root_listening">سماعت</string>
     <string name="root_theme_colors">تھیم اور رنگ</string>
     <string name="root_text_icons">متن اور آئیکنز</string>
     <string name="root_sound_quality">آواز اور کوالٹی</string>

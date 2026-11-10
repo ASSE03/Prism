@@ -102,7 +102,7 @@
     <string name="save">সেভ</string>
     <string name="cancel">বাতিল</string>
     <string name="share_2">%1$s শেয়ার করুন</string>
-    <string name="scan_it_in_prism_settings_customize">Prism-এ স্ক্যান করুন: সেটিংস → Prism কাস্টমাইজ করুন → লুক → স্ক্যান</string>
+    <string name="scan_it_in_prism_settings_customize">Prism-এ স্ক্যান করুন: সেটিংস → লুক → একটি লুক নিন</string>
     <string name="too_much_for_a_qr_code">QR কোডের জন্য অনেক বেশি: টেক্সট বা ফাইল হিসেবে পাঠান</string>
     <string name="codes_leave_out_photos_and_your">কোডে ছবি আর আপনার নিজের ফন্ট থাকে না; ফাইলে সেগুলো থাকতে পারে।</string>
     <string name="here_s_my_prism_look_share">এই যে আমার Prism লুক, \"%1$s\"। দেখতে এই মেসেজটি Prism-এ শেয়ার করুন:\n\n%2$s</string>
@@ -652,7 +652,7 @@
     <string name="remove_this_color">এই রং সরান</string>
     <string name="changes">%1$s\n\nযা বদলায়: %2$s</string>
     <string name="white_black_and_greys_give_prism">সাদা, কালো আর ধূসর Prism-কে সাধারণ চেহারা দেয়: গাঢ় পেজে সাদা, হালকা পেজে কালো</string>
-    <string name="shown_softened_lighter_on_dark_pages">নরম করে দেখানো (গাঢ় পেজে হালকা, হালকা পেজে গাঢ়)। হুবহু ব্যবহার করতে রঙের পেজে \"যেমন বাছা হয়েছে হুবহু\" বাছুন</string>
+    <string name="shown_softened_lighter_on_dark_pages">নরম করে দেখানো (গাঢ় পেজে হালকা, হালকা পেজে গাঢ়)। হুবহু ব্যবহার করতে অ্যাকসেন্ট-এর নিচে \"যেমন বাছা হয়েছে হুবহু\" বাছুন</string>
     <string name="made_a_little_lighter_or_darker">যেখানে এর ওপরের লেখা পড়া যাবে না সেখানে একটু হালকা বা গাঢ় করা</string>
     <string name="tint_strength">আভার তীব্রতা</string>
     <string name="faint">ক্ষীণ</string>
@@ -1098,7 +1098,7 @@
     <string name="in_the_middle">মাঝখানে</string>
     <string name="title_size">শিরোনামের আকার</string>
     <string name="title_weight">শিরোনামের পুরুত্ব</string>
-    <string name="light_is_prism_s_own_and">হালকা হলো Prism-এর নিজস্ব, আর লেখা → পুরুত্ব অনুসরণ করে। বোল্ড করলে শিল্পীর নামও মোটা হয়।</string>
+    <string name="light_is_prism_s_own_and">হালকা হলো Prism-এর নিজস্ব, আর লেখা ও আইকন → পুরুত্ব অনুসরণ করে। বোল্ড করলে শিল্পীর নামও মোটা হয়।</string>
     <string name="scrolling_titles">চলমান শিরোনাম</string>
     <string name="a_long_title_scrolls_across_off">লম্বা শিরোনাম পাশ দিয়ে সরে যায় (বন্ধ: … দিয়ে শেষ হয়)</string>
     <string name="times_under_the_progress_bar">অগ্রগতি বারের নিচে সময়</string>
@@ -1963,7 +1963,7 @@
     <string name="refractive_bars_and_controls">প্রতিসারী বার আর কন্ট্রোল</string>
     <string name="soft_blur_no_refraction">নরম ব্লার, প্রতিসরণ নেই</string>
     <string name="pages_frosted_with_their_picture">নিজের ছবি দিয়ে ঝাপসা করা পেজ</string>
-    <string name="artist_album_and_playlist_pages_sit">শিল্পী, অ্যালবাম আর প্লেলিস্ট পেজ তাদের ছবি থেকে তৈরি ঝাপসা কাচের ওপর থাকে; হোম, লাইব্রেরি, সার্চ আর সেটিংস থাকে যা চলছে তার ঝাপসা আভার ওপর। পেজগুলো তাদের ছবির রং নেবে কিনা তা রং-এর নিচে আছে।</string>
+    <string name="artist_album_and_playlist_pages_sit">শিল্পী, অ্যালবাম আর প্লেলিস্ট পেজ তাদের ছবি থেকে তৈরি ঝাপসা কাচের ওপর থাকে; হোম, লাইব্রেরি, সার্চ আর সেটিংস থাকে যা চলছে তার ঝাপসা আভার ওপর। পেজগুলো তাদের ছবির রং নেবে কিনা তা পেজ-এর নিচে আছে।</string>
     <string name="calmer_quicker_animations">শান্ত, দ্রুত অ্যানিমেশন</string>
     <string name="no_drifting_backgrounds_no_artwork_bounce">ভাসমান ব্যাকগ্রাউন্ড নেই, আর্টওয়ার্কের লাফানো নেই, দ্রুত রূপান্তর।</string>
     <string name="that_font_couldn_t_be_used">ফন্টটি ব্যবহার করা যায়নি</string>
@@ -2005,7 +2005,7 @@
     <string name="more_room_swipe_down_from_the">আরও জায়গা; দেখতে ওপর থেকে নিচে সোয়াইপ করুন</string>
     <string name="the_clock_battery_and_notification_icons">Prism খোলা থাকার সময় ওপরের ঘড়ি, ব্যাটারি আর নোটিফিকেশন আইকন লুকানো থাকে। ওপরের প্রান্ত থেকে নিচে সোয়াইপ করলে কিছুক্ষণের জন্য দেখা যায়। ইমারসিভ মোড আর পূর্ণ স্ক্রিন ভিডিও আগের মতোই অন্য বারগুলোও লুকায়।</string>
     <string name="never_shows_only_the_icons_words">কখনও নয় দেখায় শুধু আইকন; শুধু শব্দ দেখায় শুধু নাম।</string>
-    <string name="see_through_lets_the_page_show">স্বচ্ছ হলে বারের ভেতর দিয়ে পেজ দেখা যায়; ভরাট হলে লুকায়। ব্লার নিজে আসে কাচ থেকে (Prism কাস্টমাইজ করুন → কাচ ও ব্যাকগ্রাউন্ড)।</string>
+    <string name="see_through_lets_the_page_show">স্বচ্ছ হলে বারের ভেতর দিয়ে পেজ দেখা যায়; ভরাট হলে লুকায়। ব্লার নিজে আসে কাচ থেকে (থিম ও রং → কাচ)।</string>
     <string name="slims_down_as_you_scroll">স্ক্রল করলে সরু হয়</string>
     <string name="swipe_sideways_on_a_tab_s">ট্যাবের পেজে পাশে সোয়াইপ করুন</string>
     <string name="a_sideways_swipe_on_a_tab">কোনো ট্যাবের নিজের পেজে পাশে সোয়াইপ করলে পাশের ট্যাবে যায়। যেসব সারি পাশে স্ক্রল হয় (আর লাইব্রেরির নিজের পেজগুলো) সেগুলো নিজেদের সোয়াইপ রাখে।</string>
@@ -2034,7 +2034,7 @@
     <string name="played_now_playing_and_up_next">\"চালানো হয়েছে\", \"এখন চলছে\" আর \"এরপর আসছে\"</string>
     <string name="off_the_queue_is_one_list">বন্ধ থাকলে, সারিটি চালানো গান থেকে আসন্ন গান পর্যন্ত একটিই তালিকা।</string>
     <string name="moving_artwork_when_a_song_has">চলমান আর্টওয়ার্ক, যখন গানে থাকে</string>
-    <string name="motion_artwork_and_video_covers_turn">চলমান আর্টওয়ার্ক আর ভিডিও কভার। একটি গানের জন্য প্লেয়ারের ⋯ মেনু থেকে বন্ধ করুন। মোবাইল ডেটায় চলবে কিনা, আর ফোনে রাখাগুলো, ডাউনলোড, স্টোরেজ ও ডেটা-তে আছে।</string>
+    <string name="motion_artwork_and_video_covers_turn">চলমান আর্টওয়ার্ক আর ভিডিও কভার। একটি গানের জন্য প্লেয়ারের ⋯ মেনু থেকে বন্ধ করুন। মোবাইল ডেটায় চলবে কিনা, আর ফোনে রাখাগুলো, ডাউনলোড ও ডেটা-তে আছে।</string>
     <string name="the_animated_cover_plays_behind_everything">অ্যানিমেটেড কভার সবকিছুর পেছনে চলে</string>
     <string name="the_moving_artwork_fills_the_whole">চলমান আর্টওয়ার্ক পুরো প্লেয়ার ভরে দেয়, কন্ট্রোলের নিচে গাঢ় করা, আর কভারে স্থির ছবি দেখায়। প্রান্ত পর্যন্ত আর্টওয়ার্কের সাথে নয়, যা আগেই প্রান্ত থেকে প্রান্ত দেখায়।</string>
     <string name="the_cover_fills_the_screen_lyrics">কভার স্ক্রিন ভরে দেয়, ওপরে লিরিক্স</string>
@@ -2137,7 +2137,7 @@
     <string name="needed_for_sing">গলা মেলানোর জন্য দরকার · %1$s</string>
     <string name="takes_the_singer_s_voice_out">কারাওকের জন্য আপনার ফোনেই গান থেকে শিল্পীর কণ্ঠ সরিয়ে দেয়। একবারই ডাউনলোড হয়।</string>
     <string name="so_sing_starts_at_once_when">যাতে চালু করলেই গলা মেলান সাথে সাথে শুরু হয়</string>
-    <string name="the_playing_song_and_the_next">গলা মেলান বন্ধ থাকলেও চলমান আর পরের গান ব্যাকগ্রাউন্ডে আলাদা করা হয়। গান চলার সময় এতে বেশি ব্যাটারি লাগে; মোবাইল ডেটায় এটি ডাউনলোড, স্টোরেজ ও ডেটা → মোবাইল ডেটা অনুসরণ করে।</string>
+    <string name="the_playing_song_and_the_next">গলা মেলান বন্ধ থাকলেও চলমান আর পরের গান ব্যাকগ্রাউন্ডে আলাদা করা হয়। গান চলার সময় এতে বেশি ব্যাটারি লাগে; মোবাইল ডেটায় এটি ডাউনলোড ও ডেটা → মোবাইল ডেটা অনুসরণ করে।</string>
     <string name="using">%1$s ব্যবহৃত</string>
     <string name="songs_are_worked_out_again_the">পরের বার গাইলে গানগুলো আবার তৈরি করা হবে।</string>
     <string name="word_by_word_first_then_by">আগে শব্দে শব্দে, তারপর লাইন ধরে</string>
@@ -2495,7 +2495,7 @@
     <string name="allow_notifications">নোটিফিকেশনের অনুমতি দিন</string>
     <string name="turn_them_on_in_android_s">Android-এর সেটিংসে Prism-এর জন্য এগুলো চালু করুন।</string>
     <string name="your_starting_point_made_from_what">আপনার শুরুর জায়গা, আপনি যা চালান তা থেকে তৈরি।</string>
-    <string name="the_replay_card_at_the_top">ওপরের Replay কার্ড: এ পর্যন্ত আপনার বছর (এর চেহারা বাছুন সেটিংস → Prism কাস্টমাইজ করুন → হোম ও লাইব্রেরি-তে)</string>
+    <string name="the_replay_card_at_the_top">ওপরের Replay কার্ড: এ পর্যন্ত আপনার বছর (এর চেহারা বাছুন সেটিংস → হোম ও লাইব্রেরি → Replay কার্ড-এ)</string>
     <string name="quick_picks_songs_around_the_artists">দ্রুত বাছাই: আপনার শোনা শিল্পীদের ঘিরে গান, আরও দেখতে পাশে সোয়াইপ করুন</string>
     <string name="made_for_you_daily_mixes_your">আপনার জন্য তৈরি: ডেইলি মিক্স, দিনের সময়ের মিক্স আর Release Radar</string>
     <string name="the_grid_button_at_the_top">ওপরের গ্রিড বোতাম হোমের সেকশনগুলো সাজায়</string>
@@ -2516,12 +2516,12 @@
     <string name="let_prism_mix_your_music_songs">Prism-কে আপনার গান মিক্স করতে দিন: গানগুলো স্কেল আর বিট মিলিয়ে একে অপরে মিশে যায়।</string>
     <string name="in_the_queue_tap_dj_then">সারিতে DJ ট্যাপ করুন, তারপর স্থির, ধীরে চড়া বা ধীরে নামা বাছুন</string>
     <string name="long_press_an_album_or_playlist">কোনো অ্যালবাম বা প্লেলিস্ট টিপে ধরে রাখুন → DJ সেট হিসেবে চালান</string>
-    <string name="crossfade_settings_playback_sound_blends_any">ক্রসফেড (সেটিংস → প্লেব্যাক ও সাউন্ড) যেকোনো দুটি গান মেশায়</string>
+    <string name="crossfade_settings_playback_sound_blends_any">ক্রসফেড (সেটিংস → প্লেব্যাক) যেকোনো দুটি গান মেশায়</string>
     <string name="mixes_made_on_your_phone_from">আপনি যা চালান তা থেকে আপনার ফোনেই তৈরি মিক্স। আপনার শোনা নিয়ে কিছুই ফোনের বাইরে যায় না।</string>
     <string name="daily_mixes_group_the_artists_you">ডেইলি মিক্স আপনার শোনা শিল্পীদের যা একসাথে মানায় সেভাবে সাজায়</string>
     <string name="release_radar_finds_new_music_from">Release Radar আপনার ফলো করা শিল্পীদের নতুন গান খুঁজে আনে</string>
     <string name="made_for_you_also_has_mixes">আপনার জন্য তৈরি-তে আপনার নিজের গান থেকেও মিক্স আছে, আর বারবার শোনা: এগুলো শুধু আপনার শোনা থেকে আসে আর অফলাইনেও চলে</string>
-    <string name="when_the_queue_ends_prism_s">সারি শেষ হলে Prism-এর রেডিও আপনার গান থেকে বাছে (সেটিংস → প্লেব্যাক ও সাউন্ড → অটোপ্লে যেখান থেকে)</string>
+    <string name="when_the_queue_ends_prism_s">সারি শেষ হলে Prism-এর রেডিও আপনার গান থেকে বাছে (সেটিংস → প্লেব্যাক → সারি শেষ হলে)</string>
     <string name="tap_shuffle_twice_on_a_playlist">স্মার্ট শাফেলের জন্য প্লেলিস্টে দুবার শাফেল ট্যাপ করুন: নতুন গান ঢুকে পড়ে</string>
     <string name="not_for_me_and_leave_out">\"আমার জন্য নয়\" আর \"আমার রুচি থেকে বাদ দিন\" জিনিস বাইরে রাখে</string>
     <string name="find_anything_in_prism_music_or">Prism Music-এ যেকোনো কিছু খুঁজুন, বা আশেপাশে চলা গানের নাম জানুন।</string>
@@ -2545,11 +2545,11 @@
     <string name="control_prism_from_a_browser_on">আপনার কম্পিউটারের ব্রাউজার থেকে Prism নিয়ন্ত্রণ করুন</string>
     <string name="hand_what_s_playing_to_another">যা চলছে তা Prism আছে এমন অন্য ফোন বা ট্যাবলেটে দিন</string>
     <string name="prism_takes_its_color_from_what">Prism যা চলছে তা থেকে রং নেয়। যতটা ইচ্ছা বদলান।</string>
-    <string name="appearance_the_spectrum_s_colors_or">চেহারা: বর্ণালির রং (বা সাধারণ সাদা), আপনার অ্যাকসেন্ট, ফন্ট, আইকন আর ব্যাকগ্রাউন্ড</string>
-    <string name="layout_the_tab_bar_your_tabs">লেআউট: ট্যাব বার, আপনার ট্যাব আর মিনি প্লেয়ার</string>
+    <string name="appearance_the_spectrum_s_colors_or">থিম ও রং, লেখা ও আইকন: আলোর রং (বা সাধারণ সাদা), আপনার অ্যাকসেন্ট, ফন্ট, আইকন আর ব্যাকগ্রাউন্ড</string>
+    <string name="layout_the_tab_bar_your_tabs">ট্যাব ও মিনি প্লেয়ার: ট্যাব বার, আপনার ট্যাব আর মিনি প্লেয়ার</string>
     <string name="player_its_background_the_cover_and">প্লেয়ার: এর ব্যাকগ্রাউন্ড, কভার আর এতে কী দেখায়</string>
     <string name="search_settings_from_the_box_at">সেটিংসের ওপরের বক্স থেকে সেটিংস সার্চ করুন</string>
-    <string name="settings_customize_prism_color_every_choice">সেটিংস → Prism কাস্টমাইজ করুন → রং: প্রতিটি বিকল্প বাছার আগেই দেখায় দেখতে কেমন।</string>
+    <string name="settings_customize_prism_color_every_choice">সেটিংস → থিম ও রং: প্রতিটি বিকল্প বাছার আগেই দেখায় দেখতে কেমন।</string>
     <string name="the_light_12_presets_white_black">আলো: ১২টি প্রিসেট, সাদা (লাইট মোডে কালো), বা আপনার নিজের রং</string>
     <string name="your_accent_any_color_from_a">আপনার অ্যাকসেন্ট: যেকোনো রং, চাকা, কোড বা আইড্রপার থেকে</string>
     <string name="the_page_background_plain_tinted_with">পেজের ব্যাকগ্রাউন্ড: সাধারণ, আপনার অ্যাকসেন্টের আভায়, বা আপনার নিজের একটি রং</string>
@@ -2560,14 +2560,14 @@
     <string name="pin_prism_playlists_to_home_customize">Prism প্লেলিস্ট হোমে পিন করুন (হোম কাস্টমাইজ করুন → পিন করা প্লেলিস্ট)</string>
     <string name="song_credits_in_any_song_s">যেকোনো গানের মেনুতে গানের ক্রেডিট</string>
     <string name="see_which_downloads_failed_and_why">কোন ডাউনলোড ব্যর্থ হয়েছে আর কেন, দেখুন</string>
-    <string name="settings_customize_prism_looks_your_whole">সেটিংস → Prism কাস্টমাইজ করুন → লুক: আপনার পুরো চেহারা, এক ট্যাপে সেভ, বদল আর শেয়ার।</string>
+    <string name="settings_customize_prism_looks_your_whole">সেটিংস → লুক: আপনার পুরো চেহারা, এক ট্যাপে সেভ, বদল আর শেয়ার।</string>
     <string name="try_prism_s_own_paper_midnight">Prism-এর নিজেরগুলো চেষ্টা করুন: Paper, Midnight, Neon, Soft, Studio আর Vinyl</string>
     <string name="save_yours_update_it_when_you">নিজেরটা সেভ করুন, বদলালে আপডেট করুন, আর QR কোড, কোড বা ফাইল হিসেবে শেয়ার করুন</string>
     <string name="browse_looks_people_shared_under_from">কমিউনিটি থেকে-র নিচে মানুষের শেয়ার করা লুক দেখুন</string>
     <string name="one_look_by_day_and_another">দিনে একটি লুক আর রাতে আরেকটি, সূর্যোদয় আর সূর্যাস্তে</string>
     <string name="every_look_page_shows_home_the">প্রতিটি চেহারার পেজ আপনি বদলানোর সাথে সাথে হোম, প্লেয়ার আর লিরিক্স দেখায়; পূর্বাবস্থায় ফিরুন একটি পরিবর্তন ফিরিয়ে নেয়</string>
-    <string name="customize_by_tapping_hold_the_settings">ট্যাপ করে কাস্টমাইজ: সেটিংস ট্যাব ধরে রাখুন, বা চেহারা-তে চালু করুন, তারপর মিনি প্লেয়ার, ট্যাব বার, প্লেয়ার বা কোনো হোম সেকশনে ট্যাপ করুন</string>
-    <string name="settings_customize_prism_player_or_player">সেটিংস → Prism কাস্টমাইজ করুন → প্লেয়ার, বা প্লেয়ারেই ⋯ → প্লেয়ারের সেটিংস।</string>
+    <string name="customize_by_tapping_hold_the_settings">ট্যাপ করে কাস্টমাইজ: সেটিংস ট্যাব ধরে রাখুন, বা লুক-এ চালু করুন, তারপর মিনি প্লেয়ার, ট্যাব বার, প্লেয়ার বা কোনো হোম সেকশনে ট্যাপ করুন</string>
+    <string name="settings_customize_prism_player_or_player">সেটিংস → প্লেয়ার, বা প্লেয়ারেই ⋯ → প্লেয়ারের সেটিংস।</string>
     <string name="layouts_standard_a_big_cover_lyrics">লেআউট: স্ট্যান্ডার্ড, বড় কভার, লিরিক্স আগে, মিনিমাল, ভিনাইল বা ক্যাসেট (গান চলার সাথে ঘোরে)</string>
     <string name="a_visualizer_if_you_d_like">চাইলে একটি ভিজুয়ালাইজার: বার, ঢেউ, রিং, স্পন্দন বা আভা (না বাছলে বন্ধ)</string>
     <string name="pick_the_buttons_under_the_controls">কন্ট্রোলের নিচের বোতাম বাছুন (গতি একটি), আর আপনার নোটিফিকেশন ও গাড়িতে প্লে-র পাশের দুটি</string>
@@ -2578,7 +2578,7 @@
     <string name="prism_tells_android_which_of_its">Prism Android-কে জানায় এর কোন অংশ আগে থেকে তৈরি রাখতে হবে, আর ব্যানার থেকে আসা আপডেট তৈরি অবস্থায় আসে, তাই আর ধীরে চলে না</string>
     <string name="less_work_while_lists_scroll_while">তালিকা স্ক্রল করার সময়, সার্চে টাইপ করার সময় আর গান চলার সময় কম কাজ</string>
     <string name="if_something_still_stutters_settings_backup">তবুও কিছু আটকে গেলে, সেটিংস → ব্যাকআপ ও সম্পর্কে → ডায়াগনস্টিক কোথায় হয়েছে তা লিখে রাখে, শেয়ার করার জন্য</string>
-    <string name="settings_customize_prism_lyrics_how_your">সেটিংস → Prism কাস্টমাইজ করুন → লিরিক্স: আপনার লিরিক্স দেখতে কেমন, প্রতিটি বিকল্পের উদাহরণসহ।</string>
+    <string name="settings_customize_prism_lyrics_how_your">সেটিংস → লিরিক্স ও গলা মেলান: আপনার লিরিক্স দেখতে কেমন, প্রতিটি বিকল্পের উদাহরণসহ।</string>
     <string name="six_styles_prism_classic_karaoke_bold">ছয়টি স্টাইল: Prism, ক্লাসিক কারাওকে, বোল্ড কার্ড, আভা, টাইপরাইটার আর শান্ত</string>
     <string name="the_sung_line_and_the_others">গাওয়া লাইন আর বাকিগুলো সাদায়, আপনার আলোয়, অ্যাকসেন্টে, কভারের রঙে বা আপনার নিজের রঙে</string>
     <string name="weight_line_spacing_how_dim_the">পুরুত্ব, লাইনের ব্যবধান, অন্য লাইনগুলো কতটা ম্লান, ব্লারের মাত্রা, বড় হাতের অক্ষর আর ছায়া</string>
@@ -2588,8 +2588,8 @@
     <string name="a_few_things_you_asked_for">আপনার চাওয়া কয়েকটি জিনিস।</string>
     <string name="library_history_what_you_played_by">লাইব্রেরি → ইতিহাস: আপনি যা চালিয়েছেন, দিন অনুযায়ী, এই ফোনে বা আপনার অ্যাকাউন্টে</string>
     <string name="liked_a_song_and_its_video">গান আর তার ভিডিও দুটোই পছন্দ করেছেন? গান হিসেবে একবারই দেখায়</string>
-    <string name="prism_s_own_volume_apart_from">ফোনের থেকে আলাদা Prism-এর নিজের ভলিউম (সেটিংস → Prism কাস্টমাইজ করুন → প্লেয়ার)</string>
-    <string name="hide_the_status_bar_customize_prism">স্ট্যাটাস বার লুকান (Prism কাস্টমাইজ করুন → ট্যাব ও মিনি প্লেয়ার)</string>
+    <string name="prism_s_own_volume_apart_from">ফোনের থেকে আলাদা Prism-এর নিজের ভলিউম (সেটিংস → প্লেয়ার)</string>
+    <string name="hide_the_status_bar_customize_prism">স্ট্যাটাস বার লুকান (সেটিংস → ট্যাব ও মিনি প্লেয়ার)</string>
     <string name="settings_pages_are_tidier_tap_beside">সেটিংসের পেজগুলো আরও গোছানো: বিস্তারিত জানতে সেটিংয়ের পাশের ⓘ-তে ট্যাপ করুন</string>
     <string name="library_s_tiles_the_edit_button">লাইব্রেরির টাইল: লাইব্রেরির ওপরের এডিট বোতাম</string>
     <string name="customize_home_the_button_at_the">হোম কাস্টমাইজ করুন-এ (হোমের ওপরের বোতাম) আরও অনেক কিছু আছে।</string>
@@ -2610,10 +2610,10 @@
     <string name="artists_and_songs_with_their_pictures">টাইপ করার সময় ছবিসহ শিল্পী আর গান</string>
     <string name="results_already_in_your_library_right">আপনার লাইব্রেরিতে আগে থেকে থাকা ফলাফল, সেরাটির ঠিক পরেই</string>
     <string name="settings_are_sorted_by_what_they">সেটিংস সাজানো হয়েছে কী করে সেই অনুযায়ী।</string>
-    <string name="everything_about_how_prism_looks_is">Prism দেখতে কেমন তার সবকিছু Prism কাস্টমাইজ করুন-এর নিচে</string>
-    <string name="gestures_and_buttons_in_controls_gestures">জেসচার আর বোতাম কন্ট্রোল ও জেসচার-এ</string>
+    <string name="everything_about_how_prism_looks_is">Prism দেখতে কেমন তার সবকিছু নিজের মতো করুন-এর নিচে</string>
+    <string name="gestures_and_buttons_in_controls_gestures">জেসচার আর বোতাম শোনা-র নিচে</string>
     <string name="every_mobile_data_choice_on_one">মোবাইল ডেটার সব বিকল্প এক পেজে</string>
-    <string name="android_auto_speakers_discord_and_last">Android Auto, স্পিকার, Discord আর Last.fm ডিভাইস ও কানেকশন-এ</string>
+    <string name="android_auto_speakers_discord_and_last">Android Auto, স্পিকার, Discord আর Last.fm কানেকশন-এর নিচে</string>
     <string name="performance_mode_at_the_top_for">পারফরম্যান্স মোড, ওপরে, ধীর ফোনের জন্য</string>
     <string name="make_the_pieces_of_prism_yours">Prism-এর প্রতিটি অংশ নিজের মতো করুন।</string>
     <string name="covers_as_circles_squircles_flowers_arches">কভার বৃত্ত, স্কুইর্কল, ফুল, খিলান… হিসেবে, গান, অ্যালবাম, শিল্পী আর প্লেয়ারের জন্য</string>
@@ -2624,20 +2624,20 @@
     <string name="from_your_requests">আপনার অনুরোধ থেকে।</string>
     <string name="rearrange_your_playlists_songs_rearrange_songs">আপনার প্লেলিস্টের গান নতুন করে সাজান: ⋯ → গান নতুন করে সাজান</string>
     <string name="swipe_a_song_out_of_the">সারি থেকে গান সোয়াইপ করে সরান, খুলতে মিনি প্লেয়ার ওপরে সোয়াইপ করুন</string>
-    <string name="the_light_from_the_playing_cover">চলমান কভার থেকে আলো: রং → কভার থেকে</string>
+    <string name="the_light_from_the_playing_cover">চলমান কভার থেকে আলো: থিম ও রং → আলো → কভার থেকে</string>
     <string name="ribbons_a_progress_bar_with_strands">রিবন, একটি অগ্রগতি বার যার ওপর দিয়ে সুতোর মতো রেখা বয়ে চলে</string>
     <string name="a_bold_title_on_the_player">প্লেয়ারে বোল্ড শিরোনাম, পুরো অ্যালবাম প্লেলিস্টে, আর শেয়ারের জন্য YouTube লিঙ্ক</string>
-    <string name="settings_playback_sound">সেটিংস → প্লেব্যাক ও সাউন্ড।</string>
+    <string name="settings_playback_sound">সেটিংস → প্লেব্যাক, আর সেটিংস → সাউন্ড ও কোয়ালিটি।</string>
     <string name="speed_pitch_slowed_sped_up_or">গতি ও পিচ: ধীর, দ্রুত, বা যেকোনো স্কেল, প্লেয়ারের ⋯ থেকে</string>
     <string name="how_songs_cross_in_a_crossfade">ক্রসফেডে গান কীভাবে মেশে, পরেরটি যেখানে আসে সেখানে চিহ্ন, আর মিশে যাওয়া কভার</string>
     <string name="normalize_volume_s_level_and_albums">ভলিউম সমান করার মাত্রা, আর অ্যালবাম যেমন আছে তেমন রাখা</string>
     <string name="your_own_equalizer_presets_shared_as">আপনার নিজের ইকুয়ালাইজার প্রিসেট, কোড হিসেবে শেয়ার করা, একটি গাড়ির জন্য আর একটি ইয়ারবাডের জন্য</string>
     <string name="fades_for_the_sleep_timer_and">স্লিপ টাইমার আর বিরতি ও প্লে-র জন্য ফেড</string>
     <string name="liked_how_prism_1_6_looked">Prism 1.6 দেখতে যেমন ছিল পছন্দ করতেন? এটি ফিরে এসেছে, একটি বিকল্প হিসেবে।</string>
-    <string name="the_classic_look_customize_prism_looks">ক্লাসিক লুক: Prism কাস্টমাইজ করুন → লুক</string>
+    <string name="the_classic_look_customize_prism_looks">ক্লাসিক লুক: সেটিংস → লুক</string>
     <string name="or_only_its_icons_its_bold">অথবা শুধু এর আইকন, এর বোল্ড লেখা বা এর সাধারণ কন্ট্রোল</string>
     <string name="the_player_s_buttons_apart_instead">প্লেয়ারের বোতাম ক্যাপসুলের বদলে আলাদা আলাদা</string>
-    <string name="last_fm_scrobbling_devices_connections_and">Last.fm স্ক্রবলিং (ডিভাইস ও কানেকশন), আর যেকোনো তারিখের Replay</string>
+    <string name="last_fm_scrobbling_devices_connections_and">Last.fm স্ক্রবলিং (অ্যাকাউন্ট ও শেয়ারিং), আর যেকোনো তারিখের Replay</string>
     <string name="pick_several_songs_in_the_queue">একসাথে সরাতে বা মুছতে সারিতে কয়েকটি গান বাছুন, বা এর ক্রম লক করুন</string>
     <string name="choose_what_goes_in_a_backup">ব্যাকআপে কী যাবে বাছুন</string>
     <string name="swipe_up_on_the_player_for">সারির জন্য প্লেয়ারে ওপরে সোয়াইপ, পোর্ট্রেটে লক, মিউট করলে বিরতি</string>
@@ -3794,7 +3794,7 @@
     <string name="the_ambient_frost_behind_home_search_all">হোম, সার্চ, লাইব্রেরি, Replay আর সেটিংসের পেছনের অ্যাম্বিয়েন্ট ঝাপসা আভা (স্বয়ংক্রিয় এতে কভারের রং রাখে, সাধারণ এটিকে ধূসর করে, আভা একে রাঙায়), ঝাপসা কাচ বন্ধ থাকলে ওই পেজগুলো, আর শিট ও ডায়ালগ। প্লেয়ার নয়, অ্যালবাম, শিল্পী আর প্লেলিস্টের পেজও নয়, যেগুলো তাদের ছবির রং নেয়।</string>
     <string name="home_has_the_background_glass_backgrounds_all">হোমে %1$s ব্যাকগ্রাউন্ড আছে (কাচ ও ব্যাকগ্রাউন্ড), এই রঙের ওপরে আঁকা, তাই সেখানে এটি অল্পই দেখা যায়। পুরোটা দেখতে সেখানে অ্যাম্বিয়েন্ট বাছুন</string>
     <string name="secondary_text_artists_times_notes_dividers_all">পেজ, শিট আর মেনুতে গৌণ লেখা (শিল্পী, সময়, নোট), বিভাজক আর আউটলাইন। মাঝারি আর উচ্চ অ্যাকসেন্টকেও আরও স্পষ্ট করে যাতে পড়া সহজ হয়। কভারের ওপর প্লেয়ারের নিজের সাদা লেখা যেমন আছে তেমনই থাকে।</string>
-    <string name="the_accent_on_artist_album_and_all">শিল্পী, অ্যালবাম আর প্লেলিস্টের পেজে, আর গান, অ্যালবাম বা শিল্পী থেকে খোলা মেনুতে (টিপে ধরে রাখা বা ⋯) অ্যাকসেন্ট। এদের ঝাপসা ব্যাকগ্রাউন্ড যেকোনো অবস্থায় ছবির রং নেয় (কাচ ও ব্যাকগ্রাউন্ড)।</string>
+    <string name="the_accent_on_artist_album_and_all">শিল্পী, অ্যালবাম আর প্লেলিস্টের পেজে, আর গান, অ্যালবাম বা শিল্পী থেকে খোলা মেনুতে (টিপে ধরে রাখা বা ⋯) অ্যাকসেন্ট। এদের ঝাপসা ব্যাকগ্রাউন্ড যেকোনো অবস্থায় ছবির রং নেয় (কাচ)।</string>
     <string name="tap_the_line_under_the_player_all">প্লেয়ারের কন্ট্রোলের নিচের লাইনে ট্যাপ করুন (কোন ডিভাইসে চলছে তা বলে) আর একটি স্পিকার, টিভি বা রিসিভার বাছুন। এটিকে Google Cast (Chromecast, Google TV, Cast বিল্ট-ইন স্পিকার) বা DLNA / UPnP (কখনও মিডিয়া শেয়ারিং বলা হয়) সহ এই Wi-Fi-তে থাকতে হবে। আপনার সারি, লিরিক্স আর কন্ট্রোল ফোনেই থাকে, আর এর ভলিউম বোতাম স্পিকারের ভলিউম ঠিক করে। ইকুয়ালাইজার, ক্রসফেড, গলা মেলান আর ভিডিও ফোনের নিজস্ব, তাই কাস্ট করার সময় বন্ধ থাকে।</string>
     <string name="nothing_new_from_your_artists_in_all">শেষ তিন মাসে আপনার শিল্পীদের নতুন কিছু নেই। আপনার তারা দেওয়া, সেভ করা আর সবচেয়ে বেশি শোনা শিল্পীদের Prism কয়েক দিন পরপর দেখে; প্রথমবার শুধু যা আগে থেকে বেরিয়েছে তা জেনে নেয়, তাই নতুন গান পরের বার থেকে দেখা যায়।</string>
     <string name="tunemymusic_copies_your_playlists_liked_songs_all">TuneMyMusic আপনার প্লেলিস্ট, পছন্দের গানসহ, আপনার YouTube Music অ্যাকাউন্টে কপি করে। YouTube Music-এর নিজের অ্যাপও ট্রান্সফারের জন্য এই সার্ভিসই ব্যবহার করে।</string>
@@ -4237,14 +4237,14 @@
     <string name="shaped_by_the_crossfade">ক্রসফেডের আকারে</string>
     <string name="crossfade_shape_keywords">ক্রসফেড ব্লেন্ড ফেড আউট ফেড ইন সরু আকার বক্ররেখা অগ্রগতি বার সিক বার crossfade</string>
     <string name="the_end_tapers_as_the_song_fades">গান মিলিয়ে যাওয়ার সঙ্গে শেষটা সরু হয়ে আসে</string>
-    <string name="crossfade_shape_info">বারের শেষ অংশ গানটি যেভাবে মিলিয়ে যায় সেই আকার নেয়, আর পরের গানের বার সেটি যেভাবে ফুটে ওঠে সেভাবে বেড়ে ওঠে, আপনার ক্রসফেডের ধরন অনুযায়ী (সাউন্ড → ক্রসফেড)। শুধু যখন ক্রসফেড আসছে: অ্যালবামের ট্র্যাকগুলোর মাঝে নয়, কাস্ট করার সময় নয়, পর্ব বা লাইভ স্ট্রিমে নয়। স্বয়ংক্রিয় দৈর্ঘ্যে ব্লেন্ডটা ঠিক হয়ে গেলে এটি দেখায়। ওয়েভফর্ম আর রিবন এর বদলে চিহ্নটাই রাখে।</string>
+    <string name="crossfade_shape_info">বারের শেষ অংশ গানটি যেভাবে মিলিয়ে যায় সেই আকার নেয়, আর পরের গানের বার সেটি যেভাবে ফুটে ওঠে সেভাবে বেড়ে ওঠে, আপনার ক্রসফেডের ধরন অনুযায়ী (প্লেব্যাক → ক্রসফেড)। শুধু যখন ক্রসফেড আসছে: অ্যালবামের ট্র্যাকগুলোর মাঝে নয়, কাস্ট করার সময় নয়, পর্ব বা লাইভ স্ট্রিমে নয়। স্বয়ংক্রিয় দৈর্ঘ্যে ব্লেন্ডটা ঠিক হয়ে গেলে এটি দেখায়। ওয়েভফর্ম আর রিবন এর বদলে চিহ্নটাই রাখে।</string>
     <string name="imp_title">আপনার ইতিহাস নিয়ে আসুন</string>
     <string name="imp_subtitle">Spotify, YouTube Music আর Last.fm থেকে, এই ফোনেই পড়া হয়</string>
     <string name="imp_row_detail">Spotify, YouTube Music, Last.fm</string>
     <string name="imp_group_info">Spotify-এর ডেটা ডাউনলোড থেকে আপনার প্লে, পছন্দের গান আর প্লেলিস্ট, Google Takeout থেকে আপনার YouTube Music ইতিহাস, অথবা আপনার Last.fm স্ক্রবল নিয়ে আসুন। ফাইলগুলো এই ফোনেই পড়া হয়; প্রতিটি গান খুঁজে পেতে Prism সেটি সার্চ করে, ঠিক যেমন তার সার্চ করে।</string>
     <string name="imp_keywords">ইমপোর্ট spotify ডেটা ডাউনলোড takeout google youtube music ইতিহাস last.fm স্ক্রবল পছন্দের গান প্লেলিস্ট ট্রান্সফার স্থানান্তর</string>
     <string name="imp_bring_from">কোথা থেকে আনবেন</string>
-    <string name="imp_bring_from_info">Spotify: spotify.com-এ, অ্যাকাউন্ট → প্রাইভেসি → আপনার ডেটা ডাউনলোড করুন। অ্যাকাউন্ট ডেটা কয়েক দিনে আসে (এক বছরের প্লে, পছন্দের গান, প্লেলিস্ট); বর্ধিত স্ট্রিমিং ইতিহাস আসতে 30 দিন পর্যন্ত লাগে (যোগ দেওয়ার পর থেকে প্রতিটি প্লে)। যে zip-এ আসে সেটি, অথবা তার ভেতরের ফাইলগুলো বাছুন।\n\nYouTube Music: takeout.google.com-এ YouTube আর YouTube Music বাছুন, শুধু ইতিহাস, JSON হিসেবে। zip অথবা watch-history.json বাছুন।\n\nLast.fm: ডিভাইস ও কানেকশনে এটি কানেক্ট করুন, তাহলে Prism আপনার স্ক্রবল পড়বে।\n\nকিছুই কোথাও পাঠানো হয় না। প্রতিটি গান খুঁজে পেতে Prism সেটি সার্চ করে, ঠিক যেমন তার সার্চ করে।</string>
+    <string name="imp_bring_from_info">Spotify: spotify.com-এ, অ্যাকাউন্ট → প্রাইভেসি → আপনার ডেটা ডাউনলোড করুন। অ্যাকাউন্ট ডেটা কয়েক দিনে আসে (এক বছরের প্লে, পছন্দের গান, প্লেলিস্ট); বর্ধিত স্ট্রিমিং ইতিহাস আসতে 30 দিন পর্যন্ত লাগে (যোগ দেওয়ার পর থেকে প্রতিটি প্লে)। যে zip-এ আসে সেটি, অথবা তার ভেতরের ফাইলগুলো বাছুন।\n\nYouTube Music: takeout.google.com-এ YouTube আর YouTube Music বাছুন, শুধু ইতিহাস, JSON হিসেবে। zip অথবা watch-history.json বাছুন।\n\nLast.fm: সেটিংস → অ্যাকাউন্ট ও শেয়ারিং-এ এটি কানেক্ট করুন, তাহলে Prism আপনার স্ক্রবল পড়বে।\n\nকিছুই কোথাও পাঠানো হয় না। প্রতিটি গান খুঁজে পেতে Prism সেটি সার্চ করে, ঠিক যেমন তার সার্চ করে।</string>
     <string name="imp_spotify_detail">এর ডেটা ডাউনলোড: প্লে, পছন্দের গান, প্লেলিস্ট</string>
     <string name="imp_takeout_detail">Google Takeout-এর দেখার ইতিহাস</string>
     <string name="imp_lastfm_detail">আপনার স্ক্রবল, %1$s হিসেবে</string>
@@ -4349,7 +4349,7 @@
     <string name="explicit_show">দেখান</string>
     <string name="explicit_skip">এড়িয়ে যান</string>
     <string name="explicit_hide">লুকান</string>
-    <string name="explicit_skipped">অশালীন গান বাদ রাখা হচ্ছে (সেটিংস → প্লেব্যাক ও সাউন্ড)</string>
+    <string name="explicit_skipped">অশালীন গান বাদ রাখা হচ্ছে (সেটিংস → প্লেব্যাক)</string>
     <string name="explicit_none_left">বাজানোর মতো কিছু নেই: এখানকার সব গানই অশালীন</string>
     <string name="change_cover">কভার বদলান</string>
     <string name="cover_changed">কভার বদলানো হয়েছে</string>
@@ -4399,7 +4399,7 @@
     <string name="replay_last_weeks">শেষ %1$d সপ্তাহ</string>
     <string name="replay_last_days">শেষ %1$d দিন</string>
     <string name="replay_story_font">স্টোরির ফন্ট</string>
-    <string name="replay_story_font_info">Replay আর Rewind স্টোরি তাদের লেখা কীভাবে সাজায়: Prism-এর পোস্টার ফন্টে, অথবা Prism-এর জন্য আপনার বেছে নেওয়া ফন্টে (লেখা)।</string>
+    <string name="replay_story_font_info">Replay আর Rewind স্টোরি তাদের লেখা কীভাবে সাজায়: Prism-এর পোস্টার ফন্টে, অথবা Prism-এর জন্য আপনার বেছে নেওয়া ফন্টে (লেখা ও আইকন)।</string>
     <string name="replay_story_font_keywords">ফন্ট টাইপোগ্রাফি টাইপফেস স্টোরি rewind wrapped</string>
     <string name="replay_story_font_poster">পোস্টার ফন্ট</string>
     <string name="replay_story_font_own">আপনার ফন্ট</string>
@@ -4598,7 +4598,7 @@
         <item quantity="other">বাছার জন্য %1$sটি গান</item>
     </plurals>
     <string name="ytlive_spotify_connect">এটি ব্যবহার করতে Spotify কানেক্ট করুন</string>
-    <string name="ytlive_spotify_recent_off">বন্ধ: Spotify পেজে ‘সাম্প্রতিক প্লে’ চালু করুন</string>
+    <string name="ytlive_spotify_recent_off">বন্ধ: সেটিংস → অ্যাকাউন্ট ও শেয়ারিং → Spotify-এ ‘সাম্প্রতিক প্লে’ চালু করুন</string>
     <string name="ytlive_connection_on">আপনার ইতিহাস হালনাগাদ · চালু</string>
     <string name="ytlive_connection_off">আপনার ইতিহাস হালনাগাদ রাখুন · বন্ধ</string>
     <string name="ytlive_connection_signed_out">ইতিহাস হালনাগাদ রাখতে সাইন ইন করুন</string>
@@ -4614,7 +4614,7 @@
     <string name="dj_in_the_queue_keywords">dj মোড বোতাম সারি উপরে জায়গা লুকান</string>
     <string name="menu_lyrics_only_way">প্লেয়ার থেকে লিরিক্সে যাওয়ার একমাত্র পথ থাকলে এটি থাকে</string>
     <string name="smart_downloads_offer_title">দরকারের আগেই গান ডাউনলোড করে রাখবেন?</string>
-    <string name="smart_downloads_offer_body">স্মার্ট ডাউনলোড আপনি যে গানগুলো চালাতে পারেন সেগুলো অফলাইনের জন্য তৈরি রাখে: 1 GB পর্যন্ত, Wi-Fi-তে। যখন খুশি \"ডাউনলোড, স্টোরেজ ও ডেটা\"-তে বদলাতে পারবেন।</string>
+    <string name="smart_downloads_offer_body">স্মার্ট ডাউনলোড আপনি যে গানগুলো চালাতে পারেন সেগুলো অফলাইনের জন্য তৈরি রাখে: 1 GB পর্যন্ত, Wi-Fi-তে। যখন খুশি সেটিংস → ডাউনলোড ও ডেটা-তে বদলাতে পারবেন।</string>
     <!-- 1.8.2 -->
     <string name="loading_list">\"%1$s\" লোড হচ্ছে…</string>
     <string name="song_details">গানের তথ্য</string>
@@ -4855,7 +4855,7 @@
     <string name="glass_blur">ব্লার</string>
     <string name="glass_blur_info">কাচের পেছনের রঙ কতটা ছড়ায়। লেখার মতো ছোট জিনিস লিকুইড গ্লাসের পেছনে হালকা রেখা ধরে রাখে, এটা যতই বাড়ান; ঝাপসা কাচ সেগুলোকেও মিলিয়ে দেয়। 100% হলো Prism-এর নিজের মান। এর ওপরে ধীর ফোনের জন্য কাজ আরও কঠিন।</string>
     <string name="glass_frost">ফ্রস্ট</string>
-    <string name="glass_frost_info">কাচের ওপরের পর্দা কতটা পুরু: কম হলে তার পেছনের আরও বেশি দেখা যায়, বেশি হলে লাইট মোডে আরও দুধেলা আর ডার্ক মোডে আরও গাঢ় হয়, এবং ব্যস্ত ছবির ওপরে পড়া সহজ হয়। 100% হলো Prism-এর নিজের মান। নিজস্ব ব্যাকগ্রাউন্ডওয়ালা ট্যাব বার (লেআউট, ট্যাব বার) সেই ব্যাকগ্রাউন্ডই রাখে।</string>
+    <string name="glass_frost_info">কাচের ওপরের পর্দা কতটা পুরু: কম হলে তার পেছনের আরও বেশি দেখা যায়, বেশি হলে লাইট মোডে আরও দুধেলা আর ডার্ক মোডে আরও গাঢ় হয়, এবং ব্যস্ত ছবির ওপরে পড়া সহজ হয়। 100% হলো Prism-এর নিজের মান। নিজস্ব ব্যাকগ্রাউন্ডওয়ালা ট্যাব বার (ট্যাব ও মিনি প্লেয়ার → নেভিগেশন বার) সেই ব্যাকগ্রাউন্ডই রাখে।</string>
     <string name="glass_needs_android_12">এগুলোর জন্য Android 12-এর সঙ্গে আসা ব্লার দরকার। এই ফোনে বারগুলো নিরেট, তাই ব্লার বা ফ্রস্ট সেটিং বদলানোর মতো কিছু নেই।</string>
     <string name="glass_on_more_of_the_screen">স্ক্রিনের আরও বেশি জায়গায় গ্লাস</string>
     <string name="glass_on_more_of_the_screen_detail">কার্ড, চিপ, গোল বোতাম আর পূর্বাবস্থায় ফিরুন বার</string>
@@ -5187,6 +5187,7 @@
     <string name="the_day_before">তার আগের দিন</string>
     <string name="the_week_before">তার আগের সপ্তাহ</string>
     <string name="root_app">অ্যাপ</string>
+    <string name="root_listening">শোনা</string>
     <string name="root_theme_colors">থিম ও রং</string>
     <string name="root_text_icons">লেখা ও আইকন</string>
     <string name="root_sound_quality">সাউন্ড ও কোয়ালিটি</string>

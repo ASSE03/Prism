@@ -102,7 +102,7 @@
     <string name="save">Spara</string>
     <string name="cancel">Avbryt</string>
     <string name="share_2">Dela %1$s</string>
-    <string name="scan_it_in_prism_settings_customize">Skanna den i Prism: Inställningar → Anpassa Prism → Looks → Skanna</string>
+    <string name="scan_it_in_prism_settings_customize">Skanna den i Prism: Inställningar → Looks → Hämta en Look</string>
     <string name="too_much_for_a_qr_code">För mycket för en QR-kod: skicka den som text eller fil</string>
     <string name="codes_leave_out_photos_and_your">Koder tar inte med foton och ditt eget typsnitt; en fil kan ta med dem.</string>
     <string name="here_s_my_prism_look_share">Här är min Prism-Look, \"%1$s\". Dela det här meddelandet till Prism för att se den:\n\n%2$s</string>
@@ -652,7 +652,7 @@
     <string name="remove_this_color">Ta bort den här färgen</string>
     <string name="changes">%1$s\n\nÄndrar: %2$s</string>
     <string name="white_black_and_greys_give_prism">Vitt, svart och gråtoner ger Prisms enkla utseende: vitt på mörka sidor, svart på ljusa</string>
-    <string name="shown_softened_lighter_on_dark_pages">Visas mjukad (ljusare på mörka sidor, djupare på ljusa). Välj \"Exakt som vald\" på Färg-sidan för att använda den som den är</string>
+    <string name="shown_softened_lighter_on_dark_pages">Visas mjukad (ljusare på mörka sidor, djupare på ljusa). Välj \"Exakt som vald\" under Accent för att använda den som den är</string>
     <string name="made_a_little_lighter_or_darker">Görs lite ljusare eller mörkare där text i den inte skulle gå att läsa</string>
     <string name="tint_strength">Tonstyrka</string>
     <string name="faint">Svag</string>
@@ -1098,7 +1098,7 @@
     <string name="in_the_middle">I mitten</string>
     <string name="title_size">Titelstorlek</string>
     <string name="title_weight">Titelvikt</string>
-    <string name="light_is_prism_s_own_and">Tunn är Prisms egen och följer Text → Vikt. Fet gör även artistens namn kraftigare.</string>
+    <string name="light_is_prism_s_own_and">Tunn är Prisms egen och följer Text &amp; ikoner → Vikt. Fet gör även artistens namn kraftigare.</string>
     <string name="scrolling_titles">Rullande titlar</string>
     <string name="a_long_title_scrolls_across_off">En lång titel rullar förbi (av: den slutar med …)</string>
     <string name="times_under_the_progress_bar">Tider under förloppsfältet</string>
@@ -1963,7 +1963,7 @@
     <string name="refractive_bars_and_controls">Ljusbrytande fält och kontroller</string>
     <string name="soft_blur_no_refraction">Mjuk oskärpa, ingen ljusbrytning</string>
     <string name="pages_frosted_with_their_picture">Sidor frostade med sin bild</string>
-    <string name="artist_album_and_playlist_pages_sit">Artist-, album- och spellistsidor ligger på frostat glas gjort av sin bild; Hem, Bibliotek, Sök och Inställningar ligger på frost från det som spelas. Om sidorna tar sin bilds färg ställer du in under Färg.</string>
+    <string name="artist_album_and_playlist_pages_sit">Artist-, album- och spellistsidor ligger på frostat glas gjort av sin bild; Hem, Bibliotek, Sök och Inställningar ligger på frost från det som spelas. Om sidorna tar sin bilds färg ställer du in under Sidor.</string>
     <string name="calmer_quicker_animations">Lugnare, snabbare animationer</string>
     <string name="no_drifting_backgrounds_no_artwork_bounce">Inga drivande bakgrunder, inga studsande omslag, snabbare övergångar.</string>
     <string name="that_font_couldn_t_be_used">Det typsnittet gick inte att använda</string>
@@ -2005,7 +2005,7 @@
     <string name="more_room_swipe_down_from_the">Mer utrymme; svep nedåt från överkanten för att se det</string>
     <string name="the_clock_battery_and_notification_icons">Klockan, batteriet och aviseringsikonerna högst upp förblir dolda medan Prism är öppet. Svep nedåt från överkanten så visas de en stund. Uppslukande läge och video i helskärm döljer de andra fälten också, som förut.</string>
     <string name="never_shows_only_the_icons_words">Aldrig visar bara ikonerna; Bara ord visar bara namnen.</string>
-    <string name="see_through_lets_the_page_show">Genomskinligt låter sidan synas genom fältet; Heltäckande döljer den. Själva oskärpan kommer från Glas (Anpassa Prism → Glas &amp; bakgrunder).</string>
+    <string name="see_through_lets_the_page_show">Genomskinligt låter sidan synas genom fältet; Heltäckande döljer den. Själva oskärpan kommer från Glas (Tema &amp; färger → Glas).</string>
     <string name="slims_down_as_you_scroll">Blir smalare när du skrollar</string>
     <string name="swipe_sideways_on_a_tab_s">Svep i sidled på en fliks sida</string>
     <string name="a_sideways_swipe_on_a_tab">Ett svep i sidled på en fliks egen sida går till fliken bredvid. Rader som skrollar i sidled (och Bibliotekets egna sidor) behåller sina svep.</string>
@@ -2034,7 +2034,7 @@
     <string name="played_now_playing_and_up_next">\"Spelade\", \"Spelas nu\" och \"Nästa i kön\"</string>
     <string name="off_the_queue_is_one_list">Av: kön är en enda lista med låtar, från de spelade till de som kommer.</string>
     <string name="moving_artwork_when_a_song_has">Rörligt omslag, när en låt har det</string>
-    <string name="motion_artwork_and_video_covers_turn">Rörliga omslag och videoomslag. Stäng av dem för en låt i spelarens ⋯-meny. Om de spelas på mobildata, och de som sparas på telefonen, finns i Nedladdningar, lagring &amp; data.</string>
+    <string name="motion_artwork_and_video_covers_turn">Rörliga omslag och videoomslag. Stäng av dem för en låt i spelarens ⋯-meny. Om de spelas på mobildata, och de som sparas på telefonen, finns i Nedladdningar &amp; data.</string>
     <string name="the_animated_cover_plays_behind_everything">Det animerade omslaget spelas bakom allt</string>
     <string name="the_moving_artwork_fills_the_whole">Det rörliga omslaget fyller hela spelaren, mörkat under kontrollerna, och själva omslaget visar stillbilden. Inte med utfallande omslag, som redan visar det kant till kant.</string>
     <string name="the_cover_fills_the_screen_lyrics">Omslaget fyller skärmen, låttexten ovanpå</string>
@@ -2137,7 +2137,7 @@
     <string name="needed_for_sing">Behövs för Sjung · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Tar bort sångarens röst ur låtar, på din telefon, för karaoke. Laddas ned en gång.</string>
     <string name="so_sing_starts_at_once_when">Så att Sjung startar direkt när du slår på det</string>
-    <string name="the_playing_song_and_the_next">Låten som spelas och nästa separeras i bakgrunden även när Sjung är av. Det drar mer batteri medan musik spelas; på mobildata följer det Nedladdningar, lagring &amp; data → Mobildata.</string>
+    <string name="the_playing_song_and_the_next">Låten som spelas och nästa separeras i bakgrunden även när Sjung är av. Det drar mer batteri medan musik spelas; på mobildata följer det Nedladdningar &amp; data → Mobildata.</string>
     <string name="using">Använder %1$s</string>
     <string name="songs_are_worked_out_again_the">Låtarna bearbetas på nytt nästa gång du sjunger dem.</string>
     <string name="word_by_word_first_then_by">Ord för ord först, sedan per rad</string>
@@ -2495,7 +2495,7 @@
     <string name="allow_notifications">Tillåt aviseringar</string>
     <string name="turn_them_on_in_android_s">Slå på dem i Androids inställningar för Prism.</string>
     <string name="your_starting_point_made_from_what">Din startpunkt, skapad av det du spelar.</string>
-    <string name="the_replay_card_at_the_top">Replay-kortet högst upp: ditt år hittills (välj utseende i Inställningar → Anpassa Prism → Hem &amp; Bibliotek)</string>
+    <string name="the_replay_card_at_the_top">Replay-kortet högst upp: ditt år hittills (välj utseende i Inställningar → Hem &amp; Bibliotek → Replay-kort)</string>
     <string name="quick_picks_songs_around_the_artists">Snabbval: låtar kring artisterna du spelar, svep i sidled för fler</string>
     <string name="made_for_you_daily_mixes_your">Skapat för dig: Daily Mix, din mix för tiden på dygnet och Release Radar</string>
     <string name="the_grid_button_at_the_top">Rutnätsknappen högst upp ordnar Hems sektioner</string>
@@ -2516,12 +2516,12 @@
     <string name="let_prism_mix_your_music_songs">Låt Prism mixa din musik: låtar flyter ihop, i rätt tonart och i takt.</string>
     <string name="in_the_queue_tap_dj_then">Tryck på DJ i kön och välj sedan Jämnt, Bygg upp eller Varva ned</string>
     <string name="long_press_an_album_or_playlist">Håll ned ett album eller en spellista → Spela som DJ-set</string>
-    <string name="crossfade_settings_playback_sound_blends_any">Övertoning (Inställningar → Uppspelning &amp; ljud) tonar ihop två valfria låtar</string>
+    <string name="crossfade_settings_playback_sound_blends_any">Övertoning (Inställningar → Uppspelning) tonar ihop två valfria låtar</string>
     <string name="mixes_made_on_your_phone_from">Mixar skapade på din telefon av det du spelar. Inget om ditt lyssnande lämnar den.</string>
     <string name="daily_mixes_group_the_artists_you">Daily Mix grupperar artisterna du spelar efter vad som passar ihop</string>
     <string name="release_radar_finds_new_music_from">Release Radar hittar ny musik från artisterna du följer</string>
     <string name="made_for_you_also_has_mixes">Skapat för dig har också mixar av din egen musik, och På repeat: de bygger bara på dina spelningar och fungerar offline</string>
-    <string name="when_the_queue_ends_prism_s">När kön tar slut väljer Prisms radio ur din musik (Inställningar → Uppspelning &amp; ljud → Autouppspelning från)</string>
+    <string name="when_the_queue_ends_prism_s">När kön tar slut väljer Prisms radio ur din musik (Inställningar → Uppspelning → När kön tar slut)</string>
     <string name="tap_shuffle_twice_on_a_playlist">Tryck på blanda två gånger på en spellista för Smart blandning: nya låtar smyger in</string>
     <string name="not_for_me_and_leave_out">\"Inte för mig\" och \"Uteslut ur min smak\" håller saker borta</string>
     <string name="find_anything_in_prism_music_or">Hitta vad som helst i Prism Music, eller ta reda på låten som spelas omkring dig.</string>
@@ -2545,11 +2545,11 @@
     <string name="control_prism_from_a_browser_on">Styr Prism från en webbläsare på din dator</string>
     <string name="hand_what_s_playing_to_another">Lämna över det som spelas till en annan telefon eller surfplatta med Prism</string>
     <string name="prism_takes_its_color_from_what">Prism tar sin färg från det som spelas. Ändra så mycket du vill.</string>
-    <string name="appearance_the_spectrum_s_colors_or">Utseende: spektrumets färger (eller enkel vit), din accent, typsnitt, ikoner och bakgrunder</string>
-    <string name="layout_the_tab_bar_your_tabs">Layout: flikfältet, dina flikar och minispelaren</string>
+    <string name="appearance_the_spectrum_s_colors_or">Tema &amp; färger, Text &amp; ikoner: ljusets färger (eller enkel vit), din accent, typsnitt, ikoner och bakgrunder</string>
+    <string name="layout_the_tab_bar_your_tabs">Flikar &amp; minispelare: flikfältet, dina flikar och minispelaren</string>
     <string name="player_its_background_the_cover_and">Spelare: dess bakgrund, omslaget och det som visas på den</string>
     <string name="search_settings_from_the_box_at">Sök i inställningarna med rutan högst upp i Inställningar</string>
-    <string name="settings_customize_prism_color_every_choice">Inställningar → Anpassa Prism → Färg: varje val visar hur det ser ut innan du väljer det.</string>
+    <string name="settings_customize_prism_color_every_choice">Inställningar → Tema &amp; färger: varje val visar hur det ser ut innan du väljer det.</string>
     <string name="the_light_12_presets_white_black">Ljuset: 12 förinställningar, Vit (Svart i ljust läge), eller dina egna färger</string>
     <string name="your_accent_any_color_from_a">Din accent: vilken färg som helst, från ett hjul, en kod eller pipetten</string>
     <string name="the_page_background_plain_tinted_with">Sidbakgrunden: enkel, tonad med din accent, eller en egen färg</string>
@@ -2560,14 +2560,14 @@
     <string name="pin_prism_playlists_to_home_customize">Fäst Prism-spellistor på Hem (Anpassa Hem → Fästa spellistor)</string>
     <string name="song_credits_in_any_song_s">Medverkande i varje låts meny</string>
     <string name="see_which_downloads_failed_and_why">Se vilka nedladdningar som misslyckades, och varför</string>
-    <string name="settings_customize_prism_looks_your_whole">Inställningar → Anpassa Prism → Looks: hela ditt utseende, sparat, bytt och delat med ett tryck.</string>
+    <string name="settings_customize_prism_looks_your_whole">Inställningar → Looks: hela ditt utseende, sparat, bytt och delat med ett tryck.</string>
     <string name="try_prism_s_own_paper_midnight">Prova Prisms egna: Papper, Midnatt, Neon, Mjuk, Studio och Vinyl</string>
     <string name="save_yours_update_it_when_you">Spara din, uppdatera den när du ändrar den, och dela den som QR-kod, kod eller fil</string>
     <string name="browse_looks_people_shared_under_from">Bläddra bland Looks som andra har delat, under Från communityn</string>
     <string name="one_look_by_day_and_another">En Look på dagen och en annan på natten, vid soluppgång och solnedgång</string>
     <string name="every_look_page_shows_home_the">Varje utseendesida visar Hem, spelaren och låttexten medan du ändrar dem; Ångra tar tillbaka en ändring</string>
-    <string name="customize_by_tapping_hold_the_settings">Anpassa genom att trycka: håll ned fliken Inställningar, eller slå på det i Utseende, och tryck sedan på minispelaren, flikfältet, spelaren eller en Hem-sektion</string>
-    <string name="settings_customize_prism_player_or_player">Inställningar → Anpassa Prism → Spelare, eller ⋯ → Spelarinställningar i själva spelaren.</string>
+    <string name="customize_by_tapping_hold_the_settings">Anpassa genom att trycka: håll ned fliken Inställningar, eller slå på det i Looks, och tryck sedan på minispelaren, flikfältet, spelaren eller en Hem-sektion</string>
+    <string name="settings_customize_prism_player_or_player">Inställningar → Spelare, eller ⋯ → Spelarinställningar i själva spelaren.</string>
     <string name="layouts_standard_a_big_cover_lyrics">Layouter: Standard, ett stort Omslag, Låttext först, Minimal, Vinyl eller Kassett (de snurrar medan den spelar)</string>
     <string name="a_visualizer_if_you_d_like">En visualiserare om du vill: staplar, en våg, en ring, en puls eller ett sken (av om du inte väljer den)</string>
     <string name="pick_the_buttons_under_the_controls">Välj knapparna under kontrollerna (hastighet är en), och de två bredvid spela i din avisering och bil</string>
@@ -2578,7 +2578,7 @@
     <string name="prism_tells_android_which_of_its">Prism talar om för Android vilka delar som ska förberedas i förväg, och uppdateringar från bannern kommer förberedda, så de går inte längre långsamt</string>
     <string name="less_work_while_lists_scroll_while">Mindre arbete medan listor skrollas, medan du skriver i Sök och medan en låt spelas</string>
     <string name="if_something_still_stutters_settings_backup">Om något fortfarande hackar antecknar Inställningar → Säkerhetskopia &amp; om → Diagnostik var det hände, så att du kan dela det</string>
-    <string name="settings_customize_prism_lyrics_how_your">Inställningar → Anpassa Prism → Låttext: hur din låttext ser ut, med ett exempel på varje val.</string>
+    <string name="settings_customize_prism_lyrics_how_your">Inställningar → Låttexter &amp; Sjung: hur din låttext ser ut, med ett exempel på varje val.</string>
     <string name="six_styles_prism_classic_karaoke_bold">Sex stilar: Prism, Klassisk karaoke, Fet kort, Glöd, Skrivmaskin och Lugn</string>
     <string name="the_sung_line_and_the_others">Den sjungna raden och de andra i vitt, ditt ljus, accenten, omslagets färg eller din egen</string>
     <string name="weight_line_spacing_how_dim_the">Vikt, radavstånd, hur nedtonade de andra raderna är, oskärpans styrka, versaler och en skugga</string>
@@ -2588,8 +2588,8 @@
     <string name="a_few_things_you_asked_for">Några saker du har bett om.</string>
     <string name="library_history_what_you_played_by">Bibliotek → Historik: det du har spelat, per dag, på den här telefonen eller på ditt konto</string>
     <string name="liked_a_song_and_its_video">Gillat en låt och dess video? De visas en gång, som låten</string>
-    <string name="prism_s_own_volume_apart_from">Prisms egen volym, skild från telefonens (Inställningar → Anpassa Prism → Spelare)</string>
-    <string name="hide_the_status_bar_customize_prism">Dölj statusfältet (Anpassa Prism → Flikar &amp; minispelare)</string>
+    <string name="prism_s_own_volume_apart_from">Prisms egen volym, skild från telefonens (Inställningar → Spelare)</string>
+    <string name="hide_the_status_bar_customize_prism">Dölj statusfältet (Inställningar → Flikar &amp; minispelare)</string>
     <string name="settings_pages_are_tidier_tap_beside">Inställningssidorna är städade: tryck på ⓘ bredvid en inställning för detaljerna</string>
     <string name="library_s_tiles_the_edit_button">Bibliotekets rutor: redigeringsknappen högst upp i Bibliotek</string>
     <string name="customize_home_the_button_at_the">Anpassa Hem (knappen högst upp på Hem) innehåller mer.</string>
@@ -2610,10 +2610,10 @@
     <string name="artists_and_songs_with_their_pictures">Artister och låtar med sina bilder medan du skriver</string>
     <string name="results_already_in_your_library_right">Resultat som redan finns i ditt bibliotek, direkt efter toppresultatet</string>
     <string name="settings_are_sorted_by_what_they">Inställningarna är sorterade efter vad de gör.</string>
-    <string name="everything_about_how_prism_looks_is">Allt om hur Prism ser ut finns under Anpassa Prism</string>
-    <string name="gestures_and_buttons_in_controls_gestures">Gester och knappar i Kontroller &amp; gester</string>
+    <string name="everything_about_how_prism_looks_is">Allt om hur Prism ser ut finns under Gör det till ditt</string>
+    <string name="gestures_and_buttons_in_controls_gestures">Gester och knappar under Lyssnande</string>
     <string name="every_mobile_data_choice_on_one">Alla val för mobildata på en sida</string>
-    <string name="android_auto_speakers_discord_and_last">Android Auto, högtalare, Discord och Last.fm i Enheter &amp; anslutningar</string>
+    <string name="android_auto_speakers_discord_and_last">Android Auto, högtalare, Discord och Last.fm under Anslutningar</string>
     <string name="performance_mode_at_the_top_for">Prestandaläge, högst upp, för långsammare telefoner</string>
     <string name="make_the_pieces_of_prism_yours">Gör Prisms delar till dina.</string>
     <string name="covers_as_circles_squircles_flowers_arches">Omslag som cirklar, squircles, blommor, bågar… för låtar, album, artister och spelaren</string>
@@ -2624,20 +2624,20 @@
     <string name="from_your_requests">Från era önskemål.</string>
     <string name="rearrange_your_playlists_songs_rearrange_songs">Ordna om låtarna i dina spellistor: ⋯ → Ordna om låtar</string>
     <string name="swipe_a_song_out_of_the">Svep bort en låt ur kön, svep minispelaren uppåt för att öppna den</string>
-    <string name="the_light_from_the_playing_cover">Ljuset från omslaget som spelas: Färg → Från omslaget</string>
+    <string name="the_light_from_the_playing_cover">Ljuset från omslaget som spelas: Tema &amp; färger → Ljuset → Från omslaget</string>
     <string name="ribbons_a_progress_bar_with_strands">Band, ett förloppsfält med trådar som flyter längs det</string>
     <string name="a_bold_title_on_the_player">En fet titel i spelaren, hela album till en spellista och YouTube-länkar att dela</string>
-    <string name="settings_playback_sound">Inställningar → Uppspelning &amp; ljud.</string>
+    <string name="settings_playback_sound">Inställningar → Uppspelning, och Inställningar → Ljud &amp; kvalitet.</string>
     <string name="speed_pitch_slowed_sped_up_or">Hastighet &amp; tonhöjd: slowed, sped up eller valfri tonart, från spelarens ⋯</string>
     <string name="how_songs_cross_in_a_crossfade">Hur låtar möts i en övertoning, en markering där nästa kommer in och omslag som tonar över</string>
     <string name="normalize_volume_s_level_and_albums">Nivå för Normalisera volym, och album som behålls som de är</string>
     <string name="your_own_equalizer_presets_shared_as">Egna förinställningar för equalizern, delade som koder, en för bilen och en för dina hörlurar</string>
     <string name="fades_for_the_sleep_timer_and">Toningar för insomningstimern och för paus och uppspelning</string>
     <string name="liked_how_prism_1_6_looked">Gillade du hur Prism 1.6 såg ut? Det är tillbaka, som ett val.</string>
-    <string name="the_classic_look_customize_prism_looks">Looken Klassisk: Anpassa Prism → Looks</string>
+    <string name="the_classic_look_customize_prism_looks">Looken Klassisk: Inställningar → Looks</string>
     <string name="or_only_its_icons_its_bold">Eller bara dess ikoner, dess feta typografi eller dess enkla kontroller</string>
     <string name="the_player_s_buttons_apart_instead">Spelarens knappar utspridda i stället för i en kapsel</string>
-    <string name="last_fm_scrobbling_devices_connections_and">Scrobbling till Last.fm (Enheter &amp; anslutningar), och Replay för valfria datum</string>
+    <string name="last_fm_scrobbling_devices_connections_and">Scrobbling till Last.fm (Konton &amp; delning), och Replay för valfria datum</string>
     <string name="pick_several_songs_in_the_queue">Välj flera låtar i kön för att flytta eller ta bort dem tillsammans, eller lås ordningen</string>
     <string name="choose_what_goes_in_a_backup">Välj vad som ska med i en säkerhetskopia</string>
     <string name="swipe_up_on_the_player_for">Svep uppåt i spelaren för kön, lås i stående läge, pausa när ljudet är av</string>
@@ -3794,7 +3794,7 @@
     <string name="the_ambient_frost_behind_home_search_all">Ambient-frosten bakom Hem, Sök, Bibliotek, Replay och Inställningar (Automatiskt behåller omslagets färger i den, Enkel gör den grå, en ton färgar den), de sidorna när frostat glas är av, samt paneler och dialogrutor. Inte spelaren, och inte heller album-, artist- och spellistsidor, som tar sin bilds färger.</string>
     <string name="home_has_the_background_glass_backgrounds_all">Hem har bakgrunden %1$s (Glas &amp; bakgrunder), ritad över den här färgen, så den syns bara lite där. Välj Ambient där för att se den helt</string>
     <string name="secondary_text_artists_times_notes_dividers_all">Sekundär text (artister, tider, anteckningar), avdelare och konturer på sidor, paneler och menyer. Medel och Hög gör också accenten fastare så att den blir lättare att läsa. Spelarens egen vita text över omslaget förblir som den är.</string>
-    <string name="the_accent_on_artist_album_and_all">Accenten på artist-, album- och spellistsidor, och i menyerna du öppnar från en låt, ett album eller en artist (långt tryck eller ⋯). Deras frostade bakgrunder tar bildens färger i vilket fall (Glas &amp; bakgrunder).</string>
+    <string name="the_accent_on_artist_album_and_all">Accenten på artist-, album- och spellistsidor, och i menyerna du öppnar från en låt, ett album eller en artist (långt tryck eller ⋯). Deras frostade bakgrunder tar bildens färger i vilket fall (Glas).</string>
     <string name="tap_the_line_under_the_player_all">Tryck på raden under spelarens kontroller (den visar vilken enhet som spelar) och välj en högtalare, tv eller mottagare. Den måste vara på det här Wi-Fi-nätet med Google Cast (Chromecast, Google TV, högtalare med inbyggd Cast) eller DLNA / UPnP (kallas ibland mediedelning). Din kö, låttext och dina kontroller stannar på telefonen, och dess volymknappar ställer in högtalarens volym. Equalizern, Övertoning, Sjung och videor hör till telefonen, så de är av vid castning.</string>
     <string name="nothing_new_from_your_artists_in_all">Inget nytt från dina artister de senaste tre månaderna. Prism kollar med några dagars mellanrum artisterna du har stjärnmärkt, sparat och spelar mest; första gången lär den sig bara vad som redan har släppts, så ny musik visas från och med nästa gång.</string>
     <string name="tunemymusic_copies_your_playlists_liked_songs_all">TuneMyMusic kopierar dina spellistor, inklusive Gillade låtar, till ditt YouTube Music-konto. Det är samma tjänst som YouTube Musics egen app använder för överföringar.</string>
@@ -4237,14 +4237,14 @@
     <string name="shaped_by_the_crossfade">Formad av övertoningen</string>
     <string name="crossfade_shape_keywords">övertoning crossfade blanda tona ut tona in smalna form kurva förloppsfält spolning reglage</string>
     <string name="the_end_tapers_as_the_song_fades">Slutet smalnar av när låten tonas ut</string>
-    <string name="crossfade_shape_info">Slutet av fältet får formen av hur låten tonas ut, och nästa låts fält växer fram när den tonas in, efter din övertonings typ (Ljud → Övertoning). Bara när en övertoning är på väg: inte mellan ett albums spår, när du castar, för avsnitt eller livesändningar. Med automatisk längd visas den när övergången är planerad. Vågform och Band behåller markeringen i stället.</string>
+    <string name="crossfade_shape_info">Slutet av fältet får formen av hur låten tonas ut, och nästa låts fält växer fram när den tonas in, efter din övertonings typ (Uppspelning → Övertoning). Bara när en övertoning är på väg: inte mellan ett albums spår, när du castar, för avsnitt eller livesändningar. Med automatisk längd visas den när övergången är planerad. Vågform och Band behåller markeringen i stället.</string>
     <string name="imp_title">Ta med din historik</string>
     <string name="imp_subtitle">Från Spotify, YouTube Music och Last.fm, läst på den här telefonen</string>
     <string name="imp_row_detail">Spotify, YouTube Music, Last.fm</string>
     <string name="imp_group_info">Ta med dina spelningar, gillade låtar och spellistor från Spotifys datanedladdning, din YouTube Music-historik från Google Takeout eller dina scrobblingar på Last.fm. Filerna läses på den här telefonen; för att hitta varje låt söker Prism efter den, som dess sökning gör.</string>
     <string name="imp_keywords">importera spotify datanedladdning takeout google youtube music historik last.fm scrobblingar gillade låtar spellistor överföra flytta</string>
     <string name="imp_bring_from">Ta med från</string>
-    <string name="imp_bring_from_info">Spotify: på spotify.com, Konto → Sekretess → Ladda ned dina data. Kontodata kommer inom några dagar (ett år av spelningar, gillade låtar, spellistor); utökad streaminghistorik kommer inom upp till 30 dagar (varje spelning sedan du gick med). Välj zip-filen den kommer i, eller filerna i den.\n\nYouTube Music: på takeout.google.com, välj YouTube och YouTube Music, bara historik, som JSON. Välj zip-filen eller watch-history.json.\n\nLast.fm: anslut det i Enheter &amp; anslutningar, så läser Prism dina scrobblingar.\n\nInget skickas någonstans. För att hitta varje låt söker Prism efter den, som dess sökning gör.</string>
+    <string name="imp_bring_from_info">Spotify: på spotify.com, Konto → Sekretess → Ladda ned dina data. Kontodata kommer inom några dagar (ett år av spelningar, gillade låtar, spellistor); utökad streaminghistorik kommer inom upp till 30 dagar (varje spelning sedan du gick med). Välj zip-filen den kommer i, eller filerna i den.\n\nYouTube Music: på takeout.google.com, välj YouTube och YouTube Music, bara historik, som JSON. Välj zip-filen eller watch-history.json.\n\nLast.fm: anslut det i Inställningar → Konton &amp; delning, så läser Prism dina scrobblingar.\n\nInget skickas någonstans. För att hitta varje låt söker Prism efter den, som dess sökning gör.</string>
     <string name="imp_spotify_detail">Dess datanedladdning: spelningar, gillade låtar, spellistor</string>
     <string name="imp_takeout_detail">Google Takeouts visningshistorik</string>
     <string name="imp_lastfm_detail">Dina scrobblingar, som %1$s</string>
@@ -4349,7 +4349,7 @@
     <string name="explicit_show">Visa dem</string>
     <string name="explicit_skip">Hoppa över dem</string>
     <string name="explicit_hide">Dölj dem</string>
-    <string name="explicit_skipped">Explicita låtar utelämnas (Inställningar → Uppspelning &amp; ljud)</string>
+    <string name="explicit_skipped">Explicita låtar utelämnas (Inställningar → Uppspelning)</string>
     <string name="explicit_none_left">Inget att spela: alla låtar här är explicita</string>
     <string name="change_cover">Byt omslag</string>
     <string name="cover_changed">Omslaget har bytts</string>
@@ -4399,7 +4399,7 @@
     <string name="replay_last_weeks">Senaste %1$d veckorna</string>
     <string name="replay_last_days">Senaste %1$d dagarna</string>
     <string name="replay_story_font">Berättelsernas typsnitt</string>
-    <string name="replay_story_font_info">Hur berättelserna i Replay och Rewind sätter sina ord: i Prisms affischtyp, eller i typsnittet du valt för Prism (Text).</string>
+    <string name="replay_story_font_info">Hur berättelserna i Replay och Rewind sätter sina ord: i Prisms affischtyp, eller i typsnittet du valt för Prism (Text &amp; ikoner).</string>
     <string name="replay_story_font_keywords">typsnitt typografi font berättelser rewind wrapped</string>
     <string name="replay_story_font_poster">Affischtyp</string>
     <string name="replay_story_font_own">Ditt typsnitt</string>
@@ -4598,7 +4598,7 @@
         <item quantity="other">%1$s låtar att välja</item>
     </plurals>
     <string name="ytlive_spotify_connect">Anslut Spotify för att använda det här</string>
-    <string name="ytlive_spotify_recent_off">Av: slå på Senaste spelningar på Spotify-sidan</string>
+    <string name="ytlive_spotify_recent_off">Av: slå på Senaste spelningar i Inställningar → Konton &amp; delning → Spotify</string>
     <string name="ytlive_connection_on">Din historik, uppdaterad · På</string>
     <string name="ytlive_connection_off">Håll din historik uppdaterad · Av</string>
     <string name="ytlive_connection_signed_out">Logga in för att hålla din historik uppdaterad</string>
@@ -4614,7 +4614,7 @@
     <string name="dj_in_the_queue_keywords">dj läge knapp kö rubrik topp plats dölj</string>
     <string name="menu_lyrics_only_way">Finns kvar så länge det är spelarens enda väg till låttexten</string>
     <string name="smart_downloads_offer_title">Ladda ner låtar innan du behöver dem?</string>
-    <string name="smart_downloads_offer_body">Smarta nedladdningar håller de låtar du troligen spelar redo offline: upp till 1 GB, på Wi-Fi. Ändra när du vill under Nedladdningar, lagring &amp; data.</string>
+    <string name="smart_downloads_offer_body">Smarta nedladdningar håller de låtar du troligen spelar redo offline: upp till 1 GB, på Wi-Fi. Ändra när du vill under Inställningar → Nedladdningar &amp; data.</string>
     <!-- 1.8.2 -->
     <string name="loading_list">Läser in \"%1$s\"…</string>
     <string name="song_details">Låtinformation</string>
@@ -4855,7 +4855,7 @@
     <string name="glass_blur">Oskärpa</string>
     <string name="glass_blur_info">Hur långt färgerna bakom glaset sprids. Små saker som text behåller en svag kontur bakom Flytande glas hur högt du än sätter detta; Frostat glas smälter ihop dem också. 100% är Prisms eget värde. Över det blir det tyngre för en långsammare telefon.</string>
     <string name="glass_frost">Frost</string>
-    <string name="glass_frost_info">Hur tjock slöjan över glaset är: mindre släpper igenom mer av det som finns bakom, mer gör den mjölkigare i ljust läge och mörkare i mörkt läge, och lättare att läsa över röriga bilder. 100% är Prisms eget värde. Ett flikfält med egen bakgrund (Layout, Flikfält) behåller i stället den bakgrunden.</string>
+    <string name="glass_frost_info">Hur tjock slöjan över glaset är: mindre släpper igenom mer av det som finns bakom, mer gör den mjölkigare i ljust läge och mörkare i mörkt läge, och lättare att läsa över röriga bilder. 100% är Prisms eget värde. Ett flikfält med egen bakgrund (Flikar &amp; minispelare → Navigeringsfält) behåller i stället den bakgrunden.</string>
     <string name="glass_needs_android_12">Det här kräver den oskärpa som kom med Android 12. På den här telefonen är fälten solida, så det finns inget som en oskärpe- eller frostinställning kan ändra.</string>
     <string name="glass_on_more_of_the_screen">Glas på mer av skärmen</string>
     <string name="glass_on_more_of_the_screen_detail">Kort, chips, runda knappar och Ångra-fältet</string>
@@ -5187,6 +5187,7 @@
     <string name="the_day_before">dagen innan</string>
     <string name="the_week_before">veckan innan</string>
     <string name="root_app">App</string>
+    <string name="root_listening">Lyssnande</string>
     <string name="root_theme_colors">Tema &amp; färger</string>
     <string name="root_text_icons">Text &amp; ikoner</string>
     <string name="root_sound_quality">Ljud &amp; kvalitet</string>

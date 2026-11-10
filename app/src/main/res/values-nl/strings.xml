@@ -102,7 +102,7 @@
     <string name="save">Opslaan</string>
     <string name="cancel">Annuleren</string>
     <string name="share_2">%1$s delen</string>
-    <string name="scan_it_in_prism_settings_customize">Scan hem in Prism: Instellingen → Prism aanpassen → Looks → Scannen</string>
+    <string name="scan_it_in_prism_settings_customize">Scan hem in Prism: Instellingen → Looks → Een Look ophalen</string>
     <string name="too_much_for_a_qr_code">Te veel voor een QR-code: stuur hem als tekst of bestand</string>
     <string name="codes_leave_out_photos_and_your">Codes laten foto\'s en je eigen lettertype weg; een bestand kan ze meenemen.</string>
     <string name="here_s_my_prism_look_share">Hier is mijn Prism-Look, \"%1$s\". Deel dit bericht met Prism om hem te zien:\n\n%2$s</string>
@@ -652,7 +652,7 @@
     <string name="remove_this_color">Deze kleur verwijderen</string>
     <string name="changes">%1$s\n\nWijzigt: %2$s</string>
     <string name="white_black_and_greys_give_prism">Wit, zwart en grijstinten geven Prism de effen stijl: wit op donkere pagina\'s, zwart op lichte</string>
-    <string name="shown_softened_lighter_on_dark_pages">Verzacht getoond (lichter op donkere pagina\'s, dieper op lichte). Kies \"Precies zoals gekozen\" op de kleurenpagina om hem te gebruiken zoals hij is</string>
+    <string name="shown_softened_lighter_on_dark_pages">Verzacht getoond (lichter op donkere pagina\'s, dieper op lichte). Kies \"Precies zoals gekozen\" onder Accent om hem te gebruiken zoals hij is</string>
     <string name="made_a_little_lighter_or_darker">Iets lichter of donkerder gemaakt waar tekst erin niet leesbaar zou zijn</string>
     <string name="tint_strength">Sterkte van de tint</string>
     <string name="faint">Vaag</string>
@@ -1098,7 +1098,7 @@
     <string name="in_the_middle">In het midden</string>
     <string name="title_size">Titelgrootte</string>
     <string name="title_weight">Titeldikte</string>
-    <string name="light_is_prism_s_own_and">Licht is die van Prism zelf en volgt Tekst → Dikte. Vet maakt de naam van de artiest ook dikker.</string>
+    <string name="light_is_prism_s_own_and">Licht is die van Prism zelf en volgt Tekst &amp; iconen → Dikte. Vet maakt de naam van de artiest ook dikker.</string>
     <string name="scrolling_titles">Scrollende titels</string>
     <string name="a_long_title_scrolls_across_off">Een lange titel schuift voorbij (uit: hij eindigt met …)</string>
     <string name="times_under_the_progress_bar">Tijden onder de voortgangsbalk</string>
@@ -1963,7 +1963,7 @@
     <string name="refractive_bars_and_controls">Lichtbrekende balken en bediening</string>
     <string name="soft_blur_no_refraction">Zachte vervaging, geen lichtbreking</string>
     <string name="pages_frosted_with_their_picture">Pagina\'s met matglas van hun afbeelding</string>
-    <string name="artist_album_and_playlist_pages_sit">Artiest-, album- en playlistpagina\'s staan op matglas gemaakt van hun afbeelding; Home, Bibliotheek, Zoeken en Instellingen staan op matglas van wat er speelt. Of pagina\'s de kleur van hun afbeelding nemen, stel je in onder Kleur.</string>
+    <string name="artist_album_and_playlist_pages_sit">Artiest-, album- en playlistpagina\'s staan op matglas gemaakt van hun afbeelding; Home, Bibliotheek, Zoeken en Instellingen staan op matglas van wat er speelt. Of pagina\'s de kleur van hun afbeelding nemen, stel je in onder Pagina\'s.</string>
     <string name="calmer_quicker_animations">Rustigere, snellere animaties</string>
     <string name="no_drifting_backgrounds_no_artwork_bounce">Geen drijvende achtergronden, geen stuiterend artwork, snellere overgangen.</string>
     <string name="that_font_couldn_t_be_used">Dat lettertype kan niet worden gebruikt</string>
@@ -2005,7 +2005,7 @@
     <string name="more_room_swipe_down_from_the">Meer ruimte; veeg van boven omlaag om hem te zien</string>
     <string name="the_clock_battery_and_notification_icons">De klok, batterij en meldingsiconen bovenaan blijven verborgen zolang Prism open is. Veeg omlaag vanaf de bovenrand en ze verschijnen even. Meeslepende modus en video op volledig scherm verbergen ook de andere balken, zoals voorheen.</string>
     <string name="never_shows_only_the_icons_words">Nooit toont alleen de iconen; Alleen woorden toont alleen de namen.</string>
-    <string name="see_through_lets_the_page_show">Doorzichtig laat de pagina door de balk heen zien; Massief verbergt hem. De vervaging zelf komt van Glas (Prism aanpassen → Glas &amp; achtergronden).</string>
+    <string name="see_through_lets_the_page_show">Doorzichtig laat de pagina door de balk heen zien; Massief verbergt hem. De vervaging zelf komt van Glas (Thema &amp; kleuren → Glas).</string>
     <string name="slims_down_as_you_scroll">Wordt smaller als je scrolt</string>
     <string name="swipe_sideways_on_a_tab_s">Veeg opzij op de pagina van een tabblad</string>
     <string name="a_sideways_swipe_on_a_tab">Opzij vegen op de eigen pagina van een tabblad gaat naar het tabblad ernaast. Rijen die opzij scrollen (en de eigen pagina\'s van Bibliotheek) houden hun veeggebaren.</string>
@@ -2034,7 +2034,7 @@
     <string name="played_now_playing_and_up_next">\"Afgespeeld\", \"Wordt nu afgespeeld\" en \"Hierna\"</string>
     <string name="off_the_queue_is_one_list">Uit: de wachtrij is één lijst nummers, van de afgespeelde tot de komende.</string>
     <string name="moving_artwork_when_a_song_has">Bewegend artwork, als een nummer dat heeft</string>
-    <string name="motion_artwork_and_video_covers_turn">Bewegend artwork en videocovers. Zet ze voor één nummer uit via het ⋯-menu van de speler. Of ze via mobiele data spelen, en welke op de telefoon bewaard blijven, stel je in onder Downloads, opslag &amp; data.</string>
+    <string name="motion_artwork_and_video_covers_turn">Bewegend artwork en videocovers. Zet ze voor één nummer uit via het ⋯-menu van de speler. Of ze via mobiele data spelen, en welke op de telefoon bewaard blijven, stel je in onder Downloads &amp; data.</string>
     <string name="the_animated_cover_plays_behind_everything">De geanimeerde cover speelt achter alles</string>
     <string name="the_moving_artwork_fills_the_whole">Het bewegende artwork vult de hele speler, donkerder onder de bediening, en de cover zelf toont de stilstaande afbeelding. Niet met artwork tot de rand, dat het al van rand tot rand toont.</string>
     <string name="the_cover_fills_the_screen_lyrics">De cover vult het scherm, met de songtekst erover</string>
@@ -2137,7 +2137,7 @@
     <string name="needed_for_sing">Nodig voor Meezingen · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Haalt de stem van de zanger uit nummers, op je telefoon, voor karaoke. Eén keer gedownload.</string>
     <string name="so_sing_starts_at_once_when">Zodat Meezingen meteen start als je het aanzet</string>
-    <string name="the_playing_song_and_the_next">Het spelende en het volgende nummer worden op de achtergrond gescheiden, ook als Meezingen uit staat. Het kost meer batterij terwijl er muziek speelt; via mobiele data volgt het Downloads, opslag &amp; data → Mobiele data.</string>
+    <string name="the_playing_song_and_the_next">Het spelende en het volgende nummer worden op de achtergrond gescheiden, ook als Meezingen uit staat. Het kost meer batterij terwijl er muziek speelt; via mobiele data volgt het Downloads &amp; data → Mobiele data.</string>
     <string name="using">Gebruikt %1$s</string>
     <string name="songs_are_worked_out_again_the">Nummers worden opnieuw verwerkt de volgende keer dat je ze meezingt.</string>
     <string name="word_by_word_first_then_by">Eerst woord voor woord, dan per regel</string>
@@ -2495,7 +2495,7 @@
     <string name="allow_notifications">Meldingen toestaan</string>
     <string name="turn_them_on_in_android_s">Zet ze aan in de instellingen van Android voor Prism.</string>
     <string name="your_starting_point_made_from_what">Je startpunt, gemaakt uit wat je afspeelt.</string>
-    <string name="the_replay_card_at_the_top">De Replay-kaart bovenaan: je jaar tot nu toe (kies de stijl in Instellingen → Prism aanpassen → Home &amp; Bibliotheek)</string>
+    <string name="the_replay_card_at_the_top">De Replay-kaart bovenaan: je jaar tot nu toe (kies de stijl in Instellingen → Home &amp; Bibliotheek → Replay-kaart)</string>
     <string name="quick_picks_songs_around_the_artists">Snelle keuzes: nummers rond de artiesten die je afspeelt, veeg opzij voor meer</string>
     <string name="made_for_you_daily_mixes_your">Voor jou gemaakt: Daily Mixes, je mix voor dit moment van de dag en Release Radar</string>
     <string name="the_grid_button_at_the_top">De rasterknop bovenaan deelt de secties van Home in</string>
@@ -2516,12 +2516,12 @@
     <string name="let_prism_mix_your_music_songs">Laat Prism je muziek mixen: nummers vloeien in elkaar over, in de juiste toonsoort en op de beat.</string>
     <string name="in_the_queue_tap_dj_then">Tik in de wachtrij op DJ en kies dan Gelijkmatig, Opbouwen of Afbouwen</string>
     <string name="long_press_an_album_or_playlist">Houd een album of playlist ingedrukt → Afspelen als DJ-set</string>
-    <string name="crossfade_settings_playback_sound_blends_any">Crossfade (Instellingen → Afspelen &amp; geluid) laat elke twee nummers in elkaar overvloeien</string>
+    <string name="crossfade_settings_playback_sound_blends_any">Crossfade (Instellingen → Afspelen) laat elke twee nummers in elkaar overvloeien</string>
     <string name="mixes_made_on_your_phone_from">Mixen gemaakt op je telefoon uit wat je afspeelt. Niets over je luistergedrag verlaat hem.</string>
     <string name="daily_mixes_group_the_artists_you">Daily Mixes groeperen de artiesten die je afspeelt op wat bij elkaar past</string>
     <string name="release_radar_finds_new_music_from">Release Radar vindt nieuwe muziek van de artiesten die je volgt</string>
     <string name="made_for_you_also_has_mixes">Voor jou gemaakt heeft ook mixen uit je eigen muziek, en Steeds opnieuw: die komen alleen uit wat jij afspeelt en werken offline</string>
-    <string name="when_the_queue_ends_prism_s">Als de wachtrij op is, kiest de radio van Prism uit jouw muziek (Instellingen → Afspelen &amp; geluid → Automatisch afspelen uit)</string>
+    <string name="when_the_queue_ends_prism_s">Als de wachtrij op is, kiest de radio van Prism uit jouw muziek (Instellingen → Afspelen → Als de wachtrij op is)</string>
     <string name="tap_shuffle_twice_on_a_playlist">Tik twee keer op shuffle bij een playlist voor Slimme shuffle: er komen nieuwe nummers tussen</string>
     <string name="not_for_me_and_leave_out">\"Niets voor mij\" en \"Weglaten uit mijn smaak\" houden dingen buiten</string>
     <string name="find_anything_in_prism_music_or">Vind alles in Prism Music, of ontdek welk nummer er om je heen speelt.</string>
@@ -2545,11 +2545,11 @@
     <string name="control_prism_from_a_browser_on">Bedien Prism vanuit een browser op je computer</string>
     <string name="hand_what_s_playing_to_another">Geef wat er speelt door aan een andere telefoon of tablet met Prism</string>
     <string name="prism_takes_its_color_from_what">Prism neemt zijn kleur van wat er speelt. Pas er zoveel van aan als je wilt.</string>
-    <string name="appearance_the_spectrum_s_colors_or">Uiterlijk: de kleuren van het spectrum (of gewoon wit), je accent, lettertypen, iconen en achtergronden</string>
-    <string name="layout_the_tab_bar_your_tabs">Indeling: de tabbalk, je tabbladen en de minispeler</string>
+    <string name="appearance_the_spectrum_s_colors_or">Thema &amp; kleuren, Tekst &amp; iconen: de kleuren van het licht (of gewoon wit), je accent, lettertypen, iconen en achtergronden</string>
+    <string name="layout_the_tab_bar_your_tabs">Tabbladen &amp; minispeler: de tabbalk, je tabbladen en de minispeler</string>
     <string name="player_its_background_the_cover_and">Speler: de achtergrond, de cover en wat erop staat</string>
     <string name="search_settings_from_the_box_at">Doorzoek de instellingen via het vak bovenaan Instellingen</string>
-    <string name="settings_customize_prism_color_every_choice">Instellingen → Prism aanpassen → Kleur: elke keuze laat zien hoe het eruitziet voordat je kiest.</string>
+    <string name="settings_customize_prism_color_every_choice">Instellingen → Thema &amp; kleuren: elke keuze laat zien hoe het eruitziet voordat je kiest.</string>
     <string name="the_light_12_presets_white_black">Het licht: 12 presets, Wit (Zwart in lichte modus), of je eigen kleuren</string>
     <string name="your_accent_any_color_from_a">Je accent: elke kleur, via een wiel, een code of de pipet</string>
     <string name="the_page_background_plain_tinted_with">De paginaachtergrond: effen, getint met je accent, of een eigen kleur</string>
@@ -2560,14 +2560,14 @@
     <string name="pin_prism_playlists_to_home_customize">Zet Prism-playlists vast op Home (Home aanpassen → Vastgezette playlists)</string>
     <string name="song_credits_in_any_song_s">Credits in het menu van elk nummer</string>
     <string name="see_which_downloads_failed_and_why">Bekijk welke downloads mislukt zijn, en waarom</string>
-    <string name="settings_customize_prism_looks_your_whole">Instellingen → Prism aanpassen → Looks: je hele stijl, opgeslagen, gewisseld en gedeeld met één tik.</string>
+    <string name="settings_customize_prism_looks_your_whole">Instellingen → Looks: je hele stijl, opgeslagen, gewisseld en gedeeld met één tik.</string>
     <string name="try_prism_s_own_paper_midnight">Probeer die van Prism: Paper, Midnight, Neon, Soft, Studio en Vinyl</string>
     <string name="save_yours_update_it_when_you">Sla de jouwe op, werk hem bij als je hem verandert, en deel hem als QR-code, code of bestand</string>
     <string name="browse_looks_people_shared_under_from">Bekijk Looks die mensen deelden, onder Uit de community</string>
     <string name="one_look_by_day_and_another">Overdag de ene Look en \'s nachts een andere, bij zonsopgang en zonsondergang</string>
     <string name="every_look_page_shows_home_the">Elke stijlpagina toont Home, de speler en songteksten terwijl je ze aanpast; Ongedaan maken draait een wijziging terug</string>
-    <string name="customize_by_tapping_hold_the_settings">Aanpassen door te tikken: houd het tabblad Instellingen ingedrukt, of zet het aan in Uiterlijk, en tik dan op de minispeler, tabbalk, speler of een Home-sectie</string>
-    <string name="settings_customize_prism_player_or_player">Instellingen → Prism aanpassen → Speler, of ⋯ → Spelerinstellingen in de speler zelf.</string>
+    <string name="customize_by_tapping_hold_the_settings">Aanpassen door te tikken: houd het tabblad Instellingen ingedrukt, of zet het aan in Looks, en tik dan op de minispeler, tabbalk, speler of een Home-sectie</string>
+    <string name="settings_customize_prism_player_or_player">Instellingen → Speler, of ⋯ → Spelerinstellingen in de speler zelf.</string>
     <string name="layouts_standard_a_big_cover_lyrics">Indelingen: Standaard, een grote Cover, Songtekst eerst, Minimaal, Vinyl of Cassette (die draaien mee terwijl het speelt)</string>
     <string name="a_visualizer_if_you_d_like">Een visualizer als je dat wilt: balken, een golf, een ring, een puls of een gloed (uit tenzij je hem kiest)</string>
     <string name="pick_the_buttons_under_the_controls">Kies de knoppen onder de bediening (snelheid is er een), en de twee naast afspelen in je melding en auto</string>
@@ -2578,7 +2578,7 @@
     <string name="prism_tells_android_which_of_its">Prism vertelt Android welke onderdelen het vooraf klaar moet zetten, en updates via de banner komen klaar binnen, zodat ze niet meer traag lopen</string>
     <string name="less_work_while_lists_scroll_while">Minder werk tijdens het scrollen door lijsten, tijdens het typen in Zoeken, en terwijl een nummer speelt</string>
     <string name="if_something_still_stutters_settings_backup">Hapert er nog iets, dan noteert Instellingen → Back-up &amp; over → Diagnose waar het gebeurde, om te delen</string>
-    <string name="settings_customize_prism_lyrics_how_your">Instellingen → Prism aanpassen → Songtekst: hoe je songteksten eruitzien, met een voorbeeld van elke keuze.</string>
+    <string name="settings_customize_prism_lyrics_how_your">Instellingen → Songteksten &amp; Meezingen: hoe je songteksten eruitzien, met een voorbeeld van elke keuze.</string>
     <string name="six_styles_prism_classic_karaoke_bold">Zes stijlen: Prism, Klassieke karaoke, Opvallende kaart, Gloed, Typemachine en Kalm</string>
     <string name="the_sung_line_and_the_others">De gezongen regel en de andere in wit, jouw licht, het accent, de kleur van de cover of je eigen kleur</string>
     <string name="weight_line_spacing_how_dim_the">Dikte, regelafstand, hoe gedimd de andere regels zijn, sterkte van de vervaging, hoofdletters en een schaduw</string>
@@ -2588,8 +2588,8 @@
     <string name="a_few_things_you_asked_for">Een paar dingen waar je om vroeg.</string>
     <string name="library_history_what_you_played_by">Bibliotheek → Geschiedenis: wat je afspeelde, per dag, op deze telefoon of in je account</string>
     <string name="liked_a_song_and_its_video">Een nummer en de video geliket? Ze verschijnen één keer, als het nummer</string>
-    <string name="prism_s_own_volume_apart_from">Een eigen volume voor Prism, los van dat van de telefoon (Instellingen → Prism aanpassen → Speler)</string>
-    <string name="hide_the_status_bar_customize_prism">Verberg de statusbalk (Prism aanpassen → Tabbladen &amp; minispeler)</string>
+    <string name="prism_s_own_volume_apart_from">Een eigen volume voor Prism, los van dat van de telefoon (Instellingen → Speler)</string>
+    <string name="hide_the_status_bar_customize_prism">Verberg de statusbalk (Instellingen → Tabbladen &amp; minispeler)</string>
     <string name="settings_pages_are_tidier_tap_beside">Instellingenpagina\'s zijn overzichtelijker: tik op ⓘ naast een instelling voor de details</string>
     <string name="library_s_tiles_the_edit_button">De tegels van Bibliotheek: de bewerkknop bovenaan Bibliotheek</string>
     <string name="customize_home_the_button_at_the">Home aanpassen (de knop bovenaan Home) kan meer.</string>
@@ -2610,10 +2610,10 @@
     <string name="artists_and_songs_with_their_pictures">Artiesten en nummers met hun afbeeldingen terwijl je typt</string>
     <string name="results_already_in_your_library_right">Resultaten die al in je bibliotheek staan, direct na het topresultaat</string>
     <string name="settings_are_sorted_by_what_they">Instellingen zijn gesorteerd op wat ze doen.</string>
-    <string name="everything_about_how_prism_looks_is">Alles over hoe Prism eruitziet, staat onder Prism aanpassen</string>
-    <string name="gestures_and_buttons_in_controls_gestures">Gebaren en knoppen in Bediening &amp; gebaren</string>
+    <string name="everything_about_how_prism_looks_is">Alles over hoe Prism eruitziet, staat onder Maak het van jou</string>
+    <string name="gestures_and_buttons_in_controls_gestures">Gebaren en knoppen onder Luisteren</string>
     <string name="every_mobile_data_choice_on_one">Elke keuze voor mobiele data op één pagina</string>
-    <string name="android_auto_speakers_discord_and_last">Android Auto, speakers, Discord en Last.fm in Apparaten &amp; verbindingen</string>
+    <string name="android_auto_speakers_discord_and_last">Android Auto, speakers, Discord en Last.fm onder Verbindingen</string>
     <string name="performance_mode_at_the_top_for">Prestatiemodus, bovenaan, voor tragere telefoons</string>
     <string name="make_the_pieces_of_prism_yours">Maak de onderdelen van Prism van jou.</string>
     <string name="covers_as_circles_squircles_flowers_arches">Covers als cirkels, squircles, bloemen, bogen… voor nummers, albums, artiesten en de speler</string>
@@ -2624,20 +2624,20 @@
     <string name="from_your_requests">Op jullie verzoek.</string>
     <string name="rearrange_your_playlists_songs_rearrange_songs">Herschik de nummers in je playlists: ⋯ → Nummers herschikken</string>
     <string name="swipe_a_song_out_of_the">Veeg een nummer uit de wachtrij, veeg de minispeler omhoog om hem te openen</string>
-    <string name="the_light_from_the_playing_cover">Het licht uit de spelende cover: Kleur → Uit de cover</string>
+    <string name="the_light_from_the_playing_cover">Het licht uit de spelende cover: Thema &amp; kleuren → Het licht → Uit de cover</string>
     <string name="ribbons_a_progress_bar_with_strands">Linten, een voortgangsbalk met draden die erlangs stromen</string>
     <string name="a_bold_title_on_the_player">Een vette titel in de speler, hele albums in een playlist, en YouTube-links om te delen</string>
-    <string name="settings_playback_sound">Instellingen → Afspelen &amp; geluid.</string>
+    <string name="settings_playback_sound">Instellingen → Afspelen, en Instellingen → Geluid &amp; kwaliteit.</string>
     <string name="speed_pitch_slowed_sped_up_or">Snelheid &amp; toonhoogte: vertraagd, versneld of elke toonsoort, via ⋯ in de speler</string>
     <string name="how_songs_cross_in_a_crossfade">Hoe nummers overvloeien in een crossfade, een markering waar het volgende begint, en covers die in elkaar overvloeien</string>
     <string name="normalize_volume_s_level_and_albums">Het niveau van Volume normaliseren, en albums die blijven zoals ze zijn</string>
     <string name="your_own_equalizer_presets_shared_as">Je eigen equalizerpresets, gedeeld als code, één voor de auto en één voor je oordopjes</string>
     <string name="fades_for_the_sleep_timer_and">Fades voor de slaaptimer en voor pauzeren en afspelen</string>
     <string name="liked_how_prism_1_6_looked">Vond je Prism 1.6 mooi? Die stijl is terug, als keuze.</string>
-    <string name="the_classic_look_customize_prism_looks">De Look Klassiek: Prism aanpassen → Looks</string>
+    <string name="the_classic_look_customize_prism_looks">De Look Klassiek: Instellingen → Looks</string>
     <string name="or_only_its_icons_its_bold">Of alleen de iconen, de vette letters of de gewone bediening</string>
     <string name="the_player_s_buttons_apart_instead">De knoppen van de speler los in plaats van in een capsule</string>
-    <string name="last_fm_scrobbling_devices_connections_and">Last.fm-scrobbling (Apparaten &amp; verbindingen), en Replay voor elke periode</string>
+    <string name="last_fm_scrobbling_devices_connections_and">Last.fm-scrobbling (Accounts &amp; delen), en Replay voor elke periode</string>
     <string name="pick_several_songs_in_the_queue">Kies meerdere nummers in de wachtrij om ze samen te verplaatsen of te verwijderen, of vergrendel de volgorde</string>
     <string name="choose_what_goes_in_a_backup">Kies wat er in een back-up gaat</string>
     <string name="swipe_up_on_the_player_for">Veeg omhoog in de speler voor de wachtrij, vergrendel in staande stand, pauzeer als het geluid uit staat</string>
@@ -3794,7 +3794,7 @@
     <string name="the_ambient_frost_behind_home_search_all">Het Sfeer-matglas achter Home, Zoeken, Bibliotheek, Replay en Instellingen (Automatisch houdt de kleuren van de cover erin, Effen maakt het grijs, een tint kleurt het), die pagina\'s als matglas uit staat, en panelen en dialoogvensters. Niet de speler, en ook niet album-, artiest- en playlistpagina\'s, die de kleuren van hun afbeelding nemen.</string>
     <string name="home_has_the_background_glass_backgrounds_all">Home heeft de achtergrond %1$s (Glas &amp; achtergronden), getekend over deze kleur, dus die is daar maar een beetje te zien. Kies daar Sfeer om hem volledig te zien</string>
     <string name="secondary_text_artists_times_notes_dividers_all">Secundaire tekst (artiesten, tijden, notities), scheidingslijnen en omlijningen op pagina\'s, panelen en menu\'s. Gemiddeld en Hoog maken ook het accent steviger, zodat het beter leesbaar is. De eigen witte tekst van de speler over de cover blijft zoals hij is.</string>
-    <string name="the_accent_on_artist_album_and_all">Het accent op artiest-, album- en playlistpagina\'s, en in de menu\'s die je opent vanaf een nummer, album of artiest (lang indrukken of ⋯). Hun matglazen achtergronden nemen hoe dan ook de kleuren van de afbeelding (Glas &amp; achtergronden).</string>
+    <string name="the_accent_on_artist_album_and_all">Het accent op artiest-, album- en playlistpagina\'s, en in de menu\'s die je opent vanaf een nummer, album of artiest (lang indrukken of ⋯). Hun matglazen achtergronden nemen hoe dan ook de kleuren van de afbeelding (Glas).</string>
     <string name="tap_the_line_under_the_player_all">Tik op de regel onder de bediening van de speler (die zegt welk apparaat afspeelt) en kies een speaker, tv of receiver. Die moet op deze wifi zitten met Google Cast (Chromecast, Google TV, speakers met ingebouwde Cast) of DLNA / UPnP (soms media delen genoemd). Je wachtrij, songteksten en bediening blijven op de telefoon, en de volumeknoppen stellen het volume van de speaker in. De equalizer, Crossfade, Meezingen en video\'s horen bij de telefoon, dus die staan uit tijdens het casten.</string>
     <string name="nothing_new_from_your_artists_in_all">Niets nieuws van je artiesten in de afgelopen drie maanden. Prism kijkt om de paar dagen bij de artiesten die je een ster hebt gegeven, hebt opgeslagen en het meest afspeelt; de eerste keer leert het alleen wat er al uit is, dus nieuwe muziek verschijnt vanaf de volgende keer.</string>
     <string name="tunemymusic_copies_your_playlists_liked_songs_all">TuneMyMusic kopieert je playlists, inclusief Gelikete nummers, naar je YouTube Music-account. Het is dezelfde dienst die de eigen app van YouTube Music gebruikt voor overdrachten.</string>
@@ -4237,14 +4237,14 @@
     <string name="shaped_by_the_crossfade">In de vorm van de crossfade</string>
     <string name="crossfade_shape_keywords">crossfade overgang uitfaden infaden versmallen vorm curve scrubber zoekbalk voortgangsbalk</string>
     <string name="the_end_tapers_as_the_song_fades">Het einde loopt smal toe terwijl het nummer uitfadet</string>
-    <string name="crossfade_shape_info">Het einde van de balk krijgt de vorm van hoe het nummer uitfadet, en de balk van het volgende nummer groeit mee terwijl het infadet, volgens het type van je crossfade (Geluid → Crossfade). Alleen als er een crossfade aankomt: niet tussen de nummers van een album, tijdens het casten, bij afleveringen of livestreams. Met een automatische lengte verschijnt het zodra de overgang gepland is. De golfvorm en Linten houden in plaats daarvan het streepje.</string>
+    <string name="crossfade_shape_info">Het einde van de balk krijgt de vorm van hoe het nummer uitfadet, en de balk van het volgende nummer groeit mee terwijl het infadet, volgens het type van je crossfade (Afspelen → Crossfade). Alleen als er een crossfade aankomt: niet tussen de nummers van een album, tijdens het casten, bij afleveringen of livestreams. Met een automatische lengte verschijnt het zodra de overgang gepland is. De golfvorm en Linten houden in plaats daarvan het streepje.</string>
     <string name="imp_title">Je geschiedenis meenemen</string>
     <string name="imp_subtitle">Van Spotify, YouTube Music en Last.fm, gelezen op deze telefoon</string>
     <string name="imp_row_detail">Spotify, YouTube Music, Last.fm</string>
     <string name="imp_group_info">Neem je afgespeelde nummers, Gelikete nummers en playlists mee uit de gegevensdownload van Spotify, je YouTube Music-geschiedenis uit Google Takeout, of je Last.fm-scrobbles. De bestanden worden op deze telefoon gelezen; om elk nummer te vinden, zoekt Prism ernaar, zoals zijn zoekfunctie dat doet.</string>
     <string name="imp_keywords">importeren spotify gegevens downloaden takeout google youtube music geschiedenis last.fm scrobbles gelikete nummers playlists overzetten verhuizen</string>
     <string name="imp_bring_from">Meenemen van</string>
-    <string name="imp_bring_from_info">Spotify: op spotify.com, Account → Privacy → Je gegevens downloaden. Accountgegevens komen binnen een paar dagen (een jaar aan afgespeelde nummers, Gelikete nummers, playlists); de uitgebreide streaminggeschiedenis komt binnen 30 dagen (alles wat je hebt afgespeeld sinds je lid werd). Kies het zip-bestand waarin het komt, of de bestanden erin.\n\nYouTube Music: op takeout.google.com kies je YouTube en YouTube Music, alleen geschiedenis, als JSON. Kies het zip-bestand of watch-history.json.\n\nLast.fm: koppel het in Apparaten &amp; verbindingen, dan leest Prism je scrobbles.\n\nEr wordt niets verstuurd. Om elk nummer te vinden, zoekt Prism ernaar, zoals zijn zoekfunctie dat doet.</string>
+    <string name="imp_bring_from_info">Spotify: op spotify.com, Account → Privacy → Je gegevens downloaden. Accountgegevens komen binnen een paar dagen (een jaar aan afgespeelde nummers, Gelikete nummers, playlists); de uitgebreide streaminggeschiedenis komt binnen 30 dagen (alles wat je hebt afgespeeld sinds je lid werd). Kies het zip-bestand waarin het komt, of de bestanden erin.\n\nYouTube Music: op takeout.google.com kies je YouTube en YouTube Music, alleen geschiedenis, als JSON. Kies het zip-bestand of watch-history.json.\n\nLast.fm: koppel het in Instellingen → Accounts &amp; delen, dan leest Prism je scrobbles.\n\nEr wordt niets verstuurd. Om elk nummer te vinden, zoekt Prism ernaar, zoals zijn zoekfunctie dat doet.</string>
     <string name="imp_spotify_detail">De gegevensdownload: afgespeeld, Gelikete nummers, playlists</string>
     <string name="imp_takeout_detail">De kijkgeschiedenis uit Google Takeout</string>
     <string name="imp_lastfm_detail">Je scrobbles, als %1$s</string>
@@ -4349,7 +4349,7 @@
     <string name="explicit_show">Tonen</string>
     <string name="explicit_skip">Overslaan</string>
     <string name="explicit_hide">Verbergen</string>
-    <string name="explicit_skipped">Expliciete nummers worden weggelaten (Instellingen → Afspelen &amp; geluid)</string>
+    <string name="explicit_skipped">Expliciete nummers worden weggelaten (Instellingen → Afspelen)</string>
     <string name="explicit_none_left">Niets om af te spelen: elk nummer hier is expliciet</string>
     <string name="change_cover">Cover wijzigen</string>
     <string name="cover_changed">Cover gewijzigd</string>
@@ -4399,7 +4399,7 @@
     <string name="replay_last_weeks">Laatste %1$d weken</string>
     <string name="replay_last_days">Laatste %1$d dagen</string>
     <string name="replay_story_font">Letter van de verhalen</string>
-    <string name="replay_story_font_info">Hoe de verhalen van Replay en Rewind hun woorden zetten: in de posterletter van Prism, of in het lettertype dat je voor Prism hebt gekozen (Tekst).</string>
+    <string name="replay_story_font_info">Hoe de verhalen van Replay en Rewind hun woorden zetten: in de posterletter van Prism, of in het lettertype dat je voor Prism hebt gekozen (Tekst &amp; iconen).</string>
     <string name="replay_story_font_keywords">lettertype typografie font letter verhalen rewind wrapped</string>
     <string name="replay_story_font_poster">Posterletter</string>
     <string name="replay_story_font_own">Je lettertype</string>
@@ -4598,7 +4598,7 @@
         <item quantity="other">%1$s nummers om te kiezen</item>
     </plurals>
     <string name="ytlive_spotify_connect">Verbind Spotify om dit te gebruiken</string>
-    <string name="ytlive_spotify_recent_off">Uit: zet Onlangs afgespeeld aan op de Spotify-pagina</string>
+    <string name="ytlive_spotify_recent_off">Uit: zet Onlangs afgespeeld aan in Instellingen → Accounts &amp; delen → Spotify</string>
     <string name="ytlive_connection_on">Je geschiedenis wordt bijgehouden · Aan</string>
     <string name="ytlive_connection_off">Houd je geschiedenis bij · Uit</string>
     <string name="ytlive_connection_signed_out">Log in om je geschiedenis bij te houden</string>
@@ -4614,7 +4614,7 @@
     <string name="dj_in_the_queue_keywords">dj modus knop wachtrij kop boven ruimte verbergen</string>
     <string name="menu_lyrics_only_way">Blijft staan zolang het de enige weg van de speler naar de songtekst is</string>
     <string name="smart_downloads_offer_title">Songs downloaden voordat je ze nodig hebt?</string>
-    <string name="smart_downloads_offer_body">Slimme downloads houdt de songs die je waarschijnlijk gaat afspelen offline klaar: tot 1 GB, via Wi-Fi. Wijzig het altijd in Downloads, opslag &amp; data.</string>
+    <string name="smart_downloads_offer_body">Slimme downloads houdt de songs die je waarschijnlijk gaat afspelen offline klaar: tot 1 GB, via Wi-Fi. Wijzig het altijd in Instellingen → Downloads &amp; data.</string>
     <!-- 1.8.2 -->
     <string name="loading_list">\"%1$s\" laden…</string>
     <string name="song_details">Nummerdetails</string>
@@ -4855,7 +4855,7 @@
     <string name="glass_blur">Vervaging</string>
     <string name="glass_blur_info">Hoe ver de kleuren achter het glas uitspreiden. Kleine dingen zoals tekst houden achter Liquid Glass een vage omlijning, hoe hoog je dit ook zet; Matglas laat ze ook smelten. 100% is de eigen waarde van Prism. Daarboven is het zwaarder voor een tragere telefoon.</string>
     <string name="glass_frost">Matheid</string>
-    <string name="glass_frost_info">Hoe dik de sluier over het glas is: minder laat meer door van wat erachter zit, meer maakt het melkachtiger in de lichte modus en donkerder in de donkere modus, en beter leesbaar boven drukke afbeeldingen. 100% is de eigen waarde van Prism. Een tabbalk met een eigen achtergrond (Indeling, Tabbalk) houdt in plaats daarvan die achtergrond.</string>
+    <string name="glass_frost_info">Hoe dik de sluier over het glas is: minder laat meer door van wat erachter zit, meer maakt het melkachtiger in de lichte modus en donkerder in de donkere modus, en beter leesbaar boven drukke afbeeldingen. 100% is de eigen waarde van Prism. Een tabbalk met een eigen achtergrond (Tabbladen &amp; minispeler → Navigatiebalk) houdt in plaats daarvan die achtergrond.</string>
     <string name="glass_needs_android_12">Hiervoor is de vervaging nodig die met Android 12 kwam. Op deze telefoon zijn de balken ondoorzichtig, dus er valt niets te veranderen met een vervagings- of matheidsinstelling.</string>
     <string name="glass_on_more_of_the_screen">Glas op meer van het scherm</string>
     <string name="glass_on_more_of_the_screen_detail">Kaarten, chips, ronde knoppen en de balk Ongedaan maken</string>
@@ -5187,6 +5187,7 @@
     <string name="the_day_before">de dag ervoor</string>
     <string name="the_week_before">de week ervoor</string>
     <string name="root_app">App</string>
+    <string name="root_listening">Luisteren</string>
     <string name="root_theme_colors">Thema &amp; kleuren</string>
     <string name="root_text_icons">Tekst &amp; iconen</string>
     <string name="root_sound_quality">Geluid &amp; kwaliteit</string>

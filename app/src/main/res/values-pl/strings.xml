@@ -102,7 +102,7 @@
     <string name="save">Zapisz</string>
     <string name="cancel">Anuluj</string>
     <string name="share_2">Udostępnij: %1$s</string>
-    <string name="scan_it_in_prism_settings_customize">Zeskanuj w Prism: Ustawienia → Dostosuj Prism → Looki → Skanuj</string>
+    <string name="scan_it_in_prism_settings_customize">Zeskanuj w Prism: Ustawienia → Looki → Zdobądź Look</string>
     <string name="too_much_for_a_qr_code">Za dużo na kod QR: wyślij jako tekst lub plik</string>
     <string name="codes_leave_out_photos_and_your">Kody pomijają zdjęcia i twoją własną czcionkę; plik może je zawierać.</string>
     <string name="here_s_my_prism_look_share">Oto mój Look Prism „%1$s”. Udostępnij tę wiadomość do Prism, by go zobaczyć:\n\n%2$s</string>
@@ -652,7 +652,7 @@
     <string name="remove_this_color">Usuń ten kolor</string>
     <string name="changes">%1$s\n\nZmienia: %2$s</string>
     <string name="white_black_and_greys_give_prism">Biel, czerń i szarości dają Prism prosty wygląd: biel na ciemnych stronach, czerń na jasnych</string>
-    <string name="shown_softened_lighter_on_dark_pages">Pokazany złagodzony (jaśniejszy na ciemnych stronach, głębszy na jasnych). Wybierz „Dokładnie jak wybrany” na stronie Kolor, by użyć go bez zmian</string>
+    <string name="shown_softened_lighter_on_dark_pages">Pokazany złagodzony (jaśniejszy na ciemnych stronach, głębszy na jasnych). Wybierz „Dokładnie jak wybrany” w sekcji Akcent, by użyć go bez zmian</string>
     <string name="made_a_little_lighter_or_darker">Nieco rozjaśniony lub przyciemniony tam, gdzie tekst byłby nieczytelny</string>
     <string name="tint_strength">Siła odcienia</string>
     <string name="faint">Słaby</string>
@@ -1098,7 +1098,7 @@
     <string name="in_the_middle">Pośrodku</string>
     <string name="title_size">Rozmiar tytułu</string>
     <string name="title_weight">Grubość tytułu</string>
-    <string name="light_is_prism_s_own_and">Cienka to grubość Prism, zgodna z Tekst → Grubość. Pogrubiona pogrubia też nazwę wykonawcy.</string>
+    <string name="light_is_prism_s_own_and">Cienka to grubość Prism, zgodna z Tekst i ikony → Grubość. Pogrubiona pogrubia też nazwę wykonawcy.</string>
     <string name="scrolling_titles">Przewijane tytuły</string>
     <string name="a_long_title_scrolls_across_off">Długi tytuł przewija się (po wyłączeniu kończy się …)</string>
     <string name="times_under_the_progress_bar">Czas pod paskiem postępu</string>
@@ -1963,7 +1963,7 @@
     <string name="refractive_bars_and_controls">Załamujące światło paski i przyciski</string>
     <string name="soft_blur_no_refraction">Delikatne rozmycie, bez załamania</string>
     <string name="pages_frosted_with_their_picture">Strony matowe od własnego obrazu</string>
-    <string name="artist_album_and_playlist_pages_sit">Strony wykonawców, albumów i playlist leżą na matowym szkle z ich obrazu; Główna, Biblioteka, Szukaj i Ustawienia – na szronie z tego, co gra. To, czy strony biorą kolor z obrazu, ustawisz w Kolor.</string>
+    <string name="artist_album_and_playlist_pages_sit">Strony wykonawców, albumów i playlist leżą na matowym szkle z ich obrazu; Główna, Biblioteka, Szukaj i Ustawienia – na szronie z tego, co gra. To, czy strony biorą kolor z obrazu, ustawisz w Strony.</string>
     <string name="calmer_quicker_animations">Spokojniejsze, szybsze animacje</string>
     <string name="no_drifting_backgrounds_no_artwork_bounce">Bez dryfujących teł, bez odbijania okładek, szybsze przejścia.</string>
     <string name="that_font_couldn_t_be_used">Nie można użyć tej czcionki</string>
@@ -2005,7 +2005,7 @@
     <string name="more_room_swipe_down_from_the">Więcej miejsca; przesuń od góry w dół, by go zobaczyć</string>
     <string name="the_clock_battery_and_notification_icons">Zegar, bateria i ikony powiadomień na górze są ukryte, gdy Prism jest otwarty. Przesuń od górnej krawędzi w dół, a pojawią się na chwilę. Tryb immersyjny i wideo na pełnym ekranie ukrywają też pozostałe paski, jak wcześniej.</string>
     <string name="never_shows_only_the_icons_words">Nigdy pokazuje tylko ikony; Tylko słowa pokazuje tylko nazwy.</string>
-    <string name="see_through_lets_the_page_show">Prześwitujący pozwala zobaczyć stronę przez pasek; Pełny ją zasłania. Samo rozmycie pochodzi ze Szkła (Dostosuj Prism → Szkło i tła).</string>
+    <string name="see_through_lets_the_page_show">Prześwitujący pozwala zobaczyć stronę przez pasek; Pełny ją zasłania. Samo rozmycie pochodzi ze Szkła (Motyw i kolory → Szkło).</string>
     <string name="slims_down_as_you_scroll">Zwęża się podczas przewijania</string>
     <string name="swipe_sideways_on_a_tab_s">Przesuń na boki na stronie karty</string>
     <string name="a_sideways_swipe_on_a_tab">Przesunięcie na boki na stronie karty przechodzi do sąsiedniej karty. Wiersze przewijane na boki (i własne strony Biblioteki) zachowują swoje przesunięcia.</string>
@@ -2034,7 +2034,7 @@
     <string name="played_now_playing_and_up_next">„Odtworzone”, „Teraz odtwarzane” i „Następne”</string>
     <string name="off_the_queue_is_one_list">Po wyłączeniu kolejka to jedna lista utworów, od odtworzonych do nadchodzących.</string>
     <string name="moving_artwork_when_a_song_has">Ruchoma grafika, gdy utwór ją ma</string>
-    <string name="motion_artwork_and_video_covers_turn">Ruchome grafiki i okładki wideo. Wyłącz je dla jednego utworu w menu ⋯ odtwarzacza. To, czy grają przy danych mobilnych, i te zapisane na telefonie znajdziesz w Pobrane, pamięć i dane.</string>
+    <string name="motion_artwork_and_video_covers_turn">Ruchome grafiki i okładki wideo. Wyłącz je dla jednego utworu w menu ⋯ odtwarzacza. To, czy grają przy danych mobilnych, i te zapisane na telefonie znajdziesz w Pobrane i dane.</string>
     <string name="the_animated_cover_plays_behind_everything">Animowana okładka gra za wszystkim</string>
     <string name="the_moving_artwork_fills_the_whole">Ruchoma grafika wypełnia cały odtwarzacz, przyciemniona pod sterowaniem, a sama okładka pokazuje nieruchomy obraz. Nie przy grafice od krawędzi do krawędzi, która już pokazuje ją na całość.</string>
     <string name="the_cover_fills_the_screen_lyrics">Okładka wypełnia ekran, tekst na niej</string>
@@ -2137,7 +2137,7 @@
     <string name="needed_for_sing">Potrzebne do Śpiewaj · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Usuwa głos wokalisty z utworów, na twoim telefonie, do karaoke. Pobierane raz.</string>
     <string name="so_sing_starts_at_once_when">By Śpiewaj ruszało od razu po włączeniu</string>
-    <string name="the_playing_song_and_the_next">Odtwarzany i następny utwór są rozdzielane w tle, nawet gdy Śpiewaj jest wyłączone. Zużywa to więcej baterii podczas grania muzyki; przy danych mobilnych działa według Pobrane, pamięć i dane → Dane mobilne.</string>
+    <string name="the_playing_song_and_the_next">Odtwarzany i następny utwór są rozdzielane w tle, nawet gdy Śpiewaj jest wyłączone. Zużywa to więcej baterii podczas grania muzyki; przy danych mobilnych działa według Pobrane i dane → Dane mobilne.</string>
     <string name="using">Używane: %1$s</string>
     <string name="songs_are_worked_out_again_the">Utwory zostaną przygotowane ponownie, gdy następnym razem je zaśpiewasz.</string>
     <string name="word_by_word_first_then_by">Najpierw słowo po słowie, potem wierszami</string>
@@ -2495,7 +2495,7 @@
     <string name="allow_notifications">Zezwól na powiadomienia</string>
     <string name="turn_them_on_in_android_s">Włącz je w ustawieniach Androida dla Prism.</string>
     <string name="your_starting_point_made_from_what">Twój punkt startowy, stworzony z tego, czego słuchasz.</string>
-    <string name="the_replay_card_at_the_top">Karta Replay na górze: twój rok do tej pory (wygląd wybierzesz w Ustawienia → Dostosuj Prism → Główna i Biblioteka)</string>
+    <string name="the_replay_card_at_the_top">Karta Replay na górze: twój rok do tej pory (wygląd wybierzesz w Ustawienia → Główna i Biblioteka → Karta Replay)</string>
     <string name="quick_picks_songs_around_the_artists">Szybki wybór: utwory wokół wykonawców, których słuchasz; przesuń, by zobaczyć więcej</string>
     <string name="made_for_you_daily_mixes_your">Stworzone dla ciebie: Daily Mix, miks na porę dnia i Release Radar</string>
     <string name="the_grid_button_at_the_top">Przycisk siatki na górze układa sekcje ekranu głównego</string>
@@ -2516,12 +2516,12 @@
     <string name="let_prism_mix_your_music_songs">Pozwól Prism miksować twoją muzykę: utwory przechodzą jeden w drugi, w tonacji i do rytmu.</string>
     <string name="in_the_queue_tap_dj_then">W kolejce kliknij DJ, potem wybierz Równo, Rozkręcenie lub Wyciszenie</string>
     <string name="long_press_an_album_or_playlist">Przytrzymaj album lub playlistę → Odtwórz jako set DJ</string>
-    <string name="crossfade_settings_playback_sound_blends_any">Przenikanie (Ustawienia → Odtwarzanie i dźwięk) łączy dowolne dwa utwory</string>
+    <string name="crossfade_settings_playback_sound_blends_any">Przenikanie (Ustawienia → Odtwarzanie) łączy dowolne dwa utwory</string>
     <string name="mixes_made_on_your_phone_from">Miksy tworzone na twoim telefonie z tego, czego słuchasz. Nic o twoim słuchaniu go nie opuszcza.</string>
     <string name="daily_mixes_group_the_artists_you">Daily Mix grupują słuchanych wykonawców według tego, co do siebie pasuje</string>
     <string name="release_radar_finds_new_music_from">Release Radar znajduje nową muzykę obserwowanych wykonawców</string>
     <string name="made_for_you_also_has_mixes">Stworzone dla ciebie ma też miksy z twojej muzyki i W kółko: powstają tylko z twoich odtworzeń i działają offline</string>
-    <string name="when_the_queue_ends_prism_s">Gdy kolejka się skończy, radio Prism wybiera z twojej muzyki (Ustawienia → Odtwarzanie i dźwięk → Autoodtwarzanie z)</string>
+    <string name="when_the_queue_ends_prism_s">Gdy kolejka się skończy, radio Prism wybiera z twojej muzyki (Ustawienia → Odtwarzanie → Gdy kolejka się skończy)</string>
     <string name="tap_shuffle_twice_on_a_playlist">Kliknij losowanie dwa razy na playliście, by włączyć Inteligentne losowanie: wskakują nowe utwory</string>
     <string name="not_for_me_and_leave_out">„Nie dla mnie” i „Pomiń w moim guście” trzymają rzeczy z daleka</string>
     <string name="find_anything_in_prism_music_or">Znajdź wszystko w Prism Music albo rozpoznaj utwór grający wokół ciebie.</string>
@@ -2545,11 +2545,11 @@
     <string name="control_prism_from_a_browser_on">Steruj Prism z przeglądarki na komputerze</string>
     <string name="hand_what_s_playing_to_another">Przekaż to, co gra, na inny telefon lub tablet z Prism</string>
     <string name="prism_takes_its_color_from_what">Prism bierze kolor z tego, co gra. Zmień go, ile chcesz.</string>
-    <string name="appearance_the_spectrum_s_colors_or">Wygląd: kolory Widma (lub zwykła biel), twój akcent, czcionki, ikony i tła</string>
-    <string name="layout_the_tab_bar_your_tabs">Układ: pasek kart, twoje karty i miniodtwarzacz</string>
+    <string name="appearance_the_spectrum_s_colors_or">Motyw i kolory, Tekst i ikony: kolory Światła (lub zwykła biel), twój akcent, czcionki, ikony i tła</string>
+    <string name="layout_the_tab_bar_your_tabs">Karty i miniodtwarzacz: pasek kart, twoje karty i miniodtwarzacz</string>
     <string name="player_its_background_the_cover_and">Odtwarzacz: jego tło, okładka i to, co na niej widać</string>
     <string name="search_settings_from_the_box_at">Przeszukuj Ustawienia z pola na górze Ustawień</string>
-    <string name="settings_customize_prism_color_every_choice">Ustawienia → Dostosuj Prism → Kolor: każdy wybór pokazuje, jak wygląda, zanim go wybierzesz.</string>
+    <string name="settings_customize_prism_color_every_choice">Ustawienia → Motyw i kolory: każdy wybór pokazuje, jak wygląda, zanim go wybierzesz.</string>
     <string name="the_light_12_presets_white_black">Światło: 12 gotowych zestawów, Biel (Czerń w trybie jasnym) lub własne kolory</string>
     <string name="your_accent_any_color_from_a">Twój akcent: dowolny kolor, z koła, kodu lub pipety</string>
     <string name="the_page_background_plain_tinted_with">Tło strony: zwykłe, zabarwione twoim akcentem lub własny kolor</string>
@@ -2560,14 +2560,14 @@
     <string name="pin_prism_playlists_to_home_customize">Przypinaj playlisty Prism do ekranu głównego (Dostosuj ekran główny → Przypięte playlisty)</string>
     <string name="song_credits_in_any_song_s">Twórcy utworu w menu każdego utworu</string>
     <string name="see_which_downloads_failed_and_why">Zobacz, które pobierania się nie udały i dlaczego</string>
-    <string name="settings_customize_prism_looks_your_whole">Ustawienia → Dostosuj Prism → Looki: cały twój wygląd, zapisywany, przełączany i udostępniany jednym kliknięciem.</string>
+    <string name="settings_customize_prism_looks_your_whole">Ustawienia → Looki: cały twój wygląd, zapisywany, przełączany i udostępniany jednym kliknięciem.</string>
     <string name="try_prism_s_own_paper_midnight">Wypróbuj Looki Prism: Papier, Północ, Neon, Miękki, Studio i Winyl</string>
     <string name="save_yours_update_it_when_you">Zapisz swój, aktualizuj go po zmianach i udostępniaj jako kod QR, kod lub plik</string>
     <string name="browse_looks_people_shared_under_from">Przeglądaj Looki udostępnione przez innych w Od społeczności</string>
     <string name="one_look_by_day_and_another">Jeden Look za dnia, inny w nocy, o wschodzie i zachodzie słońca</string>
     <string name="every_look_page_shows_home_the">Każda strona wyglądu pokazuje ekran główny, odtwarzacz i tekst w trakcie zmian; Cofnij wycofuje zmianę</string>
-    <string name="customize_by_tapping_hold_the_settings">Dostosuj, klikając: przytrzymaj kartę Ustawienia albo włącz to w Wyglądzie, potem kliknij miniodtwarzacz, pasek kart, odtwarzacz lub sekcję ekranu głównego</string>
-    <string name="settings_customize_prism_player_or_player">Ustawienia → Dostosuj Prism → Odtwarzacz albo ⋯ → Ustawienia odtwarzacza w samym odtwarzaczu.</string>
+    <string name="customize_by_tapping_hold_the_settings">Dostosuj, klikając: przytrzymaj kartę Ustawienia albo włącz to w Lookach, potem kliknij miniodtwarzacz, pasek kart, odtwarzacz lub sekcję ekranu głównego</string>
+    <string name="settings_customize_prism_player_or_player">Ustawienia → Odtwarzacz albo ⋯ → Ustawienia odtwarzacza w samym odtwarzaczu.</string>
     <string name="layouts_standard_a_big_cover_lyrics">Układy: Standardowy, duża Okładka, Najpierw tekst, Minimalny, Winyl lub Kaseta (kręcą się w trakcie grania)</string>
     <string name="a_visualizer_if_you_d_like">Wizualizator, jeśli chcesz: słupki, fala, pierścień, puls lub poświata (wyłączony, dopóki go nie wybierzesz)</string>
     <string name="pick_the_buttons_under_the_controls">Wybierz przyciski pod sterowaniem (jednym z nich jest prędkość) i dwa obok odtwarzania w powiadomieniu i samochodzie</string>
@@ -2578,7 +2578,7 @@
     <string name="prism_tells_android_which_of_its">Prism mówi Androidowi, które swoje części przygotować wcześniej, a aktualizacje z banera przychodzą gotowe, więc już nie zwalniają</string>
     <string name="less_work_while_lists_scroll_while">Mniej pracy przy przewijaniu list, pisaniu w Szukaj i odtwarzaniu utworu</string>
     <string name="if_something_still_stutters_settings_backup">Jeśli coś nadal się zacina, Ustawienia → Kopia zapasowa i informacje → Diagnostyka zapisuje, gdzie to się stało, do udostępnienia</string>
-    <string name="settings_customize_prism_lyrics_how_your">Ustawienia → Dostosuj Prism → Tekst: jak wygląda tekst, z przykładem każdego wyboru.</string>
+    <string name="settings_customize_prism_lyrics_how_your">Ustawienia → Tekst i Śpiewaj: jak wygląda tekst, z przykładem każdego wyboru.</string>
     <string name="six_styles_prism_classic_karaoke_bold">Sześć stylów: Prism, Klasyczne karaoke, Wyrazista karta, Poświata, Maszyna do pisania i Spokój</string>
     <string name="the_sung_line_and_the_others">Śpiewany wiersz i pozostałe w bieli, twoim świetle, akcencie, kolorze okładki lub własnym</string>
     <string name="weight_line_spacing_how_dim_the">Grubość, odstęp między wierszami, przyciemnienie pozostałych, siła rozmycia, wielkie litery i cień</string>
@@ -2588,8 +2588,8 @@
     <string name="a_few_things_you_asked_for">Kilka rzeczy, o które prosiliście.</string>
     <string name="library_history_what_you_played_by">Biblioteka → Historia: czego słuchałeś, dzień po dniu, na tym telefonie lub na koncie</string>
     <string name="liked_a_song_and_its_video">Polubiłeś utwór i jego wideo? Pokażą się raz, jako utwór</string>
-    <string name="prism_s_own_volume_apart_from">Własna głośność Prism, niezależna od telefonu (Ustawienia → Dostosuj Prism → Odtwarzacz)</string>
-    <string name="hide_the_status_bar_customize_prism">Ukryj pasek stanu (Dostosuj Prism → Karty i miniodtwarzacz)</string>
+    <string name="prism_s_own_volume_apart_from">Własna głośność Prism, niezależna od telefonu (Ustawienia → Odtwarzacz)</string>
+    <string name="hide_the_status_bar_customize_prism">Ukryj pasek stanu (Ustawienia → Karty i miniodtwarzacz)</string>
     <string name="settings_pages_are_tidier_tap_beside">Strony ustawień są bardziej uporządkowane: kliknij ⓘ obok ustawienia, by zobaczyć szczegóły</string>
     <string name="library_s_tiles_the_edit_button">Kafelki Biblioteki: przycisk edycji na górze Biblioteki</string>
     <string name="customize_home_the_button_at_the">Dostosuj ekran główny (przycisk na górze ekranu głównego) ma więcej opcji.</string>
@@ -2610,10 +2610,10 @@
     <string name="artists_and_songs_with_their_pictures">Wykonawcy i utwory ze zdjęciami podczas pisania</string>
     <string name="results_already_in_your_library_right">Wyniki z twojej biblioteki tuż po najlepszym</string>
     <string name="settings_are_sorted_by_what_they">Ustawienia są pogrupowane według tego, co robią.</string>
-    <string name="everything_about_how_prism_looks_is">Wszystko o wyglądzie Prism jest w Dostosuj Prism</string>
-    <string name="gestures_and_buttons_in_controls_gestures">Gesty i przyciski w Sterowanie i gesty</string>
+    <string name="everything_about_how_prism_looks_is">Wszystko o wyglądzie Prism jest w Na twój sposób</string>
+    <string name="gestures_and_buttons_in_controls_gestures">Gesty i przyciski w Słuchanie</string>
     <string name="every_mobile_data_choice_on_one">Wszystkie opcje danych mobilnych na jednej stronie</string>
-    <string name="android_auto_speakers_discord_and_last">Android Auto, głośniki, Discord i Last.fm w Urządzenia i połączenia</string>
+    <string name="android_auto_speakers_discord_and_last">Android Auto, głośniki, Discord i Last.fm w Połączenia</string>
     <string name="performance_mode_at_the_top_for">Tryb wydajności na górze, dla wolniejszych telefonów</string>
     <string name="make_the_pieces_of_prism_yours">Dopasuj każdy element Prism do siebie.</string>
     <string name="covers_as_circles_squircles_flowers_arches">Okładki jako koła, squircle, kwiaty, łuki… dla utworów, albumów, wykonawców i odtwarzacza</string>
@@ -2624,20 +2624,20 @@
     <string name="from_your_requests">Z waszych próśb.</string>
     <string name="rearrange_your_playlists_songs_rearrange_songs">Zmieniaj kolejność utworów w playlistach: ⋯ → Zmień kolejność utworów</string>
     <string name="swipe_a_song_out_of_the">Przesuń utwór, by usunąć go z kolejki; przesuń miniodtwarzacz w górę, by go otworzyć</string>
-    <string name="the_light_from_the_playing_cover">Światło z okładki odtwarzanego utworu: Kolor → Z okładki</string>
+    <string name="the_light_from_the_playing_cover">Światło z okładki odtwarzanego utworu: Motyw i kolory → Światło → Z okładki</string>
     <string name="ribbons_a_progress_bar_with_strands">Wstęgi: pasek postępu z płynącymi wzdłuż pasmami</string>
     <string name="a_bold_title_on_the_player">Pogrubiony tytuł w odtwarzaczu, całe albumy do playlisty i linki YouTube do udostępniania</string>
-    <string name="settings_playback_sound">Ustawienia → Odtwarzanie i dźwięk.</string>
+    <string name="settings_playback_sound">Ustawienia → Odtwarzanie oraz Ustawienia → Dźwięk i jakość.</string>
     <string name="speed_pitch_slowed_sped_up_or">Prędkość i wysokość: spowolnione, przyspieszone lub dowolna tonacja, z ⋯ odtwarzacza</string>
     <string name="how_songs_cross_in_a_crossfade">Jak utwory się przenikają, znacznik wejścia następnego i przenikające się okładki</string>
     <string name="normalize_volume_s_level_and_albums">Poziom Normalizacji głośności i albumy bez zmian</string>
     <string name="your_own_equalizer_presets_shared_as">Własne ustawienia korektora, udostępniane jako kody, jedno do samochodu, drugie do słuchawek</string>
     <string name="fades_for_the_sleep_timer_and">Wyciszanie przy wyłączniku czasowym oraz przy pauzie i wznawianiu</string>
     <string name="liked_how_prism_1_6_looked">Podobał ci się wygląd Prism 1.6? Wraca, jako opcja.</string>
-    <string name="the_classic_look_customize_prism_looks">Klasyczny Look: Dostosuj Prism → Looki</string>
+    <string name="the_classic_look_customize_prism_looks">Klasyczny Look: Ustawienia → Looki</string>
     <string name="or_only_its_icons_its_bold">Albo tylko jego ikony, pogrubione pismo lub proste przyciski</string>
     <string name="the_player_s_buttons_apart_instead">Przyciski odtwarzacza osobno zamiast w kapsule</string>
-    <string name="last_fm_scrobbling_devices_connections_and">Scrobblowanie Last.fm (Urządzenia i połączenia) i Replay za dowolne daty</string>
+    <string name="last_fm_scrobbling_devices_connections_and">Scrobblowanie Last.fm (Konta i udostępnianie) i Replay za dowolne daty</string>
     <string name="pick_several_songs_in_the_queue">Zaznacz kilka utworów w kolejce, by przenieść lub usunąć je razem, albo zablokuj jej kolejność</string>
     <string name="choose_what_goes_in_a_backup">Wybierz, co trafia do kopii zapasowej</string>
     <string name="swipe_up_on_the_player_for">Przesuń w górę w odtwarzaczu, by zobaczyć kolejkę, blokada w pionie, pauza po wyciszeniu</string>
@@ -3890,7 +3890,7 @@
     <string name="the_ambient_frost_behind_home_search_all">Szron Ambient za ekranem Główna, Szukaj, Biblioteka, Replay i Ustawienia (Automatycznie zachowuje w nim kolory okładki, Zwykłe czyni go szarym, odcień go barwi), te strony, gdy matowe szkło jest wyłączone, oraz panele i okna dialogowe. Nie odtwarzacz ani strony albumów, wykonawców i playlist, które biorą kolory swojego obrazu.</string>
     <string name="home_has_the_background_glass_backgrounds_all">Ekran główny ma tło %1$s (Szkło i tła), rysowane na tym kolorze, więc widać go tam tylko trochę. Wybierz tam Ambient, by zobaczyć go w pełni</string>
     <string name="secondary_text_artists_times_notes_dividers_all">Tekst pomocniczy (wykonawcy, czasy, uwagi), separatory i obrysy na stronach, w panelach i menu. Średni i Wysoki wzmacniają też akcent, by był czytelniejszy. Biały tekst odtwarzacza na okładce zostaje bez zmian.</string>
-    <string name="the_accent_on_artist_album_and_all">Akcent na stronach wykonawców, albumów i playlist oraz w menu otwieranych z utworu, albumu lub wykonawcy (przytrzymanie lub ⋯). Ich matowe tła i tak biorą kolory obrazu (Szkło i tła).</string>
+    <string name="the_accent_on_artist_album_and_all">Akcent na stronach wykonawców, albumów i playlist oraz w menu otwieranych z utworu, albumu lub wykonawcy (przytrzymanie lub ⋯). Ich matowe tła i tak biorą kolory obrazu (Szkło).</string>
     <string name="tap_the_line_under_the_player_all">Kliknij wiersz pod sterowaniem odtwarzacza (mówi, które urządzenie gra) i wybierz głośnik, telewizor lub amplituner. Musi być w tej sieci Wi-Fi z Google Cast (Chromecast, Google TV, głośniki z wbudowanym Cast) lub DLNA / UPnP (czasem zwane udostępnianiem multimediów). Kolejka, tekst i sterowanie zostają na telefonie, a jego przyciski głośności ustawiają głośność głośnika. Korektor, Przenikanie, Śpiewaj i wideo działają tylko na telefonie, więc są wyłączone podczas przesyłania.</string>
     <string name="nothing_new_from_your_artists_in_all">Brak nowości od twoich wykonawców z ostatnich trzech miesięcy. Prism co kilka dni sprawdza wykonawców oznaczonych gwiazdką, zapisanych i najczęściej słuchanych; pierwsze sprawdzenie tylko poznaje to, co już wyszło, więc nowa muzyka pojawi się od następnego.</string>
     <string name="tunemymusic_copies_your_playlists_liked_songs_all">TuneMyMusic kopiuje twoje playlisty, łącznie z Polubionymi utworami, na twoje konto YouTube Music. To ten sam serwis, którego używa do przenoszenia sama aplikacja YouTube Music.</string>
@@ -4337,14 +4337,14 @@
     <string name="shaped_by_the_crossfade">W kształcie przenikania</string>
     <string name="crossfade_shape_keywords">przenikanie płynne przejście wyciszanie narastanie zwężenie kształt krzywa pasek przewijania pasek postępu</string>
     <string name="the_end_tapers_as_the_song_fades">Koniec zwęża się, gdy utwór cichnie</string>
-    <string name="crossfade_shape_info">Koniec paska przyjmuje kształt tego, jak utwór cichnie, a pasek następnego utworu narasta, gdy ten się pojawia, zgodnie z rodzajem twojego przenikania (Dźwięk → Przenikanie). Tylko gdy zbliża się przenikanie: nie między utworami albumu, podczas przesyłania, w odcinkach ani transmisjach na żywo. Przy automatycznej długości pojawia się, gdy przejście zostanie zaplanowane. Przebieg fali i Wstęgi zamiast tego zachowują znacznik.</string>
+    <string name="crossfade_shape_info">Koniec paska przyjmuje kształt tego, jak utwór cichnie, a pasek następnego utworu narasta, gdy ten się pojawia, zgodnie z rodzajem twojego przenikania (Odtwarzanie → Przenikanie). Tylko gdy zbliża się przenikanie: nie między utworami albumu, podczas przesyłania, w odcinkach ani transmisjach na żywo. Przy automatycznej długości pojawia się, gdy przejście zostanie zaplanowane. Przebieg fali i Wstęgi zamiast tego zachowują znacznik.</string>
     <string name="imp_title">Przenieś swoją historię</string>
     <string name="imp_subtitle">Ze Spotify, YouTube Music i Last.fm, odczytane w tym telefonie</string>
     <string name="imp_row_detail">Spotify, YouTube Music, Last.fm</string>
     <string name="imp_group_info">Przenieś swoje odtworzenia, Polubione utwory i playlisty z pobranych danych Spotify, historię YouTube Music z Google Takeout albo scrobble z Last.fm. Pliki są odczytywane w tym telefonie; aby znaleźć każdy utwór, Prism go wyszukuje, tak jak robi to jego wyszukiwarka.</string>
     <string name="imp_keywords">import importuj spotify pobierz dane takeout google youtube music historia last.fm scrobble polubione utwory playlisty przenieś przeniesienie</string>
     <string name="imp_bring_from">Przenieś z</string>
-    <string name="imp_bring_from_info">Spotify: na spotify.com, Konto → Prywatność → Pobierz swoje dane. Dane konta przychodzą w ciągu kilku dni (rok odtworzeń, Polubione utwory, playlisty); rozszerzona historia odtwarzania przychodzi w ciągu maksymalnie 30 dni (każde odtworzenie, odkąd dołączyłeś(-aś)). Wybierz plik zip, w którym przyjdzie, albo pliki w nim.\n\nYouTube Music: na takeout.google.com wybierz YouTube i YouTube Music, tylko historię, w formacie JSON. Wybierz plik zip albo watch-history.json.\n\nLast.fm: połącz je w Urządzeniach i połączeniach, a Prism odczyta twoje scrobble.\n\nNic nie jest nigdzie wysyłane. Aby znaleźć każdy utwór, Prism go wyszukuje, tak jak robi to jego wyszukiwarka.</string>
+    <string name="imp_bring_from_info">Spotify: na spotify.com, Konto → Prywatność → Pobierz swoje dane. Dane konta przychodzą w ciągu kilku dni (rok odtworzeń, Polubione utwory, playlisty); rozszerzona historia odtwarzania przychodzi w ciągu maksymalnie 30 dni (każde odtworzenie, odkąd dołączyłeś(-aś)). Wybierz plik zip, w którym przyjdzie, albo pliki w nim.\n\nYouTube Music: na takeout.google.com wybierz YouTube i YouTube Music, tylko historię, w formacie JSON. Wybierz plik zip albo watch-history.json.\n\nLast.fm: połącz je w Ustawienia → Konta i udostępnianie, a Prism odczyta twoje scrobble.\n\nNic nie jest nigdzie wysyłane. Aby znaleźć każdy utwór, Prism go wyszukuje, tak jak robi to jego wyszukiwarka.</string>
     <string name="imp_spotify_detail">Pobrane dane: odtworzenia, Polubione utwory, playlisty</string>
     <string name="imp_takeout_detail">Historia oglądania z Google Takeout</string>
     <string name="imp_lastfm_detail">Twoje scrobble, jako %1$s</string>
@@ -4449,7 +4449,7 @@
     <string name="explicit_show">Pokazuj</string>
     <string name="explicit_skip">Pomijaj</string>
     <string name="explicit_hide">Ukrywaj</string>
-    <string name="explicit_skipped">Utwory dla dorosłych są pomijane (Ustawienia → Odtwarzanie i dźwięk)</string>
+    <string name="explicit_skipped">Utwory dla dorosłych są pomijane (Ustawienia → Odtwarzanie)</string>
     <string name="explicit_none_left">Nie ma czego odtworzyć: wszystkie utwory tutaj są dla dorosłych</string>
     <string name="change_cover">Zmień okładkę</string>
     <string name="cover_changed">Okładka zmieniona</string>
@@ -4499,7 +4499,7 @@
     <string name="replay_last_weeks">Ostatnie %1$d tyg.</string>
     <string name="replay_last_days">Ostatnie %1$d dni</string>
     <string name="replay_story_font">Krój historii</string>
-    <string name="replay_story_font_info">Jak historie Replay i Rewind składają słowa: plakatowym krojem Prism albo czcionką wybraną dla Prism (Tekst).</string>
+    <string name="replay_story_font_info">Jak historie Replay i Rewind składają słowa: plakatowym krojem Prism albo czcionką wybraną dla Prism (Tekst i ikony).</string>
     <string name="replay_story_font_keywords">czcionka typografia krój pisma font historie rewind wrapped</string>
     <string name="replay_story_font_poster">Krój plakatowy</string>
     <string name="replay_story_font_own">Twoja czcionka</string>
@@ -4720,7 +4720,7 @@
         <item quantity="other">Utwory do wybrania: %1$s</item>
     </plurals>
     <string name="ytlive_spotify_connect">Połącz Spotify, aby z tego korzystać</string>
-    <string name="ytlive_spotify_recent_off">Wyłączone: włącz Ostatnio odtwarzane na stronie Spotify</string>
+    <string name="ytlive_spotify_recent_off">Wyłączone: włącz Ostatnio odtwarzane w Ustawienia → Konta i udostępnianie → Spotify</string>
     <string name="ytlive_connection_on">Twoja historia na bieżąco · Włączone</string>
     <string name="ytlive_connection_off">Utrzymuj historię na bieżąco · Wyłączone</string>
     <string name="ytlive_connection_signed_out">Zaloguj się, aby utrzymywać historię na bieżąco</string>
@@ -4738,7 +4738,7 @@
     <string name="dj_in_the_queue_keywords">dj tryb przycisk kolejka nagłówek góra miejsce ukryj</string>
     <string name="menu_lyrics_only_way">Zostaje, dopóki to jedyna droga odtwarzacza do tekstu</string>
     <string name="smart_downloads_offer_title">Pobrać piosenki, zanim będą potrzebne?</string>
-    <string name="smart_downloads_offer_body">Inteligentne pobieranie trzyma gotowe offline piosenki, które prawdopodobnie odtworzysz: do 1 GB, przez Wi-Fi. Zmienisz to w każdej chwili w Pobrane, pamięć i dane.</string>
+    <string name="smart_downloads_offer_body">Inteligentne pobieranie trzyma gotowe offline piosenki, które prawdopodobnie odtworzysz: do 1 GB, przez Wi-Fi. Zmienisz to w każdej chwili w Ustawienia → Pobrane i dane.</string>
     <!-- 1.8.2 -->
     <string name="loading_list">Wczytywanie „%1$s”…</string>
     <string name="song_details">Informacje o utworze</string>
@@ -4983,7 +4983,7 @@
     <string name="glass_blur">Rozmycie</string>
     <string name="glass_blur_info">Jak daleko rozlewają się kolory za szkłem. Drobne rzeczy, jak tekst, zachowują słaby kontur za Liquid Glass bez względu na wartość; Matowe szkło rozpuszcza i je. 100% to ustawienie Prism. Powyżej tego wolniejszy telefon ma więcej pracy.</string>
     <string name="glass_frost">Mat</string>
-    <string name="glass_frost_info">Jak gęsta jest zasłona nad szkłem: mniej przepuszcza więcej tego, co za nim, więcej robi je mlecznym w jasnym motywie i ciemniejszym w ciemnym, a tekst łatwiej czytać na tle pstrokatych obrazów. 100% to ustawienie Prism. Pasek kart z własnym tłem (Układ, Pasek kart) zachowuje to tło.</string>
+    <string name="glass_frost_info">Jak gęsta jest zasłona nad szkłem: mniej przepuszcza więcej tego, co za nim, więcej robi je mlecznym w jasnym motywie i ciemniejszym w ciemnym, a tekst łatwiej czytać na tle pstrokatych obrazów. 100% to ustawienie Prism. Pasek kart z własnym tłem (Karty i miniodtwarzacz → Pasek nawigacji) zachowuje to tło.</string>
     <string name="glass_needs_android_12">To wymaga rozmycia, które pojawiło się w Androidzie 12. Na tym telefonie paski są pełne, więc ustawienia rozmycia i matu nie mają czego zmieniać.</string>
     <string name="glass_on_more_of_the_screen">Szkło na większej części ekranu</string>
     <string name="glass_on_more_of_the_screen_detail">Karty, chipy, okrągłe przyciski i pasek Cofnij</string>
@@ -5331,6 +5331,7 @@
     <string name="the_day_before">dzień wcześniej</string>
     <string name="the_week_before">tydzień wcześniej</string>
     <string name="root_app">Aplikacja</string>
+    <string name="root_listening">Słuchanie</string>
     <string name="root_theme_colors">Motyw i kolory</string>
     <string name="root_text_icons">Tekst i ikony</string>
     <string name="root_sound_quality">Dźwięk i jakość</string>

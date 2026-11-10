@@ -12,7 +12,8 @@ import com.prism.music.ui.theme.PrismIcons
 /** The five groups of the Settings root, top to bottom (1.8.4, plan §2.3). */
 enum class SettingsRootGroup(val title: String) {
     MAKE_IT_YOURS(tr(R.string.make_it_yours)),
-    LISTENING(tr(R.string.listening)),
+    // Its own string: `listening` is Replay's listening time ("再生時間" in Japanese), not this heading.
+    LISTENING(tr(R.string.root_listening)),
     YOUR_MUSIC(tr(R.string.your_music)),
     CONNECTIONS(tr(R.string.connections)),
     APP(tr(R.string.root_app)),

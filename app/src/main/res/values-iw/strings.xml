@@ -102,7 +102,7 @@
     <string name="save">שמירה</string>
     <string name="cancel">ביטול</string>
     <string name="share_2">שיתוף %1$s</string>
-    <string name="scan_it_in_prism_settings_customize">סרוק אותו ב-Prism: הגדרות ← התאמה אישית של Prism ← מראות ← סריקה</string>
+    <string name="scan_it_in_prism_settings_customize">סרוק אותו ב-Prism: הגדרות ← מראות ← קבלת מראה</string>
     <string name="too_much_for_a_qr_code">גדול מדי לקוד QR: שלח אותו כטקסט או כקובץ</string>
     <string name="codes_leave_out_photos_and_your">קודים לא כוללים תמונות והגופן שלך; קובץ יכול לכלול אותם.</string>
     <string name="here_s_my_prism_look_share">זה המראה שלי ב-Prism, ״%1$s״. שתף את ההודעה הזו ל-Prism כדי לראות אותו:\n\n%2$s</string>
@@ -652,7 +652,7 @@
     <string name="remove_this_color">הסרת הצבע הזה</string>
     <string name="changes">%1$s\n\nמשנה: %2$s</string>
     <string name="white_black_and_greys_give_prism">לבן, שחור ואפורים נותנים ל-Prism מראה פשוט: לבן בדפים כהים, שחור בבהירים</string>
-    <string name="shown_softened_lighter_on_dark_pages">מוצג מרוכך (בהיר יותר בדפים כהים, עמוק יותר בבהירים). בחר ״בדיוק כמו שנבחר״ בדף הצבעים כדי להשתמש בו כמו שהוא</string>
+    <string name="shown_softened_lighter_on_dark_pages">מוצג מרוכך (בהיר יותר בדפים כהים, עמוק יותר בבהירים). בחר ״בדיוק כמו שנבחר״ תחת ״הדגשה״ כדי להשתמש בו כמו שהוא</string>
     <string name="made_a_little_lighter_or_darker">הובהר או הוכהה מעט איפה שטקסט עליו לא היה קריא</string>
     <string name="tint_strength">עוצמת הגוון</string>
     <string name="faint">חלש</string>
@@ -1098,7 +1098,7 @@
     <string name="in_the_middle">באמצע</string>
     <string name="title_size">גודל השם</string>
     <string name="title_weight">עובי השם</string>
-    <string name="light_is_prism_s_own_and">״דק״ הוא של Prism, ופועל לפי טקסט ← עובי. ״מודגש״ מעבה גם את שם האומן.</string>
+    <string name="light_is_prism_s_own_and">״דק״ הוא של Prism, ופועל לפי טקסט וסמלים ← עובי. ״מודגש״ מעבה גם את שם האומן.</string>
     <string name="scrolling_titles">שמות נגללים</string>
     <string name="a_long_title_scrolls_across_off">שם ארוך נגלל לרוחב (כבוי: הוא נגמר ב-…)</string>
     <string name="times_under_the_progress_bar">זמנים מתחת לסרגל ההתקדמות</string>
@@ -1963,7 +1963,7 @@
     <string name="refractive_bars_and_controls">סרגלים ופקדים שוברי אור</string>
     <string name="soft_blur_no_refraction">טשטוש רך, בלי שבירת אור</string>
     <string name="pages_frosted_with_their_picture">דפים חלביים מהתמונה שלהם</string>
-    <string name="artist_album_and_playlist_pages_sit">דפי אומן, אלבום ופלייליסט יושבים על זכוכית חלבית שנוצרת מהתמונה שלהם; דף הבית, הספרייה, החיפוש וההגדרות יושבים על זכוכית חלבית ממה שמתנגן. אם הדפים לוקחים את הצבע של התמונה שלהם נקבע תחת ״צבע״.</string>
+    <string name="artist_album_and_playlist_pages_sit">דפי אומן, אלבום ופלייליסט יושבים על זכוכית חלבית שנוצרת מהתמונה שלהם; דף הבית, הספרייה, החיפוש וההגדרות יושבים על זכוכית חלבית ממה שמתנגן. אם הדפים לוקחים את הצבע של התמונה שלהם נקבע תחת ״דפים״.</string>
     <string name="calmer_quicker_animations">אנימציות רגועות ומהירות יותר</string>
     <string name="no_drifting_backgrounds_no_artwork_bounce">בלי רקעים נסחפים, בלי קפיצת עטיפות, מעברים מהירים יותר.</string>
     <string name="that_font_couldn_t_be_used">אי אפשר להשתמש בגופן הזה</string>
@@ -2005,7 +2005,7 @@
     <string name="more_room_swipe_down_from_the">יותר מקום; החלק למטה מהחלק העליון כדי לראות אותה</string>
     <string name="the_clock_battery_and_notification_icons">השעון, הסוללה וסמלי ההתראות למעלה נשארים מוסתרים כש-Prism פתוח. החלק למטה מהקצה העליון והם יופיעו לרגע. המצב הסוחף וסרטון במסך מלא מסתירים גם את שאר הסרגלים, כמו קודם.</string>
     <string name="never_shows_only_the_icons_words">״אף פעם״ מציג רק את הסמלים; ״מילים בלבד״ מציג רק את השמות.</string>
-    <string name="see_through_lets_the_page_show">״שקוף״ מאפשר לדף להיראות דרך הסרגל; ״אטום״ מסתיר אותו. הטשטוש עצמו מגיע מהזכוכית (התאמה אישית של Prism ← זכוכית ורקעים).</string>
+    <string name="see_through_lets_the_page_show">״שקוף״ מאפשר לדף להיראות דרך הסרגל; ״אטום״ מסתיר אותו. הטשטוש עצמו מגיע מהזכוכית (ערכת נושא וצבעים ← זכוכית).</string>
     <string name="slims_down_as_you_scroll">מצטמצם בזמן הגלילה</string>
     <string name="swipe_sideways_on_a_tab_s">החלקה הצידה בדף של כרטיסייה</string>
     <string name="a_sideways_swipe_on_a_tab">החלקה הצידה בדף של כרטיסייה עוברת לכרטיסייה שלידה. שורות שנגללות הצידה (והדפים של הספרייה עצמה) שומרות על ההחלקות שלהן.</string>
@@ -2034,7 +2034,7 @@
     <string name="played_now_playing_and_up_next">״הושמעו״, ״מתנגן עכשיו״ ו״הבא בתור״</string>
     <string name="off_the_queue_is_one_list">כשזה כבוי, התור הוא רשימה אחת של שירים, מאלה שהושמעו ועד אלה שיבואו.</string>
     <string name="moving_artwork_when_a_song_has">תמונה זזה, כשיש לשיר כזו</string>
-    <string name="motion_artwork_and_video_covers_turn">תמונות זזות ועטיפות וידאו. אפשר לכבות אותן לשיר אחד מתפריט ⋯ של הנגן. אם הן מתנגנות בחבילת גלישה, ואלה שנשמרות בטלפון, נמצא תחת הורדות, אחסון ונתונים.</string>
+    <string name="motion_artwork_and_video_covers_turn">תמונות זזות ועטיפות וידאו. אפשר לכבות אותן לשיר אחד מתפריט ⋯ של הנגן. אם הן מתנגנות בחבילת גלישה, ואלה שנשמרות בטלפון, נמצא תחת הורדות ונתונים.</string>
     <string name="the_animated_cover_plays_behind_everything">העטיפה המונפשת מתנגנת מאחורי הכול</string>
     <string name="the_moving_artwork_fills_the_whole">התמונה הזזה ממלאת את כל הנגן, מוחשכת מתחת לפקדים, והעטיפה עצמה מציגה את התמונה הסטטית. לא עם תמונה מקצה לקצה, שכבר מציגה אותה מקצה לקצה.</string>
     <string name="the_cover_fills_the_screen_lyrics">העטיפה ממלאת את המסך, והמילים מעליה</string>
@@ -2137,7 +2137,7 @@
     <string name="needed_for_sing">נדרש לשירה · %1$s</string>
     <string name="takes_the_singer_s_voice_out">מוציא את הקול של הזמר מהשירים, בטלפון שלך, לקריוקי. מורד פעם אחת.</string>
     <string name="so_sing_starts_at_once_when">כדי ששירה תתחיל מיד כשמפעילים אותה</string>
-    <string name="the_playing_song_and_the_next">השיר שמתנגן והבא מופרדים ברקע גם כששירה כבויה. זה צורך יותר סוללה בזמן השמעת מוזיקה; בחבילת גלישה זה פועל לפי הורדות, אחסון ונתונים ← חבילת גלישה.</string>
+    <string name="the_playing_song_and_the_next">השיר שמתנגן והבא מופרדים ברקע גם כששירה כבויה. זה צורך יותר סוללה בזמן השמעת מוזיקה; בחבילת גלישה זה פועל לפי הורדות ונתונים ← חבילת גלישה.</string>
     <string name="using">בשימוש: %1$s</string>
     <string name="songs_are_worked_out_again_the">השירים יעובדו מחדש בפעם הבאה שתשיר אותם.</string>
     <string name="word_by_word_first_then_by">קודם מילה אחרי מילה, ואז לפי שורה</string>
@@ -2495,7 +2495,7 @@
     <string name="allow_notifications">אישור התראות</string>
     <string name="turn_them_on_in_android_s">הפעל אותן בהגדרות של Android עבור Prism.</string>
     <string name="your_starting_point_made_from_what">נקודת ההתחלה שלך, שנוצרת ממה שאתה משמיע.</string>
-    <string name="the_replay_card_at_the_top">כרטיס Replay למעלה: השנה שלך עד עכשיו (בחר את המראה שלו בהגדרות ← התאמה אישית של Prism ← דף הבית וספרייה)</string>
+    <string name="the_replay_card_at_the_top">כרטיס Replay למעלה: השנה שלך עד עכשיו (בחר את המראה שלו בהגדרות ← דף הבית וספרייה ← כרטיס Replay)</string>
     <string name="quick_picks_songs_around_the_artists">בחירות מהירות: שירים סביב האומנים שאתה משמיע, החלק הצידה לעוד</string>
     <string name="made_for_you_daily_mixes_your">נוצר בשבילך: מיקסים יומיים, המיקס לשעה ביום ו-Release Radar</string>
     <string name="the_grid_button_at_the_top">כפתור הרשת למעלה מסדר את הקטעים של דף הבית</string>
@@ -2516,12 +2516,12 @@
     <string name="let_prism_mix_your_music_songs">תן ל-Prism למקסס את המוזיקה שלך: שירים מתמזגים זה בזה, בסולם ובקצב.</string>
     <string name="in_the_queue_tap_dj_then">בתור, הקש על DJ, ואז בחר ״יציב״, ״הדרגתי למעלה״ או ״הרגעה״</string>
     <string name="long_press_an_album_or_playlist">לחיצה ארוכה על אלבום או פלייליסט ← השמעה כסט DJ</string>
-    <string name="crossfade_settings_playback_sound_blends_any">מעבר הדרגתי (הגדרות ← השמעה וצליל) ממזג כל שני שירים</string>
+    <string name="crossfade_settings_playback_sound_blends_any">מעבר הדרגתי (הגדרות ← השמעה) ממזג כל שני שירים</string>
     <string name="mixes_made_on_your_phone_from">מיקסים שנוצרים בטלפון שלך ממה שאתה משמיע. שום דבר על ההאזנות שלך לא יוצא ממנו.</string>
     <string name="daily_mixes_group_the_artists_you">המיקסים היומיים מקבצים את האומנים שאתה משמיע לפי מה שמתאים יחד</string>
     <string name="release_radar_finds_new_music_from">Release Radar מוצא מוזיקה חדשה מהאומנים שאתה עוקב אחריהם</string>
     <string name="made_for_you_also_has_mixes">ב״נוצר בשבילך״ יש גם מיקסים מהמוזיקה שלך ו״בלופ״: הם מגיעים רק מההשמעות שלך ועובדים אופליין</string>
-    <string name="when_the_queue_ends_prism_s">כשהתור נגמר, הרדיו של Prism בוחר מהמוזיקה שלך (הגדרות ← השמעה וצליל ← השמעה אוטומטית מתוך)</string>
+    <string name="when_the_queue_ends_prism_s">כשהתור נגמר, הרדיו של Prism בוחר מהמוזיקה שלך (הגדרות ← השמעה ← כשהתור נגמר)</string>
     <string name="tap_shuffle_twice_on_a_playlist">הקש פעמיים על ערבוב בפלייליסט לערבוב חכם: שירים חדשים משתלבים</string>
     <string name="not_for_me_and_leave_out">״לא בשבילי״ ו״מחוץ לטעם שלי״ מרחיקים דברים</string>
     <string name="find_anything_in_prism_music_or">מצא כל דבר ב-Prism Music, או זהה את השיר שמתנגן סביבך.</string>
@@ -2545,11 +2545,11 @@
     <string name="control_prism_from_a_browser_on">שליטה ב-Prism מדפדפן במחשב שלך</string>
     <string name="hand_what_s_playing_to_another">העברת מה שמתנגן לטלפון או לטאבלט אחר עם Prism</string>
     <string name="prism_takes_its_color_from_what">Prism לוקח את הצבע שלו ממה שמתנגן. שנה ממנו כמה שתרצה.</string>
-    <string name="appearance_the_spectrum_s_colors_or">עיצוב: צבעי הספקטרום (או לבן פשוט), צבע ההדגשה שלך, גופנים, סמלים ורקעים</string>
-    <string name="layout_the_tab_bar_your_tabs">פריסה: סרגל הכרטיסיות, הכרטיסיות שלך והמיני-נגן</string>
+    <string name="appearance_the_spectrum_s_colors_or">ערכת נושא וצבעים, טקסט וסמלים: צבעי האור (או לבן פשוט), צבע ההדגשה שלך, גופנים, סמלים ורקעים</string>
+    <string name="layout_the_tab_bar_your_tabs">כרטיסיות ומיני-נגן: סרגל הכרטיסיות, הכרטיסיות שלך והמיני-נגן</string>
     <string name="player_its_background_the_cover_and">נגן: הרקע שלו, העטיפה ומה שמוצג עליה</string>
     <string name="search_settings_from_the_box_at">חפש בהגדרות מהתיבה בראש ההגדרות</string>
-    <string name="settings_customize_prism_color_every_choice">הגדרות ← התאמה אישית של Prism ← צבע: כל אפשרות מראה איך היא נראית לפני שבוחרים בה.</string>
+    <string name="settings_customize_prism_color_every_choice">הגדרות ← ערכת נושא וצבעים: כל אפשרות מראה איך היא נראית לפני שבוחרים בה.</string>
     <string name="the_light_12_presets_white_black">האור: 12 הגדרות מוכנות, לבן (שחור במצב בהיר), או צבעים משלך</string>
     <string name="your_accent_any_color_from_a">צבע ההדגשה שלך: כל צבע, מגלגל, מקוד או מהטפטפת</string>
     <string name="the_page_background_plain_tinted_with">רקע הדף: פשוט, בגוון של צבע ההדגשה שלך, או צבע משלך</string>
@@ -2560,14 +2560,14 @@
     <string name="pin_prism_playlists_to_home_customize">הצמד פלייליסטים של Prism לדף הבית (התאמה אישית של דף הבית ← פלייליסטים מוצמדים)</string>
     <string name="song_credits_in_any_song_s">קרדיטים לשיר בתפריט של כל שיר</string>
     <string name="see_which_downloads_failed_and_why">ראה אילו הורדות נכשלו, ולמה</string>
-    <string name="settings_customize_prism_looks_your_whole">הגדרות ← התאמה אישית של Prism ← מראות: כל המראה שלך, שמור, מוחלף ומשותף בהקשה אחת.</string>
+    <string name="settings_customize_prism_looks_your_whole">הגדרות ← מראות: כל המראה שלך, שמור, מוחלף ומשותף בהקשה אחת.</string>
     <string name="try_prism_s_own_paper_midnight">נסה את אלה של Prism: נייר, חצות, ניאון, רך, סטודיו וויניל</string>
     <string name="save_yours_update_it_when_you">שמור את שלך, עדכן אותו כשאתה משנה אותו, ושתף אותו כקוד QR, כקוד או כקובץ</string>
     <string name="browse_looks_people_shared_under_from">עיין במראות שאנשים שיתפו, תחת ״מהקהילה״</string>
     <string name="one_look_by_day_and_another">מראה אחד ביום ואחר בלילה, בזריחה ובשקיעה</string>
     <string name="every_look_page_shows_home_the">כל דף מראה מציג את דף הבית, הנגן והמילים תוך כדי השינוי; ״בטל״ מחזיר שינוי</string>
-    <string name="customize_by_tapping_hold_the_settings">התאמה אישית בהקשה: לחיצה ארוכה על כרטיסיית ההגדרות, או הפעלה בעיצוב, ואז הקשה על המיני-נגן, סרגל הכרטיסיות, הנגן או קטע בדף הבית</string>
-    <string name="settings_customize_prism_player_or_player">הגדרות ← התאמה אישית של Prism ← נגן, או ⋯ ← הגדרות הנגן בנגן עצמו.</string>
+    <string name="customize_by_tapping_hold_the_settings">התאמה אישית בהקשה: לחיצה ארוכה על כרטיסיית ההגדרות, או הפעלה במראות, ואז הקשה על המיני-נגן, סרגל הכרטיסיות, הנגן או קטע בדף הבית</string>
+    <string name="settings_customize_prism_player_or_player">הגדרות ← נגן, או ⋯ ← הגדרות הנגן בנגן עצמו.</string>
     <string name="layouts_standard_a_big_cover_lyrics">פריסות: רגיל, עטיפה גדולה, מילים קודם, מינימלי, ויניל או קלטת (הם מסתובבים בזמן ההשמעה)</string>
     <string name="a_visualizer_if_you_d_like">ויזואלייזר אם תרצה: עמודות, גל, טבעת, פעימה או זוהר (כבוי אלא אם תבחר בו)</string>
     <string name="pick_the_buttons_under_the_controls">בחר את הכפתורים שמתחת לפקדים (מהירות היא אחד מהם), ואת השניים שליד ההפעלה בהתראה וברכב</string>
@@ -2578,7 +2578,7 @@
     <string name="prism_tells_android_which_of_its">Prism אומר ל-Android אילו חלקים שלו להכין מראש, ועדכונים מהבאנר מגיעים מוכנים, כך שהם כבר לא איטיים</string>
     <string name="less_work_while_lists_scroll_while">פחות עבודה כשרשימות נגללות, כשמקלידים בחיפוש וכששיר מתנגן</string>
     <string name="if_something_still_stutters_settings_backup">אם משהו עדיין מגמגם, הגדרות ← גיבוי ומידע ← אבחון רושם איפה זה קרה, כדי לשתף</string>
-    <string name="settings_customize_prism_lyrics_how_your">הגדרות ← התאמה אישית של Prism ← מילים: איך המילים שלך נראות, עם דוגמה לכל אפשרות.</string>
+    <string name="settings_customize_prism_lyrics_how_your">הגדרות ← מילים ושירה: איך המילים שלך נראות, עם דוגמה לכל אפשרות.</string>
     <string name="six_styles_prism_classic_karaoke_bold">שישה סגנונות: Prism, קריוקי קלאסי, כרטיס בולט, זוהר, מכונת כתיבה ורגוע</string>
     <string name="the_sung_line_and_the_others">השורה המושרת והאחרות בלבן, באור שלך, בצבע ההדגשה, בצבע העטיפה או בצבע משלך</string>
     <string name="weight_line_spacing_how_dim_the">עובי, ריווח שורות, כמה מעומעמות השורות האחרות, עוצמת הטשטוש, אותיות גדולות וצל</string>
@@ -2588,8 +2588,8 @@
     <string name="a_few_things_you_asked_for">כמה דברים שביקשתם.</string>
     <string name="library_history_what_you_played_by">ספרייה ← היסטוריה: מה שהשמעת, לפי יום, בטלפון הזה או בחשבון שלך</string>
     <string name="liked_a_song_and_its_video">אהבת שיר וגם את הסרטון שלו? הם מוצגים פעם אחת, כשיר</string>
-    <string name="prism_s_own_volume_apart_from">עוצמת קול נפרדת ל-Prism, בנפרד מזו של הטלפון (הגדרות ← התאמה אישית של Prism ← נגן)</string>
-    <string name="hide_the_status_bar_customize_prism">הסתרת שורת הסטטוס (התאמה אישית של Prism ← כרטיסיות ומיני-נגן)</string>
+    <string name="prism_s_own_volume_apart_from">עוצמת קול נפרדת ל-Prism, בנפרד מזו של הטלפון (הגדרות ← נגן)</string>
+    <string name="hide_the_status_bar_customize_prism">הסתרת שורת הסטטוס (הגדרות ← כרטיסיות ומיני-נגן)</string>
     <string name="settings_pages_are_tidier_tap_beside">דפי ההגדרות מסודרים יותר: הקש על ⓘ ליד הגדרה לפרטים</string>
     <string name="library_s_tiles_the_edit_button">האריחים של הספרייה: כפתור העריכה בראש הספרייה</string>
     <string name="customize_home_the_button_at_the">ב״התאמה אישית של דף הבית״ (הכפתור בראש דף הבית) יש עוד דברים.</string>
@@ -2610,10 +2610,10 @@
     <string name="artists_and_songs_with_their_pictures">אומנים ושירים עם התמונות שלהם בזמן ההקלדה</string>
     <string name="results_already_in_your_library_right">תוצאות שכבר בספרייה שלך, מיד אחרי התוצאה המובילה</string>
     <string name="settings_are_sorted_by_what_they">ההגדרות ממוינות לפי מה שהן עושות.</string>
-    <string name="everything_about_how_prism_looks_is">כל מה שקשור למראה של Prism נמצא תחת ״התאמה אישית של Prism״</string>
-    <string name="gestures_and_buttons_in_controls_gestures">מחוות וכפתורים בפקדים ומחוות</string>
+    <string name="everything_about_how_prism_looks_is">כל מה שקשור למראה של Prism נמצא תחת ״להתאים לעצמך״</string>
+    <string name="gestures_and_buttons_in_controls_gestures">מחוות וכפתורים תחת ״האזנה״</string>
     <string name="every_mobile_data_choice_on_one">כל אפשרויות חבילת הגלישה בדף אחד</string>
-    <string name="android_auto_speakers_discord_and_last">Android Auto, רמקולים, Discord ו-Last.fm במכשירים וחיבורים</string>
+    <string name="android_auto_speakers_discord_and_last">Android Auto, רמקולים, Discord ו-Last.fm תחת ״חיבורים״</string>
     <string name="performance_mode_at_the_top_for">מצב ביצועים, למעלה, לטלפונים איטיים יותר</string>
     <string name="make_the_pieces_of_prism_yours">התאם לעצמך את החלקים של Prism.</string>
     <string name="covers_as_circles_squircles_flowers_arches">עטיפות בצורת עיגולים, ריבועים מעוגלים, פרחים, קשתות… לשירים, אלבומים, אומנים ולנגן</string>
@@ -2624,20 +2624,20 @@
     <string name="from_your_requests">מהבקשות שלכם.</string>
     <string name="rearrange_your_playlists_songs_rearrange_songs">סדר מחדש את השירים בפלייליסטים שלך: ⋯ ← סידור השירים מחדש</string>
     <string name="swipe_a_song_out_of_the">החלק שיר החוצה מהתור, החלק את המיני-נגן למעלה כדי לפתוח אותו</string>
-    <string name="the_light_from_the_playing_cover">האור מהעטיפה שמתנגנת: צבע ← מהעטיפה</string>
+    <string name="the_light_from_the_playing_cover">האור מהעטיפה שמתנגנת: ערכת נושא וצבעים ← האור ← מהעטיפה</string>
     <string name="ribbons_a_progress_bar_with_strands">סרטים, סרגל התקדמות עם חוטים שזורמים לאורכו</string>
     <string name="a_bold_title_on_the_player">שם מודגש בנגן, אלבומים שלמים לפלייליסט, וקישורי YouTube לשיתוף</string>
-    <string name="settings_playback_sound">הגדרות ← השמעה וצליל.</string>
+    <string name="settings_playback_sound">הגדרות ← השמעה, והגדרות ← צליל ואיכות.</string>
     <string name="speed_pitch_slowed_sped_up_or">מהירות וגובה צליל: מואט, מואץ או כל סולם, מתפריט ⋯ של הנגן</string>
     <string name="how_songs_cross_in_a_crossfade">איך שירים מתחלפים במעבר הדרגתי, סימון איפה הבא נכנס, ועטיפות שמתמזגות</string>
     <string name="normalize_volume_s_level_and_albums">הרמה של איזון עוצמת הקול, ואלבומים שנשארים כמו שהם</string>
     <string name="your_own_equalizer_presets_shared_as">הגדרות אקולייזר משלך, משותפות כקודים, אחת לרכב ואחת לאוזניות</string>
     <string name="fades_for_the_sleep_timer_and">דעיכות לטיימר השינה ולהשהיה והפעלה</string>
     <string name="liked_how_prism_1_6_looked">אהבת איך ש-Prism 1.6 נראה? הוא חזר, כאפשרות.</string>
-    <string name="the_classic_look_customize_prism_looks">המראה הקלאסי: התאמה אישית של Prism ← מראות</string>
+    <string name="the_classic_look_customize_prism_looks">המראה הקלאסי: הגדרות ← מראות</string>
     <string name="or_only_its_icons_its_bold">או רק הסמלים שלו, הכתב המודגש שלו או הפקדים הפשוטים שלו</string>
     <string name="the_player_s_buttons_apart_instead">כפתורי הנגן בנפרד במקום בקפסולה</string>
-    <string name="last_fm_scrobbling_devices_connections_and">סקרובלינג ל-Last.fm (מכשירים וחיבורים), ו-Replay לכל תאריכים</string>
+    <string name="last_fm_scrobbling_devices_connections_and">סקרובלינג ל-Last.fm (חשבונות ושיתוף), ו-Replay לכל תאריכים</string>
     <string name="pick_several_songs_in_the_queue">בחר כמה שירים בתור כדי להזיז או להסיר אותם יחד, או נעל את הסדר שלו</string>
     <string name="choose_what_goes_in_a_backup">בחר מה נכנס לגיבוי</string>
     <string name="swipe_up_on_the_player_for">החלקה למעלה בנגן לתור, נעילה לאורך, השהיה כשהקול מושתק</string>
@@ -3842,7 +3842,7 @@
     <string name="the_ambient_frost_behind_home_search_all">הזכוכית החלבית של ״אווירה״ מאחורי דף הבית, החיפוש, הספרייה, Replay וההגדרות (״אוטומטי״ שומר בה את צבעי העטיפה, ״פשוט״ הופך אותה לאפורה, גוון צובע אותה), הדפים האלה כשהזכוכית החלבית כבויה, וחלוניות ודיאלוגים. לא הנגן, ולא דפי אלבום, אומן ופלייליסט, שלוקחים את הצבעים של התמונה שלהם.</string>
     <string name="home_has_the_background_glass_backgrounds_all">בדף הבית יש את הרקע %1$s (זכוכית ורקעים), שמצויר מעל הצבע הזה, ולכן הוא נראה שם רק מעט. בחר שם ״אווירה״ כדי לראות אותו במלואו</string>
     <string name="secondary_text_artists_times_notes_dividers_all">טקסט משני (אומנים, זמנים, הערות), קווי הפרדה ומסגרות בדפים, בחלוניות ובתפריטים. ״בינוני״ ו״גבוה״ גם מחזקים את צבע ההדגשה כדי שיהיה קריא יותר. הטקסט הלבן של הנגן עצמו מעל העטיפה נשאר כמו שהוא.</string>
-    <string name="the_accent_on_artist_album_and_all">צבע ההדגשה בדפי אומן, אלבום ופלייליסט, ובתפריטים שנפתחים משיר, אלבום או אומן (לחיצה ארוכה או ⋯). הרקעים החלביים שלהם לוקחים את צבעי התמונה בכל מקרה (זכוכית ורקעים).</string>
+    <string name="the_accent_on_artist_album_and_all">צבע ההדגשה בדפי אומן, אלבום ופלייליסט, ובתפריטים שנפתחים משיר, אלבום או אומן (לחיצה ארוכה או ⋯). הרקעים החלביים שלהם לוקחים את צבעי התמונה בכל מקרה (זכוכית).</string>
     <string name="tap_the_line_under_the_player_all">הקש על השורה שמתחת לפקדי הנגן (היא מציינת איזה מכשיר מנגן) ובחר רמקול, טלוויזיה או מקלט. הוא צריך להיות ברשת ה-Wi-Fi הזו עם Google Cast ‏(Chromecast, Google TV, רמקולים עם Cast מובנה) או DLNA / UPnP (שנקרא לפעמים שיתוף מדיה). התור, המילים והפקדים נשארים בטלפון, ומקשי עוצמת הקול שלו קובעים את עוצמת הרמקול. האקולייזר, המעבר ההדרגתי, שירה וסרטונים שייכים לטלפון, ולכן הם כבויים בזמן העברה.</string>
     <string name="nothing_new_from_your_artists_in_all">שום דבר חדש מהאומנים שלך בשלושת החודשים האחרונים. Prism בודק כל כמה ימים את האומנים שסימנת בכוכב, שמרת ומשמיע הכי הרבה; הבדיקה הראשונה רק לומדת מה כבר יצא, כך שמוזיקה חדשה תופיע מהבדיקה הבאה.</string>
     <string name="tunemymusic_copies_your_playlists_liked_songs_all">TuneMyMusic מעתיק את הפלייליסטים שלך, כולל השירים שאהבת, לחשבון YouTube Music שלך. זה אותו שירות שהאפליקציה של YouTube Music עצמה משתמשת בו להעברות.</string>
@@ -4287,14 +4287,14 @@
     <string name="shaped_by_the_crossfade">בצורת המעבר ההדרגתי</string>
     <string name="crossfade_shape_keywords">מעבר הדרגתי קרוספייד מיזוג דעיכה עמעום כניסה הצרה צורה עקומה סרגל התקדמות פס גלילה crossfade</string>
     <string name="the_end_tapers_as_the_song_fades">הסוף הולך ומצטמצם כשהשיר דועך</string>
-    <string name="crossfade_shape_info">סוף הסרגל מקבל את הצורה של דעיכת השיר, והסרגל של השיר הבא גדל בזמן שהוא נכנס, לפי סוג המעבר ההדרגתי שלך (צליל ← מעבר הדרגתי). רק כשמעבר הדרגתי מתקרב: לא בין רצועות של אלבום, לא בזמן הקרנה למכשיר אחר, לא בפרקים ולא בשידורים חיים. עם אורך אוטומטי הוא מופיע ברגע שהמיזוג מתוכנן. צורת הגל וסרטים שומרים על הסימון במקום זאת.</string>
+    <string name="crossfade_shape_info">סוף הסרגל מקבל את הצורה של דעיכת השיר, והסרגל של השיר הבא גדל בזמן שהוא נכנס, לפי סוג המעבר ההדרגתי שלך (השמעה ← מעבר הדרגתי). רק כשמעבר הדרגתי מתקרב: לא בין רצועות של אלבום, לא בזמן הקרנה למכשיר אחר, לא בפרקים ולא בשידורים חיים. עם אורך אוטומטי הוא מופיע ברגע שהמיזוג מתוכנן. צורת הגל וסרטים שומרים על הסימון במקום זאת.</string>
     <string name="imp_title">הבא את ההיסטוריה שלך</string>
     <string name="imp_subtitle">מ-Spotify,‏ YouTube Music ו-Last.fm, נקרא בטלפון הזה</string>
     <string name="imp_row_detail">Spotify,‏ YouTube Music,‏ Last.fm</string>
     <string name="imp_group_info">הבא את ההשמעות, השירים שאהבת והפלייליסטים שלך מהורדת הנתונים של Spotify, את היסטוריית YouTube Music שלך מ-Google Takeout, או את הסקרובלים שלך ב-Last.fm. הקבצים נקראים בטלפון הזה; כדי למצוא כל שיר, Prism מחפש אותו, כמו שהחיפוש שלו עושה.</string>
     <string name="imp_keywords">ייבוא spotify הורדת נתונים takeout google youtube music היסטוריה last.fm סקרובלים שירים שאהבתי פלייליסטים העברה מעבר</string>
     <string name="imp_bring_from">מאיפה להביא</string>
-    <string name="imp_bring_from_info">Spotify: באתר spotify.com, חשבון ← פרטיות ← הורדת הנתונים שלך. נתוני החשבון מגיעים תוך כמה ימים (שנה של השמעות, שירים שאהבת, פלייליסטים); היסטוריית סטרימינג מורחבת מגיעה תוך עד 30 יום (כל השמעה מאז שהצטרפת). בחר את קובץ ה-zip שהגיע, או את הקבצים שבתוכו.\n\nYouTube Music: באתר takeout.google.com, בחר YouTube ו-YouTube Music, היסטוריה בלבד, בפורמט JSON. בחר את ה-zip או את watch-history.json.\n\nLast.fm: חבר אותו ב\"מכשירים וחיבורים\", ו-Prism קורא את הסקרובלים שלך.\n\nשום דבר לא נשלח לשום מקום. כדי למצוא כל שיר, Prism מחפש אותו, כמו שהחיפוש שלו עושה.</string>
+    <string name="imp_bring_from_info">Spotify: באתר spotify.com, חשבון ← פרטיות ← הורדת הנתונים שלך. נתוני החשבון מגיעים תוך כמה ימים (שנה של השמעות, שירים שאהבת, פלייליסטים); היסטוריית סטרימינג מורחבת מגיעה תוך עד 30 יום (כל השמעה מאז שהצטרפת). בחר את קובץ ה-zip שהגיע, או את הקבצים שבתוכו.\n\nYouTube Music: באתר takeout.google.com, בחר YouTube ו-YouTube Music, היסטוריה בלבד, בפורמט JSON. בחר את ה-zip או את watch-history.json.\n\nLast.fm: חבר אותו בהגדרות ← חשבונות ושיתוף, ו-Prism קורא את הסקרובלים שלך.\n\nשום דבר לא נשלח לשום מקום. כדי למצוא כל שיר, Prism מחפש אותו, כמו שהחיפוש שלו עושה.</string>
     <string name="imp_spotify_detail">הורדת הנתונים שלו: השמעות, שירים שאהבת, פלייליסטים</string>
     <string name="imp_takeout_detail">היסטוריית הצפייה מ-Google Takeout</string>
     <string name="imp_lastfm_detail">הסקרובלים שלך, בתור %1$s</string>
@@ -4399,7 +4399,7 @@
     <string name="explicit_show">להציג אותם</string>
     <string name="explicit_skip">לדלג עליהם</string>
     <string name="explicit_hide">להסתיר אותם</string>
-    <string name="explicit_skipped">שירים בוטים מושמטים (הגדרות ← השמעה וצליל)</string>
+    <string name="explicit_skipped">שירים בוטים מושמטים (הגדרות ← השמעה)</string>
     <string name="explicit_none_left">אין מה להשמיע: כל השירים כאן בוטים</string>
     <string name="change_cover">החלפת עטיפה</string>
     <string name="cover_changed">העטיפה הוחלפה</string>
@@ -4449,7 +4449,7 @@
     <string name="replay_last_weeks">%1$d השבועות האחרונים</string>
     <string name="replay_last_days">%1$d הימים האחרונים</string>
     <string name="replay_story_font">גופן הסטוריז</string>
-    <string name="replay_story_font_info">איך הסטוריז של Replay ו-Rewind כותבים את המילים שלהם: בגופן הפוסטר של Prism, או בגופן שבחרת ל-Prism (טקסט).</string>
+    <string name="replay_story_font_info">איך הסטוריז של Replay ו-Rewind כותבים את המילים שלהם: בגופן הפוסטר של Prism, או בגופן שבחרת ל-Prism (טקסט וסמלים).</string>
     <string name="replay_story_font_keywords">גופן טיפוגרפיה פונט סטוריז סיפורים rewind wrapped</string>
     <string name="replay_story_font_poster">גופן פוסטר</string>
     <string name="replay_story_font_own">הגופן שלך</string>
@@ -4659,7 +4659,7 @@
         <item quantity="other">%1$s שירים לבחירה</item>
     </plurals>
     <string name="ytlive_spotify_connect">חבר את Spotify כדי להשתמש בזה</string>
-    <string name="ytlive_spotify_recent_off">כבוי: הפעל את ״השמעות אחרונות״ בדף Spotify</string>
+    <string name="ytlive_spotify_recent_off">כבוי: הפעל את ״השמעות אחרונות״ בהגדרות ← חשבונות ושיתוף ← Spotify</string>
     <string name="ytlive_connection_on">ההיסטוריה שלך, מעודכנת · פועל</string>
     <string name="ytlive_connection_off">שמור על עדכון ההיסטוריה שלך · כבוי</string>
     <string name="ytlive_connection_signed_out">היכנס כדי לשמור על עדכון ההיסטוריה שלך</string>
@@ -4676,7 +4676,7 @@
     <string name="dj_in_the_queue_keywords">dj מצב כפתור תור ראש מקום הסתרה</string>
     <string name="menu_lyrics_only_way">נשאר כל עוד זו הדרך היחידה מהנגן אל המילים</string>
     <string name="smart_downloads_offer_title">להוריד שירים לפני שצריך אותם?</string>
-    <string name="smart_downloads_offer_body">הורדות חכמות מכינות למצב לא מקוון את השירים שסביר שתשמיעו: עד 1 GB, ב-Wi-Fi. אפשר לשנות זאת בכל זמן תחת הורדות, אחסון ונתונים.</string>
+    <string name="smart_downloads_offer_body">הורדות חכמות מכינות למצב לא מקוון את השירים שסביר שתשמיעו: עד 1 GB, ב-Wi-Fi. אפשר לשנות זאת בכל זמן בהגדרות ← הורדות ונתונים.</string>
     <!-- 1.8.2 -->
     <string name="loading_list">טוען את ״%1$s״…</string>
     <string name="song_details">פרטי השיר</string>
@@ -4919,7 +4919,7 @@
     <string name="glass_blur">טשטוש</string>
     <string name="glass_blur_info">עד כמה הצבעים שמאחורי הזכוכית מתפזרים. דברים קטנים כמו טקסט שומרים על קו מתאר עדין מאחורי Liquid Glass, לא משנה כמה מגדילים; זכוכית חלבית ממיסה גם אותם. 100% הוא ערך ברירת המחדל של Prism. מעליו זו עבודה קשה יותר לטלפון איטי.</string>
     <string name="glass_frost">כפור</string>
-    <string name="glass_frost_info">עד כמה עבה הצעיף שמעל הזכוכית: פחות מאפשר ליותר ממה שמאחוריה לעבור, ויותר הופך אותה חלבית יותר במצב בהיר וכהה יותר במצב כהה, וקל יותר לקריאה מעל תמונות עמוסות. 100% הוא ערך ברירת המחדל של Prism. סרגל לשוניות עם רקע משלו (פריסה, סרגל לשוניות) שומר על הרקע הזה.</string>
+    <string name="glass_frost_info">עד כמה עבה הצעיף שמעל הזכוכית: פחות מאפשר ליותר ממה שמאחוריה לעבור, ויותר הופך אותה חלבית יותר במצב בהיר וכהה יותר במצב כהה, וקל יותר לקריאה מעל תמונות עמוסות. 100% הוא ערך ברירת המחדל של Prism. סרגל לשוניות עם רקע משלו (כרטיסיות ומיני-נגן ← סרגל הניווט) שומר על הרקע הזה.</string>
     <string name="glass_needs_android_12">אלה דורשים את הטשטוש שהגיע עם Android 12. בטלפון הזה הסרגלים אטומים, כך שאין מה שהגדרת טשטוש או כפור תשנה.</string>
     <string name="glass_on_more_of_the_screen">זכוכית על חלק גדול יותר מהמסך</string>
     <string name="glass_on_more_of_the_screen_detail">כרטיסים, צ\'יפים, כפתורים עגולים וסרגל הביטול</string>
@@ -5259,6 +5259,7 @@
     <string name="the_day_before">היום שלפני</string>
     <string name="the_week_before">השבוע שלפני</string>
     <string name="root_app">אפליקציה</string>
+    <string name="root_listening">האזנה</string>
     <string name="root_theme_colors">ערכת נושא וצבעים</string>
     <string name="root_text_icons">טקסט וסמלים</string>
     <string name="root_sound_quality">צליל ואיכות</string>

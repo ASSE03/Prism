@@ -102,7 +102,7 @@
     <string name="save">Αποθήκευση</string>
     <string name="cancel">Ακύρωση</string>
     <string name="share_2">Κοινοποίηση: %1$s</string>
-    <string name="scan_it_in_prism_settings_customize">Σάρωσέ το στο Prism: Ρυθμίσεις → Προσαρμογή του Prism → Στυλ → Σάρωση</string>
+    <string name="scan_it_in_prism_settings_customize">Σάρωσέ το στο Prism: Ρυθμίσεις → Στυλ → Πάρε ένα στυλ</string>
     <string name="too_much_for_a_qr_code">Πολύ μεγάλο για κωδικό QR: στείλ\' το ως κείμενο ή αρχείο</string>
     <string name="codes_leave_out_photos_and_your">Οι κωδικοί δεν περιέχουν φωτογραφίες και τη δική σου γραμματοσειρά· ένα αρχείο μπορεί να τις περιέχει.</string>
     <string name="here_s_my_prism_look_share">Αυτό είναι το στυλ μου στο Prism, «%1$s». Κοινοποίησε αυτό το μήνυμα στο Prism για να το δεις:\n\n%2$s</string>
@@ -652,7 +652,7 @@
     <string name="remove_this_color">Αφαίρεση αυτού του χρώματος</string>
     <string name="changes">%1$s\n\nΑλλάζει: %2$s</string>
     <string name="white_black_and_greys_give_prism">Το λευκό, το μαύρο και τα γκρι δίνουν την απλή εμφάνιση του Prism: λευκό σε σκούρες σελίδες, μαύρο σε ανοιχτές</string>
-    <string name="shown_softened_lighter_on_dark_pages">Εμφανίζεται απαλυμένο (πιο ανοιχτό σε σκούρες σελίδες, πιο βαθύ σε ανοιχτές). Διάλεξε «Ακριβώς όπως επιλέχθηκε» στη σελίδα Χρώμα για να το χρησιμοποιείς όπως είναι</string>
+    <string name="shown_softened_lighter_on_dark_pages">Εμφανίζεται απαλυμένο (πιο ανοιχτό σε σκούρες σελίδες, πιο βαθύ σε ανοιχτές). Διάλεξε «Ακριβώς όπως επιλέχθηκε» στην Έμφαση για να το χρησιμοποιείς όπως είναι</string>
     <string name="made_a_little_lighter_or_darker">Λίγο πιο ανοιχτό ή πιο σκούρο όπου το κείμενο πάνω του δεν θα διαβαζόταν</string>
     <string name="tint_strength">Ένταση απόχρωσης</string>
     <string name="faint">Αμυδρή</string>
@@ -1098,7 +1098,7 @@
     <string name="in_the_middle">Στη μέση</string>
     <string name="title_size">Μέγεθος τίτλου</string>
     <string name="title_weight">Πάχος τίτλου</string>
-    <string name="light_is_prism_s_own_and">Το Λεπτό είναι του Prism και ακολουθεί το Κείμενο → Πάχος. Το Έντονο κάνει και το όνομα του καλλιτέχνη πιο έντονο.</string>
+    <string name="light_is_prism_s_own_and">Το Λεπτό είναι του Prism και ακολουθεί το Κείμενο &amp; εικονίδια → Πάχος. Το Έντονο κάνει και το όνομα του καλλιτέχνη πιο έντονο.</string>
     <string name="scrolling_titles">Κυλιόμενοι τίτλοι</string>
     <string name="a_long_title_scrolls_across_off">Ένας μεγάλος τίτλος κυλά οριζόντια (ανενεργό: τελειώνει με …)</string>
     <string name="times_under_the_progress_bar">Χρόνοι κάτω από τη γραμμή προόδου</string>
@@ -1963,7 +1963,7 @@
     <string name="refractive_bars_and_controls">Μπάρες και χειριστήρια με διάθλαση</string>
     <string name="soft_blur_no_refraction">Απαλό θάμπωμα, χωρίς διάθλαση</string>
     <string name="pages_frosted_with_their_picture">Σελίδες θαμπές με την εικόνα τους</string>
-    <string name="artist_album_and_playlist_pages_sit">Οι σελίδες καλλιτεχνών, άλμπουμ και playlist βρίσκονται πάνω σε θαμπό γυαλί από την εικόνα τους· η Αρχική, η Βιβλιοθήκη, η Αναζήτηση και οι Ρυθμίσεις πάνω σε θάμπωμα από αυτό που παίζει. Το αν οι σελίδες παίρνουν το χρώμα της εικόνας τους ρυθμίζεται στο Χρώμα.</string>
+    <string name="artist_album_and_playlist_pages_sit">Οι σελίδες καλλιτεχνών, άλμπουμ και playlist βρίσκονται πάνω σε θαμπό γυαλί από την εικόνα τους· η Αρχική, η Βιβλιοθήκη, η Αναζήτηση και οι Ρυθμίσεις πάνω σε θάμπωμα από αυτό που παίζει. Το αν οι σελίδες παίρνουν το χρώμα της εικόνας τους ρυθμίζεται στις Σελίδες.</string>
     <string name="calmer_quicker_animations">Πιο ήρεμα, πιο γρήγορα κινούμενα εφέ</string>
     <string name="no_drifting_backgrounds_no_artwork_bounce">Χωρίς κινούμενα φόντα, χωρίς αναπήδηση εξωφύλλου, πιο γρήγορες μεταβάσεις.</string>
     <string name="that_font_couldn_t_be_used">Δεν ήταν δυνατή η χρήση αυτής της γραμματοσειράς</string>
@@ -2005,7 +2005,7 @@
     <string name="more_room_swipe_down_from_the">Περισσότερος χώρος· σύρε από πάνω προς τα κάτω για να τη δεις</string>
     <string name="the_clock_battery_and_notification_icons">Το ρολόι, η μπαταρία και τα εικονίδια ειδοποιήσεων στο πάνω μέρος μένουν κρυφά όσο το Prism είναι ανοιχτό. Σύρε από την πάνω άκρη προς τα κάτω και εμφανίζονται για λίγο. Η καθηλωτική λειτουργία και το βίντεο σε πλήρη οθόνη κρύβουν και τις άλλες γραμμές, όπως πριν.</string>
     <string name="never_shows_only_the_icons_words">Το Ποτέ δείχνει μόνο τα εικονίδια· το Μόνο λέξεις δείχνει μόνο τα ονόματα.</string>
-    <string name="see_through_lets_the_page_show">Το Ημιδιάφανο αφήνει τη σελίδα να φαίνεται μέσα από τη γραμμή· το Συμπαγές την κρύβει. Το ίδιο το θάμπωμα έρχεται από το Γυαλί (Προσαρμογή του Prism → Γυαλί &amp; φόντα).</string>
+    <string name="see_through_lets_the_page_show">Το Ημιδιάφανο αφήνει τη σελίδα να φαίνεται μέσα από τη γραμμή· το Συμπαγές την κρύβει. Το ίδιο το θάμπωμα έρχεται από το Γυαλί (Θέμα &amp; χρώματα → Γυαλί).</string>
     <string name="slims_down_as_you_scroll">Λεπταίνει καθώς κάνεις κύλιση</string>
     <string name="swipe_sideways_on_a_tab_s">Σύρε πλάγια στη σελίδα μιας καρτέλας</string>
     <string name="a_sideways_swipe_on_a_tab">Ένα πλάγιο σύρσιμο στη σελίδα μιας καρτέλας πηγαίνει στη διπλανή καρτέλα. Οι σειρές που κυλούν πλάγια (και οι σελίδες της Βιβλιοθήκης) κρατούν τα δικά τους συρσίματα.</string>
@@ -2034,7 +2034,7 @@
     <string name="played_now_playing_and_up_next">«Έπαιξαν», «Παίζει τώρα» και «Επόμενα»</string>
     <string name="off_the_queue_is_one_list">Όταν είναι ανενεργό, η ουρά είναι μία λίστα τραγουδιών, από αυτά που έπαιξαν μέχρι αυτά που έρχονται.</string>
     <string name="moving_artwork_when_a_song_has">Κινούμενο εξώφυλλο, όταν το τραγούδι έχει</string>
-    <string name="motion_artwork_and_video_covers_turn">Κινούμενα εξώφυλλα και εξώφυλλα βίντεο. Απενεργοποίησέ τα για ένα τραγούδι από το μενού ⋯ της οθόνης αναπαραγωγής. Το αν παίζουν με δεδομένα κινητής και όσα κρατιούνται στο τηλέφωνο βρίσκονται στις Λήψεις, αποθηκευτικός χώρος &amp; δεδομένα.</string>
+    <string name="motion_artwork_and_video_covers_turn">Κινούμενα εξώφυλλα και εξώφυλλα βίντεο. Απενεργοποίησέ τα για ένα τραγούδι από το μενού ⋯ της οθόνης αναπαραγωγής. Το αν παίζουν με δεδομένα κινητής και όσα κρατιούνται στο τηλέφωνο βρίσκονται στις Λήψεις &amp; δεδομένα.</string>
     <string name="the_animated_cover_plays_behind_everything">Το κινούμενο εξώφυλλο παίζει πίσω από όλα</string>
     <string name="the_moving_artwork_fills_the_whole">Το κινούμενο εξώφυλλο γεμίζει ολόκληρη την οθόνη αναπαραγωγής, σκουρόχρωμο κάτω από τα χειριστήρια, και το ίδιο το εξώφυλλο δείχνει τη στατική εικόνα. Όχι με το εξώφυλλο από άκρη σε άκρη, που το δείχνει ήδη σε όλη την οθόνη.</string>
     <string name="the_cover_fills_the_screen_lyrics">Το εξώφυλλο γεμίζει την οθόνη, με τους στίχους από πάνω</string>
@@ -2137,7 +2137,7 @@
     <string name="needed_for_sing">Χρειάζεται για το Τραγούδα · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Αφαιρεί τη φωνή του τραγουδιστή από τα τραγούδια, στο τηλέφωνό σου, για καραόκε. Λαμβάνεται μία φορά.</string>
     <string name="so_sing_starts_at_once_when">Για να ξεκινά αμέσως το Τραγούδα όταν το ενεργοποιείς</string>
-    <string name="the_playing_song_and_the_next">Το τραγούδι που παίζει και το επόμενο διαχωρίζονται στο παρασκήνιο ακόμα και με το Τραγούδα ανενεργό. Καταναλώνει περισσότερη μπαταρία όσο παίζει μουσική· με δεδομένα κινητής ακολουθεί το Λήψεις, αποθηκευτικός χώρος &amp; δεδομένα → Δεδομένα κινητής.</string>
+    <string name="the_playing_song_and_the_next">Το τραγούδι που παίζει και το επόμενο διαχωρίζονται στο παρασκήνιο ακόμα και με το Τραγούδα ανενεργό. Καταναλώνει περισσότερη μπαταρία όσο παίζει μουσική· με δεδομένα κινητής ακολουθεί το Λήψεις &amp; δεδομένα → Δεδομένα κινητής.</string>
     <string name="using">Σε χρήση %1$s</string>
     <string name="songs_are_worked_out_again_the">Τα τραγούδια επεξεργάζονται ξανά την επόμενη φορά που θα τα τραγουδήσεις.</string>
     <string name="word_by_word_first_then_by">Πρώτα λέξη προς λέξη, μετά ανά γραμμή</string>
@@ -2495,7 +2495,7 @@
     <string name="allow_notifications">Επίτρεψε τις ειδοποιήσεις</string>
     <string name="turn_them_on_in_android_s">Ενεργοποίησέ τες στις ρυθμίσεις του Android για το Prism.</string>
     <string name="your_starting_point_made_from_what">Το σημείο εκκίνησής σου, φτιαγμένο από ό,τι ακούς.</string>
-    <string name="the_replay_card_at_the_top">Η κάρτα Replay στην κορυφή: η χρονιά σου μέχρι τώρα (διάλεξε την εμφάνισή της στις Ρυθμίσεις → Προσαρμογή του Prism → Αρχική &amp; Βιβλιοθήκη)</string>
+    <string name="the_replay_card_at_the_top">Η κάρτα Replay στην κορυφή: η χρονιά σου μέχρι τώρα (διάλεξε την εμφάνισή της στις Ρυθμίσεις → Αρχική &amp; Βιβλιοθήκη → Κάρτα Replay)</string>
     <string name="quick_picks_songs_around_the_artists">Γρήγορες επιλογές: τραγούδια γύρω από τους καλλιτέχνες που ακούς, σύρε οριζόντια για περισσότερα</string>
     <string name="made_for_you_daily_mixes_your">Φτιαγμένα για σένα: Daily Mix, η μίξη της ώρας της ημέρας και το Release Radar</string>
     <string name="the_grid_button_at_the_top">Το κουμπί πλέγματος στην κορυφή τακτοποιεί τις ενότητες της Αρχικής</string>
@@ -2516,12 +2516,12 @@
     <string name="let_prism_mix_your_music_songs">Άφησε το Prism να μιξάρει τη μουσική σου: τα τραγούδια δένουν μεταξύ τους, στην ίδια τονικότητα και στον ρυθμό.</string>
     <string name="in_the_queue_tap_dj_then">Στην ουρά, πάτα DJ και μετά διάλεξε Σταθερά, Ανέβασμα ή Χαλάρωμα</string>
     <string name="long_press_an_album_or_playlist">Πάτα παρατεταμένα ένα άλμπουμ ή μια playlist → Αναπαραγωγή ως DJ set</string>
-    <string name="crossfade_settings_playback_sound_blends_any">Η Ομαλή μετάβαση (Ρυθμίσεις → Αναπαραγωγή &amp; ήχος) δένει οποιαδήποτε δύο τραγούδια</string>
+    <string name="crossfade_settings_playback_sound_blends_any">Η Ομαλή μετάβαση (Ρυθμίσεις → Αναπαραγωγή) δένει οποιαδήποτε δύο τραγούδια</string>
     <string name="mixes_made_on_your_phone_from">Μίξεις φτιαγμένες στο τηλέφωνό σου από ό,τι ακούς. Τίποτα για το τι ακούς δεν φεύγει από αυτό.</string>
     <string name="daily_mixes_group_the_artists_you">Τα Daily Mix ομαδοποιούν τους καλλιτέχνες που ακούς ανάλογα με το τι ταιριάζει μαζί</string>
     <string name="release_radar_finds_new_music_from">Το Release Radar βρίσκει νέα μουσική από τους καλλιτέχνες που ακολουθείς</string>
     <string name="made_for_you_also_has_mixes">Το Φτιαγμένα για σένα έχει επίσης μίξεις από τη δική σου μουσική και το Ξανά και ξανά: βγαίνουν μόνο από τις αναπαραγωγές σου και λειτουργούν εκτός σύνδεσης</string>
-    <string name="when_the_queue_ends_prism_s">Όταν τελειώνει η ουρά, το ραδιόφωνο του Prism διαλέγει από τη μουσική σου (Ρυθμίσεις → Αναπαραγωγή &amp; ήχος → Αυτόματη αναπαραγωγή από)</string>
+    <string name="when_the_queue_ends_prism_s">Όταν τελειώνει η ουρά, το ραδιόφωνο του Prism διαλέγει από τη μουσική σου (Ρυθμίσεις → Αναπαραγωγή → Όταν τελειώσει η ουρά)</string>
     <string name="tap_shuffle_twice_on_a_playlist">Πάτα δύο φορές την τυχαία αναπαραγωγή σε μια playlist για Έξυπνη τυχαία αναπαραγωγή: μπαίνουν νέα τραγούδια</string>
     <string name="not_for_me_and_leave_out">Τα «Δεν μου ταιριάζει» και «Έξω από τα γούστα μου» κρατούν πράγματα μακριά</string>
     <string name="find_anything_in_prism_music_or">Βρες οτιδήποτε στο Prism Music ή αναγνώρισε το τραγούδι που παίζει γύρω σου.</string>
@@ -2545,11 +2545,11 @@
     <string name="control_prism_from_a_browser_on">Έλεγξε το Prism από πρόγραμμα περιήγησης στον υπολογιστή σου</string>
     <string name="hand_what_s_playing_to_another">Μετάφερε ό,τι παίζει σε άλλο τηλέφωνο ή tablet με Prism</string>
     <string name="prism_takes_its_color_from_what">Το Prism παίρνει το χρώμα του από ό,τι παίζει. Άλλαξέ το όσο θέλεις.</string>
-    <string name="appearance_the_spectrum_s_colors_or">Εμφάνιση: τα χρώματα του Φάσματος (ή απλό λευκό), η έμφασή σου, γραμματοσειρές, εικονίδια και φόντα</string>
-    <string name="layout_the_tab_bar_your_tabs">Διάταξη: η γραμμή καρτελών, οι καρτέλες σου και το μίνι player</string>
+    <string name="appearance_the_spectrum_s_colors_or">Θέμα &amp; χρώματα, Κείμενο &amp; εικονίδια: τα χρώματα του φωτός (ή απλό λευκό), η έμφασή σου, γραμματοσειρές, εικονίδια και φόντα</string>
+    <string name="layout_the_tab_bar_your_tabs">Καρτέλες &amp; μίνι player: η γραμμή καρτελών, οι καρτέλες σου και το μίνι player</string>
     <string name="player_its_background_the_cover_and">Οθόνη αναπαραγωγής: το φόντο της, το εξώφυλλο και τι εμφανίζεται πάνω της</string>
     <string name="search_settings_from_the_box_at">Αναζήτησε ρυθμίσεις από το πεδίο στην κορυφή των Ρυθμίσεων</string>
-    <string name="settings_customize_prism_color_every_choice">Ρυθμίσεις → Προσαρμογή του Prism → Χρώμα: κάθε επιλογή δείχνει πώς φαίνεται πριν τη διαλέξεις.</string>
+    <string name="settings_customize_prism_color_every_choice">Ρυθμίσεις → Θέμα &amp; χρώματα: κάθε επιλογή δείχνει πώς φαίνεται πριν τη διαλέξεις.</string>
     <string name="the_light_12_presets_white_black">Το φως: 12 προρυθμίσεις, Λευκό (Μαύρο στην ανοιχτή λειτουργία) ή δικά σου χρώματα</string>
     <string name="your_accent_any_color_from_a">Η έμφασή σου: οποιοδήποτε χρώμα, από τροχό, κωδικό ή σταγονόμετρο</string>
     <string name="the_page_background_plain_tinted_with">Το φόντο σελίδας: απλό, με απόχρωση της έμφασής σου ή με δικό σου χρώμα</string>
@@ -2560,14 +2560,14 @@
     <string name="pin_prism_playlists_to_home_customize">Καρφίτσωσε playlist του Prism στην Αρχική (Προσαρμογή Αρχικής → Καρφιτσωμένες playlist)</string>
     <string name="song_credits_in_any_song_s">Συντελεστές τραγουδιού στο μενού κάθε τραγουδιού</string>
     <string name="see_which_downloads_failed_and_why">Δες ποιες λήψεις απέτυχαν και γιατί</string>
-    <string name="settings_customize_prism_looks_your_whole">Ρυθμίσεις → Προσαρμογή του Prism → Στυλ: όλη η εμφάνισή σου, αποθηκευμένη, εναλλασσόμενη και κοινοποιημένη με ένα πάτημα.</string>
+    <string name="settings_customize_prism_looks_your_whole">Ρυθμίσεις → Στυλ: όλη η εμφάνισή σου, αποθηκευμένη, εναλλασσόμενη και κοινοποιημένη με ένα πάτημα.</string>
     <string name="try_prism_s_own_paper_midnight">Δοκίμασε τα στυλ του Prism: Χαρτί, Μεσάνυχτα, Νέον, Απαλό, Στούντιο και Βινύλιο</string>
     <string name="save_yours_update_it_when_you">Αποθήκευσε το δικό σου, ενημέρωσέ το όταν το αλλάζεις και μοιράσου το ως κωδικό QR, κωδικό ή αρχείο</string>
     <string name="browse_looks_people_shared_under_from">Δες στυλ που μοιράστηκαν άλλοι, στο Από την κοινότητα</string>
     <string name="one_look_by_day_and_another">Ένα στυλ τη μέρα και άλλο τη νύχτα, με την ανατολή και τη δύση</string>
     <string name="every_look_page_shows_home_the">Κάθε σελίδα εμφάνισης δείχνει την Αρχική, την οθόνη αναπαραγωγής και τους στίχους όπως τα αλλάζεις· η Αναίρεση παίρνει πίσω μια αλλαγή</string>
-    <string name="customize_by_tapping_hold_the_settings">Προσαρμογή με πάτημα: κράτα πατημένη την καρτέλα Ρυθμίσεις ή ενεργοποίησέ την στην Εμφάνιση, και μετά πάτα το μίνι player, τη γραμμή καρτελών, την οθόνη αναπαραγωγής ή μια ενότητα της Αρχικής</string>
-    <string name="settings_customize_prism_player_or_player">Ρυθμίσεις → Προσαρμογή του Prism → Οθόνη αναπαραγωγής, ή ⋯ → Ρυθμίσεις οθόνης αναπαραγωγής πάνω στην ίδια.</string>
+    <string name="customize_by_tapping_hold_the_settings">Προσαρμογή με πάτημα: κράτα πατημένη την καρτέλα Ρυθμίσεις ή ενεργοποίησέ την στα Στυλ, και μετά πάτα το μίνι player, τη γραμμή καρτελών, την οθόνη αναπαραγωγής ή μια ενότητα της Αρχικής</string>
+    <string name="settings_customize_prism_player_or_player">Ρυθμίσεις → Οθόνη αναπαραγωγής, ή ⋯ → Ρυθμίσεις οθόνης αναπαραγωγής πάνω στην ίδια.</string>
     <string name="layouts_standard_a_big_cover_lyrics">Διατάξεις: Τυπική, μεγάλο Εξώφυλλο, Πρώτα οι στίχοι, Μινιμαλιστική, Βινύλιο ή Κασέτα (γυρίζουν όσο παίζει)</string>
     <string name="a_visualizer_if_you_d_like">Οπτικοποίηση αν θέλεις: μπάρες, κύμα, δαχτυλίδι, παλμός ή λάμψη (ανενεργή εκτός αν τη διαλέξεις)</string>
     <string name="pick_the_buttons_under_the_controls">Διάλεξε τα κουμπιά κάτω από τα χειριστήρια (η ταχύτητα είναι ένα) και τα δύο δίπλα στην αναπαραγωγή στην ειδοποίηση και στο αυτοκίνητο</string>
@@ -2578,7 +2578,7 @@
     <string name="prism_tells_android_which_of_its">Το Prism λέει στο Android ποια μέρη του να ετοιμάσει από πριν, και οι ενημερώσεις από το banner έρχονται έτοιμες, οπότε δεν είναι πια αργές</string>
     <string name="less_work_while_lists_scroll_while">Λιγότερη δουλειά όσο κυλούν οι λίστες, όσο πληκτρολογείς στην Αναζήτηση και όσο παίζει ένα τραγούδι</string>
     <string name="if_something_still_stutters_settings_backup">Αν κάτι ακόμα κολλάει, οι Ρυθμίσεις → Αντίγραφο ασφαλείας &amp; σχετικά → Διαγνωστικά σημειώνουν πού συνέβη, για να το κοινοποιήσεις</string>
-    <string name="settings_customize_prism_lyrics_how_your">Ρυθμίσεις → Προσαρμογή του Prism → Στίχοι: πώς φαίνονται οι στίχοι σου, με παράδειγμα για κάθε επιλογή.</string>
+    <string name="settings_customize_prism_lyrics_how_your">Ρυθμίσεις → Στίχοι &amp; Τραγούδα: πώς φαίνονται οι στίχοι σου, με παράδειγμα για κάθε επιλογή.</string>
     <string name="six_styles_prism_classic_karaoke_bold">Έξι στυλ: Prism, Κλασικό καραόκε, Έντονη κάρτα, Λάμψη, Γραφομηχανή και Ήρεμο</string>
     <string name="the_sung_line_and_the_others">Η γραμμή που τραγουδιέται και οι άλλες σε λευκό, στο φως σου, στην έμφαση, στο χρώμα του εξωφύλλου ή σε δικό σου</string>
     <string name="weight_line_spacing_how_dim_the">Πάχος, διάστιχο, πόσο αχνές είναι οι άλλες γραμμές, ένταση θαμπώματος, κεφαλαία και σκιά</string>
@@ -2588,8 +2588,8 @@
     <string name="a_few_things_you_asked_for">Μερικά πράγματα που ζήτησες.</string>
     <string name="library_history_what_you_played_by">Βιβλιοθήκη → Ιστορικό: τι έπαιξες, ανά ημέρα, σε αυτό το τηλέφωνο ή στον λογαριασμό σου</string>
     <string name="liked_a_song_and_its_video">Σου αρέσει ένα τραγούδι και το βίντεό του; Εμφανίζονται μία φορά, ως τραγούδι</string>
-    <string name="prism_s_own_volume_apart_from">Δική του ένταση για το Prism, χωριστά από του τηλεφώνου (Ρυθμίσεις → Προσαρμογή του Prism → Οθόνη αναπαραγωγής)</string>
-    <string name="hide_the_status_bar_customize_prism">Απόκρυψη της γραμμής κατάστασης (Προσαρμογή του Prism → Καρτέλες &amp; μίνι player)</string>
+    <string name="prism_s_own_volume_apart_from">Δική του ένταση για το Prism, χωριστά από του τηλεφώνου (Ρυθμίσεις → Οθόνη αναπαραγωγής)</string>
+    <string name="hide_the_status_bar_customize_prism">Απόκρυψη της γραμμής κατάστασης (Ρυθμίσεις → Καρτέλες &amp; μίνι player)</string>
     <string name="settings_pages_are_tidier_tap_beside">Οι σελίδες ρυθμίσεων είναι πιο τακτοποιημένες: πάτα το ⓘ δίπλα σε μια ρύθμιση για λεπτομέρειες</string>
     <string name="library_s_tiles_the_edit_button">Τα πλακίδια της Βιβλιοθήκης: το κουμπί επεξεργασίας στην κορυφή της Βιβλιοθήκης</string>
     <string name="customize_home_the_button_at_the">Η Προσαρμογή Αρχικής (το κουμπί στην κορυφή της Αρχικής) έχει περισσότερα.</string>
@@ -2610,10 +2610,10 @@
     <string name="artists_and_songs_with_their_pictures">Καλλιτέχνες και τραγούδια με τις εικόνες τους όσο πληκτρολογείς</string>
     <string name="results_already_in_your_library_right">Αποτελέσματα που είναι ήδη στη βιβλιοθήκη σου, αμέσως μετά το κορυφαίο</string>
     <string name="settings_are_sorted_by_what_they">Οι ρυθμίσεις είναι ταξινομημένες με βάση το τι κάνουν.</string>
-    <string name="everything_about_how_prism_looks_is">Όλα όσα αφορούν την εμφάνιση του Prism είναι στην Προσαρμογή του Prism</string>
-    <string name="gestures_and_buttons_in_controls_gestures">Κινήσεις και κουμπιά στα Χειριστήρια &amp; κινήσεις</string>
+    <string name="everything_about_how_prism_looks_is">Όλα όσα αφορούν την εμφάνιση του Prism είναι στο «Κάν\' το δικό σου»</string>
+    <string name="gestures_and_buttons_in_controls_gestures">Κινήσεις και κουμπιά στην Ακρόαση</string>
     <string name="every_mobile_data_choice_on_one">Όλες οι επιλογές δεδομένων κινητής σε μία σελίδα</string>
-    <string name="android_auto_speakers_discord_and_last">Android Auto, ηχεία, Discord και Last.fm στις Συσκευές &amp; συνδέσεις</string>
+    <string name="android_auto_speakers_discord_and_last">Android Auto, ηχεία, Discord και Last.fm στις Συνδέσεις</string>
     <string name="performance_mode_at_the_top_for">Η λειτουργία απόδοσης, στην κορυφή, για πιο αργά τηλέφωνα</string>
     <string name="make_the_pieces_of_prism_yours">Κάνε κάθε κομμάτι του Prism δικό σου.</string>
     <string name="covers_as_circles_squircles_flowers_arches">Εξώφυλλα σε κύκλους, squircle, λουλούδια, αψίδες… για τραγούδια, άλμπουμ, καλλιτέχνες και την οθόνη αναπαραγωγής</string>
@@ -2624,20 +2624,20 @@
     <string name="from_your_requests">Από τα αιτήματά σου.</string>
     <string name="rearrange_your_playlists_songs_rearrange_songs">Αναδιάταξε τα τραγούδια των playlist σου: ⋯ → Αναδιάταξη τραγουδιών</string>
     <string name="swipe_a_song_out_of_the">Σύρε ένα τραγούδι έξω από την ουρά, σύρε το μίνι player προς τα πάνω για να το ανοίξεις</string>
-    <string name="the_light_from_the_playing_cover">Το φως από το εξώφυλλο που παίζει: Χρώμα → Από το εξώφυλλο</string>
+    <string name="the_light_from_the_playing_cover">Το φως από το εξώφυλλο που παίζει: Θέμα &amp; χρώματα → Το φως → Από το εξώφυλλο</string>
     <string name="ribbons_a_progress_bar_with_strands">Κορδέλες, μια γραμμή προόδου με κλωστές που κυλούν πάνω της</string>
     <string name="a_bold_title_on_the_player">Έντονος τίτλος στην οθόνη αναπαραγωγής, ολόκληρα άλμπουμ σε playlist και σύνδεσμοι YouTube για κοινοποίηση</string>
-    <string name="settings_playback_sound">Ρυθμίσεις → Αναπαραγωγή &amp; ήχος.</string>
+    <string name="settings_playback_sound">Ρυθμίσεις → Αναπαραγωγή, και Ρυθμίσεις → Ήχος &amp; ποιότητα.</string>
     <string name="speed_pitch_slowed_sped_up_or">Ταχύτητα &amp; τονικότητα: πιο αργό, πιο γρήγορο ή οποιαδήποτε τονικότητα, από το ⋯ της οθόνης αναπαραγωγής</string>
     <string name="how_songs_cross_in_a_crossfade">Πώς περνούν τα τραγούδια στην ομαλή μετάβαση, ένα σημάδι εκεί που μπαίνει το επόμενο και εξώφυλλα που αναμειγνύονται</string>
     <string name="normalize_volume_s_level_and_albums">Το επίπεδο της Κανονικοποίησης έντασης και άλμπουμ που μένουν όπως είναι</string>
     <string name="your_own_equalizer_presets_shared_as">Δικές σου προρυθμίσεις ισοσταθμιστή, κοινοποιημένες ως κωδικοί, μία για το αυτοκίνητο και μία για τα ακουστικά σου</string>
     <string name="fades_for_the_sleep_timer_and">Σβησίματα για τον χρονοδιακόπτη ύπνου και για παύση και αναπαραγωγή</string>
     <string name="liked_how_prism_1_6_looked">Σου άρεσε πώς ήταν το Prism 1.6; Επέστρεψε, ως επιλογή.</string>
-    <string name="the_classic_look_customize_prism_looks">Το Κλασικό στυλ: Προσαρμογή του Prism → Στυλ</string>
+    <string name="the_classic_look_customize_prism_looks">Το Κλασικό στυλ: Ρυθμίσεις → Στυλ</string>
     <string name="or_only_its_icons_its_bold">Ή μόνο τα εικονίδιά του, τα έντονα γράμματά του ή τα απλά χειριστήριά του</string>
     <string name="the_player_s_buttons_apart_instead">Τα κουμπιά της οθόνης αναπαραγωγής χωριστά αντί σε κάψουλα</string>
-    <string name="last_fm_scrobbling_devices_connections_and">Scrobbling στο Last.fm (Συσκευές &amp; συνδέσεις) και Replay για οποιεσδήποτε ημερομηνίες</string>
+    <string name="last_fm_scrobbling_devices_connections_and">Scrobbling στο Last.fm (Λογαριασμοί &amp; κοινοποίηση) και Replay για οποιεσδήποτε ημερομηνίες</string>
     <string name="pick_several_songs_in_the_queue">Διάλεξε πολλά τραγούδια στην ουρά για να τα μετακινήσεις ή να τα αφαιρέσεις μαζί, ή κλείδωσε τη σειρά της</string>
     <string name="choose_what_goes_in_a_backup">Διάλεξε τι μπαίνει σε ένα αντίγραφο ασφαλείας</string>
     <string name="swipe_up_on_the_player_for">Σύρε προς τα πάνω στην οθόνη αναπαραγωγής για την ουρά, κλείδωμα σε κατακόρυφο, παύση στη σίγαση</string>
@@ -3794,7 +3794,7 @@
     <string name="the_ambient_frost_behind_home_search_all">Το ατμοσφαιρικό θάμπωμα πίσω από την Αρχική, την Αναζήτηση, τη Βιβλιοθήκη, το Replay και τις Ρυθμίσεις (το Αυτόματο κρατά μέσα του τα χρώματα του εξωφύλλου, το Απλό το κάνει γκρι, μια απόχρωση το χρωματίζει), αυτές οι σελίδες όταν το θαμπό γυαλί είναι ανενεργό, καθώς και φύλλα και παράθυρα διαλόγου. Όχι η οθόνη αναπαραγωγής, ούτε οι σελίδες άλμπουμ, καλλιτεχνών και playlist, που παίρνουν τα χρώματα της εικόνας τους.</string>
     <string name="home_has_the_background_glass_backgrounds_all">Η Αρχική έχει το φόντο %1$s (Γυαλί &amp; φόντα), σχεδιασμένο πάνω από αυτό το χρώμα, οπότε εκεί φαίνεται μόνο λίγο. Διάλεξε εκεί το Ατμοσφαιρικό για να το δεις ολόκληρο</string>
     <string name="secondary_text_artists_times_notes_dividers_all">Δευτερεύον κείμενο (καλλιτέχνες, χρόνοι, σημειώσεις), διαχωριστικά και περιγράμματα σε σελίδες, φύλλα και μενού. Το Μεσαίο και το Υψηλό κάνουν επίσης την έμφαση πιο έντονη, ώστε να διαβάζεται πιο εύκολα. Το λευκό κείμενο της οθόνης αναπαραγωγής πάνω στο εξώφυλλο μένει όπως είναι.</string>
-    <string name="the_accent_on_artist_album_and_all">Η έμφαση στις σελίδες καλλιτεχνών, άλμπουμ και playlist, και στα μενού που ανοίγεις από ένα τραγούδι, άλμπουμ ή καλλιτέχνη (παρατεταμένο πάτημα ή ⋯). Τα θαμπά φόντα τους παίρνουν τα χρώματα της εικόνας σε κάθε περίπτωση (Γυαλί &amp; φόντα).</string>
+    <string name="the_accent_on_artist_album_and_all">Η έμφαση στις σελίδες καλλιτεχνών, άλμπουμ και playlist, και στα μενού που ανοίγεις από ένα τραγούδι, άλμπουμ ή καλλιτέχνη (παρατεταμένο πάτημα ή ⋯). Τα θαμπά φόντα τους παίρνουν τα χρώματα της εικόνας σε κάθε περίπτωση (Γυαλί).</string>
     <string name="tap_the_line_under_the_player_all">Πάτα τη γραμμή κάτω από τα χειριστήρια της οθόνης αναπαραγωγής (λέει ποια συσκευή παίζει) και διάλεξε ηχείο, τηλεόραση ή δέκτη. Πρέπει να είναι σε αυτό το Wi-Fi με Google Cast (Chromecast, Google TV, ηχεία με ενσωματωμένο Cast) ή DLNA / UPnP (λέγεται μερικές φορές κοινή χρήση πολυμέσων). Η ουρά, οι στίχοι και τα χειριστήρια μένουν στο τηλέφωνο, και τα κουμπιά έντασής του ρυθμίζουν την ένταση του ηχείου. Ο ισοσταθμιστής, η Ομαλή μετάβαση, το Τραγούδα και τα βίντεο ανήκουν στο τηλέφωνο, οπότε είναι ανενεργά κατά τη μετάδοση.</string>
     <string name="nothing_new_from_your_artists_in_all">Τίποτα νέο από τους καλλιτέχνες σου τους τελευταίους τρεις μήνες. Το Prism ελέγχει κάθε λίγες μέρες τους καλλιτέχνες που έχεις στα αγαπημένα, έχεις αποθηκεύσει και παίζεις περισσότερο· ο πρώτος έλεγχος μαθαίνει μόνο τι έχει ήδη κυκλοφορήσει, οπότε η νέα μουσική εμφανίζεται από τον επόμενο.</string>
     <string name="tunemymusic_copies_your_playlists_liked_songs_all">Το TuneMyMusic αντιγράφει τις playlist σου, μαζί με τα Αγαπημένα τραγούδια, στον λογαριασμό σου στο YouTube Music. Είναι η ίδια υπηρεσία που χρησιμοποιεί η εφαρμογή του YouTube Music για μεταφορές.</string>
@@ -4237,14 +4237,14 @@
     <string name="shaped_by_the_crossfade">Με το σχήμα της ομαλής μετάβασης</string>
     <string name="crossfade_shape_keywords">ομαλή μετάβαση crossfade σβήσιμο σταδιακή μείωση αύξηση στένεμα σχήμα καμπύλη γραμμή προόδου μπάρα αναζήτησης</string>
     <string name="the_end_tapers_as_the_song_fades">Το τέλος στενεύει καθώς το τραγούδι σβήνει</string>
-    <string name="crossfade_shape_info">Το τέλος της γραμμής παίρνει το σχήμα του τρόπου που σβήνει το τραγούδι, και η γραμμή του επόμενου τραγουδιού μεγαλώνει καθώς αυτό δυναμώνει, ανάλογα με τον τύπο της ομαλής μετάβασής σου (Ήχος → Ομαλή μετάβαση). Μόνο όταν έρχεται ομαλή μετάβαση: όχι ανάμεσα στα κομμάτια ενός άλμπουμ, κατά τη μετάδοση, σε επεισόδια ή ζωντανές μεταδόσεις. Με αυτόματη διάρκεια εμφανίζεται μόλις σχεδιαστεί η μετάβαση. Η κυματομορφή και οι Κορδέλες κρατούν αντ’ αυτού το σημάδι.</string>
+    <string name="crossfade_shape_info">Το τέλος της γραμμής παίρνει το σχήμα του τρόπου που σβήνει το τραγούδι, και η γραμμή του επόμενου τραγουδιού μεγαλώνει καθώς αυτό δυναμώνει, ανάλογα με τον τύπο της ομαλής μετάβασής σου (Αναπαραγωγή → Ομαλή μετάβαση). Μόνο όταν έρχεται ομαλή μετάβαση: όχι ανάμεσα στα κομμάτια ενός άλμπουμ, κατά τη μετάδοση, σε επεισόδια ή ζωντανές μεταδόσεις. Με αυτόματη διάρκεια εμφανίζεται μόλις σχεδιαστεί η μετάβαση. Η κυματομορφή και οι Κορδέλες κρατούν αντ’ αυτού το σημάδι.</string>
     <string name="imp_title">Φέρε το ιστορικό σου</string>
     <string name="imp_subtitle">Από Spotify, YouTube Music και Last.fm, με ανάγνωση σε αυτό το τηλέφωνο</string>
     <string name="imp_row_detail">Spotify, YouTube Music, Last.fm</string>
     <string name="imp_group_info">Φέρε τις αναπαραγωγές, τα Αγαπημένα τραγούδια και τα playlist σου από τη λήψη δεδομένων του Spotify, το ιστορικό σου στο YouTube Music από το Google Takeout ή τα scrobbles σου στο Last.fm. Τα αρχεία διαβάζονται σε αυτό το τηλέφωνο· για να βρει κάθε τραγούδι, το Prism το αναζητά, όπως κάνει η αναζήτησή του.</string>
     <string name="imp_keywords">εισαγωγή import spotify λήψη δεδομένων takeout google youtube music ιστορικό last.fm scrobbles αγαπημένα τραγούδια playlist μεταφορά</string>
     <string name="imp_bring_from">Φέρε από</string>
-    <string name="imp_bring_from_info">Spotify: στο spotify.com, Λογαριασμός → Απόρρητο → Λήψη των δεδομένων σου. Τα δεδομένα λογαριασμού έρχονται σε λίγες μέρες (ένας χρόνος αναπαραγωγών, Αγαπημένα τραγούδια, playlist)· το εκτεταμένο ιστορικό ροής έρχεται σε έως 30 μέρες (κάθε αναπαραγωγή από τότε που μπήκες). Διάλεξε το zip όπως έρχεται ή τα αρχεία μέσα του.\n\nYouTube Music: στο takeout.google.com, διάλεξε YouTube και YouTube Music, μόνο το ιστορικό, σε JSON. Διάλεξε το zip ή το watch-history.json.\n\nLast.fm: σύνδεσέ το στις Συσκευές &amp; συνδέσεις, και το Prism διαβάζει τα scrobbles σου.\n\nΤίποτα δεν στέλνεται πουθενά. Για να βρει κάθε τραγούδι, το Prism το αναζητά, όπως κάνει η αναζήτησή του.</string>
+    <string name="imp_bring_from_info">Spotify: στο spotify.com, Λογαριασμός → Απόρρητο → Λήψη των δεδομένων σου. Τα δεδομένα λογαριασμού έρχονται σε λίγες μέρες (ένας χρόνος αναπαραγωγών, Αγαπημένα τραγούδια, playlist)· το εκτεταμένο ιστορικό ροής έρχεται σε έως 30 μέρες (κάθε αναπαραγωγή από τότε που μπήκες). Διάλεξε το zip όπως έρχεται ή τα αρχεία μέσα του.\n\nYouTube Music: στο takeout.google.com, διάλεξε YouTube και YouTube Music, μόνο το ιστορικό, σε JSON. Διάλεξε το zip ή το watch-history.json.\n\nLast.fm: σύνδεσέ το στις Ρυθμίσεις → Λογαριασμοί &amp; κοινοποίηση, και το Prism διαβάζει τα scrobbles σου.\n\nΤίποτα δεν στέλνεται πουθενά. Για να βρει κάθε τραγούδι, το Prism το αναζητά, όπως κάνει η αναζήτησή του.</string>
     <string name="imp_spotify_detail">Η λήψη δεδομένων του: αναπαραγωγές, Αγαπημένα τραγούδια, playlist</string>
     <string name="imp_takeout_detail">Το ιστορικό παρακολούθησης από το Google Takeout</string>
     <string name="imp_lastfm_detail">Τα scrobbles σου, ως %1$s</string>
@@ -4349,7 +4349,7 @@
     <string name="explicit_show">Εμφάνιση</string>
     <string name="explicit_skip">Παράλειψη</string>
     <string name="explicit_hide">Απόκρυψη</string>
-    <string name="explicit_skipped">Τα ακατάλληλα τραγούδια παραλείπονται (Ρυθμίσεις → Αναπαραγωγή &amp; ήχος)</string>
+    <string name="explicit_skipped">Τα ακατάλληλα τραγούδια παραλείπονται (Ρυθμίσεις → Αναπαραγωγή)</string>
     <string name="explicit_none_left">Τίποτα για αναπαραγωγή: κάθε τραγούδι εδώ είναι ακατάλληλο</string>
     <string name="change_cover">Αλλαγή εξωφύλλου</string>
     <string name="cover_changed">Το εξώφυλλο άλλαξε</string>
@@ -4399,7 +4399,7 @@
     <string name="replay_last_weeks">Τελευταίες %1$d εβδομάδες</string>
     <string name="replay_last_days">Τελευταίες %1$d ημέρες</string>
     <string name="replay_story_font">Γραμματοσειρά ιστοριών</string>
-    <string name="replay_story_font_info">Πώς γράφουν τις λέξεις τους οι ιστορίες του Replay και του Rewind: με τη γραμματοσειρά αφίσας του Prism ή με τη γραμματοσειρά που διάλεξες για το Prism (Κείμενο).</string>
+    <string name="replay_story_font_info">Πώς γράφουν τις λέξεις τους οι ιστορίες του Replay και του Rewind: με τη γραμματοσειρά αφίσας του Prism ή με τη γραμματοσειρά που διάλεξες για το Prism (Κείμενο &amp; εικονίδια).</string>
     <string name="replay_story_font_keywords">γραμματοσειρά τυπογραφία font ιστορίες rewind wrapped</string>
     <string name="replay_story_font_poster">Γραμματοσειρά αφίσας</string>
     <string name="replay_story_font_own">Η γραμματοσειρά σου</string>
@@ -4598,7 +4598,7 @@
         <item quantity="other">%1$s τραγούδια για επιλογή</item>
     </plurals>
     <string name="ytlive_spotify_connect">Σύνδεσε το Spotify για να το χρησιμοποιήσεις</string>
-    <string name="ytlive_spotify_recent_off">Ανενεργό: ενεργοποίησε τις Πρόσφατες αναπαραγωγές στη σελίδα του Spotify</string>
+    <string name="ytlive_spotify_recent_off">Ανενεργό: ενεργοποίησε τις Πρόσφατες αναπαραγωγές στις Ρυθμίσεις → Λογαριασμοί &amp; κοινοποίηση → Spotify</string>
     <string name="ytlive_connection_on">Το ιστορικό σου, ενημερωμένο · Ενεργό</string>
     <string name="ytlive_connection_off">Κράτα το ιστορικό σου ενημερωμένο · Ανενεργό</string>
     <string name="ytlive_connection_signed_out">Συνδέσου για να κρατάς το ιστορικό σου ενημερωμένο</string>
@@ -4614,7 +4614,7 @@
     <string name="dj_in_the_queue_keywords">dj λειτουργία κουμπί ουρά κορυφή χώρος απόκρυψη</string>
     <string name="menu_lyrics_only_way">Μένει όσο είναι ο μόνος τρόπος να φτάσεις στους στίχους από την οθόνη αναπαραγωγής</string>
     <string name="smart_downloads_offer_title">Λήψη τραγουδιών πριν τα χρειαστείς;</string>
-    <string name="smart_downloads_offer_body">Οι Έξυπνες λήψεις κρατούν έτοιμα εκτός σύνδεσης τα τραγούδια που πιθανώς θα παίξεις: έως 1 GB, μέσω Wi-Fi. Άλλαξέ το όποτε θέλεις στις Λήψεις, αποθηκευτικός χώρος &amp; δεδομένα.</string>
+    <string name="smart_downloads_offer_body">Οι Έξυπνες λήψεις κρατούν έτοιμα εκτός σύνδεσης τα τραγούδια που πιθανώς θα παίξεις: έως 1 GB, μέσω Wi-Fi. Άλλαξέ το όποτε θέλεις στις Ρυθμίσεις → Λήψεις &amp; δεδομένα.</string>
     <!-- 1.8.2 -->
     <string name="loading_list">Φόρτωση του «%1$s»…</string>
     <string name="song_details">Λεπτομέρειες τραγουδιού</string>
@@ -4855,7 +4855,7 @@
     <string name="glass_blur">Θάμπωμα</string>
     <string name="glass_blur_info">Πόσο απλώνονται τα χρώματα πίσω από το γυαλί. Μικρά πράγματα όπως το κείμενο κρατούν ένα αχνό περίγραμμα πίσω από το Υγρό γυαλί όσο κι αν ανεβεί αυτή η τιμή· το Θαμπό γυαλί τα λιώνει κι αυτά. Το 100% είναι η τιμή του Prism. Πάνω από αυτό, ένα πιο αργό κινητό δουλεύει πιο δύσκολα.</string>
     <string name="glass_frost">Θάμπωμα επιφάνειας</string>
-    <string name="glass_frost_info">Πόσο πυκνό είναι το πέπλο πάνω από το γυαλί: λιγότερο αφήνει να περνά περισσότερο από ό,τι υπάρχει πίσω του, περισσότερο το κάνει πιο γαλακτερό στο φωτεινό θέμα και πιο σκούρο στο σκούρο, και πιο εύκολο στην ανάγνωση πάνω από φορτωμένες εικόνες. Το 100% είναι η τιμή του Prism. Μια μπάρα καρτελών με δικό της φόντο (Διάταξη, Μπάρα καρτελών) κρατά αυτό το φόντο.</string>
+    <string name="glass_frost_info">Πόσο πυκνό είναι το πέπλο πάνω από το γυαλί: λιγότερο αφήνει να περνά περισσότερο από ό,τι υπάρχει πίσω του, περισσότερο το κάνει πιο γαλακτερό στο φωτεινό θέμα και πιο σκούρο στο σκούρο, και πιο εύκολο στην ανάγνωση πάνω από φορτωμένες εικόνες. Το 100% είναι η τιμή του Prism. Μια μπάρα καρτελών με δικό της φόντο (Καρτέλες &amp; μίνι player → Γραμμή πλοήγησης) κρατά αυτό το φόντο.</string>
     <string name="glass_needs_android_12">Αυτά χρειάζονται το θάμπωμα που ήρθε με το Android 12. Σε αυτό το κινητό οι μπάρες είναι συμπαγείς, οπότε οι ρυθμίσεις θαμπώματος δεν έχουν τι να αλλάξουν.</string>
     <string name="glass_on_more_of_the_screen">Γυαλί σε μεγαλύτερο μέρος της οθόνης</string>
     <string name="glass_on_more_of_the_screen_detail">Κάρτες, chips, στρογγυλά κουμπιά και η μπάρα Αναίρεσης</string>
@@ -5187,6 +5187,7 @@
     <string name="the_day_before">την προηγούμενη μέρα</string>
     <string name="the_week_before">την προηγούμενη εβδομάδα</string>
     <string name="root_app">Εφαρμογή</string>
+    <string name="root_listening">Ακρόαση</string>
     <string name="root_theme_colors">Θέμα &amp; χρώματα</string>
     <string name="root_text_icons">Κείμενο &amp; εικονίδια</string>
     <string name="root_sound_quality">Ήχος &amp; ποιότητα</string>

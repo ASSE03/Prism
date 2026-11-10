@@ -102,7 +102,7 @@
     <string name="save">Сохранить</string>
     <string name="cancel">Отмена</string>
     <string name="share_2">Поделиться: %1$s</string>
-    <string name="scan_it_in_prism_settings_customize">Отсканируй в Prism: Настройки → Настроить Prism → Стили → Сканировать</string>
+    <string name="scan_it_in_prism_settings_customize">Отсканируй в Prism: Настройки → Стили → Получить стиль</string>
     <string name="too_much_for_a_qr_code">Слишком много для QR-кода: отправь как текст или файл</string>
     <string name="codes_leave_out_photos_and_your">В код не входят фото и твой собственный шрифт; в файле они есть.</string>
     <string name="here_s_my_prism_look_share">Вот мой стиль Prism — «%1$s». Поделись этим сообщением с Prism, чтобы посмотреть его:\n\n%2$s</string>
@@ -652,7 +652,7 @@
     <string name="remove_this_color">Удалить этот цвет</string>
     <string name="changes">%1$s\n\nМеняет: %2$s</string>
     <string name="white_black_and_greys_give_prism">Белый, чёрный и серые дают простой вид Prism: белый на тёмных страницах, чёрный — на светлых</string>
-    <string name="shown_softened_lighter_on_dark_pages">Показан смягчённым (светлее на тёмных страницах, глубже — на светлых). Выбери «Точно как выбран» на странице цвета, чтобы использовать его как есть</string>
+    <string name="shown_softened_lighter_on_dark_pages">Показан смягчённым (светлее на тёмных страницах, глубже — на светлых). Выбери «Точно как выбран» в разделе «Акцент», чтобы использовать его как есть</string>
     <string name="made_a_little_lighter_or_darker">Чуть светлее или темнее там, где текст на нём не читался бы</string>
     <string name="tint_strength">Сила оттенка</string>
     <string name="faint">Едва заметно</string>
@@ -1098,7 +1098,7 @@
     <string name="in_the_middle">По центру</string>
     <string name="title_size">Размер названия</string>
     <string name="title_weight">Насыщенность названия</string>
-    <string name="light_is_prism_s_own_and">«Тонкий» — собственный вариант Prism, он следует настройке Текст → Насыщенность. «Жирный» делает и имя исполнителя жирнее.</string>
+    <string name="light_is_prism_s_own_and">«Тонкий» — собственный вариант Prism, он следует настройке Текст и значки → Насыщенность. «Жирный» делает и имя исполнителя жирнее.</string>
     <string name="scrolling_titles">Прокрутка названий</string>
     <string name="a_long_title_scrolls_across_off">Длинное название прокручивается (если выключено — обрезается с …)</string>
     <string name="times_under_the_progress_bar">Время под полосой прогресса</string>
@@ -1963,7 +1963,7 @@
     <string name="refractive_bars_and_controls">Преломляющие панели и элементы</string>
     <string name="soft_blur_no_refraction">Мягкое размытие, без преломления</string>
     <string name="pages_frosted_with_their_picture">Страницы на матовом стекле из своей картинки</string>
-    <string name="artist_album_and_playlist_pages_sit">Страницы исполнителей, альбомов и плейлистов лежат на матовом стекле из своей картинки; главная, библиотека, поиск и настройки — на матовом стекле из того, что играет. Берут ли страницы цвет своей картинки, настраивается в разделе «Цвет».</string>
+    <string name="artist_album_and_playlist_pages_sit">Страницы исполнителей, альбомов и плейлистов лежат на матовом стекле из своей картинки; главная, библиотека, поиск и настройки — на матовом стекле из того, что играет. Берут ли страницы цвет своей картинки, настраивается в разделе «Страницы».</string>
     <string name="calmer_quicker_animations">Спокойнее и быстрее анимации</string>
     <string name="no_drifting_backgrounds_no_artwork_bounce">Без плывущих фонов, без подпрыгивания обложек, быстрее переходы.</string>
     <string name="that_font_couldn_t_be_used">Этот шрифт нельзя использовать</string>
@@ -2005,7 +2005,7 @@
     <string name="more_room_swipe_down_from_the">Больше места; проведи сверху вниз, чтобы увидеть её</string>
     <string name="the_clock_battery_and_notification_icons">Часы, заряд и значки уведомлений вверху скрыты, пока Prism открыт. Проведи вниз от верхнего края — и они ненадолго появятся. Режим погружения и полноэкранное видео, как и раньше, скрывают и другие панели.</string>
     <string name="never_shows_only_the_icons_words">«Никогда» показывает только значки; «Только названия» — только названия.</string>
-    <string name="see_through_lets_the_page_show">«Полупрозрачная» показывает страницу сквозь панель; «Сплошная» её скрывает. Само размытие задаётся в разделе «Стекло» (Настроить Prism → Стекло и фоны).</string>
+    <string name="see_through_lets_the_page_show">«Полупрозрачная» показывает страницу сквозь панель; «Сплошная» её скрывает. Само размытие задаётся в разделе «Стекло» (Тема и цвета → Стекло).</string>
     <string name="slims_down_as_you_scroll">Становится тоньше при прокрутке</string>
     <string name="swipe_sideways_on_a_tab_s">Свайп в сторону на странице вкладки</string>
     <string name="a_sideways_swipe_on_a_tab">Свайп в сторону на собственной странице вкладки переходит к соседней вкладке. Ряды, которые прокручиваются вбок (и собственные страницы библиотеки), сохраняют свои свайпы.</string>
@@ -2034,7 +2034,7 @@
     <string name="played_now_playing_and_up_next">«Прослушано», «Сейчас играет» и «Далее»</string>
     <string name="off_the_queue_is_one_list">Если выключено, очередь — это один список песен от уже прослушанных до предстоящих.</string>
     <string name="moving_artwork_when_a_song_has">Анимированная обложка, если она есть у песни</string>
-    <string name="motion_artwork_and_video_covers_turn">Анимированные и видеообложки. Выключить их для одной песни можно в меню ⋯ плеера. Будут ли они играть через мобильный интернет и какие хранятся на телефоне — в разделе «Скачанное, хранилище и трафик».</string>
+    <string name="motion_artwork_and_video_covers_turn">Анимированные и видеообложки. Выключить их для одной песни можно в меню ⋯ плеера. Будут ли они играть через мобильный интернет и какие хранятся на телефоне — в разделе «Скачанное и трафик».</string>
     <string name="the_animated_cover_plays_behind_everything">Анимированная обложка играет позади всего</string>
     <string name="the_moving_artwork_fills_the_whole">Анимированная обложка заполняет весь плеер, затемняясь под элементами управления, а сама обложка показывает неподвижную картинку. Не работает с обложкой от края до края, которая и так показывает её во весь экран.</string>
     <string name="the_cover_fills_the_screen_lyrics">Обложка на весь экран, текст поверх неё</string>
@@ -2137,7 +2137,7 @@
     <string name="needed_for_sing">Нужно для «Подпевай» · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Убирает голос исполнителя из песен прямо на телефоне — для караоке. Скачивается один раз.</string>
     <string name="so_sing_starts_at_once_when">Чтобы «Подпевай» запускался сразу после включения</string>
-    <string name="the_playing_song_and_the_next">Играющая и следующая песни разделяются в фоне, даже когда «Подпевай» выключен. Пока играет музыка, расходуется больше заряда; через мобильный интернет действует настройка Скачанное, хранилище и трафик → Мобильный интернет.</string>
+    <string name="the_playing_song_and_the_next">Играющая и следующая песни разделяются в фоне, даже когда «Подпевай» выключен. Пока играет музыка, расходуется больше заряда; через мобильный интернет действует настройка Скачанное и трафик → Мобильный интернет.</string>
     <string name="using">Используется %1$s</string>
     <string name="songs_are_worked_out_again_the">Песни будут обработаны заново, когда ты споёшь их в следующий раз.</string>
     <string name="word_by_word_first_then_by">Сначала по словам, потом по строкам</string>
@@ -2495,7 +2495,7 @@
     <string name="allow_notifications">Разрешить уведомления</string>
     <string name="turn_them_on_in_android_s">Включи их для Prism в настройках Android.</string>
     <string name="your_starting_point_made_from_what">Твоя отправная точка — из того, что ты слушаешь.</string>
-    <string name="the_replay_card_at_the_top">Карточка Replay вверху: твой год на данный момент (её вид выбирается в Настройки → Настроить Prism → Главная и библиотека)</string>
+    <string name="the_replay_card_at_the_top">Карточка Replay вверху: твой год на данный момент (её вид выбирается в Настройки → Главная и библиотека → Карточка Replay)</string>
     <string name="quick_picks_songs_around_the_artists">Быстрый выбор: песни вокруг исполнителей, которых ты слушаешь, — листай вбок, чтобы увидеть больше</string>
     <string name="made_for_you_daily_mixes_your">Специально для тебя: миксы дня, микс под время суток и «Радар новинок»</string>
     <string name="the_grid_button_at_the_top">Кнопка с сеткой вверху расставляет разделы главной</string>
@@ -2516,12 +2516,12 @@
     <string name="let_prism_mix_your_music_songs">Пусть Prism сводит твою музыку: песни перетекают друг в друга, в тональности и в такт.</string>
     <string name="in_the_queue_tap_dj_then">В очереди нажми DJ и выбери «Ровно», «Нарастание» или «Спад»</string>
     <string name="long_press_an_album_or_playlist">Долго нажми на альбом или плейлист → «Включить как DJ-сет»</string>
-    <string name="crossfade_settings_playback_sound_blends_any">Плавный переход (Настройки → Воспроизведение и звук) соединяет любые две песни</string>
+    <string name="crossfade_settings_playback_sound_blends_any">Плавный переход (Настройки → Воспроизведение) соединяет любые две песни</string>
     <string name="mixes_made_on_your_phone_from">Миксы, составленные на твоём телефоне по тому, что ты слушаешь. Ничего о твоих прослушиваниях с него не уходит.</string>
     <string name="daily_mixes_group_the_artists_you">Миксы дня объединяют исполнителей, которых ты слушаешь, по тому, что сочетается</string>
     <string name="release_radar_finds_new_music_from">«Радар новинок» находит новую музыку исполнителей, за которыми ты следишь</string>
     <string name="made_for_you_also_has_mixes">В «Специально для тебя» есть и миксы из твоей собственной музыки, и «На повторе»: они составляются только по твоим прослушиваниям и работают без сети</string>
-    <string name="when_the_queue_ends_prism_s">Когда очередь заканчивается, радио Prism выбирает из твоей музыки (Настройки → Воспроизведение и звук → Автовоспроизведение из)</string>
+    <string name="when_the_queue_ends_prism_s">Когда очередь заканчивается, радио Prism выбирает из твоей музыки (Настройки → Воспроизведение → Когда очередь закончится)</string>
     <string name="tap_shuffle_twice_on_a_playlist">Нажми «Перемешать» в плейлисте дважды для умного перемешивания: в него проскальзывают новые песни</string>
     <string name="not_for_me_and_leave_out">«Не для меня» и «Не учитывать в моих вкусах» убирают лишнее</string>
     <string name="find_anything_in_prism_music_or">Находи что угодно в Prism Music или узнавай песню, которая играет вокруг.</string>
@@ -2545,11 +2545,11 @@
     <string name="control_prism_from_a_browser_on">Управляй Prism из браузера на компьютере</string>
     <string name="hand_what_s_playing_to_another">Передавай то, что играет, на другой телефон или планшет с Prism</string>
     <string name="prism_takes_its_color_from_what">Prism берёт цвет из того, что играет. Меняй его сколько хочешь.</string>
-    <string name="appearance_the_spectrum_s_colors_or">Оформление: цвета спектра (или просто белый), твой акцент, шрифты, значки и фоны</string>
-    <string name="layout_the_tab_bar_your_tabs">Макет: панель вкладок, твои вкладки и мини-плеер</string>
+    <string name="appearance_the_spectrum_s_colors_or">Тема и цвета, Текст и значки: цвета света (или просто белый), твой акцент, шрифты, значки и фоны</string>
+    <string name="layout_the_tab_bar_your_tabs">Вкладки и мини-плеер: панель вкладок, твои вкладки и мини-плеер</string>
     <string name="player_its_background_the_cover_and">Плеер: его фон, обложка и то, что на ней показывается</string>
     <string name="search_settings_from_the_box_at">Ищи настройки в поле вверху настроек</string>
-    <string name="settings_customize_prism_color_every_choice">Настройки → Настроить Prism → Цвет: каждый вариант показывает, как он выглядит, ещё до выбора.</string>
+    <string name="settings_customize_prism_color_every_choice">Настройки → Тема и цвета: каждый вариант показывает, как он выглядит, ещё до выбора.</string>
     <string name="the_light_12_presets_white_black">Свет: 12 пресетов, белый (чёрный в светлой теме) или свои цвета</string>
     <string name="your_accent_any_color_from_a">Твой акцент: любой цвет — с цветового круга, по коду или пипеткой</string>
     <string name="the_page_background_plain_tinted_with">Фон страниц: простой, с оттенком твоего акцента или свой цвет</string>
@@ -2560,14 +2560,14 @@
     <string name="pin_prism_playlists_to_home_customize">Закрепляй плейлисты Prism на главной (Настроить главную → Закреплённые плейлисты)</string>
     <string name="song_credits_in_any_song_s">Авторы песни — в меню любой песни</string>
     <string name="see_which_downloads_failed_and_why">Смотри, какие загрузки не удались и почему</string>
-    <string name="settings_customize_prism_looks_your_whole">Настройки → Настроить Prism → Стили: весь твой вид — сохраняй, переключай и делись одним нажатием.</string>
+    <string name="settings_customize_prism_looks_your_whole">Настройки → Стили: весь твой вид — сохраняй, переключай и делись одним нажатием.</string>
     <string name="try_prism_s_own_paper_midnight">Попробуй стили Prism: «Бумага», «Полночь», «Неон», «Мягкий», «Студия» и «Винил»</string>
     <string name="save_yours_update_it_when_you">Сохрани свой, обновляй его, когда меняешь, и делись им как QR-кодом, кодом или файлом</string>
     <string name="browse_looks_people_shared_under_from">Смотри стили, которыми поделились другие, в разделе «От сообщества»</string>
     <string name="one_look_by_day_and_another">Один стиль днём, другой ночью — на восходе и закате</string>
     <string name="every_look_page_shows_home_the">Каждая страница оформления показывает главную, плеер и текст по мере изменений; «Отменить» возвращает изменение</string>
-    <string name="customize_by_tapping_hold_the_settings">Настройка нажатием: удерживай вкладку «Настройки» или включи её в разделе «Оформление», а затем нажимай на мини-плеер, панель вкладок, плеер или раздел главной</string>
-    <string name="settings_customize_prism_player_or_player">Настройки → Настроить Prism → Плеер или ⋯ → Настройки плеера прямо в плеере.</string>
+    <string name="customize_by_tapping_hold_the_settings">Настройка нажатием: удерживай вкладку «Настройки» или включи её в разделе «Стили», а затем нажимай на мини-плеер, панель вкладок, плеер или раздел главной</string>
+    <string name="settings_customize_prism_player_or_player">Настройки → Плеер или ⋯ → Настройки плеера прямо в плеере.</string>
     <string name="layouts_standard_a_big_cover_lyrics">Макеты: «Стандартный», крупная «Обложка», «Сначала текст», «Минимальный», «Винил» или «Кассета» (они крутятся, пока играет музыка)</string>
     <string name="a_visualizer_if_you_d_like">Визуализатор, если хочешь: столбики, волна, кольцо, пульс или свечение (выключен, пока ты его не выберешь)</string>
     <string name="pick_the_buttons_under_the_controls">Выбирай кнопки под элементами управления (скорость — одна из них) и две рядом с кнопкой воспроизведения в уведомлении и машине</string>
@@ -2578,7 +2578,7 @@
     <string name="prism_tells_android_which_of_its">Prism подсказывает Android, какие свои части подготовить заранее, а обновления из баннера приходят уже готовыми, поэтому больше не тормозят</string>
     <string name="less_work_while_lists_scroll_while">Меньше работы, пока прокручиваются списки, пока ты печатаешь в поиске и пока играет песня</string>
     <string name="if_something_still_stutters_settings_backup">Если что-то всё ещё подтормаживает, Настройки → Резервная копия и о приложении → Диагностика отметит, где это случилось, чтобы ты мог поделиться</string>
-    <string name="settings_customize_prism_lyrics_how_your">Настройки → Настроить Prism → Текст: как выглядит текст песен, с примером для каждого варианта.</string>
+    <string name="settings_customize_prism_lyrics_how_your">Настройки → Тексты и «Подпевай»: как выглядит текст песен, с примером для каждого варианта.</string>
     <string name="six_styles_prism_classic_karaoke_bold">Шесть стилей: Prism, «Классическое караоке», «Яркая карточка», «Свечение», «Печатная машинка» и «Спокойный»</string>
     <string name="the_sung_line_and_the_others">Звучащая строка и остальные — белым, твоим светом, акцентом, цветом обложки или своим цветом</string>
     <string name="weight_line_spacing_how_dim_the">Насыщенность, межстрочный интервал, насколько приглушены другие строки, сила размытия, заглавные и тень</string>
@@ -2588,8 +2588,8 @@
     <string name="a_few_things_you_asked_for">Кое-что из того, о чём вы просили.</string>
     <string name="library_history_what_you_played_by">Библиотека → История: что ты слушал, по дням, на этом телефоне или в аккаунте</string>
     <string name="liked_a_song_and_its_video">Лайкнул песню и её клип? Они показываются один раз, как песня</string>
-    <string name="prism_s_own_volume_apart_from">Собственная громкость Prism, отдельно от громкости телефона (Настройки → Настроить Prism → Плеер)</string>
-    <string name="hide_the_status_bar_customize_prism">Скрытие строки состояния (Настроить Prism → Вкладки и мини-плеер)</string>
+    <string name="prism_s_own_volume_apart_from">Собственная громкость Prism, отдельно от громкости телефона (Настройки → Плеер)</string>
+    <string name="hide_the_status_bar_customize_prism">Скрытие строки состояния (Настройки → Вкладки и мини-плеер)</string>
     <string name="settings_pages_are_tidier_tap_beside">Страницы настроек стали аккуратнее: нажми ⓘ рядом с настройкой, чтобы узнать подробности</string>
     <string name="library_s_tiles_the_edit_button">Плитки библиотеки: кнопка изменения вверху библиотеки</string>
     <string name="customize_home_the_button_at_the">В «Настроить главную» (кнопка вверху главной) стало больше возможностей.</string>
@@ -2610,10 +2610,10 @@
     <string name="artists_and_songs_with_their_pictures">Исполнители и песни с картинками прямо во время ввода</string>
     <string name="results_already_in_your_library_right">Результаты, которые уже есть в библиотеке, — сразу после лучшего</string>
     <string name="settings_are_sorted_by_what_they">Настройки разложены по тому, что они делают.</string>
-    <string name="everything_about_how_prism_looks_is">Всё о внешнем виде Prism — в разделе «Настроить Prism»</string>
-    <string name="gestures_and_buttons_in_controls_gestures">Жесты и кнопки — в разделе «Управление и жесты»</string>
+    <string name="everything_about_how_prism_looks_is">Всё о внешнем виде Prism — в разделе «Сделай под себя»</string>
+    <string name="gestures_and_buttons_in_controls_gestures">Жесты и кнопки — в разделе «Прослушивание»</string>
     <string name="every_mobile_data_choice_on_one">Все настройки мобильного интернета на одной странице</string>
-    <string name="android_auto_speakers_discord_and_last">Android Auto, колонки, Discord и Last.fm — в разделе «Устройства и подключения»</string>
+    <string name="android_auto_speakers_discord_and_last">Android Auto, колонки, Discord и Last.fm — в разделе «Подключения»</string>
     <string name="performance_mode_at_the_top_for">Режим производительности вверху — для медленных телефонов</string>
     <string name="make_the_pieces_of_prism_yours">Сделай каждую деталь Prism своей.</string>
     <string name="covers_as_circles_squircles_flowers_arches">Обложки в виде кругов, сквирклов, цветов, арок… для песен, альбомов, исполнителей и плеера</string>
@@ -2624,20 +2624,20 @@
     <string name="from_your_requests">По вашим просьбам.</string>
     <string name="rearrange_your_playlists_songs_rearrange_songs">Меняй порядок песен в своих плейлистах: ⋯ → «Изменить порядок песен»</string>
     <string name="swipe_a_song_out_of_the">Смахни песню из очереди, проведи мини-плеер вверх, чтобы открыть его</string>
-    <string name="the_light_from_the_playing_cover">Свет из играющей обложки: Цвет → Из обложки</string>
+    <string name="the_light_from_the_playing_cover">Свет из играющей обложки: Тема и цвета → Свет → Из обложки</string>
     <string name="ribbons_a_progress_bar_with_strands">«Ленты» — полоса прогресса, по которой струятся нити</string>
     <string name="a_bold_title_on_the_player">Жирное название в плеере, целые альбомы в плейлист и ссылки YouTube, чтобы делиться</string>
-    <string name="settings_playback_sound">Настройки → Воспроизведение и звук.</string>
+    <string name="settings_playback_sound">Настройки → Воспроизведение и Настройки → Звук и качество.</string>
     <string name="speed_pitch_slowed_sped_up_or">Скорость и тональность: замедленно, ускоренно или любая тональность — в меню ⋯ плеера</string>
     <string name="how_songs_cross_in_a_crossfade">Как песни пересекаются при плавном переходе, метка, где вступает следующая, и смешивающиеся обложки</string>
     <string name="normalize_volume_s_level_and_albums">Уровень выравнивания громкости и альбомы как есть</string>
     <string name="your_own_equalizer_presets_shared_as">Свои пресеты эквалайзера, которыми можно делиться кодами, — один для машины, другой для наушников</string>
     <string name="fades_for_the_sleep_timer_and">Затухание для таймера сна, паузы и воспроизведения</string>
     <string name="liked_how_prism_1_6_looked">Нравился вид Prism 1.6? Он вернулся — как вариант на выбор.</string>
-    <string name="the_classic_look_customize_prism_looks">Классический стиль: Настроить Prism → Стили</string>
+    <string name="the_classic_look_customize_prism_looks">Классический стиль: Настройки → Стили</string>
     <string name="or_only_its_icons_its_bold">Или только его значки, жирный шрифт или простые элементы управления</string>
     <string name="the_player_s_buttons_apart_instead">Кнопки плеера по отдельности, а не в капсуле</string>
-    <string name="last_fm_scrobbling_devices_connections_and">Скробблинг в Last.fm (Устройства и подключения) и Replay за любые даты</string>
+    <string name="last_fm_scrobbling_devices_connections_and">Скробблинг в Last.fm (Аккаунты и обмен) и Replay за любые даты</string>
     <string name="pick_several_songs_in_the_queue">Выбирай несколько песен в очереди, чтобы переместить или удалить их разом, или заблокируй порядок</string>
     <string name="choose_what_goes_in_a_backup">Выбирай, что входит в резервную копию</string>
     <string name="swipe_up_on_the_player_for">Свайп вверх в плеере для очереди, только вертикальная ориентация, пауза при выключенном звуке</string>
@@ -3890,7 +3890,7 @@
     <string name="the_ambient_frost_behind_home_search_all">Атмосферное матовое стекло за главной, поиском, библиотекой, Replay и настройками («Автоматически» оставляет в нём цвета обложки, «Простой» делает его серым, оттенок окрашивает его), эти страницы, когда матовое стекло выключено, а также панели и диалоги. Не плеер и не страницы альбомов, исполнителей и плейлистов — они берут цвета своей картинки.</string>
     <string name="home_has_the_background_glass_backgrounds_all">На главной фон «%1$s» (Стекло и фоны), нарисованный поверх этого цвета, поэтому там он заметен лишь немного. Выбери там «Атмосферный», чтобы увидеть его полностью</string>
     <string name="secondary_text_artists_times_notes_dividers_all">Второстепенный текст (исполнители, время, заметки), разделители и контуры на страницах, панелях и в меню. «Средний» и «Высокий» также делают акцент чётче, чтобы он легче читался. Собственный белый текст плеера поверх обложки не меняется.</string>
-    <string name="the_accent_on_artist_album_and_all">Акцент на страницах исполнителей, альбомов и плейлистов и в меню, которые открываются из песни, альбома или исполнителя (долгое нажатие или ⋯). Их матовые фоны в любом случае берут цвета картинки (Стекло и фоны).</string>
+    <string name="the_accent_on_artist_album_and_all">Акцент на страницах исполнителей, альбомов и плейлистов и в меню, которые открываются из песни, альбома или исполнителя (долгое нажатие или ⋯). Их матовые фоны в любом случае берут цвета картинки (Стекло).</string>
     <string name="tap_the_line_under_the_player_all">Нажми на строку под элементами управления плеера (там написано, какое устройство играет) и выбери колонку, телевизор или ресивер. Устройство должно быть в этой сети Wi-Fi и поддерживать Google Cast (Chromecast, Google TV, колонки со встроенным Cast) или DLNA / UPnP (иногда это называется «общий доступ к медиа»). Очередь, текст и управление остаются на телефоне, а его кнопки громкости меняют громкость колонки. Эквалайзер, плавный переход, «Подпевай» и видео работают только на телефоне, поэтому во время трансляции они выключены.</string>
     <string name="nothing_new_from_your_artists_in_all">За последние три месяца у твоих исполнителей ничего нового. Prism каждые несколько дней проверяет исполнителей, которых ты отметил звёздочкой, сохранил и чаще всего слушаешь; первая проверка только узнаёт, что уже вышло, поэтому новая музыка появится со следующей.</string>
     <string name="tunemymusic_copies_your_playlists_liked_songs_all">TuneMyMusic копирует твои плейлисты, включая понравившиеся, в твой аккаунт YouTube Music. Это тот же сервис, который использует для переноса собственное приложение YouTube Music.</string>
@@ -4337,14 +4337,14 @@
     <string name="shaped_by_the_crossfade">По форме плавного перехода</string>
     <string name="crossfade_shape_keywords">плавный переход кроссфейд затухание нарастание сужение форма кривая полоса прогресса перемотка ползунок</string>
     <string name="the_end_tapers_as_the_song_fades">Конец сужается по мере затухания песни</string>
-    <string name="crossfade_shape_info">Конец полосы повторяет то, как песня затихает, а полоса следующей песни нарастает вместе с её появлением, по типу твоего плавного перехода (Звук → Плавный переход). Только когда впереди плавный переход: не между треками альбома, не во время трансляции на другое устройство, не для выпусков и прямых эфиров. При автоматической длительности форма появляется, как только переход запланирован. Звуковая волна и Ленты вместо этого сохраняют метку.</string>
+    <string name="crossfade_shape_info">Конец полосы повторяет то, как песня затихает, а полоса следующей песни нарастает вместе с её появлением, по типу твоего плавного перехода (Воспроизведение → Плавный переход). Только когда впереди плавный переход: не между треками альбома, не во время трансляции на другое устройство, не для выпусков и прямых эфиров. При автоматической длительности форма появляется, как только переход запланирован. Звуковая волна и Ленты вместо этого сохраняют метку.</string>
     <string name="imp_title">Перенеси свою историю</string>
     <string name="imp_subtitle">Из Spotify, YouTube Music и Last.fm, читается на этом телефоне</string>
     <string name="imp_row_detail">Spotify, YouTube Music, Last.fm</string>
     <string name="imp_group_info">Перенеси прослушивания, любимые треки и плейлисты из архива данных Spotify, историю YouTube Music из Google Takeout или свои скробблы Last.fm. Файлы читаются на этом телефоне; чтобы найти каждую песню, Prism ищет её так же, как его поиск.</string>
     <string name="imp_keywords">импорт перенос spotify архив данных скачать takeout google youtube music история last.fm скробблы любимые треки понравившиеся плейлисты</string>
     <string name="imp_bring_from">Откуда перенести</string>
-    <string name="imp_bring_from_info">Spotify: на spotify.com, Аккаунт → Конфиденциальность → Скачать свои данные. Данные аккаунта приходят за несколько дней (прослушивания за год, любимые треки, плейлисты); расширенная история прослушиваний — до 30 дней (каждое прослушивание с момента регистрации). Выбери zip, в котором они пришли, или файлы из него.\n\nYouTube Music: на takeout.google.com выбери YouTube и YouTube Music, только историю, в формате JSON. Выбери zip или watch-history.json.\n\nLast.fm: подключи его в разделе «Устройства и подключения», и Prism прочитает твои скробблы.\n\nНичего никуда не отправляется. Чтобы найти каждую песню, Prism ищет её так же, как его поиск.</string>
+    <string name="imp_bring_from_info">Spotify: на spotify.com, Аккаунт → Конфиденциальность → Скачать свои данные. Данные аккаунта приходят за несколько дней (прослушивания за год, любимые треки, плейлисты); расширенная история прослушиваний — до 30 дней (каждое прослушивание с момента регистрации). Выбери zip, в котором они пришли, или файлы из него.\n\nYouTube Music: на takeout.google.com выбери YouTube и YouTube Music, только историю, в формате JSON. Выбери zip или watch-history.json.\n\nLast.fm: подключи его в Настройки → Аккаунты и обмен, и Prism прочитает твои скробблы.\n\nНичего никуда не отправляется. Чтобы найти каждую песню, Prism ищет её так же, как его поиск.</string>
     <string name="imp_spotify_detail">Архив данных: прослушивания, любимые треки, плейлисты</string>
     <string name="imp_takeout_detail">История просмотров из Google Takeout</string>
     <string name="imp_lastfm_detail">Твои скробблы, как %1$s</string>
@@ -4449,7 +4449,7 @@
     <string name="explicit_show">Показывать</string>
     <string name="explicit_skip">Пропускать</string>
     <string name="explicit_hide">Скрывать</string>
-    <string name="explicit_skipped">Нецензурные песни не включаются (Настройки → Воспроизведение и звук)</string>
+    <string name="explicit_skipped">Нецензурные песни не включаются (Настройки → Воспроизведение)</string>
     <string name="explicit_none_left">Нечего играть: все песни здесь с нецензурным содержанием</string>
     <string name="change_cover">Сменить обложку</string>
     <string name="cover_changed">Обложка изменена</string>
@@ -4499,7 +4499,7 @@
     <string name="replay_last_weeks">Последние недели: %1$d</string>
     <string name="replay_last_days">Последние дни: %1$d</string>
     <string name="replay_story_font">Шрифт историй</string>
-    <string name="replay_story_font_info">Каким шрифтом истории Replay и Rewind набирают слова: постерным шрифтом Prism или шрифтом, который ты выбрал для Prism (Текст).</string>
+    <string name="replay_story_font_info">Каким шрифтом истории Replay и Rewind набирают слова: постерным шрифтом Prism или шрифтом, который ты выбрал для Prism (Текст и значки).</string>
     <string name="replay_story_font_keywords">шрифт типографика гарнитура истории rewind wrapped</string>
     <string name="replay_story_font_poster">Постерный шрифт</string>
     <string name="replay_story_font_own">Твой шрифт</string>
@@ -4720,7 +4720,7 @@
         <item quantity="other">Песен на выбор: %1$s</item>
     </plurals>
     <string name="ytlive_spotify_connect">Подключи Spotify, чтобы пользоваться этим</string>
-    <string name="ytlive_spotify_recent_off">Выключено: включи «Недавние прослушивания» на странице Spotify</string>
+    <string name="ytlive_spotify_recent_off">Выключено: включи «Недавние прослушивания» в Настройки → Аккаунты и обмен → Spotify</string>
     <string name="ytlive_connection_on">Твоя история в актуальном виде · Включено</string>
     <string name="ytlive_connection_off">Держать историю в актуальном виде · Выключено</string>
     <string name="ytlive_connection_signed_out">Войди, чтобы держать историю в актуальном виде</string>
@@ -4738,7 +4738,7 @@
     <string name="dj_in_the_queue_keywords">dj режим кнопка очередь заголовок верх место скрыть</string>
     <string name="menu_lyrics_only_way">Остаётся, пока это единственный путь из плеера к тексту</string>
     <string name="smart_downloads_offer_title">Скачать песни заранее?</string>
-    <string name="smart_downloads_offer_body">«Умные загрузки» держат готовыми офлайн песни, которые ты, скорее всего, включишь: до 1 GB, по Wi-Fi. Измени это в любой момент в разделе «Скачанное, хранилище и трафик».</string>
+    <string name="smart_downloads_offer_body">«Умные загрузки» держат готовыми офлайн песни, которые ты, скорее всего, включишь: до 1 GB, по Wi-Fi. Измени это в любой момент в Настройки → Скачанное и трафик.</string>
     <!-- 1.8.2 -->
     <string name="loading_list">Загружается «%1$s»…</string>
     <string name="song_details">О песне</string>
@@ -4983,7 +4983,7 @@
     <string name="glass_blur">Размытие</string>
     <string name="glass_blur_info">Насколько далеко расплываются цвета за стеклом. Мелкие детали вроде текста сохраняют слабый контур за Жидким стеклом при любом значении; Матовое стекло растворяет и их. 100% — штатное значение Prism. Выше него телефону помедленнее работать тяжелее.</string>
     <string name="glass_frost">Матовость</string>
-    <string name="glass_frost_info">Насколько плотна вуаль над стеклом: меньше — больше видно того, что за ним; больше — светлее и молочнее в светлой теме, темнее в тёмной, а текст легче читать поверх пёстрых картинок. 100% — штатное значение Prism. У панели вкладок с собственным фоном (Макет, Панель вкладок) остаётся этот фон.</string>
+    <string name="glass_frost_info">Насколько плотна вуаль над стеклом: меньше — больше видно того, что за ним; больше — светлее и молочнее в светлой теме, темнее в тёмной, а текст легче читать поверх пёстрых картинок. 100% — штатное значение Prism. У панели вкладок с собственным фоном (Вкладки и мини-плеер → Панель навигации) остаётся этот фон.</string>
     <string name="glass_needs_android_12">Для этого нужно размытие, появившееся в Android 12. На этом телефоне панели сплошные, поэтому настройкам размытия и матовости нечего менять.</string>
     <string name="glass_on_more_of_the_screen">Стекло на большей части экрана</string>
     <string name="glass_on_more_of_the_screen_detail">Карточки, чипы, круглые кнопки и панель «Отменить»</string>
@@ -5331,6 +5331,7 @@
     <string name="the_day_before">позавчера</string>
     <string name="the_week_before">позапрошлая неделя</string>
     <string name="root_app">Приложение</string>
+    <string name="root_listening">Прослушивание</string>
     <string name="root_theme_colors">Тема и цвета</string>
     <string name="root_text_icons">Текст и значки</string>
     <string name="root_sound_quality">Звук и качество</string>

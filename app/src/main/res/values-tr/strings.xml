@@ -102,7 +102,7 @@
     <string name="save">Kaydet</string>
     <string name="cancel">İptal</string>
     <string name="share_2">Paylaş: %1$s</string>
-    <string name="scan_it_in_prism_settings_customize">Prism\'de tara: Ayarlar → Prism\'i özelleştir → Görünümler → Tara</string>
+    <string name="scan_it_in_prism_settings_customize">Prism\'de tara: Ayarlar → Görünümler → Görünüm al</string>
     <string name="too_much_for_a_qr_code">QR kod için fazla büyük: metin ya da dosya olarak gönder</string>
     <string name="codes_leave_out_photos_and_your">Kodlar fotoğrafları ve kendi yazı tipini içermez; dosya bunları taşıyabilir.</string>
     <string name="here_s_my_prism_look_share">İşte Prism Görünümüm: \"%1$s\". Görmek için bu mesajı Prism ile paylaş:\n\n%2$s</string>
@@ -652,7 +652,7 @@
     <string name="remove_this_color">Bu rengi kaldır</string>
     <string name="changes">%1$s\n\nDeğiştirdikleri: %2$s</string>
     <string name="white_black_and_greys_give_prism">Beyaz, siyah ve griler Prism\'e sade görünümünü verir: koyu sayfalarda beyaz, açık sayfalarda siyah</string>
-    <string name="shown_softened_lighter_on_dark_pages">Yumuşatılmış gösteriliyor (koyu sayfalarda daha açık, açık sayfalarda daha koyu). Olduğu gibi kullanmak için Renk sayfasında \"Tam seçildiği gibi\"yi seç</string>
+    <string name="shown_softened_lighter_on_dark_pages">Yumuşatılmış gösteriliyor (koyu sayfalarda daha açık, açık sayfalarda daha koyu). Olduğu gibi kullanmak için Vurgu altında \"Tam seçildiği gibi\"yi seç</string>
     <string name="made_a_little_lighter_or_darker">İçindeki yazının okunmayacağı yerlerde biraz açıldı ya da koyulaştırıldı</string>
     <string name="tint_strength">Ton gücü</string>
     <string name="faint">Silik</string>
@@ -1098,7 +1098,7 @@
     <string name="in_the_middle">Ortada</string>
     <string name="title_size">Başlık boyutu</string>
     <string name="title_weight">Başlık kalınlığı</string>
-    <string name="light_is_prism_s_own_and">İnce, Prism\'in kendi kalınlığıdır ve Yazı → Kalınlık ayarını izler. Kalın, sanatçının adını da kalınlaştırır.</string>
+    <string name="light_is_prism_s_own_and">İnce, Prism\'in kendi kalınlığıdır ve Metin ve simgeler → Kalınlık ayarını izler. Kalın, sanatçının adını da kalınlaştırır.</string>
     <string name="scrolling_titles">Kayan başlıklar</string>
     <string name="a_long_title_scrolls_across_off">Uzun bir başlık kayarak geçer (kapalıyken … ile biter)</string>
     <string name="times_under_the_progress_bar">İlerleme çubuğunun altında süreler</string>
@@ -1963,7 +1963,7 @@
     <string name="refractive_bars_and_controls">Işığı kıran çubuklar ve kontroller</string>
     <string name="soft_blur_no_refraction">Yumuşak bulanıklık, kırılma yok</string>
     <string name="pages_frosted_with_their_picture">Resimleriyle buzlanmış sayfalar</string>
-    <string name="artist_album_and_playlist_pages_sit">Sanatçı, albüm ve çalma listesi sayfaları kendi resimlerinden yapılmış buzlu cam üzerinde durur; Ana sayfa, Kitaplık, Ara ve Ayarlar çalan şarkının buzlu camı üzerinde durur. Sayfaların resimlerinin rengini alıp almadığı Renk altında.</string>
+    <string name="artist_album_and_playlist_pages_sit">Sanatçı, albüm ve çalma listesi sayfaları kendi resimlerinden yapılmış buzlu cam üzerinde durur; Ana sayfa, Kitaplık, Ara ve Ayarlar çalan şarkının buzlu camı üzerinde durur. Sayfaların resimlerinin rengini alıp almadığı Sayfalar altında.</string>
     <string name="calmer_quicker_animations">Daha sakin, daha hızlı animasyonlar</string>
     <string name="no_drifting_backgrounds_no_artwork_bounce">Süzülen arka plan yok, kapak sekmesi yok, daha hızlı geçişler.</string>
     <string name="that_font_couldn_t_be_used">Bu yazı tipi kullanılamadı</string>
@@ -2005,7 +2005,7 @@
     <string name="more_room_swipe_down_from_the">Daha fazla yer; görmek için üstten aşağı kaydır</string>
     <string name="the_clock_battery_and_notification_icons">Üstteki saat, pil ve bildirim simgeleri Prism açıkken gizli kalır. Üst kenardan aşağı kaydırınca bir anlığına görünürler. Sürükleyici mod ve tam ekran video, önceden olduğu gibi diğer çubukları da gizler.</string>
     <string name="never_shows_only_the_icons_words">Hiçbir zaman yalnızca simgeleri gösterir; Yalnızca kelimeler yalnızca adları gösterir.</string>
-    <string name="see_through_lets_the_page_show">Saydam, sayfanın çubuğun arkasından görünmesini sağlar; Düz gizler. Bulanıklığın kendisi Cam\'dan gelir (Prism\'i özelleştir → Cam ve arka planlar).</string>
+    <string name="see_through_lets_the_page_show">Saydam, sayfanın çubuğun arkasından görünmesini sağlar; Düz gizler. Bulanıklığın kendisi Cam\'dan gelir (Tema ve renkler → Cam).</string>
     <string name="slims_down_as_you_scroll">Kaydırdıkça incelir</string>
     <string name="swipe_sideways_on_a_tab_s">Bir sekmenin sayfasında yana kaydır</string>
     <string name="a_sideways_swipe_on_a_tab">Bir sekmenin kendi sayfasında yana kaydırmak yanındaki sekmeye geçer. Yana kayan satırlar (ve Kitaplığın kendi sayfaları) kendi kaydırmalarını korur.</string>
@@ -2034,7 +2034,7 @@
     <string name="played_now_playing_and_up_next">\"Çalınanlar\", \"Şu an çalıyor\" ve \"Sıradakiler\"</string>
     <string name="off_the_queue_is_one_list">Kapalıyken sıra, çalınanlardan sıradakilere uzanan tek bir şarkı listesidir.</string>
     <string name="moving_artwork_when_a_song_has">Şarkıda varsa hareketli kapak</string>
-    <string name="motion_artwork_and_video_covers_turn">Hareketli kapaklar ve video kapakları. Tek bir şarkı için oynatıcının ⋯ menüsünden kapat. Mobil veride oynayıp oynamadıkları ve telefonda saklananlar İndirmeler, depolama ve veri altında.</string>
+    <string name="motion_artwork_and_video_covers_turn">Hareketli kapaklar ve video kapakları. Tek bir şarkı için oynatıcının ⋯ menüsünden kapat. Mobil veride oynayıp oynamadıkları ve telefonda saklananlar İndirilenler ve veri altında.</string>
     <string name="the_animated_cover_plays_behind_everything">Hareketli kapak her şeyin arkasında oynar</string>
     <string name="the_moving_artwork_fills_the_whole">Hareketli kapak tüm oynatıcıyı doldurur, kontrollerin altında koyulaşır; kapağın kendisi sabit resmi gösterir. Zaten kenardan kenara gösteren kenardan kenara kapakta olmaz.</string>
     <string name="the_cover_fills_the_screen_lyrics">Kapak ekranı doldurur, sözler üzerinde</string>
@@ -2137,7 +2137,7 @@
     <string name="needed_for_sing">Sing için gerekli · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Karaoke için, telefonunda, şarkılardan şarkıcının sesini çıkarır. Bir kez indirilir.</string>
     <string name="so_sing_starts_at_once_when">Böylece Sing\'i açtığında hemen başlar</string>
-    <string name="the_playing_song_and_the_next">Sing kapalıyken bile çalan şarkı ve sonraki şarkı arka planda ayrıştırılır. Müzik çalarken daha fazla pil kullanır; mobil veride İndirmeler, depolama ve veri → Mobil veri ayarını izler.</string>
+    <string name="the_playing_song_and_the_next">Sing kapalıyken bile çalan şarkı ve sonraki şarkı arka planda ayrıştırılır. Müzik çalarken daha fazla pil kullanır; mobil veride İndirilenler ve veri → Mobil veri ayarını izler.</string>
     <string name="using">Kullanılan: %1$s</string>
     <string name="songs_are_worked_out_again_the">Şarkılar, Sing ile bir sonraki çalınışında yeniden hazırlanır.</string>
     <string name="word_by_word_first_then_by">Önce kelime kelime, sonra satır satır</string>
@@ -2495,7 +2495,7 @@
     <string name="allow_notifications">Bildirimlere izin ver</string>
     <string name="turn_them_on_in_android_s">Android ayarlarında Prism için aç.</string>
     <string name="your_starting_point_made_from_what">Başlangıç noktan, dinlediklerinden hazırlandı.</string>
-    <string name="the_replay_card_at_the_top">En üstteki Replay kartı: bu yılın şimdiye kadarki kısmı (görünümünü Ayarlar → Prism\'i özelleştir → Ana sayfa ve Kitaplık\'tan seç)</string>
+    <string name="the_replay_card_at_the_top">En üstteki Replay kartı: bu yılın şimdiye kadarki kısmı (görünümünü Ayarlar → Ana sayfa ve Kitaplık → Replay kartı\'ndan seç)</string>
     <string name="quick_picks_songs_around_the_artists">Hızlı seçimler: dinlediğin sanatçılar etrafında şarkılar, daha fazlası için yana kaydır</string>
     <string name="made_for_you_daily_mixes_your">Senin için hazırlandı: Daily Mix\'ler, günün saatine göre mix\'in ve Release Radar</string>
     <string name="the_grid_button_at_the_top">Üstteki ızgara düğmesi Ana sayfanın bölümlerini düzenler</string>
@@ -2516,12 +2516,12 @@
     <string name="let_prism_mix_your_music_songs">Müziğini Prism mikslesin: şarkılar tonda ve ritimde birbirine karışır.</string>
     <string name="in_the_queue_tap_dj_then">Sırada DJ\'e dokun, sonra Sabit, Yükselen ya da Sakinleşen\'i seç</string>
     <string name="long_press_an_album_or_playlist">Bir albüme ya da çalma listesine uzun bas → DJ seti olarak çal</string>
-    <string name="crossfade_settings_playback_sound_blends_any">Çapraz geçiş (Ayarlar → Oynatma ve ses) herhangi iki şarkıyı birbirine karıştırır</string>
+    <string name="crossfade_settings_playback_sound_blends_any">Çapraz geçiş (Ayarlar → Oynatma) herhangi iki şarkıyı birbirine karıştırır</string>
     <string name="mixes_made_on_your_phone_from">Dinlediklerinden telefonunda hazırlanan mix\'ler. Dinlediklerine dair hiçbir şey telefondan çıkmaz.</string>
     <string name="daily_mixes_group_the_artists_you">Daily Mix\'ler, dinlediğin sanatçıları birbirine uyanlara göre gruplar</string>
     <string name="release_radar_finds_new_music_from">Release Radar, takip ettiğin sanatçıların yeni müziklerini bulur</string>
     <string name="made_for_you_also_has_mixes">Senin için hazırlandı\'da kendi müziğinden mix\'ler ve Tekrar tekrar da var: yalnızca dinlediklerinden gelir ve çevrimdışı çalışırlar</string>
-    <string name="when_the_queue_ends_prism_s">Sıra bitince Prism\'in radyosu senin müziğinden seçer (Ayarlar → Oynatma ve ses → Otomatik oynatmanın kaynağı)</string>
+    <string name="when_the_queue_ends_prism_s">Sıra bitince Prism\'in radyosu senin müziğinden seçer (Ayarlar → Oynatma → Sıra bittiğinde)</string>
     <string name="tap_shuffle_twice_on_a_playlist">Akıllı Karıştırma için bir çalma listesinde karıştır\'a iki kez dokun: araya yeni şarkılar girer</string>
     <string name="not_for_me_and_leave_out">\"Bana göre değil\" ve \"Zevkimin dışında bırak\" bunları dışarıda tutar</string>
     <string name="find_anything_in_prism_music_or">Prism Music\'te her şeyi bul ya da etrafında çalan şarkının adını öğren.</string>
@@ -2545,11 +2545,11 @@
     <string name="control_prism_from_a_browser_on">Prism\'i bilgisayarındaki bir tarayıcıdan kontrol et</string>
     <string name="hand_what_s_playing_to_another">Çalanı Prism olan başka bir telefona ya da tablete aktar</string>
     <string name="prism_takes_its_color_from_what">Prism rengini çalan şarkıdan alır. Ne kadarını istersen değiştir.</string>
-    <string name="appearance_the_spectrum_s_colors_or">Görünüş: Spektrum\'un renkleri (ya da düz beyaz), vurgun, yazı tipleri, simgeler ve arka planlar</string>
-    <string name="layout_the_tab_bar_your_tabs">Düzen: sekme çubuğu, sekmelerin ve mini oynatıcı</string>
+    <string name="appearance_the_spectrum_s_colors_or">Tema ve renkler, Metin ve simgeler: ışığın renkleri (ya da düz beyaz), vurgun, yazı tipleri, simgeler ve arka planlar</string>
+    <string name="layout_the_tab_bar_your_tabs">Sekmeler ve mini oynatıcı: sekme çubuğu, sekmelerin ve mini oynatıcı</string>
     <string name="player_its_background_the_cover_and">Oynatıcı: arka planı, kapak ve üzerinde görünenler</string>
     <string name="search_settings_from_the_box_at">Ayarlar\'ın en üstündeki kutudan ayarlarda ara</string>
-    <string name="settings_customize_prism_color_every_choice">Ayarlar → Prism\'i özelleştir → Renk: her seçenek, seçmeden önce nasıl göründüğünü gösterir.</string>
+    <string name="settings_customize_prism_color_every_choice">Ayarlar → Tema ve renkler: her seçenek, seçmeden önce nasıl göründüğünü gösterir.</string>
     <string name="the_light_12_presets_white_black">Işık: 12 ön ayar, Beyaz (açık modda Siyah) ya da kendi renklerin</string>
     <string name="your_accent_any_color_from_a">Vurgun: bir çarktan, bir koddan ya da damlalıkla herhangi bir renk</string>
     <string name="the_page_background_plain_tinted_with">Sayfa arka planı: düz, vurgunla tonlanmış ya da kendi seçtiğin bir renk</string>
@@ -2560,14 +2560,14 @@
     <string name="pin_prism_playlists_to_home_customize">Prism çalma listelerini Ana sayfaya sabitle (Ana sayfayı özelleştir → Sabitlenmiş çalma listeleri)</string>
     <string name="song_credits_in_any_song_s">Her şarkının menüsünde şarkı künyesi</string>
     <string name="see_which_downloads_failed_and_why">Hangi indirmelerin neden başarısız olduğunu gör</string>
-    <string name="settings_customize_prism_looks_your_whole">Ayarlar → Prism\'i özelleştir → Görünümler: tüm görünümün tek dokunuşla kaydedilir, değiştirilir ve paylaşılır.</string>
+    <string name="settings_customize_prism_looks_your_whole">Ayarlar → Görünümler: tüm görünümün tek dokunuşla kaydedilir, değiştirilir ve paylaşılır.</string>
     <string name="try_prism_s_own_paper_midnight">Prism\'in kendilerini dene: Kâğıt, Gece Yarısı, Neon, Yumuşak, Stüdyo ve Plak</string>
     <string name="save_yours_update_it_when_you">Kendininkini kaydet, değiştirdiğinde güncelle ve QR kod, kod ya da dosya olarak paylaş</string>
     <string name="browse_looks_people_shared_under_from">İnsanların paylaştığı Görünümlere Topluluktan altında göz at</string>
     <string name="one_look_by_day_and_another">Gün doğumunda ve gün batımında: gündüz bir Görünüm, gece başka bir Görünüm</string>
     <string name="every_look_page_shows_home_the">Her görünüm sayfası sen değiştirdikçe Ana sayfayı, oynatıcıyı ve sözleri gösterir; Geri al bir değişikliği geri alır</string>
-    <string name="customize_by_tapping_hold_the_settings">Dokunarak özelleştir: Ayarlar sekmesini basılı tut ya da Görünüş\'te aç, sonra mini oynatıcıya, sekme çubuğuna, oynatıcıya ya da bir Ana sayfa bölümüne dokun</string>
-    <string name="settings_customize_prism_player_or_player">Ayarlar → Prism\'i özelleştir → Oynatıcı ya da oynatıcının kendisinde ⋯ → Oynatıcı ayarları.</string>
+    <string name="customize_by_tapping_hold_the_settings">Dokunarak özelleştir: Ayarlar sekmesini basılı tut ya da Görünümler\'de aç, sonra mini oynatıcıya, sekme çubuğuna, oynatıcıya ya da bir Ana sayfa bölümüne dokun</string>
+    <string name="settings_customize_prism_player_or_player">Ayarlar → Oynatıcı ya da oynatıcının kendisinde ⋯ → Oynatıcı ayarları.</string>
     <string name="layouts_standard_a_big_cover_lyrics">Düzenler: Standart, büyük Kapak, Önce sözler, Minimal, Plak ya da Kaset (çaldıkça dönerler)</string>
     <string name="a_visualizer_if_you_d_like">İstersen bir görselleştirici: çubuklar, dalga, halka, nabız ya da parıltı (seçmedikçe kapalı)</string>
     <string name="pick_the_buttons_under_the_controls">Kontrollerin altındaki düğmeleri (hız da biri) ve bildiriminde ve arabanda oynatın yanındaki iki düğmeyi seç</string>
@@ -2578,7 +2578,7 @@
     <string name="prism_tells_android_which_of_its">Prism, Android\'e hangi bölümlerini önceden hazırlayacağını söyler; banttan gelen güncellemeler hazır gelir, böylece artık yavaş çalışmazlar</string>
     <string name="less_work_while_lists_scroll_while">Listeler kayarken, Ara\'da yazarken ve bir şarkı çalarken daha az iş</string>
     <string name="if_something_still_stutters_settings_backup">Bir şey hâlâ takılıyorsa Ayarlar → Yedek ve hakkında → Tanılama, paylaşmak için nerede olduğunu not eder</string>
-    <string name="settings_customize_prism_lyrics_how_your">Ayarlar → Prism\'i özelleştir → Sözler: sözlerinin nasıl göründüğü, her seçeneğin bir örneğiyle.</string>
+    <string name="settings_customize_prism_lyrics_how_your">Ayarlar → Sözler ve Sing: sözlerinin nasıl göründüğü, her seçeneğin bir örneğiyle.</string>
     <string name="six_styles_prism_classic_karaoke_bold">Altı stil: Prism, Klasik karaoke, Belirgin kart, Parıltı, Daktilo ve Sakin</string>
     <string name="the_sung_line_and_the_others">Söylenen satır ve diğerleri beyaz, senin ışığın, vurgu, kapağın rengi ya da kendi rengin</string>
     <string name="weight_line_spacing_how_dim_the">Kalınlık, satır aralığı, diğer satırların ne kadar soluk olduğu, bulanıklık gücü, büyük harf ve gölge</string>
@@ -2588,8 +2588,8 @@
     <string name="a_few_things_you_asked_for">İstediğin birkaç şey.</string>
     <string name="library_history_what_you_played_by">Kitaplık → Geçmiş: bu telefonda ya da hesabında, güne göre çaldıkların</string>
     <string name="liked_a_song_and_its_video">Bir şarkıyı ve videosunu mu beğendin? Bir kez, şarkı olarak görünürler</string>
-    <string name="prism_s_own_volume_apart_from">Telefonunkinden ayrı, Prism\'in kendi ses düzeyi (Ayarlar → Prism\'i özelleştir → Oynatıcı)</string>
-    <string name="hide_the_status_bar_customize_prism">Durum çubuğunu gizle (Prism\'i özelleştir → Sekmeler ve mini oynatıcı)</string>
+    <string name="prism_s_own_volume_apart_from">Telefonunkinden ayrı, Prism\'in kendi ses düzeyi (Ayarlar → Oynatıcı)</string>
+    <string name="hide_the_status_bar_customize_prism">Durum çubuğunu gizle (Ayarlar → Sekmeler ve mini oynatıcı)</string>
     <string name="settings_pages_are_tidier_tap_beside">Ayar sayfaları daha düzenli: ayrıntılar için bir ayarın yanındaki ⓘ simgesine dokun</string>
     <string name="library_s_tiles_the_edit_button">Kitaplığın kutucukları: Kitaplığın üstündeki düzenle düğmesi</string>
     <string name="customize_home_the_button_at_the">Ana sayfayı özelleştir\'de (Ana sayfanın üstündeki düğme) daha fazlası var.</string>
@@ -2610,10 +2610,10 @@
     <string name="artists_and_songs_with_their_pictures">Sen yazarken resimleriyle sanatçılar ve şarkılar</string>
     <string name="results_already_in_your_library_right">Kitaplığında zaten olan sonuçlar, en iyi sonucun hemen ardından</string>
     <string name="settings_are_sorted_by_what_they">Ayarlar ne yaptıklarına göre sıralandı.</string>
-    <string name="everything_about_how_prism_looks_is">Prism\'in görünüşüyle ilgili her şey Prism\'i özelleştir altında</string>
-    <string name="gestures_and_buttons_in_controls_gestures">Hareketler ve düğmeler Kontroller ve hareketler\'de</string>
+    <string name="everything_about_how_prism_looks_is">Prism\'in görünüşüyle ilgili her şey Kendine göre yap altında</string>
+    <string name="gestures_and_buttons_in_controls_gestures">Hareketler ve düğmeler Dinleme altında</string>
     <string name="every_mobile_data_choice_on_one">Tüm mobil veri seçenekleri tek sayfada</string>
-    <string name="android_auto_speakers_discord_and_last">Android Auto, hoparlörler, Discord ve Last.fm Cihazlar ve bağlantılar\'da</string>
+    <string name="android_auto_speakers_discord_and_last">Android Auto, hoparlörler, Discord ve Last.fm Bağlantılar altında</string>
     <string name="performance_mode_at_the_top_for">Yavaş telefonlar için en üstte Performans modu</string>
     <string name="make_the_pieces_of_prism_yours">Prism\'in parçalarını kendine göre yap.</string>
     <string name="covers_as_circles_squircles_flowers_arches">Şarkılar, albümler, sanatçılar ve oynatıcı için daire, yuvarlak kare, çiçek, kemer… şeklinde kapaklar</string>
@@ -2624,20 +2624,20 @@
     <string name="from_your_requests">İsteklerinden.</string>
     <string name="rearrange_your_playlists_songs_rearrange_songs">Çalma listelerindeki şarkıları yeniden düzenle: ⋯ → Şarkıları yeniden düzenle</string>
     <string name="swipe_a_song_out_of_the">Bir şarkıyı kaydırarak sıradan çıkar, açmak için mini oynatıcıyı yukarı kaydır</string>
-    <string name="the_light_from_the_playing_cover">Çalan kapaktan ışık: Renk → Kapaktan</string>
+    <string name="the_light_from_the_playing_cover">Çalan kapaktan ışık: Tema ve renkler → Işık → Kapaktan</string>
     <string name="ribbons_a_progress_bar_with_strands">Kurdeleler, boyunca teller akan bir ilerleme çubuğu</string>
     <string name="a_bold_title_on_the_player">Oynatıcıda kalın başlık, bütün albümler bir çalma listesine ve paylaşmak için YouTube bağlantıları</string>
-    <string name="settings_playback_sound">Ayarlar → Oynatma ve ses.</string>
+    <string name="settings_playback_sound">Ayarlar → Oynatma ve Ayarlar → Ses ve kalite.</string>
     <string name="speed_pitch_slowed_sped_up_or">Hız ve perde: oynatıcının ⋯ menüsünden yavaşlatılmış, hızlandırılmış ya da herhangi bir ton</string>
     <string name="how_songs_cross_in_a_crossfade">Çapraz geçişte şarkıların nasıl geçtiği, sonrakinin girdiği yerde bir işaret ve birbirine karışan kapaklar</string>
     <string name="normalize_volume_s_level_and_albums">Ses düzeyini dengele\'nin düzeyi ve olduğu gibi bırakılan albümler</string>
     <string name="your_own_equalizer_presets_shared_as">Kendi ekolayzır ön ayarların, kod olarak paylaşılır; biri araba, biri kulaklıkların için</string>
     <string name="fades_for_the_sleep_timer_and">Uyku zamanlayıcısı ile duraklatma ve oynatma için yumuşak geçişler</string>
     <string name="liked_how_prism_1_6_looked">Prism 1.6\'nın görünüşünü sevmiş miydin? Bir seçenek olarak geri döndü.</string>
-    <string name="the_classic_look_customize_prism_looks">Klasik Görünüm: Prism\'i özelleştir → Görünümler</string>
+    <string name="the_classic_look_customize_prism_looks">Klasik Görünüm: Ayarlar → Görünümler</string>
     <string name="or_only_its_icons_its_bold">Ya da yalnızca simgeleri, kalın yazısı ya da sade kontrolleri</string>
     <string name="the_player_s_buttons_apart_instead">Oynatıcının düğmeleri kapsül yerine ayrı ayrı</string>
-    <string name="last_fm_scrobbling_devices_connections_and">Last.fm scrobbling (Cihazlar ve bağlantılar) ve her tarih için Replay</string>
+    <string name="last_fm_scrobbling_devices_connections_and">Last.fm scrobbling (Hesaplar ve paylaşım) ve her tarih için Replay</string>
     <string name="pick_several_songs_in_the_queue">Birlikte taşımak ya da kaldırmak için sırada birkaç şarkı seç ya da sırasını kilitle</string>
     <string name="choose_what_goes_in_a_backup">Yedeğe nelerin gireceğini seç</string>
     <string name="swipe_up_on_the_player_for">Sıra için oynatıcıda yukarı kaydır, dikey konumda kilitle, ses kapatılınca duraklat</string>
@@ -3794,7 +3794,7 @@
     <string name="the_ambient_frost_behind_home_search_all">Ana sayfa, Ara, Kitaplık, Replay ve Ayarlar\'ın arkasındaki Ortam buzlu camı (Otomatik içinde kapağın renklerini korur, Düz griye çevirir, bir ton onu renklendirir), buzlu cam kapalıyken bu sayfalar ve alt sayfalar ile iletişim kutuları. Oynatıcı ile resimlerinin renklerini alan albüm, sanatçı ve çalma listesi sayfaları değil.</string>
     <string name="home_has_the_background_glass_backgrounds_all">Ana sayfada %1$s arka planı var (Cam ve arka planlar), bu rengin üzerine çizilir, bu yüzden orada yalnızca biraz görünür. Tamamen görmek için orada Ortam\'ı seç</string>
     <string name="secondary_text_artists_times_notes_dividers_all">Sayfalarda, alt sayfalarda ve menülerde ikincil yazılar (sanatçılar, süreler, notlar), ayırıcılar ve dış çizgiler. Orta ve Yüksek ayrıca vurguyu belirginleştirir, böylece daha kolay okunur. Oynatıcının kapak üzerindeki kendi beyaz yazısı olduğu gibi kalır.</string>
-    <string name="the_accent_on_artist_album_and_all">Sanatçı, albüm ve çalma listesi sayfalarındaki ve bir şarkıdan, albümden ya da sanatçıdan açtığın menülerdeki (uzun basma ya da ⋯) vurgu. Buzlu arka planları her durumda resmin renklerini alır (Cam ve arka planlar).</string>
+    <string name="the_accent_on_artist_album_and_all">Sanatçı, albüm ve çalma listesi sayfalarındaki ve bir şarkıdan, albümden ya da sanatçıdan açtığın menülerdeki (uzun basma ya da ⋯) vurgu. Buzlu arka planları her durumda resmin renklerini alır (Cam).</string>
     <string name="tap_the_line_under_the_player_all">Oynatıcının kontrollerinin altındaki satıra dokun (hangi cihazın çaldığını söyler) ve bir hoparlör, TV ya da alıcı seç. Bu Wi-Fi\'da Google Cast (Chromecast, Google TV, yerleşik Cast\'li hoparlörler) ya da DLNA / UPnP (bazen medya paylaşımı denir) ile olmalı. Sıran, sözlerin ve kontrollerin telefonda kalır; telefonun ses tuşları hoparlörün sesini ayarlar. Ekolayzır, Çapraz geçiş, Sing ve videolar telefonun kendisine ait olduğundan yayın sırasında kapalıdır.</string>
     <string name="nothing_new_from_your_artists_in_all">Son üç ayda sanatçılarından yeni bir şey yok. Prism birkaç günde bir yıldızladığın, kaydettiğin ve en çok dinlediğin sanatçılara bakar; ilk bakış yalnızca zaten çıkmış olanları öğrenir, bu yüzden yeni müzikler bir sonrakinden itibaren görünür.</string>
     <string name="tunemymusic_copies_your_playlists_liked_songs_all">TuneMyMusic, Beğenilen şarkılar dahil çalma listelerini YouTube Music hesabına kopyalar. YouTube Music\'in kendi uygulamasının aktarımlar için kullandığı hizmetle aynıdır.</string>
@@ -4237,14 +4237,14 @@
     <string name="shaped_by_the_crossfade">Çapraz geçişe göre şekillenir</string>
     <string name="crossfade_shape_keywords">çapraz geçiş karışım geçiş sönme kısılma açılma incelme şekil eğri ilerleme çubuğu sarma çubuğu</string>
     <string name="the_end_tapers_as_the_song_fades">Şarkı kısılırken sonu incelir</string>
-    <string name="crossfade_shape_info">Çubuğun sonu şarkının nasıl kısıldığının şeklini alır ve sonraki şarkının çubuğu, şarkı açılırken büyüyerek gelir; çapraz geçişinin türüne göre (Ses → Çapraz geçiş). Yalnızca bir çapraz geçiş yaklaşırken: bir albümün parçaları arasında, yayın yaparken, bölümlerde veya canlı yayınlarda olmaz. Otomatik uzunlukta, geçiş planlandığında görünür. Dalga formu ve Kurdeleler bunun yerine işareti gösterir.</string>
+    <string name="crossfade_shape_info">Çubuğun sonu şarkının nasıl kısıldığının şeklini alır ve sonraki şarkının çubuğu, şarkı açılırken büyüyerek gelir; çapraz geçişinin türüne göre (Oynatma → Çapraz geçiş). Yalnızca bir çapraz geçiş yaklaşırken: bir albümün parçaları arasında, yayın yaparken, bölümlerde veya canlı yayınlarda olmaz. Otomatik uzunlukta, geçiş planlandığında görünür. Dalga formu ve Kurdeleler bunun yerine işareti gösterir.</string>
     <string name="imp_title">Geçmişini getir</string>
     <string name="imp_subtitle">Spotify, YouTube Music ve Last.fm\'den, bu telefonda okunur</string>
     <string name="imp_row_detail">Spotify, YouTube Music, Last.fm</string>
     <string name="imp_group_info">Dinlemelerini, Beğenilen Şarkılar\'ını ve çalma listelerini Spotify\'ın veri indirmesinden, YouTube Music geçmişini Google Takeout\'tan veya Last.fm scrobble\'larını getir. Dosyalar bu telefonda okunur; Prism her şarkıyı bulmak için, kendi aramasında olduğu gibi onu arar.</string>
     <string name="imp_keywords">içe aktar spotify veri indirme takeout google youtube music geçmiş last.fm scrobble beğenilen şarkılar çalma listeleri aktarım taşı</string>
     <string name="imp_bring_from">Nereden getirilsin</string>
-    <string name="imp_bring_from_info">Spotify: spotify.com\'da Hesap → Gizlilik → Verilerini indir. Hesap verileri birkaç gün içinde gelir (bir yıllık dinleme, Beğenilen Şarkılar, çalma listeleri); Genişletilmiş dinleme geçmişi 30 güne kadar sürer (katıldığından beri her dinleme). Geldiği zip\'i veya içindeki dosyaları seç.\n\nYouTube Music: takeout.google.com\'da YouTube ve YouTube Music\'i seç, yalnızca geçmiş, JSON olarak. Zip\'i veya watch-history.json\'u seç.\n\nLast.fm: Cihazlar ve bağlantılar\'da bağla, Prism scrobble\'larını okusun.\n\nHiçbir şey bir yere gönderilmez. Prism her şarkıyı bulmak için, kendi aramasında olduğu gibi onu arar.</string>
+    <string name="imp_bring_from_info">Spotify: spotify.com\'da Hesap → Gizlilik → Verilerini indir. Hesap verileri birkaç gün içinde gelir (bir yıllık dinleme, Beğenilen Şarkılar, çalma listeleri); Genişletilmiş dinleme geçmişi 30 güne kadar sürer (katıldığından beri her dinleme). Geldiği zip\'i veya içindeki dosyaları seç.\n\nYouTube Music: takeout.google.com\'da YouTube ve YouTube Music\'i seç, yalnızca geçmiş, JSON olarak. Zip\'i veya watch-history.json\'u seç.\n\nLast.fm: Ayarlar → Hesaplar ve paylaşım bölümünden bağla, Prism scrobble\'larını okusun.\n\nHiçbir şey bir yere gönderilmez. Prism her şarkıyı bulmak için, kendi aramasında olduğu gibi onu arar.</string>
     <string name="imp_spotify_detail">Veri indirmesi: dinlemeler, Beğenilen Şarkılar, çalma listeleri</string>
     <string name="imp_takeout_detail">Google Takeout\'un izleme geçmişi</string>
     <string name="imp_lastfm_detail">Scrobble\'ların, %1$s olarak</string>
@@ -4349,7 +4349,7 @@
     <string name="explicit_show">Göster</string>
     <string name="explicit_skip">Atla</string>
     <string name="explicit_hide">Gizle</string>
-    <string name="explicit_skipped">Müstehcen şarkılar dışarıda bırakılıyor (Ayarlar → Oynatma ve ses)</string>
+    <string name="explicit_skipped">Müstehcen şarkılar dışarıda bırakılıyor (Ayarlar → Oynatma)</string>
     <string name="explicit_none_left">Çalacak bir şey yok: buradaki her şarkı müstehcen</string>
     <string name="change_cover">Kapağı değiştir</string>
     <string name="cover_changed">Kapak değişti</string>
@@ -4399,7 +4399,7 @@
     <string name="replay_last_weeks">Son %1$d hafta</string>
     <string name="replay_last_days">Son %1$d gün</string>
     <string name="replay_story_font">Hikâye yazısı</string>
-    <string name="replay_story_font_info">Replay ve Rewind hikâyelerinin yazılarını nasıl dizdiği: Prism\'in afiş yazısıyla ya da Prism için seçtiğin yazı tipiyle (Yazı).</string>
+    <string name="replay_story_font_info">Replay ve Rewind hikâyelerinin yazılarını nasıl dizdiği: Prism\'in afiş yazısıyla ya da Prism için seçtiğin yazı tipiyle (Metin ve simgeler).</string>
     <string name="replay_story_font_keywords">yazı tipi tipografi font hikâyeler rewind wrapped</string>
     <string name="replay_story_font_poster">Afiş yazısı</string>
     <string name="replay_story_font_own">Senin yazı tipin</string>
@@ -4598,7 +4598,7 @@
         <item quantity="other">Seçilecek %1$s şarkı</item>
     </plurals>
     <string name="ytlive_spotify_connect">Bunu kullanmak için Spotify\'ı bağla</string>
-    <string name="ytlive_spotify_recent_off">Kapalı: Spotify sayfasında Son dinlemeler seçeneğini aç</string>
+    <string name="ytlive_spotify_recent_off">Kapalı: Ayarlar → Hesaplar ve paylaşım → Spotify\'da Son dinlemeler seçeneğini aç</string>
     <string name="ytlive_connection_on">Geçmişin güncel tutuluyor · Açık</string>
     <string name="ytlive_connection_off">Geçmişini güncel tut · Kapalı</string>
     <string name="ytlive_connection_signed_out">Geçmişini güncel tutmak için giriş yap</string>
@@ -4614,7 +4614,7 @@
     <string name="dj_in_the_queue_keywords">dj modu düğme sıra başlık üst yer gizle</string>
     <string name="menu_lyrics_only_way">Oynatıcının şarkı sözlerine tek yolu olduğu sürece kalır</string>
     <string name="smart_downloads_offer_title">Şarkıları ihtiyacın olmadan önce indirelim mi?</string>
-    <string name="smart_downloads_offer_body">Akıllı İndirmeler, çalma ihtimalin yüksek şarkıları çevrimdışı hazır tutar: 1 GB\'a kadar, Wi-Fi\'da. İstediğin zaman İndirmeler, depolama ve veri bölümünden değiştir.</string>
+    <string name="smart_downloads_offer_body">Akıllı İndirmeler, çalma ihtimalin yüksek şarkıları çevrimdışı hazır tutar: 1 GB\'a kadar, Wi-Fi\'da. İstediğin zaman Ayarlar → İndirilenler ve veri bölümünden değiştir.</string>
     <!-- 1.8.2 -->
     <string name="loading_list">“%1$s” yükleniyor…</string>
     <string name="song_details">Şarkı ayrıntıları</string>
@@ -4855,7 +4855,7 @@
     <string name="glass_blur">Bulanıklık</string>
     <string name="glass_blur_info">Camın arkasındaki renklerin ne kadar yayılacağı. Metin gibi küçük şeyler, bu değer ne olursa olsun Sıvı Cam arkasında soluk bir çerçeve korur; Buzlu Cam onları da eritir. %100 Prism\'in kendi değeridir. Bunun üstünde yavaş bir telefon için iş daha zordur.</string>
     <string name="glass_frost">Buzlanma</string>
-    <string name="glass_frost_info">Camın üstündeki perdenin ne kadar kalın olduğu: azı arkasındakinin daha çoğunu geçirir, çoğu açık temada daha sütlü, koyu temada daha koyu yapar ve yoğun resimlerin üzerinde okumayı kolaylaştırır. %100 Prism\'in kendi değeridir. Kendi arka planı olan bir sekme çubuğu (Düzen, Sekme çubuğu) o arka planı korur.</string>
+    <string name="glass_frost_info">Camın üstündeki perdenin ne kadar kalın olduğu: azı arkasındakinin daha çoğunu geçirir, çoğu açık temada daha sütlü, koyu temada daha koyu yapar ve yoğun resimlerin üzerinde okumayı kolaylaştırır. %100 Prism\'in kendi değeridir. Kendi arka planı olan bir sekme çubuğu (Sekmeler ve mini oynatıcı → Gezinme çubuğu) o arka planı korur.</string>
     <string name="glass_needs_android_12">Bunlar için Android 12 ile gelen bulanıklık gerekir. Bu telefonda çubuklar düz olduğundan bulanıklık ve buzlanma ayarlarının değiştirecek bir şeyi yok.</string>
     <string name="glass_on_more_of_the_screen">Ekranın daha fazlasında cam</string>
     <string name="glass_on_more_of_the_screen_detail">Kartlar, çipler, yuvarlak düğmeler ve Geri al çubuğu</string>
@@ -5187,6 +5187,7 @@
     <string name="the_day_before">önceki gün</string>
     <string name="the_week_before">önceki hafta</string>
     <string name="root_app">Uygulama</string>
+    <string name="root_listening">Dinleme</string>
     <string name="root_theme_colors">Tema ve renkler</string>
     <string name="root_text_icons">Metin ve simgeler</string>
     <string name="root_sound_quality">Ses ve kalite</string>

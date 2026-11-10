@@ -102,7 +102,7 @@
     <string name="save">ذخیره</string>
     <string name="cancel">لغو</string>
     <string name="share_2">اشتراک‌گذاری %1$s</string>
-    <string name="scan_it_in_prism_settings_customize">در Prism اسکنش کنید: تنظیمات ← شخصی‌سازی Prism ← پوسته‌ها ← اسکن</string>
+    <string name="scan_it_in_prism_settings_customize">در Prism اسکنش کنید: تنظیمات ← پوسته‌ها ← دریافت پوسته</string>
     <string name="too_much_for_a_qr_code">برای کد QR زیاد است: به‌صورت متن یا فایل بفرستید</string>
     <string name="codes_leave_out_photos_and_your">کدها عکس‌ها و فونت خودتان را شامل نمی‌شوند؛ فایل می‌تواند آن‌ها را هم داشته باشد.</string>
     <string name="here_s_my_prism_look_share">این پوسته Prism من است، «%1$s». این پیام را با Prism به اشتراک بگذارید تا آن را ببینید:\n\n%2$s</string>
@@ -652,7 +652,7 @@
     <string name="remove_this_color">حذف این رنگ</string>
     <string name="changes">%1$s\n\nتغییر می‌دهد: %2$s</string>
     <string name="white_black_and_greys_give_prism">سفید، سیاه و خاکستری‌ها ظاهر ساده Prism را می‌دهند: سفید روی صفحه‌های تیره، سیاه روی صفحه‌های روشن</string>
-    <string name="shown_softened_lighter_on_dark_pages">ملایم‌شده نشان داده می‌شود (روشن‌تر روی صفحه‌های تیره، پررنگ‌تر روی روشن‌ها). برای استفاده از خودش، در صفحه رنگ «دقیقاً همان انتخاب» را بزنید</string>
+    <string name="shown_softened_lighter_on_dark_pages">ملایم‌شده نشان داده می‌شود (روشن‌تر روی صفحه‌های تیره، پررنگ‌تر روی روشن‌ها). برای استفاده از خودش، زیر «رنگ شاخص» گزینه «دقیقاً همان انتخاب» را بزنید</string>
     <string name="made_a_little_lighter_or_darker">جایی که متن رویش خوانا نباشد کمی روشن‌تر یا تیره‌تر می‌شود</string>
     <string name="tint_strength">شدت ته‌رنگ</string>
     <string name="faint">کم‌رنگ</string>
@@ -1098,7 +1098,7 @@
     <string name="in_the_middle">در وسط</string>
     <string name="title_size">اندازه عنوان</string>
     <string name="title_weight">ضخامت عنوان</string>
-    <string name="light_is_prism_s_own_and">«نازک» مال خود Prism است و از متن ← ضخامت پیروی می‌کند. «پررنگ» نام هنرمند را هم پررنگ‌تر می‌کند.</string>
+    <string name="light_is_prism_s_own_and">«نازک» مال خود Prism است و از متن و آیکون‌ها ← ضخامت پیروی می‌کند. «پررنگ» نام هنرمند را هم پررنگ‌تر می‌کند.</string>
     <string name="scrolling_titles">عنوان‌های متحرک</string>
     <string name="a_long_title_scrolls_across_off">عنوان طولانی حرکت می‌کند (خاموش: با … تمام می‌شود)</string>
     <string name="times_under_the_progress_bar">زمان‌ها زیر نوار پیشرفت</string>
@@ -1963,7 +1963,7 @@
     <string name="refractive_bars_and_controls">نوارها و کنترل‌های شکست نور</string>
     <string name="soft_blur_no_refraction">محوشدگی نرم، بدون شکست نور</string>
     <string name="pages_frosted_with_their_picture">صفحه‌ها مات با تصویر خودشان</string>
-    <string name="artist_album_and_playlist_pages_sit">صفحه‌های هنرمند، آلبوم و فهرست پخش روی شیشه ماتی از تصویر خودشان قرار می‌گیرند؛ صفحه اصلی، کتابخانه، جستجو و تنظیمات روی مهی از آنچه در حال پخش است. اینکه صفحه‌ها رنگ تصویرشان را بگیرند یا نه، زیر «رنگ» است.</string>
+    <string name="artist_album_and_playlist_pages_sit">صفحه‌های هنرمند، آلبوم و فهرست پخش روی شیشه ماتی از تصویر خودشان قرار می‌گیرند؛ صفحه اصلی، کتابخانه، جستجو و تنظیمات روی مهی از آنچه در حال پخش است. اینکه صفحه‌ها رنگ تصویرشان را بگیرند یا نه، زیر «صفحه‌ها» است.</string>
     <string name="calmer_quicker_animations">انیمیشن‌های آرام‌تر و سریع‌تر</string>
     <string name="no_drifting_backgrounds_no_artwork_bounce">بدون پس‌زمینه شناور، بدون پرش تصویر، گذارهای سریع‌تر.</string>
     <string name="that_font_couldn_t_be_used">استفاده از آن فونت ممکن نشد</string>
@@ -2005,7 +2005,7 @@
     <string name="more_room_swipe_down_from_the">فضای بیشتر؛ برای دیدنش از بالا به پایین بکشید</string>
     <string name="the_clock_battery_and_notification_icons">ساعت، باتری و آیکون‌های اعلان در بالا تا وقتی Prism باز است پنهان می‌مانند. از لبه بالا به پایین بکشید تا لحظه‌ای نشان داده شوند. حالت تمام‌صفحه و ویدیوی تمام‌صفحه مثل قبل نوارهای دیگر را هم پنهان می‌کنند.</string>
     <string name="never_shows_only_the_icons_words">«هرگز» فقط آیکون‌ها را نشان می‌دهد؛ «فقط کلمات» فقط نام‌ها را.</string>
-    <string name="see_through_lets_the_page_show">«نیمه‌شفاف» می‌گذارد صفحه از پشت نوار دیده شود؛ «توپر» آن را می‌پوشاند. خود محوشدگی از «شیشه» می‌آید (شخصی‌سازی Prism ← شیشه و پس‌زمینه‌ها).</string>
+    <string name="see_through_lets_the_page_show">«نیمه‌شفاف» می‌گذارد صفحه از پشت نوار دیده شود؛ «توپر» آن را می‌پوشاند. خود محوشدگی از «شیشه» می‌آید (تم و رنگ‌ها ← شیشه).</string>
     <string name="slims_down_as_you_scroll">هنگام پیمایش باریک‌تر می‌شود</string>
     <string name="swipe_sideways_on_a_tab_s">کشیدن افقی روی صفحه یک زبانه</string>
     <string name="a_sideways_swipe_on_a_tab">کشیدن افقی روی صفحه خود یک زبانه به زبانه کناری می‌رود. ردیف‌هایی که افقی پیمایش می‌شوند (و صفحه‌های خود کتابخانه) کشیدن خودشان را نگه می‌دارند.</string>
@@ -2034,7 +2034,7 @@
     <string name="played_now_playing_and_up_next">«پخش‌شده»، «در حال پخش» و «بعدی‌ها»</string>
     <string name="off_the_queue_is_one_list">اگر خاموش باشد، صف یک فهرست از آهنگ‌هاست، از پخش‌شده‌ها تا آنچه در راه است.</string>
     <string name="moving_artwork_when_a_song_has">تصویر متحرک، وقتی آهنگ داشته باشد</string>
-    <string name="motion_artwork_and_video_covers_turn">تصویرهای متحرک و کاورهای ویدیویی. برای یک آهنگ، از منوی ⋯ پخش‌کننده خاموششان کنید. اینکه با داده تلفن همراه پخش شوند، و آن‌هایی که روی گوشی نگه داشته می‌شوند، در «دانلودها، فضای ذخیره‌سازی و داده» است.</string>
+    <string name="motion_artwork_and_video_covers_turn">تصویرهای متحرک و کاورهای ویدیویی. برای یک آهنگ، از منوی ⋯ پخش‌کننده خاموششان کنید. اینکه با داده تلفن همراه پخش شوند، و آن‌هایی که روی گوشی نگه داشته می‌شوند، در «دانلودها و داده» است.</string>
     <string name="the_animated_cover_plays_behind_everything">کاور متحرک پشت همه‌چیز پخش می‌شود</string>
     <string name="the_moving_artwork_fills_the_whole">تصویر متحرک کل پخش‌کننده را پر می‌کند، زیر کنترل‌ها تیره‌تر، و خود کاور تصویر ثابت را نشان می‌دهد. نه با تصویر لبه‌به‌لبه، که خودش آن را تا لبه‌ها نشان می‌دهد.</string>
     <string name="the_cover_fills_the_screen_lyrics">کاور صفحه را پر می‌کند و متن آهنگ رویش است</string>
@@ -2137,7 +2137,7 @@
     <string name="needed_for_sing">لازم برای همخوانی · %1$s</string>
     <string name="takes_the_singer_s_voice_out">صدای خواننده را روی گوشی شما از آهنگ‌ها برمی‌دارد، برای کارائوکه. یک بار دانلود می‌شود.</string>
     <string name="so_sing_starts_at_once_when">تا همخوانی همان لحظه که روشنش می‌کنید شروع شود</string>
-    <string name="the_playing_song_and_the_next">آهنگ در حال پخش و آهنگ بعدی حتی با همخوانی خاموش هم در پس‌زمینه جدا می‌شوند. هنگام پخش موسیقی باتری بیشتری مصرف می‌کند؛ با داده تلفن همراه از «دانلودها، فضای ذخیره‌سازی و داده ← داده تلفن همراه» پیروی می‌کند.</string>
+    <string name="the_playing_song_and_the_next">آهنگ در حال پخش و آهنگ بعدی حتی با همخوانی خاموش هم در پس‌زمینه جدا می‌شوند. هنگام پخش موسیقی باتری بیشتری مصرف می‌کند؛ با داده تلفن همراه از «دانلودها و داده ← داده تلفن همراه» پیروی می‌کند.</string>
     <string name="using">در حال استفاده از %1$s</string>
     <string name="songs_are_worked_out_again_the">آهنگ‌ها دفعه بعد که همخوانی‌شان کنید دوباره آماده می‌شوند.</string>
     <string name="word_by_word_first_then_by">اول کلمه‌به‌کلمه، بعد خط‌به‌خط</string>
@@ -2495,7 +2495,7 @@
     <string name="allow_notifications">اجازه اعلان‌ها</string>
     <string name="turn_them_on_in_android_s">آن‌ها را در تنظیمات Android برای Prism روشن کنید.</string>
     <string name="your_starting_point_made_from_what">نقطه شروع شما، ساخته‌شده از آنچه گوش می‌دهید.</string>
-    <string name="the_replay_card_at_the_top">کارت Replay در بالا: سال شما تا اینجا (ظاهرش را در تنظیمات ← شخصی‌سازی Prism ← صفحه اصلی و کتابخانه انتخاب کنید)</string>
+    <string name="the_replay_card_at_the_top">کارت Replay در بالا: سال شما تا اینجا (ظاهرش را در تنظیمات ← صفحه اصلی و کتابخانه ← کارت Replay انتخاب کنید)</string>
     <string name="quick_picks_songs_around_the_artists">انتخاب‌های سریع: آهنگ‌هایی حول هنرمندانی که گوش می‌دهید؛ برای بیشتر، افقی بکشید</string>
     <string name="made_for_you_daily_mixes_your">ساخته‌شده برای شما: میکس‌های روزانه، میکس وقت روز و رادار انتشار</string>
     <string name="the_grid_button_at_the_top">دکمه شبکه در بالا بخش‌های صفحه اصلی را مرتب می‌کند</string>
@@ -2516,12 +2516,12 @@
     <string name="let_prism_mix_your_music_songs">بگذارید Prism موسیقی‌تان را میکس کند: آهنگ‌ها هم‌کلید و روی ضرب در هم ترکیب می‌شوند.</string>
     <string name="in_the_queue_tap_dj_then">در صف، DJ را بزنید، بعد «یکنواخت»، «اوج‌گیری» یا «آرام‌شدن» را انتخاب کنید</string>
     <string name="long_press_an_album_or_playlist">آلبوم یا فهرست پخش را لمس طولانی کنید ← پخش به‌صورت ست DJ</string>
-    <string name="crossfade_settings_playback_sound_blends_any">کراس‌فید (تنظیمات ← پخش و صدا) هر دو آهنگی را ترکیب می‌کند</string>
+    <string name="crossfade_settings_playback_sound_blends_any">کراس‌فید (تنظیمات ← پخش) هر دو آهنگی را ترکیب می‌کند</string>
     <string name="mixes_made_on_your_phone_from">میکس‌هایی که روی گوشی شما از آنچه گوش می‌دهید ساخته می‌شوند. هیچ چیز از شنیده‌های شما از آن خارج نمی‌شود.</string>
     <string name="daily_mixes_group_the_artists_you">میکس‌های روزانه هنرمندانی را که گوش می‌دهید بر اساس اینکه به هم می‌خورند گروه‌بندی می‌کنند</string>
     <string name="release_radar_finds_new_music_from">رادار انتشار موسیقی جدید هنرمندانی را که دنبال می‌کنید پیدا می‌کند</string>
     <string name="made_for_you_also_has_mixes">«ساخته‌شده برای شما» میکس‌هایی از موسیقی خودتان و «پشت سر هم» را هم دارد: فقط از پخش‌های شما می‌آیند و آفلاین کار می‌کنند</string>
-    <string name="when_the_queue_ends_prism_s">وقتی صف تمام شد، رادیوی Prism از موسیقی شما انتخاب می‌کند (تنظیمات ← پخش و صدا ← پخش خودکار از)</string>
+    <string name="when_the_queue_ends_prism_s">وقتی صف تمام شد، رادیوی Prism از موسیقی شما انتخاب می‌کند (تنظیمات ← پخش ← وقتی صف تمام می‌شود)</string>
     <string name="tap_shuffle_twice_on_a_playlist">برای پخش تصادفی هوشمند، دو بار روی پخش تصادفی یک فهرست پخش ضربه بزنید: آهنگ‌های جدید لابه‌لایش می‌آیند</string>
     <string name="not_for_me_and_leave_out">«به درد من نمی‌خورد» و «کنار گذاشتن از سلیقه من» چیزها را بیرون نگه می‌دارند</string>
     <string name="find_anything_in_prism_music_or">هر چیزی را در Prism Music پیدا کنید، یا نام آهنگی را که اطرافتان پخش می‌شود بفهمید.</string>
@@ -2545,11 +2545,11 @@
     <string name="control_prism_from_a_browser_on">Prism را از مرورگر رایانه‌تان کنترل کنید</string>
     <string name="hand_what_s_playing_to_another">آنچه پخش می‌شود را به گوشی یا تبلت دیگری که Prism دارد بسپارید</string>
     <string name="prism_takes_its_color_from_what">Prism رنگش را از آنچه پخش می‌شود می‌گیرد. هر قدر دوست دارید تغییرش دهید.</string>
-    <string name="appearance_the_spectrum_s_colors_or">ظاهر: رنگ‌های طیف (یا سفید ساده)، رنگ شاخص شما، فونت‌ها، آیکون‌ها و پس‌زمینه‌ها</string>
-    <string name="layout_the_tab_bar_your_tabs">چیدمان: نوار زبانه، زبانه‌های شما و پخش‌کننده کوچک</string>
+    <string name="appearance_the_spectrum_s_colors_or">تم و رنگ‌ها، متن و آیکون‌ها: رنگ‌های نور (یا سفید ساده)، رنگ شاخص شما، فونت‌ها، آیکون‌ها و پس‌زمینه‌ها</string>
+    <string name="layout_the_tab_bar_your_tabs">زبانه‌ها و پخش‌کننده کوچک: نوار زبانه، زبانه‌های شما و پخش‌کننده کوچک</string>
     <string name="player_its_background_the_cover_and">پخش‌کننده: پس‌زمینه‌اش، کاور و آنچه رویش نشان داده می‌شود</string>
     <string name="search_settings_from_the_box_at">تنظیمات را از کادر بالای صفحه تنظیمات جستجو کنید</string>
-    <string name="settings_customize_prism_color_every_choice">تنظیمات ← شخصی‌سازی Prism ← رنگ: هر گزینه پیش از انتخاب نشان می‌دهد چه شکلی است.</string>
+    <string name="settings_customize_prism_color_every_choice">تنظیمات ← تم و رنگ‌ها: هر گزینه پیش از انتخاب نشان می‌دهد چه شکلی است.</string>
     <string name="the_light_12_presets_white_black">نور: ۱۲ پیش‌تنظیم، سفید (در حالت روشن سیاه)، یا رنگ‌های خودتان</string>
     <string name="your_accent_any_color_from_a">رنگ شاخص شما: هر رنگی، از چرخه رنگ، کد یا قطره‌چکان</string>
     <string name="the_page_background_plain_tinted_with">پس‌زمینه صفحه: ساده، با ته‌رنگ شاخص شما، یا رنگی از خودتان</string>
@@ -2560,14 +2560,14 @@
     <string name="pin_prism_playlists_to_home_customize">فهرست‌های پخش Prism را به صفحه اصلی سنجاق کنید (شخصی‌سازی صفحه اصلی ← فهرست‌های پخش سنجاق‌شده)</string>
     <string name="song_credits_in_any_song_s">عوامل آهنگ در منوی هر آهنگ</string>
     <string name="see_which_downloads_failed_and_why">ببینید کدام دانلودها ناموفق بودند و چرا</string>
-    <string name="settings_customize_prism_looks_your_whole">تنظیمات ← شخصی‌سازی Prism ← پوسته‌ها: کل ظاهر شما، ذخیره‌شده، قابل تعویض و اشتراک با یک ضربه.</string>
+    <string name="settings_customize_prism_looks_your_whole">تنظیمات ← پوسته‌ها: کل ظاهر شما، ذخیره‌شده، قابل تعویض و اشتراک با یک ضربه.</string>
     <string name="try_prism_s_own_paper_midnight">پوسته‌های خود Prism را امتحان کنید: کاغذ، نیمه‌شب، نئون، ملایم، استودیو و وینیل</string>
     <string name="save_yours_update_it_when_you">مال خودتان را ذخیره کنید، وقتی تغییرش دادید به‌روزش کنید، و به‌صورت کد QR، کد یا فایل به اشتراک بگذارید</string>
     <string name="browse_looks_people_shared_under_from">پوسته‌هایی را که دیگران گذاشته‌اند در «از جامعه کاربران» مرور کنید</string>
     <string name="one_look_by_day_and_another">یک پوسته برای روز و یکی برای شب، هنگام طلوع و غروب</string>
     <string name="every_look_page_shows_home_the">هر صفحه ظاهر، صفحه اصلی، پخش‌کننده و متن آهنگ را همان‌طور که تغییرشان می‌دهید نشان می‌دهد؛ «واگرد» تغییر را برمی‌گرداند</string>
-    <string name="customize_by_tapping_hold_the_settings">شخصی‌سازی با ضربه: زبانه تنظیمات را نگه دارید، یا آن را در «ظاهر» روشن کنید، بعد روی پخش‌کننده کوچک، نوار زبانه، پخش‌کننده یا یک بخش صفحه اصلی ضربه بزنید</string>
-    <string name="settings_customize_prism_player_or_player">تنظیمات ← شخصی‌سازی Prism ← پخش‌کننده، یا ⋯ ← تنظیمات پخش‌کننده روی خود پخش‌کننده.</string>
+    <string name="customize_by_tapping_hold_the_settings">شخصی‌سازی با ضربه: زبانه تنظیمات را نگه دارید، یا آن را در «پوسته‌ها» روشن کنید، بعد روی پخش‌کننده کوچک، نوار زبانه، پخش‌کننده یا یک بخش صفحه اصلی ضربه بزنید</string>
+    <string name="settings_customize_prism_player_or_player">تنظیمات ← پخش‌کننده، یا ⋯ ← تنظیمات پخش‌کننده روی خود پخش‌کننده.</string>
     <string name="layouts_standard_a_big_cover_lyrics">چیدمان‌ها: استاندارد، کاور بزرگ، اول متن، مینیمال، وینیل یا کاست (هنگام پخش می‌چرخند)</string>
     <string name="a_visualizer_if_you_d_like">اگر بخواهید نمایشگر صوتی: نوارها، موج، حلقه، تپش یا درخشش (تا انتخابش نکنید خاموش است)</string>
     <string name="pick_the_buttons_under_the_controls">دکمه‌های زیر کنترل‌ها را انتخاب کنید (سرعت هم یکی از آن‌هاست)، و دو دکمه کنار پخش در اعلان و ماشین</string>
@@ -2578,7 +2578,7 @@
     <string name="prism_tells_android_which_of_its">Prism به Android می‌گوید کدام بخش‌هایش را از پیش آماده کند، و به‌روزرسانی‌ها از طریق بنر آماده می‌رسند، پس دیگر کند اجرا نمی‌شوند</string>
     <string name="less_work_while_lists_scroll_while">کار کمتر هنگام پیمایش فهرست‌ها، تایپ در جستجو و پخش آهنگ</string>
     <string name="if_something_still_stutters_settings_backup">اگر چیزی هنوز گیر می‌کند، تنظیمات ← پشتیبان و درباره ← عیب‌یابی ثبت می‌کند کجا رخ داده، برای اشتراک‌گذاری</string>
-    <string name="settings_customize_prism_lyrics_how_your">تنظیمات ← شخصی‌سازی Prism ← متن آهنگ: ظاهر متن آهنگ شما، با نمونه‌ای از هر گزینه.</string>
+    <string name="settings_customize_prism_lyrics_how_your">تنظیمات ← متن آهنگ و همخوانی: ظاهر متن آهنگ شما، با نمونه‌ای از هر گزینه.</string>
     <string name="six_styles_prism_classic_karaoke_bold">شش سبک: Prism، کارائوکه کلاسیک، کارت پررنگ، درخشش، ماشین تحریر و آرام</string>
     <string name="the_sung_line_and_the_others">خط در حال خواندن و بقیه به سفید، نور شما، رنگ شاخص، رنگ کاور یا رنگ خودتان</string>
     <string name="weight_line_spacing_how_dim_the">ضخامت، فاصله خطوط، میزان کم‌نوری خطوط دیگر، شدت محوشدگی، حروف بزرگ و سایه</string>
@@ -2588,8 +2588,8 @@
     <string name="a_few_things_you_asked_for">چند چیزی که خواسته بودید.</string>
     <string name="library_history_what_you_played_by">کتابخانه ← تاریخچه: آنچه پخش کردید، روز به روز، روی این گوشی یا در حسابتان</string>
     <string name="liked_a_song_and_its_video">هم آهنگ و هم ویدیویش را پسندیده‌اید؟ یک بار، به‌صورت آهنگ نشان داده می‌شوند</string>
-    <string name="prism_s_own_volume_apart_from">صدای خود Prism، جدا از صدای گوشی (تنظیمات ← شخصی‌سازی Prism ← پخش‌کننده)</string>
-    <string name="hide_the_status_bar_customize_prism">پنهان کردن نوار وضعیت (شخصی‌سازی Prism ← زبانه‌ها و پخش‌کننده کوچک)</string>
+    <string name="prism_s_own_volume_apart_from">صدای خود Prism، جدا از صدای گوشی (تنظیمات ← پخش‌کننده)</string>
+    <string name="hide_the_status_bar_customize_prism">پنهان کردن نوار وضعیت (تنظیمات ← زبانه‌ها و پخش‌کننده کوچک)</string>
     <string name="settings_pages_are_tidier_tap_beside">صفحه‌های تنظیمات مرتب‌ترند: برای جزئیات روی ⓘ کنار هر تنظیم ضربه بزنید</string>
     <string name="library_s_tiles_the_edit_button">کاشی‌های کتابخانه: دکمه ویرایش در بالای کتابخانه</string>
     <string name="customize_home_the_button_at_the">«شخصی‌سازی صفحه اصلی» (دکمه بالای صفحه اصلی) گزینه‌های بیشتری دارد.</string>
@@ -2610,10 +2610,10 @@
     <string name="artists_and_songs_with_their_pictures">هنرمندان و آهنگ‌ها با تصویرشان هنگام تایپ</string>
     <string name="results_already_in_your_library_right">نتیجه‌هایی که از قبل در کتابخانه شما هستند، درست بعد از نتیجه برتر</string>
     <string name="settings_are_sorted_by_what_they">تنظیمات بر اساس کارشان مرتب شده‌اند.</string>
-    <string name="everything_about_how_prism_looks_is">همه‌چیز درباره ظاهر Prism زیر «شخصی‌سازی Prism» است</string>
-    <string name="gestures_and_buttons_in_controls_gestures">ژست‌ها و دکمه‌ها در «کنترل‌ها و ژست‌ها»</string>
+    <string name="everything_about_how_prism_looks_is">همه‌چیز درباره ظاهر Prism زیر «مال خودتان کنید» است</string>
+    <string name="gestures_and_buttons_in_controls_gestures">ژست‌ها و دکمه‌ها زیر «گوش دادن»</string>
     <string name="every_mobile_data_choice_on_one">همه گزینه‌های داده تلفن همراه در یک صفحه</string>
-    <string name="android_auto_speakers_discord_and_last">Android Auto، بلندگوها، Discord و Last.fm در «دستگاه‌ها و اتصال‌ها»</string>
+    <string name="android_auto_speakers_discord_and_last">Android Auto، بلندگوها، Discord و Last.fm زیر «اتصال‌ها»</string>
     <string name="performance_mode_at_the_top_for">حالت کارایی، در بالا، برای گوشی‌های کندتر</string>
     <string name="make_the_pieces_of_prism_yours">تکه‌های Prism را مال خودتان کنید.</string>
     <string name="covers_as_circles_squircles_flowers_arches">کاورها به شکل دایره، سوپربیضی، گل، طاق… برای آهنگ‌ها، آلبوم‌ها، هنرمندان و پخش‌کننده</string>
@@ -2624,20 +2624,20 @@
     <string name="from_your_requests">از درخواست‌های شما.</string>
     <string name="rearrange_your_playlists_songs_rearrange_songs">چیدن دوباره آهنگ‌های فهرست‌های پخش: ⋯ ← چیدن دوباره آهنگ‌ها</string>
     <string name="swipe_a_song_out_of_the">آهنگی را از صف بیرون بکشید، پخش‌کننده کوچک را برای باز کردن به بالا بکشید</string>
-    <string name="the_light_from_the_playing_cover">نور از کاور در حال پخش: رنگ ← از کاور</string>
+    <string name="the_light_from_the_playing_cover">نور از کاور در حال پخش: تم و رنگ‌ها ← نور ← از کاور</string>
     <string name="ribbons_a_progress_bar_with_strands">روبان‌ها، نوار پیشرفتی با رشته‌هایی که در طولش روان‌اند</string>
     <string name="a_bold_title_on_the_player">عنوان پررنگ روی پخش‌کننده، آلبوم‌های کامل در فهرست پخش، و پیوندهای YouTube برای اشتراک‌گذاری</string>
-    <string name="settings_playback_sound">تنظیمات ← پخش و صدا.</string>
+    <string name="settings_playback_sound">تنظیمات ← پخش، و تنظیمات ← صدا و کیفیت.</string>
     <string name="speed_pitch_slowed_sped_up_or">سرعت و زیر و بمی: آهسته، تند، یا هر کلیدی، از ⋯ پخش‌کننده</string>
     <string name="how_songs_cross_in_a_crossfade">نحوه ترکیب آهنگ‌ها در کراس‌فید، علامتی جایی که آهنگ بعدی وارد می‌شود، و کاورهایی که در هم محو می‌شوند</string>
     <string name="normalize_volume_s_level_and_albums">سطح یکسان‌سازی صدا، و آلبوم‌هایی که همان‌طور که هستند می‌مانند</string>
     <string name="your_own_equalizer_presets_shared_as">پیش‌تنظیم‌های اکولایزر خودتان، قابل اشتراک به‌صورت کد، یکی برای ماشین و یکی برای هندزفری</string>
     <string name="fades_for_the_sleep_timer_and">محو شدن برای تایمر خواب و برای توقف و پخش</string>
     <string name="liked_how_prism_1_6_looked">ظاهر Prism 1.6 را دوست داشتید؟ برگشته، به‌عنوان یک انتخاب.</string>
-    <string name="the_classic_look_customize_prism_looks">پوسته کلاسیک: شخصی‌سازی Prism ← پوسته‌ها</string>
+    <string name="the_classic_look_customize_prism_looks">پوسته کلاسیک: تنظیمات ← پوسته‌ها</string>
     <string name="or_only_its_icons_its_bold">یا فقط آیکون‌هایش، حروف پررنگش یا کنترل‌های ساده‌اش</string>
     <string name="the_player_s_buttons_apart_instead">دکمه‌های پخش‌کننده جدا از هم به‌جای داخل کپسول</string>
-    <string name="last_fm_scrobbling_devices_connections_and">اسکرابل Last.fm (دستگاه‌ها و اتصال‌ها)، و Replay برای هر تاریخی</string>
+    <string name="last_fm_scrobbling_devices_connections_and">اسکرابل Last.fm (حساب‌ها و اشتراک‌گذاری)، و Replay برای هر تاریخی</string>
     <string name="pick_several_songs_in_the_queue">چند آهنگ را در صف انتخاب کنید تا با هم جابه‌جا یا حذفشان کنید، یا ترتیبش را قفل کنید</string>
     <string name="choose_what_goes_in_a_backup">انتخاب کنید چه چیزهایی در پشتیبان باشد</string>
     <string name="swipe_up_on_the_player_for">کشیدن به بالا روی پخش‌کننده برای صف، قفل روی حالت عمودی، توقف هنگام بی‌صدا شدن</string>
@@ -3794,7 +3794,7 @@
     <string name="the_ambient_frost_behind_home_search_all">مه «محیطی» پشت صفحه اصلی، جستجو، کتابخانه، Replay و تنظیمات («خودکار» رنگ‌های کاور را در آن نگه می‌دارد، «ساده» خاکستری‌اش می‌کند، ته‌رنگ رنگی‌اش می‌کند)، همان صفحه‌ها وقتی شیشه مات خاموش است، و برگه‌ها و پنجره‌های گفتگو. نه پخش‌کننده، و نه صفحه‌های آلبوم، هنرمند و فهرست پخش، که رنگ‌های تصویرشان را می‌گیرند.</string>
     <string name="home_has_the_background_glass_backgrounds_all">صفحه اصلی پس‌زمینه %1$s را دارد (شیشه و پس‌زمینه‌ها) که روی این رنگ کشیده می‌شود، پس آنجا فقط کمی دیده می‌شود. برای دیدن کاملش، آنجا «محیطی» را انتخاب کنید</string>
     <string name="secondary_text_artists_times_notes_dividers_all">متن‌های فرعی (هنرمندان، زمان‌ها، یادداشت‌ها)، خطوط جداکننده و دورخط‌ها در صفحه‌ها، برگه‌ها و منوها. «متوسط» و «بالا» رنگ شاخص را هم پررنگ‌تر می‌کنند تا خواناتر باشد. متن سفید خود پخش‌کننده روی کاور همان‌طور می‌ماند.</string>
-    <string name="the_accent_on_artist_album_and_all">رنگ شاخص در صفحه‌های هنرمند، آلبوم و فهرست پخش، و در منوهایی که از یک آهنگ، آلبوم یا هنرمند باز می‌کنید (لمس طولانی یا ⋯). پس‌زمینه‌های مات آن‌ها در هر صورت رنگ‌های تصویر را می‌گیرند (شیشه و پس‌زمینه‌ها).</string>
+    <string name="the_accent_on_artist_album_and_all">رنگ شاخص در صفحه‌های هنرمند، آلبوم و فهرست پخش، و در منوهایی که از یک آهنگ، آلبوم یا هنرمند باز می‌کنید (لمس طولانی یا ⋯). پس‌زمینه‌های مات آن‌ها در هر صورت رنگ‌های تصویر را می‌گیرند (شیشه).</string>
     <string name="tap_the_line_under_the_player_all">روی خط زیر کنترل‌های پخش‌کننده (که می‌گوید کدام دستگاه پخش می‌کند) ضربه بزنید و یک بلندگو، تلویزیون یا گیرنده انتخاب کنید. باید روی همین Wi-Fi با Google Cast (Chromecast، Google TV، بلندگوهای دارای Cast) یا DLNA / UPnP (که گاهی «اشتراک رسانه» نامیده می‌شود) باشد. صف، متن آهنگ و کنترل‌ها روی گوشی می‌مانند و دکمه‌های صدای گوشی صدای بلندگو را تنظیم می‌کنند. اکولایزر، کراس‌فید، همخوانی و ویدیوها مال خود گوشی‌اند، پس هنگام پخش روی دستگاه خاموش‌اند.</string>
     <string name="nothing_new_from_your_artists_in_all">در سه ماه گذشته چیز تازه‌ای از هنرمندان شما نیامده. Prism هر چند روز یک بار هنرمندانی را که ستاره زده‌اید، ذخیره کرده‌اید و بیشتر گوش می‌دهید بررسی می‌کند؛ بررسی اول فقط آنچه از قبل منتشر شده را یاد می‌گیرد، پس موسیقی جدید از بررسی بعدی نشان داده می‌شود.</string>
     <string name="tunemymusic_copies_your_playlists_liked_songs_all">TuneMyMusic فهرست‌های پخش شما، از جمله آهنگ‌های پسندیده، را در حساب YouTube Music شما کپی می‌کند. همان سرویسی است که برنامه خود YouTube Music برای انتقال استفاده می‌کند.</string>
@@ -4237,14 +4237,14 @@
     <string name="shaped_by_the_crossfade">به شکل کراس‌فید</string>
     <string name="crossfade_shape_keywords">کراس‌فید ترکیب محو شدن پایان محو شدن آغاز باریک شدن شکل منحنی نوار پیشرفت نوار جابه‌جایی crossfade</string>
     <string name="the_end_tapers_as_the_song_fades">پایان نوار با محو شدن آهنگ باریک می‌شود</string>
-    <string name="crossfade_shape_info">انتهای نوار شکلِ محو شدن آهنگ را می‌گیرد، و نوار آهنگ بعدی همان‌طور که وارد می‌شود پهن می‌شود، مطابق نوع کراس‌فید شما (صدا ← کراس‌فید). فقط وقتی کراس‌فیدی در راه است: نه بین قطعه‌های یک آلبوم، نه هنگام پخش روی دستگاه دیگر، نه برای قسمت‌ها یا پخش زنده. با مدت خودکار، به‌محض برنامه‌ریزی ترکیب نمایش داده می‌شود. شکل موج و روبان‌ها به‌جای آن همان نشانه را نگه می‌دارند.</string>
+    <string name="crossfade_shape_info">انتهای نوار شکلِ محو شدن آهنگ را می‌گیرد، و نوار آهنگ بعدی همان‌طور که وارد می‌شود پهن می‌شود، مطابق نوع کراس‌فید شما (پخش ← کراس‌فید). فقط وقتی کراس‌فیدی در راه است: نه بین قطعه‌های یک آلبوم، نه هنگام پخش روی دستگاه دیگر، نه برای قسمت‌ها یا پخش زنده. با مدت خودکار، به‌محض برنامه‌ریزی ترکیب نمایش داده می‌شود. شکل موج و روبان‌ها به‌جای آن همان نشانه را نگه می‌دارند.</string>
     <string name="imp_title">سابقهٔ خود را بیاورید</string>
     <string name="imp_subtitle">از Spotify،‏ YouTube Music و Last.fm، خوانده‌شده روی همین گوشی</string>
     <string name="imp_row_detail">Spotify،‏ YouTube Music،‏ Last.fm</string>
     <string name="imp_group_info">پخش‌ها، آهنگ‌های پسندیده و فهرست‌های پخش خود را از دادهٔ دانلودی Spotify، سابقهٔ YouTube Music خود را از Google Takeout، یا اسکرابل‌های Last.fm خود را بیاورید. فایل‌ها روی همین گوشی خوانده می‌شوند؛ برای پیدا کردن هر آهنگ، Prism آن را جستجو می‌کند، همان‌طور که جستجوی خودش این کار را می‌کند.</string>
     <string name="imp_keywords">وارد کردن درون‌ریزی spotify دانلود داده takeout google youtube music سابقه تاریخچه last.fm اسکرابل آهنگ‌های پسندیده فهرست پخش انتقال</string>
     <string name="imp_bring_from">آوردن از</string>
-    <string name="imp_bring_from_info">Spotify: در spotify.com، حساب ← حریم خصوصی ← دانلود داده‌های شما. دادهٔ حساب ظرف چند روز می‌رسد (یک سال پخش، آهنگ‌های پسندیده، فهرست‌های پخش)؛ سابقهٔ پخش گسترده ظرف حداکثر 30 روز می‌رسد (همهٔ پخش‌ها از زمان پیوستن شما). فایل zip رسیده یا فایل‌های داخل آن را انتخاب کنید.\n\nYouTube Music: در takeout.google.com، گزینهٔ YouTube و YouTube Music را انتخاب کنید، فقط سابقه، به‌صورت JSON. فایل zip یا watch-history.json را انتخاب کنید.\n\nLast.fm: آن را در «دستگاه‌ها و اتصال‌ها» وصل کنید تا Prism اسکرابل‌های شما را بخواند.\n\nهیچ چیز به جایی فرستاده نمی‌شود. برای پیدا کردن هر آهنگ، Prism آن را جستجو می‌کند، همان‌طور که جستجوی خودش این کار را می‌کند.</string>
+    <string name="imp_bring_from_info">Spotify: در spotify.com، حساب ← حریم خصوصی ← دانلود داده‌های شما. دادهٔ حساب ظرف چند روز می‌رسد (یک سال پخش، آهنگ‌های پسندیده، فهرست‌های پخش)؛ سابقهٔ پخش گسترده ظرف حداکثر 30 روز می‌رسد (همهٔ پخش‌ها از زمان پیوستن شما). فایل zip رسیده یا فایل‌های داخل آن را انتخاب کنید.\n\nYouTube Music: در takeout.google.com، گزینهٔ YouTube و YouTube Music را انتخاب کنید، فقط سابقه، به‌صورت JSON. فایل zip یا watch-history.json را انتخاب کنید.\n\nLast.fm: آن را در تنظیمات ← حساب‌ها و اشتراک‌گذاری وصل کنید تا Prism اسکرابل‌های شما را بخواند.\n\nهیچ چیز به جایی فرستاده نمی‌شود. برای پیدا کردن هر آهنگ، Prism آن را جستجو می‌کند، همان‌طور که جستجوی خودش این کار را می‌کند.</string>
     <string name="imp_spotify_detail">دادهٔ دانلودی آن: پخش‌ها، آهنگ‌های پسندیده، فهرست‌های پخش</string>
     <string name="imp_takeout_detail">سابقهٔ تماشای Google Takeout</string>
     <string name="imp_lastfm_detail">اسکرابل‌های شما، به‌عنوان %1$s</string>
@@ -4349,7 +4349,7 @@
     <string name="explicit_show">نمایش</string>
     <string name="explicit_skip">رد کردن</string>
     <string name="explicit_hide">پنهان کردن</string>
-    <string name="explicit_skipped">آهنگ‌های صریح کنار گذاشته می‌شوند (تنظیمات ← پخش و صدا)</string>
+    <string name="explicit_skipped">آهنگ‌های صریح کنار گذاشته می‌شوند (تنظیمات ← پخش)</string>
     <string name="explicit_none_left">چیزی برای پخش نیست: همهٔ آهنگ‌های اینجا صریح هستند</string>
     <string name="change_cover">تغییر کاور</string>
     <string name="cover_changed">کاور تغییر کرد</string>
@@ -4399,7 +4399,7 @@
     <string name="replay_last_weeks">%1$d هفتهٔ گذشته</string>
     <string name="replay_last_days">%1$d روز گذشته</string>
     <string name="replay_story_font">قلم استوری‌ها</string>
-    <string name="replay_story_font_info">استوری‌های Replay و Rewind کلمه‌هایشان را چطور بنویسند: با قلم پوستری Prism، یا با قلمی که برای Prism انتخاب کرده‌اید (متن).</string>
+    <string name="replay_story_font_info">استوری‌های Replay و Rewind کلمه‌هایشان را چطور بنویسند: با قلم پوستری Prism، یا با قلمی که برای Prism انتخاب کرده‌اید (متن و آیکون‌ها).</string>
     <string name="replay_story_font_keywords">قلم فونت تایپوگرافی تایپ‌فیس استوری rewind wrapped</string>
     <string name="replay_story_font_poster">قلم پوستری</string>
     <string name="replay_story_font_own">قلم خودتان</string>
@@ -4598,7 +4598,7 @@
         <item quantity="other">%1$s آهنگ برای انتخاب</item>
     </plurals>
     <string name="ytlive_spotify_connect">برای استفاده از این، Spotify را متصل کنید</string>
-    <string name="ytlive_spotify_recent_off">خاموش: «پخش‌های اخیر» را در صفحهٔ Spotify روشن کنید</string>
+    <string name="ytlive_spotify_recent_off">خاموش: «پخش‌های اخیر» را در تنظیمات ← حساب‌ها و اشتراک‌گذاری ← Spotify روشن کنید</string>
     <string name="ytlive_connection_on">سابقهٔ شما، همگام · روشن</string>
     <string name="ytlive_connection_off">سابقهٔ خود را همگام نگه دارید · خاموش</string>
     <string name="ytlive_connection_signed_out">برای همگام نگه داشتن سابقه، وارد شوید</string>
@@ -4614,7 +4614,7 @@
     <string name="dj_in_the_queue_keywords">dj حالت دکمه صف بالا جا پنهان</string>
     <string name="menu_lyrics_only_way">تا وقتی تنها راه رسیدن به متن آهنگ از پخش‌کننده است، می‌ماند</string>
     <string name="smart_downloads_offer_title">آهنگ‌ها را پیش از نیاز دانلود کنیم؟</string>
-    <string name="smart_downloads_offer_body">دانلود هوشمند آهنگ‌هایی را که احتمالاً پخش می‌کنید برای شنیدن بدون اینترنت آماده نگه می‌دارد: تا 1 GB، با Wi-Fi. هر زمان خواستید در «دانلودها، فضای ذخیره‌سازی و داده» تغییرش دهید.</string>
+    <string name="smart_downloads_offer_body">دانلود هوشمند آهنگ‌هایی را که احتمالاً پخش می‌کنید برای شنیدن بدون اینترنت آماده نگه می‌دارد: تا 1 GB، با Wi-Fi. هر زمان خواستید در تنظیمات ← دانلودها و داده تغییرش دهید.</string>
     <!-- 1.8.2 -->
     <string name="loading_list">در حال بارگیری «%1$s»…</string>
     <string name="song_details">جزئیات آهنگ</string>
@@ -4855,7 +4855,7 @@
     <string name="glass_blur">محوشدگی</string>
     <string name="glass_blur_info">رنگ‌های پشت شیشه تا چه حد پخش می‌شوند. چیزهای کوچک مثل متن پشت شیشه مایع، هر قدر این مقدار زیاد شود، لبه‌ای کمرنگ نگه می‌دارند؛ شیشه مات آن‌ها را هم محو می‌کند. ۱۰۰٪ مقدار خود Prism است. بیشتر از آن برای گوشی کندتر سنگین‌تر است.</string>
     <string name="glass_frost">مه</string>
-    <string name="glass_frost_info">ضخامت پرده روی شیشه: کمتر، بخش بیشتری از پشت آن را نشان می‌دهد؛ بیشتر، آن را در حالت روشن شیری‌تر و در حالت تاریک تیره‌تر می‌کند و خواندن روی تصاویر شلوغ را آسان‌تر می‌کند. ۱۰۰٪ مقدار خود Prism است. نوار تب‌هایی که پس‌زمینهٔ خودش را دارد (چیدمان، نوار تب‌ها) همان پس‌زمینه را نگه می‌دارد.</string>
+    <string name="glass_frost_info">ضخامت پرده روی شیشه: کمتر، بخش بیشتری از پشت آن را نشان می‌دهد؛ بیشتر، آن را در حالت روشن شیری‌تر و در حالت تاریک تیره‌تر می‌کند و خواندن روی تصاویر شلوغ را آسان‌تر می‌کند. ۱۰۰٪ مقدار خود Prism است. نوار تب‌هایی که پس‌زمینهٔ خودش را دارد (زبانه‌ها و پخش‌کننده کوچک ← نوار ناوبری) همان پس‌زمینه را نگه می‌دارد.</string>
     <string name="glass_needs_android_12">این گزینه‌ها به محوسازی‌ای نیاز دارند که با Android 12 آمد. در این گوشی نوارها یکدست‌اند، پس تنظیم محوشدگی یا مه چیزی را عوض نمی‌کند.</string>
     <string name="glass_on_more_of_the_screen">شیشه در بخش بیشتری از صفحه</string>
     <string name="glass_on_more_of_the_screen_detail">کارت‌ها، چیپ‌ها، دکمه‌های گرد و نوار واگرد</string>
@@ -5187,6 +5187,7 @@
     <string name="the_day_before">روز قبل از آن</string>
     <string name="the_week_before">هفته قبل از آن</string>
     <string name="root_app">برنامه</string>
+    <string name="root_listening">گوش دادن</string>
     <string name="root_theme_colors">تم و رنگ‌ها</string>
     <string name="root_text_icons">متن و آیکون‌ها</string>
     <string name="root_sound_quality">صدا و کیفیت</string>

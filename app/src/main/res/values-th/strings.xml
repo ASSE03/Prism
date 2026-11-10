@@ -102,7 +102,7 @@
     <string name="save">บันทึก</string>
     <string name="cancel">ยกเลิก</string>
     <string name="share_2">แชร์ %1$s</string>
-    <string name="scan_it_in_prism_settings_customize">สแกนใน Prism: การตั้งค่า → ปรับแต่ง Prism → ลุค → สแกน</string>
+    <string name="scan_it_in_prism_settings_customize">สแกนใน Prism: การตั้งค่า → ลุค → รับลุค</string>
     <string name="too_much_for_a_qr_code">ข้อมูลมากเกินไปสำหรับคิวอาร์โค้ด: ส่งเป็นข้อความหรือไฟล์แทน</string>
     <string name="codes_leave_out_photos_and_your">รหัสจะไม่รวมรูปภาพและฟอนต์ของคุณเอง แต่ไฟล์รวมได้</string>
     <string name="here_s_my_prism_look_share">นี่คือลุค Prism ของฉัน \"%1$s\" แชร์ข้อความนี้ไปที่ Prism เพื่อดู:\n\n%2$s</string>
@@ -652,7 +652,7 @@
     <string name="remove_this_color">นำสีนี้ออก</string>
     <string name="changes">%1$s\n\nสิ่งที่เปลี่ยน: %2$s</string>
     <string name="white_black_and_greys_give_prism">สีขาว ดำ และเทา จะให้หน้าตาแบบเรียบๆ ของ Prism: สีขาวบนหน้าสีเข้ม สีดำบนหน้าสีสว่าง</string>
-    <string name="shown_softened_lighter_on_dark_pages">แสดงแบบปรับให้นุ่มลง (อ่อนลงบนหน้าสีเข้ม เข้มขึ้นบนหน้าสีสว่าง) เลือก \"ตามที่เลือกทุกประการ\" ในหน้าสีเพื่อใช้สีตามเดิม</string>
+    <string name="shown_softened_lighter_on_dark_pages">แสดงแบบปรับให้นุ่มลง (อ่อนลงบนหน้าสีเข้ม เข้มขึ้นบนหน้าสีสว่าง) เลือก \"ตามที่เลือกทุกประการ\" ใต้สีเน้นเพื่อใช้สีตามเดิม</string>
     <string name="made_a_little_lighter_or_darker">ปรับให้อ่อนลงหรือเข้มขึ้นเล็กน้อยตรงที่อ่านข้อความไม่ออก</string>
     <string name="tint_strength">ความเข้มของโทนสี</string>
     <string name="faint">จาง</string>
@@ -1098,7 +1098,7 @@
     <string name="in_the_middle">ตรงกลาง</string>
     <string name="title_size">ขนาดชื่อเพลง</string>
     <string name="title_weight">น้ำหนักชื่อเพลง</string>
-    <string name="light_is_prism_s_own_and">บางคือแบบของ Prism และเป็นไปตาม ข้อความ → น้ำหนัก ตัวหนาจะทำให้ชื่อศิลปินหนาขึ้นด้วย</string>
+    <string name="light_is_prism_s_own_and">บางคือแบบของ Prism และเป็นไปตาม ข้อความและไอคอน → น้ำหนัก ตัวหนาจะทำให้ชื่อศิลปินหนาขึ้นด้วย</string>
     <string name="scrolling_titles">ชื่อเพลงแบบเลื่อน</string>
     <string name="a_long_title_scrolls_across_off">ชื่อเพลงยาวจะเลื่อนผ่าน (ปิด: จะลงท้ายด้วย …)</string>
     <string name="times_under_the_progress_bar">เวลาใต้แถบความคืบหน้า</string>
@@ -1963,7 +1963,7 @@
     <string name="refractive_bars_and_controls">แถบและปุ่มควบคุมแบบหักเหแสง</string>
     <string name="soft_blur_no_refraction">เบลอนุ่มๆ ไม่หักเหแสง</string>
     <string name="pages_frosted_with_their_picture">หน้าที่เป็นกระจกฝ้าจากรูปของตัวเอง</string>
-    <string name="artist_album_and_playlist_pages_sit">หน้าศิลปิน อัลบั้ม และเพลย์ลิสต์จะอยู่บนกระจกฝ้าที่สร้างจากรูปของตัวเอง ส่วนหน้าแรก คลังเพลง ค้นหา และการตั้งค่าจะอยู่บนฝ้าจากเพลงที่กำลังเล่น การให้หน้าต่างๆ ใช้สีจากรูปภาพอยู่ในหัวข้อสี</string>
+    <string name="artist_album_and_playlist_pages_sit">หน้าศิลปิน อัลบั้ม และเพลย์ลิสต์จะอยู่บนกระจกฝ้าที่สร้างจากรูปของตัวเอง ส่วนหน้าแรก คลังเพลง ค้นหา และการตั้งค่าจะอยู่บนฝ้าจากเพลงที่กำลังเล่น การให้หน้าต่างๆ ใช้สีจากรูปภาพอยู่ในหัวข้อหน้า</string>
     <string name="calmer_quicker_animations">แอนิเมชันที่สงบและเร็วขึ้น</string>
     <string name="no_drifting_backgrounds_no_artwork_bounce">ไม่มีพื้นหลังลอยไปมา ไม่มีภาพปกเด้ง เปลี่ยนหน้าเร็วขึ้น</string>
     <string name="that_font_couldn_t_be_used">ใช้ฟอนต์นั้นไม่ได้</string>
@@ -2005,7 +2005,7 @@
     <string name="more_room_swipe_down_from_the">มีพื้นที่มากขึ้น ปัดลงจากด้านบนเพื่อดู</string>
     <string name="the_clock_battery_and_notification_icons">นาฬิกา แบตเตอรี่ และไอคอนการแจ้งเตือนที่ด้านบนจะซ่อนอยู่ระหว่างที่เปิด Prism ปัดลงจากขอบด้านบนแล้วจะแสดงสักครู่ โหมดอิมเมอร์ซีฟและวิดีโอเต็มหน้าจอจะซ่อนแถบอื่นๆ ด้วยเหมือนเดิม</string>
     <string name="never_shows_only_the_icons_words">ไม่แสดง จะแสดงแค่ไอคอน ส่วนคำอย่างเดียว จะแสดงแค่ชื่อ</string>
-    <string name="see_through_lets_the_page_show">มองทะลุ จะให้หน้าแสดงผ่านแถบ ส่วนทึบจะปิดไว้ เอฟเฟกต์เบลอมาจากกระจก (ปรับแต่ง Prism → กระจกและพื้นหลัง)</string>
+    <string name="see_through_lets_the_page_show">มองทะลุ จะให้หน้าแสดงผ่านแถบ ส่วนทึบจะปิดไว้ เอฟเฟกต์เบลอมาจากกระจก (ธีมและสี → กระจก)</string>
     <string name="slims_down_as_you_scroll">บางลงขณะที่คุณเลื่อน</string>
     <string name="swipe_sideways_on_a_tab_s">ปัดไปด้านข้างบนหน้าของแท็บ</string>
     <string name="a_sideways_swipe_on_a_tab">การปัดไปด้านข้างบนหน้าของแท็บจะไปยังแท็บข้างๆ แถวที่เลื่อนไปด้านข้างได้ (และหน้าต่างๆ ในคลังเพลง) จะยังใช้การปัดของตัวเอง</string>
@@ -2034,7 +2034,7 @@
     <string name="played_now_playing_and_up_next">\"เล่นแล้ว\" \"กำลังเล่น\" และ \"ถัดไป\"</string>
     <string name="off_the_queue_is_one_list">เมื่อปิด คิวจะเป็นรายการเดียวตั้งแต่เพลงที่เล่นแล้วไปจนถึงเพลงที่จะเล่นต่อ</string>
     <string name="moving_artwork_when_a_song_has">ภาพปกเคลื่อนไหว เมื่อเพลงนั้นมี</string>
-    <string name="motion_artwork_and_video_covers_turn">ภาพปกเคลื่อนไหวและปกวิดีโอ ปิดสำหรับเพลงเดียวได้จากเมนู ⋯ ของเพลเยอร์ การเล่นเมื่อใช้อินเทอร์เน็ตมือถือ และปกที่เก็บไว้ในโทรศัพท์ อยู่ในดาวน์โหลด พื้นที่เก็บข้อมูล และอินเทอร์เน็ต</string>
+    <string name="motion_artwork_and_video_covers_turn">ภาพปกเคลื่อนไหวและปกวิดีโอ ปิดสำหรับเพลงเดียวได้จากเมนู ⋯ ของเพลเยอร์ การเล่นเมื่อใช้อินเทอร์เน็ตมือถือ และปกที่เก็บไว้ในโทรศัพท์ อยู่ในดาวน์โหลดและข้อมูล</string>
     <string name="the_animated_cover_plays_behind_everything">ปกเคลื่อนไหวเล่นอยู่ด้านหลังทุกอย่าง</string>
     <string name="the_moving_artwork_fills_the_whole">ภาพปกเคลื่อนไหวจะเต็มทั้งเพลเยอร์ ทำให้มืดลงใต้ปุ่มควบคุม และตัวปกจะแสดงภาพนิ่ง ไม่ใช้กับภาพปกเต็มขอบ ซึ่งแสดงแบบขอบจรดขอบอยู่แล้ว</string>
     <string name="the_cover_fills_the_screen_lyrics">ปกเต็มหน้าจอ มีเนื้อเพลงอยู่ด้านบน</string>
@@ -2137,7 +2137,7 @@
     <string name="needed_for_sing">จำเป็นสำหรับร้องตาม · %1$s</string>
     <string name="takes_the_singer_s_voice_out">แยกเสียงนักร้องออกจากเพลงในโทรศัพท์ของคุณ สำหรับร้องคาราโอเกะ ดาวน์โหลดครั้งเดียว</string>
     <string name="so_sing_starts_at_once_when">เพื่อให้ร้องตามเริ่มทันทีเมื่อคุณเปิด</string>
-    <string name="the_playing_song_and_the_next">เพลงที่กำลังเล่นและเพลงถัดไปจะถูกแยกเสียงในเบื้องหลังแม้ร้องตามจะปิดอยู่ จะใช้แบตเตอรี่มากขึ้นระหว่างที่เล่นเพลง เมื่อใช้อินเทอร์เน็ตมือถือจะเป็นไปตาม ดาวน์โหลด พื้นที่เก็บข้อมูล และอินเทอร์เน็ต → อินเทอร์เน็ตมือถือ</string>
+    <string name="the_playing_song_and_the_next">เพลงที่กำลังเล่นและเพลงถัดไปจะถูกแยกเสียงในเบื้องหลังแม้ร้องตามจะปิดอยู่ จะใช้แบตเตอรี่มากขึ้นระหว่างที่เล่นเพลง เมื่อใช้อินเทอร์เน็ตมือถือจะเป็นไปตาม ดาวน์โหลดและข้อมูล → อินเทอร์เน็ตมือถือ</string>
     <string name="using">ใช้อยู่ %1$s</string>
     <string name="songs_are_worked_out_again_the">เพลงจะถูกประมวลผลใหม่ในครั้งถัดไปที่คุณร้อง</string>
     <string name="word_by_word_first_then_by">ทีละคำก่อน จากนั้นทีละบรรทัด</string>
@@ -2495,7 +2495,7 @@
     <string name="allow_notifications">อนุญาตการแจ้งเตือน</string>
     <string name="turn_them_on_in_android_s">เปิดได้ในการตั้งค่าของ Android สำหรับ Prism</string>
     <string name="your_starting_point_made_from_what">จุดเริ่มต้นของคุณ สร้างจากเพลงที่คุณฟัง</string>
-    <string name="the_replay_card_at_the_top">การ์ด Replay ที่ด้านบน: ปีของคุณจนถึงตอนนี้ (เลือกหน้าตาได้ใน การตั้งค่า → ปรับแต่ง Prism → หน้าแรกและคลังเพลง)</string>
+    <string name="the_replay_card_at_the_top">การ์ด Replay ที่ด้านบน: ปีของคุณจนถึงตอนนี้ (เลือกหน้าตาได้ใน การตั้งค่า → หน้าแรกและคลังเพลง → การ์ด Replay)</string>
     <string name="quick_picks_songs_around_the_artists">เลือกด่วน: เพลงของศิลปินที่คุณฟังและที่ใกล้เคียง ปัดเพื่อดูเพิ่ม</string>
     <string name="made_for_you_daily_mixes_your">สร้างมาเพื่อคุณ: Daily Mix มิกซ์ตามช่วงเวลาของวัน และ Release Radar</string>
     <string name="the_grid_button_at_the_top">ปุ่มตารางที่ด้านบนใช้จัดเรียงส่วนต่างๆ ของหน้าแรก</string>
@@ -2516,12 +2516,12 @@
     <string name="let_prism_mix_your_music_songs">ให้ Prism มิกซ์เพลงของคุณ: เพลงจะผสานเข้าหากัน ตรงคีย์และตรงจังหวะ</string>
     <string name="in_the_queue_tap_dj_then">ในคิว แตะ DJ แล้วเลือก คงที่ ไต่ระดับ หรือ ผ่อนลง</string>
     <string name="long_press_an_album_or_playlist">กดค้างที่อัลบั้มหรือเพลย์ลิสต์ → เล่นเป็นเซ็ต DJ</string>
-    <string name="crossfade_settings_playback_sound_blends_any">ครอสเฟด (การตั้งค่า → การเล่นและเสียง) ผสมเพลงสองเพลงใดก็ได้</string>
+    <string name="crossfade_settings_playback_sound_blends_any">ครอสเฟด (การตั้งค่า → การเล่น) ผสมเพลงสองเพลงใดก็ได้</string>
     <string name="mixes_made_on_your_phone_from">มิกซ์ที่สร้างในโทรศัพท์ของคุณจากเพลงที่คุณฟัง ข้อมูลการฟังของคุณไม่ออกไปไหน</string>
     <string name="daily_mixes_group_the_artists_you">Daily Mix จัดกลุ่มศิลปินที่คุณฟังตามความเข้ากัน</string>
     <string name="release_radar_finds_new_music_from">Release Radar ค้นหาเพลงใหม่จากศิลปินที่คุณติดตาม</string>
     <string name="made_for_you_also_has_mixes">สร้างมาเพื่อคุณยังมีมิกซ์จากเพลงของคุณเอง และเปิดวนซ้ำ: มาจากการฟังของคุณเท่านั้นและใช้งานแบบออฟไลน์ได้</string>
-    <string name="when_the_queue_ends_prism_s">เมื่อคิวจบ วิทยุของ Prism จะเลือกจากเพลงของคุณ (การตั้งค่า → การเล่นและเสียง → เล่นอัตโนมัติจาก)</string>
+    <string name="when_the_queue_ends_prism_s">เมื่อคิวจบ วิทยุของ Prism จะเลือกจากเพลงของคุณ (การตั้งค่า → การเล่น → เมื่อคิวจบ)</string>
     <string name="tap_shuffle_twice_on_a_playlist">แตะสุ่มเพลงสองครั้งในเพลย์ลิสต์เพื่อใช้สุ่มเพลงอัจฉริยะ: เพลงใหม่ๆ จะแทรกเข้ามา</string>
     <string name="not_for_me_and_leave_out">\"ไม่ใช่แนวฉัน\" และ \"ไม่นำมาคิดเป็นรสนิยมของฉัน\" จะกันสิ่งที่ไม่ชอบออกไป</string>
     <string name="find_anything_in_prism_music_or">ค้นหาอะไรก็ได้ใน Prism Music หรือบอกชื่อเพลงที่กำลังเล่นอยู่รอบตัวคุณ</string>
@@ -2545,11 +2545,11 @@
     <string name="control_prism_from_a_browser_on">ควบคุม Prism จากเบราว์เซอร์บนคอมพิวเตอร์ของคุณ</string>
     <string name="hand_what_s_playing_to_another">ส่งต่อเพลงที่กำลังเล่นไปยังโทรศัพท์หรือแท็บเล็ตอีกเครื่องที่มี Prism</string>
     <string name="prism_takes_its_color_from_what">Prism ใช้สีจากเพลงที่กำลังเล่น ปรับเปลี่ยนได้มากเท่าที่คุณต้องการ</string>
-    <string name="appearance_the_spectrum_s_colors_or">หน้าตา: สีของสเปกตรัม (หรือสีขาวล้วน) สีเน้นของคุณ ฟอนต์ ไอคอน และพื้นหลัง</string>
-    <string name="layout_the_tab_bar_your_tabs">เลย์เอาต์: แถบแท็บ แท็บของคุณ และมินิเพลเยอร์</string>
+    <string name="appearance_the_spectrum_s_colors_or">ธีมและสี, ข้อความและไอคอน: สีของแสง (หรือสีขาวล้วน) สีเน้นของคุณ ฟอนต์ ไอคอน และพื้นหลัง</string>
+    <string name="layout_the_tab_bar_your_tabs">แท็บและมินิเพลเยอร์: แถบแท็บ แท็บของคุณ และมินิเพลเยอร์</string>
     <string name="player_its_background_the_cover_and">เพลเยอร์: พื้นหลัง ปก และสิ่งที่แสดงบนปก</string>
     <string name="search_settings_from_the_box_at">ค้นหาการตั้งค่าได้จากช่องที่ด้านบนของการตั้งค่า</string>
-    <string name="settings_customize_prism_color_every_choice">การตั้งค่า → ปรับแต่ง Prism → สี: ทุกตัวเลือกจะแสดงหน้าตาที่ได้ก่อนที่คุณจะเลือก</string>
+    <string name="settings_customize_prism_color_every_choice">การตั้งค่า → ธีมและสี: ทุกตัวเลือกจะแสดงหน้าตาที่ได้ก่อนที่คุณจะเลือก</string>
     <string name="the_light_12_presets_white_black">แสง: 12 พรีเซ็ต สีขาว (สีดำในโหมดสว่าง) หรือสีของคุณเอง</string>
     <string name="your_accent_any_color_from_a">สีเน้นของคุณ: สีใดก็ได้ จากวงล้อ รหัส หรือเครื่องมือดูดสี</string>
     <string name="the_page_background_plain_tinted_with">พื้นหลังของหน้า: เรียบๆ แต่งโทนด้วยสีเน้นของคุณ หรือสีของคุณเอง</string>
@@ -2560,14 +2560,14 @@
     <string name="pin_prism_playlists_to_home_customize">ปักหมุดเพลย์ลิสต์ Prism ไว้ที่หน้าแรก (ปรับแต่งหน้าแรก → เพลย์ลิสต์ที่ปักหมุด)</string>
     <string name="song_credits_in_any_song_s">เครดิตเพลงในเมนูของทุกเพลง</string>
     <string name="see_which_downloads_failed_and_why">ดูว่าการดาวน์โหลดใดล้มเหลว และเพราะอะไร</string>
-    <string name="settings_customize_prism_looks_your_whole">การตั้งค่า → ปรับแต่ง Prism → ลุค: หน้าตาทั้งหมดของคุณ บันทึก สลับ และแชร์ได้ในแตะเดียว</string>
+    <string name="settings_customize_prism_looks_your_whole">การตั้งค่า → ลุค: หน้าตาทั้งหมดของคุณ บันทึก สลับ และแชร์ได้ในแตะเดียว</string>
     <string name="try_prism_s_own_paper_midnight">ลองลุคของ Prism: กระดาษ เที่ยงคืน นีออน นุ่มนวล สตูดิโอ และไวนิล</string>
     <string name="save_yours_update_it_when_you">บันทึกลุคของคุณ อัปเดตเมื่อคุณเปลี่ยน และแชร์เป็นคิวอาร์โค้ด รหัส หรือไฟล์</string>
     <string name="browse_looks_people_shared_under_from">เรียกดูลุคที่ผู้คนแชร์ ในหัวข้อจากชุมชน</string>
     <string name="one_look_by_day_and_another">ลุคหนึ่งตอนกลางวันและอีกลุคตอนกลางคืน สลับตอนพระอาทิตย์ขึ้นและตก</string>
     <string name="every_look_page_shows_home_the">ทุกหน้าปรับหน้าตาจะแสดงหน้าแรก เพลเยอร์ และเนื้อเพลงตามที่คุณเปลี่ยน กดเลิกทำเพื่อย้อนการเปลี่ยนแปลง</string>
-    <string name="customize_by_tapping_hold_the_settings">ปรับแต่งด้วยการแตะ: กดค้างที่แท็บการตั้งค่า หรือเปิดในหน้าตา แล้วแตะมินิเพลเยอร์ แถบแท็บ เพลเยอร์ หรือส่วนในหน้าแรก</string>
-    <string name="settings_customize_prism_player_or_player">การตั้งค่า → ปรับแต่ง Prism → เพลเยอร์ หรือ ⋯ → การตั้งค่าเพลเยอร์ บนเพลเยอร์เอง</string>
+    <string name="customize_by_tapping_hold_the_settings">ปรับแต่งด้วยการแตะ: กดค้างที่แท็บการตั้งค่า หรือเปิดในลุค แล้วแตะมินิเพลเยอร์ แถบแท็บ เพลเยอร์ หรือส่วนในหน้าแรก</string>
+    <string name="settings_customize_prism_player_or_player">การตั้งค่า → เพลเยอร์ หรือ ⋯ → การตั้งค่าเพลเยอร์ บนเพลเยอร์เอง</string>
     <string name="layouts_standard_a_big_cover_lyrics">เลย์เอาต์: มาตรฐาน ปกใหญ่ เนื้อเพลงก่อน มินิมอล ไวนิล หรือคาสเซ็ต (หมุนไปตามเพลง)</string>
     <string name="a_visualizer_if_you_d_like">ภาพแสดงเสียงถ้าคุณต้องการ: แท่ง คลื่น วงแหวน ชีพจร หรือแสงเรือง (ปิดอยู่จนกว่าคุณจะเลือก)</string>
     <string name="pick_the_buttons_under_the_controls">เลือกปุ่มใต้ปุ่มควบคุม (ความเร็วก็เป็นหนึ่งในนั้น) และสองปุ่มข้างปุ่มเล่นในการแจ้งเตือนและรถยนต์</string>
@@ -2578,7 +2578,7 @@
     <string name="prism_tells_android_which_of_its">Prism บอก Android ว่าต้องเตรียมส่วนไหนไว้ล่วงหน้า และอัปเดตจากแบนเนอร์จะมาพร้อมใช้ จึงไม่ช้าอีกต่อไป</string>
     <string name="less_work_while_lists_scroll_while">ทำงานน้อยลงขณะเลื่อนรายการ ขณะพิมพ์ในหน้าค้นหา และขณะเล่นเพลง</string>
     <string name="if_something_still_stutters_settings_backup">ถ้ายังมีอะไรกระตุก การตั้งค่า → ข้อมูลสำรองและเกี่ยวกับ → การวินิจฉัย จะจดไว้ว่าเกิดขึ้นที่ไหน เพื่อแชร์ได้</string>
-    <string name="settings_customize_prism_lyrics_how_your">การตั้งค่า → ปรับแต่ง Prism → เนื้อเพลง: หน้าตาเนื้อเพลงของคุณ พร้อมตัวอย่างของทุกตัวเลือก</string>
+    <string name="settings_customize_prism_lyrics_how_your">การตั้งค่า → เนื้อเพลงและร้องตาม: หน้าตาเนื้อเพลงของคุณ พร้อมตัวอย่างของทุกตัวเลือก</string>
     <string name="six_styles_prism_classic_karaoke_bold">หกสไตล์: Prism คาราโอเกะคลาสสิก การ์ดสีสด เรืองแสง พิมพ์ดีด และสงบ</string>
     <string name="the_sung_line_and_the_others">บรรทัดที่กำลังร้องและบรรทัดอื่นๆ เป็นสีขาว แสงของคุณ สีเน้น สีของปก หรือสีของคุณเอง</string>
     <string name="weight_line_spacing_how_dim_the">น้ำหนัก ระยะห่างบรรทัด ความหรี่ของบรรทัดอื่น ความแรงของเบลอ ตัวพิมพ์ใหญ่ และเงา</string>
@@ -2588,8 +2588,8 @@
     <string name="a_few_things_you_asked_for">บางอย่างที่คุณขอมา</string>
     <string name="library_history_what_you_played_by">คลังเพลง → ประวัติ: เพลงที่คุณเล่นรายวัน ในโทรศัพท์เครื่องนี้หรือในบัญชีของคุณ</string>
     <string name="liked_a_song_and_its_video">ชอบทั้งเพลงและวิดีโอใช่ไหม จะแสดงครั้งเดียวในรูปแบบเพลง</string>
-    <string name="prism_s_own_volume_apart_from">ระดับเสียงของ Prism เอง แยกจากโทรศัพท์ (การตั้งค่า → ปรับแต่ง Prism → เพลเยอร์)</string>
-    <string name="hide_the_status_bar_customize_prism">ซ่อนแถบสถานะ (ปรับแต่ง Prism → แท็บและมินิเพลเยอร์)</string>
+    <string name="prism_s_own_volume_apart_from">ระดับเสียงของ Prism เอง แยกจากโทรศัพท์ (การตั้งค่า → เพลเยอร์)</string>
+    <string name="hide_the_status_bar_customize_prism">ซ่อนแถบสถานะ (การตั้งค่า → แท็บและมินิเพลเยอร์)</string>
     <string name="settings_pages_are_tidier_tap_beside">หน้าการตั้งค่าเป็นระเบียบขึ้น: แตะ ⓘ ข้างการตั้งค่าเพื่อดูรายละเอียด</string>
     <string name="library_s_tiles_the_edit_button">ไทล์ในคลังเพลง: ปุ่มแก้ไขที่ด้านบนของคลังเพลง</string>
     <string name="customize_home_the_button_at_the">ปรับแต่งหน้าแรก (ปุ่มที่ด้านบนของหน้าแรก) มีตัวเลือกมากขึ้น</string>
@@ -2610,10 +2610,10 @@
     <string name="artists_and_songs_with_their_pictures">ศิลปินและเพลงพร้อมรูปภาพระหว่างที่คุณพิมพ์</string>
     <string name="results_already_in_your_library_right">ผลลัพธ์ที่อยู่ในคลังเพลงของคุณแล้ว ต่อจากผลลัพธ์ยอดนิยม</string>
     <string name="settings_are_sorted_by_what_they">การตั้งค่าจัดเรียงตามสิ่งที่ทำ</string>
-    <string name="everything_about_how_prism_looks_is">ทุกอย่างเกี่ยวกับหน้าตาของ Prism อยู่ในปรับแต่ง Prism</string>
-    <string name="gestures_and_buttons_in_controls_gestures">ท่าทางสัมผัสและปุ่มอยู่ในปุ่มควบคุมและท่าทางสัมผัส</string>
+    <string name="everything_about_how_prism_looks_is">ทุกอย่างเกี่ยวกับหน้าตาของ Prism อยู่ใต้ทำให้เป็นของคุณ</string>
+    <string name="gestures_and_buttons_in_controls_gestures">ท่าทางสัมผัสและปุ่มอยู่ใต้การฟัง</string>
     <string name="every_mobile_data_choice_on_one">ทุกตัวเลือกอินเทอร์เน็ตมือถืออยู่ในหน้าเดียว</string>
-    <string name="android_auto_speakers_discord_and_last">Android Auto ลำโพง Discord และ Last.fm อยู่ในอุปกรณ์และการเชื่อมต่อ</string>
+    <string name="android_auto_speakers_discord_and_last">Android Auto ลำโพง Discord และ Last.fm อยู่ใต้การเชื่อมต่อ</string>
     <string name="performance_mode_at_the_top_for">โหมดประสิทธิภาพ ที่ด้านบน สำหรับโทรศัพท์ที่ช้ากว่า</string>
     <string name="make_the_pieces_of_prism_yours">ทำให้ทุกส่วนของ Prism เป็นของคุณ</string>
     <string name="covers_as_circles_squircles_flowers_arches">ปกเป็นวงกลม สี่เหลี่ยมมน ดอกไม้ ซุ้มโค้ง… สำหรับเพลง อัลบั้ม ศิลปิน และเพลเยอร์</string>
@@ -2624,20 +2624,20 @@
     <string name="from_your_requests">จากคำขอของคุณ</string>
     <string name="rearrange_your_playlists_songs_rearrange_songs">จัดเรียงเพลงในเพลย์ลิสต์ของคุณใหม่: ⋯ → จัดเรียงเพลงใหม่</string>
     <string name="swipe_a_song_out_of_the">ปัดเพลงออกจากคิว ปัดมินิเพลเยอร์ขึ้นเพื่อเปิด</string>
-    <string name="the_light_from_the_playing_cover">แสงจากปกที่กำลังเล่น: สี → จากปก</string>
+    <string name="the_light_from_the_playing_cover">แสงจากปกที่กำลังเล่น: ธีมและสี → แสง → จากปก</string>
     <string name="ribbons_a_progress_bar_with_strands">ริบบิ้น แถบความคืบหน้าที่มีเส้นสายไหลไปตามแถบ</string>
     <string name="a_bold_title_on_the_player">ชื่อเพลงตัวหนาบนเพลเยอร์ เพิ่มทั้งอัลบั้มลงในเพลย์ลิสต์ และแชร์ลิงก์ YouTube</string>
-    <string name="settings_playback_sound">การตั้งค่า → การเล่นและเสียง</string>
+    <string name="settings_playback_sound">การตั้งค่า → การเล่น และ การตั้งค่า → เสียงและคุณภาพ</string>
     <string name="speed_pitch_slowed_sped_up_or">ความเร็วและคีย์: ช้าลง เร่งความเร็ว หรือคีย์ใดก็ได้ จาก ⋯ ของเพลเยอร์</string>
     <string name="how_songs_cross_in_a_crossfade">วิธีเปลี่ยนเพลงในครอสเฟด เครื่องหมายตรงที่เพลงถัดไปเข้ามา และปกที่ผสานกัน</string>
     <string name="normalize_volume_s_level_and_albums">ระดับของการปรับระดับเสียงให้เท่ากัน และอัลบั้มตามต้นฉบับ</string>
     <string name="your_own_equalizer_presets_shared_as">พรีเซ็ตอีควอไลเซอร์ของคุณเอง แชร์เป็นรหัสได้ อันหนึ่งสำหรับรถยนต์ อีกอันสำหรับหูฟังของคุณ</string>
     <string name="fades_for_the_sleep_timer_and">การเฟดสำหรับตั้งเวลาปิด และสำหรับหยุดชั่วคราวและเล่น</string>
     <string name="liked_how_prism_1_6_looked">ชอบหน้าตาของ Prism 1.6 ใช่ไหม กลับมาแล้วในฐานะตัวเลือก</string>
-    <string name="the_classic_look_customize_prism_looks">ลุคคลาสสิก: ปรับแต่ง Prism → ลุค</string>
+    <string name="the_classic_look_customize_prism_looks">ลุคคลาสสิก: การตั้งค่า → ลุค</string>
     <string name="or_only_its_icons_its_bold">หรือใช้แค่ไอคอน ตัวอักษรหนา หรือปุ่มควบคุมเรียบๆ</string>
     <string name="the_player_s_buttons_apart_instead">ปุ่มของเพลเยอร์แยกกันแทนที่จะอยู่ในแคปซูล</string>
-    <string name="last_fm_scrobbling_devices_connections_and">สครอบเบิลไปที่ Last.fm (อุปกรณ์และการเชื่อมต่อ) และ Replay สำหรับช่วงวันที่ใดก็ได้</string>
+    <string name="last_fm_scrobbling_devices_connections_and">สครอบเบิลไปที่ Last.fm (บัญชีและการแชร์) และ Replay สำหรับช่วงวันที่ใดก็ได้</string>
     <string name="pick_several_songs_in_the_queue">เลือกหลายเพลงในคิวเพื่อย้ายหรือนำออกพร้อมกัน หรือล็อกลำดับ</string>
     <string name="choose_what_goes_in_a_backup">เลือกสิ่งที่จะใส่ในข้อมูลสำรอง</string>
     <string name="swipe_up_on_the_player_for">ปัดขึ้นบนเพลเยอร์เพื่อดูคิว ล็อกเป็นแนวตั้ง หยุดชั่วคราวเมื่อปิดเสียง</string>
@@ -3746,7 +3746,7 @@
     <string name="the_ambient_frost_behind_home_search_all">ฝ้าแอมเบียนต์ด้านหลังหน้าแรก ค้นหา คลังเพลง Replay และการตั้งค่า (อัตโนมัติจะคงสีของปกไว้ เรียบๆ จะเป็นสีเทา ส่วนโทนสีจะเติมสีให้) หน้าเหล่านั้นเมื่อปิดกระจกฝ้า และแผ่นเมนูกับกล่องโต้ตอบ ไม่รวมเพลเยอร์ และหน้าอัลบั้ม ศิลปิน และเพลย์ลิสต์ ซึ่งใช้สีจากรูปภาพของตัวเอง</string>
     <string name="home_has_the_background_glass_backgrounds_all">หน้าแรกใช้พื้นหลัง %1$s (กระจกและพื้นหลัง) ซึ่งวาดทับสีนี้ จึงเห็นสีนี้เพียงเล็กน้อยที่นั่น เลือกแอมเบียนต์ที่นั่นเพื่อดูสีนี้เต็มที่</string>
     <string name="secondary_text_artists_times_notes_dividers_all">ข้อความรอง (ศิลปิน เวลา หมายเหตุ) เส้นแบ่ง และเส้นขอบในหน้า แผ่นเมนู และเมนู ระดับกลางและสูงจะทำให้สีเน้นเข้มขึ้นด้วยเพื่อให้อ่านง่ายขึ้น ข้อความสีขาวของเพลเยอร์บนปกจะยังเหมือนเดิม</string>
-    <string name="the_accent_on_artist_album_and_all">สีเน้นในหน้าศิลปิน อัลบั้ม และเพลย์ลิสต์ และในเมนูที่คุณเปิดจากเพลง อัลบั้ม หรือศิลปิน (กดค้างหรือ ⋯) พื้นหลังกระจกฝ้าของหน้าเหล่านี้จะใช้สีจากรูปภาพไม่ว่าจะเลือกแบบไหน (กระจกและพื้นหลัง)</string>
+    <string name="the_accent_on_artist_album_and_all">สีเน้นในหน้าศิลปิน อัลบั้ม และเพลย์ลิสต์ และในเมนูที่คุณเปิดจากเพลง อัลบั้ม หรือศิลปิน (กดค้างหรือ ⋯) พื้นหลังกระจกฝ้าของหน้าเหล่านี้จะใช้สีจากรูปภาพไม่ว่าจะเลือกแบบไหน (กระจก)</string>
     <string name="tap_the_line_under_the_player_all">แตะบรรทัดใต้ปุ่มควบคุมของเพลเยอร์ (ที่บอกว่าอุปกรณ์ใดกำลังเล่น) แล้วเลือกลำโพง ทีวี หรือเครื่องรับสัญญาณ อุปกรณ์ต้องอยู่บน Wi-Fi นี้และรองรับ Google Cast (Chromecast, Google TV, ลำโพงที่มี Cast ในตัว) หรือ DLNA / UPnP (บางครั้งเรียกว่าการแชร์สื่อ) คิว เนื้อเพลง และปุ่มควบคุมจะอยู่ในโทรศัพท์ และปุ่มปรับเสียงของโทรศัพท์จะปรับระดับเสียงของลำโพง อีควอไลเซอร์ ครอสเฟด ร้องตาม และวิดีโอเป็นของโทรศัพท์เอง จึงปิดอยู่ระหว่างแคสต์</string>
     <string name="nothing_new_from_your_artists_in_all">ไม่มีอะไรใหม่จากศิลปินของคุณในสามเดือนที่ผ่านมา Prism จะตรวจดูศิลปินที่คุณติดดาว บันทึก และฟังบ่อยที่สุดทุกสองสามวัน การตรวจครั้งแรกจะรู้แค่ผลงานที่ออกแล้ว เพลงใหม่จึงจะแสดงตั้งแต่ครั้งถัดไป</string>
     <string name="tunemymusic_copies_your_playlists_liked_songs_all">TuneMyMusic จะคัดลอกเพลย์ลิสต์ของคุณ รวมถึงเพลงที่ชอบ ลงในบัญชี YouTube Music ของคุณ เป็นบริการเดียวกับที่แอป YouTube Music ใช้สำหรับการย้ายข้อมูล</string>
@@ -4187,14 +4187,14 @@
     <string name="shaped_by_the_crossfade">เป็นรูปตามครอสเฟด</string>
     <string name="crossfade_shape_keywords">ครอสเฟด ผสม เฟดออก เฟดเข้า เรียวลง รูปทรง เส้นโค้ง แถบความคืบหน้า แถบเลื่อน crossfade</string>
     <string name="the_end_tapers_as_the_song_fades">ช่วงท้ายเรียวลงตามที่เพลงค่อย ๆ เบาลง</string>
-    <string name="crossfade_shape_info">ช่วงท้ายของแถบจะเป็นรูปตามที่เพลงค่อย ๆ เบาลง และแถบของเพลงถัดไปจะค่อย ๆ ขยายขึ้นตามที่เพลงนั้นดังขึ้น ตามประเภทครอสเฟดของคุณ (เสียง → ครอสเฟด) แสดงเฉพาะเมื่อกำลังจะมีครอสเฟด: ไม่แสดงระหว่างแทร็กในอัลบั้มเดียวกัน ขณะแคสต์ สำหรับตอนพอดแคสต์ หรือไลฟ์สด หากตั้งความยาวอัตโนมัติ จะแสดงเมื่อวางแผนการผสานเพลงแล้ว รูปคลื่นเสียงและริบบิ้นจะยังคงใช้เครื่องหมายแทน</string>
+    <string name="crossfade_shape_info">ช่วงท้ายของแถบจะเป็นรูปตามที่เพลงค่อย ๆ เบาลง และแถบของเพลงถัดไปจะค่อย ๆ ขยายขึ้นตามที่เพลงนั้นดังขึ้น ตามประเภทครอสเฟดของคุณ (การเล่น → ครอสเฟด) แสดงเฉพาะเมื่อกำลังจะมีครอสเฟด: ไม่แสดงระหว่างแทร็กในอัลบั้มเดียวกัน ขณะแคสต์ สำหรับตอนพอดแคสต์ หรือไลฟ์สด หากตั้งความยาวอัตโนมัติ จะแสดงเมื่อวางแผนการผสานเพลงแล้ว รูปคลื่นเสียงและริบบิ้นจะยังคงใช้เครื่องหมายแทน</string>
     <string name="imp_title">นำประวัติของคุณมา</string>
     <string name="imp_subtitle">จาก Spotify, YouTube Music และ Last.fm อ่านในโทรศัพท์เครื่องนี้</string>
     <string name="imp_row_detail">Spotify, YouTube Music, Last.fm</string>
     <string name="imp_group_info">นำการเล่น เพลงที่ชอบ และเพลย์ลิสต์ของคุณมาจากข้อมูลที่ดาวน์โหลดจาก Spotify ประวัติ YouTube Music จาก Google Takeout หรือการสครอบเบิลใน Last.fm ของคุณ ไฟล์จะถูกอ่านในโทรศัพท์เครื่องนี้ และเพื่อหาแต่ละเพลง Prism จะค้นหาเพลงนั้นเหมือนกับที่การค้นหาของ Prism ทำ</string>
     <string name="imp_keywords">นำเข้า ย้าย โอน spotify ดาวน์โหลดข้อมูล takeout google youtube music ประวัติ last.fm สครอบเบิล เพลงที่ชอบ เพลย์ลิสต์ import</string>
     <string name="imp_bring_from">นำมาจาก</string>
-    <string name="imp_bring_from_info">Spotify: ที่ spotify.com ไปที่ บัญชี → ความเป็นส่วนตัว → ดาวน์โหลดข้อมูลของคุณ ข้อมูลบัญชีจะมาภายในไม่กี่วัน (การเล่นหนึ่งปี เพลงที่ชอบ เพลย์ลิสต์) ส่วนประวัติการสตรีมแบบละเอียดจะมาภายใน 30 วัน (ทุกการเล่นตั้งแต่คุณสมัคร) เลือกไฟล์ zip ที่ได้มา หรือไฟล์ที่อยู่ข้างใน\n\nYouTube Music: ที่ takeout.google.com เลือก YouTube และ YouTube Music เฉพาะประวัติ ในรูปแบบ JSON เลือกไฟล์ zip หรือ watch-history.json\n\nLast.fm: เชื่อมต่อใน อุปกรณ์และการเชื่อมต่อ แล้ว Prism จะอ่านการสครอบเบิลของคุณ\n\nไม่มีอะไรถูกส่งไปที่ใดเลย เพื่อหาแต่ละเพลง Prism จะค้นหาเพลงนั้นเหมือนกับที่การค้นหาของ Prism ทำ</string>
+    <string name="imp_bring_from_info">Spotify: ที่ spotify.com ไปที่ บัญชี → ความเป็นส่วนตัว → ดาวน์โหลดข้อมูลของคุณ ข้อมูลบัญชีจะมาภายในไม่กี่วัน (การเล่นหนึ่งปี เพลงที่ชอบ เพลย์ลิสต์) ส่วนประวัติการสตรีมแบบละเอียดจะมาภายใน 30 วัน (ทุกการเล่นตั้งแต่คุณสมัคร) เลือกไฟล์ zip ที่ได้มา หรือไฟล์ที่อยู่ข้างใน\n\nYouTube Music: ที่ takeout.google.com เลือก YouTube และ YouTube Music เฉพาะประวัติ ในรูปแบบ JSON เลือกไฟล์ zip หรือ watch-history.json\n\nLast.fm: เชื่อมต่อใน การตั้งค่า → บัญชีและการแชร์ แล้ว Prism จะอ่านการสครอบเบิลของคุณ\n\nไม่มีอะไรถูกส่งไปที่ใดเลย เพื่อหาแต่ละเพลง Prism จะค้นหาเพลงนั้นเหมือนกับที่การค้นหาของ Prism ทำ</string>
     <string name="imp_spotify_detail">ข้อมูลที่ดาวน์โหลด: การเล่น เพลงที่ชอบ เพลย์ลิสต์</string>
     <string name="imp_takeout_detail">ประวัติการดูจาก Google Takeout</string>
     <string name="imp_lastfm_detail">การสครอบเบิลของคุณ ในชื่อ %1$s</string>
@@ -4299,7 +4299,7 @@
     <string name="explicit_show">แสดง</string>
     <string name="explicit_skip">ข้าม</string>
     <string name="explicit_hide">ซ่อน</string>
-    <string name="explicit_skipped">ไม่รวมเพลงที่มีเนื้อหาโจ่งแจ้ง (การตั้งค่า → การเล่นและเสียง)</string>
+    <string name="explicit_skipped">ไม่รวมเพลงที่มีเนื้อหาโจ่งแจ้ง (การตั้งค่า → การเล่น)</string>
     <string name="explicit_none_left">ไม่มีอะไรให้เล่น: ทุกเพลงที่นี่มีเนื้อหาโจ่งแจ้ง</string>
     <string name="change_cover">เปลี่ยนปก</string>
     <string name="cover_changed">เปลี่ยนปกแล้ว</string>
@@ -4349,7 +4349,7 @@
     <string name="replay_last_weeks">%1$d สัปดาห์ล่าสุด</string>
     <string name="replay_last_days">%1$d วันล่าสุด</string>
     <string name="replay_story_font">ตัวอักษรของสตอรี่</string>
-    <string name="replay_story_font_info">สตอรี่ของ Replay และ Rewind จะแสดงข้อความแบบใด: ด้วยตัวอักษรแบบโปสเตอร์ของ Prism หรือด้วยฟอนต์ที่คุณเลือกไว้สำหรับ Prism (ข้อความ)</string>
+    <string name="replay_story_font_info">สตอรี่ของ Replay และ Rewind จะแสดงข้อความแบบใด: ด้วยตัวอักษรแบบโปสเตอร์ของ Prism หรือด้วยฟอนต์ที่คุณเลือกไว้สำหรับ Prism (ข้อความและไอคอน)</string>
     <string name="replay_story_font_keywords">ฟอนต์ การจัดตัวอักษร แบบอักษร สตอรี่ rewind wrapped</string>
     <string name="replay_story_font_poster">ตัวอักษรแบบโปสเตอร์</string>
     <string name="replay_story_font_own">ฟอนต์ของคุณ</string>
@@ -4537,7 +4537,7 @@
         <item quantity="other">%1$s เพลงให้เลือก</item>
     </plurals>
     <string name="ytlive_spotify_connect">เชื่อมต่อ Spotify เพื่อใช้งานส่วนนี้</string>
-    <string name="ytlive_spotify_recent_off">ปิดอยู่: เปิด การเล่นล่าสุด ในหน้า Spotify</string>
+    <string name="ytlive_spotify_recent_off">ปิดอยู่: เปิด การเล่นล่าสุด ใน การตั้งค่า → บัญชีและการแชร์ → Spotify</string>
     <string name="ytlive_connection_on">ประวัติของคุณตรงกันอยู่เสมอ · เปิด</string>
     <string name="ytlive_connection_off">ให้ประวัติตรงกันอยู่เสมอ · ปิด</string>
     <string name="ytlive_connection_signed_out">เข้าสู่ระบบเพื่อให้ประวัติของคุณตรงกันอยู่เสมอ</string>
@@ -4552,7 +4552,7 @@
     <string name="dj_in_the_queue_keywords">dj โหมด ปุ่ม คิว ส่วนหัว ด้านบน พื้นที่ ซ่อน</string>
     <string name="menu_lyrics_only_way">จะคงอยู่ตราบที่เป็นทางเดียวของเพลเยอร์ไปยังเนื้อเพลง</string>
     <string name="smart_downloads_offer_title">ดาวน์โหลดเพลงไว้ก่อนที่จะต้องใช้ไหม</string>
-    <string name="smart_downloads_offer_body">ดาวน์โหลดอัจฉริยะจะเตรียมเพลงที่คุณน่าจะฟังไว้ใช้แบบออฟไลน์ สูงสุด 1 GB ผ่าน Wi-Fi เปลี่ยนได้ทุกเมื่อใน ดาวน์โหลด พื้นที่เก็บข้อมูล และอินเทอร์เน็ต</string>
+    <string name="smart_downloads_offer_body">ดาวน์โหลดอัจฉริยะจะเตรียมเพลงที่คุณน่าจะฟังไว้ใช้แบบออฟไลน์ สูงสุด 1 GB ผ่าน Wi-Fi เปลี่ยนได้ทุกเมื่อใน การตั้งค่า → ดาวน์โหลดและข้อมูล</string>
     <!-- 1.8.2 -->
     <string name="loading_list">กำลังโหลด \"%1$s\"…</string>
     <string name="song_details">รายละเอียดเพลง</string>
@@ -4791,7 +4791,7 @@
     <string name="glass_blur">เบลอ</string>
     <string name="glass_blur_info">สีที่อยู่หลังกระจกกระจายไปไกลแค่ไหน ของเล็ก ๆ อย่างตัวอักษรจะยังมีเส้นขอบจาง ๆ หลังกระจกเหลว ไม่ว่าจะเพิ่มค่านี้เท่าใด ส่วนกระจกฝ้าจะละลายมันไปด้วย 100% คือค่าของ Prism เอง ถ้าเกินจากนี้ โทรศัพท์ที่ช้ากว่าจะทำงานหนักขึ้น</string>
     <string name="glass_frost">ฝ้า</string>
-    <string name="glass_frost_info">ม่านที่คลุมกระจกหนาแค่ไหน: น้อยลงจะเห็นสิ่งที่อยู่ข้างหลังมากขึ้น มากขึ้นจะขุ่นขาวขึ้นในโหมดสว่างและเข้มขึ้นในโหมดมืด และอ่านง่ายขึ้นเมื่ออยู่เหนือภาพที่ลายตา 100% คือค่าของ Prism เอง แถบแท็บที่มีพื้นหลังของตัวเอง (เลย์เอาต์, แถบแท็บ) จะใช้พื้นหลังนั้นต่อไป</string>
+    <string name="glass_frost_info">ม่านที่คลุมกระจกหนาแค่ไหน: น้อยลงจะเห็นสิ่งที่อยู่ข้างหลังมากขึ้น มากขึ้นจะขุ่นขาวขึ้นในโหมดสว่างและเข้มขึ้นในโหมดมืด และอ่านง่ายขึ้นเมื่ออยู่เหนือภาพที่ลายตา 100% คือค่าของ Prism เอง แถบแท็บที่มีพื้นหลังของตัวเอง (แท็บและมินิเพลเยอร์ → แถบนำทาง) จะใช้พื้นหลังนั้นต่อไป</string>
     <string name="glass_needs_android_12">ตัวเลือกเหล่านี้ต้องใช้การเบลอที่มาพร้อม Android 12 บนโทรศัพท์เครื่องนี้แถบเป็นสีทึบ จึงไม่มีอะไรให้การตั้งค่าเบลอหรือฝ้าเปลี่ยน</string>
     <string name="glass_on_more_of_the_screen">กระจกบนพื้นที่หน้าจอมากขึ้น</string>
     <string name="glass_on_more_of_the_screen_detail">การ์ด ชิป ปุ่มกลม และแถบเลิกทำ</string>
@@ -5115,6 +5115,7 @@
     <string name="the_day_before">วันก่อนหน้า</string>
     <string name="the_week_before">สัปดาห์ก่อนหน้า</string>
     <string name="root_app">แอป</string>
+    <string name="root_listening">การฟัง</string>
     <string name="root_theme_colors">ธีมและสี</string>
     <string name="root_text_icons">ข้อความและไอคอน</string>
     <string name="root_sound_quality">เสียงและคุณภาพ</string>

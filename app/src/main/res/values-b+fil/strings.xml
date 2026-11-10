@@ -102,7 +102,7 @@
     <string name="save">I-save</string>
     <string name="cancel">Kanselahin</string>
     <string name="share_2">I-share ang %1$s</string>
-    <string name="scan_it_in_prism_settings_customize">I-scan ito sa Prism: Mga Setting → I-customize ang Prism → Mga Look → I-scan</string>
+    <string name="scan_it_in_prism_settings_customize">I-scan ito sa Prism: Mga Setting → Mga Look → Kumuha ng Look</string>
     <string name="too_much_for_a_qr_code">Masyadong marami para sa QR code: ipadala ito bilang text o file</string>
     <string name="codes_leave_out_photos_and_your">Hindi kasama sa mga code ang mga larawan at sarili mong font; kaya itong dalhin ng file.</string>
     <string name="here_s_my_prism_look_share">Heto ang Prism Look ko, \"%1$s\". I-share ang mensaheng ito sa Prism para makita ito:\n\n%2$s</string>
@@ -652,7 +652,7 @@
     <string name="remove_this_color">Alisin ang kulay na ito</string>
     <string name="changes">%1$s\n\nBinabago: %2$s</string>
     <string name="white_black_and_greys_give_prism">Ang puti, itim at gray ay nagbibigay ng simpleng itsura ng Prism: puti sa madilim na page, itim sa maliwanag</string>
-    <string name="shown_softened_lighter_on_dark_pages">Ipinapakitang pinalambot (mas maliwanag sa madilim na page, mas matingkad sa maliwanag). Piliin ang \"Eksakto gaya ng pinili\" sa page ng Kulay para gamitin ito nang walang pagbabago</string>
+    <string name="shown_softened_lighter_on_dark_pages">Ipinapakitang pinalambot (mas maliwanag sa madilim na page, mas matingkad sa maliwanag). Piliin ang \"Eksakto gaya ng pinili\" sa ilalim ng Accent para gamitin ito nang walang pagbabago</string>
     <string name="made_a_little_lighter_or_darker">Ginawang medyo mas maliwanag o mas madilim kung saan hindi mababasa ang text dito</string>
     <string name="tint_strength">Lakas ng tint</string>
     <string name="faint">Mahina</string>
@@ -1098,7 +1098,7 @@
     <string name="in_the_middle">Sa gitna</string>
     <string name="title_size">Laki ng pamagat</string>
     <string name="title_weight">Kapal ng pamagat</string>
-    <string name="light_is_prism_s_own_and">Sariling estilo ng Prism ang Light, at sinusunod nito ang Text → Kapal. Pinakakapal din ng Bold ang pangalan ng artist.</string>
+    <string name="light_is_prism_s_own_and">Sariling estilo ng Prism ang Light, at sinusunod nito ang Text at mga icon → Kapal. Pinakakapal din ng Bold ang pangalan ng artist.</string>
     <string name="scrolling_titles">Gumagalaw na pamagat</string>
     <string name="a_long_title_scrolls_across_off">Gumagalaw pahalang ang mahabang pamagat (off: nagtatapos ito sa …)</string>
     <string name="times_under_the_progress_bar">Oras sa ilalim ng progress bar</string>
@@ -1963,7 +1963,7 @@
     <string name="refractive_bars_and_controls">Mga bar at kontrol na nagre-refract</string>
     <string name="soft_blur_no_refraction">Malambot na blur, walang refraction</string>
     <string name="pages_frosted_with_their_picture">Mga page na naka-frost gamit ang larawan nila</string>
-    <string name="artist_album_and_playlist_pages_sit">Nasa frosted glass na gawa sa kanilang larawan ang mga page ng artist, album at playlist; nasa frost mula sa nagpe-play ang Home, Library, Search at Mga Setting. Nasa Kulay kung kukunin ng mga page ang kulay ng larawan nila.</string>
+    <string name="artist_album_and_playlist_pages_sit">Nasa frosted glass na gawa sa kanilang larawan ang mga page ng artist, album at playlist; nasa frost mula sa nagpe-play ang Home, Library, Search at Mga Setting. Nasa Mga page kung kukunin ng mga page ang kulay ng larawan nila.</string>
     <string name="calmer_quicker_animations">Mas kalmado at mas mabilis na animation</string>
     <string name="no_drifting_backgrounds_no_artwork_bounce">Walang umaanod na background, walang talbog ng artwork, mas mabilis na transition.</string>
     <string name="that_font_couldn_t_be_used">Hindi magamit ang font na iyan</string>
@@ -2005,7 +2005,7 @@
     <string name="more_room_swipe_down_from_the">Mas maluwag; mag-swipe pababa mula sa itaas para makita ito</string>
     <string name="the_clock_battery_and_notification_icons">Nakatago ang orasan, baterya at mga icon ng notification sa itaas habang bukas ang Prism. Mag-swipe pababa mula sa gilid sa itaas at sandali silang lalabas. Itinatago rin ng immersive mode at full-screen na video ang ibang bar, gaya ng dati.</string>
     <string name="never_shows_only_the_icons_words">Ang Hindi kailanman ay icon lang ang ipinapakita; ang Salita lang ay pangalan lang ang ipinapakita.</string>
-    <string name="see_through_lets_the_page_show">Hinahayaan ng Tagusan na makita ang page sa likod ng bar; itinatago ito ng Solid. Ang blur mismo ay galing sa Glass (I-customize ang Prism → Glass at mga background).</string>
+    <string name="see_through_lets_the_page_show">Hinahayaan ng Tagusan na makita ang page sa likod ng bar; itinatago ito ng Solid. Ang blur mismo ay galing sa Glass (Theme at mga kulay → Glass).</string>
     <string name="slims_down_as_you_scroll">Numinipis habang nag-i-scroll ka</string>
     <string name="swipe_sideways_on_a_tab_s">Mag-swipe patagilid sa page ng tab</string>
     <string name="a_sideways_swipe_on_a_tab">Ang patagilid na swipe sa sariling page ng tab ay pupunta sa katabing tab. Mananatili ang swipe ng mga hilerang nag-i-scroll patagilid (at ng sariling mga page ng Library).</string>
@@ -2034,7 +2034,7 @@
     <string name="played_now_playing_and_up_next">\"Napakinggan na\", \"Nagpe-play ngayon\" at \"Susunod\"</string>
     <string name="off_the_queue_is_one_list">Kapag off, iisang listahan ang queue mula sa mga napakinggan na hanggang sa mga darating.</string>
     <string name="moving_artwork_when_a_song_has">Gumagalaw na artwork, kapag mayroon ang kanta</string>
-    <string name="motion_artwork_and_video_covers_turn">Gumagalaw na artwork at mga video cover. I-off sila para sa isang kanta mula sa ⋯ menu ng player. Nasa Mga download, storage at data kung magpe-play sila sa mobile data, at ang mga nakatago sa phone.</string>
+    <string name="motion_artwork_and_video_covers_turn">Gumagalaw na artwork at mga video cover. I-off sila para sa isang kanta mula sa ⋯ menu ng player. Nasa Mga download at data kung magpe-play sila sa mobile data, at ang mga nakatago sa phone.</string>
     <string name="the_animated_cover_plays_behind_everything">Nagpe-play ang animated cover sa likod ng lahat</string>
     <string name="the_moving_artwork_fills_the_whole">Sinasakop ng gumagalaw na artwork ang buong player, pinadilim sa ilalim ng mga kontrol, at ang cover mismo ay nagpapakita ng hindi gumagalaw na larawan. Hindi kapag artwork na sakop ang buong gilid, na nagpapakita na nito mula gilid hanggang gilid.</string>
     <string name="the_cover_fills_the_screen_lyrics">Sinasakop ng cover ang screen, may lyrics sa ibabaw</string>
@@ -2137,7 +2137,7 @@
     <string name="needed_for_sing">Kailangan para sa Kumanta · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Tinatanggal ang boses ng mang-aawit sa mga kanta, sa phone mo, para sa karaoke. Isang beses lang dina-download.</string>
     <string name="so_sing_starts_at_once_when">Para agad magsimula ang Kumanta pag-on mo</string>
-    <string name="the_playing_song_and_the_next">Pinaghihiwalay sa background ang nagpe-play na kanta at ang susunod kahit naka-off ang Kumanta. Mas malakas ito sa baterya habang may musika; sa mobile data, sinusunod nito ang Mga download, storage at data → Mobile data.</string>
+    <string name="the_playing_song_and_the_next">Pinaghihiwalay sa background ang nagpe-play na kanta at ang susunod kahit naka-off ang Kumanta. Mas malakas ito sa baterya habang may musika; sa mobile data, sinusunod nito ang Mga download at data → Mobile data.</string>
     <string name="using">Gumagamit ng %1$s</string>
     <string name="songs_are_worked_out_again_the">Ihahanda ulit ang mga kanta sa susunod na kantahin mo sila.</string>
     <string name="word_by_word_first_then_by">Bawat salita muna, tapos bawat linya</string>
@@ -2495,7 +2495,7 @@
     <string name="allow_notifications">Payagan ang mga notification</string>
     <string name="turn_them_on_in_android_s">I-on sila sa mga setting ng Android para sa Prism.</string>
     <string name="your_starting_point_made_from_what">Ang panimulang punto mo, gawa mula sa mga pinapakinggan mo.</string>
-    <string name="the_replay_card_at_the_top">Ang Replay card sa itaas: ang taon mo sa ngayon (piliin ang itsura nito sa Mga Setting → I-customize ang Prism → Home at Library)</string>
+    <string name="the_replay_card_at_the_top">Ang Replay card sa itaas: ang taon mo sa ngayon (piliin ang itsura nito sa Mga Setting → Home at Library → Replay card)</string>
     <string name="quick_picks_songs_around_the_artists">Mga mabilisang pinili: mga kanta mula sa paligid ng mga artist na pinapakinggan mo, mag-swipe pahalang para sa higit pa</string>
     <string name="made_for_you_daily_mixes_your">Ginawa para sa iyo: mga Daily Mix, ang mix mo para sa oras ng araw at Release Radar</string>
     <string name="the_grid_button_at_the_top">Inaayos ng grid button sa itaas ang mga seksyon ng Home</string>
@@ -2516,12 +2516,12 @@
     <string name="let_prism_mix_your_music_songs">Hayaang i-mix ng Prism ang musika mo: naghahalo ang mga kanta sa isa\'t isa, nasa tono at nasa beat.</string>
     <string name="in_the_queue_tap_dj_then">Sa queue, i-tap ang DJ, tapos piliin ang Tuloy-tuloy, Paakyat o Pababa</string>
     <string name="long_press_an_album_or_playlist">Pindutin nang matagal ang album o playlist → I-play bilang DJ set</string>
-    <string name="crossfade_settings_playback_sound_blends_any">Hinahalo ng Crossfade (Mga Setting → Playback at tunog) ang kahit anong dalawang kanta</string>
+    <string name="crossfade_settings_playback_sound_blends_any">Hinahalo ng Crossfade (Mga Setting → Playback) ang kahit anong dalawang kanta</string>
     <string name="mixes_made_on_your_phone_from">Mga mix na ginawa sa phone mo mula sa mga pinapakinggan mo. Walang lumalabas tungkol sa pakikinig mo.</string>
     <string name="daily_mixes_group_the_artists_you">Pinagpapangkat ng mga Daily Mix ang mga artist na pinapakinggan mo ayon sa kung ano ang bagay sa isa\'t isa</string>
     <string name="release_radar_finds_new_music_from">Naghahanap ang Release Radar ng bagong musika mula sa mga artist na fina-follow mo</string>
     <string name="made_for_you_also_has_mixes">May mga mix din ang Ginawa para sa iyo mula sa sarili mong musika, at Paulit-ulit: galing lang sila sa mga pinakinggan mo at gumagana offline</string>
-    <string name="when_the_queue_ends_prism_s">Kapag naubos ang queue, pumipili ang radio ng Prism mula sa musika mo (Mga Setting → Playback at tunog → Autoplay mula sa)</string>
+    <string name="when_the_queue_ends_prism_s">Kapag naubos ang queue, pumipili ang radio ng Prism mula sa musika mo (Mga Setting → Playback → Kapag natapos ang queue)</string>
     <string name="tap_shuffle_twice_on_a_playlist">I-tap nang dalawang beses ang shuffle sa playlist para sa Smart Shuffle: may mga bagong kantang sisingit</string>
     <string name="not_for_me_and_leave_out">Hindi isinasama ng \"Hindi para sa akin\" at \"Huwag isama sa panlasa ko\" ang mga bagay</string>
     <string name="find_anything_in_prism_music_or">Maghanap ng kahit ano sa Prism Music, o alamin ang kantang tumutugtog sa paligid mo.</string>
@@ -2545,11 +2545,11 @@
     <string name="control_prism_from_a_browser_on">Kontrolin ang Prism mula sa browser sa computer mo</string>
     <string name="hand_what_s_playing_to_another">Ipasa ang nagpe-play sa ibang phone o tablet na may Prism</string>
     <string name="prism_takes_its_color_from_what">Kinukuha ng Prism ang kulay nito mula sa nagpe-play. Baguhin ito hangga\'t gusto mo.</string>
-    <string name="appearance_the_spectrum_s_colors_or">Itsura: mga kulay ng Spectrum (o simpleng puti), ang accent mo, mga font, icon at background</string>
-    <string name="layout_the_tab_bar_your_tabs">Layout: ang tab bar, mga tab mo at ang mini player</string>
+    <string name="appearance_the_spectrum_s_colors_or">Theme at mga kulay, Text at mga icon: mga kulay ng liwanag (o simpleng puti), ang accent mo, mga font, icon at background</string>
+    <string name="layout_the_tab_bar_your_tabs">Mga tab at mini player: ang tab bar, mga tab mo at ang mini player</string>
     <string name="player_its_background_the_cover_and">Player: ang background nito, ang cover at ang lumalabas dito</string>
     <string name="search_settings_from_the_box_at">Maghanap sa Mga Setting mula sa box sa itaas ng Mga Setting</string>
-    <string name="settings_customize_prism_color_every_choice">Mga Setting → I-customize ang Prism → Kulay: ipinapakita ng bawat pagpipilian ang itsura nito bago mo ito piliin.</string>
+    <string name="settings_customize_prism_color_every_choice">Mga Setting → Theme at mga kulay: ipinapakita ng bawat pagpipilian ang itsura nito bago mo ito piliin.</string>
     <string name="the_light_12_presets_white_black">Ang liwanag: 12 preset, Puti (Itim sa light mode), o sarili mong mga kulay</string>
     <string name="your_accent_any_color_from_a">Ang accent mo: kahit anong kulay, mula sa wheel, code o eyedropper</string>
     <string name="the_page_background_plain_tinted_with">Ang background ng page: simple, may tint ng accent mo, o sariling kulay</string>
@@ -2560,14 +2560,14 @@
     <string name="pin_prism_playlists_to_home_customize">I-pin ang mga Prism playlist sa Home (I-customize ang Home → Mga naka-pin na playlist)</string>
     <string name="song_credits_in_any_song_s">Credits ng kanta sa menu ng kahit anong kanta</string>
     <string name="see_which_downloads_failed_and_why">Tingnan kung aling mga download ang nabigo, at bakit</string>
-    <string name="settings_customize_prism_looks_your_whole">Mga Setting → I-customize ang Prism → Mga Look: ang buong itsura mo, naka-save, napapalitan at naibabahagi sa isang tap.</string>
+    <string name="settings_customize_prism_looks_your_whole">Mga Setting → Mga Look: ang buong itsura mo, naka-save, napapalitan at naibabahagi sa isang tap.</string>
     <string name="try_prism_s_own_paper_midnight">Subukan ang mga sa Prism: Paper, Midnight, Neon, Soft, Studio at Vinyl</string>
     <string name="save_yours_update_it_when_you">I-save ang sa iyo, i-update ito kapag binago mo, at i-share ito bilang QR code, code o file</string>
     <string name="browse_looks_people_shared_under_from">Tingnan ang mga Look na ibinahagi ng iba, sa Mula sa komunidad</string>
     <string name="one_look_by_day_and_another">Isang Look sa araw at iba sa gabi, sa pagsikat at paglubog ng araw</string>
     <string name="every_look_page_shows_home_the">Ipinapakita ng bawat page ng itsura ang Home, player at lyrics habang binabago mo sila; binabawi ng I-undo ang isang pagbabago</string>
-    <string name="customize_by_tapping_hold_the_settings">I-customize sa pag-tap: pindutin nang matagal ang tab ng Mga Setting, o i-on ito sa Itsura, tapos i-tap ang mini player, tab bar, player o isang seksyon sa Home</string>
-    <string name="settings_customize_prism_player_or_player">Mga Setting → I-customize ang Prism → Player, o ⋯ → Mga setting ng Player sa mismong player.</string>
+    <string name="customize_by_tapping_hold_the_settings">I-customize sa pag-tap: pindutin nang matagal ang tab ng Mga Setting, o i-on ito sa Mga Look, tapos i-tap ang mini player, tab bar, player o isang seksyon sa Home</string>
+    <string name="settings_customize_prism_player_or_player">Mga Setting → Player, o ⋯ → Mga setting ng Player sa mismong player.</string>
     <string name="layouts_standard_a_big_cover_lyrics">Mga layout: Standard, malaking Cover, Lyrics muna, Minimal, Vinyl o Cassette (umiikot sila habang tumutugtog)</string>
     <string name="a_visualizer_if_you_d_like">Visualizer kung gusto mo: mga bar, alon, singsing, pulso o kinang (naka-off maliban kung piliin mo)</string>
     <string name="pick_the_buttons_under_the_controls">Piliin ang mga button sa ilalim ng mga kontrol (isa ang bilis), at ang dalawa sa tabi ng play sa notification at kotse mo</string>
@@ -2578,7 +2578,7 @@
     <string name="prism_tells_android_which_of_its">Sinasabi ng Prism sa Android kung aling mga bahagi nito ang ihahanda nang maaga, at handa na ang mga update mula sa banner, kaya hindi na sila mabagal</string>
     <string name="less_work_while_lists_scroll_while">Mas kaunting trabaho habang nag-i-scroll ang mga listahan, habang nagta-type ka sa Search, at habang may nagpe-play na kanta</string>
     <string name="if_something_still_stutters_settings_backup">Kung may pumuputol pa rin, itinatala ng Mga Setting → Backup at tungkol → Diagnostics kung saan ito nangyari, para i-share</string>
-    <string name="settings_customize_prism_lyrics_how_your">Mga Setting → I-customize ang Prism → Lyrics: ang itsura ng lyrics mo, may halimbawa ng bawat pagpipilian.</string>
+    <string name="settings_customize_prism_lyrics_how_your">Mga Setting → Lyrics at Kumanta: ang itsura ng lyrics mo, may halimbawa ng bawat pagpipilian.</string>
     <string name="six_styles_prism_classic_karaoke_bold">Anim na istilo: Prism, Classic karaoke, Bold card, Glow, Typewriter at Calm</string>
     <string name="the_sung_line_and_the_others">Ang kinakantang linya at ang iba sa puti, liwanag mo, accent, kulay ng cover o sarili mong kulay</string>
     <string name="weight_line_spacing_how_dim_the">Kapal, pagitan ng linya, gaano kalamlam ang ibang linya, lakas ng blur, malalaking titik at anino</string>
@@ -2588,8 +2588,8 @@
     <string name="a_few_things_you_asked_for">Ilang bagay na hiniling mo.</string>
     <string name="library_history_what_you_played_by">Library → History: ang mga pinakinggan mo, bawat araw, sa phone na ito o sa account mo</string>
     <string name="liked_a_song_and_its_video">Na-like mo ang kanta at ang video nito? Isang beses lang sila lalabas, bilang kanta</string>
-    <string name="prism_s_own_volume_apart_from">Sariling volume ng Prism, hiwalay sa phone (Mga Setting → I-customize ang Prism → Player)</string>
-    <string name="hide_the_status_bar_customize_prism">Itago ang status bar (I-customize ang Prism → Mga tab at mini player)</string>
+    <string name="prism_s_own_volume_apart_from">Sariling volume ng Prism, hiwalay sa phone (Mga Setting → Player)</string>
+    <string name="hide_the_status_bar_customize_prism">Itago ang status bar (Mga Setting → Mga tab at mini player)</string>
     <string name="settings_pages_are_tidier_tap_beside">Mas maayos na ang mga page ng Mga Setting: i-tap ang ⓘ sa tabi ng setting para sa mga detalye</string>
     <string name="library_s_tiles_the_edit_button">Mga tile ng Library: ang edit button sa itaas ng Library</string>
     <string name="customize_home_the_button_at_the">Mas marami na ang laman ng I-customize ang Home (ang button sa itaas ng Home).</string>
@@ -2610,10 +2610,10 @@
     <string name="artists_and_songs_with_their_pictures">Mga artist at kanta na may larawan habang nagta-type ka</string>
     <string name="results_already_in_your_library_right">Mga resultang nasa library mo na, kasunod mismo ng nangunguna</string>
     <string name="settings_are_sorted_by_what_they">Inayos ang Mga Setting ayon sa ginagawa nila.</string>
-    <string name="everything_about_how_prism_looks_is">Nasa I-customize ang Prism ang lahat tungkol sa itsura ng Prism</string>
-    <string name="gestures_and_buttons_in_controls_gestures">Mga galaw at button sa Mga kontrol at galaw</string>
+    <string name="everything_about_how_prism_looks_is">Nasa \"Gawin itong sa iyo\" ang lahat tungkol sa itsura ng Prism</string>
+    <string name="gestures_and_buttons_in_controls_gestures">Mga galaw at button sa \"Pakikinig\"</string>
     <string name="every_mobile_data_choice_on_one">Lahat ng pagpipilian sa mobile data sa iisang page</string>
-    <string name="android_auto_speakers_discord_and_last">Android Auto, mga speaker, Discord at Last.fm sa Mga device at koneksyon</string>
+    <string name="android_auto_speakers_discord_and_last">Android Auto, mga speaker, Discord at Last.fm sa \"Mga koneksyon\"</string>
     <string name="performance_mode_at_the_top_for">Performance mode, sa itaas, para sa mas mabagal na phone</string>
     <string name="make_the_pieces_of_prism_yours">Gawing sa iyo ang bawat piraso ng Prism.</string>
     <string name="covers_as_circles_squircles_flowers_arches">Mga cover bilang bilog, squircle, bulaklak, arko… para sa kanta, album, artist at player</string>
@@ -2624,20 +2624,20 @@
     <string name="from_your_requests">Mula sa mga hiling mo.</string>
     <string name="rearrange_your_playlists_songs_rearrange_songs">Ayusin ang mga kanta ng mga playlist mo: ⋯ → Ayusin ang mga kanta</string>
     <string name="swipe_a_song_out_of_the">I-swipe palabas ng queue ang isang kanta, i-swipe pataas ang mini player para buksan ito</string>
-    <string name="the_light_from_the_playing_cover">Ang liwanag mula sa nagpe-play na cover: Kulay → Mula sa cover</string>
+    <string name="the_light_from_the_playing_cover">Ang liwanag mula sa nagpe-play na cover: Theme at mga kulay → Ang liwanag → Mula sa cover</string>
     <string name="ribbons_a_progress_bar_with_strands">Ribbons, progress bar na may mga hiblang dumadaloy rito</string>
     <string name="a_bold_title_on_the_player">Makapal na pamagat sa player, buong album papunta sa playlist, at mga YouTube link na ishe-share</string>
-    <string name="settings_playback_sound">Mga Setting → Playback at tunog.</string>
+    <string name="settings_playback_sound">Mga Setting → Playback, at Mga Setting → Tunog at kalidad.</string>
     <string name="speed_pitch_slowed_sped_up_or">Bilis at pitch: slowed, sped up, o kahit anong key, mula sa ⋯ ng player</string>
     <string name="how_songs_cross_in_a_crossfade">Paano nagsasalubong ang mga kanta sa crossfade, marka kung saan papasok ang susunod, at mga cover na naghahalo</string>
     <string name="normalize_volume_s_level_and_albums">Level ng I-normalize ang volume, at mga album na pinananatili gaya ng dati</string>
     <string name="your_own_equalizer_presets_shared_as">Sarili mong mga preset ng equalizer, naibabahagi bilang code, isa para sa kotse at isa para sa earbuds mo</string>
     <string name="fades_for_the_sleep_timer_and">Mga fade para sa sleep timer at para sa pause at play</string>
     <string name="liked_how_prism_1_6_looked">Nagustuhan mo ang itsura ng Prism 1.6? Bumalik na ito, bilang pagpipilian.</string>
-    <string name="the_classic_look_customize_prism_looks">Ang Classic na Look: I-customize ang Prism → Mga Look</string>
+    <string name="the_classic_look_customize_prism_looks">Ang Classic na Look: Mga Setting → Mga Look</string>
     <string name="or_only_its_icons_its_bold">O ang mga icon lang nito, ang makapal nitong font o ang simple nitong mga kontrol</string>
     <string name="the_player_s_buttons_apart_instead">Magkakahiwalay ang mga button ng player sa halip na nasa kapsula</string>
-    <string name="last_fm_scrobbling_devices_connections_and">Last.fm scrobbling (Mga device at koneksyon), at Replay para sa kahit anong petsa</string>
+    <string name="last_fm_scrobbling_devices_connections_and">Last.fm scrobbling (Mga account at pag-share), at Replay para sa kahit anong petsa</string>
     <string name="pick_several_songs_in_the_queue">Pumili ng ilang kanta sa queue para ilipat o alisin nang sabay, o i-lock ang ayos nito</string>
     <string name="choose_what_goes_in_a_backup">Piliin kung ano ang isasama sa backup</string>
     <string name="swipe_up_on_the_player_for">Mag-swipe pataas sa player para sa queue, i-lock sa portrait, i-pause kapag naka-mute</string>
@@ -3794,7 +3794,7 @@
     <string name="the_ambient_frost_behind_home_search_all">Ang Ambient frost sa likod ng Home, Search, Library, Replay at Mga Setting (pinapanatili ng Awtomatiko ang mga kulay ng cover dito, ginagawa itong gray ng Simple, kinukulayan ito ng tint), ang mga page na iyon kapag naka-off ang frosted glass, at mga sheet at dialog. Hindi ang player, ni ang mga page ng album, artist at playlist, na kumukuha ng kulay ng larawan nila.</string>
     <string name="home_has_the_background_glass_backgrounds_all">May background na %1$s ang Home (Glass at mga background), iginuhit sa ibabaw ng kulay na ito, kaya kaunti lang ang makikita roon. Piliin ang Ambient doon para makita ito nang buo</string>
     <string name="secondary_text_artists_times_notes_dividers_all">Pangalawang text (mga artist, oras, tala), mga divider at outline sa mga page, sheet at menu. Pinatatatag din ng Katamtaman at Mataas ang accent para mas madaling mabasa. Hindi nagbabago ang sariling puting text ng player sa ibabaw ng cover.</string>
-    <string name="the_accent_on_artist_album_and_all">Ang accent sa mga page ng artist, album at playlist, at sa mga menu na binubuksan mo mula sa kanta, album o artist (pindot nang matagal o ⋯). Kinukuha pa rin ng mga frosted na background nila ang kulay ng larawan alinman ang piliin (Glass at mga background).</string>
+    <string name="the_accent_on_artist_album_and_all">Ang accent sa mga page ng artist, album at playlist, at sa mga menu na binubuksan mo mula sa kanta, album o artist (pindot nang matagal o ⋯). Kinukuha pa rin ng mga frosted na background nila ang kulay ng larawan alinman ang piliin (Glass).</string>
     <string name="tap_the_line_under_the_player_all">I-tap ang linya sa ilalim ng mga kontrol ng player (sinasabi nito kung aling device ang nagpe-play) at pumili ng speaker, TV o receiver. Dapat nasa Wi-Fi na ito na may Google Cast (Chromecast, Google TV, mga speaker na may built-in na Cast) o DLNA / UPnP (minsang tinatawag na media sharing). Nananatili sa phone ang queue, lyrics at mga kontrol mo, at ang mga volume key nito ang nagtatakda ng volume ng speaker. Sa phone lang ang equalizer, Crossfade, Kumanta at mga video, kaya naka-off sila habang nagka-cast.</string>
     <string name="nothing_new_from_your_artists_in_all">Walang bago mula sa mga artist mo sa nakaraang tatlong buwan. Tinitingnan ng Prism tuwing ilang araw ang mga artist na ini-star, ni-save at pinakamadalas mong pinapakinggan; ang unang tingin ay inaalam lang ang mga labas na, kaya lalabas ang bagong musika mula sa susunod.</string>
     <string name="tunemymusic_copies_your_playlists_liked_songs_all">Kinokopya ng TuneMyMusic ang mga playlist mo, kasama ang Liked Songs, sa YouTube Music account mo. Ito rin ang serbisyong ginagamit ng sariling app ng YouTube Music para sa mga transfer.</string>
@@ -4237,14 +4237,14 @@
     <string name="shaped_by_the_crossfade">Hugis ng crossfade</string>
     <string name="crossfade_shape_keywords">crossfade blend fade out fade in paliit hugis kurba scrubber seek bar progress bar</string>
     <string name="the_end_tapers_as_the_song_fades">Kumikitid ang dulo habang humihina ang kanta</string>
-    <string name="crossfade_shape_info">Kinukuha ng dulo ng bar ang hugis ng pag-fade out ng kanta, at lumalaki ang bar ng susunod na kanta habang nagfa-fade in ito, ayon sa uri ng crossfade mo (Tunog → Crossfade). Kapag may paparating lang na crossfade: hindi sa pagitan ng mga track ng album, habang nagka-cast, para sa mga episode o live stream. Kapag awtomatiko ang haba, lumalabas ito kapag naplano na ang blend. Ang Waveform at Ribbons ay nananatili sa marka sa halip nito.</string>
+    <string name="crossfade_shape_info">Kinukuha ng dulo ng bar ang hugis ng pag-fade out ng kanta, at lumalaki ang bar ng susunod na kanta habang nagfa-fade in ito, ayon sa uri ng crossfade mo (Playback → Crossfade). Kapag may paparating lang na crossfade: hindi sa pagitan ng mga track ng album, habang nagka-cast, para sa mga episode o live stream. Kapag awtomatiko ang haba, lumalabas ito kapag naplano na ang blend. Ang Waveform at Ribbons ay nananatili sa marka sa halip nito.</string>
     <string name="imp_title">Dalhin ang history mo</string>
     <string name="imp_subtitle">Mula sa Spotify, YouTube Music at Last.fm, binabasa sa teleponong ito</string>
     <string name="imp_row_detail">Spotify, YouTube Music, Last.fm</string>
     <string name="imp_group_info">Dalhin ang mga play, Liked Songs at playlist mo mula sa data download ng Spotify, ang YouTube Music history mo mula sa Google Takeout, o ang mga Last.fm scrobble mo. Binabasa ang mga file sa teleponong ito; para mahanap ang bawat kanta, hinahanap ito ng Prism, gaya ng ginagawa ng search nito.</string>
     <string name="imp_keywords">import spotify data download takeout google youtube music history last.fm scrobble nagustuhang kanta liked songs playlist ilipat transfer</string>
     <string name="imp_bring_from">Dalhin mula sa</string>
-    <string name="imp_bring_from_info">Spotify: sa spotify.com, Account → Privacy → Download your data. Darating ang account data sa loob ng ilang araw (isang taon ng mga play, Liked Songs, mga playlist); darating ang Extended streaming history sa loob ng hanggang 30 araw (bawat play mula nang sumali ka). Piliin ang zip na dumating, o ang mga file sa loob nito.\n\nYouTube Music: sa takeout.google.com, piliin ang YouTube at YouTube Music, history lang, bilang JSON. Piliin ang zip o ang watch-history.json.\n\nLast.fm: ikonekta ito sa Mga device at koneksyon, at babasahin ng Prism ang mga scrobble mo.\n\nWalang ipinapadala kahit saan. Para mahanap ang bawat kanta, hinahanap ito ng Prism, gaya ng ginagawa ng search nito.</string>
+    <string name="imp_bring_from_info">Spotify: sa spotify.com, Account → Privacy → Download your data. Darating ang account data sa loob ng ilang araw (isang taon ng mga play, Liked Songs, mga playlist); darating ang Extended streaming history sa loob ng hanggang 30 araw (bawat play mula nang sumali ka). Piliin ang zip na dumating, o ang mga file sa loob nito.\n\nYouTube Music: sa takeout.google.com, piliin ang YouTube at YouTube Music, history lang, bilang JSON. Piliin ang zip o ang watch-history.json.\n\nLast.fm: ikonekta ito sa Mga Setting → Mga account at pag-share, at babasahin ng Prism ang mga scrobble mo.\n\nWalang ipinapadala kahit saan. Para mahanap ang bawat kanta, hinahanap ito ng Prism, gaya ng ginagawa ng search nito.</string>
     <string name="imp_spotify_detail">Ang data download nito: mga play, Liked Songs, mga playlist</string>
     <string name="imp_takeout_detail">Ang watch history ng Google Takeout</string>
     <string name="imp_lastfm_detail">Ang mga scrobble mo, bilang %1$s</string>
@@ -4349,7 +4349,7 @@
     <string name="explicit_show">Ipakita</string>
     <string name="explicit_skip">Laktawan</string>
     <string name="explicit_hide">Itago</string>
-    <string name="explicit_skipped">Hindi isinasama ang mga explicit na kanta (Mga Setting → Playback at tunog)</string>
+    <string name="explicit_skipped">Hindi isinasama ang mga explicit na kanta (Mga Setting → Playback)</string>
     <string name="explicit_none_left">Walang mape-play: explicit ang lahat ng kanta rito</string>
     <string name="change_cover">Palitan ang cover</string>
     <string name="cover_changed">Napalitan ang cover</string>
@@ -4399,7 +4399,7 @@
     <string name="replay_last_weeks">Huling %1$d linggo</string>
     <string name="replay_last_days">Huling %1$d araw</string>
     <string name="replay_story_font">Type ng story</string>
-    <string name="replay_story_font_info">Kung paano isinusulat ng mga story ng Replay at Rewind ang mga salita nila: sa poster type ng Prism, o sa font na pinili mo para sa Prism (Text).</string>
+    <string name="replay_story_font_info">Kung paano isinusulat ng mga story ng Replay at Rewind ang mga salita nila: sa poster type ng Prism, o sa font na pinili mo para sa Prism (Text at mga icon).</string>
     <string name="replay_story_font_keywords">font typography typeface story stories rewind wrapped</string>
     <string name="replay_story_font_poster">Poster type</string>
     <string name="replay_story_font_own">Sarili mong font</string>
@@ -4598,7 +4598,7 @@
         <item quantity="other">%1$s kantang pipiliin</item>
     </plurals>
     <string name="ytlive_spotify_connect">Ikonekta ang Spotify para magamit ito</string>
-    <string name="ytlive_spotify_recent_off">Naka-off: i-on ang Mga recent play sa Spotify page</string>
+    <string name="ytlive_spotify_recent_off">Naka-off: i-on ang Mga recent play sa Mga Setting → Mga account at pag-share → Spotify</string>
     <string name="ytlive_connection_on">Napapanahon ang history mo · Naka-on</string>
     <string name="ytlive_connection_off">Panatilihing napapanahon ang history mo · Naka-off</string>
     <string name="ytlive_connection_signed_out">Mag-sign in para mapanatiling napapanahon ang history mo</string>
@@ -4614,7 +4614,7 @@
     <string name="dj_in_the_queue_keywords">dj mode button queue itaas espasyo itago</string>
     <string name="menu_lyrics_only_way">Nananatili habang ito ang tanging daan papunta sa lyrics mula sa player</string>
     <string name="smart_downloads_offer_title">I-download ang mga kanta bago mo pa kailanganin?</string>
-    <string name="smart_downloads_offer_body">Pinapanatiling handa offline ng Smart Downloads ang mga kantang malamang mong pakinggan: hanggang 1 GB, sa Wi-Fi. Baguhin ito anumang oras sa Mga download, storage at data.</string>
+    <string name="smart_downloads_offer_body">Pinapanatiling handa offline ng Smart Downloads ang mga kantang malamang mong pakinggan: hanggang 1 GB, sa Wi-Fi. Baguhin ito anumang oras sa Mga Setting → Mga download at data.</string>
     <!-- 1.8.2 -->
     <string name="loading_list">Nilo-load ang \"%1$s\"…</string>
     <string name="song_details">Mga detalye ng kanta</string>
@@ -4855,7 +4855,7 @@
     <string name="glass_blur">Blur</string>
     <string name="glass_blur_info">Kung gaano kalayo kumakalat ang mga kulay sa likod ng glass. Ang maliliit na bagay tulad ng text ay may mahinang balangkas sa likod ng Liquid Glass gaano man kataas ito; tinutunaw din sila ng Frosted Glass. Ang 100% ang sariling default ng Prism. Higit pa roon, mas mabigat ito para sa mas mabagal na telepono.</string>
     <string name="glass_frost">Frost</string>
-    <string name="glass_frost_info">Kung gaano kakapal ang tabing sa ibabaw ng glass: kapag mas mababa, mas marami ang lumulusot mula sa likod nito; kapag mas mataas, mas maputi ito sa light mode at mas madilim sa dark mode, at mas madaling basahin sa ibabaw ng magugulong larawan. Ang 100% ang sariling default ng Prism. Ang tab bar na may sariling background (Layout, Tab bar) ay pinananatili ang background na iyon.</string>
+    <string name="glass_frost_info">Kung gaano kakapal ang tabing sa ibabaw ng glass: kapag mas mababa, mas marami ang lumulusot mula sa likod nito; kapag mas mataas, mas maputi ito sa light mode at mas madilim sa dark mode, at mas madaling basahin sa ibabaw ng magugulong larawan. Ang 100% ang sariling default ng Prism. Ang tab bar na may sariling background (Mga tab at mini player → Navigation bar) ay pinananatili ang background na iyon.</string>
     <string name="glass_needs_android_12">Kailangan nito ang blur na dumating kasama ng Android 12. Sa teleponong ito, solid ang mga bar, kaya walang mababago ang setting ng blur o frost.</string>
     <string name="glass_on_more_of_the_screen">Glass sa mas maraming bahagi ng screen</string>
     <string name="glass_on_more_of_the_screen_detail">Mga card, chip, bilog na button, at ang Undo bar</string>
@@ -5187,6 +5187,7 @@
     <string name="the_day_before">sa araw bago nito</string>
     <string name="the_week_before">sa linggo bago nito</string>
     <string name="root_app">App</string>
+    <string name="root_listening">Pakikinig</string>
     <string name="root_theme_colors">Theme at mga kulay</string>
     <string name="root_text_icons">Text at mga icon</string>
     <string name="root_sound_quality">Tunog at kalidad</string>

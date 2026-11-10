@@ -102,7 +102,7 @@
     <string name="save">Mentés</string>
     <string name="cancel">Mégse</string>
     <string name="share_2">%1$s megosztása</string>
-    <string name="scan_it_in_prism_settings_customize">Olvasd be a Prismben: Beállítások → A Prism testreszabása → Arculatok → Beolvasás</string>
+    <string name="scan_it_in_prism_settings_customize">Olvasd be a Prismben: Beállítások → Arculatok → Arculat beszerzése</string>
     <string name="too_much_for_a_qr_code">Túl sok egy QR-kódhoz: küldd szövegként vagy fájlként</string>
     <string name="codes_leave_out_photos_and_your">A kódok kihagyják a fotókat és a saját betűtípusodat; egy fájl ezeket is viheti.</string>
     <string name="here_s_my_prism_look_share">Itt a Prism-arculatom: „%1$s”. Oszd meg ezt az üzenetet a Prismmel, hogy megnézd:\n\n%2$s</string>
@@ -652,7 +652,7 @@
     <string name="remove_this_color">Szín eltávolítása</string>
     <string name="changes">%1$s\n\nMódosítja: %2$s</string>
     <string name="white_black_and_greys_give_prism">A fehér, a fekete és a szürkék a Prism egyszerű megjelenését adják: fehér a sötét oldalakon, fekete a világosakon</string>
-    <string name="shown_softened_lighter_on_dark_pages">Tompítva látszik (sötét oldalakon világosabb, világosakon mélyebb). Válaszd a Színek oldalon a „Pontosan, ahogy választottam” lehetőséget, ha úgy szeretnéd használni, ahogy van</string>
+    <string name="shown_softened_lighter_on_dark_pages">Tompítva látszik (sötét oldalakon világosabb, világosakon mélyebb). Válaszd a Kiemelőszín alatt a „Pontosan, ahogy választottam” lehetőséget, ha úgy szeretnéd használni, ahogy van</string>
     <string name="made_a_little_lighter_or_darker">Kicsit világosabb vagy sötétebb ott, ahol a rajta lévő szöveg nem lenne olvasható</string>
     <string name="tint_strength">Árnyalat erőssége</string>
     <string name="faint">Halvány</string>
@@ -1098,7 +1098,7 @@
     <string name="in_the_middle">Középen</string>
     <string name="title_size">Cím mérete</string>
     <string name="title_weight">Cím vastagsága</string>
-    <string name="light_is_prism_s_own_and">A Vékony a Prism sajátja, és a Szöveg → Vastagság beállítást követi. A Félkövér az előadó nevét is vastagabbá teszi.</string>
+    <string name="light_is_prism_s_own_and">A Vékony a Prism sajátja, és a Szöveg és ikonok → Vastagság beállítást követi. A Félkövér az előadó nevét is vastagabbá teszi.</string>
     <string name="scrolling_titles">Gördülő címek</string>
     <string name="a_long_title_scrolls_across_off">A hosszú cím végiggördül (kikapcsolva …-tal végződik)</string>
     <string name="times_under_the_progress_bar">Időtartamok a folyamatjelző alatt</string>
@@ -1963,7 +1963,7 @@
     <string name="refractive_bars_and_controls">Fénytörő sávok és vezérlők</string>
     <string name="soft_blur_no_refraction">Lágy elmosás, fénytörés nélkül</string>
     <string name="pages_frosted_with_their_picture">Oldalak a saját képükből készült matt üvegen</string>
-    <string name="artist_album_and_playlist_pages_sit">Az előadó-, album- és lejátszásilista-oldalak a saját képükből készült matt üvegen állnak; a kezdőlap, a Könyvtár, a Keresés és a Beállítások pedig a most szóló dalból készült dérüvegen. Azt, hogy az oldalak átvegyék-e a képük színét, a Színek alatt állíthatod.</string>
+    <string name="artist_album_and_playlist_pages_sit">Az előadó-, album- és lejátszásilista-oldalak a saját képükből készült matt üvegen állnak; a kezdőlap, a Könyvtár, a Keresés és a Beállítások pedig a most szóló dalból készült dérüvegen. Azt, hogy az oldalak átvegyék-e a képük színét, az Oldalak alatt állíthatod.</string>
     <string name="calmer_quicker_animations">Nyugodtabb, gyorsabb animációk</string>
     <string name="no_drifting_backgrounds_no_artwork_bounce">Nincsenek sodródó hátterek, nem pattog a borító, gyorsabbak az átmenetek.</string>
     <string name="that_font_couldn_t_be_used">Ezt a betűtípust nem lehetett használni</string>
@@ -2005,7 +2005,7 @@
     <string name="more_room_swipe_down_from_the">Több hely; húzd le felülről, hogy lásd</string>
     <string name="the_clock_battery_and_notification_icons">A felül lévő óra, akkumulátor és értesítési ikonok rejtve maradnak, amíg a Prism nyitva van. Húzd le a felső széltől, és egy pillanatra megjelennek. A magával ragadó mód és a teljes képernyős videó a többi sávot is elrejti, mint eddig.</string>
     <string name="never_shows_only_the_icons_words">A Soha csak az ikonokat mutatja; a Csak szöveg csak a neveket.</string>
-    <string name="see_through_lets_the_page_show">Az Áttetsző átengedi az oldalt a sávon; a Tömör eltakarja. Maga az elmosás az Üvegtől jön (A Prism testreszabása → Üveg és hátterek).</string>
+    <string name="see_through_lets_the_page_show">Az Áttetsző átengedi az oldalt a sávon; a Tömör eltakarja. Maga az elmosás az Üvegtől jön (Téma és színek → Üveg).</string>
     <string name="slims_down_as_you_scroll">Görgetéskor keskenyebb lesz</string>
     <string name="swipe_sideways_on_a_tab_s">Húzd oldalra egy lap oldalán</string>
     <string name="a_sideways_swipe_on_a_tab">Egy lap saját oldalán oldalra húzva a mellette lévő lapra jutsz. Az oldalra görgethető sorok (és a Könyvtár saját oldalai) megtartják a saját húzásukat.</string>
@@ -2034,7 +2034,7 @@
     <string name="played_now_playing_and_up_next">„Lejátszott”, „Most szól” és „Következik”</string>
     <string name="off_the_queue_is_one_list">Kikapcsolva a lejátszási sor egyetlen lista a már lejátszott dalokától a következőkig.</string>
     <string name="moving_artwork_when_a_song_has">Mozgó borítókép, ha a dalnak van</string>
-    <string name="motion_artwork_and_video_covers_turn">Mozgó borítóképek és videóborítók. Egy dalnál a lejátszó ⋯ menüjéből kapcsolhatod ki őket. Hogy szóljanak-e mobiladaton, és a telefonon tároltakat a Letöltések, tárhely és adatforgalom alatt találod.</string>
+    <string name="motion_artwork_and_video_covers_turn">Mozgó borítóképek és videóborítók. Egy dalnál a lejátszó ⋯ menüjéből kapcsolhatod ki őket. Hogy szóljanak-e mobiladaton, és a telefonon tároltakat a Letöltések és adatok alatt találod.</string>
     <string name="the_animated_cover_plays_behind_everything">Az animált borító minden mögött szól</string>
     <string name="the_moving_artwork_fills_the_whole">A mozgó borítókép kitölti az egész lejátszót, a vezérlők alatt elsötétítve, maga a borító pedig az állóképet mutatja. Kifutó borítóképnél nem, az már széltől szélig mutatja.</string>
     <string name="the_cover_fills_the_screen_lyrics">A borító kitölti a képernyőt, rajta a dalszöveg</string>
@@ -2137,7 +2137,7 @@
     <string name="needed_for_sing">Az Énekléshez kell · %1$s</string>
     <string name="takes_the_singer_s_voice_out">Kiveszi az énekes hangját a dalokból, a telefonodon, karaokéhoz. Egyszer kell letölteni.</string>
     <string name="so_sing_starts_at_once_when">Hogy az Éneklés azonnal induljon, amikor bekapcsolod</string>
-    <string name="the_playing_song_and_the_next">A szóló dalt és a következőt a háttérben akkor is szétválasztjuk, ha az Éneklés ki van kapcsolva. Zenehallgatás közben több akkumulátort fogyaszt; mobiladaton a Letöltések, tárhely és adatforgalom → Mobiladat beállítást követi.</string>
+    <string name="the_playing_song_and_the_next">A szóló dalt és a következőt a háttérben akkor is szétválasztjuk, ha az Éneklés ki van kapcsolva. Zenehallgatás közben több akkumulátort fogyaszt; mobiladaton a Letöltések és adatok → Mobiladat beállítást követi.</string>
     <string name="using">Felhasználva: %1$s</string>
     <string name="songs_are_worked_out_again_the">A dalokat újra feldolgozzuk, amikor legközelebb énekled őket.</string>
     <string name="word_by_word_first_then_by">Előbb szóról szóra, aztán soronként</string>
@@ -2495,7 +2495,7 @@
     <string name="allow_notifications">Értesítések engedélyezése</string>
     <string name="turn_them_on_in_android_s">Kapcsold be őket a Prismhez az Android beállításaiban.</string>
     <string name="your_starting_point_made_from_what">A kiindulópontod, abból készítve, amit hallgatsz.</string>
-    <string name="the_replay_card_at_the_top">A Replay-kártya felül: az éved eddig (a megjelenését itt választhatod: Beállítások → A Prism testreszabása → Kezdőlap és Könyvtár)</string>
+    <string name="the_replay_card_at_the_top">A Replay-kártya felül: az éved eddig (a megjelenését itt választhatod: Beállítások → Kezdőlap és Könyvtár → Replay-kártya)</string>
     <string name="quick_picks_songs_around_the_artists">Gyors választások: dalok az általad hallgatott előadók körül, húzd oldalra a továbbiakért</string>
     <string name="made_for_you_daily_mixes_your">Neked készült: Napi mixek, a napszakhoz illő mixed és a Release Radar</string>
     <string name="the_grid_button_at_the_top">A felső rács gombbal rendezheted a kezdőlap szakaszait</string>
@@ -2516,12 +2516,12 @@
     <string name="let_prism_mix_your_music_songs">Hagyd, hogy a Prism keverje a zenédet: a dalok egymásba olvadnak, hangnemben és ütemre.</string>
     <string name="in_the_queue_tap_dj_then">A lejátszási sorban koppints a DJ-re, majd válaszd az Egyenletes, a Felépítés vagy a Levezetés lehetőséget</string>
     <string name="long_press_an_album_or_playlist">Nyomj hosszan egy albumra vagy lejátszási listára → Lejátszás DJ-szettként</string>
-    <string name="crossfade_settings_playback_sound_blends_any">Az Áttűnés (Beállítások → Lejátszás és hang) bármely két dalt összeolvaszt</string>
+    <string name="crossfade_settings_playback_sound_blends_any">Az Áttűnés (Beállítások → Lejátszás) bármely két dalt összeolvaszt</string>
     <string name="mixes_made_on_your_phone_from">A telefonodon készült mixek abból, amit hallgatsz. A zenehallgatásodról semmi nem hagyja el.</string>
     <string name="daily_mixes_group_the_artists_you">A Napi mixek összeillés szerint csoportosítják az általad hallgatott előadókat</string>
     <string name="release_radar_finds_new_music_from">A Release Radar új zenéket talál a követett előadóidtól</string>
     <string name="made_for_you_also_has_mixes">A Neked készültben a saját zenédből készült mixek és az Ismétlésen is ott vannak: csak a lejátszásaidból készülnek, és offline is működnek</string>
-    <string name="when_the_queue_ends_prism_s">Amikor a lejátszási sor véget ér, a Prism rádiója a zenédből válogat (Beállítások → Lejátszás és hang → Automatikus lejátszás forrása)</string>
+    <string name="when_the_queue_ends_prism_s">Amikor a lejátszási sor véget ér, a Prism rádiója a zenédből válogat (Beállítások → Lejátszás → Amikor a lejátszási sor véget ér)</string>
     <string name="tap_shuffle_twice_on_a_playlist">Koppints kétszer a keverésre egy lejátszási listán az Okos keveréshez: új dalok csúsznak be</string>
     <string name="not_for_me_and_leave_out">A „Nem nekem való” és a „Kihagyás az ízlésemből” távol tart dolgokat</string>
     <string name="find_anything_in_prism_music_or">Találj meg bármit a Prism Musicban, vagy nevezd meg a körülötted szóló dalt.</string>
@@ -2545,11 +2545,11 @@
     <string name="control_prism_from_a_browser_on">Vezéreld a Prismet a számítógéped böngészőjéből</string>
     <string name="hand_what_s_playing_to_another">Add át, ami szól, egy másik Prismet futtató telefonnak vagy táblagépnek</string>
     <string name="prism_takes_its_color_from_what">A Prism abból veszi a színét, ami szól. Változtass rajta, amennyit csak szeretnél.</string>
-    <string name="appearance_the_spectrum_s_colors_or">Megjelenés: a Spektrum színei (vagy egyszerű fehér), a kiemelőszíned, betűtípusok, ikonok és hátterek</string>
-    <string name="layout_the_tab_bar_your_tabs">Elrendezés: a lapsáv, a lapjaid és a minilejátszó</string>
+    <string name="appearance_the_spectrum_s_colors_or">Téma és színek, Szöveg és ikonok: a fény színei (vagy egyszerű fehér), a kiemelőszíned, betűtípusok, ikonok és hátterek</string>
+    <string name="layout_the_tab_bar_your_tabs">Lapok és minilejátszó: a lapsáv, a lapjaid és a minilejátszó</string>
     <string name="player_its_background_the_cover_and">Lejátszó: a háttere, a borító és ami rajta látszik</string>
     <string name="search_settings_from_the_box_at">Keress a Beállításokban a tetején lévő mezővel</string>
-    <string name="settings_customize_prism_color_every_choice">Beállítások → A Prism testreszabása → Színek: minden lehetőség megmutatja, hogyan néz ki, mielőtt választasz.</string>
+    <string name="settings_customize_prism_color_every_choice">Beállítások → Téma és színek: minden lehetőség megmutatja, hogyan néz ki, mielőtt választasz.</string>
     <string name="the_light_12_presets_white_black">A fény: 12 készlet, Fehér (világos módban Fekete), vagy saját színek</string>
     <string name="your_accent_any_color_from_a">A kiemelőszíned: bármilyen szín, színkerékről, kódból vagy pipettával</string>
     <string name="the_page_background_plain_tinted_with">Az oldalháttér: egyszerű, a kiemelőszíneddel árnyalt, vagy saját szín</string>
@@ -2560,14 +2560,14 @@
     <string name="pin_prism_playlists_to_home_customize">Tűzz ki Prism-lejátszási listákat a kezdőlapra (Kezdőlap testreszabása → Kitűzött lejátszási listák)</string>
     <string name="song_credits_in_any_song_s">A dal közreműködői bármely dal menüjében</string>
     <string name="see_which_downloads_failed_and_why">Nézd meg, mely letöltések hiúsultak meg, és miért</string>
-    <string name="settings_customize_prism_looks_your_whole">Beállítások → A Prism testreszabása → Arculatok: a teljes megjelenésed, egy koppintással mentve, váltva és megosztva.</string>
+    <string name="settings_customize_prism_looks_your_whole">Beállítások → Arculatok: a teljes megjelenésed, egy koppintással mentve, váltva és megosztva.</string>
     <string name="try_prism_s_own_paper_midnight">Próbáld ki a Prism sajátjait: Papír, Éjfél, Neon, Lágy, Stúdió és Bakelit</string>
     <string name="save_yours_update_it_when_you">Mentsd el a tiédet, frissítsd, amikor módosítod, és oszd meg QR-kódként, kódként vagy fájlként</string>
     <string name="browse_looks_people_shared_under_from">Böngészd a mások által megosztott arculatokat A közösségtől alatt</string>
     <string name="one_look_by_day_and_another">Egy arculat nappalra, egy másik éjszakára, napkeltekor és napnyugtakor</string>
     <string name="every_look_page_shows_home_the">Minden megjelenési oldal mutatja a kezdőlapot, a lejátszót és a dalszöveget, ahogy módosítod őket; a Visszavonás visszavon egy módosítást</string>
-    <string name="customize_by_tapping_hold_the_settings">Testreszabás koppintással: tartsd lenyomva a Beállítások lapot, vagy kapcsold be a Megjelenésben, aztán koppints a minilejátszóra, a lapsávra, a lejátszóra vagy egy kezdőlap-szakaszra</string>
-    <string name="settings_customize_prism_player_or_player">Beállítások → A Prism testreszabása → Lejátszó, vagy ⋯ → Lejátszó beállításai magán a lejátszón.</string>
+    <string name="customize_by_tapping_hold_the_settings">Testreszabás koppintással: tartsd lenyomva a Beállítások lapot, vagy kapcsold be az Arculatokban, aztán koppints a minilejátszóra, a lapsávra, a lejátszóra vagy egy kezdőlap-szakaszra</string>
+    <string name="settings_customize_prism_player_or_player">Beállítások → Lejátszó, vagy ⋯ → Lejátszó beállításai magán a lejátszón.</string>
     <string name="layouts_standard_a_big_cover_lyrics">Elrendezések: Normál, nagy Borító, Dalszöveg elöl, Minimál, Bakelit vagy Kazetta (lejátszás közben forognak)</string>
     <string name="a_visualizer_if_you_d_like">Vizualizáció, ha szeretnél: oszlopok, hullám, gyűrű, pulzálás vagy ragyogás (ki van kapcsolva, amíg nem választod)</string>
     <string name="pick_the_buttons_under_the_controls">Válaszd ki a vezérlők alatti gombokat (a sebesség is köztük van), és a kettőt a lejátszás mellett az értesítésben és az autóban</string>
@@ -2578,7 +2578,7 @@
     <string name="prism_tells_android_which_of_its">A Prism megmondja az Androidnak, mely részeit készítse elő, és a szalagcímből érkező frissítések előkészítve jönnek, így többé nem lassúak</string>
     <string name="less_work_while_lists_scroll_while">Kevesebb munka listák görgetése, a Keresésbe gépelés és dalok lejátszása közben</string>
     <string name="if_something_still_stutters_settings_backup">Ha valami még mindig akadozik, a Beállítások → Biztonsági mentés és névjegy → Diagnosztika feljegyzi, hol történt, megosztáshoz</string>
-    <string name="settings_customize_prism_lyrics_how_your">Beállítások → A Prism testreszabása → Dalszöveg: hogyan néz ki a dalszöveged, minden lehetőséghez példával.</string>
+    <string name="settings_customize_prism_lyrics_how_your">Beállítások → Dalszöveg és Éneklés: hogyan néz ki a dalszöveged, minden lehetőséghez példával.</string>
     <string name="six_styles_prism_classic_karaoke_bold">Hat stílus: Prism, Klasszikus karaoke, Merész kártya, Ragyogás, Írógép és Nyugodt</string>
     <string name="the_sung_line_and_the_others">Az énekelt sor és a többi fehérben, a fényedben, a kiemelőszínben, a borító színében vagy a sajátodban</string>
     <string name="weight_line_spacing_how_dim_the">Vastagság, sortávolság, mennyire halványak a többi sorok, az elmosás erőssége, nagybetűk és árnyék</string>
@@ -2588,8 +2588,8 @@
     <string name="a_few_things_you_asked_for">Néhány dolog, amit kértetek.</string>
     <string name="library_history_what_you_played_by">Könyvtár → Előzmények: amit hallgattál, naponként, ezen a telefonon vagy a fiókodban</string>
     <string name="liked_a_song_and_its_video">Kedvelted a dalt és a videóját is? Egyszer jelennek meg, dalként</string>
-    <string name="prism_s_own_volume_apart_from">A Prism saját hangereje, a telefonétól függetlenül (Beállítások → A Prism testreszabása → Lejátszó)</string>
-    <string name="hide_the_status_bar_customize_prism">Állapotsor elrejtése (A Prism testreszabása → Lapok és minilejátszó)</string>
+    <string name="prism_s_own_volume_apart_from">A Prism saját hangereje, a telefonétól függetlenül (Beállítások → Lejátszó)</string>
+    <string name="hide_the_status_bar_customize_prism">Állapotsor elrejtése (Beállítások → Lapok és minilejátszó)</string>
     <string name="settings_pages_are_tidier_tap_beside">A beállítások oldalai rendezettebbek: koppints a beállítás melletti ⓘ jelre a részletekért</string>
     <string name="library_s_tiles_the_edit_button">A Könyvtár csempéi: a szerkesztés gomb a Könyvtár tetején</string>
     <string name="customize_home_the_button_at_the">A Kezdőlap testreszabása (a gomb a kezdőlap tetején) többet tud.</string>
@@ -2610,10 +2610,10 @@
     <string name="artists_and_songs_with_their_pictures">Előadók és dalok a képükkel gépelés közben</string>
     <string name="results_already_in_your_library_right">A könyvtáradban már meglévő találatok, közvetlenül a legjobb után</string>
     <string name="settings_are_sorted_by_what_they">A beállítások aszerint vannak rendezve, mit csinálnak.</string>
-    <string name="everything_about_how_prism_looks_is">Minden, ami a Prism megjelenéséről szól, A Prism testreszabása alatt van</string>
-    <string name="gestures_and_buttons_in_controls_gestures">Mozdulatok és gombok a Vezérlők és mozdulatok alatt</string>
+    <string name="everything_about_how_prism_looks_is">Minden, ami a Prism megjelenéséről szól, a „Tedd a magadévá” alatt van</string>
+    <string name="gestures_and_buttons_in_controls_gestures">Mozdulatok és gombok a Hallgatás alatt</string>
     <string name="every_mobile_data_choice_on_one">Minden mobiladat-beállítás egy oldalon</string>
-    <string name="android_auto_speakers_discord_and_last">Android Auto, hangszórók, Discord és Last.fm az Eszközök és kapcsolatok alatt</string>
+    <string name="android_auto_speakers_discord_and_last">Android Auto, hangszórók, Discord és Last.fm a Kapcsolatok alatt</string>
     <string name="performance_mode_at_the_top_for">Teljesítmény mód, felül, lassabb telefonokhoz</string>
     <string name="make_the_pieces_of_prism_yours">Tedd a magadévá a Prism darabjait.</string>
     <string name="covers_as_circles_squircles_flowers_arches">Borítók körként, squircle-ként, virágként, boltívként… dalokhoz, albumokhoz, előadókhoz és a lejátszóhoz</string>
@@ -2624,20 +2624,20 @@
     <string name="from_your_requests">A kéréseitekből.</string>
     <string name="rearrange_your_playlists_songs_rearrange_songs">Rendezd át a lejátszási listáid dalait: ⋯ → Dalok átrendezése</string>
     <string name="swipe_a_song_out_of_the">Húzz ki egy dalt a lejátszási sorból, húzd fel a minilejátszót a megnyitásához</string>
-    <string name="the_light_from_the_playing_cover">A fény a szóló borítóból: Színek → A borítóból</string>
+    <string name="the_light_from_the_playing_cover">A fény a szóló borítóból: Téma és színek → A fény → A borítóból</string>
     <string name="ribbons_a_progress_bar_with_strands">Szalagok, egy folyamatjelző, amelyen szálak áramlanak</string>
     <string name="a_bold_title_on_the_player">Félkövér cím a lejátszón, egész albumok lejátszási listába, és YouTube-linkek megosztáshoz</string>
-    <string name="settings_playback_sound">Beállítások → Lejátszás és hang.</string>
+    <string name="settings_playback_sound">Beállítások → Lejátszás, és Beállítások → Hang és minőség.</string>
     <string name="speed_pitch_slowed_sped_up_or">Sebesség és hangmagasság: lassított, gyorsított vagy bármilyen hangnem, a lejátszó ⋯ menüjéből</string>
     <string name="how_songs_cross_in_a_crossfade">Hogyan érnek össze a dalok áttűnéskor, jel ott, ahol a következő belép, és áttűnő borítók</string>
     <string name="normalize_volume_s_level_and_albums">A Hangerő kiegyenlítésének szintje, és albumok úgy, ahogy vannak</string>
     <string name="your_own_equalizer_presets_shared_as">Saját hangszínszabályzó-készletek, kódként megosztva, egy az autóhoz és egy a fülhallgatódhoz</string>
     <string name="fades_for_the_sleep_timer_and">Halkítás az elalváskapcsolóhoz, a szünethez és a lejátszáshoz</string>
     <string name="liked_how_prism_1_6_looked">Tetszett, ahogy a Prism 1.6 kinézett? Visszatért, választhatóan.</string>
-    <string name="the_classic_look_customize_prism_looks">A Klasszikus arculat: A Prism testreszabása → Arculatok</string>
+    <string name="the_classic_look_customize_prism_looks">A Klasszikus arculat: Beállítások → Arculatok</string>
     <string name="or_only_its_icons_its_bold">Vagy csak az ikonjai, a félkövér betűi vagy az egyszerű vezérlői</string>
     <string name="the_player_s_buttons_apart_instead">A lejátszó gombjai külön, kapszula helyett</string>
-    <string name="last_fm_scrobbling_devices_connections_and">Last.fm-scrobbling (Eszközök és kapcsolatok), és Replay bármilyen időszakra</string>
+    <string name="last_fm_scrobbling_devices_connections_and">Last.fm-scrobbling (Fiókok és megosztás), és Replay bármilyen időszakra</string>
     <string name="pick_several_songs_in_the_queue">Jelölj ki több dalt a lejátszási sorban, hogy együtt helyezd át vagy távolítsd el őket, vagy zárold a sorrendet</string>
     <string name="choose_what_goes_in_a_backup">Válaszd ki, mi kerüljön a biztonsági mentésbe</string>
     <string name="swipe_up_on_the_player_for">Húzd fel a lejátszón a lejátszási sorért, rögzítés álló helyzetben, szünet némításkor</string>
@@ -3794,7 +3794,7 @@
     <string name="the_ambient_frost_behind_home_search_all">A Hangulat dérüveg a kezdőlap, a Keresés, a Könyvtár, a Replay és a Beállítások mögött (az Automatikus megtartja benne a borító színeit, az Egyszerű szürkévé teszi, egy árnyalat színezi), ezek az oldalak, amikor a matt üveg ki van kapcsolva, valamint a lapok és párbeszédablakok. Nem a lejátszó, és nem az album-, előadó- és lejátszásilista-oldalak, amelyek a képük színeit veszik át.</string>
     <string name="home_has_the_background_glass_backgrounds_all">A kezdőlapon a(z) %1$s háttér van (Üveg és hátterek), ennek a színnek a tetején, így ott csak kicsit látszik. Válaszd ott a Hangulatot, hogy teljesen lásd</string>
     <string name="secondary_text_artists_times_notes_dividers_all">Másodlagos szöveg (előadók, időtartamok, megjegyzések), elválasztók és körvonalak az oldalakon, lapokon és menükben. A Közepes és a Magas a kiemelőszínt is erősebbé teszi, hogy könnyebben olvasható legyen. A lejátszó saját fehér szövege a borító fölött változatlan marad.</string>
-    <string name="the_accent_on_artist_album_and_all">A kiemelőszín az előadó-, album- és lejátszásilista-oldalakon, és a dalból, albumból vagy előadóból megnyitott menükben (hosszú nyomás vagy ⋯). A matt hátterük mindenképp a kép színeit veszi át (Üveg és hátterek).</string>
+    <string name="the_accent_on_artist_album_and_all">A kiemelőszín az előadó-, album- és lejátszásilista-oldalakon, és a dalból, albumból vagy előadóból megnyitott menükben (hosszú nyomás vagy ⋯). A matt hátterük mindenképp a kép színeit veszi át (Üveg).</string>
     <string name="tap_the_line_under_the_player_all">Koppints a lejátszó vezérlői alatti sorra (azt mutatja, melyik eszköz szól), és válassz hangszórót, tévét vagy erősítőt. Ezen a Wi-Fi-n kell lennie Google Casttal (Chromecast, Google TV, beépített Casttal rendelkező hangszórók) vagy DLNA / UPnP-vel (néha médiamegosztásnak hívják). A lejátszási sor, a dalszöveg és a vezérlők a telefonon maradnak, a hangerőgombjai pedig a hangszóró hangerejét állítják. A hangszínszabályzó, az Áttűnés, az Éneklés és a videók a telefon sajátjai, ezért átküldés közben ki vannak kapcsolva.</string>
     <string name="nothing_new_from_your_artists_in_all">Az elmúlt három hónapban nincs újdonság az előadóidtól. A Prism néhány naponta megnézi a csillagozott, mentett és legtöbbet hallgatott előadóidat; az első alkalommal csak azt tanulja meg, ami már megjelent, így az új zenék a következőtől jelennek meg.</string>
     <string name="tunemymusic_copies_your_playlists_liked_songs_all">A TuneMyMusic átmásolja a lejátszási listáidat, a Kedvelt dalokat is beleértve, a YouTube Music-fiókodba. Ugyanezt a szolgáltatást használja a YouTube Music saját alkalmazása is az átvitelhez.</string>
@@ -4237,14 +4237,14 @@
     <string name="shaped_by_the_crossfade">Az áttűnés formájában</string>
     <string name="crossfade_shape_keywords">áttűnés keverés elhalkulás felhangosodás elkeskenyedés forma görbe csúszka folyamatjelző tekerés</string>
     <string name="the_end_tapers_as_the_song_fades">A vége elkeskenyedik, ahogy a dal elhalkul</string>
-    <string name="crossfade_shape_info">A sáv vége felveszi annak a formáját, ahogyan a dal elhalkul, a következő dal sávja pedig úgy nő ki, ahogy a dal felhangosodik, az áttűnésed típusa szerint (Hang → Áttűnés). Csak akkor, ha áttűnés következik: album számai között, átküldés közben, epizódoknál és élő közvetítéseknél nem. Automatikus hossznál akkor jelenik meg, amikor az áttűnés már meg van tervezve. A Hullámforma és a Szalagok helyette a jelölést tartják meg.</string>
+    <string name="crossfade_shape_info">A sáv vége felveszi annak a formáját, ahogyan a dal elhalkul, a következő dal sávja pedig úgy nő ki, ahogy a dal felhangosodik, az áttűnésed típusa szerint (Lejátszás → Áttűnés). Csak akkor, ha áttűnés következik: album számai között, átküldés közben, epizódoknál és élő közvetítéseknél nem. Automatikus hossznál akkor jelenik meg, amikor az áttűnés már meg van tervezve. A Hullámforma és a Szalagok helyette a jelölést tartják meg.</string>
     <string name="imp_title">Hozd át az előzményeidet</string>
     <string name="imp_subtitle">A Spotify-ról, a YouTube Musicról és a Last.fm-ről, ezen a telefonon beolvasva</string>
     <string name="imp_row_detail">Spotify, YouTube Music, Last.fm</string>
     <string name="imp_group_info">Hozd át a lejátszásaidat, Kedvelt dalaidat és lejátszási listáidat a Spotify adatletöltéséből, a YouTube Music-előzményeidet a Google Takeoutból, vagy a Last.fm-scrobble-jaidat. A fájlok beolvasása ezen a telefonon történik; az egyes dalok megtalálásához a Prism rákeres, ahogy a keresője is teszi.</string>
     <string name="imp_keywords">importálás spotify adatletöltés takeout google youtube music előzmények last.fm scrobble kedvelt dalok lejátszási listák átvitel áthozatal</string>
     <string name="imp_bring_from">Áthozatal innen</string>
-    <string name="imp_bring_from_info">Spotify: a spotify.com oldalon, Fiók → Adatvédelem → Adatok letöltése. A fiókadatok néhány napon belül megérkeznek (egy év lejátszásai, Kedvelt dalok, lejátszási listák); a bővített streamelési előzmények akár 30 nap alatt (minden lejátszás a csatlakozásod óta). Válaszd ki a zipet, amelyben érkezik, vagy a benne lévő fájlokat.\n\nYouTube Music: a takeout.google.com oldalon válaszd a YouTube és YouTube Music lehetőséget, csak az előzményeket, JSON formátumban. Válaszd ki a zipet vagy a watch-history.json fájlt.\n\nLast.fm: kapcsold össze az Eszközök és kapcsolatok alatt, és a Prism beolvassa a scrobble-jaidat.\n\nSemmi nem kerül el sehová. Az egyes dalok megtalálásához a Prism rákeres, ahogy a keresője is teszi.</string>
+    <string name="imp_bring_from_info">Spotify: a spotify.com oldalon, Fiók → Adatvédelem → Adatok letöltése. A fiókadatok néhány napon belül megérkeznek (egy év lejátszásai, Kedvelt dalok, lejátszási listák); a bővített streamelési előzmények akár 30 nap alatt (minden lejátszás a csatlakozásod óta). Válaszd ki a zipet, amelyben érkezik, vagy a benne lévő fájlokat.\n\nYouTube Music: a takeout.google.com oldalon válaszd a YouTube és YouTube Music lehetőséget, csak az előzményeket, JSON formátumban. Válaszd ki a zipet vagy a watch-history.json fájlt.\n\nLast.fm: kapcsold össze itt: Beállítások → Fiókok és megosztás, és a Prism beolvassa a scrobble-jaidat.\n\nSemmi nem kerül el sehová. Az egyes dalok megtalálásához a Prism rákeres, ahogy a keresője is teszi.</string>
     <string name="imp_spotify_detail">Az adatletöltése: lejátszások, Kedvelt dalok, lejátszási listák</string>
     <string name="imp_takeout_detail">A Google Takeout megtekintési előzményei</string>
     <string name="imp_lastfm_detail">A scrobble-jaid, %1$s néven</string>
@@ -4349,7 +4349,7 @@
     <string name="explicit_show">Megjelenítés</string>
     <string name="explicit_skip">Kihagyás</string>
     <string name="explicit_hide">Elrejtés</string>
-    <string name="explicit_skipped">A szókimondó dalok kimaradnak (Beállítások → Lejátszás és hang)</string>
+    <string name="explicit_skipped">A szókimondó dalok kimaradnak (Beállítások → Lejátszás)</string>
     <string name="explicit_none_left">Nincs mit lejátszani: itt minden dal szókimondó</string>
     <string name="change_cover">Borító módosítása</string>
     <string name="cover_changed">Borító módosítva</string>
@@ -4399,7 +4399,7 @@
     <string name="replay_last_weeks">Utolsó %1$d hét</string>
     <string name="replay_last_days">Utolsó %1$d nap</string>
     <string name="replay_story_font">Történetek betűi</string>
-    <string name="replay_story_font_info">Hogyan szedik a szöveget a Replay és a Rewind történetei: a Prism plakátbetűivel, vagy a Prismhez választott betűtípussal (Szöveg).</string>
+    <string name="replay_story_font_info">Hogyan szedik a szöveget a Replay és a Rewind történetei: a Prism plakátbetűivel, vagy a Prismhez választott betűtípussal (Szöveg és ikonok).</string>
     <string name="replay_story_font_keywords">betűtípus tipográfia font történetek rewind wrapped</string>
     <string name="replay_story_font_poster">Plakátbetű</string>
     <string name="replay_story_font_own">Saját betűtípusod</string>
@@ -4598,7 +4598,7 @@
         <item quantity="other">%1$s dal vár választásra</item>
     </plurals>
     <string name="ytlive_spotify_connect">A használatához csatlakoztasd a Spotifyt</string>
-    <string name="ytlive_spotify_recent_off">Kikapcsolva: kapcsold be a Legutóbbi lejátszásokat a Spotify oldalán</string>
+    <string name="ytlive_spotify_recent_off">Kikapcsolva: kapcsold be a Legutóbbi lejátszásokat itt: Beállítások → Fiókok és megosztás → Spotify</string>
     <string name="ytlive_connection_on">Naprakész előzmények · Be</string>
     <string name="ytlive_connection_off">Tartsd naprakészen az előzményeidet · Ki</string>
     <string name="ytlive_connection_signed_out">Jelentkezz be az előzményeid naprakészen tartásához</string>
@@ -4614,7 +4614,7 @@
     <string name="dj_in_the_queue_keywords">dj mód gomb lejátszási sor fejléc felül hely elrejtés</string>
     <string name="menu_lyrics_only_way">Addig marad, amíg ez a lejátszó egyetlen útja a dalszöveghez</string>
     <string name="smart_downloads_offer_title">Letöltöd a dalokat, mielőtt szükséged lenne rájuk?</string>
-    <string name="smart_downloads_offer_body">Az Okos letöltések offline készenlétben tartják a dalokat, amelyeket valószínűleg meghallgatsz: legfeljebb 1 GB, Wi-Fi-n. Bármikor módosíthatod a Letöltések, tárhely és adatforgalom alatt.</string>
+    <string name="smart_downloads_offer_body">Az Okos letöltések offline készenlétben tartják a dalokat, amelyeket valószínűleg meghallgatsz: legfeljebb 1 GB, Wi-Fi-n. Bármikor módosíthatod itt: Beállítások → Letöltések és adatok.</string>
     <!-- 1.8.2 -->
     <string name="loading_list">„%1$s” betöltése…</string>
     <string name="song_details">A dal adatai</string>
@@ -4855,7 +4855,7 @@
     <string name="glass_blur">Elmosás</string>
     <string name="glass_blur_info">Milyen messzire kenődnek szét az üveg mögötti színek. Az apró dolgok, például a szöveg, a Folyékony üveg mögött halvány körvonalat őriznek, akármekkora is ez; a Matt üveg ezeket is elolvasztja. A 100% a Prism saját értéke. Felette egy lassabb telefonnak nehezebb dolga van.</string>
     <string name="glass_frost">Mattság</string>
-    <string name="glass_frost_info">Milyen vastag a fátyol az üveg fölött: kevesebb több mindent átenged abból, ami mögötte van, több tejesebbé teszi világos módban és sötétebbé sötétben, és könnyebb olvasni a zsúfolt képek fölött. A 100% a Prism saját értéke. A saját háttérrel rendelkező fülsáv (Elrendezés, Fülsáv) megtartja a hátterét.</string>
+    <string name="glass_frost_info">Milyen vastag a fátyol az üveg fölött: kevesebb több mindent átenged abból, ami mögötte van, több tejesebbé teszi világos módban és sötétebbé sötétben, és könnyebb olvasni a zsúfolt képek fölött. A 100% a Prism saját értéke. A saját háttérrel rendelkező fülsáv (Lapok és minilejátszó → Navigációs sáv) megtartja a hátterét.</string>
     <string name="glass_needs_android_12">Ezekhez az Android 12-vel érkezett elmosás kell. Ezen a telefonon a sávok tömörek, így az elmosás és a mattság beállításának nincs mit módosítania.</string>
     <string name="glass_on_more_of_the_screen">Üveg a képernyő nagyobb részén</string>
     <string name="glass_on_more_of_the_screen_detail">Kártyák, chipek, kerek gombok és a Visszavonás sáv</string>
@@ -5187,6 +5187,7 @@
     <string name="the_day_before">az azelőtti nap</string>
     <string name="the_week_before">az azelőtti hét</string>
     <string name="root_app">Alkalmazás</string>
+    <string name="root_listening">Hallgatás</string>
     <string name="root_theme_colors">Téma és színek</string>
     <string name="root_text_icons">Szöveg és ikonok</string>
     <string name="root_sound_quality">Hang és minőség</string>
