@@ -847,7 +847,6 @@
     <string name="local_files">الملفات المحلية</string>
     <string name="music_files_on_this_phone">ملفات الموسيقى على هذا الهاتف</string>
     <string name="everything_you_ve_played">كل ما شغّلته</string>
-    <string name="hold_and_drag_or_use_the">اضغط مطولًا واسحب، أو استخدم الأسهم</string>
     <string name="open_a_link">فتح رابط</string>
     <string name="rearrange">إعادة الترتيب</string>
     <string name="search_liked_songs">البحث في الأغاني التي نالت إعجابك</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">إلغاء التثبيت</string>
     <string name="pin_to_the_top">التثبيت في الأعلى</string>
     <string name="rearrange_playlists">إعادة ترتيب قوائم التشغيل</string>
-    <string name="move_up_2">نقل %1$s لأعلى</string>
-    <string name="move_down_2">نقل %1$s لأسفل</string>
     <string name="the_playlist">قائمة التشغيل</string>
     <string name="open_the_playlist">فتح قائمة التشغيل</string>
     <string name="update_now">التحديث الآن</string>

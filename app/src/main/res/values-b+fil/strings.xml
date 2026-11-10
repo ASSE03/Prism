@@ -847,7 +847,6 @@
     <string name="local_files">Mga lokal na file</string>
     <string name="music_files_on_this_phone">Mga music file sa phone na ito</string>
     <string name="everything_you_ve_played">Lahat ng napakinggan mo</string>
-    <string name="hold_and_drag_or_use_the">Pindutin nang matagal at i-drag, o gamitin ang mga arrow</string>
     <string name="open_a_link">Magbukas ng link</string>
     <string name="rearrange">Ayusin</string>
     <string name="search_liked_songs">Maghanap sa mga nagustuhang kanta</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">I-unpin</string>
     <string name="pin_to_the_top">I-pin sa itaas</string>
     <string name="rearrange_playlists">Ayusin ang mga playlist</string>
-    <string name="move_up_2">Ilipat pataas ang %1$s</string>
-    <string name="move_down_2">Ilipat pababa ang %1$s</string>
     <string name="the_playlist">Ang playlist</string>
     <string name="open_the_playlist">Buksan ang playlist</string>
     <string name="update_now">I-update ngayon</string>

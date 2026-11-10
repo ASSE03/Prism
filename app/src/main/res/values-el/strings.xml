@@ -847,7 +847,6 @@
     <string name="local_files">Τοπικά αρχεία</string>
     <string name="music_files_on_this_phone">Αρχεία μουσικής σε αυτό το τηλέφωνο</string>
     <string name="everything_you_ve_played">Ό,τι έχεις παίξει</string>
-    <string name="hold_and_drag_or_use_the">Κράτα πατημένο και σύρε, ή χρησιμοποίησε τα βέλη</string>
     <string name="open_a_link">Άνοιγμα συνδέσμου</string>
     <string name="rearrange">Αναδιάταξη</string>
     <string name="search_liked_songs">Αναζήτηση στα αγαπημένα τραγούδια</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">Ξεκαρφίτσωμα</string>
     <string name="pin_to_the_top">Καρφίτσωμα στην κορυφή</string>
     <string name="rearrange_playlists">Αναδιάταξη playlist</string>
-    <string name="move_up_2">Μετακίνηση πάνω: %1$s</string>
-    <string name="move_down_2">Μετακίνηση κάτω: %1$s</string>
     <string name="the_playlist">Η playlist</string>
     <string name="open_the_playlist">Άνοιγμα της playlist</string>
     <string name="update_now">Ενημέρωση τώρα</string>

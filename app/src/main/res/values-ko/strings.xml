@@ -847,7 +847,6 @@
     <string name="local_files">로컬 파일</string>
     <string name="music_files_on_this_phone">이 휴대전화의 음악 파일</string>
     <string name="everything_you_ve_played">지금까지 들은 모든 곡</string>
-    <string name="hold_and_drag_or_use_the">길게 눌러 드래그하거나 화살표를 사용하세요</string>
     <string name="open_a_link">링크 열기</string>
     <string name="rearrange">순서 바꾸기</string>
     <string name="search_liked_songs">좋아요 표시한 곡 검색</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">고정 해제</string>
     <string name="pin_to_the_top">맨 위에 고정</string>
     <string name="rearrange_playlists">재생목록 순서 바꾸기</string>
-    <string name="move_up_2">%1$s 위로 이동</string>
-    <string name="move_down_2">%1$s 아래로 이동</string>
     <string name="the_playlist">재생목록</string>
     <string name="open_the_playlist">재생목록 열기</string>
     <string name="update_now">지금 업데이트</string>

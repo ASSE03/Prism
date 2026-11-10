@@ -847,7 +847,6 @@
     <string name="local_files">Lokala filer</string>
     <string name="music_files_on_this_phone">Musikfiler på den här telefonen</string>
     <string name="everything_you_ve_played">Allt du har spelat</string>
-    <string name="hold_and_drag_or_use_the">Håll ned och dra, eller använd pilarna</string>
     <string name="open_a_link">Öppna en länk</string>
     <string name="rearrange">Ordna om</string>
     <string name="search_liked_songs">Sök bland gillade låtar</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">Lossa</string>
     <string name="pin_to_the_top">Fäst högst upp</string>
     <string name="rearrange_playlists">Ordna om spellistor</string>
-    <string name="move_up_2">Flytta upp %1$s</string>
-    <string name="move_down_2">Flytta ned %1$s</string>
     <string name="the_playlist">Spellistan</string>
     <string name="open_the_playlist">Öppna spellistan</string>
     <string name="update_now">Uppdatera nu</string>

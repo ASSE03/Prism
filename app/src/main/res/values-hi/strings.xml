@@ -847,7 +847,6 @@
     <string name="local_files">लोकल फ़ाइलें</string>
     <string name="music_files_on_this_phone">इस फ़ोन की म्यूज़िक फ़ाइलें</string>
     <string name="everything_you_ve_played">जो कुछ आपने सुना है</string>
-    <string name="hold_and_drag_or_use_the">दबाकर खींचें, या तीरों का इस्तेमाल करें</string>
     <string name="open_a_link">लिंक खोलें</string>
     <string name="rearrange">क्रम बदलें</string>
     <string name="search_liked_songs">पसंद किए गाने खोजें</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">अनपिन करें</string>
     <string name="pin_to_the_top">सबसे ऊपर पिन करें</string>
     <string name="rearrange_playlists">प्लेलिस्ट का क्रम बदलें</string>
-    <string name="move_up_2">%1$s ऊपर ले जाएं</string>
-    <string name="move_down_2">%1$s नीचे ले जाएं</string>
     <string name="the_playlist">प्लेलिस्ट</string>
     <string name="open_the_playlist">प्लेलिस्ट खोलें</string>
     <string name="update_now">अभी अपडेट करें</string>

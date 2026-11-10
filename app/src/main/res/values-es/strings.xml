@@ -847,7 +847,6 @@
     <string name="local_files">Archivos locales</string>
     <string name="music_files_on_this_phone">Archivos de música en este teléfono</string>
     <string name="everything_you_ve_played">Todo lo que has escuchado</string>
-    <string name="hold_and_drag_or_use_the">Mantén presionado y arrastra, o usa las flechas</string>
     <string name="open_a_link">Abrir un enlace</string>
     <string name="rearrange">Reordenar</string>
     <string name="search_liked_songs">Buscar en canciones que te gustan</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">No fijar</string>
     <string name="pin_to_the_top">Fijar arriba</string>
     <string name="rearrange_playlists">Reordenar playlists</string>
-    <string name="move_up_2">Subir %1$s</string>
-    <string name="move_down_2">Bajar %1$s</string>
     <string name="the_playlist">La playlist</string>
     <string name="open_the_playlist">Abrir la playlist</string>
     <string name="update_now">Actualizar ahora</string>

@@ -847,7 +847,6 @@
     <string name="local_files">Místní soubory</string>
     <string name="music_files_on_this_phone">Hudební soubory v tomto telefonu</string>
     <string name="everything_you_ve_played">Vše, co jsi hrál(a)</string>
-    <string name="hold_and_drag_or_use_the">Podrž a táhni, nebo použij šipky</string>
     <string name="open_a_link">Otevřít odkaz</string>
     <string name="rearrange">Přeuspořádat</string>
     <string name="search_liked_songs">Hledat v oblíbených skladbách</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">Odepnout</string>
     <string name="pin_to_the_top">Připnout nahoru</string>
     <string name="rearrange_playlists">Přeuspořádat playlisty</string>
-    <string name="move_up_2">Posunout %1$s nahoru</string>
-    <string name="move_down_2">Posunout %1$s dolů</string>
     <string name="the_playlist">Playlist</string>
     <string name="open_the_playlist">Otevřít playlist</string>
     <string name="update_now">Aktualizovat teď</string>

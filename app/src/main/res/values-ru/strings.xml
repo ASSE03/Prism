@@ -847,7 +847,6 @@
     <string name="local_files">Локальные файлы</string>
     <string name="music_files_on_this_phone">Музыкальные файлы на этом телефоне</string>
     <string name="everything_you_ve_played">Всё, что ты слушал</string>
-    <string name="hold_and_drag_or_use_the">Удерживай и перетаскивай или используй стрелки</string>
     <string name="open_a_link">Открыть ссылку</string>
     <string name="rearrange">Изменить порядок</string>
     <string name="search_liked_songs">Поиск по понравившимся</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">Открепить</string>
     <string name="pin_to_the_top">Закрепить вверху</string>
     <string name="rearrange_playlists">Изменить порядок плейлистов</string>
-    <string name="move_up_2">Переместить «%1$s» вверх</string>
-    <string name="move_down_2">Переместить «%1$s» вниз</string>
     <string name="the_playlist">Плейлист</string>
     <string name="open_the_playlist">Открыть плейлист</string>
     <string name="update_now">Обновить сейчас</string>

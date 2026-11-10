@@ -847,7 +847,6 @@
     <string name="local_files">Fail setempat</string>
     <string name="music_files_on_this_phone">Fail muzik pada telefon ini</string>
     <string name="everything_you_ve_played">Semua yang pernah anda mainkan</string>
-    <string name="hold_and_drag_or_use_the">Tahan dan seret, atau gunakan anak panah</string>
     <string name="open_a_link">Buka pautan</string>
     <string name="rearrange">Susun semula</string>
     <string name="search_liked_songs">Cari lagu yang disukai</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">Nyahsemat</string>
     <string name="pin_to_the_top">Semat ke atas</string>
     <string name="rearrange_playlists">Susun semula senarai main</string>
-    <string name="move_up_2">Alih %1$s ke atas</string>
-    <string name="move_down_2">Alih %1$s ke bawah</string>
     <string name="the_playlist">Senarai main</string>
     <string name="open_the_playlist">Buka senarai main</string>
     <string name="update_now">Kemas kini sekarang</string>

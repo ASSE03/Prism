@@ -847,7 +847,6 @@
     <string name="local_files">فایل‌های محلی</string>
     <string name="music_files_on_this_phone">فایل‌های موسیقی روی این گوشی</string>
     <string name="everything_you_ve_played">هر چیزی که پخش کرده‌اید</string>
-    <string name="hold_and_drag_or_use_the">نگه دارید و بکشید، یا از پیکان‌ها استفاده کنید</string>
     <string name="open_a_link">باز کردن پیوند</string>
     <string name="rearrange">چیدن دوباره</string>
     <string name="search_liked_songs">جستجو در آهنگ‌های پسندیده</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">برداشتن سنجاق</string>
     <string name="pin_to_the_top">سنجاق به بالا</string>
     <string name="rearrange_playlists">چیدن دوباره فهرست‌های پخش</string>
-    <string name="move_up_2">انتقال %1$s به بالا</string>
-    <string name="move_down_2">انتقال %1$s به پایین</string>
     <string name="the_playlist">فهرست پخش</string>
     <string name="open_the_playlist">باز کردن فهرست پخش</string>
     <string name="update_now">به‌روزرسانی الان</string>

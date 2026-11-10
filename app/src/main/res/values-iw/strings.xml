@@ -847,7 +847,6 @@
     <string name="local_files">קבצים מקומיים</string>
     <string name="music_files_on_this_phone">קובצי מוזיקה בטלפון הזה</string>
     <string name="everything_you_ve_played">כל מה שהשמעת</string>
-    <string name="hold_and_drag_or_use_the">לחץ לחיצה ארוכה וגרור, או השתמש בחיצים</string>
     <string name="open_a_link">פתיחת קישור</string>
     <string name="rearrange">סידור מחדש</string>
     <string name="search_liked_songs">חיפוש בשירים שאהבתי</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">ביטול הצמדה</string>
     <string name="pin_to_the_top">הצמדה למעלה</string>
     <string name="rearrange_playlists">סידור הפלייליסטים מחדש</string>
-    <string name="move_up_2">הזזת %1$s למעלה</string>
-    <string name="move_down_2">הזזת %1$s למטה</string>
     <string name="the_playlist">הפלייליסט</string>
     <string name="open_the_playlist">פתיחת הפלייליסט</string>
     <string name="update_now">עדכון עכשיו</string>

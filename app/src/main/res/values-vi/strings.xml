@@ -847,7 +847,6 @@
     <string name="local_files">Tệp trên máy</string>
     <string name="music_files_on_this_phone">Tệp nhạc trên điện thoại này</string>
     <string name="everything_you_ve_played">Mọi thứ bạn đã nghe</string>
-    <string name="hold_and_drag_or_use_the">Nhấn giữ và kéo, hoặc dùng các mũi tên</string>
     <string name="open_a_link">Mở đường liên kết</string>
     <string name="rearrange">Sắp xếp lại</string>
     <string name="search_liked_songs">Tìm trong bài hát đã thích</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">Bỏ ghim</string>
     <string name="pin_to_the_top">Ghim lên đầu</string>
     <string name="rearrange_playlists">Sắp xếp lại danh sách phát</string>
-    <string name="move_up_2">Di chuyển %1$s lên</string>
-    <string name="move_down_2">Di chuyển %1$s xuống</string>
     <string name="the_playlist">Danh sách phát</string>
     <string name="open_the_playlist">Mở danh sách phát</string>
     <string name="update_now">Cập nhật ngay</string>

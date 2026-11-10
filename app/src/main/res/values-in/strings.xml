@@ -847,7 +847,6 @@
     <string name="local_files">File lokal</string>
     <string name="music_files_on_this_phone">File musik di ponsel ini</string>
     <string name="everything_you_ve_played">Semua yang pernah kamu putar</string>
-    <string name="hold_and_drag_or_use_the">Tahan dan geser, atau pakai tanda panah</string>
     <string name="open_a_link">Buka link</string>
     <string name="rearrange">Atur ulang</string>
     <string name="search_liked_songs">Cari lagu yang disukai</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">Lepas sematan</string>
     <string name="pin_to_the_top">Sematkan di atas</string>
     <string name="rearrange_playlists">Atur ulang playlist</string>
-    <string name="move_up_2">Pindahkan %1$s ke atas</string>
-    <string name="move_down_2">Pindahkan %1$s ke bawah</string>
     <string name="the_playlist">Playlist-nya</string>
     <string name="open_the_playlist">Buka playlist</string>
     <string name="update_now">Perbarui sekarang</string>

@@ -847,7 +847,6 @@
     <string name="local_files">ไฟล์ในเครื่อง</string>
     <string name="music_files_on_this_phone">ไฟล์เพลงในโทรศัพท์เครื่องนี้</string>
     <string name="everything_you_ve_played">ทุกอย่างที่คุณเคยเล่น</string>
-    <string name="hold_and_drag_or_use_the">กดค้างแล้วลาก หรือใช้ลูกศร</string>
     <string name="open_a_link">เปิดลิงก์</string>
     <string name="rearrange">จัดเรียงใหม่</string>
     <string name="search_liked_songs">ค้นหาเพลงที่ชอบ</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">เลิกปักหมุด</string>
     <string name="pin_to_the_top">ปักหมุดไว้ด้านบน</string>
     <string name="rearrange_playlists">จัดเรียงเพลย์ลิสต์ใหม่</string>
-    <string name="move_up_2">เลื่อน %1$s ขึ้น</string>
-    <string name="move_down_2">เลื่อน %1$s ลง</string>
     <string name="the_playlist">เพลย์ลิสต์</string>
     <string name="open_the_playlist">เปิดเพลย์ลิสต์</string>
     <string name="update_now">อัปเดตเดี๋ยวนี้</string>

@@ -847,7 +847,6 @@
     <string name="local_files">Helyi fájlok</string>
     <string name="music_files_on_this_phone">Zenefájlok ezen a telefonon</string>
     <string name="everything_you_ve_played">Minden, amit hallgattál</string>
-    <string name="hold_and_drag_or_use_the">Tartsd lenyomva és húzd, vagy használd a nyilakat</string>
     <string name="open_a_link">Link megnyitása</string>
     <string name="rearrange">Átrendezés</string>
     <string name="search_liked_songs">Keresés a kedvelt dalok között</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">Kitűzés megszüntetése</string>
     <string name="pin_to_the_top">Kitűzés felülre</string>
     <string name="rearrange_playlists">Lejátszási listák átrendezése</string>
-    <string name="move_up_2">%1$s feljebb</string>
-    <string name="move_down_2">%1$s lejjebb</string>
     <string name="the_playlist">A lejátszási lista</string>
     <string name="open_the_playlist">Lejátszási lista megnyitása</string>
     <string name="update_now">Frissítés most</string>

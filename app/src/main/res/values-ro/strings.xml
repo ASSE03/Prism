@@ -847,7 +847,6 @@
     <string name="local_files">Fișiere locale</string>
     <string name="music_files_on_this_phone">Fișiere de muzică de pe acest telefon</string>
     <string name="everything_you_ve_played">Tot ce ai ascultat</string>
-    <string name="hold_and_drag_or_use_the">Ține apăsat și trage sau folosește săgețile</string>
     <string name="open_a_link">Deschide un link</string>
     <string name="rearrange">Rearanjează</string>
     <string name="search_liked_songs">Caută în melodiile apreciate</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">Anulează fixarea</string>
     <string name="pin_to_the_top">Fixează sus</string>
     <string name="rearrange_playlists">Rearanjează playlisturile</string>
-    <string name="move_up_2">Mută %1$s în sus</string>
-    <string name="move_down_2">Mută %1$s în jos</string>
     <string name="the_playlist">Playlistul</string>
     <string name="open_the_playlist">Deschide playlistul</string>
     <string name="update_now">Actualizează acum</string>

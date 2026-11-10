@@ -847,7 +847,6 @@
     <string name="local_files">Lokale bestanden</string>
     <string name="music_files_on_this_phone">Muziekbestanden op deze telefoon</string>
     <string name="everything_you_ve_played">Alles wat je hebt afgespeeld</string>
-    <string name="hold_and_drag_or_use_the">Houd ingedrukt en sleep, of gebruik de pijlen</string>
     <string name="open_a_link">Een link openen</string>
     <string name="rearrange">Herschikken</string>
     <string name="search_liked_songs">Gelikete nummers doorzoeken</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">Losmaken</string>
     <string name="pin_to_the_top">Bovenaan vastzetten</string>
     <string name="rearrange_playlists">Playlists herschikken</string>
-    <string name="move_up_2">%1$s omhoog</string>
-    <string name="move_down_2">%1$s omlaag</string>
     <string name="the_playlist">De playlist</string>
     <string name="open_the_playlist">De playlist openen</string>
     <string name="update_now">Nu bijwerken</string>

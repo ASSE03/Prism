@@ -847,7 +847,6 @@
     <string name="local_files">本機檔案</string>
     <string name="music_files_on_this_phone">這支手機上的音樂檔案</string>
     <string name="everything_you_ve_played">你播放過的所有內容</string>
-    <string name="hold_and_drag_or_use_the">按住並拖曳，或使用箭頭</string>
     <string name="open_a_link">開啟連結</string>
     <string name="rearrange">重新排列</string>
     <string name="search_liked_songs">搜尋喜歡的歌曲</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">取消釘選</string>
     <string name="pin_to_the_top">釘選到頂端</string>
     <string name="rearrange_playlists">重新排列播放清單</string>
-    <string name="move_up_2">將「%1$s」上移</string>
-    <string name="move_down_2">將「%1$s」下移</string>
     <string name="the_playlist">播放清單</string>
     <string name="open_the_playlist">開啟播放清單</string>
     <string name="update_now">立即更新</string>

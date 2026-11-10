@@ -847,7 +847,6 @@
     <string name="local_files">Yerel dosyalar</string>
     <string name="music_files_on_this_phone">Bu telefondaki müzik dosyaları</string>
     <string name="everything_you_ve_played">Çaldığın her şey</string>
-    <string name="hold_and_drag_or_use_the">Basılı tutup sürükle ya da okları kullan</string>
     <string name="open_a_link">Bağlantı aç</string>
     <string name="rearrange">Yeniden düzenle</string>
     <string name="search_liked_songs">Beğenilen şarkılarda ara</string>
@@ -2745,8 +2744,6 @@
     <string name="unpin">Sabitlemeyi kaldır</string>
     <string name="pin_to_the_top">En üste sabitle</string>
     <string name="rearrange_playlists">Çalma listelerini yeniden düzenle</string>
-    <string name="move_up_2">Yukarı taşı: %1$s</string>
-    <string name="move_down_2">Aşağı taşı: %1$s</string>
     <string name="the_playlist">Çalma listesi</string>
     <string name="open_the_playlist">Çalma listesini aç</string>
     <string name="update_now">Şimdi güncelle</string>

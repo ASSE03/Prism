@@ -893,7 +893,6 @@
     <string name="local_files">Local files</string>
     <string name="music_files_on_this_phone">Music files on this phone</string>
     <string name="everything_you_ve_played">Everything you\'ve played</string>
-    <string name="hold_and_drag_or_use_the">Hold and drag, or use the arrows</string>
     <string name="open_a_link">Open a link</string>
     <string name="rearrange">Rearrange</string>
     <string name="search_liked_songs">Search liked songs</string>
@@ -2959,8 +2958,6 @@
     <string name="unpin">Unpin</string>
     <string name="pin_to_the_top">Pin to the top</string>
     <string name="rearrange_playlists">Rearrange playlists</string>
-    <string name="move_up_2">Move %1$s up</string>
-    <string name="move_down_2">Move %1$s down</string>
     <string name="the_playlist">The playlist</string>
     <string name="open_the_playlist">Open the playlist</string>
     <string name="update_now">Update now</string>
@@ -5331,4 +5328,12 @@
     <string name="tour_184_also_color">A solid color as a screen\'s background</string>
     <string name="tour_184_also_crossfade">Seeking no longer loses a song\'s crossfade</string>
     <string name="tour_184_also_glass">Text no longer shows through Liquid Glass bars</string>
+    <!-- 1.8.4 Reorder -->
+    <!-- reorder -->
+    <string name="move_to_top">Move to top</string>
+    <string name="move_to_bottom">Move to bottom</string>
+    <string name="reorder_position">%1$d of %2$d</string>
+    <string name="reorder_picked_up">Picked up, %1$d of %2$d. Up and down move it, Enter puts it down</string>
+    <string name="reorder_put_down">Put down, %1$d of %2$d</string>
+    <string name="hold_and_drag_or_the_grip">Hold and drag, or drag the grip</string>
 </resources>
