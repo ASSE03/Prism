@@ -117,6 +117,7 @@ class SettingsIndexTest {
         assertTrue("the old Looks page is rebuilt (LooksPage.kt): $read", "OldLooks.kt" !in read)
         assertTrue("the old Controls & gestures page is rebuilt (GesturesButtonsPage.kt): $read", "OldGestures.kt" !in read)
         assertTrue("the old Devices & connections page is rebuilt (CarPage.kt): $read", "OldCar.kt" !in read)
+        assertTrue("the old Home & Library page is rebuilt (HomeLibraryPage.kt): $read", "OldHomeLibrary.kt" !in read)
         // One per line, so pages rebuilt side by side each take their own line out.
         val stillRead = listOf(
             "OldTabs.kt",
@@ -136,6 +137,7 @@ class SettingsIndexTest {
             "TabsMiniPlayerPage.kt",
             "ThemeColorsPage.kt",
             "LooksPage.kt",
+            "HomeLibraryPage.kt",
         )
         for (name in stillRead) {
             assertTrue("$name is read: $read", name in read)
@@ -161,16 +163,23 @@ class SettingsIndexTest {
         assertTrue(entry(R.string.lock_screen_title).needs == null)
     }
 
-    /** Its search result opens Home & Library, group Home: the row has to be there, not only under Customize Home. */
+    /**
+     * The row is where its search result opens. Since 1.8.4 that is Customize Home only (plan §2.6: Home & Library
+     * links to that screen and no longer repeats the row), in its Options group.
+     */
     @Test
     fun quickPicksFromIsWhereItsResultOpens() {
-        val e = SettingsIndex.entries.first { it.title == com.prism.music.tr(R.string.quick_picks_from) }
-        assertTrue(e.page == com.prism.music.ui.screens.settings.SettingsPageId.HOME_LIBRARY && e.group == com.prism.music.tr(R.string.home))
-        // The page's own file (1.8.4: out of SettingsScreen.kt, into ui/screens/settings/), which the page still draws.
-        assertTrue("HomeLibraryLook()" in File("src/main/java/com/prism/music/ui/screens/settings/HomeLibraryPage.kt").readText())
-        val page = (pageFiles + File("src/main/java/com/prism/music/ui/screens/SettingsScreen.kt")).map { it.readText() }.single { "fun HomeLibraryLook()" in it }
-        val group = page.substringAfter("fun HomeLibraryLook()").substringAfter("Group(tr(R.string.home))").substringBefore("Group(")
-        assertTrue("Quick picks from isn't in that group", "R.string.quick_picks_from" in group)
+        val e = SettingsIndex.entries.single { it.title == com.prism.music.tr(R.string.quick_picks_from) }
+        org.junit.Assert.assertEquals(com.prism.music.tr(R.string.customize_home), e.pageTitle)
+        org.junit.Assert.assertEquals(com.prism.music.tr(R.string.options), e.group)
+        assertTrue(e.opens, e.opens!!.startsWith(com.prism.music.ui.Routes.CATALOGUE))
+        val screen = File("src/main/java/com/prism/music/ui/screens/CatalogueScreen.kt").readText().replace("\r", "")
+        val group = screen.substringAfter("group(tr(R.string.options))").substringBefore("\n    }\n")
+        assertTrue("the Options group was read", group.length < 4000 && "R.string.customize_button_on_home" in group)
+        assertTrue("Quick picks from isn't in that group", "ChoiceRow(\n                tr(R.string.quick_picks_from)" in group)
+        // Home & Library's file names it in its search lines only (which Customize Home's lines are among).
+        val named = File("src/main/java/com/prism/music/ui/screens/settings/HomeLibraryPage.kt").readLines().filter { "R.string.quick_picks_from)" in it }
+        assertTrue("and no longer drawn on Home & Library: $named", named.isNotEmpty() && named.all { "onHome(" in it })
     }
 
     /**
@@ -184,7 +193,8 @@ class SettingsIndexTest {
         // A page's file also holds its search lines (1.8.4): those name the row without drawing it.
         assertTrue("and on no settings page", sources.none { src -> src.lineSequence().any { row in it && "SettingEntry(" !in it } })
         val e = SettingsIndex.entries.single { it.title == com.prism.music.tr(R.string.speed_dial_your_plays_first) }
-        org.junit.Assert.assertEquals(com.prism.music.ui.Routes.CATALOGUE, e.opens)
+        // At its group: the route carries it, and Customize Home opens there.
+        org.junit.Assert.assertEquals(com.prism.music.ui.Routes.CATALOGUE + "?find=" + com.prism.music.tr(R.string.options), e.opens)
         org.junit.Assert.assertEquals(com.prism.music.tr(R.string.customize_home), e.pageTitle)
         // Still found by the page's name, and still says what to turn off first.
         assertTrue(SettingsIndex.search("customize home speed dial").contains(e))

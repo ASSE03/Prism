@@ -742,7 +742,7 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                             }
                         }
                         composable(Routes.EQ) { ScreenBackdrop(BackdropScreen.SETTINGS) { EqualizerScreen(bottomPadding) } }
-                        composable(Routes.CATALOGUE) { ScreenBackdrop(BackdropScreen.HOME) { CatalogueScreen(bottomPadding) } }
+                        composable(Routes.CATALOGUE + "?find={find}", listOf(navArgument("find") { type = NavType.StringType; nullable = true; defaultValue = null })) { ScreenBackdrop(BackdropScreen.HOME) { CatalogueScreen(bottomPadding) } }
                         composable(Routes.MOODS) { ScreenBackdrop(BackdropScreen.SEARCH) { com.prism.music.ui.screens.MoodsScreen(bottomPadding) } }
                         composable(Routes.EXPLORE) { ScreenBackdrop(BackdropScreen.SEARCH) { com.prism.music.ui.screens.ExploreScreen(bottomPadding) } }
                         composable(Routes.IMPORT) { ScreenBackdrop(BackdropScreen.LIBRARY) { com.prism.music.ui.screens.ImportScreen(bottomPadding) } }

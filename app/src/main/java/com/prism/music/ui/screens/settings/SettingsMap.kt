@@ -152,6 +152,8 @@ object SettingsMap {
             ("sound" to tr(R.string.sound)) to SettingsPageId.SOUND_QUALITY,
             ("devices" to tr(R.string.sharing_and_links)) to SettingsPageId.ACCOUNTS_SHARING,
             ("icons" to tr(R.string.home_screen_widgets)) to SettingsPageId.THEME_COLORS,
+            ("library" to tr(R.string.liked_songs)) to SettingsPageId.HOME_LIBRARY,
+            ("appearance" to tr(R.string.customize_this)) to SettingsPageId.LOOKS,
         )
     }
 
