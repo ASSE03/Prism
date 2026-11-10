@@ -30,8 +30,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -248,6 +250,9 @@ fun PickRow(
     )
 }
 
+/** How long a [SliderRow] gives its save to land before it shows the stored value again. */
+internal const val SLIDER_SETTLE_MS = 400L
+
 /**
  * Row type 3, **Slider**: the title, the value as [valueText] writes it, and the slider under them. It follows the
  * finger and saves ([onSave]) when let go.
@@ -267,6 +272,16 @@ fun SliderRow(
 ) {
     var v by remember { mutableFloatStateOf(value) }
     LaunchedEffect(value) { v = value }
+    // A save may store what was there already (a value snapped to a step: progress bar thickness, corners), and then
+    // `value` doesn't change. Once the save has had time to land, the slider shows what is stored, unless dragged again.
+    val stored by rememberUpdatedState(value)
+    var dragging by remember { mutableStateOf(false) }
+    var saves by remember { mutableIntStateOf(0) }
+    LaunchedEffect(saves) {
+        if (saves == 0) return@LaunchedEffect
+        kotlinx.coroutines.delay(SLIDER_SETTLE_MS)
+        if (!dragging) v = stored
+    }
     val shown = valueText(v)
     RowFrame(
         SettingsTags.ROW_SLIDER, title, null, shown, info, changed, enabled, modifier, dot = false, stacked = true,
@@ -276,8 +291,8 @@ fun SliderRow(
         },
         below = {
             PrismSlider(
-                v, { v = it }, Modifier.padding(start = 16.dp, end = 16.dp, bottom = 6.dp), enabled = enabled,
-                valueRange = range, steps = steps, onValueChangeFinished = { onSave(v) },
+                v, { v = it; dragging = true }, Modifier.padding(start = 16.dp, end = 16.dp, bottom = 6.dp), enabled = enabled,
+                valueRange = range, steps = steps, onValueChangeFinished = { dragging = false; onSave(v); saves++ },
             )
         },
     )
@@ -357,7 +372,7 @@ private fun KitChip(selected: Boolean, label: String, modifier: Modifier = Modif
 /**
  * Row type 4, many at once (**Show chips**): several things to show or hide as chips that tick on and off, in place of
  * a run of switches ("In the queue: Show"). Each [ShowOption] carries its own state and setter, so the stored values
- * stay as they are.
+ * stay as they are. [tickHides]: a ticked chip means hidden ("Hide from Home"), and TalkBack says so.
  */
 @Composable
 fun ShowChipsRow(
@@ -366,6 +381,7 @@ fun ShowChipsRow(
     modifier: Modifier = Modifier,
     info: String? = null,
     changed: Boolean = false,
+    tickHides: Boolean = false,
 ) {
     val shown = options.filter { it.on }
     // With nothing ticked the row says so ("None"), on a value line of its own: an empty value says nothing.
@@ -373,8 +389,8 @@ fun ShowChipsRow(
     RowFrame(
         SettingsTags.ROW_CHOICE, title, none, none ?: shown.joinToString(" · ") { it.label }, info, changed, true, modifier, stacked = true,
         below = {
-            val on = tr(R.string.shown)
-            val off = tr(R.string.hidden)
+            val on = tr(if (tickHides) R.string.hidden else R.string.shown)
+            val off = tr(if (tickHides) R.string.shown else R.string.hidden)
             KitChips(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
                 options.forEach { o ->
                     KitChip(

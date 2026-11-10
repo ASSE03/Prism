@@ -238,7 +238,7 @@ private fun CataloguePage(bottomPadding: Dp, find: String?) {
             ShowChipsRow(
                 tr(R.string.ch_hide_from_home),
                 HomeHiddenKind.entries.map { kind -> ShowOption(kind.label, kind in hidden) { prefs.setHomeHideKind(kind.key, it) } },
-                info = tr(R.string.ch_hide_from_home_info), changed = hiddenChanged,
+                info = tr(R.string.ch_hide_from_home_info), changed = hiddenChanged, tickHides = true,
             )
             // #349: Prism's, made around your artists, or YouTube Music's own as they come.
             ChoiceRow(

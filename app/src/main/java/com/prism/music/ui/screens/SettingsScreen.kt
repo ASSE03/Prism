@@ -505,7 +505,7 @@ private fun CustomizeSheetContent(target: com.prism.music.ui.components.Customiz
     val section = key?.let { k -> s.homeLayout.firstOrNull { it.key == k } }
     com.prism.music.ui.components.ActionSheet(null, onDismiss) { close ->
         Text(
-            section?.title ?: target.title, Modifier.padding(start = 24.dp, end = 24.dp, bottom = 12.dp),
+            section?.titled() ?: target.title, Modifier.padding(start = 24.dp, end = 24.dp, bottom = 12.dp),
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium),
         )
         Column(Modifier.padding(horizontal = 14.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
@@ -525,10 +525,17 @@ private fun CustomizeSheetContent(target: com.prism.music.ui.components.Customiz
                 }
                 com.prism.music.ui.components.CustomizeTarget.HOME_SECTION -> {
                     if (section != null) SettingsGroup(tr(R.string.this_section)) {
-                        // Five styles: a pick with its list (chips are for two to four short words).
-                        PickListRow(tr(R.string.style), com.prism.music.data.prefs.SectionStyle.entries, section.style, { it.label }, searchable = false) { st ->
-                            c.settings.setHomeLayout(s.homeLayout.map { if (it.key == section.key) it.copy(style = st) else it })
+                        // As Customize Home's menu: a style shows the section in it, so a pin drawn as one tile stops being one.
+                        val tiled = section.tile && OwnSections.canTile(section.key)
+                        val restyle: (com.prism.music.data.prefs.SectionStyle) -> Unit = { st ->
+                            c.settings.setHomeLayout(s.homeLayout.map { if (it.key == section.key) it.copy(style = st, visible = true, tile = false) else it })
                         }
+                        // Five styles: a pick with its list (chips are for two to four short words).
+                        PickListRow(
+                            tr(R.string.style), com.prism.music.data.prefs.SectionStyle.entries, section.style, { it.label },
+                            value = if (tiled) tr(R.string.one_tile) else section.style.label, searchable = false,
+                            onRepick = if (tiled) ({ restyle(section.style) }) else null, onPick = restyle,
+                        )
                         LinkRow(tr(R.string.hide_this_section), value = tr(R.string.bring_it_back_from_customize_home), action = true) {
                             c.settings.setHomeLayout(s.homeLayout.map { if (it.key == section.key) it.copy(visible = false) else it })
                             close {}

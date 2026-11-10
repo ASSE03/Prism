@@ -43,6 +43,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -174,7 +175,11 @@ fun SettingsPageScaffold(
         scope.launch { if (ui.reduceMotion) listState.scrollToItem(first + entry, landing) else listState.animateScrollToItem(first + entry, landing) }
     }
     val found = find?.let { f -> entries.indexOfFirst { it.key == f || it.title == f } }?.takeIf { it >= 0 }
-    if (found != null) LaunchedEffect(find) { listState.scrollToItem(first + found, landing) }
+    // Lands once: back on the page (Back from a screen it opened, a rotation) it stays where it was scrolled to, and
+    // the group glows only on that first landing.
+    var landed by rememberSaveable(find) { mutableStateOf(false) }
+    val mayGlow = remember(find) { !landed }
+    if (found != null && !landed) LaunchedEffect(find) { listState.scrollToItem(first + found, landing); landed = true }
 
     val scrolled by remember(listState) { derivedStateOf { listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 60 } }
     val bar by animateFloatAsState(if (scrolled) 1f else 0f, if (ui.reduceMotion) snap() else tween(220), label = "bar")
@@ -228,7 +233,7 @@ fun SettingsPageScaffold(
             items(entries.size, key = { "entry:" + entries[it].key }) { i ->
                 val e = entries[i]
                 Box(Modifier.padding(bottom = 18.dp)) {
-                    if (e.isGroup) SettingsGroup(e.title, info = e.info, highlight = found == i, content = e.content) else e.content()
+                    if (e.isGroup) SettingsGroup(e.title, info = e.info, highlight = mayGlow && found == i, content = e.content) else e.content()
                 }
             }
         }

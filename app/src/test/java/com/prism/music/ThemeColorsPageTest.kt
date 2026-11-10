@@ -367,6 +367,30 @@ class ThemeColorsPageTest : ThemeLooksPageHarness() {
         assertTrue(rows().none { it.config[SettingsRowChanged] })
     }
 
+    /**
+     * 1.8.4 review: "backdrops" also holds the player's own background (Player → Which background). Set only that, this
+     * page has nothing to reset; with a screen's set too, Reset puts back the screens' and keeps the player's.
+     */
+    @Test fun resetKeepsThePlayersOwnBackground() {
+        val d = AppSettings()
+        assertEquals(emptyList<String>(), themeColorsChanges(d.copy(backdrops = mapOf("PLAYER" to "SILK")), dark = true))
+        assertEquals(
+            listOf("Screen backgrounds: Aurora on 1 screen → None"),
+            themeColorsChanges(d.copy(backdrops = mapOf("PLAYER" to "SILK", "HOME" to "AURORA")), dark = true),
+        )
+
+        prefs.setBackdrops(mapOf("PLAYER" to "SILK", "HOME" to "AURORA"))
+        prefs.setContrast(ContrastLevel.HIGH)
+        await { stored.backdrops.size == 2 && stored.contrast == ContrastLevel.HIGH }
+        page()
+        compose.onNodeWithTag(SettingsTags.PAGE_MORE).performClick()
+        compose.onNodeWithTag(SettingsTags.RESET_ITEM).performClick()
+        compose.onNodeWithTag(SettingsTags.RESET_CONFIRM).performClick()
+        await { stored.contrast == d.contrast }
+        await("the player's own background stays") { stored.backdrops == mapOf("PLAYER" to "SILK") }
+        assertTrue(rows().none { it.config[SettingsRowChanged] })
+    }
+
     @Test fun everyChangeIsListedForTheReset() {
         val d = AppSettings()
         fun titles(s: AppSettings) = themeColorsChanges(s, dark = true).map { it.substringBefore(":") }

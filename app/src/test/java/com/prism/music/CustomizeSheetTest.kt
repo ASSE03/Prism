@@ -144,6 +144,32 @@ class CustomizeSheetTest : TextTabsPageHarness(SettingsPageId.TABS_MINI_PLAYER) 
         stored("square_video_covers") { stored.squareVideoCovers != com.prism.music.data.prefs.AppSettings().squareVideoCovers }
     }
 
+    /**
+     * 1.8.4 review: a pin shown as one tile. The sheet names it as Home does (its own name), says "One tile", and a style
+     * picked there shows the section in that style (as Customize Home's menu does): it was stored under the tile, which
+     * Home kept drawing.
+     */
+    @Test fun aStylePickedForAPinShownAsOneTileShowsItInThatStyle() {
+        val pin = com.prism.music.data.prefs.HomeSectionConfig(
+            com.prism.music.data.prefs.HomeSections.pinKey("album", "MPREb_test"), "Pinned album", style = SectionStyle.LIST, name = "My album", tile = true,
+        )
+        container.settings.setHomeLayout(stored.homeLayout + pin)
+        stored("pinned") { stored.homeLayout.any { it.key == pin.key } }
+        open(CustomizeTarget.HOME_SECTION, pin.key)
+        assertKitRowsOnly(CustomizeTarget.HOME_SECTION, "My album")
+        assertEquals(tr(R.string.one_tile), valueOf(rowNode("This section", "Style")))
+        val other = SectionStyle.entries.first { it != SectionStyle.LIST }
+        pick("This section", "Style", other.label)
+        stored("home_layout: style, no tile") { stored.homeLayout.first { it.key == pin.key }.let { it.style == other && !it.tile } }
+        assertEquals(other.label, valueOf(rowNode("This section", "Style")))
+
+        // The style it had under the tile, picked again, shows it in that style too.
+        container.settings.setHomeLayout(stored.homeLayout.map { if (it.key == pin.key) it.copy(style = SectionStyle.LIST, tile = true) else it })
+        stored("a tile again") { stored.homeLayout.first { it.key == pin.key }.tile }
+        pick("This section", "Style", SectionStyle.LIST.label)
+        stored("home_layout: no tile") { stored.homeLayout.first { it.key == pin.key }.let { it.style == SectionStyle.LIST && !it.tile } }
+    }
+
     /** Without a section's key (the target alone) the sheet still draws the pages' rows. */
     @Test fun aHomeSectionsSheetWithoutItsKeyDrawsThePagesRows() {
         open(CustomizeTarget.HOME_SECTION)

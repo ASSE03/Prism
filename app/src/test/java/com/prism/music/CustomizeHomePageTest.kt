@@ -1,6 +1,7 @@
 package com.prism.music
 
 import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasAnyAncestor
@@ -206,6 +207,17 @@ class CustomizeHomePageTest : HomePagesHarness() {
         }
         assertEquals(0, changedRows())
         assertEquals(listOf(3, 1, 3, 7), sizes())
+    }
+
+    /** 1.8.4 review: on "Hide from Home" a ticked chip means hidden, and TalkBack says so (it said "Shown"). */
+    @Test fun hideFromHomeChipsTellTalkBackATickMeansHidden() {
+        container.settings.setHomeHideKind(HomeSections.KIND_VIDEOS, true)
+        until("home_hide_kinds") { it.homeHideKinds == setOf(HomeSections.KIND_VIDEOS) }
+        showAt(Routes.CATALOGUE)
+        fun state(label: String) = compose.onNode(hasText(label) and SemanticsMatcher.keyIsDefined(SemanticsProperties.StateDescription))
+            .fetchSemanticsNode().config[SemanticsProperties.StateDescription]
+        assertEquals(t(R.string.hidden), state(t(R.string.videos)))
+        assertEquals(t(R.string.shown), state(t(R.string.podcasts)))
     }
 
     /** home_playlists: the row opens the sheet the playlists are pinned in. */

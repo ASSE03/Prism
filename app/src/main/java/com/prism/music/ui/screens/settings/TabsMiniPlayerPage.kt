@@ -146,6 +146,7 @@ fun TabsMiniPlayerPage(bottomPadding: Dp, find: String? = null, showBack: Boolea
         Triple(tr(R.string.labels), s.navLabels.label, d.navLabels.label),
         Triple(tr(R.string.height), s.navBarSize.label, d.navBarSize.label),
         Triple(tr(R.string.background), s.navBarFill.label, d.navBarFill.label),
+        Triple(tr(R.string.tabs_on_a_tablet), s.behavior.tabBarPosition.label, d.behavior.tabBarPosition.label),
         Triple(tr(R.string.the_tab_you_re_on), s.shapes.tabTint.label, d.shapes.tabTint.label),
         Triple(tr(R.string.shrink_while_scrolling), onOff(s.navHideOnScroll), onOff(d.navHideOnScroll)),
         Triple(tr(R.string.tabs), tabs.joinToString(" · ") { name(it) }, d.navTabs.joinToString(" · ") { it.label }),
@@ -163,6 +164,8 @@ fun TabsMiniPlayerPage(bottomPadding: Dp, find: String? = null, showBack: Boolea
     )
     val reset = PageReset(rows.filter { it.second != it.third }.map { resetLine(it.first, it.second, it.third) }) {
         prefs.resetLookKeys(tabsMiniPlayerLookKeys)
+        // Not part of a Look: put back by its own setter.
+        if (s.behavior.tabBarPosition != d.behavior.tabBarPosition) prefs.setTabBarPosition(d.behavior.tabBarPosition)
     }
 
     SettingsPageScaffold(page.title, bottomPadding, showBack = showBack, onSearch = onSearch, reset = reset, find = find) {

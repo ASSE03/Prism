@@ -132,6 +132,20 @@ class TabsMiniPlayerPageTest : TextTabsPageHarness(SettingsPageId.TABS_MINI_PLAY
         await("tab_bar_position") { stored.behavior.tabBarPosition == TabBarPosition.BOTTOM }
     }
 
+    /** 1.8.4 review: with only "Tabs on a tablet" changed (not a Look key), Reset lists it and puts it back. */
+    @Test fun resetPutsBackTabsOnATablet() {
+        show(wide = true)
+        chip(bar, "Tabs on a tablet", "At the bottom")
+        await("tab_bar_position") { stored.behavior.tabBarPosition == TabBarPosition.BOTTOM }
+        assertTrue(rowNode(bar, "Tabs on a tablet").config[SettingsRowChanged])
+        compose.onNodeWithTag(SettingsTags.PAGE_MORE).performClick()
+        compose.onNodeWithTag(SettingsTags.RESET_ITEM).performClick()
+        val listed = compose.onAllNodes(hasTestTag(SettingsTags.RESET_CHANGE)).fetchSemanticsNodes().map { it.config[SemanticsProperties.Text].joinToString { t -> t.text } }
+        assertEquals(listOf("Tabs on a tablet: ${TabBarPosition.BOTTOM.label} → ${TabBarPosition.SIDE.label}"), listed)
+        compose.onNodeWithTag(SettingsTags.RESET_CONFIRM).performClick()
+        await("the reset") { stored.behavior.tabBarPosition == TabBarPosition.SIDE }
+    }
+
     /** nav_tabs, tab_names, start_tab: the tabs' list works as it did (tick, move, rename), with "Open Prism on" under it. */
     @Test fun theTabsListStillTicksMovesAndRenames() {
         show()

@@ -193,6 +193,12 @@ fun DownloadsDataPage(bottomPadding: Dp, find: String? = null, showBack: Boolean
     val reset = ListeningResets()
     val onOff: (Boolean) -> String = { ListeningResets.onOff(it) }
 
+    // Smart Downloads as the next setter sees it. "Reset this page" runs its steps one after another while `s` still
+    // holds the settings from before (the store catches up after): once a step has turned Smart Downloads off, the
+    // steps after it (its space, its mobile data) mustn't start its worker again.
+    var smartOn = s.smartDownloads
+    var smartCellular = s.smartDownloadsCellular
+
     // The setters that do more than store (as the switches of the page before did).
     val setLikes: (Boolean) -> Unit = {
         prefs.setDownloadLikes(it)
@@ -200,13 +206,14 @@ fun DownloadsDataPage(bottomPadding: Dp, find: String? = null, showBack: Boolean
     }
     val setSmart: (Boolean) -> Unit = {
         prefs.setSmartDownloads(it)
-        SmartDownloadWorker.schedule(context, it, cellular = s.smartDownloadsCellular)
-        if (it) SmartDownloadWorker.runNow(context, cellular = s.smartDownloadsCellular) else c.trimSongCache()
+        smartOn = it
+        SmartDownloadWorker.schedule(context, it, cellular = smartCellular)
+        if (it) SmartDownloadWorker.runNow(context, cellular = smartCellular) else c.trimSongCache()
     }
     val setSpace: (Float) -> Unit = {
         prefs.setOfflineGb(it)
         c.trimSongCache()
-        if (s.smartDownloads) SmartDownloadWorker.runNow(context, cellular = s.smartDownloadsCellular)
+        if (smartOn) SmartDownloadWorker.runNow(context, cellular = smartCellular)
     }
     val setCanvasSave: (Boolean) -> Unit = {
         prefs.setCanvasWithDownloads(it)
@@ -220,7 +227,8 @@ fun DownloadsDataPage(bottomPadding: Dp, find: String? = null, showBack: Boolean
             MobileUse.LOAD_AHEAD -> prefs.setPreloadCellular(on)
             MobileUse.SMART_DOWNLOADS -> {
                 prefs.setSmartDownloadsCellular(on)
-                if (s.smartDownloads) {
+                smartCellular = on
+                if (smartOn) {
                     // The worker's network rule is fixed when it's scheduled, so it's scheduled again with the new one.
                     SmartDownloadWorker.schedule(context, true, cellular = on)
                     SmartDownloadWorker.runNow(context, force = false, cellular = on)

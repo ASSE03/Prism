@@ -82,6 +82,7 @@ import com.prism.music.ui.theme.SpectrumPresets
 import com.prism.music.ui.theme.ThemeColors
 import com.prism.music.ui.theme.glassSnap
 import com.prism.music.ui.theme.isNeutralSeed
+import com.prism.music.ui.theme.PLAYER_BACKDROP
 import com.prism.music.ui.theme.screensOnly
 import com.prism.music.widget.WidgetOptionsStore
 import com.prism.music.widget.WidgetStyle
@@ -199,9 +200,10 @@ fun themeColorsChanges(s: AppSettings, dark: Boolean): List<String> {
     line(s.pageColors != d.pageColors, R.string.tl_page_colors, pageColorsLabel(s.pageColors), pageColorsLabel(d.pageColors))
     line(s.view.playingInPageColor != d.view.playingInPageColor, R.string.playing_song_in_the_page_s_color, onOff(s.view.playingInPageColor), onOff(d.view.playingInPageColor))
     // The screen's own settings (how strong the theme's color lies over them, whether they move and fade) go back with it.
+    // The player's own background is Player's (its "Which background" row), not this page's: it stays.
     line(
-        s.backdrops != d.backdrops || s.backdropDim != d.backdropDim || s.backdropMotion != d.backdropMotion || s.view.backdropFade != d.view.backdropFade,
-        R.string.screen_backgrounds, if (s.backdrops.isEmpty()) tr(R.string.tl_none) else backgroundsText(s), tr(R.string.tl_none),
+        s.backdrops.screensOnly != d.backdrops.screensOnly || s.backdropDim != d.backdropDim || s.backdropMotion != d.backdropMotion || s.view.backdropFade != d.view.backdropFade,
+        R.string.screen_backgrounds, if (s.backdrops.screensOnly.isEmpty()) tr(R.string.tl_none) else backgroundsText(s), tr(R.string.tl_none),
     )
     line(LookChoices.glass(s) != LookChoices.glass(d), R.string.glass, LookChoices.glass(s).label, LookChoices.glass(d).label)
     line(s.view.glass.blur != d.view.glass.blur, R.string.glass_blur, glassPercent(s.view.glass.blur), glassPercent(d.view.glass.blur))
@@ -247,7 +249,10 @@ fun ThemeColorsPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
     SettingsPageScaffold(
         page.title, bottomPadding, showBack = showBack, onSearch = onSearch, find = find,
         reset = PageReset(themeColorsChanges(s, dark)) {
+            val player = s.backdrops[PLAYER_BACKDROP]
             prefs.resetLookKeys(themeColorsLookKeys)
+            // "backdrops" holds the player's own background too (Player's row): only the screens' go back.
+            if (player != null) prefs.setBackdrops(mapOf(PLAYER_BACKDROP to player))
             // How screens change isn't part of a Look: put back by its own setter.
             LookChoices.setScreenChange(prefs, LookChoices.screenChange(d))
         },

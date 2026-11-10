@@ -279,6 +279,35 @@ class SettingsKitTest {
         compose.onNodeWithText("On it option 1", useUnmergedTree = true).assertExists()
     }
 
+    /**
+     * 1.8.4 review: a page opened at a group (a search result) lands there once. Scrolled away, it leaves and comes back
+     * (Back from a screen it opened, a rotation: its saved state is kept, as the navigator keeps it) where it was
+     * scrolled to, not at the group again.
+     */
+    @Test fun aPageOpenedAtAGroupLandsThereOnlyOnce() {
+        var shown by mutableStateOf(true)
+        var state: LazyListState? = null
+        show {
+            val holder = androidx.compose.runtime.saveable.rememberSaveableStateHolder()
+            if (shown) holder.SaveableStateProvider("page") {
+                val s = androidx.compose.foundation.lazy.rememberLazyListState().also { state = it }
+                SettingsPageScaffold("Player", bottomPadding = 800.dp, showBack = false, listState = s, find = "On it") {
+                    groups.forEach { g -> group(g) { repeat(5) { i -> SwitchRow("$g option ${i + 1}", i % 2 == 0) {} } } }
+                }
+            }
+        }
+        // The title, the chips, then the groups; "On it" is the fourth group.
+        assertEquals(2 + 3, state!!.firstVisibleItemIndex)
+        compose.onNodeWithTag(SettingsTags.PAGE_LIST).performScrollToIndex(0)
+        compose.waitForIdle()
+        assertEquals(0, state!!.firstVisibleItemIndex)
+        shown = false
+        compose.waitForIdle()
+        shown = true
+        compose.waitForIdle()
+        assertEquals("back on the page, it stays where it was scrolled to", 0, state!!.firstVisibleItemIndex)
+    }
+
     @Test fun fewerThanFourGroupsGetNoJumpChips() {
         show { Page(3, LazyListState()) }
         assertEquals(0, tagged(SettingsTags.JUMP_CHIPS).size)
@@ -356,6 +385,40 @@ class SettingsKitTest {
     /** A page's gutters: its cards are 328 dp wide on a 360 dp phone. */
     @Composable
     private fun OnAPage(content: @Composable () -> Unit) = Box(Modifier.padding(horizontal = 16.dp)) { SettingsGroup(null, content = content) }
+
+    /**
+     * 1.8.4 review: a save that stores what was there already (Player's progress bar thickness snaps to 1× near it) leaves
+     * the value as it was, and the slider went on showing where it was let go. Once the save has landed it shows what's
+     * stored; a save that stores what it was let go at shows that.
+     */
+    @Test fun aSliderWhoseSaveSnapsBackShowsTheStoredValue() {
+        var stored by mutableStateOf(1f)
+        show {
+            OnAPage {
+                SliderRow("Progress bar thickness", stored, 0.6f..2f, { String.format(java.util.Locale.ROOT, "%.2f", it) }) {
+                    stored = if (it in 0.93f..1.07f) 1f else it
+                }
+            }
+        }
+        fun let(at: Float) {
+            compose.onNode(androidx.compose.ui.test.SemanticsMatcher.keyIsDefined(SemanticsActions.SetProgress)).performSemanticsAction(SemanticsActions.SetProgress) { it(at) }
+            compose.waitForIdle()
+        }
+        fun shown() = tagged(SettingsTags.ROW_SLIDER).single().config[SettingsRowValue]
+        fun settles(to: String) {
+            try { compose.waitUntil(3_000) { shown() == to } } catch (e: Throwable) { throw AssertionError("the slider shows ${shown()}, not $to", e) }
+        }
+        let(1.05f)
+        assertEquals(1f, stored)
+        settles("1.00")
+        let(1.5f)
+        assertEquals(1.5f, stored)
+        settles("1.50")
+        // (And it stays there once the save has had its time.)
+        Thread.sleep(600)
+        compose.waitForIdle()
+        assertEquals("1.50", shown())
+    }
 
     @Test fun showChipsWithNothingTickedSayNone() {
         var covers by mutableStateOf(false)

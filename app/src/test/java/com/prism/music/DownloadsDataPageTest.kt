@@ -274,6 +274,35 @@ class DownloadsDataPageTest : ListeningPageHarness(SettingsPageId.DOWNLOADS_DATA
         assertEquals(listOf(4, 3, 3, 3, 3), groupSizes())
     }
 
+    /**
+     * 1.8.4 review: Reset this page turns Smart Downloads off and its worker with it. The steps after (its space, its
+     * mobile data) read the settings from before the reset and started the worker again: scheduled anew, and run now.
+     */
+    @Test fun resetLeavesSmartDownloadsWorkerStopped() {
+        val app = RuntimeEnvironment.getApplication()
+        // A WorkManager of this test's own: the one an earlier test of the class started holds a database Robolectric has
+        // since closed (its writes fail quietly; this test reads its work back).
+        for (field in listOf("sDelegatedInstance", "sDefaultInstance")) {
+            androidx.work.impl.WorkManagerImpl::class.java.getDeclaredField(field).apply { isAccessible = true }.set(null, null)
+        }
+        androidx.work.WorkManager.initialize(app, androidx.work.Configuration.Builder().build())
+        val wm = androidx.work.WorkManager.getInstance(app)
+        container.settings.setSmartDownloads(true)
+        container.settings.setSmartDownloadsCellular(true)
+        container.settings.setOfflineGb(10f)
+        until("Smart Downloads on, on mobile data, with 10 GB") { it.smartDownloads && it.smartDownloadsCellular && it.offlineGb == 10f }
+        // While it's on, its worker is scheduled (as the app's start does).
+        com.prism.music.download.SmartDownloadWorker.schedule(app, true, cellular = true)
+        fun live(name: String) = wm.getWorkInfosForUniqueWork(name).get().filter { !it.state.isFinished }
+        assertEquals(1, live("smart_downloads").size)
+        show()
+        resetLines(confirm = true)
+        val d = AppSettings()
+        until("the reset") { it.smartDownloads == d.smartDownloads && it.smartDownloadsCellular == d.smartDownloadsCellular && it.offlineGb == d.offlineGb }
+        assertEquals("the periodic worker stays cancelled", emptyList<androidx.work.WorkInfo>(), live("smart_downloads"))
+        assertEquals("no run was started", emptyList<androidx.work.WorkInfo>(), wm.getWorkInfosForUniqueWork("smart_downloads_now").get())
+    }
+
     private fun downloadsLine(): String = com.prism.music.ui.screens.settings.downloadsDataValue(stored, dark = true)
 
     /**
