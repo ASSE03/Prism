@@ -6,7 +6,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import com.prism.music.AppLanguage
 import com.prism.music.R
+import com.prism.music.data.prefs.AppSettings
 import com.prism.music.tr
+import com.prism.music.ui.screens.SettingEntry
+import com.prism.music.ui.screens.SettingsSection
 import com.prism.music.ui.theme.LocalAppSettings
 import com.prism.music.ui.theme.LocalContainer
 
@@ -24,6 +27,37 @@ fun LanguageRegionPage(bottomPadding: Dp, showBack: Boolean = true, onSearch: ((
         bottomPadding, language = picked, country = LocalAppSettings.current.contentCountry,
         onLanguage = { AppLanguage.pick(context, it) }, onCountry = { c.settings.setContentCountry(it) },
         showBack = showBack, onSearch = onSearch,
+    )
+}
+
+private val page = SettingsPageId.LANGUAGE_REGION
+
+/**
+ * The root's line for Language & region: the language Prism is in, and the content country when one is picked. (As
+ * every page of the map, this file is the only place for the page's parts: this line, [languageRegionLookKeys],
+ * [languageRegionOldGroups] and [languageRegionIndex].)
+ */
+fun languageRegionValue(s: AppSettings, dark: Boolean): String = listOfNotNull(
+    SettingsSection.LANGUAGE.summary(s, dark),
+    s.contentCountry.takeIf { it.isNotBlank() }?.let { countryName(it) },
+).joinToString(" · ")
+
+/** The look settings "Reset this page" puts back: none (the page's own reset puts the content country back). */
+val languageRegionLookKeys: List<String> = emptyList()
+
+/** Old group titles → this page's group keys: the old Language and Region groups are the page's one card. */
+val languageRegionOldGroups: Map<String, String> by lazy {
+    mapOf(tr(R.string.language) to LANGUAGE_REGION_GROUP, tr(R.string.region) to LANGUAGE_REGION_GROUP)
+}
+
+/** The key of the page's one (untitled) group. */
+internal const val LANGUAGE_REGION_GROUP = "language-region"
+
+/** The page's lines in Settings' search (its card has no title, so they name no group). */
+val languageRegionIndex: List<SettingEntry> by lazy {
+    listOf(
+        SettingEntry(page, "", tr(R.string.language), tr(R.string.language_keywords)),
+        SettingEntry(page, "", tr(R.string.content_country), tr(R.string.region_location_gl) + " " + tr(R.string.region)),
     )
 }
 
@@ -77,7 +111,7 @@ internal fun LanguageRegionContent(
         ),
     ) {
         // One group: its name would only repeat the page's.
-        group(null, key = "language-region") {
+        group(null, key = LANGUAGE_REGION_GROUP) {
             PickListRow(
                 tr(R.string.language), languages, languageNow,
                 label = { if (it == AppLanguage.PHONE) tr(R.string.your_phone_s_language) else AppLanguage.nativeName(it) },

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.8.4, the new Settings root and map (helper "root"). English only: folded into strings.xml and translated once, with the other strings_184_*.xml. -->
+<resources>
+    <!-- The root's fifth group (Language & region, Backup & about). -->
+    <string name="root_app">App</string>
+    <!-- Page names that are new with the map (the other pages keep a name that exists). -->
+    <string name="root_theme_colors">Theme &amp; colors</string>
+    <string name="root_text_icons">Text &amp; icons</string>
+    <string name="root_sound_quality">Sound &amp; quality</string>
+    <string name="root_gestures_buttons">Gestures &amp; buttons</string>
+    <string name="root_downloads_data">Downloads &amp; data</string>
+    <string name="root_recommendations_history">Recommendations &amp; history</string>
+    <string name="root_car">Car</string>
+    <string name="root_accounts_sharing">Accounts &amp; sharing</string>
+    <!-- Root value lines. -->
+    <string name="root_crossfade_seconds">Crossfade %1$d s</string>
+    <string name="root_crossfade_off">Crossfade off</string>
+    <string name="root_accounts_value">Last.fm, Spotify, Discord, links you share</string>
+    <!-- Settings search opened from a page: the button that closes it. -->
+    <string name="root_close_search">Close search</string>
+</resources>

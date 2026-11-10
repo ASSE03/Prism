@@ -62,38 +62,30 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
-import com.prism.music.ui.screens.settings.appearance
-import com.prism.music.ui.screens.settings.AppIconSettings
-import com.prism.music.ui.screens.settings.CheckForUpdates
-import com.prism.music.ui.screens.settings.ContentCountrySetting
-import com.prism.music.ui.screens.settings.ControlsPage
-import com.prism.music.ui.screens.settings.DevicesPage
-import com.prism.music.ui.screens.settings.DiagnosticsGroup
-import com.prism.music.ui.screens.settings.DiscordGroup
-import com.prism.music.ui.screens.settings.DownloadSettings
-import com.prism.music.ui.screens.settings.GlassSettings
-import com.prism.music.ui.screens.settings.HomeLibraryLook
-import com.prism.music.ui.screens.settings.IconSettings
-import com.prism.music.ui.screens.settings.LastFmGroup
-import com.prism.music.ui.screens.settings.layoutAndNavigation
+import com.prism.music.ui.screens.settings.LicensesScreen
 import com.prism.music.ui.screens.settings.LyricsLookGroup
-import com.prism.music.ui.screens.settings.LyricsLookPage
-import com.prism.music.ui.screens.settings.LyricsSettings
 import com.prism.music.ui.screens.settings.MiniPlayerGroup
 import com.prism.music.ui.screens.settings.NavBarGroup
 import com.prism.music.ui.screens.settings.PagesGroup
 import com.prism.music.ui.screens.settings.PlayerCoverGroup
 import com.prism.music.ui.screens.settings.PlayerLookGroup
-import com.prism.music.ui.screens.settings.PlayerSettings
-import com.prism.music.ui.screens.settings.RecommendationsPage
+import com.prism.music.ui.screens.settings.SettingsMap
+import com.prism.music.ui.screens.settings.SettingsPageContent
+import com.prism.music.ui.screens.settings.SettingsPageId
+import com.prism.music.ui.screens.settings.SettingsRoot
+import com.prism.music.ui.screens.settings.SettingsSearchOverlay
+import com.prism.music.ui.screens.settings.SettingsTarget
 import com.prism.music.ui.screens.settings.ShapeSettings
-import com.prism.music.ui.screens.settings.SoundPage
-import com.prism.music.ui.screens.settings.TypeSettings
+import com.prism.music.ui.screens.settings.lookKeys
 
 /**
- * The settings pages (1.7.6's reorganization, owner): the hub lists what Prism does (playback, lyrics, controls, your
- * music, devices); everything about how Prism looks lives under one entry, Customize Prism ([APPEARANCE]), whose page
- * lists the look pages. Keys stay as they were, so links to a page (the tour, the player's ⋯, prism:// links) still work.
+ * The settings pages of before 1.8.4, by their keys (1.7.6's hub listed what Prism does, with everything about how it
+ * looks under Customize Prism, [APPEARANCE], whose page listed the look pages).
+ *
+ * 1.8.4: the pages are the 17 of the map now ([SettingsPageId], one tap from the root). These keys stay as **aliases**:
+ * a link to an old page (the tour, the player's ⋯, prism:// links, "Customize this") opens the page that holds it now
+ * ([page], [SettingsMap.resolve]). The titles, icons and summaries are the old pages', still drawn by the old link
+ * lists inside the pages that aren't rebuilt yet; nothing new should use them.
  */
 enum class SettingsSection(val key: String, val title: String, val icon: ImageVector) {
     APPEARANCE("appearance", tr(R.string.customize_prism), PrismIcons.Palette),
@@ -156,69 +148,25 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
         LOOKS -> tr(R.string.save_switch_and_share_whole_looks)
     }
 
-    /** The look settings on this page, for its "Reset this page" (empty: the page has none, or its own reset). */
-    val lookKeys: List<String> get() = when (this) {
-        TEXT -> listOf("font_choice", "lyrics_font", "text_scale", "type_weight", "type_spacing", "title_font")
-        ICONS -> listOf(
-            "corners", "corner_scale", "cover_shape_songs", "cover_shape_albums", "cover_shape_artists", "cover_shape_player",
-            "button_shape", "play_outlined",
-        )
-        // 1.8.0: Reduce motion is on the Customize Prism page now (MotionGroup), so this page's reset leaves it.
-        GLASS -> listOf("liquid_glass", "glass_kind", "frosted_glass", "frosted_pages", "backdrops", "backdrop_dim", "backdrop_motion", "glass_blur", "glass_frost", "glass_more")
-        INTERFACE -> listOf(
-            // 1.8.0: the tab you're on's tint is with the tab bar now (from Icons & shapes).
-            "tab_icon_tint",
-            "nav_style", "nav_labels", "nav_hide_on_scroll", "nav_tabs", "start_tab", "mini_player_style", "mini_skip_buttons",
-            "mini_prev_button", "mini_play_button", "mini_progress", "mini_progress_color", "mini_fill_strength", "ui_density", "title_size", "card_size", "hide_status_bar", "hide_status_bar_player",
-            "tab_names", "nav_bar_size", "nav_bar_fill", "mini_player_joined",
-        )
-        PLAYER -> listOf(
-            "player_background", "player_backdrop_show", "transport_style", "scrubber_style", "cover_size", "player_art_corners",
-            "full_bleed_artwork", "video_full_bleed", "art_shrink_on_pause", "show_playing_from", "player_shuffle_repeat", "hide_volume_bar",
-            "show_output_device", "immersive_art", "immersive_lyrics", "immersive_controls", "player_handle", "player_nav_band", "play_ring",
-            // 1.8.0: what the page now holds (What's on the player, the progress bar, the crossfade's marks from Sound).
-            "player_hidden_parts", "player_buttons", "player_buttons_pill", "player_times", "scrubber_color", "scrubber_thickness",
-            "scrubber_thumb", "cover_flight", "crossfade_mark", "blend_covers", "video_controls_hide", "mesh_speed", "mesh_intensity",
-            "player_blur", "crossfade_shape", "player_gradient_depth",
-            "cover_flight_back", "video_buttons_hide", "bleed_roomy", "queue_lengths", "queue_played_moves", "queue_tidy",
-        )
-        LYRICS_LOOK -> listOf(
-            "lyrics_align", "lyrics_scale", "lyrics_blur", "lyrics_progress_line", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",
-            "lyrics_others_alpha", "lyrics_sung_color", "lyrics_sung_custom", "lyrics_other_color", "lyrics_other_custom", "lyrics_weight",
-            "lyrics_backing_size", "lyrics_shadow", "lyrics_uppercase", "lyrics_ahead", "lyrics_position", "lyrics_extra_size", "lyrics_extra_color",
-            "lyrics_extra_italic", "lyrics_extra_place", "lyrics_background", "immersive_background", "lyrics_bg_color", "lyrics_bg_color2", "lyrics_everywhere",
-            "lyrics_strip_align", "lyrics_strip_two_lines", "lyrics_gap_mark",
-            // 1.8.0 lyrics look
-            "lyrics_motion", "lyrics_word_by_word", "lyrics_card", "lyrics_halo", "lyrics_bold_lines",
-        )
-        else -> emptyList()
-    }
+    /** 1.8.4: the page of the map that holds what this old page held ([SettingsMap.aliases]). */
+    val page: SettingsPageId get() = SettingsMap.aliases.getValue(key).page
 
-    /**
-     * The look pages: they say when Performance mode is pausing their effects. The live preview (three phones) is on
-     * Customize Prism's own page only, scrolling with it: pinned on every look page it took a third of the screen.
-     */
-    val isLook: Boolean get() = this in setOf(APPEARANCE, LOOKS, COLOR, TEXT, ICONS, GLASS, INTERFACE, HOME, PLAYER, LYRICS_LOOK)
+    /** The look settings its page's "Reset this page" puts back (1.8.4: each page's own file lists them). */
+    val lookKeys: List<String> get() = page.lookKeys
 
     companion object { fun of(key: String?) = entries.firstOrNull { it.key == key } }
 }
 
-private val hubGroups = listOf(
-    tr(R.string.make_it_yours) to listOf(SettingsSection.APPEARANCE),
-    tr(R.string.listening) to listOf(SettingsSection.SOUND, SettingsSection.LYRICS, SettingsSection.CONTROLS),
-    tr(R.string.your_music) to listOf(SettingsSection.LIBRARY, SettingsSection.DOWNLOADS),
-    tr(R.string.devices) to listOf(SettingsSection.DEVICES),
-    "" to listOf(SettingsSection.LANGUAGE, SettingsSection.ABOUT),
-)
-
 /**
- * Settings: the account, then the categories; [section] shows one category's page. On a wide window the hub lists
- * the categories down the side with the picked one's page beside it.
+ * Settings (1.8.4): the root ([SettingsRoot]: search, the account, Performance mode, the map's 17 pages in 5 groups),
+ * or, with a [key], one page. [key] is a page's own key (`SettingsPageId.key`) or a key of before 1.8.4
+ * (`SettingsSection.key`), which opens the page that holds it now; [find] is the group to open the page at
+ * ([SettingsMap.resolve]). On a wide window the root sits down the side with the picked page beside it.
  */
 @Composable
-fun SettingsScreen(bottomPadding: Dp, section: SettingsSection? = null, find: String? = null) {
+fun SettingsScreen(bottomPadding: Dp, key: String? = null, find: String? = null) {
     // The switches show what the listener chose, also while Performance mode draws Prism lighter.
-    StoredSettings { SettingsHub(bottomPadding, section, find) }
+    StoredSettings { SettingsHost(bottomPadding, SettingsMap.resolve(key, find)) }
 }
 
 /** [content] with the settings as stored, not as Performance mode draws them (pages that change settings). */
@@ -229,172 +177,50 @@ fun StoredSettings(content: @Composable () -> Unit) {
 }
 
 @Composable
-private fun SettingsHub(bottomPadding: Dp, section: SettingsSection?, find: String?) {
-    if (section != null || !com.prism.music.ui.theme.LocalWindowLayout.current.listDetail) {
-        SettingsPage(bottomPadding, section, find)
+private fun SettingsHost(bottomPadding: Dp, target: SettingsTarget?) {
+    val nav = LocalNavigator.current
+    if (target != null) {
+        SettingsDestination(bottomPadding, target, showBack = true, onSearch = null)
         return
     }
-    var open by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(SettingsSection.APPEARANCE.key) }
+    // As a tab, the root is a root page and has nothing to go back to.
+    val showBack = NavTab.SETTINGS !in LocalAppSettings.current.navTabs
+    if (!com.prism.music.ui.theme.LocalWindowLayout.current.listDetail) {
+        SettingsRoot(bottomPadding, showBack) { page, group -> nav.go(Routes.settings(page.key, group)) }
+        return
+    }
+    // A wide window: the root down the side (400 dp), the picked page beside it.
+    var open by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(SettingsPageId.entries.first().key) }
     var openFind by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<String?>(null) }
+    val searchFocus = remember { androidx.compose.ui.focus.FocusRequester() }
     Row(Modifier.fillMaxSize()) {
         Box(Modifier.width(400.dp).fillMaxHeight()) {
-            SettingsPage(bottomPadding, null, null, selected = SettingsSection.of(open)) { picked, group -> open = picked.key; openFind = group }
+            SettingsRoot(bottomPadding, showBack, selected = SettingsPageId.of(open), searchFocus = searchFocus) { page, group -> open = page.key; openFind = group }
         }
         Box(Modifier.weight(1f).fillMaxHeight()) {
             androidx.compose.runtime.key(open, openFind) {
-                SettingsPage(bottomPadding, SettingsSection.of(open) ?: SettingsSection.APPEARANCE, openFind, showBack = false)
+                SettingsDestination(
+                    bottomPadding, SettingsTarget(SettingsPageId.of(open) ?: SettingsPageId.entries.first(), openFind), showBack = false,
+                    // The search is the root's, right beside the page.
+                    onSearch = { runCatching { searchFocus.requestFocus() } },
+                )
             }
         }
     }
 }
 
 /**
- * One settings page: the hub ([section] null) or a category. [onOpen], when given, opens a category beside the hub
- * (wide windows) instead of as its own page; [selected] marks the open one.
+ * One page of the map (or the licenses, a screen of Backup & about). Its bar's search button opens Settings search:
+ * [onSearch] where the root is beside it, else the same search laid over the page.
  */
 @Composable
-private fun SettingsPage(
-    bottomPadding: Dp,
-    section: SettingsSection?,
-    find: String?,
-    selected: SettingsSection? = null,
-    showBack: Boolean = true,
-    onOpen: ((SettingsSection, String?) -> Unit)? = null,
-) {
-    val c = LocalContainer.current
-    val s = LocalAppSettings.current
-    val nav = LocalNavigator.current
-    // As a tab, the hub is a root page and has nothing to go back to.
-    val isTab = (section == null && NavTab.SETTINGS in s.navTabs) || !showBack
-    // Search (#73), on the hub: matching settings in place of the categories. A result on the hub itself (the account)
-    // is found here; one on a page opens that page at its group.
-    var query by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf("") }
-    var foundHere by remember { mutableStateOf<String?>(null) }
-    val keyboard = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
-    val results = remember(query) { if (query.isBlank()) emptyList() else SettingsIndex.search(query) }
-    // The hub only: its search is ready before the first letter, without the main thread reading the whole index (#355).
-    if (section == null) androidx.compose.runtime.LaunchedEffect(Unit) {
-        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { SettingsIndex.prepare() }
-    }
-
-    androidx.compose.runtime.CompositionLocalProvider(LocalSettingsFind provides (find ?: foundHere)) {
-    SubPage(
-        title = section?.title ?: tr(R.string.settings),
-        bottomPadding = bottomPadding,
-        horizontalPadding = 16.dp,
-        spacing = 22.dp,
-        showBack = !isTab,
-        // Only Color keeps its preview pinned under the bar: there each choice changes it, and it's one slim row.
-        pinned = if (section == SettingsSection.COLOR) ({ ColorPreviewBar(pinned = true) }) else null,
-        pinnedKey = if (section == SettingsSection.COLOR) COLOR_PREVIEW_KEY else null,
-    ) {
-        // Pages of the effects Performance mode pauses say so first, with the way back.
-        if (s.performanceMode && section?.isLook == true) item(key = "paused") { PerformancePaused() }
-        when (section) {
-            null -> {
-                item(key = "find") {
-                    com.prism.music.ui.components.SearchField(query, tr(R.string.search_settings), { query = it; foundHere = null })
-                }
-                if (query.isNotBlank()) {
-                    item(key = "results") {
-                        if (results.isEmpty()) Text(
-                            tr(R.string.no_settings_match, query.trim()),
-                            style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                        ) else Group("") {
-                            results.take(30).forEach { e ->
-                                // Keyed: a result still there after the next letter keeps its row, so its text isn't laid out again.
-                                androidx.compose.runtime.key(e.section, e.group, e.title) {
-                                    // Hidden until another switch is on: the result says so, and opens at that switch's group.
-                                    val hidden = e.needs?.takeIf { !it.on(s) }
-                                    NavRow(
-                                        e.section?.icon ?: PrismIcons.Settings, e.shown,
-                                        listOf(e.page, e.group).filter { it != e.title }.joinToString(" › "),
-                                        hint = hidden?.hint,
-                                    ) {
-                                        // The keyboard goes with the search: left up, the page's first Back only closed it.
-                                        keyboard?.hide()
-                                        val opens = e.opens
-                                        // A page outside Settings' own (Customize Home) opens as itself, beside the hub or not.
-                                        if (e.route != null) nav.go(e.route)
-                                        else if (e.section == null || opens == null) { query = ""; foundHere = e.group }
-                                        else if (onOpen != null) onOpen(e.section, e.group)
-                                        else nav.go(opens)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    return@SubPage
-                }
-                item { AccountCard() }
-                item(key = "performance") { PerformanceGroup() }
-                // Every section's icon sits on its own color of the split light, red at the top to violet at the foot.
-                val hubCount = hubGroups.sumOf { it.second.size }
-                var hubIndex = 0
-                hubGroups.forEach { (title, sections) ->
-                    val first = hubIndex
-                    hubIndex += sections.size
-                    item {
-                        Group(title) {
-                            sections.forEachIndexed { i, sec ->
-                                val hue = com.prism.music.ui.theme.PrismTokens.spectrumAt((first + i) / (hubCount - 1).coerceAtLeast(1).toFloat())
-                                NavRow(sec.icon, sec.title, sec.summary(s, com.prism.music.ui.theme.LocalIsDark.current), selected = sec == selected, hue = hue) {
-                                    if (onOpen != null) onOpen(sec, null) else nav.go(Routes.settings(sec.key))
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            SettingsSection.APPEARANCE -> appearance()
-            SettingsSection.LOOKS -> looksPage()
-            SettingsSection.COLOR -> colorPage()
-            SettingsSection.TEXT -> item(key = "text") { Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { TypeSettings(); ResetPage(section) } }
-            SettingsSection.ICONS -> item(key = "icons") {
-                Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { IconSettings(); AppIconSettings(); ShapeSettings(); HomeWidgetsGroup(); ResetPage(section) }
-            }
-            SettingsSection.GLASS -> item(key = "glass") { Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { GlassSettings(); ResetPage(section) } }
-            SettingsSection.INTERFACE -> layoutAndNavigation()
-            SettingsSection.PLAYER -> item { Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { PlayerSettings(); ResetPage(section) } }
-            SettingsSection.SOUND -> item { SoundPage() }
-            SettingsSection.LYRICS -> item { LyricsSettings() }
-            SettingsSection.LYRICS_LOOK -> item { Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { LyricsLookPage(); ResetPage(section) } }
-            SettingsSection.CONTROLS -> item { ControlsPage() }
-            SettingsSection.DOWNLOADS -> item { DownloadSettings() }
-            SettingsSection.DEVICES -> item { DevicesPage() }
-            SettingsSection.CONNECT -> item { ConnectSettings() }
-            SettingsSection.HOME -> item { HomeLibraryLook() }
-            SettingsSection.LIBRARY -> item { RecommendationsPage() }
-            SettingsSection.DISCORD -> item { DiscordGroup() }
-            SettingsSection.LASTFM -> item { LastFmGroup() }
-            SettingsSection.SPOTIFY -> item { SpotifyPage() }
-            // 1.8.0: Region (the country Prism Music is asked as) beside the language, from Recommendations & Replay.
-            SettingsSection.LANGUAGE -> item { Column(verticalArrangement = Arrangement.spacedBy(22.dp)) { LanguageSettings(); ContentCountrySetting() } }
-            SettingsSection.ABOUT -> item {
-                Column(verticalArrangement = Arrangement.spacedBy(22.dp)) {
-                BackupGroup()
-                Group(tr(R.string.about_3)) {
-                    val uri = androidx.compose.ui.platform.LocalUriHandler.current
-                    Item(tr(R.string.prism, com.prism.music.BuildConfig.VERSION_NAME), tr(R.string.unofficial_not_affiliated_with_google_or), onClick = { runCatching { uri.openUri(SOURCE_URL) } }) {
-                        Icon(PrismIcons.OpenInNew, tr(R.string.open_on_github), tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
-                    Item(tr(R.string.your_data_stays_here), tr(R.string.prism_has_no_server), info = tr(R.string.your_history_replay_and_settings_live), onClick = {})
-                    CheckForUpdates()
-                    Item(tr(R.string.take_the_tour), tr(R.string.a_minute_s_walk_through_prism), onClick = { c.tourRequests.tryEmit(Unit) }) { Chevron() }
-                    Item(tr(R.string.open_source_licenses), tr(R.string.gpl_3_0_or_later_and), onClick = { nav.go(Routes.settings(SettingsSection.LICENSES.key)) }) { Chevron() }
-                    // Debug builds only, so it's left out of Settings search (named title: SettingsIndexTest skips it).
-                    if (com.prism.music.BuildConfig.DEBUG) Item(
-                        title = tr(R.string.design_gallery), subtitle = tr(R.string.every_component_of_the_redesign_in), onClick = { nav.go(Routes.DESIGN_GALLERY) },
-                    ) { Chevron() }
-                }
-                // 1.8.0: only for sending a bug report, so folded away.
-                MoreOptions(listOf(tr(R.string.diagnostics))) { DiagnosticsGroup() }
-                }
-            }
-            SettingsSection.LICENSES -> item { LicensesPage() }
-        }
-    }
+private fun SettingsDestination(bottomPadding: Dp, target: SettingsTarget, showBack: Boolean, onSearch: (() -> Unit)?) {
+    var searching by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
+    val search = onSearch ?: { searching = true }
+    Box(Modifier.fillMaxSize()) {
+        if (target.licenses) LicensesScreen(bottomPadding, showBack, search)
+        else SettingsPageContent(target.page, bottomPadding, target.find, showBack, search)
+        if (searching) SettingsSearchOverlay(bottomPadding) { searching = false }
     }
 }
 
@@ -402,22 +228,6 @@ private fun SettingsPage(
 internal val PERFORMANCE_PAUSES =
     tr(R.string.blur_and_frosted_glass_the_frost_all)
 
-/**
- * Performance mode (1.7.6): one switch for slower phones, Prism drawn about as lightly as 1.6 was. Nothing is removed and
- * no choice is changed: the effects that cost the most on every frame pause until it's off again.
- */
-@Composable
-private fun PerformanceGroup() {
-    val c = LocalContainer.current
-    val s = LocalAppSettings.current
-    Group(tr(R.string.performance)) {
-        Toggle(
-            tr(R.string.performance_mode), if (s.performanceMode) tr(R.string.on_prism_is_drawn_lightly) else tr(R.string.for_slower_phones_lighter_fewer_effects),
-            s.performanceMode, icon = PrismIcons.Speed,
-            info = tr(R.string.pauses_every_feature_still_works_and, PERFORMANCE_PAUSES.lowercase()),
-        ) { c.settings.setPerformanceMode(it) }
-    }
-}
 
 /** At the top of a page whose effects Performance mode is pausing. */
 @Composable
@@ -437,8 +247,9 @@ internal fun Chevron() = Icon(PrismIcons.ChevronRight, null, tint = MaterialThem
 
 // ---------------------------------------------------------------------------- Account
 
+/** The root's account card: the Prism Account, then YouTube Music (sign in, sign out, switch). */
 @Composable
-private fun AccountCard() {
+internal fun AccountCard() {
     val c = LocalContainer.current
     val s = LocalAppSettings.current
     val nav = LocalNavigator.current
@@ -626,31 +437,31 @@ internal fun WholeWords(text: String, style: TextStyle, color: Color, maxLines: 
     )
 }
 
-/** "Reset this page" (1.7.3): this page's look settings back to how Prism comes, after asking. */
+/** "Reset this page" for the page that holds what [section]'s old page held (the old pages' own call). */
 @Composable
-internal fun ResetPage(section: SettingsSection) {
+internal fun ResetPage(section: SettingsSection) = ResetPage(section.page.title, section.lookKeys)
+
+/**
+ * "Reset this page" (1.7.3), the old pages' button: the look settings [lookKeys] back to how Prism comes, after asking
+ * (the dialog names [title]). [also]: what else the reset puts back (the icon style, kept apart from the settings).
+ * A page rebuilt with the kit has this under ⋯ instead (`PageReset`).
+ */
+@Composable
+internal fun ResetPage(title: String, lookKeys: List<String>, also: () -> Unit = {}) {
     val c = LocalContainer.current
-    val context = androidx.compose.ui.platform.LocalContext.current
     var ask by remember { mutableStateOf(false) }
     PrismTextButton(onClick = { ask = true }, Modifier.fillMaxWidth()) {
         Icon(PrismIcons.Refresh, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(tr(R.string.reset_this_page))
     }
     if (ask) androidx.compose.material3.AlertDialog(
         onDismissRequest = { ask = false },
-        title = { Text(tr(R.string.reset_2, section.title)) },
+        title = { Text(tr(R.string.reset_2, title)) },
         text = { Text(tr(R.string.this_page_s_look_goes_back)) },
         confirmButton = {
             PrismTextButton(onClick = {
                 ask = false
-                c.settings.resetLookKeys(section.lookKeys)
-                // The icon style lives apart from the settings.
-                if (section == SettingsSection.ICONS) {
-                    com.prism.music.ui.theme.IconStyle.save(context, com.prism.music.ui.theme.IconWeight.REGULAR, true)
-                    com.prism.music.ui.theme.IconStyle.savePack(context, com.prism.music.ui.theme.IconPack.PRISM)
-                    com.prism.music.ui.theme.IconStyle.saveLikeStar(context, false)
-                    com.prism.music.ui.theme.IconStyle.saveFill(context, com.prism.music.ui.theme.IconFill.OUTLINE)
-                    c.looks.iconsChanged()
-                }
+                c.settings.resetLookKeys(lookKeys)
+                also()
             }) { Text(tr(R.string.reset)) }
         },
         dismissButton = { PrismTextButton(onClick = { ask = false }) { Text(tr(R.string.cancel)) } },

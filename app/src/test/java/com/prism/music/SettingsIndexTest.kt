@@ -13,10 +13,40 @@ import java.io.File
 @org.junit.runner.RunWith(org.robolectric.RobolectricTestRunner::class)
 @org.robolectric.annotation.Config(sdk = [34], application = android.app.Application::class)
 class SettingsIndexTest {
-    /** 1.8.4: the pages are one file each under `ui/screens/settings/`; every file there is read, so a rebuilt page is too. */
-    private val pageFiles = File("src/main/java/com/prism/music/ui/screens/settings").listFiles().orEmpty().filter { it.extension == "kt" }.sortedBy { it.name }
+    /**
+     * 1.8.4: the pages are one file each under `ui/screens/settings/` (`<Page>Page.kt`); every file there is read, so a
+     * rebuilt page is too. An `Old*.kt` file (a page's code of before the rework) is read for as long as a page still
+     * draws something of it: once nothing outside the old files calls any of its composables, its rows are on no page,
+     * and it waits to be deleted.
+     */
+    private val pageFiles: List<File> = run {
+        val all = File("src/main/java/com/prism/music/ui/screens/settings").listFiles().orEmpty().filter { it.extension == "kt" }.sortedBy { it.name }
+        val (old, current) = all.partition { it.name.startsWith("Old") }
+        val live = (current + File("src/main/java/com/prism/music/ui/screens/SettingsScreen.kt")).toMutableList()
+        val waiting = old.toMutableList()
+        // What an old file offers the others: its composables that aren't private.
+        fun offers(f: File) = Regex("""^internal fun (?:[\w.]+\.)?(\w+)\(""", RegexOption.MULTILINE).findAll(f.readText()).map { it.groupValues[1] }.toList()
+        while (true) {
+            val text = live.joinToString("\n") { it.readText() }
+            val used = waiting.filter { f -> offers(f).any { Regex("""\b$it\(""").containsMatchIn(text) } }
+            if (used.isEmpty()) break
+            live += used
+            waiting -= used
+        }
+        live.filter { it.parentFile.name == "settings" }.sortedBy { it.name }
+    }
     private val sources = listOf("SettingsScreen.kt", "SoundSettings.kt", "BackupUi.kt", "ConnectSettings.kt", "ColorSettings.kt", "LookSettings.kt", "SpotifySettings.kt", "HistorySettings.kt")
         .map { File("src/main/java/com/prism/music/ui/screens/$it").readText() } + pageFiles.map { it.readText() }
+
+    /** The old rows, and the kit's five (1.8.4), by the composable that draws them. */
+    private val rowCalls = "Toggle|Item|SliderSetting|Label|SwitchRow|PickRow|PickCardsRow|PickListRow|SliderRow|ChoiceRow|ShowChipsRow|LinkRow"
+
+    /**
+     * Groups that only list other pages (the old hubs' link lists, still drawn inside the pages that aren't rebuilt):
+     * they hold no setting, and the pages they link to are found by their own names and the old pages' names
+     * ([SettingsMapTest]). They go with the old pages.
+     */
+    private val linkLists = setOf(R.string.the_whole_look, R.string.each_part, R.string.connections)
 
     /** The English strings (strings.xml and, until they're folded in, a release's own strings_*.xml): name → text. */
     private val strings: Map<String, String> by lazy {
@@ -34,18 +64,31 @@ class SettingsIndexTest {
 
     @Test
     fun everyRowIsSearchable() {
-        val rows = rows("Toggle|Item|SliderSetting|Label")
+        val rows = rows(rowCalls)
         assertTrue("the pages' rows were read (${rows.size})", rows.size > 100)
         val missing = rows.filter { row -> SettingsIndex.entries.none { it.title == row || row.startsWith(it.title) } }
         assertTrue("Not in SettingsIndex: $missing", missing.isEmpty())
+        // The kit's rows are read too (the first rebuilt page and the root).
+        assertTrue(com.prism.music.tr(R.string.content_country) in rows && com.prism.music.tr(R.string.performance_mode) in rows)
     }
 
     @Test
     fun everyGroupIsSearchable() {
-        val groups = rows("Group")
+        // The old groups, and the kit's (`group(...)` in a page's scaffold, `SettingsGroup(...)`).
+        val groups = rows("Group|group|SettingsGroup") - linkLists.map { com.prism.music.tr(it) }.toSet()
         assertTrue("the pages' groups were read (${groups.size})", groups.size > 20)
         val missing = groups.filter { g -> SettingsIndex.entries.none { it.group == g } }
         assertTrue("Groups not in SettingsIndex: $missing", missing.isEmpty())
+    }
+
+    /** The files of a page that is rebuilt are no longer read; the others all are. */
+    @Test
+    fun oldFilesAreReadWhileAPageDrawsThem() {
+        val read = pageFiles.map { it.name }
+        assertTrue("the old Language page is rebuilt (LanguageRegionPage.kt): $read", "OldLanguageRegion.kt" !in read)
+        for (name in listOf("OldPlayer.kt", "OldSound.kt", "OldTheme.kt", "OldTabs.kt", "OldCar.kt", "OldAccounts.kt", "OldLyrics.kt", "OldLooks.kt", "OldBackupAbout.kt", "LanguageRegionPage.kt", "PlayerPage.kt")) {
+            assertTrue("$name is read: $read", name in read)
+        }
     }
 
     /** A setting that's hidden says what to turn on first, and stops saying it once that's on. */
@@ -71,8 +114,9 @@ class SettingsIndexTest {
     @Test
     fun quickPicksFromIsWhereItsResultOpens() {
         val e = SettingsIndex.entries.first { it.title == com.prism.music.tr(R.string.quick_picks_from) }
-        assertTrue(e.section == com.prism.music.ui.screens.SettingsSection.HOME && e.group == com.prism.music.tr(R.string.home))
-        // The page's own file (1.8.4: out of SettingsScreen.kt, into ui/screens/settings/).
+        assertTrue(e.page == com.prism.music.ui.screens.settings.SettingsPageId.HOME_LIBRARY && e.group == com.prism.music.tr(R.string.home))
+        // The page's own file (1.8.4: out of SettingsScreen.kt, into ui/screens/settings/), which the page still draws.
+        assertTrue("HomeLibraryLook()" in File("src/main/java/com/prism/music/ui/screens/settings/HomeLibraryPage.kt").readText())
         val page = (pageFiles + File("src/main/java/com/prism/music/ui/screens/SettingsScreen.kt")).map { it.readText() }.single { "fun HomeLibraryLook()" in it }
         val group = page.substringAfter("fun HomeLibraryLook()").substringAfter("Group(tr(R.string.home))").substringBefore("Group(")
         assertTrue("Quick picks from isn't in that group", "R.string.quick_picks_from" in group)
@@ -86,17 +130,18 @@ class SettingsIndexTest {
     fun speedDialYoursFirstOpensThePageItIsOn() {
         val row = "R.string.speed_dial_your_plays_first)"
         assertTrue("the row is on Customize Home", row in File("src/main/java/com/prism/music/ui/screens/CatalogueScreen.kt").readText())
-        assertTrue("and on no settings page", sources.none { row in it })
+        // A page's file also holds its search lines (1.8.4): those name the row without drawing it.
+        assertTrue("and on no settings page", sources.none { src -> src.lineSequence().any { row in it && "SettingEntry(" !in it } })
         val e = SettingsIndex.entries.single { it.title == com.prism.music.tr(R.string.speed_dial_your_plays_first) }
         org.junit.Assert.assertEquals(com.prism.music.ui.Routes.CATALOGUE, e.opens)
-        org.junit.Assert.assertEquals(com.prism.music.tr(R.string.customize_home), e.page)
+        org.junit.Assert.assertEquals(com.prism.music.tr(R.string.customize_home), e.pageTitle)
         // Still found by the page's name, and still says what to turn off first.
         assertTrue(SettingsIndex.search("customize home speed dial").contains(e))
         assertTrue(e.needs != null)
-        // Every other result opens a settings page at its group, as before.
+        // Every other result opens a settings page at its group, as before (1.8.4: the page of the map it's on now).
         val haptics = SettingsIndex.entries.first { it.title == "Haptics" }
-        org.junit.Assert.assertEquals(com.prism.music.ui.Routes.settings("controls", haptics.group), haptics.opens)
-        org.junit.Assert.assertEquals(null, SettingsIndex.entries.first { it.section == null }.opens)
+        org.junit.Assert.assertEquals(com.prism.music.ui.Routes.settings("gestures_buttons", haptics.group), haptics.opens)
+        org.junit.Assert.assertEquals(null, SettingsIndex.entries.first { it.page == null }.opens)
     }
 
     /**
@@ -106,7 +151,7 @@ class SettingsIndexTest {
      */
     @Test
     fun noSettingIsListedTwice() {
-        val doubles = SettingsIndex.entries.groupBy { Triple(it.page, it.group, it.shown) }.filter { it.value.size > 1 }
+        val doubles = SettingsIndex.entries.groupBy { Triple(it.pageTitle, it.group, it.shown) }.filter { it.value.size > 1 }
         assertTrue("Listed more than once in SettingsIndex: ${doubles.map { (k, v) -> "${k.first} › ${k.second} › ${k.third} ×${v.size}" }}", doubles.isEmpty())
         // What each of the two had as search words still finds the one that's left.
         val row = com.prism.music.tr(R.string.buttons_in_the_row)

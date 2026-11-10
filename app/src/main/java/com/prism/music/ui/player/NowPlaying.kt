@@ -640,7 +640,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 if (c.sing.engineReady() && !c.sing.on.value) openLyrics()
                 toggleSing(c) { showSing = true }
             }
-            com.prism.music.data.prefs.PlayerButton.EQUALIZER -> { onCollapse(); nav.go(Routes.settings(com.prism.music.ui.screens.SettingsSection.SOUND.key)) }
+            com.prism.music.data.prefs.PlayerButton.EQUALIZER -> { onCollapse(); nav.go(Routes.settings(com.prism.music.ui.screens.settings.SettingsPageId.SOUND_QUALITY.key, com.prism.music.tr(com.prism.music.R.string.sound))) }
             else -> {}
         }
     }

@@ -737,7 +737,8 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                             ),
                         ) {
                             ScreenBackdrop(BackdropScreen.SETTINGS) {
-                                SettingsScreen(bottomPadding, com.prism.music.ui.screens.SettingsSection.of(it.arguments?.getString("section")), find = it.arguments?.getString("find"))
+                                // 1.8.4: a page of the map by its key, or an old page's key (an alias), resolved by Settings itself.
+                                SettingsScreen(bottomPadding, key = it.arguments?.getString("section"), find = it.arguments?.getString("find"))
                             }
                         }
                         composable(Routes.EQ) { ScreenBackdrop(BackdropScreen.SETTINGS) { EqualizerScreen(bottomPadding) } }

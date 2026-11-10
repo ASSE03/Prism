@@ -46,8 +46,11 @@ class SettingsBugs184Test {
     private fun settingsPages() = listOf(page("SettingsScreen.kt")) +
         File("src/main/java/com/prism/music/ui/screens/settings").listFiles().orEmpty().filter { it.extension == "kt" }.sortedBy { it.name }.map { it.readText() }
 
-    /** The one settings file that holds [marker]. */
-    private fun pageWith(marker: String) = settingsPages().single { marker in it }
+    /**
+     * The one settings file that draws [marker]. A page's file also holds its search lines (`SettingEntry(...)`, 1.8.4),
+     * which name a row without drawing it: those lines are left out.
+     */
+    private fun pageWith(marker: String) = settingsPages().map { src -> src.lines().filterNot { "SettingEntry(" in it }.joinToString("\n") }.single { marker in it }
 
     private fun show(settings: AppSettings = AppSettings(), content: @Composable () -> Unit) {
         compose.setContent { PrismTheme(settings, artworkColor = null) { Column(Modifier.width(412.dp)) { content() } } }
