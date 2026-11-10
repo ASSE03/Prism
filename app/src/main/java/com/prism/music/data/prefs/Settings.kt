@@ -565,7 +565,7 @@ data class ViewLook(
  * was in 1.8.1; [more] is off. All of it needs Android 12's blur, except that [more]'s cards and chips use no blur at all.
  */
 data class GlassLook(
-    /** How strongly Frosted Glass and Liquid Glass · Regular blur what's behind them. Clear has no blur to change. */
+    /** How strongly Frosted Glass and Liquid Glass · Regular blur what's behind them. Clear's blur is fixed. */
     val blur: Float = 1f,
     /** How much of the glass's own milky or dark veil is laid over what's behind it (0 none). */
     val frost: Float = 1f,
@@ -949,7 +949,7 @@ enum class PlayerButton(val label: String) {
  * show the first two, Android Auto and other controllers show them all.
  */
 enum class SessionButton(val label: String) {
-    LIKE(tr(R.string.widget_like)), SHUFFLE(tr(R.string.shuffle)), REPEAT(tr(R.string.repeat)), CAR_LYRICS(tr(R.string.lyrics_in_the_car)), RADIO(tr(R.string.start_radio)),
+    LIKE(tr(R.string.widget_like)), SHUFFLE(tr(R.string.shuffle)), REPEAT(tr(R.string.repeat)), CAR_LYRICS(tr(R.string.lyrics)), RADIO(tr(R.string.start_radio)),
     DISLIKE(tr(R.string.not_for_me)), BACK_10(tr(R.string.back_10_s)), AHEAD_30(tr(R.string.ahead_30_s));
 
     companion object {
