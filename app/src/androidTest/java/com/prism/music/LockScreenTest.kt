@@ -66,6 +66,7 @@ class LockScreenTest {
         settings.setLockScreenPaused(LockPaused.TEN_MINUTES)
         settings.setLockScreenHideSong(false)
         settings.setPerformanceMode(false)
+        settings.setLockScreenPlayerLook(false)
         shell("cmd media_session volume --stream 3 --set 0")
     }
 
@@ -157,6 +158,51 @@ class LockScreenTest {
                 assertEquals(0, compose.onAllNodes(hasText(Fixture.context.getString(id)), useUnmergedTree = true).fetchSemanticsNodes().size)
             }
             Fixture.screenshot("lockscreen-${layout.name.lowercase()}")
+        }
+    }
+
+    /**
+     * 1.8.4 (D53): with "Same look as the player" on, every layout still shows the song and still lets nothing but the
+     * controls be touched, whatever background and progress bar the player has; Performance mode stays Quiet. (The heart on
+     * the Lyrics layout is in LockScreenPlayerLookTest: the tone played here is a file on the phone, which can't be liked.)
+     */
+    @Test fun withThePlayersLookNothingElseCanBeTouched() {
+        LockScreenActivity.pretendLocked = true
+        settings.setLockScreen(true)
+        settings.setLockScreenPlayerLook(true)
+        val background = settings.current.playerBackground
+        val style = settings.current.scrubberStyle
+        try {
+            playTone("Prism lock look tone")
+            startLockScreen()
+            waitUntilShown()
+            val touchable = SemanticsMatcher("takes a touch") { node ->
+                listOf(SemanticsActions.OnClick, SemanticsActions.OnLongClick, SemanticsActions.SetProgress, SemanticsActions.ScrollBy, SemanticsActions.SetText)
+                    .any { it in node.config }
+            }
+            for (bg in com.prism.music.data.prefs.PlayerBackground.entries) {
+                settings.setPlayerBackground(bg)
+                settings.setScrubberStyle(com.prism.music.data.prefs.ScrubberStyle.entries[bg.ordinal % com.prism.music.data.prefs.ScrubberStyle.entries.size])
+                for (layout in LockLayout.entries) {
+                    settings.setLockScreenLayout(layout)
+                    compose.waitUntil(5_000) { layoutShown() == layout }
+                    compose.waitUntil(5_000) { compose.onAllNodes(hasText("Prism lock look tone", substring = true), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+                    val nodes = compose.onAllNodes(touchable, useUnmergedTree = true).fetchSemanticsNodes()
+                    assertTrue("$bg $layout: nothing can be touched?", nodes.isNotEmpty())
+                    for (n in nodes) {
+                        val tag = n.config.getOrNull(SemanticsProperties.TestTag)
+                        assertTrue("$bg $layout: something else can be touched: tag=$tag ${n.config}", tag in LockTags.touchable)
+                    }
+                    assertTrue("$bg $layout: the line to seek with", tagged(LockTags.SEEK))
+                    Fixture.screenshot("lockscreen-look-${bg.name.lowercase()}-${layout.name.lowercase()}")
+                }
+            }
+            settings.setLockScreenLayout(LockLayout.FULL)
+            settings.setPerformanceMode(true)
+            compose.waitUntil(5_000) { layoutShown() == LockLayout.QUIET }
+        } finally {
+            settings.setPlayerBackground(background)
+            settings.setScrubberStyle(style)
         }
     }
 
