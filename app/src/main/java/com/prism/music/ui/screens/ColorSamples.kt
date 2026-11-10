@@ -348,23 +348,6 @@ fun ColorSample(c: ThemeColors, modifier: Modifier = Modifier, marks: Boolean = 
     }
 }
 
-/** Text at a contrast level: a title, secondary lines and a hairline, as a page would show them. */
-@Composable
-fun TextSample(c: ThemeColors, modifier: Modifier = Modifier) {
-    val s = c.scheme
-    val shape = RoundedCornerShape(14.dp)
-    Column(
-        modifier.fillMaxWidth().height(96.dp).clip(shape).background(s.background).border(1.dp, c.line, shape).padding(10.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-    ) {
-        Text(tr(R.string.blinding_lights), color = s.onBackground, fontSize = 11.sp, lineHeight = 13.sp, fontWeight = FontWeight.Medium, maxLines = 1)
-        Text(tr(R.string.the_weeknd_2020), color = c.ink2, fontSize = 9.5.sp, lineHeight = 12.sp, maxLines = 1)
-        Box(Modifier.fillMaxWidth().height(1.dp).background(c.line))
-        Text(tr(R.string.in_your_eyes), color = s.onBackground, fontSize = 11.sp, lineHeight = 13.sp, fontWeight = FontWeight.Medium, maxLines = 1)
-        Text(tr(R.string.t_3_min_explicit), color = c.ink3, fontSize = 9.5.sp, lineHeight = 12.sp, maxLines = 1)
-    }
-}
-
 /** One choice shown as a card: its example on top, then its name and what it does; the picked one is ringed. */
 @Composable
 fun ChoiceCard(title: String, detail: String?, selected: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit, example: @Composable () -> Unit) {

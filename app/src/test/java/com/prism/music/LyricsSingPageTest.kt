@@ -309,6 +309,8 @@ class LyricsSingPageTest {
         // Its only control anywhere: kept, a switch, its explanation behind the ⓘ.
         val button = row(tr(R.string.lyrics_source_button)).fetchSemanticsNode()
         assertEquals(SettingsTags.ROW_SWITCH, button.config[SemanticsProperties.TestTag])
+        // A look setting (a Look carries it): the page's Reset puts it back by its key too.
+        assertTrue("lyrics_source_button" in com.prism.music.ui.screens.settings.lyricsSingLookKeys)
         val words = ArrayList<String>().also { all -> descendants(compose.onRoot(useUnmergedTree = true).fetchSemanticsNode()).forEach { n -> n.config.getOrNull(SemanticsProperties.Text)?.forEach { all += it.text } } }
         assertFalse("the button's explanation is behind its ⓘ", tr(R.string.lyrics_source_button_info) in words)
         assertFalse("Sing's note is behind an ⓘ", tr(R.string.sing_doesn_t_run_on_this) in words)

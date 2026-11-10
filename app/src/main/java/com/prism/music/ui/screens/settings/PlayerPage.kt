@@ -94,12 +94,12 @@ fun PlayerPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = true
     ) {
         // A page of the look says when Performance mode is pausing its effects (a state, not a row).
         if (s.performanceMode) item("performance") { PerformancePaused() }
-        group(PlayerGroups.layout) { LayoutRows() }
-        group(PlayerGroups.progress) { ProgressRows() }
-        group(PlayerGroups.title) { TitleRows() }
-        group(PlayerGroups.cover) { CoverRows() }
-        group(PlayerGroups.onIt) { OnItRows() }
-        group(PlayerGroups.modes) { ModesRows() }
+        group(PlayerGroups.layout) { PlayerLayoutRows() }
+        group(PlayerGroups.progress) { PlayerProgressRows() }
+        group(PlayerGroups.title) { PlayerTitleRows() }
+        group(PlayerGroups.cover) { PlayerCoverRows() }
+        group(PlayerGroups.onIt) { PlayerOnItRows() }
+        group(PlayerGroups.modes) { PlayerModesRows() }
     }
 }
 
@@ -114,7 +114,7 @@ private fun chipInfo(vararg chips: Pair<String, String>): String = chips.joinToS
 // ---------------------------------------------------------------------------- Layout
 
 @Composable
-private fun LayoutRows() {
+internal fun PlayerLayoutRows() {
     val s = LocalAppSettings.current
     val c = LocalContainer.current
     val prefs = c.settings
@@ -188,7 +188,7 @@ private fun ShowBackgroundRow() {
 // ---------------------------------------------------------------------------- Progress bar and times
 
 @Composable
-private fun ProgressRows() {
+internal fun PlayerProgressRows() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     PickCardsRow(
@@ -227,7 +227,7 @@ private fun ProgressRows() {
 // ---------------------------------------------------------------------------- Title
 
 @Composable
-private fun TitleRows() {
+internal fun PlayerTitleRows() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     PickCardsRow(
@@ -251,7 +251,7 @@ private fun TitleRows() {
 // ---------------------------------------------------------------------------- Cover
 
 @Composable
-private fun CoverRows() {
+internal fun PlayerCoverRows() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     ChoiceRow(tr(R.string.cover_size), CoverSize.entries, s.coverSize, { it.label }, changed = ch("cover_size")) { prefs.setCoverSize(it) }
@@ -295,7 +295,7 @@ private fun CoverRows() {
 // ---------------------------------------------------------------------------- On it
 
 @Composable
-private fun OnItRows() {
+internal fun PlayerOnItRows() {
     val s = LocalAppSettings.current
     val c = LocalContainer.current
     val prefs = c.settings
@@ -387,19 +387,12 @@ private fun DeckOrder() {
 // ---------------------------------------------------------------------------- Modes
 
 @Composable
-private fun ModesRows() {
+internal fun PlayerModesRows() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     val context = LocalContext.current
     val b = s.behavior
-    val visualizerOn = s.visualizer != VisualizerStyle.OFF
-    PickCardsRow(
-        tr(R.string.visualizer), VisualizerStyle.entries, s.visualizer, { it.label },
-        // Why it doesn't move is a state: it's said with the explanation.
-        info = words(tr(R.string.it_listens_to_prism_s_own), if (visualizerOn && s.reduceMotion) tr(R.string.reduce_motion_is_on_so_it) else null),
-        changed = ch("visualizer"), onPick = { prefs.setVisualizer(it) },
-    ) { VisualizerSample(it, s.visualizerColor) }
-    if (visualizerOn) ChoiceRow(tr(R.string.visualizer_color), ScrubberColor.entries, s.visualizerColor, { it.label }, changed = ch("visualizer_color")) { prefs.setVisualizerColor(it) }
+    PlayerVisualizerRows()
 
     SwitchRow(
         tr(R.string.immersive_mode), s.immersivePlayer, info = words(tr(R.string.the_cover_fills_the_screen_lyrics), tr(R.string.like_a_lyric_video_tap_the)),
@@ -441,6 +434,21 @@ private fun ModesRows() {
 
     // #265: the TV's ambient screen on a phone at its stand.
     SwitchRow(tr(R.string.desk_mode), s.tv.deskMode, info = words(tr(R.string.desk_mode_detail), tr(R.string.desk_mode_info)), changed = ch("desk_mode")) { prefs.setDeskMode(it) }
+}
+
+/** The visualizer's rows, the first of Modes: on the page, and in "Customize this" for the player. */
+@Composable
+internal fun PlayerVisualizerRows() {
+    val s = LocalAppSettings.current
+    val prefs = LocalContainer.current.settings
+    val visualizerOn = s.visualizer != VisualizerStyle.OFF
+    PickCardsRow(
+        tr(R.string.visualizer), VisualizerStyle.entries, s.visualizer, { it.label },
+        // Why it doesn't move is a state: it's said with the explanation.
+        info = words(tr(R.string.it_listens_to_prism_s_own), if (visualizerOn && s.reduceMotion) tr(R.string.reduce_motion_is_on_so_it) else null),
+        changed = ch("visualizer"), onPick = { prefs.setVisualizer(it) },
+    ) { VisualizerSample(it, s.visualizerColor) }
+    if (visualizerOn) ChoiceRow(tr(R.string.visualizer_color), ScrubberColor.entries, s.visualizerColor, { it.label }, changed = ch("visualizer_color")) { prefs.setVisualizerColor(it) }
 }
 
 @Composable
@@ -517,8 +525,10 @@ private fun LockScreenOptions(canStart: Boolean) {
 
 // ---------------------------------------------------------------------------- The page's parts for the map
 
-/** The root's line for Player: its layout, background and animated covers. */
-fun playerValue(s: AppSettings, dark: Boolean): String = SettingsSection.PLAYER.summary(s, dark)
+/** The root's line for Player: its layout and background. */
+fun playerValue(s: AppSettings, dark: Boolean): String =
+    // 1.8.4: its layout and background only, so it fits one line on the root (with animated covers it ran to "…").
+    listOf(tr(R.string.player_layout_x, s.playerLayout.label), s.playerBackground.label).joinToString(" · ")
 
 /**
  * The look settings "Reset this page" puts back by their keys: every setting of the page that is part of a Look. (The

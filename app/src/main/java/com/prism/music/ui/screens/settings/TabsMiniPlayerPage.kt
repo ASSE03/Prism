@@ -131,7 +131,6 @@ fun TabsMiniPlayerPage(bottomPadding: Dp, find: String? = null, showBack: Boolea
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     val d = remember { AppSettings() }
-    val tablet = LocalWindowLayout.current.rail
     val tabs = s.navTabs
     fun name(t: NavTab) = s.tabNames[t] ?: t.label
     val start = if (s.startTab in tabs) s.startTab else tabs.first()
@@ -167,76 +166,102 @@ fun TabsMiniPlayerPage(bottomPadding: Dp, find: String? = null, showBack: Boolea
     }
 
     SettingsPageScaffold(page.title, bottomPadding, showBack = showBack, onSearch = onSearch, reset = reset, find = find) {
-        group(tr(R.string.navigation_bar)) {
-            ChoiceRow(tr(R.string.style), NavBarStyle.entries, s.navStyle, { it.label }, changed = s.navStyle != d.navStyle) { prefs.setNavStyle(it) }
-            // The Minimal bar has no labels to show. A Pick, not chips: the kit draws four chips as one capsule, which
-            // cuts "Words only" short on a 360 dp phone.
-            if (s.navStyle != NavBarStyle.MINIMAL) PickListRow(
-                tr(R.string.labels), NavLabels.entries, s.navLabels, { it.label }, info = tr(R.string.never_shows_only_the_icons_words),
-                changed = s.navLabels != d.navLabels, searchable = false,
-            ) { prefs.setNavLabels(it) }
-            ChoiceRow(tr(R.string.height), NavBarSize.entries, s.navBarSize, { it.label }, changed = s.navBarSize != d.navBarSize) { prefs.setNavBarSize(it) }
-            ChoiceRow(
-                tr(R.string.background), NavBarFill.entries, s.navBarFill, { it.label }, info = tr(R.string.see_through_lets_the_page_show),
-                changed = s.navBarFill != d.navBarFill,
-            ) { prefs.setNavBarFill(it) }
-            // #264 (1.8.0): only where it means something, a tablet or wide window (phones: always the bottom).
-            if (tablet) ChoiceRow(
-                tr(R.string.tabs_on_a_tablet), TabBarPosition.entries, s.behavior.tabBarPosition, { it.label }, info = tr(R.string.tabs_on_a_tablet_info),
-                changed = s.behavior.tabBarPosition != d.behavior.tabBarPosition,
-            ) { prefs.setTabBarPosition(it) }
-            // A color only: chips (plan §2.4).
-            ChoiceRow(tr(R.string.the_tab_you_re_on), TabTint.entries, s.shapes.tabTint, { it.label }, changed = s.shapes.tabTint != d.shapes.tabTint) { prefs.setTabTint(it) }
-            SwitchRow(tr(R.string.shrink_while_scrolling), s.navHideOnScroll, changed = s.navHideOnScroll != d.navHideOnScroll) { prefs.setNavHideOnScroll(it) }
-        }
+        group(tr(R.string.navigation_bar)) { TabsMiniPlayerBarRows() }
         group(tr(R.string.tabs), info = tr(R.string.tick_up_to_tabs_and_hold, NavTab.MAX)) {
             TabsList()
             ChoiceRow(
                 tr(R.string.open_prism_on), tabs, start, { name(it) }, info = tr(R.string.from_prism_s_next_start), changed = start != d.startTab,
             ) { prefs.setStartTab(it) }
         }
-        group(tr(R.string.mini_player)) {
-            ChoiceRow(tr(R.string.style), MiniPlayerStyle.entries, s.miniPlayerStyle, { it.label }, changed = s.miniPlayerStyle != d.miniPlayerStyle) { prefs.setMiniPlayerStyle(it) }
-            if (s.navStyle == NavBarStyle.FLOATING) SwitchRow(
-                tr(R.string.joined_to_the_tab_bar), s.miniPlayerJoined, info = tr(R.string.the_mini_player_sits_on_top),
-                changed = s.miniPlayerJoined != d.miniPlayerJoined,
-            ) { prefs.setMiniPlayerJoined(it) }
-            ShowChipsRow(
-                tr(R.string.mini_player_buttons),
-                listOf(
-                    ShowOption(MiniButton.PREVIOUS.label, MiniButton.PREVIOUS in buttons) { prefs.setMiniPrevButton(it) },
-                    ShowOption(MiniButton.PLAY_PAUSE.label, MiniButton.PLAY_PAUSE in buttons) { prefs.setMiniPlayButton(it) },
-                    ShowOption(MiniButton.NEXT.label, MiniButton.NEXT in buttons) { prefs.setMiniSkipButtons(it) },
-                ),
-                info = listOf(R.string.swiping_right_goes_back_too, R.string.swiping_left_skips_too, R.string.the_player_and_your_phone_s_controls_still_have_it).joinToString(" · ") { tr(it) },
-                changed = buttons != buttonsDefault,
-            )
-            ChoiceRow(tr(R.string.progress), MiniProgress.entries, s.miniProgress, { it.label }, changed = s.miniProgress != d.miniProgress) { prefs.setMiniProgress(it) }
-            // #231 (1.7.9.2): its color, and how strongly Fill tints the card.
-            if (s.miniProgress != MiniProgress.NONE) ChoiceRow(
-                tr(R.string.mini_player_progress_color_row), ScrubberColor.entries, s.view.miniProgressColor, ::progressColorName,
-                changed = s.view.miniProgressColor != d.view.miniProgressColor,
-            ) { prefs.setMiniProgressColor(it) }
-            if (s.miniProgress == MiniProgress.FILL) SliderRow(
-                tr(R.string.fill_strength), s.view.miniFillStrength, 0.1f..0.9f, ::percent, changed = s.view.miniFillStrength != d.view.miniFillStrength,
-            ) { prefs.setMiniFillStrength(it) }
-        }
-        group(tr(R.string.pages)) {
-            ChoiceRow(tr(R.string.spacing), UiDensity.entries, s.uiDensity, { it.label }, changed = s.uiDensity != d.uiDensity) { prefs.setUiDensity(it) }
-            ChoiceRow(tr(R.string.page_titles), TitleSize.entries, s.titleSize, { it.label }, changed = s.titleSize != d.titleSize) { prefs.setTitleSize(it) }
-            ChoiceRow(tr(R.string.album_playlist_cards), CardSize.entries, s.cardSize, { it.label }, changed = s.cardSize != d.cardSize) { prefs.setCardSize(it) }
-            ChoiceRow(
-                tr(R.string.status_bar), StatusBarChoice.entries, status, { it.label },
-                info = tr(R.string.the_clock_battery_and_notification_icons) + " " + tr(R.string.only_while_the_player_its_lyrics),
-                changed = status != statusDefault,
-            ) { picked ->
-                // The choice it already shows writes nothing (both switches stored on stay as they are).
-                if (picked != status) {
-                    val (hide, hidePlayer) = statusBarToStored(picked, s.hideStatusBarPlayer)
-                    if (hide != s.hideStatusBar) prefs.setHideStatusBar(hide)
-                    if (hidePlayer != s.hideStatusBarPlayer) prefs.setHideStatusBarPlayer(hidePlayer)
-                }
-            }
+        group(tr(R.string.mini_player)) { TabsMiniPlayerMiniRows() }
+        group(tr(R.string.pages)) { TabsMiniPlayerPagesRows() }
+    }
+}
+
+/** The Navigation bar group's rows: on the page, and in "Customize this" for the tab bar. */
+@Composable
+internal fun TabsMiniPlayerBarRows() {
+    val s = LocalAppSettings.current
+    val prefs = LocalContainer.current.settings
+    val d = remember { AppSettings() }
+    val tablet = LocalWindowLayout.current.rail
+    ChoiceRow(tr(R.string.style), NavBarStyle.entries, s.navStyle, { it.label }, changed = s.navStyle != d.navStyle) { prefs.setNavStyle(it) }
+    // The Minimal bar has no labels to show. A Pick, not chips: the kit draws four chips as one capsule, which
+    // cuts "Words only" short on a 360 dp phone.
+    if (s.navStyle != NavBarStyle.MINIMAL) PickListRow(
+        tr(R.string.labels), NavLabels.entries, s.navLabels, { it.label }, info = tr(R.string.never_shows_only_the_icons_words),
+        changed = s.navLabels != d.navLabels, searchable = false,
+    ) { prefs.setNavLabels(it) }
+    ChoiceRow(tr(R.string.height), NavBarSize.entries, s.navBarSize, { it.label }, changed = s.navBarSize != d.navBarSize) { prefs.setNavBarSize(it) }
+    ChoiceRow(
+        tr(R.string.background), NavBarFill.entries, s.navBarFill, { it.label }, info = tr(R.string.see_through_lets_the_page_show),
+        changed = s.navBarFill != d.navBarFill,
+    ) { prefs.setNavBarFill(it) }
+    // #264 (1.8.0): only where it means something, a tablet or wide window (phones: always the bottom).
+    if (tablet) ChoiceRow(
+        tr(R.string.tabs_on_a_tablet), TabBarPosition.entries, s.behavior.tabBarPosition, { it.label }, info = tr(R.string.tabs_on_a_tablet_info),
+        changed = s.behavior.tabBarPosition != d.behavior.tabBarPosition,
+    ) { prefs.setTabBarPosition(it) }
+    // A color only: chips (plan §2.4).
+    ChoiceRow(tr(R.string.the_tab_you_re_on), TabTint.entries, s.shapes.tabTint, { it.label }, changed = s.shapes.tabTint != d.shapes.tabTint) { prefs.setTabTint(it) }
+    SwitchRow(tr(R.string.shrink_while_scrolling), s.navHideOnScroll, changed = s.navHideOnScroll != d.navHideOnScroll) { prefs.setNavHideOnScroll(it) }
+}
+
+/** The Mini player group's rows: on the page, and in "Customize this" for the mini player. */
+@Composable
+internal fun TabsMiniPlayerMiniRows() {
+    val s = LocalAppSettings.current
+    val prefs = LocalContainer.current.settings
+    val d = remember { AppSettings() }
+    val buttons = miniButtonsToMerged(s.miniPrevButton, s.view.miniPlayButton, s.miniSkipButtons)
+    val buttonsDefault = miniButtonsToMerged(d.miniPrevButton, d.view.miniPlayButton, d.miniSkipButtons)
+    ChoiceRow(tr(R.string.style), MiniPlayerStyle.entries, s.miniPlayerStyle, { it.label }, changed = s.miniPlayerStyle != d.miniPlayerStyle) { prefs.setMiniPlayerStyle(it) }
+    if (s.navStyle == NavBarStyle.FLOATING) SwitchRow(
+        tr(R.string.joined_to_the_tab_bar), s.miniPlayerJoined, info = tr(R.string.the_mini_player_sits_on_top),
+        changed = s.miniPlayerJoined != d.miniPlayerJoined,
+    ) { prefs.setMiniPlayerJoined(it) }
+    ShowChipsRow(
+        tr(R.string.mini_player_buttons),
+        listOf(
+            ShowOption(MiniButton.PREVIOUS.label, MiniButton.PREVIOUS in buttons) { prefs.setMiniPrevButton(it) },
+            ShowOption(MiniButton.PLAY_PAUSE.label, MiniButton.PLAY_PAUSE in buttons) { prefs.setMiniPlayButton(it) },
+            ShowOption(MiniButton.NEXT.label, MiniButton.NEXT in buttons) { prefs.setMiniSkipButtons(it) },
+        ),
+        info = listOf(R.string.swiping_right_goes_back_too, R.string.swiping_left_skips_too, R.string.the_player_and_your_phone_s_controls_still_have_it).joinToString(" · ") { tr(it) },
+        changed = buttons != buttonsDefault,
+    )
+    ChoiceRow(tr(R.string.progress), MiniProgress.entries, s.miniProgress, { it.label }, changed = s.miniProgress != d.miniProgress) { prefs.setMiniProgress(it) }
+    // #231 (1.7.9.2): its color, and how strongly Fill tints the card.
+    if (s.miniProgress != MiniProgress.NONE) ChoiceRow(
+        tr(R.string.mini_player_progress_color_row), ScrubberColor.entries, s.view.miniProgressColor, ::progressColorName,
+        changed = s.view.miniProgressColor != d.view.miniProgressColor,
+    ) { prefs.setMiniProgressColor(it) }
+    if (s.miniProgress == MiniProgress.FILL) SliderRow(
+        tr(R.string.fill_strength), s.view.miniFillStrength, 0.1f..0.9f, ::percent, changed = s.view.miniFillStrength != d.view.miniFillStrength,
+    ) { prefs.setMiniFillStrength(it) }
+}
+
+/** The Pages group's rows: on the page, and in "Customize this" for a Home section. */
+@Composable
+internal fun TabsMiniPlayerPagesRows() {
+    val s = LocalAppSettings.current
+    val prefs = LocalContainer.current.settings
+    val d = remember { AppSettings() }
+    val status = statusBarToMerged(s.hideStatusBar, s.hideStatusBarPlayer)
+    val statusDefault = statusBarToMerged(d.hideStatusBar, d.hideStatusBarPlayer)
+    ChoiceRow(tr(R.string.spacing), UiDensity.entries, s.uiDensity, { it.label }, changed = s.uiDensity != d.uiDensity) { prefs.setUiDensity(it) }
+    ChoiceRow(tr(R.string.page_titles), TitleSize.entries, s.titleSize, { it.label }, changed = s.titleSize != d.titleSize) { prefs.setTitleSize(it) }
+    ChoiceRow(tr(R.string.album_playlist_cards), CardSize.entries, s.cardSize, { it.label }, changed = s.cardSize != d.cardSize) { prefs.setCardSize(it) }
+    ChoiceRow(
+        tr(R.string.status_bar), StatusBarChoice.entries, status, { it.label },
+        info = tr(R.string.the_clock_battery_and_notification_icons) + " " + tr(R.string.only_while_the_player_its_lyrics),
+        changed = status != statusDefault,
+    ) { picked ->
+        // The choice it already shows writes nothing (both switches stored on stay as they are).
+        if (picked != status) {
+            val (hide, hidePlayer) = statusBarToStored(picked, s.hideStatusBarPlayer)
+            if (hide != s.hideStatusBar) prefs.setHideStatusBar(hide)
+            if (hidePlayer != s.hideStatusBarPlayer) prefs.setHideStatusBarPlayer(hidePlayer)
         }
     }
 }

@@ -71,7 +71,8 @@ enum class SettingsPageId(
     CAR("car", SettingsRootGroup.CONNECTIONS, tr(R.string.root_car), PrismIcons.Car, tr(R.string.devices_connections), tr(R.string.android_auto)),
     SPEAKERS_TVS_BROWSER(
         "speakers_tvs_browser", SettingsRootGroup.CONNECTIONS, tr(R.string.speakers_tvs_browser), PrismIcons.Cast,
-        tr(R.string.devices_connections), tr(R.string.prism_connect_cast_remote_handoff),
+        // And what people call casting ("chromecast", "dlna", "sonos"…).
+        tr(R.string.devices_connections), tr(R.string.prism_connect_cast_remote_handoff) + " " + tr(R.string.cast_casting_google_cast_google_tv),
     ),
     ACCOUNTS_SHARING(
         "accounts_sharing", SettingsRootGroup.CONNECTIONS, tr(R.string.root_accounts_sharing), PrismIcons.Groups,

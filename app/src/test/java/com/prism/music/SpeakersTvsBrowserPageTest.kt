@@ -126,7 +126,10 @@ class SpeakersTvsBrowserPageTest : ListeningPageHarness(SettingsPageId.SPEAKERS_
             assertEquals(2, changedRows())
             // The root's line is live.
             val root = me.value(stored)
-            assertTrue(root, t(R.string.browser_remote_on) in root && handoff in root)
+            assertTrue(root, t(R.string.browser_remote_on) in root && t(R.string.root_handoff_on) in root)
+            // Short, and no group that's gone ("Speakers & TVs").
+            assertFalse(root, t(R.string.speakers_tvs) in root)
+            assertEquals(t(R.string.root_connect_short), me.value(AppSettings()))
 
             // Reset this page lists both and puts them back.
             val lines = resetLines(confirm = true)

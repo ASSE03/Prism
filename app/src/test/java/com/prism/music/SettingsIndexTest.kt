@@ -14,49 +14,23 @@ import java.io.File
 @org.robolectric.annotation.Config(sdk = [34], application = android.app.Application::class)
 class SettingsIndexTest {
     /**
-     * 1.8.4: the pages are one file each under `ui/screens/settings/` (`<Page>Page.kt`); every file there is read, so a
-     * rebuilt page is too. An `Old*.kt` file (a page's code of before the rework) is read for as long as a page still
-     * draws something of it: once nothing outside the old files calls any of its composables, its rows are on no page,
-     * and it waits to be deleted.
+     * 1.8.4: the pages are one file each under `ui/screens/settings/` (`<Page>Page.kt`, some with a `<Page>Parts.kt`),
+     * next to the kit. Every file there is read, and SettingsScreen.kt (the root's notes and the "Customize this" sheet,
+     * which draws the pages' own rows). The old pages' code is gone, so there is nothing else a row could be drawn by.
      */
-    private val pageFiles: List<File> = run {
-        val all = File("src/main/java/com/prism/music/ui/screens/settings").listFiles().orEmpty().filter { it.extension == "kt" }.sortedBy { it.name }
-        val (old, current) = all.partition { it.name.startsWith("Old") }
-        val live = (current + File("src/main/java/com/prism/music/ui/screens/SettingsScreen.kt")).toMutableList()
-        // Lyrics & Sing is rebuilt (LyricsSingPage.kt + LyricsSingParts.kt). Of OldLyrics.kt only `LyricsLookGroup` is
-        // still called, by the player's Customize sheet (SettingsScreen.kt): a title around LyricsYourWay.kt's animation
-        // choices, no row of a settings page. So its old rows and groups are on no page, and aren't read.
-        val waiting = old.filter { it.name != "OldLyrics.kt" }.toMutableList()
-        // Theme & colors and Looks are rebuilt: nothing calls their old files' composables any more (a comment in
-        // SettingsInterim.kt still names `appearance()`, which would read as a call below).
-        waiting.removeAll { it.name == "OldTheme.kt" || it.name == "OldLooks.kt" }
-        // What an old file offers the others: its composables that aren't private.
-        fun offers(f: File) = Regex("""^internal fun (?:[\w.]+\.)?(\w+)\(""", RegexOption.MULTILINE).findAll(f.readText()).map { it.groupValues[1] }.toList()
-        while (true) {
-            val text = live.joinToString("\n") { it.readText() }
-            val used = waiting.filter { f -> offers(f).any { Regex("""\b$it\(""").containsMatchIn(text) } }
-            if (used.isEmpty()) break
-            live += used
-            waiting -= used
-        }
-        // OldPlayer.kt: the Player page is rebuilt (PlayerPage.kt, PlayerParts.kt) and draws none of it; only the
-        // Customize sheet over the player (SettingsScreen.kt) still shows its Look and Cover groups, which are on no page.
-        live.filter { it.parentFile.name == "settings" && it.name != "OldPlayer.kt" }.sortedBy { it.name }
-    }
-    // (ConnectSettings.kt and SpotifySettings.kt went with the pages that drew them: Speakers, TVs & browser and
-    // Accounts & sharing are rebuilt, and nothing calls `ConnectSettings()` or `SpotifyPage()` any more.)
-    private val sources = listOf("SettingsScreen.kt", "SoundSettings.kt", "BackupUi.kt", "HistorySettings.kt")
-        .map { File("src/main/java/com/prism/music/ui/screens/$it").readText() } + pageFiles.map { it.readText() }
-
-    /** The old rows, and the kit's five (1.8.4), by the composable that draws them. */
-    private val rowCalls = "Toggle|Item|SliderSetting|Label|SwitchRow|PickRow|PickCardsRow|PickListRow|SliderRow|ChoiceRow|ShowChipsRow|LinkRow"
+    private val pageFiles: List<File> =
+        File("src/main/java/com/prism/music/ui/screens/settings").listFiles().orEmpty().filter { it.extension == "kt" }.sortedBy { it.name }
+    private val sources = pageFiles.map { it.readText() } +
+        // Not the "Customize this" sheet's own two rows (a Home section's Style and Hide this section): they are that
+        // section's, not settings, and only that sheet has them. Its other rows are the pages' own, read in their files.
+        File("src/main/java/com/prism/music/ui/screens/SettingsScreen.kt").readText().substringBefore("fun CustomizeSheet(")
 
     /**
-     * Groups that only list other pages (the old hubs' link lists, still drawn inside the pages that aren't rebuilt):
-     * they hold no setting, and the pages they link to are found by their own names and the old pages' names
-     * ([SettingsMapTest]). They go with the old pages.
+     * The rows, by the composable that draws them: the kit's five and every page's own row built on them (`SheetRow`,
+     * `CoverShapeRow`, `FontRow`…: whatever is called `…Row` and takes its title first), and the old kit's `Item`, which
+     * the root's Performance mode note still is.
      */
-    private val linkLists = setOf(R.string.the_whole_look, R.string.each_part, R.string.connections)
+    private val rowCalls = """\w*Row|Item"""
 
     /** The English strings (strings.xml and, until they're folded in, a release's own strings_*.xml): name → text. */
     private val strings: Map<String, String> by lazy {
@@ -65,94 +39,91 @@ class SettingsIndexTest {
             .associate { it.groupValues[1] to I18nConvert.xmlUnescape(it.groupValues[2]) }
     }
 
-    private fun rows(calls: String) = sources.flatMap { src ->
+    private fun rows(calls: String, from: List<String> = sources) = from.flatMap { src ->
         Regex("""\b(?:$calls)\(\s*tr\(R\.string\.(\w+)""").findAll(src).map { m ->
             // "Space to use: %1$s" is listed by its fixed start.
             strings.getValue(m.groupValues[1]).substringBefore("%1\$s").trim().removeSuffix(":")
         }.toList()
     }.filter { it.isNotBlank() }.distinct()
 
-    /**
-     * Text & icons and Tabs & mini player are rebuilt (1.8.4), but `OldTextIcons.kt` and `OldTabs.kt` are still read:
-     * "Customize this" draws some of their groups. Rows of those two files that their pages no longer hold under these
-     * words: renamed ("App text size", "Card and cover corners"), or gone to another page, which lists them (the lyrics
-     * font's rows to Lyrics & Sing, "Swipe between tabs" to Gestures & buttons).
-     */
-    private val leftTextIconsAndTabs = setOf(
-        R.string.text_size, R.string.corners,
-        R.string.installed_fonts_for_lyrics, R.string.lyrics_font_file_2, R.string.remove_the_lyrics_font_file,
-        R.string.swipe_between_tabs,
-    ).map { com.prism.music.tr(it).substringBefore("%1\$s").trim().removeSuffix(":") }.toSet()
-
-    /** The old group names those two pages answer to (their `…OldGroups`): the groups' rows are in other groups now. */
-    private val regroupedTextIconsAndTabs: Set<String> =
-        com.prism.music.ui.screens.settings.textIconsOldGroups.keys + com.prism.music.ui.screens.settings.tabsMiniPlayerOldGroups.keys
-
     @Test
     fun everyRowIsSearchable() {
         val rows = rows(rowCalls)
-        assertTrue("the pages' rows were read (${rows.size})", rows.size > 100)
-        val missing = rows.filter { row -> row !in leftTextIconsAndTabs && SettingsIndex.entries.none { it.title == row || row.startsWith(it.title) } }
+        assertTrue("the pages' rows were read (${rows.size})", rows.size > 250)
+        val missing = rows.filter { row -> SettingsIndex.entries.none { it.title == row || row.startsWith(it.title) } }
         assertTrue("Not in SettingsIndex: $missing", missing.isEmpty())
-        // The kit's rows are read too (the first rebuilt page and the root).
-        assertTrue(com.prism.music.tr(R.string.content_country) in rows && com.prism.music.tr(R.string.performance_mode) in rows)
+        // The kit's rows are read, and the pages' own rows built on them.
+        for (id in listOf(R.string.content_country, R.string.performance_mode, R.string.what_s_on_the_player, R.string.songs_covers)) {
+            assertTrue(com.prism.music.tr(id), com.prism.music.tr(id) in rows)
+        }
     }
 
     @Test
     fun everyGroupIsSearchable() {
-        // The old groups, and the kit's (`group(...)` in a page's scaffold, `SettingsGroup(...)`).
-        val groups = rows("Group|group|SettingsGroup") - linkLists.map { com.prism.music.tr(it) }.toSet()
-        assertTrue("the pages' groups were read (${groups.size})", groups.size > 20)
-        val missing = groups.filter { g -> g !in regroupedTextIconsAndTabs && SettingsIndex.entries.none { it.group == g } }
+        // The pages' groups (`group(...)` in a page's scaffold, `SettingsGroup(...)`). Not the "Customize this" sheet's
+        // in SettingsScreen.kt: a search result opens a page at its group, never the sheet, and the sheet names its
+        // groups for the part tapped ("Visualizer", "Lyrics"), whose rows are found on their pages' groups.
+        // The kit's own files draw whatever title a page hands them (`SettingsGroup(e.title, …)`): no group of their own.
+        val kit = setOf("SettingsRows.kt", "SettingsGroup.kt", "SettingsPageScaffold.kt", "PickSheet.kt")
+        val pages = pageFiles.filter { it.name !in kit }.map { it.readText() }
+        val groups = (rows("group|SettingsGroup", pages) + namedGroups(pages)).distinct()
+        assertTrue("the pages' groups were read (${groups.size})", groups.size > 60)
+        val missing = groups.filter { g -> SettingsIndex.entries.none { it.group == g } }
         assertTrue("Groups not in SettingsIndex: $missing", missing.isEmpty())
     }
 
-    /** The files of a page that is rebuilt are no longer read; the others all are. */
-    @Test
-    fun oldFilesAreReadWhileAPageDrawsThem() {
-        val read = pageFiles.map { it.name }
-        assertTrue("the old Language page is rebuilt (LanguageRegionPage.kt): $read", "OldLanguageRegion.kt" !in read)
-        assertTrue("the old Lyrics pages are rebuilt (LyricsSingPage.kt): $read", "OldLyrics.kt" !in read)
-        assertTrue("the old Playback & sound page is rebuilt (PlaybackPage.kt, SoundQualityPage.kt): $read", "OldSound.kt" !in read)
-        assertTrue("the old Player page is rebuilt (PlayerPage.kt, PlayerParts.kt): $read", "OldPlayer.kt" !in read)
-        assertTrue("the old Theme page is rebuilt (ThemeColorsPage.kt): $read", "OldTheme.kt" !in read)
-        assertTrue("the old Looks page is rebuilt (LooksPage.kt): $read", "OldLooks.kt" !in read)
-        assertTrue("the old Controls & gestures page is rebuilt (GesturesButtonsPage.kt): $read", "OldGestures.kt" !in read)
-        assertTrue("the old Devices & connections page is rebuilt (CarPage.kt): $read", "OldCar.kt" !in read)
-        assertTrue("the old Downloads, storage & data page is rebuilt (DownloadsDataPage.kt): $read", "OldDownloads.kt" !in read)
-        assertTrue("the old Recommendations & Replay page is rebuilt (RecommendationsHistoryPage.kt): $read", "OldRecommendations.kt" !in read)
-        assertTrue("the old Discord, Last.fm and Sharing groups are rebuilt (AccountsSharingPage.kt): $read", "OldAccounts.kt" !in read)
-        assertTrue("the old Home & Library page is rebuilt (HomeLibraryPage.kt): $read", "OldHomeLibrary.kt" !in read)
-        assertTrue("the old Backup & about page is rebuilt (BackupAboutPage.kt): $read", "OldBackupAbout.kt" !in read)
-        // One per line, so pages rebuilt side by side each take their own line out.
-        val stillRead = listOf(
-            "OldTabs.kt",
-            "GesturesButtonsPage.kt",
-            "CarPage.kt",
-            "SpeakersTvsBrowserPage.kt",
-            "AccountsSharingPage.kt",
-            "BackupAboutPage.kt",
-            "LanguageRegionPage.kt",
-            "PlayerPage.kt",
-            "PlayerParts.kt",
-            "LyricsSingPage.kt",
-            "LyricsSingParts.kt",
-            "PlaybackPage.kt",
-            "SoundQualityPage.kt",
-            "TextIconsPage.kt",
-            "TextIconsParts.kt",
-            "TabsMiniPlayerPage.kt",
-            "ThemeColorsPage.kt",
-            "LooksPage.kt",
-            "DownloadsDataPage.kt",
-            "RecommendationsHistoryPage.kt",
-            "HomeLibraryPage.kt",
-        )
-        for (name in stillRead) {
-            assertTrue("$name is read: $read", name in read)
+    /**
+     * The groups whose title isn't written `tr(R.string.…)` in the call itself: a page's groups object
+     * (`group(PlayerGroups.layout)`, its `val layout get() = tr(R.string.layout)`), a title kept in a `val` of the file
+     * (`group(coverTitle)`), or one shown only in a state (`group(if (…) tr(R.string.spotify) else null, …)`). Each is read
+     * back to its string; a title that can't be (anything else but `null`) fails, so no group's title escapes the check.
+     */
+    private fun namedGroups(pages: List<String>): List<String> {
+        val all = pages.joinToString("\n")
+        fun text(name: String) = strings.getValue(name).substringBefore("%1\$s").trim().removeSuffix(":")
+        val props = Regex("""object (\w+)\s*\{(.*?)\n}""", RegexOption.DOT_MATCHES_ALL).findAll(all).flatMap { o ->
+            Regex("""val (\w+) get\(\) = tr\(R\.string\.(\w+)\)""").findAll(o.groupValues[2]).map { "${o.groupValues[1]}.${it.groupValues[1]}" to it.groupValues[2] }
+        }.toMap()
+        // Comments name `group(...)` without drawing one.
+        val code = pages.map { it.lines().filterNot { l -> l.trimStart().let { t -> t.startsWith("//") || t.startsWith("*") || t.startsWith("/*") } }.joinToString("\n") }
+        return code.flatMap { src ->
+            val vals = Regex("""val (\w+) = tr\(R\.string\.(\w+)\)""").findAll(src).associate { it.groupValues[1] to it.groupValues[2] }
+            Regex("""\b(?:group|SettingsGroup)\((?!\s*tr\(R\.string\.)""").findAll(src).mapNotNull { m ->
+                val arg = firstArgument(src, m.range.last + 1)
+                when {
+                    arg == "null" -> null
+                    // The root's five groups (SettingsMap.groups) list pages, not settings: the pages are found by their names.
+                    arg == "group.title" && "SettingsMap.groups.forEachIndexed { i, (group, pages) ->" in src -> null
+                    "tr(R.string." in arg -> Regex("""tr\(R\.string\.(\w+)\)""").findAll(arg).map { text(it.groupValues[1]) }.toList()
+                    arg in props -> listOf(text(props.getValue(arg)))
+                    arg in vals -> listOf(text(vals.getValue(arg)))
+                    else -> throw AssertionError("a group's title that this test can't read: group($arg")
+                }
+            }.flatten().toList()
         }
     }
-
+    /** The call's first argument, from [from] (just past its "("), up to the comma or ")" that ends it. */
+    private fun firstArgument(src: String, from: Int): String {
+        var depth = 0
+        for (i in from until src.length) {
+            when (src[i]) {
+                '(', '[', '{' -> depth++
+                ')', ']', '}' -> if (depth == 0) return src.substring(from, i).trim() else depth--
+                ',' -> if (depth == 0) return src.substring(from, i).trim()
+            }
+        }
+        return src.substring(from).trim()
+    }
+    /** Every page of the map is among the files read, and the old pages' code is gone (nothing left to read it from). */
+    @Test
+    fun everyPageFileIsReadAndNoOldPageIsLeft() {
+        val read = pageFiles.map { it.name }
+        for (p in com.prism.music.ui.screens.settings.SettingsPageId.entries) {
+            val name = p.name.lowercase().split('_').joinToString("") { it.replaceFirstChar { c -> c.uppercase() } } + "Page.kt"
+            assertTrue("$name is read: $read", name in read)
+        }
+        assertTrue("old pages' files: $read", read.none { it.startsWith("Old") || it == "SettingsInterim.kt" })
+    }
     /** A setting that's hidden says what to turn on first, and stops saying it once that's on. */
     @Test
     fun hiddenSettingsSayWhatToTurnOn() {

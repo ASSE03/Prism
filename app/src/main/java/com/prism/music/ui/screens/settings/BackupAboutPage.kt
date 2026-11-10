@@ -236,8 +236,8 @@ fun LicensesScreen(bottomPadding: Dp, showBack: Boolean = true, onSearch: (() ->
     }
 }
 
-/** The root's line for Backup & about: Prism's version, and what the page holds. */
-fun backupAboutValue(s: AppSettings, dark: Boolean): String = SettingsSection.ABOUT.summary(s, dark)
+/** The root's line for Backup & about: Prism's version, and what the page holds, in one short line. */
+fun backupAboutValue(s: AppSettings, dark: Boolean): String = tr(R.string.root_backup_short, com.prism.music.BuildConfig.VERSION_NAME)
 
 /** The look settings "Reset this page" puts back: none (the page's own reset turns the diagnostics log off again). */
 val backupAboutLookKeys: List<String> = emptyList()

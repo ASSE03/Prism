@@ -289,6 +289,8 @@ class SettingsMapTest {
         assertEquals(setOf(SettingsPageId.CAR, SettingsPageId.SPEAKERS_TVS_BROWSER, SettingsPageId.ACCOUNTS_SHARING), pagesFor("Devices & connections"))
         assertTrue(SettingsPageId.THEME_COLORS in pagesFor("Glass & backgrounds"))
         assertTrue(SettingsPageId.TEXT_ICONS in pagesFor("Icons & shapes"))
+        // What people call casting finds the page that has it.
+        assertTrue(pagesFor("chromecast").toString(), SettingsPageId.SPEAKERS_TVS_BROWSER in pagesFor("chromecast"))
         // The page comes before the settings that only match by their page's old name.
         val results = SettingsIndex.search("Playback & sound")
         assertTrue(results.take(2).all { it.isPage })
@@ -349,12 +351,59 @@ class SettingsMapTest {
     }
 
     /**
+     * 1.8.4 (seen on the A16, 392 dp wide): every page's line on the root fits one line, with Prism as it comes and with
+     * every live state its line can say on, and names no group that's gone (Speakers, TVs & browser said "Speakers & TVs").
+     */
+    @Config(qualifiers = "w392dp-h4000dp-xxhdpi")
+    @Test fun everyRootLineFitsOneLineAndNamesNoGoneGroup() {
+        val fresh = AppSettings()
+        val live = fresh.copy(
+            webRemote = true, handoffAvailable = true, discordPresence = true, mix = true, lossless = true, carLyrics = true, contentCountry = "DE",
+        )
+        // Group names of before 1.8.4 that no page draws any more (an old link's name for a group, not a group now), and
+        // that aren't a setting's own name either ("Crossfade" was a group and is what Playback's line says while it's on).
+        val now = SettingsIndex.entries.flatMap { listOf(it.group, it.title, it.shown) }.toSet() + tr(R.string.crossfade)
+        val gone = (pages.flatMap { it.oldGroups.keys } + tr(R.string.speakers_tvs)).filter { it !in now }.toSet()
+        assertTrue(tr(R.string.speakers_tvs) in gone)
+        var s by mutableStateOf(fresh)
+        compose.setContent {
+            PrismTheme(AppSettings(), artworkColor = null) {
+                SettingsRootContent(0.dp, s, dark = true, showBack = false, selected = null, account = {}, onPerformance = {}, onOpen = { _, _ -> }, onRoute = {})
+            }
+        }
+        val cut = ArrayList<String>()
+        for (state in listOf(fresh, live)) {
+            s = state
+            compose.waitForIdle()
+            for (p in pages) {
+                val line = p.value(state, true)
+                // A part of the line that is a gone group's name ("Speakers & TVs · Browser remote on"), not a word in it.
+                val parts = line.split(" · ", ", ").map { it.trim() }
+                assertTrue("${p.title}: \"$line\" names a group that's gone", parts.none { it in gone })
+                val node = compose.onNode(entry(p.key), useUnmergedTree = true).fetchSemanticsNode()
+                assertEquals(line, node.config[SettingsRowValue])
+                fun walk(n: SemanticsNode) {
+                    val text = n.config.getOrNull(SemanticsProperties.Text)?.joinToString { it.text }
+                    val layout = n.config.getOrNull(androidx.compose.ui.semantics.SemanticsActions.GetTextLayoutResult)?.action
+                    if (text == line && layout != null) {
+                        val out = ArrayList<androidx.compose.ui.text.TextLayoutResult>()
+                        layout.invoke(out)
+                        out.firstOrNull()?.let { l -> if (l.lineCount > 1 || (0 until l.lineCount).any { l.isLineEllipsized(it) }) cut += "${p.title}: \"$line\" (${l.lineCount} lines)" }
+                    }
+                    n.children.forEach { walk(it) }
+                }
+                walk(node)
+            }
+        }
+        assertTrue("root lines that don't fit one line at 392 dp: $cut", cut.isEmpty())
+    }
+
+    /**
      * Lines whose row or group isn't drawn on their page with a fresh install's settings, and why. A line with
      * `needs` is left out by itself (it says what to turn on first).
      */
     private val notDrawnByDefault: Map<Int, String> = mapOf(
         R.string.home_screen_widgets to "only while a Prism widget is on the home screen",
-        R.string.hide_this_section to "in the Customize-this sheet of a Home section, not on the page (as before 1.8.4)",
         // Accounts & sharing: Last.fm's card has no title (its first row names it), and these four show once it's connected.
         R.string.last_fm_scrobbling to "only once Last.fm is connected",
         R.string.first_artist_only to "only once Last.fm is connected",

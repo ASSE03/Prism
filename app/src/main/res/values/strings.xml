@@ -5292,4 +5292,12 @@
     <string name="tl_pick_a_split_light">Pick a light other than White first</string>
     <string name="tl_history_and_editing">History and editing</string>
     <string name="tl_reset_everything">Reset everything</string>
+    <!-- 1.8.4 root lines -->
+    <!-- old_cleanup -->
+    <string name="root_looks_short">Whole looks, day and night</string>
+    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
+    <string name="root_accounts_discord_on">Discord on · Last.fm, Spotify</string>
+    <string name="root_backup_short">Prism %1$s · backup, updates</string>
+    <string name="root_connect_short">Play on speakers and TVs</string>
+    <string name="root_handoff_on">Handoff on</string>
 </resources>

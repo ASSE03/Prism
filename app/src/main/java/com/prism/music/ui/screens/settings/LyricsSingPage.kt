@@ -86,6 +86,8 @@ val lyricsSingLookKeys: List<String> = listOf(
     "lyrics_strip_align", "lyrics_strip_two_lines", "lyrics_gap_mark",
     // 1.8.0 lyrics look
     "lyrics_motion", "lyrics_word_by_word", "lyrics_card", "lyrics_halo", "lyrics_bold_lines",
+    // The Lyrics source button is a look setting too (a Look carries it): the page's reset puts it back by its key.
+    "lyrics_source_button",
     // The lyrics font came from Text & icons, which let go of it.
     "lyrics_font",
 )

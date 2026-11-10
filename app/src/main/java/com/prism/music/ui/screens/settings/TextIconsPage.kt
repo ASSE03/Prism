@@ -200,42 +200,57 @@ fun TextIconsPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = t
                 }
             }
         }
-        group(tr(R.string.text_icons_shapes)) {
-            // Corners as a slider (1.7.7): the old four steps are its marks, and a Look that names a step still works.
-            SliderRow(
-                tr(R.string.card_and_cover_corners), corner, 0f..2f, ::cornerText, info = tr(R.string.card_and_cover_corners_info),
-                changed = cornerText(corner) != cornerText(d.corners.scale),
-            ) { v ->
-                // Close to a step: that step, so it reads by name.
-                Corners.entries.firstOrNull { abs(it.scale - v) < 0.06f }?.let { prefs.setCorners(it) } ?: prefs.setCornerScale(v)
-            }
-            // Each kind of picture has its own shape (the player's cover has its own on the Player page).
-            CoverShapeRow(tr(R.string.songs_covers), "songs", s.shapes.songs, d.shapes.songs)
-            CoverShapeRow(tr(R.string.albums_covers), "albums", s.shapes.albums, d.shapes.albums)
-            CoverShapeRow(tr(R.string.artists_pictures), "artists", s.shapes.artists, d.shapes.artists)
-            // It squares video pictures everywhere, not only on the player (#92).
-            SwitchRow(
-                tr(R.string.square_video_covers), s.squareVideoCovers, info = tr(R.string.youtube_s_video_pictures_are_wide),
-                changed = s.squareVideoCovers != d.squareVideoCovers,
-            ) { prefs.setSquareVideoCovers(it) }
-        }
-        group(tr(R.string.buttons)) {
-            PickCardsRow(
-                tr(R.string.shape), ButtonShape.entries, s.shapes.button, { it.label }, changed = s.shapes.button != d.shapes.button, columns = 3,
-                onPick = { prefs.setButtonShape(it) },
-            ) { ButtonShapeSample(it) }
-            PickCardsRow(
-                tr(R.string.play_on_album_and_playlist_pages), listOf(false, true), s.shapes.playOutlined, ::playName,
-                changed = s.shapes.playOutlined != d.shapes.playOutlined, onPick = { prefs.setPlayOutlined(it) },
-            ) { PlayButtonSample(it) }
-            // Classic controls (1.7.8, #155): each card draws a switch and a slider its way.
-            PickCardsRow(
-                tr(R.string.switches_sliders_and_buttons), listOf(false, true), s.shapes.classicControls, ::typeName,
-                info = tr(R.string.prism_s_own_lit_with_your), changed = s.shapes.classicControls != d.shapes.classicControls,
-                onPick = { prefs.setControlsClassic(it) },
-            ) { ControlsSample(it) }
-        }
+        group(tr(R.string.text_icons_shapes)) { TextIconsShapesRows() }
+        group(tr(R.string.buttons)) { TextIconsButtonsRows() }
     }
+}
+
+/** The Shapes group's rows: on the page, and in "Customize this" for a Home section. */
+@Composable
+internal fun TextIconsShapesRows() {
+    val s = LocalAppSettings.current
+    val prefs = LocalContainer.current.settings
+    val d = remember { AppSettings() }
+    val corner = s.shapes.cornerScale ?: s.corners.scale
+    // Corners as a slider (1.7.7): the old four steps are its marks, and a Look that names a step still works.
+    SliderRow(
+        tr(R.string.card_and_cover_corners), corner, 0f..2f, ::cornerText, info = tr(R.string.card_and_cover_corners_info),
+        changed = cornerText(corner) != cornerText(d.corners.scale),
+    ) { v ->
+        // Close to a step: that step, so it reads by name.
+        Corners.entries.firstOrNull { abs(it.scale - v) < 0.06f }?.let { prefs.setCorners(it) } ?: prefs.setCornerScale(v)
+    }
+    // Each kind of picture has its own shape (the player's cover has its own on the Player page).
+    CoverShapeRow(tr(R.string.songs_covers), "songs", s.shapes.songs, d.shapes.songs)
+    CoverShapeRow(tr(R.string.albums_covers), "albums", s.shapes.albums, d.shapes.albums)
+    CoverShapeRow(tr(R.string.artists_pictures), "artists", s.shapes.artists, d.shapes.artists)
+    // It squares video pictures everywhere, not only on the player (#92).
+    SwitchRow(
+        tr(R.string.square_video_covers), s.squareVideoCovers, info = tr(R.string.youtube_s_video_pictures_are_wide),
+        changed = s.squareVideoCovers != d.squareVideoCovers,
+    ) { prefs.setSquareVideoCovers(it) }
+}
+
+/** The Buttons group's rows: on the page, and in "Customize this" for a Home section. */
+@Composable
+internal fun TextIconsButtonsRows() {
+    val s = LocalAppSettings.current
+    val prefs = LocalContainer.current.settings
+    val d = remember { AppSettings() }
+    PickCardsRow(
+        tr(R.string.shape), ButtonShape.entries, s.shapes.button, { it.label }, changed = s.shapes.button != d.shapes.button, columns = 3,
+        onPick = { prefs.setButtonShape(it) },
+    ) { ButtonShapeSample(it) }
+    PickCardsRow(
+        tr(R.string.play_on_album_and_playlist_pages), listOf(false, true), s.shapes.playOutlined, ::playName,
+        changed = s.shapes.playOutlined != d.shapes.playOutlined, onPick = { prefs.setPlayOutlined(it) },
+    ) { PlayButtonSample(it) }
+    // Classic controls (1.7.8, #155): each card draws a switch and a slider its way.
+    PickCardsRow(
+        tr(R.string.switches_sliders_and_buttons), listOf(false, true), s.shapes.classicControls, ::typeName,
+        info = tr(R.string.prism_s_own_lit_with_your), changed = s.shapes.classicControls != d.shapes.classicControls,
+        onPick = { prefs.setControlsClassic(it) },
+    ) { ControlsSample(it) }
 }
 
 /** One kind of cover's shape: a Pick row whose sheet draws each shape as that kind of cover. */

@@ -13,11 +13,26 @@ import com.prism.music.data.HistoryPause
 import com.prism.music.data.prefs.AppSettings
 import com.prism.music.data.prefs.BleedFit
 import com.prism.music.data.prefs.LyricsExtraPlace
-import com.prism.music.ui.screens.settings.CoverFitChoice
-import com.prism.music.ui.screens.CrossfadeOnBarChoice
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrNull
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasAnyDescendant
+import androidx.compose.ui.test.hasText
+import androidx.navigation.compose.rememberNavController
+import com.prism.music.ui.LocalNavigator
+import com.prism.music.ui.Navigator
+import com.prism.music.ui.screens.SettingsIndex
 import com.prism.music.ui.screens.SettingsSection
-import com.prism.music.ui.screens.TranslationPlaceChoice
 import com.prism.music.ui.screens.lookStepLine
+import com.prism.music.ui.screens.settings.LsLanguageRows
+import com.prism.music.ui.screens.settings.PlayerCoverRows
+import com.prism.music.ui.screens.settings.PlayerProgressRows
+import com.prism.music.ui.screens.settings.SettingsGroup
+import com.prism.music.ui.screens.settings.SettingsTags
+import com.prism.music.ui.theme.LocalAppSettings
+import com.prism.music.ui.theme.LocalContainer
 import com.prism.music.ui.theme.PrismTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -40,6 +55,11 @@ import java.io.File
 class SettingsBugs184Test {
     @get:Rule val compose = createComposeRule()
 
+    /** For the cases that draw a page's rows: they ask the container for the settings' setters. */
+    private val made = lazy { AppContainer(org.robolectric.RuntimeEnvironment.getApplication()) }
+
+    @org.junit.After fun close() = made.closeAfterTest()
+
     private fun page(name: String) = File("src/main/java/com/prism/music/ui/screens/$name").readText()
 
     /** SettingsScreen.kt and every page's file under `ui/screens/settings/` (1.8.4: one file a page). */
@@ -59,49 +79,83 @@ class SettingsBugs184Test {
 
     private fun shown(text: String) = compose.onAllNodesWithText(text).fetchSemanticsNodes().size
 
+    /** The page's rows as they are on their page: in a group's card, with a container of their own and [settings]. */
+    private fun showRows(settings: () -> AppSettings, rows: @Composable () -> Unit) {
+        compose.setContent {
+            val s = settings()
+            val nav = Navigator(rememberNavController(), openPlayer = {})
+            CompositionLocalProvider(LocalContainer provides made.value, LocalNavigator provides nav) {
+                PrismTheme(s, artworkColor = null) {
+                    CompositionLocalProvider(LocalAppSettings provides s) { Column(Modifier.width(412.dp)) { SettingsGroup(null) { rows() } } }
+                }
+            }
+        }
+        compose.waitForIdle()
+    }
+
+    /** The kit row titled [title]: how many there are, and of which type. */
+    private fun rowsTitled(title: String) = compose.onAllNodes(hasAnyOfTags(SettingsTags.rowTypes) and hasAnyDescendant(hasText(title)), useUnmergedTree = true).fetchSemanticsNodes()
+
+    private fun hasAnyOfTags(tags: Set<String>) = SemanticsMatcher("one of $tags") { it.config.getOrNull(SemanticsProperties.TestTag) in tags }
+
     /** Looks → History: a step's line was English in every language ("… · tap to undo" written in the code). */
     @Test fun aLookStepsLineComesFromTheStrings() {
-        assertFalse("LookSettings.kt still writes the line itself", Regex("\"[^\"\\n]*tap to [^\"\\n]*\"").containsMatchIn(page("LookSettings.kt")))
+        // The page that draws the steps (LooksPage.kt) and the file the line's words come from.
+        for (file in listOf("LookSettings.kt", "settings/LooksPage.kt")) {
+            assertFalse("$file still writes the line itself", Regex("\"[^\"\\n]*tap to [^\"\\n]*\"").containsMatchIn(page(file)))
+        }
+        assertTrue("the Looks page draws a step's line through it", "value = lookStepLine(ago, newest = i == 0)" in page("settings/LooksPage.kt"))
         assertEquals(tr(R.string.look_step_tap_to_undo, "5 minutes ago"), lookStepLine("5 minutes ago", newest = true))
         assertEquals(tr(R.string.look_step_tap_to_go_back, "5 minutes ago"), lookStepLine("5 minutes ago", newest = false))
         assertTrue(lookStepLine("5 minutes ago", newest = true).startsWith("5 minutes ago"))
         assertTrue(lookStepLine("5 minutes ago", true) != lookStepLine("5 minutes ago", false))
     }
 
-    /** Player → Progress bar: "Show the crossfade on the progress bar" only does anything with Crossfade on. */
+    /** Player → Progress bar and times: "Crossfade on the progress bar" only does anything with Crossfade on. */
     @Test fun theCrossfadeOnTheBarChoiceShowsOnlyWithCrossfadeOn() {
         val off = AppSettings(mix = false)
         val on = AppSettings(mix = true)
         var s by androidx.compose.runtime.mutableStateOf(off)
-        show { CrossfadeOnBarChoice(s, cover = null) {} }
-        assertEquals("with Crossfade off", 0, shown(tr(R.string.crossfade_on_the_progress_bar)))
-        assertEquals("its cards with Crossfade off", 0, shown(tr(R.string.shaped_by_the_crossfade)))
+        showRows({ s }) { PlayerProgressRows() }
+        val title = tr(R.string.crossfade_on_the_progress_bar)
+        assertEquals("with Crossfade off", 0, shown(title))
+        // The group's other rows are there either way.
+        assertEquals(1, shown(tr(R.string.progress_bar_color)))
         s = on
         compose.waitForIdle()
-        assertEquals("with Crossfade on", 1, shown(tr(R.string.crossfade_on_the_progress_bar)))
-        assertEquals("its cards with Crossfade on", 1, shown(tr(R.string.shaped_by_the_crossfade)))
+        assertEquals("with Crossfade on", 1, shown(title))
+        assertEquals("a switch", listOf(SettingsTags.ROW_SWITCH), rowsTitled(title).map { it.config[SemanticsProperties.TestTag] })
+        // And Settings' search says what to turn on first.
+        val line = SettingsIndex.entries.single { it.title == title }
+        assertTrue(line.needs != null && !line.needs!!.on(off) && line.needs!!.on(on))
     }
 
-    /** Player → Cover: the "Fill the screen / Whole cover" chips have a label. */
+    /** Player → Cover: the "Fill the screen / Whole cover" chips have a label (they are a row of their own, named). */
     @Test fun theCoverFitChipsAreLabelled() {
-        show { CoverFitChoice(BleedFit.FILL) {} }
-        assertEquals(1, shown(tr(R.string.how_the_cover_fits)))
-        BleedFit.entries.forEach { assertEquals(it.label, 1, shown(it.label)) }
-        // And the page's chips are these: none of BleedFit's left bare.
-        val chips = "Chips(com.prism.music.data.prefs.BleedFit.entries"
-        assertEquals(1, settingsPages().sumOf { it.split(chips).size - 1 })
-        val src = pageWith("fun CoverFitChoice(")
-        assertTrue(chips in src.substringAfter("fun CoverFitChoice(").substringBefore("\n}"))
+        showRows({ AppSettings(fullBleedArtwork = true) }) { PlayerCoverRows() }
+        val title = tr(R.string.how_the_cover_fits)
+        val row = rowsTitled(title)
+        assertEquals("one row named $title", listOf(SettingsTags.ROW_CHOICE), row.map { it.config[SemanticsProperties.TestTag] })
+        BleedFit.entries.forEach { fit ->
+            assertEquals(fit.label, 1, compose.onAllNodes(hasText(fit.label) and hasAnyAncestor(SemanticsMatcher("the row") { it.id == row.single().id }), useUnmergedTree = true).fetchSemanticsNodes().size)
+        }
+        // And BleedFit's chips are drawn nowhere else on the settings pages, labelled or bare.
+        assertEquals(1, settingsPages().sumOf { it.split("BleedFit.entries").size - 1 })
+        assertTrue("ChoiceRow(tr(R.string.how_the_cover_fits), BleedFit.entries" in pageWith("BleedFit.entries"))
     }
 
-    /** Lyrics → Translations & romanized lines: the "Under the line / Over the line" chips have a label. */
+    /** Lyrics & Sing → Language and translations: the "Under the line / Over the line" chips have a label. */
     @Test fun theTranslationPlaceChipsAreLabelled() {
-        show { TranslationPlaceChoice(LyricsExtraPlace.BELOW) {} }
-        assertEquals(1, shown(tr(R.string.translation_place)))
-        LyricsExtraPlace.entries.forEach { assertEquals(it.label, 1, shown(it.label)) }
-        assertTrue("the group shows them through the labelled choice", "TranslationPlaceChoice(s.lyricsExtraPlace)" in page("LyricsYourWay.kt"))
+        val asPrismComes = AppSettings()
+        showRows({ asPrismComes }) { LsLanguageRows(asPrismComes) }
+        val title = tr(R.string.translation_place)
+        val row = rowsTitled(title)
+        assertEquals("one row named $title", listOf(SettingsTags.ROW_CHOICE), row.map { it.config[SemanticsProperties.TestTag] })
+        LyricsExtraPlace.entries.forEach { place ->
+            assertEquals(place.label, 1, compose.onAllNodes(hasText(place.label) and hasAnyAncestor(SemanticsMatcher("the row") { it.id == row.single().id }), useUnmergedTree = true).fetchSemanticsNodes().size)
+        }
+        assertEquals("drawn once, by the labelled row", 1, settingsPages().sumOf { it.split("LyricsExtraPlace.entries").size - 1 })
     }
-
     /** The hub's line for Recommendations & Replay: nothing from another page (the content country is on Language now). */
     @Test fun recommendationsLineIsFromItsOwnPage() {
         val plain = SettingsSection.LIBRARY.summary(AppSettings())
@@ -114,15 +168,23 @@ class SettingsBugs184Test {
         assertTrue(tr(R.string.hist_paused_title) in SettingsSection.LIBRARY.summary(paused))
     }
 
-    /** Downloads → Mobile data → Load ahead on mobile data: its ⓘ sent people to Playback & sound; Load ahead is on this page. */
+    /**
+     * Downloads & data → Mobile data: "Load ahead on mobile data" (since 1.8.4 the Load ahead chip of "Use mobile data
+     * for") sent people to Playback & sound in its ⓘ; Load ahead is on this page, in the same group.
+     */
     @Test fun loadAheadOnMobileDatasInfoNamesTheRightPlace() {
-        val name = Regex("""tr\(R\.string\.load_ahead_on_mobile_data\),.*?info = tr\(R\.string\.(\w+)\)""", RegexOption.DOT_MATCHES_ALL)
-            .find(pageWith("tr(R.string.load_ahead_on_mobile_data),"))!!.groupValues[1]
+        val downloads = pageWith("MobileUse.LOAD_AHEAD -> tr(R.string.")
+        val name = Regex("""MobileUse\.LOAD_AHEAD -> tr\(R\.string\.(\w+)\)""").find(downloads.substringAfter("private fun usesInfo("))!!.groupValues[1]
         val info = tr(R.string::class.java.getField(name).getInt(null))
         assertTrue("the ⓘ's text was read ($name)", info.length > 20 && !info.startsWith("#"))
         assertFalse("it names Playback & sound: $info", tr(R.string.playback_sound) in info)
-        // Load ahead's own group is on the Downloads page, right above the Mobile data group.
-        val downloads = pageWith("tr(R.string.load_ahead_on_mobile_data),").substringBefore("tr(R.string.load_ahead_on_mobile_data),")
-        assertTrue(downloads.lastIndexOf("Group(tr(R.string.load_ahead)") in 0 until downloads.lastIndexOf("Group(tr(R.string.mobile_data)"))
+        // Load ahead's own row is in the Mobile data group, right above the row that holds the chip.
+        val group = downloads.substringAfter("group(tr(R.string.mobile_data)) {").substringBefore("\n        }\n")
+        assertTrue("the Mobile data group was read", group.length in 1..3000)
+        val loadAhead = group.indexOf("tr(R.string.load_ahead), Preload.entries")
+        val uses = group.indexOf("tr(R.string.dd_use_mobile_data_for)")
+        assertTrue("Load ahead, then what may use mobile data: $loadAhead, $uses", loadAhead in 0 until uses)
+        // The old switch's name still finds the row.
+        assertTrue(SettingsIndex.search(tr(R.string.load_ahead_on_mobile_data)).any { it.page == com.prism.music.ui.screens.settings.SettingsPageId.DOWNLOADS_DATA })
     }
 }

@@ -264,8 +264,9 @@ class HomeLibraryPageTest : HomePagesHarness() {
         showAt(PAGE)
         val drawn = groupTitles().toSet()
         val mine = SettingsIndex.entries.filter { it.page == SettingsPageId.HOME_LIBRARY && it.route == null }
-        // ("Hide this section" is a row of Home's own "Customize this" sheet, listed here as it was before 1.8.4.)
-        val lost = mine.filter { it.group.isNotBlank() && it.group !in drawn && it.group != t(R.string.this_section) }
+        // ("Hide this section" is a row of Home's own "Customize this" sheet only, and no longer a line of this page.)
+        val lost = mine.filter { it.group.isNotBlank() && it.group !in drawn }
+        assertTrue(mine.none { it.title == t(R.string.hide_this_section) })
         assertTrue("search lines in groups the page doesn't have: ${lost.map { it.group + " › " + it.title }}", lost.isEmpty())
         fun at(title: String) = mine.single { it.title == title }.group
         assertEquals(t(R.string.search), at(arrangeSearch))

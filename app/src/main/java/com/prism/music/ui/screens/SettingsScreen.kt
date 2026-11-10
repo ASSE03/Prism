@@ -63,19 +63,27 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 import com.prism.music.ui.screens.settings.LicensesScreen
-import com.prism.music.ui.screens.settings.LyricsLookGroup
-import com.prism.music.ui.screens.settings.MiniPlayerGroup
-import com.prism.music.ui.screens.settings.NavBarGroup
-import com.prism.music.ui.screens.settings.PagesGroup
-import com.prism.music.ui.screens.settings.PlayerCoverGroup
-import com.prism.music.ui.screens.settings.PlayerLookGroup
+import com.prism.music.ui.screens.settings.LinkRow
+import com.prism.music.ui.screens.settings.LsStyleRows
+import com.prism.music.ui.screens.settings.PickListRow
+import com.prism.music.ui.screens.settings.PlayerCoverRows
+import com.prism.music.ui.screens.settings.PlayerGroups
+import com.prism.music.ui.screens.settings.PlayerLayoutRows
+import com.prism.music.ui.screens.settings.PlayerOnItRows
+import com.prism.music.ui.screens.settings.PlayerProgressRows
+import com.prism.music.ui.screens.settings.PlayerVisualizerRows
+import com.prism.music.ui.screens.settings.SettingsGroup
 import com.prism.music.ui.screens.settings.SettingsMap
 import com.prism.music.ui.screens.settings.SettingsPageContent
 import com.prism.music.ui.screens.settings.SettingsPageId
 import com.prism.music.ui.screens.settings.SettingsRoot
 import com.prism.music.ui.screens.settings.SettingsSearchOverlay
 import com.prism.music.ui.screens.settings.SettingsTarget
-import com.prism.music.ui.screens.settings.ShapeSettings
+import com.prism.music.ui.screens.settings.TabsMiniPlayerBarRows
+import com.prism.music.ui.screens.settings.TabsMiniPlayerMiniRows
+import com.prism.music.ui.screens.settings.TabsMiniPlayerPagesRows
+import com.prism.music.ui.screens.settings.TextIconsButtonsRows
+import com.prism.music.ui.screens.settings.TextIconsShapesRows
 import com.prism.music.ui.screens.settings.lookKeys
 
 /**
@@ -119,14 +127,15 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
     fun summary(s: AppSettings, dark: Boolean = true): String = when (this) {
         APPEARANCE -> tr(R.string.looks_colors_fonts_the_player_and)
         INTERFACE -> listOf(tr(R.string.nav_bar_x, s.navStyle.label), com.prism.music.trp(R.plurals.n_tabs, s.navTabs.size), tr(R.string.mini_player_x, s.miniPlayerStyle.label)).joinToString(" · ")
-        PLAYER -> listOfNotNull(tr(R.string.player_layout_x, s.playerLayout.label), s.playerBackground.label, if (s.canvasEnabled) tr(R.string.animated_covers) else null).joinToString(" · ")
+        PLAYER -> com.prism.music.ui.screens.settings.playerValue(s, dark)
         SOUND -> listOfNotNull(if (s.lossless) tr(R.string.lossless) else tr(R.string.audio_quality_x, s.audioQuality.label), if (s.mix) tr(R.string.crossfade) else null, if (s.normalize) tr(R.string.normalized) else null, if (s.spatial) tr(R.string.prism_spatial) else null, if (s.eq.enabled) "EQ ${com.prism.music.playback.EqPresets.label(s.eq.preset)}" else null).joinToString(" · ")
         LYRICS -> listOfNotNull(tr(R.string.first, s.lyricsSources.first().label), if (s.lyricsTranslate) tr(R.string.translated) else null, tr(R.string.sing)).joinToString(" · ")
         LYRICS_LOOK -> tr(R.string.style_2, s.lyricsStyle.label, s.lyricsPosition.label)
         CONTROLS -> tr(R.string.swipes_and_taps_on_the_player)
         DOWNLOADS -> listOfNotNull(tr(R.string.smart_downloads_2, formatGb(s.offlineGb)), if (s.downloadWifiOnly) tr(R.string.wi_fi_only) else tr(R.string.any_network), if (s.dataSaver) tr(R.string.data_saver) else null).joinToString(" · ")
         DEVICES -> tr(R.string.android_auto_speakers_tvs_discord_last)
-        CONNECT -> listOfNotNull(tr(R.string.speakers_tvs), if (s.webRemote) tr(R.string.browser_remote_on) else null, if (s.handoffAvailable) tr(R.string.available_for_handoff) else null).joinToString(" · ")
+        // 1.8.4: the pages' own lines (short enough for one line on the root).
+        CONNECT -> com.prism.music.ui.screens.settings.speakersTvsBrowserValue(s, dark)
         HOME -> tr(R.string.home_s_sections_and_top_library)
         // Only what's on the page itself (1.8.4: it showed the content country, which is on Language).
         LIBRARY -> listOfNotNull(tr(R.string.your_artists_new_releases), if (com.prism.music.data.HistoryPause.paused(s.behavior)) tr(R.string.hist_paused_title) else null, tr(R.string.replay_2)).joinToString(" · ")
@@ -134,7 +143,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
         LASTFM -> tr(R.string.scrobble_what_you_play_to_your)
         SPOTIFY -> tr(R.string.spot_summary)
         LANGUAGE -> java.util.Locale.getDefault().let { it.getDisplayName(it) }.replaceFirstChar { it.titlecase() }
-        ABOUT -> tr(R.string.prism_backup_updates_diagnostics, com.prism.music.BuildConfig.VERSION_NAME)
+        ABOUT -> com.prism.music.ui.screens.settings.backupAboutValue(s, dark)
         LICENSES -> tr(R.string.gpl_3_0_or_later)
         COLOR -> listOfNotNull(
             // The light's name (White shows as Black in light mode).
@@ -145,7 +154,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
         TEXT -> listOfNotNull(tr(R.string.font_x, s.fontChoice.label), if (s.textScale != 1f) tr(R.string.size_2, (s.textScale * 100).roundToInt()) else null).joinToString(" · ")
         ICONS -> tr(R.string.icon_pack_and_weight_app_icon)
         GLASS -> listOfNotNull(when { s.liquidGlass -> tr(R.string.liquid_glass); s.frostedGlass -> tr(R.string.frosted_glass); else -> tr(R.string.solid_bars) }, if (s.backdrops.screensOnly.isEmpty()) null else tr(R.string.backgrounds), if (s.reduceMotion) tr(R.string.reduced_motion) else null).joinToString(" · ")
-        LOOKS -> tr(R.string.save_switch_and_share_whole_looks)
+        LOOKS -> com.prism.music.ui.screens.settings.looksValue(s, dark)
     }
 
     /** 1.8.4: the page of the map that holds what this old page held ([SettingsMap.aliases]). */
@@ -469,8 +478,13 @@ internal fun ResetPage(title: String, lookKeys: List<String>, also: () -> Unit =
 }
 
 /**
- * "Customize this" (1.7.3): the settings for the element tapped, in a sheet, the same groups as on their pages, with a
- * way to the whole page. A Home section also gets its own style.
+ * "Customize this" (1.7.3): the settings for the element tapped, in a sheet, with a way to the whole page. A Home
+ * section also gets its own style.
+ *
+ * 1.8.4: the groups are the rebuilt pages' own rows (the same composables the pages call), so a setting reads and works
+ * here as on its page: the mini player's group and the tab bar's of Tabs & mini player; for the player, Player's
+ * Layout, Progress bar and times, Cover and On it, its visualizer, and Lyrics & Sing's Style; for a Home section, Tabs &
+ * mini player's Pages and Text & icons' Shapes and Buttons.
  */
 @Composable
 fun CustomizeSheet(target: com.prism.music.ui.components.CustomizeTarget, key: String?, onLeave: () -> Unit = {}, onDismiss: () -> Unit) {
@@ -494,23 +508,34 @@ private fun CustomizeSheetContent(target: com.prism.music.ui.components.Customiz
             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium),
         )
         Column(Modifier.padding(horizontal = 14.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
+            val asPrismComes = remember { AppSettings() }
             when (target) {
-                com.prism.music.ui.components.CustomizeTarget.MINI_PLAYER -> MiniPlayerGroup()
-                com.prism.music.ui.components.CustomizeTarget.TAB_BAR -> NavBarGroup()
-                com.prism.music.ui.components.CustomizeTarget.PLAYER -> { PlayerLayoutGroup(); PlayerLookGroup(); PlayerCoverGroup(); PlayerButtonsGroup(); PlayerVisualizerGroup(); LyricsStyleGroup(); LyricsLookGroup(tr(R.string.lyrics)) }
+                com.prism.music.ui.components.CustomizeTarget.MINI_PLAYER -> SettingsGroup(tr(R.string.mini_player)) { TabsMiniPlayerMiniRows() }
+                // "Swipe between tabs" isn't here: its one home is Gestures & buttons.
+                com.prism.music.ui.components.CustomizeTarget.TAB_BAR -> SettingsGroup(tr(R.string.navigation_bar)) { TabsMiniPlayerBarRows() }
+                com.prism.music.ui.components.CustomizeTarget.PLAYER -> {
+                    SettingsGroup(PlayerGroups.layout) { PlayerLayoutRows() }
+                    SettingsGroup(PlayerGroups.progress) { PlayerProgressRows() }
+                    SettingsGroup(PlayerGroups.cover) { PlayerCoverRows() }
+                    SettingsGroup(PlayerGroups.onIt) { PlayerOnItRows() }
+                    SettingsGroup(tr(R.string.visualizer)) { PlayerVisualizerRows() }
+                    // "Lyrics" and not "Style": here the group's name has to say whose.
+                    SettingsGroup(tr(R.string.lyrics)) { LsStyleRows(asPrismComes) }
+                }
                 com.prism.music.ui.components.CustomizeTarget.HOME_SECTION -> {
-                    if (section != null) Group(tr(R.string.this_section)) {
-                        Label(tr(R.string.style))
-                        Chips(com.prism.music.data.prefs.SectionStyle.entries, section.style, { it.label }) { st ->
+                    if (section != null) SettingsGroup(tr(R.string.this_section)) {
+                        // Five styles: a pick with its list (chips are for two to four short words).
+                        PickListRow(tr(R.string.style), com.prism.music.data.prefs.SectionStyle.entries, section.style, { it.label }, searchable = false) { st ->
                             c.settings.setHomeLayout(s.homeLayout.map { if (it.key == section.key) it.copy(style = st) else it })
                         }
-                        Item(tr(R.string.hide_this_section), tr(R.string.bring_it_back_from_customize_home), onClick = {
+                        LinkRow(tr(R.string.hide_this_section), value = tr(R.string.bring_it_back_from_customize_home)) {
                             c.settings.setHomeLayout(s.homeLayout.map { if (it.key == section.key) it.copy(visible = false) else it })
                             close {}
-                        })
+                        }
                     }
-                    PagesGroup()
-                    ShapeSettings()
+                    SettingsGroup(tr(R.string.pages)) { TabsMiniPlayerPagesRows() }
+                    SettingsGroup(tr(R.string.text_icons_shapes)) { TextIconsShapesRows() }
+                    SettingsGroup(tr(R.string.buttons)) { TextIconsButtonsRows() }
                 }
             }
             // The Undo bar sits under the sheet: a change made here can be taken back here.

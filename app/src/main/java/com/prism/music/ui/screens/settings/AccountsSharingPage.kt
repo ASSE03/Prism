@@ -443,8 +443,12 @@ private fun SpotifyDisconnectRow(name: String?) {
 
 // ---------------------------------------------------------------------------- The page's other parts
 
-/** The root's line for Accounts & sharing: what the page holds (the accounts' state isn't in the settings). */
-fun accountsSharingValue(s: AppSettings, dark: Boolean): String = tr(R.string.root_accounts_value)
+/**
+ * The root's line for Accounts & sharing: the accounts it holds, with "Discord on" first while it shows what you play
+ * (the one account whose state is in the settings).
+ */
+fun accountsSharingValue(s: AppSettings, dark: Boolean): String =
+    if (s.discordPresence) tr(R.string.root_accounts_discord_on) else tr(R.string.root_accounts_short)
 
 /** The look settings "Reset this page" puts back: none (accounts aren't part of a look; the page resets its rows itself). */
 val accountsSharingLookKeys: List<String> = emptyList()

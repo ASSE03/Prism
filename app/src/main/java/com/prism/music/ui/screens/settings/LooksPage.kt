@@ -383,8 +383,8 @@ private fun StateLine(text: String) {
     )
 }
 
-/** The root's line for Looks. */
-fun looksValue(s: AppSettings, dark: Boolean): String = SettingsSection.LOOKS.summary(s, dark)
+/** The root's line for Looks: what the page is for, in one short line (the Look in use isn't in the settings). */
+fun looksValue(s: AppSettings, dark: Boolean): String = tr(R.string.root_looks_short)
 
 /** The look settings "Reset this page" puts back: none (a Look is every look setting; "Reset everything" is under ⋯). */
 val looksLookKeys: List<String> = emptyList()

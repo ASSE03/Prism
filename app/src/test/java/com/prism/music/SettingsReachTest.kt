@@ -150,8 +150,7 @@ class SettingsReachTest {
     /**
      * Look settings that are in no page's `<prefix>LookKeys`, each with the home that puts it back another way: its
      * "Reset this page" goes through the setter, so the key must be one that home writes. Customize Home and
-     * Recommendations & history reset every row by its setter (they have no LookKeys); Lyrics & Sing resets by its
-     * LookKeys and puts this one back by its setter beside them (`resetLyricsSing`).
+     * Recommendations & history reset every row by its setter (they have no LookKeys).
      */
     private val lookResetBySetter: Map<String, String> by lazy {
         mapOf(
@@ -159,7 +158,6 @@ class SettingsReachTest {
             "home_header_height" to "Customize Home",
             "replay_theme_colors" to SettingsPageId.RECOMMENDATIONS_HISTORY.title,
             "replay_story_font" to SettingsPageId.RECOMMENDATIONS_HISTORY.title,
-            "lyrics_source_button" to SettingsPageId.LYRICS_SING.title,
         )
     }
 

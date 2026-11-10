@@ -375,9 +375,6 @@ val homeLibraryIndex: List<SettingEntry> by lazy {
     val onlyPicture = Needs(top + " · " + HomeHeader.PICTURE.label) { it.homeHeader == HomeHeader.PICTURE }
     val notYouTubeOnly = Needs(tr(R.string.turn_off) + " · " + tr(R.string.speed_dial_youtube_music_s_only)) { !it.speedDialYouTubeOnly }
     listOf(
-        // Not a row of this page: "Hide this section" in the sheet that "Customize by tapping" opens on Home (its
-        // group there is "This section"). Listed as it was before 1.8.4; the result opens this page.
-        SettingEntry(page, tr(R.string.this_section), tr(R.string.hide_this_section), tr(R.string.customize_this_home)),
         // Home
         SettingEntry(page, g.home, customizeHome, tr(R.string.sections_order_shortcuts_quick_picks_speed)),
         SettingEntry(page, g.home, tr(R.string.continue_line), tr(R.string.continue_album_resume_greeting_hide_context)),

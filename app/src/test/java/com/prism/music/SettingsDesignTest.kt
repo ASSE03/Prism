@@ -194,12 +194,7 @@ class SettingsDesignTest {
      * KNOWN GAPS, reported 2026-11-10 (the test is not to fix a page). Each is exactly one offender; when the page is
      * fixed the test says so and the line goes. Nothing else may be added here without the owner's word.
      */
-    private val knownSearchGaps: Map<String, String> by lazy {
-        mapOf(
-            "${SettingsPageId.HOME_LIBRARY.title} › ${tr(R.string.this_section)} › ${tr(R.string.hide_this_section)}" to
-                "a line kept from before 1.8.4 for \"Hide this section\" in Home's Customize-by-tapping sheet: Home & Library has no such group or row, so the result opens the page at its top",
-        )
-    }
+    private val knownSearchGaps: Map<String, String> = emptyMap()
     /** Since the kit's fix of 2026-11-10 a Show chips row with nothing ticked says "None": no row is without its value. */
     private val knownValuelessRows: Map<String, String> = emptyMap()
 

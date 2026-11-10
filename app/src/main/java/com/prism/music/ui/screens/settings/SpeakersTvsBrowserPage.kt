@@ -378,8 +378,13 @@ internal fun ConnectSheetText(text: String) {
 
 // ---------------------------------------------------------------------------- The page's other parts
 
-/** The root's line for Speakers, TVs & browser: what's on of the browser remote and handoff. */
-fun speakersTvsBrowserValue(s: AppSettings, dark: Boolean): String = SettingsSection.CONNECT.summary(s, dark)
+/**
+ * The root's line for Speakers, TVs & browser: what's on of the browser remote and handoff, or what the page is for
+ * when neither is.
+ */
+fun speakersTvsBrowserValue(s: AppSettings, dark: Boolean): String =
+    listOfNotNull(if (s.webRemote) tr(R.string.browser_remote_on) else null, if (s.handoffAvailable) tr(R.string.root_handoff_on) else null)
+        .joinToString(" · ").ifEmpty { tr(R.string.root_connect_short) }
 
 /** The look settings "Reset this page" puts back: none (connections aren't part of a look; the page resets its rows itself). */
 val speakersTvsBrowserLookKeys: List<String> = emptyList()
