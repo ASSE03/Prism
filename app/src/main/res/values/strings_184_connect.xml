@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1.8.4, Settings → Speakers, TVs & browser and Accounts & sharing, rebuilt with the kit (English only; folded in and translated by the coordinator). -->
+<resources>
+    <!-- Speakers, TVs & browser -->
+    <string name="cn_browser_remote">Browser remote</string>
+    <string name="cn_address_and_code">Address and pairing code</string>
+    <string name="cn_paired_browsers">Paired browsers</string>
+    <string name="cn_no_browsers">No browser is paired yet</string>
+    <string name="cn_paired_devices">Paired devices</string>
+    <string name="cn_paired_keywords">paired devices browsers forget unpair remove</string>
+    <!-- Accounts & sharing -->
+    <string name="cn_not_connected">Not connected</string>
+    <string name="cn_not_set_up">Not set up</string>
+    <string name="cn_signed_in_as">Signed in as %1$s</string>
+    <string name="cn_youtube_account_info">Signing out and switching accounts are on the first page of Settings, on your account\'s card.</string>
+    <string name="cn_youtube_keywords">youtube music google account sign in log in sign out switch</string>
+    <string name="cn_youtube_history">YouTube Music history</string>
+    <string name="cn_youtube_history_keywords">youtube music history watch history keep in step live plays</string>
+    <string name="cn_discord_show">Show what you\'re playing on Discord</string>
+    <string name="cn_disconnect_lastfm">Disconnect Last.fm</string>
+    <string name="cn_disconnect_spotify">Disconnect Spotify</string>
+    <string name="cn_how_to_connect">How to connect</string>
+    <string name="cn_spot_access_taken_back">Access taken back · reconnect</string>
+    <string name="cn_spot_followed_short">%1$d you follow can\'t be read</string>
+</resources>

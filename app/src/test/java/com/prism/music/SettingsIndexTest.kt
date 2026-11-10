@@ -43,7 +43,9 @@ class SettingsIndexTest {
         // Customize sheet over the player (SettingsScreen.kt) still shows its Look and Cover groups, which are on no page.
         live.filter { it.parentFile.name == "settings" && it.name != "OldPlayer.kt" }.sortedBy { it.name }
     }
-    private val sources = listOf("SettingsScreen.kt", "SoundSettings.kt", "BackupUi.kt", "ConnectSettings.kt", "SpotifySettings.kt", "HistorySettings.kt")
+    // (ConnectSettings.kt and SpotifySettings.kt went with the pages that drew them: Speakers, TVs & browser and
+    // Accounts & sharing are rebuilt, and nothing calls `ConnectSettings()` or `SpotifyPage()` any more.)
+    private val sources = listOf("SettingsScreen.kt", "SoundSettings.kt", "BackupUi.kt", "HistorySettings.kt")
         .map { File("src/main/java/com/prism/music/ui/screens/$it").readText() } + pageFiles.map { it.readText() }
 
     /** The old rows, and the kit's five (1.8.4), by the composable that draws them. */
@@ -119,6 +121,7 @@ class SettingsIndexTest {
         assertTrue("the old Devices & connections page is rebuilt (CarPage.kt): $read", "OldCar.kt" !in read)
         assertTrue("the old Downloads, storage & data page is rebuilt (DownloadsDataPage.kt): $read", "OldDownloads.kt" !in read)
         assertTrue("the old Recommendations & Replay page is rebuilt (RecommendationsHistoryPage.kt): $read", "OldRecommendations.kt" !in read)
+        assertTrue("the old Discord, Last.fm and Sharing groups are rebuilt (AccountsSharingPage.kt): $read", "OldAccounts.kt" !in read)
         assertTrue("the old Home & Library page is rebuilt (HomeLibraryPage.kt): $read", "OldHomeLibrary.kt" !in read)
         assertTrue("the old Backup & about page is rebuilt (BackupAboutPage.kt): $read", "OldBackupAbout.kt" !in read)
         // One per line, so pages rebuilt side by side each take their own line out.
@@ -126,7 +129,8 @@ class SettingsIndexTest {
             "OldTabs.kt",
             "GesturesButtonsPage.kt",
             "CarPage.kt",
-            "OldAccounts.kt",
+            "SpeakersTvsBrowserPage.kt",
+            "AccountsSharingPage.kt",
             "BackupAboutPage.kt",
             "LanguageRegionPage.kt",
             "PlayerPage.kt",

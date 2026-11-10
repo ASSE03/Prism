@@ -355,8 +355,11 @@ class SettingsMapTest {
     private val notDrawnByDefault: Map<Int, String> = mapOf(
         R.string.home_screen_widgets to "only while a Prism widget is on the home screen",
         R.string.hide_this_section to "in the Customize-this sheet of a Home section, not on the page (as before 1.8.4)",
-        R.string.spot_connected_as to "only once Spotify is connected",
-        R.string.disconnect to "only once the account is connected",
+        // Accounts & sharing: Last.fm's card has no title (its first row names it), and these four show once it's connected.
+        R.string.last_fm_scrobbling to "only once Last.fm is connected",
+        R.string.first_artist_only to "only once Last.fm is connected",
+        R.string.love_when_i_like_a_song to "only once Last.fm is connected",
+        R.string.cn_disconnect_lastfm to "only once Last.fm is connected",
         R.string.sign_out_of_discord to "only once Discord is signed in",
     )
 
