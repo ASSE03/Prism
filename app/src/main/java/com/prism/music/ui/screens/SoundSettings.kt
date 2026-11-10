@@ -58,7 +58,7 @@ fun CrossfadeCurveCards() {
 }
 
 @Composable
-private fun CurveSample(curve: CrossfadeCurve) {
+internal fun CurveSample(curve: CrossfadeCurve) {
     val incoming = MaterialTheme.colorScheme.primary
     val outgoing = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
     androidx.compose.foundation.Canvas(Modifier.fillMaxWidth().height(44.dp)) {

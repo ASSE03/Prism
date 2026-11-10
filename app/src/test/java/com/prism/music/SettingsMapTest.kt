@@ -165,7 +165,8 @@ class SettingsMapTest {
         assertEquals(SettingsPageId.LYRICS_SING, to("lyrics_look")!!.page)
         // Playback & sound is two pages: a link to one of its groups opens the page that has the group.
         assertEquals(SettingsTarget(SettingsPageId.PLAYBACK), to("sound"))
-        assertEquals(SettingsTarget(SettingsPageId.PLAYBACK, tr(R.string.crossfade)), to("sound", tr(R.string.crossfade)))
+        // (Playback's group around the Crossfade row has another name now: the page says which.)
+        assertEquals(SettingsTarget(SettingsPageId.PLAYBACK, SettingsPageId.PLAYBACK.oldGroups.getValue(tr(R.string.crossfade))), to("sound", tr(R.string.crossfade)))
         assertEquals(SettingsTarget(SettingsPageId.SOUND_QUALITY, tr(R.string.quality)), to("sound", tr(R.string.quality)))
         assertEquals(SettingsTarget(SettingsPageId.SOUND_QUALITY, tr(R.string.sound)), to("sound", tr(R.string.sound)))
         // Devices & connections: Android Auto is Car; its sharing group is Accounts & sharing's.

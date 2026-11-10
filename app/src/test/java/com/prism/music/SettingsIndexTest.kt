@@ -90,7 +90,24 @@ class SettingsIndexTest {
         val read = pageFiles.map { it.name }
         assertTrue("the old Language page is rebuilt (LanguageRegionPage.kt): $read", "OldLanguageRegion.kt" !in read)
         assertTrue("the old Lyrics pages are rebuilt (LyricsSingPage.kt): $read", "OldLyrics.kt" !in read)
-        for (name in listOf("OldPlayer.kt", "OldSound.kt", "OldTheme.kt", "OldTabs.kt", "OldCar.kt", "OldAccounts.kt", "OldLooks.kt", "OldBackupAbout.kt", "LanguageRegionPage.kt", "PlayerPage.kt", "LyricsSingPage.kt", "LyricsSingParts.kt")) {
+        assertTrue("the old Playback & sound page is rebuilt (PlaybackPage.kt, SoundQualityPage.kt): $read", "OldSound.kt" !in read)
+        // One per line, so pages rebuilt side by side each take their own line out.
+        val stillRead = listOf(
+            "OldPlayer.kt",
+            "OldTheme.kt",
+            "OldTabs.kt",
+            "OldCar.kt",
+            "OldAccounts.kt",
+            "OldLooks.kt",
+            "OldBackupAbout.kt",
+            "LanguageRegionPage.kt",
+            "PlayerPage.kt",
+            "LyricsSingPage.kt",
+            "LyricsSingParts.kt",
+            "PlaybackPage.kt",
+            "SoundQualityPage.kt",
+        )
+        for (name in stillRead) {
             assertTrue("$name is read: $read", name in read)
         }
     }
