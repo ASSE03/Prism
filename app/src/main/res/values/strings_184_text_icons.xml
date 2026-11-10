@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 1.8.4 Settings → Text & icons (English only; the coordinator folds these into strings.xml and translates once). -->
+    <string name="app_text_size">App text size</string>
+    <string name="text_icons_shapes">Shapes</string>
+    <string name="icon_weight">Icon weight</string>
+    <string name="icon_line_rounded">%1$s, rounded ends</string>
+    <string name="icon_line_square">%1$s, square ends</string>
+    <string name="card_and_cover_corners">Card and cover corners</string>
+    <string name="card_and_cover_corners_info">How round Prism\'s cards, tiles, sheets, rounded buttons and the covers in lists and on pages are. Icons have their own (Icon weight), and the player\'s cover has its own on the Player page.</string>
+</resources>

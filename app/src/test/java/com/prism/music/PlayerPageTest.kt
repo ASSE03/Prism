@@ -217,10 +217,10 @@ class PlayerPageTest {
         assertEquals("the ledger's keys for Player, and nothing else", ledgerKeys.toSet(), held.toSet())
         // `queue_locked` is state, allow-listed by the plan (§2.11): not a row.
         assertFalse("queue_locked" in held)
-        // Every key is a real stored one, and Reset's keys are the page's look settings (one waits for its old page's list).
+        // Every key is a real stored one, and Reset's keys are the page's look settings.
         assertTrue(held.all { it in prefs.allKeyNames })
         val look = held.filter { it in prefs.lookKinds.keys }.toSet()
-        assertEquals(look - setOf("cover_shape_player"), playerLookKeys.toSet())
+        assertEquals(look, playerLookKeys.toSet())
         assertTrue("immersive_background" in playerLookKeys)
     }
 

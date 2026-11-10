@@ -76,8 +76,7 @@ fun lyricsSingValue(s: AppSettings, dark: Boolean): String =
 /**
  * The look settings "Reset this page" puts back. The page's reset also puts back its other rows (sources, language,
  * timing, Sing, the lyrics font) through their own setters, see [resetLyricsSing]. Immersive's background is Player's
- * (plan §2.11) and no longer here; the lyrics font's key stays in Text & icons' list until that page lets go of it (no
- * key is in two pages' lists).
+ * (plan §2.11) and no longer here (no key is in two pages' lists).
  */
 val lyricsSingLookKeys: List<String> = listOf(
     "lyrics_align", "lyrics_scale", "lyrics_blur", "lyrics_progress_line", "lyrics_style", "lyrics_blur_amount", "lyrics_spacing",
@@ -87,6 +86,8 @@ val lyricsSingLookKeys: List<String> = listOf(
     "lyrics_strip_align", "lyrics_strip_two_lines", "lyrics_gap_mark",
     // 1.8.0 lyrics look
     "lyrics_motion", "lyrics_word_by_word", "lyrics_card", "lyrics_halo", "lyrics_bold_lines",
+    // The lyrics font came from Text & icons, which let go of it.
+    "lyrics_font",
 )
 
 /** Old group titles → this page's groups (links and tour steps written before 1.8.4 name the old ones). */

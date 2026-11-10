@@ -67,11 +67,27 @@ class SettingsIndexTest {
         }.toList()
     }.filter { it.isNotBlank() }.distinct()
 
+    /**
+     * Text & icons and Tabs & mini player are rebuilt (1.8.4), but `OldTextIcons.kt` and `OldTabs.kt` are still read:
+     * "Customize this" draws some of their groups. Rows of those two files that their pages no longer hold under these
+     * words: renamed ("App text size", "Card and cover corners"), or gone to another page, which lists them (the lyrics
+     * font's rows to Lyrics & Sing, "Swipe between tabs" to Gestures & buttons).
+     */
+    private val leftTextIconsAndTabs = setOf(
+        R.string.text_size, R.string.corners,
+        R.string.installed_fonts_for_lyrics, R.string.lyrics_font_file_2, R.string.remove_the_lyrics_font_file,
+        R.string.swipe_between_tabs,
+    ).map { com.prism.music.tr(it).substringBefore("%1\$s").trim().removeSuffix(":") }.toSet()
+
+    /** The old group names those two pages answer to (their `…OldGroups`): the groups' rows are in other groups now. */
+    private val regroupedTextIconsAndTabs: Set<String> =
+        com.prism.music.ui.screens.settings.textIconsOldGroups.keys + com.prism.music.ui.screens.settings.tabsMiniPlayerOldGroups.keys
+
     @Test
     fun everyRowIsSearchable() {
         val rows = rows(rowCalls)
         assertTrue("the pages' rows were read (${rows.size})", rows.size > 100)
-        val missing = rows.filter { row -> SettingsIndex.entries.none { it.title == row || row.startsWith(it.title) } }
+        val missing = rows.filter { row -> row !in leftTextIconsAndTabs && SettingsIndex.entries.none { it.title == row || row.startsWith(it.title) } }
         assertTrue("Not in SettingsIndex: $missing", missing.isEmpty())
         // The kit's rows are read too (the first rebuilt page and the root).
         assertTrue(com.prism.music.tr(R.string.content_country) in rows && com.prism.music.tr(R.string.performance_mode) in rows)
@@ -82,7 +98,7 @@ class SettingsIndexTest {
         // The old groups, and the kit's (`group(...)` in a page's scaffold, `SettingsGroup(...)`).
         val groups = rows("Group|group|SettingsGroup") - linkLists.map { com.prism.music.tr(it) }.toSet()
         assertTrue("the pages' groups were read (${groups.size})", groups.size > 20)
-        val missing = groups.filter { g -> SettingsIndex.entries.none { it.group == g } }
+        val missing = groups.filter { g -> g !in regroupedTextIconsAndTabs && SettingsIndex.entries.none { it.group == g } }
         assertTrue("Groups not in SettingsIndex: $missing", missing.isEmpty())
     }
 
@@ -109,6 +125,9 @@ class SettingsIndexTest {
             "LyricsSingParts.kt",
             "PlaybackPage.kt",
             "SoundQualityPage.kt",
+            "TextIconsPage.kt",
+            "TextIconsParts.kt",
+            "TabsMiniPlayerPage.kt",
         )
         for (name in stillRead) {
             assertTrue("$name is read: $read", name in read)

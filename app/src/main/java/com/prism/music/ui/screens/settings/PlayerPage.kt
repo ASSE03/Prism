@@ -522,8 +522,7 @@ fun playerValue(s: AppSettings, dark: Boolean): String = SettingsSection.PLAYER.
 
 /**
  * The look settings "Reset this page" puts back by their keys: every setting of the page that is part of a Look. (The
- * page's other settings go back by their setters, see `resetPlayerPage`. `cover_shape_player` is reset that way too
- * for now: Text & icons' list still holds it, and no key may be in two pages' lists.)
+ * page's other settings go back by their setters, see `resetPlayerPage`; no key may be in two pages' lists.)
  */
 val playerLookKeys: List<String> = listOf(
     "player_layout", "vinyl_tonearm", "player_background", "player_backdrop_show", "player_gradient_depth", "mesh_speed", "mesh_intensity",
@@ -538,6 +537,8 @@ val playerLookKeys: List<String> = listOf(
     "visualizer", "visualizer_color", "immersive_art", "immersive_lyrics", "immersive_controls", "immersive_video",
     // Immersive's background has its one home here (it came from Lyrics → Background).
     "immersive_background", "lock_screen_player_look",
+    // The player's cover shape came from Text & icons, which let go of it.
+    "cover_shape_player",
 )
 
 /** Old group titles → this page's groups, so links and tour steps of before the rework land where the setting is now. */
