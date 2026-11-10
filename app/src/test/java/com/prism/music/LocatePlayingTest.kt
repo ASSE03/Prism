@@ -9,7 +9,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertIsDisplayed
@@ -108,6 +112,32 @@ class LocatePlayingTest {
         assertEquals("it pulsed once", 1, locate.beat)
         assertNull("and the pulse is over", locate.pulsing)
         assertEquals("the header and Play are counted: song 380 is the list's item 381", 381, list.layoutInfo.visibleItemsInfo.first { it.key == playing }.index)
+    }
+
+    /**
+     * Pages that share one state (Local files' sections in a pager): the page going out leaves after the page coming in
+     * has offered its way there, and must not take that away (the top bar's button was gone for good).
+     */
+    @Test fun aPageLeavingAfterTheNextOneCameLeavesItsWayThere() {
+        var pages by mutableStateOf(listOf("songs"))
+        compose.setContent {
+            PrismTheme(settings(button = false, still = false), artworkColor = null) {
+                val state = remember { LocateState() }.also { locate = it }
+                Box(Modifier.fillMaxSize()) {
+                    for (p in pages) key(p) {
+                        val lazy = rememberLazyListState()
+                        LocatePlayingRow(state, lazy, inList = true, songId = playing, bottomPadding = mini) { 0 }
+                    }
+                }
+            }
+        }
+        compose.waitForIdle()
+        assertNotNull(locate.go)
+        pages = listOf("songs", "favourites"); compose.waitForIdle()
+        pages = listOf("favourites"); compose.waitForIdle()
+        assertNotNull("the section in view can still go to the playing song", locate.go)
+        pages = emptyList(); compose.waitForIdle()
+        assertNull("no section left, nowhere to go", locate.go)
     }
 
     @Test fun withReduceMotionItOnlyGoesThere() {

@@ -218,9 +218,12 @@ private fun BoxScope.LocatePlayingRow(
         }
     }
     val go by rememberUpdatedState(goNow)
+    // Only its own way there is taken back when it goes: pages that share one state (Local files' sections in a pager)
+    // leave after the next page came, and that page's way there stays.
     DisposableEffect(state, inList) {
-        state.go = if (inList) ({ go() }) else null
-        onDispose { state.go = null }
+        val mine: (() -> Unit)? = if (inList) ({ go() }) else null
+        if (mine != null) state.go = mine
+        onDispose { if (state.go === mine) state.go = null }
     }
     if (!inList || !LocalAppSettings.current.behavior.locatePlaying) return
     val where by rememberUpdatedState(side)
