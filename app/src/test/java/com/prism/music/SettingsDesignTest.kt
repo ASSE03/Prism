@@ -168,23 +168,14 @@ class SettingsDesignTest {
         SettingsTags.GROUP, SettingsTags.GROUP_CARD, SettingsTags.CHANGED_DOT, SettingsTags.PAGE_LIST, SettingsTags.PAGE_TITLE,
         SettingsTags.PAGE_SEARCH, SettingsTags.PAGE_MORE, SettingsTags.JUMP_CHIPS, SettingsTags.PREVIEW, SettingsTags.RESET_ITEM,
         SettingsTags.RESET_CHANGE, SettingsTags.RESET_CONFIRM, SettingsTags.SHEET, SettingsTags.SHEET_OPTION, SettingsTags.SHEET_SEARCH,
+        SettingsTags.PAGE_BAR_TITLE,
     )
 
     /**
-     * TEMPORARY EXEMPTION (2026-11-10), ONE KIT ISSUE: `SettingsPageScaffold` pads the bar's small title by 116 dp on
-     * each side for the buttons, which leaves 128 dp at 360 dp width. "Tabs & mini player" was the known case; measured
-     * here, these names don't fit either (at 1.3× text; the first seven already at 1.0×). A kit fix is on its way: when
-     * it lands, EMPTY THIS SET (the test then holds every name to it; `build/settings-design/bar-titles*.txt` says which
-     * lines are no longer needed). No other title may be added here.
+     * No page's name may be cut in the top bar. (Until the kit's fix of 2026-11-10 twelve were, at 360 dp and 1.3× text:
+     * the bar now gives its title the room its buttons leave and shrinks it to fit.) No title may be added here.
      */
-    private val barTitleKnownToBeCut: Set<String> by lazy {
-        listOf(
-            SettingsPageId.TABS_MINI_PLAYER, SettingsPageId.GESTURES_BUTTONS, SettingsPageId.DOWNLOADS_DATA, SettingsPageId.RECOMMENDATIONS_HISTORY,
-            SettingsPageId.SPEAKERS_TVS_BROWSER, SettingsPageId.ACCOUNTS_SHARING, SettingsPageId.LANGUAGE_REGION,
-            // Cut at 1.3× only.
-            SettingsPageId.THEME_COLORS, SettingsPageId.HOME_LIBRARY, SettingsPageId.SOUND_QUALITY, SettingsPageId.BACKUP_ABOUT,
-        ).map { it.title }.toSet() + customizeHome
-    }
+    private val barTitleKnownToBeCut: Set<String> = emptySet()
 
     /**
      * A search line's group that is a group's key and not a title on the page: a card without a title (the service's
@@ -209,12 +200,8 @@ class SettingsDesignTest {
                 "a line kept from before 1.8.4 for \"Hide this section\" in Home's Customize-by-tapping sheet: Home & Library has no such group or row, so the result opens the page at its top",
         )
     }
-    private val knownValuelessRows: Map<String, String> by lazy {
-        mapOf(
-            "${SettingsPageId.LYRICS_SING.title}: ${tr(R.string.ls_sing_and_music_files)} › ${tr(R.string.ls_when_saving)}" to
-                "kit gap: a ShowChipsRow with nothing ticked says \"\" (both chips are off on a fresh install; the chips themselves show it)",
-        )
-    }
+    /** Since the kit's fix of 2026-11-10 a Show chips row with nothing ticked says "None": no row is without its value. */
+    private val knownValuelessRows: Map<String, String> = emptyMap()
 
     // ------------------------------------------------------------------ Drawing a page
 
