@@ -133,7 +133,26 @@ private enum class AlbumKind {
     }
 }
 
-private enum class AlbumSort(val label: String) { LIBRARY(tr(R.string.library_order)), DOWNLOADED(tr(R.string.downloaded_first)), MOST(tr(R.string.most_songs)), TITLE(tr(R.string.title)), ARTIST(tr(R.string.artist)) }
+/**
+ * Saved by name ("library:albums" in [com.prism.music.data.LibraryRepository.sortOf]): new ones are added at the end and
+ * none is renamed. ADDED (1.8.4, D56): newest in the library first, by [com.prism.music.data.AlbumFirstSeen].
+ */
+internal enum class AlbumSort(val label: String) {
+    LIBRARY(tr(R.string.library_order)), DOWNLOADED(tr(R.string.downloaded_first)), MOST(tr(R.string.most_songs)), TITLE(tr(R.string.title)), ARTIST(tr(R.string.artist)),
+    ADDED(tr(R.string.recently_added));
+
+    companion object {
+        /** The sort a saved name stands for; Library order for none, or for one this version doesn't know. */
+        fun of(stored: String?): AlbumSort = entries.firstOrNull { it.name == stored } ?: LIBRARY
+    }
+}
+
+/**
+ * Library → Albums by "Recently added": albums saved on the phone by when they were saved ([saved]), the account's by
+ * when Prism first saw them ([seen]), newest first; the rest (and ties) in library order.
+ */
+internal fun <T : com.prism.music.data.model.BrowseItem> albumsRecentlyAdded(albums: List<T>, saved: Map<String, Long>, seen: Map<String, Long>): List<T> =
+    com.prism.music.data.AlbumFirstSeen.newestFirst(albums) { saved[it.id] ?: seen[it.id] }
 private enum class ArtistSort(val label: String) { LIBRARY(tr(R.string.library_order)), MOST(tr(R.string.most_songs)), NAME(tr(R.string.name)) }
 /** Saved by name ([com.prism.music.data.LibraryRepository.playlistSort]); CUSTOM is the listener's own order. */
 private enum class PlaylistSort(val label: String) { CUSTOM(tr(R.string.your_order)), LIBRARY(tr(R.string.recent_activity)), TITLE(tr(R.string.title)) }
@@ -225,7 +244,8 @@ fun LibraryScreen(bottomPadding: Dp) {
     var playlistQuery by rememberSaveable { mutableStateOf("") }
     var albumQuery by rememberSaveable { mutableStateOf("") }
     var artistQuery by rememberSaveable { mutableStateOf("") }
-    var albumSort by remember { mutableStateOf(AlbumSort.entries.firstOrNull { it.name == c.library.sortOf("library:albums") } ?: AlbumSort.LIBRARY) }
+    var albumSort by remember { mutableStateOf(AlbumSort.of(c.library.sortOf("library:albums"))) }
+    val albumsSeen by c.library.albumsSeen.times.collectAsState()
     var artistSort by remember { mutableStateOf(ArtistSort.entries.firstOrNull { it.name == c.library.sortOf("library:artists") } ?: ArtistSort.LIBRARY) }
     // Songs "From" (1.8.3, #382): liked songs and the songs of playlists the listener picks, once each. Prism's own
     // lists are read as they are now; YouTube's are loaded whole once per session.
@@ -260,7 +280,7 @@ fun LibraryScreen(bottomPadding: Dp) {
             done.mapNotNull { s -> s.album?.title?.lowercase()?.let { it to s } }.groupingBy { it.first }.eachCount()
     }
     fun artistOf(a: com.prism.music.data.model.BrowseItem) = albumSongs[a.id]?.first()?.primaryArtist ?: a.subtitle.split(" • ").firstOrNull { it != "Album" && it != "Single" && it != "EP" } ?: ""
-    val sortedAlbums = remember(albums, albumSort, albumSongs, downloadedPerAlbum) {
+    val sortedAlbums = remember(albums, albumSort, albumSongs, downloadedPerAlbum, albumsSeen, savedAlbums) {
         fun downloaded(a: com.prism.music.data.model.BrowseItem) = downloadedPerAlbum.first[a.id] ?: downloadedPerAlbum.second[a.title.lowercase()] ?: 0
         when (albumSort) {
             AlbumSort.LIBRARY -> albums
@@ -268,6 +288,7 @@ fun LibraryScreen(bottomPadding: Dp) {
             AlbumSort.MOST -> albums.sortedByDescending { albumSongs[it.id]?.size ?: 0 }
             AlbumSort.TITLE -> albums.sortedBy { it.title.lowercase() }
             AlbumSort.ARTIST -> albums.sortedWith(compareBy<com.prism.music.data.model.BrowseItem> { artistOf(it).lowercase() }.thenBy { it.title.lowercase() })
+            AlbumSort.ADDED -> albumsRecentlyAdded(albums, savedAlbums.associate { it.id to it.savedAt }, albumsSeen)
         }
     }
     var albumKind by remember { mutableStateOf(AlbumKind.entries.firstOrNull { it.name == c.library.sortOf("library:albums:kind") } ?: AlbumKind.ALL) }
