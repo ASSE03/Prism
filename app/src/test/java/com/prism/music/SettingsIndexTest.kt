@@ -13,8 +13,10 @@ import java.io.File
 @org.junit.runner.RunWith(org.robolectric.RobolectricTestRunner::class)
 @org.robolectric.annotation.Config(sdk = [34], application = android.app.Application::class)
 class SettingsIndexTest {
+    /** 1.8.4: the pages are one file each under `ui/screens/settings/`; every file there is read, so a rebuilt page is too. */
+    private val pageFiles = File("src/main/java/com/prism/music/ui/screens/settings").listFiles().orEmpty().filter { it.extension == "kt" }.sortedBy { it.name }
     private val sources = listOf("SettingsScreen.kt", "SoundSettings.kt", "BackupUi.kt", "ConnectSettings.kt", "ColorSettings.kt", "LookSettings.kt", "SpotifySettings.kt", "HistorySettings.kt")
-        .map { File("src/main/java/com/prism/music/ui/screens/$it").readText() }
+        .map { File("src/main/java/com/prism/music/ui/screens/$it").readText() } + pageFiles.map { it.readText() }
 
     /** The English strings (strings.xml and, until they're folded in, a release's own strings_*.xml): name → text. */
     private val strings: Map<String, String> by lazy {
@@ -70,8 +72,9 @@ class SettingsIndexTest {
     fun quickPicksFromIsWhereItsResultOpens() {
         val e = SettingsIndex.entries.first { it.title == com.prism.music.tr(R.string.quick_picks_from) }
         assertTrue(e.section == com.prism.music.ui.screens.SettingsSection.HOME && e.group == com.prism.music.tr(R.string.home))
-        val page = File("src/main/java/com/prism/music/ui/screens/SettingsScreen.kt").readText()
-        val group = page.substringAfter("private fun HomeLibraryLook()").substringAfter("Group(tr(R.string.home))").substringBefore("Group(")
+        // The page's own file (1.8.4: out of SettingsScreen.kt, into ui/screens/settings/).
+        val page = (pageFiles + File("src/main/java/com/prism/music/ui/screens/SettingsScreen.kt")).map { it.readText() }.single { "fun HomeLibraryLook()" in it }
+        val group = page.substringAfter("fun HomeLibraryLook()").substringAfter("Group(tr(R.string.home))").substringBefore("Group(")
         assertTrue("Quick picks from isn't in that group", "R.string.quick_picks_from" in group)
     }
 

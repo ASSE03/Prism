@@ -13,7 +13,7 @@ import com.prism.music.data.HistoryPause
 import com.prism.music.data.prefs.AppSettings
 import com.prism.music.data.prefs.BleedFit
 import com.prism.music.data.prefs.LyricsExtraPlace
-import com.prism.music.ui.screens.CoverFitChoice
+import com.prism.music.ui.screens.settings.CoverFitChoice
 import com.prism.music.ui.screens.CrossfadeOnBarChoice
 import com.prism.music.ui.screens.SettingsSection
 import com.prism.music.ui.screens.TranslationPlaceChoice
@@ -41,6 +41,13 @@ class SettingsBugs184Test {
     @get:Rule val compose = createComposeRule()
 
     private fun page(name: String) = File("src/main/java/com/prism/music/ui/screens/$name").readText()
+
+    /** SettingsScreen.kt and every page's file under `ui/screens/settings/` (1.8.4: one file a page). */
+    private fun settingsPages() = listOf(page("SettingsScreen.kt")) +
+        File("src/main/java/com/prism/music/ui/screens/settings").listFiles().orEmpty().filter { it.extension == "kt" }.sortedBy { it.name }.map { it.readText() }
+
+    /** The one settings file that holds [marker]. */
+    private fun pageWith(marker: String) = settingsPages().single { marker in it }
 
     private fun show(settings: AppSettings = AppSettings(), content: @Composable () -> Unit) {
         compose.setContent { PrismTheme(settings, artworkColor = null) { Column(Modifier.width(412.dp)) { content() } } }
@@ -79,8 +86,8 @@ class SettingsBugs184Test {
         BleedFit.entries.forEach { assertEquals(it.label, 1, shown(it.label)) }
         // And the page's chips are these: none of BleedFit's left bare.
         val chips = "Chips(com.prism.music.data.prefs.BleedFit.entries"
-        val src = page("SettingsScreen.kt")
-        assertEquals(1, src.split(chips).size - 1)
+        assertEquals(1, settingsPages().sumOf { it.split(chips).size - 1 })
+        val src = pageWith("fun CoverFitChoice(")
         assertTrue(chips in src.substringAfter("fun CoverFitChoice(").substringBefore("\n}"))
     }
 
@@ -107,12 +114,12 @@ class SettingsBugs184Test {
     /** Downloads → Mobile data → Load ahead on mobile data: its ⓘ sent people to Playback & sound; Load ahead is on this page. */
     @Test fun loadAheadOnMobileDatasInfoNamesTheRightPlace() {
         val name = Regex("""tr\(R\.string\.load_ahead_on_mobile_data\),.*?info = tr\(R\.string\.(\w+)\)""", RegexOption.DOT_MATCHES_ALL)
-            .find(page("SettingsScreen.kt"))!!.groupValues[1]
+            .find(pageWith("tr(R.string.load_ahead_on_mobile_data),"))!!.groupValues[1]
         val info = tr(R.string::class.java.getField(name).getInt(null))
         assertTrue("the ⓘ's text was read ($name)", info.length > 20 && !info.startsWith("#"))
         assertFalse("it names Playback & sound: $info", tr(R.string.playback_sound) in info)
         // Load ahead's own group is on the Downloads page, right above the Mobile data group.
-        val downloads = page("SettingsScreen.kt").substringBefore("tr(R.string.load_ahead_on_mobile_data),")
+        val downloads = pageWith("tr(R.string.load_ahead_on_mobile_data),").substringBefore("tr(R.string.load_ahead_on_mobile_data),")
         assertTrue(downloads.lastIndexOf("Group(tr(R.string.load_ahead)") in 0 until downloads.lastIndexOf("Group(tr(R.string.mobile_data)"))
     }
 }
