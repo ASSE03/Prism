@@ -191,4 +191,103 @@ class SettingsKitRenderTest {
         val shot = save("sheets-dark")
         assertTrue(shot.height > 0)
     }
+
+    /** The 1.8.4 kit fixes drawn: the bar's title once scrolled (the longest page name), and the new pieces at large text. */
+    private fun barTitle(name: String, title: String, fontScale: Float) {
+        compose.setContent {
+            val d = androidx.compose.ui.platform.LocalDensity.current
+            CompositionLocalProvider(androidx.compose.ui.platform.LocalDensity provides androidx.compose.ui.unit.Density(d.density, fontScale)) {
+                PrismTheme(AppSettings(themeMode = ThemeMode.DARK), artworkColor = null) {
+                    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+                        SettingsPageScaffold(title, 0.dp, onBack = {}, onSearch = {}, reset = PageReset(emptyList()) {}) {
+                            repeat(4) { g -> group("Group ${g + 1}") { repeat(5) { SwitchRow("Option ${it + 1}", it % 2 == 0) {} } } }
+                        }
+                    }
+                }
+            }
+        }
+        compose.onNodeWithTag(SettingsTags.PAGE_LIST).performScrollToIndex(3)
+        compose.waitForIdle()
+        save(name)
+    }
+
+    @Test fun barTitleLongest() = barTitle("bar-title-recommendations-1.0", "Recommendations & history", 1f)
+    @Test fun barTitleLongestAt13() = barTitle("bar-title-recommendations-1.3", "Recommendations & history", 1.3f)
+    @Test fun barTitleTabs() = barTitle("bar-title-tabs-1.0", "Tabs & mini player", 1f)
+
+    @Test fun fixesAtLargeText() {
+        show(AppSettings(themeMode = ThemeMode.DARK, textScale = 1.5f), glass = true) {
+            Column(Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 40.dp)) {
+                com.prism.music.ui.screens.settings.SettingsGroup("Kit fixes") {
+                    ShowChipsRow("Show", listOf(ShowOption("Song and artist names in the bar", true) {}, ShowOption("Covers", false) {}, ShowOption("Durations", true) {}))
+                    ShowChipsRow("Nothing ticked", listOf(ShowOption("Covers", false) {}, ShowOption("Durations", false) {}))
+                    ChoiceRow("Density", listOf("Standard", "Balanced", "Compact", "Minimal"), "Standard", { it }) {}
+                    ChoiceRow("Keep the screen on", listOf("Never", "Only while a song is playing", "Always"), "Never", { it }) {}
+                    LinkRow("Back up now", value = "Last: yesterday", action = true) {}
+                    LinkRow("Licenses") {}
+                }
+            }
+        }
+        save("kit-fixes-large-text")
+    }
+
+    @Test fun rowsSheet() {
+        show(AppSettings(themeMode = ThemeMode.DARK), glass = false) {
+            Column(Modifier.fillMaxSize()) {
+                Column(Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)).background(MaterialTheme.colorScheme.surfaceContainerLow).padding(top = 22.dp)) {
+                    com.prism.music.ui.screens.settings.SheetRows("Streaming quality", "What Prism asks YouTube Music for.") {
+                        SwitchRow("Higher on Wi-Fi", true) {}
+                        PickRow("On mobile data", "Normal") {}
+                        ChoiceRow("Video", listOf("Off", "Low", "High"), "Low", { it }) {}
+                        LinkRow("Clear the cache", value = "212 MB", action = true) {}
+                    }
+                }
+            }
+        }
+        save("rows-sheet-dark")
+    }
+
+    private val fewCountries = listOf("Automatic (follow the phone)", "United States", "Austria", "Belgium", "Germany")
+
+    @Composable
+    private fun ListSheet(picked: String) {
+        Column(Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)).background(MaterialTheme.colorScheme.surfaceContainerLow).padding(top = 22.dp)) {
+            PickList("Content country", fewCountries, picked, { it }, null, { null }, true) {}
+        }
+    }
+
+    /**
+     * Reported from Language & region's sheet: "a stray mark under the search field". The list opens with the current
+     * pick in view; picked far down, the first row is part-way off the top, and the feet of its letters showed as
+     * marks right under the search field. The rows now fade out at the top of a scrolled list.
+     */
+    @Test fun noStrayMarkUnderTheListSheetsSearchField() {
+        show(AppSettings(themeMode = ThemeMode.DARK), glass = false) { ListSheet("Germany") }
+        val shot = save("list-sheet-pick-last")
+        val search = compose.onNodeWithTag(SettingsTags.SHEET_SEARCH).fetchSemanticsNode().boundsInRoot
+        // The list starts 8 dp under the search field.
+        val top = (search.bottom + with(compose.density) { 8.dp.toPx() }).toInt() + 1
+        fun far(a: Int, b: Int) = maxOf(
+            kotlin.math.abs(android.graphics.Color.red(a) - android.graphics.Color.red(b)),
+            kotlin.math.abs(android.graphics.Color.green(a) - android.graphics.Color.green(b)),
+            kotlin.math.abs(android.graphics.Color.blue(a) - android.graphics.Color.blue(b)),
+        )
+        var marks = 0
+        for (y in top until top + 3) {
+            val plain = shot.getPixel(2, y)
+            for (x in 0 until shot.width) if (far(shot.getPixel(x, y), plain) > 10) marks++
+        }
+        assertEquals("pixels of a cut-off row in the list's first three lines", 0, marks)
+    }
+
+    /** The other half of that report ("the current pick, Automatic, isn't at the top"): picked, it is the list's first row. */
+    @Test fun thePickAtTheTopOfTheListSheetIsItsFirstRow() {
+        show(AppSettings(themeMode = ThemeMode.DARK), glass = false) { ListSheet(fewCountries[0]) }
+        save("list-sheet-pick-first")
+        val search = compose.onNodeWithTag(SettingsTags.SHEET_SEARCH).fetchSemanticsNode().boundsInRoot
+        val first = compose.onAllNodes(hasTestTag(SettingsTags.SHEET_OPTION)).fetchSemanticsNodes().first()
+        assertEquals(true, first.config[androidx.compose.ui.semantics.SemanticsProperties.Selected])
+        assertEquals(fewCountries[0], first.config[androidx.compose.ui.semantics.SemanticsProperties.Text].joinToString { it.text })
+        assertEquals("whole, right under the search field", search.bottom + with(compose.density) { 8.dp.toPx() }, first.boundsInRoot.top, 1.5f)
+    }
 }

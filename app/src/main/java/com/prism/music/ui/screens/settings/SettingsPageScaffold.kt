@@ -54,10 +54,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.prism.music.R
 import com.prism.music.tr
@@ -242,9 +244,13 @@ fun SettingsPageScaffold(
             if (showBack) RoundAction(PrismIcons.ArrowBack, tr(R.string.back), Modifier.align(Alignment.CenterStart).padding(start = 12.dp), glass = true) {
                 if (onBack != null) onBack() else nav?.back()
             }
-            Text(
-                title, Modifier.align(Alignment.Center).padding(horizontal = 116.dp).graphicsLayer { alpha = bar },
-                style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
+            // The small title gets all the room the bar's buttons leave (not twice the wider side's).
+            val buttons = (if (onSearch != null) 1 else 0) + (if (reset != null || menu.isNotEmpty()) 1 else 0)
+            BarTitle(
+                title, this@BoxWithConstraints.maxWidth,
+                start = if (showBack) 12.dp + 42.dp + 8.dp else 16.dp,
+                end = if (buttons == 0) 16.dp else 12.dp + 42.dp * buttons + 8.dp * buttons,
+                modifier = Modifier.align(Alignment.CenterStart).graphicsLayer { alpha = bar },
             )
             Row(Modifier.align(Alignment.CenterEnd).padding(end = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 if (onSearch != null) RoundAction(PrismIcons.Search, tr(R.string.search_settings), Modifier.testTag(SettingsTags.PAGE_SEARCH), glass = true, onClick = onSearch)
@@ -262,6 +268,46 @@ fun SettingsPageScaffold(
         }
     }
     if (asking && reset != null) ResetPageDialog(title, reset) { asking = false }
+}
+
+/**
+ * The page's title in the bar, on one line between the buttons ([start] and [end]: what they take of [barWidth]). It
+ * sits in the middle of the bar while it fits there, moves aside when a button is in its way, and where even all the
+ * room is too little (a long title, large text) its letters shrink to fit, down to 11 dp; only past that is it cut
+ * short. ("Tabs & mini player" had 128 dp of a 360 dp bar and read "Tabs & mini play…".)
+ */
+@Composable
+private fun BarTitle(title: String, barWidth: Dp, start: Dp, end: Dp, modifier: Modifier = Modifier) {
+    val style = MaterialTheme.typography.titleMedium
+    val density = LocalDensity.current
+    val measurer = rememberTextMeasurer()
+    val room = (barWidth - start - end).coerceAtLeast(0.dp)
+    val size = remember(title, style, density, room) {
+        with(density) {
+            val roomPx = room.toPx()
+            fun wide(s: TextUnit) = measurer.measure(title, style.copy(fontSize = s), maxLines = 1, softWrap = false).size.width
+            val natural = wide(style.fontSize)
+            if (natural <= roomPx || natural == 0) style.fontSize
+            else {
+                val floor = 11.dp.toSp()
+                var s = style.fontSize * (roomPx / natural)
+                while (s > floor && wide(s) > roomPx) s *= 0.97f
+                if (s < floor) floor else s
+            }
+        }
+    }
+    // (The title sits in a box that is placed, so its own bounds are the words' and not the bar's.)
+    Box(
+        modifier.layout { measurable, constraints ->
+            val startPx = start.roundToPx()
+            val endPx = end.roundToPx()
+            val p = measurable.measure(constraints.copy(minWidth = 0, maxWidth = (constraints.maxWidth - startPx - endPx).coerceAtLeast(0)))
+            val x = ((constraints.maxWidth - p.width) / 2).coerceIn(startPx, (constraints.maxWidth - endPx - p.width).coerceAtLeast(startPx))
+            layout(constraints.maxWidth, p.height) { p.placeRelative(x, 0) }
+        },
+    ) {
+        Text(title, Modifier.testTag(SettingsTags.PAGE_BAR_TITLE), style = style, fontSize = size, maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis)
+    }
 }
 
 /**

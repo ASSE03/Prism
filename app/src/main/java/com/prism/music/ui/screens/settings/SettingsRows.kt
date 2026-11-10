@@ -1,9 +1,15 @@
 package com.prism.music.ui.screens.settings
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -40,19 +46,24 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.SemanticsPropertyReceiver
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.prism.music.R
 import com.prism.music.tr
-import com.prism.music.ui.components.ChoiceFlow
 import com.prism.music.ui.components.PrismSlider
 import com.prism.music.ui.components.PrismSwitch
 import com.prism.music.ui.components.Segmented
+import com.prism.music.ui.components.glassEdge
+import com.prism.music.ui.components.glassFill
+import com.prism.music.ui.components.spectrumRing
 import com.prism.music.ui.screens.InfoMark
 import com.prism.music.ui.screens.InfoText
-import com.prism.music.ui.screens.ShowChips
 import com.prism.music.ui.screens.ShowOption
 import com.prism.music.ui.theme.LocalUi
 import com.prism.music.ui.theme.PrismIcons
@@ -91,6 +102,9 @@ object SettingsTags {
 
     const val PAGE_LIST = "settings:page:list"
     const val PAGE_TITLE = "settings:page:title"
+
+    /** The small title in the bar (seen once the page has scrolled). */
+    const val PAGE_BAR_TITLE = "settings:page:bartitle"
     const val PAGE_SEARCH = "settings:page:search"
     const val PAGE_MORE = "settings:page:more"
     const val JUMP_CHIPS = "settings:jump"
@@ -286,16 +300,58 @@ fun <T> ChoiceRow(
     onSelect: (T) -> Unit,
 ) {
     // One capsule while the words fit in it; at large text (or long words) pills that wrap, so no word is cut off.
-    val large = LocalDensity.current.fontScale >= 1.3f
-    val capsule = !large && options.size in 2..4 && options.all { label(it).length <= 12 } && options.sumOf { label(it).length } <= 30
+    val density = LocalDensity.current
+    val short = density.fontScale < 1.3f && options.size in 2..4 && options.all { label(it).length <= 12 } && options.sumOf { label(it).length } <= 30
     val pick: (T) -> Unit = { if (enabled) onSelect(it) }
+    val words = MaterialTheme.typography.labelLarge
+    val measurer = rememberTextMeasurer()
     RowFrame(
         SettingsTags.ROW_CHOICE, title, null, label(selected), info, changed, enabled, modifier, stacked = true,
         below = {
-            val m = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-            if (capsule) Segmented(options, selected, label, m, pick) else ChoiceFlow(options, { it == selected }, label, m, pick)
+            BoxWithConstraints(Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 12.dp)) {
+                // Measured, not guessed: every word must fit its share of the capsule on one line (the capsule's 3 dp
+                // rim, 6 dp beside each word), or the row falls back to chips that wrap.
+                val labels = options.map(label)
+                val capsule = short && remember(labels, maxWidth, words, density) {
+                    val share = with(density) { ((maxWidth - 6.dp) / labels.size - 12.dp).toPx() }
+                    labels.all { measurer.measure(it, words, maxLines = 1, softWrap = false).size.width + 1 <= share }
+                }
+                if (capsule) Segmented(options, selected, label, Modifier, pick)
+                else KitChips { options.forEach { o -> KitChip(o == selected, label(o)) { pick(o) } } }
+            }
         },
     )
+}
+
+/** The kit's chips, wrapping onto as many lines as they need. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun KitChips(modifier: Modifier = Modifier, chips: @Composable () -> Unit) {
+    FlowRow(modifier, horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { chips() }
+}
+
+/**
+ * A chip of [ChoiceRow] and [ShowChipsRow]: the app's chip (`PrismChip`: a glass pill, lifted and ringed in split light
+ * when picked), but never cut off: 36 dp tall on one line, and where the words don't fit the row's width (large text, a
+ * long translation) it wraps them and grows.
+ */
+@Composable
+private fun KitChip(selected: Boolean, label: String, modifier: Modifier = Modifier, icon: ImageVector? = null, onClick: () -> Unit) {
+    val scheme = MaterialTheme.colorScheme
+    // The pill's round ends at one line; a rounded box when it grows.
+    val shape = RoundedCornerShape(18.dp)
+    val bg by animateColorAsState(glassFill(if (selected) 2.6f else 1.2f), tween(180), label = "chipBg")
+    val fg by animateColorAsState(if (selected) scheme.onSurface else scheme.onSurfaceVariant, tween(180), label = "chipFg")
+    Row(
+        modifier.heightIn(min = 36.dp).clip(shape).background(bg)
+            .then(if (selected) Modifier.spectrumRing(shape) else Modifier.border(1.dp, glassEdge(), shape))
+            .semantics { this.selected = selected }
+            .clickable(onClick = onClick).padding(horizontal = 15.dp, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (icon != null) { Icon(icon, null, Modifier.size(18.dp), tint = fg); Spacer(Modifier.width(6.dp)) }
+        Text(label, style = MaterialTheme.typography.labelLarge, color = fg)
+    }
 }
 
 /**
@@ -311,15 +367,33 @@ fun ShowChipsRow(
     info: String? = null,
     changed: Boolean = false,
 ) {
+    val shown = options.filter { it.on }
+    // With nothing ticked the row says so ("None"), on a value line of its own: an empty value says nothing.
+    val none = if (shown.isEmpty()) tr(R.string.none) else null
     RowFrame(
-        SettingsTags.ROW_CHOICE, title, null, options.filter { it.on }.joinToString(" · ") { it.label }, info, changed, true, modifier, stacked = true,
-        below = { ShowChips(options); Spacer(Modifier.heightIn(min = 4.dp)) },
+        SettingsTags.ROW_CHOICE, title, none, none ?: shown.joinToString(" · ") { it.label }, info, changed, true, modifier, stacked = true,
+        below = {
+            val on = tr(R.string.shown)
+            val off = tr(R.string.hidden)
+            KitChips(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
+                options.forEach { o ->
+                    KitChip(
+                        o.on, o.label, Modifier.semantics { role = Role.Checkbox; stateDescription = if (o.on) on else off },
+                        icon = if (o.on) PrismIcons.Check else null,
+                    ) { o.onChange(!o.on) }
+                }
+            }
+            Spacer(Modifier.heightIn(min = 4.dp))
+        },
     )
 }
 
 /**
  * Row type 5, **Link**: opens another screen (or, with [external], something outside Prism). The only row that may
  * carry an [icon]. [value]: an optional line under the title (the screen's state in words).
+ *
+ * [action]: the row does something here and now and opens nothing ("Back up now", "Clear the cache"): a button, with
+ * no chevron (and no "opens outside" mark) after it.
  */
 @Composable
 fun LinkRow(
@@ -331,13 +405,15 @@ fun LinkRow(
     changed: Boolean = false,
     enabled: Boolean = true,
     external: Boolean = false,
+    action: Boolean = false,
     onClick: () -> Unit,
 ) {
+    val mark: (@Composable RowScope.() -> Unit)? = if (action) null else ({
+        Icon(if (external) PrismIcons.OpenInNew else PrismIcons.ChevronRight, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+    })
     RowFrame(
         SettingsTags.ROW_LINK, title, value, value.orEmpty(), info, changed, enabled, modifier,
         interaction = Modifier.clickable(enabled = enabled, role = Role.Button, onClick = onClick), icon = icon,
-        trailing = {
-            Icon(if (external) PrismIcons.OpenInNew else PrismIcons.ChevronRight, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
-        },
+        trailing = mark,
     )
 }

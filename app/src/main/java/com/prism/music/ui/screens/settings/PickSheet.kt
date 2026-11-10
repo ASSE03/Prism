@@ -32,8 +32,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.first
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -67,7 +78,8 @@ import com.prism.music.ui.theme.hairline
  *
  * A tap applies the option ([onPick], at once, so a preview behind the sheet shows it), gives a haptic tick and closes
  * the sheet. Swiping it down, Back or a tap outside changes nothing. [onDismiss] is called once the sheet is gone,
- * either way: clear the state that shows it there.
+ * either way: clear the state that shows it there. A tap on the current pick only closes the sheet, unless [onRepick]
+ * is given: it is then called first (a pick that opens an editor, or one that is applied again).
  *
  * [example] takes what `ChoiceCards` took for the same choice, so a page's example drawings move over as they are.
  */
@@ -82,11 +94,12 @@ fun <T> PickSheet(
     info: String? = null,
     columns: Int = 2,
     exampleScale: Float = 0.8f,
+    onRepick: (() -> Unit)? = null,
     example: @Composable (T) -> Unit,
 ) {
     SettingsSheet(onDismiss) { close ->
         PickCards(title, options, selected, label, info, columns, exampleScale, example) { picked ->
-            if (picked != selected) onPick(picked)
+            if (picked != selected) onPick(picked) else onRepick?.invoke()
             close {}
         }
     }
@@ -97,7 +110,7 @@ fun <T> PickSheet(
  * option with [label] and an optional second line ([detail]), the current one ticked. [searchable] adds a search field
  * over the list (it looks in both lines); the sheet then keeps its height while the list narrows.
  *
- * Tap, swipe-down and [onDismiss] behave as in [PickSheet].
+ * Tap, swipe-down, [onRepick] and [onDismiss] behave as in [PickSheet].
  */
 @Composable
 fun <T> PickListSheet(
@@ -110,10 +123,11 @@ fun <T> PickListSheet(
     info: String? = null,
     detail: (T) -> String? = { null },
     searchable: Boolean = options.size > 12,
+    onRepick: (() -> Unit)? = null,
 ) {
     SettingsSheet(onDismiss) { close ->
         PickList(title, options, selected, label, info, detail, searchable) { picked ->
-            if (picked != selected) onPick(picked)
+            if (picked != selected) onPick(picked) else onRepick?.invoke()
             close {}
         }
     }
@@ -121,7 +135,8 @@ fun <T> PickListSheet(
 
 /**
  * A [PickRow] that opens its own [PickSheet]: the row shows the current pick in words ([label] of [selected]) and,
- * with [thumbnail], a small picture of it.
+ * with [thumbnail], a small picture of it. [value]: what the row says where that isn't the pick's label ("Custom", the
+ * pick with a detail). [onRepick]: as [PickSheet]'s.
  */
 @Composable
 fun <T> PickCardsRow(
@@ -136,13 +151,15 @@ fun <T> PickCardsRow(
     columns: Int = 2,
     exampleScale: Float = 0.8f,
     thumbnail: (@Composable (T) -> Unit)? = null,
+    value: String? = null,
+    onRepick: (() -> Unit)? = null,
     onPick: (T) -> Unit,
     example: @Composable (T) -> Unit,
 ) {
     var open by rememberSaveable(title, "pick-cards") { mutableStateOf(false) }
     val thumb: (@Composable () -> Unit)? = if (thumbnail != null) ({ thumbnail(selected) }) else null
-    PickRow(title, label(selected), modifier, info, changed, enabled, thumb) { open = true }
-    if (open) PickSheet(title, options, selected, label, onPick, { open = false }, info, columns, exampleScale, example)
+    PickRow(title, value ?: label(selected), modifier, info, changed, enabled, thumb) { open = true }
+    if (open) PickSheet(title, options, selected, label, onPick, { open = false }, info, columns, exampleScale, onRepick, example)
 }
 
 /** A [PickRow] that opens its own [PickListSheet]. [value]: what the row says (the picked option's [label] by default). */
@@ -159,11 +176,36 @@ fun <T> PickListRow(
     enabled: Boolean = true,
     detail: (T) -> String? = { null },
     searchable: Boolean = options.size > 12,
+    onRepick: (() -> Unit)? = null,
     onPick: (T) -> Unit,
 ) {
     var open by rememberSaveable(title, "pick-list") { mutableStateOf(false) }
     PickRow(title, value, modifier, info, changed, enabled) { open = true }
-    if (open) PickListSheet(title, options, selected, label, onPick, { open = false }, info, detail, searchable)
+    if (open) PickListSheet(title, options, selected, label, onPick, { open = false }, info, detail, searchable, onRepick)
+}
+
+/**
+ * A sheet that holds rows, not one choice: what a row of the page opens when there is more behind it than fits a row
+ * (the lock screen's options, a device's codes, the two streaming qualities). The pick sheets' look (grab handle, the
+ * [title] and its ⓘ, [info]), then [content]: the kit's rows, top to bottom, scrolling when they're taller than the
+ * sheet (at most 85% of the screen). Tagged [SettingsTags.SHEET]. Rows apply at once; swiping the sheet down, Back or
+ * a tap outside closes it, and [onDismiss] is called once it's gone: clear the state that shows it there.
+ */
+@Composable
+fun RowsSheet(title: String, onDismiss: () -> Unit, info: String? = null, content: @Composable ColumnScope.() -> Unit) {
+    SettingsSheet(onDismiss) { _ -> SheetRows(title, info, content) }
+}
+
+/** What a [RowsSheet] shows under its handle (apart, so it's tested and drawn without a sheet's window). */
+@Composable
+internal fun SheetRows(title: String, info: String?, content: @Composable ColumnScope.() -> Unit) {
+    Column(Modifier.fillMaxWidth().heightIn(max = LocalConfiguration.current.screenHeightDp.dp * 0.85f).testTag(SettingsTags.SHEET)) {
+        SheetHeader(title, info)
+        Column(
+            Modifier.fillMaxWidth().weight(1f, fill = false).nestedScroll(KeepUpwardScroll).verticalScroll(rememberScrollState()).padding(bottom = 22.dp),
+            content = content,
+        )
+    }
 }
 
 /** The sheet both kinds share: [PrismSheet] with the app's grab handle, at most half the screen tall. */
@@ -239,7 +281,12 @@ internal fun <T> PickCards(
                                 .testTag(SettingsTags.SHEET_OPTION).semantics { role = Role.RadioButton; this.selected = on }
                                 .clickable { pick(o) }.padding(10.dp),
                         ) {
-                            CompositionLocalProvider(LocalDensity provides small) { example(o) }
+                            // The example is a picture of the option: whatever it draws (a switch, a button, a
+                            // slider) takes no tap and isn't read out on its own. The card takes the tap.
+                            Box {
+                                Box(Modifier.clearAndSetSemantics {}) { CompositionLocalProvider(LocalDensity provides small) { example(o) } }
+                                Box(Modifier.matchParentSize().pointerInput(Unit) {})
+                            }
                             Spacer(Modifier.height(6.dp))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(label(o), Modifier.weight(1f), style = MaterialTheme.typography.labelLarge, color = scheme.onSurface, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -273,8 +320,15 @@ internal fun <T> PickList(
         val q = query.trim()
         if (q.isEmpty()) options else options.filter { label(it).contains(q, ignoreCase = true) || detail(it)?.contains(q, ignoreCase = true) == true }
     }
-    // Opens with the current pick in view.
-    val list = rememberLazyListState((options.indexOf(selected) - 2).coerceAtLeast(0))
+    // Opens at the top while the current pick shows there whole; else scrolled to two rows above it.
+    val list = rememberLazyListState()
+    LaunchedEffect(Unit) {
+        val at = options.indexOf(selected)
+        if (at <= 0 || query.isNotBlank()) return@LaunchedEffect
+        val laid = snapshotFlow { list.layoutInfo }.first { it.visibleItemsInfo.isNotEmpty() }
+        val seen = laid.visibleItemsInfo.firstOrNull { it.index == at }
+        if (seen == null || seen.offset + seen.size > laid.viewportEndOffset) list.scrollToItem((at - 2).coerceAtLeast(0))
+    }
     // With a search field the sheet keeps its height while the list narrows; without one it's as tall as its rows.
     val height = if (searchable) Modifier.height(halfScreen()) else Modifier.heightIn(max = halfScreen())
     Column(Modifier.fillMaxWidth().then(height).testTag(SettingsTags.SHEET)) {
@@ -284,7 +338,7 @@ internal fun <T> PickList(
             tr(R.string.nothing_found), Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
             style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant,
         )
-        LazyColumn(Modifier.fillMaxWidth().weight(1f, fill = false).nestedScroll(KeepUpwardScroll), state = list) {
+        LazyColumn(Modifier.fillMaxWidth().weight(1f, fill = false).nestedScroll(KeepUpwardScroll).fadeTopWhile { list.canScrollBackward }, state = list) {
             items(shown.size) { i ->
                 val o = shown[i]
                 val on = o == selected
@@ -306,3 +360,19 @@ internal fun <T> PickList(
         }
     }
 }
+
+/**
+ * Rows that have scrolled part-way off the top of a list fade out (clear for the first 8 dp, then in over 16 dp), so a
+ * sliver of a row (the feet of its letters) doesn't sit as a stray mark under what's above the list. Nothing is drawn
+ * differently while [scrolled] is false (the list at its top).
+ */
+private fun Modifier.fadeTopWhile(scrolled: () -> Boolean): Modifier =
+    graphicsLayer { compositingStrategy = if (scrolled()) CompositingStrategy.Offscreen else CompositingStrategy.Auto }
+        .drawWithContent {
+            drawContent()
+            if (scrolled()) {
+                val clear = 8.dp.toPx()
+                val end = clear + 16.dp.toPx()
+                drawRect(Brush.verticalGradient(listOf(Color.Transparent, Color.Black), startY = clear, endY = end), blendMode = BlendMode.DstIn)
+            }
+        }

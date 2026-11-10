@@ -1,6 +1,15 @@
 package com.prism.music
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.test.click
+import com.prism.music.ui.screens.settings.PickCards
+import com.prism.music.ui.screens.settings.PickCardsRow
+import com.prism.music.ui.screens.settings.RowsSheet
+import androidx.compose.ui.semantics.Role
+import com.prism.music.ui.screens.settings.SettingsPageId
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -337,6 +346,251 @@ class SettingsKitTest {
         compose.onNode(hasTestTag(SettingsTags.SHEET_OPTION) and hasText("Germany")).performClick()
         compose.waitUntil(5_000) { !open }
         assertEquals("Germany", country)
+    }
+
+    // ---------------------------------------------------------------- what the 17 pages found (kit fixes)
+
+    /** A line drawn wider than the room its text was given (`didOverflowWidth` also says so of one-line text that fits). */
+    private fun tooWide(l: TextLayoutResult) = (0 until l.lineCount).any { l.getLineRight(it) - l.getLineLeft(it) > l.size.width + 1f }
+
+    /** A page's gutters: its cards are 328 dp wide on a 360 dp phone. */
+    @Composable
+    private fun OnAPage(content: @Composable () -> Unit) = Box(Modifier.padding(horizontal = 16.dp)) { SettingsGroup(null, content = content) }
+
+    @Test fun showChipsWithNothingTickedSayNone() {
+        var covers by mutableStateOf(false)
+        show { OnAPage { ShowChipsRow("In the queue", listOf(ShowOption("Covers", covers) { covers = it }, ShowOption("Durations", false) {})) } }
+        assertEquals("the row's value", listOf("None"), tagged(SettingsTags.ROW_CHOICE).map { it.config[SettingsRowValue] })
+        // On screen too (and so read out), not only in the tag.
+        compose.onNodeWithText("None", useUnmergedTree = true).assertExists()
+        compose.onNodeWithText("Covers").performClick()
+        compose.waitForIdle()
+        assertEquals(listOf("Covers"), tagged(SettingsTags.ROW_CHOICE).map { it.config[SettingsRowValue] })
+        assertEquals(0, compose.onAllNodes(hasText("None"), useUnmergedTree = true).fetchSemanticsNodes().size)
+    }
+
+    @Test fun aLongChipGrowsToTwoLinesAtLargeTextAndIsNotCutOff() {
+        val shown = "Song and artist names in the bar"
+        val choice = "Only while a song is playing"
+        show(fontScale = 1.5f) {
+            OnAPage {
+                ShowChipsRow("Show", listOf(ShowOption(shown, true) {}, ShowOption("Covers", false) {}, ShowOption("Durations", true) {}))
+                ChoiceRow("Keep the screen on", listOf("Never", choice, "Always"), "Never", { it }) {}
+            }
+        }
+        for (text in listOf(shown, choice)) {
+            val l = layoutOf(text)
+            assertTrue("\"$text\" wraps inside its chip (lines: ${l.lineCount})", l.lineCount >= 2)
+            assertFalse("\"$text\" ends in an ellipsis", l.isLineEllipsized(l.lineCount - 1))
+            assertFalse("\"$text\" is cut off", l.didOverflowHeight || tooWide(l))
+            val chip = compose.onNode(hasText(text) and hasAnyAncestor(hasTestTag(SettingsTags.ROW_CHOICE))).fetchSemanticsNode()
+            assertTrue("the chip grew past one line's 36 dp", with(compose.density) { chip.size.height.toDp() } > 36.dp)
+            assertTrue("and stays inside the card", chip.boundsInRoot.right <= with(compose.density) { (360.dp - 32.dp).toPx() })
+        }
+        // A short chip is as it was.
+        compose.onNodeWithText("Covers").assertHeightIsEqualTo(36.dp)
+    }
+
+    /** The options of a Choice row (each carries Selected), left to right, top to bottom. */
+    private fun choiceOptions(title: String) = compose.onAllNodes(
+        hasAnyAncestor(hasTestTag(SettingsTags.ROW_CHOICE) and androidx.compose.ui.test.hasAnyDescendant(hasText(title))) and
+            androidx.compose.ui.test.SemanticsMatcher.keyIsDefined(SemanticsProperties.Selected),
+    ).fetchSemanticsNodes()
+
+    @Test fun aCapsuleWhoseWordsDontFitBecomesWrappingChips() {
+        // Each within the capsule's old rule (four words, 12 letters at most, 30 together) and too wide for a quarter of it.
+        val wide = listOf("WWWWWWW", "MMMMMMM", "WMWMWMW", "MWMWMWM")
+        val words = listOf("Standard", "Balanced", "Compact", "Minimal")
+        show(fontScale = 1.25f) {
+            OnAPage {
+                ChoiceRow("Wide letters", wide, wide[0], { it }) {}
+                ChoiceRow("Density", words, words[0], { it }) {}
+            }
+        }
+        for (text in wide + words) {
+            val l = layoutOf(text)
+            assertFalse("\"$text\" is cut off in the capsule", l.isLineEllipsized(0) || tooWide(l))
+        }
+        assertTrue("the wide ones wrapped onto more lines", choiceOptions("Wide letters").map { it.boundsInRoot.top }.distinct().size > 1)
+    }
+
+    @Test fun wordsThatFitStayOneCapsule() {
+        val options = listOf("Off", "Cover", "Video", "Both")
+        show { OnAPage { ChoiceRow("Edge to edge", options, "Off", { it }) {} } }
+        val segments = choiceOptions("Edge to edge")
+        assertEquals(4, segments.size)
+        assertEquals("one line", 1, segments.map { it.boundsInRoot.top }.distinct().size)
+        assertEquals("four equal shares", 1, segments.map { it.size.width }.distinct().size)
+        // The shares fill the capsule: the card's 328 dp less the row's gutters and the capsule's rim.
+        val whole = with(compose.density) { segments.sumOf { it.size.width }.toDp() }
+        assertTrue("$whole", whole > 280.dp)
+    }
+
+    @Test fun aControlInAPickCardsExampleDoesNotSwallowTheTap() {
+        var picked = ""
+        var inner = 0
+        show {
+            PickCards("Progress bar style", styles, "Line", { it }, null, 2, 0.8f, {
+                Box(Modifier.fillMaxWidth().height(80.dp).clickable { inner++ })
+            }) { picked = it }
+        }
+        // A tap in the middle of the example, where the example's own control is.
+        compose.onNode(hasTestTag(SettingsTags.SHEET_OPTION) and hasText("Wave")).performTouchInput { click(Offset(centerX, 40.dp.toPx())) }
+        compose.waitForIdle()
+        assertEquals("the example's control wasn't tapped", 0, inner)
+        assertEquals("the card took the tap", "Wave", picked)
+    }
+
+    @Test fun everyPageTitleFitsTheBarOnA360Phone() {
+        var title by mutableStateOf("")
+        var scale by mutableStateOf(1f)
+        compose.setContent {
+            val d = LocalDensity.current
+            CompositionLocalProvider(LocalDensity provides Density(d.density, scale)) {
+                PrismTheme(AppSettings(themeMode = ThemeMode.DARK), artworkColor = null) {
+                    Box(Modifier.width(360.dp)) {
+                        SettingsPageScaffold(title, 0.dp, onBack = {}, onSearch = {}, reset = PageReset(emptyList()) {}) {
+                            group(null, key = "g") { SwitchRow("Row", true) {} }
+                        }
+                    }
+                }
+            }
+        }
+        val pages = SettingsPageId.entries.map { it.title }
+        assertEquals("the 17 pages", 17, pages.size)
+        // And Customize Home, a page of its own under Home & Library.
+        val titles = pages + tr(R.string.customize_home)
+        val cut = ArrayList<String>()
+        val shrunk = ArrayList<String>()
+        for (s in listOf(1f, 1.15f, 1.3f, 1.5f, 2f)) for (t in titles) {
+            scale = s; title = t
+            compose.waitForIdle()
+            // The bar's title: the node with the page's name that isn't the large title in the list.
+            val node = compose.onAllNodes(hasText(t), useUnmergedTree = true).fetchSemanticsNodes()
+                .single { it.config.getOrNull(SemanticsProperties.TestTag) != SettingsTags.PAGE_TITLE }
+            val out = ArrayList<TextLayoutResult>()
+            node.config[SemanticsActions.GetTextLayoutResult].action!!.invoke(out)
+            val l = out.first()
+            if (l.lineCount != 1 || l.isLineEllipsized(0) || tooWide(l)) cut += "\"$t\" at $s"
+            // Between the back button and the search and ⋯ buttons, not under them.
+            val (left, right) = with(compose.density) { 54.dp.toPx() to (360.dp - 104.dp).toPx() }
+            if (node.boundsInRoot.left < left || node.boundsInRoot.right > right) cut += "\"$t\" at $s is under a button"
+            if (s == 1f && l.layoutInput.style.fontSize.value < 14f) shrunk += t
+            if (l.layoutInput.style.fontSize.value < 15.95f) println("bar title \"$t\" at $s: ${"%.1f".format(l.layoutInput.style.fontSize.value)} sp")
+        }
+        assertEquals("cut off in the bar", emptyList<String>(), cut)
+        assertEquals("at normal text no title is shrunk below 14 sp", emptyList<String>(), shrunk)
+    }
+
+    /** A tap on the current pick ("Line") in one sheet; returns (picks, repicks) once the sheet has closed. */
+    private fun tapTheCurrentPick(list: Boolean, asked: Boolean): Pair<Int, Int> {
+        var picks = 0
+        var repicks = 0
+        var open by mutableStateOf(true)
+        show {
+            val again: (() -> Unit)? = if (asked) ({ repicks++ }) else null
+            if (open && !list) PickSheet("Progress bar style", styles, "Line", { it }, { picks++ }, { open = false }, onRepick = again) { Box(Modifier.fillMaxWidth().height(34.dp)) }
+            if (open && list) PickListSheet("Progress bar style", styles, "Line", { it }, { picks++ }, { open = false }, onRepick = again)
+        }
+        compose.onNode(hasTestTag(SettingsTags.SHEET_OPTION) and hasText("Line")).performClick()
+        compose.waitUntil(5_000) { !open }
+        return picks to repicks
+    }
+
+    @Test fun aTapOnTheCurrentCardCallsOnRepick() = assertEquals(0 to 1, tapTheCurrentPick(list = false, asked = true))
+    @Test fun aTapOnTheCurrentListLineCallsOnRepick() = assertEquals(0 to 1, tapTheCurrentPick(list = true, asked = true))
+
+    /** Not asked for: a tap on the current pick only closes the sheet, as before. */
+    @Test fun withoutOnRepickTheCurrentPickOnlyCloses() = assertEquals(0 to 0, tapTheCurrentPick(list = true, asked = false))
+
+    @Test fun aPickCardsRowCanSayMoreThanThePicksLabel() {
+        var repicks = 0
+        show {
+            OnAPage {
+                PickCardsRow("Accent", listOf("Auto", "Custom"), "Custom", { it }, value = "Custom · #FF8800", onRepick = { repicks++ }, onPick = {}) { Box(Modifier.fillMaxWidth().height(34.dp)) }
+                PickCardsRow("Layout", listOf("Classic", "Compact"), "Classic", { it }, onPick = {}) { Box(Modifier.fillMaxWidth().height(34.dp)) }
+            }
+        }
+        assertEquals(listOf("Custom · #FF8800", "Classic"), tagged(SettingsTags.ROW_PICK).map { it.config[SettingsRowValue] })
+        compose.onNodeWithText("Custom · #FF8800", useUnmergedTree = true).assertExists()
+        // Its sheet still marks the pick by its label, and a tap on it reaches onRepick.
+        compose.onAllNodes(hasTestTag(SettingsTags.ROW_PICK))[0].performSemanticsAction(SemanticsActions.OnClick)
+        compose.waitForIdle()
+        val custom = compose.onNode(hasTestTag(SettingsTags.SHEET_OPTION) and hasText("Custom"))
+        assertEquals(true, custom.fetchSemanticsNode().config[SemanticsProperties.Selected])
+        custom.performClick()
+        compose.waitUntil(5_000) { compose.onAllNodes(hasTestTag(SettingsTags.SHEET)).fetchSemanticsNodes().isEmpty() }
+        assertEquals(1, repicks)
+    }
+
+    @Test fun aRowsSheetHoldsRowsThatWorkAndSwipesAway() {
+        var open by mutableStateOf(true)
+        var wifi by mutableStateOf(false)
+        var taps = 0
+        show {
+            if (open) RowsSheet("Streaming quality", { open = false }, info = "What Prism asks YouTube Music for.") {
+                SwitchRow("Higher on Wi-Fi", wifi) { wifi = it }
+                PickRow("On mobile data", "Normal") { taps++ }
+                LinkRow("Clear the cache", action = true) { taps++ }
+            }
+        }
+        val sheet = hasAnyAncestor(hasTestTag(SettingsTags.SHEET))
+        assertEquals("one sheet, tagged as the pick sheets are", 1, tagged(SettingsTags.SHEET).size)
+        assertTrue("its title is a heading", compose.onNode(hasText("Streaming quality") and sheet).fetchSemanticsNode().config.contains(SemanticsProperties.Heading))
+        // The rows are the kit's, inside the sheet, and they work.
+        assertEquals(3, compose.onAllNodes(sheet and (hasTestTag(SettingsTags.ROW_SWITCH) or hasTestTag(SettingsTags.ROW_PICK) or hasTestTag(SettingsTags.ROW_LINK))).fetchSemanticsNodes().size)
+        compose.onNode(hasTestTag(SettingsTags.ROW_SWITCH) and sheet).performClick()
+        compose.onNode(hasTestTag(SettingsTags.ROW_PICK) and sheet).performClick()
+        compose.waitForIdle()
+        assertTrue(wifi)
+        assertEquals(1, taps)
+        assertTrue("a row doesn't close the sheet", open)
+        compose.onNodeWithTag(SettingsTags.SHEET).performTouchInput { swipeDown() }
+        compose.waitUntil(5_000) { !open }
+    }
+
+    @Test fun anActionRowIsAButtonWithoutAChevron() {
+        var taps = 0
+        show {
+            OnAPage {
+                LinkRow("Licenses") {}
+                LinkRow("Back up now", value = "Last: yesterday", icon = com.prism.music.ui.theme.PrismIcons.Settings, action = true) { taps++ }
+            }
+        }
+        val rows = tagged(SettingsTags.ROW_LINK)
+        assertEquals(listOf(Role.Button, Role.Button), rows.map { it.config[SemanticsProperties.Role] })
+        assertEquals(listOf("", "Last: yesterday"), rows.map { it.config[SettingsRowValue] })
+        // Same heights as any link; the chevron is what's gone: the action's title line runs on to the row's end gutter.
+        val links = compose.onAllNodes(hasTestTag(SettingsTags.ROW_LINK))
+        links[0].assertHeightIsEqualTo(56.dp)
+        links[1].assertHeightIsEqualTo(64.dp)
+        fun pixels(i: Int): Int {
+            // What's drawn in the chevron's place (18 dp before the row's 16 dp end gutter, in the middle of the row),
+            // against the row's own ground beside it.
+            val shot = links[i].captureToImage().asAndroidBitmap()
+            val (wide, gutter, half) = with(compose.density) { Triple(34.dp.roundToPx(), 16.dp.roundToPx(), 10.dp.roundToPx()) }
+            var n = 0
+            for (y in shot.height / 2 - half until shot.height / 2 + half) {
+                val ground = shot.getPixel(shot.width - gutter / 2, y)
+                for (x in shot.width - wide until shot.width - gutter) if (shot.getPixel(x, y) != ground) n++
+            }
+            return n
+        }
+        assertTrue("a link has its chevron", pixels(0) > 0)
+        assertEquals("an action has none", 0, pixels(1))
+        links[1].performClick()
+        assertEquals(1, taps)
+    }
+
+    @Test fun theCountrySheetOpensWithAutomaticAtItsTop() {
+        show { LanguageRegionContent(0.dp, AppLanguage.PHONE, "", {}, {}, showBack = false) }
+        compose.onAllNodes(hasTestTag(SettingsTags.ROW_PICK))[1].performSemanticsAction(SemanticsActions.OnClick)
+        compose.waitForIdle()
+        val first = compose.onAllNodes(hasTestTag(SettingsTags.SHEET_OPTION)).fetchSemanticsNodes().first()
+        assertEquals("Automatic (follow the phone)", first.config[SemanticsProperties.Text].joinToString { it.text })
+        assertEquals(true, first.config[SemanticsProperties.Selected])
+        val search = compose.onNodeWithTag(SettingsTags.SHEET_SEARCH).fetchSemanticsNode().boundsInWindow
+        assertEquals("whole, right under the search field", search.bottom + with(compose.density) { 8.dp.toPx() }, first.boundsInWindow.top, 1.5f)
     }
 
     // ---------------------------------------------------------------- the sample page
