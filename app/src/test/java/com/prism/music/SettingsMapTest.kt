@@ -308,7 +308,9 @@ class SettingsMapTest {
 
     // ------------------------------------------------------------------ Drawn
 
-    private val container by lazy { AppContainer(RuntimeEnvironment.getApplication()) }
+    private val made = lazy { AppContainer(RuntimeEnvironment.getApplication()) }
+    private val container by made
+    @org.junit.After fun close() = made.closeAfterTest()
 
     private fun texts(node: SemanticsNode, into: MutableList<String>) {
         node.config.getOrNull(SemanticsProperties.Text)?.forEach { into += it.text }

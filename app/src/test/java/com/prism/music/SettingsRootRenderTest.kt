@@ -55,7 +55,9 @@ import java.io.File
 class SettingsRootRenderTest {
     @get:Rule val compose = createComposeRule()
 
-    private val container by lazy { AppContainer(RuntimeEnvironment.getApplication()) }
+    private val made = lazy { AppContainer(RuntimeEnvironment.getApplication()) }
+    private val container by made
+    @org.junit.After fun close() = made.closeAfterTest()
 
     /** [glass]: on a background, as the app's frosted pages are (the Spectrum field stands in for the ambient frost). */
     private fun show(settings: AppSettings, glass: Boolean) {

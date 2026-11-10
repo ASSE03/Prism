@@ -42,7 +42,9 @@ import org.robolectric.annotation.Config
 class AlbumHeroPageTest {
     @get:Rule val compose = createComposeRule()
 
-    private val c by lazy { AppContainer(RuntimeEnvironment.getApplication()) }
+    private val made = lazy { AppContainer(RuntimeEnvironment.getApplication()) }
+    private val c by made
+    @org.junit.After fun close() = made.closeAfterTest()
     /** The room the bar and the mini player take at the bottom of a page. */
     private val mini = 150.dp
     private val about = ("Tidewater is the second album by Mira Vale, recorded over two winters in a house by the sea. " +
