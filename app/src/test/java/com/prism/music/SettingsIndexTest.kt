@@ -115,10 +115,13 @@ class SettingsIndexTest {
         assertTrue("the old Player page is rebuilt (PlayerPage.kt, PlayerParts.kt): $read", "OldPlayer.kt" !in read)
         assertTrue("the old Theme page is rebuilt (ThemeColorsPage.kt): $read", "OldTheme.kt" !in read)
         assertTrue("the old Looks page is rebuilt (LooksPage.kt): $read", "OldLooks.kt" !in read)
+        assertTrue("the old Controls & gestures page is rebuilt (GesturesButtonsPage.kt): $read", "OldGestures.kt" !in read)
+        assertTrue("the old Devices & connections page is rebuilt (CarPage.kt): $read", "OldCar.kt" !in read)
         // One per line, so pages rebuilt side by side each take their own line out.
         val stillRead = listOf(
             "OldTabs.kt",
-            "OldCar.kt",
+            "GesturesButtonsPage.kt",
+            "CarPage.kt",
             "OldAccounts.kt",
             "OldBackupAbout.kt",
             "LanguageRegionPage.kt",

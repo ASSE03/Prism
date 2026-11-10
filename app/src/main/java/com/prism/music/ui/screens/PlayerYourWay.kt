@@ -556,7 +556,7 @@ fun buttonIcon(b: PlayerButton): ImageVector = when (b) {
     PlayerButton.SPEED -> PrismIcons.Speed
 }
 
-private fun sessionIcon(b: SessionButton): ImageVector = when (b) {
+internal fun sessionIcon(b: SessionButton): ImageVector = when (b) {
     SessionButton.LIKE -> PrismIcons.Heart
     SessionButton.SHUFFLE -> PrismIcons.Shuffle
     SessionButton.REPEAT -> PrismIcons.Repeat
