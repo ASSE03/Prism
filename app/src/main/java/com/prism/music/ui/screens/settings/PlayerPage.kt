@@ -369,14 +369,12 @@ private fun DeckOrder() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     val order = s.playerDeck
-    com.prism.music.ui.components.ReorderList(order, { it }, { prefs.setPlayerDeck(it) }) { deck, i, held, mod ->
+    com.prism.music.ui.components.ReorderList(order, { it }, { prefs.setPlayerDeck(it) }) { deck, _, _, mod ->
         val part = deckPart(deck)
         OrderRow(
             deck.label, deckIcon(deck), part == null || s.shows(part), canCheck = part != null && s.canHide(part),
             onCheck = { v -> if (part != null) prefs.setPartShown(part, v) },
-            onUp = if (i > 0) ({ prefs.setPlayerDeck(order.toMutableList().apply { add(i - 1, removeAt(i)) }) }) else null,
-            onDown = if (i < order.lastIndex) ({ prefs.setPlayerDeck(order.toMutableList().apply { add(i + 1, removeAt(i)) }) }) else null,
-            modifier = mod, grip = Modifier.dragHandle(), held = held,
+            modifier = mod, grip = Modifier.dragHandle(),
         )
     }
     if (order != DeckPart.entries) com.prism.music.ui.components.PrismTextButton({ prefs.setPlayerDeck(DeckPart.entries) }, Modifier.padding(start = 12.dp)) {

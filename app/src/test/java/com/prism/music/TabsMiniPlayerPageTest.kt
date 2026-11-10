@@ -139,8 +139,8 @@ class TabsMiniPlayerPageTest : TextTabsPageHarness(SettingsPageId.TABS_MINI_PLAY
         // Tick one more tab (the checkbox is named after its tab).
         compose.onNode(hasContentDescription("Downloads") and androidx.compose.ui.test.isToggleable()).performClick()
         await("nav_tabs: one more") { stored.navTabs.last() == NavTab.DOWNLOADS && stored.navTabs.size == 5 }
-        // Move the first one down.
-        compose.onNode(hasContentDescription("Move Home down")).performClick()
+        // Move the first one down (1.8.4 §2.8: the row's arrows went; its grip's TalkBack move does it).
+        compose.reorderAction(tr(R.string.drag, NavTab.HOME.label), tr(R.string.move_down))
         await("nav_tabs: moved") { stored.navTabs.take(2) == listOf(NavTab.LIBRARY, NavTab.HOME) }
         // Rename: a tap on a tab's name still opens its dialog (the action is there, named), and the list shows a
         // tab's own name with its usual one under it. (The dialog itself isn't worked here: with it open Compose is

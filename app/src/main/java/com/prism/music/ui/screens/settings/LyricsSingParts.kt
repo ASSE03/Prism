@@ -471,7 +471,8 @@ private fun LsSourceOrder(d: AppSettings) {
             InfoMark(open, title) { open = !open }
         }
         InfoText(open, tr(R.string.tried_top_to_bottom_hold_one), Modifier.padding(start = 16.dp, end = 16.dp, bottom = 10.dp))
-        ReorderList(s.lyricsOrder, { it }, { prefs.setLyricsOrder(it) }) { src, i, held, mod ->
+        // The grip moves a source (drag, TalkBack's moves, D-pad / keyboard; 1.8.4: the up / down arrows went).
+        ReorderList(s.lyricsOrder, { it }, { prefs.setLyricsOrder(it) }) { src, i, _, mod ->
             val on = s.lyricsSourceOn(src)
             Row(mod.fillMaxWidth().padding(horizontal = 16.dp, vertical = 2.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(
@@ -491,14 +492,6 @@ private fun LsSourceOrder(d: AppSettings) {
                     enabled = !on || s.lyricsOrder.count(s::lyricsSourceOn) > 1,
                     modifier = Modifier.scale(0.8f).testTag("lyricsSing:source:" + src.name),
                 )
-                if (!held) {
-                    IconButton(onClick = { prefs.setLyricsOrder(s.lyricsOrder.toMutableList().apply { add(i - 1, removeAt(i)) }) }, enabled = i > 0) {
-                        Icon(PrismIcons.ChevronUp, tr(R.string.move_up_2, src.label))
-                    }
-                    IconButton(onClick = { prefs.setLyricsOrder(s.lyricsOrder.toMutableList().apply { add(i + 1, removeAt(i)) }) }, enabled = i < s.lyricsOrder.lastIndex) {
-                        Icon(PrismIcons.ChevronDown, tr(R.string.move_down_2, src.label))
-                    }
-                } else Spacer(Modifier.width(96.dp))
                 DragGrip(Modifier.dragHandle().padding(start = 2.dp), tr(R.string.drag, src.label))
             }
         }

@@ -553,7 +553,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                             // count was squeezed into a column a letter wide.
                             Column(Modifier.padding(end = 8.dp)) {
                             if (rearranging) Text(
-                                tr(R.string.hold_and_drag_or_use_the), style = MaterialTheme.typography.labelLarge,
+                                tr(R.string.hold_and_drag_or_the_grip), style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 8.dp, top = 4.dp, bottom = 4.dp),
                             ) else if (myPlaylists.size > 1) SortBar(trp(R.plurals.n_playlists, myPlaylists.size), PlaylistSort.entries, playlistSort, { it.label }) {
                                 c.library.setPlaylistSort(it.name)
@@ -811,20 +811,18 @@ fun LibraryScreen(bottomPadding: Dp) {
         )
     }
 }
-/** The playlists as a list to put in order: hold and drag a row, or nudge it with its arrows. */
+/**
+ * The playlists as a list to put in order: hold and drag a row, or drag its grip (which also carries TalkBack's moves and
+ * the D-pad / keyboard's; 1.8.4: the up / down arrows went).
+ */
 @Composable
 private fun RearrangePlaylists(playlists: List<com.prism.music.data.model.BrowseItem>, onReorder: (List<com.prism.music.data.model.BrowseItem>) -> Unit) {
     val c = LocalContainer.current
     val ui = com.prism.music.ui.theme.LocalUi.current
-    val scheme = MaterialTheme.colorScheme
-    fun move(from: Int, to: Int) {
-        if (to !in playlists.indices) return
-        onReorder(playlists.toMutableList().apply { add(to, removeAt(from)) })
-    }
     com.prism.music.ui.components.ReorderList(
         playlists, { it.id }, onReorder,
         Modifier.padding(horizontal = 8.dp).pane(ui.card).padding(vertical = 6.dp),
-    ) { p, i, held, drag ->
+    ) { p, _, _, drag ->
         Row(
             drag.fillMaxWidth().padding(start = 12.dp, end = 4.dp, top = 6.dp, bottom = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -838,10 +836,6 @@ private fun RearrangePlaylists(playlists: List<com.prism.music.data.model.Browse
                 p.title, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.Medium,
                 maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
             )
-            if (!held) {
-                IconButton(onClick = { move(i, i - 1) }, enabled = i > 0) { Icon(PrismIcons.ChevronUp, tr(R.string.move_up_2, p.title)) }
-                IconButton(onClick = { move(i, i + 1) }, enabled = i < playlists.lastIndex) { Icon(PrismIcons.ChevronDown, tr(R.string.move_down_2, p.title)) }
-            } else Spacer(Modifier.width(96.dp))
             // The grip moves the playlist at once; the rest of the row after a hold.
             com.prism.music.ui.components.DragGrip(Modifier.dragHandle().padding(end = 8.dp), tr(R.string.drag, p.title))
         }
@@ -924,7 +918,8 @@ fun LibraryTilesSheet(onDismiss: () -> Unit) {
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 4.dp, bottom = 8.dp),
             )
             @Composable
-            fun TileRow(t: LibraryTile, i: Int, modifier: Modifier, grip: Modifier?, held: Boolean) {
+            // The grip moves a shown tile (drag, TalkBack's moves, D-pad / keyboard; 1.8.4: the up / down arrows went).
+            fun TileRow(t: LibraryTile, modifier: Modifier, grip: Modifier?) {
                 val on = t in tiles
                 Row(modifier.fillMaxWidth().padding(start = 8.dp, end = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                     PrismCheck(on, label = t.label) { v -> prefs.setLibraryTiles(if (v) tiles + t else tiles - t) }
@@ -932,19 +927,11 @@ fun LibraryTilesSheet(onDismiss: () -> Unit) {
                         t.label, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge,
                         color = if (on) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                    if (on && !held) {
-                        androidx.compose.material3.IconButton(onClick = { prefs.setLibraryTiles(tiles.toMutableList().apply { add(i - 1, removeAt(i)) }) }, enabled = i > 0) {
-                            Icon(PrismIcons.ChevronUp, tr(R.string.move_up_2, t.label))
-                        }
-                        androidx.compose.material3.IconButton(onClick = { prefs.setLibraryTiles(tiles.toMutableList().apply { add(i + 1, removeAt(i)) }) }, enabled = i < tiles.lastIndex) {
-                            Icon(PrismIcons.ChevronDown, tr(R.string.move_down_2, t.label))
-                        }
-                    }
                     if (grip != null) com.prism.music.ui.components.DragGrip(grip.padding(horizontal = 4.dp), tr(R.string.drag, t.label))
                 }
             }
-            com.prism.music.ui.components.ReorderList(tiles, { it }, { prefs.setLibraryTiles(it) }) { t, i, held, mod -> TileRow(t, i, mod, Modifier.dragHandle(), held) }
-            offered.filter { it !in tiles }.forEach { t -> TileRow(t, -1, Modifier, null, false) }
+            com.prism.music.ui.components.ReorderList(tiles, { it }, { prefs.setLibraryTiles(it) }) { t, _, _, mod -> TileRow(t, mod, Modifier.dragHandle()) }
+            offered.filter { it !in tiles }.forEach { t -> TileRow(t, Modifier, null) }
             PrismTextButton({ prefs.setLibraryTiles(offered) }, Modifier.padding(start = 12.dp, top = 8.dp)) { Text(tr(R.string.show_all_in_prism_s_order)) }
             Text(
                 tr(R.string.where_your_playlists_go), style = MaterialTheme.typography.titleMedium,

@@ -258,19 +258,17 @@ private fun GbSessionButtons(changed: Boolean) {
                 chosen.getOrNull(1)?.let { Icon(sessionIcon(it), null, Modifier.size(20.dp), tint = ink) }
             }
         }
-        ReorderList(chosen, { it }, { prefs.setSessionButtons(it) }) { b, i, held, mod ->
+        ReorderList(chosen, { it }, { prefs.setSessionButtons(it) }) { b, _, _, mod ->
             OrderRow(
                 b.label, sessionIcon(b), true, canCheck = true,
                 onCheck = { v -> if (!v) prefs.setSessionButtons(chosen - b) },
-                onUp = if (i > 0) ({ prefs.setSessionButtons(chosen.toMutableList().apply { add(i - 1, removeAt(i)) }) }) else null,
-                onDown = if (i < chosen.lastIndex) ({ prefs.setSessionButtons(chosen.toMutableList().apply { add(i + 1, removeAt(i)) }) }) else null,
-                modifier = mod, grip = Modifier.dragHandle(), held = held,
+                modifier = mod, grip = Modifier.dragHandle(),
             )
         }
         SessionButton.entries.filter { it !in chosen }.forEach { b ->
             OrderRow(
                 b.label, sessionIcon(b), false, canCheck = true,
-                onCheck = { v -> if (v) prefs.setSessionButtons(chosen + b) }, onUp = null, onDown = null,
+                onCheck = { v -> if (v) prefs.setSessionButtons(chosen + b) },
             )
         }
         Spacer(Modifier.heightIn(min = 6.dp))

@@ -265,7 +265,8 @@ class LyricsSingPageTest {
             Case("prefer_synced", { it.preferSynced }) { toggle(tr(R.string.prefer_karaoke_synced_lyrics)) },
             Case("skip_censored", { it.skipCensored }) { toggle(tr(R.string.uncensor_lyrics)) },
             Case("lyrics_order", { it.lyricsOrder }) {
-                compose.onNode(androidx.compose.ui.test.hasContentDescription(tr(R.string.move_down_2, stored.lyricsOrder.first().label))).performClick()
+                // 1.8.4 §2.8: the row's arrows went; its grip's TalkBack move does it.
+                compose.reorderAction(tr(R.string.drag, stored.lyricsOrder.first().label), tr(R.string.move_down))
             },
             Case("lyrics_off", { it.lyricsOff }) { sourceSwitch(stored.lyricsOrder.first { it != LyricsSource.EMBEDDED }) },
             Case("embedded_lyrics", { it.behavior.embeddedLyrics }) { sourceSwitch(LyricsSource.EMBEDDED) },

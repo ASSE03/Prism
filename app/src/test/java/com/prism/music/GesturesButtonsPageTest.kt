@@ -244,7 +244,8 @@ class GesturesButtonsPageTest : ListeningPageHarness(SettingsPageId.GESTURES_BUT
         until("session_buttons") { it.sessionButtons == SessionButton.DEFAULT - SessionButton.LIKE }
         tick(SessionButton.BACK_10)
         until("session_buttons") { it.sessionButtons == SessionButton.DEFAULT - SessionButton.LIKE + SessionButton.BACK_10 }
-        compose.onNodeWithContentDescription(tr(R.string.move_down_2, SessionButton.SHUFFLE.label)).performClick()
+        // 1.8.4 §2.8: the row's arrows went; its grip's TalkBack move does it.
+        compose.reorderAction(tr(R.string.drag, SessionButton.SHUFFLE.label), tr(R.string.move_down))
         until("session_buttons") { it.sessionButtons.take(2) == listOf(SessionButton.REPEAT, SessionButton.SHUFFLE) }
         assertTrue(listNode().config[SettingsRowChanged])
         assertEquals(stored.sessionButtons.joinToString(" · ") { it.label }, listNode().config[SettingsRowValue])

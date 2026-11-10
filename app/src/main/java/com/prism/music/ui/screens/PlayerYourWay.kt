@@ -186,7 +186,7 @@ internal fun RowButtons() {
     // The Video button also needs the music video on (the old "Song / Video" switch: off, audio only).
     fun on(b: PlayerButton) = b != PlayerButton.VIDEO || s.showVideoSwitch
     Label(tr(R.string.buttons_in_the_row), info = tr(R.string.pick_to_for_the_row_under, PlayerButton.MIN, PlayerButton.MAX))
-    com.prism.music.ui.components.ReorderList(chosen, { it }, { prefs.setPlayerButtons(it) }) { b, i, held, mod ->
+    com.prism.music.ui.components.ReorderList(chosen, { it }, { prefs.setPlayerButtons(it) }) { b, _, _, mod ->
         OrderRow(
             b.label, buttonIcon(b), on(b),
             canCheck = chosen.size > PlayerButton.MIN || !on(b) || b == PlayerButton.VIDEO,
@@ -199,9 +199,7 @@ internal fun RowButtons() {
                     b == PlayerButton.VIDEO -> { prefs.setShowVideoSwitch(false); c.player.setVideoMode(false) }
                 }
             },
-            onUp = if (i > 0) ({ prefs.setPlayerButtons(chosen.toMutableList().apply { add(i - 1, removeAt(i)) }) }) else null,
-            onDown = if (i < chosen.lastIndex) ({ prefs.setPlayerButtons(chosen.toMutableList().apply { add(i + 1, removeAt(i)) }) }) else null,
-            modifier = mod, grip = Modifier.dragHandle(), held = held,
+            modifier = mod, grip = Modifier.dragHandle(),
         )
     }
     val rest = PlayerButton.entries.filter { it !in chosen }
@@ -378,14 +376,15 @@ private fun threeButtonNav(): Boolean {
 }
 
 /**
- * A tickable row with its icon, and up / down to move it while it's ticked; in a [com.prism.music.ui.components.ReorderList]
- * it also takes the list's [modifier] (hold to carry it) and shows a [grip] to drag it at once.
+ * A tickable row with its icon; in a [com.prism.music.ui.components.ReorderList] it also takes the list's [modifier] (hold
+ * to carry it) and shows a [grip] to drag it at once, which also carries the list's TalkBack moves and keys (1.8.4: the
+ * up / down arrows went).
  */
 @Composable
 internal fun OrderRow(
     label: String, icon: ImageVector, on: Boolean, canCheck: Boolean,
-    onCheck: (Boolean) -> Unit, onUp: (() -> Unit)?, onDown: (() -> Unit)?,
-    modifier: Modifier = Modifier, grip: Modifier? = null, held: Boolean = false,
+    onCheck: (Boolean) -> Unit,
+    modifier: Modifier = Modifier, grip: Modifier? = null,
 ) {
     val scheme = MaterialTheme.colorScheme
     Row(modifier.fillMaxWidth().padding(start = 8.dp, end = 8.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -393,10 +392,6 @@ internal fun OrderRow(
         Icon(icon, null, Modifier.size(20.dp), tint = if (on) scheme.onSurface else scheme.onSurfaceVariant)
         Spacer(Modifier.width(12.dp))
         Text(label, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge, color = if (on) scheme.onSurface else scheme.onSurfaceVariant)
-        if (on && !held) {
-            IconButton(onClick = { onUp?.invoke() }, enabled = onUp != null) { Icon(PrismIcons.ChevronUp, tr(R.string.move_up_2, label)) }
-            IconButton(onClick = { onDown?.invoke() }, enabled = onDown != null) { Icon(PrismIcons.ChevronDown, tr(R.string.move_down_2, label)) }
-        } else if (held) Spacer(Modifier.width(96.dp))
         if (grip != null) com.prism.music.ui.components.DragGrip(grip.padding(start = 4.dp, end = 8.dp), tr(R.string.drag, label))
     }
 }

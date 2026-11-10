@@ -469,25 +469,18 @@ internal fun SectionsEditor(sections: List<LocalSection>, onFolders: () -> Unit,
             color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 4.dp, bottom = 8.dp),
         )
         @Composable
-        fun SectionRow(s: LocalSection, i: Int, modifier: Modifier, grip: Modifier?, held: Boolean) {
+        // The grip moves a shown section (drag, TalkBack's moves, D-pad / keyboard; 1.8.4: the up / down arrows went).
+        fun SectionRow(s: LocalSection, modifier: Modifier, grip: Modifier?) {
             val on = s in sections
             Row(modifier.fillMaxWidth().padding(start = 8.dp, end = 12.dp), verticalAlignment = Alignment.CenterVertically) {
                 PrismCheck(on, enabled = !on || sections.size > 1, label = s.label) { v -> prefs.setLocalSections(if (v) sections + s else sections - s) }
                 Text(s.label, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium,
                     color = if (on) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant)
-                if (on && !held) {
-                    androidx.compose.material3.IconButton(onClick = { prefs.setLocalSections(sections.toMutableList().apply { add(i - 1, removeAt(i)) }) }, enabled = i > 0) {
-                        androidx.compose.material3.Icon(PrismIcons.ChevronUp, tr(R.string.move_up_2, s.label))
-                    }
-                    androidx.compose.material3.IconButton(onClick = { prefs.setLocalSections(sections.toMutableList().apply { add(i + 1, removeAt(i)) }) }, enabled = i < sections.lastIndex) {
-                        androidx.compose.material3.Icon(PrismIcons.ChevronDown, tr(R.string.move_down_2, s.label))
-                    }
-                }
                 if (grip != null) com.prism.music.ui.components.DragGrip(grip.padding(start = 4.dp), tr(R.string.drag, s.label))
             }
         }
-        com.prism.music.ui.components.ReorderList(sections, { it }, { prefs.setLocalSections(it) }) { s, i, held, mod -> SectionRow(s, i, mod, Modifier.dragHandle(), held) }
-        LocalSection.entries.filter { it !in sections }.forEach { s -> SectionRow(s, -1, Modifier, null, false) }
+        com.prism.music.ui.components.ReorderList(sections, { it }, { prefs.setLocalSections(it) }) { s, _, _, mod -> SectionRow(s, mod, Modifier.dragHandle()) }
+        LocalSection.entries.filter { it !in sections }.forEach { s -> SectionRow(s, Modifier, null) }
         Row(
             Modifier.fillMaxWidth().padding(top = 8.dp).clickable { close(onFolders) }.padding(horizontal = 20.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically,

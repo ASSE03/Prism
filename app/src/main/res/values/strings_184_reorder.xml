@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- A reorderable list's row (TalkBack actions on its drag handle); "Move up" / "Move down" reuse move_up / move_down. -->
+    <string name="move_to_top">Move to top</string>
+    <string name="move_to_bottom">Move to bottom</string>
+    <!-- Said after a row moves: its place in the list ("3 of 8"). -->
+    <string name="reorder_position">%1$d of %2$d</string>
+    <!-- Said when a row is picked up from the keyboard or remote (Enter on its handle). -->
+    <string name="reorder_picked_up">Picked up, %1$d of %2$d. Up and down move it, Enter puts it down</string>
+    <!-- Said when it is put down again. -->
+    <string name="reorder_put_down">Put down, %1$d of %2$d</string>
+    <!-- Library's "Rearrange" playlists: the hint over the list (was "Hold and drag, or use the arrows"; the arrows went). -->
+    <string name="hold_and_drag_or_the_grip">Hold and drag, or drag the grip</string>
+</resources>

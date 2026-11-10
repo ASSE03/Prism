@@ -267,8 +267,9 @@ internal fun TabsMiniPlayerPagesRows() {
 }
 
 /**
- * Which tabs the bar holds and in what order, each with its own name: the old page's tabs editor as it was (tick, hold
- * to move, the arrows, a tap on the name to rename), in the group's card.
+ * Which tabs the bar holds and in what order, each with its own name: the old page's tabs editor (tick, hold or drag the
+ * grip to move, a tap on the name to rename), in the group's card. The grip also carries TalkBack's moves and the
+ * D-pad / keyboard's (1.8.4: the up / down arrows went).
  */
 @Composable
 private fun TabsList() {
@@ -280,7 +281,7 @@ private fun TabsList() {
     // Settings opens from Home and Library, or is a tab itself: one of them always stays.
     fun allowed(next: List<NavTab>) = next.size in 2..NavTab.MAX && next.any { it == NavTab.HOME || it == NavTab.LIBRARY || it == NavTab.SETTINGS }
     @Composable
-    fun TabRow(t: NavTab, i: Int, modifier: Modifier, grip: Modifier?, held: Boolean) {
+    fun TabRow(t: NavTab, modifier: Modifier, grip: Modifier?) {
         val on = t in tabs
         val name = s.tabNames[t]
         Row(modifier.fillMaxWidth().padding(start = 4.dp, end = 8.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -295,16 +296,12 @@ private fun TabsList() {
                 Text(name ?: t.label, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium, color = if (on) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant)
                 if (name != null) Text(t.label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            if (on && !held) {
-                IconButton(onClick = { prefs.setNavTabs(tabs.toMutableList().apply { add(i - 1, removeAt(i)) }) }, enabled = i > 0) { Icon(PrismIcons.ChevronUp, tr(R.string.move_up_2, t.label)) }
-                IconButton(onClick = { prefs.setNavTabs(tabs.toMutableList().apply { add(i + 1, removeAt(i)) }) }, enabled = i < tabs.lastIndex) { Icon(PrismIcons.ChevronDown, tr(R.string.move_down_2, t.label)) }
-            }
             if (grip != null) DragGrip(grip.padding(horizontal = 4.dp), tr(R.string.drag, t.label))
         }
     }
     Column(Modifier.fillMaxWidth().testTag(SETTINGS_LIST_TAG).padding(vertical = 4.dp)) {
-        ReorderList(tabs, { it }, { prefs.setNavTabs(it) }) { t, i, held, mod -> TabRow(t, i, mod, Modifier.dragHandle(), held) }
-        NavTab.entries.filter { it !in tabs }.forEach { t -> TabRow(t, -1, Modifier, null, false) }
+        ReorderList(tabs, { it }, { prefs.setNavTabs(it) }) { t, _, _, mod -> TabRow(t, mod, Modifier.dragHandle()) }
+        NavTab.entries.filter { it !in tabs }.forEach { t -> TabRow(t, Modifier, null) }
     }
 }
 
