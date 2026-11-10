@@ -379,12 +379,17 @@ class LockScreenTest {
         compose.onNode(hasSetTextAction()).performTextInput("keyguard")
         compose.clickWhenFound(hasText(tr(R.string.lock_screen_title)) and hasClickAction(), 15_000)
         compose.waitUntil(10_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isEmpty() }
-        compose.clickWhenFound(hasText(tr(R.string.lock_screen_title)) and hasClickAction(), 15_000)
+        // Its page: Player → Modes (1.8.4), the switch's own row.
+        compose.clickWhenFound(settingsRow(tr(R.string.lock_screen_title)), 15_000)
         compose.waitUntil(10_000) { settings.current.behavior.lockScreen }
 
         // Android's own page would have taken over by now.
         Thread.sleep(2_000)
         assertEquals("turning it on stays on Prism's page", app, inFront())
+        // 1.8.4: the row says what stands in its way, and the steps are the first rows of "Lock screen options", the
+        // sheet the row under it opens (they were rows on the page).
+        compose.waitForText(tr(R.string.lock_screen_needs_permission))
+        compose.clickWhenFound(settingsRow(tr(R.string.settings_player_lock_options)), 15_000)
         compose.waitForText(tr(R.string.lock_screen_app_info))
         compose.waitForText(tr(R.string.lock_screen_allow_step))
         Fixture.screenshot("lock-screen-steps")
