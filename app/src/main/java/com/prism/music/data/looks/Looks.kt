@@ -51,10 +51,19 @@ data class Look(
     }
 }
 
-/** The per-screen backgrounds a Look keeps, stored as one JSON map ("HOME" → "AURORA" or "PHOTO|…"). */
+/** The per-screen backgrounds a Look keeps, stored as one JSON map ("HOME" → "AURORA", "PHOTO|…" or "COLOR|#RRGGBB"). */
 object Backgrounds {
     private val json = Json { ignoreUnknownKeys = true }
     const val ASSET = "asset:"
+
+    /** #413 (1.8.4): a solid color, exactly "COLOR|#RRGGBB" (six hex digits, no see-through). */
+    private val solid = Regex("COLOR\\|#([0-9A-Fa-f]{6})")
+
+    /** The color (opaque ARGB) a background's saved value is, or null when it isn't a solid color written right. */
+    fun colorOf(v: String?): Int? = v?.let(solid::matchEntire)?.let { 0xFF000000.toInt() or it.groupValues[1].toInt(16) }
+
+    /** What's saved for the solid color [argb] (its see-through part is dropped). */
+    fun colorValue(argb: Int): String = "COLOR|#" + (argb and 0xFFFFFF).toString(16).uppercase(java.util.Locale.ROOT).padStart(6, '0')
 
     fun parse(tagged: String?): Map<String, String> =
         LookValue.text(tagged)?.let { runCatching { json.decodeFromString<Map<String, String>>(it) }.getOrNull() } ?: emptyMap()
@@ -132,15 +141,15 @@ object LookCode {
     }.getOrNull()
 
     /**
-     * [look] with only what a Look may hold: known settings with the right kind of value, backgrounds that are designs
-     * or kept photos (never a path on someone's phone), a name of a sensible length and a known icon style.
+     * [look] with only what a Look may hold: known settings with the right kind of value, backgrounds that are designs,
+     * solid colors or kept photos (never a path on someone's phone), a name of a sensible length and a known icon style.
      */
     fun sanitized(look: Look, kinds: Map<String, Char>): Look {
         val values = look.values.filter { (k, v) -> kinds[k]?.let { LookValue.untag(v, it) } != null }.toMutableMap()
         values[Look.BACKDROPS]?.let { b ->
             val kept = Backgrounds.parse(b).filter { (screen, v) ->
-                // "|" only ever comes with a photo, under any word (#378): a design's name never has one.
-                screen.length <= 16 && ('|' !in v && v.length <= 32 || Backgrounds.assetOf(v) != null)
+                // "|" only ever comes with a photo, under any word (#378), or a solid color (#413): a design's name never has one.
+                screen.length <= 16 && ('|' !in v && v.length <= 32 || Backgrounds.assetOf(v) != null || Backgrounds.colorOf(v) != null)
             }
             if (kept.isEmpty()) values.remove(Look.BACKDROPS) else values[Look.BACKDROPS] = Backgrounds.tag(kept)
         }

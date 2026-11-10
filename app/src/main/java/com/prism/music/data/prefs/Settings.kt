@@ -1381,7 +1381,7 @@ data class AppSettings(
     val lyricsProgressLine: Boolean = true,
     /** A glass button beside Sing under the open lyrics: where they come from; a tap picks another source (1.7.9). */
     val lyricsSourceButton: Boolean = false,
-    /** Each screen's background (screen name -> "STYLE" or "PHOTO|path"); missing means the default. */
+    /** Each screen's background (screen name -> "STYLE", "PHOTO|path" or "COLOR|#RRGGBB"); missing means the default. */
     val backdrops: Map<String, String> = emptyMap(),
     /** How much the theme color washes over custom backgrounds (0 = none). */
     val backdropDim: Float = 0.35f,
@@ -1770,7 +1770,8 @@ data class AppSettings(
         frostedGlass = false,
         frostedPages = false,
         // Your own photo stays (owner, 1.8.1): a still picture costs next to nothing; the drawn and moving ones pause.
-        backdrops = backdrops.filterValues { it.substringBefore('|') == "PHOTO" },
+        // A solid color too (#413, 1.8.4): one flat fill, lighter than any of them.
+        backdrops = backdrops.filterValues { it.substringBefore('|').let { word -> word == "PHOTO" || word == "COLOR" } },
         backdropMotion = false,
         reduceMotion = true,
         canvasEnabled = false,
