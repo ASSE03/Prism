@@ -259,36 +259,41 @@ internal fun SolidInk(color: Color, bars: Boolean = false, content: @Composable 
     val minRatio = LocalAppSettings.current.contrast.minRatio
     val scheme = remember(base, color, minRatio) { solidScheme(base, color, minRatio) }
     val dark = solidIsDark(color)
-    if (bars) SolidStatusBar(lightPage = !dark)
+    // The status bar's icons dark on a light solid page and light on a dark one, whatever the theme (white icons on a white
+    // page otherwise). The navigation bar stays the theme's: Prism's own bar sits under it, and that keeps the theme's colors.
+    if (bars) StatusBarIcons(lightBar = !dark)
     MaterialTheme(colorScheme = scheme) {
         CompositionLocalProvider(LocalIsDark provides dark, LocalContentColor provides scheme.onBackground, content = content)
     }
 }
 
-/** The solid pages on screen that have asked for the status bar's icons (two overlap while one page slides to the next). */
-private val solidBarAsks = mutableListOf<Pair<Any, Boolean>>()
+/**
+ * The pages on screen that have asked for the status bar's icons, in the order they asked (two overlap while one page
+ * slides to the next, and the page going is disposed after the one coming has asked).
+ */
+private val statusBarAsks = mutableListOf<Pair<Any, Boolean>>()
 
 /**
- * The status bar's icons dark on a light solid page and light on a dark one, whatever the theme (white icons on a white
- * page otherwise). Back to the theme's when the page goes. The navigation bar stays the theme's: Prism's own bar sits
- * under it, and that keeps the theme's colors.
+ * Asks for the status bar's icons for as long as it's composed: dark ones ([lightBar], for a light page) or light ones.
+ * The latest ask still on screen wins, and the theme's come back when the last one goes, so a page leaving can't undo
+ * the icons the page coming in asked for (a solid Home page closing after an artist's photo had asked for light icons).
  */
 @Composable
-private fun SolidStatusBar(lightPage: Boolean) {
+fun StatusBarIcons(lightBar: Boolean) {
     val view = LocalView.current
     val themeDark = LocalIsDark.current
-    DisposableEffect(lightPage, themeDark, view) {
+    DisposableEffect(lightBar, themeDark, view) {
         val ask = Any()
         fun apply() {
             val window = (view.context as? android.app.Activity)?.window ?: return
-            androidx.core.view.WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = solidBarAsks.lastOrNull()?.second ?: !themeDark
+            androidx.core.view.WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = statusBarAsks.lastOrNull()?.second ?: !themeDark
         }
-        solidBarAsks += ask to lightPage
+        statusBarAsks += ask to lightBar
         apply()
         // Again after this frame's other effects: the app sets the theme's icons when the theme changes.
         view.post { apply() }
         onDispose {
-            solidBarAsks.removeAll { it.first === ask }
+            statusBarAsks.removeAll { it.first === ask }
             apply()
         }
     }

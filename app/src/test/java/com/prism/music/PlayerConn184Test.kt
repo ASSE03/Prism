@@ -11,7 +11,9 @@ import com.prism.music.data.prefs.ShuffleButton
 import com.prism.music.playback.HistoryShuffleOrder
 import com.prism.music.playback.QueueKind
 import com.prism.music.playback.QueueSource
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import org.junit.After
@@ -155,6 +157,53 @@ class PlayerConn184Test {
         c.player.playQueue(songs(20), 2, QueueSource(QueueKind.REPLAY, "Replay"))
         assertTrue(player.shuffleModeEnabled)
         assertFalse(c.queue.smartShuffle.value)
+    }
+
+    /**
+     * What the playback service hears through [com.prism.music.playback.QueueState.smartOn] while [block] runs, collected
+     * as the service collects it (a coroutine on the main thread): true asks for Smart Shuffle's picks, false drops them.
+     */
+    private fun serviceHears(block: () -> Unit): List<Boolean> {
+        val heard = ArrayList<Boolean>()
+        val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main)
+        scope.launch { c.queue.smartOn.collect { heard += it } }
+        shadowOf(Looper.getMainLooper()).idle()
+        block()
+        shadowOf(Looper.getMainLooper()).idle()
+        scope.cancel()
+        return heard
+    }
+
+    @Test fun keepShuffleSmartShuffleAsksTheServiceForPicksAtOnce() {
+        c.settings.setKeepShuffle(true)
+        settled { it.behavior.keepShuffle }
+        c.player.playQueue(songs(8, "old"), 0, playlist)
+        c.player.toggleShuffle()
+        c.player.toggleShuffle()
+        assertTrue(c.queue.smartShuffle.value)
+
+        // Smart Shuffle goes off and on again inside one call: the service has to hear that this queue wants its picks
+        // now, not when its first song ends.
+        val heard = serviceHears { c.player.playQueue(songs(20), 5, playlist.copy(title = "Another playlist")) }
+        assertTrue("Smart Shuffle carried over", c.queue.smartShuffle.value)
+        assertTrue("the service is asked for picks for the new queue (heard $heard)", true in heard)
+
+        // Carried as plain shuffle (Replay can't take picks): nothing is asked, the old picks are dropped.
+        val replay = serviceHears { c.player.playQueue(songs(20), 2, QueueSource(QueueKind.REPLAY, "Replay")) }
+        assertTrue(player.shuffleModeEnabled)
+        assertEquals(listOf(false), replay)
+
+        // Plain shuffle carried to another list: nothing to hear.
+        assertEquals(emptyList<Boolean>(), serviceHears { c.player.playQueue(songs(20), 1, playlist) })
+    }
+
+    @Test fun withTheSettingOffANewQueueAsksForNoPicks() {
+        c.player.playQueue(songs(8, "old"), 0, playlist)
+        c.player.toggleShuffle()
+        c.player.toggleShuffle()
+        assertTrue(c.queue.smartShuffle.value)
+        assertEquals("Smart Shuffle ends with the queue: its picks are dropped", listOf(false), serviceHears { c.player.playQueue(songs(20), 3, playlist) })
+        assertFalse(player.shuffleModeEnabled)
     }
 
     @Test fun keepShuffleLeavesRadiosAndSingleSongsAlone() {

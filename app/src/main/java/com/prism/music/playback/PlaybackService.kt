@@ -330,7 +330,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // "Get songs ready while Sing is off" switched on: start with the playing song.
         scope.launch { c.settings.flow.map { it.singAlwaysReady }.distinctUntilChanged().collect { if (it) singAhead() } }
         // Smart Shuffle: picks go in when it's turned on, and leave when it's turned off.
-        scope.launch { c.queue.smartShuffle.drop(1).collect { on -> if (on) smartAhead() else dropSmartPicks() } }
+        scope.launch { c.queue.smartOn.collect { on -> if (on) smartAhead() else dropSmartPicks() } }
         // DJ mode: the set is worked out when it's turned on, and again when its energy curve changes.
         scope.launch { c.dj.on.collect { on -> if (on) djAhead() else { djJob?.cancel(); djSoon?.cancel() } } }
         scope.launch { c.dj.rescan.drop(1).collect { if (c.dj.onNow) djAhead() } }
