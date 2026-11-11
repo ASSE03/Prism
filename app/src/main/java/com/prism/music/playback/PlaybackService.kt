@@ -1029,9 +1029,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 return
             }
             // Only once per file: one that can't be told apart (or was already set aside) fails as usual, never loops.
-            val file = c.localLossless.matched[id]?.uri
-            if (file == null || !c.localLossless.unplayable.add(file)) { failAndSkip(error); return }
+            // Set aside, the song is noted, and Stats for nerds says on it why the stream plays (1.8.4.1).
+            if (!c.localLossless.setAside(id)) { failAndSkip(error); return }
             AudioDiagnostics.log("error", "$id's ALAC file won't decode here: its stream plays instead")
+            c.nerdStats.value = c.nerdStats.value.copy(undecodedFile = c.localLossless.streamInstead[id].orEmpty())
             player.seekToDefaultPosition(idx)
             player.prepare()
             player.play()
@@ -2339,6 +2340,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             streamBitrateKbps = s?.bitrate ?: savedKbps.takeIf { it > 0 } ?: c.nerdStats.value.streamBitrateKbps,
             contentLength = s?.contentLength ?: savedBytes,
             client = s?.client ?: "",
+            undecodedFile = c.localLossless.streamInstead[id].orEmpty(),
         )
     }
 
