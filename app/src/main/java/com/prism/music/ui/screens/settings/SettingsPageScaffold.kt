@@ -48,7 +48,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
@@ -119,6 +119,49 @@ val PreviewStripHeight = 72.dp
 /** The preview is never taller than this. */
 val PreviewMaxHeight = 200.dp
 
+/**
+ * A settings page's list. Each group is one item of it (one card), so a fling over groups not yet composed composed a
+ * whole group in one frame (1.8.4's A/B on the A16: the Player page's first fling had twice 1.8.3.1's main-thread work
+ * and worse tail frames). The list composes and measures the groups below the screen ahead, in the idle time between
+ * frames once the page is up, so a fling finds them ready. [scheduler]: where that runs (a test's; null: Compose's own).
+ */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Composable
+fun rememberSettingsListState(scheduler: androidx.compose.foundation.lazy.layout.PrefetchScheduler? = null): LazyListState {
+    return rememberLazyListState(prefetchStrategy = remember(scheduler) { WholePagePrefetch(ahead = 8, scheduler) })
+}
+
+/**
+ * The list's prefetch: as Compose's own (the next item in the scroll's way, and nested lists), and once the page has
+ * been laid out, the [ahead] entries after the last one on the screen composed and measured in the idle time between
+ * frames (a settings page has a handful of groups; a fling then finds them ready instead of composing one in a frame).
+ */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+internal class WholePagePrefetch(
+    private val ahead: Int,
+    /** Where the prefetch runs: Compose's own (null: the idle time between frames), or a test's. */
+    private val scheduler: androidx.compose.foundation.lazy.layout.PrefetchScheduler? = null,
+) : androidx.compose.foundation.lazy.LazyListPrefetchStrategy {
+    private val own = androidx.compose.foundation.lazy.LazyListPrefetchStrategy()
+    private var asked = false
+
+    override val prefetchScheduler: androidx.compose.foundation.lazy.layout.PrefetchScheduler? get() = scheduler
+
+    override fun androidx.compose.foundation.lazy.LazyListPrefetchScope.onScroll(delta: Float, layoutInfo: androidx.compose.foundation.lazy.LazyListLayoutInfo) =
+        with(own) { onScroll(delta, layoutInfo) }
+
+    override fun androidx.compose.foundation.lazy.LazyListPrefetchScope.onVisibleItemsUpdated(layoutInfo: androidx.compose.foundation.lazy.LazyListLayoutInfo) {
+        with(own) { onVisibleItemsUpdated(layoutInfo) }
+        val last = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return
+        if (asked) return
+        asked = true
+        for (i in last + 1..minOf(last + ahead, layoutInfo.totalItemsCount - 1)) schedulePrefetch(i)
+    }
+
+    override fun androidx.compose.foundation.lazy.layout.NestedPrefetchScope.onNestedPrefetch(firstVisibleItemIndex: Int) =
+        with(own) { onNestedPrefetch(firstVisibleItemIndex) }
+}
+
 private val BAR = 60.dp
 private const val TITLE_KEY = "settings:page:title"
 private const val PREVIEW_KEY = "settings:page:preview"
@@ -140,6 +183,7 @@ private const val JUMP_KEY = "settings:page:jump"
  *
  * Motion follows Reduce motion (jumps and the bar's title don't animate); nothing here blurs.
  */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun SettingsPageScaffold(
     title: String,
@@ -153,7 +197,7 @@ fun SettingsPageScaffold(
     find: String? = null,
     preview: (@Composable (strip: Boolean) -> Unit)? = null,
     previewHeight: Dp = PreviewMaxHeight,
-    listState: LazyListState = rememberLazyListState(),
+    listState: LazyListState = rememberSettingsListState(),
     content: SettingsPageScope.() -> Unit,
 ) {
     val entries = SettingsPageScope().apply(content).entries
@@ -241,9 +285,12 @@ fun SettingsPageScaffold(
         if (preview != null) PinnedPreview(previewOffset, listState, full, statusTop + BAR, side, pinned, preview)
         // On the ambient frost the content melts away under the bar; on a plain page the bar turns solid once scrolled
         // (fully, while the preview is pinned under it).
+        // (Drawn, not composed: the bar's fade runs while a fling starts, and reading it here recomposed the page on
+        // every one of its frames.)
+        val barColor = scheme.surface
         Box(
             Modifier.fillMaxWidth()
-                .background(if (pinned) scheme.surface else if (melts) Color.Transparent else scheme.surface.copy(alpha = 0.92f * bar))
+                .drawBehind { if (pinned) drawRect(barColor) else if (!melts) drawRect(barColor.copy(alpha = 0.92f * bar)) }
                 .statusBarsPadding().height(BAR),
         ) {
             if (showBack) RoundAction(PrismIcons.ArrowBack, tr(R.string.back), Modifier.align(Alignment.CenterStart).padding(start = 12.dp), glass = true) {
