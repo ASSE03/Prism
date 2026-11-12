@@ -535,6 +535,8 @@ internal fun ReplayContent(
         }
         // 1.8.5: milestones (of all your listening, not the period's); nothing at all when there are none.
         item(key = "milestones") { MilestonesSection(milestonesHeld) }
+        // "Finish the lyric" (1.8.5): draws nothing unless its setting is on and enough songs have saved lyrics.
+        item(key = "finish_lyric") { FinishLyricCard() }
         item { SectionHeader(tr(R.string.top_songs_3)) }
         itemsIndexed(d.songs, key = { _, s -> s.songId }) { i, s ->
             val songs = remember(d) { d.songs.map { it.toSong() } }
