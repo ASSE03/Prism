@@ -895,6 +895,20 @@ internal class ClockData(val cells: LongArray, val max: Long, val busiestHour: I
 
 internal class CalendarData(val days: Map<LocalDate, DayTotal>, val months: List<YearMonth>, val max: Long, val busiest: LocalDate?)
 
+/**
+ * A section's data, or [empty] when reading it fails. A load that was cancelled (the section scrolled away while it
+ * read) is not a failure: it is passed on and nothing is kept, so the section reads again when it's back. Before this
+ * (found on the A16 in 1.8.5's check) a fling past the clock kept "nothing to show" for good.
+ */
+internal suspend fun <T> loadOrEmpty(empty: T, load: suspend () -> T): T = try {
+    load()
+} catch (e: kotlinx.coroutines.CancellationException) {
+    throw e
+} catch (e: Exception) {
+    android.util.Log.w("PrismReplay", "a Replay section couldn't be read", e)
+    empty
+}
+
 private suspend fun loadClock(stats: PlayStats, from: Long, to: Long): ClockData {
     val hours = stats.byHour(from, to)
     return withContext(Dispatchers.Default) {
@@ -965,7 +979,7 @@ private fun ClockSection(period: Period, held: MutableState<ClockData?>, still: 
     LaunchedEffect(held) {
         if (held.value == null) {
             val (from, to) = range(period)
-            held.value = runCatching { loadClock(c.imports.replay(), from, to) }.getOrElse { ClockData(LongArray(168), 0, null, 0, null, 0) }
+            held.value = loadOrEmpty(ClockData(LongArray(168), 0, null, 0, null, 0)) { loadClock(c.imports.replay(), from, to) }
         }
     }
     val d = held.value ?: return
@@ -1082,7 +1096,7 @@ private fun CalendarSection(period: Period, held: MutableState<CalendarData?>, s
     LaunchedEffect(held) {
         if (held.value == null) {
             val (from, to) = range(period)
-            held.value = runCatching { loadCalendar(c.imports.replay(), period, from, to) }.getOrElse { CalendarData(emptyMap(), emptyList(), 0, null) }
+            held.value = loadOrEmpty(CalendarData(emptyMap(), emptyList(), 0, null)) { loadCalendar(c.imports.replay(), period, from, to) }
         }
     }
     val d = held.value ?: return
@@ -1162,7 +1176,7 @@ private fun CalendarSection(period: Period, held: MutableState<CalendarData?>, s
 @Composable
 private fun MilestonesSection(held: MutableState<List<ShownMilestone>?>) {
     val c = LocalContainer.current
-    LaunchedEffect(held) { if (held.value == null) held.value = runCatching { c.milestones.all() }.getOrDefault(emptyList()) }
+    LaunchedEffect(held) { if (held.value == null) held.value = loadOrEmpty(emptyList()) { c.milestones.all() } }
     val all = held.value ?: return
     if (all.isEmpty()) return
     val first = all.take(ReplaySections.MILESTONES_SHOWN)
