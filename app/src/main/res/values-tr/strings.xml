@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · Şerit</string>
     <string name="widget_strip_desc">Kapağın renginde ince bir çubuk; önceki, oynat ve sonraki düğmeleriyle</string>
     <string name="widget_recognize_name">Prism · Tanı</string>
+    <string name="widget_replay_song_name">Prism · En çok dinlenen şarkı</string>
+    <string name="widget_replay_song_desc">Bu haftanın en çok dinlenen şarkısı, Replay\'den</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">Bu haftanın en çok dinlenen şarkısı ve sanatçısı, Replay\'den</string>
+    <string name="widget_replay_song_label">BU HAFTANIN ŞARKISI</string>
+    <string name="widget_replay_artist_label">EN ÇOK DİNLENEN SANATÇI</string>
+    <string name="widget_replay_empty">Haftanı görmek için bir şey çal</string>
+    <string name="widget_replay_open">Replay\'i aç</string>
     <string name="widget_recognize_desc">Etrafında ne çaldığını öğren. Son bulunan şarkıyı görmek için genişlet</string>
     <string name="widget_recognize_label">TANINDI</string>
     <string name="widget_recognize_empty">Bir şarkıyı tanı</string>

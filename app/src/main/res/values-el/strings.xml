@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · Λωρίδα</string>
     <string name="widget_strip_desc">Μια λεπτή μπάρα στο χρώμα του εξωφύλλου, με προηγούμενο, αναπαραγωγή και επόμενο</string>
     <string name="widget_recognize_name">Prism · Αναγνώριση</string>
+    <string name="widget_replay_song_name">Prism · Κορυφαίο τραγούδι</string>
+    <string name="widget_replay_song_desc">Το κορυφαίο τραγούδι της εβδομάδας, από το Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">Το κορυφαίο τραγούδι και ο κορυφαίος καλλιτέχνης της εβδομάδας, από το Replay</string>
+    <string name="widget_replay_song_label">ΚΟΡΥΦΑΙΟ ΤΡΑΓΟΥΔΙ ΤΗΣ ΕΒΔΟΜΑΔΑΣ</string>
+    <string name="widget_replay_artist_label">ΚΟΡΥΦΑΙΟΣ ΚΑΛΛΙΤΕΧΝΗΣ</string>
+    <string name="widget_replay_empty">Παίξε κάτι για να δεις την εβδομάδα σου</string>
+    <string name="widget_replay_open">Άνοιγμα Replay</string>
     <string name="widget_recognize_desc">Μάθε τι παίζει γύρω σου. Κάν\' το πιο φαρδύ για να βλέπεις το τελευταίο τραγούδι που βρέθηκε</string>
     <string name="widget_recognize_label">ΑΝΑΓΝΩΡΙΣΤΗΚΕ</string>
     <string name="widget_recognize_empty">Αναγνώρισε ένα τραγούδι</string>

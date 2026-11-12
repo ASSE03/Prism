@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · Strook</string>
     <string name="widget_strip_desc">Een smalle balk in de kleur van de cover, met vorige, afspelen en volgende</string>
     <string name="widget_recognize_name">Prism · Herkennen</string>
+    <string name="widget_replay_song_name">Prism · Topnummer</string>
+    <string name="widget_replay_song_desc">Je topnummer van deze week, uit Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">Je topnummer en topartiest van deze week, uit Replay</string>
+    <string name="widget_replay_song_label">TOPNUMMER VAN DEZE WEEK</string>
+    <string name="widget_replay_artist_label">TOPARTIEST</string>
+    <string name="widget_replay_empty">Speel iets af om je week te zien</string>
+    <string name="widget_replay_open">Replay openen</string>
     <string name="widget_recognize_desc">Ontdek wat er om je heen speelt. Maak hem breder om het laatst gevonden nummer te zien</string>
     <string name="widget_recognize_label">HERKEND</string>
     <string name="widget_recognize_empty">Herken een nummer</string>

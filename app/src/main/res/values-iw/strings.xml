@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · פס</string>
     <string name="widget_strip_desc">פס דק בצבע העטיפה, עם הקודם, הפעלה והבא</string>
     <string name="widget_recognize_name">Prism · זיהוי</string>
+    <string name="widget_replay_song_name">Prism · השיר המוביל</string>
+    <string name="widget_replay_song_desc">השיר המוביל של השבוע, מ-Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">השיר והאומן המובילים של השבוע, מ-Replay</string>
+    <string name="widget_replay_song_label">השיר המוביל השבוע</string>
+    <string name="widget_replay_artist_label">האומן המוביל</string>
+    <string name="widget_replay_empty">נגנו משהו כדי לראות את השבוע שלכם</string>
+    <string name="widget_replay_open">פתיחת Replay</string>
     <string name="widget_recognize_desc">גלה מה מתנגן סביבך. הרחב את הווידג׳ט כדי לראות את השיר האחרון שזוהה</string>
     <string name="widget_recognize_label">זוהה</string>
     <string name="widget_recognize_empty">זיהוי שיר</string>

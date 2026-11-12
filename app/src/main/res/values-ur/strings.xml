@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · پٹی</string>
     <string name="widget_strip_desc">کور کے رنگ کی ایک پتلی پٹی، پچھلا، پلے اور اگلا کے ساتھ</string>
     <string name="widget_recognize_name">Prism · پہچانیں</string>
+    <string name="widget_replay_song_name">Prism · ٹاپ گانا</string>
+    <string name="widget_replay_song_desc">اس ہفتے کا ٹاپ گانا، Replay سے</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">اس ہفتے کا ٹاپ گانا اور فنکار، Replay سے</string>
+    <string name="widget_replay_song_label">اس ہفتے کا ٹاپ گانا</string>
+    <string name="widget_replay_artist_label">ٹاپ فنکار</string>
+    <string name="widget_replay_empty">اپنا ہفتہ دیکھنے کے لیے کچھ چلائیں</string>
+    <string name="widget_replay_open">Replay کھولیں</string>
     <string name="widget_recognize_desc">جانیں کہ آپ کے آس پاس کیا چل رہا ہے۔ آخری پہچانا گیا گانا دیکھنے کے لیے اسے چوڑا کریں</string>
     <string name="widget_recognize_label">پہچانا گیا</string>
     <string name="widget_recognize_empty">گانا پہچانیں</string>

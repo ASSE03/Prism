@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · Faixa</string>
     <string name="widget_strip_desc">Uma barra fina da cor da capa, com anterior, reproduzir e seguinte</string>
     <string name="widget_recognize_name">Prism · Reconhecer</string>
+    <string name="widget_replay_song_name">Prism · Música mais ouvida</string>
+    <string name="widget_replay_song_desc">A música mais ouvida desta semana, do Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">A música e o artista mais ouvidos desta semana, do Replay</string>
+    <string name="widget_replay_song_label">MAIS OUVIDA DESTA SEMANA</string>
+    <string name="widget_replay_artist_label">ARTISTA MAIS OUVIDO</string>
+    <string name="widget_replay_empty">Reproduza algo para ver a sua semana</string>
+    <string name="widget_replay_open">Abrir o Replay</string>
     <string name="widget_recognize_desc">Descobre o que está a tocar à tua volta. Alarga-o para veres a última música encontrada</string>
     <string name="widget_recognize_label">RECONHECIDA</string>
     <string name="widget_recognize_empty">Reconhecer uma música</string>

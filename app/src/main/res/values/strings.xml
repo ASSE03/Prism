@@ -23,6 +23,14 @@
     <string name="widget_strip_name">Prism · Strip</string>
     <string name="widget_strip_desc">A slim bar in the cover\'s color, with previous, play and next</string>
     <string name="widget_recognize_name">Prism · Recognize</string>
+    <string name="widget_replay_song_name">Prism · Top song</string>
+    <string name="widget_replay_song_desc">This week\'s top song, from Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">This week\'s top song and artist, from Replay</string>
+    <string name="widget_replay_song_label">TOP SONG THIS WEEK</string>
+    <string name="widget_replay_artist_label">TOP ARTIST</string>
+    <string name="widget_replay_empty">Play something to see your week</string>
+    <string name="widget_replay_open">Open Replay</string>
     <string name="widget_recognize_desc">Find out what\'s playing around you. Make it wider to see the last song found</string>
     <string name="widget_recognize_label">RECOGNIZED</string>
     <string name="widget_recognize_empty">Recognize a song</string>

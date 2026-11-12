@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · Sáv</string>
     <string name="widget_strip_desc">Keskeny sáv a borító színében, előző, lejátszás és következő gombbal</string>
     <string name="widget_recognize_name">Prism · Felismerés</string>
+    <string name="widget_replay_song_name">Prism · Legjobb dal</string>
+    <string name="widget_replay_song_desc">A hét legjobb dala a Replayből</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">A hét legjobb dala és előadója a Replayből</string>
+    <string name="widget_replay_song_label">A HÉT LEGJOBB DALA</string>
+    <string name="widget_replay_artist_label">LEGJOBB ELŐADÓ</string>
+    <string name="widget_replay_empty">Játssz le valamit, hogy lásd a heted</string>
+    <string name="widget_replay_open">Replay megnyitása</string>
     <string name="widget_recognize_desc">Tudd meg, mi szól körülötted. Szélesítsd ki, hogy lásd az utoljára felismert dalt</string>
     <string name="widget_recognize_label">FELISMERVE</string>
     <string name="widget_recognize_empty">Dal felismerése</string>

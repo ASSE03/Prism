@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · 長條</string>
     <string name="widget_strip_desc">封面色彩的纖細長條，有上一首、播放和下一首按鈕</string>
     <string name="widget_recognize_name">Prism · 辨識</string>
+    <string name="widget_replay_song_name">Prism · 最愛歌曲</string>
+    <string name="widget_replay_song_desc">本週最愛歌曲，來自 Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">本週最愛歌曲和藝人，來自 Replay</string>
+    <string name="widget_replay_song_label">本週最愛歌曲</string>
+    <string name="widget_replay_artist_label">最愛藝人</string>
+    <string name="widget_replay_empty">播放點什麼，看看你的這一週</string>
+    <string name="widget_replay_open">開啟 Replay</string>
     <string name="widget_recognize_desc">找出周遭正在播放的歌曲。拉寬即可看到上次找到的歌曲</string>
     <string name="widget_recognize_label">已辨識</string>
     <string name="widget_recognize_empty">辨識歌曲</string>

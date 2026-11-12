@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · Striscia</string>
     <string name="widget_strip_desc">Una barra sottile del colore della copertina, con precedente, play e successivo</string>
     <string name="widget_recognize_name">Prism · Riconosci</string>
+    <string name="widget_replay_song_name">Prism · Brano top</string>
+    <string name="widget_replay_song_desc">Il brano top della settimana, da Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">Il brano e l\'artista top della settimana, da Replay</string>
+    <string name="widget_replay_song_label">BRANO TOP DELLA SETTIMANA</string>
+    <string name="widget_replay_artist_label">ARTISTA TOP</string>
+    <string name="widget_replay_empty">Ascolta qualcosa per vedere la tua settimana</string>
+    <string name="widget_replay_open">Apri Replay</string>
     <string name="widget_recognize_desc">Scopri cosa sta suonando intorno a te. Allargalo per vedere l\'ultimo brano trovato</string>
     <string name="widget_recognize_label">RICONOSCIUTO</string>
     <string name="widget_recognize_empty">Riconosci un brano</string>

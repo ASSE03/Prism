@@ -333,6 +333,7 @@ fun ReplayScreen(bottomPadding: Dp) {
     // Home's Rewind card or the 1 December notification: straight to that year's story.
     val request by c.rewindRequest.collectAsState()
     LaunchedEffect(request) {
+        com.prism.music.widget.ReplayWidgets.refresh(context) // Replay opened: the home screen's Replay widgets catch up.
         val y = request ?: return@LaunchedEffect
         c.rewindRequest.value = null
         periodKey = Period.year(y).key

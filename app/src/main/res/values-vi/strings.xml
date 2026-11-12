@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · Dải</string>
     <string name="widget_strip_desc">Thanh mảnh mang màu ảnh bìa, có nút trước, phát và tiếp</string>
     <string name="widget_recognize_name">Prism · Nhận dạng</string>
+    <string name="widget_replay_song_name">Prism · Bài hát hàng đầu</string>
+    <string name="widget_replay_song_desc">Bài hát hàng đầu tuần này, từ Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">Bài hát và nghệ sĩ hàng đầu tuần này, từ Replay</string>
+    <string name="widget_replay_song_label">BÀI HÁT HÀNG ĐẦU TUẦN NÀY</string>
+    <string name="widget_replay_artist_label">NGHỆ SĨ HÀNG ĐẦU</string>
+    <string name="widget_replay_empty">Phát gì đó để xem tuần của bạn</string>
+    <string name="widget_replay_open">Mở Replay</string>
     <string name="widget_recognize_desc">Tìm xem bài gì đang phát quanh bạn. Kéo rộng ra để thấy bài vừa tìm được</string>
     <string name="widget_recognize_label">ĐÃ NHẬN DẠNG</string>
     <string name="widget_recognize_empty">Nhận dạng bài hát</string>

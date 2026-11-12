@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · Bandeau</string>
     <string name="widget_strip_desc">Une fine barre de la couleur de la pochette, avec précédent, lecture et suivant</string>
     <string name="widget_recognize_name">Prism · Reconnaissance</string>
+    <string name="widget_replay_song_name">Prism · Titre n° 1</string>
+    <string name="widget_replay_song_desc">Votre titre n° 1 de la semaine, depuis Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">Votre titre et votre artiste n° 1 de la semaine, depuis Replay</string>
+    <string name="widget_replay_song_label">TITRE N° 1 DE LA SEMAINE</string>
+    <string name="widget_replay_artist_label">ARTISTE N° 1</string>
+    <string name="widget_replay_empty">Écoutez quelque chose pour voir votre semaine</string>
+    <string name="widget_replay_open">Ouvrir Replay</string>
     <string name="widget_recognize_desc">Découvrez ce qui passe autour de vous. Élargissez-le pour voir le dernier titre trouvé</string>
     <string name="widget_recognize_label">RECONNU</string>
     <string name="widget_recognize_empty">Reconnaître un titre</string>

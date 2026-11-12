@@ -477,6 +477,21 @@
             <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_recognize_info" />
         </receiver>
+        <!-- Replay (1.8.5): this week's top song (2×2), and the top song and artist (4×2). Home screen only. -->
+        <receiver
+            android:name=".widget.ReplayWidget"
+            android:exported="false"
+            android:label="@string/widget_replay_song_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_replay_small_info" />
+        </receiver>
+        <receiver
+            android:name=".widget.ReplayWideWidget"
+            android:exported="false"
+            android:label="@string/widget_replay_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_replay_info" />
+        </receiver>
         <!-- The Recognize widget and Quick Settings tile's listening card, over whatever is on screen. -->
         <activity
             android:name=".ui.screens.RecognizeActivity"

@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · Смуга</string>
     <string name="widget_strip_desc">Тонка панель у кольорі обкладинки, з попередньою, відтворенням і наступною</string>
     <string name="widget_recognize_name">Prism · Розпізнавання</string>
+    <string name="widget_replay_song_name">Prism · Топ-пісня</string>
+    <string name="widget_replay_song_desc">Топ-пісня цього тижня з Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">Топ-пісня і топ-виконавець цього тижня з Replay</string>
+    <string name="widget_replay_song_label">ТОП-ПІСНЯ ЦЬОГО ТИЖНЯ</string>
+    <string name="widget_replay_artist_label">ТОП-ВИКОНАВЕЦЬ</string>
+    <string name="widget_replay_empty">Увімкніть щось, щоб побачити свій тиждень</string>
+    <string name="widget_replay_open">Відкрити Replay</string>
     <string name="widget_recognize_desc">Дізнайся, що грає навколо. Зроби віджет ширшим, щоб бачити останню знайдену пісню</string>
     <string name="widget_recognize_label">РОЗПІЗНАНО</string>
     <string name="widget_recognize_empty">Розпізнати пісню</string>

@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · স্ট্রিপ</string>
     <string name="widget_strip_desc">কভারের রঙে একটি সরু বার, আগের, প্লে আর পরেরসহ</string>
     <string name="widget_recognize_name">Prism · শনাক্তকরণ</string>
+    <string name="widget_replay_song_name">Prism · সেরা গান</string>
+    <string name="widget_replay_song_desc">এই সপ্তাহের সেরা গান, Replay থেকে</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">এই সপ্তাহের সেরা গান ও শিল্পী, Replay থেকে</string>
+    <string name="widget_replay_song_label">এই সপ্তাহের সেরা গান</string>
+    <string name="widget_replay_artist_label">সেরা শিল্পী</string>
+    <string name="widget_replay_empty">আপনার সপ্তাহ দেখতে কিছু চালান</string>
+    <string name="widget_replay_open">Replay খুলুন</string>
     <string name="widget_recognize_desc">আপনার চারপাশে কী বাজছে জেনে নিন। শেষ খুঁজে পাওয়া গানটি দেখতে এটি চওড়া করুন</string>
     <string name="widget_recognize_label">শনাক্ত হয়েছে</string>
     <string name="widget_recognize_empty">একটি গান শনাক্ত করুন</string>

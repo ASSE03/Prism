@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · Pasek</string>
     <string name="widget_strip_desc">Wąski pasek w kolorze okładki, z przyciskami poprzedni, odtwórz i następny</string>
     <string name="widget_recognize_name">Prism · Rozpoznawanie</string>
+    <string name="widget_replay_song_name">Prism · Najczęstszy utwór</string>
+    <string name="widget_replay_song_desc">Najczęstszy utwór tego tygodnia z Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">Najczęstszy utwór i wykonawca tego tygodnia z Replay</string>
+    <string name="widget_replay_song_label">NAJCZĘSTSZY UTWÓR TEGO TYGODNIA</string>
+    <string name="widget_replay_artist_label">NAJCZĘSTSZY WYKONAWCA</string>
+    <string name="widget_replay_empty">Włącz coś, aby zobaczyć swój tydzień</string>
+    <string name="widget_replay_open">Otwórz Replay</string>
     <string name="widget_recognize_desc">Sprawdź, co gra wokół ciebie. Poszerz widżet, by zobaczyć ostatni rozpoznany utwór</string>
     <string name="widget_recognize_label">ROZPOZNANO</string>
     <string name="widget_recognize_empty">Rozpoznaj utwór</string>

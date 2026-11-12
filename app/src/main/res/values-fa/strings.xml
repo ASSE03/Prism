@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · نوار</string>
     <string name="widget_strip_desc">نواری باریک به رنگ کاور، با قبلی، پخش و بعدی</string>
     <string name="widget_recognize_name">Prism · تشخیص</string>
+    <string name="widget_replay_song_name">Prism · آهنگ برتر</string>
+    <string name="widget_replay_song_desc">آهنگ برتر این هفته، از Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">آهنگ و هنرمند برتر این هفته، از Replay</string>
+    <string name="widget_replay_song_label">آهنگ برتر این هفته</string>
+    <string name="widget_replay_artist_label">هنرمند برتر</string>
+    <string name="widget_replay_empty">چیزی پخش کنید تا هفته‌تان را ببینید</string>
+    <string name="widget_replay_open">باز کردن Replay</string>
     <string name="widget_recognize_desc">بفهمید اطرافتان چه آهنگی پخش می‌شود. پهن‌ترش کنید تا آخرین آهنگ پیداشده را ببینید</string>
     <string name="widget_recognize_label">تشخیص داده شد</string>
     <string name="widget_recognize_empty">تشخیص آهنگ</string>

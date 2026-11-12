@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · 스트립</string>
     <string name="widget_strip_desc">커버 색상의 얇은 바와 이전, 재생, 다음 버튼</string>
     <string name="widget_recognize_name">Prism · 노래 인식</string>
+    <string name="widget_replay_song_name">Prism · 최애곡</string>
+    <string name="widget_replay_song_desc">이번 주 최애곡 (Replay)</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">이번 주 최애곡과 최애 아티스트 (Replay)</string>
+    <string name="widget_replay_song_label">이번 주 최애곡</string>
+    <string name="widget_replay_artist_label">최애 아티스트</string>
+    <string name="widget_replay_empty">음악을 재생하면 이번 주 기록이 보여요</string>
+    <string name="widget_replay_open">Replay 열기</string>
     <string name="widget_recognize_desc">주변에서 재생 중인 노래를 찾아보세요. 위젯을 넓히면 마지막으로 찾은 노래가 보여요</string>
     <string name="widget_recognize_label">인식됨</string>
     <string name="widget_recognize_empty">노래 인식하기</string>

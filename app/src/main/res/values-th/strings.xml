@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · แถบ</string>
     <string name="widget_strip_desc">แถบบางๆ สีเดียวกับปก พร้อมปุ่มก่อนหน้า เล่น และถัดไป</string>
     <string name="widget_recognize_name">Prism · จดจำเพลง</string>
+    <string name="widget_replay_song_name">Prism · เพลงอันดับหนึ่ง</string>
+    <string name="widget_replay_song_desc">เพลงอันดับหนึ่งของสัปดาห์นี้ จาก Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">เพลงและศิลปินอันดับหนึ่งของสัปดาห์นี้ จาก Replay</string>
+    <string name="widget_replay_song_label">เพลงอันดับหนึ่งสัปดาห์นี้</string>
+    <string name="widget_replay_artist_label">ศิลปินอันดับหนึ่ง</string>
+    <string name="widget_replay_empty">เปิดเพลงสักเพลงเพื่อดูสัปดาห์ของคุณ</string>
+    <string name="widget_replay_open">เปิด Replay</string>
     <string name="widget_recognize_desc">ค้นหาว่าเพลงอะไรกำลังเล่นอยู่รอบตัวคุณ ขยายให้กว้างขึ้นเพื่อดูเพลงล่าสุดที่พบ</string>
     <string name="widget_recognize_label">จดจำได้แล้ว</string>
     <string name="widget_recognize_empty">จดจำเพลง</string>

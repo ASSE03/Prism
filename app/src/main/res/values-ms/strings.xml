@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · Jalur</string>
     <string name="widget_strip_desc">Bar nipis dalam warna kulit album, dengan sebelumnya, main dan seterusnya</string>
     <string name="widget_recognize_name">Prism · Kenal Pasti</string>
+    <string name="widget_replay_song_name">Prism · Lagu teratas</string>
+    <string name="widget_replay_song_desc">Lagu teratas minggu ini, daripada Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">Lagu dan artis teratas minggu ini, daripada Replay</string>
+    <string name="widget_replay_song_label">LAGU TERATAS MINGGU INI</string>
+    <string name="widget_replay_artist_label">ARTIS TERATAS</string>
+    <string name="widget_replay_empty">Mainkan sesuatu untuk melihat minggu anda</string>
+    <string name="widget_replay_open">Buka Replay</string>
     <string name="widget_recognize_desc">Ketahui lagu yang dimainkan di sekeliling anda. Lebarkan untuk melihat lagu terakhir yang ditemui</string>
     <string name="widget_recognize_label">DIKENAL PASTI</string>
     <string name="widget_recognize_empty">Kenal pasti lagu</string>

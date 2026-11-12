@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · 长条</string>
     <string name="widget_strip_desc">封面颜色的纤细长条，带上一首、播放和下一首</string>
     <string name="widget_recognize_name">Prism · 识别</string>
+    <string name="widget_replay_song_name">Prism · 热门歌曲</string>
+    <string name="widget_replay_song_desc">本周热门歌曲，来自 Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">本周热门歌曲和艺人，来自 Replay</string>
+    <string name="widget_replay_song_label">本周热门歌曲</string>
+    <string name="widget_replay_artist_label">热门艺人</string>
+    <string name="widget_replay_empty">播放点什么，看看你的这一周</string>
+    <string name="widget_replay_open">打开 Replay</string>
     <string name="widget_recognize_desc">看看周围在放什么歌。拉宽后可显示上次识别到的歌曲</string>
     <string name="widget_recognize_label">已识别</string>
     <string name="widget_recognize_empty">识别歌曲</string>

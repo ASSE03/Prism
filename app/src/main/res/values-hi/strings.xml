@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · पट्टी</string>
     <string name="widget_strip_desc">कवर के रंग वाला पतला बार, पिछला, प्ले और अगला के साथ</string>
     <string name="widget_recognize_name">Prism · पहचानें</string>
+    <string name="widget_replay_song_name">Prism · टॉप गाना</string>
+    <string name="widget_replay_song_desc">इस हफ़्ते का टॉप गाना, Replay से</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">इस हफ़्ते का टॉप गाना और कलाकार, Replay से</string>
+    <string name="widget_replay_song_label">इस हफ़्ते का टॉप गाना</string>
+    <string name="widget_replay_artist_label">टॉप कलाकार</string>
+    <string name="widget_replay_empty">अपना हफ़्ता देखने के लिए कुछ चलाएँ</string>
+    <string name="widget_replay_open">Replay खोलें</string>
     <string name="widget_recognize_desc">जानें कि आपके आसपास क्या चल रहा है। आखिरी पहचाना गया गाना देखने के लिए इसे चौड़ा करें</string>
     <string name="widget_recognize_label">पहचाना गया</string>
     <string name="widget_recognize_empty">गाना पहचानें</string>

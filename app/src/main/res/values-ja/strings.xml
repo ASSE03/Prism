@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · ストリップ</string>
     <string name="widget_strip_desc">ジャケットの色の細いバーに、前へ・再生・次へ</string>
     <string name="widget_recognize_name">Prism · 曲の認識</string>
+    <string name="widget_replay_song_name">Prism · トップソング</string>
+    <string name="widget_replay_song_desc">今週のトップソング（Replay より）</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">今週のトップソングとトップアーティスト（Replay より）</string>
+    <string name="widget_replay_song_label">今週のトップソング</string>
+    <string name="widget_replay_artist_label">トップアーティスト</string>
+    <string name="widget_replay_empty">何か再生すると今週の記録が表示されます</string>
+    <string name="widget_replay_open">Replay を開く</string>
     <string name="widget_recognize_desc">周りで流れている曲を調べます。横に広げると最後に見つかった曲が表示されます</string>
     <string name="widget_recognize_label">認識済み</string>
     <string name="widget_recognize_empty">曲を認識</string>

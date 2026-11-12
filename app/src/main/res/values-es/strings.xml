@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · Franja</string>
     <string name="widget_strip_desc">Una barra delgada del color de la portada, con anterior, reproducir y siguiente</string>
     <string name="widget_recognize_name">Prism · Reconocer</string>
+    <string name="widget_replay_song_name">Prism · Canción favorita</string>
+    <string name="widget_replay_song_desc">Tu canción favorita de esta semana, de Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">Tu canción y tu artista favoritos de esta semana, de Replay</string>
+    <string name="widget_replay_song_label">CANCIÓN FAVORITA DE ESTA SEMANA</string>
+    <string name="widget_replay_artist_label">ARTISTA FAVORITO</string>
+    <string name="widget_replay_empty">Reproduce algo para ver tu semana</string>
+    <string name="widget_replay_open">Abrir Replay</string>
     <string name="widget_recognize_desc">Descubre qué suena a tu alrededor. Hazlo más ancho para ver la última canción encontrada</string>
     <string name="widget_recognize_label">RECONOCIDA</string>
     <string name="widget_recognize_empty">Reconocer una canción</string>

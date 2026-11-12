@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · الشريط</string>
     <string name="widget_strip_desc">شريط نحيف بلون الغلاف، مع السابق والتشغيل والتالي</string>
     <string name="widget_recognize_name">Prism · التعرّف</string>
+    <string name="widget_replay_song_name">Prism · الأغنية الأولى</string>
+    <string name="widget_replay_song_desc">أغنيتك الأولى هذا الأسبوع، من Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">أغنيتك وفنانك الأوائل هذا الأسبوع، من Replay</string>
+    <string name="widget_replay_song_label">الأغنية الأولى هذا الأسبوع</string>
+    <string name="widget_replay_artist_label">الفنان الأول</string>
+    <string name="widget_replay_empty">شغّل شيئًا لترى أسبوعك</string>
+    <string name="widget_replay_open">فتح Replay</string>
     <string name="widget_recognize_desc">اعرف ما الذي يُشغَّل حولك. وسّعه لترى آخر أغنية تم العثور عليها</string>
     <string name="widget_recognize_label">تم التعرّف</string>
     <string name="widget_recognize_empty">التعرّف على أغنية</string>

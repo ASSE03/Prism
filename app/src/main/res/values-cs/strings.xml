@@ -22,6 +22,14 @@
     <string name="widget_strip_name">Prism · Pruh</string>
     <string name="widget_strip_desc">Tenký pruh v barvě obalu, s předchozí, přehráváním a další</string>
     <string name="widget_recognize_name">Prism · Rozpoznávání</string>
+    <string name="widget_replay_song_name">Prism · Top skladba</string>
+    <string name="widget_replay_song_desc">Top skladba tohoto týdne z Replay</string>
+    <string name="widget_replay_name">Prism · Replay</string>
+    <string name="widget_replay_desc">Top skladba a top interpret tohoto týdne z Replay</string>
+    <string name="widget_replay_song_label">TOP SKLADBA TOHOTO TÝDNE</string>
+    <string name="widget_replay_artist_label">TOP INTERPRET</string>
+    <string name="widget_replay_empty">Pusťte si něco a uvidíte svůj týden</string>
+    <string name="widget_replay_open">Otevřít Replay</string>
     <string name="widget_recognize_desc">Zjisti, co kolem tebe hraje. Roztáhni ho, abys viděl(a) poslední nalezenou skladbu</string>
     <string name="widget_recognize_label">ROZPOZNÁNO</string>
     <string name="widget_recognize_empty">Rozpoznat skladbu</string>
