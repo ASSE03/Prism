@@ -1,6 +1,8 @@
 package com.prism.music.playback
 
 import androidx.media3.common.C
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Timeline
 import androidx.media3.common.audio.AudioProcessor
 import androidx.media3.common.audio.BaseAudioProcessor
 import androidx.media3.common.util.UnstableApi
@@ -39,6 +41,17 @@ class NormalizerProcessor : BaseAudioProcessor() {
         this.glideSec = glideSec.coerceAtLeast(0.01f)
         targetGain = 10f.pow(db / 20f)
     }
+
+    /**
+     * D62 (1.8.5): the gain (dB) a song gets from what's known of it now, asked here on the audio thread when its sound
+     * starts (null: nothing known, it plays as it is). The song's own [setGainDb] comes from the main thread after the
+     * player says the song changed, and the player's audio runs ahead of that: on the Galaxy A16 the next song's first
+     * ~0.65 s went through at the last song's gain (a quiet song's +6 dB on a loud one, the limiter cutting up to 7 dB:
+     * static at the start of a song, gone when it was restarted).
+     */
+    @Volatile var songGainDb: ((MediaItem, Timeline) -> Float?)? = null
+    /** The song (its period) the audio now comes from, as of the last flush. */
+    private var periodUid: Any? = null
 
     companion object {
         /**
@@ -124,7 +137,31 @@ class NormalizerProcessor : BaseAudioProcessor() {
         if (t0 != 0L) AudioDiagnostics.processed("normalizer", t0, samples / inputAudioFormat.channelCount.coerceAtLeast(1), rate)
     }
 
+    /**
+     * A new song, or a seek in the same one. Another song gets its own gain from its first sample ([songGainDb]; as it
+     * is when nothing's known), not the last song's. Either way the gain is where it should be at once: there's
+     * nothing to glide from across a jump in the sound.
+     */
+    override fun onFlush(streamMetadata: AudioProcessor.StreamMetadata) {
+        val uid = streamMetadata.periodUid
+        // Without [songGainDb] (a Mix blend's ending song, given its gain once), the gain set stays.
+        val gainOf = songGainDb
+        if (gainOf != null && uid != null && uid != periodUid) {
+            val tl = streamMetadata.timeline
+            val item = tl.getIndexOfPeriod(uid).takeIf { it != C.INDEX_UNSET }
+                ?.let { tl.getWindow(tl.getPeriod(it, Timeline.Period()).windowIndex, Timeline.Window()).mediaItem }
+            val db = item?.let { runCatching { gainOf(it, tl) }.getOrNull() } ?: 0f
+            targetGain = 10f.pow(db / 20f)
+            glideSec = 0.1f
+        }
+        periodUid = uid
+        gain = targetGain
+        // Nor does the limiter hold the last sound's peaks down on the next (its instant attack still catches the new ones).
+        env = 0f
+    }
+
     override fun onReset() {
         env = 0f
+        periodUid = null
     }
 }

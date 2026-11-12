@@ -160,6 +160,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             }
         })
         effects = AudioEffects(this)
+        // D62: each song's gain from its very first sample, not the last song's until the main thread catches up.
+        normalizer.songGainDb = ::startingGain
         // Lossless mode keeps hi-res files (24-bit FLAC) at full resolution instead of rounding to 16-bit.
         val renderers = object : DefaultRenderersFactory(this) {
             override fun buildAudioSink(context: Context, enableFloatOutput: Boolean, enableAudioTrackPlaybackParams: Boolean): AudioSink =
@@ -1267,10 +1269,14 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      * "Albums as they are" (A2): while an album plays through, every song gets the same gain, set by the loudest of its
      * songs measured so far, so a quiet interlude stays quiet next to the single. Null otherwise.
      */
-    private fun albumLoudness(): Pair<Float, Float?>? {
+    private fun albumLoudness(): Pair<Float, Float?>? =
+        albumLoudness(trackedSong, (0 until player.mediaItemCount).map { player.getMediaItemAt(it) })
+
+    /** [albumLoudness] for [song] among [queue] (the player's items, or its timeline's on the audio thread). Any thread. */
+    private fun albumLoudness(song: Song?, queue: List<MediaItem>): Pair<Float, Float?>? {
         if (!c.settings.current.sound.normalizeAlbums || c.queue.source.value.kind != QueueKind.ALBUM) return null
-        val album = trackedSong?.album?.id ?: return null
-        val songs = (0 until player.mediaItemCount).map { player.getMediaItemAt(it) }.filter { it.toSong()?.album?.id == album }
+        val album = song?.album?.id ?: return null
+        val songs = queue.filter { it.toSong()?.album?.id == album }
             .filter { c.mixTempo.loudness(it.mediaId) != null }
         val loudest = songs.maxOfOrNull { c.mixTempo.loudness(it.mediaId)!! } ?: return null
         // The album's highest peak bounds how far all of it can be lifted (unknown while any song's is).
@@ -1278,22 +1284,39 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         return loudest to (if (null in peaks) null else peaks.maxOf { it!! })
     }
 
-    private fun applyNormalization() {
+    /**
+     * The gain (dB) for the song [id], from its measured loudness, else YouTube's figure [yt], with "Albums as they are"
+     * the [album]'s. Reads only settings and stored figures, so the audio thread can ask it too (D62,
+     * [NormalizerProcessor.songGainDb]) and gets what [applyNormalization] sets a moment later.
+     */
+    private fun normalizationGain(id: String?, yt: Float?, album: Pair<Float, Float?>?): Float {
         // The song's own measured loudness (integrated LUFS, from [MixTempo]'s scan) is the real figure. YouTube's
         // loudnessDb hardly differs between a loud master and a quiet one, so it only stands in until the song is
         // measured.
-        val measured = trackedSong?.id?.let { c.mixTempo.loudness(it) }
-        val yt = songLoudness
+        val measured = id?.let { c.mixTempo.loudness(it) }
         // The level picked (A2; -14 LUFS unless changed), and with "Albums as they are" one level for a whole album.
         val target = c.settings.current.sound.normalizeTarget.toFloat()
-        val album = albumLoudness()
-        val gain = when {
+        return when {
             !c.settings.current.normalize -> 0f
             album != null -> NormalizerProcessor.gainFor(target, album.first, album.second)
-            measured != null -> NormalizerProcessor.gainFor(target, measured, trackedSong?.id?.let { c.mixTempo.peak(it) })
+            measured != null -> NormalizerProcessor.gainFor(target, measured, id.let { c.mixTempo.peak(it) })
             yt != null -> NormalizerProcessor.gainFor(target, TARGET_LUFS + yt)
             else -> 0f
         }
+    }
+
+    /** [normalizationGain] for a song about to start, on the audio thread: its remembered YouTube figure, as [loadExtras] reads it. */
+    private fun startingGain(item: MediaItem, timeline: androidx.media3.common.Timeline): Float? {
+        val song = item.toSong() ?: return null
+        val queue = if (!c.settings.current.sound.normalizeAlbums) emptyList()
+            else (0 until timeline.windowCount).map { timeline.getWindow(it, androidx.media3.common.Timeline.Window()).mediaItem }
+        return normalizationGain(song.id, c.loudness.getFloat(song.id, Float.NaN).takeIf { !it.isNaN() }, albumLoudness(song, queue))
+    }
+
+    private fun applyNormalization() {
+        val measured = trackedSong?.id?.let { c.mixTempo.loudness(it) }
+        val yt = songLoudness
+        val gain = normalizationGain(trackedSong?.id, yt, albumLoudness())
         // Once the song is under way, a better figure eases in over two seconds, and a small one isn't worth a change
         // heard mid-song; before its sound starts, the right level is set at once.
         val underWay = player.isPlaying && player.currentPosition > 400
