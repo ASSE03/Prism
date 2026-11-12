@@ -42,6 +42,9 @@ class NormalizerProcessor : BaseAudioProcessor() {
         targetGain = 10f.pow(db / 20f)
     }
 
+    /** The song (its media id) the audio now comes from, as of the last flush; null when not known. */
+    private var songId: String? = null
+
     /**
      * D62 (1.8.5): the gain (dB) a song gets from what's known of it now, asked here on the audio thread when its sound
      * starts (null: nothing known, it plays as it is). The song's own [setGainDb] comes from the main thread after the
@@ -141,18 +144,26 @@ class NormalizerProcessor : BaseAudioProcessor() {
      * A new song, or a seek in the same one. Another song gets its own gain from its first sample ([songGainDb]; as it
      * is when nothing's known), not the last song's. Either way the gain is where it should be at once: there's
      * nothing to glide from across a jump in the sound.
+     *
+     * The same song in another form (swapped for its video, or back: a new item, so a new period, but the same media id)
+     * is the same listen and keeps the gain it had: past its first seconds the service leaves a song's volume alone, and
+     * a figure measured since is for its next play.
      */
     override fun onFlush(streamMetadata: AudioProcessor.StreamMetadata) {
         val uid = streamMetadata.periodUid
-        // Without [songGainDb] (a Mix blend's ending song, given its gain once), the gain set stays.
-        val gainOf = songGainDb
-        if (gainOf != null && uid != null && uid != periodUid) {
+        if (uid != null && uid != periodUid) {
             val tl = streamMetadata.timeline
             val item = tl.getIndexOfPeriod(uid).takeIf { it != C.INDEX_UNSET }
                 ?.let { tl.getWindow(tl.getPeriod(it, Timeline.Period()).windowIndex, Timeline.Window()).mediaItem }
-            val db = item?.let { runCatching { gainOf(it, tl) }.getOrNull() } ?: 0f
-            targetGain = 10f.pow(db / 20f)
-            glideSec = 0.1f
+            val id = item?.mediaId?.takeIf { it.isNotEmpty() }
+            // Without [songGainDb] (a Mix blend's ending song, given its gain once), the gain set stays.
+            val gainOf = songGainDb
+            if (gainOf != null && (id == null || id != songId)) {
+                val db = item?.let { runCatching { gainOf(it, tl) }.getOrNull() } ?: 0f
+                targetGain = 10f.pow(db / 20f)
+                glideSec = 0.1f
+            }
+            songId = id
         }
         periodUid = uid
         gain = targetGain
@@ -163,5 +174,6 @@ class NormalizerProcessor : BaseAudioProcessor() {
     override fun onReset() {
         env = 0f
         periodUid = null
+        songId = null
     }
 }

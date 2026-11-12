@@ -25,10 +25,11 @@ import kotlin.math.sin
 class NormalizerSongStartTest {
     private val rate = 48_000
 
+    /** One window and period per id; "loud#video" is another item (the song swapped for its video) of the song "loud". */
     private class Songs(private val ids: List<String>) : Timeline() {
         override fun getWindowCount() = ids.size
         override fun getWindow(windowIndex: Int, window: Window, defaultPositionProjectionUs: Long): Window = window.set(
-            ids[windowIndex], MediaItem.Builder().setMediaId(ids[windowIndex]).build(), null, 0, 0, 0, true, false,
+            ids[windowIndex], MediaItem.Builder().setMediaId(ids[windowIndex].substringBefore('#')).build(), null, 0, 0, 0, true, false,
             null, 0, 200_000_000L, windowIndex, windowIndex, 0,
         )
         override fun getPeriodCount() = ids.size
@@ -38,9 +39,9 @@ class NormalizerSongStartTest {
         override fun getUidOfPeriod(periodIndex: Int): Any = ids[periodIndex]
     }
 
-    private val songs = Songs(listOf("quiet", "loud", "unknown"))
+    private val songs = Songs(listOf("quiet", "loud", "unknown", "loud#video"))
     /** What the service knows: the quiet song is lifted 6 dB, the loud one brought down 8; the third isn't known. */
-    private val gains = mapOf("quiet" to 6f, "loud" to -8f)
+    private val gains = mutableMapOf("quiet" to 6f, "loud" to -8f)
 
     private fun processor() = NormalizerProcessor().apply {
         songGainDb = { item, _ -> gains[item.mediaId] }
@@ -102,6 +103,28 @@ class NormalizerSongStartTest {
         // Seeking within the song keeps the service's figure and lands on it at once, without a glide.
         startOf(p, "loud", positionUs = 60_000_000)
         assertEquals(-4.2, play(p, 0.1).first(), 0.3)
+    }
+
+    /**
+     * Review (1.8.5): the song swapped for its video mid-song (or another form of it: the same song, but a new item, so a
+     * new period) is the same listen and keeps the gain it had. A figure measured since is for its next play (past its
+     * first seconds the service leaves the volume alone), not snapped to halfway through this one.
+     */
+    @Test fun theSameSongSwappedForItsVideoKeepsItsGain() {
+        val p = processor()
+        startOf(p, "loud")
+        p.setGainDb(-8f)
+        play(p, 1.0)
+        // Measured 30 s in: -3 dB, kept for next time.
+        gains["loud"] = -3f
+        startOf(p, "loud#video", positionUs = 30_000_000)
+        assertEquals("the video goes on at the song's -8 dB", -8.2, play(p, 0.2).first(), 0.3)
+        // And back to the song.
+        startOf(p, "loud", positionUs = 31_000_000)
+        assertEquals(-8.2, play(p, 0.2).first(), 0.3)
+        // Another song after it still starts at its own gain: a tone at -10.5 dBFS lifted 6 dB.
+        startOf(p, "quiet")
+        assertEquals(-4.5, play(p, 0.2, peak = 0.3).first(), 0.3)
     }
 
     @Test fun withoutAnAskTheGainSetStays() {
