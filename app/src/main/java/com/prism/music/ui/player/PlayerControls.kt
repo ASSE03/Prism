@@ -592,7 +592,7 @@ fun TransportRow(
         // A podcast episode skips within itself, as podcast players do: back 15 s, ahead 30 s.
         if (skips || episode) {
             if (episode) SkipGlyph(EPISODE_BACK_S, ahead = false, touch = 53.dp) { pc.seekBy(-EPISODE_BACK_S * 1000L) }
-            else TransportGlyph(prevIcon, tr(R.string.widget_previous), skip, 53.dp, if (style == TransportStyle.GLYPHS) 0.85f else 1f, previousEnabled, onHold = back) { pc.previous() }
+            else PreviousGlyph(prevIcon, skip, if (style == TransportStyle.GLYPHS) 0.85f else 1f, previousEnabled, holdSeek = back, onPrevious = pc::previous, onPreviousSong = pc::previousSong)
         }
         if (style == TransportStyle.GLYPHS) {
             if (isLoading) {
@@ -676,6 +676,27 @@ private fun PlayDisc(isPlaying: Boolean, isLoading: Boolean, filled: Boolean, si
     }
 }
 
+/**
+ * The player's Previous: a tap goes back as it always has ([onPrevious]: the song's start, or the song before near
+ * it). #481 (1.8.5): held, it goes to the song before ([onPreviousSong]), unless "Hold to seek" is set ([holdSeek]),
+ * which keeps holding for seeking back.
+ */
+@Composable
+internal fun PreviousGlyph(
+    icon: ImageVector,
+    size: Dp,
+    heightScale: Float,
+    enabled: Boolean,
+    holdSeek: (() -> Unit)?,
+    onPrevious: () -> Unit,
+    onPreviousSong: () -> Unit,
+    modifier: Modifier = Modifier,
+) = TransportGlyph(
+    icon, tr(R.string.widget_previous), size, 53.dp, heightScale, enabled, onHold = holdSeek,
+    onLongPress = if (holdSeek == null) onPreviousSong else null, longPressLabel = tr(R.string.previous_song),
+    modifier = modifier, onClick = onPrevious,
+)
+
 @Composable
 private fun TransportGlyph(
     icon: ImageVector,
@@ -685,6 +706,10 @@ private fun TransportGlyph(
     heightScale: Float = 1f,
     enabled: Boolean = true,
     onHold: (() -> Unit)? = null,
+    /** One long press (when [onHold] isn't set): done once, named [longPressLabel] for TalkBack. */
+    onLongPress: (() -> Unit)? = null,
+    longPressLabel: String? = null,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
     val alpha by animateFloatAsState(if (enabled) 1f else 0.3f, label = "transportAlpha")
@@ -693,8 +718,12 @@ private fun TransportGlyph(
     val tapEnabled by rememberUpdatedState(enabled)
     val step by rememberUpdatedState(onHold)
     Box(
-        Modifier.size(touch).then(
-            if (onHold == null) Modifier.clickable(remember { MutableInteractionSource() }, indication = null, enabled = enabled) { haptics.click(); onClick() }
+        modifier.size(touch).then(
+            if (onHold == null && onLongPress != null) Modifier.combinedClickable(
+                remember { MutableInteractionSource() }, indication = null, enabled = enabled,
+                onLongClickLabel = longPressLabel, onLongClick = { haptics.click(); onLongPress() },
+            ) { haptics.click(); onClick() }
+            else if (onHold == null) Modifier.clickable(remember { MutableInteractionSource() }, indication = null, enabled = enabled) { haptics.click(); onClick() }
             // A tap changes songs; holding seeks, one step at once and then again every moment it's held.
             // Holding works even when the tap can't (forward on the queue's last song).
             else Modifier

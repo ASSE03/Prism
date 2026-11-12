@@ -846,6 +846,8 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
 
     fun next() = withPlayer { it.seekToNext() }
     fun previous() = withPlayer { it.seekToPrevious() }
+    /** The song before, wherever this one is (#481: Previous held): the player's own previous item, so shuffle's order. */
+    fun previousSong() = withPlayer { it.seekToPreviousMediaItem() }
 
     /** Calls [done] once the player is reached (after commands asked for before it, such as a widget's), at once if it is. */
     fun afterPending(done: () -> Unit) = withPlayer { done() }
