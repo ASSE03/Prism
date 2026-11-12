@@ -334,6 +334,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // DJ mode: the set is worked out when it's turned on, and again when its energy curve changes.
         scope.launch { c.dj.on.collect { on -> if (on) djAhead() else { djJob?.cancel(); djSoon?.cancel() } } }
         scope.launch { c.dj.rescan.drop(1).collect { if (c.dj.onNow) djAhead() } }
+        scope.launch { c.dj.newSets.drop(1).collect { djNewSet() } }
         scope.launch { c.settings.flow.map { it.djFlow }.distinctUntilChanged().drop(1).collect { resequence() } }
         scope.launch {
             c.settings.flow.map { listOf(it.carLyrics, it.carLyricsStyle, it.carLyricsOnPhone, it.behavior.carLyricsLines) }.distinctUntilChanged().collect {
@@ -956,10 +957,15 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     }
 
     override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {
+        // #374: Shuffle in DJ mode (from the notification, the car, anywhere) deals a new DJ set; DJ mode stays on and
+        // its order stays the order, so Media3's shuffle goes back off (the player's button never turns it on).
+        if (shuffleModeEnabled && c.dj.onNow) {
+            player.shuffleModeEnabled = false
+            c.dj.newSet()
+            return
+        }
         vocals.shuffle = shuffleModeEnabled
         edges.shuffle = shuffleModeEnabled
-        // Shuffle and DJ mode both decide the order: the listener's shuffle wins.
-        if (shuffleModeEnabled && c.dj.onNow) c.dj.setOn(false)
         // Shuffle off (from anywhere: the notification, the car) is Smart Shuffle off too.
         if (!shuffleModeEnabled && c.queue.smartShuffle.value) c.queue.smartShuffle.value = false
         updateButtons()
@@ -2181,12 +2187,16 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val queued = c.queue.userQueued.value
         var base = cur + 2
         while (base < player.mediaItemCount && player.getMediaItemAt(base).mediaId in queued) base++
+        // A new set's first song (#374) stays first after the listener's queued songs.
+        if (base < player.mediaItemCount && player.getMediaItemAt(base).mediaId == djLead) base++
         // Within the queue's own songs, or within autoplay's, so neither list in the queue gets the other's songs.
         val autoplay = c.queue.autoplayStart.value.takeIf { it > 0 } ?: Int.MAX_VALUE
         val limit = if (base < autoplay) minOf(autoplay, player.mediaItemCount) else player.mediaItemCount
         val end = minOf(limit, base + DJ_WINDOW)
         if (end - base < 2) return
-        val anchor = djTrack(player.getMediaItemAt(cur + 1)) ?: return
+        // The set follows on from the song just before it: the next one, or the last song the listener queued (#374:
+        // so a new set dealt after those isn't put back in the old order).
+        val anchor = djTrack(player.getMediaItemAt(base - 1)) ?: return
         val items = (base until end).map { player.getMediaItemAt(it) }
         val tracks = items.mapIndexed { i, item -> if (c.mixTempo.keyed(item.mediaId)) djTrack(item, id = i.toString()) else null }
         val known = tracks.filterNotNull()
@@ -2206,6 +2216,44 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         } finally {
             djMoving = false
         }
+    }
+
+    /**
+     * #374: Shuffle with DJ mode on. The songs after the playing one (after those the listener queued with "Play next",
+     * which keep their place) are dealt as a new DJ set: another song next, picked at random among those that blend
+     * well, and the rest in the order that follows on from it ([DjSequencer.newSet]). The same window [resequence]
+     * orders, so its next pass keeps the new set. Only moves songs.
+     */
+    /** The song a new set put first ([djNewSet]); [resequence] leaves it there. */
+    private var djLead: String? = null
+
+    private fun djNewSet() {
+        if (!c.dj.onNow || player.shuffleModeEnabled) return
+        val cur = player.currentMediaItemIndex
+        if (cur == C.INDEX_UNSET) return
+        val queued = c.queue.userQueued.value
+        var base = cur + 1
+        while (base < player.mediaItemCount && player.getMediaItemAt(base).mediaId in queued) base++
+        val autoplay = c.queue.autoplayStart.value.takeIf { it > 0 } ?: Int.MAX_VALUE
+        val limit = if (base < autoplay) minOf(autoplay, player.mediaItemCount) else player.mediaItemCount
+        val end = minOf(limit, base + 1 + DJ_WINDOW)
+        if (end - base < 2) return
+        val items = (base until end).map { player.getMediaItemAt(it) }
+        val window = items.mapIndexed { i, item -> if (c.mixTempo.keyed(item.mediaId)) djTrack(item, id = i.toString()) else null }
+        val start = djTrack(player.getMediaItemAt(base - 1))
+        val desired = DjSequencer.newSet(start, window, c.settings.current.djFlow, java.util.Random()) ?: return
+        if (desired == items.indices.toList()) return
+        android.util.Log.d("PrismDj", "new set: ${items[desired.first()].mediaId} next (was ${items.first().mediaId})")
+        djLead = items[desired.first()].mediaId
+        djMoving = true
+        try {
+            player.replaceMediaItems(base, end, desired.map { items[it] })
+        } finally {
+            djMoving = false
+        }
+        // Shuffling picks a different next song.
+        prefetchNext()
+        scheduleSave()
     }
 
     private var resequenceJob: kotlinx.coroutines.Job? = null
@@ -2680,6 +2728,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 tree.shuffleSongs(single.mediaId)?.takeIf { it.second.isNotEmpty() }?.let { (title, list) ->
                     c.queue.source.value = QueueSource(QueueKind.PLAYLIST, title)
                     c.queue.autoplayStart.value = -1
+                    // A new queue, shuffled: DJ mode ends with the old one (Shuffle in DJ mode would deal a DJ set, #374).
+                    c.dj.setOn(false)
                     player.shuffleModeEnabled = true
                     // Shuffled here too, so each "Shuffle play" is a new order rather than the player's last one.
                     return@future MediaSession.MediaItemsWithStartPosition(list.shuffled().map { it.toMediaItem() }, 0, C.TIME_UNSET)
@@ -2764,6 +2814,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             c.queue.source.value = QueueSource(QueueKind.PLAYLIST, pick.title)
             // Asked to shuffle: shuffled here too, so it's a new order each time (as the car's "Shuffle play" is);
             // otherwise in order, whatever shuffle was left on.
+            // A new queue asked shuffled: DJ mode ends with the old one (Shuffle in DJ mode would deal a DJ set, #374).
+            if (request.shuffle && pick.songs.size > 1) c.dj.setOn(false)
             player.shuffleModeEnabled = request.shuffle && pick.songs.size > 1
             val list = if (player.shuffleModeEnabled) pick.songs.shuffled() else pick.songs
             return MediaSession.MediaItemsWithStartPosition(list.map { it.toMediaItem() }, pick.start.coerceIn(0, list.lastIndex), C.TIME_UNSET)
