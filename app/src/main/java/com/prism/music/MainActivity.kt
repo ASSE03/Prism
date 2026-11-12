@@ -314,6 +314,17 @@ open class MainActivity : ComponentActivity() {
                 ?: Toast.makeText(this, tr(R.string.that_look_code_couldn_t_be), Toast.LENGTH_SHORT).show()
             return Uri.parse("prism://looks")
         }
+        // An audio file opened with Prism from a file manager (1.8.5): it plays on its own, from the file, and the
+        // player opens. The opener's read grant comes with the intent; nothing is copied.
+        intent?.data?.takeIf { com.prism.music.data.local.OpenedAudio.accepts(intent.action, it, intent.type ?: runCatching { contentResolver.getType(it) }.getOrNull()) }?.let { file ->
+            container.scope.launch(Dispatchers.IO) {
+                val song = com.prism.music.data.local.OpenedAudio.read(applicationContext, file)
+                withContext(Dispatchers.Main) {
+                    container.player.playQueue(listOf(song), 0, com.prism.music.playback.QueueSource(com.prism.music.playback.QueueKind.SINGLE, song.title))
+                }
+            }
+            return Uri.parse("prism://player")
+        }
         lookFile(intent)?.let { file ->
             container.scope.launch(Dispatchers.Main) {
                 val look = runCatching { contentResolver.openInputStream(file)?.use { container.looks.readFile(it) } }

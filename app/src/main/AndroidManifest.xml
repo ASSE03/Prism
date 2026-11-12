@@ -106,6 +106,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/zip" />
             </intent-filter>
+            <!-- An audio file opened from a file manager ("Open with Prism", 1.8.5): it plays from the file (OpenedAudio). -->
+            <intent-filter android:label="@string/open_in_prism">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:mimeType="audio/*" />
+                <data android:mimeType="application/ogg" />
+                <data android:mimeType="application/x-flac" />
+            </intent-filter>
             <!-- Last.fm's sign-in page sends the browser back here with a token (1.7.8). -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
