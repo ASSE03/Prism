@@ -141,6 +141,8 @@
     <string name="night_starts_at">กลางคืนเริ่มเวลา</string>
     <string name="next_at">ถัดไป: %1$s เวลา %2$s</string>
     <string name="history">ประวัติ</string>
+    <string name="show_all">แสดงทั้งหมด</string>
+    <string name="clear_all">ล้างทั้งหมด</string>
     <string name="remove_from_history">นำออกจากประวัติ</string>
     <string name="removed_from_history">นำออกจากประวัติแล้ว</string>
     <string name="search_history">ค้นหาประวัติ</string>

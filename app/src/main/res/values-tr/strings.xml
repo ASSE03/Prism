@@ -141,6 +141,8 @@
     <string name="night_starts_at">Gece başlangıcı</string>
     <string name="next_at">Sıradaki: %1$s, saat %2$s</string>
     <string name="history">Geçmiş</string>
+    <string name="show_all">Tümünü göster</string>
+    <string name="clear_all">Tümünü temizle</string>
     <string name="remove_from_history">Geçmişten kaldır</string>
     <string name="removed_from_history">Geçmişten kaldırıldı</string>
     <string name="search_history">Geçmişte ara</string>

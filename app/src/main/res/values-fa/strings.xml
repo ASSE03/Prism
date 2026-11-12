@@ -141,6 +141,8 @@
     <string name="night_starts_at">شروع شب</string>
     <string name="next_at">بعدی: %1$s ساعت %2$s</string>
     <string name="history">تاریخچه</string>
+    <string name="show_all">نمایش همه</string>
+    <string name="clear_all">پاک کردن همه</string>
     <string name="remove_from_history">حذف از تاریخچه</string>
     <string name="removed_from_history">از تاریخچه حذف شد</string>
     <string name="search_history">جستجو در تاریخچه</string>

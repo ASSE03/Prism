@@ -141,6 +141,8 @@
     <string name="night_starts_at">夜の開始時刻</string>
     <string name="next_at">次：%2$s に %1$s</string>
     <string name="history">履歴</string>
+    <string name="show_all">すべて表示</string>
+    <string name="clear_all">すべて消去</string>
     <string name="remove_from_history">履歴から削除</string>
     <string name="removed_from_history">履歴から削除しました</string>
     <string name="search_history">履歴を検索</string>

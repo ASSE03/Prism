@@ -141,6 +141,8 @@
     <string name="night_starts_at">夜晚开始于</string>
     <string name="next_at">下一次：%2$s 切换到“%1$s”</string>
     <string name="history">历史记录</string>
+    <string name="show_all">显示全部</string>
+    <string name="clear_all">全部清除</string>
     <string name="remove_from_history">从历史记录中移除</string>
     <string name="removed_from_history">已从历史记录中移除</string>
     <string name="search_history">搜索历史记录</string>

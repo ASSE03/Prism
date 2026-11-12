@@ -141,6 +141,8 @@
     <string name="night_starts_at">رات شروع ہوتی ہے</string>
     <string name="next_at">اگلا: %1$s، %2$s بجے</string>
     <string name="history">ہسٹری</string>
+    <string name="show_all">سب دکھائیں</string>
+    <string name="clear_all">سب صاف کریں</string>
     <string name="remove_from_history">ہسٹری سے ہٹائیں</string>
     <string name="removed_from_history">ہسٹری سے ہٹا دیا گیا</string>
     <string name="search_history">ہسٹری تلاش کریں</string>

@@ -141,6 +141,8 @@
     <string name="night_starts_at">Noc začíná v</string>
     <string name="next_at">Další: %1$s v %2$s</string>
     <string name="history">Historie</string>
+    <string name="show_all">Zobrazit vše</string>
+    <string name="clear_all">Vymazat vše</string>
     <string name="remove_from_history">Odebrat z historie</string>
     <string name="removed_from_history">Odebráno z historie</string>
     <string name="search_history">Hledat v historii</string>

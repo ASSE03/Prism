@@ -141,6 +141,8 @@
     <string name="night_starts_at">Đêm bắt đầu lúc</string>
     <string name="next_at">Tiếp theo: %1$s lúc %2$s</string>
     <string name="history">Lịch sử</string>
+    <string name="show_all">Hiện tất cả</string>
+    <string name="clear_all">Xóa tất cả</string>
     <string name="remove_from_history">Xóa khỏi lịch sử</string>
     <string name="removed_from_history">Đã xóa khỏi lịch sử</string>
     <string name="search_history">Tìm trong lịch sử</string>

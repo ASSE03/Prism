@@ -141,6 +141,8 @@
     <string name="night_starts_at">Noaptea începe la</string>
     <string name="next_at">Următorul: %1$s la %2$s</string>
     <string name="history">Istoric</string>
+    <string name="show_all">Afișează tot</string>
+    <string name="clear_all">Șterge tot</string>
     <string name="remove_from_history">Elimină din istoric</string>
     <string name="removed_from_history">Eliminat din istoric</string>
     <string name="search_history">Caută în istoric</string>

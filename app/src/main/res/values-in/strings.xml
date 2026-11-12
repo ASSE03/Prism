@@ -141,6 +141,8 @@
     <string name="night_starts_at">Malam mulai pukul</string>
     <string name="next_at">Berikutnya: %1$s pukul %2$s</string>
     <string name="history">Riwayat</string>
+    <string name="show_all">Tampilkan semua</string>
+    <string name="clear_all">Hapus semua</string>
     <string name="remove_from_history">Hapus dari riwayat</string>
     <string name="removed_from_history">Dihapus dari riwayat</string>
     <string name="search_history">Cari riwayat</string>

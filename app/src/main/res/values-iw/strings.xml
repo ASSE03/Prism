@@ -141,6 +141,8 @@
     <string name="night_starts_at">הלילה מתחיל ב-</string>
     <string name="next_at">הבא: %1$s ב-%2$s</string>
     <string name="history">היסטוריה</string>
+    <string name="show_all">הצגת הכול</string>
+    <string name="clear_all">ניקוי הכול</string>
     <string name="remove_from_history">הסרה מההיסטוריה</string>
     <string name="removed_from_history">הוסר מההיסטוריה</string>
     <string name="search_history">חיפוש בהיסטוריה</string>

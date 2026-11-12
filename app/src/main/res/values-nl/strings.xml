@@ -141,6 +141,8 @@
     <string name="night_starts_at">Nacht begint om</string>
     <string name="next_at">Volgende: %1$s om %2$s</string>
     <string name="history">Geschiedenis</string>
+    <string name="show_all">Alles tonen</string>
+    <string name="clear_all">Alles wissen</string>
     <string name="remove_from_history">Verwijderen uit geschiedenis</string>
     <string name="removed_from_history">Verwijderd uit geschiedenis</string>
     <string name="search_history">Geschiedenis doorzoeken</string>
