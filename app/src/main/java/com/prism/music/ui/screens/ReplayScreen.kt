@@ -828,6 +828,13 @@ internal object CalendarGrid {
         return out
     }
 
+    /** Months an all-time calendar shows at most (the latest ones). */
+    const val ALL_TIME_MONTHS = 12
+
+    /** Where an all-time calendar starts: [first] (the first day with music), or eleven months before [last]'s month if that's later. */
+    fun allTimeFrom(first: LocalDate, last: LocalDate): LocalDate =
+        maxOf(first, YearMonth.from(last).minusMonths(ALL_TIME_MONTHS - 1L).atDay(1))
+
     /** The day of [ym] in column [col] (0..6) of week row [row], or null for a blank cell. */
     fun dayAt(ym: YearMonth, firstDay: DayOfWeek, col: Int, row: Int): LocalDate? {
         val n = row * 7 + col - lead(ym, firstDay) + 1
@@ -908,9 +915,10 @@ private suspend fun loadCalendar(stats: PlayStats, period: Period, from: Long, t
         if (days.isEmpty()) return@withContext CalendarData(emptyMap(), emptyList(), 0, null)
         val start = Instant.ofEpochMilli(from).atZone(zone).toLocalDate()
         // All time starts at the first month with music, not in 1970.
-        val first = if (period.kind == Period.Kind.ALL) maxOf(start, days.keys.min()) else start
         val last = Instant.ofEpochMilli(to).atZone(zone).toLocalDate()
-        val busiest = days.maxByOrNull { it.value.ms }
+        // And shows its last twelve months: every month of a long history made a calendar many screens tall.
+        val first = if (period.kind == Period.Kind.ALL) CalendarGrid.allTimeFrom(maxOf(start, days.keys.min()), last) else start
+        val busiest = days.filterKeys { it >= first }.maxByOrNull { it.value.ms }
         CalendarData(days, CalendarGrid.months(first, maxOf(first, last)), busiest?.value?.ms ?: 0L, busiest?.key)
     }
 }

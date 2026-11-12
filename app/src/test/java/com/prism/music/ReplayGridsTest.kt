@@ -107,6 +107,14 @@ class ReplayGridsTest {
         assertEquals(listOf(YearMonth.of(2026, 3)), CalendarGrid.months(LocalDate.of(2026, 3, 1), LocalDate.of(2026, 3, 31)))
     }
 
+    /** All time shows its last twelve months (three years of months were many screens tall); a shorter history shows all of it. */
+    @Test fun allTimeShowsItsLastTwelveMonths() {
+        val last = LocalDate.of(2026, 11, 12)
+        assertEquals(LocalDate.of(2025, 12, 1), CalendarGrid.allTimeFrom(LocalDate.of(2023, 10, 4), last))
+        assertEquals(12, CalendarGrid.months(CalendarGrid.allTimeFrom(LocalDate.of(2023, 10, 4), last), last).size)
+        assertEquals(LocalDate.of(2026, 8, 20), CalendarGrid.allTimeFrom(LocalDate.of(2026, 8, 20), last))
+    }
+
     @Test fun daysGetDarkerWithTime() {
         assertEquals(0, CalendarGrid.level(0, 1000))
         assertEquals(1, CalendarGrid.level(1, 1000))
