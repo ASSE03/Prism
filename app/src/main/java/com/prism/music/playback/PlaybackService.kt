@@ -1426,15 +1426,17 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 withContext(Dispatchers.IO) { c.yourMusic.radio(seeds, existing, if (noRepeats) 60 else 15, offlineOnly = offline) }
             }.onFailure { android.util.Log.w("PrismRadio", "Prism radio failed", it) }.getOrNull().orEmpty()
                 .let { picks -> if (noRepeats) picks.filter { !session.has(it.song) }.take(15) else picks }
-            val mine = (if (!useYours) emptyList() else ownRadio())
-                .let { com.prism.music.data.foryou.LocalRadio.besideYouTube(it, onlyYours = !useYouTube || mode == com.prism.music.data.prefs.AutoplaySource.YOURS) }
-                .map { it.song }
+            val ownPicks = if (!useYours) emptyList() else ownRadio()
             // "Your music": YouTube only fills in when your own music has too little to follow with.
-            val wantYouTube = useYouTube && (radio || mode != com.prism.music.data.prefs.AutoplaySource.YOURS || mine.size < 5)
+            val wantYouTube = useYouTube && (radio || mode != com.prism.music.data.prefs.AutoplaySource.YOURS || ownPicks.size < 5)
             suspend fun askRadio(from: String, token: String?) = runCatching {
                 withContext(Dispatchers.IO) { c.radio(from, "RDAMVM$from", continuation = token) }
             }.getOrNull()
             val r = if (!wantYouTube) null else askRadio(seed, c.queue.autoplayContinuation)
+            // #461: beside YouTube's radio, only your songs close to the seed (or by artists on that radio).
+            val mine = com.prism.music.data.foryou.LocalRadio.besideYouTube(
+                ownPicks, onlyYours = !useYouTube || mode == com.prism.music.data.prefs.AutoplaySource.YOURS, radio = r?.songs.orEmpty(),
+            ).map { it.song }
             // Dropped if the queue was replaced, or Autoplay was switched off, while loading. (With no repeats on, having
             // nothing from either isn't the end yet: [RadioTopUp.next] looks further.)
             if ((!noRepeats && r == null && mine.isEmpty()) || c.queue.source.value !== src || (!c.settings.current.autoplay && !radio)) return@launch
