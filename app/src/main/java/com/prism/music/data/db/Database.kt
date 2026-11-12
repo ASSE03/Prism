@@ -437,6 +437,10 @@ interface PlayEventDao {
     @Query("SELECT COUNT(DISTINCT songId) FROM play_events WHERE timestamp BETWEEN :from AND :to")
     suspend fun songCount(from: Long, to: Long): Int
 
+    /** How many times [songId] was played up to [to] (the milestones' cheap check after a play). */
+    @Query("SELECT COUNT(*) FROM play_events WHERE songId = :songId AND timestamp <= :to")
+    suspend fun playsOf(songId: String, to: Long): Int
+
     @Query("SELECT COUNT(DISTINCT s.primaryArtist) FROM play_events e JOIN songs s ON s.id = e.songId WHERE e.timestamp BETWEEN :from AND :to AND s.primaryArtist != ''")
     suspend fun artistCount(from: Long, to: Long): Int
 

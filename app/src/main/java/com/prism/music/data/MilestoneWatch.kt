@@ -1,12 +1,17 @@
 package com.prism.music.data
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.prism.music.AppContainer
 import com.prism.music.R
+import com.prism.music.data.imports.PlayStats
 import com.prism.music.tr
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.Instant
+import java.time.ZoneId
 
 /** A milestone with what it's about, ready to show: the song's title and cover for a song's plays. */
 data class ShownMilestone(val milestone: Milestone, val text: String, val thumbnail: String?, val fresh: Boolean)
@@ -15,8 +20,25 @@ data class ShownMilestone(val milestone: Milestone, val text: String, val thumbn
  * Milestones for Replay's list and for the notice (1.8.5). They're read from the history ([Milestones.of]); kept here
  * is only when they were first looked at on this phone (earlier ones aren't news) and which have been seen.
  */
-class MilestoneWatch(private val c: AppContainer) {
-    private val prefs by lazy { c.app.getSharedPreferences("milestones", Context.MODE_PRIVATE) }
+class MilestoneWatch internal constructor(
+    /** What Replay counts, asked anew each time ("Count history from" can change). */
+    private val stats: () -> PlayStats,
+    prefsOf: () -> SharedPreferences,
+    /** Whether the notice is turned on. */
+    private val on: () -> Boolean,
+    /** Posts the notice with this text. */
+    private val notify: (String) -> Unit,
+    private val scope: CoroutineScope,
+) {
+    constructor(c: AppContainer) : this(
+        stats = { c.imports.replay() },
+        prefsOf = { c.app.getSharedPreferences("milestones", Context.MODE_PRIVATE) },
+        on = { c.settings.current.behavior.milestoneNotify },
+        notify = { text -> Notifications.post(c.app, Notifications.REPLAY_NEWS, 5300, tr(R.string.ms_new), text, "prism://replay") },
+        scope = c.scope,
+    )
+
+    private val prefs by lazy(prefsOf)
 
     /** When milestones were first looked at here: set on the first look, so years of history don't arrive as news. */
     private fun since(now: Long): Long = prefs.getLong(SINCE, 0L).takeIf { it > 0 } ?: now.also { prefs.edit().putLong(SINCE, it).apply() }
@@ -24,12 +46,12 @@ class MilestoneWatch(private val c: AppContainer) {
 
     /** Every milestone in what Replay counts, newest first, with the words to show. */
     suspend fun all(now: Long = System.currentTimeMillis()): List<ShownMilestone> = withContext(Dispatchers.IO) {
-        val stats = c.imports.replay()
+        val stats = stats()
         val songs = stats.topSongs(0, now, MAX_SONGS).associateBy { it.songId }
         val events = stats.events(0, now)
         val since = since(now)
         val seen = seen()
-        Milestones.of(events) { songs[it]?.artistName?.substringBefore(", ") }
+        Milestones.of(events, now = now) { songs[it]?.artistName?.substringBefore(", ") }
             .asReversed()
             .mapNotNull { m ->
                 val song = m.songId?.let { songs[it] }
@@ -49,28 +71,61 @@ class MilestoneWatch(private val c: AppContainer) {
 
     /**
      * After a play is saved: with the notice turned on, and not more than once in [CHECK_EVERY_MS], looks for a
-     * milestone reached since the last look and tells about it. Off (as it comes), nothing is read at all.
+     * milestone reached since the last look and tells about it. The whole history is read only when a play may have
+     * reached one, or once a day ([mayHaveNews]). Off (as it comes), nothing is read at all.
      */
     fun afterPlay(now: Long = System.currentTimeMillis()) {
-        if (!c.settings.current.behavior.milestoneNotify) return
+        if (!on()) return
         if (now - lastCheck < CHECK_EVERY_MS) return
         lastCheck = now
-        c.scope.launch(Dispatchers.IO) { runCatching { tell(now) } }
+        scope.launch(Dispatchers.IO) { runCatching { tell(now) } }
     }
 
-    internal suspend fun tell(now: Long): List<ShownMilestone> {
+    internal suspend fun tell(now: Long, zone: ZoneId = ZoneId.systemDefault()): List<ShownMilestone> {
+        if (!mayHaveNews(now, zone)) return emptyList()
         val fresh = all(now).filter { it.fresh }
         if (fresh.isEmpty()) return fresh
         markSeen(fresh)
         // One notice: the newest, and how many more.
         val text = fresh.first().text + if (fresh.size > 1) " " + tr(R.string.ms_and_more, fresh.size - 1) else ""
-        Notifications.post(c.app, Notifications.REPLAY_NEWS, 5300, tr(R.string.ms_new), text, "prism://replay")
+        notify(text)
         return fresh
+    }
+
+    /**
+     * Whether the whole history is worth reading now: the plays since the last look could have reached a song's, the
+     * hours' or the songs' next mark ([Milestones.mayHaveReached], a few counts in SQLite), or it's the day's first look
+     * (streaks and the year's artist, which no cheap count shows, are looked at once a day). The very first look only
+     * notes the time: nothing before it is news.
+     */
+    private suspend fun mayHaveNews(now: Long, zone: ZoneId): Boolean {
+        val looked = prefs.getLong(LOOKED, 0L)
+        val today = Instant.ofEpochMilli(now).atZone(zone).toLocalDate().toEpochDay()
+        val daily = prefs.getLong(DAY, Long.MIN_VALUE) != today
+        prefs.edit().putLong(LOOKED, now).putLong(DAY, today).apply()
+        if (looked <= 0L) { since(now); return false }
+        if (daily) return true
+        val s = stats()
+        val new = s.events(looked + 1, now)
+        if (new.isEmpty()) return false
+        val totalMs = s.totalMs(0, now)
+        val beforeMs = totalMs - new.sumOf { it.playedMs }
+        val songs = s.songCount(0, now)
+        val songsBefore = s.songCount(0, looked)
+        if (Milestones.mayHaveReached(0, beforeMs, totalMs, songsBefore, songs)) return true
+        // Each song played since: any of its plays since then could be a mark (a song played twice may pass one between).
+        return new.filter { it.songId.isNotEmpty() }.groupingBy { it.songId }.eachCount().any { (id, k) ->
+            val n = s.playsOf(id, now)
+            (n - k + 1..n).any { it in Milestones.SONG_PLAYS }
+        }
     }
 
     companion object {
         private const val SINCE = "since"
         private const val SEEN = "seen"
+        /** When the notice last looked (the plays after it are the ones the cheap check asks about), and on which day. */
+        private const val LOOKED = "looked"
+        private const val DAY = "looked_day"
         private const val MAX_SONGS = 100_000
         const val CHECK_EVERY_MS = 30 * 60_000L
 

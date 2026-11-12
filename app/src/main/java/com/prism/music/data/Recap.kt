@@ -88,14 +88,30 @@ class Recaps(private val c: AppContainer) {
 
     companion object {
         /** The notice for the next recap ([RecapCalendar.nextNotice]); always lined up, it posts only if the switch is on then. */
-        fun schedule(context: Context, now: Long = System.currentTimeMillis()) {
-            val (month, at) = RecapCalendar.nextNotice(now)
+        fun schedule(context: Context, now: Long = System.currentTimeMillis(), handled: YearMonth? = null) {
+            val (month, at) = next(now, handled)
             WorkManager.getInstance(context).enqueueUniqueWork(
                 "recap_$month", ExistingWorkPolicy.KEEP,
                 OneTimeWorkRequestBuilder<RecapWorker>().setInitialDelay((at - now).coerceAtLeast(0), TimeUnit.MILLISECONDS)
                     .setInputData(androidx.work.workDataOf(RecapWorker.MONTH to month.toString())).build(),
             )
         }
+
+        /**
+         * The notice to line up next: at app start ([handled] null) the calendar's next one; after [handled]'s worker
+         * ran, always the month after it. Not the calendar's then: a time zone or clock that moved back can make it
+         * name [handled] again, whose unique work is the one running, so KEEP would drop it and the chain would stop.
+         */
+        fun next(now: Long, handled: YearMonth?, zone: ZoneId = ZoneId.systemDefault()): Pair<YearMonth, Long> =
+            if (handled == null) RecapCalendar.nextNotice(now, zone)
+            else handled.plusMonths(1).let { it to RecapCalendar.noticeAt(it, zone) }
+
+        /**
+         * Whether [month]'s notice goes out: switched on, a month with a recap ([hasRecap]), and later than the last
+         * month told ([toldMonth]): a time zone or clock moved back lines the same month up again (as [Rewinds.tells]).
+         */
+        fun tells(month: YearMonth, on: Boolean, toldMonth: YearMonth?, hasRecap: Boolean): Boolean =
+            on && hasRecap && (toldMonth == null || month > toldMonth)
 
         /** The deep link that opens [month]'s story on Replay. */
         fun link(month: YearMonth) = "prism://recap/$month"
@@ -107,15 +123,25 @@ class RecapWorker(context: Context, params: WorkerParameters) : CoroutineWorker(
     override suspend fun doWork(): Result {
         val c = applicationContext.container
         val month = inputData.getString(MONTH)?.let { runCatching { YearMonth.parse(it) }.getOrNull() }
-        if (month != null && c.settings.current.behavior.recapNotify && runCatching { c.recaps.of(month) }.getOrNull() != null) {
+        val prefs = applicationContext.getSharedPreferences("recap", Context.MODE_PRIVATE)
+        val told = prefs.getString(TOLD, null)?.let { runCatching { YearMonth.parse(it) }.getOrNull() }
+        if (month != null && c.settings.current.behavior.recapNotify &&
+            Recaps.tells(month, on = true, toldMonth = told, hasRecap = runCatching { c.recaps.of(month) }.getOrNull() != null)
+        ) {
+            prefs.edit().putString(TOLD, month.toString()).apply()
             Notifications.post(
                 applicationContext, Notifications.REPLAY_NEWS, 5200 + month.monthValue,
                 tr(R.string.recap_ready_title, RecapCalendar.name(month)), tr(R.string.recap_ready_text), Recaps.link(month),
             )
         }
-        Recaps.schedule(applicationContext)
+        // The month after this one, under its own name: never this running work's (see Recaps.next).
+        Recaps.schedule(applicationContext, handled = month)
         return Result.success()
     }
 
-    companion object { const val MONTH = "month" }
+    companion object {
+        const val MONTH = "month"
+        /** The last month whose notice went out ("2026-10"). */
+        private const val TOLD = "told_month"
+    }
 }

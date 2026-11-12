@@ -73,11 +73,52 @@ class MilestonesTest {
             repeat(30) { add(play("y1", at(2026, 3, 1) + it * 200_000L)) }
             repeat(10) { add(play("x2", at(2026, 5, 1) + it * 200_000L)) }
         }
-        val top = Milestones.of(events, zone) { artist[it] }.of(MilestoneKind.TOP_ARTIST)
+        // Read in 2027, both years are over.
+        val top = Milestones.of(events, zone, now = at(2027, 1, 2)) { artist[it] }.of(MilestoneKind.TOP_ARTIST)
         assertEquals(listOf(2025 to "Yuri", 2026 to "Xena"), top.map { it.value to it.subject })
         assertEquals("Yuri led 2025 from the play that made an hour", at(2025, 6, 1) + 19 * 200_000L, top[0].at)
         // 25 + 6 Xena plays pass Yuri's 30: the sixth play in May.
         assertEquals(at(2026, 5, 1) + 5 * 200_000L, top[1].at)
+    }
+
+    /**
+     * This year's leader isn't "top artist of the year" while the year has months to go: not from the first hour, not
+     * at each change of leader. In December it is (reached on the 1st, or when they took the lead after it).
+     */
+    @Test fun thisYearsTopArtistWaitsForDecember() {
+        val artist = mapOf("x1" to "Xena", "y1" to "Yuri")
+        val events = buildList {
+            repeat(40) { add(play("y1", at(2025, 6, 1) + it * 200_000L)) }
+            repeat(25) { add(play("x1", at(2026, 1, 5) + it * 200_000L)) }
+            repeat(30) { add(play("y1", at(2026, 3, 1) + it * 200_000L)) }
+        }
+        val inNovember = Milestones.of(events, zone, now = at(2026, 11, 12)) { artist[it] }.of(MilestoneKind.TOP_ARTIST)
+        assertEquals("last year's only", listOf(2025 to "Yuri"), inNovember.map { it.value to it.subject })
+        assertEquals("a past year is as it was", at(2025, 6, 1) + 19 * 200_000L, inNovember[0].at)
+
+        val inDecember = Milestones.of(events, zone, now = at(2026, 12, 3)) { artist[it] }.of(MilestoneKind.TOP_ARTIST)
+        assertEquals(listOf(2025 to "Yuri", 2026 to "Yuri"), inDecember.map { it.value to it.subject })
+        assertEquals("reached on 1 December", at(2026, 12, 1, 0, 0), inDecember[1].at)
+
+        // Taking the lead in December: reached then.
+        val late = events + (0 until 40).map { play("x1", at(2026, 12, 2) + it * 200_000L) }
+        val lead = Milestones.of(late, zone, now = at(2026, 12, 5)) { artist[it] }.of(MilestoneKind.TOP_ARTIST).last()
+        assertEquals("her 31st play passes his 30", "Xena" to at(2026, 12, 2) + 5 * 200_000L, lead.subject to lead.at)
+    }
+
+    /**
+     * Imported plays not matched to a song come with no song (""): they count as listening time and days, but aren't a
+     * song of their own, so neither "different songs" nor a song's plays.
+     */
+    @Test fun unmatchedImportedPlaysAreNoSong() {
+        val start = at(2026, 2, 1)
+        val events = (0 until 99).map { play("s$it", start + it * 400_000L) } + (0 until 30).map { play("", start + 50_000_000L + it * 400_000L) }
+        val all = Milestones.of(events, zone)
+        assertTrue("99 songs and the unmatched plays aren't 100", all.of(MilestoneKind.SONGS).isEmpty())
+        assertTrue(all.of(MilestoneKind.SONG_PLAYS).isEmpty())
+        assertEquals("129 three-minute plays are 6.45 hours: no mark yet", 0, all.of(MilestoneKind.HOURS).size)
+        val more = events + (0 until 80).map { play("", start + 90_000_000L + it * 400_000L) }
+        assertEquals("but 209 plays of 3 minutes are 10 hours", listOf(10), Milestones.of(more, zone).of(MilestoneKind.HOURS).map { it.value })
     }
 
     @Test fun noArtistNamesNoTopArtist() {

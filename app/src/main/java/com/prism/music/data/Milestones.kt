@@ -15,7 +15,10 @@ enum class MilestoneKind {
     SONGS,
     /** N days in a row with music, the first time a run got that long. */
     STREAK,
-    /** An artist became the most-listened one of [Milestone.value] (a year); [Milestone.subject] is the artist. */
+    /**
+     * An artist is the most-listened one of [Milestone.value] (a year); [Milestone.subject] is the artist. The current
+     * year's only from December on ([Milestones.of]).
+     */
     TOP_ARTIST,
 }
 
@@ -44,8 +47,14 @@ object Milestones {
     /**
      * Every milestone in [events], oldest first. [events] in time order (as [com.prism.music.data.imports.PlayStats.events]
      * gives them). [artistOf] names a song's main artist, for the year's top artist; without it there's none of those.
+     * [now] is when they're read: it says which year is still going.
      */
-    fun of(events: List<PlayEventEntity>, zone: ZoneId = ZoneId.systemDefault(), artistOf: (String) -> String? = { null }): List<Milestone> {
+    fun of(
+        events: List<PlayEventEntity>,
+        zone: ZoneId = ZoneId.systemDefault(),
+        now: Long = System.currentTimeMillis(),
+        artistOf: (String) -> String? = { null },
+    ): List<Milestone> {
         val out = ArrayList<Milestone>()
         val plays = HashMap<String, Int>()
         var totalMs = 0L
@@ -59,12 +68,26 @@ object Milestones {
         val artistMs = HashMap<String, Long>()
         var leader: String? = null
         var leaderSince = 0L
-        fun closeYear() { leader?.let { out += Milestone(MilestoneKind.TOP_ARTIST, year, leaderSince, subject = it) } }
+        // This year's leader is only the year's top artist in its last month: before December it's no milestone (no
+        // notice at the first hour, nor at each change of leader); in December it's reached on the 1st, or when they took
+        // the lead after it. Past years are whoever led at the end, since they took the lead.
+        val today = Instant.ofEpochMilli(now).atZone(zone).toLocalDate()
+        val december = today.withMonth(12).withDayOfMonth(1).atStartOfDay(zone).toInstant().toEpochMilli()
+        fun closeYear() {
+            val who = leader ?: return
+            when {
+                year < today.year -> out += Milestone(MilestoneKind.TOP_ARTIST, year, leaderSince, subject = who)
+                year == today.year && today.monthValue == 12 -> out += Milestone(MilestoneKind.TOP_ARTIST, year, maxOf(leaderSince, december), subject = who)
+            }
+        }
 
         for (e in events) {
-            val n = (plays[e.songId] ?: 0) + 1
-            plays[e.songId] = n
-            if (n in SONG_PLAYS) out += Milestone(MilestoneKind.SONG_PLAYS, n, e.timestamp, songId = e.songId)
+            // An imported play not matched to a song yet ("") is listening time and a day with music, but no song.
+            if (e.songId.isNotEmpty()) {
+                val n = (plays[e.songId] ?: 0) + 1
+                plays[e.songId] = n
+                if (n in SONG_PLAYS) out += Milestone(MilestoneKind.SONG_PLAYS, n, e.timestamp, songId = e.songId)
+            }
 
             totalMs += e.playedMs
             while (hoursAt < HOURS.size && totalMs >= HOURS[hoursAt] * 3_600_000L) out += Milestone(MilestoneKind.HOURS, HOURS[hoursAt++], e.timestamp)

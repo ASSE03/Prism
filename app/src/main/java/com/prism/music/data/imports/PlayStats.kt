@@ -43,6 +43,11 @@ interface PlayStats {
     suspend fun firstEvent(): Long?
     suspend fun events(from: Long, to: Long): List<PlayEventEntity>
     suspend fun songCount(from: Long, to: Long): Int
+    /**
+     * How many times [songId] was played up to [to]: the milestones' cheap check after a play (1.8.5). Both real
+     * implementations ask SQLite; this fallback (for test fakes) counts [events].
+     */
+    suspend fun playsOf(songId: String, to: Long): Int = events(0, to).count { it.songId == songId }
     suspend fun artistCount(from: Long, to: Long): Int
     suspend fun newArtists(from: Long, to: Long): List<ArtistPlays>
     suspend fun topAlbums(from: Long, to: Long, limit: Int): List<AlbumPlays>
@@ -69,6 +74,7 @@ class PrismPlays(private val d: PlayEventDao) : PlayStats {
     override suspend fun firstEvent() = d.firstEvent()
     override suspend fun events(from: Long, to: Long) = d.events(from, to)
     override suspend fun songCount(from: Long, to: Long) = d.songCount(from, to)
+    override suspend fun playsOf(songId: String, to: Long) = d.playsOf(songId, to)
     override suspend fun artistCount(from: Long, to: Long) = d.artistCount(from, to)
     override suspend fun newArtists(from: Long, to: Long) = d.newArtists(from, to)
     override suspend fun topAlbums(from: Long, to: Long, limit: Int) = d.topAlbums(from, to, limit)
@@ -95,6 +101,7 @@ class CountedPlays(override val sources: List<ImportSource>, private val d: Coun
     override suspend fun firstEvent() = d.firstEvent(o)
     override suspend fun events(from: Long, to: Long) = d.events(o, from, to)
     override suspend fun songCount(from: Long, to: Long) = d.songCount(o, from, to)
+    override suspend fun playsOf(songId: String, to: Long) = d.playsOf(o, songId, to)
     override suspend fun artistCount(from: Long, to: Long) = d.artistCount(o, from, to)
     override suspend fun newArtists(from: Long, to: Long) = d.newArtists(o, from, to)
     override suspend fun topAlbums(from: Long, to: Long, limit: Int) = d.topAlbums(o, from, to, limit)

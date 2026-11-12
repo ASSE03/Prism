@@ -281,6 +281,9 @@ interface CountedPlayDao {
     @Query("SELECT COUNT(DISTINCT songId) FROM counted_plays WHERE origin IN (:o) AND timestamp BETWEEN :from AND :to")
     suspend fun songCount(o: List<String>, from: Long, to: Long): Int
 
+    @Query("SELECT COUNT(*) FROM counted_plays WHERE origin IN (:o) AND songId = :songId AND timestamp <= :to")
+    suspend fun playsOf(o: List<String>, songId: String, to: Long): Int
+
     @Query("SELECT COUNT(DISTINCT s.primaryArtist) FROM counted_plays e JOIN songs s ON s.id = e.songId WHERE e.origin IN (:o) AND e.timestamp BETWEEN :from AND :to AND s.primaryArtist != ''")
     suspend fun artistCount(o: List<String>, from: Long, to: Long): Int
 
