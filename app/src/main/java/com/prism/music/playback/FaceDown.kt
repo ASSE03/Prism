@@ -29,9 +29,17 @@ class FaceDown(
     private val settingOn: () -> Boolean,
     private val controls: Controls,
     private val clock: () -> Long = { SystemClock.elapsedRealtime() },
-    /** Runs a check later (the five minutes running out while paused); replaces any check still waiting. */
-    private val later: (Long, () -> Unit) -> Unit = mainLater(),
+    /** Runs a check later (the five minutes running out while paused). */
+    private val later: Later = mainLater(),
 ) : Player.Listener {
+
+    /** A check run later, on the main thread. */
+    fun interface Later {
+        /** Runs [block] in [ms]; replaces any check still waiting. */
+        fun run(ms: Long, block: () -> Unit)
+        /** Drops the check still waiting, if any. */
+        fun cancel() {}
+    }
 
     /** What [FaceDown] needs of the player and the service. */
     interface Controls {
@@ -55,9 +63,15 @@ class FaceDown(
         private set
     /** The playWhenReady our own pause / play is about to report (so it isn't taken for the listener's). */
     private var expect: Boolean? = null
+    /**
+     * Let go ([release]): the setting was switched off (switched on again, the service makes a new one). Nothing here runs
+     * again, so a check still waiting can't take the sensor back for a FaceDown nobody tells of the player any more.
+     */
+    private var released = false
 
     /** Starts or stops listening to match the setting and playback. Call on the main thread. */
     fun update() {
+        if (released) return
         val now = clock()
         val on = settingOn()
         if (!on) detector.forget()
@@ -70,17 +84,20 @@ class FaceDown(
             } else tap.stop()
         }
         if (listening && !controls.playing) detector.pausedAt()?.let { at ->
-            later(at + FaceDownDetector.RESUME_WITHIN_MS - now + 1_000) { update() }
+            later.run(at + FaceDownDetector.RESUME_WITHIN_MS - now + 1_000) { update() }
         }
     }
 
     fun release() {
+        released = true
+        later.cancel()
         if (listening) tap.stop()
         listening = false
         detector.forget()
     }
 
     private fun onSample(x: Float, y: Float, z: Float) {
+        if (released) return
         if (controls.blocked) { detector.restart(); return }
         when (detector.sample(x, y, z, clock(), controls.playing)) {
             FaceDownDetector.Action.PAUSE -> {
@@ -133,13 +150,14 @@ class FaceDown(
     }
 
     companion object {
-        private fun mainLater(): (Long, () -> Unit) -> Unit {
-            val handler by lazy { Handler(Looper.getMainLooper()) }
-            val token = Any()
-            return { ms, block ->
+        private fun mainLater(): Later = object : Later {
+            private val handler by lazy { Handler(Looper.getMainLooper()) }
+            private val token = Any()
+            override fun run(ms: Long, block: () -> Unit) {
                 handler.removeCallbacksAndMessages(token)
                 handler.postAtTime({ block() }, token, SystemClock.uptimeMillis() + ms.coerceAtLeast(0))
             }
+            override fun cancel() = handler.removeCallbacksAndMessages(token)
         }
     }
 }

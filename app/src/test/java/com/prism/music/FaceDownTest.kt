@@ -159,7 +159,12 @@ class FaceDownTest {
         val tap = FakeTap()
         val player = FakePlayer()
         var pending: Pair<Long, () -> Unit>? = null
-        val face = FaceDown(tap, { setting }, player, { now }, { ms, block -> pending = now + ms to block })
+        var cancels = 0
+        /** Counts cancels but keeps the check waiting, so a released FaceDown is also seen to ignore one that runs. */
+        val face = FaceDown(tap, { setting }, player, { now }, object : FaceDown.Later {
+            override fun run(ms: Long, block: () -> Unit) { pending = now + ms to block }
+            override fun cancel() { cancels++ }
+        })
         init { player.listener = face }
 
         fun feed(xyz: FloatArray, ms: Long) {
@@ -249,6 +254,50 @@ class FaceDownTest {
         r.face.onMediaItemTransition(null, Player.MEDIA_ITEM_TRANSITION_REASON_PLAYLIST_CHANGED)
         r.feed(up, 2_000)
         assertEquals(0, r.player.plays)
+    }
+
+    /**
+     * Review (1.8.5): the setting switched off lets the [FaceDown] go ([FaceDown.release]; the service stops telling it of
+     * the player), and switched on again makes a new one. The old one's five-minute check, still waiting from a face-down
+     * pause, ran later and took the sensor again for it, so it kept listening (and pausing) with nobody to stop it.
+     */
+    @Test fun aReleasedOneDoesNothingMore() {
+        val r = Rig(on = true)
+        r.player.set(true)
+        r.feed(inHand, 600)
+        r.feed(down, 1_600)
+        assertEquals(1, r.player.pauses)
+        assertTrue("a check waits for the five minutes to run out", r.pending != null)
+        // Off: let go. On again at once (the service would make a new one; this one isn't told of the player any more).
+        r.setting = false
+        r.face.release()
+        assertFalse(r.tap.on)
+        assertEquals("the waiting check is dropped", 1, r.cancels)
+        r.setting = true
+        // The listener plays on with the phone in hand meanwhile.
+        r.player.playing = true
+        val starts = r.tap.starts
+        // The old check comes due (this rig runs it even after a release).
+        r.pass(FaceDownDetector.RESUME_WITHIN_MS + 2_000)
+        assertEquals("the released one doesn't take the sensor again", starts, r.tap.starts)
+        assertFalse(r.tap.on)
+        r.face.update()
+        r.face.onIsPlayingChanged(true)
+        assertEquals("nothing wakes it", starts, r.tap.starts)
+        assertFalse(r.face.listening)
+    }
+
+    /** A sample already on its way when it's let go (the sensor's thread) doesn't pause either. */
+    @Test fun aReleasedOneIgnoresALateSample() {
+        val r = Rig(on = true)
+        r.player.set(true)
+        r.feed(inHand, 600)
+        r.feed(down, 1_000)
+        val late = r.tap.onSample!!
+        r.face.release()
+        late(inHand[0], inHand[1], inHand[2])
+        repeat(10) { late(down[0], down[1], down[2]); r.now += 200 }
+        assertEquals(0, r.player.pauses)
     }
 
     @Test fun nothingWhileCastingCallingOrInTheCar() {
