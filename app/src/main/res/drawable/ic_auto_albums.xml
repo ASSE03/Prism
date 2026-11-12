@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Albums" tile in Android Auto's Library: a record on a rounded square. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#FF1C7ED6"
+        android:pathData="M10,0 L38,0 Q48,0 48,10 L48,38 Q48,48 38,48 L10,48 Q0,48 0,38 L0,10 Q0,0 10,0 Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M24,11 a13,13 0 1,1 0,26 a13,13 0 1,1 0,-26 Z" />
+    <path
+        android:fillColor="#FF1C7ED6"
+        android:pathData="M24,20 a4,4 0 1,1 0,8 a4,4 0 1,1 0,-8 Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M24,22.5 a1.5,1.5 0 1,1 0,3 a1.5,1.5 0 1,1 0,-3 Z" />
+</vector>

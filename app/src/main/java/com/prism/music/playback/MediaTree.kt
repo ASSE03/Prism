@@ -42,6 +42,9 @@ class MediaTree(private val c: AppContainer) {
         const val LIBRARY = "library"
         const val RECENT = "recent"
         const val DOWNLOADS = "downloads"
+        /** Library's artists (favourites first) and albums, as in the app's Library tabs. */
+        const val ARTISTS = "artists"
+        const val ALBUMS = "albums"
         /** Prism's own mixes (Daily Mixes, the time-of-day mix, Release Radar). */
         const val MADE_FOR_YOU = "foryou"
         const val SHUFFLE = "shuffle:"
@@ -170,15 +173,31 @@ class MediaTree(private val c: AppContainer) {
             listOf(
                 folder(LIKED, tr(R.string.liked_songs), art = c.covers.custom("liked"), type = MediaMetadata.MEDIA_TYPE_PLAYLIST, fallback = "ic_auto_liked"),
                 folder(DOWNLOADS, tr(R.string.downloads), type = MediaMetadata.MEDIA_TYPE_PLAYLIST, fallback = "ic_auto_downloads"),
+                // Artists and Albums, as the app's Library tabs (each a folder of its own).
+                folder(ARTISTS, tr(R.string.artists), type = MediaMetadata.MEDIA_TYPE_FOLDER_ARTISTS, fallback = "ic_auto_artists",
+                    extras = styled(browsableGrid = true, playableGrid = false)),
+                folder(ALBUMS, tr(R.string.albums), type = MediaMetadata.MEDIA_TYPE_FOLDER_ALBUMS, fallback = "ic_auto_albums",
+                    extras = styled(browsableGrid = true, playableGrid = false)),
             ) +
                 // Prism's own playlists (kept on the phone), as in the app's Library.
                 c.prismLibrary.lists.value.map { l ->
                     val item = l.item()
                     folder(PRISM_LIST + l.id, l.title, item.subtitle, c.covers.art(item), MediaMetadata.MEDIA_TYPE_PLAYLIST)
                 } +
+                // YouTube playlists saved on the phone without an account (H7), as the app's Library shows them signed out.
+                (if (c.settings.current.isLoggedIn) emptyList() else c.prismLibrary.playlists.value.map { s ->
+                    val item = s.item()
+                    folder(mixOrPlaylistId(item), item.title, item.subtitle, c.covers.art(item), MediaMetadata.MEDIA_TYPE_PLAYLIST)
+                }) +
                 playlists.filterIsInstance<PlaylistItem>().filter { it.id != "LM" }.map {
                     folder(mixOrPlaylistId(it), it.title, it.subtitle, c.covers.art(it), MediaMetadata.MEDIA_TYPE_PLAYLIST)
                 }
+        }
+        parentId == ARTISTS -> libraryArtists().map { a ->
+            folder("ar:${a.id}", a.title, a.subtitle.ifBlank { null }, a.thumbnail, MediaMetadata.MEDIA_TYPE_ARTIST)
+        }
+        parentId == ALBUMS -> libraryAlbums().map { a ->
+            folder("al:${a.id}", a.title, a.subtitle.ifBlank { null }, a.thumbnail, MediaMetadata.MEDIA_TYPE_ALBUM)
         }
         parentId.startsWith(PRISM_LIST) -> c.prismLibrary.list(parentId.removePrefix(PRISM_LIST))?.let { songList(parentId, it.title, it.songs) } ?: emptyList()
         parentId.startsWith("pl:") -> runCatching { c.ytm.playlistAll(parentId.removePrefix("pl:"), 200) }.getOrNull()
@@ -282,6 +301,33 @@ class MediaTree(private val c: AppContainer) {
             .distinctBy { it.id }
         if (foundSongs.isNotEmpty()) folders[SEARCH] = query to foundSongs
         return (lists + liked + listOfNotNull(top) + sections).distinctBy { it.mediaId } to (found != null)
+    }
+
+    /** Liked and downloaded songs, once each: what the app's Library takes its albums and artists from. */
+    private fun mine(): List<Song> = (c.library.likedShown.value + c.downloads.completedSongs()).distinctBy { it.id }
+
+    /** The app's Library → Artists: starred ones first (marked so), the account's, then those of liked and downloaded songs. */
+    private fun libraryArtists(): List<ArtistItem> {
+        val thumbs = c.library.artistThumbs.value
+        val starred = c.artistPrefs.favorites.value.map { f -> ArtistItem(f.id, f.name, tr(R.string.favorite), f.thumbnail) }
+        return (starred + c.library.artists.value.filterIsInstance<ArtistItem>() + com.prism.music.data.LibraryRepository.artistsFrom(mine()))
+            .distinctBy { it.id }
+            .map { a ->
+                val own = c.covers.custom(c.covers.artistKey(a.id))
+                when {
+                    own != null -> a.copy(thumbnail = own)
+                    a.thumbnail == null -> a.copy(thumbnail = thumbs[a.id])
+                    else -> a
+                }
+            }
+    }
+
+    /** The app's Library → Albums: saved ones, the account's, and (signed out) those of liked and downloaded songs. */
+    private fun libraryAlbums(): List<AlbumItem> {
+        val signedIn = c.settings.current.isLoggedIn
+        return (c.prismLibrary.albums.value.map { it.item() } + c.library.albums.value.filterIsInstance<AlbumItem>() +
+            if (signedIn) emptyList() else com.prism.music.data.LibraryRepository.albumsFrom(mine()))
+            .distinctBy { it.id }
     }
 
     /** A playlist of the listener's own, for the car: Prism's, then their YouTube library's. */

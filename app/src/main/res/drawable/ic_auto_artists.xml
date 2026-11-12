@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Artists" tile in Android Auto's Library: a person (microphone-free silhouette) on a rounded square. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#FF7048E8"
+        android:pathData="M10,0 L38,0 Q48,0 48,10 L48,38 Q48,48 38,48 L10,48 Q0,48 0,38 L0,10 Q0,0 10,0 Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M24,12 a6.5,6.5 0 1,1 0,13 a6.5,6.5 0 1,1 0,-13 Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M12,37 C12,30.5 17.5,27.5 24,27.5 C30.5,27.5 36,30.5 36,37 L36,38 L12,38 Z" />
+</vector>
