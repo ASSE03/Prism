@@ -487,23 +487,18 @@ class AppContainer(val app: Application) {
     }
     /**
      * Whole playlists for Library → Songs' "From" (1.8.3, #382): Prism's own from the phone, YouTube's page after page
-     * (the copy kept on the phone without a network).
+     * (the copy kept on the phone without a network). Only a whole read is kept (#473): a page that doesn't come is asked
+     * again, and a short or cancelled read is read again next time.
      */
     val playlistSongs by lazy {
         com.prism.music.data.PlaylistSongs { id ->
-            prismLibrary.list(id)?.songs ?: run {
+            prismLibrary.list(id)?.let { com.prism.music.data.PlaylistRead(it.songs, complete = true) } ?: run {
                 val page = try { ytm.playlist(id) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (e: Exception) {
-                    offline.page(id) ?: offline.page("VL$id") ?: throw e
+                    // Offline: the copy on the phone is shown, but read live again next time.
+                    val kept = offline.page(id) ?: offline.page("VL$id") ?: throw e
+                    return@PlaylistSongs com.prism.music.data.PlaylistRead(kept.songs.distinctBy { it.id }, complete = false)
                 }
-                val songs = page.songs.toMutableList()
-                var token = page.continuation
-                while (token != null && songs.size < com.prism.music.data.PlaylistSongs.MAX) {
-                    val chunk = runCatching { ytm.playlistPage(token!!) }.getOrNull() ?: break
-                    if (chunk.songs.isEmpty()) break
-                    songs += chunk.songs
-                    token = chunk.next
-                }
-                songs.distinctBy { it.id }
+                com.prism.music.data.readPlaylist(page, ytm::playlistPage)
             }
         }
     }
