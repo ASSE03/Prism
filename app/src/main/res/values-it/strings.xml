@@ -2695,6 +2695,7 @@
     <string name="nothing_here_yet">Ancora niente qui</string>
     <string name="start_radio">Avvia radio</string>
     <string name="remove_downloads">Rimuovi download</string>
+    <string name="remove_download">Rimuovi il download</string>
     <string name="download_all">Scarica tutto</string>
     <string name="playlist_kept_up_to_date">Playlist · sempre aggiornata</string>
     <string name="make_it_a_playlist">Trasformala in playlist</string>

@@ -2695,6 +2695,7 @@
     <string name="nothing_here_yet">Τίποτα εδώ ακόμα</string>
     <string name="start_radio">Έναρξη ραδιοφώνου</string>
     <string name="remove_downloads">Αφαίρεση λήψεων</string>
+    <string name="remove_download">Αφαίρεση λήψης</string>
     <string name="download_all">Λήψη όλων</string>
     <string name="playlist_kept_up_to_date">Playlist · πάντα ενημερωμένη</string>
     <string name="make_it_a_playlist">Κάν\' το playlist</string>

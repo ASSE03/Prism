@@ -2695,6 +2695,7 @@
     <string name="nothing_here_yet">Тут поки нічого немає</string>
     <string name="start_radio">Запустити радіо</string>
     <string name="remove_downloads">Видалити завантаження</string>
+    <string name="remove_download">Видалити завантажене</string>
     <string name="download_all">Завантажити все</string>
     <string name="playlist_kept_up_to_date">Плейлист · завжди актуальний</string>
     <string name="make_it_a_playlist">Зробити плейлистом</string>

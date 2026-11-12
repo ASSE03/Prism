@@ -2695,6 +2695,7 @@
     <string name="nothing_here_yet">这里还没有内容</string>
     <string name="start_radio">开启电台</string>
     <string name="remove_downloads">移除下载内容</string>
+    <string name="remove_download">移除下载</string>
     <string name="download_all">全部下载</string>
     <string name="playlist_kept_up_to_date">播放列表 · 保持最新</string>
     <string name="make_it_a_playlist">转为播放列表</string>

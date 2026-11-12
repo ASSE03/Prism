@@ -2695,6 +2695,7 @@
     <string name="nothing_here_yet">Belum ada apa-apa di sini</string>
     <string name="start_radio">Mulakan radio</string>
     <string name="remove_downloads">Alih keluar muat turun</string>
+    <string name="remove_download">Alih keluar muat turun ini</string>
     <string name="download_all">Muat turun semua</string>
     <string name="playlist_kept_up_to_date">Senarai main · sentiasa dikemas kini</string>
     <string name="make_it_a_playlist">Jadikan senarai main</string>

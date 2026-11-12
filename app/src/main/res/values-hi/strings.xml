@@ -2695,6 +2695,7 @@
     <string name="nothing_here_yet">यहां अभी कुछ नहीं है</string>
     <string name="start_radio">रेडियो शुरू करें</string>
     <string name="remove_downloads">डाउनलोड हटाएं</string>
+    <string name="remove_download">यह डाउनलोड हटाएं</string>
     <string name="download_all">सभी डाउनलोड करें</string>
     <string name="playlist_kept_up_to_date">प्लेलिस्ट · अप टू डेट रखी जाती है</string>
     <string name="make_it_a_playlist">इसे प्लेलिस्ट बनाएं</string>

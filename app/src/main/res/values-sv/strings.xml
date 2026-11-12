@@ -2695,6 +2695,7 @@
     <string name="nothing_here_yet">Inget här än</string>
     <string name="start_radio">Starta radio</string>
     <string name="remove_downloads">Ta bort nedladdningar</string>
+    <string name="remove_download">Ta bort nedladdning</string>
     <string name="download_all">Ladda ned alla</string>
     <string name="playlist_kept_up_to_date">Spellista · hålls uppdaterad</string>
     <string name="make_it_a_playlist">Gör den till en spellista</string>

@@ -2909,6 +2909,7 @@
     <string name="nothing_here_yet">Nothing here yet</string>
     <string name="start_radio">Start radio</string>
     <string name="remove_downloads">Remove downloads</string>
+    <string name="remove_download">Remove download</string>
     <string name="download_all">Download all</string>
     <string name="playlist_kept_up_to_date">Playlist · kept up to date</string>
     <string name="make_it_a_playlist">Make it a playlist</string>

@@ -2695,6 +2695,7 @@
     <string name="nothing_here_yet">ยังไม่มีอะไรที่นี่</string>
     <string name="start_radio">เริ่มวิทยุ</string>
     <string name="remove_downloads">นำรายการดาวน์โหลดออก</string>
+    <string name="remove_download">นำการดาวน์โหลดออก</string>
     <string name="download_all">ดาวน์โหลดทั้งหมด</string>
     <string name="playlist_kept_up_to_date">เพลย์ลิสต์ · อัปเดตอยู่เสมอ</string>
     <string name="make_it_a_playlist">สร้างเป็นเพลย์ลิสต์</string>

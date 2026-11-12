@@ -2695,6 +2695,7 @@
     <string name="nothing_here_yet">這裡還沒有內容</string>
     <string name="start_radio">開始播放電台</string>
     <string name="remove_downloads">移除下載內容</string>
+    <string name="remove_download">移除下載</string>
     <string name="download_all">全部下載</string>
     <string name="playlist_kept_up_to_date">播放清單 · 自動保持最新</string>
     <string name="make_it_a_playlist">建立成播放清單</string>
