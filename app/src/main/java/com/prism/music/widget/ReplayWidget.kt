@@ -188,8 +188,8 @@ object ReplayWidgets {
         RemoteViews(context.packageName, if (wide) R.layout.widget_replay else R.layout.widget_replay_small).apply {
             val open = PendingIntent.getActivity(
                 context, 30,
-                // Replay (MainActivity: prism://rewind with no year opens Replay itself).
-                Intent(context, com.prism.music.PrismActivity::class.java).setAction(Intent.ACTION_VIEW).setData(Uri.parse("prism://rewind"))
+                // Replay (MainActivity: prism://replay).
+                Intent(context, com.prism.music.PrismActivity::class.java).setAction(Intent.ACTION_VIEW).setData(Uri.parse("prism://replay"))
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP),
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
             )
@@ -229,7 +229,7 @@ object ReplayWidgets {
                 tr(R.string.widget_replay_open) + ". " + tr(R.string.widget_replay_song_label) + ": " + song.title + ", " + song.artistName +
                     ". " + tr(R.string.widget_replay_artist_label) + ": " + artist.artistName,
             )
-            val small = (10 * context.resources.displayMetrics.density).toInt()
+            val small = (7 * context.resources.displayMetrics.density).toInt()
             if (photo != null) {
                 setImageViewBitmap(R.id.rp_artist_photo, photo)
                 setViewPadding(R.id.rp_artist_photo, 0, 0, 0, 0)
