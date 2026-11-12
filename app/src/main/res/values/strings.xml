@@ -3709,6 +3709,12 @@
     <string name="ms_songs">%1$d different songs</string>
     <string name="ms_streak">%1$d days in a row</string>
     <string name="ms_top_artist">%1$s is your top artist of %2$d</string>
+    <string name="listening_clock">Listening clock</string>
+    <string name="listening_calendar">Listening calendar</string>
+    <string name="clock_top_at">Top songs at %1$s</string>
+    <string name="clock_no_plays">Nothing played at this hour</string>
+    <string name="cal_no_music">No music</string>
+    <string name="cal_days_with_music">Days with music: %1$d</string>
     <string name="prism_s_own_icons">Prism\'s own icons</string>
     <string name="cupertino">Cupertino</string>
     <string name="in_the_style_of_apple_s">In the style of Apple\'s apps: filled tabs, a chevron for Back</string>
