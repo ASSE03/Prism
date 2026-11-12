@@ -152,6 +152,26 @@ class SongsEverywhere383MatchTest {
         assertEquals("The Lazy Song Bruno Mars", YouTubeMusic.songForVideoQuery(v("x", "The Lazy Song", 200, "Bruno Mars")))
     }
 
+    /**
+     * Review (1.8.5): with a bar, a last word like "Song" or "Audio" was taken for the label's even when it's half the
+     * song's name: "Love Song | Artist" was searched as "Love". A label's tail after a dash still goes.
+     */
+    @Test fun aLabelTailNeverTakesHalfTheName() {
+        assertEquals("Love Song Adele", YouTubeMusic.songForVideoQuery(v("x", "Love Song | Adele | 25", 200, "Adele")))
+        assertEquals("Radio Audio Band", YouTubeMusic.songForVideoQuery(v("x", "Radio Audio | Band", 200, "Band")))
+        assertEquals("y", YouTubeMusic.pickSongForVideo(v("x", "Love Song | Adele | 25", 200, "Adele"), listOf(
+            s("y", "Love Song", 199, "25", "Adele"),
+        ))?.id)
+        // Two words or more left, a dash before the label's words, or a label's own word: stripped as before.
+        assertEquals("Peniviti Kaala Bhairava", YouTubeMusic.songForVideoQuery(v("x", "Peniviti - Lyrical | Aravinda Sametha | NTR", 289, "Kaala Bhairava")))
+        assertEquals("Peniviti Kaala Bhairava", YouTubeMusic.songForVideoQuery(v("x", "Peniviti Lyrical | Aravinda Sametha | NTR", 289, "Kaala Bhairava")))
+        assertEquals("Kaun Tujhe Palak Muchhal", YouTubeMusic.songForVideoQuery(v("x", "Kaun Tujhe Full Video Song | M.S. Dhoni", 216, "Palak Muchhal")))
+        // "Kesariya Song | Brahmastra" is searched as written, and still found as the song "Kesariya".
+        val kesariya = v("x", "Kesariya Song | Brahmastra | Ranbir Kapoor, Alia Bhatt", 268, "Arijit Singh")
+        assertEquals("Kesariya Song Arijit Singh", YouTubeMusic.songForVideoQuery(kesariya))
+        assertEquals("k", YouTubeMusic.pickSongForVideo(kesariya, listOf(s("k", "Kesariya (From \"Brahmastra\")", 268, "Brahmastra", "Pritam", "Arijit Singh")))?.id)
+    }
+
     /** "(feat. …)" on the video or on the song is the same recording. */
     @Test fun featuredNamesInTheTitle() {
         val video = v("AXSm49NGkg8", "Mastaaru Mastaaru (feat. Dhanush & Samyuktha Menon)", 196, "G.V. Prakash Kumar")

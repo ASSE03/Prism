@@ -129,11 +129,27 @@ class YouTubeMusic(
             Regex("[(\\[][^)\\]]*[)\\]]").findAll(title.lowercase()).flatMap { Regex("\\p{L}+").findAll(it.value).map { w -> w.value } }
                 .filter { it in LANGUAGES }.toSet()
 
+        /**
+         * [name] without a label's "Video Song" / "Lyrical" ([LABEL_TAIL]). A last "Song" or "Audio" alone stays when it's
+         * half the name and no dash sets it apart: "Love Song" and "Radio Audio" are names. ("Kesariya Song" is matched
+         * without it too: [pickSongForVideo].)
+         */
+        private fun withoutLabelTail(name: String): String {
+            val tail = LABEL_TAIL.find(name) ?: return name
+            val rest = name.removeRange(tail.range).trim()
+            val words = rest.split(Regex("\\s+")).count { it.isNotEmpty() }
+            val namelike = tail.value.none { it in "-–:" } &&
+                tail.value.trim().split(Regex("\\s+")).all { it.lowercase() in NAME_WORDS }
+            return if (words < 2 && namelike) name else rest
+        }
+        /** [LABEL_TAIL]'s words that are often a song's own name's too. */
+        private val NAME_WORDS = setOf("song", "audio")
+
         /** The song's title and artist as a video's title and channel give them ([songForVideo]). */
         private fun videoParts(video: Song): Pair<String, String> {
             // #383 (1.8.5): a film label's title, "Chamkeela Angeelesi - Video Song | Dasara | Nani,Keerthy Suresh | …":
             // the song's name is what comes before the first bar, without the label's "Video Song".
-            val full = video.title.takeIf { "| " in it }?.substringBefore("|")?.replace(LABEL_TAIL, "")?.trim()
+            val full = video.title.takeIf { "| " in it }?.substringBefore("|")?.trim()?.let(::withoutLabelTail)
                 ?.takeIf { matchNorm(it).isNotBlank() } ?: video.title
             // "Artist - Title (Live at …)" videos put the artist in the title.
             val channel = matchNorm(video.primaryArtist)
@@ -188,6 +204,8 @@ class YouTubeMusic(
             val (rawTitle, artistName) = videoParts(video)
             val title = matchNorm(rawTitle)
             if (title.isBlank()) return null
+            // A label's title whose last "Song" was kept as the name's ([withoutLabelTail]) may still mean the song without it.
+            val titles = setOfNotNull(title, matchNorm(rawTitle.replace(LABEL_TAIL, "")).takeIf { "| " in video.title && it.isNotBlank() })
             val artist = matchNorm(artistName)
             val videoLanguages = languages(video.title)
             // An artist's own music video often runs longer than the song (an intro, a scene after it: "bad guy", 206 s for a
@@ -208,7 +226,7 @@ class YouTubeMusic(
             fun byAnyArtist(s: Song) = byArtist(s, artist) || credited.any { byArtist(s, it) }
             // Only an exact title counts; a near miss would put the wrong song's lyrics on the video. A Telugu dub isn't the Tamil song.
             val titled = results.filter { s ->
-                !s.isVideo && matchNorm(s.title) == title && languages(s.title).let { l -> l.isEmpty() || videoLanguages.isEmpty() || l.any { it in videoLanguages } }
+                !s.isVideo && matchNorm(s.title) in titles && languages(s.title).let { l -> l.isEmpty() || videoLanguages.isEmpty() || l.any { it in videoLanguages } }
             }
             val fits = titled.filter { s -> (artist.isBlank() || byAnyArtist(s)) && lengthFits(s) }
             // #383: a label's upload ("Junglee Music Telugu") of a soundtrack YouTube credits to "Various Artists" names no
