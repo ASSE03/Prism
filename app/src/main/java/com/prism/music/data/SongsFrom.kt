@@ -85,10 +85,15 @@ suspend fun readPlaylist(
 ): PlaylistRead {
     val songs = first.songs.toMutableList()
     var token = first.continuation
+    var empty = 0
     while (token != null && songs.size < PlaylistSongs.MAX) {
         val chunk = pageWithRetries(page, token, retryMs)
             ?: return PlaylistRead(songs.distinctBy { it.id }, complete = false)
-        if (chunk.songs.isEmpty()) break
+        // A page none of whose rows could be read may still point to more: read on. Page after page of nothing is
+        // shown as far as it got and read again next time, not kept as the whole playlist.
+        if (chunk.songs.isEmpty()) {
+            if (chunk.next != null && ++empty >= EMPTY_PAGES) return PlaylistRead(songs.distinctBy { it.id }, complete = false)
+        } else empty = 0
         songs += chunk.songs
         token = chunk.next
     }
@@ -113,4 +118,6 @@ private suspend fun pageWithRetries(
 }
 
 private const val PAGE_TRIES = 3
+/** Pages in a row with no song read (but more to come) before the read stops short. */
+private const val EMPTY_PAGES = 3
 private const val PAGE_RETRY_MS = 500L

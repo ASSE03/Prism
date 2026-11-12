@@ -137,6 +137,36 @@ class SongsFromTest {
         assertEquals(2, reads)
     }
 
+    /**
+     * Review (1.8.5, #473 by another route): a page whose rows all failed to read but that still points to the next one
+     * ended the read, kept as the whole playlist for the session.
+     */
+    @Test fun aPageOfUnreadableRowsDoesntEndThePlaylist() = runBlocking {
+        val read = readPlaylist(page(listOf("a"), continuation = "p2"), page = { token ->
+            when (token) {
+                "p2" -> chunk(emptyList(), next = "p3")
+                "p3" -> chunk(listOf("b", "c"), next = null)
+                else -> error("asked for $token")
+            }
+        }, retryMs = 0)
+        assertEquals(listOf("a", "b", "c"), read.songs.map { it.id })
+        assertTrue(read.complete)
+    }
+
+    @Test fun anEmptyLastPageEndsTheRead() = runBlocking {
+        val read = readPlaylist(page(listOf("a"), continuation = "p2"), page = { chunk(emptyList(), next = null) }, retryMs = 0)
+        assertEquals(listOf("a"), read.songs.map { it.id })
+        assertTrue(read.complete)
+    }
+
+    @Test fun emptyPagesWithNoEndLeaveTheReadShortAndUnkept() = runBlocking {
+        var asked = 0
+        val read = readPlaylist(page(listOf("a"), continuation = "p1"), page = { asked++; chunk(emptyList(), next = "p${asked + 1}") }, retryMs = 0)
+        assertEquals(listOf("a"), read.songs.map { it.id })
+        assertFalse("read again next time, not kept short", read.complete)
+        assertTrue("a few empty pages, then it gives up ($asked)", asked in 2..5)
+    }
+
     @Test fun aSwappedSongShowsAfterARefresh() = runBlocking {
         // Same count, different songs: "b" removed and "d" added. A refresh must show the new list, not a kept one.
         var now = listOf("a", "b", "c")
