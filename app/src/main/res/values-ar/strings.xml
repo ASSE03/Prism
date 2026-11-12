@@ -141,6 +141,7 @@
     <string name="night_starts_at">يبدأ الليل عند</string>
     <string name="next_at">التالي: %1$s عند %2$s</string>
     <string name="history">السجلّ</string>
+    <string name="search_history">البحث في السجلّ</string>
     <string name="your_last_changes_to_the_look">تظهر هنا آخر %1$s من تغييراتك على المظهر، لتعود إليها.</string>
     <string name="clear_history">محو السجلّ</string>
     <string name="your_look_stays_as_it_is">يبقى مظهرك كما هو الآن</string>

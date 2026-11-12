@@ -141,6 +141,7 @@
     <string name="night_starts_at">Az éjszaka kezdete</string>
     <string name="next_at">Következő: %1$s, %2$s-kor</string>
     <string name="history">Előzmények</string>
+    <string name="search_history">Keresés az előzményekben</string>
     <string name="your_last_changes_to_the_look">A megjelenés utolsó %1$s módosítása itt látható, hogy visszaléphess rajtuk.</string>
     <string name="clear_history">Előzmények törlése</string>
     <string name="your_look_stays_as_it_is">A megjelenés olyan marad, amilyen most</string>

@@ -322,12 +322,16 @@ interface SongDao {
     suspend fun mineOnAlbum(id: String): List<SongEntity>
 }
 
-/** One play in Library → History (#118): when, for how long, and the song. */
+/** One play in Library → History (#118): when, for how long, and the song; [eventId] is the play's own row (#469: removing it). */
 data class HistoryRow(
     val playedAt: Long,
     val playedFor: Long,
     @androidx.room.Embedded val song: SongEntity,
+    val eventId: Long,
 )
+
+/** A played song's names, all History's search (#469) reads of it. */
+data class PlayedSongNames(val id: String, val title: String, val artistName: String, val albumTitle: String?)
 
 @Dao
 interface PlayEventDao {
@@ -336,10 +340,21 @@ interface PlayEventDao {
 
     /** The latest [limit] plays on this phone of at least [minMs], newest first, each with its song (Library → History, #118). */
     @Query(
-        """SELECT e.timestamp AS playedAt, e.playedMs AS playedFor, s.* FROM play_events e JOIN songs s ON s.id = e.songId
+        """SELECT e.id AS eventId, e.timestamp AS playedAt, e.playedMs AS playedFor, s.* FROM play_events e JOIN songs s ON s.id = e.songId
            WHERE e.playedMs >= :minMs ORDER BY e.timestamp DESC LIMIT :limit"""
     )
     fun historyFlow(limit: Int, minMs: Long): Flow<List<HistoryRow>>
+
+    /** Every song played on this phone once, by its names (History's search, #469): matched in Kotlin, without accents. */
+    @Query("SELECT id, title, artistName, albumTitle FROM songs WHERE id IN (SELECT DISTINCT songId FROM play_events WHERE playedMs >= :minMs)")
+    suspend fun playedSongNames(minMs: Long): List<PlayedSongNames>
+
+    /** The latest [limit] plays of [songIds], newest first (History's search, #469; at most 500 ids a call). */
+    @Query(
+        """SELECT e.id AS eventId, e.timestamp AS playedAt, e.playedMs AS playedFor, s.* FROM play_events e JOIN songs s ON s.id = e.songId
+           WHERE e.playedMs >= :minMs AND e.songId IN (:songIds) ORDER BY e.timestamp DESC LIMIT :limit"""
+    )
+    suspend fun historyOf(songIds: List<String>, limit: Int, minMs: Long): List<HistoryRow>
 
     @Query("SELECT * FROM play_events WHERE timestamp > :since")
     suspend fun eventsSince(since: Long): List<PlayEventEntity>

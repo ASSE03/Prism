@@ -141,6 +141,7 @@
     <string name="night_starts_at">밤 시작 시간</string>
     <string name="next_at">다음: %2$s에 %1$s</string>
     <string name="history">기록</string>
+    <string name="search_history">기록 검색</string>
     <string name="your_last_changes_to_the_look">최근 %1$s개의 모양 변경 사항이 여기에 표시돼요. 되돌아갈 수 있어요.</string>
     <string name="clear_history">기록 지우기</string>
     <string name="your_look_stays_as_it_is">현재 모양은 그대로 유지돼요</string>

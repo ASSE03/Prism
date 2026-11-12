@@ -85,15 +85,15 @@ import androidx.compose.ui.platform.testTag
 private enum class LibTab(val label: String) { PLAYLISTS(tr(R.string.playlists)), SONGS(tr(R.string.songs)), ALBUMS(tr(R.string.albums)), ARTISTS(tr(R.string.artists)), HISTORY(tr(R.string.history)), DOWNLOADS(tr(R.string.downloads)), TAGS(tr(R.string.tags)) }
 
 /** One row of History (#118): a play, or a run of plays of the same song one after another. */
-private data class HistoryEntry(val song: com.prism.music.data.model.Song, val at: Long, val times: Int)
+private data class HistoryEntry(val song: com.prism.music.data.model.Song, val at: Long, val times: Int, val ids: List<Long> = emptyList())
 
 /** Plays on this phone under day headings (Today, Yesterday, the weekday, then the date), repeats in a row folded into one. */
 private fun historyByDay(rows: List<com.prism.music.data.db.HistoryRow>, now: Long = System.currentTimeMillis()): List<Pair<String, List<HistoryEntry>>> {
     val entries = mutableListOf<HistoryEntry>()
     for (r in rows) {
         val last = entries.lastOrNull()
-        if (last != null && last.song.id == r.song.id && dayStart(last.at) == dayStart(r.playedAt)) entries[entries.lastIndex] = last.copy(times = last.times + 1)
-        else entries += HistoryEntry(r.song.toSong(), r.playedAt, 1)
+        if (last != null && last.song.id == r.song.id && dayStart(last.at) == dayStart(r.playedAt)) entries[entries.lastIndex] = last.copy(times = last.times + 1, ids = last.ids + r.eventId)
+        else entries += HistoryEntry(r.song.toSong(), r.playedAt, 1, listOf(r.eventId))
     }
     val today = dayStart(now)
     val dayMs = 86_400_000L
@@ -402,9 +402,19 @@ fun LibraryScreen(bottomPadding: Dp) {
             // History (#118): this phone's plays, or the account's (YouTube Music's own history: the app and the web too).
             var fromAccount by rememberSaveable { mutableStateOf(false) }
             var historyLimit by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(300) }
+            // #469: a search through the whole of it (not only the plays shown so far), a moment after the typing pauses.
+            var historyQuery by rememberSaveable { mutableStateOf("") }
             val phoneHistory = if (tab == LibTab.HISTORY) {
                 val rows by remember(historyLimit) { c.db.plays().historyFlow(historyLimit, 0) /* #263: every kept play (how long one takes is the listener's pick) */ }.collectAsState(null)
-                remember(rows) { rows?.let { it.size to historyByDay(it) } }
+                val searcher = remember { com.prism.music.data.HistorySearch.Searcher(c.db.plays()) }
+                // Read again as the history changes (the list above emits for a new play or a removal), so a search stays true.
+                val found by androidx.compose.runtime.produceState<List<com.prism.music.data.db.HistoryRow>?>(null, historyQuery, historyLimit, rows) {
+                    if (historyQuery.isBlank()) { value = null; return@produceState }
+                    kotlinx.coroutines.delay(200)
+                    value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { runCatching { searcher.find(historyQuery, historyLimit, rows) }.getOrNull() }
+                }
+                val shownRows = if (historyQuery.isBlank()) rows else found ?: rows
+                remember(shownRows) { shownRows?.let { it.size to historyByDay(it) } }
             } else null
             var accountReload by remember { androidx.compose.runtime.mutableIntStateOf(0) }
             val accountHistory = if (tab == LibTab.HISTORY) {
@@ -673,10 +683,17 @@ fun LibraryScreen(bottomPadding: Dp) {
                                 com.prism.music.ui.components.PrismChip(fromAccount, { fromAccount = true }, tr(R.string.your_account), icon = PrismIcons.Person)
                             }
                         }
+                        // #469: the same search for both; the account's is only what's been read of it (no more requests).
+                        val historyCount = if (fromAccountShown) accountHistory?.getOrNull().orEmpty().sumOf { it.second.size } else phoneHistory?.first ?: 0
+                        findField(historyQuery, tr(R.string.search_history), historyCount) { historyQuery = it }
                         if (fromAccountShown) {
                             val result = accountHistory
-                            val sections = result?.getOrNull()
+                            val sections = result?.getOrNull()?.let { all ->
+                                if (historyQuery.isBlank()) all
+                                else all.map { (t, songs) -> t to songs.filter { s -> libraryMatches(historyQuery, s.title, s.artistText, s.album?.title.orEmpty()) } }.filter { it.second.isNotEmpty() }
+                            }
                             when {
+                                sections != null && sections.isEmpty() && historyQuery.isNotBlank() -> nothingFound(tr(R.string.history), historyQuery)
                                 result == null -> item(span = { GridItemSpan(maxLineSpan) }) {
                                     Box(Modifier.fillMaxWidth().padding(40.dp), contentAlignment = Alignment.Center) { com.prism.music.ui.components.PrismSpinner(Modifier.size(28.dp)) }
                                 }
@@ -698,7 +715,8 @@ fun LibraryScreen(bottomPadding: Dp) {
                             }
                         } else {
                             val (count, days) = phoneHistory ?: (0 to emptyList())
-                            if (phoneHistory != null && days.isEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
+                            if (phoneHistory != null && days.isEmpty() && historyQuery.isNotBlank()) nothingFound(tr(R.string.history), historyQuery)
+                            else if (phoneHistory != null && days.isEmpty()) item(span = { GridItemSpan(maxLineSpan) }) {
                                 EmptyState(PrismIcons.History, tr(R.string.nothing_played_yet), tr(R.string.songs_you_play_in_prism_show))
                             }
                             val time = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT)

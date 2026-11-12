@@ -141,6 +141,7 @@
     <string name="night_starts_at">Noc zaczyna się o</string>
     <string name="next_at">Następny: %1$s o %2$s</string>
     <string name="history">Historia</string>
+    <string name="search_history">Szukaj w historii</string>
     <string name="your_last_changes_to_the_look">Tu widać ostatnie zmiany wyglądu (%1$s), by móc do nich wrócić.</string>
     <string name="clear_history">Wyczyść historię</string>
     <string name="your_look_stays_as_it_is">Twój wygląd zostanie taki, jak teraz</string>

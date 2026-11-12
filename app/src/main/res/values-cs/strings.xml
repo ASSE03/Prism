@@ -141,6 +141,7 @@
     <string name="night_starts_at">Noc začíná v</string>
     <string name="next_at">Další: %1$s v %2$s</string>
     <string name="history">Historie</string>
+    <string name="search_history">Hledat v historii</string>
     <string name="your_last_changes_to_the_look">Tady je tvých posledních %1$s změn vzhledu, ke kterým se můžeš vrátit.</string>
     <string name="clear_history">Vymazat historii</string>
     <string name="your_look_stays_as_it_is">Tvůj vzhled zůstane, jak je teď</string>

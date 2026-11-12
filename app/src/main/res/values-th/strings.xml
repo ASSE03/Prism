@@ -141,6 +141,7 @@
     <string name="night_starts_at">กลางคืนเริ่มเวลา</string>
     <string name="next_at">ถัดไป: %1$s เวลา %2$s</string>
     <string name="history">ประวัติ</string>
+    <string name="search_history">ค้นหาประวัติ</string>
     <string name="your_last_changes_to_the_look">การเปลี่ยนแปลงลุค %1$s ครั้งล่าสุดของคุณจะแสดงที่นี่ เพื่อย้อนกลับไปดูได้</string>
     <string name="clear_history">ล้างประวัติ</string>
     <string name="your_look_stays_as_it_is">ลุคของคุณจะคงไว้อย่างที่เป็นตอนนี้</string>

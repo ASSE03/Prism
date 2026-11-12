@@ -141,6 +141,7 @@
     <string name="night_starts_at">夜晚开始于</string>
     <string name="next_at">下一次：%2$s 切换到“%1$s”</string>
     <string name="history">历史记录</string>
+    <string name="search_history">搜索历史记录</string>
     <string name="your_last_changes_to_the_look">你对外观的最近 %1$s 次更改会显示在这里，方便你回退。</string>
     <string name="clear_history">清除历史记录</string>
     <string name="your_look_stays_as_it_is">你的外观将保持现状</string>

@@ -141,6 +141,7 @@
     <string name="night_starts_at">Đêm bắt đầu lúc</string>
     <string name="next_at">Tiếp theo: %1$s lúc %2$s</string>
     <string name="history">Lịch sử</string>
+    <string name="search_history">Tìm trong lịch sử</string>
     <string name="your_last_changes_to_the_look">%1$s thay đổi giao diện gần nhất của bạn hiện ở đây để bạn quay lại.</string>
     <string name="clear_history">Xóa lịch sử</string>
     <string name="your_look_stays_as_it_is">Giao diện của bạn vẫn giữ như hiện tại</string>

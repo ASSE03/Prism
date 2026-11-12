@@ -141,6 +141,7 @@
     <string name="night_starts_at">رات شروع ہوتی ہے</string>
     <string name="next_at">اگلا: %1$s، %2$s بجے</string>
     <string name="history">ہسٹری</string>
+    <string name="search_history">ہسٹری تلاش کریں</string>
     <string name="your_last_changes_to_the_look">لُک میں آپ کی آخری %1$s تبدیلیاں یہاں دکھائی دیتی ہیں، تاکہ آپ ان میں واپس جا سکیں۔</string>
     <string name="clear_history">ہسٹری صاف کریں</string>
     <string name="your_look_stays_as_it_is">آپ کا لُک ویسا ہی رہے گا جیسا ابھی ہے</string>

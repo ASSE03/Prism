@@ -141,6 +141,7 @@
     <string name="night_starts_at">La notte inizia alle</string>
     <string name="next_at">Prossimo: %1$s alle %2$s</string>
     <string name="history">Cronologia</string>
+    <string name="search_history">Cerca nella cronologia</string>
     <string name="your_last_changes_to_the_look">Le tue ultime %1$s modifiche all\'aspetto compaiono qui, per poter tornare indietro.</string>
     <string name="clear_history">Cancella cronologia</string>
     <string name="your_look_stays_as_it_is">Il tuo aspetto resta com\'è ora</string>

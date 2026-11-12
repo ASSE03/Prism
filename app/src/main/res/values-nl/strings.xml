@@ -141,6 +141,7 @@
     <string name="night_starts_at">Nacht begint om</string>
     <string name="next_at">Volgende: %1$s om %2$s</string>
     <string name="history">Geschiedenis</string>
+    <string name="search_history">Geschiedenis doorzoeken</string>
     <string name="your_last_changes_to_the_look">Je laatste %1$s wijzigingen aan de stijl verschijnen hier, om er weer naar terug te gaan.</string>
     <string name="clear_history">Geschiedenis wissen</string>
     <string name="your_look_stays_as_it_is">Je stijl blijft zoals hij nu is</string>

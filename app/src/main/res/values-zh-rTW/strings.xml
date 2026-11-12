@@ -141,6 +141,7 @@
     <string name="night_starts_at">晚上開始於</string>
     <string name="next_at">下一個：%2$s 切換為「%1$s」</string>
     <string name="history">記錄</string>
+    <string name="search_history">搜尋記錄</string>
     <string name="your_last_changes_to_the_look">你最近對外觀做的 %1$s 項變更會顯示在這裡，可以逐一還原。</string>
     <string name="clear_history">清除記錄</string>
     <string name="your_look_stays_as_it_is">外觀會維持目前的樣子</string>
