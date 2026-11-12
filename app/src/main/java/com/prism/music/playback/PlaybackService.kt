@@ -2001,6 +2001,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         if (song != null && com.prism.music.data.HistoryPause.keepsPlay(c.settings.current.behavior, ms, song.isEpisode)) {
             scope.launch(Dispatchers.IO) {
                 c.db.plays().insert(PlayEventEntity(songId = song.id, timestamp = System.currentTimeMillis(), playedMs = ms, source = source, excluded = excluded))
+                c.milestones.afterPlay()
             }
         }
     }

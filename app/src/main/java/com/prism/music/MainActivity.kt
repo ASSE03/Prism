@@ -1332,6 +1332,12 @@ private fun handleDeepLink(uri: Uri, nav: Navigator, c: AppContainer) {
             path.firstOrNull()?.toIntOrNull()?.let { c.rewindRequest.value = it }
             nav.go(Routes.REPLAY)
         }
+        // The monthly recap's notification and Home's card (1.8.5): that month's story; a milestone's notice: Replay.
+        uri.scheme == "prism" && uri.host == "recap" -> {
+            path.firstOrNull()?.let { runCatching { java.time.YearMonth.parse(it) }.getOrNull() }?.let { c.recapRequest.value = it }
+            nav.go(Routes.REPLAY)
+        }
+        uri.scheme == "prism" && uri.host == "replay" -> nav.go(Routes.REPLAY)
         // A handoff pairing code's notification: Prism Connect's settings, where the code shows.
         uri.scheme == "prism" && uri.host == "connect" -> nav.go(Routes.settings(com.prism.music.ui.screens.SettingsSection.CONNECT.key))
         uri.scheme == "prism" && uri.host == "mix" && path.isNotEmpty() -> nav.go(Routes.mix(path[0]))
