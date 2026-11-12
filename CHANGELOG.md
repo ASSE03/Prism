@@ -27,6 +27,7 @@ What changed in each release. Older releases are described on the [Releases page
 
 ### Fixes
 
+- **No more static at the start of a song with Normalize volume on.** The next song's first half second played at the last song's level, so a loud song after a quiet one was pushed into the limiter. Each song now has its own level from its first sample.
 - **"Remove download" in a song's menu** (#471). The tile read "Downloaded", so nobody found that a tap removes it.
 - **More film songs play as songs under "Songs everywhere"** (#383): videos a little shorter than the song, names spelled a letter apart, and label-style titles now match.
 - **Your own songs beside YouTube's radio stay close to the seed** (#461).
