@@ -5148,6 +5148,9 @@
     <string name="playback_shuffle_button_info">Shuffle en Slimme shuffle: elke tik gaat van uit naar Shuffle naar Slimme shuffle en weer terug naar uit. Alleen shuffle: de knop zet Shuffle alleen aan en uit.</string>
     <string name="playback_keep_shuffle">Shuffle aan houden voor de volgende lijst</string>
     <string name="playback_keep_shuffle_info">Als de vorige wachtrij geshuffeld was, speelt een nummer dat je in een lijst aantikt eerst en wordt de rest van die lijst geshuffeld. Radio\'s, losse nummers en video\'s blijven zoals ze zijn.</string>
+    <string name="playback_face_down_pause">Pauzeren met scherm omlaag</string>
+    <string name="playback_face_down_pause_info">Leg je telefoon met het scherm omlaag om te pauzeren. Pak je hem binnen vijf minuten op, dan speelt de muziek verder.</string>
+    <string name="playback_face_down_keywords">omdraaien scherm omlaag ondersteboven sensor pauzeren hervatten oppakken</string>
     <string name="playback_shuffle_keywords">slimme shuffle willekeurige volgorde door elkaar geshuffeld blijven smart shuffle random order</string>
     <string name="playback_song_to_song">Van het ene nummer naar het volgende</string>
     <string name="playback_speed_and_pitch">Snelheid en toonhoogte</string>

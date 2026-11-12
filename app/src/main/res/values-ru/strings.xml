@@ -5292,6 +5292,9 @@
     <string name="playback_shuffle_button_info">Перемешать и умное перемешивание: каждое нажатие переключает с выкл. на «Перемешать», затем на «Умное перемешивание» и снова на выкл. Только перемешать: кнопка просто включает и выключает перемешивание.</string>
     <string name="playback_keep_shuffle">Сохранять перемешивание для следующего списка</string>
     <string name="playback_keep_shuffle_info">Если прошлая очередь была перемешана, песня, которую ты нажимаешь в списке, играет первой, а остальной список перемешивается. Радио, отдельные песни и видео остаются как есть.</string>
+    <string name="playback_face_down_pause">Пауза экраном вниз</string>
+    <string name="playback_face_down_pause_info">Положи телефон экраном вниз, чтобы поставить паузу. Подними его в течение пяти минут, и музыка продолжит играть.</string>
+    <string name="playback_face_down_keywords">экраном вниз перевернуть датчик пауза продолжить поднять</string>
     <string name="playback_shuffle_keywords">умное перемешивание случайный порядок вперемешку оставаться перемешанным</string>
     <string name="playback_song_to_song">От песни к песне</string>
     <string name="playback_speed_and_pitch">Скорость и тональность</string>

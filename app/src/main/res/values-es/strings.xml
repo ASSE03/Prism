@@ -5220,6 +5220,9 @@
     <string name="playback_shuffle_button_info">Aleatorio y Aleatorio inteligente: cada toque pasa de desactivado a Aleatorio, a Aleatorio inteligente y de vuelta a desactivado. Solo Aleatorio: el botón solo activa y desactiva Aleatorio.</string>
     <string name="playback_keep_shuffle">Mantener el aleatorio en la siguiente lista</string>
     <string name="playback_keep_shuffle_info">Si la última cola estaba en aleatorio, la canción que tocas en una lista suena primero y el resto de esa lista se mezcla. Las radios, las canciones sueltas y los videos no cambian.</string>
+    <string name="playback_face_down_pause">Pausar boca abajo</string>
+    <string name="playback_face_down_pause_info">Deja el teléfono boca abajo para pausar. Levántalo antes de cinco minutos y la música sigue.</string>
+    <string name="playback_face_down_keywords">boca abajo pantalla girar voltear sensor pausar reanudar levantar</string>
     <string name="playback_shuffle_keywords">aleatorio inteligente orden aleatorio mezclado seguir en aleatorio smart shuffle random order mixed up stay shuffled</string>
     <string name="playback_song_to_song">De una canción a la siguiente</string>
     <string name="playback_speed_and_pitch">Velocidad y tono</string>

@@ -5208,6 +5208,9 @@
     <string name="playback_shuffle_button_info">Shuffle and Smart Shuffle: each tap goes from off to Shuffle to Smart Shuffle and back to off. Shuffle only: the button just turns Shuffle on and off.</string>
     <string name="playback_keep_shuffle">Keep shuffle on for the next list</string>
     <string name="playback_keep_shuffle_info">When the last queue was shuffled, a song you tap in a list plays first and the rest of that list is shuffled. Radios, single songs and videos are left alone.</string>
+    <string name="playback_face_down_pause">Pause when face down</string>
+    <string name="playback_face_down_pause_info">Lay your phone screen-down to pause. Pick it up within five minutes and the music plays on.</string>
+    <string name="playback_face_down_keywords">face down flip turn over screen down sensor pause resume pick up</string>
     <string name="playback_shuffle_keywords">smart shuffle random order mixed up stay shuffled</string>
     <string name="playback_song_to_song">From one song to the next</string>
     <string name="playback_speed_and_pitch">Speed and pitch</string>

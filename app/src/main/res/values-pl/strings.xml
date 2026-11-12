@@ -5292,6 +5292,9 @@
     <string name="playback_shuffle_button_info">Losowo i Inteligentne losowanie: każde kliknięcie przechodzi od wyłączonego do Losowo, do Inteligentnego losowania i z powrotem do wyłączonego. Tylko Losowo: przycisk tylko włącza i wyłącza Losowo.</string>
     <string name="playback_keep_shuffle">Losowo także dla następnej listy</string>
     <string name="playback_keep_shuffle_info">Gdy ostatnia kolejka była losowa, utwór kliknięty na liście gra jako pierwszy, a reszta tej listy jest losowana. Radia, pojedyncze utwory i filmy zostają bez zmian.</string>
+    <string name="playback_face_down_pause">Wstrzymuj ekranem w dół</string>
+    <string name="playback_face_down_pause_info">Połóż telefon ekranem w dół, żeby wstrzymać. Podnieś go w ciągu pięciu minut, a muzyka zagra dalej.</string>
+    <string name="playback_face_down_keywords">ekranem w dół odwróć obróć czujnik wstrzymaj wznów podnieś</string>
     <string name="playback_shuffle_keywords">inteligentne losowanie losowa kolejność wymieszane zostaw losowo smart shuffle random order</string>
     <string name="playback_song_to_song">Z utworu na utwór</string>
     <string name="playback_speed_and_pitch">Prędkość i wysokość</string>

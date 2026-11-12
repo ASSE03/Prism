@@ -5076,6 +5076,9 @@
     <string name="playback_shuffle_button_info">셔플 및 스마트 셔플: 탭할 때마다 끄기에서 셔플, 스마트 셔플을 거쳐 다시 끄기로 바뀌어요. 셔플만: 버튼이 셔플을 켜고 끄기만 해요.</string>
     <string name="playback_keep_shuffle">다음 목록에서도 셔플 유지</string>
     <string name="playback_keep_shuffle_info">마지막 대기열이 셔플 상태였다면, 목록에서 탭한 곡이 먼저 재생되고 그 목록의 나머지는 섞여요. 라디오, 한 곡 재생, 동영상은 그대로 둬요.</string>
+    <string name="playback_face_down_pause">뒤집어 놓으면 일시중지</string>
+    <string name="playback_face_down_pause_info">휴대폰 화면이 아래로 가게 놓으면 일시중지돼요. 5분 안에 들어 올리면 음악이 이어서 재생돼요.</string>
+    <string name="playback_face_down_keywords">뒤집기 화면 아래 엎어 놓기 센서 일시중지 다시 재생 들어 올리기</string>
     <string name="playback_shuffle_keywords">스마트 셔플 무작위 순서 섞기 셔플 유지 smart shuffle random order</string>
     <string name="playback_song_to_song">한 곡에서 다음 곡으로</string>
     <string name="playback_speed_and_pitch">속도 및 음높이</string>

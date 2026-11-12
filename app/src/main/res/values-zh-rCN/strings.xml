@@ -5076,6 +5076,9 @@
     <string name="playback_shuffle_button_info">随机播放和智能随机播放：每次点按依次从关闭切换到随机播放、智能随机播放，再回到关闭。仅随机播放：按钮只开启和关闭随机播放。</string>
     <string name="playback_keep_shuffle">下一个列表继续随机播放</string>
     <string name="playback_keep_shuffle_info">如果上一个队列是随机播放的，你在列表中点按的歌曲会先播放，列表其余部分随机排列。电台、单曲和视频保持不变。</string>
+    <string name="playback_face_down_pause">屏幕朝下时暂停</string>
+    <string name="playback_face_down_pause_info">把手机屏幕朝下放即可暂停。五分钟内拿起来，音乐会接着播放。</string>
+    <string name="playback_face_down_keywords">屏幕朝下 翻转 扣放 传感器 暂停 继续 拿起</string>
     <string name="playback_shuffle_keywords">智能随机播放 随机顺序 打乱 保持随机</string>
     <string name="playback_song_to_song">从一首歌到下一首</string>
     <string name="playback_speed_and_pitch">速度和音调</string>

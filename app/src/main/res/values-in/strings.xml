@@ -5076,6 +5076,9 @@
     <string name="playback_shuffle_button_info">Acak dan Acak Pintar: setiap ketukan berpindah dari nonaktif ke Acak, ke Acak Pintar, lalu kembali nonaktif. Hanya Acak: tombol hanya mengaktifkan dan menonaktifkan Acak.</string>
     <string name="playback_keep_shuffle">Tetap acak untuk daftar berikutnya</string>
     <string name="playback_keep_shuffle_info">Jika antrean terakhir diacak, lagu yang kamu ketuk di daftar diputar lebih dulu dan sisa daftar itu diacak. Radio, lagu tunggal, dan video dibiarkan.</string>
+    <string name="playback_face_down_pause">Jeda saat ditelungkupkan</string>
+    <string name="playback_face_down_pause_info">Telungkupkan ponselmu untuk menjeda. Angkat dalam lima menit dan musik lanjut diputar.</string>
+    <string name="playback_face_down_keywords">telungkup layar ke bawah balik sensor jeda lanjutkan angkat</string>
     <string name="playback_shuffle_keywords">acak pintar urutan acak random campur tetap diacak smart shuffle random order</string>
     <string name="playback_song_to_song">Dari satu lagu ke lagu berikutnya</string>
     <string name="playback_speed_and_pitch">Kecepatan dan nada</string>

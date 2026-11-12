@@ -5076,6 +5076,9 @@
     <string name="playback_shuffle_button_info">Phát ngẫu nhiên và Trộn bài thông minh: mỗi lần nhấn chuyển từ tắt sang Phát ngẫu nhiên, sang Trộn bài thông minh rồi trở về tắt. Chỉ Phát ngẫu nhiên: nút chỉ bật và tắt Phát ngẫu nhiên.</string>
     <string name="playback_keep_shuffle">Giữ phát ngẫu nhiên cho danh sách tiếp theo</string>
     <string name="playback_keep_shuffle_info">Khi danh sách chờ trước đang phát ngẫu nhiên, bài bạn nhấn trong một danh sách sẽ phát trước và phần còn lại của danh sách đó được trộn. Radio, bài lẻ và video giữ nguyên.</string>
+    <string name="playback_face_down_pause">Tạm dừng khi úp màn hình</string>
+    <string name="playback_face_down_pause_info">Úp điện thoại xuống để tạm dừng. Cầm lên trong vòng năm phút thì nhạc phát tiếp.</string>
+    <string name="playback_face_down_keywords">úp màn hình xuống lật cảm biến tạm dừng tiếp tục cầm lên</string>
     <string name="playback_shuffle_keywords">trộn bài thông minh thứ tự ngẫu nhiên xáo trộn giữ ngẫu nhiên</string>
     <string name="playback_song_to_song">Từ bài này sang bài tiếp theo</string>
     <string name="playback_speed_and_pitch">Tốc độ và cao độ</string>

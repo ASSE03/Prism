@@ -5148,6 +5148,9 @@
     <string name="playback_shuffle_button_info">پخش تصادفی و پخش تصادفی هوشمند: هر ضربه از خاموش به پخش تصادفی، سپس به پخش تصادفی هوشمند و دوباره به خاموش می‌رود. فقط پخش تصادفی: دکمه فقط پخش تصادفی را روشن و خاموش می‌کند.</string>
     <string name="playback_keep_shuffle">پخش تصادفی برای فهرست بعدی روشن بماند</string>
     <string name="playback_keep_shuffle_info">اگر صف قبلی تصادفی بود، آهنگی که در یک فهرست لمس می‌کنید اول پخش می‌شود و بقیه آن فهرست تصادفی می‌شود. رادیوها، تک‌آهنگ‌ها و ویدیوها دست‌نخورده می‌مانند.</string>
+    <string name="playback_face_down_pause">توقف هنگام وارونه گذاشتن</string>
+    <string name="playback_face_down_pause_info">گوشی را با صفحه رو به پایین بگذارید تا موسیقی متوقف شود. اگر ظرف پنج دقیقه آن را بردارید، موسیقی ادامه می‌یابد.</string>
+    <string name="playback_face_down_keywords">وارونه صفحه رو به پایین برگرداندن حسگر توقف ادامه برداشتن</string>
     <string name="playback_shuffle_keywords">پخش تصادفی هوشمند ترتیب تصادفی درهم تصادفی بماند smart shuffle random order mixed up stay shuffled</string>
     <string name="playback_song_to_song">از یک آهنگ به آهنگ بعدی</string>
     <string name="playback_speed_and_pitch">سرعت و زیر و بمی</string>

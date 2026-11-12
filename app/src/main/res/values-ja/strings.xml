@@ -5076,6 +5076,9 @@
     <string name="playback_shuffle_button_info">シャッフルとスマートシャッフル：タップするたびに、オフ → シャッフル → スマートシャッフル → オフと切り替わります。シャッフルのみ：ボタンはシャッフルのオンとオフだけを切り替えます。</string>
     <string name="playback_keep_shuffle">次のリストでもシャッフルを続ける</string>
     <string name="playback_keep_shuffle_info">前のキューがシャッフルだった場合、リストでタップした曲を最初に再生し、そのリストの残りをシャッフルします。ラジオ、1 曲だけの再生、動画はそのままです。</string>
+    <string name="playback_face_down_pause">伏せると一時停止</string>
+    <string name="playback_face_down_pause_info">スマホの画面を下にして置くと一時停止します。5 分以内に持ち上げると続きから再生します。</string>
+    <string name="playback_face_down_keywords">伏せる 画面 下向き 裏返す センサー 一時停止 再開 持ち上げる</string>
     <string name="playback_shuffle_keywords">スマートシャッフル ランダム 順番 バラバラ シャッフルを維持 smart shuffle random order</string>
     <string name="playback_song_to_song">曲から次の曲へ</string>
     <string name="playback_speed_and_pitch">速度とピッチ</string>

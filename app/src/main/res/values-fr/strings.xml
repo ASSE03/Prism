@@ -5220,6 +5220,9 @@
     <string name="playback_shuffle_button_info">Aléatoire et Aléatoire intelligent : chaque appui passe de désactivé à Lecture aléatoire, puis à Lecture aléatoire intelligente, puis à nouveau à désactivé. Aléatoire uniquement : le bouton ne fait qu’activer et désactiver la Lecture aléatoire.</string>
     <string name="playback_keep_shuffle">Garder l’aléatoire pour la liste suivante</string>
     <string name="playback_keep_shuffle_info">Quand la dernière file d’attente était en aléatoire, le titre sur lequel vous appuyez dans une liste est lu en premier et le reste de la liste est mélangé. Les radios, les titres seuls et les vidéos ne changent pas.</string>
+    <string name="playback_face_down_pause">Pause écran retourné</string>
+    <string name="playback_face_down_pause_info">Posez votre téléphone écran vers le bas pour mettre en pause. Reprenez-le dans les cinq minutes et la musique continue.</string>
+    <string name="playback_face_down_keywords">retourner écran vers le bas face capteur pause reprendre</string>
     <string name="playback_shuffle_keywords">lecture aléatoire intelligente ordre aléatoire mélangé rester en aléatoire smart shuffle random order mixed up stay shuffled</string>
     <string name="playback_song_to_song">D’un titre au suivant</string>
     <string name="playback_speed_and_pitch">Vitesse et tonalité</string>

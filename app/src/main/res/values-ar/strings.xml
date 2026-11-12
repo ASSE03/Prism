@@ -5436,6 +5436,9 @@
     <string name="playback_shuffle_button_info">ترتيب عشوائي وترتيب عشوائي ذكي: كل نقرة تنتقل من الإيقاف إلى الترتيب العشوائي إلى الترتيب العشوائي الذكي ثم إلى الإيقاف. ترتيب عشوائي فقط: الزر يشغّل الترتيب العشوائي ويوقفه فقط.</string>
     <string name="playback_keep_shuffle">إبقاء الترتيب العشوائي للقائمة التالية</string>
     <string name="playback_keep_shuffle_info">إذا كانت قائمة الانتظار السابقة عشوائية، فالأغنية التي تنقرها في قائمة تُشغَّل أولًا ويُرتَّب باقي تلك القائمة عشوائيًا. لا يتغيّر شيء مع المحطات والأغاني المفردة والفيديوهات.</string>
+    <string name="playback_face_down_pause">الإيقاف المؤقت عند قلب الهاتف</string>
+    <string name="playback_face_down_pause_info">ضع هاتفك والشاشة للأسفل لإيقاف الموسيقى مؤقتًا. ارفعه خلال خمس دقائق وتستمر الموسيقى.</string>
+    <string name="playback_face_down_keywords">قلب الهاتف الشاشة للأسفل وجه مقلوب مستشعر إيقاف مؤقت استئناف رفع</string>
     <string name="playback_shuffle_keywords">ترتيب عشوائي ذكي ترتيب عشوائي خلط البقاء عشوائيًا smart shuffle random</string>
     <string name="playback_song_to_song">من أغنية إلى التالية</string>
     <string name="playback_speed_and_pitch">السرعة وطبقة الصوت</string>

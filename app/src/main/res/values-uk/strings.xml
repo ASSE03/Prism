@@ -5292,6 +5292,9 @@
     <string name="playback_shuffle_button_info">Перемішати й розумне перемішування: кожне торкання перемикає з вимк. на «Перемішати», далі на «Розумне перемішування» й знову на вимк. Лише перемішати: кнопка просто вмикає й вимикає перемішування.</string>
     <string name="playback_keep_shuffle">Зберігати перемішування для наступного списку</string>
     <string name="playback_keep_shuffle_info">Якщо минула черга була перемішана, пісня, яку ти торкаєш у списку, грає першою, а решта списку перемішується. Радіо, окремі пісні й відео лишаються як є.</string>
+    <string name="playback_face_down_pause">Пауза екраном донизу</string>
+    <string name="playback_face_down_pause_info">Поклади телефон екраном донизу, щоб поставити паузу. Підніми його протягом п’яти хвилин, і музика гратиме далі.</string>
+    <string name="playback_face_down_keywords">екраном донизу перевернути датчик пауза продовжити підняти</string>
     <string name="playback_shuffle_keywords">розумне перемішування випадковий порядок упереміш лишатися перемішаним</string>
     <string name="playback_song_to_song">Від пісні до пісні</string>
     <string name="playback_speed_and_pitch">Швидкість і тональність</string>

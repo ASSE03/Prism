@@ -5148,6 +5148,9 @@
     <string name="playback_shuffle_button_info">শাফেল ও স্মার্ট শাফেল: প্রতিটি ট্যাপে বন্ধ থেকে শাফেল, তারপর স্মার্ট শাফেল, তারপর আবার বন্ধ। শুধু শাফেল: বোতামটি শুধু শাফেল চালু-বন্ধ করে।</string>
     <string name="playback_keep_shuffle">পরের তালিকাতেও শাফেল চালু রাখুন</string>
     <string name="playback_keep_shuffle_info">আগের সারি শাফেল করা থাকলে, তালিকায় আপনি যে গান ট্যাপ করেন সেটি আগে চলে আর তালিকার বাকিটা শাফেল হয়। রেডিও, একক গান আর ভিডিও যেমন আছে তেমনই থাকে।</string>
+    <string name="playback_face_down_pause">উপুড় করে রাখলে বিরতি দিন</string>
+    <string name="playback_face_down_pause_info">বিরতি দিতে ফোনটি স্ক্রিন নিচের দিকে করে রাখুন। পাঁচ মিনিটের মধ্যে তুলে নিলে গান আবার চলবে।</string>
+    <string name="playback_face_down_keywords">উপুড় স্ক্রিন নিচে উল্টানো সেন্সর বিরতি আবার চালু তুলে নিন</string>
     <string name="playback_shuffle_keywords">স্মার্ট শাফেল এলোমেলো ক্রম মেশানো শাফেল রাখুন smart shuffle random order mixed up stay shuffled</string>
     <string name="playback_song_to_song">এক গান থেকে পরের গানে</string>
     <string name="playback_speed_and_pitch">গতি ও পিচ</string>

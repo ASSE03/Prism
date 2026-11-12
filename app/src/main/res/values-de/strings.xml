@@ -5148,6 +5148,9 @@
     <string name="playback_shuffle_button_info">Shuffle und Smart Shuffle: Jedes Tippen geht von Aus zu Shuffle zu Smart Shuffle und zurück zu Aus. Nur Shuffle: Die Taste schaltet nur Shuffle an und aus.</string>
     <string name="playback_keep_shuffle">Shuffle für die nächste Liste anlassen</string>
     <string name="playback_keep_shuffle_info">War die letzte Warteschlange geshuffelt, spielt ein Song, den du in einer Liste antippst, zuerst und der Rest der Liste wird geshuffelt. Radios, einzelne Songs und Videos bleiben unverändert.</string>
+    <string name="playback_face_down_pause">Pausieren, wenn umgedreht</string>
+    <string name="playback_face_down_pause_info">Leg dein Handy mit dem Display nach unten, um zu pausieren. Nimmst du es innerhalb von fünf Minuten wieder hoch, läuft die Musik weiter.</string>
+    <string name="playback_face_down_keywords">umdrehen display nach unten bildschirm sensor pause fortsetzen hochnehmen</string>
     <string name="playback_shuffle_keywords">smart shuffle zufall zufällige reihenfolge gemischt geshuffelt bleiben random order mixed up stay shuffled</string>
     <string name="playback_song_to_song">Von einem Song zum nächsten</string>
     <string name="playback_speed_and_pitch">Tempo und Tonhöhe</string>

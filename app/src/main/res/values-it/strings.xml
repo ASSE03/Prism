@@ -5220,6 +5220,9 @@
     <string name="playback_shuffle_button_info">Casuale e Casuale intelligente: ogni tocco passa da disattivato a Casuale, a Casuale intelligente e di nuovo a disattivato. Solo Casuale: il pulsante attiva e disattiva solo Casuale.</string>
     <string name="playback_keep_shuffle">Mantieni Casuale per l\'elenco successivo</string>
     <string name="playback_keep_shuffle_info">Se l\'ultima coda era in ordine casuale, il brano che tocchi in un elenco parte per primo e il resto dell\'elenco viene mescolato. Radio, singoli brani e video restano come sono.</string>
+    <string name="playback_face_down_pause">Pausa a faccia in giù</string>
+    <string name="playback_face_down_pause_info">Appoggia il telefono con lo schermo in giù per mettere in pausa. Se lo riprendi entro cinque minuti, la musica continua.</string>
+    <string name="playback_face_down_keywords">faccia in giù schermo capovolgere girare sensore pausa riprendi</string>
     <string name="playback_shuffle_keywords">casuale intelligente ordine casuale mescolato resta casuale shuffle random smart shuffle</string>
     <string name="playback_song_to_song">Da un brano all\'altro</string>
     <string name="playback_speed_and_pitch">Velocità e tonalità</string>

@@ -5148,6 +5148,9 @@
     <string name="playback_shuffle_button_info">Keverés és Okos keverés: minden koppintás a kikapcsoltról a Keverésre, majd az Okos keverésre, aztán vissza kikapcsoltra vált. Csak keverés: a gomb csak be- és kikapcsolja a Keverést.</string>
     <string name="playback_keep_shuffle">Keverés marad a következő listánál</string>
     <string name="playback_keep_shuffle_info">Ha az előző lejátszási sor kevert volt, a listában megkoppintott dal szól elsőként, a lista többi része pedig kevert lesz. A rádiók, az egyes dalok és a videók érintetlenek maradnak.</string>
+    <string name="playback_face_down_pause">Szünet képernyővel lefelé</string>
+    <string name="playback_face_down_pause_info">Tedd le a telefont képernyővel lefelé a szüneteltetéshez. Ha öt percen belül felveszed, a zene szól tovább.</string>
+    <string name="playback_face_down_keywords">képernyővel lefelé megfordít érzékelő szünet folytatás felvesz</string>
     <string name="playback_shuffle_keywords">okos keverés véletlen sorrend összekevert kevert marad smart shuffle random order</string>
     <string name="playback_song_to_song">Egyik dalról a másikra</string>
     <string name="playback_speed_and_pitch">Sebesség és hangmagasság</string>

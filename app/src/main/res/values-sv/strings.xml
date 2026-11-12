@@ -5148,6 +5148,9 @@
     <string name="playback_shuffle_button_info">Blanda och Smart blandning: varje tryck går från av till Blanda till Smart blandning och tillbaka till av. Bara Blanda: knappen slår bara på och av Blanda.</string>
     <string name="playback_keep_shuffle">Behåll blandning för nästa lista</string>
     <string name="playback_keep_shuffle_info">När den senaste kön var blandad spelas låten du trycker på i en lista först och resten av listan blandas. Radio, enstaka låtar och videor lämnas som de är.</string>
+    <string name="playback_face_down_pause">Pausa med skärmen nedåt</string>
+    <string name="playback_face_down_pause_info">Lägg telefonen med skärmen nedåt för att pausa. Plocka upp den inom fem minuter så spelar musiken vidare.</string>
+    <string name="playback_face_down_keywords">skärmen nedåt vända upp och ner sensor pausa återuppta plocka upp</string>
     <string name="playback_shuffle_keywords">smart blandning slumpvis ordning blandat förbli blandad</string>
     <string name="playback_song_to_song">Från en låt till nästa</string>
     <string name="playback_speed_and_pitch">Hastighet och tonhöjd</string>

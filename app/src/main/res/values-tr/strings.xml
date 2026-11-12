@@ -5148,6 +5148,9 @@
     <string name="playback_shuffle_button_info">Karıştır ve Akıllı Karıştırma: her dokunuş kapalıdan Karıştır\'a, oradan Akıllı Karıştırma\'ya ve tekrar kapalıya geçer. Yalnızca Karıştır: düğme yalnızca Karıştır\'ı açıp kapatır.</string>
     <string name="playback_keep_shuffle">Sonraki liste için karıştırmayı açık tut</string>
     <string name="playback_keep_shuffle_info">Son sıra karıştırılmışsa, bir listede dokunduğun şarkı önce çalar ve listenin geri kalanı karıştırılır. Radyolar, tekli şarkılar ve videolar olduğu gibi kalır.</string>
+    <string name="playback_face_down_pause">Ters çevrilince duraklat</string>
+    <string name="playback_face_down_pause_info">Duraklatmak için telefonunu ekranı aşağı bakacak şekilde bırak. Beş dakika içinde eline alırsan müzik devam eder.</string>
+    <string name="playback_face_down_keywords">ters çevir ekran aşağı yüzüstü sensör duraklat devam et kaldır</string>
     <string name="playback_shuffle_keywords">akıllı karıştırma rastgele sıra karışık karışık kalsın</string>
     <string name="playback_song_to_song">Bir şarkıdan diğerine</string>
     <string name="playback_speed_and_pitch">Hız ve perde</string>

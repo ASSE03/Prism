@@ -5076,6 +5076,9 @@
     <string name="playback_shuffle_button_info">Rombak dan Rombak Pintar: setiap ketikan beralih daripada mati ke Rombak, ke Rombak Pintar dan kembali ke mati. Rombak sahaja: butang hanya menghidupkan dan mematikan Rombak.</string>
     <string name="playback_keep_shuffle">Kekalkan rombak untuk senarai seterusnya</string>
     <string name="playback_keep_shuffle_info">Apabila baris gilir terakhir dirombak, lagu yang anda ketik dalam senarai dimainkan dahulu dan selebihnya senarai itu dirombak. Radio, lagu tunggal dan video dibiarkan.</string>
+    <string name="playback_face_down_pause">Jeda apabila ditelangkupkan</string>
+    <string name="playback_face_down_pause_info">Telangkupkan telefon anda untuk menjeda. Angkat dalam masa lima minit dan muzik terus dimainkan.</string>
+    <string name="playback_face_down_keywords">telangkup skrin ke bawah terbalik sensor jeda sambung angkat</string>
     <string name="playback_shuffle_keywords">rombak pintar susunan rawak bercampur kekal dirombak smart shuffle random order</string>
     <string name="playback_song_to_song">Dari satu lagu ke lagu seterusnya</string>
     <string name="playback_speed_and_pitch">Kelajuan dan pic</string>

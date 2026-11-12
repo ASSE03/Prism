@@ -5148,6 +5148,9 @@
     <string name="playback_shuffle_button_info">شفل اور سمارٹ شفل: ہر ٹیپ بند سے شفل، پھر سمارٹ شفل اور واپس بند پر جاتا ہے۔ صرف شفل: بٹن بس شفل آن اور آف کرتا ہے۔</string>
     <string name="playback_keep_shuffle">اگلی فہرست کے لیے شفل آن رکھیں</string>
     <string name="playback_keep_shuffle_info">جب پچھلی قطار شفل تھی، تو فہرست میں جس گانے پر آپ ٹیپ کریں وہ پہلے چلتا ہے اور باقی فہرست شفل ہو جاتی ہے۔ ریڈیوز، اکیلے گانے اور ویڈیوز ویسے ہی رہتے ہیں۔</string>
+    <string name="playback_face_down_pause">الٹا رکھنے پر روکیں</string>
+    <string name="playback_face_down_pause_info">روکنے کے لیے اپنا فون اسکرین نیچے کر کے رکھیں۔ پانچ منٹ کے اندر اٹھا لیں تو موسیقی چلتی رہے گی۔</string>
+    <string name="playback_face_down_keywords">الٹا اسکرین نیچے پلٹیں سینسر روکیں دوبارہ شروع اٹھائیں</string>
     <string name="playback_shuffle_keywords">سمارٹ شفل بے ترتیب ترتیب ملا جلا شفل رہے</string>
     <string name="playback_song_to_song">ایک گانے سے اگلے تک</string>
     <string name="playback_speed_and_pitch">رفتار اور پچ</string>

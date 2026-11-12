@@ -5220,6 +5220,9 @@
     <string name="playback_shuffle_button_info">Aleatório e Aleatório inteligente: cada toque passa de desligado a Aleatório, a Aleatório inteligente e de volta a desligado. Só Aleatório: o botão apenas liga e desliga o Aleatório.</string>
     <string name="playback_keep_shuffle">Manter o aleatório na lista seguinte</string>
     <string name="playback_keep_shuffle_info">Quando a última fila estava em aleatório, a música em que tocas numa lista toca primeiro e o resto dessa lista é baralhado. Rádios, músicas soltas e vídeos ficam como estão.</string>
+    <string name="playback_face_down_pause">Pausar com o ecrã para baixo</string>
+    <string name="playback_face_down_pause_info">Pousa o telemóvel com o ecrã para baixo para pausar. Pega nele nos cinco minutos seguintes e a música continua.</string>
+    <string name="playback_face_down_keywords">virar ecrã para baixo sensor pausar retomar pegar</string>
     <string name="playback_shuffle_keywords">aleatório inteligente ordem aleatória misturado baralhar manter</string>
     <string name="playback_song_to_song">De uma música para a seguinte</string>
     <string name="playback_speed_and_pitch">Velocidade e tom</string>

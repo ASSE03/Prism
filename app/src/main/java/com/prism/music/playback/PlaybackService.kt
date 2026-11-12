@@ -101,6 +101,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private val spatial = SpatialAudioProcessor()
     /** "Pause when muted" (#157). */
     private val muteWatch by lazy { MuteWatch(this, player) { c.settings.current.behavior.pauseOnMute } }
+    /** "Pause when face down" (1.8.5): made only while the setting is on ([faceDownSetting]); null otherwise. */
+    private var faceDown: FaceDown? = null
     private val normalizer = NormalizerProcessor()
     private var songLoudness: Float? = null
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
@@ -282,6 +284,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         scope.launch { c.settings.flow.map { it.sound.normalizeTarget to it.sound.normalizeAlbums }.distinctUntilChanged().drop(1).collect { applyNormalization() } }
         sessionPlayer.gentle = ::gentle
         scope.launch { c.settings.flow.map { it.behavior.pauseOnMute }.distinctUntilChanged().collect { muteWatch.update() } }
+        scope.launch { c.settings.flow.map { it.behavior.faceDownPause }.distinctUntilChanged().collect { faceDownSetting(it) } }
         scope.launch { c.settings.flow.map { it.audioDiagnostics }.distinctUntilChanged().collect { on -> AudioDiagnostics.setEnabled(on) { AudioDiagnostics.about(c) } } }
         // The buttons beside play follow Settings → Player → Buttons as soon as they're changed.
         scope.launch { c.settings.flow.map { it.sessionButtons }.distinctUntilChanged().drop(1).collect { updateButtons() } }
@@ -571,6 +574,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
         mix.release()
         muteWatch.release()
+        faceDown?.release()
         c.cast.detach(player)
         c.player.detach()
         carLyrics.stop()
@@ -2254,6 +2258,34 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // Shuffling picks a different next song.
         prefetchNext()
         scheduleSave()
+    }
+
+    /**
+     * "Pause when face down" switched on or off (and at start): on, a [FaceDown] listens to the player and takes the
+     * accelerometer while music plays; off, it's let go and nothing of it is left (no listener, no sensor).
+     */
+    private fun faceDownSetting(on: Boolean) {
+        if (!on) {
+            faceDown?.let { player.removeListener(it); it.release() }
+            faceDown = null
+            return
+        }
+        val f = faceDown ?: FaceDown(FaceDown.Accelerometer(this), { c.settings.current.behavior.faceDownPause }, object : FaceDown.Controls {
+            override val playing get() = player.playWhenReady && (player.playbackState == Player.STATE_READY || player.playbackState == Player.STATE_BUFFERING)
+            // Not while the music goes to another device (Cast, Prism Connect), the car (Android Auto), or in a call.
+            override val blocked get() = c.cast.casting || carControllers.isNotEmpty() || inCall()
+            override fun pause() = player.pause()
+            override fun play() = player.play()
+        }).also { faceDown = it; player.addListener(it) }
+        f.update()
+    }
+
+    private val audioManager by lazy { getSystemService(android.media.AudioManager::class.java) }
+
+    /** A phone or voice call (ringing, or on one). */
+    private fun inCall(): Boolean = when (runCatching { audioManager?.mode }.getOrNull()) {
+        android.media.AudioManager.MODE_IN_CALL, android.media.AudioManager.MODE_IN_COMMUNICATION, android.media.AudioManager.MODE_RINGTONE -> true
+        else -> false
     }
 
     private var resequenceJob: kotlinx.coroutines.Job? = null

@@ -5220,6 +5220,9 @@
     <string name="playback_shuffle_button_info">ערבוב וערבוב חכם: כל הקשה עוברת מכבוי לערבוב, לערבוב חכם וחזרה לכבוי. ערבוב בלבד: הכפתור רק מפעיל ומכבה את הערבוב.</string>
     <string name="playback_keep_shuffle">להשאיר ערבוב גם לרשימה הבאה</string>
     <string name="playback_keep_shuffle_info">כשהתור הקודם היה מעורבב, שיר שאתה מקיש עליו ברשימה מתנגן ראשון ושאר הרשימה מעורבב. רדיו, שירים בודדים וסרטונים נשארים כמו שהם.</string>
+    <string name="playback_face_down_pause">השהיה כשהטלפון הפוך</string>
+    <string name="playback_face_down_pause_info">הנח את הטלפון עם המסך כלפי מטה כדי להשהות. הרם אותו תוך חמש דקות והמוזיקה ממשיכה.</string>
+    <string name="playback_face_down_keywords">הפוך מסך כלפי מטה הפיכה חיישן השהיה המשך הרמה</string>
     <string name="playback_shuffle_keywords">ערבוב חכם סדר אקראי מעורבב להישאר בערבוב smart shuffle random order mixed up stay shuffled</string>
     <string name="playback_song_to_song">משיר לשיר הבא</string>
     <string name="playback_speed_and_pitch">מהירות וגובה צליל</string>

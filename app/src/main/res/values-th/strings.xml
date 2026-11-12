@@ -5076,6 +5076,9 @@
     <string name="playback_shuffle_button_info">สุ่มเพลงและสุ่มเพลงอัจฉริยะ: แตะแต่ละครั้งจะเปลี่ยนจากปิด เป็นสุ่มเพลง เป็นสุ่มเพลงอัจฉริยะ แล้วกลับเป็นปิด สุ่มเพลงอย่างเดียว: ปุ่มจะแค่เปิดและปิดสุ่มเพลง</string>
     <string name="playback_keep_shuffle">สุ่มเพลงต่อในรายการถัดไป</string>
     <string name="playback_keep_shuffle_info">ถ้าคิวล่าสุดสุ่มอยู่ เพลงที่คุณแตะในรายการจะเล่นก่อน และเพลงที่เหลือในรายการนั้นจะถูกสุ่ม วิทยุ เพลงเดี่ยว และวิดีโอจะไม่เปลี่ยน</string>
+    <string name="playback_face_down_pause">หยุดชั่วคราวเมื่อคว่ำโทรศัพท์</string>
+    <string name="playback_face_down_pause_info">วางโทรศัพท์คว่ำหน้าจอลงเพื่อหยุดชั่วคราว หยิบขึ้นมาภายในห้านาทีแล้วเพลงจะเล่นต่อ</string>
+    <string name="playback_face_down_keywords">คว่ำ หน้าจอลง พลิก เซ็นเซอร์ หยุดชั่วคราว เล่นต่อ หยิบขึ้น</string>
     <string name="playback_shuffle_keywords">สุ่มเพลงอัจฉริยะ ลำดับสุ่ม คละ สุ่มต่อ</string>
     <string name="playback_song_to_song">จากเพลงหนึ่งไปอีกเพลง</string>
     <string name="playback_speed_and_pitch">ความเร็วและคีย์</string>

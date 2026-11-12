@@ -5220,6 +5220,9 @@
     <string name="playback_shuffle_button_info">Amestecă și Amestecare inteligentă: fiecare atingere trece de la dezactivat la Amestecă, la Amestecare inteligentă și înapoi la dezactivat. Doar Amestecă: butonul doar pornește și oprește amestecarea.</string>
     <string name="playback_keep_shuffle">Păstrează amestecarea pentru lista următoare</string>
     <string name="playback_keep_shuffle_info">Când ultima coadă era amestecată, melodia pe care o atingi într-o listă e redată prima, iar restul listei e amestecat. Radiourile, melodiile individuale și videoclipurile rămân cum sunt.</string>
+    <string name="playback_face_down_pause">Întrerupe când e cu fața în jos</string>
+    <string name="playback_face_down_pause_info">Așază telefonul cu ecranul în jos ca să întrerupi muzica. Ridică-l în cinci minute și muzica merge mai departe.</string>
+    <string name="playback_face_down_keywords">cu fața în jos ecran întoarce senzor întrerupe reia ridică</string>
     <string name="playback_shuffle_keywords">amestecare inteligentă ordine aleatorie amestecat rămâne amestecat</string>
     <string name="playback_song_to_song">De la o melodie la următoarea</string>
     <string name="playback_speed_and_pitch">Viteză și ton</string>

@@ -5148,6 +5148,9 @@
     <string name="playback_shuffle_button_info">Shuffle at Smart Shuffle: bawat tap ay mula off papuntang Shuffle, papuntang Smart Shuffle at balik sa off. Shuffle lang: ino-on at ino-off lang ng button ang Shuffle.</string>
     <string name="playback_keep_shuffle">Panatilihing naka-shuffle sa susunod na listahan</string>
     <string name="playback_keep_shuffle_info">Kapag naka-shuffle ang huling queue, ang kantang tina-tap mo sa isang listahan ang unang tutugtog at isa-shuffle ang natitira sa listahang iyon. Hindi ginagalaw ang mga radio, solong kanta at video.</string>
+    <string name="playback_face_down_pause">I-pause kapag nakataob</string>
+    <string name="playback_face_down_pause_info">Itaob ang phone mo para i-pause. Damputin ito sa loob ng limang minuto at tutuloy ang musika.</string>
+    <string name="playback_face_down_keywords">nakataob screen pababa baligtad sensor i-pause ituloy damputin</string>
     <string name="playback_shuffle_keywords">smart shuffle random ayos halo-halo manatiling naka-shuffle random order mixed up stay shuffled</string>
     <string name="playback_song_to_song">Mula sa isang kanta papunta sa susunod</string>
     <string name="playback_speed_and_pitch">Bilis at pitch</string>
