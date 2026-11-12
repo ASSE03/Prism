@@ -38,6 +38,7 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -578,10 +579,7 @@ fun TransportRow(
     val smart by LocalContainer.current.queue.smartShuffle.collectAsState()
     val repeat by pc.repeatMode.collectAsState()
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.CenterVertically) {
-        if (modes) ModeGlyph(
-            if (smart) PrismIcons.SmartShuffle else PrismIcons.Shuffle,
-            if (smart) tr(R.string.smart_shuffle_on) else if (shuffle) tr(R.string.shuffle_on) else tr(R.string.shuffle_off), shuffle,
-        ) { pc.toggleShuffle() }
+        if (modes) ShuffleGlyph(shuffle, smart) { pc.toggleShuffle() }
         val prevIcon = if (style == TransportStyle.GLYPHS) PrismIcons.Backward else PrismIcons.Previous
         val nextIcon = if (style == TransportStyle.GLYPHS) PrismIcons.Forward else PrismIcons.Next
         val skip = if (style == TransportStyle.GLYPHS) skipSize else skipSize * 0.82f
@@ -631,13 +629,35 @@ fun MinimalPlay(isPlaying: Boolean, isLoading: Boolean) {
     }
 }
 
-/** Shuffle or repeat beside the transport: bright with a dot under it when on, dim when off; [badge] marks repeat one. */
+/**
+ * What TalkBack says of Shuffle's state (it said nothing before 1.8.5): Off, On, or Smart Shuffle, its third press where
+ * the queue allows it ([com.prism.music.playback.PlayerConnection.toggleShuffle]).
+ */
+internal fun shuffleState(shuffle: Boolean, smart: Boolean): String = when {
+    smart -> tr(R.string.smart_shuffle)
+    shuffle -> tr(R.string.tl_on)
+    else -> tr(R.string.off)
+}
+
+/** Shuffle beside the transport, named "Shuffle" with its state ([shuffleState]) and selected while on. */
 @Composable
-private fun ModeGlyph(icon: ImageVector, description: String, active: Boolean, badge: String? = null, onClick: () -> Unit) {
+internal fun ShuffleGlyph(shuffle: Boolean, smart: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) = ModeGlyph(
+    if (smart) PrismIcons.SmartShuffle else PrismIcons.Shuffle, tr(R.string.shuffle), shuffle,
+    state = shuffleState(shuffle, smart), modifier = modifier, onClick = onClick,
+)
+
+/**
+ * Shuffle or repeat beside the transport: bright with a dot under it when on, dim when off; [badge] marks repeat one.
+ * [state], when given, is read out after [description] (and the glyph is marked selected while [active]).
+ */
+@Composable
+private fun ModeGlyph(icon: ImageVector, description: String, active: Boolean, badge: String? = null, state: String? = null, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val haptics = rememberHaptics()
     val alpha by animateFloatAsState(if (active) 1f else 0.45f, label = "modeAlpha")
     Box(
-        Modifier.size(44.dp).clickable(remember { MutableInteractionSource() }, indication = null, onClickLabel = description) { haptics.tick(); onClick() },
+        modifier.size(44.dp)
+            .then(if (state != null) Modifier.semantics { stateDescription = state; selected = active } else Modifier)
+            .clickable(remember { MutableInteractionSource() }, indication = null, onClickLabel = description) { haptics.tick(); onClick() },
         contentAlignment = Alignment.Center,
     ) {
         Icon(icon, description, tint = Color.White.copy(alpha = alpha), modifier = Modifier.size(24.dp))
@@ -918,8 +938,8 @@ fun PlayerActionRow(
                     if (PlayerButton.LYRICS in chosen) BottomGlyph(PrismIcons.Lyrics, tr(R.string.lyrics), false, onToggleLyrics)
                     Pill {
                         PillSegment(
-                            if (smart) PrismIcons.SmartShuffle else PrismIcons.Shuffle, if (smart) tr(R.string.smart_shuffle) else tr(R.string.shuffle), shuffle,
-                            width = PILL_SEGMENT_WIDTH_TRIPLE,
+                            if (smart) PrismIcons.SmartShuffle else PrismIcons.Shuffle, tr(R.string.shuffle), shuffle,
+                            width = PILL_SEGMENT_WIDTH_TRIPLE, state = shuffleState(shuffle, smart),
                         ) { pc.toggleShuffle() }
                         PillDivider()
                         PillSegment(
@@ -1106,13 +1126,15 @@ private fun PillSegment(
     enabled: Boolean = true,
     width: Dp = PILL_SEGMENT_WIDTH,
     loading: Boolean = false,
+    /** Read out after [description] (Shuffle's Off / On / Smart Shuffle). */
+    state: String? = null,
     onClick: () -> Unit,
 ) {
     val haptics = rememberHaptics()
     Box(
         Modifier.width(width).height(BOTTOM_ACTION_SIZE).clip(CircleShape)
             .background(if (highlighted && enabled) Color.White.copy(alpha = 0.16f) else Color.Transparent)
-            .semantics { selected = highlighted }
+            .semantics { selected = highlighted; if (state != null) stateDescription = state }
             .clickable(remember { MutableInteractionSource() }, indication = null, enabled = enabled) { haptics.tick(); onClick() },
         contentAlignment = Alignment.Center,
     ) {
