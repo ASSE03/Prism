@@ -1,0 +1,54 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build (remplace Prism, clé debug)
+        run: ./gradlew --no-daemon :app:assembleRelease -PdebugSign
+
+      - name: Rename APK
+        run: |
+          mkdir -p out
+          cp app/build/outputs/apk/release/*.apk out/Prism-AA.apk
+
+      - name: Build (Prism Dev, s'installe à côté)
+        run: ./gradlew --no-daemon :app:assembleRelease -PdebugSign -PsideBySide
+
+      - name: Rename APK Dev
+        run: cp app/build/outputs/apk/release/*.apk out/Prism-AA-Dev.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Prism-AA
+          path: out/*.apk
+
+      - name: Publish release "latest"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest out/*.apk \
+            --title "Prism + Android Auto (Artistes / Albums / Playlists)" \
+            --notes "Build automatique du commit ${GITHUB_SHA::7}. Prism-AA.apk remplace Prism (désinstaller l'original avant). Prism-AA-Dev.apk s'installe à côté sous le nom Prism Dev." \
+            --target "$GITHUB_SHA"
