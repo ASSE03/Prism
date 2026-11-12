@@ -24,6 +24,55 @@ object OpenedAudio {
         return t.startsWith("audio/") || t in OTHER_TYPES
     }
 
+    /**
+     * Another app can name Prism's own files to it ("file:///data/data/<Prism>/…", or a content:// address on one of
+     * Prism's own providers): Prism would read them with its own rights and keep the address in its queue and history.
+     * True for those, which are never opened.
+     */
+    fun prismsOwn(context: Context, uri: Uri): Boolean {
+        val pkg = context.packageName
+        val dirs = buildList {
+            runCatching { add(context.dataDir.path) }
+            runCatching { add(context.filesDir.path) }
+            runCatching { add(context.cacheDir.path) }
+            runCatching { context.getExternalFilesDirs(null).forEach { d -> d?.parentFile?.let { add(it.path) } } }
+            runCatching { context.externalCacheDirs.forEach { d -> d?.parentFile?.let { add(it.path) } } }
+            runCatching { context.obbDirs.forEach { d -> d?.let { add(it.path) } } }
+        }
+        val authorities = runCatching {
+            @Suppress("DEPRECATION")
+            val info = context.packageManager.getPackageInfo(pkg, android.content.pm.PackageManager.GET_PROVIDERS)
+            info.providers?.flatMap { it.authority?.split(';').orEmpty() }?.toSet()
+        }.getOrNull().orEmpty()
+        return prismsOwn(uri, pkg, dirs, authorities)
+    }
+
+    /**
+     * [prismsOwn] for the app [pkg] with its data folders [dirs] and its providers' [authorities]. A file's path is taken
+     * as it really is ([canonical]: "..", and links followed), and one that can't be is refused too.
+     */
+    internal fun prismsOwn(
+        uri: Uri,
+        pkg: String,
+        dirs: List<String>,
+        authorities: Set<String>,
+        canonical: (String) -> String? = { p -> runCatching { java.io.File(p).canonicalPath }.getOrNull() },
+    ): Boolean = when (uri.scheme?.lowercase()) {
+        "content" -> {
+            // "10@authority" names a provider for another user of the phone: the authority is after the '@'.
+            val a = uri.authority?.substringAfterLast('@')?.lowercase()
+            a == null || a == pkg.lowercase() || a.startsWith(pkg.lowercase() + ".") || authorities.any { it.lowercase() == a }
+        }
+        "file" -> {
+            val real = uri.path?.let(canonical)
+            real == null || real.split('/', '\\').any { it == pkg } || dirs.any { d ->
+                canonical(d)?.trimEnd('/', '\\')?.takeIf { it.isNotEmpty() }
+                    ?.let { own -> real == own || real.startsWith("$own/") || real.startsWith("$own\\") } == true
+            }
+        }
+        else -> false
+    }
+
     /** The file an opened song plays from; null for any other song (Local music's are MediaStore ids). */
     fun uriOf(id: String): Uri? {
         if (!id.startsWith(Song.LOCAL_PREFIX)) return null

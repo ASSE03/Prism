@@ -316,8 +316,12 @@ open class MainActivity : ComponentActivity() {
             return Uri.parse("prism://looks")
         }
         // An audio file opened with Prism from a file manager (1.8.5): it plays on its own, from the file, and the
-        // player opens. The opener's read grant comes with the intent; nothing is copied.
-        intent?.data?.takeIf { com.prism.music.data.local.OpenedAudio.accepts(intent.action, it, intent.type ?: runCatching { contentResolver.getType(it) }.getOrNull()) }?.let { file ->
+        // player opens. The opener's read grant comes with the intent; nothing is copied. Prism's own files and providers
+        // are never opened this way (another app could name them).
+        intent?.data?.takeIf {
+            com.prism.music.data.local.OpenedAudio.accepts(intent.action, it, intent.type ?: runCatching { contentResolver.getType(it) }.getOrNull()) &&
+                !com.prism.music.data.local.OpenedAudio.prismsOwn(this, it)
+        }?.let { file ->
             container.scope.launch(Dispatchers.IO) {
                 val song = com.prism.music.data.local.OpenedAudio.read(applicationContext, file)
                 withContext(Dispatchers.Main) {
