@@ -35,7 +35,7 @@ fun Song.toMediaItem(videoId: String? = null): MediaItem {
         .setCustomCacheKey(id)
         .setMediaMetadata(
             MediaMetadata.Builder()
-                .setTitle(shown.title)
+                .setTitle(com.prism.music.data.TitleCleaner.clean(shown.title))
                 .setArtist(shown.artistText)
                 .setAlbumTitle(shown.album?.title)
                 // The cover picked for the song or its album (#305), or a file's own (#350), through the artwork provider:
@@ -55,6 +55,7 @@ fun Song.toMediaItem(videoId: String? = null): MediaItem {
 
 fun MediaItem.toSong(): Song? = mediaMetadata.extras?.getString(EXTRA_SONG)?.let {
     runCatching { InnerTube.json.decodeFromString(Song.serializer(), it) }.getOrNull()
+        ?.let { s -> s.copy(title = com.prism.music.data.TitleCleaner.clean(s.title)) }
 }
 
 val MediaItem.videoModeId: String? get() = mediaMetadata.extras?.getString(EXTRA_VIDEO)

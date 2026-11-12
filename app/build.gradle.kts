@@ -32,6 +32,12 @@ android {
         manifestPlaceholders["appLabel"] = "@string/app_name"
         // Only the side-by-side test copy can be profiled from adb (simpleperf / Perfetto), for chasing jank (1.7.4).
         manifestPlaceholders["profileable"] = "false"
+        // Fork ASSE03/Prism: `-PforkRun=N` (the GitHub Actions run number) makes each build newer than the last, so the
+        // in-app update (Settings → Backup & about) finds it: "1.8.4.1-aa12", code 62012.
+        (project.findProperty("forkRun") as String?)?.toIntOrNull()?.let { run ->
+            versionCode = (versionCode ?: 0) * 1000 + run
+            versionName = "$versionName-aa$run"
+        }
         // In-app tests (app/src/androidTest, 1.7.9): Prism on a fixed offline setup, YouTube and lyrics answered from
         // recordings (PrismTestRunner), each test in a fresh app with its data cleared (the orchestrator).
         testInstrumentationRunner = "com.prism.music.PrismTestRunner"

@@ -28,31 +28,56 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Build (remplace Prism, clé debug)
-        run: ./gradlew --no-daemon :app:assembleRelease -PdebugSign
-
-      - name: Rename APK
+      # Clé de signature fixe (secrets KEYSTORE_BASE64 + KEYSTORE_PASSWORD) : sans elle, chaque build aurait une
+      # signature différente et la mise à jour intégrée à Prism serait refusée.
+      - name: Clé de signature
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
-          mkdir -p out
-          cp app/build/outputs/apk/release/*.apk out/Prism-AA.apk
+          if [ -n "$KEYSTORE_BASE64" ] && [ -n "$KEYSTORE_PASSWORD" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > prism-fork.jks
+            printf 'storeFile=prism-fork.jks\nstorePassword=%s\nkeyAlias=prism\nkeyPassword=%s\n' "$KEYSTORE_PASSWORD" "$KEYSTORE_PASSWORD" > keystore.properties
+            echo "Signature : clé du fork"
+          else
+            echo "::warning::Secrets KEYSTORE_BASE64 / KEYSTORE_PASSWORD absents : APK signée avec une clé debug temporaire, la mise à jour intégrée ne fonctionnera pas."
+          fi
 
-      - name: Build (Prism Dev, s'installe à côté)
-        run: ./gradlew --no-daemon :app:assembleRelease -PdebugSign -PsideBySide
+      - name: Version
+        id: v
+        run: |
+          BASE=$(grep -m1 'versionName = "' app/build.gradle.kts | sed -E 's/.*"(.*)".*/\1/')
+          echo "name=${BASE}-aa${{ github.run_number }}" >> "$GITHUB_OUTPUT"
 
-      - name: Rename APK Dev
-        run: cp app/build/outputs/apk/release/*.apk out/Prism-AA-Dev.apk
+      - name: Build Prism (remplace Prism)
+        run: ./gradlew --no-daemon :app:assembleRelease -PforkRun=${{ github.run_number }}
+
+      - name: Copie APK
+        run: |
+          mkdir -p out dev
+          cp app/build/outputs/apk/release/*.apk out/Prism.apk
+
+      - name: Build Prism Dev (s'installe à côté)
+        run: |
+          rm -f keystore.properties
+          ./gradlew --no-daemon :app:assembleRelease -PdebugSign -PsideBySide -PforkRun=${{ github.run_number }}
+          cp app/build/outputs/apk/release/*.apk dev/Prism-Dev.apk
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Prism-AA
-          path: out/*.apk
+          name: Prism-${{ steps.v.outputs.name }}
+          path: |
+            out/Prism.apk
+            dev/Prism-Dev.apk
 
-      - name: Publish release "latest"
+      # Une release par build, tag v<version>, un seul APK nommé Prism.apk : c'est ce que lit la mise à jour de Prism
+      # (Réglages → Sauvegarde et à propos).
+      - name: Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release delete latest --yes --cleanup-tag || true
-          gh release create latest out/*.apk \
-            --title "Prism + Android Auto (Artistes / Albums / Playlists)" \
-            --notes "Build automatique du commit ${GITHUB_SHA::7}. Prism-AA.apk remplace Prism (désinstaller l'original avant). Prism-AA-Dev.apk s'installe à côté sous le nom Prism Dev." \
-            --target "$GITHUB_SHA"
+          gh release delete latest --yes --cleanup-tag 2>/dev/null || true
+          gh release create "v${{ steps.v.outputs.name }}" out/Prism.apk \
+            --title "Prism ${{ steps.v.outputs.name }}" \
+            --notes "Fork ASSE03/Prism — Android Auto (Artistes / Albums / playlists enregistrées), titres sans « (Clip officiel) », mises à jour depuis ce dépôt. Commit ${GITHUB_SHA::7}." \
+            --target "$GITHUB_SHA" --latest

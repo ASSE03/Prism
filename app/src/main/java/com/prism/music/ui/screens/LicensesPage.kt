@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-const val SOURCE_URL = "https://github.com/Yigder/Prism"
+const val SOURCE_URL = "https://github.com/ASSE03/Prism"
 
 /** A library shipped in the APK; [text] names its license text in assets/licenses/. */
 private class Library(val name: String, val by: String, val license: String, val text: String, val url: String)

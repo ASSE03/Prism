@@ -159,7 +159,7 @@ object Parser {
             val show = episodeShow
             return SongItem(
                 Song(
-                    id = videoId, title = title,
+                    id = videoId, title = com.prism.music.data.TitleCleaner.clean(title),
                     artists = listOfNotNull(show?.str("text")?.let { ArtistRef(it) }),
                     thumbnail = thumb, isEpisode = true,
                     podcastId = show?.str("navigationEndpoint", "browseEndpoint", "browseId"),
@@ -182,7 +182,7 @@ object Parser {
             return SongItem(
                 Song(
                     id = videoId,
-                    title = title,
+                    title = com.prism.music.data.TitleCleaner.clean(title),
                     artists = artistsFromRuns(cols.getOrNull(1) ?: emptyList()),
                     album = albumFromRuns(restRuns),
                     durationSec = parseDuration(duration),
@@ -220,7 +220,7 @@ object Parser {
         return Episode(
             song = Song(
                 id = id,
-                title = title,
+                title = com.prism.music.data.TitleCleaner.clean(title),
                 artists = listOfNotNull((showRun?.str("text") ?: show?.title)?.let { ArtistRef(it) }),
                 durationSec = parseDuration(progress.obj("durationText").runs().lastOrNull().str("text")),
                 thumbnail = r.obj("thumbnail").bestThumbnail() ?: show?.thumbnail,
@@ -252,7 +252,7 @@ object Parser {
             if (vt == EPISODE_VIDEO) return null
             return SongItem(
                 Song(
-                    id = id, title = title,
+                    id = id, title = com.prism.music.data.TitleCleaner.clean(title),
                     artists = artistsFromRuns(subtitleRuns),
                     album = albumFromRuns(subtitleRuns),
                     durationSec = parseDuration(subtitleRuns.map { it.str("text") ?: "" }.lastOrNull { durationRegex.matches(it.trim()) }),
@@ -300,14 +300,14 @@ object Parser {
             if (episode) {
                 return SongItem(
                     Song(
-                        id = id, title = title, artists = listOfNotNull(show?.str("text")?.let { ArtistRef(it) }),
+                        id = id, title = com.prism.music.data.TitleCleaner.clean(title), artists = listOfNotNull(show?.str("text")?.let { ArtistRef(it) }),
                         thumbnail = thumb, isEpisode = true, podcastId = show?.str("navigationEndpoint", "browseEndpoint", "browseId"),
                     )
                 )
             }
             return SongItem(
                 Song(
-                    id = id, title = title, artists = artistsFromRuns(subtitleRuns),
+                    id = id, title = com.prism.music.data.TitleCleaner.clean(title), artists = artistsFromRuns(subtitleRuns),
                     album = albumFromRuns(subtitleRuns), thumbnail = thumb,
                     isVideo = isVideoType(vt), isUpload = vt == UPLOAD,
                 )
@@ -338,7 +338,7 @@ object Parser {
         val vt = videoType(r.obj("navigationEndpoint", "watchEndpoint"))
         return Song(
             id = id,
-            title = r.obj("title").text() ?: return null,
+            title = com.prism.music.data.TitleCleaner.clean(r.obj("title").text() ?: return null),
             artists = artistsFromRuns(byline),
             album = albumFromRuns(byline),
             durationSec = parseDuration(r.obj("lengthText").text()),
@@ -433,7 +433,7 @@ object Parser {
         val albumRun = flexColumn(r, 2).firstOrNull()
         return Song(
             id = id,
-            title = title,
+            title = com.prism.music.data.TitleCleaner.clean(title),
             artists = artists,
             album = albumRun?.str("text")?.takeIf { it.isNotBlank() }?.let { AlbumRef(it, albumRun.str("navigationEndpoint", "browseEndpoint", "browseId")) } ?: album,
             durationSec = parseDuration(r.arr("fixedColumns")?.firstOrNull().obj("musicResponsiveListItemFixedColumnRenderer", "text").text()),

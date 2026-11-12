@@ -46,7 +46,7 @@ data class SongEntity(
 ) {
     fun toSong() = Song(
         id = id,
-        title = title,
+        title = com.prism.music.data.TitleCleaner.clean(title),
         artists = storedArtists(artistsJson) ?: legacyArtists(),
         album = albumTitle?.let { AlbumRef(it, albumId) },
         durationSec = durationSec,

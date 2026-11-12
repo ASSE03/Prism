@@ -383,7 +383,7 @@ class UpdateChecker(private val context: Context, private val http: OkHttpClient
     enum class InstallStep { START, WAIT, REOPEN }
 
     companion object {
-        const val REPO = "Yigder/Prism"
+        const val REPO = "ASSE03/Prism"
 
         /** How long between background checks (#278: was six hours). */
         const val CHECK_EVERY_MS = 3_600_000L
@@ -405,7 +405,10 @@ class UpdateChecker(private val context: Context, private val http: OkHttpClient
             else -> InstallStep.START
         }
 
-        /** "1.10.0" is newer than "1.9.2"; anything after a dash ("-beta") is ignored. */
+        /**
+         * "1.10.0" is newer than "1.9.2"; anything after a dash ("-beta") is ignored, except the fork's build number:
+         * "1.8.4.1-aa13" is newer than "1.8.4.1-aa12" (and than "1.8.4.1").
+         */
         fun isNewer(candidate: String, current: String): Boolean {
             fun parts(v: String) = v.substringBefore('-').split('.').map { it.filter(Char::isDigit).toIntOrNull() ?: 0 }
             val a = parts(candidate); val b = parts(current)
@@ -413,7 +416,8 @@ class UpdateChecker(private val context: Context, private val http: OkHttpClient
                 val x = a.getOrElse(i) { 0 }; val y = b.getOrElse(i) { 0 }
                 if (x != y) return x > y
             }
-            return false
+            fun forkRun(v: String) = Regex("-aa(\\d+)").find(v)?.groupValues?.get(1)?.toIntOrNull() ?: 0
+            return forkRun(candidate) > forkRun(current)
         }
     }
 }

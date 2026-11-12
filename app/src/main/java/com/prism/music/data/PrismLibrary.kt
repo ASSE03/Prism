@@ -272,7 +272,10 @@ class PrismLibrary(private val dir: File) {
 
     private fun read(): PrismLibraryFile = runCatching {
         if (!file.isFile) PrismLibraryFile()
-        else InnerTube.json.decodeFromString(PrismLibraryFile.serializer(), file.readText())
+        else InnerTube.json.decodeFromString(PrismLibraryFile.serializer(), file.readText()).let { lib ->
+            // Titles kept before the fork cleaned them: "(Clip officiel)" and the like go there too.
+            lib.copy(lists = lib.lists.map { l -> l.copy(songs = l.songs.map { s -> s.copy(title = TitleCleaner.clean(s.title)) }) })
+        }
     }.getOrElse { PrismLibraryFile() }
 
     private fun write(lib: PrismLibraryFile) {
