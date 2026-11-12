@@ -3687,6 +3687,20 @@
     <string name="finish_lyric_again">Play again</string>
     <string name="replay_news_channel">Recaps and milestones</string>
     <string name="replay_news_channel_desc">Your monthly recap and listening milestones</string>
+    <string name="rw_calendar_title">YOUR YEAR, DAY BY DAY</string>
+    <plurals name="rw_days_with_music">
+        <item quantity="one">day with music</item>
+        <item quantity="other">days with music</item>
+    </plurals>
+    <string name="rw_clock_title">YOUR WEEK, HOUR BY HOUR</string>
+    <string name="rw_clock_song">Your %1$s song</string>
+    <string name="rw_found_title">FOUND FOR YOU</string>
+    <plurals name="rw_found_songs">
+        <item quantity="one">song you kept</item>
+        <item quantity="other">songs you kept</item>
+    </plurals>
+    <string name="rw_found_line">First heard on Prism\'s radio, Smart Shuffle, DJ or a mix, then played again and again.</string>
+    <string name="rw_milestones_title">YOUR YEAR\'S MILESTONES</string>
     <string name="milestones">Milestones</string>
     <string name="ms_new">New milestone</string>
     <string name="ms_and_more">(+%1$d more)</string>
