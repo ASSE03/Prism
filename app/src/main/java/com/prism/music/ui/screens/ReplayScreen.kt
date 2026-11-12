@@ -801,8 +801,8 @@ internal object ClockGrid {
 
     /** An hour as the phone tells time: "21:00", or "9 PM". */
     fun hourLabel(hour: Int, is24: Boolean, locale: Locale = Locale.getDefault()): String {
-        val pattern = runCatching { android.text.format.DateFormat.getBestDateTimePattern(locale, if (is24) "Hm" else "ha") }.getOrNull()
-            ?.takeIf { it.isNotBlank() } ?: if (is24) "HH:mm" else "h a"
+        val pattern = runCatching { android.text.format.DateFormat.getBestDateTimePattern(locale, if (is24) "mH" else "ha") }.getOrNull()
+            ?.takeIf { it.isNotBlank() } ?: if (is24) return "%02d:00".format(locale, hour) else "h a"
         return java.time.LocalTime.of(hour, 0).format(java.time.format.DateTimeFormatter.ofPattern(pattern, locale))
     }
 

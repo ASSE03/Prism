@@ -296,6 +296,10 @@ val recommendationsHistoryIndex: List<SettingEntry> by lazy {
             page, replay, tr(R.string.replay_notices),
             listOf(R.string.rewind_notification, R.string.rewind_wrapped_year_in_review_december, R.string.recap_notification, R.string.milestone_notification, R.string.milestones).joinToString(" ") { tr(it) },
         ),
+        // Each of the three, by its own name (drawn in that row's sheet).
+        SettingEntry(page, replay, tr(R.string.rewind_notification), tr(R.string.rewind_wrapped_year_in_review_december)),
+        SettingEntry(page, replay, tr(R.string.recap_notification), tr(R.string.recap_ready_text)),
+        SettingEntry(page, replay, tr(R.string.milestone_notification), tr(R.string.milestones)),
         SettingEntry(page, replay, tr(R.string.finish_lyric_title), tr(R.string.finish_lyric_info)),
         SettingEntry(page, replay, tr(R.string.imp_count_history_from), tr(R.string.imp_count_keywords) + " " + tr(R.string.imp_prism_plays)),
     )

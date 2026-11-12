@@ -368,7 +368,6 @@ private fun BarTitle(title: String, barWidth: Dp, start: Dp, end: Dp, modifier: 
  */
 @Composable
 fun ResetPageDialog(pageTitle: String, reset: PageReset, onDismiss: () -> Unit) {
-    val looks = com.prism.music.ui.theme.LocalContainer.current.looks
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(tr(R.string.reset_2, pageTitle)) },
@@ -382,7 +381,7 @@ fun ResetPageDialog(pageTitle: String, reset: PageReset, onDismiss: () -> Unit) 
         },
         confirmButton = {
             // Its Undo bar counts the lines listed here, not the stored values under them.
-            PrismTextButton(onClick = { onDismiss(); looks.pageReset(reset.changes.size); reset.onReset() }, Modifier.testTag(SettingsTags.RESET_CONFIRM)) { Text(tr(R.string.reset)) }
+            PrismTextButton(onClick = { onDismiss(); com.prism.music.data.looks.LookStore.pageReset(reset.changes.size); reset.onReset() }, Modifier.testTag(SettingsTags.RESET_CONFIRM)) { Text(tr(R.string.reset)) }
         },
         dismissButton = { PrismTextButton(onClick = onDismiss) { Text(tr(R.string.cancel)) } },
     )
