@@ -247,6 +247,10 @@ fun List<SongPlays>.mergeUploads(): List<SongPlays> {
 data class ArtistPlays(val artistName: String, val plays: Int, val ms: Long, val thumbnail: String?, val artistId: String?)
 @kotlinx.serialization.Serializable
 data class MonthTotal(val month: String, val ms: Long)
+/** Listening in one hour of one weekday (the listening clock, 1.8.5): [weekday] 0 = Monday … 6 = Sunday, [hour] 0..23, local. */
+data class HourTotal(val weekday: Int, val hour: Int, val ms: Long, val plays: Int)
+/** Listening on one day (the listening calendar, 1.8.5): [day] is the local date, "yyyy-MM-dd". */
+data class DayTotal(val day: String, val ms: Long, val plays: Int)
 /** An album's listening (by its title and the songs' main artist); [songs] is how many of its songs were played. */
 @kotlinx.serialization.Serializable
 data class AlbumPlays(val albumTitle: String, val artistName: String, val plays: Int, val ms: Long, val songs: Int, val thumbnail: String?)
@@ -374,6 +378,18 @@ interface PlayEventDao {
            FROM play_events WHERE timestamp BETWEEN :from AND :to GROUP BY month ORDER BY month"""
     )
     suspend fun monthly(from: Long, to: Long): List<MonthTotal>
+
+    /** The listening clock (1.8.5): SQL from [com.prism.music.data.imports.LocalClock.hours], which says why it's built there. */
+    @androidx.room.RawQuery
+    suspend fun clockHours(q: androidx.sqlite.db.SupportSQLiteQuery): List<HourTotal>
+
+    /** The listening calendar (1.8.5): SQL from [com.prism.music.data.imports.LocalClock.days]. */
+    @androidx.room.RawQuery
+    suspend fun clockDays(q: androidx.sqlite.db.SupportSQLiteQuery): List<DayTotal>
+
+    /** One hour's top songs (1.8.5): SQL from [com.prism.music.data.imports.LocalClock.songs]. */
+    @androidx.room.RawQuery
+    suspend fun clockSongs(q: androidx.sqlite.db.SupportSQLiteQuery): List<SongPlays>
 
     @Query("SELECT COUNT(DISTINCT strftime('%Y-%m-%d', timestamp / 1000, 'unixepoch', 'localtime')) FROM play_events WHERE timestamp BETWEEN :from AND :to")
     suspend fun activeDays(from: Long, to: Long): Int
