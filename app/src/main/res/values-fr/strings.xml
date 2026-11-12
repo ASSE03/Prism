@@ -141,6 +141,8 @@
     <string name="night_starts_at">La nuit commence à</string>
     <string name="next_at">Prochain : %1$s à %2$s</string>
     <string name="history">Historique</string>
+    <string name="remove_from_history">Retirer de l’historique</string>
+    <string name="removed_from_history">Retiré de l’historique</string>
     <string name="search_history">Rechercher dans l’historique</string>
     <string name="your_last_changes_to_the_look">Vos %1$s dernières modifications de l’apparence s’affichent ici, pour revenir en arrière.</string>
     <string name="clear_history">Effacer l’historique</string>

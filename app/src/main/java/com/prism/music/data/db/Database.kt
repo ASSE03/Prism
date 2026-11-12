@@ -356,6 +356,25 @@ interface PlayEventDao {
     )
     suspend fun historyOf(songIds: List<String>, limit: Int, minMs: Long): List<HistoryRow>
 
+    /** Plays by their own ids, as stored (History's "Remove from history" keeps them for Undo, #469). */
+    @Query("SELECT * FROM play_events WHERE id IN (:ids)")
+    suspend fun byIds(ids: List<Long>): List<PlayEventEntity>
+
+    /** Takes one play out of the history (not the song's other plays). */
+    @Query("DELETE FROM play_events WHERE id = :id")
+    suspend fun deleteById(id: Long): Int
+
+    @Query("DELETE FROM play_events WHERE id IN (:ids)")
+    suspend fun deleteByIds(ids: List<Long>): Int
+
+    /** Puts removed plays back exactly as they were (same id, time, length, source, excluded): History's Undo. */
+    @Insert(onConflict = androidx.room.OnConflictStrategy.IGNORE)
+    suspend fun reinsert(events: List<PlayEventEntity>)
+
+    /** The song's latest play left, if any. */
+    @Query("SELECT MAX(timestamp) FROM play_events WHERE songId = :songId")
+    suspend fun lastPlayOf(songId: String): Long?
+
     @Query("SELECT * FROM play_events WHERE timestamp > :since")
     suspend fun eventsSince(since: Long): List<PlayEventEntity>
 

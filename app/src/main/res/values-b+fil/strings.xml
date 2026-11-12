@@ -141,6 +141,8 @@
     <string name="night_starts_at">Nagsisimula ang gabi sa</string>
     <string name="next_at">Susunod: %1$s nang %2$s</string>
     <string name="history">History</string>
+    <string name="remove_from_history">Alisin sa history</string>
+    <string name="removed_from_history">Inalis sa history</string>
     <string name="search_history">Maghanap sa history</string>
     <string name="your_last_changes_to_the_look">Dito lalabas ang huling %1$s pagbabago mo sa itsura, para mabalikan mo.</string>
     <string name="clear_history">I-clear ang history</string>

@@ -5,8 +5,13 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextInput
+import org.junit.Assert.assertEquals
 import androidx.compose.ui.unit.dp
 import com.prism.music.data.db.PlayEventEntity
 import com.prism.music.data.model.AlbumRef
@@ -72,6 +77,51 @@ class HistoryTabTest {
         compose.onAllNodes(hasSetTextAction())[0].performTextInput("BEYONCE")
         compose.waitUntil(10_000) { compose.onAllNodesWithText("Halo").fetchSemanticsNodes().isNotEmpty() }
         compose.waitUntil(5_000) { compose.onAllNodesWithText("Filler tune").fetchSemanticsNodes().isEmpty() }
+    }
+
+    /** Halo and Jóga by turns, Halo last: no two plays in a row fold into one. */
+    private fun seedTurns() = runBlocking {
+        val joga = Song("joga", "Jóga", listOf(ArtistRef("Björk")), durationSec = 300)
+        c.db.songs().upsertAll(listOf(halo.toEntity(), joga.toEntity()))
+        for (i in 9 downTo 0) c.db.plays().insert(PlayEventEntity(songId = if (i % 2 == 0) halo.id else joga.id, timestamp = now - 60_000L * (i + 1), playedMs = 120_000))
+    }
+
+    private fun events() = runBlocking { c.db.plays().events(0, Long.MAX_VALUE) }
+
+    private fun showTurns() {
+        val s = AppSettings().copy(libraryStartTab = "HISTORY")
+        compose.setContent {
+            val nav = Navigator(androidx.navigation.compose.rememberNavController(), openPlayer = {})
+            PrismTheme(s, artworkColor = null) {
+                CompositionLocalProvider(LocalContainer provides c, LocalNavigator provides nav) { LibraryScreen(bottomPadding = 0.dp) }
+            }
+        }
+        compose.waitUntil(10_000) { compose.onAllNodesWithText("Halo").fetchSemanticsNodes().isNotEmpty() }
+    }
+
+    @Test fun theRowsMenuOffersRemoveFromHistory() {
+        seedTurns()
+        showTurns()
+        compose.onAllNodesWithContentDescription("More")[0].performClick()
+        compose.waitUntil(5_000) { compose.onAllNodesWithText("Remove from history").fetchSemanticsNodes().isNotEmpty() }
+    }
+
+    @Test fun removingAPlayShowsUndoAndUndoPutsItBack() {
+        seedTurns()
+        showTurns()
+        val before = events()
+        val latest = before.maxBy { it.timestamp }
+        compose.onAllNodesWithContentDescription("More")[0].performClick()
+        compose.waitUntil(5_000) { compose.onAllNodesWithText("Remove from history").fetchSemanticsNodes().isNotEmpty() }
+        // Low in the sheet, which is a window of its own (a touch there doesn't reach it under Robolectric): its click action.
+        compose.onAllNodesWithText("Remove from history")[0].performScrollTo().performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
+        // That play only: the song's other plays stay.
+        compose.waitUntil(5_000) { events().size == before.size - 1 }
+        assertEquals(before - latest, events())
+        compose.waitUntil(5_000) { compose.onAllNodesWithText("Undo").fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodesWithText("Undo")[0].performClick()
+        compose.waitUntil(5_000) { events().size == before.size }
+        assertEquals("the same rows back", before, events())
     }
 
     @Test fun nothingFoundSaysWhatWasTyped() {

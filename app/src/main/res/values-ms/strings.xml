@@ -141,6 +141,8 @@
     <string name="night_starts_at">Malam bermula pada</string>
     <string name="next_at">Seterusnya: %1$s pada %2$s</string>
     <string name="history">Sejarah</string>
+    <string name="remove_from_history">Alih keluar daripada sejarah</string>
+    <string name="removed_from_history">Dialih keluar daripada sejarah</string>
     <string name="search_history">Cari sejarah</string>
     <string name="your_last_changes_to_the_look">%1$s perubahan terakhir anda pada gaya dipaparkan di sini, untuk diundur semula.</string>
     <string name="clear_history">Kosongkan sejarah</string>

@@ -141,6 +141,8 @@
     <string name="night_starts_at">রাত শুরু হয়</string>
     <string name="next_at">পরবর্তী: %2$s-এ %1$s</string>
     <string name="history">ইতিহাস</string>
+    <string name="remove_from_history">ইতিহাস থেকে সরান</string>
+    <string name="removed_from_history">ইতিহাস থেকে সরানো হয়েছে</string>
     <string name="search_history">ইতিহাস খুঁজুন</string>
     <string name="your_last_changes_to_the_look">লুকে আপনার শেষ %1$sটি পরিবর্তন এখানে দেখা যায়, যাতে ফিরে যেতে পারেন।</string>
     <string name="clear_history">ইতিহাস মুছুন</string>

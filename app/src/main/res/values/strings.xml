@@ -142,6 +142,8 @@
     <string name="night_starts_at">Night starts at</string>
     <string name="next_at">Next: %1$s at %2$s</string>
     <string name="history">History</string>
+    <string name="remove_from_history">Remove from history</string>
+    <string name="removed_from_history">Removed from history</string>
     <string name="search_history">Search history</string>
     <string name="your_last_changes_to_the_look">Your last %1$s changes to the look show here, to go back through.</string>
     <string name="clear_history">Clear history</string>

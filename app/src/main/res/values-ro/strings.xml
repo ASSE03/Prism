@@ -141,6 +141,8 @@
     <string name="night_starts_at">Noaptea începe la</string>
     <string name="next_at">Următorul: %1$s la %2$s</string>
     <string name="history">Istoric</string>
+    <string name="remove_from_history">Elimină din istoric</string>
+    <string name="removed_from_history">Eliminat din istoric</string>
     <string name="search_history">Caută în istoric</string>
     <string name="your_last_changes_to_the_look">Ultimele tale %1$s modificări ale aspectului apar aici, ca să te poți întoarce prin ele.</string>
     <string name="clear_history">Șterge istoricul</string>

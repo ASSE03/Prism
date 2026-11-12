@@ -1201,6 +1201,9 @@ private class YearSoFar(
 )
 private val yearSoFar = MutableStateFlow<YearSoFar?>(null)
 
+/** Plays taken out of the history (#469): the card reads the year again rather than keep its count for minutes. */
+internal fun forgetYearSoFar() { yearSoFar.value = null }
+
 private suspend fun loadYearSoFar(
     c: com.prism.music.AppContainer, graph: com.prism.music.data.prefs.ReplayGraph, counted: Set<com.prism.music.data.imports.ImportSource>,
 ): YearSoFar = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {

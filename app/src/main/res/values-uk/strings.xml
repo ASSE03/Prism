@@ -141,6 +141,8 @@
     <string name="night_starts_at">Ніч починається о</string>
     <string name="next_at">Далі: %1$s о %2$s</string>
     <string name="history">Історія</string>
+    <string name="remove_from_history">Видалити з історії</string>
+    <string name="removed_from_history">Видалено з історії</string>
     <string name="search_history">Шукати в історії</string>
     <string name="your_last_changes_to_the_look">Тут показано твої останні зміни вигляду (%1$s), щоб до них можна було повернутися.</string>
     <string name="clear_history">Очистити історію</string>

@@ -141,6 +141,8 @@
     <string name="night_starts_at">Η νύχτα ξεκινά στις</string>
     <string name="next_at">Επόμενο: %1$s στις %2$s</string>
     <string name="history">Ιστορικό</string>
+    <string name="remove_from_history">Αφαίρεση από το ιστορικό</string>
+    <string name="removed_from_history">Αφαιρέθηκε από το ιστορικό</string>
     <string name="search_history">Αναζήτηση στο ιστορικό</string>
     <string name="your_last_changes_to_the_look">Οι τελευταίες %1$s αλλαγές σου στην εμφάνιση εμφανίζονται εδώ, για να γυρίσεις πίσω.</string>
     <string name="clear_history">Διαγραφή ιστορικού</string>
