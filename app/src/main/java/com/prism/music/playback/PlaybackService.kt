@@ -1638,7 +1638,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 val at = (0 until player.mediaItemCount).firstOrNull { player.getMediaItemAt(it).mediaId == next && it != player.currentMediaItemIndex }
                 val song = at?.let { player.getMediaItemAt(it).toSong() }
                 if (at != null && song != null && !song.isLive) {
-                    player.replaceMediaItem(at, song.copy(isLive = true).toMediaItem(player.getMediaItemAt(at).videoModeId?.let { song.id }))
+                    player.replaceKeepingOrder(at, song.copy(isLive = true).toMediaItem(player.getMediaItemAt(at).videoModeId?.let { song.id }))
                 }
             }
         }
@@ -1680,12 +1680,12 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                     val cover = found.thumbnail?.takeIf { it != video.thumbnail } ?: return@launch
                     val at = queued() ?: return@launch
                     val now = player.getMediaItemAt(at).toSong() ?: return@launch
-                    player.replaceMediaItem(at, VideoCover.withSong(now, found, cover).toMediaItem())
+                    player.replaceKeepingOrder(at, VideoCover.withSong(now, found, cover).toMediaItem())
                     return@launch
                 }
                 if (!c.network.online.value && !c.availableOffline(song.id)) return@launch
                 val at = queued() ?: return@launch
-                player.replaceMediaItem(at, song.toMediaItem())
+                player.replaceKeepingOrder(at, song.toMediaItem())
             } finally {
                 findingSongs.remove(video.id)
             }
