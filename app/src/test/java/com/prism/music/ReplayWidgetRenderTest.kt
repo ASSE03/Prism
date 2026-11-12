@@ -64,13 +64,16 @@ class ReplayWidgetRenderTest {
 
     private class Shot(val bmp: Bitmap, val root: View)
 
-    private fun render(wide: Boolean, w: ReplayWeek, wDp: Int, hDp: Int, art: Boolean = true, white: Boolean = false): Shot {
+    private fun render(wide: Boolean, w: ReplayWeek, wDp: Int, hDp: Int, art: Boolean = true, white: Boolean = false): Shot =
+        render(if (wide) R.layout.widget_replay else R.layout.widget_replay_small, w, wDp, hDp, art, white)
+
+    private fun render(layout: Int, w: ReplayWeek, wDp: Int, hDp: Int, art: Boolean = true, white: Boolean = false): Shot {
         val px = (wDp * density).toInt()
         val py = (hDp * density).toInt()
         // The launcher's host view, in the phone's direction (left to right, or right to left in Arabic).
         val host = FrameLayout(context).apply { layoutDirection = context.resources.configuration.layoutDirection }
         val rv = ReplayWidgets.views(
-            context, wide, w,
+            context, layout, w,
             if (art) cover(0xFFE0465A.toInt(), 0xFF4B2BB8.toInt(), 0.14f) else null,
             if (art && w.artistPhoto != null) cover(0xFFF2B33D.toInt(), 0xFF1E8C7E.toInt(), 0.5f) else null,
             hours = false, white = white,
@@ -127,6 +130,49 @@ class ReplayWidgetRenderTest {
         assertEquals("TOP ARTIST", wide.root.text(R.id.rp_artist_label))
         // The artist sits beside the song, apart from it.
         assertTrue(wide.root.box(R.id.rp_title).right <= wide.root.box(R.id.rp_artist_name).left)
+    }
+
+    /** Whether view [id] is drawn whole inside the widget's padding ([padDp]) of [s]. */
+    private fun whole(s: Shot, id: Int, padDp: Int = 12): Boolean {
+        val b = s.root.box(id)
+        return b.height() > 0 && b.top >= 0 && b.bottom <= s.bmp.height - (padDp * density).toInt() + 1
+    }
+
+    /**
+     * The song widget at the shortest it can be made (110 × 110 dp, its minResize) and just under the 2×2 layout's
+     * height: the layout picked for the size shows the cover, label, title and artist whole. The 2×2 layout at 110 dp
+     * cut the title and the artist off (about 155 dp of content).
+     */
+    @Test fun theSongWidgetAtItsShortestShowsItsTitleAndArtist() {
+        val xml = File("src/main/res/xml/widget_replay_small_info.xml").readText()
+        fun dp(attr: String) = Regex("android:$attr=\"(\\d+)dp\"").find(xml)!!.groupValues[1].toInt()
+        val minW = dp("minResizeWidth")
+        val minH = dp("minResizeHeight")
+        val shortest = ReplayWidgets.layoutFor(wideWidget = false, minWidth = minW, height = minH)
+        val shots = listOf(
+            render(shortest, week, minW, minH),
+            render(shortest, long, minW, minH),
+            render(shortest, week, minW, minH, art = false),
+            render(shortest, ReplayWeek(), minW, minH),
+            render(ReplayWidgets.layoutFor(wideWidget = false, minWidth = minW, height = ReplayWidgets.TALL_DP), week, minW, ReplayWidgets.TALL_DP),
+            render(ReplayWidgets.layoutFor(wideWidget = false, minWidth = minW, height = ReplayWidgets.TALL_DP), long, minW, ReplayWidgets.TALL_DP),
+            // Short but a little wider, as a 2×1 or 3×1 often is.
+            render(ReplayWidgets.layoutFor(wideWidget = false, minWidth = 170, height = minH), week, 170, minH),
+        )
+        sheet("replay-widgets-shortest.png", shots)
+        for ((i, s) in shots.withIndex()) {
+            if (i == 3) continue
+            for (id in listOf(R.id.rp_song_art, R.id.rp_song_label, R.id.rp_title, R.id.rp_artist)) {
+                assertTrue("shot $i: ${context.resources.getResourceEntryName(id)} at ${s.root.box(id)} in ${s.bmp.width}×${s.bmp.height}", whole(s, id))
+            }
+        }
+        assertEquals("Blinding Lights", shots[0].root.text(R.id.rp_title))
+        assertEquals("The Weeknd", shots[0].root.text(R.id.rp_artist))
+        assertTrue("title ends in …", shots[1].root.ellipsized(R.id.rp_title))
+        // Nothing played: the mark and the whole line.
+        val empty = shots[3]
+        assertTrue(empty.root.shown(R.id.rp_empty) && whole(empty, R.id.rp_mark) && whole(empty, R.id.rp_empty_text))
+        assertTrue(!empty.root.ellipsized(R.id.rp_empty_text))
     }
 
     @Test fun nothingPlayedYet() {

@@ -80,6 +80,9 @@ import com.prism.music.ui.theme.LocalAppSettings
 import com.prism.music.ui.theme.LocalContainer
 import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 
 // The phone's own music files have their own page (Local files, from Playlists), with Songs, Artists and Albums.
 // Tags (1.8.3) last, and only once there's a tag: the other tabs keep their places.
@@ -118,16 +121,18 @@ private fun dayStart(at: Long): Long = java.util.Calendar.getInstance().apply {
 
 /**
  * "Removed from history" with Undo (#469), as the look's Undo bar shows it (the same bar, glass or plain), for five
- * seconds: Undo puts the same plays back.
+ * seconds (or the longer time to act the listener set in Android's accessibility settings): Undo puts the same plays
+ * back. TalkBack reads it out when it comes.
  */
 @Composable
-private fun HistoryUndoBar(
+internal fun HistoryUndoBar(
     removed: com.prism.music.data.HistoryRemoval.Removed?, modifier: Modifier, onGone: () -> Unit,
     onUndo: (com.prism.music.data.HistoryRemoval.Removed) -> Unit,
 ) {
+    val context = androidx.compose.ui.platform.LocalContext.current
     var shown by remember { mutableStateOf(removed) }
     if (removed != null) shown = removed
-    LaunchedEffect(removed) { if (removed != null) { kotlinx.coroutines.delay(5_000); onGone() } }
+    LaunchedEffect(removed) { if (removed != null) { kotlinx.coroutines.delay(com.prism.music.ui.components.undoBarMillis(context)); onGone() } }
     androidx.compose.animation.AnimatedVisibility(
         removed != null, modifier,
         enter = androidx.compose.animation.fadeIn() + androidx.compose.animation.slideInVertically { it / 2 }, exit = androidx.compose.animation.fadeOut(),
@@ -136,7 +141,11 @@ private fun HistoryUndoBar(
         val glass = LocalAppSettings.current.glassEverywhere
         val (ink, action) = com.prism.music.ui.components.barInk(glass)
         com.prism.music.ui.components.BarSurface(glass, androidx.compose.foundation.shape.RoundedCornerShape(50), Modifier.widthIn(max = 520.dp)) {
-            Row(Modifier.padding(start = 18.dp, end = 6.dp, top = 2.dp, bottom = 2.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                Modifier.semantics { liveRegion = LiveRegionMode.Polite }.testTag(HISTORY_UNDO_TAG)
+                    .padding(start = 18.dp, end = 6.dp, top = 2.dp, bottom = 2.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Text(tr(R.string.removed_from_history), Modifier.weight(1f, fill = false), style = MaterialTheme.typography.bodyMedium, color = ink, maxLines = 1)
                 Spacer(Modifier.width(8.dp))
                 PrismTextButton({ onUndo(r) }) {
@@ -148,6 +157,8 @@ private fun HistoryUndoBar(
         }
     }
 }
+
+internal const val HISTORY_UNDO_TAG = "library.history.undo"
 
 @Composable
 private fun HistoryHeading(title: String) {

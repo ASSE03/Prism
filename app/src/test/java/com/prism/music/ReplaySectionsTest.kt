@@ -3,7 +3,9 @@ package com.prism.music
 import android.content.Context
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.click
@@ -89,10 +91,15 @@ class ReplaySectionsTest {
     private fun milestonesNew() =
         RuntimeEnvironment.getApplication().getSharedPreferences("milestones", Context.MODE_PRIVATE).edit().putLong("since", 1L).commit()
 
-    private fun show(startPeriod: String? = october, opened: (String) -> Unit = {}) {
+    private fun show(startPeriod: String? = october, rtl: Boolean = false, fontScale: Float? = null, opened: (String) -> Unit = {}) {
         compose.setContent {
             val nav = Navigator(rememberNavController(), openPlayer = {})
-            CompositionLocalProvider(LocalContainer provides container, LocalNavigator provides nav) {
+            val density = androidx.compose.ui.platform.LocalDensity.current
+            CompositionLocalProvider(
+                LocalContainer provides container, LocalNavigator provides nav,
+                androidx.compose.ui.platform.LocalLayoutDirection provides if (rtl) androidx.compose.ui.unit.LayoutDirection.Rtl else androidx.compose.ui.unit.LayoutDirection.Ltr,
+                androidx.compose.ui.platform.LocalDensity provides androidx.compose.ui.unit.Density(density.density, fontScale ?: density.fontScale),
+            ) {
                 PrismTheme(AppSettings(), artworkColor = null) {
                     ReplayContent(0.dp, startPeriod = startPeriod, showStory = { s, _ -> opened(s.title) })
                 }
@@ -148,6 +155,93 @@ class ReplaySectionsTest {
         val rows = compose.onAllNodes(hasTestTag(ReplayTags.CLOCK_SONG)).fetchSemanticsNodes()
             .map { n -> n.config.getOrNull(SemanticsProperties.Text).orEmpty().joinToString(" ") { it.text } }
         assertTrue("$rows", rows[0].contains("Alpha") && rows[1].contains("Bravo"))
+    }
+
+    /** Right to left the hour labels run from the right (Row mirrors them): the grid and a tap must too, as in the story. */
+    @Test fun rightToLeftTheClockRunsFromTheRightLikeItsLabels() {
+        seedOctober()
+        show(rtl = true)
+        loaded()
+        until("the clock") { count(ReplayTags.CLOCK_BUSIEST) == 1 }
+        // Nine in the evening, counted from the right edge.
+        node(ReplayTags.CLOCK_GRID).performTouchInput { click(Offset(width * (1f - 21.5f / 24f), height / 2f)) }
+        until("nine o'clock's songs") { count(ReplayTags.CLOCK_SONG) == 2 }
+        assertEquals(5, ClockGrid.hourAt(239f - 5.5f * 10f, 240f, rtl = true))
+        assertEquals(0, ClockGrid.hourAt(239.9f, 240f, rtl = true))
+        assertEquals(23, ClockGrid.hourAt(0f, 240f, rtl = true))
+        assertEquals(230f, ClockGrid.hourLeft(0, 240f, rtl = true))
+        assertEquals(0f, ClockGrid.hourLeft(23, 240f, rtl = true))
+    }
+
+    /** At twice the font size the weekday names fit their rows (18 dp clipped them from 1.3x). */
+    @Test fun aLargeFontFitsTheClocksWeekdayNames() {
+        seedOctober()
+        show(fontScale = 2f)
+        loaded()
+        until("the clock") { count(ReplayTags.CLOCK_BUSIEST) == 1 }
+        val names = compose.onAllNodes(hasTestTag(ReplayTags.CLOCK_DAY), useUnmergedTree = true)
+        assertEquals(7, names.fetchSemanticsNodes().size)
+        for (i in 0 until 7) {
+            val results = mutableListOf<androidx.compose.ui.text.TextLayoutResult>()
+            names[i].performSemanticsAction(SemanticsActions.GetTextLayoutResult) { it(results) }
+            val r = results.single()
+            assertFalse(
+                "${r.layoutInput.text} clipped: ${r.size} of ${r.multiParagraph.width} x ${r.multiParagraph.height}, lines ${r.lineCount}, " +
+                    "exceeded ${r.multiParagraph.didExceedMaxLines}, ${r.layoutInput.constraints}, ${r.layoutInput.style.fontSize} ${r.layoutInput.density}",
+                // (hasVisualOverflow can't be used: a Text narrower than its room reports its room's width as overflow.)
+                r.multiParagraph.height > r.size.height + 0.5f || r.multiParagraph.didExceedMaxLines || r.multiParagraph.maxIntrinsicWidth > r.size.width + 0.5f,
+            )
+        }
+    }
+
+    /** At twice the font size the months' names get a taller row: before, it stayed 20 dp and the names ran into the first week. */
+    @Test fun aLargeFontGivesTheCalendarsMonthNamesRoom() {
+        seedOctober()
+        show(fontScale = 2f)
+        loaded()
+        until("the calendar") { count(ReplayTags.CALENDAR_GRID) == 1 }
+        val grid = node(ReplayTags.CALENDAR_GRID).fetchSemanticsNode()
+        val dp = compose.density.density
+        val fixed = CalendarGrid.Layout(grid.size.width.toFloat(), 1, dp)
+        // labelSmall's line at 2x (Android 14's curve: about 29 dp) and 4 dp below it, against the old 20 dp.
+        assertTrue("${grid.size.height} vs ${fixed.height}", grid.size.height >= fixed.height + 10 * dp)
+    }
+
+    /**
+     * All time shows the last twelve months: plays from years before count neither toward the calendar's minimum nor in
+     * TalkBack's "days with music".
+     */
+    @Test fun allTimeCountsOnlyTheDaysItsCalendarShows() {
+        val today = LocalDate.now()
+        val recent = listOf(today.minusDays(3), today.minusDays(5), today.minusDays(9))
+        runBlocking {
+            container.db.songs().upsertAll(listOf(song("a", "Alpha")))
+            val plays = container.db.plays()
+            suspend fun on(d: LocalDate, n: Int) = repeat(n) { plays.insert(PlayEventEntity(songId = "a", timestamp = d.atTime(12, it).atZone(zone).toInstant().toEpochMilli(), playedMs = 200_000)) }
+            // Five days three years ago, four plays each.
+            (0 until 5).forEach { on(today.minusYears(3).withDayOfMonth(1).plusDays(it.toLong()), 4) }
+            recent.forEach { on(it, 1) }
+        }
+        show(startPeriod = "ALL")
+        loaded()
+        until("the calendar") { count(ReplayTags.CALENDAR_GRID) == 1 }
+        val said = node(ReplayTags.CALENDAR_GRID).fetchSemanticsNode().config.getOrNull(SemanticsProperties.ContentDescription).orEmpty().joinToString()
+        assertTrue(said, said.contains("Days with music: 3"))
+    }
+
+    @Test fun allTimeWithOnlyOldHistoryHasNoCalendar() {
+        val old = LocalDate.now().minusYears(3).withDayOfMonth(1)
+        runBlocking {
+            container.db.songs().upsertAll(listOf(song("a", "Alpha")))
+            val plays = container.db.plays()
+            (0 until 5).forEach { d -> repeat(3) { plays.insert(PlayEventEntity(songId = "a", timestamp = old.plusDays(d.toLong()).atTime(12, it).atZone(zone).toInstant().toEpochMilli(), playedMs = 200_000)) } }
+        }
+        show(startPeriod = "ALL")
+        loaded()
+        compose.mainClock.advanceTimeBy(2_000)
+        Thread.sleep(500)
+        compose.waitForIdle()
+        assertEquals(0, count(ReplayTags.CALENDAR_GRID))
     }
 
     @Test fun tappingADaySaysItsTimeAndPlays() {

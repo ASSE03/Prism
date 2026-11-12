@@ -227,6 +227,24 @@ class RecommendationsHistoryPageTest : ListeningPageHarness(SettingsPageId.RECOM
         assertEquals(0, changedRows())
     }
 
+    /**
+     * A Replay notice turned on asks for notifications when Prism may not post them (Android 13+ without the permission):
+     * before, the switch showed on and nothing ever came. Turning one off doesn't ask.
+     */
+    @Test fun turningOnAReplayNoticeAsksForNotifications() {
+        var asked = 0
+        container.notificationPrompt = { asked++ }
+        show()
+        tap(notices)
+        inSheet(rewind).performSemanticsAction(SemanticsActions.OnClick)
+        until("rewind_notification off") { !it.rewindNotification }
+        assertEquals("turning one off doesn't ask", 0, asked)
+        inSheet(recap).performSemanticsAction(SemanticsActions.OnClick)
+        until("recap_notify") { it.behavior.recapNotify }
+        compose.waitForIdle()
+        assertEquals("turning one on asks", 1, asked)
+    }
+
     /** Your artists, Exclusions and Bring your history stay their own screens, behind Link rows. */
     @Test fun theLinkRowsOpenTheirScreens() {
         show()

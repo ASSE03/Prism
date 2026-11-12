@@ -36,6 +36,23 @@ class RecentSearchesTest {
         assertEquals(1, list.count { it == "q20" })
     }
 
+    /** The TV's Search writes the phone's list: one search there keeps all 30 (it once cut them to 12) and shows 12. */
+    @Test fun aTvSearchKeepsThePhonesThirty() {
+        val context = org.robolectric.RuntimeEnvironment.getApplication()
+        val prefs = context.getSharedPreferences("search", android.content.Context.MODE_PRIVATE)
+        prefs.edit().putString("q", (1..30).joinToString("\n") { "phone $it" }).commit()
+        com.prism.music.ui.tv.TvSearchHistory.add(context, " tv ")
+        val kept = com.prism.music.ui.tv.TvSearchHistory.read(context)
+        assertEquals(RecentSearches.KEEP, kept.size)
+        assertEquals("tv", kept.first())
+        assertEquals("phone 29", kept.last())
+        assertEquals(RecentSearches.SHOWN, com.prism.music.ui.tv.TvSearchHistory.shown(context).size)
+        // Searched again on the TV: to the top, not twice.
+        com.prism.music.ui.tv.TvSearchHistory.add(context, "phone 5")
+        assertEquals(listOf("phone 5", "tv", "phone 1"), com.prism.music.ui.tv.TvSearchHistory.read(context).take(3))
+        assertEquals(1, com.prism.music.ui.tv.TvSearchHistory.read(context).count { it == "phone 5" })
+    }
+
     @Test fun twelveShownThenShowAllThenClearAll() {
         val recents = (1..30).map { "search $it" }
         var cleared = false

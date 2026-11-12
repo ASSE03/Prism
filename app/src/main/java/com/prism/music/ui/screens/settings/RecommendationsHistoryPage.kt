@@ -231,17 +231,20 @@ private fun RhCountHistoryFrom(sources: List<CountSources.Row>, value: String, c
  */
 @Composable
 private fun RhReplayNotices(rewindChanged: Boolean, recapChanged: Boolean, milestoneChanged: Boolean) {
-    val prefs = LocalContainer.current.settings
+    val c = LocalContainer.current
+    val prefs = c.settings
     val s = LocalAppSettings.current
     val b = s.behavior
     val title = tr(R.string.replay_notices)
     val on = listOf(s.rewindNotification, b.recapNotify, b.milestoneNotify).count { it }
     var open by rememberSaveable(title, "replay-notices") { mutableStateOf(false) }
+    // A notice turned on asks for notifications (Android 13+) if Prism may not post them yet: else nothing would come.
+    fun asked(turnedOn: Boolean) { if (turnedOn) c.askNotifications() }
     PickRow(title, if (on == 0) tr(R.string.off) else "$on / 3", changed = rewindChanged || recapChanged || milestoneChanged) { open = true }
     if (open) RowsSheet(title, { open = false }) {
-        SwitchRow(tr(R.string.rewind_notification), s.rewindNotification, info = tr(R.string.on_december_1_when_your_year), changed = rewindChanged) { prefs.setRewindNotification(it) }
-        SwitchRow(tr(R.string.recap_notification), b.recapNotify, info = tr(R.string.recap_notification_info), changed = recapChanged) { prefs.setRecapNotify(it) }
-        SwitchRow(tr(R.string.milestone_notification), b.milestoneNotify, info = tr(R.string.milestone_notification_info), changed = milestoneChanged) { prefs.setMilestoneNotify(it) }
+        SwitchRow(tr(R.string.rewind_notification), s.rewindNotification, info = tr(R.string.on_december_1_when_your_year), changed = rewindChanged) { prefs.setRewindNotification(it); asked(it) }
+        SwitchRow(tr(R.string.recap_notification), b.recapNotify, info = tr(R.string.recap_notification_info), changed = recapChanged) { prefs.setRecapNotify(it); asked(it) }
+        SwitchRow(tr(R.string.milestone_notification), b.milestoneNotify, info = tr(R.string.milestone_notification_info), changed = milestoneChanged) { prefs.setMilestoneNotify(it); asked(it) }
     }
 }
 

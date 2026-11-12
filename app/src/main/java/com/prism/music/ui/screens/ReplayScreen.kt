@@ -102,6 +102,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.platform.LocalLayoutDirection
 import com.prism.music.data.ShownMilestone
 import com.prism.music.data.db.DayTotal
 import com.prism.music.data.db.HourTotal
@@ -734,6 +736,7 @@ internal object ReplayTags {
     const val HERO_LABEL = "replay.hero.label"
     const val CLOCK = "replay.clock"
     const val CLOCK_GRID = "replay.clock.grid"
+    const val CLOCK_DAY = "replay.clock.day"
     const val CLOCK_BUSIEST = "replay.clock.busiest"
     const val CLOCK_BUSIEST_DAY = "replay.clock.busiestDay"
     const val CLOCK_SONG = "replay.clock.song"
@@ -796,8 +799,18 @@ internal object ClockGrid {
     /** The weekdays top to bottom: the locale's first day of the week first. */
     fun rows(firstDay: DayOfWeek): IntArray = IntArray(7) { (firstDay.value - 1 + it) % 7 }
 
-    /** The hour under [x] on a grid [width] wide, or null off it. */
-    fun hourAt(x: Float, width: Float): Int? = if (width <= 0f || x < 0f || x >= width) null else (x / width * 24).toInt().coerceIn(0, 23)
+    /**
+     * The hour under [x] on a grid [width] wide, or null off it. Right to left ([rtl]: Arabic, Hebrew…) midnight is at
+     * the right, as the hour labels under the grid and the Rewind story's clock have it.
+     */
+    fun hourAt(x: Float, width: Float, rtl: Boolean = false): Int? =
+        if (width <= 0f || x < 0f || x >= width) null else ((if (rtl) width - x else x) / width * 24).toInt().coerceIn(0, 23)
+
+    /** The left edge of [hour]'s column on a grid [width] wide (mirrored when [rtl]). */
+    fun hourLeft(hour: Int, width: Float, rtl: Boolean = false): Float {
+        val w = width / 24f
+        return if (rtl) width - (hour + 1) * w else hour * w
+    }
 
     /** An hour as the phone tells time: "21:00", or "9 PM". */
     fun hourLabel(hour: Int, is24: Boolean, locale: Locale = Locale.getDefault()): String {
@@ -856,13 +869,24 @@ internal object CalendarGrid {
     const val GAP_DP = 2f
     const val MONTH_GAP_DP = 12f
     const val LABEL_DP = 20f
+    /** Room under a month's name before its first week (dp). */
+    const val LABEL_PAD_DP = 4f
 
-    /** Where [count] months go across [width] px ([dp] px to a dp). Every month has room for six weeks, so rows line up. */
-    class Layout(val width: Float, val count: Int, dp: Float) {
+    /**
+     * The height of the months' names row: [LABEL_DP], or the tallest name ([textPx], measured) and a little room when
+     * the text is larger (a big font size: at 2x the names ran into the first week).
+     */
+    fun labelPx(textPx: Float, dp: Float): Float = maxOf(LABEL_DP * dp, textPx + LABEL_PAD_DP * dp)
+
+    /**
+     * Where [count] months go across [width] px ([dp] px to a dp), with [labelPx] for the months' names. Every month has
+     * room for six weeks, so rows line up.
+     */
+    class Layout(val width: Float, val count: Int, dp: Float, labelPx: Float = LABEL_DP * dp) {
         val perRow = (width / dp / MONTH_MIN_DP).toInt().coerceIn(1, 6).coerceAtMost(count.coerceAtLeast(1))
         val gap = GAP_DP * dp
         val monthGap = MONTH_GAP_DP * dp
-        val label = LABEL_DP * dp
+        val label = labelPx
         val cell = minOf(((width - monthGap * (perRow - 1)) / perRow - gap * 6) / 7, CELL_MAX_DP * dp).coerceAtLeast(1f)
         val monthW = cell * 7 + gap * 6
         val monthH = label + cell * 6 + gap * 5
@@ -932,8 +956,10 @@ private suspend fun loadCalendar(stats: PlayStats, period: Period, from: Long, t
         val last = Instant.ofEpochMilli(to).atZone(zone).toLocalDate()
         // And shows its last twelve months: every month of a long history made a calendar many screens tall.
         val first = if (period.kind == Period.Kind.ALL) CalendarGrid.allTimeFrom(maxOf(start, days.keys.min()), last) else start
-        val busiest = days.filterKeys { it >= first }.maxByOrNull { it.value.ms }
-        CalendarData(days, CalendarGrid.months(first, maxOf(first, last)), busiest?.value?.ms ?: 0L, busiest?.key)
+        // Only the days the grid shows: the minimum and TalkBack's "days with music" count those, not years before.
+        val shown = days.filterKeys { it >= first && it <= last }
+        val busiest = shown.maxByOrNull { it.value.ms }
+        CalendarData(shown, CalendarGrid.months(first, maxOf(first, last)), busiest?.value?.ms ?: 0L, busiest?.key)
     }
 }
 
@@ -996,15 +1022,26 @@ private fun ClockSection(period: Period, held: MutableState<ClockData?>, still: 
     val emptyCell = com.prism.music.ui.components.quietFill()
     val shown = remember(d) { Animatable(if (still) 1f else 0f) }
     LaunchedEffect(shown) { if (!still) shown.animateTo(1f, tween(700)) }
+    // Right to left the grid runs as its hour labels do (and as the Rewind story's clock): midnight at the right.
+    val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    // Rows as tall, and the names column as wide, as the weekday names are at the phone's font size (18 dp clipped them at 1.3x).
+    val labelStyle = MaterialTheme.typography.labelSmall
+    val measurer = rememberTextMeasurer()
+    val density = LocalDensity.current
+    val dayNames = remember(rows, locale) { rows.map { ClockGrid.dayName(it, locale, TextStyle.SHORT) } }
+    val (rowH, namesW) = remember(dayNames, labelStyle, density) {
+        val sizes = dayNames.map { measurer.measure(it, labelStyle, maxLines = 1, softWrap = false).size }
+        with(density) { maxOf(CLOCK_ROW, sizes.maxOf { it.height }.toDp() + 2.dp) to maxOf(40.dp, sizes.maxOf { it.width }.toDp() + 6.dp) }
+    }
     Column(Modifier.fillMaxWidth().testTag(ReplayTags.CLOCK)) {
         Box(Modifier.fillMaxWidth()) {
             Column(Modifier.fillMaxWidth().recordCard(layer, scheme.surface).padding(bottom = 12.dp)) {
                 SectionHeader(title)
                 Row(Modifier.padding(horizontal = 20.dp)) {
-                    Column(Modifier.width(40.dp)) {
-                        rows.forEach { wd ->
-                            Box(Modifier.height(CLOCK_ROW), contentAlignment = Alignment.CenterStart) {
-                                Text(ClockGrid.dayName(wd, locale, TextStyle.SHORT), style = MaterialTheme.typography.labelSmall, color = scheme.onSurfaceVariant, maxLines = 1)
+                    Column(Modifier.width(namesW)) {
+                        dayNames.forEach { name ->
+                            Box(Modifier.height(rowH), contentAlignment = Alignment.CenterStart) {
+                                Text(name, Modifier.testTag(ReplayTags.CLOCK_DAY), style = labelStyle, color = scheme.onSurfaceVariant, maxLines = 1)
                             }
                         }
                     }
@@ -1012,13 +1049,13 @@ private fun ClockSection(period: Period, held: MutableState<ClockData?>, still: 
                         val a11y = listOfNotNull(title, hourLine, dayLine).joinToString(". ")
                         val action = tr(R.string.clock_top_at, ClockGrid.hourLabel(busiestHour, is24, locale))
                         Canvas(
-                            Modifier.fillMaxWidth().height(CLOCK_ROW * 7).testTag(ReplayTags.CLOCK_GRID)
+                            Modifier.fillMaxWidth().height(rowH * 7).testTag(ReplayTags.CLOCK_GRID)
                                 // One description for TalkBack, not 168 cells; its action lists the busiest hour's songs.
                                 .semantics {
                                     contentDescription = a11y
                                     customActions = listOf(CustomAccessibilityAction(action) { hour = busiestHour; true })
                                 }
-                                .pointerInput(d) { detectTapGestures { o -> hour = ClockGrid.hourAt(o.x, size.width.toFloat()) } },
+                                .pointerInput(d, rtl) { detectTapGestures { o -> hour = ClockGrid.hourAt(o.x, size.width.toFloat(), rtl) } },
                         ) {
                             val w = size.width / 24f
                             val h = size.height / 7f
@@ -1029,10 +1066,10 @@ private fun ClockSection(period: Period, held: MutableState<ClockData?>, still: 
                                 for (hr in 0 until 24) {
                                     val ms = d.cells[wd * 24 + hr]
                                     val color = if (ms > 0 && d.max > 0) scheme.primary.copy(alpha = (0.2f + 0.8f * ms / d.max.toFloat()) * a) else emptyCell
-                                    drawRoundRect(color, Offset(hr * w + g / 2, ri * h + g / 2), Size(w - g, h - g), r)
+                                    drawRoundRect(color, Offset(ClockGrid.hourLeft(hr, size.width, rtl) + g / 2, ri * h + g / 2), Size(w - g, h - g), r)
                                 }
                             }
-                            hour?.let { drawRoundRect(scheme.onSurface, Offset(it * w, 0f), Size(w, size.height), r, style = Stroke(1.5.dp.toPx())) }
+                            hour?.let { drawRoundRect(scheme.onSurface, Offset(ClockGrid.hourLeft(it, size.width, rtl), 0f), Size(w, size.height), r, style = Stroke(1.5.dp.toPx())) }
                         }
                         Row(Modifier.fillMaxWidth().padding(top = 4.dp)) {
                             listOf(0, 6, 12, 18).forEach {
@@ -1133,7 +1170,9 @@ private fun CalendarSection(period: Period, held: MutableState<CalendarData?>, s
             BoxWithConstraints(Modifier.padding(horizontal = 20.dp).fillMaxWidth()) {
                 val density = LocalDensity.current
                 val widthPx = constraints.maxWidth.toFloat()
-                val layout = remember(widthPx, d.months.size, density.density) { CalendarGrid.Layout(widthPx, d.months.size, density.density) }
+                // The names row as tall as the names are at the phone's font size.
+                val labelPx = CalendarGrid.labelPx(labels.maxOfOrNull { it.size.height.toFloat() } ?: 0f, density.density)
+                val layout = remember(widthPx, d.months.size, density.density, labelPx) { CalendarGrid.Layout(widthPx, d.months.size, density.density, labelPx) }
                 val a11y = listOfNotNull(title, tr(R.string.cal_days_with_music, d.days.size), busiestLine).joinToString(". ")
                 Canvas(
                     Modifier.fillMaxWidth().height(with(density) { layout.height.toDp() }).testTag(ReplayTags.CALENDAR_GRID)

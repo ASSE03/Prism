@@ -164,28 +164,49 @@ object ReplayWidgets {
         val white = Widgets.whiteLight(app)
         val cover = w.song?.let { s -> (com.prism.music.data.PlaylistCovers.artOf(s.toSong()) ?: s.thumbnail)?.let { Widgets.squareCover(app, it, 168, 0.14f) } }
         val photo = w.artistPhoto?.let { Widgets.squareCover(app, it, 144, 0.5f) }
-        for ((_, ids) in placed) for (id in ids) {
-            runCatching { manager.updateAppWidget(id, views(app, manager, id, w, cover, photo, hours, white)) }
+        for ((provider, ids) in placed) for (id in ids) {
+            runCatching { manager.updateAppWidget(id, views(app, manager, id, provider == ReplayWideWidget::class.java, w, cover, photo, hours, white)) }
         }
     }
 
+    /** From this height (dp) the song widget has its cover above the title; shorter, the compact one (cover beside its label). */
+    const val TALL_DP = 160
+
+    /**
+     * The layout an Android 11 or older launcher gets, from the size it says in the options ([minWidth], and the
+     * [height] it is drawn at, both dp). A launcher that hasn't said (0) gets the widget's own: the wide one wide.
+     */
+    fun layoutFor(wideWidget: Boolean, minWidth: Int, height: Int): Int = when {
+        (if (minWidth <= 0) wideWidget else minWidth >= WIDE_DP) -> R.layout.widget_replay
+        height in 1 until TALL_DP -> R.layout.widget_replay_compact
+        else -> R.layout.widget_replay_small
+    }
+
     private fun views(
-        context: Context, manager: AppWidgetManager, id: Int, w: ReplayWeek, cover: Bitmap?, photo: Bitmap?, hours: Boolean, white: Boolean,
+        context: Context, manager: AppWidgetManager, id: Int, wideWidget: Boolean, w: ReplayWeek, cover: Bitmap?, photo: Bitmap?, hours: Boolean, white: Boolean,
     ): RemoteViews {
         // Android 12+ picks the layout by the size it's drawn at; older launchers say the size in the options.
         if (Build.VERSION.SDK_INT >= 31) return RemoteViews(
             mapOf(
-                SizeF(40f, 40f) to views(context, false, w, cover, photo, hours, white),
-                SizeF(WIDE_DP.toFloat(), 40f) to views(context, true, w, cover, photo, hours, white),
+                SizeF(40f, 40f) to views(context, R.layout.widget_replay_compact, w, cover, photo, hours, white),
+                SizeF(40f, TALL_DP.toFloat()) to views(context, R.layout.widget_replay_small, w, cover, photo, hours, white),
+                SizeF(WIDE_DP.toFloat(), 40f) to views(context, R.layout.widget_replay, w, cover, photo, hours, white),
             ),
         )
-        val wide = manager.getAppWidgetOptions(id).getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH) >= WIDE_DP
-        return views(context, wide, w, cover, photo, hours, white)
+        val options = manager.getAppWidgetOptions(id)
+        // Upright, a widget is its min width wide and its max height tall.
+        val layout = layoutFor(wideWidget, options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH), options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT))
+        return views(context, layout, w, cover, photo, hours, white)
     }
 
     /** One widget: [wide] with the artist beside the song. Its words come from [w]; [white]: White light. */
     fun views(context: Context, wide: Boolean, w: ReplayWeek, cover: Bitmap?, photo: Bitmap?, hours: Boolean, white: Boolean): RemoteViews =
-        RemoteViews(context.packageName, if (wide) R.layout.widget_replay else R.layout.widget_replay_small).apply {
+        views(context, if (wide) R.layout.widget_replay else R.layout.widget_replay_small, w, cover, photo, hours, white)
+
+    /** One widget in [layout] (wide, small or compact). */
+    fun views(context: Context, layout: Int, w: ReplayWeek, cover: Bitmap?, photo: Bitmap?, hours: Boolean, white: Boolean): RemoteViews =
+        RemoteViews(context.packageName, layout).apply {
+            val wide = layout == R.layout.widget_replay
             val open = PendingIntent.getActivity(
                 context, 30,
                 // Replay (MainActivity: prism://replay).
@@ -207,7 +228,7 @@ object ReplayWidgets {
             setTextViewText(R.id.rp_title, song.title)
             setTextViewText(R.id.rp_artist, song.artistName)
             setContentDescription(R.id.rp_open, tr(R.string.widget_replay_open) + ". " + tr(R.string.widget_replay_song_label) + ": " + song.title + ", " + song.artistName)
-            val pad = (14 * context.resources.displayMetrics.density).toInt()
+            val pad = ((if (layout == R.layout.widget_replay_compact) 10 else 14) * context.resources.displayMetrics.density).toInt()
             if (cover != null) {
                 setImageViewBitmap(R.id.rp_song_art, cover)
                 setViewPadding(R.id.rp_song_art, 0, 0, 0, 0)

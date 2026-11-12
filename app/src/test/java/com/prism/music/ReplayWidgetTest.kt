@@ -163,6 +163,22 @@ class ReplayWidgetTest {
         }
     }
 
+    /**
+     * Android 11 and older: the layout comes from the size the launcher says. One that hasn't said (0) gets the widget's
+     * own: before, the wide widget then drew the small layout. A short song widget gets the compact one.
+     */
+    @Test fun olderLaunchersGetTheLayoutForTheirSize() {
+        val wide = R.layout.widget_replay
+        val small = R.layout.widget_replay_small
+        val compact = R.layout.widget_replay_compact
+        assertEquals("wide widget, no size said", wide, ReplayWidgets.layoutFor(wideWidget = true, minWidth = 0, height = 0))
+        assertEquals("song widget, no size said", small, ReplayWidgets.layoutFor(wideWidget = false, minWidth = 0, height = 0))
+        assertEquals(wide, ReplayWidgets.layoutFor(wideWidget = false, minWidth = 300, height = 120))
+        assertEquals("the wide one made narrow", small, ReplayWidgets.layoutFor(wideWidget = true, minWidth = 180, height = 180))
+        assertEquals(compact, ReplayWidgets.layoutFor(wideWidget = false, minWidth = 120, height = 110))
+        assertEquals(small, ReplayWidgets.layoutFor(wideWidget = false, minWidth = 120, height = ReplayWidgets.TALL_DP))
+    }
+
     /** Home screen only (never on the lock screen), no update period of Android's own, and in the manifest. */
     @Test fun providersAreHomeScreenOnly() {
         for (name in listOf("widget_replay_info.xml", "widget_replay_small_info.xml")) {
