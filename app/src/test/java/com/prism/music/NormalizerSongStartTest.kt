@@ -127,6 +127,38 @@ class NormalizerSongStartTest {
         assertEquals(-4.5, play(p, 0.2, peak = 0.3).first(), 0.3)
     }
 
+    /**
+     * Review (1.8.5): a figure the service sets for a song lands only on that song. A short song's scan (or YouTube's
+     * figure) arriving as it ends, after the audio already moved on to the next one and before the main thread hears of
+     * it, put the last song's gain on the next one's start (D62's static, narrower).
+     */
+    @Test fun aLateFigureForTheLastSongStaysOffTheNext() {
+        val p = processor()
+        startOf(p, "quiet")
+        p.setGainDb(6f, songId = "quiet")
+        play(p, 1.0)
+        startOf(p, "loud")
+        // The quiet song's figure lands now: the service still thinks it plays.
+        p.setGainDb(5f, glideSec = 2f, songId = "quiet")
+        val first = play(p, 0.5)
+        assertTrue("the loud song stays at its own -8 dB: $first", first.all { abs(it + 8.2) < 0.3 })
+        // The service's own figure for the loud song is taken.
+        p.setGainDb(-6f, songId = "loud")
+        assertEquals(-6.2, play(p, 0.5).last(), 0.3)
+    }
+
+    @Test fun aFigureForTheNextSongSetBeforeItsSoundStartsWaitsForIt() {
+        val p = processor()
+        startOf(p, "quiet")
+        p.setGainDb(6f, songId = "quiet")
+        play(p, 0.5)
+        // A song picked: the service has its figure before the player's sound gets to it. The quiet song plays on as it was.
+        p.setGainDb(-5f, songId = "loud")
+        assertEquals(-4.5, play(p, 0.2, peak = 0.3).last(), 0.3)
+        startOf(p, "loud")
+        assertEquals("the service's figure, not the stored one", -5.2, play(p, 0.2).first(), 0.3)
+    }
+
     @Test fun withoutAnAskTheGainSetStays() {
         // A Mix blend's ending song: its own processor, given its gain once.
         val p = NormalizerProcessor().apply { configure(AudioProcessor.AudioFormat(rate, 2, C.ENCODING_PCM_16BIT)) }

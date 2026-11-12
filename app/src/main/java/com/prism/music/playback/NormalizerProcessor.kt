@@ -20,9 +20,10 @@ import kotlin.math.roundToInt
  */
 @UnstableApi
 class NormalizerProcessor : BaseAudioProcessor() {
-    @Volatile private var targetGain = 1f
+    /** The gain gone to (audio thread). */
+    private var targetGain = 1f
     /** How long a change takes (s): quick before a song's sound starts, slow once it's playing. */
-    @Volatile private var glideSec = 0.1f
+    private var glideSec = 0.1f
     private var gain = 1f
     /** [appVolume] as it glides (~30 ms), apart from the song's gain, which can take seconds. */
     private var vol = 1f
@@ -35,15 +36,33 @@ class NormalizerProcessor : BaseAudioProcessor() {
     /**
      * Sets the song's gain in dB; it glides there over ~100 ms, or over [glideSec] seconds. A song already playing changes
      * slowly (Reddit 1.7: "a hiccup near the start, like it switches to another version": its measured loudness landing a
-     * few seconds in moved the volume by several dB in a tenth of a second).
+     * few seconds in moved the volume by several dB in a tenth of a second). [songId]: the song it's for (null: whichever
+     * plays); taken from the next sound on, while that song is the one playing.
      */
-    fun setGainDb(db: Float, glideSec: Float = 0.1f) {
-        this.glideSec = glideSec.coerceAtLeast(0.01f)
-        targetGain = 10f.pow(db / 20f)
+    fun setGainDb(db: Float, glideSec: Float = 0.1f, songId: String? = null) {
+        ask = Ask(songId, 10f.pow(db / 20f), glideSec.coerceAtLeast(0.01f))
     }
 
+    /**
+     * A gain asked for by [setGainDb] (any thread), for the song [songId] (null: whatever plays). The audio thread takes it
+     * ([takeAsk]) only while that song's sound is what it plays: a figure for the last song (a short one's scan landing as
+     * it ended, the main thread not yet told the next one started) isn't put on the next song's start (D62 again).
+     */
+    private class Ask(val songId: String?, val gain: Float, val glideSec: Float)
+    @Volatile private var ask: Ask? = null
+    /** The [ask] already taken, or passed over at a song change (audio thread). */
+    private var taken: Ask? = null
     /** The song (its media id) the audio now comes from, as of the last flush; null when not known. */
     private var songId: String? = null
+
+    private fun takeAsk() {
+        val a = ask ?: return
+        if (a === taken) return
+        if (a.songId != null && songId != null && a.songId != songId) return
+        taken = a
+        targetGain = a.gain
+        glideSec = a.glideSec
+    }
 
     /**
      * D62 (1.8.5): the gain (dB) a song gets from what's known of it now, asked here on the audio thread when its sound
@@ -103,6 +122,7 @@ class NormalizerProcessor : BaseAudioProcessor() {
     }
 
     override fun queueInput(inputBuffer: ByteBuffer) {
+        takeAsk()
         val bytes = inputBuffer.remaining()
         if (bytes == 0) return
         val out = replaceOutputBuffer(bytes)
@@ -162,10 +182,13 @@ class NormalizerProcessor : BaseAudioProcessor() {
                 val db = item?.let { runCatching { gainOf(it, tl) }.getOrNull() } ?: 0f
                 targetGain = 10f.pow(db / 20f)
                 glideSec = 0.1f
+                // A gain asked for before this song's sound started was for the last one, unless it names this one.
+                ask?.let { if (id == null || it.songId != id) taken = it }
             }
             songId = id
         }
         periodUid = uid
+        takeAsk()
         gain = targetGain
         // Nor does the limiter hold the last sound's peaks down on the next (its instant attack still catches the new ones).
         env = 0f

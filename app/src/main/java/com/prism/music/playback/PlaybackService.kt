@@ -1321,7 +1321,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // heard mid-song; before its sound starts, the right level is set at once.
         val underWay = player.isPlaying && player.currentPosition > 400
         if (underWay && kotlin.math.abs(gain - normalizeGainDb) < MIN_MIDSONG_CHANGE_DB) return
-        normalizer.setGainDb(gain, if (underWay) 2f else 0.1f)
+        // For this song only: a figure landing as it ended, after the audio moved on to the next, isn't put on that one.
+        normalizer.setGainDb(gain, if (underWay) 2f else 0.1f, trackedSong?.id)
         if (gain != normalizeGainDb) AudioDiagnostics.log("normalize", "gain %.1f dB (%s) at %d s".format(gain, if (measured != null) "measured" else if (yt != null) "YouTube's figure" else "none", player.currentPosition / 1000))
         normalizeGainDb = gain
         c.nerdStats.value = c.nerdStats.value.copy(
