@@ -397,6 +397,8 @@ data class BehaviorPrefs(
     val finishLyric: Boolean = false,
     /** 1.8.5: laying the phone screen-down pauses; picking it up within a few minutes plays on. */
     val faceDownPause: Boolean = false,
+    /** #464 (1.8.5): with the lyrics open, a tap on the small cover plays or pauses and a long press closes them; off, a tap closes them. */
+    val lyricsCoverPlays: Boolean = false,
 ) {
     companion object {
         /** #404: how far [lyricsOffsetMs] goes either way. */
@@ -2219,6 +2221,7 @@ class SettingsRepository(
         val milestoneNotify = booleanPreferencesKey("milestone_notify")
         val finishLyric = booleanPreferencesKey("finish_lyric")
         val faceDownPause = booleanPreferencesKey("face_down_pause")
+        val lyricsCoverPlays = booleanPreferencesKey("lyrics_cover_plays")
         val lockScreenPlayerLook = booleanPreferencesKey("lock_screen_player_look")
         val albumHeroCover = booleanPreferencesKey("album_hero_cover")
         // 1.8.0 player editor ([PlayerParts]): the hidden parts are part of a Look, the menu's choices aren't.
@@ -2362,8 +2365,8 @@ class SettingsRepository(
                 "history_paused_until", "play_count_seconds", "play_count_account",
                 // 1.8.4 (#406, #404, #416, D57, PR #400, D54): how Prism behaves, not how it looks.
                 "row_swipes", "lyrics_offset_ms", "keep_shuffle", "shuffle_button", "car_lyrics_lines", "locate_playing",
-                // 1.8.5: Replay's notices and game, and pausing face down.
-                "recap_notify", "milestone_notify", "finish_lyric", "face_down_pause",
+                // 1.8.5: Replay's notices and game, pausing face down, and the small cover's tap over the lyrics (#464).
+                "recap_notify", "milestone_notify", "finish_lyric", "face_down_pause", "lyrics_cover_plays",
             )
         }
     }
@@ -2705,6 +2708,7 @@ class SettingsRepository(
                 milestoneNotify = p[K.milestoneNotify] ?: d.behavior.milestoneNotify,
                 finishLyric = p[K.finishLyric] ?: d.behavior.finishLyric,
                 faceDownPause = p[K.faceDownPause] ?: d.behavior.faceDownPause,
+                lyricsCoverPlays = p[K.lyricsCoverPlays] ?: d.behavior.lyricsCoverPlays,
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -3442,6 +3446,7 @@ class SettingsRepository(
     fun setMilestoneNotify(v: Boolean) = edit { it[K.milestoneNotify] = v }
     fun setFinishLyric(v: Boolean) = edit { it[K.finishLyric] = v }
     fun setFaceDownPause(v: Boolean) = edit { it[K.faceDownPause] = v }
+    fun setLyricsCoverPlays(v: Boolean) = edit { it[K.lyricsCoverPlays] = v }
     fun setShuffleButton(v: ShuffleButton) = edit { it[K.shuffleButton] = v.name }
     fun setCarLyricsLines(v: CarLyricsLines) = edit { it[K.carLyricsLines] = v.name }
     fun setLocatePlaying(v: Boolean) = edit { it[K.locatePlaying] = v }

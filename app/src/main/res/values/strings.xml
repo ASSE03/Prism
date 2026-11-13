@@ -5279,6 +5279,9 @@
     <string name="playback_face_down_pause">Pause when face down</string>
     <string name="playback_face_down_pause_info">Lay your phone screen-down to pause. Pick it up within five minutes and the music plays on.</string>
     <string name="playback_face_down_keywords">face down flip turn over screen down sensor pause resume pick up</string>
+    <string name="gb_lyrics_cover_plays">Tap the small cover to play or pause</string>
+    <string name="gb_lyrics_cover_plays_info">With the lyrics open, a tap on the small cover plays or pauses and a long press closes the lyrics. Off: a tap closes the lyrics.</string>
+    <string name="gb_lyrics_cover_plays_keywords">lyrics small cover thumbnail artwork tap play pause long press close</string>
     <string name="playback_shuffle_keywords">smart shuffle random order mixed up stay shuffled</string>
     <string name="playback_song_to_song">From one song to the next</string>
     <string name="playback_speed_and_pitch">Speed and pitch</string>
