@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Playlists" tile in Android Auto's Library: lines and a note on a rounded square. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#FFF08C00"
+        android:pathData="M10,0 L38,0 Q48,0 48,10 L48,38 Q48,48 38,48 L10,48 Q0,48 0,38 L0,10 Q0,0 10,0 Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M11,13 L31,13 L31,16.5 L11,16.5 Z M11,20.5 L31,20.5 L31,24 L11,24 Z M11,28 L23,28 L23,31.5 L11,31.5 Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M33,20 L39,20 L39,23.5 L36.5,23.5 L36.5,33 A4,4 0 1,1 33,29.1 Z" />
+</vector>

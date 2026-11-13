@@ -43,6 +43,7 @@ class MediaTree(private val c: AppContainer) {
         const val RECENT = "recent"
         const val DOWNLOADS = "downloads"
         /** Library's artists (favourites first) and albums, as in the app's Library tabs. */
+        const val PLAYLISTS = "playlists"
         const val ARTISTS = "artists"
         const val ALBUMS = "albums"
         /** Prism's own mixes (Daily Mixes, the time-of-day mix, Release Radar). */
@@ -167,23 +168,25 @@ class MediaTree(private val c: AppContainer) {
         parentId == LIKED -> songList(parentId, tr(R.string.liked_songs), c.library.likedShown.value)
         parentId == RECENT -> songList(parentId, tr(R.string.recently_played), c.library.recent.value)
         parentId == DOWNLOADS -> songList(parentId, tr(R.string.downloads), c.downloads.completedSongs())
-        parentId == LIBRARY -> {
+        parentId == LIBRARY -> listOf(
+            folder(LIKED, tr(R.string.liked_songs), art = c.covers.custom("liked"), type = MediaMetadata.MEDIA_TYPE_PLAYLIST, fallback = "ic_auto_liked"),
+            folder(DOWNLOADS, tr(R.string.downloads), type = MediaMetadata.MEDIA_TYPE_PLAYLIST, fallback = "ic_auto_downloads"),
+            // Playlists, Artists and Albums, as the app's Library tabs (each a folder of its own).
+            folder(PLAYLISTS, tr(R.string.playlists), type = MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS, fallback = "ic_auto_playlists",
+                extras = styled(browsableGrid = true, playableGrid = false)),
+            folder(ARTISTS, tr(R.string.artists), type = MediaMetadata.MEDIA_TYPE_FOLDER_ARTISTS, fallback = "ic_auto_artists",
+                extras = styled(browsableGrid = true, playableGrid = false)),
+            folder(ALBUMS, tr(R.string.albums), type = MediaMetadata.MEDIA_TYPE_FOLDER_ALBUMS, fallback = "ic_auto_albums",
+                extras = styled(browsableGrid = true, playableGrid = false)),
+        )
+        parentId == PLAYLISTS -> {
             var playlists = c.library.playlists.value
             if (playlists.isEmpty() && c.settings.current.isLoggedIn) playlists = runCatching { c.ytm.libraryPlaylists() }.getOrDefault(emptyList())
-            listOf(
-                folder(LIKED, tr(R.string.liked_songs), art = c.covers.custom("liked"), type = MediaMetadata.MEDIA_TYPE_PLAYLIST, fallback = "ic_auto_liked"),
-                folder(DOWNLOADS, tr(R.string.downloads), type = MediaMetadata.MEDIA_TYPE_PLAYLIST, fallback = "ic_auto_downloads"),
-                // Artists and Albums, as the app's Library tabs (each a folder of its own).
-                folder(ARTISTS, tr(R.string.artists), type = MediaMetadata.MEDIA_TYPE_FOLDER_ARTISTS, fallback = "ic_auto_artists",
-                    extras = styled(browsableGrid = true, playableGrid = false)),
-                folder(ALBUMS, tr(R.string.albums), type = MediaMetadata.MEDIA_TYPE_FOLDER_ALBUMS, fallback = "ic_auto_albums",
-                    extras = styled(browsableGrid = true, playableGrid = false)),
-            ) +
-                // Prism's own playlists (kept on the phone), as in the app's Library.
-                c.prismLibrary.lists.value.map { l ->
-                    val item = l.item()
-                    folder(PRISM_LIST + l.id, l.title, item.subtitle, c.covers.art(item), MediaMetadata.MEDIA_TYPE_PLAYLIST)
-                } +
+            // Prism's own playlists (kept on the phone), as in the app's Library.
+            c.prismLibrary.lists.value.map { l ->
+                val item = l.item()
+                folder(PRISM_LIST + l.id, l.title, item.subtitle, c.covers.art(item), MediaMetadata.MEDIA_TYPE_PLAYLIST)
+            } +
                 // YouTube playlists saved on the phone without an account (H7), as the app's Library shows them signed out.
                 (if (c.settings.current.isLoggedIn) emptyList() else c.prismLibrary.playlists.value.map { s ->
                     val item = s.item()
