@@ -539,7 +539,8 @@ private fun AddSectionSheet(available: List<HomeSectionConfig>, notLoaded: Boole
     }
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Text(tr(R.string.add_a_section), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp))
-        val (prism, youtube) = available.partition { !it.key.startsWith(HomeSections.YT_PREFIX) }
+        // Prism's own sections by their name in the listener's language (their stored title is the English default).
+        val (prism, youtube) = available.map(HomeSections::inYourLanguage).partition { !it.key.startsWith(HomeSections.YT_PREFIX) }
         LazyColumn(Modifier.padding(bottom = 24.dp)) {
             item { SheetLabel(tr(R.string.your_own)) }
             items(rules, key = { it.key }) { cfg -> SheetRow(cfg.title) { onAdd(cfg); onDismiss() } }
