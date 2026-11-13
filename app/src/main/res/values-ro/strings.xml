@@ -5456,4 +5456,8 @@
     <string name="clock_no_plays">Nimic redat la ora asta</string>
     <string name="cal_no_music">Fără muzică</string>
     <string name="cal_days_with_music">Zile cu muzică: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Atinge coperta mică pentru a reda sau a întrerupe</string>
+    <string name="gb_lyrics_cover_plays_info">Cu versurile deschise, o atingere pe coperta mică redă sau întrerupe, iar o apăsare lungă închide versurile. Dezactivat: o atingere închide versurile.</string>
+    <string name="gb_lyrics_cover_plays_keywords">versuri copertă mică miniatură atingere redă întrerupe apăsare lungă închide lyrics cover</string>
 </resources>

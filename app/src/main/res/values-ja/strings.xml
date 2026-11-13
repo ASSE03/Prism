@@ -5306,4 +5306,8 @@
     <string name="clock_no_plays">この時間帯の再生はありません</string>
     <string name="cal_no_music">音楽なし</string>
     <string name="cal_days_with_music">音楽を聴いた日：%1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">小さなジャケットをタップして再生・一時停止</string>
+    <string name="gb_lyrics_cover_plays_info">歌詞を開いているとき、小さなジャケットをタップすると再生または一時停止し、長押しすると歌詞を閉じます。オフの場合：タップで歌詞を閉じます。</string>
+    <string name="gb_lyrics_cover_plays_keywords">歌詞 小さなジャケット サムネイル アートワーク タップ 再生 一時停止 長押し 閉じる lyrics cover</string>
 </resources>

@@ -5531,4 +5531,8 @@
     <string name="clock_no_plays">V tuto hodinu nic nehrálo</string>
     <string name="cal_no_music">Bez hudby</string>
     <string name="cal_days_with_music">Dny s hudbou: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Klepnutím na malý obal přehrát nebo pozastavit</string>
+    <string name="gb_lyrics_cover_plays_info">Při otevřených textech klepnutí na malý obal přehraje nebo pozastaví skladbu a dlouhé stisknutí texty zavře. Vypnuto: klepnutí texty zavře.</string>
+    <string name="gb_lyrics_cover_plays_keywords">texty malý obal náhled obrázek klepnutí přehrát pozastavit dlouhé stisknutí zavřít lyrics cover</string>
 </resources>

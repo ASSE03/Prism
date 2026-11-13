@@ -5381,4 +5381,8 @@
     <string name="clock_no_plays">اس گھنٹے میں کچھ نہیں چلا</string>
     <string name="cal_no_music">کوئی موسیقی نہیں</string>
     <string name="cal_days_with_music">موسیقی والے دن: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">چھوٹے کور پر ٹیپ کر کے چلائیں یا روکیں</string>
+    <string name="gb_lyrics_cover_plays_info">بول کھلے ہوں تو چھوٹے کور پر ٹیپ کرنے سے گانا چلتا یا رکتا ہے اور دیر تک دبانے سے بول بند ہو جاتے ہیں۔ بند ہونے پر: ٹیپ کرنے سے بول بند ہو جاتے ہیں۔</string>
+    <string name="gb_lyrics_cover_plays_keywords">بول چھوٹا کور تھمب نیل آرٹ ورک ٹیپ چلائیں روکیں دیر تک دبائیں بند lyrics cover</string>
 </resources>

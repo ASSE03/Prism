@@ -5381,4 +5381,8 @@
     <string name="clock_no_plays">এই সময়ে কিছু চালানো হয়নি</string>
     <string name="cal_no_music">গান নেই</string>
     <string name="cal_days_with_music">গান শোনা দিন: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">ছোট কভারে ট্যাপ করে চালান বা বিরতি দিন</string>
+    <string name="gb_lyrics_cover_plays_info">লিরিক্স খোলা থাকলে ছোট কভারে ট্যাপ করলে গান চলে বা বিরতি নেয়, আর দীর্ঘক্ষণ চেপে ধরলে লিরিক্স বন্ধ হয়। বন্ধ থাকলে: ট্যাপ করলে লিরিক্স বন্ধ হয়।</string>
+    <string name="gb_lyrics_cover_plays_keywords">লিরিক্স ছোট কভার থাম্বনেইল ছবি ট্যাপ চালান বিরতি দীর্ঘক্ষণ চাপ বন্ধ lyrics cover</string>
 </resources>

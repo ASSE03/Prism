@@ -5456,4 +5456,8 @@
     <string name="clock_no_plays">Aucune écoute à cette heure</string>
     <string name="cal_no_music">Pas de musique</string>
     <string name="cal_days_with_music">Jours avec de la musique : %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Toucher la petite pochette pour lire ou mettre en pause</string>
+    <string name="gb_lyrics_cover_plays_info">Avec les paroles ouvertes, un appui sur la petite pochette lance la lecture ou la met en pause, et un appui long ferme les paroles. Désactivé : un appui ferme les paroles.</string>
+    <string name="gb_lyrics_cover_plays_keywords">paroles petite pochette vignette cover appui lecture pause appui long fermer lyrics</string>
 </resources>

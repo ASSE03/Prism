@@ -23,6 +23,7 @@ What changed in each release. Older releases are described on the [Releases page
 - **Shuffle in DJ mode deals a new set** (#374) and DJ mode stays on, instead of Shuffle turning it off.
 - **Hold Previous for the song before** (#481), where holding doesn't seek.
 - **Pause when face down** (off by default, Settings → Playback). Lay the phone screen-down to pause; pick it up within five minutes and it plays on.
+- **Tap the small cover to play or pause** (#464, off by default, Settings → Gestures & buttons). With the lyrics open, a tap on the small cover plays or pauses and a long press closes the lyrics.
 - **Open with Prism.** Audio files opened from a file manager play in Prism.
 
 ### Fixes

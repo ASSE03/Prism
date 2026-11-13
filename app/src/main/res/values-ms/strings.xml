@@ -5306,4 +5306,8 @@
     <string name="clock_no_plays">Tiada apa dimainkan pada jam ini</string>
     <string name="cal_no_music">Tiada muzik</string>
     <string name="cal_days_with_music">Hari bermuzik: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Ketik kulit album kecil untuk main atau jeda</string>
+    <string name="gb_lyrics_cover_plays_info">Apabila lirik dibuka, mengetik kulit album kecil akan main atau jeda, dan tekan lama menutup lirik. Mati: mengetik menutup lirik.</string>
+    <string name="gb_lyrics_cover_plays_keywords">lirik kulit album kecil lakaran kecil gambar sampul ketik main jeda tekan lama tutup lyrics cover</string>
 </resources>

@@ -5531,4 +5531,8 @@
     <string name="clock_no_plays">O tej godzinie nic nie grało</string>
     <string name="cal_no_music">Bez muzyki</string>
     <string name="cal_days_with_music">Dni z muzyką: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Dotknij małej okładki, aby odtworzyć lub wstrzymać</string>
+    <string name="gb_lyrics_cover_plays_info">Przy otwartym tekście dotknięcie małej okładki odtwarza lub wstrzymuje, a długie przytrzymanie zamyka tekst. Wyłączone: dotknięcie zamyka tekst.</string>
+    <string name="gb_lyrics_cover_plays_keywords">tekst mała okładka miniatura grafika dotknięcie odtwórz wstrzymaj długie przytrzymanie zamknij lyrics cover</string>
 </resources>

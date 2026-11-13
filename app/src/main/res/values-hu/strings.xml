@@ -5381,4 +5381,8 @@
     <string name="clock_no_plays">Ebben az órában nem szólt semmi</string>
     <string name="cal_no_music">Nincs zene</string>
     <string name="cal_days_with_music">Zenés napok: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Koppints a kis borítóra a lejátszáshoz vagy szüneteltetéshez</string>
+    <string name="gb_lyrics_cover_plays_info">Megnyitott dalszövegnél a kis borítóra koppintva elindul vagy szünetel a lejátszás, hosszú nyomásra pedig bezárul a dalszöveg. Kikapcsolva: koppintásra bezárul a dalszöveg.</string>
+    <string name="gb_lyrics_cover_plays_keywords">dalszöveg kis borító bélyegkép borítókép koppintás lejátszás szünet hosszú nyomás bezárás lyrics cover</string>
 </resources>

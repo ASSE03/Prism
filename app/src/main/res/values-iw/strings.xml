@@ -5456,4 +5456,8 @@
     <string name="clock_no_plays">לא הושמע כלום בשעה הזו</string>
     <string name="cal_no_music">אין מוזיקה</string>
     <string name="cal_days_with_music">ימים עם מוזיקה: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">הקשה על העטיפה הקטנה להפעלה או השהיה</string>
+    <string name="gb_lyrics_cover_plays_info">כשהמילים פתוחות, הקשה על העטיפה הקטנה מפעילה או משהה, ולחיצה ארוכה סוגרת את המילים. כבוי: הקשה סוגרת את המילים.</string>
+    <string name="gb_lyrics_cover_plays_keywords">מילים עטיפה קטנה תמונה ממוזערת הקשה הפעלה השהיה לחיצה ארוכה סגירה lyrics cover</string>
 </resources>

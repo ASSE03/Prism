@@ -5306,4 +5306,8 @@
     <string name="clock_no_plays">Không phát gì vào giờ này</string>
     <string name="cal_no_music">Không có nhạc</string>
     <string name="cal_days_with_music">Ngày có nhạc: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Chạm vào ảnh bìa nhỏ để phát hoặc tạm dừng</string>
+    <string name="gb_lyrics_cover_plays_info">Khi đang mở lời bài hát, chạm vào ảnh bìa nhỏ sẽ phát hoặc tạm dừng, nhấn giữ sẽ đóng lời bài hát. Tắt: chạm sẽ đóng lời bài hát.</string>
+    <string name="gb_lyrics_cover_plays_keywords">lời bài hát ảnh bìa nhỏ hình thu nhỏ chạm phát tạm dừng nhấn giữ đóng lyrics cover</string>
 </resources>

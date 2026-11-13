@@ -5381,4 +5381,8 @@
     <string name="clock_no_plays">Zu dieser Stunde nichts gehört</string>
     <string name="cal_no_music">Keine Musik</string>
     <string name="cal_days_with_music">Tage mit Musik: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Auf das kleine Cover tippen, um abzuspielen oder zu pausieren</string>
+    <string name="gb_lyrics_cover_plays_info">Bei geöffnetem Songtext spielt ein Tippen auf das kleine Cover ab oder pausiert, ein langer Druck schließt den Songtext. Aus: Ein Tippen schließt den Songtext.</string>
+    <string name="gb_lyrics_cover_plays_keywords">Songtext kleines Cover Vorschaubild Albumcover Tippen Abspielen Pause langer Druck schließen lyrics</string>
 </resources>

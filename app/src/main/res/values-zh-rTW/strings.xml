@@ -5306,4 +5306,8 @@
     <string name="clock_no_plays">這個小時沒有播放</string>
     <string name="cal_no_music">沒有音樂</string>
     <string name="cal_days_with_music">有音樂的天數：%1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">點按小封面可播放或暫停</string>
+    <string name="gb_lyrics_cover_plays_info">開啟歌詞時，點按小封面可播放或暫停，長按則關閉歌詞。關閉此項：點按會關閉歌詞。</string>
+    <string name="gb_lyrics_cover_plays_keywords">歌詞 小封面 縮圖 封面圖 點按 點擊 播放 暫停 長按 關閉 歌詞 lyrics cover</string>
 </resources>

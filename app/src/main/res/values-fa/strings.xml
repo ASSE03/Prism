@@ -5381,4 +5381,8 @@
     <string name="clock_no_plays">در این ساعت چیزی پخش نشده</string>
     <string name="cal_no_music">بدون موسیقی</string>
     <string name="cal_days_with_music">روزهای با موسیقی: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">با ضربه روی کاور کوچک پخش یا متوقف کنید</string>
+    <string name="gb_lyrics_cover_plays_info">وقتی متن آهنگ باز است، ضربه روی کاور کوچک آهنگ را پخش یا متوقف می‌کند و لمس طولانی متن آهنگ را می‌بندد. خاموش: ضربه، متن آهنگ را می‌بندد.</string>
+    <string name="gb_lyrics_cover_plays_keywords">متن آهنگ کاور کوچک تصویر بندانگشتی ضربه پخش توقف لمس طولانی بستن lyrics cover</string>
 </resources>

@@ -5381,4 +5381,8 @@
     <string name="clock_no_plays">Inget spelat den här timmen</string>
     <string name="cal_no_music">Ingen musik</string>
     <string name="cal_days_with_music">Dagar med musik: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Tryck på det lilla omslaget för att spela eller pausa</string>
+    <string name="gb_lyrics_cover_plays_info">Med låttexten öppen spelar eller pausar ett tryck på det lilla omslaget, och ett långt tryck stänger låttexten. Av: ett tryck stänger låttexten.</string>
+    <string name="gb_lyrics_cover_plays_keywords">låttext litet omslag miniatyr omslagsbild tryck spela pausa långt tryck stäng lyrics cover</string>
 </resources>

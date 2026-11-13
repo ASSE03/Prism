@@ -5531,4 +5531,8 @@
     <string name="clock_no_plays">В этот час ничего не играло</string>
     <string name="cal_no_music">Без музыки</string>
     <string name="cal_days_with_music">Дней с музыкой: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Нажатие на маленькую обложку: воспроизведение или пауза</string>
+    <string name="gb_lyrics_cover_plays_info">При открытом тексте нажатие на маленькую обложку включает воспроизведение или паузу, а долгое нажатие закрывает текст. Выключено: нажатие закрывает текст.</string>
+    <string name="gb_lyrics_cover_plays_keywords">текст песни маленькая обложка миниатюра нажатие играть пауза долгое нажатие закрыть lyrics cover</string>
 </resources>

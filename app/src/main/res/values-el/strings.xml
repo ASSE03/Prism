@@ -5381,4 +5381,8 @@
     <string name="clock_no_plays">Τίποτα δεν έπαιξε αυτή την ώρα</string>
     <string name="cal_no_music">Χωρίς μουσική</string>
     <string name="cal_days_with_music">Μέρες με μουσική: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Πάτημα στο μικρό εξώφυλλο για αναπαραγωγή ή παύση</string>
+    <string name="gb_lyrics_cover_plays_info">Με ανοιχτούς τους στίχους, ένα πάτημα στο μικρό εξώφυλλο ξεκινά ή παύει την αναπαραγωγή και ένα παρατεταμένο πάτημα κλείνει τους στίχους. Ανενεργό: ένα πάτημα κλείνει τους στίχους.</string>
+    <string name="gb_lyrics_cover_plays_keywords">στίχοι μικρό εξώφυλλο μικρογραφία πάτημα αναπαραγωγή παύση παρατεταμένο πάτημα κλείσιμο lyrics cover</string>
 </resources>

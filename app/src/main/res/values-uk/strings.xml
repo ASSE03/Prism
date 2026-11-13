@@ -5531,4 +5531,8 @@
     <string name="clock_no_plays">О цій годині нічого не звучало</string>
     <string name="cal_no_music">Без музики</string>
     <string name="cal_days_with_music">Днів із музикою: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Дотик до маленької обкладинки: відтворення або пауза</string>
+    <string name="gb_lyrics_cover_plays_info">Коли текст відкрито, дотик до маленької обкладинки вмикає відтворення або паузу, а довге натискання закриває текст. Вимкнено: дотик закриває текст.</string>
+    <string name="gb_lyrics_cover_plays_keywords">текст пісні маленька обкладинка мініатюра дотик відтворити пауза довге натискання закрити lyrics cover</string>
 </resources>

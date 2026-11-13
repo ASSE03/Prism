@@ -5381,4 +5381,8 @@
     <string name="clock_no_plays">इस घंटे कुछ नहीं चला</string>
     <string name="cal_no_music">कोई संगीत नहीं</string>
     <string name="cal_days_with_music">संगीत वाले दिन: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">छोटे कवर पर टैप करके चलाएं या रोकें</string>
+    <string name="gb_lyrics_cover_plays_info">बोल खुले होने पर छोटे कवर पर टैप करने से गाना चलता या रुकता है और देर तक दबाने से बोल बंद हो जाते हैं। बंद होने पर: टैप करने से बोल बंद हो जाते हैं।</string>
+    <string name="gb_lyrics_cover_plays_keywords">बोल छोटा कवर थंबनेल आर्टवर्क टैप चलाएं रोकें देर तक दबाएं बंद lyrics cover</string>
 </resources>

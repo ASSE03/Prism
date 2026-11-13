@@ -5456,4 +5456,8 @@
     <string name="clock_no_plays">Niente ascoltato a quest\'ora</string>
     <string name="cal_no_music">Niente musica</string>
     <string name="cal_days_with_music">Giorni con musica: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Tocca la copertina piccola per riprodurre o mettere in pausa</string>
+    <string name="gb_lyrics_cover_plays_info">Con i testi aperti, un tocco sulla copertina piccola riproduce o mette in pausa e una pressione lunga chiude i testi. Disattivato: un tocco chiude i testi.</string>
+    <string name="gb_lyrics_cover_plays_keywords">testi copertina piccola miniatura artwork tocco riproduci pausa pressione lunga chiudi lyrics cover</string>
 </resources>

@@ -5306,4 +5306,8 @@
     <string name="clock_no_plays">ไม่มีเพลงที่เล่นในชั่วโมงนี้</string>
     <string name="cal_no_music">ไม่มีเพลง</string>
     <string name="cal_days_with_music">วันที่มีเพลง: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">แตะที่ปกขนาดเล็กเพื่อเล่นหรือหยุดชั่วคราว</string>
+    <string name="gb_lyrics_cover_plays_info">เมื่อเปิดเนื้อเพลงอยู่ การแตะที่ปกขนาดเล็กจะเล่นหรือหยุดชั่วคราว และการกดค้างจะปิดเนื้อเพลง เมื่อปิดอยู่: การแตะจะปิดเนื้อเพลง</string>
+    <string name="gb_lyrics_cover_plays_keywords">เนื้อเพลง ปกเล็ก ภาพขนาดย่อ ปก แตะ เล่น หยุดชั่วคราว กดค้าง ปิด lyrics cover</string>
 </resources>

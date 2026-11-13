@@ -5381,4 +5381,8 @@
     <string name="clock_no_plays">Niets afgespeeld op dit uur</string>
     <string name="cal_no_music">Geen muziek</string>
     <string name="cal_days_with_music">Dagen met muziek: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Tik op de kleine cover om af te spelen of te pauzeren</string>
+    <string name="gb_lyrics_cover_plays_info">Met geopende songtekst speelt een tik op de kleine cover af of pauzeert, en een lange druk sluit de songtekst. Uit: een tik sluit de songtekst.</string>
+    <string name="gb_lyrics_cover_plays_keywords">songtekst kleine cover miniatuur albumhoes tik afspelen pauzeren lange druk sluiten lyrics</string>
 </resources>

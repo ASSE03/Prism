@@ -5381,4 +5381,8 @@
     <string name="clock_no_plays">Bu saatte hiçbir şey çalınmadı</string>
     <string name="cal_no_music">Müzik yok</string>
     <string name="cal_days_with_music">Müzikli günler: %1$d</string>
+    <!-- 1.8.5 #464 -->
+    <string name="gb_lyrics_cover_plays">Oynatmak veya duraklatmak için küçük kapağa dokun</string>
+    <string name="gb_lyrics_cover_plays_info">Sözler açıkken küçük kapağa dokunmak oynatır veya duraklatır, uzun basmak ise sözleri kapatır. Kapalıyken: dokunmak sözleri kapatır.</string>
+    <string name="gb_lyrics_cover_plays_keywords">sözler küçük kapak önizleme albüm kapağı dokun oynat duraklat uzun bas kapat lyrics cover</string>
 </resources>
