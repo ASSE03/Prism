@@ -77,11 +77,25 @@ internal fun blendsAcrossAlbum(from: String?, to: String?, albumPlaying: Boolean
 }
 
 @Serializable
-private data class SavedQueue(
+internal data class SavedQueue(
     val songs: List<Song>, val index: Int, val positionMs: Long, val title: String,
     // Shuffle (with its order) and repeat, so a restart keeps them (#101: shuffle was off again after Prism restarted).
     val shuffle: Boolean = false, val shuffleOrder: List<Int> = emptyList(), val repeat: Int = Player.REPEAT_MODE_OFF,
 )
+
+/**
+ * queue.json's text from what the player holds: each lined-up item's stored song ([songJson], as [toMediaItem] put it in
+ * the item; null or unreadable ones are left out), where playback is, and shuffle ([order]: the play order by index,
+ * kept only when every item made it into the list) and repeat. 1.8.7: the songs are read and written again here, off the
+ * main thread (with 1,100 songs lined up it held the main thread for up to 200 ms after every song change on the A16).
+ */
+internal fun savedQueueText(
+    songJson: List<String?>, index: Int, positionMs: Long, title: String, shuffle: Boolean, order: List<Int>, repeat: Int,
+): String {
+    val songs = songJson.mapNotNull { s -> s?.let { runCatching { InnerTube.json.decodeFromString(Song.serializer(), it) }.getOrNull() } }
+    val q = SavedQueue(songs, index, positionMs, title, shuffle = shuffle, shuffleOrder = if (shuffle && songs.size == songJson.size) order else emptyList(), repeat = repeat)
+    return InnerTube.json.encodeToString(SavedQueue.serializer(), q)
+}
 
 @OptIn(UnstableApi::class)
 open class PlaybackService : MediaLibraryService(), Player.Listener {
@@ -2537,19 +2551,20 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      */
     private fun saveQueue(now: Boolean = false) {
         if (!::player.isInitialized) return
-        val songs = (0 until player.mediaItemCount).mapNotNull { player.getMediaItemAt(it).toSong() }
-        // The play order while shuffled, walked from its first song (only when every item made it into the list).
-        val order = if (player.shuffleModeEnabled && songs.size == player.mediaItemCount) player.shuffleOrder.let { so ->
+        // On this thread only what the player has to be asked for: each item's stored song as it is (not read), the
+        // place, and the play order while shuffled, walked from its first song. The file is put together by the writer.
+        val count = player.mediaItemCount
+        val songJson = List(count) { player.getMediaItemAt(it).mediaMetadata.extras?.getString(EXTRA_SONG) }
+        val shuffle = player.shuffleModeEnabled
+        val order = if (shuffle) player.shuffleOrder.let { so ->
             generateSequence(so.firstIndex.takeIf { it != androidx.media3.common.C.INDEX_UNSET }) { i -> so.getNextIndex(i).takeIf { it != androidx.media3.common.C.INDEX_UNSET } }
-                .take(songs.size).toList()
+                .take(count).toList()
         } else emptyList()
-        val q = SavedQueue(
-            songs, player.currentMediaItemIndex, player.currentPosition, c.queue.source.value.title,
-            shuffle = player.shuffleModeEnabled, shuffleOrder = order, repeat = player.repeatMode,
-        )
-        val text = InnerTube.json.encodeToString(SavedQueue.serializer(), q)
+        val index = player.currentMediaItemIndex; val position = player.currentPosition
+        val title = c.queue.source.value.title; val repeat = player.repeatMode
+        val text = { savedQueueText(songJson, index, position, title, shuffle, order, repeat) }
         placeKeeper.saved(currentPlace())
-        if (now) writeQueue(text) else scope.launch(queueWriter) { writeQueue(text) }
+        if (now) writeQueue(text()) else scope.launch(queueWriter) { writeQueue(text()) }
     }
 
     private val queueWriter = Dispatchers.IO.limitedParallelism(1)
