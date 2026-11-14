@@ -300,6 +300,8 @@ data class ResolvedStream(
     val videoHeight: Int = 0,
     val videoCodec: String? = null,
     val videoFps: Int = 0,
+    /** Premium's best was in hand but the mobile data quality (this one) picked another (1.8.7, #373); null: it wasn't. */
+    val heldBack: com.prism.music.data.prefs.AudioQuality? = null,
 )
 
 class StreamException(message: String, cause: Throwable? = null) : Exception(message, cause)
@@ -425,12 +427,11 @@ class StreamResolver(
     private fun networkNow(): String =
         context.getSystemService(ConnectivityManager::class.java)?.activeNetwork?.toString().orEmpty()
 
-    fun currentQuality(): AudioQuality = when {
-        // Data saver on mobile data (#40) wins over lossless: the mobile data quality, at most Normal.
-        settings.current.dataSaver && isMetered() -> settings.current.cellularQuality.takeIf { it != AudioQuality.HIGH } ?: AudioQuality.NORMAL
-        settings.current.lossless -> AudioQuality.HIGH // lossless mode always takes the best stream there is
-        isMetered() -> settings.current.cellularQuality
-        else -> settings.current.audioQuality
+    fun currentQuality(): AudioQuality = qualityNow(premiumInHand = false).quality
+
+    /** The quality to pick at now ([AudioPick.quality]); [premiumInHand]: Premium quality is on and its formats came. */
+    private fun qualityNow(premiumInHand: Boolean): AudioPick.Quality = settings.current.let {
+        AudioPick.quality(it.audioQuality, it.cellularQuality, it.lossless, it.dataSaver, isMetered(), premiumInHand)
     }
 
     /**
@@ -1055,7 +1056,10 @@ class StreamResolver(
         val f = formats(videoId, forVideo = withVideo)
         // A live stream's "file" is only its newest few seconds: the player has to take it as HLS instead.
         if (f.live) throw LiveStreamException(videoId)
-        val audio = pickAudio(f.audio, currentQuality())
+        // Premium quality on and its formats here (#373 #179 #148): on Wi-Fi the best of them, whatever the quality
+        // setting; on mobile data the mobile data quality still holds, and Stats for nerds says it held them back.
+        val quality = qualityNow(premiumInHand = settings.current.premiumStream && f.audio.any { it.itag in PREMIUM_ITAGS })
+        val audio = pickAudio(f.audio, quality.quality)
             ?: throw StreamException(tr(R.string.no_playable_audio_stream_was_found))
         // The account's link couldn't be unlocked (GitHub #179, 1.7.7.1: the player JS sandbox ran out of memory on a
         // OnePlus) for a song that went through the account only for Premium quality: it plays as everyone gets it,
@@ -1095,6 +1099,7 @@ class StreamResolver(
             videoHeight = video?.height ?: 0,
             videoCodec = video?.codec,
             videoFps = video?.fps ?: 0,
+            heldBack = quality.heldBack?.takeIf { audio.itag !in PREMIUM_ITAGS },
         )
     }
 }

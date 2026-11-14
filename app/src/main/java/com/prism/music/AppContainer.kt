@@ -23,6 +23,7 @@ import com.prism.music.data.innertube.YouTubeMusic
 import com.prism.music.data.lyrics.LyricsRepository
 import com.prism.music.data.meta.MetaRepository
 import com.prism.music.data.prefs.SettingsRepository
+import com.prism.music.data.stream.CachedFormat
 import com.prism.music.data.stream.ResolvedStream
 import com.prism.music.data.stream.StreamResolver
 import com.prism.music.data.stream.YouTubeStreamInterceptor
@@ -428,6 +429,17 @@ class AppContainer(val app: Application) {
     val nerdStats = MutableStateFlow(NerdStats())
     /** video id -> (source label, resolved stream) for the stats overlay */
     val streamDetails = ConcurrentHashMap<String, Pair<String, ResolvedStream?>>()
+    /** song id -> the file its saved copy (Downloaded / Cached) came as, while that copy plays (1.8.7, #373). */
+    private val copyFormats = ConcurrentHashMap<String, CachedFormat>()
+
+    /**
+     * Stats for nerds' line on where [songId]'s quality comes from: the saved copy that plays and its format, or Premium's
+     * best held back by the mobile data quality. Null when there's nothing to say.
+     */
+    fun streamNote(songId: String): String? {
+        val (source, s) = streamDetails[songId] ?: return null
+        return com.prism.music.ui.player.streamQualityNote(source, s?.heldBack, copyFormats[songId])
+    }
     @Volatile var onStreamResolved: ((String) -> Unit)? = null
 
     val databaseProvider by lazy { StandaloneDatabaseProvider(app) }
@@ -792,15 +804,14 @@ class AppContainer(val app: Application) {
         if (useCaches) {
             val saved = sound ?: song
             if (downloadCache.fullyCached(saved, spec.position, spec.length)) {
-                streamDetails[song] = "Downloaded" to streamDetails[song]?.second
-                onStreamResolved?.invoke(song)
+                savedCopyPlays(song, "Downloaded", readFormat(downloadFormats, saved))
                 return spec.buildUpon().setKey(saved).build()
             }
             if (playerCache.fullyCached(id, spec.position, spec.length)) {
-                streamDetails[song] = "Cached" to streamDetails[song]?.second
-                onStreamResolved?.invoke(song)
+                savedCopyPlays(song, "Cached", readFormat(cacheFormats, id))
                 return spec.buildUpon().setKey(STREAMED + id).build()
             }
+            copyFormats.remove(song)
         }
         // The listener's own upload (#101): only their account may play it, so it's asked for that way at once instead of
         // after two refusals.
@@ -813,8 +824,9 @@ class AppContainer(val app: Application) {
         }
         // The song's start was saved ahead from another format (the network changed since, so another quality
         // was picked): bytes of two formats can't be stitched together, so that start goes.
-        prebuffered.remove(id)?.let { itag -> if (itag != s.itag) runCatching { playerCache.removeResource(id) } }
-        if (useCaches) cacheFormat(id, s.itag) else downloadFormat(id, s.itag, spec.position)
+        val format = CachedFormat.of(s)
+        prebuffered.remove(id)?.let { was -> if (!was.sameFile(format)) runCatching { playerCache.removeResource(id) } }
+        if (useCaches) cacheFormat(id, format) else downloadFormat(id, format, spec.position)
         streamDetails[song] = (if (useCaches) "Streaming" else "Downloading") to s
         if (useCaches) onStreamResolved?.invoke(song)
         return spec.buildUpon().setUri(s.audioUrl).setKey(if (useCaches) STREAMED + id else id).build()
@@ -832,15 +844,36 @@ class AppContainer(val app: Application) {
      * into one file nothing could read: GitHub #183, "Skipping atom with length > 2147483647" from Downloads while the
      * song streamed fine. When the format changed, what was saved goes and the download starts over.
      */
-    private fun downloadFormat(id: String, itag: Int, position: Long) {
-        val before = downloadFormats.getInt(id, 0)
-        if (before != 0 && before != itag && (position > 0 || downloadCache.getCachedBytes(id, 0, Long.MAX_VALUE) > 0)) {
+    private fun downloadFormat(id: String, format: CachedFormat, position: Long) {
+        val before = readFormat(downloadFormats, id)
+        // 1.8.7: the same itag can be another file (another length, the volume-levelled variant): only the same file
+        // carries on. A download recorded before 1.8.7 (its itag alone) that stopped part-way starts over once.
+        if (before?.sameFile(format) != true && (position > 0 || downloadCache.getCachedBytes(id, 0, Long.MAX_VALUE) > 0)) {
             runCatching { downloadCache.removeResource(id) }
-            downloadFormats.edit().putInt(id, itag).apply()
-            com.prism.music.playback.AudioDiagnostics.log("download", "$id came as format $itag, not $before as before: starting it over")
+            downloadFormats.edit().putString(id, format.encode()).apply()
+            com.prism.music.playback.AudioDiagnostics.log("download", "$id came as ${format.encode()}, not ${before?.encode() ?: "unrecorded"} as before: starting it over")
             throw IOException(tr(R.string.the_song_s_format_changed_part))
         }
-        if (before != itag) downloadFormats.edit().putInt(id, itag).apply()
+        if (before != format) downloadFormats.edit().putString(id, format.encode()).apply()
+    }
+
+    /** Which file [id]'s saved bytes came as ([CachedFormat]; an Int before 1.8.7, the itag alone). Null: not recorded. */
+    private fun readFormat(prefs: android.content.SharedPreferences, id: String): CachedFormat? = runCatching {
+        try {
+            CachedFormat.decode(prefs.getString(id, null))
+        } catch (_: ClassCastException) {
+            CachedFormat.decode(prefs.getInt(id, 0))
+        }
+    }.getOrNull()
+
+    /** A saved copy of [song] plays ([source]: "Downloaded" or "Cached"), as [format]: Stats for nerds says which. */
+    private fun savedCopyPlays(song: String, source: String, format: CachedFormat?) {
+        if (format != null) copyFormats[song] = format else copyFormats.remove(song)
+        // This session's stream is kept for the stats only when it's the same file as the copy: otherwise the copy's
+        // own format (worked out from its size) shows, not a stream that isn't playing (#373).
+        val stream = streamDetails[song]?.second?.takeIf { format != null && CachedFormat.of(it).sameFile(format) }
+        streamDetails[song] = source to stream
+        onStreamResolved?.invoke(song)
     }
 
     /** The format (itag) each song's cached part came in (1.7.8), so a later part never comes from another one. */
@@ -851,28 +884,30 @@ class AppContainer(val app: Application) {
      * time): what's cached of [id] from another format goes before today's stream adds to it. Before 1.7.8 nothing was
      * recorded; such a song is caught when it can't be read ([forgetCachedAudio] from the player).
      */
-    private fun cacheFormat(id: String, itag: Int) {
-        val before = cacheFormats.getInt(id, 0)
-        if (before == itag) return
-        if (before != 0 && playerCache.getCachedBytes(id, 0, Long.MAX_VALUE) > 0) {
+    private fun cacheFormat(id: String, format: CachedFormat) {
+        val before = readFormat(cacheFormats, id)
+        if (before == format) return
+        // 1.8.7 (plan 4.2): another file of the same itag (another length, the volume-levelled variant) isn't joined
+        // on either: that made a malformed WebM that stopped seconds in. What's cached of it goes, not mixed.
+        if (!mayAddFormat(before, format, playerCache.getCachedBytes(id, 0, Long.MAX_VALUE) > 0)) {
             runCatching { playerCache.removeResource(id) }
-            com.prism.music.playback.AudioDiagnostics.log("stream", "$id came as format $itag, not $before as cached: its cached part goes")
+            com.prism.music.playback.AudioDiagnostics.log("stream", "$id came as ${format.encode()}, not ${before?.encode() ?: "unrecorded"} as cached: its cached part goes")
         }
-        cacheFormats.edit().putInt(id, itag).apply()
+        cacheFormats.edit().putString(id, format.encode()).apply()
     }
 
     /**
-     * [itag] may be saved under [key]: nothing of it is cached yet, or what is came in that format (recorded for it, as
-     * the player's stream does). Blocking (the cache's own lock).
+     * [format] may be saved under [key]: nothing of it is cached yet, or what is came as that same file (recorded for
+     * it, as the player's stream does). Blocking (the cache's own lock).
      */
-    private fun sameFormat(key: String, itag: Int): Boolean {
-        val before = cacheFormats.getInt(key, 0)
+    private fun sameFormat(key: String, format: CachedFormat): Boolean {
+        val before = readFormat(cacheFormats, key)
         val cached = playerCache.getCachedBytes(key, 0, Long.MAX_VALUE) > 0
-        if (!mayAddFormat(before, itag, cached)) {
-            com.prism.music.playback.AudioDiagnostics.log("stream", "$key: not saved ahead as format $itag, its cached part is format $before")
+        if (!mayAddFormat(before, format, cached)) {
+            com.prism.music.playback.AudioDiagnostics.log("stream", "$key: not saved ahead as ${format.encode()}, its cached part is ${before?.encode() ?: "unrecorded"}")
             return false
         }
-        if (before != itag) cacheFormats.edit().putInt(key, itag).apply()
+        if (before != format) cacheFormats.edit().putString(key, format.encode()).apply()
         return true
     }
 
@@ -887,7 +922,7 @@ class AppContainer(val app: Application) {
     fun forgetDownloadFormat(id: String) = downloadFormats.edit().remove(id).apply()
 
     /** The format (itag) a download came down in, when it's known (recorded since 1.7.7.1). */
-    fun downloadedItag(id: String): Int? = downloadFormats.getInt(id, 0).takeIf { it != 0 }
+    fun downloadedItag(id: String): Int? = readFormat(downloadFormats, id)?.itag
 
     companion object {
         /** The mark on a streamed song's key: Downloads holds no such key ([playbackDataSourceFactory]). */
@@ -899,10 +934,10 @@ class AppContainer(val app: Application) {
          * didn't count as whole, and offline Prism asked the network for it and skipped it (#213).
          */
         /**
-         * Bytes in format [itag] may join what's cached of a song: nothing is ([cached] false), or it came in the same
-         * format ([before]; 0 when it wasn't recorded, which isn't taken on trust).
+         * Bytes of [now] may join what's cached of a song: nothing is ([cached] false), or it came as the same file
+         * ([before]: the same itag and length, [CachedFormat.sameFile]; null when it wasn't recorded, which isn't taken on trust).
          */
-        internal fun mayAddFormat(before: Int, itag: Int, cached: Boolean): Boolean = !cached || before == itag
+        internal fun mayAddFormat(before: CachedFormat?, now: CachedFormat, cached: Boolean): Boolean = CachedFormat.mayAdd(before, now, cached)
 
         /**
          * The key a music video's picture is read by ([videoDataSourceFactory]); [whole]: all of it is saved in Downloads.
@@ -918,8 +953,8 @@ class AppContainer(val app: Application) {
         }
     }
 
-    /** Songs whose first seconds [warmUp] saved into the song cache, and the stream (itag) they came from. */
-    private val prebuffered = ConcurrentHashMap<String, Int>()
+    /** Songs whose first seconds [warmUp] saved into the song cache, and the file they came from. */
+    private val prebuffered = ConcurrentHashMap<String, CachedFormat>()
 
     /**
      * Gets a song ready to start the moment it's picked: its stream is resolved (the slow part, 1–2 s through
@@ -951,12 +986,13 @@ class AppContainer(val app: Application) {
         // Never added to a part cached in another format (1.8.1): the player's own stream keeps to the format it began
         // in ([cacheFormat]); saving the rest from another one joined two files into one nothing could read, kept till the
         // cache was cleared (Sing on a TV, Reddit: "I have to uninstall and reinstall the app to restore playback").
-        if (!sameFormat(key, s.itag)) return
+        val format = CachedFormat.of(s)
+        if (!sameFormat(key, format)) return
         val spec = DataSpec.Builder().setUri(s.audioUrl).setKey(key).setPosition(0).setLength(bytes).build()
         val source = CacheDataSource(playerCache, OkHttpDataSource.Factory(streamHttp).createDataSource())
         runCatching { androidx.media3.datasource.cache.CacheWriter(source, spec, null, null).also { writer?.invoke(it) }.cache() }
             .onSuccess {
-                prebuffered[key] = s.itag
+                prebuffered[key] = format
                 // Saved whole: say so, so it plays from here offline too (#213).
                 if (whole) markWhole(playerCache, key, s.contentLength)
             }
