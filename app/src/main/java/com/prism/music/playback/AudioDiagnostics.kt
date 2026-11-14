@@ -33,6 +33,24 @@ object AudioDiagnostics {
 
     fun init(context: Context) {
         file = File(context.filesDir, "diagnostics/audio.log").also { it.parentFile?.mkdirs() }
+        summaryFile = File(context.filesDir, "diagnostics/diagnostics-summary.json")
+    }
+
+    /** 1.8.7: counts since the playback service started (it calls [SessionCounters.reset] as it starts). */
+    val session = SessionCounters()
+
+    private var summaryFile: File? = null
+
+    /**
+     * The tick's line ([session]'s counts, after [line]) and the session's counts written to `diagnostics-summary.json`
+     * (`{"session": {...}}`), only while diagnostics are on.
+     */
+    fun tick(line: String) {
+        if (!enabled) return
+        log("tick", "$line; ${session.line()}")
+        val json = session.json()
+        val f = summaryFile ?: return
+        writer.execute { runCatching { writeAtomically(f, json) } }
     }
 
     /** Turned on or off from the setting; [header] describes the phone and the audio settings at the start. */

@@ -77,11 +77,26 @@ internal fun blendsAcrossAlbum(from: String?, to: String?, albumPlaying: Boolean
 }
 
 @Serializable
-private data class SavedQueue(
+internal data class SavedQueue(
     val songs: List<Song>, val index: Int, val positionMs: Long, val title: String,
     // Shuffle (with its order) and repeat, so a restart keeps them (#101: shuffle was off again after Prism restarted).
     val shuffle: Boolean = false, val shuffleOrder: List<Int> = emptyList(), val repeat: Int = Player.REPEAT_MODE_OFF,
 )
+
+/** What a resumed Prism plays ([resumptionOf]): the saved queue's songs, from [index] at [positionMs]. */
+internal data class Resumption(val songs: List<Song>, val index: Int, val positionMs: Long, val title: String)
+
+/**
+ * What a headset button or the system's resume card starts after Prism was closed or killed (#388): the saved queue
+ * ([queueText], queue.json) at the kept place ([place], queue-place.json, when newer and its song is still queued), else
+ * at the queue file's own place. Null when nothing was saved or it can't be read.
+ */
+internal fun resumptionOf(queueText: String?, place: QueuePlace?): Resumption? {
+    val q = queueText?.let { runCatching { InnerTube.json.decodeFromString(SavedQueue.serializer(), it) }.getOrNull() } ?: return null
+    if (q.songs.isEmpty()) return null
+    val (index, position) = PlaceKeeper.start(q.songs.map { it.id }, q.index, q.positionMs, place, placeIsNewer = true)
+    return Resumption(q.songs, index.coerceIn(0, q.songs.lastIndex), position.coerceAtLeast(0), q.title)
+}
 
 @OptIn(UnstableApi::class)
 open class PlaybackService : MediaLibraryService(), Player.Listener {
@@ -130,6 +145,11 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     /** The tracked play doesn't count towards taste (an excluded song, playlist or artist). */
     private var trackedExcluded = false
     private val retries = HashMap<String, Int>()
+    /** A song whose connection failed is tried again in place, or waited on while offline (1.8.7, plan 4.4). */
+    private val netRetry = NetworkRetry()
+    private var netJob: Job? = null
+    /** Songs that failed on this network: their stream block is lifted when the phone moves to another one. */
+    private val failedHere = FailedOnThisNetwork()
     /** When each music video last got its streams asked for afresh after an error ([videoRetryAllowed]). */
     private val videoRetriedAt = HashMap<String, Long>()
     private var saveJob: Job? = null
@@ -145,6 +165,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             PlaybackServices.taskRemovedForTest = { onTaskRemoved(null) }
         }
         AudioDiagnostics.init(this)
+        AudioDiagnostics.session.reset()
         // Media3's own audio warnings (spurious AudioTrack timestamps, position jumps…) go into the diagnostics too.
         androidx.media3.common.util.Log.setLogger(object : androidx.media3.common.util.Log.Logger {
             private val system = androidx.media3.common.util.Log.Logger.DEFAULT
@@ -340,6 +361,16 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         scope.launch { c.dj.on.collect { on -> if (on) djAhead() else { djJob?.cancel(); djSoon?.cancel() } } }
         scope.launch { c.dj.rescan.drop(1).collect { if (c.dj.onNow) djAhead() } }
         scope.launch { c.dj.newSets.drop(1).collect { djNewSet() } }
+        // Another network (or back online): songs that failed on the old one may play now (plan 4.4), and the one coming up
+        // is looked up afresh too (its lookup ahead of time may have failed, and a link can be bound to the old address).
+        scope.launch {
+            c.network.changes.drop(1).collect {
+                val next = player.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET }?.let { player.getMediaItemAt(it).mediaId }
+                val ids = failedHere.take(listOf(next)).filterNot { it.startsWith(Song.LOCAL_PREFIX) || it.startsWith(Song.RSS_PREFIX) }
+                ids.forEach { c.streams.invalidate(it) }
+                AudioDiagnostics.log("network", "another network: ${ids.size} songs' streams asked for afresh (${ids.take(5).joinToString()})")
+            }
+        }
         scope.launch { c.settings.flow.map { it.djFlow }.distinctUntilChanged().drop(1).collect { resequence() } }
         scope.launch {
             c.settings.flow.map { listOf(it.carLyrics, it.carLyricsStyle, it.carLyricsOnPhone, it.behavior.carLyricsLines) }.distinctUntilChanged().collect {
@@ -357,11 +388,13 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 if (tick % 15 == 0 && player.isPlaying) pushWidgets(progressOnly = true)
                 else if (widgetsBehind && screenOn()) pushWidgets()
                 // Diagnostics: every 10 s of playing, how far ahead it's loaded and what Prism's own processing cost.
-                if (tick % 10 == 0 && player.isPlaying && AudioDiagnostics.enabled) AudioDiagnostics.log(
-                    "tick",
+                // With the sitting's counts (1.8.7), also kept in diagnostics-summary.json for the soak.
+                if (tick % 10 == 0 && player.isPlaying && AudioDiagnostics.enabled) AudioDiagnostics.tick(
                     "at ${player.currentPosition / 1000} s, ${(player.bufferedPosition - player.currentPosition).coerceAtLeast(0) / 1000} s loaded ahead; " +
                         (AudioDiagnostics.summary() ?: "no processing measured"),
                 )
+                // A song tried again after its connection failed: once it has played well past that place, it starts afresh.
+                if (player.isPlaying) player.currentMediaItem?.mediaId?.let { netRetry.playing(it, player.currentPosition) }
                 if (player.mediaItemCount > 0) c.nerdStats.value = c.nerdStats.value.copy(
                     bufferMs = (player.bufferedPosition - player.currentPosition).coerceAtLeast(0),
                     effects = listOfNotNull(
@@ -498,8 +531,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 it.skipSilenceEnabled = false
                 // #364: the main player's underruns are logged; the ending song's, heard through the blend, too.
                 it.addAnalyticsListener(object : AnalyticsListener {
-                    override fun onAudioUnderrun(eventTime: AnalyticsListener.EventTime, bufferSize: Int, bufferSizeMs: Long, elapsedSinceLastFeedMs: Long) =
+                    override fun onAudioUnderrun(eventTime: AnalyticsListener.EventTime, bufferSize: Int, bufferSizeMs: Long, elapsedSinceLastFeedMs: Long) {
+                        AudioDiagnostics.session.underrun()
                         AudioDiagnostics.log("underrun", "the ending song's player ran dry: buffer $bufferSizeMs ms, last fed $elapsedSinceLastFeedMs ms before")
+                    }
                 })
                 // The ending song in the key it was playing in (Sing): the blend used to drop back to the original key.
                 pitchNow().takeIf { p -> p != 1f }?.let { p -> it.playbackParameters = androidx.media3.common.PlaybackParameters(1f, p) }
@@ -931,6 +966,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     override fun onPlaybackStateChanged(playbackState: Int) {
         val now = SystemClock.elapsedRealtime()
+        // The sitting's counts (1.8.7): a wait for data while playing, till it plays again or stops.
+        if (playbackState == Player.STATE_BUFFERING && player.playWhenReady && startedLoading == null) AudioDiagnostics.session.bufferingStarted()
+        else if (playbackState != Player.STATE_BUFFERING) AudioDiagnostics.session.bufferingEnded()
         if (playbackState == Player.STATE_BUFFERING && player.playWhenReady && startedLoading == null) stalledAt = now
         else if (playbackState == Player.STATE_READY && stalledAt > 0) {
             android.util.Log.i("PrismStream", "${player.currentMediaItem?.mediaId} stalled ${now - stalledAt} ms at ${player.currentPosition} ms")
@@ -1001,6 +1039,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     }
 
     override fun onPlayerError(error: PlaybackException) {
+        AudioDiagnostics.session.error(
+            error.errorCodeName,
+            generateSequence(error as Throwable) { it.cause }.filterIsInstance<HttpDataSource.InvalidResponseCodeException>().firstOrNull()?.responseCode,
+        )
         val id = player.currentMediaItem?.mediaId ?: return
         // The next song couldn't be had, found as the playing one's last sound is read: the player reports that as the
         // playing song's failure, which would then have its music video looked up and be retried for what isn't its fault.
@@ -1084,6 +1126,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 videoRetriedAt[videoId] = at
                 AudioDiagnostics.log("video", "video $videoId failed (${httpCode ?: if (parse) "unreadable" else error.errorCodeName}; $about): trying its streams afresh")
                 c.streams.invalidate(videoId, refused = true)
+                AudioDiagnostics.session.reResolve()
                 val pos = player.currentPosition
                 if (retry.forgetCachedSound) {
                     // Its sound's cached part goes too, as a song's does (below): asked afresh, the same bytes were read again.
@@ -1137,6 +1180,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             scope.launch {
                 withContext(Dispatchers.IO) { c.forgetCachedAudio(id) }
                 c.streams.invalidate(id)
+                AudioDiagnostics.session.reResolve()
                 playOnFrom(index, id, pos)
             }
             return
@@ -1157,11 +1201,46 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             }
             return
         }
-        if (attempts < 2 && (httpCode == 403 || httpCode == 410 || error.errorCode == PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS ||
-                error.errorCode == PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED)
-        ) {
+        // 1.8.7 (plan 4.4): the connection failed (a timeout mid-song, a dropped or refused connection), not the song. It
+        // plays on from where it stopped after a short wait, three times at most ([NetworkRetry]); offline, it waits for
+        // the network to come back without using up a try. Only then is it skipped, with the reason. Before, a timeout
+        // skipped the song at once, and a failed connection had two immediate tries.
+        if (httpCode == null && !id.startsWith(Song.LOCAL_PREFIX) && networkFailure(error.errorCode, error)) {
+            val pos = player.currentPosition
+            val index = player.currentMediaItemIndex
+            val what = error.errorCodeName
+            netJob?.cancel()
+            when (val step = netRetry.failed(id, pos, c.network.isOnline(), what)) {
+                is NetworkRetry.Step.Retry -> {
+                    AudioDiagnostics.log("song", "$id: $what at ${pos / 1000} s (${(error.cause ?: error).message?.take(80)}): trying it again in place in ${step.afterMs} ms (${step.attempt} of ${NetworkRetry.BACKOFF_MS.size})")
+                    netJob = scope.launch {
+                        delay(step.afterMs)
+                        // The last try asks for the stream afresh too: its link may have gone stale while the connection was down.
+                        if (step.last) { c.streams.invalidate(id); AudioDiagnostics.session.reResolve() }
+                        playOnFrom(index, id, step.positionMs)
+                    }
+                }
+                is NetworkRetry.Step.WaitForNetwork -> {
+                    AudioDiagnostics.log("song", "$id: $what at ${pos / 1000} s while offline: waiting for the network (${step.wait} of ${NetworkRetry.MAX_WAITS})")
+                    if (step.wait == 1) c.player.reportError(tr(R.string.you_re_offline_check_your_connection))
+                    netJob = scope.launch {
+                        awaitOnline(c.network.online, { c.network.isOnline() })
+                        delay(NetworkRetry.BACK_ONLINE_MS)
+                        AudioDiagnostics.log("song", "$id: back online: playing on from ${step.positionMs / 1000} s")
+                        playOnFrom(index, id, step.positionMs)
+                    }
+                }
+                is NetworkRetry.Step.Skip -> {
+                    AudioDiagnostics.log("error", "$id: skipped: ${step.reason}")
+                    failAndSkip(error)
+                }
+            }
+            return
+        }
+        if (attempts < 2 && (httpCode == 403 || httpCode == 410 || error.errorCode == PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS)) {
             retries[id] = attempts + 1
             c.streams.invalidate(id, refused = httpCode == 403)
+            AudioDiagnostics.session.reResolve()
             val pos = player.currentPosition
             player.prepare()
             player.seekTo(pos)
@@ -1225,6 +1304,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val cause = error.cause ?: error
         val why = (com.prism.music.data.podcast.episodeFailureText(song, error) ?: cause.friendlyMessage(tr(R.string.playback_failed))).trimEnd('.', ' ')
         AudioDiagnostics.log("error", "$id won't play (${error.errorCodeName}: ${cause.message?.take(120)})")
+        AudioDiagnostics.session.skippedByError()
+        id?.let { failedHere.failed(it) }
         fun stillThere() = player.playbackState == Player.STATE_IDLE && player.currentMediaItemIndex == index && player.currentMediaItem?.mediaId == id
         skipJob?.cancel()
         if (player.hasNextMediaItem()) c.player.reportError(tr(R.string.moving_on_after_refusal, title, why))
@@ -2508,7 +2589,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private var placeJob: Job? = null
     private val placeKeeper = PlaceKeeper { p ->
         val text = InnerTube.json.encodeToString(QueuePlace.serializer(), p)
-        scope.launch(queueWriter) { runCatching { placeFile.writeText(text) } }
+        // Whole or not at all (1.8.7): a write cut short by a kill left a broken place file, and the place from before.
+        scope.launch(queueWriter) { runCatching { writeAtomically(placeFile, text) } }
     }
 
     private fun currentPlace(): QueuePlace? {
@@ -2555,11 +2637,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private val queueWriter = Dispatchers.IO.limitedParallelism(1)
 
     @Synchronized private fun writeQueue(text: String) {
-        runCatching {
-            val tmp = File(filesDir, "queue.json.tmp")
-            tmp.writeText(text)
-            if (!tmp.renameTo(queueFile)) { queueFile.writeText(text); tmp.delete() }
-        }
+        runCatching { writeAtomically(queueFile, text) }
     }
 
     private fun restoreQueue() {
@@ -2886,15 +2964,13 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             controller: MediaSession.ControllerInfo,
             isForPlayback: Boolean,
         ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> = scope.future {
-            val (q, place) = withContext(Dispatchers.IO) {
-                runCatching { InnerTube.json.decodeFromString(SavedQueue.serializer(), queueFile.readText()) }.getOrNull() to keptPlace()
-            }
-            if (q == null || q.songs.isEmpty()) {
+            val r = withContext(Dispatchers.IO) { resumptionOf(runCatching { queueFile.readText() }.getOrNull(), keptPlace()) }
+            AudioDiagnostics.log("control", "resume asked by ${controller.packageName}: " + (r?.let { "${it.songs[it.index].id} at ${it.positionMs / 1000} s" } ?: "nothing saved"))
+            if (r == null) {
                 MediaSession.MediaItemsWithStartPosition(emptyList(), 0, C.TIME_UNSET)
             } else {
-                c.queue.source.value = QueueSource(QueueKind.OTHER, q.title)
-                val (index, position) = PlaceKeeper.start(q.songs.map { it.id }, q.index, q.positionMs, place, placeIsNewer = true)
-                MediaSession.MediaItemsWithStartPosition(q.songs.map { it.toMediaItem() }, index.coerceIn(0, q.songs.lastIndex), position)
+                c.queue.source.value = QueueSource(QueueKind.OTHER, r.title)
+                MediaSession.MediaItemsWithStartPosition(r.songs.map { it.toMediaItem() }, r.index, r.positionMs)
             }
         }
     }
@@ -2982,6 +3058,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             // Background scans back off while the sound is running dry (MixTempo.ease).
             MixTempo.lastUnderrunAt = SystemClock.elapsedRealtime()
             update { copy(underruns = underruns + 1) }
+            AudioDiagnostics.session.underrun()
         }
     }
 
