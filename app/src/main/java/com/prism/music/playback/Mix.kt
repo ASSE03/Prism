@@ -487,7 +487,8 @@ class MixEngine(
             handoverMs = 0L
             syncActionAt = now
             mainLost.reset()
-            return 10
+            // Looked at ten times a second, not a hundred: a pause can last.
+            return 100
         }
         if (now - syncActionAt > SETTLE_READINGS_MS) watchTail(t, now)
         watchMain(pos, "as the tail played along")
