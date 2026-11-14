@@ -379,7 +379,7 @@ fun rememberLyricsState(song: Song, opened: Boolean = true): LyricsState {
  * staying within a few ms of the audio, and snaps on seeks.
  */
 @Composable
-fun rememberLyricClock(active: Boolean = true): State<Long> {
+fun rememberLyricClock(active: Boolean = true, everyMs: Long = 0): State<Long> {
     val pc = LocalContainer.current.player
     val clock = remember { mutableLongStateOf(pc.lyricPosition) }
     // Android runs ordinary app content at 60 Hz; ask for the panel's full rate while lyrics move.
@@ -387,7 +387,8 @@ fun rememberLyricClock(active: Boolean = true): State<Long> {
     // Only while they move: paused, a 120 Hz screen goes back to its own rate (it stayed at 120 under paused lyrics).
     val playing by pc.isPlaying.collectAsState()
     DisposableEffect(active && playing) {
-        if (active && playing && Build.VERSION.SDK_INT >= 35) {
+        // A calm clock ([everyMs]) asks for nothing: one line on the player isn't worth the whole screen's top rate.
+        if (active && playing && everyMs <= 0 && Build.VERSION.SDK_INT >= 35) {
             val before = view.requestedFrameRate
             view.requestedFrameRate = 120f
             onDispose { view.requestedFrameRate = before }
@@ -414,6 +415,18 @@ fun rememberLyricClock(active: Boolean = true): State<Long> {
                 delay(PAUSED_CLOCK_MS)
                 continue
             }
+            // 1.8.7: a calm clock moves every [everyMs] and not on every frame of the screen. Each move draws the line
+            // again and, with it, the whole player (its blurred background too): on the A16 the one line over the
+            // progress bar kept the player at 87 frames a second and a full core for the whole song.
+            if (everyMs > 0) {
+                delay(everyMs)
+                if (pc.player?.isPlaying != true) continue
+                val now = System.nanoTime()
+                shown = calmClock(shown, pc.lyricPosition, if (last < 0) -1.0 else (now - last) / 1_000_000.0, pc.player?.playbackParameters?.speed ?: 1f)
+                last = now
+                clock.longValue = shown.toLong()
+                continue
+            }
             withFrameNanos { now ->
             val actual = pc.lyricPosition
             if (last < 0 || pc.player?.isPlaying != true) shown = actual.toDouble() else {
@@ -429,6 +442,21 @@ fun rememberLyricClock(active: Boolean = true): State<Long> {
     }
     return clock
 }
+
+/**
+ * A calm clock's next reading: [shown] moved on by the time since the last one ([sinceMs], under 0 for the first) at the
+ * song's [speed], and pulled toward the player's own [actual] place; a jump of more than a quarter second (a seek) is
+ * taken at once. The pull is stronger than the every-frame clock's, since there are fewer steps to make it in.
+ */
+internal fun calmClock(shown: Double, actual: Long, sinceMs: Double, speed: Float): Double {
+    if (sinceMs < 0) return actual.toDouble()
+    val moved = shown + sinceMs * speed
+    val err = actual - moved
+    return if (abs(err) > 250) actual.toDouble() else moved + err * 0.18
+}
+
+/** The lyric line on the player (the strip, and the one kept over a full-screen canvas): its clock moves this often. */
+internal const val CALM_LYRIC_MS = 33L
 
 /** How often a paused song's lyric clock is looked at (a seek while paused shows within this). */
 private const val PAUSED_CLOCK_MS = 40L
@@ -496,7 +524,7 @@ fun CurrentLyricStrip(state: LyricsState, isPlaying: Boolean, overScrubber: Bool
                 Text(tr(R.string.open_lyrics), style = baseStyle, color = Color.White, maxLines = 1)
             }
             lines.isNotEmpty() -> {
-                val clock = rememberLyricClock(isPlaying)
+                val clock = rememberLyricClock(isPlaying, CALM_LYRIC_MS)
                 val index by remember(lines) { derivedStateOf { lines.indexAt(clock.value) } }
                 val current = lines.getOrNull(index)
                 val firstSung = remember(lines) { lines.indexOfFirst { !it.isGap } }
@@ -565,7 +593,7 @@ fun CanvasLyricLine(state: LyricsState, isPlaying: Boolean, modifier: Modifier =
         (if (instead && roman != null) state.lines.mapIndexed { i, l -> roman.getOrNull(i) ?: l } else state.lines).map(look::shown)
     }
     if (state.song.isEpisode || lines.none { it.timeMs >= 0 }) return
-    val clock = rememberLyricClock(isPlaying)
+    val clock = rememberLyricClock(isPlaying, CALM_LYRIC_MS)
     val index by remember(lines) { derivedStateOf { lines.indexAt(clock.value) } }
     val style = MaterialTheme.typography.headlineSmall
         .copy(fontWeight = FontWeight.SemiBold, textDirection = androidx.compose.ui.text.style.TextDirection.Content).withLyricsFont()
