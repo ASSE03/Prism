@@ -447,7 +447,7 @@ class InnerTube(
      * ExoPlayer's loader threads. [signatureTimestamp] is the current player JS's, so its ciphered
      * stream URLs can be deciphered.
      */
-    fun signedInPlayer(client: PlayerClient, videoId: String, signatureTimestamp: Int?): JsonObject {
+    fun signedInPlayer(client: PlayerClient, videoId: String, signatureTimestamp: Int?, via: OkHttpClient? = null): JsonObject {
         val s = current
         val version = client.version ?: clientVersion
         val payload = buildJsonObject {
@@ -492,7 +492,7 @@ class InnerTube(
                 header("X-Goog-AuthUser", s.authUser.toString())
             }
             .build()
-        http.newCall(req).execute().use { resp ->
+        (via ?: http).newCall(req).execute().use { resp ->
             val text = resp.body.string()
             if (!resp.isSuccessful) {
                 val msg = runCatching { json.parseToJsonElement(text).str("error", "message") }.getOrNull()
@@ -509,7 +509,7 @@ class InnerTube(
     private fun visionOsUserAgent() =
         "com.google.visionos.youtube/$VISIONOS_VERSION(RealityDevice14,1; U; CPU visionOS 25_6_0 like Mac OS X; $gl)"
 
-    private fun visionOsPost(endpoint: String, body: JsonObject, visitor: String?): JsonObject {
+    private fun visionOsPost(endpoint: String, body: JsonObject, visitor: String?, via: OkHttpClient? = null): JsonObject {
         val payload = buildJsonObject {
             putJsonObject("context") {
                 putJsonObject("client") {
@@ -538,15 +538,15 @@ class InnerTube(
             .header("X-YouTube-Client-Version", VISIONOS_VERSION)
             .apply { if (visitor != null) header("X-Goog-Visitor-Id", visitor) }
             .build()
-        http.newCall(req).execute().use { resp ->
+        (via ?: http).newCall(req).execute().use { resp ->
             val text = resp.body.string()
             if (!resp.isSuccessful) throw InnerTubeException("YouTube returned HTTP ${resp.code}", resp.code)
             return json.parseToJsonElement(text).jsonObject
         }
     }
 
-    private fun visionVisitor(): String =
-        visionVisitor ?: (visionOsPost("visitor_id", JsonObject(emptyMap()), null).str("responseContext", "visitorData")
+    private fun visionVisitor(via: OkHttpClient? = null): String =
+        visionVisitor ?: (visionOsPost("visitor_id", JsonObject(emptyMap()), null, via).str("responseContext", "visitorData")
             ?: throw InnerTubeException("No visitor id")).also { visionVisitor = it }
 
     /**
@@ -554,20 +554,21 @@ class InnerTube(
      * from, asked directly in one request (~0.2 s) instead of NewPipe's three or four (visitor id, player, the web
      * page's details), ~2 s. Its stream URLs need no signature or "n" solving, and googlevideo serves them whole
      * (ANDROID_VR's stopped after the first megabyte). Without a visitor id YouTube answers with a bot check, so one is
-     * asked for once and kept; a bot check later gets one fresh id and one more try. Blocking.
+     * asked for once and kept; a bot check later gets one fresh id and one more try. Blocking. [via]: the client to ask
+     * with (the stream resolver's, which notes the address family, or its IPv4-only one, #408); this one's by default.
      */
-    fun visionOsPlayer(videoId: String): JsonObject {
+    fun visionOsPlayer(videoId: String, via: OkHttpClient? = null): JsonObject {
         val body = buildJsonObject {
             put("videoId", videoId)
             put("contentCheckOk", true)
             put("racyCheckOk", true)
         }
-        val res = visionOsPost("player", body, visionVisitor())
+        val res = visionOsPost("player", body, visionVisitor(via), via)
         val botCheck = res.str("playabilityStatus", "status") == "LOGIN_REQUIRED" &&
             res.str("playabilityStatus", "reason")?.contains("bot", ignoreCase = true) == true
         if (!botCheck) return res
         visionVisitor = null
-        return visionOsPost("player", body, visionVisitor())
+        return visionOsPost("player", body, visionVisitor(via), via)
     }
 
     /**

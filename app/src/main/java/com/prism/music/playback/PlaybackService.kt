@@ -382,6 +382,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 val next = player.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET }?.let { player.getMediaItemAt(it).mediaId }
                 val ids = failedHere.take(listOf(next)).filterNot { it.startsWith(Song.LOCAL_PREFIX) || it.startsWith(Song.RSS_PREFIX) }
                 ids.forEach { c.streams.invalidate(it) }
+                c.streams.anotherNetwork()
                 AudioDiagnostics.log("network", "another network: ${ids.size} songs' streams asked for afresh (${ids.take(5).joinToString()})")
             }
         }
@@ -1250,7 +1251,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             }
             return
         }
-        if (attempts < 2 && (httpCode == 403 || httpCode == 410 || error.errorCode == PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS)) {
+        if (attempts < 3 && (httpCode == 403 || httpCode == 410 || error.errorCode == PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS)) {
             retries[id] = attempts + 1
             c.streams.invalidate(id, refused = httpCode == 403)
             AudioDiagnostics.session.reResolve()

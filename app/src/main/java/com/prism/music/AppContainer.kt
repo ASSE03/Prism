@@ -326,10 +326,22 @@ class AppContainer(val app: Application) {
         .readTimeout(30, TimeUnit.SECONDS)
         .apply { TestHooks.network?.let(::addInterceptor) }
         .build()
-    /** The client the player reads streams with (also the self-test's "first second" check). */
-    internal val streamHttp: OkHttpClient = http.newBuilder()
-        .addInterceptor(YouTubeStreamInterceptor(http))
-        .build()
+    /**
+     * googlevideo's links. 1.8.7 (#408): each fetch notes its connection's address family (never the address), the
+     * resolver hears how each link fared, and links asked for over IPv4 only are fetched over IPv4 only too.
+     */
+    internal val streamHttp: OkHttpClient = run {
+        val chunks = http.newBuilder().addNetworkInterceptor(com.prism.music.data.stream.NetFamily.Tag).build()
+        val ipv4 = chunks.newBuilder().dns(com.prism.music.data.stream.Ipv4OnlyDns()).build()
+        val watch = com.prism.music.data.stream.StreamWatch { url, code, family -> resolverMade?.fetched(url, code, family) }
+        http.newBuilder()
+            .addInterceptor(YouTubeStreamInterceptor(chunks, ipv4Client = ipv4, watch = watch))
+            .addNetworkInterceptor(com.prism.music.data.stream.NetFamily.Tag)
+            .build()
+    }
+
+    /** The resolver once it's made: a fetch before then (a Canvas clip) has nothing to tell it, and doesn't make it. */
+    @Volatile private var resolverMade: StreamResolver? = null
 
     val innerTube = InnerTube(http, { settings.current }, settings::setVisitorData)
     val ytm = YouTubeMusic(
@@ -340,7 +352,7 @@ class AppContainer(val app: Application) {
     val db = PrismDatabase.build(app)
     /** Versions of songs the listener picked to hear instead (1.7.9, "Play a different version"). */
     val versions = com.prism.music.data.SongVersions(app.getSharedPreferences("song_versions", android.content.Context.MODE_PRIVATE))
-    val streams by lazy { StreamResolver(app, http, settings, innerTube).apply { versionOf = versions::streamedOf } }
+    val streams by lazy { StreamResolver(app, http, settings, innerTube).apply { versionOf = versions::streamedOf; resolverMade = this } }
     val translator = com.prism.music.data.lyrics.LyricsTranslator(http, File(app.filesDir, "translations"))
     /** Artist pages' Wikipedia bios (1.8.2), kept with the artist pages. Asks nothing unless that switch is on. */
     val artistBios by lazy {
@@ -761,6 +773,20 @@ class AppContainer(val app: Application) {
     val soundFrom = ConcurrentHashMap<String, String>()
 
     /**
+     * 1.8.7 (#408): song downloads YouTube refused every way, and the music video whose sound comes down in their place
+     * ([com.prism.music.download.DownloadRepository]), as [soundFrom] plays it. Kept with the downloads (one that stops
+     * and goes on later must go on from the same recording); forgotten when the download goes.
+     */
+    private val downloadSounds = app.getSharedPreferences(DOWNLOAD_SOUNDS, android.content.Context.MODE_PRIVATE)
+
+    fun downloadSoundOf(id: String): String? = downloadSounds.getString(id, null)
+
+    fun setDownloadSound(id: String, video: String?) {
+        if (video == null) { if (downloadSounds.contains(id)) downloadSounds.edit().remove(id).apply() }
+        else downloadSounds.edit().putString(id, video).apply()
+    }
+
+    /**
      * The song cache's key for song [id]'s sound: a picked version ([versions]) is kept under that recording's own id, so
      * the two recordings' bytes never mix. They shared the song's key before, cleared at each pick while the player was
      * still saving the one it had been playing: what it saved after went in under the song, and back on its own
@@ -798,10 +824,12 @@ class AppContainer(val app: Application) {
         val song = uri.lastPathSegment ?: return spec
         // Played (and cached) as the video it plays from, so its bytes never mix with the song's own. Downloads keep
         // the song's own key, so they aren't swapped.
-        val sound = if (useCaches) soundFrom[song] else null
+        // A download refused every way comes down as its music video's sound (1.8.7, [downloadSoundOf]), under the song's
+        // own key still.
+        val sound = if (useCaches) soundFrom[song] else downloadSoundOf(song)
         // A picked version is cached under its own id too ([songCacheKey]); its download is the song's (fetched again
         // as the version when it was picked).
-        val id = sound ?: if (useCaches) songCacheKey(song) else song
+        val id = if (useCaches) sound ?: songCacheKey(song) else song
         if (useCaches) {
             val saved = sound ?: song
             if (downloadCache.fullyCached(saved, spec.position, spec.length)) {
@@ -929,6 +957,9 @@ class AppContainer(val app: Application) {
         /** The mark on a streamed song's key: Downloads holds no such key ([playbackDataSourceFactory]). */
         private const val STREAMED = "streamed:"
 
+        /** The saved preferences [downloadSoundOf] reads (with the downloads in a backup). */
+        const val DOWNLOAD_SOUNDS = "download_sound_from"
+
         /**
          * Records [id]'s full length in [cache] once all of it is saved there. The cache only learns a length from a
          * request without one (a song played through); Load ahead's request names its length, so a song it saved whole
@@ -947,6 +978,14 @@ class AppContainer(val app: Application) {
          * joined into one nothing could read (#411: "Skipping atom with length > 2147483647" at ~1:08, every retry).
          */
         internal fun pictureKey(id: String, whole: Boolean): String = if (whole) "video:$id" else "${STREAMED}video:$id"
+
+        /**
+         * [upstream], telling [invalidate] the song (from the key it's read by) whose link YouTube turned away, and whether
+         * that was a refusal (403), so its next lookup gets a fresh link: the prebuffer's (1.8.7, #408), as a download's
+         * and a picture's.
+         */
+        internal fun forgetsRefused(upstream: DataSource, invalidate: (String, Boolean) -> Unit): DataSource =
+            ForgetOnForbidden(upstream) { key, code -> invalidate(key.removePrefix(STREAMED).removePrefix("video:"), code == 403) }
 
         fun markWhole(cache: Cache, id: String, length: Long) {
             if (length <= 0 || !cache.isCached(id, 0, length)) return
@@ -990,7 +1029,10 @@ class AppContainer(val app: Application) {
         val format = CachedFormat.of(s)
         if (!sameFormat(key, format)) return
         val spec = DataSpec.Builder().setUri(s.audioUrl).setKey(key).setPosition(0).setLength(bytes).build()
-        val source = CacheDataSource(playerCache, OkHttpDataSource.Factory(streamHttp).createDataSource())
+        // A link YouTube turns away here is forgotten (1.8.7, #408), as a download's is: the player would otherwise open
+        // the song on the same refused link the prebuffer was given.
+        val upstream = forgetsRefused(OkHttpDataSource.Factory(streamHttp).createDataSource()) { song, refused -> streams.invalidate(song, refused) }
+        val source = CacheDataSource(playerCache, upstream)
         runCatching { androidx.media3.datasource.cache.CacheWriter(source, spec, null, null).also { writer?.invoke(it) }.cache() }
             .onSuccess {
                 prebuffered[key] = format
@@ -1102,7 +1144,13 @@ class AppContainer(val app: Application) {
         val http = OkHttpDataSource.Factory(streamHttp)
         // A link YouTube turns away (it ran out mid-download) is forgotten, so the download's next try gets a fresh one
         // (#55): it used to try the same dead link until the download failed.
-        val upstream = DataSource.Factory { ForgetOnForbidden(http.createDataSource()) { key, code -> streams.invalidate(key.removePrefix("video:"), refused = code == 403) } }
+        // (A download coming down as its music video's sound forgets the video's link: that's the one it was given.)
+        val upstream = DataSource.Factory {
+            ForgetOnForbidden(http.createDataSource()) { key, code ->
+                val id = key.removePrefix("video:")
+                streams.invalidate(if (key.startsWith("video:")) id else downloadSoundOf(id) ?: id, refused = code == 403)
+            }
+        }
         return ResolvingDataSource.Factory(upstream) { spec ->
             val id = spec.uri.lastPathSegment
             if (spec.uri.scheme == "prism" && spec.uri.authority == "video" && id != null) {

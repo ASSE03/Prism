@@ -264,6 +264,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
                     Download.STATE_FAILED -> {
                         noteFailure(download.request.id, DownloadFailures.describe(finalException))
                         android.util.Log.w("PrismDownload", "failed ${download.request.id}", finalException)
+                        soundOfVideoInstead(download, finalException)
                     }
                     Download.STATE_COMPLETED -> noteFailure(download.request.id, null)
                 }
@@ -293,6 +294,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
                 applyRequirements()
                 noteFailure(download.request.id, null)
                 c.forgetDownloadFormat(download.request.id)
+                c.setDownloadSound(download.request.id, null)
                 c.canvasStore.forgetDownloads(listOf(download.request.id))
                 // 1.8.6: its loop from the music video goes back to the recent ones.
                 c.canvasAhead.forgetDownloads(listOf(download.request.id))
@@ -456,8 +458,38 @@ class DownloadRepository(private val context: Context, private val c: AppContain
         manager.currentDownloads.filter { it.state != Download.STATE_COMPLETED }.forEach { manager.removeDownload(it.request.id) }
     }
 
-    /** The YouTube id a download's bytes come from (a video part's is its video's). */
-    private fun streamOf(d: Download): String? = if (isVideoPart(d.request.id)) d.part()?.videoId else d.request.id
+    /** The YouTube id a download's bytes come from (a video part's is its video's, a stand-in's its video's sound). */
+    private fun streamOf(d: Download): String? = if (isVideoPart(d.request.id)) d.part()?.videoId else c.downloadSoundOf(d.request.id) ?: d.request.id
+
+    /**
+     * 1.8.7 (#408): a song download YouTube refused every way (its link turned away through all the retries, or no way
+     * gave one) comes down as its music video's sound, as playback plays it then (#93, Reddit R2): only a video of the
+     * song's length, never for an age-restricted or Premium-only song or a blocked network ([DownloadFallback]). Once per
+     * download; what came of the song's own stream goes first, since another recording's bytes can't join it.
+     */
+    private fun soundOfVideoInstead(d: Download, error: Exception?) {
+        val id = d.request.id
+        if (isVideoPart(id) || error == null) return
+        val song = d.info().song ?: return
+        if (!DownloadFallback.mayTry(song, error, already = c.downloadSoundOf(id) != null)) return
+        c.scope.launch {
+            val video = kotlinx.coroutines.withContext(Dispatchers.IO) {
+                c.queue.counterparts[song.id] ?: runCatching { c.ytm.findMusicVideo(song) }.getOrNull()?.also { c.queue.counterparts[song.id] = it }
+            }?.takeIf { it != song.id }
+            val videoSec = video?.let { v -> kotlinx.coroutines.withContext(Dispatchers.IO) { runCatching { c.streams.durationSec(v, video = true) }.getOrDefault(0L) } } ?: 0L
+            if (video == null || !DownloadFallback.sameLength(song.durationSec.toLong(), videoSec)) {
+                com.prism.music.playback.AudioDiagnostics.log("download", "$id was refused every way; ${if (video == null) "no music video for it" else "its music video $video runs ${videoSec}s, not ${song.durationSec}s"}: not downloaded in its place")
+                return@launch
+            }
+            c.setDownloadSound(id, video)
+            com.prism.music.playback.AudioDiagnostics.log("download", "$id was refused every way: downloading its music video $video's sound in its place")
+            kotlinx.coroutines.withContext(Dispatchers.IO) {
+                runCatching { c.downloadCache.removeResource(id) }
+                c.forgetDownloadFormat(id)
+            }
+            mainHandler.post { runCatching { add(d.request) } }
+        }
+    }
 
 
     /**
