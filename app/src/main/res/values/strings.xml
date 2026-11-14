@@ -5443,6 +5443,9 @@
     <string name="canvas_both_info">Which one plays first. The player\'s ⋯ menu can change it for one song.</string>
     <string name="canvas_keep_controls">Keep controls showing</string>
     <string name="canvas_keep_controls_info">In Full screen the controls fade away after a few seconds and come back on a tap. On, they stay.</string>
+    <string name="canvas_lyrics">Keep lyrics showing</string>
+    <string name="canvas_lyrics_info">In Full screen, the line being sung stays over the picture while the controls are away.</string>
+    <string name="canvas_lyrics_keywords">lyrics line words full screen controls hidden karaoke</string>
     <string name="canvas_lighter">Lighter loops</string>
     <string name="canvas_lighter_info">Loops from music videos at 480p: about 1 MB a song, softer in Full screen.</string>
     <string name="canvas_ask_title">Use music videos?</string>

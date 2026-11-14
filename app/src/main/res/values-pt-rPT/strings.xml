@@ -5494,4 +5494,8 @@
     <string name="tour_186_canvas_point_3">O menu ⋯ do leitor: %1$s ou %2$s.</string>
     <string name="tour_186_canvas_point_4">Pára com Reduzir movimento, na poupança de bateria e quando o telemóvel aquece.</string>
     <string name="tour_186_also_hours">Replay: %1$s mostra as horas em cada barra.</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">Manter a letra visível</string>
+    <string name="canvas_lyrics_info">Em Ecrã inteiro, a linha que está a ser cantada fica sobre a imagem enquanto os controlos estão ocultos.</string>
+    <string name="canvas_lyrics_keywords">letra linha palavras ecrã inteiro controlos ocultos karaoke</string>
 </resources>

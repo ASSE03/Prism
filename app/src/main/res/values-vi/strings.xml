@@ -5344,4 +5344,8 @@
     <string name="tour_186_canvas_point_3">Menu ⋯ của trình phát: %1$s, hoặc %2$s.</string>
     <string name="tour_186_canvas_point_4">Nó tạm nghỉ khi bật Giảm chuyển động, khi tiết kiệm pin và khi điện thoại nóng.</string>
     <string name="tour_186_also_hours">Replay: %1$s hiển thị số giờ trên mỗi cột.</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">Luôn hiện lời bài hát</string>
+    <string name="canvas_lyrics_info">Ở chế độ Toàn màn hình, dòng đang hát vẫn hiện trên hình khi các nút điều khiển đã ẩn.</string>
+    <string name="canvas_lyrics_keywords">lời bài hát dòng lời toàn màn hình nút điều khiển ẩn karaoke</string>
 </resources>

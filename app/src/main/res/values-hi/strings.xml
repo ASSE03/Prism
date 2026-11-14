@@ -5419,4 +5419,8 @@
     <string name="tour_186_canvas_point_3">प्लेयर का ⋯ मेन्यू: %1$s, या %2$s।</string>
     <string name="tour_186_canvas_point_4">यह मोशन कम करें के साथ, बैटरी सेवर में और फ़ोन गर्म होने पर रुक जाता है।</string>
     <string name="tour_186_also_hours">Replay: %1$s हर बार पर घंटे दिखाता है।</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">बोल दिखते रहें</string>
+    <string name="canvas_lyrics_info">पूरी स्क्रीन में जो पंक्ति अभी गाई जा रही है, वह कंट्रोल गायब होने पर भी तस्वीर के ऊपर दिखती रहती है।</string>
+    <string name="canvas_lyrics_keywords">बोल पंक्ति पूरी स्क्रीन कंट्रोल गायब छिपाएं कराओके</string>
 </resources>

@@ -5419,4 +5419,8 @@
     <string name="tour_186_canvas_point_3">Oynatıcının ⋯ menüsü: %1$s veya %2$s.</string>
     <string name="tour_186_canvas_point_4">Hareketi azalt açıkken, pil tasarrufunda ve telefon ısındığında durur.</string>
     <string name="tour_186_also_hours">Replay: %1$s her çubukta saatleri gösterir.</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">Şarkı sözleri görünür kalsın</string>
+    <string name="canvas_lyrics_info">Tam ekranda, kontroller kaybolduğunda da söylenen satır görüntünün üzerinde kalır.</string>
+    <string name="canvas_lyrics_keywords">şarkı sözleri söz satır tam ekran kontroller gizli karaoke</string>
 </resources>

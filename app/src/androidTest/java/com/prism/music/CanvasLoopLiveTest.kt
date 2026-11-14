@@ -62,6 +62,10 @@ class CanvasLoopLiveTest {
         c.settings.setPerformanceMode(false); c.settings.setReduceMotion(false); c.settings.setImmersivePlayer(false); c.settings.setFullBleedArtwork(false)
         c.settings.setCanvasEnabled(loop); c.settings.setCanvasFillsBackground(loop && !framed); c.settings.setCanvasUseVideos(loop)
         c.settings.setCanvasVideoFirst(true); c.settings.setCanvasKeepControls(false)
+        // strip=false: without the lyric line over the progress bar (what the open player costs on its own).
+        if (args.getString("strip") == "false") c.settings.setLyricsOnPlayer(false)
+        // lyrics=true: 1.8.7's "Keep lyrics showing" (the sung line over the picture while the controls are away).
+        if (args.getString("lyrics") == "true") c.settings.setCanvasLyrics(true)
         Fixture.launch()
         val words = (args.getString("song") ?: "Flowers_Miley_Cyrus").replace('_', ' ')
         val song = withContext(Dispatchers.IO) { c.ytm.search(words, SearchFilter.SONGS).items.filterIsInstance<SongItem>().first().song }

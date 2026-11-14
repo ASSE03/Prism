@@ -5344,4 +5344,8 @@
     <string name="tour_186_canvas_point_3">播放器的 ⋯ 選單：%1$s，或 %2$s。</string>
     <string name="tour_186_canvas_point_4">開啟減少動態效果、省電模式以及手機過熱時，它會暫停。</string>
     <string name="tour_186_also_hours">Replay：%1$s 會在每根長條上顯示小時數。</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">持續顯示歌詞</string>
+    <string name="canvas_lyrics_info">在全螢幕下，控制項淡出時，正在演唱的那一行歌詞會繼續顯示在畫面上方。</string>
+    <string name="canvas_lyrics_keywords">歌詞 行 全螢幕 控制項 淡出 隱藏 卡拉OK karaoke</string>
 </resources>

@@ -5344,4 +5344,8 @@
     <string name="tour_186_canvas_point_3">เมนู ⋯ ของเพลเยอร์: %1$s หรือ %2$s</string>
     <string name="tour_186_canvas_point_4">จะหยุดพักเมื่อใช้ลดการเคลื่อนไหว ในโหมดประหยัดแบตเตอรี่ และเมื่อโทรศัพท์ร้อน</string>
     <string name="tour_186_also_hours">Replay: %1$s แสดงชั่วโมงบนแต่ละแท่ง</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">แสดงเนื้อเพลงค้างไว้</string>
+    <string name="canvas_lyrics_info">ในโหมดเต็มหน้าจอ บรรทัดที่กำลังร้องจะแสดงค้างอยู่บนภาพขณะที่ปุ่มควบคุมหายไป</string>
+    <string name="canvas_lyrics_keywords">เนื้อเพลง บรรทัด คำ เต็มหน้าจอ ปุ่มควบคุม ซ่อน คาราโอเกะ karaoke</string>
 </resources>

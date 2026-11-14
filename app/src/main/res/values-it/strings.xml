@@ -5494,4 +5494,8 @@
     <string name="tour_186_canvas_point_3">Il menu ⋯ del player: %1$s, oppure %2$s.</string>
     <string name="tour_186_canvas_point_4">Si ferma con Riduci movimento, con il risparmio energetico e quando il telefono si scalda.</string>
     <string name="tour_186_also_hours">Replay: %1$s mostra le ore su ogni barra.</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">Mantieni i testi visibili</string>
+    <string name="canvas_lyrics_info">A Schermo intero la riga cantata resta sopra l\'immagine mentre i controlli sono nascosti.</string>
+    <string name="canvas_lyrics_keywords">testi riga parole schermo intero controlli nascosti karaoke</string>
 </resources>

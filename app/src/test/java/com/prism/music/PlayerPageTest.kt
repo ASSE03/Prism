@@ -210,7 +210,7 @@ class PlayerPageTest {
         // 1.8.4 (D53): new with this release, on the lock screen's sheet.
         "lock_screen_player_look",
         // 1.8.6: Canvas's sheet.
-        "canvas_use_videos", "canvas_videos_cellular", "canvas_video_first", "canvas_keep_controls", "canvas_lighter",
+        "canvas_use_videos", "canvas_videos_cellular", "canvas_video_first", "canvas_keep_controls", "canvas_lyrics", "canvas_lighter",
         // Owner, 2026-11-13: animated covers on their own.
         "canvas_covers",
     )
@@ -444,6 +444,8 @@ class PlayerPageTest {
         until("full screen") { it.canvasFillsBackground }
         tapInSheet("Keep controls showing")
         until("keep_controls") { it.behavior.canvas.keepControls }
+        tapInSheet("Keep lyrics showing")
+        until("lyrics") { it.behavior.canvas.lyrics }
         assertEquals(CanvasPrefsAll, stored.behavior.canvas)
         closeSheet()
         assertEquals("Full screen", rows().getValue("Canvas").config[SettingsRowValue])
@@ -454,7 +456,7 @@ class PlayerPageTest {
         tap("Canvas")
         sheetOpen()
         assertFalse("When a song has both" in sheetRows())
-        assertTrue("Lighter loops" in sheetRows() && "Where it shows" in sheetRows() && "Keep controls showing" in sheetRows())
+        assertTrue("Lighter loops" in sheetRows() && "Where it shows" in sheetRows() && "Keep controls showing" in sheetRows() && "Keep lyrics showing" in sheetRows())
 
         // Canvas off too, the last one: Canvas as a whole is off, and what the rows hold is kept.
         tapInSheet("Canvas")
@@ -471,7 +473,7 @@ class PlayerPageTest {
         assertEquals("Off", rows().getValue("Canvas").config[SettingsRowValue])
     }
 
-    private val CanvasPrefsAll = com.prism.music.data.prefs.CanvasPrefs(useVideos = true, videoFirst = true, keepControls = true, lighter = true, videosOnCellular = true)
+    private val CanvasPrefsAll = com.prism.music.data.prefs.CanvasPrefs(useVideos = true, videoFirst = true, keepControls = true, lyrics = true, lighter = true, videosOnCellular = true)
 
     @Test fun theCanvasRowSaysWhereItShows() {
         prefs.setCanvasFillsBackground(true); prefs.setCanvasUseVideos(true)

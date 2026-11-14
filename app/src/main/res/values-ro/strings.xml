@@ -5494,4 +5494,8 @@
     <string name="tour_186_canvas_point_3">Meniul ⋯ al playerului: %1$s sau %2$s.</string>
     <string name="tour_186_canvas_point_4">Se oprește cu Reducerea mișcării, în economisirea bateriei și când telefonul se încălzește.</string>
     <string name="tour_186_also_hours">Replay: %1$s arată orele pe fiecare bară.</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">Păstrează versurile vizibile</string>
+    <string name="canvas_lyrics_info">În Ecran complet, rândul cântat rămâne peste imagine cât timp controalele sunt ascunse.</string>
+    <string name="canvas_lyrics_keywords">versuri rând cuvinte ecran complet controale ascunse karaoke</string>
 </resources>

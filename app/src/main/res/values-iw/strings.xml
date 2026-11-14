@@ -5494,4 +5494,8 @@
     <string name="tour_186_canvas_point_3">בתפריט ⋯ של הנגן: \"%1$s\" או \"%2$s\".</string>
     <string name="tour_186_canvas_point_4">הוא נח כשהפחתת תנועה פועלת, בחיסכון בסוללה וכשהטלפון מתחמם.</string>
     <string name="tour_186_also_hours">Replay: \"%1$s\" מציג את השעות על כל עמודה.</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">להשאיר את המילים גלויות</string>
+    <string name="canvas_lyrics_info">במסך מלא השורה שמושרת כרגע נשארת מעל התמונה בזמן שהפקדים נעלמים.</string>
+    <string name="canvas_lyrics_keywords">מילים שורה מסך מלא פקדים מוסתרים הסתרה קראוקי</string>
 </resources>

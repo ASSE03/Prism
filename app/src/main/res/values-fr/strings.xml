@@ -5494,4 +5494,8 @@
     <string name="tour_186_canvas_point_3">Le menu ⋯ du lecteur : « %1$s » ou « %2$s ».</string>
     <string name="tour_186_canvas_point_4">Elle se met en pause avec Réduire les animations, en mode économiseur de batterie et quand le téléphone chauffe.</string>
     <string name="tour_186_also_hours">Replay : « %1$s » affiche les heures sur chaque barre.</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">Garder les paroles visibles</string>
+    <string name="canvas_lyrics_info">En plein écran, la ligne chantée reste affichée sur l\'image tant que les commandes sont masquées.</string>
+    <string name="canvas_lyrics_keywords">paroles ligne mots plein écran commandes masquées karaoké</string>
 </resources>

@@ -5569,4 +5569,8 @@
     <string name="tour_186_canvas_point_3">В меню ⋯ плеера: «%1$s» или «%2$s».</string>
     <string name="tour_186_canvas_point_4">Отдыхает при уменьшении движения, в режиме энергосбережения и когда телефон нагрелся.</string>
     <string name="tour_186_also_hours">Replay: «%1$s» показывает часы на каждом столбце.</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">Не скрывать текст песни</string>
+    <string name="canvas_lyrics_info">Во весь экран строка, которая сейчас звучит, остаётся поверх видео, пока кнопки скрыты.</string>
+    <string name="canvas_lyrics_keywords">текст песни строка слова во весь экран кнопки скрыты караоке</string>
 </resources>

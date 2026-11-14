@@ -5419,4 +5419,8 @@
     <string name="tour_186_canvas_point_3">Spelarens ⋯-meny: %1$s eller %2$s.</string>
     <string name="tour_186_canvas_point_4">Den vilar vid Minska rörelse, i batterisparläge och när telefonen blir varm.</string>
     <string name="tour_186_also_hours">Replay: %1$s visar timmarna på varje stapel.</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">Behåll låttexten synlig</string>
+    <string name="canvas_lyrics_info">I Helskärm ligger raden som sjungs kvar över bilden medan kontrollerna är borta.</string>
+    <string name="canvas_lyrics_keywords">låttext rad ord helskärm kontroller dolda karaoke</string>
 </resources>

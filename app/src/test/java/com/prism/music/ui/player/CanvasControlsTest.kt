@@ -26,6 +26,15 @@ class CanvasControlsTest {
         assertFalse("Reduce motion: nothing moves behind them", fades(reduce = true))
     }
 
+    /** 1.8.7, "Keep lyrics showing": the sung line is there only while the controls are on their way out or away. */
+    @Test fun theLyricLineStaysOnlyWhenAskedAndOnlyWithoutTheControls() {
+        assertTrue("asked for, the controls fading or away", canvasLyricShown(fades = true, wanted = true, controlsUp = false))
+        assertFalse("off as Prism comes", canvasLyricShown(fades = true, wanted = false, controlsUp = false))
+        assertFalse("the controls are up: the strip over the bar is the lyric", canvasLyricShown(fades = true, wanted = true, controlsUp = true))
+        assertFalse("paused, a panel open, Keep controls showing…: they never fade", canvasLyricShown(fades = false, wanted = true, controlsUp = false))
+        assertFalse(com.prism.music.data.prefs.CanvasPrefs().lyrics)
+    }
+
     @Test fun theAlbumCoverIsNotSeenOverAFullScreenCanvas() {
         assertEquals("the canvas is up: no cover", 0f, coverOverCanvas(true, 1f, 0f), 0.001f)
         assertEquals("still loading, or the song has none: its cover", 1f, coverOverCanvas(true, 0f, 0f), 0.001f)

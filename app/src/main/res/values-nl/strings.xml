@@ -5419,4 +5419,8 @@
     <string name="tour_186_canvas_point_3">Het ⋯-menu van de speler: %1$s, of %2$s.</string>
     <string name="tour_186_canvas_point_4">Het rust bij Minder beweging, in de batterijbesparing en als de telefoon heet wordt.</string>
     <string name="tour_186_also_hours">Replay: %1$s toont de uren bij elke balk.</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">Songtekst zichtbaar houden</string>
+    <string name="canvas_lyrics_info">In Volledig scherm blijft de regel die wordt gezongen over het beeld staan terwijl de bediening weg is.</string>
+    <string name="canvas_lyrics_keywords">songtekst regel woorden volledig scherm bediening verborgen karaoke</string>
 </resources>

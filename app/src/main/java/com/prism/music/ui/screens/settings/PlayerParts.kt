@@ -346,6 +346,7 @@ internal val playerSettings: List<PlayerSetting<*>> by lazy {
         flag(listOf("canvas_lighter"), g.cover, R.string.canvas_lighter, { it.behavior.canvas.lighter }, canvasSheet) { p, v -> p.setCanvasLighter(v) },
         ps(listOf("canvas_fills_background"), g.cover, R.string.canvas_where, { it.canvasFillsBackground }, ::canvasPlaceWords, canvasSheet) { p, v -> p.setCanvasFillsBackground(v) },
         flag(listOf("canvas_keep_controls"), g.cover, R.string.canvas_keep_controls, { it.behavior.canvas.keepControls }, canvasSheet) { p, v -> p.setCanvasKeepControls(v) },
+        flag(listOf("canvas_lyrics"), g.cover, R.string.canvas_lyrics, { it.behavior.canvas.lyrics }, canvasSheet) { p, v -> p.setCanvasLyrics(v) },
         // On it
         ps(
             listOf("player_hidden_parts", "player_handle", "show_playing_from", "lyrics_on_player", "show_quality", "best_part_button", "player_shuffle_repeat", "hide_volume_bar", "show_output_device", "player_nav_band", "crossfade_mark", "blend_covers"),

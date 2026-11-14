@@ -5419,4 +5419,8 @@
     <string name="tour_186_canvas_point_3">منوی ⋯ پخش‌کننده: «%1$s» یا «%2$s».</string>
     <string name="tour_186_canvas_point_4">با «کاهش حرکت»، در حالت صرفه‌جویی باتری و وقتی گوشی داغ می‌شود، متوقف می‌ماند.</string>
     <string name="tour_186_also_hours">Replay: «%1$s» ساعت‌ها را روی هر ستون نشان می‌دهد.</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">نمایش دائمی متن آهنگ</string>
+    <string name="canvas_lyrics_info">در حالت تمام‌صفحه، خطی که در حال خوانده شدن است، وقتی کنترل‌ها محو شده‌اند روی تصویر می‌ماند.</string>
+    <string name="canvas_lyrics_keywords">متن آهنگ خط تمام‌صفحه کنترل‌ها پنهان محو کارائوکه</string>
 </resources>

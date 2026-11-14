@@ -653,6 +653,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     val canvasCtlT = animateFloatAsState(if (canvasQuiet) 0f else 1f, tween(if (canvasQuiet) 700 else 200), label = "canvasControls")
     // How much of the controls shows (read where it's drawn, so the fade recomposes nothing).
     val ctl: () -> Float = { canvasCtlT.value }
+    // Whether any of the controls shows (what's drawn only under them, or only without them, follows it).
+    val controlsUp by remember { derivedStateOf { canvasCtlT.value >= 0.999f } }
+    val controlsGone by remember { derivedStateOf { canvasCtlT.value <= 0.001f } }
     // The controls' height: the kept title rides down into their place while they're away.
     var deckHeightPx by remember { mutableStateOf(0) }
     val keptRoomPx = with(LocalDensity.current) { 30.dp.toPx() }
@@ -1397,6 +1400,18 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                 drawRoundRect(Color.White.copy(alpha = 0.92f), size = androidx.compose.ui.geometry.Size(size.width * done, size.height), cornerRadius = r)
                             },
                     )
+                    // 1.8.7 (owner, 2026-11-14), Canvas's "Keep lyrics showing": the line being sung stays over the picture
+                    // while the controls are away, above the kept title, and goes as they come back. Not put together
+                    // at all while the controls are up.
+                    if (canvasLyricShown(canvasFades, canvasPrefs.lyrics, controlsUp)) CanvasLyricLine(
+                        lyricsState, isPlaying && !covered,
+                        Modifier.fillMaxWidth().testTag("canvasLyric")
+                            .offset { IntOffset(0, titleTop().roundToPx()) }
+                            .graphicsLayer {
+                                translationY = keptDrop() - size.height - CANVAS_LYRIC_GAP.toPx()
+                                alpha = 1f - ctl()
+                            },
+                    )
 
                     // ---- Lyrics and queue panels, under the collapsed header
                     if (lyricsOpen && panelsSettled) {
@@ -1497,7 +1512,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                             val spacing = deckSpacing(parts, settings.shows(PlayerPart.VOLUME), small, tight = tightDeck)
                             spacing.parts.forEachIndexed { i, part ->
                                 when (part) {
-                                    com.prism.music.data.prefs.DeckPart.STRIP -> CurrentLyricStrip(lyricsState, isPlaying && !covered, overScrubber = stripOverScrubber(spacing.parts, i), onClick = openLyrics)
+                                    com.prism.music.data.prefs.DeckPart.STRIP -> CurrentLyricStrip(lyricsState, isPlaying && !covered && !controlsGone, overScrubber = stripOverScrubber(spacing.parts, i), onClick = openLyrics)
                                     com.prism.music.data.prefs.DeckPart.SCRUBBER -> PlayheadScrubber(position, pc.duration) {
                                         // Settings → Player → "Stream quality" hides it (the full stats stay in the ⋯ menu).
                                         // In a song's opening seconds the middle offers its best part instead, while it's still ahead.

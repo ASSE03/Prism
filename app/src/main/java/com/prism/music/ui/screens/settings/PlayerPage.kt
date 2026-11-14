@@ -291,7 +291,7 @@ internal fun PlayerCoverRows() {
     ) { prefs.setCanvasKinds(covers = it, videos = kinds.videos) }
     SheetRow(
         tr(R.string.canvas), canvasWords(s),
-        changed = listOf("canvas_use_videos", "canvas_videos_cellular", "canvas_video_first", "canvas_lighter", "canvas_fills_background", "canvas_keep_controls").any { ch(it) },
+        changed = listOf("canvas_use_videos", "canvas_videos_cellular", "canvas_video_first", "canvas_lighter", "canvas_fills_background", "canvas_keep_controls", "canvas_lyrics").any { ch(it) },
     ) { CanvasOptions() }
 }
 
@@ -341,6 +341,10 @@ private fun CanvasOptions() {
     if (kinds.videos && s.canvasFillsBackground) SwitchRow(
         tr(R.string.canvas_keep_controls), c.keepControls, info = tr(R.string.canvas_keep_controls_info), changed = ch("canvas_keep_controls"),
     ) { prefs.setCanvasKeepControls(it) }
+    // 1.8.7 (owner, 2026-11-14): the line being sung can stay when the controls go.
+    if (kinds.videos && s.canvasFillsBackground) SwitchRow(
+        tr(R.string.canvas_lyrics), c.lyrics, info = tr(R.string.canvas_lyrics_info), changed = ch("canvas_lyrics"),
+    ) { prefs.setCanvasLyrics(it) }
 }
 
 // ---------------------------------------------------------------------------- On it
@@ -699,6 +703,10 @@ val playerIndex: List<SettingEntry> by lazy {
             ),
             SettingEntry(
                 page, g.cover, tr(R.string.canvas_keep_controls), tr(R.string.canvas_keep_controls_keywords),
+                needs = turnOn(tr(R.string.full_screen)) { CanvasKinds.shown(it).videos && it.canvasFillsBackground },
+            ),
+            SettingEntry(
+                page, g.cover, tr(R.string.canvas_lyrics), tr(R.string.canvas_lyrics_keywords),
                 needs = turnOn(tr(R.string.full_screen)) { CanvasKinds.shown(it).videos && it.canvasFillsBackground },
             ),
             // On it: one editor for what's on the player (found by each part's name too).

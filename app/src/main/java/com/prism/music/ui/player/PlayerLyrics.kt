@@ -549,6 +549,50 @@ fun CurrentLyricStrip(state: LyricsState, isPlaying: Boolean, overScrubber: Bool
     }
 }
 
+/**
+ * 1.8.7 (owner, 2026-11-14), Canvas's "Keep lyrics showing": the line being sung, on its own over a full-screen canvas
+ * while the controls are away. Larger than the strip, in the lyrics' own look and font, up to three rows, sung word by
+ * word where the lyrics are timed that way. Nothing during an instrumental part or for lyrics without timings: the
+ * picture is left alone. Not tappable (a tap anywhere brings the controls back).
+ */
+@Composable
+fun CanvasLyricLine(state: LyricsState, isPlaying: Boolean, modifier: Modifier = Modifier) {
+    val roman = rememberRomanized(state)
+    val instead = romanizeMode(state.song.id) == com.prism.music.data.prefs.RomanizeMode.INSTEAD
+    val settings = LocalAppSettings.current
+    val look = rememberLyricsLook(settings, com.prism.music.data.PlaylistCovers.artOf(state.song))
+    val lines = remember(state.lines, roman, instead, look.uppercase) {
+        (if (instead && roman != null) state.lines.mapIndexed { i, l -> roman.getOrNull(i) ?: l } else state.lines).map(look::shown)
+    }
+    if (state.song.isEpisode || lines.none { it.timeMs >= 0 }) return
+    val clock = rememberLyricClock(isPlaying)
+    val index by remember(lines) { derivedStateOf { lines.indexAt(clock.value) } }
+    val style = MaterialTheme.typography.headlineSmall
+        .copy(fontWeight = FontWeight.SemiBold, textDirection = androidx.compose.ui.text.style.TextDirection.Content).withLyricsFont()
+    Box(modifier, contentAlignment = Alignment.BottomStart) {
+        AnimatedContent(
+            index,
+            transitionSpec = {
+                (fadeIn(tween(340, easing = FastOutSlowInEasing)) + slideInVertically(tween(340, easing = FastOutSlowInEasing)) { (it * 0.25f).toInt() }) togetherWith
+                    (fadeOut(tween(340, easing = FastOutSlowInEasing)) + slideOutVertically(tween(340, easing = FastOutSlowInEasing)) { -(it * 0.25f).toInt() }) using
+                    SizeTransform(clip = false)
+            },
+            contentAlignment = Alignment.BottomStart,
+            label = "canvasLyric",
+        ) { i ->
+            val line = lines.getOrNull(i)
+            when {
+                line == null || line.isGap -> Spacer(Modifier.fillMaxWidth().height(1.dp))
+                line.isWordSynced || !look.plainWhenLineTimed ->
+                    SungLine(line, clock, style.copy(shadow = look.shadow), look, null, Modifier.fillMaxWidth(), maxLines = CANVAS_LYRIC_ROWS, strip = true)
+                else -> Text(line.text, style = style, color = Color.White, maxLines = CANVAS_LYRIC_ROWS, overflow = TextOverflow.Ellipsis, modifier = Modifier.fillMaxWidth())
+            }
+        }
+    }
+}
+
+private const val CANVAS_LYRIC_ROWS = 3
+
 @Composable
 private fun StripRow(onClick: () -> Unit, note: Boolean, rtl: Boolean = false, centered: Boolean = false, content: @Composable () -> Unit) {
     // The strip follows the line's own direction, not the phone's: a right-to-left line starts at the right and
@@ -612,6 +656,10 @@ fun SweptLine(
     }
     val rtl = remember(line) { isRtl(line.text) }
     val rows = remember { SweptRows() }
+    // 1.8.7: the line is drawn again only when its singing point has moved, not on every frame of the clock. A line
+    // sung through, one still to come and the rests between words stand still (the strip on the player drew ~87
+    // frames a second for a whole song on the A16).
+    val sungNow = remember(line, clock) { derivedStateOf { sweepStep(sungChars(line, offsets, clock.value)) } }
     // In a right-to-left layout a right-to-left line already starts at the right, so it can keep its own width.
     val ltrLayout = LocalLayoutDirection.current == LayoutDirection.Ltr
     // Full width, so centred and right-aligned lines (and right-to-left ones) sit where their plain copies do.
@@ -630,7 +678,7 @@ fun SweptLine(
                     // part fades in. Drawn whole under the sung part, their soft edges showed round its letters as a pale
                     // fringe (a colored fill over white words still to come, Karaoke's).
                     val l = layout ?: return@drawWithContent drawContent()
-                    drawSweep(l, rows.edges(l), line, offsets, clock.value, litBrush ?: SolidColor(Color.White), dim, style, glow ?: style.shadow)
+                    drawSweep(l, rows.edges(l), line, sungNow.value, litBrush ?: SolidColor(Color.White), dim, style, glow ?: style.shadow)
                 },
                 style = style, color = dim, maxLines = maxLines, overflow = TextOverflow.Ellipsis, onTextLayout = { layout = it },
             )
@@ -648,7 +696,7 @@ fun SweptLine(
                     .drawWithContent {
                         drawContent()
                         val l = layout ?: return@drawWithContent
-                        val sung = sungChars(line, offsets, clock.value)
+                        val sung = sungNow.value
                         if (sung <= 0f) return@drawWithContent
                         forEachSweptRow(l, rows.edges(l), line, sung) { top, bottom, part, from, to, rtlLine ->
                             val rowSize = androidx.compose.ui.geometry.Size(size.width, bottom - top)
@@ -668,8 +716,7 @@ fun SweptLine(
                 .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
                 .drawWithContent {
                     val l = layout ?: return@drawWithContent
-                    val now = clock.value
-                    val sung = sungChars(line, offsets, now)
+                    val sung = sungNow.value
                     if (sung <= 0f) return@drawWithContent
                     drawContent()
                     // Erase what hasn't been sung yet, with a soft edge so the light glides through the word.
@@ -705,7 +752,7 @@ fun SweptLine(
 }
 
 /** Characters of [line] sung by [now], with a fractional part inside the word being sung ([offsets]: each word's span). */
-private fun sungChars(line: LyricLine, offsets: List<Pair<Int, Int>>, now: Long): Float {
+internal fun sungChars(line: LyricLine, offsets: List<Pair<Int, Int>>, now: Long): Float {
     var sung = 0f
     for ((i, w) in line.words.withIndex()) {
         val (s, e) = offsets[i]
@@ -717,6 +764,13 @@ private fun sungChars(line: LyricLine, offsets: List<Pair<Int, Int>>, now: Long)
     }
     return sung
 }
+
+/**
+ * The singing point as it's drawn: in steps of 1/[SWEEP_STEPS] of a letter (under a pixel at any lyric size), so two
+ * frames that would draw the same picture give the same value and the second isn't drawn.
+ */
+internal fun sweepStep(sung: Float): Float = Math.round(sung * SWEEP_STEPS) / SWEEP_STEPS.toFloat()
+private const val SWEEP_STEPS = 64
 
 /** A row of a swept line: still to come, being sung (its soft edge between from and to), or sung through. */
 private const val ROW_TO_COME = 0
@@ -761,9 +815,8 @@ private inline fun androidx.compose.ui.graphics.drawscope.DrawScope.forEachSwept
  * [dim] fades in, so neither lies under the other (#303).
  */
 private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawSweep(
-    l: TextLayoutResult, edges: FloatArray, line: LyricLine, offsets: List<Pair<Int, Int>>, now: Long, lit: Brush, dim: Color, style: TextStyle, shadow: androidx.compose.ui.graphics.Shadow?,
+    l: TextLayoutResult, edges: FloatArray, line: LyricLine, sung: Float, lit: Brush, dim: Color, style: TextStyle, shadow: androidx.compose.ui.graphics.Shadow?,
 ) {
-    val sung = sungChars(line, offsets, now)
     val dimFill = SolidColor(dim)
     forEachSweptRow(l, edges, line, sung) { top, bottom, part, from, to, rtlLine ->
         val litPart = when (part) { ROW_SUNG -> lit; ROW_SINGING -> fadedAt(lit, from, to, rtlLine); else -> null }

@@ -5419,4 +5419,8 @@
     <string name="tour_186_canvas_point_3">প্লেয়ারের ⋯ মেনু: %1$s, অথবা %2$s।</string>
     <string name="tour_186_canvas_point_4">নড়াচড়া কমান চালু থাকলে, ব্যাটারি সেভারে আর ফোন গরম হলে এটি থেমে থাকে।</string>
     <string name="tour_186_also_hours">Replay: %1$s প্রতিটি বারে ঘণ্টা দেখায়।</string>
+    <!-- 1.8.7 Canvas lyrics -->
+    <string name="canvas_lyrics">লিরিক্স দেখানো রাখুন</string>
+    <string name="canvas_lyrics_info">পূর্ণ স্ক্রিনে কন্ট্রোল মিলিয়ে গেলেও যে লাইনটি এখন গাওয়া হচ্ছে সেটি ছবির ওপরে থেকে যায়।</string>
+    <string name="canvas_lyrics_keywords">লিরিক্স লাইন পূর্ণ স্ক্রিন কন্ট্রোল মিলিয়ে যাওয়া লুকানো কারাওকে</string>
 </resources>

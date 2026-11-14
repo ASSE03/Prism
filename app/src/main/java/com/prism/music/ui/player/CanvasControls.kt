@@ -31,6 +31,16 @@ internal fun canvasControlsMayFade(
 ): Boolean = fullScreen && hasCanvas && !keepControls && playing && !covered && !panelOpen && !dragging && !screenReader && !reduceMotion
 
 /**
+ * 1.8.7, "Keep lyrics showing": the line being sung is on the picture while the controls may fade ([fades], so only over
+ * a full-screen canvas that is playing) and are not fully up ([controlsUp]): it comes in as they go and leaves with
+ * their return. Off unless the listener asked for it ([wanted]).
+ */
+internal fun canvasLyricShown(fades: Boolean, wanted: Boolean, controlsUp: Boolean): Boolean = fades && wanted && !controlsUp
+
+/** Between the kept lyric line and the kept title under it. */
+internal val CANVAS_LYRIC_GAP = androidx.compose.ui.unit.Dp(18f)
+
+/**
  * The darkening over a full-screen canvas, top / middle / bottom, for how much of the controls shows ([controls] 0..1)
  * and whether a list (lyrics, queue) is read over it ([panel] 0..1). Lighter with the controls away, never so light
  * at the bottom that the kept title can't be read; a music video is busier than an animated cover, so it gets more.

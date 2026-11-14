@@ -425,6 +425,8 @@ data class CanvasPrefs(
     val videoFirst: Boolean = false,
     /** Full screen only: the controls stay up (by default they fade after a few seconds and come back on a tap). */
     val keepControls: Boolean = false,
+    /** 1.8.7, Full screen only: the line being sung stays over the picture while the controls are away. */
+    val lyrics: Boolean = false,
     /** Loops from videos at 480p, in place of 1080p full screen and 720p on the cover. */
     val lighter: Boolean = false,
     /** Loops from videos may be fetched over mobile data ("Use mobile data for" → "Canvas from videos"). */
@@ -2301,6 +2303,7 @@ class SettingsRepository(
         val canvasUseVideos = booleanPreferencesKey("canvas_use_videos")
         val canvasVideoFirst = booleanPreferencesKey("canvas_video_first")
         val canvasKeepControls = booleanPreferencesKey("canvas_keep_controls")
+        val canvasLyrics = booleanPreferencesKey("canvas_lyrics")
         val canvasLighter = booleanPreferencesKey("canvas_lighter")
         val canvasVideosCellular = booleanPreferencesKey("canvas_videos_cellular")
         val lockScreenPlayerLook = booleanPreferencesKey("lock_screen_player_look")
@@ -2450,7 +2453,7 @@ class SettingsRepository(
                 "recap_notify", "milestone_notify", "finish_lyric", "face_down_pause", "lyrics_cover_plays",
                 // 1.8.6 ([CanvasPrefs]): where a canvas comes from, its controls, its quality and its data: behaviour, not a look.
                 "canvas_use_videos", "canvas_video_first", "canvas_keep_controls", "canvas_lighter", "canvas_videos_cellular",
-                "canvas_covers",
+                "canvas_covers", "canvas_lyrics",
             )
         }
     }
@@ -2798,6 +2801,7 @@ class SettingsRepository(
                     useVideos = p[K.canvasUseVideos] ?: d.behavior.canvas.useVideos,
                     videoFirst = p[K.canvasVideoFirst] ?: d.behavior.canvas.videoFirst,
                     keepControls = p[K.canvasKeepControls] ?: d.behavior.canvas.keepControls,
+                    lyrics = p[K.canvasLyrics] ?: d.behavior.canvas.lyrics,
                     lighter = p[K.canvasLighter] ?: d.behavior.canvas.lighter,
                     videosOnCellular = p[K.canvasVideosCellular] ?: d.behavior.canvas.videosOnCellular,
                 ),
@@ -3574,6 +3578,7 @@ class SettingsRepository(
     }
     fun setCanvasVideoFirst(v: Boolean) = edit { it[K.canvasVideoFirst] = v }
     fun setCanvasKeepControls(v: Boolean) = edit { it[K.canvasKeepControls] = v }
+    fun setCanvasLyrics(v: Boolean) = edit { it[K.canvasLyrics] = v }
     fun setCanvasLighter(v: Boolean) = edit { it[K.canvasLighter] = v }
     fun setCanvasVideosOnCellular(v: Boolean) = edit { it[K.canvasVideosCellular] = v }
     fun setShuffleButton(v: ShuffleButton) = edit { it[K.shuffleButton] = v.name }
