@@ -155,7 +155,16 @@ private fun forgetHomeLists() {
 internal fun extraShelves(shelves: List<Shelf>, known: Set<String>, placed: Collection<Shelf>, picks: Shelf?, feedPicks: Shelf?, dial: Shelf?, hiddenKinds: Set<String>): List<Shelf> =
     shelves.filter { s ->
         shelfKey(s.title) !in known && placed.none { it === s } && s !== picks && s !== feedPicks && s !== dial && shelfKind(s) !in hiddenKinds
-    }
+    // Each is a row of Home keyed by its title as a key has it ("Mixed for you", "Mixed for You "): once (1.8.7: a
+    // second one was a key Home's list had already used, and it closed).
+    }.distinctBy { shelfKey(it.title) }
+
+/**
+ * Quick picks from the pages in so far ([page]), for the section to show before the rest of Home loads (#371). Known
+ * by what it is in any language (1.8.7: by its English title only, a Spanish Home waited for every page); a shelf of
+ * song rows that isn't Quick picks is never taken for it.
+ */
+internal fun earlyQuickPicks(page: List<Shelf>, owner: String?): Shelf? = page.quickPicks(owner)
 
 /**
  * What YouTube's own Quick picks may offer while the set made around your artists is made: nothing on a pull to refresh
@@ -260,8 +269,8 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
         val (fresh, pages) = c.ytm.fullHomePages(
             pages = 3, maxPages = 8,
             satisfied = { got -> matchShelves(wanted, got, known).size == wanted.size && (!picksOn || got.quickPicks(owner) != null) && (!dialWanted || got.speedDial(owner) != null) },
-            // By its title only: on a page of its own, another shelf of song rows could pass for it by its shape.
-            onPage = { got -> if (earlyPicks.value == null) got.firstOrNull { it.title.equals("Quick picks", true) }?.let { earlyPicks.value = it } },
+            // As soon as its page is in, in any language (1.8.7): it's known by what it is, not its English title.
+            onPage = { got -> if (earlyPicks.value == null) earlyQuickPicks(got, owner)?.let { earlyPicks.value = it } },
         )
         // Kept for the next start, to show while this loads again (#126).
         c.scope.launch { c.homeCache.write(pages) }

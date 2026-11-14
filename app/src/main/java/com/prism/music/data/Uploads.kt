@@ -108,6 +108,17 @@ class Uploads(private val c: AppContainer) {
                 com.prism.music.tr(com.prism.music.R.string.youtube_music_takes_mp3_m4a)
             else -> null
         }
+
+        /**
+         * A list as it came: read from the songs when YouTube lists none; what was kept, if asking failed or stopped
+         * partway. Each album or artist once (1.8.7): YouTube's rows aren't checked for repeats, and one listed twice was
+         * a key Uploads' list had used already, which closes the page (#330's kind).
+         */
+        internal fun <T : BrowseItem> settled(rows: Parser.UploadRows<T>?, kept: List<T>?, fromSongs: () -> List<T>): List<T> = when {
+            rows == null -> kept.orEmpty().ifEmpty(fromSongs)
+            rows.next != null -> rows.items + kept.orEmpty()
+            else -> rows.items.ifEmpty(fromSongs)
+        }.distinctBy { it.id }
     }
     private val loading = Mutex()
     private var listedFor: String? = null
@@ -167,7 +178,7 @@ class Uploads(private val c: AppContainer) {
             if (!force && (state.value as? State.Ready)?.more == false) return@withContext
             listedFor = account()
             val kept = c.offline.uploads()
-            if (kept != null) lists.value = Lists(kept.songs, kept.albums, kept.artists)
+            if (kept != null) lists.value = Lists(kept.songs.distinctBy { it.id }, kept.albums.distinctBy { it.id }, kept.artists.distinctBy { it.id })
             fun fallback(message: String) {
                 state.value = if (kept != null) State.Ready(false) else State.Failed(message)
             }
@@ -224,13 +235,6 @@ class Uploads(private val c: AppContainer) {
         } finally {
             loading.unlock()
         }
-    }
-
-    /** A list as it came: read from the songs when YouTube lists none; what was kept, if asking failed or stopped partway. */
-    private fun <T : BrowseItem> settled(rows: Parser.UploadRows<T>?, kept: List<T>?, fromSongs: () -> List<T>): List<T> = when {
-        rows == null -> kept.orEmpty().ifEmpty(fromSongs)
-        rows.next != null -> (rows.items + kept.orEmpty()).distinctBy { it.id }
-        else -> rows.items.ifEmpty(fromSongs)
     }
 
     private object Pages {
