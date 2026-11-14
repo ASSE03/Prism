@@ -1,10 +1,17 @@
 package com.prism.music
 
+import com.prism.music.data.PlaylistRead
 import com.prism.music.data.PlaylistSongs
 import com.prism.music.data.SongsFrom
+import com.prism.music.data.innertube.YouTubeMusic
 import com.prism.music.data.model.ArtistRef
+import com.prism.music.data.model.CollectionKind
+import com.prism.music.data.model.CollectionPage
 import com.prism.music.data.model.Song
+import com.prism.music.data.readPlaylist
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.runBlocking
+import java.io.IOException
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -41,7 +48,7 @@ class SongsFromTest {
 
     @Test fun aPlaylistIsReadOnceUntilRefreshed() = runBlocking {
         var reads = 0
-        val lists = PlaylistSongs { id -> reads++; if (id == "bad") error("offline") else listOf(s("$id-1")) }
+        val lists = PlaylistSongs { id -> reads++; if (id == "bad") error("offline") else PlaylistRead(listOf(s("$id-1")), complete = true) }
         assertEquals("x-1", lists.songs("x")!!.single().id)
         lists.songs("x")
         assertEquals(1, reads)
@@ -50,4 +57,130 @@ class SongsFromTest {
         assertEquals(2, reads)
         assertNull("a playlist that won't load shows nothing, no crash", lists.songs("bad"))
     }
+
+    // #473 (based on PR #474 by Irobrine): a big playlist must not stay short for the session.
+
+    @Test fun aReadThatStoppedShortIsReadAgainNextTime() = runBlocking {
+        var reads = 0
+        val lists = PlaylistSongs { id ->
+            reads++
+            if (reads == 1) PlaylistRead(listOf(s("$id-1")), complete = false)
+            else PlaylistRead(listOf(s("$id-1"), s("$id-2"), s("$id-3")), complete = true)
+        }
+        assertEquals("the page that came shows meanwhile", listOf("x-1"), lists.songs("x")!!.map { it.id })
+        assertFalse("but it isn't kept as the whole playlist", lists.isComplete("x"))
+        assertEquals("the rest comes next time", listOf("x-1", "x-2", "x-3"), lists.songs("x")!!.map { it.id })
+        assertTrue(lists.isComplete("x"))
+        lists.songs("x")
+        assertEquals("then it's kept whole", 2, reads)
+    }
+
+    @Test fun everyPageOfAPlaylistIsRead() = runBlocking {
+        val read = readPlaylist(page(listOf("a", "b"), continuation = "next"), page = { token ->
+            assertEquals("next", token)
+            chunk(listOf("c", "d"), next = null)
+        }, retryMs = 0)
+        assertEquals(listOf("a", "b", "c", "d"), read.songs.map { it.id })
+        assertTrue(read.complete)
+    }
+
+    @Test fun aPageThatFailsIsAskedAgain() = runBlocking {
+        var tries = 0
+        val read = readPlaylist(page(listOf("a"), continuation = "next"), page = {
+            if (++tries < 3) throw IOException("busy")
+            chunk(listOf("b"), next = null)
+        }, retryMs = 0)
+        assertEquals("a page lost once doesn't leave the rest out", listOf("a", "b"), read.songs.map { it.id })
+        assertTrue(read.complete)
+        assertEquals(3, tries)
+    }
+
+    @Test fun aPageThatNeverComesLeavesTheReadShortAndUnkept() = runBlocking {
+        var tries = 0
+        val read = readPlaylist(page(listOf("a"), continuation = "next"), page = { tries++; throw IOException("offline") }, retryMs = 0)
+        assertEquals(listOf("a"), read.songs.map { it.id })
+        assertFalse("shown, but not as the whole playlist", read.complete)
+        assertEquals("asked three times before giving up", 3, tries)
+        val lists = PlaylistSongs { read }
+        lists.songs("x")
+        assertFalse(lists.isComplete("x"))
+    }
+
+    @Test fun leavingTheScreenStopsTheRead() = runBlocking {
+        try {
+            readPlaylist(page(listOf("a"), continuation = "next"), page = {
+                throw CancellationException("the screen was left")
+            }, retryMs = 0)
+            throw AssertionError("the read should have been cancelled, not returned short")
+        } catch (_: CancellationException) {
+            // Passed on: the caller keeps nothing, so the next visit reads it all again.
+        }
+    }
+
+    @Test fun leavingTheScreenDoesNotLeaveAShortListKept() = runBlocking {
+        var reads = 0
+        val lists = PlaylistSongs { _ ->
+            reads++
+            // The first read is cancelled on its second page (the screen was left).
+            readPlaylist(page(listOf("a"), continuation = "next"), page = {
+                if (reads == 1) throw CancellationException("the screen was left")
+                chunk(listOf("b"), next = null)
+            }, retryMs = 0)
+        }
+        try {
+            lists.songs("x")
+            throw AssertionError("the read should have been cancelled")
+        } catch (_: CancellationException) {
+        }
+        assertFalse("the cancelled read kept nothing", lists.isComplete("x"))
+        assertEquals(listOf("a", "b"), lists.songs("x")!!.map { it.id })
+        assertEquals(2, reads)
+    }
+
+    /**
+     * Review (1.8.5, #473 by another route): a page whose rows all failed to read but that still points to the next one
+     * ended the read, kept as the whole playlist for the session.
+     */
+    @Test fun aPageOfUnreadableRowsDoesntEndThePlaylist() = runBlocking {
+        val read = readPlaylist(page(listOf("a"), continuation = "p2"), page = { token ->
+            when (token) {
+                "p2" -> chunk(emptyList(), next = "p3")
+                "p3" -> chunk(listOf("b", "c"), next = null)
+                else -> error("asked for $token")
+            }
+        }, retryMs = 0)
+        assertEquals(listOf("a", "b", "c"), read.songs.map { it.id })
+        assertTrue(read.complete)
+    }
+
+    @Test fun anEmptyLastPageEndsTheRead() = runBlocking {
+        val read = readPlaylist(page(listOf("a"), continuation = "p2"), page = { chunk(emptyList(), next = null) }, retryMs = 0)
+        assertEquals(listOf("a"), read.songs.map { it.id })
+        assertTrue(read.complete)
+    }
+
+    @Test fun emptyPagesWithNoEndLeaveTheReadShortAndUnkept() = runBlocking {
+        var asked = 0
+        val read = readPlaylist(page(listOf("a"), continuation = "p1"), page = { asked++; chunk(emptyList(), next = "p${asked + 1}") }, retryMs = 0)
+        assertEquals(listOf("a"), read.songs.map { it.id })
+        assertFalse("read again next time, not kept short", read.complete)
+        assertTrue("a few empty pages, then it gives up ($asked)", asked in 2..5)
+    }
+
+    @Test fun aSwappedSongShowsAfterARefresh() = runBlocking {
+        // Same count, different songs: "b" removed and "d" added. A refresh must show the new list, not a kept one.
+        var now = listOf("a", "b", "c")
+        val lists = PlaylistSongs { _ -> readPlaylist(page(now, continuation = null), page = { error("one page only") }, retryMs = 0) }
+        assertEquals(listOf("a", "b", "c"), lists.songs("x")!!.map { it.id })
+        now = listOf("a", "c", "d")
+        lists.refresh("x")
+        assertEquals(listOf("a", "c", "d"), lists.songs("x")!!.map { it.id })
+    }
+
+    private fun chunk(songs: List<String>, next: String?) = YouTubeMusic.PlaylistChunk(songs.map(::s), next, emptyMap())
+
+    private fun page(songs: List<String>, continuation: String?) = CollectionPage(
+        id = "playlist", kind = CollectionKind.PLAYLIST, title = "Playlist", subtitle = "", thumbnail = null,
+        songs = songs.map(::s), continuation = continuation,
+    )
 }

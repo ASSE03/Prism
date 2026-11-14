@@ -169,6 +169,8 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
             runCatching { com.prism.music.data.foryou.ReleaseRadar.schedule(this@PrismApp) }
             // Rewind: the 1 December notification, and last year kept once it's over (after start-up has settled).
             runCatching { com.prism.music.data.Rewinds.schedule(this@PrismApp) }
+            // The monthly recap's notice (1.8.5), posted only if its switch is on when the 1st comes.
+            runCatching { com.prism.music.data.Recaps.schedule(this@PrismApp) }
             // DJ mode: the songs played most and liked get their key read once a day, on Wi-Fi while charging.
             runCatching { com.prism.music.playback.DjPrescanWorker.schedule(this@PrismApp) }
             // Bring your history: the daily look at whether a fresh Spotify or Takeout download is due (only once one
@@ -487,23 +489,18 @@ class AppContainer(val app: Application) {
     }
     /**
      * Whole playlists for Library → Songs' "From" (1.8.3, #382): Prism's own from the phone, YouTube's page after page
-     * (the copy kept on the phone without a network).
+     * (the copy kept on the phone without a network). Only a whole read is kept (#473): a page that doesn't come is asked
+     * again, and a short or cancelled read is read again next time.
      */
     val playlistSongs by lazy {
         com.prism.music.data.PlaylistSongs { id ->
-            prismLibrary.list(id)?.songs ?: run {
+            prismLibrary.list(id)?.let { com.prism.music.data.PlaylistRead(it.songs, complete = true) } ?: run {
                 val page = try { ytm.playlist(id) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (e: Exception) {
-                    offline.page(id) ?: offline.page("VL$id") ?: throw e
+                    // Offline: the copy on the phone is shown, but read live again next time.
+                    val kept = offline.page(id) ?: offline.page("VL$id") ?: throw e
+                    return@PlaylistSongs com.prism.music.data.PlaylistRead(kept.songs.distinctBy { it.id }, complete = false)
                 }
-                val songs = page.songs.toMutableList()
-                var token = page.continuation
-                while (token != null && songs.size < com.prism.music.data.PlaylistSongs.MAX) {
-                    val chunk = runCatching { ytm.playlistPage(token!!) }.getOrNull() ?: break
-                    if (chunk.songs.isEmpty()) break
-                    songs += chunk.songs
-                    token = chunk.next
-                }
-                songs.distinctBy { it.id }
+                com.prism.music.data.readPlaylist(page, ytm::playlistPage)
             }
         }
     }
@@ -690,6 +687,10 @@ class AppContainer(val app: Application) {
     val rewind by lazy { com.prism.music.data.Rewinds(this) }
     /** A year's Rewind to open (Home's Rewind card, the 1 December notification): Replay shows it and clears this. */
     val rewindRequest = MutableStateFlow<Int?>(null)
+    /** A month's recap to open on Replay (1.8.5: Home's card, the notice's link). */
+    val recapRequest = MutableStateFlow<java.time.YearMonth?>(null)
+    val recaps by lazy { com.prism.music.data.Recaps(this) }
+    val milestones by lazy { com.prism.music.data.MilestoneWatch(this) }
     /**
      * Bring your history (1.8.1): plays and libraries from Spotify, Google Takeout and Last.fm. Replay counts its
      * plays through [com.prism.music.data.imports.HistoryImports.replay], the mixes through its `taste`.
