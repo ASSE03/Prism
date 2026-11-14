@@ -129,7 +129,8 @@ class PlayerPageTest {
         val counts = groups.map { rowsIn(it).size }
         assertTrue("at most 7 rows a group, and no group without kit rows: $counts", counts.all { it in 1..7 })
         assertEquals(listOf("Layout", "Progress bar and times", "Title", "Cover", "On it", "Modes"), groups.map { firstText(it) })
-        assertEquals("the ledger's fit: 7 · 7 · 5 · 7 · 7 · 4", listOf(7, 7, 5, 7, 7, 4), counts)
+        // 1.8.6: Animated covers and Canvas are two rows of Cover; Cover animation moved to Modes to make room.
+        assertEquals("the ledger's fit: 7 · 7 · 5 · 7 · 7 · 5", listOf(7, 7, 5, 7, 7, 5), counts)
         assertTrue("no group is named after the page", groups.none { firstText(it) == SettingsPageId.PLAYER.title })
         // Only the five row types, each saying its value (a switch or a link may do without a value line).
         val all = groups.flatMap { rowsIn(it) }
@@ -208,6 +209,10 @@ class PlayerPageTest {
         "lock_screen_paused", "lock_screen_hide_song", "desk_mode",
         // 1.8.4 (D53): new with this release, on the lock screen's sheet.
         "lock_screen_player_look",
+        // 1.8.6: Canvas's sheet.
+        "canvas_use_videos", "canvas_videos_cellular", "canvas_video_first", "canvas_keep_controls", "canvas_lighter",
+        // Owner, 2026-11-13: animated covers on their own.
+        "canvas_covers",
     )
 
     @Test fun everyLedgerKeyHasItsSetting() {
@@ -240,7 +245,12 @@ class PlayerPageTest {
         // an edge-to-edge cover, the volume bar, Vinyl.
         prefs.setMix(true); prefs.setLockScreen(true); prefs.setImmersivePlayer(true); prefs.setVisualizer(VisualizerStyle.BARS)
         prefs.setFullBleedArtwork(true); prefs.setPartShown(PlayerPart.VOLUME, true); prefs.setPlayerLayout(PlayerLayout.VINYL)
-        until("the conditions are stored") { it.mix && it.behavior.lockScreen && it.immersivePlayer && it.fullBleedArtwork && it.shows(PlayerPart.VOLUME) && it.playerLayout == PlayerLayout.VINYL }
+        // Canvas (its loops) on and Full screen, with Animated covers: every row of its sheet.
+        prefs.setCanvasFillsBackground(true); prefs.setCanvasKinds(covers = true, videos = true)
+        until("the conditions are stored") {
+            it.mix && it.behavior.lockScreen && it.immersivePlayer && it.fullBleedArtwork && it.shows(PlayerPart.VOLUME) && it.playerLayout == PlayerLayout.VINYL &&
+                it.canvasFillsBackground && it.behavior.canvas.useVideos
+        }
         showPage()
         val onPage = HashSet<String>()
         // What the picked background is tuned by takes one place: each background in turn.
@@ -257,7 +267,7 @@ class PlayerPageTest {
             inSheet[sheet] = rowsIn(compose.onNodeWithTag(SettingsTags.SHEET, useUnmergedTree = true).fetchSemanticsNode()).mapNotNull { firstText(it) }.toSet()
             closeSheet()
         }
-        assertEquals(setOf("Immersive options", "Lock screen options"), inSheet.keys)
+        assertEquals(setOf("Immersive options", "Lock screen options", "Canvas"), inSheet.keys)
         val missing = playerSettings.filter { p -> if (p.sheet == null) p.row !in onPage else p.row !in inSheet.getValue(p.sheet!!) }
         assertTrue("no row for: ${missing.map { it.keys to it.row }}", missing.isEmpty())
         assertTrue("the sheet's rows open from a row of the page", inSheet.keys.all { it in onPage })
@@ -300,10 +310,7 @@ class PlayerPageTest {
         until("Cover animation: opening only") { it.view.coverFlight && !it.view.coverFlightBack }
         assertEquals("Opening", rows().getValue("Cover animation").config[SettingsRowValue])
 
-        chip("Animated covers", "Fill the player")
-        until("Animated covers: fill") { it.canvasEnabled && it.canvasFillsBackground }
-        chip("Animated covers", "On the cover")
-        until("Animated covers: on the cover") { it.canvasEnabled && !it.canvasFillsBackground }
+        // (Canvas's three choices are in its sheet now: canvasIsOneRowWithItsChoicesInASheet.)
 
         // Edge to edge: Both shows the fit and "More room for the picture" under it; Video keeps only the latter.
         assertFalse("How the cover fits" in rows())
@@ -370,6 +377,151 @@ class PlayerPageTest {
         until("circle") { it.shapes.player == com.prism.music.data.prefs.CoverShape.CIRCLE }
     }
 
+    // ------------------------------------------------------------------ Canvas (1.8.6)
+
+    private fun sheetOpen() = compose.waitUntil(10_000) { tagged(SettingsTags.SHEET).isNotEmpty() }
+
+    /** The R6 question's buttons (a button is not a row). */
+    private fun button(text: String) = compose.onNode(
+        hasText(text) and androidx.compose.ui.test.hasClickAction() and SettingsTags.rowTypes.map { !hasTestTag(it) }.reduce { a, b -> a and b },
+    )
+
+
+    /** The rows drawn in the open sheet, by title (the page behind it has a "Canvas" row too). */
+    private fun sheetRows(): Map<String, SemanticsNode> =
+        rowsIn(compose.onNodeWithTag(SettingsTags.SHEET, useUnmergedTree = true).fetchSemanticsNode()).mapNotNull { n -> firstText(n)?.let { it to n } }.toMap()
+
+    /** Taps the row [title] in the open sheet. */
+    private fun tapInSheet(title: String) {
+        compose.onNode(
+            SettingsTags.rowTypes.map { hasTestTag(it) }.reduce { a, b -> a or b } and hasAnyDescendant(hasText(title)) and
+                androidx.compose.ui.test.hasAnyAncestor(hasTestTag(SettingsTags.SHEET)),
+            useUnmergedTree = true,
+        ).performSemanticsAction(SemanticsActions.OnClick)
+        compose.waitForIdle()
+    }
+
+    /** The Cover group's rows, by title, in order. */
+    private fun coverRows(): List<String> =
+        tagged(SettingsTags.GROUP).first { firstText(it) == "Cover" }.let { g -> rowsIn(g).mapNotNull { firstText(it) } }
+
+    /** Owner, 2026-11-13 ("Can you just keep these options separate?"): Animated covers and Canvas, each its own switch. */
+    @Test fun animatedCoversAndCanvasAreSeparate() {
+        showPage()
+        // Two rows of Cover, last: Animated covers (a switch on the page, on) and Canvas (a Link row, Off as Prism comes).
+        assertEquals(listOf("Animated covers", "Canvas"), coverRows().takeLast(2))
+        assertEquals(SettingsTags.ROW_SWITCH, rows().getValue("Animated covers").config[SemanticsProperties.TestTag])
+        assertEquals(com.prism.music.data.prefs.CanvasKinds(covers = true, videos = false), com.prism.music.data.prefs.CanvasKinds.shown(stored))
+        val row = rows().getValue("Canvas")
+        assertEquals(SettingsTags.ROW_LINK, row.config[SemanticsProperties.TestTag])
+        assertEquals("Off", row.config[SettingsRowValue])
+        assertFalse("Cover animation is in Modes now", "Cover animation" in coverRows())
+        assertTrue("Cover animation" in rows())
+
+        // Canvas's sheet with only Animated covers on: its switch (off) and nothing else (an animated cover is not placed here).
+        tap("Canvas")
+        sheetOpen()
+        assertEquals(listOf("Canvas"), sheetRows().keys.toList())
+        assertEquals(SettingsTags.ROW_SWITCH, sheetRows().getValue("Canvas").config[SemanticsProperties.TestTag])
+
+        // Canvas on: the loops' rows come, and "When a song has both" (both are on).
+        tapInSheet("Canvas")
+        until("canvas on") { it.canvasEnabled && it.behavior.canvas.covers && it.behavior.canvas.useVideos }
+        assertEquals(listOf("Canvas", "Use mobile data", "When a song has both", "Lighter loops", "Where it shows"), sheetRows().keys.toList())
+        assertEquals("On the cover", sheetRows().getValue("Where it shows").config[SettingsRowValue])
+        // Two choices, no Off: the two switches are what turn things off.
+        val inWhere = androidx.compose.ui.test.hasAnyAncestor(SettingsTags.rowTypes.map { hasTestTag(it) }.reduce { a, b -> a or b } and hasAnyDescendant(hasText("Where it shows")))
+        assertTrue(compose.onAllNodes(hasText("Full screen") and inWhere, useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty())
+        assertTrue(compose.onAllNodes(hasText("Off") and inWhere, useUnmergedTree = true).fetchSemanticsNodes().isEmpty())
+        tapInSheet("Use mobile data")
+        until("videos_cellular") { it.behavior.canvas.videosOnCellular }
+        chip("When a song has both", "Music video")
+        until("video_first") { it.behavior.canvas.videoFirst }
+        tapInSheet("Lighter loops")
+        until("lighter") { it.behavior.canvas.lighter }
+        // Full screen brings "Keep controls showing".
+        chip("Where it shows", "Full screen")
+        until("full screen") { it.canvasFillsBackground }
+        tapInSheet("Keep controls showing")
+        until("keep_controls") { it.behavior.canvas.keepControls }
+        assertEquals(CanvasPrefsAll, stored.behavior.canvas)
+        closeSheet()
+        assertEquals("Full screen", rows().getValue("Canvas").config[SettingsRowValue])
+
+        // Animated covers off: Canvas's loops stay, "When a song has both" goes (there is no both).
+        tap("Animated covers")
+        until("covers off") { it.canvasEnabled && !it.behavior.canvas.covers && it.behavior.canvas.useVideos }
+        tap("Canvas")
+        sheetOpen()
+        assertFalse("When a song has both" in sheetRows())
+        assertTrue("Lighter loops" in sheetRows() && "Where it shows" in sheetRows() && "Keep controls showing" in sheetRows())
+
+        // Canvas off too, the last one: Canvas as a whole is off, and what the rows hold is kept.
+        tapInSheet("Canvas")
+        until("all off") { !it.canvasEnabled }
+        assertEquals(listOf("Canvas"), sheetRows().keys.toList())
+        assertTrue(stored.behavior.canvas.useVideos && stored.behavior.canvas.lighter && stored.canvasFillsBackground)
+        closeSheet()
+        assertEquals("Off", rows().getValue("Canvas").config[SettingsRowValue])
+        assertTrue("it differs from how Prism comes", rows().getValue("Animated covers").config[SettingsRowChanged])
+
+        // Animated covers back on alone (Canvas was off before, its flag on): the loops stay off.
+        tap("Animated covers")
+        until("covers on alone") { it.canvasEnabled && it.behavior.canvas.covers && !it.behavior.canvas.useVideos }
+        assertEquals("Off", rows().getValue("Canvas").config[SettingsRowValue])
+    }
+
+    private val CanvasPrefsAll = com.prism.music.data.prefs.CanvasPrefs(useVideos = true, videoFirst = true, keepControls = true, lighter = true, videosOnCellular = true)
+
+    @Test fun theCanvasRowSaysWhereItShows() {
+        prefs.setCanvasFillsBackground(true); prefs.setCanvasUseVideos(true)
+        until("full screen with videos") { it.canvasFillsBackground && it.behavior.canvas.useVideos }
+        showPage()
+        // Existing users see no change in what is selected: the old "Fill the player" is Full screen.
+        assertEquals("Full screen", rows().getValue("Canvas").config[SettingsRowValue])
+        // Switched off as a whole before (the old "Off"): both switches show off, Full screen kept for later.
+        prefs.setCanvasEnabled(false)
+        until("off") { !it.canvasEnabled }
+        compose.waitForIdle()
+        assertEquals("Off", rows().getValue("Canvas").config[SettingsRowValue])
+        assertEquals(com.prism.music.data.prefs.CanvasKinds(false, false), com.prism.music.data.prefs.CanvasKinds.shown(stored))
+        assertTrue(rows().getValue("Animated covers").config[SettingsRowChanged])
+    }
+
+    @Test fun canvasSearchLines() {
+        val mine = com.prism.music.ui.screens.SettingsIndex.entries.filter { it.page == SettingsPageId.PLAYER && it.group == "Cover" }
+        fun line(t: String) = mine.single { it.title == t }
+        // Animated covers and Canvas each have their line, always there; the old names still find them.
+        assertEquals(null, line("Animated covers").needs)
+        assertEquals(null, line("Canvas").needs)
+        assertTrue(com.prism.music.ui.screens.SettingsIndex.search("animated covers").any { it.title == "Animated covers" && it.page == SettingsPageId.PLAYER })
+        assertTrue(com.prism.music.ui.screens.SettingsIndex.search("use music videos").any { it.title == "Canvas" && it.page == SettingsPageId.PLAYER })
+        assertTrue(com.prism.music.ui.screens.SettingsIndex.search("fill the player").any { it.title == "Where it shows" && it.page == SettingsPageId.PLAYER })
+        assertFalse("no line of its own any more", mine.any { it.title == "Use music videos" })
+        val d = AppSettings()
+        val videos = d.copy(behavior = d.behavior.copy(canvas = d.behavior.canvas.copy(useVideos = true)))
+        val noCovers = d.copy(behavior = d.behavior.copy(canvas = d.behavior.canvas.copy(covers = false)))
+        // "Where it shows" is for Canvas's loops only (an animated cover always plays in the cover).
+        assertFalse(line("Where it shows").needs!!.on(d))
+        assertTrue(line("Where it shows").needs!!.on(videos))
+        assertTrue(line("Where it shows").needs!!.on(videos.copy(behavior = videos.behavior.copy(canvas = videos.behavior.canvas.copy(covers = false)))))
+        assertFalse(line("Where it shows").needs!!.on(noCovers))
+        assertFalse(line("Where it shows").needs!!.on(videos.copy(canvasEnabled = false)))
+        // "When a song has both" needs both.
+        assertFalse(line("When a song has both").needs!!.on(videos.copy(behavior = videos.behavior.copy(canvas = videos.behavior.canvas.copy(covers = false)))))
+        for (t in listOf("When a song has both", "Lighter loops", "Use mobile data")) {
+            assertFalse(t, line(t).needs!!.on(d))
+            assertTrue(t, line(t).needs!!.on(videos))
+            assertFalse(t, line(t).needs!!.on(videos.copy(canvasEnabled = false)))
+        }
+        assertFalse(line("Keep controls showing").needs!!.on(d))
+        assertFalse("animated covers alone are never full screen", line("Keep controls showing").needs!!.on(d.copy(canvasFillsBackground = true)))
+        assertTrue(line("Keep controls showing").needs!!.on(videos.copy(canvasFillsBackground = true)))
+        assertFalse(line("Keep controls showing").needs!!.on(noCovers.copy(canvasFillsBackground = true)))
+        // Cover animation's line is in Modes now, where its row is.
+        assertTrue(com.prism.music.ui.screens.SettingsIndex.entries.any { it.page == SettingsPageId.PLAYER && it.group == "Modes" && it.title == "Cover animation" })
+    }
+
     // ------------------------------------------------------------------ Reset this page
 
     @Test fun resetThisPageListsAndPutsBackLookAndOtherSettings() {
@@ -382,7 +534,7 @@ class PlayerPageTest {
         compose.onNodeWithTag(SettingsTags.RESET_ITEM).performClick()
         val listed = compose.onAllNodes(hasTestTag(SettingsTags.RESET_CHANGE)).fetchSemanticsNodes().map { it.config[SemanticsProperties.Text].joinToString { t -> t.text } }
         assertEquals(5, listed.size)
-        assertTrue("$listed", "Desk mode: On → Off" in listed && "Animated covers: Off → On the cover" in listed && "Right-hand time: Song length → Time left" in listed)
+        assertTrue("$listed", "Desk mode: On → Off" in listed && "Animated covers: Off → On" in listed && "Right-hand time: Song length → Time left" in listed)
         compose.onNodeWithTag(SettingsTags.RESET_CONFIRM).performClick()
         until("all back") { s -> playerSettings.none { it.changed(s) } }
     }

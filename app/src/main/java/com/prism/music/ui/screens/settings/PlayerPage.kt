@@ -2,6 +2,7 @@ package com.prism.music.ui.screens.settings
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.prism.music.R
 import com.prism.music.data.prefs.AppSettings
 import com.prism.music.data.prefs.BleedFit
+import com.prism.music.data.prefs.CanvasKinds
 import com.prism.music.data.prefs.CoverShape
 import com.prism.music.data.prefs.CoverSize
 import com.prism.music.data.prefs.DeckPart
@@ -43,6 +45,7 @@ import com.prism.music.data.prefs.shows
 import com.prism.music.tr
 import com.prism.music.ui.LocalNavigator
 import com.prism.music.ui.Routes
+import com.prism.music.ui.components.PrismTextButton
 import com.prism.music.ui.screens.ArtistLinksSample
 import com.prism.music.ui.screens.KnobSample
 import com.prism.music.ui.screens.LayoutSample
@@ -279,17 +282,65 @@ internal fun PlayerCoverRows() {
         value = if (s.fullBleedArtwork) tr(R.string.not_with_full_bleed_artwork_the_banner_covers_it) else null,
         info = tr(R.string.the_cover_eases_back_while_paused), changed = ch("art_shrink_on_pause"),
     ) { prefs.setArtShrinkOnPause(it) }
+    // Owner, 2026-11-13 ("Can you just keep these options separate?"): Animated covers is its own switch on the page,
+    // and Canvas (the loops from music videos) its own row, a switch first in its sheet. "Cover animation" went to Modes
+    // so that Cover stays at seven rows.
+    val kinds = CanvasKinds.shown(s)
+    SwitchRow(
+        tr(R.string.animated_covers), kinds.covers, info = tr(R.string.motion_artwork_and_video_covers_turn), changed = ch("canvas_covers"),
+    ) { prefs.setCanvasKinds(covers = it, videos = kinds.videos) }
+    SheetRow(
+        tr(R.string.canvas), canvasWords(s),
+        changed = listOf("canvas_use_videos", "canvas_videos_cellular", "canvas_video_first", "canvas_lighter", "canvas_fills_background", "canvas_keep_controls").any { ch(it) },
+    ) { CanvasOptions() }
+}
+
+/** The mini player's cover flying into the player (and back): in Modes on the page, with the cover in "Customize this". */
+@Composable
+internal fun PlayerCoverAnimationRow() {
+    val s = LocalAppSettings.current
+    val prefs = LocalContainer.current.settings
     val flight = s.view.coverFlight to s.view.coverFlightBack
     ChoiceRow(
         tr(R.string.settings_player_cover_animation), CoverAnimation.entries, CoverAnimation.toMerged(flight), { it.label },
         info = words(tr(R.string.opening_the_player_the_mini_player), tr(R.string.instead_of_the_whole_player_sliding), tr(R.string.cover_flies_back_too_info)),
         changed = ch("cover_flight"),
     ) { v -> v.toStored(flight).let { (open, back) -> prefs.setCoverFlight(open); prefs.setCoverFlightBack(back) } }
-    val canvas = s.canvasEnabled to s.canvasFillsBackground
-    ChoiceRow(
-        tr(R.string.animated_covers), AnimatedCovers.entries, AnimatedCovers.toMerged(canvas), { it.label },
-        info = words(tr(R.string.motion_artwork_and_video_covers_turn), tr(R.string.the_moving_artwork_fills_the_whole)), changed = ch("canvas_enabled"),
-    ) { v -> v.toStored(canvas).let { (on, fills) -> prefs.setCanvasEnabled(on); prefs.setCanvasFillsBackground(fills) } }
+}
+
+/**
+ * Canvas's sheet (plan-canvas §3.1, §3.6, §11a R1, R6): its switch (the loops from music videos) and the rows that only
+ * apply to them, where they show among them. Animated covers have their own switch on the page and are not placed here.
+ */
+@Composable
+private fun CanvasOptions() {
+    val s = LocalAppSettings.current
+    val prefs = LocalContainer.current.settings
+    val c = s.behavior.canvas
+    val kinds = CanvasKinds.shown(s)
+    SwitchRow(
+        tr(R.string.canvas), kinds.videos, info = tr(R.string.canvas_use_videos_info), changed = ch("canvas_use_videos"),
+    ) { prefs.setCanvasKinds(covers = kinds.covers, videos = it) }
+    // Its mobile-data switch sits with it (owner, 2026-11-13: everything Canvas under Canvas), not among the chips of
+    // Downloads & data's "Use mobile data for".
+    if (kinds.videos) SwitchRow(
+        tr(R.string.use_mobile_data), c.videosOnCellular, info = tr(R.string.canvas_from_videos_info), changed = ch("canvas_videos_cellular"),
+    ) { prefs.setCanvasVideosOnCellular(it) }
+    if (kinds.covers && kinds.videos) ChoiceRow(
+        tr(R.string.canvas_both), listOf(false, true), c.videoFirst, ::canvasBothWords, info = tr(R.string.canvas_both_info), changed = ch("canvas_video_first"),
+    ) { prefs.setCanvasVideoFirst(it) }
+    if (kinds.videos) SwitchRow(
+        tr(R.string.canvas_lighter), c.lighter, info = tr(R.string.canvas_lighter_info), changed = ch("canvas_lighter"),
+    ) { prefs.setCanvasLighter(it) }
+    // Where Canvas's loops show. Animated covers are not placed by it (owner, 2026-11-13: an animated cover "should
+    // never have the full screen canvas look"): they play in the cover, as they did before 1.8.6.
+    if (kinds.videos) ChoiceRow(
+        tr(R.string.canvas_where), listOf(false, true), s.canvasFillsBackground, ::canvasPlaceWords,
+        info = tr(R.string.the_moving_artwork_fills_the_whole), changed = ch("canvas_fills_background"),
+    ) { prefs.setCanvasFillsBackground(it) }
+    if (kinds.videos && s.canvasFillsBackground) SwitchRow(
+        tr(R.string.canvas_keep_controls), c.keepControls, info = tr(R.string.canvas_keep_controls_info), changed = ch("canvas_keep_controls"),
+    ) { prefs.setCanvasKeepControls(it) }
 }
 
 // ---------------------------------------------------------------------------- On it
@@ -391,6 +442,7 @@ internal fun PlayerModesRows() {
     val context = LocalContext.current
     val b = s.behavior
     PlayerVisualizerRows()
+    PlayerCoverAnimationRow()
 
     SwitchRow(
         tr(R.string.immersive_mode), s.immersivePlayer, info = words(tr(R.string.the_cover_fills_the_screen_lyrics), tr(R.string.like_a_lyric_video_tap_the)),
@@ -573,6 +625,11 @@ val playerIndex: List<SettingEntry> by lazy {
         fun bg(name: Int, vararg which: PlayerBackground) = Needs(tr(R.string.turn_on_first, tr(name))) { it.playerBackground in which }
         val volumeShown = turnOn(tr(R.string.volume)) { it.shows(PlayerPart.VOLUME) }
         val edge = turnOn(tr(R.string.settings_player_edge_to_edge)) { it.fullBleedArtwork || it.videoFullBleed }
+        val canvasVideos = turnOn(tr(R.string.canvas)) { CanvasKinds.shown(it).videos }
+        // "When a song has both" asks for both kinds: the animated covers and Canvas's loops.
+        val canvasBoth = Needs(tr(R.string.turn_on_first, tr(R.string.animated_covers) + " · " + tr(R.string.canvas))) {
+            CanvasKinds.shown(it).let { k -> k.covers && k.videos }
+        }
         listOf(
             // Layout
             SettingEntry(page, g.layout, tr(R.string.layout), tr(R.string.player_layout_standard_cover_lyrics_minimal)),
@@ -625,11 +682,25 @@ val playerIndex: List<SettingEntry> by lazy {
             SettingEntry(page, g.cover, tr(R.string.how_the_cover_fits), tr(R.string.how_the_cover_fits_keywords), needs = turnOn(tr(R.string.edge_to_edge_cover)) { it.fullBleedArtwork }),
             SettingEntry(page, g.cover, tr(R.string.more_room_for_the_picture), tr(R.string.more_room_for_the_picture_keywords), needs = edge),
             SettingEntry(page, g.cover, tr(R.string.shrink_when_paused)),
+            // 1.8.6 (owner, 2026-11-13): Animated covers and Canvas, each its own row; Canvas's sheet holds the loops' rows
+            // and where both show ("Use music videos" and "Fill the player", the old names, still find them).
+            SettingEntry(page, g.cover, tr(R.string.animated_covers), tr(R.string.canvas_motion_video_cover) + " " + tr(R.string.animated_cover)),
             SettingEntry(
-                page, g.cover, tr(R.string.settings_player_cover_animation),
-                tr(R.string.cover_flies_into_place) + " " + tr(R.string.cover_flies_back_too) + " " + tr(R.string.animation_transition_open_player_cover_mini),
+                page, g.cover, tr(R.string.canvas),
+                tr(R.string.canvas_keywords) + " " + tr(R.string.canvas_use_videos) + " " + tr(R.string.canvas_use_videos_keywords) + " " + tr(R.string.music_videos_label),
             ),
-            SettingEntry(page, g.cover, tr(R.string.animated_covers), tr(R.string.canvas_motion_video_cover) + " " + tr(R.string.fill_the_player) + " " + tr(R.string.canvas_background_full_screen_behind)),
+            SettingEntry(page, g.cover, tr(R.string.use_mobile_data), tr(R.string.canvas_from_videos) + " " + tr(R.string.cellular_mobile_data) + " " + tr(R.string.canvas), needs = canvasVideos),
+            SettingEntry(page, g.cover, tr(R.string.canvas_both), tr(R.string.canvas_both_keywords), needs = canvasBoth),
+            SettingEntry(page, g.cover, tr(R.string.canvas_lighter), tr(R.string.canvas_lighter_keywords), needs = canvasVideos),
+            SettingEntry(
+                page, g.cover, tr(R.string.canvas_where),
+                tr(R.string.fill_the_player) + " " + tr(R.string.full_screen) + " " + tr(R.string.settings_player_on_the_cover) + " " + tr(R.string.canvas_background_full_screen_behind),
+                needs = canvasVideos,
+            ),
+            SettingEntry(
+                page, g.cover, tr(R.string.canvas_keep_controls), tr(R.string.canvas_keep_controls_keywords),
+                needs = turnOn(tr(R.string.full_screen)) { CanvasKinds.shown(it).videos && it.canvasFillsBackground },
+            ),
             // On it: one editor for what's on the player (found by each part's name too).
             SettingEntry(
                 page, g.onIt, tr(R.string.what_s_on_the_player),
@@ -659,6 +730,10 @@ val playerIndex: List<SettingEntry> by lazy {
             // Modes
             SettingEntry(page, g.modes, tr(R.string.visualizer), tr(R.string.visualiser_bars_wave_ring_pulse_glow)),
             SettingEntry(page, g.modes, tr(R.string.visualizer_color), tr(R.string.visualiser_colour_accent_white_cover), needs = turnOn(tr(R.string.visualizer)) { it.visualizer != VisualizerStyle.OFF }),
+            SettingEntry(
+                page, g.modes, tr(R.string.settings_player_cover_animation),
+                tr(R.string.cover_flies_into_place) + " " + tr(R.string.cover_flies_back_too) + " " + tr(R.string.animation_transition_open_player_cover_mini),
+            ),
             SettingEntry(page, g.modes, tr(R.string.immersive_mode), tr(R.string.lyric_video_full_screen)),
             SettingEntry(page, g.modes, tr(R.string.settings_player_immersive_options), needs = immersive),
             SettingEntry(page, g.modes, tr(R.string.artwork), tr(R.string.immersive_mode), needs = immersive),

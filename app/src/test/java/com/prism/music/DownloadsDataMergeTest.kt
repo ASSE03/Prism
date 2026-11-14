@@ -93,6 +93,8 @@ class DownloadsDataMergeTest {
         assertFalse(shown(d.copy(normalize = false, mix = false), MobileUse.MEASURING))
         assertTrue(shown(d.copy(normalize = true, mix = false), MobileUse.MEASURING))
         assertTrue(shown(d.copy(normalize = false, mix = true), MobileUse.MEASURING))
+        // 1.8.6: loops from music videos on mobile data is not a chip (its switch is in Canvas's sheet, Player page).
+        assertTrue(MobileUse.entries.none { it.label == tr(R.string.canvas_from_videos) })
     }
 
     /** Data saver is a mode beside the row, not a chip: no chip reads it or writes it. */

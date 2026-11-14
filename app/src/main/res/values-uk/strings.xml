@@ -3181,6 +3181,7 @@
     <string name="mono_type_neon_light_sharp_corners">Моноширинний шрифт, неонове світло, гострі кути</string>
     <string name="rounded_type_extra_round_corners_pastels">Округлий шрифт, дуже округлі кути, пастель</string>
     <string name="studio">Студія</string>
+    <string name="black_and_white_nothing_extra">Чорно-білий, простий програвач, жодних кольорів, окрім кольорів музики</string>
     <string name="white_light_no_accent_compact_classic">Біле світло, без акценту, компактно, класичні елементи керування</string>
     <string name="a_record_on_the_player_warm">Платівка в плеєрі, теплий бурштин, заголовки із засічками</string>
     <string name="prism_1_6_s_look_its">Вигляд Prism 1.6: його значки, жирний шрифт, прості елементи керування, без скла</string>
@@ -5535,4 +5536,37 @@
     <string name="gb_lyrics_cover_plays">Дотик до маленької обкладинки: відтворення або пауза</string>
     <string name="gb_lyrics_cover_plays_info">Коли текст відкрито, дотик до маленької обкладинки вмикає відтворення або паузу, а довге натискання закриває текст. Вимкнено: дотик закриває текст.</string>
     <string name="gb_lyrics_cover_plays_keywords">текст пісні маленька обкладинка мініатюра дотик відтворити пауза довге натискання закрити lyrics cover</string>
+    <!-- 1.8.6 Canvas -->
+    <string name="canvas">Canvas</string>
+    <string name="canvas_where">Де показувати</string>
+    <string name="canvas_use_videos">Використовувати музичні відео</string>
+    <string name="canvas_use_videos_info">Якщо в пісні немає анімованої обкладинки, з її власного музичного відео на YouTube вирізається короткий беззвучний цикл. Він завантажується один раз, через Wi-Fi, а потім відтворюється з телефона: близько 5 МБ на пісню на весь екран, близько 2 МБ на обкладинці.</string>
+    <string name="canvas_both">Якщо є і те, і те</string>
+    <string name="canvas_both_info">Що відтворюється першим. У меню ⋯ плеєра це можна змінити для окремої пісні.</string>
+    <string name="canvas_keep_controls">Не ховати елементи керування</string>
+    <string name="canvas_keep_controls_info">На весь екран елементи керування зникають за кілька секунд і повертаються після дотику. Коли ввімкнено, вони завжди на екрані.</string>
+    <string name="canvas_lighter">Легші цикли</string>
+    <string name="canvas_lighter_info">Цикли з музичних відео у 480p: близько 1 МБ на пісню, трохи м\'якша картинка на весь екран.</string>
+    <string name="canvas_ask_title">Використовувати музичні відео?</string>
+    <string name="canvas_ask_text">Пісні без анімованої обкладинки можуть показувати короткий цикл зі свого музичного відео. Кожен цикл завантажується один раз, через Wi-Fi: близько 5 МБ на пісню на весь екран.</string>
+    <string name="canvas_from_videos">Canvas з відео</string>
+    <string name="canvas_from_videos_info">Коли вимкнено, цикли з музичних відео завантажуються лише через Wi-Fi. Цикли, що вже є на телефоні, відтворюються в будь-якому разі.</string>
+    <string name="canvas_keywords">анімована обкладинка рух обкладинка рухоме зображення цикл на весь екран тло</string>
+    <string name="canvas_use_videos_keywords">музичне відео цикл кліп рухоме зображення</string>
+    <string name="canvas_both_keywords">анімована обкладинка музичне відео спочатку порядок</string>
+    <string name="canvas_keep_controls_keywords">елементи керування зникають ховати на весь екран дотик</string>
+    <string name="canvas_lighter_keywords">якість 480p 720p 1080p трафік розмір менший</string>
+    <string name="canvas_pick_part">Обрати іншу частину</string>
+    <string name="canvas_pick_video">Обрати інше відео</string>
+    <string name="canvas_video_no_loop">З цього відео не вийде зробити цикл</string>
+    <string name="canvas_no_videos">Для цієї пісні відео не знайдено</string>
+    <string name="canvas_use">Показувати</string>
+    <string name="canvas_not_this_video">Це не те відео</string>
+    <string name="tour_186_canvas_title">Canvas</string>
+    <string name="tour_186_canvas_about">Беззвучна картинка в циклі за твоєю музикою: кілька секунд, вирізаних з власного музичного відео пісні. Анімовані обкладинки лишаються як були.</string>
+    <string name="tour_186_canvas_point_1">На весь екран: цикл заповнює плеєр. Елементи керування зникають і повертаються після дотику.</string>
+    <string name="tour_186_canvas_two">«%1$s» і «%2$s» мають по окремому перемикачу. Цикл завантажується один раз, через Wi-Fi: близько 5 МБ на пісню на весь екран.</string>
+    <string name="tour_186_canvas_point_3">Меню ⋯ плеєра: «%1$s» або «%2$s».</string>
+    <string name="tour_186_canvas_point_4">Він зупиняється з функцією «Зменшити рух», в енергозбереженні та коли телефон перегрівається.</string>
+    <string name="tour_186_also_hours">Replay: «%1$s» показує години на кожному стовпчику.</string>
 </resources>

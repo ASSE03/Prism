@@ -1088,6 +1088,40 @@ class AppContainer(val app: Application) {
 
     /** Animated-cover clips on the phone: recently played, and saved (from the player, by album, or with downloads). */
     val canvasStore by lazy { com.prism.music.data.canvas.CanvasStore(app, http, canvas, ytm, databaseProvider, scope) }
+    /** 1.8.6: Canvas loops cut from music videos, kept as small files (recent ones in the cache, downloads' for good). */
+    val clipFiles by lazy {
+        com.prism.music.data.canvas.ClipFiles(File(app.cacheDir, "canvas_clips"), File(app.filesDir, "canvas_clips")) {
+            // One 400 MB for everything recent that Canvas keeps (the settings say so): loops get what the animated covers leave,
+            // never under 100 MB.
+            (400L * 1024 * 1024 - canvasStore.recentBytes).coerceAtLeast(100L * 1024 * 1024)
+        }
+    }
+    val canvasClips by lazy {
+        com.prism.music.data.canvas.ClipRepository(
+            db.canvasClips(),
+            com.prism.music.data.canvas.ClipFinder.create(ytm, innerTube, http),
+            com.prism.music.data.canvas.ClipFetcher(streamHttp, { id -> kotlinx.coroutines.withContext(Dispatchers.IO) { innerTube.visionOsPlayer(id) } }, clipFiles),
+        ).apply { files = clipFiles; refiner = com.prism.music.data.canvas.ClipDecode }
+    }
+    /** 1.8.6: the next two songs' loops got ready on Wi-Fi, and downloads' kept with them (plan-canvas 4.8). */
+    val canvasAhead by lazy {
+        com.prism.music.data.canvas.CanvasAhead(scope, object : com.prism.music.data.canvas.CanvasAhead.Facts {
+            override fun settings() = settings.current
+            override fun metered() = app.getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered != false
+            // The song's loop switched off (its animated cover's own switch is read in hasCover).
+            override fun hidden(songId: String) = songId in canvas.hiddenLoops.value
+            override fun saved(song: com.prism.music.data.model.Song) = canvas.isSaved(song)
+            override fun savedById(songId: String) = canvas.saved.value.has(songId, null)
+            override suspend fun choice(songId: String) = canvasClips.choice(songId)
+            // Only an animated cover that may play counts ([canvasCoverWanted]): one that may not leaves room for the loop.
+            override suspend fun hasCover(song: com.prism.music.data.model.Song) =
+                com.prism.music.data.canvas.canvasCoverWanted(settings.current, song.id in canvas.hidden.value) && canvas.canvasFor(song) != null
+            override suspend fun prepare(song: com.prism.music.data.model.Song, height: Int, saved: Boolean, allowed: () -> Boolean) =
+                canvasClips.prepare(song, height, saved, allowed)
+            override suspend fun videoOf(songId: String) = canvasClips.row(songId)?.videoId
+            override fun unsave(videoId: String) = clipFiles.unsave(videoId)
+        })
+    }
     fun songCacheBytes(): Long = runCatching { playerCache.cacheSpace }.getOrDefault(0)
 
     fun clearSongCache() {

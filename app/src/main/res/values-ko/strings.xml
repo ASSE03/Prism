@@ -3181,6 +3181,7 @@
     <string name="mono_type_neon_light_sharp_corners">고정폭 글꼴, 네온 빛, 각진 모서리</string>
     <string name="rounded_type_extra_round_corners_pastels">둥근 글꼴, 아주 둥근 모서리, 파스텔</string>
     <string name="studio">스튜디오</string>
+    <string name="black_and_white_nothing_extra">흑백, 단순한 플레이어, 음악의 색 외에는 색이 없음</string>
     <string name="white_light_no_accent_compact_classic">흰색 빛, 강조 색상 없음, 촘촘하게, 클래식 컨트롤</string>
     <string name="a_record_on_the_player_warm">플레이어 위의 레코드, 따뜻한 호박색, 세리프 제목</string>
     <string name="prism_1_6_s_look_its">Prism 1.6의 모양: 그때의 아이콘, 굵은 글자, 단순한 컨트롤, 유리 효과 없음</string>
@@ -5310,4 +5311,37 @@
     <string name="gb_lyrics_cover_plays">작은 커버를 탭해 재생 또는 일시중지</string>
     <string name="gb_lyrics_cover_plays_info">가사가 열려 있을 때 작은 커버를 탭하면 재생하거나 일시중지하고, 길게 누르면 가사가 닫힙니다. 꺼짐: 탭하면 가사가 닫힙니다.</string>
     <string name="gb_lyrics_cover_plays_keywords">가사 작은 커버 썸네일 아트워크 탭 재생 일시중지 길게 누르기 닫기 lyrics cover</string>
+    <!-- 1.8.6 Canvas -->
+    <string name="canvas">Canvas</string>
+    <string name="canvas_where">표시 위치</string>
+    <string name="canvas_use_videos">뮤직비디오 사용</string>
+    <string name="canvas_use_videos_info">움직이는 커버가 없는 곡은 YouTube에 있는 곡의 뮤직비디오에서 소리 없는 짧은 루프를 잘라 써요. Wi-Fi에서 한 번만 가져오고, 이후에는 휴대전화에서 재생해요. 전체 화면에서는 곡당 약 5MB, 커버에서는 약 2MB예요.</string>
+    <string name="canvas_both">둘 다 있는 곡</string>
+    <string name="canvas_both_info">어느 쪽을 먼저 재생할지 정해요. 플레이어의 ⋯ 메뉴에서 곡마다 바꿀 수 있어요.</string>
+    <string name="canvas_keep_controls">컨트롤 계속 표시</string>
+    <string name="canvas_keep_controls_info">전체 화면에서는 몇 초 후 컨트롤이 사라지고, 탭하면 다시 나타나요. 켜면 계속 표시돼요.</string>
+    <string name="canvas_lighter">가벼운 루프</string>
+    <string name="canvas_lighter_info">뮤직비디오 루프를 480p로 가져와요. 곡당 약 1MB이고, 전체 화면에서는 화질이 조금 부드러워져요.</string>
+    <string name="canvas_ask_title">뮤직비디오를 사용할까요?</string>
+    <string name="canvas_ask_text">움직이는 커버가 없는 곡은 뮤직비디오의 짧은 루프를 보여줄 수 있어요. 루프는 Wi-Fi에서 한 번만 가져오며, 전체 화면에서는 곡당 약 5MB예요.</string>
+    <string name="canvas_from_videos">영상 기반 Canvas</string>
+    <string name="canvas_from_videos_info">끄면 뮤직비디오 루프는 Wi-Fi에서만 가져와요. 이미 휴대전화에 있는 루프는 어느 쪽이든 재생돼요.</string>
+    <string name="canvas_keywords">움직이는 커버 모션 아트워크 움직이는 그림 루프 전체 화면 배경</string>
+    <string name="canvas_use_videos_keywords">뮤직비디오 루프 클립 움직이는 그림</string>
+    <string name="canvas_both_keywords">움직이는 커버 뮤직비디오 먼저 순서</string>
+    <string name="canvas_keep_controls_keywords">컨트롤 사라짐 숨기기 전체 화면 탭</string>
+    <string name="canvas_lighter_keywords">화질 480p 720p 1080p 데이터 용량 작게</string>
+    <string name="canvas_pick_part">다른 구간 선택</string>
+    <string name="canvas_pick_video">다른 영상 선택</string>
+    <string name="canvas_video_no_loop">이 영상으로는 루프를 만들 수 없어요</string>
+    <string name="canvas_no_videos">이 곡의 영상을 찾을 수 없어요</string>
+    <string name="canvas_use">사용</string>
+    <string name="canvas_not_this_video">이 영상 아님</string>
+    <string name="tour_186_canvas_title">Canvas</string>
+    <string name="tour_186_canvas_about">음악 뒤에서 소리 없이 반복되는 그림이에요. 곡 자신의 뮤직비디오에서 잘라 낸 몇 초예요. 움직이는 커버는 그대로예요.</string>
+    <string name="tour_186_canvas_point_1">전체 화면: 루프가 플레이어를 가득 채워요. 컨트롤은 사라졌다가 탭하면 다시 나타나요.</string>
+    <string name="tour_186_canvas_two">%1$s, %2$s 각각 따로 스위치가 있어요. 루프는 Wi-Fi에서 한 번만 가져오며, 전체 화면에서는 곡당 약 5MB예요.</string>
+    <string name="tour_186_canvas_point_3">플레이어의 ⋯ 메뉴: %1$s 또는 %2$s.</string>
+    <string name="tour_186_canvas_point_4">동작 줄이기를 켜거나, 절전 모드이거나, 휴대전화가 뜨거울 때는 쉬어요.</string>
+    <string name="tour_186_also_hours">Replay: %1$s이(가) 막대마다 시간을 보여줘요.</string>
 </resources>

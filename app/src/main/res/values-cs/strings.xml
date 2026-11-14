@@ -3181,6 +3181,7 @@
     <string name="mono_type_neon_light_sharp_corners">Neproporcionální písmo, neonové světlo, ostré rohy</string>
     <string name="rounded_type_extra_round_corners_pastels">Zaoblené písmo, extra zaoblené rohy, pastely</string>
     <string name="studio">Studio</string>
+    <string name="black_and_white_nothing_extra">Černobílé, jednoduchý přehrávač, žádná barva kromě té z hudby</string>
     <string name="white_light_no_accent_compact_classic">Bílé světlo, bez zvýraznění, kompaktní, klasické ovládání</string>
     <string name="a_record_on_the_player_warm">Deska v přehrávači, teplá jantarová, patkové nadpisy</string>
     <string name="prism_1_6_s_look_its">Vzhled Prismu 1.6: jeho ikony, tučné písmo, jednoduché ovládání, bez skla</string>
@@ -5535,4 +5536,37 @@
     <string name="gb_lyrics_cover_plays">Klepnutím na malý obal přehrát nebo pozastavit</string>
     <string name="gb_lyrics_cover_plays_info">Při otevřených textech klepnutí na malý obal přehraje nebo pozastaví skladbu a dlouhé stisknutí texty zavře. Vypnuto: klepnutí texty zavře.</string>
     <string name="gb_lyrics_cover_plays_keywords">texty malý obal náhled obrázek klepnutí přehrát pozastavit dlouhé stisknutí zavřít lyrics cover</string>
+    <!-- 1.8.6 Canvas -->
+    <string name="canvas">Canvas</string>
+    <string name="canvas_where">Kde se zobrazí</string>
+    <string name="canvas_use_videos">Používat hudební videa</string>
+    <string name="canvas_use_videos_info">Když skladba nemá animovaný obal, vystřihne se krátká tichá smyčka z jejího hudebního videa na YouTube. Stáhne se jednou přes Wi-Fi a pak se přehrává z telefonu: asi 5 MB na skladbu na celou obrazovku, asi 2 MB na obalu.</string>
+    <string name="canvas_both">Když skladba má obojí</string>
+    <string name="canvas_both_info">Co se přehraje jako první. V nabídce ⋯ v přehrávači to jde změnit pro jednu skladbu.</string>
+    <string name="canvas_keep_controls">Nechat ovládání zobrazené</string>
+    <string name="canvas_keep_controls_info">Na celé obrazovce ovládání po pár sekundách zmizí a po klepnutí se vrátí. Když je zapnuto, zůstane vidět.</string>
+    <string name="canvas_lighter">Lehčí smyčky</string>
+    <string name="canvas_lighter_info">Smyčky z hudebních videí v 480p: asi 1 MB na skladbu, na celé obrazovce měkčí obraz.</string>
+    <string name="canvas_ask_title">Používat hudební videa?</string>
+    <string name="canvas_ask_text">Skladby bez animovaného obalu mohou ukázat krátkou smyčku ze svého hudebního videa. Každá smyčka se stáhne jednou přes Wi-Fi: asi 5 MB na skladbu na celou obrazovku.</string>
+    <string name="canvas_from_videos">Canvas z videí</string>
+    <string name="canvas_from_videos_info">Když je vypnuto, smyčky z hudebních videí se stahují jen přes Wi-Fi. Smyčky, které už jsou v telefonu, se přehrají v obou případech.</string>
+    <string name="canvas_keywords">animovaný obal pohyb obrázek pohyblivý smyčka celá obrazovka pozadí</string>
+    <string name="canvas_use_videos_keywords">hudební video smyčka klip pohyblivý obrázek</string>
+    <string name="canvas_both_keywords">animovaný obal hudební video první pořadí</string>
+    <string name="canvas_keep_controls_keywords">ovládání mizí skrýt celá obrazovka klepnutí</string>
+    <string name="canvas_lighter_keywords">kvalita 480p 720p 1080p data velikost menší</string>
+    <string name="canvas_pick_part">Vybrat jinou část</string>
+    <string name="canvas_pick_video">Vybrat jiné video</string>
+    <string name="canvas_video_no_loop">Z tohoto videa nelze vytvořit smyčku</string>
+    <string name="canvas_no_videos">Pro tuto skladbu nebyla nalezena žádná videa</string>
+    <string name="canvas_use">Použít</string>
+    <string name="canvas_not_this_video">Ne toto video</string>
+    <string name="tour_186_canvas_title">Canvas</string>
+    <string name="tour_186_canvas_about">Tichý, opakující se obraz za vaší hudbou: pár sekund vystřižených z hudebního videa samotné skladby. Animované obaly zůstávají, jak byly.</string>
+    <string name="tour_186_canvas_point_1">Celá obrazovka: smyčka vyplní přehrávač. Ovládání zmizí a po klepnutí se vrátí.</string>
+    <string name="tour_186_canvas_two">%1$s a %2$s mají každé svůj vlastní přepínač. Smyčka se stáhne jednou přes Wi-Fi: asi 5 MB na skladbu na celou obrazovku.</string>
+    <string name="tour_186_canvas_point_3">Nabídka ⋯ v přehrávači: %1$s nebo %2$s.</string>
+    <string name="tour_186_canvas_point_4">Odpočívá při Omezit pohyb, v úsporném režimu baterie a když se telefon zahřeje.</string>
+    <string name="tour_186_also_hours">Replay: %1$s ukáže hodiny na každém sloupci.</string>
 </resources>

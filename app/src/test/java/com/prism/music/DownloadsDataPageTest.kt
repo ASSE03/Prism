@@ -327,7 +327,9 @@ class DownloadsDataPageTest : ListeningPageHarness(SettingsPageId.DOWNLOADS_DATA
         )
         container.settings.setDataSaver(true)
         container.settings.setSmartDownloads(true)
-        until("data saver and Smart Downloads on") { it.dataSaver && it.smartDownloads }
+        // 1.8.6: and Canvas using music videos, for its chip.
+        container.settings.setCanvasUseVideos(true)
+        until("data saver, Smart Downloads and Canvas's music videos on") { it.dataSaver && it.smartDownloads && it.behavior.canvas.useVideos }
         assertEquals(MobileUse.entries.map { it.label }, chips(useFor))
 
         // Tick and untick each of the eight: the store is what the chips say, and only that chip's switch moved.
@@ -424,6 +426,20 @@ class DownloadsDataPageTest : ListeningPageHarness(SettingsPageId.DOWNLOADS_DATA
         assertBudgets("animated covers off")
         assertEquals(listOf(gDownloads, gFiles, gSmart, gData), groupTitles())
         assertFalse(MobileUse.ANIMATED_COVERS.label in chips(useFor) || MobileUse.SAVING_COVERS.label in chips(useFor))
+    }
+
+    /** 1.8.6: loops from music videos on mobile data is in Canvas's sheet (Player page), not a chip here. */
+    @Test fun canvasFromVideosIsNotAChipHere() {
+        container.settings.setCanvasUseVideos(true)
+        until("music videos on") { it.behavior.canvas.useVideos }
+        show()
+        assertFalse(t(R.string.canvas_from_videos) in chips(useFor))
+        // Turning it on elsewhere changes nothing here: no chip, and the row is not marked as changed for it.
+        val before = valueOf(useFor)
+        container.settings.setCanvasVideosOnCellular(true)
+        until("on mobile data") { it.behavior.canvas.videosOnCellular }
+        compose.waitForIdle()
+        assertEquals(before, valueOf(useFor))
     }
 
     @Test fun atLargeTextNothingIsCutOff() {

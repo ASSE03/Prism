@@ -399,10 +399,73 @@ data class BehaviorPrefs(
     val faceDownPause: Boolean = false,
     /** #464 (1.8.5): with the lyrics open, a tap on the small cover plays or pauses and a long press closes them; off, a tap closes them. */
     val lyricsCoverPlays: Boolean = false,
+    /** 1.8.6: Canvas's choices beyond Off / On the cover / Full screen ([AppSettings.canvasEnabled], [AppSettings.canvasFillsBackground]). */
+    val canvas: CanvasPrefs = CanvasPrefs(),
 ) {
     companion object {
         /** #404: how far [lyricsOffsetMs] goes either way. */
         val LYRICS_OFFSET_MS = -500..500
+    }
+}
+
+/**
+ * 1.8.6 Canvas (plan-canvas §3.1, §3.6, §3.7, §11a R1): how a song's canvas is chosen and shown. Nested in
+ * [BehaviorPrefs] (`behavior.canvas`); all off by default, and none of it is part of a Look. Whether Canvas is on, and on
+ * the cover or full screen, stays in [AppSettings.canvasEnabled] and [AppSettings.canvasFillsBackground].
+ */
+data class CanvasPrefs(
+    /**
+     * A song's animated cover (Apple/Tidal motion art) plays. On by default, as before; apart from [useVideos], so Canvas
+     * can be the animated covers alone, the loops from videos alone, or both.
+     */
+    val covers: Boolean = true,
+    /** A song without an animated cover may show a short silent loop cut from its music video. */
+    val useVideos: Boolean = false,
+    /** When a song has both: false, the animated cover first (as before); true, the music video's loop first. */
+    val videoFirst: Boolean = false,
+    /** Full screen only: the controls stay up (by default they fade after a few seconds and come back on a tap). */
+    val keepControls: Boolean = false,
+    /** Loops from videos at 480p, in place of 1080p full screen and 720p on the cover. */
+    val lighter: Boolean = false,
+    /** Loops from videos may be fetched over mobile data ("Use mobile data for" → "Canvas from videos"). */
+    val videosOnCellular: Boolean = false,
+)
+
+/**
+ * What a new install comes with on (owner, 2026-11-13), by stored name: written once at the first run
+ * (`SettingsRepository.setOnboarded`), each only where nothing was ever stored, so people updating keep what they have
+ * and the data classes' defaults stay as they are.
+ */
+object NewInstall {
+    /** Canvas full screen, fade on pause and play, "You and this artist", Replay's "Finish the lyric", the album pages' full-width picture. */
+    val on: List<String> = listOf("canvas_fills_background", "pause_fade", "artist_you", "finish_lyric", "album_hero_cover")
+
+    /**
+     * Motion kept apart: the mini player's cover flying into the player and back, and the player's background fading into
+     * the next cover. These may be dropped after a smoothness check on a budget phone.
+     */
+    val motion: List<String> = listOf("cover_flight", "cover_flight_back", "backdrop_fade")
+}
+
+/** The three stored flags behind Settings' two Canvas switches ([CanvasKinds]), as they are stored. */
+data class CanvasStored(val enabled: Boolean, val covers: Boolean, val videos: Boolean)
+
+/**
+ * Settings → Player's two switches (owner, 2026-11-13: "keep these options separate"): "Animated covers" and "Canvas"
+ * (the loops from music videos), over the three flags stored as always: [AppSettings.canvasEnabled] (what the rest of
+ * Prism reads), [CanvasPrefs.covers] and [CanvasPrefs.useVideos]. The rule: enabled == (covers || videos), so nobody's
+ * stored choice changes meaning. Written in one go by `SettingsRepository.setCanvasKinds`.
+ */
+data class CanvasKinds(val covers: Boolean, val videos: Boolean) {
+    val any: Boolean get() = covers || videos
+
+    /** What is stored for this pair, from what is stored now ([was]). Both off: Canvas off, the two flags kept as they are. */
+    fun toStored(was: CanvasStored): CanvasStored = if (any) CanvasStored(true, covers, videos) else was.copy(enabled = false)
+
+    companion object {
+        /** What the two switches show for what is stored: each is on only while Canvas as a whole is on. */
+        fun shown(stored: CanvasStored): CanvasKinds = CanvasKinds(stored.enabled && stored.covers, stored.enabled && stored.videos)
+        fun shown(s: AppSettings): CanvasKinds = shown(CanvasStored(s.canvasEnabled, s.behavior.canvas.covers, s.behavior.canvas.useVideos))
     }
 }
 
@@ -644,7 +707,16 @@ enum class MenuAction(val group: MenuGroup, val fromPlayer: Boolean = false, val
     PREVIOUS(MenuGroup.PLAYING, true), NEXT(MenuGroup.PLAYING, true), DJ(MenuGroup.PLAYING, true), EQUALIZER(MenuGroup.PLAYING, true),
     SLEEP(MenuGroup.PLAYING), SPEED_PITCH(MenuGroup.PLAYING), OUTPUT(MenuGroup.PLAYING), IMMERSIVE(MenuGroup.PLAYING),
     VIDEO_DOWNLOAD(MenuGroup.PLAYING), LISTEN_TOGETHER(MenuGroup.PLAYING), BEST_PART(MenuGroup.PLAYING),
-    ANIMATED_COVER(MenuGroup.PLAYING), SAVE_ANIMATED_COVER(MenuGroup.PLAYING),
+    /** "Animated cover" for this song, on or off (names are stored). */
+    ANIMATED_COVER(MenuGroup.PLAYING),
+    /** 1.8.6: "Canvas" for this song, on or off: its loop from the music video, apart from its animated cover. */
+    CANVAS(MenuGroup.PLAYING),
+    /** 1.8.6 Canvas, for one song: another part of its video's loop, which source it uses, and "Not this video". */
+    CANVAS_PART(MenuGroup.PLAYING),
+    /** Which video the song's loop is cut from, picked by the listener (owner, 2026-11-13: as a song has "Play a different version"). */
+    CANVAS_VIDEO(MenuGroup.PLAYING),
+    CANVAS_USE(MenuGroup.PLAYING), CANVAS_NOT_THIS_VIDEO(MenuGroup.PLAYING),
+    SAVE_ANIMATED_COVER(MenuGroup.PLAYING),
     STATS(MenuGroup.HELP), MARK_STUTTER(MenuGroup.HELP);
 
     companion object {
@@ -1786,6 +1858,8 @@ data class AppSettings(
         reduceMotion = true,
         canvasEnabled = false,
         canvasFillsBackground = false,
+        // 1.8.6: no loops cut from music videos either (Canvas is off above; this keeps a reader of the nested value honest).
+        behavior = behavior.copy(canvas = behavior.canvas.copy(useVideos = false)),
         visualizer = VisualizerStyle.OFF,
         meshSpeed = 0f,
         playerBackground = if (playerBackground == PlayerBackground.BLUR || playerBackground == PlayerBackground.APPEARANCE) PlayerBackground.MESH else playerBackground,
@@ -2222,6 +2296,13 @@ class SettingsRepository(
         val finishLyric = booleanPreferencesKey("finish_lyric")
         val faceDownPause = booleanPreferencesKey("face_down_pause")
         val lyricsCoverPlays = booleanPreferencesKey("lyrics_cover_plays")
+        // 1.8.6 ([CanvasPrefs], in [BehaviorPrefs]).
+        val canvasCovers = booleanPreferencesKey("canvas_covers")
+        val canvasUseVideos = booleanPreferencesKey("canvas_use_videos")
+        val canvasVideoFirst = booleanPreferencesKey("canvas_video_first")
+        val canvasKeepControls = booleanPreferencesKey("canvas_keep_controls")
+        val canvasLighter = booleanPreferencesKey("canvas_lighter")
+        val canvasVideosCellular = booleanPreferencesKey("canvas_videos_cellular")
         val lockScreenPlayerLook = booleanPreferencesKey("lock_screen_player_look")
         val albumHeroCover = booleanPreferencesKey("album_hero_cover")
         // 1.8.0 player editor ([PlayerParts]): the hidden parts are part of a Look, the menu's choices aren't.
@@ -2367,6 +2448,9 @@ class SettingsRepository(
                 "row_swipes", "lyrics_offset_ms", "keep_shuffle", "shuffle_button", "car_lyrics_lines", "locate_playing",
                 // 1.8.5: Replay's notices and game, pausing face down, and the small cover's tap over the lyrics (#464).
                 "recap_notify", "milestone_notify", "finish_lyric", "face_down_pause", "lyrics_cover_plays",
+                // 1.8.6 ([CanvasPrefs]): where a canvas comes from, its controls, its quality and its data: behaviour, not a look.
+                "canvas_use_videos", "canvas_video_first", "canvas_keep_controls", "canvas_lighter", "canvas_videos_cellular",
+                "canvas_covers",
             )
         }
     }
@@ -2709,6 +2793,14 @@ class SettingsRepository(
                 finishLyric = p[K.finishLyric] ?: d.behavior.finishLyric,
                 faceDownPause = p[K.faceDownPause] ?: d.behavior.faceDownPause,
                 lyricsCoverPlays = p[K.lyricsCoverPlays] ?: d.behavior.lyricsCoverPlays,
+                canvas = CanvasPrefs(
+                    covers = p[K.canvasCovers] ?: d.behavior.canvas.covers,
+                    useVideos = p[K.canvasUseVideos] ?: d.behavior.canvas.useVideos,
+                    videoFirst = p[K.canvasVideoFirst] ?: d.behavior.canvas.videoFirst,
+                    keepControls = p[K.canvasKeepControls] ?: d.behavior.canvas.keepControls,
+                    lighter = p[K.canvasLighter] ?: d.behavior.canvas.lighter,
+                    videosOnCellular = p[K.canvasVideosCellular] ?: d.behavior.canvas.videosOnCellular,
+                ),
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -2987,7 +3079,19 @@ class SettingsRepository(
         }
     }
 
-    fun setOnboarded(v: Boolean) = edit { it[K.onboarded] = v }
+    /**
+     * A new install comes with Canvas using music videos (owner, 2026-11-13: without them Canvas shows nothing for most
+     * songs). Someone updating from before 1.8.6 never passes here: they are asked once in the player ([canvasVideosAnswered]).
+     * The same goes for the rest of a new install's own defaults ([NewInstall]).
+     */
+    fun setOnboarded(v: Boolean) = edit {
+        it[K.onboarded] = v
+        if (v && it[K.canvasUseVideos] == null) it[K.canvasUseVideos] = true
+        // The rest of a new install's own defaults (owner, 2026-11-13), each only where nothing was ever stored.
+        if (v) for (name in NewInstall.on + NewInstall.motion) booleanPreferencesKey(name).let { k -> if (it[k] == null) it[k] = true }
+    }
+    /** Whether "Use music videos" was ever decided on this phone (by the first run, the question, or the switch). */
+    val canvasVideosAnswered: Boolean get() = raw[K.canvasUseVideos] != null
 
     /** Once (1.7): Home layouts saved before "Made for you" and "New releases" existed get them, after Quick picks. */
     fun addNewHomeSections() = edit { p ->
@@ -3447,6 +3551,31 @@ class SettingsRepository(
     fun setFinishLyric(v: Boolean) = edit { it[K.finishLyric] = v }
     fun setFaceDownPause(v: Boolean) = edit { it[K.faceDownPause] = v }
     fun setLyricsCoverPlays(v: Boolean) = edit { it[K.lyricsCoverPlays] = v }
+    // 1.8.6 Canvas ([CanvasPrefs]).
+    fun setCanvasCovers(v: Boolean) = edit { it[K.canvasCovers] = v }
+    fun setCanvasUseVideos(v: Boolean) = edit { it[K.canvasUseVideos] = v }
+
+    /**
+     * Settings' "Animated covers" and "Canvas" switches ([CanvasKinds]), in one write: Canvas on while either is on, and
+     * then both flags as asked; both off turns Canvas off and leaves the two flags as stored. [covers] or [videos] null:
+     * that one as it shows now, read in the same write (so two calls in a row, as "Reset this page" makes, never race).
+     */
+    fun setCanvasKinds(covers: Boolean? = null, videos: Boolean? = null) = edit { p ->
+        val d = AppSettings()
+        val was = CanvasStored(p[K.canvasEnabled] ?: d.canvasEnabled, p[K.canvasCovers] ?: d.behavior.canvas.covers, p[K.canvasUseVideos] ?: d.behavior.canvas.useVideos)
+        val now = CanvasKinds.shown(was)
+        val want = CanvasKinds(covers ?: now.covers, videos ?: now.videos)
+        val to = want.toStored(was)
+        p[K.canvasEnabled] = to.enabled
+        if (want.any) {
+            p[K.canvasCovers] = to.covers
+            p[K.canvasUseVideos] = to.videos
+        }
+    }
+    fun setCanvasVideoFirst(v: Boolean) = edit { it[K.canvasVideoFirst] = v }
+    fun setCanvasKeepControls(v: Boolean) = edit { it[K.canvasKeepControls] = v }
+    fun setCanvasLighter(v: Boolean) = edit { it[K.canvasLighter] = v }
+    fun setCanvasVideosOnCellular(v: Boolean) = edit { it[K.canvasVideosCellular] = v }
     fun setShuffleButton(v: ShuffleButton) = edit { it[K.shuffleButton] = v.name }
     fun setCarLyricsLines(v: CarLyricsLines) = edit { it[K.carLyricsLines] = v.name }
     fun setLocatePlaying(v: Boolean) = edit { it[K.locatePlaying] = v }

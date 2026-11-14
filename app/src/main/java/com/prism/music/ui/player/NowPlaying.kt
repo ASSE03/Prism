@@ -28,6 +28,8 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
@@ -81,6 +83,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.BlendMode
@@ -92,7 +95,9 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -128,6 +133,7 @@ import com.prism.music.ui.components.shareTarget
 import com.prism.music.ui.components.tickWhileShown
 import com.prism.music.ui.theme.LocalContainer
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -200,6 +206,16 @@ private fun stripBalanced(parts: List<com.prism.music.data.prefs.DeckPart>, gaps
  * last one's while this one loads, or an animated cover.
  */
 internal fun heroTarget(heroMode: Boolean, picture: Boolean, canvas: Boolean): Boolean = heroMode && (picture || canvas)
+
+/**
+ * The last song's picture stays under the new one only while that one loads (#244). A song whose own picture can't be
+ * had (no address, or it failed) drops it: it stayed for the whole song, another artist's cover on this one (owner,
+ * 2026-11-13: The Beatles' cover on a Memphis May Fire song).
+ */
+internal const val COVER_RETRIES = 3
+internal const val COVER_RETRY_MS = 2_000L
+
+internal fun <T> lastPictureWhile(last: T?, newFailed: Boolean): T? = if (newFailed) null else last
 
 /**
  * #250: the player draws the band behind the navigation buttons itself on Android 15 and later ([sdk] 35+), where a
@@ -525,17 +541,59 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     val metered = remember { context.getSystemService(ConnectivityManager::class.java)?.isActiveNetworkMetered == true }
     val savedCanvases by c.canvas.saved.collectAsState()
     val canvasSaved = savedCanvases.has(song.id, com.prism.music.data.canvas.CanvasRepository.albumKey(song))
-    val songCanvas by produceState<CanvasArtwork?>(c.canvas.cached(song), song.id, song.album?.title, settings.canvasEnabled) {
+    val canvasPrefs = settings.behavior.canvas
+    // The song's two switches in the ⋯ menu: its animated cover off, its loop from the video off. One leaves the other.
+    val coverHidden = song.id in c.canvas.hidden.collectAsState().value
+    val loopHidden = song.id in c.canvas.hiddenLoops.collectAsState().value
+    val coverWanted = com.prism.music.data.canvas.canvasCoverWanted(settings, coverHidden)
+    val songCanvas by produceState<CanvasArtwork?>(
+        if (coverWanted) c.canvas.cached(song) else null, song.id, song.album?.title, settings.canvasEnabled,
+        canvasPrefs.covers, canvasPrefs.useVideos, canvasPrefs.videoFirst, canvasPrefs.lighter, settings.canvasFillsBackground,
+        // The song's own choices from the ⋯ menu (another part, "Use:", "Not this video"): looked at again.
+        c.canvasClips.changes.collectAsState().value,
+        coverHidden, loopHidden,
+    ) {
+        if (!settings.canvasEnabled) { value = null; return@produceState }
+        // 1.8.6: the song's music video is looked up meanwhile (no video is fetched by this), so a song without an
+        // animated cover doesn't wait for that answer first: three seconds less before a new song's loop shows.
+        if (canvasPrefs.useVideos && !loopHidden && com.prism.music.data.canvas.ClipGate.isSong(song)) launch {
+            runCatching {
+                c.canvasClips.findAhead(song, com.prism.music.data.canvas.canvasHeight(settings), allowed = {
+                    com.prism.music.data.canvas.canvasNetworkAllowed(settings, context.getSystemService(ConnectivityManager::class.java)?.isActiveNetworkMetered == true)
+                })
+            }
+        }
         // Saved clips play from the phone, so mobile data doesn't matter for them.
-        if (!settings.canvasEnabled || (metered && (!settings.canvasOnCellular || settings.dataSaver) && !c.canvas.isSaved(song))) { value = null; return@produceState }
-        val known = c.canvas.cached(song)
-        value = known
-        if (known == null) delay(500)
-        value = c.canvas.canvasFor(song)
+        val coverAllowed = !(metered && (!settings.canvasOnCellular || settings.dataSaver)) || c.canvas.isSaved(song)
+        var cover: CanvasArtwork? = null
+        // The animated cover only when it may play ([canvasCoverWanted]: "Animated covers" on, not off for this song).
+        if (coverWanted && coverAllowed) {
+            val known = c.canvas.cached(song)
+            value = known
+            if (known == null) delay(500)
+            cover = c.canvas.canvasFor(song)
+        }
+        value = cover
+        // 1.8.6: a loop from the song's music video, where the song has no animated cover or the listener put the
+        // video first (the setting, or "Use:" for this song). It is only asked for when it is the one that would show:
+        // [canvasWant], the rule the next-song preparation, downloads and diagnostics share.
+        if (canvasPrefs.useVideos) {
+            val choice = c.canvasClips.choice(song.id)
+            val want = com.prism.music.data.canvas.canvasWant(
+                settings, metered, hasCover = cover != null, songChoice = choice,
+                hidden = loopHidden, isSong = com.prism.music.data.canvas.ClipGate.isSong(song),
+            )
+            if (want.video) {
+                val loop = c.canvasClips.artworkFor(song, want.height, saved = c.canvas.isSaved(song), allowed = {
+                    val onData = context.getSystemService(ConnectivityManager::class.java)?.isActiveNetworkMetered == true
+                    com.prism.music.data.canvas.canvasNetworkAllowed(settings, onData)
+                })
+                if (loop != null) value = loop
+            }
+        }
     }
-    // Animated artwork can be switched off per song from the song options.
-    val canvasHidden by c.canvas.hidden.collectAsState()
-    val canvas = songCanvas.takeIf { !videoMode && song.id !in canvasHidden }
+    // What a song switched off from the ⋯ menu may show is decided above (its cover, its loop, each on its own).
+    val canvas = songCanvas.takeIf { !videoMode }
     var canvasCover by remember(canvas) { mutableFloatStateOf(0f) }
 
     // ---------------------------------------------------------------- Artwork
@@ -544,16 +602,61 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     val artUrl = hiRes(songArt, 1200)
     // Decoded at full size whatever size the cover is first laid out at (#86): opened mid-animation or with lyrics
     // open it starts out small, and the picture decoded for that size was then stretched over the whole cover.
-    val artRequest = remember(artUrl, settings.fullBleedArtwork) { playerCoverRequest(context, artUrl, settings.fullBleedArtwork) }
+    // A cover that failed to load is asked for again a few times (it wasn't: one dropped connection left the song
+    // without its picture until the next song).
+    var artTry by remember(artUrl) { mutableStateOf(0) }
+    var artFailed by remember(artUrl) { mutableStateOf(false) }
+    val artRequest = remember(artUrl, settings.fullBleedArtwork, artTry) { playerCoverRequest(context, artUrl, settings.fullBleedArtwork) }
     var artLoaded by remember(artUrl) { mutableStateOf(false) }
+    LaunchedEffect(artUrl, artFailed, artTry) {
+        if (artFailed && artUrl != null && artTry < COVER_RETRIES) { delay(COVER_RETRY_MS); artFailed = false; artTry++ }
+    }
     // Vinyl: the cover is a record (its own shape, no edge-to-edge banner).
     val vinyl = layout == com.prism.music.data.prefs.PlayerLayout.VINYL && !videoMode
     // Cassette (1.7.4): the cover on a tape, its reels turning.
     val cassette = layout == com.prism.music.data.prefs.PlayerLayout.CASSETTE && !videoMode
     val heroMode = settings.fullBleedArtwork && !videoMode && !wide && !vinyl && !cassette
-    // The animated cover plays behind the whole player instead of in the cover (not with full-bleed artwork, which
-    // already shows it edge to edge).
-    val canvasBehind = settings.canvasFillsBackground && !heroMode && !videoMode && !wide
+    // Canvas, Full screen: the loop plays behind the whole player instead of in the cover, over the edge-to-edge
+    // banner too (which stays as the cover until the loop is up).
+    val canvasBehind = canvasFullScreen(settings.canvasFillsBackground, videoMode, wide, loop = canvas?.clip != null)
+    // 1.8.6 Canvas, Full screen: after a few seconds without a touch the controls fade away, leaving the title, the
+    // artist and a thin progress line over the picture; a tap brings them back ([canvasControlsMayFade] says when not).
+    val screenReader by rememberTouchExploration()
+    val canvasFades = canvasControlsMayFade(
+        fullScreen = canvasBehind, hasCanvas = canvas != null, keepControls = canvasPrefs.keepControls, playing = isPlaying,
+        covered = covered, panelOpen = lyricsOpen || queueOpen || statsOpen, dragging = volume.dragging,
+        screenReader = screenReader, reduceMotion = settings.reduceMotion,
+    )
+    // Canvas was on before 1.8.6 and music videos were never decided: asked once, here (either answer is kept).
+    if (canvasAsksOnce(settings.canvasEnabled, remember(settings) { c.settings.canvasVideosAnswered }, playerOpen = !lyricsOpen && !queueOpen && !statsOpen)) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { c.settings.setCanvasUseVideos(false) },
+            title = { Text(tr(R.string.canvas_ask_title)) },
+            text = { Text(tr(R.string.canvas_ask_text)) },
+            confirmButton = { com.prism.music.ui.components.PrismTextButton(onClick = { c.settings.setCanvasUseVideos(true) }) { Text(tr(R.string.canvas_use_videos)) } },
+            dismissButton = { com.prism.music.ui.components.PrismTextButton(onClick = { c.settings.setCanvasUseVideos(false) }) { Text(tr(R.string.not_now)) } },
+        )
+    }
+    // How much of the full-screen canvas is up (0 while it loads, or under a sheet): the album cover goes as it comes.
+    var canvasBehindShown by remember { androidx.compose.runtime.mutableFloatStateOf(0f) }
+    if (!canvasBehind || canvas == null) canvasBehindShown = 0f
+    var canvasQuiet by remember { mutableStateOf(false) }
+    val canvasTouches = remember { kotlinx.coroutines.flow.MutableSharedFlow<Unit>(extraBufferCapacity = 1) }
+    LaunchedEffect(canvasFades) {
+        canvasQuiet = false
+        if (canvasFades) kotlinx.coroutines.flow.merge(kotlinx.coroutines.flow.flowOf(Unit), canvasTouches).collectLatest {
+            canvasQuiet = false
+            delay(CANVAS_CONTROLS_MS)
+            canvasQuiet = true
+        }
+    }
+    val canvasCtlT = animateFloatAsState(if (canvasQuiet) 0f else 1f, tween(if (canvasQuiet) 700 else 200), label = "canvasControls")
+    // How much of the controls shows (read where it's drawn, so the fade recomposes nothing).
+    val ctl: () -> Float = { canvasCtlT.value }
+    // The controls' height: the kept title rides down into their place while they're away.
+    var deckHeightPx by remember { mutableStateOf(0) }
+    val keptRoomPx = with(LocalDensity.current) { 30.dp.toPx() }
+    val keptDrop: () -> Float = { (1f - ctl()) * (deckHeightPx - keptRoomPx).coerceAtLeast(0f) }
     // Full-bleed video (#120): the video runs edge to edge from the top of the screen and fades into the background,
     // in the full-bleed cover's place; the box it would sit in keeps only its buttons.
     val videoBehind = settings.videoFullBleed && videoMode && !wide
@@ -650,7 +753,10 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         if (showProviders) LyricsProviderSheet(lyricsState) { showProviders = false }
         if (showActions) PlayerOptionsSheet(
             song,
+            // Something shows now; the menu itself adds the song's two switches, each kept after it was switched off
+            // (owner, 2026-11-13: with only a video loop the row went with the loop, and there was no way back).
             hasCanvas = songCanvas != null,
+            shownClip = canvas?.clip,
             statsShown = statsOpen,
             hasNext = hasNext,
             // What the player's hidden parts did (1.8.0): open the lyrics or the queue, the music video, the buttons.
@@ -714,7 +820,15 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 scaleX = 1f - f * 0.06f; scaleY = 1f - f * 0.06f
                 shape = RoundedCornerShape((f * 140).dp); clip = f > 0f
             }
-            .background(PlayerFallbackBackdrop),
+            .background(PlayerFallbackBackdrop)
+            // A touch or a key anywhere keeps the controls up over a full-screen canvas (seen on its way down, taken from nobody).
+            .pointerInput(Unit) {
+                awaitEachGesture {
+                    awaitFirstDown(requireUnconsumed = false, pass = androidx.compose.ui.input.pointer.PointerEventPass.Initial)
+                    if (!canvasQuiet) canvasTouches.tryEmit(Unit)
+                }
+            }
+            .onPreviewKeyEvent { canvasTouches.tryEmit(Unit); false },
     ) {
         // ------------------------------------------------ Backdrop
         when (settings.playerBackground) {
@@ -775,8 +889,14 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             CanvasPlayer(
                 clip, canvasSaved, isPlaying, Modifier.fillMaxSize(), hold = covered,
                 presentationAlpha = { (1f - 2f * p()).coerceIn(0f, 1f) },
+                onCoverChanged = { canvasBehindShown = it },
             )
-            Box(Modifier.fillMaxSize().background(Brush.verticalGradient(0f to Color.Black.copy(alpha = 0.25f), 0.5f to Color.Black.copy(alpha = 0.45f), 1f to Color.Black.copy(alpha = 0.75f))))
+            // Darkened under the type: lighter while the controls are away, stronger under the lyrics and the queue.
+            val video = clip.clip != null
+            Box(Modifier.fillMaxSize().testTag("canvasScrim").drawBehind {
+                val s = canvasScrim(ctl(), fullBlur, video)
+                drawRect(Brush.verticalGradient(0f to Color.Black.copy(alpha = s[0]), 0.5f to Color.Black.copy(alpha = s[1]), 1f to Color.Black.copy(alpha = s[2])))
+            })
         }
         if (videoBehind && heroHeight > 0.dp && !collapsePastHalf) {
             MusicVideoSurface(
@@ -795,7 +915,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                     .fillMaxWidth()
                     .height(heroHeight)
                     .graphicsLayer {
-                        alpha = heroVisible() * (1f - canvasCover)
+                        alpha = heroVisible() * (1f - canvasCover) * coverOverCanvas(canvasBehind, canvasBehindShown, p())
                         compositingStrategy = CompositingStrategy.Offscreen
                     }
                     .drawWithContent {
@@ -817,11 +937,14 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 }
                 AsyncImage(
                     artRequest, null, contentScale = if (fit) ContentScale.Fit else ContentScale.Crop,
-                    onState = { if (it is AsyncImagePainter.State.Success) { artLoaded = true; heroPicture = artRequest } },
+                    onState = {
+                        if (it is AsyncImagePainter.State.Success) { artLoaded = true; heroPicture = artRequest }
+                        else if (it is AsyncImagePainter.State.Error) { artFailed = true; heroPicture = lastPictureWhile(heroPicture, newFailed = true) }
+                    },
                     modifier = Modifier.matchParentSize(),
                 )
             }
-            canvas?.takeIf { !collapsePastHalf }?.let { clip ->
+            if (!canvasBehind) canvas?.takeIf { !collapsePastHalf }?.let { clip ->
                 CanvasPlayer(
                     clip, canvasSaved, isPlaying,
                     Modifier.fillMaxWidth().height(heroHeight),
@@ -973,7 +1096,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         ) else
         Column(Modifier.fillMaxSize().windowInsetsPadding(statusBarRoom()).navigationBarsPadding().then(skipGesture), horizontalAlignment = Alignment.CenterHorizontally) {
             // ------------------------------------------------ Handle + caption
-            Box(Modifier.fillMaxWidth().height(DISMISS_STRIP).then(dismissGesture).inked()) {
+            Box(Modifier.fillMaxWidth().height(DISMISS_STRIP).then(dismissGesture).graphicsLayer { alpha = ctl() }.inked()) {
                 // Settings → Player → Show on the player → Handle at the top (Reddit, 1.7.9.1): off, the strip still
                 // takes the swipe down.
                 if (settings.playerHandle) Box(
@@ -1083,6 +1206,8 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                 val idle = artScale + (1f - artScale) * p()
                                 scaleX = idle; scaleY = idle
                                 translationX = swipe.value * (1f - p())
+                                // Over a full-screen canvas the cover isn't seen: the picture has its place.
+                                alpha = ctl() * coverOverCanvas(canvasBehind, canvasBehindShown, p())
                             }
                             .smallCoverTaps(
                                 lyricsOpen, queueOpen || statsOpen, settings.behavior.lyricsCoverPlays, isPlaying,
@@ -1180,6 +1305,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                 }
                             }
                             .height(headerHeight)
+                            .graphicsLayer { translationY = keptDrop() }
                             .then(sleeveGesture)
                             // #320: dark over the White background.
                             .inked(),
@@ -1239,6 +1365,8 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                                 }
                             }
                         }
+                        // The title's buttons go with the controls over a full-screen canvas; the title and the artist stay.
+                        Row(Modifier.graphicsLayer { alpha = ctl() }, verticalAlignment = Alignment.CenterVertically) {
                         Spacer(Modifier.width(10.dp))
                         // A Smart Shuffle pick: keep it in the playlist, or turn it down.
                         val smartPicks by c.queue.smartPicks.collectAsState()
@@ -1254,7 +1382,21 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                             Spacer(Modifier.width(8.dp))
                         }
                         if (settings.showsMenuButton() || collapsePastHalf) CircleGlyph(PrismIcons.More, tr(R.string.song_options)) { showActions = true }
+                        }
                     }
+                    // The thin progress line kept under the title while the controls are away.
+                    if (canvasFades) Box(
+                        Modifier.fillMaxWidth().height(2.dp).testTag("canvasProgress")
+                            .offset { IntOffset(0, (titleTop() + headerHeight + 8.dp).roundToPx()) }
+                            .graphicsLayer { translationY = keptDrop(); alpha = 1f - ctl() }
+                            .drawBehind {
+                                val total = pc.duration
+                                val done = if (total > 0) (position.value.toFloat() / total).coerceIn(0f, 1f) else 0f
+                                val r = androidx.compose.ui.geometry.CornerRadius(size.height / 2)
+                                drawRoundRect(Color.White.copy(alpha = 0.28f), cornerRadius = r)
+                                drawRoundRect(Color.White.copy(alpha = 0.92f), size = androidx.compose.ui.geometry.Size(size.width * done, size.height), cornerRadius = r)
+                            },
+                    )
 
                     // ---- Lyrics and queue panels, under the collapsed header
                     if (lyricsOpen && panelsSettled) {
@@ -1326,7 +1468,10 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                         !settings.behavior.gesturesEverywhere || lyricsOpen || queueOpen || statsOpen -> Modifier
                         else -> sleeveGesture.then(doubleTapSeek)
                     }
-                    Column(swipes.then(coverGestures).testTag("playerDeck").inked(), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(
+                        swipes.then(coverGestures).testTag("playerDeck").onSizeChanged { deckHeightPx = it.height }.graphicsLayer { alpha = ctl() }.inked(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
                         // #293: closer together over a full-bleed picture ("More room for the picture").
                         val tightDeck = bleedRoomy && !lyricsOpen && !queueOpen && !statsOpen
                         val deckGap = if (tightDeck) 8.dp else if (roomyCover) 12.dp else 18.dp
@@ -1404,6 +1549,12 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 )
             }
         }
+        // The controls away over a full-screen canvas: a tap anywhere brings them back (and presses nothing under it);
+        // the swipes still skip and close.
+        if (canvasQuiet && !wide) Box(
+            Modifier.fillMaxSize().testTag("canvasWake").then(skipGesture).then(dismissGesture)
+                .pointerInput(Unit) { detectTapGestures(onTap = { canvasTouches.tryEmit(Unit) }) },
+        )
         // #250 on Android 15 and later, where a window's navigation bar color isn't drawn: the band is the player's own.
         if (drawsNavBand(android.os.Build.VERSION.SDK_INT, navBand)) PlayerNavBand(inkLight, Modifier.align(Alignment.BottomCenter))
     }
