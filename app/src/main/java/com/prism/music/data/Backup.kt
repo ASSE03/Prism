@@ -337,7 +337,11 @@ class Backup(private val c: AppContainer) {
                 "lossless_links", "lossless_misses", "lossless_hidden", "lossless_alac",
                 // 1.8.2: songs skipped in lists' downloads (#221), when kept playlists were last read (#298).
                 "download_skips", "kept_playlists",
+                // 1.8.7 (#408): downloads coming down as their music video's sound.
+                com.prism.music.AppContainer.DOWNLOAD_SOUNDS,
             ).forEach { put(it, BackupPart.DOWNLOADS) }
+            // 1.8.7 (#408): which way gets links on each of this phone's networks, by an id only this phone knows.
+            put(com.prism.music.data.stream.WayMemory.PREFS, null)
             // The Last.fm connection (and its waiting scrobbles) is the listener's account.
             put("lastfm", BackupPart.ACCOUNTS)
             // 1.8.1: the Spotify connection's Client ID and switches go with the accounts (a Client ID is public in
