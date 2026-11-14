@@ -3147,6 +3147,8 @@
     <string name="listening_with">Listening with %1$s</string>
     <string name="this_phone_can_t_play_apple">This phone can\'t play Apple Lossless (ALAC) files</string>
     <string name="file_can_t_be_decoded_stream_plays">%1$s file: this phone can\'t decode it, so the stream plays instead</string>
+    <string name="saved_copy_plays_its_format">The copy saved on this phone plays, in the format it was saved in: %1$s</string>
+    <string name="premium_held_back_by_mobile_quality">Premium\'s best is held back by your mobile data quality (%1$s); on Wi-Fi it plays</string>
     <string name="so_its_music_video_s_sound">%1$s %2$s, so its music video\'s sound plays</string>
     <string name="playback_failed">Playback failed</string>
     <string name="sound_output_not_responding">Your headphones or speaker aren\'t responding. Try reconnecting them, or play on the phone</string>

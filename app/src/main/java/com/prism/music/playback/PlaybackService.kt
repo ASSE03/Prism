@@ -682,8 +682,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         applySkipSilence()
         // Already playing: a seamless move on (gapless, or a Mix blend); nothing to time.
         startedLoading = if (player.isPlaying) null else song.id to SystemClock.elapsedRealtime()
-        retries.remove(song.id)
-        retries.remove("stuck:${song.id}")
+        RetryKeys.onSongChange(retries) // every once-only retry, "file:"/"cache:" too (1.8.7)
         // A queued song that's playing now isn't "next in queue" any more.
         if (song.id in c.queue.userQueued.value) c.queue.userQueued.value = c.queue.userQueued.value - song.id
         if (player.isPlaying) playStartedAt = SystemClock.elapsedRealtime()
