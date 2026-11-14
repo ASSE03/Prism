@@ -41,15 +41,26 @@ class CanvasLoopLiveTest {
     /**
      * The long run for heat and battery (`canvas-heat.ps1` reads the phone meanwhile): one song on repeat for
      * `minutes=<n>`, the player open, with `cond=loop` (Full screen, its music video's loop) or `cond=still` (Canvas off).
+     * 1.8.7: `cond=frame` is the loop in the cover's frame; `loop-paused`, `frame-paused` and `still-paused` pause the
+     * song once that is on screen (what a paused player costs); `newinstall=true` leaves a new install's own defaults
+     * (the cover flight, the backdrop fade) as they are, where the tests' setup otherwise switches them off.
      */
     @Test fun aLongRunForHeat() = runBlocking {
         assumeTrue("live test: run with record=true", args.getString("record") == "true")
-        val loop = args.getString("cond") == "loop"
+        val cond = args.getString("cond") ?: "still"
+        val paused = cond.endsWith("-paused")
+        val framed = cond.startsWith("frame")
+        val loop = cond.startsWith("loop") || framed
         val minutes = args.getString("minutes")?.toDoubleOrNull() ?: 20.0
         Fixture.ready()
         val c = Fixture.container
+        if (args.getString("newinstall") == "true") c.settings.editNow {
+            for (name in com.prism.music.data.prefs.NewInstall.on + com.prism.music.data.prefs.NewInstall.motion) {
+                it[androidx.datastore.preferences.core.booleanPreferencesKey(name)] = true
+            }
+        }
         c.settings.setPerformanceMode(false); c.settings.setReduceMotion(false); c.settings.setImmersivePlayer(false); c.settings.setFullBleedArtwork(false)
-        c.settings.setCanvasEnabled(loop); c.settings.setCanvasFillsBackground(loop); c.settings.setCanvasUseVideos(loop)
+        c.settings.setCanvasEnabled(loop); c.settings.setCanvasFillsBackground(loop && !framed); c.settings.setCanvasUseVideos(loop)
         c.settings.setCanvasVideoFirst(true); c.settings.setCanvasKeepControls(false)
         Fixture.launch()
         val words = (args.getString("song") ?: "Flowers_Miley_Cyrus").replace('_', ' ')
@@ -66,11 +77,16 @@ class CanvasLoopLiveTest {
         repeat(3) { if (c.player.repeatMode.value != androidx.media3.common.Player.REPEAT_MODE_ONE) { withContext(Dispatchers.Main) { c.player.cycleRepeat() }; delay(700) } }
         val until = System.currentTimeMillis() + (minutes * 60_000).toLong()
         if (loop) while (System.currentTimeMillis() < until && CanvasStats.showing?.startsWith("file://") != true) delay(200)
-        android.util.Log.i("CanvasHeat", "start ${if (loop) "loop" else "still"}: \"${song.title}\", repeat ${c.player.repeatMode.value}, showing ${CanvasStats.showing}, row ${c.canvasClips.row(song.id)?.height}p")
+        if (paused) {
+            delay(4_000)
+            if (c.player.isPlaying.value) withContext(Dispatchers.Main) { c.player.togglePlay() }
+            delay(3_000)
+        }
+        android.util.Log.i("CanvasHeat", "start $cond: \"${song.title}\", repeat ${c.player.repeatMode.value}, playing ${c.player.isPlaying.value}, showing ${CanvasStats.showing}, row ${c.canvasClips.row(song.id)?.height}p")
         while (System.currentTimeMillis() < until) delay(1_000)
         android.util.Log.i(
             "CanvasHeat",
-            "end ${if (loop) "loop" else "still"}: rounds ${CanvasStats.rounds - before.first}, covered ${CanvasStats.covered}, errors ${CanvasStats.errors - before.second} " +
+            "end $cond: rounds ${CanvasStats.rounds - before.first}, covered ${CanvasStats.covered}, errors ${CanvasStats.errors - before.second} " +
                 "(${CanvasStats.lastError}), showing ${CanvasStats.showing}, playing ${c.player.isPlaying.value}",
         )
         if (loop) assertEquals("no loop failed in the long run", before.second, CanvasStats.errors)
