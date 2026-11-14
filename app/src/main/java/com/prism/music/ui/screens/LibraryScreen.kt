@@ -785,7 +785,9 @@ fun LibraryScreen(bottomPadding: Dp) {
                             val time = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT)
                             days.forEachIndexed { di, (title, entries) ->
                                 item(key = "ph$di", span = { GridItemSpan(maxLineSpan) }) { HistoryHeading(title) }
-                                items(entries.size, key = { "p$di-${entries[it].at}" }, span = { GridItemSpan(maxLineSpan) }) { i ->
+                                // Plays brought in from elsewhere (an import, by the second) can share a time.
+                                val keys = com.prism.music.ui.components.rowKeys(entries) { "p$di-${it.at}" }
+                                items(entries.size, key = { keys[it] }, span = { GridItemSpan(maxLineSpan) }) { i ->
                                     val e = entries[i]
                                     val at = time.format(java.util.Date(e.at))
                                     // #469: the row's own plays out (a run of the same song is one row), not the song's others.
