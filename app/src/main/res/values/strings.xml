@@ -5474,7 +5474,7 @@
     <string name="tour_186_also_hours">Replay: %1$s shows the hours on each bar.</string>
     <!-- 1.8.7: Backup & about → Diagnostics → "Is playback working?" (the self-test). -->
     <string name="selftest_title">Is playback working?</string>
-    <string name="selftest_info">A few quick checks, one after another, and what to do when one fails. They ask only YouTube and one lyrics service, as playing a song does. Nothing leaves the phone unless you tap Share.</string>
+    <string name="selftest_info">A few quick checks, one after another, and what to do when one fails. They ask only YouTube and one lyrics service, as playing a song does. The result stays on the phone unless you tap Share.</string>
     <string name="selftest_keywords">self test check not playing broken problem error 403 bot sign in battery help</string>
     <string name="selftest_waiting">Waiting</string>
     <string name="selftest_checking">Checking…</string>
