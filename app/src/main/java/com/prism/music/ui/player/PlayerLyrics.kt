@@ -1172,7 +1172,13 @@ fun LyricsPanel(
     if (lines.isEmpty()) {
         Box(modifier.pointerInput(Unit) { detectTapGestures { onRevealControls() } }, contentAlignment = Alignment.Center) {
             if (state.loading) CircularProgressIndicator(color = Color.White, strokeWidth = 3.dp)
-            else Text(tr(R.string.no_lyrics_for_this_track), style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.6f))
+            else androidx.compose.foundation.layout.Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(tr(R.string.no_lyrics_for_this_track), style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.6f))
+                // 1.8.7 (6.2): every source asked again, past what was noted as "not found".
+                if (state.unavailable) androidx.compose.material3.TextButton(onClick = { state.redownload() }) {
+                    Text(tr(R.string.try_again), color = Color.White.copy(alpha = 0.8f))
+                }
+            }
         }
         return
     }
