@@ -90,7 +90,8 @@ class MixEngine(
         var postponed = 0
     }
 
-    private enum class Phase { IDLE, PREPARED, SYNCING, BLENDING, SETTLING }
+    /** [SKIP_FADE]: skipped mid-blend, the ending song fades out (and the song skipped to up) over [SKIP_FADE_MS]. */
+    private enum class Phase { IDLE, PREPARED, SYNCING, BLENDING, SETTLING, SKIP_FADE }
 
     private var phase = Phase.IDLE
     private var plan: Plan? = null
@@ -143,7 +144,7 @@ class MixEngine(
     }
 
     /** A blend is under way (the next song's tempo is the blend's until it settles): the Speed button waits for it. */
-    val blending: Boolean get() = phase == Phase.BLENDING || phase == Phase.SETTLING
+    val blending: Boolean get() = phase == Phase.BLENDING || phase == Phase.SETTLING || phase == Phase.SKIP_FADE
 
     /** Ends a blend under way at once (casting starts: the music goes elsewhere, and no blend may leave it at half volume). */
     fun stopBlend() {
@@ -174,6 +175,14 @@ class MixEngine(
     private var intoSeen: BlendIn? = null
     private var intoFurthest = 0L
 
+    /** Mid-blend: the furthest the next song has played (a seek back from it is the listener's), and the blend's last progress. */
+    private var blendFurthest = 0L
+    private var lastProgress = 0f
+    /** A skip mid-blend ([Phase.SKIP_FADE]): the volumes the fade starts from, and when. */
+    private var fadeMainFrom = 1f
+    private var fadeTailFrom = 0f
+    private var fadeStartedAt = 0L
+
     /** One step; returns how long to wait before the next. */
     private fun tick(): Long {
         val length = mixMs()
@@ -189,6 +198,7 @@ class MixEngine(
             Phase.SYNCING -> syncing()
             Phase.BLENDING -> blending()
             Phase.SETTLING -> settling()
+            Phase.SKIP_FADE -> skipFading()
         }
     }
 
@@ -373,8 +383,9 @@ class MixEngine(
     private fun following(p: Plan): Plan? {
         val at = main.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET } ?: return null
         val next = main.getMediaItemAt(at)
-        if (next.mediaId == p.toId) { p.toIndex = at; return p }
         val from = main.currentMediaItem ?: return null
+        // 1.8.7: still allowed as things are now (video mode switched on for either song since it was planned, say).
+        if (next.mediaId == p.toId) { if (!allowed(from, next)) return null; p.toIndex = at; return p }
         if (next.mediaId.isBlank() || next.mediaId == from.mediaId || !allowed(from, next)) return null
         val nextDur = (next.mediaMetadata.durationMs ?: 0L).takeIf { it > 0 } ?: Long.MAX_VALUE
         val length = minOf(p.lengthMs, nextDur / 3)
@@ -385,12 +396,23 @@ class MixEngine(
         return Plan(p.fromId, next.mediaId, at, p.startMs, inMs, length, 1f, false).also { it.postponed = p.postponed; plan = it }
     }
 
+    /**
+     * 1.8.7: why a blend planned can't go on as things are now, or null. Repeat one switched on since (it moved on to the
+     * next song all the same), or the song stopped (a playback error: the second player played on, muted, meanwhile).
+     */
+    private fun cantGoOn(): String? = when {
+        main.repeatMode == Player.REPEAT_MODE_ONE -> "repeat one"
+        main.playbackState == Player.STATE_IDLE -> "the song stopped (an error)"
+        else -> null
+    }
+
     /** The tail is getting ready; it starts playing along (muted) just before the blend. */
     private fun prepared(): Long {
         val planned = plan ?: return abort("no plan")
         val t = tail ?: return abort("no tail")
         if (main.currentMediaItem?.mediaId != planned.fromId) return abort("song changed")
-        val p = following(planned) ?: return abort("nothing next to blend into")
+        cantGoOn()?.let { return abort(it, again = true) }
+        val p = following(planned) ?: return abort("nothing next to blend into (or no longer blended here)")
         val pos = main.currentPosition
         if (pos > p.startMs + 200 || pos < p.startMs - LEAD_MS - PREPARE_MS - 15_000) return abort("seeked away", again = true)
         watchMain(pos, "while the tail got ready")
@@ -448,11 +470,25 @@ class MixEngine(
         val planned = plan ?: return abort("no plan")
         val t = tail ?: return abort("no tail")
         if (main.currentMediaItem?.mediaId != planned.fromId) return abort("song changed")
-        val p = following(planned) ?: return abort("nothing next to blend into")
+        cantGoOn()?.let { return abort(it, again = true) }
+        if (t.playbackState == Player.STATE_IDLE) return abort("the ending song's second player stopped (an error)")
+        val p = following(planned) ?: return abort("nothing next to blend into (or no longer blended here)")
         t.playWhenReady = main.playWhenReady
         val pos = main.currentPosition
         if (pos > p.startMs + 500 || pos < p.startMs - LEAD_MS - 2000) return abort("seeked away", again = true)
         val now = SystemClock.elapsedRealtime()
+        if (!main.isPlaying) {
+            // 1.8.7: paused (or loading) while the two are lined up. The clock goes on and the positions don't, so what was
+            // read before doesn't hold after: the main player's lead over the clock put it seconds on from where it is
+            // (the hand-over came early), and the two may start again apart. Read again from scratch once it plays.
+            mainLead = Long.MIN_VALUE; tailLead = Long.MIN_VALUE; windowFrom = 0L
+            offset = null
+            clockLead = Long.MIN_VALUE
+            handoverMs = 0L
+            syncActionAt = now
+            mainLost.reset()
+            return 10
+        }
         if (now - syncActionAt > SETTLE_READINGS_MS) watchTail(t, now)
         watchMain(pos, "as the tail played along")
         val drift = tailPosition(t) - pos
@@ -546,6 +582,8 @@ class MixEngine(
         catchUpUntil = 0L
         rushedAt = 0L
         tailStalledAt = 0L
+        blendFurthest = p.inMs
+        lastProgress = 0f
         phase = Phase.BLENDING
         note("blend ${p.fromId} -> ${p.toId} started (tail $d ms off, crossed over in $handoverMs ms, put off ${p.postponed} times; tail stopped $tailStops times in the lead-in, $tailStoppedMs ms)")
         return 20
@@ -553,7 +591,7 @@ class MixEngine(
     private fun blending(): Long {
         val p = plan ?: return abort("no plan")
         val t = tail ?: return abort("no tail")
-        if (main.currentMediaItem?.mediaId != p.toId) return abort("skipped during the blend")
+        if (main.currentMediaItem?.mediaId != p.toId) return skipped(t)
         t.playWhenReady = main.playWhenReady
         // The blend's clock is whichever song is behind: a pause can't rush it, and if the next song takes a moment to
         // start, the ending one isn't faded out into a gap before it's there.
@@ -586,6 +624,27 @@ class MixEngine(
             rushMs = STALL_RUSH_MS
             note("${p.fromId} stalled loading ${(tailPosition(t) - p.startMs)} ms into the blend: bringing ${p.toId} in now")
         }
+        // 1.8.7: the ending song's player stopped (an error): its clock stood still, and with it the blend, the next song
+        // held below full for good. It comes up the rest of the way now (the ending song is already silent).
+        if (rushedAt == 0L && t.playbackState == Player.STATE_IDLE) {
+            rushedAt = now
+            rushFrom = lastProgress
+            rushMs = RUSH_MS
+            note("${p.fromId}'s second player stopped ${(tailPosition(t) - p.startMs)} ms into the blend: bringing ${p.toId} in now")
+        }
+        // 1.8.7: the next song taken back (a seek) during the blend. Its clock went back with it, so it was muted again,
+        // then jumped to full when the ending song ran out. The listener wants the next song: it comes up the rest of the
+        // way from where it was, and the ending song goes.
+        val mainAt = main.currentPosition
+        if (rushedAt == 0L && mainAt < blendFurthest - SEEK_BACK_MS) {
+            rushedAt = now
+            rushFrom = lastProgress
+            rushMs = RUSH_MS
+            // Its bar no longer grows in from where the blend began.
+            state.into.value = null
+            note("${p.toId} taken back to $mainAt ms during the blend (it had played to $blendFurthest ms): bringing it in now")
+        }
+        blendFurthest = maxOf(blendFurthest, mainAt)
         if (rushedAt != 0L) progress = maxOf(progress, (rushFrom + (now - rushedAt).toFloat() / rushMs * (1 - rushFrom)).coerceAtMost(1f))
         val ended = t.playbackState == Player.STATE_ENDED
         if (now - lastSyncLog >= 1000) {
@@ -597,6 +656,7 @@ class MixEngine(
         val (incoming, outgoing) = curve().gains(progress)
         main.volume = incoming
         t.volume = outgoing
+        if (main.isPlaying) lastProgress = progress
         state.blend.value = BlendNow(p.fromId, p.toId, progress)
         if (p.beats && t.isPlaying) alignBeats(p, t, progress)
         if (progress >= 1f || ended) {
@@ -666,6 +726,48 @@ class MixEngine(
         val f = ((SystemClock.elapsedRealtime() - settleStartedAt) / SETTLE_MS.toFloat()).coerceIn(0f, 1f)
         main.playbackParameters = at(settleFrom + (1f - settleFrom) * f)
         if (f >= 1f) { main.playbackParameters = at(1f); finish() }
+        return 100
+    }
+
+    /**
+     * 1.8.7: skipped (or taken to another song) mid-blend. It was a hard cut: the ending song stopped dead wherever its
+     * fade was. Now it fades out over [SKIP_FADE_MS], and the song skipped to comes up from the next song's volume to full
+     * over the same time. (Crossfading on skips itself is a later release.)
+     */
+    private fun skipped(t: ExoPlayer): Long {
+        note("blend stopped: skipped during the blend (the ending song fades out over $SKIP_FADE_MS ms)")
+        state.blend.value = null
+        state.mark.value = null
+        state.into.value = null
+        if (main.playbackParameters.speed != 1f) main.playbackParameters = at(1f)
+        catchUpUntil = 0L
+        plan = null
+        fadeMainFrom = main.volume.coerceIn(0f, 1f)
+        fadeTailFrom = t.volume.coerceIn(0f, 1f)
+        fadeStartedAt = SystemClock.elapsedRealtime()
+        phase = Phase.SKIP_FADE
+        return skipFading()
+    }
+
+    /** [Phase.SKIP_FADE]'s steps: both volumes move a step; at the end the second player goes and the main one is at full. */
+    private fun skipFading(): Long {
+        val t = tail ?: return abort("no tail")
+        val f = ((SystemClock.elapsedRealtime() - fadeStartedAt).toFloat() / SKIP_FADE_MS).coerceIn(0f, 1f)
+        if (f < 1f) {
+            t.volume = fadeTailFrom * (1f - f)
+            main.volume = fadeMainFrom + (1f - fadeMainFrom) * f
+            return 10
+        }
+        t.volume = 0f
+        runCatching { t.release() }
+        tail = null
+        shifter = null
+        main.volume = 1f
+        catchUpUntil = 0L
+        phase = Phase.IDLE
+        plan = null
+        refusal = null
+        onSettled()
         return 100
     }
 
@@ -809,6 +911,10 @@ class MixEngine(
         private const val MIN_POSTPONED_MS = 3000L
         /** The next song starting later than this after the hand-over goes in the log. */
         private const val NEXT_WAIT_WORTH_SAYING_MS = 300L
+        /** A skip mid-blend: how long the ending song takes to fade out (and the song skipped to to come up). */
+        const val SKIP_FADE_MS = 150L
+        /** The next song this far behind the furthest it's played mid-blend has been taken back (readings lag, never lead). */
+        private const val SEEK_BACK_MS = 500L
         /** The ending song stopped to load this long mid-blend: it's let go ([STALL_RUSH_MS]). */
         private const val TAIL_STALL_MS = 500L
         /** How quickly the next song comes up when the ending song is let go. */
