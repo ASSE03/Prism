@@ -43,9 +43,9 @@ class SettingsSearchTest {
         // as the Crossfade row's chips.
         compose.waitUntil(5_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isEmpty() }
         compose.clickWhenFound(settingsChip("Fixed length", row = "Crossfade"))
-        compose.waitUntil(5_000) { Fixture.container.settings.current.let { it.mix && !it.mixAuto } }
+        compose.waitUntil(5_000) { Fixture.container.settings.current.let { it.mix.on && !it.mix.auto } }
         val s = Fixture.container.settings.current
-        assertTrue("Crossfade on with a fixed length (mix=${s.mix}, mixAuto=${s.mixAuto})", s.mix && !s.mixAuto)
+        assertTrue("Crossfade on with a fixed length (mix=${s.mix.on}, mixAuto=${s.mix.auto})", s.mix.on && !s.mix.auto)
     }
 
     /** #209 (1.7.9): a slider described in words also shows its number (Lyrics & Sing → Text since 1.8.4). */

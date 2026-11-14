@@ -226,9 +226,9 @@ class PlayerEditorTest {
         assertFalse(noMenu.showsMenuButton())
         val bare = d.copy(view = ViewLook(parts = PlayerParts(hidden = setOf(PlayerPart.MENU, PlayerPart.TITLE, PlayerPart.ARTIST))))
         assertTrue(bare.showsMenuButton())
-        assertFalse(bare.copy(coverLongPress = PlayerGesture.MENU).showsMenuButton())
+        assertFalse(bare.copy(gestures = bare.gestures.copy(coverLongPress = PlayerGesture.MENU)).showsMenuButton())
         // The wide player's cover has no gestures but seek and skip: there ⋯ stays even with a gesture set to the menu.
-        assertTrue(bare.copy(coverLongPress = PlayerGesture.MENU).showsMenuButton(wide = true))
+        assertTrue(bare.copy(gestures = bare.gestures.copy(coverLongPress = PlayerGesture.MENU)).showsMenuButton(wide = true))
         assertFalse("hidden on its own, the title still opens it", noMenu.showsMenuButton(wide = true))
         // A hidden cover isn't drawn (no animated cover, no turning record) until it shrinks into the header.
         val noCover = d.copy(view = ViewLook(parts = PlayerParts(hidden = setOf(PlayerPart.COVER))))
@@ -295,7 +295,7 @@ class PlayerEditorTest {
         val plain = AppSettings(themeMode = if (dark) ThemeMode.DARK else ThemeMode.LIGHT)
         // The second one with Crossfade on, so its mark and blending covers are there to pick.
         val someHidden = plain.copy(
-            playerHandle = false, showQuality = false, playerShuffleRepeat = true, mix = true,
+            playerHandle = false, showQuality = false, playerShuffleRepeat = true, mix = plain.mix.copy(on = true),
             view = plain.view.copy(parts = PlayerParts(hidden = setOf(PlayerPart.LIKE, PlayerPart.BUTTONS))),
         )
         val menu = PlayerParts(menuHidden = setOf(MenuAction.STATS, MenuAction.NOT_FOR_ME), menuTiles = listOf(MenuAction.RADIO, MenuAction.SING, MenuAction.OUTPUT))

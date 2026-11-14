@@ -128,7 +128,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
         APPEARANCE -> tr(R.string.looks_colors_fonts_the_player_and)
         INTERFACE -> listOf(tr(R.string.nav_bar_x, s.navStyle.label), com.prism.music.trp(R.plurals.n_tabs, s.navTabs.size), tr(R.string.mini_player_x, s.miniPlayerStyle.label)).joinToString(" · ")
         PLAYER -> com.prism.music.ui.screens.settings.playerValue(s, dark)
-        SOUND -> listOfNotNull(if (s.lossless) tr(R.string.lossless) else tr(R.string.audio_quality_x, s.audioQuality.label), if (s.mix) tr(R.string.crossfade) else null, if (s.normalize) tr(R.string.normalized) else null, if (s.spatial) tr(R.string.prism_spatial) else null, if (s.eq.enabled) "EQ ${com.prism.music.playback.EqPresets.label(s.eq.preset)}" else null).joinToString(" · ")
+        SOUND -> listOfNotNull(if (s.lossless) tr(R.string.lossless) else tr(R.string.audio_quality_x, s.audioQuality.label), if (s.mix.on) tr(R.string.crossfade) else null, if (s.normalize) tr(R.string.normalized) else null, if (s.spatial) tr(R.string.prism_spatial) else null, if (s.eq.enabled) "EQ ${com.prism.music.playback.EqPresets.label(s.eq.preset)}" else null).joinToString(" · ")
         LYRICS -> listOfNotNull(tr(R.string.first, s.lyricsSources.first().label), if (s.lyricsTranslate) tr(R.string.translated) else null, tr(R.string.sing)).joinToString(" · ")
         LYRICS_LOOK -> tr(R.string.style_2, s.lyricsStyle.label, s.lyricsPosition.label)
         CONTROLS -> tr(R.string.swipes_and_taps_on_the_player)

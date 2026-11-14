@@ -222,7 +222,7 @@ internal fun PlayerProgressRows() {
         info = tr(R.string.settings_player_right_hand_time_info), changed = ch("show_track_length"),
     ) { prefs.setShowTrackLength(it) }
     // The bar only takes the crossfade's shape while Crossfade is on, so the row only shows then.
-    if (s.mix) SwitchRow(
+    if (s.mix.on) SwitchRow(
         tr(R.string.crossfade_on_the_progress_bar), s.view.crossfadeShape, info = tr(R.string.crossfade_shape_info), changed = ch("crossfade_shape"),
     ) { prefs.setCrossfadeShape(it) }
 }
@@ -335,10 +335,10 @@ private fun CanvasOptions() {
     // Where Canvas's loops show. Animated covers are not placed by it (owner, 2026-11-13: an animated cover "should
     // never have the full screen canvas look"): they play in the cover, as they did before 1.8.6.
     if (kinds.videos) ChoiceRow(
-        tr(R.string.canvas_where), listOf(false, true), s.canvasFillsBackground, ::canvasPlaceWords,
+        tr(R.string.canvas_where), listOf(false, true), s.behavior.canvas.fillsBackground, ::canvasPlaceWords,
         info = tr(R.string.the_moving_artwork_fills_the_whole), changed = ch("canvas_fills_background"),
     ) { prefs.setCanvasFillsBackground(it) }
-    if (kinds.videos && s.canvasFillsBackground) SwitchRow(
+    if (kinds.videos && s.behavior.canvas.fillsBackground) SwitchRow(
         tr(R.string.canvas_keep_controls), c.keepControls, info = tr(R.string.canvas_keep_controls_info), changed = ch("canvas_keep_controls"),
     ) { prefs.setCanvasKeepControls(it) }
 }
@@ -699,7 +699,7 @@ val playerIndex: List<SettingEntry> by lazy {
             ),
             SettingEntry(
                 page, g.cover, tr(R.string.canvas_keep_controls), tr(R.string.canvas_keep_controls_keywords),
-                needs = turnOn(tr(R.string.full_screen)) { CanvasKinds.shown(it).videos && it.canvasFillsBackground },
+                needs = turnOn(tr(R.string.full_screen)) { CanvasKinds.shown(it).videos && it.behavior.canvas.fillsBackground },
             ),
             // On it: one editor for what's on the player (found by each part's name too).
             SettingEntry(

@@ -17,7 +17,7 @@ import org.junit.Test
 class PerformanceModeTest {
     private val heavy = AppSettings(
         frostedGlass = true, liquidGlass = true, frostedPages = true, backdrops = mapOf("HOME" to "CONSTELLATION"),
-        canvasEnabled = true, visualizer = VisualizerStyle.GLOW, meshSpeed = 0.8f, playerBackground = PlayerBackground.BLUR,
+        visualizer = VisualizerStyle.GLOW, meshSpeed = 0.8f, playerBackground = PlayerBackground.BLUR,
         lyricsLook = com.prism.music.data.prefs.LyricsLookPrefs(
             style = LyricsStyle.GLOW, blurAmount = 1.5f, background = LyricsBackground.CANVAS, spacing = 1.4f,
         ),
@@ -32,7 +32,7 @@ class PerformanceModeTest {
     @Test
     fun onDrawsLighter() {
         val e = heavy.copy(performanceMode = true).effective()
-        assertFalse(e.frostedGlass || e.liquidGlass || e.frostedPages || e.canvasEnabled)
+        assertFalse(e.frostedGlass || e.liquidGlass || e.frostedPages || e.behavior.canvas.enabled)
         assertTrue(e.backdrops.isEmpty())
         assertTrue(e.reduceMotion)
         // Your own photo stays (1.8.1, Reddit: "only a black background now"): a still picture is cheap to draw.

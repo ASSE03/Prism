@@ -718,9 +718,9 @@ class DownloadRepository(private val context: Context, private val c: AppContain
      */
     private fun saveCanvas(song: Song): Boolean {
         val s = c.settings.current
-        if (!s.canvasEnabled || !s.canvasWithDownloads || song.isLocal || c.canvas.saved.value.has(song.id, null)) return true
+        if (!s.behavior.canvas.enabled || !s.behavior.canvas.withDownloads || song.isLocal || c.canvas.saved.value.has(song.id, null)) return true
         val metered = context.getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered != false
-        if (metered && !s.canvasWithDownloadsCellular) return false
+        if (metered && !s.behavior.canvas.withDownloadsCellular) return false
         c.canvasStore.saveWithDownload(song)
         // 1.8.6: and its loop from the music video, where one is wanted for it (the player's rule).
         c.canvasAhead.keepWithDownload(song)

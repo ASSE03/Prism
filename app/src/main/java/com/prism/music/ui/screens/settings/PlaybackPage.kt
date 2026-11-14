@@ -71,12 +71,12 @@ fun PlaybackPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = tr
     val keepShuffleChanged = reset.add(tr(R.string.playback_keep_shuffle), s.behavior.keepShuffle, d.behavior.keepShuffle, onOff) { prefs.setKeepShuffle(it) }
     val crossfadeChanged = reset.add(tr(R.string.crossfade), crossfade, SoundChoices.crossfade(d), { it.label }) {
         // Off keeps whether the length was automatic: put that back too.
-        prefs.setMixAuto(d.mixAuto)
-        prefs.setMix(d.mix)
+        prefs.setMixAuto(d.mix.auto)
+        prefs.setMix(d.mix.on)
     }
-    val lengthChanged = reset.add(tr(R.string.length), s.mixSeconds, d.mixSeconds, seconds) { prefs.setMixSeconds(it) }
-    val beatMatchChanged = reset.add(tr(R.string.match_tempo_and_beats_dj_style), s.mixBeatMatch, d.mixBeatMatch, onOff) { prefs.setMixBeatMatch(it) }
-    val keepAlbumsChanged = reset.add(tr(R.string.keep_an_album_s_songs_whole), s.mixKeepAlbums, d.mixKeepAlbums, onOff) { prefs.setMixKeepAlbums(it) }
+    val lengthChanged = reset.add(tr(R.string.length), s.mix.seconds, d.mix.seconds, seconds) { prefs.setMixSeconds(it) }
+    val beatMatchChanged = reset.add(tr(R.string.match_tempo_and_beats_dj_style), s.mix.beatMatch, d.mix.beatMatch, onOff) { prefs.setMixBeatMatch(it) }
+    val keepAlbumsChanged = reset.add(tr(R.string.keep_an_album_s_songs_whole), s.mix.keepAlbums, d.mix.keepAlbums, onOff) { prefs.setMixKeepAlbums(it) }
     val curveChanged = reset.add(tr(R.string.how_they_cross), s.sound.crossfadeCurve, d.sound.crossfadeCurve, { it.label }) { prefs.setCrossfadeCurve(it) }
     // The two are stored together: either one's reset writes the pair as it will be once both are back.
     val speedAfter = d.sound.musicSpeed
@@ -134,14 +134,14 @@ fun PlaybackPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = tr
                 info = tr(R.string.crossfade_choice_info), changed = crossfadeChanged,
             ) { SoundChoices.setCrossfade(prefs, it) }
             // #351: up to 30 s (a song's blend is still at most a third of it: MixEngine.makePlan).
-            if (s.mix && !s.mixAuto) SliderRow(
-                tr(R.string.length), s.mixSeconds.toFloat(), 1f..MAX_CROSSFADE_SECONDS.toFloat(), { seconds(it.roundToInt()) },
+            if (s.mix.on && !s.mix.auto) SliderRow(
+                tr(R.string.length), s.mix.seconds.toFloat(), 1f..MAX_CROSSFADE_SECONDS.toFloat(), { seconds(it.roundToInt()) },
                 steps = MAX_CROSSFADE_SECONDS - 2, changed = lengthChanged,
             ) { prefs.setMixSeconds(it.roundToInt()) }
-            if (s.mix) {
-                SwitchRow(tr(R.string.match_tempo_and_beats_dj_style), s.mixBeatMatch, info = tr(R.string.the_next_song_plays_at_the), changed = beatMatchChanged) { prefs.setMixBeatMatch(it) }
+            if (s.mix.on) {
+                SwitchRow(tr(R.string.match_tempo_and_beats_dj_style), s.mix.beatMatch, info = tr(R.string.the_next_song_plays_at_the), changed = beatMatchChanged) { prefs.setMixBeatMatch(it) }
                 // #247: an album played as an album never blended; this keeps its songs whole anywhere they meet.
-                SwitchRow(tr(R.string.keep_an_album_s_songs_whole), s.mixKeepAlbums, info = tr(R.string.an_album_playing_through_never_blends), changed = keepAlbumsChanged) { prefs.setMixKeepAlbums(it) }
+                SwitchRow(tr(R.string.keep_an_album_s_songs_whole), s.mix.keepAlbums, info = tr(R.string.an_album_playing_through_never_blends), changed = keepAlbumsChanged) { prefs.setMixKeepAlbums(it) }
             }
             // Each card draws the two volumes over the blend (1.7.8, A1), with what the curve does under it.
             PickCardsRow(
@@ -215,9 +215,9 @@ internal class ListeningResets {
 /** The root's line for Playback: the crossfade, and "No repeats" when it's on ("Crossfade 6 s · No repeats this session"). */
 fun playbackValue(s: AppSettings, dark: Boolean): String = listOfNotNull(
     when {
-        !s.mix -> tr(R.string.root_crossfade_off)
-        s.mixAuto -> tr(R.string.crossfade)
-        else -> tr(R.string.root_crossfade_seconds, s.mixSeconds)
+        !s.mix.on -> tr(R.string.root_crossfade_off)
+        s.mix.auto -> tr(R.string.crossfade)
+        else -> tr(R.string.root_crossfade_seconds, s.mix.seconds)
     },
     if (s.behavior.autoplayNoRepeats) tr(R.string.no_repeats_title) else null,
 ).joinToString(" · ")

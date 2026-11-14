@@ -206,6 +206,14 @@ class SettingsRoundTripTest {
 
     companion object {
         /** Model path -> the name the snapshot knows it by (a field renamed when it moved into a group). */
-        val ALIASES: Map<String, String> = emptyMap()
+        val ALIASES: Map<String, String> = mapOf(
+            // 1.8.7: crossfade's group.
+            "mix.on" to "mix", "mix.seconds" to "mixSeconds", "mix.auto" to "mixAuto", "mix.beatMatch" to "mixBeatMatch",
+            "mix.keepAlbums" to "mixKeepAlbums", "mix.tempoOnCellular" to "mixTempoOnCellular",
+            // 1.8.7: Canvas's on / full screen / mobile data / downloads, into `behavior.canvas`.
+            "behavior.canvas.enabled" to "canvasEnabled", "behavior.canvas.fillsBackground" to "canvasFillsBackground",
+            "behavior.canvas.onCellular" to "canvasOnCellular", "behavior.canvas.withDownloads" to "canvasWithDownloads",
+            "behavior.canvas.withDownloadsCellular" to "canvasWithDownloadsCellular",
+        )
     }
 }

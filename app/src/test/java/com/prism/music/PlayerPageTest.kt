@@ -248,8 +248,8 @@ class PlayerPageTest {
         // Canvas (its loops) on and Full screen, with Animated covers: every row of its sheet.
         prefs.setCanvasFillsBackground(true); prefs.setCanvasKinds(covers = true, videos = true)
         until("the conditions are stored") {
-            it.mix && it.behavior.lockScreen && it.immersivePlayer && it.fullBleedArtwork && it.shows(PlayerPart.VOLUME) && it.playerLayout == PlayerLayout.VINYL &&
-                it.canvasFillsBackground && it.behavior.canvas.useVideos
+            it.mix.on && it.behavior.lockScreen && it.immersivePlayer && it.fullBleedArtwork && it.shows(PlayerPart.VOLUME) && it.playerLayout == PlayerLayout.VINYL &&
+                it.behavior.canvas.fillsBackground && it.behavior.canvas.useVideos
         }
         showPage()
         val onPage = HashSet<String>()
@@ -426,7 +426,7 @@ class PlayerPageTest {
 
         // Canvas on: the loops' rows come, and "When a song has both" (both are on).
         tapInSheet("Canvas")
-        until("canvas on") { it.canvasEnabled && it.behavior.canvas.covers && it.behavior.canvas.useVideos }
+        until("canvas on") { it.behavior.canvas.enabled && it.behavior.canvas.covers && it.behavior.canvas.useVideos }
         assertEquals(listOf("Canvas", "Use mobile data", "When a song has both", "Lighter loops", "Where it shows"), sheetRows().keys.toList())
         assertEquals("On the cover", sheetRows().getValue("Where it shows").config[SettingsRowValue])
         // Two choices, no Off: the two switches are what turn things off.
@@ -441,7 +441,7 @@ class PlayerPageTest {
         until("lighter") { it.behavior.canvas.lighter }
         // Full screen brings "Keep controls showing".
         chip("Where it shows", "Full screen")
-        until("full screen") { it.canvasFillsBackground }
+        until("full screen") { it.behavior.canvas.fillsBackground }
         tapInSheet("Keep controls showing")
         until("keep_controls") { it.behavior.canvas.keepControls }
         assertEquals(CanvasPrefsAll, stored.behavior.canvas)
@@ -450,7 +450,7 @@ class PlayerPageTest {
 
         // Animated covers off: Canvas's loops stay, "When a song has both" goes (there is no both).
         tap("Animated covers")
-        until("covers off") { it.canvasEnabled && !it.behavior.canvas.covers && it.behavior.canvas.useVideos }
+        until("covers off") { it.behavior.canvas.enabled && !it.behavior.canvas.covers && it.behavior.canvas.useVideos }
         tap("Canvas")
         sheetOpen()
         assertFalse("When a song has both" in sheetRows())
@@ -458,16 +458,16 @@ class PlayerPageTest {
 
         // Canvas off too, the last one: Canvas as a whole is off, and what the rows hold is kept.
         tapInSheet("Canvas")
-        until("all off") { !it.canvasEnabled }
+        until("all off") { !it.behavior.canvas.enabled }
         assertEquals(listOf("Canvas"), sheetRows().keys.toList())
-        assertTrue(stored.behavior.canvas.useVideos && stored.behavior.canvas.lighter && stored.canvasFillsBackground)
+        assertTrue(stored.behavior.canvas.useVideos && stored.behavior.canvas.lighter && stored.behavior.canvas.fillsBackground)
         closeSheet()
         assertEquals("Off", rows().getValue("Canvas").config[SettingsRowValue])
         assertTrue("it differs from how Prism comes", rows().getValue("Animated covers").config[SettingsRowChanged])
 
         // Animated covers back on alone (Canvas was off before, its flag on): the loops stay off.
         tap("Animated covers")
-        until("covers on alone") { it.canvasEnabled && it.behavior.canvas.covers && !it.behavior.canvas.useVideos }
+        until("covers on alone") { it.behavior.canvas.enabled && it.behavior.canvas.covers && !it.behavior.canvas.useVideos }
         assertEquals("Off", rows().getValue("Canvas").config[SettingsRowValue])
     }
 
@@ -475,13 +475,13 @@ class PlayerPageTest {
 
     @Test fun theCanvasRowSaysWhereItShows() {
         prefs.setCanvasFillsBackground(true); prefs.setCanvasUseVideos(true)
-        until("full screen with videos") { it.canvasFillsBackground && it.behavior.canvas.useVideos }
+        until("full screen with videos") { it.behavior.canvas.fillsBackground && it.behavior.canvas.useVideos }
         showPage()
         // Existing users see no change in what is selected: the old "Fill the player" is Full screen.
         assertEquals("Full screen", rows().getValue("Canvas").config[SettingsRowValue])
         // Switched off as a whole before (the old "Off"): both switches show off, Full screen kept for later.
         prefs.setCanvasEnabled(false)
-        until("off") { !it.canvasEnabled }
+        until("off") { !it.behavior.canvas.enabled }
         compose.waitForIdle()
         assertEquals("Off", rows().getValue("Canvas").config[SettingsRowValue])
         assertEquals(com.prism.music.data.prefs.CanvasKinds(false, false), com.prism.music.data.prefs.CanvasKinds.shown(stored))
@@ -506,18 +506,18 @@ class PlayerPageTest {
         assertTrue(line("Where it shows").needs!!.on(videos))
         assertTrue(line("Where it shows").needs!!.on(videos.copy(behavior = videos.behavior.copy(canvas = videos.behavior.canvas.copy(covers = false)))))
         assertFalse(line("Where it shows").needs!!.on(noCovers))
-        assertFalse(line("Where it shows").needs!!.on(videos.copy(canvasEnabled = false)))
+        assertFalse(line("Where it shows").needs!!.on(videos.copy(behavior = videos.behavior.copy(canvas = videos.behavior.canvas.copy(enabled = false)))))
         // "When a song has both" needs both.
         assertFalse(line("When a song has both").needs!!.on(videos.copy(behavior = videos.behavior.copy(canvas = videos.behavior.canvas.copy(covers = false)))))
         for (t in listOf("When a song has both", "Lighter loops", "Use mobile data")) {
             assertFalse(t, line(t).needs!!.on(d))
             assertTrue(t, line(t).needs!!.on(videos))
-            assertFalse(t, line(t).needs!!.on(videos.copy(canvasEnabled = false)))
+            assertFalse(t, line(t).needs!!.on(videos.copy(behavior = videos.behavior.copy(canvas = videos.behavior.canvas.copy(enabled = false)))))
         }
         assertFalse(line("Keep controls showing").needs!!.on(d))
-        assertFalse("animated covers alone are never full screen", line("Keep controls showing").needs!!.on(d.copy(canvasFillsBackground = true)))
-        assertTrue(line("Keep controls showing").needs!!.on(videos.copy(canvasFillsBackground = true)))
-        assertFalse(line("Keep controls showing").needs!!.on(noCovers.copy(canvasFillsBackground = true)))
+        assertFalse("animated covers alone are never full screen", line("Keep controls showing").needs!!.on(d.copy(behavior = d.behavior.copy(canvas = d.behavior.canvas.copy(fillsBackground = true)))))
+        assertTrue(line("Keep controls showing").needs!!.on(videos.copy(behavior = videos.behavior.copy(canvas = videos.behavior.canvas.copy(fillsBackground = true)))))
+        assertFalse(line("Keep controls showing").needs!!.on(noCovers.copy(behavior = noCovers.behavior.copy(canvas = noCovers.behavior.canvas.copy(fillsBackground = true)))))
         // Cover animation's line is in Modes now, where its row is.
         assertTrue(com.prism.music.ui.screens.SettingsIndex.entries.any { it.page == SettingsPageId.PLAYER && it.group == "Modes" && it.title == "Cover animation" })
     }
@@ -528,7 +528,7 @@ class PlayerPageTest {
         // A look setting, one that isn't part of a Look, one of a merge, and the one another page's list still holds.
         prefs.setScrubberThickness(1.5f); prefs.setDeskMode(true); prefs.setCanvasEnabled(false); prefs.setCoverShape("player", com.prism.music.data.prefs.CoverShape.CIRCLE)
         prefs.setShowTrackLength(true)
-        until("changed") { it.scrubberThickness == 1.5f && it.tv.deskMode && !it.canvasEnabled && it.showTrackLength && it.shapes.player == com.prism.music.data.prefs.CoverShape.CIRCLE }
+        until("changed") { it.scrubberThickness == 1.5f && it.tv.deskMode && !it.behavior.canvas.enabled && it.showTrackLength && it.shapes.player == com.prism.music.data.prefs.CoverShape.CIRCLE }
         showPage()
         compose.onNodeWithTag(SettingsTags.PAGE_MORE).performClick()
         compose.onNodeWithTag(SettingsTags.RESET_ITEM).performClick()

@@ -547,13 +547,13 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     val loopHidden = song.id in c.canvas.hiddenLoops.collectAsState().value
     val coverWanted = com.prism.music.data.canvas.canvasCoverWanted(settings, coverHidden)
     val songCanvas by produceState<CanvasArtwork?>(
-        if (coverWanted) c.canvas.cached(song) else null, song.id, song.album?.title, settings.canvasEnabled,
-        canvasPrefs.covers, canvasPrefs.useVideos, canvasPrefs.videoFirst, canvasPrefs.lighter, settings.canvasFillsBackground,
+        if (coverWanted) c.canvas.cached(song) else null, song.id, song.album?.title, settings.behavior.canvas.enabled,
+        canvasPrefs.covers, canvasPrefs.useVideos, canvasPrefs.videoFirst, canvasPrefs.lighter, settings.behavior.canvas.fillsBackground,
         // The song's own choices from the ⋯ menu (another part, "Use:", "Not this video"): looked at again.
         c.canvasClips.changes.collectAsState().value,
         coverHidden, loopHidden,
     ) {
-        if (!settings.canvasEnabled) { value = null; return@produceState }
+        if (!settings.behavior.canvas.enabled) { value = null; return@produceState }
         // 1.8.6: the song's music video is looked up meanwhile (no video is fetched by this), so a song without an
         // animated cover doesn't wait for that answer first: three seconds less before a new song's loop shows.
         if (canvasPrefs.useVideos && !loopHidden && com.prism.music.data.canvas.ClipGate.isSong(song)) launch {
@@ -564,7 +564,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             }
         }
         // Saved clips play from the phone, so mobile data doesn't matter for them.
-        val coverAllowed = !(metered && (!settings.canvasOnCellular || settings.dataSaver)) || c.canvas.isSaved(song)
+        val coverAllowed = !(metered && (!settings.behavior.canvas.onCellular || settings.dataSaver)) || c.canvas.isSaved(song)
         var cover: CanvasArtwork? = null
         // The animated cover only when it may play ([canvasCoverWanted]: "Animated covers" on, not off for this song).
         if (coverWanted && coverAllowed) {
@@ -618,7 +618,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     val heroMode = settings.fullBleedArtwork && !videoMode && !wide && !vinyl && !cassette
     // Canvas, Full screen: the loop plays behind the whole player instead of in the cover, over the edge-to-edge
     // banner too (which stays as the cover until the loop is up).
-    val canvasBehind = canvasFullScreen(settings.canvasFillsBackground, videoMode, wide, loop = canvas?.clip != null)
+    val canvasBehind = canvasFullScreen(settings.behavior.canvas.fillsBackground, videoMode, wide, loop = canvas?.clip != null)
     // 1.8.6 Canvas, Full screen: after a few seconds without a touch the controls fade away, leaving the title, the
     // artist and a thin progress line over the picture; a tap brings them back ([canvasControlsMayFade] says when not).
     val screenReader by rememberTouchExploration()
@@ -628,7 +628,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         screenReader = screenReader, reduceMotion = settings.reduceMotion,
     )
     // Canvas was on before 1.8.6 and music videos were never decided: asked once, here (either answer is kept).
-    if (canvasAsksOnce(settings.canvasEnabled, remember(settings) { c.settings.canvasVideosAnswered }, playerOpen = !lyricsOpen && !queueOpen && !statsOpen)) {
+    if (canvasAsksOnce(settings.behavior.canvas.enabled, remember(settings) { c.settings.canvasVideosAnswered }, playerOpen = !lyricsOpen && !queueOpen && !statsOpen)) {
         androidx.compose.material3.AlertDialog(
             onDismissRequest = { c.settings.setCanvasUseVideos(false) },
             title = { Text(tr(R.string.canvas_ask_title)) },
@@ -1008,7 +1008,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 onDragEnd = {
                     if (dismiss.value > 220f) slideClosed()
                     else scope.launch {
-                        val up = c.settings.current.coverSwipeUp
+                        val up = c.settings.current.gestures.coverSwipeUp
                         if (total < -90f && up != com.prism.music.data.prefs.PlayerGesture.NONE) { dismiss.snapTo(0f); haptics.gestureEnd(); runGesture(up) }
                         else dismiss.animateTo(0f, spring())
                     }
@@ -1026,9 +1026,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         // Double-tap the cover: by default its left or right half seeks back or ahead (#79, as on YouTube Music); long
         // press: nothing unless one's set. A double tap set to nothing leaves single taps instant.
         val seekStep = settings.doubleTapSeekSeconds
-        val doubleTap = settings.coverDoubleTap.takeUnless { it == com.prism.music.data.prefs.PlayerGesture.SEEK_SIDES && seekStep <= 0 }
+        val doubleTap = settings.gestures.coverDoubleTap.takeUnless { it == com.prism.music.data.prefs.PlayerGesture.SEEK_SIDES && seekStep <= 0 }
             ?: com.prism.music.data.prefs.PlayerGesture.NONE
-        val longPress = settings.coverLongPress
+        val longPress = settings.gestures.coverLongPress
         val tapForDeck = deckOnTap
         fun tapsAndHolds(panelOpen: Boolean, tapShowsDeck: Boolean) = Modifier.pointerInput(panelOpen, seekStep, doubleTap, longPress, tapShowsDeck) {
             if (panelOpen) return@pointerInput
@@ -1058,8 +1058,8 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 onDragEnd = {
                     val now = c.settings.current
                     val g = when {
-                        total <= -threshold -> now.coverSwipeLeft
-                        total >= threshold -> now.coverSwipeRight
+                        total <= -threshold -> now.gestures.coverSwipeLeft
+                        total >= threshold -> now.gestures.coverSwipeRight
                         else -> com.prism.music.data.prefs.PlayerGesture.NONE
                     }
                     if (g != com.prism.music.data.prefs.PlayerGesture.NONE) { haptics.gestureEnd(); runGesture(g) }
@@ -1068,7 +1068,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             ) { _, d ->
                 val now = c.settings.current
                 // #222: toward a swipe set to Nothing the cover stays still, and gives no tick.
-                val off = (if (total + d < 0f) now.coverSwipeLeft else now.coverSwipeRight) == com.prism.music.data.prefs.PlayerGesture.NONE
+                val off = (if (total + d < 0f) now.gestures.coverSwipeLeft else now.gestures.coverSwipeRight) == com.prism.music.data.prefs.PlayerGesture.NONE
                 if (!off && (kotlin.math.abs(total) < threshold) != (kotlin.math.abs(total + d) < threshold)) haptics.threshold()
                 total += d
                 scope.launch { swipe.snapTo(if (off) 0f else total * 0.35f) }

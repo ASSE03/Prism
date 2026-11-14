@@ -107,7 +107,7 @@ internal data class MobileDataStored(
     companion object {
         fun of(s: AppSettings) = MobileDataStored(
             s.behavior.noVideoOnData, s.preloadCellular, s.smartDownloadsCellular, s.lyricsOnMobileData,
-            s.canvasOnCellular, s.canvasWithDownloadsCellular, s.mixTempoOnCellular, s.singOnCellular,
+            s.behavior.canvas.onCellular, s.behavior.canvas.withDownloadsCellular, s.mix.tempoOnCellular, s.singOnCellular,
         )
     }
 }
@@ -144,9 +144,9 @@ internal fun mobileUsesShown(s: AppSettings): List<MobileUse> = MobileUse.entrie
     when (it) {
         MobileUse.VIDEOS -> s.dataSaver
         MobileUse.SMART_DOWNLOADS -> s.smartDownloads
-        MobileUse.ANIMATED_COVERS -> s.canvasEnabled
-        MobileUse.SAVING_COVERS -> s.canvasEnabled && s.canvasWithDownloads
-        MobileUse.MEASURING -> s.normalize || s.mix
+        MobileUse.ANIMATED_COVERS -> s.behavior.canvas.enabled
+        MobileUse.SAVING_COVERS -> s.behavior.canvas.enabled && s.behavior.canvas.withDownloads
+        MobileUse.MEASURING -> s.normalize || s.mix.on
         MobileUse.LOAD_AHEAD, MobileUse.LYRICS, MobileUse.SING -> true
     }
 }
@@ -257,7 +257,7 @@ fun DownloadsDataPage(bottomPadding: Dp, find: String? = null, showBack: Boolean
     val sectionsChanged = reset.add(tr(R.string.dd_sections_in_local_files), s.localSections, d.localSections, ::sectionsText) { prefs.setLocalSections(it) }
     val smartChanged = reset.add(tr(R.string.smart_downloads), s.smartDownloads, d.smartDownloads, onOff, setSmart)
     val spaceChanged = reset.add(tr(R.string.space_to_use), s.offlineGb, d.offlineGb, ::formatGb, setSpace)
-    val canvasSaveChanged = reset.add(tr(R.string.save_with_downloads), s.canvasWithDownloads, d.canvasWithDownloads, onOff, setCanvasSave)
+    val canvasSaveChanged = reset.add(tr(R.string.save_with_downloads), s.behavior.canvas.withDownloads, d.behavior.canvas.withDownloads, onOff, setCanvasSave)
     val preloadChanged = reset.add(tr(R.string.load_ahead), s.preload, d.preload, { it.label }) { prefs.setPreload(it) }
     val saverChanged = reset.add(tr(R.string.data_saver), s.dataSaver, d.dataSaver, onOff) { prefs.setDataSaver(it) }
     val usesChanged = reset.add(tr(R.string.dd_use_mobile_data_for), uses, mobileDataToMerged(MobileDataStored.of(d)), ::usesText) { back ->
@@ -324,9 +324,9 @@ fun DownloadsDataPage(bottomPadding: Dp, find: String? = null, showBack: Boolean
                 cacheBytes = c.songCacheBytes()
             }
         }
-        if (s.canvasEnabled) group(tr(R.string.animated_covers)) {
+        if (s.behavior.canvas.enabled) group(tr(R.string.animated_covers)) {
             SwitchRow(
-                tr(R.string.save_with_downloads), s.canvasWithDownloads,
+                tr(R.string.save_with_downloads), s.behavior.canvas.withDownloads,
                 info = tr(R.string.a_downloaded_song_s_animated_cover), changed = canvasSaveChanged, onChange = setCanvasSave,
             )
             DdCanvasStorage()

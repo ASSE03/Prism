@@ -153,7 +153,7 @@ internal fun canvasBothWords(videoFirst: Boolean): String = if (videoFirst) tr(R
 
 /** The Canvas row's line: Off while its switch is off, else where it shows. */
 internal fun canvasWords(s: AppSettings): String =
-    if (CanvasKinds.shown(s).videos) canvasPlaceWords(s.canvasFillsBackground) else tr(R.string.off)
+    if (CanvasKinds.shown(s).videos) canvasPlaceWords(s.behavior.canvas.fillsBackground) else tr(R.string.off)
 
 /**
  * Hide controls over videos + Video buttons wait for a tap. Stored: (controlsHide, buttonsHide). The plan names three
@@ -270,7 +270,7 @@ internal fun percent(v: Float) = "${(v * 100).roundToInt()}%"
 
 /** The parts of the player hidden now, as the row says them ("Hidden: Volume"). */
 internal fun hiddenPartsWords(s: AppSettings): String {
-    val hidden = PlayerPart.entries.filter { !s.shows(it) && it != PlayerPart.NAV_BAND && (s.mix || it !in PlayerPart.CROSSFADE) }
+    val hidden = PlayerPart.entries.filter { !s.shows(it) && it != PlayerPart.NAV_BAND && (s.mix.on || it !in PlayerPart.CROSSFADE) }
     return if (hidden.isEmpty()) tr(R.string.settings_player_all_shown) else tr(R.string.hidden_s, hidden.joinToString(", ") { it.label })
 }
 
@@ -344,7 +344,7 @@ internal val playerSettings: List<PlayerSetting<*>> by lazy {
         flag(listOf("canvas_videos_cellular"), g.cover, R.string.use_mobile_data, { it.behavior.canvas.videosOnCellular }, canvasSheet) { p, v -> p.setCanvasVideosOnCellular(v) },
         ps(listOf("canvas_video_first"), g.cover, R.string.canvas_both, { it.behavior.canvas.videoFirst }, ::canvasBothWords, canvasSheet) { p, v -> p.setCanvasVideoFirst(v) },
         flag(listOf("canvas_lighter"), g.cover, R.string.canvas_lighter, { it.behavior.canvas.lighter }, canvasSheet) { p, v -> p.setCanvasLighter(v) },
-        ps(listOf("canvas_fills_background"), g.cover, R.string.canvas_where, { it.canvasFillsBackground }, ::canvasPlaceWords, canvasSheet) { p, v -> p.setCanvasFillsBackground(v) },
+        ps(listOf("canvas_fills_background"), g.cover, R.string.canvas_where, { it.behavior.canvas.fillsBackground }, ::canvasPlaceWords, canvasSheet) { p, v -> p.setCanvasFillsBackground(v) },
         flag(listOf("canvas_keep_controls"), g.cover, R.string.canvas_keep_controls, { it.behavior.canvas.keepControls }, canvasSheet) { p, v -> p.setCanvasKeepControls(v) },
         // On it
         ps(

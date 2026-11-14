@@ -19,7 +19,7 @@ class CanvasDiagnosticsTest {
     private val song = Song("s1", "Title", listOf(ArtistRef("Artist")), durationSec = 200)
 
     private fun stored(enabled: Boolean = true, full: Boolean = false, performance: Boolean = false, prefs: CanvasPrefs = CanvasPrefs(useVideos = true)) =
-        AppSettings().let { it.copy(canvasEnabled = enabled, canvasFillsBackground = full, performanceMode = performance, behavior = it.behavior.copy(canvas = prefs)) }
+        AppSettings().let { it.copy(performanceMode = performance, behavior = it.behavior.copy(canvas = prefs.copy(enabled = enabled, fillsBackground = full))) }
 
     private fun now(
         stored: AppSettings = stored(), metered: Boolean = false, videoMode: Boolean = false, song: Song? = this.song,

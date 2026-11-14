@@ -38,7 +38,7 @@ fun canvasWant(
 ): CanvasWant {
     val prefs = settings.behavior.canvas
     val notAsked = when {
-        !settings.canvasEnabled -> NotAsked.CANVAS_OFF
+        !settings.behavior.canvas.enabled -> NotAsked.CANVAS_OFF
         !prefs.useVideos -> NotAsked.VIDEOS_OFF
         hidden -> NotAsked.HIDDEN
         !isSong -> NotAsked.NOT_A_SONG
@@ -56,12 +56,12 @@ fun canvasWant(
  * its video's loop may show ([canvasWant] with `hasCover = false`).
  */
 fun canvasCoverWanted(settings: AppSettings, coverHidden: Boolean): Boolean =
-    settings.canvasEnabled && settings.behavior.canvas.covers && !coverHidden
+    settings.behavior.canvas.enabled && settings.behavior.canvas.covers && !coverHidden
 
 /** Sharp where it fills the screen, lighter on the cover (plan §11a R1); "lighter" is 480 everywhere. */
 fun canvasHeight(settings: AppSettings): Int = when {
     settings.behavior.canvas.lighter -> 480
-    settings.canvasFillsBackground -> 1080
+    settings.behavior.canvas.fillsBackground -> 1080
     else -> 720
 }
 

@@ -51,16 +51,16 @@ object SettingNeeds {
     fun turnOn(name: String, on: (com.prism.music.data.prefs.AppSettings) -> Boolean) = Needs(tr(R.string.turn_on_first, name), on)
     val immersive = turnOn(tr(R.string.immersive_mode)) { it.immersivePlayer }
     // 1.8.6: the setting is called Canvas now.
-    val canvas = turnOn(tr(R.string.canvas)) { it.canvasEnabled }
-    val canvasSave = turnOn(tr(R.string.animated_covers_and_save_with_downloads)) { it.canvasEnabled && it.canvasWithDownloads }
+    val canvas = turnOn(tr(R.string.canvas)) { it.behavior.canvas.enabled }
+    val canvasSave = turnOn(tr(R.string.animated_covers_and_save_with_downloads)) { it.behavior.canvas.enabled && it.behavior.canvas.withDownloads }
     val holdSeek = turnOn(tr(R.string.hold_previous_next_to_seek)) { it.holdSeekSeconds > 0 }
     val songsOnly = turnOn(tr(R.string.songs_not_videos)) { it.radioSongsOnly }
-    val crossfade = turnOn(tr(R.string.crossfade_songs)) { it.mix }
-    val manualLength = Needs(tr(R.string.turn_on_crossfade_songs_and_turn)) { it.mix && !it.mixAuto }
+    val crossfade = turnOn(tr(R.string.crossfade_songs)) { it.mix.on }
+    val manualLength = Needs(tr(R.string.turn_on_crossfade_songs_and_turn)) { it.mix.on && !it.mix.auto }
     val lossless = turnOn(tr(R.string.lossless_playback)) { it.lossless }
     val notLossless = Needs(tr(R.string.lossless_playback_always_plays_the_best)) { !it.lossless }
     val saver = turnOn(tr(R.string.lossless_playback_and_data_saver)) { it.lossless && it.dataSaver }
-    val measuring = turnOn(tr(R.string.normalize_volume_or_crossfade_songs)) { it.normalize || it.mix }
+    val measuring = turnOn(tr(R.string.normalize_volume_or_crossfade_songs)) { it.normalize || it.mix.on }
     val translate = turnOn(tr(R.string.translate_lyrics)) { it.lyricsTranslate }
     val romanize = Needs(tr(R.string.pick_a_romanize_lyrics_option_first)) { it.romanize != com.prism.music.data.prefs.RomanizeMode.OFF }
     val smart = turnOn(tr(R.string.smart_downloads)) { it.smartDownloads }

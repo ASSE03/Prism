@@ -399,7 +399,7 @@ data class BehaviorPrefs(
     val faceDownPause: Boolean = false,
     /** #464 (1.8.5): with the lyrics open, a tap on the small cover plays or pauses and a long press closes them; off, a tap closes them. */
     val lyricsCoverPlays: Boolean = false,
-    /** 1.8.6: Canvas's choices beyond Off / On the cover / Full screen ([AppSettings.canvasEnabled], [AppSettings.canvasFillsBackground]). */
+    /** 1.8.6: Canvas's choices beyond Off / On the cover / Full screen ([CanvasPrefs.enabled], [CanvasPrefs.fillsBackground]). */
     val canvas: CanvasPrefs = CanvasPrefs(),
 ) {
     companion object {
@@ -411,7 +411,7 @@ data class BehaviorPrefs(
 /**
  * 1.8.6 Canvas (plan-canvas §3.1, §3.6, §3.7, §11a R1): how a song's canvas is chosen and shown. Nested in
  * [BehaviorPrefs] (`behavior.canvas`); all off by default, and none of it is part of a Look. Whether Canvas is on, and on
- * the cover or full screen, stays in [AppSettings.canvasEnabled] and [AppSettings.canvasFillsBackground].
+ * the cover or full screen, is [enabled] and [fillsBackground] here.
  */
 data class CanvasPrefs(
     /**
@@ -429,6 +429,48 @@ data class CanvasPrefs(
     val lighter: Boolean = false,
     /** Loops from videos may be fetched over mobile data ("Use mobile data for" → "Canvas from videos"). */
     val videosOnCellular: Boolean = false,
+    /** Animated cover art (motion artwork / video covers) over the sleeve; Canvas's Off / On the cover / Full screen are this and [fillsBackground]. */
+    val enabled: Boolean = true,
+    /** An animated cover fills the whole player behind everything, not only the cover. */
+    val fillsBackground: Boolean = false,
+    val onCellular: Boolean = true,
+    /** Downloaded songs save their animated cover too. */
+    val withDownloads: Boolean = true,
+    /** ...on mobile data as well (off: they're saved once on Wi-Fi). */
+    val withDownloadsCellular: Boolean = false,
+)
+
+/** Gestures on the player's cover and on the mini player (1.8.7: moved out of [AppSettings] into a group of their own). */
+data class GesturePrefs(
+    val coverSwipeLeft: PlayerGesture = PlayerGesture.NEXT,
+    val coverSwipeRight: PlayerGesture = PlayerGesture.PREVIOUS,
+    val coverSwipeUp: PlayerGesture = PlayerGesture.QUEUE,
+    val coverDoubleTap: PlayerGesture = PlayerGesture.SEEK_SIDES,
+    val coverLongPress: PlayerGesture = PlayerGesture.NONE,
+    val miniSwipeLeft: PlayerGesture = PlayerGesture.NEXT,
+    val miniSwipeRight: PlayerGesture = PlayerGesture.PREVIOUS,
+    val miniSwipeDown: PlayerGesture = PlayerGesture.STOP,
+    /** Swiping the mini player up (#149, 1.7.7): it did nothing before, so opening the player changes no habit. */
+    val miniSwipeUp: PlayerGesture = PlayerGesture.OPEN,
+)
+
+/** Crossfade (1.8.7: moved out of [AppSettings] into a group of their own). */
+data class MixPrefs(
+    /** Crossfade: songs fade into each other when one runs into the next (after Spotify's), instead of stopping and starting. */
+    val on: Boolean = false,
+    /** How long a crossfade lasts, in seconds, when it isn't [auto]. */
+    val seconds: Int = 6,
+    /** Crossfade works out the best length for each pair of songs, from how one ends and the next begins. */
+    val auto: Boolean = true,
+    /** DJ-style: lines up the songs' beats and plays the incoming song at the outgoing one's tempo during the crossfade. */
+    val beatMatch: Boolean = false,
+    /**
+     * An album's songs never cross into each other, wherever they sit side by side (#247; an album playing through
+     * already didn't). Off as before: a playlist or shuffle putting two of an album's songs together blends them.
+     */
+    val keepAlbums: Boolean = false,
+    /** Tempo analysis (a 1–4 MB download per song) may use mobile data, not only Wi-Fi. */
+    val tempoOnCellular: Boolean = false,
 )
 
 /**
@@ -452,7 +494,7 @@ data class CanvasStored(val enabled: Boolean, val covers: Boolean, val videos: B
 
 /**
  * Settings → Player's two switches (owner, 2026-11-13: "keep these options separate"): "Animated covers" and "Canvas"
- * (the loops from music videos), over the three flags stored as always: [AppSettings.canvasEnabled] (what the rest of
+ * (the loops from music videos), over the three flags stored as always: [CanvasPrefs.enabled] (what the rest of
  * Prism reads), [CanvasPrefs.covers] and [CanvasPrefs.useVideos]. The rule: enabled == (covers || videos), so nobody's
  * stored choice changes meaning. Written in one go by `SettingsRepository.setCanvasKinds`.
  */
@@ -465,7 +507,7 @@ data class CanvasKinds(val covers: Boolean, val videos: Boolean) {
     companion object {
         /** What the two switches show for what is stored: each is on only while Canvas as a whole is on. */
         fun shown(stored: CanvasStored): CanvasKinds = CanvasKinds(stored.enabled && stored.covers, stored.enabled && stored.videos)
-        fun shown(s: AppSettings): CanvasKinds = shown(CanvasStored(s.canvasEnabled, s.behavior.canvas.covers, s.behavior.canvas.useVideos))
+        fun shown(s: AppSettings): CanvasKinds = shown(CanvasStored(s.behavior.canvas.enabled, s.behavior.canvas.covers, s.behavior.canvas.useVideos))
     }
 }
 
@@ -768,7 +810,7 @@ fun AppSettings.canHide(part: PlayerPart): Boolean = !(part == PlayerPart.VOLUME
 fun AppSettings.showsMenuButton(wide: Boolean = false): Boolean = shows(PlayerPart.MENU) ||
     (!shows(PlayerPart.TITLE) && !shows(PlayerPart.ARTIST) &&
         // The wide player's cover (a tablet, a phone on its side) only seeks and skips: no gesture opens the menu there.
-        (wide || PlayerGesture.MENU !in listOf(coverSwipeLeft, coverSwipeRight, coverSwipeUp, coverDoubleTap, coverLongPress)))
+        (wide || PlayerGesture.MENU !in listOf(gestures.coverSwipeLeft, gestures.coverSwipeRight, gestures.coverSwipeUp, gestures.coverDoubleTap, gestures.coverLongPress)))
 
 /** The player's cover is drawn: shown, or (hidden) once it's shrinking into the header over the lyrics or the queue. */
 fun AppSettings.drawsCover(collapsedPastHalf: Boolean): Boolean = shows(PlayerPart.COVER) || collapsedPastHalf
@@ -806,7 +848,7 @@ fun AppSettings.menuFromPlayer(): List<MenuAction> {
  */
 fun AppSettings.lyricsElsewhere(): Boolean = shows(PlayerPart.LYRIC_LINE) || behavior.panelSwipes ||
     ((shows(PlayerPart.COVER) || behavior.gesturesEverywhere) &&
-        PlayerGesture.LYRICS in listOf(coverSwipeLeft, coverSwipeRight, coverSwipeUp, coverDoubleTap, coverLongPress))
+        PlayerGesture.LYRICS in listOf(gestures.coverSwipeLeft, gestures.coverSwipeRight, gestures.coverSwipeUp, gestures.coverDoubleTap, gestures.coverLongPress))
 
 /**
  * The [MenuAction.fromPlayer] actions the listener may fold under "More" now (#345): "Show lyrics" while the lyrics are
@@ -1452,9 +1494,6 @@ data class AppSettings(
     val preload: Preload = Preload.START,
     /** Songs are loaded ahead ([preload]: a start or whole songs) on mobile data too (else only on Wi-Fi). */
     val preloadCellular: Boolean = false,
-    /** Animated cover art (motion artwork / video covers) over the sleeve. */
-    val canvasEnabled: Boolean = true,
-    val canvasOnCellular: Boolean = true,
     val hideVolumeBar: Boolean = true,
     /** "Playing from …" above the artwork in the player. */
     val showPlayingFrom: Boolean = true,
@@ -1521,10 +1560,6 @@ data class AppSettings(
     val shareYoutubeLinks: Boolean = false,
     // Playback
     val showNerdStats: Boolean = false,
-    /** Downloaded songs save their animated cover too. */
-    val canvasWithDownloads: Boolean = true,
-    /** ...on mobile data as well (off: they're saved once on Wi-Fi). */
-    val canvasWithDownloadsCellular: Boolean = false,
     /** The stream's quality (codec and bitrate, or "Downloaded") under the player's scrubber. */
     val showQuality: Boolean = true,
     /** Videos played as songs get a square cover: the thumbnail's black bars trimmed and its middle cut square (#92). */
@@ -1576,21 +1611,6 @@ data class AppSettings(
     val losslessLocal: Boolean = false,
     val normalize: Boolean = true,
     val skipSilence: Boolean = false,
-    /** Crossfade: songs fade into each other when one runs into the next (after Spotify's), instead of stopping and starting. */
-    val mix: Boolean = false,
-    /** How long a crossfade lasts, in seconds, when it isn't [mixAuto]. */
-    val mixSeconds: Int = 6,
-    /** Crossfade works out the best length for each pair of songs, from how one ends and the next begins. */
-    val mixAuto: Boolean = true,
-    /** DJ-style: lines up the songs' beats and plays the incoming song at the outgoing one's tempo during the crossfade. */
-    val mixBeatMatch: Boolean = false,
-    /**
-     * An album's songs never cross into each other, wherever they sit side by side (#247; an album playing through
-     * already didn't). Off as before: a playlist or shuffle putting two of an album's songs together blends them.
-     */
-    val mixKeepAlbums: Boolean = false,
-    /** Tempo analysis (a 1–4 MB download per song) may use mobile data, not only Wi-Fi. */
-    val mixTempoOnCellular: Boolean = false,
     val videoMaxHeight: Int = 1080,
     /**
      * The country YouTube Music is asked as (ISO code, e.g. "US"); blank follows the phone. Where YouTube Music
@@ -1675,6 +1695,10 @@ data class AppSettings(
     val view: ViewLook = ViewLook(),
     val sound: SoundPrefs = SoundPrefs(),
     val behavior: BehaviorPrefs = BehaviorPrefs(),
+    /** The gestures on the player's cover and on the mini player. */
+    val gestures: GesturePrefs = GesturePrefs(),
+    /** Crossfade. */
+    val mix: MixPrefs = MixPrefs(),
     /** Prism TV and the phone's desk mode (1.8.0). */
     val tv: TvPrefs = TvPrefs(),
     val uiDensity: UiDensity = UiDensity.COMFORTABLE,
@@ -1756,8 +1780,6 @@ data class AppSettings(
     val meshIntensity: Float = 1f,
     /** How soft the blurred cover is (0.5 … 1.5; 1 as before). */
     val playerBlur: Float = 1f,
-    /** An animated cover fills the whole player behind everything, not only the cover. */
-    val canvasFillsBackground: Boolean = false,
     /** The progress bar's thickness (0.6 thin … 2 thick; 1 as the style draws it) and the knob at the playhead. */
     val scrubberThickness: Float = 1f,
     val scrubberThumb: ScrubberThumb = ScrubberThumb.AUTO,
@@ -1776,16 +1798,6 @@ data class AppSettings(
     val visualizer: VisualizerStyle = VisualizerStyle.OFF,
     val visualizerColor: ScrubberColor = ScrubberColor.SPECTRUM,
     // Gestures on the player's cover and on the mini player.
-    val coverSwipeLeft: PlayerGesture = PlayerGesture.NEXT,
-    val coverSwipeRight: PlayerGesture = PlayerGesture.PREVIOUS,
-    val coverSwipeUp: PlayerGesture = PlayerGesture.QUEUE,
-    val coverDoubleTap: PlayerGesture = PlayerGesture.SEEK_SIDES,
-    val coverLongPress: PlayerGesture = PlayerGesture.NONE,
-    val miniSwipeLeft: PlayerGesture = PlayerGesture.NEXT,
-    val miniSwipeRight: PlayerGesture = PlayerGesture.PREVIOUS,
-    val miniSwipeDown: PlayerGesture = PlayerGesture.STOP,
-    /** Swiping the mini player up (#149, 1.7.7): it did nothing before, so opening the player changes no habit. */
-    val miniSwipeUp: PlayerGesture = PlayerGesture.OPEN,
     // Library & Replay
     val libraryView: LibraryView = LibraryView.LIST,
     /** Library tabs shown their own way (1.7.6: "PLAYLISTS", "ALBUMS", "ARTISTS"); the rest as [libraryView]. */
@@ -1856,10 +1868,8 @@ data class AppSettings(
         backdrops = backdrops.filterValues { it.substringBefore('|').let { word -> word == "PHOTO" || word == "COLOR" } },
         backdropMotion = false,
         reduceMotion = true,
-        canvasEnabled = false,
-        canvasFillsBackground = false,
-        // 1.8.6: no loops cut from music videos either (Canvas is off above; this keeps a reader of the nested value honest).
-        behavior = behavior.copy(canvas = behavior.canvas.copy(useVideos = false)),
+        // 1.8.6: no loops cut from music videos either (Canvas is off here; this keeps a reader of the nested value honest).
+        behavior = behavior.copy(canvas = behavior.canvas.copy(enabled = false, fillsBackground = false, useVideos = false)),
         visualizer = VisualizerStyle.OFF,
         meshSpeed = 0f,
         playerBackground = if (playerBackground == PlayerBackground.BLUR || playerBackground == PlayerBackground.APPEARANCE) PlayerBackground.MESH else playerBackground,
@@ -2539,8 +2549,6 @@ class SettingsRepository(
             playerShuffleRepeat = p[K.playerShuffleRepeat] ?: d.playerShuffleRepeat,
             preload = p.enum(K.preload, d.preload),
             preloadCellular = p[K.preloadCellular] ?: d.preloadCellular,
-            canvasEnabled = p[K.canvasEnabled] ?: d.canvasEnabled,
-            canvasOnCellular = p[K.canvasOnCellular] ?: d.canvasOnCellular,
             hideVolumeBar = p[K.hideVolumeBar] ?: d.hideVolumeBar,
             showPlayingFrom = p[K.showPlayingFrom] ?: d.showPlayingFrom,
             spatial = p[K.spatial] ?: d.spatial,
@@ -2591,8 +2599,6 @@ class SettingsRepository(
             bestPartButton = p[K.bestPartButton] ?: d.bestPartButton,
             showVideoSwitch = p[K.showVideoSwitch] ?: d.showVideoSwitch,
             holdSeekSeconds = p[K.holdSeekSeconds] ?: d.holdSeekSeconds,
-            canvasWithDownloads = p[K.canvasWithDownloads] ?: d.canvasWithDownloads,
-            canvasWithDownloadsCellular = p[K.canvasWithDownloadsCellular] ?: d.canvasWithDownloadsCellular,
             audioQuality = p.enum(K.audioQuality, d.audioQuality),
             cellularQuality = p.enum(K.cellularQuality, d.cellularQuality),
             premiumStream = p[K.premiumStream] ?: d.premiumStream,
@@ -2611,12 +2617,6 @@ class SettingsRepository(
             lossless = p[K.lossless] ?: d.lossless,
             losslessLocal = p[K.losslessLocal] ?: d.losslessLocal,
             normalize = p[K.normalize] ?: d.normalize,
-            mix = p[K.mix] ?: d.mix,
-            mixSeconds = (p[K.mixSeconds] ?: d.mixSeconds).coerceIn(1, MAX_CROSSFADE_SECONDS),
-            mixAuto = p[K.mixAuto] ?: d.mixAuto,
-            mixBeatMatch = p[K.mixBeatMatch] ?: d.mixBeatMatch,
-            mixKeepAlbums = p[K.mixKeepAlbums] ?: d.mixKeepAlbums,
-            mixTempoOnCellular = p[K.mixTempoOnCellular] ?: d.mixTempoOnCellular,
             contentCountry = p[K.contentCountry] ?: d.contentCountry,
             skipSilence = p[K.skipSilence] ?: d.skipSilence,
             videoMaxHeight = p[K.videoMaxHeight] ?: d.videoMaxHeight,
@@ -2800,7 +2800,31 @@ class SettingsRepository(
                     keepControls = p[K.canvasKeepControls] ?: d.behavior.canvas.keepControls,
                     lighter = p[K.canvasLighter] ?: d.behavior.canvas.lighter,
                     videosOnCellular = p[K.canvasVideosCellular] ?: d.behavior.canvas.videosOnCellular,
+                    enabled = p[K.canvasEnabled] ?: d.behavior.canvas.enabled,
+                    fillsBackground = p[K.canvasFillsBackground] ?: d.behavior.canvas.fillsBackground,
+                    onCellular = p[K.canvasOnCellular] ?: d.behavior.canvas.onCellular,
+                    withDownloads = p[K.canvasWithDownloads] ?: d.behavior.canvas.withDownloads,
+                    withDownloadsCellular = p[K.canvasWithDownloadsCellular] ?: d.behavior.canvas.withDownloadsCellular,
                 ),
+            ),
+            gestures = GesturePrefs(
+                coverSwipeLeft = p.enum(K.coverSwipeLeft, d.gestures.coverSwipeLeft),
+                coverSwipeRight = p.enum(K.coverSwipeRight, d.gestures.coverSwipeRight),
+                coverSwipeUp = p.enum(K.coverSwipeUp, d.gestures.coverSwipeUp),
+                coverDoubleTap = p.enum(K.coverDoubleTap, d.gestures.coverDoubleTap),
+                coverLongPress = p.enum(K.coverLongPress, d.gestures.coverLongPress),
+                miniSwipeLeft = p.enum(K.miniSwipeLeft, d.gestures.miniSwipeLeft),
+                miniSwipeRight = p.enum(K.miniSwipeRight, d.gestures.miniSwipeRight),
+                miniSwipeDown = p.enum(K.miniSwipeDown, d.gestures.miniSwipeDown),
+                miniSwipeUp = p.enum(K.miniSwipeUp, d.gestures.miniSwipeUp),
+            ),
+            mix = MixPrefs(
+                on = p[K.mix] ?: d.mix.on,
+                seconds = (p[K.mixSeconds] ?: d.mix.seconds).coerceIn(1, MAX_CROSSFADE_SECONDS),
+                auto = p[K.mixAuto] ?: d.mix.auto,
+                beatMatch = p[K.mixBeatMatch] ?: d.mix.beatMatch,
+                keepAlbums = p[K.mixKeepAlbums] ?: d.mix.keepAlbums,
+                tempoOnCellular = p[K.mixTempoOnCellular] ?: d.mix.tempoOnCellular,
             ),
             tv = TvPrefs(
                 ambientMinutes = (p[K.tvAmbientMinutes] ?: d.tv.ambientMinutes).coerceIn(0, 60),
@@ -2854,7 +2878,6 @@ class SettingsRepository(
             meshSpeed = p[K.meshSpeed] ?: d.meshSpeed,
             meshIntensity = p[K.meshIntensity] ?: d.meshIntensity,
             playerBlur = p[K.playerBlur] ?: d.playerBlur,
-            canvasFillsBackground = p[K.canvasFillsBackground] ?: d.canvasFillsBackground,
             scrubberThickness = (p[K.scrubberThickness] ?: d.scrubberThickness).coerceIn(0.6f, 2f),
             scrubberThumb = p.enum(K.scrubberThumb, d.scrubberThumb),
             volumeMatchesProgress = p[K.volumeMatchesProgress] ?: d.volumeMatchesProgress,
@@ -2902,15 +2925,6 @@ class SettingsRepository(
             hideStatusBar = p[K.hideStatusBar] ?: d.hideStatusBar,
             volumeControl = p.enum(K.volumeControl, d.volumeControl),
             appVolume = (p[K.appVolume] ?: d.appVolume).coerceIn(0f, 1f),
-            coverSwipeLeft = p.enum(K.coverSwipeLeft, d.coverSwipeLeft),
-            coverSwipeRight = p.enum(K.coverSwipeRight, d.coverSwipeRight),
-            coverSwipeUp = p.enum(K.coverSwipeUp, d.coverSwipeUp),
-            coverDoubleTap = p.enum(K.coverDoubleTap, d.coverDoubleTap),
-            coverLongPress = p.enum(K.coverLongPress, d.coverLongPress),
-            miniSwipeLeft = p.enum(K.miniSwipeLeft, d.miniSwipeLeft),
-            miniSwipeRight = p.enum(K.miniSwipeRight, d.miniSwipeRight),
-            miniSwipeDown = p.enum(K.miniSwipeDown, d.miniSwipeDown),
-            miniSwipeUp = p.enum(K.miniSwipeUp, d.miniSwipeUp),
             libraryView = p.enum(K.libraryView, d.libraryView),
             libraryViews = p[K.libraryViews]?.let(::parseLibraryViews) ?: d.libraryViews,
             libraryColumns = p.enum(K.libraryColumns, d.libraryColumns),
@@ -3562,7 +3576,7 @@ class SettingsRepository(
      */
     fun setCanvasKinds(covers: Boolean? = null, videos: Boolean? = null) = edit { p ->
         val d = AppSettings()
-        val was = CanvasStored(p[K.canvasEnabled] ?: d.canvasEnabled, p[K.canvasCovers] ?: d.behavior.canvas.covers, p[K.canvasUseVideos] ?: d.behavior.canvas.useVideos)
+        val was = CanvasStored(p[K.canvasEnabled] ?: d.behavior.canvas.enabled, p[K.canvasCovers] ?: d.behavior.canvas.covers, p[K.canvasUseVideos] ?: d.behavior.canvas.useVideos)
         val now = CanvasKinds.shown(was)
         val want = CanvasKinds(covers ?: now.covers, videos ?: now.videos)
         val to = want.toStored(was)

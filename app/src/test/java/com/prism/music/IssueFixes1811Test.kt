@@ -58,10 +58,10 @@ class IssueFixes1811Test {
         assertEquals("only what may fold is under More", listOf(MenuAction.STATS), l.more)
         assertEquals(MenuAction.OPEN_LYRICS, l.groups.single().second.single())
         // A cover gesture that opens them, or a swipe up on the controls, is another way too.
-        assertEquals(setOf(MenuAction.OPEN_LYRICS), noStrip.copy(coverLongPress = PlayerGesture.LYRICS).menuFolds())
+        assertEquals(setOf(MenuAction.OPEN_LYRICS), noStrip.copy(gestures = noStrip.gestures.copy(coverLongPress = PlayerGesture.LYRICS)).menuFolds())
         assertEquals(setOf(MenuAction.OPEN_LYRICS), noStrip.copy(behavior = BehaviorPrefs(panelSwipes = true)).menuFolds())
         // …but not a gesture on a cover that isn't there.
-        val noCover = noStrip.copy(coverLongPress = PlayerGesture.LYRICS, view = ViewLook(parts = PlayerParts(hidden = setOf(PlayerPart.COVER))))
+        val noCover = noStrip.copy(view = ViewLook(parts = PlayerParts(hidden = setOf(PlayerPart.COVER))), gestures = noStrip.gestures.copy(coverLongPress = PlayerGesture.LYRICS))
         assertTrue(noCover.menuFolds().isEmpty())
         // The other actions the player brings never fold.
         assertFalse(MenuAction.OPEN_QUEUE.foldable || MenuAction.PREVIOUS.foldable)
