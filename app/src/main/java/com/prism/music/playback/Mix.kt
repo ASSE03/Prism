@@ -67,6 +67,8 @@ class MixEngine(
     private val curve: () -> com.prism.music.data.prefs.CrossfadeCurve = { com.prism.music.data.prefs.CrossfadeCurve.EQUAL_POWER },
     /** Where the next blend starts and how one under way is going, for the player (A6). */
     private val state: MixState = MixState(),
+    /** #493: why [allowed] said no for these two, for the listener ([MixState.why]); read from the songs themselves by default. */
+    private val whyNot: (from: MediaItem, to: MediaItem) -> MixWhy = ::mixWhyNot,
 ) {
     /** The main player at [speed], in the music's key. */
     private fun at(speed: Float) = PlaybackParameters(speed, pitch())
@@ -129,7 +131,7 @@ class MixEngine(
                 val wait = runCatching { tick() }.getOrElse { e ->
                     Log.w(TAG, "mix step failed", e)
                     note("mix step failed: $e")
-                    abort("error")
+                    abort("error", MixWhy.GLITCH)
                     500L
                 }
                 delay(wait)
@@ -139,7 +141,7 @@ class MixEngine(
 
     fun release() {
         loop?.cancel()
-        abort("released")
+        abort("released", null)
     }
 
     /** A blend is under way (the next song's tempo is the blend's until it settles): the Speed button waits for it. */
@@ -147,7 +149,8 @@ class MixEngine(
 
     /** Ends a blend under way at once (casting starts: the music goes elsewhere, and no blend may leave it at half volume). */
     fun stopBlend() {
-        if (phase != Phase.IDLE) abort("stopped")
+        // (Said even with no blend under way: while the music plays elsewhere, none is made, #493.)
+        abort("stopped", MixWhy.CASTING, always = true)
     }
 
     /** The song a scan from the phone was last asked for (once per song as its end comes up). */
@@ -178,7 +181,7 @@ class MixEngine(
     private fun tick(): Long {
         val length = mixMs()
         if (length == null) {
-            if (phase != Phase.IDLE) abort("Mix turned off")
+            if (phase != Phase.IDLE) abort("Mix turned off", null)
             state.mark.value = null
             state.into.value = null
             return 1000
@@ -233,7 +236,7 @@ class MixEngine(
             val pos = main.currentPosition
             val late = lateStartMs(p.startMs, p.lengthMs, pos, if (p.beats) p.beatMs / p.ratio else 0.0)
             if (late == null) {
-                note("no blend after ${item.mediaId}: too close to the end to get ready (at $pos ms, blend at ${p.startMs} ms)")
+                noBlend(item, MixWhy.TOO_LATE, "too close to the end to get ready (at $pos ms, blend at ${p.startMs} ms)")
                 refuse(item.mediaId)
                 return 1000
             }
@@ -288,9 +291,13 @@ class MixEngine(
         AudioDiagnostics.log("mix", message)
     }
 
-    /** Why a song isn't blended into the next, said once per song (in Share diagnostics), then null. */
-    private fun noBlend(item: MediaItem, why: String): Plan? {
-        note("no blend after ${item.mediaId}: $why")
+    /**
+     * Why a song isn't blended into the next, said once per song (in Share diagnostics, [detail]) and kept for the
+     * listener ([MixState.why], #493: it used to go only to diagnostics), then null.
+     */
+    private fun noBlend(item: MediaItem, why: MixWhy, detail: String): Plan? {
+        note("no blend after ${item.mediaId}: $detail")
+        state.why.value = MixRefusal(why, item.mediaId, nextId())
         return null
     }
 
@@ -327,16 +334,22 @@ class MixEngine(
     }
 
     private fun makePlan(item: MediaItem, dur: Long, length: Long): Plan? {
-        val toIndex = main.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET } ?: return noBlend(item, "nothing next in the queue")
-        if (main.repeatMode == Player.REPEAT_MODE_ONE) return noBlend(item, "repeat one")
+        val toIndex = main.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET } ?: return noBlend(item, MixWhy.NOTHING_NEXT, "nothing next in the queue")
+        if (main.repeatMode == Player.REPEAT_MODE_ONE) return noBlend(item, MixWhy.REPEAT_ONE, "repeat one")
         val next = main.getMediaItemAt(toIndex)
-        if (next.mediaId.isBlank() || next.mediaId == item.mediaId) return noBlend(item, "the same song next")
-        if (!allowed(item, next)) return noBlend(item, "not blended here (an album playing through, a video, live, a podcast, Sing, Listen Together or casting)")
+        if (next.mediaId.isBlank() || next.mediaId == item.mediaId) return noBlend(item, MixWhy.SAME_SONG, "the same song next")
+        if (!allowed(item, next)) {
+            val why = whyNot(item, next)
+            return noBlend(item, why, "not blended here (${why.name}: an album playing through, a video, live, a podcast, Sing, Listen Together or casting)")
+        }
         val a = tempo.cached(item.mediaId)
         val b = tempo.cached(next.mediaId)
         val nextDur = (next.mediaMetadata.durationMs ?: 0L).takeIf { it > 0 } ?: Long.MAX_VALUE
         val len = minOf(chosenLength(item, next, a, b, length), dur / 3, nextDur / 3)
-        if (len < 1000 || dur < 30_000) return noBlend(item, "a song too short to blend (${dur / 1000} s, next ${nextDur.takeIf { it != Long.MAX_VALUE }?.let { it / 1000 } ?: "?"} s)")
+        if (len < 1000 || dur < 30_000) return noBlend(
+            item, if (dur < 30_000) MixWhy.SHORT else MixWhy.NEXT_SHORT,
+            "a song too short to blend (${dur / 1000} s, next ${nextDur.takeIf { it != Long.MAX_VALUE }?.let { it / 1000 } ?: "?"} s)",
+        )
         val end = (a?.lastSoundMs?.takeIf { it in dur / 2..dur } ?: dur)
         var start = end - len
         // Silence before the next song's music is skipped (up to 10 s; a quiet intro is music, and stays).
@@ -359,7 +372,7 @@ class MixEngine(
                 beatMs = beat * r
             }
         }
-        if (start < dur / 2) return noBlend(item, "the blend would start before the song's middle")
+        if (start < dur / 2) return noBlend(item, MixWhy.TOO_LONG, "the blend would start before the song's middle")
         return Plan(item.mediaId, next.mediaId, toIndex, start, inMs, len, ratio, beats, beatMs)
     }
 
@@ -371,35 +384,40 @@ class MixEngine(
      * that came. Null when there's nothing now to blend into.
      */
     private fun following(p: Plan): Plan? {
+        followingWhy = MixWhy.NOTHING_NEXT
         val at = main.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET } ?: return null
         val next = main.getMediaItemAt(at)
         if (next.mediaId == p.toId) { p.toIndex = at; return p }
         val from = main.currentMediaItem ?: return null
-        if (next.mediaId.isBlank() || next.mediaId == from.mediaId || !allowed(from, next)) return null
+        if (next.mediaId.isBlank() || next.mediaId == from.mediaId) { followingWhy = MixWhy.SAME_SONG; return null }
+        if (!allowed(from, next)) { followingWhy = whyNot(from, next); return null }
         val nextDur = (next.mediaMetadata.durationMs ?: 0L).takeIf { it > 0 } ?: Long.MAX_VALUE
         val length = minOf(p.lengthMs, nextDur / 3)
-        if (length < 1000) return null
+        if (length < 1000) { followingWhy = MixWhy.NEXT_SHORT; return null }
         note("the next song changed to ${next.mediaId} (was ${p.toId}): the blend goes into it")
         val inMs = (tempo.cached(next.mediaId)?.firstSoundMs ?: 0L).coerceIn(0, 10_000)
         state.mark.value = BlendMark(p.fromId, p.startMs, length)
         return Plan(p.fromId, next.mediaId, at, p.startMs, inMs, length, 1f, false).also { it.postponed = p.postponed; plan = it }
     }
 
+    /** Why [following] found nothing to blend into, the last time it didn't. */
+    private var followingWhy = MixWhy.NOTHING_NEXT
+
     /** The tail is getting ready; it starts playing along (muted) just before the blend. */
     private fun prepared(): Long {
-        val planned = plan ?: return abort("no plan")
-        val t = tail ?: return abort("no tail")
-        if (main.currentMediaItem?.mediaId != planned.fromId) return abort("song changed")
-        val p = following(planned) ?: return abort("nothing next to blend into")
+        val planned = plan ?: return abort("no plan", MixWhy.GLITCH)
+        val t = tail ?: return abort("no tail", MixWhy.GLITCH)
+        if (main.currentMediaItem?.mediaId != planned.fromId) return abort("song changed", MixWhy.SKIPPED)
+        val p = following(planned) ?: return abort("nothing next to blend into", followingWhy)
         val pos = main.currentPosition
-        if (pos > p.startMs + 200 || pos < p.startMs - LEAD_MS - PREPARE_MS - 15_000) return abort("seeked away", again = true)
+        if (pos > p.startMs + 200 || pos < p.startMs - LEAD_MS - PREPARE_MS - 15_000) return abort("seeked away", null, again = true)
         watchMain(pos, "while the tail got ready")
         if (pos < p.startMs - LEAD_MS) return if (p.startMs - LEAD_MS - pos > 400) 100 else 10
         if (t.playbackState != Player.STATE_READY) {
             // Still loading the ending (slow network): it can wait as long as there's time left to get in step.
             if (pos < p.startMs - MIN_SYNC_MS) return 50
             // Not ready in time: no blend, the song ends on its own.
-            return abort("tail not ready (the song's ending didn't load in time)")
+            return abort("tail not ready (the song's ending didn't load in time)", MixWhy.SLOW)
         }
         // Where the main player is now, if it's well past where the tail waits (a reload costs a moment; [syncing]
         // shifts away whatever difference is left). Still muted.
@@ -445,13 +463,13 @@ class MixEngine(
      * again once the shifted audio has reached the speaker.
      */
     private fun syncing(): Long {
-        val planned = plan ?: return abort("no plan")
-        val t = tail ?: return abort("no tail")
-        if (main.currentMediaItem?.mediaId != planned.fromId) return abort("song changed")
-        val p = following(planned) ?: return abort("nothing next to blend into")
+        val planned = plan ?: return abort("no plan", MixWhy.GLITCH)
+        val t = tail ?: return abort("no tail", MixWhy.GLITCH)
+        if (main.currentMediaItem?.mediaId != planned.fromId) return abort("song changed", MixWhy.SKIPPED)
+        val p = following(planned) ?: return abort("nothing next to blend into", followingWhy)
         t.playWhenReady = main.playWhenReady
         val pos = main.currentPosition
-        if (pos > p.startMs + 500 || pos < p.startMs - LEAD_MS - 2000) return abort("seeked away", again = true)
+        if (pos > p.startMs + 500 || pos < p.startMs - LEAD_MS - 2000) return abort("seeked away", null, again = true)
         val now = SystemClock.elapsedRealtime()
         if (now - syncActionAt > SETTLE_READINGS_MS) watchTail(t, now)
         watchMain(pos, "as the tail played along")
@@ -518,7 +536,7 @@ class MixEngine(
                         LONG_HANDOVER_MS
                     } else {
                         note("tail out of step by ${d ?: "an unknown amount"} ms at the blend")
-                        return abort("out of step")
+                        return abort("out of step", MixWhy.SLOW)
                     }
                 }
                 // (Measured: [outOfStep] says so otherwise.)
@@ -540,6 +558,8 @@ class MixEngine(
         main.playbackParameters = at(p.ratio)
         // The next song's bar grows in over the blend, in its own time (faster or slower by the tempo match).
         state.into.value = BlendIn(p.toId, p.inMs, (p.lengthMs * p.ratio).toLong())
+        // A blend happens: the last time one didn't is no longer the news (#493).
+        state.why.value = null
         blendStartedAt = now
         syncActionAt = now
         windowFrom = 0L
@@ -551,9 +571,9 @@ class MixEngine(
         return 20
     }
     private fun blending(): Long {
-        val p = plan ?: return abort("no plan")
-        val t = tail ?: return abort("no tail")
-        if (main.currentMediaItem?.mediaId != p.toId) return abort("skipped during the blend")
+        val p = plan ?: return abort("no plan", MixWhy.GLITCH)
+        val t = tail ?: return abort("no tail", MixWhy.GLITCH)
+        if (main.currentMediaItem?.mediaId != p.toId) return abort("skipped during the blend", MixWhy.SKIPPED)
         t.playWhenReady = main.playWhenReady
         // The blend's clock is whichever song is behind: a pause can't rush it, and if the next song takes a moment to
         // start, the ending one isn't faded out into a gap before it's there.
@@ -689,11 +709,17 @@ class MixEngine(
 
     /**
      * Stops whatever is under way. [again]: the listener moved in the song (#432), so the blend is planned afresh from
-     * where the song is now, rather than refused after this song.
+     * where the song is now, rather than refused after this song. [reason]: what the listener is told of it ([MixState.why],
+     * #493), null for a stop that's no refusal (Mix turned off, a seek, the app closing); kept only when a blend was under
+     * way, or [always].
      */
-    private fun abort(why: String, again: Boolean = false): Long {
+    private fun abort(why: String, reason: MixWhy?, again: Boolean = false, always: Boolean = false): Long {
         val wasOn = phase != Phase.IDLE
         if (wasOn) note("blend stopped: $why")
+        if (reason != null && (wasOn || always)) {
+            val from = plan?.fromId ?: main.currentMediaItem?.mediaId
+            if (from != null) state.why.value = MixRefusal(reason, from, plan?.toId ?: nextId())
+        }
         state.blend.value = null
         state.mark.value = null
         // Stopped mid-blend, the next song jumps to full volume: its bar no longer grows in.
@@ -916,4 +942,59 @@ class MixState {
     val blend = kotlinx.coroutines.flow.MutableStateFlow<BlendNow?>(null)
     /** The song playing came in from a crossfade: kept while it plays (its bar's start keeps the fade-in's shape). */
     val into = kotlinx.coroutines.flow.MutableStateFlow<BlendIn?>(null)
+    /** #493: the last time two songs weren't blended (or a blend was dropped), and why; null again once a blend happens. */
+    val why = kotlinx.coroutines.flow.MutableStateFlow<MixRefusal?>(null)
+}
+
+/** #493 "DJ is not working": the last blend refused or dropped, [why], after [fromId] with [toId] up next (null: nothing was). */
+data class MixRefusal(val why: MixWhy, val fromId: String, val toId: String?)
+
+/**
+ * Why two songs weren't blended, as a listener would put it (#493): each of [MixEngine]'s refusals is one of these, and
+ * the engine's reasons that mean the same to a listener share one. [text] is its sentence (Crossfade's ⓘ, the DJ chip's).
+ */
+enum class MixWhy(@androidx.annotation.StringRes val text: Int) {
+    NOTHING_NEXT(com.prism.music.R.string.mix_why_nothing_next),
+    REPEAT_ONE(com.prism.music.R.string.mix_why_repeat_one),
+    SAME_SONG(com.prism.music.R.string.mix_why_same_song),
+    VIDEO(com.prism.music.R.string.mix_why_video),
+    LIVE(com.prism.music.R.string.mix_why_live),
+    PODCAST(com.prism.music.R.string.mix_why_podcast),
+    /** An album playing through (or Keep an album's songs whole). */
+    ALBUM(com.prism.music.R.string.mix_why_album),
+    /** Sing, or Listen Together (the engine isn't told which). */
+    SING_OR_TOGETHER(com.prism.music.R.string.mix_why_sing_or_together),
+    CASTING(com.prism.music.R.string.mix_why_casting),
+    /** The ending song is under 30 s. */
+    SHORT(com.prism.music.R.string.mix_why_short),
+    /** The next song is too short for even a second's blend (under 3 s). */
+    NEXT_SHORT(com.prism.music.R.string.mix_why_next_short),
+    /** The blend would start before the song's middle (its music ends early for the length chosen). */
+    TOO_LONG(com.prism.music.R.string.mix_why_too_long),
+    /** Too close to the blend to get ready (a seek, or a scan that moved it). */
+    TOO_LATE(com.prism.music.R.string.mix_why_too_late),
+    /** The ending song's second player didn't load or get in step in time. */
+    SLOW(com.prism.music.R.string.mix_why_slow),
+    /** Another song was picked before or during the blend. */
+    SKIPPED(com.prism.music.R.string.mix_why_skipped),
+    /** Something inside the engine went wrong (no plan, no tail, a step that failed). */
+    GLITCH(com.prism.music.R.string.mix_why_glitch),
+}
+
+/**
+ * Why [MixEngine]'s `allowed` said no for [from] into [to], from what the songs themselves say (PlaybackService's
+ * `mayBlend`, in its order): a video, a live stream, an episode, an album's own next track; otherwise what the songs
+ * can't say, Sing or Listen Together. (Casting never gets here: Mix is off while casting, [MixEngine.stopBlend].)
+ */
+fun mixWhyNot(from: MediaItem, to: MediaItem): MixWhy {
+    val a = from.toSong()
+    val b = to.toSong()
+    return when {
+        a == null || b == null -> MixWhy.GLITCH
+        a.isLive || b.isLive -> MixWhy.LIVE
+        from.videoModeId != null || to.videoModeId != null -> MixWhy.VIDEO
+        a.isEpisode || b.isEpisode -> MixWhy.PODCAST
+        a.album?.id != null && a.album?.id == b.album?.id -> MixWhy.ALBUM
+        else -> MixWhy.SING_OR_TOGETHER
+    }
 }

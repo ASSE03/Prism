@@ -2,6 +2,7 @@ package com.prism.music
 
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.performClick
 import com.prism.music.data.AutoplayLength
 import com.prism.music.data.prefs.AppSettings
 import com.prism.music.data.prefs.AutoplaySource
@@ -250,6 +251,30 @@ class PlaybackPageTest : ListeningPageHarness(SettingsPageId.PLAYBACK) {
         assertEquals(1, changedRows())
         tap(faceDown)
         until("face_down_pause off") { !it.behavior.faceDownPause }
+    }
+
+    /** #493: why the last two songs didn't blend is the last line behind Crossfade's ⓘ, and only when there's a reason. */
+    @Test fun crossfadesInfoSaysWhyTheLastSongsDidntBlend() {
+        val line = "Last time: One of the two is a music video."
+        val more = tr(R.string.more_about, crossfade)
+        fun shown(text: String) = compose.onAllNodes(androidx.compose.ui.test.hasText(text, substring = true)).fetchSemanticsNodes().size
+        show()
+        compose.onNode(androidx.compose.ui.test.hasContentDescription(more)).performClick()
+        compose.waitForIdle()
+        assertEquals("its ⓘ opens", 1, shown(t(R.string.crossfade_choice_info)))
+        assertEquals("no reason yet: no last line", 0, shown("Last time:"))
+        container.mixState.why.value = com.prism.music.playback.MixRefusal(com.prism.music.playback.MixWhy.VIDEO, "a", "b")
+        compose.waitForIdle()
+        assertEquals(1, shown(line))
+        // Behind the ⓘ only: closed, it's not on the page.
+        compose.onNode(androidx.compose.ui.test.hasContentDescription(tr(R.string.hide_details))).performClick()
+        compose.waitForIdle()
+        assertEquals(0, shown(line))
+        // A blend happened: the line goes.
+        container.mixState.why.value = null
+        compose.onNode(androidx.compose.ui.test.hasContentDescription(more)).performClick()
+        compose.waitForIdle()
+        assertEquals(0, shown("Last time:"))
     }
 
     /** Links written before the rework still land: the old page's groups by their old names. */

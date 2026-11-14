@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
@@ -17,6 +18,8 @@ import com.prism.music.data.prefs.CrossfadeCurve
 import com.prism.music.data.prefs.ExplicitContent
 import com.prism.music.data.prefs.MAX_CROSSFADE_SECONDS
 import com.prism.music.data.prefs.ShuffleButton
+import com.prism.music.playback.MixRefusal
+import com.prism.music.playback.MixWhy
 import com.prism.music.tr
 import com.prism.music.ui.screens.Crossfade
 import com.prism.music.ui.screens.CurveSample
@@ -51,6 +54,8 @@ fun PlaybackPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = tr
     val prefs = c.settings
     val d = remember { AppSettings() }
     val reset = ListeningResets()
+    // #493: why the last two songs didn't blend, when they didn't (until one does): a last line in Crossfade's ⓘ.
+    val lastWhy = c.mixState.why.collectAsState().value
 
     val onOff: (Boolean) -> String = { ListeningResets.onOff(it) }
     val seconds: (Int) -> String = { ListeningResets.seconds(it) }
@@ -131,7 +136,7 @@ fun PlaybackPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = tr
         group(tr(R.string.playback_song_to_song)) {
             ChoiceRow(
                 tr(R.string.crossfade), Crossfade.entries, crossfade, { it.label },
-                info = tr(R.string.crossfade_choice_info), changed = crossfadeChanged,
+                info = crossfadeInfo(lastWhy), changed = crossfadeChanged,
             ) { SoundChoices.setCrossfade(prefs, it) }
             // #351: up to 30 s (a song's blend is still at most a third of it: MixEngine.makePlan).
             if (s.mix && !s.mixAuto) SliderRow(
@@ -179,6 +184,15 @@ fun PlaybackPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = tr
         }
     }
 }
+
+/** The Crossfade row's ⓘ: what the three choices do, and (#493) a last line "Last time: …" when the last blend didn't happen. */
+fun crossfadeInfo(last: MixRefusal?): String {
+    val base = tr(R.string.crossfade_choice_info)
+    return if (last == null) base else base + "\n\n" + mixWhyLine(last.why)
+}
+
+/** "Last time: One of the two is a music video." (Crossfade's ⓘ and the DJ chip's in the queue.) */
+fun mixWhyLine(why: MixWhy): String = tr(R.string.mix_why_last, tr(why.text))
 
 /**
  * What "Reset this page" lists and puts back on Playback and on Sound & quality. Their settings aren't part of a Look
