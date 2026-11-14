@@ -180,13 +180,132 @@ class SongsEverywhere383MatchTest {
     }
 
     /**
-     * Not matched, on purpose (as [anotherArtistsSongStillDoesNotCount]): the video credits someone the song doesn't name
+     * Not matched by names (as [anotherArtistsSongStillDoesNotCount]): the video credits someone the song doesn't name
      * at all ("Dandiya India": Mukesh / Suchitra; "Sairo Sairo": Renjith / Rahul Nambiar, Naveen; "Sailaja Sailaja": the
-     * lyricist / the composer and singer). Without a shared name, a cover's video would become the original.
+     * lyricist / the composer and singer). Without a shared name, and nothing else to confirm it, a cover's video would
+     * become the original: it stays a video, also when its title names no film or album.
      */
     @Test fun aVideoCreditingNobodyTheSongNamesStaysAVideo() {
-        assertNull(YouTubeMusic.pickSongForVideo(v("OgyB7CspkQY", "Dandiya India", 302, "Mukesh"), listOf(s("cYr59BxBUN4", "Dandiya India", 282, "Oosaravelli", "Suchitra"))))
-        assertNull(YouTubeMusic.pickSongForVideo(v("teaO8hzOvsI", "Sailaja Sailaja", 261, "Bhaskara Bhatla"), listOf(s("gsE1_8QIZa4", "Sailaja Sailaja", 234, "Nenu Sailaja", "Devi Sri Prasad", "Sagar"))))
+        val dandiya = v("OgyB7CspkQY", "Dandiya India", 302, "Mukesh")
+        val dandiyaSong = listOf(s("cYr59BxBUN4", "Dandiya India", 282, "Oosaravelli", "Suchitra"))
+        assertNull(YouTubeMusic.pickSongForVideo(dandiya, dandiyaSong))
+        assertNull("the row's own title names no film", YouTubeMusic.pickSongForVideo(dandiya, dandiyaSong) { YouTubeMusic.namesRelease(dandiya.title, it) })
+        val sailaja = v("teaO8hzOvsI", "Sailaja Sailaja", 261, "Bhaskara Bhatla")
+        val sailajaSong = listOf(s("gsE1_8QIZa4", "Sailaja Sailaja", 234, "Nenu Sailaja", "Devi Sri Prasad", "Sagar"))
+        assertNull(YouTubeMusic.pickSongForVideo(sailaja, sailajaSong))
+        assertNull("only its own name, twice", YouTubeMusic.pickSongForVideo(sailaja, sailajaSong) { YouTubeMusic.namesRelease("Sailaja Sailaja Full Song", it) })
+        assertNull("another film named", YouTubeMusic.pickSongForVideo(sailaja, sailajaSong) { YouTubeMusic.namesRelease("Sailaja Sailaja Full Song || Shailaja Reddy Alludu Songs", it) })
+    }
+
+    // 1.8.7 (plan 3.1): the three nsk-47 named after 1.8.5. Rows, search results, album pages and `player` answers read
+    // signed out on 2026-11-14 from PLEV4Wjn7aSFHRm-VkBxh2TJKwNyfUGqsO. Neither confirmation (a) nor (b) of the plan holds
+    // for them: the songs' own video search finds another upload (Dandiya: Suchitra's I3AHMObuatU) or none, and their album
+    // pages list the songs, not these videos. What does: the video's full title, which the playlist row cuts to the
+    // song's name, names the film.
+
+    private fun fullTitle(id: String): String {
+        val text = javaClass.getResource("/songs383/$id-player.json")!!.readText()
+        val player = com.prism.music.data.innertube.InnerTube.json.parseToJsonElement(text) as kotlinx.serialization.json.JsonObject
+        return YouTubeMusic.fullVideoTitleOf(player)!!
+    }
+
+    private fun picked(video: Song, results: List<Song>): String? {
+        val full = fullTitle(video.id)
+        assertEquals("nothing by name", null, YouTubeMusic.pickSongForVideo(video, results))
+        assertEquals("a full title is worth asking for", true, YouTubeMusic.waitsOnConfirmation(video, results))
+        return YouTubeMusic.pickSongForVideo(video, results) { YouTubeMusic.namesRelease(full, it) }?.id
+    }
+
+    @Test fun theFullTitleIsTheWatchPagesNotTheRows() {
+        assertEquals("Oosaravelli Telugu Movie || Dandiya India Song With Lyrics || Jr.Ntr,Tamanna,", fullTitle("OgyB7CspkQY"))
+        assertEquals("Sairo Sairo Full Song | Baadshah Movie | Jr. NTR, Kajal Agarwal || Thaman S", fullTitle("fIgXoqQ0c_s"))
+    }
+
+    @Test fun dandiyaIndiaPlaysAsTheOosaravelliSong() {
+        val video = v("OgyB7CspkQY", "Dandiya India", 302, "Mukesh")
+        val results = listOf(
+            Song("cYr59BxBUN4", "Dandiya India", listOf(ArtistRef("Suchitra")), AlbumRef("Oosaravelli", "MPREb_Ya4HVVt4xrE"), durationSec = 282),
+            s("6jEyVZKdoO0", "Dholi Taaro Dhol Vaaghe (41 Non Stop)", 3629, "Dholi Taaro Dhol Vaaghe", "Anuradha Paudwal", "Kavita Paudwal", "Nitin Mukesh"),
+            s("wVXTfjZaSqM", "Non Stop Bollywood Dandiya Garbe Ki Raat Hai 2014", 4053, "Non Stop Bollywood Dandiya 2014 (Garbe Ki Raat Hai)", "Manish J Tipu", "Arijit Singh"),
+            s("euZGBtdCxns", "Jharkhand kar Chori", 320, "Holi Mei Tor Ghar", "Mukesh"),
+        )
+        assertEquals("cYr59BxBUN4", picked(video, results))
+    }
+
+    @Test fun sairoSairoPlaysAsTheBaadshahSongNotAdhrustams() {
+        val video = v("fIgXoqQ0c_s", "Sairo Sairo", 257, "Renjith")
+        val results = listOf(
+            s("94JuL_OdJ_g", "Sairo Sairo", 231, "Baadshah", "Rahul Nambiar", "Naveen"),
+            s("us_GvpcAEBw", "Sairo Sairo", 309, "Adhrustam", "Kiran", "Devan"),
+            s("B5qbQuvDGa4", "Diamond Girl", 239, "Baadshah", "Suchitra"),
+            s("kETqj1rD4_w", "Sairo", 197, "Jackpot (Telugu) (Original Motion Picture Soundtrack)", "Vishal Chandrashekhar", "M.M. Srilekha", "Uma Neha"),
+            s("_2LDWDtkkn8", "Anbe Nee", 259, "Stalin", "Ranjith"),
+        )
+        assertEquals("94JuL_OdJ_g", picked(video, results))
+    }
+
+    @Test fun sailajaSailajaPlaysAsTheNenuSailajaSong() {
+        val video = v("teaO8hzOvsI", "Sailaja Sailaja", 261, "Bhaskara Bhatla")
+        val results = listOf(
+            s("gsE1_8QIZa4", "Sailaja Sailaja", 234, "Nenu Sailaja", "Devi Sri Prasad", "Sagar"),
+            s("_W2rFMDxg0o", "Crazy Feeling", 210, "Nenu Sailaja", "Ramajogayya Sastry", "Devi Sri Prasad", "Prudhvi Chandra"),
+            s("tf4RVw2iWPA", "Sailaja", 362, "Sailaja", "Shiva Alijarla"),
+            s("9g8y_Nii7XY", "Sailu Sailu Sailaja", 282, "Pilla Perucheppu Maisamma", "Vadlakonda Anil Kumar"),
+        )
+        assertEquals("gsE1_8QIZa4", picked(video, results))
+    }
+
+    /** The same title by another artist, its title naming another release (or a cover of it), stays a video. */
+    @Test fun theSameTitleByAnotherArtistNeedsItsRelease() {
+        val video = v("x", "Dandiya India", 300, "Someone")
+        val other = listOf(s("y", "Dandiya India", 290, "Dandiya Nights", "Another Singer"))
+        assertNull(YouTubeMusic.pickSongForVideo(video, other) { YouTubeMusic.namesRelease("Oosaravelli Telugu Movie || Dandiya India Song", it) })
+        val song = listOf(s("z", "Dandiya India", 282, "Oosaravelli", "Suchitra"))
+        assertNull("a cover", YouTubeMusic.pickSongForVideo(video, song) { YouTubeMusic.namesRelease("Dandiya India cover | Oosaravelli", it) })
+        assertNull("the length still counts", YouTubeMusic.pickSongForVideo(v("x", "Dandiya India", 120, "Someone"), song) { YouTubeMusic.namesRelease("Oosaravelli || Dandiya India", it) })
+        // A single's album is the song: the film is its soundtrack tag's.
+        val single = listOf(s("p", "Yeshanagula (From \"The Paradise\") (Telugu)", 189, "Yeshanagula (From \"The Paradise\") (Telugu)", "Anirudh Ravichander"))
+        assertEquals("p", YouTubeMusic.pickSongForVideo(v("q", "Yeshanagula", 192, "A Label"), single) { YouTubeMusic.namesRelease("Yeshanagula Video Song | The Paradise | Nani", it) }?.id)
+        assertNull(YouTubeMusic.pickSongForVideo(v("q", "Yeshanagula", 192, "A Label"), single) { YouTubeMusic.namesRelease("Yeshanagula Video Song | Nani", it) })
+    }
+
+    /** A song found by name never needs the request for the full title. */
+    @Test fun noFullTitleAskedWhenANameMatches() {
+        val video = v("JqFzhcWo3EU", "Yeshanagula", 192, "Jangi Reddy")
+        val results = listOf(s("IcLdJ93eP18", "Yeshanagula (From \"The Paradise\") (Telugu)", 189, "a", "Anirudh Ravichander", "Jangi Reddy"))
+        assertEquals(false, YouTubeMusic.waitsOnConfirmation(video, results))
+        assertEquals(false, YouTubeMusic.waitsOnConfirmation(v("x", "Another Song", 200, "Someone"), results))
+    }
+
+    // Plan 3.3 (#154's last gap): an album page that lists videos, with its playlist a track longer or shorter.
+
+    @Test fun anAlbumWithOneExtraTrackStillPlaysItsSongs() {
+        val listed = listOf(
+            Song("v1", "Brathakaali", durationSec = 330, isVideo = true),
+            Song("s2", "Nenante Naaku", durationSec = 244),
+            Song("v3", "Dandiya India", durationSec = 300, isVideo = true),
+            Song("v4", "Oosaravelli", durationSec = 150, isVideo = true),
+        )
+        val own = listOf(
+            s("p1", "Brathakaali", 327, "Oosaravelli", "Devi Sri Prasad"),
+            s("s2", "Nenante Naaku", 244, "Oosaravelli", "Adnan Sami"),
+            s("bonus", "Brathakaali (Remix)", 300, "Oosaravelli", "Devi Sri Prasad"),
+            s("p3", "Dandiya India", 282, "Oosaravelli", "Suchitra"),
+            s("p4", "Oosaravelli", 150, "Oosaravelli", "Ujjayinee Roy"),
+        )
+        val pairs = YouTubeMusic.pairAlbumTracks(listed, own)
+        assertEquals(mapOf(0 to "p1", 2 to "p3", 3 to "p4"), pairs.mapValues { it.value.first.id })
+        assertEquals("v3", pairs[2]?.second)
+        // A video with no song of its title on the playlist stays a video; a song is taken once.
+        val twice = listOf(Song("v1", "Brathakaali", durationSec = 330, isVideo = true), Song("v1b", "Brathakaali", durationSec = 330, isVideo = true), Song("v9", "Not On It", durationSec = 200, isVideo = true))
+        assertEquals(mapOf(0 to "p1"), YouTubeMusic.pairAlbumTracks(twice, own).mapValues { it.value.first.id })
+    }
+
+    @Test fun anAlbumOfTheSameLengthStillPairsByPlace() {
+        val listed = listOf(Song("v1", "Intro", durationSec = 600, isVideo = true), Song("v2", "Song", durationSec = 200, isVideo = true))
+        val own = listOf(s("p1", "Intro", 60, "a", "X"), s("p2", "Other", 200, "a", "X"))
+        // By place: the title must agree there, and the length doesn't matter (an 8-minute video for a 5-minute song).
+        assertEquals(mapOf(0 to "p1"), YouTubeMusic.pairAlbumTracks(listed, own).mapValues { it.value.first.id })
     }
 
     // What still keeps recordings apart.

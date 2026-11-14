@@ -200,7 +200,31 @@ class YouTubeMusic(
          * song's soundtrack and language tags (#383); anything else in brackets, and live or session takes, tell recordings
          * apart; and the lengths must agree.
          */
-        internal fun pickSongForVideo(video: Song, results: List<Song>, anyLength: Boolean = false): Song? {
+        internal fun pickSongForVideo(
+            video: Song,
+            results: List<Song>,
+            anyLength: Boolean = false,
+            /**
+             * #383 (1.8.7): for a song of the video's title that credits none of its artists, what else may confirm it
+             * ([namesRelease]: the video's full title names the song's film or album). Without it such a song never counts.
+             */
+            confirm: ((Song) -> Boolean)? = null,
+        ): Song? {
+            val m = songMatches(video, results, anyLength) ?: return null
+            return m.byName.ifEmpty { if (confirm == null) emptyList() else m.titleOnly.filter(confirm) }.minWithOrNull(m.order)
+        }
+
+        /**
+         * Whether [pickSongForVideo] finds nothing by name but has songs of the video's title only a confirmation could
+         * take ([songForVideo] then asks for the video's full title, one request, only then).
+         */
+        internal fun waitsOnConfirmation(video: Song, results: List<Song>, anyLength: Boolean = false): Boolean =
+            songMatches(video, results, anyLength)?.let { it.byName.isEmpty() && it.titleOnly.isNotEmpty() } == true
+
+        /** What [pickSongForVideo] chooses from: the songs that match by name, the ones of the title alone, and the order. */
+        private class SongMatches(val byName: List<Song>, val titleOnly: List<Song>, val order: Comparator<Song>)
+
+        private fun songMatches(video: Song, results: List<Song>, anyLength: Boolean): SongMatches? {
             val (rawTitle, artistName) = videoParts(video)
             val title = matchNorm(rawTitle)
             if (title.isBlank()) return null
@@ -234,10 +258,68 @@ class YouTubeMusic(
             val chosen = fits.ifEmpty {
                 titled.singleOrNull()?.takeIf { s -> s.artists.isNotEmpty() && s.artists.all { matchNorm(it.name) in VARIOUS } && lengthFits(s) }?.let(::listOf).orEmpty()
             }
+            // #383 (1.8.7): a label's upload credits whom it likes ("Dandiya India": Mukesh, the song Suchitra): the same title
+            // and a fitting length, but nobody shared. Only kept for a confirmation that doesn't rest on names.
+            val titleOnly = titled.filter { s -> s !in chosen && lengthFits(s) }
             // The one crediting more of the video's artists first (the Telugu dub names its Telugu lyricist), then the nearest length.
-            return chosen.minWithOrNull(
+            return SongMatches(
+                chosen, titleOnly,
                 compareBy<Song>({ s -> -credited.count { byArtist(s, it) } }, { s -> if (video.durationSec > 0 && s.durationSec > 0) kotlin.math.abs(s.durationSec - video.durationSec) else 0 }),
             )
+        }
+
+        /** A `player` answer's full video title: its page's (microformat); "videoDetails" carries the cut one. */
+        internal fun fullVideoTitleOf(player: JsonObject): String? =
+            (player.str("microformat", "microformatDataRenderer", "title") ?: player.str("videoDetails", "title"))?.takeIf { it.isNotBlank() }
+
+        /** A film's name in a soundtrack tag, '(From "Nenu Sailaja")'. */
+        private val FROM_NAME = Regex("""[(\[]\s*from\s+["“”]([^"“”]*)["“”]""", RegexOption.IGNORE_CASE)
+        private fun nameWords(s: String) = s.lowercase().split(Regex("[^\\p{L}\\p{N}]+")).filter { it.isNotEmpty() }
+        private fun List<String>.indexOfRun(run: List<String>): Int =
+            if (run.isEmpty()) -1 else (0..size - run.size).firstOrNull { i -> subList(i, i + run.size) == run } ?: -1
+
+        /**
+         * #383 (1.8.7): whether a video's full title ([videoTitle], as its watch page gives it: a playlist row cuts a label's
+         * "Oosaravelli Telugu Movie || Dandiya India Song With Lyrics || Jr.Ntr,Tamanna" down to "Dandiya India") names
+         * the film or album [song] is from, apart from the song's own name. Never for another take (a cover, a live one).
+         */
+        internal fun namesRelease(videoTitle: String, song: Song): Boolean {
+            if (MusicVideoMatch.otherTake(videoTitle)) return false
+            val own = nameWords(song.title.replace(FROM_TAG, " ").replace(SONG_FOR_VIDEO_BRACKETS, " "))
+            var words = nameWords(videoTitle)
+            // "Sailaja Sailaja Full Song || Nenu Sailaja Songs": the song's name doesn't count as its film's.
+            val at = words.indexOfRun(own)
+            if (at >= 0) words = words.take(at) + words.drop(at + own.size)
+            val names = listOfNotNull(
+                FROM_NAME.find(song.title)?.groupValues?.get(1),
+                song.album?.title?.let { a -> FROM_NAME.find(a)?.groupValues?.get(1) ?: a },
+            ).map { nameWords(it.replace(SONG_FOR_VIDEO_BRACKETS, " ")) }
+            // A single's album is the song itself: that names nothing more.
+            return names.any { n -> n.joinToString("").length >= 4 && n != own && n.joinToString("") !in VARIOUS && words.indexOfRun(n) >= 0 }
+        }
+
+        /**
+         * For an album page that lists music videos ([listed]), the songs its own playlist ([own]) lists in their place,
+         * each with the video it replaces. Where both lists have as many tracks, by place and the same title. Where they
+         * don't (#154's last gap, 1.8.7: a bonus track on one of them), each video on its own through [pickSongForVideo]
+         * among the playlist's songs, its being on the song's album page the confirmation; a song is taken once.
+         */
+        internal fun pairAlbumTracks(listed: List<Song>, own: List<Song>): Map<Int, Pair<Song, String>> {
+            if (own.size == listed.size) return listed.indices.mapNotNull { i ->
+                val page = listed[i]
+                val song = own[i]
+                if (!page.isVideo || song.isVideo || song.id == page.id || !sameTrackTitle(page.title, song.title)) null
+                else i to (song to page.id)
+            }.toMap()
+            val songs = own.filter { !it.isVideo }
+            val taken = HashSet<String>()
+            return listed.indices.mapNotNull { i ->
+                val page = listed[i]
+                if (!page.isVideo) return@mapNotNull null
+                val song = pickSongForVideo(page, songs.filter { it.id != page.id && it.id !in taken }, confirm = { true }) ?: return@mapNotNull null
+                taken += song.id
+                i to (song to page.id)
+            }.toMap()
         }
     }
 
@@ -527,22 +609,14 @@ class YouTubeMusic(
     }
 
     /**
-     * For an album page that lists music videos ([listed]), the songs its own playlist lists in their place, by track
-     * position, each with the video it replaces. Only where both lists agree: the same number of tracks and, at each
-     * place, the same title. Empty when the playlist can't be read or doesn't line up (the page then stays as listed).
+     * For an album page that lists music videos ([listed]), the songs its own playlist lists in their place, each with
+     * the video it replaces ([pairAlbumTracks]). Empty when the playlist can't be read (the page then stays as listed).
      */
     private suspend fun albumSongs(listed: List<Song>, playlistId: String): Map<Int, Pair<Song, String>> {
         val own = runCatching { playlist(playlistId).songs }.getOrNull() ?: return emptyMap()
-        if (own.size != listed.size) {
-            log("album $playlistId: its playlist has ${own.size} tracks, the page ${listed.size}; videos left as listed")
-            return emptyMap()
-        }
-        return listed.indices.mapNotNull { i ->
-            val page = listed[i]
-            val song = own[i]
-            if (!page.isVideo || song.isVideo || song.id == page.id || !sameTrackTitle(page.title, song.title)) null
-            else i to (song to page.id)
-        }.toMap().also { if (it.isNotEmpty()) log("album $playlistId: ${it.size} tracks listed as videos played as their songs") }
+        if (own.size != listed.size) log("album $playlistId: its playlist has ${own.size} tracks, the page ${listed.size}; each video matched on its own")
+        return pairAlbumTracks(listed, own)
+            .also { if (it.isNotEmpty()) log("album $playlistId: ${it.size} tracks listed as videos played as their songs") }
     }
 
     /** The header's bookmark ("Save to library") state; only meaningful when signed in. */
@@ -805,8 +879,20 @@ class YouTubeMusic(
             r.songs.firstOrNull { !it.isVideo && r.counterparts[it.id] == video.id }?.let { return it }
         }
         val query = songForVideoQuery(video) ?: return null
-        return pickSongForVideo(video, search(query, SearchFilter.SONGS).items.filterIsInstance<SongItem>().map { it.song }, anyLength)
+        val results = search(query, SearchFilter.SONGS).items.filterIsInstance<SongItem>().map { it.song }
+        pickSongForVideo(video, results, anyLength)?.let { return it }
+        // #383 (1.8.7): the title matches but nobody is shared. The video's title may name the song's film or album; a
+        // playlist row's title is often cut to the song's name, so its watch page's full title is asked for then.
+        if (!waitsOnConfirmation(video, results, anyLength)) return null
+        pickSongForVideo(video, results, anyLength) { namesRelease(video.title, it) }?.let { return it }
+        val full = runCatching { fullVideoTitle(video.id) }.getOrNull()?.takeIf { it != video.title } ?: return null
+        return pickSongForVideo(video, results, anyLength) { namesRelease(full, it) }
+            .also { log("song for ${video.id} \"${video.title}\": by its full title \"$full\": ${it?.id ?: "none"}") }
     }
+
+    /** A video's title as its watch page gives it, in full (YouTube Music's own rows may carry only the song's name). */
+    private suspend fun fullVideoTitle(videoId: String): String? =
+        fullVideoTitleOf(api.post("player", buildJsonObject { put("videoId", videoId) }))
 
     /**
      * Finds the official music video for an audio track. Uses the pairing from
