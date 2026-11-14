@@ -96,23 +96,23 @@ class CanvasPrefsTest {
      */
     @Test fun aNewInstallsOwnDefaults() = runBlocking {
         val names = NewInstall.on + NewInstall.motion
-        assertEquals(listOf("canvas_fills_background", "pause_fade", "artist_you", "finish_lyric", "album_hero_cover"), NewInstall.on)
+        assertEquals(listOf("canvas_fills_background", "pause_fade", "artist_you", "finish_lyric", "album_hero_cover", "canvas_lyrics"), NewInstall.on)
         assertEquals(listOf("cover_flight", "cover_flight_back", "backdrop_fade"), NewInstall.motion)
         for (n in names) assertTrue("$n is stored", n in repo.allKeyNames)
         // The data classes keep them off.
-        assertEquals(List(8) { false }, on(AppSettings()))
+        assertEquals(List(9) { false }, on(AppSettings()))
         // Not onboarded: nothing written.
         repo.setOnboarded(false); repo.editNow { }
-        assertEquals(List(8) { false }, on(read { true }))
+        assertEquals(List(9) { false }, on(read { true }))
         assertTrue(repo.forBackup(settings = true, accounts = false).keys.none { it in names })
         // Onboarded on a fresh store: all of them.
         repo.setOnboarded(true)
-        assertEquals(List(8) { true }, on(read { it.onboarded }))
+        assertEquals(List(9) { true }, on(read { it.onboarded }))
     }
 
-    /** The eight, in [NewInstall]'s order ([NewInstall.on], then [NewInstall.motion]). */
+    /** The nine, in [NewInstall]'s order ([NewInstall.on], then [NewInstall.motion]). */
     private fun on(s: AppSettings) = listOf(
-        s.canvasFillsBackground, s.sound.pauseFade, s.behavior.artistYou, s.behavior.finishLyric, s.view.albumHeroCover,
+        s.canvasFillsBackground, s.sound.pauseFade, s.behavior.artistYou, s.behavior.finishLyric, s.view.albumHeroCover, s.behavior.canvas.lyrics,
         s.view.coverFlight, s.view.coverFlightBack, s.view.backdropFade,
     )
 

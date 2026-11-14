@@ -439,8 +439,8 @@ data class CanvasPrefs(
  * and the data classes' defaults stay as they are.
  */
 object NewInstall {
-    /** Canvas full screen, fade on pause and play, "You and this artist", Replay's "Finish the lyric", the album pages' full-width picture. */
-    val on: List<String> = listOf("canvas_fills_background", "pause_fade", "artist_you", "finish_lyric", "album_hero_cover")
+    /** Canvas full screen, fade on pause and play, "You and this artist", Replay's "Finish the lyric", the album pages' full-width picture, and (1.8.7, owner 2026-11-14) Canvas's "Keep lyrics showing". */
+    val on: List<String> = listOf("canvas_fills_background", "pause_fade", "artist_you", "finish_lyric", "album_hero_cover", "canvas_lyrics")
 
     /**
      * Motion kept apart: the mini player's cover flying into the player and back, and the player's background fading into
