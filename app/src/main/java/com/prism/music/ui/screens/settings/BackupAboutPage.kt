@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
@@ -29,6 +30,10 @@ import androidx.core.content.FileProvider
 import com.prism.music.BuildConfig
 import com.prism.music.CrashLog
 import com.prism.music.R
+import com.prism.music.data.LiveProbe
+import com.prism.music.data.SelfTestCheck
+import com.prism.music.data.SelfTestChecks
+import com.prism.music.data.SelfTestText
 import com.prism.music.data.prefs.AppSettings
 import com.prism.music.playback.AudioDiagnostics
 import com.prism.music.tr
@@ -81,7 +86,7 @@ fun BackupAboutPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
         shareDiagnostics = {
             scope.launch {
                 val file = withContext(Dispatchers.IO) {
-                    AudioDiagnostics.export(context, AudioDiagnostics.about(c) + "\n" + AudioDiagnostics.canvas(c))
+                    AudioDiagnostics.export(context, diagnosticsAbout(AudioDiagnostics.about(c), AudioDiagnostics.canvas(c), SelfTestText.last))
                 }
                 val uri = FileProvider.getUriForFile(context, "${context.packageName}.share", file)
                 context.startActivity(Intent.createChooser(diagnosticsShareIntent(uri), tr(R.string.share_diagnostics)))
@@ -89,6 +94,13 @@ fun BackupAboutPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
         },
     )
 }
+
+/**
+ * The head of the shared diagnostics: the phone and its settings ([about]), the Canvas lines ([canvas]) and, once "Is
+ * playback working?" has been shared from its sheet, that result ([selfTest]).
+ */
+internal fun diagnosticsAbout(about: String, canvas: String, selfTest: String?): String =
+    about + "\n" + canvas + (selfTest?.let { "\n\n===== ${tr(R.string.selftest_title)} =====\n$it" } ?: "")
 
 /**
  * What goes to Android's share sheet for "Share diagnostics" and "Last crash": the exported text file, readable by
@@ -136,6 +148,8 @@ internal fun BackupAboutContent(
     onSearch: (() -> Unit)?,
     checkNow: suspend () -> String?,
     shareDiagnostics: () -> Unit,
+    /** The checks "Is playback working?" runs: the real ones unless a test hands in its own. */
+    selfTestChecks: (() -> List<SelfTestCheck>)? = null,
 ) {
     val c = LocalContainer.current
     val s = LocalAppSettings.current
@@ -153,6 +167,13 @@ internal fun BackupAboutContent(
     var check by remember { mutableStateOf<UpdateCheck?>(null) }
     // A crash kept on the phone (CrashLog): there to share whether or not diagnostics are on.
     var crashAt by remember { mutableStateOf(CrashLog.lastAt(context)) }
+    // "Is playback working?": its sheet lives here, not in its row, as the backup's dialogs do.
+    var selfTestOpen by rememberSaveable { mutableStateOf(false) }
+    if (selfTestOpen) SelfTestSheet(
+        checks = selfTestChecks ?: { SelfTestChecks.checks(LiveProbe(c, context)) },
+        share = { text -> SelfTestText.last = text; shareDiagnostics() },
+        onDismiss = { selfTestOpen = false },
+    )
 
     val reset = ListeningResets()
     val diagnosticsChanged = reset.add(tr(R.string.playback_diagnostics), s.audioDiagnostics, d.audioDiagnostics, { ListeningResets.onOff(it) }) {
@@ -201,6 +222,8 @@ internal fun BackupAboutContent(
             SwitchRow(
                 tr(R.string.playback_diagnostics), s.audioDiagnostics, info = tr(R.string.keeps_a_log_on_this_phone), changed = diagnosticsChanged,
             ) { c.settings.setAudioDiagnostics(it) }
+            // 1.8.7: a few quick checks of what playing a song needs, in a sheet (plan §9).
+            LinkRow(tr(R.string.selftest_title), info = tr(R.string.selftest_info)) { selfTestOpen = true }
             crashAt?.let { at ->
                 LinkRow(
                     tr(R.string.last_crash),
@@ -266,6 +289,7 @@ val backupAboutIndex: List<SettingEntry> by lazy {
         SettingEntry(page, about, tr(R.string.take_the_tour), tr(R.string.tutorial_walkthrough_help_guide_what_s)),
         SettingEntry(page, about, tr(R.string.open_source_licenses), tr(R.string.license_gpl)),
         SettingEntry(page, diagnostics, tr(R.string.playback_diagnostics), tr(R.string.stutter_judder_skip_glitch_lag_bluetooth) + " " + tr(R.string.a_log_for_tracking_down_stutters)),
+        SettingEntry(page, diagnostics, tr(R.string.selftest_title), tr(R.string.selftest_keywords)),
         // The two crash rows show while a crash is kept on the phone (not a setting to turn on).
         SettingEntry(page, diagnostics, tr(R.string.last_crash), tr(R.string.crash_closed_unexpectedly_error_report_stack)),
         SettingEntry(page, diagnostics, tr(R.string.forget_crashes), tr(R.string.crash_delete_clear)),

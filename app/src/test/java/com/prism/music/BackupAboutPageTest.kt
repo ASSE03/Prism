@@ -126,6 +126,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
     private val forgetCrashes = t(R.string.forget_crashes)
     private val shareLog = t(R.string.share_diagnostics)
     private val clearLog = t(R.string.clear_diagnostics)
+    private val selfTest = t(R.string.selftest_title)
     private val unofficial = t(R.string.unofficial_not_affiliated_with_google_or)
     private val installed = tr(R.string.prism, BuildConfig.VERSION_NAME)
 
@@ -141,7 +142,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
 
     private val opened = ArrayList<String>()
 
-    private fun showContent(check: suspend () -> String? = { null }, share: () -> Unit = {}) {
+    private fun showContent(check: suspend () -> String? = { null }, share: () -> Unit = {}, selfTest: (() -> List<com.prism.music.data.SelfTestCheck>)? = null) {
         compose.setContent {
             val controller = rememberNavController().also { navController = it }
             val nav = Navigator(controller, openPlayer = {})
@@ -152,7 +153,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
                     CompositionLocalProvider(LocalAppSettings provides s) {
                         Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
                             NavHost(controller, "page") {
-                                composable("page") { BackupAboutContent(0.dp, null, true, {}, check, share) }
+                                composable("page") { BackupAboutContent(0.dp, null, true, {}, check, share, selfTest) }
                                 composable("settings/{section}") { Box(Modifier.fillMaxSize()) }
                             }
                         }
@@ -169,7 +170,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         show()
         assertBudgets("defaults")
         assertEquals(listOf(backupGroup, updatesGroup, aboutGroup, diagnosticsGroup), groupTitles())
-        assertEquals(listOf(2, 1, aboutRows, 1), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 2), groupSizes())
         assertEquals("nothing differs from how Prism comes", 0, changedRows())
         // No group is named as the page, and none as one of its own rows.
         assertTrue(groupTitles().none { it == SettingsPageId.BACKUP_ABOUT.title })
@@ -234,7 +235,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         assertTrue(hasRow(shareLog) && hasRow(clearLog))
         assertEquals(SettingsTags.ROW_LINK, typeOf(shareLog))
         assertEquals(SettingsTags.ROW_LINK, typeOf(clearLog))
-        assertEquals(listOf(2, 1, aboutRows, 3), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 4), groupSizes())
         assertBudgets("diagnostics on")
         assertEquals(1, changedRows())
 
@@ -243,7 +244,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         assertEquals(listOf("$diagnostics: ${t(R.string.on_2)} → ${t(R.string.off)}"), lines)
         until("the reset") { !it.audioDiagnostics }
         assertEquals(0, changedRows())
-        assertEquals(listOf(2, 1, aboutRows, 1), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 2), groupSizes())
     }
 
     /** Clearing starts the log again and says so; nothing else on the page changes. */
@@ -262,15 +263,15 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         var shared = 0
         showContent(share = { shared++ })
         assertEquals("drawing the page shares nothing", 0, shared)
-        assertEquals(listOf(2, 1, aboutRows, 3), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 4), groupSizes())
         val at = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(crashedAt))
         assertEquals(tr(R.string.tap_to_share_its_details, at), valueOf(lastCrash))
         tap(lastCrash)
         assertEquals(1, shared)
-        // With the log on as well: the group's fullest state, five rows.
+        // With the log on as well: the group's fullest state, six rows.
         tap(diagnostics)
         until("audio_diagnostics") { it.audioDiagnostics }
-        assertEquals(listOf(2, 1, aboutRows, 5), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 6), groupSizes())
         assertBudgets("a crash kept, diagnostics on")
         tap(shareLog)
         assertEquals(2, shared)
@@ -278,7 +279,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         tap(forgetCrashes)
         assertFalse(file.exists())
         assertFalse(hasRow(lastCrash) || hasRow(forgetCrashes))
-        assertEquals(listOf(2, 1, aboutRows, 3), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 4), groupSizes())
         assertEquals(2, shared)
     }
 
@@ -294,6 +295,51 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         assertEquals(uri, send.clipData!!.getItemAt(0).uri)
         assertNull("no app is named: the listener picks", send.component)
         assertNull(send.`package`)
+    }
+
+    // ------------------------------------------------------------------ Is playback working? (1.8.7)
+
+    /** The row: a Link row in Diagnostics, with its words behind ⓘ; drawing the page runs nothing. */
+    @Test fun theSelfTestRowIsInDiagnostics() {
+        var ran = 0
+        showContent(selfTest = { ran++; emptyList() })
+        assertEquals(SettingsTags.ROW_LINK, typeOf(selfTest))
+        assertEquals("drawing the page runs no check", 0, ran)
+        assertEquals(0, shown(t(R.string.selftest_info)))
+        val line = SettingsIndex.entries.single { it.page == SettingsPageId.BACKUP_ABOUT && it.title == selfTest }
+        assertEquals(diagnosticsGroup, line.group)
+        assertTrue(SettingsIndex.search("not playing").any { it.title == selfTest })
+        assertTrue(SettingsIndex.search("403").any { it.title == selfTest })
+    }
+
+    /** The sheet runs the checks it is handed, shows each result, and Share adds the result to the shared diagnostics. */
+    @Test fun theSelfTestSheetShowsAndSharesTheResult() {
+        var shared = 0
+        com.prism.music.data.SelfTestText.last = null
+        val checks = {
+            listOf(
+                com.prism.music.data.SelfTestCheck("a", "First check", "Do the first thing.") { com.prism.music.data.CheckResult.ok() },
+                com.prism.music.data.SelfTestCheck("b", "Second check", "Do the second thing.") { com.prism.music.data.CheckResult.problem("broke") },
+                com.prism.music.data.SelfTestCheck("c", "Third check", "Do the third thing.", needs = listOf("b")) { com.prism.music.data.CheckResult.ok() },
+            )
+        }
+        showContent(share = { shared++ }, selfTest = checks)
+        tap(selfTest)
+        compose.waitUntil(5_000) { shown(t(R.string.selftest_ok)) == 1 && shown(t(R.string.selftest_problem) + "\nDo the second thing.") == 1 }
+        assertEquals(1, shown(tr(R.string.selftest_skipped_after, "Second check")))
+        compose.onNode(hasText(t(R.string.selftest_share)) and hasAnyAncestor(hasTestTag(SettingsTags.SHEET))).performClick()
+        compose.waitForIdle()
+        assertEquals(1, shared)
+        val text = com.prism.music.data.SelfTestText.last!!
+        assertTrue(text, "1. First check: ${t(R.string.selftest_ok)}" in text && "2. Second check: ${t(R.string.selftest_problem)} (broke) Do the second thing." in text)
+        com.prism.music.data.SelfTestText.last = null
+    }
+
+    /** What "Share diagnostics" shares: the result too, once it has been shared from the sheet. */
+    @Test fun theSharedDiagnosticsCarryTheResult() {
+        assertEquals("about\ncanvas", com.prism.music.ui.screens.settings.diagnosticsAbout("about", "canvas", null))
+        val with = com.prism.music.ui.screens.settings.diagnosticsAbout("about", "canvas", "1. Online: Works")
+        assertTrue(with, with.startsWith("about\ncanvas\n") && with.endsWith("===== $selfTest =====\n1. Online: Works"))
     }
 
     // ------------------------------------------------------------------ Backup
@@ -374,7 +420,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         val drawn = compose.onNode(hasText(t(R.string.tap_to_update)) and hasAnyAncestor(hasTestTag(BACKUP_ABOUT_UPDATE))).fetchSemanticsNode()
         assertTrue("inside the page's gutters", drawn.boundsInRoot.left >= cards[1].boundsInRoot.left && drawn.boundsInRoot.right <= cards[1].boundsInRoot.right)
         assertBudgets("an update offered")
-        assertEquals(listOf(2, 1, aboutRows, 1), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 2), groupSizes())
     }
 
     // ------------------------------------------------------------------ About
@@ -409,7 +455,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         assertTrue("search lines in groups the page doesn't have: ${lost.map { it.group + " › " + it.title }}", lost.isEmpty())
         fun line(title: String) = lines.single { it.title == title }
         // Every row of the page with default settings has its line, in the group it is drawn in.
-        for ((group, titles) in listOf(backupGroup to listOf(backUp, restore), updatesGroup to listOf(check), aboutGroup to listOf(source, tour, licenses), diagnosticsGroup to listOf(diagnostics))) {
+        for ((group, titles) in listOf(backupGroup to listOf(backUp, restore), updatesGroup to listOf(check), aboutGroup to listOf(source, tour, licenses), diagnosticsGroup to listOf(diagnostics, selfTest))) {
             for (title in titles) assertEquals(title, group, line(title).group)
         }
         // The rows that follow the log say what to turn on, and stop saying it once that's on.
@@ -439,7 +485,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
     @Test fun atLargeTextNothingIsCutOff() {
         keepACrash()
         show(fontScale = 1.5f, over = everything)
-        assertEquals(listOf(2, 1, aboutRows, 5), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 6), groupSizes())
         assertBudgets("large text")
         assertNoTextCutOff("font scale 1.5")
     }

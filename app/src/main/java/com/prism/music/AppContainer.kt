@@ -325,7 +325,8 @@ class AppContainer(val app: Application) {
         .readTimeout(30, TimeUnit.SECONDS)
         .apply { TestHooks.network?.let(::addInterceptor) }
         .build()
-    private val streamHttp: OkHttpClient = http.newBuilder()
+    /** The client the player reads streams with (also the self-test's "first second" check). */
+    internal val streamHttp: OkHttpClient = http.newBuilder()
         .addInterceptor(YouTubeStreamInterceptor(http))
         .build()
 
