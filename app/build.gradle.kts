@@ -2,6 +2,7 @@ import java.awt.geom.Path2D
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Properties
+import java.util.zip.ZipFile
 
 plugins {
     id("com.android.application")
@@ -172,6 +173,50 @@ ksp {
 androidComponents {
     onVariants { v ->
         if (v.buildType != "release") v.manifestPlaceholders.put("profileable", "true")
+    }
+}
+
+/**
+ * The release APK carries native code for phones' chips only (1.8.7, plan 12b.2): the x86 and x86_64 copies of ONNX
+ * Runtime's bridge (the APK's only native library, ~0.3 MB) are for emulators, and emulators run debug builds, the
+ * side-by-side test copy (`-PsideBySide`) and :baselineprofile's benchmarkRelease / nonMinifiedRelease, which all keep
+ * them. Chromebooks and other x86 Androids with ARM translation still install it. `-PallAbis` keeps them in the release
+ * too, for installing the real release on an x86 emulator without ARM translation (Android 9's `old` tier, the TVs).
+ */
+val releaseDropsAbis = setOf("x86", "x86_64")
+val releaseKeepsAbis = setOf("armeabi-v7a", "arm64-v8a")
+val releaseOnlyArm = !project.hasProperty("sideBySide") && !project.hasProperty("allAbis")
+
+/** Fails the build when a release APK still carries [dropped] chips' libraries or lost one of [required]'s. */
+abstract class CheckReleaseAbis : DefaultTask() {
+    @get:InputFiles @get:PathSensitive(PathSensitivity.NONE) abstract val apkDir: DirectoryProperty
+    @get:Input abstract val dropped: SetProperty<String>
+    @get:Input abstract val required: SetProperty<String>
+
+    @TaskAction fun check() {
+        val apks = apkDir.get().asFile.walkTopDown().filter { it.isFile && it.extension == "apk" }.toList()
+        require(apks.isNotEmpty()) { "No APK in ${apkDir.get().asFile}" }
+        for (apk in apks) ZipFile(apk).use { zip ->
+            val abis = zip.entries().asSequence().map { it.name }.filter { it.startsWith("lib/") }
+                .map { it.split('/')[1] }.toSet()
+            val extra = abis intersect dropped.get()
+            require(extra.isEmpty()) { "${apk.name} still carries native libraries for $extra (plan 12b.2)" }
+            val missing = required.get() - abis
+            require(missing.isEmpty()) { "${apk.name} has no native libraries for $missing" }
+        }
+    }
+}
+
+androidComponents {
+    onVariants(selector().withBuildType("release")) { v ->
+        if (!releaseOnlyArm) return@onVariants
+        v.packaging.jniLibs.excludes.addAll(releaseDropsAbis.map { "lib/$it/**" })
+        val check = tasks.register<CheckReleaseAbis>("check${v.name.replaceFirstChar { it.uppercase() }}Abis") {
+            apkDir.set(v.artifacts.get(com.android.build.api.artifact.SingleArtifact.APK))
+            dropped.set(releaseDropsAbis)
+            required.set(releaseKeepsAbis)
+        }
+        tasks.matching { it.name == "assemble${v.name.replaceFirstChar { c -> c.uppercase() }}" }.configureEach { finalizedBy(check) }
     }
 }
 
