@@ -31,11 +31,14 @@ object SongMatch {
     private val marks = Regex("\\p{M}+")
     private val artistSplit = Regex("\\s*(?:,|&|、|/|;|\\+|\\bx\\b|\\band\\b|\\bfeat\\.?|\\bft\\.?|\\bwith\\b)\\s*", RegexOption.IGNORE_CASE)
 
-    /** [s] for comparing: one case, no accents, marks or punctuation, full-width letters as ASCII, kanji in Japanese form. */
+    /**
+     * [s] for comparing: one case, no accents, marks or punctuation, full-width letters as ASCII, traditional Chinese
+     * characters as simplified ones ([HanForms]) and those as Japanese kanji where Japanese writes them otherwise.
+     */
     fun key(s: String): String {
         val folded = Normalizer.normalize(s, Normalizer.Form.NFKC).lowercase()
         val plain = Normalizer.normalize(folded, Normalizer.Form.NFD).replace(marks, "")
-        return JapaneseKanji.fromChinese(Normalizer.normalize(plain, Normalizer.Form.NFC)).replace(notWord, "")
+        return JapaneseKanji.fromChinese(HanForms.simplified(Normalizer.normalize(plain, Normalizer.Form.NFC))).replace(notWord, "")
     }
 
     /** The title without what editions and guests add: brackets, "feat. …", " - Remastered 2011". */
@@ -43,11 +46,25 @@ object SongMatch {
 
     private fun scripts(s: String) = Script.foreignIn(s)
 
+    private val quoted = Regex("[\"“”„«»]([^\"“”„«»]{3,})[\"“”„«»]")
+
+    /**
+     * The ways a title may be written shorter: whole, bare ([bareTitle]), and for a classical work the piece itself
+     * ("Turandot, Act 3: "Nessun dorma" (Live)" is "Nessun dorma" elsewhere): what's quoted, or after the last colon.
+     */
+    private fun forms(t: String): List<String> {
+        val bare = bareTitle(t)
+        // Outside brackets only: "(from DreamWorks Animation's "TROLLS")" doesn't name the song.
+        val open = t.replace(bracketed, " ")
+        val piece = listOfNotNull(quoted.find(open)?.groupValues?.get(1), open.substringAfterLast(": ", "").takeIf { it.isNotBlank() })
+        return (listOf(t, bare) + piece).map(::key).filter { it.isNotEmpty() }.distinct()
+    }
+
     /** The title [found] against the song's [wanted] one. */
     fun title(found: String?, wanted: String): Verdict {
         if (found.isNullOrBlank() || wanted.isBlank()) return Verdict.ABSENT
-        val f = listOf(key(found), key(bareTitle(found))).filter { it.isNotEmpty() }.distinct()
-        val w = listOf(key(wanted), key(bareTitle(wanted))).filter { it.isNotEmpty() }.distinct()
+        val f = forms(found)
+        val w = forms(wanted)
         if (f.isEmpty() || w.isEmpty()) return Verdict.ABSENT
         if (f.any { it in w }) return Verdict.MATCH
         if (scripts(bareTitle(found)) != scripts(bareTitle(wanted))) return Verdict.OTHER_SCRIPT
@@ -126,6 +143,14 @@ object SongMatch {
         fits(song, title, listOfNotNull(artist?.takeIf { it.isNotBlank() }), sec)
 
     /**
+     * Untimed lyrics under the song's own title by someone else (a cover's, as Bini and LyricsPlus file "Pretender" by
+     * Tokyo Arrow for Official Hige Dandism's): the words are the song's, and without timings the other recording
+     * doesn't matter. Taken only when nothing [fits], and only with no length that's off.
+     */
+    fun sameWordsUntimed(song: Song, title: String?, sec: Double?): Boolean =
+        title(title, song.title) == Verdict.MATCH && length(song, sec) != Verdict.MISMATCH
+
+    /**
      * How much of word-timed lyrics [words] the line-timed [reference] of the song has: the share of its lines found
      * there, nearly word for word. Null when they can't be compared (too few lines, or written in other scripts: a
      * romanized copy of the same song).
@@ -137,7 +162,12 @@ object SongMatch {
         fun scriptsOf(l: List<LyricLine>) = l.filter { !it.isGap }.flatMapTo(HashSet()) { scripts(it.text) }
         if (scriptsOf(words) != scriptsOf(reference)) return null
         val refBigrams = theirs.map(::bigrams)
-        val found = mine.count { m -> val b = bigrams(m); refBigrams.any { dice(b, it) >= SAME_LINE } }
+        // Sources break lines in different places: a line may be two of the other's run together, or half of one.
+        val refLong = theirs.filter { it.length >= 4 }
+        val found = mine.count { m ->
+            val b = bigrams(m)
+            refBigrams.any { dice(b, it) >= SAME_LINE } || (m.length >= 4 && theirs.any { it.contains(m) }) || refLong.any { m.contains(it) }
+        }
         return found.toDouble() / mine.size
     }
 

@@ -67,6 +67,27 @@ class LyricMatchTest {
         assertTrue("the artist in another script", SongMatch.fits(song("Lemon", "Kenshi Yonezu", 255), "Lemon", "米津玄師", 255.0))
     }
 
+    /** Found by the coverage run (LyricCoverageLiveTest): right songs the first version of the check refused. */
+    @Test fun rightSongsTheCoverageRunFound() {
+        // YouTube Music writes Mandarin names in traditional characters, the sources in simplified ones.
+        assertTrue(SongMatch.fits(song("告白氣球", "周杰倫", 216), "告白气球", "周杰伦", 215.0))
+        assertTrue(SongMatch.fits(song("因為愛情 - Because Of Love", "Eason Chan", 217), "因为爱情", "陈奕迅", 216.0))
+        // A classical piece is filed under its own name.
+        val nessun = Song("x", "Turandot, Act 3: \"Nessun dorma\" (Live)", listOf(ArtistRef("Luciano Pavarotti"), ArtistRef("Giacomo Puccini")), null, 205)
+        assertTrue(SongMatch.fits(nessun, "Nessun dorma", "Luciano Pavarotti", 204.0))
+        assertTrue(SongMatch.fits(nessun, "Turandot / Act 3 - Puccini: Turandot / Act 3 - \"Nessun dorma!\" (Live)", "Luciano Pavarotti", 205.0))
+        assertFalse(SongMatch.fits(nessun, "Vesti la giubba", "Luciano Pavarotti", 205.0))
+        // A cover's untimed words under the song's own title (Bini's and LyricsPlus' "Pretender" by Tokyo Arrow).
+        val pretender = song("Pretender", "Official Hige Dandism", 327)
+        assertFalse(SongMatch.fits(pretender, "Pretender", "Tokyo Arrow", 325.0))
+        assertTrue(SongMatch.sameWordsUntimed(pretender, "Pretender", 325.0))
+        assertFalse(SongMatch.sameWordsUntimed(pretender, "Pretender", 234.0))
+        val bini = arr("""[{"track_name":"Pretender","artist_name":"Tokyo Arrow","duration":325,"timing_type":"none","lyricsUrl":"https://x/1"},
+            {"track_name":"Pretender","artist_name":"Yudai","duration":330,"timing_type":"word","lyricsUrl":"https://x/2"}]""")
+        assertEquals("https://x/1", repo.biniPick(bini, pretender).let { (it as kotlinx.serialization.json.JsonObject)["lyricsUrl"].toString().trim('"') })
+        assertNull("a timed cover isn't taken", repo.biniPick(JsonArray(bini.drop(1)), pretender))
+    }
+
     @Test fun anotherSongOfTheSameLengthIsRefused() {
         val queen = song("Don't Stop Me Now", "Queen", 209)
         assertFalse(SongMatch.fits(queen, "Bohemian Rhapsody", "Queen", 209.0))
@@ -171,6 +192,19 @@ class LyricMatchTest {
         // A romanized copy can't be compared: no verdict.
         assertNull(SongMatch.linesInCommon(words(listOf("夢を見ていた", "月光", "花火の夜", "君の声")), lines(texts.take(4))))
         assertNull(SongMatch.linesInCommon(words(texts.take(2)), lines(texts)))
+        // Lines broken in other places: two run together, or one in halves.
+        val merged = texts.chunked(2).map { it.joinToString(" ") }
+        assertTrue(SongMatch.linesInCommon(words(merged), lines(texts))!! >= 0.9)
+        assertTrue(SongMatch.linesInCommon(words(texts), lines(merged))!! >= 0.9)
+    }
+
+    /** The coverage run: Mandarin word lyrics in simplified characters against YouTube Music's traditional ones. */
+    @Test fun traditionalAndSimplifiedAreTheSameLines() {
+        val simp = listOf("我们说过的话", "时间会让你忘记", "风吹过东边的门", "梦里还有你的声音", "爱是一个长长的梦", "没有人听见我的心")
+        val trad = listOf("我們說過的話", "時間會讓你忘記", "風吹過東邊的門", "夢裡還有你的聲音", "愛是一個長長的夢", "沒有人聽見我的心")
+        val other = listOf("山上的雪很白", "河水向东流去", "孩子在门口等着", "妈妈做好了饭菜", "天黑了快回家", "明天又是新的一天")
+        assertTrue(SongMatch.linesInCommon(words(simp), lines(trad))!! >= 0.9)
+        assertTrue(SongMatch.linesInCommon(words(other), lines(trad))!! < SongMatch.MIN_LINES_IN_COMMON)
     }
 
     @Test fun anotherSongsWordLyricsAreDropped() = runBlocking {

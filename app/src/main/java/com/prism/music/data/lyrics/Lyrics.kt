@@ -575,8 +575,9 @@ class LyricsRepository(
         fun first(vararg keys: String) = keys.firstNotNullOfOrNull { k -> meta[k]?.let { (it as? kotlinx.serialization.json.JsonPrimitive)?.takeIf { p -> p.isString }?.content } }
         val title = first("title", "trackName", "track_name", "track", "song", "songName", "song_name")
         val artist = first("artist", "artistName", "artist_name", "artists")
-        val sec = (meta["duration"] ?: meta["totalDuration"]).str()?.toDoubleOrNull()?.let { if (it > 10_000) it / 1000 else it }
-        return SongMatch.fits(song, title, artist, sec)
+        // No length: these services were asked with the song's length already, and what they call a duration (LyricsPlus'
+        // "totalDuration" is the lyrics' own, "4:50.984") isn't the recording's.
+        return SongMatch.fits(song, title, artist, null)
     }
 
     private fun getJson(url: okhttp3.HttpUrl, headers: Map<String, String> = emptyMap()): JsonElement? =
@@ -837,6 +838,8 @@ class LyricsRepository(
             SongMatch.fits(song, it.str("track_name"), it.str("artist_name") ?: it.str("artist"), it.str("duration")?.toDoubleOrNull())
         }.sortedWith(compareBy({ timingRank(it.str("timing_type")) }, { abs((it.str("duration")?.toDoubleOrNull() ?: 0.0) - song.durationSec) }))
             .firstOrNull()
+            // Else a cover's untimed words under the song's own title ([SongMatch.sameWordsUntimed]).
+            ?: results.firstOrNull { it.str("timing_type") == "none" && SongMatch.sameWordsUntimed(song, it.str("track_name"), it.str("duration")?.toDoubleOrNull()) }
     }
 
     /** Apple Music TTML through the Bini catalogue (a second matcher over Apple's lyrics). */
@@ -890,11 +893,14 @@ class LyricsRepository(
             // a song without lyrics wait longer. (A dead mirror answers 404 to everything, so only the good one counts.)
             if (code == 404 && host == lyricsPlusGood) return null
             if (body == null) continue
-            if (LyricsPlusFormat.parse(body).isNotEmpty()) {
+            val lines = LyricsPlusFormat.parse(body)
+            if (lines.isNotEmpty()) {
                 lyricsPlusGood = host
-                // Its own title and artist, where it says them, have to be the song's (6.1).
+                // Its own title and artist, where it says them, have to be the song's (6.1); a cover's words without
+                // timings under the song's own title will do ([SongMatch.sameWordsUntimed]).
                 val meta = runCatching { InnerTube.json.parseToJsonElement(body) }.getOrNull().field("metadata")
-                if (!metaFits(song, meta)) return null
+                val untimed = lines.filter { !it.isGap }.map { it.timeMs }.distinct().size <= 1
+                if (!metaFits(song, meta) && !(untimed && SongMatch.sameWordsUntimed(song, meta.str("title"), null))) return null
                 return LyricsPlusFormat.PREFIX + body
             }
         }
