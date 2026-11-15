@@ -347,11 +347,16 @@ class AppContainer(val app: Application) {
     val ytm = YouTubeMusic(
         innerTube,
         songsEverywhere = { settings.current.let { it.radioSongsOnly && it.songsEverywhere } },
-        onPairs = { queue.counterparts.putAll(it) },
+        onPairs = { pairs ->
+            pairs.forEach { (song, video) -> queue.counterparts[song.id] = video }
+            plays.learnAll(pairs.map { (song, video) -> video to song }, com.prism.music.data.meta.PairSource.ALBUM_PAGE)
+        },
     ).apply { moodsCache = com.prism.music.data.MoodsCache(app.filesDir) }
     val db = PrismDatabase.build(app)
     /** Versions of songs the listener picked to hear instead (1.7.9, "Play a different version"). */
     val versions = com.prism.music.data.SongVersions(app.getSharedPreferences("song_versions", android.content.Context.MODE_PRIVATE))
+    /** 1.8.7 §3.2: what plays for each row, one answer for playback, downloads, covers, history and lyrics. */
+    val plays = com.prism.music.data.meta.PlaysAs(com.prism.music.data.meta.PlaysAs.fileIn(app.filesDir), scope, pickOf = { versions.picks.value[it] })
     val streams by lazy { StreamResolver(app, http, settings, innerTube).apply { versionOf = versions::streamedOf; resolverMade = this } }
     val translator = com.prism.music.data.lyrics.LyricsTranslator(http, File(app.filesDir, "translations"))
     /** Artist pages' Wikipedia bios (1.8.2), kept with the artist pages. Asks nothing unless that switch is on. */
@@ -615,8 +620,20 @@ class AppContainer(val app: Application) {
      */
     val downloadState = kotlinx.coroutines.flow.MutableStateFlow<Map<String, com.prism.music.download.DownloadInfo>>(emptyMap())
     val videoState = kotlinx.coroutines.flow.MutableStateFlow<Map<String, com.prism.music.download.VideoDownload>>(emptyMap())
-    /** Music videos downloaded as their song, video id -> song id ([com.prism.music.download.forRow], #315). */
+    /**
+     * Rows whose download is kept under their song's id, row id -> song id ([com.prism.music.download.forRow], #315):
+     * music videos downloaded as their song, and (1.8.7 §3.2) while videos play as their songs, every video whose song
+     * [plays] knows ([com.prism.music.data.meta.PlaysAsRules.keptAs]).
+     */
     val downloadStandIns = kotlinx.coroutines.flow.MutableStateFlow<Map<String, String>>(emptyMap())
+    init {
+        scope.launch {
+            kotlinx.coroutines.flow.combine(
+                plays.learned, plays.downloaded, versions.picks,
+                settings.flow.map { com.prism.music.download.swapsVideos(it) }.distinctUntilChanged(),
+            ) { _, _, _, everywhere -> plays.keptAs(everywhere) }.collect { downloadStandIns.value = it }
+        }
+    }
     /** Songs left out when a whole list downloads (#221). */
     val downloadSkips by lazy { com.prism.music.download.DownloadSkips(app) }
     /** Playlists that stay downloaded as they grow (#298). */
@@ -770,8 +787,9 @@ class AppContainer(val app: Application) {
     /**
      * Songs YouTube won't play where the listener is, and the music video whose sound plays in their place (#93: the
      * video was allowed when its song wasn't). Set by the player when a song fails as unavailable; for this run only.
+     * One of [plays]' sources ([com.prism.music.data.meta.PlaysAs.blocked]).
      */
-    val soundFrom = ConcurrentHashMap<String, String>()
+    val soundFrom: ConcurrentHashMap<String, String> get() = plays.blocked
 
     /**
      * 1.8.7 (#408): song downloads YouTube refused every way, and the music video whose sound comes down in their place
@@ -1169,6 +1187,7 @@ class AppContainer(val app: Application) {
         videoId: String?, playlistId: String?, params: String? = null, continuation: String? = null, keepFirst: Boolean = false,
     ): com.prism.music.data.model.NextResult {
         val r = ytm.next(videoId, playlistId, params, continuation)
+        plays.learnAll(r.songPairs(), com.prism.music.data.meta.PairSource.RADIO)
         return (if (settings.current.radioSongsOnly) r.songsOnly(keepFirst) else r).also { queue.counterparts.putAll(it.counterparts) }
     }
 

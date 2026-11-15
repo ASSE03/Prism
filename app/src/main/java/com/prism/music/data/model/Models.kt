@@ -319,6 +319,19 @@ data class NextResult(
     fun videoSongs(): Map<String, Song> = songs.filter { it.isVideo && !it.isLive && !it.isEpisode }
         .mapNotNull { v -> counterpartSongs[v.id]?.takeIf { !it.isVideo }?.let { v.id to it } }.toMap()
 
+    /**
+     * 1.8.7 §3.2: every pairing YouTube gives in the panel as (music video id, its song), whichever half the panel lists:
+     * a video with its song, or a song with its video.
+     */
+    fun songPairs(): List<Pair<String, Song>> = songs.mapNotNull { p ->
+        val o = counterpartSongs[p.id] ?: return@mapNotNull null
+        when {
+            p.isVideo && !o.isVideo && !p.isLive && !p.isEpisode -> p.id to o
+            !p.isVideo && o.isVideo && !o.isLive && !o.isEpisode && !p.isLive && !p.isEpisode -> o.id to p
+            else -> null
+        }
+    }
+
     fun songsOnly(keepFirst: Boolean = false): NextResult {
         val pairs = counterparts.toMutableMap()
         val swapped = songs.mapIndexedNotNull { i, s ->

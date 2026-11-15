@@ -705,7 +705,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
         trackedSong = song
         // For "No repeats this session": heard, however briefly (a quick skip never reaches the history).
-        if (!song.isEpisode) c.sessionHeard.note(song, c.queue.counterparts[song.id])
+        if (!song.isEpisode) c.sessionHeard.note(song, c.queue.counterparts[song.id] ?: c.plays.videoOf(song.id))
         trackedSource = sourceOf(mediaItem)
         trackedRecommended = picked || mediaItem.mediaId in c.queue.smartPicks.value ||
             c.queue.source.value.originId?.let { com.prism.music.data.foryou.ForYou.isMixId(it) } == true
@@ -1802,6 +1802,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
         if (!c.player.songsEverywhere() && !fromRadio) return
         val video = item.toSong()?.takeIf { it.isVideo && !it.isLive && !it.isEpisode && !it.isLocal } ?: return
+        // A version the listener picked for the video plays in its place, and shows as that one already (#328, 1.8.7 §3.2).
+        if (c.plays.picked(video.id)) return
         if (!findingSongs.add(video.id)) return
         scope.launch {
             try {
@@ -1811,8 +1813,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 val song = c.player.songFor(video) ?: run {
                     // #328: no song of its length, so its own sound plays; its song's cover and album are there from
                     // the start, not seconds after it begins ([songCoverForVideo]). Same address: nothing reloads.
-                    if (c.versions.of(video.id) != null) return@launch
-                    val found = runCatching { withContext(Dispatchers.IO) { c.ytm.songForVideo(video, anyLength = true) } }.getOrNull() ?: return@launch
+                    val found = coverSongFor(video) ?: return@launch
                     val cover = found.thumbnail?.takeIf { it != video.thumbnail } ?: return@launch
                     val at = queued() ?: return@launch
                     val now = player.getMediaItemAt(at).toSong() ?: return@launch
@@ -2008,18 +2009,26 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
     }
 
+    /**
+     * The song whose cover and album a music video playing as itself shows: one known already (1.8.7 §3.2), else the
+     * same title by the same artist at any length, kept as a cover-only pairing ([com.prism.music.data.meta.PairSource.COVER]).
+     */
+    private suspend fun coverSongFor(video: Song): Song? =
+        c.plays.coverSong(video.id) ?: runCatching { withContext(Dispatchers.IO) { c.ytm.songForVideo(video, anyLength = true) } }.getOrNull()
+            ?.also { c.plays.learn(video.id, it, com.prism.music.data.meta.PairSource.COVER) }
+
     private fun songCoverForVideo(song: Song) {
         if (!song.isVideo || song.isLive || song.isLocal || song.isEpisode || song.isUpload) return
         // A version picked to play in its place shows as that one already (#328).
-        if (c.versions.of(song.id) != null) return
+        if (c.plays.picked(song.id)) return
         val item = player.currentMediaItem ?: return
         // A video found as a song's video already shows its song's cover; a video with no song found when it was
         // tapped (PlayerConnection.playQueue waits 4 s for it) is the item itself, shown as its video or, after Song, as its sound.
         if (item.videoModeId != null && item.videoModeId != song.id) return
         scope.launch {
-            // Its song if one was found to play (the session's), else the same title by the same artist at any length:
-            // only for the cover, so it's never kept as the song to play in its place.
-            val found = c.player.songFor(song) ?: runCatching { withContext(Dispatchers.IO) { c.ytm.songForVideo(song, anyLength = true) } }.getOrNull()
+            // Its song if one was found to play, else the same title by the same artist at any length: only for the
+            // cover, so it's never kept as the song to play in its place ([coverSongFor]).
+            val found = c.player.songFor(song) ?: coverSongFor(song)
             android.util.Log.i("PrismVideo", "cover for video ${song.id} \"${song.title}\": song ${found?.id} ${found?.thumbnail}")
             if (found == null) return@launch
             val cover = found.thumbnail?.takeIf { it != song.thumbnail } ?: return@launch
