@@ -87,7 +87,45 @@ class Spotify(private val c: AppContainer) {
     private val _connection = MutableStateFlow(connectionNow())
     val connection: StateFlow<Connection> = _connection
 
+    // ---- "Sign in to Spotify" (1.8.7.5): the web-player session, read only
+
+    val sessionTokens by lazy { SessionTokens(store, SessionWeb(c.app, c.http)) }
+    /** The session's reads (liked songs, playlists). Nothing here can change anything on Spotify. */
+    val web by lazy { SpotifyWeb(c.http, sessionTokens, SpotifyCodeBook(store.prefs, c.http), userAgent = { SessionWeb.userAgent(c.app) }) }
+
+    /** Connected by the sign-in on Spotify's page (not by the listener's own developer app). */
+    val bySession: Boolean get() = store.sessionOn
+
+    /**
+     * The sign-in screen calls this once Spotify's page has landed signed in ([SessionWeb.signedIn]): the first token
+     * is fetched and the account's name read. False (and [Connection.Failed]) when no token came for them.
+     */
+    suspend fun sessionSignedIn(): Boolean {
+        _connection.value = Connection.Waiting
+        return try {
+            // One route at a time: an own-key connection is given up for the sign-in.
+            if (store.tokens() != null) store.clearTokens()
+            if (!sessionTokens.begin()) throw SpotifyError.Unavailable(0, "no token after the sign-in")
+            val p = SpotifyWebParse.profile(web.read("profileAttributes"))
+            store.userId = p.id
+            store.userName = p.name
+            log("connected by sign-in")
+            _connection.value = Connection.Connected(p.name)
+            schedule()
+            enabledFeatures().forEach { f -> c.scope.launch { run(f) } }
+            true
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            log("sign-in didn't finish: ${e.javaClass.simpleName}")
+            store.clearSession()
+            _connection.value = Connection.Failed(tr(R.string.spot_failed_network))
+            false
+        }
+    }
+
     private fun connectionNow(): Connection = when {
+        store.sessionOn && store.sessionEnded -> Connection.Revoked
         store.revoked -> Connection.Revoked
         store.connected -> Connection.Connected(store.userName ?: store.userId.orEmpty())
         else -> Connection.None
@@ -193,7 +231,10 @@ class Spotify(private val c: AppContainer) {
         cancelConnect()
         SpotifyWorker.cancel(c.app)
         // The tokens first, so a feature running now stops at its next request; then each waits for its run to end.
+        val session = store.sessionOn
         store.wipe(clientIdToo)
+        // A sign-in on Spotify's page also leaves this phone: its cookies and the page's storage.
+        if (session) withContext(Dispatchers.Main) { SessionWeb.signOut() }
         running.getValue(SpotifyFeature.PLAYLISTS).withLock { runCatching { playlists.forget(keepPlaylists) } }
         running.getValue(SpotifyFeature.TOP).withLock { top.forget() }
         running.getValue(SpotifyFeature.LIKES).withLock { likes.forget() }

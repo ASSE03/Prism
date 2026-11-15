@@ -92,6 +92,29 @@ class SpotifyStore(private val auth: SharedPreferences, val prefs: SharedPrefere
 
     val connected: Boolean get() = connectedIn(auth)
 
+    // The web-player sign-in (1.8.7.5). Kept beside the own-key tokens, in the same file that no backup carries.
+
+    /** The listener signed in on Spotify's page and a token came for them. False again after [wipe] or [clearSession]. */
+    val sessionOn: Boolean get() = auth.getBoolean(S_ON, false)
+
+    /** Spotify answered for nobody (signed out there, or the password changed): the card offers "Sign in again". */
+    var sessionEnded: Boolean
+        get() = auth.getBoolean(S_ENDED, false)
+        set(v) { auth.edit().putBoolean(S_ENDED, v).apply() }
+
+    fun sessionToken(): SessionToken? {
+        val access = auth.getString(S_ACCESS, null)?.let(box::open) ?: return null
+        return SessionToken(access, auth.getLong(S_EXPIRES, 0))
+    }
+
+    fun saveSession(t: SessionToken) {
+        auth.edit().putString(S_ACCESS, box.seal(t.access)).putLong(S_EXPIRES, t.expiresAt)
+            .putBoolean(S_ON, true).putBoolean(S_ENDED, false).commit()
+    }
+
+    /** The session's token and marks go; the own-key tokens, if any, stay. */
+    fun clearSession() { auth.edit().remove(S_ACCESS).remove(S_EXPIRES).remove(S_ON).remove(S_ENDED).commit() }
+
     /** Only the tokens and the account go (a sign-in that didn't finish): the switches and the Client ID stay. */
     fun clearTokens() { auth.edit().clear().commit() }
 
@@ -114,8 +137,13 @@ class SpotifyStore(private val auth: SharedPreferences, val prefs: SharedPrefere
         private const val USER_ID = "user_id"
         private const val USER_NAME = "user_name"
         private const val REVOKED = "revoked"
+        private const val S_ACCESS = "session_access"
+        private const val S_EXPIRES = "session_expires_at"
+        private const val S_ON = "session_on"
+        private const val S_ENDED = "session_ended"
 
         /** Connected, read from [auth] ([AUTH_PREFS]) alone: nothing is unsealed, no keystore is touched. */
-        fun connectedIn(auth: SharedPreferences): Boolean = auth.contains(ACCESS) && !auth.getBoolean(REVOKED, false)
+        fun connectedIn(auth: SharedPreferences): Boolean =
+            (auth.contains(ACCESS) && !auth.getBoolean(REVOKED, false)) || (auth.getBoolean(S_ON, false) && !auth.getBoolean(S_ENDED, false))
     }
 }
