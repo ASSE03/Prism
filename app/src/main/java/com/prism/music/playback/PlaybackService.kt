@@ -500,7 +500,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     /**
      * The second player Mix plays a song's ending on while the next one fades in: the same sources, the same
      * effects (spatial audio, the ending song's normalization, and the equalizer through the shared audio
-     * session), and no audio focus of its own.
+     * session), on the same output, and no audio focus of its own.
      */
     private fun buildTailPlayer(shift: ShiftProcessor): ExoPlayer {
         val s = c.settings.current
@@ -508,7 +508,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val tailNormalizer = NormalizerProcessor().apply { setGainDb(normalizeGainDb) }
         // The same headphone correction as the main player, so a blend doesn't change the sound.
         val tailEq = ParametricEqProcessor().apply { c.headphoneEq.active.value.let { configure(it?.profile, it?.strength ?: 1f) } }
-        val renderers = object : DefaultRenderersFactory(this) {
+        // Audio renderers only: it plays a song's ending and nothing else (plan 5.1).
+        val renderers = object : AudioOnlyRenderers(this) {
             override fun buildAudioSink(context: Context, enableFloatOutput: Boolean, enableAudioTrackPlaybackParams: Boolean): AudioSink =
                 DefaultAudioSink.Builder(context)
                     .setEnableFloatOutput(enableFloatOutput || s.lossless)
@@ -544,6 +545,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             .build()
             .also {
                 it.skipSilenceEnabled = false
+                // Where the main player plays: the output picked in the device sheet (plan 5.1).
+                it.playOnPicked(c.player.preferredOutput.value)
                 // #364: the main player's underruns are logged; the ending song's, heard through the blend, too.
                 it.addAnalyticsListener(object : AnalyticsListener {
                     override fun onAudioUnderrun(eventTime: AnalyticsListener.EventTime, bufferSize: Int, bufferSizeMs: Long, elapsedSinceLastFeedMs: Long) {
