@@ -406,6 +406,10 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     val controlsAtOpen = panelPlayer != com.prism.music.data.prefs.PanelPlayer.HIDDEN
     val openLyrics = { lyricsControlsOpen = controlsAtOpen; lyricsOpen = true; queueOpen = false; statsOpen = false }
     val closeLyrics = { lyricsControlsOpen = false; lyricsOpen = false }
+    // #215: a recognized song played opens on its lyrics (taken once, by that song).
+    LaunchedEffect(PlayerAsks.lyricsFor, song.id) {
+        if (PlayerAsks.lyricsFor == song.id) { PlayerAsks.lyricsFor = null; openLyrics() }
+    }
     val toggleQueue = {
         val opening = !queueOpen
         queueOpen = opening
