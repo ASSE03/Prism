@@ -593,7 +593,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                         val onData = context.getSystemService(ConnectivityManager::class.java)?.isActiveNetworkMetered == true
                         com.prism.music.data.canvas.canvasNetworkAllowed(settings, onData)
                     }, run = loopWait)
-                    else { loopWait?.end("no loop asked (${want.notAsked?.text})"); null }
+                    else { loopWait?.endNotAsked(want.notAsked?.text); null }
                 }
             },
             show = { value = it },

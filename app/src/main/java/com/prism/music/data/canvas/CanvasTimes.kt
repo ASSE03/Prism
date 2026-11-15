@@ -34,6 +34,9 @@ class CanvasTimes(private val clock: () -> Long = System::nanoTime) {
         }
 
         /** The run is over: [how] says how ("shown", "no loop"). The line it leaves is [last]. */
+        /** No loop was asked for, and why (a line for the diagnostics log, not shown in the app). */
+        fun endNotAsked(why: String?) = end("no loop asked ($why)")
+
         fun end(how: String) {
             val line = synchronized(this) {
                 if (ended) return
