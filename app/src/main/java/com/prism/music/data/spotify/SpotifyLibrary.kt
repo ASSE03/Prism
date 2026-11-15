@@ -14,6 +14,9 @@ interface SpotifyLibrary {
     /** False for the sign-in: nothing is ever written to Spotify with it. */
     val canWrite: Boolean
 
+    /** True when the songs of a playlist the listener only follows can be read (the sign-in; a developer app gets 403). */
+    val readsFollowed: Boolean
+
     /** Every playlist in the library (own, collaborative and followed), up to [maxPages] pages of 50. */
     suspend fun playlists(maxPages: Int): List<SpotifyPlaylist>
 
@@ -28,6 +31,7 @@ interface SpotifyLibrary {
 
 class ApiLibrary(private val api: SpotifyApi) : SpotifyLibrary {
     override val canWrite = true
+    override val readsFollowed = false
 
     override suspend fun playlists(maxPages: Int): List<SpotifyPlaylist> {
         val all = ArrayList<SpotifyPlaylist>()
@@ -65,14 +69,15 @@ class ApiLibrary(private val api: SpotifyApi) : SpotifyLibrary {
  */
 class WebLibrary(
     private val web: SpotifyWeb,
-    /** The signed-in account's id: its own playlists are the ones mirrored, so the ones worth a look each. */
-    private val me: () -> String?,
+    /** The playlists that are mirrored (the listener's own, and followed ones they brought in): each gets a look. */
+    private val mirrored: (SpotifyPlaylist) -> Boolean,
 ) : SpotifyLibrary {
     override val canWrite = false
+    override val readsFollowed = true
 
     /**
      * The library's list names no song count for a playlist (seen on the A16, 2026-11-15), so each of the listener's
-     * own playlists is asked for its count with one small read; followed ones are only named and keep 0.
+     * mirrored playlists is asked for its count with one small read; the others are only named and keep 0.
      */
     override suspend fun playlists(maxPages: Int): List<SpotifyPlaylist> {
         val all = ArrayList<SpotifyPlaylist>()
@@ -83,10 +88,9 @@ class WebLibrary(
             offset += PAGE
             if (page.items.isEmpty() || offset >= page.total) break
         }
-        val mine = me()
         return all.map { p ->
             if (p.total > 0) p.copy(snapshot = snapshotOf(p.total))
-            else if (mine != null && (p.ownerId == mine || p.collaborative)) {
+            else if (mirrored(p)) {
                 val total = SpotifyWebParse.playlistItems(web.read("fetchPlaylist", playlistVars(p.id, 1, 0))).total
                 p.copy(total = total, snapshot = snapshotOf(total))
             } else p

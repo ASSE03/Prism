@@ -31,6 +31,8 @@ data class PlaylistMirror(
     /** Playlists the listener follows but doesn't own: Development Mode apps can't read their songs (February 2026). */
     val notYours: Int = 0,
     val listedAt: Long = 0,
+    /** Followed playlists the listener brought in (1.8.7.5, the sign-in only): mirrored like their own from then on. */
+    val brought: List<String> = emptyList(),
 )
 
 /**
@@ -96,7 +98,9 @@ class SpotifyPlaylists(
     suspend fun refreshAll(userId: String, now: Long = System.currentTimeMillis()) = lock.withLock {
         val all = library().playlists(MAX_LIST_PAGES)
 
-        val (yours, others) = split(all, userId)
+        // With the sign-in, a followed playlist the listener brought in is read like one of their own.
+        val brought = if (library().readsFollowed) mirror().brought.filter { id -> all.any { it.id == id } } else emptyList()
+        val (yours, others) = all.partition { isYours(it, userId) || it.id in brought }
         val old = mirror().lists.associateBy { it.playlist.id }
         val refused = ArrayList<SpotifyPlaylist>()
         val lists = yours.mapNotNull { p ->
@@ -109,9 +113,30 @@ class SpotifyPlaylists(
         // A playlist gone from Spotify (deleted there, or no longer shared with the listener) goes from Library too.
         old.values.filter { o -> lists.none { it.playlist.id == o.playlist.id } }.forEach { gone -> gone.prismId?.let { if (hands.exists(it)) hands.delete(it) } }
         SpotifyQueue.remember(db, lists.flatMap { it.tracks })
-        save(PlaylistMirror(apply(lists), others.size + refused.size, now))
+        save(PlaylistMirror(apply(lists), others.size + refused.size, now, brought))
         // The ones whose songs Spotify keeps to itself: only named in Library (never Prism playlists).
         saveFollowed(others + refused.filter { r -> lists.none { it.playlist.id == r.id } })
+    }
+
+    /**
+     * "Bring it in" (1.8.7.5, the sign-in only): a playlist the listener follows is read and becomes a Prism playlist
+     * that stays in step like their own. One at a time, when asked: some people follow hundreds. Returns its Prism
+     * playlist, or null when this connection can't read followed playlists or it isn't one of them.
+     */
+    suspend fun bringIn(id: String, now: Long = System.currentTimeMillis()): String? = lock.withLock {
+        if (!library().readsFollowed) return@withLock null
+        val m = mirror()
+        m.lists.firstOrNull { it.playlist.id == id && !it.removed }?.prismId?.let { return@withLock it }
+        val p = _followed.value.firstOrNull { it.id == id } ?: return@withLock null
+        val items = readItems(id)
+        val snapshot = library().playlistSnapshot(id)?.first ?: WebLibrary.snapshotOf(items.size)
+        SpotifyQueue.remember(db, items)
+        matchNow(items)
+        val entry = MirroredPlaylist(p.copy(total = items.size, snapshot = snapshot), items, null, false, now)
+        val lists = apply(m.lists.filter { it.playlist.id != id } + entry)
+        save(m.copy(lists = lists, notYours = (m.notYours - 1).coerceAtLeast(0), brought = (m.brought + id).distinct()))
+        saveFollowed(_followed.value.filter { it.id != id })
+        lists.firstOrNull { it.playlist.id == id }?.prismId
     }
 
     // ---- Followed and saved playlists (1.8.1): listed, not mirrored
@@ -226,7 +251,9 @@ class SpotifyPlaylists(
          * the rest (followed or saved: their songs answer 403), each in Spotify's order.
          */
         fun split(all: List<SpotifyPlaylist>, userId: String): Pair<List<SpotifyPlaylist>, List<SpotifyPlaylist>> =
-            all.partition { it.ownerId == userId || it.collaborative }
+            all.partition { isYours(it, userId) }
+
+        fun isYours(p: SpotifyPlaylist, userId: String) = p.ownerId == userId || p.collaborative
 
         /** Where Spotify's app opens a playlist (it catches the link; a browser shows the web player otherwise). */
         fun openLink(id: String) = "https://open.spotify.com/playlist/$id"

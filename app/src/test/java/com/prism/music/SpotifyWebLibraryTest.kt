@@ -58,7 +58,8 @@ class SpotifyWebLibraryTest {
     private val api = SpotifyApi(net.client, store, pause = {})
     private val tokens = SessionTokens(store, SessionFetcher { SessionFetch.Failed("not in this test") })
     private val web = SpotifyWeb(net.client, tokens, SpotifyCodeBook(prefs, net.client), userAgent = { "UA" }, pause = {})
-    private val library = WebLibrary(web) { "samr" }
+    private var broughtIds: () -> Set<String> = { emptySet() }
+    private val library = WebLibrary(web) { it.ownerId == "samr" || it.id in broughtIds() }
     private val dir = File(app.filesDir, "spotify-web-test").apply { deleteRecursively() }
 
     @After fun close() { db.close(); auth.edit().clear().commit(); prefs.edit().clear().commit(); dir.deleteRecursively() }
@@ -194,6 +195,47 @@ class SpotifyWebLibraryTest {
         playlists.refreshAll("samr", now = 2)
         assertEquals("the list and the own playlist's count, not its songs again", 2, net.requests.size - before)
         assertTrue(sent(net.requests.size - 1).contains("\"limit\":1"))
+    }
+
+    @Test fun aFollowedPlaylistIsBroughtInWhenAskedAndStaysInStep() = runBlocking {
+        val song = ytSong("fHI8X4OXluQ", "Blinding Lights", "The Weeknd", 200)
+        var lofiSongs = 1
+        net.routes[SpotifyWeb.URL] = {
+            val body = sent(net.requests.size - 1)
+            when {
+                body.contains("\"libraryV3\"") -> 200 to libraryAnswer(3, pseudoLiked, playlistItem("p1", "Road", "samr", 1), playlistItem("p2", "Lofi", "lofigirl", 300))
+                body.contains("spotify:playlist:p2") -> 200 to playlistAnswer(lofiSongs, *(1..lofiSongs).map { inPlaylist(trackData("l$it", if (it == 1) "Blinding Lights" else "Song $it", "The Weeknd", "After Hours", 200_040, "trackDuration", uri = true)) }.toTypedArray())
+                else -> 200 to playlistAnswer(1, inPlaylist(trackData("t1", "Creep", "Radiohead", "Pablo Honey", 238_640, "trackDuration", uri = true)))
+            }
+        }
+        val hands = FakeHands()
+        val playlists = SpotifyPlaylists(api, db, importer, dir, hands, matchOf("Blinding Lights" to song), pause = {}, library = { library })
+        broughtIds = { playlists.mirror().brought.toSet() }
+        playlists.refreshAll("samr", now = 1)
+        assertEquals("nothing followed is read until asked", listOf("p2"), playlists.followed.value.map { it.id })
+        assertEquals(0, net.requests.count { sent(net.requests.indexOf(it)).contains("spotify:playlist:p2") })
+
+        val prismId = playlists.bringIn("p2", now = 2)!!
+        assertEquals("Lofi", hands.lists.getValue(prismId).first)
+        assertEquals(listOf("fHI8X4OXluQ"), hands.lists.getValue(prismId).second.map { it.id })
+        assertTrue("no longer only named", playlists.followed.value.isEmpty())
+        assertTrue(playlists.isMirror(prismId))
+        assertEquals("asked twice, it is the same playlist", prismId, playlists.bringIn("p2", now = 3))
+
+        // The next daily read keeps it mirrored, and reads it again when its song count changed.
+        lofiSongs = 2
+        playlists.refreshAll("samr", now = 4)
+        assertEquals(listOf("p1", "p2"), playlists.mirror().lists.map { it.playlist.id })
+        assertEquals(2, playlists.mirror().lists.last().tracks.size)
+        assertTrue(playlists.followed.value.isEmpty())
+        assertEquals(1, hands.lists.count { it.value.first == "Lofi" })
+    }
+
+    @Test fun aDeveloperAppCannotBringAFollowedPlaylistIn() = runBlocking {
+        store.saveTokens(com.prism.music.data.spotify.SpotifyTokens("acc", "ref", Long.MAX_VALUE))
+        val playlists = SpotifyPlaylists(api, db, importer, dir, FakeHands(), matchOf(), pause = {})
+        assertNull(playlists.bringIn("p2"))
+        assertEquals("nothing was asked", 0, net.requests.size)
     }
 
     @Test fun likedSongsComeInAndNothingIsWrittenToSpotify() = runBlocking {

@@ -612,8 +612,13 @@ fun LibraryScreen(bottomPadding: Dp) {
                                 LibraryItem(shown(p), asList, onLongClick = { menuFor = p }) { nav.open(p, onSong) }
                             }
                             items(foundFollowed, key = { "sf" + it.id }) { p ->
-                                val item = com.prism.music.data.model.PlaylistItem("spotify-followed:${p.id}", p.name, tr(R.string.spot_followed_subtitle, p.ownerName.ifBlank { tr(R.string.spotify) }), p.image)
-                                Box(Modifier.alpha(0.6f)) { LibraryItem(item, asList) { followedOpen = p } }
+                                // With the sign-in a followed playlist can be brought in (a tap away), so it isn't dimmed.
+                                val bring = c.spotify.canBringFollowed
+                                val item = com.prism.music.data.model.PlaylistItem(
+                                    "spotify-followed:${p.id}", p.name,
+                                    tr(if (bring) R.string.spot_session_followed_subtitle else R.string.spot_followed_subtitle, p.ownerName.ifBlank { tr(R.string.spotify) }), p.image,
+                                )
+                                Box(Modifier.alpha(if (bring) 1f else 0.6f)) { LibraryItem(item, asList) { followedOpen = p } }
                             }
                       }
                       val playlistsPart: androidx.compose.foundation.lazy.grid.LazyGridScope.() -> Unit = {

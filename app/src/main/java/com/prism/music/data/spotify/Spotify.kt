@@ -69,7 +69,9 @@ class Spotify(private val c: AppContainer) {
     val recent = SpotifyRecent(api, c.db, c.imports.importer, store)
     val top = SpotifyTop(api, c.db, dir)
     private val ownLibrary = ApiLibrary(api)
-    private val webLibrary by lazy { WebLibrary(web) { store.userId } }
+    private val webLibrary by lazy {
+        WebLibrary(web) { p -> SpotifyPlaylists.isYours(p, store.userId.orEmpty()) || p.id in playlists.mirror().brought }
+    }
     /** The library as the connection reads it now: the sign-in's reads, or the listener's own developer app. */
     private val library: () -> SpotifyLibrary = { if (store.sessionOn) webLibrary else ownLibrary }
     val playlists = SpotifyPlaylists(api, c.db, c.imports.importer, dir, LibraryHands(c.prismLibrary), match, library = library)
@@ -321,6 +323,27 @@ class Spotify(private val c: AppContainer) {
         val now = hiddenNow() + id
         store.prefs.edit().putStringSet(FOLLOWED_HIDDEN, now).apply()
         _hidden.value = now
+    }
+
+    /** True with the sign-in: a followed playlist can be brought in ([bringFollowed]); a developer app only gets its name. */
+    val canBringFollowed: Boolean get() = store.sessionOn && !store.sessionEnded
+
+    /**
+     * "Bring it in" on a followed playlist (the sign-in only): read, made a Prism playlist and kept in step from then
+     * on. Its Prism playlist's id, or null when it didn't work (the guard hears why).
+     */
+    suspend fun bringFollowed(id: String): String? = running.getValue(SpotifyFeature.PLAYLISTS).withLock {
+        if (!canBringFollowed || !_options.value.playlists) return@withLock null
+        val guard = guards.getValue(SpotifyFeature.PLAYLISTS)
+        try {
+            playlists.bringIn(id).also { guard.succeeded(); matchSoon() }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: SpotifyError.Revoked) {
+            _connection.value = Connection.Revoked; null
+        } catch (e: Exception) {
+            guard.failed(e); null
+        }
     }
 
     /** "Refresh now": the playlists read again at once (a copy just made in Spotify appears), whatever the day's run did. */

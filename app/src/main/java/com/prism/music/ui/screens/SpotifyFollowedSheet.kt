@@ -45,6 +45,39 @@ fun SpotifyFollowedSheet(p: SpotifyPlaylist, onDismiss: () -> Unit) {
     val scope = rememberCoroutineScope()
     var refreshing by remember { mutableStateOf(false) }
     var refreshed by remember { mutableStateOf(false) }
+    // With the sign-in on Spotify's page (1.8.7.5) its songs can be read: one action brings it in as a Prism playlist.
+    if (c.spotify.canBringFollowed) {
+        var bringing by remember { mutableStateOf(false) }
+        var failed by remember { mutableStateOf(false) }
+        ActionSheet(p.image, onDismiss) { close ->
+            ActionHeader(p.image, p.name, p.ownerName.ifBlank { null }, placeholderIcon = PrismIcons.QueueMusic)
+            Text(tr(R.string.spot_session_followed_why), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(horizontal = 20.dp))
+            ActionGroup(null, listOf(
+                ActionItem(
+                    PrismIcons.PlaylistAdd, tr(R.string.spot_session_bring), keepOpen = true,
+                    value = when { bringing -> tr(R.string.spot_session_bringing); failed -> tr(R.string.spot_session_bring_failed); else -> null },
+                ) {
+                    if (!bringing) {
+                        bringing = true; failed = false
+                        // In the app's scope: closing the sheet doesn't stop a playlist half read.
+                        c.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
+                            val made = c.spotify.bringFollowed(p.id)
+                            bringing = false
+                            if (made != null) close {} else failed = true
+                        }
+                    }
+                },
+                ActionItem(PrismIcons.OpenInNew, tr(R.string.spot_open_in_spotify)) {
+                    val view = Intent(Intent.ACTION_VIEW, Uri.parse(SpotifyPlaylists.openLink(p.id)))
+                    runCatching { context.startActivity(view) }.onFailure { runCatching { context.startActivity(view.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } }
+                },
+            )) { runAction(it, close) }
+            ActionGroup(null, listOf(
+                ActionItem(PrismIcons.PlaylistRemove, tr(R.string.spot_hide_from_library)) { c.spotify.hideFollowed(p.id) },
+            )) { runAction(it, close) }
+        }
+        return
+    }
     ActionSheet(p.image, onDismiss) { close ->
         ActionHeader(p.image, p.name, p.ownerName.ifBlank { null }, placeholderIcon = PrismIcons.QueueMusic)
         Text(tr(R.string.spot_followed_why), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(horizontal = 20.dp))
