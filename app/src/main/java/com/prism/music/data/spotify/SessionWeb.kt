@@ -84,6 +84,17 @@ class SessionWeb(
 
         fun userAgent(context: Context): String = userAgent(WebSettings.getDefaultUserAgent(context))
 
+        /**
+         * For the sign-in screen's own (visible) WebView, from its `shouldInterceptRequest`: once signed in, Spotify's
+         * page asks for a token to become a player. It gets an empty answer there too, so the page on screen can never
+         * show up among the listener's Spotify devices or play anything. Null for every other request (let it through:
+         * the sign-in page needs its captcha's hosts).
+         */
+        fun signInPageAnswer(request: WebResourceRequest): WebResourceResponse? =
+            if (SessionRules.isTokenRequest(request.url.toString())) {
+                WebResourceResponse("text/plain", "utf-8", 204, "No Content", emptyMap(), ByteArrayInputStream(ByteArray(0)))
+            } else null
+
         private val COOKIE_HOSTS = listOf(
             "https://open.spotify.com", "https://accounts.spotify.com", "https://www.spotify.com", "https://spotify.com",
             "https://challenge.spotify.com", "https://api-partner.spotify.com",
