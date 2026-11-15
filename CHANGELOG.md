@@ -41,6 +41,7 @@ What changed in each release. Older releases are described on the [Releases page
 ### Fixed
 
 - Lists that could crash on a repeated row (podcasts, library search, For you, Uploads, the versions sheet, Blend).
+- With Pure black, or Frosted pages off, the list's text read straight through the mini player and the tab bar. The bars are solid enough to read again (the Minimal Look had it too).
 - Quick picks on Home are recognised in every language, not only English.
 - The Moods page was read from storage again on every visit.
 - Backups no longer carry this phone's raw settings file, diagnostics, crash logs or Canvas clips, and restoring a backup made by 1.7.8 to 1.8.6 leaves them out (#498).
