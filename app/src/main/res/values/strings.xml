@@ -5495,10 +5495,10 @@
     <string name="tour_186_also_hours">Replay: %1$s shows the hours on each bar.</string>
     <string name="tour_187_plays_title">It just plays</string>
     <string name="tour_187_plays_about">This update is about one thing: the song you picked plays, and keeps playing.</string>
-    <string name="tour_187_plays_point_1">A network hiccup no longer skips the song. Prism tries again from the same place, and waits when the phone is offline.</string>
-    <string name="tour_187_plays_point_2">A song refused on one Wi-Fi network is tried another way, and Prism remembers what worked there.</string>
-    <string name="tour_187_plays_point_3">Prism closed in the background? Play on a headset or on the phone\'s media card picks up where it was.</string>
-    <string name="tour_187_plays_point_4">%1$s, under %2$s: a check that says in plain words what works on your phone and network.</string>
+    <string name="tour_187_plays_point_1">A network hiccup no longer skips the song: Prism tries again from the same place.</string>
+    <string name="tour_187_plays_point_2">A song refused on one Wi-Fi network is tried another way.</string>
+    <string name="tour_187_plays_point_3">Closed in the background, Prism picks up where it was when you press Play.</string>
+    <string name="tour_187_plays_point_4">%1$s, under %2$s: a check of what works on your phone and network.</string>
     <string name="tour_187_also_about">Lyrics, the DJ and a lighter player.</string>
     <string name="tour_187_also_lyrics_line">%1$s: with a full-screen Canvas, the line being sung stays over the picture.</string>
     <string name="tour_187_also_lyrics_right">The wrong song\'s lyrics are refused, and missing lyrics can be tried again.</string>
