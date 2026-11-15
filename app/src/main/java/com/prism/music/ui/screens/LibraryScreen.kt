@@ -374,9 +374,17 @@ fun LibraryScreen(bottomPadding: Dp) {
         ?: if (playlistOrder.isEmpty()) PlaylistSort.LIBRARY else PlaylistSort.CUSTOM
     // Signed out, YouTube playlists saved on the phone (H7) sit with Prism's own.
     val savedPlaylists by c.prismLibrary.playlists.collectAsState()
-    val myPlaylists = remember(playlists, prismLists, savedPlaylists, settings.isLoggedIn) {
-        // A Spotify playlist (1.8.1) says so where Prism's own say "Prism playlist".
-        prismLists.map { l -> l.item().let { if (c.spotify.isSpotifyPlaylist(l.id)) it.copy(subtitle = tr(R.string.spot_playlist_subtitle, com.prism.music.data.model.songCount(l.songs.size))) else it } } + (if (settings.isLoggedIn) emptyList() else savedPlaylists.map { it.item() }) + playlists.filter { it.id != "LM" }
+    // Which playlists are Spotify's and which are still being matched: Library follows both by itself (no refresh).
+    val spotifyMirrored by c.spotify.mirroredPlaylists.collectAsState()
+    val spotifyFilling by c.spotify.playlistFilling.collectAsState()
+    val spotifyBringing by c.spotify.followedBringing.collectAsState()
+    val myPlaylists = remember(playlists, prismLists, savedPlaylists, settings.isLoggedIn, spotifyMirrored, spotifyFilling) {
+        // A Spotify playlist (1.8.1) says so where Prism's own say "Prism playlist"; one still being matched says how far.
+        prismLists.map { l -> l.item().let {
+            if (!c.spotify.isSpotifyPlaylist(l.id)) it
+            else it.copy(subtitle = spotifyFilling[l.id]?.let { f -> tr(R.string.spot_playlist_syncing, f.done, f.total) }
+                ?: tr(R.string.spot_playlist_subtitle, com.prism.music.data.model.songCount(l.songs.size)))
+        } } + (if (settings.isLoggedIn) emptyList() else savedPlaylists.map { it.item() }) + playlists.filter { it.id != "LM" }
     }
     if (choosingFrom) SongsFromSheet(songsFrom, myPlaylists, { choosingFrom = false }) { chosen ->
         // Opened again: a YouTube playlist picked anew is read afresh.
@@ -618,7 +626,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                                 val bring = c.spotify.canBringFollowed
                                 val item = com.prism.music.data.model.PlaylistItem(
                                     "spotify-followed:${p.id}", p.name,
-                                    tr(if (bring) R.string.spot_session_followed_subtitle else R.string.spot_followed_subtitle, p.ownerName.ifBlank { tr(R.string.spotify) }), p.image,
+                                    tr(when { !bring -> R.string.spot_followed_subtitle; p.id in spotifyBringing -> R.string.spot_session_followed_bringing; else -> R.string.spot_session_followed_subtitle }, p.ownerName.ifBlank { tr(R.string.spotify) }), p.image,
                                 )
                                 Box(Modifier.alpha(if (bring) 1f else 0.6f)) { LibraryItem(item, asList) { followedOpen = p } }
                             }

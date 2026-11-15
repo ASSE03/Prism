@@ -228,6 +228,30 @@ class SpotifyWebLibraryTest {
         assertEquals(listOf("fHI8X4OXluQ"), hands.songIds(prismId))
     }
 
+    @Test fun aPlaylistJustBroughtInSaysHowFarItsSongsHaveBeenLookedUp() = runBlocking {
+        val n = SpotifyPlaylists.AT_ONCE_ON_OPEN + 5
+        net.routes[SpotifyWeb.URL] = {
+            val body = sent(net.requests.size - 1)
+            when {
+                body.contains("\"libraryV3\"") -> 200 to libraryAnswer(3, pseudoLiked, playlistItem("p1", "Road", "samr", 1), playlistItem("p2", "Lofi", "lofigirl", 300))
+                body.contains("spotify:playlist:p2") -> 200 to playlistAnswer(n, *(1..n).map { inPlaylist(trackData("l$it", "Song $it", "Artist $it", "Album", 200_040, "trackDuration", uri = true)) }.toTypedArray())
+                else -> 200 to playlistAnswer(1, inPlaylist(trackData("t1", "Creep", "Radiohead", "Pablo Honey", 238_640, "trackDuration", uri = true)))
+            }
+        }
+        val hands = FakeHands()
+        val playlists = SpotifyPlaylists(api, db, importer, dir, hands, matchOf(), pause = {}, library = { library })
+        broughtIds = { playlists.mirror().brought.toSet() }
+        playlists.refreshAll("samr", now = 1)
+        val prismId = playlists.bringIn("p2", now = 2)!!
+        assertTrue("Library hears of the new Spotify playlist by itself", prismId in playlists.mirrored.value)
+        assertEquals(SpotifyPlaylists.Fill(SpotifyPlaylists.AT_ONCE_ON_OPEN, n), playlists.filling.value[prismId])
+        // The rest looked up (here by opening it; in the app, the background matching): nothing left to say.
+        playlists.refreshOne(prismId, readAgain = false)
+        assertNull(playlists.filling.value[prismId])
+        playlists.forget(keep = true)
+        assertTrue(playlists.mirrored.value.isEmpty())
+    }
+
     @Test fun matchedSongsArePlacedEverySoManyOfARunNotOnlyAtItsEnd() {
         val steps = com.prism.music.data.imports.PlaceSteps(20)
         assertEquals("a run that starts at 0, then 1, 2 … 100", listOf(20, 40, 60, 80, 100), (0..100).filter { steps.due(it) })

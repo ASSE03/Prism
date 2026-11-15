@@ -4868,6 +4868,8 @@
     <string name="spot_session_signed_out_info">Spotify no longer accepts this sign-in (you signed out there, or your password changed). Sign in again to carry on: your switches stay as they were.</string>
     <string name="spot_session_keywords">spotify sign in login log in account free no setup</string>
     <string name="spot_session_followed_subtitle">%1$s · Tap to bring in</string>
+    <string name="spot_session_followed_bringing">%1$s · Bringing it in…</string>
+    <string name="spot_playlist_syncing">Spotify · Syncing %1$d of %2$d songs</string>
     <string name="spot_session_followed_why">Bring this playlist into Prism. Its songs are found on YouTube Music, and it stays in step with Spotify.</string>
     <string name="spot_session_bring">Bring it in</string>
     <string name="spot_session_bringing">Bringing it in…</string>

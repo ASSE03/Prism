@@ -89,7 +89,21 @@ class SpotifyPlaylists(
         tmp.writeText(json.encodeToString(PlaylistMirror.serializer(), m))
         if (!tmp.renameTo(file)) { file.delete(); tmp.renameTo(file) }
         cached = m
+        _mirrored.value = prismIds()
     }
+
+    private val _mirrored by lazy { MutableStateFlow(prismIds()) }
+
+    /** [prismIds], as they come and go. */
+    val mirrored: StateFlow<Set<String>> get() = _mirrored
+
+    /** [done] of a playlist's [total] songs have been looked up on YouTube Music. */
+    data class Fill(val done: Int, val total: Int)
+
+    private val _filling = MutableStateFlow<Map<String, Fill>>(emptyMap())
+
+    /** The playlists (by Prism id) with songs still waiting to be looked up; one all looked up isn't in it. */
+    val filling: StateFlow<Map<String, Fill>> get() = _filling
 
     /**
      * Reads the list of playlists and, of each that changed, its songs; lines the songs up for matching and brings the
@@ -232,7 +246,9 @@ class SpotifyPlaylists(
 
     /** The Prism playlists made or brought up to date from [lists]; returns them with their Prism ids. */
     private suspend fun apply(lists: List<MirroredPlaylist>): List<MirroredPlaylist> {
-        val matched = SpotifyQueue.matched(db, lists.flatMap { l -> l.tracks.map(SpotifyQueue::key) })
+        val keys = lists.flatMap { l -> l.tracks.map(SpotifyQueue::key) }
+        val matched = SpotifyQueue.matched(db, keys)
+        val waiting = SpotifyQueue.pending(db, keys)
         return lists.map { l ->
             if (l.removed) return@map l
             val songs = songsOf(l.tracks, matched)
@@ -247,6 +263,12 @@ class SpotifyPlaylists(
                     l
                 }
             }
+        }.also { out ->
+            _filling.value = out.filter { !it.removed && it.prismId != null }.mapNotNull { l ->
+                val all = l.tracks.map(SpotifyQueue::key).distinct()
+                val left = all.count { it in waiting }
+                if (left > 0) l.prismId!! to Fill(all.size - left, all.size) else null
+            }.toMap()
         }
     }
 
@@ -255,6 +277,8 @@ class SpotifyPlaylists(
         if (!keep) mirror().lists.forEach { l -> l.prismId?.let { if (hands.exists(it)) hands.delete(it) } }
         file.delete()
         cached = null
+        _mirrored.value = emptySet()
+        _filling.value = emptyMap()
         followedFile.delete()
         _followed.value = emptyList()
     }

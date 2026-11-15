@@ -334,19 +334,37 @@ class Spotify(private val c: AppContainer) {
      * "Bring it in" on a followed playlist (the sign-in only): read, made a Prism playlist and kept in step from then
      * on. Its Prism playlist's id, or null when it didn't work (the guard hears why).
      */
-    suspend fun bringFollowed(id: String): String? = running.getValue(SpotifyFeature.PLAYLISTS).withLock {
-        if (!canBringFollowed || !_options.value.playlists) return@withLock null
-        val guard = guards.getValue(SpotifyFeature.PLAYLISTS)
+    suspend fun bringFollowed(id: String): String? {
+        _bringing.value = _bringing.value + id
         try {
-            playlists.bringIn(id).also { guard.succeeded(); matchSoon() }
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: SpotifyError.Revoked) {
-            _connection.value = Connection.Revoked; null
-        } catch (e: Exception) {
-            guard.failed(e); null
+            return running.getValue(SpotifyFeature.PLAYLISTS).withLock {
+                if (!canBringFollowed || !_options.value.playlists) return@withLock null
+                val guard = guards.getValue(SpotifyFeature.PLAYLISTS)
+                try {
+                    playlists.bringIn(id).also { guard.succeeded(); matchSoon() }
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: SpotifyError.Revoked) {
+                    _connection.value = Connection.Revoked; null
+                } catch (e: Exception) {
+                    guard.failed(e); null
+                }
+            }
+        } finally {
+            _bringing.value = _bringing.value - id
         }
     }
+
+    private val _bringing = MutableStateFlow<Set<String>>(emptySet())
+
+    /** Followed playlists being brought in right now (read from Spotify): Library and the sheet say so, wherever the listener went. */
+    val followedBringing: StateFlow<Set<String>> = _bringing
+
+    /** The Prism playlists that show Spotify ones, as they come and go (Library's mark follows it). */
+    val mirroredPlaylists: StateFlow<Set<String>> get() = playlists.mirrored
+
+    /** Spotify playlists still being matched: how many of their songs have been looked up, of how many. */
+    val playlistFilling: StateFlow<Map<String, SpotifyPlaylists.Fill>> get() = playlists.filling
 
     /** "Refresh now": the playlists read again at once (a copy just made in Spotify appears), whatever the day's run did. */
     fun refreshPlaylistsNow(): Job = c.scope.launch { run(SpotifyFeature.PLAYLISTS) }

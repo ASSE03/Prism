@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,7 +48,9 @@ fun SpotifyFollowedSheet(p: SpotifyPlaylist, onDismiss: () -> Unit) {
     var refreshed by remember { mutableStateOf(false) }
     // With the sign-in on Spotify's page (1.8.7.5) its songs can be read: one action brings it in as a Prism playlist.
     if (c.spotify.canBringFollowed) {
-        var bringing by remember { mutableStateOf(false) }
+        // From the app, not this sheet: opened again while it's being read, it still says so.
+        val bringingNow by c.spotify.followedBringing.collectAsState()
+        val bringing = p.id in bringingNow
         var failed by remember { mutableStateOf(false) }
         ActionSheet(p.image, onDismiss) { close ->
             ActionHeader(p.image, p.name, p.ownerName.ifBlank { null }, placeholderIcon = PrismIcons.QueueMusic)
@@ -58,11 +61,10 @@ fun SpotifyFollowedSheet(p: SpotifyPlaylist, onDismiss: () -> Unit) {
                     value = when { bringing -> tr(R.string.spot_session_bringing); failed -> tr(R.string.spot_session_bring_failed); else -> null },
                 ) {
                     if (!bringing) {
-                        bringing = true; failed = false
+                        failed = false
                         // In the app's scope: closing the sheet doesn't stop a playlist half read.
                         c.scope.launch(kotlinx.coroutines.Dispatchers.Main) {
                             val made = c.spotify.bringFollowed(p.id)
-                            bringing = false
                             if (made != null) close {} else failed = true
                         }
                     }
