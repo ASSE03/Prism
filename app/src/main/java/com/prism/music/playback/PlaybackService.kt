@@ -425,13 +425,15 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             main = player,
             scope = scope,
             tempo = c.mixTempo,
-            // DJ mode blends every song into the next, beat-matched, at Crossfade's automatic length.
+            // DJ mode blends every song into the next, beat-matched, at Crossfade's automatic length, or at the
+            // listener's own when they set one (#502, [DjBlend]).
             // Not while casting: the renderer plays one song at a time (and the phone's own player is muted).
             mixMs = { c.settings.current.let { s -> if ((s.mix.on || c.dj.onNow) && !c.cast.casting) s.mix.seconds * 1000L else null } },
-            auto = { c.settings.current.mix.auto || c.dj.onNow },
+            auto = { c.settings.current.mix.let { m -> DjBlend.automatic(m.on, m.auto, c.dj.onNow) } },
             beatMatch = { c.settings.current.mix.beatMatch || c.dj.onNow },
             harmonic = { from, to ->
-                if (!c.dj.onNow) null else {
+                val m = c.settings.current.mix
+                if (!DjBlend.keysSetLength(c.dj.onNow, DjBlend.automatic(m.on, m.auto, c.dj.onNow))) null else {
                     val a = c.mixTempo.key(from); val b = c.mixTempo.key(to)
                     if (a?.sure == true && b?.sure == true) MusicKey.clash(a, b) else null
                 }
