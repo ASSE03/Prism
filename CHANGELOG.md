@@ -35,6 +35,7 @@ What changed in each release. Older releases are described on the [Releases page
 
 - **The open player does less work.** The lyric line over the progress bar is drawn about 30 times a second, and only when it moved. On a Galaxy A16 with the player open, Prism's processor use went from about 95% of one core to about 68%, and from about 98% to about 76% with a Canvas loop (same phone, same song, both orders).
 - A long queue no longer stalls the screen when it is saved.
+- A song's Canvas loop comes sooner the first time it is played: with the video first it no longer waits for the animated-cover lookup, and the steps that find the video run side by side.
 - **Smoother scrolling** (Settings, under Performance mode; shown on screens faster than 60 Hz): asks the screen for its fastest refresh rate while Prism is open. Off by default; it uses more battery.
 - The download is a little smaller: the app no longer carries code for emulator chips.
 
