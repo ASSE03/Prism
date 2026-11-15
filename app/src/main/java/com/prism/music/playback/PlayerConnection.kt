@@ -692,6 +692,15 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         return kept
     }
 
+    /**
+     * With nothing on, [songs] become the queue: one song as a single (its radio follows), several (songs picked with
+     * Select many, which come with no [source], #476: only the first used to play) in their order.
+     */
+    private fun startWith(songs: List<Song>, source: QueueSource?) {
+        if (source == null && songs.size == 1) playSingle(songs.first())
+        else playQueue(songs, 0, source ?: QueueSource(QueueKind.OTHER, ""))
+    }
+
     /** Songs (one, or a whole album or playlist) straight after the current song, or played, with nothing on. */
     fun playNext(songs: List<Song>, source: QueueSource?) {
         if (songs.isEmpty()) return
@@ -699,7 +708,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         if (allowed.size < songs.size) return playNext(allowed, source)
         withPlayer { p ->
             if (p.mediaItemCount == 0) {
-                if (source == null) playSingle(songs.first()) else playQueue(songs, 0, source)
+                startWith(songs, source)
             } else {
                 // #368: a song already coming up moves up (it used to go in a second time). Next already: nothing moves,
                 // so a stream or a blend being got ready for it carries on.
@@ -727,7 +736,7 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         if (allowed.size < songs.size) return addToQueue(allowed, source)
         withPlayer { p ->
             if (p.mediaItemCount == 0) {
-                if (source == null) playSingle(songs.first()) else playQueue(songs, 0, source)
+                startWith(songs, source)
             } else {
                 val auto = c.queue.autoplayStart.value
                 val cur = p.currentMediaItemIndex
