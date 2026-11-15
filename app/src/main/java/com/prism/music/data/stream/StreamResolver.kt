@@ -112,7 +112,14 @@ class YouTubeStreamInterceptor(
     private val ipv4Client: OkHttpClient? = null,
     /** Told about each response's code and family ([NetFamily.Tag]'s header), for the diagnostics and the way memory. */
     private val watch: StreamWatch? = null,
+    /** #514: the pauses before each quick retry of a 5xx ([whileBusy]); their number is the bound. */
+    private val busyPausesMs: List<Long> = BUSY_PAUSES_MS,
 ) : Interceptor {
+    companion object {
+        /** #514 (1.8.7.5): a 5xx is asked again twice, quickly; a third in a row gives the link up ([StreamResolver.fetched]). */
+        val BUSY_PAUSES_MS = listOf(300L, 900L)
+    }
+
     private val requestNumber = AtomicInteger(0)
 
     private fun isStream(url: HttpUrl) = url.host.endsWith("googlevideo.com") && url.encodedPath.startsWith("/videoplayback")
@@ -146,10 +153,41 @@ class YouTubeStreamInterceptor(
     /** googlevideo occasionally rejects a request transiently; one quick retry usually succeeds. */
     private inline fun withRetry(request: okhttp3.Request, send: (okhttp3.Request) -> Response): Response {
         val resp = send(request)
-        if (resp.code != 403) return resp
+        if (resp.code != 403) return whileBusy(resp, { false }) { send(renumbered(request)) }
         resp.close()
         Thread.sleep(350)
         return send(request.newBuilder().url(request.url.newBuilder().setQueryParameter("rn", requestNumber.incrementAndGet().toString()).build()).build())
+    }
+
+    /** [request] again, with the next request number. */
+    private fun renumbered(request: okhttp3.Request): okhttp3.Request =
+        request.newBuilder().url(request.url.newBuilder().setQueryParameter("rn", requestNumber.incrementAndGet().toString()).build()).build()
+
+    /**
+     * #514: googlevideo's server answered 5xx (a 503 to a ranged request on a visionOS link, after a seek): that can be
+     * momentary, so it's asked again after each of [busyPausesMs], quickly, and what comes last is the answer. A 5xx
+     * still then tells the watcher the link is given up on ([StreamResolver.fetched]). Anything else comes back at once.
+     * [stop]: the read was given up meanwhile.
+     */
+    private inline fun whileBusy(first: Response, stop: () -> Boolean, again: () -> Response): Response {
+        var resp = first
+        for (pause in busyPausesMs) {
+            if (!serverBusy(resp.code) || stop()) return resp
+            resp.close()
+            pauseFor(pause)
+            resp = again()
+        }
+        return resp
+    }
+
+    /** A wait that a cancelled read cuts short as an IOException, which the player and OkHttp expect. */
+    private fun pauseFor(ms: Long) {
+        try {
+            Thread.sleep(ms)
+        } catch (e: InterruptedException) {
+            Thread.currentThread().interrupt()
+            throw java.io.InterruptedIOException("cancelled while waiting to ask the server again")
+        }
     }
 
     /** [resp] came for [url]: the watcher hears of it (it never stops a stream). */
@@ -234,6 +272,10 @@ class YouTubeStreamInterceptor(
                     if (response.code == 403) {
                         response.close()
                         runCatching { chunkClient.newCall(streamRequest(base, from, to, true)).execute() }
+                            .onSuccess { if (!f.complete(it)) it.close() }.onFailure { f.completeExceptionally(it) }
+                    } else if (serverBusy(response.code)) {
+                        // #514: a later chunk's 5xx is asked again quickly too, as the first chunk's is.
+                        runCatching { whileBusy(response, { f.isDone }) { chunkClient.newCall(streamRequest(base, from, to, true)).execute() } }
                             .onSuccess { if (!f.complete(it)) it.close() }.onFailure { f.completeExceptionally(it) }
                     } else if (!f.complete(response)) response.close()
                 }
@@ -375,6 +417,40 @@ internal class RefusedSongs(private val now: () -> Long = System::currentTimeMil
     companion object { const val FOR_MS = 5 * 60_000L }
 }
 
+/**
+ * #514 (1.8.7.5): a googlevideo answer that says its server can't serve now (5xx; a 503 above all), not that the link is
+ * refused (403/410, handled as in 1.8.7).
+ */
+internal fun serverBusy(code: Int?): Boolean = code != null && code in 500..599
+
+/**
+ * #514: songs whose link's server kept answering 5xx after the stream's quick retries, with the ways ([StreamWay.name])
+ * those links came by: the song's next lookups ask the other ways first ([StreamResolver]'s `otherWays`), for [FOR_MS].
+ * Only an order: when no other way has a link, the usual one is asked again, so the player's own bounded retries end it.
+ * Never kept on disk; another network starts afresh.
+ */
+internal class BusyWays(private val now: () -> Long = System::currentTimeMillis) {
+    private class Entry(val until: Long, val ways: Set<String>)
+
+    private val entries = ConcurrentHashMap<String, Entry>()
+
+    fun note(id: String, way: String) {
+        entries.compute(id) { _, e -> Entry(now() + FOR_MS, e?.takeIf { now() < it.until }?.ways.orEmpty() + way) }
+    }
+
+    /** The ways [id]'s links lately got 5xx by; empty: none. */
+    fun of(id: String): Set<String> {
+        val e = entries[id] ?: return emptySet()
+        if (now() < e.until) return e.ways
+        entries.remove(id, e)
+        return emptySet()
+    }
+
+    fun clear() = entries.clear()
+
+    companion object { const val FOR_MS = 10 * 60_000L }
+}
+
 /** [videoId] turned out to be live: it plays from its HLS manifest (`prism://live/…`), not as a file. */
 class LiveStreamException(val videoId: String) : IOException("$videoId is a live stream")
 
@@ -504,11 +580,18 @@ class StreamResolver(
      * Forgets [videoId]'s stream, to be looked up again. [refused]: its server turned the stream away (403), so the next
      * lookup doesn't take the direct answer again (on the phone, "Beat It" `kOn-HdEg6AQ` signed in got 403s on every
      * direct link, so it failed twice and was skipped); it goes through NewPipe, as before the direct lookup.
+     * [unavailable] (#514): its server kept answering 5xx; the way it came by is asked last for it ([BusyWays]), and none
+     * of [refused]'s steps are taken (no IPv4-only step: a busy server isn't the network's doing).
      */
-    fun invalidate(songId: String, refused: Boolean = false) {
+    fun invalidate(songId: String, refused: Boolean = false, unavailable: Boolean = false) {
         val videoId = versionOf(songId) ?: songId
         refusedSongs.forget(videoId)
         val was = cache.remove(videoId)
+        if (unavailable) {
+            // Told by the stream already, as a rule ([fetched]): the same way noted twice is noted once.
+            was?.let { busyWays.note(videoId, it.way.name) }
+            return
+        }
         // The same refusal told twice (a video's data source and the player both do): the step it started stands.
         if (refused && was == null && ipv4Retry.containsKey(videoId)) return
         if (refused && was != null && ipv4Step(videoId, was)) return
@@ -582,6 +665,7 @@ class StreamResolver(
             diag("${e?.songId ?: url.queryParameter("id") ?: "?"}: refused (HTTP $code), link from ${e?.way ?: "?"}: $families")
             return
         }
+        if (serverBusy(code)) { busyLink(e, url, code); return }
         if (e == null || code !in 200..299 || e.fetched) return
         e.fetched = true
         diag("${e.songId}: first bytes, link from ${e.way}: $families")
@@ -591,9 +675,24 @@ class StreamResolver(
         ways.worked(net, e.way)
     }
 
+    /**
+     * #514: [url]'s server kept answering [code] (5xx) through the stream's quick retries: the link is given up on. The
+     * lookup it came from is forgotten while it's still the one in hand, so the next read (Media3's own retry, from where
+     * it was; a download's next try) looks the song up afresh, and the way it came by is asked last ([BusyWays]).
+     */
+    private fun busyLink(e: LinkBook.Entry?, url: HttpUrl, code: Int) {
+        if (e == null) {
+            diag("${url.queryParameter("id") ?: "?"}: HTTP $code from its server, for a link not handed out lately")
+            return
+        }
+        busyWays.note(e.songId, e.way.name)
+        (e.formats as? Formats)?.let { cache.remove(e.songId, it) }
+        diag("${e.songId}: its server kept answering HTTP $code for the link from ${e.way}; it's looked up again, another way first")
+    }
+
     /** [url], one of [f]'s links for [videoId], as it's handed out: marked when it was asked over IPv4 only, and noted. */
     private fun handOut(videoId: String, f: Formats, url: String): String {
-        if (links.note(url, LinkBook.Entry(videoId, f.way, f.asked, remember = f.afterRefusal || f.ipv4))) {
+        if (links.note(url, LinkBook.Entry(videoId, f.way, f.asked, remember = f.afterRefusal || f.ipv4, formats = f))) {
             diag("$videoId: link from ${f.way}: ${NetFamily.linkLine(f.asked, NetFamily.ofLink(url))}")
         }
         return if (f.ipv4) Ipv4Links.mark(url) else url
@@ -621,8 +720,14 @@ class StreamResolver(
     /** Songs refused by every account client a moment ago, and no other way played them ([RefusedSongs]). */
     private val refusedSongs = RefusedSongs()
 
-    /** Another network (1.8.7): no song stays turned away for what the old one did. */
-    fun anotherNetwork() = refusedSongs.clear()
+    /** Another network (1.8.7): no song stays turned away for what the old one did, nor kept off a busy server (#514). */
+    fun anotherNetwork() {
+        refusedSongs.clear()
+        busyWays.clear()
+    }
+
+    /** Songs whose link's server kept answering 5xx, and the ways those links came by (#514). */
+    private val busyWays = BusyWays()
 
     /** Every account client refused the song being looked up now; kept in [refusedSongs] if no other way plays it either. */
     private val refusedNow = ConcurrentHashMap.newKeySet<String>()
@@ -796,9 +901,10 @@ class StreamResolver(
      * The way remembered for this network ([WayMemory]), first; not when it's the usual first step anyway, nor one
      * this song's own link was refused by.
      */
-    private fun remembered(videoId: String, signedIn: Boolean): Formats? {
+    private fun remembered(videoId: String, signedIn: Boolean, busy: Set<String>): Formats? {
         val way = ways.get(networkNow()) ?: return null
         if (way == StreamWay(StreamWay.DIRECT, false)) return null
+        if (way.name in busy) return null
         if (way.name == StreamWay.DIRECT && videoId in directRefused) return null
         if (way.name.startsWith(StreamWay.ACCOUNT) && (videoId in accountRefused || !signedIn)) return null
         return tryWay(videoId, way, signedIn)
@@ -806,12 +912,15 @@ class StreamResolver(
 
     /** The ladder as it was before 1.8.7, with the way remembered for this network after Premium quality's ask. */
     private fun inOrder(videoId: String, forVideo: Boolean, signedIn: Boolean): Formats {
-        if (signedIn && videoId in needsAccount) return signedInFormats(videoId)
+        val busy = busyWays.of(videoId)
+        if (signedIn && videoId in needsAccount) return signedInFormats(videoId, AccountClients.lastly(busy))
+        // #514: this song's link from [busy]'s ways kept getting 5xx from its server: the other ways first.
+        if (busy.isNotEmpty()) otherWays(videoId, signedIn, busy)?.let { return it }
         // A music video looked up for its picture or its length (each song's, ahead of time) never has Premium's formats:
         // its ask slowed it down for nothing and counted as a miss, so that songs in the cache with videos asked for
         // around them paused Premium for the next hour.
         if (!forVideo && videoId !in accountRefused) premiumFormats(videoId)?.let { return it }
-        remembered(videoId, signedIn)?.let { return it }
+        remembered(videoId, signedIn, busy)?.let { return it }
         // While YouTube is blocking NewPipe here, signed-in playback goes straight to the account's own clients
         // (each song would otherwise wait for NewPipe to be refused first).
         if (signedIn && System.currentTimeMillis() < newPipeBlockedUntil) {
@@ -841,6 +950,25 @@ class StreamResolver(
                 else -> throw StreamException(why, e)
             }
         }
+    }
+
+    /**
+     * #514: [videoId]'s links from [busy]'s ways kept getting 5xx from their servers (visionOS links above all): the
+     * other ways, first the account's other clients when signed in, then the visionOS app and NewPipe unless in [busy].
+     * Null when none of them has a link: the usual ladder then runs, the busy way included, so a song is never left
+     * without a try; the player's own retries bound how often.
+     */
+    private fun otherWays(videoId: String, signedIn: Boolean, busy: Set<String>): Formats? {
+        val clients = AccountClients.order.filter { StreamWay.ACCOUNT + it.name !in busy }
+        if (signedIn && videoId !in accountRefused && clients.isNotEmpty()) {
+            runCatching { signedInFormats(videoId, clients) }.getOrNull()?.let { return it }
+        }
+        if (StreamWay.DIRECT !in busy && videoId !in directRefused) directFormats(videoId, signedIn)?.let { return it }
+        if (StreamWay.NEWPIPE !in busy && System.currentTimeMillis() >= newPipeBlockedUntil) {
+            runCatching { anonymousFormats(videoId) }.getOrNull()?.takeIf { it.audio.isNotEmpty() || it.hlsUrl != null }?.let { return it }
+        }
+        diag("$videoId: no way but ${busy.joinToString()} had a link; asking the usual way again")
+        return null
     }
 
     /** Until when [directFormats] is skipped: YouTube was answering it with bot checks from this network. */
@@ -931,6 +1059,10 @@ class StreamResolver(
         /** [order] with [first] (the one that last had what's wanted) at its head. */
         fun order(first: InnerTube.PlayerClient?): List<InnerTube.PlayerClient> =
             if (first == null) order else listOf(first) + order.filter { it != first }
+
+        /** [order] with the clients whose links' servers kept answering 5xx ([busy]'s ways, #514) last; as it is without any. */
+        fun lastly(busy: Set<String>): List<InnerTube.PlayerClient> =
+            if (busy.isEmpty()) order else order.sortedBy { StreamWay.ACCOUNT + it.name in busy }
 
         const val RETRY_PAUSE_MS = 300L
     }

@@ -178,7 +178,8 @@ internal class WayMemory(private val prefs: SharedPreferences?, private val cap:
  * over, and whether its bytes have been fetched yet. At most [cap] links; the oldest go first.
  */
 internal class LinkBook(private val cap: Int = 64) {
-    class Entry(val songId: String, val way: StreamWay, val asked: String?, val remember: Boolean) {
+    /** [formats]: the lookup the link came from, so a link given up on forgets that lookup only (#514). */
+    class Entry(val songId: String, val way: StreamWay, val asked: String?, val remember: Boolean, val formats: Any? = null) {
         @Volatile var fetched = false
     }
 

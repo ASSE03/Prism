@@ -1144,7 +1144,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             if (retry != null) {
                 videoRetriedAt[videoId] = at
                 AudioDiagnostics.log("video", "video $videoId failed (${httpCode ?: if (parse) "unreadable" else error.errorCodeName}; $about): trying its streams afresh")
-                c.streams.invalidate(videoId, refused = true)
+                // #514: a server answering 5xx isn't a refused link: another way first, not the same one over IPv4 only.
+                c.streams.invalidate(videoId, refused = !retry.serverBusy, unavailable = retry.serverBusy)
                 AudioDiagnostics.session.reResolve()
                 val pos = player.currentPosition
                 if (retry.forgetCachedSound) {
@@ -1258,7 +1259,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
         if (attempts < 3 && (httpCode == 403 || httpCode == 410 || error.errorCode == PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS)) {
             retries[id] = attempts + 1
-            c.streams.invalidate(id, refused = httpCode == 403)
+            // #514: a 5xx after the stream's own quick retries: looked up again another way first (and played on from here).
+            c.streams.invalidate(id, refused = httpCode == 403, unavailable = com.prism.music.data.stream.serverBusy(httpCode))
             AudioDiagnostics.session.reResolve()
             val pos = player.currentPosition
             player.prepare()
