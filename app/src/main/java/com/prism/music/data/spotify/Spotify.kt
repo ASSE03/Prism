@@ -68,8 +68,12 @@ class Spotify(private val c: AppContainer) {
 
     val recent = SpotifyRecent(api, c.db, c.imports.importer, store)
     val top = SpotifyTop(api, c.db, dir)
-    val playlists = SpotifyPlaylists(api, c.db, c.imports.importer, dir, LibraryHands(c.prismLibrary), match)
-    val likes = SpotifyLikes(api, c.db, c.imports.importer, dir, { c.imports.likeImported(it) }, { c.imports.keptLikes() }, match)
+    private val ownLibrary = ApiLibrary(api)
+    private val webLibrary by lazy { WebLibrary(web) { store.userId } }
+    /** The library as the connection reads it now: the sign-in's reads, or the listener's own developer app. */
+    private val library: () -> SpotifyLibrary = { if (store.sessionOn) webLibrary else ownLibrary }
+    val playlists = SpotifyPlaylists(api, c.db, c.imports.importer, dir, LibraryHands(c.prismLibrary), match, library = library)
+    val likes = SpotifyLikes(api, c.db, c.imports.importer, dir, { c.imports.likeImported(it) }, { c.imports.keptLikes() }, match, library = library)
 
     // ---- The connection
 
@@ -343,6 +347,8 @@ class Spotify(private val c: AppContainer) {
      */
     suspend fun run(f: SpotifyFeature, scheduled: Boolean = false, unmetered: Boolean = true, now: Long = System.currentTimeMillis()) = running.getValue(f).withLock {
         if (!store.connected || !_options.value.on(f)) return@withLock
+        // Recent plays and the top lists exist only on the Web API, which refuses a session (the A16 trial, 2026-11-15).
+        if (store.sessionOn && (f == SpotifyFeature.RECENT || f == SpotifyFeature.TOP)) return@withLock
         val guard = guards.getValue(f)
         if (!guard.mayRun()) return@withLock
         val daily = !scheduled || unmetered

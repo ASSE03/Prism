@@ -53,6 +53,8 @@ class SpotifyPlaylists(
     /** Finds one song on YouTube Music (the import matcher, or a test's). */
     private val match: suspend (TrackToMatch) -> MatchResult,
     private val pause: suspend (Long) -> Unit = { delay(it) },
+    /** Where the library is read from now: the Web API, or the sign-in (1.8.7.5). */
+    private val library: () -> SpotifyLibrary = ApiLibrary(api).let { own -> { own } },
 ) {
     /** Where the Prism playlists live (Prism's library; a test's own). */
     interface Hands {
@@ -92,11 +94,8 @@ class SpotifyPlaylists(
      * Prism playlists up to date. [userId]: the connected account (its own playlists are the readable ones).
      */
     suspend fun refreshAll(userId: String, now: Long = System.currentTimeMillis()) = lock.withLock {
-        val all = ArrayList<SpotifyPlaylist>()
-        var page = SpotifyParse.playlists(api.get("/me/playlists", mapOf("limit" to "50")))
-        all += page.items
-        var pages = 1
-        while (pages < MAX_LIST_PAGES) { val next = page.next ?: break; page = SpotifyParse.playlists(api.next(next)); all += page.items; pages++ }
+        val all = library().playlists(MAX_LIST_PAGES)
+
         val (yours, others) = split(all, userId)
         val old = mirror().lists.associateBy { it.playlist.id }
         val refused = ArrayList<SpotifyPlaylist>()
@@ -148,7 +147,8 @@ class SpotifyPlaylists(
         val at = m.lists.indexOfFirst { it.prismId == prismId }.takeIf { it >= 0 } ?: return@withLock
         var entry = m.lists[at]
         if (readAgain) {
-            val snapshot = runCatching { SpotifyParse.playlistSnapshot(api.get("/playlists/${entry.playlist.id}", mapOf("fields" to "snapshot_id,name,description"))) }.getOrNull()
+            val snapshot = library().playlistSnapshot(entry.playlist.id)
+
             if (snapshot != null && snapshot.first != entry.playlist.snapshot) {
                 val p = entry.playlist.copy(snapshot = snapshot.first, name = snapshot.second ?: entry.playlist.name)
                 entry = entry.copy(playlist = p, tracks = readItems(p.id), readAt = now)
@@ -167,14 +167,8 @@ class SpotifyPlaylists(
     }
 
     /** The songs of one playlist, page by page (owned or collaborative ones only answer). */
-    private suspend fun readItems(id: String): List<SpotifyTrack> {
-        val out = ArrayList<SpotifyTrack>()
-        var page = SpotifyParse.playlistItems(api.get("/playlists/$id/items", mapOf("limit" to "50", "additional_types" to "track", "fields" to ITEM_FIELDS)))
-        out += page.items.filterNotNull()
-        var pages = 1
-        while (pages < MAX_ITEM_PAGES) { val next = page.next ?: break; page = SpotifyParse.playlistItems(api.next(next)); out += page.items.filterNotNull(); pages++ }
-        return out
-    }
+    private suspend fun readItems(id: String): List<SpotifyTrack> = library().playlistItems(id, MAX_ITEM_PAGES)
+
 
     /** Matches up to [AT_ONCE_ON_OPEN] of [tracks] not looked up yet, now. */
     private suspend fun matchNow(tracks: List<SpotifyTrack>) {

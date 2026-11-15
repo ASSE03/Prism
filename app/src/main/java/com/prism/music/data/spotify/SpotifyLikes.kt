@@ -121,6 +121,8 @@ class SpotifyLikes(
     private val kept: () -> Set<String>,
     private val match: suspend (TrackToMatch) -> MatchResult,
     private val pause: suspend (Long) -> Unit = { delay(it) },
+    /** Where Liked Songs are read from now: the Web API, or the sign-in (1.8.7.5: read only, so one way). */
+    private val library: () -> SpotifyLibrary = ApiLibrary(api).let { own -> { own } },
 ) {
     private val file = File(dir, "likes.json")
     private val json = Json { ignoreUnknownKeys = true }
@@ -141,13 +143,7 @@ class SpotifyLikes(
     fun matchKeys(): Set<String> = state().waitingHere.values.toSet()
 
     /** Spotify's Liked Songs, page by page (up to [MAX_LIKES]). */
-    suspend fun spotifyLikes(): List<SavedTrack> {
-        val out = ArrayList<SavedTrack>()
-        var page = SpotifyParse.savedTracks(api.get("/me/tracks", mapOf("limit" to "50")))
-        out += page.items
-        while (out.size < MAX_LIKES) { val next = page.next ?: break; page = SpotifyParse.savedTracks(api.next(next)); out += page.items }
-        return out
-    }
+    suspend fun spotifyLikes(): List<SavedTrack> = library().savedTracks(MAX_LIKES)
 
     suspend fun prismLikes(): List<PrismLike> = db.songs().liked().filter { !it.id.startsWith(Song.LOCAL_PREFIX) && !it.isVideo }
         .map { e -> e.toSong().let { s -> PrismLike(s.id, s.title, s.primaryArtist.ifBlank { e.artistName }, s.durationSec, e.likedAt) } }
@@ -186,7 +182,10 @@ class SpotifyLikes(
         val found = ArrayList<String>()
         val searched = HashSet<String>()
         val notFound = state.notOnSpotify.toMutableSet()
-        for (p in plan.toLikeOnSpotify.take(SEARCHES_PER_RUN)) {
+        // With the sign-in nothing is written to Spotify: no search, no save. These likes stay unseen, so a later
+        // connection with the listener's own developer app takes them.
+        val there = if (library().canWrite) plan.toLikeOnSpotify.take(SEARCHES_PER_RUN) else emptyList()
+        for (p in there) {
             searched += p.id
             val q = "${ImportKeys.core(p.title)} artist:${ImportKeys.mainArtist(p.artist)}"
             val hits = runCatching { SpotifyParse.searchTracks(api.get("/search", mapOf("q" to q, "type" to "track", "limit" to "5"))) }
