@@ -263,6 +263,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         player.addListener(this)
         player.addAnalyticsListener(StatsListener())
         player.addAnalyticsListener(DiagnosticsListener())
+        if (com.prism.music.BuildConfig.DEBUG) PlaybackServices.playerForTest = player
         applySkipSilence()
         lockScreen = com.prism.music.ui.lockscreen.LockScreenGate(this, c.settings.flow, player, scope).also { it.start() }
 
@@ -618,6 +619,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         if (PlaybackServices.running == this::class.java) PlaybackServices.running = null
         PlaybackServices.failForTest = null
         PlaybackServices.taskRemovedForTest = null
+        if (PlaybackServices.playerForTest === player) PlaybackServices.playerForTest = null
         flushPlayTime()
         saveEpisodePosition()
         saveQueue(now = true)
