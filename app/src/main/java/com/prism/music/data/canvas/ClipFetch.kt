@@ -35,6 +35,8 @@ sealed interface ClipFetch {
         val bytes: Long,
         val fromNetwork: Boolean,
         val saved: Boolean,
+        /** What a fetch over the network spent its time on ("answer 210 ms, head 150 ms, fragments 442 ms"), for [CanvasTimes]. */
+        val steps: String = "",
     ) : ClipFetch
 
     data class None(val why: Why, val detail: String = "") : ClipFetch
@@ -115,16 +117,20 @@ class ClipFetcher(
 
     private suspend fun network(videoId: String, startMs: Long, endMs: Long, maxHeight: Int, saved: Boolean): ClipFetch {
         var lastError = ""
+        val steps = StringBuilder()
         for (attempt in 0..1) {
+            val asked = System.nanoTime()
             val answer = try { player(videoId) } catch (e: Exception) {
                 if (e is kotlinx.coroutines.CancellationException) throw e
                 return ClipFetch.None(ClipFetch.Why.UNPLAYABLE, e.message.orEmpty())
             }
+            if (steps.isNotEmpty()) steps.append(", again: ")
+            steps.append("answer ").append((System.nanoTime() - asked) / 1_000_000).append(" ms")
             val status = answer.str("playabilityStatus", "status")
             if (status != "OK") return ClipFetch.None(ClipFetch.Why.UNPLAYABLE, status ?: "no status")
             val stream = chooseStream(answer, maxHeight) ?: return ClipFetch.None(ClipFetch.Why.NO_STREAM)
             try {
-                return cut(videoId, stream, startMs, endMs, saved)
+                return cut(videoId, stream, startMs, endMs, saved, steps)
             } catch (e: Refused) {
                 // An expired or turned-away link: once more with a fresh one.
                 lastError = e.message.orEmpty()
@@ -140,9 +146,12 @@ class ClipFetcher(
     private class Refused(message: String) : IOException(message)
     private class OutOfRange(message: String) : IOException(message)
 
-    private fun cut(videoId: String, stream: Stream, startMs: Long, endMs: Long, saved: Boolean): ClipFetch.Got {
+    private fun cut(videoId: String, stream: Stream, startMs: Long, endMs: Long, saved: Boolean, steps: StringBuilder): ClipFetch.Got {
         // The init segment (ftyp + moov) and the index (sidx) sit together at the head: one small request.
+        val asked = System.nanoTime()
         val head = get(stream.url, 0, stream.indexEnd) { it.readByteArray() }
+        val gotHead = System.nanoTime()
+        steps.append(", head ").append((gotHead - asked) / 1_000_000).append(" ms")
         if (head.size.toLong() != stream.indexEnd + 1) throw IOException("Head: ${head.size} bytes, wanted ${stream.indexEnd + 1}")
         val sidx = Fmp4.parseSidx(head, stream.indexStart.toInt())
         val initBytes = head.copyOfRange(0, stream.indexStart.toInt())
@@ -172,11 +181,14 @@ class ClipFetcher(
                     keys += Fmp4.copyFragments(src, out, to - from + 1, init, shift, moved)
                 }
             }
+            val gotFragments = System.nanoTime()
             val startOut = sidx.startMs(frags.first())
             val endOut = sidx.endMs(frags.last())
             val kept = files.keep(tmp, videoId, stream.height, stream.itag, startOut, endOut, pick.capped, saved)
             val keyMs = mergeKeys(keys.map { it * 1000 / init.mediaTimescale }, frags.map(sidx::startMs))
-            return ClipFetch.Got(kept.file, stream.height, stream.itag, startOut, endOut, keyMs, kept.file.length(), fromNetwork = true, saved = saved)
+            steps.append(", fragments ").append((gotFragments - gotHead) / 1_000_000).append(" ms (").append((to - from + 1) / 1024).append(" KB)")
+                .append(", kept ").append((System.nanoTime() - gotFragments) / 1_000_000).append(" ms")
+            return ClipFetch.Got(kept.file, stream.height, stream.itag, startOut, endOut, keyMs, kept.file.length(), fromNetwork = true, saved = saved, steps = steps.toString())
         } finally {
             if (tmp.exists()) tmp.delete()
         }

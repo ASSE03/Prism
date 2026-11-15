@@ -555,13 +555,15 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         coverHidden, loopHidden,
     ) {
         if (!settings.behavior.canvas.enabled) { value = null; return@produceState }
+        // 1.8.7: the wait for the loop, step by step, from here to its first frame drawn ([CanvasTimes]).
+        val loopWait = if (canvasPrefs.useVideos && !loopHidden && com.prism.music.data.canvas.ClipGate.isSong(song)) c.canvasClips.times.asked(song.id) else null
         // 1.8.6: the song's music video is looked up meanwhile (no video is fetched by this), so a song without an
         // animated cover doesn't wait for that answer first: three seconds less before a new song's loop shows.
         if (canvasPrefs.useVideos && !loopHidden && com.prism.music.data.canvas.ClipGate.isSong(song)) launch {
             runCatching {
                 c.canvasClips.findAhead(song, com.prism.music.data.canvas.canvasHeight(settings), allowed = {
                     com.prism.music.data.canvas.canvasNetworkAllowed(settings, context.getSystemService(ConnectivityManager::class.java)?.isActiveNetworkMetered == true)
-                })
+                }, run = loopWait)
             }
         }
         // Saved clips play from the phone, so mobile data doesn't matter for them.
@@ -588,9 +590,9 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 val loop = c.canvasClips.artworkFor(song, want.height, saved = c.canvas.isSaved(song), allowed = {
                     val onData = context.getSystemService(ConnectivityManager::class.java)?.isActiveNetworkMetered == true
                     com.prism.music.data.canvas.canvasNetworkAllowed(settings, onData)
-                })
+                }, run = loopWait)
                 if (loop != null) value = loop
-            }
+            } else loopWait?.end("no loop asked (${want.notAsked?.text})")
         }
     }
     // What a song switched off from the ⋯ menu may show is decided above (its cover, its loop, each on its own).
