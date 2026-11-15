@@ -195,19 +195,20 @@ class NormalizerProcessor : BaseAudioProcessor() {
         // last song's end, then flushes it for the next one): there the limiter's hold goes on too, or a lifted album
         // clicked at every change of song (plan item 10, GaplessChainTest).
         if (!drained) env = 0f
-        drained = false
+        playedOut.clear()
     }
 
     /** The sound before the next flush was played out to its end ([onQueueEndOfStream]): what follows goes on from it. */
-    private var drained = false
+    private val playedOut = PlayedOut()
+    private val drained get() = playedOut.goesOn()
 
     override fun onQueueEndOfStream() {
-        drained = true
+        playedOut.mark()
     }
 
     override fun onReset() {
         env = 0f
-        drained = false
+        playedOut.clear()
         periodUid = null
         songId = null
     }

@@ -113,10 +113,11 @@ class ParametricEqProcessor : BaseAudioProcessor() {
     }
 
     /** The sound before the next flush was played out to its end ([onQueueEndOfStream]): what follows goes on from it. */
-    private var drained = false
+    private val playedOut = PlayedOut()
+    private val drained get() = playedOut.goesOn()
 
     override fun onQueueEndOfStream() {
-        drained = true
+        playedOut.mark()
     }
 
     override fun onFlush() {
@@ -124,7 +125,7 @@ class ParametricEqProcessor : BaseAudioProcessor() {
         // (the chain played out to the last song's end, then flushed for the next) the sound goes on, and so do the
         // filters: dropping them there faded the correction in from nothing at every change of song (plan item 10).
         if (!drained) clear()
-        drained = false
+        playedOut.clear()
     }
 
     private fun clear() {
@@ -136,6 +137,6 @@ class ParametricEqProcessor : BaseAudioProcessor() {
 
     override fun onReset() {
         clear()
-        drained = false
+        playedOut.clear()
     }
 }

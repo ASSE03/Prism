@@ -234,10 +234,11 @@ class SpatialAudioProcessor : BaseAudioProcessor() {
     }
 
     /** The sound before the next flush was played out to its end ([onQueueEndOfStream]): what follows goes on from it. */
-    private var drained = false
+    private val playedOut = PlayedOut()
+    private val drained get() = playedOut.goesOn()
 
     override fun onQueueEndOfStream() {
-        drained = true
+        playedOut.mark()
     }
 
     override fun onFlush() {
@@ -245,12 +246,12 @@ class SpatialAudioProcessor : BaseAudioProcessor() {
         // end, then flushed for the next) the sound goes on, and so does the room: clearing it there cut the reverb and
         // the crossfeed off mid-sound, a click at every change of song (plan item 10).
         if (!drained) clearState()
-        drained = false
+        playedOut.clear()
     }
 
     override fun onReset() {
         clearState()
         wet = 0f
-        drained = false
+        playedOut.clear()
     }
 }
