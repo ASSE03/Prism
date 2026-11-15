@@ -10,7 +10,7 @@ import com.prism.music.playback.QueueSource
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.FixMethodOrder
-import org.junit.Ignore
+import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -25,15 +25,18 @@ import java.io.File
  * 2. `adb shell am kill <package>` (with Prism in the background: press Home first), or swipe it from Recents,
  * 3. run `b_playOnTheSessionResumesThere` (sends Play as a headset does and checks the song and the second).
  *
- * Needs a device and the hand step between: ignored in the in-app suite.
+ * Needs the step between (the end of an instrumented run stops Prism as well, which serves): skipped in the in-app suite.
  */
-@Ignore("needs a device: run a, kill Prism (adb shell am kill), then run b")
+// Only with `resume=true`: the two are run one after the other by hand or by a script, never by the suite.
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class ResumeAfterKillAppTest {
     private val expect get() = File(Fixture.context.filesDir, "resume-test-expect.txt")
 
+    private fun asked() = assumeTrue("run with resume=true, a then b", InstrumentationRegistry.getArguments().getString("resume") == "true")
+
     @Test fun a_playAndNoteThePlace() {
+        asked()
         Fixture.ready()
         val perm = if (android.os.Build.VERSION.SDK_INT >= 33) android.Manifest.permission.READ_MEDIA_AUDIO else android.Manifest.permission.READ_EXTERNAL_STORAGE
         InstrumentationRegistry.getInstrumentation().uiAutomation.grantRuntimePermission(Fixture.context.packageName, perm)
@@ -56,6 +59,7 @@ class ResumeAfterKillAppTest {
     }
 
     @Test fun b_playOnTheSessionResumesThere() {
+        asked()
         val (id, at) = expect.readLines().let { it[0] to it[1].toLong() }
         val context = Fixture.context
         // As Android hands a headset's Play to the media app it last played with.
