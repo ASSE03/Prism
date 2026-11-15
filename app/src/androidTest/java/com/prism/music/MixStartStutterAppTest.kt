@@ -114,6 +114,8 @@ class MixStartStutterAppTest {
         val b = local.tracks.value.first { it.song.title == "Prism stutter tone B" }.song
         val wallStart = System.currentTimeMillis()
         instrumentation.runOnMainSync { c.player.playQueue(listOf(a, b), 0, QueueSource(QueueKind.OTHER, "Mix stutter test")) }
+        // Repeat off: a copy left on "repeat one" by another test played the first tone again and again (A16, 2026-11-15).
+        repeat(3) { if (c.player.repeatMode.value != androidx.media3.common.Player.REPEAT_MODE_OFF) { instrumentation.runOnMainSync { c.player.cycleRepeat() }; Thread.sleep(700) } }
         waitFor("tone A playing", 20_000) { c.player.currentSong.value?.id == a.id && c.player.isPlaying.value }
 
         val exo = onMain { c.player.player }

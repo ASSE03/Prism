@@ -159,6 +159,8 @@ class GaplessAppTest {
         }
 
         instrumentation.runOnMainSync { c.player.playQueue(listOf(one, two), 0, QueueSource(QueueKind.ALBUM, album.title, originId = album.id)) }
+        // Repeat off: a copy left on "repeat one" by another test played the first tone again and again (A16, 2026-11-15).
+        repeat(3) { if (c.player.repeatMode.value != androidx.media3.common.Player.REPEAT_MODE_OFF) { instrumentation.runOnMainSync { c.player.cycleRepeat() }; Thread.sleep(700) } }
         fun position(): Long { var at = 0L; instrumentation.runOnMainSync { at = c.player.position }; return at }
         // A second into the first song: the output is made by now. Only what happens after this counts.
         assertTrue("the first half plays", waitFor(20_000) { (c.player.currentSong.value?.id == one.id && position() > 1_000).takeIf { it } } == true)

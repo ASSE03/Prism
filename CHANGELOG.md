@@ -17,7 +17,12 @@ What changed in each release. Older releases are described on the [Releases page
 ### Crossfade and the DJ
 
 - **Why it didn't blend:** when the DJ or crossfade leaves a plain change between two songs, the reason is behind the ⓘ on the DJ chip and on the Crossfade setting.
+- During a blend the ending song plays on the output you picked in Prism, as the rest of the music does.
 - Fixed: Repeat one switched on after a blend was planned still moved on; a pause while the two songs were being lined up; seeking back in the incoming song during a blend; a skip during a blend was a hard cut (it fades now).
+
+### Albums without a gap
+
+- **Songs that run into each other play as one.** Measured for the first time: with a tone cut across two files, nothing is added, dropped or restarted at the change. Spatial audio, the headphone correction and the volume leveller's limiter each made a small click at every change of song; they carry on across it now.
 
 ### Lyrics
 
