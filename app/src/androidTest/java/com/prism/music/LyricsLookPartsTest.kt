@@ -40,8 +40,8 @@ class LyricsLookPartsTest {
     )
     private fun AppSettings.look() = lyricsLook.let { p ->
         Look(
-            p.motionNow, p.wordByWordNow, p.weightNow.weight, p.sizeScale * lyricsScale, lyricsAlign.name, p.spacing, p.sungColor.name,
-            p.othersAlpha, p.pageBackground, p.onCard, p.immersiveBackground, p.haloNow, p.shadow, lyricsProgressLine, p.backingSize, p.gapMark.name,
+            p.motionNow, p.wordByWordNow, p.weightNow.weight, p.sizeScale * lyrics.scale, lyrics.align.name, p.spacing, p.sungColor.name,
+            p.othersAlpha, p.pageBackground, p.onCard, p.immersiveBackground, p.haloNow, p.shadow, lyrics.progressLine, p.backingSize, p.gapMark.name,
         )
     }
     private fun now() = settings.stored.value

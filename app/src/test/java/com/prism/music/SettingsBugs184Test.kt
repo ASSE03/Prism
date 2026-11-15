@@ -11,6 +11,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.unit.dp
 import com.prism.music.data.HistoryPause
 import com.prism.music.data.prefs.AppSettings
+import com.prism.music.data.prefs.MixPrefs
 import com.prism.music.data.prefs.BleedFit
 import com.prism.music.data.prefs.LyricsExtraPlace
 import androidx.compose.runtime.CompositionLocalProvider
@@ -113,8 +114,8 @@ class SettingsBugs184Test {
 
     /** Player → Progress bar and times: "Crossfade on the progress bar" only does anything with Crossfade on. */
     @Test fun theCrossfadeOnTheBarChoiceShowsOnlyWithCrossfadeOn() {
-        val off = AppSettings(mix = false)
-        val on = AppSettings(mix = true)
+        val off = AppSettings(mix = MixPrefs(on = false))
+        val on = AppSettings(mix = MixPrefs(on = true))
         var s by androidx.compose.runtime.mutableStateOf(off)
         showRows({ s }) { PlayerProgressRows() }
         val title = tr(R.string.crossfade_on_the_progress_bar)

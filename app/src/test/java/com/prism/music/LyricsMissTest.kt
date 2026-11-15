@@ -49,7 +49,7 @@ class LyricsMissTest {
         override suspend fun clearMisses() {}
         override suspend fun allFor(songId: String) = rows.values.filter { it.songId == songId && it.content.isNotEmpty() }
     }
-    private var settings = AppSettings(lyricsOrder = listOf(LyricsSource.APPLE, LyricsSource.LRCLIB), preferSynced = true)
+    private var settings = AppSettings(lyrics = com.prism.music.data.prefs.LyricsPrefs(order = listOf(LyricsSource.APPLE, LyricsSource.LRCLIB)), preferSynced = true)
     private val repo = LyricsRepository(http, dao, YouTubeMusic(InnerTube(http, { settings })), { settings })
 
     @Test fun networkTroubleIsNotKeptAsAMiss() = runBlocking {

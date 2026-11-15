@@ -14,6 +14,7 @@ import com.prism.music.data.lyrics.LyricsRepository
 import com.prism.music.data.model.ArtistRef
 import com.prism.music.data.model.Song
 import com.prism.music.data.prefs.AppSettings
+import com.prism.music.data.prefs.LyricsPrefs
 import com.prism.music.data.prefs.BehaviorPrefs
 import com.prism.music.data.prefs.LyricsSource
 import com.prism.music.data.prefs.defaultLyricsOrder
@@ -323,7 +324,7 @@ class EmbeddedLyricsTest {
             override suspend fun clearMisses() {}
             override suspend fun allFor(songId: String) = rows.filter { it.songId == songId }
         }
-        val settings = AppSettings(lyricsOrder = order, preferSynced = preferSynced, behavior = BehaviorPrefs(embeddedLyrics = on))
+        val settings = AppSettings(preferSynced = preferSynced, behavior = BehaviorPrefs(embeddedLyrics = on), lyrics = LyricsPrefs(order = order))
         return LyricsRepository(OkHttpClient(), dao, YouTubeMusic(InnerTube(OkHttpClient(), { settings })), { settings }).apply {
             fileLyrics = { inFile }
         }
@@ -342,8 +343,8 @@ class EmbeddedLyricsTest {
         assertEquals(LyricsSource.EMBEDDED, on.lyricsSources.last())
         // Every other source switched off leaves the file's alone only when it's on.
         val allOff = LyricsSource.entries.toSet()
-        assertEquals(defaultLyricsOrder.filter { it != LyricsSource.EMBEDDED }, off.copy(lyricsOff = allOff).lyricsSources)
-        assertEquals(listOf(LyricsSource.EMBEDDED), on.copy(lyricsOff = allOff).lyricsSources)
+        assertEquals(defaultLyricsOrder.filter { it != LyricsSource.EMBEDDED }, off.copy(lyrics = off.lyrics.copy(off = allOff)).lyricsSources)
+        assertEquals(listOf(LyricsSource.EMBEDDED), on.copy(lyrics = on.lyrics.copy(off = allOff)).lyricsSources)
     }
 
     @Test fun switchedOffTheFileIsNotLookedAt() = runBlocking {

@@ -19,8 +19,8 @@ class CanvasWantTest {
         prefs: CanvasPrefs = CanvasPrefs(useVideos = true),
     ): AppSettings = AppSettings().let {
         it.copy(
-            canvasEnabled = enabled, canvasFillsBackground = full, dataSaver = dataSaver, performanceMode = performance,
-            behavior = it.behavior.copy(canvas = prefs),
+            dataSaver = dataSaver, performanceMode = performance,
+            behavior = it.behavior.copy(canvas = prefs.copy(enabled = enabled, fillsBackground = full)),
         )
     }.effective()
 

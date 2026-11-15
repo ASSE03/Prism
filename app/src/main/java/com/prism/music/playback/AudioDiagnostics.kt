@@ -185,7 +185,7 @@ object AudioDiagnostics {
             append("Account: ${com.prism.music.data.innertube.AccountSummary.of(s.cookie, s.authUser, s.dataSyncId, s.visitorData, s.behavior.accountSavedAt)}; YouTube takes requests as: ${c.innerTube.seen.value?.text ?: "not asked yet"}\n")
             append("Settings: Premium quality ${s.premiumStream} (${c.streams.premiumState.value}), Data saver ${s.dataSaver}, network metered $metered, history paused ${com.prism.music.data.HistoryPause.paused(s.behavior)}, ")
             append("quality ${s.audioQuality}, lossless ${s.lossless}, normalize ${s.normalize}, ")
-            append("skip silence ${s.skipSilence}, crossfade ${s.mix} (${s.mixSeconds} s), spatial ${s.spatial} (${(s.spatialAmount * 100).toInt()}%), ")
+            append("skip silence ${s.skipSilence}, crossfade ${s.mix.on} (${s.mix.seconds} s), spatial ${s.spatial} (${(s.spatialAmount * 100).toInt()}%), ")
             append("EQ ${s.eq.enabled}, Sing ${c.sing.on.value}, DJ ${c.dj.onNow}, ")
             append("headphone correction ${c.headphoneEq.active.value?.let { "'${it.profile.name}' at ${(it.strength * 100).toInt()}%" } ?: "none"}\n")
             append("Now: ${n.codec} ${n.sampleRate} Hz → ${n.outputEncoding} ${n.outputSampleRate} Hz, decoder ${n.decoder}, offload ${n.offload}, underruns ${n.underruns}\n")

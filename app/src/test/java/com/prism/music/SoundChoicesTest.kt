@@ -90,20 +90,20 @@ class SoundChoicesTest {
     }
 
     @Test fun crossfadeFollowsMixAndAutomaticLength() {
-        assertEquals(Crossfade.OFF, SoundChoices.crossfade(base.copy(mix = false, mixAuto = true)))
-        assertEquals(Crossfade.OFF, SoundChoices.crossfade(base.copy(mix = false, mixAuto = false)))
-        assertEquals(Crossfade.AUTO, SoundChoices.crossfade(base.copy(mix = true, mixAuto = true)))
-        assertEquals(Crossfade.FIXED, SoundChoices.crossfade(base.copy(mix = true, mixAuto = false)))
+        assertEquals(Crossfade.OFF, SoundChoices.crossfade(base.copy(mix = base.mix.copy(on = false, auto = true))))
+        assertEquals(Crossfade.OFF, SoundChoices.crossfade(base.copy(mix = base.mix.copy(on = false, auto = false))))
+        assertEquals(Crossfade.AUTO, SoundChoices.crossfade(base.copy(mix = base.mix.copy(on = true, auto = true))))
+        assertEquals(Crossfade.FIXED, SoundChoices.crossfade(base.copy(mix = base.mix.copy(on = true, auto = false))))
         for (x in Crossfade.entries) {
             val (on, auto) = SoundChoices.crossfadeValues(x)
-            assertEquals(x, SoundChoices.crossfade(base.copy(mix = on, mixAuto = auto ?: base.mixAuto)))
+            assertEquals(x, SoundChoices.crossfade(base.copy(mix = base.mix.copy(on = on, auto = auto ?: base.mix.auto))))
         }
         // Off keeps automatic/fixed, so turning crossfade back on gives the old way.
         assertEquals(null, SoundChoices.crossfadeValues(Crossfade.OFF).second)
     }
 
     @Test fun homeTopButtonsFollowBothSwitches() {
-        fun s(p: Boolean, cz: Boolean) = base.copy(homePodcastsButton = p, homeCustomizeTopButton = cz)
+        fun s(p: Boolean, cz: Boolean) = base.copy(home = base.home.copy(podcastsButton = p, customizeTopButton = cz))
         assertEquals(com.prism.music.ui.screens.TopButtons.BOTH, com.prism.music.ui.screens.HomeChoices.topButtons(s(true, true)))
         assertEquals(com.prism.music.ui.screens.TopButtons.PODCASTS, com.prism.music.ui.screens.HomeChoices.topButtons(s(true, false)))
         assertEquals(com.prism.music.ui.screens.TopButtons.CUSTOMIZE, com.prism.music.ui.screens.HomeChoices.topButtons(s(false, true)))
@@ -181,15 +181,15 @@ class SoundChoicesTest {
     /** #351: a fixed crossfade goes up to 30 s and is kept, and its tail holds the whole of it. */
     @Test fun aCrossfadeCanRunToThirtySeconds() {
         assertEquals(30, com.prism.music.data.prefs.MAX_CROSSFADE_SECONDS)
-        assertEquals(6, base.mixSeconds)
+        assertEquals(6, base.mix.seconds)
         val tailHolds = com.prism.music.playback.MixEngine.TAIL_BUFFER_MS
         org.junit.Assert.assertTrue(com.prism.music.playback.MixEngine.tailNeedsMs(30_000) <= tailHolds)
         val repo = com.prism.music.data.prefs.SettingsRepository(
             org.robolectric.RuntimeEnvironment.getApplication(),
             kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + kotlinx.coroutines.Dispatchers.Default),
         )
-        val was = kotlinx.coroutines.runBlocking { repo.flow.first() }.mixSeconds
-        fun readBack(wanted: Int) = kotlinx.coroutines.runBlocking { kotlinx.coroutines.withTimeout(10_000) { repo.flow.first { it.mixSeconds == wanted } } }.mixSeconds
+        val was = kotlinx.coroutines.runBlocking { repo.flow.first() }.mix.seconds
+        fun readBack(wanted: Int) = kotlinx.coroutines.runBlocking { kotlinx.coroutines.withTimeout(10_000) { repo.flow.first { it.mix.seconds == wanted } } }.mix.seconds
         repo.setMixSeconds(30); assertEquals(30, readBack(30))
         repo.setMixSeconds(45); assertEquals(30, readBack(30))
         repo.setMixSeconds(was); assertEquals(was, readBack(was))

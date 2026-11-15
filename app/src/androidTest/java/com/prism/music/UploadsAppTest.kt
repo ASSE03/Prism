@@ -80,7 +80,7 @@ class UploadsAppTest {
         compose.waitForIdle()
     }
 
-    private fun tiles() = c.settings.current.libraryTiles
+    private fun tiles() = c.settings.current.library.tiles
 
     /** [text] turns up, scrolling to it if it's further down. */
     private fun ComposeTestRule.seeText(text: String, timeoutMs: Long = 20_000) {

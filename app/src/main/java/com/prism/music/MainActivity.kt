@@ -910,14 +910,14 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 val artAhead = song?.takeIf { !playerOpen }?.let { c.covers.art(it) }
                 if (artAhead != null) {
                     val warmContext = androidx.compose.ui.platform.LocalContext.current
-                    LaunchedEffect(artAhead, settings.fullBleedArtwork, settings.playerBackground, settings.playerBlur) {
+                    LaunchedEffect(artAhead, settings.fullBleedArtwork, settings.player.background, settings.player.blur) {
                         // Not as the song starts, whose own start comes first, nor for a song skipped straight past.
                         kotlinx.coroutines.delay(1_500)
                         runCatching {
                             com.prism.music.ui.player.warmPlayerArt(
                                 warmContext, artAhead, settings.fullBleedArtwork,
-                                meshToo = settings.playerBackground != com.prism.music.data.prefs.PlayerBackground.GRADIENT,
-                                blurStrength = settings.playerBlur,
+                                meshToo = settings.player.background != com.prism.music.data.prefs.PlayerBackground.GRADIENT,
+                                blurStrength = settings.player.blur,
                             )
                         }
                     }

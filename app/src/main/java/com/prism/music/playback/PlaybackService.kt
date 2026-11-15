@@ -426,9 +426,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             tempo = c.mixTempo,
             // DJ mode blends every song into the next, beat-matched, at Crossfade's automatic length.
             // Not while casting: the renderer plays one song at a time (and the phone's own player is muted).
-            mixMs = { c.settings.current.let { s -> if ((s.mix || c.dj.onNow) && !c.cast.casting) s.mixSeconds * 1000L else null } },
-            auto = { c.settings.current.mixAuto || c.dj.onNow },
-            beatMatch = { c.settings.current.mixBeatMatch || c.dj.onNow },
+            mixMs = { c.settings.current.let { s -> if ((s.mix.on || c.dj.onNow) && !c.cast.casting) s.mix.seconds * 1000L else null } },
+            auto = { c.settings.current.mix.auto || c.dj.onNow },
+            beatMatch = { c.settings.current.mix.beatMatch || c.dj.onNow },
             harmonic = { from, to ->
                 if (!c.dj.onNow) null else {
                     val a = c.mixTempo.key(from); val b = c.mixTempo.key(to)
@@ -494,7 +494,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         if (c.queue.followingHost || c.together.state.value !is com.prism.music.playback.together.TogetherState.Idle) return false
         // Only while an album plays through (a radio or playlist that puts two of an album's songs side by side blends).
         // An album played as a DJ set is a set: it blends.
-        return blendsAcrossAlbum(a.album?.id, b.album?.id, c.queue.source.value.kind == QueueKind.ALBUM, c.settings.current.mixKeepAlbums, c.dj.onNow)
+        return blendsAcrossAlbum(a.album?.id, b.album?.id, c.queue.source.value.kind == QueueKind.ALBUM, c.settings.current.mix.keepAlbums, c.dj.onNow)
     }
 
     /**
@@ -1445,15 +1445,15 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // The waveform progress bar is drawn from the scan too (1.7.4).
         val wave = s.scrubberStyle == com.prism.music.data.prefs.ScrubberStyle.WAVE
         // A radio tuned calm or energetic goes by what's been scanned, so songs heard are scanned for it too.
-        if (!s.mix && !s.normalize && !wave && s.behavior.radioTune.energy == 0f) return
-        val network = s.mixTempoOnCellular || getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered == false
+        if (!s.mix.on && !s.normalize && !wave && s.behavior.radioTune.energy == 0f) return
+        val network = s.mix.tempoOnCellular || getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered == false
         val playing = player.currentMediaItem?.mediaId
         val all = items.mapNotNull { it?.toSong() }.filter { !it.isLive && !it.isEpisode }.distinctBy { it.id }
-        val worth = MixTempo.worthScanning(all.map { it.id }, playing, c.visible.value, s.mix || wave, QUEUE_AHEAD)
+        val worth = MixTempo.worthScanning(all.map { it.id }, playing, c.visible.value, s.mix.on || wave, QUEUE_AHEAD)
         val songs = all.filter { it.id in worth }
         if (songs.isEmpty()) return
         // Songs scanned before fade-outs and intros were measured are scanned again only for Crossfade's automatic length.
-        val edges = s.mix && s.mixAuto
+        val edges = s.mix.on && s.mix.auto
         scanJob?.cancel()
         scanJob = scope.launch {
             if (playing != null) untilUnderWay(playing, UNDER_WAY_MS)
@@ -1469,7 +1469,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             // With the waveform bar, the playing song goes first: its bar is waiting for it.
             for (song in songs.sortedBy { if (wave) it.id != playing else it.id == playing }) {
                 // Asked again for each: the listener may have left since these were lined up.
-                if (song.id !in MixTempo.worthScanning(all.map { it.id }, playing, c.visible.value, s.mix || wave, QUEUE_AHEAD)) continue
+                if (song.id !in MixTempo.worthScanning(all.map { it.id }, playing, c.visible.value, s.mix.on || wave, QUEUE_AHEAD)) continue
                 c.mixTempo.measure(song.id, network, edges, wave = wave, peak = s.normalize)
                 // Measured while it's just begun: its own figure takes over (later in the song, a jump would be heard).
                 if (trackedSong?.id == song.id && settling()) applyNormalization()
@@ -2264,7 +2264,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         if (player.shuffleModeEnabled) player.shuffleModeEnabled = false
         djJob = scope.launch {
             val s = c.settings.current
-            val network = c.dj.dataAllowed || s.mixTempoOnCellular ||
+            val network = c.dj.dataAllowed || s.mix.tempoOnCellular ||
                 getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered == false
             resequence()
             val cur = player.currentMediaItemIndex

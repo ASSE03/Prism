@@ -99,7 +99,7 @@ class CustomizeHomePageTest : HomePagesHarness() {
         showAt(Routes.CATALOGUE)
         for (header in HomeHeader.entries) {
             container.settings.setHomeHeader(header)
-            until("$header") { it.homeHeader == header }
+            until("$header") { it.home.header == header }
             val greeting = header != HomeHeader.NONE
             val pictured = header == HomeHeader.PICTURE || header == HomeHeader.NOW_PLAYING
             assertEquals("$header: Headline", greeting, hasRow(headline))
@@ -130,38 +130,38 @@ class CustomizeHomePageTest : HomePagesHarness() {
         tap(style)
         assertEquals(HomeHeader.entries.size, compose.onAllNodes(hasTestTag(SettingsTags.SHEET_OPTION)).fetchSemanticsNodes().size)
         swipeSheetAway()
-        assertEquals(d.homeHeader, stored.homeHeader)
+        assertEquals(d.home.header, stored.home.header)
         pick(style, HomeHeader.PICTURE.label)
-        until("home_header") { it.homeHeader == HomeHeader.PICTURE }
+        until("home_header") { it.home.header == HomeHeader.PICTURE }
         // home_header_height
         choose(height, HomeHeaderHeight.TALL.label)
-        until("home_header_height") { it.homeHeaderHeight == HomeHeaderHeight.TALL }
+        until("home_header_height") { it.home.headerHeight == HomeHeaderHeight.TALL }
         // home_header_picture: a design from the list (or a photo of your own, which opens the phone's picker).
-        val design = Backdrop.entries.first { it.group == BackdropGroup.DESIGNS && it.season == null && it.name != d.homeHeaderPicture }
+        val design = Backdrop.entries.first { it.group == BackdropGroup.DESIGNS && it.season == null && it.name != d.home.headerPicture }
         tap(picture)
         assertTrue(compose.onAllNodes(hasTestTag(SettingsTags.SHEET_OPTION) and hasText(t(R.string.your_photo))).fetchSemanticsNodes().isNotEmpty())
         swipeSheetAway()
         pick(picture, design.label)
-        until("home_header_picture") { it.homeHeaderPicture == design.name }
+        until("home_header_picture") { it.home.headerPicture == design.name }
         assertEquals(design.label, valueOf(picture))
 
         // home_layout: the sections editor, as it was (a tap hides a section).
-        val first = stored.homeLayout.first()
+        val first = stored.home.layout.first()
         assertTrue(first.visible)
         compose.onNode(hasText(first.titled()) and SemanticsMatcher.keyIsDefined(SemanticsActions.OnClick) and hasAnyAncestor(hasTestTag(SECTIONS))).performClick()
-        until("home_layout") { !it.homeLayout.first().visible && it.homeLayout.size == d.homeLayout.size }
+        until("home_layout") { !it.home.layout.first().visible && it.home.layout.size == d.home.layout.size }
         compose.onNode(hasText(t(R.string.add_a_section)) and hasAnyAncestor(hasTestTag(SECTIONS))).assertIsDisplayed()
 
         // home_shortcuts: chips, numbered in the order they were picked.
         chip(HomeShortcut.SEARCH.label)
-        until("home_shortcuts") { it.homeShortcuts == d.homeShortcuts + HomeShortcut.SEARCH }
+        until("home_shortcuts") { it.home.shortcuts == d.home.shortcuts + HomeShortcut.SEARCH }
         chip("1  " + HomeShortcut.LIKED.label)
-        until("home_shortcuts") { it.homeShortcuts == d.homeShortcuts - HomeShortcut.LIKED + HomeShortcut.SEARCH }
+        until("home_shortcuts") { it.home.shortcuts == d.home.shortcuts - HomeShortcut.LIKED + HomeShortcut.SEARCH }
         // home_recent_tiles
         slide(recentAlbums, 5f)
-        until("home_recent_tiles") { it.homeRecentTiles == 5 }
+        until("home_recent_tiles") { it.home.recentTiles == 5 }
         slide(recentAlbums, 0f)
-        until("home_recent_tiles") { it.homeRecentTiles == 0 }
+        until("home_recent_tiles") { it.home.recentTiles == 0 }
         assertEquals(t(R.string.off), valueOf(recentAlbums))
 
         // auto_add_sections
@@ -169,11 +169,11 @@ class CustomizeHomePageTest : HomePagesHarness() {
         until("auto_add_sections") { it.autoAddSections != d.autoAddSections }
         // home_hide_kinds: two chips over the one stored set, every combination.
         chip(t(R.string.videos))
-        until("home_hide_kinds") { it.homeHideKinds == setOf(HomeSections.KIND_VIDEOS) }
+        until("home_hide_kinds") { it.home.hideKinds == setOf(HomeSections.KIND_VIDEOS) }
         chip(t(R.string.podcasts))
-        until("home_hide_kinds") { it.homeHideKinds == setOf(HomeSections.KIND_VIDEOS, HomeSections.KIND_PODCASTS) }
+        until("home_hide_kinds") { it.home.hideKinds == setOf(HomeSections.KIND_VIDEOS, HomeSections.KIND_PODCASTS) }
         chip(t(R.string.videos))
-        until("home_hide_kinds") { it.homeHideKinds == setOf(HomeSections.KIND_PODCASTS) }
+        until("home_hide_kinds") { it.home.hideKinds == setOf(HomeSections.KIND_PODCASTS) }
         assertEquals(t(R.string.podcasts), valueOf(hide))
         // quick_picks_source, quick_picks_radio
         choose(quickPicksFrom, QuickPicksSource.YOUTUBE.label)
@@ -188,7 +188,7 @@ class CustomizeHomePageTest : HomePagesHarness() {
         assertFalse(hasRow(yoursFirst))
         // home_customize_button
         tap(customizeButton)
-        until("home_customize_button") { it.homeCustomizeButton != d.homeCustomizeButton }
+        until("home_customize_button") { it.home.customizeButton != d.home.customizeButton }
 
         assertFits("everything changed")
         assertEquals(listOf(5, 1, 3, 6), sizes())
@@ -200,10 +200,10 @@ class CustomizeHomePageTest : HomePagesHarness() {
         assertEquals(lines.joinToString("\n"), 15, lines.size)
         assertTrue(lines.toString(), lines.any { it.startsWith(t(R.string.sections)) })
         until("the reset") {
-            it.homeHeader == d.homeHeader && it.homeHeaderHeight == d.homeHeaderHeight && it.homeHeaderPicture == d.homeHeaderPicture && it.greetingText == d.greetingText &&
-                it.greetingShowName == d.greetingShowName && it.homeLayout == d.homeLayout && it.homeShortcuts == d.homeShortcuts && it.homeRecentTiles == d.homeRecentTiles &&
-                it.autoAddSections == d.autoAddSections && it.homeHideKinds == d.homeHideKinds && it.quickPicksRadio == d.quickPicksRadio &&
-                it.speedDialYouTubeOnly == d.speedDialYouTubeOnly && it.homeCustomizeButton == d.homeCustomizeButton && it.behavior == d.behavior
+            it.home.header == d.home.header && it.home.headerHeight == d.home.headerHeight && it.home.headerPicture == d.home.headerPicture && it.greetingText == d.greetingText &&
+                it.greetingShowName == d.greetingShowName && it.home.layout == d.home.layout && it.home.shortcuts == d.home.shortcuts && it.home.recentTiles == d.home.recentTiles &&
+                it.autoAddSections == d.autoAddSections && it.home.hideKinds == d.home.hideKinds && it.quickPicksRadio == d.quickPicksRadio &&
+                it.speedDialYouTubeOnly == d.speedDialYouTubeOnly && it.home.customizeButton == d.home.customizeButton && it.behavior == d.behavior
         }
         assertEquals(0, changedRows())
         assertEquals(listOf(3, 1, 3, 7), sizes())
@@ -212,7 +212,7 @@ class CustomizeHomePageTest : HomePagesHarness() {
     /** 1.8.4 review: on "Hide from Home" a ticked chip means hidden, and TalkBack says so (it said "Shown"). */
     @Test fun hideFromHomeChipsTellTalkBackATickMeansHidden() {
         container.settings.setHomeHideKind(HomeSections.KIND_VIDEOS, true)
-        until("home_hide_kinds") { it.homeHideKinds == setOf(HomeSections.KIND_VIDEOS) }
+        until("home_hide_kinds") { it.home.hideKinds == setOf(HomeSections.KIND_VIDEOS) }
         showAt(Routes.CATALOGUE)
         fun state(label: String) = compose.onNode(hasText(label) and SemanticsMatcher.keyIsDefined(SemanticsProperties.StateDescription))
             .fetchSemanticsNode().config[SemanticsProperties.StateDescription]
@@ -229,13 +229,13 @@ class CustomizeHomePageTest : HomePagesHarness() {
 
     /** With the tiles' section hidden on Home, the group says why its rows are faint, behind its ⓘ; they still work. */
     @Test fun theTilesStillWorkWhileTheirSectionIsHidden() {
-        val layout = AppSettings().homeLayout.map { if (it.key == HomeSections.GREETING) it.copy(visible = false) else it }
+        val layout = AppSettings().home.layout.map { if (it.key == HomeSections.GREETING) it.copy(visible = false) else it }
         container.settings.setHomeLayout(layout)
-        until("hidden") { s -> s.homeLayout.any { it.key == HomeSections.GREETING && !it.visible } }
+        until("hidden") { s -> s.home.layout.any { it.key == HomeSections.GREETING && !it.visible } }
         showAt(Routes.CATALOGUE)
         assertFits("tiles hidden")
         chip(HomeShortcut.SEARCH.label)
-        until("home_shortcuts") { HomeShortcut.SEARCH in it.homeShortcuts }
+        until("home_shortcuts") { HomeShortcut.SEARCH in it.home.shortcuts }
     }
 
     private fun open(route: String) {
@@ -333,7 +333,7 @@ class CustomizeHomePageTest : HomePagesHarness() {
     /** With a picture on top (the group's longest state). */
     @Test @Config(qualifiers = "w360dp-h2500dp-xxhdpi") fun drawnWithAPicture() {
         container.settings.setHomeHeader(HomeHeader.PICTURE)
-        until("picture") { it.homeHeader == HomeHeader.PICTURE }
+        until("picture") { it.home.header == HomeHeader.PICTURE }
         drawn("customize-home-dark-picture", true) { it.copy(themeMode = ThemeMode.DARK) }
     }
 }

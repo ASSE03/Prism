@@ -68,7 +68,7 @@ class Requests181Test {
 
     @Test fun showBackgroundKeepsEveryOldValueAsItWas() {
         // Values from before (0..1) draw no veil and come back from the slider unchanged.
-        for (old in listOf(0f, 0.2f, AppSettings().playerBackdropShow, 0.7f, 1f)) {
+        for (old in listOf(0f, 0.2f, AppSettings().player.backdropShow, 0.7f, 1f)) {
             assertEquals(0f, backdropBlackout(old), eps)
             assertEquals(old, backdropShowFromSlider(backdropShowOnSlider(old)), eps)
             assertEquals(1f - 0.55f * old, previewVeil(old), eps)
@@ -80,10 +80,10 @@ class Requests181Test {
     @Test fun showBackgroundIsReadWithinItsRange(): Unit = kotlinx.coroutines.runBlocking {
         val repo = repo()
         repo.setPlayerBackdropShow(-3f)
-        val s = kotlinx.coroutines.withTimeout(5_000) { repo.flow.first { it.playerBackdropShow < 0f } }
-        assertEquals(BACKDROP_SHOW_MIN, s.playerBackdropShow, eps)
-        repo.setPlayerBackdropShow(AppSettings().playerBackdropShow)
-        kotlinx.coroutines.withTimeout(5_000) { repo.flow.first { it.playerBackdropShow > 0f } }
+        val s = kotlinx.coroutines.withTimeout(5_000) { repo.flow.first { it.player.backdropShow < 0f } }
+        assertEquals(BACKDROP_SHOW_MIN, s.player.backdropShow, eps)
+        repo.setPlayerBackdropShow(AppSettings().player.backdropShow)
+        kotlinx.coroutines.withTimeout(5_000) { repo.flow.first { it.player.backdropShow > 0f } }
         assertTrue(true)
     }
 

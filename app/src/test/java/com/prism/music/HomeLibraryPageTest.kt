@@ -110,15 +110,15 @@ class HomeLibraryPageTest : HomePagesHarness() {
 
         // home_continue
         tap(continueLine)
-        until("home_continue") { it.homeContinue != d.homeContinue }
+        until("home_continue") { it.home.continueLine != d.home.continueLine }
         // recent_shows
         choose(recentShows, RecentShows.COLLECTIONS.label)
         until("recent_shows") { it.behavior.recentShows == RecentShows.COLLECTIONS }
         // home_podcasts_button, home_customize_top_button: one pick of four.
         pick(topButtons, TopButtons.PODCASTS.label)
-        until("home_customize_top_button") { it.homePodcastsButton && !it.homeCustomizeTopButton }
+        until("home_customize_top_button") { it.home.podcastsButton && !it.home.customizeTopButton }
         pick(topButtons, TopButtons.NONE.label)
-        until("home_podcasts_button") { !it.homePodcastsButton && !it.homeCustomizeTopButton }
+        until("home_podcasts_button") { !it.home.podcastsButton && !it.home.customizeTopButton }
         assertEquals(TopButtons.NONE.label, valueOf(topButtons))
 
         // search_keyboard
@@ -153,33 +153,33 @@ class HomeLibraryPageTest : HomePagesHarness() {
         tap(view)
         assertEquals(1, sheets())
         choose(t(R.string.albums_as), LibraryView.GRID.label)
-        until("library_views") { it.libraryViews["ALBUMS"] == LibraryView.GRID }
+        until("library_views") { it.library.views["ALBUMS"] == LibraryView.GRID }
         choose(t(R.string.artists_as), LibraryView.GRID.label)
         choose(t(R.string.playlists_as), LibraryView.GRID.label)
-        until("library_views") { v -> listOf("PLAYLISTS", "ALBUMS", "ARTISTS").all { v.libraryViews[it] == LibraryView.GRID } }
+        until("library_views") { v -> listOf("PLAYLISTS", "ALBUMS", "ARTISTS").all { v.library.views[it] == LibraryView.GRID } }
         choose(t(R.string.playlists_as), LibraryView.LIST.label)
-        until("library_views") { it.libraryViews["PLAYLISTS"] == LibraryView.LIST }
+        until("library_views") { it.library.views["PLAYLISTS"] == LibraryView.LIST }
         assertEquals("the sheet stays for the other tabs", 1, sheets())
         swipeSheetAway()
-        assertEquals(d.libraryView, stored.libraryView)
+        assertEquals(d.library.view, stored.library.view)
         val mixed = valueOf(view)
         assertTrue(mixed, LibraryView.GRID.label in mixed && LibraryView.LIST.label in mixed && t(R.string.playlists) in mixed)
         // library_columns, library_subtitles, library_start_tab, merge_liked_videos
         choose(columns, LibraryColumns.THREE.label)
-        until("library_columns") { it.libraryColumns == LibraryColumns.THREE }
+        until("library_columns") { it.library.columns == LibraryColumns.THREE }
         tap(details)
-        until("library_subtitles") { it.librarySubtitles != d.librarySubtitles }
+        until("library_subtitles") { it.library.subtitles != d.library.subtitles }
         pick(opensOn, t(R.string.albums))
-        until("library_start_tab") { it.libraryStartTab == "ALBUMS" }
+        until("library_start_tab") { it.library.startTab == "ALBUMS" }
         assertEquals(t(R.string.albums), valueOf(opensOn))
         tap(songAndVideo)
         until("merge_liked_videos") { it.mergeLikedVideos != d.mergeLikedVideos }
         // library_tiles, library_playlists_first: the sheet Library's Edit opens.
         tap(tiles)
         compose.onNode(hasContentDescription(LibraryTile.HISTORY.label) and isToggleable()).performClick()
-        until("library_tiles") { LibraryTile.HISTORY in it.libraryTiles }
+        until("library_tiles") { LibraryTile.HISTORY in it.library.tiles }
         compose.onNode(hasText(t(R.string.playlists_first))).performClick()
-        until("library_playlists_first") { it.libraryPlaylistsFirst }
+        until("library_playlists_first") { it.library.playlistsFirst }
     }
 
     @Test fun listsAndArtistPagesStoreWhatIsPicked() {
@@ -219,14 +219,14 @@ class HomeLibraryPageTest : HomePagesHarness() {
     @Test fun resetThisPagePutsEveryRowBack() {
         val p = container.settings
         val d = AppSettings()
-        p.setHomeContinue(!d.homeContinue); p.setRecentShows(RecentShows.COLLECTIONS); p.setHomePodcastsButton(false)
+        p.setHomeContinue(!d.home.continueLine); p.setRecentShows(RecentShows.COLLECTIONS); p.setHomePodcastsButton(false)
         p.setSearchKeyboard(!d.searchKeyboard); p.setSearchSections(d.searchSections - SearchSection.MOODS)
         p.setReplayCard(ReplayCardStyle.RING.name); p.setReplayGraph(ReplayGraph.DAYS)
-        p.setLibraryTiles(d.libraryTiles + LibraryTile.HISTORY); p.setLibraryTabView("ALBUMS", LibraryView.GRID); p.setLibraryColumns(LibraryColumns.THREE)
-        p.setLibrarySubtitles(!d.librarySubtitles); p.setLibraryStartTab("ALBUMS"); p.setMergeLikedVideos(!d.mergeLikedVideos)
+        p.setLibraryTiles(d.library.tiles + LibraryTile.HISTORY); p.setLibraryTabView("ALBUMS", LibraryView.GRID); p.setLibraryColumns(LibraryColumns.THREE)
+        p.setLibrarySubtitles(!d.library.subtitles); p.setLibraryStartTab("ALBUMS"); p.setMergeLikedVideos(!d.mergeLikedVideos)
         p.setPlaylistGenres(!d.behavior.playlistGenres); p.setFullWidthPictures(FullWidthPictures.ALBUMS_AND_PLAYLISTS); p.setLocatePlaying(true)
         p.setArtistBio(!d.behavior.artistBio)
-        until("everything changed") { it.behavior.artistBio != d.behavior.artistBio && it.homeContinue != d.homeContinue }
+        until("everything changed") { it.behavior.artistBio != d.behavior.artistBio && it.home.continueLine != d.home.continueLine }
         showAt(PAGE)
         assertBudgets("everything changed")
         assertEquals(listOf(4, 2, 2, 6, 3, 1), groupSizes())
@@ -242,10 +242,10 @@ class HomeLibraryPageTest : HomePagesHarness() {
         assertTrue(lines.toString(), lines.any { it.startsWith("$fullWidth: ${FullWidthPictures.ALBUMS_AND_PLAYLISTS.label} → ${FullWidthPictures.PLAYLISTS.label}") })
         until("the reset") { it.behavior == d.behavior && it.view == d.view }
         until("the reset") {
-            it.homeContinue == d.homeContinue && it.homePodcastsButton == d.homePodcastsButton && it.searchKeyboard == d.searchKeyboard &&
-                it.searchSections == d.searchSections && it.replayCard == d.replayCard && it.libraryTiles == d.libraryTiles &&
-                it.libraryViews == d.libraryViews && it.libraryColumns == d.libraryColumns && it.librarySubtitles == d.librarySubtitles &&
-                it.libraryStartTab == d.libraryStartTab && it.mergeLikedVideos == d.mergeLikedVideos && it.playlistHeroCover == d.playlistHeroCover
+            it.home.continueLine == d.home.continueLine && it.home.podcastsButton == d.home.podcastsButton && it.searchKeyboard == d.searchKeyboard &&
+                it.searchSections == d.searchSections && it.replayCard == d.replayCard && it.library.tiles == d.library.tiles &&
+                it.library.views == d.library.views && it.library.columns == d.library.columns && it.library.subtitles == d.library.subtitles &&
+                it.library.startTab == d.library.startTab && it.mergeLikedVideos == d.mergeLikedVideos && it.playlistHeroCover == d.playlistHeroCover
         }
         assertEquals(0, changedRows())
     }

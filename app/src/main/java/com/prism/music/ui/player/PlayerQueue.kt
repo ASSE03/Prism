@@ -191,7 +191,7 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
         } else QueueHeader(
             title = tr(R.string.queue),
             dj = if (order.size > 1 && settings.view.queueDjChip) dj else null, onDj = { pc.setDjMode(!dj) },
-            djWhy = queueDjWhy(lastWhy?.why, dj || settings.mix),
+            djWhy = queueDjWhy(lastWhy?.why, dj || settings.mix.on),
             onSave = if (queue.size > 1) ({ saving = true }) else null,
             onClear = if (order.isNotEmpty()) ({ pc.clearUpcoming() }) else null,
             locked = locked, onLock = { c.settings.setQueueLocked(!locked) },

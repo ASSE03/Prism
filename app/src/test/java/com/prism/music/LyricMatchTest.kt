@@ -225,7 +225,7 @@ class LyricMatchTest {
             override suspend fun clearMisses() {}
             override suspend fun allFor(songId: String) = rows.filter { it.songId == songId }
         }
-        val st = AppSettings(lyricsOrder = listOf(LyricsSource.APPLE, LyricsSource.LRCLIB), preferSynced = true)
+        val st = AppSettings(lyrics = com.prism.music.data.prefs.LyricsPrefs(order = listOf(LyricsSource.APPLE, LyricsSource.LRCLIB)), preferSynced = true)
         val prefs = ApplicationProvider.getApplicationContext<Context>().getSharedPreferences("lyrics_other_words_test", Context.MODE_PRIVATE)
         prefs.edit().clear().commit()
         val r = LyricsRepository(OkHttpClient(), dao, YouTubeMusic(InnerTube(OkHttpClient(), { st })), { st }).apply { wordShifts = prefs }

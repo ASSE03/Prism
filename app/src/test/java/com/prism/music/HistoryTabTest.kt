@@ -57,7 +57,7 @@ class HistoryTabTest {
     }
 
     private fun show() {
-        val s = AppSettings().copy(libraryStartTab = "HISTORY")
+        val s = AppSettings().let { it.copy(library = it.library.copy(startTab = "HISTORY")) }
         compose.setContent {
             val nav = Navigator(androidx.navigation.compose.rememberNavController(), openPlayer = {})
             PrismTheme(s, artworkColor = null) {
@@ -89,7 +89,7 @@ class HistoryTabTest {
     private fun events() = runBlocking { c.db.plays().events(0, Long.MAX_VALUE) }
 
     private fun showTurns() {
-        val s = AppSettings().copy(libraryStartTab = "HISTORY")
+        val s = AppSettings().let { it.copy(library = it.library.copy(startTab = "HISTORY")) }
         compose.setContent {
             val nav = Navigator(androidx.navigation.compose.rememberNavController(), openPlayer = {})
             PrismTheme(s, artworkColor = null) {

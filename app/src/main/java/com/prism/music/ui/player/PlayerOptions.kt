@@ -1,6 +1,7 @@
 package com.prism.music.ui.player
 
 import com.prism.music.R
+import com.prism.music.data.prefs.CanvasPrefs
 import com.prism.music.tr
 import com.prism.music.ui.theme.PrismIcons
 import androidx.compose.foundation.layout.Column
@@ -189,7 +190,7 @@ fun PlayerOptionsSheet(
     }
 
     val settings = c.settings.flow.collectAsState().value
-    val translating = settings.lyricsTranslate
+    val translating = settings.lyrics.translate
     // Says which language, so turning it on for a song already in it explains itself.
     val translateInto = translateTargetName(settings)
     val singOn = c.sing.on.collectAsState().value
@@ -287,13 +288,13 @@ fun PlayerOptionsSheet(
     val loopOff = song.id in hiddenLoops
     val hasCover = c.canvas.cached(song) != null
     val hasVideo = clipRow?.videoId != null
-    if (canvasVideoPickShown(settings.canvasEnabled, canvasPrefs.useVideos, isSong, loopOff)) {
+    if (canvasVideoPickShown(settings.behavior.canvas.enabled, canvasPrefs.useVideos, isSong, loopOff)) {
         put(MenuAction.CANVAS_VIDEO, ActionItem(PrismIcons.Video, tr(R.string.canvas_pick_video), keepOpen = true) { canvasVideos = true })
     }
     // Two switches for the song, each on its own (owner, 2026-11-13): its animated cover, and its Canvas loop from the
     // music video. Each stays after it was switched off, the only way back.
-    val coverSwitch = canvasCoverSwitchShown(settings.canvasEnabled, canvasPrefs.covers, hasCover, coverOff)
-    val loopSwitch = canvasLoopSwitchShown(settings.canvasEnabled, canvasPrefs.useVideos, isSong, hasVideo, loopOff)
+    val coverSwitch = canvasCoverSwitchShown(settings.behavior.canvas.enabled, canvasPrefs.covers, hasCover, coverOff)
+    val loopSwitch = canvasLoopSwitchShown(settings.behavior.canvas.enabled, canvasPrefs.useVideos, isSong, hasVideo, loopOff)
     if ((hasCanvas || coverSwitch || loopSwitch) && !local) {
         if (coverSwitch) put(MenuAction.ANIMATED_COVER, canvasToggleItem(!coverOff, tr(R.string.animated_cover), PrismIcons.AnimatedCover) { c.canvas.setHidden(song.id, !coverOff) })
         if (loopSwitch) put(MenuAction.CANVAS, canvasToggleItem(!loopOff) { c.canvas.setLoopHidden(song.id, !loopOff) })
@@ -305,7 +306,7 @@ fun PlayerOptionsSheet(
             })
         }
         // The song has both an animated cover and a video loop: which one it uses, whatever "When a song has both" says.
-        if (canvasUseShown(settings.canvasEnabled, canvasPrefs.covers, canvasPrefs.useVideos, hasCover, hasVideo, coverOff, loopOff)) {
+        if (canvasUseShown(settings.behavior.canvas.enabled, canvasPrefs.covers, canvasPrefs.useVideos, hasCover, hasVideo, coverOff, loopOff)) {
             val now = canvasUseNow(settings, clipRow)
             put(MenuAction.CANVAS_USE, ActionItem(PrismIcons.Video, tr(R.string.canvas_use), value = canvasSourceName(now), keepOpen = true) { canvasUse = true })
         }

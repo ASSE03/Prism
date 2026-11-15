@@ -17,6 +17,7 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.prism.music.data.prefs.AppSettings
+import com.prism.music.data.prefs.MixPrefs
 import com.prism.music.ui.LocalNavigator
 import com.prism.music.ui.Navigator
 import com.prism.music.ui.Routes
@@ -109,17 +110,17 @@ class SettingsMapTest {
     }
 
     @Test fun everyRootLineSaysSomething() {
-        for (s in listOf(AppSettings(), AppSettings(performanceMode = true, mix = true, mixAuto = false, mixSeconds = 6, lossless = true, carLyrics = true, contentCountry = "DE"))) {
+        for (s in listOf(AppSettings(), AppSettings(performanceMode = true, lossless = true, carLyrics = true, contentCountry = "DE", mix = MixPrefs(on = true, auto = false, seconds = 6)))) {
             for (p in pages) assertTrue("${p.title}'s line", p.value(s, true).isNotBlank() && p.value(s, false).isNotBlank())
         }
         // It is live: it follows the settings.
-        val six = AppSettings(mix = true, mixAuto = false, mixSeconds = 6)
+        val six = AppSettings(mix = MixPrefs(on = true, auto = false, seconds = 6))
         assertTrue(SettingsPageId.PLAYBACK.value(six), tr(R.string.root_crossfade_seconds, 6) in SettingsPageId.PLAYBACK.value(six))
-        assertTrue(tr(R.string.root_crossfade_off) in SettingsPageId.PLAYBACK.value(AppSettings(mix = false)))
+        assertTrue(tr(R.string.root_crossfade_off) in SettingsPageId.PLAYBACK.value(AppSettings(mix = MixPrefs(on = false))))
         assertTrue("Germany" in SettingsPageId.LANGUAGE_REGION.value(AppSettings(contentCountry = "DE")))
         assertTrue(tr(R.string.lossless) in SettingsPageId.SOUND_QUALITY.value(AppSettings(lossless = true)))
         // Crossfade is Playback's now, not Sound & quality's.
-        assertTrue(tr(R.string.crossfade) !in SettingsPageId.SOUND_QUALITY.value(AppSettings(mix = true)))
+        assertTrue(tr(R.string.crossfade) !in SettingsPageId.SOUND_QUALITY.value(AppSettings(mix = MixPrefs(on = true))))
     }
 
     @Test fun resetKeysAreLookSettings() {
@@ -358,7 +359,7 @@ class SettingsMapTest {
     @Test fun everyRootLineFitsOneLineAndNamesNoGoneGroup() {
         val fresh = AppSettings()
         val live = fresh.copy(
-            webRemote = true, handoffAvailable = true, discordPresence = true, mix = true, lossless = true, carLyrics = true, contentCountry = "DE",
+            webRemote = true, handoffAvailable = true, discordPresence = true, mix = fresh.mix.copy(on = true), lossless = true, carLyrics = true, contentCountry = "DE",
         )
         // Group names of before 1.8.4 that no page draws any more (an old link's name for a group, not a group now), and
         // that aren't a setting's own name either ("Crossfade" was a group and is what Playback's line says while it's on).

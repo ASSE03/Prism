@@ -361,7 +361,7 @@ class LibraryRepository(private val c: AppContainer) {
             .recoverCatching { c.ytm.unsavePlaylist(item.id) }
             .onSuccess {
                 if (c.likedPlaylist.playlistId.value == item.id) c.likedPlaylist.forget()
-                val pins = c.settings.current.homePlaylists
+                val pins = c.settings.current.home.playlists
                 if (pins.any { it.id == item.id }) c.settings.setHomePlaylists(pins.filterNot { it.id == item.id })
             }
             .onFailure {

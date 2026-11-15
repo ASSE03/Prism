@@ -370,7 +370,7 @@ internal fun HiddenCover(modifier: Modifier, shape: Shape) {
 }
 
 /** The cover's shape on the player: the Look's corners and shape. */
-internal fun lockCoverShape(s: AppSettings): Shape = CoverShapes.of(s.shapes.player, s.playerArtCorners.dp)
+internal fun lockCoverShape(s: AppSettings): Shape = CoverShapes.of(s.shapes.player, s.player.artCorners.dp)
 
 /** The clock and the date, as the phone writes them (no AM / PM, as lock screens have it). Looked at every second, changed every minute. */
 @Composable
@@ -455,6 +455,6 @@ private fun rememberLockLyrics(song: Song, art: String?): (@Composable (Modifier
 /** The lyrics' typeface on its weight axis (as immersive mode): null for System and imported fonts. */
 @Composable
 private fun lockLyricsAxis(s: AppSettings): FontFamily? {
-    val choice = if (s.lyricsFont.isEmpty()) s.fontChoice else FontChoice.entries.firstOrNull { it.name == s.lyricsFont }
+    val choice = if (s.lyrics.font.isEmpty()) s.fontChoice else FontChoice.entries.firstOrNull { it.name == s.lyrics.font }
     return remember(choice) { choice?.let(AppFonts::axis) }
 }

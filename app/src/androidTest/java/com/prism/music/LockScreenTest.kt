@@ -174,7 +174,7 @@ class LockScreenTest {
         LockScreenActivity.pretendLocked = true
         settings.setLockScreen(true)
         settings.setLockScreenPlayerLook(true)
-        val background = settings.current.playerBackground
+        val background = settings.current.player.background
         val style = settings.current.scrubberStyle
         try {
             playTone("Prism lock look tone")

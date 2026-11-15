@@ -49,12 +49,12 @@ class CanvasPrefsTest {
         assertEquals(CanvasPrefs(), read { true }.behavior.canvas)
         assertTrue(read { true }.behavior.canvas.covers)
         // As before: on, on the cover; Settings shows Animated covers on and Canvas (the loops) off.
-        assertTrue(AppSettings().canvasEnabled)
-        assertFalse(AppSettings().canvasFillsBackground)
+        assertTrue(AppSettings().behavior.canvas.enabled)
+        assertFalse(AppSettings().behavior.canvas.fillsBackground)
         assertEquals(CanvasKinds(covers = true, videos = false), CanvasKinds.shown(AppSettings()))
     }
 
-    private fun triple(s: AppSettings) = CanvasStored(s.canvasEnabled, s.behavior.canvas.covers, s.behavior.canvas.useVideos)
+    private fun triple(s: AppSettings) = CanvasStored(s.behavior.canvas.enabled, s.behavior.canvas.covers, s.behavior.canvas.useVideos)
 
     /** Waits for the store to read [want] (a timeout fails the test). */
     private fun expect(want: CanvasStored) = assertEquals(want, triple(read { triple(it) == want }))
@@ -63,7 +63,7 @@ class CanvasPrefsTest {
     @Test fun theTwoSwitchesWriteTheThreeFlagsInOneGo() = runBlocking {
         // Canvas switched off before, with both flags on: both show off.
         repo.editNow { it[booleanPreferencesKey("canvas_enabled")] = false; it[booleanPreferencesKey("canvas_covers")] = true; it[booleanPreferencesKey("canvas_use_videos")] = true }
-        assertEquals(CanvasKinds(false, false), CanvasKinds.shown(read { !it.canvasEnabled && it.behavior.canvas.useVideos }))
+        assertEquals(CanvasKinds(false, false), CanvasKinds.shown(read { !it.behavior.canvas.enabled && it.behavior.canvas.useVideos }))
         // Animated covers on from there: the loops stay off.
         repo.setCanvasKinds(covers = true, videos = false)
         expect(CanvasStored(true, true, false))
@@ -74,7 +74,7 @@ class CanvasPrefsTest {
         // off and keeps the flags.
         repo.setCanvasKinds(covers = false); repo.setCanvasKinds(videos = false)
         expect(CanvasStored(false, false, true))
-        assertEquals(CanvasKinds(false, false), CanvasKinds.shown(read { !it.canvasEnabled }))
+        assertEquals(CanvasKinds(false, false), CanvasKinds.shown(read { !it.behavior.canvas.enabled }))
         repo.setCanvasKinds(videos = true)
         expect(CanvasStored(true, false, true))
     }
@@ -82,7 +82,7 @@ class CanvasPrefsTest {
     /** Both off on a store that never had the flags: Canvas off, the flags still unwritten (the question is still to come). */
     @Test fun bothOffLeavesTheFlagsUnwritten() = runBlocking {
         repo.setCanvasKinds(covers = false, videos = false); repo.editNow { }
-        assertFalse(read { !it.canvasEnabled }.canvasEnabled)
+        assertFalse(read { !it.behavior.canvas.enabled }.behavior.canvas.enabled)
         assertFalse(repo.canvasVideosAnswered)
         // Writing Canvas's switch answers the one-time question.
         repo.setCanvasKinds(covers = false, videos = true); repo.editNow { }
@@ -112,7 +112,7 @@ class CanvasPrefsTest {
 
     /** The nine, in [NewInstall]'s order ([NewInstall.on], then [NewInstall.motion]). */
     private fun on(s: AppSettings) = listOf(
-        s.canvasFillsBackground, s.sound.pauseFade, s.behavior.artistYou, s.behavior.finishLyric, s.view.albumHeroCover, s.behavior.canvas.lyrics,
+        s.behavior.canvas.fillsBackground, s.sound.pauseFade, s.behavior.artistYou, s.behavior.finishLyric, s.view.albumHeroCover, s.behavior.canvas.lyrics,
         s.view.coverFlight, s.view.coverFlightBack, s.view.backdropFade,
     )
 
@@ -173,7 +173,7 @@ class CanvasPrefsTest {
         // Performance mode pauses Canvas as a whole; the stored switch is kept.
         repo.setCanvasCovers(false); repo.setPerformanceMode(true)
         val paused = read { !it.behavior.canvas.covers && it.performanceMode }
-        assertFalse(paused.effective().canvasEnabled)
+        assertFalse(paused.effective().behavior.canvas.enabled)
         assertFalse(paused.effective().behavior.canvas.covers)
     }
 
@@ -188,14 +188,14 @@ class CanvasPrefsTest {
     }
 
     @Test fun performanceModeReadsAsNoMusicVideos() {
-        val all = CanvasPrefs(useVideos = true, videoFirst = true, keepControls = true, lyrics = true, lighter = true, videosOnCellular = true)
-        val s = AppSettings(canvasEnabled = true, canvasFillsBackground = true).let { it.copy(behavior = it.behavior.copy(canvas = all)) }
+        val all = CanvasPrefs(useVideos = true, videoFirst = true, keepControls = true, lyrics = true, lighter = true, videosOnCellular = true, enabled = true, fillsBackground = true)
+        val s = AppSettings().let { it.copy(behavior = it.behavior.copy(canvas = all)) }
         // Without Performance mode nothing changes.
         assertEquals(all, s.effective().behavior.canvas)
         // With it: no canvas, and no music videos; the rest is kept as stored.
         val light = s.copy(performanceMode = true).effective()
-        assertFalse(light.canvasEnabled)
-        assertEquals(all.copy(useVideos = false), light.behavior.canvas)
+        assertFalse(light.behavior.canvas.enabled)
+        assertEquals(all.copy(useVideos = false, enabled = false, fillsBackground = false), light.behavior.canvas)
         // Nothing stored changes.
         assertTrue(s.copy(performanceMode = true).behavior.canvas.useVideos)
     }

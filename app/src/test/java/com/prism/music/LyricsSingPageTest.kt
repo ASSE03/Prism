@@ -213,13 +213,13 @@ class LyricsSingPageTest {
                 useColor("#336699")
             },
             Case("lyrics_bg_color", { it.lyricsLook.bgColor }) { pick(tr(R.string.your_colors), tr(R.string.top_color)); useColor("#224466") },
-            Case("lyrics_strip_align", { it.lyricsStripAlign }) { pick(tr(R.string.the_line_on_the_player), tr(R.string.centered)) },
-            Case("lyrics_strip_two_lines", { it.lyricsStripTwoLines }) { pick(tr(R.string.the_line_on_the_player), tr(R.string.ls_two_lines, tr(R.string.centered))) },
+            Case("lyrics_strip_align", { it.lyrics.stripAlign }) { pick(tr(R.string.the_line_on_the_player), tr(R.string.centered)) },
+            Case("lyrics_strip_two_lines", { it.lyrics.stripTwoLines }) { pick(tr(R.string.the_line_on_the_player), tr(R.string.ls_two_lines, tr(R.string.centered))) },
             Case("lyrics_gap_mark", { it.lyricsLook.gapMark }) { pick(tr(R.string.instrumental_breaks), tr(R.string.music_note)) },
             // Text
-            Case("lyrics_font", { it.lyricsFont }) { pick(tr(R.string.lyrics_font), com.prism.music.data.prefs.FontChoice.SYSTEM.label) },
-            Case("lyrics_scale", { it.lyricsScale }) { slide(tr(R.string.lyrics_size), 1.2f) },
-            Case("lyrics_align", { it.lyricsAlign }) { chip(tr(R.string.alignment), tr(R.string.center)) },
+            Case("lyrics_font", { it.lyrics.font }) { pick(tr(R.string.lyrics_font), com.prism.music.data.prefs.FontChoice.SYSTEM.label) },
+            Case("lyrics_scale", { it.lyrics.scale }) { slide(tr(R.string.lyrics_size), 1.2f) },
+            Case("lyrics_align", { it.lyrics.align }) { chip(tr(R.string.alignment), tr(R.string.center)) },
             // Written with the weight (Bold card's "at least Bold" ends once a weight is picked).
             Case("lyrics_bold_lines", { it.lyricsLook.boldLines }) { chip(tr(R.string.weight), tr(R.string.bold)) },
             Case("lyrics_weight", { it.lyricsLook.weight }) { chip(tr(R.string.weight), tr(R.string.thin)) },
@@ -234,15 +234,15 @@ class LyricsSingPageTest {
             Case("lyrics_others_alpha", { it.lyricsLook.othersAlpha }) { slide(tr(R.string.other_lines_brightness), 0.9f) },
             Case("lyrics_blur_amount", { it.lyricsLook.blurAmount }) { slide(tr(R.string.focus_blur), 0f) },
             // The older on/off key is written by the same slider.
-            Case("lyrics_blur", { it.lyricsBlur }) { slide(tr(R.string.focus_blur), if (stored.lyricsBlur) 0f else 1.5f) },
+            Case("lyrics_blur", { it.lyrics.blur }) { slide(tr(R.string.focus_blur), if (stored.lyrics.blur) 0f else 1.5f) },
             Case("lyrics_ahead", { it.lyricsLook.ahead }) { chip(tr(R.string.lines_to_come), tr(R.string.three)) },
             Case("lyrics_halo", { it.lyricsLook.halo }) { chip(tr(R.string.effects), tr(R.string.glow)) },
             Case("lyrics_shadow", { it.lyricsLook.shadow }) { chip(tr(R.string.effects), tr(R.string.shadow)) },
-            Case("lyrics_progress_line", { it.lyricsProgressLine }) { chip(tr(R.string.effects), tr(R.string.progress_line)) },
+            Case("lyrics_progress_line", { it.lyrics.progressLine }) { chip(tr(R.string.effects), tr(R.string.progress_line)) },
             Case("lyrics_backing_size", { it.lyricsLook.backingSize }) { slide(tr(R.string.background_vocals), 0.8f) },
             // Language and translations
-            Case("lyrics_translate", { it.lyricsTranslate }) { pick(tr(R.string.translate_into), if (stored.lyricsTranslate) tr(R.string.off) else tr(R.string.german)) },
-            Case("lyrics_translate_to", { it.lyricsTranslateTo }) { pick(tr(R.string.translate_into), tr(R.string.korean)) },
+            Case("lyrics_translate", { it.lyrics.translate }) { pick(tr(R.string.translate_into), if (stored.lyrics.translate) tr(R.string.off) else tr(R.string.german)) },
+            Case("lyrics_translate_to", { it.lyrics.translateTo }) { pick(tr(R.string.translate_into), tr(R.string.korean)) },
             Case("romanize_lyrics", { it.romanize }) { pick(tr(R.string.romanize_lyrics), if (stored.romanize == RomanizeMode.INSTEAD) tr(R.string.under_each_line) else tr(R.string.instead)) },
             Case("romanize_all", { it.romanizeAll }) {
                 val mode = if (stored.romanize == RomanizeMode.OFF) RomanizeMode.UNDER else stored.romanize
@@ -264,17 +264,17 @@ class LyricsSingPageTest {
             // Sources and timing
             Case("prefer_synced", { it.preferSynced }) { toggle(tr(R.string.prefer_karaoke_synced_lyrics)) },
             Case("skip_censored", { it.skipCensored }) { toggle(tr(R.string.uncensor_lyrics)) },
-            Case("lyrics_order", { it.lyricsOrder }) {
+            Case("lyrics_order", { it.lyrics.order }) {
                 // 1.8.4 §2.8: the row's arrows went; its grip's TalkBack move does it.
-                compose.reorderAction(tr(R.string.drag, stored.lyricsOrder.first().label), tr(R.string.move_down))
+                compose.reorderAction(tr(R.string.drag, stored.lyrics.order.first().label), tr(R.string.move_down))
             },
-            Case("lyrics_off", { it.lyricsOff }) { sourceSwitch(stored.lyricsOrder.first { it != LyricsSource.EMBEDDED }) },
+            Case("lyrics_off", { it.lyrics.off }) { sourceSwitch(stored.lyrics.order.first { it != LyricsSource.EMBEDDED }) },
             Case("embedded_lyrics", { it.behavior.embeddedLyrics }) { sourceSwitch(LyricsSource.EMBEDDED) },
-            Case("lyrics_source_button", { it.lyricsSourceButton }) { toggle(tr(R.string.lyrics_source_button)) },
+            Case("lyrics_source_button", { it.lyrics.sourceButton }) { toggle(tr(R.string.lyrics_source_button)) },
             Case("lyrics_offset_ms", { it.behavior.lyricsOffsetMs }) { slide(tr(R.string.ls_offset), 120f) },
             // Sing and music files (the two Sing rows show where Sing's engine runs; the test phone's processor has none)
-            Case("lyrics_file_words", { it.lyricsFileWords }) { chip(tr(R.string.ls_when_saving), tr(R.string.ls_word_timings)) },
-            Case("lyrics_file_translation", { it.lyricsFileTranslation }) { chip(tr(R.string.ls_when_saving), tr(R.string.ls_translation)) },
+            Case("lyrics_file_words", { it.lyrics.fileWords }) { chip(tr(R.string.ls_when_saving), tr(R.string.ls_word_timings)) },
+            Case("lyrics_file_translation", { it.lyrics.fileTranslation }) { chip(tr(R.string.ls_when_saving), tr(R.string.ls_translation)) },
         ) + if (com.prism.music.data.ModelStore.Model.singRuntime() == null) emptyList() else listOf(
             Case("sing_always_ready", { it.singAlwaysReady }) { toggle(tr(R.string.get_songs_ready_while_sing_is)) },
             Case("sing_cache_mb", { it.singCacheMb }) { slide(tr(R.string.room_for_sung_songs), 2048f) },
@@ -318,7 +318,7 @@ class LyricsSingPageTest {
         // "Read lyrics from your music files" has no row of its own…
         assertFalse(tr(R.string.read_lyrics_from_your_music_files) in words)
         // …because the source list on this page has its switch.
-        assertTrue(LyricsSource.EMBEDDED in stored.lyricsOrder)
+        assertTrue(LyricsSource.EMBEDDED in stored.lyrics.order)
         assertTrue(LyricsSource.EMBEDDED.label in words)
         val before = stored.behavior.embeddedLyrics
         sourceSwitch(LyricsSource.EMBEDDED)
