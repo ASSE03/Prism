@@ -40,6 +40,8 @@ class ParametricEqProcessor : BaseAudioProcessor() {
     override fun onConfigure(inputAudioFormat: AudioProcessor.AudioFormat): AudioProcessor.AudioFormat {
         val enc = inputAudioFormat.encoding
         if (enc != C.ENCODING_PCM_16BIT && enc != C.ENCODING_PCM_FLOAT) return AudioProcessor.AudioFormat.NOT_SET
+        // The same format again (the player's next song, gapless): the filters run on as they are (plan item 10).
+        if (inputAudioFormat == this.inputAudioFormat) return inputAudioFormat
         rate = inputAudioFormat.sampleRate
         channels = inputAudioFormat.channelCount
         float = enc == C.ENCODING_PCM_FLOAT
@@ -110,8 +112,22 @@ class ParametricEqProcessor : BaseAudioProcessor() {
         if (t0 != 0L) AudioDiagnostics.processed("headphone EQ", t0, frames, rate)
     }
 
+    /** The sound before the next flush was played out to its end ([onQueueEndOfStream]): what follows goes on from it. */
+    private var drained = false
+
+    override fun onQueueEndOfStream() {
+        drained = true
+    }
+
     override fun onFlush() {
-        // A seek: the filters' memory of the old position goes, the profile stays.
+        // A seek: the filters' memory of the old position goes, the profile stays. Across a gapless move to the next song
+        // (the chain played out to the last song's end, then flushed for the next) the sound goes on, and so do the
+        // filters: dropping them there faded the correction in from nothing at every change of song (plan item 10).
+        if (!drained) clear()
+        drained = false
+    }
+
+    private fun clear() {
         applied = null
         chain = null
         fading = null
@@ -119,6 +135,7 @@ class ParametricEqProcessor : BaseAudioProcessor() {
     }
 
     override fun onReset() {
-        onFlush()
+        clear()
+        drained = false
     }
 }
