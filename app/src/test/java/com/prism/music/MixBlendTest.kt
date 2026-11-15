@@ -14,6 +14,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.prism.music.playback.EXTRA_VIDEO
 import com.prism.music.playback.MixEngine
 import com.prism.music.playback.MixState
+import com.prism.music.playback.Tempo
 import com.prism.music.playback.videoModeId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,12 +32,15 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 import java.lang.reflect.Proxy
 import java.time.Duration
+import kotlin.math.abs
 
 /**
  * 1.8.7 (plan 5.4): the crossfade engine driven through whole blends, lining up, blending and settling included, against a
  * pair of fake players that play on with the clock (the main one and every second player the engine makes). Every way
  * out of a blend (it finishes, a skip, a seek, a pause, an error, a queue edit, repeat one, video mode, Mix turned off)
- * ends with the main player at full volume and its own speed, and no second player left alive.
+ * ends with the main player at full volume and its own speed, and no second player left alive. Plan 5.4 adds the steps
+ * themselves in order (beat matching's settling included), the engine holding on to nothing after each way out, and
+ * nothing left running after a release.
  *
  * The blend: a 200 s song, a 6 s blend at 194 s, the second player made at 180 s and playing along from 189 s.
  */
@@ -147,6 +151,7 @@ class MixBlendTest {
     private val main = Fake("main", Player.STATE_READY)
     private val tails = ArrayList<Fake>()
     private var mixOn = true
+    private var beats = false
     private var settled = 0
 
     private lateinit var engine: MixEngine
@@ -163,7 +168,7 @@ class MixBlendTest {
             tempo = context.container.mixTempo,
             mixMs = { if (mixOn) 6_000L else null },
             auto = { false },
-            beatMatch = { false },
+            beatMatch = { beats },
             // As the service's: no blend into or out of video mode.
             allowed = { from, to -> from.videoModeId == null && to.videoModeId == null },
             scanFromPhone = {},
@@ -218,6 +223,39 @@ class MixBlendTest {
         assertFalse("still blending", engine.blending)
         assertNull(state.blend.value)
         for ((_, v) in main.volumes + tails.flatMap { it.volumes }) assertTrue("volume $v", v in 0f..1f)
+        // Inside the engine too: back to waiting, nothing of the blend kept (no plan, no second player, no catch-up timer).
+        assertEquals("phase", "IDLE", field("phase").toString())
+        assertNull("plan kept", field("plan"))
+        assertNull("second player kept", field("tail"))
+        assertNull("shifter kept", field("shifter"))
+        assertEquals("catch-up timer", 0L, field("catchUpUntil"))
+    }
+
+    /** One of the engine's own fields (what it holds on to after a blend). */
+    private fun field(name: String): Any? =
+        MixEngine::class.java.getDeclaredField(name).apply { isAccessible = true }.get(engine)
+
+    /** The engine's step now (IDLE, PREPARED, SYNCING, BLENDING, SETTLING, SKIP_FADE). */
+    private fun phase() = field("phase").toString()
+
+    /** Runs on in 10 ms steps for [ms], noting each step the engine goes through (once each time it changes). */
+    private fun phasesOver(ms: Long, until: () -> Boolean = { false }): List<String> {
+        val seen = arrayListOf(phase())
+        var waited = 0L
+        while (waited < ms && !until()) {
+            run(10); waited += 10
+            if (phase() != seen.last()) seen += phase()
+        }
+        return seen
+    }
+
+    /** Beat matching on: both songs scanned, steady, 120 and 124 BPM (the next one plays at 120/124 while they overlap). */
+    private fun beatMatched() {
+        beats = true
+        prefs.edit()
+            .putString("ending", Tempo(120.0, 5.0, 0, 200_000, 0, 198_000, fadeOutMs = 0, quietIntroMs = 0).encode())
+            .putString("next", Tempo(124.0, 5.0, 0, 200_000, 0, 198_000, fadeOutMs = 0, quietIntroMs = 0).encode())
+            .commit()
     }
 
     // --- Task 1: whole blends and every way out of them ---
@@ -468,5 +506,226 @@ class MixBlendTest {
         assertAllBack()
         run(8_000)
         assertNull(handOver)
+    }
+
+    // --- Plan 5.4: the blend itself, step by step, and the ways out not covered above ---
+
+    @Test
+    fun aWholeBlendGoesThroughEveryStepInOrder() {
+        val seen = phasesOver(40_000) { handOver != null && tails.all { it.released } && phase() == "IDLE" }
+        assertEquals(listOf("IDLE", "PREPARED", "SYNCING", "BLENDING", "IDLE"), seen)
+        assertAllBack()
+        assertEquals(1, settled)
+    }
+
+    @Test
+    fun aBeatMatchedBlendPlaysAtTheEndingSongsTempoThenSettlesBackToItsOwn() {
+        beatMatched()
+        val speeds = ArrayList<Float>()
+        val seen = phasesOver(45_000) {
+            if (phase() == "BLENDING") speeds += main.speed
+            handOver != null && tails.all { it.released } && phase() == "IDLE"
+        }
+        assertEquals(listOf("IDLE", "PREPARED", "SYNCING", "BLENDING", "SETTLING", "IDLE"), seen)
+        // While they overlapped, the next song played at 120/124 most of the time (a few percent either way only while its
+        // beats caught up).
+        val matched = speeds.count { abs(it - 120f / 124f) < 0.001f }
+        assertTrue("matched for $matched of ${speeds.size} steps: ${speeds.distinct()}", matched > speeds.size / 2)
+        // On the ending song's beat: the hand-over at 194 s (a beat of 500 ms from 198 s), the next song from its first beat.
+        val h = handOver!!
+        assertEquals(0L, h.toMs)
+        assertTrue("handed over at ${h.fromMs} ms", h.fromMs in 193_850..194_200)
+        assertEquals("next", main.mediaId)
+        assertAllBack()
+        assertEquals(1, settled)
+    }
+
+    @Test
+    fun skippedWhileTheSpeedSettlesItGoesStraightBackToItsOwnSpeed() {
+        beatMatched()
+        runUntil("settling", maxMs = 45_000) { phase() == "SETTLING" }
+        assertTrue(main.speed != 1f)
+        main.moveTo(2, 0)
+        run(500)
+        assertEquals("third", main.mediaId)
+        assertAllBack()
+        assertEquals(1, settled)
+    }
+
+    @Test
+    fun skippedToTheNextSongInTheLeadInTheBlendIsLetGo() {
+        toLeadIn()
+        main.moveTo(1, 0)
+        run(300)
+        assertAllBack()
+        assertEquals("next", main.mediaId)
+        // Only the listener's own move: the engine didn't seek the main player anywhere after it.
+        run(5_000)
+        assertEquals(1, main.seeks.size)
+        assertEquals(1, tails.size)
+        assertAllBack()
+    }
+
+    @Test
+    fun previousInTheLeadInStartsTheSongOverAndTheBlendComesAgainAtItsEnd() {
+        toLeadIn()
+        main.moveTo(0, 0)
+        run(300)
+        assertAllBack()
+        assertEquals("ending", main.mediaId)
+        // Played to the end again, it blends there.
+        main.moveTo(0, 178_000)
+        runUntil("the blend is done", maxMs = 40_000) { handOver != null && tails.size == 2 && tails.all { it.released } && !engine.blending }
+        assertAllBack()
+    }
+
+    @Test
+    fun previousMidBlendBackToTheEndingSongFadesTheSecondPlayerOut() {
+        toLeadIn(); toBlend()
+        main.moveTo(0, 0)
+        run(60)
+        assertEquals("SKIP_FADE", phase())
+        run(300)
+        assertEquals("ending", main.mediaId)
+        assertAllBack()
+        // The ending song from its start is planned afresh, not refused: nothing more is made until its end comes up.
+        run(5_000)
+        assertEquals(1, tails.size)
+        assertAllBack()
+    }
+
+    @Test
+    fun seekedOnInTheNextSongMidBlendTheBlendFinishesOnTheEndingSongsClock() {
+        toLeadIn(); toBlend()
+        main.moveTo(1, 60_000)
+        runUntil("the blend is done") { tails.single().released && !engine.blending }
+        assertEquals("next", main.mediaId)
+        assertAllBack()
+    }
+
+    @Test
+    fun seekedPastTheBlendInTheLeadInItIsLetGo() {
+        toLeadIn()
+        main.moveTo(0, 199_000)
+        run(500)
+        assertAllBack()
+        assertNull(handOver)
+        assertEquals(1, tails.size)
+    }
+
+    @Test
+    fun pausedMidBlendAndTheNextSongErrorsThenItStillComesBack() {
+        toLeadIn(); toBlend()
+        main.playWhenReady = false
+        run(2_000)
+        main.state = Player.STATE_IDLE
+        main.playWhenReady = true
+        run(2_000)
+        main.state = Player.STATE_READY
+        runUntil("the blend is done") { tails.single().released && !engine.blending }
+        assertAllBack()
+    }
+
+    @Test
+    fun theSecondPlayerFailingInTheLeadInLetsItGo() {
+        toLeadIn()
+        tails.single().state = Player.STATE_IDLE
+        run(300)
+        assertAllBack()
+        run(5_000)
+        assertNull(handOver)
+        assertEquals("ending", main.mediaId)
+    }
+
+    @Test
+    fun theSongBlendedIntoTakenOutOfTheQueueMidBlendTheSecondPlayerFadesOut() {
+        toLeadIn(); toBlend()
+        // The current song gone from the queue: the player moves on to the one after it.
+        main.items = listOf(ending, third)
+        main.moveTo(1, 0)
+        run(500)
+        assertEquals("third", main.mediaId)
+        assertAllBack()
+        assertNull(state.into.value)
+    }
+
+    @Test
+    fun theSongBlendedIntoReplacedMidBlendTheSecondPlayerFadesOut() {
+        toLeadIn(); toBlend()
+        main.items = listOf(ending, item("other"), third)
+        run(500)
+        assertEquals("other", main.mediaId)
+        assertAllBack()
+    }
+
+    @Test
+    fun theNextSongTakenOutInTheLeadInTheBlendGoesIntoTheOneAfter() {
+        toLeadIn()
+        main.items = listOf(ending, third)
+        runUntil("the blend is done") { handOver != null && tails.all { it.released } && !engine.blending }
+        assertEquals("third", main.mediaId)
+        assertAllBack()
+    }
+
+    @Test
+    fun repeatOneSwitchedOnMidBlendTheBlendFinishes() {
+        toLeadIn(); toBlend()
+        main.repeat = Player.REPEAT_MODE_ONE
+        runUntil("the blend is done") { tails.single().released && !engine.blending }
+        assertEquals("next", main.mediaId)
+        assertAllBack()
+    }
+
+    @Test
+    fun mixTurnedOffInTheLeadInEverythingIsLetGo() {
+        toLeadIn()
+        mixOn = false
+        run(1_500)
+        assertAllBack()
+        run(5_000)
+        assertNull(handOver)
+    }
+
+    @Test
+    fun releasedInTheLeadInEverythingIsLetGoAndNothingRunsAfter() {
+        toLeadIn()
+        engine.release()
+        assertAllBack()
+        val volumes = main.volumes.size
+        val seeks = main.seeks.size
+        run(10_000)
+        // Nothing left scheduled: no step ran after the release.
+        assertEquals(volumes, main.volumes.size)
+        assertEquals(seeks, main.seeks.size)
+        assertEquals(1, tails.size)
+        assertEquals(false, (field("loop") as kotlinx.coroutines.Job).isActive)
+    }
+
+    @Test
+    fun releasedMidBlendNothingRunsAfter() {
+        toLeadIn(); toBlend()
+        engine.release()
+        val volumes = main.volumes.size + tails.single().volumes.size
+        run(10_000)
+        assertEquals(volumes, main.volumes.size + tails.single().volumes.size)
+        assertAllBack()
+    }
+
+    @Test
+    fun castingStartedMidBlendEverythingIsLetGo() {
+        toLeadIn(); toBlend()
+        engine.stopBlend()
+        assertAllBack()
+        assertNull(state.into.value)
+    }
+
+    @Test
+    fun releasedDuringTheSkipFadeEverythingIsLetGo() {
+        toLeadIn(); toBlend()
+        main.moveTo(2, 0)
+        run(40)
+        assertEquals("SKIP_FADE", phase())
+        engine.release()
+        assertAllBack()
     }
 }
