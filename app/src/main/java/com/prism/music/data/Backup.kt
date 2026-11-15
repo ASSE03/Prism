@@ -382,6 +382,9 @@ class Backup(private val c: AppContainer) {
             // The playback diagnostics and crash logs name songs and the account's state; Canvas clips and their index
             // are a cache of videos, fetched again.
             listOf("diagnostics", "crashes", "canvas_clips", "canvas_index.json").forEach { put(it, null) }
+            // 1.8.7 §3.2: the music videos' songs as YouTube and Prism's matches paired them, learned again when missing.
+            // (The listener's picks go with the Library, download stand-ins with the Downloads, in their own files.)
+            put(com.prism.music.data.meta.PlaysAs.DIR, null)
         }
 
         internal fun prefsPart(name: String): BackupPart? = if (name in PREFS_PARTS) PREFS_PARTS[name] else BackupPart.SETTINGS

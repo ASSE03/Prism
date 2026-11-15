@@ -217,5 +217,9 @@ class BackupPartsTest {
         assertEquals(null, Backup.prefsPart("session_heard"))
         assertEquals(BackupPart.ACCOUNTS, Backup.filePart("account"))
         assertEquals(null, Backup.filePart("models"))
+        // 1.8.7 §3.2: PlaysAs' learned pairings are YouTube's answers, learned again; its other sources keep their parts.
+        assertEquals(null, Backup.filePart(com.prism.music.data.meta.PlaysAs.DIR))
+        assertEquals(BackupPart.LIBRARY, Backup.prefsPart("song_versions"))
+        assertEquals(BackupPart.DOWNLOADS, Backup.prefsPart("download_standins"))
     }
 }
