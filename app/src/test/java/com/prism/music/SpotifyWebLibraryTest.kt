@@ -262,6 +262,33 @@ class SpotifyWebLibraryTest {
         assertEquals("nothing was asked", 0, net.requests.size)
     }
 
+    @Test fun everyLikedSongIsLikedOnceMatchedWithoutWaitingForTheNextRun() = runBlocking {
+        val n = SpotifyLikes.AT_ONCE + 5
+        net.routes[SpotifyWeb.URL] = { 200 to likedAnswer(n, *(1..n).map { "t$it" to trackData("t$it", "Song $it", "Artist $it", "Album", 180_000) }.toTypedArray()) }
+        val likedHere = mutableListOf<Song>()
+        val match: suspend (TrackToMatch) -> MatchResult = { t -> ytSong("yt" + t.title.substringAfter(' ').padStart(9, '0'), t.title, t.artist, 180).let { MatchResult(MatchStatus.SURE, it, listOf(it)) } }
+        val likes = SpotifyLikes(api, db, importer, dir, { songs ->
+            likedHere += songs
+            songs.forEach { db.songs().upsert(it.toEntity(db.songs().get(it.id)).copy(liked = true, likedAt = 500)) }
+        }, { emptySet() }, match, pause = {}, library = { library })
+        val first = likes.sync(now = 1)
+        assertEquals("the first run matches a few at once", SpotifyLikes.AT_ONCE, likedHere.size)
+        assertEquals(5, first.waitingHere.size)
+
+        // The background matching gets to the rest (as ImportMatchWorker does), then says so.
+        for (key in first.waitingHere.values) {
+            val row = db.imports().match(key)!!
+            importer.applyMatch(row, match(TrackToMatch(row.title, row.artist, row.album, row.durationMs, 0, row.isrc)))
+        }
+        val asked = net.requests.size
+        assertEquals(5, likes.placeMatched())
+        assertEquals("all of them are liked here now", n, likedHere.map { it.id }.distinct().size)
+        assertEquals("without asking Spotify again", asked, net.requests.size)
+        assertTrue(likes.state().waitingHere.isEmpty())
+        assertEquals(n, likes.state().likedHere)
+        assertEquals("nothing left to do the second time", 0, likes.placeMatched())
+    }
+
     @Test fun likedSongsComeInAndNothingIsWrittenToSpotify() = runBlocking {
         // Liked here: Creep. Liked on Spotify: Blinding Lights.
         db.songs().upsert(ytSong("ytCreep0001", "Creep", "Radiohead", 239).toEntity().copy(liked = true, likedAt = 100))

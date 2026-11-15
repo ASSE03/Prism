@@ -386,6 +386,8 @@ fun LibraryScreen(bottomPadding: Dp) {
     }
     // Spotify playlists the listener follows or saved (1.8.1): named after the playlists, greyed, their songs not shared.
     val spotifyFollowed by c.spotify.followedShown.collectAsState()
+    // Songs matched since the last look are in their Spotify playlists (and liked) by the time Library shows.
+    androidx.compose.runtime.LaunchedEffect(Unit) { c.spotify.placeMatched() }
     var followedOpen by remember { mutableStateOf<com.prism.music.data.spotify.SpotifyPlaylist?>(null) }
     followedOpen?.let { p -> SpotifyFollowedSheet(p) { followedOpen = null } }
     var openingLink by remember { mutableStateOf(false) }

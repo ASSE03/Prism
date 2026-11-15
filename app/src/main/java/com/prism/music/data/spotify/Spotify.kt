@@ -391,7 +391,9 @@ class Spotify(private val c: AppContainer) {
                 SpotifyFeature.PLAYLISTS ->
                     if (daily && (!scheduled || now - playlists.mirror().listedAt >= DAILY_MS)) playlists.refreshAll(store.userId.orEmpty(), now, bringAll = store.sessionOn && _options.value.followedToo, except = hiddenNow())
                     else playlists.reapply()
-                SpotifyFeature.LIKES -> if (daily && (!scheduled || now - likes.state().lastRun >= DAILY_MS)) likes.sync(now)
+                SpotifyFeature.LIKES ->
+                    if (daily && (!scheduled || now - likes.state().lastRun >= DAILY_MS)) likes.sync(now)
+                    else likes.placeMatched()
             }
             guard.succeeded()
             matchSoon()
@@ -419,6 +421,17 @@ class Spotify(private val c: AppContainer) {
                 .any { it.state == androidx.work.WorkInfo.State.RUNNING || it.state == androidx.work.WorkInfo.State.ENQUEUED }
             if (!busy) ImportMatchWorker.enqueue(c.app, c.imports.matchOnMobile.value)
         }
+    }
+
+    /**
+     * The background matching has matched some songs: they go into their mirrored playlists and the waiting likes are
+     * liked, now, without asking Spotify anything. (Before 1.8.7.5 they waited for the next run: hours for playlists,
+     * a day for likes.)
+     */
+    suspend fun placeMatched() = withContext(Dispatchers.IO) {
+        if (!store.connected) return@withContext
+        if (_options.value.playlists) running.getValue(SpotifyFeature.PLAYLISTS).withLock { runCatching { playlists.reapply() } }
+        if (_options.value.likes) running.getValue(SpotifyFeature.LIKES).withLock { runCatching { likes.placeMatched() } }
     }
 
     /** A Spotify playlist's Prism playlist was opened: kept in step (read again when Spotify says it changed). */

@@ -37,6 +37,12 @@ class ImportMatchWorker(context: Context, params: WorkerParameters) : CoroutineW
             }
         }.getOrDefault(false)
         cancelNotice()
+        // What was matched goes where it belongs at once: Spotify's mirrored playlists and waiting likes (only when
+        // Spotify is connected; read from its sign-in preferences without building it).
+        runCatching {
+            val auth = applicationContext.getSharedPreferences(com.prism.music.data.spotify.SpotifyStore.AUTH_PREFS, Context.MODE_PRIVATE)
+            if (com.prism.music.data.spotify.SpotifyStore.connectedIn(auth)) c.spotify.placeMatched()
+        }
         // More to do (the time ran out, or the network went): WorkManager runs it again shortly.
         return if (finished) Result.success() else Result.retry()
     }

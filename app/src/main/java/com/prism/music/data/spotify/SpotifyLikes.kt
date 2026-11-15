@@ -204,6 +204,32 @@ class SpotifyLikes(
         state
     }
 
+    /**
+     * The Spotify likes matched since the last run are liked here now, without asking Spotify anything (1.8.7.5:
+     * called when the background matching has done some, so a thousand likes don't wait for tomorrow's run).
+     * Returns how many were liked.
+     */
+    suspend fun placeMatched(): Int = lock.withLock {
+        val state = state()
+        val waiting = state.waitingHere
+        if (waiting.isEmpty()) return@withLock 0
+        val matched = SpotifyQueue.matched(db, waiting.values)
+        val prismIds = prismLikes().map { it.id }.toSet()
+        val songs = waiting.mapNotNull { (_, key) -> matched[key] }.distinctBy { it.id }.filter { it.id !in prismIds }
+        if (songs.isNotEmpty()) likeHere(songs)
+        val statuses = waiting.values.chunked(500).flatMap { db.imports().matches(it) }.associate { it.songKey to MatchStatus.of(it.status) }
+        val stillWaiting = waiting.filter { (_, key) -> key !in matched && statuses[key] != MatchStatus.SKIPPED && statuses[key] != null }
+        if (songs.isEmpty() && stillWaiting.size == waiting.size) return@withLock 0
+        val links = state.links.toMutableMap()
+        waiting.forEach { (uri, key) -> matched[key]?.let { links[it.id] = uri } }
+        // Marked as Prism's own doing, so they are never sent back to Spotify as new likes.
+        save(state.copy(
+            waitingHere = stillWaiting, links = links, likedHere = state.likedHere + songs.size,
+            seenPrism = state.seenPrism + songs.associate { it.id to LikesPlan.OURS },
+        ))
+        songs.size
+    }
+
     companion object {
         const val MAX_LIKES = 5_000
         const val SEARCHES_PER_RUN = 60
