@@ -233,6 +233,15 @@ class SpotifySessionTest {
         assertEquals(1, net.count(SpotifyCodeBook.URL))
     }
 
+    @Test fun theCodesFileInTheRepositoryIsWhatTheAppWouldTake() {
+        val file = listOf(java.io.File("../spotify/codes.json"), java.io.File("spotify/codes.json")).first { it.exists() }
+        val codes = SpotifyCodeBook.parse(file.readText())
+        assertEquals("every read, and nothing else", SpotifyWeb.READS, codes.keys)
+        // The file is never behind the app: each of its codes is one the app knows, or newer than all of them.
+        assertEquals(SpotifyCodeBook.BUILT_IN.mapValues { it.value.first() }, codes)
+        assertTrue(SpotifyCodeBook.URL.endsWith("/Yigder/Prism/main/spotify/codes.json"))
+    }
+
     @Test fun aTooManyRequestsAnswerQuietsEveryRead() = runBlocking {
         tokens.begin()
         net.headers["Retry-After"] = "120"
