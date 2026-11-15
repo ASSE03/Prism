@@ -95,7 +95,7 @@ import kotlin.math.abs
 
 /** The lyrics' typeface for the weight axis (Settings' lyrics font, else the app's), or null for one without it. */
 fun tvLyricsAxisChoice(s: AppSettings): FontChoice? =
-    if (s.lyricsFont.isEmpty()) s.fontChoice else FontChoice.entries.firstOrNull { it.name == s.lyricsFont }
+    if (s.lyrics.font.isEmpty()) s.fontChoice else FontChoice.entries.firstOrNull { it.name == s.lyrics.font }
 
 @Composable
 private fun rememberTvLyricsAxis(s: AppSettings): FontFamily? {
@@ -152,7 +152,7 @@ fun TvLyricsScreen(
     val look = rememberLyricsLook(settings, now.art)
     val axis = rememberTvLyricsAxis(settings)
     val scale = settings.tv.lyricsScale * look.sizeScale
-    val centred = settings.lyricsAlign == LyricsAlign.CENTER
+    val centred = settings.lyrics.align == LyricsAlign.CENTER
     val onCard = look.card != null && !overVideo
     val style = TextStyle(
         fontSize = 40.sp * scale, lineHeight = 52.sp * scale, fontWeight = FontWeight(look.weight),
@@ -638,10 +638,10 @@ private const val TRANSLATE_TRIES = 3
 fun rememberTvTranslations(lines: List<LyricLine>): List<String?>? {
     val c = LocalContainer.current
     val s = LocalAppSettings.current
-    val to = s.lyricsTranslateTo.ifBlank { com.prism.music.ui.player.defaultTranslateTarget() }
-    val translation by produceState<com.prism.music.data.lyrics.LyricsTranslator.Translation?>(null, lines, s.lyricsTranslate, to) {
+    val to = s.lyrics.translateTo.ifBlank { com.prism.music.ui.player.defaultTranslateTarget() }
+    val translation by produceState<com.prism.music.data.lyrics.LyricsTranslator.Translation?>(null, lines, s.lyrics.translate, to) {
         value = null
-        if (!s.lyricsTranslate || lines.isEmpty()) return@produceState
+        if (!s.lyrics.translate || lines.isEmpty()) return@produceState
         val texts = lines.map { l -> if (l.isGap || (l.text.startsWith("[") && l.text.endsWith("]"))) "" else l.text }
         for (attempt in 0 until TRANSLATE_TRIES) {
             val got = runCatching { c.translator.translate(texts, to) }

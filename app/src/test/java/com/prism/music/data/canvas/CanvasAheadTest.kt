@@ -40,9 +40,10 @@ class CanvasAheadTest {
         performance: Boolean = false, withDownloads: Boolean = true, downloadsCellular: Boolean = false,
     ): AppSettings = AppSettings().let {
         it.copy(
-            canvasEnabled = true, canvasFillsBackground = full, dataSaver = dataSaver, performanceMode = performance,
-            canvasWithDownloads = withDownloads, canvasWithDownloadsCellular = downloadsCellular,
-            behavior = it.behavior.copy(canvas = prefs),
+            dataSaver = dataSaver, performanceMode = performance,
+            behavior = it.behavior.copy(
+                canvas = prefs.copy(enabled = true, fillsBackground = full, withDownloads = withDownloads, withDownloadsCellular = downloadsCellular),
+            ),
         )
     }.effective()
 
@@ -127,7 +128,7 @@ class CanvasAheadTest {
     }
 
     @Test fun nothingWhenCanvasOffVideosOffOrPerformanceMode() {
-        val off = AppSettings().let { it.copy(canvasEnabled = false, behavior = it.behavior.copy(canvas = CanvasPrefs(useVideos = true))) }
+        val off = AppSettings().let { it.copy(behavior = it.behavior.copy(canvas = CanvasPrefs(enabled = false, useVideos = true))) }
         for (s in listOf(off, settings(prefs = CanvasPrefs(useVideos = false)), settings(performance = true))) {
             val f = Fake(s)
             join(ahead(f).ahead(listOf(a, b)))

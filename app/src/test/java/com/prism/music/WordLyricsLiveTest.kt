@@ -65,7 +65,7 @@ class WordLyricsLiveTest {
     /** Downloads go for word-by-word lyrics even when a line-synced source comes first in the order. */
     @Test
     fun downloadsPreferWordByWord() = runBlocking {
-        settings = settings.copy(lyricsOrder = listOf(LyricsSource.LRCLIB) + LyricsSource.entries.filter { it != LyricsSource.LRCLIB })
+        settings = settings.copy(lyrics = settings.lyrics.copy(order = listOf(LyricsSource.LRCLIB) + LyricsSource.entries.filter { it != LyricsSource.LRCLIB }))
         for (s in listOf(
             song("bpOSxM0rNPM", "Do I Wanna Know?", "Arctic Monkeys", "AM", 272),
             song("TUVcZfQe-Kw", "Levitating", "Dua Lipa", "Future Nostalgia", 203),

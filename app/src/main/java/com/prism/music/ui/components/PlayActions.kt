@@ -261,7 +261,7 @@ fun PlayActionsSheet(target: Playable, extra: List<SheetItem> = emptyList(), ext
         }.orEmpty()
         // A section of its own on Home (1.7.6): its songs, under its name.
         val pin = item?.let { com.prism.music.ui.screens.OwnSections.pinOf(it) }?.let { cfg ->
-            val layout = c.settings.current.homeLayout
+            val layout = c.settings.current.home.layout
             val on = layout.any { it.key == cfg.key }
             listOf(ActionItem(if (on) PrismIcons.PinFilled else PrismIcons.Pin, if (on) tr(R.string.unpin_from_home) else tr(R.string.pin_to_home)) {
                 c.settings.setHomeLayout(if (on) layout.filterNot { it.key == cfg.key } else listOf(cfg) + layout)

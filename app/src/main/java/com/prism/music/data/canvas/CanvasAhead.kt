@@ -104,8 +104,8 @@ class CanvasAhead(
     fun keepWithDownload(song: Song): Job = scope.launch(dispatcher) {
         quietly {
             val s = facts.settings()
-            val allowed = { !facts.metered() || facts.settings().canvasWithDownloadsCellular }
-            if (!s.canvasWithDownloads || !allowed()) return@quietly
+            val allowed = { !facts.metered() || facts.settings().behavior.canvas.withDownloadsCellular }
+            if (!s.behavior.canvas.withDownloads || !allowed()) return@quietly
             val want = wanted(song, s, facts.metered()) ?: return@quietly
             facts.prepare(song, want.height, true, allowed)
         }

@@ -24,8 +24,8 @@ fun canvasDiagnostics(
 fun canvasSettingLine(stored: AppSettings): String {
     val p = stored.behavior.canvas
     val mode = when {
-        !stored.canvasEnabled -> "off"
-        stored.canvasFillsBackground -> "full screen"
+        !stored.behavior.canvas.enabled -> "off"
+        stored.behavior.canvas.fillsBackground -> "full screen"
         else -> "on the cover"
     }
     val extras = listOfNotNull("video first".takeIf { p.videoFirst }, "lighter, 480p".takeIf { p.lighter })
@@ -44,7 +44,7 @@ private fun canvasNow(
     song: Song?, hidden: Boolean, coverHidden: Boolean, cover: CanvasArtwork?, row: CanvasClipEntity?, kept: List<ClipFiles.Kept>, now: Long,
 ): String {
     if (song == null) return "nothing playing"
-    if (!used.canvasEnabled) return "still cover (" + (if (stored.canvasEnabled) "Canvas paused by performance mode" else "Canvas off") + ")"
+    if (!used.behavior.canvas.enabled) return "still cover (" + (if (stored.behavior.canvas.enabled) "Canvas paused by performance mode" else "Canvas off") + ")"
     if (videoMode) return "the music video plays (video mode), no canvas"
     // An animated cover that may not play counts as none ([canvasCoverWanted]), as in the player.
     val coverWanted = canvasCoverWanted(used, coverHidden)

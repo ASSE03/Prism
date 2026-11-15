@@ -64,8 +64,8 @@ object SoundChoices {
     }
 
     fun crossfade(s: AppSettings): Crossfade = when {
-        !s.mix -> Crossfade.OFF
-        s.mixAuto -> Crossfade.AUTO
+        !s.mix.on -> Crossfade.OFF
+        s.mix.auto -> Crossfade.AUTO
         else -> Crossfade.FIXED
     }
 

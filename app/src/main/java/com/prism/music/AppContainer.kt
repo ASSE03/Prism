@@ -381,6 +381,7 @@ class AppContainer(val app: Application) {
         choices = app.getSharedPreferences("lyrics_choice", android.content.Context.MODE_PRIVATE)
         searchNames = app.getSharedPreferences("lyrics_search_as", android.content.Context.MODE_PRIVATE)
         wordShifts = app.getSharedPreferences("lyrics_word_shift", android.content.Context.MODE_PRIVATE)
+        online = { network.isOnline() }
         // #344: the same files "Save lyrics into your music files" writes to, read only once they're switched on.
         val files = com.prism.music.data.local.EmbeddedLyricsFiles(app) { s ->
             if (s.isLocal) localMusic.uriFor(s.id) else localLossless.match(s)?.uri

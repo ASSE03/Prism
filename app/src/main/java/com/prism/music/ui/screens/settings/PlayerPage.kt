@@ -124,23 +124,23 @@ internal fun PlayerLayoutRows() {
     val nav = LocalNavigator.current
     val song by c.player.currentSong.collectAsState()
     val art = song?.let { com.prism.music.data.PlaylistCovers.artOf(it) }
-    val layoutInfo = when (s.playerLayout) {
+    val layoutInfo = when (s.player.layout) {
         PlayerLayout.MINIMAL -> tr(R.string.minimal_swipe_the_cover_for_the)
         PlayerLayout.COVER -> tr(R.string.cover_tap_the_cover_for_the)
         else -> ""
     } + tr(R.string.tablets_and_phones_turned_sideways_keep)
     PickCardsRow(
-        tr(R.string.layout), PlayerLayout.entries, s.playerLayout, { it.label }, info = layoutInfo, changed = ch("player_layout"),
+        tr(R.string.layout), PlayerLayout.entries, s.player.layout, { it.label }, info = layoutInfo, changed = ch("player_layout"),
         onPick = { prefs.setPlayerLayout(it) },
     ) { LayoutSample(it) }
-    if (s.playerLayout == PlayerLayout.VINYL) SwitchRow(tr(R.string.tonearm), s.vinylTonearm, info = tr(R.string.swings_onto_the_record_while_it), changed = ch("vinyl_tonearm")) { prefs.setVinylTonearm(it) }
+    if (s.player.layout == PlayerLayout.VINYL) SwitchRow(tr(R.string.tonearm), s.vinylTonearm, info = tr(R.string.swings_onto_the_record_while_it), changed = ch("vinyl_tonearm")) { prefs.setVinylTonearm(it) }
     PickCardsRow(
-        tr(R.string.background), PlayerBackground.entries, s.playerBackground, { it.label },
+        tr(R.string.background), PlayerBackground.entries, s.player.background, { it.label },
         info = tr(R.string.player_background_white_info) + " " + tr(R.string.cover_gradient_info), changed = ch("player_background"), columns = 3,
         onPick = { prefs.setPlayerBackground(it) },
     ) { PlayerBackgroundSample(it, art) }
     // What the picked background can be tuned by takes the place of "Background movement".
-    when (s.playerBackground) {
+    when (s.player.background) {
         PlayerBackground.MESH -> SliderRow(
             tr(R.string.background_movement), s.meshSpeed, 0f..1f, ::movementWords,
             // What else holds it still says so (#284).
@@ -151,7 +151,7 @@ internal fun PlayerLayoutRows() {
         ) { prefs.setGradientDepth(it) }
         PlayerBackground.BLUR -> {
             ShowBackgroundRow()
-            SliderRow(tr(R.string.softness), s.playerBlur, 0.5f..1.5f, ::percent, changed = ch("player_blur")) { prefs.setPlayerBlur(it) }
+            SliderRow(tr(R.string.softness), s.player.blur, 0.5f..1.5f, ::percent, changed = ch("player_blur")) { prefs.setPlayerBlur(it) }
         }
         PlayerBackground.APPEARANCE -> {
             val own = s.backdrops[com.prism.music.ui.theme.PLAYER_BACKDROP]
@@ -169,7 +169,7 @@ internal fun PlayerLayoutRows() {
     PickCardsRow(
         tr(R.string.buttons), listOf(true, false), s.view.buttonsPill, { if (it) tr(R.string.in_a_capsule) else tr(R.string.apart) },
         changed = ch("player_buttons_pill"), onPick = { prefs.setButtonsPill(it) },
-    ) { ButtonsPillSample(it, s.playerButtons) }
+    ) { ButtonsPillSample(it, s.player.buttons) }
     val video = VideoControls.toMerged(s.view.videoControlsHide to s.view.videoButtonsHide)
     PickListRow(
         tr(R.string.settings_player_controls_over_videos), VideoControls.choices(video), video, { it.label },
@@ -183,7 +183,7 @@ private fun ShowBackgroundRow() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     SliderRow(
-        tr(R.string.show_background), com.prism.music.ui.player.backdropShowOnSlider(s.playerBackdropShow), 0f..1f, ::backdropShowWords,
+        tr(R.string.show_background), com.prism.music.ui.player.backdropShowOnSlider(s.player.backdropShow), 0f..1f, ::backdropShowWords,
         info = tr(R.string.show_background_info), changed = ch("player_backdrop_show"),
     ) { prefs.setPlayerBackdropShow(com.prism.music.ui.player.backdropShowFromSlider(it)) }
 }
@@ -215,14 +215,14 @@ internal fun PlayerProgressRows() {
     SwitchRow(
         tr(R.string.volume_bar_like_the_progress_bar), s.volumeMatchesProgress, info = tr(R.string.same_style_and_thickness), changed = ch("volume_matches_progress"),
     ) { prefs.setVolumeMatchesProgress(it) }
-    PickCardsRow(tr(R.string.times), PlayerTimes.entries, s.playerTimes, { it.label }, changed = ch("player_times"), onPick = { prefs.setPlayerTimes(it) }) { TimesSample(it) }
+    PickCardsRow(tr(R.string.times), PlayerTimes.entries, s.player.times, { it.label }, changed = ch("player_times"), onPick = { prefs.setPlayerTimes(it) }) { TimesSample(it) }
     // 1.8.4: until now only a tap on the time on the player changed it.
     ChoiceRow(
         tr(R.string.settings_player_right_hand_time), listOf(false, true), s.showTrackLength, { if (it) tr(R.string.song_length) else tr(R.string.time_left) },
         info = tr(R.string.settings_player_right_hand_time_info), changed = ch("show_track_length"),
     ) { prefs.setShowTrackLength(it) }
     // The bar only takes the crossfade's shape while Crossfade is on, so the row only shows then.
-    if (s.mix) SwitchRow(
+    if (s.mix.on) SwitchRow(
         tr(R.string.crossfade_on_the_progress_bar), s.view.crossfadeShape, info = tr(R.string.crossfade_shape_info), changed = ch("crossfade_shape"),
     ) { prefs.setCrossfadeShape(it) }
 }
@@ -234,16 +234,16 @@ internal fun PlayerTitleRows() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
     PickCardsRow(
-        tr(R.string.alignment), PlayerTitleAlign.entries, s.playerTitleAlign, { it.label }, changed = ch("player_title_align"),
+        tr(R.string.alignment), PlayerTitleAlign.entries, s.player.titleAlign, { it.label }, changed = ch("player_title_align"),
         onPick = { prefs.setPlayerTitleAlign(it) },
     ) { TitleSample(it) }
-    ChoiceRow(tr(R.string.size), PlayerTitleSize.entries, s.playerTitleSize, { it.label }, changed = ch("player_title_size")) { prefs.setPlayerTitleSize(it) }
+    ChoiceRow(tr(R.string.size), PlayerTitleSize.entries, s.player.titleSize, { it.label }, changed = ch("player_title_size")) { prefs.setPlayerTitleSize(it) }
     PickCardsRow(
         tr(R.string.weight), PlayerTitleWeight.entries, s.type.playerTitleWeight, { it.label }, info = tr(R.string.light_is_prism_s_own_and),
         changed = ch("player_title_weight"), columns = 3, onPick = { prefs.setPlayerTitleWeight(it) },
-    ) { TitleSample(s.playerTitleAlign, it) }
+    ) { TitleSample(s.player.titleAlign, it) }
     SwitchRow(
-        tr(R.string.scrolling_titles), s.playerTitleScroll, info = tr(R.string.a_long_title_scrolls_across_off), changed = ch("player_title_scroll"),
+        tr(R.string.scrolling_titles), s.player.titleScroll, info = tr(R.string.a_long_title_scrolls_across_off), changed = ch("player_title_scroll"),
     ) { prefs.setPlayerTitleScroll(it) }
     PickCardsRow(
         tr(R.string.each_artist_its_own_link), listOf(false, true), s.view.artistLinks, ::artistLinksWords, info = tr(R.string.each_artist_its_own_link_info),
@@ -259,13 +259,13 @@ internal fun PlayerCoverRows() {
     val prefs = LocalContainer.current.settings
     ChoiceRow(tr(R.string.cover_size), CoverSize.entries, s.coverSize, { it.label }, changed = ch("cover_size")) { prefs.setCoverSize(it) }
     SliderRow(
-        tr(R.string.cover_corners), s.playerArtCorners.toFloat(), 0f..32f, { tr(R.string.dp, it.roundToInt()) }, steps = 7, changed = ch("player_art_corners"),
+        tr(R.string.cover_corners), s.player.artCorners.toFloat(), 0f..32f, { tr(R.string.dp, it.roundToInt()) }, steps = 7, changed = ch("player_art_corners"),
     ) { prefs.setPlayerArtCorners(it.roundToInt()) }
     // The player cover's shape has its one home here (plan §2.6).
     PickCardsRow(
         tr(R.string.settings_player_cover_shape), CoverShape.entries, s.shapes.player, { it.label }, changed = ch("cover_shape_player"), columns = 3,
         thumbnail = { PlayerCoverShapeSample(it, 6, size = 22) }, onPick = { prefs.setCoverShape("player", it) },
-    ) { PlayerCoverShapeSample(it, s.playerArtCorners) }
+    ) { PlayerCoverShapeSample(it, s.player.artCorners) }
     val edge = EdgeToEdge.toMerged(s.fullBleedArtwork to s.videoFullBleed)
     ChoiceRow(
         tr(R.string.settings_player_edge_to_edge), EdgeToEdge.entries, edge, { it.label },
@@ -335,14 +335,14 @@ private fun CanvasOptions() {
     // Where Canvas's loops show. Animated covers are not placed by it (owner, 2026-11-13: an animated cover "should
     // never have the full screen canvas look"): they play in the cover, as they did before 1.8.6.
     if (kinds.videos) ChoiceRow(
-        tr(R.string.canvas_where), listOf(false, true), s.canvasFillsBackground, ::canvasPlaceWords,
+        tr(R.string.canvas_where), listOf(false, true), s.behavior.canvas.fillsBackground, ::canvasPlaceWords,
         info = tr(R.string.the_moving_artwork_fills_the_whole), changed = ch("canvas_fills_background"),
     ) { prefs.setCanvasFillsBackground(it) }
-    if (kinds.videos && s.canvasFillsBackground) SwitchRow(
+    if (kinds.videos && s.behavior.canvas.fillsBackground) SwitchRow(
         tr(R.string.canvas_keep_controls), c.keepControls, info = tr(R.string.canvas_keep_controls_info), changed = ch("canvas_keep_controls"),
     ) { prefs.setCanvasKeepControls(it) }
     // 1.8.7 (owner, 2026-11-14): the line being sung can stay when the controls go.
-    if (kinds.videos && s.canvasFillsBackground) SwitchRow(
+    if (kinds.videos && s.behavior.canvas.fillsBackground) SwitchRow(
         tr(R.string.canvas_lyrics), c.lyrics, info = tr(R.string.canvas_lyrics_info), changed = ch("canvas_lyrics"),
     ) { prefs.setCanvasLyrics(it) }
 }
@@ -364,10 +364,10 @@ internal fun PlayerOnItRows() {
         PlayerPartsPreview(now, Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) { part -> prefs.setPartShown(part, !now.shows(part)) }
     }
     SheetRow(
-        tr(R.string.under_the_title), s.playerDeck.joinToString(" · ") { it.label }, info = tr(R.string.top_to_bottom_as_they_sit), changed = ch("player_deck"),
+        tr(R.string.under_the_title), s.player.deck.joinToString(" · ") { it.label }, info = tr(R.string.top_to_bottom_as_they_sit), changed = ch("player_deck"),
     ) { DeckOrder() }
     if (s.shows(PlayerPart.BUTTONS)) SheetRow(
-        tr(R.string.buttons_in_the_row), rowButtonsWords(s.playerButtons to s.showVideoSwitch), changed = ch("player_buttons"), sheetTitle = null,
+        tr(R.string.buttons_in_the_row), rowButtonsWords(s.player.buttons to s.showVideoSwitch), changed = ch("player_buttons"), sheetTitle = null,
     ) { RowButtons() }
     // The ⋯ menu's tiles and actions: its one row in Settings (the menu itself has the same editor).
     LinkRow(
@@ -423,7 +423,7 @@ internal fun PlayerOnItRows() {
 private fun DeckOrder() {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
-    val order = s.playerDeck
+    val order = s.player.deck
     com.prism.music.ui.components.ReorderList(order, { it }, { prefs.setPlayerDeck(it) }) { deck, _, _, mod ->
         val part = deckPart(deck)
         OrderRow(
@@ -582,7 +582,7 @@ private fun LockScreenOptions(canStart: Boolean) {
 /** The root's line for Player: its layout and background. */
 fun playerValue(s: AppSettings, dark: Boolean): String =
     // 1.8.4: its layout and background only, so it fits one line on the root (with animated covers it ran to "…").
-    listOf(tr(R.string.player_layout_x, s.playerLayout.label), s.playerBackground.label).joinToString(" · ")
+    listOf(tr(R.string.player_layout_x, s.player.layout.label), s.player.background.label).joinToString(" · ")
 
 /**
  * The look settings "Reset this page" puts back by their keys: every setting of the page that is part of a Look. (The
@@ -626,7 +626,7 @@ val playerOldGroups: Map<String, String> by lazy {
 val playerIndex: List<SettingEntry> by lazy {
     with(SettingNeeds) {
         val g = PlayerGroups
-        fun bg(name: Int, vararg which: PlayerBackground) = Needs(tr(R.string.turn_on_first, tr(name))) { it.playerBackground in which }
+        fun bg(name: Int, vararg which: PlayerBackground) = Needs(tr(R.string.turn_on_first, tr(name))) { it.player.background in which }
         val volumeShown = turnOn(tr(R.string.volume)) { it.shows(PlayerPart.VOLUME) }
         val edge = turnOn(tr(R.string.settings_player_edge_to_edge)) { it.fullBleedArtwork || it.videoFullBleed }
         val canvasVideos = turnOn(tr(R.string.canvas)) { CanvasKinds.shown(it).videos }
@@ -637,7 +637,7 @@ val playerIndex: List<SettingEntry> by lazy {
         listOf(
             // Layout
             SettingEntry(page, g.layout, tr(R.string.layout), tr(R.string.player_layout_standard_cover_lyrics_minimal)),
-            SettingEntry(page, g.layout, tr(R.string.tonearm), tr(R.string.vinyl_record_turntable_arm_needle), needs = turnOn(tr(R.string.vinyl_layout)) { it.playerLayout == PlayerLayout.VINYL }),
+            SettingEntry(page, g.layout, tr(R.string.tonearm), tr(R.string.vinyl_record_turntable_arm_needle), needs = turnOn(tr(R.string.vinyl_layout)) { it.player.layout == PlayerLayout.VINYL }),
             SettingEntry(page, g.layout, tr(R.string.background), tr(R.string.player_blur_cover_color) + " " + tr(R.string.cover_gradient) + " " + tr(R.string.look)),
             SettingEntry(page, g.layout, tr(R.string.show_background), needs = bg(R.string.blurred_cover, PlayerBackground.BLUR, PlayerBackground.APPEARANCE)),
             SettingEntry(page, g.layout, tr(R.string.gradient_depth), tr(R.string.gradient_depth_info), needs = bg(R.string.cover_gradient, PlayerBackground.GRADIENT)),
@@ -645,12 +645,12 @@ val playerIndex: List<SettingEntry> by lazy {
             SettingEntry(
                 page, g.layout, tr(R.string.background_movement),
                 tr(R.string.mesh_background_drift_animate_move_still) + " " + tr(R.string.mesh_background_saturation_vivid_soft_rich) + " " + tr(R.string.motion) + " " + tr(R.string.colors),
-                needs = Needs(tr(R.string.turn_on_first, PlayerBackground.MESH.label)) { it.playerBackground == PlayerBackground.MESH },
+                needs = Needs(tr(R.string.turn_on_first, PlayerBackground.MESH.label)) { it.player.background == PlayerBackground.MESH },
             ),
             SettingEntry(page, g.layout, tr(R.string.softness), tr(R.string.blur_background_strength_soft_clear), needs = bg(R.string.blurred_cover, PlayerBackground.BLUR)),
             SettingEntry(
                 page, g.layout, tr(R.string.which_background), tr(R.string.player_background_own_design_photo_pattern),
-                needs = Needs(tr(R.string.turn_on_first, PlayerBackground.APPEARANCE.label)) { it.playerBackground == PlayerBackground.APPEARANCE },
+                needs = Needs(tr(R.string.turn_on_first, PlayerBackground.APPEARANCE.label)) { it.player.background == PlayerBackground.APPEARANCE },
             ),
             SettingEntry(page, g.layout, tr(R.string.controls), tr(R.string.buttons_transport)),
             SettingEntry(page, g.layout, tr(R.string.ring_on_the_play_button), tr(R.string.the_split_light_around_play_and_pause)),
@@ -703,11 +703,11 @@ val playerIndex: List<SettingEntry> by lazy {
             ),
             SettingEntry(
                 page, g.cover, tr(R.string.canvas_keep_controls), tr(R.string.canvas_keep_controls_keywords),
-                needs = turnOn(tr(R.string.full_screen)) { CanvasKinds.shown(it).videos && it.canvasFillsBackground },
+                needs = turnOn(tr(R.string.full_screen)) { CanvasKinds.shown(it).videos && it.behavior.canvas.fillsBackground },
             ),
             SettingEntry(
                 page, g.cover, tr(R.string.canvas_lyrics), tr(R.string.canvas_lyrics_keywords),
-                needs = turnOn(tr(R.string.full_screen)) { CanvasKinds.shown(it).videos && it.canvasFillsBackground },
+                needs = turnOn(tr(R.string.full_screen)) { CanvasKinds.shown(it).videos && it.behavior.canvas.fillsBackground },
             ),
             // On it: one editor for what's on the player (found by each part's name too).
             SettingEntry(

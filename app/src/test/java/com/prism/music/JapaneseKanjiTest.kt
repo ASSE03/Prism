@@ -79,6 +79,35 @@ class JapaneseKanjiTest {
         assertEquals("ja", asked.single().first)
     }
 
+    /** 6.3: a song of only kanji whose artist's name has kana is Japanese (it was read as Chinese). */
+    @Test fun theArtistsNameCanSayItsJapanese() = runBlocking {
+        romanizer(fakeGoogle).romanize("ja-artist", listOf(LyricLine(0, "月光"), LyricLine(2_000, "花火")), emptySet(), network = true, title = "春泥棒", artist = "ヨルシカ")
+        assertEquals("ja", asked.single().first)
+    }
+
+    @Test fun theAlbumsNameCanSayItsJapanese() = runBlocking {
+        romanizer(fakeGoogle).romanize("ja-album", listOf(LyricLine(0, "月光")), emptySet(), network = true, title = "春泥棒", artist = "Yorushika", album = "だから僕は音楽を辞めた")
+        assertEquals("ja", asked.single().first)
+    }
+
+    /** 6.3: the listener's word on a song sticks (kept in the song prefs, a new start too) and beats the letters. */
+    @Test fun theListenersChoiceSticks() = runBlocking {
+        val prefs = RuntimeEnvironment.getApplication().getSharedPreferences("roman-test", android.content.Context.MODE_PRIVATE)
+        prefs.edit().clear().commit()
+        val first = Romanizer(fakeGoogle, dao, ModelStore(RuntimeEnvironment.getApplication(), fakeGoogle), CoroutineScope(Dispatchers.Default), songPrefs = prefs)
+        first.setJapanese("kanji-only", true)
+        first.setJapanese("has-kana", false)
+        val again = Romanizer(fakeGoogle, dao, ModelStore(RuntimeEnvironment.getApplication(), fakeGoogle), CoroutineScope(Dispatchers.Default), songPrefs = prefs)
+        assertEquals(true, again.japaneseChoice("kanji-only"))
+        assertTrue("the choice isn't taken for a romanize switch", again.overrides.value.isEmpty())
+        again.romanize("kanji-only", listOf(LyricLine(0, "月光")), emptySet(), network = true)
+        assertEquals("ja", asked.last().first)
+        again.romanize("has-kana", listOf(LyricLine(0, "我爱你")), emptySet(), network = true, title = "ひかり")
+        assertEquals("auto", asked.last().first)
+        again.setJapanese("kanji-only", null)
+        assertEquals(null, again.japaneseChoice("kanji-only"))
+    }
+
     @Test fun aChineseSongStaysChinese() = runBlocking {
         romanizer(fakeGoogle).romanize("zh", listOf(LyricLine(0, "我爱你"), LyricLine(2_000, "月光")), emptySet(), network = true)
         assertEquals("auto", asked.single().first)

@@ -364,7 +364,7 @@ fun rememberLyricsState(song: Song, opened: Boolean = true): LyricsState {
     val scope = rememberCoroutineScope()
     val state = remember(song.id) { LyricsState(repo, song, scope) }
     val metered by c.network.metered.collectAsState()
-    val hold = metered && !LocalAppSettings.current.lyricsOnMobileData
+    val hold = metered && !LocalAppSettings.current.lyrics.onMobileData
     LaunchedEffect(song.id, opened, hold) {
         if (!state.settled || state.waiting && (opened || !hold)) state.loadAuto(savedOnly = hold && !opened)
     }
@@ -503,8 +503,8 @@ fun CurrentLyricStrip(state: LyricsState, isPlaying: Boolean, overScrubber: Bool
     val synced = lines.any { it.timeMs >= 0 }
     // Centered and up to two lines (#121), as the listener picks. Two lines keep their room all the time, so the
     // player doesn't move up and down as lines change length; the line sits at the bottom of it, over the scrubber.
-    val centered = settings.lyricsStripAlign == com.prism.music.data.prefs.LyricsAlign.CENTER
-    val rows = if (settings.lyricsStripTwoLines) 2 else 1
+    val centered = settings.lyrics.stripAlign == com.prism.music.data.prefs.LyricsAlign.CENTER
+    val rows = if (settings.lyrics.stripTwoLines) 2 else 1
     val baseStyle = MaterialTheme.typography.titleMedium.let { if (centered) it.copy(textAlign = TextAlign.Center) else it }
     val room = if (rows > 1) {
         val density = androidx.compose.ui.platform.LocalDensity.current
@@ -597,6 +597,11 @@ fun CanvasLyricLine(state: LyricsState, isPlaying: Boolean, modifier: Modifier =
     val index by remember(lines) { derivedStateOf { lines.indexAt(clock.value) } }
     val style = MaterialTheme.typography.headlineSmall
         .copy(fontWeight = FontWeight.SemiBold, textDirection = androidx.compose.ui.text.style.TextDirection.Content).withLyricsFont()
+    // For the in-app test: the line it shows now (none in a rest, none once it's gone).
+    DisposableEffect(lines, index) {
+        CanvasStats.lyricLine = lines.getOrNull(index)?.takeUnless { it.isGap }?.text
+        onDispose { CanvasStats.lyricLine = null }
+    }
     Box(modifier, contentAlignment = Alignment.BottomStart) {
         AnimatedContent(
             index,
@@ -936,7 +941,7 @@ private fun fadedAt(lit: Brush, from: Float, to: Float, rtl: Boolean): Brush {
 @Composable
 fun LyricProgress(startMs: Long, endMs: Long, clock: State<Long>, origin: Float, modifier: Modifier = Modifier) {
     // Settings → Lyrics → Progress line: off keeps its room (lines don't move), it just isn't drawn.
-    val show = com.prism.music.ui.theme.LocalAppSettings.current.lyricsProgressLine
+    val show = com.prism.music.ui.theme.LocalAppSettings.current.lyrics.progressLine
     androidx.compose.foundation.Canvas(modifier.height(2.dp)) {
         if (!show) return@Canvas
         val f = ((clock.value - startMs).toFloat() / (endMs - startMs)).coerceIn(0f, 1f)
@@ -1120,11 +1125,11 @@ internal fun rememberLyricTranslation(state: LyricsState): com.prism.music.data.
     val c = LocalContainer.current
     val settings by c.settings.flow.collectAsState()
     val lines = state.lines
-    val translateTo = settings.lyricsTranslateTo.ifBlank { defaultTranslateTarget() }
-    var translation by remember(lines, settings.lyricsTranslate, translateTo) { mutableStateOf<com.prism.music.data.lyrics.LyricsTranslator.Translation?>(null) }
+    val translateTo = settings.lyrics.translateTo.ifBlank { defaultTranslateTarget() }
+    var translation by remember(lines, settings.lyrics.translate, translateTo) { mutableStateOf<com.prism.music.data.lyrics.LyricsTranslator.Translation?>(null) }
     val translateContext = androidx.compose.ui.platform.LocalContext.current
-    LaunchedEffect(lines, settings.lyricsTranslate, translateTo) {
-        if (!settings.lyricsTranslate || lines.isEmpty()) return@LaunchedEffect
+    LaunchedEffect(lines, settings.lyrics.translate, translateTo) {
+        if (!settings.lyrics.translate || lines.isEmpty()) return@LaunchedEffect
         val texts = lines.map { l -> if (l.isGap || (l.text.startsWith("[") && l.text.endsWith("]"))) "" else l.text }
         // Asked again while the lyrics stay open when Google isn't answering (#198), instead of showing nothing for good.
         for (attempt in 0 until TRANSLATE_TRIES) {
@@ -1149,7 +1154,7 @@ internal fun rememberLyricTranslation(state: LyricsState): com.prism.music.data.
 
 /** The language lyrics are translated into, by name in the phone's own. */
 internal fun translateTargetName(settings: com.prism.music.data.prefs.AppSettings): String =
-    settings.lyricsTranslateTo.ifBlank { defaultTranslateTarget() }.let { tag ->
+    settings.lyrics.translateTo.ifBlank { defaultTranslateTarget() }.let { tag ->
         java.util.Locale.forLanguageTag(tag).getDisplayLanguage(java.util.Locale.getDefault()).ifBlank { tag }
     }
 
@@ -1231,11 +1236,11 @@ fun LyricsPanel(
     val translation = rememberLyricTranslation(state)
     // Turned on for a song already in that language, nothing changes: say why, once, right after it's turned on.
     val context = androidx.compose.ui.platform.LocalContext.current
-    var translateWasOn by remember { mutableStateOf(settings.lyricsTranslate) }
+    var translateWasOn by remember { mutableStateOf(settings.lyrics.translate) }
     var justTurnedOn by remember { mutableStateOf(false) }
-    LaunchedEffect(settings.lyricsTranslate) {
-        if (settings.lyricsTranslate && !translateWasOn) justTurnedOn = true
-        translateWasOn = settings.lyricsTranslate
+    LaunchedEffect(settings.lyrics.translate) {
+        if (settings.lyrics.translate && !translateWasOn) justTurnedOn = true
+        translateWasOn = settings.lyrics.translate
     }
     LaunchedEffect(translation, justTurnedOn) {
         val t = translation ?: return@LaunchedEffect
@@ -1253,17 +1258,23 @@ fun LyricsPanel(
     if (lines.isEmpty()) {
         Box(modifier.pointerInput(Unit) { detectTapGestures { onRevealControls() } }, contentAlignment = Alignment.Center) {
             if (state.loading) CircularProgressIndicator(color = Color.White, strokeWidth = 3.dp)
-            else Text(tr(R.string.no_lyrics_for_this_track), style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.6f))
+            else androidx.compose.foundation.layout.Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(tr(R.string.no_lyrics_for_this_track), style = MaterialTheme.typography.titleMedium, color = Color.White.copy(alpha = 0.6f))
+                // 1.8.7 (6.2): every source asked again, past what was noted as "not found".
+                if (state.unavailable) androidx.compose.material3.TextButton(onClick = { state.redownload() }) {
+                    Text(tr(R.string.try_again), color = Color.White.copy(alpha = 0.8f))
+                }
+            }
         }
         return
     }
 
     // Focus blur at the strength picked (Settings → Lyrics; 1 is 1.7's), on Android 12 and later.
     val canBlur = Build.VERSION.SDK_INT >= 31 && look.blur > 0f
-    val scale = settings.lyricsScale * look.sizeScale
+    val scale = settings.lyrics.scale * look.sizeScale
     // The sung word's weight moves along the lyrics' typeface's axis: any font Prism ships (not System or an imported one).
-    val lyricsChoice = if (settings.lyricsFont.isEmpty()) settings.fontChoice
-        else com.prism.music.data.prefs.FontChoice.entries.firstOrNull { it.name == settings.lyricsFont }
+    val lyricsChoice = if (settings.lyrics.font.isEmpty()) settings.fontChoice
+        else com.prism.music.data.prefs.FontChoice.entries.firstOrNull { it.name == settings.lyrics.font }
     val axisFamily = remember(lyricsChoice) { lyricsChoice?.let(com.prism.music.ui.theme.AppFonts::axis) }
     // Bold card: the lines sit on the cover's own color (drawn behind the player), the words to come dark.
     val onCard = look.card != null
@@ -1317,12 +1328,12 @@ fun LyricsPanel(
             if (line.isGap) {
                 GapDots(
                     line, lines.getOrNull(index + 1)?.timeMs ?: line.endMs, clock, isActive, alpha,
-                    centred = settings.lyricsAlign == com.prism.music.data.prefs.LyricsAlign.CENTER,
+                    centred = settings.lyrics.align == com.prism.music.data.prefs.LyricsAlign.CENTER,
                     note = settings.lyricsGapMark == com.prism.music.data.prefs.LyricsGapMark.NOTE,
                 ) { c.player.seekToLyric(line.timeMs) }
                 return@itemsIndexed
             }
-            val centred = settings.lyricsAlign == com.prism.music.data.prefs.LyricsAlign.CENTER
+            val centred = settings.lyrics.align == com.prism.music.data.prefs.LyricsAlign.CENTER
             val romanLine = roman?.getOrNull(index)
             // "Instead": the line is sung in Latin letters (the original's timings kept); in capitals when that's picked.
             val shown = remember(line, romanLine, romanInstead, look.uppercase) { look.shown(if (romanInstead && romanLine != null) romanLine else line) }

@@ -284,6 +284,8 @@ internal object CanvasStats {
     /** The clip on screen last: its address (a file for a loop from a music video) and whether a frame of it showed. */
     @Volatile var showing: String? = null
     @Volatile var frames = 0
+    /** "Keep lyrics showing": the sung line over the canvas now (null: none shown). */
+    @Volatile var lyricLine: String? = null
 }
 
 /** A restart that never drew its first frame (the phone held the picture, the clip failed): the kept frame goes anyway. */

@@ -118,19 +118,19 @@ fun GesturesButtonsPage(bottomPadding: Dp, find: String? = null, showBack: Boole
     val coverTitle = tr(R.string.gb_on_the_cover)
     val miniTitle = tr(R.string.gb_on_the_mini_player)
     val cover = listOf(
-        GestureMenu(tr(R.string.swipe_left), "cover_swipe_left", s.coverSwipeLeft, d.coverSwipeLeft, PlayerGesture.choices()),
-        GestureMenu(tr(R.string.swipe_right), "cover_swipe_right", s.coverSwipeRight, d.coverSwipeRight, PlayerGesture.choices()),
-        GestureMenu(tr(R.string.swipe_up), "cover_swipe_up", s.coverSwipeUp, d.coverSwipeUp, PlayerGesture.choices(), info = tr(R.string.on_the_player_s_cover_swiping)),
-        GestureMenu(tr(R.string.double_tap), "cover_double_tap", s.coverDoubleTap, d.coverDoubleTap, PlayerGesture.choices(double = true)),
-        GestureMenu(tr(R.string.long_press), "cover_long_press", s.coverLongPress, d.coverLongPress, PlayerGesture.choices()),
+        GestureMenu(tr(R.string.swipe_left), "cover_swipe_left", s.gestures.coverSwipeLeft, d.gestures.coverSwipeLeft, PlayerGesture.choices()),
+        GestureMenu(tr(R.string.swipe_right), "cover_swipe_right", s.gestures.coverSwipeRight, d.gestures.coverSwipeRight, PlayerGesture.choices()),
+        GestureMenu(tr(R.string.swipe_up), "cover_swipe_up", s.gestures.coverSwipeUp, d.gestures.coverSwipeUp, PlayerGesture.choices(), info = tr(R.string.on_the_player_s_cover_swiping)),
+        GestureMenu(tr(R.string.double_tap), "cover_double_tap", s.gestures.coverDoubleTap, d.gestures.coverDoubleTap, PlayerGesture.choices(double = true)),
+        GestureMenu(tr(R.string.long_press), "cover_long_press", s.gestures.coverLongPress, d.gestures.coverLongPress, PlayerGesture.choices()),
     )
     val mini = listOf(
-        GestureMenu(tr(R.string.swipe_left), "mini_swipe_left", s.miniSwipeLeft, d.miniSwipeLeft, PlayerGesture.choices(mini = true)),
-        GestureMenu(tr(R.string.swipe_right), "mini_swipe_right", s.miniSwipeRight, d.miniSwipeRight, PlayerGesture.choices(mini = true)),
-        GestureMenu(tr(R.string.swipe_up), "mini_swipe_up", s.miniSwipeUp, d.miniSwipeUp, PlayerGesture.choices(mini = true)),
-        GestureMenu(tr(R.string.pull_down), "mini_swipe_down", s.miniSwipeDown, d.miniSwipeDown, PlayerGesture.choices(mini = true)),
+        GestureMenu(tr(R.string.swipe_left), "mini_swipe_left", s.gestures.miniSwipeLeft, d.gestures.miniSwipeLeft, PlayerGesture.choices(mini = true)),
+        GestureMenu(tr(R.string.swipe_right), "mini_swipe_right", s.gestures.miniSwipeRight, d.gestures.miniSwipeRight, PlayerGesture.choices(mini = true)),
+        GestureMenu(tr(R.string.swipe_up), "mini_swipe_up", s.gestures.miniSwipeUp, d.gestures.miniSwipeUp, PlayerGesture.choices(mini = true)),
+        GestureMenu(tr(R.string.pull_down), "mini_swipe_down", s.gestures.miniSwipeDown, d.gestures.miniSwipeDown, PlayerGesture.choices(mini = true)),
     )
-    val seeksBySide = s.coverDoubleTap == PlayerGesture.SEEK_SIDES
+    val seeksBySide = s.gestures.coverDoubleTap == PlayerGesture.SEEK_SIDES
     val work = gesturesWorkToMerged(s.behavior.gesturesEverywhere, s.behavior.gesturesUnderLyrics)
     val setWork: (GesturesWork) -> Unit = { w ->
         val (everywhere, underLyrics) = gesturesWorkToStored(w)
@@ -280,7 +280,7 @@ private fun GbSessionButtons(changed: Boolean) {
 
 /** The root's line for Gestures & buttons: what a double tap on the cover does, and haptics when on ("Double tap: Seek by side · Haptics"). */
 fun gesturesButtonsValue(s: AppSettings, dark: Boolean): String = listOfNotNull(
-    tr(R.string.gb_value_double_tap, s.coverDoubleTap.label),
+    tr(R.string.gb_value_double_tap, s.gestures.coverDoubleTap.label),
     if (s.haptics) tr(R.string.haptics) else null,
 ).joinToString(" · ")
 
@@ -314,7 +314,7 @@ val gesturesButtonsIndex: List<SettingEntry> by lazy {
         SettingEntry(page, cover, tr(R.string.double_tap), tr(R.string.seek_skip_seconds_fast_forward_rewind)),
         SettingEntry(
             page, cover, tr(R.string.gb_double_tap_seeks), tr(R.string.seek_skip_seconds_fast_forward_rewind),
-            needs = Needs(tr(R.string.gb_double_tap_seeks_needs)) { it.coverDoubleTap == PlayerGesture.SEEK_SIDES },
+            needs = Needs(tr(R.string.gb_double_tap_seeks_needs)) { it.gestures.coverDoubleTap == PlayerGesture.SEEK_SIDES },
         ),
         SettingEntry(page, cover, tr(R.string.long_press), tr(R.string.hold_cover)),
         // The two switches it took over stay as search words.

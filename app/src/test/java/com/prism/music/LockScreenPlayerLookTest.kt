@@ -254,7 +254,7 @@ class LockScreenPlayerLookTest {
         assertEquals("off: as 1.8.3.1", 0, differing(golden(LockLayout.COVER), off))
 
         s = dark.copy(
-            view = dark.view.copy(lockScreenPlayerLook = true), playerBackground = PlayerBackground.THEME,
+            view = dark.view.copy(lockScreenPlayerLook = true), player = dark.player.copy(background = PlayerBackground.THEME),
             scrubberStyle = ScrubberStyle.THUMB, scrubberColor = ScrubberColor.WHITE, scrubberThickness = 1.5f, scrubberThumb = ScrubberThumb.RING,
         )
         compose.waitForIdle()
@@ -277,7 +277,7 @@ class LockScreenPlayerLookTest {
         var wave by mutableStateOf<FloatArray?>(null)
         show(on) { LockScreenLayout(LockLayout.COVER, content(LockLayout.COVER, look = lookOf(s, wave = wave)), noActions) }
         val grounds = PlayerBackground.entries.associateWith { bg ->
-            s = on.copy(playerBackground = bg)
+            s = on.copy(player = on.player.copy(background = bg))
             compose.waitForIdle()
             shot("ground-${bg.name.lowercase()}")
         }
@@ -289,7 +289,7 @@ class LockScreenPlayerLookTest {
             assertTrue("$a and $b look the same", differing(grounds.getValue(a), grounds.getValue(b)) > 1000)
         }
         val bars = ScrubberStyle.entries.associateWith { style ->
-            s = on.copy(playerBackground = PlayerBackground.BLACK, scrubberStyle = style)
+            s = on.copy(scrubberStyle = style, player = on.player.copy(background = PlayerBackground.BLACK))
             wave = if (style == ScrubberStyle.WAVE) FloatArray(100) { 0.2f + 0.8f * ((it * 7) % 10) / 10f } else null
             compose.waitForIdle()
             shot("bar-${style.name.lowercase()}")
@@ -320,7 +320,7 @@ class LockScreenPlayerLookTest {
         compose.mainClock.autoAdvance = false
         show(lively) { LockScreenLayout(LockLayout.COVER, content(LockLayout.COVER, look = lookOf(s)), noActions) }
         for (bg in listOf(PlayerBackground.MESH, PlayerBackground.APPEARANCE, PlayerBackground.GRADIENT, PlayerBackground.BLUR)) {
-            s = lively.copy(playerBackground = bg)
+            s = lively.copy(player = lively.player.copy(background = bg))
             compose.waitForIdle()
             // What starts with a new background (a fade of under a second) has finished.
             compose.mainClock.advanceTimeBy(3_000)
@@ -338,7 +338,7 @@ class LockScreenPlayerLookTest {
         var s by mutableStateOf(on)
         show(on) { Box(Modifier.fillMaxSize()) { lookOf(s, hidden = true).ground() } }
         for (bg in listOf(PlayerBackground.MESH, PlayerBackground.BLUR, PlayerBackground.GRADIENT, PlayerBackground.WHITE, PlayerBackground.BLACK)) {
-            s = on.copy(playerBackground = bg)
+            s = on.copy(player = on.player.copy(background = bg))
             compose.waitForIdle()
             val img = shot("hidden-${bg.name.lowercase()}")
             val px = IntArray(img.width * img.height).also { img.getPixels(it, 0, img.width, 0, 0, img.width, img.height) }

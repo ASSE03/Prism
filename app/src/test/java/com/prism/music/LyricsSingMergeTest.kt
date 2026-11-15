@@ -137,7 +137,7 @@ class LyricsSingMergeTest {
     @Test fun resetListsWhatChangedAndNothingElse() {
         val d = AppSettings()
         assertEquals("as Prism comes: nothing to reset", emptyList<String>(), lyricsSingChanges(d, d))
-        val changed = d.copy(behavior = d.behavior.copy(lyricsOffsetMs = 120), lyricsSourceButton = !d.lyricsSourceButton, lyricsFont = "SYSTEM")
+        val changed = d.copy(behavior = d.behavior.copy(lyricsOffsetMs = 120), lyrics = d.lyrics.copy(sourceButton = !d.lyrics.sourceButton, font = "SYSTEM"))
         val lines = lyricsSingChanges(changed, d)
         assertEquals(lines.toString(), 3, lines.size)
         assertTrue(lines.any { tr(R.string.ls_offset) in it && "120 ms earlier" in it && tr(R.string.ls_offset_none) in it })

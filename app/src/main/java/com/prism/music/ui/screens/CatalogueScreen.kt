@@ -138,7 +138,7 @@ private fun CataloguePage(bottomPadding: Dp, find: String?) {
     val prefs = c.settings
     val d = remember { com.prism.music.data.prefs.AppSettings() }
     val ytShelves by homeShelfCache.collectAsState()
-    val layout = settings.homeLayout
+    val layout = settings.home.layout
     // Every section Prism can show (built-in and every shelf YouTube Music has offered) that isn't on Home yet.
     val picks = ytShelves.quickPicks(settings.accountName)
     val available = (HomeSections.defaults + ytShelves.filterNot { it === picks }.map { HomeSectionConfig(shelfKey(it.title), it.title) })
@@ -148,7 +148,7 @@ private fun CataloguePage(bottomPadding: Dp, find: String?) {
     var pinning by remember { mutableStateOf(false) }
     // The tiles only show while their section is on Home.
     val tilesOn = layout.any { it.key == HomeSections.GREETING && it.visible }
-    val header = settings.homeHeader
+    val header = settings.home.header
     val pictured = header == HomeHeader.PICTURE || header == HomeHeader.NOW_PLAYING
 
     fun save(list: List<HomeSectionConfig>) = prefs.setHomeLayout(list)
@@ -158,26 +158,26 @@ private fun CataloguePage(bottomPadding: Dp, find: String?) {
     val onOff: (Boolean) -> String = { ListeningResets.onOff(it) }
     val greeting = tr(R.string.good_morning_afternoon_evening)
     val tilesCount: (Int) -> String = { if (it == 0) tr(R.string.off) else "$it" }
-    val headerChanged = reset.add(tr(R.string.style), header, d.homeHeader, { it.label }) { prefs.setHomeHeader(it) }
+    val headerChanged = reset.add(tr(R.string.style), header, d.home.header, { it.label }) { prefs.setHomeHeader(it) }
     val headlineChanged = reset.add(tr(R.string.headline), settings.greetingText, d.greetingText, { it.ifBlank { greeting } }) { prefs.setGreetingText(it) }
     val showNameChanged = reset.add(tr(R.string.show_your_name), settings.greetingShowName, d.greetingShowName, onOff) { prefs.setGreetingShowName(it) }
-    val heightChanged = reset.add(tr(R.string.height), settings.homeHeaderHeight, d.homeHeaderHeight, { it.label }) { prefs.setHomeHeaderHeight(it) }
-    val pictureChanged = reset.add(tr(R.string.picture), settings.homeHeaderPicture, d.homeHeaderPicture, ::headerPictureLabel) { prefs.setHomeHeaderPicture(it) }
-    val sectionsChanged = reset.add(tr(R.string.sections), layout, d.homeLayout, asPrismComes(d.homeLayout)) { save(it) }
-    val shortcutsChanged = reset.add(tr(R.string.section_shortcut_tiles), settings.homeShortcuts, d.homeShortcuts, { l -> l.joinToString(" · ") { it.label }.ifEmpty { tr(R.string.none) } }) { prefs.setHomeShortcuts(it) }
-    val pinnedChanged = reset.add(tr(R.string.pinned_playlists), settings.homePlaylists, d.homePlaylists, { l -> l.joinToString(", ") { it.title }.ifEmpty { tr(R.string.none) } }) { prefs.setHomePlaylists(it) }
-    val recentChanged = reset.add(tr(R.string.recently_played_albums), settings.homeRecentTiles, d.homeRecentTiles, tilesCount) { prefs.setHomeRecentTiles(it) }
+    val heightChanged = reset.add(tr(R.string.height), settings.home.headerHeight, d.home.headerHeight, { it.label }) { prefs.setHomeHeaderHeight(it) }
+    val pictureChanged = reset.add(tr(R.string.picture), settings.home.headerPicture, d.home.headerPicture, ::headerPictureLabel) { prefs.setHomeHeaderPicture(it) }
+    val sectionsChanged = reset.add(tr(R.string.sections), layout, d.home.layout, asPrismComes(d.home.layout)) { save(it) }
+    val shortcutsChanged = reset.add(tr(R.string.section_shortcut_tiles), settings.home.shortcuts, d.home.shortcuts, { l -> l.joinToString(" · ") { it.label }.ifEmpty { tr(R.string.none) } }) { prefs.setHomeShortcuts(it) }
+    val pinnedChanged = reset.add(tr(R.string.pinned_playlists), settings.home.playlists, d.home.playlists, { l -> l.joinToString(", ") { it.title }.ifEmpty { tr(R.string.none) } }) { prefs.setHomePlaylists(it) }
+    val recentChanged = reset.add(tr(R.string.recently_played_albums), settings.home.recentTiles, d.home.recentTiles, tilesCount) { prefs.setHomeRecentTiles(it) }
     val autoAddChanged = reset.add(tr(R.string.add_new_sections_automatically), settings.autoAddSections, d.autoAddSections, onOff) { prefs.setAutoAddSections(it) }
-    val hidden = hideKindsToMerged(settings.homeHideKinds)
+    val hidden = hideKindsToMerged(settings.home.hideKinds)
     val hiddenWords: (Set<HomeHiddenKind>) -> String = { kinds -> kinds.sorted().joinToString(" · ") { it.label }.ifEmpty { tr(R.string.none) } }
-    val hiddenChanged = reset.add(tr(R.string.ch_hide_from_home), hidden, hideKindsToMerged(d.homeHideKinds), hiddenWords) { kinds ->
+    val hiddenChanged = reset.add(tr(R.string.ch_hide_from_home), hidden, hideKindsToMerged(d.home.hideKinds), hiddenWords) { kinds ->
         HomeHiddenKind.entries.forEach { prefs.setHomeHideKind(it.key, it in kinds) }
     }
     val picksFromChanged = reset.add(tr(R.string.quick_picks_from), settings.behavior.quickPicksSource, d.behavior.quickPicksSource, { it.label }) { prefs.setQuickPicksSource(it) }
     val picksRadioChanged = reset.add(tr(R.string.quick_picks_start_a_radio), settings.quickPicksRadio, d.quickPicksRadio, onOff) { prefs.setQuickPicksRadio(it) }
     val youTubeOnlyChanged = reset.add(tr(R.string.speed_dial_youtube_music_s_only), settings.speedDialYouTubeOnly, d.speedDialYouTubeOnly, onOff) { prefs.setSpeedDialYouTubeOnly(it) }
     val yoursFirstChanged = reset.add(tr(R.string.speed_dial_your_plays_first), settings.behavior.speedDialYoursFirst, d.behavior.speedDialYoursFirst, onOff) { prefs.setSpeedDialYoursFirst(it) }
-    val buttonChanged = reset.add(tr(R.string.customize_button_on_home), settings.homeCustomizeButton, d.homeCustomizeButton, onOff) { prefs.setHomeCustomizeButton(it) }
+    val buttonChanged = reset.add(tr(R.string.customize_button_on_home), settings.home.customizeButton, d.home.customizeButton, onOff) { prefs.setHomeCustomizeButton(it) }
 
     SettingsPageScaffold(tr(R.string.customize_home), bottomPadding, find = find, reset = reset.pageReset()) {
         group(tr(R.string.top_of_home)) {
@@ -197,7 +197,7 @@ private fun CataloguePage(bottomPadding: Dp, find: String?) {
                 HeadlineRow(headlineChanged)
                 SwitchRow(tr(R.string.show_your_name), settings.greetingShowName, changed = showNameChanged) { prefs.setGreetingShowName(it) }
             }
-            if (pictured) ChoiceRow(tr(R.string.height), HomeHeaderHeight.entries, settings.homeHeaderHeight, { it.label }, changed = heightChanged) { prefs.setHomeHeaderHeight(it) }
+            if (pictured) ChoiceRow(tr(R.string.height), HomeHeaderHeight.entries, settings.home.headerHeight, { it.label }, changed = heightChanged) { prefs.setHomeHeaderHeight(it) }
             if (header == HomeHeader.PICTURE) HeaderPictureRow(pictureChanged)
         }
         group(tr(R.string.sections), info = tr(R.string.hold_a_section_or_drag_its)) {
@@ -212,20 +212,20 @@ private fun CataloguePage(bottomPadding: Dp, find: String?) {
             ShowChipsRow(
                 showTitle,
                 HomeShortcut.entries.map { sc ->
-                    val on = sc in settings.homeShortcuts
+                    val on = sc in settings.home.shortcuts
                     // Numbered in the order they were picked, which is the order they show in.
-                    ShowOption(if (on) "${settings.homeShortcuts.indexOf(sc) + 1}  ${sc.label}" else sc.label, on) {
-                        prefs.setHomeShortcuts(if (on) settings.homeShortcuts - sc else settings.homeShortcuts + sc)
+                    ShowOption(if (on) "${settings.home.shortcuts.indexOf(sc) + 1}  ${sc.label}" else sc.label, on) {
+                        prefs.setHomeShortcuts(if (on) settings.home.shortcuts - sc else settings.home.shortcuts + sc)
                     }
                 },
                 modifier = faint, changed = shortcutsChanged,
             )
             LinkRow(
-                tr(R.string.pinned_playlists), faint, value = settings.homePlaylists.takeIf { it.isNotEmpty() }?.joinToString(", ") { it.title } ?: tr(R.string.none),
+                tr(R.string.pinned_playlists), faint, value = settings.home.playlists.takeIf { it.isNotEmpty() }?.joinToString(", ") { it.title } ?: tr(R.string.none),
                 info = tr(R.string.shown_as_tiles_after_the_shortcuts), changed = pinnedChanged,
             ) { pinning = true }
             SliderRow(
-                tr(R.string.recently_played_albums), settings.homeRecentTiles.toFloat(), 0f..6f, { tilesCount(it.roundToInt()) }, faint,
+                tr(R.string.recently_played_albums), settings.home.recentTiles.toFloat(), 0f..6f, { tilesCount(it.roundToInt()) }, faint,
                 steps = 5, changed = recentChanged,
             ) { prefs.setHomeRecentTiles(it.roundToInt()) }
         }
@@ -260,7 +260,7 @@ private fun CataloguePage(bottomPadding: Dp, find: String?) {
                 info = tr(R.string.speed_dial_your_plays_first_info), changed = yoursFirstChanged,
             ) { prefs.setSpeedDialYoursFirst(it) }
             // The same name here and wherever else it is spoken of (plan §2.6).
-            SwitchRow(tr(R.string.customize_button_on_home), settings.homeCustomizeButton, changed = buttonChanged) { prefs.setHomeCustomizeButton(it) }
+            SwitchRow(tr(R.string.customize_button_on_home), settings.home.customizeButton, changed = buttonChanged) { prefs.setHomeCustomizeButton(it) }
         }
     }
 
@@ -385,7 +385,7 @@ private fun HeaderPictureRow(changed: Boolean) {
             if (file != null) c.settings.setHomeHeaderPicture(com.prism.music.ui.theme.Backdrop.photoValue(file.absolutePath))
         }
     }
-    val current = com.prism.music.ui.theme.Backdrop.parse(settings.homeHeaderPicture).first
+    val current = com.prism.music.ui.theme.Backdrop.parse(settings.home.headerPicture).first
     val photo = current == com.prism.music.ui.theme.Backdrop.PHOTO
     val designs = com.prism.music.ui.theme.Backdrop.entries.filter {
         (it.group == com.prism.music.ui.theme.BackdropGroup.COLOR || it.group == com.prism.music.ui.theme.BackdropGroup.DESIGNS) &&
@@ -535,7 +535,7 @@ private fun AddSectionSheet(available: List<HomeSectionConfig>, notLoaded: Boole
     val settings = LocalAppSettings.current
     // Sections from your own listening (1.7.6), not on Home yet.
     val rules by androidx.compose.runtime.produceState(emptyList<HomeSectionConfig>()) {
-        value = OwnSections.rules(c).filter { r -> settings.homeLayout.none { it.key == r.key } }
+        value = OwnSections.rules(c).filter { r -> settings.home.layout.none { it.key == r.key } }
     }
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Text(tr(R.string.add_a_section), style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp))
@@ -576,8 +576,8 @@ private fun PinPlaylistsSheet(onDismiss: () -> Unit) {
     val mine = remember(prismLists) { prismLists.map { it.item() } }
     val playlists = remember(library, mine) { mine + library.filterIsInstance<PlaylistItem>().filterNot { l -> mine.any { it.id == l.id } } }
     // Pinned ones first (kept even if they've left the library), then Prism's playlists, then the rest of the library.
-    val pinnedIds = settings.homePlaylists.map { it.id }
-    val pinned = settings.homePlaylists.map { it.id to it.title }
+    val pinnedIds = settings.home.playlists.map { it.id }
+    val pinned = settings.home.playlists.map { it.id to it.title }
     val prismOptions = mine.filter { it.id !in pinnedIds }.map { it.id to it.title }
     val youtubeOptions = playlists.filter { it.id !in pinnedIds && mine.none { m -> m.id == it.id } }.map { it.id to it.title }
     val options = pinned + prismOptions + youtubeOptions
@@ -598,8 +598,8 @@ private fun PinPlaylistsSheet(onDismiss: () -> Unit) {
                 val on = id in pinnedIds
                 SheetRow(title, checked = on) {
                     c.settings.setHomePlaylists(
-                        if (on) settings.homePlaylists.filterNot { it.id == id }
-                        else settings.homePlaylists + playlists.first { it.id == id }.let { PinnedPlaylist(it.id, it.title, it.thumbnail) }
+                        if (on) settings.home.playlists.filterNot { it.id == id }
+                        else settings.home.playlists + playlists.first { it.id == id }.let { PinnedPlaylist(it.id, it.title, it.thumbnail) }
                     )
                 }
             }
