@@ -527,7 +527,8 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
         // Done button sat under the tab bar on phones, which it measures itself against when it's opened from Settings).
         val onboardingPicker = (route?.startsWith(Routes.PICK_ARTISTS) == true || route?.startsWith(Routes.ACCOUNT) == true) &&
             backStack?.arguments?.getBoolean("onboarding") == true
-        val showChrome = route != Routes.LOGIN && route != Routes.LOGIN_ADD && route != Routes.DISCORD_LOGIN && route != Routes.WELCOME && !onboardingPicker
+        val showChrome = route != Routes.LOGIN && route != Routes.LOGIN_ADD && route != Routes.DISCORD_LOGIN &&
+            route != Routes.SPOTIFY_BEFORE && route != Routes.SPOTIFY_LOGIN && route != Routes.WELCOME && !onboardingPicker
         val tabs = settings.navTabs.map { it.tab(settings.tabNames[it]) }
 
         val together by c.together.state.collectAsState()
@@ -786,6 +787,19 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                         }
                         composable(Routes.DISCORD_LOGIN) {
                             com.prism.music.ui.screens.DiscordLoginScreen(onBack = { navController.popBackStack() })
+                        }
+                        composable(Routes.SPOTIFY_BEFORE) {
+                            com.prism.music.ui.screens.SpotifyBeforeScreen(
+                                onSignIn = { navController.navigate(Routes.SPOTIFY_LOGIN) },
+                                onBack = { navController.popBackStack() },
+                            )
+                        }
+                        composable(Routes.SPOTIFY_LOGIN) {
+                            com.prism.music.ui.screens.SpotifyLoginScreen(
+                                // Signed in: back past "Before you sign in" to where the listener came from.
+                                onDone = { if (!navController.popBackStack(Routes.SPOTIFY_BEFORE, inclusive = true)) navController.popBackStack() },
+                                onBack = { navController.popBackStack() },
+                            )
                         }
                         composable(Routes.LOGIN_ADD) {
                             LoginScreen(

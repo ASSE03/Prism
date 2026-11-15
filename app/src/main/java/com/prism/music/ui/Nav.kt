@@ -34,6 +34,10 @@ object Routes {
     const val LOGIN_ADD = "login_add"
     /** Signs in to Discord for "Listening to Prism" on the listener's profile. */
     const val DISCORD_LOGIN = "discord_login"
+    /** "Before you sign in" to Spotify (1.8.7.5): what the unsanctioned sign-in means, then [SPOTIFY_LOGIN]. */
+    const val SPOTIFY_BEFORE = "spotify_before"
+    /** Spotify's own sign-in page (read-only session). */
+    const val SPOTIFY_LOGIN = "spotify_login"
     const val DOWNLOADS = "downloads"
     const val LOCAL = "local"
     const val MOODS = "moods"

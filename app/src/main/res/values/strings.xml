@@ -4835,6 +4835,20 @@
     <string name="spot_refreshed">Done</string>
     <string name="spot_hide_from_library">Hide from Library</string>
     <string name="spot_keywords">spotify connect sign in web api developer app client id redirect playlists liked songs likes recently played top</string>
+    <!-- 1.8.7.5: Sign in to Spotify (the screen before it, and the sign-in page) -->
+    <string name="spot_signin_before_title">Before you sign in</string>
+    <string name="spot_signin_terms">Spotify doesn\'t offer this way in. It is against Spotify\'s terms.</string>
+    <string name="spot_signin_risk">Spotify could stop it working at any time, or act on your account.</string>
+    <string name="spot_signin_reads_only">Prism only reads your liked songs and playlists. It never changes anything on Spotify.</string>
+    <string name="spot_signin_on_phone">Your sign-in stays on this phone.</string>
+    <string name="spot_signin_other_buttons">Sign in to Spotify with Google, Facebook or Apple? Those buttons don\'t work inside apps. Use the code Spotify emails you, or a password.</string>
+    <string name="spot_signin_title">Sign in to Spotify</string>
+    <string name="spot_signin_connecting">Connecting to Spotify…</string>
+    <string name="spot_signin_failed">Couldn\'t finish signing in</string>
+    <string name="spot_signin_failed_why">Spotify didn\'t let Prism in this time.</string>
+    <string name="spot_signin_unreachable">Couldn\'t reach Spotify</string>
+    <string name="spot_signin_unreachable_why">Check your connection. Some networks, like work or school ones, block Spotify.</string>
+    <string name="spot_signin_http">Spotify answered %1$d</string>
     <!-- 1.8.1: repeat imports and the fresh-download reminder -->
     <plurals name="imp_new_plays_since">
         <item quantity="one">%1$s new play since your last import (%2$s)</item>
