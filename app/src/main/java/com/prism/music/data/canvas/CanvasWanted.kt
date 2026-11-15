@@ -1,6 +1,7 @@
 package com.prism.music.data.canvas
 
 import com.prism.music.data.prefs.AppSettings
+import kotlinx.coroutines.async
 
 /**
  * Whether a song's Canvas loop from its music video is wanted (1.8.6, plan-canvas §3.1, §3.7, §11a R1), in one place, so
@@ -47,6 +48,38 @@ fun canvasWant(
     }
     if (notAsked != null) return CanvasWant(false, 0, false, notAsked)
     return CanvasWant(true, canvasHeight(settings), canvasNetworkAllowed(settings, metered), null)
+}
+
+/**
+ * Whether the loop from the song's music video is the picture whatever its animated cover (1.8.7): the video comes
+ * first (the setting, or "Use:" for this song). Then nothing about the cover changes the answer, and the player asks for
+ * the loop at once instead of after the cover's lookup ([showCanvas]).
+ */
+fun canvasLoopFirst(settings: AppSettings, metered: Boolean, songChoice: CanvasSource?, hidden: Boolean, isSong: Boolean): Boolean =
+    canvasWant(settings, metered, hasCover = true, songChoice = songChoice, hidden = hidden, isSong = isSong).video
+
+/**
+ * The order a song's picture comes in on the player (1.8.7). [cover] looks the animated cover up (showing one already
+ * known on the way, through the function it is given) and gives what it found; [loop] gives the song's loop from its
+ * music video for whether it has a cover (null: none, or not wanted); [show] puts a picture up.
+ *
+ * Without [loopFirst] the loop waits for the cover's answer, which decides whether it is wanted. With it the loop is
+ * asked for at once, beside the cover's lookup (on the A16 that lookup was two to three seconds of a new song's wait):
+ * the cover shows while the loop comes and stays when there is none, and once the loop is up nothing takes its place.
+ * Runs on one thread (the player's).
+ */
+suspend fun showCanvas(
+    loopFirst: Boolean,
+    cover: suspend (show: (CanvasArtwork?) -> Unit) -> CanvasArtwork?,
+    loop: suspend (hasCover: Boolean) -> CanvasArtwork?,
+    show: (CanvasArtwork?) -> Unit,
+): Unit = kotlinx.coroutines.coroutineScope {
+    var loopUp = false
+    val early = if (loopFirst) async { loop(true)?.also { loopUp = true; show(it) } } else null
+    val coverShows: (CanvasArtwork?) -> Unit = { if (!loopUp) show(it) }
+    val found = cover(coverShows)
+    coverShows(found)
+    if (early != null) early.await() else loop(found != null)?.let(show)
 }
 
 /**

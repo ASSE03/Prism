@@ -568,32 +568,36 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         }
         // Saved clips play from the phone, so mobile data doesn't matter for them.
         val coverAllowed = !(metered && (!settings.behavior.canvas.onCellular || settings.dataSaver)) || c.canvas.isSaved(song)
-        var cover: CanvasArtwork? = null
-        // The animated cover only when it may play ([canvasCoverWanted]: "Animated covers" on, not off for this song).
-        if (coverWanted && coverAllowed) {
-            val known = c.canvas.cached(song)
-            value = known
-            if (known == null) delay(500)
-            cover = c.canvas.canvasFor(song)
-        }
-        value = cover
-        // 1.8.6: a loop from the song's music video, where the song has no animated cover or the listener put the
-        // video first (the setting, or "Use:" for this song). It is only asked for when it is the one that would show:
-        // [canvasWant], the rule the next-song preparation, downloads and diagnostics share.
-        if (canvasPrefs.useVideos) {
-            val choice = c.canvasClips.choice(song.id)
-            val want = com.prism.music.data.canvas.canvasWant(
-                settings, metered, hasCover = cover != null, songChoice = choice,
-                hidden = loopHidden, isSong = com.prism.music.data.canvas.ClipGate.isSong(song),
-            )
-            if (want.video) {
-                val loop = c.canvasClips.artworkFor(song, want.height, saved = c.canvas.isSaved(song), allowed = {
-                    val onData = context.getSystemService(ConnectivityManager::class.java)?.isActiveNetworkMetered == true
-                    com.prism.music.data.canvas.canvasNetworkAllowed(settings, onData)
-                }, run = loopWait)
-                if (loop != null) value = loop
-            } else loopWait?.end("no loop asked (${want.notAsked?.text})")
-        }
+        val isSong = com.prism.music.data.canvas.ClipGate.isSong(song)
+        val choice = if (canvasPrefs.useVideos) c.canvasClips.choice(song.id) else null
+        // 1.8.7: where the video comes first anyway, its loop is asked for beside the cover's lookup, not after it.
+        val loopFirst = canvasPrefs.useVideos && com.prism.music.data.canvas.canvasLoopFirst(settings, metered, choice, loopHidden, isSong)
+        com.prism.music.data.canvas.showCanvas(
+            loopFirst,
+            cover = { early ->
+                // The animated cover only when it may play ([canvasCoverWanted]: "Animated covers" on, not off for this song).
+                if (coverWanted && coverAllowed) {
+                    val known = c.canvas.cached(song)
+                    early(known)
+                    if (known == null) delay(500)
+                    c.canvas.canvasFor(song)
+                } else null
+            },
+            // 1.8.6: a loop from the song's music video, where the song has no animated cover or the listener put the
+            // video first (the setting, or "Use:" for this song). It is only asked for when it is the one that would show:
+            // [canvasWant], the rule the next-song preparation, downloads and diagnostics share.
+            loop = { hasCover ->
+                if (!canvasPrefs.useVideos) null else {
+                    val want = com.prism.music.data.canvas.canvasWant(settings, metered, hasCover = hasCover, songChoice = choice, hidden = loopHidden, isSong = isSong)
+                    if (want.video) c.canvasClips.artworkFor(song, want.height, saved = c.canvas.isSaved(song), allowed = {
+                        val onData = context.getSystemService(ConnectivityManager::class.java)?.isActiveNetworkMetered == true
+                        com.prism.music.data.canvas.canvasNetworkAllowed(settings, onData)
+                    }, run = loopWait)
+                    else { loopWait?.end("no loop asked (${want.notAsked?.text})"); null }
+                }
+            },
+            show = { value = it },
+        )
     }
     // What a song switched off from the ⋯ menu may show is decided above (its cover, its loop, each on its own).
     val canvas = songCanvas.takeIf { !videoMode }
