@@ -35,6 +35,8 @@ sealed interface ClipFetch {
         val bytes: Long,
         val fromNetwork: Boolean,
         val saved: Boolean,
+        /** What a fetch over the network spent its time on ("answer 210 ms, head 150 ms, fragments 442 ms"), for [CanvasTimes]. */
+        val steps: String = "",
     ) : ClipFetch
 
     data class None(val why: Why, val detail: String = "") : ClipFetch
@@ -51,6 +53,30 @@ sealed interface ClipFetch {
         /** The fetch failed (refused twice, cut short, malformed). */
         NETWORK,
     }
+}
+
+/**
+ * The visionOS player answers the finder just had (1.8.7), so the fetch that follows within minutes asks for none again:
+ * one request less (about 0.2 s) before the fragments. It is the same request with the same answer; an answer is taken
+ * once, and only while fresh (its links last hours, it is kept minutes), so a link turned away gets a fresh answer as
+ * before. A handful kept, in memory only.
+ */
+class PlayerAnswers(private val keepMs: Long = 10 * 60_000L, private val clock: () -> Long = System::currentTimeMillis) {
+    private val kept = LinkedHashMap<String, Pair<Long, JsonObject>>()
+
+    @Synchronized fun put(videoId: String, answer: JsonObject) {
+        kept.remove(videoId)
+        kept[videoId] = clock() to answer
+        while (kept.size > MAX) kept.remove(kept.keys.first())
+    }
+
+    /** [videoId]'s answer if one is fresh; it is gone afterwards either way. */
+    @Synchronized fun take(videoId: String): JsonObject? {
+        val (at, answer) = kept.remove(videoId) ?: return null
+        return answer.takeIf { clock() - at in 0..keepMs }
+    }
+
+    private companion object { const val MAX = 8 }
 }
 
 /**
@@ -71,6 +97,8 @@ class ClipFetcher(
     /** The most media one fetch takes, whichever of the two comes first (fragments are dropped from the end). */
     private val capMs: Long = 20_000,
     private val capBytes: Long = 12L shl 20,
+    /** The player answers the finder just had for the same videos (1.8.7): the first try takes its link from one. */
+    private val answers: PlayerAnswers? = null,
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     /** Fetches under way, so the player and the next-song preparation asking for the same loop share one. */
@@ -115,16 +143,22 @@ class ClipFetcher(
 
     private suspend fun network(videoId: String, startMs: Long, endMs: Long, maxHeight: Int, saved: Boolean): ClipFetch {
         var lastError = ""
+        val steps = StringBuilder()
         for (attempt in 0..1) {
-            val answer = try { player(videoId) } catch (e: Exception) {
+            val asked = System.nanoTime()
+            // The finder's answer for this video, if it had one minutes ago; a link turned away gets a fresh one.
+            val known = if (attempt == 0) answers?.take(videoId) else null
+            val answer = known ?: try { player(videoId) } catch (e: Exception) {
                 if (e is kotlinx.coroutines.CancellationException) throw e
                 return ClipFetch.None(ClipFetch.Why.UNPLAYABLE, e.message.orEmpty())
             }
+            if (steps.isNotEmpty()) steps.append(", again: ")
+            steps.append("answer ").append((System.nanoTime() - asked) / 1_000_000).append(" ms").append(if (known != null) " (the finder's)" else "")
             val status = answer.str("playabilityStatus", "status")
             if (status != "OK") return ClipFetch.None(ClipFetch.Why.UNPLAYABLE, status ?: "no status")
             val stream = chooseStream(answer, maxHeight) ?: return ClipFetch.None(ClipFetch.Why.NO_STREAM)
             try {
-                return cut(videoId, stream, startMs, endMs, saved)
+                return cut(videoId, stream, startMs, endMs, saved, steps)
             } catch (e: Refused) {
                 // An expired or turned-away link: once more with a fresh one.
                 lastError = e.message.orEmpty()
@@ -140,9 +174,12 @@ class ClipFetcher(
     private class Refused(message: String) : IOException(message)
     private class OutOfRange(message: String) : IOException(message)
 
-    private fun cut(videoId: String, stream: Stream, startMs: Long, endMs: Long, saved: Boolean): ClipFetch.Got {
+    private fun cut(videoId: String, stream: Stream, startMs: Long, endMs: Long, saved: Boolean, steps: StringBuilder): ClipFetch.Got {
         // The init segment (ftyp + moov) and the index (sidx) sit together at the head: one small request.
+        val asked = System.nanoTime()
         val head = get(stream.url, 0, stream.indexEnd) { it.readByteArray() }
+        val gotHead = System.nanoTime()
+        steps.append(", head ").append((gotHead - asked) / 1_000_000).append(" ms")
         if (head.size.toLong() != stream.indexEnd + 1) throw IOException("Head: ${head.size} bytes, wanted ${stream.indexEnd + 1}")
         val sidx = Fmp4.parseSidx(head, stream.indexStart.toInt())
         val initBytes = head.copyOfRange(0, stream.indexStart.toInt())
@@ -172,11 +209,14 @@ class ClipFetcher(
                     keys += Fmp4.copyFragments(src, out, to - from + 1, init, shift, moved)
                 }
             }
+            val gotFragments = System.nanoTime()
             val startOut = sidx.startMs(frags.first())
             val endOut = sidx.endMs(frags.last())
             val kept = files.keep(tmp, videoId, stream.height, stream.itag, startOut, endOut, pick.capped, saved)
             val keyMs = mergeKeys(keys.map { it * 1000 / init.mediaTimescale }, frags.map(sidx::startMs))
-            return ClipFetch.Got(kept.file, stream.height, stream.itag, startOut, endOut, keyMs, kept.file.length(), fromNetwork = true, saved = saved)
+            steps.append(", fragments ").append((gotFragments - gotHead) / 1_000_000).append(" ms (").append((to - from + 1) / 1024).append(" KB)")
+                .append(", kept ").append((System.nanoTime() - gotFragments) / 1_000_000).append(" ms")
+            return ClipFetch.Got(kept.file, stream.height, stream.itag, startOut, endOut, keyMs, kept.file.length(), fromNetwork = true, saved = saved, steps = steps.toString())
         } finally {
             if (tmp.exists()) tmp.delete()
         }

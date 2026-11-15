@@ -1202,10 +1202,12 @@ class AppContainer(val app: Application) {
         }
     }
     val canvasClips by lazy {
+        // 1.8.7: the player answer the finder had for a video is the one the fetch right after it uses.
+        val answers = com.prism.music.data.canvas.PlayerAnswers()
         com.prism.music.data.canvas.ClipRepository(
             db.canvasClips(),
-            com.prism.music.data.canvas.ClipFinder.create(ytm, innerTube, http),
-            com.prism.music.data.canvas.ClipFetcher(streamHttp, { id -> kotlinx.coroutines.withContext(Dispatchers.IO) { innerTube.visionOsPlayer(id) } }, clipFiles),
+            com.prism.music.data.canvas.ClipFinder.create(ytm, innerTube, http, answers = answers),
+            com.prism.music.data.canvas.ClipFetcher(streamHttp, { id -> kotlinx.coroutines.withContext(Dispatchers.IO) { innerTube.visionOsPlayer(id) } }, clipFiles, answers = answers),
         ).apply { files = clipFiles; refiner = com.prism.music.data.canvas.ClipDecode }
     }
     /** 1.8.6: the next two songs' loops got ready on Wi-Fi, and downloads' kept with them (plan-canvas 4.8). */

@@ -10,6 +10,8 @@ import com.prism.music.data.innertube.str
 import com.prism.music.data.model.Song
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
@@ -57,13 +59,33 @@ class ClipFinder(private val net: Net) {
      * make a loop refuses it (not playable, no stream, a still picture). Marked as picked: a later search keeps it.
      */
     suspend fun forVideo(song: Song, video: String, old: CanvasClipEntity?, height: Int, now: Long = System.currentTimeMillis()): CanvasClipEntity =
-        tryVideo(song, video, old?.copy(picked = false), height, null, now, own = true).row.let { if (it.videoId != null) it.copy(picked = true) else it }
+        tryVideo(net, song, video, old?.copy(picked = false), height, null, now, own = true).row.let { if (it.videoId != null) it.copy(picked = true) else it }
 
     /** A storyboard's frames, and how many bytes its sheets took. */
     class Frames(val grids: List<Grid>, val bytes: Long)
 
-    /** A row, plus what it cost to find (diagnostics). */
-    class Found(val row: CanvasClipEntity, val boardBytes: Long)
+    /** A row, plus what it cost to find (diagnostics): the storyboard's bytes, and what the time went on ([CanvasTimes]). */
+    class Found(val row: CanvasClipEntity, val boardBytes: Long, val steps: String = "")
+
+    /**
+     * The network asked through a clock (1.8.7): how long each kind of request took, added up ("video 310 ms, type 190 ms,
+     * player 220 ms, board 480 ms, heat 260 ms"). Requests made side by side each count their own time.
+     */
+    private class Timed(private val net: Net) : Net by net {
+        private val took = java.util.concurrent.ConcurrentHashMap<String, Long>()
+        private suspend fun <T> time(name: String, ask: suspend () -> T): T {
+            val t = System.nanoTime()
+            try { return ask() } finally { took.merge(name, (System.nanoTime() - t) / 1_000_000, Long::plus) }
+        }
+        override suspend fun findVideo(song: Song) = time("video") { net.findVideo(song) }
+        override suspend fun otherVideos(song: Song, not: Set<String>) = time("others") { net.otherVideos(song, not) }
+        override suspend fun videoType(videoId: String) = time("type") { net.videoType(videoId) }
+        override suspend fun player(videoId: String) = time("player") { net.player(videoId) }
+        override suspend fun frames(board: Storyboard) = time("board") { net.frames(board) }
+        override suspend fun heatmap(videoId: String) = time("heat") { net.heatmap(videoId) }
+        fun steps(): String = ORDER.mapNotNull { k -> took[k]?.let { "$k $it ms" } }.joinToString(", ")
+        companion object { val ORDER = listOf("video", "others", "type", "player", "board", "heat") }
+    }
 
     /**
      * The row for [song]: a loop (unrefined, cut later from the stream [height] lines tall) or the reason there is none.
@@ -74,11 +96,17 @@ class ClipFinder(private val net: Net) {
         findWithCost(song, old, height, chorusMs, now).row
 
     suspend fun findWithCost(song: Song, old: CanvasClipEntity?, height: Int, chorusMs: Long?, now: Long): Found {
+        val timed = Timed(net)
+        val found = findOn(timed, song, old, height, chorusMs, now)
+        return Found(found.row, found.boardBytes, timed.steps())
+    }
+
+    private suspend fun findOn(net: Net, song: Song, old: CanvasClipEntity?, height: Int, chorusMs: Long?, now: Long): Found {
         if (!ClipGate.isSong(song)) return Found(clipRow(song.id, null, NoClip.NOT_A_SONG, old, now), 0)
         val rejected = old?.rejected().orEmpty()
         // A part the listener picked: its video is asked first, so a new search can't take the part away.
         val picked = old?.takeIf { it.picked }?.videoId?.takeIf { it !in rejected && !song.isVideo }
-        val first = picked?.let { tryVideo(song, it, old, height, chorusMs, now, own = true) }
+        val first = picked?.let { tryVideo(net, song, it, old, height, chorusMs, now, own = true) }
         if (first != null && first.row.videoId != null) return first
         val bytes = first?.boardBytes ?: 0L
         val video = if (song.isVideo) song.id else net.findVideo(song)
@@ -86,20 +114,20 @@ class ClipFinder(private val net: Net) {
         if (video in rejected) return Found(clipRow(song.id, null, NoClip.REJECTED, old, now), bytes)
         // The search found the picked part's video again: it was just judged.
         if (first != null && video == picked) return first
-        val tried = tryVideo(song, video, old, height, chorusMs, now)
+        val tried = tryVideo(net, song, video, old, height, chorusMs, now)
         var spent = bytes + tried.boardBytes
         // The video YouTube gave is a lyric video, an audio upload or not official: the real one may be a search away.
         if (tried.row.videoId == null && tried.row.why in SEARCH_AGAIN && !song.isVideo) {
             val others = try { net.otherVideos(song, rejected + video) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (e: Exception) { emptyList() }
             for (other in others.take(OTHER_VIDEOS)) {
-                val next = tryVideo(song, other, old, height, chorusMs, now)
+                val next = tryVideo(net, song, other, old, height, chorusMs, now)
                 spent += next.boardBytes
                 if (next.row.videoId != null) return Found(next.row, spent)
             }
         }
         // No better video: the song's own, whatever it is called (a lyric video, a live take, not marked official).
         if (tried.row.videoId == null && tried.row.why in SEARCH_AGAIN) {
-            val asItIs = tryVideo(song, video, old, height, chorusMs, now, own = true)
+            val asItIs = tryVideo(net, song, video, old, height, chorusMs, now, own = true)
             spent += asItIs.boardBytes
             // Its own reason, when it has one (a still picture, not playable), says more than "its title".
             return Found(asItIs.row, spent)
@@ -108,17 +136,37 @@ class ClipFinder(private val net: Net) {
     }
 
     /** One video through the gate (official, title, playable, not a still) and, if it passes, its window. */
-    private suspend fun tryVideo(song: Song, video: String, old: CanvasClipEntity?, height: Int, chorusMs: Long?, now: Long, own: Boolean = false): Found {
+    private suspend fun tryVideo(net: Net, song: Song, video: String, old: CanvasClipEntity?, height: Int, chorusMs: Long?, now: Long, own: Boolean = false): Found =
+        coroutineScope {
+            // 1.8.7: the questions that need only the video's id are asked side by side, and each answer is looked at in
+            // the same order as before, so the row is the same; a request whose answer isn't needed is let go.
+            val answer = async { try { Result.success(net.player(video)) } catch (e: CancellationException) { throw e } catch (e: Exception) { Result.failure(e) } }
+            var heat: kotlinx.coroutines.Deferred<Heatmap?>? = null
+            try {
+                tryVideoWith(net, song, video, old, height, chorusMs, now, own, { answer.await().getOrThrow() }) { _ ->
+                    async { try { net.heatmap(video) } catch (e: CancellationException) { throw e } catch (e: Exception) { null } }.also { heat = it }
+                }
+            } finally {
+                answer.cancel(); heat?.cancel()
+            }
+        }
+
+    private suspend fun tryVideoWith(
+        net: Net, song: Song, video: String, old: CanvasClipEntity?, height: Int, chorusMs: Long?, now: Long, own: Boolean,
+        player: suspend () -> PlayerInfo, heatFor: (Storyboard) -> kotlinx.coroutines.Deferred<Heatmap?>,
+    ): Found {
         fun no(why: NoClip, type: String?, bytes: Long = 0) = Found(clipRow(song.id, null, why, old, now, videoType = type), bytes)
         val type = net.videoType(video)?.removePrefix(TYPE_PREFIX)
         // [own]: the song's own video, with no better one found: its type and title are not held against it (owner,
         // 2026-11-13: "if a song has a video, Canvas should be allowed. This should be a universal rule"). What is left
         // is what can't make a loop at all: not playable, no stream, a still picture; and later, on its frames, flashing.
         if (!own && type != OFFICIAL) return no(NoClip.NOT_OFFICIAL, type)
-        val info = net.player(video)
+        val info = player()
         if (!own && ClipGate.titleSays(song.title, info.title)) return no(NoClip.TITLE, type)
         if (!info.playable) return no(NoClip.RESTRICTED, type)
         val board = Storyboard.parse(info.storyboardSpec, info.lengthMs)
+        // The "most replayed" curve comes beside the storyboard's sheets; it is only used for a video that moves.
+        val heat = board?.let(heatFor)
         val frames = board?.let { net.frames(it) }
         val bytes = frames?.bytes ?: 0
         val length = maxOf(info.lengthMs, if (board != null && frames != null) frames.grids.size * board.intervalMs else 0)
@@ -132,8 +180,7 @@ class ClipFinder(private val net: Net) {
             // The still check first: a still upload needs no "most replayed" curve.
             if (FrameJudge.isStill(frames.grids, bars)) return no(NoClip.STILL, type, bytes)
             // Without the curve the chorus or the middle decides: not worth failing the whole find over.
-            val heat = try { net.heatmap(video) } catch (e: CancellationException) { throw e } catch (e: Exception) { null }
-            val peak = heat?.let { BestPart.peakMs(it, length) }
+            val peak = heat?.await()?.let { BestPart.peakMs(it, length) }
             FrameJudge.judge(frames.grids, board.intervalMs, length, peak, chorusMs)
         }
         if (verdict !is FrameJudge.Verdict.Loop) return no(NoClip.STILL, type, bytes)
@@ -159,7 +206,11 @@ class ClipFinder(private val net: Net) {
         private const val MAX_BOARD_BYTES = 2L * 1024 * 1024
 
         /** The finder on the real network: YouTube Music for the video, its type and curve, the visionOS player for the rest. */
-        fun create(ytm: YouTubeMusic, api: InnerTube, http: OkHttpClient, decoder: SheetDecoder = BitmapSheetDecoder): ClipFinder =
+        fun create(
+            ytm: YouTubeMusic, api: InnerTube, http: OkHttpClient, decoder: SheetDecoder = BitmapSheetDecoder,
+            /** Each player answer is kept here for the fetch that follows ([ClipFetcher] asks for none again). */
+            answers: PlayerAnswers? = null,
+        ): ClipFinder =
             ClipFinder(object : Net {
                 override suspend fun findVideo(song: Song) = ytm.findMusicVideo(song)
                 override suspend fun otherVideos(song: Song, not: Set<String>) = ytm.otherMusicVideos(song, not) { ClipGate.titleSays(song.title, it) }
@@ -169,7 +220,9 @@ class ClipFinder(private val net: Net) {
                 override suspend fun videoType(videoId: String) =
                     api.post("player", buildJsonObject { put("videoId", videoId) }).str("videoDetails", "musicVideoType")
 
-                override suspend fun player(videoId: String) = withContext(Dispatchers.IO) { PlayerInfo.parse(api.visionOsPlayer(videoId)) }
+                override suspend fun player(videoId: String) = withContext(Dispatchers.IO) {
+                    PlayerInfo.parse(api.visionOsPlayer(videoId).also { answers?.put(videoId, it) })
+                }
 
                 override suspend fun frames(board: Storyboard) = fetchFrames(http, board, decoder)
 

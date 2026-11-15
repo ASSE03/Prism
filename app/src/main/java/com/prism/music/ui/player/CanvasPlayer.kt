@@ -125,7 +125,11 @@ fun CanvasPlayer(
             }
 
             // Only the clip that is loaded now counts (a late word about the one before it is not this one's first frame).
-            override fun onRenderedFirstFrame() { if (CanvasPlayers.playing(player, clip.url)) restart.firstFrameOut() }
+            override fun onRenderedFirstFrame() {
+                if (!CanvasPlayers.playing(player, clip.url)) return
+                restart.firstFrameOut()
+                c.canvasClips.times.step(clip.url, "ready")
+            }
         }
         player.addListener(listener)
         onDispose { player.removeListener(listener) }
@@ -166,6 +170,8 @@ fun CanvasPlayer(
                     .build()
             )
         }
+        // 1.8.7: the loop's wait ([com.prism.music.data.canvas.CanvasTimes]): handed to its player now.
+        c.canvasClips.times.step(url, "handed")
         player.setMediaItem(item.build())
         player.prepare()
         watchTheEnd()
@@ -224,7 +230,7 @@ fun CanvasPlayer(
                     }
                     override fun onSurfaceTextureUpdated(s: SurfaceTexture) {
                         delegate?.onSurfaceTextureUpdated(s)
-                        if (clip.frame()) { place(this@apply); CanvasStats.showing = clip.url }
+                        if (clip.frame()) { place(this@apply); c.canvasClips.times.shown(clip.url); CanvasStats.showing = clip.url }
                         // A loop of several scenes: each has its own crop, changed on the cut.
                         else if (clip.canvas.clip?.crops?.isNotEmpty() == true) place(this@apply)
                         CanvasStats.frames++
