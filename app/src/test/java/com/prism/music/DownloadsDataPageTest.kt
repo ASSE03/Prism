@@ -235,7 +235,7 @@ class DownloadsDataPageTest : ListeningPageHarness(SettingsPageId.DOWNLOADS_DATA
         chip(useFor, MobileUse.SMART_DOWNLOADS.label)
         until("smart_downloads_cellular") { it.smartDownloadsCellular }
         chip(useFor, MobileUse.LYRICS.label)
-        until("lyrics_on_mobile_data") { !it.lyricsOnMobileData }
+        until("lyrics_on_mobile_data") { !it.lyrics.onMobileData }
         chip(useFor, MobileUse.ANIMATED_COVERS.label)
         until("canvas_on_cellular") { !it.behavior.canvas.onCellular }
         chip(useFor, MobileUse.MEASURING.label)

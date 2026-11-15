@@ -144,7 +144,7 @@ class Uploads(private val c: AppContainer) {
         prefs.edit().putBoolean("has:$account", any).apply()
         if (!any || prefs.getBoolean("tile_added", false)) return
         prefs.edit().putBoolean("tile_added", true).apply()
-        c.settings.setLibraryTiles(LibraryTile.withUploads(c.settings.current.libraryTiles))
+        c.settings.setLibraryTiles(LibraryTile.withUploads(c.settings.current.library.tiles))
     }
 
     /** Rows came but none could be read: YouTube's answer isn't the shape Prism was written from. */

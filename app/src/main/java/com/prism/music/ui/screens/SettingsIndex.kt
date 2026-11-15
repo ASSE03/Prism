@@ -61,7 +61,7 @@ object SettingNeeds {
     val notLossless = Needs(tr(R.string.lossless_playback_always_plays_the_best)) { !it.lossless }
     val saver = turnOn(tr(R.string.lossless_playback_and_data_saver)) { it.lossless && it.dataSaver }
     val measuring = turnOn(tr(R.string.normalize_volume_or_crossfade_songs)) { it.normalize || it.mix.on }
-    val translate = turnOn(tr(R.string.translate_lyrics)) { it.lyricsTranslate }
+    val translate = turnOn(tr(R.string.translate_lyrics)) { it.lyrics.translate }
     val romanize = Needs(tr(R.string.pick_a_romanize_lyrics_option_first)) { it.romanize != com.prism.music.data.prefs.RomanizeMode.OFF }
     val smart = turnOn(tr(R.string.smart_downloads)) { it.smartDownloads }
     val webRemote = turnOn(tr(R.string.control_from_a_browser)) { it.webRemote }

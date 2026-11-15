@@ -95,11 +95,11 @@ internal class LockPlayerLook(val ground: @Composable () -> Unit, val bar: LockB
 internal fun rememberLockPlayerLook(s: AppSettings, art: String?, hidden: Boolean, wave: FloatArray? = null): LockPlayerLook? {
     if (!s.view.lockScreenPlayerLook) return null
     val cover = art.takeUnless { hidden }
-    val bg = s.playerBackground
+    val bg = s.player.background
     // Only the one that's up is worked out, as on the player.
     val mesh = rememberArtworkMesh(cover.takeIf { bg == PlayerBackground.MESH || bg == PlayerBackground.WHITE })
     val gradient = rememberCoverGradient(cover.takeIf { bg == PlayerBackground.GRADIENT })
-    val blur = rememberFullArtworkBlur(cover.takeIf { bg == PlayerBackground.BLUR || (bg == PlayerBackground.APPEARANCE && appearanceFromCover(s)) }, s.playerBlur)
+    val blur = rememberFullArtworkBlur(cover.takeIf { bg == PlayerBackground.BLUR || (bg == PlayerBackground.APPEARANCE && appearanceFromCover(s)) }, s.player.blur)
     val fill = scrubberFill(s.scrubberColor, cover)
     return LockPlayerLook(
         ground = { LockPlayerGround(s, mesh, blur, gradient, hidden) },
@@ -113,12 +113,12 @@ internal fun rememberLockPlayerLook(s: AppSettings, art: String?, hidden: Boolea
  */
 @Composable
 internal fun LockPlayerGround(s: AppSettings, mesh: ArtworkMesh?, blur: ImageBitmap?, gradient: CoverGradient?, hidden: Boolean = false) {
-    val show = s.playerBackdropShow
+    val show = s.player.backdropShow
     // Clipped: the blurred cover and the drawn backgrounds reach a little past their edges.
     Box(Modifier.fillMaxSize().clipToBounds().background(Color.Black)) {
-        when (s.playerBackground) {
+        when (s.player.background) {
             PlayerBackground.MESH, PlayerBackground.WHITE ->
-                if (!hidden) ArtworkMeshBackdrop(mesh, speed = 0f, intensity = s.meshIntensity, blur = s.playerBlur, liveBlur = false)
+                if (!hidden) ArtworkMeshBackdrop(mesh, speed = 0f, intensity = s.meshIntensity, blur = s.player.blur, liveBlur = false)
             PlayerBackground.BLUR -> if (!hidden) {
                 FullArtworkBlurBackdrop(blur, scrim = 1.3f - 0.95f * show.coerceAtLeast(0f))
                 Blackout(show)

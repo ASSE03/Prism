@@ -248,7 +248,7 @@ class PlayerPageTest {
         // Canvas (its loops) on and Full screen, with Animated covers: every row of its sheet.
         prefs.setCanvasFillsBackground(true); prefs.setCanvasKinds(covers = true, videos = true)
         until("the conditions are stored") {
-            it.mix.on && it.behavior.lockScreen && it.immersivePlayer && it.fullBleedArtwork && it.shows(PlayerPart.VOLUME) && it.playerLayout == PlayerLayout.VINYL &&
+            it.mix.on && it.behavior.lockScreen && it.immersivePlayer && it.fullBleedArtwork && it.shows(PlayerPart.VOLUME) && it.player.layout == PlayerLayout.VINYL &&
                 it.behavior.canvas.fillsBackground && it.behavior.canvas.useVideos
         }
         showPage()
@@ -256,7 +256,7 @@ class PlayerPageTest {
         // What the picked background is tuned by takes one place: each background in turn.
         for (bg in listOf(PlayerBackground.MESH, PlayerBackground.GRADIENT, PlayerBackground.BLUR, PlayerBackground.APPEARANCE)) {
             prefs.setPlayerBackground(bg)
-            until("$bg") { it.playerBackground == bg }
+            until("$bg") { it.player.background == bg }
             onPage += rows().keys
         }
         assertTrue("Which background" in onPage)
@@ -471,7 +471,7 @@ class PlayerPageTest {
         assertEquals("Off", rows().getValue("Canvas").config[SettingsRowValue])
     }
 
-    private val CanvasPrefsAll = com.prism.music.data.prefs.CanvasPrefs(useVideos = true, videoFirst = true, keepControls = true, lighter = true, videosOnCellular = true)
+    private val CanvasPrefsAll = com.prism.music.data.prefs.CanvasPrefs(useVideos = true, videoFirst = true, keepControls = true, lighter = true, videosOnCellular = true, fillsBackground = true)
 
     @Test fun theCanvasRowSaysWhereItShows() {
         prefs.setCanvasFillsBackground(true); prefs.setCanvasUseVideos(true)

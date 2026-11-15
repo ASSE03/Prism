@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.prism.music.data.prefs.AppSettings
+import com.prism.music.data.prefs.PlayerPrefs
 import com.prism.music.data.prefs.FontChoice
 import com.prism.music.data.prefs.PlayerTitleSize
 import com.prism.music.ui.player.PlayerMarquee
@@ -125,7 +126,7 @@ class PlayerTitleFitTest {
     }
 
     @Test fun aTallFontInLargeTitlesKeepsTheArtistWhole() {
-        show(prismTypography(AppFonts.family(FontChoice.DYSLEXIC)), AppSettings(playerTitleSize = PlayerTitleSize.LARGE))
+        show(prismTypography(AppFonts.family(FontChoice.DYSLEXIC)), AppSettings(player = PlayerPrefs(titleSize = PlayerTitleSize.LARGE)))
         save("tall-font-large-title")
         assertWhole("tall font, Large title")
     }
@@ -137,7 +138,7 @@ class PlayerTitleFitTest {
     }
 
     @Test fun classicTypeWithLargerTextKeepsTheArtistWhole() {
-        show(classicTypography(AppFonts.prism), AppSettings(playerTitleSize = PlayerTitleSize.LARGE), fontScale = 1.15f)
+        show(classicTypography(AppFonts.prism), AppSettings(player = PlayerPrefs(titleSize = PlayerTitleSize.LARGE)), fontScale = 1.15f)
         save("classic-large-title-text-115")
         assertWhole("Classic type, Large title, 115 %")
     }
@@ -149,7 +150,7 @@ class PlayerTitleFitTest {
         assertWhole("Outfit")
         assertEquals(60f, show(prismTypography(AppFonts.family(FontChoice.SYSTEM))).value, 0.01f)
         assertEquals(60f, show(classicTypography(AppFonts.prism)).value, 0.01f)
-        assertEquals(60f, show(prismTypography(AppFonts.prism), AppSettings(playerTitleSize = PlayerTitleSize.SMALL)).value, 0.01f)
-        assertEquals(60f, show(prismTypography(AppFonts.prism), AppSettings(playerTitleSize = PlayerTitleSize.LARGE)).value, 0.01f)
+        assertEquals(60f, show(prismTypography(AppFonts.prism), AppSettings(player = PlayerPrefs(titleSize = PlayerTitleSize.SMALL))).value, 0.01f)
+        assertEquals(60f, show(prismTypography(AppFonts.prism), AppSettings(player = PlayerPrefs(titleSize = PlayerTitleSize.LARGE))).value, 0.01f)
     }
 }

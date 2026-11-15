@@ -106,7 +106,7 @@ internal data class MobileDataStored(
 ) {
     companion object {
         fun of(s: AppSettings) = MobileDataStored(
-            s.behavior.noVideoOnData, s.preloadCellular, s.smartDownloadsCellular, s.lyricsOnMobileData,
+            s.behavior.noVideoOnData, s.preloadCellular, s.smartDownloadsCellular, s.lyrics.onMobileData,
             s.behavior.canvas.onCellular, s.behavior.canvas.withDownloadsCellular, s.mix.tempoOnCellular, s.singOnCellular,
         )
     }

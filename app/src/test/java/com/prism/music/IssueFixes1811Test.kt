@@ -2,6 +2,7 @@ package com.prism.music
 
 import androidx.compose.ui.unit.dp
 import com.prism.music.data.prefs.AppSettings
+import com.prism.music.data.prefs.PlayerPrefs
 import com.prism.music.data.prefs.BehaviorPrefs
 import com.prism.music.data.prefs.DeckPart
 import com.prism.music.data.prefs.MenuAction
@@ -33,7 +34,7 @@ class IssueFixes1811Test {
     // ------------------------------------------------------------------ #345 "Show lyrics" in the ⋯ menu
 
     /** The Lyrics button off the player's row: the menu has "Show lyrics" (as in 1.8.0). */
-    private val noLyricsButton = AppSettings(playerButtons = PlayerButton.DEFAULT.filter { it != PlayerButton.LYRICS })
+    private val noLyricsButton = AppSettings(player = PlayerPrefs(buttons = PlayerButton.DEFAULT.filter { it != PlayerButton.LYRICS }))
 
     @Test fun showLyricsFoldsAwayWhenTheLyricsOpenAnotherWay() {
         val d = noLyricsButton
@@ -51,7 +52,7 @@ class IssueFixes1811Test {
     }
 
     @Test fun showLyricsStaysWhileItsTheOnlyWayToTheLyrics() {
-        val noStrip = noLyricsButton.copy(lyricsOnPlayer = false)
+        val noStrip = noLyricsButton.copy(lyrics = noLyricsButton.lyrics.copy(onPlayer = false))
         assertTrue("nothing else opens the lyrics", noStrip.menuFolds().isEmpty())
         val hidden = PlayerParts(menuHidden = setOf(MenuAction.OPEN_LYRICS, MenuAction.STATS))
         val l = hidden.menuLayout(listOf(MenuAction.OPEN_LYRICS, MenuAction.STATS), noStrip.menuFolds())

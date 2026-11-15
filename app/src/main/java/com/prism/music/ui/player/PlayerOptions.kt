@@ -1,6 +1,7 @@
 package com.prism.music.ui.player
 
 import com.prism.music.R
+import com.prism.music.data.prefs.CanvasPrefs
 import com.prism.music.tr
 import com.prism.music.ui.theme.PrismIcons
 import androidx.compose.foundation.layout.Column
@@ -189,7 +190,7 @@ fun PlayerOptionsSheet(
     }
 
     val settings = c.settings.flow.collectAsState().value
-    val translating = settings.lyricsTranslate
+    val translating = settings.lyrics.translate
     // Says which language, so turning it on for a song already in it explains itself.
     val translateInto = translateTargetName(settings)
     val singOn = c.sing.on.collectAsState().value

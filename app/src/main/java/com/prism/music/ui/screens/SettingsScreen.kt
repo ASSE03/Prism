@@ -129,7 +129,7 @@ enum class SettingsSection(val key: String, val title: String, val icon: ImageVe
         INTERFACE -> listOf(tr(R.string.nav_bar_x, s.navStyle.label), com.prism.music.trp(R.plurals.n_tabs, s.navTabs.size), tr(R.string.mini_player_x, s.miniPlayerStyle.label)).joinToString(" · ")
         PLAYER -> com.prism.music.ui.screens.settings.playerValue(s, dark)
         SOUND -> listOfNotNull(if (s.lossless) tr(R.string.lossless) else tr(R.string.audio_quality_x, s.audioQuality.label), if (s.mix.on) tr(R.string.crossfade) else null, if (s.normalize) tr(R.string.normalized) else null, if (s.spatial) tr(R.string.prism_spatial) else null, if (s.eq.enabled) "EQ ${com.prism.music.playback.EqPresets.label(s.eq.preset)}" else null).joinToString(" · ")
-        LYRICS -> listOfNotNull(tr(R.string.first, s.lyricsSources.first().label), if (s.lyricsTranslate) tr(R.string.translated) else null, tr(R.string.sing)).joinToString(" · ")
+        LYRICS -> listOfNotNull(tr(R.string.first, s.lyricsSources.first().label), if (s.lyrics.translate) tr(R.string.translated) else null, tr(R.string.sing)).joinToString(" · ")
         LYRICS_LOOK -> tr(R.string.style_2, s.lyricsStyle.label, s.lyricsPosition.label)
         CONTROLS -> tr(R.string.swipes_and_taps_on_the_player)
         // Smart Downloads named only while it's on (a new install has it off: "5 GB" read as if it were on).
@@ -502,7 +502,7 @@ private fun CustomizeSheetContent(target: com.prism.music.ui.components.Customiz
         com.prism.music.ui.components.CustomizeTarget.PLAYER -> SettingsSection.PLAYER
         com.prism.music.ui.components.CustomizeTarget.HOME_SECTION -> SettingsSection.HOME
     }
-    val section = key?.let { k -> s.homeLayout.firstOrNull { it.key == k } }
+    val section = key?.let { k -> s.home.layout.firstOrNull { it.key == k } }
     com.prism.music.ui.components.ActionSheet(null, onDismiss) { close ->
         Text(
             section?.titled() ?: target.title, Modifier.padding(start = 24.dp, end = 24.dp, bottom = 12.dp),
@@ -529,7 +529,7 @@ private fun CustomizeSheetContent(target: com.prism.music.ui.components.Customiz
                         // As Customize Home's menu: a style shows the section in it, so a pin drawn as one tile stops being one.
                         val tiled = section.tile && OwnSections.canTile(section.key)
                         val restyle: (com.prism.music.data.prefs.SectionStyle) -> Unit = { st ->
-                            c.settings.setHomeLayout(s.homeLayout.map { if (it.key == section.key) it.copy(style = st, visible = true, tile = false) else it })
+                            c.settings.setHomeLayout(s.home.layout.map { if (it.key == section.key) it.copy(style = st, visible = true, tile = false) else it })
                         }
                         // Five styles: a pick with its list (chips are for two to four short words).
                         PickListRow(
@@ -538,7 +538,7 @@ private fun CustomizeSheetContent(target: com.prism.music.ui.components.Customiz
                             onRepick = if (tiled) ({ restyle(section.style) }) else null, onPick = restyle,
                         )
                         LinkRow(tr(R.string.hide_this_section), value = tr(R.string.bring_it_back_from_customize_home), action = true) {
-                            c.settings.setHomeLayout(s.homeLayout.map { if (it.key == section.key) it.copy(visible = false) else it })
+                            c.settings.setHomeLayout(s.home.layout.map { if (it.key == section.key) it.copy(visible = false) else it })
                             close {}
                         }
                     }

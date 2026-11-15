@@ -182,7 +182,7 @@ internal fun RowButtons() {
     val s = LocalAppSettings.current
     val c = LocalContainer.current
     val prefs = c.settings
-    val chosen = s.playerButtons
+    val chosen = s.player.buttons
     // The Video button also needs the music video on (the old "Song / Video" switch: off, audio only).
     fun on(b: PlayerButton) = b != PlayerButton.VIDEO || s.showVideoSwitch
     Label(tr(R.string.buttons_in_the_row), info = tr(R.string.pick_to_for_the_row_under, PlayerButton.MIN, PlayerButton.MAX))
@@ -279,7 +279,7 @@ fun PlayerPartsPreview(s: com.prism.music.data.prefs.AppSettings, modifier: Modi
                     Spot(PlayerPart.LIKE) { Icon(PrismIcons.Heart, null, Modifier.padding(4.dp).size(18.dp), tint = Color.White) }
                     Spot(PlayerPart.MENU) { Icon(PrismIcons.More, null, Modifier.padding(4.dp).size(18.dp), tint = Color.White) }
                 }
-                s.playerDeck.forEach { deck ->
+                s.player.deck.forEach { deck ->
                     Spacer(Modifier.height(6.dp))
                     when (deck) {
                         DeckPart.STRIP -> Spot(PlayerPart.LYRIC_LINE, Modifier.fillMaxWidth()) {
@@ -342,7 +342,7 @@ fun PlayerPartsPreview(s: com.prism.music.data.prefs.AppSettings, modifier: Modi
                                 if (pill) Modifier.clip(CircleShape).background(Color.White.copy(alpha = 0.10f)).border(1.dp, Color.White.copy(alpha = 0.16f), CircleShape).padding(horizontal = 10.dp, vertical = 5.dp)
                                 else Modifier.padding(vertical = 4.dp),
                                 horizontalArrangement = Arrangement.spacedBy(if (pill) 10.dp else 18.dp), verticalAlignment = Alignment.CenterVertically,
-                            ) { s.playerButtons.filter { it != PlayerButton.VIDEO || s.showVideoSwitch }.forEach { Icon(buttonIcon(it), null, Modifier.size(16.dp), tint = Ink) } }
+                            ) { s.player.buttons.filter { it != PlayerButton.VIDEO || s.showVideoSwitch }.forEach { Icon(buttonIcon(it), null, Modifier.size(16.dp), tint = Ink) } }
                         }
                     }
                 }
@@ -662,7 +662,7 @@ internal fun PlayerBackgroundSample(bg: com.prism.music.data.prefs.PlayerBackgro
                 else com.prism.music.ui.player.ArtworkMeshBackdrop(com.prism.music.ui.player.rememberArtworkMesh(art), intensity = s.meshIntensity, liveBlur = false)
             com.prism.music.data.prefs.PlayerBackground.BLUR ->
                 if (art == null) Box(Modifier.fillMaxSize().background(standIn).background(Color.Black.copy(alpha = 0.5f)))
-                else com.prism.music.ui.player.FullArtworkBlurBackdrop(com.prism.music.ui.player.rememberFullArtworkBlur(art, s.playerBlur))
+                else com.prism.music.ui.player.FullArtworkBlurBackdrop(com.prism.music.ui.player.rememberFullArtworkBlur(art, s.player.blur))
             com.prism.music.data.prefs.PlayerBackground.APPEARANCE -> {
                 val (style, photo) = com.prism.music.ui.theme.Backdrop.parse(
                     s.backdrops[com.prism.music.ui.theme.PLAYER_BACKDROP] ?: s.backdrops[com.prism.music.ui.theme.BackdropScreen.HOME.name],

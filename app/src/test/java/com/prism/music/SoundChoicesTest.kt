@@ -103,7 +103,7 @@ class SoundChoicesTest {
     }
 
     @Test fun homeTopButtonsFollowBothSwitches() {
-        fun s(p: Boolean, cz: Boolean) = base.copy(homePodcastsButton = p, homeCustomizeTopButton = cz)
+        fun s(p: Boolean, cz: Boolean) = base.copy(home = base.home.copy(podcastsButton = p, customizeTopButton = cz))
         assertEquals(com.prism.music.ui.screens.TopButtons.BOTH, com.prism.music.ui.screens.HomeChoices.topButtons(s(true, true)))
         assertEquals(com.prism.music.ui.screens.TopButtons.PODCASTS, com.prism.music.ui.screens.HomeChoices.topButtons(s(true, false)))
         assertEquals(com.prism.music.ui.screens.TopButtons.CUSTOMIZE, com.prism.music.ui.screens.HomeChoices.topButtons(s(false, true)))

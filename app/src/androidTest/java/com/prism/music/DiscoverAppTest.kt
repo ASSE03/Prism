@@ -243,8 +243,8 @@ class DiscoverAppTest {
 
     private fun onHome(key: String, title: String) {
         val s = c.settings
-        s.setHomeLayout(listOf(HomeSectionConfig(key, title)) + s.current.homeLayout)
-        compose.waitUntil(5_000) { s.current.homeLayout.first().key == key }
+        s.setHomeLayout(listOf(HomeSectionConfig(key, title)) + s.current.home.layout)
+        compose.waitUntil(5_000) { s.current.home.layout.first().key == key }
     }
 
     private fun played(s: Song, day: LocalDate) = runBlocking {
@@ -257,7 +257,7 @@ class DiscoverAppTest {
 
     @Test fun aHomeFromBeforeHasNoneOfThem() {
         Fixture.ready()
-        val keys = c.settings.current.homeLayout.map { it.key }
+        val keys = c.settings.current.home.layout.map { it.key }
         assertTrue(keys.none { it in listOf(HomeSections.NEW_TO_YOU, HomeSections.DEEP_CUTS, HomeSections.ON_THIS_DAY) })
     }
 
@@ -277,7 +277,7 @@ class DiscoverAppTest {
         compose.waitForText(tr(R.string.section_deep_cuts))
         scrolledTo(tr(R.string.section_on_this_day))
         compose.clickWhenFound(hasText(tr(R.string.section_on_this_day)) and hasClickAction())
-        compose.waitUntil(5_000) { c.settings.current.homeLayout.any { it.key == HomeSections.ON_THIS_DAY && it.visible } }
+        compose.waitUntil(5_000) { c.settings.current.home.layout.any { it.key == HomeSections.ON_THIS_DAY && it.visible } }
     }
 
     @Test fun onThisDayShowsAYearAgoToday() {

@@ -297,13 +297,13 @@ internal val playerSettings: List<PlayerSetting<*>> by lazy {
         ps(keys, group, row, get, ::onOff, sheet, set)
     listOf(
         // Layout
-        ps(listOf("player_layout"), g.layout, R.string.layout, { it.playerLayout }, { it.label }) { p, v -> p.setPlayerLayout(v) },
+        ps(listOf("player_layout"), g.layout, R.string.layout, { it.player.layout }, { it.label }) { p, v -> p.setPlayerLayout(v) },
         flag(listOf("vinyl_tonearm"), g.layout, R.string.tonearm, { it.vinylTonearm }) { p, v -> p.setVinylTonearm(v) },
-        ps(listOf("player_background"), g.layout, R.string.background, { it.playerBackground }, { it.label }) { p, v -> p.setPlayerBackground(v) },
-        ps(listOf("player_backdrop_show"), g.layout, R.string.show_background, { it.playerBackdropShow }, { backdropShowWords(com.prism.music.ui.player.backdropShowOnSlider(it)) }) { p, v -> p.setPlayerBackdropShow(v) },
+        ps(listOf("player_background"), g.layout, R.string.background, { it.player.background }, { it.label }) { p, v -> p.setPlayerBackground(v) },
+        ps(listOf("player_backdrop_show"), g.layout, R.string.show_background, { it.player.backdropShow }, { backdropShowWords(com.prism.music.ui.player.backdropShowOnSlider(it)) }) { p, v -> p.setPlayerBackdropShow(v) },
         ps(listOf("player_gradient_depth"), g.layout, R.string.gradient_depth, { it.view.gradientDepth }, ::percent) { p, v -> p.setGradientDepth(v) },
         ps(listOf("mesh_speed", "mesh_intensity"), g.layout, R.string.background_movement, { it.meshSpeed to it.meshIntensity }, { movementWords(it.first) }) { p, v -> p.setMeshSpeed(v.first); p.setMeshIntensity(v.second) },
-        ps(listOf("player_blur"), g.layout, R.string.softness, { it.playerBlur }, ::percent) { p, v -> p.setPlayerBlur(v) },
+        ps(listOf("player_blur"), g.layout, R.string.softness, { it.player.blur }, ::percent) { p, v -> p.setPlayerBlur(v) },
         ps(listOf("transport_style"), g.layout, R.string.controls, { it.transportStyle }, { it.label }) { p, v -> p.setTransportStyle(v) },
         flag(listOf("play_ring"), g.layout, R.string.ring_on_the_play_button, { it.view.playRing }) { p, v -> p.setPlayRing(v) },
         ps(listOf("player_buttons_pill"), g.layout, R.string.buttons, { it.view.buttonsPill }, { if (it) tr(R.string.in_a_capsule) else tr(R.string.apart) }) { p, v -> p.setButtonsPill(v) },
@@ -317,18 +317,18 @@ internal val playerSettings: List<PlayerSetting<*>> by lazy {
         ps(listOf("scrubber_thickness"), g.progress, R.string.progress_bar_thickness, { it.scrubberThickness }, ::thicknessWords) { p, v -> p.setScrubberThickness(v) },
         ps(listOf("scrubber_thumb"), g.progress, R.string.knob_at_the_playhead, { it.scrubberThumb }, { it.label }) { p, v -> p.setScrubberThumb(v) },
         flag(listOf("volume_matches_progress"), g.progress, R.string.volume_bar_like_the_progress_bar, { it.volumeMatchesProgress }) { p, v -> p.setVolumeMatchesProgress(v) },
-        ps(listOf("player_times"), g.progress, R.string.times, { it.playerTimes }, { it.label }) { p, v -> p.setPlayerTimes(v) },
+        ps(listOf("player_times"), g.progress, R.string.times, { it.player.times }, { it.label }) { p, v -> p.setPlayerTimes(v) },
         ps(listOf("show_track_length"), g.progress, R.string.settings_player_right_hand_time, { it.showTrackLength }, { if (it) tr(R.string.song_length) else tr(R.string.time_left) }) { p, v -> p.setShowTrackLength(v) },
         flag(listOf("crossfade_shape"), g.progress, R.string.crossfade_on_the_progress_bar, { it.view.crossfadeShape }) { p, v -> p.setCrossfadeShape(v) },
         // Title
-        ps(listOf("player_title_align"), g.title, R.string.alignment, { it.playerTitleAlign }, { it.label }) { p, v -> p.setPlayerTitleAlign(v) },
-        ps(listOf("player_title_size"), g.title, R.string.size, { it.playerTitleSize }, { it.label }) { p, v -> p.setPlayerTitleSize(v) },
+        ps(listOf("player_title_align"), g.title, R.string.alignment, { it.player.titleAlign }, { it.label }) { p, v -> p.setPlayerTitleAlign(v) },
+        ps(listOf("player_title_size"), g.title, R.string.size, { it.player.titleSize }, { it.label }) { p, v -> p.setPlayerTitleSize(v) },
         ps(listOf("player_title_weight"), g.title, R.string.weight, { it.type.playerTitleWeight }, { it.label }) { p, v -> p.setPlayerTitleWeight(v) },
-        flag(listOf("player_title_scroll"), g.title, R.string.scrolling_titles, { it.playerTitleScroll }) { p, v -> p.setPlayerTitleScroll(v) },
+        flag(listOf("player_title_scroll"), g.title, R.string.scrolling_titles, { it.player.titleScroll }) { p, v -> p.setPlayerTitleScroll(v) },
         ps(listOf("player_artist_links"), g.title, R.string.each_artist_its_own_link, { it.view.artistLinks }, ::artistLinksWords) { p, v -> p.setArtistLinks(v) },
         // Cover
         ps(listOf("cover_size"), g.cover, R.string.cover_size, { it.coverSize }, { it.label }) { p, v -> p.setCoverSize(v) },
-        ps(listOf("player_art_corners"), g.cover, R.string.cover_corners, { it.playerArtCorners }, { tr(R.string.dp, it) }) { p, v -> p.setPlayerArtCorners(v) },
+        ps(listOf("player_art_corners"), g.cover, R.string.cover_corners, { it.player.artCorners }, { tr(R.string.dp, it) }) { p, v -> p.setPlayerArtCorners(v) },
         ps(listOf("cover_shape_player"), g.cover, R.string.settings_player_cover_shape, { it.shapes.player }, { it.label }) { p, v -> p.setCoverShape("player", v) },
         ps(
             listOf("full_bleed_artwork", "video_full_bleed"), g.cover, R.string.settings_player_edge_to_edge,
@@ -352,10 +352,10 @@ internal val playerSettings: List<PlayerSetting<*>> by lazy {
             g.onIt, R.string.what_s_on_the_player,
             { s -> PlayerPart.entries.filter { !s.shows(it) }.toSet() }, { h -> if (h.isEmpty()) tr(R.string.settings_player_all_shown) else tr(R.string.hidden_s, h.joinToString(", ") { it.label }) },
         ) { p, v -> PlayerPart.entries.forEach { part -> p.setPartShown(part, part !in v) } },
-        ps(listOf("player_deck"), g.onIt, R.string.under_the_title, { it.playerDeck }, { d -> d.joinToString(" · ") { it.label } }) { p, v -> p.setPlayerDeck(v) },
+        ps(listOf("player_deck"), g.onIt, R.string.under_the_title, { it.player.deck }, { d -> d.joinToString(" · ") { it.label } }) { p, v -> p.setPlayerDeck(v) },
         ps(
             listOf("player_buttons", "show_video_switch"), g.onIt, R.string.buttons_in_the_row,
-            { it.playerButtons to it.showVideoSwitch }, ::rowButtonsWords,
+            { it.player.buttons to it.showVideoSwitch }, ::rowButtonsWords,
         ) { p, v -> p.setPlayerButtons(v.first); p.setShowVideoSwitch(v.second) },
         ps(listOf("volume_control"), g.onIt, R.string.the_volume_slider_changes, { it.volumeControl }, { it.label }) { p, v -> p.setVolumeControl(v) },
         ps(

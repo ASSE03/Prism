@@ -214,6 +214,28 @@ class SettingsRoundTripTest {
             "behavior.canvas.enabled" to "canvasEnabled", "behavior.canvas.fillsBackground" to "canvasFillsBackground",
             "behavior.canvas.onCellular" to "canvasOnCellular", "behavior.canvas.withDownloads" to "canvasWithDownloads",
             "behavior.canvas.withDownloadsCellular" to "canvasWithDownloadsCellular",
+            // 1.8.7: home's fields, into AppSettings.home.
+            "home.layout" to "homeLayout", "home.header" to "homeHeader", "home.headerHeight" to "homeHeaderHeight",
+            "home.headerPicture" to "homeHeaderPicture", "home.hideKinds" to "homeHideKinds", "home.shortcuts" to "homeShortcuts",
+            "home.recentTiles" to "homeRecentTiles", "home.playlists" to "homePlaylists", "home.customizeButton" to "homeCustomizeButton",
+            "home.continueLine" to "homeContinue", "home.customizeTopButton" to "homeCustomizeTopButton", "home.podcastsButton" to "homePodcastsButton",
+            // 1.8.7: library's fields, into AppSettings.library.
+            "library.view" to "libraryView", "library.views" to "libraryViews", "library.columns" to "libraryColumns",
+            "library.subtitles" to "librarySubtitles", "library.startTab" to "libraryStartTab", "library.tiles" to "libraryTiles",
+            "library.playlistsFirst" to "libraryPlaylistsFirst",
+            // 1.8.7: lyrics's fields, into AppSettings.lyrics.
+            "lyrics.onPlayer" to "lyricsOnPlayer", "lyrics.order" to "lyricsOrder", "lyrics.off" to "lyricsOff",
+            "lyrics.translate" to "lyricsTranslate", "lyrics.translateTo" to "lyricsTranslateTo", "lyrics.fileWords" to "lyricsFileWords",
+            "lyrics.fileTranslation" to "lyricsFileTranslation", "lyrics.blur" to "lyricsBlur", "lyrics.progressLine" to "lyricsProgressLine",
+            "lyrics.sourceButton" to "lyricsSourceButton", "lyrics.scale" to "lyricsScale", "lyrics.onMobileData" to "lyricsOnMobileData",
+            "lyrics.align" to "lyricsAlign", "lyrics.stripAlign" to "lyricsStripAlign", "lyrics.stripTwoLines" to "lyricsStripTwoLines",
+            "lyrics.font" to "lyricsFont", "lyrics.fontName" to "lyricsFontName",
+            // 1.8.7: player's fields, into AppSettings.player.
+            "player.shuffleRepeat" to "playerShuffleRepeat", "player.background" to "playerBackground", "player.backdropShow" to "playerBackdropShow",
+            "player.artCorners" to "playerArtCorners", "player.layout" to "playerLayout", "player.deck" to "playerDeck",
+            "player.buttons" to "playerButtons", "player.titleAlign" to "playerTitleAlign", "player.titleSize" to "playerTitleSize",
+            "player.titleScroll" to "playerTitleScroll", "player.times" to "playerTimes", "player.blur" to "playerBlur",
+            "player.handle" to "playerHandle", "player.navBand" to "playerNavBand",
         )
     }
 }

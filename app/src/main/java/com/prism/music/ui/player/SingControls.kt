@@ -110,7 +110,7 @@ fun LyricsButtonsRow(song: Song, state: LyricsState, onChangeSource: () -> Unit,
     val c = LocalContainer.current
     // Every phone sings (1.8.x): one Sing's engine doesn't run on uses the quick way.
     val singable = c.sing.canSing(song)
-    val source = LocalAppSettings.current.lyricsSourceButton
+    val source = LocalAppSettings.current.lyrics.sourceButton
     if (!singable && !source) return
     Box(modifier.fillMaxWidth().padding(horizontal = 4.dp)) {
         if (source) LyricsSourceButton(state, onChangeSource, Modifier.align(Alignment.CenterStart).padding(end = if (singable) SING_BUTTON + 12.dp else 0.dp))

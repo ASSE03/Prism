@@ -128,7 +128,7 @@ private const val SAMPLE_LOOP_MS = 4000L
 @Composable
 private fun sampleAxis(): androidx.compose.ui.text.font.FontFamily? {
     val s = LocalAppSettings.current
-    val choice = if (s.lyricsFont.isEmpty()) s.fontChoice else com.prism.music.data.prefs.FontChoice.entries.firstOrNull { it.name == s.lyricsFont }
+    val choice = if (s.lyrics.font.isEmpty()) s.fontChoice else com.prism.music.data.prefs.FontChoice.entries.firstOrNull { it.name == s.lyrics.font }
     return remember(choice) { choice?.let(com.prism.music.ui.theme.AppFonts::axis) }
 }
 
@@ -164,7 +164,7 @@ fun LyricsSample(
     val clock = rememberSampleClock()
     val axis = sampleAxis()
     val s = LocalAppSettings.current
-    val centred = s.lyricsAlign == LyricsAlign.CENTER
+    val centred = s.lyrics.align == LyricsAlign.CENTER
     val font = com.prism.music.ui.theme.LocalLyricsFont.current ?: MaterialTheme.typography.bodyLarge.fontFamily
     val style = TextStyle(
         fontSize = (17 * size * look.sizeScale).sp, lineHeight = (21 * size * look.sizeScale).sp, fontFamily = font,
