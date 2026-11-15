@@ -56,6 +56,30 @@ sealed interface ClipFetch {
 }
 
 /**
+ * The visionOS player answers the finder just had (1.8.7), so the fetch that follows within minutes asks for none again:
+ * one request less (about 0.2 s) before the fragments. It is the same request with the same answer; an answer is taken
+ * once, and only while fresh (its links last hours, it is kept minutes), so a link turned away gets a fresh answer as
+ * before. A handful kept, in memory only.
+ */
+class PlayerAnswers(private val keepMs: Long = 10 * 60_000L, private val clock: () -> Long = System::currentTimeMillis) {
+    private val kept = LinkedHashMap<String, Pair<Long, JsonObject>>()
+
+    @Synchronized fun put(videoId: String, answer: JsonObject) {
+        kept.remove(videoId)
+        kept[videoId] = clock() to answer
+        while (kept.size > MAX) kept.remove(kept.keys.first())
+    }
+
+    /** [videoId]'s answer if one is fresh; it is gone afterwards either way. */
+    @Synchronized fun take(videoId: String): JsonObject? {
+        val (at, answer) = kept.remove(videoId) ?: return null
+        return answer.takeIf { clock() - at in 0..keepMs }
+    }
+
+    private companion object { const val MAX = 8 }
+}
+
+/**
  * Fetches a few seconds of a music video for Canvas (plan §3.4, row 4.2): only the fragments that hold them, of the
  * video-only H.264 stream, and keeps them as a small MP4 that plays by itself offline ([ClipFiles]).
  *
@@ -73,6 +97,8 @@ class ClipFetcher(
     /** The most media one fetch takes, whichever of the two comes first (fragments are dropped from the end). */
     private val capMs: Long = 20_000,
     private val capBytes: Long = 12L shl 20,
+    /** The player answers the finder just had for the same videos (1.8.7): the first try takes its link from one. */
+    private val answers: PlayerAnswers? = null,
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     /** Fetches under way, so the player and the next-song preparation asking for the same loop share one. */
@@ -120,12 +146,14 @@ class ClipFetcher(
         val steps = StringBuilder()
         for (attempt in 0..1) {
             val asked = System.nanoTime()
-            val answer = try { player(videoId) } catch (e: Exception) {
+            // The finder's answer for this video, if it had one minutes ago; a link turned away gets a fresh one.
+            val known = if (attempt == 0) answers?.take(videoId) else null
+            val answer = known ?: try { player(videoId) } catch (e: Exception) {
                 if (e is kotlinx.coroutines.CancellationException) throw e
                 return ClipFetch.None(ClipFetch.Why.UNPLAYABLE, e.message.orEmpty())
             }
             if (steps.isNotEmpty()) steps.append(", again: ")
-            steps.append("answer ").append((System.nanoTime() - asked) / 1_000_000).append(" ms")
+            steps.append("answer ").append((System.nanoTime() - asked) / 1_000_000).append(" ms").append(if (known != null) " (the finder's)" else "")
             val status = answer.str("playabilityStatus", "status")
             if (status != "OK") return ClipFetch.None(ClipFetch.Why.UNPLAYABLE, status ?: "no status")
             val stream = chooseStream(answer, maxHeight) ?: return ClipFetch.None(ClipFetch.Why.NO_STREAM)

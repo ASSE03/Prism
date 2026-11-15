@@ -206,7 +206,11 @@ class ClipFinder(private val net: Net) {
         private const val MAX_BOARD_BYTES = 2L * 1024 * 1024
 
         /** The finder on the real network: YouTube Music for the video, its type and curve, the visionOS player for the rest. */
-        fun create(ytm: YouTubeMusic, api: InnerTube, http: OkHttpClient, decoder: SheetDecoder = BitmapSheetDecoder): ClipFinder =
+        fun create(
+            ytm: YouTubeMusic, api: InnerTube, http: OkHttpClient, decoder: SheetDecoder = BitmapSheetDecoder,
+            /** Each player answer is kept here for the fetch that follows ([ClipFetcher] asks for none again). */
+            answers: PlayerAnswers? = null,
+        ): ClipFinder =
             ClipFinder(object : Net {
                 override suspend fun findVideo(song: Song) = ytm.findMusicVideo(song)
                 override suspend fun otherVideos(song: Song, not: Set<String>) = ytm.otherMusicVideos(song, not) { ClipGate.titleSays(song.title, it) }
@@ -216,7 +220,9 @@ class ClipFinder(private val net: Net) {
                 override suspend fun videoType(videoId: String) =
                     api.post("player", buildJsonObject { put("videoId", videoId) }).str("videoDetails", "musicVideoType")
 
-                override suspend fun player(videoId: String) = withContext(Dispatchers.IO) { PlayerInfo.parse(api.visionOsPlayer(videoId)) }
+                override suspend fun player(videoId: String) = withContext(Dispatchers.IO) {
+                    PlayerInfo.parse(api.visionOsPlayer(videoId).also { answers?.put(videoId, it) })
+                }
 
                 override suspend fun frames(board: Storyboard) = fetchFrames(http, board, decoder)
 
