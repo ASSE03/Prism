@@ -44,6 +44,11 @@ class PlaysPastLiveTest {
         val video = Song(id = id, title = "Issue 411", isVideo = true)
         instrumentation.runOnMainSync { c.player.playQueue(listOf(video), 0, QueueSource(QueueKind.SINGLE, "test")) }
         fun position(): Long { var at = 0L; instrumentation.runOnMainSync { at = c.player.position }; return at }
+        // Counted from the video's own start: until it is the one playing, the place read is the last queue's
+        // (2026-11-14: a song left at 0:58 by the test before made the first 53 s read as a fall back).
+        val isIt = System.currentTimeMillis() + 30_000
+        while (System.currentTimeMillis() < isIt && !(c.player.currentSong.value?.id == id && position() < 5_000)) Thread.sleep(200)
+        assertEquals("the video is the one playing", id, c.player.currentSong.value?.id)
         var furthest = 0L; var back = 0
         val end = System.currentTimeMillis() + past + 60_000
         while (System.currentTimeMillis() < end && furthest < past) {
