@@ -5493,6 +5493,17 @@
     <string name="tour_186_canvas_point_3">The player\'s ⋯ menu: %1$s, or %2$s.</string>
     <string name="tour_186_canvas_point_4">It rests with Reduce motion, in battery saver and when the phone runs hot.</string>
     <string name="tour_186_also_hours">Replay: %1$s shows the hours on each bar.</string>
+    <string name="tour_187_plays_title">It just plays</string>
+    <string name="tour_187_plays_about">This update is about one thing: the song you picked plays, and keeps playing.</string>
+    <string name="tour_187_plays_point_1">A network hiccup no longer skips the song. Prism tries again from the same place, and waits when the phone is offline.</string>
+    <string name="tour_187_plays_point_2">A song refused on one Wi-Fi network is tried another way, and Prism remembers what worked there.</string>
+    <string name="tour_187_plays_point_3">Prism closed in the background? Play on a headset or on the phone\'s media card picks up where it was.</string>
+    <string name="tour_187_plays_point_4">%1$s, under %2$s: a check that says in plain words what works on your phone and network.</string>
+    <string name="tour_187_also_about">Lyrics, the DJ and a lighter player.</string>
+    <string name="tour_187_also_lyrics_line">%1$s: with a full-screen Canvas, the line being sung stays over the picture.</string>
+    <string name="tour_187_also_lyrics_right">The wrong song\'s lyrics are refused, and missing lyrics can be tried again.</string>
+    <string name="tour_187_also_blend">When the DJ or %1$s leaves a plain change between two songs, the ⓘ says why.</string>
+    <string name="tour_187_also_lighter">The open player asks less of the phone\'s processor.</string>
     <!-- 1.8.7: Backup & about → Diagnostics → "Is playback working?" (the self-test). -->
     <string name="selftest_title">Is playback working?</string>
     <string name="selftest_info">A few quick checks, one after another, and what to do when one fails. They ask only YouTube and one lyrics service, as playing a song does. The result stays on the phone unless you tap Share.</string>

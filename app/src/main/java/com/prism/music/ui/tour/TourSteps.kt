@@ -65,6 +65,7 @@ private const val V1_8_4 = 61
 /** Prism 1.8.5 (build 63): Replay & Rewind 2026. */
 private const val V1_8_5 = 63
 private const val V1_8_6 = 64
+private const val V1_8_7 = 65
 
     /** Every step, in the order they're shown. */
     val steps: List<TourStep> = listOf(
@@ -712,6 +713,32 @@ private const val V1_8_6 = 64
             tr(R.string.from_your_requests),
             listOf(tr(R.string.tour_186_also_hours, tr(R.string.hours_by_month))),
             showMe = Routes.REPLAY,
+        ),
+        TourStep(
+            // 1.8.7 It just plays. Opens Backup & about at Diagnostics, where "Is playback working?" is.
+            V1_8_7, PrismIcons.Play, tr(R.string.tour_187_plays_title),
+            tr(R.string.tour_187_plays_about),
+            listOf(
+                tr(R.string.tour_187_plays_point_1),
+                tr(R.string.tour_187_plays_point_2),
+                tr(R.string.tour_187_plays_point_3),
+                tr(R.string.tour_187_plays_point_4, tr(R.string.selftest_title), tr(R.string.diagnostics)),
+            ),
+            listOf(PrismIcons.Check, PrismIcons.Info),
+            showMe = Routes.settings(SettingsPageId.BACKUP_ABOUT.key, find = tr(R.string.diagnostics)),
+        ),
+        TourStep(
+            // Opens the Player page at Cover: "Keep lyrics showing" is in the Canvas row's sheet there.
+            V1_8_7, PrismIcons.Lyrics, tr(R.string.also_new),
+            tr(R.string.tour_187_also_about),
+            listOf(
+                tr(R.string.tour_187_also_lyrics_line, tr(R.string.canvas_lyrics)),
+                tr(R.string.tour_187_also_lyrics_right),
+                tr(R.string.tour_187_also_blend, tr(R.string.crossfade)),
+                tr(R.string.tour_187_also_lighter),
+            ),
+            listOf(PrismIcons.Shuffle, PrismIcons.Speed),
+            showMe = Routes.settings(SettingsPageId.PLAYER.key, find = tr(R.string.cover)),
         ),
         TourStep(
             V1_7, PrismIcons.Update, tr(R.string.stay_in_the_loop),

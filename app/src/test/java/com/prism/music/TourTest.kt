@@ -142,12 +142,39 @@ class TourTest {
     }
 
     /**
+     * 1.8.7 (build 65): an update from 1.8.6 (64) shows It just plays, then the rest, and nothing older. The first page
+     * names the check as its row is written and opens the group it is in; the second names the Canvas switch and
+     * Crossfade, and opens the Player page at Cover.
+     */
+    @Test
+    fun anUpdateFrom186ShowsItJustPlays() {
+        val pages = Tour.stepsAfter(64)
+        assertEquals(listOf(R.string.tour_187_plays_title, R.string.also_new).map { tr(it) }, pages.map { it.title })
+        assertTrue(pages.all { it.since == 65 && it.kind == TourStep.Kind.PLAIN })
+        assertTrue(pages.all { it.points.size in 3..5 && it.points.all { p -> p.isNotBlank() } })
+        assertTrue(pages.flatMap { it.points + it.body }.none { "%" in it })
+        val plays = pages.first()
+        assertTrue(plays.points.last().contains(tr(R.string.selftest_title)) && plays.points.last().contains(tr(R.string.diagnostics)))
+        val (key, find) = parse(plays.showMe!!)
+        val page = SettingsPageId.BACKUP_ABOUT
+        assertEquals(SettingsTarget(page, tr(R.string.diagnostics)), SettingsMap.resolve(key, find))
+        assertTrue(page.index.any { it.group == tr(R.string.diagnostics) && it.title == tr(R.string.selftest_title) })
+        val also = pages.last()
+        assertTrue(also.points[0].contains(tr(R.string.canvas_lyrics)))
+        assertTrue(also.points[2].contains(tr(R.string.crossfade)))
+        val (alsoKey, alsoFind) = parse(also.showMe!!)
+        assertEquals(SettingsPageId.PLAYER.key, alsoKey)
+        assertEquals(tr(R.string.cover), alsoFind)
+        assertTrue(SettingsPageId.PLAYER.index.any { it.group == tr(R.string.cover) && it.title == tr(R.string.canvas_lyrics) })
+    }
+
+    /**
      * 1.8.6 (build 64): an update from 1.8.5 (63) shows Canvas, then the hours on Replay's chart, and nothing older.
      * Canvas's page names the switch and the menu's rows as they are written, and opens the Player page at Cover.
      */
     @Test
     fun anUpdateFrom185ShowsCanvas() {
-        val pages = Tour.stepsAfter(63)
+        val pages = Tour.stepsAfter(63).filter { it.since == 64 }
         assertEquals(listOf(R.string.tour_186_canvas_title, R.string.also_new).map { tr(it) }, pages.map { it.title })
         assertTrue(pages.all { it.since == 64 && it.kind == TourStep.Kind.PLAIN })
         assertTrue(pages.flatMap { it.points + it.body }.none { "%" in it })
