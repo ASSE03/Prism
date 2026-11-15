@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,6 +50,7 @@ import com.prism.music.ui.screens.PrismCheck
 import com.prism.music.ui.screens.SettingEntry
 import com.prism.music.ui.theme.LocalAppSettings
 import com.prism.music.ui.theme.LocalContainer
+import com.prism.music.ui.theme.PrismIcons
 import kotlinx.coroutines.launch
 
 private val page = SettingsPageId.ACCOUNTS_SHARING
@@ -87,8 +90,9 @@ internal fun spotifyValue(connection: Spotify.Connection): String = when (connec
  * connected. Last.fm, Spotify and Discord have no title over their card while their first row names them (§2.7); the
  * old keys "lastfm", "spotify" and "discord" still open the page at their card.
  *
- * Spotify is connected through the listener's own developer app and Spotify's official API only: the steps are in the
- * "How to connect" sheet behind its row, with the Client ID's field.
+ * Spotify is connected one of two ways, picked on the "Connect Spotify" sheet behind its row (1.8.7.5): the sign-in on
+ * Spotify's own page (read only: playlists and liked songs), or the listener's own developer app and Spotify's official
+ * API (the steps in the "How to connect" sheet, with the Client ID's field).
  */
 @Composable
 fun AccountsSharingPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = true, onSearch: (() -> Unit)? = null) {
@@ -165,16 +169,28 @@ fun AccountsSharingPage(bottomPadding: Dp, find: String? = null, showBack: Boole
             )
         }
 
-        // Titled only while connected: its rows then are the features', and none of them says "Spotify".
-        group(if (spotifyConnection is Spotify.Connection.Connected) tr(R.string.spotify) else null, key = tr(R.string.spotify), info = if (spotifyConnection is Spotify.Connection.Connected) tr(R.string.spot_about) else null) {
+        // Titled only while connected (or signed out by Spotify after the sign-in): its rows then are the features', or
+        // "Sign in again", and none of them says "Spotify". Connected by the sign-in on Spotify's page (1.8.7.5), only
+        // what that sign-in can read shows.
+        val session = c.spotify.bySession
+        val spotifyTitled = spotifyConnection is Spotify.Connection.Connected || (session && spotifyConnection == Spotify.Connection.Revoked)
+        val spotifyInfo = when {
+            !spotifyTitled -> null
+            session -> tr(R.string.spot_session_about)
+            else -> tr(R.string.spot_about)
+        }
+        group(if (spotifyTitled) tr(R.string.spotify) else null, key = tr(R.string.spotify), info = spotifyInfo) {
             when (val conn = spotifyConnection) {
                 is Spotify.Connection.Connected -> {
-                    SpotifyFeatureRows()
-                    SpotifyDisconnectRow(conn.name)
+                    SpotifyFeatureRows(session)
+                    SpotifyDisconnectRow(conn.name, session)
                 }
-                Spotify.Connection.Revoked -> {
+                Spotify.Connection.Revoked -> if (session) {
+                    LinkRow(tr(R.string.spot_session_sign_in_again), value = tr(R.string.spot_session_signed_out), info = tr(R.string.spot_session_signed_out_info)) { nav.go(SPOTIFY_BEFORE) }
+                    SpotifyDisconnectRow(null, session = true)
+                } else {
                     SpotifyConnectRow(conn)
-                    SpotifyDisconnectRow(null)
+                    SpotifyDisconnectRow(null, session = false)
                 }
                 else -> SpotifyConnectRow(conn)
             }
@@ -279,16 +295,61 @@ internal fun LastFmRows(
 
 // ---------------------------------------------------------------------------- Spotify
 
+/** The "Before you sign in" screen that leads to the sign-in on Spotify's own page (1.8.7.5; its route is registered with it). */
+internal const val SPOTIFY_BEFORE = "spotify_before"
+
+/** The two ways to connect Spotify, as the Connect sheet's cards show them. */
+internal enum class SpotifyWay { SIGN_IN, OWN_APP }
+
 /**
  * Spotify while it isn't connected: one row that says so (or that Prism is waiting for Spotify's answer, or that
- * Spotify took the access back), opening "How to connect".
+ * Spotify took the access back). It opens "Connect Spotify" (1.8.7.5): a card for each way, "Sign in to Spotify" (to
+ * the "Before you sign in" screen) and "Use your own developer app" (to "How to connect", as before). Waiting for the
+ * own app's answer, or its access taken back, the row opens "How to connect" straight away (Cancel and Reconnect are there).
  */
 @Composable
 private fun SpotifyConnectRow(connection: Spotify.Connection) {
+    val nav = LocalNavigator.current
     val title = tr(R.string.spotify)
+    var choosing by rememberSaveable(title, "spotify-choose") { mutableStateOf(false) }
     var open by rememberSaveable(title, "spotify-connect") { mutableStateOf(false) }
-    PickRow(title, spotifyValue(connection), info = tr(R.string.spot_about)) { open = true }
+    // The card picked, followed once the Connect sheet is gone (so two sheets never show at once).
+    var picked by remember { mutableStateOf<SpotifyWay?>(null) }
+    val straightToOwnApp = connection == Spotify.Connection.Revoked || connection == Spotify.Connection.Waiting
+    val info = tr(R.string.spot_session_choose_info)
+    PickRow(title, spotifyValue(connection), info = info) { if (straightToOwnApp) open = true else choosing = true }
+    if (choosing) PickSheet<SpotifyWay?>(
+        tr(R.string.spot_session_choose_title), listOf(SpotifyWay.SIGN_IN, SpotifyWay.OWN_APP), null,
+        label = { tr(if (it == SpotifyWay.SIGN_IN) R.string.spot_session_sign_in else R.string.spot_session_own_app) },
+        onPick = { picked = it },
+        onDismiss = {
+            choosing = false
+            when (picked) {
+                SpotifyWay.SIGN_IN -> nav.go(SPOTIFY_BEFORE)
+                SpotifyWay.OWN_APP -> open = true
+                null -> Unit
+            }
+            picked = null
+        },
+        info = info, exampleScale = 1f,
+    ) { SpotifyWayExample(it ?: SpotifyWay.SIGN_IN) }
     if (open) SpotifyConnectSheet(reconnect = connection == Spotify.Connection.Revoked) { open = false }
+}
+
+/** A Connect card's picture: what that way gives, three short lines with a tick. */
+@Composable
+private fun SpotifyWayExample(way: SpotifyWay) {
+    val lines = if (way == SpotifyWay.SIGN_IN) {
+        listOf(R.string.spot_session_sign_in_1, R.string.spot_session_sign_in_2, R.string.spot_session_sign_in_3)
+    } else {
+        listOf(R.string.spot_session_own_app_1, R.string.spot_session_own_app_2, R.string.spot_session_own_app_3)
+    }
+    Column(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        for (id in lines) Row(verticalAlignment = Alignment.Top) {
+            Icon(PrismIcons.Check, null, Modifier.padding(top = 1.dp).size(14.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(tr(id), Modifier.padding(start = 6.dp), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
 }
 
 /**
@@ -342,9 +403,13 @@ private fun SpotifyConnectSheet(reconnect: Boolean, onDismiss: () -> Unit) {
     }
 }
 
-/** Each feature's switch; its line says how it's going when that isn't simply "fine". */
+/**
+ * Each feature's switch; its line says how it's going when that isn't simply "fine". Connected by the sign-in
+ * ([session]), only the playlists and a read-only "Liked Songs" (no counts asked first: nothing goes to Spotify);
+ * Spotify gives that sign-in no recent plays or top.
+ */
 @Composable
-private fun SpotifyFeatureRows() {
+private fun SpotifyFeatureRows(session: Boolean) {
     val spotify = LocalContainer.current.spotify
     val o by spotify.options.collectAsState()
     val scope = rememberCoroutineScope()
@@ -361,8 +426,10 @@ private fun SpotifyFeatureRows() {
             SpotifyGuard.State.PAUSED -> tr(R.string.spot_paused)
         }
     }
-    SwitchRow(tr(R.string.spot_recent), o.recent, value = status(SpotifyFeature.RECENT), info = tr(R.string.spot_recent_info)) { spotify.setEnabled(SpotifyFeature.RECENT, it) }
-    SwitchRow(tr(R.string.spot_top), o.top, value = status(SpotifyFeature.TOP), info = tr(R.string.spot_top_info)) { spotify.setEnabled(SpotifyFeature.TOP, it) }
+    if (!session) {
+        SwitchRow(tr(R.string.spot_recent), o.recent, value = status(SpotifyFeature.RECENT), info = tr(R.string.spot_recent_info)) { spotify.setEnabled(SpotifyFeature.RECENT, it) }
+        SwitchRow(tr(R.string.spot_top), o.top, value = status(SpotifyFeature.TOP), info = tr(R.string.spot_top_info)) { spotify.setEnabled(SpotifyFeature.TOP, it) }
+    }
     val mirror = remember(o.playlists) { spotify.playlists.mirror() }
     // How many are in Library, and how many Spotify doesn't share (what to do about those is behind the ⓘ).
     val counted = if (o.playlists && mirror.listedAt > 0) listOfNotNull(
@@ -376,7 +443,10 @@ private fun SpotifyFeatureRows() {
         tr(R.string.spot_playlists), o.playlists, value = status(SpotifyFeature.PLAYLISTS, counted), info = tr(R.string.spot_playlists_info) + followed,
     ) { spotify.setEnabled(SpotifyFeature.PLAYLISTS, it) }
     if (o.playlists) SwitchRow(tr(R.string.spot_keep_in_step), o.keepInStep, info = tr(R.string.spot_keep_in_step_info)) { spotify.setKeepInStep(it) }
-    SwitchRow(
+    // Read only: Spotify's likes come into Prism, nothing goes back.
+    if (session) {
+        SwitchRow(tr(R.string.spot_session_likes), o.likes, value = status(SpotifyFeature.LIKES), info = tr(R.string.spot_session_likes_info)) { spotify.setEnabled(SpotifyFeature.LIKES, it) }
+    } else SwitchRow(
         tr(R.string.spot_likes), o.likes, value = status(SpotifyFeature.LIKES, if (checking) tr(R.string.spot_likes_counting) else null),
         info = tr(R.string.spot_likes_info),
     ) { on ->
@@ -391,7 +461,7 @@ private fun SpotifyFeatureRows() {
             }
         }
     }
-    dryRun?.let { text ->
+    if (!session) dryRun?.let { text ->
         AlertDialog(
             onDismissRequest = { dryRun = null },
             title = { Text(tr(R.string.spot_likes)) },
@@ -404,9 +474,12 @@ private fun SpotifyFeatureRows() {
     }
 }
 
-/** Disconnect (its line says who is connected), asking what to forget. [name] null: Spotify took the access back. */
+/**
+ * Disconnect (its line says who is connected), asking what to forget. [name] null: Spotify took the access back.
+ * Connected by the sign-in ([session]) there is no Client ID to forget, so that choice isn't asked.
+ */
 @Composable
-private fun SpotifyDisconnectRow(name: String?) {
+private fun SpotifyDisconnectRow(name: String?, session: Boolean) {
     val c = LocalContainer.current
     var asking by remember { mutableStateOf(false) }
     var clientIdToo by remember { mutableStateOf(false) }
@@ -418,7 +491,7 @@ private fun SpotifyDisconnectRow(name: String?) {
         text = {
             Column {
                 Text(tr(R.string.spot_disconnect_text))
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                if (!session) Row(verticalAlignment = Alignment.CenterVertically) {
                     PrismCheck(clientIdToo, label = tr(R.string.spot_forget_client_id)) { clientIdToo = it }
                     Text(tr(R.string.spot_forget_client_id))
                 }
@@ -429,7 +502,7 @@ private fun SpotifyDisconnectRow(name: String?) {
             }
         },
         confirmButton = {
-            PrismTextButton(onClick = { asking = false; c.scope.launch { c.spotify.disconnect(clientIdToo, keepPlaylists) } }) { Text(tr(R.string.disconnect)) }
+            PrismTextButton(onClick = { asking = false; c.scope.launch { c.spotify.disconnect(clientIdToo = clientIdToo && !session, keepPlaylists = keepPlaylists) } }) { Text(tr(R.string.disconnect)) }
         },
         dismissButton = { PrismTextButton(onClick = { asking = false }) { Text(tr(R.string.cancel)) } },
     )
@@ -462,6 +535,7 @@ val accountsSharingIndex: List<SettingEntry> by lazy {
     val spotify = tr(R.string.spotify)
     val sharing = tr(R.string.sharing_and_links)
     val spot = tr(R.string.spot_keywords)
+    val session = tr(R.string.spot_session_keywords)
     listOf(
         SettingEntry(page, accounts, tr(R.string.prism_account), tr(R.string.profile_name_picture_photo_local_on)),
         SettingEntry(page, accounts, tr(R.string.youtube_music_2), tr(R.string.cn_youtube_keywords), shown = tr(R.string.sign_in_to_youtube_music)),
@@ -485,6 +559,12 @@ val accountsSharingIndex: List<SettingEntry> by lazy {
         SettingEntry(page, spotify, tr(R.string.spot_keep_in_step), spot + " " + tr(R.string.spot_keep_in_step_sub)),
         SettingEntry(page, spotify, tr(R.string.spot_likes), spot + " " + tr(R.string.spot_likes_sub)),
         SettingEntry(page, spotify, tr(R.string.cn_disconnect_spotify), spot + " " + tr(R.string.spot_connected_as, "").trim()),
+        // 1.8.7.5: the Connect sheet's two ways, and the card connected by the sign-in on Spotify's page (read only).
+        SettingEntry(page, spotify, tr(R.string.spot_session_choose_title), spot + " " + session, shown = spotify + ": " + tr(R.string.spot_session_choose_title)),
+        SettingEntry(page, spotify, tr(R.string.spot_session_sign_in), spot + " " + session),
+        SettingEntry(page, spotify, tr(R.string.spot_session_own_app), spot + " " + tr(R.string.spot_set_up)),
+        SettingEntry(page, spotify, tr(R.string.spot_session_likes), spot + " " + session),
+        SettingEntry(page, spotify, tr(R.string.spot_session_sign_in_again), spot + " " + session + " " + tr(R.string.spot_session_signed_out)),
         // "About this" (the small risk to the Discord account) is behind the switch's ⓘ now.
         SettingEntry(page, discord, tr(R.string.cn_discord_show), tr(R.string.discord_rich_presence_status_listening) + " " + tr(R.string.discord_terms_risk)),
         SettingEntry(page, discord, tr(R.string.sign_out_of_discord)),

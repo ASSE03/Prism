@@ -4849,6 +4849,24 @@
     <string name="spot_signin_unreachable">Couldn\'t reach Spotify</string>
     <string name="spot_signin_unreachable_why">Check your connection. Some networks, like work or school ones, block Spotify.</string>
     <string name="spot_signin_http">Spotify answered %1$d</string>
+    <!-- 1.8.7.5: Spotify's Connect sheet with its two ways, and the card while connected by the sign-in (read only) -->
+    <string name="spot_session_choose_title">Connect Spotify</string>
+    <string name="spot_session_choose_info">Sign in to Spotify: you sign in once on Spotify\'s own page, inside Prism. Prism then reads your liked songs and playlists and never changes anything on your Spotify. It works with free accounts. Spotify doesn\'t offer this way to other apps, so it may stop working if Spotify changes its page.\n\nYour own developer app: Spotify\'s official API, through an app you make for yourself in Spotify\'s dashboard (about three minutes, and its owner needs Spotify Premium). It also likes songs on Spotify when you like them here, and brings Recent plays and Top songs and artists.</string>
+    <string name="spot_session_sign_in">Sign in to Spotify</string>
+    <string name="spot_session_sign_in_1">One sign-in, no setup</string>
+    <string name="spot_session_sign_in_2">Works with free accounts</string>
+    <string name="spot_session_sign_in_3">Reads your liked songs and playlists</string>
+    <string name="spot_session_own_app">Use your own developer app</string>
+    <string name="spot_session_own_app_1">Also likes songs on Spotify</string>
+    <string name="spot_session_own_app_2">Recent plays and Top songs</string>
+    <string name="spot_session_own_app_3">Needs Spotify Premium</string>
+    <string name="spot_session_about">You signed in on Spotify\'s own page, inside Prism. The sign-in stays on this phone only, sealed, never in backups. Prism only reads: your liked songs and your playlists. Nothing is ever changed on Spotify. Recent plays and Top songs and artists need your own developer app: Spotify doesn\'t give them to this sign-in.</string>
+    <string name="spot_session_likes">Liked Songs</string>
+    <string name="spot_session_likes_info">Songs you like in Spotify are brought into Prism and liked here once matched. Nothing is written to Spotify: a like in Prism stays in Prism, and Prism never takes a like away. Likes you brought from a Spotify data download stay out of it. Read daily, on Wi-Fi.</string>
+    <string name="spot_session_sign_in_again">Sign in again</string>
+    <string name="spot_session_signed_out">Spotify ended the sign-in</string>
+    <string name="spot_session_signed_out_info">Spotify no longer accepts this sign-in (you signed out there, or your password changed). Sign in again to carry on: your switches stay as they were.</string>
+    <string name="spot_session_keywords">spotify sign in login log in account free no setup</string>
     <!-- 1.8.1: repeat imports and the fresh-download reminder -->
     <plurals name="imp_new_plays_since">
         <item quantity="one">%1$s new play since your last import (%2$s)</item>

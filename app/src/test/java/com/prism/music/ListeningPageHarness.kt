@@ -101,6 +101,8 @@ abstract class ListeningPageHarness(private val page: SettingsPageId) {
                             NavHost(controller, "page") {
                                 composable("page") { SettingsPageContent(page, 0.dp, onSearch = {}) }
                                 composable(Routes.EQ) { Box(Modifier.fillMaxSize()) }
+                                // Spotify's "Before you sign in" (1.8.7.5), opened from Accounts & sharing.
+                                composable("spotify_before") { Box(Modifier.fillMaxSize()) }
                             }
                         }
                     }
