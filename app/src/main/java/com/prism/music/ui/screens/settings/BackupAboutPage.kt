@@ -219,11 +219,12 @@ internal fun BackupAboutContent(
         // Playback diagnostics: a log of what the audio did, kept on the phone, for chasing stutters. A group of its
         // own since 1.8.4 (the "More options" fold is gone); Share and Clear only show while the log is kept.
         group(tr(R.string.diagnostics)) {
+            // First in the group (1.8.7 release check): whoever comes here with a song that won't play meets the check before
+            // the log's switch. 1.8.7: a few quick checks of what playing a song needs, in a sheet (plan §9).
+            LinkRow(tr(R.string.selftest_title), info = tr(R.string.selftest_info)) { selfTestOpen = true }
             SwitchRow(
                 tr(R.string.playback_diagnostics), s.audioDiagnostics, info = tr(R.string.keeps_a_log_on_this_phone), changed = diagnosticsChanged,
             ) { c.settings.setAudioDiagnostics(it) }
-            // 1.8.7: a few quick checks of what playing a song needs, in a sheet (plan §9).
-            LinkRow(tr(R.string.selftest_title), info = tr(R.string.selftest_info)) { selfTestOpen = true }
             crashAt?.let { at ->
                 LinkRow(
                     tr(R.string.last_crash),
@@ -288,8 +289,8 @@ val backupAboutIndex: List<SettingEntry> by lazy {
         SettingEntry(page, about, tr(R.string.source_code), tr(R.string.app_name) + " " + tr(R.string.version_github) + " privacy " + tr(R.string.your_data_stays_here)),
         SettingEntry(page, about, tr(R.string.take_the_tour), tr(R.string.tutorial_walkthrough_help_guide_what_s)),
         SettingEntry(page, about, tr(R.string.open_source_licenses), tr(R.string.license_gpl)),
-        SettingEntry(page, diagnostics, tr(R.string.playback_diagnostics), tr(R.string.stutter_judder_skip_glitch_lag_bluetooth) + " " + tr(R.string.a_log_for_tracking_down_stutters)),
         SettingEntry(page, diagnostics, tr(R.string.selftest_title), tr(R.string.selftest_keywords)),
+        SettingEntry(page, diagnostics, tr(R.string.playback_diagnostics), tr(R.string.stutter_judder_skip_glitch_lag_bluetooth) + " " + tr(R.string.a_log_for_tracking_down_stutters)),
         // The two crash rows show while a crash is kept on the phone (not a setting to turn on).
         SettingEntry(page, diagnostics, tr(R.string.last_crash), tr(R.string.crash_closed_unexpectedly_error_report_stack)),
         SettingEntry(page, diagnostics, tr(R.string.forget_crashes), tr(R.string.crash_delete_clear)),

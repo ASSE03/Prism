@@ -312,6 +312,18 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         assertTrue(SettingsIndex.search("403").any { it.title == selfTest })
     }
 
+    /**
+     * The check comes first in Diagnostics, above the log's switch (1.8.7 release check's settings walk: someone whose
+     * music won't play should meet "Is playback working?" before a switch about a log), in the group and in search.
+     */
+    @Test fun theCheckComesBeforeTheLog() {
+        showContent(selfTest = { emptyList() })
+        fun top(text: String) = compose.onAllNodes(hasText(text)).fetchSemanticsNodes().first().boundsInRoot.top
+        assertTrue("\"$selfTest\" is above \"$diagnostics\"", top(selfTest) < top(diagnostics))
+        val lines = SettingsIndex.entries.filter { it.page == SettingsPageId.BACKUP_ABOUT && it.group == diagnosticsGroup }.map { it.title }
+        assertTrue(lines.indexOf(selfTest) < lines.indexOf(diagnostics))
+    }
+
     /** The sheet runs the checks it is handed, shows each result, and Share adds the result to the shared diagnostics. */
     @Test fun theSelfTestSheetShowsAndSharesTheResult() {
         var shared = 0
