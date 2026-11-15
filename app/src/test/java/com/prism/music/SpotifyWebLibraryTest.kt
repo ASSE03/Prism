@@ -190,11 +190,49 @@ class SpotifyWebLibraryTest {
         assertEquals(listOf("spotify:track:t1"), playlists.mirror().lists.single().tracks.map { it.uri })
         assertEquals(listOf("p2"), playlists.followed.value.map { it.id })
         assertEquals("only the web player's address was asked", 0, net.requests.count { it.url.host == "api.spotify.com" })
-        // The same list again: the song count is the same, so the playlist isn't read a second time.
+        // The same list again: the count is the same, so the songs themselves are compared (one page here).
         val before = net.requests.size
         playlists.refreshAll("samr", now = 2)
-        assertEquals("the list and the own playlist's count, not its songs again", 2, net.requests.size - before)
-        assertTrue(sent(net.requests.size - 1).contains("\"limit\":1"))
+        assertEquals("the list, the own playlist's count, and its songs to compare", 3, net.requests.size - before)
+        assertEquals("nothing changed: the same Prism playlist, untouched", 1, hands.lists.size)
+    }
+
+    @Test fun aPlaylistThatSwapsASongAndKeepsItsLengthIsStillBroughtUpToDate() = runBlocking {
+        // Lofi Girl's kind: always as many songs, different ones. The count alone would never tell.
+        val first = ytSong("fHI8X4OXluQ", "Blinding Lights", "The Weeknd", 200)
+        val second = ytSong("XFkzRNyygfk", "Creep", "Radiohead", 238)
+        var now = trackData("t1", "Blinding Lights", "The Weeknd", "After Hours", 200_040, "trackDuration", uri = true)
+        net.routes[SpotifyWeb.URL] = {
+            val body = sent(net.requests.size - 1)
+            if (body.contains("\"libraryV3\"")) 200 to libraryAnswer(2, pseudoLiked, playlistItem("p1", "Road", "samr", 1))
+            else 200 to playlistAnswer(1, inPlaylist(now))
+        }
+        val hands = FakeHands()
+        val playlists = SpotifyPlaylists(api, db, importer, dir, hands, matchOf("Blinding Lights" to first, "Creep" to second), pause = {}, library = { library })
+        playlists.refreshAll("samr", now = 1)
+        val prismId = playlists.mirror().lists.single().prismId!!
+        playlists.refreshOne(prismId, readAgain = false)
+        assertEquals(listOf("fHI8X4OXluQ"), hands.songIds(prismId))
+
+        now = trackData("t2", "Creep", "Radiohead", "Pablo Honey", 238_640, "trackDuration", uri = true)
+        playlists.refreshAll("samr", now = 2)
+        assertEquals("still one song, a different one", listOf("spotify:track:t2"), playlists.mirror().lists.single().tracks.map { it.uri })
+        playlists.refreshOne(prismId, readAgain = false)
+        assertEquals(listOf("XFkzRNyygfk"), hands.songIds(prismId))
+
+        // Opened: compared again only after a while (a long playlist is many reads).
+        now = trackData("t1", "Blinding Lights", "The Weeknd", "After Hours", 200_040, "trackDuration", uri = true)
+        playlists.refreshOne(prismId, readAgain = true, now = 3)
+        assertEquals("too soon to compare again", listOf("XFkzRNyygfk"), hands.songIds(prismId))
+        playlists.refreshOne(prismId, readAgain = true, now = 3 + SpotifyPlaylists.LOOK_AGAIN_MS)
+        assertEquals(listOf("fHI8X4OXluQ"), hands.songIds(prismId))
+    }
+
+    @Test fun matchedSongsArePlacedEverySoManyOfARunNotOnlyAtItsEnd() {
+        val steps = com.prism.music.data.imports.PlaceSteps(20)
+        assertEquals("a run that starts at 0, then 1, 2 … 100", listOf(20, 40, 60, 80, 100), (0..100).filter { steps.due(it) })
+        assertFalse("the next run starts over", steps.due(3))
+        assertTrue(steps.due(23))
     }
 
     @Test fun aFollowedPlaylistIsBroughtInWhenAskedAndStaysInStep() = runBlocking {

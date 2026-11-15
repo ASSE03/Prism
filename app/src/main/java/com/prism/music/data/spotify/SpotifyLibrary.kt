@@ -17,6 +17,9 @@ interface SpotifyLibrary {
     /** True when the songs of a playlist the listener only follows can be read (the sign-in; a developer app gets 403). */
     val readsFollowed: Boolean
 
+    /** True when a snapshot changes whenever the songs do (the Web API); false when it only counts them (the sign-in). */
+    val snapshotsTell: Boolean
+
     /** Every playlist in the library (own, collaborative and followed), up to [maxPages] pages of 50. */
     suspend fun playlists(maxPages: Int): List<SpotifyPlaylist>
 
@@ -32,6 +35,7 @@ interface SpotifyLibrary {
 class ApiLibrary(private val api: SpotifyApi) : SpotifyLibrary {
     override val canWrite = true
     override val readsFollowed = false
+    override val snapshotsTell = true
 
     override suspend fun playlists(maxPages: Int): List<SpotifyPlaylist> {
         val all = ArrayList<SpotifyPlaylist>()
@@ -65,7 +69,8 @@ class ApiLibrary(private val api: SpotifyApi) : SpotifyLibrary {
 
 /**
  * The library through the sign-in ([SpotifyWeb]: reads only). The web player's answers name no snapshot, so a
- * playlist counts as changed when its number of songs does ([snapshotOf]); a reorder alone isn't noticed until then.
+ * playlist's snapshot is its number of songs ([snapshotOf]); [SpotifyPlaylists] compares the songs of the ones whose
+ * count stayed ([snapshotsTell]).
  */
 class WebLibrary(
     private val web: SpotifyWeb,
@@ -74,6 +79,7 @@ class WebLibrary(
 ) : SpotifyLibrary {
     override val canWrite = false
     override val readsFollowed = true
+    override val snapshotsTell = false
 
     /**
      * The library's list names no song count for a playlist (seen on the A16, 2026-11-15), so each of the listener's

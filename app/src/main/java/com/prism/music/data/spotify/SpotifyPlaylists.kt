@@ -110,9 +110,20 @@ class SpotifyPlaylists(
         val (yours, others) = all.partition { isYours(it, userId) || it.id in brought }
         val old = mirror().lists.associateBy { it.playlist.id }
         val refused = ArrayList<SpotifyPlaylist>()
+        // The sign-in names no snapshot, only a song count: a playlist that swaps songs and keeps its length (Lofi
+        // Girl's, most editorial ones) looks unchanged. So the ones that look unchanged get their songs read and
+        // compared, the longest unchecked first, [LOOKS_PER_RUN] a run.
+        val look = if (library().snapshotsTell) emptySet() else yours
+            .filter { p -> old[p.id]?.let { it.playlist.snapshot == p.snapshot && it.readAt > 0 && !it.removed } == true }
+            .sortedBy { old.getValue(it.id).readAt }.take(LOOKS_PER_RUN).map { it.id }.toSet()
         val lists = yours.mapNotNull { p ->
             val before = old[p.id]
-            if (before != null && before.playlist.snapshot == p.snapshot && before.readAt > 0) return@mapNotNull before.copy(playlist = p)
+            if (before != null && before.playlist.snapshot == p.snapshot && before.readAt > 0) {
+                if (p.id !in look) return@mapNotNull before.copy(playlist = p)
+                val items = try { readItems(p.id) } catch (e: SpotifyError.Forbidden) { return@mapNotNull before.copy(playlist = p) }
+                return@mapNotNull if (sameSongs(items, before.tracks)) before.copy(playlist = p, readAt = now)
+                else MirroredPlaylist(p, items, before.prismId, before.removed, now)
+            }
             // One Spotify won't let this app read (a collaborative one it treats as another's): left out, the rest go on.
             val items = try { readItems(p.id) } catch (e: SpotifyError.Forbidden) { refused += p; return@mapNotNull before }
             MirroredPlaylist(p, items, before?.prismId, before?.removed ?: false, now)
@@ -185,6 +196,11 @@ class SpotifyPlaylists(
                 val p = entry.playlist.copy(snapshot = snapshot.first, name = snapshot.second ?: entry.playlist.name)
                 entry = entry.copy(playlist = p, tracks = readItems(p.id), readAt = now)
                 SpotifyQueue.remember(db, entry.tracks)
+            } else if (snapshot != null && !library().snapshotsTell && now - entry.readAt >= LOOK_AGAIN_MS) {
+                // Same length: the songs themselves are compared (not on every open: a long playlist is many reads).
+                val items = readItems(entry.playlist.id)
+                entry = if (sameSongs(items, entry.tracks)) entry.copy(readAt = now) else entry.copy(tracks = items, readAt = now)
+                SpotifyQueue.remember(db, entry.tracks)
             }
         }
         matchNow(entry.tracks)
@@ -250,6 +266,13 @@ class SpotifyPlaylists(
         /** "Followed playlists too" brings in this many at most by itself; the rest stay a tap away. */
         const val AUTO_FOLLOWED = 50
         const val MATCH_GAP_MS = 400L
+        /** With the sign-in: this many same-length playlists have their songs compared in one run (every 3 hours). */
+        const val LOOKS_PER_RUN = 25
+        /** With the sign-in: an opened playlist's songs are compared again at most this often. */
+        const val LOOK_AGAIN_MS = 15 * 60_000L
+
+        /** The same songs in the same order. */
+        fun sameSongs(a: List<SpotifyTrack>, b: List<SpotifyTrack>) = a.map(SpotifyQueue::key) == b.map(SpotifyQueue::key)
         /** Only what a song needs, from each item (both the new "item" and the old "track"). */
         private const val TRACK_FIELDS = "type,uri,name,duration_ms,explicit,is_local,external_ids(isrc),artists(name),album(name,images)"
         const val ITEM_FIELDS = "next,total,items(is_local,item($TRACK_FIELDS),track($TRACK_FIELDS))"
