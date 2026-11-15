@@ -75,7 +75,7 @@ enum class MobileUse(val label: String) {
     /** `no_video_on_data`, the other way round: the chip is on while videos may play. Only shown with Data saver on. */
     VIDEOS(tr(R.string.videos)),
     /** `preload_cellular`. */
-    LOAD_AHEAD(tr(R.string.load_ahead)),
+    LOAD_AHEAD(tr(R.string.dd_use_load_ahead)),
     /** `smart_downloads_cellular`. Only shown with Smart Downloads on. */
     SMART_DOWNLOADS(tr(R.string.smart_downloads)),
     /** `lyrics_on_mobile_data`. */

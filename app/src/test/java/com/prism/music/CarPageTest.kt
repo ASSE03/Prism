@@ -40,7 +40,7 @@ class CarPageTest : ListeningPageHarness(SettingsPageId.CAR) {
 
     private val auto = t(R.string.android_auto)
     private val lyrics = t(R.string.lyrics_in_the_car)
-    private val style = t(R.string.style)
+    private val style = t(R.string.car_lyrics_style)
     private val keepTitle = t(R.string.keep_the_song_title)
     private val longLines = t(R.string.car_long_lines)
     private val grid = t(R.string.covers_in_a_grid)

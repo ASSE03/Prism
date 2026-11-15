@@ -259,7 +259,7 @@ internal fun PlayerCoverRows() {
     val prefs = LocalContainer.current.settings
     ChoiceRow(tr(R.string.cover_size), CoverSize.entries, s.coverSize, { it.label }, changed = ch("cover_size")) { prefs.setCoverSize(it) }
     SliderRow(
-        tr(R.string.cover_corners), s.player.artCorners.toFloat(), 0f..32f, { tr(R.string.dp, it.roundToInt()) }, steps = 7, changed = ch("player_art_corners"),
+        tr(R.string.cover_corners), s.player.artCorners.toFloat(), 0f..32f, { it.roundToInt().toString() }, steps = 7, changed = ch("player_art_corners"),
     ) { prefs.setPlayerArtCorners(it.roundToInt()) }
     // The player cover's shape has its one home here (plan §2.6).
     PickCardsRow(

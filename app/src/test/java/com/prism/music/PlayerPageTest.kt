@@ -128,7 +128,7 @@ class PlayerPageTest {
         assertTrue("1 to 6 groups, found ${groups.size}", groups.size in 1..6)
         val counts = groups.map { rowsIn(it).size }
         assertTrue("at most 7 rows a group, and no group without kit rows: $counts", counts.all { it in 1..7 })
-        assertEquals(listOf("Layout", "Progress bar and times", "Title", "Cover", "On it", "Modes"), groups.map { firstText(it) })
+        assertEquals(listOf("Layout", "Progress bar and times", "Title", "Cover", "On the player", "Modes"), groups.map { firstText(it) })
         // 1.8.6: Animated covers and Canvas are two rows of Cover; Cover animation moved to Modes to make room.
         assertEquals("the ledger's fit: 7 · 7 · 5 · 7 · 7 · 5", listOf(7, 7, 5, 7, 7, 5), counts)
         assertTrue("no group is named after the page", groups.none { firstText(it) == SettingsPageId.PLAYER.title })
@@ -173,7 +173,7 @@ class PlayerPageTest {
         compose.onNodeWithTag(SettingsTags.PAGE_LIST).performTouchInput { repeat(3) { swipeUp() } }
         compose.waitForIdle()
         pass()
-        assertEquals(listOf("Layout", "Progress bar and times", "Title", "Cover", "On it", "Modes"), seen.toList())
+        assertEquals(listOf("Layout", "Progress bar and times", "Title", "Cover", "On the player", "Modes"), seen.toList())
         assertTrue("cut off: $cut", cut.isEmpty())
     }
 

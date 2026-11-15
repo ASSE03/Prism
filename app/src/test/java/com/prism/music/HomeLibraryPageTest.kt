@@ -52,7 +52,7 @@ class HomeLibraryPageTest : HomePagesHarness() {
     private val topButtons = t(R.string.buttons_at_the_top_of_home)
     private val keyboard = t(R.string.open_the_keyboard)
     private val arrangeSearch = t(R.string.arrange_search)
-    private val look = t(R.string.look)
+    private val look = t(R.string.hl_card_style)
     private val graph = t(R.string.replay_card_graph)
     private val tiles = t(R.string.library_tiles)
     private val view = t(R.string.hl_view)
@@ -60,7 +60,8 @@ class HomeLibraryPageTest : HomePagesHarness() {
     private val details = t(R.string.details_under_each_one)
     private val opensOn = t(R.string.open_library_on)
     private val songAndVideo = t(R.string.a_song_and_its_video_as)
-    private val show = t(R.string.show)
+    private val show = t(R.string.hl_show_in_lists)
+    private val artistShow = t(R.string.hl_show_on_artist_pages)
     private val fullWidth = t(R.string.hl_full_width_pictures)
     private val locate = t(R.string.hl_locate_button)
 
@@ -100,7 +101,8 @@ class HomeLibraryPageTest : HomePagesHarness() {
         assertEquals(SettingsTags.ROW_SWITCH, typeOf(locate))
         // The two rows of show-chips: the lists', then the artist pages'.
         // (What artist pages show is off as Prism comes.)
-        assertEquals(listOf("$genres · $albumNames", t(R.string.none)), valuesOf(show))
+        assertEquals(listOf("$genres · $albumNames"), valuesOf(show))
+        assertEquals(listOf(t(R.string.none)), valuesOf(artistShow))
     }
 
     /** Principle 8: every stored setting the ledger gives Home & Library has its control here, and the control stores it. */
@@ -211,7 +213,7 @@ class HomeLibraryPageTest : HomePagesHarness() {
         until("artist_bio") { it.behavior.artistBio != d.behavior.artistBio && it.behavior.artistEssentials == d.behavior.artistEssentials }
         chip(artistEssentials)
         until("artist_essentials") { it.behavior.artistEssentials != d.behavior.artistEssentials }
-        assertEquals("$artistYou · $artistEssentials · $artistBio", valuesOf(show).last())
+        assertEquals("$artistYou · $artistEssentials · $artistBio", valuesOf(artistShow).last())
         assertBudgets("chips off")
     }
 

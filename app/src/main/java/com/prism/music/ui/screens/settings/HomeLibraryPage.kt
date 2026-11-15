@@ -87,7 +87,7 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
         prefs.setSearchSections(sections); prefs.setSearchChips(chips)
     }
     val look = replayCardStyle(s)
-    val lookChanged = reset.add(tr(R.string.look), look, replayCardStyle(d), { it.label }) { prefs.setReplayCard(it.name) }
+    val lookChanged = reset.add(tr(R.string.hl_card_style), look, replayCardStyle(d), { it.label }) { prefs.setReplayCard(it.name) }
     val graphChanged = reset.add(tr(R.string.replay_card_graph), s.view.replayGraph, d.view.replayGraph, { it.label }) { prefs.setReplayGraph(it) }
     val tilesDefault = d.library.tiles to d.library.playlistsFirst
     val tilesChanged = reset.add(tr(R.string.library_tiles), s.library.tiles to s.library.playlistsFirst, tilesDefault, asPrismComes(tilesDefault)) { (tiles, first) ->
@@ -104,16 +104,18 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
     val tabName: (String) -> String = { k -> tabs.firstOrNull { it.first == k }?.second ?: k }
     val startTabChanged = reset.add(tr(R.string.open_library_on), startTab, d.library.startTab, tabName) { prefs.setLibraryStartTab(it) }
     val songAndVideoChanged = reset.add(tr(R.string.a_song_and_its_video_as), s.mergeLikedVideos, d.mergeLikedVideos, onOff) { prefs.setMergeLikedVideos(it) }
-    val showTitle = tr(R.string.show)
+    // 1.8.7.5: the two rows of show-chips no longer share the name "Show".
+    val listsShowTitle = tr(R.string.hl_show_in_lists)
+    val artistShowTitle = tr(R.string.hl_show_on_artist_pages)
     val listsShow = listsShowToMerged(s.behavior.playlistGenres, s.view.downloadsAlbums)
-    val listsShowChanged = reset.add("$showTitle (${HlGroups.lists})", listsShow, listsShowToMerged(d.behavior.playlistGenres, d.view.downloadsAlbums), { shownWords(it.map(::listsShowLabel)) }) {
+    val listsShowChanged = reset.add("$listsShowTitle (${HlGroups.lists})", listsShow, listsShowToMerged(d.behavior.playlistGenres, d.view.downloadsAlbums), { shownWords(it.map(::listsShowLabel)) }) {
         listsShowToStored(it).let { (genres, albumNames) -> prefs.setPlaylistGenres(genres); prefs.setDownloadsAlbums(albumNames) }
     }
     val fullWidthChanged = reset.add(tr(R.string.hl_full_width_pictures), s.fullWidthPictures, d.fullWidthPictures, { it.label }) { prefs.setFullWidthPictures(it) }
     val locateChanged = reset.add(tr(R.string.hl_locate_button), s.behavior.locatePlaying, d.behavior.locatePlaying, onOff) { prefs.setLocatePlaying(it) }
     val artistShow = artistShowToMerged(s.behavior.artistYou, s.behavior.artistEssentials, s.behavior.artistBio)
     val artistDefault = artistShowToMerged(d.behavior.artistYou, d.behavior.artistEssentials, d.behavior.artistBio)
-    val artistShowChanged = reset.add("$showTitle (${HlGroups.artistPages})", artistShow, artistDefault, { shownWords(it.map(::artistShowLabel)) }) {
+    val artistShowChanged = reset.add("$artistShowTitle (${HlGroups.artistPages})", artistShow, artistDefault, { shownWords(it.map(::artistShowLabel)) }) {
         artistShowToStored(it).let { (you, essentials, bio) -> prefs.setArtistYou(you); prefs.setArtistEssentials(essentials); prefs.setArtistBio(bio) }
     }
 
@@ -146,7 +148,7 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
         // Not "Replay card" for the row too: a group and a row never share a name.
         group(HlGroups.replayCard) {
             PickCardsRow(
-                tr(R.string.look), ReplayCardStyle.entries, look, { it.label },
+                tr(R.string.hl_card_style), ReplayCardStyle.entries, look, { it.label },
                 info = tr(R.string.how_replay_looks_on_home_from, look.label, look.note), changed = lookChanged,
                 onPick = { prefs.setReplayCard(it.name) },
             ) { ReplayCardPreview(it) }
@@ -175,7 +177,7 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
         group(HlGroups.lists) {
             // Two switches as chips (plan §2.6); each is also in its list's sort menu.
             ShowChipsRow(
-                showTitle,
+                listsShowTitle,
                 listOf(
                     ShowOption(listsShowLabel(ListsShow.GENRES), ListsShow.GENRES in listsShow) { prefs.setPlaylistGenres(it) },
                     ShowOption(listsShowLabel(ListsShow.ALBUM_NAMES), ListsShow.ALBUM_NAMES in listsShow) { prefs.setDownloadsAlbums(it) },
@@ -193,7 +195,7 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
         // What artist pages show (their colors are Theme & colors' "Page colors").
         group(HlGroups.artistPages) {
             ShowChipsRow(
-                showTitle,
+                artistShowTitle,
                 listOf(
                     ShowOption(artistShowLabel(ArtistShow.YOU), ArtistShow.YOU in artistShow) { prefs.setArtistYou(it) },
                     ShowOption(artistShowLabel(ArtistShow.ESSENTIALS), ArtistShow.ESSENTIALS in artistShow) { prefs.setArtistEssentials(it) },
@@ -353,7 +355,7 @@ val homeLibraryIndex: List<SettingEntry> by lazy {
         SettingEntry(page, g.search, tr(R.string.open_the_keyboard), tr(R.string.search_typing)),
         SettingEntry(page, g.search, tr(R.string.arrange_search), words(R.string.hl_arrange_search_keywords, R.string.search_chips)),
         // Replay card
-        SettingEntry(page, g.replayCard, tr(R.string.look), tr(R.string.replay_teaser_look_style_design_quiet), shown = g.replayCard),
+        SettingEntry(page, g.replayCard, tr(R.string.hl_card_style),tr(R.string.replay_teaser_look_style_design_quiet), shown = g.replayCard),
         SettingEntry(page, g.replayCard, tr(R.string.replay_card_graph), tr(R.string.replay_card_graph_keywords)),
         // Library
         SettingEntry(page, g.library, tr(R.string.library_tiles), words(R.string.liked_downloads_local_files_replay_podcasts, R.string.where_your_playlists_go, R.string.playlists_first, R.string.tiles_first)),

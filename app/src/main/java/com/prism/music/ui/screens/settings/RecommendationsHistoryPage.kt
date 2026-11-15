@@ -175,6 +175,8 @@ fun RecommendationsHistoryPage(bottomPadding: Dp, find: String? = null, showBack
             ) { prefs.setPlayCountOnAccount(it) }
             LinkRow(tr(R.string.imp_title), value = tr(R.string.imp_row_detail), info = tr(R.string.imp_group_info)) { nav.go(Routes.BRING_HISTORY) }
             if (imported.isNotEmpty()) SwitchRow(tr(R.string.imp_shape_mixes), teach, info = tr(R.string.imp_shape_mixes_info)) { c.imports.setTeach(it) }
+            // 1.8.7.5: what Replay counts is a history choice, so it sits with the histories.
+            RhCountHistoryFrom(sources, countedText(countedNow), countedChanged)
         }
         group(tr(R.string.replay_2)) {
             SwitchRow(
@@ -190,7 +192,6 @@ fun RecommendationsHistoryPage(bottomPadding: Dp, find: String? = null, showBack
             // 1.8.5: Replay's three notices are one row (the group stays within its seven); each has its switch in the sheet.
             RhReplayNotices(rewindChanged, recapChanged, milestoneChanged)
             SwitchRow(tr(R.string.finish_lyric_title), b.finishLyric, info = tr(R.string.finish_lyric_info), changed = finishLyricChanged) { prefs.setFinishLyric(it) }
-            RhCountHistoryFrom(sources, countedText(countedNow), countedChanged)
         }
     }
 }
@@ -240,7 +241,7 @@ private fun RhReplayNotices(rewindChanged: Boolean, recapChanged: Boolean, miles
     var open by rememberSaveable(title, "replay-notices") { mutableStateOf(false) }
     // A notice turned on asks for notifications (Android 13+) if Prism may not post them yet: else nothing would come.
     fun asked(turnedOn: Boolean) { if (turnedOn) c.askNotifications() }
-    PickRow(title, if (on == 0) tr(R.string.off) else "$on / 3", changed = rewindChanged || recapChanged || milestoneChanged) { open = true }
+    PickRow(title, if (on == 0) tr(R.string.off) else tr(R.string.replay_notices_n_on, on), changed = rewindChanged || recapChanged || milestoneChanged) { open = true }
     if (open) RowsSheet(title, { open = false }) {
         SwitchRow(tr(R.string.rewind_notification), s.rewindNotification, info = tr(R.string.on_december_1_when_your_year), changed = rewindChanged) { prefs.setRewindNotification(it); asked(it) }
         SwitchRow(tr(R.string.recap_notification), b.recapNotify, info = tr(R.string.recap_notification_info), changed = recapChanged) { prefs.setRecapNotify(it); asked(it) }
@@ -287,6 +288,7 @@ val recommendationsHistoryIndex: List<SettingEntry> by lazy {
         // 1.8.1: Bring your history.
         SettingEntry(page, history, tr(R.string.imp_title), tr(R.string.imp_keywords)),
         SettingEntry(page, history, tr(R.string.imp_shape_mixes), tr(R.string.imp_shape_mixes_keywords)),
+        SettingEntry(page, history, tr(R.string.imp_count_history_from), tr(R.string.imp_count_keywords) + " " + tr(R.string.imp_prism_plays)),
         // On the Bring your history screen (opened from this group): the fresh-download reminder.
         SettingEntry(page, history, tr(R.string.imp_remind), tr(R.string.imp_remind_keywords)),
         // And YouTube Music (live): the account's History page every few hours (signed in).
@@ -304,6 +306,5 @@ val recommendationsHistoryIndex: List<SettingEntry> by lazy {
         SettingEntry(page, replay, tr(R.string.recap_notification), tr(R.string.recap_ready_text)),
         SettingEntry(page, replay, tr(R.string.milestone_notification), tr(R.string.milestones)),
         SettingEntry(page, replay, tr(R.string.finish_lyric_title), tr(R.string.finish_lyric_info)),
-        SettingEntry(page, replay, tr(R.string.imp_count_history_from), tr(R.string.imp_count_keywords) + " " + tr(R.string.imp_prism_plays)),
     )
 }

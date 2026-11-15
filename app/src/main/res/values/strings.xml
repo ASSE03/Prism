@@ -1519,7 +1519,7 @@
     <string name="artist_album_playlist_page_color_color">artist album playlist page color color photo accent picture</string>
     <string name="font">Font</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">typeface custom ttf otf outfit prism system clean manrope geometric plus jakarta sans airy urbanist rounded nunito editorial serif fraunces mono geist legible atkinson hyperlegible dyslexia dyslexic opendyslexic accessibility</string>
-    <string name="type">Type</string>
+    <string name="type">Heading style</string>
     <string name="classic_1_6_bold_headings_titles">classic 1.6 bold headings titles old look</string>
     <string name="classic_type">Classic type</string>
     <string name="weight_and_spacing">Weight and spacing</string>
@@ -1534,7 +1534,7 @@
     <string name="remove_the_lyrics_font_file">Remove the lyrics font file</string>
     <string name="font_size_scale_bigger_smaller">font size scale bigger smaller</string>
     <string name="icons">Icons</string>
-    <string name="pack">Pack</string>
+    <string name="pack">Icon pack</string>
     <string name="icon_style_cupertino_apple">icon style cupertino apple</string>
     <string name="icon_thin_bold">icon thin bold</string>
     <string name="rounded">Rounded</string>
@@ -1544,7 +1544,7 @@
     <string name="restart_prism_to_see_them">Restart Prism to see them</string>
     <string name="app_icon">App icon</string>
     <string name="launcher_home_screen_icon_logo">launcher home screen icon logo</string>
-    <string name="shape">Shape</string>
+    <string name="shape">Button shape</string>
     <string name="corners">Corners</string>
     <string name="rounded_square_shape_radius_slider">rounded square shape radius slider</string>
     <string name="covers_shapes">Covers\' shapes</string>
@@ -1804,7 +1804,7 @@
     <string name="curve_equal_power_linear_s_curve">curve equal power linear s-curve dj cut smooth straight gentle</string>
     <string name="crossfade_mark">Crossfade mark</string>
     <string name="progress_bar_mark_where_next_song">progress bar mark where next song blend starts</string>
-    <string name="covers_blend_too">Covers blend too</string>
+    <string name="covers_blend_too">Covers blend in a crossfade</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">cover artwork dissolve fade crossfade apple music</string>
     <string name="speed_pitch_and_fades">Speed, pitch and fades</string>
     <string name="speed_when_prism_starts">Speed when Prism starts</string>
@@ -1955,7 +1955,7 @@
     <string name="clear_smart_downloads">Clear Smart Downloads</string>
     <string name="cache_delete_free_space">cache delete free space</string>
     <string name="sections_order_shortcuts_quick_picks_speed">sections order shortcuts quick picks speed dial</string>
-    <string name="continue_line">Continue line</string>
+    <string name="continue_line">Pick up where you left off</string>
     <string name="continue_album_resume_greeting_hide_context">continue album resume greeting hide context rewind</string>
     <string name="replay_card">Replay card</string>
     <string name="replay_teaser_look_style_design_quiet">replay teaser look style design quiet ledger wash spectrum frame ring cover stripe bars aurora</string>
@@ -1992,10 +1992,10 @@
     <string name="replay_graph_days">Days</string>
     <string name="replay_last_weeks">Last %1$d weeks</string>
     <string name="replay_last_days">Last %1$d days</string>
-    <string name="replay_story_font">Story type</string>
-    <string name="replay_story_font_info">How Replay and Rewind stories set their words: in Prism\'s poster type, or in the font you picked for Prism (Text &amp; icons).</string>
+    <string name="replay_story_font">Font in stories</string>
+    <string name="replay_story_font_info">How Replay and Rewind stories set their words: in Prism\'s poster font, or in the font you picked for Prism (Text &amp; icons).</string>
     <string name="replay_story_font_keywords">font typography typeface stories rewind wrapped</string>
-    <string name="replay_story_font_poster">Poster type</string>
+    <string name="replay_story_font_poster">Prism\'s poster font</string>
     <string name="replay_story_font_own">Your font</string>
     <string name="replay_by_hour">Listening by hour</string>
     <string name="replay_by_day">Listening by day</string>
@@ -2076,8 +2076,8 @@
     <string name="open_source_licenses">Open-source licenses</string>
     <string name="license_gpl">license gpl</string>
     <string name="diagnostics">Diagnostics</string>
-    <string name="playback_diagnostics">Playback diagnostics</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">stutter judder skip glitch lag bluetooth airpods log debug</string>
+    <string name="playback_diagnostics">Keep a playback log</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">stutter judder skip glitch lag bluetooth airpods log debug diagnostics playback log</string>
     <string name="share_diagnostics">Share diagnostics</string>
     <string name="log_send_report">log send report</string>
     <string name="clear_diagnostics">Clear diagnostics</string>
@@ -2396,10 +2396,10 @@
     <string name="opens_in_youtube_music">Opens in YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">On: links you tap open here</string>
-    <string name="off_turn_on_open_supported_links">Off: turn on \"Open supported links\" for music.youtube.com</string>
-    <string name="choose_prism_when_a_link_asks">Choose Prism when a link asks which app</string>
-    <string name="android_only_lets_an_app_open">Android only lets an app open a website\'s links when you say so. This opens Prism\'s page for it: turn on its links there.</string>
+    <string name="on_links_you_tap_open_here">On</string>
+    <string name="off_turn_on_open_supported_links">Off</string>
+    <string name="choose_prism_when_a_link_asks">Not set</string>
+    <string name="android_only_lets_an_app_open">Android only lets an app open a website\'s links when you say so. This opens Prism\'s page for it. Turn on \"Open supported links\" for music.youtube.com there, and links you tap open here. If a link asks which app, choose Prism.</string>
     <string name="see_and_delete_what_s_on">See and delete what\'s on your phone</string>
     <string name="including_likes_from_other_devices">Including likes from other devices</string>
     <string name="songs_you_ll_likely_play_ready">Songs you\'ll likely play, ready offline</string>
@@ -3214,7 +3214,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music, Musixmatch and Spotify\'s · word by word</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · word by word, the most Chinese songs</string>
     <string name="open_lyrics_database_line_by_line">Open lyrics database · line by line</string>
     <string name="netease">NetEase</string>
@@ -3224,7 +3224,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Lyrics listeners submit · few songs so far</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · lines or plain</string>
+    <string name="lyricfind_lines_or_plain">The lyrics on the song\'s Prism Music page, from LyricFind · lines or plain</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Plain text · also fills in starred-out words</string>
     <string name="both">Both</string>
@@ -3261,7 +3261,7 @@
     <string name="music_note">Music note</string>
     <string name="bold">Bold</string>
     <string name="wide">Wide</string>
-    <string name="ink">Ink</string>
+    <string name="ink">Plain</string>
     <string name="the_light">The light</string>
     <string name="when_you_leave_prism">When you leave Prism</string>
     <string name="only_with_its_button">Only with its button</string>
@@ -3403,7 +3403,7 @@
     <string name="mono_type_neon_light_sharp_corners">Mono type, neon light, sharp corners</string>
     <string name="rounded_type_extra_round_corners_pastels">Rounded type, extra-round corners, pastels</string>
     <string name="studio">Studio</string>
-    <string name="black_and_white_nothing_extra">Black and white, a plain player, no colour but the music\'s</string>
+    <string name="black_and_white_nothing_extra">Black and white, a plain player, no color but the music\'s</string>
     <string name="white_light_no_accent_compact_classic">White light, no accent, compact, classic controls</string>
     <string name="a_record_on_the_player_warm">A record on the player, warm amber, serif titles</string>
     <string name="prism_1_6_s_look_its">Prism 1.6\'s look: its icons, bold type, plain controls, no glass</string>
@@ -3427,7 +3427,7 @@
     <string name="the_player_and_your_phone_s_controls_still_have_it">The player and your phone\'s controls still have it</string>
     <string name="mini_player_progress">Mini player progress</string>
     <string name="player_background_showing">Player background showing</string>
-    <string name="cover_corners">Cover corners</string>
+    <string name="cover_corners">Cover corner roundness</string>
     <string name="cover_shrinks_on_pause">Cover shrinks on pause</string>
     <string name="edge_to_edge_cover">Edge-to-edge cover</string>
     <string name="edge_to_edge_video">Edge-to-edge video</string>
@@ -4345,12 +4345,12 @@
     <!-- 1.8.0 settings (coordinator) -->
     <string name="what_plays_next">What plays next</string>
     <string name="when_the_queue_ends">When the queue ends</string>
-    <string name="when_the_queue_ends_info">Stop: the music ends with the queue. Your music: Prism\'s own radio from what you play. Both: mostly your music, with a few new songs. Prism Music: a radio from Prism Music\'s catalog. Offline it\'s always your music.</string>
+    <string name="when_the_queue_ends_info">Stop: the music ends with the queue. Your music: Prism\'s own radio from what you play. Yours and new: mostly your music, with a few new songs. Prism Music: a radio from Prism Music\'s catalog. Offline it\'s always your music.</string>
     <string name="music_videos_label">Music videos</string>
-    <string name="play_them">Play them</string>
+    <string name="play_them">Videos</string>
     <string name="songs_in_radios">Songs in radios</string>
     <string name="songs_everywhere">Songs everywhere</string>
-    <string name="music_videos_label_info">Play them: a music video plays as a video. Songs in radios: autoplay and radios play the video\'s song instead. Songs everywhere: any music video you tap plays as its song, and the Video button still shows the video.</string>
+    <string name="music_videos_label_info">Videos: a music video plays as a video. Songs in radios: autoplay and radios play the video\'s song instead. Songs everywhere: any music video you tap plays as its song, and the Video button still shows the video.</string>
     <string name="trim_silence">Trim silence at the start and end</string>
     <string name="podcasts_only">Podcasts only</string>
     <string name="songs_and_podcasts">Songs and podcasts</string>
@@ -4374,7 +4374,7 @@
     <string name="reopen_on_the_last_page">Reopen on the last page</string>
     <string name="reopen_on_the_last_page_info">The player opens on what you had open when you left it: the cover, the lyrics or the queue. Back closes the player from the lyrics or the queue too, leaving it there; their own buttons go back to the cover.</string>
     <string name="reopen_on_the_last_page_keywords">player remember lyrics queue open start page</string>
-    <string name="steadier_lyrics">Steadier lyrics</string>
+    <string name="steadier_lyrics">Calmer lyrics</string>
     <string name="steadier_lyrics_info">The controls take a longer swipe to come and go. After you scroll, the lyrics go back to the sung line sooner when it\'s close, and take their usual time when it\'s far.</string>
     <string name="steadier_lyrics_keywords">lyrics sensitive scroll swipe return current line follow controls</string>
     <string name="gestures_under_the_lyrics">Gestures below the lyrics</string>
@@ -5244,9 +5244,9 @@
     <string name="dd_space_used">%1$s used</string>
     <string name="dd_use_mobile_data_for">Use mobile data for</string>
     <string name="dd_use_saving_covers">Saving animated covers</string>
-    <string name="dd_use_measuring">Measuring songs</string>
+    <string name="dd_use_measuring">Checking loudness and tempo</string>
     <string name="dd_use_videos_info">Off, music videos don\'t play on mobile data, except ones you\'ve downloaded. If Wi-Fi drops during a video, it carries on as audio.</string>
-    <string name="dd_use_keywords">cellular metered data saver wifi only</string>
+    <string name="dd_use_keywords">cellular metered data saver wifi only load ahead measuring loudness tempo</string>
     <!-- gestures -->
     <string name="gb_on_the_cover">On the cover</string>
     <string name="gb_on_the_mini_player">On the mini player</string>
@@ -5355,7 +5355,7 @@
     <string name="sound_streaming_quality_value">Wi-Fi %1$s · Mobile data %2$s</string>
     <!-- player -->
     <string name="settings_player_progress_and_times">Progress bar and times</string>
-    <string name="settings_player_on_it">On it</string>
+    <string name="settings_player_on_it">On the player</string>
     <string name="settings_player_modes">Modes</string>
     <string name="settings_player_controls_over_videos">Controls over videos</string>
     <string name="settings_player_hide_controls">Hide controls</string>
@@ -5375,7 +5375,7 @@
     <string name="settings_player_queue_dj">DJ button</string>
     <string name="settings_player_queue_lengths">Song lengths</string>
     <string name="settings_player_queue_move_played">Move played songs</string>
-    <string name="settings_player_queue_tidier">Tidier</string>
+    <string name="settings_player_queue_tidier">Tidier queue</string>
     <string name="settings_player_scroll_for_controls">Scroll up for controls</string>
     <string name="settings_player_lock_options">Lock screen options</string>
     <string name="settings_player_immersive_options">Immersive options</string>
@@ -5599,4 +5599,15 @@
     <string name="selftest_signed_in_on">Signed in on %1$s</string>
     <string name="selftest_premium_off">Premium quality is off</string>
     <string name="selftest_premium_not_known">Not known yet: play a few songs first</string>
+    <!-- 1.8.7.5: the settings-words pass (English first; translations follow on the owner's word). -->
+    <string name="queue_end_mixed">Yours and new</string>
+    <string name="dd_use_load_ahead">Loading songs ahead</string>
+    <string name="replay_notices_n_on">%1$d of 3 on</string>
+    <string name="car_lyrics_style">Lyrics style</string>
+    <string name="tab_tint_light">Theme colors</string>
+    <string name="bini_detail">Apple Music\'s lyrics · word by word, matched another way</string>
+    <string name="hl_card_style">Card style</string>
+    <string name="hl_show_in_lists">Show in lists</string>
+    <string name="hl_show_on_artist_pages">Show on artist pages</string>
+    <string name="allow_access_to_lossless_files_value">Needed to find your lossless files</string>
 </resources>

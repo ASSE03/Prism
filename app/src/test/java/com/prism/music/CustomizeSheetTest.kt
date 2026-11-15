@@ -112,7 +112,7 @@ class CustomizeSheetTest : TextTabsPageHarness(SettingsPageId.TABS_MINI_PLAYER) 
     @Test fun thePlayersSheetDrawsThePlayerPagesAndTheLyricsRows() {
         open(CustomizeTarget.PLAYER)
         assertKitRowsOnly(CustomizeTarget.PLAYER)
-        assertEquals(listOf("Layout", "Progress bar and times", "Cover", "On it", "Visualizer", "Lyrics"), groups().map { it.title })
+        assertEquals(listOf("Layout", "Progress bar and times", "Cover", "On the player", "Visualizer", "Lyrics"), groups().map { it.title })
         // The merged controls of the page, not the old switches.
         val names = rowNames()
         assertTrue(names.toString(), "Cover › Edge to edge" in names && "Cover › Cover animation" in names)

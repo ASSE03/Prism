@@ -56,7 +56,7 @@ enum class CarLyricsStyle(val label: String, val detail: String) {
 enum class LyricsSource(val label: String, val detail: String) {
     APPLE(tr(R.string.better_lyrics), tr(R.string.apple_music_s_lyrics_word_by)),
     LYRICSPLUS(tr(R.string.lyricsplus), tr(R.string.apple_music_musixmatch_and_spotify_s)),
-    BINI(tr(R.string.bini), tr(R.string.apple_music_s_lyrics_word_by)),
+    BINI(tr(R.string.bini), tr(R.string.bini_detail)),
     QQ(tr(R.string.qq_portato), tr(R.string.qq_music_word_by_word_the)),
     LRCLIB("LRCLIB", tr(R.string.open_lyrics_database_line_by_line)),
     NETEASE(tr(R.string.netease), tr(R.string.netease_cloud_music_word_by_word)),
@@ -274,7 +274,7 @@ data class ShapeLook(
 )
 
 /** The current tab's icon color (1.7.7). */
-enum class TabTint(val label: String) { INK(tr(R.string.ink)), ACCENT(tr(R.string.accent)), LIGHT(tr(R.string.the_light)) }
+enum class TabTint(val label: String) { INK(tr(R.string.ink)), ACCENT(tr(R.string.accent)), LIGHT(tr(R.string.tab_tint_light)) }
 
 /**
  * How Prism behaves, added in 1.7.8 (not part of a Look). Nested (see [ShapeLook]). Every default keeps 1.7.7's way.

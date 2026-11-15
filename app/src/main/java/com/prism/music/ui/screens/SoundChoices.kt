@@ -7,7 +7,7 @@ import com.prism.music.data.prefs.SettingsRepository
 import com.prism.music.tr
 
 /** When the queue ends (1.8.0, #210): autoplay's switch and its source as one choice. */
-enum class QueueEnd(val label: String) { STOP(tr(R.string.stop)), YOURS(tr(R.string.your_music)), MIXED(tr(R.string.both)), YOUTUBE(tr(R.string.prism_music)) }
+enum class QueueEnd(val label: String) { STOP(tr(R.string.stop)), YOURS(tr(R.string.your_music)), MIXED(tr(R.string.queue_end_mixed)), YOUTUBE(tr(R.string.prism_music)) }
 
 /** Music videos (1.8.0): "Songs, not videos" and its "Everywhere" as one choice. */
 enum class VideoPolicy(val label: String) { PLAY(tr(R.string.play_them)), RADIOS(tr(R.string.songs_in_radios)), EVERYWHERE(tr(R.string.songs_everywhere)) }

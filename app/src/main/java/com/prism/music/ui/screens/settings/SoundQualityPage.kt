@@ -123,7 +123,7 @@ fun SoundQualityPage(bottomPadding: Dp, find: String? = null, showBack: Boolean 
             }
             if (s.lossless) {
                 if (s.losslessLocal) LinkRow(tr(R.string.scan_for_lossless_files_again), value = tr(R.string.also_checked_every_few_hours), action = true) { scope.launch { c.losslessSync.sync() } }
-                else LinkRow(tr(R.string.allow_access_to_lossless_files), action = true) { askFiles.launch(LocalLossless.permission) }
+                else LinkRow(tr(R.string.allow_access_to_lossless_files), value = tr(R.string.allow_access_to_lossless_files_value), action = true) { askFiles.launch(LocalLossless.permission) }
                 // Data saver plays songs at this quality on mobile data, lossless or not (#40).
                 if (s.dataSaver) ChoiceRow(
                     tr(R.string.streaming_quality_on_mobile_data), AudioQuality.entries.filter { it != AudioQuality.HIGH }, saverQuality, { it.label },

@@ -328,7 +328,7 @@ internal val playerSettings: List<PlayerSetting<*>> by lazy {
         ps(listOf("player_artist_links"), g.title, R.string.each_artist_its_own_link, { it.view.artistLinks }, ::artistLinksWords) { p, v -> p.setArtistLinks(v) },
         // Cover
         ps(listOf("cover_size"), g.cover, R.string.cover_size, { it.coverSize }, { it.label }) { p, v -> p.setCoverSize(v) },
-        ps(listOf("player_art_corners"), g.cover, R.string.cover_corners, { it.player.artCorners }, { tr(R.string.dp, it) }) { p, v -> p.setPlayerArtCorners(v) },
+        ps(listOf("player_art_corners"), g.cover, R.string.cover_corners, { it.player.artCorners }, { it.toString() }) { p, v -> p.setPlayerArtCorners(v) },
         ps(listOf("cover_shape_player"), g.cover, R.string.settings_player_cover_shape, { it.shapes.player }, { it.label }) { p, v -> p.setCoverShape("player", v) },
         ps(
             listOf("full_bleed_artwork", "video_full_bleed"), g.cover, R.string.settings_player_edge_to_edge,

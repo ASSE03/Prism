@@ -324,6 +324,8 @@ val textIconsOldGroups: Map<String, String> by lazy {
         tr(R.string.type) to tr(R.string.text), tr(R.string.weight_and_spacing) to tr(R.string.text), tr(R.string.titles) to tr(R.string.text),
         tr(R.string.app_icon) to tr(R.string.icons),
         tr(R.string.shape) to tr(R.string.text_icons_shapes), tr(R.string.covers_shapes) to tr(R.string.text_icons_shapes),
+        // 1.8.7.5: "Type" and "Shape" are rows named "Heading style" and "Button shape" now; links to the old group names still land.
+        "Type" to tr(R.string.text), "Shape" to tr(R.string.text_icons_shapes),
     )
 }
 
