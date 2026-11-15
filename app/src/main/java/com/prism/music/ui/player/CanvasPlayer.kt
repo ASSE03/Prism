@@ -352,8 +352,9 @@ internal data class PhoneStrain(val powerSave: Boolean = false, val hot: Boolean
 
 internal fun isHot(thermalStatus: Int): Boolean = thermalStatus >= 3 // PowerManager.THERMAL_STATUS_SEVERE
 
+/** Battery saver and heat, read now and again when they change (Canvas; and #336's Smoother scrolling reads [PhoneStrain.powerSave]). */
 @Composable
-private fun rememberPhoneStrain(): androidx.compose.runtime.State<PhoneStrain> {
+internal fun rememberPhoneStrain(): androidx.compose.runtime.State<PhoneStrain> {
     val context = LocalContext.current.applicationContext
     val state = remember { mutableStateOf(PhoneStrain()) }
     DisposableEffect(context) {

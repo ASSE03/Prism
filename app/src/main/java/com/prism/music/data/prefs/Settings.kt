@@ -399,6 +399,11 @@ data class BehaviorPrefs(
     val faceDownPause: Boolean = false,
     /** #464 (1.8.5): with the lyrics open, a tap on the small cover plays or pauses and a long press closes them; off, a tap closes them. */
     val lyricsCoverPlays: Boolean = false,
+    /**
+     * #336 (1.8.7): "Smoother scrolling", the phone's activity asks the screen for its fastest refresh rate at the current
+     * resolution ([com.prism.music.ui.FastDisplayMode]). Off by default (it costs battery); Performance mode reads it as off.
+     */
+    val smoothScrolling: Boolean = false,
     /** 1.8.6: Canvas's choices beyond Off / On the cover / Full screen ([CanvasPrefs.enabled], [CanvasPrefs.fillsBackground]). */
     val canvas: CanvasPrefs = CanvasPrefs(),
 ) {
@@ -1897,7 +1902,8 @@ data class AppSettings(
         backdropMotion = false,
         reduceMotion = true,
         // 1.8.6: no loops cut from music videos either (Canvas is off here; this keeps a reader of the nested value honest).
-        behavior = behavior.copy(canvas = behavior.canvas.copy(enabled = false, fillsBackground = false, useVideos = false)),
+        // 1.8.7 (#336): no fast refresh rate asked of the screen either.
+        behavior = behavior.copy(canvas = behavior.canvas.copy(enabled = false, fillsBackground = false, useVideos = false), smoothScrolling = false),
         visualizer = VisualizerStyle.OFF,
         meshSpeed = 0f,
         player = player.copy(background = if (player.background == PlayerBackground.BLUR || player.background == PlayerBackground.APPEARANCE) PlayerBackground.MESH else player.background),
@@ -2334,6 +2340,7 @@ class SettingsRepository(
         val finishLyric = booleanPreferencesKey("finish_lyric")
         val faceDownPause = booleanPreferencesKey("face_down_pause")
         val lyricsCoverPlays = booleanPreferencesKey("lyrics_cover_plays")
+        val smoothScrolling = booleanPreferencesKey("smooth_scrolling")
         // 1.8.6 ([CanvasPrefs], in [BehaviorPrefs]).
         val canvasCovers = booleanPreferencesKey("canvas_covers")
         val canvasUseVideos = booleanPreferencesKey("canvas_use_videos")
@@ -2490,6 +2497,8 @@ class SettingsRepository(
                 // 1.8.6 ([CanvasPrefs]): where a canvas comes from, its controls, its quality and its data: behaviour, not a look.
                 "canvas_use_videos", "canvas_video_first", "canvas_keep_controls", "canvas_lighter", "canvas_videos_cellular",
                 "canvas_covers", "canvas_lyrics",
+                // 1.8.7 (#336): the screen's refresh rate is the phone's own matter, not a look.
+                "smooth_scrolling",
             )
         }
     }
@@ -2780,6 +2789,7 @@ class SettingsRepository(
                 finishLyric = p[K.finishLyric] ?: d.behavior.finishLyric,
                 faceDownPause = p[K.faceDownPause] ?: d.behavior.faceDownPause,
                 lyricsCoverPlays = p[K.lyricsCoverPlays] ?: d.behavior.lyricsCoverPlays,
+                smoothScrolling = p[K.smoothScrolling] ?: d.behavior.smoothScrolling,
                 canvas = CanvasPrefs(
                     covers = p[K.canvasCovers] ?: d.behavior.canvas.covers,
                     useVideos = p[K.canvasUseVideos] ?: d.behavior.canvas.useVideos,
@@ -3603,6 +3613,7 @@ class SettingsRepository(
     fun setFinishLyric(v: Boolean) = edit { it[K.finishLyric] = v }
     fun setFaceDownPause(v: Boolean) = edit { it[K.faceDownPause] = v }
     fun setLyricsCoverPlays(v: Boolean) = edit { it[K.lyricsCoverPlays] = v }
+    fun setSmoothScrolling(v: Boolean) = edit { it[K.smoothScrolling] = v }
     // 1.8.6 Canvas ([CanvasPrefs]).
     fun setCanvasCovers(v: Boolean) = edit { it[K.canvasCovers] = v }
     fun setCanvasUseVideos(v: Boolean) = edit { it[K.canvasUseVideos] = v }
