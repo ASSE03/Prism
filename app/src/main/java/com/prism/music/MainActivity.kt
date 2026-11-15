@@ -493,6 +493,9 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 if (settings.behavior.lockPortrait && !tablet) android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 else android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
+        // Settings → Performance → "Smoother scrolling" (#336): the screen's fastest mode while Prism is open. `settings` is
+        // the effective one, so Performance mode reads it as off; battery saver does too.
+        com.prism.music.ui.SmoothScrollingEffect(settings.behavior.smoothScrolling)
         val navController = rememberNavController()
         var playerOpen by rememberSaveable { mutableStateOf(false) }
         val navigator = remember(navController) {

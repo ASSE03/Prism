@@ -76,6 +76,7 @@ val rootIndex: List<SettingEntry> by lazy {
         SettingEntry(null, tr(R.string.account), tr(R.string.prism_account), tr(R.string.profile_name_picture_photo_local_on)),
         SettingEntry(null, tr(R.string.performance), tr(R.string.performance_mode), tr(R.string.slow_lag_laggy_stutter_battery_old)),
         SettingEntry(null, tr(R.string.performance), tr(R.string.performance_mode_is_on), tr(R.string.paused_effects_turn_off)),
+        SettingEntry(null, tr(R.string.performance), tr(R.string.smooth_scrolling), tr(R.string.smooth_scrolling_keywords)),
     )
 }
 
@@ -111,10 +112,18 @@ fun SettingsRoot(
 ) {
     val c = LocalContainer.current
     val nav = LocalNavigator.current
+    // #336: whether this screen has a mode faster than its slowest (90 or 120 Hz); read once, it doesn't change.
+    val view = androidx.compose.ui.platform.LocalView.current
+    val fastScreen = remember(view) {
+        (view.context as? android.app.Activity)?.let { a ->
+            runCatching { com.prism.music.ui.displayModes(com.prism.music.ui.displayOf(a)).let { (m, id) -> com.prism.music.ui.hasFasterMode(m, id) } }.getOrDefault(false)
+        } ?: false
+    }
     SettingsRootContent(
         bottomPadding, LocalAppSettings.current, LocalIsDark.current, showBack, selected,
         account = { AccountCard() }, onPerformance = { c.settings.setPerformanceMode(it) },
         onOpen = onOpen, onRoute = { nav.go(it) }, searchFocus = searchFocus,
+        fastScreen = fastScreen, onSmoothScrolling = { c.settings.setSmoothScrolling(it) },
     )
 }
 
@@ -135,6 +144,9 @@ internal fun SettingsRootContent(
     onRoute: (String) -> Unit,
     onBack: (() -> Unit)? = null,
     searchFocus: FocusRequester? = null,
+    /** #336: the screen can go faster than 60 Hz; on a screen that can't, "Smoother scrolling" is left out (unless on). */
+    fastScreen: Boolean = false,
+    onSmoothScrolling: (Boolean) -> Unit = {},
 ) {
     // Search (#73): matching settings in place of the groups. A result on the root itself (the account, Performance
     // mode) is found here; one on a page opens that page at its group.
@@ -179,6 +191,13 @@ internal fun SettingsRootContent(
                 value = if (settings.performanceMode) tr(R.string.on_prism_is_drawn_lightly) else tr(R.string.for_slower_phones_lighter_fewer_effects),
                 info = tr(R.string.pauses_every_feature_still_works_and, PERFORMANCE_PAUSES.lowercase()),
                 onChange = onPerformance,
+            )
+            // #336 (1.8.7): the screen's fastest refresh rate while Prism is open. Left out on a screen with nothing
+            // faster than 60 Hz, as other pages leave out what a phone can't do; still shown while on, to turn it off.
+            if (fastScreen || settings.behavior.smoothScrolling) SwitchRow(
+                tr(R.string.smooth_scrolling), settings.behavior.smoothScrolling,
+                info = tr(R.string.smooth_scrolling_info),
+                onChange = onSmoothScrolling,
             )
         }
         // Not `group(...)`: five titled groups would give the root jump chips, and it has its search for that.
