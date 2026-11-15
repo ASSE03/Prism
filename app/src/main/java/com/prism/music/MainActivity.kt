@@ -145,7 +145,7 @@ import com.prism.music.ui.theme.ink3
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.semantics.selected
-import dev.chrisbanes.haze.hazeSource
+import com.prism.music.ui.theme.glassSource
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -652,8 +652,8 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
             Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
                 Box(
                     Modifier.fillMaxSize().then(underPlayer).nestedScroll(barScroll)
-                        // The page is copied only when glass will sample it (#343).
-                        .then(if (com.prism.music.ui.theme.glassSamplesThePage(Build.VERSION.SDK_INT, settings.liquidGlass, settings.frostedGlass)) Modifier.hazeSource(haze) else Modifier)
+                        // The page is copied only when glass will sample it (#343), on the background behind it (1.8.7).
+                        .glassSource(haze, com.prism.music.ui.theme.glassSamplesThePage(Build.VERSION.SDK_INT, settings.liquidGlass, settings.frostedGlass), MaterialTheme.colorScheme.background)
                         .then(if (settings.swipeTabs && !useRail) swipeBetweenTabs(tabs, route, selectTab) else Modifier),
                 ) {
                   CompositionLocalProvider(com.prism.music.ui.components.LocalHiddenByPlayer provides hiddenByPlayer) {
