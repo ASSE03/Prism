@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.prism.music.data.prefs.GlassKind
 import dev.chrisbanes.haze.HazeInput
 import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.blur.HazeBlurStyle
 import dev.chrisbanes.haze.blur.HazeColorEffect
 import dev.chrisbanes.haze.blur.hazeBlur
@@ -57,6 +58,17 @@ internal fun glassPath(sdk: Int, liquid: Boolean, frosted: Boolean, haze: Boolea
  * (hazeSource). With glass off (Performance mode: #343) or below Android 12 that was work for nothing.
  */
 internal fun glassSamplesThePage(sdk: Int, liquid: Boolean, frosted: Boolean): Boolean = sdk >= BLUR_SDK && (liquid || frosted)
+
+/**
+ * The page as glass copies it ([on]: [glassSamplesThePage]), on the theme's [background]. The tab bar and the mini player
+ * lay a blurred copy of the page over the page itself, so wherever the copy is see-through the page shows through them
+ * sharp. With Pure black (no Ambient frost) or Frosted pages off, a page with the Default background draws none of its
+ * own: the screen's black was behind the copy, not in it, and on Home the rows' text read through both bars with no blur
+ * at all, only the glass's veil over it (1.8.7, the Minimal Look on a Galaxy A16). The screen has the same color behind
+ * the page, so the page itself looks as before; only the glass's copy changes.
+ */
+internal fun Modifier.glassSource(haze: HazeState, on: Boolean, background: Color): Modifier =
+    if (on) hazeSource(haze).background(background) else this
 
 /**
  * Whether the tab bar and mini player sit wholly behind the keyboard, so nobody can see them. Their glass cost a Galaxy
