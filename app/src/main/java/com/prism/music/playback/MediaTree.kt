@@ -102,6 +102,9 @@ class MediaTree(private val c: AppContainer) {
         ).build()
     }
 
+    /** A tab's icon as a resource address: the car loads vector icons for its tabs from there, on a clear ground. */
+    private fun tabIcon(name: String) = "android.resource://${com.prism.music.BuildConfig.APPLICATION_ID}/drawable/$name"
+
     /** Settings → Lyrics → Android Auto → "Covers in a grid" (Reddit 1.7: "a home like Spotify's"). */
     private val grid get() = c.settings.current.autoGrid
 
@@ -128,10 +131,11 @@ class MediaTree(private val c: AppContainer) {
     suspend fun children(parentId: String): List<MediaItem> = when {
         // Four tabs, as cars show a root's first four folders along the top (Liked songs and Downloads open Library).
         parentId == ROOT -> listOf(
-            folder(HOME, tr(R.string.home), extras = styled(browsableGrid = true, playableGrid = true)),
-            folder(MADE_FOR_YOU, tr(R.string.made_for_you), type = MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS, extras = styled(browsableGrid = true, playableGrid = false)),
-            folder(RECENT, tr(R.string.recents), type = MediaMetadata.MEDIA_TYPE_PLAYLIST),
-            folder(LIBRARY, tr(R.string.library), type = MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS, extras = styled(browsableGrid = true, playableGrid = false)),
+            // Each tab with its own white icon, as the car's top bar draws it (in place of a blank tile).
+            folder(HOME, tr(R.string.home), art = tabIcon("ic_tab_home"), extras = styled(browsableGrid = true, playableGrid = true)),
+            folder(MADE_FOR_YOU, tr(R.string.made_for_you), art = tabIcon("ic_tab_made_for_you"), type = MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS, extras = styled(browsableGrid = true, playableGrid = false)),
+            folder(RECENT, tr(R.string.recents), art = tabIcon("ic_tab_recent"), type = MediaMetadata.MEDIA_TYPE_PLAYLIST),
+            folder(LIBRARY, tr(R.string.library), art = tabIcon("ic_tab_library"), type = MediaMetadata.MEDIA_TYPE_FOLDER_PLAYLISTS, extras = styled(browsableGrid = true, playableGrid = false)),
         )
         // Home: every section's albums, playlists and songs as tiles under its heading (with the grid), like Spotify's
         // home; without the grid, the sections as folders, as before.

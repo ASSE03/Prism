@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android Auto tab icon (Accueil): a white glyph on transparent, as the car's top bar shows it. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M6,19h3v-6h6v6h3v-9l-6,-4.5 -6,4.5v9zM4,21L4,9l8,-6 8,6v12h-7v-6h-2v6L4,21z" />
+</vector>
