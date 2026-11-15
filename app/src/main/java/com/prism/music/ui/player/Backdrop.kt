@@ -50,6 +50,7 @@ import coil3.toBitmap
 import com.prism.music.data.model.hiRes
 import com.prism.music.ui.theme.boxBlur
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import kotlin.math.floor
 import kotlin.math.roundToInt
@@ -346,17 +347,31 @@ internal val meshBakeCount = java.util.concurrent.atomic.AtomicInteger()
 /** [key]'s picture: from the last few made, else made off the main thread (null until it is). */
 @Composable
 private fun rememberMeshBake(key: MeshBakeKey?): MeshBake? {
-    var bake by remember(key) { mutableStateOf(key?.let(meshBakes::get)) }
+    var bake by remember(key) { mutableStateOf(key?.let(::keptMeshBake)) }
     LaunchedEffect(key) {
         if (key == null || bake != null) return@LaunchedEffect
-        val made = withContext(Dispatchers.Default) {
-            runCatching { bakeMeshBlur(key.mesh, key.width, key.height, key.seamPx, key.radiusPx, key.intensity) }.getOrNull()
-        } ?: return@LaunchedEffect
-        val held = MeshBake(key, made)
-        meshBakes[key] = held
-        bake = held
+        bake = keptMeshBake(key) ?: meshBakeOf(key).await()
     }
     return bake
+}
+
+private fun keptMeshBake(key: MeshBakeKey): MeshBake? = synchronized(meshBakes) { meshBakes[key] }
+
+/** The pictures being made now: a picture is made once, however many ask for it and whether or not they wait for it. */
+private val meshBaking = java.util.concurrent.ConcurrentHashMap<MeshBakeKey, kotlinx.coroutines.Deferred<MeshBake?>>()
+private val meshBakeScope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + Dispatchers.Default)
+
+/**
+ * [key]'s picture in the making. The new song's is asked for twice, as the one fading in and then as the one shown: the
+ * second asking joins the first, and the first isn't lost when the fade ends before it's made.
+ */
+private fun meshBakeOf(key: MeshBakeKey): kotlinx.coroutines.Deferred<MeshBake?> = meshBaking.computeIfAbsent(key) {
+    meshBakeScope.async {
+        try {
+            keptMeshBake(key) ?: runCatching { bakeMeshBlur(key.mesh, key.width, key.height, key.seamPx, key.radiusPx, key.intensity) }
+                .getOrNull()?.let { MeshBake(key, it) }?.also { synchronized(meshBakes) { meshBakes[key] = it } }
+        } finally { meshBaking.remove(key) }
+    }
 }
 
 /** The sigma Android's blur ([android.graphics.RenderEffect.createBlurEffect], through Skia) uses for a [radius] in pixels. */
