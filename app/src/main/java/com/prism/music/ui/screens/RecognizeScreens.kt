@@ -227,8 +227,9 @@ private fun FoundCard(found: Recognizer.State.Found) {
  * #215: a song just recognized ([found]) plays from where the music is now (Shazam's offset plus the time since
  * listening began), and the player opens on its lyrics.
  */
-internal fun playHeard(c: com.prism.music.AppContainer, found: Recognizer.State.Found, song: Song) {
-    PlayerAsks.lyricsFor = song.id
+internal fun playHeard(c: com.prism.music.AppContainer, found: Recognizer.State.Found, song: Song, lyrics: Boolean = true) {
+    // Only where the player opens too: asked for and never taken, the lyrics would open some later time by surprise.
+    PlayerAsks.lyricsFor = if (lyrics) song.id else null
     c.player.playSingleFrom(song, found.startAt(android.os.SystemClock.elapsedRealtime()))
 }
 
