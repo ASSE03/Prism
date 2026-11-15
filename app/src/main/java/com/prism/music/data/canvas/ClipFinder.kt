@@ -10,6 +10,8 @@ import com.prism.music.data.innertube.str
 import com.prism.music.data.model.Song
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
@@ -134,17 +136,37 @@ class ClipFinder(private val net: Net) {
     }
 
     /** One video through the gate (official, title, playable, not a still) and, if it passes, its window. */
-    private suspend fun tryVideo(net: Net, song: Song, video: String, old: CanvasClipEntity?, height: Int, chorusMs: Long?, now: Long, own: Boolean = false): Found {
+    private suspend fun tryVideo(net: Net, song: Song, video: String, old: CanvasClipEntity?, height: Int, chorusMs: Long?, now: Long, own: Boolean = false): Found =
+        coroutineScope {
+            // 1.8.7: the questions that need only the video's id are asked side by side, and each answer is looked at in
+            // the same order as before, so the row is the same; a request whose answer isn't needed is let go.
+            val answer = async { try { Result.success(net.player(video)) } catch (e: CancellationException) { throw e } catch (e: Exception) { Result.failure(e) } }
+            var heat: kotlinx.coroutines.Deferred<Heatmap?>? = null
+            try {
+                tryVideoWith(net, song, video, old, height, chorusMs, now, own, { answer.await().getOrThrow() }) { _ ->
+                    async { try { net.heatmap(video) } catch (e: CancellationException) { throw e } catch (e: Exception) { null } }.also { heat = it }
+                }
+            } finally {
+                answer.cancel(); heat?.cancel()
+            }
+        }
+
+    private suspend fun tryVideoWith(
+        net: Net, song: Song, video: String, old: CanvasClipEntity?, height: Int, chorusMs: Long?, now: Long, own: Boolean,
+        player: suspend () -> PlayerInfo, heatFor: (Storyboard) -> kotlinx.coroutines.Deferred<Heatmap?>,
+    ): Found {
         fun no(why: NoClip, type: String?, bytes: Long = 0) = Found(clipRow(song.id, null, why, old, now, videoType = type), bytes)
         val type = net.videoType(video)?.removePrefix(TYPE_PREFIX)
         // [own]: the song's own video, with no better one found: its type and title are not held against it (owner,
         // 2026-11-13: "if a song has a video, Canvas should be allowed. This should be a universal rule"). What is left
         // is what can't make a loop at all: not playable, no stream, a still picture; and later, on its frames, flashing.
         if (!own && type != OFFICIAL) return no(NoClip.NOT_OFFICIAL, type)
-        val info = net.player(video)
+        val info = player()
         if (!own && ClipGate.titleSays(song.title, info.title)) return no(NoClip.TITLE, type)
         if (!info.playable) return no(NoClip.RESTRICTED, type)
         val board = Storyboard.parse(info.storyboardSpec, info.lengthMs)
+        // The "most replayed" curve comes beside the storyboard's sheets; it is only used for a video that moves.
+        val heat = board?.let(heatFor)
         val frames = board?.let { net.frames(it) }
         val bytes = frames?.bytes ?: 0
         val length = maxOf(info.lengthMs, if (board != null && frames != null) frames.grids.size * board.intervalMs else 0)
@@ -158,8 +180,7 @@ class ClipFinder(private val net: Net) {
             // The still check first: a still upload needs no "most replayed" curve.
             if (FrameJudge.isStill(frames.grids, bars)) return no(NoClip.STILL, type, bytes)
             // Without the curve the chorus or the middle decides: not worth failing the whole find over.
-            val heat = try { net.heatmap(video) } catch (e: CancellationException) { throw e } catch (e: Exception) { null }
-            val peak = heat?.let { BestPart.peakMs(it, length) }
+            val peak = heat?.await()?.let { BestPart.peakMs(it, length) }
             FrameJudge.judge(frames.grids, board.intervalMs, length, peak, chorusMs)
         }
         if (verdict !is FrameJudge.Verdict.Loop) return no(NoClip.STILL, type, bytes)
