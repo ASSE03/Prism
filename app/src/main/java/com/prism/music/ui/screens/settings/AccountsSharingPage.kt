@@ -434,15 +434,16 @@ private fun SpotifyFeatureRows(session: Boolean) {
     // How many are in Library, and how many Spotify doesn't share (what to do about those is behind the ⓘ).
     val counted = if (o.playlists && mirror.listedAt > 0) listOfNotNull(
         tr(R.string.spot_playlists_count, mirror.lists.size),
-        if (mirror.notYours > 0) tr(R.string.cn_spot_followed_short, mirror.notYours) else null,
+        if (mirror.notYours > 0 && !session) tr(R.string.cn_spot_followed_short, mirror.notYours) else null,
     ).joinToString(" · ") else null
-    val followed = if (o.playlists && mirror.notYours > 0) {
+    // The sign-in reads followed playlists, so its ⓘ doesn't say they can't be read (nor how to copy them).
+    val followed = if (o.playlists && mirror.notYours > 0 && !session) {
         "\n\n" + tr(R.string.spot_playlists_not_yours, mirror.notYours) + "\n" + tr(R.string.spot_followed_why) + "\n" + tr(R.string.spot_followed_steps) + "\n" + tr(R.string.spot_followed_tunemymusic)
     } else ""
     SwitchRow(
-        tr(R.string.spot_playlists), o.playlists, value = status(SpotifyFeature.PLAYLISTS, counted), info = tr(R.string.spot_playlists_info) + followed,
+        tr(R.string.spot_playlists), o.playlists, value = status(SpotifyFeature.PLAYLISTS, counted), info = tr(if (session) R.string.spot_session_playlists_info else R.string.spot_playlists_info) + followed,
     ) { spotify.setEnabled(SpotifyFeature.PLAYLISTS, it) }
-    if (o.playlists) SwitchRow(tr(R.string.spot_keep_in_step), o.keepInStep, info = tr(R.string.spot_keep_in_step_info)) { spotify.setKeepInStep(it) }
+    if (o.playlists) SwitchRow(tr(R.string.spot_keep_in_step), o.keepInStep, info = tr(if (session) R.string.spot_session_keep_in_step_info else R.string.spot_keep_in_step_info)) { spotify.setKeepInStep(it) }
     // The sign-in can read the playlists you follow: by themselves with this on, a tap each in Library with it off.
     if (session && o.playlists) SwitchRow(tr(R.string.spot_session_followed_all), o.followedToo, info = tr(R.string.spot_session_followed_all_info)) { spotify.setFollowedToo(it) }
     // Read only: Spotify's likes come into Prism, nothing goes back.

@@ -371,6 +371,11 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         val info = t(R.string.spot_session_likes_info)
         assertTrue(info, "brought into prism" in info.lowercase() && "nothing is written to spotify" in info.lowercase())
         assertFalse(container.spotify.options.value.likes || container.spotify.options.value.playlists || container.spotify.options.value.recent || container.spotify.options.value.top)
+        // The sign-in reads followed playlists: its ⓘ texts never say they can't be read, nor name a developer app.
+        for (id in listOf(R.string.spot_session_playlists_info, R.string.spot_session_keep_in_step_info)) {
+            assertTrue(t(id), t(id).lowercase().let { "can’t be read" !in it && "can't be read" !in it && "developer app" !in it })
+        }
+        assertTrue(t(R.string.spot_session_playlists_info).contains(t(R.string.spot_session_followed_all)))
         val disconnect = t(R.string.cn_disconnect_spotify)
         assertEquals(t(R.string.spot_connected_as, "Tester"), value(disconnect))
 
