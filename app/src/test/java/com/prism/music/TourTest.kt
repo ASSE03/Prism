@@ -141,6 +141,18 @@ class TourTest {
         }
     }
 
+    /** 1.8.7.5 (build 66): an update from 1.8.7 shows Your Spotify, opening Accounts & sharing at Spotify, then the fixes. */
+    @Test
+    fun anUpdateFrom187ShowsYourSpotify() {
+        val pages = Tour.stepsAfter(65)
+        assertEquals(listOf(R.string.tour_1875_spotify_title, R.string.also_new).map { tr(it) }, pages.map { it.title })
+        assertTrue(pages.all { it.since == 66 && it.kind == TourStep.Kind.PLAIN })
+        assertTrue(pages.all { it.points.size in 3..5 && it.points.all { p -> p.isNotBlank() } })
+        assertTrue(pages.flatMap { it.points + it.body }.none { "%" in it })
+        val (key, find) = parse(pages.first().showMe!!)
+        assertEquals(SettingsTarget(SettingsPageId.ACCOUNTS_SHARING, tr(R.string.spotify)), SettingsMap.resolve(key, find))
+    }
+
     /**
      * 1.8.7 (build 65): an update from 1.8.6 (64) shows It just plays, then the rest, and nothing older. The first page
      * names the check as its row is written and opens the group it is in; the second names the Canvas switch and
@@ -148,7 +160,7 @@ class TourTest {
      */
     @Test
     fun anUpdateFrom186ShowsItJustPlays() {
-        val pages = Tour.stepsAfter(64)
+        val pages = Tour.stepsAfter(64).filter { it.since == 65 }
         assertEquals(listOf(R.string.tour_187_plays_title, R.string.also_new).map { tr(it) }, pages.map { it.title })
         assertTrue(pages.all { it.since == 65 && it.kind == TourStep.Kind.PLAIN })
         assertTrue(pages.all { it.points.size in 3..5 && it.points.all { p -> p.isNotBlank() } })

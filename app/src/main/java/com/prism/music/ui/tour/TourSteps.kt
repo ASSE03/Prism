@@ -66,6 +66,8 @@ private const val V1_8_4 = 61
 private const val V1_8_5 = 63
 private const val V1_8_6 = 64
 private const val V1_8_7 = 65
+/** Prism 1.8.7.5 (build 66): Your Spotify, and fixes. */
+private const val V1_8_7_5 = 66
 
     /** Every step, in the order they're shown. */
     val steps: List<TourStep> = listOf(
@@ -739,6 +741,29 @@ private const val V1_8_7 = 65
             ),
             listOf(PrismIcons.Shuffle, PrismIcons.Speed),
             showMe = Routes.settings(SettingsPageId.PLAYER.key, find = tr(R.string.cover)),
+        ),
+        TourStep(
+            // 1.8.7.5 Your Spotify. Opens Accounts & sharing at Spotify, where the Connect sheet's two cards are.
+            V1_8_7_5, PrismIcons.Link, tr(R.string.tour_1875_spotify_title),
+            tr(R.string.tour_1875_spotify_about),
+            listOf(
+                tr(R.string.tour_1875_spotify_point_1),
+                tr(R.string.tour_1875_spotify_point_2),
+                tr(R.string.tour_1875_spotify_point_3),
+                tr(R.string.tour_1875_spotify_point_4),
+            ),
+            listOf(PrismIcons.Heart, PrismIcons.QueueMusic),
+            showMe = Routes.settings(SettingsPageId.ACCOUNTS_SHARING.key, find = tr(R.string.spotify)),
+        ),
+        TourStep(
+            V1_8_7_5, PrismIcons.Check, tr(R.string.also_new),
+            tr(R.string.from_your_requests),
+            listOf(
+                tr(R.string.tour_1875_also_queue),
+                tr(R.string.tour_1875_also_home),
+                tr(R.string.tour_1875_also_busy),
+                tr(R.string.tour_1875_also_heard),
+            ),
         ),
         TourStep(
             V1_7, PrismIcons.Update, tr(R.string.stay_in_the_loop),

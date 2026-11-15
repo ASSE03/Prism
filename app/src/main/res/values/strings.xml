@@ -5545,6 +5545,16 @@
     <string name="tour_187_also_lyrics_right">The wrong song\'s lyrics are refused, and missing lyrics can be tried again.</string>
     <string name="tour_187_also_blend">When the DJ or %1$s leaves a plain change between two songs, the ⓘ says why.</string>
     <string name="tour_187_also_lighter">The open player asks less of the phone\'s processor.</string>
+    <string name="tour_1875_spotify_title">Your Spotify</string>
+    <string name="tour_1875_spotify_about">Sign in to Spotify once, and your music there comes into Prism.</string>
+    <string name="tour_1875_spotify_point_1">Your liked songs and playlists are found on YouTube Music and stay in step.</string>
+    <string name="tour_1875_spotify_point_2">Playlists you follow come too: tap one in Library to bring it in.</string>
+    <string name="tour_1875_spotify_point_3">Prism only reads. Nothing is ever changed on your Spotify.</string>
+    <string name="tour_1875_spotify_point_4">It is unofficial and against Spotify\'s terms, so it may stop working. Your own developer app still works as before.</string>
+    <string name="tour_1875_also_queue">Select songs, then Play next or Add to queue: it works with nothing playing.</string>
+    <string name="tour_1875_also_home">The play button on Home\'s big cards plays straight away.</string>
+    <string name="tour_1875_also_busy">A song whose server keeps failing is asked for another way.</string>
+    <string name="tour_1875_also_heard">A recognized song plays from the moment you heard it, with its lyrics open.</string>
     <!-- 1.8.7: Backup & about → Diagnostics → "Is playback working?" (the self-test). -->
     <string name="selftest_title">Is playback working?</string>
     <string name="selftest_info">A few quick checks, one after another, and what to do when one fails. They ask only YouTube and one lyrics service, as playing a song does. The result stays on the phone unless you tap Share.</string>

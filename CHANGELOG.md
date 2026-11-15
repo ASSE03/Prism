@@ -2,6 +2,25 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.8.7.5
+
+### Your Spotify
+
+- **Sign in to Spotify inside Prism.** One sign-in on Spotify's own page, no setup, and it works with free accounts. Prism then reads your liked songs and your playlists, finds the same songs on YouTube Music, and keeps them in step.
+- **Playlists you follow come too.** Tap one in Library to bring it in, or switch on "Followed playlists too" and the first 50 come in by themselves. A playlist that swaps its songs and keeps its length (a weekly or editorial one) is still brought up to date.
+- **You can see it working.** A playlist says "Bringing it in…" while it is read and "Syncing 120 of 500 songs" while its songs are found, and it carries on when you leave the screen. Matched songs land in their playlists and likes as they are found.
+- **Read only, and unofficial.** Prism never changes anything on your Spotify, and the sign-in stays on your phone. Spotify doesn't offer this way in to other apps and it is against Spotify's terms: it may stop working, and the screen before you sign in says so plainly. Recent plays, Top songs and artists, and liking songs on Spotify still need your own developer app, which works as before.
+
+### Fixes from your reports
+
+- Select many, then Play next or Add to queue, with nothing playing: every picked song is queued (#476).
+- The play circle on Home's big cards plays straight away (#507).
+- A song whose server keeps answering with an error is tried twice, then asked for another way, where it used to stall (#514).
+- DJ mode keeps the crossfade length you set (#502).
+- Covers of albums from your own files are sharp on large views (#520).
+- The lyrics' Sing button hides when Sing is already a button in the row (#501).
+- A recognized song plays from the moment you heard it, and the player opens on its lyrics (#215).
+
 ## 1.8.7
 
 ### It just plays
