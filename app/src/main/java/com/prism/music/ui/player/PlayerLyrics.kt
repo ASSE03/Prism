@@ -597,6 +597,11 @@ fun CanvasLyricLine(state: LyricsState, isPlaying: Boolean, modifier: Modifier =
     val index by remember(lines) { derivedStateOf { lines.indexAt(clock.value) } }
     val style = MaterialTheme.typography.headlineSmall
         .copy(fontWeight = FontWeight.SemiBold, textDirection = androidx.compose.ui.text.style.TextDirection.Content).withLyricsFont()
+    // For the in-app test: the line it shows now (none in a rest, none once it's gone).
+    DisposableEffect(lines, index) {
+        CanvasStats.lyricLine = lines.getOrNull(index)?.takeUnless { it.isGap }?.text
+        onDispose { CanvasStats.lyricLine = null }
+    }
     Box(modifier, contentAlignment = Alignment.BottomStart) {
         AnimatedContent(
             index,

@@ -214,4 +214,56 @@ class CanvasLoopLiveTest {
         delay(700)
         Fixture.screenshot("CanvasLoopLiveTest-3-controls-back")
     }
+
+    /**
+     * 1.8.7 "Keep lyrics showing": over a full-screen loop the sung line comes once the controls have gone, changes with
+     * the song, and goes when a tap brings the controls back; with the switch off there is never one.
+     */
+    @Test fun theSungLineStaysWhenTheControlsGo() = runBlocking {
+        assumeTrue("live test: run with record=true", args.getString("record") == "true")
+        Fixture.ready()
+        val c = Fixture.container
+        c.settings.setPerformanceMode(false); c.settings.setReduceMotion(false); c.settings.setImmersivePlayer(false); c.settings.setFullBleedArtwork(false)
+        c.settings.setCanvasEnabled(true); c.settings.setCanvasFillsBackground(true); c.settings.setCanvasUseVideos(true)
+        c.settings.setCanvasVideoFirst(true); c.settings.setCanvasKeepControls(false)
+        c.settings.setLyricsOnPlayer(true)
+        c.settings.setCanvasLyrics(false)
+        Fixture.launch()
+        val words = (args.getString("song") ?: "Flowers_Miley_Cyrus").replace('_', ' ')
+        val song = withContext(Dispatchers.IO) { c.ytm.search(words, SearchFilter.SONGS).items.filterIsInstance<SongItem>().first().song }
+        CanvasStats.showing = null
+        withContext(Dispatchers.Main) { c.player.playQueue(listOf(song), 0, QueueSource(QueueKind.SINGLE, "test")) }
+        Fixture.context.startActivity(
+            android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("prism://player"))
+                .setClass(Fixture.context, PrismActivity::class.java)
+                .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP),
+        )
+        val end = System.currentTimeMillis() + 60_000
+        while (System.currentTimeMillis() < end && CanvasStats.showing?.startsWith("file://") != true) delay(100)
+        assertTrue("the loop shows (${CanvasStats.showing}, ${CanvasStats.lastError})", CanvasStats.showing?.startsWith("file://") == true)
+        // Into the singing, so a line is due; the controls go a few seconds after the seek.
+        withContext(Dispatchers.Main) { c.player.seekTo(30_000) }
+        suspend fun seen(ms: Long): Set<String> {
+            val lines = mutableSetOf<String>(); val until = System.currentTimeMillis() + ms
+            while (System.currentTimeMillis() < until) { CanvasStats.lyricLine?.takeIf { it.isNotBlank() }?.let(lines::add); delay(200) }
+            return lines
+        }
+        // Switched off: the controls go, no line comes.
+        assertTrue("off: no line over the picture", seen(15_000).isEmpty())
+        Fixture.screenshot("CanvasLyricLive-1-off")
+        // Switched on while the controls are away: the line comes, and moves on with the song.
+        c.settings.setCanvasLyrics(true)
+        val lines = seen(25_000)
+        Fixture.screenshot("CanvasLyricLive-2-on")
+        android.util.Log.i("CanvasLyric", "lines seen: $lines")
+        assertTrue("on: the sung line shows and changes (saw $lines)", lines.size >= 2)
+        // A tap brings the controls back and the line goes.
+        val device = UiDevice.getInstance(instrumentation)
+        device.click(device.displayWidth / 2, device.displayHeight / 3)
+        delay(1_200)
+        Fixture.screenshot("CanvasLyricLive-3-controls-back")
+        assertEquals("with the controls up there is no line", null, CanvasStats.lyricLine)
+        // And it returns when they go again.
+        assertTrue("it comes back once the controls have gone", seen(15_000).isNotEmpty())
+    }
 }
