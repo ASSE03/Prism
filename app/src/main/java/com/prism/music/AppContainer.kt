@@ -70,6 +70,8 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
                 // First, so a cover kept on the phone is trimmed the same as one from the network (#92).
                 add(com.prism.music.data.VideoCoverInterceptor { ::container.isInitialized && container.settings.current.squareVideoCovers })
                 add(com.prism.music.data.OfflineArtInterceptor { if (::container.isInitialized) container.artwork else null })
+                // #520: local albums' covers sharp on the player and album page (lists keep the small one).
+                add(com.prism.music.data.local.LocalFullArtInterceptor { if (::container.isInitialized) container.localMusic else null })
                 add(com.prism.music.data.DataSaverInterceptor { ::container.isInitialized && container.dataSaving() })
             }
             .diskCache {
