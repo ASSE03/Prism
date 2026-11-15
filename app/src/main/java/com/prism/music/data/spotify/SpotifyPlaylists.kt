@@ -95,11 +95,18 @@ class SpotifyPlaylists(
      * Reads the list of playlists and, of each that changed, its songs; lines the songs up for matching and brings the
      * Prism playlists up to date. [userId]: the connected account (its own playlists are the readable ones).
      */
-    suspend fun refreshAll(userId: String, now: Long = System.currentTimeMillis()) = lock.withLock {
+    suspend fun refreshAll(userId: String, now: Long = System.currentTimeMillis(), bringAll: Boolean = false, except: Set<String> = emptySet()) = lock.withLock {
         val all = library().playlists(MAX_LIST_PAGES)
 
         // With the sign-in, a followed playlist the listener brought in is read like one of their own.
-        val brought = if (library().readsFollowed) mirror().brought.filter { id -> all.any { it.id == id } } else emptyList()
+        val kept = mirror().brought.filter { id -> all.any { it.id == id } }
+        val brought = when {
+            !library().readsFollowed -> emptyList()
+            // "Followed playlists too": the first [AUTO_FOLLOWED] in Spotify's order come in by themselves, less the
+            // ones hidden from Library; any brought in by hand before stay.
+            bringAll -> (kept + all.filter { !isYours(it, userId) && it.id !in except }.map { it.id }).distinct().take(maxOf(kept.size, AUTO_FOLLOWED))
+            else -> kept
+        }
         val (yours, others) = all.partition { isYours(it, userId) || it.id in brought }
         val old = mirror().lists.associateBy { it.playlist.id }
         val refused = ArrayList<SpotifyPlaylist>()
@@ -240,6 +247,8 @@ class SpotifyPlaylists(
         private const val MAX_LIST_PAGES = 10
         private const val MAX_ITEM_PAGES = 40
         const val AT_ONCE_ON_OPEN = 25
+        /** "Followed playlists too" brings in this many at most by itself; the rest stay a tap away. */
+        const val AUTO_FOLLOWED = 50
         const val MATCH_GAP_MS = 400L
         /** Only what a song needs, from each item (both the new "item" and the old "track"). */
         private const val TRACK_FIELDS = "type,uri,name,duration_ms,explicit,is_local,external_ids(isrc),artists(name),album(name,images)"

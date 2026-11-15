@@ -268,6 +268,8 @@ class Spotify(private val c: AppContainer) {
         val playlists: Boolean = false,
         val keepInStep: Boolean = true,
         val likes: Boolean = false,
+        /** With the sign-in: followed playlists come into Library by themselves (1.8.7.5; off: each is a tap away). */
+        val followedToo: Boolean = false,
     ) {
         fun on(f: SpotifyFeature) = when (f) {
             SpotifyFeature.RECENT -> recent; SpotifyFeature.TOP -> top; SpotifyFeature.PLAYLISTS -> playlists; SpotifyFeature.LIKES -> likes
@@ -276,7 +278,7 @@ class Spotify(private val c: AppContainer) {
 
     private fun optionsNow() = Options(
         store.prefs.getBoolean("on_recent", false), store.prefs.getBoolean("on_top", false), store.prefs.getBoolean("on_playlists", false),
-        store.prefs.getBoolean("keep_in_step", true), store.prefs.getBoolean("on_likes", false),
+        store.prefs.getBoolean("keep_in_step", true), store.prefs.getBoolean("on_likes", false), store.prefs.getBoolean("followed_too", false),
     )
 
     private val _options = MutableStateFlow(optionsNow())
@@ -349,6 +351,13 @@ class Spotify(private val c: AppContainer) {
     /** "Refresh now": the playlists read again at once (a copy just made in Spotify appears), whatever the day's run did. */
     fun refreshPlaylistsNow(): Job = c.scope.launch { run(SpotifyFeature.PLAYLISTS) }
 
+    /** "Followed playlists too" (the sign-in only): on, they are read at once; off, the ones already in stay. */
+    fun setFollowedToo(on: Boolean) {
+        store.prefs.edit().putBoolean("followed_too", on).apply()
+        _options.value = optionsNow()
+        if (on) refreshPlaylistsNow()
+    }
+
     fun setKeepInStep(on: Boolean) {
         store.prefs.edit().putBoolean("keep_in_step", on).apply()
         _options.value = optionsNow()
@@ -380,7 +389,7 @@ class Spotify(private val c: AppContainer) {
                 SpotifyFeature.RECENT -> recent.sync()
                 SpotifyFeature.TOP -> if (!scheduled || top.due(now)) top.refresh(now)
                 SpotifyFeature.PLAYLISTS ->
-                    if (daily && (!scheduled || now - playlists.mirror().listedAt >= DAILY_MS)) playlists.refreshAll(store.userId.orEmpty(), now)
+                    if (daily && (!scheduled || now - playlists.mirror().listedAt >= DAILY_MS)) playlists.refreshAll(store.userId.orEmpty(), now, bringAll = store.sessionOn && _options.value.followedToo, except = hiddenNow())
                     else playlists.reapply()
                 SpotifyFeature.LIKES -> if (daily && (!scheduled || now - likes.state().lastRun >= DAILY_MS)) likes.sync(now)
             }

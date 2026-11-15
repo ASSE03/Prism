@@ -88,7 +88,8 @@ class WebLibrary(
             offset += PAGE
             if (page.items.isEmpty() || offset >= page.total) break
         }
-        return all.map { p ->
+        // A list that moved between two pages can name a playlist twice: once is enough.
+        return all.distinctBy { it.id }.map { p ->
             if (p.total > 0) p.copy(snapshot = snapshotOf(p.total))
             else if (mirrored(p)) {
                 val total = SpotifyWebParse.playlistItems(web.read("fetchPlaylist", playlistVars(p.id, 1, 0))).total

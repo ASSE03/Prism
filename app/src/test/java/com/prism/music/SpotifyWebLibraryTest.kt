@@ -231,6 +231,30 @@ class SpotifyWebLibraryTest {
         assertEquals(1, hands.lists.count { it.value.first == "Lofi" })
     }
 
+    @Test fun followedPlaylistsTooBringsThemInByThemselvesLessTheHiddenOnes() = runBlocking {
+        val followed = (1..SpotifyPlaylists.AUTO_FOLLOWED + 5).map { playlistItem("f$it", "Followed $it", "someone", 10) }
+        net.routes[SpotifyWeb.URL] = {
+            val body = sent(net.requests.size - 1)
+            if (body.contains("\"libraryV3\"")) 200 to libraryAnswer(followed.size + 2, pseudoLiked, playlistItem("p1", "Road", "samr", 1), *followed.toTypedArray())
+            else 200 to playlistAnswer(1, inPlaylist(trackData("t1", "Creep", "Radiohead", "Pablo Honey", 238_640, "trackDuration", uri = true)))
+        }
+        val hands = FakeHands()
+        val playlists = SpotifyPlaylists(api, db, importer, dir, hands, matchOf(), pause = {}, library = { library })
+        broughtIds = { playlists.mirror().brought.toSet() }
+        // Off (as it is until the listener turns it on): only their own.
+        playlists.refreshAll("samr", now = 1)
+        assertEquals(listOf("p1"), playlists.mirror().lists.map { it.playlist.id })
+        // On: the first fifty in Spotify's order, the hidden one left out; the rest stay named, a tap away.
+        playlists.refreshAll("samr", now = 2, bringAll = true, except = setOf("f2"))
+        val mirrored = playlists.mirror().lists.map { it.playlist.id }
+        assertEquals(1 + SpotifyPlaylists.AUTO_FOLLOWED, mirrored.size)
+        assertTrue("f1" in mirrored && "f2" !in mirrored && "f51" in mirrored && "f52" !in mirrored)
+        assertEquals(listOf("f2") + (52..55).map { "f$it" }, playlists.followed.value.map { it.id })
+        // Off again: the ones already in stay in.
+        playlists.refreshAll("samr", now = 3)
+        assertEquals(1 + SpotifyPlaylists.AUTO_FOLLOWED, playlists.mirror().lists.size)
+    }
+
     @Test fun aDeveloperAppCannotBringAFollowedPlaylistIn() = runBlocking {
         store.saveTokens(com.prism.music.data.spotify.SpotifyTokens("acc", "ref", Long.MAX_VALUE))
         val playlists = SpotifyPlaylists(api, db, importer, dir, FakeHands(), matchOf(), pause = {})

@@ -4872,6 +4872,8 @@
     <string name="spot_session_bring">Bring it in</string>
     <string name="spot_session_bringing">Bringing it in…</string>
     <string name="spot_session_bring_failed">Couldn\'t read it. Try again.</string>
+    <string name="spot_session_followed_all">Followed playlists too</string>
+    <string name="spot_session_followed_all_info">On: the playlists you follow on Spotify come into Library by themselves, the first 50 of them, and stay in step. Off: each one waits in Library, a tap away. Ones you hid from Library are left out.</string>
     <!-- 1.8.1: repeat imports and the fresh-download reminder -->
     <plurals name="imp_new_plays_since">
         <item quantity="one">%1$s new play since your last import (%2$s)</item>

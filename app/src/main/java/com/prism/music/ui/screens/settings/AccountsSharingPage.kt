@@ -443,6 +443,8 @@ private fun SpotifyFeatureRows(session: Boolean) {
         tr(R.string.spot_playlists), o.playlists, value = status(SpotifyFeature.PLAYLISTS, counted), info = tr(R.string.spot_playlists_info) + followed,
     ) { spotify.setEnabled(SpotifyFeature.PLAYLISTS, it) }
     if (o.playlists) SwitchRow(tr(R.string.spot_keep_in_step), o.keepInStep, info = tr(R.string.spot_keep_in_step_info)) { spotify.setKeepInStep(it) }
+    // The sign-in can read the playlists you follow: by themselves with this on, a tap each in Library with it off.
+    if (session && o.playlists) SwitchRow(tr(R.string.spot_session_followed_all), o.followedToo, info = tr(R.string.spot_session_followed_all_info)) { spotify.setFollowedToo(it) }
     // Read only: Spotify's likes come into Prism, nothing goes back.
     if (session) {
         SwitchRow(tr(R.string.spot_session_likes), o.likes, value = status(SpotifyFeature.LIKES), info = tr(R.string.spot_session_likes_info)) { spotify.setEnabled(SpotifyFeature.LIKES, it) }
@@ -564,6 +566,7 @@ val accountsSharingIndex: List<SettingEntry> by lazy {
         SettingEntry(page, spotify, tr(R.string.spot_session_sign_in), spot + " " + session),
         SettingEntry(page, spotify, tr(R.string.spot_session_own_app), spot + " " + tr(R.string.spot_set_up)),
         SettingEntry(page, spotify, tr(R.string.spot_session_likes), spot + " " + session),
+        SettingEntry(page, spotify, tr(R.string.spot_session_followed_all), spot + " " + session),
         SettingEntry(page, spotify, tr(R.string.spot_session_sign_in_again), spot + " " + session + " " + tr(R.string.spot_session_signed_out)),
         // "About this" (the small risk to the Discord account) is behind the switch's ⓘ now.
         SettingEntry(page, discord, tr(R.string.cn_discord_show), tr(R.string.discord_rich_presence_status_listening) + " " + tr(R.string.discord_terms_risk)),
