@@ -26,7 +26,7 @@ class AlbumSongsPlayLiveTest {
     @Test
     fun albumPagesListTheirSongs() = runBlocking {
         val pairs = HashMap<String, String>()
-        val ytm = YouTubeMusic(innerTube, onPairs = { pairs.putAll(it) })
+        val ytm = YouTubeMusic(innerTube, onPairs = { p -> p.forEach { (song, video) -> pairs[song.id] = video } })
         val disk = ytm.album("MPREb_gLzsNqMumEh")
         println("[r1] ${disk.title} playlist ${disk.playlistId}: " + disk.songs.joinToString { "${it.id} ${it.title.take(16)} ${it.durationSec}s v=${it.isVideo}" })
         // Its own playlist, not another album's play button further down the page.

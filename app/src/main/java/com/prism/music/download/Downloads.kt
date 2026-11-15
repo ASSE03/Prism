@@ -86,7 +86,14 @@ private fun partSongId(id: String) = id.substringAfter(':')
  * not as the album track.
  */
 internal fun downloadsAsSong(song: Song, s: com.prism.music.data.prefs.AppSettings): Boolean =
-    song.isVideo && !song.isUpload && !song.isLive && !song.isEpisode && s.radioSongsOnly && s.songsEverywhere
+    song.isVideo && !song.isUpload && !song.isLive && !song.isEpisode && swapsVideos(s)
+
+/** The download stand-ins as kept since 1.8.1 (#315, "download_standins"): video id -> the song id it came down as. */
+internal fun readStandIns(prefs: android.content.SharedPreferences): Map<String, String> =
+    prefs.all.mapNotNull { (k, v) -> (v as? String)?.let { k to it } }.toMap()
+
+/** "Songs, not videos: Everywhere" (#80): a music video in any list plays, and downloads, as its song. */
+fun swapsVideos(s: com.prism.music.data.prefs.AppSettings): Boolean = s.radioSongsOnly && s.songsEverywhere
 
 @OptIn(UnstableApi::class)
 class DownloadRepository(private val context: Context, private val c: AppContainer, scope: CoroutineScope) {
@@ -115,7 +122,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
      * playlist's video row shows its song's download (#315: those rows read "not downloaded" whatever was saved).
      */
     private val standInPrefs = context.getSharedPreferences("download_standins", Context.MODE_PRIVATE)
-    private val _standIns = MutableStateFlow(standInPrefs.all.mapNotNull { (k, v) -> (v as? String)?.let { k to it } }.toMap())
+    private val _standIns = MutableStateFlow(readStandIns(standInPrefs))
 
     private fun standIn(videoId: String, songId: String) {
         if (videoId == songId || _standIns.value[videoId] == songId) return
@@ -124,12 +131,20 @@ class DownloadRepository(private val context: Context, private val c: AppContain
         publish()
     }
 
-    /** The id a download is kept under: a music video downloaded as its song is kept under the song's. */
-    private fun keptAs(id: String): String = if (id in _media.value || id in _lossless.value) id else _standIns.value[id] ?: id
+    /**
+     * The id a download is kept under: a music video downloaded as its song is kept under the song's, and so (1.8.7
+     * §3.2) is one whose song is known while videos play as their songs: the same rows the downloaded mark goes by.
+     */
+    private fun keptAs(id: String): String = if (id in _media.value || id in _lossless.value) id else rowsKeptAs()[id] ?: id
+
+    /** Row id -> the song id its download is kept under ([com.prism.music.data.meta.PlaysAsRules.keptAs]). */
+    private fun rowsKeptAs(): Map<String, String> = c.downloadStandIns.value
 
     private fun publish() {
         _downloads.value = _lossless.value + _media.value
-        c.downloadStandIns.value = _standIns.value
+        // The stand-ins are one of PlaysAs' sources; what rows are kept as comes back from it.
+        c.plays.setDownloaded(_standIns.value) { id -> _downloads.value[id]?.song }
+        c.downloadStandIns.value = c.plays.keptAs(swapsVideos(c.settings.current))
         c.downloadState.value = _downloads.value
         c.smartPickBytes = _smartIds.value.sumOf { _media.value[it]?.bytes ?: 0L }
     }
@@ -570,7 +585,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
     fun download(song: Song, asIs: Boolean = false) {
         // A file on the phone is already offline. (Episodes from a feed don't download yet.)
         if (song.isLocal || song.isRss) return
-        c.keptPlaylists.forgive(setOf(song.id, keptAs(song.id)) + _standIns.value.filterValues { it == song.id }.keys)
+        c.keptPlaylists.forgive(setOf(song.id, keptAs(song.id)) + rowsKeptAs().filterValues { it == song.id }.keys)
         // A lossless file that was taken out of Downloads just comes back.
         if (c.losslessSync.unhide(song.id)) return
         // (A music video already downloaded as its song counts as downloaded.)
@@ -605,7 +620,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
     }
 
     /** A list's download: everything on it, but for the songs marked to skip (#221). */
-    fun downloadAll(songs: List<Song>) = PlaylistDownloads.wanted(songs, c.downloadSkips.ids.value, _standIns.value).forEach(::download)
+    fun downloadAll(songs: List<Song>) = PlaylistDownloads.wanted(songs, c.downloadSkips.ids.value, rowsKeptAs()).forEach(::download)
 
     /**
      * Marks a song to skip in lists' downloads, or takes that back (#221). One still to come or failed stops there, so it

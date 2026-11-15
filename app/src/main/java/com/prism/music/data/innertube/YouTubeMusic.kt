@@ -48,8 +48,11 @@ enum class SearchFilter(val label: String, val params: String?) {
 class YouTubeMusic(
     private val api: InnerTube,
     private val songsEverywhere: () -> Boolean = { false },
-    /** Songs paired with their music videos while reading a page (song id -> video id), for the player's Video button. */
-    private val onPairs: (Map<String, String>) -> Unit = {},
+    /**
+     * Songs paired with their music videos while reading an album page (each song with the video it was listed as), for
+     * the player's Video button and what the video plays as elsewhere ([com.prism.music.data.meta.PlaysAs]).
+     */
+    private val onPairs: (List<Pair<Song, String>>) -> Unit = {},
 ) {
     companion object {
         /** An artist page "id" that's looked up by name ([artistIdByName]). */
@@ -563,7 +566,6 @@ class YouTubeMusic(
         // "Death & Romance" played its 8-minute video with another song in it, at the album's 5:15). The album's own
         // playlist still lists the songs, in the same order: one request puts them back.
         val songsOf = if (listed.any { it.isVideo } && playlistId != null) albumSongs(listed, playlistId) else emptyMap()
-        if (songsOf.isNotEmpty()) onPairs(songsOf.values.associate { (song, video) -> song.id to video })
         val songs = listed.mapIndexed { i, s ->
             val song = songsOf[i]?.first
             (song ?: s).copy(
@@ -577,6 +579,8 @@ class YouTubeMusic(
                 explicit = s.explicit || song?.explicit == true,
             )
         }
+        // Each song as the page shows it (its album and cover filled in), with the video it was listed as.
+        if (songsOf.isNotEmpty()) onPairs(songsOf.mapNotNull { (i, pair) -> songs.getOrNull(i)?.let { it to pair.second } })
         // "Other versions" sits beside the track list (deluxe, clean, live editions).
         val others = Parser.shelves(res).firstOrNull { it.title.equals("Other versions", true) }?.items.orEmpty()
             .filter { it.id != browseId }
