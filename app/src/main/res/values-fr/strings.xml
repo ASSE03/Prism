@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">La couleur de la pochette du titre</string>
     <string name="progress_bar_thickness">Épaisseur de la barre de progression</string>
     <string name="thinner">Plus fine</string>
-    <string name="as_the_style">Selon le style</string>
     <string name="thicker">Plus épaisse</string>
     <string name="the_waveform_keeps_its_own_height">La forme d’onde garde sa propre hauteur ; l’épaisseur s’applique tant qu’un titre n’a pas été analysé.</string>
-    <string name="knob_at_the_playhead">Curseur à la tête de lecture</string>
     <string name="a_dot_with_the_thumb_style">Un point avec le style Pouce</string>
     <string name="visualizer">Visualiseur</string>
     <string name="it_listens_to_prism_s_own">Il écoute le son de Prism (pas le micro) et ne fonctionne que lorsque le lecteur est ouvert et en lecture. Sur un téléphone plus ancien, Désactivé garde le lecteur le plus léger.</string>
@@ -5513,7 +5511,6 @@
     <string name="mix_why_live">L\'un des deux est un direct.</string>
     <string name="mix_why_podcast">L\'un des deux est un épisode de podcast.</string>
     <string name="mix_why_album">Un album lu en entier garde ses titres intacts.</string>
-    <string name="mix_why_sing_or_together">Sing ou Écouter ensemble était activé.</string>
     <string name="mix_why_casting">Lecture sur un autre appareil.</string>
     <string name="mix_why_short">Ce titre dure moins de 30 secondes.</string>
     <string name="mix_why_next_short">Le titre suivant ne dure que quelques secondes.</string>
@@ -5629,7 +5626,6 @@
     <string name="tour_1875_also_heard">Un titre reconnu est lu à partir du moment où vous l’avez entendu, avec ses paroles ouvertes.</string>
     <string name="queue_end_mixed">Vos titres et du nouveau</string>
     <string name="dd_use_load_ahead">Préchargement des titres</string>
-    <string name="replay_notices_n_on">%1$d sur 3 activées</string>
     <string name="car_lyrics_style">Style des paroles</string>
     <string name="tab_tint_light">Couleurs du thème</string>
     <string name="bini_detail">Paroles d’Apple Music · mot par mot, associées autrement</string>

@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">A dal borítójának színe</string>
     <string name="progress_bar_thickness">Folyamatjelző vastagsága</string>
     <string name="thinner">Vékonyabb</string>
-    <string name="as_the_style">A stílus szerint</string>
     <string name="thicker">Vastagabb</string>
     <string name="the_waveform_keeps_its_own_height">A hullámforma megtartja a saját magasságát; a vastagság addig látszik, amíg a dalt be nem olvastuk.</string>
-    <string name="knob_at_the_playhead">Gomb a lejátszási pozíciónál</string>
     <string name="a_dot_with_the_thumb_style">Egy pötty a Gomb stílussal</string>
     <string name="visualizer">Vizualizáció</string>
     <string name="it_listens_to_prism_s_own">A Prism saját hangját figyeli (mikrofon nélkül), és csak akkor fut, amikor a lejátszó nyitva van és szól. Régebbi telefonon a Ki tartja a legkönnyebben a lejátszót.</string>
@@ -5438,7 +5436,6 @@
     <string name="mix_why_live">A kettő közül az egyik élő közvetítés.</string>
     <string name="mix_why_podcast">A kettő közül az egyik podcastadás.</string>
     <string name="mix_why_album">Az egyben lejátszott album dalai épek maradnak.</string>
-    <string name="mix_why_sing_or_together">A Sing vagy a Közös hallgatás be volt kapcsolva.</string>
     <string name="mix_why_casting">Lejátszás másik eszközön.</string>
     <string name="mix_why_short">Ez a dal rövidebb 30 másodpercnél.</string>
     <string name="mix_why_next_short">A következő dal csak pár másodperces.</string>
@@ -5554,7 +5551,6 @@
     <string name="tour_1875_also_heard">Egy felismert dal onnan szól, ahol hallottad, megnyitott dalszöveggel.</string>
     <string name="queue_end_mixed">Tiéd és új</string>
     <string name="dd_use_load_ahead">Dalok előtöltése</string>
-    <string name="replay_notices_n_on">%1$d a 3-ból bekapcsolva</string>
     <string name="car_lyrics_style">Dalszöveg stílusa</string>
     <string name="tab_tint_light">Téma színei</string>
     <string name="bini_detail">Az Apple Music dalszövegei · szóról szóra, más módon párosítva</string>

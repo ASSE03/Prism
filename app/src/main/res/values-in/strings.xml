@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">Warna sampul lagu</string>
     <string name="progress_bar_thickness">Ketebalan bilah progres</string>
     <string name="thinner">Lebih tipis</string>
-    <string name="as_the_style">Sesuai gaya</string>
     <string name="thicker">Lebih tebal</string>
     <string name="the_waveform_keeps_its_own_height">Bentuk gelombang memakai tingginya sendiri; ketebalan berlaku sampai lagu selesai dipindai.</string>
-    <string name="knob_at_the_playhead">Kenop di posisi putar</string>
     <string name="a_dot_with_the_thumb_style">Titik dengan gaya Kenop</string>
     <string name="visualizer">Visualizer</string>
     <string name="it_listens_to_prism_s_own">Visualizer mendengarkan suara Prism sendiri (tanpa mikrofon) dan hanya berjalan saat pemutar terbuka dan memutar. Di ponsel lama, Nonaktif membuat pemutar paling ringan.</string>
@@ -5363,7 +5361,6 @@
     <string name="mix_why_live">Salah satu dari kedua lagu adalah siaran langsung.</string>
     <string name="mix_why_podcast">Salah satu dari kedua lagu adalah episode podcast.</string>
     <string name="mix_why_album">Album yang diputar berurutan menjaga lagunya tetap utuh.</string>
-    <string name="mix_why_sing_or_together">Sing atau Dengar Bersama sedang aktif.</string>
     <string name="mix_why_casting">Sedang diputar di perangkat lain.</string>
     <string name="mix_why_short">Lagu ini lebih pendek dari 30 detik.</string>
     <string name="mix_why_next_short">Lagu berikutnya hanya berdurasi beberapa detik.</string>
@@ -5479,7 +5476,6 @@
     <string name="tour_1875_also_heard">Lagu yang dikenali diputar dari saat kamu mendengarnya, dengan liriknya terbuka.</string>
     <string name="queue_end_mixed">Milikmu dan baru</string>
     <string name="dd_use_load_ahead">Memuat lagu lebih dulu</string>
-    <string name="replay_notices_n_on">%1$d dari 3 aktif</string>
     <string name="car_lyrics_style">Gaya lirik</string>
     <string name="tab_tint_light">Warna tema</string>
     <string name="bini_detail">Lirik Apple Music · kata demi kata, dicocokkan dengan cara lain</string>

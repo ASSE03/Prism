@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">Culoarea copertei melodiei</string>
     <string name="progress_bar_thickness">Grosimea barei de progres</string>
     <string name="thinner">Mai subțire</string>
-    <string name="as_the_style">Ca stilul</string>
     <string name="thicker">Mai groasă</string>
     <string name="the_waveform_keeps_its_own_height">Forma de undă își păstrează înălțimea; grosimea se vede până când melodia a fost scanată.</string>
-    <string name="knob_at_the_playhead">Buton la poziția redării</string>
     <string name="a_dot_with_the_thumb_style">Un punct, cu stilul Buton</string>
     <string name="visualizer">Vizualizator</string>
     <string name="it_listens_to_prism_s_own">Ascultă sunetul propriu al Prism (fără microfon) și rulează doar cât playerul e deschis și redă. Pe un telefon mai vechi, Oprit păstrează playerul cel mai ușor.</string>
@@ -5513,7 +5511,6 @@
     <string name="mix_why_live">Una dintre cele două este o transmisiune live.</string>
     <string name="mix_why_podcast">Una dintre cele două este un episod de podcast.</string>
     <string name="mix_why_album">Un album redat în întregime își păstrează melodiile întregi.</string>
-    <string name="mix_why_sing_or_together">Sing sau Ascultați împreună era activat.</string>
     <string name="mix_why_casting">Se reda pe alt dispozitiv.</string>
     <string name="mix_why_short">Această melodie durează mai puțin de 30 de secunde.</string>
     <string name="mix_why_next_short">Următoarea melodie durează doar câteva secunde.</string>
@@ -5629,7 +5626,6 @@
     <string name="tour_1875_also_heard">O melodie recunoscută se redă din momentul în care ai auzit-o, cu versurile deschise.</string>
     <string name="queue_end_mixed">Muzica ta și noutăți</string>
     <string name="dd_use_load_ahead">Încărcarea melodiilor în avans</string>
-    <string name="replay_notices_n_on">%1$d din 3 pornite</string>
     <string name="car_lyrics_style">Stilul versurilor</string>
     <string name="tab_tint_light">Culorile temei</string>
     <string name="bini_detail">Versurile Apple Music · cuvânt cu cuvânt, potrivite altfel</string>

@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">A cor da capa da música</string>
     <string name="progress_bar_thickness">Espessura da barra de progresso</string>
     <string name="thinner">Mais fina</string>
-    <string name="as_the_style">Como o estilo</string>
     <string name="thicker">Mais grossa</string>
     <string name="the_waveform_keeps_its_own_height">A forma de onda mantém a sua própria altura; a espessura aparece até a música ser analisada.</string>
-    <string name="knob_at_the_playhead">Botão na posição atual</string>
     <string name="a_dot_with_the_thumb_style">Um ponto com o estilo Polegar</string>
     <string name="visualizer">Visualizador</string>
     <string name="it_listens_to_prism_s_own">Ouve o som do próprio Prism (sem microfone) e só funciona enquanto o leitor está aberto e a tocar. Num telemóvel mais antigo, Desativado deixa o leitor mais leve.</string>
@@ -5513,7 +5511,6 @@
     <string name="mix_why_live">Uma das duas é uma transmissão em direto.</string>
     <string name="mix_why_podcast">Uma das duas é um episódio de podcast.</string>
     <string name="mix_why_album">Um álbum reproduzido do início ao fim mantém as músicas inteiras.</string>
-    <string name="mix_why_sing_or_together">Sing ou Ouvir em conjunto estava ativado.</string>
     <string name="mix_why_casting">A reproduzir noutro dispositivo.</string>
     <string name="mix_why_short">Esta música tem menos de 30 segundos.</string>
     <string name="mix_why_next_short">A música seguinte tem apenas alguns segundos.</string>
@@ -5629,7 +5626,6 @@
     <string name="tour_1875_also_heard">Uma música reconhecida toca a partir do momento em que a ouviste, com a letra aberta.</string>
     <string name="queue_end_mixed">Tuas e novas</string>
     <string name="dd_use_load_ahead">Pré-carregar músicas</string>
-    <string name="replay_notices_n_on">%1$d de 3 ativadas</string>
     <string name="car_lyrics_style">Estilo da letra</string>
     <string name="tab_tint_light">Cores do tema</string>
     <string name="bini_detail">Letras do Apple Music · palavra a palavra, encontradas de outra forma</string>

@@ -135,7 +135,8 @@ class RecommendationsHistoryPageTest : ListeningPageHarness(SettingsPageId.RECOM
         assertEquals(t(R.string.replay_story_font_poster), valueOf(storyType))
         // 1.8.5: Replay's three notices are one row; Rewind's is on as Prism comes, the two new ones off.
         assertEquals(SettingsTags.ROW_PICK, typeOf(notices))
-        assertEquals("1 of 3 on", valueOf(notices))
+        // W45 (1.8.7.6): the ones on, by name ("1 of 3 on" before).
+        assertEquals("Rewind", valueOf(notices))
         assertFalse(hasRow(rewind))
         assertEquals(SettingsTags.ROW_SWITCH, typeOf(finishLyric))
         assertEquals(SettingsTags.ROW_PICK, typeOf(countFrom))
@@ -195,7 +196,7 @@ class RecommendationsHistoryPageTest : ListeningPageHarness(SettingsPageId.RECOM
         inSheet(milestone).performSemanticsAction(SemanticsActions.OnClick)
         until("milestone_notify") { it.behavior.milestoneNotify }
         swipeSheetAway()
-        assertEquals("2 of 3 on", valueOf(notices))
+        assertEquals("Monthly recap · Milestones", valueOf(notices))
         // finish_lyric
         tap(finishLyric)
         until("finish_lyric") { it.behavior.finishLyric }

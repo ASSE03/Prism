@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">De kleur van de cover van het nummer</string>
     <string name="progress_bar_thickness">Dikte van de voortgangsbalk</string>
     <string name="thinner">Dunner</string>
-    <string name="as_the_style">Zoals de stijl</string>
     <string name="thicker">Dikker</string>
     <string name="the_waveform_keeps_its_own_height">De golfvorm houdt zijn eigen hoogte; de dikte is te zien tot een nummer is gescand.</string>
-    <string name="knob_at_the_playhead">Knop op de afspeelpositie</string>
     <string name="a_dot_with_the_thumb_style">Een stip met de stijl Duim</string>
     <string name="visualizer">Visualizer</string>
     <string name="it_listens_to_prism_s_own">Hij luistert naar het eigen geluid van Prism (geen microfoon) en draait alleen als de speler open is en afspeelt. Op een oudere telefoon houdt Uit de speler het lichtst.</string>
@@ -5438,7 +5436,6 @@
     <string name="mix_why_live">Een van de twee is een livestream.</string>
     <string name="mix_why_podcast">Een van de twee is een podcastaflevering.</string>
     <string name="mix_why_album">Een album dat doorloopt, houdt zijn nummers heel.</string>
-    <string name="mix_why_sing_or_together">Sing of Samen luisteren stond aan.</string>
     <string name="mix_why_casting">Er werd op een ander apparaat afgespeeld.</string>
     <string name="mix_why_short">Dit nummer is korter dan 30 seconden.</string>
     <string name="mix_why_next_short">Het volgende nummer duurt maar een paar seconden.</string>
@@ -5554,7 +5551,6 @@
     <string name="tour_1875_also_heard">Een herkend nummer speelt vanaf het moment dat je het hoorde, met de songtekst open.</string>
     <string name="queue_end_mixed">Jouw en nieuwe</string>
     <string name="dd_use_load_ahead">Nummers vooraf laden</string>
-    <string name="replay_notices_n_on">%1$d van 3 aan</string>
     <string name="car_lyrics_style">Songtekststijl</string>
     <string name="tab_tint_light">Themakleuren</string>
     <string name="bini_detail">Songteksten van Apple Music · woord voor woord, op een andere manier gevonden</string>

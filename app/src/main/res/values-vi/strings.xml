@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">Màu ảnh bìa bài hát</string>
     <string name="progress_bar_thickness">Độ dày thanh tiến trình</string>
     <string name="thinner">Mỏng hơn</string>
-    <string name="as_the_style">Theo kiểu</string>
     <string name="thicker">Dày hơn</string>
     <string name="the_waveform_keeps_its_own_height">Dạng sóng giữ chiều cao riêng; độ dày hiện cho đến khi bài hát được quét.</string>
-    <string name="knob_at_the_playhead">Núm ở vị trí phát</string>
     <string name="a_dot_with_the_thumb_style">Một chấm theo kiểu Ngón cái</string>
     <string name="visualizer">Hiệu ứng nhạc</string>
     <string name="it_listens_to_prism_s_own">Nó nghe âm thanh của chính Prism (không dùng micrô) và chỉ chạy khi trình phát đang mở và đang phát. Trên điện thoại cũ, Tắt giúp trình phát nhẹ nhất.</string>
@@ -5363,7 +5361,6 @@
     <string name="mix_why_live">Một trong hai là phát trực tiếp.</string>
     <string name="mix_why_podcast">Một trong hai là tập podcast.</string>
     <string name="mix_why_album">Album phát liền mạch giữ nguyên từng bài.</string>
-    <string name="mix_why_sing_or_together">Sing hoặc Nghe cùng nhau đang bật.</string>
     <string name="mix_why_casting">Đang phát trên thiết bị khác.</string>
     <string name="mix_why_short">Bài này ngắn hơn 30 giây.</string>
     <string name="mix_why_next_short">Bài tiếp theo chỉ dài vài giây.</string>
@@ -5479,7 +5476,6 @@
     <string name="tour_1875_also_heard">Bài hát được nhận dạng phát từ đúng lúc bạn nghe thấy, kèm lời bài hát đang mở.</string>
     <string name="queue_end_mixed">Của bạn và mới</string>
     <string name="dd_use_load_ahead">Tải trước bài hát</string>
-    <string name="replay_notices_n_on">Bật %1$d/3</string>
     <string name="car_lyrics_style">Kiểu lời bài hát</string>
     <string name="tab_tint_light">Màu chủ đề</string>
     <string name="bini_detail">Lời bài hát của Apple Music · từng từ, ghép bằng cách khác</string>

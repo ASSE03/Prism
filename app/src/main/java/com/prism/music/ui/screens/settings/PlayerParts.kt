@@ -132,7 +132,7 @@ enum class EdgeToEdge(val cover: Boolean, val video: Boolean) {
             OFF -> tr(R.string.off)
             COVER -> tr(R.string.cover)
             VIDEO -> tr(R.string.video)
-            BOTH -> tr(R.string.both)
+            BOTH -> tr(R.string.edge_to_edge_both)
         }
 
     fun toStored(): Pair<Boolean, Boolean> = cover to video
@@ -237,7 +237,7 @@ data class LineOnPlayer(val align: LyricsAlign, val lines: Int) {
 
 /** The page's groups (their titles are the page's `group(...)` titles and the search lines' groups). */
 internal object PlayerGroups {
-    val layout get() = tr(R.string.layout)
+    val layout get() = tr(R.string.settings_player_layout_group)
     val progress get() = tr(R.string.settings_player_progress_and_times)
     val title get() = tr(R.string.title)
     val cover get() = tr(R.string.cover)
@@ -284,8 +284,19 @@ internal fun deckWords(s: AppSettings): String =
 internal fun movementWords(speed: Float): String =
     if (speed < 0.05f) tr(R.string.still) else worded(if (speed < 0.5f) tr(R.string.gentle) else tr(R.string.lively), speed)
 
+/** "Thinner · 80%", "Standard" (at 100%, where a percent says nothing more), "Thicker · 130%". */
 internal fun thicknessWords(v: Float): String =
-    worded(if (v < 0.85f) tr(R.string.thinner) else if (v <= 1.15f) tr(R.string.as_the_style) else tr(R.string.thicker), v)
+    if (v < 0.85f) worded(tr(R.string.thinner), v) else if (v <= 1.15f) {
+        if ((v * 100).roundToInt() == 100) tr(R.string.standard) else worded(tr(R.string.standard), v)
+    } else worded(tr(R.string.thicker), v)
+
+/** The player cover's corner roundness (0-32) in the words of Text & icons' corners: Square, Subtle, Round, Extra. */
+internal fun artCornerWords(v: Int): String = when {
+    v <= 0 -> tr(R.string.square)
+    v <= 8 -> tr(R.string.subtle)
+    v <= 20 -> tr(R.string.round)
+    else -> tr(R.string.extra)
+}
 
 internal fun backdropShowWords(at: Float): String {
     val show = com.prism.music.ui.player.backdropShowFromSlider(at)
@@ -322,7 +333,7 @@ internal val playerSettings: List<PlayerSetting<*>> by lazy {
         ps(listOf("scrubber_style"), g.progress, R.string.style, { it.scrubberStyle }, { it.label }) { p, v -> p.setScrubberStyle(v) },
         ps(listOf("scrubber_color"), g.progress, R.string.progress_bar_color, { it.scrubberColor }, { it.label }) { p, v -> p.setScrubberColor(v) },
         ps(listOf("scrubber_thickness"), g.progress, R.string.progress_bar_thickness, { it.scrubberThickness }, ::thicknessWords) { p, v -> p.setScrubberThickness(v) },
-        ps(listOf("scrubber_thumb"), g.progress, R.string.knob_at_the_playhead, { it.scrubberThumb }, { it.label }) { p, v -> p.setScrubberThumb(v) },
+        ps(listOf("scrubber_thumb"), g.progress, R.string.progress_bar_knob, { it.scrubberThumb }, { it.label }) { p, v -> p.setScrubberThumb(v) },
         flag(listOf("volume_matches_progress"), g.progress, R.string.volume_bar_like_the_progress_bar, { it.volumeMatchesProgress }) { p, v -> p.setVolumeMatchesProgress(v) },
         ps(listOf("player_times"), g.progress, R.string.times, { it.player.times }, { it.label }) { p, v -> p.setPlayerTimes(v) },
         ps(listOf("show_track_length"), g.progress, R.string.settings_player_right_hand_time, { it.showTrackLength }, { if (it) tr(R.string.song_length) else tr(R.string.time_left) }) { p, v -> p.setShowTrackLength(v) },
@@ -335,7 +346,7 @@ internal val playerSettings: List<PlayerSetting<*>> by lazy {
         ps(listOf("player_artist_links"), g.title, R.string.each_artist_its_own_link, { it.view.artistLinks }, ::artistLinksWords) { p, v -> p.setArtistLinks(v) },
         // Cover
         ps(listOf("cover_size"), g.cover, R.string.cover_size, { it.coverSize }, { it.label }) { p, v -> p.setCoverSize(v) },
-        ps(listOf("player_art_corners"), g.cover, R.string.cover_corners, { it.player.artCorners }, { it.toString() }) { p, v -> p.setPlayerArtCorners(v) },
+        ps(listOf("player_art_corners"), g.cover, R.string.cover_corners, { it.player.artCorners }, ::artCornerWords) { p, v -> p.setPlayerArtCorners(v) },
         ps(listOf("cover_shape_player"), g.cover, R.string.settings_player_cover_shape, { it.shapes.player }, { it.label }) { p, v -> p.setCoverShape("player", v) },
         ps(
             listOf("full_bleed_artwork", "video_full_bleed"), g.cover, R.string.settings_player_edge_to_edge,
@@ -367,7 +378,7 @@ internal val playerSettings: List<PlayerSetting<*>> by lazy {
         ) { p, v -> p.setPlayerButtons(v.first); p.setShowVideoSwitch(v.second) },
         ps(listOf("volume_control"), g.onIt, R.string.the_volume_slider_changes, { it.volumeControl }, { it.label }) { p, v -> p.setVolumeControl(v) },
         ps(
-            listOf("player_menu_hidden", "player_menu_tiles"), g.onIt, R.string.edit_this_menu,
+            listOf("player_menu_hidden", "player_menu_tiles"), g.onIt, R.string.settings_player_edit_menu,
             { it.view.parts.menuHidden to it.view.parts.menuTiles }, { v ->
                 // Its four tiles by name, then what's folded under More.
                 val tiles = v.second.joinToString(" · ") { com.prism.music.ui.player.menuLabel(it) }

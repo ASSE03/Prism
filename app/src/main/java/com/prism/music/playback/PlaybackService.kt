@@ -444,6 +444,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 }
             },
             allowed = ::mayBlend,
+            // What the songs can't say about a refusal (#493): which of Sing, casting or Listen together it was.
+            whyNot = { from, to -> mixWhyNot(from, to, mixWhyHeld(c.sing.onNow, c.cast.casting, togetherNow())) },
             // Its song's end is waiting for it: no scan makes way for the listener's touches meanwhile (#343).
             scanFromPhone = { id -> scope.launch { MixTempo.urgently { c.mixTempo.measure(id, network = false) } } },
             buildTail = ::buildTailPlayer,
@@ -485,6 +487,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     /** The equalizer in use now (as set, or the output's own preset). */
     private var eqNow = com.prism.music.data.prefs.EqSettings()
 
+    /** Playing along with others: following a host, or in a Listen together session. */
+    private fun togetherNow(): Boolean =
+        c.queue.followingHost || c.together.state.value !is com.prism.music.playback.together.TogetherState.Idle
+
     /**
      * Whether Mix may blend these two: not an album running into its own next track (albums are made to flow on
      * as they are), not live streams or music videos, and not while playing along with others (Listen Together
@@ -499,7 +505,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // Singing along: each song plays whole, with its own vocals taken out.
         if (c.sing.onNow) return false
         if (c.cast.casting) return false
-        if (c.queue.followingHost || c.together.state.value !is com.prism.music.playback.together.TogetherState.Idle) return false
+        if (togetherNow()) return false
         // Only while an album plays through (a radio or playlist that puts two of an album's songs side by side blends).
         // An album played as a DJ set is a set: it blends.
         return blendsAcrossAlbum(a.album?.id, b.album?.id, c.queue.source.value.kind == QueueKind.ALBUM, c.settings.current.mix.keepAlbums, c.dj.onNow)

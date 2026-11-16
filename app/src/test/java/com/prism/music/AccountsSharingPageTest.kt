@@ -70,6 +70,8 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
     private val links = t(R.string.links_you_share)
     private val openLinks = t(R.string.open_youtube_music_links_in_prism)
     private val notConnected = t(R.string.cn_not_connected)
+    private val spotifyNotConnected = t(R.string.cn_spot_not_connected)
+    private val otherServices = t(R.string.cn_other_services)
 
     /** `ConnectTags`: a line and a paragraph of a sheet's content, the Client ID's field and Connect. */
     private val line = "settings:connect:line"
@@ -153,8 +155,9 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         // Accounts 3 · Last.fm 1 · Spotify 1 · Discord 1 · Sharing and links 2.
         assertEquals(listOf(3, 1, 1, 1, 2), groupSizes())
         assertEquals(0, changedRows())
-        // Last.fm, Spotify and Discord have no title over their card: their first row names them (§2.7).
-        assertEquals(listOf(accounts, sharing), headings())
+        // Last.fm, Spotify and Discord have no title of their own over their cards (their first row names them, §2.7),
+        // but one heading over the three (W46, 1.8.7.6).
+        assertEquals(listOf(accounts, otherServices, sharing), headings())
         assertTrue(headings().none { it == me.title })
 
         assertEquals(SettingsTags.ROW_LINK, type(prismAccount))
@@ -163,15 +166,17 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         assertEquals(t(R.string.tv_not_signed_in), value(youtubeMusic))
         assertEquals(SettingsTags.ROW_LINK, type(history))
         assertEquals(t(R.string.ytlive_connection_signed_out), value(history))
-        // Last.fm: "Connect Last.fm" · Not connected, or (a copy built without Last.fm's key) a row that says so.
+        // Last.fm: "Last.fm" · Not connected (W47, 1.8.7.6: a plain name, as Spotify's row), or (a copy built without
+        // Last.fm's key) a row that says so.
         if (container.lastFm.available) {
-            assertEquals(SettingsTags.ROW_LINK, type(t(R.string.connect_last_fm)))
-            assertEquals(notConnected, value(t(R.string.connect_last_fm)))
+            assertEquals(SettingsTags.ROW_LINK, type("Last.fm"))
+            assertEquals(notConnected, value("Last.fm"))
         } else {
             assertEquals(t(R.string.this_copy_of_prism_was_built), value("Last.fm"))
         }
         assertEquals(SettingsTags.ROW_PICK, type(spotify))
-        assertEquals(notConnected, value(spotify))
+        // W48 (1.8.7.6): Spotify's says what connecting reads.
+        assertEquals(spotifyNotConnected, value(spotify))
         assertEquals(SettingsTags.ROW_SWITCH, type(discord))
         assertEquals(t(R.string.tv_not_signed_in), value(discord))
         assertFalse(hasTitled(discordSignOut))
@@ -288,7 +293,7 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         // (Connect is never tapped here: it opens Spotify's page.)
         assertEquals(Spotify.Connection.None, container.spotify.connection.value)
         swipeSheetAway()
-        assertEquals(notConnected, value(spotify))
+        assertEquals(spotifyNotConnected, value(spotify))
         assertBudgets("after the sheet")
     }
 
@@ -297,7 +302,7 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         connectSpotify()
         show()
         assertBudgets("Spotify connected")
-        assertEquals(listOf(accounts, spotify, sharing), headings())
+        assertEquals(listOf(accounts, otherServices, spotify, sharing), headings())
         // Recent plays, Top songs and artists, Your playlists, Liked Songs both ways, Disconnect Spotify.
         assertEquals(listOf(3, 1, 5, 1, 2), groupSizes())
         for (id in listOf(R.string.spot_recent, R.string.spot_top, R.string.spot_playlists, R.string.spot_likes)) assertEquals(t(id), SettingsTags.ROW_SWITCH, type(t(id)))
@@ -360,7 +365,7 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         signInToSpotify()
         show()
         assertBudgets("Spotify signed in")
-        assertEquals(listOf(accounts, spotify, sharing), headings())
+        assertEquals(listOf(accounts, otherServices, spotify, sharing), headings())
         // Your playlists, Liked Songs, Disconnect Spotify.
         assertEquals(listOf(3, 1, 3, 1, 2), groupSizes())
         assertEquals(SettingsTags.ROW_SWITCH, type(t(R.string.spot_playlists)))
@@ -425,10 +430,10 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         assertEquals(SettingsTarget(me, sharing), SettingsMap.resolve("devices", sharing))
 
         val mine = SettingsIndex.entries.filter { it.page == me && !it.isPage }
-        assertEquals(setOf(accounts, "Last.fm", spotify, discordKey, sharing), mine.map { it.group }.toSet())
+        assertEquals(setOf(accounts, otherServices, "Last.fm", spotify, discordKey, sharing), mine.map { it.group }.toSet())
         // The groups' keys are in the page as it is written (three of the cards have no title to read them from).
         val source = File("src/main/java/com/prism/music/ui/screens/settings/AccountsSharingPage.kt").readText()
-        for (key in listOf("group(tr(R.string.accounts))", "group(null, key = LAST_FM)", "key = tr(R.string.spotify)", "group(null, key = tr(R.string.discord))", "group(tr(R.string.sharing_and_links))")) {
+        for (key in listOf("group(tr(R.string.accounts))", "group(tr(R.string.cn_other_services), key = LAST_FM)", "key = tr(R.string.spotify)", "group(null, key = tr(R.string.discord))", "group(tr(R.string.sharing_and_links))")) {
             assertTrue(key, key in source)
         }
         // The rows that only explained have no line any more; what they said is words for the row that took it over.

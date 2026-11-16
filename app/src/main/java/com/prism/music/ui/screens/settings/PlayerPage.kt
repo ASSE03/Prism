@@ -209,7 +209,7 @@ internal fun PlayerProgressRows() {
         info = if (s.scrubberStyle == ScrubberStyle.WAVE) tr(R.string.the_waveform_keeps_its_own_height) else null, changed = ch("scrubber_thickness"),
     ) { prefs.setScrubberThickness(if (it in 0.93f..1.07f) 1f else it) }
     PickCardsRow(
-        tr(R.string.knob_at_the_playhead), ScrubberThumb.entries, s.scrubberThumb, { it.label }, changed = ch("scrubber_thumb"),
+        tr(R.string.progress_bar_knob), ScrubberThumb.entries, s.scrubberThumb, { it.label }, changed = ch("scrubber_thumb"),
         onPick = { prefs.setScrubberThumb(it) },
     ) { KnobSample(it, s.scrubberThickness) }
     SwitchRow(
@@ -259,7 +259,7 @@ internal fun PlayerCoverRows() {
     val prefs = LocalContainer.current.settings
     ChoiceRow(tr(R.string.cover_size), CoverSize.entries, s.coverSize, { it.label }, changed = ch("cover_size")) { prefs.setCoverSize(it) }
     SliderRow(
-        tr(R.string.cover_corners), s.player.artCorners.toFloat(), 0f..32f, { it.roundToInt().toString() }, steps = 7, changed = ch("player_art_corners"),
+        tr(R.string.cover_corners), s.player.artCorners.toFloat(), 0f..32f, { artCornerWords(it.roundToInt()) }, steps = 7, changed = ch("player_art_corners"),
     ) { prefs.setPlayerArtCorners(it.roundToInt()) }
     // The player cover's shape has its one home here (plan §2.6).
     PickCardsRow(
@@ -371,7 +371,7 @@ internal fun PlayerOnItRows() {
     ) { RowButtons() }
     // The ⋯ menu's tiles and actions: its one row in Settings (the menu itself has the same editor).
     LinkRow(
-        tr(R.string.edit_this_menu), value = tr(R.string.the_player_s_menu_its_tiles_and_actions), icon = PrismIcons.More, changed = ch("player_menu_hidden"),
+        tr(R.string.settings_player_edit_menu), value = tr(R.string.the_player_s_menu_its_tiles_and_actions), icon = PrismIcons.More, changed = ch("player_menu_hidden"),
     ) { editMenu = true }
     if (editMenu) com.prism.music.ui.player.MenuEditorSheet { editMenu = false }
     PickCardsRow(
@@ -663,7 +663,7 @@ val playerIndex: List<SettingEntry> by lazy {
             SettingEntry(page, g.progress, tr(R.string.style), tr(R.string.progress_bar) + " " + tr(R.string.scrubber_seek_bar)),
             SettingEntry(page, g.progress, tr(R.string.progress_bar_color), tr(R.string.scrubber_color_accent_white_cover_spectrum)),
             SettingEntry(page, g.progress, tr(R.string.progress_bar_thickness), tr(R.string.scrubber_thick_thin_height_bold)),
-            SettingEntry(page, g.progress, tr(R.string.knob_at_the_playhead), tr(R.string.scrubber_thumb_knob_dot_line_ring)),
+            SettingEntry(page, g.progress, tr(R.string.progress_bar_knob), tr(R.string.scrubber_thumb_knob_dot_line_ring)),
             SettingEntry(page, g.progress, tr(R.string.volume_bar_like_the_progress_bar), tr(R.string.volume_bar_keywords)),
             SettingEntry(page, g.progress, tr(R.string.times), tr(R.string.times_under_the_progress_bar) + " " + tr(R.string.elapsed_remaining_time_left_none) + " " + tr(R.string.duration_time_left_remaining)),
             SettingEntry(page, g.progress, tr(R.string.settings_player_right_hand_time), tr(R.string.time_left) + " " + tr(R.string.song_length) + " " + tr(R.string.duration_time_left_remaining)),
@@ -722,7 +722,7 @@ val playerIndex: List<SettingEntry> by lazy {
                 page, g.onIt, tr(R.string.buttons_in_the_row), tr(R.string.player_bottom_row_buttons_lyrics_video) + " " + tr(R.string.music_video_audio_only),
                 needs = turnOn(tr(R.string.buttons)) { it.shows(PlayerPart.BUTTONS) },
             ),
-            SettingEntry(page, g.onIt, tr(R.string.edit_this_menu), tr(R.string.edit_this_menu_keywords)),
+            SettingEntry(page, g.onIt, tr(R.string.settings_player_edit_menu), tr(R.string.edit_this_menu) + " " + tr(R.string.edit_this_menu_keywords)),
             SettingEntry(page, g.onIt, tr(R.string.settings_player_while_panels_open), tr(R.string.player_controls_hide_full_screen_lyrics)),
             SettingEntry(
                 page, g.onIt, tr(R.string.lyrics_and_the_queue),

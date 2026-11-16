@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">Barva obalu skladby</string>
     <string name="progress_bar_thickness">Tloušťka lišty průběhu</string>
     <string name="thinner">Tenčí</string>
-    <string name="as_the_style">Podle stylu</string>
     <string name="thicker">Silnější</string>
     <string name="the_waveform_keeps_its_own_height">Zvuková vlna si drží vlastní výšku; tloušťka se ukazuje, dokud skladba není naskenovaná.</string>
-    <string name="knob_at_the_playhead">Jezdec na pozici přehrávání</string>
     <string name="a_dot_with_the_thumb_style">Tečka u stylu Palec</string>
     <string name="visualizer">Vizualizér</string>
     <string name="it_listens_to_prism_s_own">Poslouchá vlastní zvuk Prismu (bez mikrofonu) a běží jen tehdy, když je přehrávač otevřený a hraje. Na starším telefonu nechá Vypnuto přehrávač nejlehčí.</string>
@@ -5588,7 +5586,6 @@
     <string name="mix_why_live">Jedna ze dvou je živý přenos.</string>
     <string name="mix_why_podcast">Jedna ze dvou je epizoda podcastu.</string>
     <string name="mix_why_album">Album přehrávané vcelku si nechává skladby celé.</string>
-    <string name="mix_why_sing_or_together">Byl zapnutý Sing nebo Poslech společně.</string>
     <string name="mix_why_casting">Přehrávání probíhalo na jiném zařízení.</string>
     <string name="mix_why_short">Tato skladba je kratší než 30 sekund.</string>
     <string name="mix_why_next_short">Další skladba trvá jen pár sekund.</string>
@@ -5704,7 +5701,6 @@
     <string name="tour_1875_also_heard">Rozpoznaná skladba se přehraje od slyšeného okamžiku, s otevřenými texty.</string>
     <string name="queue_end_mixed">Tvoje a nové</string>
     <string name="dd_use_load_ahead">Načítání skladeb dopředu</string>
-    <string name="replay_notices_n_on">%1$d ze 3 zapnuto</string>
     <string name="car_lyrics_style">Styl textů</string>
     <string name="tab_tint_light">Barvy motivu</string>
     <string name="bini_detail">Texty z Apple Music · slovo po slovu, spárované jinak</string>

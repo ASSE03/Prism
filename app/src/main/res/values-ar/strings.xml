@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">لون غلاف الأغنية</string>
     <string name="progress_bar_thickness">سُمك شريط التقدّم</string>
     <string name="thinner">أنحف</string>
-    <string name="as_the_style">حسب النمط</string>
     <string name="thicker">أعرض</string>
     <string name="the_waveform_keeps_its_own_height">يحتفظ شكل الموجة بارتفاعه الخاص، ويظهر السُّمك إلى أن يتم فحص الأغنية.</string>
-    <string name="knob_at_the_playhead">مقبض عند موضع التشغيل</string>
     <string name="a_dot_with_the_thumb_style">نقطة مع نمط المقبض</string>
     <string name="visualizer">المؤثرات المرئية</string>
     <string name="it_listens_to_prism_s_own">يستمع إلى صوت Prism نفسه (بلا ميكروفون) ولا يعمل إلا أثناء فتح المشغّل والتشغيل. على الهواتف الأقدم، الإيقاف يجعل المشغّل أخف ما يكون.</string>
@@ -5738,7 +5736,6 @@
     <string name="mix_why_live">إحدى الأغنيتين بث مباشر.</string>
     <string name="mix_why_podcast">إحدى الأغنيتين حلقة بودكاست.</string>
     <string name="mix_why_album">الألبوم الذي يُشغَّل كاملًا تبقى أغانيه متصلة دون تداخل.</string>
-    <string name="mix_why_sing_or_together">كان Sing أو الاستماع معًا قيد التشغيل.</string>
     <string name="mix_why_casting">التشغيل على جهاز آخر.</string>
     <string name="mix_why_short">هذه الأغنية أقصر من 30 ثانية.</string>
     <string name="mix_why_next_short">الأغنية التالية لا تتجاوز بضع ثوانٍ.</string>
@@ -5854,7 +5851,6 @@
     <string name="tour_1875_also_heard">تُشغَّل الأغنية المتعرَّف عليها من اللحظة التي سمعتها فيها، مع فتح كلماتها.</string>
     <string name="queue_end_mixed">موسيقاك والجديد</string>
     <string name="dd_use_load_ahead">تحميل الأغاني مسبقًا</string>
-    <string name="replay_notices_n_on">%1$d من 3 مفعّلة</string>
     <string name="car_lyrics_style">نمط الكلمات</string>
     <string name="tab_tint_light">ألوان السمة</string>
     <string name="bini_detail">كلمات Apple Music · كلمة بكلمة، بمطابقة بطريقة أخرى</string>

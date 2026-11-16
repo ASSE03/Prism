@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">곡 커버의 색상</string>
     <string name="progress_bar_thickness">진행 표시줄 두께</string>
     <string name="thinner">더 얇게</string>
-    <string name="as_the_style">스타일대로</string>
     <string name="thicker">더 두껍게</string>
     <string name="the_waveform_keeps_its_own_height">파형은 자체 높이를 유지해요. 곡이 분석되기 전까지는 두께가 적용돼요.</string>
-    <string name="knob_at_the_playhead">재생 위치의 손잡이</string>
     <string name="a_dot_with_the_thumb_style">손잡이 스타일의 점</string>
     <string name="visualizer">비주얼라이저</string>
     <string name="it_listens_to_prism_s_own">Prism 자체 소리를 사용하며(마이크 사용 안 함) 플레이어가 열려 있고 재생 중일 때만 작동해요. 오래된 휴대전화에서는 끄는 것이 플레이어를 가장 가볍게 해요.</string>
@@ -5363,7 +5361,6 @@
     <string name="mix_why_live">둘 중 하나가 라이브 스트림이었어요.</string>
     <string name="mix_why_podcast">둘 중 하나가 팟캐스트 에피소드였어요.</string>
     <string name="mix_why_album">앨범을 처음부터 이어 들을 때는 곡을 끊지 않아요.</string>
-    <string name="mix_why_sing_or_together">Sing 또는 함께 듣기가 켜져 있었어요.</string>
     <string name="mix_why_casting">다른 기기에서 재생 중이었어요.</string>
     <string name="mix_why_short">이 곡은 30초보다 짧아요.</string>
     <string name="mix_why_next_short">다음 곡은 몇 초밖에 안 돼요.</string>
@@ -5479,7 +5476,6 @@
     <string name="tour_1875_also_heard">인식한 노래는 들은 그 순간부터 가사를 열어 둔 채 재생돼요.</string>
     <string name="queue_end_mixed">내 음악과 새 곡</string>
     <string name="dd_use_load_ahead">곡 미리 불러오기</string>
-    <string name="replay_notices_n_on">3개 중 %1$d개 사용</string>
     <string name="car_lyrics_style">가사 스타일</string>
     <string name="tab_tint_light">테마 색상</string>
     <string name="bini_detail">Apple Music 가사 · 단어별, 다른 방식으로 매칭</string>

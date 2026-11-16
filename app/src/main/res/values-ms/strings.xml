@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">Warna kulit lagu</string>
     <string name="progress_bar_thickness">Ketebalan bar kemajuan</string>
     <string name="thinner">Lebih nipis</string>
-    <string name="as_the_style">Ikut gaya</string>
     <string name="thicker">Lebih tebal</string>
     <string name="the_waveform_keeps_its_own_height">Bentuk gelombang mengekalkan ketinggiannya sendiri; ketebalan dipaparkan sehingga lagu diimbas.</string>
-    <string name="knob_at_the_playhead">Tombol pada kepala main</string>
     <string name="a_dot_with_the_thumb_style">Titik dengan gaya Ibu jari</string>
     <string name="visualizer">Visualisasi</string>
     <string name="it_listens_to_prism_s_own">Ia mendengar bunyi Prism sendiri (tanpa mikrofon) dan hanya berjalan semasa pemain dibuka dan sedang bermain. Pada telefon lama, Mati menjadikan pemain paling ringan.</string>
@@ -5363,7 +5361,6 @@
     <string name="mix_why_live">Salah satu daripada dua lagu itu ialah siaran langsung.</string>
     <string name="mix_why_podcast">Salah satu daripada dua lagu itu ialah episod podcast.</string>
     <string name="mix_why_album">Album yang dimainkan berturutan mengekalkan lagunya utuh.</string>
-    <string name="mix_why_sing_or_together">Sing atau Dengar Bersama sedang dihidupkan.</string>
     <string name="mix_why_casting">Sedang dimainkan pada peranti lain.</string>
     <string name="mix_why_short">Lagu ini kurang daripada 30 saat.</string>
     <string name="mix_why_next_short">Lagu seterusnya hanya beberapa saat panjangnya.</string>
@@ -5479,7 +5476,6 @@
     <string name="tour_1875_also_heard">Lagu yang dicam dimainkan dari detik anda mendengarnya, dengan liriknya terbuka.</string>
     <string name="queue_end_mixed">Milik anda dan baharu</string>
     <string name="dd_use_load_ahead">Memuatkan lagu lebih awal</string>
-    <string name="replay_notices_n_on">%1$d daripada 3 hidup</string>
     <string name="car_lyrics_style">Gaya lirik</string>
     <string name="tab_tint_light">Warna tema</string>
     <string name="bini_detail">Lirik Apple Music · perkataan demi perkataan, dipadankan dengan cara lain</string>

@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">رنگ کاور آهنگ</string>
     <string name="progress_bar_thickness">ضخامت نوار پیشرفت</string>
     <string name="thinner">نازک‌تر</string>
-    <string name="as_the_style">طبق سبک</string>
     <string name="thicker">ضخیم‌تر</string>
     <string name="the_waveform_keeps_its_own_height">شکل موج ارتفاع خودش را دارد؛ تا آهنگ بررسی نشده، ضخامت نشان داده می‌شود.</string>
-    <string name="knob_at_the_playhead">دستگیره در محل پخش</string>
     <string name="a_dot_with_the_thumb_style">یک نقطه با سبک «دستگیره»</string>
     <string name="visualizer">نمایشگر صوتی</string>
     <string name="it_listens_to_prism_s_own">به صدای خود Prism گوش می‌دهد (بدون میکروفون) و فقط وقتی پخش‌کننده باز است و پخش می‌کند کار می‌کند. روی گوشی قدیمی‌تر، «خاموش» پخش‌کننده را سبک‌تر نگه می‌دارد.</string>
@@ -5438,7 +5436,6 @@
     <string name="mix_why_live">یکی از این دو پخش زنده است.</string>
     <string name="mix_why_podcast">یکی از این دو قسمتی از یک پادکست است.</string>
     <string name="mix_why_album">آلبومی که پشت سر هم پخش می‌شود آهنگ‌هایش را کامل نگه می‌دارد.</string>
-    <string name="mix_why_sing_or_together">Sing یا گوش دادن با هم روشن بود.</string>
     <string name="mix_why_casting">پخش روی دستگاه دیگری بود.</string>
     <string name="mix_why_short">این آهنگ کوتاه‌تر از ۳۰ ثانیه است.</string>
     <string name="mix_why_next_short">آهنگ بعدی فقط چند ثانیه است.</string>
@@ -5554,7 +5551,6 @@
     <string name="tour_1875_also_heard">آهنگ شناسایی‌شده از لحظه‌ای که شنیدید پخش می‌شود، با متن آهنگ باز.</string>
     <string name="queue_end_mixed">موسیقی شما و تازه</string>
     <string name="dd_use_load_ahead">پیش‌بارگیری آهنگ‌ها</string>
-    <string name="replay_notices_n_on">%1$d از 3 روشن</string>
     <string name="car_lyrics_style">سبک متن آهنگ</string>
     <string name="tab_tint_light">رنگ‌های تم</string>
     <string name="bini_detail">متن آهنگ Apple Music · کلمه‌به‌کلمه، با تطبیق به روشی دیگر</string>

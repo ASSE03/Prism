@@ -137,7 +137,7 @@ class PlayerPageTest {
         assertTrue("1 to 6 groups, found ${groups.size}", groups.size in 1..6)
         val counts = groups.map { rowsIn(it).size }
         assertTrue("at most 7 rows a group, and no group without kit rows: $counts", counts.all { it in 1..7 })
-        assertEquals(listOf("Layout", "Progress bar and times", "Title", "Cover", "On the player", "Modes"), groups.map { firstText(it) })
+        assertEquals(listOf("Layout and controls", "Progress bar and times", "Title", "Cover", "On the player", "Modes"), groups.map { firstText(it) })
         // 1.8.6: Animated covers and Canvas are two rows of Cover; Cover animation moved to Modes to make room.
         assertEquals("the ledger's fit: 7 · 7 · 5 · 7 · 7 · 5", listOf(7, 7, 5, 7, 7, 5), counts)
         assertTrue("no group is named after the page", groups.none { firstText(it) == SettingsPageId.PLAYER.title })
@@ -154,8 +154,9 @@ class PlayerPageTest {
         // The pinned preview and the jump chips are there.
         assertEquals(1, tagged(SettingsTags.PREVIEW).size)
         assertEquals(1, tagged(SettingsTags.JUMP_CHIPS).size)
-        // "Edit this menu" stays, as a Link row; the progress bar's color is named apart from the mini player's.
-        assertEquals(SettingsTags.ROW_LINK, rows().getValue("Edit this menu").config[SemanticsProperties.TestTag])
+        // "Edit the player's ⋯ menu" (W31, 1.8.7.6; "Edit this menu" before) stays a Link row; the progress bar's color
+        // is named apart from the mini player's.
+        assertEquals(SettingsTags.ROW_LINK, rows().getValue("Edit the player's ⋯ menu").config[SemanticsProperties.TestTag])
         assertTrue("Progress bar color" in rows())
         assertEquals("Time left", rows().getValue("Right-hand time").config[SettingsRowValue])
     }
@@ -182,7 +183,7 @@ class PlayerPageTest {
         compose.onNodeWithTag(SettingsTags.PAGE_LIST).performTouchInput { repeat(3) { swipeUp() } }
         compose.waitForIdle()
         pass()
-        assertEquals(listOf("Layout", "Progress bar and times", "Title", "Cover", "On the player", "Modes"), seen.toList())
+        assertEquals(listOf("Layout and controls", "Progress bar and times", "Title", "Cover", "On the player", "Modes"), seen.toList())
         assertTrue("cut off: $cut", cut.isEmpty())
     }
 
@@ -321,12 +322,13 @@ class PlayerPageTest {
 
         // (Canvas's three choices are in its sheet now: canvasIsOneRowWithItsChoicesInASheet.)
 
-        // Edge to edge: Both shows the fit and "More room for the picture" under it; Video keeps only the latter.
+        // Edge to edge ("Reaches the screen's edges" since 1.8.7.6, W32): Cover and video shows the fit and "More room
+        // for the picture" under it; Video keeps only the latter.
         assertFalse("How the cover fits" in rows())
-        chip("Edge to edge", "Both")
+        chip("Reaches the screen's edges", "Cover and video")
         until("Edge to edge: both") { it.fullBleedArtwork && it.videoFullBleed }
         assertTrue("How the cover fits" in rows() && "More room for the picture" in rows())
-        chip("Edge to edge", "Video")
+        chip("Reaches the screen's edges", "Video")
         until("Edge to edge: video") { !it.fullBleedArtwork && it.videoFullBleed }
         assertTrue("How the cover fits" !in rows() && "More room for the picture" in rows())
 

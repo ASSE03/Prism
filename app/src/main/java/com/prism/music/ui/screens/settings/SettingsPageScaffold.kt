@@ -49,7 +49,13 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
@@ -78,6 +84,25 @@ import com.prism.music.ui.theme.PrismIcons
 import com.prism.music.ui.theme.PrismTokens
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+
+/**
+ * The jump chips' row fades out over its last 24 dp while more chips lie past the end, so a cut chip reads as "scroll
+ * for more" rather than a clipped word. Nothing is drawn differently once the row is at its end (or fits).
+ */
+internal fun Modifier.fadeEndWhile(more: () -> Boolean): Modifier =
+    graphicsLayer { compositingStrategy = if (more()) CompositingStrategy.Offscreen else CompositingStrategy.Auto }
+        .drawWithContent {
+            drawContent()
+            if (more()) {
+                val w = 24.dp.toPx().coerceAtMost(size.width)
+                val brush = if (layoutDirection == LayoutDirection.Rtl) {
+                    Brush.horizontalGradient(listOf(Color.Transparent, Color.Black), startX = 0f, endX = w)
+                } else {
+                    Brush.horizontalGradient(listOf(Color.Black, Color.Transparent), startX = size.width - w, endX = size.width)
+                }
+                drawRect(brush, blendMode = BlendMode.DstIn)
+            }
+        }
 
 /**
  * "Reset this page" (⋯ in the bar): [changes] is one line per row that would change, as the confirm lists them (build
@@ -264,8 +289,10 @@ fun SettingsPageScaffold(
             }
             if (hasPreview) item(key = PREVIEW_KEY) { Spacer(Modifier.height(full + 12.dp)) }
             if (showJump) item(key = JUMP_KEY) {
+                val chipScroll = rememberScrollState()
                 Row(
-                    Modifier.padding(bottom = 14.dp).horizontalScroll(rememberScrollState()).testTag(SettingsTags.JUMP_CHIPS),
+                    Modifier.padding(bottom = 14.dp).fadeEndWhile { chipScroll.canScrollForward }
+                        .horizontalScroll(chipScroll).testTag(SettingsTags.JUMP_CHIPS),
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
                     jump.forEach { e ->

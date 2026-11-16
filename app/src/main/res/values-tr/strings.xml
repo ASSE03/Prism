@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">Şarkının kapağının rengi</string>
     <string name="progress_bar_thickness">İlerleme çubuğu kalınlığı</string>
     <string name="thinner">Daha ince</string>
-    <string name="as_the_style">Stile göre</string>
     <string name="thicker">Daha kalın</string>
     <string name="the_waveform_keeps_its_own_height">Dalga formu kendi yüksekliğini korur; kalınlık, şarkı taranana kadar görünür.</string>
-    <string name="knob_at_the_playhead">Oynatma konumunda tutamaç</string>
     <string name="a_dot_with_the_thumb_style">Tutamaç stiliyle bir nokta</string>
     <string name="visualizer">Görselleştirici</string>
     <string name="it_listens_to_prism_s_own">Prism\'in kendi sesini dinler (mikrofon yok) ve yalnızca oynatıcı açıkken ve çalarken çalışır. Eski bir telefonda Kapalı, oynatıcıyı en hafif hâlde tutar.</string>
@@ -5438,7 +5436,6 @@
     <string name="mix_why_live">İkisinden biri canlı yayın.</string>
     <string name="mix_why_podcast">İkisinden biri podcast bölümü.</string>
     <string name="mix_why_album">Baştan sona çalan bir albüm şarkılarını bütün tutar.</string>
-    <string name="mix_why_sing_or_together">Sing veya Birlikte Dinle açıktı.</string>
     <string name="mix_why_casting">Başka bir cihazda çalıyordu.</string>
     <string name="mix_why_short">Bu şarkı 30 saniyeden kısa.</string>
     <string name="mix_why_next_short">Sıradaki şarkı yalnızca birkaç saniye uzunluğunda.</string>
@@ -5554,7 +5551,6 @@
     <string name="tour_1875_also_heard">Tanınan bir şarkı, duyduğun andan çalar ve sözleri açık gelir.</string>
     <string name="queue_end_mixed">Seninkiler ve yeniler</string>
     <string name="dd_use_load_ahead">Şarkıları önceden yükleme</string>
-    <string name="replay_notices_n_on">3 üzerinden %1$d açık</string>
     <string name="car_lyrics_style">Söz stili</string>
     <string name="tab_tint_light">Tema renkleri</string>
     <string name="bini_detail">Apple Music sözleri · kelime kelime, başka yolla eşleştirilmiş</string>

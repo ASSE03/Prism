@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">Колір обкладинки пісні</string>
     <string name="progress_bar_thickness">Товщина смуги прогресу</string>
     <string name="thinner">Тонша</string>
-    <string name="as_the_style">Як у стилі</string>
     <string name="thicker">Товща</string>
     <string name="the_waveform_keeps_its_own_height">Хвилеформа має власну висоту; товщину видно, доки пісню не проскановано.</string>
-    <string name="knob_at_the_playhead">Повзунок на позиції відтворення</string>
     <string name="a_dot_with_the_thumb_style">Крапка зі стилем повзунка</string>
     <string name="visualizer">Візуалізатор</string>
     <string name="it_listens_to_prism_s_own">Він слухає власний звук Prism (без мікрофона) і працює, лише поки плеєр відкритий і грає. На старішому телефоні «Вимкнено» робить плеєр найлегшим.</string>
@@ -5588,7 +5586,6 @@
     <string name="mix_why_live">Одне з двох — пряма трансляція.</string>
     <string name="mix_why_podcast">Одне з двох — випуск подкасту.</string>
     <string name="mix_why_album">Альбом, що грає підряд, лишається без накладань.</string>
-    <string name="mix_why_sing_or_together">Було ввімкнено Sing або Слухати разом.</string>
     <string name="mix_why_casting">Музика грала на іншому пристрої.</string>
     <string name="mix_why_short">Ця пісня коротша за 30 секунд.</string>
     <string name="mix_why_next_short">Наступна пісня триває лише кілька секунд.</string>
@@ -5704,7 +5701,6 @@
     <string name="tour_1875_also_heard">Розпізнана пісня грає з моменту, який ти почув, із відкритим текстом.</string>
     <string name="queue_end_mixed">Твоя музика й нове</string>
     <string name="dd_use_load_ahead">Завантаження пісень наперед</string>
-    <string name="replay_notices_n_on">%1$d із 3 увімкнено</string>
     <string name="car_lyrics_style">Стиль тексту</string>
     <string name="tab_tint_light">Кольори теми</string>
     <string name="bini_detail">Тексти Apple Music · слово за словом, зіставлені іншим способом</string>

@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">สีจากปกเพลง</string>
     <string name="progress_bar_thickness">ความหนาของแถบความคืบหน้า</string>
     <string name="thinner">บางลง</string>
-    <string name="as_the_style">ตามสไตล์</string>
     <string name="thicker">หนาขึ้น</string>
     <string name="the_waveform_keeps_its_own_height">รูปคลื่นเสียงจะคงความสูงของตัวเอง ความหนาจะแสดงจนกว่าเพลงจะถูกสแกน</string>
-    <string name="knob_at_the_playhead">ปุ่มจับที่ตำแหน่งเล่น</string>
     <string name="a_dot_with_the_thumb_style">จุดตามสไตล์ปุ่มจับ</string>
     <string name="visualizer">ภาพแสดงเสียง</string>
     <string name="it_listens_to_prism_s_own">ฟังจากเสียงของ Prism เอง (ไม่ใช้ไมโครโฟน) และทำงานเฉพาะตอนที่เพลเยอร์เปิดอยู่และกำลังเล่น ในโทรศัพท์รุ่นเก่า การปิดไว้จะทำให้เพลเยอร์เบาที่สุด</string>
@@ -5363,7 +5361,6 @@
     <string name="mix_why_live">หนึ่งในสองเป็นการสตรีมสด</string>
     <string name="mix_why_podcast">หนึ่งในสองเป็นตอนของพอดแคสต์</string>
     <string name="mix_why_album">อัลบั้มที่เล่นต่อเนื่องจะคงเพลงไว้ครบทั้งเพลง</string>
-    <string name="mix_why_sing_or_together">Sing หรือ ฟังด้วยกัน เปิดอยู่</string>
     <string name="mix_why_casting">กำลังเล่นบนอุปกรณ์อื่น</string>
     <string name="mix_why_short">เพลงนี้สั้นกว่า 30 วินาที</string>
     <string name="mix_why_next_short">เพลงถัดไปยาวแค่ไม่กี่วินาที</string>
@@ -5479,7 +5476,6 @@
     <string name="tour_1875_also_heard">เพลงที่จดจำได้จะเล่นจากช่วงที่คุณได้ยิน พร้อมเปิดเนื้อเพลง</string>
     <string name="queue_end_mixed">ของคุณและเพลงใหม่</string>
     <string name="dd_use_load_ahead">โหลดเพลงล่วงหน้า</string>
-    <string name="replay_notices_n_on">เปิด %1$d จาก 3</string>
     <string name="car_lyrics_style">สไตล์เนื้อเพลง</string>
     <string name="tab_tint_light">สีของธีม</string>
     <string name="bini_detail">เนื้อเพลงของ Apple Music · ทีละคำ จับคู่อีกวิธีหนึ่ง</string>

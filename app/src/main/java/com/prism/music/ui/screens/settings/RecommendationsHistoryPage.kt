@@ -124,13 +124,13 @@ fun RecommendationsHistoryPage(bottomPadding: Dp, find: String? = null, showBack
                 tr(R.string.new_release_notifications), s.releaseNotifications,
                 info = tr(R.string.when_a_starred_artist_puts_out), changed = releasesChanged,
             ) { prefs.setReleaseNotifications(it) }
-            LinkRow(tr(R.string.make_my_mixes_again), info = tr(R.string.fresh_daily_mixes_now), action = true) {
+            LinkRow(tr(R.string.make_my_mixes_again), value = tr(R.string.fresh_daily_mixes_now), action = true) {
                 c.scope.launch { c.forYou.refresh(force = true) }
                 Toast.makeText(context, tr(R.string.making_your_mixes), Toast.LENGTH_SHORT).show()
             }
             LinkRow(tr(R.string.exclusions), info = tr(R.string.artists_not_to_play_and_playlists)) { nav.go(Routes.EXCLUSIONS) }
             // Suggestions skipped at once stay out of mixes and radio for a while (1.7.9): this lets them all back.
-            LinkRow(tr(R.string.forget_skipped_suggestions), info = tr(R.string.forget_skipped_suggestions_info), action = true) {
+            LinkRow(tr(R.string.forget_skipped_suggestions), value = tr(R.string.let_every_song_be_suggested_again), info = tr(R.string.forget_skipped_suggestions_info), action = true) {
                 c.recFeedback.clear()
                 Toast.makeText(context, tr(R.string.suggestions_start_fresh), Toast.LENGTH_SHORT).show()
             }
@@ -228,7 +228,7 @@ private fun RhCountHistoryFrom(sources: List<CountSources.Row>, value: String, c
 
 /**
  * "Notifications" (1.8.5) as one row: Rewind's (1 December), the monthly recap's and the milestones', each a switch in
- * the row's sheet. The row says how many of the three are on.
+ * the row's sheet. The row names the ones on (1.8.7.6; it said "1 of 3 on" before).
  */
 @Composable
 private fun RhReplayNotices(rewindChanged: Boolean, recapChanged: Boolean, milestoneChanged: Boolean) {
@@ -237,11 +237,16 @@ private fun RhReplayNotices(rewindChanged: Boolean, recapChanged: Boolean, miles
     val s = LocalAppSettings.current
     val b = s.behavior
     val title = tr(R.string.replay_notices)
-    val on = listOf(s.rewindNotification, b.recapNotify, b.milestoneNotify).count { it }
+    // The ones on, by name ("Rewind · Monthly recap"), or Off.
+    val on = listOfNotNull(
+        if (s.rewindNotification) tr(R.string.rewind_3) else null,
+        if (b.recapNotify) tr(R.string.replay_notice_recap_short) else null,
+        if (b.milestoneNotify) tr(R.string.milestones) else null,
+    )
     var open by rememberSaveable(title, "replay-notices") { mutableStateOf(false) }
     // A notice turned on asks for notifications (Android 13+) if Prism may not post them yet: else nothing would come.
     fun asked(turnedOn: Boolean) { if (turnedOn) c.askNotifications() }
-    PickRow(title, if (on == 0) tr(R.string.off) else tr(R.string.replay_notices_n_on, on), changed = rewindChanged || recapChanged || milestoneChanged) { open = true }
+    PickRow(title, if (on.isEmpty()) tr(R.string.off) else on.joinToString(" · "), changed = rewindChanged || recapChanged || milestoneChanged) { open = true }
     if (open) RowsSheet(title, { open = false }) {
         SwitchRow(tr(R.string.rewind_notification), s.rewindNotification, info = tr(R.string.on_december_1_when_your_year), changed = rewindChanged) { prefs.setRewindNotification(it); asked(it) }
         SwitchRow(tr(R.string.recap_notification), b.recapNotify, info = tr(R.string.recap_notification_info), changed = recapChanged) { prefs.setRecapNotify(it); asked(it) }

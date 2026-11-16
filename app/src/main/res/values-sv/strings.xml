@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">Färgen från låtens omslag</string>
     <string name="progress_bar_thickness">Förloppsfältets tjocklek</string>
     <string name="thinner">Tunnare</string>
-    <string name="as_the_style">Som stilen</string>
     <string name="thicker">Tjockare</string>
     <string name="the_waveform_keeps_its_own_height">Vågformen behåller sin egen höjd; tjockleken syns tills en låt har skannats.</string>
-    <string name="knob_at_the_playhead">Reglage vid uppspelningsläget</string>
     <string name="a_dot_with_the_thumb_style">En prick med stilen Tumme</string>
     <string name="visualizer">Visualiserare</string>
     <string name="it_listens_to_prism_s_own">Den lyssnar på Prisms eget ljud (ingen mikrofon) och körs bara medan spelaren är öppen och spelar. På en äldre telefon håller Av spelaren som lättast.</string>
@@ -5438,7 +5436,6 @@
     <string name="mix_why_live">En av de två är en livesändning.</string>
     <string name="mix_why_podcast">En av de två är ett poddavsnitt.</string>
     <string name="mix_why_album">Ett album som spelas rakt igenom behåller sina låtar hela.</string>
-    <string name="mix_why_sing_or_together">Sing eller Lyssna tillsammans var på.</string>
     <string name="mix_why_casting">Uppspelning på en annan enhet.</string>
     <string name="mix_why_short">Den här låten är kortare än 30 sekunder.</string>
     <string name="mix_why_next_short">Nästa låt är bara några sekunder lång.</string>
@@ -5554,7 +5551,6 @@
     <string name="tour_1875_also_heard">En igenkänd låt spelas från ögonblicket du hörde den, med låttexten öppen.</string>
     <string name="queue_end_mixed">Dina och nya</string>
     <string name="dd_use_load_ahead">Ladda låtar i förväg</string>
-    <string name="replay_notices_n_on">%1$d av 3 på</string>
     <string name="car_lyrics_style">Låttextstil</string>
     <string name="tab_tint_light">Temats färger</string>
     <string name="bini_detail">Apple Musics låttexter · ord för ord, matchade på ett annat sätt</string>

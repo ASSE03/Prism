@@ -93,7 +93,7 @@
     <string name="refresh_the_list">Refresh the list</string>
     <string name="from_github">From GitHub</string>
     <string name="add_your_look">Add your Look</string>
-    <string name="by_pull_request_on_github">By pull request on GitHub</string>
+    <string name="by_pull_request_on_github">Share yours on GitHub</string>
     <string name="save_your_look_share_it_as">Save your Look, share it as text, and add its code to themes/index.json in Prism\'s repository. The page says how.</string>
     <string name="use">Use %1$s</string>
     <string name="more_for">More for %1$s</string>
@@ -130,7 +130,7 @@
     <string name="use_it">Use it</string>
     <string name="not_now">Not now</string>
     <string name="day_and_night">Day and night</string>
-    <string name="day_and_night_looks">Day and night Looks</string>
+    <string name="day_and_night_looks">Change Look by time of day</string>
     <string name="one_look_by_day_another_by">One Look by day, another by night</string>
     <string name="like_theme_system_for_whole_looks">Like Theme: System, for whole Looks. Sunrise and sunset are worked out from your time zone, without your location. A Look you pick in between stays until the next switch.</string>
     <string name="by_day">By day</string>
@@ -149,7 +149,7 @@
     <string name="search_history">Search history</string>
     <string name="your_last_changes_to_the_look">Your last %1$s changes to the look show here, to go back through.</string>
     <string name="clear_history">Clear history</string>
-    <string name="your_look_stays_as_it_is">Your look stays as it is now</string>
+    <string name="your_look_stays_as_it_is">Your settings stay as they are</string>
     <string name="clear_the_look_s_history">Clear the look\'s history?</string>
     <string name="you_won_t_be_able_to">You won\'t be able to go back to these changes. Your look stays as it is now.</string>
     <string name="clear">Clear</string>
@@ -1158,6 +1158,7 @@
     <string name="cover_tap_the_cover_for_the">Cover: tap the cover for the controls; they tuck away again after a few seconds. </string>
     <string name="tablets_and_phones_turned_sideways_keep">Tablets and phones turned sideways keep their side-by-side player.</string>
     <string name="layout">Layout</string>
+    <string name="settings_player_layout_group">Layout and controls</string>
     <string name="tonearm">Tonearm</string>
     <string name="swings_onto_the_record_while_it">Swings onto the record while it plays</string>
     <string name="buttons">Buttons</string>
@@ -1192,10 +1193,8 @@
     <string name="the_song_s_cover_s_color">The song\'s cover\'s color</string>
     <string name="progress_bar_thickness">Progress bar thickness</string>
     <string name="thinner">Thinner</string>
-    <string name="as_the_style">As the style</string>
     <string name="thicker">Thicker</string>
     <string name="the_waveform_keeps_its_own_height">The waveform keeps its own height; thickness shows until a song has been scanned.</string>
-    <string name="knob_at_the_playhead">Knob at the playhead</string>
     <string name="a_dot_with_the_thumb_style">A dot with the Thumb style</string>
     <string name="visualizer">Visualizer</string>
     <string name="it_listens_to_prism_s_own">It listens to Prism\'s own sound (no microphone) and only runs while the player is open and playing. On an older phone, Off keeps the player lightest.</string>
@@ -1301,7 +1300,7 @@
     <string name="plain_glass_one_hairline_of_split">Plain glass, one hairline of split light</string>
     <string name="ledger">Ledger</string>
     <string name="three_numbers_side_by_side">Three numbers side by side</string>
-    <string name="wash">Wash</string>
+    <string name="wash">Soft color</string>
     <string name="a_faint_wash_of_color_and">A faint wash of color and month bars</string>
     <string name="spectrum_frame">Spectrum frame</string>
     <string name="glass_ringed_in_split_light_the">Glass ringed in split light, the time in color</string>
@@ -1436,6 +1435,7 @@
     <string name="live_3">● LIVE</string>
     <string name="turn_on_first">Turn on %1$s first</string>
     <string name="animated_covers">Animated covers</string>
+    <string name="dd_use_showing_covers">Showing animated covers</string>
     <string name="animated_covers_and_save_with_downloads">Animated covers and Save with downloads</string>
     <string name="hold_previous_next_to_seek">Hold previous / next to seek</string>
     <string name="songs_not_videos">Songs, not videos</string>
@@ -1573,17 +1573,17 @@
     <string name="widget_background_transparent_see_through_color">widget background transparent see-through color buttons home screen</string>
     <string name="the_tab_you_re_on">The tab you\'re on</string>
     <string name="tab_icon_color_tint_accent_light">tab icon color tint accent light current tab</string>
-    <string name="play_on_album_and_playlist_pages">Play on album and playlist pages</string>
+    <string name="play_on_album_and_playlist_pages">Play button on albums and playlists</string>
     <string name="play_button_outlined_filled">play button outlined filled</string>
     <string name="switches_sliders_and_buttons">Switches, sliders and buttons</string>
     <string name="classic_controls_1_6_material_switch">classic controls 1.6 material switch slider old look</string>
     <string name="screen_backgrounds">Screen backgrounds</string>
     <string name="wallpaper_photo_pattern_design">wallpaper photo pattern design</string>
     <string name="glass">Glass</string>
-    <string name="liquid_glass">Liquid Glass</string>
+    <string name="liquid_glass">Liquid glass</string>
     <string name="blur_transparent">blur transparent</string>
     <string name="glass_style">Glass style</string>
-    <string name="frosted_glass">Frosted Glass</string>
+    <string name="frosted_glass">Frosted glass</string>
     <string name="frosted_pages">Frosted pages</string>
     <string name="blur_artist_album_playlist">blur artist album playlist</string>
     <string name="reduce_motion">Reduce motion</string>
@@ -1810,7 +1810,7 @@
     <string name="rotation_orientation_landscape_upright">rotation orientation landscape upright</string>
     <string name="picture_in_picture">Picture-in-picture</string>
     <string name="pip_video_float_window_leave">pip video float window leave</string>
-    <string name="load_ahead">Load ahead</string>
+    <string name="load_ahead">How far to load ahead</string>
     <string name="preload_buffer">preload buffer</string>
     <string name="load_ahead_on_mobile_data">Load ahead on mobile data</string>
     <string name="preload_cellular">preload cellular</string>
@@ -2185,7 +2185,7 @@
     <string name="keep_a_copy">Keep a copy</string>
     <string name="just_sign_out">Just sign out</string>
     <string name="prism_account_on_this_phone">Prism Account · on this phone</string>
-    <string name="your_name_and_picture_kept_on">Your name and picture, kept on this phone. Nothing you have changes</string>
+    <string name="your_name_and_picture_kept_on">Your name and picture, kept on this phone</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">signed in</string>
     <string name="signed_in_2">Signed in</string>
@@ -3033,6 +3033,8 @@
     <string name="search_for">Search for “%1$s”</string>
     <string name="nothing_on_this_phone_matches">Nothing on this phone matches</string>
     <string name="fill">Fill</string>
+    <string name="icon_style">Icon style</string>
+    <string name="prism_s_own">Prism\'s own</string>
     <string name="hide_details">Hide details</string>
     <string name="more_about">More about %1$s</string>
     <string name="open_on_github">Open on GitHub</string>
@@ -3234,19 +3236,20 @@
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music, Musixmatch and Spotify\'s · word by word</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · word by word, the most Chinese songs</string>
+    <string name="qq_music_word_by_word_the">Word by word · the most Chinese songs</string>
     <string name="open_lyrics_database_line_by_line">Open lyrics database · line by line</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · word by word</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · word by word, many Asian songs</string>
+    <string name="kugou_word_by_word_many_asian">Word by word · many Asian songs</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Lyrics listeners submit · few songs so far</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">The lyrics on the song\'s Prism Music page, from LyricFind · lines or plain</string>
+    <string name="lyricfind_lines_or_plain">LyricFind\'s lyrics, via YouTube Music · lines or plain</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Plain text · also fills in starred-out words</string>
     <string name="both">Both</string>
+    <string name="player_times_both">Both ends of the bar</string>
     <string name="carousel">Carousel</string>
     <string name="grid">Grid</string>
     <string name="list">List</string>
@@ -3276,6 +3279,7 @@
     <string name="arch">Arch</string>
     <string name="slanted">Slanted</string>
     <string name="pill">Pill</string>
+    <string name="button_shape_fully_round">Fully round</string>
     <string name="three_dots">Three dots</string>
     <string name="music_note">Music note</string>
     <string name="bold">Bold</string>
@@ -3323,6 +3327,7 @@
     <string name="blurred_cover">Blurred cover</string>
     <string name="your_background">Your background</string>
     <string name="play_button">Play button</string>
+    <string name="transport_filled_play">Filled play button</string>
     <string name="rings">Rings</string>
     <string name="full_width">Full width</string>
     <string name="next_song_s_start">Next song\'s start</string>
@@ -3379,7 +3384,7 @@
     <string name="one">One</string>
     <string name="under_the_line">Under the line</string>
     <string name="over_the_line">Over the line</string>
-    <string name="as_now">As now</string>
+    <string name="as_now">Like the player</string>
     <string name="the_player_s_background_or_the">The player\'s background, or the cover in immersive mode</string>
     <string name="plain_dark">Plain dark</string>
     <string name="nothing_but_the_words">Nothing but the words</string>
@@ -3413,7 +3418,7 @@
     <string name="the_gallery_needs_a_newer_prism">The gallery needs a newer Prism</string>
     <string name="by_2">by %1$s</string>
     <string name="a_look">A Look</string>
-    <string name="how_prism_comes_outfit_the_split">How Prism comes: Outfit, the split light, soft corners</string>
+    <string name="how_prism_comes_outfit_the_split">As it comes: Prism\'s own font, spectrum colors, soft corners</string>
     <string name="paper">Paper</string>
     <string name="light_serif_type_ink_instead_of">Light, serif type, ink instead of color, warm paper</string>
     <string name="midnight">Midnight</string>
@@ -3689,7 +3694,8 @@
     <string name="recap_ready_title">Your %1$s recap is ready</string>
     <string name="recap_ready_text">Your month in music: your top songs and artists, and how it compares with the month before.</string>
     <string name="recap_card_title">Your %1$s</string>
-    <string name="replay_notices">Notifications</string>
+    <string name="replay_notices">Replay notifications</string>
+    <string name="replay_notice_recap_short">Monthly recap</string>
     <string name="tour_185_replay_title">Replay, deeper</string>
     <string name="tour_185_replay_body">See when you listen, hour by hour and day by day.</string>
     <string name="tour_185_replay_point_1">Listening clock: your week, hour by hour. Tap an hour for its top songs.</string>
@@ -4321,7 +4327,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">Your swipes, double tap and long press work below the title too, in the space around the buttons and bars. The buttons and bars keep their own taps.</string>
     <string name="gestures_everywhere_keywords">gesture swipe double tap long press bottom lower half controls whole player</string>
     <string name="playing_song_in_the_page_s_color">Playing song in the page\'s color</string>
-    <string name="its_bars_and_title_take_the_album_s_color">Its bars and title take the album\'s color</string>
+    <string name="its_bars_and_title_take_the_album_s_color">Its bars and title take the page\'s color</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">On album, playlist and artist pages, the song that\'s playing shows its bars and title in the color of the page\'s picture instead of your light. Everywhere else they stay as they are.</string>
     <string name="playing_indicator_bars_now_playing_album_color">playing indicator bars now playing equalizer album playlist artist page color cover</string>
     <string name="slide_between_screens">Slide between screens</string>
@@ -4352,7 +4358,8 @@
     <string name="hidden_s">Hidden: %1$s</string>
     <string name="buttons_in_the_row">Buttons in the row</string>
     <string name="add_a_button">Add a button</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">The player\'s ⋯ menu: its tiles and what it shows</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">Its tiles and what it shows</string>
+    <string name="settings_player_edit_menu">Edit the player\'s ⋯ menu</string>
     <string name="and_the_sky_lit_up">And the sky lit up</string>
     <string name="play_pause_always_stays">Play and pause always stay</string>
     <string name="what_s_on_the_player_keywords">hide show parts show on the player under the title cover title artist like heart menu progress bar seek previous next skip buttons row song length cast mark</string>
@@ -4366,10 +4373,10 @@
     <string name="when_the_queue_ends">When the queue ends</string>
     <string name="when_the_queue_ends_info">Stop: the music ends with the queue. Your music: Prism\'s own radio from what you play. Yours and new: mostly your music, with a few new songs. Prism Music: a radio from Prism Music\'s catalog. Offline it\'s always your music.</string>
     <string name="music_videos_label">Music videos</string>
-    <string name="play_them">Videos</string>
+    <string name="play_them">Videos everywhere</string>
     <string name="songs_in_radios">Songs in radios</string>
     <string name="songs_everywhere">Songs everywhere</string>
-    <string name="music_videos_label_info">Videos: a music video plays as a video. Songs in radios: autoplay and radios play the video\'s song instead. Songs everywhere: any music video you tap plays as its song, and the Video button still shows the video.</string>
+    <string name="music_videos_label_info">Videos everywhere: a music video plays as a video. Songs in radios: autoplay and radios play the video\'s song instead. Songs everywhere: any music video you tap plays as its song, and the Video button still shows the video.</string>
     <string name="trim_silence">Trim silence at the start and end</string>
     <string name="podcasts_only">Podcasts only</string>
     <string name="songs_and_podcasts">Songs and podcasts</string>
@@ -4387,7 +4394,7 @@
     <string name="move_songs_you_have_played">Move songs you\'ve played</string>
     <string name="move_songs_you_have_played_info">Songs you\'ve already played get a handle too, so you can drag them around among themselves.</string>
     <string name="move_songs_you_have_played_keywords">queue played history drag handle reorder</string>
-    <string name="tidier_queue">Tidier queue</string>
+    <string name="tidier_queue">Queue with fewer buttons</string>
     <string name="tidier_queue_info">Takes the × off every song and the Queue button off the bottom row while the queue\'s open. Swipe a song left or use its ⋯ to remove it. Pull the title down or press Back to leave the queue.</string>
     <string name="tidier_queue_keywords">queue fewer buttons remove close cleaner simple</string>
     <string name="reopen_on_the_last_page">Reopen on the last page</string>
@@ -4421,7 +4428,8 @@
     <string name="mix_why_live">One of the two is a live stream.</string>
     <string name="mix_why_podcast">One of the two is a podcast episode.</string>
     <string name="mix_why_album">An album playing through keeps its songs whole.</string>
-    <string name="mix_why_sing_or_together">Sing or Listen Together was on.</string>
+    <string name="mix_why_sing">Sing is on: each song plays whole.</string>
+    <string name="mix_why_together">Listen together is on: songs change as the host\'s do.</string>
     <string name="mix_why_casting">Playing on another device.</string>
     <string name="mix_why_short">This song is shorter than 30 seconds.</string>
     <string name="mix_why_next_short">The next song is only a few seconds long.</string>
@@ -5243,6 +5251,8 @@
     <string name="cn_paired_devices">Paired devices</string>
     <string name="cn_paired_keywords">paired devices browsers forget unpair remove</string>
     <string name="cn_not_connected">Not connected</string>
+    <string name="cn_spot_not_connected">Not connected · playlists and likes</string>
+    <string name="cn_other_services">Other services</string>
     <string name="cn_not_set_up">Not set up</string>
     <string name="cn_signed_in_as">Signed in as %1$s</string>
     <string name="cn_youtube_account_info">Signing out and switching accounts are on the first page of Settings, on your account\'s card.</string>
@@ -5272,8 +5282,8 @@
     <string name="gb_swipes_and_touch">Swipes and touch</string>
     <string name="gb_double_tap_seeks">A double tap seeks</string>
     <string name="gb_double_tap_seeks_needs">Set Double tap to Seek by side first</string>
-    <string name="gb_gestures_work">Gestures work</string>
-    <string name="gb_work_cover">On the cover</string>
+    <string name="gb_gestures_work">Where gestures work</string>
+    <string name="gb_work_cover">Only on the cover</string>
     <string name="gb_work_anywhere">Anywhere</string>
     <string name="gb_work_not_lyrics">Anywhere but the lyrics</string>
     <string name="gb_work_cover_and_lyrics">On the cover and below the lyrics</string>
@@ -5363,7 +5373,7 @@
     <string name="playback_face_down_pause">Pause when face down</string>
     <string name="playback_face_down_pause_info">Lay your phone screen-down to pause. Pick it up within five minutes and the music plays on.</string>
     <string name="playback_face_down_keywords">face down flip turn over screen down sensor pause resume pick up</string>
-    <string name="gb_lyrics_cover_plays">Tap the small cover to play or pause</string>
+    <string name="gb_lyrics_cover_plays">Tap the lyrics\' cover to pause</string>
     <string name="gb_lyrics_cover_plays_info">With the lyrics open, a tap on the small cover plays or pauses and a long press closes the lyrics. Off: a tap closes the lyrics.</string>
     <string name="gb_lyrics_cover_plays_keywords">lyrics small cover thumbnail artwork tap play pause long press close</string>
     <string name="playback_shuffle_keywords">smart shuffle random order mixed up stay shuffled</string>
@@ -5383,7 +5393,8 @@
     <string name="settings_player_right_hand_time">Right-hand time</string>
     <string name="settings_player_right_hand_time_info">The time at the right of the progress bar. Tapping it on the player changes this too.</string>
     <string name="settings_player_cover_shape">Cover shape</string>
-    <string name="settings_player_edge_to_edge">Edge to edge</string>
+    <string name="settings_player_edge_to_edge">Reaches the screen\'s edges</string>
+    <string name="edge_to_edge_both">Cover and video</string>
     <string name="settings_player_cover_animation">Cover animation</string>
     <string name="settings_player_opening">Opening</string>
     <string name="settings_player_opening_and_closing">Opening and closing</string>
@@ -5394,7 +5405,7 @@
     <string name="settings_player_queue_dj">DJ button</string>
     <string name="settings_player_queue_lengths">Song lengths</string>
     <string name="settings_player_queue_move_played">Move played songs</string>
-    <string name="settings_player_queue_tidier">Tidier queue</string>
+    <string name="settings_player_queue_tidier">Fewer buttons</string>
     <string name="settings_player_scroll_for_controls">Scroll up for controls</string>
     <string name="settings_player_lock_options">Lock screen options</string>
     <string name="settings_player_immersive_options">Immersive options</string>
@@ -5473,8 +5484,8 @@
     <!-- 1.8.4 root lines -->
     <!-- old_cleanup -->
     <string name="root_looks_short">Whole looks, day and night</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord on · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord on · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · backup, updates</string>
     <string name="root_connect_short">Play on speakers and TVs</string>
     <string name="root_handoff_on">Handoff on</string>
@@ -5622,7 +5633,6 @@
     <!-- 1.8.7.5: the settings-words pass (English first; translations follow on the owner's word). -->
     <string name="queue_end_mixed">Yours and new</string>
     <string name="dd_use_load_ahead">Loading songs ahead</string>
-    <string name="replay_notices_n_on">%1$d of 3 on</string>
     <string name="car_lyrics_style">Lyrics style</string>
     <string name="tab_tint_light">Theme colors</string>
     <string name="bini_detail">Apple Music\'s lyrics · word by word, matched another way</string>

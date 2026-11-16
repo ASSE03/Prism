@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">Kolor okładki utworu</string>
     <string name="progress_bar_thickness">Grubość paska postępu</string>
     <string name="thinner">Cieńszy</string>
-    <string name="as_the_style">Jak w stylu</string>
     <string name="thicker">Grubszy</string>
     <string name="the_waveform_keeps_its_own_height">Przebieg fali ma własną wysokość; grubość widać, dopóki utwór nie zostanie przeskanowany.</string>
-    <string name="knob_at_the_playhead">Uchwyt w miejscu odtwarzania</string>
     <string name="a_dot_with_the_thumb_style">Kropka w stylu Kciuk</string>
     <string name="visualizer">Wizualizator</string>
     <string name="it_listens_to_prism_s_own">Słucha dźwięku samego Prism (bez mikrofonu) i działa tylko, gdy odtwarzacz jest otwarty i gra. Na starszym telefonie Wył. najbardziej odciąża odtwarzacz.</string>
@@ -5588,7 +5586,6 @@
     <string name="mix_why_live">Jeden z dwóch to transmisja na żywo.</string>
     <string name="mix_why_podcast">Jeden z dwóch to odcinek podcastu.</string>
     <string name="mix_why_album">Album grany po kolei zachowuje utwory w całości.</string>
-    <string name="mix_why_sing_or_together">Włączony był Sing lub Słuchaj razem.</string>
     <string name="mix_why_casting">Muzyka grała na innym urządzeniu.</string>
     <string name="mix_why_short">Ten utwór jest krótszy niż 30 sekund.</string>
     <string name="mix_why_next_short">Następny utwór trwa tylko kilka sekund.</string>
@@ -5704,7 +5701,6 @@
     <string name="tour_1875_also_heard">Rozpoznany utwór gra od usłyszanego momentu, z otwartym tekstem.</string>
     <string name="queue_end_mixed">Twoje i nowe</string>
     <string name="dd_use_load_ahead">Wczytywanie utworów z wyprzedzeniem</string>
-    <string name="replay_notices_n_on">Włączone: %1$d z 3</string>
     <string name="car_lyrics_style">Styl tekstu</string>
     <string name="tab_tint_light">Kolory motywu</string>
     <string name="bini_detail">Teksty Apple Music · słowo po słowie, dopasowane inaczej</string>

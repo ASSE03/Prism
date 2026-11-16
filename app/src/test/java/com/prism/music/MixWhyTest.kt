@@ -19,6 +19,7 @@ import com.prism.music.playback.MixEngine
 import com.prism.music.playback.MixRefusal
 import com.prism.music.playback.MixState
 import com.prism.music.playback.MixWhy
+import com.prism.music.playback.mixWhyHeld
 import com.prism.music.playback.mixWhyNot
 import com.prism.music.playback.toMediaItem
 import com.prism.music.ui.player.QUEUE_DJ_WHY
@@ -121,7 +122,29 @@ class MixWhyTest {
         assertEquals(MixWhy.LIVE, mixWhyNot(a, song("b", live = true).toMediaItem()))
         assertEquals(MixWhy.PODCAST, mixWhyNot(song("e", album = null, episode = true).toMediaItem(), a))
         assertEquals(MixWhy.ALBUM, mixWhyNot(a, song("b").toMediaItem()))
-        assertEquals(MixWhy.SING_OR_TOGETHER, mixWhyNot(a, song("b", album = "B").toMediaItem()))
+        // What the songs can't say, the player says (#493, 1.8.7.6): Sing and Listen together are two reasons now.
+        val other = song("b", album = "B").toMediaItem()
+        assertEquals(MixWhy.SING, mixWhyNot(a, other, mixWhyHeld(sing = true, casting = false, together = false)))
+        assertEquals(MixWhy.TOGETHER, mixWhyNot(a, other, mixWhyHeld(sing = false, casting = false, together = true)))
+        assertEquals(MixWhy.CASTING, mixWhyNot(a, other, mixWhyHeld(sing = false, casting = true, together = true)))
+        // In mayBlend's order: Sing before casting before Listen together.
+        assertEquals(MixWhy.SING, mixWhyHeld(sing = true, casting = true, together = true))
+        assertNull(mixWhyHeld(sing = false, casting = false, together = false))
+        // What the songs say still comes first.
+        assertEquals(MixWhy.VIDEO, mixWhyNot(a, song("b", album = "B").toMediaItem(videoId = "v"), MixWhy.SING))
+        // With no player to say, it can't tell.
+        assertEquals(MixWhy.GLITCH, mixWhyNot(a, other))
+        // Each says which, in its own words.
+        assertEquals("Sing is on: each song plays whole.", tr(MixWhy.SING.text))
+        assertEquals("Listen together is on: songs change as the host's do.", tr(MixWhy.TOGETHER.text))
+    }
+
+    @Test fun theServiceTellsTheEngineWhichOfSingOrTogetherItWas() {
+        val service = listOf("src/main/java/com/prism/music/playback/PlaybackService.kt", "app/src/main/java/com/prism/music/playback/PlaybackService.kt")
+            .map(::File).first { it.exists() }.readText()
+        assertTrue("the engine is given the player's reason", "whyNot = { from, to -> mixWhyNot(from, to, mixWhyHeld(c.sing.onNow, c.cast.casting, togetherNow())) }" in service)
+        // The same test of "together" refuses the blend and names it.
+        assertTrue("if (togetherNow()) return false" in service)
     }
 
     // ------------------------------------------------------------------ The engine keeps it, and lets it go after a blend

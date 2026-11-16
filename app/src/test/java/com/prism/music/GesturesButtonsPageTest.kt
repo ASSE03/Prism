@@ -382,7 +382,8 @@ class GesturesButtonsPageTest : ListeningPageHarness(SettingsPageId.GESTURES_BUT
         show()
         assertEquals(SettingsTags.ROW_SWITCH, typeOf(coverPlays))
         assertFalse(stored.behavior.lyricsCoverPlays)
-        assertEquals("Tap the small cover to play or pause", coverPlays)
+        // W41 (1.8.7.6): it says which cover.
+        assertEquals("Tap the lyrics' cover to pause", coverPlays)
         val e = SettingsIndex.entries.single { it.title == coverPlays }
         assertEquals(SettingsPageId.GESTURES_BUTTONS, e.page)
         assertEquals(touch, e.group)

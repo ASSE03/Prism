@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">Цвет обложки песни</string>
     <string name="progress_bar_thickness">Толщина полосы прогресса</string>
     <string name="thinner">Тоньше</string>
-    <string name="as_the_style">Как в стиле</string>
     <string name="thicker">Толще</string>
     <string name="the_waveform_keeps_its_own_height">У звуковой волны своя высота; толщина видна, пока песня не проанализирована.</string>
-    <string name="knob_at_the_playhead">Ползунок на позиции</string>
     <string name="a_dot_with_the_thumb_style">Точка, если выбран стиль с ползунком</string>
     <string name="visualizer">Визуализатор</string>
     <string name="it_listens_to_prism_s_own">Он слушает звук самого Prism (без микрофона) и работает, только пока плеер открыт и играет. На старом телефоне вариант «Выкл.» сделает плеер легче всего.</string>
@@ -5588,7 +5586,6 @@
     <string name="mix_why_live">Одно из двух — прямой эфир.</string>
     <string name="mix_why_podcast">Одно из двух — выпуск подкаста.</string>
     <string name="mix_why_album">Альбом, который играет подряд, остаётся без наложений.</string>
-    <string name="mix_why_sing_or_together">Был включён Sing или Слушать вместе.</string>
     <string name="mix_why_casting">Музыка играла на другом устройстве.</string>
     <string name="mix_why_short">Эта песня короче 30 секунд.</string>
     <string name="mix_why_next_short">Следующая песня длится всего несколько секунд.</string>
@@ -5704,7 +5701,6 @@
     <string name="tour_1875_also_heard">Распознанная песня играет с того момента, который ты услышал, с открытым текстом.</string>
     <string name="queue_end_mixed">Твоя музыка и новое</string>
     <string name="dd_use_load_ahead">Загрузка песен заранее</string>
-    <string name="replay_notices_n_on">%1$d из 3 вкл.</string>
     <string name="car_lyrics_style">Стиль текста</string>
     <string name="tab_tint_light">Цвета темы</string>
     <string name="bini_detail">Тексты Apple Music · по словам, сопоставление другим способом</string>

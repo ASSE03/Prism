@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">Kulay ng cover ng kanta</string>
     <string name="progress_bar_thickness">Kapal ng progress bar</string>
     <string name="thinner">Mas manipis</string>
-    <string name="as_the_style">Ayon sa istilo</string>
     <string name="thicker">Mas makapal</string>
     <string name="the_waveform_keeps_its_own_height">May sariling taas ang waveform; makikita ang kapal hangga\'t hindi pa na-scan ang kanta.</string>
-    <string name="knob_at_the_playhead">Knob sa playhead</string>
     <string name="a_dot_with_the_thumb_style">Isang tuldok sa istilong Thumb</string>
     <string name="visualizer">Visualizer</string>
     <string name="it_listens_to_prism_s_own">Pinakikinggan nito ang sariling tunog ng Prism (walang mikropono) at tumatakbo lang habang bukas at nagpe-play ang player. Sa mas lumang phone, Off ang pinakamagaan para sa player.</string>
@@ -5438,7 +5436,6 @@
     <string name="mix_why_live">Live stream ang isa sa dalawa.</string>
     <string name="mix_why_podcast">Episode ng podcast ang isa sa dalawa.</string>
     <string name="mix_why_album">Buo ang mga kanta kapag tuloy-tuloy na pinapatugtog ang isang album.</string>
-    <string name="mix_why_sing_or_together">Naka-on ang Sing o Sabay na Makinig.</string>
     <string name="mix_why_casting">Tumutugtog sa ibang device.</string>
     <string name="mix_why_short">Wala pang 30 segundo ang kantang ito.</string>
     <string name="mix_why_next_short">Ilang segundo lang ang haba ng susunod na kanta.</string>
@@ -5554,7 +5551,6 @@
     <string name="tour_1875_also_heard">Ang nakilalang kanta ay nagpe-play mula sa sandaling narinig mo ito, nang bukas ang lyrics.</string>
     <string name="queue_end_mixed">Iyo at bago</string>
     <string name="dd_use_load_ahead">Pag-load ng mga kanta nang maaga</string>
-    <string name="replay_notices_n_on">%1$d sa 3 ang naka-on</string>
     <string name="car_lyrics_style">Istilo ng lyrics</string>
     <string name="tab_tint_light">Mga kulay ng tema</string>
     <string name="bini_detail">Lyrics ng Apple Music · salita por salita, itinutugma sa ibang paraan</string>

@@ -81,7 +81,7 @@ enum class MobileUse(val label: String) {
     /** `lyrics_on_mobile_data`. */
     LYRICS(tr(R.string.lyrics)),
     /** `canvas_on_cellular`. Only shown with animated covers on. */
-    ANIMATED_COVERS(tr(R.string.animated_covers)),
+    ANIMATED_COVERS(tr(R.string.dd_use_showing_covers)),
     /** `canvas_with_downloads_cellular`. Only shown while animated covers are saved with downloads. */
     SAVING_COVERS(tr(R.string.dd_use_saving_covers)),
     /** `mix_tempo_cellular`. Only shown with Normalize volume or Crossfade on. */

@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">گانے کے کور کا رنگ</string>
     <string name="progress_bar_thickness">پروگریس بار کی موٹائی</string>
     <string name="thinner">پتلا</string>
-    <string name="as_the_style">انداز کے مطابق</string>
     <string name="thicker">موٹا</string>
     <string name="the_waveform_keeps_its_own_height">ویوفارم اپنی اونچائی رکھتا ہے؛ جب تک گانا اسکین نہ ہو، موٹائی دکھائی دیتی ہے۔</string>
-    <string name="knob_at_the_playhead">پلے ہیڈ پر نوب</string>
     <string name="a_dot_with_the_thumb_style">تھمب انداز کے ساتھ ایک نقطہ</string>
     <string name="visualizer">ویژولائزر</string>
     <string name="it_listens_to_prism_s_own">یہ Prism کی اپنی آواز سنتا ہے (مائیکروفون نہیں) اور صرف تب چلتا ہے جب پلیئر کھلا ہو اور چل رہا ہو۔ پرانے فون پر، آف رکھنے سے پلیئر سب سے ہلکا رہتا ہے۔</string>
@@ -5438,7 +5436,6 @@
     <string name="mix_why_live">دونوں میں سے ایک لائیو اسٹریم ہے۔</string>
     <string name="mix_why_podcast">دونوں میں سے ایک پوڈکاسٹ کی قسط ہے۔</string>
     <string name="mix_why_album">جو البم شروع سے آخر تک چل رہا ہو، اس کے گانے پورے رہتے ہیں۔</string>
-    <string name="mix_why_sing_or_together">Sing یا ساتھ سنیں آن تھا۔</string>
     <string name="mix_why_casting">کسی دوسرے آلے پر چل رہا تھا۔</string>
     <string name="mix_why_short">یہ گانا 30 سیکنڈ سے چھوٹا ہے۔</string>
     <string name="mix_why_next_short">اگلا گانا صرف چند سیکنڈ کا ہے۔</string>
@@ -5554,7 +5551,6 @@
     <string name="tour_1875_also_heard">پہچانا گیا گانا اسی لمحے سے چلتا ہے جب آپ نے اسے سنا، بول کھلے ہوئے۔</string>
     <string name="queue_end_mixed">آپ کی اور نئی</string>
     <string name="dd_use_load_ahead">گانے پہلے سے لوڈ کرنا</string>
-    <string name="replay_notices_n_on">3 میں سے %1$d آن</string>
     <string name="car_lyrics_style">بول کا انداز</string>
     <string name="tab_tint_light">تھیم کے رنگ</string>
     <string name="bini_detail">Apple Music کے بول · لفظ بہ لفظ، دوسرے طریقے سے ملائے گئے</string>

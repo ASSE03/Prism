@@ -68,7 +68,7 @@ class MixEngine(
     /** Where the next blend starts and how one under way is going, for the player (A6). */
     private val state: MixState = MixState(),
     /** #493: why [allowed] said no for these two, for the listener ([MixState.why]); read from the songs themselves by default. */
-    private val whyNot: (from: MediaItem, to: MediaItem) -> MixWhy = ::mixWhyNot,
+    private val whyNot: (from: MediaItem, to: MediaItem) -> MixWhy = ::mixWhyNotFromSongs,
 ) {
     /** The main player at [speed], in the music's key. */
     private fun at(speed: Float) = PlaybackParameters(speed, pitch())
@@ -350,7 +350,7 @@ class MixEngine(
         if (next.mediaId.isBlank() || next.mediaId == item.mediaId) return noBlend(item, MixWhy.SAME_SONG, "the same song next")
         if (!allowed(item, next)) {
             val why = whyNot(item, next)
-            return noBlend(item, why, "not blended here (${why.name}: an album playing through, a video, live, a podcast, Sing, Listen Together or casting)")
+            return noBlend(item, why, "not blended here (${why.name})")
         }
         val a = tempo.cached(item.mediaId)
         val b = tempo.cached(next.mediaId)
@@ -1065,8 +1065,10 @@ enum class MixWhy(@androidx.annotation.StringRes val text: Int) {
     PODCAST(com.prism.music.R.string.mix_why_podcast),
     /** An album playing through (or Keep an album's songs whole). */
     ALBUM(com.prism.music.R.string.mix_why_album),
-    /** Sing, or Listen Together (the engine isn't told which). */
-    SING_OR_TOGETHER(com.prism.music.R.string.mix_why_sing_or_together),
+    /** Sing is on: each song plays whole, its vocals taken out (the player says so: [mixWhyHeld]). */
+    SING(com.prism.music.R.string.mix_why_sing),
+    /** Listen together: songs change as the host's do (the player says so: [mixWhyHeld]). */
+    TOGETHER(com.prism.music.R.string.mix_why_together),
     CASTING(com.prism.music.R.string.mix_why_casting),
     /** The ending song is under 30 s. */
     SHORT(com.prism.music.R.string.mix_why_short),
@@ -1087,9 +1089,11 @@ enum class MixWhy(@androidx.annotation.StringRes val text: Int) {
 /**
  * Why [MixEngine]'s `allowed` said no for [from] into [to], from what the songs themselves say (PlaybackService's
  * `mayBlend`, in its order): a video, a live stream, an episode, an album's own next track; otherwise what the songs
- * can't say, Sing or Listen Together. (Casting never gets here: Mix is off while casting, [MixEngine.stopBlend].)
+ * can't say: [held], the player's own reason (Sing, casting or Listen together: [mixWhyHeld]), which PlaybackService
+ * passes in. Without it (no player told the engine) it can't say, and calls it a [MixWhy.GLITCH]. (Casting rarely gets
+ * here: Mix is off while casting, [MixEngine.stopBlend].)
  */
-fun mixWhyNot(from: MediaItem, to: MediaItem): MixWhy {
+fun mixWhyNot(from: MediaItem, to: MediaItem, held: MixWhy? = null): MixWhy {
     val a = from.toSong()
     val b = to.toSong()
     return when {
@@ -1098,6 +1102,20 @@ fun mixWhyNot(from: MediaItem, to: MediaItem): MixWhy {
         from.videoModeId != null || to.videoModeId != null -> MixWhy.VIDEO
         a.isEpisode || b.isEpisode -> MixWhy.PODCAST
         a.album?.id != null && a.album?.id == b.album?.id -> MixWhy.ALBUM
-        else -> MixWhy.SING_OR_TOGETHER
+        else -> held ?: MixWhy.GLITCH
     }
+}
+
+/** [mixWhyNot]'s two-song form, for the engine's default (a reference to the three-argument one wouldn't fit it). */
+fun mixWhyNotFromSongs(from: MediaItem, to: MediaItem): MixWhy = mixWhyNot(from, to)
+
+/**
+ * Which of the player's own states keeps two songs from blending, in `mayBlend`'s order: Sing, then casting, then Listen
+ * together (following a host, or in a session); null when none is on.
+ */
+fun mixWhyHeld(sing: Boolean, casting: Boolean, together: Boolean): MixWhy? = when {
+    sing -> MixWhy.SING
+    casting -> MixWhy.CASTING
+    together -> MixWhy.TOGETHER
+    else -> null
 }

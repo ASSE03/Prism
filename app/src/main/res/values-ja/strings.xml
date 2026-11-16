@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">曲のジャケットの色</string>
     <string name="progress_bar_thickness">プログレスバーの太さ</string>
     <string name="thinner">細く</string>
-    <string name="as_the_style">スタイルどおり</string>
     <string name="thicker">太く</string>
     <string name="the_waveform_keeps_its_own_height">波形は独自の高さのままです。太さは曲がスキャンされるまで反映されます。</string>
-    <string name="knob_at_the_playhead">再生位置のつまみ</string>
     <string name="a_dot_with_the_thumb_style">サム スタイルでは点</string>
     <string name="visualizer">ビジュアライザー</string>
     <string name="it_listens_to_prism_s_own">Prism 自身の音を使い（マイクは使いません）、プレーヤーが開いていて再生中のときだけ動作します。古いスマホでは、オフにするとプレーヤーが最も軽くなります。</string>
@@ -5363,7 +5361,6 @@
     <string name="mix_why_live">どちらかがライブ配信でした。</string>
     <string name="mix_why_podcast">どちらかがポッドキャストのエピソードでした。</string>
     <string name="mix_why_album">アルバムを通して再生しているときは、曲を途切れさせません。</string>
-    <string name="mix_why_sing_or_together">Sing または一緒に聴くがオンでした。</string>
     <string name="mix_why_casting">ほかのデバイスで再生していました。</string>
     <string name="mix_why_short">この曲は 30 秒より短い曲です。</string>
     <string name="mix_why_next_short">次の曲は数秒しかありません。</string>
@@ -5479,7 +5476,6 @@
     <string name="tour_1875_also_heard">認識した曲は、聞こえた瞬間から歌詞を開いた状態で再生されます。</string>
     <string name="queue_end_mixed">あなたと新曲</string>
     <string name="dd_use_load_ahead">曲の先読み</string>
-    <string name="replay_notices_n_on">3 件中 %1$d 件オン</string>
     <string name="car_lyrics_style">歌詞のスタイル</string>
     <string name="tab_tint_light">テーマの色</string>
     <string name="bini_detail">Apple Music の歌詞 · 1 語ずつ、別の方法で照合</string>

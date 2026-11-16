@@ -342,7 +342,7 @@ internal fun AccountCard() {
             )
             Text(
                 if (s.isLoggedIn) s.accountEmail.ifBlank { tr(R.string.signed_in_2) } else tr(R.string.optional_your_library_history_and_recommendation),
-                style = MaterialTheme.typography.bodySmall, color = ink.copy(alpha = 0.75f), maxLines = 1, overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.bodySmall, color = ink.copy(alpha = 0.75f), maxLines = 2, overflow = TextOverflow.Ellipsis,
             )
         }
         if (s.isLoggedIn) PrismOutlinedButton(onClick = { if (profile != null) confirmSignOut = true else signOut() }) {

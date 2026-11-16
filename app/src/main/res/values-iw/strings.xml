@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">צבע עטיפת השיר</string>
     <string name="progress_bar_thickness">עובי סרגל ההתקדמות</string>
     <string name="thinner">דק יותר</string>
-    <string name="as_the_style">לפי הסגנון</string>
     <string name="thicker">עבה יותר</string>
     <string name="the_waveform_keeps_its_own_height">צורת הגל שומרת על הגובה שלה; העובי מוצג עד ששיר נסרק.</string>
-    <string name="knob_at_the_playhead">ידית במיקום ההשמעה</string>
     <string name="a_dot_with_the_thumb_style">נקודה עם הסגנון ״אגודל״</string>
     <string name="visualizer">ויזואלייזר</string>
     <string name="it_listens_to_prism_s_own">הוא מאזין לצליל של Prism עצמו (בלי מיקרופון) ופועל רק כשהנגן פתוח ומנגן. בטלפון ישן, ״כבוי״ שומר על הנגן הכי קל.</string>
@@ -5513,7 +5511,6 @@
     <string name="mix_why_live">אחד משני השירים הוא שידור חי.</string>
     <string name="mix_why_podcast">אחד משני השירים הוא פרק של פודקאסט.</string>
     <string name="mix_why_album">אלבום שמושמע ברצף שומר על השירים שלו שלמים.</string>
-    <string name="mix_why_sing_or_together">Sing או האזנה משותפת היו פעילים.</string>
     <string name="mix_why_casting">ההשמעה הייתה במכשיר אחר.</string>
     <string name="mix_why_short">השיר הזה קצר מ-30 שניות.</string>
     <string name="mix_why_next_short">השיר הבא באורך של כמה שניות בלבד.</string>
@@ -5629,7 +5626,6 @@
     <string name="tour_1875_also_heard">שיר שזוהה מתנגן מהרגע ששמעת אותו, עם המילים פתוחות.</string>
     <string name="queue_end_mixed">שלך וחדש</string>
     <string name="dd_use_load_ahead">טעינת שירים מראש</string>
-    <string name="replay_notices_n_on">%1$d מתוך 3 מופעלות</string>
     <string name="car_lyrics_style">סגנון מילים</string>
     <string name="tab_tint_light">צבעי ערכת הנושא</string>
     <string name="bini_detail">המילים של Apple Music · מילה במילה, בהתאמה בדרך אחרת</string>

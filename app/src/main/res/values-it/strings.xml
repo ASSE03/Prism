@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">Il colore della copertina del brano</string>
     <string name="progress_bar_thickness">Spessore della barra di avanzamento</string>
     <string name="thinner">Più sottile</string>
-    <string name="as_the_style">Come lo stile</string>
     <string name="thicker">Più spessa</string>
     <string name="the_waveform_keeps_its_own_height">La forma d\'onda mantiene la sua altezza; lo spessore si vede finché un brano non è stato analizzato.</string>
-    <string name="knob_at_the_playhead">Indicatore sulla posizione</string>
     <string name="a_dot_with_the_thumb_style">Un punto con lo stile Cursore</string>
     <string name="visualizer">Visualizzatore</string>
     <string name="it_listens_to_prism_s_own">Ascolta il suono di Prism (nessun microfono) e funziona solo mentre il player è aperto e in riproduzione. Su un telefono più vecchio, No rende il player più leggero.</string>
@@ -5513,7 +5511,6 @@
     <string name="mix_why_live">Uno dei due è una diretta.</string>
     <string name="mix_why_podcast">Uno dei due è un episodio di podcast.</string>
     <string name="mix_why_album">Un album ascoltato di seguito mantiene i brani interi.</string>
-    <string name="mix_why_sing_or_together">Sing o Ascolta insieme era attivo.</string>
     <string name="mix_why_casting">Riproduzione su un altro dispositivo.</string>
     <string name="mix_why_short">Questo brano dura meno di 30 secondi.</string>
     <string name="mix_why_next_short">Il brano successivo dura solo pochi secondi.</string>
@@ -5629,7 +5626,6 @@
     <string name="tour_1875_also_heard">Un brano riconosciuto parte dal momento in cui l\'hai sentito, con i testi aperti.</string>
     <string name="queue_end_mixed">Tuoi e nuovi</string>
     <string name="dd_use_load_ahead">Caricamento anticipato dei brani</string>
-    <string name="replay_notices_n_on">%1$d su 3 attive</string>
     <string name="car_lyrics_style">Stile dei testi</string>
     <string name="tab_tint_light">Colori del tema</string>
     <string name="bini_detail">Testi di Apple Music · parola per parola, abbinati in un altro modo</string>

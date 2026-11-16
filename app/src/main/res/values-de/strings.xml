@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">Die Farbe des Song-Covers</string>
     <string name="progress_bar_thickness">Dicke der Fortschrittsleiste</string>
     <string name="thinner">Dünner</string>
-    <string name="as_the_style">Wie der Stil</string>
     <string name="thicker">Dicker</string>
     <string name="the_waveform_keeps_its_own_height">Die Wellenform behält ihre eigene Höhe; die Dicke gilt, bis ein Song analysiert ist.</string>
-    <string name="knob_at_the_playhead">Knopf an der Abspielposition</string>
     <string name="a_dot_with_the_thumb_style">Ein Punkt mit dem Daumen-Stil</string>
     <string name="visualizer">Visualizer</string>
     <string name="it_listens_to_prism_s_own">Er hört auf den Klang von Prism selbst (kein Mikrofon) und läuft nur, während der Player geöffnet ist und abspielt. Auf älteren Handys hält „Aus“ den Player am leichtesten.</string>
@@ -5438,7 +5436,6 @@
     <string name="mix_why_live">Einer der beiden ist ein Livestream.</string>
     <string name="mix_why_podcast">Einer der beiden ist eine Podcast-Folge.</string>
     <string name="mix_why_album">Ein Album, das am Stück läuft, behält seine Songs ganz.</string>
-    <string name="mix_why_sing_or_together">Sing oder Gemeinsam hören war an.</string>
     <string name="mix_why_casting">Die Wiedergabe lief auf einem anderen Gerät.</string>
     <string name="mix_why_short">Dieser Song ist kürzer als 30 Sekunden.</string>
     <string name="mix_why_next_short">Der nächste Song ist nur ein paar Sekunden lang.</string>
@@ -5554,7 +5551,6 @@
     <string name="tour_1875_also_heard">Ein erkannter Song spielt ab dem Moment, in dem du ihn gehört hast, mit geöffnetem Songtext.</string>
     <string name="queue_end_mixed">Deine und neue</string>
     <string name="dd_use_load_ahead">Songs vorausladen</string>
-    <string name="replay_notices_n_on">%1$d von 3 an</string>
     <string name="car_lyrics_style">Songtext-Stil</string>
     <string name="tab_tint_light">Designfarben</string>
     <string name="bini_detail">Songtexte von Apple Music · Wort für Wort, anders zugeordnet</string>

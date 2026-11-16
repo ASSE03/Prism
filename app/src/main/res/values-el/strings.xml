@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">Το χρώμα του εξωφύλλου του τραγουδιού</string>
     <string name="progress_bar_thickness">Πάχος γραμμής προόδου</string>
     <string name="thinner">Πιο λεπτή</string>
-    <string name="as_the_style">Όπως το στυλ</string>
     <string name="thicker">Πιο χοντρή</string>
     <string name="the_waveform_keeps_its_own_height">Η κυματομορφή κρατά το δικό της ύψος· το πάχος φαίνεται μέχρι να σαρωθεί ένα τραγούδι.</string>
-    <string name="knob_at_the_playhead">Λαβή στο σημείο αναπαραγωγής</string>
     <string name="a_dot_with_the_thumb_style">Μια κουκκίδα με το στυλ Αντίχειρας</string>
     <string name="visualizer">Οπτικοποίηση</string>
     <string name="it_listens_to_prism_s_own">Ακούει τον ήχο του ίδιου του Prism (χωρίς μικρόφωνο) και λειτουργεί μόνο όσο η οθόνη αναπαραγωγής είναι ανοιχτή και παίζει. Σε παλαιότερο τηλέφωνο, το Ανενεργό κρατά την οθόνη αναπαραγωγής πιο ελαφριά.</string>
@@ -5438,7 +5436,6 @@
     <string name="mix_why_live">Το ένα από τα δύο είναι ζωντανή μετάδοση.</string>
     <string name="mix_why_podcast">Το ένα από τα δύο είναι επεισόδιο podcast.</string>
     <string name="mix_why_album">Ένα άλμπουμ που παίζει ολόκληρο κρατά τα τραγούδια του άθικτα.</string>
-    <string name="mix_why_sing_or_together">Ήταν ενεργό το Sing ή το Ακούμε μαζί.</string>
     <string name="mix_why_casting">Αναπαραγωγή σε άλλη συσκευή.</string>
     <string name="mix_why_short">Αυτό το τραγούδι διαρκεί λιγότερο από 30 δευτερόλεπτα.</string>
     <string name="mix_why_next_short">Το επόμενο τραγούδι διαρκεί μόνο λίγα δευτερόλεπτα.</string>
@@ -5554,7 +5551,6 @@
     <string name="tour_1875_also_heard">Ένα τραγούδι που αναγνωρίστηκε παίζει από τη στιγμή που ακούστηκε, με ανοιχτούς τους στίχους.</string>
     <string name="queue_end_mixed">Δικά σου και νέα</string>
     <string name="dd_use_load_ahead">Προφόρτωση τραγουδιών</string>
-    <string name="replay_notices_n_on">%1$d από 3 ενεργά</string>
     <string name="car_lyrics_style">Στυλ στίχων</string>
     <string name="tab_tint_light">Χρώματα θέματος</string>
     <string name="bini_detail">Στίχοι του Apple Music · λέξη προς λέξη, με άλλον τρόπο αντιστοίχισης</string>

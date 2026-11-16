@@ -77,7 +77,7 @@ private fun cornerText(v: Float): String =
     Corners.entries.minByOrNull { abs(it.scale - v) }!!.let { if (abs(it.scale - v) < 0.08f) it.label else "${(v * 100).roundToInt()}%" }
 
 private fun onOff(on: Boolean) = if (on) tr(R.string.on_2) else tr(R.string.off)
-private fun typeName(classic: Boolean) = if (classic) tr(R.string.classic) else tr(R.string.app_name)
+private fun typeName(classic: Boolean) = if (classic) tr(R.string.classic) else tr(R.string.prism_s_own)
 private fun playName(outlined: Boolean) = if (outlined) tr(R.string.outlined) else tr(R.string.filled)
 private fun titleFontName(f: FontChoice?) = f?.label ?: tr(R.string.same_as_the_text)
 
@@ -117,7 +117,7 @@ fun TextIconsPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = t
         Triple(tr(R.string.weight), s.type.weight.label, d.type.weight.label),
         Triple(tr(R.string.letter_spacing), s.type.spacing.label, d.type.spacing.label),
         Triple(tr(R.string.titles), titleFontName(s.type.titleFont), titleFontName(d.type.titleFont)),
-        Triple(tr(R.string.fill), icons.fill.label, IconFill.OUTLINE.label),
+        Triple(tr(R.string.icon_style), icons.fill.label, IconFill.OUTLINE.label),
         Triple(tr(R.string.pack), icons.pack.label, IconPack.PRISM.label),
         Triple(tr(R.string.icon_weight), iconLineLabel(iconLineToMerged(icons.line)), iconLineLabel(defaultLine)),
         Triple(tr(R.string.likes_as_stars), onOff(icons.likeStar), onOff(false)),
@@ -172,7 +172,7 @@ fun TextIconsPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = t
             // Prism's icons are built as it starts: a change is saved for the next start.
             fun changedIcons() = c.looks.iconsChanged()
             PickCardsRow(
-                tr(R.string.fill), IconFill.entries, icons.fill, { it.label }, changed = icons.fill != IconFill.OUTLINE, columns = 3,
+                tr(R.string.icon_style), IconFill.entries, icons.fill, { it.label }, changed = icons.fill != IconFill.OUTLINE, columns = 3,
                 onPick = { icons.saveFill(it); changedIcons() },
             ) { IconsSample(it, icons.pack, fills = true) }
             PickCardsRow(
@@ -348,7 +348,7 @@ val textIconsIndex: List<SettingEntry> by lazy {
         SettingEntry(page, text, tr(R.string.weight), tr(R.string.bold_light_heavy_text_weight) + " " + tr(R.string.weight_and_spacing)),
         SettingEntry(page, text, tr(R.string.letter_spacing), tr(R.string.tracking_wide_tight_letters)),
         SettingEntry(page, text, tr(R.string.titles), tr(R.string.title_font_headings_different_font)),
-        SettingEntry(page, icons, tr(R.string.fill), tr(R.string.outline) + " " + tr(R.string.duotone) + " " + tr(R.string.filled)),
+        SettingEntry(page, icons, tr(R.string.icon_style), tr(R.string.fill) + " " + tr(R.string.outline) + " " + tr(R.string.duotone) + " " + tr(R.string.filled)),
         SettingEntry(page, icons, tr(R.string.pack), tr(R.string.icon_style_cupertino_apple)),
         SettingEntry(page, icons, tr(R.string.icon_weight), tr(R.string.icon_thin_bold)),
         // The old Rounded switch is part of Icon weight.

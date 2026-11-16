@@ -95,7 +95,7 @@ enum class SectionStyle(val label: String) { CAROUSEL(tr(R.string.carousel)), GR
  * looks the same on every phone; [face] is the typeface's own name. SERIF and MONO keep their stored names.
  */
 enum class FontChoice(val label: String, val face: String? = null) {
-    PRISM(tr(R.string.app_name), tr(R.string.outfit)), CLEAN(tr(R.string.clean), tr(R.string.manrope)), GEOMETRIC(tr(R.string.geometric), tr(R.string.plus_jakarta_sans)), AIRY(tr(R.string.airy), tr(R.string.urbanist)),
+    PRISM(tr(R.string.prism_s_own), tr(R.string.outfit)), CLEAN(tr(R.string.clean), tr(R.string.manrope)), GEOMETRIC(tr(R.string.geometric), tr(R.string.plus_jakarta_sans)), AIRY(tr(R.string.airy), tr(R.string.urbanist)),
     ROUNDED(tr(R.string.rounded), tr(R.string.nunito)), SERIF(tr(R.string.editorial), tr(R.string.fraunces)), MONO(tr(R.string.mono), tr(R.string.geist_mono)),
     /** Made to be told apart at a glance: low vision (1.7.7). */
     LEGIBLE(tr(R.string.legible), tr(R.string.atkinson_hyperlegible)),
@@ -121,7 +121,7 @@ enum class CoverShape(val label: String) {
     ROUNDED(tr(R.string.rounded)), SQUARE(tr(R.string.square)), CIRCLE(tr(R.string.circle)), SQUIRCLE(tr(R.string.squircle)), FLOWER(tr(R.string.flower)), COOKIE(tr(R.string.cookie)), ARCH(tr(R.string.arch)), SLANTED(tr(R.string.slanted)),
 }
 /** Prism's buttons (Play, Shuffle, dialogs' buttons), 1.7.7. */
-enum class ButtonShape(val label: String) { PILL(tr(R.string.pill)), ROUNDED(tr(R.string.rounded)), SQUARE(tr(R.string.square)) }
+enum class ButtonShape(val label: String) { PILL(tr(R.string.button_shape_fully_round)),ROUNDED(tr(R.string.rounded)), SQUARE(tr(R.string.square)) }
 
 /** Lyrics, your way (1.7.5). Every default draws the lyrics as 1.7.4 did. Nested since 1.7.7 (see [ShapeLook]). */
 data class LyricsLookPrefs(
@@ -1149,7 +1149,7 @@ enum class PlayerBackground(val label: String) {
      */
     GRADIENT(tr(R.string.cover_gradient)),
 }
-enum class TransportStyle(val label: String) { GLYPHS(tr(R.string.classic)), BUTTON(tr(R.string.play_button)), OUTLINE(tr(R.string.rings)) }
+enum class TransportStyle(val label: String) { GLYPHS(tr(R.string.classic)), BUTTON(tr(R.string.transport_filled_play)), OUTLINE(tr(R.string.rings)) }
 /** How wide the player's cover is: [extra] is how far it reaches into each side margin. */
 enum class CoverSize(val label: String, val extra: Float) { STANDARD(tr(R.string.standard), 0f), LARGE(tr(R.string.large), 18f), FULL(tr(R.string.full_width), 30f) }
 /** Immersive mode's cover: [zoom] 1 fills the screen (its sides cut off), 0 shows all of it across the width. */
@@ -1229,7 +1229,7 @@ enum class ScrubberColor(val label: String) { SPECTRUM(tr(R.string.your_light)),
 
 /** How the line being sung is drawn. [PRISM] is the lyrics as 1.7 drew them. */
 enum class LyricsStyle(val label: String, val note: String) {
-    PRISM(tr(R.string.app_name), tr(R.string.each_word_grows_bolder_as_it)),
+    PRISM(tr(R.string.prism_s_own), tr(R.string.each_word_grows_bolder_as_it)),
     KARAOKE(tr(R.string.classic_karaoke), tr(R.string.color_fills_the_words_as_they)),
     CARD(tr(R.string.bold_card), tr(R.string.big_bold_lines_on_the_cover)),
     GLOW(tr(R.string.glow), tr(R.string.the_sung_words_glow)),
@@ -1274,7 +1274,7 @@ enum class LyricsBackground(val label: String, val note: String) {
 enum class PlayerTitleAlign(val label: String) { START(tr(R.string.left)), CENTER(tr(R.string.centered)) }
 enum class PlayerTitleSize(val label: String, val scale: Float) { SMALL(tr(R.string.small), 0.82f), MEDIUM(tr(R.string.medium), 1f), LARGE(tr(R.string.large), 1.2f) }
 /** The times under the progress bar. */
-enum class PlayerTimes(val label: String) { BOTH(tr(R.string.both)), ELAPSED(tr(R.string.elapsed)), LEFT(tr(R.string.time_left)), NONE(tr(R.string.none)) }
+enum class PlayerTimes(val label: String) { BOTH(tr(R.string.player_times_both)),ELAPSED(tr(R.string.elapsed)), LEFT(tr(R.string.time_left)), NONE(tr(R.string.none)) }
 
 /** What a gesture on the player's cover (or the mini player) does. */
 enum class PlayerGesture(val label: String) {

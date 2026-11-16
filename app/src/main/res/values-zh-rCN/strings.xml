@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">歌曲封面的颜色</string>
     <string name="progress_bar_thickness">进度条粗细</string>
     <string name="thinner">更细</string>
-    <string name="as_the_style">跟随样式</string>
     <string name="thicker">更粗</string>
     <string name="the_waveform_keeps_its_own_height">波形保持自己的高度；歌曲扫描完成前会显示粗细设置。</string>
-    <string name="knob_at_the_playhead">播放位置的滑块</string>
     <string name="a_dot_with_the_thumb_style">“滑块”样式下显示为圆点</string>
     <string name="visualizer">可视化效果</string>
     <string name="it_listens_to_prism_s_own">它只聆听 Prism 自己的声音（不使用麦克风），而且只在播放器打开并播放时运行。在较旧的手机上，选择“关闭”可让播放器最轻快。</string>
@@ -5363,7 +5361,6 @@
     <string name="mix_why_live">两首中有一首是直播。</string>
     <string name="mix_why_podcast">两首中有一首是播客节目。</string>
     <string name="mix_why_album">整张专辑连续播放时，歌曲保持完整。</string>
-    <string name="mix_why_sing_or_together">Sing 或一起听已开启。</string>
     <string name="mix_why_casting">正在其他设备上播放。</string>
     <string name="mix_why_short">这首歌不足 30 秒。</string>
     <string name="mix_why_next_short">下一首只有几秒钟。</string>
@@ -5479,7 +5476,6 @@
     <string name="tour_1875_also_heard">识别出的歌曲会从你听到的那一刻开始播放，并打开歌词。</string>
     <string name="queue_end_mixed">你的与新的</string>
     <string name="dd_use_load_ahead">预加载歌曲</string>
-    <string name="replay_notices_n_on">3 项中已开启 %1$d 项</string>
     <string name="car_lyrics_style">歌词样式</string>
     <string name="tab_tint_light">主题颜色</string>
     <string name="bini_detail">Apple Music 的歌词 · 逐字，用另一种方式匹配</string>

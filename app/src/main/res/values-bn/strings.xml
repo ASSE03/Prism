@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">গানের কভারের রং</string>
     <string name="progress_bar_thickness">অগ্রগতি বারের পুরুত্ব</string>
     <string name="thinner">আরও সরু</string>
-    <string name="as_the_style">স্টাইল অনুযায়ী</string>
     <string name="thicker">আরও মোটা</string>
     <string name="the_waveform_keeps_its_own_height">ওয়েভফর্ম নিজের উচ্চতা রাখে; গান স্ক্যান না হওয়া পর্যন্ত পুরুত্ব দেখায়।</string>
-    <string name="knob_at_the_playhead">প্লেহেডে নব</string>
     <string name="a_dot_with_the_thumb_style">থাম্ব স্টাইলে একটি বিন্দু</string>
     <string name="visualizer">ভিজুয়ালাইজার</string>
     <string name="it_listens_to_prism_s_own">এটি Prism-এর নিজের আওয়াজ শোনে (মাইক্রোফোন নয়) আর শুধু প্লেয়ার খোলা থাকলে ও গান চললে কাজ করে। পুরনো ফোনে, বন্ধ রাখলে প্লেয়ার সবচেয়ে হালকা থাকে।</string>
@@ -5438,7 +5436,6 @@
     <string name="mix_why_live">দুটির একটি লাইভ স্ট্রিম।</string>
     <string name="mix_why_podcast">দুটির একটি পডকাস্ট পর্ব।</string>
     <string name="mix_why_album">পুরো অ্যালবাম চলার সময় তার গানগুলো অখণ্ড থাকে।</string>
-    <string name="mix_why_sing_or_together">Sing বা একসাথে শুনুন চালু ছিল।</string>
     <string name="mix_why_casting">অন্য ডিভাইসে চলছিল।</string>
     <string name="mix_why_short">এই গানটি ৩০ সেকেন্ডের চেয়ে ছোট।</string>
     <string name="mix_why_next_short">পরের গানটি মাত্র কয়েক সেকেন্ডের।</string>
@@ -5554,7 +5551,6 @@
     <string name="tour_1875_also_heard">চেনা গান আপনি যে মুহূর্তে শুনেছিলেন সেখান থেকে চলে, লিরিক্স খোলা অবস্থায়।</string>
     <string name="queue_end_mixed">আপনার ও নতুন</string>
     <string name="dd_use_load_ahead">আগে থেকে গান লোড</string>
-    <string name="replay_notices_n_on">3-এর মধ্যে %1$d চালু</string>
     <string name="car_lyrics_style">লিরিক্সের স্টাইল</string>
     <string name="tab_tint_light">থিমের রং</string>
     <string name="bini_detail">Apple Music-এর লিরিক্স · শব্দে শব্দে, অন্যভাবে মেলানো</string>

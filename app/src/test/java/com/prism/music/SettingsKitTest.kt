@@ -424,8 +424,9 @@ class SettingsKitTest {
         var covers by mutableStateOf(false)
         show { OnAPage { ShowChipsRow("In the queue", listOf(ShowOption("Covers", covers) { covers = it }, ShowOption("Durations", false) {})) } }
         assertEquals("the row's value", listOf("None"), tagged(SettingsTags.ROW_CHOICE).map { it.config[SettingsRowValue] })
-        // On screen too (and so read out), not only in the tag.
-        compose.onNodeWithText("None", useUnmergedTree = true).assertExists()
+        // 1.8.7.6 (W39): not as a line over the chips, which already show that none is on ("When saving: None" above
+        // chips that are off read like one more setting).
+        assertEquals(0, compose.onAllNodes(hasText("None"), useUnmergedTree = true).fetchSemanticsNodes().size)
         compose.onNodeWithText("Covers").performClick()
         compose.waitForIdle()
         assertEquals(listOf("Covers"), tagged(SettingsTags.ROW_CHOICE).map { it.config[SettingsRowValue] })

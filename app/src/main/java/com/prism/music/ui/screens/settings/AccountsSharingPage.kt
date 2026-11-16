@@ -75,7 +75,7 @@ internal fun spotifyValue(connection: Spotify.Connection): String = when (connec
     is Spotify.Connection.Connected -> tr(R.string.spot_connected_as, connection.name)
     Spotify.Connection.Waiting -> tr(R.string.spot_waiting)
     Spotify.Connection.Revoked -> tr(R.string.cn_spot_access_taken_back)
-    else -> tr(R.string.cn_not_connected)
+    else -> tr(R.string.cn_spot_not_connected)
 }
 
 /**
@@ -87,8 +87,9 @@ internal fun spotifyValue(connection: Spotify.Connection): String = when (connec
  * Five groups: Accounts (the Prism Account and YouTube Music, each a link to its own screen, and YouTube Music's
  * history, a link to Bring your history), Last.fm, Spotify, Discord, and Sharing and links (from the old Devices &
  * connections). A service's first row says its state ("Connected as …", "Not connected"); its options show while it's
- * connected. Last.fm, Spotify and Discord have no title over their card while their first row names them (§2.7); the
- * old keys "lastfm", "spotify" and "discord" still open the page at their card.
+ * connected. Last.fm, Spotify and Discord sit under one heading, "Other services" (1.8.7.6, over Last.fm's card), and
+ * keep a card each (Spotify's titled while connected); the old keys "lastfm", "spotify" and "discord" still open the
+ * page at their card.
  *
  * Spotify is connected one of two ways, picked on the "Connect Spotify" sheet behind its row (1.8.7.5): the sign-in on
  * Spotify's own page (read only: playlists and liked songs), or the listener's own developer app and Spotify's official
@@ -160,7 +161,9 @@ fun AccountsSharingPage(bottomPadding: Dp, find: String? = null, showBack: Boole
             ) { nav.go(Routes.BRING_HISTORY) }
         }
 
-        group(null, key = LAST_FM) {
+        // 1.8.7.6: one heading over the three services' cards (they had none); each card keeps its own key for search
+        // and links.
+        group(tr(R.string.cn_other_services), key = LAST_FM) {
             LastFmRows(
                 lastFm.available, lastFmUser, lastFmOptions, lastFmWaiting, scrobbleChanged, firstArtistChanged, loveChanged,
                 onOptions = { lastFm.setOptions(it) },
@@ -273,7 +276,7 @@ internal fun LastFmRows(
     val about = tr(R.string.sends_what_you_listen_to_scrobbles_all)
     when {
         !available -> LinkRow(LAST_FM, value = tr(R.string.this_copy_of_prism_was_built), enabled = false) {}
-        user == null -> LinkRow(tr(R.string.connect_last_fm), value = tr(R.string.cn_not_connected), info = about, external = true, onClick = onConnect)
+        user == null -> LinkRow(LAST_FM, value = tr(R.string.cn_not_connected), info = about, external = true, onClick = onConnect)
         else -> {
             SwitchRow(
                 tr(R.string.last_fm_scrobbling), options.scrobble,
@@ -543,7 +546,10 @@ val accountsSharingIndex: List<SettingEntry> by lazy {
         SettingEntry(page, accounts, tr(R.string.prism_account), tr(R.string.profile_name_picture_photo_local_on)),
         SettingEntry(page, accounts, tr(R.string.youtube_music_2), tr(R.string.cn_youtube_keywords), shown = tr(R.string.sign_in_to_youtube_music)),
         SettingEntry(page, accounts, tr(R.string.cn_youtube_history), tr(R.string.cn_youtube_history_keywords)),
-        // Last.fm: "Connect Last.fm" until it's connected, then its three switches and Disconnect.
+        // 1.8.7.6: the heading over the three services' cards (it opens the page at Last.fm's, the first).
+        SettingEntry(page, tr(R.string.cn_other_services), tr(R.string.cn_other_services), listOf(LAST_FM, spotify, discord).joinToString(" ")),
+        // Last.fm: its row ("Connect Last.fm" until 1.8.7.6, still a search line) until it's connected, then its three
+        // switches and Disconnect.
         SettingEntry(page, LAST_FM, tr(R.string.connect_last_fm), tr(R.string.lastfm_last_fm_scrobble_scrobbling_account)),
         SettingEntry(page, LAST_FM, tr(R.string.last_fm_scrobbling), tr(R.string.lastfm_last_fm_scrobble) + " " + tr(R.string.lastfm_scrobble_send_plays) + " " + tr(R.string.scrobble)),
         SettingEntry(page, LAST_FM, tr(R.string.first_artist_only), tr(R.string.lastfm_featured_artists_main_artist)),

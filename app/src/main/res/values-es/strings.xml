@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">El color de la portada de la canción</string>
     <string name="progress_bar_thickness">Grosor de la barra de progreso</string>
     <string name="thinner">Más delgada</string>
-    <string name="as_the_style">Según el estilo</string>
     <string name="thicker">Más gruesa</string>
     <string name="the_waveform_keeps_its_own_height">La forma de onda mantiene su propia altura; el grosor se ve hasta que la canción se analiza.</string>
-    <string name="knob_at_the_playhead">Indicador en la posición actual</string>
     <string name="a_dot_with_the_thumb_style">Un punto con el estilo Indicador</string>
     <string name="visualizer">Visualizador</string>
     <string name="it_listens_to_prism_s_own">Escucha el sonido del propio Prism (sin micrófono) y solo funciona mientras el reproductor está abierto y sonando. En un teléfono antiguo, Desactivado mantiene el reproductor más ligero.</string>
@@ -5513,7 +5511,6 @@
     <string name="mix_why_live">Una de las dos es una transmisión en vivo.</string>
     <string name="mix_why_podcast">Una de las dos es un episodio de podcast.</string>
     <string name="mix_why_album">Un álbum que suena completo mantiene sus canciones enteras.</string>
-    <string name="mix_why_sing_or_together">Sing o Escuchar juntos estaban activados.</string>
     <string name="mix_why_casting">Se reproducía en otro dispositivo.</string>
     <string name="mix_why_short">Esta canción dura menos de 30 segundos.</string>
     <string name="mix_why_next_short">La siguiente canción dura solo unos segundos.</string>
@@ -5629,7 +5626,6 @@
     <string name="tour_1875_also_heard">Una canción reconocida suena desde el momento en que la oíste, con su letra abierta.</string>
     <string name="queue_end_mixed">Tuyas y nuevas</string>
     <string name="dd_use_load_ahead">Cargar canciones por adelantado</string>
-    <string name="replay_notices_n_on">%1$d de 3 activadas</string>
     <string name="car_lyrics_style">Estilo de la letra</string>
     <string name="tab_tint_light">Colores del tema</string>
     <string name="bini_detail">Letras de Apple Music · palabra por palabra, emparejadas de otra forma</string>

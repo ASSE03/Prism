@@ -1122,10 +1122,8 @@
     <string name="the_song_s_cover_s_color">गाने के कवर का रंग</string>
     <string name="progress_bar_thickness">प्रोग्रेस बार की मोटाई</string>
     <string name="thinner">पतला</string>
-    <string name="as_the_style">स्टाइल के हिसाब से</string>
     <string name="thicker">मोटा</string>
     <string name="the_waveform_keeps_its_own_height">वेवफ़ॉर्म अपनी ऊंचाई रखता है; गाना स्कैन होने तक मोटाई दिखती है।</string>
-    <string name="knob_at_the_playhead">प्लेहेड पर नॉब</string>
     <string name="a_dot_with_the_thumb_style">अंगूठे वाली स्टाइल के साथ एक बिंदु</string>
     <string name="visualizer">विज़ुअलाइज़र</string>
     <string name="it_listens_to_prism_s_own">यह Prism की अपनी आवाज़ सुनता है (माइक्रोफ़ोन नहीं) और सिर्फ़ तब चलता है जब प्लेयर खुला हो और गाना चल रहा हो। पुराने फ़ोन पर, बंद रखने से प्लेयर सबसे हल्का रहता है।</string>
@@ -5438,7 +5436,6 @@
     <string name="mix_why_live">दोनों में से एक लाइव स्ट्रीम है।</string>
     <string name="mix_why_podcast">दोनों में से एक पॉडकास्ट एपिसोड है।</string>
     <string name="mix_why_album">पूरा एल्बम चलते समय उसके गाने पूरे रहते हैं।</string>
-    <string name="mix_why_sing_or_together">Sing या साथ में सुनें चालू था।</string>
     <string name="mix_why_casting">दूसरे डिवाइस पर चल रहा था।</string>
     <string name="mix_why_short">यह गाना 30 सेकंड से छोटा है।</string>
     <string name="mix_why_next_short">अगला गाना बस कुछ सेकंड का है।</string>
@@ -5554,7 +5551,6 @@
     <string name="tour_1875_also_heard">पहचाना गया गाना उसी पल से चलता है जब आपने उसे सुना था, बोल खुले हुए।</string>
     <string name="queue_end_mixed">आपका और नया</string>
     <string name="dd_use_load_ahead">गाने पहले से लोड करना</string>
-    <string name="replay_notices_n_on">3 में से %1$d चालू</string>
     <string name="car_lyrics_style">बोल का स्टाइल</string>
     <string name="tab_tint_light">थीम के रंग</string>
     <string name="bini_detail">Apple Music के बोल · शब्द दर शब्द, दूसरे तरीके से मिलाए गए</string>
