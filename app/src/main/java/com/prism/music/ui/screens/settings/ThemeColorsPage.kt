@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.prism.music.R
 import com.prism.music.data.prefs.AppSettings
+import com.prism.music.data.prefs.asItComes
 import com.prism.music.data.prefs.ArtworkChange
 import com.prism.music.data.prefs.ArtworkSwatch
 import com.prism.music.data.prefs.ColorSource
@@ -178,7 +179,7 @@ private fun glassAlsoText(s: AppSettings) =
  * lists them. [dark]: Prism is in dark mode now (the White light is named Black on light pages).
  */
 fun themeColorsChanges(s: AppSettings, dark: Boolean): List<String> {
-    val d = AppSettings()
+    val d = s.asItComes()
     val out = ArrayList<String>()
     fun line(changed: Boolean, title: Int, now: String, default: String) { if (changed) out += resetLine(tr(title), now, default) }
     line(s.themeMode != d.themeMode || s.pureBlack != d.pureBlack, R.string.theme, themeToMerged(s.themeMode, s.pureBlack).label, themeToMerged(d.themeMode, d.pureBlack).label)
@@ -241,7 +242,7 @@ fun ThemeColorsPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
     val prefs = LocalContainer.current.settings
     val nav = LocalNavigator.current
     val dark = LocalIsDark.current
-    val d = remember { AppSettings() }
+    val d = s.asItComes()
     val white = s.lightStyle == LightStyle.WHITE
     val widgets = placedWidgets()
     var picking by remember { mutableStateOf<ThemePicking?>(null) }

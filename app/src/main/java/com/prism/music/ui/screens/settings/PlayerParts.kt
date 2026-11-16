@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.prism.music.R
 import com.prism.music.data.prefs.AppSettings
+import com.prism.music.data.prefs.asItComes
 import com.prism.music.data.prefs.BleedFit
 import com.prism.music.data.prefs.CanvasKinds
 import com.prism.music.data.prefs.CoverShape
@@ -258,12 +259,11 @@ internal class PlayerSetting<T>(
     val words: (T) -> String,
     val set: (SettingsRepository, T) -> Unit,
 ) {
-    fun changed(s: AppSettings): Boolean = get(s) != get(PLAYER_DEFAULTS)
-    fun line(s: AppSettings): String = resetLine(if (sheet == null) row else tr(R.string.settings_player_chip_info, sheet, row),words(get(s)), words(get(PLAYER_DEFAULTS)))
-    fun reset(prefs: SettingsRepository) = set(prefs, get(PLAYER_DEFAULTS))
+    // Compared with how Prism comes on this phone (1.8.7.6: a new install's own defaults count as how it comes).
+    fun changed(s: AppSettings): Boolean = get(s) != get(s.asItComes())
+    fun line(s: AppSettings): String = resetLine(if (sheet == null) row else tr(R.string.settings_player_chip_info, sheet, row),words(get(s)), words(get(s.asItComes())))
+    fun reset(prefs: SettingsRepository, s: AppSettings) = set(prefs, get(s.asItComes()))
 }
-
-internal val PLAYER_DEFAULTS = AppSettings()
 
 private fun onOff(v: Boolean) = if (v) tr(R.string.on_2) else tr(R.string.off)
 internal fun percent(v: Float) = "${(v * 100).roundToInt()}%"
@@ -433,7 +433,7 @@ internal fun rowButtonsWords(v: Pair<List<PlayerButton>, Boolean>): String =
 internal fun resetPlayerPage(prefs: SettingsRepository, s: AppSettings) {
     val rest = playerSettings.filter { it.changed(s) && !playerLookKeys.containsAll(it.keys) }
     prefs.resetLookKeys(playerLookKeys)
-    rest.forEach { it.reset(prefs) }
+    rest.forEach { it.reset(prefs, s) }
 }
 
 // ---------------------------------------------------------------------------- Sheets

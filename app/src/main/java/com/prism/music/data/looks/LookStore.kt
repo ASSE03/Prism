@@ -110,7 +110,7 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
     private val iconsVersion = MutableStateFlow(0)
 
     /** The Look the app is in, when its settings and icons are exactly one's. */
-    val currentId: StateFlow<String?> = combine(settings.flow, _mine, iconsVersion, _other) { s, _, _, _ -> lookNow(s)?.id }
+    val currentId: StateFlow<String?> = combine(settings.prefsNow, _mine, iconsVersion, _other) { p, _, _, _ -> lookNow(p)?.id }
         .flowOn(Dispatchers.Default).stateIn(scope, SharingStarted.Eagerly, null)
 
     /** Your own Look last put on or saved, so changes made to it afterwards can be saved into it ([edited], [update]). */
@@ -128,10 +128,15 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
     val edited: StateFlow<Look?> = combine(currentId, basis, _mine) { now, b, mine -> if (b != null && now != b) mine.firstOrNull { it.id == b } else null }
         .stateIn(scope, SharingStarted.Eagerly, null)
 
-    /** The Look whose settings and icons [s] are exactly; your own Looks first (one saved from Paper as it is is yours). */
-    private fun lookNow(s: com.prism.music.data.prefs.AppSettings): Look? {
+    /**
+     * The Look whose settings and icons the store [p] holds exactly; your own Looks first (one saved from Paper as it is is
+     * yours). Both sides as stored, from the one snapshot (1.8.7.6: compared with the settings as Performance mode reads
+     * them, no Look was ever in use while it was on).
+     */
+    private fun lookNow(p: androidx.datastore.preferences.core.Preferences = settings.prefsNow.value): Look? {
         val icons = currentIcons()
-        return (_mine.value + listOfNotNull(_other.value) + BuiltInLooks.all).firstOrNull { l -> l.icons == icons && settings.previewLook(resolved(l)) == s }
+        val s = settings.storedOf(p)
+        return (_mine.value + listOfNotNull(_other.value) + BuiltInLooks.all).firstOrNull { l -> l.icons == icons && settings.previewLook(p, resolved(l)) == s }
     }
 
     // ---------------------------------------------------------------- Keeping Looks
@@ -299,7 +304,7 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
      * later: History only goes back ten.
      */
     suspend fun apply(look: Look, label: String = tr(R.string.look_2, look.name), scheduled: Boolean = false) = withContext(Dispatchers.IO) {
-        val from = lookNow(settings.current)
+        val from = lookNow(settings.prefsLatest())
         // A seasonal Look remembers the Look the listener had, to go back to when its month ends ([endSeasons]).
         if (Seasons.of(look.id) != null && Seasons.of(from?.id) == null) prefs.edit().putString(SEASON_FROM, from?.id ?: BEFORE_ID).apply()
         if (look.id != BEFORE_ID && from == null) runCatching {

@@ -605,7 +605,29 @@ object NewInstall {
      * the next cover. These may be dropped after a smoothness check on a budget phone.
      */
     val motion: List<String> = listOf("cover_flight", "cover_flight_back", "backdrop_fade")
+
+    /** How Prism comes on a phone without [BehaviorPrefs.newInstallLook]: the data classes' defaults. */
+    internal val comes: AppSettings by lazy { AppSettings() }
+
+    /**
+     * How Prism comes on a phone whose first run wrote these (1.8.7.6): the five that are in a Look on (`NewInstallLookTest`
+     * checks this against what the store reads as with only the marker).
+     */
+    internal val lookComes: AppSettings by lazy {
+        val d = AppSettings()
+        d.copy(
+            view = d.view.copy(coverFlight = true, coverFlightBack = true, backdropFade = true, albumHeroCover = true),
+            behavior = d.behavior.copy(canvas = d.behavior.canvas.copy(fillsBackground = true), newInstallLook = true),
+        )
+    }
 }
+
+/**
+ * How Prism comes on this phone (1.8.7.6): the data classes' defaults, with a new install's own defaults that are in a
+ * Look on where this phone's first run wrote them ([BehaviorPrefs.newInstallLook]). What Settings' changed dots, reset
+ * lines and setter resets compare with, as Reset look and "Reset this page" put back.
+ */
+fun AppSettings.asItComes(): AppSettings = if (behavior.newInstallLook) NewInstall.lookComes else NewInstall.comes
 
 /** The three stored flags behind Settings' two Canvas switches ([CanvasKinds]), as they are stored. */
 data class CanvasStored(val enabled: Boolean, val covers: Boolean, val videos: Boolean)
@@ -2551,10 +2573,19 @@ class SettingsRepository(
      * Puts a Look's [values] in place of every look setting in [p] (those it doesn't set go back to their defaults: on a
      * phone whose first run wrote a new install's own defaults ([K.newInstallLook]), those are on).
      */
+    /**
+     * Of the look settings [names] just put back to how Prism comes, those that are a new install's own defaults go on
+     * where this phone's first run wrote them ([K.newInstallLook]); elsewhere nothing changes.
+     */
+    private fun putNewInstallLook(p: MutablePreferences, names: Collection<String>) {
+        if (p[K.newInstallLook] != true) return
+        names.forEach { if (it in newInstallLookNames) p[booleanPreferencesKey(it)] = true }
+    }
+
     @Suppress("UNCHECKED_CAST")
     private fun putLook(p: MutablePreferences, values: Map<String, String>) {
         K.lookSpec.forEach { (k, _) -> p.remove(k as Preferences.Key<Any>) }
-        if (p[K.newInstallLook] == true) newInstallLookNames.forEach { p[booleanPreferencesKey(it)] = true }
+        putNewInstallLook(p, newInstallLookNames)
         values.forEach { (name, tagged) ->
             val key = lookKeysByName[name] ?: return@forEach
             val v = LookValue.untag(tagged, lookKinds[name] ?: return@forEach) ?: return@forEach
@@ -3041,7 +3072,22 @@ class SettingsRepository(
     fun lookAfter(values: Map<String, String>): Map<String, String> = lookOf(raw.toMutablePreferences().also { putLook(it, values) })
 
     /** The settings as they'd be with [values] as the Look, without changing anything (Look cards draw from it). */
-    fun previewLook(values: Map<String, String>): AppSettings = read(raw.toMutablePreferences().also { putLook(it, values) })
+    fun previewLook(values: Map<String, String>): AppSettings = previewLook(raw, values)
+
+    /** The same from the store as it was in [p]. */
+    fun previewLook(p: Preferences, values: Map<String, String>): AppSettings = read(p.toMutablePreferences().also { putLook(it, values) })
+
+    /**
+     * The store as one snapshot at a time (1.8.7.6): Looks tells which Look is on from it, [storedOf] against
+     * [previewLook] of the same snapshot, so Performance mode (which [flow] reads through) doesn't hide the Look.
+     */
+    val prefsNow: StateFlow<Preferences> = context.dataStore.data.stateIn(scope, SharingStarted.Eagerly, raw)
+
+    /** The settings as stored in [p] (as [stored] reads them). */
+    fun storedOf(p: Preferences): AppSettings = read(p)
+
+    /** The store as it is this moment (what [prefsNow] is about to hold). */
+    suspend fun prefsLatest(): Preferences = context.dataStore.data.first()
 
     /**
      * Makes [values] the Look in one edit, so the app redraws once. [fontChanged]: an imported font file was swapped in
@@ -3056,6 +3102,7 @@ class SettingsRepository(
     @Suppress("UNCHECKED_CAST")
     fun resetLookKeys(names: Collection<String>) = edit { p ->
         names.forEach { n -> lookKeysByName[n]?.let { p.remove(it as Preferences.Key<Any>) } }
+        putNewInstallLook(p, names)
     }
 
     // One write at a time, in the order they were asked for (1.8.0): a merged choice writes two or three keys with
@@ -3817,5 +3864,8 @@ class SettingsRepository(
 
     /** Puts every look & layout option back to how Prism ships (colors and backgrounds are left alone). */
     @Suppress("UNCHECKED_CAST")
-    fun resetLook() = edit { p -> K.look.forEach { p.remove(it as Preferences.Key<Any>) } }
+    fun resetLook() = edit { p ->
+        K.look.forEach { p.remove(it as Preferences.Key<Any>) }
+        putNewInstallLook(p, K.look.map { it.name })
+    }
 }
