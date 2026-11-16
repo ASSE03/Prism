@@ -275,6 +275,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         })
 
         effects.attach(player.audioSessionId)
+        watchCarAudioRoute()
         c.onStreamResolved = { id -> scope.launch { applyStreamStats(id) } }
         // The equalizer as set, or the preset picked for the output playing now (the car's, the earbuds'; A3).
         scope.launch {
@@ -563,7 +564,50 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
     }
 
+    /**
+     * Android Auto sans fil (DiAuto, ASSE03) : quand la voiture coupe son Bluetooth audio pour que la musique passe par
+     * Android Auto, la sortie de Prism peut rester accrochée à une sortie morte (AudioTrack « device stall », le
+     * téléphone ferme le canal musique au bout de 3 s) ; changer de piste n'y fait rien, relancer Prism si. Ici,
+     * quand une sortie Android Auto (remote submix) apparaît ou qu'une sortie Bluetooth disparaît, Prism passe sur une
+     * nouvelle session audio : Media3 recrée sa sortie et les effets (égaliseur) suivent ([onAudioSessionIdChanged]).
+     */
+    private var routeCallback: android.media.AudioDeviceCallback? = null
+    private var routeJob: kotlinx.coroutines.Job? = null
+
+    private fun watchCarAudioRoute() {
+        val am = getSystemService(android.media.AudioManager::class.java) ?: return
+        val cb = object : android.media.AudioDeviceCallback() {
+            private var primed = false
+            override fun onAudioDevicesAdded(added: Array<out android.media.AudioDeviceInfo>) {
+                if (primed && added.any { it.isSink && it.type == android.media.AudioDeviceInfo.TYPE_REMOTE_SUBMIX }) freshAudioRoute("Android Auto output appeared")
+                primed = true
+            }
+            override fun onAudioDevicesRemoved(removed: Array<out android.media.AudioDeviceInfo>) {
+                if (removed.any { it.isSink && it.type in BT_SINKS }) freshAudioRoute("a Bluetooth output went away")
+            }
+        }
+        am.registerAudioDeviceCallback(cb, null)
+        routeCallback = cb
+    }
+
+    private fun freshAudioRoute(reason: String) {
+        routeJob?.cancel()
+        // Les sorties changent en rafale (Android Auto qui démarre, puis le Bluetooth de la voiture coupé) : une seule
+        // reconstruction, 2 s après le dernier changement
+        routeJob = scope.launch {
+            kotlinx.coroutines.delay(2_000)
+            if (player.playbackState == Player.STATE_IDLE || player.currentMediaItem == null) return@launch
+            // Prism tourne vers un appareil choisi à la main (enceinte, Cast) : on n'y touche pas
+            if (c.cast.casting) return@launch
+            val session = androidx.media3.common.util.Util.generateAudioSessionIdV21(this@PlaybackService)
+            AudioDiagnostics.log("route", "fresh audio session $session ($reason; was ${player.audioSessionId})")
+            player.setAudioSessionId(session)
+        }
+    }
+
     override fun onDestroy() {
+        routeJob?.cancel()
+        routeCallback?.let { getSystemService(android.media.AudioManager::class.java)?.unregisterAudioDeviceCallback(it) }
         lockScreen.stop()
         if (PlaybackServices.running == this::class.java) PlaybackServices.running = null
         PlaybackServices.failForTest = null
@@ -3160,3 +3204,10 @@ private const val SMART_LOOK_AHEAD = 12
 private const val QUEUE_AHEAD = 3
 /** How far ahead the player loads: a whole song (and the start of the next, near its end). */
 private const val WHOLE_SONG_MS = 300_000
+
+/** Sorties Bluetooth dont le départ peut laisser la sortie de Prism sur une sortie morte (voir freshAudioRoute). */
+private val BT_SINKS = setOf(
+    android.media.AudioDeviceInfo.TYPE_BLUETOOTH_A2DP,
+    android.media.AudioDeviceInfo.TYPE_BLE_HEADSET,
+    android.media.AudioDeviceInfo.TYPE_BLE_SPEAKER,
+)
