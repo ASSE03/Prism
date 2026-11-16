@@ -781,7 +781,8 @@ private const val V1_8_7_6 = 67
                 tr(R.string.tour_1876_canvas_point_2),
                 tr(R.string.tour_1876_canvas_point_3),
             ),
-            showMe = Routes.settings(SettingsPageId.PLAYER.key, find = tr(R.string.canvas)),
+            // The Canvas switch and "Spotify's canvas first" under it are in the Player page's Cover group.
+            showMe = Routes.settings(SettingsPageId.PLAYER.key, find = tr(R.string.cover)),
         ),
         TourStep(
             V1_8_7_6, PrismIcons.Check, tr(R.string.also_new),
