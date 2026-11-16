@@ -897,6 +897,8 @@ enum class MenuAction(val group: MenuGroup, val fromPlayer: Boolean = false, val
     PREVIOUS(MenuGroup.PLAYING, true), NEXT(MenuGroup.PLAYING, true), DJ(MenuGroup.PLAYING, true), EQUALIZER(MenuGroup.PLAYING, true),
     SLEEP(MenuGroup.PLAYING), SPEED_PITCH(MenuGroup.PLAYING), OUTPUT(MenuGroup.PLAYING), IMMERSIVE(MenuGroup.PLAYING),
     VIDEO_DOWNLOAD(MenuGroup.PLAYING), LISTEN_TOGETHER(MenuGroup.PLAYING), BEST_PART(MenuGroup.PLAYING),
+    /** 1.8.7.6: "Spotify canvas" for this song, on or off: Spotify's own loop, apart from the animated cover and Prism Canvas. */
+    SPOTIFY_CANVAS(MenuGroup.PLAYING),
     /** "Animated cover" for this song, on or off (names are stored). */
     ANIMATED_COVER(MenuGroup.PLAYING),
     /** 1.8.6: "Canvas" for this song, on or off: its loop from the music video, apart from its animated cover. */

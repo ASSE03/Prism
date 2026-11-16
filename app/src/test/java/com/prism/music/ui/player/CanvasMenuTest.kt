@@ -112,13 +112,13 @@ class CanvasMenuTest {
     @Test fun theNewRowsSitBesideCanvasInPlaying() {
         val all = MenuAction.entries.filter { !it.fromPlayer }
         val playing = PlayerParts().menuLayout(all).groups.first { it.first == MenuGroup.PLAYING }.second
-        val at = playing.indexOf(MenuAction.ANIMATED_COVER)
+        val at = playing.indexOf(MenuAction.SPOTIFY_CANVAS)
         assertEquals(
             listOf(
-                MenuAction.ANIMATED_COVER, MenuAction.CANVAS, MenuAction.CANVAS_PART, MenuAction.CANVAS_VIDEO, MenuAction.CANVAS_USE,
+                MenuAction.SPOTIFY_CANVAS, MenuAction.ANIMATED_COVER, MenuAction.CANVAS, MenuAction.CANVAS_PART, MenuAction.CANVAS_VIDEO, MenuAction.CANVAS_USE,
                 MenuAction.CANVAS_NOT_THIS_VIDEO, MenuAction.SAVE_ANIMATED_COVER,
             ),
-            playing.subList(at, at + 7),
+            playing.subList(at, at + 8),
         )
         // A layout saved before: the switch hidden under More, under its stored name; the new rows show.
         val old = PlayerParts(menuHidden = setOf(MenuAction.valueOf("ANIMATED_COVER")))
@@ -130,11 +130,18 @@ class CanvasMenuTest {
         assertEquals(tr(R.string.prism_canvas), menuLabel(MenuAction.CANVAS))
         // Owner, 2026-11-16: the menu says whose loop it is.
         assertEquals("Prism Canvas", tr(R.string.prism_canvas))
-        assertEquals(tr(R.string.spotify_canvas), canvasCoverSwitchName(spotifyAsked = true, knownIsSpotify = true))
-        assertEquals(tr(R.string.spotify_canvas), canvasCoverSwitchName(spotifyAsked = true, knownIsSpotify = null))
-        assertEquals(tr(R.string.animated_cover), canvasCoverSwitchName(spotifyAsked = true, knownIsSpotify = false))
-        assertEquals(tr(R.string.animated_cover), canvasCoverSwitchName(spotifyAsked = false, knownIsSpotify = false))
-        assertEquals(tr(R.string.animated_cover), canvasCoverSwitchName(spotifyAsked = false, knownIsSpotify = null))
+        // Later that day: three switches, each its own row with its own stored name.
+        assertEquals("Spotify canvas", tr(R.string.spotify_canvas))
+        assertEquals(tr(R.string.spotify_canvas), menuLabel(MenuAction.SPOTIFY_CANVAS))
+        assertEquals(3, setOf(menuLabel(MenuAction.SPOTIFY_CANVAS), menuLabel(MenuAction.ANIMATED_COVER), menuLabel(MenuAction.CANVAS)).size)
+    }
+
+    /** "Spotify canvas" is offered for a song Spotify has a canvas for, and stays once switched off (the way back). */
+    @Test fun theSpotifySwitchShowsForASongWithSpotifysCanvas() {
+        assertTrue(canvasSpotifySwitchShown(asked = true, hasCanvas = true, switchedOff = false))
+        assertTrue("switched off: still there", canvasSpotifySwitchShown(asked = true, hasCanvas = false, switchedOff = true))
+        assertFalse("Spotify has none for the song", canvasSpotifySwitchShown(asked = true, hasCanvas = false, switchedOff = false))
+        assertFalse("Spotify's canvas not asked", canvasSpotifySwitchShown(asked = false, hasCanvas = true, switchedOff = true))
     }
 
     /** Owner, 2026-11-16: with Spotify canvas selected, Prism Canvas reads as unchecked, and the other way round. */

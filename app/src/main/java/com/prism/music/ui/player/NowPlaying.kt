@@ -554,14 +554,16 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     // loops may be ("Use mobile data" in Canvas's sheet, Data saver), and the song's "Animated cover" switch hides it too.
     val spotifyCanvas = c.canvas.spotifyAsked()
     val spotifyNet = com.prism.music.data.canvas.canvasNetworkAllowed(settings, metered)
-    val coverWanted = com.prism.music.data.canvas.canvasCoverWanted(settings, coverHidden, spotify = spotifyCanvas)
+    // The song's "Spotify canvas" switch, apart from its "Animated cover" (owner, 2026-11-16).
+    val spotifyHidden = song.id in c.canvas.hiddenSpotify.collectAsState().value
+    val coverWanted = com.prism.music.data.canvas.canvasCoverWanted(settings, coverHidden, spotify = spotifyCanvas, spotifyHidden = spotifyHidden)
     val songCanvas by produceState<CanvasArtwork?>(
-        if (coverWanted) c.canvas.cached(song, spotifyOk = spotifyNet) else null, song.id, song.album?.title, settings.behavior.canvas.enabled,
+        if (coverWanted) c.canvas.cached(song, spotifyOk = spotifyNet && !spotifyHidden, prismOk = !coverHidden) else null, song.id, song.album?.title, settings.behavior.canvas.enabled,
         canvasPrefs.covers, canvasPrefs.useVideos, canvasPrefs.videoFirst, canvasPrefs.lighter, settings.behavior.canvas.fillsBackground,
         spotifyCanvas,
         // The song's own choices from the ⋯ menu (another part, "Use:", "Not this video"): looked at again.
         c.canvasClips.changes.collectAsState().value,
-        coverHidden, loopHidden,
+        coverHidden, loopHidden, spotifyHidden,
     ) {
         // 1.8.7.6: Spotify's canvas plays with Prism's own Canvas off too (its own switch alone decides it).
         if (!settings.behavior.canvas.enabled && !spotifyCanvas) { value = null; return@produceState }
@@ -603,6 +605,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             },
             shown = { value },
             show = { value = it },
+            spotifyHidden = spotifyHidden,
         )
     }
     // What a song switched off from the ⋯ menu may show is decided above (its cover, its loop, each on its own).

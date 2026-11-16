@@ -75,9 +75,18 @@ class CanvasRepository(private val http: OkHttpClient) {
             field = v
             hidden.value = v?.getStringSet("ids", emptySet())?.toSet() ?: emptySet()
             hiddenLoops.value = v?.getStringSet("loops", emptySet())?.toSet() ?: emptySet()
+            hiddenSpotify.value = v?.getStringSet("spotify", emptySet())?.toSet() ?: emptySet()
         }
     val hidden = kotlinx.coroutines.flow.MutableStateFlow<Set<String>>(emptySet())
     val hiddenLoops = kotlinx.coroutines.flow.MutableStateFlow<Set<String>>(emptySet())
+    /** 1.8.7.6: songs whose Spotify canvas is switched off ("Spotify canvas" in the ⋯ menu), apart from the other two. */
+    val hiddenSpotify = kotlinx.coroutines.flow.MutableStateFlow<Set<String>>(emptySet())
+
+    fun setSpotifyHidden(songId: String, hide: Boolean) {
+        val next = if (hide) hiddenSpotify.value + songId else hiddenSpotify.value - songId
+        hiddenSpotify.value = next
+        hiddenPrefs?.edit()?.putStringSet("spotify", next)?.apply()
+    }
 
     fun setHidden(songId: String, hide: Boolean) {
         val next = if (hide) hidden.value + songId else hidden.value - songId

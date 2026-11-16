@@ -76,14 +76,9 @@ internal fun canvasToggleItem(
 ): ActionItem = ActionItem(icon, label, active = on, keepOpen = true, toggle = on, onClick = onToggle)
 
 /**
- * The name of the song's cover switch in the ⋯ menu (owner, 2026-11-16): "Spotify canvas" when the loop in the cover is
- * Spotify's, or when Spotify is asked and no cover is known yet (the switch was turned off); "Animated cover" for an
- * Apple Music or Tidal cover, also as the fallback of a song Spotify has no canvas for.
+ * What "Spotify canvas" and "Prism Canvas" show for a song that has both (owner, 2026-11-16): only the one that plays
+ * is checked. [coverOff] is "Spotify canvas" switched off for the song, [loopOff] "Prism Canvas".
  */
-internal fun canvasCoverSwitchName(spotifyAsked: Boolean, knownIsSpotify: Boolean?): String =
-    if (knownIsSpotify == true || (knownIsSpotify == null && spotifyAsked)) tr(R.string.spotify_canvas) else tr(R.string.animated_cover)
-
-/** What the song's two switches show when the cover's loop is Spotify's: only the one that plays is checked. */
 internal data class CanvasPair(val spotify: Boolean, val prism: Boolean)
 
 /**

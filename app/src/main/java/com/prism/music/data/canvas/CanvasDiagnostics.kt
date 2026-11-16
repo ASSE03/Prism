@@ -20,7 +20,9 @@ fun canvasDiagnostics(
     now: Long = System.currentTimeMillis(), coverHidden: Boolean = false,
     /** 1.8.7.6: Spotify's canvas is being asked ([CanvasRepository.spotifyAsked]). Only "Spotify" and its file host are named. */
     spotify: Boolean = false,
-): String = canvasSettingLine(stored) + "\n" + "Canvas now: " + canvasNow(stored, used, metered, videoMode, song, hidden, coverHidden, cover, row, kept, now, spotify)
+    /** 1.8.7.6: the song's "Spotify canvas" switched off from the player. */
+    spotifyHidden: Boolean = false,
+): String = canvasSettingLine(stored) + "\n" + "Canvas now: " + canvasNow(stored, used, metered, videoMode, song, hidden, coverHidden, cover, row, kept, now, spotify, spotifyHidden)
 
 /** "Canvas: full screen, music videos on (video first), videos on mobile data off, performance mode off". */
 fun canvasSettingLine(stored: AppSettings): String {
@@ -45,14 +47,14 @@ fun canvasSettingLine(stored: AppSettings): String {
 private fun canvasNow(
     stored: AppSettings, used: AppSettings, metered: Boolean, videoMode: Boolean,
     song: Song?, hidden: Boolean, coverHidden: Boolean, cover: CanvasArtwork?, row: CanvasClipEntity?, kept: List<ClipFiles.Kept>, now: Long,
-    spotify: Boolean,
+    spotify: Boolean, spotifyHidden: Boolean,
 ): String {
     if (song == null) return "nothing playing"
     // 1.8.7.6: Spotify's canvas is asked with Prism's own Canvas off too.
     if (!used.behavior.canvas.enabled && !spotify) return "still cover (" + (if (stored.performanceMode && (stored.behavior.canvas.enabled || stored.behavior.canvas.spotifyFirst)) "Canvas paused by performance mode" else "Canvas off") + ")"
     if (videoMode) return "the music video plays (video mode), no canvas"
     // An animated cover that may not play counts as none ([canvasCoverWanted]), as in the player.
-    val coverWanted = canvasCoverWanted(used, coverHidden, spotify)
+    val coverWanted = canvasCoverWanted(used, coverHidden, spotify, spotifyHidden)
     val shownCover = cover?.takeIf { coverWanted }
     val coverText = shownCover?.let { (if (it.spotify) "Spotify's canvas from " else "animated cover from ") + host(it.url) } ?: when {
         coverWanted -> "still cover (no animated cover known)"

@@ -79,6 +79,9 @@ internal fun canvasCoverSwitchShown(canvasOn: Boolean, covers: Boolean, hasCover
 internal fun canvasLoopSwitchShown(canvasOn: Boolean, useVideos: Boolean, isSong: Boolean, hasVideo: Boolean, switchedOff: Boolean): Boolean =
     canvasOn && useVideos && isSong && (hasVideo || switchedOff)
 
+/** 1.8.7.6: the song's "Spotify canvas" switch: while Spotify's canvas is asked, for a song Spotify has one for, and it stays after it was switched off. */
+internal fun canvasSpotifySwitchShown(asked: Boolean, hasCanvas: Boolean, switchedOff: Boolean): Boolean = asked && (hasCanvas || switchedOff)
+
 /** "Use:" is offered for a song that has both an animated cover and a video loop, neither of them switched off. */
 internal fun canvasUseShown(
     canvasOn: Boolean, covers: Boolean, useVideos: Boolean, hasCover: Boolean, hasVideo: Boolean, coverOff: Boolean, loopOff: Boolean,
