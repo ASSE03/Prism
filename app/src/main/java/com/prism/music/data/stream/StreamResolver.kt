@@ -937,6 +937,9 @@ class StreamResolver(
                 Log.w("StreamResolver", "YouTube is blocking anonymous web playback here; using other clients for a while: $e")
             }
             val why = if (blocked) BLOCKED else e.message ?: tr(R.string.couldn_t_load_this_track)
+            // #531: signed out, neither the visionOS app nor NewPipe (which asks as visionOS too) plays "made for kids"
+            // videos; the older TV app as a Samsung TV does, without an account (yt-dlp's first client signed out).
+            if (!signedIn) signedOutFormats(videoId)?.let { return it }
             when {
                 // Anything YouTube won't play (or NewPipe can't get) anonymously is asked for as the user.
                 signedIn -> try {
@@ -969,6 +972,54 @@ class StreamResolver(
         }
         diag("$videoId: no way but ${busy.joinToString()} had a link; asking the usual way again")
         return null
+    }
+
+    /**
+     * #531 (1.8.7.6): signed out, the last way, when the visionOS app and NewPipe had nothing to play: the older TV app as
+     * a Samsung TV ([SIGNED_OUT_CLIENT]), asked without an account. YouTube answers "made for kids" videos there (the
+     * visionOS app gets "This video is not available" for them), with ciphered links solved as the account's are. Null
+     * when it has nothing either; the song then fails as before, with the same message.
+     */
+    private fun signedOutFormats(videoId: String): Formats? = try {
+        signedInFormats(videoId, listOf(SIGNED_OUT_CLIENT), signedOut = true)
+            .also { diag("$videoId: no link from the visionOS app or NewPipe; signed out, ${SIGNED_OUT_CLIENT.name} has one") }
+    } catch (e: Exception) {
+        // Not one of the account's refusals: nothing is kept of it ([RefusedSongs] is about the account's clients).
+        refusedNow -= videoId
+        diag("$videoId: signed out, ${SIGNED_OUT_CLIENT.name} had no link either (${e.message?.take(120)})")
+        null
+    }
+
+    /** The pauses between asks while a signed-out TV link isn't served yet ([awaitServed]); about half a minute in all. */
+    @Volatile internal var servedPausesMs: List<Long> = SERVED_PAUSES_MS
+
+    /**
+     * #531: a link the TV app gets signed out is refused (403) for its first seconds (4 s mostly, 23 s for one video, on
+     * the PC on 2026-11-16) and then served whole. So before it's handed out, its first bytes are asked for until they
+     * come, or [servedPausesMs] run out (then it's handed out anyway, and a refusal goes the usual way). Only this way
+     * waits; a cancelled lookup stops waiting at once.
+     */
+    private fun awaitServed(videoId: String, url: String) {
+        val started = System.nanoTime()
+        fun code(): Int? = try {
+            val req = okhttp3.Request.Builder().url(url).header("Range", "bytes=0-1023").header("User-Agent", DESKTOP_UA).build()
+            apiHttp.newCall(req).execute().use { it.code }
+        } catch (e: IOException) {
+            null
+        }
+        var answer = code()
+        for (pause in servedPausesMs) {
+            if (answer != 403) break
+            try {
+                Thread.sleep(pause)
+            } catch (e: InterruptedException) {
+                Thread.currentThread().interrupt()
+                return
+            }
+            answer = code()
+        }
+        val ms = (System.nanoTime() - started) / 1_000_000
+        diag("$videoId: signed-out TV link ${if (answer == 403) "still refused" else "served (HTTP $answer)"} after $ms ms")
     }
 
     /** Until when [directFormats] is skipped: YouTube was answering it with bot checks from this network. */
@@ -1070,10 +1121,12 @@ class StreamResolver(
     /**
      * The player response as the signed-in user: [order], the first with links wins. With [wanted], the first with links
      * that it likes wins, else the first with links. What each client answered goes in [answers], with no links in it.
+     * [signedOut] (#531): asked with no account at all ([signedOutFormats]); its links wait until they're served.
      */
     private fun signedInFormats(
         videoId: String, order: List<InnerTube.PlayerClient> = AccountClients.order,
         wanted: ((Formats) -> Boolean)? = null, answers: MutableList<String>? = null, ipv4: Boolean = false,
+        signedOut: Boolean = false,
     ): Formats {
         val player = try {
             solver.currentPlayer()
@@ -1113,7 +1166,13 @@ class StreamResolver(
                 answers?.add("${client.name}: $status")
                 continue
             }
-            val f = parsePlayer(res, player?.first, via = "account (${client.name})", client = client)
+            val f = if (signedOut) {
+                // One answer's links are served from the same moment: only the first one picked waits.
+                val waited = java.util.concurrent.atomic.AtomicBoolean()
+                parsePlayer(res, player?.first, via = "signed out (${client.name})", client = client) { url ->
+                    if (waited.compareAndSet(false, true)) awaitServed(videoId, url)
+                }
+            } else parsePlayer(res, player?.first, via = "account (${client.name})", client = client)
             if (f.live && f.hlsUrl == null) { liveWithoutHls = liveWithoutHls ?: f; continue }
             answers?.add("${client.name}: ${describePlayerAnswer(res)}")
             if (f.live && f.hlsUrl != null) return f
@@ -1222,6 +1281,12 @@ class StreamResolver(
         }
 
         private const val BLOCK_BACKOFF_MS = 30 * 60_000L
+
+        /** #531: the client asked signed out when nothing else had a link (yt-dlp's first client signed out, 2026). */
+        internal val SIGNED_OUT_CLIENT = InnerTube.PlayerClient.TV_SAMSUNG
+
+        /** #531: [awaitServed]'s pauses, 30 s in all (the PC's slowest signed-out TV link was served after 23 s). */
+        internal val SERVED_PAUSES_MS = listOf(1000L, 1000L, 2000L, 2000L, 3000L, 3000L, 4000L, 4000L, 5000L, 5000L)
         val BLOCKED: String get() = com.prism.music.tr(com.prism.music.R.string.youtube_is_limiting_playback)
 
         /**
@@ -1235,8 +1300,14 @@ class StreamResolver(
         internal fun isProtected(format: JsonObject): Boolean = format.arr("drmFamilies")?.isNotEmpty() == true
     }
 
-    /** [playerId] is the player JS whose signature timestamp the request sent; its ciphers are solved with it. */
-    private fun parsePlayer(res: JsonObject, playerId: String?, via: String = "visionOS", client: InnerTube.PlayerClient? = null): Formats {
+    /**
+     * [playerId] is the player JS whose signature timestamp the request sent; its ciphers are solved with it. [served]:
+     * told each link as it's solved, before it's handed out (#531's wait); none by default.
+     */
+    private fun parsePlayer(
+        res: JsonObject, playerId: String?, via: String = "visionOS", client: InnerTube.PlayerClient? = null,
+        served: ((String) -> Unit)? = null,
+    ): Formats {
         val data = res.obj("streamingData")
         fun fmt(o: JsonObject): Fmt? {
             if (isProtected(o)) return null
@@ -1257,7 +1328,7 @@ class StreamResolver(
                 contentLength = len,
                 height = o.str("height")?.toIntOrNull() ?: 0, fps = o.str("fps")?.toIntOrNull() ?: 0,
                 original = o.obj("audioTrack")?.let { t -> t.str("audioIsDefault") != "false" } ?: true,
-            ) { decipher(playerId, direct, cipher) }
+            ) { decipher(playerId, direct, cipher).also { served?.invoke(it) } }
         }
         val adaptive = data.arr("adaptiveFormats")?.mapNotNull { (it as? JsonObject)?.let(::fmt) }.orEmpty()
         val muxed = data.arr("formats")?.mapNotNull { (it as? JsonObject)?.let(::fmt) }.orEmpty()
