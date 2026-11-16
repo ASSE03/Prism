@@ -359,6 +359,8 @@ internal val playerSettings: List<PlayerSetting<*>> by lazy {
         // videos) a switch in its own row's sheet; "Canvas on" (canvas_enabled) is stored as either of them on.
         flag(listOf("canvas_enabled", "canvas_covers"), g.cover, R.string.animated_covers, { CanvasKinds.shown(it).covers }) { p, v -> p.setCanvasKinds(covers = v) },
         flag(listOf("canvas_use_videos"), g.cover, R.string.canvas, { CanvasKinds.shown(it).videos }, canvasSheet) { p, v -> p.setCanvasKinds(videos = v) },
+        // 1.8.7.6: set by hand, its one-time offer after the Spotify sign-in is answered too (shown while signed in).
+        flag(listOf("canvas_spotify_first", "canvas_spotify_offered"), g.cover, R.string.spot_canvas_first, { it.behavior.canvas.spotifyFirst }, canvasSheet) { p, v -> p.setCanvasSpotifyFirst(v) },
         flag(listOf("canvas_videos_cellular"), g.cover, R.string.use_mobile_data, { it.behavior.canvas.videosOnCellular }, canvasSheet) { p, v -> p.setCanvasVideosOnCellular(v) },
         ps(listOf("canvas_video_first"), g.cover, R.string.canvas_both, { it.behavior.canvas.videoFirst }, ::canvasBothWords, canvasSheet) { p, v -> p.setCanvasVideoFirst(v) },
         flag(listOf("canvas_lighter"), g.cover, R.string.canvas_lighter, { it.behavior.canvas.lighter }, canvasSheet) { p, v -> p.setCanvasLighter(v) },

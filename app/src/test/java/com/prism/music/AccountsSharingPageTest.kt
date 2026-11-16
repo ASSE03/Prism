@@ -113,13 +113,90 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
      * session's mark in its own preferences (no token: it would be sealed with the Keystore), and the state as read.
      */
     @Suppress("UNCHECKED_CAST")
-    private fun signInToSpotify(state: Spotify.Connection = Spotify.Connection.Connected("Tester")) {
+    private fun signInToSpotify(state: Spotify.Connection = Spotify.Connection.Connected("Tester"), canvasOfferAnswered: Boolean = true) {
         app.getSharedPreferences(SpotifyStore.AUTH_PREFS, Context.MODE_PRIVATE).edit()
             .putBoolean("session_on", true).putBoolean("session_ended", state == Spotify.Connection.Revoked).commit()
         val flow = Spotify::class.java.getDeclaredField("_connection").apply { isAccessible = true }.get(container.spotify) as MutableStateFlow<Spotify.Connection>
         flow.value = state
         assertTrue("the session's mark is read", container.spotify.bySession)
+        // 1.8.7.6: the one-time offer of Spotify's canvas, answered already unless a test is about it.
+        if (canvasOfferAnswered) {
+            container.settings.answerSpotifyCanvasOffer(false)
+            until("the offer answered") { it.behavior.canvas.spotifyOffered }
+        }
     }
+
+    // ------------------------------------------------------------------ 1.8.7.6: the offer of Spotify's canvas
+
+    private val offerTitle get() = t(R.string.spot_canvas_offer_title)
+    private fun offerShown() = compose.onAllNodes(hasText(offerTitle)).fetchSemanticsNodes().isNotEmpty()
+
+    /** Right after a session sign-in (or the next time this page opens for someone signed in before): once; Turn on sets the switch. */
+    @Test fun aSessionSignInOffersSpotifysCanvasOnceAndTurnOnSetsIt() {
+        signInToSpotify(canvasOfferAnswered = false)
+        show()
+        compose.waitUntil(5_000) { offerShown() }
+        compose.onNodeWithText(t(R.string.spot_canvas_offer_text)).assertExists()
+        assertFalse(stored.behavior.canvas.spotifyFirst)
+        compose.onNodeWithTag("spot_canvas_offer_on").performClick()
+        until("turned on and answered") { it.behavior.canvas.spotifyFirst && it.behavior.canvas.spotifyOffered }
+        compose.waitUntil(5_000) { !offerShown() }
+        // The page opened again: never offered again.
+        assertFalse(com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, stored))
+        assertNoSecretShown()
+    }
+
+    @Test fun notNowAnswersTheOfferForGoodAndLeavesTheSwitchOff() {
+        signInToSpotify(canvasOfferAnswered = false)
+        show()
+        compose.waitUntil(5_000) { offerShown() }
+        compose.onNodeWithTag("spot_canvas_offer_not_now").performClick()
+        until("answered") { it.behavior.canvas.spotifyOffered }
+        assertFalse(stored.behavior.canvas.spotifyFirst)
+        compose.waitUntil(5_000) { !offerShown() }
+        assertFalse(com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, stored))
+    }
+
+    @Test fun theOwnDeveloperAppIsNeverOfferedSpotifysCanvas() {
+        connectSpotify()
+        assertFalse(container.spotify.bySession)
+        show()
+        compose.waitForIdle()
+        assertFalse(offerShown())
+        assertFalse(stored.behavior.canvas.spotifyOffered)
+    }
+
+    @Test fun theOfferIsNotShownOnceTheSwitchWasSetByHand() {
+        container.settings.setCanvasSpotifyFirst(true)
+        until("set by hand") { it.behavior.canvas.spotifyFirst && it.behavior.canvas.spotifyOffered }
+        container.settings.setCanvasSpotifyFirst(false)
+        until("off again") { !it.behavior.canvas.spotifyFirst }
+        signInToSpotify(canvasOfferAnswered = false)
+        show()
+        compose.waitForIdle()
+        assertFalse(offerShown())
+    }
+
+    @Test fun whenTheOfferShows() {
+        val on = AppSettings()
+        val s = com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, on)
+        assertTrue(s)
+        assertFalse("not connected", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(false, true, on))
+        assertFalse("the own developer app", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, false, on))
+        fun with(f: (com.prism.music.data.prefs.CanvasPrefs) -> com.prism.music.data.prefs.CanvasPrefs) = on.copy(behavior = on.behavior.copy(canvas = f(on.behavior.canvas)))
+        assertFalse("answered", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, with { it.copy(spotifyOffered = true) }))
+        assertFalse("already on", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, with { it.copy(spotifyFirst = true) }))
+        assertFalse("Canvas off", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, with { it.copy(enabled = false) }))
+        // Its words: unofficial, no exclamation marks, no em dashes.
+        val text = t(R.string.spot_canvas_offer_text)
+        assertTrue(text, "unofficial" in text.lower())
+        for (id in listOf(R.string.spot_canvas_offer_title, R.string.spot_canvas_offer_text, R.string.spot_canvas_first, R.string.spot_canvas_first_info)) {
+            assertFalse(t(id), t(id).contains('!') || t(id).contains('—'))
+        }
+        assertTrue("unofficial" in t(R.string.spot_canvas_first_info).lower())
+    }
+
+    private fun String.lower() = lowercase()
 
     /** The Spotify row's "Connect Spotify" sheet, then its own-app card: "How to connect". */
     private fun openHowToConnect() {

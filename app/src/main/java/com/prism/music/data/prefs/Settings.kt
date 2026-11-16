@@ -456,6 +456,14 @@ data class CanvasPrefs(
     val withDownloads: Boolean = true,
     /** ...on mobile data as well (off: they're saved once on Wi-Fi). */
     val withDownloadsCellular: Boolean = false,
+    /**
+     * 1.8.7.6, "Spotify's canvas first": signed in to Spotify with the web-player session, a song's canvas is asked of
+     * Spotify before Prism's animated covers ([com.prism.music.data.canvas.SpotifyCanvasSource]). Off by default, not
+     * part of a Look; unofficial.
+     */
+    val spotifyFirst: Boolean = false,
+    /** The one-time offer of [spotifyFirst] (after a session sign-in) was answered, or the switch was set by hand. */
+    val spotifyOffered: Boolean = false,
 )
 
 /** Gestures on the player's cover and on the mini player (1.8.7: moved out of [AppSettings] into a group of their own). */
@@ -2389,6 +2397,9 @@ class SettingsRepository(
         val canvasLyrics = booleanPreferencesKey("canvas_lyrics")
         val canvasLighter = booleanPreferencesKey("canvas_lighter")
         val canvasVideosCellular = booleanPreferencesKey("canvas_videos_cellular")
+        /** 1.8.7.6 ([CanvasPrefs.spotifyFirst], [CanvasPrefs.spotifyOffered]). */
+        val canvasSpotifyFirst = booleanPreferencesKey("canvas_spotify_first")
+        val canvasSpotifyOffered = booleanPreferencesKey("canvas_spotify_offered")
         val lockScreenPlayerLook = booleanPreferencesKey("lock_screen_player_look")
         val albumHeroCover = booleanPreferencesKey("album_hero_cover")
         // 1.8.0 player editor ([PlayerParts]): the hidden parts are part of a Look, the menu's choices aren't.
@@ -2541,6 +2552,8 @@ class SettingsRepository(
                 "smooth_scrolling",
                 // 1.8.7.6: "I've supported Prism" is the listener's word, never a Look's.
                 "supported",
+                // 1.8.7.6: where a canvas comes from (Spotify, with the listener's own sign-in), and its one-time offer.
+                "canvas_spotify_first", "canvas_spotify_offered",
             )
         }
     }
@@ -2862,6 +2875,8 @@ class SettingsRepository(
                     onCellular = p[K.canvasOnCellular] ?: d.behavior.canvas.onCellular,
                     withDownloads = p[K.canvasWithDownloads] ?: d.behavior.canvas.withDownloads,
                     withDownloadsCellular = p[K.canvasWithDownloadsCellular] ?: d.behavior.canvas.withDownloadsCellular,
+                    spotifyFirst = p[K.canvasSpotifyFirst] ?: d.behavior.canvas.spotifyFirst,
+                    spotifyOffered = p[K.canvasSpotifyOffered] ?: d.behavior.canvas.spotifyOffered,
                 ),
                 newInstallLook = p[K.newInstallLook] ?: d.behavior.newInstallLook,
             ),
@@ -3755,6 +3770,16 @@ class SettingsRepository(
     fun setCanvasLyrics(v: Boolean) = edit { it[K.canvasLyrics] = v }
     fun setCanvasLighter(v: Boolean) = edit { it[K.canvasLighter] = v }
     fun setCanvasVideosOnCellular(v: Boolean) = edit { it[K.canvasVideosCellular] = v }
+    /** 1.8.7.6, the switch in Canvas's sheet: set by hand, the one-time offer is never shown again. */
+    fun setCanvasSpotifyFirst(v: Boolean) = edit { it[K.canvasSpotifyFirst] = v; it[K.canvasSpotifyOffered] = true }
+    /**
+     * 1.8.7.6, the one-time offer after a Spotify sign-in: "Turn on" ([turnOn]) sets the switch; either answer means it
+     * is never offered again. (Not a setter: the switch's one home is Canvas's sheet on Player.)
+     */
+    fun answerSpotifyCanvasOffer(turnOn: Boolean) = edit {
+        if (turnOn) it[K.canvasSpotifyFirst] = true
+        it[K.canvasSpotifyOffered] = true
+    }
     fun setShuffleButton(v: ShuffleButton) = edit { it[K.shuffleButton] = v.name }
     fun setCarLyricsLines(v: CarLyricsLines) = edit { it[K.carLyricsLines] = v.name }
     fun setLocatePlaying(v: Boolean) = edit { it[K.locatePlaying] = v }

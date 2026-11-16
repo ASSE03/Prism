@@ -140,9 +140,12 @@ class CanvasStore(
         prune()
     }
 
-    /** Fetches [song]'s clip into the saved store, if it has one and it isn't there yet. */
+    /**
+     * Fetches [song]'s clip into the saved store, if it has one and it isn't there yet. Prism's own animated cover only:
+     * Spotify's canvas is never saved (1.8.7.6, plan D5).
+     */
     private suspend fun download(song: Song) {
-        val art = lookups.withPermit { runCatching { repo.canvasFor(song) }.getOrNull() } ?: return
+        val art = lookups.withPermit { runCatching { repo.prismCoverFor(song) }.getOrNull() } ?: return
         if (!busy.add(art.url)) return
         try {
             gate.withPermit {

@@ -5642,4 +5642,10 @@
     <string name="hl_show_in_lists">Show in lists</string>
     <string name="hl_show_on_artist_pages">Show on artist pages</string>
     <string name="allow_access_to_lossless_files_value">Needed to find your lossless files</string>
+    <!-- 1.8.7.6: Spotify's canvas first (Canvas's sheet on Player, and the one-time offer after a Spotify sign-in) -->
+    <string name="spot_canvas_first">Spotify\'s canvas first</string>
+    <string name="spot_canvas_first_info">Unofficial. Uses your Spotify sign-in to ask Spotify about each song you play. Where Spotify has a canvas for a song, it plays in place of the animated cover. Where it has none, Prism Canvas shows as before. Spotify can stop this from working at any time.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas loop video clip unofficial</string>
+    <string name="spot_canvas_offer_title">Show Spotify\'s canvas?</string>
+    <string name="spot_canvas_offer_text">Prism can play the short looping video Spotify shows with a song, where it has one. This is unofficial and uses your Spotify sign-in. Prism Canvas shows for every other song. You can change this later in Player, under Canvas.</string>
 </resources>

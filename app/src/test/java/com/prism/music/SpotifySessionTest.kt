@@ -196,14 +196,15 @@ class SpotifySessionTest {
         assertTrue(sent, sent.contains(SpotifyCodeBook.BUILT_IN.getValue("fetchLibraryTracks").first()))
     }
 
-    @Test fun nothingButTheFourReadsCanBeAsked() = runBlocking {
+    @Test fun nothingButTheReadsCanBeAsked() = runBlocking {
         tokens.begin()
         net.routes[SpotifyWeb.URL] = { 200 to liked }
-        for (op in listOf("addToLibrary", "removeFromLibrary", "addToPlaylist", "removeFromPlaylist", "moveItemsInPlaylist", "editPlaylistAttributes", "searchDesktop", "")) {
+        for (op in listOf("addToLibrary", "removeFromLibrary", "addToPlaylist", "removeFromPlaylist", "moveItemsInPlaylist", "editPlaylistAttributes", "searchTracks", "")) {
             try { web.read(op); fail(op) } catch (e: SpotifyError.Forbidden) { }
         }
         assertEquals("nothing was sent", 0, net.requests.size)
-        assertEquals(setOf("profileAttributes", "libraryV3", "fetchLibraryTracks", "fetchPlaylist"), SpotifyWeb.READS)
+        // 1.8.7.6: the catalogue's search and a track's canvas ("Spotify's canvas first"), both reads, join the four.
+        assertEquals(setOf("profileAttributes", "libraryV3", "fetchLibraryTracks", "fetchPlaylist", "searchDesktop", "canvas"), SpotifyWeb.READS)
         assertEquals(SpotifyWeb.READS, SpotifyCodeBook.BUILT_IN.keys)
     }
 

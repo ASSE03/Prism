@@ -141,6 +141,17 @@ fun AccountsSharingPage(bottomPadding: Dp, find: String? = null, showBack: Boole
     val resumed = rememberResumeCount()
     val opensLinks = remember(resumed) { LinkHandling.opensYouTubeMusicLinks(context) }
 
+    // 1.8.7.6 (plan-spotify-canvas §2a): right after a session sign-in (it lands back here), or for someone signed in
+    // before this version the next time this page opens, one offer of Spotify's canvas; never at start-up, never for the
+    // own developer app, and never again once answered (a swipe away counts as Not now) or set by hand.
+    var offerAnswered by remember { mutableStateOf(false) }
+    if (!offerAnswered && spotifyCanvasOfferShown(spotifyConnection is Spotify.Connection.Connected, c.spotify.bySession, s)) {
+        SpotifyCanvasOfferSheet { turnOn ->
+            offerAnswered = true
+            c.settings.answerSpotifyCanvasOffer(turnOn)
+        }
+    }
+
     SettingsPageScaffold(page.title, bottomPadding, showBack = showBack, onSearch = onSearch, find = find, reset = reset.pageReset()) {
         group(tr(R.string.accounts)) {
             // Each has its own screen; the root's account card is where signing out and switching are.
@@ -234,6 +245,34 @@ fun AccountsSharingPage(bottomPadding: Dp, find: String? = null, showBack: Boole
                 },
                 info = tr(R.string.android_only_lets_an_app_open), external = true,
             ) { LinkHandling.openSettings(context) }
+        }
+    }
+}
+
+/**
+ * 1.8.7.6: whether the one-time offer of "Spotify's canvas first" shows: connected by the session sign-in (not the own
+ * developer app, which can't ask for a canvas), Canvas on, the offer not answered and the switch not on.
+ */
+internal fun spotifyCanvasOfferShown(connected: Boolean, session: Boolean, s: AppSettings): Boolean =
+    connected && session && s.behavior.canvas.enabled && !s.behavior.canvas.spotifyOffered && !s.behavior.canvas.spotifyFirst
+
+/** The offer itself, in the kit's sheet: what it is in a line or two (unofficial), "Turn on" and "Not now". */
+@Composable
+internal fun SpotifyCanvasOfferSheet(onAnswer: (turnOn: Boolean) -> Unit) {
+    RowsSheet(tr(R.string.spot_canvas_offer_title), onDismiss = { onAnswer(false) }) { SpotifyCanvasOfferContent(onAnswer) }
+}
+
+/** What [SpotifyCanvasOfferSheet] holds under its title (apart, so it's tested without a sheet's window). */
+@Composable
+internal fun SpotifyCanvasOfferContent(onAnswer: (turnOn: Boolean) -> Unit) {
+    Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp).testTag("spot_canvas_offer")) {
+        Text(
+            tr(R.string.spot_canvas_offer_text), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(bottom = 16.dp),
+        )
+        PrismButton(onClick = { onAnswer(true) }, modifier = Modifier.fillMaxWidth().testTag("spot_canvas_offer_on")) { Text(tr(R.string.turn_on)) }
+        PrismTextButton(onClick = { onAnswer(false) }, modifier = Modifier.fillMaxWidth().padding(top = 4.dp).testTag("spot_canvas_offer_not_now")) {
+            Text(tr(R.string.not_now))
         }
     }
 }

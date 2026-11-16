@@ -7,6 +7,26 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
+/**
+ * 1.8.7.6: whether Prism is signed in to Spotify with the web-player session now ([SpotifyStore.sessionIn]), for what
+ * shows only then ("Spotify's canvas first" in Canvas's sheet, its search line). Kept by the app container from the
+ * connection's own file ([watch]), so nothing is built or unsealed for it. Holds a yes or no, nothing about the account.
+ */
+object SpotifySessionNow {
+    private val _on = kotlinx.coroutines.flow.MutableStateFlow(false)
+    val on: kotlinx.coroutines.flow.StateFlow<Boolean> = _on
+    /** Held here: SharedPreferences keeps its listeners weakly. */
+    private var listener: SharedPreferences.OnSharedPreferenceChangeListener? = null
+
+    @Synchronized
+    fun watch(auth: SharedPreferences) {
+        val l = SharedPreferences.OnSharedPreferenceChangeListener { p, _ -> _on.value = SpotifyStore.sessionIn(p) }
+        listener = l
+        auth.registerOnSharedPreferenceChangeListener(l)
+        _on.value = SpotifyStore.sessionIn(auth)
+    }
+}
+
 /** Seals text before it's written to the phone and opens it again ([KeystoreBox]; the tests use a plain one). */
 interface TokenBox {
     fun seal(plain: String): String
@@ -145,5 +165,11 @@ class SpotifyStore(private val auth: SharedPreferences, val prefs: SharedPrefere
         /** Connected, read from [auth] ([AUTH_PREFS]) alone: nothing is unsealed, no keystore is touched. */
         fun connectedIn(auth: SharedPreferences): Boolean =
             (auth.contains(ACCESS) && !auth.getBoolean(REVOKED, false)) || (auth.getBoolean(S_ON, false) && !auth.getBoolean(S_ENDED, false))
+
+        /**
+         * Signed in with the web-player session, and Spotify hasn't ended it, read from [auth] alone (1.8.7.6: what
+         * "Spotify's canvas first" needs; the listener's own developer app can't ask for a canvas).
+         */
+        fun sessionIn(auth: SharedPreferences): Boolean = auth.getBoolean(S_ON, false) && !auth.getBoolean(S_ENDED, false)
     }
 }

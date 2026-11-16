@@ -69,7 +69,7 @@ class PlayerPageTest {
     /** The settings' store is one for the whole test run: each test starts from Prism as it comes, and leaves it so. */
     private fun asPrismComes() = kotlinx.coroutines.runBlocking { container.settings.editNow { it.clear() } }
 
-    @org.junit.Before fun fresh() = asPrismComes()
+    @org.junit.Before fun fresh() { asPrismComes(); spotifySession(false) }
     @org.junit.After fun close() { asPrismComes(); made.closeAfterTest() }
 
     private fun showPage(theme: AppSettings = AppSettings(), fontScale: Float = 1f) {
@@ -223,7 +223,18 @@ class PlayerPageTest {
         "canvas_use_videos", "canvas_videos_cellular", "canvas_video_first", "canvas_keep_controls", "canvas_lyrics", "canvas_lighter",
         // Owner, 2026-11-13: animated covers on their own.
         "canvas_covers",
+        // 1.8.7.6: Spotify's canvas first, in Canvas's sheet (set by hand, its one-time offer counts as answered).
+        "canvas_spotify_first", "canvas_spotify_offered",
     )
+
+    /** Signed in to Spotify with the session sign-in (its mark in the connection's own file), or not. */
+    private fun spotifySession(on: Boolean) {
+        RuntimeEnvironment.getApplication().getSharedPreferences(com.prism.music.data.spotify.SpotifyStore.AUTH_PREFS, android.content.Context.MODE_PRIVATE)
+            .edit().clear().putBoolean("session_on", on).commit()
+        com.prism.music.data.spotify.SpotifySessionNow.watch(
+            RuntimeEnvironment.getApplication().getSharedPreferences(com.prism.music.data.spotify.SpotifyStore.AUTH_PREFS, android.content.Context.MODE_PRIVATE),
+        )
+    }
 
     @Test fun everyLedgerKeyHasItsSetting() {
         val held = playerSettings.flatMap { it.keys }
@@ -255,8 +266,10 @@ class PlayerPageTest {
         // an edge-to-edge cover, the volume bar, Vinyl.
         prefs.setMix(true); prefs.setLockScreen(true); prefs.setImmersivePlayer(true); prefs.setVisualizer(VisualizerStyle.BARS)
         prefs.setFullBleedArtwork(true); prefs.setPartShown(PlayerPart.VOLUME, true); prefs.setPlayerLayout(PlayerLayout.VINYL)
-        // Canvas (its loops) on and Full screen, with Animated covers: every row of its sheet.
+        // Canvas (its loops) on and Full screen, with Animated covers: every row of its sheet. Signed in to Spotify with
+        // the session sign-in: "Spotify's canvas first" too.
         prefs.setCanvasFillsBackground(true); prefs.setCanvasKinds(covers = true, videos = true)
+        spotifySession(true)
         until("the conditions are stored") {
             it.mix.on && it.behavior.lockScreen && it.immersivePlayer && it.fullBleedArtwork && it.shows(PlayerPart.VOLUME) && it.player.layout == PlayerLayout.VINYL &&
                 it.behavior.canvas.fillsBackground && it.behavior.canvas.useVideos
@@ -482,6 +495,56 @@ class PlayerPageTest {
         tap("Animated covers")
         until("covers on alone") { it.behavior.canvas.enabled && it.behavior.canvas.covers && !it.behavior.canvas.useVideos }
         assertEquals("Off", rows().getValue("Canvas").config[SettingsRowValue])
+    }
+
+    /**
+     * 1.8.7.6, "Spotify's canvas first" (owner, 2026-11-16): a switch in Canvas's sheet, off by default, shown only while
+     * signed in to Spotify with the session sign-in and Canvas is on; turned on, the mobile-data switch its loops follow
+     * shows with it, and its one-time offer counts as answered.
+     */
+    @Test fun spotifysCanvasFirstShowsOnlyWithTheSessionSignIn() {
+        val title = tr(R.string.spot_canvas_first)
+        spotifySession(false)
+        showPage()
+        tap("Canvas")
+        sheetOpen()
+        assertFalse("hidden without the session sign-in", title in sheetRows())
+        closeSheet()
+
+        spotifySession(true)
+        compose.waitForIdle()
+        tap("Canvas")
+        sheetOpen()
+        // Only Animated covers on (Prism as it comes): Canvas's switch, then Spotify's (off); no mobile-data row yet.
+        assertEquals(listOf("Canvas", title), sheetRows().keys.toList())
+        assertEquals(SettingsTags.ROW_SWITCH, sheetRows().getValue(title).config[SemanticsProperties.TestTag])
+        assertFalse(stored.behavior.canvas.spotifyFirst)
+        tapInSheet(title)
+        until("spotify first on, the offer answered") { it.behavior.canvas.spotifyFirst && it.behavior.canvas.spotifyOffered }
+        assertEquals(listOf("Canvas", title, "Use mobile data"), sheetRows().keys.toList())
+        assertTrue(sheetRows().getValue(title).config[SettingsRowChanged])
+        closeSheet()
+        assertTrue("the Canvas row says something changed in its sheet", rows().getValue("Canvas").config[SettingsRowChanged])
+        assertFalse("not part of a Look", "canvas_spotify_first" in prefs.lookKinds.keys)
+
+        // Canvas off altogether: the row goes (nothing would show).
+        prefs.setCanvasEnabled(false)
+        until("canvas off") { !it.behavior.canvas.enabled }
+        tap("Canvas")
+        sheetOpen()
+        assertEquals(listOf("Canvas"), sheetRows().keys.toList())
+        closeSheet()
+        spotifySession(false)
+    }
+
+    @Test fun spotifysCanvasFirstIsFoundBySearch() {
+        spotifySession(false)
+        val line = com.prism.music.ui.screens.SettingsIndex.search("spotify canvas").first { it.title == tr(R.string.spot_canvas_first) }
+        assertEquals(SettingsPageId.PLAYER, line.page)
+        assertFalse("says to sign in first", line.needs!!.on(AppSettings()))
+        spotifySession(true)
+        assertTrue(line.needs!!.on(AppSettings()))
+        spotifySession(false)
     }
 
     private val CanvasPrefsAll = com.prism.music.data.prefs.CanvasPrefs(useVideos = true, videoFirst = true, keepControls = true, lyrics = true, lighter = true, videosOnCellular = true, fillsBackground = true)

@@ -245,6 +245,8 @@ class Spotify(private val c: AppContainer) {
         running.getValue(SpotifyFeature.TOP).withLock { top.forget() }
         running.getValue(SpotifyFeature.LIKES).withLock { likes.forget() }
         dir.deleteRecursively()
+        // 1.8.7.6: the canvases Spotify's canvas remembered go with the connection.
+        c.canvas.spotify?.forget()
         guards.values.forEach { it.reset() }
         _options.value = optionsNow()
         _hidden.value = hiddenNow()

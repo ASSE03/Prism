@@ -550,10 +550,15 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     // The song's two switches in the ⋯ menu: its animated cover off, its loop from the video off. One leaves the other.
     val coverHidden = song.id in c.canvas.hidden.collectAsState().value
     val loopHidden = song.id in c.canvas.hiddenLoops.collectAsState().value
-    val coverWanted = com.prism.music.data.canvas.canvasCoverWanted(settings, coverHidden)
+    // 1.8.7.6, "Spotify's canvas first": Spotify's loop takes the animated cover's place. It is fetched only where Canvas's
+    // loops may be ("Use mobile data" in Canvas's sheet, Data saver), and the song's "Animated cover" switch hides it too.
+    val spotifyCanvas = c.canvas.spotifyAsked()
+    val spotifyNet = com.prism.music.data.canvas.canvasNetworkAllowed(settings, metered)
+    val coverWanted = com.prism.music.data.canvas.canvasCoverWanted(settings, coverHidden, spotify = spotifyCanvas)
     val songCanvas by produceState<CanvasArtwork?>(
-        if (coverWanted) c.canvas.cached(song) else null, song.id, song.album?.title, settings.behavior.canvas.enabled,
+        if (coverWanted) c.canvas.cached(song, spotifyOk = spotifyNet) else null, song.id, song.album?.title, settings.behavior.canvas.enabled,
         canvasPrefs.covers, canvasPrefs.useVideos, canvasPrefs.videoFirst, canvasPrefs.lighter, settings.behavior.canvas.fillsBackground,
+        spotifyCanvas,
         // The song's own choices from the ⋯ menu (another part, "Use:", "Not this video"): looked at again.
         c.canvasClips.changes.collectAsState().value,
         coverHidden, loopHidden,
@@ -580,11 +585,12 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             loopFirst,
             cover = { early ->
                 // The animated cover only when it may play ([canvasCoverWanted]: "Animated covers" on, not off for this song).
-                if (coverWanted && coverAllowed) {
-                    val known = c.canvas.cached(song)
+                // Spotify's canvas (1.8.7.6) by the loops' mobile-data rule, Prism's animated cover by its own.
+                if (coverWanted && (coverAllowed || (spotifyCanvas && spotifyNet))) {
+                    val known = c.canvas.cached(song, spotifyOk = spotifyNet, prismOk = coverAllowed)
                     early(known)
                     if (known == null) delay(500)
-                    c.canvas.canvasFor(song)
+                    c.canvas.canvasFor(song, spotifyOk = spotifyNet, prismOk = coverAllowed)
                 } else null
             },
             // 1.8.6: a loop from the song's music video, where the song has no animated cover or the listener put the

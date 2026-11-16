@@ -397,6 +397,28 @@ class AppContainer(val app: Application) {
         hiddenPrefs = app.getSharedPreferences("canvas_hidden", android.content.Context.MODE_PRIVATE)
         savedPrefs = app.getSharedPreferences("canvas_saved", android.content.Context.MODE_PRIVATE)
         useIndex(File(app.filesDir, "canvas_index.json"))
+        // 1.8.7.6, "Spotify's canvas first": asked only with the switch on, Canvas on (Performance mode pauses it) and
+        // the Spotify connection the web-player session (read from its file alone: nothing is built or unsealed for it).
+        prismCovers = { settings.current.behavior.canvas.covers }
+        spotify = com.prism.music.data.canvas.SpotifyCanvasSource(
+            CoroutineScope(scope.coroutineContext + Dispatchers.IO),
+            enabled = {
+                val s = settings.current.behavior.canvas
+                s.enabled && s.spotifyFirst && com.prism.music.data.spotify.SpotifyStore.sessionIn(spotifyAuthPrefs)
+            },
+            finder = { spotifyCanvasFinder },
+            quietUntil = { this@AppContainer.spotify.web.quietUntil },
+            file = File(app.filesDir, "spotify_canvas.json"),
+            log = { com.prism.music.playback.AudioDiagnostics.log("spotify", it) },
+        )
+    }
+    /** The Spotify connection's own file ([com.prism.music.data.spotify.SpotifyStore.AUTH_PREFS]), read without building it. */
+    private val spotifyAuthPrefs by lazy { app.getSharedPreferences(com.prism.music.data.spotify.SpotifyStore.AUTH_PREFS, android.content.Context.MODE_PRIVATE) }
+    /** Spotify's canvas through the session's reads; built on the first ask. */
+    private val spotifyCanvasFinder by lazy { com.prism.music.data.spotify.SpotifyCanvas { op, vars -> spotify.web.read(op, vars) } }
+    init {
+        // Whether the session sign-in is on, for the rows and search lines that show only then (read off the main thread).
+        scope.launch(Dispatchers.IO) { com.prism.music.data.spotify.SpotifySessionNow.watch(spotifyAuthPrefs) }
     }
     val videoSync by lazy { com.prism.music.playback.VideoSync(app, streamHttp, streams, scope) }
     /** Songs' tempo and edges, for Mix, and their loudness, for normalization. */
@@ -1225,8 +1247,10 @@ class AppContainer(val app: Application) {
             override fun savedById(songId: String) = canvas.saved.value.has(songId, null)
             override suspend fun choice(songId: String) = canvasClips.choice(songId)
             // Only an animated cover that may play counts ([canvasCoverWanted]): one that may not leaves room for the loop.
+            // 1.8.7.6: Spotify's canvas is not counted (nor asked) here: it is never kept with a download (plan D5), so a
+            // downloaded song keeps its loop from the video for when Spotify can't be asked.
             override suspend fun hasCover(song: com.prism.music.data.model.Song) =
-                com.prism.music.data.canvas.canvasCoverWanted(settings.current, song.id in canvas.hidden.value) && canvas.canvasFor(song) != null
+                com.prism.music.data.canvas.canvasCoverWanted(settings.current, song.id in canvas.hidden.value) && canvas.canvasFor(song, spotifyOk = false) != null
             override suspend fun prepare(song: com.prism.music.data.model.Song, height: Int, saved: Boolean, allowed: () -> Boolean) =
                 canvasClips.prepare(song, height, saved, allowed)
             override suspend fun videoOf(songId: String) = canvasClips.row(songId)?.videoId

@@ -291,7 +291,7 @@ internal fun PlayerCoverRows() {
     ) { prefs.setCanvasKinds(covers = it, videos = kinds.videos) }
     SheetRow(
         tr(R.string.canvas), canvasWords(s),
-        changed = listOf("canvas_use_videos", "canvas_videos_cellular", "canvas_video_first", "canvas_lighter", "canvas_fills_background", "canvas_keep_controls", "canvas_lyrics").any { ch(it) },
+        changed = listOf("canvas_use_videos", "canvas_videos_cellular", "canvas_video_first", "canvas_lighter", "canvas_fills_background", "canvas_keep_controls", "canvas_lyrics", "canvas_spotify_first").any { ch(it) },
     ) { CanvasOptions() }
 }
 
@@ -321,9 +321,16 @@ private fun CanvasOptions() {
     SwitchRow(
         tr(R.string.canvas), kinds.videos, info = tr(R.string.canvas_use_videos_info), changed = ch("canvas_use_videos"),
     ) { prefs.setCanvasKinds(covers = kinds.covers, videos = it) }
+    // 1.8.7.6 (owner, 2026-11-16): Spotify's own canvas first, for those signed in to Spotify with the session sign-in
+    // (hidden otherwise), while Canvas is on. Its loops follow the mobile-data switch below, which then shows too.
+    val spotifySession by com.prism.music.data.spotify.SpotifySessionNow.on.collectAsState()
+    val spotifyShown = spotifySession && s.behavior.canvas.enabled
+    if (spotifyShown) SwitchRow(
+        tr(R.string.spot_canvas_first), c.spotifyFirst, info = tr(R.string.spot_canvas_first_info), changed = ch("canvas_spotify_first"),
+    ) { prefs.setCanvasSpotifyFirst(it) }
     // Its mobile-data switch sits with it (owner, 2026-11-13: everything Canvas under Canvas), not among the chips of
     // Downloads & data's "Use mobile data for".
-    if (kinds.videos) SwitchRow(
+    if (kinds.videos || (spotifyShown && c.spotifyFirst)) SwitchRow(
         tr(R.string.use_mobile_data), c.videosOnCellular, info = tr(R.string.canvas_from_videos_info), changed = ch("canvas_videos_cellular"),
     ) { prefs.setCanvasVideosOnCellular(it) }
     if (kinds.covers && kinds.videos) ChoiceRow(
@@ -692,6 +699,11 @@ val playerIndex: List<SettingEntry> by lazy {
             SettingEntry(
                 page, g.cover, tr(R.string.canvas),
                 tr(R.string.canvas_keywords) + " " + tr(R.string.canvas_use_videos) + " " + tr(R.string.canvas_use_videos_keywords) + " " + tr(R.string.music_videos_label),
+            ),
+            // 1.8.7.6: only while signed in to Spotify with the session sign-in.
+            SettingEntry(
+                page, g.cover, tr(R.string.spot_canvas_first), tr(R.string.spot_canvas_first_keywords),
+                needs = Needs(tr(R.string.spot_signin_title)) { com.prism.music.data.spotify.SpotifySessionNow.on.value },
             ),
             SettingEntry(page, g.cover, tr(R.string.use_mobile_data), tr(R.string.canvas_from_videos) + " " + tr(R.string.cellular_mobile_data) + " " + tr(R.string.canvas), needs = canvasVideos),
             SettingEntry(page, g.cover, tr(R.string.canvas_both), tr(R.string.canvas_both_keywords), needs = canvasBoth),

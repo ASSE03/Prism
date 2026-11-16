@@ -1,0 +1,397 @@
+package com.prism.music.data.canvas
+
+import android.content.Context
+import com.prism.music.SpotifyFixtures
+import com.prism.music.data.model.ArtistRef
+import com.prism.music.data.model.Song
+import com.prism.music.data.prefs.AppSettings
+import com.prism.music.data.prefs.CanvasPrefs
+import com.prism.music.data.spotify.SessionFetch
+import com.prism.music.data.spotify.SessionFetcher
+import com.prism.music.data.spotify.SessionToken
+import com.prism.music.data.spotify.SessionTokens
+import com.prism.music.data.spotify.SpotifyCanvas
+import com.prism.music.data.spotify.SpotifyCanvasParse
+import com.prism.music.data.spotify.SpotifyCodeBook
+import com.prism.music.data.spotify.SpotifyStore
+import com.prism.music.data.spotify.SpotifyWeb
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.runBlocking
+import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Protocol
+import okhttp3.Response
+import okhttp3.ResponseBody.Companion.toResponseBody
+import okio.Buffer
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.rules.TemporaryFolder
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
+import java.io.File
+
+/**
+ * 1.8.7.6, "Spotify's canvas first" (plan-spotify-canvas.md): a song's canvas asked of Spotify with the session's reads,
+ * against a made-up Spotify (trimmed answers in the shapes the A16 trial saw on 2026-11-16, nothing real). Only a sure
+ * match gives a loop; a still picture, a link off Spotify's file hosts, a slow or refusing Spotify, no session, the own
+ * developer app, and the switch off all leave Prism Canvas as it is. Nothing here reaches the network.
+ */
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34], application = android.app.Application::class)
+class SpotifyCanvasTest {
+    @get:Rule val tmp = TemporaryFolder()
+
+    private val app = RuntimeEnvironment.getApplication()
+    private val auth = app.getSharedPreferences(SpotifyStore.AUTH_PREFS, Context.MODE_PRIVATE)
+    private val prefs = app.getSharedPreferences(SpotifyStore.PREFS, Context.MODE_PRIVATE)
+    private val store = SpotifyStore(auth, prefs, SpotifyFixtures.ReverseBox)
+    private var clock = 1_800_000_000_000L
+    private val token = "tok-secret-0123456789"
+
+    /** A made-up Spotify: answers by the GraphQL operation asked, notes every request (its host and operation). */
+    private inner class FakeSpotify {
+        val requests = mutableListOf<Pair<String, String>>()
+        val headers = mutableMapOf<String, String>()
+        @Volatile var sleepMs = 0L
+        var answer: (op: String) -> Pair<Int, String> = { 404 to "{}" }
+        val client: OkHttpClient = OkHttpClient.Builder().addInterceptor(Interceptor { chain ->
+            val r = chain.request()
+            val body = r.body?.let { b -> Buffer().also { b.writeTo(it) }.readUtf8() }.orEmpty()
+            val op = Regex("\"operationName\":\"(\\w+)\"").find(body)?.groupValues?.get(1).orEmpty()
+            synchronized(requests) { requests += r.url.host to op }
+            if (sleepMs > 0) Thread.sleep(sleepMs)
+            val (code, text) = if (r.url.toString() == SpotifyWeb.URL) answer(op) else 404 to "{}"
+            Response.Builder().request(r).protocol(Protocol.HTTP_1_1).code(code).message("test")
+                .apply { headers.forEach { (k, v) -> header(k, v) } }
+                .body(text.toResponseBody("application/json".toMediaType())).build()
+        }).build()
+
+        fun count(op: String? = null) = synchronized(requests) { requests.count { it.first == "api-partner.spotify.com" && (op == null || it.second == op) } }
+        val all get() = synchronized(requests) { requests.toList() }
+    }
+
+    private val net = FakeSpotify()
+    private val tokens = SessionTokens(store, SessionFetcher { SessionFetch.Got(SessionToken(token, clock + 3_600_000)) }, now = { clock })
+    private val web = SpotifyWeb(net.client, tokens, SpotifyCodeBook(prefs, net.client, now = { clock }), userAgent = { "UA" }, now = { clock }, pause = {})
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val logged = mutableListOf<String>()
+
+    /** "Spotify's canvas first", as the app reads it: the switch, Canvas on, and the session sign-in ([SpotifyStore.sessionIn]). */
+    private var settings = AppSettings().let { it.copy(behavior = it.behavior.copy(canvas = CanvasPrefs(spotifyFirst = true))) }
+    private val enabled = { settings.behavior.canvas.enabled && settings.behavior.canvas.spotifyFirst && SpotifyStore.sessionIn(auth) }
+
+    private fun source(file: File? = null, waitMs: Long = 4_000) = SpotifyCanvasSource(
+        scope, enabled, { SpotifyCanvas { op, vars -> web.read(op, vars) } }, { web.quietUntil }, file, now = { clock }, waitMs = waitMs,
+        log = { synchronized(logged) { logged += it } },
+    )
+
+    private val espresso = Song("yt-espresso", "Espresso", listOf(ArtistRef("Sabrina Carpenter")), durationSec = 175)
+    private val loopUrl = "https://canvaz.scdn.co/upload/artist/abc/video/def.cnvs.mp4"
+
+    private fun search(vararg hits: Triple<String, String, Long>) = """{"data":{"searchV2":{"tracksV2":{"items":[${hits.mapIndexed { i, (name, artist, ms) ->
+        """{"item":{"data":{"__typename":"Track","uri":"spotify:track:t$i","name":"$name","artists":{"items":[{"profile":{"name":"$artist"}}]},"duration":{"totalMilliseconds":$ms}}}}"""
+    }.joinToString(",")}]}}}}"""
+
+    private fun canvas(url: String?, type: String = "VIDEO_LOOPING_RANDOM") =
+        if (url == null) """{"data":{"trackUnion":{"__typename":"Track","canvas":null}}}"""
+        else """{"data":{"trackUnion":{"__typename":"Track","canvas":{"url":"$url","type":"$type","fileId":"x"}}}}"""
+
+    private val sureSearch = search(Triple("Espresso", "Sabrina Carpenter", 175_459), Triple("Espresso (Live)", "Sabrina Carpenter", 190_000))
+
+    private fun answers(search: String = sureSearch, canvas: String = canvas(loopUrl)) {
+        net.answer = { op -> when (op) { "searchDesktop" -> 200 to search; "canvas" -> 200 to canvas; else -> 404 to "{}" } }
+    }
+
+    @Before fun signedIn() = runBlocking {
+        auth.edit().clear().commit()
+        prefs.edit().clear().commit()
+        assertTrue(tokens.begin())
+        assertTrue(SpotifyStore.sessionIn(auth))
+    }
+
+    @After fun stop() = scope.cancel()
+
+    // ---- what Spotify's answers mean ----
+
+    @Test fun aSureMatchGivesTheLoop() = runBlocking {
+        answers()
+        val art = source().lookup(espresso)!!
+        assertEquals(loopUrl, art.url)
+        assertTrue("marked as Spotify's", art.spotify)
+        assertEquals(listOf("searchDesktop", "canvas"), net.all.map { it.second })
+        assertTrue("only Spotify's own host is asked", net.all.all { it.first == "api-partner.spotify.com" })
+    }
+
+    @Test fun theCanvasIsAskedForTheSureTrack() = runBlocking {
+        // The first hit is another version; the matcher's sure one is the second.
+        answers(search(Triple("Espresso (Acoustic)", "Sabrina Carpenter", 160_000), Triple("Espresso", "Sabrina Carpenter", 175_100)))
+        val bodies = mutableListOf<String>()
+        val probe = SpotifyCanvas { op, vars -> bodies += "$op $vars"; web.read(op, vars) }
+        assertTrue(probe.find(espresso) is com.prism.music.data.spotify.SpotifyCanvasAnswer.Loop)
+        assertTrue(bodies.last(), bodies.last().contains("spotify:track:t1"))
+    }
+
+    @Test fun anUnsureMatchGivesPrismCanvas() = runBlocking {
+        // Same title and artist, 25 s longer: another recording, not sure.
+        answers(search(Triple("Espresso", "Sabrina Carpenter", 200_000)))
+        assertNull(source().lookup(espresso))
+        assertEquals("no canvas is asked for an unsure match", 0, net.count("canvas"))
+        // Another artist altogether.
+        answers(search(Triple("Espresso", "Someone Else", 175_000)))
+        assertNull(source().lookup(espresso.copy(id = "other")))
+        // Nothing found at all.
+        answers(search())
+        assertNull(source().lookup(espresso.copy(id = "none")))
+        assertEquals(0, net.count("canvas"))
+    }
+
+    @Test fun aStillPictureIsNone() = runBlocking {
+        answers(canvas = canvas("https://canvaz.scdn.co/upload/artist/abc/image/def.jpg", type = "IMAGE"))
+        assertNull(source().lookup(espresso))
+        answers(canvas = canvas(null))
+        assertNull(source().lookup(espresso.copy(id = "b")))
+        answers(canvas = canvas(loopUrl, type = "GIF"))
+        assertNull(source().lookup(espresso.copy(id = "c")))
+    }
+
+    @Test fun aLinkOffSpotifysFileHostsIsNone() = runBlocking {
+        for ((i, url) in listOf(
+            "https://evil.example.com/x.mp4", "http://canvaz.scdn.co/x.mp4", "https://canvaz.scdn.co.evil.example/x.mp4",
+            "https://scdn.co.example.com/x.mp4", "https://user:pw@canvaz.scdn.co/x.mp4", "https://canvaz.scdn.co:8443/x.mp4", "ftp://canvaz.scdn.co/x.mp4", "not a link",
+        ).withIndex()) {
+            answers(canvas = canvas(url))
+            assertNull(url, source().lookup(espresso.copy(id = "s$i")))
+        }
+        assertTrue(SpotifyCanvasParse.isSpotifyFile(loopUrl))
+        assertTrue(SpotifyCanvasParse.isSpotifyFile("https://video-fa.spotifycdn.com/x.mp4"))
+    }
+
+    // ---- when Spotify is slow, refuses or fails ----
+
+    @Test fun aSlowSpotifyGivesPrismCanvasAndIsNotRememberedAsNone() = runBlocking {
+        answers()
+        net.sleepMs = 1_500
+        val s = source(waitMs = 200)
+        val started = System.nanoTime()
+        assertNull(s.lookup(espresso))
+        assertTrue("the wait is capped", (System.nanoTime() - started) / 1_000_000 < 1_200)
+        assertEquals("a slow answer is not a none", 0, s.rememberedCount)
+    }
+
+    @Test fun aTooManyRequestsAnswerQuietsEveryCanvasAsk() = runBlocking {
+        net.headers["Retry-After"] = "120"
+        net.answer = { 429 to "" }
+        val s = source()
+        assertNull(s.lookup(espresso))
+        assertEquals(1, net.count())
+        assertEquals("a refusal is not remembered", 0, s.rememberedCount)
+        // Quiet: another song is not asked about at all.
+        net.headers.clear()
+        answers()
+        assertNull(s.lookup(espresso.copy(id = "two")))
+        clock += 119_000
+        assertNull(s.lookup(espresso.copy(id = "three")))
+        assertEquals("nothing left during the quiet", 1, net.count())
+        // Once it has passed, the asks start again.
+        clock += 2_000
+        assertEquals(loopUrl, s.lookup(espresso)?.url)
+        assertEquals(3, net.count())
+    }
+
+    @Test fun anErrorIsNotRememberedAndPausesTheAsksForAMinute() = runBlocking {
+        net.answer = { 500 to """{"errors":[{"message":"boom"}]}""" }
+        val s = source()
+        assertNull(s.lookup(espresso))
+        assertEquals(0, s.rememberedCount)
+        answers()
+        assertNull("paused after an error", s.lookup(espresso))
+        assertEquals(1, net.count())
+        clock += SpotifyCanvasSource.ERROR_PAUSE_MS + 1
+        assertEquals(loopUrl, s.lookup(espresso)?.url)
+    }
+
+    // ---- when nothing is asked at all ----
+
+    @Test fun notSignedInAsksNothing() = runBlocking {
+        answers()
+        auth.edit().clear().commit()
+        assertNull(source().lookup(espresso))
+        // Signed out by Spotify (the session ended): nothing either.
+        auth.edit().putBoolean("session_on", true).putBoolean("session_ended", true).commit()
+        assertNull(source().lookup(espresso))
+        assertEquals(0, net.all.size)
+    }
+
+    @Test fun theOwnDeveloperAppConnectionAsksNothing() = runBlocking {
+        answers()
+        auth.edit().clear().commit()
+        store.saveTokens(com.prism.music.data.spotify.SpotifyTokens("own", "ref", clock + 3_600_000, ""))
+        assertTrue("connected, by the own app", store.connected)
+        assertFalse(SpotifyStore.sessionIn(auth))
+        assertNull(source().lookup(espresso))
+        assertEquals(0, net.all.size)
+    }
+
+    @Test fun theSwitchOffAsksNothing() = runBlocking {
+        answers()
+        settings = AppSettings()
+        assertFalse("off by default", settings.behavior.canvas.spotifyFirst)
+        val s = source()
+        assertNull(s.lookup(espresso))
+        assertNull(s.known(espresso))
+        // Canvas off (or paused by Performance mode, which reads as off) asks nothing either.
+        settings = AppSettings().let { it.copy(behavior = it.behavior.copy(canvas = CanvasPrefs(spotifyFirst = true, enabled = false))) }
+        assertNull(s.lookup(espresso))
+        settings = AppSettings(performanceMode = true).let { it.copy(behavior = it.behavior.copy(canvas = CanvasPrefs(spotifyFirst = true))) }.effective()
+        assertNull(s.lookup(espresso))
+        assertEquals(0, net.all.size)
+    }
+
+    @Test fun notASongAsksNothing() = runBlocking {
+        answers()
+        val s = source()
+        assertNull(s.lookup(espresso.copy(id = Song.LOCAL_PREFIX + "1")))
+        assertNull(s.lookup(espresso.copy(id = "e1", isEpisode = true)))
+        assertEquals(0, net.all.size)
+    }
+
+    // ---- remembered answers ----
+
+    @Test fun aLoopIsRememberedForADay() = runBlocking {
+        answers()
+        val s = source()
+        assertEquals(loopUrl, s.lookup(espresso)?.url)
+        assertEquals(loopUrl, s.known(espresso)?.url)
+        clock += SpotifyCanvasSource.LOOP_MS - 1
+        assertEquals(loopUrl, s.lookup(espresso)?.url)
+        assertEquals("asked once", 2, net.count())
+        clock += 2
+        assertNull("too old to show without asking", s.known(espresso))
+        assertEquals(loopUrl, s.lookup(espresso)?.url)
+        assertEquals("asked again after a day", 4, net.count())
+    }
+
+    @Test fun noneAndNoSureMatchAreRememberedForAWeek() = runBlocking {
+        answers(canvas = canvas(null))
+        val s = source()
+        assertNull(s.lookup(espresso))
+        answers(search(Triple("Espresso", "Someone Else", 175_000)))
+        val other = espresso.copy(id = "unsure")
+        assertNull(s.lookup(other))
+        val asked = net.count()
+        assertEquals(3, asked)
+        answers()
+        clock += 6 * 86_400_000L
+        assertNull(s.lookup(espresso))
+        assertNull(s.lookup(other))
+        assertEquals("both still remembered", asked, net.count())
+        clock += 86_400_000L + 1
+        assertEquals(loopUrl, s.lookup(espresso)?.url)
+        assertEquals(loopUrl, s.lookup(other)?.url)
+    }
+
+    @Test fun theMemoryIsKeptInAFileWithNothingAboutTheAccount() = runBlocking {
+        answers()
+        val file = File(tmp.root, "spotify_canvas.json")
+        assertEquals(loopUrl, source(file).lookup(espresso)?.url)
+        val end = System.currentTimeMillis() + 5_000
+        while (!file.exists() && System.currentTimeMillis() < end) Thread.sleep(20)
+        val text = file.readText()
+        assertTrue(text, text.contains(loopUrl))
+        for (secret in listOf(token, "Bearer", "spotify:track:")) assertFalse(secret, text.contains(secret))
+        // Read back by the next start.
+        val again = source(file)
+        val until = System.currentTimeMillis() + 5_000
+        while (again.known(espresso) == null && System.currentTimeMillis() < until) Thread.sleep(20)
+        assertEquals(loopUrl, again.known(espresso)?.url)
+        again.forget()
+        assertNull(again.known(espresso))
+    }
+
+    @Test fun noTokenInTheLog() = runBlocking {
+        net.answer = { 500 to """{"errors":[{"message":"bad token $token"}]}""" }
+        source().lookup(espresso)
+        net.headers["Retry-After"] = "5"
+        net.answer = { 429 to "" }
+        clock += SpotifyCanvasSource.ERROR_PAUSE_MS + 1
+        source().lookup(espresso.copy(id = "x"))
+        assertTrue(logged.isNotEmpty())
+        assertTrue(logged.toString(), logged.none { token in it || "Bearer" in it || "boom" in it || "bad token" in it })
+    }
+
+    // ---- the repository: Spotify first, then Prism Canvas as it always was ----
+
+    private fun repo() = CanvasRepository(net.client).also { it.spotify = source() }
+    private fun prismAsked() = net.all.count { it.first != "api-partner.spotify.com" }
+
+    @Test fun theRepositoryShowsSpotifysLoopFirst() = runBlocking {
+        answers()
+        val r = repo()
+        assertEquals(loopUrl, r.canvasFor(espresso)?.url)
+        assertEquals("Prism's sources not asked when Spotify has a loop", 0, prismAsked())
+        assertEquals(loopUrl, r.cached(espresso)?.url)
+        assertTrue(r.spotifyAsked())
+    }
+
+    @Test fun whenSpotifyHasNoneTheExistingOrderRuns() = runBlocking {
+        answers(canvas = canvas(null))
+        val r = repo()
+        assertNull(r.canvasFor(espresso))
+        assertTrue("Apple, Tidal, the community index were asked", prismAsked() > 0)
+    }
+
+    @Test fun withTheSwitchOffTheRepositoryNeverAsksSpotify() = runBlocking {
+        answers()
+        settings = AppSettings()
+        val r = repo()
+        assertNull(r.canvasFor(espresso))
+        assertNull(r.cached(espresso))
+        assertFalse(r.spotifyAsked())
+        assertEquals("zero Spotify requests", 0, net.count())
+        assertTrue("Prism Canvas looked as before", prismAsked() > 0)
+    }
+
+    @Test fun whereSpotifyMayNotBeFetchedOnlyPrismCanvasIsAsked() = runBlocking {
+        answers()
+        val r = repo()
+        assertNull(r.canvasFor(espresso, spotifyOk = false))
+        assertEquals(0, net.count())
+    }
+
+    @Test fun spotifysLoopIsNeverSaved() = runBlocking {
+        answers()
+        val r = repo()
+        r.canvasFor(espresso)
+        assertNull("saves and downloads look at Prism's own covers only", r.prismCoverFor(espresso))
+        assertEquals(1, net.count("canvas"))
+        assertTrue("nothing of Spotify's in the saved clips", r.savedClipUrls().isEmpty())
+    }
+
+    @Test fun theCoversPlaceIsWantedForSpotifysCanvas() {
+        val off = AppSettings().let { it.copy(behavior = it.behavior.copy(canvas = CanvasPrefs(covers = false))) }
+        assertFalse(canvasCoverWanted(off, coverHidden = false))
+        assertTrue("Animated covers off, Spotify's canvas on", canvasCoverWanted(off, coverHidden = false, spotify = true))
+        assertFalse("the song's own switch hides it", canvasCoverWanted(off, coverHidden = true, spotify = true))
+        assertFalse("Canvas off", canvasCoverWanted(off.copy(behavior = off.behavior.copy(canvas = off.behavior.canvas.copy(enabled = false))), false, spotify = true))
+    }
+
+    @Test fun diagnosticsNameSpotifyAndItsHostOnly() {
+        val stored = AppSettings().let { it.copy(behavior = it.behavior.copy(canvas = CanvasPrefs(spotifyFirst = true))) }
+        val text = canvasDiagnostics(stored, stored, false, false, espresso, false, CanvasArtwork(loopUrl, spotify = true), null, emptyList(), clock, spotify = true)
+        assertTrue(text, text.lines()[0].endsWith(", Spotify's canvas first on"))
+        assertTrue(text, text.lines()[1].startsWith("Canvas now: Spotify's canvas from canvaz.scdn.co"))
+        assertFalse(text, text.contains("/upload/"))
+    }
+}

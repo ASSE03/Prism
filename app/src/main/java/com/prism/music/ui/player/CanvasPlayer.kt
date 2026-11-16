@@ -102,7 +102,8 @@ fun CanvasPlayer(
             tv.cropTo(clip.aspect, loop, x)
         }
     }
-    androidx.compose.runtime.SideEffect { held.source.clip = url; held.source.keep = saved }
+    // 1.8.7.6: Spotify's canvas plays from the recent cache only, never written to the saved store (plan D5).
+    androidx.compose.runtime.SideEffect { held.source.clip = url; held.source.keep = saved && !canvas.spotify }
     DisposableEffect(held) { onDispose { CanvasPlayers.give(held) } }
     DisposableEffect(player) {
         val listener = object : Player.Listener {

@@ -207,8 +207,9 @@ object AudioDiagnostics {
             videoMode = c.player.videoMode.value, song = song, hidden = song != null && song.id in c.canvas.hiddenLoops.value,
             cover = song?.let { c.canvas.cached(it) }, row = row, kept = kept,
             coverHidden = song != null && song.id in c.canvas.hidden.value,
+            spotify = c.canvas.spotifyAsked(),
         )
-    }.getOrElse { "Canvas: couldn't read ($it)" }
+    }.getOrElse { "Canvas: couldn't read (${it.javaClass.simpleName})" }
 
     /** Clears the log (it starts again with a fresh header if diagnostics are on). */
     fun clear(header: () -> String) {

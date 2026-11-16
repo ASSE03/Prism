@@ -87,9 +87,12 @@ suspend fun showCanvas(
  * diagnostics: Canvas on, "Animated covers" on, and not switched off for this song ([coverHidden], the ⋯ menu's
  * "Animated cover"). Apart from the loop from the music video: a song whose cover may not play counts as having none, so
  * its video's loop may show ([canvasWant] with `hasCover = false`).
+ *
+ * 1.8.7.6: [spotify] is Spotify's canvas being asked ([CanvasRepository.spotifyAsked]): it shows where the animated
+ * cover would, so with it the cover's place is wanted even while "Animated covers" (Prism's own) is off.
  */
-fun canvasCoverWanted(settings: AppSettings, coverHidden: Boolean): Boolean =
-    settings.behavior.canvas.enabled && settings.behavior.canvas.covers && !coverHidden
+fun canvasCoverWanted(settings: AppSettings, coverHidden: Boolean, spotify: Boolean = false): Boolean =
+    settings.behavior.canvas.enabled && (settings.behavior.canvas.covers || spotify) && !coverHidden
 
 /** Sharp where it fills the screen, lighter on the cover (plan §11a R1); "lighter" is 480 everywhere. */
 fun canvasHeight(settings: AppSettings): Int = when {

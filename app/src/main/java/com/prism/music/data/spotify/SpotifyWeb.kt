@@ -75,6 +75,10 @@ class SpotifyCodeBook(
                 "8964e8eafb21aa992a7d951d256d83285c04be2105d209262901de70cb97584a",
             ),
             "fetchLibraryTracks" to listOf("087278b20b743578a6262c2b0b4bcd20d879c503cc359a2285baf083ef944240"),
+            // 1.8.7.6, "Spotify's canvas first" ([SpotifyCanvas]): both answered 30 of 30 on the A16 trial (2026-11-16)
+            // with the session's token alone.
+            "searchDesktop" to listOf("db61238974d27839a136c9dc02bfdbe3fab7635f21cf85976ebff9a1ee281345"),
+            "canvas" to listOf("575138ab27cd5c1b3e54da54d0a7cc8d85485402de26340c2145f0f6bb5e7a9f"),
         )
 
         /** `{"profileAttributes": "<64 hex>", ...}`: reads only, well-formed codes only. Empty when it isn't that. */
@@ -90,7 +94,7 @@ class SpotifyCodeBook(
 
 /**
  * The signed-in listener's library, read the way Spotify's web player reads it (its GraphQL at [URL]) with the
- * session's token. **Read only, enforced here:** [read] sends nothing but the four reads in [READS]; no change to
+ * session's token. **Read only, enforced here:** [read] sends nothing but the reads in [READS]; no change to
  * anything on Spotify can be asked through this class, whatever the caller. Requests are spaced [SpotifyApi.GAP_MS]
  * apart and a 429's wait is kept by everyone.
  */
@@ -180,8 +184,11 @@ class SpotifyWeb(
         private val JSON = "application/json; charset=UTF-8".toMediaType()
         private val json = Json { ignoreUnknownKeys = true }
 
-        /** Everything this class can ask. All four only read. */
-        val READS = setOf("profileAttributes", "libraryV3", "fetchLibraryTracks", "fetchPlaylist")
+        /**
+         * Everything this class can ask. All of them only read: the account's name, its library, a playlist, and (1.8.7.6,
+         * [SpotifyCanvas]) a search of Spotify's catalogue and a track's canvas.
+         */
+        val READS = setOf("profileAttributes", "libraryV3", "fetchLibraryTracks", "fetchPlaylist", "searchDesktop", "canvas")
 
         fun body(op: String, code: String, variables: JsonObject): String = JsonObject(mapOf(
             "variables" to variables,
