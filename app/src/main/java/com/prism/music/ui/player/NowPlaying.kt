@@ -635,7 +635,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     val heroMode = settings.fullBleedArtwork && !videoMode && !wide && !vinyl && !cassette
     // Canvas, Full screen: the loop plays behind the whole player instead of in the cover, over the edge-to-edge
     // banner too (which stays as the cover until the loop is up).
-    val canvasBehind = canvasFullScreen(settings.behavior.canvas.fillsBackground, videoMode, wide, loop = canvas?.clip != null)
+    val canvasBehind = canvasFullScreen(settings.behavior.canvas.fillsBackground, videoMode, wide, loop = canvasFillsPlayer(canvas, settings.behavior.canvas.enabled))
     // 1.8.6 Canvas, Full screen: after a few seconds without a touch the controls fade away, leaving the title, the
     // artist and a thin progress line over the picture; a tap brings them back ([canvasControlsMayFade] says when not).
     val screenReader by rememberTouchExploration()
@@ -912,7 +912,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                 onCoverChanged = { canvasBehindShown = it },
             )
             // Darkened under the type: lighter while the controls are away, stronger under the lyrics and the queue.
-            val video = clip.clip != null
+            val video = clip.clip != null || clip.spotify
             Box(Modifier.fillMaxSize().testTag("canvasScrim").drawBehind {
                 val s = canvasScrim(ctl(), fullBlur, video)
                 drawRect(Brush.verticalGradient(0f to Color.Black.copy(alpha = s[0]), 0.5f to Color.Black.copy(alpha = s[1]), 1f to Color.Black.copy(alpha = s[2])))

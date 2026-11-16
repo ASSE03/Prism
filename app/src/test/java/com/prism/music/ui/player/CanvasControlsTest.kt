@@ -63,6 +63,20 @@ class CanvasControlsTest {
     /** Owner, 2026-11-13: "The animated cover should never have the full screen canvas look it should look only like it use to." */
     @Test fun anAnimatedCoverNeverFillsThePlayer() {
         assertFalse("an animated cover, or nothing yet", canvasFullScreen(fills = true, videoMode = false, wide = false, loop = false))
+        // 1.8.7.6 (owner, 2026-11-16): Spotify's canvas fills the player like the video's loop, so the controls fade
+        // over it; Prism's animated cover still plays in the cover.
+        val clip = com.prism.music.data.canvas.CanvasArtwork("clip:v", clip = com.prism.music.data.canvas.VideoClip("v", 0, 8_000, 720))
+        val spotifys = com.prism.music.data.canvas.CanvasArtwork("https://canvaz.scdn.co/x.mp4", spotify = true)
+        val cover = com.prism.music.data.canvas.CanvasArtwork("https://example.com/cover.mp4")
+        assertTrue(canvasFillsPlayer(clip, canvasOn = true))
+        assertTrue(canvasFillsPlayer(spotifys, canvasOn = true))
+        assertFalse("Canvas off: Spotify's stays in the cover", canvasFillsPlayer(spotifys, canvasOn = false))
+        assertFalse(canvasFillsPlayer(cover, canvasOn = true))
+        assertFalse(canvasFillsPlayer(null, canvasOn = true))
+        assertTrue("so the controls may fade over Spotify's canvas", canvasControlsMayFade(
+            fullScreen = canvasFullScreen(true, false, false, canvasFillsPlayer(spotifys, true)), hasCanvas = true, keepControls = false,
+            playing = true, covered = false, panelOpen = false, dragging = false, screenReader = false, reduceMotion = false,
+        ))
         // So its controls stay up, and the album cover's place is its own.
         assertFalse(canvasControlsMayFade(false, true, false, true, false, false, false, false, false))
         assertEquals(1f, coverOverCanvas(false, 1f, 0f), 0.001f)

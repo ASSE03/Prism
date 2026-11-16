@@ -65,6 +65,16 @@ internal fun canvasScrim(controls: Float, panel: Float, video: Boolean): FloatAr
 internal fun canvasFullScreen(fills: Boolean, videoMode: Boolean, wide: Boolean, loop: Boolean): Boolean = fills && loop && !videoMode && !wide
 
 /**
+ * Whether a song's canvas is one that fills the player in "Full screen" ([canvasFullScreen]'s `loop`): the loop from its
+ * music video, and since 1.8.7.6 Spotify's canvas (a tall loop made for the whole screen) while Canvas itself is on
+ * ([canvasOn]: "Full screen" is Canvas's own choice, so with Canvas off Spotify's canvas stays in the cover). Owner,
+ * 2026-11-16: with Spotify's canvas first the controls no longer faded, because it played in the cover like an animated
+ * cover. Prism's animated cover still never fills.
+ */
+internal fun canvasFillsPlayer(art: com.prism.music.data.canvas.CanvasArtwork?, canvasOn: Boolean): Boolean =
+    art?.clip != null || (art?.spotify == true && canvasOn)
+
+/**
  * The song's "Animated cover" switch in the ⋯ menu: while Canvas and "Animated covers" are on and the song has an
  * animated cover, and it stays after it was switched off for the song (the switch is the only way back; a cover switched
  * off is no longer looked up, so it may not be known).
