@@ -316,6 +316,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             override fun onAudioTrackInitialized(eventTime: AnalyticsListener.EventTime, audioTrackConfig: AudioSink.AudioTrackConfig) =
                 effects.trackReady()
         })
+        scope.launch { effects.refused.collect { c.eqRefused.value = it } }
         c.onStreamResolved = { id -> scope.launch { applyStreamStats(id) } }
         // The equalizer as set, or the preset picked for the output playing now (the car's, the earbuds'; A3).
         scope.launch {
@@ -652,6 +653,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         carLyrics.stop()
         // Released on the effects thread, after anything still queued there: a stalled audio server can't hold this up.
         effects.shutdown()
+        c.eqRefused.value = false
         session.release()
         player.release()
         scope.cancel()

@@ -4011,6 +4011,8 @@
     <string name="eq_late_night">Late Night</string>
     <string name="eq_loudness">Loudness</string>
     <string name="eq_custom">Custom</string>
+    <!-- #519: on the Equalizer screen, when Android refuses the effects the equalizer needs. -->
+    <string name="eq_refused">Android is refusing sound effects right now. Restarting the phone fixes it.</string>
     <string name="audio_quality_x">%1$s quality</string>
     <!-- A Look's areas, as listed in "Changes your theme, colors and icons". -->
     <string name="area_theme">theme</string>

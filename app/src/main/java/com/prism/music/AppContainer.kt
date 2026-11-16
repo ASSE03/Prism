@@ -448,6 +448,8 @@ class AppContainer(val app: Application) {
     }
     val queue = QueueState()
     val nerdStats = MutableStateFlow(NerdStats())
+    /** #519: Android refuses the effects the equalizer asks for (the playback service sets it; the Equalizer screen says so). */
+    val eqRefused = MutableStateFlow(false)
     /** video id -> (source label, resolved stream) for the stats overlay */
     val streamDetails = ConcurrentHashMap<String, Pair<String, ResolvedStream?>>()
     /** song id -> the file its saved copy (Downloaded / Cached) came as, while that copy plays (1.8.7, #373). */
