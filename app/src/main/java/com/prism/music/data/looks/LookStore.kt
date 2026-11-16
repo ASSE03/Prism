@@ -606,7 +606,28 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
         }
     }
 
+    /**
+     * Once (1.8.7.6): the first run of 1.8.6 to 1.8.7.5 left a step in History nobody made ("Animated cover fills the
+     * player → On and 4 more": exactly a new install's own defaults that are in a Look, none of them set before, not a
+     * Look's switch). It goes, and the settings get the marker that makes those defaults Prism's own Look on this phone
+     * ([SettingsRepository.repairNewInstallLook]). A missing or unreadable History is left as it is.
+     */
+    private fun repairFirstRun() {
+        runCatching {
+            if (!settings.newInstallLookRepairDue) return
+            val names = settings.newInstallLookNames.takeIf { it.isNotEmpty() } ?: return
+            val steps = _steps.value
+            val firstRun = steps.filter { s -> !s.look && s.keys.toSet() == names && s.before.keys.none { it in names } }
+            if (firstRun.isNotEmpty()) saveSteps(steps.filterNot { it in firstRun })
+            settings.repairNewInstallLook(firstRunSeen = firstRun.isNotEmpty())
+        }.onFailure { android.util.Log.w("PrismLooks", "the first run's repair failed", it) }
+    }
+
     init {
+        // The first run's own defaults (SettingsRepository.setOnboarded) aren't a change of the listener's: told inside
+        // that write, before the change can reach the collector below.
+        settings.onFirstRunLook = { target -> expect = Expect(target, silent = true) }
+        repairFirstRun()
         runSeasons()
         scope.launch {
             var last = settings.lookValues.value

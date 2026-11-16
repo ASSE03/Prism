@@ -406,6 +406,12 @@ data class BehaviorPrefs(
     val smoothScrolling: Boolean = false,
     /** 1.8.6: Canvas's choices beyond Off / On the cover / Full screen ([CanvasPrefs.enabled], [CanvasPrefs.fillsBackground]). */
     val canvas: CanvasPrefs = CanvasPrefs(),
+    /**
+     * 1.8.7.6: this phone's first run wrote a new install's own defaults ([NewInstall]): those in a Look are part of how
+     * Prism comes here (Prism's own Look holds them). Not a setting anyone changes; read here so that Looks sees the
+     * moment it is set.
+     */
+    val newInstallLook: Boolean = false,
 ) {
     companion object {
         /** #404: how far [lyricsOffsetMs] goes either way. */
@@ -1945,6 +1951,11 @@ class SettingsRepository(
 
     private object K {
         val onboarded = booleanPreferencesKey("onboarded")
+        /**
+         * 1.8.7.6: this phone's first run wrote a new install's own defaults ([NewInstall]), so those in a Look are how
+         * Prism comes here: Prism's own Look, and any Look that doesn't set them, keeps them on ([putLook]).
+         */
+        val newInstallLook = booleanPreferencesKey("new_install_look")
         val cookie = stringPreferencesKey("cookie")
         val visitorData = stringPreferencesKey("visitor_data")
         val dataSyncId = stringPreferencesKey("data_sync_id")
@@ -2443,7 +2454,7 @@ class SettingsRepository(
                 "player_menu_hidden", "player_menu_tiles",
                 "lyrics_file_words", "lyrics_file_translation",
                 "merge_liked_videos", "volume_control", "app_volume", "speed_dial_youtube_only", "swipe_tabs",
-                "onboarded", "cookie", "visitor_data", "data_sync_id", "auth_user", "discord_presence", "account_name", "account_email",
+                "onboarded", "new_install_look", "cookie", "visitor_data", "data_sync_id", "auth_user", "discord_presence", "account_name", "account_email",
                 "account_avatar", "haptics", "immersive_player", "preload", "preload_cellular", "canvas_enabled", "canvas_on_cellular",
                 "soft_spatial", "soft_spatial_amount", "lyrics_on_player", "lyrics_order", "lyrics_off", "prefer_synced", "skip_censored",
                 "lyrics_translate", "lyrics_translate_to", "romanize_lyrics", "romanize_all", "sing_cellular", "sing_always_ready",
@@ -2524,10 +2535,17 @@ class SettingsRepository(
     private fun lookOf(p: Preferences): Map<String, String> =
         K.lookSpec.mapNotNull { (k, _) -> p[k]?.let { v -> LookValue.tag(v)?.let { k.name to it } } }.toMap()
 
-    /** Puts a Look's [values] in place of every look setting in [p] (those it doesn't set go back to their defaults). */
+    /** A new install's own defaults that are in a Look (1.8.7.6: Canvas full screen, the cover's flight both ways, the background's fade, the album pages' picture). */
+    val newInstallLookNames: Set<String> by lazy { (NewInstall.on + NewInstall.motion).filter { lookKinds[it] == 'b' }.toSet() }
+
+    /**
+     * Puts a Look's [values] in place of every look setting in [p] (those it doesn't set go back to their defaults: on a
+     * phone whose first run wrote a new install's own defaults ([K.newInstallLook]), those are on).
+     */
     @Suppress("UNCHECKED_CAST")
     private fun putLook(p: MutablePreferences, values: Map<String, String>) {
         K.lookSpec.forEach { (k, _) -> p.remove(k as Preferences.Key<Any>) }
+        if (p[K.newInstallLook] == true) newInstallLookNames.forEach { p[booleanPreferencesKey(it)] = true }
         values.forEach { (name, tagged) ->
             val key = lookKeysByName[name] ?: return@forEach
             val v = LookValue.untag(tagged, lookKinds[name] ?: return@forEach) ?: return@forEach
@@ -2804,6 +2822,7 @@ class SettingsRepository(
                     withDownloads = p[K.canvasWithDownloads] ?: d.behavior.canvas.withDownloads,
                     withDownloadsCellular = p[K.canvasWithDownloadsCellular] ?: d.behavior.canvas.withDownloadsCellular,
                 ),
+                newInstallLook = p[K.newInstallLook] ?: d.behavior.newInstallLook,
             ),
             gestures = GesturePrefs(
                 coverSwipeLeft = p.enum(K.coverSwipeLeft, d.gestures.coverSwipeLeft),
@@ -3145,13 +3164,40 @@ class SettingsRepository(
      * A new install comes with Canvas using music videos (owner, 2026-11-13: without them Canvas shows nothing for most
      * songs). Someone updating from before 1.8.6 never passes here: they are asked once in the player ([canvasVideosAnswered]).
      * The same goes for the rest of a new install's own defaults ([NewInstall]).
+     *
+     * 1.8.7.6: only on the first run (nothing stored as onboarded yet). Every sign-in calls this too, and since 1.0 a
+     * sign-in has stored onboarded, so someone set up before 1.8.6 who signs in later is not given them unasked. The
+     * marker ([K.newInstallLook]) makes them part of how Prism comes here, and Looks is told before the change can be
+     * seen ([onFirstRunLook]), so it is not kept in History as the listener's own.
      */
     fun setOnboarded(v: Boolean) = edit {
+        val firstRun = v && it[K.onboarded] != true
         it[K.onboarded] = v
-        if (v && it[K.canvasUseVideos] == null) it[K.canvasUseVideos] = true
+        if (!firstRun) return@edit
+        val lookBefore = lookOf(it)
+        if (it[K.canvasUseVideos] == null) it[K.canvasUseVideos] = true
         // The rest of a new install's own defaults (owner, 2026-11-13), each only where nothing was ever stored.
-        if (v) for (name in NewInstall.on + NewInstall.motion) booleanPreferencesKey(name).let { k -> if (it[k] == null) it[k] = true }
+        for (name in NewInstall.on + NewInstall.motion) booleanPreferencesKey(name).let { k -> if (it[k] == null) it[k] = true }
+        it[K.newInstallLook] = true
+        val lookAfter = lookOf(it)
+        if (lookAfter != lookBefore) onFirstRunLook?.let { tell -> runCatching { tell(lookAfter) } }
     }
+
+    /**
+     * Told the look settings the first run leaves ([setOnboarded]) inside its write, so before the change can be read:
+     * Looks (`LookStore`) takes it as Prism's own, not a change of the listener's.
+     */
+    @Volatile var onFirstRunLook: ((Map<String, String>) -> Unit)? = null
+
+    /** Whether [repairNewInstallLook] is still to run on this phone. */
+    val newInstallLookRepairDue: Boolean get() = raw[newInstallLookRepaired] != true
+
+    /**
+     * Once (1.8.7.6): a phone set up on 1.8.6 to 1.8.7.5 got a new install's own defaults without [K.newInstallLook], so
+     * Looks said "your own mix" from the start. It gets the marker when it is onboarded and its first run's values are
+     * there (all on) or Looks found the first run's step in History ([firstRunSeen]).
+     */
+    fun repairNewInstallLook(firstRunSeen: Boolean) = edit { markNewInstallLook(it, firstRunSeen, newInstallLookNames) }
     /** Whether "Use music videos" was ever decided on this phone (by the first run, the question, or the switch). */
     val canvasVideosAnswered: Boolean get() = raw[K.canvasUseVideos] != null
 
@@ -3187,6 +3233,17 @@ class SettingsRepository(
 
     companion object {
         private val lyricsOnPhoneSplit = booleanPreferencesKey("car_lyrics_on_phone_split_184")
+
+        private val newInstallLookRepaired = booleanPreferencesKey("new_install_look_repaired_1876")
+
+        /** [repairNewInstallLook]'s rule, once per store (a restored backup from before it brings the repair back). */
+        internal fun markNewInstallLook(p: MutablePreferences, firstRunSeen: Boolean, names: Collection<String>) {
+            if (p[newInstallLookRepaired] == true) return
+            if (p[K.onboarded] == true && p[K.newInstallLook] != true && (firstRunSeen || names.all { p[booleanPreferencesKey(it)] == true })) {
+                p[K.newInstallLook] = true
+            }
+            p[newInstallLookRepaired] = true
+        }
 
         /**
          * Once (#392, 1.8.4): lyrics in the notification no longer need "Lyrics in the car". Someone who had "On this
