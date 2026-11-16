@@ -36,7 +36,7 @@ import com.prism.music.ui.screens.settings.oldGroups
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -83,11 +83,11 @@ class DownloadsDataPageTest : ListeningPageHarness(SettingsPageId.DOWNLOADS_DATA
     private val gCovers = t(R.string.animated_covers)
     private val gData = t(R.string.mobile_data)
 
-    /** Smart Downloads' switch schedules its worker: WorkManager has to be there for it (the app's start does that on a phone). */
-    @Before fun workManager() {
-        val app = RuntimeEnvironment.getApplication()
-        if (!androidx.work.WorkManager.isInitialized()) androidx.work.WorkManager.initialize(app, androidx.work.Configuration.Builder().build())
-    }
+    /**
+     * Smart Downloads' switch schedules its worker: WorkManager has to be there for it (the app's start does that on a
+     * phone). Each test has its own, closed when it ends ([OwnWorkManager]: one kept for the class outlived its database).
+     */
+    @get:Rule(order = 1) val workManager = OwnWorkManager()
 
     private fun groupTitles() = compose.onAllNodes(hasTestTag(SettingsTags.GROUP)).fetchSemanticsNodes()
         .map { g -> g.children.first().config[SemanticsProperties.Text].first().text }
@@ -282,12 +282,7 @@ class DownloadsDataPageTest : ListeningPageHarness(SettingsPageId.DOWNLOADS_DATA
      */
     @Test fun resetLeavesSmartDownloadsWorkerStopped() {
         val app = RuntimeEnvironment.getApplication()
-        // A WorkManager of this test's own: the one an earlier test of the class started holds a database Robolectric has
-        // since closed (its writes fail quietly; this test reads its work back).
-        for (field in listOf("sDelegatedInstance", "sDefaultInstance")) {
-            androidx.work.impl.WorkManagerImpl::class.java.getDeclaredField(field).apply { isAccessible = true }.set(null, null)
-        }
-        androidx.work.WorkManager.initialize(app, androidx.work.Configuration.Builder().build())
+        // The test's own WorkManager ([workManager]): this test reads its work back.
         val wm = androidx.work.WorkManager.getInstance(app)
         container.settings.setSmartDownloads(true)
         container.settings.setSmartDownloadsCellular(true)
