@@ -92,7 +92,7 @@
     <string name="refresh_the_list">Uppdatera listan</string>
     <string name="from_github">Från GitHub</string>
     <string name="add_your_look">Lägg till din Look</string>
-    <string name="by_pull_request_on_github">Med en pull request på GitHub</string>
+    <string name="by_pull_request_on_github">Dela din på GitHub</string>
     <string name="save_your_look_share_it_as">Spara din Look, dela den som text och lägg till dess kod i themes/index.json i Prisms repo. Sidan berättar hur.</string>
     <string name="use">Använd %1$s</string>
     <string name="more_for">Mer för %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">Använd den</string>
     <string name="not_now">Inte nu</string>
     <string name="day_and_night">Dag och natt</string>
-    <string name="day_and_night_looks">Looks för dag och natt</string>
+    <string name="day_and_night_looks">Byt look efter tid på dygnet</string>
     <string name="one_look_by_day_another_by">En Look på dagen, en annan på natten</string>
     <string name="like_theme_system_for_whole_looks">Som Tema: System, fast för hela Looks. Soluppgång och solnedgång räknas ut från din tidszon, utan din plats. En Look du väljer däremellan ligger kvar till nästa byte.</string>
     <string name="by_day">På dagen</string>
@@ -148,7 +148,7 @@
     <string name="search_history">Sök i historiken</string>
     <string name="your_last_changes_to_the_look">Dina senaste %1$s ändringar av utseendet visas här, så att du kan gå tillbaka.</string>
     <string name="clear_history">Rensa historik</string>
-    <string name="your_look_stays_as_it_is">Ditt utseende förblir som det är nu</string>
+    <string name="your_look_stays_as_it_is">Dina inställningar förblir som de är</string>
     <string name="clear_the_look_s_history">Rensa utseendets historik?</string>
     <string name="you_won_t_be_able_to">Du kommer inte att kunna gå tillbaka till de här ändringarna. Ditt utseende förblir som det är nu.</string>
     <string name="clear">Rensa</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">Enkelt glas, en hårfin linje spektrumljus</string>
     <string name="ledger">Huvudbok</string>
     <string name="three_numbers_side_by_side">Tre siffror sida vid sida</string>
-    <string name="wash">Skimmer</string>
+    <string name="wash">Mjuk färg</string>
     <string name="a_faint_wash_of_color_and">Ett svagt färgskimmer och månadsstaplar</string>
     <string name="spectrum_frame">Spektrumram</string>
     <string name="glass_ringed_in_split_light_the">Glas inramat av spektrumljus, tiden i färg</string>
@@ -1472,7 +1472,7 @@
     <string name="widget_background_transparent_see_through_color">widget bakgrund transparent genomskinlig färg knappar hemskärm</string>
     <string name="the_tab_you_re_on">Fliken du är på</string>
     <string name="tab_icon_color_tint_accent_light">flik ikon färg ton accent ljus aktuell flik</string>
-    <string name="play_on_album_and_playlist_pages">Spela på album- och spellistsidor</string>
+    <string name="play_on_album_and_playlist_pages">Spelknapp på album- och spellistsidor</string>
     <string name="play_button_outlined_filled">spelknapp kontur fylld</string>
     <string name="switches_sliders_and_buttons">Reglage, skjutreglage och knappar</string>
     <string name="classic_controls_1_6_material_switch">klassiska kontroller 1.6 material reglage skjutreglage gammalt utseende</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">rotation orientering liggande stående</string>
     <string name="picture_in_picture">Bild-i-bild</string>
     <string name="pip_video_float_window_leave">pip bild i bild video flytande fönster lämna</string>
-    <string name="load_ahead">Ladda i förväg</string>
+    <string name="load_ahead">Hur långt i förväg att ladda</string>
     <string name="preload_buffer">förladda buffert</string>
     <string name="load_ahead_on_mobile_data">Ladda i förväg på mobildata</string>
     <string name="preload_cellular">förladda mobildata</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">Spara en kopia</string>
     <string name="just_sign_out">Bara logga ut</string>
     <string name="prism_account_on_this_phone">Prism Account · på den här telefonen</string>
-    <string name="your_name_and_picture_kept_on">Ditt namn och din bild, sparade på den här telefonen. Inget av det du har ändras</string>
+    <string name="your_name_and_picture_kept_on">Ditt namn och din bild, sparade på den här telefonen</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">inloggad</string>
     <string name="signed_in_2">Inloggad</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">Apple Musics, Musixmatchs och Spotifys · ord för ord</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · ord för ord, flest kinesiska låtar</string>
+    <string name="qq_music_word_by_word_the">Ord för ord · flest kinesiska låtar</string>
     <string name="open_lyrics_database_line_by_line">Öppen låttextdatabas · rad för rad</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · ord för ord</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · ord för ord, många asiatiska låtar</string>
+    <string name="kugou_word_by_word_many_asian">Ord för ord · många asiatiska låtar</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Låttexter som lyssnare skickar in · få låtar än så länge</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">Låttexten på låtens sida i Prism Music, från LyricFind · rader eller vanlig text</string>
+    <string name="lyricfind_lines_or_plain">LyricFinds låttexter, via YouTube Music · rader eller vanlig text</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Vanlig text · fyller också i ord som stjärnats</string>
     <string name="both">Båda</string>
@@ -3136,7 +3136,7 @@
     <string name="one">En</string>
     <string name="under_the_line">Under raden</string>
     <string name="over_the_line">Ovanför raden</string>
-    <string name="as_now">Som nu</string>
+    <string name="as_now">Som spelaren</string>
     <string name="the_player_s_background_or_the">Spelarens bakgrund, eller omslaget i uppslukande läge</string>
     <string name="plain_dark">Enkel mörk</string>
     <string name="nothing_but_the_words">Inget annat än orden</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">Galleriet kräver en nyare Prism</string>
     <string name="by_2">av %1$s</string>
     <string name="a_look">En Look</string>
-    <string name="how_prism_comes_outfit_the_split">Som Prism levereras: Outfit, spektrumljuset, mjuka hörn</string>
+    <string name="how_prism_comes_outfit_the_split">Som den levereras: Prisms egen font, spektrumfärger, mjuka hörn</string>
     <string name="paper">Papper</string>
     <string name="light_serif_type_ink_instead_of">Ljus, typsnitt med serifer, bläck i stället för färg, varmt papper</string>
     <string name="midnight">Midnatt</string>
@@ -3948,7 +3948,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">Dina svep, dubbeltryck och långa tryck fungerar även under titeln, i utrymmet runt knapparna och fälten. Knapparna och fälten behåller sina egna tryck.</string>
     <string name="gestures_everywhere_keywords">gest svep dubbeltryck långt tryck nedre delen kontroller hela spelaren</string>
     <string name="playing_song_in_the_page_s_color">Låten som spelas i sidans färg</string>
-    <string name="its_bars_and_title_take_the_album_s_color">Staplarna och titeln får albumets färg</string>
+    <string name="its_bars_and_title_take_the_album_s_color">Staplarna och titeln får sidans färg</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">På album-, spellista- och artistsidor visar låten som spelas sina staplar och sin titel i färgen från sidans bild i stället för ditt ljus. Överallt annars är det som vanligt.</string>
     <string name="playing_indicator_bars_now_playing_album_color">indikator spelas staplar equalizer album spellista artist sida färg omslag</string>
     <string name="slide_between_screens">Glid mellan skärmar</string>
@@ -3978,7 +3978,7 @@
     <string name="hidden_s">Dold: %1$s</string>
     <string name="buttons_in_the_row">Knappar i raden</string>
     <string name="add_a_button">Lägg till en knapp</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">Spelarens ⋯-meny: dess rutor och vad den visar</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">Dess rutor och vad den visar</string>
     <string name="and_the_sky_lit_up">Och himlen lystes upp</string>
     <string name="play_pause_always_stays">Spela och pausa finns alltid kvar</string>
     <string name="what_s_on_the_player_keywords">dölj visa delar på spelaren under titeln omslag titel artist gilla hjärta meny förloppsindikator spola föregående nästa hoppa över knappar rad låtlängd cast-markering</string>
@@ -3990,10 +3990,10 @@
     <string name="when_the_queue_ends">När kön tar slut</string>
     <string name="when_the_queue_ends_info">Stopp: musiken slutar med kön. Din musik: Prisms egen radio utifrån det du spelar. Dina och nya: mest din musik, med några nya låtar. Prism Music: en radio ur Prism Musics katalog. Offline är det alltid din musik.</string>
     <string name="music_videos_label">Musikvideor</string>
-    <string name="play_them">Videor</string>
+    <string name="play_them">Videor överallt</string>
     <string name="songs_in_radios">Låtar i radio</string>
     <string name="songs_everywhere">Låtar överallt</string>
-    <string name="music_videos_label_info">Videor: en musikvideo spelas som video. Låtar i radio: autouppspelning och radio spelar videons låt i stället. Låtar överallt: varje musikvideo du trycker på spelas som sin låt, och Video-knappen visar fortfarande videon.</string>
+    <string name="music_videos_label_info">Videor överallt: en musikvideo spelas som video. Låtar i radio: autouppspelning och radio spelar videons låt i stället. Låtar överallt: varje musikvideo du trycker på spelas som sin låt, och Video-knappen visar fortfarande videon.</string>
     <string name="trim_silence">Ta bort tystnad i början och slutet</string>
     <string name="podcasts_only">Bara poddar</string>
     <string name="songs_and_podcasts">Låtar och poddar</string>
@@ -4757,7 +4757,7 @@
     <string name="move_songs_you_have_played">Flytta låtar du har spelat</string>
     <string name="move_songs_you_have_played_info">Låtar du redan har spelat får också ett handtag, så att du kan dra dem sinsemellan.</string>
     <string name="move_songs_you_have_played_keywords">kö spelade historik dra handtag ändra ordning</string>
-    <string name="tidier_queue">Prydligare kö</string>
+    <string name="tidier_queue">Kö med färre knappar</string>
     <string name="tidier_queue_info">Tar bort × från varje låt och Kö-knappen från nedre raden medan kön är öppen. Svep en låt åt vänster eller använd dess ⋯ för att ta bort den. Dra titeln nedåt eller tryck på Bakåt för att lämna kön.</string>
     <string name="tidier_queue_keywords">kö färre knappar ta bort stäng renare enkel</string>
     <string name="reopen_on_the_last_page">Öppna på senaste sidan</string>
@@ -5078,8 +5078,8 @@
     <string name="gb_swipes_and_touch">Svep och tryck</string>
     <string name="gb_double_tap_seeks">Dubbeltryck spolar</string>
     <string name="gb_double_tap_seeks_needs">Ställ först in Dubbeltryck på Spola efter sida</string>
-    <string name="gb_gestures_work">Gester fungerar</string>
-    <string name="gb_work_cover">På omslaget</string>
+    <string name="gb_gestures_work">Var gester fungerar</string>
+    <string name="gb_work_cover">Bara på omslaget</string>
     <string name="gb_work_anywhere">Överallt</string>
     <string name="gb_work_not_lyrics">Överallt utom på låttexten</string>
     <string name="gb_work_cover_and_lyrics">På omslaget och under låttexten</string>
@@ -5179,7 +5179,7 @@
     <string name="settings_player_right_hand_time">Tid till höger</string>
     <string name="settings_player_right_hand_time_info">Tiden till höger om förloppsfältet. Att trycka på den i spelaren ändrar också detta.</string>
     <string name="settings_player_cover_shape">Omslagets form</string>
-    <string name="settings_player_edge_to_edge">Kant till kant</string>
+    <string name="settings_player_edge_to_edge">Når skärmens kanter</string>
     <string name="settings_player_cover_animation">Omslagsanimation</string>
     <string name="settings_player_opening">Vid öppning</string>
     <string name="settings_player_opening_and_closing">Vid öppning och stängning</string>
@@ -5190,7 +5190,7 @@
     <string name="settings_player_queue_dj">DJ-knapp</string>
     <string name="settings_player_queue_lengths">Låtlängder</string>
     <string name="settings_player_queue_move_played">Flytta spelade låtar</string>
-    <string name="settings_player_queue_tidier">Prydligare kö</string>
+    <string name="settings_player_queue_tidier">Färre knappar</string>
     <string name="settings_player_scroll_for_controls">Skrolla upp för kontroller</string>
     <string name="settings_player_lock_options">Alternativ för låsskärmen</string>
     <string name="settings_player_immersive_options">Alternativ för uppslukande läge</string>
@@ -5262,8 +5262,8 @@
     <string name="tl_reset_everything">Återställ allt</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">Hela looks, dag och natt</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord på · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord på · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · säkerhetskopia, uppdateringar</string>
     <string name="root_connect_short">Spela på högtalare och tv</string>
     <string name="root_handoff_on">Överlämning på</string>
@@ -5308,7 +5308,7 @@
     <string name="recap_ready_title">Din sammanfattning för %1$s är klar</string>
     <string name="recap_ready_text">Din månad i musik: dina topplåtar och toppartister, och hur det står sig mot månaden innan.</string>
     <string name="recap_card_title">%1$s: din månad</string>
-    <string name="replay_notices">Aviseringar</string>
+    <string name="replay_notices">Replay-aviseringar</string>
     <string name="tour_185_replay_title">Replay, på djupet</string>
     <string name="tour_185_replay_body">Se när du lyssnar, timme för timme och dag för dag.</string>
     <string name="tour_185_replay_point_1">Lyssningsklocka: din vecka, timme för timme. Tryck på en timme för dess topplåtar.</string>
@@ -5381,7 +5381,7 @@
     <string name="cal_no_music">Ingen musik</string>
     <string name="cal_days_with_music">Dagar med musik: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">Tryck på det lilla omslaget för att spela eller pausa</string>
+    <string name="gb_lyrics_cover_plays">Tryck på textens omslag för att pausa</string>
     <string name="gb_lyrics_cover_plays_info">Med låttexten öppen spelar eller pausar ett tryck på det lilla omslaget, och ett långt tryck stänger låttexten. Av: ett tryck stänger låttexten.</string>
     <string name="gb_lyrics_cover_plays_keywords">låttext litet omslag miniatyr omslagsbild tryck spela pausa långt tryck stäng lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5558,4 +5558,37 @@
     <string name="hl_show_in_lists">Visa i listor</string>
     <string name="hl_show_on_artist_pages">Visa på artistsidor</string>
     <string name="allow_access_to_lossless_files_value">Behövs för att hitta dina förlustfria filer</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">Stöd Prism</string>
+    <string name="support_prism_info">Stödet betalar testtelefonerna och verktygen som Prism görs med. Alla funktioner förblir gratis, oavsett om du stöder det eller inte. Öppnar Ko-fi i webbläsaren.</string>
+    <string name="support_prism_keywords">donera dricks kaffe tack hjälp utvecklaren stöd</string>
+    <string name="i_ve_supported_prism">Jag har stött Prism</string>
+    <string name="i_ve_supported_prism_info">Stänger av alla uppmaningar att stödja Prism, för gott. Inget kontrolleras: det är ditt ord som gäller.</string>
+    <string name="i_ve_supported_prism_keywords">donerat supporter dölj uppmaningar sluta fråga</string>
+    <string name="supporters">Stödjare</string>
+    <string name="supporters_keywords">tack krediter namn givare medlemmar</string>
+    <string name="supporters_info">De som har stött Prism och valt att bli nämnda. Bara namn: inga belopp, inga datum.</string>
+    <string name="supporters_members">Månadsmedlemmar</string>
+    <string name="supporters_thank_you">Tack</string>
+    <string name="supporters_empty">Inga namn här än. Ditt kan bli det första.</string>
+    <string name="support_on_kofi">Stöd på Ko-fi</string>
+    <string name="don_t_show_again">Visa inte igen</string>
+    <string name="support_hours_title">100 timmar musik med Prism</string>
+    <string name="support_hours_body">Den är gratis och görs av en enda person: om den är värd en kaffe för dig hjälper det den att leva vidare.</string>
+    <string name="support_made_by_one_person">Gjord av en enda person.</string>
+    <string name="support_whats_new_line">Prism är gratis och görs av en enda person. Gillar du det kan du stödja det.</string>
+    <string name="settings_player_layout_group">Layout och kontroller</string>
+    <string name="dd_use_showing_covers">Visar animerade omslag</string>
+    <string name="icon_style">Ikonstil</string>
+    <string name="prism_s_own">Prisms egen</string>
+    <string name="player_times_both">Båda ändar av fältet</string>
+    <string name="button_shape_fully_round">Helt rund</string>
+    <string name="transport_filled_play">Fylld spelknapp</string>
+    <string name="replay_notice_recap_short">Månadssammanfattning</string>
+    <string name="settings_player_edit_menu">Redigera spelarens ⋯-meny</string>
+    <string name="mix_why_sing">Sjung är på, så varje låt spelas hel.</string>
+    <string name="mix_why_together">Lyssna tillsammans är på, så låtarna följer värden.</string>
+    <string name="cn_spot_not_connected">Inte ansluten · spellistor och gillade låtar</string>
+    <string name="cn_other_services">Andra tjänster</string>
+    <string name="edge_to_edge_both">Omslag och video</string>
 </resources>

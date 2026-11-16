@@ -92,7 +92,7 @@
     <string name="refresh_the_list">Liste aktualisieren</string>
     <string name="from_github">Von GitHub</string>
     <string name="add_your_look">Deinen Look hinzufügen</string>
-    <string name="by_pull_request_on_github">Per Pull-Request auf GitHub</string>
+    <string name="by_pull_request_on_github">Deinen auf GitHub teilen</string>
     <string name="save_your_look_share_it_as">Speichere deinen Look, teile ihn als Text und füge seinen Code in themes/index.json im Repository von Prism ein. Die Seite erklärt, wie es geht.</string>
     <string name="use">%1$s verwenden</string>
     <string name="more_for">Mehr für %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">Verwenden</string>
     <string name="not_now">Nicht jetzt</string>
     <string name="day_and_night">Tag und Nacht</string>
-    <string name="day_and_night_looks">Looks für Tag und Nacht</string>
+    <string name="day_and_night_looks">Look nach Tageszeit wechseln</string>
     <string name="one_look_by_day_another_by">Ein Look am Tag, ein anderer in der Nacht</string>
     <string name="like_theme_system_for_whole_looks">Wie „Design: System“, nur für ganze Looks. Sonnenauf- und -untergang werden aus deiner Zeitzone berechnet, ohne deinen Standort. Ein Look, den du zwischendurch wählst, bleibt bis zum nächsten Wechsel.</string>
     <string name="by_day">Am Tag</string>
@@ -148,7 +148,7 @@
     <string name="search_history">Verlauf durchsuchen</string>
     <string name="your_last_changes_to_the_look">Deine letzten %1$s Änderungen am Aussehen stehen hier, damit du zurückgehen kannst.</string>
     <string name="clear_history">Verlauf löschen</string>
-    <string name="your_look_stays_as_it_is">Dein Aussehen bleibt, wie es jetzt ist</string>
+    <string name="your_look_stays_as_it_is">Deine Einstellungen bleiben, wie sie sind</string>
     <string name="clear_the_look_s_history">Verlauf des Aussehens löschen?</string>
     <string name="you_won_t_be_able_to">Du kannst dann nicht mehr zu diesen Änderungen zurück. Dein Aussehen bleibt, wie es jetzt ist.</string>
     <string name="clear">Löschen</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">Schlichtes Glas, eine haarfeine Linie Spektrallicht</string>
     <string name="ledger">Bilanz</string>
     <string name="three_numbers_side_by_side">Drei Zahlen nebeneinander</string>
-    <string name="wash">Hauch</string>
+    <string name="wash">Sanfte Farbe</string>
     <string name="a_faint_wash_of_color_and">Ein leichter Farbhauch und Monatsbalken</string>
     <string name="spectrum_frame">Spektrum-Rahmen</string>
     <string name="glass_ringed_in_split_light_the">Glas mit einem Rand aus Spektrallicht, die Zeit in Farbe</string>
@@ -1472,7 +1472,7 @@
     <string name="widget_background_transparent_see_through_color">widget hintergrund transparent durchsichtig farbe tasten startbildschirm</string>
     <string name="the_tab_you_re_on">Der aktuelle Tab</string>
     <string name="tab_icon_color_tint_accent_light">tab symbol farbe tönung akzent licht aktueller tab</string>
-    <string name="play_on_album_and_playlist_pages">Play auf Album- und Playlist-Seiten</string>
+    <string name="play_on_album_and_playlist_pages">Play-Taste auf Alben und Playlists</string>
     <string name="play_button_outlined_filled">play taste umrandet gefüllt</string>
     <string name="switches_sliders_and_buttons">Schalter, Regler und Tasten</string>
     <string name="classic_controls_1_6_material_switch">klassische steuerung 1.6 material schalter regler altes aussehen</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">drehen ausrichtung querformat hochformat</string>
     <string name="picture_in_picture">Bild im Bild</string>
     <string name="pip_video_float_window_leave">bild im bild pip video schwebendes fenster verlassen</string>
-    <string name="load_ahead">Vorausladen</string>
+    <string name="load_ahead">Wie weit vorausgeladen wird</string>
     <string name="preload_buffer">vorladen puffer</string>
     <string name="load_ahead_on_mobile_data">Über mobile Daten vorausladen</string>
     <string name="preload_cellular">vorladen mobilfunk</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">Kopie behalten</string>
     <string name="just_sign_out">Nur abmelden</string>
     <string name="prism_account_on_this_phone">Prism Account · auf diesem Handy</string>
-    <string name="your_name_and_picture_kept_on">Dein Name und dein Bild, auf diesem Handy gespeichert. Nichts von dem, was du hast, ändert sich</string>
+    <string name="your_name_and_picture_kept_on">Dein Name und dein Bild, auf diesem Handy gespeichert</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">angemeldet</string>
     <string name="signed_in_2">Angemeldet</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">Von Apple Music, Musixmatch und Spotify · Wort für Wort</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · Wort für Wort, die meisten chinesischen Songs</string>
+    <string name="qq_music_word_by_word_the">Wort für Wort · die meisten chinesischen Songs</string>
     <string name="open_lyrics_database_line_by_line">Offene Songtext-Datenbank · Zeile für Zeile</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · Wort für Wort</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · Wort für Wort, viele asiatische Songs</string>
+    <string name="kugou_word_by_word_many_asian">Wort für Wort · viele asiatische Songs</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Von Hörern eingereichte Songtexte · bisher wenige Songs</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">Der Songtext auf der Songseite in Prism Music, von LyricFind · Zeilen oder reiner Text</string>
+    <string name="lyricfind_lines_or_plain">Songtexte von LyricFind, über YouTube Music · Zeilen oder reiner Text</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Reiner Text · füllt auch zensierte Wörter aus</string>
     <string name="both">Beides</string>
@@ -3136,7 +3136,7 @@
     <string name="one">Eine</string>
     <string name="under_the_line">Unter der Zeile</string>
     <string name="over_the_line">Über der Zeile</string>
-    <string name="as_now">Wie jetzt</string>
+    <string name="as_now">Wie der Player</string>
     <string name="the_player_s_background_or_the">Der Hintergrund des Players oder das Cover im immersiven Modus</string>
     <string name="plain_dark">Schlicht dunkel</string>
     <string name="nothing_but_the_words">Nichts außer den Wörtern</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">Die Galerie braucht ein neueres Prism</string>
     <string name="by_2">von %1$s</string>
     <string name="a_look">Ein Look</string>
-    <string name="how_prism_comes_outfit_the_split">So kommt Prism: Outfit, das Spektrallicht, weiche Ecken</string>
+    <string name="how_prism_comes_outfit_the_split">So kommt es: Prisms eigene Schrift, Spektralfarben, weiche Ecken</string>
     <string name="paper">Papier</string>
     <string name="light_serif_type_ink_instead_of">Hell, Serifenschrift, Tinte statt Farbe, warmes Papier</string>
     <string name="midnight">Mitternacht</string>
@@ -3948,7 +3948,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">Deine Wischgesten, Doppeltippen und langes Drücken funktionieren auch unter dem Titel, im Bereich um die Tasten und Leisten. Tasten und Leisten behalten ihr eigenes Tippen.</string>
     <string name="gestures_everywhere_keywords">geste wischen doppeltippen lange drücken unten steuerung ganzer player</string>
     <string name="playing_song_in_the_page_s_color">Laufender Song in der Farbe der Seite</string>
-    <string name="its_bars_and_title_take_the_album_s_color">Balken und Titel in der Farbe des Albums</string>
+    <string name="its_bars_and_title_take_the_album_s_color">Balken und Titel in der Farbe der Seite</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">Auf Album-, Playlist- und Künstlerseiten zeigt der laufende Song Balken und Titel in der Farbe des Seitenbilds statt in deinem Licht. Überall sonst bleibt es wie es ist.</string>
     <string name="playing_indicator_bars_now_playing_album_color">anzeige läuft balken equalizer album playlist künstler seite farbe cover</string>
     <string name="slide_between_screens">Zwischen Bildschirmen gleiten</string>
@@ -3978,7 +3978,7 @@
     <string name="hidden_s">Ausgeblendet: %1$s</string>
     <string name="buttons_in_the_row">Tasten in der Reihe</string>
     <string name="add_a_button">Taste hinzufügen</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">Das ⋯-Menü des Players: seine Kacheln und was es zeigt</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">Seine Kacheln und was es zeigt</string>
     <string name="and_the_sky_lit_up">Und der Himmel leuchtete auf</string>
     <string name="play_pause_always_stays">Play und Pause bleiben immer</string>
     <string name="what_s_on_the_player_keywords">ausblenden einblenden teile player unter dem titel cover titel künstler gefällt mir herz menü fortschrittsbalken spulen zurück weiter überspringen tasten reihe songlänge cast symbol</string>
@@ -3990,10 +3990,10 @@
     <string name="when_the_queue_ends">Wenn die Warteschlange endet</string>
     <string name="when_the_queue_ends_info">Stopp: Die Musik endet mit der Warteschlange. Deine Musik: das eigene Radio von Prism aus dem, was du hörst. Deine und neue: vor allem deine Musik, mit ein paar neuen Songs. Prism Music: ein Radio aus dem Katalog von Prism Music. Offline ist es immer deine Musik.</string>
     <string name="music_videos_label">Musikvideos</string>
-    <string name="play_them">Videos</string>
+    <string name="play_them">Überall Videos</string>
     <string name="songs_in_radios">Songs in Radios</string>
     <string name="songs_everywhere">Überall Songs</string>
-    <string name="music_videos_label_info">Videos: Ein Musikvideo läuft als Video. Songs in Radios: Autoplay und Radios spielen stattdessen den Song des Videos. Überall Songs: Jedes Musikvideo, auf das du tippst, läuft als sein Song, und die Video-Taste zeigt weiterhin das Video.</string>
+    <string name="music_videos_label_info">Überall Videos: Ein Musikvideo läuft als Video. Songs in Radios: Autoplay und Radios spielen stattdessen den Song des Videos. Überall Songs: Jedes Musikvideo, auf das du tippst, läuft als sein Song, und die Video-Taste zeigt weiterhin das Video.</string>
     <string name="trim_silence">Stille am Anfang und Ende entfernen</string>
     <string name="podcasts_only">Nur Podcasts</string>
     <string name="songs_and_podcasts">Songs und Podcasts</string>
@@ -4757,7 +4757,7 @@
     <string name="move_songs_you_have_played">Bereits gespielte Songs verschieben</string>
     <string name="move_songs_you_have_played_info">Auch Songs, die du schon gehört hast, bekommen einen Griff, sodass du sie untereinander verschieben kannst.</string>
     <string name="move_songs_you_have_played_keywords">warteschlange gespielt verlauf ziehen griff neu anordnen</string>
-    <string name="tidier_queue">Aufgeräumtere Warteschlange</string>
+    <string name="tidier_queue">Warteschlange mit weniger Tasten</string>
     <string name="tidier_queue_info">Entfernt das × bei jedem Song und die Warteschlangen-Taste aus der unteren Reihe, solange die Warteschlange geöffnet ist. Wische einen Song nach links oder nutze sein ⋯, um ihn zu entfernen. Zieh den Titel nach unten oder drücke Zurück, um die Warteschlange zu verlassen.</string>
     <string name="tidier_queue_keywords">warteschlange weniger tasten entfernen schließen aufgeräumt einfach</string>
     <string name="reopen_on_the_last_page">Auf der letzten Seite wieder öffnen</string>
@@ -5078,8 +5078,8 @@
     <string name="gb_swipes_and_touch">Wischen und Tippen</string>
     <string name="gb_double_tap_seeks">Doppeltippen spult</string>
     <string name="gb_double_tap_seeks_needs">Stell zuerst Doppeltippen auf Je nach Seite spulen</string>
-    <string name="gb_gestures_work">Gesten wirken</string>
-    <string name="gb_work_cover">Auf dem Cover</string>
+    <string name="gb_gestures_work">Wo Gesten wirken</string>
+    <string name="gb_work_cover">Nur auf dem Cover</string>
     <string name="gb_work_anywhere">Überall</string>
     <string name="gb_work_not_lyrics">Überall außer im Songtext</string>
     <string name="gb_work_cover_and_lyrics">Auf dem Cover und unter dem Songtext</string>
@@ -5179,7 +5179,7 @@
     <string name="settings_player_right_hand_time">Zeit rechts</string>
     <string name="settings_player_right_hand_time_info">Die Zeit rechts an der Fortschrittsleiste. Ein Tippen darauf im Player ändert das auch.</string>
     <string name="settings_player_cover_shape">Cover-Form</string>
-    <string name="settings_player_edge_to_edge">Von Rand zu Rand</string>
+    <string name="settings_player_edge_to_edge">Reicht bis zum Bildschirmrand</string>
     <string name="settings_player_cover_animation">Cover-Animation</string>
     <string name="settings_player_opening">Beim Öffnen</string>
     <string name="settings_player_opening_and_closing">Beim Öffnen und Schließen</string>
@@ -5190,7 +5190,7 @@
     <string name="settings_player_queue_dj">DJ-Taste</string>
     <string name="settings_player_queue_lengths">Songlängen</string>
     <string name="settings_player_queue_move_played">Gespielte verschieben</string>
-    <string name="settings_player_queue_tidier">Aufgeräumtere Warteschlange</string>
+    <string name="settings_player_queue_tidier">Weniger Tasten</string>
     <string name="settings_player_scroll_for_controls">Nach oben scrollen für Steuerung</string>
     <string name="settings_player_lock_options">Sperrbildschirm-Optionen</string>
     <string name="settings_player_immersive_options">Optionen für Immersiv</string>
@@ -5262,8 +5262,8 @@
     <string name="tl_reset_everything">Alles zurücksetzen</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">Ganze Looks, Tag und Nacht</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord an · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord an · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · Backup, Updates</string>
     <string name="root_connect_short">Auf Lautsprechern und TVs abspielen</string>
     <string name="root_handoff_on">Übergabe an</string>
@@ -5308,7 +5308,7 @@
     <string name="recap_ready_title">Dein Rückblick auf %1$s ist da</string>
     <string name="recap_ready_text">Dein Monat in Musik: deine Top-Songs und -Künstler und der Vergleich mit dem Vormonat.</string>
     <string name="recap_card_title">Dein %1$s</string>
-    <string name="replay_notices">Benachrichtigungen</string>
+    <string name="replay_notices">Replay-Benachrichtigungen</string>
     <string name="tour_185_replay_title">Replay, tiefer</string>
     <string name="tour_185_replay_body">Sieh, wann du hörst, Stunde für Stunde und Tag für Tag.</string>
     <string name="tour_185_replay_point_1">Hör-Uhr: deine Woche, Stunde für Stunde. Tippe auf eine Stunde für ihre Top-Songs.</string>
@@ -5381,7 +5381,7 @@
     <string name="cal_no_music">Keine Musik</string>
     <string name="cal_days_with_music">Tage mit Musik: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">Auf das kleine Cover tippen, um abzuspielen oder zu pausieren</string>
+    <string name="gb_lyrics_cover_plays">Auf das kleine Cover neben dem Songtext tippen, um zu pausieren</string>
     <string name="gb_lyrics_cover_plays_info">Bei geöffnetem Songtext spielt ein Tippen auf das kleine Cover ab oder pausiert, ein langer Druck schließt den Songtext. Aus: Ein Tippen schließt den Songtext.</string>
     <string name="gb_lyrics_cover_plays_keywords">Songtext kleines Cover Vorschaubild Albumcover Tippen Abspielen Pause langer Druck schließen lyrics</string>
     <!-- 1.8.6 Canvas -->
@@ -5558,4 +5558,37 @@
     <string name="hl_show_in_lists">In Listen einblenden</string>
     <string name="hl_show_on_artist_pages">Auf Künstlerseiten einblenden</string>
     <string name="allow_access_to_lossless_files_value">Nötig, um deine verlustfreien Dateien zu finden</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">Prism unterstützen</string>
+    <string name="support_prism_info">Mit der Unterstützung werden die Testhandys und Werkzeuge bezahlt, mit denen Prism entsteht. Alle Funktionen bleiben kostenlos, egal ob du unterstützt oder nicht. Öffnet Ko-fi in deinem Browser.</string>
+    <string name="support_prism_keywords">spenden Trinkgeld Kaffee Danke helfen Entwickler unterstützen</string>
+    <string name="i_ve_supported_prism">Ich habe Prism unterstützt</string>
+    <string name="i_ve_supported_prism_info">Schaltet alle Bitten um Unterstützung für Prism für immer aus. Es wird nichts geprüft: Es gilt dein Wort.</string>
+    <string name="i_ve_supported_prism_keywords">gespendet Unterstützer ausblenden Bitten aufhören</string>
+    <string name="supporters">Unterstützer</string>
+    <string name="supporters_keywords">Danke Credits Namen Spender Mitglieder</string>
+    <string name="supporters_info">Die Menschen, die Prism unterstützt haben und genannt werden wollten. Nur Namen: keine Beträge, keine Daten.</string>
+    <string name="supporters_members">Monatliche Mitglieder</string>
+    <string name="supporters_thank_you">Danke</string>
+    <string name="supporters_empty">Hier stehen noch keine Namen. Deiner könnte der erste sein.</string>
+    <string name="support_on_kofi">Auf Ko-fi unterstützen</string>
+    <string name="don_t_show_again">Nicht mehr anzeigen</string>
+    <string name="support_hours_title">100 Stunden Musik mit Prism</string>
+    <string name="support_hours_body">Prism ist kostenlos und wird von einer Person gemacht: Wenn dir das einen Kaffee wert ist, hält es Prism am Laufen.</string>
+    <string name="support_made_by_one_person">Von einer Person gemacht.</string>
+    <string name="support_whats_new_line">Prism ist kostenlos und wird von einer Person gemacht. Wenn es dir gefällt, kannst du es unterstützen.</string>
+    <string name="settings_player_layout_group">Layout und Steuerung</string>
+    <string name="dd_use_showing_covers">Animierte Cover anzeigen</string>
+    <string name="icon_style">Icon-Stil</string>
+    <string name="prism_s_own">Von Prism</string>
+    <string name="player_times_both">Beide Enden der Leiste</string>
+    <string name="button_shape_fully_round">Ganz rund</string>
+    <string name="transport_filled_play">Gefüllte Play-Taste</string>
+    <string name="replay_notice_recap_short">Monatsrückblick</string>
+    <string name="settings_player_edit_menu">Das ⋯-Menü des Players bearbeiten</string>
+    <string name="mix_why_sing">Mitsingen ist an, darum läuft jeder Song ganz.</string>
+    <string name="mix_why_together">Gemeinsam hören ist an, darum folgen die Songs dem Host.</string>
+    <string name="cn_spot_not_connected">Nicht verbunden · Playlists und Likes</string>
+    <string name="cn_other_services">Weitere Dienste</string>
+    <string name="edge_to_edge_both">Cover und Video</string>
 </resources>

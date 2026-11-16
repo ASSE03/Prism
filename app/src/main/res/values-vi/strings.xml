@@ -92,7 +92,7 @@
     <string name="refresh_the_list">Làm mới danh sách</string>
     <string name="from_github">Từ GitHub</string>
     <string name="add_your_look">Thêm Phong cách của bạn</string>
-    <string name="by_pull_request_on_github">Bằng pull request trên GitHub</string>
+    <string name="by_pull_request_on_github">Chia sẻ phong cách của bạn trên GitHub</string>
     <string name="save_your_look_share_it_as">Lưu Phong cách của bạn, chia sẻ dạng văn bản và thêm mã của nó vào themes/index.json trong kho của Prism. Trang đó có hướng dẫn.</string>
     <string name="use">Dùng %1$s</string>
     <string name="more_for">Thêm cho %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">Dùng</string>
     <string name="not_now">Để sau</string>
     <string name="day_and_night">Ngày và đêm</string>
-    <string name="day_and_night_looks">Phong cách ngày và đêm</string>
+    <string name="day_and_night_looks">Đổi phong cách theo giờ trong ngày</string>
     <string name="one_look_by_day_another_by">Một Phong cách ban ngày, một Phong cách ban đêm</string>
     <string name="like_theme_system_for_whole_looks">Giống Chủ đề: Hệ thống, nhưng cho cả Phong cách. Giờ mặt trời mọc và lặn được tính từ múi giờ, không cần vị trí của bạn. Phong cách bạn chọn giữa chừng sẽ giữ đến lần chuyển tiếp theo.</string>
     <string name="by_day">Ban ngày</string>
@@ -148,7 +148,7 @@
     <string name="search_history">Tìm trong lịch sử</string>
     <string name="your_last_changes_to_the_look">%1$s thay đổi giao diện gần nhất của bạn hiện ở đây để bạn quay lại.</string>
     <string name="clear_history">Xóa lịch sử</string>
-    <string name="your_look_stays_as_it_is">Giao diện của bạn vẫn giữ như hiện tại</string>
+    <string name="your_look_stays_as_it_is">Cài đặt của bạn vẫn giữ nguyên</string>
     <string name="clear_the_look_s_history">Xóa lịch sử giao diện?</string>
     <string name="you_won_t_be_able_to">Bạn sẽ không thể quay lại những thay đổi này. Giao diện của bạn vẫn giữ như hiện tại.</string>
     <string name="clear">Xóa</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">Kính trơn, một đường dải sáng mảnh</string>
     <string name="ledger">Sổ cái</string>
     <string name="three_numbers_side_by_side">Ba con số cạnh nhau</string>
-    <string name="wash">Loang màu</string>
+    <string name="wash">Màu dịu</string>
     <string name="a_faint_wash_of_color_and">Một lớp màu loang nhạt và các cột theo tháng</string>
     <string name="spectrum_frame">Khung quang phổ</string>
     <string name="glass_ringed_in_split_light_the">Kính viền dải sáng, thời gian có màu</string>
@@ -1472,7 +1472,7 @@
     <string name="widget_background_transparent_see_through_color">tiện ích nền trong suốt nhìn xuyên màu nút màn hình chính widget</string>
     <string name="the_tab_you_re_on">Thẻ đang mở</string>
     <string name="tab_icon_color_tint_accent_light">thẻ biểu tượng màu phủ màu nhấn dải sáng thẻ hiện tại</string>
-    <string name="play_on_album_and_playlist_pages">Nút Phát trên trang album và danh sách phát</string>
+    <string name="play_on_album_and_playlist_pages">Nút phát trên trang album và danh sách phát</string>
     <string name="play_button_outlined_filled">nút phát viền đặc</string>
     <string name="switches_sliders_and_buttons">Công tắc, thanh trượt và nút</string>
     <string name="classic_controls_1_6_material_switch">điều khiển cổ điển 1.6 material công tắc thanh trượt giao diện cũ</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">xoay hướng màn hình ngang dọc</string>
     <string name="picture_in_picture">Hình trong hình</string>
     <string name="pip_video_float_window_leave">pip video cửa sổ nổi rời đi</string>
-    <string name="load_ahead">Tải trước</string>
+    <string name="load_ahead">Tải trước bao xa</string>
     <string name="preload_buffer">tải trước bộ đệm</string>
     <string name="load_ahead_on_mobile_data">Tải trước khi dùng dữ liệu di động</string>
     <string name="preload_cellular">tải trước dữ liệu di động</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">Giữ một bản sao</string>
     <string name="just_sign_out">Chỉ đăng xuất</string>
     <string name="prism_account_on_this_phone">Prism Account · trên điện thoại này</string>
-    <string name="your_name_and_picture_kept_on">Tên và ảnh của bạn, lưu trên điện thoại này. Không gì bạn có bị thay đổi</string>
+    <string name="your_name_and_picture_kept_on">Tên và ảnh của bạn, lưu trên điện thoại này</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">đã đăng nhập</string>
     <string name="signed_in_2">Đã đăng nhập</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">Của Apple Music, Musixmatch và Spotify · theo từng từ</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · theo từng từ, nhiều bài hát tiếng Trung nhất</string>
+    <string name="qq_music_word_by_word_the">Theo từng từ · nhiều bài hát tiếng Trung nhất</string>
     <string name="open_lyrics_database_line_by_line">Cơ sở dữ liệu lời bài hát mở · theo từng dòng</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · theo từng từ</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · theo từng từ, nhiều bài hát châu Á</string>
+    <string name="kugou_word_by_word_many_asian">Theo từng từ · nhiều bài hát châu Á</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Lời bài hát do người nghe gửi · hiện còn ít bài</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">Lời bài hát trên trang bài hát của Prism Music, từ LyricFind · theo dòng hoặc văn bản thường</string>
+    <string name="lyricfind_lines_or_plain">Lời của LyricFind, qua YouTube Music · theo dòng hoặc văn bản thường</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Văn bản thường · cũng điền lại những từ bị che bằng dấu sao</string>
     <string name="both">Cả hai</string>
@@ -3136,7 +3136,7 @@
     <string name="one">Một</string>
     <string name="under_the_line">Dưới dòng</string>
     <string name="over_the_line">Trên dòng</string>
-    <string name="as_now">Như hiện tại</string>
+    <string name="as_now">Như trình phát</string>
     <string name="the_player_s_background_or_the">Hình nền của trình phát, hoặc ảnh bìa ở chế độ toàn màn hình</string>
     <string name="plain_dark">Tối trơn</string>
     <string name="nothing_but_the_words">Chỉ có chữ</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">Thư viện Phong cách cần Prism mới hơn</string>
     <string name="by_2">bởi %1$s</string>
     <string name="a_look">Một Phong cách</string>
-    <string name="how_prism_comes_outfit_the_split">Như Prism mặc định: Outfit, dải sáng, góc mềm</string>
+    <string name="how_prism_comes_outfit_the_split">Mặc định: phông chữ riêng của Prism, màu quang phổ, góc mềm</string>
     <string name="paper">Giấy</string>
     <string name="light_serif_type_ink_instead_of">Sáng, chữ có chân, mực thay cho màu, giấy ấm</string>
     <string name="midnight">Nửa đêm</string>
@@ -3898,7 +3898,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">Thao tác vuốt, nhấn đúp và nhấn giữ của bạn cũng hoạt động bên dưới tiêu đề, trong khoảng quanh các nút và thanh. Các nút và thanh vẫn giữ thao tác chạm riêng.</string>
     <string name="gestures_everywhere_keywords">cử chỉ vuốt nhấn đúp nhấn giữ nửa dưới nút điều khiển cả trình phát</string>
     <string name="playing_song_in_the_page_s_color">Bài đang phát theo màu của trang</string>
-    <string name="its_bars_and_title_take_the_album_s_color">Thanh và tên bài lấy màu của album</string>
+    <string name="its_bars_and_title_take_the_album_s_color">Thanh và tên bài lấy màu của trang</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">Ở trang album, danh sách phát và nghệ sĩ, bài đang phát hiện thanh và tên bài theo màu ảnh của trang thay vì ánh sáng của bạn. Ở chỗ khác giữ nguyên.</string>
     <string name="playing_indicator_bars_now_playing_album_color">chỉ báo đang phát thanh bộ cân bằng album danh sách nghệ sĩ trang màu bìa</string>
     <string name="slide_between_screens">Trượt giữa các màn hình</string>
@@ -3928,7 +3928,7 @@
     <string name="hidden_s">Đã ẩn: %1$s</string>
     <string name="buttons_in_the_row">Các nút trong hàng</string>
     <string name="add_a_button">Thêm nút</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">Menu ⋯ của trình phát: các ô và những gì nó hiện</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">Các ô và những gì nó hiện</string>
     <string name="and_the_sky_lit_up">Và bầu trời bừng sáng</string>
     <string name="play_pause_always_stays">Phát và Tạm dừng luôn được giữ lại</string>
     <string name="what_s_on_the_player_keywords">ẩn hiện phần hiện trên trình phát dưới tên bài ảnh bìa tên bài nghệ sĩ thích trái tim menu thanh tiến trình tua trước sau bỏ qua nút hàng thời lượng bài hát truyền cast hide show player</string>
@@ -3940,10 +3940,10 @@
     <string name="when_the_queue_ends">Khi danh sách chờ kết thúc</string>
     <string name="when_the_queue_ends_info">Dừng: nhạc dừng cùng danh sách chờ. Nhạc của bạn: đài phát riêng của Prism từ những gì bạn nghe. Của bạn và mới: chủ yếu là nhạc của bạn, thêm vài bài mới. Prism Music: đài phát từ kho nhạc của Prism Music. Khi ngoại tuyến luôn là nhạc của bạn.</string>
     <string name="music_videos_label">Video nhạc</string>
-    <string name="play_them">Video</string>
+    <string name="play_them">Video ở mọi nơi</string>
     <string name="songs_in_radios">Bài hát trong đài phát</string>
     <string name="songs_everywhere">Bài hát ở mọi nơi</string>
-    <string name="music_videos_label_info">Video: video nhạc phát dưới dạng video. Bài hát trong đài phát: tự động phát và đài phát sẽ phát bài hát của video đó. Bài hát ở mọi nơi: video nhạc nào bạn nhấn cũng phát dưới dạng bài hát, và nút Video vẫn hiện video.</string>
+    <string name="music_videos_label_info">Video ở mọi nơi: video nhạc phát dưới dạng video. Bài hát trong đài phát: tự động phát và đài phát sẽ phát bài hát của video đó. Bài hát ở mọi nơi: video nhạc nào bạn nhấn cũng phát dưới dạng bài hát, và nút Video vẫn hiện video.</string>
     <string name="trim_silence">Cắt khoảng lặng ở đầu và cuối</string>
     <string name="podcasts_only">Chỉ podcast</string>
     <string name="songs_and_podcasts">Bài hát và podcast</string>
@@ -4693,7 +4693,7 @@
     <string name="move_songs_you_have_played">Di chuyển bài hát đã nghe</string>
     <string name="move_songs_you_have_played_info">Bài hát bạn đã nghe cũng có tay nắm, để bạn kéo sắp xếp chúng với nhau.</string>
     <string name="move_songs_you_have_played_keywords">danh sách chờ đã nghe lịch sử kéo tay nắm sắp xếp lại</string>
-    <string name="tidier_queue">Danh sách chờ gọn hơn</string>
+    <string name="tidier_queue">Danh sách chờ ít nút hơn</string>
     <string name="tidier_queue_info">Bỏ dấu × khỏi mọi bài hát và nút Danh sách chờ khỏi hàng dưới cùng khi danh sách chờ đang mở. Vuốt bài hát sang trái hoặc dùng ⋯ của nó để xóa. Kéo tiêu đề xuống hoặc nhấn Quay lại để rời danh sách chờ.</string>
     <string name="tidier_queue_keywords">danh sách chờ ít nút hơn xóa đóng gọn đơn giản</string>
     <string name="reopen_on_the_last_page">Mở lại ở trang cuối</string>
@@ -5007,7 +5007,7 @@
     <string name="gb_double_tap_seeks">Nhấn đúp để tua</string>
     <string name="gb_double_tap_seeks_needs">Hãy đặt Nhấn đúp thành Tua theo bên nhấn trước</string>
     <string name="gb_gestures_work">Cử chỉ hoạt động</string>
-    <string name="gb_work_cover">Trên ảnh bìa</string>
+    <string name="gb_work_cover">Chỉ trên ảnh bìa</string>
     <string name="gb_work_anywhere">Mọi nơi</string>
     <string name="gb_work_not_lyrics">Mọi nơi trừ lời bài hát</string>
     <string name="gb_work_cover_and_lyrics">Trên ảnh bìa và dưới lời bài hát</string>
@@ -5107,7 +5107,7 @@
     <string name="settings_player_right_hand_time">Thời gian bên phải</string>
     <string name="settings_player_right_hand_time_info">Thời gian ở bên phải thanh tiến trình. Nhấn vào nó trên trình phát cũng thay đổi mục này.</string>
     <string name="settings_player_cover_shape">Hình dạng ảnh bìa</string>
-    <string name="settings_player_edge_to_edge">Tràn viền</string>
+    <string name="settings_player_edge_to_edge">Tràn đến mép màn hình</string>
     <string name="settings_player_cover_animation">Hiệu ứng ảnh bìa</string>
     <string name="settings_player_opening">Khi mở</string>
     <string name="settings_player_opening_and_closing">Khi mở và đóng</string>
@@ -5118,7 +5118,7 @@
     <string name="settings_player_queue_dj">Nút DJ</string>
     <string name="settings_player_queue_lengths">Độ dài bài hát</string>
     <string name="settings_player_queue_move_played">Dời bài đã phát</string>
-    <string name="settings_player_queue_tidier">Danh sách chờ gọn hơn</string>
+    <string name="settings_player_queue_tidier">Ít nút hơn</string>
     <string name="settings_player_scroll_for_controls">Cuộn lên để hiện nút điều khiển</string>
     <string name="settings_player_lock_options">Tùy chọn màn hình khóa</string>
     <string name="settings_player_immersive_options">Tùy chọn chế độ toàn màn hình</string>
@@ -5189,8 +5189,8 @@
     <string name="tl_reset_everything">Đặt lại tất cả</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">Cả phong cách, ngày và đêm</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord bật · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord bật · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · sao lưu, cập nhật</string>
     <string name="root_connect_short">Phát trên loa và TV</string>
     <string name="root_handoff_on">Chuyển tiếp bật</string>
@@ -5235,7 +5235,7 @@
     <string name="recap_ready_title">Tổng kết %1$s của bạn đã sẵn sàng</string>
     <string name="recap_ready_text">Tháng âm nhạc của bạn: bài hát và nghệ sĩ hàng đầu, và so với tháng trước thế nào.</string>
     <string name="recap_card_title">%1$s của bạn</string>
-    <string name="replay_notices">Thông báo</string>
+    <string name="replay_notices">Thông báo Replay</string>
     <string name="tour_185_replay_title">Replay, sâu hơn</string>
     <string name="tour_185_replay_body">Xem bạn nghe nhạc lúc nào, theo từng giờ và từng ngày.</string>
     <string name="tour_185_replay_point_1">Đồng hồ nghe nhạc: tuần của bạn theo từng giờ. Nhấn vào một giờ để xem bài hát hàng đầu của giờ đó.</string>
@@ -5306,7 +5306,7 @@
     <string name="cal_no_music">Không có nhạc</string>
     <string name="cal_days_with_music">Ngày có nhạc: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">Chạm vào ảnh bìa nhỏ để phát hoặc tạm dừng</string>
+    <string name="gb_lyrics_cover_plays">Chạm vào ảnh bìa cạnh lời bài hát để tạm dừng</string>
     <string name="gb_lyrics_cover_plays_info">Khi đang mở lời bài hát, chạm vào ảnh bìa nhỏ sẽ phát hoặc tạm dừng, nhấn giữ sẽ đóng lời bài hát. Tắt: chạm sẽ đóng lời bài hát.</string>
     <string name="gb_lyrics_cover_plays_keywords">lời bài hát ảnh bìa nhỏ hình thu nhỏ chạm phát tạm dừng nhấn giữ đóng lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5483,4 +5483,37 @@
     <string name="hl_show_in_lists">Hiện trong danh sách</string>
     <string name="hl_show_on_artist_pages">Hiện trên trang nghệ sĩ</string>
     <string name="allow_access_to_lossless_files_value">Cần để tìm các tệp lossless của bạn</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">Ủng hộ Prism</string>
+    <string name="support_prism_info">Khoản ủng hộ giúp trang trải điện thoại thử nghiệm và công cụ để làm ra Prism. Mọi tính năng vẫn miễn phí, dù bạn có ủng hộ hay không. Mở Ko-fi trong trình duyệt của bạn.</string>
+    <string name="support_prism_keywords">quyên góp tip cà phê cảm ơn giúp đỡ nhà phát triển ủng hộ</string>
+    <string name="i_ve_supported_prism">Tôi đã ủng hộ Prism</string>
+    <string name="i_ve_supported_prism_info">Tắt vĩnh viễn mọi lời nhắc ủng hộ Prism. Không có gì được kiểm tra: chúng tôi tin lời bạn.</string>
+    <string name="i_ve_supported_prism_keywords">đã quyên góp người ủng hộ ẩn lời nhắc ngừng hỏi</string>
+    <string name="supporters">Người ủng hộ</string>
+    <string name="supporters_keywords">cảm ơn danh sách tên nhà tài trợ thành viên</string>
+    <string name="supporters_info">Những người đã ủng hộ Prism và chọn được nêu tên. Chỉ có tên: không số tiền, không ngày.</string>
+    <string name="supporters_members">Thành viên hằng tháng</string>
+    <string name="supporters_thank_you">Cảm ơn bạn</string>
+    <string name="supporters_empty">Chưa có tên nào ở đây. Tên bạn có thể là người đầu tiên.</string>
+    <string name="support_on_kofi">Ủng hộ trên Ko-fi</string>
+    <string name="don_t_show_again">Không hiện lại</string>
+    <string name="support_hours_title">100 giờ nghe nhạc cùng Prism</string>
+    <string name="support_hours_body">Prism miễn phí và do một người làm ra: nếu bạn thấy đáng một ly cà phê, điều đó giúp Prism tiếp tục.</string>
+    <string name="support_made_by_one_person">Do một người làm ra.</string>
+    <string name="support_whats_new_line">Prism miễn phí và do một người làm ra. Nếu bạn thích, bạn có thể ủng hộ.</string>
+    <string name="settings_player_layout_group">Bố cục và nút điều khiển</string>
+    <string name="dd_use_showing_covers">Hiện ảnh bìa động</string>
+    <string name="icon_style">Kiểu biểu tượng</string>
+    <string name="prism_s_own">Của riêng Prism</string>
+    <string name="player_times_both">Hai đầu thanh</string>
+    <string name="button_shape_fully_round">Tròn hoàn toàn</string>
+    <string name="transport_filled_play">Nút phát đặc</string>
+    <string name="replay_notice_recap_short">Tổng kết hằng tháng</string>
+    <string name="settings_player_edit_menu">Sửa menu ⋯ của trình phát</string>
+    <string name="mix_why_sing">Hát cùng đang bật, nên mỗi bài hát phát trọn vẹn.</string>
+    <string name="mix_why_together">Nghe cùng nhau đang bật, nên các bài hát theo chủ phòng.</string>
+    <string name="cn_spot_not_connected">Chưa kết nối · danh sách phát và bài đã thích</string>
+    <string name="cn_other_services">Dịch vụ khác</string>
+    <string name="edge_to_edge_both">Ảnh bìa và video</string>
 </resources>

@@ -92,7 +92,7 @@
     <string name="refresh_the_list">تازه‌سازی فهرست</string>
     <string name="from_github">از GitHub</string>
     <string name="add_your_look">افزودن پوسته خودتان</string>
-    <string name="by_pull_request_on_github">با pull request در GitHub</string>
+    <string name="by_pull_request_on_github">مال خودتان را در GitHub به اشتراک بگذارید</string>
     <string name="save_your_look_share_it_as">پوسته‌تان را ذخیره کنید، به‌صورت متن به اشتراک بگذارید و کدش را به themes/index.json در مخزن Prism اضافه کنید. صفحه می‌گوید چطور.</string>
     <string name="use">استفاده از %1$s</string>
     <string name="more_for">بیشتر برای %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">استفاده</string>
     <string name="not_now">الان نه</string>
     <string name="day_and_night">روز و شب</string>
-    <string name="day_and_night_looks">پوسته‌های روز و شب</string>
+    <string name="day_and_night_looks">تغییر پوسته بر اساس ساعت روز</string>
     <string name="one_look_by_day_another_by">یک پوسته برای روز، یکی برای شب</string>
     <string name="like_theme_system_for_whole_looks">مثل «تم: سیستم»، اما برای کل پوسته‌ها. طلوع و غروب از منطقه زمانی شما حساب می‌شود، بدون موقعیت مکانی. پوسته‌ای که در این بین انتخاب کنید تا تعویض بعدی می‌ماند.</string>
     <string name="by_day">روز</string>
@@ -148,7 +148,7 @@
     <string name="search_history">جستجو در تاریخچه</string>
     <string name="your_last_changes_to_the_look">%1$s تغییر آخر شما در ظاهر اینجا نشان داده می‌شود تا بتوانید به آن‌ها برگردید.</string>
     <string name="clear_history">پاک کردن تاریخچه</string>
-    <string name="your_look_stays_as_it_is">ظاهر شما همین‌طور که الان هست می‌ماند</string>
+    <string name="your_look_stays_as_it_is">تنظیمات شما همین‌طور که هست می‌ماند</string>
     <string name="clear_the_look_s_history">تاریخچه ظاهر پاک شود؟</string>
     <string name="you_won_t_be_able_to">دیگر نمی‌توانید به این تغییرات برگردید. ظاهر شما همین‌طور که الان هست می‌ماند.</string>
     <string name="clear">پاک کردن</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">شیشه ساده، یک خط باریک از نور طیفی</string>
     <string name="ledger">دفتر</string>
     <string name="three_numbers_side_by_side">سه عدد کنار هم</string>
-    <string name="wash">رنگ‌آمیزی</string>
+    <string name="wash">رنگ ملایم</string>
     <string name="a_faint_wash_of_color_and">ته‌رنگی کم‌رنگ و نوارهای ماهانه</string>
     <string name="spectrum_frame">قاب طیفی</string>
     <string name="glass_ringed_in_split_light_the">شیشه‌ای با حلقه‌ای از نور طیفی، زمان به‌صورت رنگی</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">چرخش جهت افقی عمودی</string>
     <string name="picture_in_picture">تصویر در تصویر</string>
     <string name="pip_video_float_window_leave">pip ویدیو شناور پنجره خروج</string>
-    <string name="load_ahead">پیش‌بارگیری</string>
+    <string name="load_ahead">تا چه اندازه پیش‌بارگیری شود</string>
     <string name="preload_buffer">پیش‌بارگیری بافر</string>
     <string name="load_ahead_on_mobile_data">پیش‌بارگیری با داده تلفن همراه</string>
     <string name="preload_cellular">پیش‌بارگیری داده موبایل</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">نگه داشتن نسخه</string>
     <string name="just_sign_out">فقط خروج</string>
     <string name="prism_account_on_this_phone">Prism Account · روی این گوشی</string>
-    <string name="your_name_and_picture_kept_on">نام و تصویر شما، روی همین گوشی. هیچ چیزی از آنچه دارید تغییر نمی‌کند</string>
+    <string name="your_name_and_picture_kept_on">نام و تصویر شما، روی همین گوشی</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">وارد شده</string>
     <string name="signed_in_2">وارد شده</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">از Apple Music، Musixmatch و Spotify · کلمه‌به‌کلمه</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · کلمه‌به‌کلمه، بیشترین آهنگ‌های چینی</string>
+    <string name="qq_music_word_by_word_the">کلمه‌به‌کلمه · بیشترین آهنگ‌های چینی</string>
     <string name="open_lyrics_database_line_by_line">پایگاه داده آزاد متن آهنگ · خط‌به‌خط</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · کلمه‌به‌کلمه</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · کلمه‌به‌کلمه، آهنگ‌های آسیایی زیاد</string>
+    <string name="kugou_word_by_word_many_asian">کلمه‌به‌کلمه · آهنگ‌های آسیایی زیاد</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">متن‌هایی که شنونده‌ها می‌فرستند · فعلاً آهنگ‌های کم</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">متن آهنگ در صفحهٔ آهنگ در Prism Music، از LyricFind · خطوط همگام یا متن ساده</string>
+    <string name="lyricfind_lines_or_plain">متن آهنگ از LyricFind، از طریق YouTube Music · خطوط همگام یا متن ساده</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">متن ساده · کلمات ستاره‌دار را هم کامل می‌کند</string>
     <string name="both">هر دو</string>
@@ -3136,7 +3136,7 @@
     <string name="one">یک</string>
     <string name="under_the_line">زیر خط</string>
     <string name="over_the_line">بالای خط</string>
-    <string name="as_now">مثل الان</string>
+    <string name="as_now">مثل پخش‌کننده</string>
     <string name="the_player_s_background_or_the">پس‌زمینه پخش‌کننده، یا کاور در حالت تمام‌صفحه</string>
     <string name="plain_dark">تیره ساده</string>
     <string name="nothing_but_the_words">فقط کلمات</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">گالری به نسخه جدیدتر Prism نیاز دارد</string>
     <string name="by_2">از %1$s</string>
     <string name="a_look">یک پوسته</string>
-    <string name="how_prism_comes_outfit_the_split">ظاهر پیش‌فرض Prism: فونت Outfit، نور طیفی، گوشه‌های نرم</string>
+    <string name="how_prism_comes_outfit_the_split">ظاهر پیش‌فرض: فونت خود Prism، نور طیفی، گوشه‌های نرم</string>
     <string name="paper">کاغذ</string>
     <string name="light_serif_type_ink_instead_of">روشن، حروف سریف، جوهر به‌جای رنگ، کاغذ گرم</string>
     <string name="midnight">نیمه‌شب</string>
@@ -3948,7 +3948,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">کشیدن‌ها، دوضربه و نگه‌داشتن زیر عنوان هم کار می‌کنند، در فضای دور دکمه‌ها و نوارها. دکمه‌ها و نوارها ضربه‌های خودشان را نگه می‌دارند.</string>
     <string name="gestures_everywhere_keywords">حرکت کشیدن دوضربه نگه داشتن پایین کنترل‌ها کل پخش‌کننده</string>
     <string name="playing_song_in_the_page_s_color">آهنگ در حال پخش به رنگ صفحه</string>
-    <string name="its_bars_and_title_take_the_album_s_color">نوارها و عنوانش رنگ آلبوم را می‌گیرند</string>
+    <string name="its_bars_and_title_take_the_album_s_color">نوارها و عنوانش رنگ صفحه را می‌گیرند</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">در صفحه‌های آلبوم، فهرست پخش و هنرمند، آهنگ در حال پخش نوارها و عنوانش را به رنگ تصویر صفحه نشان می‌دهد، نه نور شما. جاهای دیگر همان‌طور می‌ماند.</string>
     <string name="playing_indicator_bars_now_playing_album_color">نشانگر پخش نوارها اکولایزر آلبوم فهرست هنرمند صفحه رنگ کاور</string>
     <string name="slide_between_screens">لغزیدن بین صفحه‌ها</string>
@@ -3978,7 +3978,7 @@
     <string name="hidden_s">پنهان: %1$s</string>
     <string name="buttons_in_the_row">دکمه‌های ردیف</string>
     <string name="add_a_button">افزودن دکمه</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">منوی ⋯ پخش‌کننده: کاشی‌هایش و آنچه نشان می‌دهد</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">کاشی‌هایش و آنچه نشان می‌دهد</string>
     <string name="and_the_sky_lit_up">و آسمان روشن شد</string>
     <string name="play_pause_always_stays">پخش و توقف همیشه می‌مانند</string>
     <string name="what_s_on_the_player_keywords">پنهان نمایش بخش‌ها روی پخش‌کننده زیر عنوان کاور عنوان هنرمند پسندیدن قلب منو نوار پیشرفت جلو قبلی بعدی رد کردن دکمه‌ها ردیف مدت آهنگ پخش روی دستگاه</string>
@@ -3990,10 +3990,10 @@
     <string name="when_the_queue_ends">وقتی صف تمام می‌شود</string>
     <string name="when_the_queue_ends_info">توقف کامل: موسیقی با تمام شدن صف تمام می‌شود. موسیقی شما: رادیوی خود Prism از آنچه پخش می‌کنید. موسیقی شما و تازه: بیشتر موسیقی شما، همراه چند آهنگ تازه. Prism Music: رادیویی از کاتالوگ Prism Music. در حالت آفلاین همیشه موسیقی شماست.</string>
     <string name="music_videos_label">موزیک‌ویدیوها</string>
-    <string name="play_them">ویدیوها</string>
+    <string name="play_them">ویدیوها همه‌جا</string>
     <string name="songs_in_radios">آهنگ در رادیوها</string>
     <string name="songs_everywhere">آهنگ همه جا</string>
-    <string name="music_videos_label_info">ویدیوها: موزیک‌ویدیو به‌صورت ویدیو پخش می‌شود. آهنگ در رادیوها: پخش خودکار و رادیوها به‌جای ویدیو آهنگ آن را پخش می‌کنند. آهنگ همه جا: هر موزیک‌ویدیویی که رویش ضربه بزنید به‌صورت آهنگش پخش می‌شود و دکمهٔ «ویدیو» همچنان ویدیو را نشان می‌دهد.</string>
+    <string name="music_videos_label_info">ویدیوها همه‌جا: موزیک‌ویدیو به‌صورت ویدیو پخش می‌شود. آهنگ در رادیوها: پخش خودکار و رادیوها به‌جای ویدیو آهنگ آن را پخش می‌کنند. آهنگ همه جا: هر موزیک‌ویدیویی که رویش ضربه بزنید به‌صورت آهنگش پخش می‌شود و دکمهٔ «ویدیو» همچنان ویدیو را نشان می‌دهد.</string>
     <string name="trim_silence">حذف سکوت ابتدا و انتها</string>
     <string name="podcasts_only">فقط پادکست‌ها</string>
     <string name="songs_and_podcasts">آهنگ‌ها و پادکست‌ها</string>
@@ -4757,7 +4757,7 @@
     <string name="move_songs_you_have_played">جابه‌جایی آهنگ‌های پخش‌شده</string>
     <string name="move_songs_you_have_played_info">آهنگ‌هایی که قبلاً پخش کرده‌اید هم دستگیره می‌گیرند تا بتوانید آن‌ها را میان خودشان بکشید و جابه‌جا کنید.</string>
     <string name="move_songs_you_have_played_keywords">صف پخش‌شده تاریخچه کشیدن دستگیره چیدن دوباره</string>
-    <string name="tidier_queue">صف مرتب‌تر</string>
+    <string name="tidier_queue">صف با دکمه‌های کمتر</string>
     <string name="tidier_queue_info">تا وقتی صف باز است، × را از هر آهنگ و دکمه صف را از ردیف پایین برمی‌دارد. برای حذف یک آهنگ آن را به چپ بکشید یا از ⋯ آن استفاده کنید. برای خروج از صف، عنوان را پایین بکشید یا برگشت را بزنید.</string>
     <string name="tidier_queue_keywords">صف دکمه‌های کمتر حذف بستن مرتب ساده</string>
     <string name="reopen_on_the_last_page">بازشدن روی آخرین صفحه</string>
@@ -5079,7 +5079,7 @@
     <string name="gb_double_tap_seeks">دو ضربه جابه‌جا می‌کند</string>
     <string name="gb_double_tap_seeks_needs">اول «دو ضربه» را روی «جابه‌جایی بر اساس سمت» بگذارید</string>
     <string name="gb_gestures_work">محل کار ژست‌ها</string>
-    <string name="gb_work_cover">روی کاور</string>
+    <string name="gb_work_cover">فقط روی کاور</string>
     <string name="gb_work_anywhere">همه‌جا</string>
     <string name="gb_work_not_lyrics">همه‌جا به‌جز متن آهنگ</string>
     <string name="gb_work_cover_and_lyrics">روی کاور و زیر متن آهنگ</string>
@@ -5179,7 +5179,7 @@
     <string name="settings_player_right_hand_time">زمان سمت راست</string>
     <string name="settings_player_right_hand_time_info">زمانی که در سمت راست نوار پیشرفت است. ضربه زدن روی آن در پخش‌کننده هم این را تغییر می‌دهد.</string>
     <string name="settings_player_cover_shape">شکل کاور</string>
-    <string name="settings_player_edge_to_edge">لبه تا لبه</string>
+    <string name="settings_player_edge_to_edge">تا لبه‌های صفحه می‌رسد</string>
     <string name="settings_player_cover_animation">انیمیشن کاور</string>
     <string name="settings_player_opening">هنگام باز شدن</string>
     <string name="settings_player_opening_and_closing">هنگام باز و بسته شدن</string>
@@ -5190,7 +5190,7 @@
     <string name="settings_player_queue_dj">دکمه DJ</string>
     <string name="settings_player_queue_lengths">مدت آهنگ‌ها</string>
     <string name="settings_player_queue_move_played">جابه‌جایی پخش‌شده‌ها</string>
-    <string name="settings_player_queue_tidier">صف مرتب‌تر</string>
+    <string name="settings_player_queue_tidier">دکمه‌های کمتر</string>
     <string name="settings_player_scroll_for_controls">پیمایش به بالا برای کنترل‌ها</string>
     <string name="settings_player_lock_options">گزینه‌های صفحه قفل</string>
     <string name="settings_player_immersive_options">گزینه‌های حالت تمام‌صفحه</string>
@@ -5262,8 +5262,8 @@
     <string name="tl_reset_everything">بازنشانی همه</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">پوسته‌های کامل، روز و شب</string>
-    <string name="root_accounts_short">Last.fm، Spotify، Discord</string>
-    <string name="root_accounts_discord_on">Discord روشن · Last.fm، Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord روشن · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · پشتیبان، به‌روزرسانی</string>
     <string name="root_connect_short">پخش روی بلندگو و تلویزیون</string>
     <string name="root_handoff_on">انتقال پخش روشن</string>
@@ -5308,7 +5308,7 @@
     <string name="recap_ready_title">خلاصهٔ %1$s شما آماده است</string>
     <string name="recap_ready_text">ماه شما در موسیقی: آهنگ‌ها و هنرمندان برترتان، و مقایسه با ماه قبل.</string>
     <string name="recap_card_title">%1$s شما</string>
-    <string name="replay_notices">اعلان‌ها</string>
+    <string name="replay_notices">اعلان‌های Replay</string>
     <string name="tour_185_replay_title">Replay، عمیق‌تر</string>
     <string name="tour_185_replay_body">ببینید کی گوش می‌دهید، ساعت به ساعت و روز به روز.</string>
     <string name="tour_185_replay_point_1">ساعت شنیدن: هفتهٔ شما، ساعت به ساعت. روی یک ساعت بزنید تا آهنگ‌های برترش را ببینید.</string>
@@ -5381,7 +5381,7 @@
     <string name="cal_no_music">بدون موسیقی</string>
     <string name="cal_days_with_music">روزهای با موسیقی: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">با ضربه روی کاور کوچک پخش یا متوقف کنید</string>
+    <string name="gb_lyrics_cover_plays">با ضربه روی کاور متن آهنگ متوقف کنید</string>
     <string name="gb_lyrics_cover_plays_info">وقتی متن آهنگ باز است، ضربه روی کاور کوچک آهنگ را پخش یا متوقف می‌کند و لمس طولانی متن آهنگ را می‌بندد. خاموش: ضربه، متن آهنگ را می‌بندد.</string>
     <string name="gb_lyrics_cover_plays_keywords">متن آهنگ کاور کوچک تصویر بندانگشتی ضربه پخش توقف لمس طولانی بستن lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5558,4 +5558,37 @@
     <string name="hl_show_in_lists">نمایش در فهرست‌ها</string>
     <string name="hl_show_on_artist_pages">نمایش در صفحه‌های هنرمندان</string>
     <string name="allow_access_to_lossless_files_value">برای یافتن فایل‌های بی‌اتلاف شما لازم است</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">حمایت از Prism</string>
+    <string name="support_prism_info">حمایت شما هزینهٔ گوشی‌های آزمایشی و ابزارهایی را می‌دهد که Prism با آن‌ها ساخته می‌شود. همهٔ امکانات رایگان می‌مانند، چه حمایت کنید چه نکنید. Ko-fi را در مرورگر شما باز می‌کند.</string>
+    <string name="support_prism_keywords">اهدا انعام قهوه تشکر کمک توسعه‌دهنده حمایت</string>
+    <string name="i_ve_supported_prism">از Prism حمایت کرده‌ام</string>
+    <string name="i_ve_supported_prism_info">همهٔ درخواست‌های حمایت از Prism را برای همیشه خاموش می‌کند. چیزی بررسی نمی‌شود: حرف شما ملاک است.</string>
+    <string name="i_ve_supported_prism_keywords">اهدا حامی پنهان درخواست دیگر نپرس</string>
+    <string name="supporters">حامیان</string>
+    <string name="supporters_keywords">تشکر اعتبارنامه نام‌ها اهداکنندگان اعضا</string>
+    <string name="supporters_info">کسانی که از Prism حمایت کردند و خواستند نامشان آورده شود. فقط نام‌ها: بدون مبلغ و تاریخ.</string>
+    <string name="supporters_members">اعضای ماهانه</string>
+    <string name="supporters_thank_you">سپاسگزاریم</string>
+    <string name="supporters_empty">هنوز نامی اینجا نیست. شاید نام شما اولین باشد.</string>
+    <string name="support_on_kofi">حمایت در Ko-fi</string>
+    <string name="don_t_show_again">دیگر نشان نده</string>
+    <string name="support_hours_title">100 ساعت موسیقی با Prism</string>
+    <string name="support_hours_body">رایگان است و یک نفر آن را می‌سازد: اگر برایتان به اندازهٔ یک قهوه می‌ارزد، همین آن را زنده نگه می‌دارد.</string>
+    <string name="support_made_by_one_person">ساختهٔ یک نفر.</string>
+    <string name="support_whats_new_line">Prism رایگان است و یک نفر آن را می‌سازد. اگر دوستش دارید، می‌توانید از آن حمایت کنید.</string>
+    <string name="settings_player_layout_group">چیدمان و کنترل‌ها</string>
+    <string name="dd_use_showing_covers">نمایش کاورهای متحرک</string>
+    <string name="icon_style">سبک نمادها</string>
+    <string name="prism_s_own">مال خود Prism</string>
+    <string name="player_times_both">هر دو سر نوار</string>
+    <string name="button_shape_fully_round">کاملاً گرد</string>
+    <string name="transport_filled_play">دکمه پخش توپر</string>
+    <string name="replay_notice_recap_short">مرور ماهانه</string>
+    <string name="settings_player_edit_menu">ویرایش منوی ⋯ پخش‌کننده</string>
+    <string name="mix_why_sing">«همخوانی» روشن است، پس هر آهنگ کامل پخش می‌شود.</string>
+    <string name="mix_why_together">«گوش دادن با هم» روشن است، پس آهنگ‌ها از میزبان پیروی می‌کنند.</string>
+    <string name="cn_spot_not_connected">متصل نیست · فهرست‌های پخش و پسندیده‌ها</string>
+    <string name="cn_other_services">سرویس‌های دیگر</string>
+    <string name="edge_to_edge_both">کاور و ویدیو</string>
 </resources>

@@ -92,7 +92,7 @@
     <string name="refresh_the_list">목록 새로고침</string>
     <string name="from_github">GitHub에서</string>
     <string name="add_your_look">내 룩 추가하기</string>
-    <string name="by_pull_request_on_github">GitHub의 풀 리퀘스트로</string>
+    <string name="by_pull_request_on_github">GitHub에 공유하기</string>
     <string name="save_your_look_share_it_as">룩을 저장하고 텍스트로 공유한 다음, 그 코드를 Prism 저장소의 themes/index.json에 추가하세요. 방법은 페이지에 나와 있어요.</string>
     <string name="use">%1$s 사용</string>
     <string name="more_for">%1$s 더보기</string>
@@ -129,7 +129,7 @@
     <string name="use_it">사용하기</string>
     <string name="not_now">나중에</string>
     <string name="day_and_night">낮과 밤</string>
-    <string name="day_and_night_looks">낮과 밤 룩</string>
+    <string name="day_and_night_looks">시간대별로 룩 바꾸기</string>
     <string name="one_look_by_day_another_by">낮에는 이 룩, 밤에는 저 룩</string>
     <string name="like_theme_system_for_whole_looks">룩 전체에 적용되는 \'테마: 시스템\'과 같아요. 일출과 일몰 시간은 위치 정보 없이 시간대로 계산해요. 그 사이에 고른 룩은 다음 전환 때까지 유지돼요.</string>
     <string name="by_day">낮</string>
@@ -148,7 +148,7 @@
     <string name="search_history">기록 검색</string>
     <string name="your_last_changes_to_the_look">최근 %1$s개의 모양 변경 사항이 여기에 표시돼요. 되돌아갈 수 있어요.</string>
     <string name="clear_history">기록 지우기</string>
-    <string name="your_look_stays_as_it_is">현재 모양은 그대로 유지돼요</string>
+    <string name="your_look_stays_as_it_is">설정은 그대로 유지돼요</string>
     <string name="clear_the_look_s_history">모양 변경 기록을 지울까요?</string>
     <string name="you_won_t_be_able_to">이 변경 사항으로 되돌아갈 수 없게 돼요. 현재 모양은 그대로 유지돼요.</string>
     <string name="clear">지우기</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">단순한 유리에 가는 스펙트럼 빛 한 줄</string>
     <string name="ledger">장부</string>
     <string name="three_numbers_side_by_side">나란히 놓인 숫자 세 개</string>
-    <string name="wash">물들임</string>
+    <string name="wash">은은한 색</string>
     <string name="a_faint_wash_of_color_and">옅게 물든 색과 월별 막대</string>
     <string name="spectrum_frame">스펙트럼 테두리</string>
     <string name="glass_ringed_in_split_light_the">스펙트럼 빛 테두리의 유리, 컬러 시간 표시</string>
@@ -1472,7 +1472,7 @@
     <string name="widget_background_transparent_see_through_color">위젯 배경 투명 반투명 색상 버튼 홈 화면</string>
     <string name="the_tab_you_re_on">현재 탭</string>
     <string name="tab_icon_color_tint_accent_light">탭 아이콘 색상 색조 강조 빛 현재 탭</string>
-    <string name="play_on_album_and_playlist_pages">앨범 및 재생목록 페이지의 재생 버튼</string>
+    <string name="play_on_album_and_playlist_pages">앨범 및 재생목록의 재생 버튼</string>
     <string name="play_button_outlined_filled">재생 버튼 윤곽선 채움</string>
     <string name="switches_sliders_and_buttons">스위치, 슬라이더, 버튼</string>
     <string name="classic_controls_1_6_material_switch">클래식 컨트롤 1.6 머티리얼 스위치 슬라이더 예전 모양</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">회전 방향 가로 세로</string>
     <string name="picture_in_picture">PIP 모드</string>
     <string name="pip_video_float_window_leave">pip 동영상 플로팅 창 나가기 화면 속 화면</string>
-    <string name="load_ahead">미리 불러오기</string>
+    <string name="load_ahead">미리 불러올 범위</string>
     <string name="preload_buffer">미리 로드 버퍼</string>
     <string name="load_ahead_on_mobile_data">모바일 데이터에서 미리 불러오기</string>
     <string name="preload_cellular">미리 로드 셀룰러 모바일 데이터</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">사본 보관</string>
     <string name="just_sign_out">로그아웃만 하기</string>
     <string name="prism_account_on_this_phone">Prism Account · 이 휴대전화</string>
-    <string name="your_name_and_picture_kept_on">이 휴대전화에 저장된 이름과 사진. 기존 데이터는 바뀌지 않아요</string>
+    <string name="your_name_and_picture_kept_on">이 휴대전화에 저장된 이름과 사진</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">로그인됨</string>
     <string name="signed_in_2">로그인됨</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music, Musixmatch, Spotify 가사 · 단어별</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · 단어별, 중국 노래가 가장 많음</string>
+    <string name="qq_music_word_by_word_the">단어별 · 중국 노래가 가장 많음</string>
     <string name="open_lyrics_database_line_by_line">오픈 가사 데이터베이스 · 줄별</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · 단어별</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · 단어별, 아시아 노래가 많음</string>
+    <string name="kugou_word_by_word_many_asian">단어별 · 아시아 노래가 많음</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">청취자가 올린 가사 · 아직 곡이 적음</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">곡의 Prism Music 페이지에 있는 가사, LyricFind 제공 · 줄별 또는 일반 텍스트</string>
+    <string name="lyricfind_lines_or_plain">YouTube Music을 통한 LyricFind 가사 · 줄별 또는 일반 텍스트</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">일반 텍스트 · 별표로 가린 단어도 채워요</string>
     <string name="both">둘 다</string>
@@ -3136,7 +3136,7 @@
     <string name="one">1</string>
     <string name="under_the_line">줄 아래</string>
     <string name="over_the_line">줄 위</string>
-    <string name="as_now">현재처럼</string>
+    <string name="as_now">플레이어와 같게</string>
     <string name="the_player_s_background_or_the">플레이어 배경, 몰입 모드에서는 커버</string>
     <string name="plain_dark">어두운 단색</string>
     <string name="nothing_but_the_words">가사만</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">갤러리를 보려면 최신 Prism이 필요해요</string>
     <string name="by_2">%1$s 제작</string>
     <string name="a_look">룩</string>
-    <string name="how_prism_comes_outfit_the_split">Prism 기본: Outfit, 스펙트럼 빛, 부드러운 모서리</string>
+    <string name="how_prism_comes_outfit_the_split">기본 상태: Prism 고유 글꼴, 스펙트럼 색, 부드러운 모서리</string>
     <string name="paper">페이퍼</string>
     <string name="light_serif_type_ink_instead_of">밝은 테마, 세리프 글꼴, 색 대신 잉크, 따뜻한 종이</string>
     <string name="midnight">미드나잇</string>
@@ -3898,7 +3898,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">스와이프, 두 번 탭, 길게 누르기가 제목 아래, 버튼과 바 주변 공간에서도 작동합니다. 버튼과 바는 원래의 탭을 유지합니다.</string>
     <string name="gestures_everywhere_keywords">제스처 스와이프 두 번 탭 길게 누르기 아래쪽 컨트롤 플레이어 전체</string>
     <string name="playing_song_in_the_page_s_color">재생 중인 곡을 페이지 색으로</string>
-    <string name="its_bars_and_title_take_the_album_s_color">막대와 제목이 앨범 색을 따릅니다</string>
+    <string name="its_bars_and_title_take_the_album_s_color">막대와 제목이 페이지 색을 따릅니다</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">앨범, 재생목록, 아티스트 페이지에서 재생 중인 곡의 막대와 제목이 내 빛 대신 페이지 이미지의 색으로 표시됩니다. 다른 곳은 그대로입니다.</string>
     <string name="playing_indicator_bars_now_playing_album_color">재생 중 표시 막대 이퀄라이저 앨범 재생목록 아티스트 페이지 색 커버</string>
     <string name="slide_between_screens">화면 사이 슬라이드</string>
@@ -3928,7 +3928,7 @@
     <string name="hidden_s">숨김: %1$s</string>
     <string name="buttons_in_the_row">버튼 줄</string>
     <string name="add_a_button">버튼 추가</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">플레이어의 ⋯ 메뉴: 타일과 표시할 항목</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">타일과 표시할 항목</string>
     <string name="and_the_sky_lit_up">그리고 하늘이 밝게 빛났어</string>
     <string name="play_pause_always_stays">재생과 일시정지는 항상 남아요</string>
     <string name="what_s_on_the_player_keywords">숨기기 표시 부분 플레이어 제목 아래 커버 제목 아티스트 좋아요 하트 메뉴 진행 표시줄 탐색 이전 다음 건너뛰기 버튼 줄 곡 길이 캐스트</string>
@@ -3940,10 +3940,10 @@
     <string name="when_the_queue_ends">대기열이 끝나면</string>
     <string name="when_the_queue_ends_info">정지: 대기열이 끝나면 음악도 멈춰요. 내 음악: 내가 듣는 음악으로 만든 Prism만의 라디오예요. 내 음악과 새 곡: 주로 내 음악에 새 곡을 조금 섞어요. Prism Music: Prism Music 카탈로그로 만든 라디오예요. 오프라인에서는 항상 내 음악이에요.</string>
     <string name="music_videos_label">뮤직비디오</string>
-    <string name="play_them">동영상</string>
+    <string name="play_them">어디서나 동영상</string>
     <string name="songs_in_radios">라디오에서는 노래로</string>
     <string name="songs_everywhere">어디서나 노래로</string>
-    <string name="music_videos_label_info">동영상: 뮤직비디오를 동영상으로 재생해요. 라디오에서는 노래로: 자동재생과 라디오에서는 동영상 대신 그 노래를 재생해요. 어디서나 노래로: 탭한 뮤직비디오는 모두 노래로 재생되고, 동영상 버튼으로 동영상도 볼 수 있어요.</string>
+    <string name="music_videos_label_info">어디서나 동영상: 뮤직비디오를 동영상으로 재생해요. 라디오에서는 노래로: 자동재생과 라디오에서는 동영상 대신 그 노래를 재생해요. 어디서나 노래로: 탭한 뮤직비디오는 모두 노래로 재생되고, 동영상 버튼으로 동영상도 볼 수 있어요.</string>
     <string name="trim_silence">시작과 끝의 무음 구간 자르기</string>
     <string name="podcasts_only">팟캐스트만</string>
     <string name="songs_and_podcasts">노래와 팟캐스트</string>
@@ -4693,7 +4693,7 @@
     <string name="move_songs_you_have_played">재생한 곡 옮기기</string>
     <string name="move_songs_you_have_played_info">이미 재생한 곡에도 핸들이 생겨서, 그 곡들끼리 끌어서 순서를 바꿀 수 있어요.</string>
     <string name="move_songs_you_have_played_keywords">대기열 재생한 기록 끌기 핸들 순서 변경</string>
-    <string name="tidier_queue">깔끔한 대기열</string>
+    <string name="tidier_queue">버튼이 적은 대기열</string>
     <string name="tidier_queue_info">대기열이 열려 있는 동안 모든 곡의 ×와 아래 줄의 대기열 버튼을 숨겨요. 곡을 왼쪽으로 스와이프하거나 ⋯로 삭제하세요. 제목을 아래로 당기거나 뒤로를 눌러 대기열에서 나가요.</string>
     <string name="tidier_queue_keywords">대기열 버튼 줄이기 삭제 닫기 깔끔 간단</string>
     <string name="reopen_on_the_last_page">마지막 페이지에서 다시 열기</string>
@@ -5006,8 +5006,8 @@
     <string name="gb_swipes_and_touch">스와이프 및 터치</string>
     <string name="gb_double_tap_seeks">두 번 탭으로 탐색</string>
     <string name="gb_double_tap_seeks_needs">먼저 두 번 탭을 양옆으로 탐색으로 설정하세요</string>
-    <string name="gb_gestures_work">제스처 작동 범위</string>
-    <string name="gb_work_cover">커버에서</string>
+    <string name="gb_gestures_work">제스처가 작동하는 곳</string>
+    <string name="gb_work_cover">커버에서만</string>
     <string name="gb_work_anywhere">어디서나</string>
     <string name="gb_work_not_lyrics">가사 말고 어디서나</string>
     <string name="gb_work_cover_and_lyrics">커버와 가사 아래에서</string>
@@ -5107,7 +5107,7 @@
     <string name="settings_player_right_hand_time">오른쪽 시간</string>
     <string name="settings_player_right_hand_time_info">진행 표시줄 오른쪽에 보이는 시간이에요. 플레이어에서 탭해도 바뀌어요.</string>
     <string name="settings_player_cover_shape">커버 모양</string>
-    <string name="settings_player_edge_to_edge">가장자리까지</string>
+    <string name="settings_player_edge_to_edge">화면 가장자리까지</string>
     <string name="settings_player_cover_animation">커버 애니메이션</string>
     <string name="settings_player_opening">열 때</string>
     <string name="settings_player_opening_and_closing">열고 닫을 때</string>
@@ -5118,7 +5118,7 @@
     <string name="settings_player_queue_dj">DJ 버튼</string>
     <string name="settings_player_queue_lengths">곡 길이</string>
     <string name="settings_player_queue_move_played">재생한 곡 옮기기</string>
-    <string name="settings_player_queue_tidier">더 깔끔한 대기열</string>
+    <string name="settings_player_queue_tidier">버튼 줄이기</string>
     <string name="settings_player_scroll_for_controls">위로 스크롤해서 컨트롤 보기</string>
     <string name="settings_player_lock_options">잠금 화면 옵션</string>
     <string name="settings_player_immersive_options">몰입 모드 옵션</string>
@@ -5189,8 +5189,8 @@
     <string name="tl_reset_everything">모두 초기화</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">낮과 밤을 위한 전체 룩</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord 켜짐 · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord 켜짐 · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · 백업, 업데이트</string>
     <string name="root_connect_short">스피커와 TV에서 재생</string>
     <string name="root_handoff_on">이어 듣기 켜짐</string>
@@ -5235,7 +5235,7 @@
     <string name="recap_ready_title">%1$s 결산이 준비됐어요</string>
     <string name="recap_ready_text">음악으로 본 한 달: 가장 많이 들은 곡과 아티스트, 그리고 지난달과의 비교.</string>
     <string name="recap_card_title">나의 %1$s</string>
-    <string name="replay_notices">알림</string>
+    <string name="replay_notices">Replay 알림</string>
     <string name="tour_185_replay_title">더 깊어진 Replay</string>
     <string name="tour_185_replay_body">언제 듣는지 시간별, 날짜별로 확인하세요.</string>
     <string name="tour_185_replay_point_1">감상 시계: 일주일을 시간별로. 시간을 탭하면 그때의 인기곡을 볼 수 있어요.</string>
@@ -5306,7 +5306,7 @@
     <string name="cal_no_music">음악 없음</string>
     <string name="cal_days_with_music">음악을 들은 날: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">작은 커버를 탭해 재생 또는 일시중지</string>
+    <string name="gb_lyrics_cover_plays">가사 옆 커버를 탭해 일시중지</string>
     <string name="gb_lyrics_cover_plays_info">가사가 열려 있을 때 작은 커버를 탭하면 재생하거나 일시중지하고, 길게 누르면 가사가 닫힙니다. 꺼짐: 탭하면 가사가 닫힙니다.</string>
     <string name="gb_lyrics_cover_plays_keywords">가사 작은 커버 썸네일 아트워크 탭 재생 일시중지 길게 누르기 닫기 lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5483,4 +5483,37 @@
     <string name="hl_show_in_lists">목록에 표시</string>
     <string name="hl_show_on_artist_pages">아티스트 페이지에 표시</string>
     <string name="allow_access_to_lossless_files_value">무손실 파일을 찾으려면 필요해요</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">Prism 후원하기</string>
+    <string name="support_prism_info">후원금은 Prism을 만드는 데 쓰는 테스트 폰과 도구 비용에 쓰여요. 후원 여부와 상관없이 모든 기능은 계속 무료예요. 브라우저에서 Ko-fi가 열려요.</string>
+    <string name="support_prism_keywords">후원 기부 커피 감사 개발자 응원 도움</string>
+    <string name="i_ve_supported_prism">Prism을 후원했어요</string>
+    <string name="i_ve_supported_prism_info">Prism 후원 요청을 모두 영구적으로 꺼요. 확인하지 않아요. 말씀만 믿을게요.</string>
+    <string name="i_ve_supported_prism_keywords">후원함 기부함 후원자 요청 숨기기 그만 묻기</string>
+    <string name="supporters">후원자</string>
+    <string name="supporters_keywords">감사 크레딧 이름 후원자 기부자 멤버</string>
+    <string name="supporters_info">Prism을 후원하고 이름을 밝히기로 한 분들이에요. 이름만 표시하고 금액과 날짜는 표시하지 않아요.</string>
+    <string name="supporters_members">월간 멤버</string>
+    <string name="supporters_thank_you">감사합니다</string>
+    <string name="supporters_empty">아직 이름이 없어요. 첫 번째 이름이 되어 보세요.</string>
+    <string name="support_on_kofi">Ko-fi에서 후원하기</string>
+    <string name="don_t_show_again">다시 표시 안 함</string>
+    <string name="support_hours_title">Prism으로 음악 100시간</string>
+    <string name="support_hours_body">무료이고 한 사람이 만들었어요. 커피 한 잔의 가치가 있다고 느끼신다면 큰 힘이 돼요.</string>
+    <string name="support_made_by_one_person">한 사람이 만들었어요.</string>
+    <string name="support_whats_new_line">Prism은 무료이고 한 사람이 만들었어요. 마음에 드셨다면 후원할 수 있어요.</string>
+    <string name="settings_player_layout_group">레이아웃과 컨트롤</string>
+    <string name="dd_use_showing_covers">움직이는 커버 표시</string>
+    <string name="icon_style">아이콘 스타일</string>
+    <string name="prism_s_own">Prism 기본</string>
+    <string name="player_times_both">진행 표시줄 양쪽 끝</string>
+    <string name="button_shape_fully_round">완전 둥근 모양</string>
+    <string name="transport_filled_play">채워진 재생 버튼</string>
+    <string name="replay_notice_recap_short">월간 요약</string>
+    <string name="settings_player_edit_menu">플레이어의 ⋯ 메뉴 편집</string>
+    <string name="mix_why_sing">따라 부르기가 켜져 있어서 곡을 끊지 않고 끝까지 재생해요.</string>
+    <string name="mix_why_together">함께 듣기가 켜져 있어서 호스트를 따라 재생해요.</string>
+    <string name="cn_spot_not_connected">연결 안 됨 · 재생목록과 좋아요</string>
+    <string name="cn_other_services">다른 서비스</string>
+    <string name="edge_to_edge_both">커버와 동영상</string>
 </resources>

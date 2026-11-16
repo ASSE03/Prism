@@ -92,7 +92,7 @@
     <string name="refresh_the_list">重新整理清單</string>
     <string name="from_github">來自 GitHub</string>
     <string name="add_your_look">新增你的風格</string>
-    <string name="by_pull_request_on_github">在 GitHub 上提交 Pull Request</string>
+    <string name="by_pull_request_on_github">在 GitHub 上分享你的風格</string>
     <string name="save_your_look_share_it_as">儲存你的風格，以文字分享，再把代碼加到 Prism 存放區的 themes/index.json。頁面上有說明。</string>
     <string name="use">使用「%1$s」</string>
     <string name="more_for">「%1$s」的更多選項</string>
@@ -129,7 +129,7 @@
     <string name="use_it">使用</string>
     <string name="not_now">現在不要</string>
     <string name="day_and_night">日夜切換</string>
-    <string name="day_and_night_looks">日夜風格</string>
+    <string name="day_and_night_looks">依時段切換風格</string>
     <string name="one_look_by_day_another_by">白天一個風格，晚上另一個風格</string>
     <string name="like_theme_system_for_whole_looks">就像「主題：系統」，但套用在整個風格上。日出和日落時間依你的時區推算，不需要你的位置。在兩次切換之間選的風格會一直保留到下次切換。</string>
     <string name="by_day">白天</string>
@@ -148,7 +148,7 @@
     <string name="search_history">搜尋記錄</string>
     <string name="your_last_changes_to_the_look">你最近對外觀做的 %1$s 項變更會顯示在這裡，可以逐一還原。</string>
     <string name="clear_history">清除記錄</string>
-    <string name="your_look_stays_as_it_is">外觀會維持目前的樣子</string>
+    <string name="your_look_stays_as_it_is">你的設定維持現狀</string>
     <string name="clear_the_look_s_history">要清除外觀的記錄嗎？</string>
     <string name="you_won_t_be_able_to">你將無法還原這些變更。外觀會維持目前的樣子。</string>
     <string name="clear">清除</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">素面玻璃，搭配一道細細的分光</string>
     <string name="ledger">帳本</string>
     <string name="three_numbers_side_by_side">三個數字並排</string>
-    <string name="wash">渲染</string>
+    <string name="wash">柔和色彩</string>
     <string name="a_faint_wash_of_color_and">淡淡的色彩渲染和月份長條</string>
     <string name="spectrum_frame">光譜外框</string>
     <string name="glass_ringed_in_split_light_the">以分光環繞的玻璃，時間以彩色顯示</string>
@@ -1472,7 +1472,7 @@
     <string name="widget_background_transparent_see_through_color">小工具 背景 透明 半透明 顏色 按鈕 主畫面</string>
     <string name="the_tab_you_re_on">目前所在的分頁</string>
     <string name="tab_icon_color_tint_accent_light">分頁 圖示 顏色 色調 強調色 光線 目前分頁</string>
-    <string name="play_on_album_and_playlist_pages">專輯和播放清單頁面上的播放按鈕</string>
+    <string name="play_on_album_and_playlist_pages">專輯和播放清單上的播放按鈕</string>
     <string name="play_button_outlined_filled">播放 按鈕 外框 實心</string>
     <string name="switches_sliders_and_buttons">開關、滑桿和按鈕</string>
     <string name="classic_controls_1_6_material_switch">經典 控制項 1.6 material 開關 滑桿 舊版 外觀</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">旋轉 方向 橫向 直向</string>
     <string name="picture_in_picture">子母畫面</string>
     <string name="pip_video_float_window_leave">子母畫面 pip 影片 浮動 視窗 離開</string>
-    <string name="load_ahead">預先載入</string>
+    <string name="load_ahead">預先載入多遠</string>
     <string name="preload_buffer">預先載入 緩衝</string>
     <string name="load_ahead_on_mobile_data">使用行動數據時預先載入</string>
     <string name="preload_cellular">預先載入 行動數據</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">保留副本</string>
     <string name="just_sign_out">直接登出</string>
     <string name="prism_account_on_this_phone">Prism Account · 在這支手機上</string>
-    <string name="your_name_and_picture_kept_on">你的名稱和照片，保存在這支手機上。你的其他內容都不會改變</string>
+    <string name="your_name_and_picture_kept_on">你的名稱和照片，保存在這支手機上</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">已登入</string>
     <string name="signed_in_2">已登入</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music、Musixmatch 和 Spotify 的歌詞 · 逐字</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · 逐字，收錄最多中文歌曲</string>
+    <string name="qq_music_word_by_word_the">逐字 · 收錄最多中文歌曲</string>
     <string name="open_lyrics_database_line_by_line">開放歌詞資料庫 · 逐行</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">網易雲音樂 · 逐字</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · 逐字，收錄許多亞洲歌曲</string>
+    <string name="kugou_word_by_word_many_asian">逐字 · 收錄許多亞洲歌曲</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">由聽眾提交的歌詞 · 目前歌曲不多</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">歌曲 Prism Music 頁面上的歌詞，來自 LyricFind · 逐行或純文字</string>
+    <string name="lyricfind_lines_or_plain">LyricFind 的歌詞，經由 YouTube Music · 逐行或純文字</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">純文字 · 也能補回被星號遮蔽的字詞</string>
     <string name="both">兩者</string>
@@ -3136,7 +3136,7 @@
     <string name="one">一行</string>
     <string name="under_the_line">在歌詞行下方</string>
     <string name="over_the_line">在歌詞行上方</string>
-    <string name="as_now">維持現狀</string>
+    <string name="as_now">與播放器一致</string>
     <string name="the_player_s_background_or_the">播放器的背景，沉浸模式下則是封面</string>
     <string name="plain_dark">純深色</string>
     <string name="nothing_but_the_words">只有文字</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">風格庫需要較新版本的 Prism</string>
     <string name="by_2">作者：%1$s</string>
     <string name="a_look">風格</string>
-    <string name="how_prism_comes_outfit_the_split">Prism 的預設樣子：Outfit 字型、分光、柔和圓角</string>
+    <string name="how_prism_comes_outfit_the_split">預設樣子：Prism 內建字型、分光、柔和圓角</string>
     <string name="paper">紙張</string>
     <string name="light_serif_type_ink_instead_of">淺色、襯線字體、以墨色取代彩色、溫暖的紙張質感</string>
     <string name="midnight">午夜</string>
@@ -3898,7 +3898,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">你的滑動、輕觸兩下和長按在標題下方、按鈕和進度列周圍的空白處也能用。按鈕和進度列保留自己的輕觸。</string>
     <string name="gestures_everywhere_keywords">手勢 滑動 輕觸兩下 長按 下半部 控制 整個播放器</string>
     <string name="playing_song_in_the_page_s_color">正在播放的歌曲使用頁面顏色</string>
-    <string name="its_bars_and_title_take_the_album_s_color">它的跳動條和標題取專輯的顏色</string>
+    <string name="its_bars_and_title_take_the_album_s_color">它的跳動條和標題取頁面的顏色</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">在專輯、播放清單和藝人頁面上，正在播放的歌曲以頁面圖片的顏色顯示跳動條和標題，而不是你的光。其他地方保持不變。</string>
     <string name="playing_indicator_bars_now_playing_album_color">正在播放 指示 跳動條 等化器 專輯 播放清單 藝人 頁面 顏色 封面</string>
     <string name="slide_between_screens">頁面之間滑動切換</string>
@@ -3928,7 +3928,7 @@
     <string name="hidden_s">已隱藏：%1$s</string>
     <string name="buttons_in_the_row">按鈕列</string>
     <string name="add_a_button">新增按鈕</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">播放器的 ⋯ 選單：方塊和顯示的內容</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">方塊和顯示的內容</string>
     <string name="and_the_sky_lit_up">於是天空亮了起來</string>
     <string name="play_pause_always_stays">播放和暫停一律保留</string>
     <string name="what_s_on_the_player_keywords">隱藏 顯示 部分 播放器 標題下方 封面 標題 藝人 喜歡 愛心 選單 進度列 拖曳 上一首 下一首 略過 按鈕 歌曲長度 投放 投影</string>
@@ -3940,10 +3940,10 @@
     <string name="when_the_queue_ends">待播清單結束後</string>
     <string name="when_the_queue_ends_info">停止：待播清單結束時音樂也跟著停止。你的音樂：根據你播放的內容產生的 Prism 專屬電台。你的與新的：以你的音樂為主，加入少量新歌。Prism Music：來自 Prism Music 曲庫的電台。離線時一律播放你的音樂。</string>
     <string name="music_videos_label">音樂影片</string>
-    <string name="play_them">影片</string>
+    <string name="play_them">影片隨處播放</string>
     <string name="songs_in_radios">電台中播放歌曲</string>
     <string name="songs_everywhere">所有地方都播放歌曲</string>
-    <string name="music_videos_label_info">影片：音樂影片以影片形式播放。電台中播放歌曲：自動播放和電台改為播放影片對應的歌曲。所有地方都播放歌曲：你輕觸的任何音樂影片都會以歌曲形式播放，「影片」按鈕仍可顯示影片。</string>
+    <string name="music_videos_label_info">影片隨處播放：音樂影片以影片形式播放。電台中播放歌曲：自動播放和電台改為播放影片對應的歌曲。所有地方都播放歌曲：你輕觸的任何音樂影片都會以歌曲形式播放，「影片」按鈕仍可顯示影片。</string>
     <string name="trim_silence">去除開頭和結尾的靜音</string>
     <string name="podcasts_only">僅限 Podcast</string>
     <string name="songs_and_podcasts">歌曲和 Podcast</string>
@@ -4693,7 +4693,7 @@
     <string name="move_songs_you_have_played">可移動已播放的歌曲</string>
     <string name="move_songs_you_have_played_info">已播放的歌曲也會有拖曳把手，你可以在它們之間拖曳調整順序。</string>
     <string name="move_songs_you_have_played_keywords">待播清單 已播放 紀錄 拖曳 把手 排序</string>
-    <string name="tidier_queue">更簡潔的待播清單</string>
+    <string name="tidier_queue">按鈕更少的待播清單</string>
     <string name="tidier_queue_info">開啟待播清單時，移除每首歌上的 ×，並移除底部一列的待播清單按鈕。向左滑動歌曲或使用它的 ⋯ 即可移除。下拉標題或按「返回」即可離開待播清單。</string>
     <string name="tidier_queue_keywords">待播清單 較少按鈕 移除 關閉 更整潔 簡潔</string>
     <string name="reopen_on_the_last_page">重新開啟時回到上次的頁面</string>
@@ -5007,7 +5007,7 @@
     <string name="gb_double_tap_seeks">輕觸兩下快轉倒轉</string>
     <string name="gb_double_tap_seeks_needs">請先將「輕觸兩下」設為「依位置快轉倒轉」</string>
     <string name="gb_gestures_work">手勢作用範圍</string>
-    <string name="gb_work_cover">在封面上</string>
+    <string name="gb_work_cover">僅在封面上</string>
     <string name="gb_work_anywhere">任何位置</string>
     <string name="gb_work_not_lyrics">歌詞以外的任何位置</string>
     <string name="gb_work_cover_and_lyrics">封面上和歌詞下方</string>
@@ -5107,7 +5107,7 @@
     <string name="settings_player_right_hand_time">右側時間</string>
     <string name="settings_player_right_hand_time_info">進度列右側的時間。在播放器上輕觸它也會變更此項。</string>
     <string name="settings_player_cover_shape">封面形狀</string>
-    <string name="settings_player_edge_to_edge">邊到邊</string>
+    <string name="settings_player_edge_to_edge">延伸到螢幕邊緣</string>
     <string name="settings_player_cover_animation">封面動畫</string>
     <string name="settings_player_opening">開啟時</string>
     <string name="settings_player_opening_and_closing">開啟和關閉時</string>
@@ -5118,7 +5118,7 @@
     <string name="settings_player_queue_dj">DJ 按鈕</string>
     <string name="settings_player_queue_lengths">歌曲長度</string>
     <string name="settings_player_queue_move_played">移走已播放</string>
-    <string name="settings_player_queue_tidier">更整齊的待播清單</string>
+    <string name="settings_player_queue_tidier">更少按鈕</string>
     <string name="settings_player_scroll_for_controls">向上捲動顯示控制項</string>
     <string name="settings_player_lock_options">鎖定畫面選項</string>
     <string name="settings_player_immersive_options">沉浸模式選項</string>
@@ -5189,8 +5189,8 @@
     <string name="tl_reset_everything">全部重設</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">整套風格，白天和夜間</string>
-    <string name="root_accounts_short">Last.fm、Spotify、Discord</string>
-    <string name="root_accounts_discord_on">Discord 已開啟 · Last.fm、Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord 已開啟 · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · 備份、更新</string>
     <string name="root_connect_short">在喇叭和電視上播放</string>
     <string name="root_handoff_on">接力已開啟</string>
@@ -5235,7 +5235,7 @@
     <string name="recap_ready_title">你的%1$s回顧已準備好</string>
     <string name="recap_ready_text">你這個月的音樂：最常聽的歌曲和藝人，以及跟上個月比起來如何。</string>
     <string name="recap_card_title">你的%1$s</string>
-    <string name="replay_notices">通知</string>
+    <string name="replay_notices">Replay 通知</string>
     <string name="tour_185_replay_title">Replay，更深入</string>
     <string name="tour_185_replay_body">看看你什麼時候在聽，逐時、逐日。</string>
     <string name="tour_185_replay_point_1">聆聽時鐘：你的一週，逐時顯示。輕觸某個小時，查看那時的熱門歌曲。</string>
@@ -5306,7 +5306,7 @@
     <string name="cal_no_music">沒有音樂</string>
     <string name="cal_days_with_music">有音樂的天數：%1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">點按小封面可播放或暫停</string>
+    <string name="gb_lyrics_cover_plays">點按歌詞旁的封面可暫停</string>
     <string name="gb_lyrics_cover_plays_info">開啟歌詞時，點按小封面可播放或暫停，長按則關閉歌詞。關閉此項：點按會關閉歌詞。</string>
     <string name="gb_lyrics_cover_plays_keywords">歌詞 小封面 縮圖 封面圖 點按 點擊 播放 暫停 長按 關閉 歌詞 lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5483,4 +5483,37 @@
     <string name="hl_show_in_lists">在清單中顯示</string>
     <string name="hl_show_on_artist_pages">在藝人頁面顯示</string>
     <string name="allow_access_to_lossless_files_value">用於尋找你的無損檔案</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">支持 Prism</string>
+    <string name="support_prism_info">支持的款項用於購買製作 Prism 所用的測試手機和工具。無論你是否支持，所有功能都維持免費。會在瀏覽器中開啟 Ko-fi。</string>
+    <string name="support_prism_keywords">捐款 打賞 咖啡 感謝 幫助 開發者 贊助</string>
+    <string name="i_ve_supported_prism">我已支持 Prism</string>
+    <string name="i_ve_supported_prism_info">永久關閉所有支持 Prism 的提示。不會做任何查核：全憑你的一句話。</string>
+    <string name="i_ve_supported_prism_keywords">已捐款 支持者 隱藏 提示 不再提醒</string>
+    <string name="supporters">支持者</string>
+    <string name="supporters_keywords">感謝 名單 名字 捐款者 會員</string>
+    <string name="supporters_info">支持過 Prism 並願意具名的人。只有名字：沒有金額，沒有日期。</string>
+    <string name="supporters_members">每月會員</string>
+    <string name="supporters_thank_you">感謝</string>
+    <string name="supporters_empty">這裡還沒有名字。第一個可能就是你。</string>
+    <string name="support_on_kofi">在 Ko-fi 上支持</string>
+    <string name="don_t_show_again">不再顯示</string>
+    <string name="support_hours_title">與 Prism 一起聽了 100 小時音樂</string>
+    <string name="support_hours_body">它免費，由一個人製作：如果你覺得值一杯咖啡，就能讓它繼續下去。</string>
+    <string name="support_made_by_one_person">由一個人製作。</string>
+    <string name="support_whats_new_line">Prism 免費，由一個人製作。如果你喜歡，可以支持它。</string>
+    <string name="settings_player_layout_group">版面配置和控制項</string>
+    <string name="dd_use_showing_covers">顯示動態封面</string>
+    <string name="icon_style">圖示樣式</string>
+    <string name="prism_s_own">Prism 內建</string>
+    <string name="player_times_both">進度列兩端</string>
+    <string name="button_shape_fully_round">全圓</string>
+    <string name="transport_filled_play">實心播放按鈕</string>
+    <string name="replay_notice_recap_short">每月回顧</string>
+    <string name="settings_player_edit_menu">編輯播放器的 ⋯ 選單</string>
+    <string name="mix_why_sing">歡唱已開啟，所以每首歌都完整播放。</string>
+    <string name="mix_why_together">「一起聽」已開啟，所以歌曲跟隨主持人。</string>
+    <string name="cn_spot_not_connected">未連線 · 播放清單和喜歡的歌曲</string>
+    <string name="cn_other_services">其他服務</string>
+    <string name="edge_to_edge_both">封面和影片</string>
 </resources>

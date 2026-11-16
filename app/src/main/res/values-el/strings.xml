@@ -92,7 +92,7 @@
     <string name="refresh_the_list">Ανανέωση της λίστας</string>
     <string name="from_github">Από το GitHub</string>
     <string name="add_your_look">Πρόσθεσε το στυλ σου</string>
-    <string name="by_pull_request_on_github">Με pull request στο GitHub</string>
+    <string name="by_pull_request_on_github">Μοιράσου το δικό σου στο GitHub</string>
     <string name="save_your_look_share_it_as">Αποθήκευσε το στυλ σου, μοιράσου το ως κείμενο και πρόσθεσε τον κωδικό του στο themes/index.json στο αποθετήριο του Prism. Η σελίδα εξηγεί πώς.</string>
     <string name="use">Χρήση: %1$s</string>
     <string name="more_for">Περισσότερα για %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">Χρήση</string>
     <string name="not_now">Όχι τώρα</string>
     <string name="day_and_night">Μέρα και νύχτα</string>
-    <string name="day_and_night_looks">Στυλ για μέρα και νύχτα</string>
+    <string name="day_and_night_looks">Αλλαγή στυλ ανά ώρα της ημέρας</string>
     <string name="one_look_by_day_another_by">Ένα στυλ τη μέρα, άλλο τη νύχτα</string>
     <string name="like_theme_system_for_whole_looks">Όπως το Θέμα: Σύστημα, αλλά για ολόκληρα στυλ. Η ανατολή και η δύση υπολογίζονται από τη ζώνη ώρας σου, χωρίς την τοποθεσία σου. Ένα στυλ που διαλέγεις στο ενδιάμεσο μένει μέχρι την επόμενη αλλαγή.</string>
     <string name="by_day">Τη μέρα</string>
@@ -148,7 +148,7 @@
     <string name="search_history">Αναζήτηση στο ιστορικό</string>
     <string name="your_last_changes_to_the_look">Οι τελευταίες %1$s αλλαγές σου στην εμφάνιση εμφανίζονται εδώ, για να γυρίσεις πίσω.</string>
     <string name="clear_history">Διαγραφή ιστορικού</string>
-    <string name="your_look_stays_as_it_is">Η εμφάνιση μένει όπως είναι τώρα</string>
+    <string name="your_look_stays_as_it_is">Οι ρυθμίσεις σου μένουν όπως είναι</string>
     <string name="clear_the_look_s_history">Διαγραφή του ιστορικού εμφάνισης;</string>
     <string name="you_won_t_be_able_to">Δεν θα μπορείς να γυρίσεις σε αυτές τις αλλαγές. Η εμφάνιση μένει όπως είναι τώρα.</string>
     <string name="clear">Διαγραφή</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">Απλό γυαλί, μια λεπτή γραμμή διαθλασμένου φωτός</string>
     <string name="ledger">Λογιστικό</string>
     <string name="three_numbers_side_by_side">Τρεις αριθμοί δίπλα-δίπλα</string>
-    <string name="wash">Πινελιά</string>
+    <string name="wash">Απαλό χρώμα</string>
     <string name="a_faint_wash_of_color_and">Μια αχνή πινελιά χρώματος και μπάρες ανά μήνα</string>
     <string name="spectrum_frame">Πλαίσιο φάσματος</string>
     <string name="glass_ringed_in_split_light_the">Γυαλί με περίγραμμα διαθλασμένου φωτός, ο χρόνος σε χρώμα</string>
@@ -1472,7 +1472,7 @@
     <string name="widget_background_transparent_see_through_color">widget φόντο διάφανο ημιδιάφανο χρώμα κουμπιά αρχική οθόνη</string>
     <string name="the_tab_you_re_on">Η καρτέλα όπου βρίσκεσαι</string>
     <string name="tab_icon_color_tint_accent_light">εικονίδιο καρτέλας χρώμα απόχρωση έμφαση φως τρέχουσα καρτέλα</string>
-    <string name="play_on_album_and_playlist_pages">Αναπαραγωγή σε σελίδες άλμπουμ και playlist</string>
+    <string name="play_on_album_and_playlist_pages">Κουμπί αναπαραγωγής σε άλμπουμ και playlist</string>
     <string name="play_button_outlined_filled">κουμπί αναπαραγωγής περίγραμμα γεμάτο</string>
     <string name="switches_sliders_and_buttons">Διακόπτες, ρυθμιστικά και κουμπιά</string>
     <string name="classic_controls_1_6_material_switch">κλασικά χειριστήρια 1.6 material διακόπτης ρυθμιστικό παλιά εμφάνιση</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">περιστροφή προσανατολισμός οριζόντιο κατακόρυφο</string>
     <string name="picture_in_picture">Εικόνα σε εικόνα</string>
     <string name="pip_video_float_window_leave">pip βίντεο αιωρούμενο παράθυρο έξοδος</string>
-    <string name="load_ahead">Προφόρτωση</string>
+    <string name="load_ahead">Πόσο μπροστά να φορτώνει</string>
     <string name="preload_buffer">προφόρτωση buffer</string>
     <string name="load_ahead_on_mobile_data">Προφόρτωση με δεδομένα κινητής</string>
     <string name="preload_cellular">προφόρτωση δεδομένα κινητής</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">Κράτα αντίγραφο</string>
     <string name="just_sign_out">Απλώς αποσύνδεση</string>
     <string name="prism_account_on_this_phone">Prism Account · σε αυτό το τηλέφωνο</string>
-    <string name="your_name_and_picture_kept_on">Το όνομα και η εικόνα σου, σε αυτό το τηλέφωνο. Τίποτα από όσα έχεις δεν αλλάζει</string>
+    <string name="your_name_and_picture_kept_on">Το όνομα και η εικόνα σου, σε αυτό το τηλέφωνο</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">συνδεδεμένος</string>
     <string name="signed_in_2">Συνδεδεμένος</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music, Musixmatch και Spotify · λέξη προς λέξη</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · λέξη προς λέξη, τα περισσότερα κινεζικά τραγούδια</string>
+    <string name="qq_music_word_by_word_the">Λέξη προς λέξη · τα περισσότερα κινεζικά τραγούδια</string>
     <string name="open_lyrics_database_line_by_line">Ανοιχτή βάση δεδομένων στίχων · γραμμή προς γραμμή</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · λέξη προς λέξη</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · λέξη προς λέξη, πολλά ασιατικά τραγούδια</string>
+    <string name="kugou_word_by_word_many_asian">Λέξη προς λέξη · πολλά ασιατικά τραγούδια</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Στίχοι που στέλνουν οι ακροατές · λίγα τραγούδια μέχρι στιγμής</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">Οι στίχοι στη σελίδα του τραγουδιού στο Prism Music, από το LyricFind · γραμμές ή απλό κείμενο</string>
+    <string name="lyricfind_lines_or_plain">Οι στίχοι του LyricFind, μέσω YouTube Music · γραμμές ή απλό κείμενο</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Απλό κείμενο · συμπληρώνει επίσης λέξεις με αστεράκια</string>
     <string name="both">Και τα δύο</string>
@@ -3136,7 +3136,7 @@
     <string name="one">Μία</string>
     <string name="under_the_line">Κάτω από τη γραμμή</string>
     <string name="over_the_line">Πάνω από τη γραμμή</string>
-    <string name="as_now">Όπως τώρα</string>
+    <string name="as_now">Όπως η αναπαραγωγή</string>
     <string name="the_player_s_background_or_the">Το φόντο της οθόνης αναπαραγωγής ή το εξώφυλλο στην καθηλωτική λειτουργία</string>
     <string name="plain_dark">Απλό σκούρο</string>
     <string name="nothing_but_the_words">Μόνο οι λέξεις</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">Η συλλογή χρειάζεται νεότερο Prism</string>
     <string name="by_2">από %1$s</string>
     <string name="a_look">Ένα στυλ</string>
-    <string name="how_prism_comes_outfit_the_split">Όπως έρχεται το Prism: Outfit, το διαθλασμένο φως, απαλές γωνίες</string>
+    <string name="how_prism_comes_outfit_the_split">Όπως έρχεται: η γραμματοσειρά του Prism, χρώματα φάσματος, απαλές γωνίες</string>
     <string name="paper">Χαρτί</string>
     <string name="light_serif_type_ink_instead_of">Ανοιχτό, γράμματα serif, μελάνι αντί για χρώμα, ζεστό χαρτί</string>
     <string name="midnight">Μεσάνυχτα</string>
@@ -3948,7 +3948,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">Τα σαρώματα, το διπλό πάτημα και το παρατεταμένο πάτημα λειτουργούν και κάτω από τον τίτλο, στον χώρο γύρω από τα κουμπιά και τις μπάρες. Τα κουμπιά και οι μπάρες κρατούν τα δικά τους πατήματα.</string>
     <string name="gestures_everywhere_keywords">χειρονομία σάρωση διπλό πάτημα παρατεταμένο κάτω μέρος χειριστήρια όλο το player</string>
     <string name="playing_song_in_the_page_s_color">Το τραγούδι που παίζει στο χρώμα της σελίδας</string>
-    <string name="its_bars_and_title_take_the_album_s_color">Οι μπάρες και ο τίτλος του παίρνουν το χρώμα του άλμπουμ</string>
+    <string name="its_bars_and_title_take_the_album_s_color">Οι μπάρες και ο τίτλος του παίρνουν το χρώμα της σελίδας</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">Στις σελίδες άλμπουμ, λιστών και καλλιτεχνών, το τραγούδι που παίζει δείχνει τις μπάρες και τον τίτλο του στο χρώμα της εικόνας της σελίδας αντί για το φως σας. Αλλού μένουν όπως είναι.</string>
     <string name="playing_indicator_bars_now_playing_album_color">δείκτης αναπαραγωγή μπάρες ισοσταθμιστής άλμπουμ λίστα καλλιτέχνης σελίδα χρώμα εξώφυλλο</string>
     <string name="slide_between_screens">Ολίσθηση ανάμεσα στις οθόνες</string>
@@ -3978,7 +3978,7 @@
     <string name="hidden_s">Κρυφό: %1$s</string>
     <string name="buttons_in_the_row">Κουμπιά στη σειρά</string>
     <string name="add_a_button">Προσθήκη κουμπιού</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">Το μενού ⋯ της οθόνης αναπαραγωγής: τα πλακίδιά του και τι εμφανίζει</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">Τα πλακίδιά του και τι εμφανίζει</string>
     <string name="and_the_sky_lit_up">Κι ο ουρανός φωτίστηκε</string>
     <string name="play_pause_always_stays">Η αναπαραγωγή και η παύση μένουν πάντα</string>
     <string name="what_s_on_the_player_keywords">απόκρυψη εμφάνιση μέρη εμφάνιση στην οθόνη αναπαραγωγής κάτω από τον τίτλο εξώφυλλο τίτλος καλλιτέχνης μου αρέσει καρδιά μενού γραμμή προόδου μετακίνηση προηγούμενο επόμενο παράλειψη κουμπιά σειρά διάρκεια τραγουδιού μετάδοση σήμα</string>
@@ -3990,10 +3990,10 @@
     <string name="when_the_queue_ends">Όταν τελειώσει η ουρά</string>
     <string name="when_the_queue_ends_info">Διακοπή: η μουσική τελειώνει μαζί με την ουρά. Η μουσική σου: το δικό ραδιόφωνο του Prism από ό,τι ακούς. Δικά σου και νέα: κυρίως η μουσική σου, με λίγα νέα τραγούδια. Prism Music: ένα ραδιόφωνο από τον κατάλογο του Prism Music. Εκτός σύνδεσης είναι πάντα η μουσική σου.</string>
     <string name="music_videos_label">Μουσικά βίντεο</string>
-    <string name="play_them">Βίντεο</string>
+    <string name="play_them">Βίντεο παντού</string>
     <string name="songs_in_radios">Τραγούδια στα ραδιόφωνα</string>
     <string name="songs_everywhere">Τραγούδια παντού</string>
-    <string name="music_videos_label_info">Βίντεο: ένα μουσικό βίντεο παίζει ως βίντεο. Τραγούδια στα ραδιόφωνα: η αυτόματη αναπαραγωγή και τα ραδιόφωνα παίζουν αντί γι\' αυτό το τραγούδι του βίντεο. Τραγούδια παντού: κάθε μουσικό βίντεο που πατάς παίζει ως το τραγούδι του, και το κουμπί «Βίντεο» εξακολουθεί να δείχνει το βίντεο.</string>
+    <string name="music_videos_label_info">Βίντεο παντού: ένα μουσικό βίντεο παίζει ως βίντεο. Τραγούδια στα ραδιόφωνα: η αυτόματη αναπαραγωγή και τα ραδιόφωνα παίζουν αντί γι\' αυτό το τραγούδι του βίντεο. Τραγούδια παντού: κάθε μουσικό βίντεο που πατάς παίζει ως το τραγούδι του, και το κουμπί «Βίντεο» εξακολουθεί να δείχνει το βίντεο.</string>
     <string name="trim_silence">Κόψιμο σιωπής στην αρχή και στο τέλος</string>
     <string name="podcasts_only">Μόνο podcast</string>
     <string name="songs_and_podcasts">Τραγούδια και podcast</string>
@@ -4757,7 +4757,7 @@
     <string name="move_songs_you_have_played">Μετακίνηση τραγουδιών που έχεις παίξει</string>
     <string name="move_songs_you_have_played_info">Και τα τραγούδια που έχεις ήδη παίξει παίρνουν λαβή, ώστε να τα σύρεις μεταξύ τους.</string>
     <string name="move_songs_you_have_played_keywords">ουρά παιγμένα ιστορικό σύρσιμο λαβή αναδιάταξη</string>
-    <string name="tidier_queue">Πιο τακτική ουρά</string>
+    <string name="tidier_queue">Ουρά με λιγότερα κουμπιά</string>
     <string name="tidier_queue_info">Αφαιρεί το × από κάθε τραγούδι και το κουμπί Ουρά από την κάτω γραμμή όσο η ουρά είναι ανοιχτή. Σύρε ένα τραγούδι αριστερά ή χρησιμοποίησε το ⋯ για να το αφαιρέσεις. Τράβηξε τον τίτλο προς τα κάτω ή πάτα Πίσω για να βγεις από την ουρά.</string>
     <string name="tidier_queue_keywords">ουρά λιγότερα κουμπιά αφαίρεση κλείσιμο πιο καθαρό απλό</string>
     <string name="reopen_on_the_last_page">Άνοιγμα στην τελευταία σελίδα</string>
@@ -5079,7 +5079,7 @@
     <string name="gb_double_tap_seeks">Το διπλό πάτημα μετακινεί</string>
     <string name="gb_double_tap_seeks_needs">Ρύθμισε πρώτα το Διπλό πάτημα σε Μετακίνηση ανά πλευρά</string>
     <string name="gb_gestures_work">Πού λειτουργούν οι κινήσεις</string>
-    <string name="gb_work_cover">Στο εξώφυλλο</string>
+    <string name="gb_work_cover">Μόνο στο εξώφυλλο</string>
     <string name="gb_work_anywhere">Παντού</string>
     <string name="gb_work_not_lyrics">Παντού εκτός από τους στίχους</string>
     <string name="gb_work_cover_and_lyrics">Στο εξώφυλλο και κάτω από τους στίχους</string>
@@ -5179,7 +5179,7 @@
     <string name="settings_player_right_hand_time">Χρόνος δεξιά</string>
     <string name="settings_player_right_hand_time_info">Ο χρόνος στα δεξιά της μπάρας προόδου. Αν τον πατήσεις στην οθόνη αναπαραγωγής, αλλάζει κι αυτό.</string>
     <string name="settings_player_cover_shape">Σχήμα εξωφύλλου</string>
-    <string name="settings_player_edge_to_edge">Από άκρη σε άκρη</string>
+    <string name="settings_player_edge_to_edge">Φτάνει στα άκρα της οθόνης</string>
     <string name="settings_player_cover_animation">Κίνηση εξωφύλλου</string>
     <string name="settings_player_opening">Στο άνοιγμα</string>
     <string name="settings_player_opening_and_closing">Στο άνοιγμα και το κλείσιμο</string>
@@ -5190,7 +5190,7 @@
     <string name="settings_player_queue_dj">Κουμπί DJ</string>
     <string name="settings_player_queue_lengths">Διάρκειες τραγουδιών</string>
     <string name="settings_player_queue_move_played">Μετακίνηση όσων έπαιξαν</string>
-    <string name="settings_player_queue_tidier">Πιο τακτοποιημένη ουρά</string>
+    <string name="settings_player_queue_tidier">Λιγότερα κουμπιά</string>
     <string name="settings_player_scroll_for_controls">Κύλιση προς τα πάνω για χειριστήρια</string>
     <string name="settings_player_lock_options">Επιλογές οθόνης κλειδώματος</string>
     <string name="settings_player_immersive_options">Επιλογές καθηλωτικής λειτουργίας</string>
@@ -5262,8 +5262,8 @@
     <string name="tl_reset_everything">Επαναφορά όλων</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">Ολόκληρα στυλ, μέρα και νύχτα</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord ενεργό · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord ενεργό · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · αντίγραφα, ενημερώσεις</string>
     <string name="root_connect_short">Παίξε σε ηχεία και τηλεοράσεις</string>
     <string name="root_handoff_on">Μεταφορά ενεργή</string>
@@ -5308,7 +5308,7 @@
     <string name="recap_ready_title">Η ανασκόπησή σου είναι έτοιμη: %1$s</string>
     <string name="recap_ready_text">Ο μήνας σου στη μουσική: τα κορυφαία τραγούδια και οι καλλιτέχνες σου, και η σύγκριση με τον προηγούμενο μήνα.</string>
     <string name="recap_card_title">%1$s: ο μήνας σου</string>
-    <string name="replay_notices">Ειδοποιήσεις</string>
+    <string name="replay_notices">Ειδοποιήσεις Replay</string>
     <string name="tour_185_replay_title">Replay, πιο βαθιά</string>
     <string name="tour_185_replay_body">Δες πότε ακούς, ώρα με την ώρα και μέρα με τη μέρα.</string>
     <string name="tour_185_replay_point_1">Ρολόι ακρόασης: η εβδομάδα σου, ώρα με την ώρα. Πάτησε μια ώρα για τα κορυφαία τραγούδια της.</string>
@@ -5381,7 +5381,7 @@
     <string name="cal_no_music">Χωρίς μουσική</string>
     <string name="cal_days_with_music">Μέρες με μουσική: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">Πάτημα στο μικρό εξώφυλλο για αναπαραγωγή ή παύση</string>
+    <string name="gb_lyrics_cover_plays">Πάτημα στο εξώφυλλο των στίχων για παύση</string>
     <string name="gb_lyrics_cover_plays_info">Με ανοιχτούς τους στίχους, ένα πάτημα στο μικρό εξώφυλλο ξεκινά ή παύει την αναπαραγωγή και ένα παρατεταμένο πάτημα κλείνει τους στίχους. Ανενεργό: ένα πάτημα κλείνει τους στίχους.</string>
     <string name="gb_lyrics_cover_plays_keywords">στίχοι μικρό εξώφυλλο μικρογραφία πάτημα αναπαραγωγή παύση παρατεταμένο πάτημα κλείσιμο lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5558,4 +5558,37 @@
     <string name="hl_show_in_lists">Εμφάνιση στις λίστες</string>
     <string name="hl_show_on_artist_pages">Εμφάνιση στις σελίδες καλλιτεχνών</string>
     <string name="allow_access_to_lossless_files_value">Χρειάζεται για να βρεθούν τα αρχεία σου χωρίς απώλειες</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">Υποστήριξη του Prism</string>
+    <string name="support_prism_info">Η υποστήριξη πληρώνει τα δοκιμαστικά τηλέφωνα και τα εργαλεία με τα οποία φτιάχνεται το Prism. Κάθε λειτουργία μένει δωρεάν, είτε υποστηρίξεις είτε όχι. Ανοίγει το Ko-fi στο πρόγραμμα περιήγησης.</string>
+    <string name="support_prism_keywords">δωρεά φιλοδώρημα καφές ευχαριστώ βοήθεια προγραμματιστής</string>
+    <string name="i_ve_supported_prism">Έχω υποστηρίξει το Prism</string>
+    <string name="i_ve_supported_prism_info">Απενεργοποιεί για πάντα κάθε πρόσκληση υποστήριξης του Prism. Τίποτα δεν ελέγχεται: ισχύει ο λόγος σου.</string>
+    <string name="i_ve_supported_prism_keywords">δωρεά υποστηρικτής απόκρυψη προσκλήσεις σταμάτα</string>
+    <string name="supporters">Υποστηρικτές</string>
+    <string name="supporters_keywords">ευχαριστίες credits ονόματα δωρητές μέλη</string>
+    <string name="supporters_info">Όσοι υποστήριξαν το Prism και επέλεξαν να αναφέρονται. Μόνο ονόματα: χωρίς ποσά, χωρίς ημερομηνίες.</string>
+    <string name="supporters_members">Μηνιαία μέλη</string>
+    <string name="supporters_thank_you">Ευχαριστούμε</string>
+    <string name="supporters_empty">Δεν υπάρχουν ονόματα ακόμα. Το δικό σου μπορεί να είναι το πρώτο.</string>
+    <string name="support_on_kofi">Υποστήριξη στο Ko-fi</string>
+    <string name="don_t_show_again">Να μην εμφανιστεί ξανά</string>
+    <string name="support_hours_title">100 ώρες μουσικής με το Prism</string>
+    <string name="support_hours_body">Είναι δωρεάν και φτιαγμένο από έναν άνθρωπο: αν αξίζει έναν καφέ για σένα, αυτό το κρατά ζωντανό.</string>
+    <string name="support_made_by_one_person">Φτιαγμένο από έναν άνθρωπο.</string>
+    <string name="support_whats_new_line">Το Prism είναι δωρεάν και φτιαγμένο από έναν άνθρωπο. Αν σου αρέσει, μπορείς να το υποστηρίξεις.</string>
+    <string name="settings_player_layout_group">Διάταξη και χειριστήρια</string>
+    <string name="dd_use_showing_covers">Εμφάνιση κινούμενων εξωφύλλων</string>
+    <string name="icon_style">Στυλ εικονιδίων</string>
+    <string name="prism_s_own">Του Prism</string>
+    <string name="player_times_both">Και τα δύο άκρα της γραμμής</string>
+    <string name="button_shape_fully_round">Απόλυτα στρογγυλό</string>
+    <string name="transport_filled_play">Κουμπί αναπαραγωγής με γέμισμα</string>
+    <string name="replay_notice_recap_short">Μηνιαία ανασκόπηση</string>
+    <string name="settings_player_edit_menu">Επεξεργασία του μενού ⋯ της αναπαραγωγής</string>
+    <string name="mix_why_sing">Το Τραγούδα είναι ενεργό, οπότε κάθε τραγούδι παίζει ολόκληρο.</string>
+    <string name="mix_why_together">Το Ακούμε μαζί είναι ενεργό, οπότε τα τραγούδια ακολουθούν τον οικοδεσπότη.</string>
+    <string name="cn_spot_not_connected">Δεν είναι συνδεδεμένο · playlist και αγαπημένα</string>
+    <string name="cn_other_services">Άλλες υπηρεσίες</string>
+    <string name="edge_to_edge_both">Εξώφυλλο και βίντεο</string>
 </resources>

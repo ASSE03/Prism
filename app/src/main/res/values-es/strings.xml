@@ -92,7 +92,7 @@
     <string name="refresh_the_list">Actualizar la lista</string>
     <string name="from_github">Desde GitHub</string>
     <string name="add_your_look">Agrega tu Look</string>
-    <string name="by_pull_request_on_github">Con un pull request en GitHub</string>
+    <string name="by_pull_request_on_github">Comparte el tuyo en GitHub</string>
     <string name="save_your_look_share_it_as">Guarda tu Look, compártelo como texto y agrega su código a themes/index.json en el repositorio de Prism. La página explica cómo.</string>
     <string name="use">Usar %1$s</string>
     <string name="more_for">Más para %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">Usarlo</string>
     <string name="not_now">Ahora no</string>
     <string name="day_and_night">Día y noche</string>
-    <string name="day_and_night_looks">Looks de día y de noche</string>
+    <string name="day_and_night_looks">Cambiar de Look según la hora del día</string>
     <string name="one_look_by_day_another_by">Un Look de día y otro de noche</string>
     <string name="like_theme_system_for_whole_looks">Como Tema: Sistema, pero para Looks completos. El amanecer y el atardecer se calculan con tu zona horaria, sin tu ubicación. Un Look que elijas entre medio se queda hasta el próximo cambio.</string>
     <string name="by_day">De día</string>
@@ -148,7 +148,7 @@
     <string name="search_history">Buscar en el historial</string>
     <string name="your_last_changes_to_the_look">Tus últimos %1$s cambios al aspecto aparecen aquí, para volver atrás.</string>
     <string name="clear_history">Borrar historial</string>
-    <string name="your_look_stays_as_it_is">Tu aspecto se queda como está ahora</string>
+    <string name="your_look_stays_as_it_is">Tus ajustes se quedan como están</string>
     <string name="clear_the_look_s_history">¿Borrar el historial del aspecto?</string>
     <string name="you_won_t_be_able_to">No podrás volver a estos cambios. Tu aspecto se queda como está ahora.</string>
     <string name="clear">Borrar</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">Cristal liso, un hilo de luz dividida</string>
     <string name="ledger">Registro</string>
     <string name="three_numbers_side_by_side">Tres números lado a lado</string>
-    <string name="wash">Velo</string>
+    <string name="wash">Color suave</string>
     <string name="a_faint_wash_of_color_and">Un velo tenue de color y barras por mes</string>
     <string name="spectrum_frame">Marco de espectro</string>
     <string name="glass_ringed_in_split_light_the">Cristal rodeado de luz dividida, el tiempo en color</string>
@@ -1472,14 +1472,14 @@
     <string name="widget_background_transparent_see_through_color">widget fondo transparente translúcido color botones pantalla principal</string>
     <string name="the_tab_you_re_on">La pestaña en la que estás</string>
     <string name="tab_icon_color_tint_accent_light">pestaña ícono color tinte acento luz pestaña actual</string>
-    <string name="play_on_album_and_playlist_pages">Reproducir en páginas de álbumes y playlists</string>
+    <string name="play_on_album_and_playlist_pages">Botón de reproducir en álbumes y playlists</string>
     <string name="play_button_outlined_filled">botón de reproducir contorno relleno</string>
     <string name="switches_sliders_and_buttons">Interruptores, controles deslizantes y botones</string>
     <string name="classic_controls_1_6_material_switch">controles clásicos 1.6 material interruptor control deslizante aspecto antiguo</string>
     <string name="screen_backgrounds">Fondos de pantalla</string>
     <string name="wallpaper_photo_pattern_design">fondo de pantalla foto patrón diseño</string>
     <string name="glass">Cristal</string>
-    <string name="liquid_glass">Liquid Glass</string>
+    <string name="liquid_glass">Liquid glass</string>
     <string name="blur_transparent">desenfoque transparente</string>
     <string name="glass_style">Estilo de cristal</string>
     <string name="frosted_glass">Cristal esmerilado</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">rotación orientación horizontal vertical</string>
     <string name="picture_in_picture">Pantalla en pantalla</string>
     <string name="pip_video_float_window_leave">pip video ventana flotante salir pantalla en pantalla</string>
-    <string name="load_ahead">Cargar por adelantado</string>
+    <string name="load_ahead">Cuánto cargar por adelantado</string>
     <string name="preload_buffer">precargar búfer</string>
     <string name="load_ahead_on_mobile_data">Cargar por adelantado con datos móviles</string>
     <string name="preload_cellular">precargar datos móviles</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">Guardar una copia</string>
     <string name="just_sign_out">Solo cerrar sesión</string>
     <string name="prism_account_on_this_phone">Prism Account · en este teléfono</string>
-    <string name="your_name_and_picture_kept_on">Tu nombre y tu imagen, guardados en este teléfono. No cambia nada de lo que tienes</string>
+    <string name="your_name_and_picture_kept_on">Tu nombre y tu imagen, guardados en este teléfono</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">sesión iniciada</string>
     <string name="signed_in_2">Sesión iniciada</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">De Apple Music, Musixmatch y Spotify · palabra por palabra</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · palabra por palabra, la mayor cantidad de canciones en chino</string>
+    <string name="qq_music_word_by_word_the">Palabra por palabra · la mayor cantidad de canciones en chino</string>
     <string name="open_lyrics_database_line_by_line">Base de datos abierta de letras · línea por línea</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · palabra por palabra</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · palabra por palabra, muchas canciones asiáticas</string>
+    <string name="kugou_word_by_word_many_asian">Palabra por palabra · muchas canciones asiáticas</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Letras que envían los oyentes · pocas canciones por ahora</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">La letra de la página de la canción en Prism Music, de LyricFind · por líneas o simple</string>
+    <string name="lyricfind_lines_or_plain">La letra de LyricFind, vía YouTube Music · por líneas o simple</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Texto simple · también completa las palabras censuradas</string>
     <string name="both">Ambos</string>
@@ -3136,7 +3136,7 @@
     <string name="one">Una</string>
     <string name="under_the_line">Debajo de la línea</string>
     <string name="over_the_line">Encima de la línea</string>
-    <string name="as_now">Como ahora</string>
+    <string name="as_now">Como el reproductor</string>
     <string name="the_player_s_background_or_the">El fondo del reproductor, o la portada en el modo inmersivo</string>
     <string name="plain_dark">Oscuro liso</string>
     <string name="nothing_but_the_words">Nada más que las palabras</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">La galería necesita una versión más reciente de Prism</string>
     <string name="by_2">de %1$s</string>
     <string name="a_look">Un Look</string>
-    <string name="how_prism_comes_outfit_the_split">Como viene Prism: Outfit, la luz dividida, esquinas suaves</string>
+    <string name="how_prism_comes_outfit_the_split">Como viene: la fuente propia de Prism, colores del espectro, esquinas suaves</string>
     <string name="paper">Papel</string>
     <string name="light_serif_type_ink_instead_of">Claro, tipografía con serifa, tinta en lugar de color, papel cálido</string>
     <string name="midnight">Medianoche</string>
@@ -3998,7 +3998,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">Tus deslizamientos, doble toque y pulsación larga funcionan también debajo del título, en el espacio alrededor de los botones y las barras. Los botones y las barras conservan sus propios toques.</string>
     <string name="gestures_everywhere_keywords">gesto deslizar doble toque pulsación larga parte inferior controles todo el reproductor</string>
     <string name="playing_song_in_the_page_s_color">Canción en reproducción en el color de la página</string>
-    <string name="its_bars_and_title_take_the_album_s_color">Sus barras y su título toman el color del álbum</string>
+    <string name="its_bars_and_title_take_the_album_s_color">Sus barras y su título toman el color de la página</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">En las páginas de álbumes, playlists y artistas, la canción que suena muestra sus barras y su título en el color de la imagen de la página en lugar de tu luz. En el resto de la app siguen igual.</string>
     <string name="playing_indicator_bars_now_playing_album_color">indicador reproduciendo barras ecualizador álbum playlist artista página color portada</string>
     <string name="slide_between_screens">Deslizar entre pantallas</string>
@@ -4028,7 +4028,7 @@
     <string name="hidden_s">Oculto: %1$s</string>
     <string name="buttons_in_the_row">Botones de la fila</string>
     <string name="add_a_button">Agregar un botón</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">El menú ⋯ del reproductor: sus mosaicos y lo que muestra</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">Sus mosaicos y lo que muestra</string>
     <string name="and_the_sky_lit_up">Y el cielo se iluminó</string>
     <string name="play_pause_always_stays">Reproducir y pausar siempre se quedan</string>
     <string name="what_s_on_the_player_keywords">ocultar mostrar partes reproductor bajo el título portada título artista me gusta corazón menú barra de progreso adelantar anterior siguiente saltar botones fila duración marca de transmisión</string>
@@ -4040,10 +4040,10 @@
     <string name="when_the_queue_ends">Cuando termina la cola</string>
     <string name="when_the_queue_ends_info">Detener: la música termina con la cola. Tu música: la radio propia de Prism a partir de lo que escuchas. Tuyas y nuevas: sobre todo tu música, con algunas canciones nuevas. Prism Music: una radio del catálogo de Prism Music. Sin conexión, siempre es tu música.</string>
     <string name="music_videos_label">Videos musicales</string>
-    <string name="play_them">Videos</string>
+    <string name="play_them">Videos en todas partes</string>
     <string name="songs_in_radios">Canciones en las radios</string>
     <string name="songs_everywhere">Canciones en todas partes</string>
-    <string name="music_videos_label_info">Videos: un video musical suena como video. Canciones en las radios: la reproducción automática y las radios ponen la canción del video en su lugar. Canciones en todas partes: cualquier video musical que toques suena como su canción, y el botón Video sigue mostrando el video.</string>
+    <string name="music_videos_label_info">Videos en todas partes: un video musical suena como video. Canciones en las radios: la reproducción automática y las radios ponen la canción del video en su lugar. Canciones en todas partes: cualquier video musical que toques suena como su canción, y el botón Video sigue mostrando el video.</string>
     <string name="trim_silence">Recortar el silencio al inicio y al final</string>
     <string name="podcasts_only">Solo podcasts</string>
     <string name="songs_and_podcasts">Canciones y podcasts</string>
@@ -4821,7 +4821,7 @@
     <string name="move_songs_you_have_played">Mover las canciones ya escuchadas</string>
     <string name="move_songs_you_have_played_info">Las canciones que ya escuchaste también tienen asa, para que puedas arrastrarlas entre ellas.</string>
     <string name="move_songs_you_have_played_keywords">cola escuchadas historial arrastrar asa reordenar</string>
-    <string name="tidier_queue">Cola más ordenada</string>
+    <string name="tidier_queue">Cola con menos botones</string>
     <string name="tidier_queue_info">Quita la × de cada canción y el botón Cola de la fila inferior mientras la cola está abierta. Desliza una canción a la izquierda o usa su ⋯ para quitarla. Tira del título hacia abajo o pulsa Atrás para salir de la cola.</string>
     <string name="tidier_queue_keywords">cola menos botones quitar cerrar limpia simple</string>
     <string name="reopen_on_the_last_page">Reabrir en la última página</string>
@@ -5151,7 +5151,7 @@
     <string name="gb_double_tap_seeks">El doble toque avanza o retrocede</string>
     <string name="gb_double_tap_seeks_needs">Primero pon Doble toque en Buscar según el lado</string>
     <string name="gb_gestures_work">Dónde funcionan los gestos</string>
-    <string name="gb_work_cover">En la portada</string>
+    <string name="gb_work_cover">Solo en la portada</string>
     <string name="gb_work_anywhere">En cualquier parte</string>
     <string name="gb_work_not_lyrics">En cualquier parte menos la letra</string>
     <string name="gb_work_cover_and_lyrics">En la portada y debajo de la letra</string>
@@ -5251,7 +5251,7 @@
     <string name="settings_player_right_hand_time">Tiempo a la derecha</string>
     <string name="settings_player_right_hand_time_info">El tiempo a la derecha de la barra de progreso. Tocarlo en el reproductor también cambia esto.</string>
     <string name="settings_player_cover_shape">Forma de la portada</string>
-    <string name="settings_player_edge_to_edge">De borde a borde</string>
+    <string name="settings_player_edge_to_edge">Llega a los bordes de la pantalla</string>
     <string name="settings_player_cover_animation">Animación de la portada</string>
     <string name="settings_player_opening">Al abrir</string>
     <string name="settings_player_opening_and_closing">Al abrir y cerrar</string>
@@ -5262,7 +5262,7 @@
     <string name="settings_player_queue_dj">Botón DJ</string>
     <string name="settings_player_queue_lengths">Duración de las canciones</string>
     <string name="settings_player_queue_move_played">Mover las reproducidas</string>
-    <string name="settings_player_queue_tidier">Cola más ordenada</string>
+    <string name="settings_player_queue_tidier">Menos botones</string>
     <string name="settings_player_scroll_for_controls">Desplazar hacia arriba para los controles</string>
     <string name="settings_player_lock_options">Opciones de la pantalla de bloqueo</string>
     <string name="settings_player_immersive_options">Opciones del modo inmersivo</string>
@@ -5335,8 +5335,8 @@
     <string name="tl_reset_everything">Restablecer todo</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">Looks completos, de día y de noche</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord activado · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord activado · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · copia, actualizaciones</string>
     <string name="root_connect_short">Reproducir en altavoces y TV</string>
     <string name="root_handoff_on">Traspaso activado</string>
@@ -5381,7 +5381,7 @@
     <string name="recap_ready_title">Tu resumen de %1$s está listo</string>
     <string name="recap_ready_text">Tu mes en música: tus canciones y artistas favoritos, y cómo se compara con el mes anterior.</string>
     <string name="recap_card_title">Tu %1$s</string>
-    <string name="replay_notices">Notificaciones</string>
+    <string name="replay_notices">Notificaciones de Replay</string>
     <string name="tour_185_replay_title">Replay, más a fondo</string>
     <string name="tour_185_replay_body">Mira cuándo escuchas, hora a hora y día a día.</string>
     <string name="tour_185_replay_point_1">Reloj de escucha: tu semana, hora a hora. Toca una hora para ver sus canciones favoritas.</string>
@@ -5456,7 +5456,7 @@
     <string name="cal_no_music">Sin música</string>
     <string name="cal_days_with_music">Días con música: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">Tocar la portada pequeña para reproducir o pausar</string>
+    <string name="gb_lyrics_cover_plays">Tocar la portada de la letra para pausar</string>
     <string name="gb_lyrics_cover_plays_info">Con la letra abierta, tocar la portada pequeña reproduce o pausa, y una pulsación larga cierra la letra. Desactivado: tocar cierra la letra.</string>
     <string name="gb_lyrics_cover_plays_keywords">letra portada pequeña miniatura carátula tocar reproducir pausar pulsación larga cerrar lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5633,4 +5633,37 @@
     <string name="hl_show_in_lists">Mostrar en listas</string>
     <string name="hl_show_on_artist_pages">Mostrar en las páginas de artista</string>
     <string name="allow_access_to_lossless_files_value">Necesario para encontrar tus archivos sin pérdida</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">Apoyar a Prism</string>
+    <string name="support_prism_info">Tu apoyo paga los teléfonos de prueba y las herramientas con las que se hace Prism. Todas las funciones siguen siendo gratis, apoyes o no. Abre Ko-fi en el navegador.</string>
+    <string name="support_prism_keywords">donar propina café gracias ayudar desarrollador apoyo</string>
+    <string name="i_ve_supported_prism">He apoyado a Prism</string>
+    <string name="i_ve_supported_prism_info">Desactiva para siempre todas las invitaciones a apoyar Prism. No se comprueba nada: basta con tu palabra.</string>
+    <string name="i_ve_supported_prism_keywords">donado donante ocultar avisos dejar de preguntar</string>
+    <string name="supporters">Colaboradores</string>
+    <string name="supporters_keywords">gracias créditos nombres donantes miembros</string>
+    <string name="supporters_info">Las personas que apoyaron Prism y quisieron aparecer con su nombre. Solo nombres: sin importes ni fechas.</string>
+    <string name="supporters_members">Miembros mensuales</string>
+    <string name="supporters_thank_you">Gracias</string>
+    <string name="supporters_empty">Todavía no hay nombres. El tuyo podría ser el primero.</string>
+    <string name="support_on_kofi">Apoyar en Ko-fi</string>
+    <string name="don_t_show_again">No volver a mostrar</string>
+    <string name="support_hours_title">100 horas de música con Prism</string>
+    <string name="support_hours_body">Es gratis y lo hace una sola persona: si te parece que vale un café, eso lo mantiene vivo.</string>
+    <string name="support_made_by_one_person">Hecho por una sola persona.</string>
+    <string name="support_whats_new_line">Prism es gratis y lo hace una sola persona. Si te gusta, puedes apoyarlo.</string>
+    <string name="settings_player_layout_group">Diseño y controles</string>
+    <string name="dd_use_showing_covers">Mostrar portadas animadas</string>
+    <string name="icon_style">Estilo de iconos</string>
+    <string name="prism_s_own">El de Prism</string>
+    <string name="player_times_both">Ambos extremos de la barra</string>
+    <string name="button_shape_fully_round">Totalmente redondo</string>
+    <string name="transport_filled_play">Botón de reproducir relleno</string>
+    <string name="replay_notice_recap_short">Resumen mensual</string>
+    <string name="settings_player_edit_menu">Editar el menú ⋯ del reproductor</string>
+    <string name="mix_why_sing">Cantar está activado, así que cada canción suena completa.</string>
+    <string name="mix_why_together">Escuchar juntos está activado, así que las canciones siguen al anfitrión.</string>
+    <string name="cn_spot_not_connected">Sin conectar · playlists y Me gusta</string>
+    <string name="cn_other_services">Otros servicios</string>
+    <string name="edge_to_edge_both">Portada y video</string>
 </resources>

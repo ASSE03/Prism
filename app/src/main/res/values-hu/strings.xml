@@ -92,7 +92,7 @@
     <string name="refresh_the_list">Lista frissítése</string>
     <string name="from_github">A GitHubról</string>
     <string name="add_your_look">Add hozzá az arculatodat</string>
-    <string name="by_pull_request_on_github">Pull requesttel a GitHubon</string>
+    <string name="by_pull_request_on_github">Oszd meg a sajátodat a GitHubon</string>
     <string name="save_your_look_share_it_as">Mentsd el az arculatodat, oszd meg szövegként, és add hozzá a kódját a themes/index.json fájlhoz a Prism tárolójában. Az oldalon leírjuk, hogyan.</string>
     <string name="use">%1$s használata</string>
     <string name="more_for">Továbbiak: %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">Használom</string>
     <string name="not_now">Most nem</string>
     <string name="day_and_night">Nappal és éjjel</string>
-    <string name="day_and_night_looks">Nappali és éjszakai arculat</string>
+    <string name="day_and_night_looks">Arculat váltása napszak szerint</string>
     <string name="one_look_by_day_another_by">Egy arculat nappalra, egy másik éjszakára</string>
     <string name="like_theme_system_for_whole_looks">Mint a Téma: Rendszer, csak teljes arculatokra. A napkeltét és a napnyugtát az időzónádból számoljuk ki, a helyadataid nélkül. Az időközben választott arculat a következő váltásig marad.</string>
     <string name="by_day">Nappal</string>
@@ -148,7 +148,7 @@
     <string name="search_history">Keresés az előzményekben</string>
     <string name="your_last_changes_to_the_look">A megjelenés utolsó %1$s módosítása itt látható, hogy visszaléphess rajtuk.</string>
     <string name="clear_history">Előzmények törlése</string>
-    <string name="your_look_stays_as_it_is">A megjelenés olyan marad, amilyen most</string>
+    <string name="your_look_stays_as_it_is">A beállításaid változatlanok maradnak</string>
     <string name="clear_the_look_s_history">Törlöd a megjelenés előzményeit?</string>
     <string name="you_won_t_be_able_to">Nem tudsz majd visszatérni ezekhez a módosításokhoz. A megjelenés olyan marad, amilyen most.</string>
     <string name="clear">Törlés</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">Sima üveg, egy hajszálnyi megtört fénnyel</string>
     <string name="ledger">Főkönyv</string>
     <string name="three_numbers_side_by_side">Három szám egymás mellett</string>
-    <string name="wash">Lehelet</string>
+    <string name="wash">Lágy szín</string>
     <string name="a_faint_wash_of_color_and">Halvány színfátyol és havi oszlopok</string>
     <string name="spectrum_frame">Spektrumkeret</string>
     <string name="glass_ringed_in_split_light_the">Megtört fénnyel keretezett üveg, az idő színesen</string>
@@ -1472,7 +1472,7 @@
     <string name="widget_background_transparent_see_through_color">modul háttér átlátszó áttetsző szín gombok kezdőképernyő widget</string>
     <string name="the_tab_you_re_on">Az aktuális lap</string>
     <string name="tab_icon_color_tint_accent_light">lap ikon szín árnyalat kiemelőszín fény aktuális lap</string>
-    <string name="play_on_album_and_playlist_pages">Lejátszás gomb az album- és lejátszásilista-oldalakon</string>
+    <string name="play_on_album_and_playlist_pages">Lejátszás gomb albumokon és lejátszási listákon</string>
     <string name="play_button_outlined_filled">lejátszás gomb körvonalas kitöltött</string>
     <string name="switches_sliders_and_buttons">Kapcsolók, csúszkák és gombok</string>
     <string name="classic_controls_1_6_material_switch">klasszikus vezérlők 1.6 material kapcsoló csúszka régi megjelenés</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">elforgatás tájolás fekvő álló</string>
     <string name="picture_in_picture">Kép a képben</string>
     <string name="pip_video_float_window_leave">pip videó lebegő ablak kilépés</string>
-    <string name="load_ahead">Előtöltés</string>
+    <string name="load_ahead">Mennyire töltsön előre</string>
     <string name="preload_buffer">előtöltés puffer</string>
     <string name="load_ahead_on_mobile_data">Előtöltés mobiladaton</string>
     <string name="preload_cellular">előtöltés mobilhálózat</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">Másolat megőrzése</string>
     <string name="just_sign_out">Csak kijelentkezés</string>
     <string name="prism_account_on_this_phone">Prism Account · ezen a telefonon</string>
-    <string name="your_name_and_picture_kept_on">A neved és a képed, ezen a telefonon tárolva. Semmi nem változik abból, ami a tiéd</string>
+    <string name="your_name_and_picture_kept_on">A neved és a képed, ezen a telefonon tárolva</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">bejelentkezve</string>
     <string name="signed_in_2">Bejelentkezve</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">Az Apple Music, a Musixmatch és a Spotify dalszövegei · szóról szóra</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · szóról szóra, a legtöbb kínai dal</string>
+    <string name="qq_music_word_by_word_the">Szóról szóra · a legtöbb kínai dal</string>
     <string name="open_lyrics_database_line_by_line">Nyílt dalszöveg-adatbázis · soronként</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · szóról szóra</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · szóról szóra, sok ázsiai dal</string>
+    <string name="kugou_word_by_word_many_asian">Szóról szóra · sok ázsiai dal</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Hallgatók által beküldött dalszövegek · eddig kevés dal</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">A dal Prism Music oldalán látható szöveg, a LyricFindtól · sorok vagy sima szöveg</string>
+    <string name="lyricfind_lines_or_plain">A LyricFind szövegei a YouTube Musicon keresztül · sorok vagy sima szöveg</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Sima szöveg · a kicsillagozott szavakat is kitölti</string>
     <string name="both">Mindkettő</string>
@@ -3136,7 +3136,7 @@
     <string name="one">Egy</string>
     <string name="under_the_line">A sor alatt</string>
     <string name="over_the_line">A sor fölött</string>
-    <string name="as_now">Mint most</string>
+    <string name="as_now">Mint a lejátszó</string>
     <string name="the_player_s_background_or_the">A lejátszó háttere, vagy magával ragadó módban a borító</string>
     <string name="plain_dark">Egyszerű sötét</string>
     <string name="nothing_but_the_words">Csak a szavak</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">A galériához újabb Prism kell</string>
     <string name="by_2">készítette: %1$s</string>
     <string name="a_look">Egy arculat</string>
-    <string name="how_prism_comes_outfit_the_split">Ahogy a Prism érkezik: Outfit, a megtört fény, lágy sarkok</string>
+    <string name="how_prism_comes_outfit_the_split">Alapból: a Prism saját betűtípusa, spektrumszínek, lágy sarkok</string>
     <string name="paper">Papír</string>
     <string name="light_serif_type_ink_instead_of">Világos, talpas betűk, tinta szín helyett, meleg papír</string>
     <string name="midnight">Éjfél</string>
@@ -3948,7 +3948,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">A húzások, a dupla koppintás és a hosszú nyomás a cím alatt is működnek, a gombok és sávok körüli részen. A gombok és sávok megtartják a saját koppintásukat.</string>
     <string name="gestures_everywhere_keywords">mozdulat húzás dupla koppintás hosszú nyomás alsó rész vezérlők egész lejátszó</string>
     <string name="playing_song_in_the_page_s_color">A szóló dal az oldal színében</string>
-    <string name="its_bars_and_title_take_the_album_s_color">A sávok és a cím az album színét kapják</string>
+    <string name="its_bars_and_title_take_the_album_s_color">A sávok és a cím az oldal színét kapják</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">Album-, lejátszási lista- és előadóoldalakon a szóló dal sávjai és címe az oldal képének színében jelennek meg a fényed helyett. Máshol minden marad.</string>
     <string name="playing_indicator_bars_now_playing_album_color">jelző lejátszás sávok hangszínszabályzó album lista előadó oldal szín borító</string>
     <string name="slide_between_screens">Csúszás a képernyők között</string>
@@ -3978,7 +3978,7 @@
     <string name="hidden_s">Elrejtve: %1$s</string>
     <string name="buttons_in_the_row">Gombok a sorban</string>
     <string name="add_a_button">Gomb hozzáadása</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">A lejátszó ⋯ menüje: a csempéi és amit mutat</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">A csempéi és amit mutat</string>
     <string name="and_the_sky_lit_up">És felragyogott az ég</string>
     <string name="play_pause_always_stays">A lejátszás és a szünet mindig megmarad</string>
     <string name="what_s_on_the_player_keywords">elrejtés megjelenítés részek megjelenítés a lejátszón a cím alatt borító cím előadó tetszik szív menü folyamatjelző tekerés előző következő kihagyás gombok sor dal hossza átküldés cast</string>
@@ -3990,10 +3990,10 @@
     <string name="when_the_queue_ends">Amikor a lejátszási sor véget ér</string>
     <string name="when_the_queue_ends_info">Leállítás: a zene a lejátszási sorral együtt véget ér. A zenéd: a Prism saját rádiója abból, amit hallgatsz. Tiéd és új: főleg a zenéd, néhány új dallal. Prism Music: rádió a Prism Music katalógusából. Offline mindig a zenéd szól.</string>
     <string name="music_videos_label">Zenei videók</string>
-    <string name="play_them">Videók</string>
+    <string name="play_them">Videók mindenhol</string>
     <string name="songs_in_radios">Dalok a rádiókban</string>
     <string name="songs_everywhere">Dalok mindenhol</string>
-    <string name="music_videos_label_info">Videók: a zenei videó videóként szól. Dalok a rádiókban: az automatikus lejátszás és a rádiók helyette a videó dalát játsszák. Dalok mindenhol: minden zenei videó, amelyre koppintasz, a dalaként szól, a Videó gomb pedig továbbra is a videót mutatja.</string>
+    <string name="music_videos_label_info">Videók mindenhol: a zenei videó videóként szól. Dalok a rádiókban: az automatikus lejátszás és a rádiók helyette a videó dalát játsszák. Dalok mindenhol: minden zenei videó, amelyre koppintasz, a dalaként szól, a Videó gomb pedig továbbra is a videót mutatja.</string>
     <string name="trim_silence">Csend levágása az elején és a végén</string>
     <string name="podcasts_only">Csak podcastok</string>
     <string name="songs_and_podcasts">Dalok és podcastok</string>
@@ -4757,7 +4757,7 @@
     <string name="move_songs_you_have_played">Lejátszott dalok mozgatása</string>
     <string name="move_songs_you_have_played_info">A már lejátszott dalok is kapnak fogantyút, így egymás között húzhatod őket.</string>
     <string name="move_songs_you_have_played_keywords">lejátszási sor lejátszott előzmények húzás fogantyú átrendezés</string>
-    <string name="tidier_queue">Rendezettebb lejátszási sor</string>
+    <string name="tidier_queue">Lejátszási sor kevesebb gombbal</string>
     <string name="tidier_queue_info">Leveszi az × jelet minden dalról és a Lejátszási sor gombot az alsó sorból, amíg a sor nyitva van. Húzz balra egy dalt, vagy használd a ⋯ menüt az eltávolításához. Húzd lejjebb a címet vagy nyomd meg a Vissza gombot a sor elhagyásához.</string>
     <string name="tidier_queue_keywords">lejátszási sor kevesebb gomb eltávolítás bezárás tisztább egyszerű</string>
     <string name="reopen_on_the_last_page">Megnyitás az utolsó oldalon</string>
@@ -5078,8 +5078,8 @@
     <string name="gb_swipes_and_touch">Húzások és érintés</string>
     <string name="gb_double_tap_seeks">Dupla koppintás teker</string>
     <string name="gb_double_tap_seeks_needs">Előbb állítsd a Dupla koppintást Tekerés oldal szerint értékre</string>
-    <string name="gb_gestures_work">Mozdulatok helye</string>
-    <string name="gb_work_cover">A borítón</string>
+    <string name="gb_gestures_work">Hol működnek a mozdulatok</string>
+    <string name="gb_work_cover">Csak a borítón</string>
     <string name="gb_work_anywhere">Bárhol</string>
     <string name="gb_work_not_lyrics">Bárhol, kivéve a dalszöveget</string>
     <string name="gb_work_cover_and_lyrics">A borítón és a dalszöveg alatt</string>
@@ -5179,7 +5179,7 @@
     <string name="settings_player_right_hand_time">Jobb oldali idő</string>
     <string name="settings_player_right_hand_time_info">Az idő a folyamatjelző jobb végén. Ha a lejátszón megkoppintod, az is ezt váltja.</string>
     <string name="settings_player_cover_shape">Borító alakja</string>
-    <string name="settings_player_edge_to_edge">Széltől szélig</string>
+    <string name="settings_player_edge_to_edge">Eléri a képernyő szélét</string>
     <string name="settings_player_cover_animation">Borítóanimáció</string>
     <string name="settings_player_opening">Megnyitáskor</string>
     <string name="settings_player_opening_and_closing">Megnyitáskor és bezáráskor</string>
@@ -5190,7 +5190,7 @@
     <string name="settings_player_queue_dj">DJ gomb</string>
     <string name="settings_player_queue_lengths">Dalok hossza</string>
     <string name="settings_player_queue_move_played">Lejátszottak áthelyezése</string>
-    <string name="settings_player_queue_tidier">Rendezettebb sor</string>
+    <string name="settings_player_queue_tidier">Kevesebb gomb</string>
     <string name="settings_player_scroll_for_controls">Görgess fel a vezérlőkért</string>
     <string name="settings_player_lock_options">Zárolási képernyő beállításai</string>
     <string name="settings_player_immersive_options">Magával ragadó mód beállításai</string>
@@ -5262,8 +5262,8 @@
     <string name="tl_reset_everything">Minden visszaállítása</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">Teljes arculatok, éjjel-nappal</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord be · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord be · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · mentés, frissítések</string>
     <string name="root_connect_short">Lejátszás hangszórón és tévén</string>
     <string name="root_handoff_on">Átadás bekapcsolva</string>
@@ -5308,7 +5308,7 @@
     <string name="recap_ready_title">Elkészült a havi összefoglalód: %1$s</string>
     <string name="recap_ready_text">A hónapod zenében: a legjobb dalaid és előadóid, és hogy hogyan alakult az előző hónaphoz képest.</string>
     <string name="recap_card_title">%1$s: a hónapod</string>
-    <string name="replay_notices">Értesítések</string>
+    <string name="replay_notices">Replay értesítések</string>
     <string name="tour_185_replay_title">Replay, mélyebben</string>
     <string name="tour_185_replay_body">Nézd meg, mikor hallgatsz zenét, óráról órára és napról napra.</string>
     <string name="tour_185_replay_point_1">Hallgatási óra: a heted óráról órára. Koppints egy órára a legjobb dalaiért.</string>
@@ -5381,7 +5381,7 @@
     <string name="cal_no_music">Nincs zene</string>
     <string name="cal_days_with_music">Zenés napok: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">Koppints a kis borítóra a lejátszáshoz vagy szüneteltetéshez</string>
+    <string name="gb_lyrics_cover_plays">Koppints a szöveg melletti borítóra a szüneteltetéshez</string>
     <string name="gb_lyrics_cover_plays_info">Megnyitott dalszövegnél a kis borítóra koppintva elindul vagy szünetel a lejátszás, hosszú nyomásra pedig bezárul a dalszöveg. Kikapcsolva: koppintásra bezárul a dalszöveg.</string>
     <string name="gb_lyrics_cover_plays_keywords">dalszöveg kis borító bélyegkép borítókép koppintás lejátszás szünet hosszú nyomás bezárás lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5558,4 +5558,37 @@
     <string name="hl_show_in_lists">Megjelenítés a listákban</string>
     <string name="hl_show_on_artist_pages">Megjelenítés az előadói oldalakon</string>
     <string name="allow_access_to_lossless_files_value">Szükséges a veszteségmentes fájlok megtalálásához</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">Prism támogatása</string>
+    <string name="support_prism_info">A támogatásból a Prism fejlesztéséhez használt tesztelefonok és eszközök telnek. Minden funkció ingyenes marad, akár támogatod, akár nem. Megnyitja a Ko-fit a böngészőben.</string>
+    <string name="support_prism_keywords">adomány borravaló kávé köszönöm segítség fejlesztő támogatás</string>
+    <string name="i_ve_supported_prism">Támogattam a Prismet</string>
+    <string name="i_ve_supported_prism_info">Végleg kikapcsolja a Prism támogatására szóló összes felkérést. Semmit nem ellenőrzünk: elég a szavad.</string>
+    <string name="i_ve_supported_prism_keywords">adományoztam támogató elrejt kérések ne kérdezz</string>
+    <string name="supporters">Támogatók</string>
+    <string name="supporters_keywords">köszönet készítők nevek adományozók tagok</string>
+    <string name="supporters_info">Azok, akik támogatták a Prismet, és vállalták a nevük megjelenítését. Csak nevek: összegek és dátumok nélkül.</string>
+    <string name="supporters_members">Havi tagok</string>
+    <string name="supporters_thank_you">Köszönet</string>
+    <string name="supporters_empty">Itt még nincs név. Lehet, hogy a tiéd lesz az első.</string>
+    <string name="support_on_kofi">Támogatás a Ko-fin</string>
+    <string name="don_t_show_again">Ne mutasd újra</string>
+    <string name="support_hours_title">100 óra zene a Prismmel</string>
+    <string name="support_hours_body">Ingyenes, és egyetlen ember készíti: ha megér neked egy kávét, azzal életben tartod.</string>
+    <string name="support_made_by_one_person">Egyetlen ember készítette.</string>
+    <string name="support_whats_new_line">A Prism ingyenes, és egyetlen ember készíti. Ha tetszik, támogathatod.</string>
+    <string name="settings_player_layout_group">Elrendezés és vezérlők</string>
+    <string name="dd_use_showing_covers">Animált borítók megjelenítése</string>
+    <string name="icon_style">Ikonstílus</string>
+    <string name="prism_s_own">A Prism sajátja</string>
+    <string name="player_times_both">A sáv mindkét vége</string>
+    <string name="button_shape_fully_round">Teljesen kerek</string>
+    <string name="transport_filled_play">Kitöltött lejátszás gomb</string>
+    <string name="replay_notice_recap_short">Havi összefoglaló</string>
+    <string name="settings_player_edit_menu">A lejátszó ⋯ menüjének szerkesztése</string>
+    <string name="mix_why_sing">Az Éneklés be van kapcsolva, ezért minden dal egészben szól.</string>
+    <string name="mix_why_together">A Közös hallgatás be van kapcsolva, ezért a dalok a házigazdát követik.</string>
+    <string name="cn_spot_not_connected">Nincs csatlakoztatva · lejátszási listák és kedvencek</string>
+    <string name="cn_other_services">További szolgáltatások</string>
+    <string name="edge_to_edge_both">Borító és videó</string>
 </resources>

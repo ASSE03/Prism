@@ -92,7 +92,7 @@
     <string name="refresh_the_list">تحديث القائمة</string>
     <string name="from_github">من GitHub</string>
     <string name="add_your_look">أضف مظهرك</string>
-    <string name="by_pull_request_on_github">عبر طلب سحب على GitHub</string>
+    <string name="by_pull_request_on_github">شارك مظهرك على GitHub</string>
     <string name="save_your_look_share_it_as">احفظ مظهرك، وشاركه كنص، وأضف رمزه إلى themes/index.json في مستودع Prism. الصفحة توضح الطريقة.</string>
     <string name="use">استخدام %1$s</string>
     <string name="more_for">المزيد لـ %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">استخدامه</string>
     <string name="not_now">ليس الآن</string>
     <string name="day_and_night">النهار والليل</string>
-    <string name="day_and_night_looks">مظاهر النهار والليل</string>
+    <string name="day_and_night_looks">تغيير المظهر حسب وقت اليوم</string>
     <string name="one_look_by_day_another_by">مظهر في النهار، وآخر في الليل</string>
     <string name="like_theme_system_for_whole_looks">مثل السمة: النظام، لكن للمظاهر كاملة. يُحسب وقتا الشروق والغروب من منطقتك الزمنية، دون موقعك. المظهر الذي تختاره بينهما يبقى حتى التبديل التالي.</string>
     <string name="by_day">في النهار</string>
@@ -148,7 +148,7 @@
     <string name="search_history">البحث في السجلّ</string>
     <string name="your_last_changes_to_the_look">تظهر هنا آخر %1$s من تغييراتك على المظهر، لتعود إليها.</string>
     <string name="clear_history">محو السجلّ</string>
-    <string name="your_look_stays_as_it_is">يبقى مظهرك كما هو الآن</string>
+    <string name="your_look_stays_as_it_is">تبقى إعداداتك كما هي</string>
     <string name="clear_the_look_s_history">هل تريد محو سجلّ المظهر؟</string>
     <string name="you_won_t_be_able_to">لن تتمكن من العودة إلى هذه التغييرات. يبقى مظهرك كما هو الآن.</string>
     <string name="clear">محو</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">زجاج سادة، مع خط رفيع من ضوء الطيف</string>
     <string name="ledger">السجلّ</string>
     <string name="three_numbers_side_by_side">ثلاثة أرقام جنبًا إلى جنب</string>
-    <string name="wash">مسحة</string>
+    <string name="wash">لون ناعم</string>
     <string name="a_faint_wash_of_color_and">مسحة خفيفة من اللون وأشرطة الأشهر</string>
     <string name="spectrum_frame">إطار الطيف</string>
     <string name="glass_ringed_in_split_light_the">زجاج محاط بضوء الطيف، والوقت ملوّن</string>
@@ -1472,7 +1472,7 @@
     <string name="widget_background_transparent_see_through_color">أداة خلفية شفافة لون أزرار الشاشة الرئيسية widget</string>
     <string name="the_tab_you_re_on">علامة التبويب الحالية</string>
     <string name="tab_icon_color_tint_accent_light">علامة التبويب أيقونة لون مسحة لون التمييز ضوء علامة التبويب الحالية</string>
-    <string name="play_on_album_and_playlist_pages">زر التشغيل في صفحات الألبومات وقوائم التشغيل</string>
+    <string name="play_on_album_and_playlist_pages">زر التشغيل في الألبومات وقوائم التشغيل</string>
     <string name="play_button_outlined_filled">زر التشغيل محدد مملوء</string>
     <string name="switches_sliders_and_buttons">مفاتيح التبديل وأشرطة التمرير والأزرار</string>
     <string name="classic_controls_1_6_material_switch">عناصر تحكم كلاسيكية 1.6 material مفتاح شريط تمرير المظهر القديم</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">تدوير اتجاه أفقي عمودي</string>
     <string name="picture_in_picture">نافذة ضمن نافذة</string>
     <string name="pip_video_float_window_leave">pip فيديو عائم نافذة مغادرة صورة داخل صورة</string>
-    <string name="load_ahead">التحميل المسبق</string>
+    <string name="load_ahead">مدى التحميل المسبق</string>
     <string name="preload_buffer">تحميل مسبق تخزين مؤقت buffer</string>
     <string name="load_ahead_on_mobile_data">التحميل المسبق على بيانات الجوّال</string>
     <string name="preload_cellular">تحميل مسبق بيانات خلوية</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">الاحتفاظ بنسخة</string>
     <string name="just_sign_out">تسجيل الخروج فقط</string>
     <string name="prism_account_on_this_phone">Prism Account · على هذا الهاتف</string>
-    <string name="your_name_and_picture_kept_on">اسمك وصورتك، محفوظان على هذا الهاتف. لا يتغيّر شيء مما لديك</string>
+    <string name="your_name_and_picture_kept_on">اسمك وصورتك، محفوظان على هذا الهاتف</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">مسجّل الدخول</string>
     <string name="signed_in_2">مسجّل الدخول</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">من Apple Music وMusixmatch وSpotify · كلمة بكلمة</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · كلمة بكلمة، أكثر الأغاني الصينية</string>
+    <string name="qq_music_word_by_word_the">كلمة بكلمة · أكثر الأغاني الصينية</string>
     <string name="open_lyrics_database_line_by_line">قاعدة بيانات مفتوحة للكلمات · سطرًا بسطر</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · كلمة بكلمة</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · كلمة بكلمة، كثير من الأغاني الآسيوية</string>
+    <string name="kugou_word_by_word_many_asian">كلمة بكلمة · كثير من الأغاني الآسيوية</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">كلمات يرسلها المستمعون · أغانٍ قليلة حتى الآن</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">كلمات الأغنية في صفحتها على Prism Music، من LyricFind · أسطر أو نص عادي</string>
+    <string name="lyricfind_lines_or_plain">كلمات LyricFind عبر YouTube Music · أسطر أو نص عادي</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">نص عادي · ويملأ أيضًا الكلمات المخفية بالنجوم</string>
     <string name="both">كلاهما</string>
@@ -3136,7 +3136,7 @@
     <string name="one">واحد</string>
     <string name="under_the_line">تحت السطر</string>
     <string name="over_the_line">فوق السطر</string>
-    <string name="as_now">كما الآن</string>
+    <string name="as_now">مثل المشغّل</string>
     <string name="the_player_s_background_or_the">خلفية المشغّل، أو الغلاف في الوضع الغامر</string>
     <string name="plain_dark">داكنة سادة</string>
     <string name="nothing_but_the_words">لا شيء سوى الكلمات</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">يحتاج المعرض إلى إصدار أحدث من Prism</string>
     <string name="by_2">بواسطة %1$s</string>
     <string name="a_look">مظهر</string>
-    <string name="how_prism_comes_outfit_the_split">كما يأتي Prism: خط Outfit، وضوء الطيف، وزوايا ناعمة</string>
+    <string name="how_prism_comes_outfit_the_split">كما يأتي: خط Prism الخاص، وألوان الطيف، وزوايا ناعمة</string>
     <string name="paper">ورق</string>
     <string name="light_serif_type_ink_instead_of">فاتح، وخط بأطراف مذيّلة، وحبر بدلًا من الألوان، وورق دافئ</string>
     <string name="midnight">منتصف الليل</string>
@@ -4148,7 +4148,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">تعمل السحبات والنقر المزدوج والضغط المطوّل أسفل العنوان أيضاً، في المساحة حول الأزرار والأشرطة. تحتفظ الأزرار والأشرطة بنقراتها الخاصة.</string>
     <string name="gestures_everywhere_keywords">إيماءة سحب نقر مزدوج ضغط مطول الجزء السفلي عناصر التحكم المشغل كله</string>
     <string name="playing_song_in_the_page_s_color">الأغنية قيد التشغيل بلون الصفحة</string>
-    <string name="its_bars_and_title_take_the_album_s_color">أشرطتها وعنوانها بلون الألبوم</string>
+    <string name="its_bars_and_title_take_the_album_s_color">أشرطتها وعنوانها بلون الصفحة</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">في صفحات الألبومات وقوائم التشغيل والفنانين، تظهر أشرطة الأغنية قيد التشغيل وعنوانها بلون صورة الصفحة بدلاً من ضوئك. وفي باقي التطبيق تبقى كما هي.</string>
     <string name="playing_indicator_bars_now_playing_album_color">مؤشر تشغيل أشرطة معادل ألبوم قائمة فنان صفحة لون غلاف</string>
     <string name="slide_between_screens">انزلاق بين الشاشات</string>
@@ -4178,7 +4178,7 @@
     <string name="hidden_s">مخفي: %1$s</string>
     <string name="buttons_in_the_row">الأزرار في الصف</string>
     <string name="add_a_button">إضافة زر</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">قائمة ⋯ في المشغّل: مربعاتها وما تعرضه</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">مربعاتها وما تعرضه</string>
     <string name="and_the_sky_lit_up">وأضاءت السماء</string>
     <string name="play_pause_always_stays">التشغيل والإيقاف المؤقت يبقيان دائمًا</string>
     <string name="what_s_on_the_player_keywords">إخفاء إظهار أجزاء على المشغّل تحت العنوان غلاف عنوان فنان إعجاب قلب قائمة شريط التقدم تقديم السابق التالي تخطي أزرار صف مدة الأغنية بث</string>
@@ -4190,10 +4190,10 @@
     <string name="when_the_queue_ends">عند انتهاء قائمة الانتظار</string>
     <string name="when_the_queue_ends_info">إيقاف: تنتهي الموسيقى مع قائمة الانتظار. موسيقاك: راديو Prism الخاص من الأغاني التي تشغّلها. موسيقاك والجديد: موسيقاك في الغالب مع بعض الأغاني الجديدة. Prism Music: راديو من كتالوج Prism Music. دون اتصال تكون دائمًا موسيقاك.</string>
     <string name="music_videos_label">فيديوهات الموسيقى</string>
-    <string name="play_them">فيديوهات</string>
+    <string name="play_them">فيديوهات في كل مكان</string>
     <string name="songs_in_radios">أغانٍ في الراديو</string>
     <string name="songs_everywhere">أغانٍ في كل مكان</string>
-    <string name="music_videos_label_info">فيديوهات: يُشغَّل فيديو الموسيقى كفيديو. أغانٍ في الراديو: يشغّل التشغيل التلقائي والراديو أغنية الفيديو بدلًا منه. أغانٍ في كل مكان: أي فيديو موسيقى تنقر عليه يُشغَّل كأغنيته، ويظل زر «فيديو» يعرض الفيديو.</string>
+    <string name="music_videos_label_info">فيديوهات في كل مكان: يُشغَّل فيديو الموسيقى كفيديو. أغانٍ في الراديو: يشغّل التشغيل التلقائي والراديو أغنية الفيديو بدلًا منه. أغانٍ في كل مكان: أي فيديو موسيقى تنقر عليه يُشغَّل كأغنيته، ويظل زر «فيديو» يعرض الفيديو.</string>
     <string name="trim_silence">قص الصمت في البداية والنهاية</string>
     <string name="podcasts_only">البودكاست فقط</string>
     <string name="songs_and_podcasts">الأغاني والبودكاست</string>
@@ -5013,7 +5013,7 @@
     <string name="move_songs_you_have_played">تحريك الأغاني التي شغّلتها</string>
     <string name="move_songs_you_have_played_info">الأغاني التي شغّلتها سابقًا تحصل على مقبض أيضًا، فتستطيع سحبها وترتيبها فيما بينها.</string>
     <string name="move_songs_you_have_played_keywords">قائمة الانتظار شُغّلت سجل سحب مقبض إعادة ترتيب</string>
-    <string name="tidier_queue">قائمة انتظار أنظف</string>
+    <string name="tidier_queue">قائمة انتظار بأزرار أقل</string>
     <string name="tidier_queue_info">يزيل × من كل أغنية وزر قائمة الانتظار من الصف السفلي أثناء فتح القائمة. اسحب الأغنية لليسار أو استخدم ⋯ لإزالتها. اسحب العنوان للأسفل أو اضغط رجوع لمغادرة القائمة.</string>
     <string name="tidier_queue_keywords">قائمة الانتظار أزرار أقل إزالة إغلاق أنظف بسيط</string>
     <string name="reopen_on_the_last_page">إعادة الفتح على آخر صفحة</string>
@@ -5367,7 +5367,7 @@
     <string name="gb_double_tap_seeks">النقر مرتين يقفز</string>
     <string name="gb_double_tap_seeks_needs">اضبط «النقر مرتين» على «التنقل حسب الجانب» أولًا</string>
     <string name="gb_gestures_work">مكان عمل الإيماءات</string>
-    <string name="gb_work_cover">على الغلاف</string>
+    <string name="gb_work_cover">على الغلاف فقط</string>
     <string name="gb_work_anywhere">في أي مكان</string>
     <string name="gb_work_not_lyrics">في أي مكان عدا الكلمات</string>
     <string name="gb_work_cover_and_lyrics">على الغلاف وأسفل الكلمات</string>
@@ -5467,7 +5467,7 @@
     <string name="settings_player_right_hand_time">الوقت على اليمين</string>
     <string name="settings_player_right_hand_time_info">الوقت في الطرف الأيمن من شريط التقدّم. النقر عليه في المشغّل يغيّر هذا أيضًا.</string>
     <string name="settings_player_cover_shape">شكل الغلاف</string>
-    <string name="settings_player_edge_to_edge">من الحافة إلى الحافة</string>
+    <string name="settings_player_edge_to_edge">يصل إلى حواف الشاشة</string>
     <string name="settings_player_cover_animation">حركة الغلاف</string>
     <string name="settings_player_opening">عند الفتح</string>
     <string name="settings_player_opening_and_closing">عند الفتح والإغلاق</string>
@@ -5478,7 +5478,7 @@
     <string name="settings_player_queue_dj">زر DJ</string>
     <string name="settings_player_queue_lengths">مدد الأغاني</string>
     <string name="settings_player_queue_move_played">نقل الأغاني المشغّلة</string>
-    <string name="settings_player_queue_tidier">قائمة انتظار أكثر ترتيبًا</string>
+    <string name="settings_player_queue_tidier">أزرار أقل</string>
     <string name="settings_player_scroll_for_controls">التمرير للأعلى لعناصر التحكم</string>
     <string name="settings_player_lock_options">خيارات شاشة القفل</string>
     <string name="settings_player_immersive_options">خيارات الوضع الغامر</string>
@@ -5554,8 +5554,8 @@
     <string name="tl_reset_everything">إعادة ضبط كل شيء</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">مظاهر كاملة، نهارًا وليلًا</string>
-    <string name="root_accounts_short">Last.fm وSpotify وDiscord</string>
-    <string name="root_accounts_discord_on">Discord مفعّل · Last.fm وSpotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord مفعّل · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · نسخ احتياطي، تحديثات</string>
     <string name="root_connect_short">التشغيل على مكبرات الصوت والتلفزيون</string>
     <string name="root_handoff_on">التسليم مفعّل</string>
@@ -5600,7 +5600,7 @@
     <string name="recap_ready_title">ملخص %1$s جاهز</string>
     <string name="recap_ready_text">شهرك في الموسيقى: أفضل أغانيك وفنانيك، ومقارنته بالشهر الذي قبله.</string>
     <string name="recap_card_title">%1$s: شهرك</string>
-    <string name="replay_notices">الإشعارات</string>
+    <string name="replay_notices">إشعارات Replay</string>
     <string name="tour_185_replay_title">Replay، بعمق أكبر</string>
     <string name="tour_185_replay_body">اعرف متى تستمع، ساعة بساعة ويومًا بيوم.</string>
     <string name="tour_185_replay_point_1">ساعة الاستماع: أسبوعك ساعة بساعة. انقر على ساعة لترى أفضل أغانيها.</string>
@@ -5681,7 +5681,7 @@
     <string name="cal_no_music">لا موسيقى</string>
     <string name="cal_days_with_music">أيام فيها موسيقى: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">اضغط على الغلاف الصغير للتشغيل أو الإيقاف المؤقت</string>
+    <string name="gb_lyrics_cover_plays">اضغط على الغلاف الصغير بجانب الكلمات للإيقاف المؤقت</string>
     <string name="gb_lyrics_cover_plays_info">مع فتح الكلمات، الضغط على الغلاف الصغير يشغّل أو يوقف مؤقتًا، والضغط مطولًا يغلق الكلمات. عند الإيقاف: الضغط يغلق الكلمات.</string>
     <string name="gb_lyrics_cover_plays_keywords">الكلمات غلاف صغير صورة مصغرة ضغط تشغيل إيقاف مؤقت ضغط مطول إغلاق lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5858,4 +5858,37 @@
     <string name="hl_show_in_lists">إظهار في القوائم</string>
     <string name="hl_show_on_artist_pages">إظهار في صفحات الفنانين</string>
     <string name="allow_access_to_lossless_files_value">مطلوب للعثور على ملفاتك بلا فقدان</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">دعم Prism</string>
+    <string name="support_prism_info">يغطي الدعم تكلفة الهواتف التجريبية والأدوات التي يُصنع بها Prism. تبقى كل الميزات مجانية، سواء دعمته أم لا. يفتح Ko-fi في متصفحك.</string>
+    <string name="support_prism_keywords">تبرع إكرامية قهوة شكرا مساعدة المطور دعم</string>
+    <string name="i_ve_supported_prism">لقد دعمت Prism</string>
+    <string name="i_ve_supported_prism_info">يوقف كل طلبات دعم Prism نهائيًا. لا يُتحقق من شيء: كلمتك تكفي.</string>
+    <string name="i_ve_supported_prism_keywords">تبرعت داعم إخفاء طلبات إيقاف</string>
+    <string name="supporters">الداعمون</string>
+    <string name="supporters_keywords">شكرا شكر أسماء متبرعون أعضاء</string>
+    <string name="supporters_info">الأشخاص الذين دعموا Prism واختاروا أن تُذكر أسماؤهم. أسماء فقط: بلا مبالغ ولا تواريخ.</string>
+    <string name="supporters_members">الأعضاء الشهريون</string>
+    <string name="supporters_thank_you">شكرًا لكم</string>
+    <string name="supporters_empty">لا توجد أسماء هنا بعد. قد يكون اسمك الأول.</string>
+    <string name="support_on_kofi">ادعم على Ko-fi</string>
+    <string name="don_t_show_again">لا تعرض مرة أخرى</string>
+    <string name="support_hours_title">100 ساعة من الموسيقى مع Prism</string>
+    <string name="support_hours_body">مجاني ويصنعه شخص واحد: إن كان يستحق عندك فنجان قهوة، فهذا يبقيه مستمرًا.</string>
+    <string name="support_made_by_one_person">صنعه شخص واحد.</string>
+    <string name="support_whats_new_line">Prism مجاني ويصنعه شخص واحد. إن أعجبك، يمكنك دعمه.</string>
+    <string name="settings_player_layout_group">التخطيط وعناصر التحكم</string>
+    <string name="dd_use_showing_covers">عرض الأغلفة المتحركة</string>
+    <string name="icon_style">نمط الأيقونات</string>
+    <string name="prism_s_own">الخاص بـ Prism</string>
+    <string name="player_times_both">طرفا الشريط</string>
+    <string name="button_shape_fully_round">دائري بالكامل</string>
+    <string name="transport_filled_play">زر تشغيل ممتلئ</string>
+    <string name="replay_notice_recap_short">الملخص الشهري</string>
+    <string name="settings_player_edit_menu">تعديل قائمة ⋯ في المشغّل</string>
+    <string name="mix_why_sing">الغناء مفعّل، لذا تُشغَّل كل أغنية كاملة.</string>
+    <string name="mix_why_together">الاستماع معًا مفعّل، لذا تتبع الأغاني المضيف.</string>
+    <string name="cn_spot_not_connected">غير متصل · قوائم التشغيل والإعجابات</string>
+    <string name="cn_other_services">خدمات أخرى</string>
+    <string name="edge_to_edge_both">الغلاف والفيديو</string>
 </resources>

@@ -92,7 +92,7 @@
     <string name="refresh_the_list">তালিকা রিফ্রেশ করুন</string>
     <string name="from_github">GitHub থেকে</string>
     <string name="add_your_look">আপনার লুক যোগ করুন</string>
-    <string name="by_pull_request_on_github">GitHub-এ পুল রিকোয়েস্ট দিয়ে</string>
+    <string name="by_pull_request_on_github">আপনার লুক GitHub-এ শেয়ার করুন</string>
     <string name="save_your_look_share_it_as">আপনার লুক সেভ করুন, টেক্সট হিসেবে শেয়ার করুন, আর এর কোড Prism-এর রিপোজিটরির themes/index.json-এ যোগ করুন। পেজটিতে কীভাবে করবেন বলা আছে।</string>
     <string name="use">%1$s ব্যবহার করুন</string>
     <string name="more_for">%1$s-এর জন্য আরও</string>
@@ -129,7 +129,7 @@
     <string name="use_it">ব্যবহার করুন</string>
     <string name="not_now">এখন নয়</string>
     <string name="day_and_night">দিন ও রাত</string>
-    <string name="day_and_night_looks">দিন ও রাতের লুক</string>
+    <string name="day_and_night_looks">সময় অনুযায়ী লুক বদলান</string>
     <string name="one_look_by_day_another_by">দিনে একটি লুক, রাতে আরেকটি</string>
     <string name="like_theme_system_for_whole_looks">পুরো লুকের জন্য থিম: সিস্টেমের মতো। সূর্যোদয় আর সূর্যাস্ত আপনার টাইম জোন থেকে হিসাব করা হয়, আপনার লোকেশন ছাড়াই। মাঝে আপনি যে লুক বেছে নেন তা পরের বদল পর্যন্ত থাকে।</string>
     <string name="by_day">দিনে</string>
@@ -148,7 +148,7 @@
     <string name="search_history">ইতিহাস খুঁজুন</string>
     <string name="your_last_changes_to_the_look">লুকে আপনার শেষ %1$sটি পরিবর্তন এখানে দেখা যায়, যাতে ফিরে যেতে পারেন।</string>
     <string name="clear_history">ইতিহাস মুছুন</string>
-    <string name="your_look_stays_as_it_is">আপনার লুক এখন যেমন আছে তেমনই থাকবে</string>
+    <string name="your_look_stays_as_it_is">আপনার সেটিং যেমন আছে তেমনই থাকবে</string>
     <string name="clear_the_look_s_history">লুকের ইতিহাস মুছবেন?</string>
     <string name="you_won_t_be_able_to">আপনি এই পরিবর্তনগুলোতে আর ফিরে যেতে পারবেন না। আপনার লুক এখন যেমন আছে তেমনই থাকবে।</string>
     <string name="clear">মুছুন</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">সাধারণ কাচ, বর্ণালি আলোর একটি সরু রেখা</string>
     <string name="ledger">খাতা</string>
     <string name="three_numbers_side_by_side">পাশাপাশি তিনটি সংখ্যা</string>
-    <string name="wash">আভা</string>
+    <string name="wash">নরম রং</string>
     <string name="a_faint_wash_of_color_and">রঙের হালকা আভা আর মাসের বার</string>
     <string name="spectrum_frame">বর্ণালি ফ্রেম</string>
     <string name="glass_ringed_in_split_light_the">বর্ণালি আলোয় ঘেরা কাচ, সময় রঙিন</string>
@@ -1472,7 +1472,7 @@
     <string name="widget_background_transparent_see_through_color">উইজেট ব্যাকগ্রাউন্ড স্বচ্ছ রং বোতাম হোম স্ক্রিন widget</string>
     <string name="the_tab_you_re_on">আপনি যে ট্যাবে আছেন</string>
     <string name="tab_icon_color_tint_accent_light">ট্যাব আইকন রং আভা অ্যাকসেন্ট আলো বর্তমান ট্যাব</string>
-    <string name="play_on_album_and_playlist_pages">অ্যালবাম আর প্লেলিস্ট পেজে প্লে</string>
+    <string name="play_on_album_and_playlist_pages">অ্যালবাম আর প্লেলিস্টে প্লে বোতাম</string>
     <string name="play_button_outlined_filled">প্লে বোতাম আউটলাইন ভরাট</string>
     <string name="switches_sliders_and_buttons">সুইচ, স্লাইডার আর বোতাম</string>
     <string name="classic_controls_1_6_material_switch">ক্লাসিক কন্ট্রোল 1.6 material সুইচ স্লাইডার পুরনো চেহারা</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">ঘোরানো দিক ল্যান্ডস্কেপ খাড়া</string>
     <string name="picture_in_picture">ছবির ভেতরে ছবি</string>
     <string name="pip_video_float_window_leave">pip ভিডিও ভাসমান উইন্ডো বের হওয়া</string>
-    <string name="load_ahead">আগে থেকে লোড</string>
+    <string name="load_ahead">কতটা আগে থেকে লোড হবে</string>
     <string name="preload_buffer">প্রিলোড বাফার</string>
     <string name="load_ahead_on_mobile_data">মোবাইল ডেটায় আগে থেকে লোড</string>
     <string name="preload_cellular">প্রিলোড মোবাইল ডেটা</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">একটি কপি রাখুন</string>
     <string name="just_sign_out">শুধু সাইন আউট</string>
     <string name="prism_account_on_this_phone">Prism Account · এই ফোনে</string>
-    <string name="your_name_and_picture_kept_on">আপনার নাম আর ছবি, এই ফোনে রাখা। আপনার কোনো কিছু বদলায় না</string>
+    <string name="your_name_and_picture_kept_on">আপনার নাম আর ছবি, এই ফোনে রাখা</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">সাইন ইন করা</string>
     <string name="signed_in_2">সাইন ইন করা</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music, Musixmatch আর Spotify-এর · শব্দে শব্দে</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · শব্দে শব্দে, সবচেয়ে বেশি চীনা গান</string>
+    <string name="qq_music_word_by_word_the">শব্দে শব্দে · সবচেয়ে বেশি চীনা গান</string>
     <string name="open_lyrics_database_line_by_line">উন্মুক্ত লিরিক্স ডেটাবেস · লাইন ধরে ধরে</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · শব্দে শব্দে</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · শব্দে শব্দে, অনেক এশীয় গান</string>
+    <string name="kugou_word_by_word_many_asian">শব্দে শব্দে · অনেক এশীয় গান</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">শ্রোতাদের জমা দেওয়া লিরিক্স · এখনও কম গান</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">Prism Music-এ গানের পেজের লিরিক্স, LyricFind থেকে · লাইন বা সাধারণ</string>
+    <string name="lyricfind_lines_or_plain">YouTube Music-এর মাধ্যমে LyricFind-এর লিরিক্স · লাইন বা সাধারণ</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">সাধারণ লেখা · তারা দিয়ে ঢাকা শব্দও পূরণ করে</string>
     <string name="both">দুটোই</string>
@@ -3136,7 +3136,7 @@
     <string name="one">এক</string>
     <string name="under_the_line">লাইনের নিচে</string>
     <string name="over_the_line">লাইনের ওপরে</string>
-    <string name="as_now">এখনকার মতো</string>
+    <string name="as_now">প্লেয়ারের মতো</string>
     <string name="the_player_s_background_or_the">প্লেয়ারের ব্যাকগ্রাউন্ড, বা ইমারসিভ মোডে কভার</string>
     <string name="plain_dark">সাধারণ গাঢ়</string>
     <string name="nothing_but_the_words">শুধু শব্দ, আর কিছু নয়</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">গ্যালারির জন্য Prism-এর নতুন সংস্করণ লাগবে</string>
     <string name="by_2">%1$s-এর</string>
     <string name="a_look">একটি লুক</string>
-    <string name="how_prism_comes_outfit_the_split">Prism যেমন আসে: Outfit, বর্ণালি আলো, নরম কোণ</string>
+    <string name="how_prism_comes_outfit_the_split">যেমন আসে: Prism-এর নিজের ফন্ট, বর্ণালি রং, নরম কোণ</string>
     <string name="paper">Paper</string>
     <string name="light_serif_type_ink_instead_of">লাইট, সেরিফ লেখা, রঙের বদলে কালি, উষ্ণ কাগজ</string>
     <string name="midnight">Midnight</string>
@@ -3948,7 +3948,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">আপনার সোয়াইপ, ডাবল ট্যাপ আর লম্বা চাপ শিরোনামের নিচেও কাজ করে, বোতাম আর বারের চারপাশের জায়গায়। বোতাম আর বার নিজেদের ট্যাপ রাখে।</string>
     <string name="gestures_everywhere_keywords">জেসচার সোয়াইপ ডাবল ট্যাপ লম্বা চাপ নিচের অংশ কন্ট্রোল পুরো প্লেয়ার</string>
     <string name="playing_song_in_the_page_s_color">চলমান গান পেজের রঙে</string>
-    <string name="its_bars_and_title_take_the_album_s_color">এর বার আর শিরোনাম অ্যালবামের রং নেয়</string>
+    <string name="its_bars_and_title_take_the_album_s_color">এর বার আর শিরোনাম পেজের রং নেয়</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">অ্যালবাম, প্লেলিস্ট আর শিল্পীর পেজে চলমান গান আপনার আলোর বদলে পেজের ছবির রঙে তার বার আর শিরোনাম দেখায়। অন্য কোথাও কিছু বদলায় না।</string>
     <string name="playing_indicator_bars_now_playing_album_color">নির্দেশক চলছে বার ইকুয়ালাইজার অ্যালবাম প্লেলিস্ট শিল্পী পেজ রং কভার</string>
     <string name="slide_between_screens">স্ক্রিনের মধ্যে স্লাইড</string>
@@ -3978,7 +3978,7 @@
     <string name="hidden_s">লুকানো: %1$s</string>
     <string name="buttons_in_the_row">সারির বোতাম</string>
     <string name="add_a_button">বোতাম যোগ করুন</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">প্লেয়ারের ⋯ মেনু: তার টাইল আর তাতে কী দেখায়</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">তার টাইল আর তাতে কী দেখায়</string>
     <string name="and_the_sky_lit_up">আর আকাশ আলোয় ভরে উঠল</string>
     <string name="play_pause_always_stays">চালান আর বিরতি সবসময় থাকে</string>
     <string name="what_s_on_the_player_keywords">লুকান দেখান অংশ প্লেয়ারে শিরোনামের নিচে কভার শিরোনাম শিল্পী পছন্দ হার্ট মেনু অগ্রগতি বার সিক আগের পরের স্কিপ বোতাম সারি গানের দৈর্ঘ্য কাস্ট hide show player</string>
@@ -3990,10 +3990,10 @@
     <string name="when_the_queue_ends">সারি শেষ হলে</string>
     <string name="when_the_queue_ends_info">থামান: সারির সঙ্গেই গান শেষ হয়। আপনার গান: আপনি যা শোনেন তা থেকে Prism-এর নিজের রেডিও। আপনার ও নতুন: বেশিরভাগ আপনার গান, সঙ্গে কয়েকটি নতুন গান। Prism Music: Prism Music-এর ক্যাটালগ থেকে একটি রেডিও। অফলাইনে সবসময় আপনার গান চলে।</string>
     <string name="music_videos_label">মিউজিক ভিডিও</string>
-    <string name="play_them">ভিডিও</string>
+    <string name="play_them">সব জায়গায় ভিডিও</string>
     <string name="songs_in_radios">রেডিওতে গান</string>
     <string name="songs_everywhere">সব জায়গায় গান</string>
-    <string name="music_videos_label_info">ভিডিও: মিউজিক ভিডিও ভিডিও হিসেবেই চলে। রেডিওতে গান: অটোপ্লে আর রেডিও তার বদলে ভিডিওর গানটি চালায়। সব জায়গায় গান: আপনি যে মিউজিক ভিডিওতেই ট্যাপ করুন তা তার গান হিসেবে চলে, আর ভিডিও বোতাম তবুও ভিডিও দেখায়।</string>
+    <string name="music_videos_label_info">সব জায়গায় ভিডিও: মিউজিক ভিডিও ভিডিও হিসেবেই চলে। রেডিওতে গান: অটোপ্লে আর রেডিও তার বদলে ভিডিওর গানটি চালায়। সব জায়গায় গান: আপনি যে মিউজিক ভিডিওতেই ট্যাপ করুন তা তার গান হিসেবে চলে, আর ভিডিও বোতাম তবুও ভিডিও দেখায়।</string>
     <string name="trim_silence">শুরু আর শেষের নীরবতা বাদ দিন</string>
     <string name="podcasts_only">শুধু পডকাস্ট</string>
     <string name="songs_and_podcasts">গান আর পডকাস্ট</string>
@@ -4757,7 +4757,7 @@
     <string name="move_songs_you_have_played">শোনা গান সরান</string>
     <string name="move_songs_you_have_played_info">আপনার ইতিমধ্যে শোনা গানেও হ্যান্ডেল থাকে, যাতে নিজেদের মধ্যে টেনে সাজাতে পারেন।</string>
     <string name="move_songs_you_have_played_keywords">সারি শোনা ইতিহাস টানুন হ্যান্ডেল ক্রম বদল</string>
-    <string name="tidier_queue">গোছানো সারি</string>
+    <string name="tidier_queue">কম বোতামের সারি</string>
     <string name="tidier_queue_info">সারি খোলা থাকলে প্রতিটি গান থেকে × আর নিচের সারি থেকে সারি বোতাম সরিয়ে দেয়। কোনো গান সরাতে বাঁ দিকে সোয়াইপ করুন বা তার ⋯ ব্যবহার করুন। সারি থেকে বেরোতে শিরোনাম নিচে টানুন বা ব্যাক চাপুন।</string>
     <string name="tidier_queue_keywords">সারি কম বোতাম সরান বন্ধ পরিষ্কার সহজ</string>
     <string name="reopen_on_the_last_page">শেষ পেজে আবার খুলুন</string>
@@ -5079,7 +5079,7 @@
     <string name="gb_double_tap_seeks">ডাবল ট্যাপে সামনে-পেছনে যায়</string>
     <string name="gb_double_tap_seeks_needs">আগে ডাবল ট্যাপ «পাশ অনুযায়ী সামনে-পেছনে»-এ সেট করুন</string>
     <string name="gb_gestures_work">জেসচার কোথায় কাজ করে</string>
-    <string name="gb_work_cover">কভারে</string>
+    <string name="gb_work_cover">শুধু কভারে</string>
     <string name="gb_work_anywhere">যেকোনো জায়গায়</string>
     <string name="gb_work_not_lyrics">লিরিক্স ছাড়া যেকোনো জায়গায়</string>
     <string name="gb_work_cover_and_lyrics">কভারে আর লিরিক্সের নিচে</string>
@@ -5179,7 +5179,7 @@
     <string name="settings_player_right_hand_time">ডান পাশের সময়</string>
     <string name="settings_player_right_hand_time_info">প্রোগ্রেস বারের ডান দিকের সময়। প্লেয়ারে এটিতে ট্যাপ করলেও এটি বদলায়।</string>
     <string name="settings_player_cover_shape">কভারের আকৃতি</string>
-    <string name="settings_player_edge_to_edge">প্রান্ত থেকে প্রান্ত</string>
+    <string name="settings_player_edge_to_edge">স্ক্রিনের প্রান্ত পর্যন্ত</string>
     <string name="settings_player_cover_animation">কভারের অ্যানিমেশন</string>
     <string name="settings_player_opening">খোলার সময়</string>
     <string name="settings_player_opening_and_closing">খোলা ও বন্ধ করার সময়</string>
@@ -5190,7 +5190,7 @@
     <string name="settings_player_queue_dj">DJ বোতাম</string>
     <string name="settings_player_queue_lengths">গানের দৈর্ঘ্য</string>
     <string name="settings_player_queue_move_played">চালানো গান সরান</string>
-    <string name="settings_player_queue_tidier">আরও গোছানো সারি</string>
+    <string name="settings_player_queue_tidier">কম বোতাম</string>
     <string name="settings_player_scroll_for_controls">কন্ট্রোলের জন্য ওপরে স্ক্রল করুন</string>
     <string name="settings_player_lock_options">লক স্ক্রিনের অপশন</string>
     <string name="settings_player_immersive_options">ইমারসিভ অপশন</string>
@@ -5262,8 +5262,8 @@
     <string name="tl_reset_everything">সবকিছু রিসেট করুন</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">পুরো লুক, দিনে ও রাতে</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord চালু · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord চালু · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · ব্যাকআপ, আপডেট</string>
     <string name="root_connect_short">স্পিকার ও টিভিতে চালান</string>
     <string name="root_handoff_on">হ্যান্ডঅফ চালু</string>
@@ -5308,7 +5308,7 @@
     <string name="recap_ready_title">আপনার %1$s-এর রিক্যাপ তৈরি</string>
     <string name="recap_ready_text">গানে আপনার মাস: আপনার সেরা গান আর শিল্পী, আর আগের মাসের তুলনায় কেমন গেল।</string>
     <string name="recap_card_title">আপনার %1$s</string>
-    <string name="replay_notices">নোটিফিকেশন</string>
+    <string name="replay_notices">Replay নোটিফিকেশন</string>
     <string name="tour_185_replay_title">Replay, আরও গভীরে</string>
     <string name="tour_185_replay_body">দেখুন কখন শোনেন, ঘণ্টা ধরে আর দিন ধরে।</string>
     <string name="tour_185_replay_point_1">শোনার ঘড়ি: আপনার সপ্তাহ, ঘণ্টা ধরে। কোনো ঘণ্টায় ট্যাপ করে তার সেরা গান দেখুন।</string>
@@ -5381,7 +5381,7 @@
     <string name="cal_no_music">গান নেই</string>
     <string name="cal_days_with_music">গান শোনা দিন: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">ছোট কভারে ট্যাপ করে চালান বা বিরতি দিন</string>
+    <string name="gb_lyrics_cover_plays">লিরিক্সের পাশের ছোট কভারে ট্যাপ করে বিরতি দিন</string>
     <string name="gb_lyrics_cover_plays_info">লিরিক্স খোলা থাকলে ছোট কভারে ট্যাপ করলে গান চলে বা বিরতি নেয়, আর দীর্ঘক্ষণ চেপে ধরলে লিরিক্স বন্ধ হয়। বন্ধ থাকলে: ট্যাপ করলে লিরিক্স বন্ধ হয়।</string>
     <string name="gb_lyrics_cover_plays_keywords">লিরিক্স ছোট কভার থাম্বনেইল ছবি ট্যাপ চালান বিরতি দীর্ঘক্ষণ চাপ বন্ধ lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5558,4 +5558,37 @@
     <string name="hl_show_in_lists">তালিকায় দেখান</string>
     <string name="hl_show_on_artist_pages">শিল্পীর পেজে দেখান</string>
     <string name="allow_access_to_lossless_files_value">আপনার লসলেস ফাইল খুঁজে পেতে দরকার</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">Prism-কে সহায়তা করুন</string>
+    <string name="support_prism_info">সহায়তার টাকায় টেস্ট ফোন আর যেসব টুল দিয়ে Prism বানানো হয়, সেগুলো চলে। আপনি সহায়তা করুন বা না করুন, সব ফিচার বিনামূল্যেই থাকবে। আপনার ব্রাউজারে Ko-fi খোলে।</string>
+    <string name="support_prism_keywords">দান টিপ কফি ধন্যবাদ সাহায্য ডেভেলপার সহায়তা</string>
+    <string name="i_ve_supported_prism">আমি Prism-কে সহায়তা করেছি</string>
+    <string name="i_ve_supported_prism_info">Prism-কে সহায়তার সব অনুরোধ চিরতরে বন্ধ করে। কিছুই যাচাই করা হয় না: আপনার কথাই যথেষ্ট।</string>
+    <string name="i_ve_supported_prism_keywords">দান করেছি সমর্থক লুকান অনুরোধ বন্ধ</string>
+    <string name="supporters">সমর্থকরা</string>
+    <string name="supporters_keywords">ধন্যবাদ কৃতজ্ঞতা নাম দাতা সদস্য</string>
+    <string name="supporters_info">যাঁরা Prism-কে সহায়তা করেছেন এবং নাম দেখাতে চেয়েছেন। শুধু নাম: কোনো অঙ্ক নেই, কোনো তারিখ নেই।</string>
+    <string name="supporters_members">মাসিক সদস্য</string>
+    <string name="supporters_thank_you">ধন্যবাদ</string>
+    <string name="supporters_empty">এখানে এখনও কোনো নাম নেই। প্রথম নামটি আপনার হতে পারে।</string>
+    <string name="support_on_kofi">Ko-fi-তে সহায়তা করুন</string>
+    <string name="don_t_show_again">আর দেখাবেন না</string>
+    <string name="support_hours_title">Prism-এর সাথে ১০০ ঘণ্টার গান</string>
+    <string name="support_hours_body">এটি বিনামূল্যে আর একজন মানুষ বানান: আপনার কাছে এক কাপ কফির যোগ্য মনে হলে, সেটাই একে চালু রাখে।</string>
+    <string name="support_made_by_one_person">একজন মানুষের তৈরি।</string>
+    <string name="support_whats_new_line">Prism বিনামূল্যে আর একজন মানুষ বানান। ভালো লাগলে আপনি এতে সহায়তা করতে পারেন।</string>
+    <string name="settings_player_layout_group">লেআউট আর কন্ট্রোল</string>
+    <string name="dd_use_showing_covers">অ্যানিমেটেড কভার দেখানো</string>
+    <string name="icon_style">আইকনের ধরন</string>
+    <string name="prism_s_own">Prism-এর নিজের</string>
+    <string name="player_times_both">বারের দুই প্রান্ত</string>
+    <string name="button_shape_fully_round">পুরো গোল</string>
+    <string name="transport_filled_play">ভরাট প্লে বোতাম</string>
+    <string name="replay_notice_recap_short">মাসিক রিক্যাপ</string>
+    <string name="settings_player_edit_menu">প্লেয়ারের ⋯ মেনু বদলান</string>
+    <string name="mix_why_sing">গলা মেলান চালু আছে, তাই প্রতিটি গান পুরোটা চলে।</string>
+    <string name="mix_why_together">একসাথে শুনুন চালু আছে, তাই গান হোস্টের সাথে চলে।</string>
+    <string name="cn_spot_not_connected">সংযুক্ত নয় · প্লেলিস্ট আর লাইক</string>
+    <string name="cn_other_services">অন্যান্য সেবা</string>
+    <string name="edge_to_edge_both">কভার আর ভিডিও</string>
 </resources>

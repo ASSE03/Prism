@@ -92,7 +92,7 @@
     <string name="refresh_the_list">Lijst vernieuwen</string>
     <string name="from_github">Van GitHub</string>
     <string name="add_your_look">Je Look toevoegen</string>
-    <string name="by_pull_request_on_github">Via een pull request op GitHub</string>
+    <string name="by_pull_request_on_github">Deel de jouwe op GitHub</string>
     <string name="save_your_look_share_it_as">Sla je Look op, deel hem als tekst en voeg de code toe aan themes/index.json in de repository van Prism. De pagina legt uit hoe.</string>
     <string name="use">%1$s gebruiken</string>
     <string name="more_for">Meer voor %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">Gebruiken</string>
     <string name="not_now">Niet nu</string>
     <string name="day_and_night">Dag en nacht</string>
-    <string name="day_and_night_looks">Looks voor dag en nacht</string>
+    <string name="day_and_night_looks">Look wisselen op tijd van de dag</string>
     <string name="one_look_by_day_another_by">Overdag de ene Look, \'s nachts een andere</string>
     <string name="like_theme_system_for_whole_looks">Zoals Thema: Systeem, maar voor hele Looks. Zonsopgang en zonsondergang worden berekend uit je tijdzone, zonder je locatie. Een Look die je tussendoor kiest, blijft tot de volgende wissel.</string>
     <string name="by_day">Overdag</string>
@@ -148,7 +148,7 @@
     <string name="search_history">Geschiedenis doorzoeken</string>
     <string name="your_last_changes_to_the_look">Je laatste %1$s wijzigingen aan de stijl verschijnen hier, om er weer naar terug te gaan.</string>
     <string name="clear_history">Geschiedenis wissen</string>
-    <string name="your_look_stays_as_it_is">Je stijl blijft zoals hij nu is</string>
+    <string name="your_look_stays_as_it_is">Je instellingen blijven zoals ze zijn</string>
     <string name="clear_the_look_s_history">Geschiedenis van de stijl wissen?</string>
     <string name="you_won_t_be_able_to">Je kunt niet meer terug naar deze wijzigingen. Je stijl blijft zoals hij nu is.</string>
     <string name="clear">Wissen</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">Effen glas, één haarlijn van gebroken licht</string>
     <string name="ledger">Grootboek</string>
     <string name="three_numbers_side_by_side">Drie getallen naast elkaar</string>
-    <string name="wash">Waas</string>
+    <string name="wash">Zachte kleur</string>
     <string name="a_faint_wash_of_color_and">Een vage waas van kleur en maandbalken</string>
     <string name="spectrum_frame">Spectrumlijst</string>
     <string name="glass_ringed_in_split_light_the">Glas omringd door gebroken licht, de tijd in kleur</string>
@@ -1472,14 +1472,14 @@
     <string name="widget_background_transparent_see_through_color">widget achtergrond transparant doorzichtig kleur knoppen startscherm</string>
     <string name="the_tab_you_re_on">Het tabblad waarop je bent</string>
     <string name="tab_icon_color_tint_accent_light">tabblad icoon kleur tint accent licht huidig tabblad</string>
-    <string name="play_on_album_and_playlist_pages">Afspelen op album- en playlistpagina\'s</string>
+    <string name="play_on_album_and_playlist_pages">Afspeelknop op album- en playlistpagina\'s</string>
     <string name="play_button_outlined_filled">afspeelknop omlijnd gevuld</string>
     <string name="switches_sliders_and_buttons">Schakelaars, schuiven en knoppen</string>
     <string name="classic_controls_1_6_material_switch">klassieke bediening 1.6 material schakelaar schuif oude stijl</string>
     <string name="screen_backgrounds">Schermachtergronden</string>
     <string name="wallpaper_photo_pattern_design">achtergrond wallpaper foto patroon ontwerp</string>
     <string name="glass">Glas</string>
-    <string name="liquid_glass">Liquid Glass</string>
+    <string name="liquid_glass">Liquid glass</string>
     <string name="blur_transparent">vervaging blur transparant</string>
     <string name="glass_style">Glasstijl</string>
     <string name="frosted_glass">Matglas</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">draaien stand liggend staand rotatie</string>
     <string name="picture_in_picture">Beeld-in-beeld</string>
     <string name="pip_video_float_window_leave">pip beeld-in-beeld video zwevend venster verlaten</string>
-    <string name="load_ahead">Vooraf laden</string>
+    <string name="load_ahead">Hoe ver vooraf laden</string>
     <string name="preload_buffer">vooraf laden buffer</string>
     <string name="load_ahead_on_mobile_data">Vooraf laden via mobiele data</string>
     <string name="preload_cellular">vooraf laden mobiel</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">Kopie bewaren</string>
     <string name="just_sign_out">Gewoon uitloggen</string>
     <string name="prism_account_on_this_phone">Prism Account · op deze telefoon</string>
-    <string name="your_name_and_picture_kept_on">Je naam en afbeelding, bewaard op deze telefoon. Er verandert niets aan wat je hebt</string>
+    <string name="your_name_and_picture_kept_on">Je naam en afbeelding, bewaard op deze telefoon</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">ingelogd</string>
     <string name="signed_in_2">Ingelogd</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">Van Apple Music, Musixmatch en Spotify · woord voor woord</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · woord voor woord, de meeste Chinese nummers</string>
+    <string name="qq_music_word_by_word_the">Woord voor woord · de meeste Chinese nummers</string>
     <string name="open_lyrics_database_line_by_line">Open songtekstdatabase · regel voor regel</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · woord voor woord</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · woord voor woord, veel Aziatische nummers</string>
+    <string name="kugou_word_by_word_many_asian">Woord voor woord · veel Aziatische nummers</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Songteksten die luisteraars insturen · nog weinig nummers</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">De songtekst op de nummerpagina in Prism Music, van LyricFind · regels of gewone tekst</string>
+    <string name="lyricfind_lines_or_plain">Songteksten van LyricFind, via YouTube Music · regels of gewone tekst</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Gewone tekst · vult ook weggesterde woorden in</string>
     <string name="both">Allebei</string>
@@ -3136,7 +3136,7 @@
     <string name="one">Eén</string>
     <string name="under_the_line">Onder de regel</string>
     <string name="over_the_line">Boven de regel</string>
-    <string name="as_now">Zoals nu</string>
+    <string name="as_now">Zoals de speler</string>
     <string name="the_player_s_background_or_the">De achtergrond van de speler, of de cover in de meeslepende modus</string>
     <string name="plain_dark">Effen donker</string>
     <string name="nothing_but_the_words">Niets dan de woorden</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">De galerij heeft een nieuwere Prism nodig</string>
     <string name="by_2">door %1$s</string>
     <string name="a_look">Een Look</string>
-    <string name="how_prism_comes_outfit_the_split">Zoals Prism standaard is: Outfit, het gebroken licht, zachte hoeken</string>
+    <string name="how_prism_comes_outfit_the_split">Zoals het komt: het eigen lettertype van Prism, spectrumkleuren, zachte hoeken</string>
     <string name="paper">Paper</string>
     <string name="light_serif_type_ink_instead_of">Licht, schreefletters, inkt in plaats van kleur, warm papier</string>
     <string name="midnight">Midnight</string>
@@ -3948,7 +3948,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">Je vegen, dubbeltikken en lang drukken werken ook onder de titel, in de ruimte rond de knoppen en balken. Knoppen en balken houden hun eigen tikken.</string>
     <string name="gestures_everywhere_keywords">gebaar vegen dubbeltikken lang drukken onderkant bediening hele speler</string>
     <string name="playing_song_in_the_page_s_color">Spelend nummer in de kleur van de pagina</string>
-    <string name="its_bars_and_title_take_the_album_s_color">De balkjes en titel nemen de kleur van het album aan</string>
+    <string name="its_bars_and_title_take_the_album_s_color">De balkjes en titel nemen de kleur van de pagina aan</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">Op album-, playlist- en artiestpagina\'s toont het spelende nummer zijn balkjes en titel in de kleur van de afbeelding van de pagina in plaats van jouw licht. Elders blijft alles zoals het is.</string>
     <string name="playing_indicator_bars_now_playing_album_color">indicator speelt balkjes equalizer album playlist artiest pagina kleur hoes</string>
     <string name="slide_between_screens">Schuiven tussen schermen</string>
@@ -3978,7 +3978,7 @@
     <string name="hidden_s">Verborgen: %1$s</string>
     <string name="buttons_in_the_row">Knoppen in de rij</string>
     <string name="add_a_button">Knop toevoegen</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">Het ⋯-menu van de speler: de tegels en wat het toont</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">De tegels en wat het toont</string>
     <string name="and_the_sky_lit_up">En de hemel lichtte op</string>
     <string name="play_pause_always_stays">Afspelen en pauzeren blijven altijd</string>
     <string name="what_s_on_the_player_keywords">verbergen tonen delen op de speler onder de titel cover titel artiest vind ik leuk hartje menu voortgangsbalk spoelen vorige volgende overslaan knoppen rij nummerlengte cast-teken</string>
@@ -3990,10 +3990,10 @@
     <string name="when_the_queue_ends">Als de wachtrij op is</string>
     <string name="when_the_queue_ends_info">Stoppen: de muziek stopt met de wachtrij. Je muziek: de eigen radio van Prism op basis van wat je afspeelt. Jouw en nieuwe: vooral je eigen muziek, met een paar nieuwe nummers. Prism Music: een radio uit de catalogus van Prism Music. Offline is het altijd je eigen muziek.</string>
     <string name="music_videos_label">Muziekvideo\'s</string>
-    <string name="play_them">Video\'s</string>
+    <string name="play_them">Overal video\'s</string>
     <string name="songs_in_radios">Nummers in radio\'s</string>
     <string name="songs_everywhere">Overal nummers</string>
-    <string name="music_videos_label_info">Video\'s: een muziekvideo speelt als video. Nummers in radio\'s: automatisch afspelen en radio\'s spelen in plaats daarvan het nummer van de video. Overal nummers: elke muziekvideo waarop je tikt, speelt als het nummer, en de knop Video toont nog steeds de video.</string>
+    <string name="music_videos_label_info">Overal video\'s: een muziekvideo speelt als video. Nummers in radio\'s: automatisch afspelen en radio\'s spelen in plaats daarvan het nummer van de video. Overal nummers: elke muziekvideo waarop je tikt, speelt als het nummer, en de knop Video toont nog steeds de video.</string>
     <string name="trim_silence">Stilte aan het begin en eind weglaten</string>
     <string name="podcasts_only">Alleen podcasts</string>
     <string name="songs_and_podcasts">Nummers en podcasts</string>
@@ -4757,7 +4757,7 @@
     <string name="move_songs_you_have_played">Afgespeelde nummers verplaatsen</string>
     <string name="move_songs_you_have_played_info">Nummers die je al hebt afgespeeld krijgen ook een handvat, zodat je ze onderling kunt slepen.</string>
     <string name="move_songs_you_have_played_keywords">wachtrij afgespeeld geschiedenis slepen handvat herschikken</string>
-    <string name="tidier_queue">Nettere wachtrij</string>
+    <string name="tidier_queue">Wachtrij met minder knoppen</string>
     <string name="tidier_queue_info">Haalt de × bij elk nummer en de knop Wachtrij van de onderste rij weg zolang de wachtrij open is. Veeg een nummer naar links of gebruik zijn ⋯ om het te verwijderen. Trek de titel omlaag of druk op Terug om de wachtrij te verlaten.</string>
     <string name="tidier_queue_keywords">wachtrij minder knoppen verwijderen sluiten schoner eenvoudig</string>
     <string name="reopen_on_the_last_page">Heropenen op de laatste pagina</string>
@@ -5078,8 +5078,8 @@
     <string name="gb_swipes_and_touch">Vegen en aanraken</string>
     <string name="gb_double_tap_seeks">Dubbeltikken spoelt</string>
     <string name="gb_double_tap_seeks_needs">Zet eerst Dubbeltikken op Spoelen per kant</string>
-    <string name="gb_gestures_work">Gebaren werken</string>
-    <string name="gb_work_cover">Op de cover</string>
+    <string name="gb_gestures_work">Waar gebaren werken</string>
+    <string name="gb_work_cover">Alleen op de cover</string>
     <string name="gb_work_anywhere">Overal</string>
     <string name="gb_work_not_lyrics">Overal behalve op de songtekst</string>
     <string name="gb_work_cover_and_lyrics">Op de cover en onder de songtekst</string>
@@ -5179,7 +5179,7 @@
     <string name="settings_player_right_hand_time">Tijd rechts</string>
     <string name="settings_player_right_hand_time_info">De tijd rechts van de voortgangsbalk. Erop tikken in de speler verandert dit ook.</string>
     <string name="settings_player_cover_shape">Vorm van de cover</string>
-    <string name="settings_player_edge_to_edge">Van rand tot rand</string>
+    <string name="settings_player_edge_to_edge">Reikt tot de schermranden</string>
     <string name="settings_player_cover_animation">Coveranimatie</string>
     <string name="settings_player_opening">Bij openen</string>
     <string name="settings_player_opening_and_closing">Bij openen en sluiten</string>
@@ -5190,7 +5190,7 @@
     <string name="settings_player_queue_dj">DJ-knop</string>
     <string name="settings_player_queue_lengths">Lengte van nummers</string>
     <string name="settings_player_queue_move_played">Gespeelde verplaatsen</string>
-    <string name="settings_player_queue_tidier">Nettere wachtrij</string>
+    <string name="settings_player_queue_tidier">Minder knoppen</string>
     <string name="settings_player_scroll_for_controls">Omhoog scrollen voor bediening</string>
     <string name="settings_player_lock_options">Opties vergrendelscherm</string>
     <string name="settings_player_immersive_options">Opties meeslepend</string>
@@ -5262,8 +5262,8 @@
     <string name="tl_reset_everything">Alles herstellen</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">Hele looks, dag en nacht</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord aan · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord aan · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · back-up, updates</string>
     <string name="root_connect_short">Afspelen op speakers en tv\'s</string>
     <string name="root_handoff_on">Doorgeven aan</string>
@@ -5308,7 +5308,7 @@
     <string name="recap_ready_title">Je overzicht van %1$s staat klaar</string>
     <string name="recap_ready_text">Je maand in muziek: je topnummers en -artiesten, en hoe het zich verhoudt tot de maand ervoor.</string>
     <string name="recap_card_title">Jouw %1$s</string>
-    <string name="replay_notices">Meldingen</string>
+    <string name="replay_notices">Replay-meldingen</string>
     <string name="tour_185_replay_title">Replay, dieper</string>
     <string name="tour_185_replay_body">Zie wanneer je luistert, uur voor uur en dag voor dag.</string>
     <string name="tour_185_replay_point_1">Luisterklok: je week, uur voor uur. Tik op een uur voor de topnummers van dat uur.</string>
@@ -5381,7 +5381,7 @@
     <string name="cal_no_music">Geen muziek</string>
     <string name="cal_days_with_music">Dagen met muziek: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">Tik op de kleine cover om af te spelen of te pauzeren</string>
+    <string name="gb_lyrics_cover_plays">Tik op de cover bij de songtekst om te pauzeren</string>
     <string name="gb_lyrics_cover_plays_info">Met geopende songtekst speelt een tik op de kleine cover af of pauzeert, en een lange druk sluit de songtekst. Uit: een tik sluit de songtekst.</string>
     <string name="gb_lyrics_cover_plays_keywords">songtekst kleine cover miniatuur albumhoes tik afspelen pauzeren lange druk sluiten lyrics</string>
     <!-- 1.8.6 Canvas -->
@@ -5558,4 +5558,37 @@
     <string name="hl_show_in_lists">Tonen in lijsten</string>
     <string name="hl_show_on_artist_pages">Tonen op artiestenpagina\'s</string>
     <string name="allow_access_to_lossless_files_value">Nodig om je lossless-bestanden te vinden</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">Prism steunen</string>
+    <string name="support_prism_info">Met steun worden de testtelefoons en tools betaald waarmee Prism wordt gemaakt. Alle functies blijven gratis, of je Prism nu steunt of niet. Opent Ko-fi in je browser.</string>
+    <string name="support_prism_keywords">doneren donatie fooi koffie bedankt helpen ontwikkelaar steunen</string>
+    <string name="i_ve_supported_prism">Ik heb Prism gesteund</string>
+    <string name="i_ve_supported_prism_info">Zet alle verzoeken om Prism te steunen voorgoed uit. Er wordt niets gecontroleerd: we gaan op je woord af.</string>
+    <string name="i_ve_supported_prism_keywords">gedoneerd supporter verbergen verzoeken niet meer vragen</string>
+    <string name="supporters">Supporters</string>
+    <string name="supporters_keywords">bedankt credits namen donateurs leden</string>
+    <string name="supporters_info">De mensen die Prism hebben gesteund en met naam genoemd willen worden. Alleen namen: geen bedragen, geen data.</string>
+    <string name="supporters_members">Maandelijkse leden</string>
+    <string name="supporters_thank_you">Bedankt</string>
+    <string name="supporters_empty">Hier staan nog geen namen. De jouwe kan de eerste zijn.</string>
+    <string name="support_on_kofi">Steun via Ko-fi</string>
+    <string name="don_t_show_again">Niet meer tonen</string>
+    <string name="support_hours_title">100 uur muziek met Prism</string>
+    <string name="support_hours_body">Het is gratis en gemaakt door één persoon: als het je een kopje koffie waard is, houdt dat het draaiend.</string>
+    <string name="support_made_by_one_person">Gemaakt door één persoon.</string>
+    <string name="support_whats_new_line">Prism is gratis en gemaakt door één persoon. Als je het fijn vindt, kun je het steunen.</string>
+    <string name="settings_player_layout_group">Indeling en bediening</string>
+    <string name="dd_use_showing_covers">Geanimeerde covers tonen</string>
+    <string name="icon_style">Pictogramstijl</string>
+    <string name="prism_s_own">Die van Prism</string>
+    <string name="player_times_both">Beide kanten van de balk</string>
+    <string name="button_shape_fully_round">Helemaal rond</string>
+    <string name="transport_filled_play">Gevulde afspeelknop</string>
+    <string name="replay_notice_recap_short">Maandoverzicht</string>
+    <string name="settings_player_edit_menu">Het ⋯-menu van de speler bewerken</string>
+    <string name="mix_why_sing">Meezingen staat aan, dus elk nummer speelt helemaal.</string>
+    <string name="mix_why_together">Samen luisteren staat aan, dus nummers volgen de host.</string>
+    <string name="cn_spot_not_connected">Niet verbonden · playlists en likes</string>
+    <string name="cn_other_services">Andere diensten</string>
+    <string name="edge_to_edge_both">Cover en video</string>
 </resources>

@@ -92,7 +92,7 @@
     <string name="refresh_the_list">I-refresh ang listahan</string>
     <string name="from_github">Mula sa GitHub</string>
     <string name="add_your_look">Idagdag ang Look mo</string>
-    <string name="by_pull_request_on_github">Sa pull request sa GitHub</string>
+    <string name="by_pull_request_on_github">Ibahagi ang iyo sa GitHub</string>
     <string name="save_your_look_share_it_as">I-save ang Look mo, i-share ito bilang text, at idagdag ang code nito sa themes/index.json sa repository ng Prism. Sinasabi ng page kung paano.</string>
     <string name="use">Gamitin ang %1$s</string>
     <string name="more_for">Higit pa para sa %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">Gamitin ito</string>
     <string name="not_now">Hindi muna</string>
     <string name="day_and_night">Araw at gabi</string>
-    <string name="day_and_night_looks">Mga Look sa araw at gabi</string>
+    <string name="day_and_night_looks">Palitan ang Look ayon sa oras ng araw</string>
     <string name="one_look_by_day_another_by">Isang Look sa araw, iba sa gabi</string>
     <string name="like_theme_system_for_whole_looks">Gaya ng Theme: System, pero para sa buong Look. Kinukuwenta ang pagsikat at paglubog ng araw mula sa time zone mo, nang hindi ginagamit ang lokasyon mo. Ang Look na pipiliin mo sa pagitan ay mananatili hanggang sa susunod na palit.</string>
     <string name="by_day">Sa araw</string>
@@ -148,7 +148,7 @@
     <string name="search_history">Maghanap sa history</string>
     <string name="your_last_changes_to_the_look">Dito lalabas ang huling %1$s pagbabago mo sa itsura, para mabalikan mo.</string>
     <string name="clear_history">I-clear ang history</string>
-    <string name="your_look_stays_as_it_is">Mananatili ang itsura mo gaya ngayon</string>
+    <string name="your_look_stays_as_it_is">Mananatili ang mga setting mo gaya ng dati</string>
     <string name="clear_the_look_s_history">I-clear ang history ng itsura?</string>
     <string name="you_won_t_be_able_to">Hindi mo na mababalikan ang mga pagbabagong ito. Mananatili ang itsura mo gaya ngayon.</string>
     <string name="clear">I-clear</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">Simpleng glass, isang manipis na guhit ng hating liwanag</string>
     <string name="ledger">Ledger</string>
     <string name="three_numbers_side_by_side">Tatlong numerong magkakatabi</string>
-    <string name="wash">Wash</string>
+    <string name="wash">Banayad na kulay</string>
     <string name="a_faint_wash_of_color_and">Mahinang bahid ng kulay at mga bar ng buwan</string>
     <string name="spectrum_frame">Spectrum frame</string>
     <string name="glass_ringed_in_split_light_the">Glass na napapalibutan ng hating liwanag, ang oras ay may kulay</string>
@@ -1472,17 +1472,17 @@
     <string name="widget_background_transparent_see_through_color">widget background transparent see-through tagusan kulay mga button home screen</string>
     <string name="the_tab_you_re_on">Ang tab na kinaroroonan mo</string>
     <string name="tab_icon_color_tint_accent_light">tab icon kulay tint accent liwanag kasalukuyang tab</string>
-    <string name="play_on_album_and_playlist_pages">Play sa mga page ng album at playlist</string>
+    <string name="play_on_album_and_playlist_pages">Play button sa mga album at playlist</string>
     <string name="play_button_outlined_filled">play button may outline puno</string>
     <string name="switches_sliders_and_buttons">Mga switch, slider at button</string>
     <string name="classic_controls_1_6_material_switch">classic na kontrol 1.6 material switch slider lumang itsura</string>
     <string name="screen_backgrounds">Mga background ng screen</string>
     <string name="wallpaper_photo_pattern_design">wallpaper larawan pattern disenyo</string>
     <string name="glass">Glass</string>
-    <string name="liquid_glass">Liquid Glass</string>
+    <string name="liquid_glass">Liquid glass</string>
     <string name="blur_transparent">blur malabo transparent</string>
     <string name="glass_style">Istilo ng glass</string>
-    <string name="frosted_glass">Frosted Glass</string>
+    <string name="frosted_glass">Frosted glass</string>
     <string name="frosted_pages">Mga frosted na page</string>
     <string name="blur_artist_album_playlist">blur malabo artist album playlist</string>
     <string name="reduce_motion">Bawasan ang galaw</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">pag-ikot rotation orientation landscape patayo</string>
     <string name="picture_in_picture">Picture-in-picture</string>
     <string name="pip_video_float_window_leave">pip video lumulutang window umalis</string>
-    <string name="load_ahead">I-load nang maaga</string>
+    <string name="load_ahead">Gaano kalayo mag-load nang maaga</string>
     <string name="preload_buffer">preload buffer i-load nang maaga</string>
     <string name="load_ahead_on_mobile_data">I-load nang maaga sa mobile data</string>
     <string name="preload_cellular">preload cellular mobile data</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">Magtago ng kopya</string>
     <string name="just_sign_out">Mag-sign out lang</string>
     <string name="prism_account_on_this_phone">Prism Account · sa phone na ito</string>
-    <string name="your_name_and_picture_kept_on">Ang pangalan at larawan mo, nakatago sa phone na ito. Walang magbabago sa mga mayroon ka</string>
+    <string name="your_name_and_picture_kept_on">Ang pangalan at larawan mo, nakatago sa phone na ito</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">naka-sign in</string>
     <string name="signed_in_2">Naka-sign in</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">Mula sa Apple Music, Musixmatch at Spotify · bawat salita</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · bawat salita, pinakamaraming kantang Chinese</string>
+    <string name="qq_music_word_by_word_the">Bawat salita · pinakamaraming kantang Chinese</string>
     <string name="open_lyrics_database_line_by_line">Bukas na database ng lyrics · bawat linya</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · bawat salita</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · bawat salita, maraming kantang Asyano</string>
+    <string name="kugou_word_by_word_many_asian">Bawat salita · maraming kantang Asyano</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Lyrics na isinumite ng mga nakikinig · kaunti pa lang ang kanta</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">Ang lyrics sa Prism Music page ng kanta, mula sa LyricFind · mga linya o simple</string>
+    <string name="lyricfind_lines_or_plain">Lyrics ng LyricFind, via YouTube Music · mga linya o simple</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Simpleng text · pinupunan din ang mga salitang tinakpan ng bituin</string>
     <string name="both">Pareho</string>
@@ -3136,7 +3136,7 @@
     <string name="one">Isa</string>
     <string name="under_the_line">Sa ilalim ng linya</string>
     <string name="over_the_line">Sa itaas ng linya</string>
-    <string name="as_now">Gaya ngayon</string>
+    <string name="as_now">Gaya ng player</string>
     <string name="the_player_s_background_or_the">Ang background ng player, o ang cover sa immersive mode</string>
     <string name="plain_dark">Simpleng madilim</string>
     <string name="nothing_but_the_words">Mga salita lang</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">Kailangan ng gallery ng mas bagong Prism</string>
     <string name="by_2">ni %1$s</string>
     <string name="a_look">Isang Look</string>
-    <string name="how_prism_comes_outfit_the_split">Ang default ng Prism: Outfit, ang hating liwanag, malalambot na sulok</string>
+    <string name="how_prism_comes_outfit_the_split">Ang default: sariling font ng Prism, mga kulay ng spectrum, malalambot na sulok</string>
     <string name="paper">Paper</string>
     <string name="light_serif_type_ink_instead_of">Maliwanag, serif na font, tinta sa halip na kulay, mainit na papel</string>
     <string name="midnight">Midnight</string>
@@ -3948,7 +3948,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">Gumagana rin ang iyong mga swipe, double tap at long press sa ilalim ng pamagat, sa espasyo sa paligid ng mga button at bar. Pinapanatili ng mga button at bar ang sarili nilang tap.</string>
     <string name="gestures_everywhere_keywords">gesture swipe double tap long press ibabang bahagi kontrol buong player</string>
     <string name="playing_song_in_the_page_s_color">Kantang tumutugtog sa kulay ng page</string>
-    <string name="its_bars_and_title_take_the_album_s_color">Kinukuha ng mga bar at pamagat nito ang kulay ng album</string>
+    <string name="its_bars_and_title_take_the_album_s_color">Kinukuha ng mga bar at pamagat nito ang kulay ng page</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">Sa mga page ng album, playlist at artist, ipinapakita ng kantang tumutugtog ang mga bar at pamagat nito sa kulay ng larawan ng page sa halip na sa iyong ilaw. Sa ibang lugar, walang nagbabago.</string>
     <string name="playing_indicator_bars_now_playing_album_color">indicator tumutugtog bar equalizer album playlist artist page kulay cover</string>
     <string name="slide_between_screens">Mag-slide sa pagitan ng mga screen</string>
@@ -3978,7 +3978,7 @@
     <string name="hidden_s">Nakatago: %1$s</string>
     <string name="buttons_in_the_row">Mga button sa hilera</string>
     <string name="add_a_button">Magdagdag ng button</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">Ang ⋯ menu ng player: ang mga tile nito at ang ipinapakita nito</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">Ang mga tile nito at ang ipinapakita nito</string>
     <string name="and_the_sky_lit_up">At lumiwanag ang langit</string>
     <string name="play_pause_always_stays">Laging nananatili ang play at pause</string>
     <string name="what_s_on_the_player_keywords">itago ipakita bahagi nasa player sa ilalim ng pamagat cover pamagat artist like puso menu progress bar seek previous next skip button hilera haba ng kanta cast mark</string>
@@ -3990,10 +3990,10 @@
     <string name="when_the_queue_ends">Kapag natapos ang queue</string>
     <string name="when_the_queue_ends_info">Ihinto: natatapos ang musika kasabay ng queue. Ang musika mo: sariling radio ng Prism mula sa mga pinapakinggan mo. Iyo at bago: karamihan ay musika mo, may ilang bagong kanta. Prism Music: radio mula sa catalog ng Prism Music. Kapag offline, laging musika mo.</string>
     <string name="music_videos_label">Mga music video</string>
-    <string name="play_them">Video</string>
+    <string name="play_them">Video saanman</string>
     <string name="songs_in_radios">Kanta sa mga radio</string>
     <string name="songs_everywhere">Kanta saanman</string>
-    <string name="music_videos_label_info">Video: nagpe-play ang music video bilang video. Kanta sa mga radio: ang kanta ng video ang ipinapatugtog ng autoplay at mga radio. Kanta saanman: anumang music video na i-tap mo ay nagpe-play bilang kanta nito, at ipinapakita pa rin ng button na Video ang video.</string>
+    <string name="music_videos_label_info">Video saanman: nagpe-play ang music video bilang video. Kanta sa mga radio: ang kanta ng video ang ipinapatugtog ng autoplay at mga radio. Kanta saanman: anumang music video na i-tap mo ay nagpe-play bilang kanta nito, at ipinapakita pa rin ng button na Video ang video.</string>
     <string name="trim_silence">Tanggalin ang katahimikan sa simula at dulo</string>
     <string name="podcasts_only">Mga podcast lang</string>
     <string name="songs_and_podcasts">Mga kanta at podcast</string>
@@ -4757,7 +4757,7 @@
     <string name="move_songs_you_have_played">Ilipat ang mga napatugtog na kanta</string>
     <string name="move_songs_you_have_played_info">May hawakan din ang mga napatugtog mo na, kaya puwede mo silang i-drag sa pagitan nila.</string>
     <string name="move_songs_you_have_played_keywords">queue napatugtog history drag hawakan ayusin</string>
-    <string name="tidier_queue">Mas maayos na queue</string>
+    <string name="tidier_queue">Queue na mas kaunti ang button</string>
     <string name="tidier_queue_info">Inaalis ang × sa bawat kanta at ang button na Queue sa ibabang hanay habang bukas ang queue. I-swipe pakaliwa ang kanta o gamitin ang ⋯ nito para alisin. I-pull pababa ang pamagat o pindutin ang Back para lumabas sa queue.</string>
     <string name="tidier_queue_keywords">queue mas kaunting button alisin isara malinis simple</string>
     <string name="reopen_on_the_last_page">Buksan ulit sa huling page</string>
@@ -5079,7 +5079,7 @@
     <string name="gb_double_tap_seeks">Nagse-seek ang double tap</string>
     <string name="gb_double_tap_seeks_needs">Itakda muna ang Double tap sa Mag-seek ayon sa gilid</string>
     <string name="gb_gestures_work">Saan gumagana ang mga galaw</string>
-    <string name="gb_work_cover">Sa cover</string>
+    <string name="gb_work_cover">Sa cover lang</string>
     <string name="gb_work_anywhere">Kahit saan</string>
     <string name="gb_work_not_lyrics">Kahit saan maliban sa lyrics</string>
     <string name="gb_work_cover_and_lyrics">Sa cover at sa ilalim ng lyrics</string>
@@ -5179,7 +5179,7 @@
     <string name="settings_player_right_hand_time">Oras sa kanan</string>
     <string name="settings_player_right_hand_time_info">Ang oras sa kanan ng progress bar. Binabago rin ito ng pag-tap dito sa player.</string>
     <string name="settings_player_cover_shape">Hugis ng cover</string>
-    <string name="settings_player_edge_to_edge">Gilid hanggang gilid</string>
+    <string name="settings_player_edge_to_edge">Aabot sa gilid ng screen</string>
     <string name="settings_player_cover_animation">Animation ng cover</string>
     <string name="settings_player_opening">Pagbukas</string>
     <string name="settings_player_opening_and_closing">Pagbukas at pagsara</string>
@@ -5190,7 +5190,7 @@
     <string name="settings_player_queue_dj">Button ng DJ</string>
     <string name="settings_player_queue_lengths">Haba ng mga kanta</string>
     <string name="settings_player_queue_move_played">Ilipat ang mga natugtog na</string>
-    <string name="settings_player_queue_tidier">Mas maayos na queue</string>
+    <string name="settings_player_queue_tidier">Mas kaunting button</string>
     <string name="settings_player_scroll_for_controls">Mag-scroll pataas para sa mga control</string>
     <string name="settings_player_lock_options">Mga opsyon sa lock screen</string>
     <string name="settings_player_immersive_options">Mga opsyon sa Immersive</string>
@@ -5262,8 +5262,8 @@
     <string name="tl_reset_everything">I-reset lahat</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">Buong look, araw at gabi</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Naka-on ang Discord · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Naka-on ang Discord · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · backup, mga update</string>
     <string name="root_connect_short">I-play sa mga speaker at TV</string>
     <string name="root_handoff_on">Naka-on ang handoff</string>
@@ -5308,7 +5308,7 @@
     <string name="recap_ready_title">Handa na ang %1$s recap mo</string>
     <string name="recap_ready_text">Ang buwan mo sa musika: ang mga top song at artist mo, at kung paano ito kumpara sa nakaraang buwan.</string>
     <string name="recap_card_title">Ang %1$s mo</string>
-    <string name="replay_notices">Mga notification</string>
+    <string name="replay_notices">Mga notification ng Replay</string>
     <string name="tour_185_replay_title">Replay, mas malalim</string>
     <string name="tour_185_replay_body">Tingnan kung kailan ka nakikinig, oras-oras at araw-araw.</string>
     <string name="tour_185_replay_point_1">Listening clock: ang linggo mo, oras-oras. I-tap ang isang oras para sa mga top song nito.</string>
@@ -5381,7 +5381,7 @@
     <string name="cal_no_music">Walang musika</string>
     <string name="cal_days_with_music">Mga araw na may musika: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">I-tap ang maliit na cover para mag-play o mag-pause</string>
+    <string name="gb_lyrics_cover_plays">I-tap ang maliit na cover sa tabi ng lyrics para mag-pause</string>
     <string name="gb_lyrics_cover_plays_info">Kapag bukas ang lyrics, ang pag-tap sa maliit na cover ay magpe-play o magpa-pause, at ang matagal na pagpindot ay magsasara ng lyrics. Naka-off: ang pag-tap ay magsasara ng lyrics.</string>
     <string name="gb_lyrics_cover_plays_keywords">lyrics maliit na cover thumbnail artwork tap play pause matagal na pindot isara</string>
     <!-- 1.8.6 Canvas -->
@@ -5558,4 +5558,37 @@
     <string name="hl_show_in_lists">Ipakita sa mga listahan</string>
     <string name="hl_show_on_artist_pages">Ipakita sa mga page ng artist</string>
     <string name="allow_access_to_lossless_files_value">Kailangan para mahanap ang mga lossless file mo</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">Suportahan ang Prism</string>
+    <string name="support_prism_info">Ang suporta ang pambayad sa mga test phone at tool na ginagamit sa paggawa ng Prism. Libre pa rin ang lahat ng feature, suportahan mo man ito o hindi. Binubuksan ang Ko-fi sa browser mo.</string>
+    <string name="support_prism_keywords">donate tip kape salamat tulong developer suporta</string>
+    <string name="i_ve_supported_prism">Sinuportahan ko na ang Prism</string>
+    <string name="i_ve_supported_prism_info">Pinapatay ang lahat ng paghingi ng suporta sa Prism, habambuhay. Walang sinusuri: salita mo ang basehan.</string>
+    <string name="i_ve_supported_prism_keywords">nag-donate supporter itago paghingi tigilan</string>
+    <string name="supporters">Mga Supporter</string>
+    <string name="supporters_keywords">salamat credits pangalan donor miyembro</string>
+    <string name="supporters_info">Ang mga taong sumuporta sa Prism at piniling mapangalanan. Mga pangalan lang: walang halaga, walang petsa.</string>
+    <string name="supporters_members">Mga buwanang miyembro</string>
+    <string name="supporters_thank_you">Salamat</string>
+    <string name="supporters_empty">Wala pang pangalan dito. Ang iyo ang maaaring maging una.</string>
+    <string name="support_on_kofi">Suportahan sa Ko-fi</string>
+    <string name="don_t_show_again">Huwag nang ipakita</string>
+    <string name="support_hours_title">100 oras ng musika kasama ang Prism</string>
+    <string name="support_hours_body">Libre ito at gawa ng isang tao: kung sulit ito ng isang kape para sa iyo, iyon ang nagpapatuloy dito.</string>
+    <string name="support_made_by_one_person">Gawa ng isang tao.</string>
+    <string name="support_whats_new_line">Libre ang Prism at gawa ng isang tao. Kung gusto mo ito, puwede mo itong suportahan.</string>
+    <string name="settings_player_layout_group">Layout at mga kontrol</string>
+    <string name="dd_use_showing_covers">Pagpapakita ng mga animated cover</string>
+    <string name="icon_style">Istilo ng icon</string>
+    <string name="prism_s_own">Mula sa Prism</string>
+    <string name="player_times_both">Magkabilang dulo ng bar</string>
+    <string name="button_shape_fully_round">Buong bilog</string>
+    <string name="transport_filled_play">Filled na play button</string>
+    <string name="replay_notice_recap_short">Buwanang recap</string>
+    <string name="settings_player_edit_menu">I-edit ang ⋯ menu ng player</string>
+    <string name="mix_why_sing">Naka-on ang Kumanta, kaya buo ang bawat kantang pinapatugtog.</string>
+    <string name="mix_why_together">Naka-on ang Sabay na Makinig, kaya sumusunod ang mga kanta sa host.</string>
+    <string name="cn_spot_not_connected">Hindi nakakonekta · mga playlist at like</string>
+    <string name="cn_other_services">Iba pang serbisyo</string>
+    <string name="edge_to_edge_both">Cover at video</string>
 </resources>

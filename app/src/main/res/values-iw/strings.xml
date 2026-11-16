@@ -92,7 +92,7 @@
     <string name="refresh_the_list">רענון הרשימה</string>
     <string name="from_github">מ-GitHub</string>
     <string name="add_your_look">הוספת המראה שלך</string>
-    <string name="by_pull_request_on_github">ב-Pull Request ב-GitHub</string>
+    <string name="by_pull_request_on_github">שתף את שלך ב-GitHub</string>
     <string name="save_your_look_share_it_as">שמור את המראה שלך, שתף אותו כטקסט והוסף את הקוד שלו ל-themes/index.json במאגר של Prism. הדף מסביר איך.</string>
     <string name="use">שימוש ב-%1$s</string>
     <string name="more_for">עוד עבור %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">שימוש</string>
     <string name="not_now">לא עכשיו</string>
     <string name="day_and_night">יום ולילה</string>
-    <string name="day_and_night_looks">מראות ליום וללילה</string>
+    <string name="day_and_night_looks">החלפת מראה לפי שעות היום</string>
     <string name="one_look_by_day_another_by">מראה אחד ביום, אחר בלילה</string>
     <string name="like_theme_system_for_whole_looks">כמו ערכת נושא: מערכת, אבל למראות שלמים. הזריחה והשקיעה מחושבות לפי אזור הזמן שלך, בלי המיקום שלך. מראה שתבחר באמצע נשאר עד ההחלפה הבאה.</string>
     <string name="by_day">ביום</string>
@@ -148,7 +148,7 @@
     <string name="search_history">חיפוש בהיסטוריה</string>
     <string name="your_last_changes_to_the_look">%1$s השינויים האחרונים שלך במראה מופיעים כאן, כדי לחזור אחורה דרכם.</string>
     <string name="clear_history">ניקוי ההיסטוריה</string>
-    <string name="your_look_stays_as_it_is">המראה שלך נשאר כמו שהוא עכשיו</string>
+    <string name="your_look_stays_as_it_is">ההגדרות שלך נשארות כמו שהן</string>
     <string name="clear_the_look_s_history">לנקות את היסטוריית המראה?</string>
     <string name="you_won_t_be_able_to">לא תוכל לחזור לשינויים האלה. המראה שלך נשאר כמו שהוא עכשיו.</string>
     <string name="clear">ניקוי</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">זכוכית פשוטה, קו דק אחד של אור מפוצל</string>
     <string name="ledger">פנקס</string>
     <string name="three_numbers_side_by_side">שלושה מספרים זה לצד זה</string>
-    <string name="wash">שטיפה</string>
+    <string name="wash">צבע רך</string>
     <string name="a_faint_wash_of_color_and">שטיפת צבע עדינה ועמודות לפי חודש</string>
     <string name="spectrum_frame">מסגרת ספקטרום</string>
     <string name="glass_ringed_in_split_light_the">זכוכית מוקפת באור מפוצל, הזמן בצבע</string>
@@ -1472,14 +1472,14 @@
     <string name="widget_background_transparent_see_through_color">ווידג׳ט רקע שקוף צבע כפתורים מסך הבית widget</string>
     <string name="the_tab_you_re_on">הכרטיסייה הנוכחית</string>
     <string name="tab_icon_color_tint_accent_light">סמל כרטיסייה צבע גוון הדגשה אור כרטיסייה נוכחית</string>
-    <string name="play_on_album_and_playlist_pages">הפעלה בדפי אלבום ופלייליסט</string>
+    <string name="play_on_album_and_playlist_pages">כפתור הפעלה באלבומים ובפלייליסטים</string>
     <string name="play_button_outlined_filled">כפתור הפעלה מתאר מלא</string>
     <string name="switches_sliders_and_buttons">מתגים, פסי גלילה וכפתורים</string>
     <string name="classic_controls_1_6_material_switch">פקדים קלאסיים 1.6 material מתג פס גלילה מראה ישן</string>
     <string name="screen_backgrounds">רקעי המסכים</string>
     <string name="wallpaper_photo_pattern_design">טפט תמונה דוגמה עיצוב רקע</string>
     <string name="glass">זכוכית</string>
-    <string name="liquid_glass">Liquid Glass</string>
+    <string name="liquid_glass">Liquid glass</string>
     <string name="blur_transparent">טשטוש שקוף</string>
     <string name="glass_style">סגנון הזכוכית</string>
     <string name="frosted_glass">זכוכית חלבית</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">סיבוב כיוון לרוחב לאורך</string>
     <string name="picture_in_picture">תמונה בתוך תמונה</string>
     <string name="pip_video_float_window_leave">pip סרטון חלון צף יציאה</string>
-    <string name="load_ahead">טעינה מראש</string>
+    <string name="load_ahead">כמה רחוק לטעון מראש</string>
     <string name="preload_buffer">טעינה מראש באפר</string>
     <string name="load_ahead_on_mobile_data">טעינה מראש בחבילת גלישה</string>
     <string name="preload_cellular">טעינה מראש סלולרי</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">שמירת עותק</string>
     <string name="just_sign_out">רק יציאה</string>
     <string name="prism_account_on_this_phone">Prism Account · בטלפון הזה</string>
-    <string name="your_name_and_picture_kept_on">השם והתמונה שלך, שמורים בטלפון הזה. שום דבר אחר לא משתנה</string>
+    <string name="your_name_and_picture_kept_on">השם והתמונה שלך, שמורים בטלפון הזה</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">מחובר</string>
     <string name="signed_in_2">מחובר</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">של Apple Music,‏ Musixmatch ו-Spotify · מילה אחרי מילה</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · מילה אחרי מילה, הכי הרבה שירים בסינית</string>
+    <string name="qq_music_word_by_word_the">מילה אחרי מילה · הכי הרבה שירים בסינית</string>
     <string name="open_lyrics_database_line_by_line">מאגר מילים פתוח · שורה אחרי שורה</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · מילה אחרי מילה</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · מילה אחרי מילה, הרבה שירים מאסיה</string>
+    <string name="kugou_word_by_word_many_asian">מילה אחרי מילה · הרבה שירים מאסיה</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">מילים שמאזינים שולחים · מעט שירים בינתיים</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">המילים בדף השיר ב-Prism Music, מ-LyricFind · שורות או טקסט פשוט</string>
+    <string name="lyricfind_lines_or_plain">המילים של LyricFind, דרך YouTube Music · שורות או טקסט פשוט</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">טקסט פשוט · משלים גם מילים שהוחלפו בכוכביות</string>
     <string name="both">שניהם</string>
@@ -3136,7 +3136,7 @@
     <string name="one">אחת</string>
     <string name="under_the_line">מתחת לשורה</string>
     <string name="over_the_line">מעל השורה</string>
-    <string name="as_now">כמו עכשיו</string>
+    <string name="as_now">כמו הנגן</string>
     <string name="the_player_s_background_or_the">הרקע של הנגן, או העטיפה במצב הסוחף</string>
     <string name="plain_dark">כהה פשוט</string>
     <string name="nothing_but_the_words">רק המילים</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">הגלריה דורשת גרסה חדשה יותר של Prism</string>
     <string name="by_2">מאת %1$s</string>
     <string name="a_look">מראה</string>
-    <string name="how_prism_comes_outfit_the_split">כמו ש-Prism מגיע: Outfit, האור המפוצל, פינות רכות</string>
+    <string name="how_prism_comes_outfit_the_split">כברירת מחדל: הגופן של Prism, צבעי הספקטרום, פינות רכות</string>
     <string name="paper">נייר</string>
     <string name="light_serif_type_ink_instead_of">בהיר, כתב עם סריפים, דיו במקום צבע, נייר חמים</string>
     <string name="midnight">חצות</string>
@@ -3998,7 +3998,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">ההחלקות, ההקשה הכפולה והלחיצה הארוכה שלך עובדות גם מתחת לכותרת, באזור שסביב הכפתורים והפסים. הכפתורים והפסים שומרים על ההקשות שלהם.</string>
     <string name="gestures_everywhere_keywords">מחווה החלקה הקשה כפולה לחיצה ארוכה חלק תחתון פקדים כל הנגן</string>
     <string name="playing_song_in_the_page_s_color">השיר שמתנגן בצבע הדף</string>
-    <string name="its_bars_and_title_take_the_album_s_color">הפסים והכותרת שלו מקבלים את צבע האלבום</string>
+    <string name="its_bars_and_title_take_the_album_s_color">הפסים והכותרת שלו מקבלים את צבע הדף</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">בדפי אלבומים, פלייליסטים ואמנים, השיר שמתנגן מציג את הפסים והכותרת שלו בצבע התמונה של הדף במקום האור שלך. בשאר המקומות הכול נשאר כפי שהוא.</string>
     <string name="playing_indicator_bars_now_playing_album_color">מחוון מתנגן פסים אקולייזר אלבום פלייליסט אמן דף צבע עטיפה</string>
     <string name="slide_between_screens">החלקה בין מסכים</string>
@@ -4028,7 +4028,7 @@
     <string name="hidden_s">מוסתר: %1$s</string>
     <string name="buttons_in_the_row">הכפתורים בשורה</string>
     <string name="add_a_button">הוספת כפתור</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">תפריט ⋯ של הנגן: האריחים שלו ומה שהוא מציג</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">האריחים שלו ומה שהוא מציג</string>
     <string name="and_the_sky_lit_up">והשמיים נדלקו</string>
     <string name="play_pause_always_stays">הפעלה והשהיה תמיד נשארות</string>
     <string name="what_s_on_the_player_keywords">הסתרה הצגה חלקים בנגן מתחת לשם עטיפה שם אומן לייק לב תפריט סרגל התקדמות דילוג קודם הבא כפתורים שורה אורך השיר שידור</string>
@@ -4040,10 +4040,10 @@
     <string name="when_the_queue_ends">כשהתור נגמר</string>
     <string name="when_the_queue_ends_info">עצירה: המוזיקה נגמרת עם התור. המוזיקה שלך: הרדיו של Prism עצמו ממה שאתה משמיע. שלך וחדש: בעיקר המוזיקה שלך, עם כמה שירים חדשים. Prism Music: רדיו מהקטלוג של Prism Music. במצב לא מקוון זו תמיד המוזיקה שלך.</string>
     <string name="music_videos_label">קליפים</string>
-    <string name="play_them">סרטונים</string>
+    <string name="play_them">סרטונים בכל מקום</string>
     <string name="songs_in_radios">שירים ברדיו</string>
     <string name="songs_everywhere">שירים בכל מקום</string>
-    <string name="music_videos_label_info">סרטונים: קליפ מתנגן כסרטון. שירים ברדיו: ההשמעה האוטומטית והרדיו משמיעים במקומו את השיר של הקליפ. שירים בכל מקום: כל קליפ שתקיש עליו מתנגן כשיר שלו, וכפתור ״סרטון״ עדיין מציג את הקליפ.</string>
+    <string name="music_videos_label_info">סרטונים בכל מקום: קליפ מתנגן כסרטון. שירים ברדיו: ההשמעה האוטומטית והרדיו משמיעים במקומו את השיר של הקליפ. שירים בכל מקום: כל קליפ שתקיש עליו מתנגן כשיר שלו, וכפתור ״סרטון״ עדיין מציג את הקליפ.</string>
     <string name="trim_silence">חיתוך שקט בהתחלה ובסוף</string>
     <string name="podcasts_only">פודקאסטים בלבד</string>
     <string name="songs_and_podcasts">שירים ופודקאסטים</string>
@@ -4821,7 +4821,7 @@
     <string name="move_songs_you_have_played">הזזת שירים שהושמעו</string>
     <string name="move_songs_you_have_played_info">גם לשירים שכבר השמעת יש ידית, כדי שתוכל לגרור אותם ביניהם.</string>
     <string name="move_songs_you_have_played_keywords">תור הושמעו היסטוריה גרירה ידית סידור מחדש</string>
-    <string name="tidier_queue">תור מסודר יותר</string>
+    <string name="tidier_queue">תור עם פחות כפתורים</string>
     <string name="tidier_queue_info">מסיר את ה-× מכל שיר ואת כפתור התור מהשורה התחתונה כשהתור פתוח. החלק שיר שמאלה או השתמש ב-⋯ כדי להסיר אותו. משוך את הכותרת מטה או לחץ על חזרה כדי לצאת מהתור.</string>
     <string name="tidier_queue_keywords">תור פחות כפתורים הסרה סגירה נקי פשוט</string>
     <string name="reopen_on_the_last_page">פתיחה מחדש בעמוד האחרון</string>
@@ -5151,7 +5151,7 @@
     <string name="gb_double_tap_seeks">הקשה כפולה מריצה</string>
     <string name="gb_double_tap_seeks_needs">יש להגדיר קודם את ״הקשה כפולה״ ל״הרצה לפי צד״</string>
     <string name="gb_gestures_work">איפה המחוות פועלות</string>
-    <string name="gb_work_cover">על העטיפה</string>
+    <string name="gb_work_cover">רק על העטיפה</string>
     <string name="gb_work_anywhere">בכל מקום</string>
     <string name="gb_work_not_lyrics">בכל מקום חוץ מהמילים</string>
     <string name="gb_work_cover_and_lyrics">על העטיפה ומתחת למילים</string>
@@ -5251,7 +5251,7 @@
     <string name="settings_player_right_hand_time">הזמן בצד ימין</string>
     <string name="settings_player_right_hand_time_info">הזמן שבקצה הימני של פס ההתקדמות. הקשה עליו בנגן משנה גם את זה.</string>
     <string name="settings_player_cover_shape">צורת העטיפה</string>
-    <string name="settings_player_edge_to_edge">מקצה לקצה</string>
+    <string name="settings_player_edge_to_edge">מגיע לקצוות המסך</string>
     <string name="settings_player_cover_animation">אנימציית העטיפה</string>
     <string name="settings_player_opening">בפתיחה</string>
     <string name="settings_player_opening_and_closing">בפתיחה ובסגירה</string>
@@ -5262,7 +5262,7 @@
     <string name="settings_player_queue_dj">כפתור DJ</string>
     <string name="settings_player_queue_lengths">אורכי השירים</string>
     <string name="settings_player_queue_move_played">העברת שירים שהושמעו</string>
-    <string name="settings_player_queue_tidier">תור מסודר יותר</string>
+    <string name="settings_player_queue_tidier">פחות כפתורים</string>
     <string name="settings_player_scroll_for_controls">גלילה למעלה לפקדים</string>
     <string name="settings_player_lock_options">אפשרויות מסך הנעילה</string>
     <string name="settings_player_immersive_options">אפשרויות המצב הסוחף</string>
@@ -5335,8 +5335,8 @@
     <string name="tl_reset_everything">איפוס הכול</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">מראות שלמים, ביום ובלילה</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord מופעל · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord מופעל · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · גיבוי, עדכונים</string>
     <string name="root_connect_short">השמעה ברמקולים ובטלוויזיות</string>
     <string name="root_handoff_on">העברה מופעלת</string>
@@ -5381,7 +5381,7 @@
     <string name="recap_ready_title">הסיכום של %1$s מוכן</string>
     <string name="recap_ready_text">החודש שלך במוזיקה: השירים והאמנים המובילים שלך, ואיך זה בהשוואה לחודש הקודם.</string>
     <string name="recap_card_title">%1$s שלך</string>
-    <string name="replay_notices">התראות</string>
+    <string name="replay_notices">התראות Replay</string>
     <string name="tour_185_replay_title">Replay, לעומק</string>
     <string name="tour_185_replay_body">לראות מתי מאזינים, שעה אחרי שעה ויום אחרי יום.</string>
     <string name="tour_185_replay_point_1">שעון ההאזנה: השבוע שלך, שעה אחרי שעה. הקשה על שעה מציגה את השירים המובילים בה.</string>
@@ -5456,7 +5456,7 @@
     <string name="cal_no_music">אין מוזיקה</string>
     <string name="cal_days_with_music">ימים עם מוזיקה: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">הקשה על העטיפה הקטנה להפעלה או השהיה</string>
+    <string name="gb_lyrics_cover_plays">הקשה על העטיפה שליד המילים להשהיה</string>
     <string name="gb_lyrics_cover_plays_info">כשהמילים פתוחות, הקשה על העטיפה הקטנה מפעילה או משהה, ולחיצה ארוכה סוגרת את המילים. כבוי: הקשה סוגרת את המילים.</string>
     <string name="gb_lyrics_cover_plays_keywords">מילים עטיפה קטנה תמונה ממוזערת הקשה הפעלה השהיה לחיצה ארוכה סגירה lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5633,4 +5633,37 @@
     <string name="hl_show_in_lists">הצגה ברשימות</string>
     <string name="hl_show_on_artist_pages">הצגה בדפי אמנים</string>
     <string name="allow_access_to_lossless_files_value">נדרש כדי למצוא את הקבצים ללא אובדן איכות שלך</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">תמיכה ב-Prism</string>
+    <string name="support_prism_info">התמיכה משלמת על טלפוני הבדיקה והכלים שבהם Prism נעשה. כל התכונות נשארות חינמיות, בין אם תתמוך ובין אם לא. פותח את Ko-fi בדפדפן.</string>
+    <string name="support_prism_keywords">תרומה טיפ קפה תודה עזרה מפתח תמיכה</string>
+    <string name="i_ve_supported_prism">תמכתי ב-Prism</string>
+    <string name="i_ve_supported_prism_info">מכבה לתמיד כל בקשה לתמוך ב-Prism. שום דבר לא נבדק: המילה שלך מספיקה.</string>
+    <string name="i_ve_supported_prism_keywords">תרמתי תומך הסתרה בקשות להפסיק</string>
+    <string name="supporters">תומכים</string>
+    <string name="supporters_keywords">תודה קרדיטים שמות תורמים חברים</string>
+    <string name="supporters_info">האנשים שתמכו ב-Prism ובחרו שיופיעו בשמם. רק שמות: בלי סכומים ובלי תאריכים.</string>
+    <string name="supporters_members">חברים חודשיים</string>
+    <string name="supporters_thank_you">תודה</string>
+    <string name="supporters_empty">עדיין אין כאן שמות. אולי השם שלך יהיה הראשון.</string>
+    <string name="support_on_kofi">תמיכה ב-Ko-fi</string>
+    <string name="don_t_show_again">אל תציג שוב</string>
+    <string name="support_hours_title">100 שעות של מוזיקה עם Prism</string>
+    <string name="support_hours_body">זה חינמי ונעשה על ידי אדם אחד: אם זה שווה לך כוס קפה, זה מה שמחזיק את זה.</string>
+    <string name="support_made_by_one_person">נעשה על ידי אדם אחד.</string>
+    <string name="support_whats_new_line">Prism חינמי ונעשה על ידי אדם אחד. אם זה מוצא חן בעיניך, אפשר לתמוך בו.</string>
+    <string name="settings_player_layout_group">פריסה ופקדים</string>
+    <string name="dd_use_showing_covers">הצגת עטיפות מונפשות</string>
+    <string name="icon_style">סגנון סמלים</string>
+    <string name="prism_s_own">ברירת המחדל של Prism</string>
+    <string name="player_times_both">שני קצוות הסרגל</string>
+    <string name="button_shape_fully_round">עגול לגמרי</string>
+    <string name="transport_filled_play">כפתור הפעלה מלא</string>
+    <string name="replay_notice_recap_short">סיכום חודשי</string>
+    <string name="settings_player_edit_menu">עריכת תפריט ⋯ של הנגן</string>
+    <string name="mix_why_sing">״שירה״ פועלת, ולכן כל שיר מושמע בשלמותו.</string>
+    <string name="mix_why_together">״האזנה משותפת״ פועלת, ולכן השירים עוקבים אחרי המארח.</string>
+    <string name="cn_spot_not_connected">לא מחובר · פלייליסטים ולייקים</string>
+    <string name="cn_other_services">שירותים נוספים</string>
+    <string name="edge_to_edge_both">עטיפה וסרטון</string>
 </resources>

@@ -92,7 +92,7 @@
     <string name="refresh_the_list">Listeyi yenile</string>
     <string name="from_github">GitHub\'dan</string>
     <string name="add_your_look">Görünümünü ekle</string>
-    <string name="by_pull_request_on_github">GitHub\'da pull request ile</string>
+    <string name="by_pull_request_on_github">Seninkini GitHub\'da paylaş</string>
     <string name="save_your_look_share_it_as">Görünümünü kaydet, metin olarak paylaş ve kodunu Prism\'in deposundaki themes/index.json dosyasına ekle. Sayfa nasıl yapılacağını anlatıyor.</string>
     <string name="use">Kullan: %1$s</string>
     <string name="more_for">Daha fazlası: %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">Kullan</string>
     <string name="not_now">Şimdi değil</string>
     <string name="day_and_night">Gündüz ve gece</string>
-    <string name="day_and_night_looks">Gündüz ve gece Görünümleri</string>
+    <string name="day_and_night_looks">Görünümü günün saatine göre değiştir</string>
     <string name="one_look_by_day_another_by">Gündüz bir Görünüm, gece başka bir Görünüm</string>
     <string name="like_theme_system_for_whole_looks">Tema: Sistem gibi, ama tüm Görünümler için. Gün doğumu ve gün batımı konumun kullanılmadan saat diliminden hesaplanır. Arada seçtiğin bir Görünüm bir sonraki geçişe kadar kalır.</string>
     <string name="by_day">Gündüz</string>
@@ -148,7 +148,7 @@
     <string name="search_history">Geçmişte ara</string>
     <string name="your_last_changes_to_the_look">Görünüme yaptığın son %1$s değişiklik geri dönebilmen için burada görünür.</string>
     <string name="clear_history">Geçmişi temizle</string>
-    <string name="your_look_stays_as_it_is">Görünümün şu anki hâliyle kalır</string>
+    <string name="your_look_stays_as_it_is">Ayarların olduğu gibi kalır</string>
     <string name="clear_the_look_s_history">Görünüm geçmişi temizlensin mi?</string>
     <string name="you_won_t_be_able_to">Bu değişikliklere geri dönemezsin. Görünümün şu anki hâliyle kalır.</string>
     <string name="clear">Temizle</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">Düz cam, ince bir spektrum ışığı çizgisi</string>
     <string name="ledger">Defter</string>
     <string name="three_numbers_side_by_side">Yan yana üç sayı</string>
-    <string name="wash">Tül</string>
+    <string name="wash">Yumuşak renk</string>
     <string name="a_faint_wash_of_color_and">Hafif bir renk tülü ve ay çubukları</string>
     <string name="spectrum_frame">Spektrum çerçeve</string>
     <string name="glass_ringed_in_split_light_the">Spektrum ışığıyla çevrili cam, süre renkli</string>
@@ -1472,17 +1472,17 @@
     <string name="widget_background_transparent_see_through_color">widget arka plan şeffaf saydam renk düğmeler ana ekran</string>
     <string name="the_tab_you_re_on">Bulunduğun sekme</string>
     <string name="tab_icon_color_tint_accent_light">sekme simge rengi ton vurgu ışık geçerli sekme</string>
-    <string name="play_on_album_and_playlist_pages">Albüm ve çalma listesi sayfalarında Oynat</string>
+    <string name="play_on_album_and_playlist_pages">Albüm ve çalma listelerinde oynat düğmesi</string>
     <string name="play_button_outlined_filled">oynat düğmesi çerçeveli dolu</string>
     <string name="switches_sliders_and_buttons">Anahtarlar, kaydırıcılar ve düğmeler</string>
     <string name="classic_controls_1_6_material_switch">klasik kontroller 1.6 material anahtar kaydırıcı eski görünüm</string>
     <string name="screen_backgrounds">Ekran arka planları</string>
     <string name="wallpaper_photo_pattern_design">duvar kâğıdı fotoğraf desen tasarım</string>
     <string name="glass">Cam</string>
-    <string name="liquid_glass">Sıvı Cam</string>
+    <string name="liquid_glass">Sıvı cam</string>
     <string name="blur_transparent">bulanıklık şeffaf</string>
     <string name="glass_style">Cam stili</string>
-    <string name="frosted_glass">Buzlu Cam</string>
+    <string name="frosted_glass">Buzlu cam</string>
     <string name="frosted_pages">Buzlu sayfalar</string>
     <string name="blur_artist_album_playlist">bulanıklık sanatçı albüm çalma listesi</string>
     <string name="reduce_motion">Hareketi azalt</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">döndürme yön yatay dikey</string>
     <string name="picture_in_picture">Pencere içinde pencere</string>
     <string name="pip_video_float_window_leave">pip video yüzen pencere çıkış</string>
-    <string name="load_ahead">Önceden yükle</string>
+    <string name="load_ahead">Ne kadar önceden yüklensin</string>
     <string name="preload_buffer">önceden yükle arabellek</string>
     <string name="load_ahead_on_mobile_data">Mobil veride önceden yükle</string>
     <string name="preload_cellular">önceden yükle mobil veri</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">Kopya sakla</string>
     <string name="just_sign_out">Yalnızca çıkış yap</string>
     <string name="prism_account_on_this_phone">Prism Hesabı · bu telefonda</string>
-    <string name="your_name_and_picture_kept_on">Adın ve resmin bu telefonda saklanır. Sahip olduğun hiçbir şey değişmez</string>
+    <string name="your_name_and_picture_kept_on">Adın ve resmin bu telefonda saklanır</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">oturum açık</string>
     <string name="signed_in_2">Oturum açık</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music, Musixmatch ve Spotify\'ınkiler · kelime kelime</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · kelime kelime, en çok Çince şarkı</string>
+    <string name="qq_music_word_by_word_the">Kelime kelime · en çok Çince şarkı</string>
     <string name="open_lyrics_database_line_by_line">Açık söz veritabanı · satır satır</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · kelime kelime</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · kelime kelime, birçok Asya şarkısı</string>
+    <string name="kugou_word_by_word_many_asian">Kelime kelime · birçok Asya şarkısı</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Dinleyicilerin gönderdiği sözler · şimdilik az şarkı</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">Şarkının Prism Music sayfasındaki sözler, LyricFind\'dan · satırlar ya da düz</string>
+    <string name="lyricfind_lines_or_plain">LyricFind\'ın sözleri, YouTube Music üzerinden · satırlar ya da düz</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Düz metin · yıldızlanmış kelimeleri de doldurur</string>
     <string name="both">İkisi de</string>
@@ -3136,7 +3136,7 @@
     <string name="one">Bir</string>
     <string name="under_the_line">Satırın altında</string>
     <string name="over_the_line">Satırın üstünde</string>
-    <string name="as_now">Şimdiki gibi</string>
+    <string name="as_now">Oynatıcı gibi</string>
     <string name="the_player_s_background_or_the">Oynatıcının arka planı ya da sürükleyici modda kapak</string>
     <string name="plain_dark">Düz koyu</string>
     <string name="nothing_but_the_words">Yalnızca kelimeler</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">Galeri için Prism\'in daha yeni bir sürümü gerekiyor</string>
     <string name="by_2">yapan: %1$s</string>
     <string name="a_look">Bir Görünüm</string>
-    <string name="how_prism_comes_outfit_the_split">Prism\'in varsayılan hâli: Outfit, spektrum ışığı, yumuşak köşeler</string>
+    <string name="how_prism_comes_outfit_the_split">Varsayılan hâli: Prism\'in kendi yazı tipi, spektrum renkleri, yumuşak köşeler</string>
     <string name="paper">Kâğıt</string>
     <string name="light_serif_type_ink_instead_of">Açık, serifli yazı, renk yerine mürekkep, sıcak kâğıt</string>
     <string name="midnight">Gece Yarısı</string>
@@ -3948,7 +3948,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">Kaydırmalarınız, çift dokunma ve uzun basma başlığın altında, düğmelerle çubukların çevresindeki alanda da çalışır. Düğmeler ve çubuklar kendi dokunuşlarını korur.</string>
     <string name="gestures_everywhere_keywords">hareket kaydırma çift dokunma uzun basma alt kısım kontroller tüm oynatıcı</string>
     <string name="playing_song_in_the_page_s_color">Çalan şarkı sayfanın renginde</string>
-    <string name="its_bars_and_title_take_the_album_s_color">Çubukları ve adı albümün rengini alır</string>
+    <string name="its_bars_and_title_take_the_album_s_color">Çubukları ve adı sayfanın rengini alır</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">Albüm, çalma listesi ve sanatçı sayfalarında çalan şarkı, çubuklarını ve adını ışığınız yerine sayfa görselinin renginde gösterir. Başka yerlerde değişmez.</string>
     <string name="playing_indicator_bars_now_playing_album_color">gösterge çalıyor çubuklar ekolayzer albüm çalma listesi sanatçı sayfa renk kapak</string>
     <string name="slide_between_screens">Ekranlar arasında kaydır</string>
@@ -3978,7 +3978,7 @@
     <string name="hidden_s">Gizli: %1$s</string>
     <string name="buttons_in_the_row">Satırdaki düğmeler</string>
     <string name="add_a_button">Düğme ekle</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">Oynatıcının ⋯ menüsü: kutucukları ve gösterdikleri</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">Kutucukları ve gösterdikleri</string>
     <string name="and_the_sky_lit_up">Ve gökyüzü aydınlandı</string>
     <string name="play_pause_always_stays">Oynat ve duraklat her zaman kalır</string>
     <string name="what_s_on_the_player_keywords">gizle göster parçalar oynatıcıda göster başlığın altında kapak başlık sanatçı beğen kalp menü ilerleme çubuğu sarma önceki sonraki atla düğmeler satır şarkı uzunluğu yayın işareti</string>
@@ -3990,10 +3990,10 @@
     <string name="when_the_queue_ends">Sıra bittiğinde</string>
     <string name="when_the_queue_ends_info">Durdur: müzik sırayla birlikte biter. Müziğin: dinlediklerinden Prism\'in kendi radyosu. Seninkiler ve yeniler: çoğunlukla senin müziğin, birkaç yeni şarkıyla. Prism Music: Prism Music kataloğundan bir radyo. Çevrimdışıyken her zaman senin müziğin çalar.</string>
     <string name="music_videos_label">Müzik videoları</string>
-    <string name="play_them">Videolar</string>
+    <string name="play_them">Her yerde videolar</string>
     <string name="songs_in_radios">Radyolarda şarkılar</string>
     <string name="songs_everywhere">Her yerde şarkılar</string>
-    <string name="music_videos_label_info">Videolar: müzik videosu video olarak oynar. Radyolarda şarkılar: otomatik oynatma ve radyolar videonun yerine onun şarkısını çalar. Her yerde şarkılar: dokunduğun her müzik videosu şarkısı olarak çalar, Video düğmesi ise videoyu yine gösterir.</string>
+    <string name="music_videos_label_info">Her yerde videolar: müzik videosu video olarak oynar. Radyolarda şarkılar: otomatik oynatma ve radyolar videonun yerine onun şarkısını çalar. Her yerde şarkılar: dokunduğun her müzik videosu şarkısı olarak çalar, Video düğmesi ise videoyu yine gösterir.</string>
     <string name="trim_silence">Baştaki ve sondaki sessizliği kırp</string>
     <string name="podcasts_only">Yalnızca podcast\'ler</string>
     <string name="songs_and_podcasts">Şarkılar ve podcast\'ler</string>
@@ -4757,7 +4757,7 @@
     <string name="move_songs_you_have_played">Çaldığın şarkıları taşı</string>
     <string name="move_songs_you_have_played_info">Daha önce çaldığın şarkılar da bir tutamaç alır; böylece onları kendi aralarında sürükleyebilirsin.</string>
     <string name="move_songs_you_have_played_keywords">sıra çalınan geçmiş sürükle tutamaç yeniden sırala</string>
-    <string name="tidier_queue">Daha derli toplu sıra</string>
+    <string name="tidier_queue">Daha az düğmeli sıra</string>
     <string name="tidier_queue_info">Sıra açıkken her şarkıdan × işaretini ve alt satırdan Sıra düğmesini kaldırır. Bir şarkıyı kaldırmak için sola kaydır veya ⋯ menüsünü kullan. Sıradan çıkmak için başlığı aşağı çek ya da Geri\'ye bas.</string>
     <string name="tidier_queue_keywords">sıra daha az düğme kaldır kapat temiz sade</string>
     <string name="reopen_on_the_last_page">Son sayfada yeniden aç</string>
@@ -5079,7 +5079,7 @@
     <string name="gb_double_tap_seeks">Çift dokunma sarar</string>
     <string name="gb_double_tap_seeks_needs">Önce Çift dokun\'u Kenara göre sar olarak ayarla</string>
     <string name="gb_gestures_work">Hareketlerin çalıştığı yer</string>
-    <string name="gb_work_cover">Kapakta</string>
+    <string name="gb_work_cover">Yalnızca kapakta</string>
     <string name="gb_work_anywhere">Her yerde</string>
     <string name="gb_work_not_lyrics">Sözler hariç her yerde</string>
     <string name="gb_work_cover_and_lyrics">Kapakta ve sözlerin altında</string>
@@ -5179,7 +5179,7 @@
     <string name="settings_player_right_hand_time">Sağdaki süre</string>
     <string name="settings_player_right_hand_time_info">İlerleme çubuğunun sağındaki süre. Oynatıcıda ona dokunmak da bunu değiştirir.</string>
     <string name="settings_player_cover_shape">Kapak şekli</string>
-    <string name="settings_player_edge_to_edge">Kenardan kenara</string>
+    <string name="settings_player_edge_to_edge">Ekranın kenarlarına uzanır</string>
     <string name="settings_player_cover_animation">Kapak animasyonu</string>
     <string name="settings_player_opening">Açılırken</string>
     <string name="settings_player_opening_and_closing">Açılırken ve kapanırken</string>
@@ -5190,7 +5190,7 @@
     <string name="settings_player_queue_dj">DJ düğmesi</string>
     <string name="settings_player_queue_lengths">Şarkı süreleri</string>
     <string name="settings_player_queue_move_played">Çalınanları taşı</string>
-    <string name="settings_player_queue_tidier">Daha düzenli sıra</string>
+    <string name="settings_player_queue_tidier">Daha az düğme</string>
     <string name="settings_player_scroll_for_controls">Kontroller için yukarı kaydır</string>
     <string name="settings_player_lock_options">Kilit ekranı seçenekleri</string>
     <string name="settings_player_immersive_options">Sürükleyici mod seçenekleri</string>
@@ -5262,8 +5262,8 @@
     <string name="tl_reset_everything">Her şeyi sıfırla</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">Tüm görünümler, gece ve gündüz</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord açık · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord açık · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · yedek, güncellemeler</string>
     <string name="root_connect_short">Hoparlörlerde ve TV\'lerde çal</string>
     <string name="root_handoff_on">Aktarma açık</string>
@@ -5308,7 +5308,7 @@
     <string name="recap_ready_title">%1$s özetin hazır</string>
     <string name="recap_ready_text">Müzikle geçen ayın: en çok dinlediğin şarkılar ve sanatçılar, ve önceki ayla karşılaştırması.</string>
     <string name="recap_card_title">%1$s ayın</string>
-    <string name="replay_notices">Bildirimler</string>
+    <string name="replay_notices">Replay bildirimleri</string>
     <string name="tour_185_replay_title">Replay, daha derin</string>
     <string name="tour_185_replay_body">Ne zaman dinlediğini saat saat ve gün gün gör.</string>
     <string name="tour_185_replay_point_1">Dinleme saati: haftan, saat saat. En çok dinlenen şarkıları için bir saate dokun.</string>
@@ -5381,7 +5381,7 @@
     <string name="cal_no_music">Müzik yok</string>
     <string name="cal_days_with_music">Müzikli günler: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">Oynatmak veya duraklatmak için küçük kapağa dokun</string>
+    <string name="gb_lyrics_cover_plays">Sözlerdeki kapağa dokunarak duraklat</string>
     <string name="gb_lyrics_cover_plays_info">Sözler açıkken küçük kapağa dokunmak oynatır veya duraklatır, uzun basmak ise sözleri kapatır. Kapalıyken: dokunmak sözleri kapatır.</string>
     <string name="gb_lyrics_cover_plays_keywords">sözler küçük kapak önizleme albüm kapağı dokun oynat duraklat uzun bas kapat lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5558,4 +5558,37 @@
     <string name="hl_show_in_lists">Listelerde göster</string>
     <string name="hl_show_on_artist_pages">Sanatçı sayfalarında göster</string>
     <string name="allow_access_to_lossless_files_value">Kayıpsız dosyalarını bulmak için gerekli</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">Prism\'i destekle</string>
+    <string name="support_prism_info">Destek, Prism\'in yapıldığı test telefonlarının ve araçların masrafını karşılar. Desteklesen de desteklemesen de her özellik ücretsiz kalır. Ko-fi\'yi tarayıcında açar.</string>
+    <string name="support_prism_keywords">bağış bahşiş kahve teşekkür yardım geliştirici destek</string>
+    <string name="i_ve_supported_prism">Prism\'i destekledim</string>
+    <string name="i_ve_supported_prism_info">Prism\'i desteklemeye dair tüm istekleri kalıcı olarak kapatır. Hiçbir şey kontrol edilmez: sözüne güveniriz.</string>
+    <string name="i_ve_supported_prism_keywords">bağış yaptım destekçi gizle istekleri durdur</string>
+    <string name="supporters">Destekçiler</string>
+    <string name="supporters_keywords">teşekkür isimler bağışçılar üyeler</string>
+    <string name="supporters_info">Prism\'i destekleyen ve adının görünmesini isteyen kişiler. Yalnızca adlar: tutar yok, tarih yok.</string>
+    <string name="supporters_members">Aylık üyeler</string>
+    <string name="supporters_thank_you">Teşekkürler</string>
+    <string name="supporters_empty">Burada henüz isim yok. İlk sen olabilirsin.</string>
+    <string name="support_on_kofi">Ko-fi\'de destekle</string>
+    <string name="don_t_show_again">Bir daha gösterme</string>
+    <string name="support_hours_title">Prism ile 100 saat müzik</string>
+    <string name="support_hours_body">Ücretsiz ve tek bir kişi tarafından yapılıyor: senin için bir kahve eder diyorsan, devam etmesini sağlar.</string>
+    <string name="support_made_by_one_person">Tek bir kişi tarafından yapıldı.</string>
+    <string name="support_whats_new_line">Prism ücretsiz ve tek bir kişi tarafından yapılıyor. Beğendiysen destekleyebilirsin.</string>
+    <string name="settings_player_layout_group">Düzen ve kontroller</string>
+    <string name="dd_use_showing_covers">Hareketli kapakları gösterirken</string>
+    <string name="icon_style">Simge stili</string>
+    <string name="prism_s_own">Prism\'in kendi</string>
+    <string name="player_times_both">Çubuğun iki ucu</string>
+    <string name="button_shape_fully_round">Tam yuvarlak</string>
+    <string name="transport_filled_play">Dolu oynat düğmesi</string>
+    <string name="replay_notice_recap_short">Aylık özet</string>
+    <string name="settings_player_edit_menu">Oynatıcının ⋯ menüsünü düzenle</string>
+    <string name="mix_why_sing">Sing açık, bu yüzden her şarkı bütün çalar.</string>
+    <string name="mix_why_together">Birlikte Dinle açık, bu yüzden şarkılar sunucuyu izler.</string>
+    <string name="cn_spot_not_connected">Bağlı değil · çalma listeleri ve beğeniler</string>
+    <string name="cn_other_services">Diğer hizmetler</string>
+    <string name="edge_to_edge_both">Kapak ve video</string>
 </resources>

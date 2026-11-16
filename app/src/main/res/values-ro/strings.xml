@@ -92,7 +92,7 @@
     <string name="refresh_the_list">Reîmprospătează lista</string>
     <string name="from_github">De pe GitHub</string>
     <string name="add_your_look">Adaugă Look-ul tău</string>
-    <string name="by_pull_request_on_github">Printr-un pull request pe GitHub</string>
+    <string name="by_pull_request_on_github">Împărtășește-l pe al tău pe GitHub</string>
     <string name="save_your_look_share_it_as">Salvează-ți Look-ul, distribuie-l ca text și adaugă-i codul în themes/index.json din depozitul Prism. Pagina îți arată cum.</string>
     <string name="use">Folosește %1$s</string>
     <string name="more_for">Mai multe pentru %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">Folosește-l</string>
     <string name="not_now">Nu acum</string>
     <string name="day_and_night">Zi și noapte</string>
-    <string name="day_and_night_looks">Look-uri de zi și de noapte</string>
+    <string name="day_and_night_looks">Schimbă look-ul în funcție de ora din zi</string>
     <string name="one_look_by_day_another_by">Un Look ziua, altul noaptea</string>
     <string name="like_theme_system_for_whole_looks">Ca Temă: Sistem, dar pentru Look-uri întregi. Răsăritul și apusul se calculează din fusul tău orar, fără locația ta. Un Look ales între timp rămâne până la următoarea schimbare.</string>
     <string name="by_day">Ziua</string>
@@ -148,7 +148,7 @@
     <string name="search_history">Caută în istoric</string>
     <string name="your_last_changes_to_the_look">Ultimele tale %1$s modificări ale aspectului apar aici, ca să te poți întoarce prin ele.</string>
     <string name="clear_history">Șterge istoricul</string>
-    <string name="your_look_stays_as_it_is">Aspectul rămâne cum e acum</string>
+    <string name="your_look_stays_as_it_is">Setările tale rămân cum sunt</string>
     <string name="clear_the_look_s_history">Ștergi istoricul aspectului?</string>
     <string name="you_won_t_be_able_to">Nu vei mai putea reveni la aceste modificări. Aspectul rămâne cum e acum.</string>
     <string name="clear">Șterge</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">Sticlă simplă, un fir subțire de lumină descompusă</string>
     <string name="ledger">Registru</string>
     <string name="three_numbers_side_by_side">Trei numere unul lângă altul</string>
-    <string name="wash">Voal</string>
+    <string name="wash">Culoare fină</string>
     <string name="a_faint_wash_of_color_and">Un voal slab de culoare și bare pe luni</string>
     <string name="spectrum_frame">Ramă spectru</string>
     <string name="glass_ringed_in_split_light_the">Sticlă înconjurată de lumină descompusă, timpul colorat</string>
@@ -1472,7 +1472,7 @@
     <string name="widget_background_transparent_see_through_color">widget fundal transparent culoare butoane ecran de pornire</string>
     <string name="the_tab_you_re_on">Fila curentă</string>
     <string name="tab_icon_color_tint_accent_light">filă pictogramă culoare nuanță accent lumină fila curentă</string>
-    <string name="play_on_album_and_playlist_pages">Redă pe paginile de album și playlist</string>
+    <string name="play_on_album_and_playlist_pages">Buton de redare pe albume și playlisturi</string>
     <string name="play_button_outlined_filled">buton redare conturat plin</string>
     <string name="switches_sliders_and_buttons">Comutatoare, glisoare și butoane</string>
     <string name="classic_controls_1_6_material_switch">controale clasice 1.6 material comutator glisor aspect vechi</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">rotire orientare orizontal vertical portret</string>
     <string name="picture_in_picture">Picture-in-picture</string>
     <string name="pip_video_float_window_leave">pip videoclip fereastră plutitoare ieșire</string>
-    <string name="load_ahead">Încarcă în avans</string>
+    <string name="load_ahead">Cât de departe să încarce în avans</string>
     <string name="preload_buffer">preîncărcare buffer</string>
     <string name="load_ahead_on_mobile_data">Încarcă în avans pe date mobile</string>
     <string name="preload_cellular">preîncărcare date mobile</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">Păstrează o copie</string>
     <string name="just_sign_out">Doar deconectează-mă</string>
     <string name="prism_account_on_this_phone">Prism Account · pe acest telefon</string>
-    <string name="your_name_and_picture_kept_on">Numele și imaginea ta, păstrate pe acest telefon. Nu se schimbă nimic din ce ai</string>
+    <string name="your_name_and_picture_kept_on">Numele și imaginea ta, păstrate pe acest telefon</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">conectat</string>
     <string name="signed_in_2">Conectat</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music, Musixmatch și Spotify · cuvânt cu cuvânt</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · cuvânt cu cuvânt, cele mai multe melodii chinezești</string>
+    <string name="qq_music_word_by_word_the">Cuvânt cu cuvânt · cele mai multe melodii chinezești</string>
     <string name="open_lyrics_database_line_by_line">Bază de date deschisă de versuri · rând cu rând</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · cuvânt cu cuvânt</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · cuvânt cu cuvânt, multe melodii asiatice</string>
+    <string name="kugou_word_by_word_many_asian">Cuvânt cu cuvânt · multe melodii asiatice</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Versuri trimise de ascultători · puține melodii deocamdată</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">Versurile de pe pagina melodiei din Prism Music, de la LyricFind · rânduri sau text simplu</string>
+    <string name="lyricfind_lines_or_plain">Versurile LyricFind, prin YouTube Music · rânduri sau text simplu</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Text simplu · completează și cuvintele acoperite cu stele</string>
     <string name="both">Ambele</string>
@@ -3136,7 +3136,7 @@
     <string name="one">Unul</string>
     <string name="under_the_line">Sub rând</string>
     <string name="over_the_line">Deasupra rândului</string>
-    <string name="as_now">Ca acum</string>
+    <string name="as_now">Ca playerul</string>
     <string name="the_player_s_background_or_the">Fundalul playerului sau coperta în modul imersiv</string>
     <string name="plain_dark">Întunecat simplu</string>
     <string name="nothing_but_the_words">Doar cuvintele</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">Galeria are nevoie de un Prism mai nou</string>
     <string name="by_2">de %1$s</string>
     <string name="a_look">Un Look</string>
-    <string name="how_prism_comes_outfit_the_split">Cum vine Prism: Outfit, lumina descompusă, colțuri blânde</string>
+    <string name="how_prism_comes_outfit_the_split">Cum vine: fontul propriu Prism, culorile spectrului, colțuri blânde</string>
     <string name="paper">Hârtie</string>
     <string name="light_serif_type_ink_instead_of">Luminos, font serif, cerneală în loc de culoare, hârtie caldă</string>
     <string name="midnight">Miezul nopții</string>
@@ -3998,7 +3998,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">Glisările, atingerea dublă și apăsarea lungă merg și sub titlu, în spațiul din jurul butoanelor și barelor. Butoanele și barele își păstrează atingerile.</string>
     <string name="gestures_everywhere_keywords">gest glisare atingere dublă apăsare lungă partea de jos comenzi tot playerul</string>
     <string name="playing_song_in_the_page_s_color">Melodia redată în culoarea paginii</string>
-    <string name="its_bars_and_title_take_the_album_s_color">Barele și titlul iau culoarea albumului</string>
+    <string name="its_bars_and_title_take_the_album_s_color">Barele și titlul iau culoarea paginii</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">Pe paginile de album, playlist și artist, melodia redată își arată barele și titlul în culoarea imaginii paginii în loc de lumina ta. În rest rămân la fel.</string>
     <string name="playing_indicator_bars_now_playing_album_color">indicator redare bare egalizator album playlist artist pagină culoare copertă</string>
     <string name="slide_between_screens">Glisare între ecrane</string>
@@ -4028,7 +4028,7 @@
     <string name="hidden_s">Ascuns: %1$s</string>
     <string name="buttons_in_the_row">Butoanele din rând</string>
     <string name="add_a_button">Adaugă un buton</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">Meniul ⋯ al playerului: plăcile lui și ce afișează</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">Plăcile lui și ce afișează</string>
     <string name="and_the_sky_lit_up">Și cerul s-a aprins</string>
     <string name="play_pause_always_stays">Redarea și pauza rămân mereu</string>
     <string name="what_s_on_the_player_keywords">ascunde afișează părți afișează pe player sub titlu copertă titlu artist apreciez inimă meniu bara de progres derulare anterior următor omite butoane rând durata melodiei transmitere cast</string>
@@ -4040,10 +4040,10 @@
     <string name="when_the_queue_ends">Când se termină coada</string>
     <string name="when_the_queue_ends_info">Oprește: muzica se termină odată cu coada. Muzica ta: radioul propriu Prism, din ce asculți. Muzica ta și noutăți: mai ales muzica ta, cu câteva melodii noi. Prism Music: un radio din catalogul Prism Music. Offline e mereu muzica ta.</string>
     <string name="music_videos_label">Videoclipuri muzicale</string>
-    <string name="play_them">Videoclipuri</string>
+    <string name="play_them">Videoclipuri peste tot</string>
     <string name="songs_in_radios">Melodii în radiouri</string>
     <string name="songs_everywhere">Melodii peste tot</string>
-    <string name="music_videos_label_info">Videoclipuri: un videoclip muzical se redă ca videoclip. Melodii în radiouri: redarea automată și radiourile redau în schimb melodia videoclipului. Melodii peste tot: orice videoclip muzical pe care îl atingi se redă ca melodia lui, iar butonul Videoclip afișează în continuare videoclipul.</string>
+    <string name="music_videos_label_info">Videoclipuri peste tot: un videoclip muzical se redă ca videoclip. Melodii în radiouri: redarea automată și radiourile redau în schimb melodia videoclipului. Melodii peste tot: orice videoclip muzical pe care îl atingi se redă ca melodia lui, iar butonul Videoclip afișează în continuare videoclipul.</string>
     <string name="trim_silence">Taie liniștea de la început și de la sfârșit</string>
     <string name="podcasts_only">Doar podcasturi</string>
     <string name="songs_and_podcasts">Melodii și podcasturi</string>
@@ -4821,7 +4821,7 @@
     <string name="move_songs_you_have_played">Mută melodiile ascultate</string>
     <string name="move_songs_you_have_played_info">Melodiile pe care le-ai ascultat deja primesc și ele un mâner, ca să le poți trage între ele.</string>
     <string name="move_songs_you_have_played_keywords">coadă ascultate istoric trage mâner reordonare</string>
-    <string name="tidier_queue">Coadă mai ordonată</string>
+    <string name="tidier_queue">Coadă cu mai puține butoane</string>
     <string name="tidier_queue_info">Scoate × de pe fiecare melodie și butonul Coadă din rândul de jos cât timp coada e deschisă. Trage o melodie spre stânga sau folosește ⋯ ca s-o elimini. Trage titlul în jos sau apasă Înapoi ca să închizi coada.</string>
     <string name="tidier_queue_keywords">coadă mai puține butoane elimină închide curat simplu</string>
     <string name="reopen_on_the_last_page">Redeschide pe ultima pagină</string>
@@ -5150,8 +5150,8 @@
     <string name="gb_swipes_and_touch">Glisări și atingeri</string>
     <string name="gb_double_tap_seeks">Atingerea dublă derulează</string>
     <string name="gb_double_tap_seeks_needs">Setează mai întâi Atingere dublă la Derulare după latură</string>
-    <string name="gb_gestures_work">Gesturile funcționează</string>
-    <string name="gb_work_cover">Pe copertă</string>
+    <string name="gb_gestures_work">Unde funcționează gesturile</string>
+    <string name="gb_work_cover">Doar pe copertă</string>
     <string name="gb_work_anywhere">Oriunde</string>
     <string name="gb_work_not_lyrics">Oriunde, în afară de versuri</string>
     <string name="gb_work_cover_and_lyrics">Pe copertă și sub versuri</string>
@@ -5251,7 +5251,7 @@
     <string name="settings_player_right_hand_time">Timpul din dreapta</string>
     <string name="settings_player_right_hand_time_info">Timpul din dreapta barei de progres. Dacă îl atingi pe player, se schimbă și aici.</string>
     <string name="settings_player_cover_shape">Forma copertei</string>
-    <string name="settings_player_edge_to_edge">De la margine la margine</string>
+    <string name="settings_player_edge_to_edge">Ajunge la marginile ecranului</string>
     <string name="settings_player_cover_animation">Animația copertei</string>
     <string name="settings_player_opening">La deschidere</string>
     <string name="settings_player_opening_and_closing">La deschidere și închidere</string>
@@ -5262,7 +5262,7 @@
     <string name="settings_player_queue_dj">Butonul DJ</string>
     <string name="settings_player_queue_lengths">Durate</string>
     <string name="settings_player_queue_move_played">Mută cele redate</string>
-    <string name="settings_player_queue_tidier">Coadă mai ordonată</string>
+    <string name="settings_player_queue_tidier">Mai puține butoane</string>
     <string name="settings_player_scroll_for_controls">Derulează în sus pentru comenzi</string>
     <string name="settings_player_lock_options">Opțiuni pentru ecranul de blocare</string>
     <string name="settings_player_immersive_options">Opțiuni pentru modul imersiv</string>
@@ -5335,8 +5335,8 @@
     <string name="tl_reset_everything">Resetează tot</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">Look-uri întregi, zi și noapte</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord pornit · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord pornit · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · backup, actualizări</string>
     <string name="root_connect_short">Redă pe boxe și televizoare</string>
     <string name="root_handoff_on">Transfer pornit</string>
@@ -5381,7 +5381,7 @@
     <string name="recap_ready_title">Rezumatul tău pentru %1$s e gata</string>
     <string name="recap_ready_text">Luna ta în muzică: melodiile și artiștii tăi de top și cum se compară cu luna de dinainte.</string>
     <string name="recap_card_title">%1$s: luna ta</string>
-    <string name="replay_notices">Notificări</string>
+    <string name="replay_notices">Notificări Replay</string>
     <string name="tour_185_replay_title">Replay, mai în detaliu</string>
     <string name="tour_185_replay_body">Vezi când asculți, oră cu oră și zi cu zi.</string>
     <string name="tour_185_replay_point_1">Ceasul ascultării: săptămâna ta, oră cu oră. Atinge o oră pentru melodiile ei de top.</string>
@@ -5456,7 +5456,7 @@
     <string name="cal_no_music">Fără muzică</string>
     <string name="cal_days_with_music">Zile cu muzică: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">Atinge coperta mică pentru a reda sau a întrerupe</string>
+    <string name="gb_lyrics_cover_plays">Atinge coperta versurilor pentru pauză</string>
     <string name="gb_lyrics_cover_plays_info">Cu versurile deschise, o atingere pe coperta mică redă sau întrerupe, iar o apăsare lungă închide versurile. Dezactivat: o atingere închide versurile.</string>
     <string name="gb_lyrics_cover_plays_keywords">versuri copertă mică miniatură atingere redă întrerupe apăsare lungă închide lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5633,4 +5633,37 @@
     <string name="hl_show_in_lists">Afișează în liste</string>
     <string name="hl_show_on_artist_pages">Afișează pe paginile artiștilor</string>
     <string name="allow_access_to_lossless_files_value">Necesar pentru a găsi fișierele tale fără pierderi</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">Susține Prism</string>
+    <string name="support_prism_info">Sprijinul plătește telefoanele de test și uneltele cu care se face Prism. Toate funcțiile rămân gratuite, indiferent dacă îl susții sau nu. Deschide Ko-fi în browser.</string>
+    <string name="support_prism_keywords">donație bacșiș cafea mulțumesc ajutor dezvoltator susținere</string>
+    <string name="i_ve_supported_prism">Am susținut Prism</string>
+    <string name="i_ve_supported_prism_info">Oprește definitiv toate cererile de a susține Prism. Nu se verifică nimic: te luăm pe cuvânt.</string>
+    <string name="i_ve_supported_prism_keywords">donat susținător ascunde cereri nu mai cere</string>
+    <string name="supporters">Susținători</string>
+    <string name="supporters_keywords">mulțumiri credite nume donatori membri</string>
+    <string name="supporters_info">Oamenii care au susținut Prism și au ales să fie menționați. Doar nume: fără sume, fără date.</string>
+    <string name="supporters_members">Membri lunari</string>
+    <string name="supporters_thank_you">Mulțumim</string>
+    <string name="supporters_empty">Încă nu e niciun nume aici. Al tău ar putea fi primul.</string>
+    <string name="support_on_kofi">Susține pe Ko-fi</string>
+    <string name="don_t_show_again">Nu mai arăta</string>
+    <string name="support_hours_title">100 de ore de muzică cu Prism</string>
+    <string name="support_hours_body">E gratuit și făcut de o singură persoană: dacă ți se pare că merită o cafea, îl ajuți să continue.</string>
+    <string name="support_made_by_one_person">Făcut de o singură persoană.</string>
+    <string name="support_whats_new_line">Prism e gratuit și făcut de o singură persoană. Dacă îți place, îl poți susține.</string>
+    <string name="settings_player_layout_group">Aranjament și controale</string>
+    <string name="dd_use_showing_covers">Se afișează coperte animate</string>
+    <string name="icon_style">Stilul pictogramelor</string>
+    <string name="prism_s_own">Cel din Prism</string>
+    <string name="player_times_both">La ambele capete ale barei</string>
+    <string name="button_shape_fully_round">Complet rotund</string>
+    <string name="transport_filled_play">Buton de redare plin</string>
+    <string name="replay_notice_recap_short">Rezumat lunar</string>
+    <string name="settings_player_edit_menu">Editează meniul ⋯ al playerului</string>
+    <string name="mix_why_sing">Cântă e pornit, așa că fiecare melodie se redă întreagă.</string>
+    <string name="mix_why_together">Ascultați împreună e pornit, așa că melodiile urmează gazda.</string>
+    <string name="cn_spot_not_connected">Neconectat · playlisturi și apreceri</string>
+    <string name="cn_other_services">Alte servicii</string>
+    <string name="edge_to_edge_both">Coperta și videoclipul</string>
 </resources>

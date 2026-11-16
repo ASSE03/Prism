@@ -92,7 +92,7 @@
     <string name="refresh_the_list">Muat semula senarai</string>
     <string name="from_github">Daripada GitHub</string>
     <string name="add_your_look">Tambah Gaya anda</string>
-    <string name="by_pull_request_on_github">Melalui pull request di GitHub</string>
+    <string name="by_pull_request_on_github">Kongsi gaya anda di GitHub</string>
     <string name="save_your_look_share_it_as">Simpan Gaya anda, kongsinya sebagai teks, dan tambah kodnya ke themes/index.json dalam repositori Prism. Halaman itu menerangkan caranya.</string>
     <string name="use">Guna %1$s</string>
     <string name="more_for">Lagi untuk %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">Gunakannya</string>
     <string name="not_now">Bukan sekarang</string>
     <string name="day_and_night">Siang dan malam</string>
-    <string name="day_and_night_looks">Gaya siang dan malam</string>
+    <string name="day_and_night_looks">Tukar gaya mengikut waktu</string>
     <string name="one_look_by_day_another_by">Satu Gaya pada siang hari, satu lagi pada malam hari</string>
     <string name="like_theme_system_for_whole_looks">Seperti Tema: Sistem, untuk keseluruhan Gaya. Waktu matahari terbit dan terbenam dikira daripada zon waktu anda, tanpa lokasi anda. Gaya yang anda pilih di antaranya kekal sehingga pertukaran seterusnya.</string>
     <string name="by_day">Siang hari</string>
@@ -148,7 +148,7 @@
     <string name="search_history">Cari sejarah</string>
     <string name="your_last_changes_to_the_look">%1$s perubahan terakhir anda pada gaya dipaparkan di sini, untuk diundur semula.</string>
     <string name="clear_history">Kosongkan sejarah</string>
-    <string name="your_look_stays_as_it_is">Gaya anda kekal seperti sekarang</string>
+    <string name="your_look_stays_as_it_is">Tetapan anda kekal seperti sekarang</string>
     <string name="clear_the_look_s_history">Kosongkan sejarah gaya?</string>
     <string name="you_won_t_be_able_to">Anda tidak akan dapat kembali kepada perubahan ini. Gaya anda kekal seperti sekarang.</string>
     <string name="clear">Kosongkan</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">Kaca biasa, satu garis halus cahaya spektrum</string>
     <string name="ledger">Lejar</string>
     <string name="three_numbers_side_by_side">Tiga nombor bersebelahan</string>
-    <string name="wash">Sapuan</string>
+    <string name="wash">Warna lembut</string>
     <string name="a_faint_wash_of_color_and">Sapuan warna yang samar dan bar bulanan</string>
     <string name="spectrum_frame">Bingkai spektrum</string>
     <string name="glass_ringed_in_split_light_the">Kaca yang dikelilingi cahaya spektrum, masa dalam warna</string>
@@ -1472,17 +1472,17 @@
     <string name="widget_background_transparent_see_through_color">widget latar belakang lutsinar telus warna butang skrin utama</string>
     <string name="the_tab_you_re_on">Tab semasa anda</string>
     <string name="tab_icon_color_tint_accent_light">tab ikon warna rona aksen cahaya tab semasa</string>
-    <string name="play_on_album_and_playlist_pages">Main pada halaman album dan senarai main</string>
+    <string name="play_on_album_and_playlist_pages">Butang main pada album dan senarai main</string>
     <string name="play_button_outlined_filled">butang main bergaris luar diisi</string>
     <string name="switches_sliders_and_buttons">Suis, peluncur dan butang</string>
     <string name="classic_controls_1_6_material_switch">klasik kawalan 1.6 material suis peluncur rupa lama</string>
     <string name="screen_backgrounds">Latar belakang skrin</string>
     <string name="wallpaper_photo_pattern_design">kertas dinding foto corak reka bentuk</string>
     <string name="glass">Kaca</string>
-    <string name="liquid_glass">Kaca Cecair</string>
+    <string name="liquid_glass">Kaca cecair</string>
     <string name="blur_transparent">kabur lutsinar blur</string>
     <string name="glass_style">Gaya kaca</string>
-    <string name="frosted_glass">Kaca Kabur</string>
+    <string name="frosted_glass">Kaca kabur</string>
     <string name="frosted_pages">Halaman kabur</string>
     <string name="blur_artist_album_playlist">kabur artis album senarai main</string>
     <string name="reduce_motion">Kurangkan gerakan</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">putaran orientasi landskap tegak</string>
     <string name="picture_in_picture">Gambar dalam gambar</string>
     <string name="pip_video_float_window_leave">pip video terapung tetingkap keluar</string>
-    <string name="load_ahead">Muat lebih awal</string>
+    <string name="load_ahead">Sejauh mana muat lebih awal</string>
     <string name="preload_buffer">pramuat penimbal</string>
     <string name="load_ahead_on_mobile_data">Muat lebih awal pada data mudah alih</string>
     <string name="preload_cellular">pramuat selular</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">Simpan salinan</string>
     <string name="just_sign_out">Log keluar sahaja</string>
     <string name="prism_account_on_this_phone">Prism Account · pada telefon ini</string>
-    <string name="your_name_and_picture_kept_on">Nama dan gambar anda, disimpan pada telefon ini. Tiada apa-apa yang anda miliki berubah</string>
+    <string name="your_name_and_picture_kept_on">Nama dan gambar anda, disimpan pada telefon ini</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">telah log masuk</string>
     <string name="signed_in_2">Telah log masuk</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music, Musixmatch dan Spotify · perkataan demi perkataan</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · perkataan demi perkataan, paling banyak lagu Cina</string>
+    <string name="qq_music_word_by_word_the">Perkataan demi perkataan · paling banyak lagu Cina</string>
     <string name="open_lyrics_database_line_by_line">Pangkalan data lirik terbuka · baris demi baris</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · perkataan demi perkataan</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · perkataan demi perkataan, banyak lagu Asia</string>
+    <string name="kugou_word_by_word_many_asian">Perkataan demi perkataan · banyak lagu Asia</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Lirik yang dihantar pendengar · sedikit lagu setakat ini</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">Lirik pada halaman Prism Music lagu itu, daripada LyricFind · baris atau teks biasa</string>
+    <string name="lyricfind_lines_or_plain">Lirik LyricFind, melalui YouTube Music · baris atau teks biasa</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Teks biasa · turut mengisi perkataan yang dibintangkan</string>
     <string name="both">Kedua-duanya</string>
@@ -3136,7 +3136,7 @@
     <string name="one">Satu</string>
     <string name="under_the_line">Di bawah baris</string>
     <string name="over_the_line">Di atas baris</string>
-    <string name="as_now">Seperti sekarang</string>
+    <string name="as_now">Seperti pemain</string>
     <string name="the_player_s_background_or_the">Latar belakang pemain, atau kulit album dalam mod imersif</string>
     <string name="plain_dark">Gelap biasa</string>
     <string name="nothing_but_the_words">Hanya perkataan</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">Galeri memerlukan Prism yang lebih baharu</string>
     <string name="by_2">oleh %1$s</string>
     <string name="a_look">Satu Gaya</string>
-    <string name="how_prism_comes_outfit_the_split">Seperti asal Prism: Outfit, cahaya spektrum, bucu lembut</string>
+    <string name="how_prism_comes_outfit_the_split">Seperti asal: fon Prism sendiri, warna spektrum, bucu lembut</string>
     <string name="paper">Kertas</string>
     <string name="light_serif_type_ink_instead_of">Cerah, tulisan serif, dakwat dan bukan warna, kertas hangat</string>
     <string name="midnight">Tengah Malam</string>
@@ -3898,7 +3898,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">Leretan, ketik dua kali dan tekan lama anda juga berfungsi di bawah tajuk, di ruang sekeliling butang dan bar. Butang dan bar mengekalkan ketikan sendiri.</string>
     <string name="gestures_everywhere_keywords">gerak isyarat leret ketik dua kali tekan lama bahagian bawah kawalan seluruh pemain</string>
     <string name="playing_song_in_the_page_s_color">Lagu yang dimainkan dalam warna halaman</string>
-    <string name="its_bars_and_title_take_the_album_s_color">Bar dan tajuknya mengikut warna album</string>
+    <string name="its_bars_and_title_take_the_album_s_color">Bar dan tajuknya mengikut warna halaman</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">Di halaman album, senarai main dan artis, lagu yang dimainkan menunjukkan bar dan tajuknya dalam warna gambar halaman, bukan cahaya anda. Di tempat lain kekal seperti biasa.</string>
     <string name="playing_indicator_bars_now_playing_album_color">penunjuk dimainkan bar penyama album senarai main artis halaman warna kulit</string>
     <string name="slide_between_screens">Gelongsor antara skrin</string>
@@ -3928,7 +3928,7 @@
     <string name="hidden_s">Tersembunyi: %1$s</string>
     <string name="buttons_in_the_row">Butang dalam baris</string>
     <string name="add_a_button">Tambah butang</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">Menu ⋯ pemain: jubinnya dan apa yang dipaparkan</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">Jubinnya dan apa yang dipaparkan</string>
     <string name="and_the_sky_lit_up">Dan langit pun bercahaya</string>
     <string name="play_pause_always_stays">Main dan jeda sentiasa kekal</string>
     <string name="what_s_on_the_player_keywords">sembunyi tunjuk bahagian pada pemain di bawah tajuk kulit tajuk artis suka hati menu bar kemajuan cari sebelumnya seterusnya langkau butang baris panjang lagu tanda cast</string>
@@ -3940,10 +3940,10 @@
     <string name="when_the_queue_ends">Apabila baris gilir tamat</string>
     <string name="when_the_queue_ends_info">Henti: muzik tamat bersama baris gilir. Muzik anda: radio Prism sendiri daripada apa yang anda mainkan. Milik anda dan baharu: kebanyakannya muzik anda, dengan beberapa lagu baharu. Prism Music: radio daripada katalog Prism Music. Semasa luar talian, ia sentiasa muzik anda.</string>
     <string name="music_videos_label">Video muzik</string>
-    <string name="play_them">Video</string>
+    <string name="play_them">Video di mana-mana</string>
     <string name="songs_in_radios">Lagu dalam radio</string>
     <string name="songs_everywhere">Lagu di semua tempat</string>
-    <string name="music_videos_label_info">Video: video muzik dimainkan sebagai video. Lagu dalam radio: automain dan radio memainkan lagu video itu. Lagu di semua tempat: mana-mana video muzik yang anda ketik dimainkan sebagai lagunya, dan butang Video masih memaparkan video.</string>
+    <string name="music_videos_label_info">Video di mana-mana: video muzik dimainkan sebagai video. Lagu dalam radio: automain dan radio memainkan lagu video itu. Lagu di semua tempat: mana-mana video muzik yang anda ketik dimainkan sebagai lagunya, dan butang Video masih memaparkan video.</string>
     <string name="trim_silence">Potong senyap di awal dan akhir</string>
     <string name="podcasts_only">Podcast sahaja</string>
     <string name="songs_and_podcasts">Lagu dan podcast</string>
@@ -4693,7 +4693,7 @@
     <string name="move_songs_you_have_played">Alihkan lagu yang telah dimainkan</string>
     <string name="move_songs_you_have_played_info">Lagu yang telah anda mainkan turut mendapat pemegang, jadi anda boleh menyeretnya sesama mereka.</string>
     <string name="move_songs_you_have_played_keywords">baris gilir dimainkan sejarah seret pemegang susun semula</string>
-    <string name="tidier_queue">Baris gilir lebih kemas</string>
+    <string name="tidier_queue">Baris gilir dengan lebih sedikit butang</string>
     <string name="tidier_queue_info">Mengalih keluar × pada setiap lagu dan butang Baris gilir pada baris bawah semasa baris gilir dibuka. Leret lagu ke kiri atau guna ⋯ untuk mengalih keluarnya. Tarik tajuk ke bawah atau tekan Kembali untuk keluar dari baris gilir.</string>
     <string name="tidier_queue_keywords">baris gilir kurang butang alih keluar tutup bersih ringkas</string>
     <string name="reopen_on_the_last_page">Buka semula di halaman terakhir</string>
@@ -5006,8 +5006,8 @@
     <string name="gb_swipes_and_touch">Leretan dan sentuhan</string>
     <string name="gb_double_tap_seeks">Ketik dua kali untuk mencari</string>
     <string name="gb_double_tap_seeks_needs">Tetapkan Ketik dua kali kepada Cari mengikut sisi dahulu</string>
-    <string name="gb_gestures_work">Gerak isyarat berfungsi</string>
-    <string name="gb_work_cover">Pada kulit</string>
+    <string name="gb_gestures_work">Tempat gerak isyarat berfungsi</string>
+    <string name="gb_work_cover">Pada kulit sahaja</string>
     <string name="gb_work_anywhere">Di mana-mana</string>
     <string name="gb_work_not_lyrics">Di mana-mana kecuali lirik</string>
     <string name="gb_work_cover_and_lyrics">Pada kulit dan di bawah lirik</string>
@@ -5107,7 +5107,7 @@
     <string name="settings_player_right_hand_time">Masa di sebelah kanan</string>
     <string name="settings_player_right_hand_time_info">Masa di hujung kanan bar kemajuan. Mengetiknya pada pemain juga menukar ini.</string>
     <string name="settings_player_cover_shape">Bentuk kulit</string>
-    <string name="settings_player_edge_to_edge">Tepi ke tepi</string>
+    <string name="settings_player_edge_to_edge">Sampai ke tepi skrin</string>
     <string name="settings_player_cover_animation">Animasi kulit</string>
     <string name="settings_player_opening">Semasa dibuka</string>
     <string name="settings_player_opening_and_closing">Semasa dibuka dan ditutup</string>
@@ -5118,7 +5118,7 @@
     <string name="settings_player_queue_dj">Butang DJ</string>
     <string name="settings_player_queue_lengths">Panjang lagu</string>
     <string name="settings_player_queue_move_played">Alihkan lagu yang dimainkan</string>
-    <string name="settings_player_queue_tidier">Baris gilir lebih kemas</string>
+    <string name="settings_player_queue_tidier">Lebih sedikit butang</string>
     <string name="settings_player_scroll_for_controls">Tatal ke atas untuk kawalan</string>
     <string name="settings_player_lock_options">Pilihan skrin kunci</string>
     <string name="settings_player_immersive_options">Pilihan imersif</string>
@@ -5189,8 +5189,8 @@
     <string name="tl_reset_everything">Tetapkan semula semuanya</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">Gaya penuh, siang dan malam</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord hidup · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord hidup · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · sandaran, kemas kini</string>
     <string name="root_connect_short">Main pada pembesar suara dan TV</string>
     <string name="root_handoff_on">Serahan hidup</string>
@@ -5235,7 +5235,7 @@
     <string name="recap_ready_title">Imbasan %1$s anda sudah sedia</string>
     <string name="recap_ready_text">Sebulan muzik anda: lagu dan artis teratas anda, dan perbandingannya dengan bulan sebelumnya.</string>
     <string name="recap_card_title">%1$s anda</string>
-    <string name="replay_notices">Pemberitahuan</string>
+    <string name="replay_notices">Pemberitahuan Replay</string>
     <string name="tour_185_replay_title">Replay, lebih mendalam</string>
     <string name="tour_185_replay_body">Lihat bila anda mendengar, jam demi jam dan hari demi hari.</string>
     <string name="tour_185_replay_point_1">Jam pendengaran: minggu anda, jam demi jam. Ketik satu jam untuk lagu teratasnya.</string>
@@ -5306,7 +5306,7 @@
     <string name="cal_no_music">Tiada muzik</string>
     <string name="cal_days_with_music">Hari bermuzik: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">Ketik kulit album kecil untuk main atau jeda</string>
+    <string name="gb_lyrics_cover_plays">Ketik kulit di sebelah lirik untuk jeda</string>
     <string name="gb_lyrics_cover_plays_info">Apabila lirik dibuka, mengetik kulit album kecil akan main atau jeda, dan tekan lama menutup lirik. Mati: mengetik menutup lirik.</string>
     <string name="gb_lyrics_cover_plays_keywords">lirik kulit album kecil lakaran kecil gambar sampul ketik main jeda tekan lama tutup lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5483,4 +5483,37 @@
     <string name="hl_show_in_lists">Tunjukkan dalam senarai</string>
     <string name="hl_show_on_artist_pages">Tunjukkan pada halaman artis</string>
     <string name="allow_access_to_lossless_files_value">Diperlukan untuk mencari fail lossless anda</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">Sokong Prism</string>
+    <string name="support_prism_info">Sokongan membiayai telefon ujian dan alatan yang digunakan untuk membuat Prism. Semua ciri kekal percuma, sama ada anda menyokong atau tidak. Membuka Ko-fi dalam pelayar anda.</string>
+    <string name="support_prism_keywords">derma sumbangan kopi terima kasih bantu pembangun</string>
+    <string name="i_ve_supported_prism">Saya telah menyokong Prism</string>
+    <string name="i_ve_supported_prism_info">Menutup semua permintaan untuk menyokong Prism, selama-lamanya. Tiada apa-apa yang disemak: kami percaya cakap anda.</string>
+    <string name="i_ve_supported_prism_keywords">menderma penyokong sembunyi permintaan berhenti tanya</string>
+    <string name="supporters">Penyokong</string>
+    <string name="supporters_keywords">terima kasih kredit nama penderma ahli</string>
+    <string name="supporters_info">Orang yang menyokong Prism dan memilih untuk disebut namanya. Nama sahaja: tiada jumlah, tiada tarikh.</string>
+    <string name="supporters_members">Ahli bulanan</string>
+    <string name="supporters_thank_you">Terima kasih</string>
+    <string name="supporters_empty">Belum ada nama di sini. Nama anda mungkin yang pertama.</string>
+    <string name="support_on_kofi">Sokong di Ko-fi</string>
+    <string name="don_t_show_again">Jangan tunjuk lagi</string>
+    <string name="support_hours_title">100 jam muzik bersama Prism</string>
+    <string name="support_hours_body">Ia percuma dan dibuat oleh seorang sahaja: jika ia berbaloi dengan secawan kopi bagi anda, itu membantu ia terus berjalan.</string>
+    <string name="support_made_by_one_person">Dibuat oleh seorang sahaja.</string>
+    <string name="support_whats_new_line">Prism percuma dan dibuat oleh seorang sahaja. Jika anda menyukainya, anda boleh menyokongnya.</string>
+    <string name="settings_player_layout_group">Reka letak dan kawalan</string>
+    <string name="dd_use_showing_covers">Memaparkan kulit beranimasi</string>
+    <string name="icon_style">Gaya ikon</string>
+    <string name="prism_s_own">Asal Prism</string>
+    <string name="player_times_both">Kedua-dua hujung bar</string>
+    <string name="button_shape_fully_round">Bulat penuh</string>
+    <string name="transport_filled_play">Butang main berisi</string>
+    <string name="replay_notice_recap_short">Rumusan bulanan</string>
+    <string name="settings_player_edit_menu">Edit menu ⋯ pemain</string>
+    <string name="mix_why_sing">Nyanyi dihidupkan, jadi setiap lagu dimainkan penuh.</string>
+    <string name="mix_why_together">Dengar Bersama dihidupkan, jadi lagu mengikut hos.</string>
+    <string name="cn_spot_not_connected">Tidak disambungkan · senarai main dan suka</string>
+    <string name="cn_other_services">Perkhidmatan lain</string>
+    <string name="edge_to_edge_both">Kulit dan video</string>
 </resources>

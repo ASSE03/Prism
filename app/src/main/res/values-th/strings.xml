@@ -92,7 +92,7 @@
     <string name="refresh_the_list">รีเฟรชรายการ</string>
     <string name="from_github">จาก GitHub</string>
     <string name="add_your_look">เพิ่มลุคของคุณ</string>
-    <string name="by_pull_request_on_github">ผ่าน Pull Request บน GitHub</string>
+    <string name="by_pull_request_on_github">แชร์ลุคของคุณบน GitHub</string>
     <string name="save_your_look_share_it_as">บันทึกลุคของคุณ แชร์เป็นข้อความ แล้วเพิ่มรหัสลงใน themes/index.json ในที่เก็บของ Prism หน้านั้นมีวิธีบอกไว้</string>
     <string name="use">ใช้ %1$s</string>
     <string name="more_for">เพิ่มเติมสำหรับ %1$s</string>
@@ -129,7 +129,7 @@
     <string name="use_it">ใช้เลย</string>
     <string name="not_now">ไว้ทีหลัง</string>
     <string name="day_and_night">กลางวันและกลางคืน</string>
-    <string name="day_and_night_looks">ลุคกลางวันและกลางคืน</string>
+    <string name="day_and_night_looks">เปลี่ยนลุคตามช่วงเวลาของวัน</string>
     <string name="one_look_by_day_another_by">ลุคหนึ่งตอนกลางวัน อีกลุคตอนกลางคืน</string>
     <string name="like_theme_system_for_whole_looks">เหมือนธีม: ตามระบบ แต่ใช้กับทั้งลุค เวลาพระอาทิตย์ขึ้นและตกคำนวณจากเขตเวลาของคุณ โดยไม่ใช้ตำแหน่งของคุณ ลุคที่คุณเลือกระหว่างนั้นจะคงอยู่จนถึงการสลับครั้งถัดไป</string>
     <string name="by_day">กลางวัน</string>
@@ -148,7 +148,7 @@
     <string name="search_history">ค้นหาประวัติ</string>
     <string name="your_last_changes_to_the_look">การเปลี่ยนแปลงลุค %1$s ครั้งล่าสุดของคุณจะแสดงที่นี่ เพื่อย้อนกลับไปดูได้</string>
     <string name="clear_history">ล้างประวัติ</string>
-    <string name="your_look_stays_as_it_is">ลุคของคุณจะคงไว้อย่างที่เป็นตอนนี้</string>
+    <string name="your_look_stays_as_it_is">การตั้งค่าของคุณจะคงไว้อย่างเดิม</string>
     <string name="clear_the_look_s_history">ล้างประวัติของลุคไหม</string>
     <string name="you_won_t_be_able_to">คุณจะย้อนกลับไปที่การเปลี่ยนแปลงเหล่านี้ไม่ได้ ลุคของคุณจะคงไว้อย่างที่เป็นตอนนี้</string>
     <string name="clear">ล้าง</string>
@@ -1203,7 +1203,7 @@
     <string name="plain_glass_one_hairline_of_split">กระจกเรียบๆ กับแสงสเปกตรัมเส้นบางหนึ่งเส้น</string>
     <string name="ledger">บัญชี</string>
     <string name="three_numbers_side_by_side">ตัวเลขสามตัวเรียงกัน</string>
-    <string name="wash">เคลือบสี</string>
+    <string name="wash">สีนุ่ม</string>
     <string name="a_faint_wash_of_color_and">สีเคลือบจางๆ กับแถบรายเดือน</string>
     <string name="spectrum_frame">กรอบสเปกตรัม</string>
     <string name="glass_ringed_in_split_light_the">กระจกที่มีแสงสเปกตรัมล้อมรอบ และเวลาเป็นสี</string>
@@ -1653,7 +1653,7 @@
     <string name="rotation_orientation_landscape_upright">การหมุน การวางแนว แนวนอน แนวตั้ง</string>
     <string name="picture_in_picture">การแสดงภาพซ้อนภาพ</string>
     <string name="pip_video_float_window_leave">pip ภาพซ้อนภาพ วิดีโอ ลอย หน้าต่าง ออก</string>
-    <string name="load_ahead">โหลดล่วงหน้า</string>
+    <string name="load_ahead">โหลดล่วงหน้าไกลแค่ไหน</string>
     <string name="preload_buffer">โหลดล่วงหน้า บัฟเฟอร์ preload buffer</string>
     <string name="load_ahead_on_mobile_data">โหลดล่วงหน้าเมื่อใช้อินเทอร์เน็ตมือถือ</string>
     <string name="preload_cellular">โหลดล่วงหน้า เน็ตมือถือ</string>
@@ -1950,7 +1950,7 @@
     <string name="keep_a_copy">เก็บสำเนา</string>
     <string name="just_sign_out">ออกจากระบบอย่างเดียว</string>
     <string name="prism_account_on_this_phone">Prism Account · ในโทรศัพท์เครื่องนี้</string>
-    <string name="your_name_and_picture_kept_on">ชื่อและรูปของคุณ เก็บไว้ในโทรศัพท์เครื่องนี้ ข้อมูลที่คุณมีจะไม่เปลี่ยนแปลง</string>
+    <string name="your_name_and_picture_kept_on">ชื่อและรูปของคุณ เก็บไว้ในโทรศัพท์เครื่องนี้</string>
     <string name="youtube_music">YouTube Music · %1$s</string>
     <string name="signed_in">ลงชื่อเข้าใช้แล้ว</string>
     <string name="signed_in_2">ลงชื่อเข้าใช้แล้ว</string>
@@ -2991,16 +2991,16 @@
     <string name="apple_music_musixmatch_and_spotify_s">ของ Apple Music, Musixmatch และ Spotify · ทีละคำ</string>
     <string name="bini">Bini</string>
     <string name="qq_portato">QQ Music</string>
-    <string name="qq_music_word_by_word_the">QQ Music · ทีละคำ มีเพลงจีนมากที่สุด</string>
+    <string name="qq_music_word_by_word_the">ทีละคำ · มีเพลงจีนมากที่สุด</string>
     <string name="open_lyrics_database_line_by_line">ฐานข้อมูลเนื้อเพลงแบบเปิด · ทีละบรรทัด</string>
     <string name="netease">NetEase</string>
     <string name="netease_cloud_music_word_by_word">NetEase Cloud Music · ทีละคำ</string>
     <string name="kugou">KuGou</string>
-    <string name="kugou_word_by_word_many_asian">KuGou · ทีละคำ มีเพลงเอเชียมากมาย</string>
+    <string name="kugou_word_by_word_many_asian">ทีละคำ · มีเพลงเอเชียมากมาย</string>
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">เนื้อเพลงที่ผู้ฟังส่งมา · ยังมีไม่กี่เพลง</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">เนื้อเพลงในหน้าเพลงของ Prism Music จาก LyricFind · ทีละบรรทัดหรือข้อความธรรมดา</string>
+    <string name="lyricfind_lines_or_plain">เนื้อเพลงจาก LyricFind ผ่าน YouTube Music · ทีละบรรทัดหรือข้อความธรรมดา</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">ข้อความธรรมดา · เติมคำที่ถูกแทนด้วยดอกจันด้วย</string>
     <string name="both">ทั้งสองแบบ</string>
@@ -3136,7 +3136,7 @@
     <string name="one">หนึ่ง</string>
     <string name="under_the_line">ใต้บรรทัด</string>
     <string name="over_the_line">เหนือบรรทัด</string>
-    <string name="as_now">ตามตอนนี้</string>
+    <string name="as_now">เหมือนเพลเยอร์</string>
     <string name="the_player_s_background_or_the">พื้นหลังของเพลเยอร์ หรือปกในโหมดอิมเมอร์ซีฟ</string>
     <string name="plain_dark">สีเข้มเรียบ</string>
     <string name="nothing_but_the_words">มีแค่ตัวหนังสือ</string>
@@ -3170,7 +3170,7 @@
     <string name="the_gallery_needs_a_newer_prism">แกลเลอรีต้องใช้ Prism เวอร์ชันใหม่กว่านี้</string>
     <string name="by_2">โดย %1$s</string>
     <string name="a_look">ลุค</string>
-    <string name="how_prism_comes_outfit_the_split">แบบที่ Prism มาให้: Outfit แสงสเปกตรัม มุมมน</string>
+    <string name="how_prism_comes_outfit_the_split">แบบที่มาให้: ฟอนต์ของ Prism เอง สีสเปกตรัม มุมมน</string>
     <string name="paper">กระดาษ</string>
     <string name="light_serif_type_ink_instead_of">สว่าง ตัวอักษรมีเชิง หมึกแทนสี กระดาษโทนอุ่น</string>
     <string name="midnight">เที่ยงคืน</string>
@@ -3898,7 +3898,7 @@
     <string name="your_swipes_double_tap_and_long_press_work_below_the_title_too">การปัด การแตะสองครั้ง และการกดค้าง ใช้ได้ใต้ชื่อเพลงด้วย ในพื้นที่รอบปุ่มและแถบ ปุ่มและแถบยังรับการแตะของตัวเอง</string>
     <string name="gestures_everywhere_keywords">ท่าทาง ปัด แตะสองครั้ง กดค้าง ครึ่งล่าง ปุ่มควบคุม ทั้งเพลเยอร์</string>
     <string name="playing_song_in_the_page_s_color">เพลงที่กำลังเล่นเป็นสีของหน้า</string>
-    <string name="its_bars_and_title_take_the_album_s_color">แถบและชื่อเพลงใช้สีของอัลบั้ม</string>
+    <string name="its_bars_and_title_take_the_album_s_color">แถบและชื่อเพลงใช้สีของหน้า</string>
     <string name="on_album_playlist_and_artist_pages_the_playing_song">ในหน้าอัลบั้ม เพลย์ลิสต์ และศิลปิน เพลงที่กำลังเล่นจะแสดงแถบและชื่อเป็นสีของรูปในหน้าแทนแสงของคุณ ที่อื่นยังเหมือนเดิม</string>
     <string name="playing_indicator_bars_now_playing_album_color">ตัวบ่งชี้ กำลังเล่น แถบ อีควอไลเซอร์ อัลบั้ม เพลย์ลิสต์ ศิลปิน หน้า สี ปก</string>
     <string name="slide_between_screens">เลื่อนระหว่างหน้าจอ</string>
@@ -3928,7 +3928,7 @@
     <string name="hidden_s">ซ่อนอยู่: %1$s</string>
     <string name="buttons_in_the_row">ปุ่มในแถว</string>
     <string name="add_a_button">เพิ่มปุ่ม</string>
-    <string name="the_player_s_menu_its_tiles_and_actions">เมนู ⋯ ของเพลเยอร์: ไทล์และสิ่งที่แสดง</string>
+    <string name="the_player_s_menu_its_tiles_and_actions">ไทล์และสิ่งที่แสดง</string>
     <string name="and_the_sky_lit_up">แล้วท้องฟ้าก็สว่างไสว</string>
     <string name="play_pause_always_stays">เล่นและหยุดชั่วคราวจะอยู่เสมอ</string>
     <string name="what_s_on_the_player_keywords">ซ่อน แสดง ส่วน บนเพลเยอร์ ใต้ชื่อเพลง ปก ชื่อเพลง ศิลปิน ชอบ หัวใจ เมนู แถบความคืบหน้า เลื่อน ก่อนหน้า ถัดไป ข้าม ปุ่ม แถว ความยาวเพลง แคสต์ hide show player</string>
@@ -3940,10 +3940,10 @@
     <string name="when_the_queue_ends">เมื่อคิวจบ</string>
     <string name="when_the_queue_ends_info">หยุด: เพลงจบพร้อมคิว เพลงของคุณ: วิทยุของ Prism เองจากสิ่งที่คุณฟัง ของคุณและเพลงใหม่: เพลงของคุณเป็นส่วนใหญ่ พร้อมเพลงใหม่บ้าง Prism Music: วิทยุจากแคตตาล็อกของ Prism Music เมื่อออฟไลน์จะเป็นเพลงของคุณเสมอ</string>
     <string name="music_videos_label">มิวสิกวิดีโอ</string>
-    <string name="play_them">วิดีโอ</string>
+    <string name="play_them">วิดีโอทุกที่</string>
     <string name="songs_in_radios">เพลงในวิทยุ</string>
     <string name="songs_everywhere">เพลงทุกที่</string>
-    <string name="music_videos_label_info">วิดีโอ: มิวสิกวิดีโอเล่นเป็นวิดีโอ เพลงในวิทยุ: เล่นอัตโนมัติและวิทยุจะเล่นเพลงของวิดีโอนั้นแทน เพลงทุกที่: มิวสิกวิดีโอที่คุณแตะจะเล่นเป็นเพลง และปุ่มวิดีโอยังแสดงวิดีโอได้</string>
+    <string name="music_videos_label_info">วิดีโอทุกที่: มิวสิกวิดีโอเล่นเป็นวิดีโอ เพลงในวิทยุ: เล่นอัตโนมัติและวิทยุจะเล่นเพลงของวิดีโอนั้นแทน เพลงทุกที่: มิวสิกวิดีโอที่คุณแตะจะเล่นเป็นเพลง และปุ่มวิดีโอยังแสดงวิดีโอได้</string>
     <string name="trim_silence">ตัดช่วงเงียบตอนต้นและตอนท้าย</string>
     <string name="podcasts_only">เฉพาะพอดแคสต์</string>
     <string name="songs_and_podcasts">เพลงและพอดแคสต์</string>
@@ -4693,7 +4693,7 @@
     <string name="move_songs_you_have_played">ย้ายเพลงที่เล่นแล้ว</string>
     <string name="move_songs_you_have_played_info">เพลงที่คุณเล่นไปแล้วจะมีที่จับด้วย เพื่อให้ลากสลับกันเองได้</string>
     <string name="move_songs_you_have_played_keywords">คิว เล่นแล้ว ประวัติ ลาก ที่จับ เรียงลำดับใหม่</string>
-    <string name="tidier_queue">คิวที่เรียบร้อยขึ้น</string>
+    <string name="tidier_queue">คิวที่มีปุ่มน้อยลง</string>
     <string name="tidier_queue_info">เอา × ออกจากทุกเพลงและเอาปุ่มคิวออกจากแถวล่างขณะที่คิวเปิดอยู่ ปัดเพลงไปทางซ้ายหรือใช้ ⋯ ของเพลงเพื่อลบ ดึงชื่อลงหรือกดย้อนกลับเพื่อออกจากคิว</string>
     <string name="tidier_queue_keywords">คิว ปุ่มน้อยลง ลบ ปิด สะอาด เรียบง่าย</string>
     <string name="reopen_on_the_last_page">เปิดใหม่ที่หน้าล่าสุด</string>
@@ -5006,8 +5006,8 @@
     <string name="gb_swipes_and_touch">การปัดและการแตะ</string>
     <string name="gb_double_tap_seeks">แตะสองครั้งเพื่อกรอ</string>
     <string name="gb_double_tap_seeks_needs">ตั้งแตะสองครั้งเป็นกรอตามด้านที่แตะก่อน</string>
-    <string name="gb_gestures_work">ท่าทางใช้ได้ที่</string>
-    <string name="gb_work_cover">บนปก</string>
+    <string name="gb_gestures_work">ใช้ท่าทางได้ที่ไหน</string>
+    <string name="gb_work_cover">เฉพาะบนปก</string>
     <string name="gb_work_anywhere">ทุกที่</string>
     <string name="gb_work_not_lyrics">ทุกที่ยกเว้นเนื้อเพลง</string>
     <string name="gb_work_cover_and_lyrics">บนปกและใต้เนื้อเพลง</string>
@@ -5107,7 +5107,7 @@
     <string name="settings_player_right_hand_time">เวลาด้านขวา</string>
     <string name="settings_player_right_hand_time_info">เวลาที่ด้านขวาของแถบความคืบหน้า การแตะเวลานี้บนเพลเยอร์จะเปลี่ยนค่านี้ด้วย</string>
     <string name="settings_player_cover_shape">รูปทรงปก</string>
-    <string name="settings_player_edge_to_edge">ขอบถึงขอบ</string>
+    <string name="settings_player_edge_to_edge">ไปถึงขอบหน้าจอ</string>
     <string name="settings_player_cover_animation">แอนิเมชันปก</string>
     <string name="settings_player_opening">ตอนเปิด</string>
     <string name="settings_player_opening_and_closing">ตอนเปิดและปิด</string>
@@ -5118,7 +5118,7 @@
     <string name="settings_player_queue_dj">ปุ่ม DJ</string>
     <string name="settings_player_queue_lengths">ความยาวเพลง</string>
     <string name="settings_player_queue_move_played">ย้ายเพลงที่เล่นแล้ว</string>
-    <string name="settings_player_queue_tidier">คิวเป็นระเบียบขึ้น</string>
+    <string name="settings_player_queue_tidier">ปุ่มน้อยลง</string>
     <string name="settings_player_scroll_for_controls">เลื่อนขึ้นเพื่อดูปุ่มควบคุม</string>
     <string name="settings_player_lock_options">ตัวเลือกหน้าจอล็อก</string>
     <string name="settings_player_immersive_options">ตัวเลือกโหมดอิมเมอร์ซีฟ</string>
@@ -5189,8 +5189,8 @@
     <string name="tl_reset_everything">รีเซ็ตทั้งหมด</string>
     <!-- 1.8.4 root lines -->
     <string name="root_looks_short">ลุคทั้งชุด ทั้งกลางวันและกลางคืน</string>
-    <string name="root_accounts_short">Last.fm, Spotify, Discord</string>
-    <string name="root_accounts_discord_on">Discord เปิด · Last.fm, Spotify</string>
+    <string name="root_accounts_short">Last.fm · Spotify · Discord</string>
+    <string name="root_accounts_discord_on">Discord เปิด · Last.fm · Spotify</string>
     <string name="root_backup_short">Prism %1$s · สำรองข้อมูล อัปเดต</string>
     <string name="root_connect_short">เล่นบนลำโพงและทีวี</string>
     <string name="root_handoff_on">ส่งต่อเปิดอยู่</string>
@@ -5235,7 +5235,7 @@
     <string name="recap_ready_title">สรุปเดือน%1$sของคุณพร้อมแล้ว</string>
     <string name="recap_ready_text">เดือนแห่งเสียงเพลงของคุณ: เพลงและศิลปินยอดนิยมของคุณ และเทียบกับเดือนก่อนหน้าเป็นอย่างไร</string>
     <string name="recap_card_title">เดือน%1$sของคุณ</string>
-    <string name="replay_notices">การแจ้งเตือน</string>
+    <string name="replay_notices">การแจ้งเตือน Replay</string>
     <string name="tour_185_replay_title">Replay ที่ลึกขึ้น</string>
     <string name="tour_185_replay_body">ดูว่าคุณฟังเพลงตอนไหน รายชั่วโมงและรายวัน</string>
     <string name="tour_185_replay_point_1">นาฬิกาการฟัง: สัปดาห์ของคุณ รายชั่วโมง แตะชั่วโมงใดก็ได้เพื่อดูเพลงยอดนิยมของชั่วโมงนั้น</string>
@@ -5306,7 +5306,7 @@
     <string name="cal_no_music">ไม่มีเพลง</string>
     <string name="cal_days_with_music">วันที่มีเพลง: %1$d</string>
     <!-- 1.8.5 #464 -->
-    <string name="gb_lyrics_cover_plays">แตะที่ปกขนาดเล็กเพื่อเล่นหรือหยุดชั่วคราว</string>
+    <string name="gb_lyrics_cover_plays">แตะที่ปกข้างเนื้อเพลงเพื่อหยุดชั่วคราว</string>
     <string name="gb_lyrics_cover_plays_info">เมื่อเปิดเนื้อเพลงอยู่ การแตะที่ปกขนาดเล็กจะเล่นหรือหยุดชั่วคราว และการกดค้างจะปิดเนื้อเพลง เมื่อปิดอยู่: การแตะจะปิดเนื้อเพลง</string>
     <string name="gb_lyrics_cover_plays_keywords">เนื้อเพลง ปกเล็ก ภาพขนาดย่อ ปก แตะ เล่น หยุดชั่วคราว กดค้าง ปิด lyrics cover</string>
     <!-- 1.8.6 Canvas -->
@@ -5483,4 +5483,37 @@
     <string name="hl_show_in_lists">แสดงในรายการ</string>
     <string name="hl_show_on_artist_pages">แสดงในหน้าศิลปิน</string>
     <string name="allow_access_to_lossless_files_value">จำเป็นต่อการค้นหาไฟล์ lossless ของคุณ</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="support_prism">สนับสนุน Prism</string>
+    <string name="support_prism_info">เงินสนับสนุนใช้จ่ายค่าโทรศัพท์ทดสอบและเครื่องมือที่ใช้สร้าง Prism ทุกฟีเจอร์ยังใช้ฟรีเสมอ ไม่ว่าคุณจะสนับสนุนหรือไม่ จะเปิด Ko-fi ในเบราว์เซอร์</string>
+    <string name="support_prism_keywords">บริจาค ทิป กาแฟ ขอบคุณ ช่วยเหลือ นักพัฒนา สนับสนุน</string>
+    <string name="i_ve_supported_prism">สนับสนุน Prism แล้ว</string>
+    <string name="i_ve_supported_prism_info">ปิดคำขอสนับสนุน Prism ทั้งหมดถาวร ไม่มีการตรวจสอบใดๆ ถือตามคำของคุณ</string>
+    <string name="i_ve_supported_prism_keywords">บริจาคแล้ว ผู้สนับสนุน ซ่อนคำขอ เลิกขอ</string>
+    <string name="supporters">ผู้สนับสนุน</string>
+    <string name="supporters_keywords">ขอบคุณ เครดิต รายชื่อ ผู้บริจาค สมาชิก</string>
+    <string name="supporters_info">ผู้ที่สนับสนุน Prism และเลือกให้ระบุชื่อ แสดงเฉพาะชื่อ ไม่มียอดเงินและวันที่</string>
+    <string name="supporters_members">สมาชิกรายเดือน</string>
+    <string name="supporters_thank_you">ขอบคุณ</string>
+    <string name="supporters_empty">ยังไม่มีรายชื่อที่นี่ ชื่อของคุณอาจเป็นชื่อแรก</string>
+    <string name="support_on_kofi">สนับสนุนบน Ko-fi</string>
+    <string name="don_t_show_again">ไม่ต้องแสดงอีก</string>
+    <string name="support_hours_title">100 ชั่วโมงแห่งดนตรีกับ Prism</string>
+    <string name="support_hours_body">ใช้ฟรีและทำโดยคนคนเดียว ถ้าคุ้มค่ากาแฟสักแก้วสำหรับคุณ ก็ช่วยให้แอปไปต่อได้</string>
+    <string name="support_made_by_one_person">ทำโดยคนคนเดียว</string>
+    <string name="support_whats_new_line">Prism ใช้ฟรีและทำโดยคนคนเดียว ถ้าชอบ คุณสนับสนุนได้</string>
+    <string name="settings_player_layout_group">เลย์เอาต์และปุ่มควบคุม</string>
+    <string name="dd_use_showing_covers">แสดงปกเคลื่อนไหว</string>
+    <string name="icon_style">สไตล์ไอคอน</string>
+    <string name="prism_s_own">แบบของ Prism</string>
+    <string name="player_times_both">ทั้งสองปลายแถบ</string>
+    <string name="button_shape_fully_round">กลมเต็มที่</string>
+    <string name="transport_filled_play">ปุ่มเล่นแบบเติมสี</string>
+    <string name="replay_notice_recap_short">สรุปรายเดือน</string>
+    <string name="settings_player_edit_menu">แก้ไขเมนู ⋯ ของเพลเยอร์</string>
+    <string name="mix_why_sing">เปิดร้องตามอยู่ จึงเล่นแต่ละเพลงจนจบ</string>
+    <string name="mix_why_together">เปิดฟังด้วยกันอยู่ เพลงจึงเล่นตามโฮสต์</string>
+    <string name="cn_spot_not_connected">ไม่ได้เชื่อมต่อ · เพลย์ลิสต์และเพลงที่ถูกใจ</string>
+    <string name="cn_other_services">บริการอื่น</string>
+    <string name="edge_to_edge_both">ปกและวิดีโอ</string>
 </resources>
