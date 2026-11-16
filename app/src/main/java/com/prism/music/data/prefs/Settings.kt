@@ -2570,10 +2570,6 @@ class SettingsRepository(
     val newInstallLookNames: Set<String> by lazy { (NewInstall.on + NewInstall.motion).filter { lookKinds[it] == 'b' }.toSet() }
 
     /**
-     * Puts a Look's [values] in place of every look setting in [p] (those it doesn't set go back to their defaults: on a
-     * phone whose first run wrote a new install's own defaults ([K.newInstallLook]), those are on).
-     */
-    /**
      * Of the look settings [names] just put back to how Prism comes, those that are a new install's own defaults go on
      * where this phone's first run wrote them ([K.newInstallLook]); elsewhere nothing changes.
      */
@@ -2582,6 +2578,10 @@ class SettingsRepository(
         names.forEach { if (it in newInstallLookNames) p[booleanPreferencesKey(it)] = true }
     }
 
+    /**
+     * Puts a Look's [values] in place of every look setting in [p] (those it doesn't set go back to their defaults: on a
+     * phone whose first run wrote a new install's own defaults ([K.newInstallLook]), those are on).
+     */
     @Suppress("UNCHECKED_CAST")
     private fun putLook(p: MutablePreferences, values: Map<String, String>) {
         K.lookSpec.forEach { (k, _) -> p.remove(k as Preferences.Key<Any>) }
