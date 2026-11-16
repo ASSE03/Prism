@@ -138,6 +138,13 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         compose.waitUntil(5_000) { offerShown() }
         compose.onNodeWithText(t(R.string.spot_canvas_offer_text)).assertExists()
         assertFalse(stored.behavior.canvas.spotifyFirst)
+        // The whole sheet, title included, for the design review (build/settings-pages/accounts-sharing).
+        val sheet = compose.onAllNodes(androidx.compose.ui.test.isDialog()).fetchSemanticsNodes()
+        if (sheet.isNotEmpty()) {
+            val shot = compose.onAllNodes(androidx.compose.ui.test.isDialog())[0].captureToImage().asAndroidBitmap()
+            val dir = File("build/settings-pages/accounts-sharing").apply { mkdirs() }
+            File(dir, "accounts-dark-spotify-canvas-offer.png").outputStream().use { shot.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        } else saveNode("spot_canvas_offer", "accounts-dark-spotify-canvas-offer")
         compose.onNodeWithTag("spot_canvas_offer_on").performClick()
         until("turned on and answered") { it.behavior.canvas.spotifyFirst && it.behavior.canvas.spotifyOffered }
         compose.waitUntil(5_000) { !offerShown() }
