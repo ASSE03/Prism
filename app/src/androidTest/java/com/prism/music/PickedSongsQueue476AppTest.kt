@@ -5,10 +5,10 @@ import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createEmptyComposeRule
-import androidx.compose.ui.test.longClick
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -84,6 +84,10 @@ class PickedSongsQueue476AppTest {
 
     private fun bar() = compose.onAllNodes(hasTestTag("selectionBar")).fetchSemanticsNodes()
 
+    /** A song's row, acted on through its own actions: on a short screen the lower rows sit under the bottom bar, where a touch
+     *  aimed at them lands on the bar instead. */
+    private fun row(title: String) = compose.onAllNodes(hasText(title) and hasClickAction()).onFirst()
+
     private fun pickAndSend(action: String) {
         Fixture.ready()
         instrumentation.uiAutomation.executeShellCommand("cmd media_session volume --stream 3 --set 0").close()
@@ -95,10 +99,10 @@ class PickedSongsQueue476AppTest {
 
         // Picked out of the list's order: 3, then 1, then 5.
         val picked = listOf(songs[2], songs[0], songs[4])
-        compose.onAllNodes(hasText(picked[0].title)).onFirst().performTouchInput { longClick() }
+        row(picked[0].title).performSemanticsAction(SemanticsActions.OnLongClick)
         compose.waitUntil(5_000) { bar().isNotEmpty() }
-        compose.onAllNodes(hasText(picked[1].title)).onFirst().performClick()
-        compose.onAllNodes(hasText(picked[2].title)).onFirst().performClick()
+        row(picked[1].title).performSemanticsAction(SemanticsActions.OnClick)
+        row(picked[2].title).performSemanticsAction(SemanticsActions.OnClick)
         compose.waitForText("3 songs picked")
         assertEquals("still nothing playing", 0, onMain { c.player.player?.mediaItemCount ?: 0 })
 
