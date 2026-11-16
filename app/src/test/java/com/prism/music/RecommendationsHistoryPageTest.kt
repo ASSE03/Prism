@@ -29,6 +29,7 @@ import com.prism.music.ui.screens.settings.value
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -110,13 +111,14 @@ class RecommendationsHistoryPageTest : ListeningPageHarness(SettingsPageId.RECOM
         assertBudgets("defaults")
         // The ledger's layout with a fresh install's settings ("Bring your history" is a row of History: its group was named as its row).
         assertEquals(listOf(gMade, gRadios, gHistory, gReplay), groupTitles())
-        assertEquals(listOf(5, 3, 4, 5), groupSizes())
+        assertEquals(listOf(5, 3, 3, 5), groupSizes())
         assertEquals("nothing differs from how Prism comes", 0, changedRows())
         assertTrue(groupTitles().none { it == SettingsPageId.RECOMMENDATIONS_HISTORY.title })
         for (g in groupTitles()) assertFalse("a group and a row are both \"$g\"", hasRow(g))
         assertEquals(1, compose.onAllNodes(hasTestTag(SettingsTags.JUMP_CHIPS)).fetchSemanticsNodes().size)
         // Each row is the type the ledger gives it, and says its state.
-        for (link in listOf(artists, mixesAgain, exclusions, forget, bring)) assertEquals(link, SettingsTags.ROW_LINK, typeOf(link))
+        for (link in listOf(artists, mixesAgain, exclusions, forget)) assertEquals(link, SettingsTags.ROW_LINK, typeOf(link))
+        assertFalse("Bring your history is on Accounts & sharing since 1.8.7.6", hasRow(bring))
         assertEquals(SettingsTags.ROW_SWITCH, typeOf(releases))
         for (slider in listOf(newness, depth, energy)) {
             assertEquals(SettingsTags.ROW_SLIDER, typeOf(slider))
@@ -151,7 +153,7 @@ class RecommendationsHistoryPageTest : ListeningPageHarness(SettingsPageId.RECOM
     @Test fun everyStoredSettingHasItsControl() {
         show(over = signedIn)
         val d = AppSettings()
-        assertEquals("signed in, History has its third setting", listOf(5, 3, 5, 5), groupSizes())
+        assertEquals("signed in, History has its third setting", listOf(5, 3, 4, 5), groupSizes())
 
         // release_notifications
         tap(releases)
@@ -211,7 +213,7 @@ class RecommendationsHistoryPageTest : ListeningPageHarness(SettingsPageId.RECOM
 
         // Every row with a setting now differs from how Prism comes, says so, and the page still fits.
         assertBudgets("everything changed")
-        assertEquals(listOf(5, 3, 5, 5), groupSizes())
+        assertEquals(listOf(5, 3, 4, 5), groupSizes())
         assertEquals(12, changedRows())
 
         // Reset this page lists each of them and puts them all back (history is recorded again).
@@ -246,14 +248,12 @@ class RecommendationsHistoryPageTest : ListeningPageHarness(SettingsPageId.RECOM
         assertEquals("turning one on asks", 1, asked)
     }
 
-    /** Your artists, Exclusions and Bring your history stay their own screens, behind Link rows. */
+    /** Your artists and Exclusions stay their own screens, behind Link rows (Bring your history is on Accounts & sharing). */
     @Test fun theLinkRowsOpenTheirScreens() {
         show()
         addRoutes(Routes.PICK_ARTISTS, Routes.EXCLUSIONS, Routes.BRING_HISTORY)
         opens(artists, Routes.PICK_ARTISTS)
         opens(exclusions, Routes.EXCLUSIONS)
-        opens(bring, Routes.BRING_HISTORY)
-        assertEquals(t(R.string.imp_row_detail), valueOf(bring))
         // "Forget skipped suggestions" does it at once and says so, as before (it never asked first).
         tap(forget)
         assertEquals(t(R.string.suggestions_start_fresh), ShadowToast.getTextOfLatestToast())
@@ -269,7 +269,7 @@ class RecommendationsHistoryPageTest : ListeningPageHarness(SettingsPageId.RECOM
         show()
         addRoutes(Routes.BRING_HISTORY)
         compose.waitUntil(5_000) { hasRow(shapeMixes) }
-        assertEquals("with a history brought in, its switch shows", listOf(5, 3, 5, 5), groupSizes())
+        assertEquals("with a history brought in, its switch shows", listOf(5, 3, 4, 5), groupSizes())
         assertEquals(SettingsTags.ROW_SWITCH, typeOf(shapeMixes))
         assertEquals(t(R.string.imp_prism_plays), valueOf(countFrom))
 
@@ -307,9 +307,10 @@ class RecommendationsHistoryPageTest : ListeningPageHarness(SettingsPageId.RECOM
 
     /** Links written before the rework still land, and every line of the page's search names a group the page draws. */
     @Test fun oldGroupNamesOpenTheGroupThatHoldsThemNow() {
-        assertEquals(gHistory, SettingsPageId.RECOMMENDATIONS_HISTORY.oldGroups[bring])
+        assertNull(SettingsPageId.RECOMMENDATIONS_HISTORY.oldGroups[bring])
         fun to(group: String) = SettingsMap.resolve("library", group)
-        assertEquals(SettingsTarget(SettingsPageId.RECOMMENDATIONS_HISTORY, gHistory), to(bring))
+        // Bring your history moved to Accounts & sharing (1.8.7.6): the old link opens it there, not here.
+        assertEquals(SettingsTarget(SettingsPageId.ACCOUNTS_SHARING, t(R.string.accounts)), to(bring))
         assertEquals(SettingsTarget(SettingsPageId.RECOMMENDATIONS_HISTORY, gHistory), to(gHistory))
         assertEquals(SettingsTarget(SettingsPageId.RECOMMENDATIONS_HISTORY, gRadios), to(gRadios))
         assertEquals(SettingsTarget(SettingsPageId.RECOMMENDATIONS_HISTORY, gMade), to(gMade))
@@ -319,7 +320,7 @@ class RecommendationsHistoryPageTest : ListeningPageHarness(SettingsPageId.RECOM
         val mine = SettingsIndex.entries.filter { it.page == SettingsPageId.RECOMMENDATIONS_HISTORY && it.group.isNotBlank() }
         val lost = mine.filter { it.group !in drawn }
         assertTrue("search lines in groups the page doesn't have: ${lost.map { it.group + " › " + it.title }}", lost.isEmpty())
-        for (title in listOf(artists, releases, mixesAgain, exclusions, forget, newness, depth, energy, pause, countAfter, account, bring, shapeMixes, hours, themeColors, storyType, notices, finishLyric, countFrom)) {
+        for (title in listOf(artists, releases, mixesAgain, exclusions, forget, newness, depth, energy, pause, countAfter, account, shapeMixes, hours, themeColors, storyType, notices, finishLyric, countFrom)) {
             assertEquals(title, 1, mine.count { it.title == title })
         }
         // The three notices are in one row's sheet: each one's name finds that row.
@@ -332,7 +333,9 @@ class RecommendationsHistoryPageTest : ListeningPageHarness(SettingsPageId.RECOM
         // The account's row says what it needs, and search still finds the page by its old name.
         assertFalse(mine.single { it.title == account }.needs!!.on(AppSettings()))
         assertTrue(SettingsIndex.search("private session").any { it.title == pause })
-        assertTrue(SettingsIndex.search("spotify history").any { it.title == bring })
+        // Bring your history is no line of this page (it is Accounts & sharing's), and search still finds it.
+        assertTrue(mine.none { it.title == bring })
+        assertTrue(SettingsIndex.search("spotify history").any { it.title == bring && it.page == SettingsPageId.ACCOUNTS_SHARING })
     }
 
     @Test fun atLargeTextNothingIsCutOff() {

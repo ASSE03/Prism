@@ -133,8 +133,14 @@ class SettingsKitAdoptionTest {
         show(SettingsPageId.RECOMMENDATIONS_HISTORY)
         assertActions(
             actions = listOf(tr(R.string.make_my_mixes_again), tr(R.string.forget_skipped_suggestions)),
-            links = listOf(tr(R.string.your_artists), tr(R.string.exclusions), tr(R.string.imp_title)),
+            links = listOf(tr(R.string.your_artists), tr(R.string.exclusions)),
         )
+    }
+
+    /** 1.8.7.6: Bring your history moved to Accounts & sharing; it still opens a screen, so its chevron stays. */
+    @Test fun accountsHistoryLinkKeepsItsChevron() {
+        show(SettingsPageId.ACCOUNTS_SHARING)
+        assertActions(actions = emptyList(), links = listOf(tr(R.string.imp_title)))
     }
 
     @Test fun downloadsActionsHaveNoChevron() {

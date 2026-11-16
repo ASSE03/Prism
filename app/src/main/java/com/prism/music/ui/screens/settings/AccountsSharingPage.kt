@@ -159,6 +159,8 @@ fun AccountsSharingPage(bottomPadding: Dp, find: String? = null, showBack: Boole
                     else -> tr(R.string.ytlive_connection_off)
                 },
             ) { nav.go(Routes.BRING_HISTORY) }
+            // 1.8.7.6: moved here from Recommendations & history, so every account is in one place.
+            LinkRow(tr(R.string.imp_title), value = tr(R.string.imp_row_detail), info = tr(R.string.imp_group_info)) { nav.go(Routes.BRING_HISTORY) }
         }
 
         // 1.8.7.6: one heading over the three services' cards (they had none); each card keeps its own key for search
@@ -531,7 +533,11 @@ val accountsSharingLookKeys: List<String> = emptyList()
  * Spotify and "Sharing and links" are still found by those names: they are the cards' keys.)
  */
 val accountsSharingOldGroups: Map<String, String> by lazy {
-    mapOf(tr(R.string.spot_set_up) to tr(R.string.spotify), tr(R.string.spot_connection) to tr(R.string.spotify))
+    mapOf(
+        tr(R.string.spot_set_up) to tr(R.string.spotify), tr(R.string.spot_connection) to tr(R.string.spotify),
+        // "Bring your history" is a row of Accounts since 1.8.7.6 (its old link "library?find=Bring your history" comes here).
+        tr(R.string.imp_title) to tr(R.string.accounts),
+    )
 }
 
 /** The page's lines in Settings' search (each names the group it is drawn in). */
@@ -546,6 +552,7 @@ val accountsSharingIndex: List<SettingEntry> by lazy {
         SettingEntry(page, accounts, tr(R.string.prism_account), tr(R.string.profile_name_picture_photo_local_on)),
         SettingEntry(page, accounts, tr(R.string.youtube_music_2), tr(R.string.cn_youtube_keywords), shown = tr(R.string.sign_in_to_youtube_music)),
         SettingEntry(page, accounts, tr(R.string.cn_youtube_history), tr(R.string.cn_youtube_history_keywords)),
+        SettingEntry(page, accounts, tr(R.string.imp_title), tr(R.string.imp_keywords)),
         // 1.8.7.6: the heading over the three services' cards (it opens the page at Last.fm's, the first).
         SettingEntry(page, tr(R.string.cn_other_services), tr(R.string.cn_other_services), listOf(LAST_FM, spotify, discord).joinToString(" ")),
         // Last.fm: its row ("Connect Last.fm" until 1.8.7.6, still a search line) until it's connected, then its three

@@ -173,7 +173,6 @@ fun RecommendationsHistoryPage(bottomPadding: Dp, find: String? = null, showBack
                 tr(R.string.hist_count_account), b.playCountOnAccount,
                 info = tr(R.string.hist_count_account_info), changed = accountChanged,
             ) { prefs.setPlayCountOnAccount(it) }
-            LinkRow(tr(R.string.imp_title), value = tr(R.string.imp_row_detail), info = tr(R.string.imp_group_info)) { nav.go(Routes.BRING_HISTORY) }
             if (imported.isNotEmpty()) SwitchRow(tr(R.string.imp_shape_mixes), teach, info = tr(R.string.imp_shape_mixes_info)) { c.imports.setTeach(it) }
             // 1.8.7.5: what Replay counts is a history choice, so it sits with the histories.
             RhCountHistoryFrom(sources, countedText(countedNow), countedChanged)
@@ -261,12 +260,11 @@ fun recommendationsHistoryValue(s: AppSettings, dark: Boolean): String = Setting
 val recommendationsHistoryLookKeys: List<String> = emptyList()
 
 /**
- * Old group titles → this page's groups: "Bring your history" is a row of History now. "Made for you", "Tune your
- * radios", "History" and "Replay" are still called that. (The old "Liked songs" group is Home & Library's.)
+ * Old group titles → this page's groups: none ("Made for you", "Tune your radios", "History" and "Replay" are still
+ * called that). (The old "Liked songs" group is Home & Library's; "Bring your history" is Accounts & sharing's row since
+ * 1.8.7.6, see [SettingsMap.movedGroups].)
  */
-val recommendationsHistoryOldGroups: Map<String, String> by lazy {
-    mapOf(tr(R.string.imp_title) to tr(R.string.hist_title))
-}
+val recommendationsHistoryOldGroups: Map<String, String> = emptyMap()
 
 /** The page's lines in Settings' search (each names the group it is drawn in). */
 val recommendationsHistoryIndex: List<SettingEntry> by lazy {
@@ -290,8 +288,7 @@ val recommendationsHistoryIndex: List<SettingEntry> by lazy {
         SettingEntry(page, history, tr(R.string.hist_pause), tr(R.string.hist_pause_keywords)),
         SettingEntry(page, history, tr(R.string.hist_count_after), tr(R.string.hist_count_keywords)),
         SettingEntry(page, history, tr(R.string.hist_count_account), tr(R.string.hist_count_keywords), needs = signedIn),
-        // 1.8.1: Bring your history.
-        SettingEntry(page, history, tr(R.string.imp_title), tr(R.string.imp_keywords)),
+        // 1.8.1: Bring your history (its row is on Accounts & sharing since 1.8.7.6).
         SettingEntry(page, history, tr(R.string.imp_shape_mixes), tr(R.string.imp_shape_mixes_keywords)),
         SettingEntry(page, history, tr(R.string.imp_count_history_from), tr(R.string.imp_count_keywords) + " " + tr(R.string.imp_prism_plays)),
         // On the Bring your history screen (opened from this group): the fresh-download reminder.

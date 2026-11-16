@@ -152,8 +152,8 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
     @Test fun fiveGroupsWithinTheBudgets() {
         show()
         assertBudgets("defaults")
-        // Accounts 3 · Last.fm 1 · Spotify 1 · Discord 1 · Sharing and links 2.
-        assertEquals(listOf(3, 1, 1, 1, 2), groupSizes())
+        // Accounts 4 (Bring your history is the last) · Last.fm 1 · Spotify 1 · Discord 1 · Sharing and links 2.
+        assertEquals(listOf(4, 1, 1, 1, 2), groupSizes())
         assertEquals(0, changedRows())
         // Last.fm, Spotify and Discord have no title of their own over their cards (their first row names them, §2.7),
         // but one heading over the three (W46, 1.8.7.6).
@@ -208,7 +208,7 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
 
         assertEquals(t(R.string.on_discord_as, "tester"), value(discord))
         assertTrue("signed in: Sign out shows", hasTitled(discordSignOut))
-        assertEquals(listOf(3, 1, 1, 2, 2), groupSizes())
+        assertEquals(listOf(4, 1, 1, 2, 2), groupSizes())
         tap(discord)
         until("discord_presence") { !it.discordPresence }
         assertEquals(t(R.string.cn_signed_in_as, "tester"), value(discord))
@@ -304,7 +304,7 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         assertBudgets("Spotify connected")
         assertEquals(listOf(accounts, otherServices, spotify, sharing), headings())
         // Recent plays, Top songs and artists, Your playlists, Liked Songs both ways, Disconnect Spotify.
-        assertEquals(listOf(3, 1, 5, 1, 2), groupSizes())
+        assertEquals(listOf(4, 1, 5, 1, 2), groupSizes())
         for (id in listOf(R.string.spot_recent, R.string.spot_top, R.string.spot_playlists, R.string.spot_likes)) assertEquals(t(id), SettingsTags.ROW_SWITCH, type(t(id)))
         // "Keep in step" only shows with the playlists on.
         assertFalse(hasTitled(t(R.string.spot_keep_in_step)))
@@ -367,7 +367,7 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         assertBudgets("Spotify signed in")
         assertEquals(listOf(accounts, otherServices, spotify, sharing), headings())
         // Your playlists, Liked Songs, Disconnect Spotify.
-        assertEquals(listOf(3, 1, 3, 1, 2), groupSizes())
+        assertEquals(listOf(4, 1, 3, 1, 2), groupSizes())
         assertEquals(SettingsTags.ROW_SWITCH, type(t(R.string.spot_playlists)))
         assertEquals(SettingsTags.ROW_SWITCH, type(t(R.string.spot_session_likes)))
         for (id in listOf(R.string.spot_recent, R.string.spot_top, R.string.spot_likes)) assertFalse(t(id), hasTitled(t(id)))
@@ -415,6 +415,38 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
             assertTrue(q, SettingsIndex.search(q).any { it.page == me && it.group == spotify })
         }
         assertTrue(SettingsIndex.search("spotify login").any { it.title == t(R.string.spot_session_sign_in) })
+    }
+
+    /**
+     * 1.8.7.6: "Bring your history" moved here from Recommendations & history: it is the last row of Accounts (after
+     * "YouTube Music history"), opens its screen, has its search line here and none there, and the old link finds it.
+     */
+    @Test fun bringYourHistoryIsTheLastRowOfAccounts() {
+        show()
+        val bring = t(R.string.imp_title)
+        val titles = rows().mapNotNull { it.config.getOrNull(SemanticsProperties.Text)?.firstOrNull()?.text }
+        assertEquals(titles.indexOf(history) + 1, titles.indexOf(bring))
+        assertEquals(titles.indexOf(prismAccount) + 3, titles.indexOf(bring))
+        assertEquals(SettingsTags.ROW_LINK, type(bring))
+        assertEquals(t(R.string.imp_row_detail), value(bring))
+        val nc = navController!!
+        compose.runOnUiThread {
+            val navigator = nc.navigatorProvider.getNavigator(androidx.navigation.compose.ComposeNavigator::class.java)
+            nc.graph.addDestination(
+                androidx.navigation.compose.ComposeNavigator.Destination(navigator) { androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier) }
+                    .apply { route = com.prism.music.ui.Routes.BRING_HISTORY },
+            )
+        }
+        tap(bring)
+        compose.waitUntil(5_000) { route() == com.prism.music.ui.Routes.BRING_HISTORY }
+        // Search: one line here, in Accounts; none on Recommendations & history.
+        val lines = SettingsIndex.entries.filter { it.title == bring }
+        assertEquals(listOf(me), lines.map { it.page })
+        assertEquals(accounts, lines.single().group)
+        assertTrue(SettingsIndex.search("spotify history").any { it.page == me && it.title == bring })
+        assertTrue(SettingsIndex.entries.none { it.page == SettingsPageId.RECOMMENDATIONS_HISTORY && it.title == bring })
+        // The old link (library, Bring your history) opens this page at its Accounts group.
+        assertEquals(SettingsTarget(me, accounts), SettingsMap.resolve("library", bring))
     }
 
     /** The old links land, and every line of the page's search names a group the page draws. */
