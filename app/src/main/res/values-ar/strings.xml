@@ -5903,6 +5903,8 @@
     <string name="tour_1876_also_kids">الأغاني المصنّفة للأطفال تُشغَّل دون تسجيل الدخول.</string>
     <string name="tour_1876_also_cast">على مكبّر صوت للبث، ضغطة واحدة على زر الصوت تساوي خطوة واحدة.</string>
     <string name="tour_1876_also_history">أحضِر سجلّك صار الآن ضمن الحسابات والمشاركة.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas من Spotify</string>
     <string name="spot_canvas_first">Canvas من Spotify أولًا</string>
     <string name="spot_canvas_first_info">غير رسمي. يستخدم تسجيل دخولك إلى Spotify ليسأل Spotify عن كل أغنية تشغّلها. إن كان لدى Spotify مقطع Canvas لأغنية، فإنه يُعرض بدل الغلاف المتحرك. وإن لم يكن، يظهر Prism Canvas كما كان. يمكن لـ Spotify إيقاف هذا في أي وقت.</string>
     <string name="spot_canvas_first_keywords">spotify canvas كانفاس حلقة فيديو مقطع غير رسمي</string>

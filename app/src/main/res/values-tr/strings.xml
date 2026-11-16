@@ -5603,6 +5603,8 @@
     <string name="tour_1876_also_kids">Çocuklara özel olarak işaretlenmiş şarkılar giriş yapmadan çalar.</string>
     <string name="tour_1876_also_cast">Yayın yapılan bir hoparlörde ses tuşuna bir basış bir adım eder.</string>
     <string name="tour_1876_also_history">Geçmişini getir artık Hesaplar ve paylaşım içinde.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Spotify\'ın Canvas\'ı</string>
     <string name="spot_canvas_first">Önce Spotify\'ın Canvas\'ı</string>
     <string name="spot_canvas_first_info">Resmî değil. Çaldığın her şarkıyı Spotify\'a sormak için Spotify girişini kullanır. Spotify\'ın bir şarkı için Canvas\'ı varsa hareketli kapağın yerine o oynar. Yoksa Prism Canvas eskisi gibi görünür. Spotify bunun çalışmasını istediği zaman durdurabilir.</string>
     <string name="spot_canvas_first_keywords">spotify canvas döngü video klip resmî değil hareketli kapak</string>

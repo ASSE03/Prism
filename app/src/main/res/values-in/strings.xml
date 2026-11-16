@@ -5528,6 +5528,8 @@
     <string name="tour_1876_also_kids">Lagu yang ditandai dibuat untuk anak-anak diputar tanpa login.</string>
     <string name="tour_1876_also_cast">Di speaker cast, satu kali tekan tombol volume sama dengan satu langkah.</string>
     <string name="tour_1876_also_history">Bawa riwayatmu kini ada di Akun &amp; berbagi.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas Spotify</string>
     <string name="spot_canvas_first">Canvas Spotify lebih dulu</string>
     <string name="spot_canvas_first_info">Tidak resmi. Memakai login Spotify-mu untuk menanyakan ke Spotify tentang setiap lagu yang kamu putar. Jika Spotify punya canvas untuk sebuah lagu, canvas itu diputar menggantikan sampul animasi. Jika tidak ada, Prism Canvas tampil seperti sebelumnya. Spotify bisa menghentikan fitur ini kapan saja.</string>
     <string name="spot_canvas_first_keywords">spotify canvas loop video klip tidak resmi</string>

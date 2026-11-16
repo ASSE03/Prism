@@ -5678,6 +5678,8 @@
     <string name="tour_1876_also_kids">Músicas marcadas como feitas para crianças tocam sem entrar na conta.</string>
     <string name="tour_1876_also_cast">Em uma caixa de som com transmissão, um toque na tecla de volume é um passo.</string>
     <string name="tour_1876_also_history">Trazer seu histórico agora fica em Contas e compartilhamento.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas do Spotify</string>
     <string name="spot_canvas_first">Canvas do Spotify primeiro</string>
     <string name="spot_canvas_first_info">Não oficial. Usa seu login do Spotify para perguntar ao Spotify sobre cada música que você toca. Onde o Spotify tem um canvas para a música, ele toca no lugar da capa animada. Onde não tem, o Prism Canvas aparece como antes. O Spotify pode impedir que isso funcione a qualquer momento.</string>
     <string name="spot_canvas_first_keywords">spotify canvas loop vídeo clipe não oficial</string>

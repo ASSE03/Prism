@@ -5603,6 +5603,8 @@
     <string name="tour_1876_also_kids">बच्चों के लिए बने के रूप में चिह्नित गाने साइन इन किए बिना चलते हैं।</string>
     <string name="tour_1876_also_cast">कास्ट स्पीकर पर, वॉल्यूम की एक बार दबाने का मतलब एक कदम है।</string>
     <string name="tour_1876_also_history">अपना इतिहास लाएं अब खाते &amp; शेयरिंग में है।</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Spotify का canvas</string>
     <string name="spot_canvas_first">पहले Spotify का canvas</string>
     <string name="spot_canvas_first_info">अनौपचारिक। आपके Spotify साइन इन से हर उस गाने के बारे में Spotify से पूछता है जो आप चलाते हैं। जहाँ Spotify के पास किसी गाने का canvas है, वह एनिमेटेड कवर की जगह चलता है। जहाँ नहीं है, वहाँ Prism Canvas पहले की तरह दिखता है। Spotify इसे कभी भी काम करने से रोक सकता है।</string>
     <string name="spot_canvas_first_keywords">spotify canvas लूप वीडियो क्लिप अनौपचारिक एनिमेटेड कवर</string>

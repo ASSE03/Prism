@@ -5678,6 +5678,8 @@
     <string name="tour_1876_also_kids">I brani contrassegnati come per bambini si ascoltano senza accedere.</string>
     <string name="tour_1876_also_cast">Su un altoparlante in trasmissione, una pressione del tasto del volume è un passo.</string>
     <string name="tour_1876_also_history">Porta la tua cronologia ora è in Account e condivisione.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas di Spotify</string>
     <string name="spot_canvas_first">Prima il canvas di Spotify</string>
     <string name="spot_canvas_first_info">Non ufficiale. Usa il tuo accesso a Spotify per chiedere a Spotify di ogni brano che riproduci. Dove Spotify ha un canvas per un brano, parte al posto della copertina animata. Dove non ce l\'ha, Prism Canvas appare come prima. Spotify può bloccare il funzionamento in qualsiasi momento.</string>
     <string name="spot_canvas_first_keywords">spotify canvas loop video clip non ufficiale</string>

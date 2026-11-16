@@ -5528,6 +5528,8 @@
     <string name="tour_1876_also_kids">Lagu yang ditanda sebagai dibuat untuk kanak-kanak dimainkan tanpa log masuk.</string>
     <string name="tour_1876_also_cast">Pada pembesar suara cast, satu tekanan kekunci kelantangan ialah satu langkah.</string>
     <string name="tour_1876_also_history">Bawa sejarah anda kini berada dalam Akaun &amp; perkongsian.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas Spotify</string>
     <string name="spot_canvas_first">Canvas Spotify dahulu</string>
     <string name="spot_canvas_first_info">Tidak rasmi. Menggunakan log masuk Spotify anda untuk bertanya kepada Spotify tentang setiap lagu yang anda main. Jika Spotify ada Canvas untuk sesuatu lagu, ia dimainkan menggantikan kulit beranimasi. Jika tiada, Prism Canvas dipaparkan seperti biasa. Spotify boleh menghentikan ciri ini bila-bila masa.</string>
     <string name="spot_canvas_first_keywords">spotify canvas gelung video klip tidak rasmi</string>

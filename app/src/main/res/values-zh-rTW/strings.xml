@@ -5528,6 +5528,8 @@
     <string name="tour_1876_also_kids">標示為兒童內容的歌曲無需登入即可播放。</string>
     <string name="tour_1876_also_cast">在投放的喇叭上，按一次音量鍵就是一格。</string>
     <string name="tour_1876_also_history">匯入你的播放記錄現在位於帳戶和分享中。</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Spotify 的 Canvas</string>
     <string name="spot_canvas_first">優先使用 Spotify 的 Canvas</string>
     <string name="spot_canvas_first_info">非官方。使用你的 Spotify 登入，向 Spotify 查詢你播放的每首歌。Spotify 有某首歌的 Canvas 時，它會取代動態封面播放；沒有時，Prism Canvas 照常顯示。Spotify 隨時可能讓此功能失效。</string>
     <string name="spot_canvas_first_keywords">spotify canvas 循環 影片 短片 非官方 動態封面</string>

@@ -5753,6 +5753,8 @@
     <string name="tour_1876_also_kids">Треки с пометкой «для детей» играют без входа в аккаунт.</string>
     <string name="tour_1876_also_cast">На колонке с трансляцией одно нажатие кнопки громкости меняет её на один шаг.</string>
     <string name="tour_1876_also_history">Перенеси свою историю теперь в разделе Аккаунты и обмен.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas из Spotify</string>
     <string name="spot_canvas_first">Сначала Canvas из Spotify</string>
     <string name="spot_canvas_first_info">Неофициально. Использует твой вход в Spotify, чтобы спрашивать у Spotify про каждый трек, который ты слушаешь. Если у Spotify есть canvas для трека, он играет вместо анимированной обложки. Если нет, Prism Canvas показывается как раньше. Spotify может в любой момент перестать это поддерживать.</string>
     <string name="spot_canvas_first_keywords">spotify canvas цикл петля видео клип неофициально</string>

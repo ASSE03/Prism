@@ -5678,6 +5678,8 @@
     <string name="tour_1876_also_kids">As músicas marcadas como feitas para crianças tocam sem iniciar sessão.</string>
     <string name="tour_1876_also_cast">Numa coluna com transmissão, um toque numa tecla de volume é um passo.</string>
     <string name="tour_1876_also_history">Traz o teu histórico passou para Contas e partilha.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas do Spotify</string>
     <string name="spot_canvas_first">Canvas do Spotify primeiro</string>
     <string name="spot_canvas_first_info">Não oficial. Usa o teu início de sessão no Spotify para perguntar ao Spotify por cada música que ouves. Onde o Spotify tem um canvas para uma música, ele toca no lugar da capa animada. Onde não tem, o Prism Canvas aparece como antes. O Spotify pode impedir que isto funcione a qualquer momento.</string>
     <string name="spot_canvas_first_keywords">spotify canvas ciclo vídeo clipe não oficial</string>

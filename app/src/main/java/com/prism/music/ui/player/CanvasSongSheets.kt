@@ -65,15 +65,35 @@ import okhttp3.Request
  */
 
 /**
- * "Canvas" (the loop from the song's music video) or "Animated cover" for this song, on or off: a switch to a screen
- * reader ("Canvas, On").
+ * "Prism Canvas" (the loop from the song's music video) or "Animated cover" for this song, on or off: a switch to a
+ * screen reader ("Prism Canvas, On").
  */
 internal fun canvasToggleItem(
     on: Boolean,
-    label: String = tr(R.string.canvas),
+    label: String = tr(R.string.prism_canvas),
     icon: androidx.compose.ui.graphics.vector.ImageVector = PrismIcons.Video,
     onToggle: () -> Unit,
 ): ActionItem = ActionItem(icon, label, active = on, keepOpen = true, toggle = on, onClick = onToggle)
+
+/**
+ * The name of the song's cover switch in the ⋯ menu (owner, 2026-11-16): "Spotify canvas" when the loop in the cover is
+ * Spotify's, or when Spotify is asked and no cover is known yet (the switch was turned off); "Animated cover" for an
+ * Apple Music or Tidal cover, also as the fallback of a song Spotify has no canvas for.
+ */
+internal fun canvasCoverSwitchName(spotifyAsked: Boolean, knownIsSpotify: Boolean?): String =
+    if (knownIsSpotify == true || (knownIsSpotify == null && spotifyAsked)) tr(R.string.spotify_canvas) else tr(R.string.animated_cover)
+
+/** What the song's two switches show when the cover's loop is Spotify's: only the one that plays is checked. */
+internal data class CanvasPair(val spotify: Boolean, val prism: Boolean)
+
+/**
+ * "Spotify canvas" and "Prism Canvas" for one song (owner, 2026-11-16: with Spotify canvas selected, Prism Canvas
+ * reads as unchecked). [coverOff] / [loopOff] are the song's own switches, [now] what a song with both shows.
+ */
+internal fun canvasPairShown(coverOff: Boolean, loopOff: Boolean, now: CanvasSource): CanvasPair = CanvasPair(
+    spotify = !coverOff && (loopOff || now == CanvasSource.COVER),
+    prism = !loopOff && (coverOff || now == CanvasSource.VIDEO),
+)
 
 /** Which one a song with both shows now: its own "Use:", else the setting "When a song has both". */
 internal fun canvasUseNow(settings: AppSettings, row: CanvasClipEntity?): CanvasSource =

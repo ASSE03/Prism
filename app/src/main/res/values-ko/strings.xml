@@ -5528,6 +5528,8 @@
     <string name="tour_1876_also_kids">어린이용으로 표시된 노래는 로그인 없이 재생돼요.</string>
     <string name="tour_1876_also_cast">전송 스피커에서는 볼륨 키를 한 번 누르면 한 단계씩 바뀌어요.</string>
     <string name="tour_1876_also_history">내 기록 가져오기가 이제 계정 &amp; 공유에 있어요.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Spotify Canvas</string>
     <string name="spot_canvas_first">Spotify Canvas 우선</string>
     <string name="spot_canvas_first_info">비공식 기능이에요. Spotify 로그인을 사용해 재생하는 노래마다 Spotify에 물어봐요. Spotify에 노래의 Canvas가 있으면 움직이는 커버 대신 재생돼요. 없으면 전처럼 Prism Canvas가 보여요. Spotify가 언제든 이 기능을 막을 수 있어요.</string>
     <string name="spot_canvas_first_keywords">spotify canvas 캔버스 스포티파이 반복 영상 동영상 클립 비공식</string>

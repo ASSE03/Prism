@@ -5528,6 +5528,8 @@
     <string name="tour_1876_also_kids">Bài hát được đánh dấu dành cho trẻ em phát được mà không cần đăng nhập.</string>
     <string name="tour_1876_also_cast">Trên loa đang được phát tới, nhấn phím âm lượng một lần là một bước.</string>
     <string name="tour_1876_also_history">Mang lịch sử của bạn sang giờ nằm trong Tài khoản &amp; chia sẻ.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas của Spotify</string>
     <string name="spot_canvas_first">Ưu tiên Canvas của Spotify</string>
     <string name="spot_canvas_first_info">Không chính thức. Dùng phiên đăng nhập Spotify của bạn để hỏi Spotify về từng bài bạn phát. Nếu Spotify có Canvas cho bài hát, nó sẽ phát thay cho ảnh bìa động. Nếu không có, Prism Canvas hiển thị như trước. Spotify có thể chặn tính năng này bất cứ lúc nào.</string>
     <string name="spot_canvas_first_keywords">spotify canvas lặp video clip không chính thức ảnh bìa động</string>

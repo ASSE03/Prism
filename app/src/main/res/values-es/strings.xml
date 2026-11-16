@@ -5678,6 +5678,8 @@
     <string name="tour_1876_also_kids">Las canciones marcadas como para niños se reproducen sin iniciar sesión.</string>
     <string name="tour_1876_also_cast">En un altavoz de transmisión, una pulsación de la tecla de volumen es un paso.</string>
     <string name="tour_1876_also_history">Trae tu historial ahora está en Cuentas y compartir.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas de Spotify</string>
     <string name="spot_canvas_first">Primero el canvas de Spotify</string>
     <string name="spot_canvas_first_info">No oficial. Usa tu inicio de sesión de Spotify para preguntarle a Spotify por cada canción que reproduces. Si Spotify tiene un canvas para una canción, se reproduce en lugar de la portada animada. Si no tiene ninguno, Prism Canvas se muestra como antes. Spotify puede hacer que esto deje de funcionar en cualquier momento.</string>
     <string name="spot_canvas_first_keywords">spotify canvas bucle video clip no oficial</string>

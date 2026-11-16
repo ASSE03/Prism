@@ -5603,6 +5603,8 @@
     <string name="tour_1876_also_kids">آهنگ‌هایی که «ویژهٔ کودکان» علامت خورده‌اند بدون ورود پخش می‌شوند.</string>
     <string name="tour_1876_also_cast">روی بلندگوی کست، یک بار فشردن دکمهٔ صدا یک پله است.</string>
     <string name="tour_1876_also_history">«سابقهٔ خود را بیاورید» حالا در حساب‌ها و اشتراک‌گذاری است.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas در Spotify</string>
     <string name="spot_canvas_first">اول Canvas در Spotify</string>
     <string name="spot_canvas_first_info">غیررسمی. از ورود شما به Spotify استفاده می‌کند تا دربارهٔ هر آهنگی که پخش می‌کنید از Spotify بپرسد. اگر Spotify برای آهنگی Canvas داشته باشد، به‌جای کاور متحرک پخش می‌شود. اگر نداشته باشد، Prism Canvas مثل قبل نشان داده می‌شود. Spotify هر زمان بخواهد می‌تواند این را از کار بیندازد.</string>
     <string name="spot_canvas_first_keywords">spotify canvas تکرار ویدیو کلیپ غیررسمی کاور متحرک</string>

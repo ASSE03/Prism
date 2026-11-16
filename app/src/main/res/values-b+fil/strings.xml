@@ -5603,6 +5603,8 @@
     <string name="tour_1876_also_kids">Nagpe-play nang hindi nagsa-sign in ang mga kantang may markang para sa mga bata.</string>
     <string name="tour_1876_also_cast">Sa cast speaker, isang hakbang ang isang pindot sa volume key.</string>
     <string name="tour_1876_also_history">Nasa Mga account at pag-share na ngayon ang Dalhin ang history mo.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas ng Spotify</string>
     <string name="spot_canvas_first">Canvas ng Spotify muna</string>
     <string name="spot_canvas_first_info">Hindi opisyal. Ginagamit ang Spotify sign-in mo para itanong sa Spotify ang bawat kantang pinapatugtog mo. Kung may canvas ang Spotify para sa isang kanta, iyon ang magpe-play kapalit ng animated cover. Kung wala, lalabas ang Prism Canvas gaya ng dati. Maaaring ihinto ito ng Spotify anumang oras.</string>
     <string name="spot_canvas_first_keywords">spotify canvas loop video clip hindi opisyal</string>

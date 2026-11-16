@@ -5603,6 +5603,8 @@
     <string name="tour_1876_also_kids">A gyerekeknek készültként jelölt dalok bejelentkezés nélkül is lejátszódnak.</string>
     <string name="tour_1876_also_cast">Átküldött lejátszásnál a hangerőgomb egy lenyomása egy lépés.</string>
     <string name="tour_1876_also_history">A Hozd át az előzményeidet mostantól a Fiókok és megosztás alatt van.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Spotify canvasa</string>
     <string name="spot_canvas_first">Először a Spotify canvasa</string>
     <string name="spot_canvas_first_info">Nem hivatalos. A Spotify-bejelentkezésedet használja, hogy minden lejátszott dalról megkérdezze a Spotifyt. Ahol a Spotifynak van canvasa egy dalhoz, az az animált borító helyett játszik le. Ahol nincs, a Prism Canvas jelenik meg, mint eddig. A Spotify bármikor leállíthatja a működését.</string>
     <string name="spot_canvas_first_keywords">spotify canvas hurok videó klip nem hivatalos</string>

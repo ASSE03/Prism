@@ -5528,6 +5528,8 @@
     <string name="tour_1876_also_kids">子ども向けとされた曲も、ログインなしで再生できます。</string>
     <string name="tour_1876_also_cast">キャスト先のスピーカーでは、音量キーを 1 回押すと 1 段階変わります。</string>
     <string name="tour_1876_also_history">「履歴を持ってくる」は「アカウントと共有」に移動しました。</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Spotify の Canvas</string>
     <string name="spot_canvas_first">Spotify の Canvas を優先</string>
     <string name="spot_canvas_first_info">非公式の機能です。Spotify のログイン情報を使い、再生する曲ごとに Spotify に問い合わせます。Spotify に曲の Canvas があれば、アニメーション カバーの代わりに再生されます。ない場合は、これまでどおり Prism Canvas が表示されます。Spotify によって、いつでも使えなくなる可能性があります。</string>
     <string name="spot_canvas_first_keywords">spotify canvas キャンバス ループ 動画 ビデオ 非公式</string>

@@ -5603,6 +5603,8 @@
     <string name="tour_1876_also_kids">Songs, die als „für Kinder“ markiert sind, spielen ohne Anmeldung.</string>
     <string name="tour_1876_also_cast">Auf einem Cast-Lautsprecher ist ein Druck auf die Lautstärketaste ein Schritt.</string>
     <string name="tour_1876_also_history">Deinen Verlauf mitbringen findest du jetzt unter Konten &amp; Teilen.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Spotify-Canvas</string>
     <string name="spot_canvas_first">Spotifys Canvas zuerst</string>
     <string name="spot_canvas_first_info">Inoffiziell. Nutzt deine Spotify-Anmeldung, um Spotify zu jedem gespielten Song zu fragen. Hat Spotify ein Canvas für einen Song, läuft es anstelle des animierten Covers. Hat es keins, erscheint wie bisher Prism Canvas. Spotify kann dies jederzeit stoppen.</string>
     <string name="spot_canvas_first_keywords">spotify canvas schleife video clip inoffiziell</string>

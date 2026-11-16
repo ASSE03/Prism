@@ -5603,6 +5603,8 @@
     <string name="tour_1876_also_kids">Nummers die als voor kinderen gemaakt zijn gemarkeerd, spelen zonder inloggen.</string>
     <string name="tour_1876_also_cast">Op een cast-speaker is één druk op een volumetoets één stap.</string>
     <string name="tour_1876_also_history">Je geschiedenis meenemen staat nu onder Accounts &amp; delen.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas van Spotify</string>
     <string name="spot_canvas_first">Canvas van Spotify eerst</string>
     <string name="spot_canvas_first_info">Onofficieel. Gebruikt je Spotify-inlog om Spotify te vragen naar elk nummer dat je afspeelt. Heeft Spotify een canvas voor een nummer, dan wordt die afgespeeld in plaats van de geanimeerde cover. Heeft Spotify er geen, dan toont Prism Canvas zoals eerder. Spotify kan dit op elk moment laten stoppen.</string>
     <string name="spot_canvas_first_keywords">spotify canvas lus video clip onofficieel</string>

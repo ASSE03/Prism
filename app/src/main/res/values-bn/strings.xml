@@ -5603,6 +5603,8 @@
     <string name="tour_1876_also_kids">শিশুদের জন্য চিহ্নিত গান সাইন ইন ছাড়াই চলে।</string>
     <string name="tour_1876_also_cast">কাস্ট স্পিকারে ভলিউম বোতামে একবার চাপ মানে এক ধাপ।</string>
     <string name="tour_1876_also_history">আপনার ইতিহাস নিয়ে আসুন এখন অ্যাকাউন্ট ও শেয়ারিং-এ আছে।</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Spotify-এর Canvas</string>
     <string name="spot_canvas_first">আগে Spotify-এর Canvas</string>
     <string name="spot_canvas_first_info">অনানুষ্ঠানিক। আপনার Spotify সাইন ইন ব্যবহার করে আপনার চালানো প্রতিটি গান সম্পর্কে Spotify-কে জিজ্ঞেস করে। কোনো গানের Canvas Spotify-এ থাকলে সেটি অ্যানিমেটেড কভারের জায়গায় চলে। না থাকলে আগের মতোই Prism Canvas দেখায়। Spotify যেকোনো সময় এটি কাজ করা বন্ধ করে দিতে পারে।</string>
     <string name="spot_canvas_first_keywords">spotify canvas লুপ ভিডিও ক্লিপ অনানুষ্ঠানিক ক্যানভাস</string>

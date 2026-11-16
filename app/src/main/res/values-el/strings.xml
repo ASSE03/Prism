@@ -5603,6 +5603,8 @@
     <string name="tour_1876_also_kids">Τα τραγούδια που έχουν σήμανση για παιδιά παίζουν χωρίς σύνδεση.</string>
     <string name="tour_1876_also_cast">Σε ηχείο μετάδοσης, ένα πάτημα του πλήκτρου έντασης είναι ένα βήμα.</string>
     <string name="tour_1876_also_history">Το «Φέρε το ιστορικό σου» βρίσκεται πλέον στους Λογαριασμοί &amp; κοινοποίηση.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas του Spotify</string>
     <string name="spot_canvas_first">Πρώτα το canvas του Spotify</string>
     <string name="spot_canvas_first_info">Ανεπίσημο. Χρησιμοποιεί τη σύνδεσή σου στο Spotify για να ρωτά το Spotify για κάθε τραγούδι που παίζεις. Όπου το Spotify έχει canvas για ένα τραγούδι, παίζει στη θέση του κινούμενου εξωφύλλου. Όπου δεν έχει, το Prism Canvas εμφανίζεται όπως πριν. Το Spotify μπορεί να το σταματήσει ανά πάσα στιγμή.</string>
     <string name="spot_canvas_first_keywords">spotify canvas επανάληψη βίντεο κλιπ ανεπίσημο</string>

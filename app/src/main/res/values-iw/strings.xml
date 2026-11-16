@@ -5678,6 +5678,8 @@
     <string name="tour_1876_also_kids">שירים שמסומנים כמיועדים לילדים מתנגנים בלי כניסה לחשבון.</string>
     <string name="tour_1876_also_cast">ברמקול שמקבל העברה, לחיצה אחת על מקש עוצמת הקול היא צעד אחד.</string>
     <string name="tour_1876_also_history">הבא את ההיסטוריה שלך נמצא עכשיו ב-חשבונות ושיתוף.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas של Spotify</string>
     <string name="spot_canvas_first">‏Canvas של Spotify קודם</string>
     <string name="spot_canvas_first_info">לא רשמי. משתמש בכניסה שלך ל-Spotify כדי לשאול את Spotify על כל שיר שאתה מנגן. כש-Spotify יש Canvas לשיר, הוא מתנגן במקום העטיפה המונפשת. כשאין, ‏Prism Canvas מוצג כמו קודם. Spotify יכול לעצור את זה בכל רגע.</string>
     <string name="spot_canvas_first_keywords">spotify canvas לופ סרטון קליפ לא רשמי</string>

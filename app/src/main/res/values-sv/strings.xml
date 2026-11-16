@@ -5603,6 +5603,8 @@
     <string name="tour_1876_also_kids">Låtar markerade som gjorda för barn spelas utan inloggning.</string>
     <string name="tour_1876_also_cast">På en cast-högtalare är ett tryck på volymknappen ett steg.</string>
     <string name="tour_1876_also_history">Ta med din historik finns nu i Konton &amp; delning.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Spotifys canvas</string>
     <string name="spot_canvas_first">Spotifys canvas först</string>
     <string name="spot_canvas_first_info">Inofficiellt. Använder din Spotify-inloggning för att fråga Spotify om varje låt du spelar. Där Spotify har en canvas för en låt spelas den i stället för det animerade omslaget. Där den saknas visas Prism Canvas som förut. Spotify kan när som helst stoppa detta.</string>
     <string name="spot_canvas_first_keywords">spotify canvas loop video klipp inofficiell</string>

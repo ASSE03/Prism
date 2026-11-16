@@ -5753,6 +5753,8 @@
     <string name="tour_1876_also_kids">Skladby označené jako určené pro děti se přehrají bez přihlášení.</string>
     <string name="tour_1876_also_cast">Na reproduktoru s Cast je jedno stisknutí tlačítka hlasitosti jeden krok.</string>
     <string name="tour_1876_also_history">Přenes si svou historii je teď v Účty a sdílení.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas ze Spotify</string>
     <string name="spot_canvas_first">Nejdřív Canvas ze Spotify</string>
     <string name="spot_canvas_first_info">Neoficiální. Využívá tvé přihlášení do Spotify a u každé přehrávané skladby se Spotify zeptá. Pokud má Spotify ke skladbě Canvas, přehraje se místo animovaného obalu. Pokud ho nemá, zobrazí se jako dřív Prism Canvas. Spotify to může kdykoli přestat umožňovat.</string>
     <string name="spot_canvas_first_keywords">spotify canvas smyčka video klip neoficiální</string>

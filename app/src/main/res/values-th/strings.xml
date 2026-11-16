@@ -5528,6 +5528,8 @@
     <string name="tour_1876_also_kids">เพลงที่ระบุว่าสร้างมาสำหรับเด็กเล่นได้โดยไม่ต้องลงชื่อเข้าใช้</string>
     <string name="tour_1876_also_cast">บนลำโพงที่แคสต์ กดปุ่มปรับเสียงหนึ่งครั้งจะเปลี่ยนหนึ่งระดับ</string>
     <string name="tour_1876_also_history">นำประวัติของคุณมา อยู่ที่ บัญชีและการแชร์ แล้ว</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas ของ Spotify</string>
     <string name="spot_canvas_first">ใช้ Canvas ของ Spotify ก่อน</string>
     <string name="spot_canvas_first_info">ไม่เป็นทางการ ใช้การลงชื่อเข้าใช้ Spotify ของคุณเพื่อถาม Spotify ถึงแต่ละเพลงที่คุณเล่น เพลงที่ Spotify มี Canvas จะเล่นแทนปกเคลื่อนไหว เพลงที่ไม่มี Prism Canvas จะแสดงเหมือนเดิม Spotify อาจทำให้สิ่งนี้หยุดทำงานได้ทุกเมื่อ</string>
     <string name="spot_canvas_first_keywords">spotify canvas วนซ้ำ วิดีโอ คลิป ไม่เป็นทางการ</string>

@@ -5753,6 +5753,8 @@
     <string name="tour_1876_also_kids">Utwory oznaczone jako dla dzieci grają bez logowania.</string>
     <string name="tour_1876_also_cast">Na głośniku z przesyłaniem jedno naciśnięcie klawisza głośności to jeden krok.</string>
     <string name="tour_1876_also_history">Przenieś swoją historię jest teraz w Konta i udostępnianie.</string>
+    <string name="prism_canvas">Prism Canvas</string>
+    <string name="spotify_canvas">Canvas ze Spotify</string>
     <string name="spot_canvas_first">Najpierw Canvas ze Spotify</string>
     <string name="spot_canvas_first_info">Funkcja nieoficjalna. Używa twojego logowania do Spotify, by pytać Spotify o każdy odtwarzany utwór. Jeśli Spotify ma Canvas do utworu, odtwarza się on zamiast animowanej okładki. Jeśli nie ma, Prism Canvas działa jak dotąd. Spotify może w każdej chwili przestać na to pozwalać.</string>
     <string name="spot_canvas_first_keywords">spotify canvas pętla zapętlony wideo film klip nieoficjalne</string>
