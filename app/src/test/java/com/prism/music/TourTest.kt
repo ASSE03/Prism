@@ -161,9 +161,27 @@ class TourTest {
     }
 
     /** 1.8.7.5 (build 66): an update from 1.8.7 shows Your Spotify, opening Accounts & sharing at Spotify, then the fixes. */
+    /**
+     * 1.8.7.6 (build 67): an update from 1.8.7.5 (66) shows Spotify's canvas, then the fixes, and nothing older. The first
+     * page opens the Player page at Canvas; only the last carries the line about supporting Prism.
+     */
+    @Test
+    fun anUpdateFrom1875ShowsSpotifysCanvas() {
+        val pages = Tour.stepsAfter(66)
+        assertEquals(listOf(R.string.tour_1876_canvas_title, R.string.also_new).map { tr(it) }, pages.map { it.title })
+        assertTrue(pages.all { it.since == 67 && it.kind == TourStep.Kind.PLAIN })
+        assertTrue(pages.all { it.points.size in 3..5 && it.points.all { p -> p.isNotBlank() } })
+        assertTrue(pages.flatMap { it.points + it.body }.none { "%" in it })
+        assertEquals(listOf(false, true), pages.map { it.support })
+        val (key, find) = parse(pages.first().showMe!!)
+        assertEquals(SettingsPageId.PLAYER, SettingsMap.resolve(key, find)?.page)
+        // An update from 1.8.7 sees both releases' pages, in order.
+        assertEquals(listOf(66, 66, 67, 67), Tour.stepsAfter(65).map { it.since })
+    }
+
     @Test
     fun anUpdateFrom187ShowsYourSpotify() {
-        val pages = Tour.stepsAfter(65)
+        val pages = Tour.stepsAfter(65).filter { it.since == 66 }
         assertEquals(listOf(R.string.tour_1875_spotify_title, R.string.also_new).map { tr(it) }, pages.map { it.title })
         assertTrue(pages.all { it.since == 66 && it.kind == TourStep.Kind.PLAIN })
         assertTrue(pages.all { it.points.size in 3..5 && it.points.all { p -> p.isNotBlank() } })

@@ -2,6 +2,24 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.8.7.6
+
+### The small things
+
+- **Spotify's canvas, if you want it.** Signed in to Spotify in Prism? Turn on "Spotify's canvas first" (Settings, Player, under Canvas, or the offer after you sign in) and Prism shows the short looping video Spotify has for a song. Where Spotify has none, Prism Canvas shows as before. It is off until you turn it on. It is unofficial, like the sign-in: it asks Spotify about each song you play and may stop working.
+- **Prism stays free.** There is now a quiet way to support it: a "Support Prism" row in Settings, About, one card after 100 hours of listening, and one line at the end of the year's recap and of What's new. Each shows once. "I've supported Prism" turns them all off for good, and nobody checks. A Supporters page thanks the people who did.
+- **Settings in plainer words.** Dozens of names and lines across the settings pages were reworded, buttons that do something are in your accent color, and "Bring your history" moved to Accounts & sharing, with the other accounts.
+- **A new install's look is called by its name.** A fresh install said its Look was "your own mix" and marked settings as changed that nobody had touched. It now shows Prism's own Look, and a reset goes back to it.
+
+### Fixes from your reports
+
+- The equalizer does something again (#519). Prism was filling a list Android keeps of sound effects until Android refused new ones. If your equalizer still does nothing after updating, restart your phone once: that empties the list, and Prism no longer fills it. The Equalizer screen says so when Android is refusing.
+- A canvas goes round without standing still (#528). On the test phone the pause at the restart went from up to 1.5 seconds to under a tenth of a second.
+- Songs marked as made for kids play without signing in (#531). They can take a few seconds longer to start.
+- Casting to a speaker, one press of a volume key is one step, and a held key no longer runs to full or silent (#534).
+- Mix says which of Sing or Listen together kept two songs from blending (#493).
+- The volume bar in a Look's preview and in the player follows "Match the progress bar".
+
 ## 1.8.7.5
 
 ### Your Spotify

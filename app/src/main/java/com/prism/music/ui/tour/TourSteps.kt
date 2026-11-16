@@ -74,6 +74,8 @@ private const val V1_8_6 = 64
 private const val V1_8_7 = 65
 /** Prism 1.8.7.5 (build 66): Your Spotify, and fixes. */
 private const val V1_8_7_5 = 66
+/** Prism 1.8.7.6 (build 67): the small things, and Spotify's canvas. */
+private const val V1_8_7_6 = 67
 
     /** Every step, in the order they're shown. */
     val steps: List<TourStep> = listOf(
@@ -770,6 +772,29 @@ private const val V1_8_7_5 = 66
                 tr(R.string.tour_1875_also_busy),
                 tr(R.string.tour_1875_also_heard),
             ),
+        ),
+        TourStep(
+            V1_8_7_6, PrismIcons.PlayCircle, tr(R.string.tour_1876_canvas_title),
+            tr(R.string.tour_1876_canvas_about),
+            listOf(
+                tr(R.string.tour_1876_canvas_point_1),
+                tr(R.string.tour_1876_canvas_point_2),
+                tr(R.string.tour_1876_canvas_point_3),
+            ),
+            showMe = Routes.settings(SettingsPageId.PLAYER.key, find = tr(R.string.canvas)),
+        ),
+        TourStep(
+            V1_8_7_6, PrismIcons.Check, tr(R.string.also_new),
+            tr(R.string.from_your_requests),
+            listOf(
+                tr(R.string.tour_1876_also_loop),
+                tr(R.string.tour_1876_also_eq),
+                tr(R.string.tour_1876_also_kids),
+                tr(R.string.tour_1876_also_cast),
+                tr(R.string.tour_1876_also_history),
+            ),
+            // The release's last card carries the one line about supporting Prism (plan-1.8.7.6 §4.1 S6).
+            support = true,
         ),
         TourStep(
             V1_7, PrismIcons.Update, tr(R.string.stay_in_the_loop),

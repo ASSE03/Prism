@@ -5591,6 +5591,17 @@
     <string name="tour_1875_also_home">The play button on Home\'s big cards plays straight away.</string>
     <string name="tour_1875_also_busy">A song whose server keeps failing is asked for another way.</string>
     <string name="tour_1875_also_heard">A recognized song plays from the moment you heard it, with its lyrics open.</string>
+    <!-- Tour cards for 1.8.7.6. "Canvas" is the short looping video behind a song. -->
+    <string name="tour_1876_canvas_title">Spotify\'s canvas</string>
+    <string name="tour_1876_canvas_about">For people signed in to Spotify in Prism</string>
+    <string name="tour_1876_canvas_point_1">Prism can show the short looping video Spotify has for a song.</string>
+    <string name="tour_1876_canvas_point_2">Where Spotify has none, Prism Canvas shows as before.</string>
+    <string name="tour_1876_canvas_point_3">It is off until you turn it on, and it is unofficial: it may stop working.</string>
+    <string name="tour_1876_also_loop">A canvas goes round without standing still.</string>
+    <string name="tour_1876_also_eq">The equalizer works again. If it still does nothing, restart your phone once.</string>
+    <string name="tour_1876_also_kids">Songs marked as made for kids play without signing in.</string>
+    <string name="tour_1876_also_cast">On a cast speaker, one press of a volume key is one step.</string>
+    <string name="tour_1876_also_history">Bring your history is now in Accounts &amp; sharing.</string>
     <!-- 1.8.7: Backup & about → Diagnostics → "Is playback working?" (the self-test). -->
     <string name="selftest_title">Is playback working?</string>
     <string name="selftest_info">A few quick checks, one after another, and what to do when one fails. They ask only YouTube and one lyrics service, as playing a song does. The result stays on the phone unless you tap Share.</string>

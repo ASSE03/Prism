@@ -34,7 +34,7 @@ internal object CanvasFrames {
 
     /**
      * What the decoder handed out around each restart, from the player's own thread: the last frame's time in the loop
-     * before it went back, the first one after, and how long apart they were released ("old ms -> new ms after n ms").
+     * before it went back, the first one after, and how long apart they were released, in ms ("old>new+apart").
      */
     val wraps = ArrayList<String>()
 
@@ -45,7 +45,8 @@ internal object CanvasFrames {
         override fun onVideoFrameAboutToBeRendered(presentationTimeUs: Long, releaseTimeNs: Long, format: androidx.media3.common.Format, mediaFormat: android.media.MediaFormat?) {
             // Each time the loop goes back, and any frame released long after the one before it.
             if (lastPtsUs != Long.MIN_VALUE && (presentationTimeUs < lastPtsUs || releaseTimeNs - lastReleaseNs > 80_000_000L)) synchronized(wraps) {
-                wraps += "${lastPtsUs / 1000.0} ms -> ${presentationTimeUs / 1000.0} ms after ${(releaseTimeNs - lastReleaseNs) / 1e6} ms"
+                // Numbers only (milliseconds): no words, so nothing here is text to translate.
+                wraps += "${lastPtsUs / 1000.0}>${presentationTimeUs / 1000.0}+${(releaseTimeNs - lastReleaseNs) / 1e6}"
             }
             lastPtsUs = presentationTimeUs; lastReleaseNs = releaseTimeNs
         }
