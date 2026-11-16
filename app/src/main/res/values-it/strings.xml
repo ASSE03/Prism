@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">artista album playlist pagina colore foto accento immagine</string>
     <string name="font">Carattere</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">carattere font personalizzato ttf otf outfit prism sistema pulito manrope geometrico plus jakarta sans arioso urbanist arrotondato nunito editoriale serif grazie fraunces mono geist leggibile atkinson hyperlegible dislessia dislessico opendyslexic accessibilità</string>
-    <string name="type">Tipografia</string>
+    <string name="type">Stile dei titoli</string>
     <string name="classic_1_6_bold_headings_titles">classico 1.6 grassetto intestazioni titoli vecchio aspetto</string>
     <string name="classic_type">Tipografia classica</string>
     <string name="weight_and_spacing">Spessore e spaziatura</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">Rimuovi il file del carattere dei testi</string>
     <string name="font_size_scale_bigger_smaller">carattere dimensione scala più grande più piccolo</string>
     <string name="icons">Icone</string>
-    <string name="pack">Pacchetto</string>
+    <string name="pack">Pacchetto di icone</string>
     <string name="icon_style_cupertino_apple">icone stile cupertino apple</string>
     <string name="icon_thin_bold">icone sottili spesse</string>
     <string name="rounded">Arrotondate</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">Riavvia Prism per vederle</string>
     <string name="app_icon">Icona dell\'app</string>
     <string name="launcher_home_screen_icon_logo">launcher schermata home icona logo</string>
-    <string name="shape">Forma</string>
+    <string name="shape">Forma dei pulsanti</string>
     <string name="corners">Angoli</string>
     <string name="rounded_square_shape_radius_slider">arrotondato quadrato forma raggio cursore</string>
     <string name="covers_shapes">Forme delle copertine</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">curva potenza costante lineare curva a s dj taglio morbida diretta delicata</string>
     <string name="crossfade_mark">Segno della dissolvenza</string>
     <string name="progress_bar_mark_where_next_song">barra di avanzamento segno dove inizia la dissolvenza del brano successivo</string>
-    <string name="covers_blend_too">Anche le copertine sfumano</string>
+    <string name="covers_blend_too">Le copertine sfumano nella dissolvenza incrociata</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">copertina dissolvi sfuma dissolvenza incrociata apple music</string>
     <string name="speed_pitch_and_fades">Velocità, tonalità e dissolvenze</string>
     <string name="speed_when_prism_starts">Velocità all\'avvio di Prism</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">Cancella Download intelligenti</string>
     <string name="cache_delete_free_space">cache elimina libera spazio</string>
     <string name="sections_order_shortcuts_quick_picks_speed">sezioni ordine scorciatoie scelte rapide selezione rapida quick picks speed dial</string>
-    <string name="continue_line">Riga Continua</string>
+    <string name="continue_line">Riprendi da dove eri rimasto</string>
     <string name="continue_album_resume_greeting_hide_context">continua album riprendi saluto nascondi contesto rewind</string>
     <string name="replay_card">Scheda Replay</string>
     <string name="replay_teaser_look_style_design_quiet">replay anteprima aspetto stile design discreto registro velo cornice spettro anello copertina striscia barre aurora</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">Licenze open source</string>
     <string name="license_gpl">licenza gpl</string>
     <string name="diagnostics">Diagnostica</string>
-    <string name="playback_diagnostics">Diagnostica della riproduzione</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">scatti interruzioni salti glitch lag bluetooth airpods log debug</string>
+    <string name="playback_diagnostics">Tieni un registro della riproduzione</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">scatti interruzioni salti glitch lag bluetooth airpods log debug diagnostica riproduzione registro</string>
     <string name="share_diagnostics">Condividi diagnostica</string>
     <string name="log_send_report">log invia segnalazione</string>
     <string name="clear_diagnostics">Cancella diagnostica</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">Si apre in YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">Attivo: i link che tocchi si aprono qui</string>
-    <string name="off_turn_on_open_supported_links">Disattivo: attiva \"Apri link supportati\" per music.youtube.com</string>
-    <string name="choose_prism_when_a_link_asks">Scegli Prism quando un link chiede quale app usare</string>
-    <string name="android_only_lets_an_app_open">Android permette a un\'app di aprire i link di un sito solo se lo dici tu. Questo apre la pagina di Prism per farlo: attiva lì i suoi link.</string>
+    <string name="on_links_you_tap_open_here">Attivo</string>
+    <string name="off_turn_on_open_supported_links">Disattivo</string>
+    <string name="choose_prism_when_a_link_asks">Non impostato</string>
+    <string name="android_only_lets_an_app_open">Android permette a un\'app di aprire i link di un sito solo se lo dici tu. Questo apre la pagina di Prism per farlo. Attiva lì \"Apri link supportati\" per music.youtube.com, e i link che tocchi si apriranno qui. Se un link chiede quale app usare, scegli Prism.</string>
     <string name="see_and_delete_what_s_on">Vedi ed elimina ciò che c\'è sul telefono</string>
     <string name="including_likes_from_other_devices">Compresi i Mi piace da altri dispositivi</string>
     <string name="songs_you_ll_likely_play_ready">Brani che probabilmente ascolterai, pronti offline</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Di Apple Music, Musixmatch e Spotify · parola per parola</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · parola per parola, il maggior numero di brani cinesi</string>
     <string name="open_lyrics_database_line_by_line">Database di testi aperto · riga per riga</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Testi inviati dagli ascoltatori · ancora pochi brani</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · righe o testo semplice</string>
+    <string name="lyricfind_lines_or_plain">I testi nella pagina del brano su Prism Music, da LyricFind · righe o testo semplice</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Testo semplice · completa anche le parole censurate</string>
     <string name="both">Entrambi</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">Nota musicale</string>
     <string name="bold">Grassetto</string>
     <string name="wide">Ampio</string>
-    <string name="ink">Inchiostro</string>
+    <string name="ink">Semplice</string>
     <string name="the_light">La luce</string>
     <string name="when_you_leave_prism">Quando esci da Prism</string>
     <string name="only_with_its_button">Solo con il suo pulsante</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">Precedente del mini player</string>
     <string name="mini_player_progress">Avanzamento del mini player</string>
     <string name="player_background_showing">Sfondo del player visibile</string>
-    <string name="cover_corners">Angoli della copertina</string>
+    <string name="cover_corners">Arrotondamento degli angoli della copertina</string>
     <string name="cover_shrinks_on_pause">La copertina si riduce in pausa</string>
     <string name="edge_to_edge_cover">Copertina da bordo a bordo</string>
     <string name="edge_to_edge_video">Video da bordo a bordo</string>
@@ -4040,12 +4040,12 @@
     <string name="edit_this_menu_keywords">menu ⋯ puntini altre opzioni opzioni brano riquadri rapidi azioni nascondi mostra</string>
     <string name="what_plays_next">Cosa viene dopo</string>
     <string name="when_the_queue_ends">Quando finisce la coda</string>
-    <string name="when_the_queue_ends_info">Stop: la musica finisce con la coda. La tua musica: la radio di Prism da ciò che ascolti. Entrambi: soprattutto la tua musica, con qualche brano nuovo. Prism Music: una radio dal catalogo di Prism Music. Offline è sempre la tua musica.</string>
+    <string name="when_the_queue_ends_info">Stop: la musica finisce con la coda. La tua musica: la radio di Prism da ciò che ascolti. Tuoi e nuovi: soprattutto la tua musica, con qualche brano nuovo. Prism Music: una radio dal catalogo di Prism Music. Offline è sempre la tua musica.</string>
     <string name="music_videos_label">Video musicali</string>
-    <string name="play_them">Riproducili</string>
+    <string name="play_them">Video</string>
     <string name="songs_in_radios">Brani nelle radio</string>
     <string name="songs_everywhere">Brani ovunque</string>
-    <string name="music_videos_label_info">Riproducili: un video musicale viene riprodotto come video. Brani nelle radio: la riproduzione automatica e le radio riproducono invece il brano del video. Brani ovunque: ogni video musicale che tocchi viene riprodotto come brano, e il pulsante Video mostra comunque il video.</string>
+    <string name="music_videos_label_info">Video: un video musicale viene riprodotto come video. Brani nelle radio: la riproduzione automatica e le radio riproducono invece il brano del video. Brani ovunque: ogni video musicale che tocchi viene riprodotto come brano, e il pulsante Video mostra comunque il video.</string>
     <string name="trim_silence">Togli il silenzio all\'inizio e alla fine</string>
     <string name="podcasts_only">Solo podcast</string>
     <string name="songs_and_podcasts">Brani e podcast</string>
@@ -4464,10 +4464,10 @@
     <string name="replay_graph_days">Giorni</string>
     <string name="replay_last_weeks">Ultime %1$d settimane</string>
     <string name="replay_last_days">Ultimi %1$d giorni</string>
-    <string name="replay_story_font">Caratteri delle storie</string>
+    <string name="replay_story_font">Carattere nelle storie</string>
     <string name="replay_story_font_info">Come le storie di Replay e Rewind compongono le parole: con il carattere da poster di Prism, o con il carattere che hai scelto per Prism (Testo e icone).</string>
     <string name="replay_story_font_keywords">carattere tipografia font storie rewind wrapped</string>
-    <string name="replay_story_font_poster">Carattere da poster</string>
+    <string name="replay_story_font_poster">Carattere da poster di Prism</string>
     <string name="replay_story_font_own">Il tuo carattere</string>
     <string name="replay_by_hour">Ascolti per ora</string>
     <string name="replay_by_day">Ascolti per giorno</string>
@@ -4829,7 +4829,7 @@
     <string name="reopen_on_the_last_page">Riapri sull\'ultima pagina</string>
     <string name="reopen_on_the_last_page_info">Il player si apre su ciò che avevi aperto quando l\'hai lasciato: la copertina, i testi o la coda. Indietro chiude il player anche dai testi o dalla coda, lasciandolo lì; i loro pulsanti tornano alla copertina.</string>
     <string name="reopen_on_the_last_page_keywords">player ricorda testi coda apri avvio pagina</string>
-    <string name="steadier_lyrics">Testi più stabili</string>
+    <string name="steadier_lyrics">Testi più calmi</string>
     <string name="steadier_lyrics_info">I controlli richiedono uno scorrimento più lungo per comparire e sparire. Dopo che scorri, i testi tornano prima alla riga cantata se è vicina, e si prendono il tempo di sempre se è lontana.</string>
     <string name="steadier_lyrics_keywords">testi sensibile scorrimento scorri ritorno riga corrente segui controlli</string>
     <string name="gestures_under_the_lyrics">Gesti sotto i testi</string>
@@ -5144,9 +5144,9 @@
     <string name="dd_space_used">%1$s usati</string>
     <string name="dd_use_mobile_data_for">Usa i dati mobili per</string>
     <string name="dd_use_saving_covers">Salvare copertine animate</string>
-    <string name="dd_use_measuring">Misurare i brani</string>
+    <string name="dd_use_measuring">Controllo di volume e tempo</string>
     <string name="dd_use_videos_info">Se è disattivato, i video musicali non vengono riprodotti con i dati mobili, tranne quelli che hai scaricato. Se il Wi-Fi cade durante un video, continua come audio.</string>
-    <string name="dd_use_keywords">rete cellulare a consumo risparmio dati solo wifi cellular metered data saver</string>
+    <string name="dd_use_keywords">rete cellulare a consumo risparmio dati solo wifi caricamento anticipato misurare volume tempo cellular metered data saver</string>
     <string name="gb_on_the_cover">Sulla copertina</string>
     <string name="gb_on_the_mini_player">Sul mini player</string>
     <string name="gb_swipes_and_touch">Scorrimenti e tocchi</string>
@@ -5264,7 +5264,7 @@
     <string name="settings_player_queue_dj">Pulsante DJ</string>
     <string name="settings_player_queue_lengths">Durata dei brani</string>
     <string name="settings_player_queue_move_played">Sposta i brani ascoltati</string>
-    <string name="settings_player_queue_tidier">Più ordinata</string>
+    <string name="settings_player_queue_tidier">Coda più ordinata</string>
     <string name="settings_player_scroll_for_controls">Scorri in su per i controlli</string>
     <string name="settings_player_lock_options">Opzioni della schermata di blocco</string>
     <string name="settings_player_immersive_options">Opzioni immersive</string>
@@ -5613,4 +5613,28 @@
     <string name="spot_session_bring_failed">Impossibile leggerla. Riprova.</string>
     <string name="spot_session_followed_all">Anche le playlist che segui</string>
     <string name="spot_session_followed_all_info">Attivo: le playlist che segui su Spotify arrivano da sole nella Raccolta, le prime 50, e restano aggiornate. Disattivo: ognuna aspetta nella Raccolta, a un tocco di distanza. Quelle che hai nascosto dalla Raccolta restano escluse.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (come viene letto il web player di Spotify)</string>
+    <string name="spot_session_playlists_info">Le tue playlist di Spotify compaiono nella Raccolta con il segno Spotify, e vengono riprodotte tramite le corrispondenze su YouTube Music, nell\'ordine di Spotify. I brani vengono abbinati una volta e ricordati. Le playlist che segui aspettano nella Raccolta, a un tocco di distanza, oppure arrivano da sole con Anche le playlist che segui. Disattivando questa opzione escono dalla Raccolta.</string>
+    <string name="spot_session_keep_in_step_info">Quando ne apri una, Prism controlla se i suoi brani sono cambiati su Spotify e, se sì, la rilegge. In ogni caso, vengono controllate tutte una volta al giorno con il Wi-Fi. Le modifiche che fai in Prism vengono sostituite da quelle di Spotify.</string>
+    <string name="tour_1875_spotify_title">Il tuo Spotify</string>
+    <string name="tour_1875_spotify_about">Accedi a Spotify una volta e la tua musica arriva in Prism.</string>
+    <string name="tour_1875_spotify_point_1">I tuoi brani preferiti e le tue playlist vengono trovati su YouTube Music e restano allineati.</string>
+    <string name="tour_1875_spotify_point_2">Arrivano anche le playlist che segui: tocca una nella Raccolta per portarla dentro.</string>
+    <string name="tour_1875_spotify_point_3">Prism legge soltanto. Nel tuo Spotify non viene mai cambiato nulla.</string>
+    <string name="tour_1875_spotify_point_4">Non è ufficiale e va contro i termini di Spotify, quindi potrebbe smettere di funzionare. La tua app sviluppatore funziona come prima.</string>
+    <string name="tour_1875_also_queue">Seleziona dei brani, poi Riproduci dopo o Aggiungi alla coda: funziona anche senza niente in riproduzione.</string>
+    <string name="tour_1875_also_home">Il pulsante di riproduzione sulle schede grandi della Home riproduce subito.</string>
+    <string name="tour_1875_also_busy">Un brano il cui server continua a dare errore viene richiesto in un altro modo.</string>
+    <string name="tour_1875_also_heard">Un brano riconosciuto parte dal momento in cui l\'hai sentito, con i testi aperti.</string>
+    <string name="queue_end_mixed">Tuoi e nuovi</string>
+    <string name="dd_use_load_ahead">Caricamento anticipato dei brani</string>
+    <string name="replay_notices_n_on">%1$d su 3 attive</string>
+    <string name="car_lyrics_style">Stile dei testi</string>
+    <string name="tab_tint_light">Colori del tema</string>
+    <string name="bini_detail">Testi di Apple Music · parola per parola, abbinati in un altro modo</string>
+    <string name="hl_card_style">Stile della scheda</string>
+    <string name="hl_show_in_lists">Mostra negli elenchi</string>
+    <string name="hl_show_on_artist_pages">Mostra nelle pagine degli artisti</string>
+    <string name="allow_access_to_lossless_files_value">Necessario per trovare i tuoi file lossless</string>
 </resources>

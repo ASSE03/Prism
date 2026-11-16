@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">فنکار البم پلے لسٹ صفحہ رنگ تصویر ایکسنٹ</string>
     <string name="font">فونٹ</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">ٹائپ فیس حسبِ منشا ttf otf outfit prism سسٹم صاف manrope جیومیٹرک plus jakarta sans کھلا urbanist گول nunito ادارتی serif fraunces mono geist واضح atkinson hyperlegible ڈسلیکسیا opendyslexic رسائی font</string>
-    <string name="type">فونٹ کا انداز</string>
+    <string name="type">سرخی کا انداز</string>
     <string name="classic_1_6_bold_headings_titles">کلاسک 1.6 موٹی سرخیاں عنوانات پرانا لُک classic</string>
     <string name="classic_type">کلاسک فونٹ</string>
     <string name="weight_and_spacing">موٹائی اور فاصلہ</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">بولوں کے فونٹ کی فائل ہٹائیں</string>
     <string name="font_size_scale_bigger_smaller">فونٹ سائز پیمانہ بڑا چھوٹا</string>
     <string name="icons">آئیکنز</string>
-    <string name="pack">پیک</string>
+    <string name="pack">آئیکن پیک</string>
     <string name="icon_style_cupertino_apple">آئیکن انداز cupertino apple</string>
     <string name="icon_thin_bold">آئیکن پتلا موٹا</string>
     <string name="rounded">گول</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">انہیں دیکھنے کے لیے Prism دوبارہ شروع کریں</string>
     <string name="app_icon">ایپ آئیکن</string>
     <string name="launcher_home_screen_icon_logo">لانچر ہوم اسکرین آئیکن لوگو</string>
-    <string name="shape">شکل</string>
+    <string name="shape">بٹن کی شکل</string>
     <string name="corners">کونے</string>
     <string name="rounded_square_shape_radius_slider">گول مربع شکل رداس سلائیڈر</string>
     <string name="covers_shapes">کورز کی اشکال</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">کرو برابر طاقت سیدھا s-curve dj کٹ ہموار نرم</string>
     <string name="crossfade_mark">کراس فیڈ نشان</string>
     <string name="progress_bar_mark_where_next_song">پروگریس بار نشان جہاں اگلا گانا ملنا شروع ہو</string>
-    <string name="covers_blend_too">کورز بھی گھل جاتے ہیں</string>
+    <string name="covers_blend_too">کراس فیڈ میں کورز گھل جاتے ہیں</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">کور آرٹ ورک گھلنا فیڈ کراس فیڈ apple music</string>
     <string name="speed_pitch_and_fades">رفتار، پچ اور فیڈز</string>
     <string name="speed_when_prism_starts">Prism شروع ہونے پر رفتار</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">سمارٹ ڈاؤن لوڈز صاف کریں</string>
     <string name="cache_delete_free_space">کیش حذف خالی جگہ</string>
     <string name="sections_order_shortcuts_quick_picks_speed">سیکشنز ترتیب شارٹ کٹس فوری انتخاب اسپیڈ ڈائل</string>
-    <string name="continue_line">جاری رکھیں لائن</string>
+    <string name="continue_line">وہیں سے جاری رکھیں جہاں چھوڑا تھا</string>
     <string name="continue_album_resume_greeting_hide_context">جاری رکھیں البم دوبارہ شروع سلام چھپائیں rewind</string>
     <string name="replay_card">Replay کارڈ</string>
     <string name="replay_teaser_look_style_design_quiet">replay جھلک لُک انداز ڈیزائن سادہ کھاتہ رنگ اسپیکٹرم فریم حلقہ کور پٹی پٹیاں اورورا</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">اوپن سورس لائسنسز</string>
     <string name="license_gpl">لائسنس gpl</string>
     <string name="diagnostics">تشخیص</string>
-    <string name="playback_diagnostics">پلے بیک کی تشخیص</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">اٹکنا جھٹکا چھوڑنا خرابی لیگ bluetooth airpods لاگ debug</string>
+    <string name="playback_diagnostics">پلے بیک لاگ رکھیں</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">اٹکنا جھٹکا چھوڑنا خرابی لیگ bluetooth airpods لاگ debug تشخیص پلے بیک لاگ diagnostics playback log</string>
     <string name="share_diagnostics">تشخیص شیئر کریں</string>
     <string name="log_send_report">لاگ بھیجیں رپورٹ</string>
     <string name="clear_diagnostics">تشخیص صاف کریں</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">YouTube Music میں کھلتا ہے</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">آن: جن لنکس پر آپ ٹیپ کریں وہ یہاں کھلتے ہیں</string>
-    <string name="off_turn_on_open_supported_links">آف: music.youtube.com کے لیے \"معاون لنکس کھولیں\" آن کریں</string>
-    <string name="choose_prism_when_a_link_asks">جب لنک پوچھے کون سی ایپ تو Prism چنیں</string>
-    <string name="android_only_lets_an_app_open">Android کسی ایپ کو ویب سائٹ کے لنکس تبھی کھولنے دیتا ہے جب آپ اجازت دیں۔ یہ Prism کا اس کے لیے صفحہ کھولتا ہے: وہاں اس کے لنکس آن کریں۔</string>
+    <string name="on_links_you_tap_open_here">آن</string>
+    <string name="off_turn_on_open_supported_links">آف</string>
+    <string name="choose_prism_when_a_link_asks">طے نہیں</string>
+    <string name="android_only_lets_an_app_open">Android کسی ایپ کو ویب سائٹ کے لنکس تبھی کھولنے دیتا ہے جب آپ اجازت دیں۔ یہ Prism کا اس کے لیے صفحہ کھولتا ہے۔ وہاں music.youtube.com کے لیے \"معاون لنکس کھولیں\" آن کریں، تو آپ کے ٹیپ کیے لنکس یہاں کھلیں گے۔ اگر کوئی لنک پوچھے کون سی ایپ، تو Prism چنیں۔</string>
     <string name="see_and_delete_what_s_on">دیکھیں اور حذف کریں کہ آپ کے فون پر کیا ہے</string>
     <string name="including_likes_from_other_devices">دوسری ڈیوائسز کی پسند سمیت</string>
     <string name="songs_you_ll_likely_play_ready">گانے جو آپ ممکنہ طور پر چلائیں گے، آف لائن تیار</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music، Musixmatch اور Spotify کے · لفظ بہ لفظ</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · لفظ بہ لفظ، سب سے زیادہ چینی گانے</string>
     <string name="open_lyrics_database_line_by_line">کھلا بولوں کا ڈیٹا بیس · سطر بہ سطر</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">سننے والوں کے بھیجے گئے بول · ابھی تک چند گانے</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · سطریں یا سادہ</string>
+    <string name="lyricfind_lines_or_plain">Prism Music پر گانے کے صفحے کے بول، LyricFind سے · سطریں یا سادہ</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">سادہ متن · ستاروں سے چھپائے الفاظ بھی بھرتا ہے</string>
     <string name="both">دونوں</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">میوزک نوٹ</string>
     <string name="bold">موٹا</string>
     <string name="wide">چوڑا</string>
-    <string name="ink">سیاہی</string>
+    <string name="ink">سادہ</string>
     <string name="the_light">روشنی</string>
     <string name="when_you_leave_prism">جب آپ Prism سے باہر جائیں</string>
     <string name="only_with_its_button">صرف اس کے بٹن سے</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">منی پلیئر کا پچھلا</string>
     <string name="mini_player_progress">منی پلیئر کی پروگریس</string>
     <string name="player_background_showing">پلیئر کا پس منظر نظر آئے</string>
-    <string name="cover_corners">کور کے کونے</string>
+    <string name="cover_corners">کور کے کونوں کی گولائی</string>
     <string name="cover_shrinks_on_pause">روکنے پر کور چھوٹا ہو</string>
     <string name="edge_to_edge_cover">کنارے سے کنارے تک کور</string>
     <string name="edge_to_edge_video">کنارے سے کنارے تک ویڈیو</string>
@@ -3990,12 +3990,12 @@
     <string name="edit_this_menu_keywords">مینو ⋯ نقطے مزید اختیارات گانے کے اختیارات فوری ٹائلز کام چھپائیں دکھائیں</string>
     <string name="what_plays_next">آگے کیا چلے گا</string>
     <string name="when_the_queue_ends">جب قطار ختم ہو</string>
-    <string name="when_the_queue_ends_info">روکیں: قطار کے ساتھ موسیقی ختم ہو جاتی ہے۔ آپ کی موسیقی: آپ جو چلاتے ہیں اس سے Prism کا اپنا ریڈیو۔ دونوں: زیادہ تر آپ کی موسیقی، کچھ نئے گانوں کے ساتھ۔ Prism Music: Prism Music کے کیٹلاگ سے ایک ریڈیو۔ آف لائن ہمیشہ آپ کی موسیقی ہوتی ہے۔</string>
+    <string name="when_the_queue_ends_info">روکیں: قطار کے ساتھ موسیقی ختم ہو جاتی ہے۔ آپ کی موسیقی: آپ جو چلاتے ہیں اس سے Prism کا اپنا ریڈیو۔ آپ کی اور نئی: زیادہ تر آپ کی موسیقی، کچھ نئے گانوں کے ساتھ۔ Prism Music: Prism Music کے کیٹلاگ سے ایک ریڈیو۔ آف لائن ہمیشہ آپ کی موسیقی ہوتی ہے۔</string>
     <string name="music_videos_label">میوزک ویڈیوز</string>
-    <string name="play_them">انہیں چلائیں</string>
+    <string name="play_them">ویڈیوز</string>
     <string name="songs_in_radios">ریڈیو میں گانے</string>
     <string name="songs_everywhere">ہر جگہ گانے</string>
-    <string name="music_videos_label_info">انہیں چلائیں: میوزک ویڈیو بطور ویڈیو چلتی ہے۔ ریڈیو میں گانے: آٹو پلے اور ریڈیو اس کی جگہ ویڈیو کا گانا چلاتے ہیں۔ ہر جگہ گانے: آپ جس میوزک ویڈیو پر بھی ٹیپ کریں وہ اپنے گانے کے طور پر چلتی ہے، اور ویڈیو بٹن پھر بھی ویڈیو دکھاتا ہے۔</string>
+    <string name="music_videos_label_info">ویڈیوز: میوزک ویڈیو بطور ویڈیو چلتی ہے۔ ریڈیو میں گانے: آٹو پلے اور ریڈیو اس کی جگہ ویڈیو کا گانا چلاتے ہیں۔ ہر جگہ گانے: آپ جس میوزک ویڈیو پر بھی ٹیپ کریں وہ اپنے گانے کے طور پر چلتی ہے، اور ویڈیو بٹن پھر بھی ویڈیو دکھاتا ہے۔</string>
     <string name="trim_silence">شروع اور آخر کی خاموشی کاٹیں</string>
     <string name="podcasts_only">صرف پوڈکاسٹس</string>
     <string name="songs_and_podcasts">گانے اور پوڈکاسٹس</string>
@@ -4414,10 +4414,10 @@
     <string name="replay_graph_days">دن</string>
     <string name="replay_last_weeks">پچھلے %1$d ہفتے</string>
     <string name="replay_last_days">پچھلے %1$d دن</string>
-    <string name="replay_story_font">اسٹوری کا فونٹ</string>
+    <string name="replay_story_font">اسٹوریز میں فونٹ</string>
     <string name="replay_story_font_info">Replay اور Rewind اسٹوریز اپنے الفاظ کیسے لکھتی ہیں: Prism کے پوسٹر فونٹ میں، یا اس فونٹ میں جو آپ نے Prism کے لیے چنا ہے (متن اور آئیکنز)۔</string>
     <string name="replay_story_font_keywords">فونٹ ٹائپوگرافی ٹائپ فیس اسٹوریز rewind wrapped</string>
-    <string name="replay_story_font_poster">پوسٹر فونٹ</string>
+    <string name="replay_story_font_poster">Prism کا پوسٹر فونٹ</string>
     <string name="replay_story_font_own">آپ کا فونٹ</string>
     <string name="replay_by_hour">گھنٹے کے لحاظ سے سننا</string>
     <string name="replay_by_day">دن کے لحاظ سے سننا</string>
@@ -4765,7 +4765,7 @@
     <string name="reopen_on_the_last_page">آخری صفحے پر دوبارہ کھولیں</string>
     <string name="reopen_on_the_last_page_info">پلیئر وہیں کھلتا ہے جو چھوڑتے وقت کھلا تھا: کور، بول یا قطار۔ واپس پلیئر کو بول یا قطار سے بھی بند کر دیتا ہے اور اسے وہیں چھوڑ دیتا ہے؛ ان کے اپنے بٹن کور پر واپس لے جاتے ہیں۔</string>
     <string name="reopen_on_the_last_page_keywords">پلیئر یاد رکھیں بول قطار کھولنا آغاز صفحہ</string>
-    <string name="steadier_lyrics">زیادہ مستحکم بول</string>
+    <string name="steadier_lyrics">پرسکون بول</string>
     <string name="steadier_lyrics_info">کنٹرول کے آنے جانے کے لیے لمبا سوائپ درکار ہوتا ہے۔ اسکرول کرنے کے بعد، گائی جانے والی سطر قریب ہو تو بول جلد اس پر واپس آ جاتے ہیں، اور دور ہو تو معمول کا وقت لیتے ہیں۔</string>
     <string name="steadier_lyrics_keywords">بول حساسیت اسکرول سوائپ واپسی موجودہ سطر پیچھا کنٹرول</string>
     <string name="gestures_under_the_lyrics">بولوں کے نیچے اشارے</string>
@@ -5072,9 +5072,9 @@
     <string name="dd_space_used">%1$s استعمال شدہ</string>
     <string name="dd_use_mobile_data_for">موبائل ڈیٹا استعمال کریں برائے</string>
     <string name="dd_use_saving_covers">اینیمیٹڈ کورز محفوظ کرنا</string>
-    <string name="dd_use_measuring">گانوں کی پیمائش</string>
+    <string name="dd_use_measuring">آواز اور ٹیمپو کی جانچ</string>
     <string name="dd_use_videos_info">بند ہو تو میوزک ویڈیوز موبائل ڈیٹا پر نہیں چلتیں، سوائے ان کے جو آپ نے ڈاؤن لوڈ کی ہیں۔ اگر ویڈیو کے دوران Wi-Fi چلا جائے تو وہ آڈیو کے طور پر چلتی رہتی ہے۔</string>
-    <string name="dd_use_keywords">موبائل ڈیٹا سیلولر محدود ڈیٹا سیور صرف wifi</string>
+    <string name="dd_use_keywords">موبائل ڈیٹا سیلولر محدود ڈیٹا سیور صرف wifi پہلے سے لوڈ پیمائش آواز ٹیمپو load ahead measuring loudness tempo</string>
     <string name="gb_on_the_cover">کور پر</string>
     <string name="gb_on_the_mini_player">منی پلیئر پر</string>
     <string name="gb_swipes_and_touch">سوائپ اور ٹچ</string>
@@ -5192,7 +5192,7 @@
     <string name="settings_player_queue_dj">DJ بٹن</string>
     <string name="settings_player_queue_lengths">گانوں کی لمبائی</string>
     <string name="settings_player_queue_move_played">چلے ہوئے گانے ہٹائیں</string>
-    <string name="settings_player_queue_tidier">زیادہ صاف</string>
+    <string name="settings_player_queue_tidier">زیادہ صاف قطار</string>
     <string name="settings_player_scroll_for_controls">کنٹرولز کے لیے اوپر اسکرول کریں</string>
     <string name="settings_player_lock_options">لاک اسکرین کے اختیارات</string>
     <string name="settings_player_immersive_options">امرسیو اختیارات</string>
@@ -5538,4 +5538,28 @@
     <string name="spot_session_bring_failed">پڑھی نہیں جا سکی۔ دوبارہ کوشش کریں۔</string>
     <string name="spot_session_followed_all">فالو کی گئی پلے لسٹس بھی</string>
     <string name="spot_session_followed_all_info">آن: جو پلے لسٹس آپ Spotify پر فالو کرتے ہیں وہ خود بخود لائبریری میں آ جاتی ہیں، ان میں سے پہلی 50، اور ساتھ ساتھ رہتی ہیں۔ آف: ہر ایک لائبریری میں ایک ٹیپ کی دوری پر انتظار کرتی ہے۔ جو پلے لسٹس آپ نے لائبریری سے چھپائیں وہ شامل نہیں ہوتیں۔</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (Spotify کا ویب پلیئر کیسے پڑھا جاتا ہے)</string>
+    <string name="spot_session_playlists_info">آپ کی Spotify پلے لسٹس لائبریری میں Spotify کے نشان کے ساتھ دکھائی دیتی ہیں، اور ان کے YouTube Music مماثل گانوں کے ذریعے، Spotify کی ترتیب میں چلتی ہیں۔ گانوں کا ملان ایک بار ہوتا ہے اور یاد رکھا جاتا ہے۔ جو پلے لسٹس آپ فالو کرتے ہیں وہ لائبریری میں ایک ٹیپ کی دوری پر رہتی ہیں، یا \"فالو کی گئی پلے لسٹس بھی\" کے ساتھ خود آ جاتی ہیں۔ اسے بند کرنے سے وہ لائبریری سے نکل جاتی ہیں۔</string>
+    <string name="spot_session_keep_in_step_info">جب آپ ان میں سے کوئی کھولتے ہیں، Prism دیکھتا ہے کہ Spotify پر اس کے گانے بدلے ہیں یا نہیں اور بدلے ہوں تو اسے دوبارہ پڑھتا ہے۔ ویسے بھی سب کو دن میں ایک بار Wi-Fi پر جانچا جاتا ہے۔ Prism میں ان میں کی گئی تبدیلیوں کی جگہ Spotify والی آ جاتی ہیں۔</string>
+    <string name="tour_1875_spotify_title">آپ کا Spotify</string>
+    <string name="tour_1875_spotify_about">Spotify میں ایک بار سائن ان کریں، اور وہاں کی آپ کی موسیقی Prism میں آ جاتی ہے۔</string>
+    <string name="tour_1875_spotify_point_1">آپ کے پسندیدہ گانے اور پلے لسٹس YouTube Music پر ملتی ہیں اور ہم آہنگ رہتی ہیں۔</string>
+    <string name="tour_1875_spotify_point_2">جو پلے لسٹس آپ فالو کرتے ہیں وہ بھی آتی ہیں: لائبریری میں کسی پر ٹیپ کر کے اسے لے آئیں۔</string>
+    <string name="tour_1875_spotify_point_3">Prism صرف پڑھتا ہے۔ آپ کے Spotify میں کبھی کچھ نہیں بدلتا۔</string>
+    <string name="tour_1875_spotify_point_4">یہ غیر سرکاری ہے اور Spotify کی شرائط کے خلاف ہے، اس لیے ہو سکتا ہے کام کرنا بند کر دے۔ آپ کی اپنی ڈیولپر ایپ پہلے کی طرح کام کرتی ہے۔</string>
+    <string name="tour_1875_also_queue">گانے منتخب کریں، پھر اگلا چلائیں یا قطار میں شامل کریں: کچھ نہ چل رہا ہو تب بھی کام کرتا ہے۔</string>
+    <string name="tour_1875_also_home">ہوم کے بڑے کارڈز پر پلے بٹن فوراً چلاتا ہے۔</string>
+    <string name="tour_1875_also_busy">جس گانے کا سرور بار بار ناکام ہو اسے دوسرے طریقے سے مانگا جاتا ہے۔</string>
+    <string name="tour_1875_also_heard">پہچانا گیا گانا اسی لمحے سے چلتا ہے جب آپ نے اسے سنا، بول کھلے ہوئے۔</string>
+    <string name="queue_end_mixed">آپ کی اور نئی</string>
+    <string name="dd_use_load_ahead">گانے پہلے سے لوڈ کرنا</string>
+    <string name="replay_notices_n_on">3 میں سے %1$d آن</string>
+    <string name="car_lyrics_style">بول کا انداز</string>
+    <string name="tab_tint_light">تھیم کے رنگ</string>
+    <string name="bini_detail">Apple Music کے بول · لفظ بہ لفظ، دوسرے طریقے سے ملائے گئے</string>
+    <string name="hl_card_style">کارڈ کا انداز</string>
+    <string name="hl_show_in_lists">فہرستوں میں دکھائیں</string>
+    <string name="hl_show_on_artist_pages">آرٹسٹ صفحات پر دکھائیں</string>
+    <string name="allow_access_to_lossless_files_value">آپ کی لاسلیس فائلیں ڈھونڈنے کے لیے ضروری ہے</string>
 </resources>

@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">ศิลปิน อัลบั้ม เพลย์ลิสต์ หน้า สี รูปภาพ สีเน้น รูป</string>
     <string name="font">ฟอนต์</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">แบบอักษร ฟอนต์ กำหนดเอง ttf otf outfit prism ระบบ คลีน manrope เรขาคณิต plus jakarta sans โปร่ง urbanist มน nunito บทความ serif fraunces mono geist อ่านง่าย atkinson hyperlegible ดิสเล็กเซีย dyslexia opendyslexic การช่วยเหลือพิเศษ</string>
-    <string name="type">ตัวอักษร</string>
+    <string name="type">สไตล์หัวข้อ</string>
     <string name="classic_1_6_bold_headings_titles">คลาสสิก 1.6 ตัวหนา หัวข้อ ชื่อ หน้าตาเก่า classic</string>
     <string name="classic_type">ตัวอักษรคลาสสิก</string>
     <string name="weight_and_spacing">น้ำหนักและระยะห่าง</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">นำไฟล์ฟอนต์เนื้อเพลงออก</string>
     <string name="font_size_scale_bigger_smaller">ขนาดฟอนต์ สเกล ใหญ่ขึ้น เล็กลง</string>
     <string name="icons">ไอคอน</string>
-    <string name="pack">ชุด</string>
+    <string name="pack">ชุดไอคอน</string>
     <string name="icon_style_cupertino_apple">ไอคอน สไตล์ cupertino apple แอปเปิล</string>
     <string name="icon_thin_bold">ไอคอน บาง หนา</string>
     <string name="rounded">มน</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">รีสตาร์ท Prism เพื่อดูการเปลี่ยนแปลง</string>
     <string name="app_icon">ไอคอนแอป</string>
     <string name="launcher_home_screen_icon_logo">ตัวเรียกใช้งาน หน้าจอหลัก ไอคอน โลโก้ launcher</string>
-    <string name="shape">รูปทรง</string>
+    <string name="shape">รูปทรงปุ่ม</string>
     <string name="corners">มุม</string>
     <string name="rounded_square_shape_radius_slider">มน สี่เหลี่ยม รูปทรง รัศมี แถบเลื่อน</string>
     <string name="covers_shapes">รูปทรงของปก</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">เส้นโค้ง equal power linear s-curve dj ตัด นุ่มนวล ตรง ค่อยเป็นค่อยไป</string>
     <string name="crossfade_mark">เครื่องหมายครอสเฟด</string>
     <string name="progress_bar_mark_where_next_song">แถบความคืบหน้า เครื่องหมาย ตำแหน่ง เพลงถัดไป เริ่มผสม</string>
-    <string name="covers_blend_too">ผสมปกด้วย</string>
+    <string name="covers_blend_too">ปกผสมกันตอนครอสเฟด</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">ปก ภาพปก ละลาย เฟด ครอสเฟด apple music</string>
     <string name="speed_pitch_and_fades">ความเร็ว คีย์ และการเฟด</string>
     <string name="speed_when_prism_starts">ความเร็วเมื่อ Prism เริ่มทำงาน</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">ล้างดาวน์โหลดอัจฉริยะ</string>
     <string name="cache_delete_free_space">แคช ลบ เพิ่มพื้นที่ว่าง</string>
     <string name="sections_order_shortcuts_quick_picks_speed">ส่วนต่างๆ ลำดับ ทางลัด เลือกด่วน เข้าถึงด่วน quick picks speed dial</string>
-    <string name="continue_line">บรรทัดฟังต่อ</string>
+    <string name="continue_line">ฟังต่อจากที่ค้างไว้</string>
     <string name="continue_album_resume_greeting_hide_context">ฟังต่อ อัลบั้ม เล่นต่อ คำทักทาย ซ่อน บริบท rewind</string>
     <string name="replay_card">การ์ด Replay</string>
     <string name="replay_teaser_look_style_design_quiet">replay ตัวอย่าง หน้าตา สไตล์ ดีไซน์ เรียบง่าย บัญชี เคลือบสี กรอบสเปกตรัม วงแหวน ปก แถบ แท่ง ออโรร่า</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">สัญญาอนุญาตโอเพนซอร์ส</string>
     <string name="license_gpl">สัญญาอนุญาต license gpl</string>
     <string name="diagnostics">การวินิจฉัย</string>
-    <string name="playback_diagnostics">การวินิจฉัยการเล่น</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">กระตุก สะดุด ข้าม ผิดพลาด แลค bluetooth บลูทูธ airpods บันทึก log debug</string>
+    <string name="playback_diagnostics">เก็บบันทึกการเล่น</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">กระตุก สะดุด ข้าม ผิดพลาด แลค bluetooth บลูทูธ airpods บันทึก log debug วินิจฉัย บันทึกการเล่น diagnostics playback log</string>
     <string name="share_diagnostics">แชร์ข้อมูลวินิจฉัย</string>
     <string name="log_send_report">บันทึก ส่ง รายงาน log</string>
     <string name="clear_diagnostics">ล้างข้อมูลวินิจฉัย</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">เปิดใน YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">เปิด: ลิงก์ที่คุณแตะจะเปิดที่นี่</string>
-    <string name="off_turn_on_open_supported_links">ปิด: เปิด \"เปิดลิงก์ที่รองรับ\" สำหรับ music.youtube.com</string>
-    <string name="choose_prism_when_a_link_asks">เลือก Prism เมื่อลิงก์ถามว่าจะใช้แอปไหน</string>
-    <string name="android_only_lets_an_app_open">Android จะให้แอปเปิดลิงก์ของเว็บไซต์ได้ก็ต่อเมื่อคุณอนุญาต ปุ่มนี้จะเปิดหน้าของ Prism ในการตั้งค่า ให้เปิดลิงก์ที่นั่น</string>
+    <string name="on_links_you_tap_open_here">เปิด</string>
+    <string name="off_turn_on_open_supported_links">ปิด</string>
+    <string name="choose_prism_when_a_link_asks">ยังไม่ตั้งค่า</string>
+    <string name="android_only_lets_an_app_open">Android จะให้แอปเปิดลิงก์ของเว็บไซต์ได้ก็ต่อเมื่อคุณอนุญาต ปุ่มนี้จะเปิดหน้าของ Prism ในการตั้งค่า ให้เปิด \"เปิดลิงก์ที่รองรับ\" สำหรับ music.youtube.com ที่นั่น แล้วลิงก์ที่คุณแตะจะเปิดที่นี่ หากลิงก์ถามว่าจะใช้แอปไหน ให้เลือก Prism</string>
     <string name="see_and_delete_what_s_on">ดูและลบสิ่งที่อยู่ในโทรศัพท์ของคุณ</string>
     <string name="including_likes_from_other_devices">รวมถึงเพลงที่ชอบจากอุปกรณ์อื่น</string>
     <string name="songs_you_ll_likely_play_ready">เพลงที่คุณน่าจะเล่น พร้อมฟังออฟไลน์</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">ของ Apple Music, Musixmatch และ Spotify · ทีละคำ</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · ทีละคำ มีเพลงจีนมากที่สุด</string>
     <string name="open_lyrics_database_line_by_line">ฐานข้อมูลเนื้อเพลงแบบเปิด · ทีละบรรทัด</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">เนื้อเพลงที่ผู้ฟังส่งมา · ยังมีไม่กี่เพลง</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · ทีละบรรทัดหรือข้อความธรรมดา</string>
+    <string name="lyricfind_lines_or_plain">เนื้อเพลงในหน้าเพลงของ Prism Music จาก LyricFind · ทีละบรรทัดหรือข้อความธรรมดา</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">ข้อความธรรมดา · เติมคำที่ถูกแทนด้วยดอกจันด้วย</string>
     <string name="both">ทั้งสองแบบ</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">โน้ตเพลง</string>
     <string name="bold">หนา</string>
     <string name="wide">กว้าง</string>
-    <string name="ink">หมึก</string>
+    <string name="ink">เรียบ</string>
     <string name="the_light">แสง</string>
     <string name="when_you_leave_prism">เมื่อคุณออกจาก Prism</string>
     <string name="only_with_its_button">เฉพาะเมื่อกดปุ่ม</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">ปุ่มก่อนหน้าของมินิเพลเยอร์</string>
     <string name="mini_player_progress">ความคืบหน้าในมินิเพลเยอร์</string>
     <string name="player_background_showing">แสดงพื้นหลังเพลเยอร์</string>
-    <string name="cover_corners">มุมของปก</string>
+    <string name="cover_corners">ความโค้งมนของมุมปก</string>
     <string name="cover_shrinks_on_pause">ปกย่อลงเมื่อหยุดชั่วคราว</string>
     <string name="edge_to_edge_cover">ปกขอบจรดขอบ</string>
     <string name="edge_to_edge_video">วิดีโอขอบจรดขอบ</string>
@@ -3940,12 +3940,12 @@
     <string name="edit_this_menu_keywords">เมนู ⋯ จุด ตัวเลือกเพิ่มเติม ตัวเลือกเพลง ไทล์ด่วน คำสั่ง ซ่อน แสดง menu</string>
     <string name="what_plays_next">สิ่งที่จะเล่นต่อ</string>
     <string name="when_the_queue_ends">เมื่อคิวจบ</string>
-    <string name="when_the_queue_ends_info">หยุด: เพลงจบพร้อมคิว เพลงของคุณ: วิทยุของ Prism เองจากสิ่งที่คุณฟัง ทั้งสองแบบ: เพลงของคุณเป็นส่วนใหญ่ พร้อมเพลงใหม่บ้าง Prism Music: วิทยุจากแคตตาล็อกของ Prism Music เมื่อออฟไลน์จะเป็นเพลงของคุณเสมอ</string>
+    <string name="when_the_queue_ends_info">หยุด: เพลงจบพร้อมคิว เพลงของคุณ: วิทยุของ Prism เองจากสิ่งที่คุณฟัง ของคุณและเพลงใหม่: เพลงของคุณเป็นส่วนใหญ่ พร้อมเพลงใหม่บ้าง Prism Music: วิทยุจากแคตตาล็อกของ Prism Music เมื่อออฟไลน์จะเป็นเพลงของคุณเสมอ</string>
     <string name="music_videos_label">มิวสิกวิดีโอ</string>
-    <string name="play_them">เล่นเป็นวิดีโอ</string>
+    <string name="play_them">วิดีโอ</string>
     <string name="songs_in_radios">เพลงในวิทยุ</string>
     <string name="songs_everywhere">เพลงทุกที่</string>
-    <string name="music_videos_label_info">เล่นเป็นวิดีโอ: มิวสิกวิดีโอเล่นเป็นวิดีโอ เพลงในวิทยุ: เล่นอัตโนมัติและวิทยุจะเล่นเพลงของวิดีโอนั้นแทน เพลงทุกที่: มิวสิกวิดีโอที่คุณแตะจะเล่นเป็นเพลง และปุ่มวิดีโอยังแสดงวิดีโอได้</string>
+    <string name="music_videos_label_info">วิดีโอ: มิวสิกวิดีโอเล่นเป็นวิดีโอ เพลงในวิทยุ: เล่นอัตโนมัติและวิทยุจะเล่นเพลงของวิดีโอนั้นแทน เพลงทุกที่: มิวสิกวิดีโอที่คุณแตะจะเล่นเป็นเพลง และปุ่มวิดีโอยังแสดงวิดีโอได้</string>
     <string name="trim_silence">ตัดช่วงเงียบตอนต้นและตอนท้าย</string>
     <string name="podcasts_only">เฉพาะพอดแคสต์</string>
     <string name="songs_and_podcasts">เพลงและพอดแคสต์</string>
@@ -4364,10 +4364,10 @@
     <string name="replay_graph_days">วัน</string>
     <string name="replay_last_weeks">%1$d สัปดาห์ล่าสุด</string>
     <string name="replay_last_days">%1$d วันล่าสุด</string>
-    <string name="replay_story_font">ตัวอักษรของสตอรี่</string>
+    <string name="replay_story_font">ตัวอักษรในสตอรี่</string>
     <string name="replay_story_font_info">สตอรี่ของ Replay และ Rewind จะแสดงข้อความแบบใด: ด้วยตัวอักษรแบบโปสเตอร์ของ Prism หรือด้วยฟอนต์ที่คุณเลือกไว้สำหรับ Prism (ข้อความและไอคอน)</string>
     <string name="replay_story_font_keywords">ฟอนต์ การจัดตัวอักษร แบบอักษร สตอรี่ rewind wrapped</string>
-    <string name="replay_story_font_poster">ตัวอักษรแบบโปสเตอร์</string>
+    <string name="replay_story_font_poster">ตัวอักษรโปสเตอร์ของ Prism</string>
     <string name="replay_story_font_own">ฟอนต์ของคุณ</string>
     <string name="replay_by_hour">การฟังตามชั่วโมง</string>
     <string name="replay_by_day">การฟังตามวัน</string>
@@ -4701,7 +4701,7 @@
     <string name="reopen_on_the_last_page">เปิดใหม่ที่หน้าล่าสุด</string>
     <string name="reopen_on_the_last_page_info">เครื่องเล่นเปิดที่สิ่งที่คุณเปิดค้างไว้ตอนออก: ปก เนื้อเพลง หรือคิว การกดย้อนกลับจากเนื้อเพลงหรือคิวจะปิดเครื่องเล่นและคงหน้านั้นไว้ ส่วนปุ่มของหน้านั้นเองจะกลับไปที่ปก</string>
     <string name="reopen_on_the_last_page_keywords">เครื่องเล่น จำ เนื้อเพลง คิว เปิด หน้าเริ่มต้น</string>
-    <string name="steadier_lyrics">เนื้อเพลงนิ่งขึ้น</string>
+    <string name="steadier_lyrics">เนื้อเพลงสงบขึ้น</string>
     <string name="steadier_lyrics_info">ต้องปัดนานขึ้นเพื่อให้ปุ่มควบคุมแสดงและซ่อน หลังเลื่อนเนื้อเพลง จะกลับไปที่บรรทัดที่กำลังร้องเร็วขึ้นเมื่ออยู่ใกล้ และใช้เวลาตามปกติเมื่ออยู่ไกล</string>
     <string name="steadier_lyrics_keywords">เนื้อเพลง ไว เลื่อน ปัด กลับ บรรทัดปัจจุบัน ตาม ปุ่มควบคุม</string>
     <string name="gestures_under_the_lyrics">ท่าทางใต้เนื้อเพลง</string>
@@ -5000,9 +5000,9 @@
     <string name="dd_space_used">ใช้ไป %1$s</string>
     <string name="dd_use_mobile_data_for">ใช้อินเทอร์เน็ตมือถือสำหรับ</string>
     <string name="dd_use_saving_covers">การบันทึกปกเคลื่อนไหว</string>
-    <string name="dd_use_measuring">การวัดเพลง</string>
+    <string name="dd_use_measuring">ตรวจความดังและจังหวะ</string>
     <string name="dd_use_videos_info">เมื่อปิด มิวสิกวิดีโอจะไม่เล่นผ่านอินเทอร์เน็ตมือถือ ยกเว้นที่คุณดาวน์โหลดไว้ ถ้า Wi-Fi หลุดระหว่างดูวิดีโอ จะเล่นต่อเป็นเสียงอย่างเดียว</string>
-    <string name="dd_use_keywords">อินเทอร์เน็ตมือถือ เซลลูลาร์ จำกัดปริมาณ ประหยัดอินเทอร์เน็ต wifi เท่านั้น</string>
+    <string name="dd_use_keywords">อินเทอร์เน็ตมือถือ เซลลูลาร์ จำกัดปริมาณ ประหยัดอินเทอร์เน็ต wifi เท่านั้น โหลดล่วงหน้า วัด ความดัง จังหวะ load ahead measuring loudness tempo</string>
     <string name="gb_on_the_cover">บนปก</string>
     <string name="gb_on_the_mini_player">บนมินิเพลเยอร์</string>
     <string name="gb_swipes_and_touch">การปัดและการแตะ</string>
@@ -5120,7 +5120,7 @@
     <string name="settings_player_queue_dj">ปุ่ม DJ</string>
     <string name="settings_player_queue_lengths">ความยาวเพลง</string>
     <string name="settings_player_queue_move_played">ย้ายเพลงที่เล่นแล้ว</string>
-    <string name="settings_player_queue_tidier">เป็นระเบียบขึ้น</string>
+    <string name="settings_player_queue_tidier">คิวเป็นระเบียบขึ้น</string>
     <string name="settings_player_scroll_for_controls">เลื่อนขึ้นเพื่อดูปุ่มควบคุม</string>
     <string name="settings_player_lock_options">ตัวเลือกหน้าจอล็อก</string>
     <string name="settings_player_immersive_options">ตัวเลือกโหมดอิมเมอร์ซีฟ</string>
@@ -5463,4 +5463,28 @@
     <string name="spot_session_bring_failed">อ่านไม่ได้ ลองอีกครั้ง</string>
     <string name="spot_session_followed_all">รวมเพลย์ลิสต์ที่ติดตามด้วย</string>
     <string name="spot_session_followed_all_info">เปิด: เพลย์ลิสต์ที่คุณติดตามบน Spotify จะเข้ามาในคลังเพลงเอง 50 รายการแรก และอัปเดตตามอยู่เสมอ ปิด: แต่ละรายการรออยู่ในคลังเพลง แตะครั้งเดียวก็นำเข้า เพลย์ลิสต์ที่คุณซ่อนจากคลังเพลงจะไม่รวมอยู่ด้วย</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (วิธีอ่านเว็บเพลเยอร์ของ Spotify)</string>
+    <string name="spot_session_playlists_info">เพลย์ลิสต์ Spotify ของคุณจะแสดงในคลังเพลงพร้อมป้าย Spotify และเล่นผ่านเพลงที่จับคู่ได้ใน YouTube Music ตามลำดับของ Spotify เพลงจะถูกจับคู่ครั้งเดียวแล้วจดจำไว้ เพลย์ลิสต์ที่คุณติดตามจะรออยู่ในคลังเพลง แตะครั้งเดียวก็นำเข้าได้ หรือเข้ามาเองเมื่อเปิด \"รวมเพลย์ลิสต์ที่ติดตามด้วย\" การปิดตัวเลือกนี้จะนำเพลย์ลิสต์เหล่านี้ออกจากคลังเพลง</string>
+    <string name="spot_session_keep_in_step_info">เมื่อคุณเปิดเพลย์ลิสต์ใดเพลย์ลิสต์หนึ่ง Prism จะตรวจดูว่าเพลงใน Spotify เปลี่ยนไปหรือไม่ และอ่านใหม่หากเปลี่ยน ไม่ว่าอย่างไรทุกเพลย์ลิสต์จะถูกตรวจวันละครั้งผ่าน Wi-Fi การเปลี่ยนแปลงที่คุณทำใน Prism จะถูกแทนที่ด้วยของ Spotify</string>
+    <string name="tour_1875_spotify_title">Spotify ของคุณ</string>
+    <string name="tour_1875_spotify_about">ลงชื่อเข้าใช้ Spotify ครั้งเดียว แล้วเพลงของคุณที่นั่นจะเข้ามาใน Prism</string>
+    <string name="tour_1875_spotify_point_1">เพลงที่ถูกใจและเพลย์ลิสต์ของคุณจะถูกหาเจอใน YouTube Music และตรงกันอยู่เสมอ</string>
+    <string name="tour_1875_spotify_point_2">เพลย์ลิสต์ที่คุณติดตามก็มาด้วย: แตะเพลย์ลิสต์ในคลังเพลงเพื่อนำเข้า</string>
+    <string name="tour_1875_spotify_point_3">Prism อ่านอย่างเดียว ไม่มีอะไรเปลี่ยนใน Spotify ของคุณเลย</string>
+    <string name="tour_1875_spotify_point_4">ไม่เป็นทางการและขัดกับข้อกำหนดของ Spotify จึงอาจหยุดทำงานได้ แอปนักพัฒนาของคุณเองยังใช้ได้เหมือนเดิม</string>
+    <string name="tour_1875_also_queue">เลือกเพลง แล้วเลือกเล่นถัดไปหรือเพิ่มลงในคิว: ใช้ได้แม้ไม่มีเพลงเล่นอยู่</string>
+    <string name="tour_1875_also_home">ปุ่มเล่นบนการ์ดใหญ่ของหน้าแรกจะเล่นทันที</string>
+    <string name="tour_1875_also_busy">เพลงที่เซิร์ฟเวอร์ล้มเหลวซ้ำ ๆ จะถูกขอด้วยวิธีอื่น</string>
+    <string name="tour_1875_also_heard">เพลงที่จดจำได้จะเล่นจากช่วงที่คุณได้ยิน พร้อมเปิดเนื้อเพลง</string>
+    <string name="queue_end_mixed">ของคุณและเพลงใหม่</string>
+    <string name="dd_use_load_ahead">โหลดเพลงล่วงหน้า</string>
+    <string name="replay_notices_n_on">เปิด %1$d จาก 3</string>
+    <string name="car_lyrics_style">สไตล์เนื้อเพลง</string>
+    <string name="tab_tint_light">สีของธีม</string>
+    <string name="bini_detail">เนื้อเพลงของ Apple Music · ทีละคำ จับคู่อีกวิธีหนึ่ง</string>
+    <string name="hl_card_style">สไตล์การ์ด</string>
+    <string name="hl_show_in_lists">แสดงในรายการ</string>
+    <string name="hl_show_on_artist_pages">แสดงในหน้าศิลปิน</string>
+    <string name="allow_access_to_lossless_files_value">จำเป็นต่อการค้นหาไฟล์ lossless ของคุณ</string>
 </resources>

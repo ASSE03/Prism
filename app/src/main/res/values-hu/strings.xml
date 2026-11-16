@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">előadó album lejátszási lista oldal szín fotó kiemelőszín kép</string>
     <string name="font">Betűtípus</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">betűtípus egyéni ttf otf outfit prism rendszer letisztult manrope geometrikus plus jakarta sans légies urbanist lekerekített nunito szerkesztőségi talpas serif fraunces mono geist jól olvasható atkinson hyperlegible diszlexia diszlexiabarát opendyslexic kisegítő lehetőségek</string>
-    <string name="type">Betűk</string>
+    <string name="type">Címsor stílusa</string>
     <string name="classic_1_6_bold_headings_titles">klasszikus 1.6 félkövér címsorok címek régi megjelenés</string>
     <string name="classic_type">Klasszikus betűk</string>
     <string name="weight_and_spacing">Vastagság és térköz</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">A dalszöveg betűtípusfájljának eltávolítása</string>
     <string name="font_size_scale_bigger_smaller">betűméret méretezés nagyobb kisebb</string>
     <string name="icons">Ikonok</string>
-    <string name="pack">Csomag</string>
+    <string name="pack">Ikoncsomag</string>
     <string name="icon_style_cupertino_apple">ikon stílus cupertino apple</string>
     <string name="icon_thin_bold">ikon vékony félkövér</string>
     <string name="rounded">Lekerekített</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">Indítsd újra a Prismet, hogy lásd őket</string>
     <string name="app_icon">Alkalmazásikon</string>
     <string name="launcher_home_screen_icon_logo">indító kezdőképernyő ikon logó</string>
-    <string name="shape">Forma</string>
+    <string name="shape">Gombok formája</string>
     <string name="corners">Sarkok</string>
     <string name="rounded_square_shape_radius_slider">lekerekített négyzet forma sugár csúszka</string>
     <string name="covers_shapes">Borítók formája</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">görbe egyenlő teljesítmény lineáris s-görbe dj vágás sima egyenes finom</string>
     <string name="crossfade_mark">Áttűnésjelölő</string>
     <string name="progress_bar_mark_where_next_song">folyamatjelző jelölő ahol a következő dal áttűnése kezdődik</string>
-    <string name="covers_blend_too">A borítók is áttűnnek</string>
+    <string name="covers_blend_too">A borítók áttűnésnél összemosódnak</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">borító borítókép átúszás halványítás áttűnés apple music</string>
     <string name="speed_pitch_and_fades">Sebesség, hangmagasság és halkítások</string>
     <string name="speed_when_prism_starts">Sebesség a Prism indításakor</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">Okos letöltések törlése</string>
     <string name="cache_delete_free_space">gyorsítótár törlés szabad hely</string>
     <string name="sections_order_shortcuts_quick_picks_speed">szakaszok sorrend parancsikonok gyors választások gyorstárcsázó</string>
-    <string name="continue_line">Folytatás sor</string>
+    <string name="continue_line">Folytatás ott, ahol abbahagytad</string>
     <string name="continue_album_resume_greeting_hide_context">folytatás album újrakezdés köszöntés elrejtés környezet rewind</string>
     <string name="replay_card">Replay-kártya</string>
     <string name="replay_teaser_look_style_design_quiet">replay előzetes megjelenés stílus dizájn visszafogott főkönyv lehelet spektrumkeret gyűrű borító csík oszlopok aurora</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">Nyílt forráskódú licencek</string>
     <string name="license_gpl">licenc gpl</string>
     <string name="diagnostics">Diagnosztika</string>
-    <string name="playback_diagnostics">Lejátszási diagnosztika</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">akadozás szaggatás ugrás hiba késés bluetooth airpods napló hibakeresés</string>
+    <string name="playback_diagnostics">Lejátszási napló vezetése</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">akadozás szaggatás ugrás hiba késés bluetooth airpods napló hibakeresés diagnosztika lejátszás</string>
     <string name="share_diagnostics">Diagnosztika megosztása</string>
     <string name="log_send_report">napló küldés jelentés</string>
     <string name="clear_diagnostics">Diagnosztika törlése</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">A YouTube Musicban nyílik meg</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">Bekapcsolva: a koppintott linkek itt nyílnak meg</string>
-    <string name="off_turn_on_open_supported_links">Kikapcsolva: kapcsold be a „Támogatott linkek megnyitása” lehetőséget a music.youtube.com-hoz</string>
-    <string name="choose_prism_when_a_link_asks">Válaszd a Prismet, amikor egy link rákérdez, melyik alkalmazással</string>
-    <string name="android_only_lets_an_app_open">Az Android csak akkor enged egy alkalmazást megnyitni egy webhely linkjeit, ha te mondod. Ez megnyitja a Prism ehhez tartozó oldalát: kapcsold be ott a linkjeit.</string>
+    <string name="on_links_you_tap_open_here">Be</string>
+    <string name="off_turn_on_open_supported_links">Ki</string>
+    <string name="choose_prism_when_a_link_asks">Nincs beállítva</string>
+    <string name="android_only_lets_an_app_open">Az Android csak akkor enged egy alkalmazást megnyitni egy webhely linkjeit, ha te mondod. Ez megnyitja a Prism ehhez tartozó oldalát. Kapcsold be ott a „Támogatott linkek megnyitása” lehetőséget a music.youtube.com-hoz, és a koppintott linkek itt nyílnak meg. Ha egy link rákérdez, melyik alkalmazással, válaszd a Prismet.</string>
     <string name="see_and_delete_what_s_on">Nézd meg és töröld, ami a telefonodon van</string>
     <string name="including_likes_from_other_devices">A más eszközökön kedveltekkel együtt</string>
     <string name="songs_you_ll_likely_play_ready">Dalok, amelyeket valószínűleg meghallgatsz, offline készen</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Az Apple Music, a Musixmatch és a Spotify dalszövegei · szóról szóra</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · szóról szóra, a legtöbb kínai dal</string>
     <string name="open_lyrics_database_line_by_line">Nyílt dalszöveg-adatbázis · soronként</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Hallgatók által beküldött dalszövegek · eddig kevés dal</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · sorok vagy sima szöveg</string>
+    <string name="lyricfind_lines_or_plain">A dal Prism Music oldalán látható szöveg, a LyricFindtól · sorok vagy sima szöveg</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Sima szöveg · a kicsillagozott szavakat is kitölti</string>
     <string name="both">Mindkettő</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">Hangjegy</string>
     <string name="bold">Félkövér</string>
     <string name="wide">Széles</string>
-    <string name="ink">Tinta</string>
+    <string name="ink">Egyszerű</string>
     <string name="the_light">A fény</string>
     <string name="when_you_leave_prism">Amikor kilépsz a Prismből</string>
     <string name="only_with_its_button">Csak a gombjával</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">Minilejátszó Előző gombja</string>
     <string name="mini_player_progress">Minilejátszó folyamatjelzője</string>
     <string name="player_background_showing">Lejátszó hátterének láthatósága</string>
-    <string name="cover_corners">Borító sarkai</string>
+    <string name="cover_corners">Borító sarkainak lekerekítése</string>
     <string name="cover_shrinks_on_pause">Borító összehúzódása szünetnél</string>
     <string name="edge_to_edge_cover">Széltől szélig borító</string>
     <string name="edge_to_edge_video">Széltől szélig videó</string>
@@ -3990,12 +3990,12 @@
     <string name="edit_this_menu_keywords">menü ⋯ pontok további lehetőségek dal lehetőségei gyorscsempék műveletek elrejtés megjelenítés</string>
     <string name="what_plays_next">Mi szól ezután</string>
     <string name="when_the_queue_ends">Amikor a lejátszási sor véget ér</string>
-    <string name="when_the_queue_ends_info">Leállítás: a zene a lejátszási sorral együtt véget ér. A zenéd: a Prism saját rádiója abból, amit hallgatsz. Mindkettő: főleg a zenéd, néhány új dallal. Prism Music: rádió a Prism Music katalógusából. Offline mindig a zenéd szól.</string>
+    <string name="when_the_queue_ends_info">Leállítás: a zene a lejátszási sorral együtt véget ér. A zenéd: a Prism saját rádiója abból, amit hallgatsz. Tiéd és új: főleg a zenéd, néhány új dallal. Prism Music: rádió a Prism Music katalógusából. Offline mindig a zenéd szól.</string>
     <string name="music_videos_label">Zenei videók</string>
-    <string name="play_them">Lejátszás videóként</string>
+    <string name="play_them">Videók</string>
     <string name="songs_in_radios">Dalok a rádiókban</string>
     <string name="songs_everywhere">Dalok mindenhol</string>
-    <string name="music_videos_label_info">Lejátszás videóként: a zenei videó videóként szól. Dalok a rádiókban: az automatikus lejátszás és a rádiók helyette a videó dalát játsszák. Dalok mindenhol: minden zenei videó, amelyre koppintasz, a dalaként szól, a Videó gomb pedig továbbra is a videót mutatja.</string>
+    <string name="music_videos_label_info">Videók: a zenei videó videóként szól. Dalok a rádiókban: az automatikus lejátszás és a rádiók helyette a videó dalát játsszák. Dalok mindenhol: minden zenei videó, amelyre koppintasz, a dalaként szól, a Videó gomb pedig továbbra is a videót mutatja.</string>
     <string name="trim_silence">Csend levágása az elején és a végén</string>
     <string name="podcasts_only">Csak podcastok</string>
     <string name="songs_and_podcasts">Dalok és podcastok</string>
@@ -4414,10 +4414,10 @@
     <string name="replay_graph_days">Napok</string>
     <string name="replay_last_weeks">Utolsó %1$d hét</string>
     <string name="replay_last_days">Utolsó %1$d nap</string>
-    <string name="replay_story_font">Történetek betűi</string>
+    <string name="replay_story_font">Betű a történetekben</string>
     <string name="replay_story_font_info">Hogyan szedik a szöveget a Replay és a Rewind történetei: a Prism plakátbetűivel, vagy a Prismhez választott betűtípussal (Szöveg és ikonok).</string>
     <string name="replay_story_font_keywords">betűtípus tipográfia font történetek rewind wrapped</string>
-    <string name="replay_story_font_poster">Plakátbetű</string>
+    <string name="replay_story_font_poster">A Prism plakátbetűje</string>
     <string name="replay_story_font_own">Saját betűtípusod</string>
     <string name="replay_by_hour">Hallgatás óránként</string>
     <string name="replay_by_day">Hallgatás naponként</string>
@@ -5072,9 +5072,9 @@
     <string name="dd_space_used">%1$s foglalt</string>
     <string name="dd_use_mobile_data_for">Mobiladat használata ehhez</string>
     <string name="dd_use_saving_covers">Animált borítók mentése</string>
-    <string name="dd_use_measuring">Dalok mérése</string>
+    <string name="dd_use_measuring">Hangerő és tempó ellenőrzése</string>
     <string name="dd_use_videos_info">Kikapcsolva a zenei videók nem játszódnak le mobiladaton, kivéve a letöltötteket. Ha videó közben megszakad a Wi-Fi, hangként folytatódik.</string>
-    <string name="dd_use_keywords">mobilhálózat forgalomkorlátos adattakarékos csak wifi cellular metered data saver</string>
+    <string name="dd_use_keywords">mobilhálózat forgalomkorlátos adattakarékos csak wifi cellular metered data saver előtöltés mérés hangerő tempó</string>
     <string name="gb_on_the_cover">A borítón</string>
     <string name="gb_on_the_mini_player">A minilejátszón</string>
     <string name="gb_swipes_and_touch">Húzások és érintés</string>
@@ -5172,7 +5172,7 @@
     <string name="sound_wifi">Wi-Fi</string>
     <string name="sound_streaming_quality_value">Wi-Fi %1$s · Mobiladat %2$s</string>
     <string name="settings_player_progress_and_times">Folyamatjelző és idők</string>
-    <string name="settings_player_on_it">Rajta</string>
+    <string name="settings_player_on_it">A lejátszón</string>
     <string name="settings_player_modes">Módok</string>
     <string name="settings_player_controls_over_videos">Vezérlők a videókon</string>
     <string name="settings_player_hide_controls">Vezérlők elrejtése</string>
@@ -5192,7 +5192,7 @@
     <string name="settings_player_queue_dj">DJ gomb</string>
     <string name="settings_player_queue_lengths">Dalok hossza</string>
     <string name="settings_player_queue_move_played">Lejátszottak áthelyezése</string>
-    <string name="settings_player_queue_tidier">Rendezettebb</string>
+    <string name="settings_player_queue_tidier">Rendezettebb sor</string>
     <string name="settings_player_scroll_for_controls">Görgess fel a vezérlőkért</string>
     <string name="settings_player_lock_options">Zárolási képernyő beállításai</string>
     <string name="settings_player_immersive_options">Magával ragadó mód beállításai</string>
@@ -5538,4 +5538,28 @@
     <string name="spot_session_bring_failed">Nem sikerült beolvasni. Próbáld újra.</string>
     <string name="spot_session_followed_all">A követett listák is</string>
     <string name="spot_session_followed_all_info">Be: a Spotifyon követett lejátszási listák maguktól bekerülnek a Könyvtárba (az első 50), és szinkronban maradnak. Ki: mindegyik a Könyvtárban vár, egy koppintásnyira. Amiket elrejtettél a Könyvtárból, azok kimaradnak.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (a Spotify webes lejátszójának olvasása)</string>
+    <string name="spot_session_playlists_info">A Spotify-lejátszási listáid Spotify jelöléssel jelennek meg a Könyvtárban, és a YouTube Music-megfelelőikkel szólnak, a Spotify sorrendjében. A dalok párosítása egyszer történik meg, és megmarad. A követett listák a Könyvtárban várnak egy koppintásra, vagy maguktól bekerülnek a „A követett listák is” kapcsolóval. Ha kikapcsolod, kikerülnek a Könyvtárból.</string>
+    <string name="spot_session_keep_in_step_info">Ha megnyitod valamelyiket, a Prism megnézi, változtak-e a dalai a Spotifyon, és ha igen, újra beolvassa. Mindegyiket így is, úgy is naponta egyszer ellenőrzi Wi-Fin. A Prismben rajtuk végzett módosításaidat a Spotify változatai felülírják.</string>
+    <string name="tour_1875_spotify_title">A te Spotifyod</string>
+    <string name="tour_1875_spotify_about">Jelentkezz be egyszer a Spotifyba, és az ottani zenéd megjelenik a Prismben.</string>
+    <string name="tour_1875_spotify_point_1">A kedvelt dalaid és a lejátszási listáid megtalálhatók a YouTube Musicon, és szinkronban maradnak.</string>
+    <string name="tour_1875_spotify_point_2">A követett listák is jönnek: koppints egyre a Könyvtárban, és behozod.</string>
+    <string name="tour_1875_spotify_point_3">A Prism csak olvas. A Spotifyodon soha semmi nem változik.</string>
+    <string name="tour_1875_spotify_point_4">Nem hivatalos és ellenkezik a Spotify feltételeivel, ezért leállhat. A saját fejlesztői alkalmazásod a régi módon működik tovább.</string>
+    <string name="tour_1875_also_queue">Jelölj ki dalokat, majd Lejátszás következőként vagy Hozzáadás a lejátszási sorhoz: akkor is működik, ha semmi nem szól.</string>
+    <string name="tour_1875_also_home">A Kezdőlap nagy kártyáin a lejátszás gomb azonnal lejátszik.</string>
+    <string name="tour_1875_also_busy">Az a dal, amelynek a szervere folyton hibázik, más módon lesz lekérve.</string>
+    <string name="tour_1875_also_heard">Egy felismert dal onnan szól, ahol hallottad, megnyitott dalszöveggel.</string>
+    <string name="queue_end_mixed">Tiéd és új</string>
+    <string name="dd_use_load_ahead">Dalok előtöltése</string>
+    <string name="replay_notices_n_on">%1$d a 3-ból bekapcsolva</string>
+    <string name="car_lyrics_style">Dalszöveg stílusa</string>
+    <string name="tab_tint_light">Téma színei</string>
+    <string name="bini_detail">Az Apple Music dalszövegei · szóról szóra, más módon párosítva</string>
+    <string name="hl_card_style">Kártya stílusa</string>
+    <string name="hl_show_in_lists">Megjelenítés a listákban</string>
+    <string name="hl_show_on_artist_pages">Megjelenítés az előadói oldalakon</string>
+    <string name="allow_access_to_lossless_files_value">Szükséges a veszteségmentes fájlok megtalálásához</string>
 </resources>

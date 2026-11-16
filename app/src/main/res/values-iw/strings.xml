@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">אומן אלבום פלייליסט דף צבע תמונה צבע הדגשה</string>
     <string name="font">גופן</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">גופן מותאם אישית ttf otf outfit prism מערכת נקי manrope גאומטרי plus jakarta sans אוורירי urbanist מעוגל nunito עיתונאי סריף fraunces mono geist קריא atkinson hyperlegible דיסלקציה opendyslexic נגישות font</string>
-    <string name="type">כתב</string>
+    <string name="type">סגנון כותרות</string>
     <string name="classic_1_6_bold_headings_titles">קלאסי 1.6 כותרות מודגשות שמות מראה ישן</string>
     <string name="classic_type">כתב קלאסי</string>
     <string name="weight_and_spacing">עובי וריווח</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">הסרת קובץ גופן המילים</string>
     <string name="font_size_scale_bigger_smaller">גודל גופן קנה מידה גדול יותר קטן יותר</string>
     <string name="icons">סמלים</string>
-    <string name="pack">ערכה</string>
+    <string name="pack">ערכת סמלים</string>
     <string name="icon_style_cupertino_apple">סגנון סמלים cupertino apple</string>
     <string name="icon_thin_bold">סמל דק עבה</string>
     <string name="rounded">מעוגל</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">הפעל מחדש את Prism כדי לראות אותם</string>
     <string name="app_icon">סמל האפליקציה</string>
     <string name="launcher_home_screen_icon_logo">מפעיל מסך הבית סמל לוגו</string>
-    <string name="shape">צורה</string>
+    <string name="shape">צורת כפתור</string>
     <string name="corners">פינות</string>
     <string name="rounded_square_shape_radius_slider">מעוגל ריבוע צורה רדיוס פס גלילה</string>
     <string name="covers_shapes">צורות העטיפות</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">עקומה הספק שווה לינארי עקומת s dj חיתוך חלק ישר עדין</string>
     <string name="crossfade_mark">סימון המעבר ההדרגתי</string>
     <string name="progress_bar_mark_where_next_song">סרגל התקדמות סימון איפה מתחיל המיזוג לשיר הבא</string>
-    <string name="covers_blend_too">גם העטיפות מתמזגות</string>
+    <string name="covers_blend_too">העטיפות מתמזגות במעבר הדרגתי</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">עטיפה תמונה התמוססות דעיכה מעבר הדרגתי apple music</string>
     <string name="speed_pitch_and_fades">מהירות, גובה צליל ודעיכות</string>
     <string name="speed_when_prism_starts">מהירות כש-Prism נפתח</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">ניקוי ההורדות החכמות</string>
     <string name="cache_delete_free_space">מטמון מחיקה פינוי מקום</string>
     <string name="sections_order_shortcuts_quick_picks_speed">קטעים סדר קיצורי דרך בחירות מהירות חיוג מהיר</string>
-    <string name="continue_line">שורת ״המשך״</string>
+    <string name="continue_line">המשך מאיפה שעצרת</string>
     <string name="continue_album_resume_greeting_hide_context">המשך אלבום חידוש ברכה הסתרה הקשר rewind</string>
     <string name="replay_card">כרטיס Replay</string>
     <string name="replay_teaser_look_style_design_quiet">replay תקציר מראה סגנון עיצוב שקט פנקס שטיפה מסגרת ספקטרום טבעת עטיפה פס עמודות זוהר</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">רישיונות קוד פתוח</string>
     <string name="license_gpl">רישיון gpl</string>
     <string name="diagnostics">אבחון</string>
-    <string name="playback_diagnostics">אבחון השמעה</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">גמגום קפיצות דילוג תקלה לאג bluetooth airpods יומן דיבאג</string>
+    <string name="playback_diagnostics">שמירת יומן השמעה</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">גמגום קפיצות דילוג תקלה לאג bluetooth airpods יומן דיבאג אבחון יומן השמעה diagnostics playback log</string>
     <string name="share_diagnostics">שיתוף האבחון</string>
     <string name="log_send_report">יומן שליחה דוח</string>
     <string name="clear_diagnostics">ניקוי האבחון</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">נפתח ב-YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">מופעל: קישורים שאתה מקיש עליהם נפתחים כאן</string>
-    <string name="off_turn_on_open_supported_links">כבוי: הפעל את ״פתיחת קישורים נתמכים״ עבור music.youtube.com</string>
-    <string name="choose_prism_when_a_link_asks">בחר ב-Prism כשקישור שואל באיזו אפליקציה לפתוח</string>
-    <string name="android_only_lets_an_app_open">Android מאפשר לאפליקציה לפתוח קישורים של אתר רק אם אתה מאשר. זה פותח את הדף של Prism בהגדרות: הפעל שם את הקישורים שלו.</string>
+    <string name="on_links_you_tap_open_here">מופעל</string>
+    <string name="off_turn_on_open_supported_links">כבוי</string>
+    <string name="choose_prism_when_a_link_asks">לא הוגדר</string>
+    <string name="android_only_lets_an_app_open">Android מאפשר לאפליקציה לפתוח קישורים של אתר רק אם אתה מאשר. זה פותח את הדף של Prism בהגדרות. הפעל שם ״פתיחת קישורים נתמכים״ עבור music.youtube.com, וקישורים שתקיש עליהם ייפתחו כאן. אם קישור שואל באיזו אפליקציה לפתוח, בחר ב-Prism.</string>
     <string name="see_and_delete_what_s_on">צפייה ומחיקה של מה שבטלפון שלך</string>
     <string name="including_likes_from_other_devices">כולל לייקים ממכשירים אחרים</string>
     <string name="songs_you_ll_likely_play_ready">שירים שסביר שתשמיע, מוכנים אופליין</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">של Apple Music,‏ Musixmatch ו-Spotify · מילה אחרי מילה</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · מילה אחרי מילה, הכי הרבה שירים בסינית</string>
     <string name="open_lyrics_database_line_by_line">מאגר מילים פתוח · שורה אחרי שורה</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">מילים שמאזינים שולחים · מעט שירים בינתיים</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · שורות או טקסט פשוט</string>
+    <string name="lyricfind_lines_or_plain">המילים בדף השיר ב-Prism Music, מ-LyricFind · שורות או טקסט פשוט</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">טקסט פשוט · משלים גם מילים שהוחלפו בכוכביות</string>
     <string name="both">שניהם</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">תו מוזיקלי</string>
     <string name="bold">מודגש</string>
     <string name="wide">רחב</string>
-    <string name="ink">דיו</string>
+    <string name="ink">פשוט</string>
     <string name="the_light">האור</string>
     <string name="when_you_leave_prism">כשיוצאים מ-Prism</string>
     <string name="only_with_its_button">רק עם הכפתור שלו</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">״הקודם״ במיני-נגן</string>
     <string name="mini_player_progress">התקדמות במיני-נגן</string>
     <string name="player_background_showing">רקע הנגן גלוי</string>
-    <string name="cover_corners">פינות העטיפה</string>
+    <string name="cover_corners">עיגול פינות העטיפה</string>
     <string name="cover_shrinks_on_pause">העטיפה מתכווצת בהשהיה</string>
     <string name="edge_to_edge_cover">עטיפה מקצה לקצה</string>
     <string name="edge_to_edge_video">סרטון מקצה לקצה</string>
@@ -4040,12 +4040,12 @@
     <string name="edit_this_menu_keywords">תפריט ⋯ נקודות עוד אפשרויות אפשרויות שיר אריחים מהירים פעולות הסתרה הצגה</string>
     <string name="what_plays_next">מה יתנגן אחר כך</string>
     <string name="when_the_queue_ends">כשהתור נגמר</string>
-    <string name="when_the_queue_ends_info">עצירה: המוזיקה נגמרת עם התור. המוזיקה שלך: הרדיו של Prism עצמו ממה שאתה משמיע. שניהם: בעיקר המוזיקה שלך, עם כמה שירים חדשים. Prism Music: רדיו מהקטלוג של Prism Music. במצב לא מקוון זו תמיד המוזיקה שלך.</string>
+    <string name="when_the_queue_ends_info">עצירה: המוזיקה נגמרת עם התור. המוזיקה שלך: הרדיו של Prism עצמו ממה שאתה משמיע. שלך וחדש: בעיקר המוזיקה שלך, עם כמה שירים חדשים. Prism Music: רדיו מהקטלוג של Prism Music. במצב לא מקוון זו תמיד המוזיקה שלך.</string>
     <string name="music_videos_label">קליפים</string>
-    <string name="play_them">להשמיע אותם</string>
+    <string name="play_them">סרטונים</string>
     <string name="songs_in_radios">שירים ברדיו</string>
     <string name="songs_everywhere">שירים בכל מקום</string>
-    <string name="music_videos_label_info">להשמיע אותם: קליפ מתנגן כסרטון. שירים ברדיו: ההשמעה האוטומטית והרדיו משמיעים במקומו את השיר של הקליפ. שירים בכל מקום: כל קליפ שתקיש עליו מתנגן כשיר שלו, וכפתור ״סרטון״ עדיין מציג את הקליפ.</string>
+    <string name="music_videos_label_info">סרטונים: קליפ מתנגן כסרטון. שירים ברדיו: ההשמעה האוטומטית והרדיו משמיעים במקומו את השיר של הקליפ. שירים בכל מקום: כל קליפ שתקיש עליו מתנגן כשיר שלו, וכפתור ״סרטון״ עדיין מציג את הקליפ.</string>
     <string name="trim_silence">חיתוך שקט בהתחלה ובסוף</string>
     <string name="podcasts_only">פודקאסטים בלבד</string>
     <string name="songs_and_podcasts">שירים ופודקאסטים</string>
@@ -4464,10 +4464,10 @@
     <string name="replay_graph_days">ימים</string>
     <string name="replay_last_weeks">%1$d השבועות האחרונים</string>
     <string name="replay_last_days">%1$d הימים האחרונים</string>
-    <string name="replay_story_font">גופן הסטוריז</string>
+    <string name="replay_story_font">גופן בסטוריז</string>
     <string name="replay_story_font_info">איך הסטוריז של Replay ו-Rewind כותבים את המילים שלהם: בגופן הפוסטר של Prism, או בגופן שבחרת ל-Prism (טקסט וסמלים).</string>
     <string name="replay_story_font_keywords">גופן טיפוגרפיה פונט סטוריז סיפורים rewind wrapped</string>
-    <string name="replay_story_font_poster">גופן פוסטר</string>
+    <string name="replay_story_font_poster">גופן הפוסטר של Prism</string>
     <string name="replay_story_font_own">הגופן שלך</string>
     <string name="replay_by_hour">האזנה לפי שעה</string>
     <string name="replay_by_day">האזנה לפי יום</string>
@@ -4829,7 +4829,7 @@
     <string name="reopen_on_the_last_page">פתיחה מחדש בעמוד האחרון</string>
     <string name="reopen_on_the_last_page_info">הנגן נפתח על מה שהיה פתוח כשעזבת אותו: העטיפה, המילים או התור. חזרה סוגרת את הנגן גם מהמילים או מהתור ומשאירה אותו שם; הכפתורים שלהם חוזרים אל העטיפה.</string>
     <string name="reopen_on_the_last_page_keywords">נגן זכירה מילים תור פתיחה התחלה עמוד</string>
-    <string name="steadier_lyrics">מילים יציבות יותר</string>
+    <string name="steadier_lyrics">מילים רגועות יותר</string>
     <string name="steadier_lyrics_info">הפקדים דורשים החלקה ארוכה יותר כדי להופיע ולהיעלם. אחרי גלילה, המילים חוזרות מהר יותר לשורה שמושרת כשהיא קרובה, ולוקחות את הזמן הרגיל כשהיא רחוקה.</string>
     <string name="steadier_lyrics_keywords">מילים רגישות גלילה החלקה חזרה שורה נוכחית מעקב פקדים</string>
     <string name="gestures_under_the_lyrics">מחוות מתחת למילים</string>
@@ -5144,9 +5144,9 @@
     <string name="dd_space_used">%1$s בשימוש</string>
     <string name="dd_use_mobile_data_for">שימוש בחבילת גלישה עבור</string>
     <string name="dd_use_saving_covers">שמירת עטיפות מונפשות</string>
-    <string name="dd_use_measuring">מדידת שירים</string>
+    <string name="dd_use_measuring">בדיקת עוצמת קול וקצב</string>
     <string name="dd_use_videos_info">כשכבוי, קליפים לא מושמעים בחבילת גלישה, חוץ מאלה שהורדת. אם ה-Wi-Fi נופל באמצע סרטון, ההשמעה ממשיכה כאודיו.</string>
-    <string name="dd_use_keywords">סלולרי מוגבל חיסכון בנתונים רק וויפיי cellular metered data saver wifi only</string>
+    <string name="dd_use_keywords">סלולרי מוגבל חיסכון בנתונים רק וויפיי טעינה מראש מדידה עוצמה קצב cellular metered data saver wifi only load ahead measuring loudness tempo</string>
     <string name="gb_on_the_cover">על העטיפה</string>
     <string name="gb_on_the_mini_player">על המיני-נגן</string>
     <string name="gb_swipes_and_touch">החלקות ומגע</string>
@@ -5244,7 +5244,7 @@
     <string name="sound_wifi">Wi-Fi</string>
     <string name="sound_streaming_quality_value">Wi-Fi %1$s · חבילת גלישה %2$s</string>
     <string name="settings_player_progress_and_times">פס ההתקדמות והזמנים</string>
-    <string name="settings_player_on_it">מה מופיע עליו</string>
+    <string name="settings_player_on_it">בנגן</string>
     <string name="settings_player_modes">מצבים</string>
     <string name="settings_player_controls_over_videos">פקדים מעל סרטונים</string>
     <string name="settings_player_hide_controls">הסתרת הפקדים</string>
@@ -5264,7 +5264,7 @@
     <string name="settings_player_queue_dj">כפתור DJ</string>
     <string name="settings_player_queue_lengths">אורכי השירים</string>
     <string name="settings_player_queue_move_played">העברת שירים שהושמעו</string>
-    <string name="settings_player_queue_tidier">מסודר יותר</string>
+    <string name="settings_player_queue_tidier">תור מסודר יותר</string>
     <string name="settings_player_scroll_for_controls">גלילה למעלה לפקדים</string>
     <string name="settings_player_lock_options">אפשרויות מסך הנעילה</string>
     <string name="settings_player_immersive_options">אפשרויות המצב הסוחף</string>
@@ -5613,4 +5613,28 @@
     <string name="spot_session_bring_failed">לא הצלחנו לקרוא אותו. נסה שוב.</string>
     <string name="spot_session_followed_all">גם פלייליסטים שאתה עוקב אחריהם</string>
     <string name="spot_session_followed_all_info">מופעל: הפלייליסטים שאתה עוקב אחריהם ב-Spotify נכנסים לספרייה מעצמם, 50 הראשונים, ונשארים מעודכנים. כבוי: כל אחד ממתין בספרייה, במרחק הקשה. פלייליסטים שהסתרת מהספרייה לא נכללים.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (איך נגן הרשת של Spotify נקרא)</string>
+    <string name="spot_session_playlists_info">הפלייליסטים שלך ב-Spotify מופיעים בספרייה עם סימון Spotify, ומתנגנים דרך ההתאמות שלהם ב-YouTube Music, בסדר של Spotify. השירים מותאמים פעם אחת ונזכרים. פלייליסטים שאתה עוקב אחריהם מחכים בספרייה, במרחק הקשה, או נכנסים מעצמם עם ״גם פלייליסטים שאתה עוקב אחריהם״. כיבוי האפשרות מוציא אותם מהספרייה.</string>
+    <string name="spot_session_keep_in_step_info">כשאתה פותח אחד מהם, Prism בודק אם השירים שבו השתנו ב-Spotify וקורא אותו מחדש אם כן. בכל מקרה, כולם נבדקים פעם ביום ב-Wi-Fi. שינויים שאתה עושה בהם ב-Prism מוחלפים בשינויים של Spotify.</string>
+    <string name="tour_1875_spotify_title">ה-Spotify שלך</string>
+    <string name="tour_1875_spotify_about">היכנס ל-Spotify פעם אחת, והמוזיקה שלך שם תגיע אל Prism.</string>
+    <string name="tour_1875_spotify_point_1">השירים שאהבת והפלייליסטים שלך נמצאים ב-YouTube Music ונשארים מסונכרנים.</string>
+    <string name="tour_1875_spotify_point_2">גם פלייליסטים שאתה עוקב אחריהם מגיעים: הקש על אחד בספרייה כדי להביא אותו.</string>
+    <string name="tour_1875_spotify_point_3">Prism רק קורא. שום דבר ב-Spotify שלך לא משתנה.</string>
+    <string name="tour_1875_spotify_point_4">זה לא רשמי ואסור לפי התנאים של Spotify, ולכן ייתכן שיפסיק לעבוד. אפליקציית המפתחים שלך ממשיכה לעבוד כמו קודם.</string>
+    <string name="tour_1875_also_queue">בחר שירים ואז השמעה בתור הבא או הוספה לתור: זה עובד גם כשום דבר לא מתנגן.</string>
+    <string name="tour_1875_also_home">כפתור ההשמעה בכרטיסים הגדולים במסך הבית משמיע מיד.</string>
+    <string name="tour_1875_also_busy">שיר שהשרת שלו ממשיך להיכשל מתבקש בדרך אחרת.</string>
+    <string name="tour_1875_also_heard">שיר שזוהה מתנגן מהרגע ששמעת אותו, עם המילים פתוחות.</string>
+    <string name="queue_end_mixed">שלך וחדש</string>
+    <string name="dd_use_load_ahead">טעינת שירים מראש</string>
+    <string name="replay_notices_n_on">%1$d מתוך 3 מופעלות</string>
+    <string name="car_lyrics_style">סגנון מילים</string>
+    <string name="tab_tint_light">צבעי ערכת הנושא</string>
+    <string name="bini_detail">המילים של Apple Music · מילה במילה, בהתאמה בדרך אחרת</string>
+    <string name="hl_card_style">סגנון כרטיס</string>
+    <string name="hl_show_in_lists">הצגה ברשימות</string>
+    <string name="hl_show_on_artist_pages">הצגה בדפי אמנים</string>
+    <string name="allow_access_to_lossless_files_value">נדרש כדי למצוא את הקבצים ללא אובדן איכות שלך</string>
 </resources>

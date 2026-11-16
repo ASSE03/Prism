@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">nghệ sĩ album danh sách phát trang màu ảnh màu nhấn hình</string>
     <string name="font">Phông chữ</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">kiểu chữ phông tùy chỉnh ttf otf outfit prism hệ thống gọn gàng manrope hình học plus jakarta sans thoáng urbanist bo tròn nunito biên tập serif fraunces mono geist dễ đọc atkinson hyperlegible khó đọc dyslexia opendyslexic hỗ trợ tiếp cận font</string>
-    <string name="type">Kiểu chữ</string>
+    <string name="type">Kiểu tiêu đề</string>
     <string name="classic_1_6_bold_headings_titles">cổ điển 1.6 đậm tiêu đề giao diện cũ classic</string>
     <string name="classic_type">Kiểu chữ cổ điển</string>
     <string name="weight_and_spacing">Độ đậm và khoảng cách</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">Xóa tệp phông chữ lời bài hát</string>
     <string name="font_size_scale_bigger_smaller">cỡ chữ tỷ lệ lớn hơn nhỏ hơn</string>
     <string name="icons">Biểu tượng</string>
-    <string name="pack">Gói</string>
+    <string name="pack">Bộ biểu tượng</string>
     <string name="icon_style_cupertino_apple">kiểu biểu tượng cupertino apple icon</string>
     <string name="icon_thin_bold">biểu tượng mảnh đậm</string>
     <string name="rounded">Bo tròn</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">Khởi động lại Prism để thấy chúng</string>
     <string name="app_icon">Biểu tượng ứng dụng</string>
     <string name="launcher_home_screen_icon_logo">trình khởi chạy màn hình chính biểu tượng logo</string>
-    <string name="shape">Hình dạng</string>
+    <string name="shape">Hình dạng nút</string>
     <string name="corners">Góc</string>
     <string name="rounded_square_shape_radius_slider">bo tròn vuông hình dạng bán kính thanh trượt</string>
     <string name="covers_shapes">Hình dạng ảnh bìa</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">đường cong công suất đều tuyến tính đường cong s dj cắt mượt thẳng nhẹ</string>
     <string name="crossfade_mark">Dấu chuyển tiếp</string>
     <string name="progress_bar_mark_where_next_song">thanh tiến trình dấu nơi bài tiếp theo bắt đầu hòa vào</string>
-    <string name="covers_blend_too">Ảnh bìa cũng hòa vào nhau</string>
+    <string name="covers_blend_too">Ảnh bìa hòa vào nhau khi chuyển tiếp mượt</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">ảnh bìa hình ảnh tan dần mờ dần chuyển tiếp apple music</string>
     <string name="speed_pitch_and_fades">Tốc độ, cao độ và mờ dần</string>
     <string name="speed_when_prism_starts">Tốc độ khi Prism khởi động</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">Xóa Tải xuống thông minh</string>
     <string name="cache_delete_free_space">bộ nhớ đệm xóa giải phóng dung lượng</string>
     <string name="sections_order_shortcuts_quick_picks_speed">mục thứ tự lối tắt chọn nhanh quay số nhanh</string>
-    <string name="continue_line">Dòng Tiếp tục</string>
+    <string name="continue_line">Tiếp tục từ chỗ bạn dừng</string>
     <string name="continue_album_resume_greeting_hide_context">tiếp tục album nghe tiếp lời chào ẩn ngữ cảnh rewind</string>
     <string name="replay_card">Thẻ Replay</string>
     <string name="replay_teaser_look_style_design_quiet">replay xem trước giao diện kiểu thiết kế tĩnh lặng sổ cái loang màu khung quang phổ vòng ảnh bìa sọc cột cực quang</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">Giấy phép nguồn mở</string>
     <string name="license_gpl">giấy phép gpl</string>
     <string name="diagnostics">Chẩn đoán</string>
-    <string name="playback_diagnostics">Chẩn đoán phát nhạc</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">giật khựng nhảy lỗi lag bluetooth airpods nhật ký gỡ lỗi</string>
+    <string name="playback_diagnostics">Lưu nhật ký phát nhạc</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">giật khựng nhảy lỗi lag bluetooth airpods nhật ký gỡ lỗi chẩn đoán nhật ký phát nhạc diagnostics playback log</string>
     <string name="share_diagnostics">Chia sẻ chẩn đoán</string>
     <string name="log_send_report">nhật ký gửi báo cáo</string>
     <string name="clear_diagnostics">Xóa chẩn đoán</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">Mở trong YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">Bật: đường liên kết bạn nhấn sẽ mở ở đây</string>
-    <string name="off_turn_on_open_supported_links">Tắt: hãy bật \"Mở các đường liên kết được hỗ trợ\" cho music.youtube.com</string>
-    <string name="choose_prism_when_a_link_asks">Chọn Prism khi đường liên kết hỏi dùng ứng dụng nào</string>
-    <string name="android_only_lets_an_app_open">Android chỉ cho một ứng dụng mở liên kết của trang web khi bạn đồng ý. Nút này mở trang của Prism trong cài đặt: hãy bật các liên kết ở đó.</string>
+    <string name="on_links_you_tap_open_here">Bật</string>
+    <string name="off_turn_on_open_supported_links">Tắt</string>
+    <string name="choose_prism_when_a_link_asks">Chưa đặt</string>
+    <string name="android_only_lets_an_app_open">Android chỉ cho một ứng dụng mở liên kết của trang web khi bạn đồng ý. Nút này mở trang của Prism trong cài đặt. Hãy bật \"Mở các đường liên kết được hỗ trợ\" cho music.youtube.com ở đó, và liên kết bạn nhấn sẽ mở tại đây. Nếu liên kết hỏi dùng ứng dụng nào, hãy chọn Prism.</string>
     <string name="see_and_delete_what_s_on">Xem và xóa những gì có trên điện thoại</string>
     <string name="including_likes_from_other_devices">Kể cả lượt thích từ thiết bị khác</string>
     <string name="songs_you_ll_likely_play_ready">Những bài bạn có thể sẽ nghe, sẵn sàng ngoại tuyến</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Của Apple Music, Musixmatch và Spotify · theo từng từ</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · theo từng từ, nhiều bài hát tiếng Trung nhất</string>
     <string name="open_lyrics_database_line_by_line">Cơ sở dữ liệu lời bài hát mở · theo từng dòng</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Lời bài hát do người nghe gửi · hiện còn ít bài</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · theo dòng hoặc văn bản thường</string>
+    <string name="lyricfind_lines_or_plain">Lời bài hát trên trang bài hát của Prism Music, từ LyricFind · theo dòng hoặc văn bản thường</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Văn bản thường · cũng điền lại những từ bị che bằng dấu sao</string>
     <string name="both">Cả hai</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">Nốt nhạc</string>
     <string name="bold">Đậm</string>
     <string name="wide">Rộng</string>
-    <string name="ink">Mực</string>
+    <string name="ink">Đơn giản</string>
     <string name="the_light">Dải sáng</string>
     <string name="when_you_leave_prism">Khi bạn rời Prism</string>
     <string name="only_with_its_button">Chỉ bằng nút của nó</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">Nút Trước của trình phát thu nhỏ</string>
     <string name="mini_player_progress">Tiến trình trình phát thu nhỏ</string>
     <string name="player_background_showing">Hiện hình nền trình phát</string>
-    <string name="cover_corners">Góc ảnh bìa</string>
+    <string name="cover_corners">Độ bo góc ảnh bìa</string>
     <string name="cover_shrinks_on_pause">Ảnh bìa thu nhỏ khi tạm dừng</string>
     <string name="edge_to_edge_cover">Ảnh bìa tràn viền</string>
     <string name="edge_to_edge_video">Video tràn viền</string>
@@ -3940,12 +3940,12 @@
     <string name="edit_this_menu_keywords">menu ⋯ dấu chấm thêm tùy chọn tùy chọn bài hát ô nhanh thao tác ẩn hiện</string>
     <string name="what_plays_next">Phát gì tiếp theo</string>
     <string name="when_the_queue_ends">Khi danh sách chờ kết thúc</string>
-    <string name="when_the_queue_ends_info">Dừng: nhạc dừng cùng danh sách chờ. Nhạc của bạn: đài phát riêng của Prism từ những gì bạn nghe. Cả hai: chủ yếu là nhạc của bạn, thêm vài bài mới. Prism Music: đài phát từ kho nhạc của Prism Music. Khi ngoại tuyến luôn là nhạc của bạn.</string>
+    <string name="when_the_queue_ends_info">Dừng: nhạc dừng cùng danh sách chờ. Nhạc của bạn: đài phát riêng của Prism từ những gì bạn nghe. Của bạn và mới: chủ yếu là nhạc của bạn, thêm vài bài mới. Prism Music: đài phát từ kho nhạc của Prism Music. Khi ngoại tuyến luôn là nhạc của bạn.</string>
     <string name="music_videos_label">Video nhạc</string>
-    <string name="play_them">Phát video</string>
+    <string name="play_them">Video</string>
     <string name="songs_in_radios">Bài hát trong đài phát</string>
     <string name="songs_everywhere">Bài hát ở mọi nơi</string>
-    <string name="music_videos_label_info">Phát video: video nhạc phát dưới dạng video. Bài hát trong đài phát: tự động phát và đài phát sẽ phát bài hát của video đó. Bài hát ở mọi nơi: video nhạc nào bạn nhấn cũng phát dưới dạng bài hát, và nút Video vẫn hiện video.</string>
+    <string name="music_videos_label_info">Video: video nhạc phát dưới dạng video. Bài hát trong đài phát: tự động phát và đài phát sẽ phát bài hát của video đó. Bài hát ở mọi nơi: video nhạc nào bạn nhấn cũng phát dưới dạng bài hát, và nút Video vẫn hiện video.</string>
     <string name="trim_silence">Cắt khoảng lặng ở đầu và cuối</string>
     <string name="podcasts_only">Chỉ podcast</string>
     <string name="songs_and_podcasts">Bài hát và podcast</string>
@@ -4364,10 +4364,10 @@
     <string name="replay_graph_days">Ngày</string>
     <string name="replay_last_weeks">%1$d tuần qua</string>
     <string name="replay_last_days">%1$d ngày qua</string>
-    <string name="replay_story_font">Kiểu chữ câu chuyện</string>
+    <string name="replay_story_font">Kiểu chữ trong câu chuyện</string>
     <string name="replay_story_font_info">Cách các câu chuyện Replay và Rewind trình bày chữ: bằng kiểu chữ áp phích của Prism, hoặc bằng phông bạn đã chọn cho Prism (Chữ &amp; biểu tượng).</string>
     <string name="replay_story_font_keywords">phông chữ kiểu chữ font câu chuyện stories rewind wrapped</string>
-    <string name="replay_story_font_poster">Kiểu chữ áp phích</string>
+    <string name="replay_story_font_poster">Kiểu chữ áp phích của Prism</string>
     <string name="replay_story_font_own">Phông của bạn</string>
     <string name="replay_by_hour">Nghe theo giờ</string>
     <string name="replay_by_day">Nghe theo ngày</string>
@@ -4701,7 +4701,7 @@
     <string name="reopen_on_the_last_page">Mở lại ở trang cuối</string>
     <string name="reopen_on_the_last_page_info">Trình phát mở ở nơi bạn đã mở khi rời đi: ảnh bìa, lời bài hát hoặc danh sách chờ. Nhấn Quay lại từ lời bài hát hoặc danh sách chờ sẽ đóng trình phát và giữ nguyên trang đó; các nút riêng của chúng quay về ảnh bìa.</string>
     <string name="reopen_on_the_last_page_keywords">trình phát nhớ lời bài hát danh sách chờ mở trang bắt đầu</string>
-    <string name="steadier_lyrics">Lời bài hát ổn định hơn</string>
+    <string name="steadier_lyrics">Lời bài hát êm hơn</string>
     <string name="steadier_lyrics_info">Cần vuốt lâu hơn để các nút điều khiển hiện ra và ẩn đi. Sau khi cuộn, lời bài hát quay về dòng đang hát nhanh hơn khi dòng đó ở gần, và mất thời gian như thường khi ở xa.</string>
     <string name="steadier_lyrics_keywords">lời bài hát nhạy cuộn vuốt quay lại dòng hiện tại theo dõi nút điều khiển</string>
     <string name="gestures_under_the_lyrics">Cử chỉ bên dưới lời bài hát</string>
@@ -5000,9 +5000,9 @@
     <string name="dd_space_used">Đã dùng %1$s</string>
     <string name="dd_use_mobile_data_for">Dùng dữ liệu di động cho</string>
     <string name="dd_use_saving_covers">Lưu ảnh bìa động</string>
-    <string name="dd_use_measuring">Đo bài hát</string>
+    <string name="dd_use_measuring">Kiểm tra độ lớn và nhịp độ</string>
     <string name="dd_use_videos_info">Khi tắt, video nhạc không phát bằng dữ liệu di động, trừ những video bạn đã tải xuống. Nếu mất Wi-Fi khi đang xem video, video sẽ tiếp tục dưới dạng âm thanh.</string>
-    <string name="dd_use_keywords">dữ liệu di động mạng di động giới hạn tiết kiệm dữ liệu chỉ wifi</string>
+    <string name="dd_use_keywords">dữ liệu di động mạng di động giới hạn tiết kiệm dữ liệu chỉ wifi tải trước đo độ lớn nhịp độ load ahead measuring loudness tempo</string>
     <string name="gb_on_the_cover">Trên ảnh bìa</string>
     <string name="gb_on_the_mini_player">Trên trình phát thu nhỏ</string>
     <string name="gb_swipes_and_touch">Vuốt và chạm</string>
@@ -5120,7 +5120,7 @@
     <string name="settings_player_queue_dj">Nút DJ</string>
     <string name="settings_player_queue_lengths">Độ dài bài hát</string>
     <string name="settings_player_queue_move_played">Dời bài đã phát</string>
-    <string name="settings_player_queue_tidier">Gọn hơn</string>
+    <string name="settings_player_queue_tidier">Danh sách chờ gọn hơn</string>
     <string name="settings_player_scroll_for_controls">Cuộn lên để hiện nút điều khiển</string>
     <string name="settings_player_lock_options">Tùy chọn màn hình khóa</string>
     <string name="settings_player_immersive_options">Tùy chọn chế độ toàn màn hình</string>
@@ -5463,4 +5463,28 @@
     <string name="spot_session_bring_failed">Không đọc được. Hãy thử lại.</string>
     <string name="spot_session_followed_all">Cả danh sách phát đang theo dõi</string>
     <string name="spot_session_followed_all_info">Bật: các danh sách phát bạn theo dõi trên Spotify tự vào Thư viện, 50 danh sách đầu tiên, và luôn cập nhật theo. Tắt: mỗi danh sách chờ trong Thư viện, chỉ cách một lần chạm. Những danh sách bạn đã ẩn khỏi Thư viện được bỏ qua.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (cách đọc trình phát web của Spotify)</string>
+    <string name="spot_session_playlists_info">Danh sách phát Spotify của bạn hiện trong Thư viện với dấu Spotify, và phát qua các bài khớp trên YouTube Music, theo thứ tự của Spotify. Mỗi bài chỉ được ghép một lần và được ghi nhớ. Danh sách phát bạn theo dõi nằm chờ trong Thư viện, chỉ cách một lần nhấn, hoặc tự vào khi bật \"Cả danh sách phát đang theo dõi\". Tắt mục này sẽ đưa chúng ra khỏi Thư viện.</string>
+    <string name="spot_session_keep_in_step_info">Khi bạn mở một danh sách, Prism xem các bài của nó trên Spotify có thay đổi không và đọc lại nếu có. Dù sao thì tất cả cũng được kiểm tra mỗi ngày một lần qua Wi-Fi. Những thay đổi bạn làm với chúng trong Prism sẽ bị thay bằng bản của Spotify.</string>
+    <string name="tour_1875_spotify_title">Spotify của bạn</string>
+    <string name="tour_1875_spotify_about">Đăng nhập Spotify một lần, nhạc của bạn ở đó sẽ vào Prism.</string>
+    <string name="tour_1875_spotify_point_1">Bài hát đã thích và danh sách phát của bạn được tìm thấy trên YouTube Music và luôn đồng bộ.</string>
+    <string name="tour_1875_spotify_point_2">Danh sách phát bạn theo dõi cũng vào: nhấn một danh sách trong Thư viện để đưa vào.</string>
+    <string name="tour_1875_spotify_point_3">Prism chỉ đọc. Không có gì trên Spotify của bạn bị thay đổi.</string>
+    <string name="tour_1875_spotify_point_4">Cách này không chính thức và trái điều khoản của Spotify, nên có thể ngừng hoạt động. Ứng dụng nhà phát triển của riêng bạn vẫn hoạt động như trước.</string>
+    <string name="tour_1875_also_queue">Chọn bài hát, rồi Phát tiếp theo hoặc Thêm vào danh sách chờ: dùng được cả khi chưa phát gì.</string>
+    <string name="tour_1875_also_home">Nút phát trên các thẻ lớn ở Trang chủ phát ngay.</string>
+    <string name="tour_1875_also_busy">Bài hát có máy chủ cứ lỗi sẽ được lấy bằng cách khác.</string>
+    <string name="tour_1875_also_heard">Bài hát được nhận dạng phát từ đúng lúc bạn nghe thấy, kèm lời bài hát đang mở.</string>
+    <string name="queue_end_mixed">Của bạn và mới</string>
+    <string name="dd_use_load_ahead">Tải trước bài hát</string>
+    <string name="replay_notices_n_on">Bật %1$d/3</string>
+    <string name="car_lyrics_style">Kiểu lời bài hát</string>
+    <string name="tab_tint_light">Màu chủ đề</string>
+    <string name="bini_detail">Lời bài hát của Apple Music · từng từ, ghép bằng cách khác</string>
+    <string name="hl_card_style">Kiểu thẻ</string>
+    <string name="hl_show_in_lists">Hiện trong danh sách</string>
+    <string name="hl_show_on_artist_pages">Hiện trên trang nghệ sĩ</string>
+    <string name="allow_access_to_lossless_files_value">Cần để tìm các tệp lossless của bạn</string>
 </resources>

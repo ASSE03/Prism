@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">artist album playlist pagină culoare fotografie accent imagine</string>
     <string name="font">Font</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">font personalizat ttf otf outfit prism sistem curat manrope geometric plus jakarta sans aerisit urbanist rotunjit nunito editorial serif fraunces mono geist lizibil atkinson hyperlegible dislexie dyslexic opendyslexic accesibilitate</string>
-    <string name="type">Scris</string>
+    <string name="type">Stilul titlurilor</string>
     <string name="classic_1_6_bold_headings_titles">clasic 1.6 îngroșat titluri aspect vechi</string>
     <string name="classic_type">Scris clasic</string>
     <string name="weight_and_spacing">Grosime și spațiere</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">Elimină fișierul fontului pentru versuri</string>
     <string name="font_size_scale_bigger_smaller">font mărime scară mai mare mai mic</string>
     <string name="icons">Pictograme</string>
-    <string name="pack">Pachet</string>
+    <string name="pack">Pachet de pictograme</string>
     <string name="icon_style_cupertino_apple">pictograme stil cupertino apple</string>
     <string name="icon_thin_bold">pictograme subțiri îngroșate</string>
     <string name="rounded">Rotunjite</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">Repornește Prism ca să le vezi</string>
     <string name="app_icon">Pictograma aplicației</string>
     <string name="launcher_home_screen_icon_logo">lansator ecran de pornire pictogramă logo</string>
-    <string name="shape">Formă</string>
+    <string name="shape">Forma butoanelor</string>
     <string name="corners">Colțuri</string>
     <string name="rounded_square_shape_radius_slider">rotunjit pătrat formă rază glisor</string>
     <string name="covers_shapes">Formele copertelor</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">curbă putere egală liniară curbă s dj tăietură lină dreaptă blândă</string>
     <string name="crossfade_mark">Semnul tranziției</string>
     <string name="progress_bar_mark_where_next_song">bara de progres semn unde începe îmbinarea cu următoarea melodie</string>
-    <string name="covers_blend_too">Și copertele se îmbină</string>
+    <string name="covers_blend_too">Copertele se îmbină la tranziție</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">copertă imagine dizolvare estompare tranziție apple music</string>
     <string name="speed_pitch_and_fades">Viteză, ton și estompări</string>
     <string name="speed_when_prism_starts">Viteza la pornirea Prism</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">Șterge Descărcările inteligente</string>
     <string name="cache_delete_free_space">cache șterge eliberează spațiu</string>
     <string name="sections_order_shortcuts_quick_picks_speed">secțiuni ordine comenzi rapide selecții rapide apelare rapidă</string>
-    <string name="continue_line">Rândul Continuă</string>
+    <string name="continue_line">Continuă de unde ai rămas</string>
     <string name="continue_album_resume_greeting_hide_context">continuă album reia salut ascunde context rewind</string>
     <string name="replay_card">Cardul Replay</string>
     <string name="replay_teaser_look_style_design_quiet">replay previzualizare aspect stil design discret registru voal ramă spectru inel copertă dungă bare auroră</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">Licențe open-source</string>
     <string name="license_gpl">licență gpl</string>
     <string name="diagnostics">Diagnosticare</string>
-    <string name="playback_diagnostics">Diagnosticarea redării</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">sacadare întrerupere salt eroare întârziere bluetooth airpods jurnal debug stutter</string>
+    <string name="playback_diagnostics">Păstrează un jurnal de redare</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">sacadare întrerupere salt eroare întârziere bluetooth airpods jurnal debug stutter diagnosticare redare</string>
     <string name="share_diagnostics">Distribuie diagnosticarea</string>
     <string name="log_send_report">jurnal trimite raport</string>
     <string name="clear_diagnostics">Șterge diagnosticarea</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">Se deschide în YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">Pornit: linkurile atinse se deschid aici</string>
-    <string name="off_turn_on_open_supported_links">Oprit: activează „Deschide linkurile acceptate” pentru music.youtube.com</string>
-    <string name="choose_prism_when_a_link_asks">Alege Prism când un link întreabă ce aplicație</string>
-    <string name="android_only_lets_an_app_open">Android îi permite unei aplicații să deschidă linkurile unui site doar dacă spui tu. Asta deschide pagina Prism pentru asta: activează-i linkurile acolo.</string>
+    <string name="on_links_you_tap_open_here">Pornit</string>
+    <string name="off_turn_on_open_supported_links">Oprit</string>
+    <string name="choose_prism_when_a_link_asks">Nesetat</string>
+    <string name="android_only_lets_an_app_open">Android îi permite unei aplicații să deschidă linkurile unui site doar dacă spui tu. Asta deschide pagina Prism pentru asta. Activează acolo „Deschide linkurile acceptate” pentru music.youtube.com, iar linkurile atinse se deschid aici. Dacă un link întreabă ce aplicație, alege Prism.</string>
     <string name="see_and_delete_what_s_on">Vezi și șterge ce e pe telefon</string>
     <string name="including_likes_from_other_devices">Inclusiv aprecierile de pe alte dispozitive</string>
     <string name="songs_you_ll_likely_play_ready">Melodii pe care probabil le vei asculta, gata offline</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music, Musixmatch și Spotify · cuvânt cu cuvânt</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · cuvânt cu cuvânt, cele mai multe melodii chinezești</string>
     <string name="open_lyrics_database_line_by_line">Bază de date deschisă de versuri · rând cu rând</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Versuri trimise de ascultători · puține melodii deocamdată</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · rânduri sau text simplu</string>
+    <string name="lyricfind_lines_or_plain">Versurile de pe pagina melodiei din Prism Music, de la LyricFind · rânduri sau text simplu</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Text simplu · completează și cuvintele acoperite cu stele</string>
     <string name="both">Ambele</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">Notă muzicală</string>
     <string name="bold">Îngroșat</string>
     <string name="wide">Larg</string>
-    <string name="ink">Cerneală</string>
+    <string name="ink">Simplu</string>
     <string name="the_light">Lumina</string>
     <string name="when_you_leave_prism">Când ieși din Prism</string>
     <string name="only_with_its_button">Doar cu butonul lui</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">Înapoi în mini player</string>
     <string name="mini_player_progress">Progresul din mini player</string>
     <string name="player_background_showing">Fundalul playerului vizibil</string>
-    <string name="cover_corners">Colțurile copertei</string>
+    <string name="cover_corners">Rotunjirea colțurilor copertei</string>
     <string name="cover_shrinks_on_pause">Coperta se micșorează în pauză</string>
     <string name="edge_to_edge_cover">Copertă de la margine la margine</string>
     <string name="edge_to_edge_video">Videoclip de la margine la margine</string>
@@ -4040,12 +4040,12 @@
     <string name="edit_this_menu_keywords">meniu ⋯ puncte mai multe opțiuni opțiuni melodie plăci rapide acțiuni ascunde afișează</string>
     <string name="what_plays_next">Ce se redă în continuare</string>
     <string name="when_the_queue_ends">Când se termină coada</string>
-    <string name="when_the_queue_ends_info">Oprește: muzica se termină odată cu coada. Muzica ta: radioul propriu Prism, din ce asculți. Ambele: mai ales muzica ta, cu câteva melodii noi. Prism Music: un radio din catalogul Prism Music. Offline e mereu muzica ta.</string>
+    <string name="when_the_queue_ends_info">Oprește: muzica se termină odată cu coada. Muzica ta: radioul propriu Prism, din ce asculți. Muzica ta și noutăți: mai ales muzica ta, cu câteva melodii noi. Prism Music: un radio din catalogul Prism Music. Offline e mereu muzica ta.</string>
     <string name="music_videos_label">Videoclipuri muzicale</string>
-    <string name="play_them">Redă-le</string>
+    <string name="play_them">Videoclipuri</string>
     <string name="songs_in_radios">Melodii în radiouri</string>
     <string name="songs_everywhere">Melodii peste tot</string>
-    <string name="music_videos_label_info">Redă-le: un videoclip muzical se redă ca videoclip. Melodii în radiouri: redarea automată și radiourile redau în schimb melodia videoclipului. Melodii peste tot: orice videoclip muzical pe care îl atingi se redă ca melodia lui, iar butonul Videoclip afișează în continuare videoclipul.</string>
+    <string name="music_videos_label_info">Videoclipuri: un videoclip muzical se redă ca videoclip. Melodii în radiouri: redarea automată și radiourile redau în schimb melodia videoclipului. Melodii peste tot: orice videoclip muzical pe care îl atingi se redă ca melodia lui, iar butonul Videoclip afișează în continuare videoclipul.</string>
     <string name="trim_silence">Taie liniștea de la început și de la sfârșit</string>
     <string name="podcasts_only">Doar podcasturi</string>
     <string name="songs_and_podcasts">Melodii și podcasturi</string>
@@ -4464,10 +4464,10 @@
     <string name="replay_graph_days">Zile</string>
     <string name="replay_last_weeks">Ultimele săptămâni: %1$d</string>
     <string name="replay_last_days">Ultimele zile: %1$d</string>
-    <string name="replay_story_font">Litera poveștilor</string>
+    <string name="replay_story_font">Litera în povești</string>
     <string name="replay_story_font_info">Cum își așază cuvintele poveștile Replay și Rewind: cu litera de afiș a Prism, sau cu fontul ales pentru Prism (Text și pictograme).</string>
     <string name="replay_story_font_keywords">font tipografie caractere povești rewind wrapped</string>
-    <string name="replay_story_font_poster">Literă de afiș</string>
+    <string name="replay_story_font_poster">Litera de afiș Prism</string>
     <string name="replay_story_font_own">Fontul tău</string>
     <string name="replay_by_hour">Ascultare pe ore</string>
     <string name="replay_by_day">Ascultare pe zile</string>
@@ -4829,7 +4829,7 @@
     <string name="reopen_on_the_last_page">Redeschide pe ultima pagină</string>
     <string name="reopen_on_the_last_page_info">Playerul se deschide la ce aveai deschis când l-ai părăsit: coperta, versurile sau coada. Înapoi închide playerul și din versuri sau din coadă, lăsându-l acolo; butoanele lor te duc înapoi la copertă.</string>
     <string name="reopen_on_the_last_page_keywords">player ține minte versuri coadă deschide pagina de start</string>
-    <string name="steadier_lyrics">Versuri mai stabile</string>
+    <string name="steadier_lyrics">Versuri mai calme</string>
     <string name="steadier_lyrics_info">Controalele cer o trasă mai lungă ca să apară și să dispară. După ce derulezi, versurile revin mai repede la rândul cântat când e aproape și își iau timpul obișnuit când e departe.</string>
     <string name="steadier_lyrics_keywords">versuri sensibil derulare trasă revenire rândul curent urmărire controale</string>
     <string name="gestures_under_the_lyrics">Gesturi sub versuri</string>
@@ -5144,9 +5144,9 @@
     <string name="dd_space_used">%1$s folosiți</string>
     <string name="dd_use_mobile_data_for">Folosește date mobile pentru</string>
     <string name="dd_use_saving_covers">Salvarea copertelor animate</string>
-    <string name="dd_use_measuring">Măsurarea melodiilor</string>
+    <string name="dd_use_measuring">Verificarea volumului și a tempoului</string>
     <string name="dd_use_videos_info">Dezactivat, videoclipurile muzicale nu rulează pe date mobile, în afară de cele descărcate. Dacă Wi-Fi-ul cade în timpul unui videoclip, acesta continuă doar ca audio.</string>
-    <string name="dd_use_keywords">date mobile celular limitat economizor de date doar wifi</string>
+    <string name="dd_use_keywords">date mobile celular limitat economizor de date doar wifi încărcare în avans măsurare volum tempo</string>
     <string name="gb_on_the_cover">Pe copertă</string>
     <string name="gb_on_the_mini_player">Pe mini player</string>
     <string name="gb_swipes_and_touch">Glisări și atingeri</string>
@@ -5264,7 +5264,7 @@
     <string name="settings_player_queue_dj">Butonul DJ</string>
     <string name="settings_player_queue_lengths">Durate</string>
     <string name="settings_player_queue_move_played">Mută cele redate</string>
-    <string name="settings_player_queue_tidier">Mai ordonată</string>
+    <string name="settings_player_queue_tidier">Coadă mai ordonată</string>
     <string name="settings_player_scroll_for_controls">Derulează în sus pentru comenzi</string>
     <string name="settings_player_lock_options">Opțiuni pentru ecranul de blocare</string>
     <string name="settings_player_immersive_options">Opțiuni pentru modul imersiv</string>
@@ -5613,4 +5613,28 @@
     <string name="spot_session_bring_failed">Nu s-a putut citi. Încearcă din nou.</string>
     <string name="spot_session_followed_all">Și playlisturile urmărite</string>
     <string name="spot_session_followed_all_info">Pornit: playlisturile pe care le urmărești pe Spotify intră singure în Bibliotecă, primele 50, și rămân la zi. Oprit: fiecare așteaptă în Bibliotecă, la o atingere distanță. Cele pe care le-ai ascuns din Bibliotecă sunt lăsate deoparte.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (cum este citit playerul web Spotify)</string>
+    <string name="spot_session_playlists_info">Playlisturile tale din Spotify apar în Bibliotecă marcate Spotify și se redau prin potrivirile lor din YouTube Music, în ordinea din Spotify. Melodiile sunt potrivite o dată și reținute. Playlisturile pe care le urmărești așteaptă în Bibliotecă, la o atingere distanță, sau vin singure cu opțiunea Și playlisturile urmărite. Dacă oprești asta, le scoți din Bibliotecă.</string>
+    <string name="spot_session_keep_in_step_info">Când deschizi unul dintre ele, Prism verifică dacă melodiile lui s-au schimbat în Spotify și îl recitește dacă da. Toate sunt verificate oricum o dată pe zi prin Wi-Fi. Modificările făcute în ele în Prism sunt înlocuite cu cele din Spotify.</string>
+    <string name="tour_1875_spotify_title">Spotify-ul tău</string>
+    <string name="tour_1875_spotify_about">Conectează-te o dată la Spotify și muzica ta de acolo ajunge în Prism.</string>
+    <string name="tour_1875_spotify_point_1">Melodiile apreciate și playlisturile tale sunt găsite pe YouTube Music și rămân sincronizate.</string>
+    <string name="tour_1875_spotify_point_2">Vin și playlisturile pe care le urmărești: atinge unul în Bibliotecă ca să-l aduci.</string>
+    <string name="tour_1875_spotify_point_3">Prism doar citește. Nimic nu se schimbă vreodată în Spotify-ul tău.</string>
+    <string name="tour_1875_spotify_point_4">Este neoficial și împotriva termenilor Spotify, așa că se poate opri din funcționare. Aplicația ta proprie de dezvoltator funcționează ca înainte.</string>
+    <string name="tour_1875_also_queue">Selectează melodii, apoi Redă în continuare sau Adaugă în coadă: merge și când nu se redă nimic.</string>
+    <string name="tour_1875_also_home">Butonul de redare de pe cardurile mari din Acasă redă pe loc.</string>
+    <string name="tour_1875_also_busy">O melodie al cărei server eșuează mereu este cerută pe altă cale.</string>
+    <string name="tour_1875_also_heard">O melodie recunoscută se redă din momentul în care ai auzit-o, cu versurile deschise.</string>
+    <string name="queue_end_mixed">Muzica ta și noutăți</string>
+    <string name="dd_use_load_ahead">Încărcarea melodiilor în avans</string>
+    <string name="replay_notices_n_on">%1$d din 3 pornite</string>
+    <string name="car_lyrics_style">Stilul versurilor</string>
+    <string name="tab_tint_light">Culorile temei</string>
+    <string name="bini_detail">Versurile Apple Music · cuvânt cu cuvânt, potrivite altfel</string>
+    <string name="hl_card_style">Stilul cardului</string>
+    <string name="hl_show_in_lists">Afișează în liste</string>
+    <string name="hl_show_on_artist_pages">Afișează pe paginile artiștilor</string>
+    <string name="allow_access_to_lossless_files_value">Necesar pentru a găsi fișierele tale fără pierderi</string>
 </resources>

@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">виконавець альбом плейлист сторінка колір фото акцент зображення</string>
     <string name="font">Шрифт</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">шрифт гарнітура власний ttf otf outfit prism системний чистий manrope геометричний plus jakarta sans легкий urbanist округлий nunito журнальний serif fraunces моно geist розбірливий atkinson hyperlegible дислексія opendyslexic доступність</string>
-    <string name="type">Шрифт</string>
+    <string name="type">Стиль заголовків</string>
     <string name="classic_1_6_bold_headings_titles">класичний 1.6 жирні заголовки назви старий вигляд</string>
     <string name="classic_type">Класичний шрифт</string>
     <string name="weight_and_spacing">Товщина й інтервали</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">Прибрати файл шрифту для текстів</string>
     <string name="font_size_scale_bigger_smaller">шрифт розмір масштаб більший менший</string>
     <string name="icons">Значки</string>
-    <string name="pack">Набір</string>
+    <string name="pack">Набір значків</string>
     <string name="icon_style_cupertino_apple">стиль значків cupertino apple іконки</string>
     <string name="icon_thin_bold">значки тонкі жирні</string>
     <string name="rounded">Заокруглені</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">Перезапусти Prism, щоб їх побачити</string>
     <string name="app_icon">Значок застосунку</string>
     <string name="launcher_home_screen_icon_logo">лаунчер головний екран значок логотип іконка</string>
-    <string name="shape">Форма</string>
+    <string name="shape">Форма кнопок</string>
     <string name="corners">Кути</string>
     <string name="rounded_square_shape_radius_slider">заокруглений квадрат форма радіус повзунок</string>
     <string name="covers_shapes">Форми обкладинок</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">крива рівна потужність лінійна s-крива dj різко плавно прямо м\'яко</string>
     <string name="crossfade_mark">Позначка переходу</string>
     <string name="progress_bar_mark_where_next_song">смуга прогресу позначка де починається перехід наступної пісні</string>
-    <string name="covers_blend_too">Обкладинки теж змішуються</string>
+    <string name="covers_blend_too">Обкладинки змішуються при плавному переході</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">обкладинка розчинення затухання перехід apple music</string>
     <string name="speed_pitch_and_fades">Швидкість, тональність і затухання</string>
     <string name="speed_when_prism_starts">Швидкість під час запуску Prism</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">Очистити Розумні завантаження</string>
     <string name="cache_delete_free_space">кеш видалити звільнити місце</string>
     <string name="sections_order_shortcuts_quick_picks_speed">розділи порядок ярлики швидкий вибір швидкий набір</string>
-    <string name="continue_line">Рядок «Продовжити»</string>
+    <string name="continue_line">Продовжити з того місця, де ти зупинився</string>
     <string name="continue_album_resume_greeting_hide_context">продовжити альбом відновити привітання сховати контекст rewind</string>
     <string name="replay_card">Картка Replay</string>
     <string name="replay_teaser_look_style_design_quiet">replay анонс вигляд стиль дизайн спокійна підсумок заливка спектральна рамка кільце обкладинка смуга стовпчики полярне сяйво</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">Ліцензії відкритого коду</string>
     <string name="license_gpl">ліцензія gpl</string>
     <string name="diagnostics">Діагностика</string>
-    <string name="playback_diagnostics">Діагностика відтворення</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">заїкання переривання пропуски збій затримка bluetooth airpods журнал налагодження</string>
+    <string name="playback_diagnostics">Вести журнал відтворення</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">заїкання переривання пропуски збій затримка bluetooth airpods журнал налагодження діагностика відтворення</string>
     <string name="share_diagnostics">Поділитися діагностикою</string>
     <string name="log_send_report">журнал надіслати звіт</string>
     <string name="clear_diagnostics">Очистити діагностику</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">Відкривається в YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">Увімкнено: посилання, які ти торкаєшся, відкриваються тут</string>
-    <string name="off_turn_on_open_supported_links">Вимкнено: увімкни «Відкривати підтримувані посилання» для music.youtube.com</string>
-    <string name="choose_prism_when_a_link_asks">Вибирай Prism, коли посилання запитує, яким застосунком відкрити</string>
-    <string name="android_only_lets_an_app_open">Android дозволяє застосунку відкривати посилання сайту лише з твоєї згоди. Ця кнопка відкриває для цього сторінку Prism: увімкни там його посилання.</string>
+    <string name="on_links_you_tap_open_here">Увімкнено</string>
+    <string name="off_turn_on_open_supported_links">Вимкнено</string>
+    <string name="choose_prism_when_a_link_asks">Не задано</string>
+    <string name="android_only_lets_an_app_open">Android дозволяє застосунку відкривати посилання сайту лише з твоєї згоди. Це відкриває для цього сторінку Prism. Увімкни там «Відкривати підтримувані посилання» для music.youtube.com, і посилання, яких ти торкнешся, відкриватимуться тут. Якщо посилання запитає, яким застосунком відкрити, вибери Prism.</string>
     <string name="see_and_delete_what_s_on">Переглядай і видаляй те, що є на телефоні</string>
     <string name="including_likes_from_other_devices">Включно з вподобаннями з інших пристроїв</string>
     <string name="songs_you_ll_likely_play_ready">Пісні, які ти, ймовірно, слухатимеш, готові офлайн</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Тексти Apple Music, Musixmatch і Spotify · слово за словом</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · слово за словом, найбільше китайських пісень</string>
     <string name="open_lyrics_database_line_by_line">Відкрита база текстів · рядок за рядком</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Тексти від слухачів · поки небагато пісень</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · рядки або простий текст</string>
+    <string name="lyricfind_lines_or_plain">Тексти на сторінці пісні в Prism Music, від LyricFind · рядки або простий текст</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Простий текст · також відновлює слова із зірочками</string>
     <string name="both">Обидва</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">Нота</string>
     <string name="bold">Жирний</string>
     <string name="wide">Широкий</string>
-    <string name="ink">Чорнило</string>
+    <string name="ink">Простий</string>
     <string name="the_light">Світло</string>
     <string name="when_you_leave_prism">Коли виходиш із Prism</string>
     <string name="only_with_its_button">Лише кнопкою</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">«Назад» у мініплеєрі</string>
     <string name="mini_player_progress">Прогрес у мініплеєрі</string>
     <string name="player_background_showing">Видимість фону плеєра</string>
-    <string name="cover_corners">Кути обкладинки</string>
+    <string name="cover_corners">Округлення кутів обкладинки</string>
     <string name="cover_shrinks_on_pause">Обкладинка зменшується на паузі</string>
     <string name="edge_to_edge_cover">Обкладинка від краю до краю</string>
     <string name="edge_to_edge_video">Відео від краю до краю</string>
@@ -4090,12 +4090,12 @@
     <string name="edit_this_menu_keywords">меню ⋯ крапки більше параметри пісні швидкі плитки дії сховати показати</string>
     <string name="what_plays_next">Що грає далі</string>
     <string name="when_the_queue_ends">Коли черга закінчиться</string>
-    <string name="when_the_queue_ends_info">Зупинити: музика закінчується разом із чергою. Твоя музика: власне радіо Prism з того, що ти слухаєш. Обидва: здебільшого твоя музика й кілька нових пісень. Prism Music: радіо з каталогу Prism Music. Без мережі завжди грає твоя музика.</string>
+    <string name="when_the_queue_ends_info">Зупинити: музика закінчується разом із чергою. Твоя музика: власне радіо Prism з того, що ти слухаєш. Твоя музика й нове: здебільшого твоя музика й кілька нових пісень. Prism Music: радіо з каталогу Prism Music. Без мережі завжди грає твоя музика.</string>
     <string name="music_videos_label">Музичні відео</string>
-    <string name="play_them">Відтворювати</string>
+    <string name="play_them">Відео</string>
     <string name="songs_in_radios">Пісні в радіо</string>
     <string name="songs_everywhere">Пісні всюди</string>
-    <string name="music_videos_label_info">Відтворювати: музичне відео грає як відео. Пісні в радіо: автовідтворення й радіо вмикають замість відео його пісню. Пісні всюди: будь-яке музичне відео, якого ти торкнешся, грає як пісня, а кнопка «Відео» і далі показує відео.</string>
+    <string name="music_videos_label_info">Відео: музичне відео грає як відео. Пісні в радіо: автовідтворення й радіо вмикають замість відео його пісню. Пісні всюди: будь-яке музичне відео, якого ти торкнешся, грає як пісня, а кнопка «Відео» і далі показує відео.</string>
     <string name="trim_silence">Обрізати тишу на початку й у кінці</string>
     <string name="podcasts_only">Тільки подкасти</string>
     <string name="songs_and_podcasts">Пісні й подкасти</string>
@@ -4514,10 +4514,10 @@
     <string name="replay_graph_days">Дні</string>
     <string name="replay_last_weeks">Тижнів: останні %1$d</string>
     <string name="replay_last_days">Днів: останні %1$d</string>
-    <string name="replay_story_font">Шрифт історій</string>
+    <string name="replay_story_font">Шрифт в історіях</string>
     <string name="replay_story_font_info">Як історії Replay і Rewind набирають слова: плакатним шрифтом Prism або шрифтом, який ти вибрав для Prism (Текст і значки).</string>
     <string name="replay_story_font_keywords">шрифт типографіка гарнітура історії rewind wrapped</string>
-    <string name="replay_story_font_poster">Плакатний шрифт</string>
+    <string name="replay_story_font_poster">Плакатний шрифт Prism</string>
     <string name="replay_story_font_own">Твій шрифт</string>
     <string name="replay_by_hour">Прослуховування за годинами</string>
     <string name="replay_by_day">Прослуховування за днями</string>
@@ -5216,9 +5216,9 @@
     <string name="dd_space_used">Зайнято: %1$s</string>
     <string name="dd_use_mobile_data_for">Мобільні дані для</string>
     <string name="dd_use_saving_covers">Збереження анімованих обкладинок</string>
-    <string name="dd_use_measuring">Вимірювання пісень</string>
+    <string name="dd_use_measuring">Перевірка гучності й темпу</string>
     <string name="dd_use_videos_info">Якщо вимкнено, кліпи не відтворюються через мобільні дані, крім завантажених. Якщо Wi-Fi зникне під час кліпу, він продовжиться як аудіо.</string>
-    <string name="dd_use_keywords">мобільні дані стільникова мережа лімітний трафік економія трафіку лише wifi</string>
+    <string name="dd_use_keywords">мобільні дані стільникова мережа лімітний трафік економія трафіку лише wifi завантаження наперед вимірювання гучність темп</string>
     <string name="gb_on_the_cover">На обкладинці</string>
     <string name="gb_on_the_mini_player">На мініплеєрі</string>
     <string name="gb_swipes_and_touch">Свайпи й торкання</string>
@@ -5336,7 +5336,7 @@
     <string name="settings_player_queue_dj">Кнопка DJ</string>
     <string name="settings_player_queue_lengths">Тривалість</string>
     <string name="settings_player_queue_move_played">Зсувати прослухані</string>
-    <string name="settings_player_queue_tidier">Охайніше</string>
+    <string name="settings_player_queue_tidier">Охайніша черга</string>
     <string name="settings_player_scroll_for_controls">Гортання вгору для кнопок</string>
     <string name="settings_player_lock_options">Параметри екрана блокування</string>
     <string name="settings_player_immersive_options">Параметри режиму занурення</string>
@@ -5688,4 +5688,28 @@
     <string name="spot_session_bring_failed">Не вдалося прочитати. Спробуй ще раз.</string>
     <string name="spot_session_followed_all">Також плейлисти, на які підписаний</string>
     <string name="spot_session_followed_all_info">Увімкнено: плейлисти, на які ти підписаний у Spotify, самі потрапляють у Бібліотеку (перші 50) і лишаються актуальними. Вимкнено: кожен чекає в Бібліотеці, досить торкнутися. Приховані тобою з Бібліотеки не додаються.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (як читається вебпрогравач Spotify)</string>
+    <string name="spot_session_playlists_info">Твої плейлисти зі Spotify з\'являються в Бібліотеці з позначкою Spotify і грають через відповідники з YouTube Music, у порядку Spotify. Пісні зіставляються один раз і запам\'ятовуються. Плейлисти, на які ти підписаний, чекають у Бібліотеці, один дотик, або додаються самі з опцією «Також плейлисти, на які підписаний». Якщо вимкнути це, вони зникнуть із Бібліотеки.</string>
+    <string name="spot_session_keep_in_step_info">Коли ти відкриваєш один із них, Prism дивиться, чи змінилися його пісні в Spotify, і якщо так, читає його знову. У будь-якому разі всі вони перевіряються раз на день через Wi-Fi. Зміни, які ти вносиш у них у Prism, замінюються змінами зі Spotify.</string>
+    <string name="tour_1875_spotify_title">Твій Spotify</string>
+    <string name="tour_1875_spotify_about">Увійди в Spotify один раз, і твоя музика звідти з\'явиться в Prism.</string>
+    <string name="tour_1875_spotify_point_1">Твої улюблені пісні й плейлисти знаходяться на YouTube Music і лишаються синхронізованими.</string>
+    <string name="tour_1875_spotify_point_2">Плейлисти, на які ти підписаний, теж приходять: торкнися плейлиста в Бібліотеці, щоб додати його.</string>
+    <string name="tour_1875_spotify_point_3">Prism лише читає. У твоєму Spotify нічого не змінюється.</string>
+    <string name="tour_1875_spotify_point_4">Це неофіційно і проти умов Spotify, тож може перестати працювати. Твій власний застосунок розробника працює як раніше.</string>
+    <string name="tour_1875_also_queue">Вибери пісні, потім «Відтворити наступною» або «Додати в чергу»: це працює, навіть коли нічого не грає.</string>
+    <string name="tour_1875_also_home">Кнопка відтворення на великих картках Головної одразу вмикає музику.</string>
+    <string name="tour_1875_also_busy">Пісню, сервер якої постійно дає збій, запитують іншим способом.</string>
+    <string name="tour_1875_also_heard">Розпізнана пісня грає з моменту, який ти почув, із відкритим текстом.</string>
+    <string name="queue_end_mixed">Твоя музика й нове</string>
+    <string name="dd_use_load_ahead">Завантаження пісень наперед</string>
+    <string name="replay_notices_n_on">%1$d із 3 увімкнено</string>
+    <string name="car_lyrics_style">Стиль тексту</string>
+    <string name="tab_tint_light">Кольори теми</string>
+    <string name="bini_detail">Тексти Apple Music · слово за словом, зіставлені іншим способом</string>
+    <string name="hl_card_style">Стиль картки</string>
+    <string name="hl_show_in_lists">Показувати в списках</string>
+    <string name="hl_show_on_artist_pages">Показувати на сторінках виконавців</string>
+    <string name="allow_access_to_lossless_files_value">Потрібно, щоб знайти твої файли без втрат</string>
 </resources>

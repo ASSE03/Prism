@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">καλλιτέχνης άλμπουμ playlist σελίδα χρώμα φωτογραφία έμφαση εικόνα</string>
     <string name="font">Γραμματοσειρά</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">γραμματοσειρά font προσαρμοσμένη ttf otf outfit prism σύστημα καθαρή manrope γεωμετρική plus jakarta sans αέρινη urbanist στρογγυλή nunito εκδοτική serif fraunces mono geist ευανάγνωστη atkinson hyperlegible δυσλεξία opendyslexic προσβασιμότητα</string>
-    <string name="type">Τυπογραφία</string>
+    <string name="type">Στυλ τίτλων</string>
     <string name="classic_1_6_bold_headings_titles">κλασικό 1.6 έντονες επικεφαλίδες τίτλοι παλιά εμφάνιση</string>
     <string name="classic_type">Κλασική τυπογραφία</string>
     <string name="weight_and_spacing">Πάχος και απόσταση</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">Αφαίρεση του αρχείου γραμματοσειράς στίχων</string>
     <string name="font_size_scale_bigger_smaller">γραμματοσειρά μέγεθος κλίμακα μεγαλύτερο μικρότερο</string>
     <string name="icons">Εικονίδια</string>
-    <string name="pack">Πακέτο</string>
+    <string name="pack">Πακέτο εικονιδίων</string>
     <string name="icon_style_cupertino_apple">στυλ εικονιδίων cupertino apple</string>
     <string name="icon_thin_bold">εικονίδιο λεπτό έντονο</string>
     <string name="rounded">Στρογγυλεμένα</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">Κάνε επανεκκίνηση του Prism για να τα δεις</string>
     <string name="app_icon">Εικονίδιο εφαρμογής</string>
     <string name="launcher_home_screen_icon_logo">launcher αρχική οθόνη εικονίδιο λογότυπο</string>
-    <string name="shape">Σχήμα</string>
+    <string name="shape">Σχήμα κουμπιών</string>
     <string name="corners">Γωνίες</string>
     <string name="rounded_square_shape_radius_slider">στρογγυλεμένο τετράγωνο σχήμα ακτίνα ρυθμιστικό</string>
     <string name="covers_shapes">Σχήματα εξωφύλλων</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">καμπύλη ίση ισχύς γραμμική s-curve dj κόψιμο ομαλή ευθεία απαλή</string>
     <string name="crossfade_mark">Σημάδι ομαλής μετάβασης</string>
     <string name="progress_bar_mark_where_next_song">γραμμή προόδου σημάδι όπου ξεκινά η μετάβαση στο επόμενο τραγούδι</string>
-    <string name="covers_blend_too">Και τα εξώφυλλα αναμειγνύονται</string>
+    <string name="covers_blend_too">Τα εξώφυλλα αναμειγνύονται στη μετάβαση</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">εξώφυλλο διάλυση σβήσιμο ομαλή μετάβαση apple music</string>
     <string name="speed_pitch_and_fades">Ταχύτητα, τονικότητα και σβησίματα</string>
     <string name="speed_when_prism_starts">Ταχύτητα κατά την έναρξη του Prism</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">Διαγραφή Έξυπνων λήψεων</string>
     <string name="cache_delete_free_space">cache διαγραφή ελεύθερος χώρος</string>
     <string name="sections_order_shortcuts_quick_picks_speed">ενότητες σειρά συντομεύσεις γρήγορες επιλογές γρήγορη κλήση</string>
-    <string name="continue_line">Γραμμή «Συνέχισε»</string>
+    <string name="continue_line">Συνέχισε από εκεί που σταμάτησες</string>
     <string name="continue_album_resume_greeting_hide_context">συνέχεια άλμπουμ συνέχιση χαιρετισμός απόκρυψη πλαίσιο rewind</string>
     <string name="replay_card">Κάρτα Replay</string>
     <string name="replay_teaser_look_style_design_quiet">replay προεπισκόπηση εμφάνιση στυλ σχέδιο διακριτικό λογιστικό πινελιά φάσμα πλαίσιο δαχτυλίδι εξώφυλλο λωρίδα μπάρες σέλας</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">Άδειες ανοιχτού κώδικα</string>
     <string name="license_gpl">άδεια gpl</string>
     <string name="diagnostics">Διαγνωστικά</string>
-    <string name="playback_diagnostics">Διαγνωστικά αναπαραγωγής</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">κόμπιασμα τρεμόπαιγμα πήδημα σφάλμα καθυστέρηση bluetooth airpods αρχείο καταγραφής debug</string>
+    <string name="playback_diagnostics">Κράτα αρχείο αναπαραγωγής</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">κόμπιασμα τρεμόπαιγμα πήδημα σφάλμα καθυστέρηση bluetooth airpods αρχείο καταγραφής debug διαγνωστικά αναπαραγωγή αρχείο</string>
     <string name="share_diagnostics">Κοινοποίηση διαγνωστικών</string>
     <string name="log_send_report">αρχείο καταγραφής αποστολή αναφορά</string>
     <string name="clear_diagnostics">Διαγραφή διαγνωστικών</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">Ανοίγει στο YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">Ενεργό: οι σύνδεσμοι που πατάς ανοίγουν εδώ</string>
-    <string name="off_turn_on_open_supported_links">Ανενεργό: ενεργοποίησε το «Άνοιγμα υποστηριζόμενων συνδέσμων» για το music.youtube.com</string>
-    <string name="choose_prism_when_a_link_asks">Διάλεξε το Prism όταν ένας σύνδεσμος ρωτά ποια εφαρμογή</string>
-    <string name="android_only_lets_an_app_open">Το Android επιτρέπει σε μια εφαρμογή να ανοίγει τους συνδέσμους ενός ιστότοπου μόνο αν το πεις εσύ. Αυτό ανοίγει τη σελίδα του Prism για αυτό: ενεργοποίησε εκεί τους συνδέσμους του.</string>
+    <string name="on_links_you_tap_open_here">Ενεργό</string>
+    <string name="off_turn_on_open_supported_links">Ανενεργό</string>
+    <string name="choose_prism_when_a_link_asks">Μη ορισμένο</string>
+    <string name="android_only_lets_an_app_open">Το Android επιτρέπει σε μια εφαρμογή να ανοίγει τους συνδέσμους ενός ιστότοπου μόνο αν το πεις εσύ. Αυτό ανοίγει τη σελίδα του Prism για αυτό. Ενεργοποίησε εκεί το «Άνοιγμα υποστηριζόμενων συνδέσμων» για το music.youtube.com και οι σύνδεσμοι που πατάς ανοίγουν εδώ. Αν ένας σύνδεσμος ρωτά ποια εφαρμογή, διάλεξε το Prism.</string>
     <string name="see_and_delete_what_s_on">Δες και διάγραψε ό,τι υπάρχει στο τηλέφωνό σου</string>
     <string name="including_likes_from_other_devices">Μαζί με τα «μου αρέσει» από άλλες συσκευές</string>
     <string name="songs_you_ll_likely_play_ready">Τραγούδια που μάλλον θα παίξεις, έτοιμα εκτός σύνδεσης</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music, Musixmatch και Spotify · λέξη προς λέξη</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · λέξη προς λέξη, τα περισσότερα κινεζικά τραγούδια</string>
     <string name="open_lyrics_database_line_by_line">Ανοιχτή βάση δεδομένων στίχων · γραμμή προς γραμμή</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Στίχοι που στέλνουν οι ακροατές · λίγα τραγούδια μέχρι στιγμής</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · γραμμές ή απλό κείμενο</string>
+    <string name="lyricfind_lines_or_plain">Οι στίχοι στη σελίδα του τραγουδιού στο Prism Music, από το LyricFind · γραμμές ή απλό κείμενο</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Απλό κείμενο · συμπληρώνει επίσης λέξεις με αστεράκια</string>
     <string name="both">Και τα δύο</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">Νότα</string>
     <string name="bold">Έντονο</string>
     <string name="wide">Φαρδύ</string>
-    <string name="ink">Μελάνι</string>
+    <string name="ink">Απλό</string>
     <string name="the_light">Το φως</string>
     <string name="when_you_leave_prism">Όταν βγαίνεις από το Prism</string>
     <string name="only_with_its_button">Μόνο με το κουμπί του</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">Προηγούμενο στο μίνι player</string>
     <string name="mini_player_progress">Πρόοδος μίνι player</string>
     <string name="player_background_showing">Ορατό φόντο οθόνης αναπαραγωγής</string>
-    <string name="cover_corners">Γωνίες εξωφύλλου</string>
+    <string name="cover_corners">Στρογγυλότητα γωνιών εξωφύλλου</string>
     <string name="cover_shrinks_on_pause">Το εξώφυλλο μικραίνει στην παύση</string>
     <string name="edge_to_edge_cover">Εξώφυλλο από άκρη σε άκρη</string>
     <string name="edge_to_edge_video">Βίντεο από άκρη σε άκρη</string>
@@ -3990,12 +3990,12 @@
     <string name="edit_this_menu_keywords">μενού ⋯ τελείες περισσότερα επιλογές τραγουδιού γρήγορα πλακίδια ενέργειες απόκρυψη εμφάνιση</string>
     <string name="what_plays_next">Τι παίζει μετά</string>
     <string name="when_the_queue_ends">Όταν τελειώσει η ουρά</string>
-    <string name="when_the_queue_ends_info">Διακοπή: η μουσική τελειώνει μαζί με την ουρά. Η μουσική σου: το δικό ραδιόφωνο του Prism από ό,τι ακούς. Και τα δύο: κυρίως η μουσική σου, με λίγα νέα τραγούδια. Prism Music: ένα ραδιόφωνο από τον κατάλογο του Prism Music. Εκτός σύνδεσης είναι πάντα η μουσική σου.</string>
+    <string name="when_the_queue_ends_info">Διακοπή: η μουσική τελειώνει μαζί με την ουρά. Η μουσική σου: το δικό ραδιόφωνο του Prism από ό,τι ακούς. Δικά σου και νέα: κυρίως η μουσική σου, με λίγα νέα τραγούδια. Prism Music: ένα ραδιόφωνο από τον κατάλογο του Prism Music. Εκτός σύνδεσης είναι πάντα η μουσική σου.</string>
     <string name="music_videos_label">Μουσικά βίντεο</string>
-    <string name="play_them">Αναπαραγωγή τους</string>
+    <string name="play_them">Βίντεο</string>
     <string name="songs_in_radios">Τραγούδια στα ραδιόφωνα</string>
     <string name="songs_everywhere">Τραγούδια παντού</string>
-    <string name="music_videos_label_info">Αναπαραγωγή τους: ένα μουσικό βίντεο παίζει ως βίντεο. Τραγούδια στα ραδιόφωνα: η αυτόματη αναπαραγωγή και τα ραδιόφωνα παίζουν αντί γι\' αυτό το τραγούδι του βίντεο. Τραγούδια παντού: κάθε μουσικό βίντεο που πατάς παίζει ως το τραγούδι του, και το κουμπί «Βίντεο» εξακολουθεί να δείχνει το βίντεο.</string>
+    <string name="music_videos_label_info">Βίντεο: ένα μουσικό βίντεο παίζει ως βίντεο. Τραγούδια στα ραδιόφωνα: η αυτόματη αναπαραγωγή και τα ραδιόφωνα παίζουν αντί γι\' αυτό το τραγούδι του βίντεο. Τραγούδια παντού: κάθε μουσικό βίντεο που πατάς παίζει ως το τραγούδι του, και το κουμπί «Βίντεο» εξακολουθεί να δείχνει το βίντεο.</string>
     <string name="trim_silence">Κόψιμο σιωπής στην αρχή και στο τέλος</string>
     <string name="podcasts_only">Μόνο podcast</string>
     <string name="songs_and_podcasts">Τραγούδια και podcast</string>
@@ -4414,10 +4414,10 @@
     <string name="replay_graph_days">Ημέρες</string>
     <string name="replay_last_weeks">Τελευταίες %1$d εβδομάδες</string>
     <string name="replay_last_days">Τελευταίες %1$d ημέρες</string>
-    <string name="replay_story_font">Γραμματοσειρά ιστοριών</string>
+    <string name="replay_story_font">Γραμματοσειρά στις ιστορίες</string>
     <string name="replay_story_font_info">Πώς γράφουν τις λέξεις τους οι ιστορίες του Replay και του Rewind: με τη γραμματοσειρά αφίσας του Prism ή με τη γραμματοσειρά που διάλεξες για το Prism (Κείμενο &amp; εικονίδια).</string>
     <string name="replay_story_font_keywords">γραμματοσειρά τυπογραφία font ιστορίες rewind wrapped</string>
-    <string name="replay_story_font_poster">Γραμματοσειρά αφίσας</string>
+    <string name="replay_story_font_poster">Η γραμματοσειρά αφίσας του Prism</string>
     <string name="replay_story_font_own">Η γραμματοσειρά σου</string>
     <string name="replay_by_hour">Ακρόαση ανά ώρα</string>
     <string name="replay_by_day">Ακρόαση ανά ημέρα</string>
@@ -4765,7 +4765,7 @@
     <string name="reopen_on_the_last_page">Άνοιγμα στην τελευταία σελίδα</string>
     <string name="reopen_on_the_last_page_info">Το πρόγραμμα αναπαραγωγής ανοίγει σε ό,τι είχες ανοιχτό όταν το άφησες: το εξώφυλλο, τους στίχους ή την ουρά. Το Πίσω κλείνει το πρόγραμμα αναπαραγωγής και από τους στίχους ή την ουρά, αφήνοντάς το εκεί· τα δικά τους κουμπιά γυρίζουν στο εξώφυλλο.</string>
     <string name="reopen_on_the_last_page_keywords">πρόγραμμα αναπαραγωγής θυμάται στίχοι ουρά άνοιγμα αρχική σελίδα</string>
-    <string name="steadier_lyrics">Πιο σταθεροί στίχοι</string>
+    <string name="steadier_lyrics">Πιο ήρεμοι στίχοι</string>
     <string name="steadier_lyrics_info">Τα χειριστήρια θέλουν μεγαλύτερο σύρσιμο για να εμφανιστούν και να κρυφτούν. Αφού κάνεις κύλιση, οι στίχοι επιστρέφουν πιο γρήγορα στη γραμμή που τραγουδιέται όταν είναι κοντά, και παίρνουν τον συνηθισμένο χρόνο όταν είναι μακριά.</string>
     <string name="steadier_lyrics_keywords">στίχοι ευαίσθητο κύλιση σύρσιμο επιστροφή τρέχουσα γραμμή ακολούθηση χειριστήρια</string>
     <string name="gestures_under_the_lyrics">Χειρονομίες κάτω από τους στίχους</string>
@@ -5072,9 +5072,9 @@
     <string name="dd_space_used">%1$s σε χρήση</string>
     <string name="dd_use_mobile_data_for">Χρήση δεδομένων κινητής για</string>
     <string name="dd_use_saving_covers">Αποθήκευση κινούμενων εξωφύλλων</string>
-    <string name="dd_use_measuring">Μέτρηση τραγουδιών</string>
+    <string name="dd_use_measuring">Έλεγχος έντασης και ρυθμού</string>
     <string name="dd_use_videos_info">Όταν είναι ανενεργό, τα μουσικά βίντεο δεν παίζουν με δεδομένα κινητής, εκτός από όσα έχεις κατεβάσει. Αν το Wi-Fi χαθεί κατά τη διάρκεια ενός βίντεο, συνεχίζει ως ήχος.</string>
-    <string name="dd_use_keywords">κινητή τηλεφωνία μετρούμενη εξοικονόμηση δεδομένων μόνο wifi cellular metered data saver wifi only</string>
+    <string name="dd_use_keywords">κινητή τηλεφωνία μετρούμενη εξοικονόμηση δεδομένων μόνο wifi cellular metered data saver wifi only προφόρτωση μέτρηση ένταση ρυθμός</string>
     <string name="gb_on_the_cover">Στο εξώφυλλο</string>
     <string name="gb_on_the_mini_player">Στο μίνι player</string>
     <string name="gb_swipes_and_touch">Σύρσιμο και άγγιγμα</string>
@@ -5172,7 +5172,7 @@
     <string name="sound_wifi">Wi-Fi</string>
     <string name="sound_streaming_quality_value">Wi-Fi %1$s · Δεδομένα κινητής %2$s</string>
     <string name="settings_player_progress_and_times">Μπάρα προόδου και χρόνοι</string>
-    <string name="settings_player_on_it">Πάνω της</string>
+    <string name="settings_player_on_it">Στο πρόγραμμα αναπαραγωγής</string>
     <string name="settings_player_modes">Λειτουργίες</string>
     <string name="settings_player_controls_over_videos">Χειριστήρια πάνω από βίντεο</string>
     <string name="settings_player_hide_controls">Απόκρυψη χειριστηρίων</string>
@@ -5192,7 +5192,7 @@
     <string name="settings_player_queue_dj">Κουμπί DJ</string>
     <string name="settings_player_queue_lengths">Διάρκειες τραγουδιών</string>
     <string name="settings_player_queue_move_played">Μετακίνηση όσων έπαιξαν</string>
-    <string name="settings_player_queue_tidier">Πιο τακτοποιημένη</string>
+    <string name="settings_player_queue_tidier">Πιο τακτοποιημένη ουρά</string>
     <string name="settings_player_scroll_for_controls">Κύλιση προς τα πάνω για χειριστήρια</string>
     <string name="settings_player_lock_options">Επιλογές οθόνης κλειδώματος</string>
     <string name="settings_player_immersive_options">Επιλογές καθηλωτικής λειτουργίας</string>
@@ -5538,4 +5538,28 @@
     <string name="spot_session_bring_failed">Δεν διαβάστηκε. Δοκίμασε ξανά.</string>
     <string name="spot_session_followed_all">Και τα playlist που ακολουθείς</string>
     <string name="spot_session_followed_all_info">Ενεργό: τα playlist που ακολουθείς στο Spotify μπαίνουν μόνα τους στη Βιβλιοθήκη, τα πρώτα 50, και μένουν συγχρονισμένα. Ανενεργό: το καθένα περιμένει στη Βιβλιοθήκη, με ένα πάτημα. Όσα έκρυψες από τη Βιβλιοθήκη μένουν εκτός.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (πώς διαβάζεται το web player του Spotify)</string>
+    <string name="spot_session_playlists_info">Τα playlist σου από το Spotify εμφανίζονται στη Βιβλιοθήκη με την ένδειξη Spotify και παίζουν μέσω των αντίστοιχων τραγουδιών τους στο YouTube Music, με τη σειρά του Spotify. Τα τραγούδια αντιστοιχίζονται μία φορά και απομνημονεύονται. Τα playlist που ακολουθείς περιμένουν στη Βιβλιοθήκη, ένα πάτημα μακριά, ή μπαίνουν από μόνα τους με το Και τα playlist που ακολουθείς. Αν το απενεργοποιήσεις, φεύγουν από τη Βιβλιοθήκη.</string>
+    <string name="spot_session_keep_in_step_info">Όταν ανοίγεις ένα από αυτά, το Prism ελέγχει αν άλλαξαν τα τραγούδια του στο Spotify και το διαβάζει ξανά αν ναι. Όλα ελέγχονται ούτως ή άλλως μία φορά την ημέρα μέσω Wi-Fi. Οι αλλαγές που κάνεις σε αυτά στο Prism αντικαθίστανται από αυτές του Spotify.</string>
+    <string name="tour_1875_spotify_title">Το Spotify σου</string>
+    <string name="tour_1875_spotify_about">Συνδέσου στο Spotify μία φορά και η μουσική σου από εκεί έρχεται στο Prism.</string>
+    <string name="tour_1875_spotify_point_1">Τα αγαπημένα τραγούδια και τα playlist σου βρίσκονται στο YouTube Music και μένουν συγχρονισμένα.</string>
+    <string name="tour_1875_spotify_point_2">Έρχονται και τα playlist που ακολουθείς: πάτα ένα στη Βιβλιοθήκη για να το φέρεις.</string>
+    <string name="tour_1875_spotify_point_3">Το Prism μόνο διαβάζει. Τίποτα δεν αλλάζει ποτέ στο Spotify σου.</string>
+    <string name="tour_1875_spotify_point_4">Είναι ανεπίσημο και αντίθετο με τους όρους του Spotify, οπότε μπορεί να σταματήσει να λειτουργεί. Η δική σου εφαρμογή προγραμματιστή λειτουργεί όπως πριν.</string>
+    <string name="tour_1875_also_queue">Επίλεξε τραγούδια και μετά Αναπαραγωγή μετά ή Προσθήκη στην ουρά: λειτουργεί και χωρίς να παίζει κάτι.</string>
+    <string name="tour_1875_also_home">Το κουμπί αναπαραγωγής στις μεγάλες κάρτες της Αρχικής παίζει αμέσως.</string>
+    <string name="tour_1875_also_busy">Ένα τραγούδι που ο διακομιστής του αποτυγχάνει συνεχώς ζητείται με άλλον τρόπο.</string>
+    <string name="tour_1875_also_heard">Ένα τραγούδι που αναγνωρίστηκε παίζει από τη στιγμή που ακούστηκε, με ανοιχτούς τους στίχους.</string>
+    <string name="queue_end_mixed">Δικά σου και νέα</string>
+    <string name="dd_use_load_ahead">Προφόρτωση τραγουδιών</string>
+    <string name="replay_notices_n_on">%1$d από 3 ενεργά</string>
+    <string name="car_lyrics_style">Στυλ στίχων</string>
+    <string name="tab_tint_light">Χρώματα θέματος</string>
+    <string name="bini_detail">Στίχοι του Apple Music · λέξη προς λέξη, με άλλον τρόπο αντιστοίχισης</string>
+    <string name="hl_card_style">Στυλ κάρτας</string>
+    <string name="hl_show_in_lists">Εμφάνιση στις λίστες</string>
+    <string name="hl_show_on_artist_pages">Εμφάνιση στις σελίδες καλλιτεχνών</string>
+    <string name="allow_access_to_lossless_files_value">Χρειάζεται για να βρεθούν τα αρχεία σου χωρίς απώλειες</string>
 </resources>

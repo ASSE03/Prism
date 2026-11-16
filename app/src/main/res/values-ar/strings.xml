@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">فنان ألبوم قائمة تشغيل صفحة لون صورة لون التمييز</string>
     <string name="font">الخط</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">نوع الخط مخصّص ttf otf outfit prism النظام نظيف manrope هندسي plus jakarta sans فسيح urbanist مستدير nunito تحريري serif fraunces mono geist سهل القراءة atkinson hyperlegible عسر القراءة dyslexic opendyslexic إمكانية الوصول</string>
-    <string name="type">الخطوط</string>
+    <string name="type">نمط العناوين</string>
     <string name="classic_1_6_bold_headings_titles">كلاسيكي 1.6 عناوين عريضة عناوين المظهر القديم classic</string>
     <string name="classic_type">خطوط كلاسيكية</string>
     <string name="weight_and_spacing">السُّمك والتباعد</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">إزالة ملف خط الكلمات</string>
     <string name="font_size_scale_bigger_smaller">حجم الخط مقياس أكبر أصغر</string>
     <string name="icons">الأيقونات</string>
-    <string name="pack">الحزمة</string>
+    <string name="pack">حزمة الأيقونات</string>
     <string name="icon_style_cupertino_apple">نمط الأيقونات cupertino apple</string>
     <string name="icon_thin_bold">أيقونة رفيعة عريضة</string>
     <string name="rounded">مستديرة</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">أعد تشغيل Prism لتراها</string>
     <string name="app_icon">أيقونة التطبيق</string>
     <string name="launcher_home_screen_icon_logo">المشغّل الشاشة الرئيسية أيقونة شعار launcher</string>
-    <string name="shape">الشكل</string>
+    <string name="shape">شكل الأزرار</string>
     <string name="corners">الزوايا</string>
     <string name="rounded_square_shape_radius_slider">مستدير مربع شكل نصف قطر شريط تمرير</string>
     <string name="covers_shapes">أشكال الأغلفة</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">منحنى قدرة متساوية خطي منحنى s قطع dj سلس مستقيم هادئ</string>
     <string name="crossfade_mark">علامة التلاشي المتداخل</string>
     <string name="progress_bar_mark_where_next_song">شريط التقدّم علامة حيث يبدأ مزج الأغنية التالية</string>
-    <string name="covers_blend_too">الأغلفة تمتزج أيضًا</string>
+    <string name="covers_blend_too">الأغلفة تمتزج في التلاشي المتداخل</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">غلاف صورة ذوبان تلاشٍ تلاشٍ متداخل apple music</string>
     <string name="speed_pitch_and_fades">السرعة وطبقة الصوت والتلاشي</string>
     <string name="speed_when_prism_starts">السرعة عند بدء Prism</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">محو التنزيلات الذكية</string>
     <string name="cache_delete_free_space">ذاكرة مؤقتة حذف مساحة فارغة</string>
     <string name="sections_order_shortcuts_quick_picks_speed">أقسام ترتيب اختصارات اختيارات سريعة الطلب السريع</string>
-    <string name="continue_line">سطر المتابعة</string>
+    <string name="continue_line">تابع من حيث توقفت</string>
     <string name="continue_album_resume_greeting_hide_context">متابعة ألبوم استئناف تحية إخفاء سياق rewind</string>
     <string name="replay_card">بطاقة Replay</string>
     <string name="replay_teaser_look_style_design_quiet">replay معاينة مظهر نمط تصميم هادئة السجلّ مسحة إطار الطيف حلقة غلاف شريط أشرطة شفق</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">تراخيص البرامج مفتوحة المصدر</string>
     <string name="license_gpl">ترخيص gpl</string>
     <string name="diagnostics">التشخيص</string>
-    <string name="playback_diagnostics">تشخيص التشغيل</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">تقطيع اهتزاز تخطٍّ خلل تأخير bluetooth airpods سجلّ تصحيح الأخطاء</string>
+    <string name="playback_diagnostics">حفظ سجلّ التشغيل</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">تقطيع اهتزاز تخطٍّ خلل تأخير bluetooth airpods سجلّ تصحيح الأخطاء تشخيص سجلّ التشغيل diagnostics playback log</string>
     <string name="share_diagnostics">مشاركة التشخيص</string>
     <string name="log_send_report">سجلّ إرسال تقرير</string>
     <string name="clear_diagnostics">محو التشخيص</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">يُفتح في YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">مفعّل: الروابط التي تنقر عليها تُفتح هنا</string>
-    <string name="off_turn_on_open_supported_links">متوقف: فعّل «فتح الروابط المتوافقة» لـ music.youtube.com</string>
-    <string name="choose_prism_when_a_link_asks">اختر Prism عندما يسألك رابط عن التطبيق</string>
-    <string name="android_only_lets_an_app_open">لا يسمح Android لتطبيق بفتح روابط موقع إلا إذا وافقت. هذا يفتح صفحة Prism الخاصة بذلك: فعّل روابطه هناك.</string>
+    <string name="on_links_you_tap_open_here">مفعّل</string>
+    <string name="off_turn_on_open_supported_links">إيقاف</string>
+    <string name="choose_prism_when_a_link_asks">غير محدد</string>
+    <string name="android_only_lets_an_app_open">لا يسمح Android لتطبيق بفتح روابط موقع إلا إذا وافقت. هذا يفتح صفحة Prism الخاصة بذلك. فعّل «فتح الروابط المتوافقة» لـ music.youtube.com هناك، فتُفتح الروابط التي تنقر عليها هنا. وإذا سألك رابط عن التطبيق، فاختر Prism.</string>
     <string name="see_and_delete_what_s_on">اعرض ما على هاتفك واحذفه</string>
     <string name="including_likes_from_other_devices">بما في ذلك الإعجابات من الأجهزة الأخرى</string>
     <string name="songs_you_ll_likely_play_ready">أغانٍ يُرجّح أن تشغّلها، جاهزة دون اتصال</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">من Apple Music وMusixmatch وSpotify · كلمة بكلمة</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · كلمة بكلمة، أكثر الأغاني الصينية</string>
     <string name="open_lyrics_database_line_by_line">قاعدة بيانات مفتوحة للكلمات · سطرًا بسطر</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">كلمات يرسلها المستمعون · أغانٍ قليلة حتى الآن</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · أسطر أو نص عادي</string>
+    <string name="lyricfind_lines_or_plain">كلمات الأغنية في صفحتها على Prism Music، من LyricFind · أسطر أو نص عادي</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">نص عادي · ويملأ أيضًا الكلمات المخفية بالنجوم</string>
     <string name="both">كلاهما</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">نوتة موسيقية</string>
     <string name="bold">عريض</string>
     <string name="wide">واسع</string>
-    <string name="ink">الحبر</string>
+    <string name="ink">عادي</string>
     <string name="the_light">الضوء</string>
     <string name="when_you_leave_prism">عند مغادرة Prism</string>
     <string name="only_with_its_button">بزرّه فقط</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">زر السابق في المشغّل المصغّر</string>
     <string name="mini_player_progress">تقدّم المشغّل المصغّر</string>
     <string name="player_background_showing">إظهار خلفية المشغّل</string>
-    <string name="cover_corners">زوايا الغلاف</string>
+    <string name="cover_corners">استدارة زوايا الغلاف</string>
     <string name="cover_shrinks_on_pause">الغلاف يصغر عند الإيقاف المؤقت</string>
     <string name="edge_to_edge_cover">غلاف من حافة إلى حافة</string>
     <string name="edge_to_edge_video">فيديو من حافة إلى حافة</string>
@@ -4190,12 +4190,12 @@
     <string name="edit_this_menu_keywords">قائمة ⋯ نقاط خيارات أكثر خيارات الأغنية مربعات سريعة إجراءات إخفاء إظهار</string>
     <string name="what_plays_next">ما يُشغَّل بعد ذلك</string>
     <string name="when_the_queue_ends">عند انتهاء قائمة الانتظار</string>
-    <string name="when_the_queue_ends_info">إيقاف: تنتهي الموسيقى مع قائمة الانتظار. موسيقاك: راديو Prism الخاص من الأغاني التي تشغّلها. كلاهما: موسيقاك في الغالب مع بعض الأغاني الجديدة. Prism Music: راديو من كتالوج Prism Music. دون اتصال تكون دائمًا موسيقاك.</string>
+    <string name="when_the_queue_ends_info">إيقاف: تنتهي الموسيقى مع قائمة الانتظار. موسيقاك: راديو Prism الخاص من الأغاني التي تشغّلها. موسيقاك والجديد: موسيقاك في الغالب مع بعض الأغاني الجديدة. Prism Music: راديو من كتالوج Prism Music. دون اتصال تكون دائمًا موسيقاك.</string>
     <string name="music_videos_label">فيديوهات الموسيقى</string>
-    <string name="play_them">تشغيلها</string>
+    <string name="play_them">فيديوهات</string>
     <string name="songs_in_radios">أغانٍ في الراديو</string>
     <string name="songs_everywhere">أغانٍ في كل مكان</string>
-    <string name="music_videos_label_info">تشغيلها: يُشغَّل فيديو الموسيقى كفيديو. أغانٍ في الراديو: يشغّل التشغيل التلقائي والراديو أغنية الفيديو بدلًا منه. أغانٍ في كل مكان: أي فيديو موسيقى تنقر عليه يُشغَّل كأغنيته، ويظل زر «فيديو» يعرض الفيديو.</string>
+    <string name="music_videos_label_info">فيديوهات: يُشغَّل فيديو الموسيقى كفيديو. أغانٍ في الراديو: يشغّل التشغيل التلقائي والراديو أغنية الفيديو بدلًا منه. أغانٍ في كل مكان: أي فيديو موسيقى تنقر عليه يُشغَّل كأغنيته، ويظل زر «فيديو» يعرض الفيديو.</string>
     <string name="trim_silence">قص الصمت في البداية والنهاية</string>
     <string name="podcasts_only">البودكاست فقط</string>
     <string name="songs_and_podcasts">الأغاني والبودكاست</string>
@@ -4614,10 +4614,10 @@
     <string name="replay_graph_days">الأيام</string>
     <string name="replay_last_weeks">آخر %1$d أسبوعًا</string>
     <string name="replay_last_days">آخر %1$d يومًا</string>
-    <string name="replay_story_font">خط القصص</string>
+    <string name="replay_story_font">الخط في القصص</string>
     <string name="replay_story_font_info">الخط الذي تكتب به قصص Replay وRewind كلماتها: خط الملصق الخاص بـ Prism، أو الخط الذي اخترته لـ Prism (النص والأيقونات).</string>
     <string name="replay_story_font_keywords">خط طباعة نوع الخط قصص rewind wrapped</string>
-    <string name="replay_story_font_poster">خط الملصق</string>
+    <string name="replay_story_font_poster">خط الملصق الخاص بـ Prism</string>
     <string name="replay_story_font_own">خطك</string>
     <string name="replay_by_hour">الاستماع حسب الساعة</string>
     <string name="replay_by_day">الاستماع حسب اليوم</string>
@@ -5021,7 +5021,7 @@
     <string name="reopen_on_the_last_page">إعادة الفتح على آخر صفحة</string>
     <string name="reopen_on_the_last_page_info">يُفتح المشغّل على ما كان مفتوحًا عند مغادرته: الغلاف أو الكلمات أو قائمة الانتظار. يغلق رجوع المشغّل من الكلمات أو قائمة الانتظار أيضًا ويتركه هناك؛ أما أزرارها فتعود إلى الغلاف.</string>
     <string name="reopen_on_the_last_page_keywords">مشغّل تذكّر كلمات قائمة الانتظار فتح بدء صفحة</string>
-    <string name="steadier_lyrics">كلمات أثبت</string>
+    <string name="steadier_lyrics">كلمات أهدأ</string>
     <string name="steadier_lyrics_info">تحتاج عناصر التحكم إلى سحبة أطول لتظهر وتختفي. وبعد التمرير، تعود الكلمات إلى السطر الذي يُغنّى أسرع عندما يكون قريبًا، وتأخذ وقتها المعتاد عندما يكون بعيدًا.</string>
     <string name="steadier_lyrics_keywords">كلمات حساسية تمرير سحب عودة السطر الحالي متابعة عناصر التحكم</string>
     <string name="gestures_under_the_lyrics">الإيماءات أسفل الكلمات</string>
@@ -5360,9 +5360,9 @@
     <string name="dd_space_used">%1$s مستخدَمة</string>
     <string name="dd_use_mobile_data_for">استخدام بيانات الجوّال لـ</string>
     <string name="dd_use_saving_covers">حفظ الأغلفة المتحركة</string>
-    <string name="dd_use_measuring">قياس الأغاني</string>
+    <string name="dd_use_measuring">فحص مستوى الصوت والإيقاع</string>
     <string name="dd_use_videos_info">عند الإيقاف، لا تُشغَّل الفيديوهات الموسيقية على بيانات الجوّال، إلا التي نزّلتها. وإذا انقطع Wi-Fi أثناء فيديو، يستمر كصوت فقط.</string>
-    <string name="dd_use_keywords">بيانات خلوية محدودة توفير البيانات واي فاي فقط cellular metered data saver wifi only</string>
+    <string name="dd_use_keywords">بيانات خلوية محدودة توفير البيانات واي فاي فقط تحميل مسبق قياس مستوى الصوت إيقاع cellular metered data saver wifi only load ahead measuring loudness tempo</string>
     <string name="gb_on_the_cover">على الغلاف</string>
     <string name="gb_on_the_mini_player">على المشغّل المصغّر</string>
     <string name="gb_swipes_and_touch">السحب واللمس</string>
@@ -5460,7 +5460,7 @@
     <string name="sound_wifi">Wi-Fi</string>
     <string name="sound_streaming_quality_value">Wi-Fi %1$s · بيانات الجوّال %2$s</string>
     <string name="settings_player_progress_and_times">شريط التقدّم والأوقات</string>
-    <string name="settings_player_on_it">ما يظهر عليه</string>
+    <string name="settings_player_on_it">على المشغّل</string>
     <string name="settings_player_modes">الأوضاع</string>
     <string name="settings_player_controls_over_videos">عناصر التحكم فوق الفيديوهات</string>
     <string name="settings_player_hide_controls">إخفاء عناصر التحكم</string>
@@ -5480,7 +5480,7 @@
     <string name="settings_player_queue_dj">زر DJ</string>
     <string name="settings_player_queue_lengths">مدد الأغاني</string>
     <string name="settings_player_queue_move_played">نقل الأغاني المشغّلة</string>
-    <string name="settings_player_queue_tidier">أكثر ترتيبًا</string>
+    <string name="settings_player_queue_tidier">قائمة انتظار أكثر ترتيبًا</string>
     <string name="settings_player_scroll_for_controls">التمرير للأعلى لعناصر التحكم</string>
     <string name="settings_player_lock_options">خيارات شاشة القفل</string>
     <string name="settings_player_immersive_options">خيارات الوضع الغامر</string>
@@ -5838,4 +5838,28 @@
     <string name="spot_session_bring_failed">تعذّرت قراءتها. حاول مرة أخرى.</string>
     <string name="spot_session_followed_all">القوائم التي تتابعها أيضًا</string>
     <string name="spot_session_followed_all_info">مفعّل: قوائم التشغيل التي تتابعها في Spotify تدخل المكتبة من تلقاء نفسها، أول 50 منها، وتبقى متزامنة. معطّل: تنتظر كل واحدة في المكتبة، على بعد نقرة. القوائم التي أخفيتها من المكتبة تُستثنى.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (كيف يُقرأ مشغّل الويب في Spotify)</string>
+    <string name="spot_session_playlists_info">تظهر قوائم التشغيل الخاصة بك على Spotify في المكتبة بعلامة Spotify، وتُشغَّل عبر ما يطابقها في YouTube Music، بترتيب Spotify. تُطابَق الأغاني مرة واحدة وتُحفظ. أما القوائم التي تتابعها فتنتظرك في المكتبة، بنقرة واحدة، أو تدخل وحدها عند تفعيل «القوائم التي تتابعها أيضًا». وإيقاف هذا الخيار يخرجها من المكتبة.</string>
+    <string name="spot_session_keep_in_step_info">عند فتح إحداها، يتحقق Prism مما إذا كانت أغانيها قد تغيّرت على Spotify ويقرؤها من جديد إن تغيّرت. وتُفحص كلها مرة يوميًا عبر Wi-Fi في كل الأحوال. والتغييرات التي تجريها عليها في Prism تحلّ محلها تغييرات Spotify.</string>
+    <string name="tour_1875_spotify_title">Spotify الخاص بك</string>
+    <string name="tour_1875_spotify_about">سجّل الدخول إلى Spotify مرة واحدة، وتأتي موسيقاك هناك إلى Prism.</string>
+    <string name="tour_1875_spotify_point_1">تُوجد أغانيك المفضلة وقوائمك على YouTube Music وتبقى متزامنة.</string>
+    <string name="tour_1875_spotify_point_2">تأتي القوائم التي تتابعها أيضًا: انقر على واحدة في المكتبة لإحضارها.</string>
+    <string name="tour_1875_spotify_point_3">يقرأ Prism فقط. لا يتغيّر أي شيء في Spotify الخاص بك أبدًا.</string>
+    <string name="tour_1875_spotify_point_4">هذا غير رسمي ويخالف شروط Spotify، فقد يتوقف عن العمل. ويظل تطبيق المطوّر الخاص بك يعمل كما كان.</string>
+    <string name="tour_1875_also_queue">حدّد أغاني ثم اختر تشغيل تاليًا أو إضافة إلى قائمة الانتظار: يعمل حتى دون تشغيل شيء.</string>
+    <string name="tour_1875_also_home">زر التشغيل على بطاقات الرئيسية الكبيرة يشغّل فورًا.</string>
+    <string name="tour_1875_also_busy">الأغنية التي يتعطل خادمها باستمرار تُطلب بطريقة أخرى.</string>
+    <string name="tour_1875_also_heard">تُشغَّل الأغنية المتعرَّف عليها من اللحظة التي سمعتها فيها، مع فتح كلماتها.</string>
+    <string name="queue_end_mixed">موسيقاك والجديد</string>
+    <string name="dd_use_load_ahead">تحميل الأغاني مسبقًا</string>
+    <string name="replay_notices_n_on">%1$d من 3 مفعّلة</string>
+    <string name="car_lyrics_style">نمط الكلمات</string>
+    <string name="tab_tint_light">ألوان السمة</string>
+    <string name="bini_detail">كلمات Apple Music · كلمة بكلمة، بمطابقة بطريقة أخرى</string>
+    <string name="hl_card_style">نمط البطاقة</string>
+    <string name="hl_show_in_lists">إظهار في القوائم</string>
+    <string name="hl_show_on_artist_pages">إظهار في صفحات الفنانين</string>
+    <string name="allow_access_to_lossless_files_value">مطلوب للعثور على ملفاتك بلا فقدان</string>
 </resources>

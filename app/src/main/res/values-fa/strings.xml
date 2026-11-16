@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">هنرمند آلبوم فهرست پخش صفحه رنگ عکس رنگ شاخص تصویر</string>
     <string name="font">فونت</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">قلم فونت سفارشی ttf otf outfit prism سیستم تمیز manrope هندسی plus jakarta sans سبک urbanist گرد nunito مجله‌ای سریف fraunces تک‌فاصله mono geist خوانا atkinson hyperlegible نارساخوانی dyslexic opendyslexic دسترس‌پذیری</string>
-    <string name="type">حروف</string>
+    <string name="type">سبک عنوان</string>
     <string name="classic_1_6_bold_headings_titles">کلاسیک 1.6 پررنگ سرتیترها عنوان‌ها ظاهر قدیمی classic</string>
     <string name="classic_type">حروف کلاسیک</string>
     <string name="weight_and_spacing">ضخامت و فاصله</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">حذف فایل فونت متن آهنگ</string>
     <string name="font_size_scale_bigger_smaller">فونت اندازه مقیاس بزرگ‌تر کوچک‌تر</string>
     <string name="icons">آیکون‌ها</string>
-    <string name="pack">بسته</string>
+    <string name="pack">بستهٔ آیکون</string>
     <string name="icon_style_cupertino_apple">آیکون سبک cupertino apple اپل</string>
     <string name="icon_thin_bold">آیکون نازک پررنگ</string>
     <string name="rounded">گرد</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">Prism را دوباره باز کنید تا آن‌ها را ببینید</string>
     <string name="app_icon">آیکون برنامه</string>
     <string name="launcher_home_screen_icon_logo">لانچر صفحه اصلی گوشی آیکون لوگو</string>
-    <string name="shape">شکل</string>
+    <string name="shape">شکل دکمه</string>
     <string name="corners">گوشه‌ها</string>
     <string name="rounded_square_shape_radius_slider">گرد مربع شکل شعاع لغزنده</string>
     <string name="covers_shapes">شکل کاورها</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">منحنی توان برابر خطی s-curve dj برش نرم مستقیم ملایم</string>
     <string name="crossfade_mark">علامت کراس‌فید</string>
     <string name="progress_bar_mark_where_next_song">نوار پیشرفت علامت جایی که ترکیب آهنگ بعدی شروع می‌شود</string>
-    <string name="covers_blend_too">کاورها هم ترکیب شوند</string>
+    <string name="covers_blend_too">کاورها در کراس‌فید ترکیب می‌شوند</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">کاور تصویر محو شدن کراس‌فید apple music</string>
     <string name="speed_pitch_and_fades">سرعت، زیر و بمی و محو شدن</string>
     <string name="speed_when_prism_starts">سرعت هنگام شروع Prism</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">پاک کردن دانلودهای هوشمند</string>
     <string name="cache_delete_free_space">حافظه موقت حذف فضای خالی</string>
     <string name="sections_order_shortcuts_quick_picks_speed">بخش‌ها ترتیب میان‌برها انتخاب‌های سریع دسترسی سریع</string>
-    <string name="continue_line">خط «ادامه»</string>
+    <string name="continue_line">از همان جا که ماندید ادامه دهید</string>
     <string name="continue_album_resume_greeting_hide_context">ادامه آلبوم از سر گرفتن خوش‌آمد پنهان زمینه rewind</string>
     <string name="replay_card">کارت Replay</string>
     <string name="replay_teaser_look_style_design_quiet">replay پیش‌نمایش ظاهر سبک طرح آرام دفتر رنگ‌آمیزی قاب طیفی حلقه کاور نوار نوارها شفق</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">مجوزهای متن‌باز</string>
     <string name="license_gpl">مجوز gpl</string>
     <string name="diagnostics">عیب‌یابی</string>
-    <string name="playback_diagnostics">عیب‌یابی پخش</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">قطع و وصل لرزش پرش اشکال لگ bluetooth بلوتوث airpods گزارش debug</string>
+    <string name="playback_diagnostics">نگه‌داری گزارش پخش</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">قطع و وصل لرزش پرش اشکال لگ bluetooth بلوتوث airpods گزارش debug عیب‌یابی گزارش پخش diagnostics playback log</string>
     <string name="share_diagnostics">اشتراک‌گذاری عیب‌یابی</string>
     <string name="log_send_report">گزارش فرستادن log</string>
     <string name="clear_diagnostics">پاک کردن عیب‌یابی</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">در YouTube Music باز می‌شود</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">روشن: پیوندهایی که می‌زنید اینجا باز می‌شوند</string>
-    <string name="off_turn_on_open_supported_links">خاموش: «باز کردن پیوندهای پشتیبانی‌شده» را برای music.youtube.com روشن کنید</string>
-    <string name="choose_prism_when_a_link_asks">وقتی پیوندی پرسید کدام برنامه، Prism را انتخاب کنید</string>
-    <string name="android_only_lets_an_app_open">Android فقط وقتی خودتان بگویید اجازه می‌دهد برنامه‌ای پیوندهای یک وب‌سایت را باز کند. این گزینه صفحه مربوط به Prism را باز می‌کند: پیوندهایش را آنجا روشن کنید.</string>
+    <string name="on_links_you_tap_open_here">روشن</string>
+    <string name="off_turn_on_open_supported_links">خاموش</string>
+    <string name="choose_prism_when_a_link_asks">تنظیم نشده</string>
+    <string name="android_only_lets_an_app_open">Android فقط وقتی خودتان بگویید اجازه می‌دهد برنامه‌ای پیوندهای یک وب‌سایت را باز کند. این گزینه صفحهٔ مربوط به Prism را باز می‌کند. آنجا «باز کردن پیوندهای پشتیبانی‌شده» را برای music.youtube.com روشن کنید تا پیوندهایی که می‌زنید اینجا باز شوند. اگر پیوندی پرسید کدام برنامه، Prism را انتخاب کنید.</string>
     <string name="see_and_delete_what_s_on">دیدن و حذف آنچه روی گوشی شماست</string>
     <string name="including_likes_from_other_devices">شامل پسندیده‌ها از دستگاه‌های دیگر</string>
     <string name="songs_you_ll_likely_play_ready">آهنگ‌هایی که احتمالاً پخش می‌کنید، آماده برای آفلاین</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">از Apple Music، Musixmatch و Spotify · کلمه‌به‌کلمه</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · کلمه‌به‌کلمه، بیشترین آهنگ‌های چینی</string>
     <string name="open_lyrics_database_line_by_line">پایگاه داده آزاد متن آهنگ · خط‌به‌خط</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">متن‌هایی که شنونده‌ها می‌فرستند · فعلاً آهنگ‌های کم</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · خطوط همگام یا متن ساده</string>
+    <string name="lyricfind_lines_or_plain">متن آهنگ در صفحهٔ آهنگ در Prism Music، از LyricFind · خطوط همگام یا متن ساده</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">متن ساده · کلمات ستاره‌دار را هم کامل می‌کند</string>
     <string name="both">هر دو</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">نت موسیقی</string>
     <string name="bold">پررنگ</string>
     <string name="wide">باز</string>
-    <string name="ink">جوهر</string>
+    <string name="ink">ساده</string>
     <string name="the_light">نور</string>
     <string name="when_you_leave_prism">وقتی از Prism خارج می‌شوید</string>
     <string name="only_with_its_button">فقط با دکمه‌اش</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">«قبلی» پخش‌کننده کوچک</string>
     <string name="mini_player_progress">پیشرفت پخش‌کننده کوچک</string>
     <string name="player_background_showing">نمایش پس‌زمینه پخش‌کننده</string>
-    <string name="cover_corners">گوشه‌های کاور</string>
+    <string name="cover_corners">گردی گوشه‌های کاور</string>
     <string name="cover_shrinks_on_pause">کوچک شدن کاور هنگام توقف</string>
     <string name="edge_to_edge_cover">کاور لبه‌به‌لبه</string>
     <string name="edge_to_edge_video">ویدیوی لبه‌به‌لبه</string>
@@ -3990,12 +3990,12 @@
     <string name="edit_this_menu_keywords">منو ⋯ نقطه‌ها گزینه‌های بیشتر گزینه‌های آهنگ کاشی‌های سریع کارها پنهان نمایش</string>
     <string name="what_plays_next">آنچه بعد پخش می‌شود</string>
     <string name="when_the_queue_ends">وقتی صف تمام می‌شود</string>
-    <string name="when_the_queue_ends_info">توقف کامل: موسیقی با تمام شدن صف تمام می‌شود. موسیقی شما: رادیوی خود Prism از آنچه پخش می‌کنید. هر دو: بیشتر موسیقی شما، همراه چند آهنگ تازه. Prism Music: رادیویی از کاتالوگ Prism Music. در حالت آفلاین همیشه موسیقی شماست.</string>
+    <string name="when_the_queue_ends_info">توقف کامل: موسیقی با تمام شدن صف تمام می‌شود. موسیقی شما: رادیوی خود Prism از آنچه پخش می‌کنید. موسیقی شما و تازه: بیشتر موسیقی شما، همراه چند آهنگ تازه. Prism Music: رادیویی از کاتالوگ Prism Music. در حالت آفلاین همیشه موسیقی شماست.</string>
     <string name="music_videos_label">موزیک‌ویدیوها</string>
-    <string name="play_them">پخش خودشان</string>
+    <string name="play_them">ویدیوها</string>
     <string name="songs_in_radios">آهنگ در رادیوها</string>
     <string name="songs_everywhere">آهنگ همه جا</string>
-    <string name="music_videos_label_info">پخش خودشان: موزیک‌ویدیو به‌صورت ویدیو پخش می‌شود. آهنگ در رادیوها: پخش خودکار و رادیوها به‌جای ویدیو آهنگ آن را پخش می‌کنند. آهنگ همه جا: هر موزیک‌ویدیویی که رویش ضربه بزنید به‌صورت آهنگش پخش می‌شود و دکمهٔ «ویدیو» همچنان ویدیو را نشان می‌دهد.</string>
+    <string name="music_videos_label_info">ویدیوها: موزیک‌ویدیو به‌صورت ویدیو پخش می‌شود. آهنگ در رادیوها: پخش خودکار و رادیوها به‌جای ویدیو آهنگ آن را پخش می‌کنند. آهنگ همه جا: هر موزیک‌ویدیویی که رویش ضربه بزنید به‌صورت آهنگش پخش می‌شود و دکمهٔ «ویدیو» همچنان ویدیو را نشان می‌دهد.</string>
     <string name="trim_silence">حذف سکوت ابتدا و انتها</string>
     <string name="podcasts_only">فقط پادکست‌ها</string>
     <string name="songs_and_podcasts">آهنگ‌ها و پادکست‌ها</string>
@@ -4414,10 +4414,10 @@
     <string name="replay_graph_days">روزها</string>
     <string name="replay_last_weeks">%1$d هفتهٔ گذشته</string>
     <string name="replay_last_days">%1$d روز گذشته</string>
-    <string name="replay_story_font">قلم استوری‌ها</string>
+    <string name="replay_story_font">قلم در استوری‌ها</string>
     <string name="replay_story_font_info">استوری‌های Replay و Rewind کلمه‌هایشان را چطور بنویسند: با قلم پوستری Prism، یا با قلمی که برای Prism انتخاب کرده‌اید (متن و آیکون‌ها).</string>
     <string name="replay_story_font_keywords">قلم فونت تایپوگرافی تایپ‌فیس استوری rewind wrapped</string>
-    <string name="replay_story_font_poster">قلم پوستری</string>
+    <string name="replay_story_font_poster">قلم پوستری Prism</string>
     <string name="replay_story_font_own">قلم خودتان</string>
     <string name="replay_by_hour">شنیدن بر اساس ساعت</string>
     <string name="replay_by_day">شنیدن بر اساس روز</string>
@@ -4765,7 +4765,7 @@
     <string name="reopen_on_the_last_page">بازشدن روی آخرین صفحه</string>
     <string name="reopen_on_the_last_page_info">پخش‌کننده روی چیزی باز می‌شود که هنگام ترک آن باز بود: کاور، متن آهنگ یا صف. برگشت پخش‌کننده را از متن آهنگ یا صف هم می‌بندد و آن را همان‌جا می‌گذارد؛ دکمه‌های خودشان به کاور برمی‌گردند.</string>
     <string name="reopen_on_the_last_page_keywords">پخش‌کننده به خاطر سپردن متن آهنگ صف باز شدن شروع صفحه</string>
-    <string name="steadier_lyrics">متن آهنگ پایدارتر</string>
+    <string name="steadier_lyrics">متن آهنگ آرام‌تر</string>
     <string name="steadier_lyrics_info">برای آمدن و رفتن کنترل‌ها کشیدن بلندتری لازم است. پس از پیمایش، اگر خط در حال خوانده شدن نزدیک باشد متن زودتر به آن برمی‌گردد و اگر دور باشد زمان معمول خود را می‌برد.</string>
     <string name="steadier_lyrics_keywords">متن آهنگ حساسیت پیمایش کشیدن بازگشت خط فعلی دنبال کردن کنترل‌ها</string>
     <string name="gestures_under_the_lyrics">حرکت‌ها زیر متن آهنگ</string>
@@ -5072,9 +5072,9 @@
     <string name="dd_space_used">%1$s استفاده‌شده</string>
     <string name="dd_use_mobile_data_for">استفاده از داده تلفن همراه برای</string>
     <string name="dd_use_saving_covers">ذخیره کاورهای متحرک</string>
-    <string name="dd_use_measuring">سنجش آهنگ‌ها</string>
+    <string name="dd_use_measuring">بررسی بلندی صدا و تمپو</string>
     <string name="dd_use_videos_info">وقتی خاموش است، موزیک‌ویدیوها با داده تلفن همراه پخش نمی‌شوند، جز آن‌هایی که دانلود کرده‌اید. اگر Wi-Fi وسط ویدیو قطع شود، به‌صورت صوتی ادامه می‌دهد.</string>
-    <string name="dd_use_keywords">داده سلولی محدود صرفه‌جویی داده فقط وای‌فای cellular metered data saver wifi only</string>
+    <string name="dd_use_keywords">داده سلولی محدود صرفه‌جویی داده فقط وای‌فای پیش‌بارگیری بلندی صدا تمپو cellular metered data saver wifi only load ahead measuring loudness tempo</string>
     <string name="gb_on_the_cover">روی کاور</string>
     <string name="gb_on_the_mini_player">روی پخش‌کننده کوچک</string>
     <string name="gb_swipes_and_touch">کشیدن و لمس</string>
@@ -5172,7 +5172,7 @@
     <string name="sound_wifi">Wi-Fi</string>
     <string name="sound_streaming_quality_value">Wi-Fi %1$s · داده تلفن همراه %2$s</string>
     <string name="settings_player_progress_and_times">نوار پیشرفت و زمان‌ها</string>
-    <string name="settings_player_on_it">روی آن</string>
+    <string name="settings_player_on_it">روی پخش‌کننده</string>
     <string name="settings_player_modes">حالت‌ها</string>
     <string name="settings_player_controls_over_videos">کنترل‌ها روی ویدیوها</string>
     <string name="settings_player_hide_controls">پنهان کردن کنترل‌ها</string>
@@ -5192,7 +5192,7 @@
     <string name="settings_player_queue_dj">دکمه DJ</string>
     <string name="settings_player_queue_lengths">مدت آهنگ‌ها</string>
     <string name="settings_player_queue_move_played">جابه‌جایی پخش‌شده‌ها</string>
-    <string name="settings_player_queue_tidier">مرتب‌تر</string>
+    <string name="settings_player_queue_tidier">صف مرتب‌تر</string>
     <string name="settings_player_scroll_for_controls">پیمایش به بالا برای کنترل‌ها</string>
     <string name="settings_player_lock_options">گزینه‌های صفحه قفل</string>
     <string name="settings_player_immersive_options">گزینه‌های حالت تمام‌صفحه</string>
@@ -5538,4 +5538,28 @@
     <string name="spot_session_bring_failed">خوانده نشد. دوباره امتحان کنید.</string>
     <string name="spot_session_followed_all">فهرست‌های دنبال‌شده هم</string>
     <string name="spot_session_followed_all_info">روشن: فهرست‌های پخشی که در Spotify دنبال می‌کنید خودشان وارد کتابخانه می‌شوند، ۵۰ تای اول، و همگام می‌مانند. خاموش: هر کدام در کتابخانه منتظر می‌ماند، با یک ضربه. فهرست‌هایی که از کتابخانه پنهان کرده‌اید کنار گذاشته می‌شوند.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (چگونه پخش‌کنندهٔ وب Spotify خوانده می‌شود)</string>
+    <string name="spot_session_playlists_info">فهرست‌های پخش Spotify شما در کتابخانه با علامت Spotify نشان داده می‌شوند و از طریق معادل‌هایشان در YouTube Music، به ترتیب Spotify، پخش می‌شوند. آهنگ‌ها یک بار تطبیق داده و به خاطر سپرده می‌شوند. فهرست‌هایی که دنبال می‌کنید در کتابخانه منتظرند، یک ضربه آن‌طرف‌تر، یا با «فهرست‌های دنبال‌شده هم» خودبه‌خود می‌آیند. خاموش کردن این گزینه آن‌ها را از کتابخانه بیرون می‌برد.</string>
+    <string name="spot_session_keep_in_step_info">وقتی یکی از آن‌ها را باز می‌کنید، Prism بررسی می‌کند که آهنگ‌هایش در Spotify تغییر کرده یا نه و اگر کرده بود دوباره آن را می‌خواند. در هر حال همهٔ آن‌ها روزی یک بار روی Wi-Fi بررسی می‌شوند. تغییراتی که در Prism در آن‌ها می‌دهید با تغییرات Spotify جایگزین می‌شود.</string>
+    <string name="tour_1875_spotify_title">Spotify شما</string>
+    <string name="tour_1875_spotify_about">یک بار وارد Spotify شوید تا موسیقی‌تان در آنجا به Prism بیاید.</string>
+    <string name="tour_1875_spotify_point_1">آهنگ‌های پسندیده و فهرست‌های پخش شما در YouTube Music پیدا می‌شوند و همگام می‌مانند.</string>
+    <string name="tour_1875_spotify_point_2">فهرست‌هایی که دنبال می‌کنید هم می‌آیند: در کتابخانه روی یکی ضربه بزنید تا وارد شود.</string>
+    <string name="tour_1875_spotify_point_3">Prism فقط می‌خواند. هیچ‌چیز در Spotify شما هرگز تغییر نمی‌کند.</string>
+    <string name="tour_1875_spotify_point_4">غیررسمی است و با شرایط Spotify مغایرت دارد، پس ممکن است از کار بیفتد. برنامهٔ توسعه‌دهندهٔ خودتان مثل قبل کار می‌کند.</string>
+    <string name="tour_1875_also_queue">آهنگ‌ها را انتخاب کنید و بعد پخش بعدی یا افزودن به صف را بزنید: بدون پخش هیچ آهنگی هم کار می‌کند.</string>
+    <string name="tour_1875_also_home">دکمهٔ پخش روی کارت‌های بزرگ خانه فوراً پخش می‌کند.</string>
+    <string name="tour_1875_also_busy">آهنگی که سرورش مدام خطا می‌دهد از راه دیگری درخواست می‌شود.</string>
+    <string name="tour_1875_also_heard">آهنگ شناسایی‌شده از لحظه‌ای که شنیدید پخش می‌شود، با متن آهنگ باز.</string>
+    <string name="queue_end_mixed">موسیقی شما و تازه</string>
+    <string name="dd_use_load_ahead">پیش‌بارگیری آهنگ‌ها</string>
+    <string name="replay_notices_n_on">%1$d از 3 روشن</string>
+    <string name="car_lyrics_style">سبک متن آهنگ</string>
+    <string name="tab_tint_light">رنگ‌های تم</string>
+    <string name="bini_detail">متن آهنگ Apple Music · کلمه‌به‌کلمه، با تطبیق به روشی دیگر</string>
+    <string name="hl_card_style">سبک کارت</string>
+    <string name="hl_show_in_lists">نمایش در فهرست‌ها</string>
+    <string name="hl_show_on_artist_pages">نمایش در صفحه‌های هنرمندان</string>
+    <string name="allow_access_to_lossless_files_value">برای یافتن فایل‌های بی‌اتلاف شما لازم است</string>
 </resources>

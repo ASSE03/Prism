@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">artis album playlist halaman warna foto aksen gambar</string>
     <string name="font">Font</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">jenis huruf kustom ttf otf outfit prism sistem clean manrope geometric plus jakarta sans airy urbanist rounded nunito editorial serif fraunces mono geist legible atkinson hyperlegible disleksia dyslexic opendyslexic aksesibilitas</string>
-    <string name="type">Huruf</string>
+    <string name="type">Gaya judul</string>
     <string name="classic_1_6_bold_headings_titles">klasik 1.6 tebal judul tampilan lama</string>
     <string name="classic_type">Huruf klasik</string>
     <string name="weight_and_spacing">Ketebalan dan jarak</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">Hapus file font lirik</string>
     <string name="font_size_scale_bigger_smaller">ukuran font skala lebih besar lebih kecil</string>
     <string name="icons">Ikon</string>
-    <string name="pack">Paket</string>
+    <string name="pack">Paket ikon</string>
     <string name="icon_style_cupertino_apple">gaya ikon cupertino apple</string>
     <string name="icon_thin_bold">ikon tipis tebal</string>
     <string name="rounded">Bulat</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">Mulai ulang Prism untuk melihatnya</string>
     <string name="app_icon">Ikon aplikasi</string>
     <string name="launcher_home_screen_icon_logo">launcher layar utama ikon logo</string>
-    <string name="shape">Bentuk</string>
+    <string name="shape">Bentuk tombol</string>
     <string name="corners">Sudut</string>
     <string name="rounded_square_shape_radius_slider">bulat persegi bentuk radius penggeser</string>
     <string name="covers_shapes">Bentuk sampul</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">kurva equal power linear kurva-s dj potong halus lurus lembut</string>
     <string name="crossfade_mark">Tanda crossfade</string>
     <string name="progress_bar_mark_where_next_song">bilah progres tanda tempat lagu berikutnya mulai berbaur</string>
-    <string name="covers_blend_too">Sampul ikut berbaur</string>
+    <string name="covers_blend_too">Sampul berbaur saat crossfade</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">sampul artwork larut pudar crossfade apple music</string>
     <string name="speed_pitch_and_fades">Kecepatan, nada, dan pudar</string>
     <string name="speed_when_prism_starts">Kecepatan saat Prism dimulai</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">Hapus Download Pintar</string>
     <string name="cache_delete_free_space">cache hapus kosongkan ruang</string>
     <string name="sections_order_shortcuts_quick_picks_speed">bagian urutan pintasan pilihan cepat panggilan cepat</string>
-    <string name="continue_line">Baris Lanjutkan</string>
+    <string name="continue_line">Lanjutkan dari terakhir</string>
     <string name="continue_album_resume_greeting_hide_context">lanjutkan album lanjutkan sapaan sembunyikan konteks rewind</string>
     <string name="replay_card">Kartu Replay</string>
     <string name="replay_teaser_look_style_design_quiet">replay cuplikan tampilan gaya desain kalem buku catatan sapuan bingkai spektrum cincin sampul garis bilah aurora</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">Lisensi open source</string>
     <string name="license_gpl">lisensi gpl</string>
     <string name="diagnostics">Diagnostik</string>
-    <string name="playback_diagnostics">Diagnostik pemutaran</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">patah-patah tersendat lompat glitch lag bluetooth airpods log debug</string>
+    <string name="playback_diagnostics">Simpan log pemutaran</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">patah-patah tersendat lompat glitch lag bluetooth airpods log debug diagnostik pemutaran</string>
     <string name="share_diagnostics">Bagikan diagnostik</string>
     <string name="log_send_report">log kirim laporan</string>
     <string name="clear_diagnostics">Hapus diagnostik</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">Dibuka di YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">Aktif: link yang kamu ketuk dibuka di sini</string>
-    <string name="off_turn_on_open_supported_links">Nonaktif: aktifkan \"Buka link yang didukung\" untuk music.youtube.com</string>
-    <string name="choose_prism_when_a_link_asks">Pilih Prism saat link menanyakan aplikasi mana</string>
-    <string name="android_only_lets_an_app_open">Android hanya mengizinkan aplikasi membuka link situs web jika kamu mengizinkannya. Ini membuka halaman Prism untuk itu: aktifkan link-nya di sana.</string>
+    <string name="on_links_you_tap_open_here">Aktif</string>
+    <string name="off_turn_on_open_supported_links">Nonaktif</string>
+    <string name="choose_prism_when_a_link_asks">Belum diatur</string>
+    <string name="android_only_lets_an_app_open">Android hanya mengizinkan aplikasi membuka link situs web jika kamu mengizinkannya. Ini membuka halaman Prism untuk itu. Aktifkan \"Buka link yang didukung\" untuk music.youtube.com di sana, dan link yang kamu ketuk dibuka di sini. Jika link menanyakan aplikasi mana, pilih Prism.</string>
     <string name="see_and_delete_what_s_on">Lihat dan hapus yang ada di ponselmu</string>
     <string name="including_likes_from_other_devices">Termasuk suka dari perangkat lain</string>
     <string name="songs_you_ll_likely_play_ready">Lagu yang mungkin kamu putar, siap offline</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music, Musixmatch, dan Spotify · kata per kata</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · kata per kata, lagu Mandarin paling banyak</string>
     <string name="open_lyrics_database_line_by_line">Database lirik terbuka · per baris</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Lirik kiriman pendengar · baru sedikit lagu</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · per baris atau teks biasa</string>
+    <string name="lyricfind_lines_or_plain">Lirik di halaman Prism Music lagu, dari LyricFind · per baris atau teks biasa</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Teks biasa · juga mengisi kata yang disensor bintang</string>
     <string name="both">Keduanya</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">Not musik</string>
     <string name="bold">Tebal</string>
     <string name="wide">Lebar</string>
-    <string name="ink">Tinta</string>
+    <string name="ink">Polos</string>
     <string name="the_light">Cahaya</string>
     <string name="when_you_leave_prism">Saat kamu keluar dari Prism</string>
     <string name="only_with_its_button">Hanya dengan tombolnya</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">Sebelumnya di pemutar mini</string>
     <string name="mini_player_progress">Progres pemutar mini</string>
     <string name="player_background_showing">Latar pemutar terlihat</string>
-    <string name="cover_corners">Sudut sampul</string>
+    <string name="cover_corners">Kebulatan sudut sampul</string>
     <string name="cover_shrinks_on_pause">Sampul mengecil saat dijeda</string>
     <string name="edge_to_edge_cover">Sampul tepi ke tepi</string>
     <string name="edge_to_edge_video">Video tepi ke tepi</string>
@@ -3940,12 +3940,12 @@
     <string name="edit_this_menu_keywords">menu ⋯ titik lainnya opsi lagu kotak cepat tindakan sembunyikan tampilkan</string>
     <string name="what_plays_next">Yang diputar berikutnya</string>
     <string name="when_the_queue_ends">Saat antrean habis</string>
-    <string name="when_the_queue_ends_info">Berhenti: musik berakhir bersama antrean. Musikmu: radio Prism sendiri dari yang kamu putar. Keduanya: sebagian besar musikmu, dengan beberapa lagu baru. Prism Music: radio dari katalog Prism Music. Saat offline, selalu musikmu.</string>
+    <string name="when_the_queue_ends_info">Berhenti: musik berakhir bersama antrean. Musikmu: radio Prism sendiri dari yang kamu putar. Milikmu dan baru: sebagian besar musikmu, dengan beberapa lagu baru. Prism Music: radio dari katalog Prism Music. Saat offline, selalu musikmu.</string>
     <string name="music_videos_label">Video musik</string>
-    <string name="play_them">Putar sebagai video</string>
+    <string name="play_them">Video</string>
     <string name="songs_in_radios">Lagu di radio</string>
     <string name="songs_everywhere">Lagu di mana saja</string>
-    <string name="music_videos_label_info">Putar sebagai video: video musik diputar sebagai video. Lagu di radio: putar otomatis dan radio memutar lagu dari video itu. Lagu di mana saja: video musik apa pun yang kamu ketuk diputar sebagai lagunya, dan tombol Video tetap menampilkan videonya.</string>
+    <string name="music_videos_label_info">Video: video musik diputar sebagai video. Lagu di radio: putar otomatis dan radio memutar lagu dari video itu. Lagu di mana saja: video musik apa pun yang kamu ketuk diputar sebagai lagunya, dan tombol Video tetap menampilkan videonya.</string>
     <string name="trim_silence">Pangkas hening di awal dan akhir</string>
     <string name="podcasts_only">Podcast saja</string>
     <string name="songs_and_podcasts">Lagu dan podcast</string>
@@ -4364,10 +4364,10 @@
     <string name="replay_graph_days">Hari</string>
     <string name="replay_last_weeks">%1$d minggu terakhir</string>
     <string name="replay_last_days">%1$d hari terakhir</string>
-    <string name="replay_story_font">Huruf cerita</string>
-    <string name="replay_story_font_info">Bagaimana cerita Replay dan Rewind menulis kata-katanya: dengan huruf poster Prism, atau dengan font yang kamu pilih untuk Prism (Teks &amp; ikon).</string>
+    <string name="replay_story_font">Font di cerita</string>
+    <string name="replay_story_font_info">Bagaimana cerita Replay dan Rewind menulis kata-katanya: dengan font poster Prism, atau dengan font yang kamu pilih untuk Prism (Teks &amp; ikon).</string>
     <string name="replay_story_font_keywords">font tipografi jenis huruf cerita rewind wrapped</string>
-    <string name="replay_story_font_poster">Huruf poster</string>
+    <string name="replay_story_font_poster">Font poster Prism</string>
     <string name="replay_story_font_own">Font kamu</string>
     <string name="replay_by_hour">Mendengarkan per jam</string>
     <string name="replay_by_day">Mendengarkan per hari</string>
@@ -4701,7 +4701,7 @@
     <string name="reopen_on_the_last_page">Buka lagi di halaman terakhir</string>
     <string name="reopen_on_the_last_page_info">Pemutar terbuka di halaman yang terakhir kamu buka: sampul, lirik, atau antrean. Kembali menutup pemutar dari lirik atau antrean juga, dan membiarkannya di sana; tombolnya sendiri kembali ke sampul.</string>
     <string name="reopen_on_the_last_page_keywords">pemutar ingat lirik antrean buka halaman awal</string>
-    <string name="steadier_lyrics">Lirik lebih stabil</string>
+    <string name="steadier_lyrics">Lirik lebih tenang</string>
     <string name="steadier_lyrics_info">Kontrol butuh gesekan lebih panjang untuk muncul dan hilang. Setelah menggulir, lirik kembali ke baris yang sedang dinyanyikan lebih cepat jika dekat, dan seperti biasa jika jauh.</string>
     <string name="steadier_lyrics_keywords">lirik sensitif gulir gesek kembali baris saat ini ikuti kontrol</string>
     <string name="gestures_under_the_lyrics">Gestur di bawah lirik</string>
@@ -5000,9 +5000,9 @@
     <string name="dd_space_used">%1$s terpakai</string>
     <string name="dd_use_mobile_data_for">Pakai data seluler untuk</string>
     <string name="dd_use_saving_covers">Menyimpan sampul animasi</string>
-    <string name="dd_use_measuring">Mengukur lagu</string>
+    <string name="dd_use_measuring">Memeriksa kenyaringan dan tempo</string>
     <string name="dd_use_videos_info">Jika nonaktif, video musik tidak diputar dengan data seluler, kecuali yang sudah kamu download. Jika Wi-Fi terputus saat video, pemutaran berlanjut sebagai audio.</string>
-    <string name="dd_use_keywords">seluler terukur penghemat data hanya wifi cellular metered data saver wifi only</string>
+    <string name="dd_use_keywords">seluler terukur penghemat data hanya wifi muat lebih dulu mengukur kenyaringan tempo cellular metered data saver wifi only load ahead measuring loudness tempo</string>
     <string name="gb_on_the_cover">Di sampul</string>
     <string name="gb_on_the_mini_player">Di pemutar mini</string>
     <string name="gb_swipes_and_touch">Geser dan sentuh</string>
@@ -5120,7 +5120,7 @@
     <string name="settings_player_queue_dj">Tombol DJ</string>
     <string name="settings_player_queue_lengths">Durasi lagu</string>
     <string name="settings_player_queue_move_played">Pindahkan yang sudah diputar</string>
-    <string name="settings_player_queue_tidier">Lebih rapi</string>
+    <string name="settings_player_queue_tidier">Antrean lebih rapi</string>
     <string name="settings_player_scroll_for_controls">Gulir ke atas untuk kontrol</string>
     <string name="settings_player_lock_options">Opsi layar kunci</string>
     <string name="settings_player_immersive_options">Opsi imersif</string>
@@ -5463,4 +5463,28 @@
     <string name="spot_session_bring_failed">Tidak bisa dibaca. Coba lagi.</string>
     <string name="spot_session_followed_all">Playlist yang diikuti juga</string>
     <string name="spot_session_followed_all_info">Aktif: playlist yang kamu ikuti di Spotify masuk ke Koleksi dengan sendirinya, 50 yang pertama, dan tetap selaras. Nonaktif: tiap playlist menunggu di Koleksi, cukup satu ketukan. Yang kamu sembunyikan dari Koleksi tidak ikut.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (cara pemutar web Spotify dibaca)</string>
+    <string name="spot_session_playlists_info">Playlist Spotify-mu muncul di Koleksi dengan tanda Spotify, dan diputar lewat padanannya di YouTube Music, dalam urutan Spotify. Lagu dicocokkan sekali dan diingat. Playlist yang kamu ikuti menunggu di Koleksi, tinggal ketuk, atau masuk sendiri dengan Playlist yang diikuti juga. Menonaktifkan ini mengeluarkannya dari Koleksi.</string>
+    <string name="spot_session_keep_in_step_info">Saat kamu membuka salah satunya, Prism memeriksa apakah lagunya berubah di Spotify dan membacanya ulang jika ya. Bagaimanapun, semuanya diperiksa sekali sehari lewat Wi-Fi. Perubahan yang kamu buat di Prism akan diganti dengan versi Spotify.</string>
+    <string name="tour_1875_spotify_title">Spotify-mu</string>
+    <string name="tour_1875_spotify_about">Login ke Spotify sekali, dan musikmu di sana masuk ke Prism.</string>
+    <string name="tour_1875_spotify_point_1">Lagu yang kamu sukai dan playlist-mu ditemukan di YouTube Music dan tetap selaras.</string>
+    <string name="tour_1875_spotify_point_2">Playlist yang kamu ikuti juga ikut: ketuk satu di Koleksi untuk memasukkannya.</string>
+    <string name="tour_1875_spotify_point_3">Prism hanya membaca. Tidak ada yang pernah diubah di Spotify-mu.</string>
+    <string name="tour_1875_spotify_point_4">Ini tidak resmi dan melanggar ketentuan Spotify, jadi bisa saja berhenti berfungsi. Aplikasi developer milikmu sendiri tetap berfungsi seperti biasa.</string>
+    <string name="tour_1875_also_queue">Pilih lagu, lalu Putar berikutnya atau Tambahkan ke antrean: bisa dipakai saat tidak ada yang diputar.</string>
+    <string name="tour_1875_also_home">Tombol putar di kartu besar Beranda langsung memutar.</string>
+    <string name="tour_1875_also_busy">Lagu yang servernya terus gagal diminta lewat cara lain.</string>
+    <string name="tour_1875_also_heard">Lagu yang dikenali diputar dari saat kamu mendengarnya, dengan liriknya terbuka.</string>
+    <string name="queue_end_mixed">Milikmu dan baru</string>
+    <string name="dd_use_load_ahead">Memuat lagu lebih dulu</string>
+    <string name="replay_notices_n_on">%1$d dari 3 aktif</string>
+    <string name="car_lyrics_style">Gaya lirik</string>
+    <string name="tab_tint_light">Warna tema</string>
+    <string name="bini_detail">Lirik Apple Music · kata demi kata, dicocokkan dengan cara lain</string>
+    <string name="hl_card_style">Gaya kartu</string>
+    <string name="hl_show_in_lists">Tampilkan di daftar</string>
+    <string name="hl_show_on_artist_pages">Tampilkan di halaman artis</string>
+    <string name="allow_access_to_lossless_files_value">Diperlukan untuk menemukan file lossless-mu</string>
 </resources>

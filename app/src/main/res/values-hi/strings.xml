@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">कलाकार एल्बम प्लेलिस्ट पेज रंग फ़ोटो एक्सेंट तस्वीर</string>
     <string name="font">फ़ॉन्ट</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">टाइपफ़ेस फ़ॉन्ट कस्टम ttf otf outfit prism सिस्टम clean manrope geometric plus jakarta sans airy urbanist rounded nunito editorial serif fraunces mono geist legible atkinson hyperlegible डिस्लेक्सिया dyslexic opendyslexic सुलभता</string>
-    <string name="type">टाइप</string>
+    <string name="type">हेडिंग स्टाइल</string>
     <string name="classic_1_6_bold_headings_titles">क्लासिक 1.6 बोल्ड हेडिंग टाइटल पुराना लुक</string>
     <string name="classic_type">क्लासिक टाइप</string>
     <string name="weight_and_spacing">मोटाई और अंतर</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">बोल की फ़ॉन्ट फ़ाइल हटाएं</string>
     <string name="font_size_scale_bigger_smaller">फ़ॉन्ट साइज़ स्केल बड़ा छोटा</string>
     <string name="icons">आइकन</string>
-    <string name="pack">पैक</string>
+    <string name="pack">आइकन पैक</string>
     <string name="icon_style_cupertino_apple">आइकन स्टाइल cupertino apple</string>
     <string name="icon_thin_bold">आइकन पतला बोल्ड</string>
     <string name="rounded">गोल</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">इन्हें देखने के लिए Prism रीस्टार्ट करें</string>
     <string name="app_icon">ऐप आइकन</string>
     <string name="launcher_home_screen_icon_logo">लॉन्चर होम स्क्रीन आइकन लोगो</string>
-    <string name="shape">आकार</string>
+    <string name="shape">बटन का आकार</string>
     <string name="corners">कोने</string>
     <string name="rounded_square_shape_radius_slider">गोल चौकोर आकार रेडियस स्लाइडर</string>
     <string name="covers_shapes">कवर के आकार</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">कर्व equal power linear s-curve dj कट स्मूद सीधा हल्का</string>
     <string name="crossfade_mark">क्रॉसफ़ेड का निशान</string>
     <string name="progress_bar_mark_where_next_song">प्रोग्रेस बार निशान जहां अगला गाना मिलना शुरू होता है</string>
-    <string name="covers_blend_too">कवर भी घुलें</string>
+    <string name="covers_blend_too">क्रॉसफ़ेड में कवर घुलते हैं</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">कवर आर्टवर्क घुलना फ़ेड क्रॉसफ़ेड apple music</string>
     <string name="speed_pitch_and_fades">स्पीड, पिच और फ़ेड</string>
     <string name="speed_when_prism_starts">Prism शुरू होने पर स्पीड</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">स्मार्ट डाउनलोड साफ़ करें</string>
     <string name="cache_delete_free_space">कैश मिटाएं खाली जगह</string>
     <string name="sections_order_shortcuts_quick_picks_speed">सेक्शन क्रम शॉर्टकट क्विक पिक्स स्पीड डायल</string>
-    <string name="continue_line">जारी रखें वाली लाइन</string>
+    <string name="continue_line">वहीं से शुरू करें जहां छोड़ा था</string>
     <string name="continue_album_resume_greeting_hide_context">जारी रखें एल्बम फिर से शुरू अभिवादन छिपाएं संदर्भ rewind</string>
     <string name="replay_card">Replay कार्ड</string>
     <string name="replay_teaser_look_style_design_quiet">replay झलक लुक स्टाइल डिज़ाइन शांत बही हल्का रंग स्पेक्ट्रम फ़्रेम रिंग कवर धारी बार ऑरोरा</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">ओपन-सोर्स लाइसेंस</string>
     <string name="license_gpl">लाइसेंस gpl</string>
     <string name="diagnostics">डायग्नोस्टिक्स</string>
-    <string name="playback_diagnostics">प्लेबैक डायग्नोस्टिक्स</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">अटकना झटका स्किप गड़बड़ी लैग bluetooth airpods लॉग डीबग</string>
+    <string name="playback_diagnostics">प्लेबैक लॉग रखें</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">अटकना झटका स्किप गड़बड़ी लैग bluetooth airpods लॉग डीबग डायग्नोस्टिक्स प्लेबैक लॉग diagnostics playback log</string>
     <string name="share_diagnostics">डायग्नोस्टिक्स शेयर करें</string>
     <string name="log_send_report">लॉग भेजें रिपोर्ट</string>
     <string name="clear_diagnostics">डायग्नोस्टिक्स साफ़ करें</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">YouTube Music में खुलता है</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">चालू: आपके टैप किए लिंक यहां खुलते हैं</string>
-    <string name="off_turn_on_open_supported_links">बंद: music.youtube.com के लिए \"समर्थित लिंक खोलें\" चालू करें</string>
-    <string name="choose_prism_when_a_link_asks">जब कोई लिंक ऐप पूछे तो Prism चुनें</string>
-    <string name="android_only_lets_an_app_open">Android किसी ऐप को वेबसाइट के लिंक तभी खोलने देता है जब आप कहें। यह उसके लिए Prism का पेज खोलता है: वहां इसके लिंक चालू करें।</string>
+    <string name="on_links_you_tap_open_here">चालू</string>
+    <string name="off_turn_on_open_supported_links">बंद</string>
+    <string name="choose_prism_when_a_link_asks">तय नहीं</string>
+    <string name="android_only_lets_an_app_open">Android किसी ऐप को वेबसाइट के लिंक तभी खोलने देता है जब आप कहें। यह उसके लिए Prism का पेज खोलता है। वहां music.youtube.com के लिए \"समर्थित लिंक खोलें\" चालू करें, और आपके टैप किए लिंक यहां खुलेंगे। अगर कोई लिंक ऐप पूछे, तो Prism चुनें।</string>
     <string name="see_and_delete_what_s_on">देखें और मिटाएं कि आपके फ़ोन पर क्या है</string>
     <string name="including_likes_from_other_devices">दूसरे डिवाइस की पसंद समेत</string>
     <string name="songs_you_ll_likely_play_ready">जो गाने आप शायद सुनेंगे, ऑफ़लाइन तैयार</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music, Musixmatch और Spotify के · शब्द दर शब्द</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · शब्द दर शब्द, सबसे ज़्यादा चीनी गाने</string>
     <string name="open_lyrics_database_line_by_line">खुला बोल डेटाबेस · लाइन दर लाइन</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">श्रोताओं के भेजे बोल · अभी कुछ ही गाने</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · लाइनें या सादा</string>
+    <string name="lyricfind_lines_or_plain">Prism Music पर गाने के पेज के बोल, LyricFind से · लाइनें या सादा</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">सादा टेक्स्ट · स्टार से छिपे शब्द भी भरता है</string>
     <string name="both">दोनों</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">म्यूज़िक नोट</string>
     <string name="bold">बोल्ड</string>
     <string name="wide">चौड़ा</string>
-    <string name="ink">स्याही</string>
+    <string name="ink">सादा</string>
     <string name="the_light">रोशनी</string>
     <string name="when_you_leave_prism">जब आप Prism छोड़ें</string>
     <string name="only_with_its_button">सिर्फ़ इसके बटन से</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">मिनी प्लेयर का पिछला</string>
     <string name="mini_player_progress">मिनी प्लेयर की प्रोग्रेस</string>
     <string name="player_background_showing">प्लेयर बैकग्राउंड दिखे</string>
-    <string name="cover_corners">कवर के कोने</string>
+    <string name="cover_corners">कवर के कोनों की गोलाई</string>
     <string name="cover_shrinks_on_pause">रुकने पर कवर छोटा हो</string>
     <string name="edge_to_edge_cover">किनारे से किनारे कवर</string>
     <string name="edge_to_edge_video">किनारे से किनारे वीडियो</string>
@@ -3990,12 +3990,12 @@
     <string name="edit_this_menu_keywords">मेनू ⋯ डॉट्स और विकल्प गाने के विकल्प क्विक टाइल ऐक्शन छिपाएं दिखाएं menu</string>
     <string name="what_plays_next">आगे क्या चलेगा</string>
     <string name="when_the_queue_ends">कतार ख़त्म होने पर</string>
-    <string name="when_the_queue_ends_info">रोकें: कतार के साथ संगीत ख़त्म हो जाता है। आपका संगीत: आप जो सुनते हैं उससे बना Prism का अपना रेडियो। दोनों: ज़्यादातर आपका संगीत, कुछ नए गानों के साथ। Prism Music: Prism Music के कैटलॉग से बना रेडियो। ऑफ़लाइन होने पर हमेशा आपका संगीत चलता है।</string>
+    <string name="when_the_queue_ends_info">रोकें: कतार के साथ संगीत ख़त्म हो जाता है। आपका संगीत: आप जो सुनते हैं उससे बना Prism का अपना रेडियो। आपका और नया: ज़्यादातर आपका संगीत, कुछ नए गानों के साथ। Prism Music: Prism Music के कैटलॉग से बना रेडियो। ऑफ़लाइन होने पर हमेशा आपका संगीत चलता है।</string>
     <string name="music_videos_label">म्यूज़िक वीडियो</string>
-    <string name="play_them">वीडियो चलाएं</string>
+    <string name="play_them">वीडियो</string>
     <string name="songs_in_radios">रेडियो में गाने</string>
     <string name="songs_everywhere">हर जगह गाने</string>
-    <string name="music_videos_label_info">वीडियो चलाएं: म्यूज़िक वीडियो वीडियो की तरह चलता है। रेडियो में गाने: ऑटोप्ले और रेडियो उसकी जगह वीडियो का गाना चलाते हैं। हर जगह गाने: आप जिस भी म्यूज़िक वीडियो पर टैप करें वह अपने गाने की तरह चलता है, और वीडियो बटन अब भी वीडियो दिखाता है।</string>
+    <string name="music_videos_label_info">वीडियो: म्यूज़िक वीडियो वीडियो की तरह चलता है। रेडियो में गाने: ऑटोप्ले और रेडियो उसकी जगह वीडियो का गाना चलाते हैं। हर जगह गाने: आप जिस भी म्यूज़िक वीडियो पर टैप करें वह अपने गाने की तरह चलता है, और वीडियो बटन अब भी वीडियो दिखाता है।</string>
     <string name="trim_silence">शुरू और आख़िर की चुप्पी हटाएं</string>
     <string name="podcasts_only">सिर्फ़ पॉडकास्ट</string>
     <string name="songs_and_podcasts">गाने और पॉडकास्ट</string>
@@ -4414,10 +4414,10 @@
     <string name="replay_graph_days">दिन</string>
     <string name="replay_last_weeks">पिछले %1$d हफ़्ते</string>
     <string name="replay_last_days">पिछले %1$d दिन</string>
-    <string name="replay_story_font">स्टोरी के अक्षर</string>
+    <string name="replay_story_font">स्टोरी में अक्षर</string>
     <string name="replay_story_font_info">Replay और Rewind की स्टोरी अपने शब्द कैसे लिखती हैं: Prism के पोस्टर अक्षरों में, या उस फ़ॉन्ट में जो आपने Prism के लिए चुना है (टेक्स्ट &amp; आइकन)।</string>
     <string name="replay_story_font_keywords">फ़ॉन्ट टाइपोग्राफ़ी टाइपफ़ेस स्टोरी rewind wrapped font</string>
-    <string name="replay_story_font_poster">पोस्टर अक्षर</string>
+    <string name="replay_story_font_poster">Prism के पोस्टर अक्षर</string>
     <string name="replay_story_font_own">आपका फ़ॉन्ट</string>
     <string name="replay_by_hour">घंटे के हिसाब से सुनना</string>
     <string name="replay_by_day">दिन के हिसाब से सुनना</string>
@@ -4765,7 +4765,7 @@
     <string name="reopen_on_the_last_page">आख़िरी पेज पर दोबारा खोलें</string>
     <string name="reopen_on_the_last_page_info">प्लेयर वहीं खुलता है जो आपने छोड़ते समय खोला था: कवर, बोल या कतार। बोल या कतार से वापस दबाने पर प्लेयर बंद होता है और वह पेज वैसा ही रहता है; उनके अपने बटन कवर पर लौटाते हैं।</string>
     <string name="reopen_on_the_last_page_keywords">प्लेयर याद रखें बोल कतार खोलें शुरुआती पेज</string>
-    <string name="steadier_lyrics">स्थिर बोल</string>
+    <string name="steadier_lyrics">शांत बोल</string>
     <string name="steadier_lyrics_info">कंट्रोल को आने-जाने के लिए ज़्यादा लंबा स्वाइप चाहिए। स्क्रॉल करने के बाद बोल गाई जा रही पंक्ति पर जल्दी लौटते हैं जब वह पास हो, और दूर होने पर अपना सामान्य समय लेते हैं।</string>
     <string name="steadier_lyrics_keywords">बोल संवेदनशील स्क्रॉल स्वाइप वापसी मौजूदा पंक्ति पीछे चलना कंट्रोल</string>
     <string name="gestures_under_the_lyrics">बोल के नीचे जेस्चर</string>
@@ -5072,9 +5072,9 @@
     <string name="dd_space_used">%1$s इस्तेमाल हुआ</string>
     <string name="dd_use_mobile_data_for">इनके लिए मोबाइल डेटा इस्तेमाल करें</string>
     <string name="dd_use_saving_covers">एनिमेटेड कवर सेव करना</string>
-    <string name="dd_use_measuring">गानों को मापना</string>
+    <string name="dd_use_measuring">आवाज़ और टेम्पो की जांच</string>
     <string name="dd_use_videos_info">बंद होने पर, म्यूज़िक वीडियो मोबाइल डेटा पर नहीं चलते, सिवाय उनके जो आपने डाउनलोड किए हैं। अगर वीडियो के दौरान Wi-Fi चला जाए, तो वह ऑडियो के रूप में चलता रहता है।</string>
-    <string name="dd_use_keywords">सेल्युलर मीटर्ड डेटा सेवर सिर्फ़ wifi cellular metered data saver wifi only</string>
+    <string name="dd_use_keywords">सेल्युलर मीटर्ड डेटा सेवर सिर्फ़ wifi पहले से लोड आवाज़ टेम्पो मापना cellular metered data saver wifi only load ahead measuring loudness tempo</string>
     <string name="gb_on_the_cover">कवर पर</string>
     <string name="gb_on_the_mini_player">मिनी प्लेयर पर</string>
     <string name="gb_swipes_and_touch">स्वाइप और टच</string>
@@ -5192,7 +5192,7 @@
     <string name="settings_player_queue_dj">DJ बटन</string>
     <string name="settings_player_queue_lengths">गानों की लंबाई</string>
     <string name="settings_player_queue_move_played">चल चुके गाने खिसकाएं</string>
-    <string name="settings_player_queue_tidier">ज़्यादा साफ़</string>
+    <string name="settings_player_queue_tidier">ज़्यादा साफ़ कतार</string>
     <string name="settings_player_scroll_for_controls">कंट्रोल के लिए ऊपर स्क्रॉल करें</string>
     <string name="settings_player_lock_options">लॉक स्क्रीन के विकल्प</string>
     <string name="settings_player_immersive_options">इमर्सिव के विकल्प</string>
@@ -5538,4 +5538,28 @@
     <string name="spot_session_bring_failed">पढ़ नहीं सके। फिर कोशिश करें।</string>
     <string name="spot_session_followed_all">फ़ॉलो की गई प्लेलिस्ट भी</string>
     <string name="spot_session_followed_all_info">चालू: जिन प्लेलिस्ट को आप Spotify पर फ़ॉलो करते हैं वे अपने आप लाइब्रेरी में आ जाती हैं, उनमें से पहली 50, और तालमेल में रहती हैं। बंद: हर एक लाइब्रेरी में एक टैप की दूरी पर इंतज़ार करती है। जिन्हें आपने लाइब्रेरी से छिपाया है वे शामिल नहीं होतीं।</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (Spotify का वेब प्लेयर कैसे पढ़ा जाता है)</string>
+    <string name="spot_session_playlists_info">आपकी Spotify प्लेलिस्ट लाइब्रेरी में Spotify के निशान के साथ दिखती हैं, और Spotify के क्रम में अपने YouTube Music मिलानों से चलती हैं। गानों का मिलान एक बार होता है और याद रखा जाता है। जिन प्लेलिस्ट को आप फ़ॉलो करते हैं, वे लाइब्रेरी में एक टैप की दूरी पर रहती हैं, या \"फ़ॉलो की गई प्लेलिस्ट भी\" से अपने आप आ जाती हैं। इसे बंद करने पर वे लाइब्रेरी से हट जाती हैं।</string>
+    <string name="spot_session_keep_in_step_info">जब आप इनमें से कोई खोलते हैं, तो Prism देखता है कि Spotify पर उसके गाने बदले हैं या नहीं, और बदले हों तो उसे फिर से पढ़ता है। हर हाल में, सभी को दिन में एक बार Wi-Fi पर जांचा जाता है। Prism में इनमें किए गए बदलावों की जगह Spotify के बदलाव आ जाते हैं।</string>
+    <string name="tour_1875_spotify_title">आपका Spotify</string>
+    <string name="tour_1875_spotify_about">Spotify में एक बार साइन इन करें, और वहां का आपका संगीत Prism में आ जाता है।</string>
+    <string name="tour_1875_spotify_point_1">आपके पसंदीदा गाने और प्लेलिस्ट YouTube Music पर मिल जाते हैं और तालमेल में रहते हैं।</string>
+    <string name="tour_1875_spotify_point_2">जिन प्लेलिस्ट को आप फ़ॉलो करते हैं वे भी आती हैं: लाइब्रेरी में किसी पर टैप करके उसे ले आएं।</string>
+    <string name="tour_1875_spotify_point_3">Prism सिर्फ़ पढ़ता है। आपके Spotify में कभी कुछ नहीं बदलता।</string>
+    <string name="tour_1875_spotify_point_4">यह अनौपचारिक है और Spotify की शर्तों के ख़िलाफ़ है, इसलिए हो सकता है यह चलना बंद कर दे। आपका अपना डेवलपर ऐप पहले की तरह काम करता है।</string>
+    <string name="tour_1875_also_queue">गाने चुनें, फिर अगला चलाएं या कतार में जोड़ें: कुछ न बज रहा हो तब भी यह काम करता है।</string>
+    <string name="tour_1875_also_home">होम के बड़े कार्ड पर प्ले बटन तुरंत चलाता है।</string>
+    <string name="tour_1875_also_busy">जिस गाने का सर्वर बार-बार फ़ेल होता है, उसे दूसरे तरीके से मांगा जाता है।</string>
+    <string name="tour_1875_also_heard">पहचाना गया गाना उसी पल से चलता है जब आपने उसे सुना था, बोल खुले हुए।</string>
+    <string name="queue_end_mixed">आपका और नया</string>
+    <string name="dd_use_load_ahead">गाने पहले से लोड करना</string>
+    <string name="replay_notices_n_on">3 में से %1$d चालू</string>
+    <string name="car_lyrics_style">बोल का स्टाइल</string>
+    <string name="tab_tint_light">थीम के रंग</string>
+    <string name="bini_detail">Apple Music के बोल · शब्द दर शब्द, दूसरे तरीके से मिलाए गए</string>
+    <string name="hl_card_style">कार्ड का स्टाइल</string>
+    <string name="hl_show_in_lists">सूचियों में दिखाएं</string>
+    <string name="hl_show_on_artist_pages">आर्टिस्ट पेज पर दिखाएं</string>
+    <string name="allow_access_to_lossless_files_value">आपकी लॉसलेस फ़ाइलें ढूंढने के लिए ज़रूरी</string>
 </resources>

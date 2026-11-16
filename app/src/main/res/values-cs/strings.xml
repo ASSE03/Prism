@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">interpret album playlist stránka barva fotka zvýraznění obrázek</string>
     <string name="font">Písmo</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">písmo font vlastní ttf otf outfit prism systém čisté manrope geometrické plus jakarta sans vzdušné urbanist zaoblené nunito redakční patkové serif fraunces mono geist čitelné atkinson hyperlegible dyslexie dyslektik opendyslexic přístupnost</string>
-    <string name="type">Písmo</string>
+    <string name="type">Styl nadpisů</string>
     <string name="classic_1_6_bold_headings_titles">klasické 1.6 tučné nadpisy názvy starý vzhled</string>
     <string name="classic_type">Klasické písmo</string>
     <string name="weight_and_spacing">Tloušťka a rozestupy</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">Odebrat soubor písma textů</string>
     <string name="font_size_scale_bigger_smaller">velikost písma měřítko větší menší</string>
     <string name="icons">Ikony</string>
-    <string name="pack">Balíček</string>
+    <string name="pack">Balíček ikon</string>
     <string name="icon_style_cupertino_apple">styl ikon cupertino apple</string>
     <string name="icon_thin_bold">ikona tenká tučná</string>
     <string name="rounded">Zaoblené</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">Restartuj Prism, aby se ukázaly</string>
     <string name="app_icon">Ikona aplikace</string>
     <string name="launcher_home_screen_icon_logo">spouštěč plocha ikona logo</string>
-    <string name="shape">Tvar</string>
+    <string name="shape">Tvar tlačítek</string>
     <string name="corners">Rohy</string>
     <string name="rounded_square_shape_radius_slider">zaoblený čtverec tvar poloměr posuvník</string>
     <string name="covers_shapes">Tvary obalů</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">křivka stejný výkon lineární s-křivka dj střih plynulý rovný jemný</string>
     <string name="crossfade_mark">Značka prolnutí</string>
     <string name="progress_bar_mark_where_next_song">lišta průběhu značka kde další skladba prolnutí začíná</string>
-    <string name="covers_blend_too">Prolínají se i obaly</string>
+    <string name="covers_blend_too">Obaly se prolínají při prolínání</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">obal obrázek rozplynutí přechod prolínání apple music</string>
     <string name="speed_pitch_and_fades">Rychlost, výška tónu a přechody</string>
     <string name="speed_when_prism_starts">Rychlost při spuštění Prismu</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">Vymazat Chytré stahování</string>
     <string name="cache_delete_free_space">mezipaměť smazat uvolnit místo</string>
     <string name="sections_order_shortcuts_quick_picks_speed">sekce pořadí zkratky rychlý výběr rychlá volba</string>
-    <string name="continue_line">Řádek Pokračovat</string>
+    <string name="continue_line">Pokračovat tam, kde jsi skončil</string>
     <string name="continue_album_resume_greeting_hide_context">pokračovat album obnovit pozdrav skrýt kontext rewind</string>
     <string name="replay_card">Karta Replay</string>
     <string name="replay_teaser_look_style_design_quiet">replay upoutávka vzhled styl design tiché přehled nádech rámeček spektra kruh obal pruh sloupce polární záře</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">Licence open source</string>
     <string name="license_gpl">licence gpl</string>
     <string name="diagnostics">Diagnostika</string>
-    <string name="playback_diagnostics">Diagnostika přehrávání</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">sekání trhání přeskakování chyba zpoždění bluetooth airpods log ladění</string>
+    <string name="playback_diagnostics">Vést záznam přehrávání</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">sekání trhání přeskakování chyba zpoždění bluetooth airpods log ladění diagnostika přehrávání záznam</string>
     <string name="share_diagnostics">Sdílet diagnostiku</string>
     <string name="log_send_report">log poslat hlášení</string>
     <string name="clear_diagnostics">Vymazat diagnostiku</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">Otevře se v YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">Zapnuto: odkazy, na které klepneš, se otevřou tady</string>
-    <string name="off_turn_on_open_supported_links">Vypnuto: zapni „Otevírat podporované odkazy“ pro music.youtube.com</string>
-    <string name="choose_prism_when_a_link_asks">Až se odkaz zeptá na aplikaci, vyber Prism</string>
-    <string name="android_only_lets_an_app_open">Android aplikaci dovolí otevírat odkazy webu, jen když to povolíš. Tímto se otevře stránka Prismu pro toto nastavení: zapni tam jeho odkazy.</string>
+    <string name="on_links_you_tap_open_here">Zapnuto</string>
+    <string name="off_turn_on_open_supported_links">Vypnuto</string>
+    <string name="choose_prism_when_a_link_asks">Nenastaveno</string>
+    <string name="android_only_lets_an_app_open">Android aplikaci dovolí otevírat odkazy webu, jen když to povolíš. Tímto se otevře stránka Prismu pro toto nastavení. Zapni tam „Otevírat podporované odkazy“ pro music.youtube.com a odkazy, na které klepneš, se otevřou tady. Pokud se odkaz zeptá na aplikaci, vyber Prism.</string>
     <string name="see_and_delete_what_s_on">Zobraz a smaž, co je v telefonu</string>
     <string name="including_likes_from_other_devices">Včetně oblíbených z jiných zařízení</string>
     <string name="songs_you_ll_likely_play_ready">Skladby, které nejspíš pustíš, připravené offline</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Z Apple Music, Musixmatch a Spotify · slovo po slově</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · slovo po slově, nejvíc čínských skladeb</string>
     <string name="open_lyrics_database_line_by_line">Otevřená databáze textů · po řádcích</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Texty od posluchačů · zatím málo skladeb</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · řádky nebo prostý text</string>
+    <string name="lyricfind_lines_or_plain">Texty na stránce skladby v Prism Music, od LyricFind · řádky nebo prostý text</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Prostý text · také doplňuje slova skrytá hvězdičkami</string>
     <string name="both">Obojí</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">Nota</string>
     <string name="bold">Tučné</string>
     <string name="wide">Široké</string>
-    <string name="ink">Inkoust</string>
+    <string name="ink">Prostý</string>
     <string name="the_light">Světlo</string>
     <string name="when_you_leave_prism">Když opustíš Prism</string>
     <string name="only_with_its_button">Jen jeho tlačítkem</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">Předchozí v minipřehrávači</string>
     <string name="mini_player_progress">Průběh v minipřehrávači</string>
     <string name="player_background_showing">Viditelnost pozadí přehrávače</string>
-    <string name="cover_corners">Rohy obalu</string>
+    <string name="cover_corners">Zaoblení rohů obalu</string>
     <string name="cover_shrinks_on_pause">Obal se při pozastavení zmenší</string>
     <string name="edge_to_edge_cover">Obal od okraje k okraji</string>
     <string name="edge_to_edge_video">Video od okraje k okraji</string>
@@ -4090,12 +4090,12 @@
     <string name="edit_this_menu_keywords">nabídka menu ⋯ tečky více možností možnosti skladby rychlé dlaždice akce skrýt zobrazit</string>
     <string name="what_plays_next">Co hraje dál</string>
     <string name="when_the_queue_ends">Když fronta skončí</string>
-    <string name="when_the_queue_ends_info">Zastavit: hudba skončí s frontou. Tvoje hudba: vlastní rádio Prismu z toho, co posloucháš. Obojí: hlavně tvoje hudba a k tomu pár nových skladeb. Prism Music: rádio z katalogu Prism Music. Offline je to vždy tvoje hudba.</string>
+    <string name="when_the_queue_ends_info">Zastavit: hudba skončí s frontou. Tvoje hudba: vlastní rádio Prismu z toho, co posloucháš. Tvoje a nové: hlavně tvoje hudba a k tomu pár nových skladeb. Prism Music: rádio z katalogu Prism Music. Offline je to vždy tvoje hudba.</string>
     <string name="music_videos_label">Hudební videa</string>
-    <string name="play_them">Přehrávat je</string>
+    <string name="play_them">Videa</string>
     <string name="songs_in_radios">Skladby v rádiích</string>
     <string name="songs_everywhere">Skladby všude</string>
-    <string name="music_videos_label_info">Přehrávat je: hudební video se přehraje jako video. Skladby v rádiích: automatické přehrávání a rádia místo videa přehrají jeho skladbu. Skladby všude: každé hudební video, na které klepneš, se přehraje jako jeho skladba a tlačítko Video dál ukáže video.</string>
+    <string name="music_videos_label_info">Videa: hudební video se přehraje jako video. Skladby v rádiích: automatické přehrávání a rádia místo videa přehrají jeho skladbu. Skladby všude: každé hudební video, na které klepneš, se přehraje jako jeho skladba a tlačítko Video dál ukáže video.</string>
     <string name="trim_silence">Ořezat ticho na začátku a na konci</string>
     <string name="podcasts_only">Jen podcasty</string>
     <string name="songs_and_podcasts">Skladby a podcasty</string>
@@ -4514,10 +4514,10 @@
     <string name="replay_graph_days">Dny</string>
     <string name="replay_last_weeks">Posledních %1$d týdnů</string>
     <string name="replay_last_days">Posledních %1$d dní</string>
-    <string name="replay_story_font">Písmo příběhů</string>
+    <string name="replay_story_font">Písmo v příbězích</string>
     <string name="replay_story_font_info">Jakým písmem příběhy Replay a Rewind sázejí slova: plakátovým písmem Prismu, nebo písmem, které sis vybral pro Prism (Text a ikony).</string>
     <string name="replay_story_font_keywords">písmo typografie font příběhy rewind wrapped</string>
-    <string name="replay_story_font_poster">Plakátové písmo</string>
+    <string name="replay_story_font_poster">Plakátové písmo Prismu</string>
     <string name="replay_story_font_own">Tvoje písmo</string>
     <string name="replay_by_hour">Poslech podle hodin</string>
     <string name="replay_by_day">Poslech podle dnů</string>
@@ -5216,9 +5216,9 @@
     <string name="dd_space_used">Využito %1$s</string>
     <string name="dd_use_mobile_data_for">Používat mobilní data pro</string>
     <string name="dd_use_saving_covers">Ukládání animovaných obalů</string>
-    <string name="dd_use_measuring">Měření skladeb</string>
+    <string name="dd_use_measuring">Kontrola hlasitosti a tempa</string>
     <string name="dd_use_videos_info">Když je vypnuto, hudební videa se na mobilních datech nepřehrávají, kromě stažených. Když během videa vypadne Wi-Fi, pokračuje jako zvuk.</string>
-    <string name="dd_use_keywords">mobilní data měřené spořič dat jen wifi cellular metered data saver wifi only</string>
+    <string name="dd_use_keywords">mobilní data měřené spořič dat jen wifi cellular metered data saver wifi only načítat dopředu měření hlasitost tempo</string>
     <string name="gb_on_the_cover">Na obalu</string>
     <string name="gb_on_the_mini_player">Na minipřehrávači</string>
     <string name="gb_swipes_and_touch">Přejetí a dotyk</string>
@@ -5336,7 +5336,7 @@
     <string name="settings_player_queue_dj">Tlačítko DJ</string>
     <string name="settings_player_queue_lengths">Délky skladeb</string>
     <string name="settings_player_queue_move_played">Přesouvat přehrané</string>
-    <string name="settings_player_queue_tidier">Úhlednější</string>
+    <string name="settings_player_queue_tidier">Úhlednější fronta</string>
     <string name="settings_player_scroll_for_controls">Posunout nahoru pro ovládání</string>
     <string name="settings_player_lock_options">Možnosti zamykací obrazovky</string>
     <string name="settings_player_immersive_options">Možnosti pohlcujícího režimu</string>
@@ -5688,4 +5688,28 @@
     <string name="spot_session_bring_failed">Nepodařilo se ho načíst. Zkus to znovu.</string>
     <string name="spot_session_followed_all">I sledované playlisty</string>
     <string name="spot_session_followed_all_info">Zapnuto: playlisty, které sleduješ ve Spotify, se do Knihovny dostanou samy (prvních 50) a zůstávají aktuální. Vypnuto: každý čeká v Knihovně, stačí klepnout. Ty, které jsi z Knihovny skryl, se vynechají.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (jak se čte webový přehrávač Spotify)</string>
+    <string name="spot_session_playlists_info">Tvoje playlisty ze Spotify se zobrazí v Knihovně se značkou Spotify a hrají přes své protějšky v YouTube Music, v pořadí ze Spotify. Skladby se přiřadí jednou a zapamatují. Playlisty, které sleduješ, čekají v Knihovně na jedno klepnutí, nebo přijdou samy s volbou I sledované playlisty. Vypnutím je z Knihovny odebereš.</string>
+    <string name="spot_session_keep_in_step_info">Když některý z nich otevřeš, Prism se podívá, jestli se jeho skladby na Spotify změnily, a pokud ano, načte ho znovu. Všechny se tak či tak kontrolují jednou denně přes Wi-Fi. Změny, které v nich uděláš v Prismu, se nahradí těmi ze Spotify.</string>
+    <string name="tour_1875_spotify_title">Tvůj Spotify</string>
+    <string name="tour_1875_spotify_about">Přihlas se do Spotify jednou a tvoje hudba odtamtud se objeví v Prismu.</string>
+    <string name="tour_1875_spotify_point_1">Tvoje oblíbené skladby a playlisty se najdou v YouTube Music a zůstanou synchronizované.</string>
+    <string name="tour_1875_spotify_point_2">Sledované playlisty přijdou taky: klepni na playlist v Knihovně a přidej ho.</string>
+    <string name="tour_1875_spotify_point_3">Prism jen čte. Na tvém Spotify se nikdy nic nemění.</string>
+    <string name="tour_1875_spotify_point_4">Je to neoficiální a proti podmínkám Spotify, takže to může přestat fungovat. Tvoje vlastní vývojářská aplikace funguje jako dřív.</string>
+    <string name="tour_1875_also_queue">Vyber skladby a pak Přehrát jako další nebo Přidat do fronty: funguje to, i když nic nehraje.</string>
+    <string name="tour_1875_also_home">Tlačítko přehrávání na velkých kartách Domů přehraje hned.</string>
+    <string name="tour_1875_also_busy">Skladba, jejíž server stále selhává, se vyžádá jinou cestou.</string>
+    <string name="tour_1875_also_heard">Rozpoznaná skladba se přehraje od slyšeného okamžiku, s otevřenými texty.</string>
+    <string name="queue_end_mixed">Tvoje a nové</string>
+    <string name="dd_use_load_ahead">Načítání skladeb dopředu</string>
+    <string name="replay_notices_n_on">%1$d ze 3 zapnuto</string>
+    <string name="car_lyrics_style">Styl textů</string>
+    <string name="tab_tint_light">Barvy motivu</string>
+    <string name="bini_detail">Texty z Apple Music · slovo po slovu, spárované jinak</string>
+    <string name="hl_card_style">Styl karty</string>
+    <string name="hl_show_in_lists">Zobrazovat v seznamech</string>
+    <string name="hl_show_on_artist_pages">Zobrazovat na stránkách interpretů</string>
+    <string name="allow_access_to_lossless_files_value">Potřeba k nalezení tvých bezztrátových souborů</string>
 </resources>

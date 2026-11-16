@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">艺人 专辑 播放列表 页面 颜色 照片 强调色 图片</string>
     <string name="font">字体</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">字体 自定义 ttf otf outfit prism 系统 简洁 manrope 几何 plus jakarta sans 轻盈 urbanist 圆润 nunito 杂志 衬线 fraunces 等宽 mono geist 易读 atkinson hyperlegible 读写障碍 dyslexia opendyslexic 无障碍</string>
-    <string name="type">文字</string>
+    <string name="type">标题样式</string>
     <string name="classic_1_6_bold_headings_titles">经典 1.6 粗体 标题 旧外观 classic</string>
     <string name="classic_type">经典文字</string>
     <string name="weight_and_spacing">字重和间距</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">重启 Prism 即可看到</string>
     <string name="app_icon">应用图标</string>
     <string name="launcher_home_screen_icon_logo">启动器 主屏幕 图标 标志 logo</string>
-    <string name="shape">形状</string>
+    <string name="shape">按钮形状</string>
     <string name="corners">圆角</string>
     <string name="rounded_square_shape_radius_slider">圆角 方形 形状 半径 滑块</string>
     <string name="covers_shapes">封面形状</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">曲线 等功率 线性 s 曲线 dj 切换 平滑 直线 柔和</string>
     <string name="crossfade_mark">交叉淡入淡出标记</string>
     <string name="progress_bar_mark_where_next_song">进度条 标记 下一首 衔接 开始</string>
-    <string name="covers_blend_too">封面也随之过渡</string>
+    <string name="covers_blend_too">交叉淡入淡出时封面也融合</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">封面 插图 溶解 淡入淡出 交叉淡入淡出 apple music</string>
     <string name="speed_pitch_and_fades">速度、音调和淡入淡出</string>
     <string name="speed_when_prism_starts">Prism 启动时的速度</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">清除智能下载</string>
     <string name="cache_delete_free_space">缓存 删除 释放空间</string>
     <string name="sections_order_shortcuts_quick_picks_speed">版块 顺序 快捷方式 快速精选 快速拨号</string>
-    <string name="continue_line">“继续播放”一行</string>
+    <string name="continue_line">继续上次播放</string>
     <string name="continue_album_resume_greeting_hide_context">继续 专辑 恢复 问候 隐藏 上下文 rewind</string>
     <string name="replay_card">Replay 卡片</string>
     <string name="replay_teaser_look_style_design_quiet">replay 预告 外观 样式 设计 低调 账本 晕染 光谱边框 圆环 封面 条纹 柱状 极光</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">开源许可</string>
     <string name="license_gpl">许可证 gpl 开源</string>
     <string name="diagnostics">诊断</string>
-    <string name="playback_diagnostics">播放诊断</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">卡顿 抖动 跳音 故障 延迟 蓝牙 bluetooth airpods 日志 调试</string>
+    <string name="playback_diagnostics">保留播放日志</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">卡顿 抖动 跳音 故障 延迟 蓝牙 bluetooth airpods 日志 调试 诊断 播放日志</string>
     <string name="share_diagnostics">分享诊断信息</string>
     <string name="log_send_report">日志 发送 报告</string>
     <string name="clear_diagnostics">清除诊断信息</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">在 YouTube Music 中打开</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">开启：你点按的链接会在这里打开</string>
-    <string name="off_turn_on_open_supported_links">关闭：请为 music.youtube.com 开启“打开支持的链接”</string>
-    <string name="choose_prism_when_a_link_asks">链接询问用哪个应用打开时，请选择 Prism</string>
-    <string name="android_only_lets_an_app_open">只有在你同意时，Android 才允许应用打开某个网站的链接。这会打开 Prism 的相应设置页面：请在那里开启它的链接。</string>
+    <string name="on_links_you_tap_open_here">开启</string>
+    <string name="off_turn_on_open_supported_links">关闭</string>
+    <string name="choose_prism_when_a_link_asks">未设置</string>
+    <string name="android_only_lets_an_app_open">只有在你同意时，Android 才允许应用打开某个网站的链接。这会打开 Prism 的相应设置页面。请在那里为 music.youtube.com 开启“打开支持的链接”，你点按的链接就会在这里打开。如果链接询问用哪个应用打开，请选择 Prism。</string>
     <string name="see_and_delete_what_s_on">查看和删除手机上的内容</string>
     <string name="including_likes_from_other_devices">包括在其他设备上喜欢的歌曲</string>
     <string name="songs_you_ll_likely_play_ready">你可能会播放的歌曲，随时可离线收听</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music、Musixmatch 和 Spotify 的歌词 · 逐字</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · 逐字，中文歌曲最多</string>
     <string name="open_lyrics_database_line_by_line">开放歌词数据库 · 逐行</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">听众提交的歌词 · 目前歌曲较少</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · 逐行或纯文本</string>
+    <string name="lyricfind_lines_or_plain">歌曲 Prism Music 页面上的歌词，来自 LyricFind · 逐行或纯文本</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">纯文本 · 也可补全被星号屏蔽的词</string>
     <string name="both">两者结合</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">音符</string>
     <string name="bold">粗</string>
     <string name="wide">宽</string>
-    <string name="ink">墨色</string>
+    <string name="ink">素色</string>
     <string name="the_light">光线</string>
     <string name="when_you_leave_prism">离开 Prism 时</string>
     <string name="only_with_its_button">仅通过其按钮</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">迷你播放器的“上一首”</string>
     <string name="mini_player_progress">迷你播放器进度</string>
     <string name="player_background_showing">显示播放器背景</string>
-    <string name="cover_corners">封面圆角</string>
+    <string name="cover_corners">封面圆角程度</string>
     <string name="cover_shrinks_on_pause">暂停时封面缩小</string>
     <string name="edge_to_edge_cover">全屏封面</string>
     <string name="edge_to_edge_video">全屏视频</string>
@@ -3940,12 +3940,12 @@
     <string name="edit_this_menu_keywords">菜单 ⋯ 三个点 更多 选项 歌曲选项 快捷磁贴 操作 隐藏 显示 编辑</string>
     <string name="what_plays_next">接下来播放什么</string>
     <string name="when_the_queue_ends">队列结束后</string>
-    <string name="when_the_queue_ends_info">停止：队列结束，音乐也随之停止。你的音乐：根据你播放的内容生成的 Prism 自有电台。两者结合：以你的音乐为主，加入少量新歌。Prism Music：来自 Prism Music 曲库的电台。离线时始终播放你的音乐。</string>
+    <string name="when_the_queue_ends_info">停止：队列结束，音乐也随之停止。你的音乐：根据你播放的内容生成的 Prism 自有电台。你的与新的：以你的音乐为主，加入少量新歌。Prism Music：来自 Prism Music 曲库的电台。离线时始终播放你的音乐。</string>
     <string name="music_videos_label">音乐视频</string>
-    <string name="play_them">照常播放</string>
+    <string name="play_them">视频</string>
     <string name="songs_in_radios">电台中放歌曲</string>
     <string name="songs_everywhere">所有地方放歌曲</string>
-    <string name="music_videos_label_info">照常播放：音乐视频以视频形式播放。电台中放歌曲：自动播放和电台改为播放视频对应的歌曲。所有地方放歌曲：你点按的任何音乐视频都会以歌曲形式播放，“视频”按钮仍可显示视频。</string>
+    <string name="music_videos_label_info">视频：音乐视频以视频形式播放。电台中放歌曲：自动播放和电台改为播放视频对应的歌曲。所有地方放歌曲：你点按的任何音乐视频都会以歌曲形式播放，“视频”按钮仍可显示视频。</string>
     <string name="trim_silence">去除开头和结尾的静音</string>
     <string name="podcasts_only">仅播客</string>
     <string name="songs_and_podcasts">歌曲和播客</string>
@@ -4364,10 +4364,10 @@
     <string name="replay_graph_days">天</string>
     <string name="replay_last_weeks">最近 %1$d 周</string>
     <string name="replay_last_days">最近 %1$d 天</string>
-    <string name="replay_story_font">故事字体</string>
+    <string name="replay_story_font">故事中的字体</string>
     <string name="replay_story_font_info">Replay 和 Rewind 故事如何排版文字：使用 Prism 的海报字体，或你为 Prism 选择的字体（文字和图标）。</string>
     <string name="replay_story_font_keywords">字体 排版 字型 故事 rewind wrapped</string>
-    <string name="replay_story_font_poster">海报字体</string>
+    <string name="replay_story_font_poster">Prism 的海报字体</string>
     <string name="replay_story_font_own">你的字体</string>
     <string name="replay_by_hour">按小时的收听</string>
     <string name="replay_by_day">按天的收听</string>
@@ -4701,7 +4701,7 @@
     <string name="reopen_on_the_last_page">重新打开时回到上次的页面</string>
     <string name="reopen_on_the_last_page_info">播放器会打开到你离开时所在的页面：封面、歌词或队列。在歌词或队列中按“返回”会直接关闭播放器，并停留在那一页；它们各自的按钮则返回封面。</string>
     <string name="reopen_on_the_last_page_keywords">播放器 记住 歌词 队列 打开 启动 页面</string>
-    <string name="steadier_lyrics">更稳定的歌词</string>
+    <string name="steadier_lyrics">更平稳的歌词</string>
     <string name="steadier_lyrics_info">控件需要更长的滑动才会出现或隐藏。滚动之后，如果正在唱的那一行很近，歌词会更快回到那一行；如果很远，则仍按平常的时间回去。</string>
     <string name="steadier_lyrics_keywords">歌词 灵敏度 滚动 滑动 返回 当前行 跟随 控件</string>
     <string name="gestures_under_the_lyrics">歌词下方的手势</string>
@@ -5000,9 +5000,9 @@
     <string name="dd_space_used">已用 %1$s</string>
     <string name="dd_use_mobile_data_for">移动数据用于</string>
     <string name="dd_use_saving_covers">保存动态封面</string>
-    <string name="dd_use_measuring">测量歌曲</string>
+    <string name="dd_use_measuring">检测响度和节奏</string>
     <string name="dd_use_videos_info">关闭时，音乐视频不使用移动数据播放，已下载的除外。如果播放视频时 Wi-Fi 断开，会以音频形式继续播放。</string>
-    <string name="dd_use_keywords">移动数据 蜂窝 按流量计费 流量节省 仅限 wifi</string>
+    <string name="dd_use_keywords">移动数据 蜂窝 按流量计费 流量节省 仅限 wifi 预加载 检测 响度 节奏</string>
     <string name="gb_on_the_cover">在封面上</string>
     <string name="gb_on_the_mini_player">在迷你播放器上</string>
     <string name="gb_swipes_and_touch">滑动和触摸</string>
@@ -5120,7 +5120,7 @@
     <string name="settings_player_queue_dj">DJ 按钮</string>
     <string name="settings_player_queue_lengths">歌曲时长</string>
     <string name="settings_player_queue_move_played">移走已播放</string>
-    <string name="settings_player_queue_tidier">更整洁</string>
+    <string name="settings_player_queue_tidier">更整洁的队列</string>
     <string name="settings_player_scroll_for_controls">向上滚动显示控件</string>
     <string name="settings_player_lock_options">锁屏选项</string>
     <string name="settings_player_immersive_options">沉浸模式选项</string>
@@ -5463,4 +5463,28 @@
     <string name="spot_session_bring_failed">无法读取。请重试。</string>
     <string name="spot_session_followed_all">也包括关注的播放列表</string>
     <string name="spot_session_followed_all_info">开启：你在 Spotify 关注的播放列表会自动进入音乐库（最多前 50 个），并保持同步。关闭：每个都在音乐库中等着，轻点一下即可带入。你从音乐库中隐藏的不包括在内。</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld（用于读取 Spotify 网页播放器）</string>
+    <string name="spot_session_playlists_info">你的 Spotify 播放列表会显示在音乐库中并标记为 Spotify，按 Spotify 的顺序通过 YouTube Music 上的匹配歌曲播放。歌曲只匹配一次并会被记住。你关注的播放列表会留在音乐库中，点按一下即可导入，也可以开启“也包括关注的播放列表”让它们自动导入。关闭此项会将它们从音乐库中移除。</string>
+    <string name="spot_session_keep_in_step_info">当你打开其中一个时，Prism 会查看它的歌曲在 Spotify 上是否有变化，如有变化就重新读取。无论如何，所有播放列表每天都会在 Wi-Fi 下检查一次。你在 Prism 中对它们做的更改会被 Spotify 的版本取代。</string>
+    <string name="tour_1875_spotify_title">你的 Spotify</string>
+    <string name="tour_1875_spotify_about">登录一次 Spotify，你在那里的音乐就会进入 Prism。</string>
+    <string name="tour_1875_spotify_point_1">你喜欢的歌曲和播放列表会在 YouTube Music 上找到，并保持同步。</string>
+    <string name="tour_1875_spotify_point_2">你关注的播放列表也能导入：在音乐库中点按一个即可。</string>
+    <string name="tour_1875_spotify_point_3">Prism 只读取，绝不会更改你的 Spotify。</string>
+    <string name="tour_1875_spotify_point_4">这是非官方方式，且违反 Spotify 的条款，所以可能会失效。你自己的开发者应用仍像以前一样可用。</string>
+    <string name="tour_1875_also_queue">选择歌曲后点按“下一首播放”或“添加到队列”：没有在播放时也能用。</string>
+    <string name="tour_1875_also_home">首页大卡片上的播放按钮现在会直接播放。</string>
+    <string name="tour_1875_also_busy">服务器一直失败的歌曲会改用其他方式获取。</string>
+    <string name="tour_1875_also_heard">识别出的歌曲会从你听到的那一刻开始播放，并打开歌词。</string>
+    <string name="queue_end_mixed">你的与新的</string>
+    <string name="dd_use_load_ahead">预加载歌曲</string>
+    <string name="replay_notices_n_on">3 项中已开启 %1$d 项</string>
+    <string name="car_lyrics_style">歌词样式</string>
+    <string name="tab_tint_light">主题颜色</string>
+    <string name="bini_detail">Apple Music 的歌词 · 逐字，用另一种方式匹配</string>
+    <string name="hl_card_style">卡片样式</string>
+    <string name="hl_show_in_lists">在列表中显示</string>
+    <string name="hl_show_on_artist_pages">在艺人页面显示</string>
+    <string name="allow_access_to_lossless_files_value">用于查找你的无损文件</string>
 </resources>

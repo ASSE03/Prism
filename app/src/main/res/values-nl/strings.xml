@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">artiest album playlist pagina kleur foto accent afbeelding</string>
     <string name="font">Lettertype</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">lettertype font eigen ttf otf outfit prism systeem strak manrope geometrisch plus jakarta sans luchtig urbanist afgerond nunito redactioneel serif fraunces mono geist leesbaar atkinson hyperlegible dyslexie dyslectisch opendyslexic toegankelijkheid</string>
-    <string name="type">Letters</string>
+    <string name="type">Kopstijl</string>
     <string name="classic_1_6_bold_headings_titles">klassiek 1.6 vet koppen titels oude stijl</string>
     <string name="classic_type">Klassieke letters</string>
     <string name="weight_and_spacing">Dikte en afstand</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">Het lettertypebestand voor songteksten verwijderen</string>
     <string name="font_size_scale_bigger_smaller">lettergrootte schaal groter kleiner</string>
     <string name="icons">Iconen</string>
-    <string name="pack">Pakket</string>
+    <string name="pack">Iconenpakket</string>
     <string name="icon_style_cupertino_apple">icoon stijl cupertino apple</string>
     <string name="icon_thin_bold">icoon dun vet</string>
     <string name="rounded">Afgerond</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">Start Prism opnieuw om ze te zien</string>
     <string name="app_icon">App-icoon</string>
     <string name="launcher_home_screen_icon_logo">launcher startscherm icoon logo</string>
-    <string name="shape">Vorm</string>
+    <string name="shape">Knopvorm</string>
     <string name="corners">Hoeken</string>
     <string name="rounded_square_shape_radius_slider">afgerond vierkant vorm straal schuif</string>
     <string name="covers_shapes">Vormen van covers</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">curve gelijk vermogen lineair s-curve dj knip vloeiend recht zacht</string>
     <string name="crossfade_mark">Crossfade-markering</string>
     <string name="progress_bar_mark_where_next_song">voortgangsbalk markering waar volgende nummer overvloeien begint</string>
-    <string name="covers_blend_too">Covers vloeien ook over</string>
+    <string name="covers_blend_too">Covers vloeien over in een crossfade</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">cover artwork overvloeien fade crossfade apple music</string>
     <string name="speed_pitch_and_fades">Snelheid, toonhoogte en fades</string>
     <string name="speed_when_prism_starts">Snelheid bij het starten van Prism</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">Slimme downloads wissen</string>
     <string name="cache_delete_free_space">cache verwijderen ruimte vrijmaken</string>
     <string name="sections_order_shortcuts_quick_picks_speed">secties volgorde snelkoppelingen snelle keuzes snelkiezen</string>
-    <string name="continue_line">Regel Verder met</string>
+    <string name="continue_line">Ga verder waar je was</string>
     <string name="continue_album_resume_greeting_hide_context">verder album hervatten begroeting verbergen context rewind</string>
     <string name="replay_card">Replay-kaart</string>
     <string name="replay_teaser_look_style_design_quiet">replay teaser stijl ontwerp rustig grootboek waas spectrum lijst ring cover streep balken aurora</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">Opensourcelicenties</string>
     <string name="license_gpl">licentie gpl</string>
     <string name="diagnostics">Diagnose</string>
-    <string name="playback_diagnostics">Afspeeldiagnose</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">haperen schokken overslaan storing lag bluetooth airpods log debug</string>
+    <string name="playback_diagnostics">Een afspeellog bijhouden</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">haperen schokken overslaan storing lag bluetooth airpods log debug diagnose afspelen logboek</string>
     <string name="share_diagnostics">Diagnose delen</string>
     <string name="log_send_report">log versturen rapport</string>
     <string name="clear_diagnostics">Diagnose wissen</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">Opent in YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">Aan: links waarop je tikt, openen hier</string>
-    <string name="off_turn_on_open_supported_links">Uit: zet \"Ondersteunde links openen\" aan voor music.youtube.com</string>
-    <string name="choose_prism_when_a_link_asks">Kies Prism als een link vraagt welke app</string>
-    <string name="android_only_lets_an_app_open">Android laat een app alleen links van een website openen als jij dat zegt. Dit opent de pagina van Prism daarvoor: zet daar de links aan.</string>
+    <string name="on_links_you_tap_open_here">Aan</string>
+    <string name="off_turn_on_open_supported_links">Uit</string>
+    <string name="choose_prism_when_a_link_asks">Niet ingesteld</string>
+    <string name="android_only_lets_an_app_open">Android laat een app alleen links van een website openen als jij dat zegt. Dit opent de pagina van Prism daarvoor. Zet daar \"Ondersteunde links openen\" aan voor music.youtube.com, en links waarop je tikt openen hier. Als een link vraagt welke app, kies dan Prism.</string>
     <string name="see_and_delete_what_s_on">Bekijk en verwijder wat er op je telefoon staat</string>
     <string name="including_likes_from_other_devices">Ook likes van andere apparaten</string>
     <string name="songs_you_ll_likely_play_ready">Nummers die je waarschijnlijk afspeelt, offline klaar</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Van Apple Music, Musixmatch en Spotify · woord voor woord</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · woord voor woord, de meeste Chinese nummers</string>
     <string name="open_lyrics_database_line_by_line">Open songtekstdatabase · regel voor regel</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Songteksten die luisteraars insturen · nog weinig nummers</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · regels of gewone tekst</string>
+    <string name="lyricfind_lines_or_plain">De songtekst op de nummerpagina in Prism Music, van LyricFind · regels of gewone tekst</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Gewone tekst · vult ook weggesterde woorden in</string>
     <string name="both">Allebei</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">Muzieknoot</string>
     <string name="bold">Vet</string>
     <string name="wide">Breed</string>
-    <string name="ink">Inkt</string>
+    <string name="ink">Eenvoudig</string>
     <string name="the_light">Het licht</string>
     <string name="when_you_leave_prism">Als je Prism verlaat</string>
     <string name="only_with_its_button">Alleen met de knop</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">Vorige in minispeler</string>
     <string name="mini_player_progress">Voortgang in minispeler</string>
     <string name="player_background_showing">Achtergrond van speler zichtbaar</string>
-    <string name="cover_corners">Hoeken van de cover</string>
+    <string name="cover_corners">Afronding van de hoeken van de cover</string>
     <string name="cover_shrinks_on_pause">Cover krimpt bij pauzeren</string>
     <string name="edge_to_edge_cover">Cover van rand tot rand</string>
     <string name="edge_to_edge_video">Video van rand tot rand</string>
@@ -3990,12 +3990,12 @@
     <string name="edit_this_menu_keywords">menu ⋯ puntjes meer opties nummeropties snelle tegels acties verbergen tonen</string>
     <string name="what_plays_next">Wat er hierna speelt</string>
     <string name="when_the_queue_ends">Als de wachtrij op is</string>
-    <string name="when_the_queue_ends_info">Stoppen: de muziek stopt met de wachtrij. Je muziek: de eigen radio van Prism op basis van wat je afspeelt. Allebei: vooral je eigen muziek, met een paar nieuwe nummers. Prism Music: een radio uit de catalogus van Prism Music. Offline is het altijd je eigen muziek.</string>
+    <string name="when_the_queue_ends_info">Stoppen: de muziek stopt met de wachtrij. Je muziek: de eigen radio van Prism op basis van wat je afspeelt. Jouw en nieuwe: vooral je eigen muziek, met een paar nieuwe nummers. Prism Music: een radio uit de catalogus van Prism Music. Offline is het altijd je eigen muziek.</string>
     <string name="music_videos_label">Muziekvideo\'s</string>
-    <string name="play_them">Afspelen als video</string>
+    <string name="play_them">Video\'s</string>
     <string name="songs_in_radios">Nummers in radio\'s</string>
     <string name="songs_everywhere">Overal nummers</string>
-    <string name="music_videos_label_info">Afspelen als video: een muziekvideo speelt als video. Nummers in radio\'s: automatisch afspelen en radio\'s spelen in plaats daarvan het nummer van de video. Overal nummers: elke muziekvideo waarop je tikt, speelt als het nummer, en de knop Video toont nog steeds de video.</string>
+    <string name="music_videos_label_info">Video\'s: een muziekvideo speelt als video. Nummers in radio\'s: automatisch afspelen en radio\'s spelen in plaats daarvan het nummer van de video. Overal nummers: elke muziekvideo waarop je tikt, speelt als het nummer, en de knop Video toont nog steeds de video.</string>
     <string name="trim_silence">Stilte aan het begin en eind weglaten</string>
     <string name="podcasts_only">Alleen podcasts</string>
     <string name="songs_and_podcasts">Nummers en podcasts</string>
@@ -4414,10 +4414,10 @@
     <string name="replay_graph_days">Dagen</string>
     <string name="replay_last_weeks">Laatste %1$d weken</string>
     <string name="replay_last_days">Laatste %1$d dagen</string>
-    <string name="replay_story_font">Letter van de verhalen</string>
-    <string name="replay_story_font_info">Hoe de verhalen van Replay en Rewind hun woorden zetten: in de posterletter van Prism, of in het lettertype dat je voor Prism hebt gekozen (Tekst &amp; iconen).</string>
+    <string name="replay_story_font">Lettertype in verhalen</string>
+    <string name="replay_story_font_info">Hoe de verhalen van Replay en Rewind hun woorden zetten: in het posterlettertype van Prism, of in het lettertype dat je voor Prism hebt gekozen (Tekst &amp; iconen).</string>
     <string name="replay_story_font_keywords">lettertype typografie font letter verhalen rewind wrapped</string>
-    <string name="replay_story_font_poster">Posterletter</string>
+    <string name="replay_story_font_poster">Posterlettertype van Prism</string>
     <string name="replay_story_font_own">Je lettertype</string>
     <string name="replay_by_hour">Luisteren per uur</string>
     <string name="replay_by_day">Luisteren per dag</string>
@@ -4765,7 +4765,7 @@
     <string name="reopen_on_the_last_page">Heropenen op de laatste pagina</string>
     <string name="reopen_on_the_last_page_info">De speler opent op wat je open had toen je wegging: de cover, de songtekst of de wachtrij. Terug sluit de speler ook vanuit de songtekst of de wachtrij en laat hem daar staan; hun eigen knoppen gaan terug naar de cover.</string>
     <string name="reopen_on_the_last_page_keywords">speler onthouden songtekst wachtrij openen start pagina</string>
-    <string name="steadier_lyrics">Rustigere songtekst</string>
+    <string name="steadier_lyrics">Kalmere songtekst</string>
     <string name="steadier_lyrics_info">De bediening vraagt een langere veeg om te verschijnen en te verdwijnen. Nadat je hebt gescrolld, gaat de songtekst sneller terug naar de regel die wordt gezongen als die dichtbij is, en neemt hij zijn gebruikelijke tijd als die ver weg is.</string>
     <string name="steadier_lyrics_keywords">songtekst gevoelig scrollen vegen terugkeren huidige regel volgen bediening</string>
     <string name="gestures_under_the_lyrics">Gebaren onder de songtekst</string>
@@ -5072,9 +5072,9 @@
     <string name="dd_space_used">%1$s gebruikt</string>
     <string name="dd_use_mobile_data_for">Mobiele data gebruiken voor</string>
     <string name="dd_use_saving_covers">Geanimeerde covers opslaan</string>
-    <string name="dd_use_measuring">Nummers meten</string>
+    <string name="dd_use_measuring">Volume en tempo controleren</string>
     <string name="dd_use_videos_info">Uit: muziekvideo\'s spelen niet via mobiele data, behalve die je hebt gedownload. Valt de Wi-Fi weg tijdens een video, dan gaat die verder als audio.</string>
-    <string name="dd_use_keywords">mobiel netwerk datalimiet databesparing alleen wifi cellular metered data saver wifi only</string>
+    <string name="dd_use_keywords">mobiel netwerk datalimiet databesparing alleen wifi vooraf laden meten volume tempo cellular metered data saver wifi only</string>
     <string name="gb_on_the_cover">Op de cover</string>
     <string name="gb_on_the_mini_player">Op de minispeler</string>
     <string name="gb_swipes_and_touch">Vegen en aanraken</string>
@@ -5172,7 +5172,7 @@
     <string name="sound_wifi">Wi-Fi</string>
     <string name="sound_streaming_quality_value">Wi-Fi %1$s · Mobiele data %2$s</string>
     <string name="settings_player_progress_and_times">Voortgangsbalk en tijden</string>
-    <string name="settings_player_on_it">Erop</string>
+    <string name="settings_player_on_it">Op de speler</string>
     <string name="settings_player_modes">Modi</string>
     <string name="settings_player_controls_over_videos">Bediening over video\'s</string>
     <string name="settings_player_hide_controls">Bediening verbergen</string>
@@ -5192,7 +5192,7 @@
     <string name="settings_player_queue_dj">DJ-knop</string>
     <string name="settings_player_queue_lengths">Lengte van nummers</string>
     <string name="settings_player_queue_move_played">Gespeelde verplaatsen</string>
-    <string name="settings_player_queue_tidier">Netter</string>
+    <string name="settings_player_queue_tidier">Nettere wachtrij</string>
     <string name="settings_player_scroll_for_controls">Omhoog scrollen voor bediening</string>
     <string name="settings_player_lock_options">Opties vergrendelscherm</string>
     <string name="settings_player_immersive_options">Opties meeslepend</string>
@@ -5538,4 +5538,28 @@
     <string name="spot_session_bring_failed">Kon niet worden gelezen. Probeer het opnieuw.</string>
     <string name="spot_session_followed_all">Ook gevolgde playlists</string>
     <string name="spot_session_followed_all_info">Aan: de playlists die je op Spotify volgt komen vanzelf in de Bibliotheek, de eerste 50, en blijven gelijklopen. Uit: elke playlist wacht in de Bibliotheek, één tik weg. Playlists die je uit de Bibliotheek hebt verborgen, blijven erbuiten.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (hoe de webspeler van Spotify wordt gelezen)</string>
+    <string name="spot_session_playlists_info">Je Spotify-playlists staan in Bibliotheek met de markering Spotify en spelen via hun treffers op YouTube Music, in de volgorde van Spotify. Nummers worden één keer opgezocht en onthouden. Playlists die je volgt, wachten in Bibliotheek, één tik weg, of komen vanzelf binnen met Ook gevolgde playlists. Zet je dit uit, dan verdwijnen ze uit Bibliotheek.</string>
+    <string name="spot_session_keep_in_step_info">Als je er een opent, kijkt Prism of de nummers op Spotify zijn veranderd en leest de playlist opnieuw als dat zo is. Hoe dan ook worden ze allemaal één keer per dag via wifi gecontroleerd. Wijzigingen die je er in Prism in aanbrengt, worden vervangen door die van Spotify.</string>
+    <string name="tour_1875_spotify_title">Jouw Spotify</string>
+    <string name="tour_1875_spotify_about">Log één keer in bij Spotify en je muziek daar komt in Prism.</string>
+    <string name="tour_1875_spotify_point_1">Je gelikete nummers en playlists worden op YouTube Music gevonden en blijven bij.</string>
+    <string name="tour_1875_spotify_point_2">Playlists die je volgt komen ook: tik in Bibliotheek op een playlist om hem binnen te halen.</string>
+    <string name="tour_1875_spotify_point_3">Prism leest alleen. Er wordt nooit iets veranderd op je Spotify.</string>
+    <string name="tour_1875_spotify_point_4">Het is onofficieel en tegen de voorwaarden van Spotify, dus het kan ophouden te werken. Je eigen ontwikkelaarsapp werkt nog als vroeger.</string>
+    <string name="tour_1875_also_queue">Selecteer nummers en kies Hierna afspelen of Toevoegen aan wachtrij: dat werkt ook als er niets speelt.</string>
+    <string name="tour_1875_also_home">De afspeelknop op de grote kaarten van Start speelt meteen af.</string>
+    <string name="tour_1875_also_busy">Een nummer waarvan de server blijft falen, wordt op een andere manier opgevraagd.</string>
+    <string name="tour_1875_also_heard">Een herkend nummer speelt vanaf het moment dat je het hoorde, met de songtekst open.</string>
+    <string name="queue_end_mixed">Jouw en nieuwe</string>
+    <string name="dd_use_load_ahead">Nummers vooraf laden</string>
+    <string name="replay_notices_n_on">%1$d van 3 aan</string>
+    <string name="car_lyrics_style">Songtekststijl</string>
+    <string name="tab_tint_light">Themakleuren</string>
+    <string name="bini_detail">Songteksten van Apple Music · woord voor woord, op een andere manier gevonden</string>
+    <string name="hl_card_style">Kaartstijl</string>
+    <string name="hl_show_in_lists">Tonen in lijsten</string>
+    <string name="hl_show_on_artist_pages">Tonen op artiestenpagina\'s</string>
+    <string name="allow_access_to_lossless_files_value">Nodig om je lossless-bestanden te vinden</string>
 </resources>

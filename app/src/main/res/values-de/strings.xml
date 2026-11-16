@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">künstler album playlist seite farbe foto akzent bild</string>
     <string name="font">Schrift</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">schriftart eigene ttf otf outfit prism system klar manrope geometrisch plus jakarta sans luftig urbanist rund nunito editorial serif fraunces mono geist gut lesbar atkinson hyperlegible legasthenie dyslexie opendyslexic barrierefreiheit font</string>
-    <string name="type">Schrift</string>
+    <string name="type">Überschriftenstil</string>
     <string name="classic_1_6_bold_headings_titles">klassisch 1.6 fett überschriften titel altes aussehen classic</string>
     <string name="classic_type">Klassische Schrift</string>
     <string name="weight_and_spacing">Stärke und Abstand</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">Schriftdatei für Songtexte entfernen</string>
     <string name="font_size_scale_bigger_smaller">schriftgröße skalierung größer kleiner</string>
     <string name="icons">Symbole</string>
-    <string name="pack">Paket</string>
+    <string name="pack">Symbolpaket</string>
     <string name="icon_style_cupertino_apple">symbol stil cupertino apple icons</string>
     <string name="icon_thin_bold">symbol dünn fett</string>
     <string name="rounded">Abgerundet</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">Starte Prism neu, um sie zu sehen</string>
     <string name="app_icon">App-Symbol</string>
     <string name="launcher_home_screen_icon_logo">launcher startbildschirm symbol logo icon</string>
-    <string name="shape">Form</string>
+    <string name="shape">Tastenform</string>
     <string name="corners">Ecken</string>
     <string name="rounded_square_shape_radius_slider">abgerundet quadrat form radius regler</string>
     <string name="covers_shapes">Formen der Cover</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">kurve gleiche leistung linear s-kurve dj schnitt weich gerade sanft</string>
     <string name="crossfade_mark">Crossfade-Markierung</string>
     <string name="progress_bar_mark_where_next_song">fortschrittsleiste markierung wo nächster song überblenden beginnt</string>
-    <string name="covers_blend_too">Cover blenden mit über</string>
+    <string name="covers_blend_too">Cover blenden im Crossfade über</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">cover artwork überblenden fade crossfade apple music</string>
     <string name="speed_pitch_and_fades">Tempo, Tonhöhe und Ein-/Ausblenden</string>
     <string name="speed_when_prism_starts">Tempo beim Start von Prism</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">Smart Downloads löschen</string>
     <string name="cache_delete_free_space">cache löschen speicher freigeben</string>
     <string name="sections_order_shortcuts_quick_picks_speed">bereiche reihenfolge verknüpfungen schnellauswahl schnellwahl</string>
-    <string name="continue_line">Fortsetzen-Zeile</string>
+    <string name="continue_line">Weitermachen, wo du aufgehört hast</string>
     <string name="continue_album_resume_greeting_hide_context">fortsetzen album weiterhören begrüßung ausblenden kontext rewind</string>
     <string name="replay_card">Replay-Karte</string>
     <string name="replay_teaser_look_style_design_quiet">replay vorschau aussehen stil design ruhig bilanz hauch spektrum rahmen ring cover streifen balken polarlicht</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">Open-Source-Lizenzen</string>
     <string name="license_gpl">lizenz gpl</string>
     <string name="diagnostics">Diagnose</string>
-    <string name="playback_diagnostics">Wiedergabediagnose</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">stottern ruckeln springen aussetzer verzögerung bluetooth airpods log debug</string>
+    <string name="playback_diagnostics">Wiedergabeprotokoll führen</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">stottern ruckeln springen aussetzer verzögerung bluetooth airpods log debug diagnose wiedergabe protokoll</string>
     <string name="share_diagnostics">Diagnose teilen</string>
     <string name="log_send_report">log senden bericht</string>
     <string name="clear_diagnostics">Diagnose löschen</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">Öffnet in YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">An: Links, auf die du tippst, öffnen sich hier</string>
-    <string name="off_turn_on_open_supported_links">Aus: Schalte „Unterstützte Links öffnen“ für music.youtube.com ein</string>
-    <string name="choose_prism_when_a_link_asks">Wähle Prism, wenn ein Link nach der App fragt</string>
-    <string name="android_only_lets_an_app_open">Android lässt eine App die Links einer Website nur öffnen, wenn du es erlaubst. Das öffnet die Seite von Prism dafür: Schalte dort seine Links ein.</string>
+    <string name="on_links_you_tap_open_here">An</string>
+    <string name="off_turn_on_open_supported_links">Aus</string>
+    <string name="choose_prism_when_a_link_asks">Nicht festgelegt</string>
+    <string name="android_only_lets_an_app_open">Android lässt eine App die Links einer Website nur öffnen, wenn du es erlaubst. Das öffnet die Seite von Prism dafür. Schalte dort „Unterstützte Links öffnen“ für music.youtube.com ein, und Links, auf die du tippst, öffnen sich hier. Wenn ein Link nach der App fragt, wähle Prism.</string>
     <string name="see_and_delete_what_s_on">Sehen und löschen, was auf deinem Handy ist</string>
     <string name="including_likes_from_other_devices">Auch Likes von anderen Geräten</string>
     <string name="songs_you_ll_likely_play_ready">Songs, die du wahrscheinlich hörst, offline bereit</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Von Apple Music, Musixmatch und Spotify · Wort für Wort</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · Wort für Wort, die meisten chinesischen Songs</string>
     <string name="open_lyrics_database_line_by_line">Offene Songtext-Datenbank · Zeile für Zeile</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Von Hörern eingereichte Songtexte · bisher wenige Songs</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · Zeilen oder reiner Text</string>
+    <string name="lyricfind_lines_or_plain">Der Songtext auf der Songseite in Prism Music, von LyricFind · Zeilen oder reiner Text</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Reiner Text · füllt auch zensierte Wörter aus</string>
     <string name="both">Beides</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">Musiknote</string>
     <string name="bold">Fett</string>
     <string name="wide">Weit</string>
-    <string name="ink">Tinte</string>
+    <string name="ink">Schlicht</string>
     <string name="the_light">Das Licht</string>
     <string name="when_you_leave_prism">Wenn du Prism verlässt</string>
     <string name="only_with_its_button">Nur mit seiner Taste</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">Zurück im Miniplayer</string>
     <string name="mini_player_progress">Fortschritt im Miniplayer</string>
     <string name="player_background_showing">Player-Hintergrund sichtbar</string>
-    <string name="cover_corners">Ecken des Covers</string>
+    <string name="cover_corners">Rundung der Cover-Ecken</string>
     <string name="cover_shrinks_on_pause">Cover wird bei Pause kleiner</string>
     <string name="edge_to_edge_cover">Randloses Cover</string>
     <string name="edge_to_edge_video">Randloses Video</string>
@@ -3990,12 +3990,12 @@
     <string name="edit_this_menu_keywords">menü ⋯ punkte weitere optionen song optionen schnellkacheln aktionen ausblenden einblenden</string>
     <string name="what_plays_next">Was als Nächstes läuft</string>
     <string name="when_the_queue_ends">Wenn die Warteschlange endet</string>
-    <string name="when_the_queue_ends_info">Stopp: Die Musik endet mit der Warteschlange. Deine Musik: das eigene Radio von Prism aus dem, was du hörst. Beides: vor allem deine Musik, mit ein paar neuen Songs. Prism Music: ein Radio aus dem Katalog von Prism Music. Offline ist es immer deine Musik.</string>
+    <string name="when_the_queue_ends_info">Stopp: Die Musik endet mit der Warteschlange. Deine Musik: das eigene Radio von Prism aus dem, was du hörst. Deine und neue: vor allem deine Musik, mit ein paar neuen Songs. Prism Music: ein Radio aus dem Katalog von Prism Music. Offline ist es immer deine Musik.</string>
     <string name="music_videos_label">Musikvideos</string>
-    <string name="play_them">Als Videos abspielen</string>
+    <string name="play_them">Videos</string>
     <string name="songs_in_radios">Songs in Radios</string>
     <string name="songs_everywhere">Überall Songs</string>
-    <string name="music_videos_label_info">Als Videos abspielen: Ein Musikvideo läuft als Video. Songs in Radios: Autoplay und Radios spielen stattdessen den Song des Videos. Überall Songs: Jedes Musikvideo, auf das du tippst, läuft als sein Song, und die Video-Taste zeigt weiterhin das Video.</string>
+    <string name="music_videos_label_info">Videos: Ein Musikvideo läuft als Video. Songs in Radios: Autoplay und Radios spielen stattdessen den Song des Videos. Überall Songs: Jedes Musikvideo, auf das du tippst, läuft als sein Song, und die Video-Taste zeigt weiterhin das Video.</string>
     <string name="trim_silence">Stille am Anfang und Ende entfernen</string>
     <string name="podcasts_only">Nur Podcasts</string>
     <string name="songs_and_podcasts">Songs und Podcasts</string>
@@ -4414,10 +4414,10 @@
     <string name="replay_graph_days">Tage</string>
     <string name="replay_last_weeks">Letzte %1$d Wochen</string>
     <string name="replay_last_days">Letzte %1$d Tage</string>
-    <string name="replay_story_font">Schrift der Storys</string>
+    <string name="replay_story_font">Schrift in Storys</string>
     <string name="replay_story_font_info">Wie die Storys von Replay und Rewind ihre Worte setzen: in Prisms Plakatschrift oder in der Schrift, die du für Prism gewählt hast (Text &amp; Symbole).</string>
     <string name="replay_story_font_keywords">schrift typografie schriftart storys rewind wrapped</string>
-    <string name="replay_story_font_poster">Plakatschrift</string>
+    <string name="replay_story_font_poster">Prisms Plakatschrift</string>
     <string name="replay_story_font_own">Deine Schrift</string>
     <string name="replay_by_hour">Hören nach Stunde</string>
     <string name="replay_by_day">Hören nach Tag</string>
@@ -5072,9 +5072,9 @@
     <string name="dd_space_used">%1$s belegt</string>
     <string name="dd_use_mobile_data_for">Mobile Daten nutzen für</string>
     <string name="dd_use_saving_covers">Animierte Cover speichern</string>
-    <string name="dd_use_measuring">Songs messen</string>
+    <string name="dd_use_measuring">Lautstärke und Tempo prüfen</string>
     <string name="dd_use_videos_info">Aus: Musikvideos laufen nicht über mobile Daten, außer heruntergeladene. Bricht das WLAN während eines Videos ab, geht es als Audio weiter.</string>
-    <string name="dd_use_keywords">mobilfunk getaktet datensparer nur wlan wifi cellular metered data saver wifi only</string>
+    <string name="dd_use_keywords">mobilfunk getaktet datensparer nur wlan vorausladen messen lautstärke tempo wifi cellular metered data saver wifi only</string>
     <string name="gb_on_the_cover">Auf dem Cover</string>
     <string name="gb_on_the_mini_player">Auf dem Miniplayer</string>
     <string name="gb_swipes_and_touch">Wischen und Tippen</string>
@@ -5172,7 +5172,7 @@
     <string name="sound_wifi">WLAN</string>
     <string name="sound_streaming_quality_value">WLAN %1$s · Mobile Daten %2$s</string>
     <string name="settings_player_progress_and_times">Fortschrittsleiste und Zeiten</string>
-    <string name="settings_player_on_it">Darauf</string>
+    <string name="settings_player_on_it">Im Player</string>
     <string name="settings_player_modes">Modi</string>
     <string name="settings_player_controls_over_videos">Steuerung über Videos</string>
     <string name="settings_player_hide_controls">Steuerung ausblenden</string>
@@ -5192,7 +5192,7 @@
     <string name="settings_player_queue_dj">DJ-Taste</string>
     <string name="settings_player_queue_lengths">Songlängen</string>
     <string name="settings_player_queue_move_played">Gespielte verschieben</string>
-    <string name="settings_player_queue_tidier">Aufgeräumter</string>
+    <string name="settings_player_queue_tidier">Aufgeräumtere Warteschlange</string>
     <string name="settings_player_scroll_for_controls">Nach oben scrollen für Steuerung</string>
     <string name="settings_player_lock_options">Sperrbildschirm-Optionen</string>
     <string name="settings_player_immersive_options">Optionen für Immersiv</string>
@@ -5538,4 +5538,28 @@
     <string name="spot_session_bring_failed">Konnte nicht gelesen werden. Versuch es noch einmal.</string>
     <string name="spot_session_followed_all">Auch gefolgte Playlists</string>
     <string name="spot_session_followed_all_info">An: Die Playlists, denen du auf Spotify folgst, kommen von selbst in die Mediathek, die ersten 50 davon, und bleiben auf dem Laufenden. Aus: Jede wartet in der Mediathek, einen Tipp entfernt. Playlists, die du in der Mediathek ausgeblendet hast, bleiben außen vor.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (wie der Web-Player von Spotify gelesen wird)</string>
+    <string name="spot_session_playlists_info">Deine Spotify-Playlists erscheinen in der Mediathek mit der Markierung Spotify und spielen über ihre Treffer in YouTube Music, in der Reihenfolge von Spotify. Songs werden einmal zugeordnet und gemerkt. Playlists, denen du folgst, warten in der Mediathek, einen Tipp entfernt, oder kommen von selbst mit Auch gefolgte Playlists. Schaltest du das aus, verschwinden sie aus der Mediathek.</string>
+    <string name="spot_session_keep_in_step_info">Wenn du eine davon öffnest, schaut Prism nach, ob sich ihre Songs bei Spotify geändert haben, und liest sie in dem Fall neu. Alle werden ohnehin einmal am Tag im WLAN geprüft. Änderungen, die du in Prism an ihnen machst, werden durch die von Spotify ersetzt.</string>
+    <string name="tour_1875_spotify_title">Dein Spotify</string>
+    <string name="tour_1875_spotify_about">Melde dich einmal bei Spotify an, und deine Musik von dort kommt in Prism.</string>
+    <string name="tour_1875_spotify_point_1">Deine Lieblingssongs und Playlists werden in YouTube Music gefunden und bleiben auf dem Stand.</string>
+    <string name="tour_1875_spotify_point_2">Playlists, denen du folgst, kommen auch: Tippe in der Mediathek auf eine, um sie zu holen.</string>
+    <string name="tour_1875_spotify_point_3">Prism liest nur. Bei deinem Spotify wird nie etwas geändert.</string>
+    <string name="tour_1875_spotify_point_4">Es ist inoffiziell und verstößt gegen die Bedingungen von Spotify, kann also aufhören zu funktionieren. Deine eigene Entwickler-App funktioniert weiter wie bisher.</string>
+    <string name="tour_1875_also_queue">Wähle Songs aus und tippe auf Als Nächstes spielen oder Zur Warteschlange hinzufügen: Das klappt auch, wenn nichts läuft.</string>
+    <string name="tour_1875_also_home">Der Play-Button auf den großen Karten der Startseite spielt sofort ab.</string>
+    <string name="tour_1875_also_busy">Ein Song, dessen Server immer wieder ausfällt, wird auf anderem Weg geholt.</string>
+    <string name="tour_1875_also_heard">Ein erkannter Song spielt ab dem Moment, in dem du ihn gehört hast, mit geöffnetem Songtext.</string>
+    <string name="queue_end_mixed">Deine und neue</string>
+    <string name="dd_use_load_ahead">Songs vorausladen</string>
+    <string name="replay_notices_n_on">%1$d von 3 an</string>
+    <string name="car_lyrics_style">Songtext-Stil</string>
+    <string name="tab_tint_light">Designfarben</string>
+    <string name="bini_detail">Songtexte von Apple Music · Wort für Wort, anders zugeordnet</string>
+    <string name="hl_card_style">Kartenstil</string>
+    <string name="hl_show_in_lists">In Listen einblenden</string>
+    <string name="hl_show_on_artist_pages">Auf Künstlerseiten einblenden</string>
+    <string name="allow_access_to_lossless_files_value">Nötig, um deine verlustfreien Dateien zu finden</string>
 </resources>

@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">アーティスト アルバム プレイリスト ページ 色 写真 アクセント 画像</string>
     <string name="font">フォント</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">書体 フォント カスタム ttf otf outfit prism システム clean manrope geometric plus jakarta sans airy urbanist rounded nunito editorial serif セリフ fraunces mono 等幅 geist legible atkinson hyperlegible ディスレクシア dyslexia opendyslexic アクセシビリティ</string>
-    <string name="type">文字</string>
+    <string name="type">見出しのスタイル</string>
     <string name="classic_1_6_bold_headings_titles">クラシック 1.6 太字 見出し タイトル 以前の見た目</string>
     <string name="classic_type">クラシックな文字</string>
     <string name="weight_and_spacing">太さと間隔</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">歌詞のフォント ファイルを削除</string>
     <string name="font_size_scale_bigger_smaller">フォント サイズ 拡大 縮小 大きく 小さく</string>
     <string name="icons">アイコン</string>
-    <string name="pack">パック</string>
+    <string name="pack">アイコンパック</string>
     <string name="icon_style_cupertino_apple">アイコン スタイル cupertino apple クパチーノ</string>
     <string name="icon_thin_bold">アイコン 細い 太い</string>
     <string name="rounded">丸み</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">反映するには Prism を再起動してください</string>
     <string name="app_icon">アプリアイコン</string>
     <string name="launcher_home_screen_icon_logo">ランチャー ホーム画面 アイコン ロゴ</string>
-    <string name="shape">形</string>
+    <string name="shape">ボタンの形</string>
     <string name="corners">角</string>
     <string name="rounded_square_shape_radius_slider">丸み 四角 形 半径 スライダー 角丸</string>
     <string name="covers_shapes">ジャケットの形</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">カーブ 等パワー リニア s カーブ dj カット なめらか 直線 ゆるやか</string>
     <string name="crossfade_mark">クロスフェードの目印</string>
     <string name="progress_bar_mark_where_next_song">プログレスバー 目印 次の曲 つなぎ 開始</string>
-    <string name="covers_blend_too">ジャケットもクロスフェード</string>
+    <string name="covers_blend_too">クロスフェードでジャケットも切り替え</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">ジャケット アートワーク ディゾルブ フェード クロスフェード apple music</string>
     <string name="speed_pitch_and_fades">速度、ピッチ、フェード</string>
     <string name="speed_when_prism_starts">起動時の速度</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">スマートダウンロードを消去</string>
     <string name="cache_delete_free_space">キャッシュ 削除 空き容量</string>
     <string name="sections_order_shortcuts_quick_picks_speed">セクション 順序 ショートカット クイック ピック スピード ダイヤル</string>
-    <string name="continue_line">「続き」の行</string>
+    <string name="continue_line">続きから再生</string>
     <string name="continue_album_resume_greeting_hide_context">続き アルバム 再開 挨拶 隠す コンテキスト rewind</string>
     <string name="replay_card">Replay カード</string>
     <string name="replay_teaser_look_style_design_quiet">replay ティーザー 見た目 スタイル デザイン クワイエット レジャー ウォッシュ スペクトル フレーム リング ジャケット ストライプ バー オーロラ</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">オープンソース ライセンス</string>
     <string name="license_gpl">ライセンス gpl</string>
     <string name="diagnostics">診断</string>
-    <string name="playback_diagnostics">再生の診断</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">途切れ カクつき 音飛び ノイズ 遅延 bluetooth airpods ログ デバッグ</string>
+    <string name="playback_diagnostics">再生ログを残す</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">途切れ カクつき 音飛び ノイズ 遅延 bluetooth airpods ログ デバッグ 診断 再生ログ</string>
     <string name="share_diagnostics">診断情報を共有</string>
     <string name="log_send_report">ログ 送信 レポート</string>
     <string name="clear_diagnostics">診断情報を消去</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">YouTube Music で開きます</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">オン：タップしたリンクがここで開きます</string>
-    <string name="off_turn_on_open_supported_links">オフ：music.youtube.com の「対応リンクを開く」をオンにしてください</string>
-    <string name="choose_prism_when_a_link_asks">リンクでアプリを聞かれたら Prism を選択</string>
-    <string name="android_only_lets_an_app_open">Android では、あなたが許可した場合にのみアプリがウェブサイトのリンクを開けます。Prism の設定ページを開くので、そこでリンクをオンにしてください。</string>
+    <string name="on_links_you_tap_open_here">オン</string>
+    <string name="off_turn_on_open_supported_links">オフ</string>
+    <string name="choose_prism_when_a_link_asks">未設定</string>
+    <string name="android_only_lets_an_app_open">Android では、あなたが許可した場合にのみアプリがウェブサイトのリンクを開けます。これで Prism の設定ページが開きます。そこで music.youtube.com の「対応リンクを開く」をオンにすると、タップしたリンクが Prism で開きます。リンクでアプリを聞かれたら Prism を選んでください。</string>
     <string name="see_and_delete_what_s_on">スマホに保存されているものを確認、削除</string>
     <string name="including_likes_from_other_devices">ほかのデバイスでのいいねも含む</string>
     <string name="songs_you_ll_likely_play_ready">再生しそうな曲をオフライン用に準備</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Apple Music、Musixmatch、Spotify の歌詞 · 単語ごと</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · 単語ごと、中国語の曲が最も多い</string>
     <string name="open_lyrics_database_line_by_line">オープンな歌詞データベース · 行ごと</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">リスナーが投稿した歌詞 · 現在は曲数少なめ</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · 行ごと、またはテキストのみ</string>
+    <string name="lyricfind_lines_or_plain">曲の Prism Music ページの歌詞、LyricFind 提供 · 行ごと、またはテキストのみ</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">テキストのみ · 伏せ字の単語の補完にも使用</string>
     <string name="both">両方</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">音符</string>
     <string name="bold">太い</string>
     <string name="wide">広い</string>
-    <string name="ink">インク</string>
+    <string name="ink">シンプル</string>
     <string name="the_light">光</string>
     <string name="when_you_leave_prism">Prism から離れたとき</string>
     <string name="only_with_its_button">ボタンを押したときのみ</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">ミニプレーヤーの前へ</string>
     <string name="mini_player_progress">ミニプレーヤーの再生位置</string>
     <string name="player_background_showing">プレーヤーの背景を表示</string>
-    <string name="cover_corners">ジャケットの角</string>
+    <string name="cover_corners">ジャケットの角の丸み</string>
     <string name="cover_shrinks_on_pause">一時停止でジャケットを縮小</string>
     <string name="edge_to_edge_cover">端から端までのジャケット</string>
     <string name="edge_to_edge_video">端から端までの動画</string>
@@ -3940,12 +3940,12 @@
     <string name="edit_this_menu_keywords">メニュー ⋯ 点 その他 オプション 曲のオプション クイックタイル 操作 非表示 表示 編集</string>
     <string name="what_plays_next">次に再生するもの</string>
     <string name="when_the_queue_ends">キューの終了後</string>
-    <string name="when_the_queue_ends_info">停止：キューが終わると音楽も止まります。あなたの音楽：再生履歴をもとにした Prism 独自のラジオ。両方：主にあなたの音楽に、新しい曲を少し加えます。Prism Music：Prism Music のカタログから作るラジオ。オフラインのときは常にあなたの音楽です。</string>
+    <string name="when_the_queue_ends_info">停止：キューが終わると音楽も止まります。あなたの音楽：再生履歴をもとにした Prism 独自のラジオ。あなたと新曲：主にあなたの音楽に、新しい曲を少し加えます。Prism Music：Prism Music のカタログから作るラジオ。オフラインのときは常にあなたの音楽です。</string>
     <string name="music_videos_label">ミュージック ビデオ</string>
-    <string name="play_them">そのまま再生</string>
+    <string name="play_them">動画</string>
     <string name="songs_in_radios">ラジオでは曲で</string>
     <string name="songs_everywhere">どこでも曲で</string>
-    <string name="music_videos_label_info">そのまま再生：ミュージック ビデオを動画として再生します。ラジオでは曲で：自動再生とラジオでは、動画の代わりにその曲を再生します。どこでも曲で：タップしたミュージック ビデオはすべて曲として再生され、動画ボタンで動画も見られます。</string>
+    <string name="music_videos_label_info">動画：ミュージック ビデオを動画として再生します。ラジオでは曲で：自動再生とラジオでは、動画の代わりにその曲を再生します。どこでも曲で：タップしたミュージック ビデオはすべて曲として再生され、動画ボタンで動画も見られます。</string>
     <string name="trim_silence">最初と最後の無音部分をカット</string>
     <string name="podcasts_only">ポッドキャストのみ</string>
     <string name="songs_and_podcasts">曲とポッドキャスト</string>
@@ -4364,10 +4364,10 @@
     <string name="replay_graph_days">日</string>
     <string name="replay_last_weeks">直近 %1$d 週</string>
     <string name="replay_last_days">直近 %1$d 日</string>
-    <string name="replay_story_font">ストーリーの書体</string>
+    <string name="replay_story_font">ストーリーのフォント</string>
     <string name="replay_story_font_info">Replay と Rewind のストーリーの文字をどう表示するか。Prism のポスター書体か、Prism 用に選んだフォント (文字とアイコン) です。</string>
     <string name="replay_story_font_keywords">フォント 書体 タイポグラフィ ストーリー rewind wrapped font</string>
-    <string name="replay_story_font_poster">ポスター書体</string>
+    <string name="replay_story_font_poster">Prism のポスター書体</string>
     <string name="replay_story_font_own">自分のフォント</string>
     <string name="replay_by_hour">時間帯別の再生</string>
     <string name="replay_by_day">日別の再生</string>
@@ -4701,7 +4701,7 @@
     <string name="reopen_on_the_last_page">最後のページで開く</string>
     <string name="reopen_on_the_last_page_info">プレーヤーを、最後に開いていた画面（カバー、歌詞、キュー）で開きます。歌詞やキューから「戻る」を押すと、その画面のままプレーヤーが閉じます。それぞれのボタンを押すとカバーに戻ります。</string>
     <string name="reopen_on_the_last_page_keywords">プレーヤー 記憶 歌詞 キュー 開く 開始 ページ</string>
-    <string name="steadier_lyrics">安定した歌詞表示</string>
+    <string name="steadier_lyrics">落ち着いた歌詞表示</string>
     <string name="steadier_lyrics_info">コントロールの表示と非表示に、より長いスワイプが必要になります。スクロールしたあと、歌っている行が近ければ歌詞がすぐにそこへ戻り、遠ければ通常どおりの時間をかけて戻ります。</string>
     <string name="steadier_lyrics_keywords">歌詞 感度 スクロール スワイプ 戻る 現在の行 追従 コントロール</string>
     <string name="gestures_under_the_lyrics">歌詞の下でジェスチャー</string>
@@ -5000,9 +5000,9 @@
     <string name="dd_space_used">%1$s 使用中</string>
     <string name="dd_use_mobile_data_for">モバイルデータを使うもの</string>
     <string name="dd_use_saving_covers">アニメーション カバーの保存</string>
-    <string name="dd_use_measuring">曲の測定</string>
+    <string name="dd_use_measuring">音量感とテンポのチェック</string>
     <string name="dd_use_videos_info">オフにすると、ダウンロード済みのものを除き、ミュージックビデオはモバイルデータでは再生されません。動画の途中で Wi-Fi が切れると、音声のみで再生を続けます。</string>
-    <string name="dd_use_keywords">モバイル 従量制 データセーバー Wi-Fi のみ cellular metered data saver wifi only</string>
+    <string name="dd_use_keywords">モバイル 従量制 データセーバー Wi-Fi のみ 先読み 測定 音量 テンポ cellular metered data saver wifi only load ahead measuring loudness tempo</string>
     <string name="gb_on_the_cover">ジャケット上</string>
     <string name="gb_on_the_mini_player">ミニプレーヤー上</string>
     <string name="gb_swipes_and_touch">スワイプとタッチ</string>
@@ -5120,7 +5120,7 @@
     <string name="settings_player_queue_dj">DJ ボタン</string>
     <string name="settings_player_queue_lengths">曲の長さ</string>
     <string name="settings_player_queue_move_played">再生済みを移動</string>
-    <string name="settings_player_queue_tidier">すっきり</string>
+    <string name="settings_player_queue_tidier">すっきりしたキュー</string>
     <string name="settings_player_scroll_for_controls">上にスクロールでコントロール</string>
     <string name="settings_player_lock_options">ロック画面のオプション</string>
     <string name="settings_player_immersive_options">没入モードのオプション</string>
@@ -5463,4 +5463,28 @@
     <string name="spot_session_bring_failed">読み込めませんでした。もう一度お試しください。</string>
     <string name="spot_session_followed_all">フォロー中のプレイリストも</string>
     <string name="spot_session_followed_all_info">オン: Spotify でフォローしているプレイリストが、最初の 50 件まで自動でライブラリに入り、同期も保たれます。オフ: 1 つずつライブラリで待機し、タップで取り込めます。ライブラリから非表示にしたものは含まれません。</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (Spotify のウェブプレーヤーの読み取りに使用)</string>
+    <string name="spot_session_playlists_info">Spotify のプレイリストが Spotify のマーク付きでライブラリに表示され、YouTube Music で一致した曲を Spotify と同じ順番で再生します。曲の照合は一度だけ行われ、記憶されます。フォローしているプレイリストはライブラリでタップすると取り込めるほか、「フォロー中のプレイリストも」をオンにすると自動で取り込まれます。オフにするとライブラリから外れます。</string>
+    <string name="spot_session_keep_in_step_info">いずれかを開くと、Prism は Spotify で曲が変わったか確認し、変わっていれば読み込み直します。それとは別に、すべてを 1 日 1 回 Wi-Fi で確認します。Prism で加えた変更は Spotify の内容で置き換えられます。</string>
+    <string name="tour_1875_spotify_title">あなたの Spotify</string>
+    <string name="tour_1875_spotify_about">Spotify に一度ログインすれば、そこにあるあなたの音楽が Prism に入ります。</string>
+    <string name="tour_1875_spotify_point_1">高く評価した曲やプレイリストは YouTube Music で見つかり、同期され続けます。</string>
+    <string name="tour_1875_spotify_point_2">フォロー中のプレイリストも入ります。ライブラリでタップして取り込みましょう。</string>
+    <string name="tour_1875_spotify_point_3">Prism は読み取るだけです。あなたの Spotify は一切変更されません。</string>
+    <string name="tour_1875_spotify_point_4">非公式で Spotify の利用規約に反するため、使えなくなる可能性があります。ご自身の開発者アプリは今までどおり使えます。</string>
+    <string name="tour_1875_also_queue">曲を選んで「次に再生」や「キューに追加」を押すと、何も再生していなくても使えます。</string>
+    <string name="tour_1875_also_home">ホームの大きなカードの再生ボタンで、すぐに再生されます。</string>
+    <string name="tour_1875_also_busy">サーバーが失敗し続ける曲は、別の方法で取得します。</string>
+    <string name="tour_1875_also_heard">認識した曲は、聞こえた瞬間から歌詞を開いた状態で再生されます。</string>
+    <string name="queue_end_mixed">あなたと新曲</string>
+    <string name="dd_use_load_ahead">曲の先読み</string>
+    <string name="replay_notices_n_on">3 件中 %1$d 件オン</string>
+    <string name="car_lyrics_style">歌詞のスタイル</string>
+    <string name="tab_tint_light">テーマの色</string>
+    <string name="bini_detail">Apple Music の歌詞 · 1 語ずつ、別の方法で照合</string>
+    <string name="hl_card_style">カードのスタイル</string>
+    <string name="hl_show_in_lists">リストに表示</string>
+    <string name="hl_show_on_artist_pages">アーティストのページに表示</string>
+    <string name="allow_access_to_lossless_files_value">ロスレスファイルを見つけるために必要です</string>
 </resources>

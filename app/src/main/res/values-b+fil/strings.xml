@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">artist album playlist page kulay larawan accent picture</string>
     <string name="font">Font</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">typeface custom ttf otf outfit prism system clean malinis manrope geometric plus jakarta sans airy maaliwalas urbanist rounded bilugan nunito editorial serif fraunces mono geist legible atkinson hyperlegible dyslexia dyslexic opendyslexic accessibility</string>
-    <string name="type">Font</string>
+    <string name="type">Istilo ng heading</string>
     <string name="classic_1_6_bold_headings_titles">classic 1.6 bold makapal heading pamagat lumang itsura</string>
     <string name="classic_type">Classic na font</string>
     <string name="weight_and_spacing">Kapal at pagitan</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">Alisin ang file ng font ng lyrics</string>
     <string name="font_size_scale_bigger_smaller">font laki size scale mas malaki mas maliit</string>
     <string name="icons">Mga icon</string>
-    <string name="pack">Pack</string>
+    <string name="pack">Icon pack</string>
     <string name="icon_style_cupertino_apple">icon istilo style cupertino apple</string>
     <string name="icon_thin_bold">icon manipis makapal thin bold</string>
     <string name="rounded">Bilugan</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">I-restart ang Prism para makita sila</string>
     <string name="app_icon">Icon ng app</string>
     <string name="launcher_home_screen_icon_logo">launcher home screen icon logo</string>
-    <string name="shape">Hugis</string>
+    <string name="shape">Hugis ng button</string>
     <string name="corners">Mga sulok</string>
     <string name="rounded_square_shape_radius_slider">bilugan parisukat hugis radius slider</string>
     <string name="covers_shapes">Mga hugis ng cover</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">curve equal power linear s-curve dj cut makinis tuwid banayad</string>
     <string name="crossfade_mark">Marka ng crossfade</string>
     <string name="progress_bar_mark_where_next_song">progress bar marka kung saan nagsisimula ang halo ng susunod na kanta</string>
-    <string name="covers_blend_too">Naghahalo rin ang mga cover</string>
+    <string name="covers_blend_too">Naghahalo ang mga cover sa crossfade</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">cover artwork dissolve fade crossfade apple music</string>
     <string name="speed_pitch_and_fades">Bilis, pitch at fade</string>
     <string name="speed_when_prism_starts">Bilis pagbukas ng Prism</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">I-clear ang Smart Downloads</string>
     <string name="cache_delete_free_space">cache burahin bakanteng puwang</string>
     <string name="sections_order_shortcuts_quick_picks_speed">mga seksyon ayos shortcut mabilisang pinili quick picks speed dial</string>
-    <string name="continue_line">Linyang Ituloy</string>
+    <string name="continue_line">Ituloy kung saan ka huminto</string>
     <string name="continue_album_resume_greeting_hide_context">ituloy album resume pagbati itago konteksto rewind</string>
     <string name="replay_card">Replay card</string>
     <string name="replay_teaser_look_style_design_quiet">replay teaser itsura istilo disenyo quiet ledger wash spectrum frame ring cover stripe bars aurora</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">Mga open-source na lisensya</string>
     <string name="license_gpl">lisensya license gpl</string>
     <string name="diagnostics">Diagnostics</string>
-    <string name="playback_diagnostics">Diagnostics ng playback</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">stutter putol-putol judder skip glitch lag bluetooth airpods log debug</string>
+    <string name="playback_diagnostics">Magtago ng playback log</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">stutter putol-putol judder skip glitch lag bluetooth airpods log debug diagnostics playback log</string>
     <string name="share_diagnostics">I-share ang diagnostics</string>
     <string name="log_send_report">log ipadala ulat report</string>
     <string name="clear_diagnostics">I-clear ang diagnostics</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">Nagbubukas sa YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">On: dito bumubukas ang mga link na tina-tap mo</string>
-    <string name="off_turn_on_open_supported_links">Off: i-on ang \"Buksan ang mga suportadong link\" para sa music.youtube.com</string>
-    <string name="choose_prism_when_a_link_asks">Piliin ang Prism kapag nagtanong ang link kung aling app</string>
-    <string name="android_only_lets_an_app_open">Pinapayagan lang ng Android ang isang app na magbukas ng mga link ng website kapag sinabi mo. Bubuksan nito ang page ng Prism para dito: i-on doon ang mga link nito.</string>
+    <string name="on_links_you_tap_open_here">On</string>
+    <string name="off_turn_on_open_supported_links">Off</string>
+    <string name="choose_prism_when_a_link_asks">Hindi pa naka-set</string>
+    <string name="android_only_lets_an_app_open">Pinapayagan lang ng Android ang isang app na magbukas ng mga link ng website kapag sinabi mo. Bubuksan nito ang page ng Prism para dito. I-on doon ang \"Buksan ang mga suportadong link\" para sa music.youtube.com, at dito bubukas ang mga link na tina-tap mo. Kung magtanong ang link kung aling app, piliin ang Prism.</string>
     <string name="see_and_delete_what_s_on">Tingnan at burahin ang nasa phone mo</string>
     <string name="including_likes_from_other_devices">Kasama ang mga like mula sa ibang device</string>
     <string name="songs_you_ll_likely_play_ready">Mga kantang malamang na pakikinggan mo, handa offline</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Mula sa Apple Music, Musixmatch at Spotify · bawat salita</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · bawat salita, pinakamaraming kantang Chinese</string>
     <string name="open_lyrics_database_line_by_line">Bukas na database ng lyrics · bawat linya</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Lyrics na isinumite ng mga nakikinig · kaunti pa lang ang kanta</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · mga linya o simple</string>
+    <string name="lyricfind_lines_or_plain">Ang lyrics sa Prism Music page ng kanta, mula sa LyricFind · mga linya o simple</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Simpleng text · pinupunan din ang mga salitang tinakpan ng bituin</string>
     <string name="both">Pareho</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">Nota ng musika</string>
     <string name="bold">Bold</string>
     <string name="wide">Malapad</string>
-    <string name="ink">Tinta</string>
+    <string name="ink">Simple</string>
     <string name="the_light">Ang liwanag</string>
     <string name="when_you_leave_prism">Kapag umalis ka sa Prism</string>
     <string name="only_with_its_button">Gamit lang ang button nito</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">Nakaraan ng mini player</string>
     <string name="mini_player_progress">Progress ng mini player</string>
     <string name="player_background_showing">Nakikitang background ng player</string>
-    <string name="cover_corners">Mga sulok ng cover</string>
+    <string name="cover_corners">Bilog ng mga sulok ng cover</string>
     <string name="cover_shrinks_on_pause">Lumiliit ang cover kapag naka-pause</string>
     <string name="edge_to_edge_cover">Cover na gilid hanggang gilid</string>
     <string name="edge_to_edge_video">Video na gilid hanggang gilid</string>
@@ -3990,12 +3990,12 @@
     <string name="edit_this_menu_keywords">menu ⋯ tuldok higit pa options opsyon ng kanta quick tile action itago ipakita</string>
     <string name="what_plays_next">Ano ang susunod na ipe-play</string>
     <string name="when_the_queue_ends">Kapag natapos ang queue</string>
-    <string name="when_the_queue_ends_info">Ihinto: natatapos ang musika kasabay ng queue. Ang musika mo: sariling radio ng Prism mula sa mga pinapakinggan mo. Pareho: karamihan ay musika mo, may ilang bagong kanta. Prism Music: radio mula sa catalog ng Prism Music. Kapag offline, laging musika mo.</string>
+    <string name="when_the_queue_ends_info">Ihinto: natatapos ang musika kasabay ng queue. Ang musika mo: sariling radio ng Prism mula sa mga pinapakinggan mo. Iyo at bago: karamihan ay musika mo, may ilang bagong kanta. Prism Music: radio mula sa catalog ng Prism Music. Kapag offline, laging musika mo.</string>
     <string name="music_videos_label">Mga music video</string>
-    <string name="play_them">I-play bilang video</string>
+    <string name="play_them">Video</string>
     <string name="songs_in_radios">Kanta sa mga radio</string>
     <string name="songs_everywhere">Kanta saanman</string>
-    <string name="music_videos_label_info">I-play bilang video: nagpe-play ang music video bilang video. Kanta sa mga radio: ang kanta ng video ang ipinapatugtog ng autoplay at mga radio. Kanta saanman: anumang music video na i-tap mo ay nagpe-play bilang kanta nito, at ipinapakita pa rin ng button na Video ang video.</string>
+    <string name="music_videos_label_info">Video: nagpe-play ang music video bilang video. Kanta sa mga radio: ang kanta ng video ang ipinapatugtog ng autoplay at mga radio. Kanta saanman: anumang music video na i-tap mo ay nagpe-play bilang kanta nito, at ipinapakita pa rin ng button na Video ang video.</string>
     <string name="trim_silence">Tanggalin ang katahimikan sa simula at dulo</string>
     <string name="podcasts_only">Mga podcast lang</string>
     <string name="songs_and_podcasts">Mga kanta at podcast</string>
@@ -4414,10 +4414,10 @@
     <string name="replay_graph_days">Mga araw</string>
     <string name="replay_last_weeks">Huling %1$d linggo</string>
     <string name="replay_last_days">Huling %1$d araw</string>
-    <string name="replay_story_font">Type ng story</string>
-    <string name="replay_story_font_info">Kung paano isinusulat ng mga story ng Replay at Rewind ang mga salita nila: sa poster type ng Prism, o sa font na pinili mo para sa Prism (Text at mga icon).</string>
+    <string name="replay_story_font">Font sa mga story</string>
+    <string name="replay_story_font_info">Kung paano isinusulat ng mga story ng Replay at Rewind ang mga salita nila: sa poster font ng Prism, o sa font na pinili mo para sa Prism (Text at mga icon).</string>
     <string name="replay_story_font_keywords">font typography typeface story stories rewind wrapped</string>
-    <string name="replay_story_font_poster">Poster type</string>
+    <string name="replay_story_font_poster">Poster font ng Prism</string>
     <string name="replay_story_font_own">Sarili mong font</string>
     <string name="replay_by_hour">Pakikinig ayon sa oras</string>
     <string name="replay_by_day">Pakikinig ayon sa araw</string>
@@ -4765,7 +4765,7 @@
     <string name="reopen_on_the_last_page">Buksan ulit sa huling page</string>
     <string name="reopen_on_the_last_page_info">Bumubukas ang player sa huli mong binuksan: ang cover, ang lyrics, o ang queue. Isinasara din ng Back ang player mula sa lyrics o queue, at iniiwan ito roon; ang sarili nilang mga button ay bumabalik sa cover.</string>
     <string name="reopen_on_the_last_page_keywords">player tandaan lyrics queue buksan simulang page</string>
-    <string name="steadier_lyrics">Mas matatag na lyrics</string>
+    <string name="steadier_lyrics">Mas kalmadong lyrics</string>
     <string name="steadier_lyrics_info">Mas mahabang swipe ang kailangan para lumabas at mawala ang mga control. Pagkatapos mong mag-scroll, mas mabilis na bumabalik ang lyrics sa kinakantang linya kapag malapit, at ang karaniwang tagal kapag malayo.</string>
     <string name="steadier_lyrics_keywords">lyrics sensitibo scroll swipe balik kasalukuyang linya sundan control</string>
     <string name="gestures_under_the_lyrics">Mga gesture sa ilalim ng lyrics</string>
@@ -5072,9 +5072,9 @@
     <string name="dd_space_used">%1$s ang nagamit</string>
     <string name="dd_use_mobile_data_for">Gumamit ng mobile data para sa</string>
     <string name="dd_use_saving_covers">Pag-save ng mga animated cover</string>
-    <string name="dd_use_measuring">Pagsukat ng mga kanta</string>
+    <string name="dd_use_measuring">Pagsuri ng lakas ng tunog at tempo</string>
     <string name="dd_use_videos_info">Kapag Off, hindi nagpe-play ang mga music video sa mobile data, maliban sa mga na-download mo. Kapag nawala ang Wi-Fi habang may video, tuloy ito bilang audio.</string>
-    <string name="dd_use_keywords">cellular metered data saver wifi lang cellular metered data saver wifi only</string>
+    <string name="dd_use_keywords">cellular metered data saver wifi lang i-load nang maaga pagsukat lakas ng tunog tempo cellular metered data saver wifi only load ahead measuring loudness tempo</string>
     <string name="gb_on_the_cover">Sa cover</string>
     <string name="gb_on_the_mini_player">Sa mini player</string>
     <string name="gb_swipes_and_touch">Mga swipe at pindot</string>
@@ -5192,7 +5192,7 @@
     <string name="settings_player_queue_dj">Button ng DJ</string>
     <string name="settings_player_queue_lengths">Haba ng mga kanta</string>
     <string name="settings_player_queue_move_played">Ilipat ang mga natugtog na</string>
-    <string name="settings_player_queue_tidier">Mas maayos</string>
+    <string name="settings_player_queue_tidier">Mas maayos na queue</string>
     <string name="settings_player_scroll_for_controls">Mag-scroll pataas para sa mga control</string>
     <string name="settings_player_lock_options">Mga opsyon sa lock screen</string>
     <string name="settings_player_immersive_options">Mga opsyon sa Immersive</string>
@@ -5538,4 +5538,28 @@
     <string name="spot_session_bring_failed">Hindi nabasa. Subukan ulit.</string>
     <string name="spot_session_followed_all">Pati mga sinusundang playlist</string>
     <string name="spot_session_followed_all_info">Naka-on: kusang papasok sa Library ang mga playlist na sinusundan mo sa Spotify, ang unang 50, at mananatiling sabay. Naka-off: bawat isa ay maghihintay sa Library, isang tap lang. Hindi kasama ang mga itinago mo sa Library.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (kung paano binabasa ang web player ng Spotify)</string>
+    <string name="spot_session_playlists_info">Lumalabas sa Library ang mga Spotify playlist mo na may markang Spotify, at tumutugtog sa pamamagitan ng mga katugma nila sa YouTube Music, sa pagkakasunod ng Spotify. Isang beses itinutugma ang mga kanta at tinatandaan. Naghihintay sa Library ang mga playlist na sinusundan mo, isang tap lang, o kusang pumapasok kapag naka-on ang Pati mga sinusundang playlist. Kapag in-off ito, aalisin sila sa Library.</string>
+    <string name="spot_session_keep_in_step_info">Kapag binuksan mo ang isa sa kanila, tinitingnan ng Prism kung nagbago ang mga kanta nito sa Spotify at binabasa ulit kung nagbago nga. Tinitingnan silang lahat isang beses sa isang araw sa Wi-Fi anuman ang mangyari. Napapalitan ng sa Spotify ang mga pagbabagong ginawa mo sa kanila sa Prism.</string>
+    <string name="tour_1875_spotify_title">Ang Spotify mo</string>
+    <string name="tour_1875_spotify_about">Mag-sign in sa Spotify nang isang beses, at ang musika mo roon ay papasok sa Prism.</string>
+    <string name="tour_1875_spotify_point_1">Makikita sa YouTube Music ang mga liked song at playlist mo, at mananatiling magkatugma.</string>
+    <string name="tour_1875_spotify_point_2">Kasama rin ang mga playlist na sinusundan mo: mag-tap ng isa sa Library para ipasok ito.</string>
+    <string name="tour_1875_spotify_point_3">Bumabasa lang ang Prism. Walang binabago kailanman sa Spotify mo.</string>
+    <string name="tour_1875_spotify_point_4">Hindi ito opisyal at labag sa mga tuntunin ng Spotify, kaya maaari itong tumigil sa paggana. Gumagana pa rin gaya ng dati ang sarili mong developer app.</string>
+    <string name="tour_1875_also_queue">Pumili ng mga kanta, saka Play next o Add to queue: gumagana kahit walang tumutugtog.</string>
+    <string name="tour_1875_also_home">Ang play button sa malalaking card ng Home ay agad nagpe-play.</string>
+    <string name="tour_1875_also_busy">Ang kantang paulit-ulit na pumapalya ang server ay hinihingi sa ibang paraan.</string>
+    <string name="tour_1875_also_heard">Ang nakilalang kanta ay nagpe-play mula sa sandaling narinig mo ito, nang bukas ang lyrics.</string>
+    <string name="queue_end_mixed">Iyo at bago</string>
+    <string name="dd_use_load_ahead">Pag-load ng mga kanta nang maaga</string>
+    <string name="replay_notices_n_on">%1$d sa 3 ang naka-on</string>
+    <string name="car_lyrics_style">Istilo ng lyrics</string>
+    <string name="tab_tint_light">Mga kulay ng tema</string>
+    <string name="bini_detail">Lyrics ng Apple Music · salita por salita, itinutugma sa ibang paraan</string>
+    <string name="hl_card_style">Istilo ng card</string>
+    <string name="hl_show_in_lists">Ipakita sa mga listahan</string>
+    <string name="hl_show_on_artist_pages">Ipakita sa mga page ng artist</string>
+    <string name="allow_access_to_lossless_files_value">Kailangan para mahanap ang mga lossless file mo</string>
 </resources>

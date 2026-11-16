@@ -1439,7 +1439,7 @@
     <string name="artist_album_playlist_page_color_color">artist album spellista sida färg foto accent bild</string>
     <string name="font">Typsnitt</string>
     <string name="typeface_custom_ttf_otf_outfit_prism">typsnitt font anpassad ttf otf outfit prism system ren manrope geometrisk plus jakarta sans luftig urbanist rundad nunito redaktionell serif fraunces mono geist läsbar atkinson hyperlegible dyslexi dyslektisk opendyslexic tillgänglighet</string>
-    <string name="type">Typografi</string>
+    <string name="type">Rubrikstil</string>
     <string name="classic_1_6_bold_headings_titles">klassisk 1.6 fet rubriker titlar gammalt utseende</string>
     <string name="classic_type">Klassisk typografi</string>
     <string name="weight_and_spacing">Vikt och avstånd</string>
@@ -1454,7 +1454,7 @@
     <string name="remove_the_lyrics_font_file">Ta bort typsnittsfilen för låttexter</string>
     <string name="font_size_scale_bigger_smaller">typsnitt storlek skala större mindre</string>
     <string name="icons">Ikoner</string>
-    <string name="pack">Paket</string>
+    <string name="pack">Ikonpaket</string>
     <string name="icon_style_cupertino_apple">ikon stil cupertino apple</string>
     <string name="icon_thin_bold">ikon tunn fet</string>
     <string name="rounded">Rundade</string>
@@ -1464,7 +1464,7 @@
     <string name="restart_prism_to_see_them">Starta om Prism för att se dem</string>
     <string name="app_icon">Appikon</string>
     <string name="launcher_home_screen_icon_logo">startprogram hemskärm ikon logotyp</string>
-    <string name="shape">Form</string>
+    <string name="shape">Knappform</string>
     <string name="corners">Hörn</string>
     <string name="rounded_square_shape_radius_slider">rundad fyrkant form radie reglage</string>
     <string name="covers_shapes">Omslagens former</string>
@@ -1668,7 +1668,7 @@
     <string name="curve_equal_power_linear_s_curve">kurva lika effekt linjär s-kurva dj klipp mjuk rak lugn</string>
     <string name="crossfade_mark">Övertoningsmarkering</string>
     <string name="progress_bar_mark_where_next_song">förloppsfält markering där nästa låt övertoning börjar</string>
-    <string name="covers_blend_too">Omslagen tonar också över</string>
+    <string name="covers_blend_too">Omslagen tonar över i övertoningen</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">omslag konstverk upplösning tona övertoning apple music</string>
     <string name="speed_pitch_and_fades">Hastighet, tonhöjd och toningar</string>
     <string name="speed_when_prism_starts">Hastighet när Prism startar</string>
@@ -1806,7 +1806,7 @@
     <string name="clear_smart_downloads">Rensa Smarta nedladdningar</string>
     <string name="cache_delete_free_space">cache radera frigör utrymme</string>
     <string name="sections_order_shortcuts_quick_picks_speed">sektioner ordning genvägar snabbval kortnummer quick picks speed dial</string>
-    <string name="continue_line">Fortsätt-rad</string>
+    <string name="continue_line">Fortsätt där du slutade</string>
     <string name="continue_album_resume_greeting_hide_context">fortsätt album återuppta hälsning dölj sammanhang rewind</string>
     <string name="replay_card">Replay-kort</string>
     <string name="replay_teaser_look_style_design_quiet">replay förhandstitt utseende stil design diskret huvudbok skimmer spektrumram ring omslag rand staplar norrsken</string>
@@ -1862,8 +1862,8 @@
     <string name="open_source_licenses">Licenser för öppen källkod</string>
     <string name="license_gpl">licens gpl</string>
     <string name="diagnostics">Diagnostik</string>
-    <string name="playback_diagnostics">Uppspelningsdiagnostik</string>
-    <string name="stutter_judder_skip_glitch_lag_bluetooth">hackar ryck hopp glapp lagg bluetooth airpods logg felsökning</string>
+    <string name="playback_diagnostics">Spara en uppspelningslogg</string>
+    <string name="stutter_judder_skip_glitch_lag_bluetooth">hackar ryck hopp glapp lagg bluetooth airpods logg felsökning diagnostik uppspelning</string>
     <string name="share_diagnostics">Dela diagnostik</string>
     <string name="log_send_report">logg skicka rapport</string>
     <string name="clear_diagnostics">Rensa diagnostik</string>
@@ -2180,10 +2180,10 @@
     <string name="opens_in_youtube_music">Öppnas i YouTube Music</string>
     <string name="youtu_be_fj9ruzimczq">youtu.be/fJ9rUzIMcZQ</string>
     <string name="music_youtube_com_watch_v_fj9ruzimczq">music.youtube.com/watch?v=fJ9rUzIMcZQ</string>
-    <string name="on_links_you_tap_open_here">På: länkar du trycker på öppnas här</string>
-    <string name="off_turn_on_open_supported_links">Av: slå på \"Öppna länkar som stöds\" för music.youtube.com</string>
-    <string name="choose_prism_when_a_link_asks">Välj Prism när en länk frågar vilken app</string>
-    <string name="android_only_lets_an_app_open">Android låter bara en app öppna en webbplats länkar när du säger till. Det här öppnar Prisms sida för det: slå på dess länkar där.</string>
+    <string name="on_links_you_tap_open_here">På</string>
+    <string name="off_turn_on_open_supported_links">Av</string>
+    <string name="choose_prism_when_a_link_asks">Inte inställt</string>
+    <string name="android_only_lets_an_app_open">Android låter bara en app öppna en webbplats länkar när du säger till. Det här öppnar Prisms sida för det. Slå på \"Öppna länkar som stöds\" för music.youtube.com där, så öppnas länkar du trycker på här. Om en länk frågar vilken app, välj Prism.</string>
     <string name="see_and_delete_what_s_on">Se och radera det som finns på telefonen</string>
     <string name="including_likes_from_other_devices">Även gillningar från andra enheter</string>
     <string name="songs_you_ll_likely_play_ready">Låtar du troligen spelar, redo offline</string>
@@ -2992,7 +2992,7 @@
     <string name="lyricsplus">LyricsPlus</string>
     <string name="apple_music_musixmatch_and_spotify_s">Apple Musics, Musixmatchs och Spotifys · ord för ord</string>
     <string name="bini">Bini</string>
-    <string name="qq_portato">QQ · Portato</string>
+    <string name="qq_portato">QQ Music</string>
     <string name="qq_music_word_by_word_the">QQ Music · ord för ord, flest kinesiska låtar</string>
     <string name="open_lyrics_database_line_by_line">Öppen låttextdatabas · rad för rad</string>
     <string name="netease">NetEase</string>
@@ -3002,7 +3002,7 @@
     <string name="unison">Unison</string>
     <string name="lyrics_listeners_submit_few_songs_so">Låttexter som lyssnare skickar in · få låtar än så länge</string>
     <string name="prism_music">Prism Music</string>
-    <string name="lyricfind_lines_or_plain">LyricFind · rader eller vanlig text</string>
+    <string name="lyricfind_lines_or_plain">Låttexten på låtens sida i Prism Music, från LyricFind · rader eller vanlig text</string>
     <string name="genius">Genius</string>
     <string name="plain_text_also_fills_in_starred">Vanlig text · fyller också i ord som stjärnats</string>
     <string name="both">Båda</string>
@@ -3039,7 +3039,7 @@
     <string name="music_note">Musiknot</string>
     <string name="bold">Fet</string>
     <string name="wide">Bred</string>
-    <string name="ink">Bläck</string>
+    <string name="ink">Enkel</string>
     <string name="the_light">Ljuset</string>
     <string name="when_you_leave_prism">När du lämnar Prism</string>
     <string name="only_with_its_button">Bara med sin knapp</string>
@@ -3202,7 +3202,7 @@
     <string name="mini_player_s_previous">Minispelarens Föregående</string>
     <string name="mini_player_progress">Minispelarens förlopp</string>
     <string name="player_background_showing">Spelarens bakgrund syns</string>
-    <string name="cover_corners">Omslagets hörn</string>
+    <string name="cover_corners">Omslagets hörnrundning</string>
     <string name="cover_shrinks_on_pause">Omslaget krymper vid paus</string>
     <string name="edge_to_edge_cover">Omslag kant till kant</string>
     <string name="edge_to_edge_video">Video kant till kant</string>
@@ -3990,12 +3990,12 @@
     <string name="edit_this_menu_keywords">meny ⋯ prickar fler alternativ låtalternativ snabbrutor åtgärder dölj visa</string>
     <string name="what_plays_next">Vad som spelas härnäst</string>
     <string name="when_the_queue_ends">När kön tar slut</string>
-    <string name="when_the_queue_ends_info">Stopp: musiken slutar med kön. Din musik: Prisms egen radio utifrån det du spelar. Båda: mest din musik, med några nya låtar. Prism Music: en radio ur Prism Musics katalog. Offline är det alltid din musik.</string>
+    <string name="when_the_queue_ends_info">Stopp: musiken slutar med kön. Din musik: Prisms egen radio utifrån det du spelar. Dina och nya: mest din musik, med några nya låtar. Prism Music: en radio ur Prism Musics katalog. Offline är det alltid din musik.</string>
     <string name="music_videos_label">Musikvideor</string>
-    <string name="play_them">Spela dem</string>
+    <string name="play_them">Videor</string>
     <string name="songs_in_radios">Låtar i radio</string>
     <string name="songs_everywhere">Låtar överallt</string>
-    <string name="music_videos_label_info">Spela dem: en musikvideo spelas som video. Låtar i radio: autouppspelning och radio spelar videons låt i stället. Låtar överallt: varje musikvideo du trycker på spelas som sin låt, och Video-knappen visar fortfarande videon.</string>
+    <string name="music_videos_label_info">Videor: en musikvideo spelas som video. Låtar i radio: autouppspelning och radio spelar videons låt i stället. Låtar överallt: varje musikvideo du trycker på spelas som sin låt, och Video-knappen visar fortfarande videon.</string>
     <string name="trim_silence">Ta bort tystnad i början och slutet</string>
     <string name="podcasts_only">Bara poddar</string>
     <string name="songs_and_podcasts">Låtar och poddar</string>
@@ -4414,10 +4414,10 @@
     <string name="replay_graph_days">Dagar</string>
     <string name="replay_last_weeks">Senaste %1$d veckorna</string>
     <string name="replay_last_days">Senaste %1$d dagarna</string>
-    <string name="replay_story_font">Berättelsernas typsnitt</string>
-    <string name="replay_story_font_info">Hur berättelserna i Replay och Rewind sätter sina ord: i Prisms affischtyp, eller i typsnittet du valt för Prism (Text &amp; ikoner).</string>
+    <string name="replay_story_font">Typsnitt i berättelser</string>
+    <string name="replay_story_font_info">Hur berättelserna i Replay och Rewind sätter sina ord: i Prisms affischtypsnitt, eller i typsnittet du valt för Prism (Text &amp; ikoner).</string>
     <string name="replay_story_font_keywords">typsnitt typografi font berättelser rewind wrapped</string>
-    <string name="replay_story_font_poster">Affischtyp</string>
+    <string name="replay_story_font_poster">Prisms affischtypsnitt</string>
     <string name="replay_story_font_own">Ditt typsnitt</string>
     <string name="replay_by_hour">Lyssnande per timme</string>
     <string name="replay_by_day">Lyssnande per dag</string>
@@ -4765,7 +4765,7 @@
     <string name="reopen_on_the_last_page">Öppna på senaste sidan</string>
     <string name="reopen_on_the_last_page_info">Spelaren öppnas på det du hade öppet när du lämnade den: omslaget, låttexten eller kön. Bakåt stänger spelaren även från låttexten eller kön och lämnar den där; deras egna knappar går tillbaka till omslaget.</string>
     <string name="reopen_on_the_last_page_keywords">spelare komma ihåg låttext kö öppna start sida</string>
-    <string name="steadier_lyrics">Stadigare låttext</string>
+    <string name="steadier_lyrics">Lugnare låttext</string>
     <string name="steadier_lyrics_info">Kontrollerna kräver ett längre svep för att visas och döljas. Efter att du har scrollat går låttexten tillbaka till den sjungna raden snabbare när den är nära, och tar sin vanliga tid när den är långt bort.</string>
     <string name="steadier_lyrics_keywords">låttext känslig scrolla svepa återgå aktuell rad följa kontroller</string>
     <string name="gestures_under_the_lyrics">Gester under låttexten</string>
@@ -5072,9 +5072,9 @@
     <string name="dd_space_used">%1$s används</string>
     <string name="dd_use_mobile_data_for">Använd mobildata för</string>
     <string name="dd_use_saving_covers">Spara animerade omslag</string>
-    <string name="dd_use_measuring">Mäta låtar</string>
+    <string name="dd_use_measuring">Kontrollera ljudstyrka och tempo</string>
     <string name="dd_use_videos_info">Av: musikvideor spelas inte på mobildata, utom de du har laddat ned. Om Wi-Fi försvinner under en video fortsätter den som ljud.</string>
-    <string name="dd_use_keywords">mobildata mobilnät begränsad datasparläge endast wifi</string>
+    <string name="dd_use_keywords">mobildata mobilnät begränsad datasparläge endast wifi ladda i förväg mäta ljudstyrka tempo</string>
     <string name="gb_on_the_cover">På omslaget</string>
     <string name="gb_on_the_mini_player">På minispelaren</string>
     <string name="gb_swipes_and_touch">Svep och tryck</string>
@@ -5192,7 +5192,7 @@
     <string name="settings_player_queue_dj">DJ-knapp</string>
     <string name="settings_player_queue_lengths">Låtlängder</string>
     <string name="settings_player_queue_move_played">Flytta spelade låtar</string>
-    <string name="settings_player_queue_tidier">Prydligare</string>
+    <string name="settings_player_queue_tidier">Prydligare kö</string>
     <string name="settings_player_scroll_for_controls">Skrolla upp för kontroller</string>
     <string name="settings_player_lock_options">Alternativ för låsskärmen</string>
     <string name="settings_player_immersive_options">Alternativ för uppslukande läge</string>
@@ -5538,4 +5538,28 @@
     <string name="spot_session_bring_failed">Det gick inte att läsa den. Försök igen.</string>
     <string name="spot_session_followed_all">Följda spellistor också</string>
     <string name="spot_session_followed_all_info">På: spellistorna du följer på Spotify kommer av sig själva till Bibliotek, de första 50, och hålls synkade. Av: var och en väntar i Bibliotek, ett tryck bort. Spellistor du dolt från Bibliotek lämnas utanför.</string>
+    <!-- 1.8.7.5 tour, settings words -->
+    <string name="meld_spotify_reads">Meld (hur Spotifys webbspelare läses)</string>
+    <string name="spot_session_playlists_info">Dina Spotify-spellistor visas i Bibliotek märkta Spotify och spelas via sina matchningar på YouTube Music, i Spotifys ordning. Låtar matchas en gång och sparas. Spellistor du följer väntar i Bibliotek, ett tryck bort, eller kommer in av sig själva med Följda spellistor också. Slår du av det här tas de bort från Bibliotek.</string>
+    <string name="spot_session_keep_in_step_info">När du öppnar en av dem tittar Prism på om låtarna har ändrats på Spotify och läser den igen i så fall. Alla kontrolleras en gång om dagen via Wi-Fi oavsett. Ändringar du gör i dem i Prism ersätts av Spotifys.</string>
+    <string name="tour_1875_spotify_title">Din Spotify</string>
+    <string name="tour_1875_spotify_about">Logga in på Spotify en gång, så kommer din musik därifrån in i Prism.</string>
+    <string name="tour_1875_spotify_point_1">Dina gillade låtar och spellistor hittas på YouTube Music och hålls uppdaterade.</string>
+    <string name="tour_1875_spotify_point_2">Spellistor du följer kommer också: tryck på en i Bibliotek för att hämta in den.</string>
+    <string name="tour_1875_spotify_point_3">Prism bara läser. Inget ändras någonsin på din Spotify.</string>
+    <string name="tour_1875_spotify_point_4">Det är inofficiellt och mot Spotifys villkor, så det kan sluta fungera. Din egen utvecklarapp fungerar som förut.</string>
+    <string name="tour_1875_also_queue">Markera låtar och välj Spela härnäst eller Lägg till i kön: det fungerar även när inget spelas.</string>
+    <string name="tour_1875_also_home">Spelaknappen på Hems stora kort spelar direkt.</string>
+    <string name="tour_1875_also_busy">En låt vars server fortsätter att fela efterfrågas på ett annat sätt.</string>
+    <string name="tour_1875_also_heard">En igenkänd låt spelas från ögonblicket du hörde den, med låttexten öppen.</string>
+    <string name="queue_end_mixed">Dina och nya</string>
+    <string name="dd_use_load_ahead">Ladda låtar i förväg</string>
+    <string name="replay_notices_n_on">%1$d av 3 på</string>
+    <string name="car_lyrics_style">Låttextstil</string>
+    <string name="tab_tint_light">Temats färger</string>
+    <string name="bini_detail">Apple Musics låttexter · ord för ord, matchade på ett annat sätt</string>
+    <string name="hl_card_style">Kortstil</string>
+    <string name="hl_show_in_lists">Visa i listor</string>
+    <string name="hl_show_on_artist_pages">Visa på artistsidor</string>
+    <string name="allow_access_to_lossless_files_value">Behövs för att hitta dina förlustfria filer</string>
 </resources>
