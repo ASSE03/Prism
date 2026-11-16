@@ -458,7 +458,6 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         sessionPlayer.remote = object : LyricsOverlayPlayer.Remote {
             override val volume: Int? get() = if (c.cast.casting) c.cast.volume else null
             override fun setVolume(v: Int) = c.cast.setVolume(v)
-            override fun adjust(delta: Int) = c.cast.adjustVolume(delta)
         }
         c.cast.attach(player, object : com.prism.music.connect.Cast.Hooks {
             override fun beforeCasting() {

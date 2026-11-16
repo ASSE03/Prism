@@ -157,8 +157,6 @@ import kotlin.math.abs
  * The app's screen. Declared in the manifest as [PrismActivity], so that ".MainActivity" can be the classic app-icon
  * alias (#20) and home-screen icons made before stay valid.
  */
-/** A volume key press on a cast speaker or TV, out of 100. */
-private const val VOLUME_KEY_STEP = 4
 /** How .prismlook files are sent (a zip: the Look's code and any photos or font it carries). */
 private const val LOOK_MIME = "application/zip"
 
@@ -286,10 +284,18 @@ open class MainActivity : ComponentActivity() {
     }
 
     /** While casting, the volume keys turn the speaker or TV up and down (with Prism open; elsewhere, the media session does). */
+    private var castVolumeKeyAt = 0L
+
     override fun onKeyDown(keyCode: Int, event: android.view.KeyEvent): Boolean {
         val cast = container.cast
         if (cast.casting && (keyCode == android.view.KeyEvent.KEYCODE_VOLUME_UP || keyCode == android.view.KeyEvent.KEYCODE_VOLUME_DOWN)) {
-            cast.adjustVolume(if (keyCode == android.view.KeyEvent.KEYCODE_VOLUME_UP) VOLUME_KEY_STEP else -VOLUME_KEY_STEP)
+            // #534: one step per press, and a held key no faster than the phone's own volume climbs.
+            val now = android.os.SystemClock.uptimeMillis()
+            if (com.prism.music.playback.RemoteVolume.takesKey(event.repeatCount, now, castVolumeKeyAt)) {
+                castVolumeKeyAt = now
+                val up = keyCode == android.view.KeyEvent.KEYCODE_VOLUME_UP
+                cast.setVolume(com.prism.music.playback.RemoteVolume.stepped(cast.volume ?: 50, if (up) 1 else -1))
+            }
             return true
         }
         return super.onKeyDown(keyCode, event)

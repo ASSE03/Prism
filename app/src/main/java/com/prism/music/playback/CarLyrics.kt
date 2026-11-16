@@ -82,7 +82,6 @@ class LyricsOverlayPlayer(player: Player) : ForwardingSimpleBasePlayer(player) {
         /** 0–100, or null when not casting. */
         val volume: Int?
         fun setVolume(v: Int)
-        fun adjust(delta: Int)
     }
 
     var remote: Remote? = null
@@ -93,21 +92,21 @@ class LyricsOverlayPlayer(player: Player) : ForwardingSimpleBasePlayer(player) {
     override fun handleSetDeviceVolume(deviceVolume: Int, flags: Int): com.google.common.util.concurrent.ListenableFuture<*> {
         val r = remote
         if (r?.volume == null) return super.handleSetDeviceVolume(deviceVolume, flags)
-        r.setVolume(deviceVolume)
+        r.setVolume(RemoteVolume.level(deviceVolume))
         return com.google.common.util.concurrent.Futures.immediateVoidFuture()
     }
 
     override fun handleIncreaseDeviceVolume(flags: Int): com.google.common.util.concurrent.ListenableFuture<*> {
         val r = remote
         if (r?.volume == null) return super.handleIncreaseDeviceVolume(flags)
-        r.adjust(REMOTE_STEP)
+        r.setVolume(RemoteVolume.stepped(r.volume ?: 0, 1))
         return com.google.common.util.concurrent.Futures.immediateVoidFuture()
     }
 
     override fun handleDecreaseDeviceVolume(flags: Int): com.google.common.util.concurrent.ListenableFuture<*> {
         val r = remote
         if (r?.volume == null) return super.handleDecreaseDeviceVolume(flags)
-        r.adjust(-REMOTE_STEP)
+        r.setVolume(RemoteVolume.stepped(r.volume ?: 0, -1))
         return com.google.common.util.concurrent.Futures.immediateVoidFuture()
     }
 
@@ -137,8 +136,8 @@ class LyricsOverlayPlayer(player: Player) : ForwardingSimpleBasePlayer(player) {
         shown = null
         remote?.volume?.let { v ->
             s = s.buildUpon()
-                .setDeviceInfo(androidx.media3.common.DeviceInfo.Builder(androidx.media3.common.DeviceInfo.PLAYBACK_TYPE_REMOTE).setMinVolume(0).setMaxVolume(100).build())
-                .setDeviceVolume(v)
+                .setDeviceInfo(androidx.media3.common.DeviceInfo.Builder(androidx.media3.common.DeviceInfo.PLAYBACK_TYPE_REMOTE).setMinVolume(0).setMaxVolume(RemoteVolume.STEPS).build())
+                .setDeviceVolume(RemoteVolume.shown(v))
                 .setIsDeviceMuted(v == 0)
                 .setAvailableCommands(
                     s.availableCommands.buildUpon().addAll(
@@ -171,10 +170,30 @@ class LyricsOverlayPlayer(player: Player) : ForwardingSimpleBasePlayer(player) {
         return s.buildUpon().setPlaylist(s.timeline, s.currentTracks, meta).build()
     }
 
-    private companion object {
-        /** A volume key press on a cast speaker or TV, out of 100. */
-        const val REMOTE_STEP = 4
-    }
+}
+
+/**
+ * A cast speaker's volume (0–100) as the phone's volume keys and Android's volume panel see it (#534, 1.8.7.6): in
+ * [STEPS] steps, one per key press. Before, the session said 100 steps and a press moved 4 of them: Android's panel
+ * showed one step up, then jumped to where the speaker really was, and a held key ran to the end.
+ */
+object RemoteVolume {
+    const val STEPS = 25
+    private const val PER_STEP = 100 / STEPS
+    /** A held key's repeats come every 50 ms; one step is taken per this long, about 2.5 s from silent to full. */
+    const val HELD_GAP_MS = 100L
+
+    /** The step shown for a speaker at [level] (0–100). */
+    fun shown(level: Int): Int = (level.coerceIn(0, 100) + PER_STEP / 2) / PER_STEP
+
+    /** The speaker's level (0–100) for the step [shown]. */
+    fun level(shown: Int): Int = shown.coerceIn(0, STEPS) * PER_STEP
+
+    /** The level one key press up ([by] 1) or down (-1) from [level]: the next step, so the panel and speaker agree. */
+    fun stepped(level: Int, by: Int): Int = level(shown(level) + by)
+
+    /** Whether a volume key event is taken: every first press, and a held key's repeats [HELD_GAP_MS] apart. */
+    fun takesKey(repeat: Int, now: Long, lastAt: Long): Boolean = repeat == 0 || now - lastAt >= HELD_GAP_MS
 }
 
 /**
