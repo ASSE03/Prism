@@ -147,6 +147,58 @@ class CanvasLoopLiveTest {
         }
     }
 
+    /**
+     * 1.8.7.6 (#528): how long the picture stands at a real loop's restart, on the phone's own network. `kind=video` (the
+     * default) plays a song's music-video loop, `kind=cover` its animated cover; `song=<search words>`; `rounds=<n>`
+     * (default 10). Logged under "CanvasWrap"; nothing asserted but that the loop showed and went round.
+     */
+    @Test fun wrapGapsOnARealLoop() = runBlocking {
+        assumeTrue("live test: run with record=true", args.getString("record") == "true")
+        val cover = args.getString("kind") == "cover"
+        val rounds = args.getString("rounds")?.toIntOrNull() ?: 10
+        Fixture.ready()
+        val c = Fixture.container
+        c.settings.setPerformanceMode(false); c.settings.setReduceMotion(false); c.settings.setImmersivePlayer(false); c.settings.setFullBleedArtwork(false)
+        c.settings.setCanvasEnabled(true); c.settings.setCanvasFillsBackground(true); c.settings.setCanvasUseVideos(true)
+        c.settings.setCanvasVideoFirst(!cover); c.settings.setCanvasKeepControls(false)
+        Fixture.launch()
+        val words = (args.getString("song") ?: if (cover) "Anti-Hero_Taylor_Swift" else "Flowers_Miley_Cyrus").replace('_', ' ')
+        val song = withContext(Dispatchers.IO) { c.ytm.search(words, SearchFilter.SONGS).items.filterIsInstance<SongItem>().first().song }
+        CanvasStats.showing = null
+        com.prism.music.ui.player.CanvasFrames.clear()
+        com.prism.music.ui.player.CanvasFrames.on = true
+        try {
+            withContext(Dispatchers.Main) { c.player.playQueue(listOf(song), 0, QueueSource(QueueKind.SINGLE, "test")) }
+            Fixture.context.startActivity(
+                android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("prism://player"))
+                    .setClass(Fixture.context, PrismActivity::class.java)
+                    .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP),
+            )
+            val end = System.currentTimeMillis() + 60_000
+            while (System.currentTimeMillis() < end && CanvasStats.showing == null) delay(100)
+            assertNotNull("a canvas shows (${CanvasStats.lastError})", CanvasStats.showing)
+            // Counted from the clip on screen now (the player view may have been made again once the clip came).
+            withContext(Dispatchers.Main) { com.prism.music.ui.player.CanvasFrames.clear() }
+            val until = System.currentTimeMillis() + 240_000
+            while (System.currentTimeMillis() < until && withContext(Dispatchers.Main) { com.prism.music.ui.player.CanvasFrames.roundsNs().size } < rounds + 1) delay(250)
+            delay(1_500)
+            val frames = withContext(Dispatchers.Main) { com.prism.music.ui.player.CanvasFrames.framesNs() }
+            val went = withContext(Dispatchers.Main) { com.prism.music.ui.player.CanvasFrames.roundsNs() }
+            val g = com.prism.music.ui.player.wrapGaps(frames, went)
+            val seen = com.prism.music.ui.player.wrapGaps(withContext(Dispatchers.Main) { com.prism.music.ui.player.CanvasFrames.visibleNs() }, went)
+            val row = c.canvasClips.row(song.id)
+            android.util.Log.i(
+                "CanvasWrap",
+                "live ${if (cover) "cover" else "video"} (kept frame up ${withContext(Dispatchers.Main) { com.prism.music.ui.player.CanvasFrames.coversUp() }} times) \"${song.title}\": showing ${CanvasStats.showing}; row ${row?.height}p ${row?.startMs}-${row?.endMs} refined ${row?.refined}; " +
+                    "${went.size} rounds; seen at the restarts ${seen.atWrapsMs.map { "%.0f".format(it) }} ms, drawn ${g.atWrapsMs.map { "%.0f".format(it) }} ms, inside typically ${"%.1f".format(g.typicalMs)} ms " +
+                    "(longest ${"%.0f".format(g.longestElsewhereMs)} ms); decoder: ${synchronized(com.prism.music.ui.player.CanvasFrames.wraps) { com.prism.music.ui.player.CanvasFrames.wraps.toList() }}",
+            )
+            assertTrue("it went round (${went.size})", went.size >= 2)
+        } finally {
+            com.prism.music.ui.player.CanvasFrames.on = false
+        }
+    }
+
     @Test fun aSongsMusicVideoLoopsBehindThePlayer() = runBlocking {
         assumeTrue("live test: run with record=true", args.getString("record") == "true")
         Fixture.ready()
