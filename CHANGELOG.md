@@ -20,6 +20,7 @@ What changed in each release. Older releases are described on the [Releases page
 - Covers of albums from your own files are sharp on large views (#520).
 - The lyrics' Sing button hides when Sing is already a button in the row (#501).
 - A recognized song plays from the moment you heard it, and the player opens on its lyrics (#215).
+- Home no longer takes a large, short-lived chunk of memory each time it loads (found in this release's hour-long test on a Galaxy A16).
 
 ## 1.8.7
 
