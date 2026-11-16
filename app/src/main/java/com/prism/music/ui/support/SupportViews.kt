@@ -54,8 +54,9 @@ fun SupportHomeCard(otherOffer: Boolean) {
     val uri = LocalUriHandler.current
     val marks = remember { SupportMarks(context) }
     var ended by remember { mutableStateOf(false) }
-    // Only asked of the database while an ask could show at all.
-    val quiet = ended || settings.behavior.supported || !settings.onboarded
+    // Only asked of the database while this ask could show at all: not once it was answered, and not in the first days.
+    val over = remember { SupportAsks.HOME.key in marks.shown() || marks.now() - marks.installedAt() < SupportAsks.QUIET_DAYS * 86_400_000L }
+    val quiet = ended || over || settings.behavior.supported || !settings.onboarded
     val listened by produceState<Long?>(null, quiet) {
         value = if (quiet) null else withContext(Dispatchers.IO) { runCatching { c.db.plays().totalMs(0, marks.now()) }.getOrNull() }
     }
