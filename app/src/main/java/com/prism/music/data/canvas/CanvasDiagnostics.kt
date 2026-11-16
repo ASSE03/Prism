@@ -48,7 +48,8 @@ private fun canvasNow(
     spotify: Boolean,
 ): String {
     if (song == null) return "nothing playing"
-    if (!used.behavior.canvas.enabled) return "still cover (" + (if (stored.behavior.canvas.enabled) "Canvas paused by performance mode" else "Canvas off") + ")"
+    // 1.8.7.6: Spotify's canvas is asked with Prism's own Canvas off too.
+    if (!used.behavior.canvas.enabled && !spotify) return "still cover (" + (if (stored.performanceMode && (stored.behavior.canvas.enabled || stored.behavior.canvas.spotifyFirst)) "Canvas paused by performance mode" else "Canvas off") + ")"
     if (videoMode) return "the music video plays (video mode), no canvas"
     // An animated cover that may not play counts as none ([canvasCoverWanted]), as in the player.
     val coverWanted = canvasCoverWanted(used, coverHidden, spotify)

@@ -290,14 +290,16 @@ fun PlayerOptionsSheet(
     val hasCover = known != null
     val hasVideo = clipRow?.videoId != null
     // 1.8.7.6: Spotify's canvas stands where the animated cover would: the song's "Animated cover" switch and "Use:" work
-    // for it too, while "Animated covers" (Prism's own) may be off.
-    val coversKind = canvasPrefs.covers || c.canvas.spotifyAsked()
+    // for it too, while "Animated covers" and Canvas (Prism's own) may both be off.
+    val spotifyCanvas = c.canvas.spotifyAsked()
+    val coversKind = com.prism.music.data.canvas.prismCoversOn(settings) || spotifyCanvas
+    val canvasOn = settings.behavior.canvas.enabled || spotifyCanvas
     if (canvasVideoPickShown(settings.behavior.canvas.enabled, canvasPrefs.useVideos, isSong, loopOff)) {
         put(MenuAction.CANVAS_VIDEO, ActionItem(PrismIcons.Video, tr(R.string.canvas_pick_video), keepOpen = true) { canvasVideos = true })
     }
     // Two switches for the song, each on its own (owner, 2026-11-13): its animated cover, and its Canvas loop from the
     // music video. Each stays after it was switched off, the only way back.
-    val coverSwitch = canvasCoverSwitchShown(settings.behavior.canvas.enabled, coversKind, hasCover, coverOff)
+    val coverSwitch = canvasCoverSwitchShown(canvasOn, coversKind, hasCover, coverOff)
     val loopSwitch = canvasLoopSwitchShown(settings.behavior.canvas.enabled, canvasPrefs.useVideos, isSong, hasVideo, loopOff)
     if ((hasCanvas || coverSwitch || loopSwitch) && !local) {
         if (coverSwitch) put(MenuAction.ANIMATED_COVER, canvasToggleItem(!coverOff, tr(R.string.animated_cover), PrismIcons.AnimatedCover) { c.canvas.setHidden(song.id, !coverOff) })
@@ -310,7 +312,7 @@ fun PlayerOptionsSheet(
             })
         }
         // The song has both an animated cover and a video loop: which one it uses, whatever "When a song has both" says.
-        if (canvasUseShown(settings.behavior.canvas.enabled, coversKind, canvasPrefs.useVideos, hasCover, hasVideo, coverOff, loopOff)) {
+        if (canvasUseShown(canvasOn, coversKind, settings.behavior.canvas.enabled && canvasPrefs.useVideos, hasCover, hasVideo, coverOff, loopOff)) {
             val now = canvasUseNow(settings, clipRow)
             put(MenuAction.CANVAS_USE, ActionItem(PrismIcons.Video, tr(R.string.canvas_use), value = canvasSourceName(now), keepOpen = true) { canvasUse = true })
         }

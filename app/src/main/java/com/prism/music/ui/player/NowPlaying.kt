@@ -563,12 +563,15 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         c.canvasClips.changes.collectAsState().value,
         coverHidden, loopHidden,
     ) {
-        if (!settings.behavior.canvas.enabled) { value = null; return@produceState }
+        // 1.8.7.6: Spotify's canvas plays with Prism's own Canvas off too (its own switch alone decides it).
+        if (!settings.behavior.canvas.enabled && !spotifyCanvas) { value = null; return@produceState }
+        // Loops from music videos only while Canvas itself is on (both of Prism's switches off keeps their flags).
+        val useVideos = settings.behavior.canvas.enabled && canvasPrefs.useVideos
         // 1.8.7: the wait for the loop, step by step, from here to its first frame drawn ([CanvasTimes]).
-        val loopWait = if (canvasPrefs.useVideos && !loopHidden && com.prism.music.data.canvas.ClipGate.isSong(song)) c.canvasClips.times.asked(song.id) else null
+        val loopWait = if (useVideos && !loopHidden && com.prism.music.data.canvas.ClipGate.isSong(song)) c.canvasClips.times.asked(song.id) else null
         // 1.8.6: the song's music video is looked up meanwhile (no video is fetched by this), so a song without an
         // animated cover doesn't wait for that answer first: three seconds less before a new song's loop shows.
-        if (canvasPrefs.useVideos && !loopHidden && com.prism.music.data.canvas.ClipGate.isSong(song)) launch {
+        if (useVideos && !loopHidden && com.prism.music.data.canvas.ClipGate.isSong(song)) launch {
             runCatching {
                 c.canvasClips.findAhead(song, com.prism.music.data.canvas.canvasHeight(settings), allowed = {
                     com.prism.music.data.canvas.canvasNetworkAllowed(settings, context.getSystemService(ConnectivityManager::class.java)?.isActiveNetworkMetered == true)
@@ -578,26 +581,18 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
         // Saved clips play from the phone, so mobile data doesn't matter for them.
         val coverAllowed = !(metered && (!settings.behavior.canvas.onCellular || settings.dataSaver)) || c.canvas.isSaved(song)
         val isSong = com.prism.music.data.canvas.ClipGate.isSong(song)
-        val choice = if (canvasPrefs.useVideos) c.canvasClips.choice(song.id) else null
+        val choice = if (useVideos) c.canvasClips.choice(song.id) else null
         // 1.8.7: where the video comes first anyway, its loop is asked for beside the cover's lookup, not after it.
-        val loopFirst = canvasPrefs.useVideos && com.prism.music.data.canvas.canvasLoopFirst(settings, metered, choice, loopHidden, isSong)
-        com.prism.music.data.canvas.showCanvas(
-            loopFirst,
-            cover = { early ->
-                // The animated cover only when it may play ([canvasCoverWanted]: "Animated covers" on, not off for this song).
-                // Spotify's canvas (1.8.7.6) by the loops' mobile-data rule, Prism's animated cover by its own.
-                if (coverWanted && (coverAllowed || (spotifyCanvas && spotifyNet))) {
-                    val known = c.canvas.cached(song, spotifyOk = spotifyNet, prismOk = coverAllowed)
-                    early(known)
-                    if (known == null) delay(500)
-                    c.canvas.canvasFor(song, spotifyOk = spotifyNet, prismOk = coverAllowed)
-                } else null
-            },
+        val loopFirst = useVideos && com.prism.music.data.canvas.canvasLoopFirst(settings, metered, choice, loopHidden, isSong)
+        // The animated cover only when it may play ([canvasCoverWanted]), Spotify's canvas first in its place (1.8.7.6),
+        // and Spotify's loop shown when it comes even after Prism carried on ([playerCanvas]).
+        com.prism.music.data.canvas.playerCanvas(
+            settings, song, c.canvas, coverHidden = coverHidden, metered = metered, coverAllowed = coverAllowed, loopFirst = loopFirst,
             // 1.8.6: a loop from the song's music video, where the song has no animated cover or the listener put the
             // video first (the setting, or "Use:" for this song). It is only asked for when it is the one that would show:
             // [canvasWant], the rule the next-song preparation, downloads and diagnostics share.
             loop = { hasCover ->
-                if (!canvasPrefs.useVideos) null else {
+                if (!useVideos) null else {
                     val want = com.prism.music.data.canvas.canvasWant(settings, metered, hasCover = hasCover, songChoice = choice, hidden = loopHidden, isSong = isSong)
                     if (want.video) c.canvasClips.artworkFor(song, want.height, saved = c.canvas.isSaved(song), allowed = {
                         val onData = context.getSystemService(ConnectivityManager::class.java)?.isActiveNetworkMetered == true
@@ -606,6 +601,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                     else { loopWait?.endNotAsked(want.notAsked?.text); null }
                 }
             },
+            shown = { value },
             show = { value = it },
         )
     }

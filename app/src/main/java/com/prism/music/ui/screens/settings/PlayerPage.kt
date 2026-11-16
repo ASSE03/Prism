@@ -322,9 +322,10 @@ private fun CanvasOptions() {
         tr(R.string.canvas), kinds.videos, info = tr(R.string.canvas_use_videos_info), changed = ch("canvas_use_videos"),
     ) { prefs.setCanvasKinds(covers = kinds.covers, videos = it) }
     // 1.8.7.6 (owner, 2026-11-16): Spotify's own canvas first, for those signed in to Spotify with the session sign-in
-    // (hidden otherwise), while Canvas is on. Its loops follow the mobile-data switch below, which then shows too.
+    // (hidden otherwise), whatever Canvas and "Animated covers" say: it works with both off. Its loops follow the
+    // mobile-data switch below, which then shows too.
     val spotifySession by com.prism.music.data.spotify.SpotifySessionNow.on.collectAsState()
-    val spotifyShown = spotifySession && s.behavior.canvas.enabled
+    val spotifyShown = spotifySession
     if (spotifyShown) SwitchRow(
         tr(R.string.spot_canvas_first), c.spotifyFirst, info = tr(R.string.spot_canvas_first_info), changed = ch("canvas_spotify_first"),
     ) { prefs.setCanvasSpotifyFirst(it) }

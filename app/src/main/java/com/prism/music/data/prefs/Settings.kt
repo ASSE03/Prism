@@ -1944,7 +1944,8 @@ data class AppSettings(
         reduceMotion = true,
         // 1.8.6: no loops cut from music videos either (Canvas is off here; this keeps a reader of the nested value honest).
         // 1.8.7 (#336): no fast refresh rate asked of the screen either.
-        behavior = behavior.copy(canvas = behavior.canvas.copy(enabled = false, fillsBackground = false, useVideos = false), smoothScrolling = false),
+        // 1.8.7.6: Spotify's canvas first pauses too (it no longer hangs on Canvas being on).
+        behavior = behavior.copy(canvas = behavior.canvas.copy(enabled = false, fillsBackground = false, useVideos = false, spotifyFirst = false), smoothScrolling = false),
         visualizer = VisualizerStyle.OFF,
         meshSpeed = 0f,
         player = player.copy(background = if (player.background == PlayerBackground.BLUR || player.background == PlayerBackground.APPEARANCE) PlayerBackground.MESH else player.background),

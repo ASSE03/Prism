@@ -88,9 +88,9 @@ class SpotifyCanvasTest {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val logged = mutableListOf<String>()
 
-    /** "Spotify's canvas first", as the app reads it: the switch, Canvas on, and the session sign-in ([SpotifyStore.sessionIn]). */
+    /** "Spotify's canvas first", as the app reads it ([spotifyCanvasOn]): the switch and the session sign-in ([SpotifyStore.sessionIn]). */
     private var settings = AppSettings().let { it.copy(behavior = it.behavior.copy(canvas = CanvasPrefs(spotifyFirst = true))) }
-    private val enabled = { settings.behavior.canvas.enabled && settings.behavior.canvas.spotifyFirst && SpotifyStore.sessionIn(auth) }
+    private val enabled = { spotifyCanvasOn(settings, SpotifyStore.sessionIn(auth)) }
 
     private fun source(file: File? = null, waitMs: Long = 4_000) = SpotifyCanvasSource(
         scope, enabled, { SpotifyCanvas { op, vars -> web.read(op, vars) } }, { web.quietUntil }, file, now = { clock }, waitMs = waitMs,
@@ -251,12 +251,21 @@ class SpotifyCanvasTest {
         val s = source()
         assertNull(s.lookup(espresso))
         assertNull(s.known(espresso))
-        // Canvas off (or paused by Performance mode, which reads as off) asks nothing either.
-        settings = AppSettings().let { it.copy(behavior = it.behavior.copy(canvas = CanvasPrefs(spotifyFirst = true, enabled = false))) }
-        assertNull(s.lookup(espresso))
-        settings = AppSettings(performanceMode = true).let { it.copy(behavior = it.behavior.copy(canvas = CanvasPrefs(spotifyFirst = true))) }.effective()
-        assertNull(s.lookup(espresso))
+        // Paused by Performance mode (the settings Prism uses read it as off), whatever Canvas says.
+        for (canvasOn in listOf(true, false)) {
+            settings = AppSettings(performanceMode = true).let { it.copy(behavior = it.behavior.copy(canvas = CanvasPrefs(spotifyFirst = true, enabled = canvasOn))) }.effective()
+            assertFalse(settings.behavior.canvas.spotifyFirst)
+            assertNull(s.lookup(espresso))
+        }
         assertEquals(0, net.all.size)
+    }
+
+    /** 1.8.7.6, the A16 check: Spotify's canvas no longer hangs on Prism's own Canvas being on. */
+    @Test fun prismsCanvasOffStillAsksSpotify() = runBlocking {
+        answers()
+        settings = AppSettings().let { it.copy(behavior = it.behavior.copy(canvas = CanvasPrefs(spotifyFirst = true, enabled = false, covers = false))) }
+        assertEquals(loopUrl, source().lookup(espresso)?.url)
+        assertEquals(2, net.count())
     }
 
     @Test fun notASongAsksNothing() = runBlocking {
@@ -384,7 +393,11 @@ class SpotifyCanvasTest {
         assertFalse(canvasCoverWanted(off, coverHidden = false))
         assertTrue("Animated covers off, Spotify's canvas on", canvasCoverWanted(off, coverHidden = false, spotify = true))
         assertFalse("the song's own switch hides it", canvasCoverWanted(off, coverHidden = true, spotify = true))
-        assertFalse("Canvas off", canvasCoverWanted(off.copy(behavior = off.behavior.copy(canvas = off.behavior.canvas.copy(enabled = false))), false, spotify = true))
+        // 1.8.7.6: Canvas off as a whole too (both of Prism's switches off): Spotify's canvas still has the cover's place.
+        val allOff = off.copy(behavior = off.behavior.copy(canvas = off.behavior.canvas.copy(enabled = false, covers = true)))
+        assertTrue("Canvas off", canvasCoverWanted(allOff, false, spotify = true))
+        assertFalse("and nothing changes with Spotify's off", canvasCoverWanted(allOff, false))
+        assertFalse(prismCoversOn(allOff))
     }
 
     @Test fun diagnosticsNameSpotifyAndItsHostOnly() {
@@ -393,5 +406,113 @@ class SpotifyCanvasTest {
         assertTrue(text, text.lines()[0].endsWith(", Spotify's canvas first on"))
         assertTrue(text, text.lines()[1].startsWith("Canvas now: Spotify's canvas from canvaz.scdn.co"))
         assertFalse(text, text.contains("/upload/"))
+        // Prism's own Canvas off: Spotify's canvas is still named; with Spotify's off, as before.
+        val off = stored.copy(behavior = stored.behavior.copy(canvas = stored.behavior.canvas.copy(enabled = false)))
+        val offText = canvasDiagnostics(off, off, false, false, espresso, false, CanvasArtwork(loopUrl, spotify = true), null, emptyList(), clock, spotify = true)
+        assertTrue(offText, offText.lines()[1].startsWith("Canvas now: Spotify's canvas from canvaz.scdn.co"))
+        val none = canvasDiagnostics(off, off, false, false, espresso, false, null, null, emptyList(), clock, spotify = false)
+        assertEquals("Canvas now: still cover (Canvas off)", none.lines()[1])
+    }
+
+    // ---- the player ([playerCanvas]): what shows for each way Prism's two switches can be set ----
+
+    private val videoLoop = CanvasArtwork("clip:v1", clip = VideoClip("v1", 10_000, 18_000, 720))
+    private val bohemian = Song("yt-bohemian", "Bohemian Rhapsody", listOf(ArtistRef("Queen")), durationSec = 354)
+    private val bohemianSearch = search(Triple("Bohemian Rhapsody", "Queen", 354_320))
+
+    /** The settings Prism uses for these two switches (both off keeps their flags, as the page stores it) and Spotify's. */
+    private fun switches(covers: Boolean, videos: Boolean, spotify: Boolean, videoFirst: Boolean = false, performance: Boolean = false): AppSettings {
+        val k = com.prism.music.data.prefs.CanvasKinds(covers, videos).toStored(com.prism.music.data.prefs.CanvasStored(true, true, true))
+        return AppSettings(performanceMode = performance).let {
+            it.copy(behavior = it.behavior.copy(canvas = CanvasPrefs(enabled = k.enabled, covers = k.covers, useVideos = k.videos, videoFirst = videoFirst, spotifyFirst = spotify)))
+        }.effective()
+    }
+
+    private class Player { var shown: CanvasArtwork? = null; val history = mutableListOf<CanvasArtwork?>() }
+
+    /** The player for [song] with [s], as NowPlaying wires it: the loop from the music video is [videoLoop]. */
+    private fun play(song: Song, s: AppSettings, r: CanvasRepository): Player = runBlocking {
+        settings = s
+        r.prismCovers = { prismCoversOn(settings) }
+        val p = Player()
+        val videos = s.behavior.canvas.enabled && s.behavior.canvas.useVideos
+        val loopFirst = videos && canvasLoopFirst(s, false, null, hidden = false, isSong = true)
+        playerCanvas(
+            s, song, r, coverHidden = false, metered = false, coverAllowed = true, loopFirst = loopFirst,
+            loop = { hasCover -> if (videos && canvasWant(s, false, hasCover, null, false, true).video) videoLoop else null },
+            shown = { p.shown }, show = { p.shown = it; p.history += it },
+        )
+        p
+    }
+
+    private fun repo(waitMs: Long) = CanvasRepository(net.client).also { it.spotify = source(waitMs = waitMs) }
+    private fun clearRequests() = synchronized(net.requests) { net.requests.clear() }
+
+    @Test fun eachWayPrismsSwitchesAreSetSpotifysCanvasShowsWithItsSwitchOn() {
+        for ((covers, videos) in listOf(true to true, true to false, false to true, false to false)) {
+            val case = "covers $covers, videos $videos"
+            val s = switches(covers, videos, spotify = true)
+            // A song Spotify has a canvas for: it shows, and Prism's own sources aren't asked.
+            answers()
+            clearRequests()
+            assertEquals(case, loopUrl, play(espresso, s, repo(4_000)).shown?.url)
+            assertEquals(case, 2, net.count())
+            assertEquals(case, 0, prismAsked())
+            // A song it has none for: what Prism shows without Spotify (the video's loop, else the still cover).
+            answers(bohemianSearch, canvas(null))
+            clearRequests()
+            val shown = play(bohemian, s, repo(4_000)).shown
+            assertEquals(case, if (videos) videoLoop else null, shown)
+            assertEquals(case, 2, net.count())
+            assertEquals("$case: Prism's animated covers looked up only while they are on", covers, prismAsked() > 0)
+        }
+    }
+
+    @Test fun eachWayPrismsSwitchesAreSetSpotifysOffAsksSpotifyNothing() {
+        answers()
+        for ((covers, videos) in listOf(true to true, true to false, false to true, false to false)) {
+            val case = "covers $covers, videos $videos"
+            clearRequests()
+            val shown = play(espresso, switches(covers, videos, spotify = false), repo(4_000)).shown
+            assertEquals("$case: zero Spotify requests", 0, net.count())
+            assertEquals(case, if (videos) videoLoop else null, shown)
+            assertEquals("$case: Prism's animated covers as before", covers, prismAsked() > 0)
+        }
+    }
+
+    @Test fun performanceModePausesSpotifysCanvasWhateverTheSwitches() {
+        answers()
+        for ((covers, videos) in listOf(true to true, true to false, false to true, false to false)) {
+            clearRequests()
+            val p = play(espresso, switches(covers, videos, spotify = true, performance = true), repo(4_000))
+            assertNull(p.shown)
+            assertEquals(0, net.count())
+        }
+    }
+
+    /**
+     * The A16 check (2026-11-16): Canvas off, Animated covers on, Spotify's on; Espresso showed the still cover. Spotify
+     * was asked, but the first answer after a start took 7.7 s (the connection built and its token fetched), past the
+     * player's 4 s; it was remembered and only showed once something made the player look again (Canvas switched on).
+     * A late loop now shows when it comes.
+     */
+    @Test fun aLateAnswerStillShows() {
+        answers()
+        net.sleepMs = 1_000
+        val p = play(espresso, switches(covers = true, videos = false, spotify = true), repo(waitMs = 200))
+        assertEquals(loopUrl, p.shown?.url)
+        assertTrue("Prism carried on meanwhile", prismAsked() > 0)
+    }
+
+    @Test fun aLateAnswerTakesTheVideoLoopsPlaceUnlessTheVideoComesFirst() {
+        answers()
+        net.sleepMs = 1_000
+        // No animated cover: the video's loop shows while Spotify is slow, then Spotify's canvas in its place.
+        val p = play(espresso, switches(covers = false, videos = true, spotify = true), repo(waitMs = 200))
+        assertEquals(loopUrl, p.shown?.url)
+        assertTrue(p.history.toString(), videoLoop in p.history)
+        // The listener put the video first: once its loop is up it stays.
+        val first = play(espresso.copy(id = "yt-espresso-2"), switches(covers = false, videos = true, spotify = true, videoFirst = true), repo(waitMs = 200))
+        assertEquals(videoLoop, first.shown)
     }
 }

@@ -36,7 +36,7 @@ import java.io.File
  */
 class SpotifyCanvasSource(
     private val scope: CoroutineScope,
-    /** Spotify may be asked now: the switch on, Canvas on (Performance mode pauses it), signed in with the session. */
+    /** Spotify may be asked now ([spotifyCanvasOn]): the switch on and signed in with the session; Performance mode pauses it. */
     val enabled: () -> Boolean,
     /** What asks Spotify; called only once something is to be asked (it builds the Spotify connection). */
     private val finder: () -> SpotifyCanvas,
@@ -80,9 +80,10 @@ class SpotifyCanvasSource(
 
     /**
      * The song's Spotify loop, or null (Spotify has none, the match isn't sure, Spotify is slow, quiet or failing, or
-     * [enabled] is false: then nothing is asked at all).
+     * [enabled] is false: then nothing is asked at all). Waits [wait] at most; a second call for the same song shares
+     * the ask still running ([CanvasRepository.spotifyLate] waits longer for it).
      */
-    suspend fun lookup(song: Song): CanvasArtwork? {
+    suspend fun lookup(song: Song, wait: Long = waitMs): CanvasArtwork? {
         if (!enabled() || !ClipGate.isSong(song) || song.title.isBlank()) return null
         val t = now()
         synchronized(kept) { kept[song.id]?.takeIf { fresh(it, t) } }?.let { return it.art() }
@@ -91,10 +92,11 @@ class SpotifyCanvasSource(
             inFlight[song.id] ?: scope.async { try { ask(song) } finally { synchronized(inFlight) { inFlight.remove(song.id) } } }
                 .also { inFlight[song.id] = it }
         }
-        return withTimeoutOrNull(waitMs) { job.await() }
+        return withTimeoutOrNull(wait) { job.await() }
     }
 
     private suspend fun ask(song: Song): CanvasArtwork? {
+        val started = now()
         val answer = try {
             finder().find(song)
         } catch (e: CancellationException) {
@@ -114,6 +116,8 @@ class SpotifyCanvasSource(
             SpotifyCanvasAnswer.NoSureMatch -> Kept(null, now(), sure = false)
         }
         synchronized(kept) { kept[song.id] = k }
+        // How long Spotify took, and what it said (no link, no title: the song id is all).
+        log("canvas: ${song.id} " + when (answer) { is SpotifyCanvasAnswer.Loop -> "loop"; SpotifyCanvasAnswer.None -> "none"; SpotifyCanvasAnswer.NoSureMatch -> "no sure match" } + " in ${now() - started} ms")
         scheduleWrite()
         return k.art()
     }
@@ -145,6 +149,8 @@ class SpotifyCanvasSource(
     companion object {
         /** About 4 s for the whole lookup (search and canvas: about 1.1 s on the A16), then Prism Canvas. */
         const val WAIT_MS = 4_000L
+        /** How long the player still waits for a late answer, after Prism Canvas carried on ([CanvasRepository.spotifyLate]). */
+        const val LATE_MS = 30_000L
         const val LOOP_MS = 86_400_000L
         const val NONE_MS = 7 * 86_400_000L
         const val ERROR_PAUSE_MS = 60_000L

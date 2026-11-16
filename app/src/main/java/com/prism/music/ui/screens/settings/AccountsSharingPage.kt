@@ -251,10 +251,12 @@ fun AccountsSharingPage(bottomPadding: Dp, find: String? = null, showBack: Boole
 
 /**
  * 1.8.7.6: whether the one-time offer of "Spotify's canvas first" shows: connected by the session sign-in (not the own
- * developer app, which can't ask for a canvas), Canvas on, the offer not answered and the switch not on.
+ * developer app, which can't ask for a canvas), the offer not answered and the switch not on. Whatever Prism's own
+ * Canvas switches say (Spotify's canvas works with both off), but not in Performance mode, where it would be paused:
+ * "Turn on" is to end in Spotify's canvases showing, so the offer waits for the next visit outside it.
  */
 internal fun spotifyCanvasOfferShown(connected: Boolean, session: Boolean, s: AppSettings): Boolean =
-    connected && session && s.behavior.canvas.enabled && !s.behavior.canvas.spotifyOffered && !s.behavior.canvas.spotifyFirst
+    connected && session && !s.performanceMode && !s.behavior.canvas.spotifyOffered && !s.behavior.canvas.spotifyFirst
 
 /** The offer itself, in the kit's sheet: what it is in a line or two (unofficial), "Turn on" and "Not now". */
 @Composable

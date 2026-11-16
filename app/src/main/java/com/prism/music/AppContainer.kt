@@ -397,14 +397,14 @@ class AppContainer(val app: Application) {
         hiddenPrefs = app.getSharedPreferences("canvas_hidden", android.content.Context.MODE_PRIVATE)
         savedPrefs = app.getSharedPreferences("canvas_saved", android.content.Context.MODE_PRIVATE)
         useIndex(File(app.filesDir, "canvas_index.json"))
-        // 1.8.7.6, "Spotify's canvas first": asked only with the switch on, Canvas on (Performance mode pauses it) and
-        // the Spotify connection the web-player session (read from its file alone: nothing is built or unsealed for it).
-        prismCovers = { settings.current.behavior.canvas.covers }
+        // 1.8.7.6, "Spotify's canvas first": asked only with its switch on and the Spotify connection the web-player
+        // session (read from its file alone: nothing is built or unsealed for it), whatever Prism's own two Canvas
+        // switches say; Performance mode pauses it (the settings used read it as off).
+        prismCovers = { com.prism.music.data.canvas.prismCoversOn(settings.current) }
         spotify = com.prism.music.data.canvas.SpotifyCanvasSource(
             CoroutineScope(scope.coroutineContext + Dispatchers.IO),
             enabled = {
-                val s = settings.current.behavior.canvas
-                s.enabled && s.spotifyFirst && com.prism.music.data.spotify.SpotifyStore.sessionIn(spotifyAuthPrefs)
+                com.prism.music.data.canvas.spotifyCanvasOn(settings.current, com.prism.music.data.spotify.SpotifyStore.sessionIn(spotifyAuthPrefs))
             },
             finder = { spotifyCanvasFinder },
             quietUntil = { this@AppContainer.spotify.web.quietUntil },

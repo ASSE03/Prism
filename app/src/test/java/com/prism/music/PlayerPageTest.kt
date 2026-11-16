@@ -527,13 +527,22 @@ class PlayerPageTest {
         assertTrue("the Canvas row says something changed in its sheet", rows().getValue("Canvas").config[SettingsRowChanged])
         assertFalse("not part of a Look", "canvas_spotify_first" in prefs.lookKinds.keys)
 
-        // Canvas off altogether: the row goes (nothing would show).
-        prefs.setCanvasEnabled(false)
-        until("canvas off") { !it.behavior.canvas.enabled }
-        tap("Canvas")
-        sheetOpen()
-        assertEquals(listOf("Canvas"), sheetRows().keys.toList())
-        closeSheet()
+        // 1.8.7.6 (the A16 check): Prism's two switches have no say over it. Each of the four ways they can be set, the
+        // row is there, on, with its mobile-data switch, and it can be switched off and on again.
+        for ((covers, videos) in listOf(true to true, true to false, false to true, false to false)) {
+            prefs.setCanvasKinds(covers = covers, videos = videos)
+            until("covers $covers, videos $videos") { com.prism.music.data.prefs.CanvasKinds.shown(it) == com.prism.music.data.prefs.CanvasKinds(covers, videos) }
+            tap("Canvas")
+            sheetOpen()
+            val keys = sheetRows().keys.toList()
+            assertEquals("covers $covers, videos $videos: $keys", listOf("Canvas", title, "Use mobile data"), keys.take(3))
+            assertTrue(stored.behavior.canvas.spotifyFirst)
+            tapInSheet(title)
+            until("off") { !it.behavior.canvas.spotifyFirst }
+            tapInSheet(title)
+            until("on again") { it.behavior.canvas.spotifyFirst }
+            closeSheet()
+        }
         spotifySession(false)
     }
 

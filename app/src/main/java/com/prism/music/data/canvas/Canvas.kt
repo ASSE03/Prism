@@ -213,14 +213,20 @@ class CanvasRepository(private val http: OkHttpClient) {
      */
     var spotify: SpotifyCanvasSource? = null
 
-    /** Whether "Animated covers" (Prism's own: Apple, Tidal, the community index) is on; the app container's. */
+    /** Whether Prism's own animated covers (Apple, Tidal, the community index) may play ([prismCoversOn]); the app container's. */
     var prismCovers: () -> Boolean = { true }
 
-    /** Spotify's canvas may be asked now (the switch on, Canvas on, signed in with the session). */
+    /** Spotify's canvas may be asked now ([spotifyCanvasOn]: its switch on and signed in with the session; not in Performance mode). */
     fun spotifyAsked(): Boolean = spotify?.enabled?.invoke() == true
 
     /**
-     * Prism's own animated covers are wanted: "Animated covers" on. While Spotify's canvas is not asked, callers decide
+     * Spotify's answer for the song however long it takes (up to [SpotifyCanvasSource.LATE_MS]): the same ask as
+     * [canvasFor]'s, waited for past its 4 s, so a loop that comes late still shows ([playerCanvas]).
+     */
+    suspend fun spotifyLate(song: Song): CanvasArtwork? = spotify?.lookup(song, SpotifyCanvasSource.LATE_MS)
+
+    /**
+     * Prism's own animated covers are wanted: Canvas and "Animated covers" on. While Spotify's canvas is not asked, callers decide
      * that themselves as before 1.8.7.6 (they only ask with it on), so nothing about them changes.
      */
     private fun prismWanted(): Boolean = prismCovers() || !spotifyAsked()

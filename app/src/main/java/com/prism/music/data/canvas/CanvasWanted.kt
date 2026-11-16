@@ -2,6 +2,7 @@ package com.prism.music.data.canvas
 
 import com.prism.music.data.prefs.AppSettings
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 /**
  * Whether a song's Canvas loop from its music video is wanted (1.8.6, plan-canvas §3.1, §3.7, §11a R1), in one place, so
@@ -89,10 +90,69 @@ suspend fun showCanvas(
  * its video's loop may show ([canvasWant] with `hasCover = false`).
  *
  * 1.8.7.6: [spotify] is Spotify's canvas being asked ([CanvasRepository.spotifyAsked]): it shows where the animated
- * cover would, so with it the cover's place is wanted even while "Animated covers" (Prism's own) is off.
+ * cover would, so with it the cover's place is wanted whatever Prism's own two switches say ("Animated covers" and
+ * "Canvas" may both be off: Spotify's canvas depends on its own switch alone, [spotifyCanvasOn]).
  */
 fun canvasCoverWanted(settings: AppSettings, coverHidden: Boolean, spotify: Boolean = false): Boolean =
-    settings.behavior.canvas.enabled && (settings.behavior.canvas.covers || spotify) && !coverHidden
+    !coverHidden && (prismCoversOn(settings) || spotify)
+
+/** Prism's own animated covers may play: Canvas on and "Animated covers" on (both off keeps the flag, Canvas off). */
+fun prismCoversOn(settings: AppSettings): Boolean = settings.behavior.canvas.enabled && settings.behavior.canvas.covers
+
+/**
+ * 1.8.7.6, "Spotify's canvas first" may be asked: its own switch and the Spotify web-player session sign-in
+ * ([session]), nothing else. Prism's "Animated covers" and "Canvas" don't matter (owner, 2026-11-16: "Turn on" must
+ * always end in Spotify's canvases showing). Performance mode pauses it: [settings] are the ones Prism uses
+ * ([AppSettings.effective], where it reads as off).
+ */
+fun spotifyCanvasOn(settings: AppSettings, session: Boolean): Boolean = settings.behavior.canvas.spotifyFirst && session
+
+/**
+ * The player's canvas for a song (1.8.7.6, moved out of the player so it can be tested): [showCanvas] for Prism's
+ * cover and loop, with Spotify's canvas first in the cover's place.
+ *
+ * Spotify's answer is waited for about 4 s ([SpotifyCanvasSource.WAIT_MS]) before Prism's own cover is looked up. An
+ * answer that comes later (the first ask after a start builds the Spotify connection and fetches its token: 7 s on the
+ * A16) still shows when it comes, in place of what Prism showed meanwhile, unless the music video's loop comes first
+ * for this song ([loopFirst]) and is already up. Without this a late loop was remembered but only shown the next time
+ * the song played.
+ *
+ * [loop] is the player's loop from the music video for whether the song has a cover; [shown] what is up now.
+ */
+suspend fun playerCanvas(
+    settings: AppSettings, song: com.prism.music.data.model.Song, repo: CanvasRepository,
+    coverHidden: Boolean, metered: Boolean, coverAllowed: Boolean, loopFirst: Boolean,
+    loop: suspend (hasCover: Boolean) -> CanvasArtwork?,
+    shown: () -> CanvasArtwork?, show: (CanvasArtwork?) -> Unit,
+): Unit = kotlinx.coroutines.coroutineScope {
+    val spotify = repo.spotifyAsked()
+    if (!settings.behavior.canvas.enabled && !spotify) { show(null); return@coroutineScope }
+    val spotifyNet = canvasNetworkAllowed(settings, metered)
+    val coverWanted = canvasCoverWanted(settings, coverHidden, spotify)
+    // Once Spotify's late loop is up, Prism's cover (still being looked up) doesn't take its place.
+    var spotifyUp = false
+    val put: (CanvasArtwork?) -> Unit = { if (!spotifyUp || it?.spotify == true) show(it) }
+    if (coverWanted && spotify && spotifyNet) launch {
+        val late = repo.spotifyLate(song) ?: return@launch
+        val now = shown()
+        if (now?.spotify == true) return@launch
+        if (loopFirst) { if (now?.clip == null) show(late) } else { spotifyUp = true; show(late) }
+    }
+    showCanvas(
+        loopFirst,
+        cover = { early ->
+            // Spotify's canvas by the loops' mobile-data rule, Prism's animated cover by its own ([coverAllowed]).
+            if (coverWanted && (coverAllowed || (spotify && spotifyNet))) {
+                val known = repo.cached(song, spotifyOk = spotifyNet, prismOk = coverAllowed)
+                early(known)
+                if (known == null) kotlinx.coroutines.delay(500)
+                repo.canvasFor(song, spotifyOk = spotifyNet, prismOk = coverAllowed)
+            } else null
+        },
+        loop = loop,
+        show = put,
+    )
+}
 
 /** Sharp where it fills the screen, lighter on the cover (plan §11a R1); "lighter" is 480 everywhere. */
 fun canvasHeight(settings: AppSettings): Int = when {

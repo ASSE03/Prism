@@ -146,6 +146,19 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         assertNoSecretShown()
     }
 
+    /** 1.8.7.6, the A16 check: with Prism's own Canvas off (both switches), the offer still comes and Turn on sets it. */
+    @Test fun theOfferComesWithPrismsCanvasOffAndTurnOnSetsIt() {
+        container.settings.setCanvasKinds(covers = false, videos = false)
+        until("Prism's Canvas off") { !it.behavior.canvas.enabled }
+        signInToSpotify(canvasOfferAnswered = false)
+        show()
+        compose.waitUntil(5_000) { offerShown() }
+        compose.onNodeWithTag("spot_canvas_offer_on").performClick()
+        until("turned on") { it.behavior.canvas.spotifyFirst && it.behavior.canvas.spotifyOffered }
+        assertFalse("Prism's own Canvas stays as it was", stored.behavior.canvas.enabled)
+        assertTrue("and Spotify's canvas is asked", com.prism.music.data.canvas.spotifyCanvasOn(container.settings.current, true))
+    }
+
     @Test fun notNowAnswersTheOfferForGoodAndLeavesTheSwitchOff() {
         signInToSpotify(canvasOfferAnswered = false)
         show()
@@ -186,7 +199,13 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         fun with(f: (com.prism.music.data.prefs.CanvasPrefs) -> com.prism.music.data.prefs.CanvasPrefs) = on.copy(behavior = on.behavior.copy(canvas = f(on.behavior.canvas)))
         assertFalse("answered", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, with { it.copy(spotifyOffered = true) }))
         assertFalse("already on", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, with { it.copy(spotifyFirst = true) }))
-        assertFalse("Canvas off", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, with { it.copy(enabled = false) }))
+        // 1.8.7.6 (the A16 check): Prism's own two switches have no say; Performance mode holds it back for later.
+        for ((covers, videos) in listOf(true to true, true to false, false to true, false to false)) {
+            val kinds = com.prism.music.data.prefs.CanvasKinds(covers, videos).toStored(com.prism.music.data.prefs.CanvasStored(true, true, true))
+            assertTrue("covers $covers, videos $videos", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true,
+                with { it.copy(enabled = kinds.enabled, covers = kinds.covers, useVideos = kinds.videos) }))
+        }
+        assertFalse("Performance mode", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, on.copy(performanceMode = true)))
         // Its words: unofficial, no exclamation marks, no em dashes.
         val text = t(R.string.spot_canvas_offer_text)
         assertTrue(text, "unofficial" in text.lower())
