@@ -311,6 +311,11 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         })
 
         effects.attach(player.audioSessionId)
+        // #519: the effects are made once the session has a track on it, never on an empty one (AudioEffects' note).
+        player.addAnalyticsListener(object : AnalyticsListener {
+            override fun onAudioTrackInitialized(eventTime: AnalyticsListener.EventTime, audioTrackConfig: AudioSink.AudioTrackConfig) =
+                effects.trackReady()
+        })
         c.onStreamResolved = { id -> scope.launch { applyStreamStats(id) } }
         // The equalizer as set, or the preset picked for the output playing now (the car's, the earbuds'; A3).
         scope.launch {
@@ -569,6 +574,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                     it.setAudioSessionId(session)
                     val tailEffects = AudioEffects(this, announce = false).apply { apply(eq); attach(session) }
                     it.addAnalyticsListener(object : AnalyticsListener {
+                        // Made once the tail's track is (#519: never on a session with nothing on it yet).
+                        override fun onAudioTrackInitialized(eventTime: AnalyticsListener.EventTime, audioTrackConfig: AudioSink.AudioTrackConfig) =
+                            tailEffects.trackReady()
                         override fun onPlayerReleased(eventTime: AnalyticsListener.EventTime) = tailEffects.shutdown()
                     })
                     AudioDiagnostics.log("mix", "tail on its own session $session with the equalizer (${eq.preset})")

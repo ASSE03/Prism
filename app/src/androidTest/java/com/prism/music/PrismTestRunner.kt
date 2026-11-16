@@ -21,7 +21,7 @@ class PrismTestRunner : AndroidJUnitRunner() {
         }
         // Measurements (@Measurement) run only when asked for (`-e tvperf 1`): left out of every other run, rather than
         // each one skipped by an assumption, which the orchestrator reports as a failure.
-        if (args.getString("tvperf") == null && args.getString("singBench") == null && args.getString("mixStutter") == null) {
+        if (args.getString("tvperf") == null && args.getString("singBench") == null && args.getString("mixStutter") == null && args.getString("eqCheck") == null) {
             args.putString("filter", listOfNotNull(args.getString("filter"), NoMeasurements::class.java.name).joinToString(","))
         }
         whoTouchedCompose()
