@@ -274,6 +274,13 @@ internal fun hiddenPartsWords(s: AppSettings): String {
     return if (hidden.isEmpty()) tr(R.string.settings_player_all_shown) else tr(R.string.hidden_s, hidden.joinToString(", ") { it.label })
 }
 
+/**
+ * The parts under the title, top to bottom, as the "Under the title" row says them: only those the player shows (a
+ * fresh install hides Volume; the row named it anyway). The controls always show.
+ */
+internal fun deckWords(s: AppSettings): String =
+    s.player.deck.filter { d -> com.prism.music.ui.screens.deckPart(d)?.let { s.shows(it) } ?: true }.joinToString(" · ") { it.label }
+
 internal fun movementWords(speed: Float): String =
     if (speed < 0.05f) tr(R.string.still) else worded(if (speed < 0.5f) tr(R.string.gentle) else tr(R.string.lively), speed)
 

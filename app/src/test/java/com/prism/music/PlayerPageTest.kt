@@ -122,6 +122,15 @@ class PlayerPageTest {
 
     // ------------------------------------------------------------------ Budgets
 
+    /** 1.8.7.6: "Under the title" names only the parts the player shows (a fresh install hides Volume). */
+    @Test fun underTheTitleLeavesOutHiddenParts() {
+        val volume = com.prism.music.data.prefs.DeckPart.VOLUME.label
+        val fresh = com.prism.music.ui.screens.settings.deckWords(AppSettings())
+        assertFalse("a fresh install's row leaves Volume out: $fresh", volume in fresh)
+        val shown = com.prism.music.ui.screens.settings.deckWords(AppSettings(hideVolumeBar = false))
+        assertTrue("with the volume bar shown the row names it: $shown", volume in shown)
+    }
+
     @Test fun budgetsHoldWithDefaultSettings() {
         showPage()
         val groups = tagged(SettingsTags.GROUP)

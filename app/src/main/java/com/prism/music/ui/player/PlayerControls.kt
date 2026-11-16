@@ -877,16 +877,34 @@ fun barHeights(style: ScrubberStyle, thick: Float): Pair<Dp, Dp> = when (style) 
 
 @Composable
 fun VolumeRow(volume: PlayerVolume) {
-    val s = LocalAppSettings.current
-    // Reddit, 1.7.9.1: "Volume bar like the progress bar" takes its style's height and thickness; else its own, as before.
-    val (idle, held) = if (s.volumeMatchesProgress) barHeights(s.scrubberStyle, s.scrubberThickness) else 6.dp to 10.dp
+    // Like the progress bar, its color can come from the cover: the song's art, read only when it's asked for.
+    val cover = if (LocalAppSettings.current.volumeMatchesProgress) {
+        val current by LocalContainer.current.player.currentSong.collectAsState()
+        current?.let { com.prism.music.data.PlaylistCovers.artOf(it) }
+    } else null
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Icon(PrismIcons.VolumeDown, null, tint = Color.White.copy(alpha = 0.5f), modifier = Modifier.size(20.dp))
         Spacer(Modifier.width(10.dp))
-        ThinSlider(volume.level, volume::drag, Modifier.weight(1f).testTag("volumeBar"), volume::release, idleHeight = idle, activeHeight = held)
+        VolumeSlider(volume.level, volume::drag, volume::release, cover, Modifier.weight(1f).testTag("volumeBar"))
         Spacer(Modifier.width(10.dp))
         Icon(PrismIcons.VolumeUp, null, tint = Color.White.copy(alpha = 0.5f), modifier = Modifier.size(20.dp))
     }
+}
+
+/**
+ * The volume bar itself: white, or with "Volume bar like the progress bar" the progress bar's heights and its light too
+ * (the split light, or the color picked for it with [cover] the song's art), as [PlayerScrubber] draws it.
+ */
+@Composable
+internal fun VolumeSlider(level: Float, onDrag: (Float) -> Unit, onRelease: () -> Unit, cover: String?, modifier: Modifier = Modifier) {
+    val s = LocalAppSettings.current
+    // Reddit, 1.7.9.1: "Volume bar like the progress bar" takes its style's height and thickness; else its own, as before.
+    val like = s.volumeMatchesProgress
+    val (idle, held) = if (like) barHeights(s.scrubberStyle, s.scrubberThickness) else 6.dp to 10.dp
+    ThinSlider(
+        level, onDrag, modifier, onRelease, idleHeight = idle, activeHeight = held,
+        spectrum = like, fill = if (like) scrubberFill(s.scrubberColor, cover) else null,
+    )
 }
 
 /**

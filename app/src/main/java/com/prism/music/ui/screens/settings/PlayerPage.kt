@@ -364,7 +364,7 @@ internal fun PlayerOnItRows() {
         PlayerPartsPreview(now, Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) { part -> prefs.setPartShown(part, !now.shows(part)) }
     }
     SheetRow(
-        tr(R.string.under_the_title), s.player.deck.joinToString(" · ") { it.label }, info = tr(R.string.top_to_bottom_as_they_sit), changed = ch("player_deck"),
+        tr(R.string.under_the_title), deckWords(s), info = tr(R.string.top_to_bottom_as_they_sit), changed = ch("player_deck"),
     ) { DeckOrder() }
     if (s.shows(PlayerPart.BUTTONS)) SheetRow(
         tr(R.string.buttons_in_the_row), rowButtonsWords(s.player.buttons to s.showVideoSwitch), changed = ch("player_buttons"), sheetTitle = null,

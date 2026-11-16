@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -51,6 +52,7 @@ import com.prism.music.data.prefs.LyricsAlign
 import com.prism.music.data.prefs.PlayerBackground
 import com.prism.music.data.prefs.ScrubberStyle
 import com.prism.music.data.prefs.TransportStyle
+import com.prism.music.data.prefs.shows
 import com.prism.music.ui.components.Artwork
 import com.prism.music.ui.components.pageTitleStyle
 import com.prism.music.ui.components.rememberArtPalette
@@ -248,9 +250,9 @@ fun MiniPlayerScreen(c: ThemeColors, song: Song?) {
                                     Icon(PrismIcons.Next, null, Modifier.size(34.dp), tint = Color.White)
                                 }
                             }
-                            com.prism.music.data.prefs.DeckPart.VOLUME -> if (!s.hideVolumeBar) {
+                            com.prism.music.data.prefs.DeckPart.VOLUME -> if (s.shows(com.prism.music.data.prefs.PlayerPart.VOLUME)) {
                                 Spacer(Modifier.height(18.dp))
-                                Box(Modifier.fillMaxWidth().height(5.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.2f))) {
+                                Box(Modifier.fillMaxWidth().height(5.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.2f)).testTag("previewVolume")) {
                                     Box(Modifier.fillMaxWidth(0.65f).height(5.dp).background(Color.White.copy(alpha = 0.85f)))
                                 }
                             }
