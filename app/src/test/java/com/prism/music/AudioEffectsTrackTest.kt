@@ -38,6 +38,9 @@ class AudioEffectsTrackTest {
 
     @After fun stop() { executor.shutdownNow() }
 
+    /** On, with a band moved: asks for the equalizer. */
+    private val ON = EqSettings(enabled = true, bands = List(10) { if (it == 5) 3f else 0f })
+
     @Test fun nothingIsMadeOnASessionWithNoTrack() {
         val e = effects()
         e.attach(42)
@@ -50,7 +53,7 @@ class AudioEffectsTrackTest {
     @Test fun theEffectsAreMadeOnceTheTrackIs() {
         val e = effects()
         e.attach(42)
-        e.apply(EqSettings(enabled = true, bassBoost = 500))
+        e.apply(EqSettings(enabled = true, bands = List(10) { 2f }, bassBoost = 500, loudnessGainMb = 300))
         e.trackReady()
         settle()
         assertEquals("open 42", events.first())
@@ -78,7 +81,7 @@ class AudioEffectsTrackTest {
         settle()
         assertEquals("asked of Android with the equalizer off: $events", emptyList<String>(), made())
         // Switched on later, while playing: made then.
-        e.apply(EqSettings(enabled = true))
+        e.apply(ON)
         settle()
         assertTrue("not made when switched on: $events", made().isNotEmpty())
     }
@@ -86,7 +89,7 @@ class AudioEffectsTrackTest {
     @Test fun aTrackReportedBeforeTheSessionCountsForIt() {
         // Media3 hands the session to listeners a moment after it's made; the track can come first.
         val e = effects()
-        e.apply(EqSettings(enabled = true))
+        e.apply(ON)
         e.trackReady()
         settle()
         assertEquals(emptyList<String>(), made())
@@ -97,7 +100,7 @@ class AudioEffectsTrackTest {
 
     @Test fun aNewSessionWaitsForItsOwnTrack() {
         val e = effects()
-        e.apply(EqSettings(enabled = true))
+        e.apply(ON)
         e.attach(42)
         e.trackReady()
         settle()
@@ -111,9 +114,95 @@ class AudioEffectsTrackTest {
         assertTrue("not made on the new session: $events", made().isNotEmpty() && made().all { it.endsWith(" 43") })
     }
 
+    private fun kinds() = made().map { it.split(' ')[1] }
+    private val eqKinds = setOf("dynamics", "equalizer")
+
+    /** A live session with these settings; what was asked of Android. */
+    private fun playing(s: EqSettings, normalizationDb: Float = 0f): AudioEffects = effects().also { e ->
+        e.attach(42)
+        if (normalizationDb != 0f) e.setNormalization(normalizationDb)
+        e.apply(s)
+        e.trackReady()
+        settle()
+    }
+
+    @Test fun eachEffectOnlyWhenItIsAskedFor() {
+        // Only bass boost: no equalizer, no loudness.
+        playing(EqSettings(enabled = true, bassBoost = 600))
+        assertEquals("bass only: $events", listOf("bass"), kinds())
+        events.clear()
+        // Only loudness.
+        playing(EqSettings(enabled = true, loudnessGainMb = 400))
+        assertEquals("loudness only: $events", listOf("loudness"), kinds())
+        events.clear()
+        // A band moved: the equalizer, and nothing else.
+        playing(EqSettings(enabled = true, bands = List(10) { if (it == 3) 4f else 0f }))
+        assertTrue("band: $events", kinds().size == 1 && kinds().single() in eqKinds)
+        events.clear()
+        // The preamp alone is the equalizer's input gain.
+        playing(EqSettings(enabled = true, preampDb = -3f))
+        assertTrue("preamp: $events", kinds().size == 1 && kinds().single() in eqKinds)
+        events.clear()
+        // On but flat, nothing moved: nothing at all.
+        playing(EqSettings(enabled = true))
+        assertEquals("flat: $events", emptyList<String>(), kinds())
+        events.clear()
+        // A normalization gain with the equalizer off: only the equalizer (its input gain), not bass or loudness.
+        playing(EqSettings(enabled = false, bassBoost = 600, loudnessGainMb = 400), normalizationDb = -2f)
+        assertTrue("normalization: $events", kinds().size == 1 && kinds().single() in eqKinds)
+        events.clear()
+        // Off, with values left on the sliders: nothing.
+        playing(EqSettings(enabled = false, bands = List(10) { 5f }, bassBoost = 600, loudnessGainMb = 400, preampDb = 2f))
+        assertEquals("off: $events", emptyList<String>(), kinds())
+    }
+
+    @Test fun oneMadeStaysAndOthersComeWhenAsked() {
+        val e = playing(EqSettings(enabled = true, bassBoost = 600))
+        assertEquals(listOf("bass"), kinds())
+        // Bass back to 0: the bass boost stays (switched off), nothing new.
+        e.apply(EqSettings(enabled = true))
+        settle()
+        assertEquals(listOf("bass"), kinds())
+        // Loudness asked for now: made then, once.
+        e.apply(EqSettings(enabled = true, loudnessGainMb = 200))
+        e.apply(EqSettings(enabled = true, loudnessGainMb = 300))
+        settle()
+        assertEquals(listOf("bass", "loudness"), kinds())
+    }
+
+    @Test fun refusedWhenAndroidMakesNoneOfWhatsAsked() {
+        val e = effects()
+        e.refuseForTest = { true }
+        e.attach(42)
+        e.apply(EqSettings(enabled = true, bands = List(10) { 2f }, bassBoost = 300))
+        e.trackReady()
+        settle()
+        assertTrue("not reported refused: $events", e.refused.value)
+        assertTrue(e.activeSummary.contains("refused"))
+        // Nothing asked any more: not refused.
+        e.apply(EqSettings(enabled = false))
+        settle()
+        assertEquals(false, e.refused.value)
+        // Android making them again (the phone restarted, or room freed): asked once more, made, not refused.
+        e.refuseForTest = null
+        e.apply(EqSettings(enabled = true, bands = List(10) { 2f }))
+        settle()
+        assertEquals(false, e.refused.value)
+    }
+
+    @Test fun notRefusedWhenSomeOfItIsMade() {
+        val e = effects()
+        e.refuseForTest = { it == "bass" }
+        e.attach(42)
+        e.apply(EqSettings(enabled = true, bands = List(10) { 2f }, bassBoost = 300))
+        e.trackReady()
+        settle()
+        assertEquals("one effect missing isn't Android refusing them all: $events", false, e.refused.value)
+    }
+
     @Test fun crossfadesTailIsNotAnnounced() {
         val e = effects(announce = false)
-        e.apply(EqSettings(enabled = true))
+        e.apply(ON)
         e.attach(7)
         e.trackReady()
         e.shutdown()

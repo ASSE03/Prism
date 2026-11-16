@@ -157,9 +157,14 @@ class AudioEffects(
 
     /** Tests only: told of each effect asked of Android, and of each announcement ("make bass 42", "open 42"). */
     @Volatile internal var trace: ((String) -> Unit)? = null
+    /** Tests only: the effect kinds ("dynamics", "equalizer", "bass", "loudness") Android is to refuse, as a full register does. */
+    @Volatile internal var refuseForTest: ((String) -> Boolean)? = null
 
     /** Android refused the effects the settings ask for (shown in stats for nerds). */
     @Volatile private var unavailable = false
+    private val _refused = kotlinx.coroutines.flow.MutableStateFlow(false)
+    /** Android refuses the effects the settings ask for, now (the Equalizer screen says so). */
+    val refused: kotlinx.coroutines.flow.StateFlow<Boolean> = _refused
 
     // Set by callers, read by the effects thread: the newest settings always win.
     @Volatile private var wanted = EqSettings()
@@ -222,7 +227,7 @@ class AudioEffects(
         live = false
         trackBeforeSession = false
         refusedLogged = false
-        unavailable = false
+        setUnavailable(false)
         if (carried) trackReadyNow()
     }
 
@@ -245,7 +250,10 @@ class AudioEffects(
     /** [make]s an effect on the session; null, and noted once for the session, when Android refuses it. */
     private fun <T : AudioEffect> make(kind: String, make: (Int) -> T): T? {
         trace?.invoke("make $kind $sessionId")
-        return runCatching { make(sessionId) }.onFailure { e ->
+        return runCatching {
+            if (refuseForTest?.invoke(kind) == true) throw RuntimeException("Cannot initialize effect engine (test)")
+            make(sessionId)
+        }.onFailure { e ->
             if (!refusedLogged) {
                 refusedLogged = true
                 android.util.Log.w("PrismEffects", "Android refused the $kind effect on session $sessionId", e)
@@ -261,17 +269,15 @@ class AudioEffects(
     private fun applyNow() {
         val s = wanted
         val normalizationDb = wantedNormalizationDb
-        // Nothing is made on a session without a track (see the class note), nor when nothing is asked of the effects:
-        // the equalizer off means no platform effect at all. Ones already made stay (switched off below) for the session.
+        // Nothing is made on a session without a track (see the class note), and each effect only when the settings ask
+        // something of it: Android's register is shared by every app on the phone, so Prism holds as little of it as it
+        // can. One already made stays for the session and is switched off when it's no longer asked for.
         if (sessionId == 0 || !live) return
-        val needed = s.enabled || normalizationDb != 0f
-        if (!needed && dynamics == null && equalizer == null && bass == null && loudness == null) {
-            tenBand = false
-            unavailable = false
-            return
-        }
+        val asks = Asks.of(s, normalizationDb)
         val preGain = normalizationDb + if (s.enabled) s.preampDb else 0f
-        if (Build.VERSION.SDK_INT >= 28) {
+        if (!asks.equalizer && dynamics == null && equalizer == null) {
+            tenBand = false
+        } else if (Build.VERSION.SDK_INT >= 28) {
             val dp = dynamics ?: make("dynamics") { session ->
                 DynamicsProcessing(
                     0, session,
@@ -289,36 +295,71 @@ class AudioEffects(
                 dp.setPreEqAllChannelsTo(eq)
                 dp.setInputGainAllChannelsTo(preGain)
                 dp.setLimiterAllChannelsTo(DynamicsProcessing.Limiter(true, true, 1, 1f, 60f, 10f, -1f, 0f))
-                dp.enabled = s.enabled || preGain != 0f
+                dp.enabled = asks.equalizer
             }.isSuccess
             if (!set) {
                 // Let go of it now rather than whenever it's collected, and fall back on the platform equalizer.
                 runCatching { dynamics?.release() }
                 dynamics = null
-                applyLegacyEq(s, normalizationDb)
+                applyLegacyEq(s, normalizationDb, asks.equalizer)
             }
-        } else applyLegacyEq(s, normalizationDb)
+        } else applyLegacyEq(s, normalizationDb, asks.equalizer)
         tenBand = dynamics != null
 
-        val b = bass ?: make("bass") { BassBoost(0, it) }?.also { bass = it }
+        val b = bass ?: if (asks.bass) make("bass") { BassBoost(0, it) }?.also { bass = it } else null
         runCatching {
             if (b != null) {
                 if (b.strengthSupported) b.setStrength(s.bassBoost.coerceIn(0, 1000).toShort())
-                b.enabled = s.enabled && s.bassBoost > 0
+                b.enabled = asks.bass
             }
         }
         // No platform virtualizer: Prism Spatial (software) took its place, and it was only ever made to be switched off.
-        val l = loudness ?: make("loudness") { LoudnessEnhancer(it) }?.also { loudness = it }
+        val l = loudness ?: if (asks.loudness) make("loudness") { LoudnessEnhancer(it) }?.also { loudness = it } else null
         runCatching {
             if (l != null) {
                 l.setTargetGain(s.loudnessGainMb.coerceAtLeast(0))
-                l.enabled = s.enabled && s.loudnessGainMb > 0
+                l.enabled = asks.loudness
             }
         }
-        unavailable = needed && dynamics == null && equalizer == null
+        // Refused: something was asked and Android made none of it (as when its register is full). An effect this phone
+        // doesn't have at all isn't a refusal.
+        val asked = listOf(
+            asks.equalizer to (dynamics ?: equalizer),
+            (asks.bass && hasType(AudioEffect.EFFECT_TYPE_BASS_BOOST)) to bass,
+            (asks.loudness && hasType(AudioEffect.EFFECT_TYPE_LOUDNESS_ENHANCER)) to loudness,
+        ).filter { it.first }
+        setUnavailable(asked.isNotEmpty() && asked.all { it.second == null })
     }
 
-    private fun applyLegacyEq(s: EqSettings, normalizationDb: Float) {
+    /** Effect types this phone has (null: unknown, so every type counts as present). */
+    private val types: Set<java.util.UUID>? by lazy {
+        runCatching { AudioEffect.queryEffects()?.mapNotNull { it?.type }?.toSet() }.getOrNull()?.takeIf { it.isNotEmpty() }
+    }
+
+    private fun hasType(type: java.util.UUID?): Boolean = type == null || types?.contains(type) != false
+
+    private fun setUnavailable(now: Boolean) {
+        unavailable = now
+        _refused.value = now
+    }
+
+    /** What the settings ask of the platform effects. */
+    internal data class Asks(val equalizer: Boolean, val bass: Boolean, val loudness: Boolean) {
+        companion object {
+            /**
+             * The equalizer (DynamicsProcessing or Equalizer) when it's on with a band or the preamp away from 0, or for a
+             * normalization gain; bass boost and loudness only when on and above 0. The equalizer on but flat asks for
+             * nothing: no platform effect made just to pass the sound through.
+             */
+            fun of(s: EqSettings, normalizationDb: Float) = Asks(
+                equalizer = normalizationDb != 0f || (s.enabled && (s.preampDb != 0f || s.bands.any { it != 0f })),
+                bass = s.enabled && s.bassBoost > 0,
+                loudness = s.enabled && s.loudnessGainMb > 0,
+            )
+        }
+    }
+
+    private fun applyLegacyEq(s: EqSettings, normalizationDb: Float, on: Boolean) {
         val eq = equalizer ?: make("equalizer") { Equalizer(0, it) }?.also { equalizer = it } ?: return
         runCatching {
             val range = eq.bandLevelRange
@@ -329,7 +370,7 @@ class AudioEffects(
                     .coerceIn(range[0].toInt(), range[1].toInt())
                 eq.setBandLevel(band.toShort(), mb.toShort())
             }
-            eq.enabled = s.enabled || normalizationDb != 0f
+            eq.enabled = on
         }
     }
 
