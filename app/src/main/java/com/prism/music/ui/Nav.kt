@@ -71,6 +71,8 @@ object Routes {
     const val RECOGNIZED = "recognized"
     /** Every shared component of the 1.7 redesign (debug builds, from Settings → About). */
     const val DESIGN_GALLERY = "design_gallery"
+    /** 1.8.7.6: the people who supported Prism (from Settings → Backup & about → About). */
+    const val SUPPORTERS = "supporters"
     /** One of Prism's own mixes (Daily Mix 1, the time-of-day mix, Release Radar). */
     fun mix(id: String) = "mix/${Uri.encode(id)}"
     fun podcast(id: String) = "podcast/${Uri.encode(id)}"

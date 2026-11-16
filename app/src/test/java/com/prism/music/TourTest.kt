@@ -40,6 +40,25 @@ class TourTest {
         }
     }
 
+    /** The cards with the support line (1.8.7.6) that are not the last of their release's cards. */
+    private fun supportMisplaced(steps: List<TourStep>): List<String> = steps.withIndex()
+        .filter { (i, s) -> s.support && steps.drop(i + 1).any { it.since == s.since } }
+        .map { (_, s) -> "${s.since}: ${s.title}" }
+
+    /**
+     * 1.8.7.6 (plan-1.8.7.6 §4.1 S6, D5): the line asking to support Prism sits only on the last card of a release's
+     * cards (so a release asks once, at its end).
+     */
+    @Test
+    fun theSupportLineOnlyEndsARelease() {
+        assertEquals(emptyList<String>(), supportMisplaced(Tour.steps))
+        // The rule catches a line put on an earlier card of a release.
+        val icon = com.prism.music.ui.theme.PrismIcons.Heart
+        val wrong = listOf(TourStep(70, icon, "a", "b", support = true), TourStep(70, icon, "c", "d"))
+        assertEquals(listOf("70: a"), supportMisplaced(wrong))
+        assertEquals(emptyList<String>(), supportMisplaced(listOf(TourStep(70, icon, "a", "b"), TourStep(70, icon, "c", "d", support = true), TourStep(71, icon, "e", "f", support = true))))
+    }
+
     @Test
     fun stepsAreDatedNoLaterThanThisBuild() {
         assertTrue(Tour.steps.all { it.since in 1..BuildConfig.VERSION_CODE })

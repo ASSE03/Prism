@@ -1526,6 +1526,8 @@ private fun Summary(s: ReplayStory, modifier: Modifier, onReplay: () -> Unit, on
             }
             Pill(tr(R.string.watch_again), PrismIcons.Refresh, onClick = onReplay)
         }
+        // 1.8.7.6 (plan-1.8.7.6 §4.1 S5): once for a monthly Replay, once for the year's Rewind, then never.
+        com.prism.music.ui.support.SupportStoryLine(s.rewind, Modifier.reveal(900).padding(top = 14.dp))
     }
 }
 

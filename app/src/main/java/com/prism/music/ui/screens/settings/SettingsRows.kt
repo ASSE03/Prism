@@ -199,7 +199,8 @@ private fun RowFrame(
 
 /**
  * Row type 1, **Switch**: on or off; the whole row is the switch. [value] is an optional line under the title (the
- * state in words where on/off alone doesn't say it).
+ * state in words where on/off alone doesn't say it). [icon]: a small mark before the title (1.8.7.6: the heart beside
+ * "I've supported Prism" while it is on).
  */
 @Composable
 fun SwitchRow(
@@ -210,11 +211,12 @@ fun SwitchRow(
     info: String? = null,
     changed: Boolean = false,
     enabled: Boolean = true,
+    icon: ImageVector? = null,
     onChange: (Boolean) -> Unit,
 ) {
     RowFrame(
         SettingsTags.ROW_SWITCH, title, value, value.orEmpty(), info, changed, enabled, modifier,
-        interaction = Modifier.toggleable(checked, enabled = enabled, role = Role.Switch, onValueChange = onChange),
+        interaction = Modifier.toggleable(checked, enabled = enabled, role = Role.Switch, onValueChange = onChange), icon = icon,
         trailing = { PrismSwitch(checked, null, enabled = enabled) },
     )
 }

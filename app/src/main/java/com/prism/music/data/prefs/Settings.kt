@@ -404,6 +404,11 @@ data class BehaviorPrefs(
      * resolution ([com.prism.music.ui.FastDisplayMode]). Off by default (it costs battery); Performance mode reads it as off.
      */
     val smoothScrolling: Boolean = false,
+    /**
+     * 1.8.7.6: "I've supported Prism". On, every support ask is off for good ([com.prism.music.ui.support.SupportAsks]).
+     * Nothing checks it: it is the listener's word. Off by default, never part of a Look.
+     */
+    val supported: Boolean = false,
     /** 1.8.6: Canvas's choices beyond Off / On the cover / Full screen ([CanvasPrefs.enabled], [CanvasPrefs.fillsBackground]). */
     val canvas: CanvasPrefs = CanvasPrefs(),
     /**
@@ -2352,6 +2357,8 @@ class SettingsRepository(
         val faceDownPause = booleanPreferencesKey("face_down_pause")
         val lyricsCoverPlays = booleanPreferencesKey("lyrics_cover_plays")
         val smoothScrolling = booleanPreferencesKey("smooth_scrolling")
+        /** 1.8.7.6 ([BehaviorPrefs.supported]). */
+        val supported = booleanPreferencesKey("supported")
         // 1.8.6 ([CanvasPrefs], in [BehaviorPrefs]).
         val canvasCovers = booleanPreferencesKey("canvas_covers")
         val canvasUseVideos = booleanPreferencesKey("canvas_use_videos")
@@ -2510,6 +2517,8 @@ class SettingsRepository(
                 "canvas_covers", "canvas_lyrics",
                 // 1.8.7 (#336): the screen's refresh rate is the phone's own matter, not a look.
                 "smooth_scrolling",
+                // 1.8.7.6: "I've supported Prism" is the listener's word, never a Look's.
+                "supported",
             )
         }
     }
@@ -2808,6 +2817,7 @@ class SettingsRepository(
                 faceDownPause = p[K.faceDownPause] ?: d.behavior.faceDownPause,
                 lyricsCoverPlays = p[K.lyricsCoverPlays] ?: d.behavior.lyricsCoverPlays,
                 smoothScrolling = p[K.smoothScrolling] ?: d.behavior.smoothScrolling,
+                supported = p[K.supported] ?: d.behavior.supported,
                 canvas = CanvasPrefs(
                     covers = p[K.canvasCovers] ?: d.behavior.canvas.covers,
                     useVideos = p[K.canvasUseVideos] ?: d.behavior.canvas.useVideos,
@@ -3671,6 +3681,7 @@ class SettingsRepository(
     fun setFaceDownPause(v: Boolean) = edit { it[K.faceDownPause] = v }
     fun setLyricsCoverPlays(v: Boolean) = edit { it[K.lyricsCoverPlays] = v }
     fun setSmoothScrolling(v: Boolean) = edit { it[K.smoothScrolling] = v }
+    fun setSupported(v: Boolean) = edit { it[K.supported] = v }
     // 1.8.6 Canvas ([CanvasPrefs]).
     fun setCanvasCovers(v: Boolean) = edit { it[K.canvasCovers] = v }
     fun setCanvasUseVideos(v: Boolean) = edit { it[K.canvasUseVideos] = v }

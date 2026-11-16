@@ -845,6 +845,25 @@
     <string name="performance_mode_pauses_blur_moving_backgrounds">Performance mode pauses blur, moving backgrounds and animated covers. Every feature stays.</string>
     <string name="no_thanks">No thanks</string>
     <string name="turn_on">Turn on</string>
+    <!-- 1.8.7.6 Support Prism (plan-1.8.7.6 §4): about supporting the work, never about paying for music or for the app. -->
+    <string name="support_prism">Support Prism</string>
+    <string name="support_prism_info">Support pays for the test phones and tools Prism is made with. Every feature stays free, whether you support it or not. Opens Ko-fi in your browser.</string>
+    <string name="support_prism_keywords">donate tip coffee thank you help the developer</string>
+    <string name="i_ve_supported_prism">I\'ve supported Prism</string>
+    <string name="i_ve_supported_prism_info">Turns off every ask to support Prism, for good. Nothing is checked: it\'s your word.</string>
+    <string name="i_ve_supported_prism_keywords">donated supporter hide asks stop asking</string>
+    <string name="supporters">Supporters</string>
+    <string name="supporters_keywords">thanks credits names donors members</string>
+    <string name="supporters_info">The people who supported Prism and chose to be named. Only names: no amounts, no dates.</string>
+    <string name="supporters_members">Monthly members</string>
+    <string name="supporters_thank_you">Thank you</string>
+    <string name="supporters_empty">No names here yet. Yours could be the first.</string>
+    <string name="support_on_kofi">Support on Ko-fi</string>
+    <string name="don_t_show_again">Don\'t show again</string>
+    <string name="support_hours_title">100 hours of music with Prism</string>
+    <string name="support_hours_body">It\'s free and made by one person: if it\'s worth a coffee to you, that keeps it going.</string>
+    <string name="support_made_by_one_person">Made by one person.</string>
+    <string name="support_whats_new_line">Prism is free and made by one person. If you like it, you can support it.</string>
     <string name="home_shows_the_music_on_this">Home shows the music on this phone: downloads, songs kept whole and your files</string>
     <string name="good_morning">Good morning</string>
     <string name="good_afternoon">Good afternoon</string>

@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
@@ -130,8 +131,13 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
     private val unofficial = t(R.string.unofficial_not_affiliated_with_google_or)
     private val installed = tr(R.string.prism, BuildConfig.VERSION_NAME)
 
-    /** Debug builds (as the tests are) also have the design gallery's row. */
-    private val aboutRows = if (BuildConfig.DEBUG) 4 else 3
+    // 1.8.7.6: Support Prism's three rows, first in About.
+    private val support = t(R.string.support_prism)
+    private val supported = t(R.string.i_ve_supported_prism)
+    private val supporters = t(R.string.supporters)
+
+    /** Debug builds (as the tests are) also have the design gallery's row; 1.8.7.6 adds Support Prism's three. */
+    private val aboutRows = if (BuildConfig.DEBUG) 7 else 6
 
     private fun groupTitles() = compose.onAllNodes(hasTestTag(SettingsTags.GROUP)).fetchSemanticsNodes()
         .map { g -> g.children.first().config[SemanticsProperties.Text].first().text }
@@ -155,6 +161,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
                             NavHost(controller, "page") {
                                 composable("page") { BackupAboutContent(0.dp, null, true, {}, check, share, selfTest) }
                                 composable("settings/{section}") { Box(Modifier.fillMaxSize()) }
+                                composable(Routes.SUPPORTERS) { Box(Modifier.fillMaxSize()) }
                             }
                         }
                     }
@@ -457,6 +464,68 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         }
     }
 
+    /**
+     * 1.8.7.6 (plan-1.8.7.6 §4.1 S1–S3): Support Prism opens Ko-fi in the browser (nothing else leaves the phone), "I've
+     * supported Prism" is off as Prism comes and shows a heart when on, and Supporters opens its own screen. All three
+     * sit first in About, above "Source code", with their words behind the ⓘ.
+     */
+    @Test fun supportPrismsThreeRows() {
+        showContent()
+        for (title in listOf(support, supported, supporters)) assertTrue(title, hasRow(title))
+        assertEquals(SettingsTags.ROW_LINK, typeOf(support))
+        assertEquals(SettingsTags.ROW_SWITCH, typeOf(supported))
+        assertEquals(SettingsTags.ROW_LINK, typeOf(supporters))
+        assertEquals("Ko-fi", valueOf(support))
+        // Above Source code, in this order.
+        fun top(title: String) = compose.onAllNodes(hasText(title)).fetchSemanticsNodes().first().boundsInRoot.top
+        assertTrue(top(support) < top(supported) && top(supported) < top(supporters) && top(supporters) < top(source))
+        // Explanations only behind the ⓘ.
+        assertEquals(0, shown(t(R.string.support_prism_info)))
+        assertEquals(0, shown(t(R.string.i_ve_supported_prism_info)))
+        tap(support)
+        assertEquals(listOf("https://ko-fi.com/yigder"), opened)
+        // The switch: off as Prism comes, the listener's word when on.
+        assertFalse(stored.behavior.supported)
+        assertFalse(AppSettings().behavior.supported)
+        tap(supported)
+        until("supported") { it.behavior.supported }
+        tap(supported)
+        until("supported off") { !it.behavior.supported }
+        tap(supporters)
+        compose.waitForIdle()
+        assertEquals(Routes.SUPPORTERS, navController!!.currentDestination?.route)
+    }
+
+    /** An empty Supporters list says so in one friendly line, with the way to Ko-fi; a list shows members first. */
+    @Test fun theSupportersList() {
+        val taps = ArrayList<String>()
+        compose.setContent {
+            val s by container.settings.stored.collectAsState()
+            CompositionLocalProvider(LocalContainer provides container) {
+                PrismTheme(s, artworkColor = null) {
+                    CompositionLocalProvider(LocalAppSettings provides s) {
+                        var list by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(com.prism.music.ui.support.Supporters()) }
+                        listState = { list = it }
+                        com.prism.music.ui.screens.settings.SupportersList(list) { taps += "kofi" }
+                    }
+                }
+            }
+        }
+        compose.waitForIdle()
+        assertEquals(1, shown(t(R.string.supporters_empty)))
+        compose.onNodeWithText(support).performClick()
+        assertEquals(listOf("kofi"), taps)
+        listState!!(com.prism.music.ui.support.Supporters(members = listOf("Ana"), supporters = listOf("Bo", "Cy")))
+        compose.waitForIdle()
+        assertEquals(0, shown(t(R.string.supporters_empty)))
+        // (A group's title is drawn as an eyebrow, in capitals.)
+        fun top(text: String) = compose.onNodeWithText(text, ignoreCase = true).fetchSemanticsNode().boundsInRoot.top
+        assertTrue(top(t(R.string.supporters_members)) < top("Ana") && top("Ana") < top(t(R.string.supporters_thank_you)) && top(t(R.string.supporters_thank_you)) < top("Bo"))
+        assertEquals(3, compose.onAllNodes(hasTestTag(com.prism.music.ui.screens.settings.SupportersTags.NAME)).fetchSemanticsNodes().size)
+    }
+
+    private var listState: ((com.prism.music.ui.support.Supporters) -> Unit)? = null
+
     // ------------------------------------------------------------------ Search and old links
 
     @Test fun searchFindsEveryRowInItsGroup() {
@@ -467,7 +536,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         assertTrue("search lines in groups the page doesn't have: ${lost.map { it.group + " › " + it.title }}", lost.isEmpty())
         fun line(title: String) = lines.single { it.title == title }
         // Every row of the page with default settings has its line, in the group it is drawn in.
-        for ((group, titles) in listOf(backupGroup to listOf(backUp, restore), updatesGroup to listOf(check), aboutGroup to listOf(source, tour, licenses), diagnosticsGroup to listOf(diagnostics, selfTest))) {
+        for ((group, titles) in listOf(backupGroup to listOf(backUp, restore), updatesGroup to listOf(check), aboutGroup to listOf(support, supported, supporters, source, tour, licenses), diagnosticsGroup to listOf(diagnostics, selfTest))) {
             for (title in titles) assertEquals(title, group, line(title).group)
         }
         // The rows that follow the log say what to turn on, and stop saying it once that's on.
@@ -482,6 +551,8 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         assertTrue(SettingsIndex.search("version").any { it.page == SettingsPageId.BACKUP_ABOUT })
         assertTrue(SettingsIndex.search("github").any { it.title == source })
         assertTrue(SettingsIndex.search("stutter").any { it.title == diagnostics })
+        assertTrue(SettingsIndex.search("ko-fi").any { it.title == support })
+        assertTrue(SettingsIndex.search("donate").any { it.title == support })
         assertEquals(check, SettingsIndex.search("check for updates").first().title)
         // Links written before the rework still land: the old page's key, and its groups by their names.
         assertTrue(SettingsPageId.BACKUP_ABOUT.oldGroups.values.all { it in drawn })

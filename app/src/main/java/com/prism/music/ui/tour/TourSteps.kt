@@ -28,6 +28,12 @@ data class TourStep(
     /** "Show me": where it opens (the tour closes; it can be taken again from Settings → About). */
     val showMe: String? = null,
     val kind: Kind = Kind.PLAIN,
+    /**
+     * 1.8.7.6 (plan-1.8.7.6 §4.1 S6, D5): the card ends with one line asking to support Prism, shown once per release and
+     * never with "I've supported Prism" on ([com.prism.music.ui.support.SupportWhatsNewLine]). Only on the last card of
+     * a release's cards (`TourTest`).
+     */
+    val support: Boolean = false,
 ) {
     enum class Kind { PLAIN, NOTIFICATIONS }
 }

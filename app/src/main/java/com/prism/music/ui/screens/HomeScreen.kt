@@ -441,6 +441,9 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
     val openItem: (BrowseItem) -> Unit = { nav.open(it, onSong) }
 
     val list = rememberLazyListState()
+    // Whether Smart Downloads was ever answered (#339): its card shows until it is, and no other offer shows beside it.
+    var smartAnswered by remember { mutableStateOf<Boolean?>(null) }
+    LaunchedEffect(Unit) { smartAnswered = c.settings.smartDownloadsChosen() }
     // Content melts away under the status bar once the greeting has scrolled off.
     val scrolled by remember { derivedStateOf { list.firstVisibleItemIndex > 0 || list.firstVisibleItemScrollOffset > 24 } }
     val edge by animateFloatAsState(if (scrolled) 1f else 0f, tween(220), label = "edge")
@@ -455,7 +458,11 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
             item { HomeTopBar() }
             item(key = "update") { UpdateBanner() }
             item(key = "performance") { PerformanceOffer() }
-            item(key = "smartDownloads") { SmartDownloadsOffer() }
+            item(key = "smartDownloads") { SmartDownloadsOffer(smartAnswered) { smartAnswered = true } }
+            // 1.8.7.6: the 100-hour card, never beside another offer (one ask at a time).
+            item(key = "support") {
+                com.prism.music.ui.support.SupportHomeCard(otherOffer = performanceOfferShows() || smartAnswered != true && settings.onboarded)
+            }
             if (!online) item(key = "offline") { OfflineNote() }
             if (online && home.state is Load.Loading && shelves.isEmpty()) item { LoadingState() }
             // With the last Home on show, a failed refresh leaves it there (pull to refresh tries again).
@@ -584,12 +591,17 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
  * offered where it's seen. Either answer puts the card away for good; Settings has the switch.
  */
 @Composable
-private fun PerformanceOffer() {
-    val c = LocalContainer.current
+private fun performanceOfferShows(): Boolean {
     val settings = LocalAppSettings.current
     val context = androidx.compose.ui.platform.LocalContext.current
     val slow = remember { com.prism.music.data.DevicePower.mayBeSlow(context) }
-    if (!slow || settings.performanceOffered || settings.performanceMode) return
+    return slow && !settings.performanceOffered && !settings.performanceMode
+}
+
+@Composable
+private fun PerformanceOffer() {
+    val c = LocalContainer.current
+    if (!performanceOfferShows()) return
     val ui = com.prism.music.ui.theme.LocalUi.current
     Column(
         Modifier.padding(start = 16.dp, end = 16.dp, top = ui.gap(14.dp)).fillMaxWidth().pane(ui.shape(16.dp)).padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 4.dp),
@@ -617,14 +629,12 @@ private fun PerformanceOffer() {
  * the card away for good (Downloads, storage & data has the switch); it never shows to anyone who had it before.
  */
 @Composable
-private fun SmartDownloadsOffer() {
+private fun SmartDownloadsOffer(answered: Boolean?, onAnswered: () -> Unit) {
     val c = LocalContainer.current
     val settings = LocalAppSettings.current
-    var answered by remember { mutableStateOf<Boolean?>(null) }
-    LaunchedEffect(Unit) { answered = c.settings.smartDownloadsChosen() }
     if (answered != false || !settings.onboarded) return
     val ui = com.prism.music.ui.theme.LocalUi.current
-    val answer = { on: Boolean -> c.settings.setSmartDownloads(on); answered = true }
+    val answer = { on: Boolean -> c.settings.setSmartDownloads(on); onAnswered() }
     Column(
         Modifier.padding(start = 16.dp, end = 16.dp, top = ui.gap(14.dp)).fillMaxWidth().pane(ui.shape(16.dp)).padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 4.dp),
     ) {

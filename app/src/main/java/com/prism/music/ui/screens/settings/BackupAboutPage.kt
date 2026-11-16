@@ -47,6 +47,8 @@ import com.prism.music.ui.screens.SettingsSection
 import com.prism.music.ui.screens.UpdateBanner
 import com.prism.music.ui.screens.rememberBackupFlow
 import com.prism.music.ui.screens.rememberRestoreFlow
+import com.prism.music.ui.support.SupportAsks
+import com.prism.music.ui.support.Supporters
 import com.prism.music.ui.theme.LocalAppSettings
 import com.prism.music.ui.theme.LocalContainer
 import kotlinx.coroutines.Dispatchers
@@ -209,6 +211,14 @@ internal fun BackupAboutContent(
         }
         // "Your data stays here" was a row that did nothing: its words are the group's ⓘ (§2.7).
         group(tr(R.string.about_3), info = tr(R.string.about_data_info)) {
+            // 1.8.7.6 Support Prism (plan-1.8.7.6 §4.1 S1–S3): Ko-fi opens in the browser, Prism never contacts it; the
+            // switch is the listener's word (nothing checks it) and turns every ask off; the names are shipped in the app.
+            LinkRow(tr(R.string.support_prism), value = KOFI, info = tr(R.string.support_prism_info), external = true) { SupportAsks.openKofi(uri) }
+            SwitchRow(
+                tr(R.string.i_ve_supported_prism), s.behavior.supported, info = tr(R.string.i_ve_supported_prism_info),
+                icon = if (s.behavior.supported) com.prism.music.ui.theme.PrismIcons.Heart else null,
+            ) { c.settings.setSupported(it) }
+            LinkRow(tr(R.string.supporters)) { nav.go(Routes.SUPPORTERS) }
             // The installed version is the Updates row's value line (and the root's); this one is where Prism comes from.
             LinkRow(tr(R.string.source_code), value = tr(R.string.open_on_github), external = true) { runCatching { uri.openUri(SOURCE_URL) } }
             LinkRow(tr(R.string.take_the_tour), info = tr(R.string.a_minute_s_walk_through_prism)) { c.tourRequests.tryEmit(Unit) }
@@ -262,6 +272,58 @@ fun LicensesScreen(bottomPadding: Dp, showBack: Boolean = true, onSearch: (() ->
     }
 }
 
+/** Ko-fi's own name, the same in every language. */
+internal const val KOFI = "Ko-fi"
+
+/** The Supporters list's own tags (the page's names, the empty line). */
+internal object SupportersTags {
+    const val NAME = "supporters:name"
+    const val EMPTY = "supporters:empty"
+}
+
+/**
+ * 1.8.7.6: the people who supported Prism (`supporters`), a screen of this page opened from About, in the licenses'
+ * style: monthly members first under their own heading, then everyone else, from the list shipped in the app
+ * ([Supporters]). Nothing is fetched. An empty list says so in one line, with the way to Ko-fi.
+ */
+@Composable
+fun SupportersScreen(bottomPadding: Dp, showBack: Boolean = true) {
+    val context = LocalContext.current
+    val uri = LocalUriHandler.current
+    val list = remember { Supporters.read(context) }
+    SettingsPageScaffold(tr(R.string.supporters), bottomPadding, showBack = showBack) {
+        item("supporters") { SupportersList(list) { SupportAsks.openKofi(uri) } }
+    }
+}
+
+/** The list itself ([openKofi] is the only way out of the phone, and only on a tap). */
+@Composable
+internal fun SupportersList(list: Supporters, openKofi: () -> Unit) {
+    androidx.compose.foundation.layout.Column(verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(22.dp)) {
+        if (list.isEmpty) {
+            com.prism.music.ui.screens.Group(tr(R.string.supporters), info = tr(R.string.supporters_info)) {
+                Box(Modifier.testTag(SupportersTags.EMPTY)) { com.prism.music.ui.screens.Note(tr(R.string.supporters_empty)) }
+                com.prism.music.ui.screens.Item(tr(R.string.support_prism), KOFI, onClick = openKofi) {
+                    androidx.compose.material3.Icon(com.prism.music.ui.theme.PrismIcons.OpenInNew, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            return@Column
+        }
+        @Composable fun names(title: String, names: List<String>, info: String?) {
+            com.prism.music.ui.screens.Group(title, info = info) {
+                names.forEach { n ->
+                    Text(
+                        n, Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp).testTag(SupportersTags.NAME),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+            }
+        }
+        if (list.members.isNotEmpty()) names(tr(R.string.supporters_members), list.members, tr(R.string.supporters_info))
+        if (list.supporters.isNotEmpty()) names(tr(R.string.supporters_thank_you), list.supporters, if (list.members.isEmpty()) tr(R.string.supporters_info) else null)
+    }
+}
+
 /** The root's line for Backup & about: Prism's version, and what the page holds, in one short line. */
 fun backupAboutValue(s: AppSettings, dark: Boolean): String = tr(R.string.root_backup_short, com.prism.music.BuildConfig.VERSION_NAME)
 
@@ -285,6 +347,9 @@ val backupAboutIndex: List<SettingEntry> by lazy {
         SettingEntry(page, backup, tr(R.string.back_up), tr(R.string.backup_export_save_move_new_phone)),
         SettingEntry(page, backup, tr(R.string.restore_from_a_backup), tr(R.string.import_move_new_phone)),
         SettingEntry(page, updates, tr(R.string.check_for_updates), tr(R.string.update_new_version)),
+        SettingEntry(page, about, tr(R.string.support_prism), KOFI + " " + tr(R.string.support_prism_keywords)),
+        SettingEntry(page, about, tr(R.string.i_ve_supported_prism), tr(R.string.i_ve_supported_prism_keywords)),
+        SettingEntry(page, about, tr(R.string.supporters), tr(R.string.supporters_keywords)),
         // "Your data stays here" is the group's ⓘ now: its words still find About.
         SettingEntry(page, about, tr(R.string.source_code), tr(R.string.app_name) + " " + tr(R.string.version_github) + " privacy " + tr(R.string.your_data_stays_here)),
         SettingEntry(page, about, tr(R.string.take_the_tour), tr(R.string.tutorial_walkthrough_help_guide_what_s)),

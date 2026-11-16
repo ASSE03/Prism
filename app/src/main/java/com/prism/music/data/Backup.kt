@@ -361,6 +361,9 @@ class Backup(private val c: AppContainer) {
             listOf("recap", "milestones", "rewind").forEach { put(it, BackupPart.HISTORY) }
             // Which install this is (RestoredInstall): restoring one's own backup elsewhere mustn't look like Android's.
             put(RestoredInstall.PREFS, null)
+            // 1.8.7.6: which asks to support Prism were shown go with the settings (as the switch does), so a restored
+            // phone doesn't ask again.
+            put(com.prism.music.ui.support.SupportMarks.PREFS, BackupPart.SETTINGS)
         }
 
         /** Folders (and files) right under files/ by part; anything else counts as Settings. */
