@@ -4428,8 +4428,8 @@
     <string name="mix_why_live">One of the two is a live stream.</string>
     <string name="mix_why_podcast">One of the two is a podcast episode.</string>
     <string name="mix_why_album">An album playing through keeps its songs whole.</string>
-    <string name="mix_why_sing">Sing is on: each song plays whole.</string>
-    <string name="mix_why_together">Listen together is on: songs change as the host\'s do.</string>
+    <string name="mix_why_sing">Sing is on, so each song plays whole.</string>
+    <string name="mix_why_together">Listen together is on, so songs follow the host.</string>
     <string name="mix_why_casting">Playing on another device.</string>
     <string name="mix_why_short">This song is shorter than 30 seconds.</string>
     <string name="mix_why_next_short">The next song is only a few seconds long.</string>

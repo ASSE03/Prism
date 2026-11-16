@@ -135,8 +135,8 @@ class MixWhyTest {
         // With no player to say, it can't tell.
         assertEquals(MixWhy.GLITCH, mixWhyNot(a, other))
         // Each says which, in its own words.
-        assertEquals("Sing is on: each song plays whole.", tr(MixWhy.SING.text))
-        assertEquals("Listen together is on: songs change as the host's do.", tr(MixWhy.TOGETHER.text))
+        assertEquals("Sing is on, so each song plays whole.", tr(MixWhy.SING.text))
+        assertEquals("Listen together is on, so songs follow the host.", tr(MixWhy.TOGETHER.text))
     }
 
     @Test fun theServiceTellsTheEngineWhichOfSingOrTogetherItWas() {
