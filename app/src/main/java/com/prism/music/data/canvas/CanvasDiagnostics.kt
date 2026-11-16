@@ -61,7 +61,7 @@ private fun canvasNow(
         coverHidden && used.behavior.canvas.covers -> "still cover (animated cover hidden for this song)"
         else -> "still cover (animated covers off)"
     }
-    val want = canvasWant(used, metered, hasCover = shownCover != null, songChoice = CanvasSource.of(row?.prefer), hidden = hidden, isSong = ClipGate.isSong(song))
+    val want = canvasWant(if (shownCover?.spotify == true) spotifyBeforeVideo(used) else used, metered, hasCover = shownCover != null, songChoice = CanvasSource.of(row?.prefer), hidden = hidden, isSong = ClipGate.isSong(song))
     val choice = row?.prefer?.let { ", this song set to $it" }.orEmpty()
     if (!want.video) return "$coverText; no loop: not asked: ${want.notAsked?.text}$choice"
     if (row == null) return "$coverText; no loop: not looked up yet" + (if (want.network) "" else " and no Wi-Fi")

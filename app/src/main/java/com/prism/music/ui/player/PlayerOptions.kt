@@ -144,7 +144,7 @@ fun PlayerOptionsSheet(
     if (editing) { MenuEditorSheet { editing = false }; return }
     if (canvasParts) { CanvasPartsSheet(song) { canvasParts = false; onDismiss() }; return }
     if (canvasVideos) { CanvasVideosSheet(song, clipRow?.videoId) { canvasVideos = false; onDismiss() }; return }
-    if (canvasUse) { CanvasUseSheet(song, canvasUseNow(c.settings.current, clipRow)) { canvasUse = false; onDismiss() }; return }
+    if (canvasUse) { CanvasUseSheet(song, canvasUseNow(c.settings.current, clipRow, spotifys = c.canvas.spotifyAsked() && song.id !in hiddenSpotify && c.canvas.cached(song, spotifyOk = true, prismOk = false) != null)) { canvasUse = false; onDismiss() }; return }
 
     val isLiked = song.id in liked
     val dl = downloads[song.id]
@@ -313,7 +313,7 @@ fun PlayerOptionsSheet(
         if (spotifySwitch && loopSwitch && spotifyKnown != null) {
             // With Spotify's canvas there, only the one of the two loops that shows is checked; turning one on makes it
             // the song's choice, so the other reads as off without being switched off for the song.
-            val pair = canvasPairShown(spotifyOff, loopOff, canvasUseNow(settings, clipRow))
+            val pair = canvasPairShown(spotifyOff, loopOff, canvasUseNow(settings, clipRow, spotifys = true))
             put(MenuAction.SPOTIFY_CANVAS, canvasToggleItem(pair.spotify, tr(R.string.spotify_canvas), PrismIcons.AnimatedCover) {
                 if (pair.spotify) c.canvas.setSpotifyHidden(song.id, true)
                 else { c.canvas.setSpotifyHidden(song.id, false); c.scope.launch { c.canvasClips.setChoice(song.id, com.prism.music.data.canvas.CanvasSource.COVER) } }
@@ -335,7 +335,7 @@ fun PlayerOptionsSheet(
         }
         // The song has both an animated cover and a video loop: which one it uses, whatever "When a song has both" says.
         if (canvasUseShown(canvasOn, coversKind, settings.behavior.canvas.enabled && canvasPrefs.useVideos, hasCover, hasVideo, coverOff = false, loopOff = loopOff)) {
-            val now = canvasUseNow(settings, clipRow)
+            val now = canvasUseNow(settings, clipRow, spotifys = known?.spotify == true)
             put(MenuAction.CANVAS_USE, ActionItem(PrismIcons.Video, tr(R.string.canvas_use), value = canvasSourceName(now), keepOpen = true) { canvasUse = true })
         }
         // Only a song that has an animated cover (a loop from its video is kept by itself, and with its download). Not

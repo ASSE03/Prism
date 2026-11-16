@@ -108,6 +108,23 @@ fun prismCoversOn(settings: AppSettings): Boolean = settings.behavior.canvas.ena
 fun spotifyCanvasOn(settings: AppSettings, session: Boolean): Boolean = settings.behavior.canvas.spotifyFirst && session
 
 /**
+ * 1.8.7.6 (owner, 2026-11-16): beside Spotify's canvas, "When a song has both: music video first" does not put the video
+ * first. Spotify's canvas is tried first for every song, and only the song's own choice (the ⋯ menu's "Prism Canvas" or
+ * "Use:") shows its video's loop instead. These are [settings] as they count beside Spotify's canvas.
+ */
+fun spotifyBeforeVideo(settings: AppSettings): AppSettings =
+    if (!settings.behavior.canvas.videoFirst) settings
+    else settings.copy(behavior = settings.behavior.copy(canvas = settings.behavior.canvas.copy(videoFirst = false)))
+
+/**
+ * Whether the player asks for the loop from the music video at once ([canvasLoopFirst]). While Spotify's canvas is tried
+ * for the song ([spotifyTried]: asked, the network may be used, not switched off for the song) only the song's own
+ * choice does that ([spotifyBeforeVideo]).
+ */
+fun playerLoopFirst(settings: AppSettings, metered: Boolean, songChoice: CanvasSource?, hidden: Boolean, isSong: Boolean, spotifyTried: Boolean): Boolean =
+    canvasLoopFirst(if (spotifyTried) spotifyBeforeVideo(settings) else settings, metered, songChoice, hidden, isSong)
+
+/**
  * The player's canvas for a song (1.8.7.6, moved out of the player so it can be tested): [showCanvas] for Prism's
  * cover and loop, with Spotify's canvas first in the cover's place.
  *
@@ -117,12 +134,13 @@ fun spotifyCanvasOn(settings: AppSettings, session: Boolean): Boolean = settings
  * for this song ([loopFirst]) and is already up. Without this a late loop was remembered but only shown the next time
  * the song played.
  *
- * [loop] is the player's loop from the music video for whether the song has a cover; [shown] what is up now.
+ * [loop] is the player's loop from the music video for whether the song has a cover and whether that cover is Spotify's
+ * canvas (then the song's video comes first only by its own choice, [spotifyBeforeVideo]); [shown] what is up now.
  */
 suspend fun playerCanvas(
     settings: AppSettings, song: com.prism.music.data.model.Song, repo: CanvasRepository,
     coverHidden: Boolean, metered: Boolean, coverAllowed: Boolean, loopFirst: Boolean,
-    loop: suspend (hasCover: Boolean) -> CanvasArtwork?,
+    loop: suspend (hasCover: Boolean, spotifys: Boolean) -> CanvasArtwork?,
     shown: () -> CanvasArtwork?, show: (CanvasArtwork?) -> Unit,
     spotifyHidden: Boolean = false,
 ): Unit = kotlinx.coroutines.coroutineScope {
@@ -136,6 +154,7 @@ suspend fun playerCanvas(
     val coverWanted = canvasCoverWanted(settings, coverHidden, asked, spotifyHidden)
     // Once Spotify's late loop is up, Prism's cover (still being looked up) doesn't take its place.
     var spotifyUp = false
+    var foundSpotifys = false
     val put: (CanvasArtwork?) -> Unit = { if (!spotifyUp || it?.spotify == true) show(it) }
     if (coverWanted && spotify && spotifyNet) launch {
         val late = repo.spotifyLate(song) ?: return@launch
@@ -151,10 +170,10 @@ suspend fun playerCanvas(
                 val known = repo.cached(song, spotifyOk = spotifyNet && !spotifyHidden, prismOk = prismCover)
                 early(known)
                 if (known == null) kotlinx.coroutines.delay(500)
-                repo.canvasFor(song, spotifyOk = spotifyNet && !spotifyHidden, prismOk = prismCover)
+                repo.canvasFor(song, spotifyOk = spotifyNet && !spotifyHidden, prismOk = prismCover).also { foundSpotifys = it?.spotify == true }
             } else null
         },
-        loop = loop,
+        loop = { hasCover -> loop(hasCover, foundSpotifys) },
         show = put,
     )
 }

@@ -91,8 +91,8 @@ internal fun canvasPairShown(coverOff: Boolean, loopOff: Boolean, now: CanvasSou
 )
 
 /** Which one a song with both shows now: its own "Use:", else the setting "When a song has both". */
-internal fun canvasUseNow(settings: AppSettings, row: CanvasClipEntity?): CanvasSource =
-    pickSource(hasCover = true, hasClip = true, useVideos = true, videoFirst = settings.behavior.canvas.videoFirst, songChoice = CanvasSource.of(row?.prefer))
+internal fun canvasUseNow(settings: AppSettings, row: CanvasClipEntity?, spotifys: Boolean = false): CanvasSource =
+    pickSource(hasCover = true, hasClip = true, useVideos = true, videoFirst = settings.behavior.canvas.videoFirst && !spotifys, songChoice = CanvasSource.of(row?.prefer))
         ?: CanvasSource.COVER
 
 internal fun canvasSourceName(s: CanvasSource): String = when (s) {

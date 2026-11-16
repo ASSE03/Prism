@@ -94,6 +94,9 @@ class CanvasMenuTest {
         assertEquals(CanvasSource.VIDEO, canvasUseNow(videoFirst, row))
         assertEquals(CanvasSource.VIDEO, canvasUseNow(coverFirst, row.copy(prefer = "video")))
         assertEquals(CanvasSource.COVER, canvasUseNow(videoFirst, row.copy(prefer = "cover")))
+        // 1.8.7.6: beside Spotify's canvas the setting "video first" doesn't count, the song's own choice does.
+        assertEquals(CanvasSource.COVER, canvasUseNow(videoFirst, row, spotifys = true))
+        assertEquals(CanvasSource.VIDEO, canvasUseNow(videoFirst, row.copy(prefer = "video"), spotifys = true))
         assertEquals(tr(R.string.animated_cover), canvasSourceName(CanvasSource.COVER))
         assertEquals(tr(R.string.music_video_3), canvasSourceName(CanvasSource.VIDEO))
     }

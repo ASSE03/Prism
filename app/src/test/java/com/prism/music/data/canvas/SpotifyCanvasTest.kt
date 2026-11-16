@@ -436,15 +436,15 @@ class SpotifyCanvasTest {
     private class Player { var shown: CanvasArtwork? = null; val history = mutableListOf<CanvasArtwork?>() }
 
     /** The player for [song] with [s], as NowPlaying wires it: the loop from the music video is [videoLoop]. */
-    private fun play(song: Song, s: AppSettings, r: CanvasRepository, coverHidden: Boolean = false, spotifyHidden: Boolean = false): Player = runBlocking {
+    private fun play(song: Song, s: AppSettings, r: CanvasRepository, coverHidden: Boolean = false, spotifyHidden: Boolean = false, choice: CanvasSource? = null): Player = runBlocking {
         settings = s
         r.prismCovers = { prismCoversOn(settings) }
         val p = Player()
         val videos = s.behavior.canvas.enabled && s.behavior.canvas.useVideos
-        val loopFirst = videos && canvasLoopFirst(s, false, null, hidden = false, isSong = true)
+        val loopFirst = videos && playerLoopFirst(s, false, choice, hidden = false, isSong = true, spotifyTried = r.spotifyAsked() && !spotifyHidden)
         playerCanvas(
             s, song, r, coverHidden = coverHidden, metered = false, coverAllowed = true, loopFirst = loopFirst,
-            loop = { hasCover -> if (videos && canvasWant(s, false, hasCover, null, false, true).video) videoLoop else null },
+            loop = { hasCover, spotifys -> if (videos && canvasWant(if (spotifys) spotifyBeforeVideo(s) else s, false, hasCover, choice, false, true).video) videoLoop else null },
             shown = { p.shown }, show = { p.shown = it; p.history += it },
             spotifyHidden = spotifyHidden,
         )
@@ -548,8 +548,39 @@ class SpotifyCanvasTest {
         val p = play(espresso, switches(covers = false, videos = true, spotify = true), repo(waitMs = 200))
         assertEquals(loopUrl, p.shown?.url)
         assertTrue(p.history.toString(), videoLoop in p.history)
-        // The listener put the video first: once its loop is up it stays.
-        val first = play(espresso.copy(id = "yt-espresso-2"), switches(covers = false, videos = true, spotify = true, videoFirst = true), repo(waitMs = 200))
+        // The listener put the video first for this song: once its loop is up it stays.
+        val first = play(espresso.copy(id = "yt-espresso-2"), switches(covers = false, videos = true, spotify = true), repo(waitMs = 200), choice = CanvasSource.VIDEO)
         assertEquals(videoLoop, first.shown)
+    }
+
+    /**
+     * Owner, 2026-11-16: "Spotify canvas is not being used first even with the option selected". With "When a song has
+     * both: music video first" the video's loop won for every song. Spotify's canvas is tried first for every song; only
+     * a song set to Prism Canvas by hand shows its video, and the next song tries Spotify again.
+     */
+    @Test fun spotifysCanvasComesBeforeTheVideoUnlessTheSongItselfIsSetToIt() {
+        for (covers in listOf(true, false)) {
+            val s = switches(covers, videos = true, spotify = true, videoFirst = true)
+            answers()
+            assertEquals("video first in settings: still Spotify's", loopUrl, play(espresso, s, repo(4_000)).shown?.url)
+            // This song set to Prism Canvas from its menu: its video.
+            val set = play(espresso, s, repo(4_000), choice = CanvasSource.VIDEO)
+            assertEquals(videoLoop, set.shown)
+            assertTrue("and Spotify's never took its place", set.history.none { it?.spotify == true })
+            // The next song, nothing set for it: Spotify's again.
+            assertEquals("the next song", loopUrl, play(espresso.copy(id = "yt-espresso-next"), s, repo(4_000)).shown?.url)
+            // A song Spotify has none for: the video, as the setting says.
+            answers(bohemianSearch, canvas(null))
+            assertEquals(videoLoop, play(bohemian, s, repo(4_000)).shown)
+        }
+        // Slow Spotify with video first in settings: the video shows meanwhile, then Spotify's takes its place.
+        answers()
+        net.sleepMs = 1_000
+        val late = play(espresso.copy(id = "yt-espresso-late"), switches(covers = false, videos = true, spotify = true, videoFirst = true), repo(waitMs = 200))
+        assertEquals(loopUrl, late.shown?.url)
+        // Spotify canvas switched off for a song: the setting counts again.
+        net.sleepMs = 0
+        assertTrue(playerLoopFirst(switches(true, true, spotify = true, videoFirst = true), false, null, hidden = false, isSong = true, spotifyTried = false))
+        assertFalse(playerLoopFirst(switches(true, true, spotify = true, videoFirst = true), false, null, hidden = false, isSong = true, spotifyTried = true))
     }
 }
