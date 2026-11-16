@@ -234,8 +234,9 @@ class TextIconsPageTest : TextTabsPageHarness(SettingsPageId.TEXT_ICONS) {
         assertTrue(index.filter { it.group !in drawn }.map { it.title }.toString(), index.all { it.group in drawn })
         // The old pages' groups land on the groups that hold their rows now.
         val old = SettingsPageId.TEXT_ICONS.oldGroups
-        assertEquals("Text", old["Type"]); assertEquals("Text", old["Weight and spacing"]); assertEquals("Text", old["Titles"])
-        assertEquals("Icons", old["App icon"]); assertEquals("Shapes", old["Shape"]); assertEquals("Shapes", old["Covers' shapes"])
+        // 1.8.7.5: the rows "Type" and "Shape" are "Heading style" and "Button shape"; a link naming either still lands.
+        assertEquals("Text", old["Heading style"]); assertEquals("Text", old["Weight and spacing"]); assertEquals("Text", old["Titles"])
+        assertEquals("Icons", old["App icon"]); assertEquals("Shapes", old["Button shape"]); assertEquals("Shapes", old["Covers' shapes"])
         assertTrue(old.values.all { it in drawn })
         // "Text size" still finds it, under its new name.
         val size = com.prism.music.ui.screens.SettingsIndex.search("text size").first { it.page == SettingsPageId.TEXT_ICONS }

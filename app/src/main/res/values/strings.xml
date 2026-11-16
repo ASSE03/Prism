@@ -5545,6 +5545,7 @@
     <string name="tour_187_also_lyrics_right">The wrong song\'s lyrics are refused, and missing lyrics can be tried again.</string>
     <string name="tour_187_also_blend">When the DJ or %1$s leaves a plain change between two songs, the ⓘ says why.</string>
     <string name="tour_187_also_lighter">The open player asks less of the phone\'s processor.</string>
+    <string name="francesco_grazioso" translatable="false">Francesco Grazioso</string>
     <string name="meld_spotify_reads">Meld (how Spotify\'s web player is read)</string>
     <string name="spot_session_playlists_info">Your Spotify playlists show in Library marked Spotify, and play through their YouTube Music matches, in Spotify\'s order. Songs are matched once and remembered. Playlists you follow wait in Library, a tap away, or come in by themselves with Followed playlists too. Turning this off takes them out of Library.</string>
     <string name="spot_session_keep_in_step_info">When you open one of them, Prism looks at whether its songs changed on Spotify and reads it again if they did. All of them are checked once a day on Wi-Fi either way. Changes you make to them in Prism are replaced by Spotify\'s.</string>
