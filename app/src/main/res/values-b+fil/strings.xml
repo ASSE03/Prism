@@ -5591,4 +5591,21 @@
     <string name="cn_spot_not_connected">Hindi nakakonekta · mga playlist at like</string>
     <string name="cn_other_services">Iba pang serbisyo</string>
     <string name="edge_to_edge_both">Cover at video</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Tinatanggihan ngayon ng Android ang mga sound effect. Maaayos ito ng pag-restart ng phone.</string>
+    <string name="tour_1876_canvas_title">Canvas ng Spotify</string>
+    <string name="tour_1876_canvas_about">Para sa mga naka-sign in sa Spotify sa Prism</string>
+    <string name="tour_1876_canvas_point_1">Maipapakita ng Prism ang maikling looping na video na mayroon ang Spotify para sa isang kanta.</string>
+    <string name="tour_1876_canvas_point_2">Kung wala ang Spotify, lalabas ang Prism Canvas gaya ng dati.</string>
+    <string name="tour_1876_canvas_point_3">Naka-off ito hanggang i-on mo, at hindi ito opisyal: maaari itong tumigil sa paggana.</string>
+    <string name="tour_1876_also_loop">Umiikot ang canvas nang hindi tumitigil.</string>
+    <string name="tour_1876_also_eq">Gumagana na ulit ang equalizer. Kung wala pa ring nangyayari, i-restart ang phone mo nang isang beses.</string>
+    <string name="tour_1876_also_kids">Nagpe-play nang hindi nagsa-sign in ang mga kantang may markang para sa mga bata.</string>
+    <string name="tour_1876_also_cast">Sa cast speaker, isang hakbang ang isang pindot sa volume key.</string>
+    <string name="tour_1876_also_history">Nasa Mga account at pag-share na ngayon ang Dalhin ang history mo.</string>
+    <string name="spot_canvas_first">Canvas ng Spotify muna</string>
+    <string name="spot_canvas_first_info">Hindi opisyal. Ginagamit ang Spotify sign-in mo para itanong sa Spotify ang bawat kantang pinapatugtog mo. Kung may canvas ang Spotify para sa isang kanta, iyon ang magpe-play kapalit ng animated cover. Kung wala, lalabas ang Prism Canvas gaya ng dati. Maaaring ihinto ito ng Spotify anumang oras.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas loop video clip hindi opisyal</string>
+    <string name="spot_canvas_offer_title">Ipakita ang Canvas ng Spotify?</string>
+    <string name="spot_canvas_offer_text">Maipe-play ng Prism ang maikling looping na video na ipinapakita ng Spotify kasama ng isang kanta, kung mayroon ito. Hindi ito opisyal at ginagamit nito ang Spotify sign-in mo. Prism Canvas ang lalabas sa lahat ng ibang kanta. Mababago mo ito mamaya sa Player, sa ilalim ng Canvas.</string>
 </resources>

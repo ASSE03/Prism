@@ -5516,4 +5516,21 @@
     <string name="cn_spot_not_connected">未接続 · プレイリストと高評価</string>
     <string name="cn_other_services">その他のサービス</string>
     <string name="edge_to_edge_both">カバーと動画</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android がいまサウンドエフェクトを拒否しています。スマホを再起動すると直ります。</string>
+    <string name="tour_1876_canvas_title">Spotify の Canvas</string>
+    <string name="tour_1876_canvas_about">Prism で Spotify にログインしている方向け</string>
+    <string name="tour_1876_canvas_point_1">Spotify が曲に用意している、短いループ動画を Prism で表示できます。</string>
+    <string name="tour_1876_canvas_point_2">Spotify にない曲は、これまでどおり Prism Canvas が表示されます。</string>
+    <string name="tour_1876_canvas_point_3">オンにするまでは使われません。非公式のため、使えなくなることがあります。</string>
+    <string name="tour_1876_also_loop">Canvas が止まらずにループするようになりました。</string>
+    <string name="tour_1876_also_eq">イコライザが再び動くようになりました。それでも反応しない場合は、スマホを一度再起動してください。</string>
+    <string name="tour_1876_also_kids">子ども向けとされた曲も、ログインなしで再生できます。</string>
+    <string name="tour_1876_also_cast">キャスト先のスピーカーでは、音量キーを 1 回押すと 1 段階変わります。</string>
+    <string name="tour_1876_also_history">「履歴を持ってくる」は「アカウントと共有」に移動しました。</string>
+    <string name="spot_canvas_first">Spotify の Canvas を優先</string>
+    <string name="spot_canvas_first_info">非公式の機能です。Spotify のログイン情報を使い、再生する曲ごとに Spotify に問い合わせます。Spotify に曲の Canvas があれば、アニメーション カバーの代わりに再生されます。ない場合は、これまでどおり Prism Canvas が表示されます。Spotify によって、いつでも使えなくなる可能性があります。</string>
+    <string name="spot_canvas_first_keywords">spotify canvas キャンバス ループ 動画 ビデオ 非公式</string>
+    <string name="spot_canvas_offer_title">Spotify の Canvas を表示しますか？</string>
+    <string name="spot_canvas_offer_text">Spotify が曲に用意している短いループ動画があれば、Prism で再生できます。非公式の機能で、Spotify のログイン情報を使います。それ以外の曲には Prism Canvas が表示されます。あとから「プレーヤー」の「Canvas」で変更できます。</string>
 </resources>

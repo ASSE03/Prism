@@ -5741,4 +5741,21 @@
     <string name="cn_spot_not_connected">Nepřipojeno · playlisty a lajky</string>
     <string name="cn_other_services">Další služby</string>
     <string name="edge_to_edge_both">Obal i video</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android teď odmítá zvukové efekty. Pomůže restart telefonu.</string>
+    <string name="tour_1876_canvas_title">Canvas ze Spotify</string>
+    <string name="tour_1876_canvas_about">Pro ty, kdo jsou v Prism přihlášení do Spotify</string>
+    <string name="tour_1876_canvas_point_1">Prism umí zobrazit krátké smyčkové video, které má Spotify ke skladbě.</string>
+    <string name="tour_1876_canvas_point_2">Kde ho Spotify nemá, zobrazí se jako dřív Prism Canvas.</string>
+    <string name="tour_1876_canvas_point_3">Je vypnuté, dokud ho nezapneš, a je neoficiální: může přestat fungovat.</string>
+    <string name="tour_1876_also_loop">Canvas se přehrává dokola bez zastavení.</string>
+    <string name="tour_1876_also_eq">Ekvalizér zase funguje. Když pořád nic nedělá, restartuj telefon.</string>
+    <string name="tour_1876_also_kids">Skladby označené jako určené pro děti se přehrají bez přihlášení.</string>
+    <string name="tour_1876_also_cast">Na reproduktoru s Cast je jedno stisknutí tlačítka hlasitosti jeden krok.</string>
+    <string name="tour_1876_also_history">Přenes si svou historii je teď v Účty a sdílení.</string>
+    <string name="spot_canvas_first">Nejdřív Canvas ze Spotify</string>
+    <string name="spot_canvas_first_info">Neoficiální. Využívá tvé přihlášení do Spotify a u každé přehrávané skladby se Spotify zeptá. Pokud má Spotify ke skladbě Canvas, přehraje se místo animovaného obalu. Pokud ho nemá, zobrazí se jako dřív Prism Canvas. Spotify to může kdykoli přestat umožňovat.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas smyčka video klip neoficiální</string>
+    <string name="spot_canvas_offer_title">Zobrazovat Canvas ze Spotify?</string>
+    <string name="spot_canvas_offer_text">Prism umí přehrát krátké smyčkové video, které Spotify ke skladbě zobrazuje, pokud ho má. Je to neoficiální a využívá to tvé přihlášení do Spotify. U všech ostatních skladeb se zobrazí Prism Canvas. Později to můžeš změnit v Přehrávači, v části Canvas.</string>
 </resources>

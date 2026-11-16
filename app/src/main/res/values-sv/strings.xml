@@ -5591,4 +5591,21 @@
     <string name="cn_spot_not_connected">Inte ansluten · spellistor och gillade låtar</string>
     <string name="cn_other_services">Andra tjänster</string>
     <string name="edge_to_edge_both">Omslag och video</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android vägrar just nu ljudeffekter. Det löser sig om du startar om telefonen.</string>
+    <string name="tour_1876_canvas_title">Spotifys canvas</string>
+    <string name="tour_1876_canvas_about">För dig som är inloggad på Spotify i Prism</string>
+    <string name="tour_1876_canvas_point_1">Prism kan visa den korta videon i loop som Spotify har för en låt.</string>
+    <string name="tour_1876_canvas_point_2">Där Spotify inte har någon visas Prism Canvas som förut.</string>
+    <string name="tour_1876_canvas_point_3">Den är av tills du slår på den och är inofficiell: den kan sluta fungera.</string>
+    <string name="tour_1876_also_loop">En canvas går runt utan att stanna.</string>
+    <string name="tour_1876_also_eq">Equalizern fungerar igen. Om den ändå inte gör något, starta om telefonen en gång.</string>
+    <string name="tour_1876_also_kids">Låtar markerade som gjorda för barn spelas utan inloggning.</string>
+    <string name="tour_1876_also_cast">På en cast-högtalare är ett tryck på volymknappen ett steg.</string>
+    <string name="tour_1876_also_history">Ta med din historik finns nu i Konton &amp; delning.</string>
+    <string name="spot_canvas_first">Spotifys canvas först</string>
+    <string name="spot_canvas_first_info">Inofficiellt. Använder din Spotify-inloggning för att fråga Spotify om varje låt du spelar. Där Spotify har en canvas för en låt spelas den i stället för det animerade omslaget. Där den saknas visas Prism Canvas som förut. Spotify kan när som helst stoppa detta.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas loop video klipp inofficiell</string>
+    <string name="spot_canvas_offer_title">Visa Spotifys canvas?</string>
+    <string name="spot_canvas_offer_text">Prism kan spela den korta videon i loop som Spotify visar med en låt, där den finns. Det här är inofficiellt och använder din Spotify-inloggning. Prism Canvas visas för alla andra låtar. Du kan ändra det senare i Spelare, under Canvas.</string>
 </resources>

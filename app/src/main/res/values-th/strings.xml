@@ -5516,4 +5516,21 @@
     <string name="cn_spot_not_connected">ไม่ได้เชื่อมต่อ · เพลย์ลิสต์และเพลงที่ถูกใจ</string>
     <string name="cn_other_services">บริการอื่น</string>
     <string name="edge_to_edge_both">ปกและวิดีโอ</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">ตอนนี้ Android ไม่ยอมสร้างเอฟเฟกต์เสียง การรีสตาร์ตโทรศัพท์จะแก้ได้</string>
+    <string name="tour_1876_canvas_title">Canvas ของ Spotify</string>
+    <string name="tour_1876_canvas_about">สำหรับผู้ที่ลงชื่อเข้าใช้ Spotify ใน Prism</string>
+    <string name="tour_1876_canvas_point_1">Prism แสดงวิดีโอสั้นที่เล่นวนซึ่ง Spotify มีให้กับเพลงได้</string>
+    <string name="tour_1876_canvas_point_2">เพลงที่ Spotify ไม่มี Prism Canvas จะแสดงเหมือนเดิม</string>
+    <string name="tour_1876_canvas_point_3">ปิดอยู่จนกว่าคุณจะเปิด และไม่เป็นทางการ จึงอาจหยุดทำงานได้</string>
+    <string name="tour_1876_also_loop">Canvas เล่นวนต่อเนื่องโดยไม่ค้าง</string>
+    <string name="tour_1876_also_eq">อีควอไลเซอร์กลับมาใช้ได้แล้ว ถ้ายังไม่ทำงาน ให้รีสตาร์ตโทรศัพท์หนึ่งครั้ง</string>
+    <string name="tour_1876_also_kids">เพลงที่ระบุว่าสร้างมาสำหรับเด็กเล่นได้โดยไม่ต้องลงชื่อเข้าใช้</string>
+    <string name="tour_1876_also_cast">บนลำโพงที่แคสต์ กดปุ่มปรับเสียงหนึ่งครั้งจะเปลี่ยนหนึ่งระดับ</string>
+    <string name="tour_1876_also_history">นำประวัติของคุณมา อยู่ที่ บัญชีและการแชร์ แล้ว</string>
+    <string name="spot_canvas_first">ใช้ Canvas ของ Spotify ก่อน</string>
+    <string name="spot_canvas_first_info">ไม่เป็นทางการ ใช้การลงชื่อเข้าใช้ Spotify ของคุณเพื่อถาม Spotify ถึงแต่ละเพลงที่คุณเล่น เพลงที่ Spotify มี Canvas จะเล่นแทนปกเคลื่อนไหว เพลงที่ไม่มี Prism Canvas จะแสดงเหมือนเดิม Spotify อาจทำให้สิ่งนี้หยุดทำงานได้ทุกเมื่อ</string>
+    <string name="spot_canvas_first_keywords">spotify canvas วนซ้ำ วิดีโอ คลิป ไม่เป็นทางการ</string>
+    <string name="spot_canvas_offer_title">แสดง Canvas ของ Spotify ไหม</string>
+    <string name="spot_canvas_offer_text">Prism เล่นวิดีโอสั้นที่เล่นวนซึ่ง Spotify แสดงกับเพลงได้ ถ้าเพลงนั้นมี สิ่งนี้ไม่เป็นทางการและใช้การลงชื่อเข้าใช้ Spotify ของคุณ เพลงอื่นทั้งหมดจะแสดง Prism Canvas คุณเปลี่ยนได้ภายหลังที่ เพลเยอร์ ในหัวข้อ Canvas</string>
 </resources>

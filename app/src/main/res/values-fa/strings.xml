@@ -5591,4 +5591,21 @@
     <string name="cn_spot_not_connected">متصل نیست · فهرست‌های پخش و پسندیده‌ها</string>
     <string name="cn_other_services">سرویس‌های دیگر</string>
     <string name="edge_to_edge_both">کاور و ویدیو</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android در حال حاضر جلوه‌های صوتی را رد می‌کند. راه‌اندازی دوباره گوشی آن را درست می‌کند.</string>
+    <string name="tour_1876_canvas_title">Canvas در Spotify</string>
+    <string name="tour_1876_canvas_about">برای کسانی که در Prism وارد Spotify شده‌اند</string>
+    <string name="tour_1876_canvas_point_1">Prism می‌تواند ویدیوی کوتاه تکرارشونده‌ای را که Spotify برای یک آهنگ دارد نشان دهد.</string>
+    <string name="tour_1876_canvas_point_2">جایی که Spotify چیزی ندارد، Prism Canvas مثل قبل نشان داده می‌شود.</string>
+    <string name="tour_1876_canvas_point_3">تا وقتی روشنش نکنید خاموش است و غیررسمی است: ممکن است از کار بیفتد.</string>
+    <string name="tour_1876_also_loop">Canvas بدون مکث دوباره از اول شروع می‌شود.</string>
+    <string name="tour_1876_also_eq">اکولایزر دوباره کار می‌کند. اگر هنوز کاری نمی‌کند، یک بار گوشی را دوباره راه‌اندازی کنید.</string>
+    <string name="tour_1876_also_kids">آهنگ‌هایی که «ویژهٔ کودکان» علامت خورده‌اند بدون ورود پخش می‌شوند.</string>
+    <string name="tour_1876_also_cast">روی بلندگوی کست، یک بار فشردن دکمهٔ صدا یک پله است.</string>
+    <string name="tour_1876_also_history">«سابقهٔ خود را بیاورید» حالا در حساب‌ها و اشتراک‌گذاری است.</string>
+    <string name="spot_canvas_first">اول Canvas در Spotify</string>
+    <string name="spot_canvas_first_info">غیررسمی. از ورود شما به Spotify استفاده می‌کند تا دربارهٔ هر آهنگی که پخش می‌کنید از Spotify بپرسد. اگر Spotify برای آهنگی Canvas داشته باشد، به‌جای کاور متحرک پخش می‌شود. اگر نداشته باشد، Prism Canvas مثل قبل نشان داده می‌شود. Spotify هر زمان بخواهد می‌تواند این را از کار بیندازد.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas تکرار ویدیو کلیپ غیررسمی کاور متحرک</string>
+    <string name="spot_canvas_offer_title">Canvas در Spotify نشان داده شود؟</string>
+    <string name="spot_canvas_offer_text">Prism می‌تواند ویدیوی کوتاه تکرارشونده‌ای را که Spotify همراه یک آهنگ نشان می‌دهد، در صورت وجود پخش کند. این قابلیت غیررسمی است و از ورود شما به Spotify استفاده می‌کند. برای بقیهٔ آهنگ‌ها Prism Canvas نشان داده می‌شود. بعداً می‌توانید آن را در پخش‌کننده، زیر Canvas تغییر دهید.</string>
 </resources>

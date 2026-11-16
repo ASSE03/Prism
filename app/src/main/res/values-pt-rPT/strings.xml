@@ -5666,4 +5666,21 @@
     <string name="cn_spot_not_connected">Não ligado · playlists e favoritos</string>
     <string name="cn_other_services">Outros serviços</string>
     <string name="edge_to_edge_both">Capa e vídeo</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">O Android está a recusar efeitos de som neste momento. Reiniciar o telemóvel resolve.</string>
+    <string name="tour_1876_canvas_title">O canvas do Spotify</string>
+    <string name="tour_1876_canvas_about">Para quem tem sessão iniciada no Spotify no Prism</string>
+    <string name="tour_1876_canvas_point_1">O Prism pode mostrar o pequeno vídeo em ciclo que o Spotify tem para uma música.</string>
+    <string name="tour_1876_canvas_point_2">Onde o Spotify não tem nenhum, o Prism Canvas aparece como antes.</string>
+    <string name="tour_1876_canvas_point_3">Está desligado até o ligares e não é oficial: pode deixar de funcionar.</string>
+    <string name="tour_1876_also_loop">Um canvas repete-se sem parar a meio.</string>
+    <string name="tour_1876_also_eq">O equalizador voltou a funcionar. Se continuar sem fazer nada, reinicia o telemóvel uma vez.</string>
+    <string name="tour_1876_also_kids">As músicas marcadas como feitas para crianças tocam sem iniciar sessão.</string>
+    <string name="tour_1876_also_cast">Numa coluna com transmissão, um toque numa tecla de volume é um passo.</string>
+    <string name="tour_1876_also_history">Traz o teu histórico passou para Contas e partilha.</string>
+    <string name="spot_canvas_first">Canvas do Spotify primeiro</string>
+    <string name="spot_canvas_first_info">Não oficial. Usa o teu início de sessão no Spotify para perguntar ao Spotify por cada música que ouves. Onde o Spotify tem um canvas para uma música, ele toca no lugar da capa animada. Onde não tem, o Prism Canvas aparece como antes. O Spotify pode impedir que isto funcione a qualquer momento.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas ciclo vídeo clipe não oficial</string>
+    <string name="spot_canvas_offer_title">Mostrar o canvas do Spotify?</string>
+    <string name="spot_canvas_offer_text">O Prism pode reproduzir o pequeno vídeo em ciclo que o Spotify mostra com uma música, quando existe. Isto não é oficial e usa o teu início de sessão no Spotify. O Prism Canvas aparece em todas as outras músicas. Podes mudar isto mais tarde em Leitor, em Canvas.</string>
 </resources>

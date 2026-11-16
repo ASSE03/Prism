@@ -5591,4 +5591,21 @@
     <string name="cn_spot_not_connected">منسلک نہیں · پلے لسٹس اور پسندیدہ</string>
     <string name="cn_other_services">دیگر سروسز</string>
     <string name="edge_to_edge_both">کور اور ویڈیو</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android اس وقت ساؤنڈ ایفیکٹس سے انکار کر رہا ہے۔ فون ری اسٹارٹ کرنے سے ٹھیک ہو جاتا ہے۔</string>
+    <string name="tour_1876_canvas_title">Spotify کا Canvas</string>
+    <string name="tour_1876_canvas_about">Prism میں Spotify پر سائن ان لوگوں کے لیے</string>
+    <string name="tour_1876_canvas_point_1">Prism وہ مختصر لوپنگ ویڈیو دکھا سکتا ہے جو Spotify کے پاس گانے کے لیے ہے۔</string>
+    <string name="tour_1876_canvas_point_2">جہاں Spotify کے پاس نہیں، وہاں Prism Canvas پہلے کی طرح دکھائی دیتا ہے۔</string>
+    <string name="tour_1876_canvas_point_3">یہ آپ کے آن کرنے تک بند رہتا ہے اور غیر سرکاری ہے: یہ کام کرنا بند کر سکتا ہے۔</string>
+    <string name="tour_1876_also_loop">Canvas رکے بغیر دوبارہ چلتا ہے۔</string>
+    <string name="tour_1876_also_eq">ایکوالائزر دوبارہ کام کرتا ہے۔ اگر پھر بھی کچھ نہ کرے تو فون ایک بار ری اسٹارٹ کریں۔</string>
+    <string name="tour_1876_also_kids">بچوں کے لیے بنے نشان زد گانے سائن ان کے بغیر چلتے ہیں۔</string>
+    <string name="tour_1876_also_cast">کاسٹ اسپیکر پر والیوم کی کو ایک بار دبانا ایک قدم ہے۔</string>
+    <string name="tour_1876_also_history">اپنی ہسٹری لائیں اب اکاؤنٹس اور شیئرنگ میں ہے۔</string>
+    <string name="spot_canvas_first">پہلے Spotify کا Canvas</string>
+    <string name="spot_canvas_first_info">غیر سرکاری۔ آپ کے چلائے ہر گانے کے بارے میں Spotify سے پوچھنے کے لیے آپ کا Spotify سائن ان استعمال کرتا ہے۔ جہاں Spotify کے پاس گانے کا Canvas ہو، وہ اینیمیٹڈ کور کی جگہ چلتا ہے۔ جہاں نہ ہو، Prism Canvas پہلے کی طرح دکھائی دیتا ہے۔ Spotify کسی بھی وقت اسے کام کرنے سے روک سکتا ہے۔</string>
+    <string name="spot_canvas_first_keywords">spotify canvas لوپ ویڈیو کلپ غیر سرکاری اینیمیٹڈ کور</string>
+    <string name="spot_canvas_offer_title">Spotify کا Canvas دکھائیں؟</string>
+    <string name="spot_canvas_offer_text">Prism وہ مختصر لوپنگ ویڈیو چلا سکتا ہے جو Spotify گانے کے ساتھ دکھاتا ہے، جہاں وہ موجود ہو۔ یہ غیر سرکاری ہے اور آپ کا Spotify سائن ان استعمال کرتا ہے۔ باقی ہر گانے کے لیے Prism Canvas دکھائی دیتا ہے۔ آپ اسے بعد میں پلیئر میں، Canvas کے تحت بدل سکتے ہیں۔</string>
 </resources>

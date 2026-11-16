@@ -5591,4 +5591,21 @@
     <string name="cn_spot_not_connected">Nicht verbunden · Playlists und Likes</string>
     <string name="cn_other_services">Weitere Dienste</string>
     <string name="edge_to_edge_both">Cover und Video</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android verweigert gerade Soundeffekte. Ein Neustart des Handys behebt das.</string>
+    <string name="tour_1876_canvas_title">Spotifys Canvas</string>
+    <string name="tour_1876_canvas_about">Für alle, die in Prism bei Spotify angemeldet sind</string>
+    <string name="tour_1876_canvas_point_1">Prism kann die kurze Videoschleife zeigen, die Spotify zu einem Song hat.</string>
+    <string name="tour_1876_canvas_point_2">Wo Spotify keine hat, erscheint wie bisher Prism Canvas.</string>
+    <string name="tour_1876_canvas_point_3">Es ist aus, bis du es einschaltest, und es ist inoffiziell: Es kann aufhören zu funktionieren.</string>
+    <string name="tour_1876_also_loop">Ein Canvas läuft ohne Stillstand von vorn los.</string>
+    <string name="tour_1876_also_eq">Der Equalizer funktioniert wieder. Tut er trotzdem nichts, starte dein Handy einmal neu.</string>
+    <string name="tour_1876_also_kids">Songs, die als „für Kinder“ markiert sind, spielen ohne Anmeldung.</string>
+    <string name="tour_1876_also_cast">Auf einem Cast-Lautsprecher ist ein Druck auf die Lautstärketaste ein Schritt.</string>
+    <string name="tour_1876_also_history">Deinen Verlauf mitbringen findest du jetzt unter Konten &amp; Teilen.</string>
+    <string name="spot_canvas_first">Spotifys Canvas zuerst</string>
+    <string name="spot_canvas_first_info">Inoffiziell. Nutzt deine Spotify-Anmeldung, um Spotify zu jedem gespielten Song zu fragen. Hat Spotify ein Canvas für einen Song, läuft es anstelle des animierten Covers. Hat es keins, erscheint wie bisher Prism Canvas. Spotify kann dies jederzeit stoppen.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas schleife video clip inoffiziell</string>
+    <string name="spot_canvas_offer_title">Spotifys Canvas zeigen?</string>
+    <string name="spot_canvas_offer_text">Prism kann die kurze Videoschleife abspielen, die Spotify zu einem Song zeigt, wenn es eine hat. Das ist inoffiziell und nutzt deine Spotify-Anmeldung. Für alle anderen Songs erscheint Prism Canvas. Du kannst das später unter Player bei Canvas ändern.</string>
 </resources>

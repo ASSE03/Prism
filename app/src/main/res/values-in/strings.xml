@@ -5516,4 +5516,21 @@
     <string name="cn_spot_not_connected">Tidak terhubung · playlist dan suka</string>
     <string name="cn_other_services">Layanan lain</string>
     <string name="edge_to_edge_both">Sampul dan video</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android sedang menolak efek suara. Memulai ulang ponsel akan memperbaikinya.</string>
+    <string name="tour_1876_canvas_title">Canvas Spotify</string>
+    <string name="tour_1876_canvas_about">Untuk yang login ke Spotify di Prism</string>
+    <string name="tour_1876_canvas_point_1">Prism bisa menampilkan video pendek berulang yang dimiliki Spotify untuk sebuah lagu.</string>
+    <string name="tour_1876_canvas_point_2">Jika Spotify tidak punya, Prism Canvas tampil seperti sebelumnya.</string>
+    <string name="tour_1876_canvas_point_3">Nonaktif sampai kamu mengaktifkannya, dan tidak resmi: bisa saja berhenti berfungsi.</string>
+    <string name="tour_1876_also_loop">Canvas kini berulang tanpa berhenti sejenak.</string>
+    <string name="tour_1876_also_eq">Equalizer berfungsi lagi. Jika masih tidak berpengaruh, mulai ulang ponselmu sekali.</string>
+    <string name="tour_1876_also_kids">Lagu yang ditandai dibuat untuk anak-anak diputar tanpa login.</string>
+    <string name="tour_1876_also_cast">Di speaker cast, satu kali tekan tombol volume sama dengan satu langkah.</string>
+    <string name="tour_1876_also_history">Bawa riwayatmu kini ada di Akun &amp; berbagi.</string>
+    <string name="spot_canvas_first">Canvas Spotify lebih dulu</string>
+    <string name="spot_canvas_first_info">Tidak resmi. Memakai login Spotify-mu untuk menanyakan ke Spotify tentang setiap lagu yang kamu putar. Jika Spotify punya canvas untuk sebuah lagu, canvas itu diputar menggantikan sampul animasi. Jika tidak ada, Prism Canvas tampil seperti sebelumnya. Spotify bisa menghentikan fitur ini kapan saja.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas loop video klip tidak resmi</string>
+    <string name="spot_canvas_offer_title">Tampilkan canvas Spotify?</string>
+    <string name="spot_canvas_offer_text">Prism bisa memutar video pendek berulang yang ditampilkan Spotify untuk sebuah lagu, jika ada. Ini tidak resmi dan memakai login Spotify-mu. Prism Canvas tampil untuk semua lagu lainnya. Kamu bisa mengubahnya nanti di Pemutar, di bagian Canvas.</string>
 </resources>

@@ -5891,4 +5891,21 @@
     <string name="cn_spot_not_connected">غير متصل · قوائم التشغيل والإعجابات</string>
     <string name="cn_other_services">خدمات أخرى</string>
     <string name="edge_to_edge_both">الغلاف والفيديو</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">يرفض Android حاليًا المؤثرات الصوتية. تُحلّ المشكلة بإعادة تشغيل الهاتف.</string>
+    <string name="tour_1876_canvas_title">Canvas من Spotify</string>
+    <string name="tour_1876_canvas_about">لمن سجّل الدخول إلى Spotify داخل Prism</string>
+    <string name="tour_1876_canvas_point_1">يمكن لـ Prism عرض الفيديو القصير المتكرر الذي يملكه Spotify لأغنية ما.</string>
+    <string name="tour_1876_canvas_point_2">وحيث لا يملك Spotify واحدًا، يظهر Prism Canvas كما كان.</string>
+    <string name="tour_1876_canvas_point_3">هو متوقف حتى تشغّله، وهو غير رسمي: قد يتوقف عن العمل.</string>
+    <string name="tour_1876_also_loop">يعاد تشغيل Canvas من البداية دون توقف.</string>
+    <string name="tour_1876_also_eq">عاد المعادل الصوتي إلى العمل. وإن بقي لا يفعل شيئًا، أعد تشغيل هاتفك مرة واحدة.</string>
+    <string name="tour_1876_also_kids">الأغاني المصنّفة للأطفال تُشغَّل دون تسجيل الدخول.</string>
+    <string name="tour_1876_also_cast">على مكبّر صوت للبث، ضغطة واحدة على زر الصوت تساوي خطوة واحدة.</string>
+    <string name="tour_1876_also_history">أحضِر سجلّك صار الآن ضمن الحسابات والمشاركة.</string>
+    <string name="spot_canvas_first">Canvas من Spotify أولًا</string>
+    <string name="spot_canvas_first_info">غير رسمي. يستخدم تسجيل دخولك إلى Spotify ليسأل Spotify عن كل أغنية تشغّلها. إن كان لدى Spotify مقطع Canvas لأغنية، فإنه يُعرض بدل الغلاف المتحرك. وإن لم يكن، يظهر Prism Canvas كما كان. يمكن لـ Spotify إيقاف هذا في أي وقت.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas كانفاس حلقة فيديو مقطع غير رسمي</string>
+    <string name="spot_canvas_offer_title">عرض Canvas من Spotify؟</string>
+    <string name="spot_canvas_offer_text">يمكن لـ Prism تشغيل الفيديو القصير المتكرر الذي يعرضه Spotify مع أغنية ما، إن وُجد. هذا غير رسمي ويستخدم تسجيل دخولك إلى Spotify. ويظهر Prism Canvas لكل الأغاني الأخرى. يمكنك تغيير ذلك لاحقًا في المشغّل، ضمن Canvas.</string>
 </resources>

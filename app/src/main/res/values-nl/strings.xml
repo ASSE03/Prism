@@ -5591,4 +5591,21 @@
     <string name="cn_spot_not_connected">Niet verbonden · playlists en likes</string>
     <string name="cn_other_services">Andere diensten</string>
     <string name="edge_to_edge_both">Cover en video</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android weigert nu geluidseffecten. Een herstart van de telefoon lost het op.</string>
+    <string name="tour_1876_canvas_title">De Canvas van Spotify</string>
+    <string name="tour_1876_canvas_about">Voor wie in Prism is ingelogd bij Spotify</string>
+    <string name="tour_1876_canvas_point_1">Prism kan de korte lusvideo laten zien die Spotify bij een nummer heeft.</string>
+    <string name="tour_1876_canvas_point_2">Heeft Spotify er geen, dan toont Prism Canvas zoals eerder.</string>
+    <string name="tour_1876_canvas_point_3">Het staat uit tot je het aanzet, en het is onofficieel: het kan ophouden te werken.</string>
+    <string name="tour_1876_also_loop">Een canvas herhaalt zonder even stil te staan.</string>
+    <string name="tour_1876_also_eq">De equalizer werkt weer. Doet hij nog steeds niets, start je telefoon dan één keer opnieuw op.</string>
+    <string name="tour_1876_also_kids">Nummers die als voor kinderen gemaakt zijn gemarkeerd, spelen zonder inloggen.</string>
+    <string name="tour_1876_also_cast">Op een cast-speaker is één druk op een volumetoets één stap.</string>
+    <string name="tour_1876_also_history">Je geschiedenis meenemen staat nu onder Accounts &amp; delen.</string>
+    <string name="spot_canvas_first">Canvas van Spotify eerst</string>
+    <string name="spot_canvas_first_info">Onofficieel. Gebruikt je Spotify-inlog om Spotify te vragen naar elk nummer dat je afspeelt. Heeft Spotify een canvas voor een nummer, dan wordt die afgespeeld in plaats van de geanimeerde cover. Heeft Spotify er geen, dan toont Prism Canvas zoals eerder. Spotify kan dit op elk moment laten stoppen.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas lus video clip onofficieel</string>
+    <string name="spot_canvas_offer_title">Canvas van Spotify tonen?</string>
+    <string name="spot_canvas_offer_text">Prism kan de korte lusvideo afspelen die Spotify bij een nummer toont, als die er is. Dit is onofficieel en gebruikt je Spotify-inlog. Prism Canvas toont zich bij alle andere nummers. Je kunt dit later wijzigen bij Speler, onder Canvas.</string>
 </resources>

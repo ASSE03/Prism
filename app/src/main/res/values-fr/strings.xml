@@ -5666,4 +5666,21 @@
     <string name="cn_spot_not_connected">Non connecté · playlists et J’aime</string>
     <string name="cn_other_services">Autres services</string>
     <string name="edge_to_edge_both">Pochette et vidéo</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android refuse actuellement les effets sonores. Redémarrer le téléphone règle le problème.</string>
+    <string name="tour_1876_canvas_title">Le canvas de Spotify</string>
+    <string name="tour_1876_canvas_about">Pour les personnes connectées à Spotify dans Prism</string>
+    <string name="tour_1876_canvas_point_1">Prism peut afficher la courte vidéo en boucle que Spotify propose pour un titre.</string>
+    <string name="tour_1876_canvas_point_2">Là où Spotify n’en a pas, Prism Canvas s’affiche comme avant.</string>
+    <string name="tour_1876_canvas_point_3">C’est désactivé tant que vous ne l’activez pas, et non officiel : cela peut cesser de fonctionner.</string>
+    <string name="tour_1876_also_loop">Un canvas repart du début sans s’arrêter.</string>
+    <string name="tour_1876_also_eq">L’égaliseur fonctionne de nouveau. S’il ne fait toujours rien, redémarrez votre téléphone une fois.</string>
+    <string name="tour_1876_also_kids">Les titres marqués comme conçus pour les enfants sont lus sans connexion.</string>
+    <string name="tour_1876_also_cast">Sur une enceinte de diffusion, un appui sur une touche de volume fait un cran.</string>
+    <string name="tour_1876_also_history">Importer votre historique se trouve désormais dans Comptes et partage.</string>
+    <string name="spot_canvas_first">Canvas de Spotify d’abord</string>
+    <string name="spot_canvas_first_info">Non officiel. Utilise votre connexion Spotify pour interroger Spotify sur chaque titre que vous écoutez. Quand Spotify a un canvas pour un titre, il est lu à la place de la pochette animée. Quand il n’en a pas, Prism Canvas s’affiche comme avant. Spotify peut empêcher cela de fonctionner à tout moment.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas boucle vidéo clip non officiel pochette animée</string>
+    <string name="spot_canvas_offer_title">Afficher le canvas de Spotify ?</string>
+    <string name="spot_canvas_offer_text">Prism peut lire la courte vidéo en boucle que Spotify affiche avec un titre, quand il en a une. C’est non officiel et cela utilise votre connexion Spotify. Prism Canvas s’affiche pour tous les autres titres. Vous pouvez le modifier plus tard dans Lecteur, sous Canvas.</string>
 </resources>

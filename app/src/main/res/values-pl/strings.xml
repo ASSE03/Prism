@@ -5741,4 +5741,21 @@
     <string name="cn_spot_not_connected">Nie połączono · playlisty i polubienia</string>
     <string name="cn_other_services">Inne usługi</string>
     <string name="edge_to_edge_both">Okładka i wideo</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android odmawia teraz efektów dźwiękowych. Pomaga ponowne uruchomienie telefonu.</string>
+    <string name="tour_1876_canvas_title">Canvas ze Spotify</string>
+    <string name="tour_1876_canvas_about">Dla osób zalogowanych do Spotify w Prism</string>
+    <string name="tour_1876_canvas_point_1">Prism może pokazać krótki zapętlony film, który Spotify ma do utworu.</string>
+    <string name="tour_1876_canvas_point_2">Gdy Spotify go nie ma, Prism Canvas działa jak dotąd.</string>
+    <string name="tour_1876_canvas_point_3">Jest wyłączone, dopóki go nie włączysz, i jest nieoficjalne: może przestać działać.</string>
+    <string name="tour_1876_also_loop">Canvas zapętla się bez zatrzymywania.</string>
+    <string name="tour_1876_also_eq">Korektor znów działa. Jeśli nadal nic nie robi, uruchom telefon ponownie.</string>
+    <string name="tour_1876_also_kids">Utwory oznaczone jako dla dzieci grają bez logowania.</string>
+    <string name="tour_1876_also_cast">Na głośniku z przesyłaniem jedno naciśnięcie klawisza głośności to jeden krok.</string>
+    <string name="tour_1876_also_history">Przenieś swoją historię jest teraz w Konta i udostępnianie.</string>
+    <string name="spot_canvas_first">Najpierw Canvas ze Spotify</string>
+    <string name="spot_canvas_first_info">Funkcja nieoficjalna. Używa twojego logowania do Spotify, by pytać Spotify o każdy odtwarzany utwór. Jeśli Spotify ma Canvas do utworu, odtwarza się on zamiast animowanej okładki. Jeśli nie ma, Prism Canvas działa jak dotąd. Spotify może w każdej chwili przestać na to pozwalać.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas pętla zapętlony wideo film klip nieoficjalne</string>
+    <string name="spot_canvas_offer_title">Pokazywać Canvas ze Spotify?</string>
+    <string name="spot_canvas_offer_text">Prism może odtwarzać krótki zapętlony film, który Spotify pokazuje przy utworze, jeśli go ma. To funkcja nieoficjalna, korzysta z twojego logowania do Spotify. Przy pozostałych utworach pokazuje się Prism Canvas. Możesz to później zmienić w Odtwarzacz, w sekcji Canvas.</string>
 </resources>

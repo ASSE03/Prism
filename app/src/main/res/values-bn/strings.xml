@@ -5591,4 +5591,21 @@
     <string name="cn_spot_not_connected">সংযুক্ত নয় · প্লেলিস্ট আর লাইক</string>
     <string name="cn_other_services">অন্যান্য সেবা</string>
     <string name="edge_to_edge_both">কভার আর ভিডিও</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android এখন সাউন্ড ইফেক্ট দিচ্ছে না। ফোন রিস্টার্ট করলে ঠিক হয়ে যায়।</string>
+    <string name="tour_1876_canvas_title">Spotify-এর Canvas</string>
+    <string name="tour_1876_canvas_about">যাঁরা Prism-এ Spotify-এ সাইন ইন করেছেন তাঁদের জন্য</string>
+    <string name="tour_1876_canvas_point_1">Spotify-এ কোনো গানের যে ছোট লুপ ভিডিও আছে, Prism তা দেখাতে পারে।</string>
+    <string name="tour_1876_canvas_point_2">Spotify-এ না থাকলে আগের মতোই Prism Canvas দেখায়।</string>
+    <string name="tour_1876_canvas_point_3">আপনি চালু না করা পর্যন্ত এটি বন্ধ থাকে, আর এটি অনানুষ্ঠানিক: কাজ করা বন্ধ হতে পারে।</string>
+    <string name="tour_1876_also_loop">Canvas থেমে না গিয়ে ঘুরে ঘুরে চলে।</string>
+    <string name="tour_1876_also_eq">ইকুয়ালাইজার আবার কাজ করছে। তবুও কিছু না হলে একবার ফোন রিস্টার্ট করুন।</string>
+    <string name="tour_1876_also_kids">শিশুদের জন্য চিহ্নিত গান সাইন ইন ছাড়াই চলে।</string>
+    <string name="tour_1876_also_cast">কাস্ট স্পিকারে ভলিউম বোতামে একবার চাপ মানে এক ধাপ।</string>
+    <string name="tour_1876_also_history">আপনার ইতিহাস নিয়ে আসুন এখন অ্যাকাউন্ট ও শেয়ারিং-এ আছে।</string>
+    <string name="spot_canvas_first">আগে Spotify-এর Canvas</string>
+    <string name="spot_canvas_first_info">অনানুষ্ঠানিক। আপনার Spotify সাইন ইন ব্যবহার করে আপনার চালানো প্রতিটি গান সম্পর্কে Spotify-কে জিজ্ঞেস করে। কোনো গানের Canvas Spotify-এ থাকলে সেটি অ্যানিমেটেড কভারের জায়গায় চলে। না থাকলে আগের মতোই Prism Canvas দেখায়। Spotify যেকোনো সময় এটি কাজ করা বন্ধ করে দিতে পারে।</string>
+    <string name="spot_canvas_first_keywords">spotify canvas লুপ ভিডিও ক্লিপ অনানুষ্ঠানিক ক্যানভাস</string>
+    <string name="spot_canvas_offer_title">Spotify-এর Canvas দেখাবেন?</string>
+    <string name="spot_canvas_offer_text">Spotify কোনো গানের সঙ্গে যে ছোট লুপ ভিডিও দেখায়, থাকলে Prism তা চালাতে পারে। এটি অনানুষ্ঠানিক এবং আপনার Spotify সাইন ইন ব্যবহার করে। বাকি সব গানে Prism Canvas দেখায়। পরে এটি প্লেয়ারে, Canvas-এর নিচে বদলাতে পারবেন।</string>
 </resources>

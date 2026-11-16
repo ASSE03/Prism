@@ -5666,4 +5666,21 @@
     <string name="cn_spot_not_connected">לא מחובר · פלייליסטים ולייקים</string>
     <string name="cn_other_services">שירותים נוספים</string>
     <string name="edge_to_edge_both">עטיפה וסרטון</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android מסרב כרגע להפעיל אפקטי קול. הפעלה מחדש של הטלפון פותרת את זה.</string>
+    <string name="tour_1876_canvas_title">‏Canvas של Spotify</string>
+    <string name="tour_1876_canvas_about">למי שנכנס ל-Spotify דרך Prism</string>
+    <string name="tour_1876_canvas_point_1">Prism יכול להציג את הסרטון הקצר והחוזר ש-Spotify מציע לשיר.</string>
+    <string name="tour_1876_canvas_point_2">איפה ש-Spotify אין, ‏Prism Canvas מוצג כמו קודם.</string>
+    <string name="tour_1876_canvas_point_3">זה כבוי עד שתפעיל אותו, והוא לא רשמי: ייתכן שיפסיק לעבוד.</string>
+    <string name="tour_1876_also_loop">Canvas חוזר שוב ושוב בלי לעצור.</string>
+    <string name="tour_1876_also_eq">האקולייזר עובד שוב. אם הוא עדיין לא עושה כלום, הפעל מחדש את הטלפון פעם אחת.</string>
+    <string name="tour_1876_also_kids">שירים שמסומנים כמיועדים לילדים מתנגנים בלי כניסה לחשבון.</string>
+    <string name="tour_1876_also_cast">ברמקול שמקבל העברה, לחיצה אחת על מקש עוצמת הקול היא צעד אחד.</string>
+    <string name="tour_1876_also_history">הבא את ההיסטוריה שלך נמצא עכשיו ב-חשבונות ושיתוף.</string>
+    <string name="spot_canvas_first">‏Canvas של Spotify קודם</string>
+    <string name="spot_canvas_first_info">לא רשמי. משתמש בכניסה שלך ל-Spotify כדי לשאול את Spotify על כל שיר שאתה מנגן. כש-Spotify יש Canvas לשיר, הוא מתנגן במקום העטיפה המונפשת. כשאין, ‏Prism Canvas מוצג כמו קודם. Spotify יכול לעצור את זה בכל רגע.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas לופ סרטון קליפ לא רשמי</string>
+    <string name="spot_canvas_offer_title">להציג את ה-Canvas של Spotify?</string>
+    <string name="spot_canvas_offer_text">Prism יכול לנגן את הסרטון הקצר והחוזר ש-Spotify מציג עם שיר, אם יש לו כזה. זה לא רשמי ומשתמש בכניסה שלך ל-Spotify. לכל שאר השירים מוצג Prism Canvas. אפשר לשנות זאת אחר כך ב-נגן, תחת Canvas.</string>
 </resources>

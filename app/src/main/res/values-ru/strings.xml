@@ -5741,4 +5741,21 @@
     <string name="cn_spot_not_connected">Не подключено · плейлисты и лайки</string>
     <string name="cn_other_services">Другие сервисы</string>
     <string name="edge_to_edge_both">Обложка и видео</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android сейчас не разрешает звуковые эффекты. Перезагрузка телефона это исправит.</string>
+    <string name="tour_1876_canvas_title">Canvas из Spotify</string>
+    <string name="tour_1876_canvas_about">Для тех, кто вошёл в Spotify в Prism</string>
+    <string name="tour_1876_canvas_point_1">Prism может показывать короткое зацикленное видео, которое есть у Spotify для трека.</string>
+    <string name="tour_1876_canvas_point_2">Если у Spotify его нет, Prism Canvas показывается как раньше.</string>
+    <string name="tour_1876_canvas_point_3">Пока ты не включишь, он выключен, и он неофициальный: может перестать работать.</string>
+    <string name="tour_1876_also_loop">Canvas теперь повторяется без остановки.</string>
+    <string name="tour_1876_also_eq">Эквалайзер снова работает. Если он всё равно ничего не делает, перезагрузи телефон один раз.</string>
+    <string name="tour_1876_also_kids">Треки с пометкой «для детей» играют без входа в аккаунт.</string>
+    <string name="tour_1876_also_cast">На колонке с трансляцией одно нажатие кнопки громкости меняет её на один шаг.</string>
+    <string name="tour_1876_also_history">Перенеси свою историю теперь в разделе Аккаунты и обмен.</string>
+    <string name="spot_canvas_first">Сначала Canvas из Spotify</string>
+    <string name="spot_canvas_first_info">Неофициально. Использует твой вход в Spotify, чтобы спрашивать у Spotify про каждый трек, который ты слушаешь. Если у Spotify есть canvas для трека, он играет вместо анимированной обложки. Если нет, Prism Canvas показывается как раньше. Spotify может в любой момент перестать это поддерживать.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas цикл петля видео клип неофициально</string>
+    <string name="spot_canvas_offer_title">Показывать Canvas из Spotify?</string>
+    <string name="spot_canvas_offer_text">Prism может воспроизводить короткое зацикленное видео, которое Spotify показывает с треком, если оно есть. Это неофициально и использует твой вход в Spotify. Для всех остальных треков показывается Prism Canvas. Это можно изменить позже в разделе Плеер, в группе Canvas.</string>
 </resources>

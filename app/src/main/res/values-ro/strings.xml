@@ -5666,4 +5666,21 @@
     <string name="cn_spot_not_connected">Neconectat · playlisturi și apreceri</string>
     <string name="cn_other_services">Alte servicii</string>
     <string name="edge_to_edge_both">Coperta și videoclipul</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android refuză acum efectele sonore. Repornirea telefonului rezolvă problema.</string>
+    <string name="tour_1876_canvas_title">Canvas-ul Spotify</string>
+    <string name="tour_1876_canvas_about">Pentru cei conectați la Spotify în Prism</string>
+    <string name="tour_1876_canvas_point_1">Prism poate afișa scurtul videoclip în buclă pe care Spotify îl are pentru o melodie.</string>
+    <string name="tour_1876_canvas_point_2">Unde Spotify nu are niciunul, Prism Canvas apare ca înainte.</string>
+    <string name="tour_1876_canvas_point_3">Este oprit până îl pornești și este neoficial: poate înceta să funcționeze.</string>
+    <string name="tour_1876_also_loop">Un canvas se reia fără să se oprească pe loc.</string>
+    <string name="tour_1876_also_eq">Egalizatorul funcționează din nou. Dacă tot nu face nimic, repornește telefonul o dată.</string>
+    <string name="tour_1876_also_kids">Melodiile marcate ca fiind pentru copii se redau fără conectare.</string>
+    <string name="tour_1876_also_cast">Pe o boxă cu proiectare, o apăsare pe o tastă de volum înseamnă un pas.</string>
+    <string name="tour_1876_also_history">Adu-ți istoricul este acum în Conturi și distribuire.</string>
+    <string name="spot_canvas_first">Întâi canvas-ul Spotify</string>
+    <string name="spot_canvas_first_info">Neoficial. Folosește conectarea ta la Spotify ca să întrebe Spotify despre fiecare melodie pe care o redai. Unde Spotify are un canvas pentru o melodie, acesta se redă în locul copertei animate. Unde nu are, Prism Canvas apare ca înainte. Spotify poate opri funcționarea oricând.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas buclă videoclip clip neoficial</string>
+    <string name="spot_canvas_offer_title">Arăți canvas-ul Spotify?</string>
+    <string name="spot_canvas_offer_text">Prism poate reda scurtul videoclip în buclă pe care Spotify îl arată cu o melodie, dacă are unul. Este neoficial și folosește conectarea ta la Spotify. Prism Canvas apare pentru toate celelalte melodii. Poți schimba asta mai târziu în Player, la Canvas.</string>
 </resources>

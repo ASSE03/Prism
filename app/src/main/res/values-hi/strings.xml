@@ -5591,4 +5591,21 @@
     <string name="cn_spot_not_connected">कनेक्ट नहीं है · प्लेलिस्ट और पसंदीदा गाने</string>
     <string name="cn_other_services">दूसरी सर्विस</string>
     <string name="edge_to_edge_both">कवर और वीडियो</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android अभी साउंड इफ़ेक्ट देने से मना कर रहा है। फ़ोन रीस्टार्ट करने से यह ठीक हो जाता है।</string>
+    <string name="tour_1876_canvas_title">Spotify का canvas</string>
+    <string name="tour_1876_canvas_about">उनके लिए जिन्होंने Prism में Spotify में साइन इन किया है</string>
+    <string name="tour_1876_canvas_point_1">Prism वह छोटा लूप वाला वीडियो दिखा सकता है जो Spotify के पास किसी गाने के लिए होता है।</string>
+    <string name="tour_1876_canvas_point_2">जहाँ Spotify के पास कोई नहीं है, वहाँ Prism Canvas पहले की तरह दिखता है।</string>
+    <string name="tour_1876_canvas_point_3">यह तब तक बंद रहता है जब तक आप इसे चालू न करें, और यह अनौपचारिक है: यह काम करना बंद कर सकता है।</string>
+    <string name="tour_1876_also_loop">Canvas बिना रुके दोबारा शुरू होता है।</string>
+    <string name="tour_1876_also_eq">इक्वलाइज़र फिर से काम करता है। अगर यह अब भी कुछ नहीं करता, तो अपना फ़ोन एक बार रीस्टार्ट करें।</string>
+    <string name="tour_1876_also_kids">बच्चों के लिए बने के रूप में चिह्नित गाने साइन इन किए बिना चलते हैं।</string>
+    <string name="tour_1876_also_cast">कास्ट स्पीकर पर, वॉल्यूम की एक बार दबाने का मतलब एक कदम है।</string>
+    <string name="tour_1876_also_history">अपना इतिहास लाएं अब खाते &amp; शेयरिंग में है।</string>
+    <string name="spot_canvas_first">पहले Spotify का canvas</string>
+    <string name="spot_canvas_first_info">अनौपचारिक। आपके Spotify साइन इन से हर उस गाने के बारे में Spotify से पूछता है जो आप चलाते हैं। जहाँ Spotify के पास किसी गाने का canvas है, वह एनिमेटेड कवर की जगह चलता है। जहाँ नहीं है, वहाँ Prism Canvas पहले की तरह दिखता है। Spotify इसे कभी भी काम करने से रोक सकता है।</string>
+    <string name="spot_canvas_first_keywords">spotify canvas लूप वीडियो क्लिप अनौपचारिक एनिमेटेड कवर</string>
+    <string name="spot_canvas_offer_title">Spotify का canvas दिखाएं?</string>
+    <string name="spot_canvas_offer_text">Prism वह छोटा लूप वाला वीडियो चला सकता है जो Spotify किसी गाने के साथ दिखाता है, जहाँ वह उपलब्ध है। यह अनौपचारिक है और आपके Spotify साइन इन का इस्तेमाल करता है। बाकी सभी गानों के लिए Prism Canvas दिखता है। आप इसे बाद में प्लेयर में, Canvas के नीचे बदल सकते हैं।</string>
 </resources>

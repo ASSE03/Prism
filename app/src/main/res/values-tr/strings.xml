@@ -5591,4 +5591,21 @@
     <string name="cn_spot_not_connected">Bağlı değil · çalma listeleri ve beğeniler</string>
     <string name="cn_other_services">Diğer hizmetler</string>
     <string name="edge_to_edge_both">Kapak ve video</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android şu anda ses efektlerine izin vermiyor. Telefonu yeniden başlatmak sorunu çözer.</string>
+    <string name="tour_1876_canvas_title">Spotify\'ın Canvas\'ı</string>
+    <string name="tour_1876_canvas_about">Prism\'de Spotify\'a giriş yapanlar için</string>
+    <string name="tour_1876_canvas_point_1">Prism, Spotify\'ın bir şarkı için sunduğu kısa döngü videosunu gösterebilir.</string>
+    <string name="tour_1876_canvas_point_2">Spotify\'da olmayan şarkılarda Prism Canvas eskisi gibi görünür.</string>
+    <string name="tour_1876_canvas_point_3">Sen açana kadar kapalıdır ve resmî değildir: çalışmayı bırakabilir.</string>
+    <string name="tour_1876_also_loop">Canvas, takılmadan başa dönüyor.</string>
+    <string name="tour_1876_also_eq">Ekolayzır yeniden çalışıyor. Hâlâ bir şey yapmıyorsa telefonunu bir kez yeniden başlat.</string>
+    <string name="tour_1876_also_kids">Çocuklara özel olarak işaretlenmiş şarkılar giriş yapmadan çalar.</string>
+    <string name="tour_1876_also_cast">Yayın yapılan bir hoparlörde ses tuşuna bir basış bir adım eder.</string>
+    <string name="tour_1876_also_history">Geçmişini getir artık Hesaplar ve paylaşım içinde.</string>
+    <string name="spot_canvas_first">Önce Spotify\'ın Canvas\'ı</string>
+    <string name="spot_canvas_first_info">Resmî değil. Çaldığın her şarkıyı Spotify\'a sormak için Spotify girişini kullanır. Spotify\'ın bir şarkı için Canvas\'ı varsa hareketli kapağın yerine o oynar. Yoksa Prism Canvas eskisi gibi görünür. Spotify bunun çalışmasını istediği zaman durdurabilir.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas döngü video klip resmî değil hareketli kapak</string>
+    <string name="spot_canvas_offer_title">Spotify\'ın Canvas\'ı gösterilsin mi?</string>
+    <string name="spot_canvas_offer_text">Prism, Spotify\'ın bir şarkıyla gösterdiği kısa döngü videosunu, varsa oynatabilir. Bu resmî değildir ve Spotify girişini kullanır. Diğer tüm şarkılarda Prism Canvas görünür. Bunu sonra Oynatıcı ayarlarında, Canvas altında değiştirebilirsin.</string>
 </resources>

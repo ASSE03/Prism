@@ -5591,4 +5591,21 @@
     <string name="cn_spot_not_connected">Δεν είναι συνδεδεμένο · playlist και αγαπημένα</string>
     <string name="cn_other_services">Άλλες υπηρεσίες</string>
     <string name="edge_to_edge_both">Εξώφυλλο και βίντεο</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Το Android αρνείται αυτή τη στιγμή τα ηχητικά εφέ. Η επανεκκίνηση του τηλεφώνου το διορθώνει.</string>
+    <string name="tour_1876_canvas_title">Το canvas του Spotify</string>
+    <string name="tour_1876_canvas_about">Για όσους έχουν συνδεθεί στο Spotify μέσα στο Prism</string>
+    <string name="tour_1876_canvas_point_1">Το Prism μπορεί να δείχνει το μικρό βίντεο σε επανάληψη που έχει το Spotify για ένα τραγούδι.</string>
+    <string name="tour_1876_canvas_point_2">Όπου το Spotify δεν έχει κανένα, το Prism Canvas εμφανίζεται όπως πριν.</string>
+    <string name="tour_1876_canvas_point_3">Είναι ανενεργό μέχρι να το ενεργοποιήσεις και είναι ανεπίσημο: μπορεί να σταματήσει να λειτουργεί.</string>
+    <string name="tour_1876_also_loop">Ένα canvas ξαναρχίζει χωρίς να σταματά.</string>
+    <string name="tour_1876_also_eq">Ο ισοσταθμιστής λειτουργεί ξανά. Αν δεν κάνει ακόμα τίποτα, κάνε μία επανεκκίνηση στο τηλέφωνο.</string>
+    <string name="tour_1876_also_kids">Τα τραγούδια που έχουν σήμανση για παιδιά παίζουν χωρίς σύνδεση.</string>
+    <string name="tour_1876_also_cast">Σε ηχείο μετάδοσης, ένα πάτημα του πλήκτρου έντασης είναι ένα βήμα.</string>
+    <string name="tour_1876_also_history">Το «Φέρε το ιστορικό σου» βρίσκεται πλέον στους Λογαριασμοί &amp; κοινοποίηση.</string>
+    <string name="spot_canvas_first">Πρώτα το canvas του Spotify</string>
+    <string name="spot_canvas_first_info">Ανεπίσημο. Χρησιμοποιεί τη σύνδεσή σου στο Spotify για να ρωτά το Spotify για κάθε τραγούδι που παίζεις. Όπου το Spotify έχει canvas για ένα τραγούδι, παίζει στη θέση του κινούμενου εξωφύλλου. Όπου δεν έχει, το Prism Canvas εμφανίζεται όπως πριν. Το Spotify μπορεί να το σταματήσει ανά πάσα στιγμή.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas επανάληψη βίντεο κλιπ ανεπίσημο</string>
+    <string name="spot_canvas_offer_title">Να εμφανίζεται το canvas του Spotify;</string>
+    <string name="spot_canvas_offer_text">Το Prism μπορεί να παίζει το μικρό βίντεο σε επανάληψη που δείχνει το Spotify με ένα τραγούδι, όπου υπάρχει. Είναι ανεπίσημο και χρησιμοποιεί τη σύνδεσή σου στο Spotify. Για όλα τα άλλα τραγούδια εμφανίζεται το Prism Canvas. Μπορείς να το αλλάξεις αργότερα στην Οθόνη αναπαραγωγής, στο Canvas.</string>
 </resources>

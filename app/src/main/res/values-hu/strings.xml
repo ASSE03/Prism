@@ -5591,4 +5591,21 @@
     <string name="cn_spot_not_connected">Nincs csatlakoztatva · lejátszási listák és kedvencek</string>
     <string name="cn_other_services">További szolgáltatások</string>
     <string name="edge_to_edge_both">Borító és videó</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Az Android most nem engedélyezi a hangeffektusokat. A telefon újraindítása megoldja.</string>
+    <string name="tour_1876_canvas_title">A Spotify canvasa</string>
+    <string name="tour_1876_canvas_about">A Prismben Spotifyba bejelentkezett felhasználóknak</string>
+    <string name="tour_1876_canvas_point_1">A Prism meg tudja jeleníteni azt a rövid, ismétlődő videót, amelyet a Spotify egy dalhoz kínál.</string>
+    <string name="tour_1876_canvas_point_2">Ahol a Spotifynak nincs ilyen, a Prism Canvas jelenik meg, mint eddig.</string>
+    <string name="tour_1876_canvas_point_3">Kikapcsolva indul, amíg be nem kapcsolod, és nem hivatalos: előfordulhat, hogy leáll.</string>
+    <string name="tour_1876_also_loop">A canvas megállás nélkül pörög körbe.</string>
+    <string name="tour_1876_also_eq">A hangszínszabályzó újra működik. Ha még mindig nem csinál semmit, indítsd újra egyszer a telefont.</string>
+    <string name="tour_1876_also_kids">A gyerekeknek készültként jelölt dalok bejelentkezés nélkül is lejátszódnak.</string>
+    <string name="tour_1876_also_cast">Átküldött lejátszásnál a hangerőgomb egy lenyomása egy lépés.</string>
+    <string name="tour_1876_also_history">A Hozd át az előzményeidet mostantól a Fiókok és megosztás alatt van.</string>
+    <string name="spot_canvas_first">Először a Spotify canvasa</string>
+    <string name="spot_canvas_first_info">Nem hivatalos. A Spotify-bejelentkezésedet használja, hogy minden lejátszott dalról megkérdezze a Spotifyt. Ahol a Spotifynak van canvasa egy dalhoz, az az animált borító helyett játszik le. Ahol nincs, a Prism Canvas jelenik meg, mint eddig. A Spotify bármikor leállíthatja a működését.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas hurok videó klip nem hivatalos</string>
+    <string name="spot_canvas_offer_title">Megjelenjen a Spotify canvasa?</string>
+    <string name="spot_canvas_offer_text">A Prism le tudja játszani azt a rövid, ismétlődő videót, amelyet a Spotify egy dalhoz mutat, ha van neki. Ez nem hivatalos, és a Spotify-bejelentkezésedet használja. Minden más dalnál a Prism Canvas jelenik meg. Ezt később módosíthatod a Lejátszó oldal Canvas csoportjában.</string>
 </resources>

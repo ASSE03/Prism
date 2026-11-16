@@ -5516,4 +5516,21 @@
     <string name="cn_spot_not_connected">未连接 · 播放列表和喜欢的歌曲</string>
     <string name="cn_other_services">其他服务</string>
     <string name="edge_to_edge_both">封面和视频</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android 目前拒绝创建音效。重启手机即可解决。</string>
+    <string name="tour_1876_canvas_title">Spotify 的 Canvas</string>
+    <string name="tour_1876_canvas_about">适用于在 Prism 中登录 Spotify 的用户</string>
+    <string name="tour_1876_canvas_point_1">Prism 可以显示 Spotify 为歌曲提供的短循环视频。</string>
+    <string name="tour_1876_canvas_point_2">Spotify 没有的歌曲，Prism Canvas 照常显示。</string>
+    <string name="tour_1876_canvas_point_3">默认关闭，需要你手动开启，而且是非官方的：可能随时失效。</string>
+    <string name="tour_1876_also_loop">Canvas 循环播放时不再停顿。</string>
+    <string name="tour_1876_also_eq">均衡器恢复正常。如果仍然没有反应，请重启一次手机。</string>
+    <string name="tour_1876_also_kids">标记为儿童内容的歌曲无需登录即可播放。</string>
+    <string name="tour_1876_also_cast">在投放的音箱上，按一次音量键就是一档。</string>
+    <string name="tour_1876_also_history">导入你的听歌记录现在位于账号和分享中。</string>
+    <string name="spot_canvas_first">优先使用 Spotify 的 Canvas</string>
+    <string name="spot_canvas_first_info">非官方。使用你的 Spotify 登录，向 Spotify 查询你播放的每首歌。Spotify 有某首歌的 Canvas 时，它会代替动态封面播放；没有时，Prism Canvas 照常显示。Spotify 随时可能让此功能失效。</string>
+    <string name="spot_canvas_first_keywords">spotify canvas 循环 视频 短片 非官方 动态封面</string>
+    <string name="spot_canvas_offer_title">显示 Spotify 的 Canvas？</string>
+    <string name="spot_canvas_offer_text">Prism 可以播放 Spotify 随歌曲显示的短循环视频（如果有）。这是非官方的，并使用你的 Spotify 登录。其他歌曲显示 Prism Canvas。你之后可以在播放器的 Canvas 下更改。</string>
 </resources>

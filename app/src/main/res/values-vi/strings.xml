@@ -5516,4 +5516,21 @@
     <string name="cn_spot_not_connected">Chưa kết nối · danh sách phát và bài đã thích</string>
     <string name="cn_other_services">Dịch vụ khác</string>
     <string name="edge_to_edge_both">Ảnh bìa và video</string>
+    <!-- 1.8.7.6 Support Prism, settings words -->
+    <string name="eq_refused">Android hiện đang từ chối hiệu ứng âm thanh. Khởi động lại điện thoại sẽ khắc phục được.</string>
+    <string name="tour_1876_canvas_title">Canvas của Spotify</string>
+    <string name="tour_1876_canvas_about">Dành cho người đã đăng nhập Spotify trong Prism</string>
+    <string name="tour_1876_canvas_point_1">Prism có thể hiển thị video ngắn lặp lại mà Spotify có cho bài hát.</string>
+    <string name="tour_1876_canvas_point_2">Bài nào Spotify không có, Prism Canvas hiển thị như trước.</string>
+    <string name="tour_1876_canvas_point_3">Tính năng này tắt cho đến khi bạn bật, và không chính thức: có thể ngừng hoạt động.</string>
+    <string name="tour_1876_also_loop">Canvas lặp lại liền mạch, không bị khựng.</string>
+    <string name="tour_1876_also_eq">Bộ chỉnh âm đã hoạt động trở lại. Nếu vẫn không có tác dụng, hãy khởi động lại điện thoại một lần.</string>
+    <string name="tour_1876_also_kids">Bài hát được đánh dấu dành cho trẻ em phát được mà không cần đăng nhập.</string>
+    <string name="tour_1876_also_cast">Trên loa đang được phát tới, nhấn phím âm lượng một lần là một bước.</string>
+    <string name="tour_1876_also_history">Mang lịch sử của bạn sang giờ nằm trong Tài khoản &amp; chia sẻ.</string>
+    <string name="spot_canvas_first">Ưu tiên Canvas của Spotify</string>
+    <string name="spot_canvas_first_info">Không chính thức. Dùng phiên đăng nhập Spotify của bạn để hỏi Spotify về từng bài bạn phát. Nếu Spotify có Canvas cho bài hát, nó sẽ phát thay cho ảnh bìa động. Nếu không có, Prism Canvas hiển thị như trước. Spotify có thể chặn tính năng này bất cứ lúc nào.</string>
+    <string name="spot_canvas_first_keywords">spotify canvas lặp video clip không chính thức ảnh bìa động</string>
+    <string name="spot_canvas_offer_title">Hiển thị Canvas của Spotify?</string>
+    <string name="spot_canvas_offer_text">Prism có thể phát video ngắn lặp lại mà Spotify hiển thị cùng bài hát, nếu có. Tính năng này không chính thức và dùng phiên đăng nhập Spotify của bạn. Prism Canvas hiển thị cho mọi bài khác. Bạn có thể đổi sau trong Trình phát, mục Canvas.</string>
 </resources>
