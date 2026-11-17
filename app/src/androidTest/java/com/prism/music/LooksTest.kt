@@ -60,13 +60,15 @@ class LooksTest {
         assertEquals(false, settings.current.pureBlack)
     }
 
-    /** 1.8.0: in November the Looks page offers Harvest (card and grid); picking it puts on its colors and background. */
+    /** 1.8.0: in November the Looks page offers Harvest on its card (1.8.7.6: not again in the grid); "Use it" puts on its colors and background. */
     @Test fun harvestInNovember() {
         // The date is November 20 ([start]).
         openLooks()
         compose.waitForText("For the season: Harvest")
         assertEquals("Holiday isn't offered in November", 0, compose.onAllNodes(clickLabel("Use Holiday")).fetchSemanticsNodes().size)
-        compose.clickWhenFound(clickLabel("Use Harvest"))
+        assertEquals("not twice: the card is its place", 0, compose.onAllNodes(clickLabel("Use Harvest")).fetchSemanticsNodes().size)
+        compose.scrollSettingsTo(hasText("Use it") and hasClickAction())
+        compose.clickWhenFound(hasText("Use it") and hasClickAction())
         val looks = Fixture.container.looks
         compose.waitUntil(10_000) { looks.currentId.value == "harvest" }
         val values = Fixture.container.settings.lookValues.value
