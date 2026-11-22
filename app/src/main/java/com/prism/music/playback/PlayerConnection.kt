@@ -583,7 +583,20 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         c.queue.autoplayStart.value = -1
         c.queue.userQueued.value = emptySet()
         ensureStarted()
+        // 1.8.8: with "Blend when I skip" on, the song playing fades out over 200 ms before the new queue takes over.
         withPlayer { p ->
+            val begin = { startNow(p, songs, startIndex, source, shuffle, startVideo, startMs, rest, dj, wasSmart, token) }
+            val s = service
+            if (s != null) s.newQueueFade(begin) else begin()
+        }
+    }
+
+    /** [startQueue]'s change of queue on the player itself (kept apart so a fade-out can come first). */
+    private fun startNow(
+        p: ExoPlayer, songs: List<Song>, startIndex: Int, source: QueueSource, shuffle: Boolean, startVideo: String?, startMs: Long,
+        rest: (suspend () -> List<Song>?)?, dj: Boolean, wasSmart: Boolean, token: Int,
+    ) {
+        run {
             // Whatever Autoplay was still finding was for the queue going now: this one asks for its own, below.
             service?.dropAutoplay()
             val start = startIndex.coerceIn(0, songs.lastIndex)
@@ -888,10 +901,15 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         if (service?.gentle(play) != true) { if (play) p.play() else p.pause() }
     }
 
-    fun next() = withPlayer { it.seekToNext() }
-    fun previous() = withPlayer { it.seekToPrevious() }
+    // 1.8.8 (plan-mix §2.3a item 1): Prism's own skips go through the service's skip path first ("Blend when I skip"),
+    // as the notification's, the car's and the headset's do; with it off (or not taken over) they are today's.
+    fun next() = withPlayer { p -> if (service?.skipBlend(SkipKind.NEXT) != true) p.seekToNext() }
+    fun previous() = withPlayer { p -> if (service?.skipBlend(SkipKind.PREVIOUS) != true) p.seekToPrevious() }
     /** The song before, wherever this one is (#481: Previous held): the player's own previous item, so shuffle's order. */
-    fun previousSong() = withPlayer { it.seekToPreviousMediaItem() }
+    fun previousSong() = withPlayer { p ->
+        val before = p.previousMediaItemIndex
+        if (before == C.INDEX_UNSET || service?.skipBlend(SkipKind.PREVIOUS, before) != true) p.seekToPreviousMediaItem()
+    }
 
     /** Calls [done] once the player is reached (after commands asked for before it, such as a widget's), at once if it is. */
     fun afterPending(done: () -> Unit) = withPlayer { done() }
@@ -904,6 +922,8 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
     fun skipTo(index: Int) = withPlayer { p ->
         // Shuffled, the song picked plays next in the order, so Previous comes back to the one playing now.
         if (p.shuffleModeEnabled) (p.shuffleOrder as? HistoryShuffleOrder)?.let { p.setShuffleOrder(it.playingNext(p.currentMediaItemIndex, index)) }
+        // 1.8.8: blended into, while it plays ("Blend when I skip").
+        if (service?.skipBlend(SkipKind.JUMP, index) == true) return@withPlayer
         p.seekToDefaultPosition(index)
         if (p.playbackState == Player.STATE_IDLE) p.prepare()
         p.play()

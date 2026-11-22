@@ -69,7 +69,21 @@ class MixEngine(
     private val state: MixState = MixState(),
     /** #493: why [allowed] said no for these two, for the listener ([MixState.why]); read from the songs themselves by default. */
     private val whyNot: (from: MediaItem, to: MediaItem) -> MixWhy = ::mixWhyNotFromSongs,
+    /**
+     * 1.8.8 "Blend when I skip" ([SkipFade]): driven from this loop. While one runs, no blend of the engine's own is made
+     * (one that was coming is dropped at the press), and it runs whether Crossfade is on or not.
+     */
+    private val skip: SkipFade? = null,
 ) {
+    /** Wakes the loop early (a skip-blend just started: its first steps can't wait out a long idle look). */
+    private val wakes = kotlinx.coroutines.channels.Channel<Unit>(kotlinx.coroutines.channels.Channel.CONFLATED)
+
+    init {
+        skip?.wake = { wakes.trySend(Unit) }
+        skip?.mixHeard = { blending }
+        skip?.dropMix = { dropForSkip() }
+    }
+
     /** The main player at [speed], in the music's key. */
     private fun at(speed: Float) = PlaybackParameters(speed, pitch())
     private class Plan(
@@ -135,14 +149,23 @@ class MixEngine(
                     abort("error", MixWhy.GLITCH)
                     500L
                 }
-                delay(wait)
+                if (skip == null) delay(wait) else kotlinx.coroutines.withTimeoutOrNull(wait) { wakes.receive() }
             }
         }
     }
 
     fun release() {
         loop?.cancel()
+        skip?.release()
         abort("released", null)
+    }
+
+    /**
+     * A skip is about to be blended (or cut): whatever the engine has under way for the song heard goes, quietly. (A blend
+     * being heard isn't blended out of: [SkipFade] asks [blending] first, and that skip is a plain cut.)
+     */
+    private fun dropForSkip() {
+        if (phase != Phase.IDLE) abort("skipped", MixWhy.SKIPPED)
     }
 
     /** A blend is under way (the next song's tempo is the blend's until it settles): the Speed button waits for it. */
@@ -150,6 +173,7 @@ class MixEngine(
 
     /** Ends a blend under way at once (casting starts: the music goes elsewhere, and no blend may leave it at half volume). */
     fun stopBlend() {
+        skip?.stop("casting started")
         // (Said even with no blend under way: while the music plays elsewhere, none is made, #493.)
         abort("stopped", MixWhy.CASTING, always = true)
     }
@@ -188,6 +212,8 @@ class MixEngine(
 
     /** One step; returns how long to wait before the next. */
     private fun tick(): Long {
+        // A skip-blend under way has both players to itself (with Crossfade off too).
+        skip?.let { if (it.active) return it.tick() }
         val length = mixMs()
         if (length == null) {
             if (phase != Phase.IDLE) abort("Mix turned off", null)
