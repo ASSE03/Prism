@@ -27,6 +27,17 @@ class TourTest {
         assertTrue(Tour.isFullTour(0))
     }
 
+    /** 1.8.8 (plan-tour.md §3 D, §5): every card has a Guide topic, and every topic has a card; newest first in each. */
+    @Test
+    fun everyCardHasATopicAndEveryTopicACard() {
+        val none = Tour.steps.filter { it.topic == null }.map { "${it.since}: ${it.title}" }
+        assertEquals("cards without a topic", emptyList<String>(), none)
+        for (t in com.prism.music.ui.tour.TourTopic.entries) {
+            assertTrue("$t has no card", t.cards.isNotEmpty())
+            assertEquals(t.cards.map { it.since }.sortedDescending(), t.cards.map { it.since })
+        }
+    }
+
     @Test
     fun aTourSeenAtThisVersionShowsNothingMore() {
         assertTrue(Tour.stepsAfter(BuildConfig.VERSION_CODE).isEmpty())

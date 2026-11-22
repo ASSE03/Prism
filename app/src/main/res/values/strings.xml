@@ -5669,4 +5669,21 @@
     <string name="spot_canvas_first_keywords">spotify canvas loop video clip unofficial</string>
     <string name="spot_canvas_offer_title">Show Spotify\'s canvas?</string>
     <string name="spot_canvas_offer_text">Prism can play the short looping video Spotify shows with a song, where it has one. This is unofficial and uses your Spotify sign-in. Prism Canvas shows for every other song. You can change this later in Player, under Canvas.</string>
+    <!-- 1.8.8 tour, part D (plan-tour.md): the Guide's topics. -->
+    <string name="guide_topic_playing">Playing</string>
+    <string name="guide_topic_playing_line">The player, skipping, the queue</string>
+    <string name="guide_topic_lyrics">Lyrics</string>
+    <string name="guide_topic_lyrics_line">Word by word, Sing, translations</string>
+    <string name="guide_topic_library">Your library</string>
+    <string name="guide_topic_library_line">Likes, playlists, downloads</string>
+    <string name="guide_topic_finding">Finding music</string>
+    <string name="guide_topic_finding_line">Home, Search, mixes made for you</string>
+    <string name="guide_topic_sound">Sound</string>
+    <string name="guide_topic_sound_line">Equalizer, spatial sound, quality</string>
+    <string name="guide_topic_looks">Looks</string>
+    <string name="guide_topic_looks_line">Colors, shapes, fonts, Canvas</string>
+    <string name="guide_topic_replay">Replay</string>
+    <string name="guide_topic_replay_line">Your listening, counted on this phone</string>
+    <string name="guide_topic_devices">Your devices</string>
+    <string name="guide_topic_devices_line">Speakers, TV, the car, Prism Connect</string>
 </resources>
