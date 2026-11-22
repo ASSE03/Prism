@@ -16,12 +16,19 @@ class TourAnchorsTest {
     private fun kotlin(dir: File) = dir.walkTopDown().filter { it.extension == "kt" }
     private val use = Regex("""TourAnchor\.([A-Z_]+)\b""")
 
+    /**
+     * Anchors with a second home that never shows at the same time as the first: Home's profile picture carries
+     * SETTINGS_TAB only when the bar has no Settings tab (1.8.8, a fresh install's bar has none).
+     */
+    private val alsoOn = mapOf(TourAnchor.SETTINGS_TAB to "HomeScreen.kt")
+
     @Test fun everyAnchorIsAttachedExactlyOnce() {
         val app = kotlin(src).filter { !it.startsWith(tour) }.toList()
         val uses = app.flatMap { f -> f.readLines().mapIndexedNotNull { n, line -> use.findAll(line).map { it.groupValues[1] to "${f.relativeTo(src)}:${n + 1}" }.toList().takeIf { it.isNotEmpty() } }.flatten() }
         val byName = uses.groupBy({ it.first }, { it.second })
         val wrong = TourAnchor.entries.mapNotNull { a ->
-            val at = byName[a.name].orEmpty()
+            val second = alsoOn[a]
+            val at = byName[a.name].orEmpty().filterNot { second != null && File(it.substringBefore(':')).name == second }
             if (at.size == 1) null else "${a.name}: attached ${at.size} times ${at.joinToString()}"
         }
         assertTrue("Each anchor goes on its control once:\n" + wrong.joinToString("\n"), wrong.isEmpty())
