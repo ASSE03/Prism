@@ -56,9 +56,8 @@ object FirstSteps {
     /** Where the last step is done: Settings → Looks. */
     val looksRoute: String get() = Routes.settings(SettingsPageId.LOOKS.key)
 
-    // GUIDE HOOK (plan §3 D): "Open the Guide" opens this; until the Guide page is in, Settings → Backup & about (where
-    // "Take the tour" is). Point it at the Guide's route when that lands.
-    val guideRoute: String get() = Routes.settings(SettingsPageId.BACKUP_ABOUT.key)
+    /** The closing card's "Open the Guide" (plan §3 D). */
+    val guideRoute: String get() = Routes.GUIDE
 
     /** In the "tour" prefs file, beside the What's new pager's "seen_version". */
     internal const val PREF = "first_steps"

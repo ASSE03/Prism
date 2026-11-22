@@ -73,6 +73,10 @@ object Routes {
     const val DESIGN_GALLERY = "design_gallery"
     /** 1.8.7.6: the people who supported Prism (from Settings → Backup & about → About). */
     const val SUPPORTERS = "supporters"
+    /** 1.8.8: the Guide, every tour card by topic (from Settings → Backup & about, and What's new's "more things"). */
+    const val GUIDE = "guide"
+    /** One of the Guide's topics ([com.prism.music.ui.tour.TourTopic], by its name in lower case). */
+    fun guideTopic(topic: String) = "guide/$topic"
     /** One of Prism's own mixes (Daily Mix 1, the time-of-day mix, Release Radar). */
     fun mix(id: String) = "mix/${Uri.encode(id)}"
     fun podcast(id: String) = "podcast/${Uri.encode(id)}"

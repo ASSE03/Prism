@@ -10,12 +10,65 @@ import com.prism.music.ui.screens.settings.SettingsPageId
 import com.prism.music.ui.theme.PrismIcons
 
 /**
+ * The Guide's eight topics (1.8.8, plan-tour.md §3 D), in the order the Guide lists them. Every card has one
+ * ([TourStep.topic]); within a topic the newest cards come first.
+ */
+enum class TourTopic(val icon: ImageVector) {
+    PLAYING(PrismIcons.Play),
+    LYRICS(PrismIcons.Lyrics),
+    LIBRARY(PrismIcons.Library),
+    FINDING(PrismIcons.Search),
+    SOUND(PrismIcons.Equalizer),
+    LOOKS(PrismIcons.Palette),
+    REPLAY(PrismIcons.Stats),
+    DEVICES(PrismIcons.Cast),
+    ;
+
+    val title: String get() = tr(
+        when (this) {
+            PLAYING -> R.string.guide_topic_playing
+            LYRICS -> R.string.guide_topic_lyrics
+            LIBRARY -> R.string.guide_topic_library
+            FINDING -> R.string.guide_topic_finding
+            SOUND -> R.string.guide_topic_sound
+            LOOKS -> R.string.guide_topic_looks
+            REPLAY -> R.string.guide_topic_replay
+            DEVICES -> R.string.guide_topic_devices
+        },
+    )
+
+    /** One line under the topic's name: what's in it. */
+    val line: String get() = tr(
+        when (this) {
+            PLAYING -> R.string.guide_topic_playing_line
+            LYRICS -> R.string.guide_topic_lyrics_line
+            LIBRARY -> R.string.guide_topic_library_line
+            FINDING -> R.string.guide_topic_finding_line
+            SOUND -> R.string.guide_topic_sound_line
+            LOOKS -> R.string.guide_topic_looks_line
+            REPLAY -> R.string.guide_topic_replay_line
+            DEVICES -> R.string.guide_topic_devices_line
+        },
+    )
+
+    /** Its cards, newest first (the order of [Tour.steps] within a release). */
+    val cards: List<TourStep> get() = Tour.steps.filter { it.topic == this }.sortedByDescending { it.since }
+}
+
+/**
+ * What's new's "Show me" with the coach (1.8.8): the place opens with the hole on [anchor] and [caption] beside it; the
+ * step is done when [done] says so (never, by default: the person looks, then taps "Back to what's new").
+ */
+class ShowMeCoach(val anchor: TourAnchor, val caption: String, val done: (TourState) -> Boolean = { false })
+
+/**
  * One page of Prism's tour.
  *
- * [since] is the versionCode of the release the feature (or its current look) came in. A new install sees every step
- * (the full tour); someone updating sees only the steps newer than the last tour they saw ([Tour.seenVersion]). To
- * introduce a later release's features: add steps with that release's versionCode, and keep the older steps true to
- * the app (new installs still see all of them).
+ * [since] is the versionCode of the release the feature (or its current look) came in. Someone updating sees the
+ * newest release's steps, with the older ones they skipped folded into one line that opens the Guide
+ * ([whatsNewPlan]); every step is in the Guide under its [topic]. To introduce a later release's features: add at most
+ * two steps with that release's versionCode (the headline, with a [coach] target, and "Also new"; `TourTest` holds
+ * releases from 1.8.8 on to it), and keep the older steps true to the app (the Guide still shows them).
  */
 data class TourStep(
     val since: Int,
@@ -25,7 +78,7 @@ data class TourStep(
     val points: List<String> = emptyList(),
     /** Small icons beside the big one, for what the step covers. */
     val extras: List<ImageVector> = emptyList(),
-    /** "Show me": where it opens (the tour closes; it can be taken again from Settings → About). */
+    /** "Show me": where it opens (the tour steps aside, with a chip back to the next card; the Guide has it too). */
     val showMe: String? = null,
     val kind: Kind = Kind.PLAIN,
     /**
@@ -34,6 +87,10 @@ data class TourStep(
      * a release's cards (`TourTest`).
      */
     val support: Boolean = false,
+    /** The Guide's topic it is listed under (1.8.8). Every card has one (`TourTest`). */
+    val topic: TourTopic? = null,
+    /** "Show me" with the coach's hole on the exact control (1.8.8); without, Show me only opens [showMe]. */
+    val coach: ShowMeCoach? = null,
 ) {
     enum class Kind { PLAIN, NOTIFICATIONS }
 }
@@ -76,9 +133,29 @@ private const val V1_8_7 = 65
 private const val V1_8_7_5 = 66
 /** Prism 1.8.7.6 (build 67): the small things, and Spotify's canvas. */
 private const val V1_8_7_6 = 67
+/** Prism 1.8.8 (build 68): Mix, and the tour redone. The first release under the two-card rule. */
+const val V1_8_8 = 68
 
-    /** Every step, in the order they're shown. */
-    val steps: List<TourStep> = listOf(
+    /**
+     * PLACEHOLDER (1.8.8's release session): Mix's "Blend when I skip" isn't built yet, so 1.8.8's headline card
+     * (`tour_188_mix_*`) is sample wording from the mockup. Fill it from what Mix ships, check its Show me lands on the
+     * right row, then set this false. `TourTest` fails once the build is 1.8.8 while this is still true.
+     */
+    const val MIX_HEADLINE_PLACEHOLDER = true
+
+    /** The release each versionCode with cards is called by (the Guide's "Since 1.8.3"). */
+    val versionNames: Map<Int, String> = mapOf(
+        V1_7 to "1.7", V1_7_2 to "1.7.2", V1_7_3 to "1.7.3", V1_7_4 to "1.7.4", V1_7_5 to "1.7.5", V1_7_6 to "1.7.6",
+        V1_7_7 to "1.7.7", V1_7_8 to "1.7.8", V1_7_9 to "1.7.9", V1_7_9_2 to "1.7.9.2", V1_8_0 to "1.8.0", V1_8_1 to "1.8.1",
+        V1_8_2 to "1.8.2", V1_8_3 to "1.8.3", V1_8_4 to "1.8.4", V1_8_5 to "1.8.5", V1_8_6 to "1.8.6", V1_8_7 to "1.8.7",
+        V1_8_7_5 to "1.8.7.5", V1_8_7_6 to "1.8.7.6", V1_8_8 to "1.8.8",
+    )
+
+    /**
+     * Every step, in the order they're shown, including those of the release being built: a step dated after this
+     * build stays out of [steps] (it could never be marked seen) until the versionCode reaches it.
+     */
+    val allSteps: List<TourStep> = listOf(
         TourStep(
             V1_7, PrismIcons.Home, tr(R.string.home),
             tr(R.string.your_starting_point_made_from_what),
@@ -90,6 +167,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.continue_picks_up_the_album_you),
             ),
             listOf(PrismIcons.StarFilled, PrismIcons.Customize),
+            topic = TourTopic.FINDING,
         ),
         TourStep(
             V1_7, PrismIcons.PlayCircle, tr(R.string.the_player),
@@ -101,6 +179,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.has_the_sleep_timer_stats_downloads),
             ),
             listOf(PrismIcons.Flame, PrismIcons.Moon),
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             V1_7, PrismIcons.Lyrics, tr(R.string.lyrics),
@@ -111,6 +190,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.translate_them_or_read_other_scripts),
             ),
             listOf(PrismIcons.Translate, PrismIcons.Romanize),
+            topic = TourTopic.LYRICS,
         ),
         TourStep(
             // Simpler in 1.7.8: one button.
@@ -121,6 +201,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.hold_it_and_slide_for_how),
                 tr(R.string.move_the_key_up_or_down),
             ),
+            topic = TourTopic.LYRICS,
         ),
         TourStep(
             V1_7, PrismIcons.Equalizer, tr(R.string.dj_mode_and_crossfade),
@@ -131,6 +212,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.crossfade_settings_playback_sound_blends_any),
             ),
             listOf(PrismIcons.Queue, PrismIcons.Shuffle),
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             V1_7, PrismIcons.StarFilled, tr(R.string.made_for_you),
@@ -144,6 +226,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.not_for_me_and_leave_out),
             ),
             listOf(PrismIcons.SmartShuffle, PrismIcons.Block),
+            topic = TourTopic.FINDING,
         ),
         TourStep(
             V1_7, PrismIcons.Search, tr(R.string.search_and_recognize),
@@ -156,6 +239,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.podcasts_the_button_at_the_top),
             ),
             listOf(PrismIcons.Recognize),
+            topic = TourTopic.FINDING,
         ),
         TourStep(
             V1_7, PrismIcons.LibraryFilled, tr(R.string.your_library),
@@ -168,6 +252,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.listen_together_plays_in_step_with),
             ),
             listOf(PrismIcons.Blend, PrismIcons.Groups),
+            topic = TourTopic.LIBRARY,
         ),
         TourStep(
             V1_7, PrismIcons.Stats, tr(R.string.replay_and_rewind),
@@ -178,6 +263,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.share_any_slide_as_a_picture),
             ),
             listOf(PrismIcons.History),
+            topic = TourTopic.REPLAY,
         ),
         TourStep(
             V1_7, PrismIcons.Cast, tr(R.string.prism_connect),
@@ -189,6 +275,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Tv, PrismIcons.Handoff),
             showMe = Routes.settings("connect"),
+            topic = TourTopic.DEVICES,
         ),
         TourStep(
             V1_7, PrismIcons.Palette, tr(R.string.make_it_yours),
@@ -201,6 +288,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Customize, PrismIcons.Settings),
             showMe = Routes.settings("appearance"),
+            topic = TourTopic.LOOKS,
         ),
         TourStep(
             V1_7_2, PrismIcons.Palette, tr(R.string.color_your_way),
@@ -213,6 +301,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Customize),
             showMe = Routes.settings("color"),
+            topic = TourTopic.LOOKS,
         ),
         TourStep(
             V1_7_2, PrismIcons.LibraryFilled, tr(R.string.also_new),
@@ -225,6 +314,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.see_which_downloads_failed_and_why),
             ),
             listOf(PrismIcons.Edit),
+            topic = TourTopic.LIBRARY,
         ),
         TourStep(
             V1_7_3, PrismIcons.Looks, tr(R.string.looks),
@@ -239,6 +329,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Sun, PrismIcons.Moon, PrismIcons.Undo),
             showMe = Routes.settings("looks"),
+            topic = TourTopic.LOOKS,
         ),
         TourStep(
             V1_7_4, PrismIcons.PlayCircle, tr(R.string.the_player_your_way),
@@ -253,6 +344,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Turntable, PrismIcons.Customize),
             showMe = Routes.settings("player"),
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             V1_7_4, PrismIcons.Speed, tr(R.string.faster),
@@ -262,6 +354,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.less_work_while_lists_scroll_while),
                 tr(R.string.if_something_still_stutters_settings_backup),
             ),
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             V1_7_5, PrismIcons.Lyrics, tr(R.string.lyrics_your_way),
@@ -276,6 +369,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Lyrics, PrismIcons.Palette),
             showMe = Routes.settings("lyrics_look"),
+            topic = TourTopic.LYRICS,
         ),
         TourStep(
             V1_7_5, PrismIcons.History, tr(R.string.also_new),
@@ -289,6 +383,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.library_s_tiles_the_edit_button),
             ),
             listOf(PrismIcons.History, PrismIcons.HeartFilled),
+            topic = TourTopic.LIBRARY,
         ),
         TourStep(
             V1_7_6, PrismIcons.Home, tr(R.string.home_your_way),
@@ -302,6 +397,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Home, PrismIcons.Pin),
             showMe = Routes.CATALOGUE,
+            topic = TourTopic.FINDING,
         ),
         TourStep(
             V1_7_6, PrismIcons.Library, tr(R.string.library_and_tabs_your_way),
@@ -315,6 +411,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Folder, PrismIcons.Library),
             showMe = Routes.settings("interface"),
+            topic = TourTopic.LIBRARY,
         ),
         TourStep(
             V1_7_6, PrismIcons.Search, tr(R.string.search_redesigned),
@@ -327,6 +424,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Search, PrismIcons.Recognize),
             showMe = Routes.SEARCH,
+            topic = TourTopic.FINDING,
         ),
         TourStep(
             V1_7_6, PrismIcons.Settings, tr(R.string.settings_easier_to_find),
@@ -340,6 +438,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Settings, PrismIcons.Speed),
             showMe = Routes.SETTINGS,
+            topic = TourTopic.LOOKS,
         ),
         TourStep(
             V1_7_7, PrismIcons.Category, tr(R.string.shapes_icons_and_type),
@@ -353,6 +452,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Category, PrismIcons.Signature),
             showMe = Routes.settings("icons"),
+            topic = TourTopic.LOOKS,
         ),
         TourStep(
             V1_7_7, PrismIcons.QueueMusic, tr(R.string.also_new),
@@ -365,6 +465,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.a_bold_title_on_the_player),
             ),
             listOf(PrismIcons.SwapVertical, PrismIcons.Palette),
+            topic = TourTopic.LOOKS,
         ),
         TourStep(
             V1_7_8, PrismIcons.Equalizer, tr(R.string.sound_your_way),
@@ -378,6 +479,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Speed, PrismIcons.Equalizer),
             showMe = Routes.settings("sound"),
+            topic = TourTopic.SOUND,
         ),
         TourStep(
             V1_7_8, PrismIcons.Looks, tr(R.string.classic_prism),
@@ -389,6 +491,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Looks, PrismIcons.Category),
             showMe = Routes.settings("looks"),
+            topic = TourTopic.LOOKS,
         ),
         TourStep(
             V1_7_8, PrismIcons.QueueMusic, tr(R.string.also_new),
@@ -401,12 +504,14 @@ private const val V1_8_7_6 = 67
                 tr(R.string.lyrics_into_your_m4a_files_and),
             ),
             listOf(PrismIcons.Queue, PrismIcons.Calendar),
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             V1_7_9, PrismIcons.Globe, tr(R.string.tour_179_language),
             tr(R.string.tour_179_language_body),
             listOf(tr(R.string.tour_179_language_youtube)),
             showMe = Routes.settings("language"),
+            topic = TourTopic.LOOKS,
         ),
         TourStep(
             V1_7_9, PrismIcons.QueueMusic, tr(R.string.also_new),
@@ -419,6 +524,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.tour_179_widget),
             ),
             listOf(PrismIcons.Lyrics, PrismIcons.Palette),
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             V1_7_9_2, PrismIcons.QueueMusic, tr(R.string.also_new),
@@ -431,6 +537,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.tour_1792_colors),
             ),
             listOf(PrismIcons.Search, PrismIcons.Palette),
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             V1_8_0, PrismIcons.Tv, tr(R.string.tour_180_tv),
@@ -442,6 +549,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Tv, PrismIcons.Handoff),
             showMe = Routes.settings("connect"),
+            topic = TourTopic.DEVICES,
         ),
         TourStep(
             V1_8_0, PrismIcons.Settings, tr(R.string.tour_180_settings),
@@ -453,6 +561,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Settings, PrismIcons.Search),
             showMe = Routes.settings("sound"),
+            topic = TourTopic.LOOKS,
         ),
         TourStep(
             V1_8_0, PrismIcons.PlayCircle, tr(R.string.tour_180_player),
@@ -460,6 +569,7 @@ private const val V1_8_7_6 = 67
             listOf(tr(R.string.tour_180_player_parts), tr(R.string.tour_180_player_menu)),
             listOf(PrismIcons.PlayCircle, PrismIcons.Edit),
             showMe = Routes.settings("player"),
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             V1_8_0, PrismIcons.Lyrics, tr(R.string.tour_180_lyrics),
@@ -467,6 +577,7 @@ private const val V1_8_7_6 = 67
             listOf(tr(R.string.tour_180_lyrics_start), tr(R.string.tour_180_lyrics_smooth)),
             listOf(PrismIcons.Lyrics, PrismIcons.Palette),
             showMe = Routes.settings("lyrics_look"),
+            topic = TourTopic.LYRICS,
         ),
         TourStep(
             V1_8_0, PrismIcons.QueueMusic, tr(R.string.also_new),
@@ -479,6 +590,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.tour_180_size),
             ),
             listOf(PrismIcons.Moon, PrismIcons.Equalizer),
+            topic = TourTopic.SOUND,
         ),
         TourStep(
             V1_8_1, PrismIcons.History, tr(R.string.tour_181_history),
@@ -490,6 +602,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Download, PrismIcons.Stats),
             showMe = Routes.BRING_HISTORY,
+            topic = TourTopic.REPLAY,
         ),
         TourStep(
             V1_8_1, PrismIcons.Library, tr(R.string.tour_181_spotify),
@@ -501,6 +614,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Sync, PrismIcons.HeartFilled),
             showMe = Routes.settings("spotify"),
+            topic = TourTopic.LIBRARY,
         ),
         TourStep(
             // Opens Recommendations & Replay at its History group (pause, what counts as a play).
@@ -513,6 +627,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Pause, PrismIcons.History),
             showMe = Routes.settings("library", find = tr(R.string.hist_title)),
+            topic = TourTopic.REPLAY,
         ),
         TourStep(
             V1_8_1, PrismIcons.Palette, tr(R.string.tour_181_yours),
@@ -526,6 +641,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Photo, PrismIcons.Signature),
             showMe = Routes.settings("appearance"),
+            topic = TourTopic.LOOKS,
         ),
         TourStep(
             V1_8_1, PrismIcons.QueueMusic, tr(R.string.also_new),
@@ -537,12 +653,14 @@ private const val V1_8_7_6 = 67
                 tr(R.string.tour_181_tv),
             ),
             listOf(PrismIcons.Car, PrismIcons.Tv),
+            topic = TourTopic.DEVICES,
         ),
         TourStep(
             V1_8_2, PrismIcons.Lock, tr(R.string.tour_182_lock_title),
             tr(R.string.tour_182_lock_body),
             listOf(tr(R.string.tour_182_lock_point_1), tr(R.string.tour_182_lock_point_2), tr(R.string.tour_182_lock_point_3)),
             showMe = Routes.settings("player", find = tr(R.string.lock_screen_title)),
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             V1_8_2, PrismIcons.Radio, tr(R.string.tour_182_discover_title),
@@ -554,6 +672,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.tour_182_discover_tune),
             ),
             showMe = Routes.settings("library", find = tr(R.string.tune_radios)),
+            topic = TourTopic.FINDING,
         ),
         TourStep(
             V1_8_2, PrismIcons.QueueMusic, tr(R.string.also_new),
@@ -565,28 +684,33 @@ private const val V1_8_7_6 = 67
                 tr(R.string.tour_182_also_files),
                 tr(R.string.tour_182_also_crossfade),
             ),
+            topic = TourTopic.LIBRARY,
         ),
         TourStep(
             V1_8_3, PrismIcons.SmartShuffle, tr(R.string.tour_183_smart_title),
             tr(R.string.tour_183_smart_body),
             listOf(tr(R.string.tour_183_smart_point_1), tr(R.string.tour_183_smart_point_2), tr(R.string.tour_183_smart_point_3)),
             showMe = Routes.LIBRARY,
+            topic = TourTopic.LIBRARY,
         ),
         TourStep(
             V1_8_3, PrismIcons.Tag, tr(R.string.tour_183_tags_title),
             tr(R.string.tour_183_tags_body),
             listOf(tr(R.string.tour_183_tags_point_1), tr(R.string.tour_183_tags_point_2), tr(R.string.tour_183_tags_point_3)),
+            topic = TourTopic.LIBRARY,
         ),
         TourStep(
             V1_8_3, PrismIcons.CheckCircle, tr(R.string.tour_183_select_title),
             tr(R.string.tour_183_select_body),
             listOf(tr(R.string.tour_183_select_point_1), tr(R.string.tour_183_select_point_2)),
+            topic = TourTopic.LIBRARY,
         ),
         TourStep(
             V1_8_3, PrismIcons.Search, tr(R.string.tour_183_search_title),
             tr(R.string.tour_183_search_body),
             listOf(tr(R.string.tour_183_search_point_1), tr(R.string.tour_183_search_point_2), tr(R.string.tour_183_search_point_3)),
             showMe = Routes.librarySearch(),
+            topic = TourTopic.LIBRARY,
         ),
         TourStep(
             V1_8_3, PrismIcons.QueueMusic, tr(R.string.also_new),
@@ -598,6 +722,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.tour_183_also_lock),
                 tr(R.string.tour_183_also_uploads),
             ),
+            topic = TourTopic.LIBRARY,
         ),
         TourStep(
             // Opens Settings' new first page (plan §5).
@@ -612,6 +737,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Search, PrismIcons.Speed),
             showMe = Routes.SETTINGS,
+            topic = TourTopic.LOOKS,
         ),
         TourStep(
             // #404, with #392 and the car's Long lines. Opens Lyrics & Sing at the group with "Lyrics earlier / later".
@@ -620,6 +746,7 @@ private const val V1_8_7_6 = 67
             listOf(tr(R.string.tour_184_lyrics_point_1), tr(R.string.tour_184_lyrics_point_2), tr(R.string.tour_184_lyrics_point_3)),
             listOf(PrismIcons.Timer, PrismIcons.Car),
             showMe = Routes.settings(SettingsPageId.LYRICS_SING.key, find = tr(R.string.ls_sources_and_timing)),
+            topic = TourTopic.LYRICS,
         ),
         TourStep(
             // D53. Opens Player at Modes, where the lock screen and its options are.
@@ -632,6 +759,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.PlayCircle, PrismIcons.HeartFilled),
             showMe = Routes.settings(SettingsPageId.PLAYER.key, find = tr(R.string.settings_player_modes)),
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             // D54, D55, D56 and #406. Opens Home & Library at Lists, with "Button to find the playing song".
@@ -646,6 +774,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Album, PrismIcons.Library),
             showMe = Routes.settings(SettingsPageId.HOME_LIBRARY.key, find = tr(R.string.hl_lists)),
+            topic = TourTopic.LIBRARY,
         ),
         TourStep(
             // D57 + #416, D58/D59, #413, and the fixes #432 and #429.
@@ -659,6 +788,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.tour_184_also_glass),
             ),
             listOf(PrismIcons.Shuffle, PrismIcons.Stats),
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             // The listening clock, the calendar, milestones and the monthly recap. Opens Replay.
@@ -672,11 +802,13 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Timer, PrismIcons.StarFilled),
             showMe = Routes.REPLAY,
+            topic = TourTopic.REPLAY,
         ),
         TourStep(
             V1_8_5, PrismIcons.ReplayFilled, tr(R.string.tour_185_rewind_title),
             tr(R.string.tour_185_rewind_body),
             listOf(tr(R.string.tour_185_rewind_point_1), tr(R.string.tour_185_rewind_point_2), tr(R.string.tour_185_rewind_point_3)),
+            topic = TourTopic.REPLAY,
         ),
         TourStep(
             // The widgets, the two notices and Finish the lyric. Opens Recommendations & history at Replay, where the switches are.
@@ -689,6 +821,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Lyrics, PrismIcons.Home),
             showMe = Routes.settings(SettingsPageId.RECOMMENDATIONS_HISTORY.key, find = tr(R.string.replay_2)),
+            topic = TourTopic.REPLAY,
         ),
         TourStep(
             // #469, #477, face-down pause, #374, #481 and Open with Prism.
@@ -702,6 +835,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.tour_185_also_open_with),
             ),
             listOf(PrismIcons.Search, PrismIcons.Shuffle),
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             // 1.8.6 Canvas. Opens the Player page at Cover, the group the Canvas row is in.
@@ -716,6 +850,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Video, PrismIcons.Fullscreen),
             showMe = Routes.settings(SettingsPageId.PLAYER.key, find = tr(R.string.cover)),
+            topic = TourTopic.LOOKS,
         ),
         TourStep(
             // The hours on Replay's "Hours by month" bars (the owner's ask, 2026-11-13).
@@ -723,6 +858,7 @@ private const val V1_8_7_6 = 67
             tr(R.string.from_your_requests),
             listOf(tr(R.string.tour_186_also_hours, tr(R.string.hours_by_month))),
             showMe = Routes.REPLAY,
+            topic = TourTopic.REPLAY,
         ),
         TourStep(
             // 1.8.7 It just plays. Opens Backup & about at Diagnostics, where "Is playback working?" is.
@@ -736,6 +872,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Check, PrismIcons.Info),
             showMe = Routes.settings(SettingsPageId.BACKUP_ABOUT.key, find = tr(R.string.diagnostics)),
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             // Opens the Player page at Cover: "Keep lyrics showing" is in the Canvas row's sheet there.
@@ -749,6 +886,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Shuffle, PrismIcons.Speed),
             showMe = Routes.settings(SettingsPageId.PLAYER.key, find = tr(R.string.cover)),
+            topic = TourTopic.LYRICS,
         ),
         TourStep(
             // 1.8.7.5 Your Spotify. Opens Accounts & sharing at Spotify, where the Connect sheet's two cards are.
@@ -762,6 +900,7 @@ private const val V1_8_7_6 = 67
             ),
             listOf(PrismIcons.Heart, PrismIcons.QueueMusic),
             showMe = Routes.settings(SettingsPageId.ACCOUNTS_SHARING.key, find = tr(R.string.spotify)),
+            topic = TourTopic.LIBRARY,
         ),
         TourStep(
             V1_8_7_5, PrismIcons.Check, tr(R.string.also_new),
@@ -772,6 +911,7 @@ private const val V1_8_7_6 = 67
                 tr(R.string.tour_1875_also_busy),
                 tr(R.string.tour_1875_also_heard),
             ),
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             V1_8_7_6, PrismIcons.PlayCircle, tr(R.string.tour_1876_canvas_title),
@@ -783,6 +923,7 @@ private const val V1_8_7_6 = 67
             ),
             // The Canvas switch and "Spotify's canvas first" under it are in the Player page's Cover group.
             showMe = Routes.settings(SettingsPageId.PLAYER.key, find = tr(R.string.cover)),
+            topic = TourTopic.LOOKS,
         ),
         TourStep(
             V1_8_7_6, PrismIcons.Check, tr(R.string.also_new),
@@ -796,6 +937,38 @@ private const val V1_8_7_6 = 67
             ),
             // The release's last card carries the one line about supporting Prism (plan-1.8.7.6 §4.1 S6).
             support = true,
+            topic = TourTopic.PLAYING,
+        ),
+        // 1.8.8, the first release under the two-card rule (plan-tour.md §3 C, D8): the headline, whose Show me uses the
+        // coach, then "Also new"; four points each at most.
+        TourStep(
+            // PLACEHOLDER ([MIX_HEADLINE_PLACEHOLDER]): Mix's "Blend when I skip" isn't built; the release session
+            // fills these words from what ships. Opens Playback at Song to song, the hole on the Crossfade row.
+            V1_8_8, PrismIcons.Equalizer, tr(R.string.tour_188_mix_title),
+            tr(R.string.tour_188_mix_about),
+            listOf(
+                tr(R.string.tour_188_mix_point_1, tr(R.string.crossfade)),
+                tr(R.string.tour_188_mix_point_2),
+                tr(R.string.tour_188_mix_point_3),
+                tr(R.string.tour_188_mix_point_4),
+            ),
+            listOf(PrismIcons.Shuffle, PrismIcons.Queue),
+            showMe = Routes.settings(SettingsPageId.PLAYBACK.key, find = tr(R.string.playback_song_to_song)),
+            topic = TourTopic.PLAYING,
+            coach = ShowMeCoach(TourAnchor.CROSSFADE, tr(R.string.tour_188_mix_coach)),
+        ),
+        TourStep(
+            V1_8_8, PrismIcons.Check, tr(R.string.also_new),
+            tr(R.string.tour_188_also_about),
+            listOf(
+                tr(R.string.tour_188_also_guide),
+                tr(R.string.tour_188_also_sing, tr(R.string.ls_sing_button)),
+                tr(R.string.tour_188_also_radio, tr(R.string.radio_started)),
+                tr(R.string.tour_188_also_tv, tr(R.string.clear_cache)),
+            ),
+            listOf(PrismIcons.Mic, PrismIcons.Tv),
+            support = true,
+            topic = TourTopic.PLAYING,
         ),
         TourStep(
             V1_7, PrismIcons.Update, tr(R.string.stay_in_the_loop),
@@ -806,8 +979,12 @@ private const val V1_8_7_6 = 67
                 tr(R.string.your_rewind_ready_on_december_1),
             ),
             kind = TourStep.Kind.NOTIFICATIONS,
+            topic = TourTopic.FINDING,
         ),
     )
+
+    /** The steps of the releases up to this build: What's new and the Guide draw from these. */
+    val steps: List<TourStep> = allSteps.filter { it.since <= BuildConfig.VERSION_CODE }
 
     private fun prefs(context: Context) = context.getSharedPreferences("tour", Context.MODE_PRIVATE)
 
@@ -819,7 +996,4 @@ private const val V1_8_7_6 = 67
 
     /** The steps someone who last saw the tour at [seen] hasn't seen: all of them for 0. */
     fun stepsAfter(seen: Int): List<TourStep> = steps.filter { it.since > seen }
-
-    /** Whether it's the whole tour (never seen one) or only what's new since the last one. */
-    fun isFullTour(seen: Int) = seen == 0
 }

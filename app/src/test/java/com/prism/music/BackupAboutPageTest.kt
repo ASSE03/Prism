@@ -120,7 +120,8 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
     private val restore = t(R.string.restore_from_a_backup)
     private val check = t(R.string.check_for_updates)
     private val source = t(R.string.source_code)
-    private val tour = t(R.string.take_the_tour)
+    // 1.8.8 (plan-tour.md D6): "Take the tour" is the Guide.
+    private val tour = t(R.string.guide)
     private val licenses = t(R.string.open_source_licenses)
     private val diagnostics = t(R.string.playback_diagnostics)
     private val lastCrash = t(R.string.last_crash)
@@ -162,6 +163,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
                                 composable("page") { BackupAboutContent(0.dp, null, true, {}, check, share, selfTest) }
                                 composable("settings/{section}") { Box(Modifier.fillMaxSize()) }
                                 composable(Routes.SUPPORTERS) { Box(Modifier.fillMaxSize()) }
+                                composable(Routes.GUIDE) { Box(Modifier.fillMaxSize()) }
                             }
                         }
                     }
@@ -222,7 +224,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         // The old second lines are no longer prose on the page.
         for (id in listOf(
             R.string.settings_library_replay_sign_in_you, R.string.replaces_what_the_backup_holds_then, R.string.prism_also_checks_on_its_own,
-            R.string.a_minute_s_walk_through_prism, R.string.a_log_for_tracking_down_stutters, R.string.keeps_a_log_on_this_phone,
+            R.string.guide_info, R.string.a_log_for_tracking_down_stutters, R.string.keeps_a_log_on_this_phone,
         )) assertEquals(t(id), 0, shown(t(id)))
         // One tap away: Back up's.
         compose.onNodeWithContentDescription(tr(R.string.more_about, backUp)).performClick()
@@ -444,24 +446,24 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
 
     // ------------------------------------------------------------------ About
 
+    /** Source code opens GitHub, the Guide (1.8.8, "Take the tour" before) its own page, the licenses theirs. */
     @Test fun aboutsLinksGoWhereTheyDid() {
-        val tours = java.util.concurrent.atomic.AtomicInteger()
-        val scope = CoroutineScope(Dispatchers.Unconfined)
-        scope.launch { container.tourRequests.collect { tours.incrementAndGet() } }
-        try {
-            showContent()
-            tap(source)
-            assertEquals(listOf(SOURCE_URL), opened)
-            tap(tour)
-            assertEquals(1, tours.get())
-            tap(licenses)
-            compose.waitForIdle()
-            assertEquals("settings/{section}", navController!!.currentDestination?.route)
-            assertEquals("licenses", navController!!.currentBackStackEntry?.arguments?.getString("section"))
-            assertTrue(SettingsMap.resolve("licenses")!!.licenses)
-        } finally {
-            scope.cancel()
-        }
+        showContent()
+        tap(source)
+        assertEquals(listOf(SOURCE_URL), opened)
+        assertEquals("the old name is gone", 0, shown(t(R.string.take_the_tour)))
+        tap(tour)
+        compose.waitForIdle()
+        assertEquals(Routes.GUIDE, navController!!.currentDestination?.route)
+        navController!!.popBackStack()
+        compose.waitForIdle()
+        tap(licenses)
+        compose.waitForIdle()
+        assertEquals("settings/{section}", navController!!.currentDestination?.route)
+        assertEquals("licenses", navController!!.currentBackStackEntry?.arguments?.getString("section"))
+        assertTrue(SettingsMap.resolve("licenses")!!.licenses)
+        // Search still finds it by its old name.
+        assertTrue(SettingsIndex.entries.any { it.page == SettingsPageId.BACKUP_ABOUT && it.title == tour && t(R.string.take_the_tour) in it.keywords })
     }
 
     /**

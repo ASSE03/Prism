@@ -237,7 +237,7 @@ class FirstStepsTest {
         compose.onNodeWithTag(FIRST_STEPS_DONE_TAG).performClick()
         assertEquals(1, guide)
         assertEquals(1, done)
-        assertTrue("the Guide's way in: a real settings page until the Guide is in", FirstSteps.guideRoute.startsWith("settings/"))
+        assertEquals("\"Open the Guide\" opens the Guide", com.prism.music.ui.Routes.GUIDE, FirstSteps.guideRoute)
     }
 
     @Test fun filledRoutesNameTheirPage() {

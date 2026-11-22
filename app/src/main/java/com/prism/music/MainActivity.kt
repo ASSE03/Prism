@@ -773,6 +773,9 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                         composable(Routes.IMPORT) { ScreenBackdrop(BackdropScreen.LIBRARY) { com.prism.music.ui.screens.ImportScreen(bottomPadding) } }
                         composable(Routes.DESIGN_GALLERY) { ScreenBackdrop(BackdropScreen.SETTINGS) { com.prism.music.ui.components.DesignGallery(bottomPadding) } }
                         composable(Routes.SUPPORTERS) { ScreenBackdrop(BackdropScreen.SETTINGS) { com.prism.music.ui.screens.settings.SupportersScreen(bottomPadding) } }
+                        // 1.8.8: the Guide and its topics. HOOK (part B): onFirstSteps = start First steps again.
+                        composable(Routes.GUIDE) { ScreenBackdrop(BackdropScreen.SETTINGS) { com.prism.music.ui.tour.GuideScreen(bottomPadding, onFirstSteps = { com.prism.music.ui.tour.FirstSteps.start(context) { com.prism.music.ui.tour.FirstSteps.quickPick?.let { c.player.cue(it) } } }) } }
+                        composable(Routes.guideTopic("{topic}")) { ScreenBackdrop(BackdropScreen.SETTINGS) { com.prism.music.ui.tour.GuideTopicScreen(bottomPadding, it.arguments?.getString("topic")) } }
                         composable(Routes.TOGETHER) { ScreenBackdrop(BackdropScreen.LIBRARY) { com.prism.music.ui.screens.TogetherScreen(bottomPadding) } }
                         composable(Routes.PODCASTS) { ScreenBackdrop(BackdropScreen.LIBRARY) { com.prism.music.ui.screens.PodcastsScreen(bottomPadding) } }
                         composable(Routes.UPLOADS) { ScreenBackdrop(BackdropScreen.LIBRARY) { com.prism.music.ui.screens.UploadsScreen(bottomPadding) } }
@@ -994,12 +997,11 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                         } else tour = com.prism.music.ui.tour.pendingTour(context, c.returningUser == true)
                     }
                 }
-                LaunchedEffect(Unit) { c.tourRequests.collect { playerOpen = false; tour = com.prism.music.ui.tour.fullTour(c.returningUser == true) } }
                 tour?.let { plan ->
                     com.prism.music.ui.tour.TourOverlay(plan, onOpen = { r -> playerOpen = false; navigator.go(r) }, onDone = { tour = null })
                 }
                 // The coach (1.8.8): a tour that has the person do things, over everything. Nothing while none runs.
-                val coachActions = remember(navigator) { com.prism.music.ui.tour.CoachActions(go = { r -> navigator.go(r) }, setPlayerOpen = { playerOpen = it }) }
+                val coachActions = remember(navigator) { com.prism.music.ui.tour.CoachActions(go = { r -> navigator.go(r) }, setPlayerOpen = { playerOpen = it }, tab = selectTab) }
                 // The page showing with its arguments ("settings/looks", not "settings/{section}…"), for the steps' checks.
                 val place = route?.let { r -> com.prism.music.ui.filledRoute(r) { a -> @Suppress("DEPRECATION") backStack?.arguments?.get(a)?.toString() } }
                 com.prism.music.ui.tour.CoachHost(place, playerOpen && song != null, coachActions)
@@ -1009,6 +1011,8 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                     onGuide = { firstSteps.closing = false; playerOpen = false; navigator.go(firstSteps.guideRoute) },
                     onDone = { firstSteps.closing = false },
                 )
+                // What's new's "Show me" (1.8.8): the chip back to the next card, over the coach. Nothing otherwise.
+                com.prism.music.ui.tour.BackToWhatsNew { tour = it }
 
                 // Holiday Mode (1.8.0): once a season, the first time Prism opens in its month after setting up and the
                 // tour; never over the welcome screen, the tour, the player or another question.
