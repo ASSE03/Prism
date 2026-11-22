@@ -33,6 +33,8 @@ object Fixture {
             it[booleanPreferencesKey("tv_welcomed")] = true
         }
         com.prism.music.ui.tour.Tour.markSeen(context)
+        // 1.8.8: First steps done too, so no test meets the coach unless it asks for it (FirstStepsAppTest).
+        com.prism.music.ui.tour.FirstSteps.markDone(context)
         // Holiday Mode (1.8.0) asked already, around whatever year the test's clock says.
         val year = com.prism.music.data.looks.Seasons.today().year
         val seasons = (year - 1..year + 1).flatMap { y -> com.prism.music.data.looks.Season.entries.map { "${it.name}:$y" } }.toSet()
