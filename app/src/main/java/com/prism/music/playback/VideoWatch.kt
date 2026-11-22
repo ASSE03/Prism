@@ -46,3 +46,26 @@ fun videoRetry(httpCode: Int?, unreadable: Boolean, network: Boolean, lastRetryA
         VideoRetry(forgetCachedSound = unreadable, serverBusy = busy)
     } else null
 }
+
+/** How near its end the song may take over from its video and still be heard ([videoTakeOver]). */
+const val SONG_TAKEOVER_END_MS = 2_000L
+
+/** What follows a music video that failed: its song from [atMs], or the video once more where it was. */
+sealed interface VideoTakeOver {
+    data class Song(val atMs: Long) : VideoTakeOver
+    data object VideoAgain : VideoTakeOver
+}
+
+/**
+ * A music video that failed gives way to its song at the same moment: [videoPosMs] less the video's lead [lagMs] (its
+ * intro; 0 when not measured). A video often runs on past its song (scenes after the music, an intro the lead doesn't
+ * know of), so that moment can be at or past the end of the song's own length [songMs]: the song then ended at once and
+ * the next one started while the video still had a while to go (Ko-fi, Android TV, a Xiaomi box: "some music videos
+ * skip to the next song before they end"). There the video gets one more go instead, the first time ([triedAgain]
+ * false); after that the song takes over as before. [songMs] 0 (not known): the song, as before.
+ */
+fun videoTakeOver(videoPosMs: Long, lagMs: Long, songMs: Long, triedAgain: Boolean): VideoTakeOver {
+    val at = (videoPosMs - lagMs).coerceAtLeast(0)
+    val pastSong = songMs > 0 && at >= songMs - SONG_TAKEOVER_END_MS
+    return if (pastSong && !triedAgain) VideoTakeOver.VideoAgain else VideoTakeOver.Song(at)
+}

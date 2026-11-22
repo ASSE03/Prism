@@ -1938,6 +1938,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private val prefetched = java.util.Collections.newSetFromMap(java.util.concurrent.ConcurrentHashMap<String, Boolean>())
     /** Videos that failed to play; their streams are re-resolved on the next try. */
     private val failedVideos = HashSet<String>()
+    /** Videos given one more go after failing past their song's end ([videoTakeOver]): once each this session. */
+    private val outroRetried = HashSet<String>()
 
     /** Swaps the current item between its audio track and its music video. Returns an error message, if any. */
     suspend fun setVideoMode(enabled: Boolean): String? {
@@ -2119,10 +2121,25 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             c.player.reportError(tr(R.string.the_live_video_didn_t_load))
             return
         }
+        val lag = current.videoModeId?.takeIf { it != song.id }?.let { c.videoSync.cached(song.id, it) } ?: 0L
+        val videoPos = player.currentPosition
+        // Ko-fi (Android TV): a video that failed past its song's end (its outro) went back to a song that was already
+        // over, and so on to the next song before the video had ended. It gets one more go where it was (once).
+        val vid = current.videoModeId
+        val failed = player.playerError != null
+        val takeOver = videoTakeOver(videoPos, lag, song.durationSec * 1000L, triedAgain = !failed || vid == null || vid in outroRetried)
+        if (takeOver == VideoTakeOver.VideoAgain && vid != null) {
+            outroRetried += vid
+            AudioDiagnostics.log("video", "video $vid for $songId failed at $videoPos ms, past its song's end (${song.durationSec} s): one more go, not on to the next song")
+            c.streams.invalidate(vid)
+            player.prepare()
+            player.seekTo(idx, videoPos)
+            player.play()
+            return
+        }
         current.videoModeId?.let { failedVideos += it; prefetched -= it }
         android.util.Log.w("PrismVideo", "video ${current.videoModeId} for $songId didn't load (${player.playerError?.errorCodeName ?: "no picture in time"}); back to the song")
-        val lag = current.videoModeId?.takeIf { it != song.id }?.let { c.videoSync.cached(song.id, it) } ?: 0L
-        val pos = (player.currentPosition - lag).coerceAtLeast(0)
+        val pos = (takeOver as? VideoTakeOver.Song)?.atMs ?: (videoPos - lag).coerceAtLeast(0)
         swapInPlace(idx, song.toMediaItem(null))
         player.seekTo(idx, pos)
         player.prepare()
