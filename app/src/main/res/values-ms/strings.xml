@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">Kulit yang disimpan tetap dimainkan</string>
     <string name="otherwise_they_wait_for_wi_fi">Jika tidak, ia menunggu Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">Untuk Normalkan kelantangan dan Pudar silang, 1–4 MB setiap lagu</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Normalkan kelantangan dan Pudar silang mengukur setiap lagu sekali: kenyaringannya, cara muziknya bermula dan tamat, rentaknya. Lagu pada telefon anda diukur dari situ. Jika mati, selebihnya menunggu Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Kekuatan bunyi sama dan Pudar silang mengukur setiap lagu sekali: kenyaringannya, cara muziknya bermula dan tamat, rentaknya. Lagu pada telefon anda diukur dari situ. Jika mati, selebihnya menunggu Wi-Fi.</string>
     <string name="a_few_mb_a_song">Beberapa MB setiap lagu</string>
     <string name="sing_needs_each_song_whole_on">Nyanyi memerlukan setiap lagu secara penuh pada telefon. Jika mati, ia menunggu Wi-Fi melainkan lagu itu dimuat turun atau sudah dimainkan sepenuhnya.</string>
     <string name="sections_the_top_of_home_shortcuts">Bahagian, bahagian atas Laman Utama, pintasan</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Audio ruang perisian: pentas lebih luas, bunyi diletakkan di luar kepala anda dan rasa ruang. Terbina dalam Prism, jadi ia tidak memerlukan Dolby Atmos atau perkakasan audio ruang.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 jalur, pratetap anda, pembetulan fon kepala</string>
     <string name="how_the_ending_song_goes_down">Cara lagu yang tamat menurun dan lagu seterusnya naik sepanjang pudar silang. Garis yang naik ialah lagu seterusnya.</string>
-    <string name="how_loud_normalize_volume_makes_every">Sejauh mana kuatnya Normalkan kelantangan menjadikan setiap lagu. Kuat sesuai untuk tempat bising dan fon telinga yang perlahan; Siaran memberi ruang paling banyak untuk detik besar. Lagu hanya dinaikkan sehingga 6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">Sejauh mana kuatnya setiap lagu dijadikan. Kuat sesuai untuk tempat bising dan fon telinga yang perlahan; Siaran memberi ruang paling banyak untuk detik besar. Lagu hanya dinaikkan sehingga 6 dB.</string>
     <string name="like_spotify_and_youtube">, seperti Spotify dan YouTube</string>
     <string name="like_apple_music">, seperti Apple Music</string>
     <string name="like_tv_and_radio">, seperti TV dan radio</string>
@@ -5636,7 +5636,7 @@
     <string name="tour_188_mix_point_4">Semuanya mati sehingga anda menghidupkannya</string>
     <string name="tour_188_mix_coach">Pilih Automix di sini. Adun apabila saya langkau ada di bawahnya.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism mengadun seperti DJ dan memilih satu gerakan untuk setiap pasangan lagu: tukar bes, tapis keluar, gema keluar, potongan pada rentak atau adunan. Lagu diukur dahulu, pada Wi-Fi kecuali \"Ukur lagu pada data mudah alih\" dihidupkan; sehingga itu lagu diadun seperti Automatik. Album yang dimainkan penuh tidak diusik.</string>
+    <string name="automix_info">Automix: Prism mengadun seperti DJ dan memilih satu gerakan untuk setiap pasangan lagu: tukar bes, tapis keluar, gema keluar, potongan pada rentak atau adunan. Lagu diukur dahulu, pada Wi-Fi kecuali \"Menyemak kelantangan dan tempo\" dihidupkan dalam Muat turun &amp; data; sehingga itu lagu diadun seperti Automatik. Album yang dimainkan penuh tidak diusik.</string>
     <string name="automix_keywords">automix dj peralihan tukar bes gema tapis adun mix pudar silang</string>
     <string name="automix_does_this">Automix melakukan ini untuk anda</string>
     <string name="crossfade_off_detail">Satu lagu, kemudian yang seterusnya</string>

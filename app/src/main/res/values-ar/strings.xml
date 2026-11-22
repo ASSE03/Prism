@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">الأغلفة المحفوظة تُشغَّل في الحالتين</string>
     <string name="otherwise_they_wait_for_wi_fi">وإلا فإنها تنتظر Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">لتوحيد مستوى الصوت والتلاشي المتداخل، 1–4 MB لكل أغنية</string>
-    <string name="normalize_volume_and_crossfade_measure_each">يقيس توحيد مستوى الصوت والتلاشي المتداخل كل أغنية مرة واحدة: جهارتها، وكيف تبدأ موسيقاها وتنتهي، وإيقاعها. الأغاني الموجودة على هاتفك تُقاس من هناك. وعند الإيقاف، ينتظر الباقي Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">يقيس ارتفاع صوت واحد والتلاشي المتداخل كل أغنية مرة واحدة: جهارتها، وكيف تبدأ موسيقاها وتنتهي، وإيقاعها. الأغاني الموجودة على هاتفك تُقاس من هناك. وعند الإيقاف، ينتظر الباقي Wi-Fi.</string>
     <string name="a_few_mb_a_song">بضعة MB لكل أغنية</string>
     <string name="sing_needs_each_song_whole_on">يحتاج الغناء إلى كل أغنية كاملة على الهاتف. وعند الإيقاف، ينتظر Wi-Fi ما لم تكن الأغنية منزّلة أو شُغّلت كاملة.</string>
     <string name="sections_the_top_of_home_shortcuts">الأقسام، وأعلى الرئيسية، والاختصارات</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">صوت مكاني برمجي: مسرح أوسع، وصوت يتموضع خارج رأسك، وإحساس بالمكان. مدمج في Prism، فلا يحتاج إلى Dolby Atmos أو عتاد صوت مكاني.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 نطاقات، وإعداداتك المسبقة، وتصحيح السماعات</string>
     <string name="how_the_ending_song_goes_down">كيف تنخفض الأغنية المنتهية وترتفع التالية خلال التلاشي المتداخل. الخط الصاعد هو الأغنية التالية.</string>
-    <string name="how_loud_normalize_volume_makes_every">مدى ارتفاع صوت كل أغنية مع توحيد مستوى الصوت. «عالٍ» يناسب الأماكن الصاخبة والسماعات الهادئة، و«بث» يترك أكبر مجال للحظات القوية. لا تُرفع الأغاني إلا بما يصل إلى 6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">مدى ارتفاع صوت كل أغنية. «عالٍ» يناسب الأماكن الصاخبة والسماعات الهادئة، و«بث» يترك أكبر مجال للحظات القوية. لا تُرفع الأغاني إلا بما يصل إلى 6 dB.</string>
     <string name="like_spotify_and_youtube">، مثل Spotify وYouTube</string>
     <string name="like_apple_music">، مثل Apple Music</string>
     <string name="like_tv_and_radio">، مثل التلفزيون والراديو</string>
@@ -6016,7 +6016,7 @@
     <string name="tour_188_mix_point_4">كلها متوقفة حتى تشغّلها</string>
     <string name="tour_188_mix_coach">اختر Automix من هنا. مزج عند التخطي تحته مباشرة.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: يمزج Prism مثل DJ، فيختار حركة لكل زوج من الأغاني: تبديل الباس أو تصفية الخروج أو صدى الخروج أو قطعاً على النبضة أو مزجاً. تُقاس الأغاني أولاً عبر Wi-Fi ما لم يكن \"قياس الأغاني على بيانات الجوّال\" مفعّلاً؛ وإلى ذلك الحين تتداخل كما في الوضع التلقائي. الألبوم الذي يُشغَّل كاملاً لا يُمَسّ.</string>
+    <string name="automix_info">Automix: يمزج Prism مثل DJ، فيختار حركة لكل زوج من الأغاني: تبديل الباس أو تصفية الخروج أو صدى الخروج أو قطعاً على النبضة أو مزجاً. تُقاس الأغاني أولاً عبر Wi-Fi ما لم يكن \"فحص مستوى الصوت والإيقاع\" مفعّلاً في التنزيلات والبيانات؛ وإلى ذلك الحين تتداخل كما في الوضع التلقائي. الألبوم الذي يُشغَّل كاملاً لا يُمَسّ.</string>
     <string name="automix_keywords">automix dj أوتوميكس دي جي انتقالات مزج باس صدى فلتر تلاشي</string>
     <string name="automix_does_this">يتولى Automix ذلك عنك</string>
     <string name="crossfade_off_detail">أغنية، ثم التي تليها</string>

@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">As capas guardadas tocam de qualquer forma</string>
     <string name="otherwise_they_wait_for_wi_fi">Caso contrário, esperam pelo Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">Para Normalizar o volume e Crossfade, 1–4 MB por música</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Normalizar o volume e Crossfade medem cada música uma vez: o volume, como a música começa e acaba, a batida. As músicas no teu telemóvel são medidas a partir daí. Desativado, as restantes esperam pelo Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">O mesmo volume e Crossfade medem cada música uma vez: o volume, como a música começa e acaba, a batida. As músicas no teu telemóvel são medidas a partir daí. Desativado, as restantes esperam pelo Wi-Fi.</string>
     <string name="a_few_mb_a_song">Alguns MB por música</string>
     <string name="sing_needs_each_song_whole_on">O Cantar precisa de cada música inteira no telemóvel. Desativado, espera pelo Wi-Fi, a não ser que a música esteja transferida ou já tenha sido ouvida até ao fim.</string>
     <string name="sections_the_top_of_home_shortcuts">Secções, o topo do Início, atalhos</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Áudio espacial por software: um palco mais amplo, som colocado fora da tua cabeça e sensação de sala. Integrado no Prism, por isso não precisa de Dolby Atmos nem de hardware de áudio espacial.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 bandas, as tuas predefinições, correção de auscultadores</string>
     <string name="how_the_ending_song_goes_down">Como a música que acaba desce e a seguinte sobe durante o crossfade. A linha que sobe é a música seguinte.</string>
-    <string name="how_loud_normalize_volume_makes_every">O volume a que Normalizar o volume põe cada música. Alto adequa-se a sítios barulhentos e auriculares fracos; Transmissão deixa mais espaço para os grandes momentos. As músicas só sobem até 6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">O volume a que cada música fica. Alto adequa-se a sítios barulhentos e auriculares fracos; Transmissão deixa mais espaço para os grandes momentos. As músicas só sobem até 6 dB.</string>
     <string name="like_spotify_and_youtube">, como o Spotify e o YouTube</string>
     <string name="like_apple_music">, como o Apple Music</string>
     <string name="like_tv_and_radio">, como a TV e a rádio</string>
@@ -5788,7 +5788,7 @@
     <string name="tour_188_mix_point_4">Tudo desativado até o ativar</string>
     <string name="tour_188_mix_coach">Escolha Automix aqui. Fundir ao ignorar está logo abaixo.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: o Prism mistura como um DJ, escolhendo um movimento para cada par de músicas: bass swap, filter out, echo out, corte na batida ou fusão. As músicas são medidas primeiro, por Wi-Fi, a menos que \"Medir músicas com dados móveis\" esteja ativado; até lá, fundem-se como no Automático. Um álbum a tocar inteiro é deixado em paz.</string>
+    <string name="automix_info">Automix: o Prism mistura como um DJ, escolhendo um movimento para cada par de músicas: bass swap, filter out, echo out, corte na batida ou fusão. As músicas são medidas primeiro, por Wi-Fi, a menos que \"Verificar volume e tempo\" esteja ativado em Transferências e dados; até lá, fundem-se como no Automático. Um álbum a tocar inteiro é deixado em paz.</string>
     <string name="automix_keywords">automix dj transições crossfade bass swap eco filtro mix mistura</string>
     <string name="automix_does_this">O Automix faz isto por si</string>
     <string name="crossfade_off_detail">Uma música, depois a seguinte</string>

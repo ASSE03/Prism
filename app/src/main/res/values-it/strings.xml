@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">Le copertine salvate funzionano comunque</string>
     <string name="otherwise_they_wait_for_wi_fi">Altrimenti aspettano il Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">Per Normalizza volume e Dissolvenza incrociata, 1–4 MB a brano</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Normalizza volume e Dissolvenza incrociata analizzano ogni brano una volta: il volume, come inizia e finisce la musica, il ritmo. I brani sul telefono vengono analizzati da lì. Se disattivato, gli altri aspettano il Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Stesso volume e Dissolvenza incrociata analizzano ogni brano una volta: il volume, come inizia e finisce la musica, il ritmo. I brani sul telefono vengono analizzati da lì. Se disattivato, gli altri aspettano il Wi-Fi.</string>
     <string name="a_few_mb_a_song">Qualche MB a brano</string>
     <string name="sing_needs_each_song_whole_on">Canta ha bisogno di ogni brano intero sul telefono. Se disattivato, aspetta il Wi-Fi a meno che il brano non sia scaricato o già ascoltato per intero.</string>
     <string name="sections_the_top_of_home_shortcuts">Sezioni, la parte alta della Home, scorciatoie</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Audio spaziale software: una scena più ampia, il suono collocato fuori dalla testa e un senso di ambiente. Integrato in Prism, quindi non servono Dolby Atmos né hardware per l\'audio spaziale.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 bande, i tuoi preset, correzione cuffie</string>
     <string name="how_the_ending_song_goes_down">Come il brano che finisce si abbassa e il successivo sale durante la dissolvenza. La linea che sale è il brano successivo.</string>
-    <string name="how_loud_normalize_volume_makes_every">Quanto è forte ogni brano con Normalizza volume. Forte è adatto a luoghi rumorosi e auricolari poco potenti; Broadcast lascia più spazio ai momenti intensi. I brani vengono alzati al massimo di 6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">Quanto viene reso forte ogni brano. Forte è adatto a luoghi rumorosi e auricolari poco potenti; Broadcast lascia più spazio ai momenti intensi. I brani vengono alzati al massimo di 6 dB.</string>
     <string name="like_spotify_and_youtube">, come Spotify e YouTube</string>
     <string name="like_apple_music">, come Apple Music</string>
     <string name="like_tv_and_radio">, come TV e radio</string>
@@ -5788,7 +5788,7 @@
     <string name="tour_188_mix_point_4">Tutto è disattivato finché non lo attivi</string>
     <string name="tour_188_mix_coach">Scegli Automix qui. Sfuma quando salto è subito sotto.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism mixa come un DJ e sceglie una mossa per ogni coppia di brani: bass swap, filter out, echo out, un taglio a tempo o una sfumatura. I brani vengono prima analizzati, con il Wi-Fi a meno che \"Analizza i brani con dati mobili\" sia attivo; fino ad allora si fondono come con Automatica. Un album riprodotto per intero non viene toccato.</string>
+    <string name="automix_info">Automix: Prism mixa come un DJ e sceglie una mossa per ogni coppia di brani: bass swap, filter out, echo out, un taglio a tempo o una sfumatura. I brani vengono prima analizzati, con il Wi-Fi a meno che \"Controllo di volume e tempo\" sia attivo in Download e dati; fino ad allora si fondono come con Automatica. Un album riprodotto per intero non viene toccato.</string>
     <string name="automix_keywords">automix dj transizioni bass swap echo filter mix dissolvenza</string>
     <string name="automix_does_this">Ci pensa Automix</string>
     <string name="crossfade_off_detail">Un brano, poi il successivo</string>

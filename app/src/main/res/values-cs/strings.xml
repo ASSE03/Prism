@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">Uložené obaly hrají tak jako tak</string>
     <string name="otherwise_they_wait_for_wi_fi">Jinak čekají na Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">Pro Normalizovat hlasitost a Prolínání, 1–4 MB na skladbu</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Normalizovat hlasitost a Prolínání změří každou skladbu jednou: její hlasitost, jak hudba začíná a končí, její rytmus. Skladby v telefonu se měří odtamtud. Když je vypnuto, ostatní čekají na Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Stejná hlasitost a Prolínání změří každou skladbu jednou: její hlasitost, jak hudba začíná a končí, její rytmus. Skladby v telefonu se měří odtamtud. Když je vypnuto, ostatní čekají na Wi-Fi.</string>
     <string name="a_few_mb_a_song">Pár MB na skladbu</string>
     <string name="sing_needs_each_song_whole_on">Zpívání potřebuje každou skladbu celou v telefonu. Když je vypnuto, čeká na Wi-Fi, pokud skladba není stažená nebo už jednou celá přehraná.</string>
     <string name="sections_the_top_of_home_shortcuts">Sekce, horní část Domů, zkratky</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Softwarový prostorový zvuk: širší scéna, zvuk umístěný mimo hlavu a pocit prostoru. Je vestavěný v Prismu, takže nepotřebuje Dolby Atmos ani hardware pro prostorový zvuk.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 pásem, tvoje předvolby, korekce sluchátek</string>
     <string name="how_the_ending_song_goes_down">Jak končící skladba během prolnutí slábne a další sílí. Stoupající čára je další skladba.</string>
-    <string name="how_loud_normalize_volume_makes_every">Jak hlasitě Normalizovat hlasitost nastaví každou skladbu. Hlasité se hodí do hlučných míst a k tichým sluchátkům; Vysílání nechává nejvíc prostoru pro velké momenty. Skladby se zesílí nejvýš o 6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">Jak hlasitě je každá skladba nastavena. Hlasité se hodí do hlučných míst a k tichým sluchátkům; Vysílání nechává nejvíc prostoru pro velké momenty. Skladby se zesílí nejvýš o 6 dB.</string>
     <string name="like_spotify_and_youtube">, jako Spotify a YouTube</string>
     <string name="like_apple_music">, jako Apple Music</string>
     <string name="like_tv_and_radio">, jako televize a rádio</string>
@@ -5864,7 +5864,7 @@
     <string name="tour_188_mix_point_4">Vše je vypnuté, dokud to nezapnete</string>
     <string name="tour_188_mix_coach">Automix vyberte tady. Prolínat při přeskočení je hned pod ním.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism míchá jako DJ a pro každou dvojici skladeb vybere jiný tah: výměnu basů, filtr ven, echo ven, střih na doby nebo prolnutí. Skladby se nejdřív změří, na Wi-Fi, pokud není zapnuto \"Měřit skladby na mobilních datech\"; do té doby se prolínají jako u Automaticky. Album přehrávané celé zůstane nedotčené.</string>
+    <string name="automix_info">Automix: Prism míchá jako DJ a pro každou dvojici skladeb vybere jiný tah: výměnu basů, filtr ven, echo ven, střih na doby nebo prolnutí. Skladby se nejdřív změří, na Wi-Fi, pokud není v části Stahování a data zapnuto \"Kontrola hlasitosti a tempa\"; do té doby se prolínají jako u Automaticky. Album přehrávané celé zůstane nedotčené.</string>
     <string name="automix_keywords">automix dj přechody prolínání míchání basy echo filtr mix</string>
     <string name="automix_does_this">Automix to udělá za vás</string>
     <string name="crossfade_off_detail">Jedna skladba, pak další</string>

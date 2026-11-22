@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">Τα αποθηκευμένα εξώφυλλα παίζουν σε κάθε περίπτωση</string>
     <string name="otherwise_they_wait_for_wi_fi">Αλλιώς περιμένουν για Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">Για την Κανονικοποίηση έντασης και την Ομαλή μετάβαση, 1–4 MB ανά τραγούδι</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Η Κανονικοποίηση έντασης και η Ομαλή μετάβαση μετρούν κάθε τραγούδι μία φορά: την ένταση, πώς ξεκινά και τελειώνει η μουσική του, τον ρυθμό του. Τα τραγούδια στο τηλέφωνό σου μετριούνται από εκεί. Όταν είναι ανενεργό, τα υπόλοιπα περιμένουν για Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Η Ίδια ένταση και η Ομαλή μετάβαση μετρούν κάθε τραγούδι μία φορά: την ένταση, πώς ξεκινά και τελειώνει η μουσική του, τον ρυθμό του. Τα τραγούδια στο τηλέφωνό σου μετριούνται από εκεί. Όταν είναι ανενεργό, τα υπόλοιπα περιμένουν για Wi-Fi.</string>
     <string name="a_few_mb_a_song">Μερικά MB ανά τραγούδι</string>
     <string name="sing_needs_each_song_whole_on">Το Τραγούδα χρειάζεται κάθε τραγούδι ολόκληρο στο τηλέφωνο. Όταν είναι ανενεργό, περιμένει για Wi-Fi, εκτός αν το τραγούδι έχει ληφθεί ή έχει ήδη παίξει ολόκληρο.</string>
     <string name="sections_the_top_of_home_shortcuts">Ενότητες, το πάνω μέρος της Αρχικής, συντομεύσεις</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Χωρικός ήχος μέσω λογισμικού: ευρύτερη σκηνή, ήχος έξω από το κεφάλι σου και αίσθηση χώρου. Ενσωματωμένο στο Prism, οπότε δεν χρειάζεται Dolby Atmos ή υλικό χωρικού ήχου.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 ζώνες, οι προρυθμίσεις σου, διόρθωση ακουστικών</string>
     <string name="how_the_ending_song_goes_down">Πώς χαμηλώνει το τραγούδι που τελειώνει και ανεβαίνει το επόμενο κατά την ομαλή μετάβαση. Η γραμμή που ανεβαίνει είναι το επόμενο τραγούδι.</string>
-    <string name="how_loud_normalize_volume_makes_every">Πόσο δυνατά κάνει η Κανονικοποίηση έντασης κάθε τραγούδι. Το Δυνατό ταιριάζει σε θορυβώδεις χώρους και σιγανά ακουστικά· το Εκπομπή αφήνει τον περισσότερο χώρο για τις μεγάλες στιγμές. Τα τραγούδια ανεβαίνουν το πολύ 6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">Πόσο δυνατό γίνεται κάθε τραγούδι. Το Δυνατό ταιριάζει σε θορυβώδεις χώρους και σιγανά ακουστικά· το Εκπομπή αφήνει τον περισσότερο χώρο για τις μεγάλες στιγμές. Τα τραγούδια ανεβαίνουν το πολύ 6 dB.</string>
     <string name="like_spotify_and_youtube">, όπως το Spotify και το YouTube</string>
     <string name="like_apple_music">, όπως το Apple Music</string>
     <string name="like_tv_and_radio">, όπως η τηλεόραση και το ραδιόφωνο</string>
@@ -5712,7 +5712,7 @@
     <string name="tour_188_mix_point_4">Όλα ανενεργά μέχρι να τα ενεργοποιήσεις</string>
     <string name="tour_188_mix_coach">Διάλεξε εδώ το Automix. Η Ανάμειξη όταν παραλείπω είναι ακριβώς από κάτω.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: το Prism μιξάρει σαν DJ και επιλέγει μια κίνηση για κάθε ζευγάρι τραγουδιών: bass swap, filter out, echo out, κόψιμο στο beat ή ανάμειξη. Τα τραγούδια μετριούνται πρώτα, μέσω Wi-Fi, εκτός αν είναι ενεργή η \"Μέτρηση τραγουδιών με δεδομένα κινητής\"· ως τότε αναμειγνύονται όπως στο Αυτόματο. Ένα άλμπουμ που παίζει ολόκληρο μένει ανέγγιχτο.</string>
+    <string name="automix_info">Automix: το Prism μιξάρει σαν DJ και επιλέγει μια κίνηση για κάθε ζευγάρι τραγουδιών: bass swap, filter out, echo out, κόψιμο στο beat ή ανάμειξη. Τα τραγούδια μετριούνται πρώτα, μέσω Wi-Fi, εκτός αν είναι ενεργός ο \"Έλεγχος έντασης και ρυθμού\" στις Λήψεις &amp; δεδομένα· ως τότε αναμειγνύονται όπως στο Αυτόματο. Ένα άλμπουμ που παίζει ολόκληρο μένει ανέγγιχτο.</string>
     <string name="automix_keywords">automix dj μεταβάσεις ανάμειξη μίξη μπάσο echo φίλτρο mix crossfade</string>
     <string name="automix_does_this">Το Automix το κάνει για σένα</string>
     <string name="crossfade_off_detail">Ένα τραγούδι, μετά το επόμενο</string>

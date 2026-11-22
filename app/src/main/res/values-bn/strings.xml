@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">সেভ করা কভার যেকোনো অবস্থায় চলে</string>
     <string name="otherwise_they_wait_for_wi_fi">নইলে সেগুলো Wi-Fi-এর অপেক্ষা করে</string>
     <string name="for_normalize_volume_and_crossfade_1">ভলিউম সমান করা আর ক্রসফেডের জন্য, প্রতি গানে 1–4 MB</string>
-    <string name="normalize_volume_and_crossfade_measure_each">ভলিউম সমান করা আর ক্রসফেড প্রতিটি গান একবার মাপে: এর আওয়াজ, এর বাজনা কীভাবে শুরু ও শেষ হয়, এর বিট। আপনার ফোনে থাকা গান সেখান থেকেই মাপা হয়। বন্ধ থাকলে বাকিগুলো Wi-Fi-এর অপেক্ষা করে।</string>
+    <string name="normalize_volume_and_crossfade_measure_each">একই আওয়াজ আর ক্রসফেড প্রতিটি গান একবার মাপে: এর আওয়াজ, এর বাজনা কীভাবে শুরু ও শেষ হয়, এর বিট। আপনার ফোনে থাকা গান সেখান থেকেই মাপা হয়। বন্ধ থাকলে বাকিগুলো Wi-Fi-এর অপেক্ষা করে।</string>
     <string name="a_few_mb_a_song">প্রতি গানে কয়েক MB</string>
     <string name="sing_needs_each_song_whole_on">গলা মেলানোর জন্য প্রতিটি গান পুরোটা ফোনে থাকা দরকার। বন্ধ থাকলে, গানটি ডাউনলোড করা বা আগে পুরো চালানো না থাকলে এটি Wi-Fi-এর অপেক্ষা করে।</string>
     <string name="sections_the_top_of_home_shortcuts">সেকশন, হোমের ওপরের অংশ, শর্টকাট</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">সফটওয়্যার স্প্যাশিয়াল অডিও: আরও চওড়া মঞ্চ, মাথার বাইরে রাখা সাউন্ড আর ঘরের অনুভূতি। Prism-এ বিল্ট-ইন, তাই Dolby Atmos বা স্প্যাশিয়াল অডিও হার্ডওয়্যার লাগে না।</string>
     <string name="t_10_bands_your_presets_headphone_correction">১০টি ব্যান্ড, আপনার প্রিসেট, হেডফোন সংশোধন</string>
     <string name="how_the_ending_song_goes_down">ক্রসফেডের সময় শেষ হতে থাকা গান কীভাবে কমে আর পরেরটি কীভাবে বাড়ে। ওপরে উঠতে থাকা রেখাটি পরের গান।</string>
-    <string name="how_loud_normalize_volume_makes_every">ভলিউম সমান করা প্রতিটি গান কতটা জোরে করে। জোরে মানায় শব্দময় জায়গা আর আস্তে ইয়ারবাডে; সম্প্রচার বড় মুহূর্তের জন্য সবচেয়ে বেশি জায়গা রাখে। গান সর্বোচ্চ 6 dB পর্যন্ত বাড়ানো হয়।</string>
+    <string name="how_loud_normalize_volume_makes_every">প্রতিটি গান কতটা জোরে করা হয়। জোরে মানায় শব্দময় জায়গা আর আস্তে ইয়ারবাডে; সম্প্রচার বড় মুহূর্তের জন্য সবচেয়ে বেশি জায়গা রাখে। গান সর্বোচ্চ 6 dB পর্যন্ত বাড়ানো হয়।</string>
     <string name="like_spotify_and_youtube">, Spotify আর YouTube-এর মতো</string>
     <string name="like_apple_music">, Apple Music-এর মতো</string>
     <string name="like_tv_and_radio">, টিভি আর রেডিওর মতো</string>
@@ -5712,7 +5712,7 @@
     <string name="tour_188_mix_point_4">চালু না করা পর্যন্ত সব বন্ধ</string>
     <string name="tour_188_mix_coach">এখানে Automix বেছে নিন। বাদ দিলে মিশে যাক ঠিক নিচে।</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism DJ-এর মতো মেশায় এবং প্রতিটি গানের জোড়ার জন্য একটি চাল বেছে নেয়: বেস সোয়াপ, ফিল্টার আউট, ইকো আউট, বিটে কাট বা মিশ্রণ। গান আগে মাপা হয়, ওয়াই-ফাইতে, যদি না \"মোবাইল ডেটায় গান মাপুন\" চালু থাকে; ততক্ষণ গান স্বয়ংক্রিয়ের মতো মিশে যায়। পুরো বাজতে থাকা অ্যালবাম ছোঁয়া হয় না।</string>
+    <string name="automix_info">Automix: Prism DJ-এর মতো মেশায় এবং প্রতিটি গানের জোড়ার জন্য একটি চাল বেছে নেয়: বেস সোয়াপ, ফিল্টার আউট, ইকো আউট, বিটে কাট বা মিশ্রণ। গান আগে মাপা হয়, ওয়াই-ফাইতে, যদি না ডাউনলোড ও ডেটায় \"ভলিউম আর টেম্পো যাচাই\" চালু থাকে; ততক্ষণ গান স্বয়ংক্রিয়ের মতো মিশে যায়। পুরো বাজতে থাকা অ্যালবাম ছোঁয়া হয় না।</string>
     <string name="automix_keywords">automix dj অটোমিক্স ডিজে ট্রানজিশন মিক্স বেস ইকো ফিল্টার ক্রসফেড</string>
     <string name="automix_does_this">Automix এটা আপনার হয়ে করে</string>
     <string name="crossfade_off_detail">একটি গান, তারপর পরেরটি</string>

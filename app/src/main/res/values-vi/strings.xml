@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">Ảnh bìa đã lưu vẫn phát dù thế nào</string>
     <string name="otherwise_they_wait_for_wi_fi">Nếu không, chúng chờ Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">Cho Chuẩn hóa âm lượng và Chuyển tiếp mượt, 1–4 MB mỗi bài</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Chuẩn hóa âm lượng và Chuyển tiếp mượt đo mỗi bài một lần: độ lớn, cách nhạc bắt đầu và kết thúc, nhịp. Bài hát trên điện thoại được đo từ đó. Khi tắt, phần còn lại chờ Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Cùng độ to và Chuyển tiếp mượt đo mỗi bài một lần: độ lớn, cách nhạc bắt đầu và kết thúc, nhịp. Bài hát trên điện thoại được đo từ đó. Khi tắt, phần còn lại chờ Wi-Fi.</string>
     <string name="a_few_mb_a_song">Vài MB mỗi bài</string>
     <string name="sing_needs_each_song_whole_on">Hát cùng cần toàn bộ bài hát trên điện thoại. Khi tắt, nó chờ Wi-Fi trừ khi bài đã được tải xuống hoặc đã phát hết.</string>
     <string name="sections_the_top_of_home_shortcuts">Các mục, phần đầu Trang chủ, lối tắt</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Âm thanh không gian bằng phần mềm: sân khấu rộng hơn, âm thanh đặt ra ngoài đầu bạn và cảm giác không gian phòng. Tích hợp sẵn trong Prism, nên không cần Dolby Atmos hay phần cứng âm thanh không gian.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 dải, cài đặt sẵn của bạn, hiệu chỉnh tai nghe</string>
     <string name="how_the_ending_song_goes_down">Cách bài đang kết thúc nhỏ dần và bài tiếp theo to dần trong lúc chuyển tiếp. Đường đi lên là bài tiếp theo.</string>
-    <string name="how_loud_normalize_volume_makes_every">Mức to mà Chuẩn hóa âm lượng đặt cho mọi bài. To hợp với nơi ồn ào và tai nghe nhỏ tiếng; Phát sóng chừa nhiều khoảng nhất cho những đoạn cao trào. Bài hát chỉ được tăng tối đa 6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">Mức to của mọi bài. To hợp với nơi ồn ào và tai nghe nhỏ tiếng; Phát sóng chừa nhiều khoảng nhất cho những đoạn cao trào. Bài hát chỉ được tăng tối đa 6 dB.</string>
     <string name="like_spotify_and_youtube">, như Spotify và YouTube</string>
     <string name="like_apple_music">, như Apple Music</string>
     <string name="like_tv_and_radio">, như TV và radio</string>
@@ -5636,7 +5636,7 @@
     <string name="tour_188_mix_point_4">Tất cả đều tắt cho đến khi bạn bật</string>
     <string name="tour_188_mix_coach">Chọn Automix ở đây. Hòa vào nhau khi bỏ qua ở ngay bên dưới.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism phối nhạc như DJ, chọn một kiểu chuyển cho từng cặp bài: đổi bass, lọc dần ra, vang dần ra, cắt đúng phách hoặc hòa trộn. Các bài được đo trước, qua Wi-Fi trừ khi bật \"Đo bài hát khi dùng dữ liệu di động\"; trước đó chúng hòa vào nhau như chế độ Tự động. Album phát trọn vẹn được giữ nguyên.</string>
+    <string name="automix_info">Automix: Prism phối nhạc như DJ, chọn một kiểu chuyển cho từng cặp bài: đổi bass, lọc dần ra, vang dần ra, cắt đúng phách hoặc hòa trộn. Các bài được đo trước, qua Wi-Fi trừ khi bật \"Kiểm tra độ lớn và nhịp độ\" trong Tải xuống &amp; dữ liệu; trước đó chúng hòa vào nhau như chế độ Tự động. Album phát trọn vẹn được giữ nguyên.</string>
     <string name="automix_keywords">automix dj chuyển bài chuyển tiếp đổi bass vang lọc phối trộn mix</string>
     <string name="automix_does_this">Automix làm việc này cho bạn</string>
     <string name="crossfade_off_detail">Hết bài này đến bài kế tiếp</string>

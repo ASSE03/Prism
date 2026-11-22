@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">保存済みのカバーはどちらの場合も再生されます</string>
     <string name="otherwise_they_wait_for_wi_fi">それ以外は Wi-Fi を待ちます</string>
     <string name="for_normalize_volume_and_crossfade_1">音量の均一化とクロスフェード用、1 曲あたり 1〜4 MB</string>
-    <string name="normalize_volume_and_crossfade_measure_each">音量の均一化とクロスフェードでは、各曲を 1 回だけ測定します（音量、曲の始まりと終わり方、ビート）。スマホにある曲はそこから測定します。オフにすると、残りは Wi-Fi を待ちます。</string>
+    <string name="normalize_volume_and_crossfade_measure_each">同じ音量とクロスフェードでは、各曲を 1 回だけ測定します（音量、曲の始まりと終わり方、ビート）。スマホにある曲はそこから測定します。オフにすると、残りは Wi-Fi を待ちます。</string>
     <string name="a_few_mb_a_song">1 曲あたり数 MB</string>
     <string name="sing_needs_each_song_whole_on">シングには曲全体がスマホに必要です。オフにすると、曲がダウンロード済みか最後まで再生済みでない限り Wi-Fi を待ちます。</string>
     <string name="sections_the_top_of_home_shortcuts">セクション、ホームの上部、ショートカット</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">ソフトウェアによる空間オーディオ：広い音場、頭の外に定位する音、空間の響き。Prism に内蔵されているので、Dolby Atmos や空間オーディオ対応のハードウェアは不要です。</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 バンド、あなたのプリセット、ヘッドホン補正</string>
     <string name="how_the_ending_song_goes_down">クロスフェード中に、終わる曲の音量がどう下がり、次の曲がどう上がるか。上がっていく線が次の曲です。</string>
-    <string name="how_loud_normalize_volume_makes_every">「音量を均一化」でそろえる音量。「大きめ」は騒がしい場所や音の小さいイヤホン向け、「放送」は盛り上がる場面のための余裕を最も多く残します。音量を上げるのは最大 6 dB までです。</string>
+    <string name="how_loud_normalize_volume_makes_every">各曲をそろえる音量。「大きめ」は騒がしい場所や音の小さいイヤホン向け、「放送」は盛り上がる場面のための余裕を最も多く残します。音量を上げるのは最大 6 dB までです。</string>
     <string name="like_spotify_and_youtube">、Spotify や YouTube と同程度</string>
     <string name="like_apple_music">、Apple Music と同程度</string>
     <string name="like_tv_and_radio">、テレビやラジオと同程度</string>
@@ -5636,7 +5636,7 @@
     <string name="tour_188_mix_point_4">すべて、オンにするまでオフです</string>
     <string name="tour_188_mix_coach">ここで Automix を選びます。すぐ下に「スキップ時になじませる」があります。</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix：Prism が DJ のようにミックスし、曲の組み合わせごとにベース スワップ、フィルター アウト、エコー アウト、拍に合わせたカット、またはブレンドを選びます。曲は先に測定されます（「モバイルデータで曲を測定」がオンでない限り Wi-Fi で行います）。それまでは自動と同じようにブレンドします。アルバムを通して再生しているときは何もしません。</string>
+    <string name="automix_info">Automix：Prism が DJ のようにミックスし、曲の組み合わせごとにベース スワップ、フィルター アウト、エコー アウト、拍に合わせたカット、またはブレンドを選びます。曲は先に測定されます（「ダウンロードとデータ」で「音量感とテンポのチェック」がオンでない限り Wi-Fi で行います）。それまでは自動と同じようにブレンドします。アルバムを通して再生しているときは何もしません。</string>
     <string name="automix_keywords">automix オートミックス dj ミックス トランジション ベース スワップ エコー フィルター クロスフェード</string>
     <string name="automix_does_this">Automix が自動で行います</string>
     <string name="crossfade_off_detail">1曲ずつ、続けて再生</string>

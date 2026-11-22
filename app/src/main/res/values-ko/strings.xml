@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">저장된 커버는 어느 쪽이든 재생돼요</string>
     <string name="otherwise_they_wait_for_wi_fi">그 외에는 Wi-Fi를 기다려요</string>
     <string name="for_normalize_volume_and_crossfade_1">볼륨 평준화와 크로스페이드용, 곡당 1–4MB</string>
-    <string name="normalize_volume_and_crossfade_measure_each">볼륨 평준화와 크로스페이드는 각 곡을 한 번 측정해요: 음량, 음악이 시작하고 끝나는 방식, 비트. 휴대전화에 있는 곡은 거기서 측정해요. 끄면 나머지는 Wi-Fi를 기다려요.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">같은 음량과 크로스페이드는 각 곡을 한 번 측정해요: 음량, 음악이 시작하고 끝나는 방식, 비트. 휴대전화에 있는 곡은 거기서 측정해요. 끄면 나머지는 Wi-Fi를 기다려요.</string>
     <string name="a_few_mb_a_song">곡당 몇 MB</string>
     <string name="sing_needs_each_song_whole_on">따라 부르기는 휴대전화에 곡 전체가 있어야 해요. 끄면 곡을 다운로드했거나 이미 끝까지 들은 경우가 아니면 Wi-Fi를 기다려요.</string>
     <string name="sections_the_top_of_home_shortcuts">섹션, 홈 상단, 바로가기</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">소프트웨어 공간 음향: 더 넓은 무대감, 머리 바깥에서 들리는 소리, 공간감을 줘요. Prism에 내장되어 있어서 Dolby Atmos나 공간 음향 하드웨어가 필요 없어요.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10밴드, 내 프리셋, 헤드폰 보정</string>
     <string name="how_the_ending_song_goes_down">크로스페이드 동안 끝나는 곡이 작아지고 다음 곡이 커지는 방식이에요. 올라가는 선이 다음 곡이에요.</string>
-    <string name="how_loud_normalize_volume_makes_every">볼륨 평준화로 모든 곡을 얼마나 크게 할지 정해요. \'크게\'는 시끄러운 곳과 소리가 작은 이어폰에, \'방송\'은 큰 순간을 위한 여유를 가장 많이 남겨요. 곡은 최대 6dB까지만 키워요.</string>
+    <string name="how_loud_normalize_volume_makes_every">모든 곡을 얼마나 크게 할지 정해요. \'크게\'는 시끄러운 곳과 소리가 작은 이어폰에, \'방송\'은 큰 순간을 위한 여유를 가장 많이 남겨요. 곡은 최대 6dB까지만 키워요.</string>
     <string name="like_spotify_and_youtube">, Spotify와 YouTube처럼</string>
     <string name="like_apple_music">, Apple Music처럼</string>
     <string name="like_tv_and_radio">, TV와 라디오처럼</string>
@@ -5636,7 +5636,7 @@
     <string name="tour_188_mix_point_4">켜기 전까지는 모두 꺼져 있습니다</string>
     <string name="tour_188_mix_coach">여기서 Automix를 선택하세요. 건너뛸 때 섞기는 바로 아래에 있습니다.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism이 DJ처럼 믹스하며, 곡 쌍마다 베이스 스왑, 필터 아웃, 에코 아웃, 비트에 맞춘 컷, 블렌드 중 하나를 고릅니다. 곡은 먼저 측정되며, \"모바일 데이터에서 곡 측정\"을 켜지 않으면 Wi-Fi에서 측정합니다. 그전까지는 자동과 같이 블렌드합니다. 처음부터 끝까지 재생되는 앨범은 그대로 둡니다.</string>
+    <string name="automix_info">Automix: Prism이 DJ처럼 믹스하며, 곡 쌍마다 베이스 스왑, 필터 아웃, 에코 아웃, 비트에 맞춘 컷, 블렌드 중 하나를 고릅니다. 곡은 먼저 측정되며, 다운로드 및 데이터에서 \"음량과 템포 확인\"을 켜지 않으면 Wi-Fi에서 측정합니다. 그전까지는 자동과 같이 블렌드합니다. 처음부터 끝까지 재생되는 앨범은 그대로 둡니다.</string>
     <string name="automix_keywords">automix 오토믹스 dj 디제이 전환 트랜지션 베이스 스왑 에코 필터 믹스 크로스페이드</string>
     <string name="automix_does_this">Automix가 알아서 합니다</string>
     <string name="crossfade_off_detail">한 곡이 끝나면 다음 곡</string>

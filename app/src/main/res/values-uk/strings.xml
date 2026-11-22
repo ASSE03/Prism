@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">Збережені обкладинки грають у будь-якому разі</string>
     <string name="otherwise_they_wait_for_wi_fi">Інакше вони чекають на Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">Для вирівнювання гучності й плавного переходу, 1–4 MB на пісню</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Вирівнювання гучності й плавний перехід вимірюють кожну пісню один раз: її гучність, як починається й закінчується музика, її біт. Пісні на телефоні вимірюються звідти. Коли вимкнено, решта чекає на Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Однакова гучність і плавний перехід вимірюють кожну пісню один раз: її гучність, як починається й закінчується музика, її біт. Пісні на телефоні вимірюються звідти. Коли вимкнено, решта чекає на Wi-Fi.</string>
     <string name="a_few_mb_a_song">Кілька MB на пісню</string>
     <string name="sing_needs_each_song_whole_on">Для Співу кожна пісня потрібна на телефоні повністю. Коли вимкнено, він чекає на Wi-Fi, якщо пісню не завантажено чи вже не прослухано до кінця.</string>
     <string name="sections_the_top_of_home_shortcuts">Розділи, верх Головної, ярлики</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Програмний просторовий звук: ширша сцена, звук поза головою й відчуття простору. Вбудований у Prism, тож не потребує Dolby Atmos чи обладнання для просторового звуку.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 смуг, твої пресети, корекція навушників</string>
     <string name="how_the_ending_song_goes_down">Як пісня, що закінчується, затихає, а наступна наростає під час переходу. Лінія, що йде вгору, — наступна пісня.</string>
-    <string name="how_loud_normalize_volume_makes_every">Наскільки гучною вирівнювання робить кожну пісню. «Гучно» пасує шумним місцям і тихим навушникам; «Мовлення» залишає найбільше запасу для гучних моментів. Пісні підсилюються щонайбільше на 6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">Наскільки гучною робиться кожна пісня. «Гучно» пасує шумним місцям і тихим навушникам; «Мовлення» залишає найбільше запасу для гучних моментів. Пісні підсилюються щонайбільше на 6 dB.</string>
     <string name="like_spotify_and_youtube">, як у Spotify і YouTube</string>
     <string name="like_apple_music">, як в Apple Music</string>
     <string name="like_tv_and_radio">, як на ТБ і радіо</string>
@@ -5864,7 +5864,7 @@
     <string name="tour_188_mix_point_4">Усе вимкнено, доки ви не ввімкнете</string>
     <string name="tour_188_mix_coach">Оберіть Automix тут. Змішувати при пропуску одразу нижче.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism міксує, як DJ, добираючи рух для кожної пари пісень: обмін басами, фільтр на вихід, луну на вихід, різкий перехід у такт або плавне змішування. Спершу пісні вимірюються, у Wi-Fi, якщо не ввімкнено «Вимірювати пісні в мобільній мережі»; до того вони змішуються, як в Автоматично. Альбом, що грає повністю, не чіпається.</string>
+    <string name="automix_info">Automix: Prism міксує, як DJ, добираючи рух для кожної пари пісень: обмін басами, фільтр на вихід, луну на вихід, різкий перехід у такт або плавне змішування. Спершу пісні вимірюються, у Wi-Fi, якщо в розділі Завантаження й дані не ввімкнено «Перевірка гучності й темпу»; до того вони змішуються, як в Автоматично. Альбом, що грає повністю, не чіпається.</string>
     <string name="automix_keywords">automix dj діджей переходи обмін басами луна фільтр мікс плавний перехід</string>
     <string name="automix_does_this">Automix робить це за вас</string>
     <string name="crossfade_off_detail">Одна пісня, потім наступна</string>

@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">Kaydedilen kapaklar her durumda oynar</string>
     <string name="otherwise_they_wait_for_wi_fi">Aksi hâlde Wi-Fi beklerler</string>
     <string name="for_normalize_volume_and_crossfade_1">Ses düzeyini dengele ve Çapraz geçiş için, şarkı başına 1–4 MB</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Ses düzeyini dengele ve Çapraz geçiş her şarkıyı bir kez ölçer: ses yüksekliğini, müziğinin nasıl başlayıp bittiğini, ritmini. Telefonundaki şarkılar oradan ölçülür. Kapalıyken geri kalanlar Wi-Fi bekler.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Aynı ses yüksekliği ve Çapraz geçiş her şarkıyı bir kez ölçer: ses yüksekliğini, müziğinin nasıl başlayıp bittiğini, ritmini. Telefonundaki şarkılar oradan ölçülür. Kapalıyken geri kalanlar Wi-Fi bekler.</string>
     <string name="a_few_mb_a_song">Şarkı başına birkaç MB</string>
     <string name="sing_needs_each_song_whole_on">Sing, her şarkının tamamının telefonda olmasına ihtiyaç duyar. Kapalıyken, şarkı indirilmemiş ya da baştan sona çalınmamışsa Wi-Fi bekler.</string>
     <string name="sections_the_top_of_home_shortcuts">Bölümler, Ana sayfanın üstü, kısayollar</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Yazılımsal uzamsal ses: daha geniş bir sahne, kafanın dışına yerleştirilmiş ses ve bir oda hissi. Prism\'e yerleşik olduğundan Dolby Atmos ya da uzamsal ses donanımı gerektirmez.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 bant, ön ayarların, kulaklık düzeltmesi</string>
     <string name="how_the_ending_song_goes_down">Çapraz geçiş boyunca biten şarkının nasıl kısılıp sonrakinin nasıl yükseldiği. Yükselen çizgi sonraki şarkıdır.</string>
-    <string name="how_loud_normalize_volume_makes_every">Ses düzeyini dengele\'nin her şarkıyı ne kadar yüksek yaptığı. Yüksek, gürültülü yerlere ve sesi düşük kulaklıklara uyar; Yayın, büyük anlar için en çok payı bırakır. Şarkılar en fazla 6 dB yükseltilir.</string>
+    <string name="how_loud_normalize_volume_makes_every">Her şarkının ne kadar yüksek yapıldığı. Yüksek, gürültülü yerlere ve sesi düşük kulaklıklara uyar; Yayın, büyük anlar için en çok payı bırakır. Şarkılar en fazla 6 dB yükseltilir.</string>
     <string name="like_spotify_and_youtube">, Spotify ve YouTube gibi</string>
     <string name="like_apple_music">, Apple Music gibi</string>
     <string name="like_tv_and_radio">, TV ve radyo gibi</string>
@@ -5712,7 +5712,7 @@
     <string name="tour_188_mix_point_4">Sen açana kadar hepsi kapalı</string>
     <string name="tour_188_mix_coach">Automix\'i buradan seç. Atlarken karıştır hemen altında.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism bir DJ gibi karıştırır ve her şarkı çifti için bir hareket seçer: bas değişimi, filtreyle çıkış, yankıyla çıkış, ritme denk kesme veya karışım. Şarkılar önce ölçülür; \"Şarkıları mobil veride ölç\" açık değilse yalnızca Wi-Fi\'de. O zamana kadar Otomatik\'teki gibi karışırlar. Baştan sona çalan bir albüme dokunulmaz.</string>
+    <string name="automix_info">Automix: Prism bir DJ gibi karıştırır ve her şarkı çifti için bir hareket seçer: bas değişimi, filtreyle çıkış, yankıyla çıkış, ritme denk kesme veya karışım. Şarkılar önce ölçülür; İndirilenler ve veri bölümünde \"Ses düzeyi ve tempoyu denetleme\" açık değilse yalnızca Wi-Fi\'de. O zamana kadar Otomatik\'teki gibi karışırlar. Baştan sona çalan bir albüme dokunulmaz.</string>
     <string name="automix_keywords">automix dj geçiş geçişler bas değişimi yankı filtre karıştır çapraz geçiş</string>
     <string name="automix_does_this">Bunu Automix senin için yapar</string>
     <string name="crossfade_off_detail">Bir şarkı, sonra sonrakisi</string>

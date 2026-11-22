@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">已儲存的封面無論如何都會播放</string>
     <string name="otherwise_they_wait_for_wi_fi">否則會等待 Wi-Fi 連線</string>
     <string name="for_normalize_volume_and_crossfade_1">用於音量標準化和淡入淡出，每首 1–4 MB</string>
-    <string name="normalize_volume_and_crossfade_measure_each">音量標準化和淡入淡出會測量每首歌一次：響度、音樂開始和結束的方式，以及節拍。手機上的歌曲會直接從手機測量。關閉時，其餘歌曲會等待 Wi-Fi 連線。</string>
+    <string name="normalize_volume_and_crossfade_measure_each">音量一致和淡入淡出會測量每首歌一次：響度、音樂開始和結束的方式，以及節拍。手機上的歌曲會直接從手機測量。關閉時，其餘歌曲會等待 Wi-Fi 連線。</string>
     <string name="a_few_mb_a_song">每首幾 MB</string>
     <string name="sing_needs_each_song_whole_on">歡唱需要手機上有完整的歌曲。關閉時，除非歌曲已下載或已完整播放過，否則會等待 Wi-Fi 連線。</string>
     <string name="sections_the_top_of_home_shortcuts">區塊、首頁頂端、捷徑</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">軟體空間音訊：更寬廣的音場、讓聲音位於頭部之外，並帶有空間感。內建於 Prism，不需要 Dolby Atmos 或空間音訊硬體。</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 段、你的預設組合、耳機校正</string>
     <string name="how_the_ending_song_goes_down">淡入淡出期間，結束中的歌曲如何降低音量、下一首如何提高音量。上升的線條是下一首歌。</string>
-    <string name="how_loud_normalize_volume_makes_every">音量標準化會讓每首歌有多大聲。「大聲」適合吵雜的地方和音量小的耳機；「廣播」會為高潮片段保留最多空間。歌曲最多只會提高 6 dB。</string>
+    <string name="how_loud_normalize_volume_makes_every">每首歌有多大聲。「大聲」適合吵雜的地方和音量小的耳機；「廣播」會為高潮片段保留最多空間。歌曲最多只會提高 6 dB。</string>
     <string name="like_spotify_and_youtube">，與 Spotify 和 YouTube 相同</string>
     <string name="like_apple_music">，與 Apple Music 相同</string>
     <string name="like_tv_and_radio">，與電視和廣播相同</string>
@@ -5636,7 +5636,7 @@
     <string name="tour_188_mix_point_4">在你開啟之前，全部關閉</string>
     <string name="tour_188_mix_coach">在這裡選擇 Automix。略過時融合就在下方。</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix：Prism 像 DJ 一樣混音，為每對歌曲挑選一種手法：低音互換、濾波淡出、回音淡出、卡拍直切或融合。歌曲會先被測量，預設僅在 Wi-Fi 下進行，除非開啟「使用行動數據時測量歌曲」；在此之前，它們會像「自動」一樣融合。完整播放的專輯不會被更動。</string>
+    <string name="automix_info">Automix：Prism 像 DJ 一樣混音，為每對歌曲挑選一種手法：低音互換、濾波淡出、回音淡出、卡拍直切或融合。歌曲會先被測量，預設僅在 Wi-Fi 下進行，除非在「下載和數據」中開啟「檢測響度和節奏」；在此之前，它們會像「自動」一樣融合。完整播放的專輯不會被更動。</string>
     <string name="automix_keywords">automix dj 轉場 低音互換 回音 濾波 混音 淡入淡出 自動混音</string>
     <string name="automix_does_this">Automix 會為你完成這些</string>
     <string name="crossfade_off_detail">一首結束，再接下一首</string>

@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">ปกที่บันทึกไว้เล่นได้ทั้งสองแบบ</string>
     <string name="otherwise_they_wait_for_wi_fi">ไม่อย่างนั้นจะรอ Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">สำหรับปรับระดับเสียงให้เท่ากันและครอสเฟด 1–4 MB ต่อเพลง</string>
-    <string name="normalize_volume_and_crossfade_measure_each">ปรับระดับเสียงให้เท่ากันและครอสเฟดจะวัดแต่ละเพลงหนึ่งครั้ง: ความดัง ช่วงเริ่มและจบของดนตรี และจังหวะ เพลงที่อยู่ในโทรศัพท์จะวัดจากในเครื่อง เมื่อปิด เพลงที่เหลือจะรอ Wi-Fi</string>
+    <string name="normalize_volume_and_crossfade_measure_each">ความดังเท่ากันและครอสเฟดจะวัดแต่ละเพลงหนึ่งครั้ง: ความดัง ช่วงเริ่มและจบของดนตรี และจังหวะ เพลงที่อยู่ในโทรศัพท์จะวัดจากในเครื่อง เมื่อปิด เพลงที่เหลือจะรอ Wi-Fi</string>
     <string name="a_few_mb_a_song">ไม่กี่ MB ต่อเพลง</string>
     <string name="sing_needs_each_song_whole_on">ร้องตามต้องมีเพลงทั้งเพลงในโทรศัพท์ เมื่อปิด จะรอ Wi-Fi เว้นแต่เพลงนั้นดาวน์โหลดแล้วหรือเล่นจนจบไปแล้ว</string>
     <string name="sections_the_top_of_home_shortcuts">ส่วนต่างๆ ด้านบนของหน้าแรก ทางลัด</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">เสียงรอบทิศทางแบบซอฟต์แวร์: เวทีเสียงกว้างขึ้น เสียงอยู่นอกศีรษะ และให้ความรู้สึกของห้อง มีอยู่ใน Prism จึงไม่ต้องใช้ Dolby Atmos หรือฮาร์ดแวร์เสียงรอบทิศทาง</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 แบนด์ พรีเซ็ตของคุณ ปรับเสียงหูฟัง</string>
     <string name="how_the_ending_song_goes_down">เพลงที่กำลังจบจะเบาลงและเพลงถัดไปจะดังขึ้นอย่างไรตลอดช่วงครอสเฟด เส้นที่ขึ้นคือเพลงถัดไป</string>
-    <string name="how_loud_normalize_volume_makes_every">ปรับระดับเสียงให้เท่ากันจะทำให้ทุกเพลงดังแค่ไหน ดังเหมาะกับที่เสียงดังและหูฟังที่เสียงเบา ออกอากาศเว้นที่ไว้มากที่สุดสำหรับช่วงที่เสียงพุ่งสูง เพลงจะถูกเพิ่มเสียงได้ไม่เกิน 6 dB</string>
+    <string name="how_loud_normalize_volume_makes_every">ทุกเพลงถูกทำให้ดังแค่ไหน ดังเหมาะกับที่เสียงดังและหูฟังที่เสียงเบา ออกอากาศเว้นที่ไว้มากที่สุดสำหรับช่วงที่เสียงพุ่งสูง เพลงจะถูกเพิ่มเสียงได้ไม่เกิน 6 dB</string>
     <string name="like_spotify_and_youtube"> เหมือน Spotify และ YouTube</string>
     <string name="like_apple_music"> เหมือน Apple Music</string>
     <string name="like_tv_and_radio"> เหมือนทีวีและวิทยุ</string>
@@ -5636,7 +5636,7 @@
     <string name="tour_188_mix_point_4">ปิดทั้งหมดจนกว่าคุณจะเปิด</string>
     <string name="tour_188_mix_coach">เลือก Automix ที่นี่ ผสมเมื่อฉันข้ามเพลงอยู่ด้านล่างพอดี</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism มิกซ์เหมือน DJ โดยเลือกท่วงท่าให้แต่ละคู่เพลง ได้แก่ สลับเบส ฟิลเตอร์ออก เอคโค่ออก ตัดตามบีต หรือผสมกัน ระบบจะวัดเพลงก่อนผ่าน Wi-Fi เว้นแต่เปิด \"วัดเพลงเมื่อใช้อินเทอร์เน็ตมือถือ\" ไว้ จนกว่าจะวัดเสร็จ เพลงจะผสมกันแบบอัตโนมัติ อัลบั้มที่เล่นต่อเนื่องจะไม่ถูกแตะต้อง</string>
+    <string name="automix_info">Automix: Prism มิกซ์เหมือน DJ โดยเลือกท่วงท่าให้แต่ละคู่เพลง ได้แก่ สลับเบส ฟิลเตอร์ออก เอคโค่ออก ตัดตามบีต หรือผสมกัน ระบบจะวัดเพลงก่อนผ่าน Wi-Fi เว้นแต่เปิด \"ตรวจความดังและจังหวะ\" ใน ดาวน์โหลดและข้อมูล ไว้ จนกว่าจะวัดเสร็จ เพลงจะผสมกันแบบอัตโนมัติ อัลบั้มที่เล่นต่อเนื่องจะไม่ถูกแตะต้อง</string>
     <string name="automix_keywords">automix dj ออโต้มิกซ์ ดีเจ การเปลี่ยนเพลง สลับเบส เอคโค่ ฟิลเตอร์ มิกซ์ ครอสเฟด</string>
     <string name="automix_does_this">Automix ทำสิ่งนี้ให้คุณ</string>
     <string name="crossfade_off_detail">เล่นเพลงหนึ่ง แล้วต่อเพลงถัดไป</string>

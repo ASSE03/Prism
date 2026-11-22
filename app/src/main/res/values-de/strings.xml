@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">Gespeicherte Cover laufen so oder so</string>
     <string name="otherwise_they_wait_for_wi_fi">Sonst warten sie auf WLAN</string>
     <string name="for_normalize_volume_and_crossfade_1">Für Lautstärkeangleichung und Crossfade, 1–4 MB pro Song</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Lautstärkeangleichung und Crossfade messen jeden Song einmal: seine Lautheit, wie seine Musik beginnt und endet, seinen Beat. Songs auf deinem Handy werden direkt dort gemessen. Aus: Der Rest wartet auf WLAN.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Gleiche Lautstärke und Crossfade messen jeden Song einmal: seine Lautheit, wie seine Musik beginnt und endet, seinen Beat. Songs auf deinem Handy werden direkt dort gemessen. Aus: Der Rest wartet auf WLAN.</string>
     <string name="a_few_mb_a_song">Ein paar MB pro Song</string>
     <string name="sing_needs_each_song_whole_on">Mitsingen braucht jeden Song vollständig auf dem Handy. Aus: Es wartet auf WLAN, außer der Song ist heruntergeladen oder schon einmal ganz gelaufen.</string>
     <string name="sections_the_top_of_home_shortcuts">Bereiche, der Kopf der Startseite, Verknüpfungen</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Software-Raumklang: eine breitere Bühne, Klang außerhalb deines Kopfes und ein Gefühl von Raum. In Prism eingebaut, braucht also kein Dolby Atmos und keine Raumklang-Hardware.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 Bänder, deine Voreinstellungen, Kopfhörerkorrektur</string>
     <string name="how_the_ending_song_goes_down">Wie der endende Song leiser und der nächste lauter wird, über den Crossfade hinweg. Die ansteigende Linie ist der nächste Song.</string>
-    <string name="how_loud_normalize_volume_makes_every">Wie laut die Lautstärkeangleichung jeden Song macht. „Laut“ passt zu lauten Orten und leisen Ohrhörern; „Rundfunk“ lässt am meisten Raum für große Momente. Songs werden nur um bis zu 6 dB angehoben.</string>
+    <string name="how_loud_normalize_volume_makes_every">Wie laut jeder Song gemacht wird. „Laut“ passt zu lauten Orten und leisen Ohrhörern; „Rundfunk“ lässt am meisten Raum für große Momente. Songs werden nur um bis zu 6 dB angehoben.</string>
     <string name="like_spotify_and_youtube">, wie Spotify und YouTube</string>
     <string name="like_apple_music">, wie Apple Music</string>
     <string name="like_tv_and_radio">, wie Fernsehen und Radio</string>
@@ -5712,7 +5712,7 @@
     <string name="tour_188_mix_point_4">Alles aus, bis du es einschaltest</string>
     <string name="tour_188_mix_coach">Wähle hier Automix. Beim Überspringen überblenden steht direkt darunter.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism mischt wie ein DJ und wählt für jedes Songpaar einen Move: Bass Swap, Filter Out, Echo Out, einen Schnitt auf den Beat oder eine Überblendung. Die Songs werden zuerst gemessen, über WLAN, es sei denn \"Songs über mobile Daten messen\" ist an; bis dahin blenden sie über wie bei Automatisch. Ein Album, das durchläuft, bleibt unangetastet.</string>
+    <string name="automix_info">Automix: Prism mischt wie ein DJ und wählt für jedes Songpaar einen Move: Bass Swap, Filter Out, Echo Out, einen Schnitt auf den Beat oder eine Überblendung. Die Songs werden zuerst gemessen, über WLAN, es sei denn \"Lautstärke und Tempo prüfen\" ist in Downloads &amp; Daten an; bis dahin blenden sie über wie bei Automatisch. Ein Album, das durchläuft, bleibt unangetastet.</string>
     <string name="automix_keywords">automix dj übergänge überblenden mischen bass echo filter mix crossfade</string>
     <string name="automix_does_this">Automix übernimmt das für dich</string>
     <string name="crossfade_off_detail">Ein Song, dann der nächste</string>

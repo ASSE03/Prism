@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">עטיפות שמורות מתנגנות בכל מקרה</string>
     <string name="otherwise_they_wait_for_wi_fi">אחרת הן ממתינות ל-Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">לאיזון עוצמת הקול ולמעבר הדרגתי, 1–4 MB לשיר</string>
-    <string name="normalize_volume_and_crossfade_measure_each">איזון עוצמת הקול והמעבר ההדרגתי מודדים כל שיר פעם אחת: העוצמה שלו, איך המוזיקה שלו מתחילה ונגמרת, הקצב שלו. שירים שבטלפון שלך נמדדים משם. כשזה כבוי, השאר ממתינים ל-Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">אותה עוצמה והמעבר ההדרגתי מודדים כל שיר פעם אחת: העוצמה שלו, איך המוזיקה שלו מתחילה ונגמרת, הקצב שלו. שירים שבטלפון שלך נמדדים משם. כשזה כבוי, השאר ממתינים ל-Wi-Fi.</string>
     <string name="a_few_mb_a_song">כמה MB לשיר</string>
     <string name="sing_needs_each_song_whole_on">שירה צריכה כל שיר בשלמותו בטלפון. כשזה כבוי, היא ממתינה ל-Wi-Fi, אלא אם השיר הורד או כבר הושמע עד הסוף.</string>
     <string name="sections_the_top_of_home_shortcuts">קטעים, ראש דף הבית, קיצורי דרך</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">אודיו מרחבי בתוכנה: במה רחבה יותר, צליל שממוקם מחוץ לראש ותחושה של חדר. מובנה ב-Prism, ולכן לא צריך Dolby Atmos או חומרת אודיו מרחבי.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 פסים, ההגדרות השמורות שלך, תיקון לאוזניות</string>
     <string name="how_the_ending_song_goes_down">איך השיר שנגמר יורד והבא עולה לאורך המעבר ההדרגתי. הקו שעולה הוא השיר הבא.</string>
-    <string name="how_loud_normalize_volume_makes_every">כמה חזק איזון עוצמת הקול מביא כל שיר. ״חזק״ מתאים למקומות רועשים ולאוזניות שקטות; ״שידור״ משאיר הכי הרבה מקום לרגעים גדולים. שירים מוגברים לכל היותר ב-6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">כמה חזק כל שיר נעשה. ״חזק״ מתאים למקומות רועשים ולאוזניות שקטות; ״שידור״ משאיר הכי הרבה מקום לרגעים גדולים. שירים מוגברים לכל היותר ב-6 dB.</string>
     <string name="like_spotify_and_youtube">, כמו Spotify ו-YouTube</string>
     <string name="like_apple_music">, כמו Apple Music</string>
     <string name="like_tv_and_radio">, כמו טלוויזיה ורדיו</string>
@@ -5788,7 +5788,7 @@
     <string name="tour_188_mix_point_4">הכול כבוי עד שמפעילים</string>
     <string name="tour_188_mix_coach">בחרו כאן Automix. מעבר חלק כשאני מדלג נמצא ממש מתחת.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism מערבב כמו DJ ובוחר מהלך לכל זוג שירים: החלפת בס, סינון החוצה, הד יוצא, חיתוך על הביט או מיזוג. השירים נמדדים קודם, ב-Wi-Fi, אלא אם \"מדידת שירים בחבילת גלישה\" פועל; עד אז הם נמזגים כמו במצב אוטומטי. אלבום שמתנגן ברצף נשאר כמו שהוא.</string>
+    <string name="automix_info">Automix: Prism מערבב כמו DJ ובוחר מהלך לכל זוג שירים: החלפת בס, סינון החוצה, הד יוצא, חיתוך על הביט או מיזוג. השירים נמדדים קודם, ב-Wi-Fi, אלא אם \"בדיקת עוצמת קול וקצב\" פועלת בהורדות ונתונים; עד אז הם נמזגים כמו במצב אוטומטי. אלבום שמתנגן ברצף נשאר כמו שהוא.</string>
     <string name="automix_keywords">automix dj מעברים בס הד סינון מיקס מיזוג מעבר הדרגתי</string>
     <string name="automix_does_this">Automix עושה את זה בשבילכם</string>
     <string name="crossfade_off_detail">שיר אחד, ואז הבא</string>

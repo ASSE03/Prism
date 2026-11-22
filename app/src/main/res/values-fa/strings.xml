@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">کاورهای ذخیره‌شده در هر صورت پخش می‌شوند</string>
     <string name="otherwise_they_wait_for_wi_fi">در غیر این صورت منتظر Wi-Fi می‌مانند</string>
     <string name="for_normalize_volume_and_crossfade_1">برای یکسان‌سازی صدا و کراس‌فید، ۱ تا ۴ MB برای هر آهنگ</string>
-    <string name="normalize_volume_and_crossfade_measure_each">یکسان‌سازی صدا و کراس‌فید هر آهنگ را یک بار اندازه می‌گیرند: بلندی‌اش، اینکه موسیقی‌اش چطور شروع و تمام می‌شود، و ضربش. آهنگ‌های روی گوشی از همان‌جا اندازه‌گیری می‌شوند. اگر خاموش باشد، بقیه منتظر Wi-Fi می‌مانند.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">بلندی یکسان و کراس‌فید هر آهنگ را یک بار اندازه می‌گیرند: بلندی‌اش، اینکه موسیقی‌اش چطور شروع و تمام می‌شود، و ضربش. آهنگ‌های روی گوشی از همان‌جا اندازه‌گیری می‌شوند. اگر خاموش باشد، بقیه منتظر Wi-Fi می‌مانند.</string>
     <string name="a_few_mb_a_song">چند MB برای هر آهنگ</string>
     <string name="sing_needs_each_song_whole_on">همخوانی به کل هر آهنگ روی گوشی نیاز دارد. اگر خاموش باشد، منتظر Wi-Fi می‌ماند مگر آهنگ دانلود شده یا قبلاً کامل پخش شده باشد.</string>
     <string name="sections_the_top_of_home_shortcuts">بخش‌ها، بالای صفحه اصلی، میان‌برها</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">صدای فضایی نرم‌افزاری: صحنه‌ای بازتر، صدایی که بیرون از سرتان قرار می‌گیرد و حس فضا. درون Prism ساخته شده، پس به Dolby Atmos یا سخت‌افزار صدای فضایی نیاز ندارد.</string>
     <string name="t_10_bands_your_presets_headphone_correction">۱۰ باند، پیش‌تنظیم‌های شما، اصلاح هدفون</string>
     <string name="how_the_ending_song_goes_down">اینکه آهنگ در حال پایان چطور پایین می‌رود و آهنگ بعدی در طول کراس‌فید چطور بالا می‌آید. خطی که بالا می‌آید آهنگ بعدی است.</string>
-    <string name="how_loud_normalize_volume_makes_every">اینکه یکسان‌سازی صدا هر آهنگ را چقدر بلند کند. «بلند» برای جاهای پرسروصدا و هندزفری‌های کم‌صدا مناسب است؛ «پخش رادیویی» بیشترین جا را برای لحظه‌های اوج می‌گذارد. آهنگ‌ها حداکثر ۶ dB بالا برده می‌شوند.</string>
+    <string name="how_loud_normalize_volume_makes_every">اینکه هر آهنگ چقدر بلند شود. «بلند» برای جاهای پرسروصدا و هندزفری‌های کم‌صدا مناسب است؛ «پخش رادیویی» بیشترین جا را برای لحظه‌های اوج می‌گذارد. آهنگ‌ها حداکثر ۶ dB بالا برده می‌شوند.</string>
     <string name="like_spotify_and_youtube">، مثل Spotify و YouTube</string>
     <string name="like_apple_music">، مثل Apple Music</string>
     <string name="like_tv_and_radio">، مثل تلویزیون و رادیو</string>
@@ -5712,7 +5712,7 @@
     <string name="tour_188_mix_point_4">همه تا وقتی روشن نکنید خاموش‌اند</string>
     <string name="tour_188_mix_coach">Automix را اینجا انتخاب کنید. ترکیب هنگام رد کردن درست پایین‌تر است.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism مثل یک DJ میکس می‌کند و برای هر جفت آهنگ یک حرکت انتخاب می‌کند: جابه‌جایی بیس، خروج با فیلتر، خروج با پژواک، برش روی ضرب یا یک ترکیب نرم. آهنگ‌ها اول اندازه‌گیری می‌شوند، با Wi-Fi، مگر اینکه «اندازه‌گیری آهنگ‌ها با داده تلفن همراه» روشن باشد؛ تا آن موقع مثل حالت خودکار ترکیب می‌شوند. آلبومی که کامل پخش می‌شود دست‌نخورده می‌ماند.</string>
+    <string name="automix_info">Automix: Prism مثل یک DJ میکس می‌کند و برای هر جفت آهنگ یک حرکت انتخاب می‌کند: جابه‌جایی بیس، خروج با فیلتر، خروج با پژواک، برش روی ضرب یا یک ترکیب نرم. آهنگ‌ها اول اندازه‌گیری می‌شوند، با Wi-Fi، مگر اینکه «بررسی بلندی صدا و تمپو» در دانلودها و داده روشن باشد؛ تا آن موقع مثل حالت خودکار ترکیب می‌شوند. آلبومی که کامل پخش می‌شود دست‌نخورده می‌ماند.</string>
     <string name="automix_keywords">automix dj میکس دی‌جی گذار بیس پژواک فیلتر ترکیب کراس‌فید</string>
     <string name="automix_does_this">Automix این کار را برایتان انجام می‌دهد</string>
     <string name="crossfade_off_detail">یک آهنگ، بعد آهنگ بعدی</string>

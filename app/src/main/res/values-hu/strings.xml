@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">A mentett borítók mindenképp szólnak</string>
     <string name="otherwise_they_wait_for_wi_fi">Különben Wi-Fi-re várnak</string>
     <string name="for_normalize_volume_and_crossfade_1">A Hangerő kiegyenlítéséhez és az Áttűnéshez, dalonként 1–4 MB</string>
-    <string name="normalize_volume_and_crossfade_measure_each">A Hangerő kiegyenlítése és az Áttűnés minden dalt egyszer mér be: a hangosságát, hogyan kezdődik és végződik a zenéje, az ütemét. A telefonodon lévő dalokat onnan mérjük. Kikapcsolva a többi Wi-Fi-re vár.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Az Azonos hangerő és az Áttűnés minden dalt egyszer mér be: a hangosságát, hogyan kezdődik és végződik a zenéje, az ütemét. A telefonodon lévő dalokat onnan mérjük. Kikapcsolva a többi Wi-Fi-re vár.</string>
     <string name="a_few_mb_a_song">Dalonként néhány MB</string>
     <string name="sing_needs_each_song_whole_on">Az Énekléshez minden dalnak teljesen a telefonon kell lennie. Kikapcsolva Wi-Fi-re vár, hacsak a dal nincs letöltve vagy már végig nem szólt.</string>
     <string name="sections_the_top_of_home_shortcuts">Szakaszok, a kezdőlap teteje, parancsikonok</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Szoftveres térhatású hang: szélesebb színpad, a fejeden kívül elhelyezett hang és térérzet. A Prismbe épített, így nem kell hozzá Dolby Atmos vagy térhatású hanghoz való hardver.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 sáv, saját készletek, fejhallgató-korrekció</string>
     <string name="how_the_ending_song_goes_down">Hogyan halkul el a véget érő dal és erősödik fel a következő az áttűnés alatt. A felfelé tartó vonal a következő dal.</string>
-    <string name="how_loud_normalize_volume_makes_every">Milyen hangosra hozza a Hangerő kiegyenlítése a dalokat. A Hangos zajos helyekhez és halk fülhallgatókhoz illik; a Műsorszórás hagyja a legtöbb teret a nagy pillanatoknak. A dalokat legfeljebb 6 dB-lel emeljük meg.</string>
+    <string name="how_loud_normalize_volume_makes_every">Milyen hangosra kerül minden dal. A Hangos zajos helyekhez és halk fülhallgatókhoz illik; a Műsorszórás hagyja a legtöbb teret a nagy pillanatoknak. A dalokat legfeljebb 6 dB-lel emeljük meg.</string>
     <string name="like_spotify_and_youtube">, mint a Spotify és a YouTube</string>
     <string name="like_apple_music">, mint az Apple Music</string>
     <string name="like_tv_and_radio">, mint a tévé és a rádió</string>
@@ -5712,7 +5712,7 @@
     <string name="tour_188_mix_point_4">Minden ki van kapcsolva, amíg be nem kapcsolod</string>
     <string name="tour_188_mix_coach">Itt válaszd az Automixet. Az Áttűnés kihagyáskor közvetlenül alatta van.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: a Prism úgy kever, mint egy DJ, és minden dalpárhoz kiválaszt egy mozdulatot: basszuscserét, szűrős kiúszást, visszhangos kiúszást, vágást az ütemre, vagy áttűnést. A dalokat előbb bemérjük, Wi-Fi-n, kivéve ha a \"Dalok bemérése mobiladaton\" be van kapcsolva; addig úgy tűnnek át, mint az Automatikusnál. A végigjátszott albumot békén hagyja.</string>
+    <string name="automix_info">Automix: a Prism úgy kever, mint egy DJ, és minden dalpárhoz kiválaszt egy mozdulatot: basszuscserét, szűrős kiúszást, visszhangos kiúszást, vágást az ütemre, vagy áttűnést. A dalokat előbb bemérjük, Wi-Fi-n, kivéve ha a Letöltések és adatok alatt a \"Hangerő és tempó ellenőrzése\" be van kapcsolva; addig úgy tűnnek át, mint az Automatikusnál. A végigjátszott albumot békén hagyja.</string>
     <string name="automix_keywords">automix dj átmenet átmenetek basszus visszhang szűrő keverés mix áttűnés</string>
     <string name="automix_does_this">Az Automix ezt elvégzi helyetted</string>
     <string name="crossfade_off_detail">Egy dal, aztán a következő</string>

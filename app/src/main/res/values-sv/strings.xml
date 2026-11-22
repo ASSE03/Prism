@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">Sparade omslag spelas i vilket fall</string>
     <string name="otherwise_they_wait_for_wi_fi">Annars väntar de på Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">För Normalisera volym och Övertoning, 1–4 MB per låt</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Normalisera volym och Övertoning mäter varje låt en gång: dess ljudstyrka, hur musiken börjar och slutar, dess takt. Låtar på telefonen mäts därifrån. Av: resten väntar på Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Samma ljudstyrka och Övertoning mäter varje låt en gång: dess ljudstyrka, hur musiken börjar och slutar, dess takt. Låtar på telefonen mäts därifrån. Av: resten väntar på Wi-Fi.</string>
     <string name="a_few_mb_a_song">Några MB per låt</string>
     <string name="sing_needs_each_song_whole_on">Sjung behöver varje låt i sin helhet på telefonen. Av: det väntar på Wi-Fi om inte låten är nedladdad eller redan har spelats igenom.</string>
     <string name="sections_the_top_of_home_shortcuts">Sektioner, toppen av Hem, genvägar</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Rumsligt ljud i mjukvara: en bredare ljudbild, ljud som placeras utanför huvudet och en känsla av rum. Inbyggt i Prism, så det kräver ingen Dolby Atmos eller hårdvara för rumsligt ljud.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 band, dina förinställningar, hörlurskorrigering</string>
     <string name="how_the_ending_song_goes_down">Hur den avslutande låten sänks och nästa höjs under övertoningen. Linjen som stiger är nästa låt.</string>
-    <string name="how_loud_normalize_volume_makes_every">Hur högt Normalisera volym gör varje låt. Högt passar bullriga platser och tysta hörlurar; Broadcast lämnar mest utrymme för stora ögonblick. Låtar höjs bara med upp till 6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">Hur högt varje låt görs. Högt passar bullriga platser och tysta hörlurar; Broadcast lämnar mest utrymme för stora ögonblick. Låtar höjs bara med upp till 6 dB.</string>
     <string name="like_spotify_and_youtube">, som Spotify och YouTube</string>
     <string name="like_apple_music">, som Apple Music</string>
     <string name="like_tv_and_radio">, som tv och radio</string>
@@ -5712,7 +5712,7 @@
     <string name="tour_188_mix_point_4">Allt är av tills du slår på det</string>
     <string name="tour_188_mix_coach">Välj Automix här. Tona över när jag hoppar finns precis under.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism mixar som en DJ och väljer ett drag för varje låtpar: en bass swap, filter out, echo out, ett klipp på taktslaget eller en övertoning. Låtarna mäts först, över Wi-Fi om inte \"Mät låtar på mobildata\" är på; tills dess tonas de över som med Automatisk. Ett album som spelas igenom lämnas orört.</string>
+    <string name="automix_info">Automix: Prism mixar som en DJ och väljer ett drag för varje låtpar: en bass swap, filter out, echo out, ett klipp på taktslaget eller en övertoning. Låtarna mäts först, över Wi-Fi om inte \"Kontrollera ljudstyrka och tempo\" är på i Nedladdningar &amp; data; tills dess tonas de över som med Automatisk. Ett album som spelas igenom lämnas orört.</string>
     <string name="automix_keywords">automix dj övergångar övertoning bass swap eko filter mix mixa</string>
     <string name="automix_does_this">Automix gör detta åt dig</string>
     <string name="crossfade_off_detail">En låt, sedan nästa</string>

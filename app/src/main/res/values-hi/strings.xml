@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">सेव किए कवर दोनों ही हालात में चलते हैं</string>
     <string name="otherwise_they_wait_for_wi_fi">वरना वे Wi-Fi का इंतज़ार करते हैं</string>
     <string name="for_normalize_volume_and_crossfade_1">वॉल्यूम एक जैसा करने और क्रॉसफ़ेड के लिए, हर गाना 1–4 MB</string>
-    <string name="normalize_volume_and_crossfade_measure_each">वॉल्यूम एक जैसा करें और क्रॉसफ़ेड हर गाने को एक बार मापते हैं: उसकी आवाज़, उसका संगीत कैसे शुरू और खत्म होता है, उसकी बीट। आपके फ़ोन पर मौजूद गाने वहीं से मापे जाते हैं। बंद होने पर, बाकी Wi-Fi का इंतज़ार करते हैं।</string>
+    <string name="normalize_volume_and_crossfade_measure_each">एक जैसी आवाज़ और क्रॉसफ़ेड हर गाने को एक बार मापते हैं: उसकी आवाज़, उसका संगीत कैसे शुरू और खत्म होता है, उसकी बीट। आपके फ़ोन पर मौजूद गाने वहीं से मापे जाते हैं। बंद होने पर, बाकी Wi-Fi का इंतज़ार करते हैं।</string>
     <string name="a_few_mb_a_song">हर गाना कुछ MB</string>
     <string name="sing_needs_each_song_whole_on">साथ गाएं को हर गाना पूरा फ़ोन पर चाहिए। बंद होने पर, यह Wi-Fi का इंतज़ार करता है, जब तक गाना डाउनलोड न हो या पहले से पूरा न सुना गया हो।</string>
     <string name="sections_the_top_of_home_shortcuts">सेक्शन, होम का ऊपरी हिस्सा, शॉर्टकट</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">सॉफ़्टवेयर स्पेशियल ऑडियो: चौड़ा स्टेज, आपके सिर के बाहर रखी आवाज़ और कमरे का एहसास। Prism में ही बना है, इसलिए Dolby Atmos या स्पेशियल ऑडियो हार्डवेयर की ज़रूरत नहीं।</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 बैंड, आपके प्रीसेट, हेडफ़ोन करेक्शन</string>
     <string name="how_the_ending_song_goes_down">क्रॉसफ़ेड के दौरान खत्म हो रहा गाना कैसे धीमा होता है और अगला कैसे तेज़। ऊपर जाती लाइन अगला गाना है।</string>
-    <string name="how_loud_normalize_volume_makes_every">वॉल्यूम एक जैसा करें हर गाने को कितना तेज़ बनाए। तेज़ शोर वाली जगहों और धीमे ईयरबड के लिए सही है; ब्रॉडकास्ट बड़े पलों के लिए सबसे ज़्यादा जगह छोड़ता है। गाने ज़्यादा से ज़्यादा 6 dB तक ही बढ़ाए जाते हैं।</string>
+    <string name="how_loud_normalize_volume_makes_every">हर गाने को कितना तेज़ बनाया जाता है। तेज़ शोर वाली जगहों और धीमे ईयरबड के लिए सही है; ब्रॉडकास्ट बड़े पलों के लिए सबसे ज़्यादा जगह छोड़ता है। गाने ज़्यादा से ज़्यादा 6 dB तक ही बढ़ाए जाते हैं।</string>
     <string name="like_spotify_and_youtube">, Spotify और YouTube की तरह</string>
     <string name="like_apple_music">, Apple Music की तरह</string>
     <string name="like_tv_and_radio">, टीवी और रेडियो की तरह</string>
@@ -5712,7 +5712,7 @@
     <string name="tour_188_mix_point_4">आप चालू करें, तब तक सब बंद</string>
     <string name="tour_188_mix_coach">Automix यहाँ चुनें। छोड़ने पर घुलाएँ ठीक नीचे है।</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism DJ की तरह मिक्स करता है और हर गाने की जोड़ी के लिए एक चाल चुनता है: बास स्वैप, फ़िल्टर आउट, इको आउट, बीट पर कट, या मिलाव। गानों को पहले मापा जाता है, Wi-Fi पर, जब तक \"मोबाइल डेटा पर गाने मापें\" चालू न हो; तब तक वे अपने-आप वाले तरीक़े की तरह घुलते हैं। पूरा बजता एल्बम जैसा है वैसा रहता है।</string>
+    <string name="automix_info">Automix: Prism DJ की तरह मिक्स करता है और हर गाने की जोड़ी के लिए एक चाल चुनता है: बास स्वैप, फ़िल्टर आउट, इको आउट, बीट पर कट, या मिलाव। गानों को पहले मापा जाता है, Wi-Fi पर, जब तक डाउनलोड &amp; डेटा में \"आवाज़ और टेम्पो की जांच\" चालू न हो; तब तक वे अपने-आप वाले तरीक़े की तरह घुलते हैं। पूरा बजता एल्बम जैसा है वैसा रहता है।</string>
     <string name="automix_keywords">automix dj ट्रांज़िशन बास स्वैप इको फ़िल्टर मिक्स क्रॉसफ़ेड</string>
     <string name="automix_does_this">Automix यह आपके लिए करता है</string>
     <string name="crossfade_off_detail">एक गाना, फिर अगला</string>

@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">Zapisane okładki grają tak czy inaczej</string>
     <string name="otherwise_they_wait_for_wi_fi">Inaczej czekają na Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">Do Normalizacji głośności i Przenikania, 1–4 MB na utwór</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Normalizacja głośności i Przenikanie mierzą każdy utwór raz: jego głośność, jak muzyka się zaczyna i kończy, rytm. Utwory na telefonie są mierzone stamtąd. Po wyłączeniu reszta czeka na Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Ta sama głośność i Przenikanie mierzą każdy utwór raz: jego głośność, jak muzyka się zaczyna i kończy, rytm. Utwory na telefonie są mierzone stamtąd. Po wyłączeniu reszta czeka na Wi-Fi.</string>
     <string name="a_few_mb_a_song">Kilka MB na utwór</string>
     <string name="sing_needs_each_song_whole_on">Śpiewaj potrzebuje każdego utworu w całości na telefonie. Po wyłączeniu czeka na Wi-Fi, chyba że utwór jest pobrany lub już odtworzony do końca.</string>
     <string name="sections_the_top_of_home_shortcuts">Sekcje, góra ekranu głównego, skróty</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Programowy dźwięk przestrzenny: szersza scena, dźwięk umieszczony poza głową i poczucie pomieszczenia. Wbudowany w Prism, więc nie potrzebuje Dolby Atmos ani sprzętu do dźwięku przestrzennego.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 pasm, twoje ustawienia wstępne, korekcja słuchawek</string>
     <string name="how_the_ending_song_goes_down">Jak kończący się utwór cichnie, a następny narasta podczas przenikania. Rosnąca linia to następny utwór.</string>
-    <string name="how_loud_normalize_volume_makes_every">Jak głośno Normalizacja głośności ustawia każdy utwór. Głośno pasuje do hałaśliwych miejsc i cichych słuchawek; Broadcast zostawia najwięcej miejsca na mocne momenty. Utwory są podgłaśniane najwyżej o 6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">Jak głośno jest ustawiony każdy utwór. Głośno pasuje do hałaśliwych miejsc i cichych słuchawek; Broadcast zostawia najwięcej miejsca na mocne momenty. Utwory są podgłaśniane najwyżej o 6 dB.</string>
     <string name="like_spotify_and_youtube">, jak Spotify i YouTube</string>
     <string name="like_apple_music">, jak Apple Music</string>
     <string name="like_tv_and_radio">, jak telewizja i radio</string>
@@ -5864,7 +5864,7 @@
     <string name="tour_188_mix_point_4">Wszystko wyłączone, dopóki tego nie włączysz</string>
     <string name="tour_188_mix_coach">Wybierz tutaj Automix. Przenikaj przy pominięciu jest tuż poniżej.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism miksuje jak DJ i dobiera ruch do każdej pary utworów: bass swap, filter out, echo out, cięcie w rytm lub przenikanie. Utwory są najpierw mierzone, przez Wi-Fi, chyba że włączono \"Mierz utwory przy danych mobilnych\"; do tego czasu przenikają jak w trybie Automatycznie. Album odtwarzany w całości zostaje nietknięty.</string>
+    <string name="automix_info">Automix: Prism miksuje jak DJ i dobiera ruch do każdej pary utworów: bass swap, filter out, echo out, cięcie w rytm lub przenikanie. Utwory są najpierw mierzone, przez Wi-Fi, chyba że w Pobrane i dane włączono \"Sprawdzanie głośności i tempa\"; do tego czasu przenikają jak w trybie Automatycznie. Album odtwarzany w całości zostaje nietknięty.</string>
     <string name="automix_keywords">automix dj przejścia przenikanie bass swap echo filtr miks mieszanie</string>
     <string name="automix_does_this">Automix robi to za Ciebie</string>
     <string name="crossfade_off_detail">Jeden utwór, potem następny</string>

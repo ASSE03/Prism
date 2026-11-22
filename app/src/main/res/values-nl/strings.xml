@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">Opgeslagen covers spelen hoe dan ook</string>
     <string name="otherwise_they_wait_for_wi_fi">Anders wachten ze op wifi</string>
     <string name="for_normalize_volume_and_crossfade_1">Voor Volume normaliseren en Crossfade, 1–4 MB per nummer</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Volume normaliseren en Crossfade meten elk nummer één keer: de luidheid, hoe de muziek begint en eindigt, de beat. Nummers op je telefoon worden daar gemeten. Uit: de rest wacht op wifi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Even luid en Crossfade meten elk nummer één keer: de luidheid, hoe de muziek begint en eindigt, de beat. Nummers op je telefoon worden daar gemeten. Uit: de rest wacht op wifi.</string>
     <string name="a_few_mb_a_song">Een paar MB per nummer</string>
     <string name="sing_needs_each_song_whole_on">Meezingen heeft elk nummer volledig op de telefoon nodig. Uit: het wacht op wifi, tenzij het nummer gedownload is of al helemaal afgespeeld.</string>
     <string name="sections_the_top_of_home_shortcuts">Secties, de bovenkant van Home, snelkoppelingen</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Ruimtelijke audio via software: een breder podium, geluid buiten je hoofd en een gevoel van ruimte. Ingebouwd in Prism, dus er is geen Dolby Atmos of hardware voor ruimtelijke audio nodig.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 banden, je presets, koptelefooncorrectie</string>
     <string name="how_the_ending_song_goes_down">Hoe het eindigende nummer zachter wordt en het volgende harder tijdens de crossfade. De stijgende lijn is het volgende nummer.</string>
-    <string name="how_loud_normalize_volume_makes_every">Hoe luid Volume normaliseren elk nummer maakt. Luid past bij lawaaiige plekken en zachte oordopjes; Omroep laat de meeste ruimte voor grote momenten. Nummers worden maximaal 6 dB versterkt.</string>
+    <string name="how_loud_normalize_volume_makes_every">Hoe luid elk nummer wordt gemaakt. Luid past bij lawaaiige plekken en zachte oordopjes; Omroep laat de meeste ruimte voor grote momenten. Nummers worden maximaal 6 dB versterkt.</string>
     <string name="like_spotify_and_youtube">, zoals Spotify en YouTube</string>
     <string name="like_apple_music">, zoals Apple Music</string>
     <string name="like_tv_and_radio">, zoals tv en radio</string>
@@ -5712,7 +5712,7 @@
     <string name="tour_188_mix_point_4">Alles staat uit tot je het aanzet</string>
     <string name="tour_188_mix_coach">Kies hier Automix. Overvloeien als ik oversla staat er direct onder.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism mixt als een DJ en kiest voor elk paar nummers een move: een bass swap, filter out, echo out, een knip op de beat of een overvloeiing. Nummers worden eerst gemeten, via Wi-Fi tenzij \"Nummers meten via mobiele data\" aanstaat; tot die tijd vloeien ze over zoals bij Automatisch. Een album dat doorspeelt blijft ongemoeid.</string>
+    <string name="automix_info">Automix: Prism mixt als een DJ en kiest voor elk paar nummers een move: een bass swap, filter out, echo out, een knip op de beat of een overvloeiing. Nummers worden eerst gemeten, via Wi-Fi tenzij \"Volume en tempo controleren\" aanstaat in Downloads &amp; data; tot die tijd vloeien ze over zoals bij Automatisch. Een album dat doorspeelt blijft ongemoeid.</string>
     <string name="automix_keywords">automix dj overgangen bass swap echo filter mix crossfade overvloeien</string>
     <string name="automix_does_this">Automix doet dit voor je</string>
     <string name="crossfade_off_detail">Eén nummer, dan het volgende</string>

@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">已保存的封面始终会播放</string>
     <string name="otherwise_they_wait_for_wi_fi">否则会等待 Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">用于音量标准化和交叉淡入淡出，每首 1–4 MB</string>
-    <string name="normalize_volume_and_crossfade_measure_each">音量标准化和交叉淡入淡出会对每首歌测量一次：它的响度、音乐如何开始和结束、它的节拍。手机上的歌曲直接在本地测量。关闭后，其余的会等待 Wi-Fi。</string>
+    <string name="normalize_volume_and_crossfade_measure_each">音量一致和交叉淡入淡出会对每首歌测量一次：它的响度、音乐如何开始和结束、它的节拍。手机上的歌曲直接在本地测量。关闭后，其余的会等待 Wi-Fi。</string>
     <string name="a_few_mb_a_song">每首几 MB</string>
     <string name="sing_needs_each_song_whole_on">跟唱需要手机上有完整的歌曲。关闭后，除非歌曲已下载或已完整播放过，否则会等待 Wi-Fi。</string>
     <string name="sections_the_top_of_home_shortcuts">版块、首页顶部、快捷方式</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">软件空间音频：更宽的声场，声音定位在头部之外，并带有空间感。内置于 Prism，无需杜比全景声或空间音频硬件。</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 段、你的预设、耳机校正</string>
     <string name="how_the_ending_song_goes_down">交叉淡入淡出期间，即将结束的歌曲如何降低、下一首如何升高。上升的那条线是下一首歌。</string>
-    <string name="how_loud_normalize_volume_makes_every">音量标准化让每首歌有多响。“响亮”适合嘈杂环境和音量小的耳塞；“广播”为高潮部分留出最多空间。歌曲最多只会提高 6 dB。</string>
+    <string name="how_loud_normalize_volume_makes_every">每首歌有多响。“响亮”适合嘈杂环境和音量小的耳塞；“广播”为高潮部分留出最多空间。歌曲最多只会提高 6 dB。</string>
     <string name="like_spotify_and_youtube">，与 Spotify 和 YouTube 相同</string>
     <string name="like_apple_music">，与 Apple Music 相同</string>
     <string name="like_tv_and_radio">，与电视和广播相同</string>
@@ -5636,7 +5636,7 @@
     <string name="tour_188_mix_point_4">在你开启之前，全部关闭</string>
     <string name="tour_188_mix_coach">在这里选择 Automix。跳过时融合就在下方。</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix：Prism 像 DJ 一样混音，为每对歌曲挑选一种手法：低音互换、滤波淡出、回声淡出、卡拍直切或融合。歌曲会先被测量，默认仅在 Wi-Fi 下进行，除非开启“使用移动数据时测量歌曲”；在此之前，它们会像“自动”一样融合。完整播放的专辑不会被改动。</string>
+    <string name="automix_info">Automix：Prism 像 DJ 一样混音，为每对歌曲挑选一种手法：低音互换、滤波淡出、回声淡出、卡拍直切或融合。歌曲会先被测量，默认仅在 Wi-Fi 下进行，除非在“下载和数据”中开启“检测响度和节奏”；在此之前，它们会像“自动”一样融合。完整播放的专辑不会被改动。</string>
     <string name="automix_keywords">automix dj 过渡 低音互换 回声 滤波 混音 交叉淡入淡出 自动混音</string>
     <string name="automix_does_this">Automix 会为你完成这些</string>
     <string name="crossfade_off_detail">一首结束，再接下一首</string>

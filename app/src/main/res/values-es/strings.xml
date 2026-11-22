@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">Las portadas guardadas se reproducen de todos modos</string>
     <string name="otherwise_they_wait_for_wi_fi">Si no, esperan al Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">Para Normalizar volumen y Fundido, 1–4 MB por canción</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Normalizar volumen y Fundido miden cada canción una vez: su volumen, cómo empieza y termina su música, su ritmo. Las canciones de tu teléfono se miden desde ahí. Desactivado, las demás esperan al Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">El mismo volumen y Fundido miden cada canción una vez: su volumen, cómo empieza y termina su música, su ritmo. Las canciones de tu teléfono se miden desde ahí. Desactivado, las demás esperan al Wi-Fi.</string>
     <string name="a_few_mb_a_song">Unos pocos MB por canción</string>
     <string name="sing_needs_each_song_whole_on">Cantar necesita cada canción completa en el teléfono. Desactivado, espera al Wi-Fi salvo que la canción esté descargada o ya se haya reproducido completa.</string>
     <string name="sections_the_top_of_home_shortcuts">Secciones, la parte superior de Inicio, accesos directos</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Audio espacial por software: un escenario más amplio, el sonido ubicado fuera de tu cabeza y sensación de espacio. Integrado en Prism, así que no necesita Dolby Atmos ni hardware de audio espacial.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 bandas, tus ajustes, corrección de auriculares</string>
     <string name="how_the_ending_song_goes_down">Cómo baja la canción que termina y sube la siguiente durante el fundido. La línea que sube es la siguiente canción.</string>
-    <string name="how_loud_normalize_volume_makes_every">Qué tan fuerte deja Normalizar volumen cada canción. Fuerte va bien con lugares ruidosos y auriculares bajos; Transmisión deja más margen para los grandes momentos. Las canciones solo se suben hasta 6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">Qué tan fuerte queda cada canción. Fuerte va bien con lugares ruidosos y auriculares bajos; Transmisión deja más margen para los grandes momentos. Las canciones solo se suben hasta 6 dB.</string>
     <string name="like_spotify_and_youtube">, como Spotify y YouTube</string>
     <string name="like_apple_music">, como Apple Music</string>
     <string name="like_tv_and_radio">, como la TV y la radio</string>
@@ -5788,7 +5788,7 @@
     <string name="tour_188_mix_point_4">Todo desactivado hasta que lo actives</string>
     <string name="tour_188_mix_coach">Elige Automix aquí. Fundir al omitir está justo debajo.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism mezcla como un DJ y elige un movimiento para cada par de canciones: un cambio de bajos, un filtro de salida, un eco de salida, un corte al ritmo o un fundido. Las canciones se miden primero, con Wi-Fi, salvo que \"Medir canciones con datos móviles\" esté activado; hasta entonces se funden como en Automático. Un álbum que suena completo se deja tal cual.</string>
+    <string name="automix_info">Automix: Prism mezcla como un DJ y elige un movimiento para cada par de canciones: un cambio de bajos, un filtro de salida, un eco de salida, un corte al ritmo o un fundido. Las canciones se miden primero, con Wi-Fi, salvo que \"Comprobar volumen y tempo\" esté activado en Descargas y datos; hasta entonces se funden como en Automático. Un álbum que suena completo se deja tal cual.</string>
     <string name="automix_keywords">automix dj transiciones fundido mezcla mezclar bajos eco filtro mix crossfade</string>
     <string name="automix_does_this">Automix lo hace por ti</string>
     <string name="crossfade_off_detail">Una canción y luego la siguiente</string>

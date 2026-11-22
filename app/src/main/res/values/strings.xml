@@ -2443,7 +2443,7 @@
     <string name="saved_covers_play_either_way">Saved covers play either way</string>
     <string name="otherwise_they_wait_for_wi_fi">Otherwise they wait for Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">For Normalize volume and Crossfade, 1–4 MB a song</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Normalize volume and Crossfade measure each song once: its loudness, how its music starts and ends, its beat. Songs on your phone are measured from there. Off, the rest wait for Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Same loudness and Crossfade measure each song once: its loudness, how its music starts and ends, its beat. Songs on your phone are measured from there. Off, the rest wait for Wi-Fi.</string>
     <string name="a_few_mb_a_song">A few MB a song</string>
     <string name="sing_needs_each_song_whole_on">Sing needs each song whole on the phone. Off, it waits for Wi-Fi unless the song is downloaded or already played through.</string>
     <string name="sections_the_top_of_home_shortcuts">Sections, the top of Home, shortcuts</string>
@@ -2488,7 +2488,7 @@
     <string name="software_spatial_audio_a_wider_stage">Software spatial audio: a wider stage, sound placed outside your head and a sense of room. Built into Prism, so it needs no Dolby Atmos or spatial audio hardware.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 bands, your presets, headphone correction</string>
     <string name="how_the_ending_song_goes_down">How the ending song goes down and the next comes up over the crossfade. The line coming up is the next song.</string>
-    <string name="how_loud_normalize_volume_makes_every">How loud Normalize volume makes every song. Loud suits noisy places and quiet earbuds; Broadcast leaves the most room for big moments. Songs are only lifted by up to 6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">How loud every song is made. Loud suits noisy places and quiet earbuds; Broadcast leaves the most room for big moments. Songs are only lifted by up to 6 dB.</string>
     <string name="like_spotify_and_youtube">, like Spotify and YouTube</string>
     <string name="like_apple_music">, like Apple Music</string>
     <string name="like_tv_and_radio">, like TV and radio</string>
@@ -4431,7 +4431,7 @@
     <string name="skip_blend_info">Next, Previous and a tap in the queue blend into the song you picked over a second and a half instead of cutting: the song playing carries on until the next one is ready. A new list fades out briefly. Works with Crossfade off too. Performance mode and battery saver use a short fade instead; videos, podcasts, live streams, casting and Listen together always cut.</string>
     <string name="skip_blend_keywords">skip next previous blend fade cut</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism mixes like a DJ, picking a move for each pair of songs: a bass swap, a filter out, an echo out, a cut on the beat, or a blend. Songs are measured first, on Wi-Fi unless \"Measure songs on mobile data\" is on; until then they blend as with Automatic. An album playing through is left alone.</string>
+    <string name="automix_info">Automix: Prism mixes like a DJ, picking a move for each pair of songs: a bass swap, a filter out, an echo out, a cut on the beat, or a blend. Songs are measured first, on Wi-Fi unless \"Checking loudness and tempo\" is on in Downloads &amp; data; until then they blend as with Automatic. An album playing through is left alone.</string>
     <string name="automix_keywords">automix dj transitions bass swap echo filter mix</string>
     <string name="automix_does_this">Automix does this for you</string>
     <string name="crossfade_off_detail">One song, then the next</string>

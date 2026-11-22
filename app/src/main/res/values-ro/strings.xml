@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">Copertele salvate se redau oricum</string>
     <string name="otherwise_they_wait_for_wi_fi">Altfel așteaptă Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">Pentru Normalizează volumul și Tranziție, 1–4 MB pe melodie</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Normalizează volumul și Tranziție măsoară fiecare melodie o singură dată: intensitatea, cum începe și se termină muzica, ritmul. Melodiile de pe telefon sunt măsurate de acolo. Oprit, restul așteaptă Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Aceeași intensitate și Tranziție măsoară fiecare melodie o singură dată: intensitatea, cum începe și se termină muzica, ritmul. Melodiile de pe telefon sunt măsurate de acolo. Oprit, restul așteaptă Wi-Fi.</string>
     <string name="a_few_mb_a_song">Câțiva MB pe melodie</string>
     <string name="sing_needs_each_song_whole_on">Cântă are nevoie de fiecare melodie întreagă pe telefon. Oprit, așteaptă Wi-Fi, dacă melodia nu e descărcată sau deja ascultată până la capăt.</string>
     <string name="sections_the_top_of_home_shortcuts">Secțiuni, partea de sus de pe Acasă, comenzi rapide</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Sunet spațial software: o scenă mai largă, sunet plasat în afara capului și senzația unei încăperi. Integrat în Prism, deci nu necesită Dolby Atmos sau hardware pentru sunet spațial.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 benzi, presetările tale, corecție pentru căști</string>
     <string name="how_the_ending_song_goes_down">Cum scade melodia care se termină și cum crește următoarea în timpul tranziției. Linia care urcă e melodia următoare.</string>
-    <string name="how_loud_normalize_volume_makes_every">Cât de tare face Normalizează volumul fiecare melodie. Tare se potrivește locurilor zgomotoase și căștilor încete; Broadcast lasă cel mai mult loc momentelor mari. Melodiile sunt ridicate cu cel mult 6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">Cât de tare este făcută fiecare melodie. Tare se potrivește locurilor zgomotoase și căștilor încete; Broadcast lasă cel mai mult loc momentelor mari. Melodiile sunt ridicate cu cel mult 6 dB.</string>
     <string name="like_spotify_and_youtube">, ca Spotify și YouTube</string>
     <string name="like_apple_music">, ca Apple Music</string>
     <string name="like_tv_and_radio">, ca TV-ul și radioul</string>
@@ -5788,7 +5788,7 @@
     <string name="tour_188_mix_point_4">Totul oprit până le pornești</string>
     <string name="tour_188_mix_coach">Alege Automix aici. Îmbină când omit e chiar dedesubt.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism mixează ca un DJ și alege o mișcare pentru fiecare pereche de melodii: bass swap, filter out, echo out, tăiere pe ritm sau îmbinare. Melodiile sunt măsurate mai întâi, pe Wi-Fi, dacă nu e pornită opțiunea \"Măsoară melodiile pe date mobile\"; până atunci se îmbină ca la Automat. Un album ascultat cap-coadă este lăsat în pace.</string>
+    <string name="automix_info">Automix: Prism mixează ca un DJ și alege o mișcare pentru fiecare pereche de melodii: bass swap, filter out, echo out, tăiere pe ritm sau îmbinare. Melodiile sunt măsurate mai întâi, pe Wi-Fi, dacă nu e pornită opțiunea \"Verificarea volumului și a tempoului\" din Descărcări și date; până atunci se îmbină ca la Automat. Un album ascultat cap-coadă este lăsat în pace.</string>
     <string name="automix_keywords">automix dj tranziții tranziție bass swap echo filtru mix mixare</string>
     <string name="automix_does_this">Automix face asta pentru tine</string>
     <string name="crossfade_off_detail">O melodie, apoi următoarea</string>

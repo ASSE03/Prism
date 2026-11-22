@@ -2205,7 +2205,7 @@
     <string name="saved_covers_play_either_way">Sampul tersimpan tetap diputar</string>
     <string name="otherwise_they_wait_for_wi_fi">Jika tidak, menunggu Wi-Fi</string>
     <string name="for_normalize_volume_and_crossfade_1">Untuk Normalisasi volume dan Crossfade, 1–4 MB per lagu</string>
-    <string name="normalize_volume_and_crossfade_measure_each">Normalisasi volume dan Crossfade mengukur setiap lagu sekali: kenyaringannya, cara musiknya dimulai dan berakhir, ketukannya. Lagu di ponselmu diukur dari sana. Jika nonaktif, sisanya menunggu Wi-Fi.</string>
+    <string name="normalize_volume_and_crossfade_measure_each">Kenyaringan sama dan Crossfade mengukur setiap lagu sekali: kenyaringannya, cara musiknya dimulai dan berakhir, ketukannya. Lagu di ponselmu diukur dari sana. Jika nonaktif, sisanya menunggu Wi-Fi.</string>
     <string name="a_few_mb_a_song">Beberapa MB per lagu</string>
     <string name="sing_needs_each_song_whole_on">Nyanyi butuh setiap lagu utuh di ponsel. Jika nonaktif, Nyanyi menunggu Wi-Fi kecuali lagunya sudah didownload atau sudah diputar sampai habis.</string>
     <string name="sections_the_top_of_home_shortcuts">Bagian, bagian atas Beranda, pintasan</string>
@@ -2250,7 +2250,7 @@
     <string name="software_spatial_audio_a_wider_stage">Audio spasial berbasis software: panggung lebih luas, suara terasa di luar kepala, dan kesan ruangan. Tertanam di Prism, jadi tidak butuh Dolby Atmos atau perangkat audio spasial.</string>
     <string name="t_10_bands_your_presets_headphone_correction">10 band, preset kamu, koreksi headphone</string>
     <string name="how_the_ending_song_goes_down">Cara lagu yang berakhir turun dan lagu berikutnya naik selama crossfade. Garis yang naik adalah lagu berikutnya.</string>
-    <string name="how_loud_normalize_volume_makes_every">Seberapa keras Normalisasi volume membuat setiap lagu. Keras cocok untuk tempat bising dan earbud yang pelan; Siaran menyisakan ruang paling banyak untuk momen besar. Lagu hanya dinaikkan hingga 6 dB.</string>
+    <string name="how_loud_normalize_volume_makes_every">Seberapa keras setiap lagu dibuat. Keras cocok untuk tempat bising dan earbud yang pelan; Siaran menyisakan ruang paling banyak untuk momen besar. Lagu hanya dinaikkan hingga 6 dB.</string>
     <string name="like_spotify_and_youtube">, seperti Spotify dan YouTube</string>
     <string name="like_apple_music">, seperti Apple Music</string>
     <string name="like_tv_and_radio">, seperti TV dan radio</string>
@@ -5636,7 +5636,7 @@
     <string name="tour_188_mix_point_4">Semuanya nonaktif sampai dinyalakan</string>
     <string name="tour_188_mix_coach">Pilih Automix di sini. Berbaur saat saya lewati ada tepat di bawahnya.</string>
     <string name="automix">Automix</string>
-    <string name="automix_info">Automix: Prism mencampur seperti DJ dan memilih satu gerakan untuk tiap pasangan lagu: bass swap, filter out, echo out, potongan tepat di ketukan, atau berbaur. Lagu diukur terlebih dahulu, lewat Wi-Fi kecuali \"Ukur lagu dengan data seluler\" aktif; sebelum itu lagu berbaur seperti pada Otomatis. Album yang diputar penuh dibiarkan apa adanya.</string>
+    <string name="automix_info">Automix: Prism mencampur seperti DJ dan memilih satu gerakan untuk tiap pasangan lagu: bass swap, filter out, echo out, potongan tepat di ketukan, atau berbaur. Lagu diukur terlebih dahulu, lewat Wi-Fi kecuali \"Memeriksa kenyaringan dan tempo\" aktif di Download &amp; data; sebelum itu lagu berbaur seperti pada Otomatis. Album yang diputar penuh dibiarkan apa adanya.</string>
     <string name="automix_keywords">automix dj transisi bass swap echo filter campur mix crossfade</string>
     <string name="automix_does_this">Automix yang mengatur ini</string>
     <string name="crossfade_off_detail">Satu lagu, lalu lagu berikutnya</string>
