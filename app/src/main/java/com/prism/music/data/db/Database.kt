@@ -779,9 +779,10 @@ interface RomanizedDao {
 @Database(
     entities = [SongEntity::class, PlayEventEntity::class, LyricsEntity::class, GenreEntity::class, MotionArtEntity::class, HeatmapEntity::class,
         RomanizedEntity::class, ReleaseEntity::class, MixEntity::class, BlendEntity::class, RecognitionEntity::class,
-        ImportedPlayEntity::class, ImportMatchEntity::class, SongTraitsEntity::class, SongTagEntity::class, CanvasClipEntity::class],
+        ImportedPlayEntity::class, ImportMatchEntity::class, SongTraitsEntity::class, SongTagEntity::class, CanvasClipEntity::class,
+        TransitionEntity::class],
     views = [CountedPlay::class],
-    version = 12,
+    version = 13,
     exportSchema = true,
 )
 abstract class PrismDatabase : RoomDatabase() {
@@ -809,6 +810,8 @@ abstract class PrismDatabase : RoomDatabase() {
     abstract fun tags(): TagDao
     /** Canvas loops cut from music videos, and the listener's choices for them (1.8.6). */
     abstract fun canvasClips(): CanvasClipDao
+    /** The listener's own transitions between two songs of a playlist (1.8.8, Mix it yourself). */
+    abstract fun transitions(): TransitionDao
 
     companion object {
         /**
@@ -899,6 +902,12 @@ abstract class PrismDatabase : RoomDatabase() {
             object : Migration(11, 12) {
                 override fun migrate(db: SupportSQLiteDatabase) {
                     db.execSQL("CREATE TABLE IF NOT EXISTS `canvas_clips` (`songId` TEXT NOT NULL, `videoId` TEXT, `why` TEXT NOT NULL, `videoType` TEXT, `height` INTEGER NOT NULL, `itag` INTEGER NOT NULL, `startMs` INTEGER NOT NULL, `endMs` INTEGER NOT NULL, `cropX` REAL NOT NULL, `barLeft` REAL NOT NULL, `barTop` REAL NOT NULL, `barRight` REAL NOT NULL, `barBottom` REAL NOT NULL, `windows` TEXT NOT NULL, `refined` INTEGER NOT NULL, `picked` INTEGER NOT NULL, `rejectedVideos` TEXT NOT NULL, `prefer` TEXT, `checkedAt` INTEGER NOT NULL, `crops` TEXT NOT NULL, PRIMARY KEY(`songId`))")
+                }
+            },
+            // 1.8.8: the listener's own transitions between two songs of a playlist (Mix it yourself).
+            object : Migration(12, 13) {
+                override fun migrate(db: SupportSQLiteDatabase) {
+                    db.execSQL("CREATE TABLE IF NOT EXISTS `transitions` (`playlistId` TEXT NOT NULL, `fromId` TEXT NOT NULL, `toId` TEXT NOT NULL, `outMs` INTEGER NOT NULL, `inMs` INTEGER NOT NULL, `lengthMs` INTEGER NOT NULL, `style` TEXT NOT NULL, `snap` INTEGER NOT NULL, `changedAt` INTEGER NOT NULL, `usedAt` INTEGER NOT NULL, PRIMARY KEY(`playlistId`, `fromId`, `toId`))")
                 }
             },
         )

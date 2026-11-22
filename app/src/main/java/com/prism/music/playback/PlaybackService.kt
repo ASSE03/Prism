@@ -473,6 +473,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             curve = { c.settings.current.sound.crossfadeCurve },
             state = c.mixState,
             skip = skipFade,
+            // 1.8.8 Mix it yourself: a playlist's own transitions, from memory (the store follows the queue's playlist).
+            playlist = { c.queue.source.value.takeIf { it.kind == QueueKind.PLAYLIST }?.originId },
+            custom = { playlist, from, to -> c.transitions.cached(playlist, from, to) },
+            customPlayed = { playlist, from, to -> c.transitions.used(playlist, from, to) },
         ).also { it.start() }
         // Prism Connect: the speaker or TV being cast to plays what this player plays, and its volume is the session's.
         sessionPlayer.remote = object : LyricsOverlayPlayer.Remote {
@@ -578,8 +582,15 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      */
     private fun buildTailPlayer(shift: ShiftProcessor): ExoPlayer = buildTailPlayer(shift, normalizeGainDb)
 
+    /**
+     * 1.8.8 Mix it yourself: one of the transition editor's two small players ([MixPreview]) for [item]: the queue's
+     * second player's sources and sound at the song's own normalization, with [fx] (Automix's effects) after the shift.
+     */
+    internal fun buildPreviewPlayer(item: MediaItem, fx: TransitionFx): ExoPlayer =
+        buildTailPlayer(ShiftProcessor(), startingGain(item, player.currentTimeline) ?: normalizeGainDb, fx)
+
     /** [buildTailPlayer] at [gainDb]: a skip-blend's head plays the chosen song at its own normalization (1.8.8). */
-    private fun buildTailPlayer(shift: ShiftProcessor, gainDb: Float): ExoPlayer {
+    private fun buildTailPlayer(shift: ShiftProcessor, gainDb: Float, fx: TransitionFx? = null): ExoPlayer {
         val s = c.settings.current
         val tailSpatial = SpatialAudioProcessor().apply { configure(s.spatial, s.spatialAmount) }
         val tailNormalizer = NormalizerProcessor().apply { setGainDb(gainDb) }
@@ -591,7 +602,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 DefaultAudioSink.Builder(context)
                     .setEnableFloatOutput(enableFloatOutput || s.lossless)
                     .setEnableAudioTrackPlaybackParams(enableAudioTrackPlaybackParams)
-                    .setAudioProcessors(arrayOf(shift, tailEq, tailSpatial, tailNormalizer))
+                    .setAudioProcessors(listOfNotNull(shift, fx, tailEq, tailSpatial, tailNormalizer).toTypedArray())
                     .build()
 
             override fun buildAudioRenderers(

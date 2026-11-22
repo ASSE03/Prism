@@ -193,6 +193,28 @@ class MigrationTest {
         db.close()
     }
 
+    /** v13 (1.8.8): the listener's own transitions between two songs of a playlist, a table of their own. */
+    @Test
+    fun v13AddsTransitions() {
+        val context = RuntimeEnvironment.getApplication()
+        val name = "migrate-v13-transitions.db"
+        context.deleteDatabase(name)
+        createAt(context.getDatabasePath(name), 12)
+        val db = Room.databaseBuilder(context, PrismDatabase::class.java, name)
+            .addMigrations(*PrismDatabase.MIGRATIONS).allowMainThreadQueries().build()
+        runBlocking {
+            assertEquals(0, db.transitions().count())
+            db.transitions().put(com.prism.music.data.db.TransitionEntity("PL1", "a", "b", 170_000, 12_000, 8_000, "bass_swap", true, changedAt = 5L))
+            val row = db.transitions().get("PL1", "a", "b")!!
+            assertEquals(170_000L, row.outMs)
+            assertEquals("bass_swap", row.style)
+            assertTrue(row.snap)
+            assertEquals(0L, row.usedAt)
+            assertEquals("history kept", 2, db.plays().count(0, Long.MAX_VALUE))
+        }
+        db.close()
+    }
+
     @Test
     fun currentSchemaIsExported() {
         // A version bump without its exported schema would leave the next migration untestable.
