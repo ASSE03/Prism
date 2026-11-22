@@ -14,6 +14,8 @@ import androidx.test.core.app.ApplicationProvider
 import com.prism.music.playback.EXTRA_VIDEO
 import com.prism.music.playback.MixEngine
 import com.prism.music.playback.MixState
+import com.prism.music.playback.SkipFade
+import com.prism.music.playback.SkipKind
 import com.prism.music.playback.Tempo
 import com.prism.music.playback.videoModeId
 import kotlinx.coroutines.CoroutineScope
@@ -162,22 +164,25 @@ class MixBlendTest {
         main.items = listOf(ending, next, third)
         main.moveTo(0, 178_000)
         main.seeks.clear()
-        engine = MixEngine(
-            main = main.player,
-            scope = scope,
-            tempo = context.container.mixTempo,
-            mixMs = { if (mixOn) 6_000L else null },
-            auto = { false },
-            beatMatch = { beats },
-            // As the service's: no blend into or out of video mode.
-            allowed = { from, to -> from.videoModeId == null && to.videoModeId == null },
-            scanFromPhone = {},
-            buildTail = { Fake("tail ${tails.size}", Player.STATE_IDLE).also { tails += it }.player },
-            onSettled = { settled++ },
-            state = state,
-        )
+        engine = makeEngine()
         engine.start()
     }
+
+    private fun makeEngine(skip: SkipFade? = null) = MixEngine(
+        main = main.player,
+        scope = scope,
+        tempo = context.container.mixTempo,
+        mixMs = { if (mixOn) 6_000L else null },
+        auto = { false },
+        beatMatch = { beats },
+        // As the service's: no blend into or out of video mode.
+        allowed = { from, to -> from.videoModeId == null && to.videoModeId == null },
+        scanFromPhone = {},
+        buildTail = { Fake("tail ${tails.size}", Player.STATE_IDLE).also { tails += it }.player },
+        onSettled = { settled++ },
+        state = state,
+        skip = skip,
+    )
 
     @After
     fun stop() {
@@ -482,6 +487,43 @@ class MixBlendTest {
         assertAllBack()
         assertNull(state.into.value)
         run(3_000)
+        assertAllBack()
+    }
+
+    /**
+     * 1.8.8 review: with "Blend when I skip" on, a skip during an end-of-song blend fades as with it off. Fails on the old
+     * code: the switch's press aborted the blend (the ending song let go at once, the next at full) before the skip's seek.
+     */
+    @Test
+    fun withBlendWhenISkipOnASkipMidBlendStillFades() {
+        engine.release()
+        val skip = SkipFade(
+            main = main.player, buildHead = { error("no second player: the skip is today's") }, firstSoundMs = { 0L },
+            on = { true }, light = { false }, allowed = { _, _ -> true }, warm = { _, _ -> false }, note = {},
+        )
+        engine = makeEngine(skip)
+        engine.start()
+        toLeadIn(); toBlend()
+        val tail = tails.single()
+        val tailWas = tail.volume
+        val mainWas = main.volume
+        val at = now()
+        // The session's Next asks "Blend when I skip" first: it lets it through as today's skip.
+        assertFalse(skip.press(SkipKind.NEXT, 2))
+        assertFalse("let go at once", tail.released)
+        assertEquals("brought up before the skip", mainWas, main.volume)
+        main.moveTo(2, 0)
+        run(60)
+        assertFalse("cut off at once", tail.released)
+        assertTrue(tail.volume > 0f && tail.volume < tailWas)
+        assertTrue(engine.blending)
+        run(200)
+        assertTrue(tail.released)
+        val out = tail.volumes.filter { it.first >= at }
+        assertEquals(0f, out.last().second)
+        assertTrue(out.map { it.second }.zipWithNext().all { (a, b) -> b <= a })
+        assertEquals("third", main.mediaId)
+        assertFalse(skip.active)
         assertAllBack()
     }
 

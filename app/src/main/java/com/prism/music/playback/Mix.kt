@@ -95,8 +95,13 @@ class MixEngine(
     private val buildFxTail: (ShiftProcessor, TransitionFx) -> ExoPlayer = { shift, _ -> buildTail(shift) },
     /** A song's key, for Automix's pick. */
     private val keyOf: (String) -> MusicKey? = { tempo.key(it) },
-    /** A song's shape ([com.prism.music.data.SongWaves.shape]: a file read, so asked once a song and kept, [shapeFor]). */
+    /**
+     * A song's shape ([com.prism.music.data.SongWaves.shape]: a file read). Read on [shapeReads] ahead of Automix's plan
+     * ([warmShapes]) and kept; the plan only looks in what's kept ([shapeFor]).
+     */
     private val shapeOf: (String) -> SongShape? = { null },
+    /** Where [shapeOf] is read: never the main thread, where this engine's loop runs. */
+    private val shapeReads: kotlinx.coroutines.CoroutineDispatcher = kotlinx.coroutines.Dispatchers.IO,
 ) {
     /** Wakes the loop early (a skip-blend just started: its first steps can't wait out a long idle look). */
     private val wakes = kotlinx.coroutines.channels.Channel<Unit>(kotlinx.coroutines.channels.Channel.CONFLATED)
@@ -294,7 +299,9 @@ class MixEngine(
         val length = mixMs()
         // 1.8.8: with Crossfade off, the listener's own transitions still play (one under way, or one coming up next).
         val savedOn = if (phase == Phase.IDLE) main.currentMediaItem?.let(::savedNext) != null else plan?.saved != null
-        if (length == null && !savedOn) {
+        // A skip's fade (its plan already gone) finishes first, whatever Crossfade says: 150 ms, never a cut (1.8.8 review:
+        // a skip during a saved transition with Crossfade off was taken for "Mix turned off" and the ending song let go).
+        if (length == null && !savedOn && phase != Phase.SKIP_FADE) {
             if (phase != Phase.IDLE) abort("Mix turned off", null)
             state.mark.value = null
             // (A song that came in by a saved transition keeps its fade-in's shape on the bar while it plays.)
@@ -335,6 +342,8 @@ class MixEngine(
         val musicEnd = tempo.cached(item.mediaId)?.lastSoundMs?.takeIf { it in dur / 2..dur } ?: dur
         val left = (if (saved != null) saved.startMs + saved.lengthMs else musicEnd) - main.currentPosition
         val planAhead = length + LEAD_MS + PREPARE_MS + 5_000
+        // Automix's pick reads both songs' shapes: read off the main thread a little before it's planned.
+        if (moves && left <= planAhead + SHAPE_WARM_MS) warmShapes(item.mediaId, nextId())
         // The player's crossfade mark: where the blend should start, as far as it's known yet (once it's being planned,
         // the plan's own, below: set once a step, so the bar doesn't flick between the two).
         val refused = refused(item)
@@ -434,14 +443,33 @@ class MixEngine(
         fx.arm(s, tailFromMs, afterNextFlush = seeked)
     }
 
-    /** Song [id]'s shape: read once, and again only while it has none (a scan may bring it). */
-    private fun shapeFor(id: String): SongShape? {
+    /** Song [id]'s shape as kept ([warmShapes]); null when it has none, or it hasn't been read yet (the same to a plan). */
+    private fun shapeFor(id: String): SongShape? = shapes[id]?.second
+
+    /** Songs whose shape is being read now. */
+    private val shapesAsked = HashSet<String>()
+
+    /**
+     * 1.8.8 review: the songs' shapes read off the main thread ahead of Automix's plan (it was a file read on this loop, right
+     * before a blend), and kept: once each, and again only while one has none (a scan may bring it).
+     */
+    private fun warmShapes(vararg ids: String?) {
         val now = SystemClock.elapsedRealtime()
-        shapes[id]?.let { (at, s) -> if (s != null || now - at < SHAPE_AGAIN_MS) return s }
-        val s = runCatching { shapeOf(id) }.getOrNull()
-        if (shapes.size >= 8) shapes.clear()
-        shapes[id] = now to s
-        return s
+        for (id in ids) {
+            if (id.isNullOrBlank() || id in shapesAsked) continue
+            val kept = shapes[id]
+            if (kept != null && (kept.second != null || now - kept.first < SHAPE_AGAIN_MS)) continue
+            shapesAsked += id
+            scope.launch {
+                try {
+                    val s = kotlinx.coroutines.withContext(shapeReads) { runCatching { shapeOf(id) }.getOrNull() }
+                    if (shapes.size >= 8 && id !in shapes) shapes.clear()
+                    shapes[id] = SystemClock.elapsedRealtime() to s
+                } finally {
+                    shapesAsked -= id
+                }
+            }
+        }
     }
 
     /**
@@ -1138,6 +1166,8 @@ class MixEngine(
         private const val ARM_AHEAD_MS = 1_000L
         /** A song with no shape yet is looked at again after this long (a scan may have brought one). */
         private const val SHAPE_AGAIN_MS = 30_000L
+        /** The shapes are read this long before Automix plans (it plans [AUTOMIX_AHEAD_MS] and a little before the end). */
+        private const val SHAPE_WARM_MS = 15_000L
 
         /** A move as diagnostics name it: "bass swap", "filter out", "echo out", "blend", "cut". */
         fun moveName(m: Move): String = m.name.lowercase().replace('_', ' ')

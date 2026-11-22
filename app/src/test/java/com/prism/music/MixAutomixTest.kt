@@ -148,6 +148,7 @@ class MixAutomixTest {
     private var withMainFx = true
     private var harmonic: (String, String) -> Double? = { _, _ -> null }
     private val saved = HashMap<Triple<String, String, String>, Transition>()
+    private var shapeOf: (String) -> com.prism.music.playback.SongShape? = { null }
     private lateinit var engine: MixEngine
 
     /** A song [DUR] long at [bpm], its music 0.2–195 s, first beat at 0.5 s, its last beats on the same grid (as MixMovesTest's). */
@@ -188,8 +189,24 @@ class MixAutomixTest {
             automix = { automixOn },
             mainFx = if (withMainFx) mainFx else null,
             buildFxTail = { _, fx -> Fake("tail ${tails.size}", Player.STATE_IDLE).also { tails += it; tailFxs += fx }.player },
+            shapeOf = { shapeOf(it) },
         )
         engine.start()
+    }
+
+    /** 1.8.8 review. Fails on the old code: the shapes (a file read each) were read on the engine's loop, the main thread. */
+    @Test fun theSongsShapesAreReadOffTheMainThreadBeforeThePlan() {
+        scan("ending", tempo(120.0)); scan("next", tempo(124.0))
+        val reads = java.util.Collections.synchronizedList(ArrayList<Pair<String, Boolean>>())
+        shapeOf = { id -> reads += id to (Looper.myLooper() == Looper.getMainLooper()); null }
+        build(startMs = 130_000)
+        runUntil("the hand-over", maxMs = 90_000) { handOver != null }
+        assertTrue("both read: $reads", reads.map { it.first }.containsAll(listOf("ending", "next")))
+        assertTrue("read on the main thread: $reads", reads.none { it.second })
+        // Kept: a song with none is looked at again only after a while, not on every look of the plan (four a second).
+        assertTrue(reads.toString(), reads.size <= 4)
+        runToTheEnd()
+        assertEquals("next", main.mediaId)
     }
 
     @Before fun clear() {

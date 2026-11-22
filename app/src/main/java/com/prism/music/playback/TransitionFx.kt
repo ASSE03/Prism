@@ -72,7 +72,9 @@ class FxScript(ramps: List<FxRamp>, val echoMs: Double = 0.0) {
  * ([arm]'s anchor), not by the engine's loop: a change lands on the frame asked for, not a buffer early.
  *
  * With no script it copies the sound through byte for byte: lossless playback is untouched, and nothing is reconfigured
- * mid-song. A seek (flush) ends a script that is running; [disarm] and a script's own end go back to the dry sound over
+ * mid-song. A flush into another song (or one that doesn't say where it is) ends a script that is running; one within the
+ * same song (a seek, or a speed change, which drains and flushes the chain) carries it on from where the player says it
+ * is. [disarm] and a script's own end go back to the dry sound over
  * [FADE_MS], then to that copy. 16-bit and float.
  *
  * [shiftMs]: frames moved in the chain before this one (the tail's [ShiftProcessor.shiftedMs]), so the song time it
@@ -159,6 +161,8 @@ class TransitionFx(private val shiftMs: () -> Long = { 0L }) : BaseAudioProcesso
     private var format: AudioProcessor.AudioFormat? = null
     /** The song position of the first frame after the last flush, as the player gave it (null when it didn't say). */
     private var flushMs: Long? = null
+    /** The song ([AudioProcessor.StreamMetadata.periodUid]) the last flush that said where it was is in. */
+    private var flushPeriod: Any? = null
 
     private fun take() {
         val p = pending.getAndSet(null) ?: return
@@ -304,12 +308,18 @@ class TransitionFx(private val shiftMs: () -> Long = { 0L }) : BaseAudioProcesso
     override fun onFlush(streamMetadata: AudioProcessor.StreamMetadata) {
         val newFormat = takeFormat()
         // Where in its song the player starts from here (EdgeSilenceProcessor reads the same): only when it says which song.
-        val at = if (streamMetadata.periodUid != null && streamMetadata.positionOffsetUs != C.TIME_UNSET) streamMetadata.positionOffsetUs / 1000 else null
+        val uid = streamMetadata.periodUid
+        val at = if (uid != null && streamMetadata.positionOffsetUs != C.TIME_UNSET) streamMetadata.positionOffsetUs / 1000 else null
         // A second flush with nothing played since (a new song's sound being set up): what started at the first goes on,
         // from where the player now says it is (its times are the song's).
         val again = script != null && frames == 0L
+        // 1.8.8 review: a flush that says where it is in the same song as the last one. Without AudioTrack speed, a speed
+        // change while playing drains and flushes the chain (Media3 1.11.1's applyAudioProcessorPlaybackParameters…), and
+        // the engine nudges the speed mid-move to keep the beats in line: the script goes on from there (its times are the
+        // song's), not cut off with no fade. Into another song, or with no position, it ends as at any seek.
+        val sameSong = script != null && !again && at != null && flushPeriod != null && uid == flushPeriod
         frames = 0
-        if (!again || at != null) flushMs = at
+        if (!again || at != null) { flushMs = at; flushPeriod = if (at != null) uid else null }
         // A seek: the frames count from the new place. A script running ends (its times no longer hold); one waiting for
         // this seek starts, and so does one armed just before it (B5: the editor's Listen and the queue's second player
         // arm theirs before the player's first flush).
@@ -319,7 +329,7 @@ class TransitionFx(private val shiftMs: () -> Long = { 0L }) : BaseAudioProcesso
             p.script == null -> null
             else -> p
         }
-        if (again && p == null && waiting == null) {
+        if ((again || sameSong) && p == null && waiting == null) {
             flushMs?.let { anchorMs = it }
             if (newFormat) { clearState(); fitDelay() }
             return
@@ -333,6 +343,7 @@ class TransitionFx(private val shiftMs: () -> Long = { 0L }) : BaseAudioProcesso
         stop()
         frames = 0
         flushMs = null
+        flushPeriod = null
         format = null
     }
 

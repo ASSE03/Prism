@@ -313,6 +313,42 @@ class TransitionFxTest {
         assertEquals(0f, out[at * 2], 1e-6f)
     }
 
+    /** A flush as [playerFlush], in song [uid]. */
+    private fun flushIn(p: TransitionFx, uid: String, atMs: Long) =
+        p.flush(AudioProcessor.StreamMetadata.Builder().setPositionOffsetUs(atMs * 1000).setPeriodUid(uid).build())
+
+    @Test
+    fun aSpeedChangeMidMoveKeepsTheScriptGoing() {
+        // 1.8.8 review: without AudioTrack speed, a speed change while playing drains and flushes the chain, saying where in
+        // the same song it is. The beat matching nudges the speed mid-move: the move goes on from there, its times the song's.
+        // Fails on the old code: every flush with sound played since ended the script, with no fade.
+        val p = TransitionFx().apply { configure(AudioProcessor.AudioFormat(rate, 2, C.ENCODING_PCM_FLOAT)) }
+        flushIn(p, "next", 10_000)
+        // The dry sound down from 1 at 10.5 s to 0 at 11.5 s.
+        p.arm(FxScript(listOf(FxRamp(FxParam.DRY, 10_500.0, 1_000.0, 0f))), anchorMs = 10_000)
+        run(p, FloatArray(rate / 2 * 2) { 0.5f }, true)
+        // The nudge's flush, half a second on.
+        flushIn(p, "next", 10_500)
+        assertTrue(p.running)
+        val out = run(p, FloatArray(rate * 2 * 2) { 0.5f }, true)
+        // Half-way down at 11 s (half a second after the flush), gone after 11.5 s.
+        assertEquals(0.25f, out[(rate / 2) * 2], 0.01f)
+        assertEquals(0f, out[(rate + rate / 10) * 2], 1e-6f)
+    }
+
+    @Test
+    fun aFlushIntoAnotherSongOrWithNoPlaceStillEndsIt() {
+        for (other in listOf(true, false)) {
+            val p = TransitionFx().apply { configure(AudioProcessor.AudioFormat(rate, 2, C.ENCODING_PCM_FLOAT)) }
+            flushIn(p, "next", 0)
+            p.arm(FxScript(listOf(FxRamp(FxParam.DRY, 0.0, 0.0, 0f))), anchorMs = 0)
+            assertTrue(run(p, FloatArray(2000) { 0.5f }, true).all { it == 0f })
+            if (other) flushIn(p, "third", 0) else p.flush()
+            assertTrue("other song=$other", run(p, FloatArray(2000) { 0.5f }, true).all { it == 0.5f })
+            assertFalse(p.running)
+        }
+    }
+
     @Test
     fun theMainChainIsUntouchedWithNoScript() {
         // The main player's chain as PlaybackService has it: the silence trimmer, then this, before the EQ. With no

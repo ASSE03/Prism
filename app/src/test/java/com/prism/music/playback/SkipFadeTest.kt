@@ -314,13 +314,16 @@ class SkipFadeTest {
         assertFalse(skip.active)
     }
 
-    @Test fun anEndOfSongBlendHeardIsStoppedAndTheSkipIsPlain() {
+    @Test fun anEndOfSongBlendHeardIsLeftToTheEngineAndTheSkipIsPlain() {
+        // 1.8.8 review: the blend isn't aborted here (a hard cut): the plain skip goes through and the engine's own skip
+        // fade takes it down, as with the switch off (MixBlendTest.withBlendWhenISkipOnASkipMidBlendStillFades).
         var dropped = 0
         skip.mixHeard = { true }
         skip.dropMix = { dropped++ }
         assertFalse(skip.press(SkipKind.NEXT, 1))
-        assertEquals(1, dropped)
+        assertEquals(0, dropped)
         assertTrue(heads.isEmpty())
+        assertFalse(skip.active)
     }
 
     @Test fun castingStartingOrTheServiceGoingEndsItAtOnce() {
@@ -397,6 +400,34 @@ class SkipFadeTest {
         assertTrue("the new queue the listener asked for", ran)
         assertFalse(s.active)
         assertEquals(1f, main.volume)
+    }
+
+    /** 1.8.8 review. Fails on the old code: the move after an error was only logged, and the old song played on. */
+    @Test fun aStepThatFailsBeforeTheMoveStillLandsOnTheChosenSong() {
+        for (inFade in listOf(false, true)) {
+            main.moveTo(0, 60_000)
+            run(400)
+            var boom = false
+            val made = ArrayList<Fake>()
+            val s = SkipFade(
+                main = main.player, buildHead = { Fake("head", loadMs = 200).also { made += it }.player }, firstSoundMs = { 0L },
+                on = { true }, light = { false }, allowed = { _, _ -> true }, warm = { _, _ -> false },
+                speed = { if (boom) error("boom") else 1f }, note = {},
+            )
+            assertTrue(s.press(SkipKind.NEXT, 1))
+            if (inFade) {
+                // Into the fade: the head plays, both heard.
+                var waited = 0L
+                while (made.single().volume < 0.2f) { assertTrue("never faded", waited < 3_000); run(10); waited += 10; s.tick() }
+            }
+            assertEquals("a", main.mediaId)
+            boom = true
+            s.tick()
+            assertFalse("inFade=$inFade", s.active)
+            assertEquals("inFade=$inFade: on the chosen song", "b", main.mediaId)
+            assertEquals(1f, main.volume)
+            assertTrue(made.single().released)
+        }
     }
 
     @Test fun eightSecondsAfterThePressAllIsNormalEvenPaused() {

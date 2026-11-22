@@ -371,7 +371,18 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         runCatching { context.startService(android.content.Intent(context, PlaybackServices.target(context))) }
     }
 
+    /**
+     * 1.8.8 review: commands asked while a new queue waits on its fade-out ([startQueue]), run in order once it has
+     * started; null when none is waiting. (A seek asked right after a new queue went to the song fading out.)
+     */
+    private var heldForQueue: MutableList<(ExoPlayer) -> Unit>? = null
+
+    /** Tests only: what a new queue waits on before it starts (the service's [PlaybackService.newQueueFade]). */
+    @androidx.annotation.VisibleForTesting
+    internal var testQueueFade: ((() -> Unit) -> Unit)? = null
+
     private fun withPlayer(block: (ExoPlayer) -> Unit) {
+        heldForQueue?.let { it += block; return }
         val p = player
         if (p != null) block(p) else {
             pending += block
@@ -584,10 +595,39 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         c.queue.userQueued.value = emptySet()
         ensureStarted()
         // 1.8.8: with "Blend when I skip" on, the song playing fades out over 200 ms before the new queue takes over.
-        withPlayer { p ->
-            val begin = { startNow(p, songs, startIndex, source, shuffle, startVideo, startMs, rest, dj, wasSmart, token) }
-            val s = service
-            if (s != null) s.newQueueFade(begin) else begin()
+        // Whatever is asked after this (a seek into the new queue, say) waits for it to start, and then runs in order.
+        startOrHold { p -> startNow(p, songs, startIndex, source, shuffle, startVideo, startMs, rest, dj, wasSmart, token) }
+    }
+
+    /** [start] on the player, after the service's fade-out when it makes one; later commands are held until it has run. */
+    private fun startOrHold(start: (ExoPlayer) -> Unit) {
+        val p = player
+        val fade = testQueueFade ?: service?.let { s -> { action: () -> Unit -> s.newQueueFade(action) } }
+        if (p == null || fade == null) { withPlayer(start); return }
+        // A new queue overtaking one still waiting (its fade-out cut short): what was asked after that one runs now,
+        // on the player as it is (as it always did), before this queue starts.
+        heldForQueue?.let { release(it, p) }
+        val held = mutableListOf<(ExoPlayer) -> Unit>()
+        heldForQueue = held
+        var started = false
+        try {
+            fade {
+                started = true
+                try { start(player ?: p) } finally { release(held, p) }
+            }
+        } catch (e: Throwable) {
+            // The fade failed without starting the queue: nothing stays held behind it.
+            if (!started) release(held, p)
+            throw e
+        }
+    }
+
+    /** Runs what [held] kept, in order, once (and no longer holds what comes next behind it). */
+    private fun release(held: MutableList<(ExoPlayer) -> Unit>, p: ExoPlayer) {
+        if (heldForQueue === held) heldForQueue = null
+        while (held.isNotEmpty()) {
+            val block = held.removeAt(0)
+            runCatching { block(player ?: p) }.onFailure { e -> AudioDiagnostics.log("queue", "a command after a new queue failed: $e") }
         }
     }
 
