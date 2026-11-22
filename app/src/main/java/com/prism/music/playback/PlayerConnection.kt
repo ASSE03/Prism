@@ -1150,6 +1150,10 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
 
     suspend fun videoIdFor(song: Song): String? = service?.videoIdFor(song)?.id ?: if (song.isVideo) song.id else null
 
+    /** 1.8.8 Mix it yourself: a small player for the transition editor's Listen ([MixPreview]); null with no service. */
+    @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+    fun previewPlayer(item: androidx.media3.common.MediaItem, fx: TransitionFx): ExoPlayer? = service?.buildPreviewPlayer(item, fx)
+
     private val _sleepEndOfSong = MutableStateFlow(false)
     /** The sleep timer is set to pause when the current song ends. */
     val sleepEndOfSong: StateFlow<Boolean> = _sleepEndOfSong
