@@ -305,9 +305,14 @@ class AppContainer(val app: Application) {
      */
     @Volatile var returningUser: Boolean? = null
 
-    /** Asks for notifications once ever, when Prism may not post them yet and is on screen to ask. */
+    /**
+     * Asks for notifications once ever, when Prism may not post them yet and is on screen to ask. Never over a coach tour
+     * (1.8.8: First steps' like downloads the song, and Android's prompt covered the next step); not marked asked then,
+     * so a later download asks.
+     */
     fun askNotifications() {
         if (android.os.Build.VERSION.SDK_INT < 33 || com.prism.music.data.Notifications.allowed(app)) return
+        if (com.prism.music.ui.tour.TourAnchors.running) return
         val prefs = app.getSharedPreferences("prompts", android.content.Context.MODE_PRIVATE)
         if (prefs.getBoolean("notifications_asked", false)) return
         val prompt = notificationPrompt ?: return

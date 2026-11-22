@@ -9,8 +9,8 @@ import org.junit.Test
 class CanvasControlsTest {
     private fun fades(
         fullScreen: Boolean = true, hasCanvas: Boolean = true, keep: Boolean = false, playing: Boolean = true, covered: Boolean = false,
-        panel: Boolean = false, dragging: Boolean = false, reader: Boolean = false, reduce: Boolean = false,
-    ) = canvasControlsMayFade(fullScreen, hasCanvas, keep, playing, covered, panel, dragging, reader, reduce)
+        panel: Boolean = false, dragging: Boolean = false, reader: Boolean = false, reduce: Boolean = false, coach: Boolean = false,
+    ) = canvasControlsMayFade(fullScreen, hasCanvas, keep, playing, covered, panel, dragging, reader, reduce, coach)
 
     @Test fun theControlsFadeOverAPlayingFullScreenCanvas() = assertTrue(fades())
 
@@ -24,6 +24,9 @@ class CanvasControlsTest {
         assertFalse("a finger on the volume", fades(dragging = true))
         assertFalse("TalkBack", fades(reader = true))
         assertFalse("Reduce motion: nothing moves behind them", fades(reduce = true))
+        // 1.8.8: First steps on a new install (Canvas on Full screen) pointed at a Lyrics button that had faded away, and
+        // the tap on it only brought the controls back, so step 3 could never be done.
+        assertFalse("a coach tour points at them", fades(coach = true))
     }
 
     /** 1.8.7, "Keep lyrics showing": the sung line is there only while the controls are on their way out or away. */

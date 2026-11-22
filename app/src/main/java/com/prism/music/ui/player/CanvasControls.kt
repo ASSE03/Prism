@@ -16,7 +16,7 @@ internal const val CANVAS_CONTROLS_MS = 4_000L
  * 1.8.6 Canvas, Full screen: whether the controls may fade away, leaving the title, the artist and a thin progress
  * line over the picture. Anything that says "someone is using them, or can't get them back by looking" keeps them up:
  * a paused song, a sheet, the lyrics or the queue, a drag on the volume, a screen reader, Reduce motion (nothing moves
- * behind them then), and the listener's own "Keep controls showing".
+ * behind them then), the listener's own "Keep controls showing", and a coach tour (1.8.8: it points at them).
  */
 internal fun canvasControlsMayFade(
     fullScreen: Boolean,
@@ -28,7 +28,8 @@ internal fun canvasControlsMayFade(
     dragging: Boolean,
     screenReader: Boolean,
     reduceMotion: Boolean,
-): Boolean = fullScreen && hasCanvas && !keepControls && playing && !covered && !panelOpen && !dragging && !screenReader && !reduceMotion
+    coachRunning: Boolean = false,
+): Boolean = fullScreen && hasCanvas && !keepControls && playing && !covered && !panelOpen && !dragging && !screenReader && !reduceMotion && !coachRunning
 
 /**
  * 1.8.7, "Keep lyrics showing": the line being sung is on the picture while the controls may fade ([fades], so only over

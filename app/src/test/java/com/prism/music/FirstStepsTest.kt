@@ -120,6 +120,22 @@ class FirstStepsTest {
 
     private fun index() = Coach.run?.index
 
+    /**
+     * 1.8.8, seen on a fresh install: its bar has no Settings tab (Home, Library, Search, Replay), so the last step pointed
+     * at nothing. Without the tab, Home's profile picture is where Settings opens: the step goes to Home first.
+     */
+    @Test fun withoutASettingsTabTheLastStepGoesHomeWhereThePictureOpensSettings() {
+        val looks = FirstSteps.steps { }[FirstSteps.LOOKS_STEP]
+        val noTab = AppSettings(navTabs = listOf(com.prism.music.data.prefs.NavTab.HOME, com.prism.music.data.prefs.NavTab.LIBRARY, com.prism.music.data.prefs.NavTab.SEARCH))
+        var went: String? = null
+        val acts = CoachActions(go = { went = it })
+        looks.prep!!.invoke(acts, TourState(route = Routes.LIBRARY, settings = noTab))
+        assertEquals(Routes.HOME, went)
+        went = null
+        looks.prep!!.invoke(acts, TourState(route = Routes.LIBRARY, settings = noTab.copy(navTabs = noTab.navTabs + com.prism.music.data.prefs.NavTab.SETTINGS)))
+        assertEquals("with the tab, it stays where it is", null, went)
+    }
+
     @Test fun theFiveStepsAreWalkedByDoingThem() {
         begin()
         assertEquals(FirstSteps.COUNT, Coach.run!!.steps.size)

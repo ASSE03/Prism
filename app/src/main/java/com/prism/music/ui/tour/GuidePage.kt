@@ -97,7 +97,8 @@ object GuideTours {
     )
     private val looks get() = CoachStep(
         TourAnchor.SETTINGS_TAB, tr(R.string.first_steps_looks), done = { isSettings(it.route) },
-        prep = { setPlayerOpen(false) },
+        // No Settings tab: Home's profile picture carries the mark (1.8.8, as First steps).
+        prep = { s -> setPlayerOpen(false); if (!FirstSteps.settingsTabShown(s) && s.route != Routes.HOME) go(Routes.HOME) },
     )
 
     /** Settings, its first page or any page of it. */

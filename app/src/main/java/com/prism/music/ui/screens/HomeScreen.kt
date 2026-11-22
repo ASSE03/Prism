@@ -774,8 +774,10 @@ private fun HomeTopRow(greeting: String, today: String, showGreeting: Boolean) {
             com.prism.music.ui.components.RoundAction(PrismIcons.Customize, tr(R.string.customize_home_2)) { nav.go(Routes.CATALOGUE) }
         }
         Spacer(Modifier.width(8.dp))
+        // 1.8.8: with no Settings tab in the bar, this is where the coach's "Everything can look your way" points.
+        val settingsMark = if (com.prism.music.data.prefs.NavTab.SETTINGS in settings.navTabs) null else com.prism.music.ui.tour.TourAnchor.SETTINGS_TAB
         com.prism.music.ui.screens.ProfilePicture(
-            Modifier.size(42.dp).clickable(onClickLabel = tr(R.string.settings)) { nav.go(Routes.SETTINGS) }, description = tr(R.string.settings),
+            Modifier.size(42.dp).then(settingsMark?.mark ?: Modifier).clickable(onClickLabel = tr(R.string.settings)) { nav.go(Routes.SETTINGS) }, description = tr(R.string.settings),
         )
     }
 }

@@ -649,7 +649,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     val canvasFades = canvasControlsMayFade(
         fullScreen = canvasBehind, hasCanvas = canvas != null, keepControls = canvasPrefs.keepControls, playing = isPlaying,
         covered = covered, panelOpen = lyricsOpen || queueOpen || statsOpen, dragging = volume.dragging,
-        screenReader = screenReader, reduceMotion = settings.reduceMotion,
+        screenReader = screenReader, reduceMotion = settings.reduceMotion, coachRunning = com.prism.music.ui.tour.TourAnchors.running,
     )
     // Canvas was on before 1.8.6 and music videos were never decided: asked once, here (either answer is kept).
     if (canvasAsksOnce(settings.behavior.canvas.enabled, remember(settings) { c.settings.canvasVideosAnswered }, playerOpen = !lyricsOpen && !queueOpen && !statsOpen)) {

@@ -179,10 +179,14 @@ object FirstSteps {
             CoachStep(
                 TourAnchor.SETTINGS_TAB, tr(R.string.first_steps_looks),
                 done = { it.route == looksRoute },
-                prep = { setPlayerOpen(false) },
+                // No Settings tab in the bar: Home's profile picture opens Settings, and carries this step's mark then.
+                prep = { s -> setPlayerOpen(false); if (!settingsTabShown(s) && s.route != Routes.HOME) go(Routes.HOME) },
             ),
         )
     }
+
+    /** The bar shows a Settings tab; without one, Home's profile picture is [TourAnchor.SETTINGS_TAB]. */
+    fun settingsTabShown(s: TourState): Boolean = com.prism.music.data.prefs.NavTab.SETTINGS in s.settings.navTabs
 
     /** Home tells the first Quick pick while a coach tour runs (one line there). */
     @Composable
