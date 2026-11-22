@@ -100,7 +100,10 @@ class SkipFade(
         )
         return when (SkipFadeRules.choose(ask)) {
             SkipChoice.PLAIN -> false
-            SkipChoice.STOP_MIX_THEN_PLAIN -> { dropMix(); false }
+            // 1.8.8 review: not aborted here (that let the ending song go at once and put the next at full before the skip's
+            // seek, a hard cut). The plain skip goes through and the engine's own skip fade takes the blend down over a
+            // moment, exactly as with the switch off.
+            SkipChoice.STOP_MIX_THEN_PLAIN -> false
             SkipChoice.CUT -> {
                 val newQueue = rules.phase == SkipFadeRules.Phase.FADE_OUT && rules.target < 0
                 when {
@@ -315,6 +318,8 @@ class SkipFade(
 
     /** Whatever state it's in, back to normal at once: no head, main at full volume and the listener's speed. */
     private fun forceNormal(why: String) {
+        // How the two stand, if they can still be read (the head's place, for a move as a normal finish makes it).
+        val now = runCatching { read() }.getOrNull() ?: SkipNow(clock(), false, false, -1, 0L, headFailed = true)
         runCatching { head?.release() }
         head = null
         // A new queue (or the cut) that waited still happens: the listener asked for it.
@@ -324,7 +329,16 @@ class SkipFade(
         runThen(f)
         runCatching { if (main.volume != 1f) main.volume = 1f; setSpeed(1f) }
         if (ownsBlend) { state.blend.value = null; ownsBlend = false }
-        val r = rules.finishNow(SkipNow(clock(), false, false, -1, 0L, headFailed = true), why)
+        val r = rules.finishNow(now, why)
+        // 1.8.8 review: not moved yet (an error loading or fading), the skip still lands on the chosen song, as a normal
+        // finish would: it was only logged, and the main player stayed on the old song.
+        val t = r.target
+        runCatching {
+            if (t in 0 until main.mediaItemCount) {
+                val ms = r.moveMs
+                if (ms != null) main.seekTo(t, ms.coerceAtLeast(0L)) else if (r.plain) main.seekToDefaultPosition(t)
+            }
+        }.onFailure { e -> note("skip-blend: the move after an error failed: $e") }
         r.end?.let { note(skipLine(fromId, toId, kind, rules.leadWarmMs, rules.leadColdMs, it, null)) }
         onSettled()
     }

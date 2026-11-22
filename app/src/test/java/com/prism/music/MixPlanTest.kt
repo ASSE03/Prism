@@ -197,6 +197,30 @@ class MixPlanTest {
         assertEquals(1f, main.volume)
     }
 
+    /** 1.8.8 review. Fails on the old code: with its plan gone at the skip, the next step took it for Mix turned off and let the ending song go at once. */
+    @Test fun aSkipDuringASavedPairWithCrossfadeOffStillFades() {
+        saved[Triple("PL1", "ending", "next")] = Transition(170_000, 20_000, 8_000, TransitionStyle.STRAIGHT)
+        build()
+        runUntil("the hand-over") { handOver != null }
+        runUntil("into the blend") { main.position() >= 23_000 }
+        val tail = tails.single()
+        val tailWas = tail.volume
+        assertTrue(tailWas in 0.2f..0.9f)
+        val at = now()
+        main.moveTo(2, 0)
+        run(80)
+        assertFalse("cut off at once", tail.released)
+        assertTrue("fading: ${tail.volume}", tail.volume > 0f && tail.volume < tailWas)
+        run(250)
+        assertTrue(tail.released)
+        val out = tail.volumes.filter { it.first >= at }.map { it.second }
+        assertEquals(0f, out.last())
+        assertTrue(out.size > 3)
+        assertEquals("third", main.mediaId)
+        assertEquals(1f, main.volume)
+        assertFalse(engine.blending)
+    }
+
     @Test fun theReversedOrderIsntTheSavedPair() {
         saved[Triple("PL1", "next", "ending")] = Transition(170_000, 20_000, 8_000)
         build()

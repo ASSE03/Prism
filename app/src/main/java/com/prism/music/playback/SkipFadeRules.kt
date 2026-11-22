@@ -12,7 +12,10 @@ enum class SkipChoice {
     PLAIN,
     /** A skip-blend is under way: it ends, and this skip is a plain cut to its song (skips don't stack). */
     CUT,
-    /** An end-of-song blend is being heard: it's stopped first, then this skip is a plain cut (plan-mix §2.3.6). */
+    /**
+     * An end-of-song blend is being heard: this skip is today's (plan-mix §2.3.6), and the engine's own skip fade takes the
+     * blend down over a moment, as with the switch off.
+     */
     STOP_MIX_THEN_PLAIN,
     /** Performance mode or battery saver: the song fades out over [SkipFadeRules.FADE_OUT_MS], then the cut. No second player. */
     FADE_OUT,
