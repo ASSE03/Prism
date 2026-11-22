@@ -5735,4 +5735,33 @@
     <string name="tour_188_also_sing">%1$s (Lyrics &amp; Sing): hide the microphone under the lyrics</string>
     <string name="tour_188_also_radio">\"%1$s\" says so when a radio gets going</string>
     <string name="tour_188_also_tv">On the TV, Settings → Storage → %1$s. And fixes from your reports</string>
+    <!-- 1.8.8 Mix it yourself: your own transition between two songs of a playlist -->
+    <string name="transition_to_the_next_song">Transition to the next song</string>
+    <string name="transition_title">Transition</string>
+    <string name="transition_from_to">%1$s into %2$s</string>
+    <string name="transition_where_leaves">Where %1$s leaves</string>
+    <string name="transition_where_comes_in">Where %1$s comes in</string>
+    <string name="transition_before_end">%1$s before the end</string>
+    <string name="transition_from_start">%1$s from the start</string>
+    <string name="transition_overlap">Overlap</string>
+    <string name="transition_cut">Cut</string>
+    <string name="transition_seconds">%1$d s</string>
+    <string name="transition_shortened">Plays %1$s long: an overlap can\'t be longer than a third of either song or run past its end.</string>
+    <string name="transition_snap">Snap to beat</string>
+    <string name="transition_snap_info">Keeps both handles on a beat. Needs a steady beat in both songs.</string>
+    <string name="transition_bpm_key">%1$s BPM · %2$s</string>
+    <string name="transition_bpm">%1$s BPM</string>
+    <string name="transition_not_measured">Not measured yet</string>
+    <string name="transition_measuring">Measuring the songs</string>
+    <string name="transition_measure_on_data">Measure on mobile data</string>
+    <string name="transition_listen_failed">Couldn\'t play the preview</string>
+    <string name="transition_auto_detail">Like your other crossfades</string>
+    <string name="transition_bass_swap">Bass swap</string>
+    <string name="transition_bass_swap_detail">The basses trade places on a beat</string>
+    <string name="transition_filter_out">Filter out</string>
+    <string name="transition_filter_out_detail">The first song is swept away as the next one opens up</string>
+    <string name="transition_echo_out">Echo out</string>
+    <string name="transition_echo_out_detail">The last beat echoes away as the next song starts</string>
+    <string name="transition_mark">Your own transition into the next song</string>
+    <string name="transition_edit">Edit the transition into the next song</string>
 </resources>

@@ -101,18 +101,24 @@ object Transitions {
         )
     }
 
-    /** The beat of [t] nearest [ms] (on its ending's grid), or [ms] when it has no clear beat. */
-    fun nearestBeat(t: Tempo?, ms: Long): Long {
+    /**
+     * The beat of [t] nearest [ms], or [ms] when it has no clear beat. On its ending's grid ([Tempo.outroBeatMs], where a
+     * song is left), or with [fromStart] on its start's ([Tempo.firstBeatMs], where a song comes in): the scan's tempo
+     * is a hair off over minutes, so each end is counted from its own beat.
+     */
+    fun nearestBeat(t: Tempo?, ms: Long, fromStart: Boolean = false): Long {
         if (t == null || !t.steady) return ms
         val beat = t.periodMs
-        return (t.outroBeatMs + Math.round((ms - t.outroBeatMs) / beat) * beat).toLong()
+        val anchor = if (fromStart) t.firstBeatMs else t.outroBeatMs
+        return (anchor + Math.round((ms - anchor) / beat) * beat).toLong()
     }
 
-    /** The first song's beats inside [fromMs]..[toMs] (the editor's ticks); empty without a clear beat. */
-    fun beats(t: Tempo?, fromMs: Long, toMs: Long): List<Long> {
+    /** [t]'s beats inside [fromMs]..[toMs] (the editor's ticks), on the grid [nearestBeat] uses; empty without a clear beat. */
+    fun beats(t: Tempo?, fromMs: Long, toMs: Long, fromStart: Boolean = false): List<Long> {
         if (t == null || !t.steady || toMs <= fromMs) return emptyList()
         val beat = t.periodMs
-        var b = t.outroBeatMs + Math.ceil((fromMs - t.outroBeatMs) / beat) * beat
+        val anchor = if (fromStart) t.firstBeatMs else t.outroBeatMs
+        var b = anchor + Math.ceil((fromMs - anchor) / beat) * beat
         val out = ArrayList<Long>()
         while (b <= toMs && out.size < 1000) { if (b >= 0) out += b.toLong(); b += beat }
         return out
