@@ -119,5 +119,21 @@ fun androidx.compose.ui.test.junit4.ComposeTestRule.clickWhenFound(matcher: Sema
     node.performSemanticsAction(SemanticsActions.OnClick)
 }
 
+/**
+ * A button of the Select many bar by its words (#567): on the bar when it fits there, else from the bar's ⋯ menu.
+ */
+fun androidx.compose.ui.test.junit4.ComposeTestRule.clickSelectionAction(label: String) {
+    val onBar = androidx.compose.ui.test.hasText(label) and androidx.compose.ui.test.hasClickAction() and
+        androidx.compose.ui.test.hasAnyAncestor(androidx.compose.ui.test.hasTestTag("selectionBar"))
+    waitUntil(10_000) { onAllNodes(androidx.compose.ui.test.hasTestTag("selectionBar")).fetchSemanticsNodes().isNotEmpty() }
+    // A button that doesn't fit is measured but not placed: only a placed one is on the bar.
+    if (onAllNodes(onBar).fetchSemanticsNodes().any { it.layoutInfo.isPlaced }) { clickWhenFound(onBar); return }
+    clickWhenFound(androidx.compose.ui.test.hasTestTag(com.prism.music.ui.components.SelectionTags.MORE))
+    clickWhenFound(
+        androidx.compose.ui.test.hasText(label) and androidx.compose.ui.test.hasClickAction() and
+            androidx.compose.ui.test.hasAnyAncestor(androidx.compose.ui.test.hasTestTag(com.prism.music.ui.components.SelectionTags.MORE_MENU)),
+    )
+}
+
 /** A node whose tap is labelled [label] (what TalkBack says: "Use Midnight"). */
 fun clickLabel(label: String) = SemanticsMatcher("click label '$label'") { it.config.getOrNull(SemanticsActions.OnClick)?.label == label }
