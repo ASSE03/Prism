@@ -5669,7 +5669,25 @@
     <string name="spot_canvas_first_keywords">spotify canvas loop video clip unofficial</string>
     <string name="spot_canvas_offer_title">Show Spotify\'s canvas?</string>
     <string name="spot_canvas_offer_text">Prism can play the short looping video Spotify shows with a song, where it has one. This is unofficial and uses your Spotify sign-in. Prism Canvas shows for every other song. You can change this later in Player, under Canvas.</string>
-    <!-- 1.8.8 tour, part D (plan-tour.md): the Guide's topics. -->
+    <!-- 1.8.8 tour, parts C and D (plan-tour.md): What's new and the Guide. -->
+    <string name="whats_new">What\'s new</string>
+    <string name="back_to_whats_new">Back to what\'s new</string>
+    <string name="whats_new_in_the_guide">Every tip is also in the Guide, in Settings → Backup &amp; about.</string>
+    <plurals name="n_more_things_since">
+        <item quantity="one">And %d more thing since you last looked</item>
+        <item quantity="other">And %d more things since you last looked</item>
+    </plurals>
+    <string name="guide">Guide</string>
+    <string name="guide_info">Every tip, by topic, and First steps again.</string>
+    <string name="guide_keywords">tour tutorial walkthrough help tips how to what\'s new first steps</string>
+    <string name="guide_search_hint">Search the Guide</string>
+    <string name="guide_nothing_found">Nothing in the Guide matches that.</string>
+    <string name="guide_first_steps">First steps</string>
+    <string name="guide_first_steps_line">Five things, about a minute.</string>
+    <string name="guide_first_steps_again">Take First steps again</string>
+    <string name="guide_show_me_how">Show me how</string>
+    <string name="guide_show_me_how_line">A short tour, done for real.</string>
+    <string name="guide_since">Since %1$s</string>
     <string name="guide_topic_playing">Playing</string>
     <string name="guide_topic_playing_line">The player, skipping, the queue</string>
     <string name="guide_topic_lyrics">Lyrics</string>
@@ -5686,4 +5704,24 @@
     <string name="guide_topic_replay_line">Your listening, counted on this phone</string>
     <string name="guide_topic_devices">Your devices</string>
     <string name="guide_topic_devices_line">Speakers, TV, the car, Prism Connect</string>
+    <!-- The Guide's "Show me how" captions (one sentence, 12 words at most). The first five say what First steps says. -->
+    <string name="guide_how_play">Tap a song to play it.</string>
+    <string name="guide_how_player">This is your player. Tap it.</string>
+    <string name="guide_how_lyrics">Lyrics follow the song. Tap here.</string>
+    <string name="guide_how_like">Like it, and it\'s in your Library.</string>
+    <string name="guide_how_library">Your liked songs are kept here.</string>
+    <string name="guide_how_looks">Everything can look your way.</string>
+    <!-- 1.8.8's What's new. PLACEHOLDER: the Mix headline (tour_188_mix_*) is sample wording; the release session writes it from what Mix ships. -->
+    <string name="tour_188_mix_title">Mix: songs blend when you skip</string>
+    <string name="tour_188_mix_about">Skip to another song and it no longer cuts in: the two cross over.</string>
+    <string name="tour_188_mix_point_1">Turn it on in Settings → Playback → %1$s</string>
+    <string name="tour_188_mix_point_2">Works from the notification, lock screen, headset and car</string>
+    <string name="tour_188_mix_point_3">The cover and title blend too</string>
+    <string name="tour_188_mix_point_4">Off until you turn it on</string>
+    <string name="tour_188_mix_coach">Turn this on to blend songs when you skip.</string>
+    <string name="tour_188_also_about">A shorter tour, and a few smaller things.</string>
+    <string name="tour_188_also_guide">First steps for new people, and the Guide: every tip by topic, in Settings → Backup &amp; about</string>
+    <string name="tour_188_also_sing">%1$s (Lyrics &amp; Sing): hide the microphone under the lyrics</string>
+    <string name="tour_188_also_radio">\"%1$s\" says so when a radio gets going</string>
+    <string name="tour_188_also_tv">On the TV, Settings → Storage → %1$s. And fixes from your reports</string>
 </resources>

@@ -67,8 +67,9 @@ internal const val BACKUP_ABOUT_UPDATE = "backupAbout:update"
 
 /**
  * Settings → Backup & about (1.8.4's map, plan §2.3), built with the kit: back up and restore, the update check (with
- * the update itself under it when there is one), Prism's version and source, the tour, the licenses, and diagnostics
- * as a group of its own (a fold before 1.8.4). At the page's foot, outside the groups, the line that Prism is
+ * the update itself under it when there is one), Prism's version and source, the Guide (1.8.8; "Take the tour"
+ * before), the licenses, and diagnostics as a group of its own (a fold before 1.8.4). At the page's foot, outside the
+ * groups, the line that Prism is
  * unofficial. This file is the only place for the page: its composable, its lines in Settings' search
  * ([backupAboutIndex]), its "Reset this page" keys ([backupAboutLookKeys]), its line on the root ([backupAboutValue])
  * and the old group names it answers to ([backupAboutOldGroups]). The licenses' screen, opened from its About group, is
@@ -221,7 +222,8 @@ internal fun BackupAboutContent(
             LinkRow(tr(R.string.supporters)) { nav.go(Routes.SUPPORTERS) }
             // The installed version is the Updates row's value line (and the root's); this one is where Prism comes from.
             LinkRow(tr(R.string.source_code), value = tr(R.string.open_on_github), external = true) { runCatching { uri.openUri(SOURCE_URL) } }
-            LinkRow(tr(R.string.take_the_tour), info = tr(R.string.a_minute_s_walk_through_prism)) { c.tourRequests.tryEmit(Unit) }
+            // 1.8.8 (plan-tour.md D6): the Guide, every tour card by topic, in place of "Take the tour".
+            LinkRow(tr(R.string.guide), info = tr(R.string.guide_info)) { nav.go(Routes.GUIDE) }
             LinkRow(tr(R.string.open_source_licenses), value = tr(R.string.gpl_3_0_or_later)) { nav.go(Routes.settings(SettingsSection.LICENSES.key)) }
             // Debug builds only, so it's left out of Settings search (named title: SettingsIndexTest skips it).
             if (BuildConfig.DEBUG) LinkRow(title = tr(R.string.design_gallery), info = tr(R.string.every_component_of_the_redesign_in)) { nav.go(Routes.DESIGN_GALLERY) }
@@ -352,7 +354,7 @@ val backupAboutIndex: List<SettingEntry> by lazy {
         SettingEntry(page, about, tr(R.string.supporters), tr(R.string.supporters_keywords)),
         // "Your data stays here" is the group's ⓘ now: its words still find About.
         SettingEntry(page, about, tr(R.string.source_code), tr(R.string.app_name) + " " + tr(R.string.version_github) + " privacy " + tr(R.string.your_data_stays_here)),
-        SettingEntry(page, about, tr(R.string.take_the_tour), tr(R.string.tutorial_walkthrough_help_guide_what_s)),
+        SettingEntry(page, about, tr(R.string.guide), tr(R.string.guide_keywords) + " " + tr(R.string.take_the_tour)),
         SettingEntry(page, about, tr(R.string.open_source_licenses), tr(R.string.license_gpl)),
         SettingEntry(page, diagnostics, tr(R.string.selftest_title), tr(R.string.selftest_keywords)),
         SettingEntry(page, diagnostics, tr(R.string.playback_diagnostics), tr(R.string.stutter_judder_skip_glitch_lag_bluetooth) + " " + tr(R.string.a_log_for_tracking_down_stutters)),

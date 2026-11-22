@@ -130,6 +130,8 @@ class CoachStep(
 class CoachActions(
     val go: (route: String) -> Unit = {},
     val setPlayerOpen: (Boolean) -> Unit = {},
+    /** Shows a tab as its tab bar button does (the Guide's "Show me how" starting on Home); [go] where none is given. */
+    val tab: (route: String) -> Unit = go,
 )
 
 /** How a tour ended: every step done (or passed with Next), or Skip / Back from the first step. */

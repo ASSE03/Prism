@@ -46,6 +46,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.testTag
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -66,33 +69,126 @@ import com.prism.music.ui.theme.PrismTokens
 import kotlin.math.absoluteValue
 import kotlinx.coroutines.launch
 
-/** What a tour shows: [steps] after an opening page ([full]: the whole tour, else what's new since the last one). */
-class TourPlan(val full: Boolean, val freshInstall: Boolean, val steps: List<TourStep>)
-
 /**
- * The tour to show now, if any: the whole of it after a new install or the first time a release with tours runs
- * (Prism 1.7 for everyone), later only the steps of releases since the last tour seen. Null when there's nothing new.
+ * What What's new shows: an opening page, then [steps] (the newest release's cards), the last of them ending with the
+ * line "And [more] more things since you last looked" when older releases were skipped (it opens the Guide).
+ * [welcome]: someone from before tours ("Welcome to the new Prism"). [start] is the page it opens at (0, the opening;
+ * after a "Show me", the card after the one it came from).
  */
-fun pendingTour(context: Context, returning: Boolean): TourPlan? {
-    val seen = Tour.seenVersion(context)
-    val steps = Tour.stepsAfter(seen)
-    if (steps.isEmpty()) return null
-    return TourPlan(Tour.isFullTour(seen), freshInstall = !returning, steps = steps)
+class TourPlan(val welcome: Boolean, val steps: List<TourStep>, val more: Int = 0, val start: Int = 0) {
+    val pages: Int get() = steps.size + 1
+
+    /** The same, opening at [page]. */
+    fun at(page: Int) = TourPlan(welcome, steps, more, page.coerceIn(0, pages - 1))
 }
 
-/** The whole tour, from Settings → About → Take the tour. */
-fun fullTour(returning: Boolean) = TourPlan(full = true, freshInstall = !returning, steps = Tour.steps)
+/**
+ * What's new for someone who last saw the tour at [seen] (1.8.8, plan-tour.md §3 C, D7): the newest release's cards,
+ * the cards of any older release since folded into [TourPlan.more]. Null when there's nothing new, and for a new
+ * install ([seen] 0, not [returning]): that gets First steps, never the history. Someone from before tours ([seen] 0,
+ * [returning]) gets the newest release's cards and the Guide line too, not every page.
+ */
+fun whatsNewPlan(seen: Int, returning: Boolean): TourPlan? {
+    if (seen == 0 && !returning) return null
+    val after = Tour.stepsAfter(seen)
+    if (after.isEmpty()) return null
+    val newest = after.maxOf { it.since }
+    val cards = after.filter { it.since == newest && it.kind == TourStep.Kind.PLAIN }
+    if (cards.isEmpty()) return null
+    return TourPlan(welcome = seen == 0, steps = cards, more = after.size - cards.size)
+}
+
+/** What's new to show now, if any ([whatsNewPlan] for the tour last seen). */
+fun pendingTour(context: Context, returning: Boolean): TourPlan? = whatsNewPlan(Tour.seenVersion(context), returning)
 
 /**
- * The tour: a page at a time over the app, swiped or stepped through with Next, skippable at any point. Finishing or
- * skipping it marks it seen for this version ([Tour.markSeen]).
+ * After What's new's "Show me" (1.8.8): the cards to come back to, and the page the person was on. The chip "Back to
+ * what's new" ([BackToWhatsNew]) is shown while this is set.
+ */
+object WhatsNewReturn {
+    class Pending internal constructor(val plan: TourPlan, internal val from: String?, internal val run: CoachRun?)
+
+    var pending by mutableStateOf<Pending?>(null)
+        private set
+
+    internal fun arm(plan: TourPlan, from: String?, run: CoachRun?) { pending = Pending(plan, from, run) }
+
+    fun clear() { pending = null }
+}
+
+const val WHATS_NEW_BACK_TAG = "whatsNew:back"
+const val WHATS_NEW_MORE_TAG = "whatsNew:more"
+const val WHATS_NEW_SHOW_ME_TAG = "whatsNew:showMe"
+
+/**
+ * What's new's "Show me" for [step] on [page] of [plan]: the tour steps aside (seen, as before), the place opens with
+ * the coach's hole on the control when the card names one ([TourStep.coach]; not on a TV), else as it always did, and
+ * the chip back to the next card is armed. [here] is the page showing now (to return to).
+ */
+internal fun whatsNewShowMe(plan: TourPlan, page: Int, step: TourStep, here: String?, tv: Boolean, open: (String) -> Unit) {
+    val route = step.showMe ?: return
+    val coach = step.coach
+    val run = if (coach != null && !tv) {
+        Coach.start(
+            listOf(CoachStep(coach.anchor, coach.caption, coach.done, prep = { setPlayerOpen(false); go(route) })),
+            label = tr(R.string.whats_new),
+        )
+    } else null
+    if (run == null) open(route)
+    WhatsNewReturn.arm(plan.at(page + 1), here, run)
+}
+
+/**
+ * The chip "Back to what's new", top left, after a "Show me": it puts back the page the person was on and opens What's
+ * new at the next card ([onReturn]). It goes on its own when the person goes back to that page themselves. Nothing is
+ * drawn (or watched) otherwise.
+ */
+@Composable
+fun BackToWhatsNew(modifier: Modifier = Modifier, onReturn: (TourPlan) -> Unit) {
+    val p = WhatsNewReturn.pending ?: return
+    val nav = com.prism.music.ui.LocalNavigator.current.nav
+    val entry by nav.currentBackStackEntryAsState()
+    var left by remember(p) { mutableStateOf(false) }
+    LaunchedEffect(p, entry?.id) {
+        val id = entry?.id ?: return@LaunchedEffect
+        if (id != p.from) left = true else if (left) WhatsNewReturn.clear()
+    }
+    val scheme = MaterialTheme.colorScheme
+    Box(modifier.fillMaxSize()) {
+        Row(
+            Modifier.align(Alignment.TopStart).statusBarsPadding().padding(top = 8.dp, start = 12.dp)
+                .shadow(8.dp, CircleShape).clip(CircleShape).background(scheme.primaryContainer)
+                .clickable {
+                    WhatsNewReturn.clear()
+                    p.run?.let { if (Coach.run === it) Coach.skip() }
+                    if (p.from != null && nav.currentBackStack.value.any { it.id == p.from }) {
+                        while (nav.currentBackStackEntry?.id != p.from && nav.popBackStack()) Unit
+                    }
+                    onReturn(p.plan)
+                }
+                .padding(start = 10.dp, end = 14.dp, top = 8.dp, bottom = 8.dp).testTag(WHATS_NEW_BACK_TAG),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(PrismIcons.ArrowBack, null, tint = scheme.onPrimaryContainer, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(6.dp))
+            Text(tr(R.string.back_to_whats_new), color = scheme.onPrimaryContainer, style = MaterialTheme.typography.labelLarge)
+        }
+    }
+}
+
+/**
+ * What's new: a page at a time over the app, swiped or stepped through with Next, skippable at any point. Finishing or
+ * skipping it marks it seen for this version ([Tour.markSeen]). "Show me" opens the place (the coach's hole on the
+ * control when the card names one) with a chip back to the next card; the "more things" line opens the Guide.
  */
 @Composable
 fun TourOverlay(plan: TourPlan, onOpen: (String) -> Unit, onDone: () -> Unit) {
     val context = LocalContext.current
-    val pages = plan.steps.size + 1
-    val pager = rememberPagerState { pages }
+    val pages = plan.pages
+    val pager = rememberPagerState(initialPage = plan.start) { pages }
     val scope = rememberCoroutineScope()
+    val nav = com.prism.music.ui.LocalNavigator.current
+    val tv = remember { com.prism.music.ui.tv.TvDevice.isTv(context) }
     fun finish() { Tour.markSeen(context); onDone() }
     BackHandler { if (pager.currentPage > 0) scope.launch { pager.animateScrollToPage(pager.currentPage - 1) } else finish() }
     val shown by animateFloatAsState(1f, tween(320), label = "tourIn")
@@ -124,7 +220,17 @@ fun TourOverlay(plan: TourPlan, onOpen: (String) -> Unit, onDone: () -> Unit) {
                     contentAlignment = Alignment.Center,
                 ) {
                     if (page == 0) Opening(plan)
-                    else StepPage(plan.steps[page - 1], current = pager.settledPage == page, onShowMe = { route -> Tour.markSeen(context); onDone(); onOpen(route) })
+                    else StepPage(
+                        plan.steps[page - 1], current = pager.settledPage == page,
+                        more = if (page == pages - 1) plan.more else 0,
+                        onShowMe = {
+                            val step = plan.steps[page - 1]
+                            val here = nav.nav.currentBackStackEntry?.id
+                            finish()
+                            whatsNewShowMe(plan, page, step, here, tv, onOpen)
+                        },
+                        onMore = { finish(); onOpen(com.prism.music.ui.Routes.GUIDE) },
+                    )
                 }
             }
             Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -147,10 +253,10 @@ fun TourOverlay(plan: TourPlan, onOpen: (String) -> Unit, onDone: () -> Unit) {
 
 @Composable
 private fun Opening(plan: TourPlan) {
+    // A new install gets First steps, never this pager (plan-tour.md §3 B).
     val (title, body) = when {
-        !plan.full -> tr(R.string.what_s_new_in_prism, BuildConfig.VERSION_NAME) to
+        !plan.welcome -> tr(R.string.what_s_new_in_prism, BuildConfig.VERSION_NAME) to
             trp(R.plurals.n_things_to_know, plan.steps.size)
-        plan.freshInstall -> tr(R.string.welcome_to_prism) to tr(R.string.your_music_refracted_here_s_a)
         else -> tr(R.string.welcome_to_the_new_prism) to tr(R.string.prism_is_redrawn_from_the_ground, BuildConfig.VERSION_NAME)
     }
     PageColumn {
@@ -160,12 +266,12 @@ private fun Opening(plan: TourPlan) {
         Spacer(Modifier.height(12.dp))
         Text(body, color = Color.White.copy(alpha = 0.78f), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
         Spacer(Modifier.height(18.dp))
-        Text(tr(R.string.you_can_take_it_again_from), color = Color.White.copy(alpha = 0.5f), style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
+        Text(tr(R.string.whats_new_in_the_guide), color = Color.White.copy(alpha = 0.5f), style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
     }
 }
 
 @Composable
-private fun StepPage(step: TourStep, current: Boolean, onShowMe: (String) -> Unit) {
+private fun StepPage(step: TourStep, current: Boolean, more: Int, onShowMe: () -> Unit, onMore: () -> Unit) {
     val c = LocalContainer.current
     val context = LocalContext.current
     PageColumn {
@@ -208,14 +314,21 @@ private fun StepPage(step: TourStep, current: Boolean, onShowMe: (String) -> Uni
             }) { Text(tr(R.string.allow_notifications), color = Color.White) }
             else Text(tr(R.string.turn_them_on_in_android_s), color = Color.White.copy(alpha = 0.7f), style = MaterialTheme.typography.bodyMedium)
         }
-        step.showMe?.let { route ->
+        if (step.showMe != null) {
             Spacer(Modifier.height(18.dp))
-            PrismOutlinedButton(onClick = { onShowMe(route) }) { Text(tr(R.string.show_me), color = Color.White) }
+            PrismOutlinedButton(onClick = onShowMe, modifier = Modifier.testTag(WHATS_NEW_SHOW_ME_TAG)) { Text(tr(R.string.show_me), color = Color.White) }
         }
         // 1.8.7.6: the release's last card may end with one quiet line to support Prism (once per release).
         if (step.support) {
             Spacer(Modifier.height(18.dp))
             com.prism.music.ui.support.SupportWhatsNewLine(step.since, current)
+        }
+        // 1.8.8: the older releases skipped, folded into one line that opens the Guide (plan-tour.md D7).
+        if (more > 0) {
+            Spacer(Modifier.height(14.dp))
+            PrismTextButton(onClick = onMore, modifier = Modifier.testTag(WHATS_NEW_MORE_TAG)) {
+                Text(trp(R.plurals.n_more_things_since, more), color = Color.White.copy(alpha = 0.85f), textAlign = TextAlign.Center)
+            }
         }
     }
 }

@@ -305,9 +305,6 @@ class AppContainer(val app: Application) {
      */
     @Volatile var returningUser: Boolean? = null
 
-    /** Settings → About → "Take the tour": the activity shows the whole tour. */
-    val tourRequests = kotlinx.coroutines.flow.MutableSharedFlow<Unit>(extraBufferCapacity = 1)
-
     /** Asks for notifications once ever, when Prism may not post them yet and is on screen to ask. */
     fun askNotifications() {
         if (android.os.Build.VERSION.SDK_INT < 33 || com.prism.music.data.Notifications.allowed(app)) return

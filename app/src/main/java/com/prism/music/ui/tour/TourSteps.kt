@@ -56,12 +56,19 @@ enum class TourTopic(val icon: ImageVector) {
 }
 
 /**
+ * What's new's "Show me" with the coach (1.8.8): the place opens with the hole on [anchor] and [caption] beside it; the
+ * step is done when [done] says so (never, by default: the person looks, then taps "Back to what's new").
+ */
+class ShowMeCoach(val anchor: TourAnchor, val caption: String, val done: (TourState) -> Boolean = { false })
+
+/**
  * One page of Prism's tour.
  *
- * [since] is the versionCode of the release the feature (or its current look) came in. A new install sees every step
- * (the full tour); someone updating sees only the steps newer than the last tour they saw ([Tour.seenVersion]). To
- * introduce a later release's features: add steps with that release's versionCode, and keep the older steps true to
- * the app (new installs still see all of them).
+ * [since] is the versionCode of the release the feature (or its current look) came in. Someone updating sees the
+ * newest release's steps, with the older ones they skipped folded into one line that opens the Guide
+ * ([whatsNewPlan]); every step is in the Guide under its [topic]. To introduce a later release's features: add at most
+ * two steps with that release's versionCode (the headline, with a [coach] target, and "Also new"; `TourTest` holds
+ * releases from 1.8.8 on to it), and keep the older steps true to the app (the Guide still shows them).
  */
 data class TourStep(
     val since: Int,
@@ -71,7 +78,7 @@ data class TourStep(
     val points: List<String> = emptyList(),
     /** Small icons beside the big one, for what the step covers. */
     val extras: List<ImageVector> = emptyList(),
-    /** "Show me": where it opens (the tour closes; it can be taken again from Settings → About). */
+    /** "Show me": where it opens (the tour steps aside, with a chip back to the next card; the Guide has it too). */
     val showMe: String? = null,
     val kind: Kind = Kind.PLAIN,
     /**
@@ -82,6 +89,8 @@ data class TourStep(
     val support: Boolean = false,
     /** The Guide's topic it is listed under (1.8.8). Every card has one (`TourTest`). */
     val topic: TourTopic? = null,
+    /** "Show me" with the coach's hole on the exact control (1.8.8); without, Show me only opens [showMe]. */
+    val coach: ShowMeCoach? = null,
 ) {
     enum class Kind { PLAIN, NOTIFICATIONS }
 }
@@ -124,9 +133,29 @@ private const val V1_8_7 = 65
 private const val V1_8_7_5 = 66
 /** Prism 1.8.7.6 (build 67): the small things, and Spotify's canvas. */
 private const val V1_8_7_6 = 67
+/** Prism 1.8.8 (build 68): Mix, and the tour redone. The first release under the two-card rule. */
+const val V1_8_8 = 68
 
-    /** Every step, in the order they're shown. */
-    val steps: List<TourStep> = listOf(
+    /**
+     * PLACEHOLDER (1.8.8's release session): Mix's "Blend when I skip" isn't built yet, so 1.8.8's headline card
+     * (`tour_188_mix_*`) is sample wording from the mockup. Fill it from what Mix ships, check its Show me lands on the
+     * right row, then set this false. `TourTest` fails once the build is 1.8.8 while this is still true.
+     */
+    const val MIX_HEADLINE_PLACEHOLDER = true
+
+    /** The release each versionCode with cards is called by (the Guide's "Since 1.8.3"). */
+    val versionNames: Map<Int, String> = mapOf(
+        V1_7 to "1.7", V1_7_2 to "1.7.2", V1_7_3 to "1.7.3", V1_7_4 to "1.7.4", V1_7_5 to "1.7.5", V1_7_6 to "1.7.6",
+        V1_7_7 to "1.7.7", V1_7_8 to "1.7.8", V1_7_9 to "1.7.9", V1_7_9_2 to "1.7.9.2", V1_8_0 to "1.8.0", V1_8_1 to "1.8.1",
+        V1_8_2 to "1.8.2", V1_8_3 to "1.8.3", V1_8_4 to "1.8.4", V1_8_5 to "1.8.5", V1_8_6 to "1.8.6", V1_8_7 to "1.8.7",
+        V1_8_7_5 to "1.8.7.5", V1_8_7_6 to "1.8.7.6", V1_8_8 to "1.8.8",
+    )
+
+    /**
+     * Every step, in the order they're shown, including those of the release being built: a step dated after this
+     * build stays out of [steps] (it could never be marked seen) until the versionCode reaches it.
+     */
+    val allSteps: List<TourStep> = listOf(
         TourStep(
             V1_7, PrismIcons.Home, tr(R.string.home),
             tr(R.string.your_starting_point_made_from_what),
@@ -910,6 +939,37 @@ private const val V1_8_7_6 = 67
             support = true,
             topic = TourTopic.PLAYING,
         ),
+        // 1.8.8, the first release under the two-card rule (plan-tour.md §3 C, D8): the headline, whose Show me uses the
+        // coach, then "Also new"; four points each at most.
+        TourStep(
+            // PLACEHOLDER ([MIX_HEADLINE_PLACEHOLDER]): Mix's "Blend when I skip" isn't built; the release session
+            // fills these words from what ships. Opens Playback at Song to song, the hole on the Crossfade row.
+            V1_8_8, PrismIcons.Equalizer, tr(R.string.tour_188_mix_title),
+            tr(R.string.tour_188_mix_about),
+            listOf(
+                tr(R.string.tour_188_mix_point_1, tr(R.string.crossfade)),
+                tr(R.string.tour_188_mix_point_2),
+                tr(R.string.tour_188_mix_point_3),
+                tr(R.string.tour_188_mix_point_4),
+            ),
+            listOf(PrismIcons.Shuffle, PrismIcons.Queue),
+            showMe = Routes.settings(SettingsPageId.PLAYBACK.key, find = tr(R.string.playback_song_to_song)),
+            topic = TourTopic.PLAYING,
+            coach = ShowMeCoach(TourAnchor.CROSSFADE, tr(R.string.tour_188_mix_coach)),
+        ),
+        TourStep(
+            V1_8_8, PrismIcons.Check, tr(R.string.also_new),
+            tr(R.string.tour_188_also_about),
+            listOf(
+                tr(R.string.tour_188_also_guide),
+                tr(R.string.tour_188_also_sing, tr(R.string.ls_sing_button)),
+                tr(R.string.tour_188_also_radio, tr(R.string.radio_started)),
+                tr(R.string.tour_188_also_tv, tr(R.string.clear_cache)),
+            ),
+            listOf(PrismIcons.Mic, PrismIcons.Tv),
+            support = true,
+            topic = TourTopic.PLAYING,
+        ),
         TourStep(
             V1_7, PrismIcons.Update, tr(R.string.stay_in_the_loop),
             tr(R.string.let_prism_tell_you_when_something),
@@ -923,6 +983,9 @@ private const val V1_8_7_6 = 67
         ),
     )
 
+    /** The steps of the releases up to this build: What's new and the Guide draw from these. */
+    val steps: List<TourStep> = allSteps.filter { it.since <= BuildConfig.VERSION_CODE }
+
     private fun prefs(context: Context) = context.getSharedPreferences("tour", Context.MODE_PRIVATE)
 
     /** The versionCode of the last tour finished or skipped; 0 for none (a new install, or one from before tours). */
@@ -933,7 +996,4 @@ private const val V1_8_7_6 = 67
 
     /** The steps someone who last saw the tour at [seen] hasn't seen: all of them for 0. */
     fun stepsAfter(seen: Int): List<TourStep> = steps.filter { it.since > seen }
-
-    /** Whether it's the whole tour (never seen one) or only what's new since the last one. */
-    fun isFullTour(seen: Int) = seen == 0
 }
