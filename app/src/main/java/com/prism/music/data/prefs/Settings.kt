@@ -862,7 +862,7 @@ enum class PlayerPart(val label: String) {
     LYRIC_LINE(tr(R.string.current_lyric)), PROGRESS(tr(R.string.progress_bar)), TIMES(tr(R.string.times)),
     QUALITY(tr(R.string.stream_quality)), BEST_PART(tr(R.string.best_part)), PREV_NEXT(tr(R.string.previous_and_next)),
     /** Shown only while Crossfade is on (Settings → Sound): the mark where the next song comes in, and the covers blending. */
-    CROSSFADE_MARK(tr(R.string.crossfade_mark)), BLEND_COVERS(tr(R.string.covers_blend_too)),
+    CROSSFADE_MARK(tr(R.string.crossfade_mark)), BLEND_COVERS(tr(R.string.cover_and_title_blend_too)),
     SHUFFLE_REPEAT(tr(R.string.shuffle_repeat)), VOLUME(tr(R.string.volume)), BUTTONS(tr(R.string.buttons)),
     OUTPUT(tr(R.string.output_device)), NAV_BAND(tr(R.string.band_behind_the_navigation_buttons));
 
@@ -1058,6 +1058,11 @@ data class SoundPrefs(
      * Downloads ("Use your own song files"). Off by default; doesn't need lossless playback.
      */
     val ownLossyFiles: Boolean = false,
+    /**
+     * 1.8.8 (#481, plan-mix §2): "Blend when I skip". Next, Previous and a tap in the queue blend into the chosen song over
+     * 1.5 s instead of cutting, and a new queue fades out over 200 ms. Off by default; works with Crossfade off too.
+     */
+    val skipBlend: Boolean = false,
 )
 
 /** The longest fixed crossfade, in seconds (#351; it was 12). [com.prism.music.playback.MixEngine] and its tail player are good for it. */
@@ -2426,6 +2431,8 @@ class SettingsRepository(
         val pauseFade = booleanPreferencesKey("pause_fade")
         /** 1.8.1 (#314, [SoundPrefs.ownLossyFiles]). */
         val ownLossyFiles = booleanPreferencesKey("own_lossy_files")
+        /** 1.8.8 ([SoundPrefs.skipBlend]). */
+        val skipBlend = booleanPreferencesKey("skip_blend")
         val performanceMode = booleanPreferencesKey("performance_mode")
         /** The Home card offering Performance mode on a slower phone was answered (either way). */
         val performanceOffered = booleanPreferencesKey("performance_offered")
@@ -2534,6 +2541,8 @@ class SettingsRepository(
                 "skip_silence_episodes", "sleep_fade", "pause_fade",
                 // 1.8.1 (#314): your own song files in place of the stream.
                 "own_lossy_files",
+                // 1.8.8 (#481): how a skip sounds, not a look.
+                "skip_blend",
                 // 1.8.1 (#216): what plays and shows, not a look.
                 "explicit_content",
                 // 1.8.2 (#349): where Home's Quick picks come from.
@@ -2814,6 +2823,7 @@ class SettingsRepository(
                 sleepFadeSeconds = (p[K.sleepFade] ?: d.sound.sleepFadeSeconds).coerceIn(0, 60),
                 pauseFade = p[K.pauseFade] ?: d.sound.pauseFade,
                 ownLossyFiles = p[K.ownLossyFiles] ?: d.sound.ownLossyFiles,
+                skipBlend = p[K.skipBlend] ?: d.sound.skipBlend,
             ),
             behavior = BehaviorPrefs(
                 lockPortrait = p[K.lockPortrait] ?: d.behavior.lockPortrait,
@@ -3866,6 +3876,7 @@ class SettingsRepository(
     fun setSleepFade(v: Int) = edit { it[K.sleepFade] = v.coerceIn(0, 60) }
     fun setPauseFade(v: Boolean) = edit { it[K.pauseFade] = v }
     fun setOwnLossyFiles(v: Boolean) = edit { it[K.ownLossyFiles] = v }
+    fun setSkipBlend(v: Boolean) = edit { it[K.skipBlend] = v }
     fun setLyricsStripAlign(v: LyricsAlign) = edit { it[K.lyricsStripAlign] = v.name }
     fun setLyricsStripTwoLines(v: Boolean) = edit { it[K.lyricsStripTwoLines] = v }
     fun setMergeLikedVideos(v: Boolean) = edit { it[K.mergeLikedVideos] = v }

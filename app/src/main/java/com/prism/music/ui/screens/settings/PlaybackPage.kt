@@ -79,6 +79,7 @@ fun PlaybackPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = tr
         prefs.setMixAuto(d.mix.auto)
         prefs.setMix(d.mix.on)
     }
+    val skipBlendChanged = reset.add(tr(R.string.skip_blend), s.sound.skipBlend, d.sound.skipBlend, onOff) { prefs.setSkipBlend(it) }
     val lengthChanged = reset.add(tr(R.string.length), s.mix.seconds, d.mix.seconds, seconds) { prefs.setMixSeconds(it) }
     val beatMatchChanged = reset.add(tr(R.string.match_tempo_and_beats_dj_style), s.mix.beatMatch, d.mix.beatMatch, onOff) { prefs.setMixBeatMatch(it) }
     val keepAlbumsChanged = reset.add(tr(R.string.keep_an_album_s_songs_whole), s.mix.keepAlbums, d.mix.keepAlbums, onOff) { prefs.setMixKeepAlbums(it) }
@@ -139,6 +140,8 @@ fun PlaybackPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = tr
                 modifier = com.prism.music.ui.tour.TourAnchor.CROSSFADE.mark,
                 info = crossfadeInfo(lastWhy), changed = crossfadeChanged,
             ) { SoundChoices.setCrossfade(prefs, it) }
+            // 1.8.8 (#481): Next, Previous and a tap in the queue blend instead of cutting, with Crossfade off too.
+            SwitchRow(tr(R.string.skip_blend), s.sound.skipBlend, info = tr(R.string.skip_blend_info), changed = skipBlendChanged) { prefs.setSkipBlend(it) }
             // #351: up to 30 s (a song's blend is still at most a third of it: MixEngine.makePlan).
             if (s.mix.on && !s.mix.auto) SliderRow(
                 tr(R.string.length), s.mix.seconds.toFloat(), 1f..MAX_CROSSFADE_SECONDS.toFloat(), { seconds(it.roundToInt()) },
@@ -274,6 +277,7 @@ val playbackIndex: List<SettingEntry> by lazy {
             SettingEntry(page, shuffle, tr(R.string.playback_shuffle_button), tr(R.string.playback_shuffle_keywords) + " " + tr(R.string.shuffle_button_both) + " " + tr(R.string.shuffle_button_only)),
             SettingEntry(page, shuffle, tr(R.string.playback_keep_shuffle), tr(R.string.playback_shuffle_keywords)),
             SettingEntry(page, between, tr(R.string.crossfade), tr(R.string.mix_blend_transition_fade) + " " + tr(R.string.crossfade_songs) + " " + tr(R.string.automatic_length)),
+            SettingEntry(page, between, tr(R.string.skip_blend), tr(R.string.skip_blend_keywords)),
             SettingEntry(page, between, tr(R.string.length), needs = manualLength),
             SettingEntry(page, between, tr(R.string.match_tempo_and_beats_dj_style), tr(R.string.bpm_beatmatch), needs = crossfade),
             SettingEntry(page, between, tr(R.string.keep_an_album_s_songs_whole), tr(R.string.keep_albums_keywords), needs = crossfade),

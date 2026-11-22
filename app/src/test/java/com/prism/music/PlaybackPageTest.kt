@@ -1,6 +1,7 @@
 package com.prism.music
 
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.performClick
 import com.prism.music.data.AutoplayLength
@@ -51,6 +52,7 @@ class PlaybackPageTest : ListeningPageHarness(SettingsPageId.PLAYBACK) {
     private val shuffleButton = t(R.string.playback_shuffle_button)
     private val keepShuffle = t(R.string.playback_keep_shuffle)
     private val crossfade = t(R.string.crossfade)
+    private val skipBlend = t(R.string.skip_blend)
     private val length = t(R.string.length)
     private val beatMatch = t(R.string.match_tempo_and_beats_dj_style)
     private val keepAlbums = t(R.string.keep_an_album_s_songs_whole)
@@ -74,7 +76,7 @@ class PlaybackPageTest : ListeningPageHarness(SettingsPageId.PLAYBACK) {
             listOf(t(R.string.what_plays_next), t(R.string.shuffle), t(R.string.playback_song_to_song), t(R.string.playback_speed_and_pitch), t(R.string.stopping_and_pausing)),
             groupTitles(),
         )
-        assertEquals(listOf(6, 2, 2, 2, 5), groupSizes())
+        assertEquals(listOf(6, 2, 3, 2, 5), groupSizes())
         assertEquals("nothing differs from how Prism comes", 0, changedRows())
         // No group is named as the page, and none as one of its own rows (§2.7: "Crossfade" was both).
         assertTrue(groupTitles().none { it == SettingsPageId.PLAYBACK.title })
@@ -87,6 +89,7 @@ class PlaybackPageTest : ListeningPageHarness(SettingsPageId.PLAYBACK) {
         assertEquals(SettingsTags.ROW_SWITCH, typeOf(noRepeats))
         assertEquals(SettingsTags.ROW_SLIDER, typeOf(longest))
         assertEquals(SettingsTags.ROW_CHOICE, typeOf(crossfade))
+        assertEquals(SettingsTags.ROW_SWITCH, typeOf(skipBlend))
         assertEquals(SettingsTags.ROW_PICK, typeOf(curve))
         assertEquals(CrossfadeCurve.EQUAL_POWER.label, valueOf(curve))
         assertEquals(SettingsTags.ROW_SLIDER, typeOf(speed))
@@ -101,7 +104,7 @@ class PlaybackPageTest : ListeningPageHarness(SettingsPageId.PLAYBACK) {
         until("crossfade on") { it.mix.on && !it.mix.auto }
         show()
         assertBudgets("crossfade on, fixed length")
-        assertEquals(listOf(6, 2, 5, 2, 5), groupSizes())
+        assertEquals(listOf(6, 2, 6, 2, 5), groupSizes())
         assertEquals("6 s", valueOf(length))
     }
 
@@ -165,6 +168,9 @@ class PlaybackPageTest : ListeningPageHarness(SettingsPageId.PLAYBACK) {
         pick(curve, CrossfadeCurve.LINEAR.label)
         until("crossfade_curve") { it.sound.crossfadeCurve == CrossfadeCurve.LINEAR }
         assertEquals(CrossfadeCurve.LINEAR.label, valueOf(curve))
+        // skip_blend (1.8.8)
+        tap(skipBlend)
+        until("skip_blend") { it.sound.skipBlend }
 
         // music_speed, music_pitch
         slide(speed, 1.25f)
@@ -187,15 +193,15 @@ class PlaybackPageTest : ListeningPageHarness(SettingsPageId.PLAYBACK) {
 
         // Every row now differs from how Prism comes, says so, and the page still fits.
         assertBudgets("everything changed")
-        assertEquals(listOf(6, 2, 5, 2, 5), groupSizes())
-        assertEquals(20, changedRows())
+        assertEquals(listOf(6, 2, 6, 2, 5), groupSizes())
+        assertEquals(21, changedRows())
         // The root's line is live.
         val line = SettingsPageId.PLAYBACK.value(stored)
         assertTrue(line, tr(R.string.root_crossfade_seconds, 9) in line && noRepeats in line)
 
         // Reset this page lists each of them and puts them all back.
         val lines = resetLines(confirm = true)
-        assertEquals(lines.joinToString("\n"), 20, lines.size)
+        assertEquals(lines.joinToString("\n"), 21, lines.size)
         assertTrue(lines.toString(), lines.any { it.startsWith("$shuffleButton: ${ShuffleButton.SHUFFLE_ONLY.label} → ${ShuffleButton.SHUFFLE_AND_SMART.label}") })
         until("the reset") { it.behavior == d.behavior && it.sound == d.sound }
         until("the reset") {
@@ -204,7 +210,7 @@ class PlaybackPageTest : ListeningPageHarness(SettingsPageId.PLAYBACK) {
                 it.mix.beatMatch == d.mix.beatMatch && it.mix.keepAlbums == d.mix.keepAlbums && it.stopOnSwipeAway == d.stopOnSwipeAway
         }
         assertEquals(0, changedRows())
-        assertEquals(listOf(6, 2, 2, 2, 5), groupSizes())
+        assertEquals(listOf(6, 2, 3, 2, 5), groupSizes())
     }
 
     /** D57 and #416: the two new rows, off (as Prism was) until picked. */
@@ -252,6 +258,44 @@ class PlaybackPageTest : ListeningPageHarness(SettingsPageId.PLAYBACK) {
         tap(faceDown)
         until("face_down_pause off") { !it.behavior.faceDownPause }
     }
+
+    /**
+     * 1.8.8 (#481, plan-mix §2): "Blend when I skip", a switch right under Crossfade, shown with Crossfade off too (it works
+     * either way), off until switched on, its words behind the ⓘ, found by search, and not part of a Look.
+     */
+    @Test fun blendWhenISkipIsASwitchUnderCrossfadeOffByDefault() {
+        show()
+        assertFalse(stored.sound.skipBlend)
+        assertFalse(stored.mix.on)
+        assertEquals(SettingsTags.ROW_SWITCH, typeOf(skipBlend))
+        // Right under the Crossfade row, in its group.
+        assertEquals(skipBlend, rowsUnder(crossfade).firstOrNull())
+        val e = SettingsIndex.entries.single { it.title == skipBlend }
+        assertEquals(SettingsPageId.PLAYBACK, e.page)
+        assertEquals(t(R.string.playback_song_to_song), e.group)
+        assertTrue(SettingsIndex.search("skip").any { it.title == skipBlend })
+        assertTrue(SettingsIndex.search("blend when").any { it.title == skipBlend })
+        // Behind the ⓘ only.
+        assertEquals(0, compose.onAllNodes(androidx.compose.ui.test.hasText(t(R.string.skip_blend_info))).fetchSemanticsNodes().size)
+        // A setting of how Prism plays, not of how it looks.
+        assertTrue("skip_blend" in container.settings.notLookNames)
+        tap(skipBlend)
+        until("skip_blend") { it.sound.skipBlend }
+        assertEquals(1, changedRows())
+        // Reset this page lists it and puts it back off.
+        assertTrue(resetLines(confirm = true).any { it.startsWith("$skipBlend: ") })
+        until("skip_blend reset") { !it.sound.skipBlend }
+    }
+
+    /** The rows of the group holding [title], after it, top to bottom. */
+    private fun rowsUnder(title: String): List<String> {
+        val card = compose.onAllNodes(hasTestTag(SettingsTags.GROUP_CARD)).fetchSemanticsNodes().first { c -> c.children.any { r -> texts(r).contains(title) } }
+        val names = card.children.map { r -> texts(r).firstOrNull().orEmpty() }
+        return names.drop(names.indexOf(title) + 1)
+    }
+
+    private fun texts(n: androidx.compose.ui.semantics.SemanticsNode): List<String> =
+        (n.config.getOrNull(SemanticsProperties.Text)?.map { it.text } ?: emptyList()) + n.children.flatMap { texts(it) }
 
     /** #493: why the last two songs didn't blend is the last line behind Crossfade's ⓘ, and only when there's a reason. */
     @Test fun crossfadesInfoSaysWhyTheLastSongsDidntBlend() {
