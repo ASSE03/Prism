@@ -484,7 +484,10 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
                             // Offline: the songs on the phone you're most likely to want, played in order.
                             val firstPick = com.prism.music.ui.tour.TourAnchor.QUICK_PICK // where the coach points first (1.8.8)
                             // First steps' D12: the song put in the mini player when step 1 is passed with Next.
-                            if (com.prism.music.ui.tour.TourAnchors.running) com.prism.music.ui.tour.FirstSteps.QuickPick((if (online) pickSongs else offlinePicks).firstOrNull())
+                            // The first one shown: with "Hide explicit" that's not always the list's first.
+                            if (com.prism.music.ui.tour.TourAnchors.running) com.prism.music.ui.tour.FirstSteps.QuickPick(
+                                com.prism.music.ui.tour.FirstSteps.firstShown(settings.behavior.explicitContent, if (online) pickSongs else offlinePicks),
+                            )
                             if (!online) { if (offlinePicks.isNotEmpty()) SongSection(cfg, cfg.titled(tr(R.string.quick_picks)), tr(R.string.ready_offline), offlinePicks, snap = true, firstAnchor = firstPick) }
                             else if (pickSongs.isNotEmpty()) SongSection(
                                 cfg, cfg.titled(tr(R.string.quick_picks)), picks?.strapline, pickSongs, snap = true, firstAnchor = firstPick,

@@ -229,6 +229,21 @@ class LyricsState(
     val lines: List<LyricLine> get() = lyrics?.lines.orEmpty()
     val unavailable: Boolean get() = !loading && lyrics == null && !waiting
 
+    /**
+     * Whether the song has lyrics, for the coach's Lyrics step (1.8.8): null while that isn't known yet. Lyrics waiting
+     * for mobile data count as there (opening them looks them up), so the step isn't passed over for them.
+     */
+    val forTour: Boolean? get() = forTour(loading, waiting, lyrics != null)
+
+    companion object {
+        /** [forTour] from the look-up's state: still [loading], [waiting] for the lyrics to be opened, or [found]. */
+        fun forTour(loading: Boolean, waiting: Boolean, found: Boolean): Boolean? = when {
+            waiting -> true
+            loading -> null
+            else -> found
+        }
+    }
+
     /** [savedOnly]: only what's saved on the phone, no lyric service asked (then [waiting] if there's nothing). */
     suspend fun loadAuto(savedOnly: Boolean = false) {
         // Podcast episodes have no lyrics: don't ask ten lyric services about one.

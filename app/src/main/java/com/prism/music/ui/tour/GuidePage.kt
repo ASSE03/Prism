@@ -73,10 +73,20 @@ fun guideTopics(query: String): List<TourTopic> {
  * four most used topics. Their steps are First steps' own, done for real.
  */
 object GuideTours {
-    private val play get() = CoachStep(
-        TourAnchor.QUICK_PICK, tr(R.string.first_steps_play), done = { it.playing },
-        prep = { setPlayerOpen(false); tab(Routes.HOME) },
-    )
+    // What was there as the step began, so music already playing or a song already liked isn't taken as done (as First
+    // steps does): a step made anew for each tour, with its own.
+    private val play: CoachStep get() {
+        var startSong: String? = null
+        var startPlaying = false
+        return CoachStep(
+            TourAnchor.QUICK_PICK, tr(R.string.first_steps_play),
+            done = { s ->
+                if (!s.playing) startPlaying = false // paused since: playing again counts
+                s.playing && s.song != null && (s.song.id != startSong || !startPlaying)
+            },
+            prep = { s -> startSong = s.song?.id; startPlaying = s.playing; setPlayerOpen(false); tab(Routes.HOME) },
+        )
+    }
     private val player get() = CoachStep(
         TourAnchor.MINI_PLAYER, tr(R.string.first_steps_player), done = { it.playerOpen },
         prep = { setPlayerOpen(false) },
@@ -87,10 +97,18 @@ object GuideTours {
         passOver = { it.playerOpen && it.songHasLyrics == false },
         prep = { setPlayerOpen(true) },
     )
-    private val like get() = CoachStep(
-        TourAnchor.PLAYER_LIKE, tr(R.string.first_steps_like), done = { it.songLiked },
-        prep = { setPlayerOpen(true) },
-    )
+    private val like: CoachStep get() {
+        var likedSong: String? = null
+        var likedBefore = false
+        return CoachStep(
+            TourAnchor.PLAYER_LIKE, tr(R.string.first_steps_like),
+            done = { s ->
+                if (!s.songLiked) likedBefore = false // unliked since: liking it again counts
+                s.songLiked && (!likedBefore || s.song?.id != likedSong)
+            },
+            prep = { s -> likedSong = s.song?.id; likedBefore = s.songLiked; setPlayerOpen(true) },
+        )
+    }
     private val libraryTab get() = CoachStep(
         TourAnchor.LIBRARY_TAB, tr(R.string.guide_how_library), done = { it.route == Routes.LIBRARY },
         prep = { setPlayerOpen(false) },
@@ -98,7 +116,7 @@ object GuideTours {
     private val looks get() = CoachStep(
         TourAnchor.SETTINGS_TAB, tr(R.string.first_steps_looks), done = { isSettings(it.route) },
         // No Settings tab: Home's profile picture carries the mark (1.8.8, as First steps).
-        prep = { s -> setPlayerOpen(false); if (!FirstSteps.settingsTabShown(s) && s.route != Routes.HOME) go(Routes.HOME) },
+        prep = { s -> setPlayerOpen(false); if (!FirstSteps.settingsTabShown(s) && s.route != Routes.HOME) tab(Routes.HOME) },
     )
 
     /** Settings, its first page or any page of it. */

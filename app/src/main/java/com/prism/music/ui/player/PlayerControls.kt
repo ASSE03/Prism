@@ -99,6 +99,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -127,6 +129,9 @@ fun formatTime(ms: Long): String {
     val s = (ms.coerceAtLeast(0)) / 1000
     return if (s >= 3600) "%d:%02d:%02d".format(s / 3600, (s % 3600) / 60, s % 60) else "%d:%02d".format(s / 60, s % 60)
 }
+
+/** How near the mark (each side) a tap opens it ([ThinSlider]'s markTap). */
+internal val MARK_TAP_HALF = 12.dp
 
 /** A hairline capsule with no thumb that thickens under the finger. */
 @Composable
@@ -161,8 +166,20 @@ fun ThinSlider(
     shape: BlendShape? = null,
     /** Points (0–1) that give a haptic step when dragged across without a tick drawn (the shaped bar's start of the blend). */
     quietMarks: List<Float> = emptyList(),
+    /**
+     * A point (0–1) a tap on opens something (1.8.8, the crossfade mark: its transition): a tap within [MARK_TAP_HALF] of
+     * it calls [onMarkTap] in place of seeking. A drag from it, and a tap anywhere else, still seek. The bar runs left to
+     * right in either direction of text, and so does this point. [markTag] / [markLabel]: its node, for tests and
+     * TalkBack (whose double tap calls [onMarkTap] too).
+     */
+    markTap: Float? = null,
+    onMarkTap: (() -> Unit)? = null,
+    markTag: String? = null,
+    markLabel: String? = null,
 ) {
     var dragging by remember { mutableStateOf(false) }
+    val markTapNow by androidx.compose.runtime.rememberUpdatedState(markTap.takeIf { onMarkTap != null })
+    val onMarkTapNow by androidx.compose.runtime.rememberUpdatedState(onMarkTap)
     // The shaped bar's outline, kept between frames; only made once a shape is there.
     val outline = remember(shape != null) { if (shape != null) BlendBarPath() else null }
     // The strands' paths, rebuilt in place each frame rather than made anew.
@@ -194,22 +211,40 @@ fun ThinSlider(
                     val down = awaitFirstDown(requireUnconsumed = false)
                     dragging = true
                     last = -1f
+                    // On the mark: a tap there opens it; moved past the touch slop, it's a drag that seeks as ever.
+                    val onMark = markTapNow?.let { m -> kotlin.math.abs(down.position.x - m * size.width) <= MARK_TAP_HALF.toPx() } == true
+                    var moved = false
                     (down.position.x / size.width).coerceIn(0f, 1f).let { crossed(it); onChange(it) }
                     while (true) {
                         val event = awaitPointerEvent()
                         val p = event.changes.firstOrNull { it.id == down.id } ?: break
                         if (!p.pressed) { p.consume(); break }
+                        if (!moved && (p.position - down.position).getDistance() > viewConfiguration.touchSlop) moved = true
                         if (p.positionChanged()) {
                             (p.position.x / size.width).coerceIn(0f, 1f).let { crossed(it); onChange(it) }
                             p.consume()
                         }
                     }
                     dragging = false
-                    onFinished?.invoke()
+                    val tapped = onMarkTapNow
+                    if (onMark && !moved && tapped != null) tapped() else onFinished?.invoke()
                 }
             },
         contentAlignment = Alignment.Center,
     ) {
+        // The mark's node: no touch handling of its own (the bar's gesture above has them all), placed from the left
+        // as the bar's values are, not mirrored right to left.
+        val mark = markTap
+        if (mark != null && onMarkTap != null) Box(
+            Modifier.matchParentSize()
+                .layout { measurable, constraints ->
+                    val w = (MARK_TAP_HALF * 2).roundToPx()
+                    val p = measurable.measure(Constraints.fixed(w, constraints.maxHeight))
+                    layout(constraints.maxWidth, constraints.maxHeight) { p.place((constraints.maxWidth * mark).toInt() - w / 2, 0) }
+                }
+                .then(if (markTag != null) Modifier.testTag(markTag) else Modifier)
+                .semantics { onClick(markLabel) { onMarkTap(); true } },
+        )
         Canvas(Modifier.fillMaxWidth().height(height)) {
             val r = CornerRadius(size.height / 2f)
             val filled = size.width * value.coerceIn(0f, 1f)
@@ -444,8 +479,15 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
     val transitionList = queueSource.takeIf { it.kind == com.prism.music.playback.QueueKind.PLAYLIST && !c.isTv }?.originId
     var transitionOpen by remember { mutableStateOf<com.prism.music.ui.screens.TransitionPair?>(null) }
     transitionOpen?.let { p -> com.prism.music.ui.screens.TransitionEditor(p) { transitionOpen = null } }
+    // The crossfade mark: a tap on it opens the transition into the next song (a drag from it still seeks).
+    val openTransition: (() -> Unit)? = if (blendMark != null && transitionList != null) ({
+        scrub = null
+        val q = pc.queue.value
+        val next = pc.upNext.value.firstOrNull()?.let { q.getOrNull(it)?.song }
+        val now = current
+        if (now != null && next != null && now.id != next.id) transitionOpen = com.prism.music.ui.screens.TransitionPair(transitionList, now, next)
+    }) else null
     Column(Modifier.fillMaxWidth()) {
-        androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxWidth()) {
         // Spectrum: a thin line, the played part in the split light (or the color picked for it).
         ThinSlider(
             value = shown,
@@ -466,21 +508,11 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
             ribbons = if (style == ScrubberStyle.RIBBONS && !waved) ({ ribbonPhase.floatValue }) else null,
             shape = blendShape,
             quietMarks = if (blendShape?.fadesOut == true) remember(blendShape) { listOf(blendShape.outFrom) } else emptyList(),
+            markTap = blendMark.takeIf { openTransition != null },
+            onMarkTap = openTransition,
+            markTag = com.prism.music.ui.screens.TRANSITION_PLAYER_MARK_TAG,
+            markLabel = tr(R.string.transition_edit),
         )
-        // The crossfade mark's own small strip over the bar: a tap there opens the transition into the next song.
-        if (blendMark != null && transitionList != null) {
-            Box(
-                Modifier.matchParentSize().then(Modifier.wrapContentWidth(Alignment.Start)).offset(x = maxWidth * blendMark - 12.dp).width(24.dp)
-                    .testTag(com.prism.music.ui.screens.TRANSITION_PLAYER_MARK_TAG)
-                    .clickable(onClickLabel = tr(R.string.transition_edit)) {
-                        val q = pc.queue.value
-                        val next = pc.upNext.value.firstOrNull()?.let { q.getOrNull(it)?.song }
-                        val now = current
-                        if (now != null && next != null && now.id != next.id) transitionOpen = com.prism.music.ui.screens.TransitionPair(transitionList, now, next)
-                    },
-            )
-        }
-        }
         Box(Modifier.fillMaxWidth().offset(y = (-9).dp).heightIn(min = 16.dp)) {
             val elapsed = settings.player.times == com.prism.music.data.prefs.PlayerTimes.BOTH || settings.player.times == com.prism.music.data.prefs.PlayerTimes.ELAPSED
             val left = settings.player.times == com.prism.music.data.prefs.PlayerTimes.BOTH || settings.player.times == com.prism.music.data.prefs.PlayerTimes.LEFT
