@@ -4430,6 +4430,16 @@
     <string name="skip_blend">Blend when I skip</string>
     <string name="skip_blend_info">Next, Previous and a tap in the queue blend into the song you picked over a second and a half instead of cutting: the song playing carries on until the next one is ready. A new list fades out briefly. Works with Crossfade off too. Performance mode and battery saver use a short fade instead; videos, podcasts, live streams, casting and Listen together always cut.</string>
     <string name="skip_blend_keywords">skip next previous blend fade cut</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism mixes like a DJ, picking a move for each pair of songs: a bass swap, a filter out, an echo out, a cut on the beat, or a blend. Songs are measured first, on Wi-Fi unless \"Measure songs on mobile data\" is on; until then they blend as with Automatic. An album playing through is left alone.</string>
+    <string name="automix_keywords">automix dj transitions bass swap echo filter mix</string>
+    <string name="automix_does_this">Automix does this for you</string>
+    <string name="crossfade_off_detail">One song, then the next</string>
+    <string name="crossfade_auto_detail">Fits how songs end and begin</string>
+    <string name="crossfade_fixed_detail">The same length every time</string>
+    <string name="crossfade_automix_detail">DJ-style moves, on the beat</string>
+    <string name="hear_it_on_the_next_song">Hear it on the next song</string>
+    <string name="hear_it_on_the_next_song_none">Nothing is coming up to blend into yet</string>
     <string name="mix_why_last">Last time: %1$s</string>
     <string name="mix_why_last_blend">Why the last songs didn\'t blend</string>
     <string name="mix_why_nothing_next">Nothing was up next in the queue.</string>

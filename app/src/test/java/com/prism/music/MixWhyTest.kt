@@ -277,7 +277,7 @@ class MixWhyTest {
     // ------------------------------------------------------------------ Where it shows
 
     @Test fun crossfadesInfoGainsALastLineOnlyWithAReason() {
-        val base = tr(R.string.crossfade_choice_info)
+        val base = tr(R.string.crossfade_choice_info) + "\n\n" + tr(R.string.automix_info)
         assertEquals(base, crossfadeInfo(null))
         val with = crossfadeInfo(MixRefusal(MixWhy.SHORT, "a", "b"))
         assertTrue(with, with.startsWith(base) && with.endsWith("\n\nLast time: This song is shorter than 30 seconds."))

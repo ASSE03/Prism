@@ -2,6 +2,10 @@ package com.prism.music
 
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.performClick
 import com.prism.music.data.AutoplayLength
@@ -88,7 +92,9 @@ class PlaybackPageTest : ListeningPageHarness(SettingsPageId.PLAYBACK) {
         assertEquals(QueueEnd.MIXED.label, valueOf(queueEnds))
         assertEquals(SettingsTags.ROW_SWITCH, typeOf(noRepeats))
         assertEquals(SettingsTags.ROW_SLIDER, typeOf(longest))
-        assertEquals(SettingsTags.ROW_CHOICE, typeOf(crossfade))
+        // 1.8.8: four choices with Automix, as example cards in a sheet.
+        assertEquals(SettingsTags.ROW_PICK, typeOf(crossfade))
+        assertEquals(Crossfade.OFF.label, valueOf(crossfade))
         assertEquals(SettingsTags.ROW_SWITCH, typeOf(skipBlend))
         assertEquals(SettingsTags.ROW_PICK, typeOf(curve))
         assertEquals(CrossfadeCurve.EQUAL_POWER.label, valueOf(curve))
@@ -146,11 +152,14 @@ class PlaybackPageTest : ListeningPageHarness(SettingsPageId.PLAYBACK) {
 
         // mix, mix_auto: "Crossfade"; its three rows only show with it on (the length with a fixed one).
         assertFalse(hasRow(length) || hasRow(beatMatch) || hasRow(keepAlbums))
-        choose(crossfade, Crossfade.AUTO.label)
+        pick(crossfade, Crossfade.AUTO.label)
         until("mix") { it.mix.on && it.mix.auto }
         assertFalse(hasRow(length))
-        choose(crossfade, Crossfade.FIXED.label)
-        until("mix_auto") { it.mix.on && !it.mix.auto }
+        // mix_automix (1.8.8)
+        pick(crossfade, Crossfade.AUTOMIX.label)
+        until("mix_automix") { it.mix.on && it.mix.auto && it.mix.automix }
+        pick(crossfade, Crossfade.FIXED.label)
+        until("mix_auto") { it.mix.on && !it.mix.auto && !it.mix.automix }
         // mix_seconds
         slide(length, 9f)
         until("mix_seconds") { it.mix.seconds == 9 }
@@ -285,6 +294,79 @@ class PlaybackPageTest : ListeningPageHarness(SettingsPageId.PLAYBACK) {
         // Reset this page lists it and puts it back off.
         assertTrue(resetLines(confirm = true).any { it.startsWith("$skipBlend: ") })
         until("skip_blend reset") { !it.sound.skipBlend }
+    }
+
+    /**
+     * 1.8.8 (plan-mix §3.2): Automix, the fourth card in Crossfade's sheet, off until picked. Picked, the length stays
+     * hidden (it's automatic) and "Match tempo and beats" is greyed and shown on, saying Automix does it; its words are
+     * behind the ⓘ only; search finds it by DJ words; it isn't part of a Look; the root says so; Reset puts it back.
+     */
+    @Test fun automixIsTheFourthCardOffByDefault() {
+        show()
+        assertFalse(stored.mix.automix)
+        tap(crossfade)
+        val cards = compose.onAllNodes(hasTestTag(SettingsTags.SHEET_OPTION)).fetchSemanticsNodes()
+        assertEquals(4, cards.size)
+        assertEquals(listOf(Crossfade.OFF, Crossfade.AUTO, Crossfade.FIXED, Crossfade.AUTOMIX).map { it.label }, cards.map { texts(it).last() })
+        // Nothing plays here: no "Hear it on the next song".
+        assertEquals(0, compose.onAllNodes(hasTestTag(com.prism.music.ui.screens.settings.PlaybackTags.HEAR_IT)).fetchSemanticsNodes().size)
+        swipeSheetAway()
+        pick(crossfade, Crossfade.AUTOMIX.label)
+        until("mix_automix") { it.mix.on && it.mix.auto && it.mix.automix }
+        assertEquals(Crossfade.AUTOMIX.label, valueOf(crossfade))
+        assertFalse("the length is automatic with Automix", hasRow(length))
+        row(beatMatch).assertIsNotEnabled()
+        assertEquals(t(R.string.automix_does_this), valueOf(beatMatch))
+        assertTrue(row(beatMatch).fetchSemanticsNode().config[SemanticsProperties.ToggleableState] == androidx.compose.ui.state.ToggleableState.On)
+        assertFalse("the stored beat matching is kept for the other choices", stored.mix.beatMatch)
+        row(keepAlbums).assertIsEnabled()
+        assertEquals(1, changedRows())
+        assertTrue(tr(R.string.automix) in SettingsPageId.PLAYBACK.value(stored))
+        // Behind the ⓘ only.
+        assertEquals(0, compose.onAllNodes(androidx.compose.ui.test.hasText(t(R.string.automix_info), substring = true)).fetchSemanticsNodes().size)
+        assertTrue(crossfadeInfoText().contains(t(R.string.automix_info)))
+        for (q in listOf("automix", "dj", "bass swap", "echo", "transitions")) {
+            assertTrue(q, SettingsIndex.search(q).any { it.title == crossfade && it.page == SettingsPageId.PLAYBACK })
+        }
+        assertTrue("mix_automix" in container.settings.notLookNames)
+        // Another choice turns it off; Off keeps it for when Crossfade comes back.
+        pick(crossfade, Crossfade.OFF.label)
+        until("off") { !it.mix.on && it.mix.automix }
+        pick(crossfade, Crossfade.AUTO.label)
+        until("automatic") { it.mix.on && !it.mix.automix }
+        row(beatMatch).assertIsEnabled()
+        pick(crossfade, Crossfade.AUTOMIX.label)
+        until("automix again") { it.mix.automix }
+        // Reset this page puts Crossfade back off, Automix with it.
+        assertTrue(resetLines(confirm = true).any { it.startsWith("$crossfade: ${Crossfade.AUTOMIX.label} → ${Crossfade.OFF.label}") })
+        until("reset") { !it.mix.on && !it.mix.automix }
+    }
+
+    /** The Crossfade row's ⓘ text, as [crossfadeInfo] gives it with no last reason. */
+    private fun crossfadeInfoText() = com.prism.music.ui.screens.settings.crossfadeInfo(null)
+
+    /** "Hear it on the next song": greyed while nothing is coming, and a tap hands over where to seek. */
+    @Test fun hearItOnTheNextSongSeeksOrWaits() {
+        var heard: Long? = null
+        var at by androidx.compose.runtime.mutableStateOf<Long?>(null)
+        compose.setContent {
+            androidx.compose.runtime.CompositionLocalProvider(com.prism.music.ui.theme.LocalContainer provides container) {
+                com.prism.music.ui.theme.PrismTheme(stored, artworkColor = null) {
+                    androidx.compose.runtime.CompositionLocalProvider(com.prism.music.ui.theme.LocalAppSettings provides stored) {
+                        androidx.compose.foundation.layout.Column { com.prism.music.ui.screens.settings.HearItButton(at) { heard = it } }
+                    }
+                }
+            }
+        }
+        val button = compose.onNode(hasTestTag(SettingsTags.ROW_LINK) and androidx.compose.ui.test.hasAnyAncestor(hasTestTag(com.prism.music.ui.screens.settings.PlaybackTags.HEAR_IT)))
+        button.assertIsNotEnabled()
+        assertEquals(1, compose.onAllNodes(androidx.compose.ui.test.hasText(t(R.string.hear_it_on_the_next_song_none))).fetchSemanticsNodes().size)
+        at = 188_000L
+        compose.waitForIdle()
+        button.assertIsEnabled()
+        button.performClick()
+        compose.waitForIdle()
+        assertEquals(188_000L, heard)
     }
 
     /** The rows of the group holding [title], after it, top to bottom. */

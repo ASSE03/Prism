@@ -497,6 +497,12 @@ data class MixPrefs(
     val keepAlbums: Boolean = false,
     /** Tempo analysis (a 1–4 MB download per song) may use mobile data, not only Wi-Fi. */
     val tempoOnCellular: Boolean = false,
+    /**
+     * 1.8.8 (plan-mix §3.2): "Automix", the fourth Crossfade choice. With [on], Prism picks a DJ-style move for each pair
+     * of songs (bass swap, filter out, echo out, cut on the beat, or a blend); it implies [auto] and beat matching. Off by
+     * default; Crossfade's Off keeps it, for when Crossfade comes back.
+     */
+    val automix: Boolean = false,
 )
 
 /** Home: its sections, header, greeting tiles and buttons (1.8.7: moved out of [AppSettings] into a group of their own). */
@@ -2126,6 +2132,8 @@ class SettingsRepository(
         val mixBeatMatch = booleanPreferencesKey("mix_beat_match")
         val mixKeepAlbums = booleanPreferencesKey("mix_keep_albums")
         val mixTempoOnCellular = booleanPreferencesKey("mix_tempo_cellular")
+        /** 1.8.8 ([MixPrefs.automix]). */
+        val mixAutomix = booleanPreferencesKey("mix_automix")
         val contentCountry = stringPreferencesKey("content_country")
         val videoMaxHeight = intPreferencesKey("video_max_height")
         val cacheSizeMb = intPreferencesKey("cache_size_mb")
@@ -2543,6 +2551,8 @@ class SettingsRepository(
                 "own_lossy_files",
                 // 1.8.8 (#481): how a skip sounds, not a look.
                 "skip_blend",
+                // 1.8.8 (plan-mix §3.2): Automix, how songs meet, as the other mix keys.
+                "mix_automix",
                 // 1.8.1 (#216): what plays and shows, not a look.
                 "explicit_content",
                 // 1.8.2 (#349): where Home's Quick picks come from.
@@ -2919,6 +2929,7 @@ class SettingsRepository(
                 beatMatch = p[K.mixBeatMatch] ?: d.mix.beatMatch,
                 keepAlbums = p[K.mixKeepAlbums] ?: d.mix.keepAlbums,
                 tempoOnCellular = p[K.mixTempoOnCellular] ?: d.mix.tempoOnCellular,
+                automix = p[K.mixAutomix] ?: d.mix.automix,
             ),
             home = HomePrefs(
                 layout = p[K.homeLayout]?.let {
@@ -3514,6 +3525,7 @@ class SettingsRepository(
     fun setMixBeatMatch(v: Boolean) = edit { it[K.mixBeatMatch] = v }
     fun setMixKeepAlbums(v: Boolean) = edit { it[K.mixKeepAlbums] = v }
     fun setMixTempoOnCellular(v: Boolean) = edit { it[K.mixTempoOnCellular] = v }
+    fun setMixAutomix(v: Boolean) = edit { it[K.mixAutomix] = v }
     fun setContentCountry(v: String) = edit { it[K.contentCountry] = v }
     fun setSkipSilence(v: Boolean) = edit { it[K.skipSilence] = v }
     fun setVideoMaxHeight(v: Int) = edit { it[K.videoMaxHeight] = v }
