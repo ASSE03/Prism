@@ -38,7 +38,7 @@ class AppCaches(private val parts: List<Part>) {
 /**
  * #535: the caches' room on a TV box. Boxes like the Onn 4K and Chromecast with Google TV have 8 GB in all, and the
  * phone's 5 GB song cache filled them (the only way out was wiping Prism's data). On a TV the song cache takes half of
- * what is free above [KEEP_FREE], at most [SONG_MAX] and never under [SONG_MIN]; the other caches have smaller fixed
+ * what is free above [KEEP_FREE], at most [SONG_MAX] and at least [SONG_MIN] where that much is spare; the other caches have smaller fixed
  * rooms. A phone keeps its own rooms.
  */
 object TvCacheRoom {
@@ -54,18 +54,30 @@ object TvCacheRoom {
 
     /**
      * The song cache's room, from what the box has [freeBytes] and what the cache already holds [usedBytes] (the two
-     * together don't change as the cache trims, so neither does the room).
+     * together don't change as the cache trims, so neither does the room). Never more than what is free above
+     * [KEEP_FREE] (#535: a box with under 1 GB free gets no room, the songs still stream); [SONG_MIN] only when there is
+     * that much to spare. [freeBytes] below 0 is unknown (no good read yet): the smallest room.
      */
-    fun songCache(freeBytes: Long, usedBytes: Long): Long =
-        ((freeBytes + usedBytes - KEEP_FREE) / 2).coerceIn(SONG_MIN, SONG_MAX)
+    fun songCache(freeBytes: Long, usedBytes: Long): Long {
+        if (freeBytes < 0) return SONG_MIN
+        val spare = (freeBytes + usedBytes - KEEP_FREE).coerceAtLeast(0L)
+        return maxOf(spare / 2, minOf(SONG_MIN, spare)).coerceAtMost(SONG_MAX)
+    }
 
-    /** The free space, read at most every [everyMs] (the evictor asks at every piece of a song it saves). */
+    /**
+     * The free space, read at most every [everyMs] (the evictor asks at every piece of a song it saves). A read of 0 or
+     * one that fails is unknown (`File.usableSpace` answers 0 when it can't tell): the last good read stands, or -1
+     * before there is one.
+     */
     class FreeSpace(private val everyMs: Long = 10_000, private val now: () -> Long = System::currentTimeMillis, private val read: () -> Long) {
         @Volatile private var at = Long.MIN_VALUE
-        @Volatile private var last = 0L
+        @Volatile private var last = -1L
         operator fun invoke(): Long {
             val t = now()
-            if (at == Long.MIN_VALUE || t - at >= everyMs) { last = runCatching(read).getOrDefault(last); at = t }
+            if (at == Long.MIN_VALUE || t - at >= everyMs) {
+                runCatching(read).getOrNull()?.takeIf { it > 0 }?.let { last = it }
+                at = t
+            }
             return last
         }
     }
