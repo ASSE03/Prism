@@ -5855,4 +5855,22 @@
     <string name="transition_echo_out_detail">Последний бит затихает эхом, когда начинается следующая песня</string>
     <string name="transition_mark">Ваш собственный переход к следующей песне</string>
     <string name="transition_edit">Изменить переход к следующей песне</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: песни текут, как в диджей-сете</string>
+    <string name="tour_188_mix_about">Теперь песни могут переходить одна в другую так, как их свёл бы диджей.</string>
+    <string name="tour_188_mix_point_1">Automix, в разделе «%1$s»: bass swap, эхо, фильтр или срез, подобранные для каждой пары песен</string>
+    <string name="tour_188_mix_point_2">Смешивать при пропуске: «Далее» и «Назад» плавно переходят вместо резкой смены</string>
+    <string name="tour_188_mix_point_3">Свои переходы: в плейлисте у песни ⋯ → Переход к следующей песне</string>
+    <string name="tour_188_mix_point_4">Всё выключено, пока вы не включите</string>
+    <string name="tour_188_mix_coach">Выберите Automix здесь. Смешивать при пропуске чуть ниже.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism сводит, как диджей, и выбирает приём для каждой пары песен: bass swap, filter out, echo out, срез по биту или плавное смешивание. Сначала песни анализируются, по Wi-Fi, если не включено \"Анализировать песни через мобильный интернет\"; до этого они смешиваются, как при режиме «Автоматически». Альбом, играющий целиком, остаётся нетронутым.</string>
+    <string name="automix_keywords">automix dj автомикс диджей переходы плавный переход bass swap эхо фильтр микс сведение</string>
+    <string name="automix_does_this">Automix делает это за вас</string>
+    <string name="crossfade_off_detail">Одна песня, потом следующая</string>
+    <string name="crossfade_auto_detail">Подстраивается под конец и начало песен</string>
+    <string name="crossfade_fixed_detail">Каждый раз одинаковой длины</string>
+    <string name="crossfade_automix_detail">Приёмы диджея, в такт</string>
+    <string name="hear_it_on_the_next_song">Послушать на следующей песне</string>
+    <string name="hear_it_on_the_next_song_none">Пока нет песни, с которой можно смешать</string>
 </resources>

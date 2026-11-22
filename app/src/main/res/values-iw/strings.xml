@@ -5779,4 +5779,22 @@
     <string name="transition_echo_out_detail">הפעימה האחרונה מהדהדת ונמוגה כשהשיר הבא מתחיל</string>
     <string name="transition_mark">המעבר שלך אל השיר הבא</string>
     <string name="transition_edit">עריכת המעבר אל השיר הבא</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">מיקס: שירים שזורמים כמו סט של DJ</string>
+    <string name="tour_188_mix_about">עכשיו שירים יכולים לעבור זה לזה כמו שDJ היה מערבב אותם.</string>
+    <string name="tour_188_mix_point_1">Automix, תחת %1$s: החלפת בס, הד, סינון או חיתוך שנבחרים לכל זוג שירים</string>
+    <string name="tour_188_mix_point_2">מעבר חלק כשאני מדלג: הבא וקודם נמזגים במקום להיחתך</string>
+    <string name="tour_188_mix_point_3">מעברים משלכם: בפלייליסט, ⋯ של שיר ← מעבר לשיר הבא</string>
+    <string name="tour_188_mix_point_4">הכול כבוי עד שמפעילים</string>
+    <string name="tour_188_mix_coach">בחרו כאן Automix. מעבר חלק כשאני מדלג נמצא ממש מתחת.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism מערבב כמו DJ ובוחר מהלך לכל זוג שירים: החלפת בס, סינון החוצה, הד יוצא, חיתוך על הביט או מיזוג. השירים נמדדים קודם, ב-Wi-Fi, אלא אם \"מדידת שירים בחבילת גלישה\" פועל; עד אז הם נמזגים כמו במצב אוטומטי. אלבום שמתנגן ברצף נשאר כמו שהוא.</string>
+    <string name="automix_keywords">automix dj מעברים בס הד סינון מיקס מיזוג מעבר הדרגתי</string>
+    <string name="automix_does_this">Automix עושה את זה בשבילכם</string>
+    <string name="crossfade_off_detail">שיר אחד, ואז הבא</string>
+    <string name="crossfade_auto_detail">מתאים לאופן שבו שירים נגמרים ומתחילים</string>
+    <string name="crossfade_fixed_detail">אותו אורך בכל פעם</string>
+    <string name="crossfade_automix_detail">מהלכים בסגנון DJ, על הביט</string>
+    <string name="hear_it_on_the_next_song">שמעו את זה בשיר הבא</string>
+    <string name="hear_it_on_the_next_song_none">עדיין אין שיר קרוב להתמזג אליו</string>
 </resources>

@@ -5627,4 +5627,22 @@
     <string name="transition_echo_out_detail">จังหวะสุดท้ายก้องหายไปเมื่อเพลงถัดไปเริ่ม</string>
     <string name="transition_mark">การเปลี่ยนแบบของคุณเองไปเพลงถัดไป</string>
     <string name="transition_edit">แก้ไขการเปลี่ยนไปเพลงถัดไป</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: เพลงไหลต่อกันเหมือนเซ็ต DJ</string>
+    <string name="tour_188_mix_about">ตอนนี้เพลงเปลี่ยนต่อกันได้เหมือนที่ DJ มิกซ์</string>
+    <string name="tour_188_mix_point_1">Automix ใน %1$s: เลือกสลับเบส เอคโค่ ฟิลเตอร์ หรือตัดให้แต่ละคู่เพลง</string>
+    <string name="tour_188_mix_point_2">ผสมเมื่อฉันข้ามเพลง: ถัดไปและก่อนหน้าจะเฟดข้ามแทนการตัดทันที</string>
+    <string name="tour_188_mix_point_3">การเปลี่ยนเพลงของคุณเอง: ในเพลย์ลิสต์ ที่ ⋯ ของเพลง → การเปลี่ยนไปเพลงถัดไป</string>
+    <string name="tour_188_mix_point_4">ปิดทั้งหมดจนกว่าคุณจะเปิด</string>
+    <string name="tour_188_mix_coach">เลือก Automix ที่นี่ ผสมเมื่อฉันข้ามเพลงอยู่ด้านล่างพอดี</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism มิกซ์เหมือน DJ โดยเลือกท่วงท่าให้แต่ละคู่เพลง ได้แก่ สลับเบส ฟิลเตอร์ออก เอคโค่ออก ตัดตามบีต หรือผสมกัน ระบบจะวัดเพลงก่อนผ่าน Wi-Fi เว้นแต่เปิด \"วัดเพลงเมื่อใช้อินเทอร์เน็ตมือถือ\" ไว้ จนกว่าจะวัดเสร็จ เพลงจะผสมกันแบบอัตโนมัติ อัลบั้มที่เล่นต่อเนื่องจะไม่ถูกแตะต้อง</string>
+    <string name="automix_keywords">automix dj ออโต้มิกซ์ ดีเจ การเปลี่ยนเพลง สลับเบส เอคโค่ ฟิลเตอร์ มิกซ์ ครอสเฟด</string>
+    <string name="automix_does_this">Automix ทำสิ่งนี้ให้คุณ</string>
+    <string name="crossfade_off_detail">เล่นเพลงหนึ่ง แล้วต่อเพลงถัดไป</string>
+    <string name="crossfade_auto_detail">ปรับตามการจบและการเริ่มของเพลง</string>
+    <string name="crossfade_fixed_detail">ความยาวเท่ากันทุกครั้ง</string>
+    <string name="crossfade_automix_detail">ท่วงท่าสไตล์ DJ ตามบีต</string>
+    <string name="hear_it_on_the_next_song">ลองฟังที่เพลงถัดไป</string>
+    <string name="hear_it_on_the_next_song_none">ยังไม่มีเพลงถัดไปให้ผสมเข้าด้วย</string>
 </resources>

@@ -5627,4 +5627,22 @@
     <string name="transition_echo_out_detail">다음 곡이 시작되면 마지막 비트가 에코로 사라집니다</string>
     <string name="transition_mark">다음 곡으로 가는 나만의 전환</string>
     <string name="transition_edit">다음 곡으로 가는 전환 편집</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: DJ 세트처럼 흐르는 곡들</string>
+    <string name="tour_188_mix_about">이제 곡과 곡이 DJ가 믹스하듯 이어질 수 있습니다.</string>
+    <string name="tour_188_mix_point_1">Automix, %1$s 아래: 곡 쌍마다 베이스 스왑, 에코, 필터, 컷 중에서 선택</string>
+    <string name="tour_188_mix_point_2">건너뛸 때 섞기: 다음과 이전이 끊기지 않고 자연스럽게 교차</string>
+    <string name="tour_188_mix_point_3">나만의 전환: 재생목록에서 곡의 ⋯ → 다음 곡으로 전환</string>
+    <string name="tour_188_mix_point_4">켜기 전까지는 모두 꺼져 있습니다</string>
+    <string name="tour_188_mix_coach">여기서 Automix를 선택하세요. 건너뛸 때 섞기는 바로 아래에 있습니다.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism이 DJ처럼 믹스하며, 곡 쌍마다 베이스 스왑, 필터 아웃, 에코 아웃, 비트에 맞춘 컷, 블렌드 중 하나를 고릅니다. 곡은 먼저 측정되며, \"모바일 데이터에서 곡 측정\"을 켜지 않으면 Wi-Fi에서 측정합니다. 그전까지는 자동과 같이 블렌드합니다. 처음부터 끝까지 재생되는 앨범은 그대로 둡니다.</string>
+    <string name="automix_keywords">automix 오토믹스 dj 디제이 전환 트랜지션 베이스 스왑 에코 필터 믹스 크로스페이드</string>
+    <string name="automix_does_this">Automix가 알아서 합니다</string>
+    <string name="crossfade_off_detail">한 곡이 끝나면 다음 곡</string>
+    <string name="crossfade_auto_detail">곡의 끝과 시작에 맞춥니다</string>
+    <string name="crossfade_fixed_detail">매번 같은 길이</string>
+    <string name="crossfade_automix_detail">비트에 맞춘 DJ 스타일 전환</string>
+    <string name="hear_it_on_the_next_song">다음 곡에서 들어보기</string>
+    <string name="hear_it_on_the_next_song_none">아직 이어서 섞을 다음 곡이 없습니다</string>
 </resources>

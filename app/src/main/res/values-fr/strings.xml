@@ -5779,4 +5779,22 @@
     <string name="transition_echo_out_detail">Le dernier temps s\'éteint en écho quand le titre suivant démarre</string>
     <string name="transition_mark">Votre propre transition vers le titre suivant</string>
     <string name="transition_edit">Modifier la transition vers le titre suivant</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix : des titres qui s\'enchaînent comme un set de DJ</string>
+    <string name="tour_188_mix_about">Les titres peuvent maintenant s\'enchaîner comme le ferait un DJ.</string>
+    <string name="tour_188_mix_point_1">Automix, sous %1$s : un bass swap, un écho, un filtre ou une coupure choisi pour chaque paire de titres</string>
+    <string name="tour_188_mix_point_2">Fondu quand je passe : Suivant et Précédent se fondent au lieu de couper</string>
+    <string name="tour_188_mix_point_3">Vos propres transitions : dans une playlist, ⋯ d\'un titre → Transition vers le titre suivant</string>
+    <string name="tour_188_mix_point_4">Tout est désactivé tant que vous ne l\'activez pas</string>
+    <string name="tour_188_mix_coach">Choisissez Automix ici. Fondu quand je passe est juste en dessous.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix : Prism mixe comme un DJ et choisit une transition pour chaque paire de titres : un bass swap, un filter out, un echo out, une coupure sur le temps ou un fondu. Les titres sont d\'abord mesurés, en Wi-Fi sauf si « Mesurer les titres avec les données mobiles » est activé ; d\'ici là, ils se fondent comme avec Automatique. Un album lu en entier est laissé tel quel.</string>
+    <string name="automix_keywords">automix dj transitions bass swap écho filtre mix mixage fondu enchaîné</string>
+    <string name="automix_does_this">Automix s\'en occupe pour vous</string>
+    <string name="crossfade_off_detail">Un titre, puis le suivant</string>
+    <string name="crossfade_auto_detail">S\'adapte à la fin et au début des titres</string>
+    <string name="crossfade_fixed_detail">La même durée à chaque fois</string>
+    <string name="crossfade_automix_detail">Transitions de DJ, sur le tempo</string>
+    <string name="hear_it_on_the_next_song">L\'entendre sur le titre suivant</string>
+    <string name="hear_it_on_the_next_song_none">Aucun titre à venir avec lequel se fondre pour l\'instant</string>
 </resources>

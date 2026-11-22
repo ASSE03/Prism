@@ -5703,4 +5703,22 @@
     <string name="transition_echo_out_detail">अगला गाना शुरू होते ही आख़िरी बीट गूँजकर मिट जाती है</string>
     <string name="transition_mark">अगले गाने में आपका अपना ट्रांज़िशन</string>
     <string name="transition_edit">अगले गाने में ट्रांज़िशन बदलें</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">मिक्स: गाने जो DJ सेट की तरह बहते हैं</string>
+    <string name="tour_188_mix_about">अब गाने एक-दूसरे में वैसे ही बदल सकते हैं जैसे कोई DJ मिलाता है।</string>
+    <string name="tour_188_mix_point_1">Automix, %1$s के नीचे: हर गाने की जोड़ी के लिए चुना गया बास स्वैप, इको, फ़िल्टर या कट</string>
+    <string name="tour_188_mix_point_2">छोड़ने पर घुलाएँ: अगला और पिछला कटने की जगह आपस में घुलते हैं</string>
+    <string name="tour_188_mix_point_3">अपने ट्रांज़िशन: प्लेलिस्ट में, गाने का ⋯ → अगले गाने में ट्रांज़िशन</string>
+    <string name="tour_188_mix_point_4">आप चालू करें, तब तक सब बंद</string>
+    <string name="tour_188_mix_coach">Automix यहाँ चुनें। छोड़ने पर घुलाएँ ठीक नीचे है।</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism DJ की तरह मिक्स करता है और हर गाने की जोड़ी के लिए एक चाल चुनता है: बास स्वैप, फ़िल्टर आउट, इको आउट, बीट पर कट, या मिलाव। गानों को पहले मापा जाता है, Wi-Fi पर, जब तक \"मोबाइल डेटा पर गाने मापें\" चालू न हो; तब तक वे अपने-आप वाले तरीक़े की तरह घुलते हैं। पूरा बजता एल्बम जैसा है वैसा रहता है।</string>
+    <string name="automix_keywords">automix dj ट्रांज़िशन बास स्वैप इको फ़िल्टर मिक्स क्रॉसफ़ेड</string>
+    <string name="automix_does_this">Automix यह आपके लिए करता है</string>
+    <string name="crossfade_off_detail">एक गाना, फिर अगला</string>
+    <string name="crossfade_auto_detail">गानों के अंत और शुरुआत के हिसाब से</string>
+    <string name="crossfade_fixed_detail">हर बार एक जैसी लंबाई</string>
+    <string name="crossfade_automix_detail">DJ स्टाइल चालें, बीट पर</string>
+    <string name="hear_it_on_the_next_song">अगले गाने पर सुनें</string>
+    <string name="hear_it_on_the_next_song_none">घुलने के लिए अभी कोई गाना आने वाला नहीं है</string>
 </resources>

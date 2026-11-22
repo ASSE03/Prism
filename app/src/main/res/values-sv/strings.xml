@@ -5703,4 +5703,22 @@
     <string name="transition_echo_out_detail">Sista beatet ekar bort när nästa låt börjar</string>
     <string name="transition_mark">Din egen övergång till nästa låt</string>
     <string name="transition_edit">Redigera övergången till nästa låt</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: låtar som flyter som ett DJ-set</string>
+    <string name="tour_188_mix_about">Låtar kan nu glida in i varandra på det sätt som en DJ skulle mixa dem.</string>
+    <string name="tour_188_mix_point_1">Automix, under %1$s: en bass swap, eko, filter eller klipp vald för varje låtpar</string>
+    <string name="tour_188_mix_point_2">Tona över när jag hoppar: Nästa och Föregående tonas över i stället för att klippas</string>
+    <string name="tour_188_mix_point_3">Egna övergångar: i en spellista, en låts ⋯ → Övergång till nästa låt</string>
+    <string name="tour_188_mix_point_4">Allt är av tills du slår på det</string>
+    <string name="tour_188_mix_coach">Välj Automix här. Tona över när jag hoppar finns precis under.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism mixar som en DJ och väljer ett drag för varje låtpar: en bass swap, filter out, echo out, ett klipp på taktslaget eller en övertoning. Låtarna mäts först, över Wi-Fi om inte \"Mät låtar på mobildata\" är på; tills dess tonas de över som med Automatisk. Ett album som spelas igenom lämnas orört.</string>
+    <string name="automix_keywords">automix dj övergångar övertoning bass swap eko filter mix mixa</string>
+    <string name="automix_does_this">Automix gör detta åt dig</string>
+    <string name="crossfade_off_detail">En låt, sedan nästa</string>
+    <string name="crossfade_auto_detail">Anpassas efter hur låtar slutar och börjar</string>
+    <string name="crossfade_fixed_detail">Lika lång varje gång</string>
+    <string name="crossfade_automix_detail">DJ-drag, på taktslaget</string>
+    <string name="hear_it_on_the_next_song">Lyssna på nästa låt</string>
+    <string name="hear_it_on_the_next_song_none">Det kommer ingen låt att tona över till än</string>
 </resources>

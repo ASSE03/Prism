@@ -5627,4 +5627,22 @@
     <string name="transition_echo_out_detail">Rentak terakhir bergema pergi apabila lagu seterusnya bermula</string>
     <string name="transition_mark">Peralihan anda sendiri ke lagu seterusnya</string>
     <string name="transition_edit">Edit peralihan ke lagu seterusnya</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: lagu mengalir seperti set DJ</string>
+    <string name="tour_188_mix_about">Lagu kini boleh bersambung antara satu sama lain seperti diadun oleh DJ.</string>
+    <string name="tour_188_mix_point_1">Automix, di bawah %1$s: tukar bes, gema, tapis atau potong dipilih untuk setiap pasangan lagu</string>
+    <string name="tour_188_mix_point_2">Adun apabila saya langkau: Seterusnya dan Sebelumnya bersilang, bukan terpotong</string>
+    <string name="tour_188_mix_point_3">Peralihan anda sendiri: dalam senarai main, ⋯ pada lagu → Peralihan ke lagu seterusnya</string>
+    <string name="tour_188_mix_point_4">Semuanya mati sehingga anda menghidupkannya</string>
+    <string name="tour_188_mix_coach">Pilih Automix di sini. Adun apabila saya langkau ada di bawahnya.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism mengadun seperti DJ dan memilih satu gerakan untuk setiap pasangan lagu: tukar bes, tapis keluar, gema keluar, potongan pada rentak atau adunan. Lagu diukur dahulu, pada Wi-Fi kecuali \"Ukur lagu pada data mudah alih\" dihidupkan; sehingga itu lagu diadun seperti Automatik. Album yang dimainkan penuh tidak diusik.</string>
+    <string name="automix_keywords">automix dj peralihan tukar bes gema tapis adun mix pudar silang</string>
+    <string name="automix_does_this">Automix melakukan ini untuk anda</string>
+    <string name="crossfade_off_detail">Satu lagu, kemudian yang seterusnya</string>
+    <string name="crossfade_auto_detail">Sesuai dengan cara lagu tamat dan bermula</string>
+    <string name="crossfade_fixed_detail">Panjang yang sama setiap kali</string>
+    <string name="crossfade_automix_detail">Gerakan gaya DJ, mengikut rentak</string>
+    <string name="hear_it_on_the_next_song">Dengar pada lagu seterusnya</string>
+    <string name="hear_it_on_the_next_song_none">Belum ada lagu seterusnya untuk diadun</string>
 </resources>

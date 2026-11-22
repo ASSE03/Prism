@@ -6007,4 +6007,22 @@
     <string name="transition_echo_out_detail">تتلاشى آخر نبضة كصدى حين تبدأ الأغنية التالية</string>
     <string name="transition_mark">انتقالك الخاص إلى الأغنية التالية</string>
     <string name="transition_edit">تعديل الانتقال إلى الأغنية التالية</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: أغانٍ تنساب كأنها مجموعة DJ</string>
+    <string name="tour_188_mix_about">صارت الأغاني تنتقل من واحدة إلى التالية كما يمزجها DJ.</string>
+    <string name="tour_188_mix_point_1">Automix، ضمن %1$s: تبديل باس أو صدى أو تصفية أو قطع يُختار لكل زوج من الأغاني</string>
+    <string name="tour_188_mix_point_2">مزج عند التخطي: التالي والسابق يتداخلان بدل القطع المفاجئ</string>
+    <string name="tour_188_mix_point_3">انتقالاتك الخاصة: في قائمة تشغيل، ⋯ الخاصة بالأغنية ← الانتقال إلى الأغنية التالية</string>
+    <string name="tour_188_mix_point_4">كلها متوقفة حتى تشغّلها</string>
+    <string name="tour_188_mix_coach">اختر Automix من هنا. مزج عند التخطي تحته مباشرة.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: يمزج Prism مثل DJ، فيختار حركة لكل زوج من الأغاني: تبديل الباس أو تصفية الخروج أو صدى الخروج أو قطعاً على النبضة أو مزجاً. تُقاس الأغاني أولاً عبر Wi-Fi ما لم يكن \"قياس الأغاني على بيانات الجوّال\" مفعّلاً؛ وإلى ذلك الحين تتداخل كما في الوضع التلقائي. الألبوم الذي يُشغَّل كاملاً لا يُمَسّ.</string>
+    <string name="automix_keywords">automix dj أوتوميكس دي جي انتقالات مزج باس صدى فلتر تلاشي</string>
+    <string name="automix_does_this">يتولى Automix ذلك عنك</string>
+    <string name="crossfade_off_detail">أغنية، ثم التي تليها</string>
+    <string name="crossfade_auto_detail">يتناسب مع نهاية الأغاني وبدايتها</string>
+    <string name="crossfade_fixed_detail">المدة نفسها كل مرة</string>
+    <string name="crossfade_automix_detail">حركات بأسلوب DJ، على النبضة</string>
+    <string name="hear_it_on_the_next_song">استمع إليه في الأغنية التالية</string>
+    <string name="hear_it_on_the_next_song_none">لا شيء قادم للتداخل معه بعد</string>
 </resources>

@@ -5703,4 +5703,22 @@
     <string name="transition_echo_out_detail">Sonraki şarkı başlarken son vuruş yankılanıp söner</string>
     <string name="transition_mark">Sonraki şarkıya kendi geçişin</string>
     <string name="transition_edit">Sonraki şarkıya geçişi düzenle</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: DJ seti gibi akan şarkılar</string>
+    <string name="tour_188_mix_about">Şarkılar artık bir DJ\'in karıştırdığı gibi birbirine geçebiliyor.</string>
+    <string name="tour_188_mix_point_1">%1$s altında Automix: her şarkı çifti için seçilen bas değişimi, yankı, filtre veya kesme</string>
+    <string name="tour_188_mix_point_2">Atlarken karıştır: Sonraki ve Önceki aniden kesmek yerine birbirine geçer</string>
+    <string name="tour_188_mix_point_3">Kendi geçişlerin: bir çalma listesinde, şarkının ⋯ → Sonraki şarkıya geçiş</string>
+    <string name="tour_188_mix_point_4">Sen açana kadar hepsi kapalı</string>
+    <string name="tour_188_mix_coach">Automix\'i buradan seç. Atlarken karıştır hemen altında.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism bir DJ gibi karıştırır ve her şarkı çifti için bir hareket seçer: bas değişimi, filtreyle çıkış, yankıyla çıkış, ritme denk kesme veya karışım. Şarkılar önce ölçülür; \"Şarkıları mobil veride ölç\" açık değilse yalnızca Wi-Fi\'de. O zamana kadar Otomatik\'teki gibi karışırlar. Baştan sona çalan bir albüme dokunulmaz.</string>
+    <string name="automix_keywords">automix dj geçiş geçişler bas değişimi yankı filtre karıştır çapraz geçiş</string>
+    <string name="automix_does_this">Bunu Automix senin için yapar</string>
+    <string name="crossfade_off_detail">Bir şarkı, sonra sonrakisi</string>
+    <string name="crossfade_auto_detail">Şarkıların bitişine ve başlangıcına uyar</string>
+    <string name="crossfade_fixed_detail">Her seferinde aynı uzunluk</string>
+    <string name="crossfade_automix_detail">DJ tarzı hareketler, ritme göre</string>
+    <string name="hear_it_on_the_next_song">Sonraki şarkıda dinle</string>
+    <string name="hear_it_on_the_next_song_none">Henüz karışacak bir şarkı yok</string>
 </resources>

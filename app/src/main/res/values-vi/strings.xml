@@ -5627,4 +5627,22 @@
     <string name="transition_echo_out_detail">Nhịp cuối vang xa dần khi bài kế tiếp bắt đầu</string>
     <string name="transition_mark">Cách chuyển bài riêng của bạn sang bài kế tiếp</string>
     <string name="transition_edit">Chỉnh cách chuyển sang bài kế tiếp</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: các bài hát nối nhau như một set DJ</string>
+    <string name="tour_188_mix_about">Giờ các bài hát có thể chuyển sang nhau như cách một DJ phối nhạc.</string>
+    <string name="tour_188_mix_point_1">Automix, trong %1$s: chọn đổi bass, vang, lọc hoặc cắt cho từng cặp bài</string>
+    <string name="tour_188_mix_point_2">Hòa vào nhau khi bỏ qua: Tiếp theo và Trước đó hòa vào nhau thay vì cắt ngang</string>
+    <string name="tour_188_mix_point_3">Chuyển bài do bạn chọn: trong danh sách phát, ⋯ của bài → Chuyển sang bài kế tiếp</string>
+    <string name="tour_188_mix_point_4">Tất cả đều tắt cho đến khi bạn bật</string>
+    <string name="tour_188_mix_coach">Chọn Automix ở đây. Hòa vào nhau khi bỏ qua ở ngay bên dưới.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism phối nhạc như DJ, chọn một kiểu chuyển cho từng cặp bài: đổi bass, lọc dần ra, vang dần ra, cắt đúng phách hoặc hòa trộn. Các bài được đo trước, qua Wi-Fi trừ khi bật \"Đo bài hát khi dùng dữ liệu di động\"; trước đó chúng hòa vào nhau như chế độ Tự động. Album phát trọn vẹn được giữ nguyên.</string>
+    <string name="automix_keywords">automix dj chuyển bài chuyển tiếp đổi bass vang lọc phối trộn mix</string>
+    <string name="automix_does_this">Automix làm việc này cho bạn</string>
+    <string name="crossfade_off_detail">Hết bài này đến bài kế tiếp</string>
+    <string name="crossfade_auto_detail">Khớp với cách các bài kết thúc và bắt đầu</string>
+    <string name="crossfade_fixed_detail">Cùng một độ dài mỗi lần</string>
+    <string name="crossfade_automix_detail">Kiểu DJ, đúng phách</string>
+    <string name="hear_it_on_the_next_song">Nghe thử ở bài kế tiếp</string>
+    <string name="hear_it_on_the_next_song_none">Chưa có bài nào sắp tới để hòa vào</string>
 </resources>

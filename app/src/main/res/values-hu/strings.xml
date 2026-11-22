@@ -5703,4 +5703,22 @@
     <string name="transition_echo_out_detail">Az utolsó ütem visszhangozva elhal, ahogy a következő dal indul</string>
     <string name="transition_mark">Saját átmenet a következő dalba</string>
     <string name="transition_edit">Átmenet szerkesztése a következő dalba</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: dalok, amelyek úgy folynak, mint egy DJ-szett</string>
+    <string name="tour_188_mix_about">A dalok mostantól úgy mennek át egymásba, ahogy egy DJ keverné őket.</string>
+    <string name="tour_188_mix_point_1">Automix, az %1$s alatt: minden dalpárhoz basszuscsere, visszhang, szűrő vagy vágás kerül kiválasztásra</string>
+    <string name="tour_188_mix_point_2">Áttűnés kihagyáskor: a Következő és az Előző vágás helyett átúszik</string>
+    <string name="tour_188_mix_point_3">Saját átmenetek: lejátszási listában a dal ⋯ → Átmenet a következő dalba</string>
+    <string name="tour_188_mix_point_4">Minden ki van kapcsolva, amíg be nem kapcsolod</string>
+    <string name="tour_188_mix_coach">Itt válaszd az Automixet. Az Áttűnés kihagyáskor közvetlenül alatta van.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: a Prism úgy kever, mint egy DJ, és minden dalpárhoz kiválaszt egy mozdulatot: basszuscserét, szűrős kiúszást, visszhangos kiúszást, vágást az ütemre, vagy áttűnést. A dalokat előbb bemérjük, Wi-Fi-n, kivéve ha a \"Dalok bemérése mobiladaton\" be van kapcsolva; addig úgy tűnnek át, mint az Automatikusnál. A végigjátszott albumot békén hagyja.</string>
+    <string name="automix_keywords">automix dj átmenet átmenetek basszus visszhang szűrő keverés mix áttűnés</string>
+    <string name="automix_does_this">Az Automix ezt elvégzi helyetted</string>
+    <string name="crossfade_off_detail">Egy dal, aztán a következő</string>
+    <string name="crossfade_auto_detail">Igazodik a dalok végéhez és elejéhez</string>
+    <string name="crossfade_fixed_detail">Minden alkalommal ugyanolyan hosszú</string>
+    <string name="crossfade_automix_detail">DJ-s mozdulatok, ütemre</string>
+    <string name="hear_it_on_the_next_song">Hallgasd meg a következő dalon</string>
+    <string name="hear_it_on_the_next_song_none">Még nincs olyan dal, amelybe átúszhatna</string>
 </resources>

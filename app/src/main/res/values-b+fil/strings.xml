@@ -5703,4 +5703,22 @@
     <string name="transition_echo_out_detail">Ang huling beat ay umaalingawngaw palayo habang nagsisimula ang susunod na kanta</string>
     <string name="transition_mark">Sarili mong transition papunta sa susunod na kanta</string>
     <string name="transition_edit">I-edit ang transition papunta sa susunod na kanta</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: mga kantang dumadaloy parang DJ set</string>
+    <string name="tour_188_mix_about">Puwede nang magpalit-palit ang mga kanta tulad ng paghahalo ng isang DJ.</string>
+    <string name="tour_188_mix_point_1">Automix, sa ilalim ng %1$s: bass swap, echo, filter o cut na pinipili para sa bawat pares ng kanta</string>
+    <string name="tour_188_mix_point_2">Maghalo kapag lumaktaw: ang Susunod at Nakaraan ay naghahalo sa halip na putol</string>
+    <string name="tour_188_mix_point_3">Sarili mong mga transition: sa isang playlist, ⋯ ng kanta → Transition papunta sa susunod na kanta</string>
+    <string name="tour_188_mix_point_4">Lahat ay naka-off hangga\'t hindi mo binubuksan</string>
+    <string name="tour_188_mix_coach">Piliin dito ang Automix. Nasa ibaba lang ang Maghalo kapag lumaktaw.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: naghahalo ang Prism na parang DJ at pumipili ng galaw para sa bawat pares ng kanta: bass swap, filter out, echo out, putol sa beat, o simpleng paghalo. Sinusukat muna ang mga kanta, sa Wi-Fi maliban kung nakabukas ang \"Sukatin ang mga kanta sa mobile data\"; hangga\'t hindi pa, naghahalo sila tulad ng sa Awtomatiko. Hindi ginagalaw ang album na tumutugtog nang buo.</string>
+    <string name="automix_keywords">automix dj transition bass swap echo filter halo mix crossfade</string>
+    <string name="automix_does_this">Ginagawa ito ng Automix para sa iyo</string>
+    <string name="crossfade_off_detail">Isang kanta, tapos ang susunod</string>
+    <string name="crossfade_auto_detail">Akma sa pagtatapos at pagsisimula ng mga kanta</string>
+    <string name="crossfade_fixed_detail">Pareho ang haba sa bawat pagkakataon</string>
+    <string name="crossfade_automix_detail">Mga galaw na pang-DJ, sa beat</string>
+    <string name="hear_it_on_the_next_song">Pakinggan sa susunod na kanta</string>
+    <string name="hear_it_on_the_next_song_none">Wala pang susunod na pagsasamahan ng kanta</string>
 </resources>

@@ -5703,4 +5703,22 @@
     <string name="transition_echo_out_detail">পরের গান শুরু হতেই শেষ বিটটি প্রতিধ্বনিতে মিলিয়ে যায়</string>
     <string name="transition_mark">পরের গানে আপনার নিজের ট্রানজিশন</string>
     <string name="transition_edit">পরের গানের ট্রানজিশন সম্পাদনা করুন</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: DJ সেটের মতো বয়ে চলা গান</string>
+    <string name="tour_188_mix_about">এখন গান এক থেকে আরেকটিতে যায় ঠিক যেভাবে একজন DJ মেশায়।</string>
+    <string name="tour_188_mix_point_1">Automix, %1$s-এর ভেতরে: প্রতিটি গানের জোড়ার জন্য বেস সোয়াপ, ইকো, ফিল্টার বা কাট বেছে নেওয়া হয়</string>
+    <string name="tour_188_mix_point_2">বাদ দিলে মিশে যাক: পরের ও আগের গান কেটে না গিয়ে মিশে যায়</string>
+    <string name="tour_188_mix_point_3">নিজের ট্রানজিশন: প্লেলিস্টে গানের ⋯ → পরের গানে ট্রানজিশন</string>
+    <string name="tour_188_mix_point_4">চালু না করা পর্যন্ত সব বন্ধ</string>
+    <string name="tour_188_mix_coach">এখানে Automix বেছে নিন। বাদ দিলে মিশে যাক ঠিক নিচে।</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism DJ-এর মতো মেশায় এবং প্রতিটি গানের জোড়ার জন্য একটি চাল বেছে নেয়: বেস সোয়াপ, ফিল্টার আউট, ইকো আউট, বিটে কাট বা মিশ্রণ। গান আগে মাপা হয়, ওয়াই-ফাইতে, যদি না \"মোবাইল ডেটায় গান মাপুন\" চালু থাকে; ততক্ষণ গান স্বয়ংক্রিয়ের মতো মিশে যায়। পুরো বাজতে থাকা অ্যালবাম ছোঁয়া হয় না।</string>
+    <string name="automix_keywords">automix dj অটোমিক্স ডিজে ট্রানজিশন মিক্স বেস ইকো ফিল্টার ক্রসফেড</string>
+    <string name="automix_does_this">Automix এটা আপনার হয়ে করে</string>
+    <string name="crossfade_off_detail">একটি গান, তারপর পরেরটি</string>
+    <string name="crossfade_auto_detail">গান কীভাবে শেষ ও শুরু হয় সেই অনুযায়ী</string>
+    <string name="crossfade_fixed_detail">প্রতিবার একই দৈর্ঘ্য</string>
+    <string name="crossfade_automix_detail">DJ-ধাঁচের চাল, বিটে বিটে</string>
+    <string name="hear_it_on_the_next_song">পরের গানে শুনুন</string>
+    <string name="hear_it_on_the_next_song_none">মেশানোর মতো কিছু এখনো আসছে না</string>
 </resources>

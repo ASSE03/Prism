@@ -5779,4 +5779,22 @@
     <string name="transition_echo_out_detail">O último beat vai-se perdendo em eco quando a música seguinte começa</string>
     <string name="transition_mark">A sua própria transição para a música seguinte</string>
     <string name="transition_edit">Editar a transição para a música seguinte</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: músicas que fluem como um set de DJ</string>
+    <string name="tour_188_mix_about">Agora as músicas podem passar de uma para a outra como um DJ as misturaria.</string>
+    <string name="tour_188_mix_point_1">Automix, em %1$s: bass swap, eco, filtro ou corte escolhido para cada par de músicas</string>
+    <string name="tour_188_mix_point_2">Fundir ao ignorar: Seguinte e Anterior cruzam-se em vez de cortar</string>
+    <string name="tour_188_mix_point_3">As suas próprias transições: numa playlist, ⋯ da música → Transição para a música seguinte</string>
+    <string name="tour_188_mix_point_4">Tudo desativado até o ativar</string>
+    <string name="tour_188_mix_coach">Escolha Automix aqui. Fundir ao ignorar está logo abaixo.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: o Prism mistura como um DJ, escolhendo um movimento para cada par de músicas: bass swap, filter out, echo out, corte na batida ou fusão. As músicas são medidas primeiro, por Wi-Fi, a menos que \"Medir músicas com dados móveis\" esteja ativado; até lá, fundem-se como no Automático. Um álbum a tocar inteiro é deixado em paz.</string>
+    <string name="automix_keywords">automix dj transições crossfade bass swap eco filtro mix mistura</string>
+    <string name="automix_does_this">O Automix faz isto por si</string>
+    <string name="crossfade_off_detail">Uma música, depois a seguinte</string>
+    <string name="crossfade_auto_detail">Ajusta-se ao fim e ao início das músicas</string>
+    <string name="crossfade_fixed_detail">A mesma duração sempre</string>
+    <string name="crossfade_automix_detail">Movimentos de DJ, ao ritmo da batida</string>
+    <string name="hear_it_on_the_next_song">Ouvir na música seguinte</string>
+    <string name="hear_it_on_the_next_song_none">Ainda não há nada para fundir a seguir</string>
 </resources>

@@ -5779,4 +5779,22 @@
     <string name="transition_echo_out_detail">L\'ultimo battito svanisce in eco quando parte il brano successivo</string>
     <string name="transition_mark">La tua transizione al brano successivo</string>
     <string name="transition_edit">Modifica la transizione al brano successivo</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: brani che scorrono come un set DJ</string>
+    <string name="tour_188_mix_about">Ora i brani possono passare l\'uno nell\'altro come in un mix di DJ.</string>
+    <string name="tour_188_mix_point_1">Automix, sotto %1$s: bass swap, echo, filter o taglio scelto per ogni coppia di brani</string>
+    <string name="tour_188_mix_point_2">Sfuma quando salto: Avanti e Indietro si incrociano invece di tagliare</string>
+    <string name="tour_188_mix_point_3">Transizioni tue: in una playlist, ⋯ di un brano → Transizione al brano successivo</string>
+    <string name="tour_188_mix_point_4">Tutto è disattivato finché non lo attivi</string>
+    <string name="tour_188_mix_coach">Scegli Automix qui. Sfuma quando salto è subito sotto.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism mixa come un DJ e sceglie una mossa per ogni coppia di brani: bass swap, filter out, echo out, un taglio a tempo o una sfumatura. I brani vengono prima analizzati, con il Wi-Fi a meno che \"Analizza i brani con dati mobili\" sia attivo; fino ad allora si fondono come con Automatica. Un album riprodotto per intero non viene toccato.</string>
+    <string name="automix_keywords">automix dj transizioni bass swap echo filter mix dissolvenza</string>
+    <string name="automix_does_this">Ci pensa Automix</string>
+    <string name="crossfade_off_detail">Un brano, poi il successivo</string>
+    <string name="crossfade_auto_detail">Si adatta a come finiscono e iniziano i brani</string>
+    <string name="crossfade_fixed_detail">Sempre della stessa durata</string>
+    <string name="crossfade_automix_detail">Mosse in stile DJ, a tempo</string>
+    <string name="hear_it_on_the_next_song">Ascoltalo sul brano successivo</string>
+    <string name="hear_it_on_the_next_song_none">Non c\'è ancora nessun brano in arrivo con cui sfumare</string>
 </resources>

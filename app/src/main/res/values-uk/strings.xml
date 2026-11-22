@@ -5855,4 +5855,22 @@
     <string name="transition_echo_out_detail">Останній біт згасає луною, коли починається наступна пісня</string>
     <string name="transition_mark">Ваш власний перехід до наступної пісні</string>
     <string name="transition_edit">Редагувати перехід до наступної пісні</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: пісні течуть, як DJ-сет</string>
+    <string name="tour_188_mix_about">Тепер пісні можуть переходити одна в одну так, як їх міксував би DJ.</string>
+    <string name="tour_188_mix_point_1">Automix у розділі «%1$s»: для кожної пари пісень добирається обмін басами, луна, фільтр або різкий перехід</string>
+    <string name="tour_188_mix_point_2">Змішувати при пропуску: «Наступна» й «Попередня» плавно перетікають замість різкого обриву</string>
+    <string name="tour_188_mix_point_3">Власні переходи: у плейлисті ⋯ біля пісні → Перехід до наступної пісні</string>
+    <string name="tour_188_mix_point_4">Усе вимкнено, доки ви не ввімкнете</string>
+    <string name="tour_188_mix_coach">Оберіть Automix тут. Змішувати при пропуску одразу нижче.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism міксує, як DJ, добираючи рух для кожної пари пісень: обмін басами, фільтр на вихід, луну на вихід, різкий перехід у такт або плавне змішування. Спершу пісні вимірюються, у Wi-Fi, якщо не ввімкнено «Вимірювати пісні в мобільній мережі»; до того вони змішуються, як в Автоматично. Альбом, що грає повністю, не чіпається.</string>
+    <string name="automix_keywords">automix dj діджей переходи обмін басами луна фільтр мікс плавний перехід</string>
+    <string name="automix_does_this">Automix робить це за вас</string>
+    <string name="crossfade_off_detail">Одна пісня, потім наступна</string>
+    <string name="crossfade_auto_detail">Підлаштовується під кінець і початок пісень</string>
+    <string name="crossfade_fixed_detail">Щоразу однакова тривалість</string>
+    <string name="crossfade_automix_detail">Рухи як у DJ, у такт</string>
+    <string name="hear_it_on_the_next_song">Почути на наступній пісні</string>
+    <string name="hear_it_on_the_next_song_none">Поки немає пісні, у яку можна перейти</string>
 </resources>

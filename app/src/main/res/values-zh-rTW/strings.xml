@@ -5627,4 +5627,22 @@
     <string name="transition_echo_out_detail">下一首開始時，最後一拍化作回音消散</string>
     <string name="transition_mark">你為下一首設定的專屬轉場</string>
     <string name="transition_edit">編輯到下一首的轉場</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix：歌曲像 DJ 串燒一樣流暢銜接</string>
+    <string name="tour_188_mix_about">現在歌曲之間可以像 DJ 混音那樣自然轉場。</string>
+    <string name="tour_188_mix_point_1">%1$s 中的 Automix：為每對歌曲選擇低音互換、回音、濾波或直切</string>
+    <string name="tour_188_mix_point_2">略過時融合：下一首和上一首會融合轉場，而不是生硬切換</string>
+    <string name="tour_188_mix_point_3">自訂轉場：在播放清單中，歌曲的 ⋯ → 轉場到下一首</string>
+    <string name="tour_188_mix_point_4">在你開啟之前，全部關閉</string>
+    <string name="tour_188_mix_coach">在這裡選擇 Automix。略過時融合就在下方。</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix：Prism 像 DJ 一樣混音，為每對歌曲挑選一種手法：低音互換、濾波淡出、回音淡出、卡拍直切或融合。歌曲會先被測量，預設僅在 Wi-Fi 下進行，除非開啟「使用行動數據時測量歌曲」；在此之前，它們會像「自動」一樣融合。完整播放的專輯不會被更動。</string>
+    <string name="automix_keywords">automix dj 轉場 低音互換 回音 濾波 混音 淡入淡出 自動混音</string>
+    <string name="automix_does_this">Automix 會為你完成這些</string>
+    <string name="crossfade_off_detail">一首結束，再接下一首</string>
+    <string name="crossfade_auto_detail">依歌曲的結尾和開頭自動調整</string>
+    <string name="crossfade_fixed_detail">每次都是相同長度</string>
+    <string name="crossfade_automix_detail">DJ 風格的手法，卡準節拍</string>
+    <string name="hear_it_on_the_next_song">在下一首試聽</string>
+    <string name="hear_it_on_the_next_song_none">暫時沒有可以融合的下一首</string>
 </resources>

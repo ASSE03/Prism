@@ -5779,4 +5779,22 @@
     <string name="transition_echo_out_detail">Ultimul beat se pierde în ecou când începe melodia următoare</string>
     <string name="transition_mark">Tranziția ta spre melodia următoare</string>
     <string name="transition_edit">Editează tranziția spre melodia următoare</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: melodii care curg ca într-un set de DJ</string>
+    <string name="tour_188_mix_about">Melodiile pot trece acum una în alta așa cum le-ar mixa un DJ.</string>
+    <string name="tour_188_mix_point_1">Automix, la %1$s: un bass swap, echo, filtru sau tăiere ales pentru fiecare pereche de melodii</string>
+    <string name="tour_188_mix_point_2">Îmbină când omit: Următoarea și Anterioara se întrepătrund în loc să taie</string>
+    <string name="tour_188_mix_point_3">Tranzițiile tale: într-un playlist, ⋯ de la melodie → Tranziție spre melodia următoare</string>
+    <string name="tour_188_mix_point_4">Totul oprit până le pornești</string>
+    <string name="tour_188_mix_coach">Alege Automix aici. Îmbină când omit e chiar dedesubt.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism mixează ca un DJ și alege o mișcare pentru fiecare pereche de melodii: bass swap, filter out, echo out, tăiere pe ritm sau îmbinare. Melodiile sunt măsurate mai întâi, pe Wi-Fi, dacă nu e pornită opțiunea \"Măsoară melodiile pe date mobile\"; până atunci se îmbină ca la Automat. Un album ascultat cap-coadă este lăsat în pace.</string>
+    <string name="automix_keywords">automix dj tranziții tranziție bass swap echo filtru mix mixare</string>
+    <string name="automix_does_this">Automix face asta pentru tine</string>
+    <string name="crossfade_off_detail">O melodie, apoi următoarea</string>
+    <string name="crossfade_auto_detail">Se potrivește cu sfârșitul și începutul melodiilor</string>
+    <string name="crossfade_fixed_detail">Aceeași durată de fiecare dată</string>
+    <string name="crossfade_automix_detail">Mișcări în stil DJ, pe ritm</string>
+    <string name="hear_it_on_the_next_song">Ascult-o la melodia următoare</string>
+    <string name="hear_it_on_the_next_song_none">Încă nu urmează nicio melodie în care să se îmbine</string>
 </resources>

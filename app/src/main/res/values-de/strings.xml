@@ -5703,4 +5703,22 @@
     <string name="transition_echo_out_detail">Der letzte Beat hallt aus, während der nächste Song startet</string>
     <string name="transition_mark">Dein eigener Übergang zum nächsten Song</string>
     <string name="transition_edit">Übergang zum nächsten Song bearbeiten</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: Songs, die fließen wie ein DJ-Set</string>
+    <string name="tour_188_mix_about">Songs gehen jetzt so ineinander über, wie ein DJ sie mischen würde.</string>
+    <string name="tour_188_mix_point_1">Automix, unter %1$s: Für jedes Songpaar wird Bass Swap, Echo, Filter oder Schnitt gewählt</string>
+    <string name="tour_188_mix_point_2">Beim Überspringen überblenden: Weiter und Zurück blenden über, statt hart zu schneiden</string>
+    <string name="tour_188_mix_point_3">Eigene Übergänge: in einer Playlist beim Song ⋯ → Übergang zum nächsten Song</string>
+    <string name="tour_188_mix_point_4">Alles aus, bis du es einschaltest</string>
+    <string name="tour_188_mix_coach">Wähle hier Automix. Beim Überspringen überblenden steht direkt darunter.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism mischt wie ein DJ und wählt für jedes Songpaar einen Move: Bass Swap, Filter Out, Echo Out, einen Schnitt auf den Beat oder eine Überblendung. Die Songs werden zuerst gemessen, über WLAN, es sei denn \"Songs über mobile Daten messen\" ist an; bis dahin blenden sie über wie bei Automatisch. Ein Album, das durchläuft, bleibt unangetastet.</string>
+    <string name="automix_keywords">automix dj übergänge überblenden mischen bass echo filter mix crossfade</string>
+    <string name="automix_does_this">Automix übernimmt das für dich</string>
+    <string name="crossfade_off_detail">Ein Song, dann der nächste</string>
+    <string name="crossfade_auto_detail">Passt sich an Ende und Anfang der Songs an</string>
+    <string name="crossfade_fixed_detail">Jedes Mal gleich lang</string>
+    <string name="crossfade_automix_detail">Moves wie ein DJ, auf den Beat</string>
+    <string name="hear_it_on_the_next_song">Beim nächsten Song anhören</string>
+    <string name="hear_it_on_the_next_song_none">Es kommt noch nichts, in das übergeblendet werden kann</string>
 </resources>

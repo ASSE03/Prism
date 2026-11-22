@@ -5627,4 +5627,22 @@
     <string name="transition_echo_out_detail">Ketukan terakhir menggema lalu hilang saat lagu berikutnya mulai</string>
     <string name="transition_mark">Transisi Anda sendiri ke lagu berikutnya</string>
     <string name="transition_edit">Edit transisi ke lagu berikutnya</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: lagu mengalir seperti set DJ</string>
+    <string name="tour_188_mix_about">Kini lagu bisa berpindah satu sama lain seperti diracik seorang DJ.</string>
+    <string name="tour_188_mix_point_1">Automix, di bawah %1$s: bass swap, echo, filter, atau potongan yang dipilih untuk tiap pasangan lagu</string>
+    <string name="tour_188_mix_point_2">Berbaur saat saya lewati: Berikutnya dan Sebelumnya saling berpadu, tidak langsung terpotong</string>
+    <string name="tour_188_mix_point_3">Transisi buatan sendiri: di playlist, ⋯ pada lagu → Transisi ke lagu berikutnya</string>
+    <string name="tour_188_mix_point_4">Semuanya nonaktif sampai dinyalakan</string>
+    <string name="tour_188_mix_coach">Pilih Automix di sini. Berbaur saat saya lewati ada tepat di bawahnya.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism mencampur seperti DJ dan memilih satu gerakan untuk tiap pasangan lagu: bass swap, filter out, echo out, potongan tepat di ketukan, atau berbaur. Lagu diukur terlebih dahulu, lewat Wi-Fi kecuali \"Ukur lagu dengan data seluler\" aktif; sebelum itu lagu berbaur seperti pada Otomatis. Album yang diputar penuh dibiarkan apa adanya.</string>
+    <string name="automix_keywords">automix dj transisi bass swap echo filter campur mix crossfade</string>
+    <string name="automix_does_this">Automix yang mengatur ini</string>
+    <string name="crossfade_off_detail">Satu lagu, lalu lagu berikutnya</string>
+    <string name="crossfade_auto_detail">Menyesuaikan akhir dan awal lagu</string>
+    <string name="crossfade_fixed_detail">Durasi sama setiap kali</string>
+    <string name="crossfade_automix_detail">Gerakan ala DJ, tepat di ketukan</string>
+    <string name="hear_it_on_the_next_song">Dengarkan di lagu berikutnya</string>
+    <string name="hear_it_on_the_next_song_none">Belum ada lagu berikutnya untuk dipadukan</string>
 </resources>

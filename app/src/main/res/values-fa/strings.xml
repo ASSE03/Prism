@@ -5703,4 +5703,22 @@
     <string name="transition_echo_out_detail">آخرین ضرب با پژواک محو می‌شود و آهنگ بعدی شروع می‌شود</string>
     <string name="transition_mark">گذار دلخواه شما به آهنگ بعدی</string>
     <string name="transition_edit">ویرایش گذار به آهنگ بعدی</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">میکس: آهنگ‌هایی که مثل یک ست DJ جاری می‌شوند</string>
+    <string name="tour_188_mix_about">حالا آهنگ‌ها می‌توانند همان‌طور که یک DJ میکس می‌کند به هم برسند.</string>
+    <string name="tour_188_mix_point_1">Automix، زیر %1$s: برای هر جفت آهنگ یک جابه‌جایی بیس، پژواک، فیلتر یا برش انتخاب می‌شود</string>
+    <string name="tour_188_mix_point_2">ترکیب هنگام رد کردن: بعدی و قبلی به‌جای برش ناگهانی، محو می‌شوند</string>
+    <string name="tour_188_mix_point_3">گذارهای خودتان: در یک فهرست پخش، ⋯ آهنگ ← گذار به آهنگ بعدی</string>
+    <string name="tour_188_mix_point_4">همه تا وقتی روشن نکنید خاموش‌اند</string>
+    <string name="tour_188_mix_coach">Automix را اینجا انتخاب کنید. ترکیب هنگام رد کردن درست پایین‌تر است.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism مثل یک DJ میکس می‌کند و برای هر جفت آهنگ یک حرکت انتخاب می‌کند: جابه‌جایی بیس، خروج با فیلتر، خروج با پژواک، برش روی ضرب یا یک ترکیب نرم. آهنگ‌ها اول اندازه‌گیری می‌شوند، با Wi-Fi، مگر اینکه «اندازه‌گیری آهنگ‌ها با داده تلفن همراه» روشن باشد؛ تا آن موقع مثل حالت خودکار ترکیب می‌شوند. آلبومی که کامل پخش می‌شود دست‌نخورده می‌ماند.</string>
+    <string name="automix_keywords">automix dj میکس دی‌جی گذار بیس پژواک فیلتر ترکیب کراس‌فید</string>
+    <string name="automix_does_this">Automix این کار را برایتان انجام می‌دهد</string>
+    <string name="crossfade_off_detail">یک آهنگ، بعد آهنگ بعدی</string>
+    <string name="crossfade_auto_detail">با پایان و شروع آهنگ‌ها هماهنگ می‌شود</string>
+    <string name="crossfade_fixed_detail">هر بار با همان مدت</string>
+    <string name="crossfade_automix_detail">حرکت‌های DJ، روی ضرب</string>
+    <string name="hear_it_on_the_next_song">روی آهنگ بعدی بشنوید</string>
+    <string name="hear_it_on_the_next_song_none">هنوز آهنگی برای ترکیب شدن در راه نیست</string>
 </resources>

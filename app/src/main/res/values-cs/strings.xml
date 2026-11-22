@@ -5855,4 +5855,22 @@
     <string name="transition_echo_out_detail">Poslední beat doznívá v echu, když začne další skladba</string>
     <string name="transition_mark">Váš vlastní přechod na další skladbu</string>
     <string name="transition_edit">Upravit přechod na další skladbu</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: skladby, které plynou jako DJ set</string>
+    <string name="tour_188_mix_about">Skladby teď do sebe přecházejí tak, jak by je smíchal DJ.</string>
+    <string name="tour_188_mix_point_1">Automix v nastavení %1$s: pro každou dvojici skladeb se vybere výměna basů, echo, filtr nebo střih</string>
+    <string name="tour_188_mix_point_2">Prolínat při přeskočení: Další a Předchozí se prolnou místo useknutí</string>
+    <string name="tour_188_mix_point_3">Vlastní přechody: v playlistu u skladby ⋯ → Přechod na další skladbu</string>
+    <string name="tour_188_mix_point_4">Vše je vypnuté, dokud to nezapnete</string>
+    <string name="tour_188_mix_coach">Automix vyberte tady. Prolínat při přeskočení je hned pod ním.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism míchá jako DJ a pro každou dvojici skladeb vybere jiný tah: výměnu basů, filtr ven, echo ven, střih na doby nebo prolnutí. Skladby se nejdřív změří, na Wi-Fi, pokud není zapnuto \"Měřit skladby na mobilních datech\"; do té doby se prolínají jako u Automaticky. Album přehrávané celé zůstane nedotčené.</string>
+    <string name="automix_keywords">automix dj přechody prolínání míchání basy echo filtr mix</string>
+    <string name="automix_does_this">Automix to udělá za vás</string>
+    <string name="crossfade_off_detail">Jedna skladba, pak další</string>
+    <string name="crossfade_auto_detail">Přizpůsobí se konci a začátku skladeb</string>
+    <string name="crossfade_fixed_detail">Pokaždé stejně dlouhé</string>
+    <string name="crossfade_automix_detail">Tahy jako od DJe, přesně na doby</string>
+    <string name="hear_it_on_the_next_song">Poslechnout na další skladbě</string>
+    <string name="hear_it_on_the_next_song_none">Zatím nic nenásleduje, s čím by se dalo prolnout</string>
 </resources>

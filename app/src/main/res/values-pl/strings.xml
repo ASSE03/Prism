@@ -5855,4 +5855,22 @@
     <string name="transition_echo_out_detail">Ostatnie uderzenie wybrzmiewa echem, gdy zaczyna się następny utwór</string>
     <string name="transition_mark">Twoje własne przejście do następnego utworu</string>
     <string name="transition_edit">Edytuj przejście do następnego utworu</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: utwory płyną jak w secie didżeja</string>
+    <string name="tour_188_mix_about">Utwory mogą teraz przechodzić jeden w drugi tak, jak zmiksowałby je DJ.</string>
+    <string name="tour_188_mix_point_1">Automix, w ustawieniu %1$s: bass swap, echo, filtr lub cięcie dobrane do każdej pary utworów</string>
+    <string name="tour_188_mix_point_2">Przenikaj przy pominięciu: Następny i Poprzedni przenikają zamiast ucinać</string>
+    <string name="tour_188_mix_point_3">Własne przejścia: na playliście ⋯ przy utworze → Przejście do następnego utworu</string>
+    <string name="tour_188_mix_point_4">Wszystko wyłączone, dopóki tego nie włączysz</string>
+    <string name="tour_188_mix_coach">Wybierz tutaj Automix. Przenikaj przy pominięciu jest tuż poniżej.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism miksuje jak DJ i dobiera ruch do każdej pary utworów: bass swap, filter out, echo out, cięcie w rytm lub przenikanie. Utwory są najpierw mierzone, przez Wi-Fi, chyba że włączono \"Mierz utwory przy danych mobilnych\"; do tego czasu przenikają jak w trybie Automatycznie. Album odtwarzany w całości zostaje nietknięty.</string>
+    <string name="automix_keywords">automix dj przejścia przenikanie bass swap echo filtr miks mieszanie</string>
+    <string name="automix_does_this">Automix robi to za Ciebie</string>
+    <string name="crossfade_off_detail">Jeden utwór, potem następny</string>
+    <string name="crossfade_auto_detail">Dopasowane do końca i początku utworów</string>
+    <string name="crossfade_fixed_detail">Za każdym razem tak samo długo</string>
+    <string name="crossfade_automix_detail">Ruchy w stylu DJ-a, w rytm</string>
+    <string name="hear_it_on_the_next_song">Posłuchaj na następnym utworze</string>
+    <string name="hear_it_on_the_next_song_none">Nie ma jeszcze utworu, w który można przenikać</string>
 </resources>

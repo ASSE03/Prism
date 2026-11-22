@@ -5627,4 +5627,22 @@
     <string name="transition_echo_out_detail">次の曲が始まると、最後のビートがエコーで消えていく</string>
     <string name="transition_mark">次の曲へのオリジナルのトランジション</string>
     <string name="transition_edit">次の曲へのトランジションを編集</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix：DJ セットのようにつながる曲</string>
+    <string name="tour_188_mix_about">曲と曲を、DJ がミックスするようにつなげられるようになりました。</string>
+    <string name="tour_188_mix_point_1">Automix（%1$s の中）：曲の組み合わせごとに、ベース スワップ、エコー、フィルター、カットを選択</string>
+    <string name="tour_188_mix_point_2">スキップ時になじませる：次へ・前へで、ぶつ切りにせずクロスフェード</string>
+    <string name="tour_188_mix_point_3">自分だけのトランジション：プレイリストで曲の ⋯ → 次の曲へのトランジション</string>
+    <string name="tour_188_mix_point_4">すべて、オンにするまでオフです</string>
+    <string name="tour_188_mix_coach">ここで Automix を選びます。すぐ下に「スキップ時になじませる」があります。</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix：Prism が DJ のようにミックスし、曲の組み合わせごとにベース スワップ、フィルター アウト、エコー アウト、拍に合わせたカット、またはブレンドを選びます。曲は先に測定されます（「モバイルデータで曲を測定」がオンでない限り Wi-Fi で行います）。それまでは自動と同じようにブレンドします。アルバムを通して再生しているときは何もしません。</string>
+    <string name="automix_keywords">automix オートミックス dj ミックス トランジション ベース スワップ エコー フィルター クロスフェード</string>
+    <string name="automix_does_this">Automix が自動で行います</string>
+    <string name="crossfade_off_detail">1曲ずつ、続けて再生</string>
+    <string name="crossfade_auto_detail">曲の終わりと始まりに合わせます</string>
+    <string name="crossfade_fixed_detail">毎回同じ長さです</string>
+    <string name="crossfade_automix_detail">DJ 風の動きを、ビートに合わせて</string>
+    <string name="hear_it_on_the_next_song">次の曲で聴く</string>
+    <string name="hear_it_on_the_next_song_none">ブレンドする次の曲がまだありません</string>
 </resources>

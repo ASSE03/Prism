@@ -5703,4 +5703,22 @@
     <string name="transition_echo_out_detail">اگلا گانا شروع ہوتے ہی آخری بیٹ گونج کر مدھم ہو جاتی ہے</string>
     <string name="transition_mark">اگلے گانے میں آپ کی اپنی ٹرانزیشن</string>
     <string name="transition_edit">اگلے گانے میں ٹرانزیشن میں ترمیم کریں</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: گانے DJ سیٹ کی طرح بہتے ہوئے</string>
+    <string name="tour_188_mix_about">اب گانے ایک دوسرے میں ویسے ہی ڈھل سکتے ہیں جیسے DJ ملاتا ہے۔</string>
+    <string name="tour_188_mix_point_1">%1$s کے تحت Automix: ہر جوڑی کے لیے بیس سویپ، ایکو، فلٹر یا کٹ کا انتخاب</string>
+    <string name="tour_188_mix_point_2">چھوڑتے وقت گھلائیں: اگلا اور پچھلا اچانک کٹنے کے بجائے ایک دوسرے میں گھل جاتے ہیں</string>
+    <string name="tour_188_mix_point_3">آپ کی اپنی ٹرانزیشنز: پلے لسٹ میں گانے کے ⋯ ← اگلے گانے میں ٹرانزیشن</string>
+    <string name="tour_188_mix_point_4">جب تک آپ آن نہ کریں، سب کچھ آف ہے</string>
+    <string name="tour_188_mix_coach">Automix یہاں سے چنیں۔ چھوڑتے وقت گھلائیں بالکل نیچے ہے۔</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism DJ کی طرح ملاتا ہے اور ہر جوڑی کے لیے ایک انداز چنتا ہے: بیس سویپ، فلٹر آؤٹ، ایکو آؤٹ، بیٹ پر کٹ، یا ملاپ۔ گانوں کی پہلے پیمائش ہوتی ہے، Wi-Fi پر، جب تک \"موبائل ڈیٹا پر گانوں کی پیمائش کریں\" آن نہ ہو۔ تب تک وہ خودکار کی طرح گھلتے ہیں۔ پورا چلتا البم جوں کا توں رہتا ہے۔</string>
+    <string name="automix_keywords">automix dj ڈی جے ٹرانزیشن بیس سویپ ایکو فلٹر مکس کراس فیڈ</string>
+    <string name="automix_does_this">Automix یہ آپ کے لیے کرتا ہے</string>
+    <string name="crossfade_off_detail">ایک گانا، پھر اگلا</string>
+    <string name="crossfade_auto_detail">گانوں کے ختم اور شروع ہونے کے مطابق ڈھلتا ہے</string>
+    <string name="crossfade_fixed_detail">ہر بار ایک ہی لمبائی</string>
+    <string name="crossfade_automix_detail">DJ انداز کی حرکات، بیٹ پر</string>
+    <string name="hear_it_on_the_next_song">اگلے گانے پر سنیں</string>
+    <string name="hear_it_on_the_next_song_none">ابھی ملانے کے لیے کوئی گانا آنے والا نہیں</string>
 </resources>

@@ -5703,4 +5703,22 @@
     <string name="transition_echo_out_detail">De laatste beat echoot weg als het volgende nummer begint</string>
     <string name="transition_mark">Je eigen overgang naar het volgende nummer</string>
     <string name="transition_edit">De overgang naar het volgende nummer bewerken</string>
+    <!-- 1.8.8 Automix and the Mix tour card -->
+    <string name="tour_188_mix_title">Mix: nummers die lopen als een DJ-set</string>
+    <string name="tour_188_mix_about">Nummers kunnen nu in elkaar overgaan zoals een DJ ze zou mixen.</string>
+    <string name="tour_188_mix_point_1">Automix, onder %1$s: voor elk paar nummers een bass swap, echo, filter of knip</string>
+    <string name="tour_188_mix_point_2">Overvloeien als ik oversla: Volgende en Vorige vloeien in elkaar over in plaats van af te knippen</string>
+    <string name="tour_188_mix_point_3">Eigen overgangen: in een playlist, ⋯ bij een nummer → Overgang naar het volgende nummer</string>
+    <string name="tour_188_mix_point_4">Alles staat uit tot je het aanzet</string>
+    <string name="tour_188_mix_coach">Kies hier Automix. Overvloeien als ik oversla staat er direct onder.</string>
+    <string name="automix">Automix</string>
+    <string name="automix_info">Automix: Prism mixt als een DJ en kiest voor elk paar nummers een move: een bass swap, filter out, echo out, een knip op de beat of een overvloeiing. Nummers worden eerst gemeten, via Wi-Fi tenzij \"Nummers meten via mobiele data\" aanstaat; tot die tijd vloeien ze over zoals bij Automatisch. Een album dat doorspeelt blijft ongemoeid.</string>
+    <string name="automix_keywords">automix dj overgangen bass swap echo filter mix crossfade overvloeien</string>
+    <string name="automix_does_this">Automix doet dit voor je</string>
+    <string name="crossfade_off_detail">Eén nummer, dan het volgende</string>
+    <string name="crossfade_auto_detail">Past bij hoe nummers eindigen en beginnen</string>
+    <string name="crossfade_fixed_detail">Elke keer even lang</string>
+    <string name="crossfade_automix_detail">Moves zoals een DJ, op de beat</string>
+    <string name="hear_it_on_the_next_song">Hoor het bij het volgende nummer</string>
+    <string name="hear_it_on_the_next_song_none">Er komt nog geen nummer om in over te vloeien</string>
 </resources>
