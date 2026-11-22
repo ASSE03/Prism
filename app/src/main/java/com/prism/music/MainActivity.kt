@@ -491,14 +491,9 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
             lifecycle.addObserver(watcher)
             onDispose { lifecycle.removeObserver(watcher) }
         }
-        // Settings → Controls & gestures → "Lock to portrait" (#190): phones stay upright; tablets keep their own layouts.
-        // A full-screen video still turns sideways (it sets its own and puts this back after).
-        val tablet = androidx.compose.ui.platform.LocalConfiguration.current.smallestScreenWidthDp >= 600
-        androidx.compose.runtime.LaunchedEffect(settings.behavior.lockPortrait, tablet) {
-            (rootView.context as? android.app.Activity)?.requestedOrientation =
-                if (settings.behavior.lockPortrait && !tablet) android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                else android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
+        // Settings → Controls & gestures → "Lock to portrait" (#190): phones stay upright; tablets keep their own layouts;
+        // nothing is forced in a car (#582). A full-screen video still turns sideways (it sets its own and puts this back after).
+        com.prism.music.ui.PortraitLockEffect(settings.behavior.lockPortrait)
         // Settings → Performance → "Smoother scrolling" (#336): the screen's fastest mode while Prism is open. `settings` is
         // the effective one, so Performance mode reads it as off; battery saver does too.
         com.prism.music.ui.SmoothScrollingEffect(settings.behavior.smoothScrolling)

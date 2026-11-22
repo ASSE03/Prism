@@ -47,6 +47,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.text.BreakIterator
@@ -514,10 +515,15 @@ class CarState(private val context: Context, private val scope: CoroutineScope, 
         registered = false
     }
 
+    /** One look at a time, in order: a slow first look finishing after a car's broadcast would undo what it said. */
+    private val looking = kotlinx.coroutines.sync.Mutex()
+
     fun update() {
         scope.launch {
-            val now = automotive || withContext(Dispatchers.IO) { carMode() || projecting() }
-            if (now != driving) { driving = now; onChange() }
+            looking.withLock {
+                val now = automotive || withContext(Dispatchers.IO) { carMode() || projecting() }
+                if (now != driving) { driving = now; onChange() }
+            }
         }
     }
 
