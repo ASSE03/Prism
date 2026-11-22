@@ -204,6 +204,32 @@ class BackupPartsTest {
         assertTrue(read("files/restore_settings.json")!!.contains("SID=theirs"))
     }
 
+    /**
+     * 1.8.8 Mix it yourself: the listener's transitions live in the database, so they go out with History and come back
+     * from a restore of it, exactly as saved.
+     */
+    @Test fun savedTransitionsGoThereAndBack() {
+        fun open() = androidx.room.Room.databaseBuilder(app, com.prism.music.data.db.PrismDatabase::class.java, "prism.db").allowMainThreadQueries().build()
+        app.deleteDatabase("prism.db")
+        val row = com.prism.music.data.db.TransitionEntity("PL1", "a", "b", 170_000, 12_000, 8_000, "filter_out", true, changedAt = 7L, usedAt = 9L)
+        open().also { db -> kotlinx.coroutines.runBlocking { db.transitions().put(row) }; db.close() }
+        val taken = Backup.filesToBackUp(data, files, setOf(BackupPart.HISTORY))
+        val dbFile = taken.single { it.name == "prism.db" }
+        val copy = dbFile.readBytes()
+        // Restored onto a phone whose own database has none.
+        app.deleteDatabase("prism.db")
+        open().close()
+        stage("""{"format":2,"app":"${app.packageName}","parts":["HISTORY"]}""")
+        File(files, "restore_pending/databases").mkdirs()
+        File(files, "restore_pending/databases/prism.db").writeBytes(copy)
+        Backup.applyPending(app)
+        open().also { db ->
+            assertEquals(row, kotlinx.coroutines.runBlocking { db.transitions().get("PL1", "a", "b") })
+            db.close()
+        }
+        app.deleteDatabase("prism.db")
+    }
+
     @Test fun everyPrefsFileHasAPart() {
         assertEquals(null, Backup.filePart("datastore"))
         assertEquals(null, Backup.filePart("diagnostics"))

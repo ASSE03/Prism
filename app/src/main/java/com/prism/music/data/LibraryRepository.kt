@@ -376,6 +376,8 @@ class LibraryRepository(private val c: AppContainer) {
         runCatching { c.ytm.deletePlaylist(item.id) }
             .recoverCatching { c.ytm.unsavePlaylist(item.id) }
             .onSuccess {
+                // 1.8.8: its saved transitions go with it.
+                runCatching { c.transitions.forgetPlaylist(item.id) }
                 if (c.likedPlaylist.playlistId.value == item.id) c.likedPlaylist.forget()
                 val pins = c.settings.current.home.playlists
                 if (pins.any { it.id == item.id }) c.settings.setHomePlaylists(pins.filterNot { it.id == item.id })

@@ -543,7 +543,18 @@ class AppContainer(val app: Application) {
     /** Big data files downloaded on first use (the Japanese reading dictionary, Sing's model). */
     val models = com.prism.music.data.ModelStore(app, http)
     /** Playlists and saved albums kept on the phone (no account needed). */
-    val prismLibrary = com.prism.music.data.PrismLibrary(java.io.File(app.filesDir, "library"))
+    val prismLibrary = com.prism.music.data.PrismLibrary(java.io.File(app.filesDir, "library")).also { lib ->
+        lib.onDeleted = { id -> scope.launch(kotlinx.coroutines.Dispatchers.IO) { runCatching { transitions.forgetPlaylist(id) } } }
+    }
+    /**
+     * The listener's own transitions between two songs of a playlist (1.8.8, Mix it yourself): read when the queue's
+     * playlist is asked about, never at start. Made once, it clears out rows unused for a year.
+     */
+    val transitions by lazy {
+        com.prism.music.data.TransitionStore(db.transitions(), scope).also { s ->
+            scope.launch(kotlinx.coroutines.Dispatchers.IO) { runCatching { s.prune() } }
+        }
+    }
     /** The listener's own tags on songs (1.8.3). */
     val tags by lazy { com.prism.music.data.TagStore(db, scope, java.io.File(app.filesDir, "library")) }
     /** Smart playlists' songs (1.8.3): asked for when one opens, never at start. */
