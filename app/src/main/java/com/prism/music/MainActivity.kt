@@ -1005,6 +1005,8 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 // The page showing with its arguments ("settings/looks", not "settings/{section}…"), for the steps' checks.
                 val place = route?.let { r -> com.prism.music.ui.filledRoute(r) { a -> @Suppress("DEPRECATION") backStack?.arguments?.get(a)?.toString() } }
                 com.prism.music.ui.tour.CoachHost(place, playerOpen && song != null, coachActions)
+                // A step that opened the player with no song in it (none came): closed again when the tour ends.
+                com.prism.music.ui.tour.CoachPlayerReset(playerOpen, { c.player.currentSong.value != null }) { playerOpen = false }
                 // First steps' last step: Settings opens Looks; then its closing card.
                 LaunchedEffect(place) { firstSteps.redirect(place)?.let { navigator.go(it) } }
                 if (firstSteps.closing) com.prism.music.ui.tour.FirstStepsClosing(

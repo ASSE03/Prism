@@ -174,6 +174,41 @@ class GuidePageTest {
         assertEquals(TourTopic.SOUND.cards.size, count(GuideTags.CARD))
     }
 
+    /**
+     * 1.8.8 review: "Show me how" with music already playing, or the song already liked, ended its step at once. As in
+     * First steps, what was there as the step began doesn't count: pausing and playing (or unliking and liking) does,
+     * and so does another song. And its way to Home is Home's tab, not a second Home over the Guide.
+     */
+    @Test fun showMeHowStepsDoNotEndThemselves() {
+        val song = Song(id = "tst00000001", title = "Test song 1", artists = emptyList(), durationSec = 181)
+        val another = Song(id = "tst00000002", title = "Test song 2", artists = emptyList(), durationSec = 181)
+        val went = ArrayList<String>()
+        val tabbed = ArrayList<String>()
+        val acts = com.prism.music.ui.tour.CoachActions(go = { went += it }, tab = { tabbed += it })
+        val (play, _) = GuideTours.of(TourTopic.PLAYING)
+        val playing = TourState(route = Routes.GUIDE, song = song, playing = true)
+        play.prep!!.invoke(acts, playing)
+        assertFalse("already playing as it began", play.done(playing))
+        assertTrue("another song", play.done(TourState(song = another, playing = true)))
+        assertFalse(play.done(TourState(song = song)))
+        assertTrue("paused, then played", play.done(playing))
+        val (like, _) = GuideTours.of(TourTopic.LIBRARY)
+        val liked = TourState(song = song, liked = setOf(song.id))
+        like.prep!!.invoke(acts, liked)
+        assertFalse("already liked as it began", like.done(liked))
+        assertFalse(like.done(TourState(song = song)))
+        assertTrue("unliked, then liked", like.done(liked))
+        // A fresh tour starts fresh.
+        val again = GuideTours.of(TourTopic.LIBRARY).first()
+        again.prep!!.invoke(acts, TourState(song = song))
+        assertTrue(again.done(liked))
+        // Looks' tour without a Settings tab goes Home by the tab too.
+        val noTab = com.prism.music.data.prefs.AppSettings(navTabs = listOf(com.prism.music.data.prefs.NavTab.HOME, com.prism.music.data.prefs.NavTab.LIBRARY))
+        GuideTours.of(TourTopic.LOOKS).single().prep!!.invoke(acts, TourState(route = Routes.GUIDE, settings = noTab))
+        assertEquals(emptyList<String>(), went)
+        assertEquals(listOf(Routes.HOME, Routes.HOME), tabbed)
+    }
+
     /** The four tours (plan D13 and the mockup): their steps, the controls they point at, and when each is done. */
     @Test fun theShowMeHowTours() {
         assertEquals(setOf(TourTopic.PLAYING, TourTopic.LYRICS, TourTopic.LIBRARY, TourTopic.LOOKS), GuideTours.topics)

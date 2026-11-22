@@ -136,6 +136,32 @@ class FirstStepsTest {
         assertEquals("with the tab, it stays where it is", null, went)
     }
 
+    /**
+     * 1.8.8 review: taken again from the Guide, step 1 pushed a second Home over the Guide (`go`); it switches to Home's
+     * tab as its tab button does. The last step's way to Home (no Settings tab) too.
+     */
+    @Test fun stepsGoHomeAsTheTabDoesNotByPushingAnotherHome() {
+        val steps = FirstSteps.steps { }
+        val went = ArrayList<String>()
+        val tabbed = ArrayList<String>()
+        val acts = CoachActions(go = { went += it }, tab = { tabbed += it })
+        steps[0].prep!!.invoke(acts, TourState(route = Routes.GUIDE))
+        val noTab = AppSettings(navTabs = listOf(com.prism.music.data.prefs.NavTab.HOME, com.prism.music.data.prefs.NavTab.LIBRARY))
+        steps[FirstSteps.LOOKS_STEP].prep!!.invoke(acts, TourState(route = Routes.GUIDE, settings = noTab))
+        assertEquals(emptyList<String>(), went)
+        assertEquals(listOf(Routes.HOME, Routes.HOME), tabbed)
+    }
+
+    /** 1.8.8 review: with "Hide explicit" Home's Quick picks leave an explicit first song out: the pick is the first shown. */
+    @Test fun theQuickPickIsTheFirstOneShown() {
+        val explicit = pick.copy(id = "explicit001", explicit = true)
+        val picks = listOf(explicit, pick, other)
+        assertEquals(pick, FirstSteps.firstShown(com.prism.music.data.prefs.ExplicitContent.HIDE, picks))
+        assertEquals(explicit, FirstSteps.firstShown(com.prism.music.data.prefs.ExplicitContent.SHOW, picks))
+        assertEquals("Skip lists them (it skips them when playing)", explicit, FirstSteps.firstShown(com.prism.music.data.prefs.ExplicitContent.SKIP, picks))
+        assertNull(FirstSteps.firstShown(com.prism.music.data.prefs.ExplicitContent.HIDE, listOf(explicit)))
+    }
+
     @Test fun theFiveStepsAreWalkedByDoingThem() {
         begin()
         assertEquals(FirstSteps.COUNT, Coach.run!!.steps.size)

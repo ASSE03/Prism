@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -282,7 +283,9 @@ fun CoachLayer(
     LaunchedEffect(run, i, run.touches) { delay(COACH_IDLE_MS); run.nextOffered = true }
     if (screenReader) LaunchedEffect(run, i) { run.nextOffered = true }
 
-    BackHandler { run.back() }
+    // Back is the coach's while it runs. A handler registered later wins (the player's own, once a step opens it), so
+    // this one is registered again whenever the step or the place it's on changes, and so stays the last one.
+    key(i, state.playerOpen, state.lyricsOpen, state.route) { BackHandler { run.back() } }
 
     val scheme = MaterialTheme.colorScheme
     val glow = lerp(scheme.primary, Color.White, 0.4f)
@@ -300,14 +303,19 @@ fun CoachLayer(
         drawRect(SCRIM)
         hole?.let { drawHole(it, glow, pulse?.value) }
     }
-    // Over it the caption and Skip, whose buttons take their own touches (and nothing else here does).
+    // Over it the caption and Skip, whose buttons take their own touches (and nothing else here does). Skip sits in the
+    // top-end corner, or the top-start one when the hole is there (Home's profile picture), so the control can be tapped.
+    val rtl = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
+    val skipZone = with(density) { Size(SKIP_ZONE_W.toPx(), WindowInsets.safeDrawing.getTop(this) + SKIP_ZONE_H.toPx()) }
+    val skipStart = skipAtStart(hole, layer?.width ?: 0f, skipZone, rtl)
     Box(Modifier.fillMaxSize()) {
         CaptionPlacement(hole) {
             Caption(run, step, i)
         }
         PrismTextButton(
             onClick = { Coach.end(CoachEnd.SKIPPED, run) },
-            modifier = Modifier.align(Alignment.TopEnd).statusBarsPadding().padding(top = 6.dp, end = 10.dp)
+            modifier = Modifier.align(if (skipStart) Alignment.TopStart else Alignment.TopEnd).statusBarsPadding()
+                .padding(top = 6.dp, end = if (skipStart) 0.dp else 10.dp, start = if (skipStart) 10.dp else 0.dp)
                 .clip(CircleShape).background(Color.White.copy(alpha = 0.16f)).testTag(COACH_SKIP_TAG),
             shape = CircleShape,
         ) { Text(tr(R.string.skip), color = Color.White, style = MaterialTheme.typography.labelLarge) }
@@ -380,6 +388,35 @@ internal fun captionTop(hole: Rect?, captionHeight: Int, top: Int, bottom: Int, 
     val lo = top.coerceAtMost(height - captionHeight).coerceAtLeast(0)
     val hi = (bottom - captionHeight).coerceAtLeast(lo)
     return y.coerceIn(lo, hi).coerceAtMost((height - captionHeight).coerceAtLeast(0))
+}
+
+/** Where Skip may be: this wide and this far down (below the status bar) in its top corner. */
+private val SKIP_ZONE_W = 140.dp
+private val SKIP_ZONE_H = 64.dp
+
+/**
+ * Skip goes to the top-start corner: the [hole] (layer pixels, a layer [width] wide) reaches into the top-end corner's
+ * [zone] (its width, and its height from the top), where Skip would cover it. [rtl]: the end is on the left.
+ */
+internal fun skipAtStart(hole: Rect?, width: Float, zone: Size, rtl: Boolean): Boolean {
+    if (hole == null || hole.top >= zone.height) return false
+    return if (rtl) hole.left < zone.width else hole.right > width - zone.width
+}
+
+/**
+ * A tour's step may open the player when there's no song in it yet (one is being loaded). The player draws only with a
+ * song, so with none it never showed, and the flag stayed: the next song threw the full player open. When a tour ends
+ * with the player open and still no song, [close] puts the flag back. Nothing while no tour has run.
+ */
+@Composable
+fun CoachPlayerReset(playerOpen: Boolean, hasSong: () -> Boolean, close: () -> Unit) {
+    val running = Coach.run != null
+    val open by rememberUpdatedState(playerOpen)
+    var ran by remember { mutableStateOf(running) }
+    LaunchedEffect(running) {
+        if (running) ran = true
+        else if (ran) { ran = false; if (open && !hasSong()) close() }
+    }
 }
 
 /**

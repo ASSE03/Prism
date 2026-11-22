@@ -41,6 +41,7 @@ import com.prism.music.ui.tour.captionTop
 import com.prism.music.ui.tour.tourAnchor
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -213,6 +214,106 @@ class CoachTest {
             assertTrue("$where: caption $cap inside $root", cap.top >= root.top && cap.bottom <= root.bottom && cap.left >= root.left && cap.right <= root.right)
             if (where != Alignment.Center) assertTrue("$where: caption $cap clear of the control $target", cap.bottom <= target.top || cap.top >= target.bottom)
         }
+    }
+
+    /**
+     * 1.8.8 review: First steps' last step, without a Settings tab, points at Home's profile picture in the top-end
+     * corner, where Skip sat over it. Skip moves to the other top corner then, either direction of text.
+     */
+    @Test fun skipStaysClearOfAHoleInItsCorner() {
+        var dir by mutableStateOf(LayoutDirection.Ltr)
+        var at by mutableStateOf(Alignment.TopEnd)
+        Coach.start(listOf(step("Your picture opens Settings.")))
+        compose.setContent { CompositionLocalProvider(LocalLayoutDirection provides dir) { App(at) } }
+        for (d in listOf(LayoutDirection.Ltr, LayoutDirection.Rtl)) {
+            dir = d
+            at = Alignment.TopEnd
+            compose.waitForIdle()
+            val skip = compose.onNodeWithTag(COACH_SKIP_TAG).getBoundsInRoot()
+            val target = compose.onNodeWithTag("target").getBoundsInRoot()
+            val apart = skip.right <= target.left || skip.left >= target.right || skip.bottom <= target.top || skip.top >= target.bottom
+            assertTrue("$d: Skip $skip clear of the control $target", apart)
+            val before = targetTaps
+            compose.onNodeWithTag("target").performClick()
+            compose.waitForIdle()
+            assertEquals("$d: the control can be tapped", before + 1, targetTaps)
+            // A hole elsewhere: Skip in its own corner, the top end.
+            at = Alignment.Center
+            compose.waitForIdle()
+            val root = compose.onRoot().getBoundsInRoot()
+            val s = compose.onNodeWithTag(COACH_SKIP_TAG).getBoundsInRoot()
+            val atEnd = if (d == LayoutDirection.Ltr) s.left > root.right / 2 else s.right < root.right / 2
+            assertTrue("$d: Skip $s at the top end", atEnd)
+        }
+        assertTrue(com.prism.music.ui.tour.skipAtStart(Rect(300f, 10f, 400f, 60f), 400f, androidx.compose.ui.geometry.Size(140f, 64f), rtl = false))
+        assertTrue(com.prism.music.ui.tour.skipAtStart(Rect(0f, 10f, 100f, 60f), 400f, androidx.compose.ui.geometry.Size(140f, 64f), rtl = true))
+        assertFalse(com.prism.music.ui.tour.skipAtStart(Rect(0f, 10f, 100f, 60f), 400f, androidx.compose.ui.geometry.Size(140f, 64f), rtl = false))
+        assertFalse("lower down", com.prism.music.ui.tour.skipAtStart(Rect(300f, 100f, 400f, 160f), 400f, androidx.compose.ui.geometry.Size(140f, 64f), rtl = false))
+        assertFalse(com.prism.music.ui.tour.skipAtStart(null, 400f, androidx.compose.ui.geometry.Size(140f, 64f), rtl = false))
+    }
+
+    /**
+     * 1.8.8 review: the coach's Back was registered at its first step, and the player's own handlers (registered once a
+     * step opens it) came later and won: Back closed the player's parts instead of going back a step. It's the coach's.
+     */
+    @Test fun backIsTheCoachsEvenOnceThePlayerOpensWithItsOwn() {
+        var playerBacks = 0
+        Coach.start(listOf(step("One.", anchor = null), step("Two.", anchor = null), step("Open the player.", anchor = null)))
+        lateinit var dispatcher: androidx.activity.OnBackPressedDispatcher
+        compose.setContent {
+            dispatcher = androidx.activity.compose.LocalOnBackPressedDispatcherOwner.current!!.onBackPressedDispatcher
+            PrismTheme(AppSettings(), artworkColor = null) {
+                Box(Modifier.fillMaxSize()) {
+                    if (state.playerOpen) androidx.activity.compose.BackHandler { playerBacks++ }
+                    Coach.run?.let { CoachLayer(it, state, reduceMotion = true) }
+                }
+            }
+        }
+        compose.runOnIdle { Coach.run!!.next(); Coach.run!!.next() }
+        compose.waitForIdle()
+        assertEquals(2, index())
+        state = TourState(playerOpen = true) // the player opens, and its Back is registered after the coach's
+        compose.waitForIdle()
+        compose.runOnUiThread { dispatcher.onBackPressed() }
+        compose.waitForIdle()
+        assertEquals("the player's Back wasn't the one called", 0, playerBacks)
+        assertEquals("the coach went back a step", 1, index())
+        // With the tour gone, Back is the player's again.
+        compose.runOnIdle { Coach.skip() }
+        compose.waitForIdle()
+        compose.runOnUiThread { dispatcher.onBackPressed() }
+        compose.waitForIdle()
+        assertEquals(1, playerBacks)
+    }
+
+    /**
+     * 1.8.8 review: a step opens the player (Lyrics, the heart) while no song is in it. The player draws only with one,
+     * so nothing showed, and the flag stayed: the next song threw the full player open. The tour's end puts it back.
+     */
+    @Test fun aPlayerOpenedWithNoSongIsClosedWhenTheTourEnds() {
+        var open by mutableStateOf(false)
+        var hasSong = false
+        compose.setContent { com.prism.music.ui.tour.CoachPlayerReset(open, { hasSong }) { open = false } }
+        open = true
+        compose.waitForIdle()
+        assertTrue("no tour ran: left alone", open)
+        open = false
+        compose.runOnIdle { Coach.start(listOf(step("Lyrics.", anchor = null))) }
+        compose.waitForIdle()
+        open = true // the step's prep
+        compose.waitForIdle()
+        assertTrue("open while the tour runs (a song may still come)", open)
+        compose.runOnIdle { Coach.skip() }
+        compose.waitForIdle()
+        assertTrue("closed as the tour ends with no song", !open)
+        // With a song in it, the player stays open after a tour.
+        compose.runOnIdle { Coach.start(listOf(step("Like it.", anchor = null))) }
+        compose.waitForIdle()
+        open = true; hasSong = true
+        compose.waitForIdle()
+        compose.runOnIdle { Coach.skip() }
+        compose.waitForIdle()
+        assertTrue(open)
     }
 
     @Test fun captionPlacement() {

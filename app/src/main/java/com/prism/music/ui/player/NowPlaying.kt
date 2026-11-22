@@ -449,7 +449,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     LaunchedEffect(videoChips) { if (videoChips) { delay(5000); videoChips = false } }
     // Lyrics layout: each song opens on its lyrics once they're in (a song without any stays on the cover).
     val hasLyrics = lyricsState.lyrics != null
-    if (com.prism.music.ui.tour.TourAnchors.running) com.prism.music.ui.tour.TourSignals.Player(lyricsOpen, hasLyrics.takeIf { !lyricsState.loading }) // the coach (1.8.8)
+    if (com.prism.music.ui.tour.TourAnchors.running) com.prism.music.ui.tour.TourSignals.Player(lyricsOpen, lyricsState.forTour) // the coach (1.8.8)
     LaunchedEffect(playing.id, hasLyrics, layout) {
         if (layout == com.prism.music.data.prefs.PlayerLayout.LYRICS && hasLyrics && !queueOpen && !statsOpen && !lyricsOpen) openLyrics()
     }

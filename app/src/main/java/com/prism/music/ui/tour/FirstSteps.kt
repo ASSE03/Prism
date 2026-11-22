@@ -150,7 +150,8 @@ object FirstSteps {
                 prep = { s ->
                     startSong = s.song?.id; startPlaying = s.playing
                     setPlayerOpen(false)
-                    if (s.route != Routes.HOME) go(Routes.HOME)
+                    // As Home's tab button does: taken again from the Guide, no second Home on top of it.
+                    if (s.route != Routes.HOME) tab(Routes.HOME)
                 },
             ),
             CoachStep(
@@ -180,13 +181,17 @@ object FirstSteps {
                 TourAnchor.SETTINGS_TAB, tr(R.string.first_steps_looks),
                 done = { it.route == looksRoute },
                 // No Settings tab in the bar: Home's profile picture opens Settings, and carries this step's mark then.
-                prep = { s -> setPlayerOpen(false); if (!settingsTabShown(s) && s.route != Routes.HOME) go(Routes.HOME) },
+                prep = { s -> setPlayerOpen(false); if (!settingsTabShown(s) && s.route != Routes.HOME) tab(Routes.HOME) },
             ),
         )
     }
 
     /** The bar shows a Settings tab; without one, Home's profile picture is [TourAnchor.SETTINGS_TAB]. */
     fun settingsTabShown(s: TourState): Boolean = com.prism.music.data.prefs.NavTab.SETTINGS in s.settings.navTabs
+
+    /** The first of [picks] Home actually shows: "Hide explicit" leaves explicit songs off its rows. */
+    fun firstShown(mode: com.prism.music.data.prefs.ExplicitContent, picks: List<Song>): Song? =
+        com.prism.music.data.ExplicitFilter.shown(mode, picks).firstOrNull()
 
     /** Home tells the first Quick pick while a coach tour runs (one line there). */
     @Composable
