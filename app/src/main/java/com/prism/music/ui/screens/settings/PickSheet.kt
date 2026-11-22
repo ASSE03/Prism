@@ -272,7 +272,7 @@ internal fun <T> PickCards(
         SheetHeader(title, info)
         Column(
             Modifier.fillMaxWidth().weight(1f, fill = false).nestedScroll(KeepUpwardScroll).verticalScroll(rememberScrollState())
-                .padding(start = 16.dp, end = 16.dp, bottom = 22.dp),
+                .padding(start = 16.dp, end = 16.dp, bottom = if (footer == null) 22.dp else 4.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             options.chunked(across).forEach { row ->
@@ -301,8 +301,10 @@ internal fun <T> PickCards(
                     repeat(across - row.size) { Spacer(Modifier.weight(1f)) }
                 }
             }
-            footer?.invoke(this)
         }
+        // Under the cards, outside their scroll: always whole (1.8.8 check: at the foot of the scroll it was cut
+        // through its letters when the cards filled the sheet).
+        if (footer != null) Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 18.dp), content = footer)
     }
 }
 

@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.click
+import androidx.compose.material3.Text
+import androidx.compose.ui.platform.testTag
 import com.prism.music.ui.screens.settings.PickCards
 import com.prism.music.ui.screens.settings.PickCardsRow
 import com.prism.music.ui.screens.settings.RowsSheet
@@ -503,6 +505,22 @@ class SettingsKitTest {
         compose.waitForIdle()
         assertEquals("the example's control wasn't tapped", 0, inner)
         assertEquals("the card took the tap", "Wave", picked)
+    }
+
+    /**
+     * 1.8.8 check: on the mid emulator the Crossfade sheet's "Hear it on the next song" sat at the foot of the scrolling
+     * cards and was cut through its letters ("sona"). The footer stays under the cards, whole, when they scroll.
+     */
+    @Test fun aPickSheetsFooterIsShownWholeWhenTheCardsScroll() {
+        show {
+            Box(Modifier.height(300.dp)) {
+                PickCards("Progress bar style", styles, "Line", { it }, null, 2, 0.8f, {
+                    Box(Modifier.fillMaxWidth().height(110.dp))
+                }, footer = { Text("Hear it on the next song", Modifier.testTag("footer").height(48.dp)) }) {}
+            }
+        }
+        val footer = compose.onNode(hasTestTag("footer")).fetchSemanticsNode()
+        assertEquals("the footer isn't clipped", footer.size.height.toFloat(), footer.boundsInRoot.height, 0.5f)
     }
 
     @Test fun everyPageTitleFitsTheBarOnA360Phone() {
