@@ -107,4 +107,27 @@ class ReplayArtistPhotoTest {
         assertEquals(darshanFace, ArtistPhotos.photo(mapOf(DARSHAN to darshanFace), DARSHAN, "Darshan Raval"))
         assertEquals("no id: by name", pritamFace, ArtistPhotos.photo(mapOf(ArtistPhotos.nameKey("Pritam") to pritamFace), null, "Pritam"))
     }
+
+    /**
+     * A page whose title doesn't read is called "Artist" (YouTubeMusic.artist). Its name wasn't kept, so the page was
+     * never known and was fetched again at every Replay, Rewind and widget refresh; and Rewind judged "Artist" as
+     * another artist and dropped the photo, where Replay used it.
+     */
+    @Test fun aPageWithoutATitleIsKnownOnceFetchedAndKeepsItsPhoto() {
+        val face = "https://yt3/pritam"
+        // What fetching it keeps: the photo by id, and the page as known (no name).
+        val kept = mapOf(PRITAM to face, ArtistPhotos.pageEntry(PRITAM, ArtistPhotos.UNNAMED))
+        assertTrue(ArtistPhotos.pageKnown(kept, PRITAM))
+        assertFalse("not fetched again", ArtistPhotos.wanted(kept, PRITAM, "Pritam"))
+        assertEquals("its photo is used", face, ArtistPhotos.photo(kept, PRITAM, "Pritam"))
+        // Before it's fetched it is wanted; a named page is known by its name as before.
+        assertTrue(ArtistPhotos.wanted(mapOf(PRITAM to face), PRITAM, "Pritam"))
+        assertEquals(ArtistPhotos.pageKey(DARSHAN) to "Darshan Raval", ArtistPhotos.pageEntry(DARSHAN, "Darshan Raval"))
+        assertEquals(ArtistPhotos.pageKey(DARSHAN) to "", ArtistPhotos.pageEntry(DARSHAN, " "))
+        // Rewind treats it as Replay does: an unnamed page isn't someone else's; a plainly other one still is.
+        assertTrue(ArtistPhotos.couldBe(ArtistPhotos.UNNAMED, "Pritam"))
+        assertTrue(ArtistPhotos.couldBe("", "Pritam"))
+        assertFalse(ArtistPhotos.couldBe("Darshan Raval", "Pritam"))
+        assertTrue(ArtistPhotos.couldBe("Pritam", "Pritam"))
+    }
 }
