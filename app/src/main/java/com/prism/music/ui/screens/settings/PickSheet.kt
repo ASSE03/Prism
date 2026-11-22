@@ -95,10 +95,11 @@ fun <T> PickSheet(
     columns: Int = 2,
     exampleScale: Float = 0.8f,
     onRepick: (() -> Unit)? = null,
+    footer: (@Composable ColumnScope.() -> Unit)? = null,
     example: @Composable (T) -> Unit,
 ) {
     SettingsSheet(onDismiss) { close ->
-        PickCards(title, options, selected, label, info, columns, exampleScale, example) { picked ->
+        PickCards(title, options, selected, label, info, columns, exampleScale, example, footer) { picked ->
             if (picked != selected) onPick(picked) else onRepick?.invoke()
             close {}
         }
@@ -153,13 +154,15 @@ fun <T> PickCardsRow(
     thumbnail: (@Composable (T) -> Unit)? = null,
     value: String? = null,
     onRepick: (() -> Unit)? = null,
+    /** Under the cards in the sheet: something that goes with the choice (Crossfade's "Hear it on the next song"). */
+    footer: (@Composable ColumnScope.() -> Unit)? = null,
     onPick: (T) -> Unit,
     example: @Composable (T) -> Unit,
 ) {
     var open by rememberSaveable(title, "pick-cards") { mutableStateOf(false) }
     val thumb: (@Composable () -> Unit)? = if (thumbnail != null) ({ thumbnail(selected) }) else null
     PickRow(title, value ?: label(selected), modifier, info, changed, enabled, thumb) { open = true }
-    if (open) PickSheet(title, options, selected, label, onPick, { open = false }, info, columns, exampleScale, onRepick, example)
+    if (open) PickSheet(title, options, selected, label, onPick, { open = false }, info, columns, exampleScale, onRepick, footer, example)
 }
 
 /** A [PickRow] that opens its own [PickListSheet]. [value]: what the row says (the picked option's [label] by default). */
@@ -256,6 +259,7 @@ internal fun <T> PickCards(
     columns: Int,
     exampleScale: Float,
     example: @Composable (T) -> Unit,
+    footer: (@Composable ColumnScope.() -> Unit)? = null,
     onPick: (T) -> Unit,
 ) {
     val ui = LocalUi.current
@@ -297,6 +301,7 @@ internal fun <T> PickCards(
                     repeat(across - row.size) { Spacer(Modifier.weight(1f)) }
                 }
             }
+            footer?.invoke(this)
         }
     }
 }

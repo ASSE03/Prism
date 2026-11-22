@@ -12,8 +12,16 @@ enum class QueueEnd(val label: String) { STOP(tr(R.string.stop)), YOURS(tr(R.str
 /** Music videos (1.8.0): "Songs, not videos" and its "Everywhere" as one choice. */
 enum class VideoPolicy(val label: String) { PLAY(tr(R.string.play_them)), RADIOS(tr(R.string.songs_in_radios)), EVERYWHERE(tr(R.string.songs_everywhere)) }
 
-/** Crossfade (1.8.0, #210): its switch and "Automatic length" as one choice; Fixed shows the length slider. */
-enum class Crossfade(val label: String) { OFF(tr(R.string.off)), AUTO(tr(R.string.automatic_plain)), FIXED(tr(R.string.fixed_length)) }
+/**
+ * Crossfade (1.8.0, #210): its switch and "Automatic length" as one choice; Fixed shows the length slider. Automix (1.8.8,
+ * plan-mix §3.2): automatic length with a DJ-style move picked for each pair of songs.
+ */
+enum class Crossfade(val label: String) {
+    OFF(tr(R.string.off)), AUTO(tr(R.string.automatic_plain)), FIXED(tr(R.string.fixed_length)), AUTOMIX(tr(R.string.automix)),
+}
+
+/** What a [Crossfade] choice stores: Crossfade on, automatic length, Automix (null = leave it as it was). */
+data class CrossfadeValues(val on: Boolean, val auto: Boolean?, val automix: Boolean?)
 
 /** Skip silence (1.8.0, #210; "Songs only" #325): skip silence for songs and for podcast episodes as one choice. */
 enum class TrimSilence(val label: String) { OFF(tr(R.string.off)), SONGS(tr(R.string.songs_only)), PODCASTS(tr(R.string.podcasts_only)), ALL(tr(R.string.songs_and_podcasts)) }
@@ -63,23 +71,43 @@ object SoundChoices {
         prefs.setSongsEverywhere(everywhere)
     }
 
+    /** Automix counts first: it implies an automatic length, whatever `mix_auto` says. */
     fun crossfade(s: AppSettings): Crossfade = when {
         !s.mix.on -> Crossfade.OFF
+        s.mix.automix -> Crossfade.AUTOMIX
         s.mix.auto -> Crossfade.AUTO
         else -> Crossfade.FIXED
     }
 
-    /** mix, mixAuto (null = leave as it was: Off keeps whether it was automatic, for when it's turned back on). */
-    fun crossfadeValues(x: Crossfade): Pair<Boolean, Boolean?> = when (x) {
-        Crossfade.OFF -> false to null
-        Crossfade.AUTO -> true to true
-        Crossfade.FIXED -> true to false
+    /**
+     * mix, mixAuto, mixAutomix (null = leave as it was: Off keeps whether it was automatic and whether it was Automix, for
+     * when it's turned back on). Any other choice turns Automix off.
+     */
+    fun crossfadeValues(x: Crossfade): CrossfadeValues = when (x) {
+        Crossfade.OFF -> CrossfadeValues(false, null, null)
+        Crossfade.AUTO -> CrossfadeValues(true, true, false)
+        Crossfade.FIXED -> CrossfadeValues(true, false, false)
+        Crossfade.AUTOMIX -> CrossfadeValues(true, true, true)
     }
 
     fun setCrossfade(prefs: SettingsRepository, x: Crossfade) {
-        val (on, auto) = crossfadeValues(x)
-        auto?.let { prefs.setMixAuto(it) }
-        prefs.setMix(on)
+        val v = crossfadeValues(x)
+        v.auto?.let { prefs.setMixAuto(it) }
+        v.automix?.let { prefs.setMixAutomix(it) }
+        prefs.setMix(v.on)
+    }
+
+    /** "Hear it on the next song" seeks this far before the coming transition. */
+    const val HEAR_IT_LEAD_MS = 12_000L
+
+    /**
+     * Where "Hear it on the next song" seeks to: [HEAR_IT_LEAD_MS] before the coming transition [mark] (the engine's
+     * [com.prism.music.playback.MixState.mark]), when it belongs to the song playing ([songId]) and Crossfade is on; else
+     * null (nothing is coming, and the button is greyed). Never before the song's start.
+     */
+    fun hearItAt(s: AppSettings, mark: com.prism.music.playback.BlendMark?, songId: String?): Long? {
+        if (!s.mix.on || mark == null || songId == null || mark.songId != songId || mark.startMs <= 0) return null
+        return (mark.startMs - HEAR_IT_LEAD_MS).coerceAtLeast(0)
     }
 
     /**

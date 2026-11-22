@@ -95,11 +95,59 @@ class SoundChoicesTest {
         assertEquals(Crossfade.AUTO, SoundChoices.crossfade(base.copy(mix = base.mix.copy(on = true, auto = true))))
         assertEquals(Crossfade.FIXED, SoundChoices.crossfade(base.copy(mix = base.mix.copy(on = true, auto = false))))
         for (x in Crossfade.entries) {
-            val (on, auto) = SoundChoices.crossfadeValues(x)
-            assertEquals(x, SoundChoices.crossfade(base.copy(mix = base.mix.copy(on = on, auto = auto ?: base.mix.auto))))
+            val v = SoundChoices.crossfadeValues(x)
+            assertEquals(x, SoundChoices.crossfade(base.copy(mix = base.mix.copy(on = v.on, auto = v.auto ?: base.mix.auto, automix = v.automix ?: base.mix.automix))))
         }
         // Off keeps automatic/fixed, so turning crossfade back on gives the old way.
-        assertEquals(null, SoundChoices.crossfadeValues(Crossfade.OFF).second)
+        assertEquals(null, SoundChoices.crossfadeValues(Crossfade.OFF).auto)
+    }
+
+    /**
+     * 1.8.8 (plan-mix §3.2): Automix is the fourth choice. Stored: mix on, automatic length, mix_automix on; it reads as
+     * Automix whatever the length setting says. Any other choice turns it off; Off keeps it, so Crossfade comes back as
+     * Automix (as Off keeps Automatic today). Nobody's setting changes: a fresh install and every older combination
+     * (no mix_automix stored) read as before.
+     */
+    @Test fun automixIsTheFourthChoiceBothWays() {
+        assertEquals(listOf(Crossfade.OFF, Crossfade.AUTO, Crossfade.FIXED, Crossfade.AUTOMIX), Crossfade.entries)
+        assertEquals(false, base.mix.automix)
+        assertEquals(Crossfade.OFF, SoundChoices.crossfade(base))
+        fun mix(on: Boolean, auto: Boolean, automix: Boolean) = base.copy(mix = base.mix.copy(on = on, auto = auto, automix = automix))
+        // Read.
+        assertEquals(Crossfade.AUTOMIX, SoundChoices.crossfade(mix(on = true, auto = true, automix = true)))
+        assertEquals(Crossfade.AUTOMIX, SoundChoices.crossfade(mix(on = true, auto = false, automix = true)))
+        assertEquals(Crossfade.OFF, SoundChoices.crossfade(mix(on = false, auto = true, automix = true)))
+        assertEquals(Crossfade.AUTO, SoundChoices.crossfade(mix(on = true, auto = true, automix = false)))
+        assertEquals(Crossfade.FIXED, SoundChoices.crossfade(mix(on = true, auto = false, automix = false)))
+        // Written.
+        assertEquals(com.prism.music.ui.screens.CrossfadeValues(on = true, auto = true, automix = true), SoundChoices.crossfadeValues(Crossfade.AUTOMIX))
+        assertEquals(false, SoundChoices.crossfadeValues(Crossfade.AUTO).automix)
+        assertEquals(false, SoundChoices.crossfadeValues(Crossfade.FIXED).automix)
+        assertEquals(null, SoundChoices.crossfadeValues(Crossfade.OFF).automix)
+        // Off, then back: the choice that was there before Off.
+        for (was in listOf(Crossfade.AUTO, Crossfade.FIXED, Crossfade.AUTOMIX)) {
+            var s = base
+            fun apply(x: Crossfade) {
+                val v = SoundChoices.crossfadeValues(x)
+                s = s.copy(mix = s.mix.copy(on = v.on, auto = v.auto ?: s.mix.auto, automix = v.automix ?: s.mix.automix))
+            }
+            apply(was); apply(Crossfade.OFF)
+            assertEquals(Crossfade.OFF, SoundChoices.crossfade(s))
+            s = s.copy(mix = s.mix.copy(on = true))
+            assertEquals("Crossfade back on after Off from $was", was, SoundChoices.crossfade(s))
+        }
+    }
+
+    /** "Hear it on the next song": 12 s before the coming transition of the song playing; nothing when none is coming. */
+    @Test fun hearItSeeksTwelveSecondsBeforeTheComingTransition() {
+        val on = base.copy(mix = base.mix.copy(on = true, automix = true))
+        val mark = com.prism.music.playback.BlendMark("a", 200_000L)
+        assertEquals(188_000L, SoundChoices.hearItAt(on, mark, "a"))
+        assertEquals("never before the song's start", 0L, SoundChoices.hearItAt(on, mark.copy(startMs = 5_000L), "a"))
+        assertEquals("another song's mark", null, SoundChoices.hearItAt(on, mark, "b"))
+        assertEquals("nothing playing", null, SoundChoices.hearItAt(on, mark, null))
+        assertEquals("no transition coming", null, SoundChoices.hearItAt(on, null, "a"))
+        assertEquals("Crossfade off", null, SoundChoices.hearItAt(base, mark, "a"))
     }
 
     @Test fun homeTopButtonsFollowBothSwitches() {

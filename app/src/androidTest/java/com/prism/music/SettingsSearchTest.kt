@@ -40,9 +40,10 @@ class SettingsSearchTest {
         compose.onNode(hasSetTextAction()).performTextInput("crossfade songs")
         compose.clickWhenFound(androidx.compose.ui.test.hasText("Crossfade") and androidx.compose.ui.test.hasClickAction())
         // Its page (Playback since 1.8.4, opened at "Song to song"): the search box is gone and the choice is there,
-        // as the Crossfade row's chips.
+        // as the Crossfade row's example cards (a sheet since 1.8.8, with Automix the fourth).
         compose.waitUntil(5_000) { compose.onAllNodes(hasSetTextAction()).fetchSemanticsNodes().isEmpty() }
-        compose.clickWhenFound(settingsChip("Fixed length", row = "Crossfade"))
+        compose.clickWhenFound(androidx.compose.ui.test.hasTestTag(com.prism.music.ui.screens.settings.SettingsTags.ROW_PICK) and (androidx.compose.ui.test.hasText("Crossfade") or androidx.compose.ui.test.hasAnyDescendant(androidx.compose.ui.test.hasText("Crossfade"))))
+        compose.clickWhenFound(androidx.compose.ui.test.hasTestTag(com.prism.music.ui.screens.settings.SettingsTags.SHEET_OPTION) and androidx.compose.ui.test.hasText("Fixed length"))
         compose.waitUntil(5_000) { Fixture.container.settings.current.let { it.mix.on && !it.mix.auto } }
         val s = Fixture.container.settings.current
         assertTrue("Crossfade on with a fixed length (mix=${s.mix.on}, mixAuto=${s.mix.auto})", s.mix.on && !s.mix.auto)
