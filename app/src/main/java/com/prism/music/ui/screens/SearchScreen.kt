@@ -232,7 +232,7 @@ fun SearchScreen(bottomPadding: Dp) {
         value = runCatching { kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) { c.lyricSearch.find(live) } }.getOrDefault(emptyList())
     }
 
-    val moods = rememberLoad("moods") { c.taste.rank(runCatching { c.ytm.moodsAndGenres() }.getOrDefault(emptyList())) }
+    val moods = rememberLoad(c.ytm.moodsLoadKey()) { c.taste.rank(runCatching { c.ytm.moodsAndGenres() }.getOrDefault(emptyList())) }
     val onSong: (SongItem) -> Unit = { c.player.playSingle(it.song) }
     val open: (BrowseItem) -> Unit = { item ->
         saveQuery(live); focus.clearFocus()

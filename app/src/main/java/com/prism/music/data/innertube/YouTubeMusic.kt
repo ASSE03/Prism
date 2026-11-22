@@ -392,6 +392,12 @@ class YouTubeMusic(
         ?: Parser.shelves(browse("FEmusic_moods_and_genres"))
 
     /**
+     * What a screen keeps its Moods & genres under (Home's and Search's last as long as the app): one per page language
+     * and country, so after a new country in Settings they ask again instead of showing the old country's.
+     */
+    fun moodsLoadKey(): String = "moods:${api.pageLanguage}"
+
+    /**
      * Explore's new releases, moods and genres, and trending. Asked without the account: it's the same public page, and
      * what was checked is what everyone gets.
      */

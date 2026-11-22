@@ -297,7 +297,7 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
     val lastHome by produceState(homeShelfCache.value.ifEmpty { null }) {
         if (value == null) value = c.homeCache.read()?.also { if (homeShelfCache.value.isEmpty()) homeShelfCache.value = it }
     }
-    val moods = rememberLoad("moods") { c.taste.rank(runCatching { c.ytm.moodsAndGenres() }.getOrDefault(emptyList())) }
+    val moods = rememberLoad(c.ytm.moodsLoadKey()) { c.taste.rank(runCatching { c.ytm.moodsAndGenres() }.getOrDefault(emptyList())) }
     LaunchedEffect(signIn) { if (signInChanged) home.reload(false) }
     val recent by c.library.recent.collectAsState()
     val liked by c.library.likedShown.collectAsState()
