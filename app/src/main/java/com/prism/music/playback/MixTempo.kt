@@ -366,7 +366,8 @@ class MixTempo(
     /** Scanned before the song's fade-out and intro were measured (for Mix's Auto length): scanned again once. */
     private fun old(id: String) = prefs.getString(id, null)?.let(Tempo::isOld) == true
 
-    internal class Scan(val tempo: Tempo?, val lufs: Float?, val key: MusicKey?, val peakDb: Float?, val brightness: Double?)
+    /** [shape]: energy and bass a second at a time, for Automix (1.8.8), kept beside the waveform outline. */
+    internal class Scan(val tempo: Tempo?, val lufs: Float?, val key: MusicKey?, val peakDb: Float?, val brightness: Double?, val shape: SongShape? = null)
 
     // ---------------------------------------------------------------- DJ mode's quick scan
 
@@ -554,7 +555,10 @@ class MixTempo(
                         File(dir, "mix_${id}_$rate.f32").writeBytes(bb.array())
                     }
                 }
-            })
+            }).also { s ->
+                // Automix's shape of the song (energy and bass a second at a time), beside its outline (1.8.8).
+                s.shape?.let { shape -> waves?.let { w -> runCatching { w.putShape(id, shape) } } }
+            }
         } finally {
             file.delete()
         }
@@ -662,11 +666,11 @@ class MixTempo(
             step()
             // Energy's brightness from the same bands as the tempo (1.8.3; no extra pass).
             val brightness = runCatching { Energy.brightness(heard.bands) }.getOrNull()
-            return Scan(Tempo.analyze(heard.bands, heard.frameMs, offsetMs = heard.offsetMs), heard.lufs, heard.key, heard.peakDb, brightness)
+            return Scan(Tempo.analyze(heard.bands, heard.frameMs, offsetMs = heard.offsetMs), heard.lufs, heard.key, heard.peakDb, brightness, heard.shape)
         }
 
         /** What a scan reads straight from the samples, and none of the samples themselves. */
-        private class Heard(val lufs: Float?, val bands: Array<FloatArray>, val frameMs: Double, val offsetMs: Double, val key: MusicKey?, val peakDb: Float?)
+        private class Heard(val lufs: Float?, val bands: Array<FloatArray>, val frameMs: Double, val offsetMs: Double, val key: MusicKey?, val peakDb: Float?, val shape: SongShape?)
 
         /** The only frame that holds the decoded samples: they go when it returns. */
         private fun hear(decode: () -> Decoded, onSamples: (pcm: FloatArray, count: Int, rate: Int) -> Unit, step: () -> Unit): Heard {
@@ -681,7 +685,9 @@ class MixTempo(
             step()
             val key = runCatching { KeyDetector.detect(pcm, rate, count) }.getOrNull()
             val peakDb = decoded.peak.takeIf { it > 0f }?.let { (20 * kotlin.math.log10(it.toDouble())).toFloat() }
-            return Heard(lufs, bands, frameMs, VideoSync.WINDOW / 2 * 1000.0 / rate, key, peakDb)
+            // Automix's shape: one pass of two low-passes over the samples, about half a kilobyte kept (1.8.8).
+            val shape = runCatching { SongShape.of(pcm, count, rate) }.getOrNull()
+            return Heard(lufs, bands, frameMs, VideoSync.WINDOW / 2 * 1000.0 / rate, key, peakDb, shape)
         }
 
         /** When the sound last ran dry (SystemClock.elapsedRealtime; set by the playback service). */
