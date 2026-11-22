@@ -27,6 +27,48 @@ class TourTest {
         assertTrue(Tour.isFullTour(0))
     }
 
+    private val context get() = androidx.test.core.app.ApplicationProvider.getApplicationContext<android.app.Application>()
+    private fun freshInstall() = context.getSharedPreferences("tour", android.content.Context.MODE_PRIVATE).edit().clear().commit()
+
+    /**
+     * 1.8.8 (plan-tour.md §3 B, §5): a new install is given First steps (five steps), not the history: no pager of every
+     * release's pages, then or at a later start; at this version nothing else is pending.
+     */
+    @Test
+    fun aNewInstallGetsFirstStepsAndNotTheHistory() {
+        freshInstall()
+        com.prism.music.ui.tour.FirstSteps.load(context, returning = false)
+        assertTrue(com.prism.music.ui.tour.FirstSteps.pending)
+        assertEquals(5, com.prism.music.ui.tour.FirstSteps.steps {}.size)
+        assertNull("no history pager for a new install", com.prism.music.ui.tour.pendingTour(context, returning = false))
+        // Prism closed before First steps came up: the next start (set up by then) still gives First steps, no pager.
+        com.prism.music.ui.tour.FirstSteps.load(context, returning = true)
+        assertTrue(com.prism.music.ui.tour.FirstSteps.pending)
+        assertNull(com.prism.music.ui.tour.pendingTour(context, returning = true))
+        // Done (finished or skipped): never again, and still no history.
+        com.prism.music.ui.tour.FirstSteps.markDone(context)
+        com.prism.music.ui.tour.FirstSteps.load(context, returning = false)
+        assertTrue(!com.prism.music.ui.tour.FirstSteps.pending)
+        assertNull(com.prism.music.ui.tour.pendingTour(context, returning = true))
+    }
+
+    /** D9: nobody who has seen the tour, and nobody returning (set up before this start), is given First steps. */
+    @Test
+    fun peopleAlreadyOnPrismNeverGetFirstSteps() {
+        freshInstall()
+        com.prism.music.ui.tour.FirstSteps.load(context, returning = true)
+        assertTrue("set up before tours existed", !com.prism.music.ui.tour.FirstSteps.pending)
+        freshInstall()
+        Tour.markSeen(context)
+        com.prism.music.ui.tour.FirstSteps.load(context, returning = false)
+        assertTrue("saw the old tour", !com.prism.music.ui.tour.FirstSteps.pending)
+        freshInstall()
+        context.getSharedPreferences("tour", android.content.Context.MODE_PRIVATE).edit().putInt("seen_version", 61).commit()
+        com.prism.music.ui.tour.FirstSteps.load(context, returning = true)
+        assertTrue(!com.prism.music.ui.tour.FirstSteps.pending)
+        assertNotNull("someone updating still gets What's new", com.prism.music.ui.tour.pendingTour(context, returning = true))
+    }
+
     @Test
     fun aTourSeenAtThisVersionShowsNothingMore() {
         assertTrue(Tour.stepsAfter(BuildConfig.VERSION_CODE).isEmpty())

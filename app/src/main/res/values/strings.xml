@@ -5669,4 +5669,15 @@
     <string name="spot_canvas_first_keywords">spotify canvas loop video clip unofficial</string>
     <string name="spot_canvas_offer_title">Show Spotify\'s canvas?</string>
     <string name="spot_canvas_offer_text">Prism can play the short looping video Spotify shows with a song, where it has one. This is unofficial and uses your Spotify sign-in. Prism Canvas shows for every other song. You can change this later in Player, under Canvas.</string>
+    <!-- 1.8.8: First steps, the new-user tour (plan-tour.md §3 B), and the welcome screen's three lines (D4) -->
+    <string name="first_steps_play">Tap a song to play it.</string>
+    <string name="first_steps_player">This is your player. Tap it.</string>
+    <string name="first_steps_lyrics">Lyrics follow the song. Tap here.</string>
+    <string name="first_steps_like">Like it, and it\'s in your Library.</string>
+    <string name="first_steps_looks">Everything can look your way.</string>
+    <string name="first_steps_closing">That\'s the start. The Guide has the rest, whenever you want it.</string>
+    <string name="first_steps_open_guide">Open the Guide</string>
+    <string name="welcome_line_music">Your YouTube Music, with no ads in the way</string>
+    <string name="welcome_line_lyrics">Lyrics that follow the song</string>
+    <string name="welcome_line_looks">Looks, sound and a player you can make yours</string>
 </resources>

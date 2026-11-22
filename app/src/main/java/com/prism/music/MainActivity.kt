@@ -195,6 +195,8 @@ open class MainActivity : ComponentActivity() {
         // Not asked here any more (a prompt before the welcome screen, with no reason given): the tour or the first
         // download asks, through this.
         if (c.returningUser == null) c.returningUser = c.settings.current.let { it.onboarded || it.isLoggedIn }
+        // 1.8.8: a new install is given First steps (once), never the history pager.
+        com.prism.music.ui.tour.FirstSteps.load(this, c.returningUser == true)
         c.notificationPrompt = { if (Build.VERSION.SDK_INT >= 33) runOnUiThread { notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS) } }
         SmartDownloadWorker.schedule(this, c.settings.current.smartDownloads)
         // Tidies the smart-download queue (it only adds more if it's been a while).
@@ -979,10 +981,17 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 // The tour (1.7): the whole of it after setting up a new install or the first time a release with tours
                 // runs; later releases show only what's new since the last one seen. Settings → About takes it again.
                 var tour by remember { mutableStateOf<com.prism.music.ui.tour.TourPlan?>(null) }
+                val firstSteps = com.prism.music.ui.tour.FirstSteps
                 LaunchedEffect(showChrome) {
                     if (showChrome && tour == null) {
                         kotlinx.coroutines.delay(600) // after the first page has drawn
-                        tour = com.prism.music.ui.tour.pendingTour(context, c.returningUser == true)
+                        // 1.8.8: a new install's First steps (plan-tour.md §3 B), on the coach, in place of the pager.
+                        if (firstSteps.pending) {
+                            if (com.prism.music.ui.tour.Coach.run == null) {
+                                playerOpen = false
+                                firstSteps.start(context) { firstSteps.quickPick?.let { c.player.cue(it) } }
+                            }
+                        } else tour = com.prism.music.ui.tour.pendingTour(context, c.returningUser == true)
                     }
                 }
                 LaunchedEffect(Unit) { c.tourRequests.collect { playerOpen = false; tour = com.prism.music.ui.tour.fullTour(c.returningUser == true) } }
@@ -991,14 +1000,23 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 }
                 // The coach (1.8.8): a tour that has the person do things, over everything. Nothing while none runs.
                 val coachActions = remember(navigator) { com.prism.music.ui.tour.CoachActions(go = { r -> navigator.go(r) }, setPlayerOpen = { playerOpen = it }) }
-                com.prism.music.ui.tour.CoachHost(route, playerOpen && song != null, coachActions)
+                // The page showing with its arguments ("settings/looks", not "settings/{section}…"), for the steps' checks.
+                val place = route?.let { r -> com.prism.music.ui.filledRoute(r) { a -> @Suppress("DEPRECATION") backStack?.arguments?.get(a)?.toString() } }
+                com.prism.music.ui.tour.CoachHost(place, playerOpen && song != null, coachActions)
+                // First steps' last step: Settings opens Looks; then its closing card.
+                LaunchedEffect(place) { firstSteps.redirect(place)?.let { navigator.go(it) } }
+                if (firstSteps.closing) com.prism.music.ui.tour.FirstStepsClosing(
+                    onGuide = { firstSteps.closing = false; playerOpen = false; navigator.go(firstSteps.guideRoute) },
+                    onDone = { firstSteps.closing = false },
+                )
 
                 // Holiday Mode (1.8.0): once a season, the first time Prism opens in its month after setting up and the
                 // tour; never over the welcome screen, the tour, the player or another question.
                 var seasonAsk by remember { mutableStateOf<com.prism.music.data.looks.Season?>(null) }
                 val lookPending by c.looks.pending.collectAsState()
                 val blendPending by c.blends.pending.collectAsState()
-                val clear = showChrome && tour == null && !playerOpen && customizing == null && lookPending == null && blendPending == null
+                // 1.8.8 (D11): not while First steps is to come or its card is up, nor in a new install's first session.
+                val clear = showChrome && tour == null && !playerOpen && customizing == null && lookPending == null && blendPending == null && com.prism.music.ui.tour.Coach.run == null && !com.prism.music.ui.tour.FirstSteps.holidayWaits(newInstallSession = c.returningUser == false)
                 LaunchedEffect(clear) {
                     if (!clear || seasonAsk != null) return@LaunchedEffect
                     kotlinx.coroutines.delay(1_500) // after the tour would have come up

@@ -457,8 +457,9 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
         LazyColumn(Modifier.fillMaxSize(), state = list, contentPadding = PaddingValues(bottom = bottomPadding + 16.dp)) {
             item { HomeTopBar() }
             item(key = "update") { UpdateBanner() }
-            item(key = "performance") { PerformanceOffer() }
-            item(key = "smartDownloads") { SmartDownloadsOffer(smartAnswered) { smartAnswered = true } }
+            // 1.8.8 (plan-tour.md D11): neither offer while a new install's First steps is still to come.
+            item(key = "performance") { if (!com.prism.music.ui.tour.FirstSteps.offersWait()) PerformanceOffer() }
+            item(key = "smartDownloads") { if (!com.prism.music.ui.tour.FirstSteps.offersWait()) SmartDownloadsOffer(smartAnswered) { smartAnswered = true } }
             // 1.8.7.6: the 100-hour card, never beside another offer (one ask at a time).
             item(key = "support") {
                 com.prism.music.ui.support.SupportHomeCard(otherOffer = performanceOfferShows() || smartAnswered != true && settings.onboarded)
@@ -482,6 +483,8 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
                             // A pick starts a radio from it (#38), as on YouTube Music, unless Customize Home says to play them in order.
                             // Offline: the songs on the phone you're most likely to want, played in order.
                             val firstPick = com.prism.music.ui.tour.TourAnchor.QUICK_PICK // where the coach points first (1.8.8)
+                            // First steps' D12: the song put in the mini player when step 1 is passed with Next.
+                            if (com.prism.music.ui.tour.TourAnchors.running) com.prism.music.ui.tour.FirstSteps.QuickPick((if (online) pickSongs else offlinePicks).firstOrNull())
                             if (!online) { if (offlinePicks.isNotEmpty()) SongSection(cfg, cfg.titled(tr(R.string.quick_picks)), tr(R.string.ready_offline), offlinePicks, snap = true, firstAnchor = firstPick) }
                             else if (pickSongs.isNotEmpty()) SongSection(
                                 cfg, cfg.titled(tr(R.string.quick_picks)), picks?.strapline, pickSongs, snap = true, firstAnchor = firstPick,

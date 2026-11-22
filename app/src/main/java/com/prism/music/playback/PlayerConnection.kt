@@ -791,6 +791,25 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
     }
 
     /**
+     * First steps (1.8.8, plan-tour.md D12): [song] in the mini player, paused, as if it had been tapped and paused at
+     * once (its Play plays it, then autoplay as after any song tapped).
+     */
+    fun cue(song: Song) {
+        ++playToken
+        stopFill()
+        c.queue.source.value = QueueSource(QueueKind.SINGLE, tr(R.string.autoplay), seedId = song.id)
+        c.queue.autoplayContinuation = null
+        c.queue.autoplayStart.value = -1
+        c.queue.userQueued.value = emptySet()
+        ensureStarted()
+        withPlayer { p ->
+            p.setMediaItems(listOf(song.toMediaItem()), 0, 0)
+            p.prepare()
+            p.playWhenReady = false
+        }
+    }
+
+    /**
      * Prism Connect handoff: another device's playback continues here, the whole queue from the same song and place,
      * in the same play order ([order]: queue indices as they play; null when not shuffled) and repeat mode.
      */

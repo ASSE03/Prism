@@ -95,6 +95,20 @@ object Routes {
         "browse/${Uri.encode(id)}?params=${Uri.encode(params ?: "")}&title=${Uri.encode(title)}"
 }
 
+// Android's (ICU) regex wants the closing brace escaped too.
+private val ROUTE_ARGUMENT = Regex("\\{([^\\}]+)\\}")
+private val EMPTY_QUERY = Regex("[?&][^=&?]+=(?=&|$)")
+
+/** Without empty query arguments ("settings/about?find=" is "settings/about"). */
+internal fun normalizedRoute(route: String) = route.replace(EMPTY_QUERY, "").replace("?&", "?").removeSuffix("?")
+
+/**
+ * A destination's [pattern] filled in with its arguments ([arg] by name, null for none), as the route that opened it:
+ * "settings/{section}?find={find}" for Looks is "settings/looks". The coach's steps read the page this way (1.8.8).
+ */
+fun filledRoute(pattern: String, arg: (String) -> String?): String =
+    normalizedRoute(ROUTE_ARGUMENT.replace(pattern) { m -> arg(m.groupValues[1])?.let(Uri::encode) ?: "" })
+
 /** Everything a screen needs to move around the app. */
 class Navigator(val nav: NavController, val openPlayer: () -> Unit, private val playMix: (PlaylistItem) -> Unit = {}) {
     /**
@@ -111,22 +125,12 @@ class Navigator(val nav: NavController, val openPlayer: () -> Unit, private val 
     private fun currentRoute(): String? {
         val e = nav.currentBackStackEntry ?: return null
         val pattern = e.destination.route ?: return null
-        // Android's (ICU) regex wants the closing brace escaped too.
-        val filled = ARGUMENT.replace(pattern) { m ->
-            @Suppress("DEPRECATION")
-            e.arguments?.get(m.groupValues[1])?.toString()?.let(Uri::encode) ?: ""
-        }
-        return normalized(filled)
+        @Suppress("DEPRECATION")
+        return filledRoute(pattern) { e.arguments?.get(it)?.toString() }
     }
     fun back() = nav.popBackStack()
 
-    /** Without empty query arguments ("settings/about?find=" is "settings/about"). */
-    private fun normalized(route: String) = route.replace(EMPTY_QUERY, "").replace("?&", "?").removeSuffix("?")
-
-    private companion object {
-        val ARGUMENT = Regex("\\{([^\\}]+)\\}")
-        val EMPTY_QUERY = Regex("[?&][^=&?]+=(?=&|$)")
-    }
+    private fun normalized(route: String) = normalizedRoute(route)
 
     fun open(item: BrowseItem, onSong: (SongItem) -> Unit) {
         when (item) {
