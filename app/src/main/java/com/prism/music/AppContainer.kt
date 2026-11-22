@@ -649,6 +649,11 @@ class AppContainer(val app: Application) {
         scope.launch(Dispatchers.IO) {
             if (java.io.File(app.filesDir, "library/" + com.prism.music.data.TagStore.PENDING).isFile) tags.readPending()
         }
+        // 1.8.8: a restored backup's transitions (they go with the Library), read in once (a file check otherwise).
+        scope.launch(Dispatchers.IO) {
+            val f = java.io.File(app.filesDir, "library/" + com.prism.music.data.TransitionStore.PENDING)
+            if (f.isFile) transitions.readPending(f)
+        }
         // GitHub #182: bringing the library over had starred every library song's artist; those come off once, unless the
         // account follows them. Retried on a later launch when the account's follows couldn't be asked for.
         scope.launch(Dispatchers.IO) {

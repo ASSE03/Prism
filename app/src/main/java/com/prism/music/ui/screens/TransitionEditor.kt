@@ -223,7 +223,7 @@ fun TransitionEditorScreen(pair: TransitionPair, onClose: () -> Unit) {
         t = next
         touched = true
         savedRow = true
-        c.scope.launch { runCatching { c.transitions.save(pair.playlistId, pair.from.id, pair.to.id, next) } }
+        c.scope.launch(start = kotlinx.coroutines.CoroutineStart.UNDISPATCHED) { runCatching { c.transitions.save(pair.playlistId, pair.from.id, pair.to.id, next) } }
     }
 
     TransitionEditorBody(
@@ -232,7 +232,7 @@ fun TransitionEditorScreen(pair: TransitionPair, onClose: () -> Unit) {
         onChange = { t = it; touched = true }, onSave = ::save,
         onReset = {
             preview.stop()
-            c.scope.launch { runCatching { c.transitions.reset(pair.playlistId, pair.from.id, pair.to.id) } }
+            c.scope.launch(start = kotlinx.coroutines.CoroutineStart.UNDISPATCHED) { runCatching { c.transitions.reset(pair.playlistId, pair.from.id, pair.to.id) } }
             savedRow = false
             touched = false
             t = Transitions.automatic(a?.tempo, b?.tempo, fromMs)

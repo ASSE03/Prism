@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -104,6 +105,57 @@ class TransitionStoreTest {
         store.save("PL1", "c", "d", t)
         store.save("PL2", "x", "y", t)
         assertEquals(setOf("a" to "b", "c" to "d"), store.pairs("PL1").first())
+    }
+
+    /**
+     * The editor's Save and Reset each start their own coroutine. A save reads the row, then writes it: a Reset that
+     * deleted the row between the two was undone by the save's write, and the row lived on after Reset.
+     */
+    @Test fun aResetAfterASaveWinsWhateverTheTiming() = runBlocking {
+        val real = db.transitions()
+        val readDone = kotlinx.coroutines.CompletableDeferred<Unit>()
+        val goOn = kotlinx.coroutines.CompletableDeferred<Unit>()
+        val gated = object : com.prism.music.data.db.TransitionDao() {
+            override fun forPlaylistFlow(playlistId: String) = real.forPlaylistFlow(playlistId)
+            override suspend fun forPlaylist(playlistId: String) = real.forPlaylist(playlistId)
+            override suspend fun get(playlistId: String, fromId: String, toId: String): TransitionEntity? {
+                val row = real.get(playlistId, fromId, toId)
+                // The save's read is held here, as a slow database would.
+                if (!readDone.isCompleted) { readDone.complete(Unit); goOn.await() }
+                return row
+            }
+            override suspend fun put(t: TransitionEntity) = real.put(t)
+            override suspend fun putAll(rows: List<TransitionEntity>) = real.putAll(rows)
+            override suspend fun delete(playlistId: String, fromId: String, toId: String) = real.delete(playlistId, fromId, toId)
+            override suspend fun deletePlaylist(ids: List<String>) = real.deletePlaylist(ids)
+            override suspend fun used(playlistId: String, fromId: String, toId: String, at: Long) = real.used(playlistId, fromId, toId, at)
+            override suspend fun pruneBefore(before: Long) = real.pruneBefore(before)
+            override suspend fun count() = real.count()
+            override suspend fun all() = real.all()
+            override suspend fun clear() = real.clear()
+        }
+        val s = TransitionStore(gated, scope) { clock }
+        val save = scope.launch { s.save("PL1", "a", "b", t) }
+        readDone.await()
+        // Reset is pressed while the save is between its read and its write.
+        val reset = scope.launch { s.reset("PL1", "a", "b") }
+        kotlinx.coroutines.delay(200)
+        goOn.complete(Unit)
+        save.join(); reset.join()
+        assertNull("reset is the last word", real.get("PL1", "a", "b"))
+    }
+
+    /** 1.8.8: the transitions go with a backup's Library as a file, and a restore's file replaces this phone's, once. */
+    @Test fun aRestoredFileReplacesTheRowsOnce() = runBlocking {
+        store.save("PL1", "a", "b", t)
+        val theirs = TransitionEntity("PL9", "x", "y", 1, 2, 3, "cut", false, changedAt = 4, usedAt = 5)
+        val f = java.io.File(RuntimeEnvironment.getApplication().cacheDir, "transitions-${System.nanoTime()}.json")
+        f.writeText(TransitionStore.exportJson(com.prism.music.data.TransitionsFile(listOf(theirs))))
+        store.readPending(f)
+        assertEquals(listOf(theirs), store.export().rows)
+        assertTrue("read once", !f.exists())
+        store.readPending(f)
+        assertEquals(listOf(theirs), store.export().rows)
     }
 
     @Test fun aStyleNoLongerOfferedPlaysAsAutomatic() {

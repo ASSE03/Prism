@@ -90,6 +90,10 @@ class Backup(private val c: AppContainer) {
                 zip.putNextEntry(ZipEntry(TAGS_ENTRY))
                 zip.write(c.tags.exportJson(c.tags.export()).toByteArray())
                 zip.closeEntry()
+                // So do the playlists' own transitions (1.8.8, Mix it yourself).
+                zip.putNextEntry(ZipEntry(TRANSITIONS_ENTRY))
+                zip.write(TransitionStore.exportJson(c.transitions.export()).toByteArray())
+                zip.closeEntry()
             }
             filesToBackUp(parts).forEach { f ->
                 zip.putNextEntry(ZipEntry(f.relativeTo(data).invariantSeparatorsPath))
@@ -246,8 +250,8 @@ class Backup(private val c: AppContainer) {
             filesDir.walkTopDown()
                 .onEnter { dir -> dir == filesDir || filePart(dir.relativeTo(filesDir).invariantSeparatorsPath.substringBefore('/')) in parts }
                 .filter { it.isFile && (it.parentFile != filesDir || filePart(it.name) in parts) }
-                // A restore's tags not read in yet: the database's are written above instead.
-                .filter { "files/" + it.relativeTo(filesDir).invariantSeparatorsPath != TAGS_ENTRY }
+                // A restore's tags and transitions not read in yet: the database's are written above instead.
+                .filter { ("files/" + it.relativeTo(filesDir).invariantSeparatorsPath).let { p -> p != TAGS_ENTRY && p != TRANSITIONS_ENTRY } }
                 .forEach { keep += it }
             return keep
         }
@@ -260,6 +264,8 @@ class Backup(private val c: AppContainer) {
         private const val BRING_LOOK = "bring/look.txt"
         /** The library's tags (1.8.3), read in at the next start ([TagStore.readPending]). */
         private const val TAGS_ENTRY = "files/library/" + TagStore.PENDING
+        /** The playlists' transitions (1.8.8), read in at the next start ([TransitionStore.readPending]). */
+        private const val TRANSITIONS_ENTRY = "files/library/" + TransitionStore.PENDING
         /** All a bundle may unpack to (its own size is held to [com.prism.music.connect.BringTransfer.MAX_BYTES]). */
         private const val BRING_UNPACKED_MAX = 128L * 1024 * 1024
 
@@ -415,6 +421,11 @@ class Backup(private val c: AppContainer) {
                 if (BackupPart.HISTORY in parts && BackupPart.LIBRARY !in parts) TagStore.readFrom(File(data, "databases/$DB"))?.let { mine ->
                     File(files, "library").mkdirs()
                     File(files, "library/" + TagStore.PENDING).writeText(InnerTube.json.encodeToString(TagsFile.serializer(), mine))
+                }
+                // So are the playlists' transitions (1.8.8): the same, so this phone's stay with its playlists.
+                if (BackupPart.HISTORY in parts && BackupPart.LIBRARY !in parts) TransitionStore.readFrom(File(data, "databases/$DB"))?.let { mine ->
+                    File(files, "library").mkdirs()
+                    File(files, "library/" + TransitionStore.PENDING).writeText(TransitionStore.exportJson(mine))
                 }
                 // Out with what the backup replaces.
                 File(data, "databases").listFiles()?.forEach {

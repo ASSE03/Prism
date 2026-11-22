@@ -204,29 +204,78 @@ class BackupPartsTest {
         assertTrue(read("files/restore_settings.json")!!.contains("SID=theirs"))
     }
 
+    private fun openDb(name: String = "prism.db") =
+        androidx.room.Room.databaseBuilder(app, com.prism.music.data.db.PrismDatabase::class.java, name).allowMainThreadQueries().build()
+
+    private val mine = com.prism.music.data.db.TransitionEntity("PL1", "a", "b", 170_000, 12_000, 8_000, "filter_out", true, changedAt = 7L, usedAt = 9L)
+    private val theirs = com.prism.music.data.db.TransitionEntity("PL2", "x", "y", 60_000, 1_000, 4_000, "cut", false, changedAt = 3L, usedAt = 0L)
+
+    /** This phone's database with [rows] as its transitions. */
+    private fun phoneWithTransitions(vararg rows: com.prism.music.data.db.TransitionEntity) {
+        app.deleteDatabase("prism.db")
+        openDb().also { db -> kotlinx.coroutines.runBlocking { db.transitions().putAll(rows.toList()) }; db.close() }
+    }
+
+    /** What the app does at the next start: the restored transitions read in ([AppContainer]); then this phone's rows. */
+    private fun transitionsAfterStart(): List<com.prism.music.data.db.TransitionEntity> {
+        val db = openDb()
+        try {
+            val store = com.prism.music.data.TransitionStore(db.transitions(), kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Default))
+            return kotlinx.coroutines.runBlocking {
+                store.readPending(File(files, "library/" + com.prism.music.data.TransitionStore.PENDING))
+                store.export().rows
+            }
+        } finally { db.close() }
+    }
+
     /**
-     * 1.8.8 Mix it yourself: the listener's transitions live in the database, so they go out with History and come back
-     * from a restore of it, exactly as saved.
+     * 1.8.8 Mix it yourself: the transitions belong to the playlists (Library) though they live in the database. A
+     * restore of the Library alone brings the backup's (they were lost: the database stayed this phone's).
      */
-    @Test fun savedTransitionsGoThereAndBack() {
-        fun open() = androidx.room.Room.databaseBuilder(app, com.prism.music.data.db.PrismDatabase::class.java, "prism.db").allowMainThreadQueries().build()
+    @Test fun transitionsComeBackWithTheLibrary() {
+        phoneWithTransitions(mine)
+        stage(
+            """{"format":2,"app":"${app.packageName}","parts":["LIBRARY"]}""",
+            "files/library/prism.json" to "new library",
+            "files/library/transitions.json" to com.prism.music.data.TransitionStore.exportJson(com.prism.music.data.TransitionsFile(listOf(theirs))),
+        )
+        Backup.applyPending(app)
+        assertEquals(listOf(theirs), transitionsAfterStart())
+        assertFalse("read in once", File(files, "library/transitions.json").exists())
+        // A backup of the Library never takes a restore's file not yet read in (the database's go as their own entry).
+        write("files/library/transitions.json", "stale")
+        assertFalse(Backup.filesToBackUp(data, files, setOf(BackupPart.LIBRARY)).any { it.name == "transitions.json" })
+        File(files, "library/transitions.json").delete()
         app.deleteDatabase("prism.db")
-        val row = com.prism.music.data.db.TransitionEntity("PL1", "a", "b", 170_000, 12_000, 8_000, "filter_out", true, changedAt = 7L, usedAt = 9L)
-        open().also { db -> kotlinx.coroutines.runBlocking { db.transitions().put(row) }; db.close() }
-        val taken = Backup.filesToBackUp(data, files, setOf(BackupPart.HISTORY))
-        val dbFile = taken.single { it.name == "prism.db" }
-        val copy = dbFile.readBytes()
-        // Restored onto a phone whose own database has none.
-        app.deleteDatabase("prism.db")
-        open().close()
+    }
+
+    /**
+     * A restore of the History alone replaces the database, which holds the transitions: this phone's playlists stay,
+     * so do their transitions (they were wiped, or swapped for the backup's).
+     */
+    @Test fun historyAloneKeepsThisPhonesTransitions() {
+        // The backup's database, with its own transitions.
+        app.deleteDatabase("backup-src.db")
+        openDb("backup-src.db").also { db -> kotlinx.coroutines.runBlocking { db.transitions().put(theirs) }; db.close() }
+        val copy = app.getDatabasePath("backup-src.db").readBytes()
+        app.deleteDatabase("backup-src.db")
+        phoneWithTransitions(mine)
         stage("""{"format":2,"app":"${app.packageName}","parts":["HISTORY"]}""")
         File(files, "restore_pending/databases").mkdirs()
         File(files, "restore_pending/databases/prism.db").writeBytes(copy)
         Backup.applyPending(app)
-        open().also { db ->
-            assertEquals(row, kotlinx.coroutines.runBlocking { db.transitions().get("PL1", "a", "b") })
-            db.close()
-        }
+        assertEquals(listOf(mine), transitionsAfterStart())
+
+        // With the Library too, they're the backup's.
+        phoneWithTransitions(mine)
+        stage(
+            """{"format":2,"app":"${app.packageName}","parts":["HISTORY","LIBRARY"]}""",
+            "files/library/transitions.json" to com.prism.music.data.TransitionStore.exportJson(com.prism.music.data.TransitionsFile(listOf(theirs))),
+        )
+        File(files, "restore_pending/databases").mkdirs()
+        File(files, "restore_pending/databases/prism.db").writeBytes(copy)
+        Backup.applyPending(app)
+        assertEquals(listOf(theirs), transitionsAfterStart())
         app.deleteDatabase("prism.db")
     }
 
