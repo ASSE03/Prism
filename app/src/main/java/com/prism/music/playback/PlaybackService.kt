@@ -473,6 +473,10 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             curve = { c.settings.current.sound.crossfadeCurve },
             state = c.mixState,
             skip = skipFade,
+            // 1.8.8 Mix it yourself: a playlist's own transitions, from memory (the store follows the queue's playlist).
+            playlist = { c.queue.source.value.takeIf { it.kind == QueueKind.PLAYLIST }?.originId },
+            custom = { playlist, from, to -> c.transitions.cached(playlist, from, to) },
+            customPlayed = { playlist, from, to -> c.transitions.used(playlist, from, to) },
         ).also { it.start() }
         // Prism Connect: the speaker or TV being cast to plays what this player plays, and its volume is the session's.
         sessionPlayer.remote = object : LyricsOverlayPlayer.Remote {

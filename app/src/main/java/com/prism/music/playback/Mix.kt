@@ -74,6 +74,16 @@ class MixEngine(
      * (one that was coming is dropped at the press), and it runs whether Crossfade is on or not.
      */
     private val skip: SkipFade? = null,
+    /** 1.8.8 Mix it yourself: the playlist the queue is playing (its [QueueSource.originId]), or null for none. */
+    private val playlist: () -> String? = { null },
+    /**
+     * The listener's own transition for [from] into [to] in [playlistId] ([com.prism.music.data.TransitionStore.cached]):
+     * asked on every look, so from memory. It plays before anything automatic, with Crossfade off too, never where
+     * [allowed] says no.
+     */
+    private val custom: (playlistId: String, from: String, to: String) -> Transition? = { _, _, _ -> null },
+    /** A saved transition just played (it's in use: the yearly prune leaves it). */
+    private val customPlayed: (playlistId: String, from: String, to: String) -> Unit = { _, _, _ -> },
 ) {
     /** Wakes the loop early (a skip-blend just started: its first steps can't wait out a long idle look). */
     private val wakes = kotlinx.coroutines.channels.Channel<Unit>(kotlinx.coroutines.channels.Channel.CONFLATED)
@@ -101,9 +111,33 @@ class MixEngine(
         val beats: Boolean,
         /** A beat of the ending song in the next song's time (ms), with beat matching. */
         val beatMs: Double = 0.0,
+        /** The listener's own transition for this pair (1.8.8), or null for the engine's own. */
+        val saved: SavedPlan? = null,
     ) {
         /** How many times the blend has been put off to get the tail in step. */
         var postponed = 0
+    }
+
+    /** A plan from the listener's own transition: which playlist it's kept in, how it sounds, where its move's moment is. */
+    private class SavedPlan(val playlistId: String, val style: TransitionStyle, val pivot: Float)
+
+    /** The listener's transition for the song playing into the next ([custom]), with where that next song is. */
+    private class Saved(val playlistId: String, val next: MediaItem, val toIndex: Int, val t: Transition) {
+        fun fit(dur: Long): FittedTransition = Transitions.fit(t, dur, next.mediaMetadata.durationMs?.takeIf { it > 0 })
+    }
+
+    /**
+     * The listener's own transition from [item] into the song up next, if there is one and it may play: not with
+     * repeat one, not into the same song, never where [allowed] says no. Cheap when there is none (a lookup in memory).
+     */
+    private fun savedNext(item: MediaItem): Saved? {
+        val pid = playlist() ?: return null
+        val toIndex = main.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET } ?: return null
+        if (main.repeatMode == Player.REPEAT_MODE_ONE) return null
+        val next = main.getMediaItemAt(toIndex)
+        if (next.mediaId.isBlank() || next.mediaId == item.mediaId) return null
+        val t = custom(pid, item.mediaId, next.mediaId) ?: return null
+        return if (allowed(item, next)) Saved(pid, next, toIndex, t) else null
     }
 
     /** [SKIP_FADE]: skipped mid-blend, the ending song fades out (and the song skipped to up) over [SKIP_FADE_MS]. */
@@ -210,15 +244,21 @@ class MixEngine(
     private var fadeTailFrom = 0f
     private var fadeStartedAt = 0L
 
+    /** The song that last came in by one of the listener's own transitions (its fade-in's shape is kept with Crossfade off). */
+    private var savedInto: String? = null
+
     /** One step; returns how long to wait before the next. */
     private fun tick(): Long {
         // A skip-blend under way has both players to itself (with Crossfade off too).
         skip?.let { if (it.active) return it.tick() }
         val length = mixMs()
-        if (length == null) {
+        // 1.8.8: with Crossfade off, the listener's own transitions still play (one under way, or one coming up next).
+        val savedOn = if (phase == Phase.IDLE) main.currentMediaItem?.let(::savedNext) != null else plan?.saved != null
+        if (length == null && !savedOn) {
             if (phase != Phase.IDLE) abort("Mix turned off", null)
             state.mark.value = null
-            state.into.value = null
+            // (A song that came in by a saved transition keeps its fade-in's shape on the bar while it plays.)
+            if (savedInto == null || state.into.value?.songId != savedInto || savedInto != main.currentMediaItem?.mediaId) state.into.value = null
             return 1000
         }
         return when (phase) {
@@ -231,9 +271,8 @@ class MixEngine(
         }
     }
 
-    private fun idle(chosen: Long): Long {
-        // With Auto, plans are made as early as the longest blend could need.
-        val length = if (auto()) AUTO_MAX_MS else chosen
+    /** [chosen]: Crossfade's length, or null with it off (then only the listener's own transitions play). */
+    private fun idle(chosen: Long?): Long {
         if (!main.isPlaying) return 500
         val item = main.currentMediaItem ?: return 500
         // How the song playing came in is only its own: another song (skipped to, or the next without a blend) has none.
@@ -245,10 +284,14 @@ class MixEngine(
             if (wentBack(into, main.currentPosition, intoFurthest)) state.into.value = null
         }
         val dur = main.duration.takeIf { it != C.TIME_UNSET && it > 0 } ?: return 500
+        // 1.8.8: the listener's own transition for this pair, planned by its own points (up to 90 s before the end).
+        val saved = savedNext(item)?.fit(dur)
+        // With Auto, plans are made as early as the longest blend could need.
+        val length = saved?.lengthMs ?: if (auto()) AUTO_MAX_MS else chosen ?: run { state.mark.value = null; return 1000 }
         // Counted to where the music ends, not the file: a song with a long silent tail blends that much earlier (counted
         // from the file's end, the blend's moment had passed before it was even planned, and the song just stopped).
         val musicEnd = tempo.cached(item.mediaId)?.lastSoundMs?.takeIf { it in dur / 2..dur } ?: dur
-        val left = musicEnd - main.currentPosition
+        val left = (if (saved != null) saved.startMs + saved.lengthMs else musicEnd) - main.currentPosition
         val planAhead = length + LEAD_MS + PREPARE_MS + 5_000
         // The player's crossfade mark: where the blend should start, as far as it's known yet (once it's being planned,
         // the plan's own, below: set once a step, so the bar doesn't flick between the two).
@@ -264,6 +307,8 @@ class MixEngine(
         if (left > planAhead) return minOf(2000, left - planAhead).coerceAtLeast(250)
         if (refused) return 1000
         val p = makePlan(item, dur, length) ?: run { refuse(item.mediaId); return 1000 }
+        // A saved cut needs no second player: the main player moves on at the saved spot.
+        if (p.saved != null && p.lengthMs == 0L) return cut(item, p)
         // (The tail can still load while it waits to play along, see [prepared], so only the lead-in itself is needed.)
         if (main.currentPosition > p.startMs - LEAD_MS - 1000) {
             // Too late to get the tail ready by then (a seek to just before the blend, or a scan that came late and moved
@@ -288,7 +333,7 @@ class MixEngine(
         shifter = shift
         t.volume = 0f
         t.setMediaItem(item.buildUpon().build())
-        t.seekTo(p.startMs - LEAD_MS)
+        t.seekTo((p.startMs - LEAD_MS).coerceAtLeast(0))
         t.playWhenReady = false
         t.prepare()
         tail = t
@@ -297,8 +342,31 @@ class MixEngine(
         state.mark.value = BlendMark(p.fromId, p.startMs, p.lengthMs)
         phase = Phase.PREPARED
         note("planned ${p.fromId} -> ${p.toId}: blend at ${p.startMs} ms for ${p.lengthMs} ms, next from ${p.inMs} ms" +
-            if (p.beats) ", tempo ×%.3f, on the beat".format(p.ratio) else "")
+            (if (p.beats) ", tempo ×%.3f, on the beat".format(p.ratio) else "") +
+            (p.saved?.let { ", the listener's own (${it.style.key}, playlist ${it.playlistId})" } ?: ""))
         return 50
+    }
+
+    /**
+     * 1.8.8: the listener's own transition with no overlap, a cut: no second player, the main player moves to the next
+     * song at the saved spot, where it was set to come in. Missed (a seek past the spot), the song plays on to its end.
+     */
+    private fun cut(item: MediaItem, p: Plan): Long {
+        state.mark.value = BlendMark(p.fromId, p.startMs, 0L)
+        val pos = main.currentPosition
+        if (pos < p.startMs) return (p.startMs - pos).coerceIn(5, 250)
+        if (pos > p.startMs + CUT_LATE_MS) {
+            noBlend(item, MixWhy.TOO_LATE, "past the saved cut (at $pos ms, cut at ${p.startMs} ms)")
+            refuse(item.mediaId)
+            return 1000
+        }
+        main.seekTo(p.toIndex, p.inMs)
+        state.mark.value = null
+        state.why.value = null
+        state.into.value = null
+        p.saved?.let { customPlayed(it.playlistId, p.fromId, p.toId) }
+        note("the listener's own cut ${p.fromId} -> ${p.toId} at $pos ms (set at ${p.startMs} ms), next from ${p.inMs} ms")
+        return 500
     }
 
     /** The song up next, as the queue is now. */
@@ -342,7 +410,10 @@ class MixEngine(
      * it by under a beat), or null when there won't be one. Quiet: nothing is logged. Its length is given only when it's
      * the listener's: an automatic one (and DJ mode's) is only known once the blend is planned.
      */
-    private fun predict(item: MediaItem, dur: Long, length: Long): BlendMark? {
+    private fun predict(item: MediaItem, dur: Long, length: Long?): BlendMark? {
+        // The listener's own transition: its spot and length are known (1.8.8).
+        savedNext(item)?.fit(dur)?.let { return BlendMark(item.mediaId, it.startMs, it.lengthMs) }
+        if (length == null) return null
         val toIndex = main.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET } ?: return null
         if (main.repeatMode == Player.REPEAT_MODE_ONE) return null
         val next = main.getMediaItemAt(toIndex)
@@ -369,7 +440,21 @@ class MixEngine(
         return chosen
     }
 
+    /**
+     * 1.8.8 Mix it yourself: the listener's own transition as a plan: their points and length (the caps that protect every
+     * blend applied, [Transitions.fit]), at the next song's own tempo, in their style ([TransitionSound]).
+     */
+    private fun savedPlan(item: MediaItem, dur: Long, s: Saved): Plan {
+        val f = s.fit(dur)
+        val beat = tempo.cached(item.mediaId)?.takeIf { it.steady }?.periodMs ?: 0.0
+        val place = TransitionSound.place(s.t.style, f, beat)
+        return Plan(item.mediaId, s.next.mediaId, s.toIndex, f.startMs, f.inMs, f.lengthMs, 1f, false,
+            saved = SavedPlan(s.playlistId, s.t.style, place.pivot))
+    }
+
     private fun makePlan(item: MediaItem, dur: Long, length: Long): Plan? {
+        // The listener's own transition for this pair comes before anything automatic.
+        savedNext(item)?.let { return savedPlan(item, dur, it) }
         val toIndex = main.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET } ?: return noBlend(item, MixWhy.NOTHING_NEXT, "nothing next in the queue")
         if (main.repeatMode == Player.REPEAT_MODE_ONE) return noBlend(item, MixWhy.REPEAT_ONE, "repeat one")
         val next = main.getMediaItemAt(toIndex)
@@ -449,6 +534,8 @@ class MixEngine(
         // or the song stopped (a playback error: the second player played on, muted, meanwhile).
         if (main.repeatMode == Player.REPEAT_MODE_ONE) return abort("repeat one", MixWhy.REPEAT_ONE, again = true)
         if (main.playbackState == Player.STATE_IDLE) return abort("the song stopped (an error)", MixWhy.GLITCH, again = true)
+        // The listener's own transition is for that pair only: planned afresh for whatever is next now.
+        if (planned.saved != null && nextId() != planned.toId) return abort("the saved pair is no longer next", null, again = true)
         val p = following(planned) ?: return abort("nothing next to blend into (or no longer blended here)", followingWhy)
         val pos = main.currentPosition
         if (pos > p.startMs + 200 || pos < p.startMs - LEAD_MS - PREPARE_MS - 15_000) return abort("seeked away", null, again = true)
@@ -512,6 +599,7 @@ class MixEngine(
         if (main.repeatMode == Player.REPEAT_MODE_ONE) return abort("repeat one", MixWhy.REPEAT_ONE, again = true)
         if (main.playbackState == Player.STATE_IDLE) return abort("the song stopped (an error)", MixWhy.GLITCH, again = true)
         if (t.playbackState == Player.STATE_IDLE) return abort("the ending song's second player stopped (an error)", MixWhy.GLITCH)
+        if (planned.saved != null && nextId() != planned.toId) return abort("the saved pair is no longer next", null, again = true)
         val p = following(planned) ?: return abort("nothing next to blend into (or no longer blended here)", followingWhy)
         t.playWhenReady = main.playWhenReady
         val pos = main.currentPosition
@@ -619,6 +707,8 @@ class MixEngine(
         state.into.value = BlendIn(p.toId, p.inMs, (p.lengthMs * p.ratio).toLong())
         // A blend happens: the last time one didn't is no longer the news (#493).
         state.why.value = null
+        savedInto = if (p.saved != null) p.toId else null
+        p.saved?.let { customPlayed(it.playlistId, p.fromId, p.toId) }
         blendStartedAt = now
         syncActionAt = now
         windowFrom = 0L
@@ -696,7 +786,8 @@ class MixEngine(
                 progress, tailPosition(t), stateName(t), shifter?.quietMs ?: 0L, main.currentPosition, stateName(main),
             ))
         }
-        val (incoming, outgoing) = curve().gains(progress)
+        // The listener's own transition sounds as its style (the same function as the editor's Listen); else the curve.
+        val (incoming, outgoing) = p.saved?.let { TransitionSound.gains(it.style, progress, it.pivot, curve()) } ?: curve().gains(progress)
         main.volume = incoming
         t.volume = outgoing
         if (main.isPlaying) lastProgress = progress
@@ -954,6 +1045,9 @@ class MixEngine(
 
         /** Two copies of the song this close are heard as one (the quick cross-over's limit). */
         private const val IN_STEP_DOUBLING_MS = 45L
+
+        /** A saved cut missed by more than this (a seek past it) isn't made: the song plays on. */
+        private const val CUT_LATE_MS = 1_000L
 
         private const val POSTPONE_MS = 2000L
         private const val MAX_POSTPONES = 2
