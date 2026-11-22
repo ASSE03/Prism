@@ -21,6 +21,11 @@ class SmartCacheEvictor(
     private val favoured: (String) -> Boolean,
     /** All of Smart Downloads' space; below 1 GB (256 and 512 MB, 1.8.3 D42) the floor shrinks with it. */
     private val totalBytes: () -> Long = { Long.MAX_VALUE },
+    /**
+     * #535: a room the cache never goes past whatever the space says, from what it holds now (a TV box's
+     * [com.prism.music.data.TvCacheRoom.songCache]); none on a phone.
+     */
+    private val roomCap: (usedBytes: Long) -> Long = { Long.MAX_VALUE },
 ) : CacheEvictor {
     /** Each span's eviction rank, fixed when it's added (the set's order mustn't change under it). */
     private val rank = IdentityHashMap<CacheSpan, Long>()
@@ -59,7 +64,7 @@ class SmartCacheEvictor(
     fun trim(cache: Cache) = synchronized(cache) { evict(cache, 0) }
 
     private fun evict(cache: Cache, required: Long) {
-        val max = limit(maxBytes(), totalBytes())
+        val max = minOf(limit(maxBytes(), totalBytes()), roomCap(size))
         while (size + required > max && spans.isNotEmpty()) {
             val first = spans.first()
             cache.removeSpan(first)

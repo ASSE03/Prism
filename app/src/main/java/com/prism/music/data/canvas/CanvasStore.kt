@@ -55,8 +55,10 @@ class CanvasStore(
     private val ytm: YouTubeMusic,
     databaseProvider: DatabaseProvider,
     private val scope: CoroutineScope,
+    /** The recently played clips' room (#535: smaller on a TV box). */
+    recentMaxBytes: Long = 400L * 1024 * 1024,
 ) {
-    private val recentCache = SimpleCache(File(context.cacheDir, "canvas_cache"), LeastRecentlyUsedCacheEvictor(400L * 1024 * 1024), databaseProvider)
+    private val recentCache = SimpleCache(File(context.cacheDir, "canvas_cache"), LeastRecentlyUsedCacheEvictor(recentMaxBytes), databaseProvider)
     private val savedCache = SimpleCache(File(context.filesDir, "canvas_saved"), NoOpCacheEvictor(), databaseProvider)
     /** A few clips at a time, so saving an album doesn't swamp the connection. */
     private val gate = Semaphore(2)

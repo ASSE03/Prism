@@ -78,6 +78,11 @@ fun TvSettingsPlace(nav: TvNav) {
     val app = context.applicationContext
     val sayLater: (String) -> Unit = { Toast.makeText(app, it, Toast.LENGTH_LONG).show() }
     fun percent(v: Float) = tr(R.string.tv_percent, (v * 100).toInt())
+    // #535: what the caches hold, read off the main thread (again after a clear).
+    var cacheVersion by remember { mutableIntStateOf(0) }
+    val cacheBytes by androidx.compose.runtime.produceState<Long?>(null, cacheVersion) {
+        value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { c.caches.bytes() }
+    }
 
     val groups: List<Pair<TvSettingGroup, List<TvSettingRow>>> = listOf(
         TvSettingGroup(tr(R.string.account), PrismIcons.Person, emptyList()) to buildList {
@@ -144,6 +149,25 @@ fun TvSettingsPlace(nav: TvNav) {
         // The highlights' light: Spectrum or White light (monochrome), the phone's own Color setting.
         TvSettingGroup(tr(R.string.colors), PrismIcons.Palette, emptyList()) to listOf(
             TvSettingRow(TvSetting(tr(R.string.colors), settings.lightStyle.label), TvSettingAction.Run { pickingLight = true }),
+        ),
+        // #535: TV boxes have little room (8 GB); the caches can be emptied here, with OK on a confirmation.
+        TvSettingGroup(tr(R.string.tv_storage), PrismIcons.Delete, emptyList()) to listOf(
+            TvSettingRow(
+                TvSetting(tr(R.string.clear_cache), cacheBytes?.let { tr(R.string.using, com.prism.music.data.AppCaches.size(it)) }, info = tr(R.string.clear_cache_info)),
+                TvSettingAction.Choose(
+                    listOf(
+                        tr(R.string.clear_cache) to {
+                            c.scope.launch {
+                                val freed = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { c.caches.clear() }
+                                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                                    sayLater(tr(R.string.cache_cleared, com.prism.music.data.AppCaches.size(freed)))
+                                    cacheVersion++
+                                }
+                            }
+                        },
+                    ),
+                ),
+            ),
         ),
         TvSettingGroup(tr(R.string.about_3), PrismIcons.Info, emptyList()) to listOf(
             TvSettingRow(TvSetting(tr(R.string.tv_version, BuildConfig.VERSION_NAME)), TvSettingAction.Run {}),

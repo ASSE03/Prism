@@ -4610,6 +4610,10 @@
     <string name="tv_phone_as_remote">Use your phone as a remote</string>
     <string name="tv_signed_in_as">Signed in as %1$s</string>
     <string name="tv_percent">%1$d%%</string>
+    <string name="tv_storage">Storage</string>
+    <string name="clear_cache">Clear cache</string>
+    <string name="clear_cache_info">Removes the songs, pictures and animated covers Prism kept from streaming, to free up space. They load again when they play. Your downloads, likes, history, settings and sign-in stay.</string>
+    <string name="cache_cleared">Cache cleared: %1$s freed</string>
     <string name="tv_not_signed_in">Not signed in</string>
     <string name="tv_language_tv">The TV\'s language</string>
     <string name="tv_sound_quality">Sound quality</string>

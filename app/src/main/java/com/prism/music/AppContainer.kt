@@ -78,6 +78,8 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
                 coil3.disk.DiskCache.Builder()
                     .directory(File(context.cacheDir, "image_cache").absolutePath.toPath())
                     .maxSizePercent(0.02)
+                    // #535: a TV box has 8 GB in all; pictures keep to less there.
+                    .apply { if (com.prism.music.ui.tv.TvDevice.isTv(context)) maximumMaxSizeBytes(com.prism.music.data.TvCacheRoom.IMAGES) }
                     .build()
             }
             .build()
@@ -496,8 +498,15 @@ class AppContainer(val app: Application) {
             maxBytes = { (settings.current.offlineGb * 1_073_741_824.0).toLong() - smartPickBytes },
             favoured = { id -> runCatching { id in library.likedIds.value }.getOrDefault(false) },
             totalBytes = { (settings.current.offlineGb * 1_073_741_824.0).toLong() },
+            // #535: on a TV box (8 GB in all) the song cache keeps to what the box can spare.
+            roomCap = { used -> if (isTv) com.prism.music.data.TvCacheRoom.songCache(freeSpace(), used) else Long.MAX_VALUE },
         )
     }
+    /** #535: a TV (Android TV / Google TV): the caches keep to [com.prism.music.data.TvCacheRoom]'s smaller rooms. */
+    val isTv: Boolean by lazy { com.prism.music.ui.tv.TvDevice.isTv(app) }
+    private val freeSpace by lazy { com.prism.music.data.TvCacheRoom.FreeSpace { app.cacheDir.usableSpace } }
+    /** Recently played animated covers and loops together. */
+    private val canvasRecentBytes: Long get() = if (isTv) com.prism.music.data.TvCacheRoom.CANVAS else 400L * 1024 * 1024
     val playerCache: SimpleCache by lazy {
         SimpleCache(File(app.cacheDir, "song_cache"), cacheEvictor, databaseProvider)
     }
@@ -1218,13 +1227,13 @@ class AppContainer(val app: Application) {
     }
 
     /** Animated-cover clips on the phone: recently played, and saved (from the player, by album, or with downloads). */
-    val canvasStore by lazy { com.prism.music.data.canvas.CanvasStore(app, http, canvas, ytm, databaseProvider, scope) }
+    val canvasStore by lazy { com.prism.music.data.canvas.CanvasStore(app, http, canvas, ytm, databaseProvider, scope, recentMaxBytes = canvasRecentBytes) }
     /** 1.8.6: Canvas loops cut from music videos, kept as small files (recent ones in the cache, downloads' for good). */
     val clipFiles by lazy {
         com.prism.music.data.canvas.ClipFiles(File(app.cacheDir, "canvas_clips"), File(app.filesDir, "canvas_clips")) {
             // One 400 MB for everything recent that Canvas keeps (the settings say so): loops get what the animated covers leave,
-            // never under 100 MB.
-            (400L * 1024 * 1024 - canvasStore.recentBytes).coerceAtLeast(100L * 1024 * 1024)
+            // never under 100 MB. #535: on a TV, one 128 MB, never under 32 MB.
+            (canvasRecentBytes - canvasStore.recentBytes).coerceAtLeast(canvasRecentBytes / 4)
         }
     }
     val canvasClips by lazy {
@@ -1261,5 +1270,23 @@ class AppContainer(val app: Application) {
 
     fun clearSongCache() {
         runCatching { playerCache.keys.toList().forEach { playerCache.removeResource(it) } }
+    }
+
+    /**
+     * #535: every cache Prism keeps, for "Clear cache": songs kept from streaming (not Smart Downloads' picks, which are
+     * downloads), pictures, recently played animated covers and loops, pictures made for sharing.
+     */
+    val caches by lazy {
+        val share = File(app.cacheDir, "share")
+        fun images() = runCatching { coil3.SingletonImageLoader.get(app).diskCache }.getOrNull()
+        com.prism.music.data.AppCaches(
+            listOf(
+                com.prism.music.data.AppCaches.Part("songs", ::songCacheBytes, ::clearSongCache),
+                com.prism.music.data.AppCaches.Part("pictures", { images()?.size ?: 0L }, { images()?.clear() }),
+                com.prism.music.data.AppCaches.Part("animated covers", { canvasStore.recentBytes }, { canvasStore.clearRecent() }),
+                com.prism.music.data.AppCaches.Part("loops", { clipFiles.recentBytes }, { clipFiles.clearRecent() }),
+                com.prism.music.data.AppCaches.Part("shared pictures", { com.prism.music.data.AppCaches.dirBytes(share) }, { com.prism.music.data.AppCaches.emptyDir(share) }),
+            ),
+        )
     }
 }
