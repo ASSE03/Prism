@@ -85,8 +85,11 @@ class SkipFadeTest {
             else -> Player.STATE_READY
         }
         fun isPlaying() = running()
+        /** Volumes and moves in the order they came ("vol 1.0", "seek 2"). */
+        val events = ArrayList<String>()
         fun moveTo(i: Int, ms: Long) {
             seeks += i to ms
+            events += "seek $i"
             index = i; base = ms; since = now(); readyAt = now() + restartMs
         }
         val mediaId: String? get() = items.getOrNull(index)?.mediaId
@@ -108,7 +111,7 @@ class SkipFadeTest {
                 "getNextMediaItemIndex" -> if (index + 1 < items.size) index + 1 else C.INDEX_UNSET
                 "getMediaItemAt" -> items[args!![0] as Int]
                 "getVolume" -> volume
-                "setVolume" -> { volume = args!![0] as Float; volumes += volume; null }
+                "setVolume" -> { volume = args!![0] as Float; volumes += volume; events += "vol $volume"; null }
                 "getPlaybackParameters" -> PlaybackParameters(speed)
                 "setPlaybackParameters" -> { speed = (args!![0] as PlaybackParameters).speed; null }
                 "getRepeatMode" -> Player.REPEAT_MODE_OFF
@@ -331,6 +334,68 @@ class SkipFadeTest {
         engine.release()
         assertFalse(skip.active)
         assertFalse(skip.headAlive)
+        assertEquals(1f, main.volume)
+    }
+
+    // 1.8.8 review (a second read of SkipFade): the four points below.
+
+    @Test fun aSecondSkipInTheFadeMovesBeforeTheVolumeComesBack() {
+        assertTrue(skip.press(SkipKind.NEXT, 1))
+        runUntil("the fade under way") { heads.single().volume in 0.3f..0.7f }
+        main.events.clear()
+        assertTrue(skip.press(SkipKind.NEXT, 1))
+        // Up to full only once on the newest choice: the song left is never heard at full again.
+        assertEquals("seek 2", main.events.first())
+        assertTrue(main.events.indexOf("vol 1.0") > 0)
+        assertAllBack("c")
+    }
+
+    @Test fun aNewQueueInTheFadeComesBeforeTheVolumeDoes() {
+        assertTrue(skip.press(SkipKind.NEXT, 1))
+        runUntil("the fade under way") { heads.single().volume in 0.3f..0.7f }
+        main.events.clear()
+        var ran = false
+        skip.fadeOutThen { ran = true; main.moveTo(3, 0) }
+        assertTrue(ran)
+        assertEquals("seek 3", main.events.first())
+        assertAllBack("d")
+    }
+
+    @Test fun aNextToNowhereWhileCatchingUpLeavesTheRunBe() {
+        assertTrue(skip.press(SkipKind.NEXT, 1))
+        runUntil("the move") { main.seeks.isNotEmpty() }
+        // Next on the last song does nothing today: here it doesn't cut the hand-over short either.
+        assertTrue(skip.press(SkipKind.NEXT, C.INDEX_UNSET))
+        assertTrue("still under way", skip.active)
+        runUntil("over") { !skip.active }
+        assertAllBack("b")
+    }
+
+    @Test fun aNewQueueThatFailsStillLeavesAllNormal() {
+        skip.fadeOutThen { error("the new queue failed") }
+        run(100)
+        assertTrue("fading out: ${main.volume}", main.volume < 1f)
+        // A skip cuts the fade-out short: the new queue runs, fails, and is only noted.
+        val r = runCatching { skip.press(SkipKind.NEXT, 1) }
+        assertTrue("nothing thrown at the skip: ${r.exceptionOrNull()}", r.isSuccess)
+        assertFalse(skip.active)
+        assertEquals(1f, main.volume)
+        assertEquals(1, settled)
+    }
+
+    @Test fun aStepThatFailsStillPlaysTheNewQueue() {
+        var boom = false
+        val s = SkipFade(
+            main = main.player, buildHead = { error("no head") }, firstSoundMs = { 0L }, on = { true }, light = { false },
+            allowed = { _, _ -> true }, warm = { _, _ -> false }, speed = { if (boom) error("boom") else 1f }, note = {},
+        )
+        var ran = false
+        s.fadeOutThen { ran = true }
+        assertTrue(s.active)
+        boom = true
+        s.tick()
+        assertTrue("the new queue the listener asked for", ran)
+        assertFalse(s.active)
         assertEquals(1f, main.volume)
     }
 

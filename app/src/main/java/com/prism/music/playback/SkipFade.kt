@@ -103,11 +103,18 @@ class SkipFade(
             SkipChoice.STOP_MIX_THEN_PLAIN -> { dropMix(); false }
             SkipChoice.CUT -> {
                 val newQueue = rules.phase == SkipFadeRules.Phase.FADE_OUT && rules.target < 0
-                apply(rules.cut(read()))
-                // Straight to the newest choice, as today's skip goes (a new queue's is worked out on that queue).
                 when {
-                    newQueue -> plainAgain(kind, index)
-                    target in 0 until main.mediaItemCount -> main.seekToDefaultPosition(target)
+                    // A new queue waits on its fade-out: it comes first, then this skip on it, as today's.
+                    newQueue -> { apply(rules.cut(read())); plainAgain(kind, index) }
+                    // A skip to nowhere (Next on the last song) does nothing today: the run goes on.
+                    !valid -> Unit
+                    else -> {
+                        // Straight to the newest choice, before the volume comes back (no blip of what it leaves);
+                        // a short fade-out's own skip is overtaken by this one.
+                        then = null
+                        own { main.seekToDefaultPosition(target) }
+                        apply(rules.cut(read()))
+                    }
                 }
                 true
             }
@@ -150,7 +157,12 @@ class SkipFade(
      * 200 ms first ([SkipFadeRules.FADE_OUT_MS]); otherwise (and with the switch off) [action] at once.
      */
     fun fadeOutThen(action: () -> Unit) {
-        if (rules.active) { apply(rules.cut(read())); action(); return }
+        if (rules.active) {
+            // The new queue first, while the run still holds the volume down; what the run waited on is overtaken.
+            then = null
+            try { action() } finally { apply(rules.cut(read())) }
+            return
+        }
         if (!on() || !main.isPlaying || mixHeard() || held()) { action(); return }
         dropMix()
         begin(SkipKind.JUMP, main.currentMediaItem, null)
@@ -244,7 +256,8 @@ class SkipFade(
         s.moveMs?.let { ms -> if (t in 0 until main.mediaItemCount) own { main.seekTo(t, ms.coerceAtLeast(0L)) } }
         s.seekMs?.let { ms -> own { main.seekTo(ms.coerceAtLeast(0L)) } }
         if (s.plain && t in 0 until main.mediaItemCount) own { main.seekToDefaultPosition(t) }
-        if (s.then) { val f = then; then = null; f?.invoke() }
+        // What waited (a new queue, the cut) has nobody to tell if it fails: noted, and the run still ends normally.
+        if (s.then) { val f = then; then = null; runThen(f) }
         s.nudge?.let { setSpeed(it) }
         s.headVolume?.let { v -> h?.let { if (it.volume != v) it.volume = v.coerceIn(0f, 1f) } }
         s.mainVolume?.let { v -> if (main.volume != v) main.volume = v.coerceIn(0f, 1f) }
@@ -263,6 +276,14 @@ class SkipFade(
         // Only while the run is on (a run's last step has already reset it): after that a discontinuity isn't looked at.
         if (rules.active) ownSeeks++
         seek()
+    }
+
+    private fun runThen(f: (() -> Unit)?) {
+        if (f == null) return
+        runCatching(f).onFailure { e ->
+            Log.w(TAG, "skip-blend: what waited on the fade-out failed", e)
+            note("skip-blend: what waited on the fade-out failed: $e")
+        }
     }
 
     /** The main player at [share] of the listener's speed; back to theirs only if a nudge moved it (a new queue may start on an episode). */
@@ -296,8 +317,11 @@ class SkipFade(
     private fun forceNormal(why: String) {
         runCatching { head?.release() }
         head = null
+        // A new queue (or the cut) that waited still happens: the listener asked for it.
+        val f = then
         then = null
         ownSeeks = 0
+        runThen(f)
         runCatching { if (main.volume != 1f) main.volume = 1f; setSpeed(1f) }
         if (ownsBlend) { state.blend.value = null; ownsBlend = false }
         val r = rules.finishNow(SkipNow(clock(), false, false, -1, 0L, headFailed = true), why)
