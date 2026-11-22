@@ -4,11 +4,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -239,6 +235,11 @@ fun ArtworkMeshBackdrop(
      * as before (the tests' reference); the system's blur also covers the moment until the picture is made.
      */
     baked: Boolean = true,
+    /**
+     * #547: held still where it is (a sheet over the player) and going on from there when let go. Setting [speed] to 0
+     * instead snaps it back to rest, and its loop starts again from the top: two jumps.
+     */
+    held: Boolean = false,
 ) {
     var shown by remember { mutableStateOf(mesh) }
     var incoming by remember { mutableStateOf<ArtworkMesh?>(null) }
@@ -259,11 +260,13 @@ fun ArtworkMeshBackdrop(
     // The drift moves the drawn layer only (scaled up a little so its edges never show): what's drawn and blurred
     // inside it stays as it is, so it costs the GPU a transform a frame, not a redraw.
     val move = meshDrift(speed).takeUnless { com.prism.music.ui.theme.LocalUi.current.reduceMotion }
-    val drift = if (move == null) null else rememberInfiniteTransition(label = "meshDrift").animateFloat(
-        0f, (2 * Math.PI).toFloat(),
-        infiniteRepeatable(tween(move.loopMs, easing = LinearEasing)),
-        label = "drift",
-    )
+    // Its place in the loop, kept while held: no frames are asked for then, and it goes on from the same place after.
+    val drift = remember { DriftPhase() }
+    if (move != null && !held) LaunchedEffect(move.loopMs) {
+        try {
+            while (true) androidx.compose.animation.core.withInfiniteAnimationFrameNanos { drift.advance(it, move.loopMs) }
+        } finally { drift.hold() }
+    }
     val tone = remember(intensity) {
         if (kotlin.math.abs(intensity - 1f) < 0.01f) null
         else androidx.compose.ui.graphics.ColorFilter.colorMatrix(androidx.compose.ui.graphics.ColorMatrix().apply { setToSaturation(intensity) })
@@ -290,8 +293,8 @@ fun ArtworkMeshBackdrop(
             .onSizeChanged { laidOut = it }
             .background(PlayerFallbackBackdrop)
             .graphicsLayer {
-                val t = drift?.value ?: return@graphicsLayer
                 val m = move ?: return@graphicsLayer
+                val t = drift.value
                 val s = m.scale + 0.04f * kotlin.math.sin(t * 2)
                 scaleX = s; scaleY = s
                 translationX = size.width * m.reachX * kotlin.math.cos(t)
@@ -470,6 +473,30 @@ internal fun meshDrift(speed: Float): MeshDrift? {
     // Twice the farthest reach plus the breathing (±0.04) and a little more, so the drifted layer still covers the screen.
     val scale = 1f + 2f * maxOf(reachX, reachY) + 0.08f
     return MeshDrift((16_000 / v).roundToInt(), reachX, reachY, scale)
+}
+
+/**
+ * Where the mesh's drift is in its loop (radians, 0 until 2π), moved on frame by frame ([advance]). [hold] stops the
+ * count of time: the next [advance] takes up from the same place, the time held not counted (#547).
+ */
+internal class DriftPhase {
+    private val phase = androidx.compose.runtime.mutableFloatStateOf(0f)
+    private var lastNanos = -1L
+
+    /** Read in the drawn layer only, so a frame's move is a redraw of the layer, not a recomposition. */
+    val value: Float get() = phase.floatValue
+
+    fun advance(frameNanos: Long, loopMs: Int) {
+        val last = lastNanos
+        lastNanos = frameNanos
+        if (last < 0 || loopMs <= 0) return
+        val step = (frameNanos - last).coerceAtLeast(0L) / 1_000_000.0 / loopMs * TWO_PI
+        phase.floatValue = ((phase.floatValue + step) % TWO_PI).toFloat()
+    }
+
+    fun hold() { lastNanos = -1L }
+
+    private companion object { const val TWO_PI = 2 * Math.PI }
 }
 
 /**

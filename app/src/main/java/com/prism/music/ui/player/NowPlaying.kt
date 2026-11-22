@@ -855,8 +855,8 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
             com.prism.music.data.prefs.PlayerBackground.MESH -> {
                 if (fullBlur < 1f) ArtworkMeshBackdrop(
                     mesh, Modifier.graphicsLayer { alpha = 1f - fullBlur }, seam = if (heroMode) heroHeight else 0.dp,
-                    // Held still under a sheet, like everything else that moves here.
-                    speed = if (covered) 0f else settings.meshSpeed, intensity = settings.meshIntensity, blur = settings.player.blur,
+                    // Held still under a sheet, like everything else that moves here: where it is, not back at rest (#547).
+                    speed = settings.meshSpeed, held = covered, intensity = settings.meshIntensity, blur = settings.player.blur,
                 )
                 if (fullBlur > 0f) FullArtworkBlurBackdrop(blurImage, Modifier.graphicsLayer { alpha = fullBlur })
             }
