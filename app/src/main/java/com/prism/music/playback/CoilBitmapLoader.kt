@@ -31,11 +31,24 @@ class CoilBitmapLoader(private val context: Context, private val scope: Coroutin
 
     override fun loadBitmap(uri: Uri): ListenableFuture<Bitmap> = scope.future {
         val req = ImageRequest.Builder(context).data(uri.toString()).size(SIZE).allowHardware(false).build()
-        (SingletonImageLoader.get(context).execute(req) as? SuccessResult)?.image?.toBitmap()
+        val cached = (SingletonImageLoader.get(context).execute(req) as? SuccessResult)?.image?.toBitmap()
             ?: throw java.io.IOException("Couldn't load the cover")
+        sessionCopy(cached)
     }
 
-    private companion object {
-        const val SIZE = 544
+    companion object {
+        private const val SIZE = 544
+
+        /**
+         * #594: the bitmap Coil returns is the one in its memory cache, shared with every other user of that cover.
+         * Media3 keeps what we give it and the system scales it again at each metadata update, so a cover recycled
+         * elsewhere crashed the app. The session gets a copy nobody else holds (about 1 MB at 544 px), and a cover
+         * already recycled is refused, which media3 treats as "no artwork" instead of a crash.
+         */
+        fun sessionCopy(cached: Bitmap): Bitmap {
+            if (cached.isRecycled) throw java.io.IOException("The cover was recycled")
+            return cached.copy(cached.config ?: Bitmap.Config.ARGB_8888, false)
+                ?: throw java.io.IOException("Couldn't copy the cover")
+        }
     }
 }
