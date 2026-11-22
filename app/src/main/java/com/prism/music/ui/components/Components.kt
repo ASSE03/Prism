@@ -712,7 +712,7 @@ fun SongActionsSheet(song: Song, extra: List<SheetItem> = emptyList(), onDismiss
         if (guest != null) ActionItem(PrismIcons.PersonAdd, tr(R.string.add_to_queue)) { c.together.suggest(song, next = false); toast(tr(R.string.sent_to, guest.hostName)) }
         else ActionItem(PrismIcons.QueueMusic, tr(R.string.add_to_queue)) { c.player.addToQueue(song) },
         // A radio of a podcast episode is music radio: not offered for episodes.
-        if (song.isEpisode || local) null else ActionItem(PrismIcons.Radio, tr(R.string.radio_2)) { c.player.playRadio(song) },
+        if (song.isEpisode || local) null else ActionItem(PrismIcons.Radio, tr(R.string.radio_2)) { c.player.playRadio(song, announce = true) },
         // #471: named for what a tap does once it's downloaded (it read "Downloaded", and nobody found how to remove one).
         if (local || rss) null else ActionItem(
             if (downloaded) PrismIcons.DownloadDone else PrismIcons.Download, if (downloaded) tr(R.string.remove_download) else tr(R.string.download),

@@ -1640,6 +1640,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 player.addMediaItems(answer.add.map { it.toMediaItem() })
                 fb.served(answer.add.map { it.id })
                 if (answer.cameRound) c.player.reportError(tr(R.string.no_repeats_ran_out))
+                // A Radio button's notice (1.8.8): the radio has really started.
+                else if (c.player.radioNotice.take(src, answer.add.size)) c.player.reportError(tr(R.string.radio_started))
             }
         }
         autoplayJob = job

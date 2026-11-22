@@ -383,6 +383,9 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
         _errors.tryEmit(msg)
     }
 
+    /** A Radio button's "Radio started", said by the service when the radio's first songs are in. */
+    val radioNotice = RadioNotice()
+
     // ------------------------------------------------------------ Commands
 
     private val _showPlayer = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
@@ -649,10 +652,12 @@ class PlayerConnection(private val context: Context, private val c: AppContainer
 
     /**
      * Plays [song] and then a radio of songs like it (YouTube Music's), whether or not Autoplay is on. The song playing
-     * now carries on where it is, the radio lined up after it (#292: it started again from the top).
+     * now carries on where it is, the radio lined up after it (#292: it started again from the top). [announce]: say
+     * "Radio started" once its songs are in ([radioNotice]; the Radio buttons, 1.8.8).
      */
-    fun playRadio(song: Song) {
+    fun playRadio(song: Song, announce: Boolean = false) {
         val source = QueueSource(QueueKind.RADIO, tr(R.string.radio, song.title), seedId = song.id)
+        if (announce) radioNotice.asked(source)
         val p = player
         if (p == null || p.mediaItemCount == 0 || p.currentMediaItem?.mediaId != song.id) { playQueue(listOf(song), 0, source); return }
         ++playToken
