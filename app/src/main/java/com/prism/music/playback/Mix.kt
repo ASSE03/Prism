@@ -84,6 +84,19 @@ class MixEngine(
     private val custom: (playlistId: String, from: String, to: String) -> Transition? = { _, _, _ -> null },
     /** A saved transition just played (it's in use: the yearly prune leaves it). */
     private val customPlayed: (playlistId: String, from: String, to: String) -> Unit = { _, _, _ -> },
+    /**
+     * 1.8.8 Automix (plan-mix.md §3): with Crossfade on and a blend allowed, Prism picks a move for each pair
+     * ([MixMoves]); it implies the automatic length and beat matching, and DJ sets use it too. Off, none of it runs.
+     */
+    private val automix: () -> Boolean = { false },
+    /** Automix's effects on the main player ([TransitionFx] in its chain); null for none (a move needing them blends). */
+    private val mainFx: TransitionFx? = null,
+    /** [buildTail] with Automix's effects after the shift, for a move whose ending song has some. */
+    private val buildFxTail: (ShiftProcessor, TransitionFx) -> ExoPlayer = { shift, _ -> buildTail(shift) },
+    /** A song's key, for Automix's pick. */
+    private val keyOf: (String) -> MusicKey? = { tempo.key(it) },
+    /** A song's shape ([com.prism.music.data.SongWaves.shape]: a file read, so asked once a song and kept, [shapeFor]). */
+    private val shapeOf: (String) -> SongShape? = { null },
 ) {
     /** Wakes the loop early (a skip-blend just started: its first steps can't wait out a long idle look). */
     private val wakes = kotlinx.coroutines.channels.Channel<Unit>(kotlinx.coroutines.channels.Channel.CONFLATED)
@@ -113,9 +126,19 @@ class MixEngine(
         val beatMs: Double = 0.0,
         /** The listener's own transition for this pair (1.8.8), or null for the engine's own. */
         val saved: SavedPlan? = null,
+        /** Automix's move for this pair (1.8.8), or null for the engine's plain blend (or the listener's transition). */
+        val move: Move? = null,
+        /** The move's moment as a share of it ([MovePlace.pivot]). */
+        val pivot: Float = 0.5f,
+        /** Each song's effects (the ending song's, the next song's), each in its own time; null for none. */
+        var fx: Pair<FxScript, FxScript>? = null,
     ) {
         /** How many times the blend has been put off to get the tail in step. */
         var postponed = 0
+        /** The move couldn't be set up as placed: today's crossfade instead, at its place ([fallBack]). */
+        var plain = false
+        /** Why the move picked isn't the one heard, for the diagnostics line. */
+        var fellBack: String? = null
     }
 
     /** A plan from the listener's own transition: which playlist it's kept in, how it sounds, where its move's moment is. */
@@ -147,6 +170,13 @@ class MixEngine(
     private var plan: Plan? = null
     private var tail: ExoPlayer? = null
     private var shifter: ShiftProcessor? = null
+    /** The tail's own effects (made only for a move whose ending song has some), and where it was last seeked to. */
+    private var tailFx: TransitionFx? = null
+    private var tailFromMs = 0L
+    /** Automix's moves as they were heard, oldest first (the last [RECENT_MOVES]): no effect a third time running. */
+    private val recent = ArrayList<Move>()
+    /** Songs' shapes as last read ([shapeFor]): when, and what (null: none yet). */
+    private val shapes = HashMap<String, Pair<Long, SongShape?>>()
     private var blendStartedAt = 0L
     private var settleFrom = 1f
     private var settleStartedAt = 0L
@@ -204,6 +234,16 @@ class MixEngine(
 
     /** A blend is under way (the next song's tempo is the blend's until it settles): the Speed button waits for it. */
     val blending: Boolean get() = phase == Phase.BLENDING || phase == Phase.SETTLING || phase == Phase.SKIP_FADE
+
+    /** Debug builds' in-app tests (AutomixAppTest): Automix on or off whatever the setting says; null for the setting. */
+    @Volatile var testAutomix: Boolean? = null
+    private fun automixOn(): Boolean = testAutomix ?: automix()
+
+    /** Automix's moves as heard, oldest first (main thread). */
+    val recentMoves: List<Move> get() = recent.toList()
+
+    /** Whether the main player's effects are armed: never once a transition is over. */
+    val mainFxArmed: Boolean get() = mainFx?.asked != null
 
     /** Ends a blend under way at once (casting starts: the music goes elsewhere, and no blend may leave it at half volume). */
     fun stopBlend() {
@@ -286,8 +326,10 @@ class MixEngine(
         val dur = main.duration.takeIf { it != C.TIME_UNSET && it > 0 } ?: return 500
         // 1.8.8: the listener's own transition for this pair, planned by its own points (up to 90 s before the end).
         val saved = savedNext(item)?.fit(dur)
-        // With Auto, plans are made as early as the longest blend could need.
-        val length = saved?.lengthMs ?: if (auto()) AUTO_MAX_MS else chosen ?: run { state.mark.value = null; return 1000 }
+        // 1.8.8 Automix: only with Crossfade on (it's one of its choices).
+        val moves = chosen != null && automixOn()
+        // With Auto, plans are made as early as the longest blend could need (with Automix, the earliest a move starts).
+        val length = saved?.lengthMs ?: if (moves) AUTOMIX_AHEAD_MS else if (auto()) AUTO_MAX_MS else chosen ?: run { state.mark.value = null; return 1000 }
         // Counted to where the music ends, not the file: a song with a long silent tail blends that much earlier (counted
         // from the file's end, the blend's moment had passed before it was even planned, and the song just stopped).
         val musicEnd = tempo.cached(item.mediaId)?.lastSoundMs?.takeIf { it in dur / 2..dur } ?: dur
@@ -306,7 +348,7 @@ class MixEngine(
         }
         if (left > planAhead) return minOf(2000, left - planAhead).coerceAtLeast(250)
         if (refused) return 1000
-        val p = makePlan(item, dur, length) ?: run { refuse(item.mediaId); return 1000 }
+        val p = makePlan(item, dur, length, moves) ?: run { refuse(item.mediaId); return 1000 }
         // A saved cut needs no second player: the main player moves on at the saved spot.
         if (p.saved != null && p.lengthMs == 0L) return cut(item, p)
         // (The tail can still load while it waits to play along, see [prepared], so only the lead-in itself is needed.)
@@ -324,16 +366,22 @@ class MixEngine(
             note("too close to the blend after ${item.mediaId} to get ready (at $pos ms, blend at ${p.startMs} ms): it starts at $late ms instead")
             p.lengthMs -= late - p.startMs
             p.startMs = late
+            // A move's effects were placed for its own start.
+            fallBack(p, "started late")
         }
         // Planned: the mark with the blend's length too (an automatic one is only known from here on).
         state.mark.value = BlendMark(p.fromId, p.startMs, p.lengthMs)
         if (main.currentPosition < p.startMs - LEAD_MS - PREPARE_MS - 3000) return 250
         val shift = ShiftProcessor()
-        val t = buildTail(shift)
+        // The ending song's effects get their own processor in its second player, only when it has some (light first).
+        val fx = if (p.fx?.first?.ramps?.isNotEmpty() == true) TransitionFx { shift.shiftedMs } else null
+        val t = if (fx != null) buildFxTail(shift, fx) else buildTail(shift)
         shifter = shift
+        tailFx = fx
         t.volume = 0f
         t.setMediaItem(item.buildUpon().build())
-        t.seekTo((p.startMs - LEAD_MS).coerceAtLeast(0))
+        tailFromMs = (p.startMs - LEAD_MS).coerceAtLeast(0)
+        t.seekTo(tailFromMs)
         t.playWhenReady = false
         t.prepare()
         tail = t
@@ -343,8 +391,57 @@ class MixEngine(
         phase = Phase.PREPARED
         note("planned ${p.fromId} -> ${p.toId}: blend at ${p.startMs} ms for ${p.lengthMs} ms, next from ${p.inMs} ms" +
             (if (p.beats) ", tempo ×%.3f, on the beat".format(p.ratio) else "") +
-            (p.saved?.let { ", the listener's own (${it.style.key}, playlist ${it.playlistId})" } ?: ""))
+            (p.saved?.let { ", the listener's own (${it.style.key}, playlist ${it.playlistId})" } ?: "") + moveLine(p))
         return 50
+    }
+
+    /**
+     * What Share diagnostics says of a plan's move (plan-mix.md §3.2): ", Automix: bass swap", and when the move picked
+     * couldn't be the one heard, why ("… (fell back from echo out: started late)"). Empty for a blend without one.
+     */
+    private fun moveLine(p: Plan): String =
+        (p.move?.let { ", Automix: ${if (p.plain) "blend" else moveName(it)}" } ?: "") + (p.fellBack?.let { " (fell back from $it)" } ?: "")
+
+    /**
+     * A move that can't be set up as placed (started late, put off, its effects not ready in time): the blend goes
+     * ahead as today's crossfade at the same spot, never silence, and both players' effects are cleared. [say]: logged
+     * (not while plans are still being made afresh every step).
+     */
+    private fun fallBack(p: Plan, why: String, say: Boolean = true) {
+        if (p.fx == null) return
+        p.fx = null
+        p.plain = true
+        val name = p.move?.let(::moveName) ?: p.saved?.style?.key ?: "the move"
+        p.fellBack = (p.fellBack?.let { "$it; " } ?: "") + "$name: $why"
+        tailFx?.disarm()
+        disarmMain()
+        if (say) note("$name after ${p.fromId} plays as a plain blend: $why")
+    }
+
+    /** The main player's effects back to its own sound: they're for one transition only. */
+    private fun disarmMain() {
+        mainFx?.takeIf { it.asked != null }?.disarm()
+    }
+
+    /**
+     * The ending song's effects, armed as its second player starts playing along (well before the blend: the echo
+     * catches the beat before it), in its own time. Too late for the first of them, the move falls back to a blend.
+     */
+    private fun armTail(p: Plan, seeked: Boolean) {
+        val s = p.fx?.first?.takeIf { it.ramps.isNotEmpty() } ?: return
+        val fx = tailFx
+        if (fx == null || main.currentPosition > s.ramps.minOf { it.atMs } - ARM_AHEAD_MS) return fallBack(p, "the ending song's effects weren't ready in time")
+        fx.arm(s, tailFromMs, afterNextFlush = seeked)
+    }
+
+    /** Song [id]'s shape: read once, and again only while it has none (a scan may bring it). */
+    private fun shapeFor(id: String): SongShape? {
+        val now = SystemClock.elapsedRealtime()
+        shapes[id]?.let { (at, s) -> if (s != null || now - at < SHAPE_AGAIN_MS) return s }
+        val s = runCatching { shapeOf(id) }.getOrNull()
+        if (shapes.size >= 8) shapes.clear()
+        shapes[id] = now to s
+        return s
     }
 
     /**
@@ -420,7 +517,8 @@ class MixEngine(
         if (next.mediaId.isBlank() || next.mediaId == item.mediaId || !allowed(item, next)) return null
         val a = tempo.cached(item.mediaId)
         val nextDur = (next.mediaMetadata.durationMs ?: 0L).takeIf { it > 0 } ?: Long.MAX_VALUE
-        val automatic = auto()
+        // (Automix's moves are known only once planned, as an automatic length is.)
+        val automatic = auto() || automixOn()
         val len = minOf(if (automatic) autoLengthMs(a, tempo.cached(next.mediaId)) else length, dur / 3, nextDur / 3)
         if (len < 1000 || dur < 30_000) return null
         val start = (a?.lastSoundMs?.takeIf { it in dur / 2..dur } ?: dur) - len
@@ -429,7 +527,8 @@ class MixEngine(
 
     /** The blend's length before the songs' own lengths cap it: the listener's, or worked out for the pair; DJ mode's keys stretch or cut it. */
     private fun chosenLength(item: MediaItem, next: MediaItem, a: Tempo?, b: Tempo?, length: Long): Long {
-        var chosen = if (auto()) autoLengthMs(a, b) else length
+        // (Automix implies the automatic length, for a pair it blends the plain way too.)
+        var chosen = if (auto() || automixOn()) autoLengthMs(a, b) else length
         harmonic(item.mediaId, next.mediaId)?.let { clash ->
             chosen = when {
                 clash <= 0.25 -> maxOf(chosen, HARMONIC_LONG_MS)
@@ -448,11 +547,43 @@ class MixEngine(
         val f = s.fit(dur)
         val beat = tempo.cached(item.mediaId)?.takeIf { it.steady }?.periodMs ?: 0.0
         val place = TransitionSound.place(s.t.style, f, beat)
+        // Its style's effects ([TransitionSound.scripts]: bass swap, filter out, echo out), played as made.
+        val fx = TransitionSound.scripts(s.t.style, place).takeIf { it.first.ramps.isNotEmpty() || it.second.ramps.isNotEmpty() }
         return Plan(item.mediaId, s.next.mediaId, s.toIndex, f.startMs, f.inMs, f.lengthMs, 1f, false,
-            saved = SavedPlan(s.playlistId, s.t.style, place.pivot))
+            saved = SavedPlan(s.playlistId, s.t.style, place.pivot), fx = fx).also {
+            if (fx != null && mainFx == null && fx.second.ramps.isNotEmpty()) fallBack(it, "no effects on this player", say = false)
+        }
     }
 
-    private fun makePlan(item: MediaItem, dur: Long, length: Long): Plan? {
+    /**
+     * 1.8.8 Automix (plan-mix.md §3.1): the move [MixMoves] picks for [item] into [next] (their scans, keys and shapes,
+     * and the moves before), where it sits ([MixMoves.place]: on a phrase, maybe out of the outro) and each song's
+     * effects. Beat matched when the tempos allow it, whatever Crossfade's own switch says. A move that can't be placed,
+     * or whose next song's effects have no processor to play on, is the blend at Automix's place; null when even that
+     * can't be placed, and today's plain blend is planned instead.
+     */
+    private fun movePlan(item: MediaItem, next: MediaItem, toIndex: Int, dur: Long, a: Tempo?, b: Tempo?): Plan? {
+        val ending = MixSide(a, keyOf(item.mediaId), shapeFor(item.mediaId), dur)
+        val coming = MixSide(b, keyOf(next.mediaId), shapeFor(next.mediaId), next.mediaMetadata.durationMs?.takeIf { it > 0 } ?: 0L)
+        val picked = MixMoves.pick(ending, coming, recent)
+        var place = MixMoves.place(picked, ending, coming)
+        var scripts = place?.let { MixMoves.scripts(it) }
+        var why: String? = null
+        if (place != null && mainFx == null && scripts!!.second.ramps.isNotEmpty()) { why = "no effects on this player"; place = null }
+        if (place == null && picked != Move.BLEND) {
+            why = "${moveName(picked)}: ${why ?: "it couldn't be placed"}"
+            place = MixMoves.place(Move.BLEND, ending, coming)
+            scripts = null
+        }
+        val pl = place ?: return null
+        val beats = a != null && MixMoves.matchedRatio(a, b) != null && pl.move != Move.ECHO_OUT && pl.move != Move.CUT
+        val fx = scripts?.takeIf { it.first.ramps.isNotEmpty() || it.second.ramps.isNotEmpty() }
+        return Plan(item.mediaId, next.mediaId, toIndex, pl.startMs, pl.inMs, pl.lengthMs, pl.ratio, beats,
+            if (beats) a!!.periodMs * pl.ratio else 0.0, move = pl.move, pivot = pl.pivot, fx = fx).also { it.fellBack = why }
+    }
+
+    /** [moves]: Automix picks this pair's move ([movePlan]). */
+    private fun makePlan(item: MediaItem, dur: Long, length: Long, moves: Boolean = false): Plan? {
         // The listener's own transition for this pair comes before anything automatic.
         savedNext(item)?.let { return savedPlan(item, dur, it) }
         val toIndex = main.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET } ?: return noBlend(item, MixWhy.NOTHING_NEXT, "nothing next in the queue")
@@ -465,6 +596,7 @@ class MixEngine(
         }
         val a = tempo.cached(item.mediaId)
         val b = tempo.cached(next.mediaId)
+        if (moves) movePlan(item, next, toIndex, dur, a, b)?.let { return it }
         val nextDur = (next.mediaMetadata.durationMs ?: 0L).takeIf { it > 0 } ?: Long.MAX_VALUE
         val len = minOf(chosenLength(item, next, a, b, length), dur / 3, nextDur / 3)
         if (len < 1000 || dur < 30_000) return noBlend(
@@ -537,6 +669,8 @@ class MixEngine(
         // The listener's own transition is for that pair only: planned afresh for whatever is next now.
         if (planned.saved != null && nextId() != planned.toId) return abort("the saved pair is no longer next", null, again = true)
         val p = following(planned) ?: return abort("nothing next to blend into (or no longer blended here)", followingWhy)
+        // Another song next now: the blend goes into it without the move (its effects were for the other one).
+        if (p !== planned) tailFx?.disarm()
         val pos = main.currentPosition
         if (pos > p.startMs + 200 || pos < p.startMs - LEAD_MS - PREPARE_MS - 15_000) return abort("seeked away", null, again = true)
         watchMain(pos, "while the tail got ready")
@@ -549,7 +683,9 @@ class MixEngine(
         }
         // Where the main player is now, if it's well past where the tail waits (a reload costs a moment; [syncing]
         // shifts away whatever difference is left). Still muted.
-        if (abs(pos - t.currentPosition) > 1000) t.seekTo(pos)
+        val seeked = abs(pos - t.currentPosition) > 1000
+        if (seeked) { t.seekTo(pos); tailFromMs = pos }
+        armTail(p, seeked)
         t.playWhenReady = main.playWhenReady
         mainLead = Long.MIN_VALUE; tailLead = Long.MIN_VALUE; windowFrom = 0L
         offset = null
@@ -601,6 +737,7 @@ class MixEngine(
         if (t.playbackState == Player.STATE_IDLE) return abort("the ending song's second player stopped (an error)", MixWhy.GLITCH)
         if (planned.saved != null && nextId() != planned.toId) return abort("the saved pair is no longer next", null, again = true)
         val p = following(planned) ?: return abort("nothing next to blend into (or no longer blended here)", followingWhy)
+        if (p !== planned) tailFx?.disarm()
         t.playWhenReady = main.playWhenReady
         val pos = main.currentPosition
         if (pos > p.startMs + 500 || pos < p.startMs - LEAD_MS - 2000) return abort("seeked away", null, again = true)
@@ -672,6 +809,8 @@ class MixEngine(
                         p.postponed++
                         state.mark.value = BlendMark(p.fromId, p.startMs, p.lengthMs)
                         note("tail ${d ?: "?"} ms off at the blend: put off by $by ms (now ${p.lengthMs} ms long)")
+                        // A move's effects were placed for its own start.
+                        fallBack(p, "put off to get in step")
                         return 10
                     }
                     // Put off as often as it may be and still apart: a plain blend (not on the beat) goes ahead anyway when
@@ -701,8 +840,11 @@ class MixEngine(
         // Hand over: the tail carries the ending song on; the main player moves to the next one, silent.
         t.volume = 1f
         main.volume = 0f
+        // Automix: the next song's effects from its first frame, the seek's (in its own time, counted by its processor).
+        p.fx?.second?.takeIf { it.ramps.isNotEmpty() }?.let { mainFx?.arm(it, p.inMs, afterNextFlush = true) }
         main.seekTo(p.toIndex, p.inMs)
         main.playbackParameters = at(p.ratio)
+        p.move?.let { heard(if (p.plain) Move.BLEND else it) }
         // The next song's bar grows in over the blend, in its own time (faster or slower by the tempo match).
         state.into.value = BlendIn(p.toId, p.inMs, (p.lengthMs * p.ratio).toLong())
         // A blend happens: the last time one didn't is no longer the news (#493).
@@ -718,8 +860,14 @@ class MixEngine(
         blendFurthest = p.inMs
         lastProgress = 0f
         phase = Phase.BLENDING
-        note("blend ${p.fromId} -> ${p.toId} started (tail $d ms off, crossed over in $handoverMs ms, put off ${p.postponed} times; tail stopped $tailStops times in the lead-in, $tailStoppedMs ms)")
+        note("blend ${p.fromId} -> ${p.toId} started (tail $d ms off, crossed over in $handoverMs ms, put off ${p.postponed} times; tail stopped $tailStops times in the lead-in, $tailStoppedMs ms)" + moveLine(p))
         return 20
+    }
+
+    /** A move was heard: kept for the no-three-in-a-row rule ([MixMoves.pick]) and the in-app test. */
+    private fun heard(m: Move) {
+        recent += m
+        while (recent.size > RECENT_MOVES) recent.removeAt(0)
     }
     private fun blending(): Long {
         val p = plan ?: return abort("no plan", MixWhy.GLITCH)
@@ -778,7 +926,11 @@ class MixEngine(
             note("${p.toId} taken back to $mainAt ms during the blend (it had played to $blendFurthest ms): bringing it in now")
         }
         blendFurthest = maxOf(blendFurthest, mainAt)
-        if (rushedAt != 0L) progress = maxOf(progress, (rushFrom + (now - rushedAt).toFloat() / rushMs * (1 - rushFrom)).coerceAtMost(1f))
+        if (rushedAt != 0L) {
+            progress = maxOf(progress, (rushFrom + (now - rushedAt).toFloat() / rushMs * (1 - rushFrom)).coerceAtMost(1f))
+            // Brought in early, the next song comes up as itself (its bass back, unmuffled), not held in the move.
+            disarmMain()
+        }
         val ended = t.playbackState == Player.STATE_ENDED
         if (now - lastSyncLog >= 1000) {
             lastSyncLog = now
@@ -786,8 +938,14 @@ class MixEngine(
                 progress, tailPosition(t), stateName(t), shifter?.quietMs ?: 0L, main.currentPosition, stateName(main),
             ))
         }
-        // The listener's own transition sounds as its style (the same function as the editor's Listen); else the curve.
-        val (incoming, outgoing) = p.saved?.let { TransitionSound.gains(it.style, progress, it.pivot, curve()) } ?: curve().gains(progress)
+        // The listener's own transition sounds as its style (the same function as the editor's Listen), Automix's move
+        // as the move (both as judged in the listening round); else, and for a move fallen back, the curve.
+        val (incoming, outgoing) = when {
+            p.plain -> curve().gains(progress)
+            p.saved != null -> TransitionSound.gains(p.saved.style, progress, p.saved.pivot, curve())
+            p.move != null -> MixMoves.gains(p.move, progress, p.pivot, curve())
+            else -> curve().gains(progress)
+        }
         main.volume = incoming
         t.volume = outgoing
         if (main.isPlaying) lastProgress = progress
@@ -797,6 +955,8 @@ class MixEngine(
             t.release()
             tail = null
             shifter = null
+            tailFx = null
+            disarmMain()
             main.volume = 1f
             note("blend ${p.fromId} -> ${p.toId} done in ${SystemClock.elapsedRealtime() - blendStartedAt} ms")
             if (main.playbackParameters.speed != 1f) {
@@ -839,7 +999,10 @@ class MixEngine(
         when {
             abs(err) <= BEATS_IN_STEP_MS -> syncActionAt = now
             abs(err) > 60 && progress < 0.2f -> {
-                main.seekTo(beatSeekMs(main.currentPosition, mainLead + (dt * p.ratio).toLong(), err, p.beatMs))
+                val to = beatSeekMs(main.currentPosition, mainLead + (dt * p.ratio).toLong(), err, p.beatMs)
+                // A seek ends the effects running on the main player: the move's go on from the new place (song time).
+                p.fx?.second?.takeIf { it.ramps.isNotEmpty() && mainFx?.asked != null }?.let { mainFx?.arm(it, to, afterNextFlush = true) }
+                main.seekTo(to)
                 syncActionAt = now
             }
             else -> {
@@ -876,6 +1039,9 @@ class MixEngine(
         if (main.playbackParameters.speed != 1f) main.playbackParameters = at(1f)
         catchUpUntil = 0L
         plan = null
+        // The song skipped to plays as itself; the ending song's effects go with it.
+        disarmMain()
+        tailFx?.disarm()
         fadeMainFrom = main.volume.coerceIn(0f, 1f)
         fadeTailFrom = t.volume.coerceIn(0f, 1f)
         fadeStartedAt = SystemClock.elapsedRealtime()
@@ -896,6 +1062,7 @@ class MixEngine(
         runCatching { t.release() }
         tail = null
         shifter = null
+        tailFx = null
         main.volume = 1f
         catchUpUntil = 0L
         phase = Phase.IDLE
@@ -908,6 +1075,7 @@ class MixEngine(
     private fun finish() {
         state.blend.value = null
         state.mark.value = null
+        disarmMain()
         catchUpUntil = 0L
         phase = Phase.IDLE
         plan = null
@@ -943,6 +1111,10 @@ class MixEngine(
         tail?.let { runCatching { it.release() } }
         tail = null
         shifter = null
+        // Whatever a move had armed goes: the next song plays clean (a skip, a seek, Mix turned off, the app closing).
+        tailFx?.disarm()
+        tailFx = null
+        disarmMain()
         if (main.volume != 1f) main.volume = 1f
         if (main.playbackParameters.speed != 1f) main.playbackParameters = at(1f)
         if (!again && (phase == Phase.PREPARED || phase == Phase.SYNCING)) plan?.let { refuse(it.fromId) }
@@ -955,6 +1127,20 @@ class MixEngine(
 
     companion object {
         private const val TAG = "PrismMix"
+        /** Automix's moves kept as heard ([recentMoves]). */
+        const val RECENT_MOVES = 16
+        /**
+         * With Automix, plans are made this far before the music's end: the earliest a move may start (out of the outro,
+         * up to 20 s before the end, then back to its phrase).
+         */
+        private const val AUTOMIX_AHEAD_MS = 40_000L
+        /** A song's ending effects are armed at least this long before their first moment (its sound is worked on ahead of play). */
+        private const val ARM_AHEAD_MS = 1_000L
+        /** A song with no shape yet is looked at again after this long (a scan may have brought one). */
+        private const val SHAPE_AGAIN_MS = 30_000L
+
+        /** A move as diagnostics name it: "bass swap", "filter out", "echo out", "blend", "cut". */
+        fun moveName(m: Move): String = m.name.lowercase().replace('_', ' ')
         /** How far back a reading may be from the furthest seen before it counts as the song going back (readings lag). */
         private const val WENT_BACK_SLACK_MS = 1_000L
         /** The longest [idle] waits between looks: a song started over may have played this far on by the next one. */

@@ -33,6 +33,8 @@ object PlaybackServices {
     @Volatile var playerForTest: androidx.media3.exoplayer.ExoPlayer? = null
     /** Debug builds only, for the in-app tests: the running service's skip-blend (SkipBlendTest: no second player left). */
     @Volatile var skipFadeForTest: SkipFade? = null
+    /** Debug builds only, for the in-app tests: the running service's crossfade engine (AutomixAppTest: its moves). */
+    @Volatile var mixForTest: MixEngine? = null
 
     fun classFor(icon: AppIcon): Class<out PlaybackService> = when (icon) {
         AppIcon.CLASSIC -> PlaybackService::class.java
