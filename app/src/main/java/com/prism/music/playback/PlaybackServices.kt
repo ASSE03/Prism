@@ -31,6 +31,8 @@ object PlaybackServices {
     @Volatile var taskRemovedForTest: (() -> Unit)? = null
     /** Debug builds only, for the in-app tests: the running service's own player, for what it reports (GaplessAppTest). */
     @Volatile var playerForTest: androidx.media3.exoplayer.ExoPlayer? = null
+    /** Debug builds only, for the in-app tests: the running service's skip-blend (SkipBlendTest: no second player left). */
+    @Volatile var skipFadeForTest: SkipFade? = null
 
     fun classFor(icon: AppIcon): Class<out PlaybackService> = when (icon) {
         AppIcon.CLASSIC -> PlaybackService::class.java

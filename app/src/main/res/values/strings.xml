@@ -1824,6 +1824,7 @@
     <string name="crossfade_mark">Crossfade mark</string>
     <string name="progress_bar_mark_where_next_song">progress bar mark where next song blend starts</string>
     <string name="covers_blend_too">Covers blend in a crossfade</string>
+    <string name="cover_and_title_blend_too">Cover and title blend too</string>
     <string name="cover_artwork_dissolve_fade_crossfade_apple">cover artwork dissolve fade crossfade apple music</string>
     <string name="speed_pitch_and_fades">Speed, pitch and fades</string>
     <string name="speed_when_prism_starts">Speed when Prism starts</string>
@@ -3524,6 +3525,7 @@
     <string name="cover_flies_into_the_player">Cover flies into the player</string>
     <string name="controls_hide_over_videos">Controls hide over videos</string>
     <string name="covers_blend_in_a_crossfade">Covers blend in a crossfade</string>
+    <string name="cover_and_title_blend_in_a_crossfade">Cover and title blend in a crossfade</string>
     <string name="player_buttons_in_a_capsule">Player buttons in a capsule</string>
     <string name="songs_covers">Songs\' covers</string>
     <string name="albums_covers">Albums\' covers</string>
@@ -4425,6 +4427,9 @@
     <string name="automatic_plain">Automatic</string>
     <string name="fixed_length">Fixed length</string>
     <string name="crossfade_choice_info">Off: songs play one after another. Automatic: each crossfade fits how the songs end and begin. Fixed length: the same length every time.</string>
+    <string name="skip_blend">Blend when I skip</string>
+    <string name="skip_blend_info">Next, Previous and a tap in the queue blend into the song you picked over a second and a half instead of cutting: the song playing carries on until the next one is ready. A new list fades out briefly. Works with Crossfade off too. Performance mode and battery saver use a short fade instead; videos, podcasts, live streams, casting and Listen together always cut.</string>
+    <string name="skip_blend_keywords">skip next previous blend fade cut</string>
     <string name="mix_why_last">Last time: %1$s</string>
     <string name="mix_why_last_blend">Why the last songs didn\'t blend</string>
     <string name="mix_why_nothing_next">Nothing was up next in the queue.</string>

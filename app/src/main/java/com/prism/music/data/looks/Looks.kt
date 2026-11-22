@@ -316,7 +316,7 @@ object LookLabels {
         "lyrics_card" to tr(R.string.lyrics_on_bold_card), "lyrics_halo" to tr(R.string.lyrics_glow), "lyrics_bold_lines" to tr(R.string.bold_card_s_bold_lines),
         "panel_player" to tr(R.string.player_over_lyrics_queue), "queue_headings" to tr(R.string.queue_headings), "queue_dj_chip" to tr(R.string.dj_in_the_queue), "cast_mark" to tr(R.string.cast_mark_under_the_player),
         "immersive_video" to tr(R.string.video_in_immersive_mode), "bleed_fit" to tr(R.string.full_bleed_artwork_s_fit), "cover_flight" to tr(R.string.cover_flies_into_the_player),
-        "video_controls_hide" to tr(R.string.controls_hide_over_videos), "crossfade_mark" to tr(R.string.crossfade_mark), "blend_covers" to tr(R.string.covers_blend_in_a_crossfade), "player_buttons_pill" to tr(R.string.player_buttons_in_a_capsule),
+        "video_controls_hide" to tr(R.string.controls_hide_over_videos), "crossfade_mark" to tr(R.string.crossfade_mark), "blend_covers" to tr(R.string.cover_and_title_blend_in_a_crossfade), "player_buttons_pill" to tr(R.string.player_buttons_in_a_capsule),
         "crossfade_shape" to tr(R.string.crossfade_on_the_progress_bar),
         // 1.8.2 requests (#223, #293, #294, #331).
         "cover_flight_back" to tr(R.string.cover_flies_back_too), "video_buttons_hide" to tr(R.string.buttons_on_videos_wait_for_a_tap),
