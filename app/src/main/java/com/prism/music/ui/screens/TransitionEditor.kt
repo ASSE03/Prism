@@ -162,6 +162,8 @@ fun TransitionEditor(pair: TransitionPair, onClose: () -> Unit) {
 }
 
 /** The editor wired to Prism: the store, the scans, the preview and the queue's own song. */
+// Listen builds its own player (previewPlayer), part of Media3's unstable API.
+@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 @Composable
 fun TransitionEditorScreen(pair: TransitionPair, onClose: () -> Unit) {
     val c = LocalContainer.current
