@@ -999,7 +999,7 @@ private fun PlayerButtonGlyph(
     val song by pc.currentSong.collectAsState()
     val s = song ?: return
     when (b) {
-        PlayerButton.LYRICS -> BottomGlyph(if (lyricsOpen) PrismIcons.LyricsFilled else PrismIcons.Lyrics, if (lyricsOpen) tr(R.string.close_lyrics) else tr(R.string.lyrics), lyricsOpen, onToggleLyrics, width)
+        PlayerButton.LYRICS -> BottomGlyph(if (lyricsOpen) PrismIcons.LyricsFilled else PrismIcons.Lyrics, if (lyricsOpen) tr(R.string.close_lyrics) else tr(R.string.lyrics), lyricsOpen, onToggleLyrics, width, modifier = com.prism.music.ui.tour.TourAnchor.PLAYER_LYRICS.mark)
         // One Video toggle: on (marked) plays the music video; tapping again goes back to the song.
         PlayerButton.VIDEO -> PillSegment(
             PrismIcons.Video,
@@ -1167,10 +1167,10 @@ private fun PillSegment(
 }
 
 @Composable
-private fun BottomGlyph(icon: ImageVector, description: String, highlighted: Boolean, onClick: () -> Unit, width: Dp = 56.dp, enabled: Boolean = true) {
+private fun BottomGlyph(icon: ImageVector, description: String, highlighted: Boolean, onClick: () -> Unit, width: Dp = 56.dp, enabled: Boolean = true, modifier: Modifier = Modifier) {
     val haptics = rememberHaptics()
     Box(
-        Modifier.size(width = width, height = BOTTOM_ACTION_SIZE).clip(CircleShape)
+        modifier.size(width = width, height = BOTTOM_ACTION_SIZE).clip(CircleShape)
             .background(if (highlighted && enabled) Color.White.copy(alpha = 0.16f) else Color.Transparent)
             .semantics { selected = highlighted }
             .clickable(remember { MutableInteractionSource() }, indication = null, enabled = enabled) { haptics.tick(); onClick() },
@@ -1183,11 +1183,11 @@ private fun BottomGlyph(icon: ImageVector, description: String, highlighted: Boo
 
 /** A bare button beside the credits (like, menu): Spectrum keeps them out of discs; [active] (liked) in full white. */
 @Composable
-fun CircleGlyph(icon: ImageVector, description: String, active: Boolean = false, onClick: () -> Unit) {
+fun CircleGlyph(icon: ImageVector, description: String, active: Boolean = false, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val ink by animateFloatAsState(if (active) 1f else 0.8f, label = "glyphInk")
     val haptics = rememberHaptics()
     Box(
-        Modifier.size(40.dp).clip(CircleShape).background(Color.White.copy(alpha = if (active) 0.22f else 0.13f)).border(1.dp, Color.White.copy(alpha = 0.16f), CircleShape)
+        modifier.size(40.dp).clip(CircleShape).background(Color.White.copy(alpha = if (active) 0.22f else 0.13f)).border(1.dp, Color.White.copy(alpha = 0.16f), CircleShape)
             .clickable(remember { MutableInteractionSource() }, indication = null, onClickLabel = description) { haptics.click(); onClick() },
         contentAlignment = Alignment.Center,
     ) {

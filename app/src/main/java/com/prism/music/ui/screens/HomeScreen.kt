@@ -481,9 +481,10 @@ fun HomeScreen(bottomPadding: androidx.compose.ui.unit.Dp) {
                             // what you've just heard). Your recent plays themselves never do: that's Recently played.
                             // A pick starts a radio from it (#38), as on YouTube Music, unless Customize Home says to play them in order.
                             // Offline: the songs on the phone you're most likely to want, played in order.
-                            if (!online) { if (offlinePicks.isNotEmpty()) SongSection(cfg, cfg.titled(tr(R.string.quick_picks)), tr(R.string.ready_offline), offlinePicks, snap = true) }
+                            val firstPick = com.prism.music.ui.tour.TourAnchor.QUICK_PICK // where the coach points first (1.8.8)
+                            if (!online) { if (offlinePicks.isNotEmpty()) SongSection(cfg, cfg.titled(tr(R.string.quick_picks)), tr(R.string.ready_offline), offlinePicks, snap = true, firstAnchor = firstPick) }
                             else if (pickSongs.isNotEmpty()) SongSection(
-                                cfg, cfg.titled(tr(R.string.quick_picks)), picks?.strapline, pickSongs, snap = true,
+                                cfg, cfg.titled(tr(R.string.quick_picks)), picks?.strapline, pickSongs, snap = true, firstAnchor = firstPick,
                                 play = if (settings.quickPicksRadio) { list, i -> c.player.playRadio(list[i]) } else null,
                             )
                         }
@@ -986,6 +987,8 @@ internal fun SongSection(
     snap: Boolean = false,
     /** What tapping a song does; null plays the section from it. */
     play: ((List<Song>, Int) -> Unit)? = null,
+    /** The coach's mark on the first song (Quick picks, List and Grid). */
+    firstAnchor: com.prism.music.ui.tour.TourAnchor? = null,
     onMore: (() -> Unit)? = null,
 ) {
     val c = LocalContainer.current
@@ -1003,7 +1006,7 @@ internal fun SongSection(
             GridCells.Fixed(if (songs.size > 2) 2 else 1), Modifier.height(if (songs.size > 2) 2 * 212.dp else 212.dp),
             contentPadding = PaddingValues(horizontal = 12.dp),
         ) {
-            items(songs.size) { i -> ItemCard(SongItem(songs[i]), width = 140.dp) { start(i) } }
+            items(songs.size) { i -> ItemCard(SongItem(songs[i]), (if (i == 0) firstAnchor?.mark else null) ?: Modifier, width = 140.dp) { start(i) } }
         }
         SectionStyle.LIST -> {
             val grid = androidx.compose.foundation.lazy.grid.rememberLazyGridState()
@@ -1022,7 +1025,7 @@ internal fun SongSection(
             ) {
                 items(songs.size) { i ->
                     // The song playing is marked, as in a playlist (#242: Quick picks never showed it).
-                    Box(Modifier.width(330.dp)) { SongRow(songs[i], playing = current?.id == songs[i].id) { start(i) } }
+                    Box(Modifier.width(330.dp).then((if (i == 0) firstAnchor?.mark else null) ?: Modifier)) { SongRow(songs[i], playing = current?.id == songs[i].id) { start(i) } }
                 }
             }
         }

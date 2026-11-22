@@ -63,6 +63,8 @@ import com.prism.music.ui.theme.LocalContainer
 import com.prism.music.ui.theme.LocalUi
 import com.prism.music.ui.theme.hairline
 import androidx.compose.ui.draw.drawBehind
+import com.prism.music.ui.tour.TourAnchor
+import com.prism.music.ui.tour.tourAnchor
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -138,6 +140,7 @@ fun MiniPlayer(
             .fillMaxWidth()
             .height(height)
             .testTag("miniPlayer")
+            .tourAnchor(TourAnchor.MINI_PLAYER)
             .offset { IntOffset(drag.value.roundToInt(), pull.value.roundToInt()) }
             .graphicsLayer { alpha = 1f - (pull.value / (height.toPx() * 1.6f)).coerceIn(0f, 0.85f) }
             .pointerInput(Unit) {

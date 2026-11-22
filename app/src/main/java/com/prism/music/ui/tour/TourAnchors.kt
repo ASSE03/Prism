@@ -37,6 +37,10 @@ enum class TourAnchor {
     LIBRARY_TAB,
     /** Settings → Playback → Song to song: the Crossfade row (What's new's "Show me"). */
     CROSSFADE,
+    ;
+
+    /** `Modifier.tourAnchor(this)`, for a file that would rather not import it (one line to merge). */
+    val mark: Modifier get() = Modifier.tourAnchor(this)
 }
 
 /**

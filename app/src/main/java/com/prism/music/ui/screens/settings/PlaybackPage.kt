@@ -136,6 +136,7 @@ fun PlaybackPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = tr
         group(tr(R.string.playback_song_to_song)) {
             ChoiceRow(
                 tr(R.string.crossfade), Crossfade.entries, crossfade, { it.label },
+                modifier = com.prism.music.ui.tour.TourAnchor.CROSSFADE.mark,
                 info = crossfadeInfo(lastWhy), changed = crossfadeChanged,
             ) { SoundChoices.setCrossfade(prefs, it) }
             // #351: up to 30 s (a song's blend is still at most a third of it: MixEngine.makePlan).

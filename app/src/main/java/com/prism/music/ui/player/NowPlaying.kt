@@ -443,6 +443,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
     LaunchedEffect(videoChips) { if (videoChips) { delay(5000); videoChips = false } }
     // Lyrics layout: each song opens on its lyrics once they're in (a song without any stays on the cover).
     val hasLyrics = lyricsState.lyrics != null
+    if (com.prism.music.ui.tour.TourAnchors.running) com.prism.music.ui.tour.TourSignals.Player(lyricsOpen, hasLyrics.takeIf { !lyricsState.loading }) // the coach (1.8.8)
     LaunchedEffect(song.id, hasLyrics, layout) {
         if (layout == com.prism.music.data.prefs.PlayerLayout.LYRICS && hasLyrics && !queueOpen && !statsOpen && !lyricsOpen) openLyrics()
     }
@@ -1396,7 +1397,7 @@ fun NowPlayingScreen(onCollapse: () -> Unit) {
                         }
                         val isLiked = song.id in liked
                         if (!heartBelow && inHeader(PlayerPart.LIKE) && !song.isRss) {
-                            CircleGlyph(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) tr(R.string.remove_from_liked) else tr(R.string.widget_like), isLiked) {
+                            CircleGlyph(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, if (isLiked) tr(R.string.remove_from_liked) else tr(R.string.widget_like), isLiked, com.prism.music.ui.tour.TourAnchor.PLAYER_LIKE.mark) {
                                 c.library.toggleLike(song)
                             }
                             Spacer(Modifier.width(8.dp))

@@ -2,6 +2,8 @@ package com.prism.music
 
 import com.prism.music.ui.components.quietGraphicsLayers
 import com.prism.music.ui.components.tabTint
+import com.prism.music.ui.tour.TourAnchor
+import com.prism.music.ui.tour.tourAnchor
 import android.Manifest
 import android.content.Intent
 import android.net.Uri
@@ -987,6 +989,9 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 tour?.let { plan ->
                     com.prism.music.ui.tour.TourOverlay(plan, onOpen = { r -> playerOpen = false; navigator.go(r) }, onDone = { tour = null })
                 }
+                // The coach (1.8.8): a tour that has the person do things, over everything. Nothing while none runs.
+                val coachActions = remember(navigator) { com.prism.music.ui.tour.CoachActions(go = { r -> navigator.go(r) }, setPlayerOpen = { playerOpen = it }) }
+                com.prism.music.ui.tour.CoachHost(route, playerOpen && song != null, coachActions)
 
                 // Holiday Mode (1.8.0): once a season, the first time Prism opens in its month after setting up and the
                 // tour; never over the welcome screen, the tour, the player or another question.
@@ -1075,7 +1080,7 @@ private fun NavRail(tabs: List<Tab>, route: String?, settings: AppSettings, onSe
                 val indicator by animateColorAsState(if (selected) scheme.primary.copy(alpha = 0.16f) else Color.Transparent, label = "railTab")
                 val showLabel = settings.navLabels == NavLabels.ALWAYS || settings.navLabels == NavLabels.WORDS || (settings.navLabels == NavLabels.SELECTED && selected)
                 Column(
-                    Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).background(indicator)
+                    Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).background(indicator).then(tabMark(tab.route))
                         .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClickLabel = tab.label) { onSelect(tab.route) }
                         .padding(vertical = if (showLabel) 8.dp else 12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -1091,6 +1096,11 @@ private fun NavRail(tabs: List<Tab>, route: String?, settings: AppSettings, onSe
         }
     }
 }
+
+/** The coach's marks on the tabs it points at (1.8.8), in the bar, the minimal bar and the rail alike. */
+private fun tabMark(route: String): Modifier = Modifier.tourAnchor(
+    when (route) { Routes.SETTINGS -> TourAnchor.SETTINGS_TAB; Routes.LIBRARY -> TourAnchor.LIBRARY_TAB; else -> null },
+)
 
 private fun isSelected(tab: Tab, route: String?): Boolean =
     route == tab.route || (tab.route == Routes.SETTINGS && route?.startsWith("settings/") == true) ||
@@ -1222,7 +1232,7 @@ private fun TabItem(tab: Tab, selected: Boolean, labels: NavLabels, compact: Flo
         onLongClickLabel = if (tab.route == Routes.SETTINGS) tr(R.string.customize_this) else null,
         onLongClick = if (tab.route == Routes.SETTINGS) ({ c.customizing.value = !c.customizing.value }) else null,
         onClick = onClick,
-    ).semantics { this.selected = selected }
+    ).semantics { this.selected = selected }.then(tabMark(tab.route))
     val icon = if (selected) tab.selectedIcon else tab.icon
     // The current tab's icon in ink, the accent or the light (1.7.7).
     val tabTint = com.prism.music.ui.theme.LocalAppSettings.current.shapes.tabTint
@@ -1305,7 +1315,7 @@ private fun MinimalTab(tab: Tab, selected: Boolean, height: Dp = 44.dp, onClick:
     val scheme = MaterialTheme.colorScheme
     val bg by animateColorAsState(if (selected) scheme.onSurface else Color.Transparent, label = "minTab")
     Box(
-        Modifier.size(54.dp, height).clip(CircleShape).background(bg)
+        Modifier.size(54.dp, height).clip(CircleShape).background(bg).then(tabMark(tab.route))
             .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClickLabel = tab.label, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
