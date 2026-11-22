@@ -512,6 +512,10 @@ internal fun LsSingRows(d: AppSettings) {
     val runtime = ModelStore.Model.singRuntime()
     val model = ModelStore.Model.SING_MODEL
     var used by remember { mutableStateOf(c.sing.store.bytes()) }
+    // Reddit (1.8.8): the microphone under the open lyrics can go; Sing stays in the player's menu.
+    SwitchRow(
+        tr(R.string.ls_sing_button), s.lyrics.singButton, info = tr(R.string.ls_sing_button_info), changed = s.lyrics.singButton != d.lyrics.singButton,
+    ) { prefs.setLyricsSingButton(it) }
     if (runtime == null) {
         // Sing's full separation doesn't run on this phone's processor: the row says so, the why behind its ⓘ.
         LinkRow(tr(R.string.sing_s_voice_separation), value = tr(R.string.ls_sing_quick_way), info = tr(R.string.sing_doesn_t_run_on_this), enabled = false) {}

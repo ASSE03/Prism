@@ -560,6 +560,11 @@ data class LyricsPrefs(
     val progressLine: Boolean = true,
     /** A glass button beside Sing under the open lyrics: where they come from; a tap picks another source (1.7.9). */
     val sourceButton: Boolean = false,
+    /**
+     * Sing's button under the open lyrics (Reddit, 1.8.8: a switch to hide it). On as it comes: it hides a button that's
+     * there today. Sing itself stays in the player's menu and buttons.
+     */
+    val singButton: Boolean = true,
     val scale: Float = 1f,
     /** Lyrics are looked up on mobile data as each song starts; off, only once the lyrics are opened (#95). */
     val onMobileData: Boolean = true,
@@ -2052,6 +2057,7 @@ class SettingsRepository(
         val lyricsBlur = booleanPreferencesKey("lyrics_blur")
         val lyricsProgressLine = booleanPreferencesKey("lyrics_progress_line")
         val lyricsSourceButton = booleanPreferencesKey("lyrics_source_button")
+        val lyricsSingButton = booleanPreferencesKey("lyrics_sing_button")
         val backdrops = stringPreferencesKey("backdrops")
         val backdropDim = floatPreferencesKey("backdrop_dim")
         val backdropMotion = booleanPreferencesKey("backdrop_motion")
@@ -2557,6 +2563,8 @@ class SettingsRepository(
                 "supported",
                 // 1.8.7.6: where a canvas comes from (Spotify, with the listener's own sign-in), and its one-time offer.
                 "canvas_spotify_first", "canvas_spotify_offered",
+                // 1.8.8: whether Sing's button shows on the lyrics is how you use Sing, not a look.
+                "lyrics_sing_button",
             )
         }
     }
@@ -2951,6 +2959,7 @@ class SettingsRepository(
                 blur = p[K.lyricsBlur] ?: d.lyrics.blur,
                 progressLine = p[K.lyricsProgressLine] ?: d.lyrics.progressLine,
                 sourceButton = p[K.lyricsSourceButton] ?: d.lyrics.sourceButton,
+                singButton = p[K.lyricsSingButton] ?: d.lyrics.singButton,
                 scale = p[K.lyricsScale] ?: d.lyrics.scale,
                 onMobileData = p[K.lyricsOnMobileData] ?: d.lyrics.onMobileData,
                 align = p.enum(K.lyricsAlign, d.lyrics.align),
@@ -3432,6 +3441,7 @@ class SettingsRepository(
     fun setLyricsBlur(v: Boolean) = edit { it[K.lyricsBlur] = v }
     fun setLyricsProgressLine(v: Boolean) = edit { it[K.lyricsProgressLine] = v }
     fun setLyricsSourceButton(v: Boolean) = edit { it[K.lyricsSourceButton] = v }
+    fun setLyricsSingButton(v: Boolean) = edit { it[K.lyricsSingButton] = v }
     fun setBackdrops(v: Map<String, String>) = edit { it[K.backdrops] = json.encodeToString<Map<String, String>>(v) }
     fun setBackdropDim(v: Float) = edit { it[K.backdropDim] = v }
     fun setBackdropMotion(v: Boolean) = edit { it[K.backdropMotion] = v }

@@ -35,7 +35,8 @@ private val page = SettingsPageId.LYRICS_SING
  * themselves are in `LyricsSingParts.kt`.
  *
  * Six groups: Style · Text · Color and effects · Language and translations · Sources and timing · Sing and music
- * files, under a pinned lyrics sample. Three of them sit at seven rows: the next setting here needs a sheet.
+ * files, under a pinned lyrics sample. Four of them sit at seven rows (Sing's since 1.8.8's "Show the Sing button"):
+ * the next setting here needs a sheet.
  */
 @Composable
 fun LyricsSingPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = true, onSearch: (() -> Unit)? = null) {
@@ -160,6 +161,7 @@ val lyricsSingIndex: List<SettingEntry> by lazy {
             SettingEntry(page, g.sources, tr(R.string.lyrics_source_button), tr(R.string.change_lyrics_source)),
             SettingEntry(page, g.sources, tr(R.string.ls_offset), tr(R.string.ls_offset_keywords)),
             // Sing and music files
+            SettingEntry(page, g.sing, tr(R.string.ls_sing_button), tr(R.string.ls_sing_button_keywords)),
             SettingEntry(page, g.sing, tr(R.string.sing_s_voice_separation), tr(R.string.karaoke_vocals_remove_instrumental_download_mode)),
             SettingEntry(page, g.sing, tr(R.string.get_songs_ready_while_sing_is), tr(R.string.karaoke_prepare_ahead_background_preload_vocals)),
             SettingEntry(page, g.sing, tr(R.string.room_for_sung_songs), tr(R.string.karaoke_storage_space)),
@@ -352,6 +354,7 @@ internal fun lyricsSingChanges(s: AppSettings, d: AppSettings): List<String> = b
     line(R.string.lyrics_source_button, lsOnOff(s.lyrics.sourceButton), lsOnOff(d.lyrics.sourceButton))
     line(R.string.ls_offset, lyricsOffsetText(s.behavior.lyricsOffsetMs), lyricsOffsetText(d.behavior.lyricsOffsetMs))
     // Sing and music files
+    line(R.string.ls_sing_button, lsOnOff(s.lyrics.singButton), lsOnOff(d.lyrics.singButton))
     line(R.string.get_songs_ready_while_sing_is, lsOnOff(s.singAlwaysReady), lsOnOff(d.singAlwaysReady))
     line(R.string.room_for_sung_songs, lsSingRoomText(s.singCacheMb.toFloat().coerceAtMost(LS_SING_ROOM_TOP)), lsSingRoomText(d.singCacheMb.toFloat().coerceAtMost(LS_SING_ROOM_TOP)))
     line(R.string.ls_when_saving, saved(s), saved(d))
@@ -375,6 +378,7 @@ internal fun resetLyricsSing(prefs: SettingsRepository, d: AppSettings) {
     prefs.setEmbeddedLyrics(d.behavior.embeddedLyrics)
     prefs.setLyricsSourceButton(d.lyrics.sourceButton)
     prefs.setLyricsOffsetMs(d.behavior.lyricsOffsetMs)
+    prefs.setLyricsSingButton(d.lyrics.singButton)
     prefs.setSingAlwaysReady(d.singAlwaysReady)
     prefs.setSingCacheMb(d.singCacheMb)
     prefs.setLyricsFileWords(d.lyrics.fileWords)

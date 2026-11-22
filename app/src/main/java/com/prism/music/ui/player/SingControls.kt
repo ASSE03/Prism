@@ -103,10 +103,11 @@ fun toggleSing(c: com.prism.music.AppContainer, onNeedsDownload: () -> Unit) {
 
 /**
  * #501: whether the open lyrics show their own Sing button: for what can be sung, unless Sing is already one of the
- * player's row buttons ([row], as [com.prism.music.data.prefs.rowButtons] gives them), where it showed twice.
+ * player's row buttons ([row], as [com.prism.music.data.prefs.rowButtons] gives them), where it showed twice, or the
+ * listener hid it (Settings → Lyrics & Sing → "Show the Sing button", [shown]; Reddit, 1.8.8).
  */
-internal fun lyricsShowSing(singable: Boolean, row: List<com.prism.music.data.prefs.PlayerButton>): Boolean =
-    singable && com.prism.music.data.prefs.PlayerButton.SING !in row
+internal fun lyricsShowSing(singable: Boolean, row: List<com.prism.music.data.prefs.PlayerButton>, shown: Boolean = true): Boolean =
+    shown && singable && com.prism.music.data.prefs.PlayerButton.SING !in row
 
 /**
  * The buttons under the open lyrics: Sing's at the lower right (nothing for what can't be sung: live streams, podcasts),
@@ -118,7 +119,7 @@ fun LyricsButtonsRow(song: Song, state: LyricsState, onChangeSource: () -> Unit,
     val c = LocalContainer.current
     // Every phone sings (1.8.x): one Sing's engine doesn't run on uses the quick way.
     val settings = LocalAppSettings.current
-    val singable = lyricsShowSing(c.sing.canSing(song), settings.rowButtons())
+    val singable = lyricsShowSing(c.sing.canSing(song), settings.rowButtons(), settings.lyrics.singButton)
     val source = settings.lyrics.sourceButton
     if (!singable && !source) return
     Box(modifier.fillMaxWidth().padding(horizontal = 4.dp)) {

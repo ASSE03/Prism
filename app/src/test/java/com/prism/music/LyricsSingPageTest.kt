@@ -273,6 +273,7 @@ class LyricsSingPageTest {
             Case("lyrics_source_button", { it.lyrics.sourceButton }) { toggle(tr(R.string.lyrics_source_button)) },
             Case("lyrics_offset_ms", { it.behavior.lyricsOffsetMs }) { slide(tr(R.string.ls_offset), 120f) },
             // Sing and music files (the two Sing rows show where Sing's engine runs; the test phone's processor has none)
+            Case("lyrics_sing_button", { it.lyrics.singButton }) { toggle(tr(R.string.ls_sing_button)) },
             Case("lyrics_file_words", { it.lyrics.fileWords }) { chip(tr(R.string.ls_when_saving), tr(R.string.ls_word_timings)) },
             Case("lyrics_file_translation", { it.lyrics.fileTranslation }) { chip(tr(R.string.ls_when_saving), tr(R.string.ls_translation)) },
         ) + if (com.prism.music.data.ModelStore.Model.singRuntime() == null) emptyList() else listOf(
@@ -329,6 +330,23 @@ class LyricsSingPageTest {
         // The lyrics font is here now.
         assertEquals(SettingsTags.ROW_PICK, row(tr(R.string.lyrics_font)).fetchSemanticsNode().config[SemanticsProperties.TestTag])
         assertEquals(tr(R.string.app_font), valueOf(tr(R.string.lyrics_font)))
+    }
+
+    /** Reddit (1.8.8): a switch for Sing's button on the lyrics, in Sing's group, on as it comes, its why behind the ⓘ. */
+    @Test fun theSingButtonHasASwitchInSingsGroup() {
+        show()
+        val title = tr(R.string.ls_sing_button)
+        assertEquals(SettingsTags.ROW_SWITCH, row(title).fetchSemanticsNode().config[SemanticsProperties.TestTag])
+        assertTrue("on for a fresh install", stored.lyrics.singButton)
+        val words = ArrayList<String>().also { all -> descendants(compose.onRoot(useUnmergedTree = true).fetchSemanticsNode()).forEach { n -> n.config.getOrNull(SemanticsProperties.Text)?.forEach { all += it.text } } }
+        assertFalse("its explanation is behind its ⓘ", tr(R.string.ls_sing_button_info) in words)
+        toggle(title)
+        until("the switch to turn it off") { !stored.lyrics.singButton }
+        // Not a look (a Look someone shares never hides it), and Settings' search finds it under Sing's group.
+        assertTrue("lyrics_sing_button" in container.settings.notLookNames)
+        assertFalse("lyrics_sing_button" in com.prism.music.ui.screens.settings.lyricsSingLookKeys)
+        val entry = com.prism.music.ui.screens.settings.lyricsSingIndex.single { it.title == title }
+        assertEquals(com.prism.music.ui.screens.settings.LsGroups.sing, entry.group)
     }
 
     @Test fun lyricsEarlierOrLaterIsASliderOfTenMsSteps() {
