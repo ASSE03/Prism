@@ -95,7 +95,8 @@ class MixPreview(
         if (sa.ramps.isNotEmpty()) fxA.arm(sa, plan.fromMs)
         if (sb.ramps.isNotEmpty()) fxB.arm(sb, plan.fit.inMs)
         _phase.value = Phase.LOADING
-        job = scope.launch { follow(a, b, plan) }
+        // On the main thread, where the players were made (ExoPlayer is used from its own thread only).
+        job = scope.launch(kotlinx.coroutines.Dispatchers.Main) { follow(a, b, plan) }
         return true
     }
 

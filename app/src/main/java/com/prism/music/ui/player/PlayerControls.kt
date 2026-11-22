@@ -57,6 +57,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -437,7 +438,14 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
             lifecycle.framesWhileShown { ribbonPhase.floatValue += it }
         }
     }
+    // 1.8.8 Mix it yourself: while a playlist is the queue, the crossfade mark opens this pair's own transition (not on
+    // the TV). The queue is only read when the mark is tapped.
+    val queueSource by c.queue.source.collectAsState()
+    val transitionList = queueSource.takeIf { it.kind == com.prism.music.playback.QueueKind.PLAYLIST && !c.isTv }?.originId
+    var transitionOpen by remember { mutableStateOf<com.prism.music.ui.screens.TransitionPair?>(null) }
+    transitionOpen?.let { p -> com.prism.music.ui.screens.TransitionEditor(p) { transitionOpen = null } }
     Column(Modifier.fillMaxWidth()) {
+        androidx.compose.foundation.layout.BoxWithConstraints(Modifier.fillMaxWidth()) {
         // Spectrum: a thin line, the played part in the split light (or the color picked for it).
         ThinSlider(
             value = shown,
@@ -459,6 +467,20 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
             shape = blendShape,
             quietMarks = if (blendShape?.fadesOut == true) remember(blendShape) { listOf(blendShape.outFrom) } else emptyList(),
         )
+        // The crossfade mark's own small strip over the bar: a tap there opens the transition into the next song.
+        if (blendMark != null && transitionList != null) {
+            Box(
+                Modifier.matchParentSize().then(Modifier.wrapContentWidth(Alignment.Start)).offset(x = maxWidth * blendMark - 12.dp).width(24.dp)
+                    .testTag(com.prism.music.ui.screens.TRANSITION_PLAYER_MARK_TAG)
+                    .clickable(onClickLabel = tr(R.string.transition_edit)) {
+                        val q = pc.queue.value
+                        val next = pc.upNext.value.firstOrNull()?.let { q.getOrNull(it)?.song }
+                        val now = current
+                        if (now != null && next != null && now.id != next.id) transitionOpen = com.prism.music.ui.screens.TransitionPair(transitionList, now, next)
+                    },
+            )
+        }
+        }
         Box(Modifier.fillMaxWidth().offset(y = (-9).dp).heightIn(min = 16.dp)) {
             val elapsed = settings.player.times == com.prism.music.data.prefs.PlayerTimes.BOTH || settings.player.times == com.prism.music.data.prefs.PlayerTimes.ELAPSED
             val left = settings.player.times == com.prism.music.data.prefs.PlayerTimes.BOTH || settings.player.times == com.prism.music.data.prefs.PlayerTimes.LEFT

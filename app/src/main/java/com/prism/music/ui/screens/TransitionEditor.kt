@@ -2,6 +2,7 @@ package com.prism.music.ui.screens
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -476,6 +477,25 @@ private fun styleDetail(s: TransitionStyle): String = s.curve?.detail ?: when (s
     TransitionStyle.FILTER_OUT -> tr(R.string.transition_filter_out_detail)
     TransitionStyle.ECHO_OUT -> tr(R.string.transition_echo_out_detail)
     else -> tr(R.string.transition_auto_detail)
+}
+
+const val TRANSITION_ROW_MARK_TAG = "transitionRowMark"
+const val TRANSITION_PLAYER_MARK_TAG = "transitionPlayerMark"
+
+/** The small mark between two rows of a playlist that have their own transition; a tap opens it. */
+@Composable
+fun TransitionRowMark(onClick: () -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().height(20.dp).testTag(TRANSITION_ROW_MARK_TAG)
+            .clickable(onClickLabel = tr(R.string.transition_edit)) { onClick() }
+            .semantics { contentDescription = tr(R.string.transition_mark) }
+            .padding(start = 28.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(PrismIcons.Blend, null, Modifier.size(14.dp), tint = MaterialTheme.colorScheme.primary)
+        Spacer(Modifier.width(8.dp))
+        Box(Modifier.width(36.dp).height(1.dp).background(MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)))
+    }
 }
 
 /** Bars across each waveform. */
