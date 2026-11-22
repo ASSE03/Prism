@@ -334,6 +334,8 @@ val playbackIndex: List<SettingEntry> by lazy {
             SettingEntry(page, shuffle, tr(R.string.playback_shuffle_button), tr(R.string.playback_shuffle_keywords) + " " + tr(R.string.shuffle_button_both) + " " + tr(R.string.shuffle_button_only)),
             SettingEntry(page, shuffle, tr(R.string.playback_keep_shuffle), tr(R.string.playback_shuffle_keywords)),
             SettingEntry(page, between, tr(R.string.crossfade), tr(R.string.mix_blend_transition_fade) + " " + tr(R.string.crossfade_songs) + " " + tr(R.string.automatic_length) + " " + tr(R.string.automix_keywords)),
+            // 1.8.8: in Crossfade's sheet, under the cards.
+            SettingEntry(page, between, tr(R.string.hear_it_on_the_next_song), tr(R.string.automix_keywords), needs = crossfade),
             SettingEntry(page, between, tr(R.string.skip_blend), tr(R.string.skip_blend_keywords)),
             SettingEntry(page, between, tr(R.string.length), needs = manualLength),
             SettingEntry(page, between, tr(R.string.match_tempo_and_beats_dj_style), tr(R.string.bpm_beatmatch), needs = crossfade),
