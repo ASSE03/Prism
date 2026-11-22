@@ -1,15 +1,11 @@
 package com.prism.music
 
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.prism.music.ui.tour.COACH_CAPTION_TAG
@@ -60,41 +56,87 @@ class FirstStepsAppTest {
 
     private fun awaitCaption(id: Int, ms: Long = 20_000) = compose.waitUntil(ms) { shows(tr(id)) }
 
-    /** A tap on [anchor] where the coach's hole is (taps there reach the app). */
-    private fun tap(anchor: TourAnchor) {
-        compose.waitUntil(15_000) { compose.runOnIdle { TourAnchors.boundsOf(anchor) } != null }
-        val b = compose.runOnIdle { TourAnchors.boundsOf(anchor) }!!
-        val root = compose.onAllNodes(isRoot())[0]
-        val origin = root.fetchSemanticsNode().boundsInWindow.topLeft
-        root.performTouchInput { click(Offset(b.center.x - origin.x, b.center.y - origin.y)) }
-        compose.waitForIdle()
+    private fun boundsNow(anchor: TourAnchor): androidx.compose.ui.geometry.Rect? {
+        var r: androidx.compose.ui.geometry.Rect? = null
+        InstrumentationRegistry.getInstrumentation().runOnMainSync { r = TourAnchors.boundsOf(anchor) }
+        return r
     }
 
+    /**
+     * A tap on [anchor] where the coach's hole is (taps there reach the app). It never waits for the screen to settle:
+     * with music playing it doesn't (the player's motion), so the place is read on the main thread and the tap goes in
+     * through UiAutomator, at window pixels (the activity fills the screen).
+     */
+    private fun tap(anchor: TourAnchor, ms: Long = 15_000) {
+        val until = System.currentTimeMillis() + ms
+        // Drawn, and still for half a second (Home still loading above it moves it down).
+        var b = boundsNow(anchor)
+        var stillSince = System.currentTimeMillis()
+        while (true) {
+            Thread.sleep(100)
+            val now = boundsNow(anchor)
+            if (now == null || now != b) { b = now; stillSince = System.currentTimeMillis() }
+            else if (System.currentTimeMillis() - stillSince >= 500) break
+            assertTrue("$anchor never drawn and still", System.currentTimeMillis() < until)
+        }
+        b!!
+        androidx.test.uiautomator.UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+            .click(b.center.x.toInt(), b.center.y.toInt())
+    }
+
+    /** [what] read on the main thread until true, never waiting for the screen to settle (it doesn't while music plays). */
+    private fun until(ms: Long, why: String, what: () -> Boolean) {
+        val end = System.currentTimeMillis() + ms
+        while (true) {
+            var ok = false
+            InstrumentationRegistry.getInstrumentation().runOnMainSync { ok = what() }
+            if (ok) return
+            assertTrue("never: $why", System.currentTimeMillis() < end)
+            Thread.sleep(100)
+        }
+    }
+
+    /** The coach's caption now (null when no tour runs). */
+    private fun caption(): String? = Coach.run?.step?.caption
+
+    private fun awaitStep(id: Int, ms: Long = 20_000) = until(ms, tr(id)) { caption() == tr(id) }
+
+    /** The music paused, so the screen can settle for the closing checks. */
+    private fun pause() {
+        InstrumentationRegistry.getInstrumentation().runOnMainSync { if (Fixture.container.player.isPlaying.value) Fixture.container.player.togglePlay() }
+        until(10_000, "paused") { !Fixture.container.player.isPlaying.value }
+    }
+
+    /** Live: step 1 is done only once the song really plays, and the recordings hold no audio (left out of normal runs). */
+    @Live
     @Test fun aNewInstallIsWalkedThroughTheFiveStepsByDoingThem() {
         newInstall()
         Fixture.launch()
         awaitCaption(R.string.first_steps_play, 30_000)
         val started = System.currentTimeMillis()
         Fixture.screenshot("firststeps-1")
-        tap(TourAnchor.QUICK_PICK)
-        awaitCaption(R.string.first_steps_player, 30_000)
+        // Live, Home's Quick picks can take a while to come.
+        tap(TourAnchor.QUICK_PICK, 60_000)
+        // From here music plays and the screen never settles: the steps are read from the coach itself.
+        awaitStep(R.string.first_steps_player, 30_000)
         Fixture.screenshot("firststeps-2")
         tap(TourAnchor.MINI_PLAYER)
-        compose.waitUntil(20_000) { shows(tr(R.string.first_steps_lyrics)) || shows(tr(R.string.first_steps_like)) }
-        if (shows(tr(R.string.first_steps_lyrics))) {
+        until(20_000, "lyrics or like") { caption() == tr(R.string.first_steps_lyrics) || caption() == tr(R.string.first_steps_like) }
+        if (Coach.run?.step?.caption == tr(R.string.first_steps_lyrics)) {
             Fixture.screenshot("firststeps-3")
             tap(TourAnchor.PLAYER_LYRICS)
         }
-        awaitCaption(R.string.first_steps_like)
+        awaitStep(R.string.first_steps_like)
         Fixture.screenshot("firststeps-4")
         tap(TourAnchor.PLAYER_LIKE)
-        awaitCaption(R.string.first_steps_looks)
+        awaitStep(R.string.first_steps_looks)
         Fixture.screenshot("firststeps-5")
         tap(TourAnchor.SETTINGS_TAB)
-        compose.waitUntil(15_000) { compose.onAllNodes(hasTestTag(FIRST_STEPS_CLOSING_TAG)).fetchSemanticsNodes().isNotEmpty() }
+        until(15_000, "the tour over") { Coach.run == null }
         android.util.Log.i("FirstStepsAppTest", "five steps in ${System.currentTimeMillis() - started} ms")
+        pause()
+        compose.waitUntil(15_000) { compose.onAllNodes(hasTestTag(FIRST_STEPS_CLOSING_TAG)).fetchSemanticsNodes().isNotEmpty() }
         Fixture.screenshot("firststeps-closing")
-        assertNull(Coach.run)
         assertTrue(shows(tr(R.string.first_steps_closing)))
         compose.onNodeWithTag(FIRST_STEPS_DONE_TAG).performClick()
         compose.waitForIdle()

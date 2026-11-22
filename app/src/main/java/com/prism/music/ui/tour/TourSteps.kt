@@ -137,9 +137,9 @@ private const val V1_8_7_6 = 67
 const val V1_8_8 = 68
 
     /**
-     * PLACEHOLDER (1.8.8's release session): Mix's "Blend when I skip" isn't built yet, so 1.8.8's headline card
-     * (`tour_188_mix_*`) is sample wording from the mockup. Fill it from what Mix ships, check its Show me lands on the
-     * right row, then set this false. `TourTest` fails once the build is 1.8.8 while this is still true.
+     * 1.8.8's headline card (`tour_188_mix_*`) is worded from what Mix ships (2026-11-22). Still to do: see its Show me
+     * land on the Crossfade row with Automix in the pick (B6), then set this false. `TourTest` fails once the build is
+     * 1.8.8 while this is still true.
      */
     const val MIX_HEADLINE_PLACEHOLDER = true
 
@@ -942,8 +942,8 @@ const val V1_8_8 = 68
         // 1.8.8, the first release under the two-card rule (plan-tour.md §3 C, D8): the headline, whose Show me uses the
         // coach, then "Also new"; four points each at most.
         TourStep(
-            // PLACEHOLDER ([MIX_HEADLINE_PLACEHOLDER]): Mix's "Blend when I skip" isn't built; the release session
-            // fills these words from what ships. Opens Playback at Song to song, the hole on the Crossfade row.
+            // Mix as it ships (Automix, Blend when I skip, your own transitions). Opens Playback at Song to song, the
+            // hole on the Crossfade row ([MIX_HEADLINE_PLACEHOLDER]: until that is seen on a device with Automix in it).
             V1_8_8, PrismIcons.Equalizer, tr(R.string.tour_188_mix_title),
             tr(R.string.tour_188_mix_about),
             listOf(

@@ -5722,14 +5722,14 @@
     <string name="guide_topic_devices_line">Speakers, TV, the car, Prism Connect</string>
     <!-- The Guide's "Show me how" captions (one sentence, 12 words at most). The others use First steps' own (first_steps_*). -->
     <string name="guide_how_library">Your liked songs are kept here.</string>
-    <!-- 1.8.8's What's new. PLACEHOLDER: the Mix headline (tour_188_mix_*) is sample wording; the release session writes it from what Mix ships. -->
-    <string name="tour_188_mix_title">Mix: songs blend when you skip</string>
-    <string name="tour_188_mix_about">Skip to another song and it no longer cuts in: the two cross over.</string>
-    <string name="tour_188_mix_point_1">Turn it on in Settings → Playback → %1$s</string>
-    <string name="tour_188_mix_point_2">Works from the notification, lock screen, headset and car</string>
-    <string name="tour_188_mix_point_3">The cover and title blend too</string>
-    <string name="tour_188_mix_point_4">Off until you turn it on</string>
-    <string name="tour_188_mix_coach">Turn this on to blend songs when you skip.</string>
+    <!-- 1.8.8's What's new: the Mix headline. -->
+    <string name="tour_188_mix_title">Mix: songs that flow like a DJ set</string>
+    <string name="tour_188_mix_about">Songs can now move into each other the way a DJ would mix them.</string>
+    <string name="tour_188_mix_point_1">Automix, under %1$s: a bass swap, echo, filter or cut picked for each pair of songs</string>
+    <string name="tour_188_mix_point_2">Blend when I skip: Next and Previous cross over instead of cutting</string>
+    <string name="tour_188_mix_point_3">Your own transitions: in a playlist, a song\'s ⋯ → Transition to the next song</string>
+    <string name="tour_188_mix_point_4">All off until you turn them on</string>
+    <string name="tour_188_mix_coach">Pick Automix here. Blend when I skip is just below.</string>
     <string name="tour_188_also_about">A shorter tour, and a few smaller things.</string>
     <string name="tour_188_also_guide">First steps for new people, and the Guide: every tip by topic, in Settings → Backup &amp; about</string>
     <string name="tour_188_also_sing">%1$s (Lyrics &amp; Sing): hide the microphone under the lyrics</string>
