@@ -8,6 +8,7 @@ import com.prism.music.playback.FxScript
 import com.prism.music.playback.TransitionFx
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.nio.ByteBuffer
@@ -201,6 +202,20 @@ class TransitionFxTest {
     }
 
     @Test
+    fun aScriptStartedAtOnceOvertakesOneWaitingForTheSeek() {
+        // Review of B5 (Gemini, checked): one waiting for the next seek, then a newer one started at once. The seek ends
+        // the newer one as any seek does; the older one must not come back with it.
+        val p = fx(float = true)
+        p.arm(FxScript(listOf(FxRamp(FxParam.DRY, 0.0, 0.0, 0f))), anchorMs = 0, afterNextFlush = true)
+        run(p, FloatArray(200) { 0.5f }, true)
+        p.arm(FxScript(listOf(FxRamp(FxParam.DRY, 0.0, 0.0, 0.5f))), anchorMs = 0)
+        run(p, FloatArray(200) { 0.5f }, true)
+        p.flush()
+        assertTrue(run(p, FloatArray(2000) { 0.5f }, true).all { it == 0.5f })
+        assertFalse(p.running)
+    }
+
+    @Test
     fun aSeekEndsTheScriptRunning() {
         val p = fx(float = true)
         p.arm(FxScript(listOf(FxRamp(FxParam.DRY, 0.0, 0.0, 0f))), anchorMs = 0)
@@ -237,6 +252,91 @@ class TransitionFxTest {
         val input = buffer(noise(3000, seed = 5), true)
         val copy = ByteArray(input.remaining()).also { input.duplicate().get(it) }
         assertArrayEquals(copy, bytesOf(p, input))
+    }
+
+    // --- B5: armed by the engine around a real player's flushes ---
+
+    /** A flush as the player makes one: with the song it's in and where in it ([AudioProcessor.StreamMetadata]). */
+    private fun playerFlush(p: TransitionFx, atMs: Long) =
+        p.flush(AudioProcessor.StreamMetadata.Builder().setPositionOffsetUs(atMs * 1000).setPeriodUid("song").build())
+
+    @Test
+    fun aScriptArmedJustBeforeThePlayersFirstFlushStartsThere() {
+        // As the editor's Listen and the queue's second player arm it: set up, armed, and only then flushed by the player.
+        val p = TransitionFx().apply { configure(AudioProcessor.AudioFormat(rate, 2, C.ENCODING_PCM_FLOAT)) }
+        p.arm(FxScript(listOf(FxRamp(FxParam.DRY, 30_100.0, 0.0, 0f))), anchorMs = 30_000)
+        playerFlush(p, 30_000)
+        val out = run(p, FloatArray(rate) { 0.5f }, true)
+        val at = rate / 10
+        assertEquals(0.5f, out[(at - 1) * 2], 1e-6f)
+        assertEquals(0f, out[at * 2], 1e-6f)
+    }
+
+    @Test
+    fun aSecondFlushAtTheSamePlaceKeepsTheScript() {
+        // A new song's sound being set up flushes twice before anything plays: the script waiting for the seek holds.
+        val p = fx(float = true)
+        p.arm(FxScript(listOf(FxRamp(FxParam.DRY, 20_100.0, 0.0, 0f))), anchorMs = 20_000, afterNextFlush = true)
+        playerFlush(p, 20_000)
+        playerFlush(p, 20_000)
+        val out = run(p, FloatArray(rate) { 0.5f }, true)
+        assertEquals(0f, out[(rate / 10) * 2], 1e-6f)
+        // A real seek after sound has played still ends it.
+        playerFlush(p, 5_000)
+        assertTrue(run(p, FloatArray(2000) { 0.5f }, true).all { it == 0.5f })
+    }
+
+    @Test
+    fun aNewSongsFormatDoesntDropTheScriptWaitingForIt() {
+        // The next song is 44.1 kHz where the last was 48: the format comes between the arm and the seek's flush.
+        val p = fx(float = true)
+        p.arm(FxScript(listOf(FxRamp(FxParam.DRY, 1_100.0, 0.0, 0f))), anchorMs = 1_000, afterNextFlush = true)
+        // The ending song's last buffer still comes through (and the script is taken up, waiting for the seek).
+        assertTrue(run(p, FloatArray(2000) { 0.5f }, true).all { it == 0.5f })
+        p.configure(AudioProcessor.AudioFormat(44_100, 2, C.ENCODING_PCM_FLOAT))
+        playerFlush(p, 1_000)
+        val out = run(p, FloatArray(44_100) { 0.5f }, true)
+        val at = 4_410
+        assertEquals(0.5f, out[(at - 1) * 2], 1e-6f)
+        assertEquals(0f, out[at * 2], 1e-6f)
+    }
+
+    @Test
+    fun theSongTimeIsThePlayersWhenItSaysWhereItIs() {
+        // The engine's guess of where the player last seeked to is only a fallback: the player's own flush says.
+        val p = TransitionFx().apply { configure(AudioProcessor.AudioFormat(rate, 2, C.ENCODING_PCM_FLOAT)) }
+        playerFlush(p, 12_000)
+        p.arm(FxScript(listOf(FxRamp(FxParam.DRY, 12_500.0, 0.0, 0f))), anchorMs = 11_000)
+        val out = run(p, FloatArray(rate * 2) { 0.5f }, true)
+        val at = rate / 2
+        assertEquals(0.5f, out[(at - 1) * 2], 1e-6f)
+        assertEquals(0f, out[at * 2], 1e-6f)
+    }
+
+    @Test
+    fun theMainChainIsUntouchedWithNoScript() {
+        // The main player's chain as PlaybackService has it: the silence trimmer, then this, before the EQ. With no
+        // script (never armed, or disarmed after a transition) what leaves it is what came from the decoder.
+        for (float in listOf(true, false)) {
+            val format = AudioProcessor.AudioFormat(rate, 2, if (float) C.ENCODING_PCM_FLOAT else C.ENCODING_PCM_16BIT)
+            val edges = com.prism.music.playback.EdgeSilenceProcessor()
+            val p = TransitionFx(shiftMs = { edges.skippedMs })
+            edges.configure(format); edges.flush()
+            p.configure(format); p.flush()
+            fun through(samples: FloatArray): Pair<ByteArray, ByteArray> {
+                val input = buffer(samples, float)
+                val copy = ByteArray(input.remaining()).also { input.duplicate().get(it) }
+                edges.queueInput(input)
+                return copy to bytesOf(p, edges.output)
+            }
+            through(noise(20_000, seed = 3)).let { (a, b) -> assertArrayEquals("float=$float", a, b) }
+            // Armed for a seek, then disarmed before it (a skip mid-move): the seek leaves it untouched still.
+            p.arm(FxScript(listOf(FxRamp(FxParam.BASS_DB, 0.0, 0.0, -30f))), anchorMs = 0, afterNextFlush = true)
+            p.disarm()
+            edges.flush(); p.flush()
+            through(noise(20_000, seed = 4)).let { (a, b) -> assertArrayEquals("float=$float, after a disarm", a, b) }
+            assertTrue(p.asked == null && !p.running)
+        }
     }
 
     @Test

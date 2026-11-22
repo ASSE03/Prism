@@ -132,12 +132,12 @@ object Transitions {
  */
 object TransitionSound {
     /**
-     * TODO(B5): false until Automix's engine wiring puts [TransitionFx] in both of the queue's players and arms it. Until
-     * then a style whose sound IS its effects (bass swap, filter out, echo out) plays with the blend's volume law (the
-     * listener's curve) and no effects, in the queue and in the editor's Listen the same, and Automatic is the listener's
-     * curve too. B5 turns this on (and picks Automatic's move with [MixMoves.pick]) here, in this one place.
+     * Whether a style whose sound IS its effects (bass swap, filter out, echo out) plays as made: on since B5 put
+     * [TransitionFx] in both of the queue's players ([MixEngine] arms them), as the editor's Listen has its own two.
+     * Off, such a style would play with the blend's volume law (the listener's curve) and no effects, in the queue and
+     * the editor alike. Automatic stays the listener's curve at the saved points.
      */
-    const val EFFECTS_PLAY = false
+    const val EFFECTS_PLAY = true
 
     /** The moves that are nothing without their effects. */
     private val FX_MOVES = setOf(Move.BASS_SWAP, Move.FILTER_OUT, Move.ECHO_OUT)
@@ -163,7 +163,7 @@ object TransitionSound {
         return MovePlace(move, fit.startMs, fit.inMs, fit.lengthMs.coerceAtLeast(1), 1f, beatMs, pivot)
     }
 
-    /** Each song's effects for [style] at [place] (the first song's, the second's); none while [EFFECTS_PLAY] is off. */
+    /** Each song's effects for [style] at [place] (the first song's, the second's); none for a curve, or with [EFFECTS_PLAY] off. */
     fun scripts(style: TransitionStyle, place: MovePlace): Pair<FxScript, FxScript> {
         val none = FxScript(emptyList())
         if (style.move == null || !playsAsMade(style) || style.move !in FX_MOVES) return none to none

@@ -127,6 +127,11 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private val headphoneEq = ParametricEqProcessor()
     /** Skip silence for songs: their start and end only (#210); episodes keep Media3's skipper. */
     private val edges = EdgeSilenceProcessor()
+    /**
+     * Automix's effects on the song playing (1.8.8, plan-mix §3.3.2): after the silence trimmer (its song time counts
+     * what that left out) and before the EQ. With no transition under way it copies the sound through untouched.
+     */
+    private val transitionFx = TransitionFx(shiftMs = { edges.skippedMs })
     private val spatial = SpatialAudioProcessor()
     /** "Pause when muted" (#157). */
     private val muteWatch by lazy { MuteWatch(this, player) { c.settings.current.behavior.pauseOnMute } }
@@ -209,7 +214,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                     // was left out (#210).
                     .setAudioProcessorChain(
                         EdgeSilenceProcessor.Chain(
-                            edges, arrayOf(vocals, edges, headphoneEq, spatial, normalizer, androidx.media3.exoplayer.audio.TeeAudioProcessor(VisualizerTap)),
+                            edges, arrayOf(vocals, edges, transitionFx, headphoneEq, spatial, normalizer, androidx.media3.exoplayer.audio.TeeAudioProcessor(VisualizerTap)),
                         )
                     )
                     .build()
@@ -477,7 +482,14 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             playlist = { c.queue.source.value.takeIf { it.kind == QueueKind.PLAYLIST }?.originId },
             custom = { playlist, from, to -> c.transitions.cached(playlist, from, to) },
             customPlayed = { playlist, from, to -> c.transitions.used(playlist, from, to) },
+            // 1.8.8 Automix: its effects on both players, the move picked by the songs' scans, keys and shapes.
+            // Crossfade's fourth choice (Settings → Playback → Crossfade → Automix).
+            automix = { c.settings.current.mix.let { it.on && it.automix } },
+            mainFx = transitionFx,
+            buildFxTail = { shift, fx -> buildTailPlayer(shift, normalizeGainDb, fx) },
+            shapeOf = { id -> c.waves.shape(id) },
         ).also { it.start() }
+        if (com.prism.music.BuildConfig.DEBUG) PlaybackServices.mixForTest = mix
         // Prism Connect: the speaker or TV being cast to plays what this player plays, and its volume is the session's.
         sessionPlayer.remote = object : LyricsOverlayPlayer.Remote {
             override val volume: Int? get() = if (c.cast.casting) c.cast.volume else null

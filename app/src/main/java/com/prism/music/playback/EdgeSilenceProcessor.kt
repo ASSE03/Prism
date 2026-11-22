@@ -38,6 +38,9 @@ class EdgeSilenceProcessor : BaseAudioProcessor() {
     var skippedFrames = 0L
         private set
 
+    /** [skippedFrames] as time: how far the song is ahead of the frames that left here (Automix's [TransitionFx] after it). */
+    val skippedMs: Long get() = skippedFrames * 1000 / rate.coerceAtLeast(1)
+
     private var rate = 48_000
     private var channels = 2
     private var float = false

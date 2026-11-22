@@ -12,6 +12,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.test.core.app.ApplicationProvider
 import com.prism.music.data.prefs.CrossfadeCurve
 import com.prism.music.playback.MixEngine
+import com.prism.music.playback.MixMoves
 import com.prism.music.playback.MixState
 import com.prism.music.playback.Transition
 import com.prism.music.playback.TransitionSound
@@ -271,14 +272,24 @@ class MixPlanTest {
             assertEquals(s.curve!!.gains(p), TransitionSound.gains(s, p, listener = CrossfadeCurve.LINEAR))
     }
 
-    @Test fun beforeB5TheEffectMovesAndAutomaticUseTheBlendsLaw() {
-        assertFalse("effects aren't wired in yet (B5)", TransitionSound.EFFECTS_PLAY)
+    @Test fun sinceB5TheEffectMovesPlayAsMade() {
+        assertTrue("effects are wired in (B5)", TransitionSound.EFFECTS_PLAY)
         val listener = CrossfadeCurve.S_CURVE
-        for (s in listOf(TransitionStyle.AUTOMATIC, TransitionStyle.BASS_SWAP, TransitionStyle.FILTER_OUT, TransitionStyle.ECHO_OUT)) {
-            for (p in listOf(0f, 0.25f, 0.5f, 0.75f, 1f)) assertEquals(s.name, listener.gains(p), TransitionSound.gains(s, p, 0.5f, listener))
+        // Automatic is the listener's own curve, with no effects.
+        for (p in listOf(0f, 0.25f, 0.5f, 0.75f, 1f)) assertEquals(listener.gains(p), TransitionSound.gains(TransitionStyle.AUTOMATIC, p, 0.5f, listener))
+        val auto = TransitionSound.scripts(TransitionStyle.AUTOMATIC,
+            TransitionSound.place(TransitionStyle.AUTOMATIC, Transitions.fit(Transition(170_000, 0, 8_000), 200_000, 200_000), 500.0))
+        assertTrue(auto.first.ramps.isEmpty() && auto.second.ramps.isEmpty())
+        // The three effect moves: their own volume law and their own effects, Automix's (as judged by ear).
+        for (s in listOf(TransitionStyle.BASS_SWAP, TransitionStyle.FILTER_OUT, TransitionStyle.ECHO_OUT)) {
+            assertTrue(s.name, TransitionSound.playsAsMade(s))
+            for (p in listOf(0f, 0.25f, 0.5f, 0.75f, 1f)) assertEquals(s.name, MixMoves.gains(s.move!!, p, 0.5f, listener), TransitionSound.gains(s, p, 0.5f, listener))
             val place = TransitionSound.place(s, Transitions.fit(Transition(170_000, 0, 8_000, s), 200_000, 200_000), 500.0)
             val (a, b) = TransitionSound.scripts(s, place)
-            assertTrue("${s.name}: no effects yet", a.ramps.isEmpty() && b.ramps.isEmpty())
+            val (ma, mb) = MixMoves.scripts(place)
+            assertTrue("${s.name}: the ending song has effects", a.ramps.isNotEmpty())
+            assertEquals(s.name, ma.ramps, a.ramps)
+            assertEquals(s.name, mb.ramps, b.ramps)
         }
     }
 

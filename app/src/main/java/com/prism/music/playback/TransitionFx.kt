@@ -82,7 +82,8 @@ class FxScript(ramps: List<FxRamp>, val echoMs: Double = 0.0) {
 class TransitionFx(private val shiftMs: () -> Long = { 0L }) : BaseAudioProcessor() {
     private class Armed(val script: FxScript?, val anchorMs: Long, val afterNextFlush: Boolean)
 
-    @Volatile private var pending: Armed? = null
+    /** Asked from the main thread, taken on the audio thread (taken whole: an arm can't slip between a read and a clear). */
+    private val pending = java.util.concurrent.atomic.AtomicReference<Armed?>(null)
     /** Held for the next flush ([arm] with afterNextFlush). */
     private var waiting: Armed? = null
 
@@ -115,48 +116,73 @@ class TransitionFx(private val shiftMs: () -> Long = { 0L }) : BaseAudioProcesso
     /**
      * Runs [script] (any thread). [anchorMs] is the song position of the first frame after the last flush (where the
      * player was last seeked to), or with [afterNextFlush], after the next one (a seek just asked for, not yet carried
-     * out): the script then waits for that flush.
+     * out): the script then waits for that flush. A player's own flush says where in the song it is, and that counts
+     * over [anchorMs], which is then only the caller's guess (B5).
      */
     fun arm(script: FxScript, anchorMs: Long, afterNextFlush: Boolean = false) {
-        pending = Armed(script, anchorMs, afterNextFlush)
+        asked = script
+        pending.set(Armed(script, anchorMs, afterNextFlush))
     }
 
     /** Back to the dry sound (over [FADE_MS]), then untouched. Any thread. */
     fun disarm() {
-        pending = Armed(null, 0, false)
+        asked = null
+        pending.set(Armed(null, 0, false))
     }
+
+    /** The script last armed and not disarmed since (any thread): what the engine has asked of this player's sound. */
+    @Volatile var asked: FxScript? = null
+        private set
 
     override fun onConfigure(inputAudioFormat: AudioProcessor.AudioFormat): AudioProcessor.AudioFormat {
         val enc = inputAudioFormat.encoding
         if (enc != C.ENCODING_PCM_16BIT && enc != C.ENCODING_PCM_FLOAT) return AudioProcessor.AudioFormat.NOT_SET
-        if (inputAudioFormat == this.inputAudioFormat) return inputAudioFormat
-        rate = inputAudioFormat.sampleRate
-        channels = inputAudioFormat.channelCount
-        float = enc == C.ENCODING_PCM_FLOAT
-        fadeLength = (rate * FADE_MS / 1000).coerceAtLeast(1)
-        z = Array(channels) { DoubleArray(10) }
-        delay = Array(channels) { FloatArray(0) }
-        stop()
+        // Taken up at the flush that follows ([takeFormat]), where the player starts using it: until then the last song's
+        // sound may still come through, and a script waiting for the next song's first frame outlasts this (B5).
         return inputAudioFormat
     }
 
+    /** The format the last flush brought in ([inputAudioFormat]); true when it's a new one. */
+    private fun takeFormat(): Boolean {
+        val f = inputAudioFormat
+        if (f.sampleRate <= 0 || f == format) return false
+        format = f
+        rate = f.sampleRate
+        channels = f.channelCount
+        float = f.encoding == C.ENCODING_PCM_FLOAT
+        fadeLength = (rate * FADE_MS / 1000).coerceAtLeast(1)
+        z = Array(channels) { DoubleArray(10) }
+        delay = Array(channels) { FloatArray(0) }
+        return true
+    }
+
+    private var format: AudioProcessor.AudioFormat? = null
+    /** The song position of the first frame after the last flush, as the player gave it (null when it didn't say). */
+    private var flushMs: Long? = null
+
     private fun take() {
-        val p = pending ?: return
-        pending = null
+        val p = pending.getAndSet(null) ?: return
         when {
             p.script == null -> { waiting = null; if (script != null) { script = null; fadeLeft = fadeLength } }
             p.afterNextFlush -> waiting = p
-            else -> start(p)
+            // The newest ask wins: one waiting for a seek doesn't come back at it.
+            else -> { waiting = null; start(p) }
         }
     }
 
     private fun start(p: Armed) {
         script = p.script
-        anchorMs = p.anchorMs
+        // Where the player said it was at the last flush; the caller's anchor only when it didn't say (a plain flush).
+        anchorMs = flushMs ?: p.anchorMs
         fadeLeft = 0
         clearState()
-        val s = p.script!!
-        delayFrames = if (s.echoMs > 0) (s.echoMs * rate / 1000).roundToInt().coerceIn(1, rate * MAX_ECHO_S) else 0
+        fitDelay()
+    }
+
+    /** The echo's line for the script running, at the rate in use. */
+    private fun fitDelay() {
+        val s = script
+        delayFrames = if (s != null && s.echoMs > 0) (s.echoMs * rate / 1000).roundToInt().coerceIn(1, rate * MAX_ECHO_S) else 0
         if (delayFrames > 0) for (ch in 0 until channels) if (delay[ch].size < delayFrames) delay[ch] = FloatArray(delayFrames)
     }
 
@@ -275,20 +301,39 @@ class TransitionFx(private val shiftMs: () -> Long = { 0L }) : BaseAudioProcesso
         }
     }
 
-    override fun onFlush() {
-        // A seek: the frames count from the new place. A script running ends (its times no longer hold); one waiting
-        // for this seek starts.
+    override fun onFlush(streamMetadata: AudioProcessor.StreamMetadata) {
+        val newFormat = takeFormat()
+        // Where in its song the player starts from here (EdgeSilenceProcessor reads the same): only when it says which song.
+        val at = if (streamMetadata.periodUid != null && streamMetadata.positionOffsetUs != C.TIME_UNSET) streamMetadata.positionOffsetUs / 1000 else null
+        // A second flush with nothing played since (a new song's sound being set up): what started at the first goes on,
+        // from where the player now says it is (its times are the song's).
+        val again = script != null && frames == 0L
         frames = 0
-        take()
-        val w = waiting
+        if (!again || at != null) flushMs = at
+        // A seek: the frames count from the new place. A script running ends (its times no longer hold); one waiting for
+        // this seek starts, and so does one armed just before it (B5: the editor's Listen and the queue's second player
+        // arm theirs before the player's first flush).
+        val p = pending.getAndSet(null)
+        val next = when {
+            p == null -> waiting
+            p.script == null -> null
+            else -> p
+        }
+        if (again && p == null && waiting == null) {
+            flushMs?.let { anchorMs = it }
+            if (newFormat) { clearState(); fitDelay() }
+            return
+        }
         stop()
-        if (w != null) start(w)
+        if (next != null) start(next)
     }
 
     override fun onReset() {
-        pending = null
+        pending.set(null)
         stop()
         frames = 0
+        flushMs = null
+        format = null
     }
 
     companion object {
