@@ -137,11 +137,12 @@ private const val V1_8_7_6 = 67
 const val V1_8_8 = 68
 
     /**
-     * 1.8.8's headline card (`tour_188_mix_*`) is worded from what Mix ships (2026-11-22). Still to do: see its Show me
-     * land on the Crossfade row with Automix in the pick (B6), then set this false. `TourTest` fails once the build is
-     * 1.8.8 while this is still true.
+     * 1.8.8's headline card (`tour_188_mix_*`) is worded from what Mix ships (2026-11-22, in all languages). Its Show me
+     * opens Playback with the hole on the Crossfade row (now a pick with Automix; the row still carries
+     * [TourAnchor.CROSSFADE]); WhatsNewShowMeAppTest sees it on a device once the build is 1.8.8. `TourTest` fails if
+     * this is true at 1.8.8.
      */
-    const val MIX_HEADLINE_PLACEHOLDER = true
+    const val MIX_HEADLINE_PLACEHOLDER = false
 
     /** The release each versionCode with cards is called by (the Guide's "Since 1.8.3"). */
     val versionNames: Map<Int, String> = mapOf(
@@ -943,7 +944,7 @@ const val V1_8_8 = 68
         // coach, then "Also new"; four points each at most.
         TourStep(
             // Mix as it ships (Automix, Blend when I skip, your own transitions). Opens Playback at Song to song, the
-            // hole on the Crossfade row ([MIX_HEADLINE_PLACEHOLDER]: until that is seen on a device with Automix in it).
+            // hole on the Crossfade row.
             V1_8_8, PrismIcons.Equalizer, tr(R.string.tour_188_mix_title),
             tr(R.string.tour_188_mix_about),
             listOf(
