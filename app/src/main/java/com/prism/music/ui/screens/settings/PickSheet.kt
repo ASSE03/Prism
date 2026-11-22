@@ -268,7 +268,11 @@ internal fun <T> PickCards(
     val pick = ticking(onPick)
     val density = LocalDensity.current
     val small = remember(density, exampleScale) { Density(density.density * exampleScale, density.fontScale) }
-    Column(Modifier.fillMaxWidth().heightIn(max = halfScreen()).testTag(SettingsTags.SHEET)) {
+    // A footer (Crossfade's "Hear it on the next song") takes room the cards had: such a sheet may grow past half the
+    // screen, up to the rows sheets' 85%, and is only as tall as what it holds (1.8.8 check: at half the screen the
+    // second row of cards was cut).
+    val maxHeight = if (footer == null) halfScreen() else LocalConfiguration.current.screenHeightDp.dp * 0.85f - 26.dp
+    Column(Modifier.fillMaxWidth().heightIn(max = maxHeight).testTag(SettingsTags.SHEET)) {
         SheetHeader(title, info)
         Column(
             Modifier.fillMaxWidth().weight(1f, fill = false).nestedScroll(KeepUpwardScroll).verticalScroll(rememberScrollState())

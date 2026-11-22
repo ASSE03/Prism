@@ -523,6 +523,23 @@ class SettingsKitTest {
         assertEquals("the footer isn't clipped", footer.size.height.toFloat(), footer.boundsInRoot.height, 0.5f)
     }
 
+    /**
+     * 1.8.8 check, the retake: with the footer pinned, the half-screen sheet cut the second row of cards instead (the
+     * picked Automix card among them). A sheet with a footer may grow past half the screen: cards and footer whole.
+     */
+    @Test fun aPickSheetWithAFooterShowsAllItsCardsWhole() {
+        show {
+            PickCards("Crossfade", styles, "Steps", { it }, null, 2, 0.8f, {
+                Box(Modifier.fillMaxWidth().height(130.dp))
+            }, footer = { Text("Hear it on the next song", Modifier.testTag("footer").height(48.dp)) }) {}
+        }
+        val cards = compose.onAllNodes(hasTestTag(SettingsTags.SHEET_OPTION)).fetchSemanticsNodes()
+        assertEquals(4, cards.size)
+        cards.forEach { assertEquals("a card isn't clipped", it.size.height.toFloat(), it.boundsInRoot.height, 0.5f) }
+        val footer = compose.onNode(hasTestTag("footer")).fetchSemanticsNode()
+        assertEquals("the footer isn't clipped", footer.size.height.toFloat(), footer.boundsInRoot.height, 0.5f)
+    }
+
     @Test fun everyPageTitleFitsTheBarOnA360Phone() {
         var title by mutableStateOf("")
         var scale by mutableStateOf(1f)
