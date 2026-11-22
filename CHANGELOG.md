@@ -2,6 +2,37 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.8.8
+
+### Mix
+
+- **Automix.** A fourth choice under Crossfade (Settings, Playback): Prism mixes like a DJ, picking a move for each pair of songs: a bass swap, a filter out, an echo out, a cut on the beat, or a blend. Moves that need the beat only happen where the two songs' tempos line up; everywhere else the songs blend as before. Songs are measured first, on Wi-Fi unless you allow mobile data. Crossfade's choices are now cards with an example each, and "Hear it on the next song" jumps to just before the coming transition so you can listen. Off until you pick it.
+- **Blend when I skip.** Next, Previous and a tap in the queue blend into the song you picked instead of cutting: the song playing carries on until the next one is ready, then the two cross over. The cover and title blend too. Works from the notification, lock screen, headset and car, and with Crossfade off. Off until you turn it on (Settings, Playback, under Crossfade).
+- **Your own transitions.** In a playlist, a song's ⋯ menu has "Transition to the next song": drag where the first song leaves and where the next comes in on their waveforms, pick how long they overlap and how (a curve, or one of Automix's moves), snap to the beat, and listen before you keep it. It plays whenever those two songs follow each other in that playlist. A small mark between the two rows shows it is there.
+
+### The tour, redone
+
+- **First steps.** A new install is shown five things by doing them: play a song, open the player, the lyrics, the heart, and Settings. Skip ends it for good.
+- **What's new has "Show me".** It opens the place and points at the control, then brings you back to the next card. Each release now has two cards at most.
+- **The Guide.** Every tip, by topic, in Settings, Backup & about, with a search line.
+
+### Also new
+
+- "Radio started" shows when a Radio button's radio gets going, where there was only a small buzz.
+- Settings, Lyrics & Sing: "Show the Sing button" can hide the microphone under the lyrics.
+- On the TV, Settings, Storage has "Clear cache", and the caches fit a small box (#535).
+
+### Fixes from your reports
+
+- Prism no longer closes at every play on some phones with custom ROMs (#594).
+- Prism shows up when Android asks which music app to use (#548).
+- Select many: every button in the bar is in reach on a phone; the rest are under More (#567).
+- The player's backdrop holds still under a sheet, then carries on (#547).
+- "Lock to portrait" leaves the screen alone while the phone is in a car (#582).
+- Replay's top artists keep their own photo when a song credits them under someone else's page.
+- Moods and genres follow a change of country without a restart.
+- A music video that fails near its end gets one more go instead of skipping to the next song.
+
 ## 1.8.7.6
 
 ### The small things
