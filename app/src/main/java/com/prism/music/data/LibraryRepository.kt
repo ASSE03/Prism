@@ -305,9 +305,11 @@ class LibraryRepository(private val c: AppContainer) {
         artistThumbs.value = artistThumbs.value + entries
     }
 
-    /** [id]'s page name, kept beside its photo (1.8.8): "Artist" is what a page without a title is called, so not kept. */
-    private fun pageNamed(id: String, name: String): Map<String, String> =
-        if (name.isBlank() || name == "Artist") emptyMap() else mapOf(ArtistPhotos.pageKey(id) to name)
+    /**
+     * [id]'s page name, kept beside its photo (1.8.8); "" for a page without a title ("Artist"), so that page is known
+     * too and not fetched again at every open ([ArtistPhotos.pageEntry]).
+     */
+    private fun pageNamed(id: String, name: String): Map<String, String> = mapOf(ArtistPhotos.pageEntry(id, name))
 
     /** An artist's photo, by id, or by name for songs saved without the artist's id or linked to someone else's ([ArtistPhotos]). */
     fun artistPhoto(thumbs: Map<String, String>, id: String?, name: String): String? = ArtistPhotos.photo(thumbs, id, name)
@@ -320,7 +322,7 @@ class LibraryRepository(private val c: AppContainer) {
         if (c.dataSaving()) return@withContext
         val todo = artists.distinct().filter { (id, name) ->
             val thumbs = artistThumbs.value
-            (artistPhoto(thumbs, id, name) == null || (id != null && !ArtistPhotos.pageKnown(thumbs, id))) && thumbsLoading.add(id ?: nameKey(name))
+            ArtistPhotos.wanted(thumbs, id, name) && thumbsLoading.add(id ?: nameKey(name))
         }
         if (todo.isEmpty()) return@withContext
         val gate = kotlinx.coroutines.sync.Semaphore(4)
@@ -337,7 +339,7 @@ class LibraryRepository(private val c: AppContainer) {
                             if (page != null) {
                                 keepThumbs(pageNamed(id, page.name) + listOfNotNull(page.thumbnail?.let { id to it }))
                                 // The song linked the name to another artist's page: the name's own photo, if there is one.
-                                if (pageNamed(id, page.name).isNotEmpty() && !ArtistPhotos.sameArtist(page.name, name) && artistThumbs.value[nameKey(name)] == null) {
+                                if (!ArtistPhotos.couldBe(page.name, name) && artistThumbs.value[nameKey(name)] == null) {
                                     photoByName(name)?.let { keepThumbs(mapOf(nameKey(name) to it)) }
                                 }
                             }

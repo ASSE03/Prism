@@ -73,8 +73,9 @@ class Rewinds(private val c: AppContainer) {
         val imageJob = async {
             dao.topArtists(from0, minOf(end0, now), 1).firstOrNull()?.let { lead ->
                 lead.artistId?.let { id -> withTimeoutOrNull(5_000) { runCatching { c.ytm.artist(id) }.getOrNull() } }
-                    // Never another artist's photo, from a song that linked the name to the wrong page (1.8.8).
-                    ?.takeIf { ArtistPhotos.sameArtist(it.name, lead.artistName) }?.thumbnail
+                    // Never another artist's photo, from a song that linked the name to the wrong page (1.8.8); a page
+                    // whose title didn't read ("Artist") isn't judged, as in Replay.
+                    ?.takeIf { ArtistPhotos.couldBe(it.name, lead.artistName) }?.thumbnail
             }
         }
         RewindBuild.build(
