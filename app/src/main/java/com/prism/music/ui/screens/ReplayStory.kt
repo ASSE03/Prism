@@ -214,7 +214,7 @@ private suspend fun loadRewindStory(c: AppContainer, year: Int): ReplayStory = w
         plays = s.plays, activeDays = s.activeDays, songCount = s.songCount, artistCount = s.artistCount,
         songs = s.songs, artists = s.artists, genres = s.genres.map { it.genre to it.ms }, genreSongs = genreSongs,
         habits = s.habits(), newArtists = s.newArtists, personality = s.personality,
-        topArtistImage = s.topArtistImage ?: leadPage?.thumbnail, topArtistType = leadType,
+        topArtistImage = s.topArtistImage ?: leadPage?.takeIf { com.prism.music.data.ArtistPhotos.sameArtist(it.name, lead?.artistName.orEmpty()) }?.thumbnail, topArtistType = leadType,
         rewind = true, months = s.months, topAlbum = s.topAlbum, firstSong = s.firstSong, seasons = s.seasons, prism = s.prism,
         topLyric = s.topLyric, previousTopArtist = s.previousTopArtist, previousSongCount = s.previousSongCount,
         includes = includesLine(c),
@@ -300,7 +300,8 @@ private suspend fun loadPeriodStory(c: AppContainer, period: Period): ReplayStor
             topSongPlays = top?.plays ?: 0, topSongTitle = top?.title, activeDays = activeDays,
             topGenreShare = genres.firstOrNull()?.let { it.second.toDouble() / genreTotal }, habits = habits,
         ),
-        topArtistImage = leadPage?.thumbnail,
+        // Not when the id's page is another artist's (a song linked the name to the wrong page): their photo, below.
+        topArtistImage = leadPage?.takeIf { com.prism.music.data.ArtistPhotos.sameArtist(it.name, lead?.artistName.orEmpty()) }?.thumbnail,
         topArtistType = leadType,
         months = months,
         includes = includesLine(c),

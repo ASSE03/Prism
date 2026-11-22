@@ -286,6 +286,15 @@ fun List<SongPlays>.mergeUploads(): List<SongPlays> {
 
 @kotlinx.serialization.Serializable
 data class ArtistPlays(val artistName: String, val plays: Int, val ms: Long, val thumbnail: String?, val artistId: String?)
+
+/**
+ * An artist's id in the "top artists" queries, over rows already counted per (name, id): the id the most of the
+ * artist's songs link to, then the most plays, then the id itself, so the same plays always give the same id. YouTube
+ * sometimes links a credit to someone else (Reddit, 2026-11: "Mehrama" credits "Pritam" with Darshan Raval's page), and
+ * the highest id of the lot, what was taken before, then put Darshan Raval's photo on Pritam (Darshan's id sorts
+ * higher). The count is zero-padded in front of the id, so the highest string is the most linked, and cut off again.
+ */
+internal const val ARTIST_ID_VOTE = "substr(MAX(CASE WHEN id IS NOT NULL THEN printf('%06d%010d', k, n) || id END), 17)"
 @kotlinx.serialization.Serializable
 data class MonthTotal(val month: String, val ms: Long)
 /** Listening in one hour of one weekday (the listening clock, 1.8.5): [weekday] 0 = Monday … 6 = Sunday, [hour] 0..23, local. */
@@ -437,14 +446,17 @@ interface PlayEventDao {
 
     /**
      * Artists by listening, each counted under a song's main artist (a joint credit isn't an artist of its own), and
-     * songs without an artist (untagged files) left out.
+     * songs without an artist (untagged files) left out. The artist's id is the one most of their songs link to
+     * ([ARTIST_ID_VOTE]), not the highest of them.
      */
     @Query(
-        """SELECT MAX(s.primaryArtist) AS artistName, COUNT(*) AS plays, SUM(e.playedMs) AS ms,
-           MAX(s.thumbnail) AS thumbnail, MAX(s.artistId) AS artistId
-           FROM play_events e JOIN songs s ON s.id = e.songId
-           WHERE e.timestamp BETWEEN :from AND :to AND s.primaryArtist != ''
-           GROUP BY s.primaryArtist ORDER BY ms DESC LIMIT :limit"""
+        """SELECT name AS artistName, SUM(n) AS plays, SUM(ms) AS ms, MAX(thumb) AS thumbnail, $ARTIST_ID_VOTE AS artistId
+           FROM (SELECT s.primaryArtist AS name, s.artistId AS id, COUNT(*) AS n, COUNT(DISTINCT e.songId) AS k,
+                 SUM(e.playedMs) AS ms, MAX(s.thumbnail) AS thumb
+                 FROM play_events e JOIN songs s ON s.id = e.songId
+                 WHERE e.timestamp BETWEEN :from AND :to AND s.primaryArtist != ''
+                 GROUP BY s.primaryArtist, s.artistId)
+           GROUP BY name ORDER BY ms DESC LIMIT :limit"""
     )
     suspend fun topArtists(from: Long, to: Long, limit: Int): List<ArtistPlays>
 
@@ -487,13 +499,15 @@ interface PlayEventDao {
 
     /** Artists first heard between [from] and [to], with their listening in that time, most listened first. */
     @Query(
-        """SELECT MAX(s.primaryArtist) AS artistName, COUNT(*) AS plays, SUM(e.playedMs) AS ms,
-           MAX(s.thumbnail) AS thumbnail, MAX(s.artistId) AS artistId
-           FROM play_events e JOIN songs s ON s.id = e.songId
-           WHERE e.timestamp BETWEEN :from AND :to AND s.primaryArtist != '' AND s.primaryArtist IN (
-               SELECT s2.primaryArtist FROM play_events e2 JOIN songs s2 ON s2.id = e2.songId
-               GROUP BY s2.primaryArtist HAVING MIN(e2.timestamp) BETWEEN :from AND :to)
-           GROUP BY s.primaryArtist ORDER BY ms DESC"""
+        """SELECT name AS artistName, SUM(n) AS plays, SUM(ms) AS ms, MAX(thumb) AS thumbnail, $ARTIST_ID_VOTE AS artistId
+           FROM (SELECT s.primaryArtist AS name, s.artistId AS id, COUNT(*) AS n, COUNT(DISTINCT e.songId) AS k,
+                 SUM(e.playedMs) AS ms, MAX(s.thumbnail) AS thumb
+                 FROM play_events e JOIN songs s ON s.id = e.songId
+                 WHERE e.timestamp BETWEEN :from AND :to AND s.primaryArtist != '' AND s.primaryArtist IN (
+                     SELECT s2.primaryArtist FROM play_events e2 JOIN songs s2 ON s2.id = e2.songId
+                     GROUP BY s2.primaryArtist HAVING MIN(e2.timestamp) BETWEEN :from AND :to)
+                 GROUP BY s.primaryArtist, s.artistId)
+           GROUP BY name ORDER BY ms DESC"""
     )
     suspend fun newArtists(from: Long, to: Long): List<ArtistPlays>
 
@@ -556,11 +570,13 @@ interface PlayEventDao {
 
     /** [topArtists] for taste: plays the listener left out of it don't count. */
     @Query(
-        """SELECT MAX(s.primaryArtist) AS artistName, COUNT(*) AS plays, SUM(e.playedMs) AS ms,
-           MAX(s.thumbnail) AS thumbnail, MAX(s.artistId) AS artistId
-           FROM play_events e JOIN songs s ON s.id = e.songId
-           WHERE e.timestamp BETWEEN :from AND :to AND e.excluded = 0 AND s.primaryArtist != ''
-           GROUP BY s.primaryArtist ORDER BY ms DESC LIMIT :limit"""
+        """SELECT name AS artistName, SUM(n) AS plays, SUM(ms) AS ms, MAX(thumb) AS thumbnail, $ARTIST_ID_VOTE AS artistId
+           FROM (SELECT s.primaryArtist AS name, s.artistId AS id, COUNT(*) AS n, COUNT(DISTINCT e.songId) AS k,
+                 SUM(e.playedMs) AS ms, MAX(s.thumbnail) AS thumb
+                 FROM play_events e JOIN songs s ON s.id = e.songId
+                 WHERE e.timestamp BETWEEN :from AND :to AND e.excluded = 0 AND s.primaryArtist != ''
+                 GROUP BY s.primaryArtist, s.artistId)
+           GROUP BY name ORDER BY ms DESC LIMIT :limit"""
     )
     suspend fun tasteTopArtists(from: Long, to: Long, limit: Int): List<ArtistPlays>
 

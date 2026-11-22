@@ -287,11 +287,8 @@ class LibraryRepository(private val c: AppContainer) {
                     launch {
                         gate.acquire()
                         try {
-                            val thumb = runCatching { c.ytm.artist(id).thumbnail }.getOrNull()
-                            if (thumb != null) {
-                                thumbPrefs.edit().putString(id, thumb).apply()
-                                artistThumbs.value = artistThumbs.value + (id to thumb)
-                            }
+                            val page = runCatching { c.ytm.artist(id) }.getOrNull()
+                            if (page?.thumbnail != null) keepThumbs(pageNamed(id, page.name) + (id to page.thumbnail))
                         } finally { gate.release() }
                     }
                 }
@@ -299,19 +296,31 @@ class LibraryRepository(private val c: AppContainer) {
         }
     }
 
-    private fun nameKey(name: String) = "name:" + name.lowercase().trim()
+    private fun nameKey(name: String) = ArtistPhotos.nameKey(name)
 
-    /** An artist's photo, by id, or by name for songs saved without the artist's id. */
-    fun artistPhoto(thumbs: Map<String, String>, id: String?, name: String): String? = id?.let { thumbs[it] } ?: thumbs[nameKey(name)]
+    /** Kept on the phone and shown at once. */
+    @Synchronized private fun keepThumbs(entries: Map<String, String>) {
+        if (entries.isEmpty()) return
+        thumbPrefs.edit().apply { entries.forEach { (k, v) -> putString(k, v) } }.apply()
+        artistThumbs.value = artistThumbs.value + entries
+    }
+
+    /** [id]'s page name, kept beside its photo (1.8.8): "Artist" is what a page without a title is called, so not kept. */
+    private fun pageNamed(id: String, name: String): Map<String, String> =
+        if (name.isBlank() || name == "Artist") emptyMap() else mapOf(ArtistPhotos.pageKey(id) to name)
+
+    /** An artist's photo, by id, or by name for songs saved without the artist's id or linked to someone else's ([ArtistPhotos]). */
+    fun artistPhoto(thumbs: Map<String, String>, id: String?, name: String): String? = ArtistPhotos.photo(thumbs, id, name)
 
     /**
-     * Fetches photos for artists from play history (Replay): by id when the song carried one,
-     * otherwise by searching for the name. Waits until they're in.
+     * Fetches photos for artists from play history (Replay): by id when the song carried one (unless its page is someone
+     * else's, 1.8.8), otherwise by searching for the name. Waits until they're in.
      */
     suspend fun fetchArtistPhotos(artists: List<Pair<String?, String>>) = withContext(Dispatchers.IO) {
         if (c.dataSaving()) return@withContext
         val todo = artists.distinct().filter { (id, name) ->
-            artistPhoto(artistThumbs.value, id, name) == null && thumbsLoading.add(id ?: nameKey(name))
+            val thumbs = artistThumbs.value
+            (artistPhoto(thumbs, id, name) == null || (id != null && !ArtistPhotos.pageKnown(thumbs, id))) && thumbsLoading.add(id ?: nameKey(name))
         }
         if (todo.isEmpty()) return@withContext
         val gate = kotlinx.coroutines.sync.Semaphore(4)
@@ -321,10 +330,17 @@ class LibraryRepository(private val c: AppContainer) {
                     val key = id ?: nameKey(name)
                     gate.acquire()
                     try {
-                        val thumb = if (id != null) runCatching { c.ytm.artist(id).thumbnail }.getOrNull() else photoByName(name)
-                        if (thumb != null) {
-                            thumbPrefs.edit().putString(key, thumb).apply()
-                            artistThumbs.value = artistThumbs.value + (key to thumb)
+                        if (id == null) {
+                            photoByName(name)?.let { keepThumbs(mapOf(key to it)) }
+                        } else {
+                            val page = runCatching { c.ytm.artist(id) }.getOrNull()
+                            if (page != null) {
+                                keepThumbs(pageNamed(id, page.name) + listOfNotNull(page.thumbnail?.let { id to it }))
+                                // The song linked the name to another artist's page: the name's own photo, if there is one.
+                                if (pageNamed(id, page.name).isNotEmpty() && !ArtistPhotos.sameArtist(page.name, name) && artistThumbs.value[nameKey(name)] == null) {
+                                    photoByName(name)?.let { keepThumbs(mapOf(nameKey(name) to it)) }
+                                }
+                            }
                         }
                     } finally {
                         gate.release()
