@@ -297,7 +297,11 @@ fun SliderRow(
         },
         below = {
             PrismSlider(
-                v, { v = it; dragging = true }, Modifier.padding(start = 16.dp, end = 16.dp, bottom = 6.dp), enabled = enabled,
+                v, { v = it; dragging = true },
+                // TalkBack reads the row's name and its value as the row writes it ("Overlap, 8 s"), not a bare
+                // percentage (1.8.8 check).
+                Modifier.padding(start = 16.dp, end = 16.dp, bottom = 6.dp).semantics { contentDescription = title; stateDescription = shown },
+                enabled = enabled,
                 valueRange = range, steps = steps, onValueChangeFinished = { dragging = false; onSave(v); saves++ },
             )
         },

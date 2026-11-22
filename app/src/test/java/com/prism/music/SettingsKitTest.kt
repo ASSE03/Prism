@@ -540,6 +540,17 @@ class SettingsKitTest {
         assertEquals("the footer isn't clipped", footer.size.height.toFloat(), footer.boundsInRoot.height, 0.5f)
     }
 
+    /**
+     * 1.8.8 check (the transition editor's Overlap, read with TalkBack): a row's slider had no name and no value of its
+     * own, so TalkBack read a bare percentage. It carries the row's title and the value as the row writes it.
+     */
+    @Test fun aSliderRowsSliderIsNamedAndReadsTheRowsValue() {
+        show { OnAPage { SliderRow("Overlap", 8f, 0f..30f, { "${it.toInt()} s" }) {} } }
+        val slider = compose.onNode(androidx.compose.ui.test.SemanticsMatcher.keyIsDefined(SemanticsProperties.ProgressBarRangeInfo)).fetchSemanticsNode()
+        assertEquals(listOf("Overlap"), slider.config.getOrNull(SemanticsProperties.ContentDescription))
+        assertEquals("8 s", slider.config.getOrNull(SemanticsProperties.StateDescription))
+    }
+
     @Test fun everyPageTitleFitsTheBarOnA360Phone() {
         var title by mutableStateOf("")
         var scale by mutableStateOf(1f)
