@@ -31,11 +31,12 @@ class QuickPicksLiveTest {
         val http = OkHttpClient.Builder().readTimeout(30, TimeUnit.SECONDS).build()
         val ytm = YouTubeMusic(InnerTube(http, { settings }, { settings = settings.copy(visitorData = it) }))
         val shelves = ytm.home().shelves
-        println("shelves: " + shelves.joinToString { "${it.title}${if (it.rows) " (rows)" else ""}" })
+        println("shelves: " + shelves.joinToString { "${it.title}${if (it.rows) " (rows)" else ""}${if (it.startsRadios) " (radios)" else ""}" })
         val picks = shelves.quickPicks()
         assertNotNull(picks)
-        // In Spanish it isn't called "Quick picks", so it was found by its shape.
+        // In Spanish it isn't called "Quick picks", so it was found by what it is: song rows that each start a radio.
         assertNotEquals("Quick picks", picks!!.title)
+        assertTrue(picks.startsRadios)
         assertTrue(picks.items.count { it is SongItem } >= 8)
     }
 }

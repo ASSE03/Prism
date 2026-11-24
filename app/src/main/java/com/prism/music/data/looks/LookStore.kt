@@ -110,7 +110,7 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
     private val iconsVersion = MutableStateFlow(0)
 
     /** The Look the app is in, when its settings and icons are exactly one's. */
-    val currentId: StateFlow<String?> = combine(settings.flow, _mine, iconsVersion, _other) { s, _, _, _ -> lookNow(s)?.id }
+    val currentId: StateFlow<String?> = combine(settings.prefsNow, _mine, iconsVersion, _other) { p, _, _, _ -> lookNow(p)?.id }
         .flowOn(Dispatchers.Default).stateIn(scope, SharingStarted.Eagerly, null)
 
     /** Your own Look last put on or saved, so changes made to it afterwards can be saved into it ([edited], [update]). */
@@ -128,10 +128,15 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
     val edited: StateFlow<Look?> = combine(currentId, basis, _mine) { now, b, mine -> if (b != null && now != b) mine.firstOrNull { it.id == b } else null }
         .stateIn(scope, SharingStarted.Eagerly, null)
 
-    /** The Look whose settings and icons [s] are exactly; your own Looks first (one saved from Paper as it is is yours). */
-    private fun lookNow(s: com.prism.music.data.prefs.AppSettings): Look? {
+    /**
+     * The Look whose settings and icons the store [p] holds exactly; your own Looks first (one saved from Paper as it is is
+     * yours). Both sides as stored, from the one snapshot (1.8.7.6: compared with the settings as Performance mode reads
+     * them, no Look was ever in use while it was on).
+     */
+    private fun lookNow(p: androidx.datastore.preferences.core.Preferences = settings.prefsNow.value): Look? {
         val icons = currentIcons()
-        return (_mine.value + listOfNotNull(_other.value) + BuiltInLooks.all).firstOrNull { l -> l.icons == icons && settings.previewLook(resolved(l)) == s }
+        val s = settings.storedOf(p)
+        return (_mine.value + listOfNotNull(_other.value) + BuiltInLooks.all).firstOrNull { l -> l.icons == icons && settings.previewLook(p, resolved(l)) == s }
     }
 
     // ---------------------------------------------------------------- Keeping Looks
@@ -299,7 +304,7 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
      * later: History only goes back ten.
      */
     suspend fun apply(look: Look, label: String = tr(R.string.look_2, look.name), scheduled: Boolean = false) = withContext(Dispatchers.IO) {
-        val from = lookNow(settings.current)
+        val from = lookNow(settings.prefsLatest())
         // A seasonal Look remembers the Look the listener had, to go back to when its month ends ([endSeasons]).
         if (Seasons.of(look.id) != null && Seasons.of(from?.id) == null) prefs.edit().putString(SEASON_FROM, from?.id ?: BEFORE_ID).apply()
         if (look.id != BEFORE_ID && from == null) runCatching {
@@ -606,7 +611,28 @@ class LookStore(private val app: Context, private val settings: SettingsReposito
         }
     }
 
+    /**
+     * Once (1.8.7.6): the first run of 1.8.6 to 1.8.7.5 left a step in History nobody made ("Animated cover fills the
+     * player → On and 4 more": exactly a new install's own defaults that are in a Look, none of them set before, not a
+     * Look's switch). It goes, and the settings get the marker that makes those defaults Prism's own Look on this phone
+     * ([SettingsRepository.repairNewInstallLook]). A missing or unreadable History is left as it is.
+     */
+    private fun repairFirstRun() {
+        runCatching {
+            if (!settings.newInstallLookRepairDue) return
+            val names = settings.newInstallLookNames.takeIf { it.isNotEmpty() } ?: return
+            val steps = _steps.value
+            val firstRun = steps.filter { s -> !s.look && s.keys.toSet() == names && s.before.keys.none { it in names } }
+            if (firstRun.isNotEmpty()) saveSteps(steps.filterNot { it in firstRun })
+            settings.repairNewInstallLook(firstRunSeen = firstRun.isNotEmpty())
+        }.onFailure { android.util.Log.w("PrismLooks", "the first run's repair failed", it) }
+    }
+
     init {
+        // The first run's own defaults (SettingsRepository.setOnboarded) aren't a change of the listener's: told inside
+        // that write, before the change can reach the collector below.
+        settings.onFirstRunLook = { target -> expect = Expect(target, silent = true) }
+        repairFirstRun()
         runSeasons()
         scope.launch {
             var last = settings.lookValues.value

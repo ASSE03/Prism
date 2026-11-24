@@ -448,12 +448,10 @@ fun WelcomeScreen(onSignIn: () -> Unit, onAccount: () -> Unit, onSkip: () -> Uni
             Text(tr(R.string.app_name), color = Color.White, style = MaterialTheme.typography.displayLarge)
             Text(tr(R.string.your_music_refracted), color = Color.White.copy(alpha = 0.8f), style = MaterialTheme.typography.titleLarge)
             Spacer(Modifier.height(28.dp))
-            Feature(PrismIcons.Lyrics, tr(R.string.karaoke_lyrics_word_by_word_from))
-            Feature(PrismIcons.Mic, tr(R.string.sing_the_song_with_its_voice))
-            Feature(PrismIcons.StarFilled, tr(R.string.made_for_you_daily_mixes_release))
-            Feature(PrismIcons.Equalizer, tr(R.string.dj_mode_your_songs_mixed_in))
-            Feature(PrismIcons.Recognize, tr(R.string.name_the_song_playing_around_you))
-            Feature(PrismIcons.Replay, tr(R.string.rewind_your_year_in_music))
+            // 1.8.8 (plan-tour.md D4): three lines, not six. The old six stay in strings.xml, unused, until a clean-up.
+            Feature(PrismIcons.Play, tr(R.string.welcome_line_music))
+            Feature(PrismIcons.Lyrics, tr(R.string.welcome_line_lyrics))
+            Feature(PrismIcons.Palette, tr(R.string.welcome_line_looks))
             Spacer(Modifier.height(32.dp))
             // A Prism Account first: it's all on this phone, no sign-in anywhere. Google's for the YouTube Music library.
             PrismButton(onClick = onAccount, Modifier.fillMaxWidth().heightIn(min = 56.dp), shape = RoundedCornerShape(18.dp)) {

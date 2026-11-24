@@ -366,7 +366,8 @@ class MixTempo(
     /** Scanned before the song's fade-out and intro were measured (for Mix's Auto length): scanned again once. */
     private fun old(id: String) = prefs.getString(id, null)?.let(Tempo::isOld) == true
 
-    private class Scan(val tempo: Tempo?, val lufs: Float?, val key: MusicKey?, val peakDb: Float?, val brightness: Double?)
+    /** [shape]: energy and bass a second at a time, for Automix (1.8.8), kept beside the waveform outline. */
+    internal class Scan(val tempo: Tempo?, val lufs: Float?, val key: MusicKey?, val peakDb: Float?, val brightness: Double?, val shape: SongShape? = null)
 
     // ---------------------------------------------------------------- DJ mode's quick scan
 
@@ -543,37 +544,28 @@ class MixTempo(
                 }
                 android.net.Uri.fromFile(file)
             }
-            val decoded = decodeAll(uri) ?: throw java.io.IOException("couldn't decode its audio")
-            val pcm = decoded.pcm; val rate = decoded.rate; val count = decoded.count
-            val lufs = integratedLoudness(pcm, rate, count)?.let { it + MONO_TO_STEREO_DB }
-            // The waveform progress bar's outline, from the same audio (1.7.4).
-            waves?.let { w -> runCatching { w.put(id, com.prism.music.data.SongWaves.outline(pcm, count)) } }
-            // Debug builds keep the decoded audio when asked (adb shell touch …/files/mix_dump), for tuning [Tempo.analyze].
-            if (com.prism.music.BuildConfig.DEBUG) context.getExternalFilesDir(null)?.let { dir ->
-                if (File(dir, "mix_dump").exists()) runCatching {
-                    val bb = java.nio.ByteBuffer.allocate(count * 4).order(ByteOrder.LITTLE_ENDIAN)
-                    for (i in 0 until count) bb.putFloat(pcm[i])
-                    File(dir, "mix_${id}_$rate.f32").writeBytes(bb.array())
+            return analyse({ decodeAll(uri) ?: throw java.io.IOException("couldn't decode its audio") }, onSamples = { pcm, count, rate ->
+                // The waveform progress bar's outline, from the same audio (1.7.4).
+                waves?.let { w -> runCatching { w.put(id, com.prism.music.data.SongWaves.outline(pcm, count)) } }
+                // Debug builds keep the decoded audio when asked (adb shell touch …/files/mix_dump), for tuning [Tempo.analyze].
+                if (com.prism.music.BuildConfig.DEBUG) context.getExternalFilesDir(null)?.let { dir ->
+                    if (File(dir, "mix_dump").exists()) runCatching {
+                        val bb = java.nio.ByteBuffer.allocate(count * 4).order(ByteOrder.LITTLE_ENDIAN)
+                        for (i in 0 until count) bb.putFloat(pcm[i])
+                        File(dir, "mix_${id}_$rate.f32").writeBytes(bb.array())
+                    }
                 }
+            }).also { s ->
+                // Automix's shape of the song (energy and bass a second at a time), beside its outline (1.8.8).
+                s.shape?.let { shape -> waves?.let { w -> runCatching { w.putShape(id, shape) } } }
             }
-            // The analysis steps are seconds of work each on a slow phone: each waits its turn too ([ease]).
-            ease()
-            val bands = VideoSync.bandFeatures(pcm, rate, count)
-            val frameMs = (rate / 100) * 1000.0 / rate
-            ease()
-            val key = runCatching { KeyDetector.detect(pcm, rate, count) }.getOrNull()
-            ease()
-            val peakDb = decoded.peak.takeIf { it > 0f }?.let { (20 * kotlin.math.log10(it.toDouble())).toFloat() }
-            // Energy's brightness from the same bands as the tempo (1.8.3; no extra pass).
-            val brightness = runCatching { Energy.brightness(bands) }.getOrNull()
-            return Scan(Tempo.analyze(bands, frameMs, offsetMs = VideoSync.WINDOW / 2 * 1000.0 / rate), lufs, key, peakDb, brightness)
         } finally {
             file.delete()
         }
     }
 
     /** A song as mono PCM: the first [count] samples of [pcm], at [rate], and its loudest sample before (0 … 1). */
-    private class Decoded(val pcm: FloatArray, val count: Int, val rate: Int, val peak: Float)
+    internal class Decoded(val pcm: FloatArray, val count: Int, val rate: Int, val peak: Float)
 
     /**
      * The whole file as mono PCM, decimated to roughly 11 kHz. One array, sized from the song's length (it used to grow
@@ -657,6 +649,45 @@ class MixTempo(
         internal fun decodedSize(lengthMs: Long, rate: Int): Int {
             val seconds = (if (lengthMs > 0) lengthMs / 1000 else 180L).coerceAtMost(MAX_SECONDS.toLong()) + 2
             return (seconds * rate).toInt().coerceAtLeast(1024)
+        }
+
+        /**
+         * A song's scan from its decoded samples ([decode]; [onSamples] sees them too: the waveform's outline). The
+         * samples (a song's are about 11 MB) are read in [hear] and let go when it returns: the steps after it (a wait of
+         * its turn, Energy's brightness, the tempo) and the result hold only what was read from them (A16 heap dump,
+         * 1.8.7.5). [step] is each analysis step waiting its turn ([ease]).
+         */
+        internal fun analyse(
+            decode: () -> Decoded,
+            onSamples: (pcm: FloatArray, count: Int, rate: Int) -> Unit = { _, _, _ -> },
+            step: () -> Unit = ::ease,
+        ): Scan {
+            val heard = hear(decode, onSamples, step)
+            step()
+            // Energy's brightness from the same bands as the tempo (1.8.3; no extra pass).
+            val brightness = runCatching { Energy.brightness(heard.bands) }.getOrNull()
+            return Scan(Tempo.analyze(heard.bands, heard.frameMs, offsetMs = heard.offsetMs), heard.lufs, heard.key, heard.peakDb, brightness, heard.shape)
+        }
+
+        /** What a scan reads straight from the samples, and none of the samples themselves. */
+        private class Heard(val lufs: Float?, val bands: Array<FloatArray>, val frameMs: Double, val offsetMs: Double, val key: MusicKey?, val peakDb: Float?, val shape: SongShape?)
+
+        /** The only frame that holds the decoded samples: they go when it returns. */
+        private fun hear(decode: () -> Decoded, onSamples: (pcm: FloatArray, count: Int, rate: Int) -> Unit, step: () -> Unit): Heard {
+            val decoded = decode()
+            val pcm = decoded.pcm; val rate = decoded.rate; val count = decoded.count
+            val lufs = integratedLoudness(pcm, rate, count)?.let { it + MONO_TO_STEREO_DB }
+            onSamples(pcm, count, rate)
+            // The analysis steps are seconds of work each on a slow phone: each waits its turn too ([ease]).
+            step()
+            val bands = VideoSync.bandFeatures(pcm, rate, count)
+            val frameMs = (rate / 100) * 1000.0 / rate
+            step()
+            val key = runCatching { KeyDetector.detect(pcm, rate, count) }.getOrNull()
+            val peakDb = decoded.peak.takeIf { it > 0f }?.let { (20 * kotlin.math.log10(it.toDouble())).toFloat() }
+            // Automix's shape: one pass of two low-passes over the samples, about half a kilobyte kept (1.8.8).
+            val shape = runCatching { SongShape.of(pcm, count, rate) }.getOrNull()
+            return Heard(lufs, bands, frameMs, VideoSync.WINDOW / 2 * 1000.0 / rate, key, peakDb, shape)
         }
 
         /** When the sound last ran dry (SystemClock.elapsedRealtime; set by the playback service). */

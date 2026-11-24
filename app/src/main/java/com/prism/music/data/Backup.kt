@@ -90,6 +90,10 @@ class Backup(private val c: AppContainer) {
                 zip.putNextEntry(ZipEntry(TAGS_ENTRY))
                 zip.write(c.tags.exportJson(c.tags.export()).toByteArray())
                 zip.closeEntry()
+                // So do the playlists' own transitions (1.8.8, Mix it yourself).
+                zip.putNextEntry(ZipEntry(TRANSITIONS_ENTRY))
+                zip.write(TransitionStore.exportJson(c.transitions.export()).toByteArray())
+                zip.closeEntry()
             }
             filesToBackUp(parts).forEach { f ->
                 zip.putNextEntry(ZipEntry(f.relativeTo(data).invariantSeparatorsPath))
@@ -246,8 +250,8 @@ class Backup(private val c: AppContainer) {
             filesDir.walkTopDown()
                 .onEnter { dir -> dir == filesDir || filePart(dir.relativeTo(filesDir).invariantSeparatorsPath.substringBefore('/')) in parts }
                 .filter { it.isFile && (it.parentFile != filesDir || filePart(it.name) in parts) }
-                // A restore's tags not read in yet: the database's are written above instead.
-                .filter { "files/" + it.relativeTo(filesDir).invariantSeparatorsPath != TAGS_ENTRY }
+                // A restore's tags and transitions not read in yet: the database's are written above instead.
+                .filter { ("files/" + it.relativeTo(filesDir).invariantSeparatorsPath).let { p -> p != TAGS_ENTRY && p != TRANSITIONS_ENTRY } }
                 .forEach { keep += it }
             return keep
         }
@@ -260,6 +264,8 @@ class Backup(private val c: AppContainer) {
         private const val BRING_LOOK = "bring/look.txt"
         /** The library's tags (1.8.3), read in at the next start ([TagStore.readPending]). */
         private const val TAGS_ENTRY = "files/library/" + TagStore.PENDING
+        /** The playlists' transitions (1.8.8), read in at the next start ([TransitionStore.readPending]). */
+        private const val TRANSITIONS_ENTRY = "files/library/" + TransitionStore.PENDING
         /** All a bundle may unpack to (its own size is held to [com.prism.music.connect.BringTransfer.MAX_BYTES]). */
         private const val BRING_UNPACKED_MAX = 128L * 1024 * 1024
 
@@ -337,7 +343,11 @@ class Backup(private val c: AppContainer) {
                 "lossless_links", "lossless_misses", "lossless_hidden", "lossless_alac",
                 // 1.8.2: songs skipped in lists' downloads (#221), when kept playlists were last read (#298).
                 "download_skips", "kept_playlists",
+                // 1.8.7 (#408): downloads coming down as their music video's sound.
+                com.prism.music.AppContainer.DOWNLOAD_SOUNDS,
             ).forEach { put(it, BackupPart.DOWNLOADS) }
+            // 1.8.7 (#408): which way gets links on each of this phone's networks, by an id only this phone knows.
+            put(com.prism.music.data.stream.WayMemory.PREFS, null)
             // The Last.fm connection (and its waiting scrobbles) is the listener's account.
             put("lastfm", BackupPart.ACCOUNTS)
             // 1.8.1: the Spotify connection's Client ID and switches go with the accounts (a Client ID is public in
@@ -357,6 +367,9 @@ class Backup(private val c: AppContainer) {
             listOf("recap", "milestones", "rewind").forEach { put(it, BackupPart.HISTORY) }
             // Which install this is (RestoredInstall): restoring one's own backup elsewhere mustn't look like Android's.
             put(RestoredInstall.PREFS, null)
+            // 1.8.7.6: which asks to support Prism were shown go with the settings (as the switch does), so a restored
+            // phone doesn't ask again.
+            put(com.prism.music.ui.support.SupportMarks.PREFS, BackupPart.SETTINGS)
         }
 
         /** Folders (and files) right under files/ by part; anything else counts as Settings. */
@@ -378,6 +391,9 @@ class Backup(private val c: AppContainer) {
             // The playback diagnostics and crash logs name songs and the account's state; Canvas clips and their index
             // are a cache of videos, fetched again.
             listOf("diagnostics", "crashes", "canvas_clips", "canvas_index.json").forEach { put(it, null) }
+            // 1.8.7 §3.2: the music videos' songs as YouTube and Prism's matches paired them, learned again when missing.
+            // (The listener's picks go with the Library, download stand-ins with the Downloads, in their own files.)
+            put(com.prism.music.data.meta.PlaysAs.DIR, null)
         }
 
         internal fun prefsPart(name: String): BackupPart? = if (name in PREFS_PARTS) PREFS_PARTS[name] else BackupPart.SETTINGS
@@ -405,6 +421,11 @@ class Backup(private val c: AppContainer) {
                 if (BackupPart.HISTORY in parts && BackupPart.LIBRARY !in parts) TagStore.readFrom(File(data, "databases/$DB"))?.let { mine ->
                     File(files, "library").mkdirs()
                     File(files, "library/" + TagStore.PENDING).writeText(InnerTube.json.encodeToString(TagsFile.serializer(), mine))
+                }
+                // So are the playlists' transitions (1.8.8): the same, so this phone's stay with its playlists.
+                if (BackupPart.HISTORY in parts && BackupPart.LIBRARY !in parts) TransitionStore.readFrom(File(data, "databases/$DB"))?.let { mine ->
+                    File(files, "library").mkdirs()
+                    File(files, "library/" + TransitionStore.PENDING).writeText(TransitionStore.exportJson(mine))
                 }
                 // Out with what the backup replaces.
                 File(data, "databases").listFiles()?.forEach {

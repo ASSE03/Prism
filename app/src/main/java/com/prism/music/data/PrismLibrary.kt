@@ -162,7 +162,13 @@ class PrismLibrary(private val dir: File) {
 
     fun rename(id: String, title: String, description: String) = edit(id) { it.copy(title = title.trim().ifBlank { it.title }, description = description.trim()) }
 
-    fun delete(id: String) = change { it.copy(lists = it.lists.filterNot { l -> l.id == id }) }
+    fun delete(id: String) {
+        change { it.copy(lists = it.lists.filterNot { l -> l.id == id }) }
+        onDeleted(id)
+    }
+
+    /** A playlist of Prism's own was deleted (1.8.8: its saved transitions go with it, [TransitionStore.forgetPlaylist]). */
+    @Volatile var onDeleted: (String) -> Unit = {}
 
     /** Adds the songs not in it yet, at the end; how many were added. */
     fun add(id: String, songs: List<Song>): Int {

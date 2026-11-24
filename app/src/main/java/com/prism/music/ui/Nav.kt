@@ -34,6 +34,10 @@ object Routes {
     const val LOGIN_ADD = "login_add"
     /** Signs in to Discord for "Listening to Prism" on the listener's profile. */
     const val DISCORD_LOGIN = "discord_login"
+    /** "Before you sign in" to Spotify (1.8.7.5): what the unsanctioned sign-in means, then [SPOTIFY_LOGIN]. */
+    const val SPOTIFY_BEFORE = "spotify_before"
+    /** Spotify's own sign-in page (read-only session). */
+    const val SPOTIFY_LOGIN = "spotify_login"
     const val DOWNLOADS = "downloads"
     const val LOCAL = "local"
     const val MOODS = "moods"
@@ -67,6 +71,12 @@ object Routes {
     const val RECOGNIZED = "recognized"
     /** Every shared component of the 1.7 redesign (debug builds, from Settings → About). */
     const val DESIGN_GALLERY = "design_gallery"
+    /** 1.8.7.6: the people who supported Prism (from Settings → Backup & about → About). */
+    const val SUPPORTERS = "supporters"
+    /** 1.8.8: the Guide, every tour card by topic (from Settings → Backup & about, and What's new's "more things"). */
+    const val GUIDE = "guide"
+    /** One of the Guide's topics ([com.prism.music.ui.tour.TourTopic], by its name in lower case). */
+    fun guideTopic(topic: String) = "guide/$topic"
     /** One of Prism's own mixes (Daily Mix 1, the time-of-day mix, Release Radar). */
     fun mix(id: String) = "mix/${Uri.encode(id)}"
     fun podcast(id: String) = "podcast/${Uri.encode(id)}"
@@ -89,6 +99,20 @@ object Routes {
         "browse/${Uri.encode(id)}?params=${Uri.encode(params ?: "")}&title=${Uri.encode(title)}"
 }
 
+// Android's (ICU) regex wants the closing brace escaped too.
+private val ROUTE_ARGUMENT = Regex("\\{([^\\}]+)\\}")
+private val EMPTY_QUERY = Regex("[?&][^=&?]+=(?=&|$)")
+
+/** Without empty query arguments ("settings/about?find=" is "settings/about"). */
+internal fun normalizedRoute(route: String) = route.replace(EMPTY_QUERY, "").replace("?&", "?").removeSuffix("?")
+
+/**
+ * A destination's [pattern] filled in with its arguments ([arg] by name, null for none), as the route that opened it:
+ * "settings/{section}?find={find}" for Looks is "settings/looks". The coach's steps read the page this way (1.8.8).
+ */
+fun filledRoute(pattern: String, arg: (String) -> String?): String =
+    normalizedRoute(ROUTE_ARGUMENT.replace(pattern) { m -> arg(m.groupValues[1])?.let(Uri::encode) ?: "" })
+
 /** Everything a screen needs to move around the app. */
 class Navigator(val nav: NavController, val openPlayer: () -> Unit, private val playMix: (PlaylistItem) -> Unit = {}) {
     /**
@@ -105,22 +129,12 @@ class Navigator(val nav: NavController, val openPlayer: () -> Unit, private val 
     private fun currentRoute(): String? {
         val e = nav.currentBackStackEntry ?: return null
         val pattern = e.destination.route ?: return null
-        // Android's (ICU) regex wants the closing brace escaped too.
-        val filled = ARGUMENT.replace(pattern) { m ->
-            @Suppress("DEPRECATION")
-            e.arguments?.get(m.groupValues[1])?.toString()?.let(Uri::encode) ?: ""
-        }
-        return normalized(filled)
+        @Suppress("DEPRECATION")
+        return filledRoute(pattern) { e.arguments?.get(it)?.toString() }
     }
     fun back() = nav.popBackStack()
 
-    /** Without empty query arguments ("settings/about?find=" is "settings/about"). */
-    private fun normalized(route: String) = route.replace(EMPTY_QUERY, "").replace("?&", "?").removeSuffix("?")
-
-    private companion object {
-        val ARGUMENT = Regex("\\{([^\\}]+)\\}")
-        val EMPTY_QUERY = Regex("[?&][^=&?]+=(?=&|$)")
-    }
+    private fun normalized(route: String) = normalizedRoute(route)
 
     fun open(item: BrowseItem, onSong: (SongItem) -> Unit) {
         when (item) {

@@ -112,10 +112,10 @@ class CustomizeSheetTest : TextTabsPageHarness(SettingsPageId.TABS_MINI_PLAYER) 
     @Test fun thePlayersSheetDrawsThePlayerPagesAndTheLyricsRows() {
         open(CustomizeTarget.PLAYER)
         assertKitRowsOnly(CustomizeTarget.PLAYER)
-        assertEquals(listOf("Layout", "Progress bar and times", "Cover", "On it", "Visualizer", "Lyrics"), groups().map { it.title })
+        assertEquals(listOf("Layout and controls", "Progress bar and times", "Cover", "On the player", "Visualizer", "Lyrics"), groups().map { it.title })
         // The merged controls of the page, not the old switches.
         val names = rowNames()
-        assertTrue(names.toString(), "Cover › Edge to edge" in names && "Cover › Cover animation" in names)
+        assertTrue(names.toString(), "Cover › Reaches the screen's edges" in names && "Cover › Cover animation" in names)
         assertTrue(names.toString(), names.none { it.endsWith("Edge-to-edge cover") || it.endsWith("Cover flies into place") })
         chip("Cover", "Cover size", "Large")
         stored("cover_size") { stored.coverSize == CoverSize.LARGE }
@@ -128,7 +128,7 @@ class CustomizeSheetTest : TextTabsPageHarness(SettingsPageId.TABS_MINI_PLAYER) 
     }
 
     @Test fun aHomeSectionsSheetDrawsItsOwnRowsAndThePagesRows() {
-        val section = stored.homeLayout.first()
+        val section = stored.home.layout.first()
         open(CustomizeTarget.HOME_SECTION, section.key)
         // The sheet is named after the section.
         assertKitRowsOnly(CustomizeTarget.HOME_SECTION, section.title)
@@ -137,7 +137,7 @@ class CustomizeSheetTest : TextTabsPageHarness(SettingsPageId.TABS_MINI_PLAYER) 
         assertEquals(SettingsTags.ROW_LINK, typeOf(rowNode("This section", "Hide this section")))
         val other = SectionStyle.entries.first { it != section.style }
         pick("This section", "Style", other.label)
-        stored("home_layout: style") { stored.homeLayout.first { it.key == section.key }.style == other }
+        stored("home_layout: style") { stored.home.layout.first { it.key == section.key }.style == other }
         chip("Pages", "Spacing", "Compact")
         stored("ui_density") { stored.uiDensity == UiDensity.COMPACT }
         tap("Shapes", "Square video covers")
@@ -153,21 +153,21 @@ class CustomizeSheetTest : TextTabsPageHarness(SettingsPageId.TABS_MINI_PLAYER) 
         val pin = com.prism.music.data.prefs.HomeSectionConfig(
             com.prism.music.data.prefs.HomeSections.pinKey("album", "MPREb_test"), "Pinned album", style = SectionStyle.LIST, name = "My album", tile = true,
         )
-        container.settings.setHomeLayout(stored.homeLayout + pin)
-        stored("pinned") { stored.homeLayout.any { it.key == pin.key } }
+        container.settings.setHomeLayout(stored.home.layout + pin)
+        stored("pinned") { stored.home.layout.any { it.key == pin.key } }
         open(CustomizeTarget.HOME_SECTION, pin.key)
         assertKitRowsOnly(CustomizeTarget.HOME_SECTION, "My album")
         assertEquals(tr(R.string.one_tile), valueOf(rowNode("This section", "Style")))
         val other = SectionStyle.entries.first { it != SectionStyle.LIST }
         pick("This section", "Style", other.label)
-        stored("home_layout: style, no tile") { stored.homeLayout.first { it.key == pin.key }.let { it.style == other && !it.tile } }
+        stored("home_layout: style, no tile") { stored.home.layout.first { it.key == pin.key }.let { it.style == other && !it.tile } }
         assertEquals(other.label, valueOf(rowNode("This section", "Style")))
 
         // The style it had under the tile, picked again, shows it in that style too.
-        container.settings.setHomeLayout(stored.homeLayout.map { if (it.key == pin.key) it.copy(style = SectionStyle.LIST, tile = true) else it })
-        stored("a tile again") { stored.homeLayout.first { it.key == pin.key }.tile }
+        container.settings.setHomeLayout(stored.home.layout.map { if (it.key == pin.key) it.copy(style = SectionStyle.LIST, tile = true) else it })
+        stored("a tile again") { stored.home.layout.first { it.key == pin.key }.tile }
         pick("This section", "Style", SectionStyle.LIST.label)
-        stored("home_layout: no tile") { stored.homeLayout.first { it.key == pin.key }.let { it.style == SectionStyle.LIST && !it.tile } }
+        stored("home_layout: no tile") { stored.home.layout.first { it.key == pin.key }.let { it.style == SectionStyle.LIST && !it.tile } }
     }
 
     /** Without a section's key (the target alone) the sheet still draws the pages' rows. */

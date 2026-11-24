@@ -77,7 +77,7 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
     val onOff: (Boolean) -> String = { ListeningResets.onOff(it) }
 
     // What differs from how Prism comes, for the rows' dots and for Reset this page (top to bottom, as the page).
-    val continueChanged = reset.add(tr(R.string.continue_line), s.homeContinue, d.homeContinue, onOff) { prefs.setHomeContinue(it) }
+    val continueChanged = reset.add(tr(R.string.continue_line), s.home.continueLine, d.home.continueLine, onOff) { prefs.setHomeContinue(it) }
     val recentChanged = reset.add(tr(R.string.recently_played_shows), s.behavior.recentShows, d.behavior.recentShows, { it.label }) { prefs.setRecentShows(it) }
     val topButtons = HomeChoices.topButtons(s)
     val topButtonsChanged = reset.add(tr(R.string.buttons_at_the_top_of_home), topButtons, HomeChoices.topButtons(d), { it.label }) { HomeChoices.setTopButtons(prefs, it) }
@@ -87,33 +87,35 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
         prefs.setSearchSections(sections); prefs.setSearchChips(chips)
     }
     val look = replayCardStyle(s)
-    val lookChanged = reset.add(tr(R.string.look), look, replayCardStyle(d), { it.label }) { prefs.setReplayCard(it.name) }
+    val lookChanged = reset.add(tr(R.string.hl_card_style), look, replayCardStyle(d), { it.label }) { prefs.setReplayCard(it.name) }
     val graphChanged = reset.add(tr(R.string.replay_card_graph), s.view.replayGraph, d.view.replayGraph, { it.label }) { prefs.setReplayGraph(it) }
-    val tilesDefault = d.libraryTiles to d.libraryPlaylistsFirst
-    val tilesChanged = reset.add(tr(R.string.library_tiles), s.libraryTiles to s.libraryPlaylistsFirst, tilesDefault, asPrismComes(tilesDefault)) { (tiles, first) ->
+    val tilesDefault = d.library.tiles to d.library.playlistsFirst
+    val tilesChanged = reset.add(tr(R.string.library_tiles), s.library.tiles to s.library.playlistsFirst, tilesDefault, asPrismComes(tilesDefault)) { (tiles, first) ->
         prefs.setLibraryTiles(tiles); prefs.setLibraryPlaylistsFirst(first)
     }
-    val views = libraryViewsToMerged(s.libraryViews, s.libraryView)
+    val views = libraryViewsToMerged(s.library.views, s.library.view)
     // Back to one view for every tab: Prism's (the tabs' own go, and what they fall back on is put back).
-    val viewChanged = reset.add(tr(R.string.hl_view), views, libraryViewsToMerged(d.libraryViews, d.libraryView), ::libraryViewsText) { prefs.setLibraryView(d.libraryView) }
-    val columnsChanged = reset.add(tr(R.string.covers_across), s.libraryColumns, d.libraryColumns, { it.label }) { prefs.setLibraryColumns(it) }
-    val detailsChanged = reset.add(tr(R.string.details_under_each_one), s.librarySubtitles, d.librarySubtitles, onOff) { prefs.setLibrarySubtitles(it) }
+    val viewChanged = reset.add(tr(R.string.hl_view), views, libraryViewsToMerged(d.library.views, d.library.view), ::libraryViewsText) { prefs.setLibraryView(d.library.view) }
+    val columnsChanged = reset.add(tr(R.string.covers_across), s.library.columns, d.library.columns, { it.label }) { prefs.setLibraryColumns(it) }
+    val detailsChanged = reset.add(tr(R.string.details_under_each_one), s.library.subtitles, d.library.subtitles, onOff) { prefs.setLibrarySubtitles(it) }
     val tabs = libraryTabs
     // "LOCAL" (On this phone) was a tab before Local files got its own page: Playlists stands in for it.
-    val startTab = s.libraryStartTab.takeIf { k -> tabs.any { it.first == k } } ?: "PLAYLISTS"
+    val startTab = s.library.startTab.takeIf { k -> tabs.any { it.first == k } } ?: "PLAYLISTS"
     val tabName: (String) -> String = { k -> tabs.firstOrNull { it.first == k }?.second ?: k }
-    val startTabChanged = reset.add(tr(R.string.open_library_on), startTab, d.libraryStartTab, tabName) { prefs.setLibraryStartTab(it) }
+    val startTabChanged = reset.add(tr(R.string.open_library_on), startTab, d.library.startTab, tabName) { prefs.setLibraryStartTab(it) }
     val songAndVideoChanged = reset.add(tr(R.string.a_song_and_its_video_as), s.mergeLikedVideos, d.mergeLikedVideos, onOff) { prefs.setMergeLikedVideos(it) }
-    val showTitle = tr(R.string.show)
+    // 1.8.7.5: the two rows of show-chips no longer share the name "Show".
+    val listsShowTitle = tr(R.string.hl_show_in_lists)
+    val artistShowTitle = tr(R.string.hl_show_on_artist_pages)
     val listsShow = listsShowToMerged(s.behavior.playlistGenres, s.view.downloadsAlbums)
-    val listsShowChanged = reset.add("$showTitle (${HlGroups.lists})", listsShow, listsShowToMerged(d.behavior.playlistGenres, d.view.downloadsAlbums), { shownWords(it.map(::listsShowLabel)) }) {
+    val listsShowChanged = reset.add("$listsShowTitle (${HlGroups.lists})", listsShow, listsShowToMerged(d.behavior.playlistGenres, d.view.downloadsAlbums), { shownWords(it.map(::listsShowLabel)) }) {
         listsShowToStored(it).let { (genres, albumNames) -> prefs.setPlaylistGenres(genres); prefs.setDownloadsAlbums(albumNames) }
     }
     val fullWidthChanged = reset.add(tr(R.string.hl_full_width_pictures), s.fullWidthPictures, d.fullWidthPictures, { it.label }) { prefs.setFullWidthPictures(it) }
     val locateChanged = reset.add(tr(R.string.hl_locate_button), s.behavior.locatePlaying, d.behavior.locatePlaying, onOff) { prefs.setLocatePlaying(it) }
     val artistShow = artistShowToMerged(s.behavior.artistYou, s.behavior.artistEssentials, s.behavior.artistBio)
     val artistDefault = artistShowToMerged(d.behavior.artistYou, d.behavior.artistEssentials, d.behavior.artistBio)
-    val artistShowChanged = reset.add("$showTitle (${HlGroups.artistPages})", artistShow, artistDefault, { shownWords(it.map(::artistShowLabel)) }) {
+    val artistShowChanged = reset.add("$artistShowTitle (${HlGroups.artistPages})", artistShow, artistDefault, { shownWords(it.map(::artistShowLabel)) }) {
         artistShowToStored(it).let { (you, essentials, bio) -> prefs.setArtistYou(you); prefs.setArtistEssentials(essentials); prefs.setArtistBio(bio) }
     }
 
@@ -125,7 +127,7 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
         group(HlGroups.home) {
             // Sections, the top of Home, the shortcut tiles and Home's options: a screen of its own (plan §2.6).
             LinkRow(tr(R.string.customize_home), value = tr(R.string.sections_the_top_of_home_shortcuts), icon = PrismIcons.Customize) { nav.go(Routes.CATALOGUE) }
-            SwitchRow(tr(R.string.continue_line), s.homeContinue, info = tr(R.string.the_album_you_were_last_playing), changed = continueChanged) { prefs.setHomeContinue(it) }
+            SwitchRow(tr(R.string.continue_line), s.home.continueLine, info = tr(R.string.the_album_you_were_last_playing), changed = continueChanged) { prefs.setHomeContinue(it) }
             ChoiceRow(
                 tr(R.string.recently_played_shows), RecentShows.entries, s.behavior.recentShows, { it.label },
                 info = tr(R.string.every_song_you_played_or_the), changed = recentChanged,
@@ -146,7 +148,7 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
         // Not "Replay card" for the row too: a group and a row never share a name.
         group(HlGroups.replayCard) {
             PickCardsRow(
-                tr(R.string.look), ReplayCardStyle.entries, look, { it.label },
+                tr(R.string.hl_card_style), ReplayCardStyle.entries, look, { it.label },
                 info = tr(R.string.how_replay_looks_on_home_from, look.label, look.note), changed = lookChanged,
                 onPick = { prefs.setReplayCard(it.name) },
             ) { ReplayCardPreview(it) }
@@ -158,13 +160,13 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
         }
         group(HlGroups.library) {
             // The sheet Library's own Edit button opens: which tiles show, their order, and where the playlists go.
-            LinkRow(tr(R.string.library_tiles), value = tr(R.string.hl_shown_of, s.libraryTiles.size, offered.size), changed = tilesChanged) { editingTiles = true }
+            LinkRow(tr(R.string.library_tiles), value = tr(R.string.hl_shown_of, s.library.tiles.size, offered.size), changed = tilesChanged) { editingTiles = true }
             LibraryViewRow(views, viewChanged)
             ChoiceRow(
-                tr(R.string.covers_across), LibraryColumns.entries, s.libraryColumns, { it.label },
+                tr(R.string.covers_across), LibraryColumns.entries, s.library.columns, { it.label },
                 info = tr(R.string.in_the_grid_auto_fits_as), changed = columnsChanged,
             ) { prefs.setLibraryColumns(it) }
-            SwitchRow(tr(R.string.details_under_each_one), s.librarySubtitles, info = tr(R.string.song_counts_owners_and_years), changed = detailsChanged) { prefs.setLibrarySubtitles(it) }
+            SwitchRow(tr(R.string.details_under_each_one), s.library.subtitles, info = tr(R.string.song_counts_owners_and_years), changed = detailsChanged) { prefs.setLibrarySubtitles(it) }
             PickListRow(tr(R.string.open_library_on), tabs.map { it.first }, startTab, tabName, changed = startTabChanged, searchable = false) { prefs.setLibraryStartTab(it) }
             // From Recommendations (plan §2.11): it is about what Liked songs lists.
             SwitchRow(
@@ -175,7 +177,7 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
         group(HlGroups.lists) {
             // Two switches as chips (plan §2.6); each is also in its list's sort menu.
             ShowChipsRow(
-                showTitle,
+                listsShowTitle,
                 listOf(
                     ShowOption(listsShowLabel(ListsShow.GENRES), ListsShow.GENRES in listsShow) { prefs.setPlaylistGenres(it) },
                     ShowOption(listsShowLabel(ListsShow.ALBUM_NAMES), ListsShow.ALBUM_NAMES in listsShow) { prefs.setDownloadsAlbums(it) },
@@ -193,7 +195,7 @@ fun HomeLibraryPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
         // What artist pages show (their colors are Theme & colors' "Page colors").
         group(HlGroups.artistPages) {
             ShowChipsRow(
-                showTitle,
+                artistShowTitle,
                 listOf(
                     ShowOption(artistShowLabel(ArtistShow.YOU), ArtistShow.YOU in artistShow) { prefs.setArtistYou(it) },
                     ShowOption(artistShowLabel(ArtistShow.ESSENTIALS), ArtistShow.ESSENTIALS in artistShow) { prefs.setArtistEssentials(it) },
@@ -305,7 +307,7 @@ fun fullWidthToStored(v: FullWidthPictures): Pair<Boolean, Boolean> = (v != Full
 
 /** The root's line for Home & Library: how Library shows ("Library: List", "Library: Grid and list"). */
 fun homeLibraryValue(s: AppSettings, dark: Boolean): String {
-    val v = libraryViewsToMerged(s.libraryViews, s.libraryView)
+    val v = libraryViewsToMerged(s.library.views, s.library.view)
     return tr(R.string.hl_root_library, if (v.playlists == v.albums && v.albums == v.artists) v.playlists.label else tr(R.string.hl_view_mixed))
 }
 
@@ -338,9 +340,9 @@ val homeLibraryIndex: List<SettingEntry> by lazy {
     val options = tr(R.string.options)
     fun onHome(group: String, title: String, keywords: String = "", needs: Needs? = null) =
         SettingEntry(page, group, title, keywords, needs = needs, route = customizeHomeRoute(group), routeTitle = customizeHome)
-    val withGreeting = Needs(tr(R.string.turn_off) + " · " + HomeHeader.NONE.label) { it.homeHeader != HomeHeader.NONE }
-    val withPicture = Needs(top + " · " + HomeHeader.PICTURE.label) { it.homeHeader == HomeHeader.PICTURE || it.homeHeader == HomeHeader.NOW_PLAYING }
-    val onlyPicture = Needs(top + " · " + HomeHeader.PICTURE.label) { it.homeHeader == HomeHeader.PICTURE }
+    val withGreeting = Needs(tr(R.string.turn_off) + " · " + HomeHeader.NONE.label) { it.home.header != HomeHeader.NONE }
+    val withPicture = Needs(top + " · " + HomeHeader.PICTURE.label) { it.home.header == HomeHeader.PICTURE || it.home.header == HomeHeader.NOW_PLAYING }
+    val onlyPicture = Needs(top + " · " + HomeHeader.PICTURE.label) { it.home.header == HomeHeader.PICTURE }
     val notYouTubeOnly = Needs(tr(R.string.turn_off) + " · " + tr(R.string.speed_dial_youtube_music_s_only)) { !it.speedDialYouTubeOnly }
     listOf(
         // Home
@@ -353,7 +355,7 @@ val homeLibraryIndex: List<SettingEntry> by lazy {
         SettingEntry(page, g.search, tr(R.string.open_the_keyboard), tr(R.string.search_typing)),
         SettingEntry(page, g.search, tr(R.string.arrange_search), words(R.string.hl_arrange_search_keywords, R.string.search_chips)),
         // Replay card
-        SettingEntry(page, g.replayCard, tr(R.string.look), tr(R.string.replay_teaser_look_style_design_quiet), shown = g.replayCard),
+        SettingEntry(page, g.replayCard, tr(R.string.hl_card_style),tr(R.string.replay_teaser_look_style_design_quiet), shown = g.replayCard),
         SettingEntry(page, g.replayCard, tr(R.string.replay_card_graph), tr(R.string.replay_card_graph_keywords)),
         // Library
         SettingEntry(page, g.library, tr(R.string.library_tiles), words(R.string.liked_downloads_local_files_replay_podcasts, R.string.where_your_playlists_go, R.string.playlists_first, R.string.tiles_first)),

@@ -163,6 +163,8 @@ private fun RowFrame(
     dot: Boolean = changed,
     /** A row with controls under its title line is as tall as they make it. */
     stacked: Boolean = false,
+    /** The title's color: the accent for a row that acts at once ([LinkRow]'s `action`), else the page's ink. */
+    accentTitle: Boolean = false,
     trailing: (@Composable RowScope.() -> Unit)? = null,
     below: (@Composable ColumnScope.() -> Unit)? = null,
 ) {
@@ -181,7 +183,7 @@ private fun RowFrame(
             Column(Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     // No line limit: at large text the title wraps and the row grows.
-                    Text(title, Modifier.weight(1f, fill = false), style = MaterialTheme.typography.titleMedium, color = scheme.onSurface)
+                    Text(title, Modifier.weight(1f, fill = false), style = MaterialTheme.typography.titleMedium, color = if (accentTitle) scheme.primary else scheme.onSurface)
                     if (dot && value == null) ChangedDot()
                     if (info != null) InfoMark(open, title) { open = !open }
                 }
@@ -199,7 +201,8 @@ private fun RowFrame(
 
 /**
  * Row type 1, **Switch**: on or off; the whole row is the switch. [value] is an optional line under the title (the
- * state in words where on/off alone doesn't say it).
+ * state in words where on/off alone doesn't say it). [icon]: a small mark before the title (1.8.7.6: the heart beside
+ * "I've supported Prism" while it is on).
  */
 @Composable
 fun SwitchRow(
@@ -210,11 +213,12 @@ fun SwitchRow(
     info: String? = null,
     changed: Boolean = false,
     enabled: Boolean = true,
+    icon: ImageVector? = null,
     onChange: (Boolean) -> Unit,
 ) {
     RowFrame(
         SettingsTags.ROW_SWITCH, title, value, value.orEmpty(), info, changed, enabled, modifier,
-        interaction = Modifier.toggleable(checked, enabled = enabled, role = Role.Switch, onValueChange = onChange),
+        interaction = Modifier.toggleable(checked, enabled = enabled, role = Role.Switch, onValueChange = onChange), icon = icon,
         trailing = { PrismSwitch(checked, null, enabled = enabled) },
     )
 }
@@ -233,11 +237,13 @@ fun PickRow(
     changed: Boolean = false,
     enabled: Boolean = true,
     thumbnail: (@Composable () -> Unit)? = null,
+    /** False where the [thumbnail] says it all (a color's swatch): no value line, though TalkBack still reads [value]. */
+    showValue: Boolean = true,
     onClick: () -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
     RowFrame(
-        SettingsTags.ROW_PICK, title, value, value, info, changed, enabled, modifier,
+        SettingsTags.ROW_PICK, title, if (showValue) value else null, value, info, changed, enabled, modifier,
         interaction = Modifier.clickable(enabled = enabled, role = Role.Button, onClick = onClick),
         trailing = {
             if (thumbnail != null) {
@@ -291,7 +297,11 @@ fun SliderRow(
         },
         below = {
             PrismSlider(
-                v, { v = it; dragging = true }, Modifier.padding(start = 16.dp, end = 16.dp, bottom = 6.dp), enabled = enabled,
+                v, { v = it; dragging = true },
+                // TalkBack reads the row's name and its value as the row writes it ("Overlap, 8 s"), not a bare
+                // percentage (1.8.8 check).
+                Modifier.padding(start = 16.dp, end = 16.dp, bottom = 6.dp).semantics { contentDescription = title; stateDescription = shown },
+                enabled = enabled,
                 valueRange = range, steps = steps, onValueChangeFinished = { dragging = false; onSave(v); saves++ },
             )
         },
@@ -384,10 +394,11 @@ fun ShowChipsRow(
     tickHides: Boolean = false,
 ) {
     val shown = options.filter { it.on }
-    // With nothing ticked the row says so ("None"), on a value line of its own: an empty value says nothing.
+    // With nothing ticked the row's value is "None" (for TalkBack and tests), but no line says it: the chips under the
+    // title already show that none is on, and "None" above them read like one more setting.
     val none = if (shown.isEmpty()) tr(R.string.none) else null
     RowFrame(
-        SettingsTags.ROW_CHOICE, title, none, none ?: shown.joinToString(" · ") { it.label }, info, changed, true, modifier, stacked = true,
+        SettingsTags.ROW_CHOICE, title, null, none ?: shown.joinToString(" · ") { it.label }, info, changed, true, modifier, stacked = true,
         below = {
             val on = tr(if (tickHides) R.string.hidden else R.string.shown)
             val off = tr(if (tickHides) R.string.shown else R.string.hidden)
@@ -409,7 +420,7 @@ fun ShowChipsRow(
  * carry an [icon]. [value]: an optional line under the title (the screen's state in words).
  *
  * [action]: the row does something here and now and opens nothing ("Back up now", "Clear the cache"): a button, with
- * no chevron (and no "opens outside" mark) after it.
+ * no chevron (and no "opens outside" mark) after it, its title in the accent color so it reads as tappable.
  */
 @Composable
 fun LinkRow(
@@ -430,6 +441,6 @@ fun LinkRow(
     RowFrame(
         SettingsTags.ROW_LINK, title, value, value.orEmpty(), info, changed, enabled, modifier,
         interaction = Modifier.clickable(enabled = enabled, role = Role.Button, onClick = onClick), icon = icon,
-        trailing = mark,
+        accentTitle = action, trailing = mark,
     )
 }

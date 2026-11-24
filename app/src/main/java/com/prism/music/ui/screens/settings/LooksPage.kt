@@ -174,7 +174,8 @@ fun LooksPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = true,
         seasonLook?.let { look -> item("season") { SeasonCard(look) { apply(look) } } }
 
         group(tr(R.string.prism_s_looks)) {
-            LookGrid(BuiltInLooks.all.filter { Seasons.shown(it.id, today) || it.id == current }, current, onPick = { apply(it) }, onMore = { acting = it })
+            // The season's Look has its own card above while it shows: not again in the grid, unless it's the one in use.
+            LookGrid(BuiltInLooks.all.filter { (Seasons.shown(it.id, today) && it.id != seasonLook?.id) || it.id == current }, current, onPick = { apply(it) }, onMore = { acting = it })
         }
         group(tr(R.string.your_looks)) {
             if (mine.isEmpty()) StateLine(tr(R.string.looks_you_save_show_here_save))

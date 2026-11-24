@@ -144,7 +144,11 @@ fun PodcastsScreen(bottomPadding: Dp) {
                     }
                     if (f.episodes.isNotEmpty()) {
                         item(key = "found-eps-h") { SectionHeader(tr(R.string.episodes)) }
-                        items(f.episodes.take(30), key = { "fe:" + it.id }) { song ->
+                        // YouTube's search can list an episode twice: each row a key of its own (#330's kind).
+                        val eps = f.episodes.take(30)
+                        val keys = com.prism.music.ui.components.rowKeys(eps) { "fe:" + it.id }
+                        items(eps.size, key = { keys[it] }) { i ->
+                            val song = eps[i]
                             EpisodeRow(Episode(song, date = null, description = null), showShow = true) { playEpisode(c, song, tr(R.string.podcast_search)) }
                         }
                     }
@@ -175,7 +179,11 @@ fun PodcastsScreen(bottomPadding: Dp) {
                 }
                 if (home.saved.isNotEmpty()) {
                     item(key = "saved-h") { SectionHeader(tr(R.string.episodes_for_later), onMore = { nav.go(Routes.playlist("SE")) }) }
-                    items(home.saved.take(5), key = { "sv:" + it.id }) { song ->
+                    // A playlist ("SE") can hold an episode twice.
+                    val later = home.saved.take(5)
+                    val keys = com.prism.music.ui.components.rowKeys(later) { "sv:" + it.id }
+                    items(later.size, key = { keys[it] }) { i ->
+                        val song = later[i]
                         EpisodeRow(Episode(song, date = null, description = null), showShow = true) { playEpisode(c, song, tr(R.string.episodes_for_later)) }
                     }
                 }

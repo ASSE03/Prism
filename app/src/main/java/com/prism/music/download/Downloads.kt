@@ -86,7 +86,14 @@ private fun partSongId(id: String) = id.substringAfter(':')
  * not as the album track.
  */
 internal fun downloadsAsSong(song: Song, s: com.prism.music.data.prefs.AppSettings): Boolean =
-    song.isVideo && !song.isUpload && !song.isLive && !song.isEpisode && s.radioSongsOnly && s.songsEverywhere
+    song.isVideo && !song.isUpload && !song.isLive && !song.isEpisode && swapsVideos(s)
+
+/** The download stand-ins as kept since 1.8.1 (#315, "download_standins"): video id -> the song id it came down as. */
+internal fun readStandIns(prefs: android.content.SharedPreferences): Map<String, String> =
+    prefs.all.mapNotNull { (k, v) -> (v as? String)?.let { k to it } }.toMap()
+
+/** "Songs, not videos: Everywhere" (#80): a music video in any list plays, and downloads, as its song. */
+fun swapsVideos(s: com.prism.music.data.prefs.AppSettings): Boolean = s.radioSongsOnly && s.songsEverywhere
 
 @OptIn(UnstableApi::class)
 class DownloadRepository(private val context: Context, private val c: AppContainer, scope: CoroutineScope) {
@@ -115,7 +122,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
      * playlist's video row shows its song's download (#315: those rows read "not downloaded" whatever was saved).
      */
     private val standInPrefs = context.getSharedPreferences("download_standins", Context.MODE_PRIVATE)
-    private val _standIns = MutableStateFlow(standInPrefs.all.mapNotNull { (k, v) -> (v as? String)?.let { k to it } }.toMap())
+    private val _standIns = MutableStateFlow(readStandIns(standInPrefs))
 
     private fun standIn(videoId: String, songId: String) {
         if (videoId == songId || _standIns.value[videoId] == songId) return
@@ -124,12 +131,20 @@ class DownloadRepository(private val context: Context, private val c: AppContain
         publish()
     }
 
-    /** The id a download is kept under: a music video downloaded as its song is kept under the song's. */
-    private fun keptAs(id: String): String = if (id in _media.value || id in _lossless.value) id else _standIns.value[id] ?: id
+    /**
+     * The id a download is kept under: a music video downloaded as its song is kept under the song's, and so (1.8.7
+     * §3.2) is one whose song is known while videos play as their songs: the same rows the downloaded mark goes by.
+     */
+    private fun keptAs(id: String): String = if (id in _media.value || id in _lossless.value) id else rowsKeptAs()[id] ?: id
+
+    /** Row id -> the song id its download is kept under ([com.prism.music.data.meta.PlaysAsRules.keptAs]). */
+    private fun rowsKeptAs(): Map<String, String> = c.downloadStandIns.value
 
     private fun publish() {
         _downloads.value = _lossless.value + _media.value
-        c.downloadStandIns.value = _standIns.value
+        // The stand-ins are one of PlaysAs' sources; what rows are kept as comes back from it.
+        c.plays.setDownloaded(_standIns.value) { id -> _downloads.value[id]?.song }
+        c.downloadStandIns.value = c.plays.keptAs(swapsVideos(c.settings.current))
         c.downloadState.value = _downloads.value
         c.smartPickBytes = _smartIds.value.sumOf { _media.value[it]?.bytes ?: 0L }
     }
@@ -264,6 +279,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
                     Download.STATE_FAILED -> {
                         noteFailure(download.request.id, DownloadFailures.describe(finalException))
                         android.util.Log.w("PrismDownload", "failed ${download.request.id}", finalException)
+                        soundOfVideoInstead(download, finalException)
                     }
                     Download.STATE_COMPLETED -> noteFailure(download.request.id, null)
                 }
@@ -293,6 +309,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
                 applyRequirements()
                 noteFailure(download.request.id, null)
                 c.forgetDownloadFormat(download.request.id)
+                c.setDownloadSound(download.request.id, null)
                 c.canvasStore.forgetDownloads(listOf(download.request.id))
                 // 1.8.6: its loop from the music video goes back to the recent ones.
                 c.canvasAhead.forgetDownloads(listOf(download.request.id))
@@ -456,8 +473,38 @@ class DownloadRepository(private val context: Context, private val c: AppContain
         manager.currentDownloads.filter { it.state != Download.STATE_COMPLETED }.forEach { manager.removeDownload(it.request.id) }
     }
 
-    /** The YouTube id a download's bytes come from (a video part's is its video's). */
-    private fun streamOf(d: Download): String? = if (isVideoPart(d.request.id)) d.part()?.videoId else d.request.id
+    /** The YouTube id a download's bytes come from (a video part's is its video's, a stand-in's its video's sound). */
+    private fun streamOf(d: Download): String? = if (isVideoPart(d.request.id)) d.part()?.videoId else c.downloadSoundOf(d.request.id) ?: d.request.id
+
+    /**
+     * 1.8.7 (#408): a song download YouTube refused every way (its link turned away through all the retries, or no way
+     * gave one) comes down as its music video's sound, as playback plays it then (#93, Reddit R2): only a video of the
+     * song's length, never for an age-restricted or Premium-only song or a blocked network ([DownloadFallback]). Once per
+     * download; what came of the song's own stream goes first, since another recording's bytes can't join it.
+     */
+    private fun soundOfVideoInstead(d: Download, error: Exception?) {
+        val id = d.request.id
+        if (isVideoPart(id) || error == null) return
+        val song = d.info().song ?: return
+        if (!DownloadFallback.mayTry(song, error, already = c.downloadSoundOf(id) != null)) return
+        c.scope.launch {
+            val video = kotlinx.coroutines.withContext(Dispatchers.IO) {
+                c.queue.counterparts[song.id] ?: runCatching { c.ytm.findMusicVideo(song) }.getOrNull()?.also { c.queue.counterparts[song.id] = it }
+            }?.takeIf { it != song.id }
+            val videoSec = video?.let { v -> kotlinx.coroutines.withContext(Dispatchers.IO) { runCatching { c.streams.durationSec(v, video = true) }.getOrDefault(0L) } } ?: 0L
+            if (video == null || !DownloadFallback.sameLength(song.durationSec.toLong(), videoSec)) {
+                com.prism.music.playback.AudioDiagnostics.log("download", "$id was refused every way; ${if (video == null) "no music video for it" else "its music video $video runs ${videoSec}s, not ${song.durationSec}s"}: not downloaded in its place")
+                return@launch
+            }
+            c.setDownloadSound(id, video)
+            com.prism.music.playback.AudioDiagnostics.log("download", "$id was refused every way: downloading its music video $video's sound in its place")
+            kotlinx.coroutines.withContext(Dispatchers.IO) {
+                runCatching { c.downloadCache.removeResource(id) }
+                c.forgetDownloadFormat(id)
+            }
+            mainHandler.post { runCatching { add(d.request) } }
+        }
+    }
 
 
     /**
@@ -538,7 +585,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
     fun download(song: Song, asIs: Boolean = false) {
         // A file on the phone is already offline. (Episodes from a feed don't download yet.)
         if (song.isLocal || song.isRss) return
-        c.keptPlaylists.forgive(setOf(song.id, keptAs(song.id)) + _standIns.value.filterValues { it == song.id }.keys)
+        c.keptPlaylists.forgive(setOf(song.id, keptAs(song.id)) + rowsKeptAs().filterValues { it == song.id }.keys)
         // A lossless file that was taken out of Downloads just comes back.
         if (c.losslessSync.unhide(song.id)) return
         // (A music video already downloaded as its song counts as downloaded.)
@@ -573,7 +620,7 @@ class DownloadRepository(private val context: Context, private val c: AppContain
     }
 
     /** A list's download: everything on it, but for the songs marked to skip (#221). */
-    fun downloadAll(songs: List<Song>) = PlaylistDownloads.wanted(songs, c.downloadSkips.ids.value, _standIns.value).forEach(::download)
+    fun downloadAll(songs: List<Song>) = PlaylistDownloads.wanted(songs, c.downloadSkips.ids.value, rowsKeptAs()).forEach(::download)
 
     /**
      * Marks a song to skip in lists' downloads, or takes that back (#221). One still to come or failed stops there, so it
@@ -718,9 +765,9 @@ class DownloadRepository(private val context: Context, private val c: AppContain
      */
     private fun saveCanvas(song: Song): Boolean {
         val s = c.settings.current
-        if (!s.canvasEnabled || !s.canvasWithDownloads || song.isLocal || c.canvas.saved.value.has(song.id, null)) return true
+        if (!s.behavior.canvas.enabled || !s.behavior.canvas.withDownloads || song.isLocal || c.canvas.saved.value.has(song.id, null)) return true
         val metered = context.getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered != false
-        if (metered && !s.canvasWithDownloadsCellular) return false
+        if (metered && !s.behavior.canvas.withDownloadsCellular) return false
         c.canvasStore.saveWithDownload(song)
         // 1.8.6: and its loop from the music video, where one is wanted for it (the player's rule).
         c.canvasAhead.keepWithDownload(song)

@@ -66,7 +66,7 @@ class SettingsSpeedTest {
         compose.waitForIdle()
     }
 
-    private val groups = listOf("Layout", "Progress bar", "Title", "Cover", "On it", "Modes")
+    private val groups = listOf("Layout", "Progress bar", "Title", "Cover", "On the player", "Modes")
 
     /** A page of six groups of six rows (about three screens), as the Player page; [composed] counts the times each group is composed anew. */
     @Composable

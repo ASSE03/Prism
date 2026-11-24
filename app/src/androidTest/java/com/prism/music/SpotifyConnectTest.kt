@@ -85,8 +85,10 @@ class SpotifyConnectTest {
         // connected") that opens "How to connect" in a sheet (the guide was the Spotify page of Devices & connections).
         compose.openSettingsPage(SettingsPageId.ACCOUNTS_SHARING)
         val spotifyRow = settingsRow("Spotify")
-        compose.scrollSettingsTo(spotifyRow and hasText("Not connected"))
+        compose.scrollSettingsTo(spotifyRow and hasText("Not connected", substring = true))
         compose.clickWhenFound(spotifyRow)
+        // 1.8.7.5: the row opens the two ways to connect; this test is the developer-app one.
+        compose.clickWhenFound(hasText("Use your own developer app") and hasClickAction())
         compose.waitForText("How to connect")
         compose.waitForText("Create app")
         compose.waitForText("http://127.0.0.1:43827/callback")
@@ -175,7 +177,7 @@ class SpotifyConnectTest {
         assertTrue("the tokens are gone", c.spotify.store.tokens() == null)
         compose.waitUntil(10_000) { spotifyJobs().isEmpty() }
         // Back to the one row that says it isn't connected (the guide is its sheet again).
-        compose.waitUntil(10_000) { compose.onAllNodes(spotifyRow and hasText("Not connected")).fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(10_000) { compose.onAllNodes(spotifyRow and hasText("Not connected", substring = true)).fetchSemanticsNodes().isNotEmpty() }
         // The followed one is gone too, from the data and from Library.
         compose.waitUntil(10_000) { c.spotify.followedShown.value.isEmpty() && c.spotify.playlists.followed.value.isEmpty() }
         compose.tapTab("Library")

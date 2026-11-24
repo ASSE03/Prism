@@ -309,7 +309,7 @@ internal fun SeasonCard(look: Look, onUse: () -> Unit) {
             }
             Text(look.note, style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
             InfoText(info, tr(R.string.season_info))
-            PrismOutlinedButton(onUse) { Text(tr(R.string.use_it)) }
+            PrismButton(onUse) { Text(tr(R.string.use_it)) }
         }
     }
 }

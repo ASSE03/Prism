@@ -1,13 +1,16 @@
 package com.prism.music.ui.screens.settings
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.prism.music.R
@@ -17,9 +20,13 @@ import com.prism.music.data.prefs.CrossfadeCurve
 import com.prism.music.data.prefs.ExplicitContent
 import com.prism.music.data.prefs.MAX_CROSSFADE_SECONDS
 import com.prism.music.data.prefs.ShuffleButton
+import com.prism.music.playback.MixRefusal
+import com.prism.music.playback.MixWhy
 import com.prism.music.tr
 import com.prism.music.ui.screens.Crossfade
+import com.prism.music.ui.screens.CrossfadeSample
 import com.prism.music.ui.screens.CurveSample
+import com.prism.music.ui.screens.crossfadeDetail
 import com.prism.music.ui.screens.QueueEnd
 import com.prism.music.ui.screens.SettingEntry
 import com.prism.music.ui.screens.SettingNeeds
@@ -51,6 +58,8 @@ fun PlaybackPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = tr
     val prefs = c.settings
     val d = remember { AppSettings() }
     val reset = ListeningResets()
+    // #493: why the last two songs didn't blend, when they didn't (until one does): a last line in Crossfade's ⓘ.
+    val lastWhy = c.mixState.why.collectAsState().value
 
     val onOff: (Boolean) -> String = { ListeningResets.onOff(it) }
     val seconds: (Int) -> String = { ListeningResets.seconds(it) }
@@ -70,13 +79,20 @@ fun PlaybackPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = tr
     val shuffleButtonChanged = reset.add(tr(R.string.playback_shuffle_button), s.behavior.shuffleButton, d.behavior.shuffleButton, { it.label }) { prefs.setShuffleButton(it) }
     val keepShuffleChanged = reset.add(tr(R.string.playback_keep_shuffle), s.behavior.keepShuffle, d.behavior.keepShuffle, onOff) { prefs.setKeepShuffle(it) }
     val crossfadeChanged = reset.add(tr(R.string.crossfade), crossfade, SoundChoices.crossfade(d), { it.label }) {
-        // Off keeps whether the length was automatic: put that back too.
-        prefs.setMixAuto(d.mixAuto)
-        prefs.setMix(d.mix)
+        // Off keeps whether the length was automatic, and whether it was Automix: put those back too.
+        prefs.setMixAuto(d.mix.auto)
+        prefs.setMixAutomix(d.mix.automix)
+        prefs.setMix(d.mix.on)
     }
-    val lengthChanged = reset.add(tr(R.string.length), s.mixSeconds, d.mixSeconds, seconds) { prefs.setMixSeconds(it) }
-    val beatMatchChanged = reset.add(tr(R.string.match_tempo_and_beats_dj_style), s.mixBeatMatch, d.mixBeatMatch, onOff) { prefs.setMixBeatMatch(it) }
-    val keepAlbumsChanged = reset.add(tr(R.string.keep_an_album_s_songs_whole), s.mixKeepAlbums, d.mixKeepAlbums, onOff) { prefs.setMixKeepAlbums(it) }
+    // 1.8.8: "Hear it on the next song" in Crossfade's sheet, 12 s before the coming transition of the song playing.
+    val mark = c.mixState.mark.collectAsState().value
+    val playingNow = c.player.currentSong.collectAsState().value
+    val hearAt = SoundChoices.hearItAt(s, mark, playingNow?.id)
+    val automix = crossfade == Crossfade.AUTOMIX
+    val skipBlendChanged = reset.add(tr(R.string.skip_blend), s.sound.skipBlend, d.sound.skipBlend, onOff) { prefs.setSkipBlend(it) }
+    val lengthChanged = reset.add(tr(R.string.length), s.mix.seconds, d.mix.seconds, seconds) { prefs.setMixSeconds(it) }
+    val beatMatchChanged = reset.add(tr(R.string.match_tempo_and_beats_dj_style), s.mix.beatMatch, d.mix.beatMatch, onOff) { prefs.setMixBeatMatch(it) }
+    val keepAlbumsChanged = reset.add(tr(R.string.keep_an_album_s_songs_whole), s.mix.keepAlbums, d.mix.keepAlbums, onOff) { prefs.setMixKeepAlbums(it) }
     val curveChanged = reset.add(tr(R.string.how_they_cross), s.sound.crossfadeCurve, d.sound.crossfadeCurve, { it.label }) { prefs.setCrossfadeCurve(it) }
     // The two are stored together: either one's reset writes the pair as it will be once both are back.
     val speedAfter = d.sound.musicSpeed
@@ -129,19 +145,42 @@ fun PlaybackPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = tr
         }
         // Not "Crossfade": that is its first row's name (§2.7).
         group(tr(R.string.playback_song_to_song)) {
-            ChoiceRow(
+            // 1.8.8: four choices with Automix, so example cards in a sheet (each draws the two volumes over the change).
+            PickCardsRow(
                 tr(R.string.crossfade), Crossfade.entries, crossfade, { it.label },
-                info = tr(R.string.crossfade_choice_info), changed = crossfadeChanged,
-            ) { SoundChoices.setCrossfade(prefs, it) }
+                modifier = com.prism.music.ui.tour.TourAnchor.CROSSFADE.mark,
+                info = crossfadeInfo(lastWhy), changed = crossfadeChanged, exampleScale = 1f,
+                // Only with something playing and a crossfade chosen; greyed until a transition is coming.
+                footer = if (crossfade == Crossfade.OFF || playingNow == null) null else ({
+                    HearItButton(hearAt) { at ->
+                        c.player.seekTo(at)
+                        if (!c.player.isPlaying.value) c.player.togglePlay()
+                    }
+                }),
+                onPick = { SoundChoices.setCrossfade(prefs, it) },
+            ) { x ->
+                Column {
+                    CrossfadeSample(x)
+                    Spacer(Modifier.height(4.dp))
+                    Text(crossfadeDetail(x), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            // 1.8.8 (#481): Next, Previous and a tap in the queue blend instead of cutting, with Crossfade off too.
+            SwitchRow(tr(R.string.skip_blend), s.sound.skipBlend, info = tr(R.string.skip_blend_info), changed = skipBlendChanged) { prefs.setSkipBlend(it) }
             // #351: up to 30 s (a song's blend is still at most a third of it: MixEngine.makePlan).
-            if (s.mix && !s.mixAuto) SliderRow(
-                tr(R.string.length), s.mixSeconds.toFloat(), 1f..MAX_CROSSFADE_SECONDS.toFloat(), { seconds(it.roundToInt()) },
+            // Hidden with Automatic and with Automix alike (both work the length out for each pair of songs).
+            if (s.mix.on && !s.mix.auto && !automix) SliderRow(
+                tr(R.string.length), s.mix.seconds.toFloat(), 1f..MAX_CROSSFADE_SECONDS.toFloat(), { seconds(it.roundToInt()) },
                 steps = MAX_CROSSFADE_SECONDS - 2, changed = lengthChanged,
             ) { prefs.setMixSeconds(it.roundToInt()) }
-            if (s.mix) {
-                SwitchRow(tr(R.string.match_tempo_and_beats_dj_style), s.mixBeatMatch, info = tr(R.string.the_next_song_plays_at_the), changed = beatMatchChanged) { prefs.setMixBeatMatch(it) }
+            if (s.mix.on) {
+                // With Automix it matches the beats itself: greyed and shown on, the stored choice kept for the others.
+                SwitchRow(
+                    tr(R.string.match_tempo_and_beats_dj_style), s.mix.beatMatch || automix, value = if (automix) tr(R.string.automix_does_this) else null,
+                    info = tr(R.string.the_next_song_plays_at_the), changed = beatMatchChanged, enabled = !automix,
+                ) { prefs.setMixBeatMatch(it) }
                 // #247: an album played as an album never blended; this keeps its songs whole anywhere they meet.
-                SwitchRow(tr(R.string.keep_an_album_s_songs_whole), s.mixKeepAlbums, info = tr(R.string.an_album_playing_through_never_blends), changed = keepAlbumsChanged) { prefs.setMixKeepAlbums(it) }
+                SwitchRow(tr(R.string.keep_an_album_s_songs_whole), s.mix.keepAlbums, info = tr(R.string.an_album_playing_through_never_blends), changed = keepAlbumsChanged) { prefs.setMixKeepAlbums(it) }
             }
             // Each card draws the two volumes over the blend (1.7.8, A1), with what the curve does under it.
             PickCardsRow(
@@ -181,6 +220,41 @@ fun PlaybackPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = tr
 }
 
 /**
+ * The Crossfade row's ⓘ: what the four choices do (Automix's in a paragraph of its own, 1.8.8), and (#493) a last line
+ * "Last time: …" when the last blend didn't happen.
+ */
+fun crossfadeInfo(last: MixRefusal?): String {
+    val base = tr(R.string.crossfade_choice_info) + "\n\n" + tr(R.string.automix_info)
+    return if (last == null) base else base + "\n\n" + mixWhyLine(last.why)
+}
+
+/** Tags for tests. */
+object PlaybackTags {
+    /** Crossfade sheet's "Hear it on the next song". */
+    const val HEAR_IT = "playback:hearit"
+}
+
+/**
+ * "Hear it on the next song" (1.8.8, plan-mix §3.2), under Crossfade's cards: jumps the song playing to [at] (12 s before
+ * its coming transition) and plays, so the choice can be judged by ear. Greyed, with a line saying so, while nothing is
+ * coming ([at] null: the last song of the queue, a refused pair, or the transition not known yet).
+ */
+@Composable
+internal fun HearItButton(at: Long?, onHear: (Long) -> Unit) {
+    Spacer(Modifier.height(6.dp))
+    Box(Modifier.testTag(PlaybackTags.HEAR_IT)) {
+        LinkRow(
+            tr(R.string.hear_it_on_the_next_song),
+            value = if (at == null) tr(R.string.hear_it_on_the_next_song_none) else null,
+            action = true, enabled = at != null,
+        ) { at?.let(onHear) }
+    }
+}
+
+/** "Last time: One of the two is a music video." (Crossfade's ⓘ and the DJ chip's in the queue.) */
+fun mixWhyLine(why: MixWhy): String = tr(R.string.mix_why_last, tr(why.text))
+
+/**
  * What "Reset this page" lists and puts back on Playback and on Sound & quality. Their settings aren't part of a Look
  * (so not in the pages' look keys): each row adds itself with [add], which also says whether it differs from how Prism
  * comes (the row's dot).
@@ -215,9 +289,10 @@ internal class ListeningResets {
 /** The root's line for Playback: the crossfade, and "No repeats" when it's on ("Crossfade 6 s · No repeats this session"). */
 fun playbackValue(s: AppSettings, dark: Boolean): String = listOfNotNull(
     when {
-        !s.mix -> tr(R.string.root_crossfade_off)
-        s.mixAuto -> tr(R.string.crossfade)
-        else -> tr(R.string.root_crossfade_seconds, s.mixSeconds)
+        !s.mix.on -> tr(R.string.root_crossfade_off)
+        s.mix.automix -> tr(R.string.automix)
+        s.mix.auto -> tr(R.string.crossfade)
+        else -> tr(R.string.root_crossfade_seconds, s.mix.seconds)
     },
     if (s.behavior.autoplayNoRepeats) tr(R.string.no_repeats_title) else null,
 ).joinToString(" · ")
@@ -258,7 +333,10 @@ val playbackIndex: List<SettingEntry> by lazy {
             // 1.8.4: D57, #416.
             SettingEntry(page, shuffle, tr(R.string.playback_shuffle_button), tr(R.string.playback_shuffle_keywords) + " " + tr(R.string.shuffle_button_both) + " " + tr(R.string.shuffle_button_only)),
             SettingEntry(page, shuffle, tr(R.string.playback_keep_shuffle), tr(R.string.playback_shuffle_keywords)),
-            SettingEntry(page, between, tr(R.string.crossfade), tr(R.string.mix_blend_transition_fade) + " " + tr(R.string.crossfade_songs) + " " + tr(R.string.automatic_length)),
+            SettingEntry(page, between, tr(R.string.crossfade), tr(R.string.mix_blend_transition_fade) + " " + tr(R.string.crossfade_songs) + " " + tr(R.string.automatic_length) + " " + tr(R.string.automix_keywords)),
+            // 1.8.8: in Crossfade's sheet, under the cards.
+            SettingEntry(page, between, tr(R.string.hear_it_on_the_next_song), tr(R.string.automix_keywords), needs = crossfade),
+            SettingEntry(page, between, tr(R.string.skip_blend), tr(R.string.skip_blend_keywords)),
             SettingEntry(page, between, tr(R.string.length), needs = manualLength),
             SettingEntry(page, between, tr(R.string.match_tempo_and_beats_dj_style), tr(R.string.bpm_beatmatch), needs = crossfade),
             SettingEntry(page, between, tr(R.string.keep_an_album_s_songs_whole), tr(R.string.keep_albums_keywords), needs = crossfade),

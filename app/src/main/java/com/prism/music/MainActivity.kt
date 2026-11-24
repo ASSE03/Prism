@@ -2,6 +2,8 @@ package com.prism.music
 
 import com.prism.music.ui.components.quietGraphicsLayers
 import com.prism.music.ui.components.tabTint
+import com.prism.music.ui.tour.TourAnchor
+import com.prism.music.ui.tour.tourAnchor
 import android.Manifest
 import android.content.Intent
 import android.net.Uri
@@ -145,7 +147,7 @@ import com.prism.music.ui.theme.ink3
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.semantics.selected
-import dev.chrisbanes.haze.hazeSource
+import com.prism.music.ui.theme.glassSource
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -157,8 +159,6 @@ import kotlin.math.abs
  * The app's screen. Declared in the manifest as [PrismActivity], so that ".MainActivity" can be the classic app-icon
  * alias (#20) and home-screen icons made before stay valid.
  */
-/** A volume key press on a cast speaker or TV, out of 100. */
-private const val VOLUME_KEY_STEP = 4
 /** How .prismlook files are sent (a zip: the Look's code and any photos or font it carries). */
 private const val LOOK_MIME = "application/zip"
 
@@ -195,6 +195,8 @@ open class MainActivity : ComponentActivity() {
         // Not asked here any more (a prompt before the welcome screen, with no reason given): the tour or the first
         // download asks, through this.
         if (c.returningUser == null) c.returningUser = c.settings.current.let { it.onboarded || it.isLoggedIn }
+        // 1.8.8: a new install is given First steps (once), never the history pager.
+        com.prism.music.ui.tour.FirstSteps.load(this, c.returningUser == true)
         c.notificationPrompt = { if (Build.VERSION.SDK_INT >= 33) runOnUiThread { notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS) } }
         SmartDownloadWorker.schedule(this, c.settings.current.smartDownloads)
         // Tidies the smart-download queue (it only adds more if it's been a while).
@@ -286,10 +288,18 @@ open class MainActivity : ComponentActivity() {
     }
 
     /** While casting, the volume keys turn the speaker or TV up and down (with Prism open; elsewhere, the media session does). */
+    private var castVolumeKeyAt = 0L
+
     override fun onKeyDown(keyCode: Int, event: android.view.KeyEvent): Boolean {
         val cast = container.cast
         if (cast.casting && (keyCode == android.view.KeyEvent.KEYCODE_VOLUME_UP || keyCode == android.view.KeyEvent.KEYCODE_VOLUME_DOWN)) {
-            cast.adjustVolume(if (keyCode == android.view.KeyEvent.KEYCODE_VOLUME_UP) VOLUME_KEY_STEP else -VOLUME_KEY_STEP)
+            // #534: one step per press, and a held key no faster than the phone's own volume climbs.
+            val now = android.os.SystemClock.uptimeMillis()
+            if (com.prism.music.playback.RemoteVolume.takesKey(event.repeatCount, now, castVolumeKeyAt)) {
+                castVolumeKeyAt = now
+                val up = keyCode == android.view.KeyEvent.KEYCODE_VOLUME_UP
+                cast.setVolume(com.prism.music.playback.RemoteVolume.stepped(cast.volume ?: 50, if (up) 1 else -1))
+            }
             return true
         }
         return super.onKeyDown(keyCode, event)
@@ -485,14 +495,12 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
             lifecycle.addObserver(watcher)
             onDispose { lifecycle.removeObserver(watcher) }
         }
-        // Settings → Controls & gestures → "Lock to portrait" (#190): phones stay upright; tablets keep their own layouts.
-        // A full-screen video still turns sideways (it sets its own and puts this back after).
-        val tablet = androidx.compose.ui.platform.LocalConfiguration.current.smallestScreenWidthDp >= 600
-        androidx.compose.runtime.LaunchedEffect(settings.behavior.lockPortrait, tablet) {
-            (rootView.context as? android.app.Activity)?.requestedOrientation =
-                if (settings.behavior.lockPortrait && !tablet) android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                else android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
+        // Settings → Controls & gestures → "Lock to portrait" (#190): phones stay upright; tablets keep their own layouts;
+        // nothing is forced in a car (#582). A full-screen video still turns sideways (it sets its own and puts this back after).
+        com.prism.music.ui.PortraitLockEffect(settings.behavior.lockPortrait)
+        // Settings → Performance → "Smoother scrolling" (#336): the screen's fastest mode while Prism is open. `settings` is
+        // the effective one, so Performance mode reads it as off; battery saver does too.
+        com.prism.music.ui.SmoothScrollingEffect(settings.behavior.smoothScrolling)
         val navController = rememberNavController()
         var playerOpen by rememberSaveable { mutableStateOf(false) }
         val navigator = remember(navController) {
@@ -524,7 +532,8 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
         // Done button sat under the tab bar on phones, which it measures itself against when it's opened from Settings).
         val onboardingPicker = (route?.startsWith(Routes.PICK_ARTISTS) == true || route?.startsWith(Routes.ACCOUNT) == true) &&
             backStack?.arguments?.getBoolean("onboarding") == true
-        val showChrome = route != Routes.LOGIN && route != Routes.LOGIN_ADD && route != Routes.DISCORD_LOGIN && route != Routes.WELCOME && !onboardingPicker
+        val showChrome = route != Routes.LOGIN && route != Routes.LOGIN_ADD && route != Routes.DISCORD_LOGIN &&
+            route != Routes.SPOTIFY_BEFORE && route != Routes.SPOTIFY_LOGIN && route != Routes.WELCOME && !onboardingPicker
         val tabs = settings.navTabs.map { it.tab(settings.tabNames[it]) }
 
         val together by c.together.state.collectAsState()
@@ -649,8 +658,8 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
             Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
                 Box(
                     Modifier.fillMaxSize().then(underPlayer).nestedScroll(barScroll)
-                        // The page is copied only when glass will sample it (#343).
-                        .then(if (com.prism.music.ui.theme.glassSamplesThePage(Build.VERSION.SDK_INT, settings.liquidGlass, settings.frostedGlass)) Modifier.hazeSource(haze) else Modifier)
+                        // The page is copied only when glass will sample it (#343), on the background behind it (1.8.7).
+                        .glassSource(haze, com.prism.music.ui.theme.glassSamplesThePage(Build.VERSION.SDK_INT, settings.liquidGlass, settings.frostedGlass), MaterialTheme.colorScheme.background)
                         .then(if (settings.swipeTabs && !useRail) swipeBetweenTabs(tabs, route, selectTab) else Modifier),
                 ) {
                   CompositionLocalProvider(com.prism.music.ui.components.LocalHiddenByPlayer provides hiddenByPlayer) {
@@ -763,6 +772,10 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                         composable(Routes.EXPLORE) { ScreenBackdrop(BackdropScreen.SEARCH) { com.prism.music.ui.screens.ExploreScreen(bottomPadding) } }
                         composable(Routes.IMPORT) { ScreenBackdrop(BackdropScreen.LIBRARY) { com.prism.music.ui.screens.ImportScreen(bottomPadding) } }
                         composable(Routes.DESIGN_GALLERY) { ScreenBackdrop(BackdropScreen.SETTINGS) { com.prism.music.ui.components.DesignGallery(bottomPadding) } }
+                        composable(Routes.SUPPORTERS) { ScreenBackdrop(BackdropScreen.SETTINGS) { com.prism.music.ui.screens.settings.SupportersScreen(bottomPadding) } }
+                        // 1.8.8: the Guide and its topics. HOOK (part B): onFirstSteps = start First steps again.
+                        composable(Routes.GUIDE) { ScreenBackdrop(BackdropScreen.SETTINGS) { com.prism.music.ui.tour.GuideScreen(bottomPadding, onFirstSteps = { com.prism.music.ui.tour.FirstSteps.start(context) { com.prism.music.ui.tour.FirstSteps.quickPick?.let { c.player.cue(it) } } }) } }
+                        composable(Routes.guideTopic("{topic}")) { ScreenBackdrop(BackdropScreen.SETTINGS) { com.prism.music.ui.tour.GuideTopicScreen(bottomPadding, it.arguments?.getString("topic")) } }
                         composable(Routes.TOGETHER) { ScreenBackdrop(BackdropScreen.LIBRARY) { com.prism.music.ui.screens.TogetherScreen(bottomPadding) } }
                         composable(Routes.PODCASTS) { ScreenBackdrop(BackdropScreen.LIBRARY) { com.prism.music.ui.screens.PodcastsScreen(bottomPadding) } }
                         composable(Routes.UPLOADS) { ScreenBackdrop(BackdropScreen.LIBRARY) { com.prism.music.ui.screens.UploadsScreen(bottomPadding) } }
@@ -783,6 +796,19 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                         }
                         composable(Routes.DISCORD_LOGIN) {
                             com.prism.music.ui.screens.DiscordLoginScreen(onBack = { navController.popBackStack() })
+                        }
+                        composable(Routes.SPOTIFY_BEFORE) {
+                            com.prism.music.ui.screens.SpotifyBeforeScreen(
+                                onSignIn = { navController.navigate(Routes.SPOTIFY_LOGIN) },
+                                onBack = { navController.popBackStack() },
+                            )
+                        }
+                        composable(Routes.SPOTIFY_LOGIN) {
+                            com.prism.music.ui.screens.SpotifyLoginScreen(
+                                // Signed in: back past "Before you sign in" to where the listener came from.
+                                onDone = { if (!navController.popBackStack(Routes.SPOTIFY_BEFORE, inclusive = true)) navController.popBackStack() },
+                                onBack = { navController.popBackStack() },
+                            )
                         }
                         composable(Routes.LOGIN_ADD) {
                             LoginScreen(
@@ -910,14 +936,14 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 val artAhead = song?.takeIf { !playerOpen }?.let { c.covers.art(it) }
                 if (artAhead != null) {
                     val warmContext = androidx.compose.ui.platform.LocalContext.current
-                    LaunchedEffect(artAhead, settings.fullBleedArtwork, settings.playerBackground, settings.playerBlur) {
+                    LaunchedEffect(artAhead, settings.fullBleedArtwork, settings.player.background, settings.player.blur) {
                         // Not as the song starts, whose own start comes first, nor for a song skipped straight past.
                         kotlinx.coroutines.delay(1_500)
                         runCatching {
                             com.prism.music.ui.player.warmPlayerArt(
                                 warmContext, artAhead, settings.fullBleedArtwork,
-                                meshToo = settings.playerBackground != com.prism.music.data.prefs.PlayerBackground.GRADIENT,
-                                blurStrength = settings.playerBlur,
+                                meshToo = settings.player.background != com.prism.music.data.prefs.PlayerBackground.GRADIENT,
+                                blurStrength = settings.player.blur,
                             )
                         }
                     }
@@ -958,23 +984,45 @@ private fun PrismRoot(deepLink: MutableStateFlow<Uri?>) {
                 // The tour (1.7): the whole of it after setting up a new install or the first time a release with tours
                 // runs; later releases show only what's new since the last one seen. Settings → About takes it again.
                 var tour by remember { mutableStateOf<com.prism.music.ui.tour.TourPlan?>(null) }
+                val firstSteps = com.prism.music.ui.tour.FirstSteps
                 LaunchedEffect(showChrome) {
                     if (showChrome && tour == null) {
                         kotlinx.coroutines.delay(600) // after the first page has drawn
-                        tour = com.prism.music.ui.tour.pendingTour(context, c.returningUser == true)
+                        // 1.8.8: a new install's First steps (plan-tour.md §3 B), on the coach, in place of the pager.
+                        if (firstSteps.pending) {
+                            if (com.prism.music.ui.tour.Coach.run == null) {
+                                playerOpen = false
+                                firstSteps.start(context) { firstSteps.quickPick?.let { c.player.cue(it) } }
+                            }
+                        } else tour = com.prism.music.ui.tour.pendingTour(context, c.returningUser == true)
                     }
                 }
-                LaunchedEffect(Unit) { c.tourRequests.collect { playerOpen = false; tour = com.prism.music.ui.tour.fullTour(c.returningUser == true) } }
                 tour?.let { plan ->
                     com.prism.music.ui.tour.TourOverlay(plan, onOpen = { r -> playerOpen = false; navigator.go(r) }, onDone = { tour = null })
                 }
+                // The coach (1.8.8): a tour that has the person do things, over everything. Nothing while none runs.
+                val coachActions = remember(navigator) { com.prism.music.ui.tour.CoachActions(go = { r -> navigator.go(r) }, setPlayerOpen = { playerOpen = it }, tab = selectTab) }
+                // The page showing with its arguments ("settings/looks", not "settings/{section}…"), for the steps' checks.
+                val place = route?.let { r -> com.prism.music.ui.filledRoute(r) { a -> @Suppress("DEPRECATION") backStack?.arguments?.get(a)?.toString() } }
+                com.prism.music.ui.tour.CoachHost(place, playerOpen && song != null, coachActions)
+                // A step that opened the player with no song in it (none came): closed again when the tour ends.
+                com.prism.music.ui.tour.CoachPlayerReset(playerOpen, { c.player.currentSong.value != null }) { playerOpen = false }
+                // First steps' last step: Settings opens Looks; then its closing card.
+                LaunchedEffect(place) { firstSteps.redirect(place)?.let { navigator.go(it) } }
+                if (firstSteps.closing) com.prism.music.ui.tour.FirstStepsClosing(
+                    onGuide = { firstSteps.closing = false; playerOpen = false; navigator.go(firstSteps.guideRoute) },
+                    onDone = { firstSteps.closing = false },
+                )
+                // What's new's "Show me" (1.8.8): the chip back to the next card, over the coach. Nothing otherwise.
+                com.prism.music.ui.tour.BackToWhatsNew { tour = it }
 
                 // Holiday Mode (1.8.0): once a season, the first time Prism opens in its month after setting up and the
                 // tour; never over the welcome screen, the tour, the player or another question.
                 var seasonAsk by remember { mutableStateOf<com.prism.music.data.looks.Season?>(null) }
                 val lookPending by c.looks.pending.collectAsState()
                 val blendPending by c.blends.pending.collectAsState()
-                val clear = showChrome && tour == null && !playerOpen && customizing == null && lookPending == null && blendPending == null
+                // 1.8.8 (D11): not while First steps is to come or its card is up, nor in a new install's first session.
+                val clear = showChrome && tour == null && !playerOpen && customizing == null && lookPending == null && blendPending == null && com.prism.music.ui.tour.Coach.run == null && !com.prism.music.ui.tour.FirstSteps.holidayWaits(newInstallSession = c.returningUser == false)
                 LaunchedEffect(clear) {
                     if (!clear || seasonAsk != null) return@LaunchedEffect
                     kotlinx.coroutines.delay(1_500) // after the tour would have come up
@@ -1056,7 +1104,7 @@ private fun NavRail(tabs: List<Tab>, route: String?, settings: AppSettings, onSe
                 val indicator by animateColorAsState(if (selected) scheme.primary.copy(alpha = 0.16f) else Color.Transparent, label = "railTab")
                 val showLabel = settings.navLabels == NavLabels.ALWAYS || settings.navLabels == NavLabels.WORDS || (settings.navLabels == NavLabels.SELECTED && selected)
                 Column(
-                    Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).background(indicator)
+                    Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp)).background(indicator).then(tabMark(tab.route))
                         .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClickLabel = tab.label) { onSelect(tab.route) }
                         .padding(vertical = if (showLabel) 8.dp else 12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -1072,6 +1120,11 @@ private fun NavRail(tabs: List<Tab>, route: String?, settings: AppSettings, onSe
         }
     }
 }
+
+/** The coach's marks on the tabs it points at (1.8.8), in the bar, the minimal bar and the rail alike. */
+private fun tabMark(route: String): Modifier = Modifier.tourAnchor(
+    when (route) { Routes.SETTINGS -> TourAnchor.SETTINGS_TAB; Routes.LIBRARY -> TourAnchor.LIBRARY_TAB; else -> null },
+)
 
 private fun isSelected(tab: Tab, route: String?): Boolean =
     route == tab.route || (tab.route == Routes.SETTINGS && route?.startsWith("settings/") == true) ||
@@ -1203,7 +1256,7 @@ private fun TabItem(tab: Tab, selected: Boolean, labels: NavLabels, compact: Flo
         onLongClickLabel = if (tab.route == Routes.SETTINGS) tr(R.string.customize_this) else null,
         onLongClick = if (tab.route == Routes.SETTINGS) ({ c.customizing.value = !c.customizing.value }) else null,
         onClick = onClick,
-    ).semantics { this.selected = selected }
+    ).semantics { this.selected = selected }.then(tabMark(tab.route))
     val icon = if (selected) tab.selectedIcon else tab.icon
     // The current tab's icon in ink, the accent or the light (1.7.7).
     val tabTint = com.prism.music.ui.theme.LocalAppSettings.current.shapes.tabTint
@@ -1286,7 +1339,7 @@ private fun MinimalTab(tab: Tab, selected: Boolean, height: Dp = 44.dp, onClick:
     val scheme = MaterialTheme.colorScheme
     val bg by animateColorAsState(if (selected) scheme.onSurface else Color.Transparent, label = "minTab")
     Box(
-        Modifier.size(54.dp, height).clip(CircleShape).background(bg)
+        Modifier.size(54.dp, height).clip(CircleShape).background(bg).then(tabMark(tab.route))
             .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null, onClickLabel = tab.label, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {

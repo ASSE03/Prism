@@ -52,10 +52,10 @@ class TextIconsPageTest : TextTabsPageHarness(SettingsPageId.TEXT_ICONS) {
 
     /** The ledger's rows for the page, as the page names them (with a fresh install's settings). */
     private val expected = listOf(
-        "Text › Font", "Text › App text size", "Text › Type", "Text › Weight", "Text › Letter spacing", "Text › Titles",
-        "Icons › Fill", "Icons › Pack", "Icons › Icon weight", "Icons › Likes as stars", "Icons › App icon",
+        "Text › Font", "Text › App text size", "Text › Heading style", "Text › Weight", "Text › Letter spacing", "Text › Titles",
+        "Icons › Icon style", "Icons › Icon pack", "Icons › Icon weight", "Icons › Likes as stars", "Icons › App icon",
         "Shapes › Card and cover corners", "Shapes › Songs' covers", "Shapes › Albums' covers", "Shapes › Artists' pictures", "Shapes › Square video covers",
-        "Buttons › Shape", "Buttons › Play on album and playlist pages", "Buttons › Switches, sliders and buttons",
+        "Buttons › Button shape", "Buttons › Play button on albums and playlists", "Buttons › Switches, sliders and buttons",
     )
 
     @Test fun theGroupsAndRowsAreTheLedgersWithinTheBudgets() {
@@ -75,23 +75,26 @@ class TextIconsPageTest : TextTabsPageHarness(SettingsPageId.TEXT_ICONS) {
         show()
         fun type(group: String, title: String) = typeOf(rowNode(group, title))
         for ((g, t) in listOf(
-            text to "Font", text to "Type", text to "Weight", text to "Letter spacing", text to "Titles",
-            icons to "Fill", icons to "Pack", icons to "Icon weight", icons to "App icon",
+            text to "Font", text to "Heading style", text to "Weight", text to "Letter spacing", text to "Titles",
+            icons to "Icon style", icons to "Icon pack", icons to "Icon weight", icons to "App icon",
             shapes to "Songs' covers", shapes to "Albums' covers", shapes to "Artists' pictures",
-            buttons to "Shape", buttons to "Play on album and playlist pages", buttons to "Switches, sliders and buttons",
+            buttons to "Button shape", buttons to "Play button on albums and playlists", buttons to "Switches, sliders and buttons",
         )) assertEquals("$g › $t", SettingsTags.ROW_PICK, type(g, t))
         assertEquals(SettingsTags.ROW_SLIDER, type(text, "App text size"))
         assertEquals(SettingsTags.ROW_SLIDER, type(shapes, "Card and cover corners"))
         assertEquals(SettingsTags.ROW_SWITCH, type(icons, "Likes as stars"))
         assertEquals(SettingsTags.ROW_SWITCH, type(shapes, "Square video covers"))
-        // Each says its value in words.
-        assertEquals("Prism", valueOf(rowNode(text, "Font")))
+        // Each says its value in words (Prism's own font: "Prism's own", W23 of 1.8.7.6, not "Prism").
+        assertEquals("Prism's own", valueOf(rowNode(text, "Font")))
+        assertEquals("Prism's own", valueOf(rowNode(text, "Heading style")))
+        assertEquals("Prism's own", valueOf(rowNode(icons, "Icon pack")))
+        assertEquals("Prism's own", valueOf(rowNode(buttons, "Switches, sliders and buttons")))
         assertEquals("100%", valueOf(rowNode(text, "App text size")))
         assertEquals("Same as the text", valueOf(rowNode(text, "Titles")))
         assertEquals("Regular, rounded ends", valueOf(rowNode(icons, "Icon weight")))
         assertEquals("Round", valueOf(rowNode(shapes, "Card and cover corners")))
         assertEquals("Circle", valueOf(rowNode(shapes, "Artists' pictures")))
-        assertEquals("Filled", valueOf(rowNode(buttons, "Play on album and playlist pages")))
+        assertEquals("Filled", valueOf(rowNode(buttons, "Play button on albums and playlists")))
     }
 
     /** §2.6: the renames, and what has its one home on another page. */
@@ -119,7 +122,7 @@ class TextIconsPageTest : TextTabsPageHarness(SettingsPageId.TEXT_ICONS) {
         slide(text, "App text size", 1.15f)
         await("text_scale") { kotlin.math.abs(stored.textScale - 1.15f) < 0.01f }
         // type_classic
-        pick(text, "Type", "Classic")
+        pick(text, "Heading style", "Classic")
         await("type_classic") { stored.type.classic }
         // type_weight
         pick(text, "Weight", "Bold")
@@ -169,9 +172,9 @@ class TextIconsPageTest : TextTabsPageHarness(SettingsPageId.TEXT_ICONS) {
         tap(shapes, "Square video covers")
         await("square_video_covers") { !stored.squareVideoCovers }
         // button_shape, play_outlined, controls_classic
-        pick(buttons, "Shape", "Square")
+        pick(buttons, "Button shape", "Square")
         await("button_shape") { stored.shapes.button == ButtonShape.SQUARE }
-        pick(buttons, "Play on album and playlist pages", "Outlined")
+        pick(buttons, "Play button on albums and playlists", "Outlined")
         await("play_outlined") { stored.shapes.playOutlined }
         pick(buttons, "Switches, sliders and buttons", "Classic")
         await("controls_classic") { stored.shapes.classicControls }
@@ -181,9 +184,9 @@ class TextIconsPageTest : TextTabsPageHarness(SettingsPageId.TEXT_ICONS) {
     @Test fun iconRowsChangeWhatIsSaved() {
         show()
         assertFalse("nothing to restart for yet", rowNames().any { it.endsWith("Restart Prism to see them") })
-        pick(icons, "Fill", "Filled")
+        pick(icons, "Icon style", "Filled")
         assertEquals(IconFill.FILLED, IconStyle.savedFill(app))
-        pick(icons, "Pack", "Dots")
+        pick(icons, "Icon pack", "Dots")
         assertEquals(IconPack.DOTS, IconStyle.savedPack(app))
         // §2.5: weight and rounded are one row; a pick writes both.
         pick(icons, "Icon weight", "Bold, square ends")
@@ -212,13 +215,13 @@ class TextIconsPageTest : TextTabsPageHarness(SettingsPageId.TEXT_ICONS) {
         compose.onNodeWithTag(SettingsTags.RESET_ITEM).performClick()
         val listed = compose.onAllNodes(hasTestTag(SettingsTags.RESET_CHANGE)).fetchSemanticsNodes().map { it.config[SemanticsProperties.Text].joinToString { t -> t.text } }
         assertEquals(
-            listOf("Font: System → Prism", "Fill: Filled → Outline", "Songs' covers: Circle → Rounded", "Square video covers: Off → On"),
+            listOf("Font: System → Prism's own", "Icon style: Filled → Outline", "Songs' covers: Circle → Rounded", "Square video covers: Off → On"),
             listed,
         )
         compose.onNodeWithTag(SettingsTags.RESET_CONFIRM).performClick()
         await("the reset") { stored.fontChoice == FontChoice.PRISM && stored.shapes.songs == CoverShape.ROUNDED && stored.squareVideoCovers }
         assertEquals(IconFill.OUTLINE, IconStyle.savedFill(app))
-        assertEquals("Outline", valueOf(rowNode(icons, "Fill")))
+        assertEquals("Outline", valueOf(rowNode(icons, "Icon style")))
     }
 
     // ------------------------------------------------------------------ Search and old links
@@ -234,8 +237,9 @@ class TextIconsPageTest : TextTabsPageHarness(SettingsPageId.TEXT_ICONS) {
         assertTrue(index.filter { it.group !in drawn }.map { it.title }.toString(), index.all { it.group in drawn })
         // The old pages' groups land on the groups that hold their rows now.
         val old = SettingsPageId.TEXT_ICONS.oldGroups
-        assertEquals("Text", old["Type"]); assertEquals("Text", old["Weight and spacing"]); assertEquals("Text", old["Titles"])
-        assertEquals("Icons", old["App icon"]); assertEquals("Shapes", old["Shape"]); assertEquals("Shapes", old["Covers' shapes"])
+        // 1.8.7.5: the rows "Type" and "Shape" are "Heading style" and "Button shape"; a link naming either still lands.
+        assertEquals("Text", old["Heading style"]); assertEquals("Text", old["Weight and spacing"]); assertEquals("Text", old["Titles"])
+        assertEquals("Icons", old["App icon"]); assertEquals("Shapes", old["Button shape"]); assertEquals("Shapes", old["Covers' shapes"])
         assertTrue(old.values.all { it in drawn })
         // "Text size" still finds it, under its new name.
         val size = com.prism.music.ui.screens.SettingsIndex.search("text size").first { it.page == SettingsPageId.TEXT_ICONS }

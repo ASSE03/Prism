@@ -60,13 +60,15 @@ class LooksTest {
         assertEquals(false, settings.current.pureBlack)
     }
 
-    /** 1.8.0: in November the Looks page offers Harvest (card and grid); picking it puts on its colors and background. */
+    /** 1.8.0: in November the Looks page offers Harvest on its card (1.8.7.6: not again in the grid); "Use it" puts on its colors and background. */
     @Test fun harvestInNovember() {
         // The date is November 20 ([start]).
         openLooks()
         compose.waitForText("For the season: Harvest")
         assertEquals("Holiday isn't offered in November", 0, compose.onAllNodes(clickLabel("Use Holiday")).fetchSemanticsNodes().size)
-        compose.clickWhenFound(clickLabel("Use Harvest"))
+        assertEquals("not twice: the card is its place", 0, compose.onAllNodes(clickLabel("Use Harvest")).fetchSemanticsNodes().size)
+        compose.scrollSettingsTo(hasText("Use it") and hasClickAction())
+        compose.clickWhenFound(hasText("Use it") and hasClickAction())
         val looks = Fixture.container.looks
         compose.waitUntil(10_000) { looks.currentId.value == "harvest" }
         val values = Fixture.container.settings.lookValues.value
@@ -115,6 +117,22 @@ fun androidx.compose.ui.test.junit4.ComposeTestRule.clickWhenFound(matcher: Sema
     val node = onAllNodes(matcher).onFirst()
     runCatching { node.performScrollTo() } // not in a list (a top bar): already where it is
     node.performSemanticsAction(SemanticsActions.OnClick)
+}
+
+/**
+ * A button of the Select many bar by its words (#567): on the bar when it fits there, else from the bar's ⋯ menu.
+ */
+fun androidx.compose.ui.test.junit4.ComposeTestRule.clickSelectionAction(label: String) {
+    val onBar = androidx.compose.ui.test.hasText(label) and androidx.compose.ui.test.hasClickAction() and
+        androidx.compose.ui.test.hasAnyAncestor(androidx.compose.ui.test.hasTestTag("selectionBar"))
+    waitUntil(10_000) { onAllNodes(androidx.compose.ui.test.hasTestTag("selectionBar")).fetchSemanticsNodes().isNotEmpty() }
+    // A button that doesn't fit is measured but not placed: only a placed one is on the bar.
+    if (onAllNodes(onBar).fetchSemanticsNodes().any { it.layoutInfo.isPlaced }) { clickWhenFound(onBar); return }
+    clickWhenFound(androidx.compose.ui.test.hasTestTag(com.prism.music.ui.components.SelectionTags.MORE))
+    clickWhenFound(
+        androidx.compose.ui.test.hasText(label) and androidx.compose.ui.test.hasClickAction() and
+            androidx.compose.ui.test.hasAnyAncestor(androidx.compose.ui.test.hasTestTag(com.prism.music.ui.components.SelectionTags.MORE_MENU)),
+    )
 }
 
 /** A node whose tap is labelled [label] (what TalkBack says: "Use Midnight"). */

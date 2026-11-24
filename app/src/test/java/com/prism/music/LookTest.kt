@@ -143,7 +143,7 @@ class LookTest {
         assertEquals("Pure black → On", LookLabels.change(mapOf("pure_black" to "b:0"), mapOf("pure_black" to "b:1"), emptyList()))
         assertEquals("Text size → 110%", LookLabels.change(emptyMap(), mapOf("text_scale" to "f:1.1"), emptyList()))
         assertEquals(
-            "Liquid Glass → On and 1 more",
+            "Liquid glass → On and 1 more",
             LookLabels.change(emptyMap(), mapOf("liquid_glass" to "b:1", "frosted_glass" to "b:0"), listOf("liquid_glass", "frosted_glass")),
         )
         assertNull(LookLabels.change(mapOf("a" to "b:1"), mapOf("a" to "b:1"), emptyList()))

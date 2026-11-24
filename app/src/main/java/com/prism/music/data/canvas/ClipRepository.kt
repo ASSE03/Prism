@@ -125,7 +125,20 @@ class ClipRepository(private val dao: CanvasClipDao, private val finder: ClipFin
      */
     suspend fun artworkFor(
         song: Song, height: Int, saved: Boolean, allowed: () -> Boolean, chorusMs: Long? = null, now: Long = System.currentTimeMillis(),
-    ): CanvasArtwork? = lock(song.id).withLock { loopFor(song, height, saved, allowed, chorusMs, now, retried = false) }
+        /** The player's wait for this song ([times]), when it is the player asking: each step is counted on it. */
+        run: CanvasTimes.Run? = null,
+    ): CanvasArtwork? {
+        run?.step("cover")
+        return lock(song.id).withLock {
+            run?.step("wait")
+            loopFor(song, height, saved, allowed, chorusMs, now, retried = false, run).also { art ->
+                if (run != null) { if (art != null) times.handed(run, art.url) else run.end("no loop") }
+            }
+        }
+    }
+
+    /** The player's waits, song by song, from asking to the loop's first frame drawn (the live test, diagnostics). */
+    val times = CanvasTimes()
 
     /** One song at a time is worked on once: the player, the look ahead and a download may all ask for the same one. */
     private val locks = java.util.concurrent.ConcurrentHashMap<String, kotlinx.coroutines.sync.Mutex>()
@@ -135,25 +148,35 @@ class ClipRepository(private val dao: CanvasClipDao, private val finder: ClipFin
      * Looks the song's video up (which video, which seconds: no video is fetched) if that hasn't been done, so the player
      * can do it while it still asks whether the song has an animated cover. Whoever asks for the loop next finds it done.
      */
-    suspend fun findAhead(song: Song, height: Int, allowed: () -> Boolean, now: Long = System.currentTimeMillis()) {
-        lock(song.id).withLock { if (needsFinding(dao.get(song.id), now) && allowed()) find(song, dao.get(song.id), height, null, now) }
+    suspend fun findAhead(song: Song, height: Int, allowed: () -> Boolean, now: Long = System.currentTimeMillis(), run: CanvasTimes.Run? = null) {
+        lock(song.id).withLock {
+            if (needsFinding(dao.get(song.id), now) && allowed()) {
+                // Its time runs beside the cover's lookup: what is left of it when the loop is asked for shows as "wait".
+                val t = System.nanoTime()
+                var steps = ""
+                find(song, dao.get(song.id), height, null, now) { steps = it }
+                run?.note("wait", "found ahead in ${(System.nanoTime() - t) / 1_000_000} ms: $steps")
+            }
+        }
     }
 
-    private suspend fun loopFor(song: Song, height: Int, saved: Boolean, allowed: () -> Boolean, chorusMs: Long?, now: Long, retried: Boolean): CanvasArtwork? {
+    private suspend fun loopFor(song: Song, height: Int, saved: Boolean, allowed: () -> Boolean, chorusMs: Long?, now: Long, retried: Boolean, run: CanvasTimes.Run?): CanvasArtwork? {
         var row = dao.get(song.id)
-        val t0 = System.nanoTime()
         // A "no loop" is asked again after a week (a video may have been posted); a loop that was found stays.
-        if (needsFinding(row, now) && allowed()) row = find(song, row, height, chorusMs, now) ?: row
-        val t1 = System.nanoTime()
+        if (needsFinding(row, now) && allowed()) row = find(song, row, height, chorusMs, now) { s -> run?.note("find", s) } ?: row
+        run?.step("find")
         var clip = row?.clip() ?: return null
         var got = fetcher.fetch(clip.videoId, clip.startMs, clip.endMs, height, saved, allowed)
-        val t2 = System.nanoTime()
-        lastTimes = "find ${(t1 - t0) / 1_000_000} ms, fetch ${(t2 - t1) / 1_000_000} ms" + if ((got as? ClipFetch.Got)?.fromNetwork == true) " (network)" else " (kept)"
+        run?.step("fetch")
+        run?.note("fetch", fetchNote(got))
         if (got is ClipFetch.None && got.why in GONE && allowed() && row?.picked != true) {
             // The video went away or changed under the row: look once more, and take what that finds.
-            row = find(song, row, height, chorusMs, now) ?: return null
+            row = find(song, row, height, chorusMs, now) { s -> run?.note("find", s) } ?: return null
+            run?.step("find")
             clip = row.clip() ?: return null
             got = fetcher.fetch(clip.videoId, clip.startMs, clip.endMs, height, saved, allowed)
+            run?.step("fetch")
+            run?.note("fetch", fetchNote(got))
         }
         if (got !is ClipFetch.Got) return null
         var loop = loopIn(clip, got.startMs, got.endMs, got.keyFramesMs).copy(height = got.height)
@@ -161,6 +184,8 @@ class ClipRepository(private val dao: CanvasClipDao, private val finder: ClipFin
         // The second look, on the real frames, once per loop and before it is ever shown (a flashing loop never is).
         if (!loop.refined && got.file.path !in unreadable) {
             val judged = try { refiner?.refine(got.file, loop) } catch (e: CancellationException) { throw e } catch (e: Exception) { null }
+            run?.step("decode")
+            run?.note("decode", when { judged == null -> "not read"; judged.flashing -> "flashing"; judged.closeUp -> "close-up"; else -> "calm" })
             when {
                 judged == null -> if (refiner != null) unreadable += got.file.path
                 judged.flashing -> {
@@ -168,13 +193,15 @@ class ClipRepository(private val dao: CanvasClipDao, private val finder: ClipFin
                     val next = current.otherParts().firstOrNull { it != current.startMs }
                     if (next == null || retried) {
                         dao.put(clipRow(song.id, null, NoClip.FLASHING, current, now, videoType = current.videoType))
+                        run?.step("write")
                         return null
                     }
                     dao.put(current.copy(
                         startMs = next, endMs = next + PICK_LENGTH_MS, refined = false, picked = false, crops = "",
                         windows = current.otherParts().filter { it != next && it != current.startMs }.joinToString(","),
                     ))
-                    return loopFor(song, height, saved, allowed, chorusMs, now, retried = true)
+                    run?.step("write")
+                    return loopFor(song, height, saved, allowed, chorusMs, now, retried = true, run)
                 }
                 // Mostly a face filling the frame (half a face, upright): the next part is tried once, unless the listener
                 // picked this one. The part stays among the others, last, so "Pick another part" can still have it.
@@ -184,7 +211,8 @@ class ClipRepository(private val dao: CanvasClipDao, private val finder: ClipFin
                         startMs = next, endMs = next + PICK_LENGTH_MS, refined = false, crops = "",
                         windows = (current.otherParts().filter { it != next && it != current.startMs } + current.startMs).joinToString(","),
                     ))
-                    return loopFor(song, height, saved, allowed, chorusMs, now, retried = true)
+                    run?.step("write")
+                    return loopFor(song, height, saved, allowed, chorusMs, now, retried = true, run)
                 }
                 else -> loop = loop.copy(endMs = judged.endMs.coerceIn(loop.startMs + 1, got.endMs.coerceAtLeast(loop.startMs + 1)), cropX = judged.cropX ?: loop.cropX, refined = true, crops = judged.crops)
             }
@@ -194,19 +222,32 @@ class ClipRepository(private val dao: CanvasClipDao, private val finder: ClipFin
         ) {
             dao.put(current.copy(startMs = loop.startMs, endMs = loop.endMs, height = got.height, itag = got.itag, cropX = loop.cropX, refined = loop.refined, crops = SceneCrop.encode(loop.crops)))
         }
+        run?.step("write")
         return CanvasArtwork(url = fileUrl(got.file, loop), title = song.title, artist = song.artistText, album = song.album?.title, clip = loop)
     }
 
-    /** How long the last loop took to find and fetch (Share diagnostics, the live test). */
-    @Volatile var lastTimes: String? = null; private set
+    private fun fetchNote(got: ClipFetch): String = when (got) {
+        is ClipFetch.Got -> if (got.fromNetwork) "network: ${got.steps}" else "kept"
+        is ClipFetch.None -> "none: ${got.why.name.lowercase()}"
+    }
+
+    /**
+     * The player's last wait for a loop, step by step, from asking to its first frame drawn (or to "no loop"): see
+     * [CanvasTimes] (the live test, diagnostics).
+     */
+    val lastTimes: String? get() = times.last
 
     /** Reads a kept loop's real frames ([ClipDecode] on a phone); set by the app, absent in most tests. */
     var refiner: ClipRefiner? = null
     /** Files this phone couldn't read frames from: not tried again until Prism restarts. */
     private val unreadable = java.util.Collections.synchronizedSet(HashSet<String>())
 
-    private suspend fun find(song: Song, old: CanvasClipEntity?, height: Int, chorusMs: Long?, now: Long): CanvasClipEntity? = try {
-        finder.find(song, old, height, chorusMs, now).also { dao.put(it) }
+    private suspend fun find(
+        song: Song, old: CanvasClipEntity?, height: Int, chorusMs: Long?, now: Long, steps: (String) -> Unit = {},
+    ): CanvasClipEntity? = try {
+        val found = finder.findWithCost(song, old, height, chorusMs, now)
+        steps(found.steps)
+        found.row.also { dao.put(it) }
     } catch (e: CancellationException) {
         throw e
     } catch (e: Exception) {

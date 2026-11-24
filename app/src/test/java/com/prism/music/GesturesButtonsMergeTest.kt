@@ -56,7 +56,7 @@ class GesturesButtonsMergeTest {
             assertFalse(GesturesWork.COVER_AND_LYRICS in gesturesWorkChoices(now))
         }
         assertEquals(three + GesturesWork.COVER_AND_LYRICS, gesturesWorkChoices(GesturesWork.COVER_AND_LYRICS))
-        // The three as the plan words them.
-        assertEquals(listOf("On the cover", "Anywhere", "Anywhere but the lyrics"), three.map { it.label })
+        // The three as the plan words them ("Only on the cover" since 1.8.7.6, W40: the heading is "On the cover").
+        assertEquals(listOf("Only on the cover", "Anywhere", "Anywhere but the lyrics"), three.map { it.label })
     }
 }

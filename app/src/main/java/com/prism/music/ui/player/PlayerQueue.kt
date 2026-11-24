@@ -50,6 +50,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -131,6 +132,8 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
     val dj by c.dj.on.collectAsState()
     val djProgress by c.dj.progress.collectAsState()
     val djRevision by c.dj.revision.collectAsState()
+    // #493: why the last two songs didn't blend, behind an ⓘ by the DJ chip.
+    val lastWhy by c.mixState.why.collectAsState()
     // Smart Shuffle's picks are marked ✦.
     val smartPicks by c.queue.smartPicks.collectAsState()
     val badge: (Song) -> String? = remember(dj, djRevision, smartPicks) {
@@ -188,6 +191,7 @@ fun InlineQueue(onRevealPlayer: () -> Unit, onHidePlayer: () -> Unit, modifier: 
         } else QueueHeader(
             title = tr(R.string.queue),
             dj = if (order.size > 1 && settings.view.queueDjChip) dj else null, onDj = { pc.setDjMode(!dj) },
+            djWhy = queueDjWhy(lastWhy?.why, dj || settings.mix.on),
             onSave = if (queue.size > 1) ({ saving = true }) else null,
             onClear = if (order.isNotEmpty()) ({ pc.clearUpcoming() }) else null,
             locked = locked, onLock = { c.settings.setQueueLocked(!locked) },
@@ -388,6 +392,8 @@ private fun LazyListScope.queueSection(
 internal fun QueueHeader(
     title: String,
     dj: Boolean?, onDj: () -> Unit,
+    /** #493: "Last time: …", behind an ⓘ by the DJ chip (null: no ⓘ). */
+    djWhy: String? = null,
     onSave: (() -> Unit)?,
     onClear: (() -> Unit)?,
     locked: Boolean, onLock: () -> Unit,
@@ -405,6 +411,7 @@ internal fun QueueHeader(
                 horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (dj != null) QueueChip("DJ", selected = dj, onClick = onDj)
+                if (dj != null && djWhy != null) QueueWhy(djWhy)
                 if (onSave != null) QueueChip(tr(R.string.save), onClick = onSave)
                 if (onClear != null) QueueChip(tr(R.string.clear), onClick = onClear)
             }
@@ -440,6 +447,28 @@ internal fun QueueHeader(
             titleP.placeRelative(0, (height - titleP.height) / 2)
             chips.placeRelative(width - lock.width - chips.width, (height - chips.height) / 2)
             lock.placeRelative(width - lock.width, (height - lock.height) / 2)
+        }
+    }
+}
+
+/** The DJ chip's ⓘ line (#493): why the last two songs didn't blend, while DJ mode or Crossfade is on and there's a reason. */
+internal fun queueDjWhy(why: com.prism.music.playback.MixWhy?, mixing: Boolean): String? =
+    if (why == null || !mixing) null else com.prism.music.ui.screens.settings.mixWhyLine(why)
+
+/** Test tag of the DJ chip's ⓘ. */
+internal const val QUEUE_DJ_WHY = "queue/dj-why"
+
+/** The small ⓘ by the DJ chip: [text] opens under it (#493). */
+@Composable
+private fun QueueWhy(text: String) {
+    var open by remember { mutableStateOf(false) }
+    Box {
+        Icon(
+            PrismIcons.Info, tr(R.string.mix_why_last_blend), tint = Color.White.copy(alpha = if (open) 1f else 0.7f),
+            modifier = Modifier.testTag(QUEUE_DJ_WHY).size(30.dp).clip(CircleShape).clickable { open = !open }.padding(6.dp),
+        )
+        androidx.compose.material3.DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+            Text(text, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).width(240.dp))
         }
     }
 }

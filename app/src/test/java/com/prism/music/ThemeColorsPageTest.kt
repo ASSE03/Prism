@@ -88,16 +88,19 @@ class ThemeColorsPageTest : ThemeLooksPageHarness() {
         assertEquals("Prism", valueOf("Preset"))
         assertEquals("Smooth", valueOf("Smooth or bands"))
         assertEquals("Your pick", valueOf("Accent from"))
+        // W17 (1.8.7.6): the swatch says it; the hex code is read out, and is in the picker, but isn't drawn on the row.
         assertEquals("#3A86FF", valueOf("Accent color"))
+        assertFalse("#3A86FF" in textsOf(compose.onNodeWithTag(SettingsTags.PAGE_LIST, useUnmergedTree = true).fetchSemanticsNode()))
         assertEquals("Softened", valueOf("How it's used"))
         assertEquals("The same as your accent", valueOf("Light mode accent"))
         assertEquals("Automatic", valueOf("Page background"))
         assertEquals("Standard", valueOf("Text contrast"))
         assertEquals("Your accent", valueOf("Page colors"))
         assertEquals("Designs or your own photo", valueOf("Screen backgrounds"))
-        assertEquals("Frosted Glass", valueOf("Glass"))
-        assertEquals("100%", valueOf("Blur"))
-        assertEquals("100%", valueOf("Frost"))
+        assertEquals("Frosted glass", valueOf("Glass"))
+        // W21 (1.8.7.6): 100% is the middle of both sliders, how the glass is designed.
+        assertEquals("As designed", valueOf("Blur"))
+        assertEquals("As designed", valueOf("Frost"))
         assertEquals("Artist and album pages", valueOf("Glass also on"))
         // Nothing differs from how Prism comes: no dot anywhere, and nothing for Reset this page to do.
         assertTrue(rows().none { it.config[SettingsRowChanged] })
@@ -147,7 +150,7 @@ class ThemeColorsPageTest : ThemeLooksPageHarness() {
         await { stored.performanceMode }
         page()
         // The settings shown are the stored ones, not what Performance mode draws.
-        assertEquals("Frosted Glass", valueOf("Glass"))
+        assertEquals("Frosted glass", valueOf("Glass"))
         assertEquals(listOf("") + defaultGroups, groups().map { it.first })
         assertEquals("Some of these effects are paused for now", valueOf("Performance mode is on"))
         assertEquals(19, rows().size)
@@ -415,8 +418,8 @@ class ThemeColorsPageTest : ThemeLooksPageHarness() {
     }
 
     @Test fun theRootsLineNamesTheGlassAndTheTheme() {
-        assertEquals("Frosted Glass · System", themeColorsValue(AppSettings(), true))
-        assertEquals("Liquid Glass · Black", themeColorsValue(AppSettings(liquidGlass = true, themeMode = ThemeMode.DARK, pureBlack = true), true))
+        assertEquals("Frosted glass · System", themeColorsValue(AppSettings(), true))
+        assertEquals("Liquid glass · Black", themeColorsValue(AppSettings(liquidGlass = true, themeMode = ThemeMode.DARK, pureBlack = true), true))
         assertEquals("Solid bars · Light", themeColorsValue(AppSettings(frostedGlass = false, themeMode = ThemeMode.LIGHT, pureBlack = true), true))
     }
 

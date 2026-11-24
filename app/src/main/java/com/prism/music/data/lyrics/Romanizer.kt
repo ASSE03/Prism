@@ -55,8 +55,33 @@ class Romanizer(
     private val japaneseForTests: Japanese? = null,
 ) {
     private val _overrides = MutableStateFlow(
-        songPrefs?.all?.mapNotNull { (k, v) -> (v as? Boolean)?.let { k to it } }?.toMap().orEmpty()
+        songPrefs?.all?.filterKeys { !it.startsWith(READ_AS_PREFIX) }?.mapNotNull { (k, v) -> (v as? Boolean)?.let { k to it } }?.toMap().orEmpty()
     )
+
+    /**
+     * Songs the listener said are Japanese (true) or not (false), whatever their letters suggest (6.3): kept, so the
+     * choice sticks over every later look-up and lyric source.
+     */
+    private val readAs = HashMap<String, Boolean>().apply {
+        songPrefs?.all?.forEach { (k, v) -> if (k.startsWith(READ_AS_PREFIX) && v is Boolean) put(k.removePrefix(READ_AS_PREFIX), v) }
+    }
+
+    /** Sets (null: clears) whether [songId]'s lyrics are read as Japanese. */
+    fun setJapanese(songId: String, japanese: Boolean?) {
+        synchronized(readAs) { if (japanese == null) readAs.remove(songId) else readAs[songId] = japanese }
+        songPrefs?.edit()?.apply { if (japanese == null) remove(READ_AS_PREFIX + songId) else putBoolean(READ_AS_PREFIX + songId, japanese) }?.apply()
+    }
+
+    /** The listener's own word on whether [songId] is Japanese, if they gave it. */
+    fun japaneseChoice(songId: String): Boolean? = synchronized(readAs) { readAs[songId] }
+
+    /**
+     * Whether a song is Japanese: the listener's word for it, else any kana in its lyrics, title, artist or album
+     * (6.3: a song of only kanji by "ヨルシカ" or on an album with kana was read as Chinese).
+     */
+    fun isJapanese(songId: String, lines: List<LyricLine>, title: String = "", artist: String = "", album: String = ""): Boolean =
+        japaneseChoice(songId) ?: (listOf(title, artist, album).any { Script.KANA in Script.foreignIn(it) } ||
+            lines.any { Script.KANA in Script.foreignIn(it.text) })
     /** Per-song choices: song id → romanized (even in the phone's own script) or not. */
     val overrides: StateFlow<Map<String, Boolean>> = _overrides
 
@@ -114,12 +139,15 @@ class Romanizer(
      * [lines] in Latin letters, line for line (null where a line needs none: it's already Latin, or in one of [skip],
      * the scripts the listener reads). Word-timed lines come back word-timed. [network] allows Google's romanization.
      *
-     * Whether it's Japanese is decided for the whole song, by any kana in its lyrics or its [title]: a line of only kanji
-     * looks Chinese on its own (#370).
+     * Whether it's Japanese is decided for the whole song ([isJapanese]): the listener's word, else any kana in its
+     * lyrics, [title], [artist] or [album]. A line of only kanji looks Chinese on its own (#370).
      */
-    suspend fun romanize(songId: String, lines: List<LyricLine>, skip: Set<Script>, network: Boolean = true, title: String = ""): List<LyricLine?> =
+    suspend fun romanize(
+        songId: String, lines: List<LyricLine>, skip: Set<Script>, network: Boolean = true,
+        title: String = "", artist: String = "", album: String = "",
+    ): List<LyricLine?> =
         withContext(Dispatchers.Default) {
-            val japaneseSong = Script.KANA in Script.foreignIn(title) || lines.any { Script.KANA in Script.foreignIn(it.text) }
+            val japaneseSong = isJapanese(songId, lines, title, artist, album)
             val jaReady = japaneseForTests != null || models.ready(ModelStore.Model.JAPANESE)
             val key = "$songId|$VERSION|${if (jaReady) "ja" else "-"}|${if (japaneseSong) "j" else ""}|${skip.sorted().joinToString(",")}|" +
                 lines.joinToString("\n") { it.text + "|" + it.backgroundLine?.text.orEmpty() }.hashCode()
@@ -320,6 +348,8 @@ class Romanizer(
         // 4 (1.8.2.1, #370): Japanese songs with kanji read as Chinese are spelled again.
         private const val VERSION = 4
         private const val RELEASE_AFTER_MS = 3 * 60_000L
+        /** [songPrefs] keys for the listener's "this song is Japanese" word (beside the plain song-id romanize switches). */
+        private const val READ_AS_PREFIX = "ja-read:"
         /** Line-by-line requests are only made for this many lines (a long song's worth). */
         private const val MAX_SINGLE = 80
 

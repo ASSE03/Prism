@@ -100,9 +100,10 @@ class YouTubeLiveInAppTest {
         seeText("Connect Spotify to use this")
         compose.clickWhenFound(hasText("Spotify (live)") and hasClickAction())
         // Back on Accounts & sharing, at Spotify: not connected, it is one row, and the guide is the sheet it opens.
-        val spotifyRow = settingsRow(tr(R.string.spotify)) and hasText(tr(R.string.cn_not_connected))
+        val spotifyRow = settingsRow(tr(R.string.spotify)) and hasText(tr(R.string.cn_spot_not_connected))
         compose.scrollSettingsTo(spotifyRow)
         compose.clickWhenFound(spotifyRow)
+        compose.clickWhenFound(hasText("Use your own developer app") and hasClickAction())   // 1.8.7.5: two ways to connect
         seeText("Create app")
     }
 

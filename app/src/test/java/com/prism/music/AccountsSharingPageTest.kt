@@ -21,6 +21,7 @@ import com.prism.music.data.prefs.AppSettings
 import com.prism.music.data.prefs.ThemeMode
 import com.prism.music.data.spotify.Spotify
 import com.prism.music.data.spotify.SpotifyOAuth
+import com.prism.music.data.spotify.SpotifyStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.prism.music.ui.screens.SettingsIndex
 import com.prism.music.ui.screens.settings.SettingsMap
@@ -69,6 +70,8 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
     private val links = t(R.string.links_you_share)
     private val openLinks = t(R.string.open_youtube_music_links_in_prism)
     private val notConnected = t(R.string.cn_not_connected)
+    private val spotifyNotConnected = t(R.string.cn_spot_not_connected)
+    private val otherServices = t(R.string.cn_other_services)
 
     /** `ConnectTags`: a line and a paragraph of a sheet's content, the Client ID's field and Connect. */
     private val line = "settings:connect:line"
@@ -105,6 +108,137 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         state.value = Spotify.Connection.Connected("Tester")
     }
 
+    /**
+     * Spotify as connected by the sign-in on Spotify's page (1.8.7.5), or signed out there ([state] Revoked): the
+     * session's mark in its own preferences (no token: it would be sealed with the Keystore), and the state as read.
+     */
+    @Suppress("UNCHECKED_CAST")
+    private fun signInToSpotify(state: Spotify.Connection = Spotify.Connection.Connected("Tester"), canvasOfferAnswered: Boolean = true) {
+        app.getSharedPreferences(SpotifyStore.AUTH_PREFS, Context.MODE_PRIVATE).edit()
+            .putBoolean("session_on", true).putBoolean("session_ended", state == Spotify.Connection.Revoked).commit()
+        val flow = Spotify::class.java.getDeclaredField("_connection").apply { isAccessible = true }.get(container.spotify) as MutableStateFlow<Spotify.Connection>
+        flow.value = state
+        assertTrue("the session's mark is read", container.spotify.bySession)
+        // 1.8.7.6: the one-time offer of Spotify's canvas, answered already unless a test is about it.
+        if (canvasOfferAnswered) {
+            container.settings.answerSpotifyCanvasOffer(false)
+            until("the offer answered") { it.behavior.canvas.spotifyOffered }
+        }
+    }
+
+    // ------------------------------------------------------------------ 1.8.7.6: the offer of Spotify's canvas
+
+    private val offerTitle get() = t(R.string.spot_canvas_offer_title)
+    private fun offerShown() = compose.onAllNodes(hasText(offerTitle)).fetchSemanticsNodes().isNotEmpty()
+
+    /** Right after a session sign-in (or the next time this page opens for someone signed in before): once; Turn on sets the switch. */
+    @Test fun aSessionSignInOffersSpotifysCanvasOnceAndTurnOnSetsIt() {
+        signInToSpotify(canvasOfferAnswered = false)
+        show()
+        compose.waitUntil(5_000) { offerShown() }
+        compose.onNodeWithText(t(R.string.spot_canvas_offer_text)).assertExists()
+        assertFalse(stored.behavior.canvas.spotifyFirst)
+        // The whole sheet, title included, for the design review (build/settings-pages/accounts-sharing).
+        val sheet = compose.onAllNodes(androidx.compose.ui.test.isDialog()).fetchSemanticsNodes()
+        if (sheet.isNotEmpty()) {
+            val shot = compose.onAllNodes(androidx.compose.ui.test.isDialog())[0].captureToImage().asAndroidBitmap()
+            val dir = File("build/settings-pages/accounts-sharing").apply { mkdirs() }
+            File(dir, "accounts-dark-spotify-canvas-offer.png").outputStream().use { shot.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        } else saveNode("spot_canvas_offer", "accounts-dark-spotify-canvas-offer")
+        compose.onNodeWithTag("spot_canvas_offer_on").performClick()
+        until("turned on and answered") { it.behavior.canvas.spotifyFirst && it.behavior.canvas.spotifyOffered }
+        compose.waitUntil(5_000) { !offerShown() }
+        // The page opened again: never offered again.
+        assertFalse(com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, stored))
+        assertNoSecretShown()
+    }
+
+    /** 1.8.7.6, the A16 check: with Prism's own Canvas off (both switches), the offer still comes and Turn on sets it. */
+    @Test fun theOfferComesWithPrismsCanvasOffAndTurnOnSetsIt() {
+        container.settings.setCanvasKinds(covers = false, videos = false)
+        until("Prism's Canvas off") { !it.behavior.canvas.enabled }
+        signInToSpotify(canvasOfferAnswered = false)
+        show()
+        compose.waitUntil(5_000) { offerShown() }
+        compose.onNodeWithTag("spot_canvas_offer_on").performClick()
+        until("turned on") { it.behavior.canvas.spotifyFirst && it.behavior.canvas.spotifyOffered }
+        assertFalse("Prism's own Canvas stays as it was", stored.behavior.canvas.enabled)
+        assertTrue("and Spotify's canvas is asked", com.prism.music.data.canvas.spotifyCanvasOn(container.settings.current, true))
+    }
+
+    @Test fun notNowAnswersTheOfferForGoodAndLeavesTheSwitchOff() {
+        signInToSpotify(canvasOfferAnswered = false)
+        show()
+        compose.waitUntil(5_000) { offerShown() }
+        compose.onNodeWithTag("spot_canvas_offer_not_now").performClick()
+        until("answered") { it.behavior.canvas.spotifyOffered }
+        assertFalse(stored.behavior.canvas.spotifyFirst)
+        compose.waitUntil(5_000) { !offerShown() }
+        assertFalse(com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, stored))
+    }
+
+    @Test fun theOwnDeveloperAppIsNeverOfferedSpotifysCanvas() {
+        connectSpotify()
+        assertFalse(container.spotify.bySession)
+        show()
+        compose.waitForIdle()
+        assertFalse(offerShown())
+        assertFalse(stored.behavior.canvas.spotifyOffered)
+    }
+
+    @Test fun theOfferIsNotShownOnceTheSwitchWasSetByHand() {
+        container.settings.setCanvasSpotifyFirst(true)
+        until("set by hand") { it.behavior.canvas.spotifyFirst && it.behavior.canvas.spotifyOffered }
+        container.settings.setCanvasSpotifyFirst(false)
+        until("off again") { !it.behavior.canvas.spotifyFirst }
+        signInToSpotify(canvasOfferAnswered = false)
+        show()
+        compose.waitForIdle()
+        assertFalse(offerShown())
+    }
+
+    @Test fun whenTheOfferShows() {
+        val on = AppSettings()
+        val s = com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, on)
+        assertTrue(s)
+        assertFalse("not connected", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(false, true, on))
+        assertFalse("the own developer app", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, false, on))
+        fun with(f: (com.prism.music.data.prefs.CanvasPrefs) -> com.prism.music.data.prefs.CanvasPrefs) = on.copy(behavior = on.behavior.copy(canvas = f(on.behavior.canvas)))
+        assertFalse("answered", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, with { it.copy(spotifyOffered = true) }))
+        assertFalse("already on", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, with { it.copy(spotifyFirst = true) }))
+        // 1.8.7.6 (the A16 check): Prism's own two switches have no say; Performance mode holds it back for later.
+        for ((covers, videos) in listOf(true to true, true to false, false to true, false to false)) {
+            val kinds = com.prism.music.data.prefs.CanvasKinds(covers, videos).toStored(com.prism.music.data.prefs.CanvasStored(true, true, true))
+            assertTrue("covers $covers, videos $videos", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true,
+                with { it.copy(enabled = kinds.enabled, covers = kinds.covers, useVideos = kinds.videos) }))
+        }
+        assertFalse("Performance mode", com.prism.music.ui.screens.settings.spotifyCanvasOfferShown(true, true, on.copy(performanceMode = true)))
+        // Its words: unofficial, no exclamation marks, no em dashes.
+        val text = t(R.string.spot_canvas_offer_text)
+        assertTrue(text, "unofficial" in text.lower())
+        for (id in listOf(R.string.spot_canvas_offer_title, R.string.spot_canvas_offer_text, R.string.spot_canvas_first, R.string.spot_canvas_first_info)) {
+            assertFalse(t(id), t(id).contains('!') || t(id).contains('—'))
+        }
+        assertTrue("unofficial" in t(R.string.spot_canvas_first_info).lower())
+    }
+
+    private fun String.lower() = lowercase()
+
+    /** The Spotify row's "Connect Spotify" sheet, then its own-app card: "How to connect". */
+    private fun openHowToConnect() {
+        compose.onNode(rowIs(spotify)).performClick()
+        compose.waitForIdle()
+        compose.onNode(hasTestTag(SettingsTags.SHEET_OPTION) and hasText(t(R.string.spot_session_own_app))).performClick()
+        compose.waitUntil(5_000) { compose.onAllNodes(hasText(t(R.string.cn_how_to_connect))).fetchSemanticsNodes().isNotEmpty() }
+        compose.waitForIdle()
+    }
+
+    private fun route(): String? = navController?.currentDestination?.route
+
+    /** Every text on the screen (merged rows and dialogs too). */
+    private fun allTexts(): List<String> = compose.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsProperties.Text), useUnmergedTree = true)
+        .fetchSemanticsNodes().flatMap { n -> n.config.getOrNull(SemanticsProperties.Text).orEmpty().map { it.text } }
+
     /** Discord as signed in (a made-up sign-in in its own preferences), with the switch as stored. */
     private fun signInToDiscord() {
         app.getSharedPreferences("discord", Context.MODE_PRIVATE).edit().putString("token", MADE_UP_ACCESS).commit()
@@ -121,11 +255,12 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
     @Test fun fiveGroupsWithinTheBudgets() {
         show()
         assertBudgets("defaults")
-        // Accounts 3 · Last.fm 1 · Spotify 1 · Discord 1 · Sharing and links 2.
-        assertEquals(listOf(3, 1, 1, 1, 2), groupSizes())
+        // Accounts 4 (Bring your history is the last) · Last.fm 1 · Spotify 1 · Discord 1 · Sharing and links 2.
+        assertEquals(listOf(4, 1, 1, 1, 2), groupSizes())
         assertEquals(0, changedRows())
-        // Last.fm, Spotify and Discord have no title over their card: their first row names them (§2.7).
-        assertEquals(listOf(accounts, sharing), headings())
+        // Last.fm, Spotify and Discord have no title of their own over their cards (their first row names them, §2.7),
+        // but one heading over the three (W46, 1.8.7.6).
+        assertEquals(listOf(accounts, otherServices, sharing), headings())
         assertTrue(headings().none { it == me.title })
 
         assertEquals(SettingsTags.ROW_LINK, type(prismAccount))
@@ -134,15 +269,17 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         assertEquals(t(R.string.tv_not_signed_in), value(youtubeMusic))
         assertEquals(SettingsTags.ROW_LINK, type(history))
         assertEquals(t(R.string.ytlive_connection_signed_out), value(history))
-        // Last.fm: "Connect Last.fm" · Not connected, or (a copy built without Last.fm's key) a row that says so.
+        // Last.fm: "Last.fm" · Not connected (W47, 1.8.7.6: a plain name, as Spotify's row), or (a copy built without
+        // Last.fm's key) a row that says so.
         if (container.lastFm.available) {
-            assertEquals(SettingsTags.ROW_LINK, type(t(R.string.connect_last_fm)))
-            assertEquals(notConnected, value(t(R.string.connect_last_fm)))
+            assertEquals(SettingsTags.ROW_LINK, type("Last.fm"))
+            assertEquals(notConnected, value("Last.fm"))
         } else {
             assertEquals(t(R.string.this_copy_of_prism_was_built), value("Last.fm"))
         }
         assertEquals(SettingsTags.ROW_PICK, type(spotify))
-        assertEquals(notConnected, value(spotify))
+        // W48 (1.8.7.6): Spotify's says what connecting reads.
+        assertEquals(spotifyNotConnected, value(spotify))
         assertEquals(SettingsTags.ROW_SWITCH, type(discord))
         assertEquals(t(R.string.tv_not_signed_in), value(discord))
         assertFalse(hasTitled(discordSignOut))
@@ -174,7 +311,7 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
 
         assertEquals(t(R.string.on_discord_as, "tester"), value(discord))
         assertTrue("signed in: Sign out shows", hasTitled(discordSignOut))
-        assertEquals(listOf(3, 1, 1, 2, 2), groupSizes())
+        assertEquals(listOf(4, 1, 1, 2, 2), groupSizes())
         tap(discord)
         until("discord_presence") { !it.discordPresence }
         assertEquals(t(R.string.cn_signed_in_as, "tester"), value(discord))
@@ -227,8 +364,7 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
     @Test fun spotifysStepsAreInItsHowToConnectSheet() {
         show()
         assertEquals(0, texts(paragraph).size)
-        compose.onNode(rowIs(spotify)).performClick()
-        compose.waitForIdle()
+        openHowToConnect()
         assertEquals(1, sheets())
         assertEquals(1, compose.onAllNodes(hasText(t(R.string.cn_how_to_connect))).fetchSemanticsNodes().size)
         val said = texts(paragraph)
@@ -260,7 +396,7 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         // (Connect is never tapped here: it opens Spotify's page.)
         assertEquals(Spotify.Connection.None, container.spotify.connection.value)
         swipeSheetAway()
-        assertEquals(notConnected, value(spotify))
+        assertEquals(spotifyNotConnected, value(spotify))
         assertBudgets("after the sheet")
     }
 
@@ -269,9 +405,9 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         connectSpotify()
         show()
         assertBudgets("Spotify connected")
-        assertEquals(listOf(accounts, spotify, sharing), headings())
+        assertEquals(listOf(accounts, otherServices, spotify, sharing), headings())
         // Recent plays, Top songs and artists, Your playlists, Liked Songs both ways, Disconnect Spotify.
-        assertEquals(listOf(3, 1, 5, 1, 2), groupSizes())
+        assertEquals(listOf(4, 1, 5, 1, 2), groupSizes())
         for (id in listOf(R.string.spot_recent, R.string.spot_top, R.string.spot_playlists, R.string.spot_likes)) assertEquals(t(id), SettingsTags.ROW_SWITCH, type(t(id)))
         // "Keep in step" only shows with the playlists on.
         assertFalse(hasTitled(t(R.string.spot_keep_in_step)))
@@ -294,6 +430,128 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         assertNoSecretShown()
     }
 
+    /**
+     * 1.8.7.5: the Spotify row opens "Connect Spotify", a card for each way: "Sign in to Spotify" first (to the "Before
+     * you sign in" screen), then "Use your own developer app" (to "How to connect", as before). The sign-in is never
+     * called official; nothing is picked beforehand.
+     */
+    @Test fun connectOffersTheTwoWays() {
+        show()
+        assertEquals(SettingsTags.ROW_PICK, type(spotify))
+        compose.onNode(rowIs(spotify)).performClick()
+        compose.waitForIdle()
+        assertEquals(1, sheets())
+        assertEquals(1, compose.onAllNodes(hasText(t(R.string.spot_session_choose_title))).fetchSemanticsNodes().size)
+        val cards = compose.onAllNodes(hasTestTag(SettingsTags.SHEET_OPTION)).fetchSemanticsNodes()
+        assertEquals(2, cards.size)
+        val labels = cards.map { n -> n.config.getOrNull(SemanticsProperties.Text).orEmpty().joinToString(" ") { it.text } }
+        assertEquals(listOf(t(R.string.spot_session_sign_in), t(R.string.spot_session_own_app)), labels)
+        assertTrue("nothing is ringed as picked", cards.none { it.config.getOrNull(SemanticsProperties.Selected) == true })
+        // The sign-in's words: never "official" (the own app's way may say Spotify's official API).
+        val signIn = listOf(R.string.spot_session_sign_in, R.string.spot_session_sign_in_1, R.string.spot_session_sign_in_2, R.string.spot_session_sign_in_3, R.string.spot_session_about, R.string.spot_session_likes_info)
+            .joinToString("\n") { t(it) } + "\n" + t(R.string.spot_session_choose_info).substringBefore("\n\n")
+        assertFalse(signIn, "official" in signIn.lowercase())
+        // Nothing explains on the sheet itself: the longer words are behind its ⓘ.
+        assertEquals(0, compose.onAllNodes(hasText(t(R.string.spot_session_choose_info))).fetchSemanticsNodes().size)
+
+        // Sign in to Spotify: the sheet goes, then the "Before you sign in" screen opens.
+        compose.onNode(hasTestTag(SettingsTags.SHEET_OPTION) and hasText(t(R.string.spot_session_sign_in))).performClick()
+        compose.waitUntil(5_000) { route() == "spotify_before" }
+        assertEquals(Spotify.Connection.None, container.spotify.connection.value)
+    }
+
+    /**
+     * Connected by the sign-in: "Connected as", Your playlists and a read-only Liked Songs; no Recent plays, no Top, no
+     * "both ways" (nor its counts); Disconnect doesn't ask about a Client ID.
+     */
+    @Test fun aSessionShowsOnlyWhatItReads() {
+        signInToSpotify()
+        show()
+        assertBudgets("Spotify signed in")
+        assertEquals(listOf(accounts, otherServices, spotify, sharing), headings())
+        // Your playlists, Liked Songs, Disconnect Spotify.
+        assertEquals(listOf(4, 1, 3, 1, 2), groupSizes())
+        assertEquals(SettingsTags.ROW_SWITCH, type(t(R.string.spot_playlists)))
+        assertEquals(SettingsTags.ROW_SWITCH, type(t(R.string.spot_session_likes)))
+        for (id in listOf(R.string.spot_recent, R.string.spot_top, R.string.spot_likes)) assertFalse(t(id), hasTitled(t(id)))
+        assertTrue(allTexts().none { "both ways" in it || it == t(R.string.spot_likes_counting) })
+        // The read-only switch says so (behind its ⓘ), and every switch is off until turned on.
+        val info = t(R.string.spot_session_likes_info)
+        assertTrue(info, "brought into prism" in info.lowercase() && "nothing is written to spotify" in info.lowercase())
+        assertFalse(container.spotify.options.value.likes || container.spotify.options.value.playlists || container.spotify.options.value.recent || container.spotify.options.value.top)
+        // The sign-in reads followed playlists: its ⓘ texts never say they can't be read, nor name a developer app.
+        for (id in listOf(R.string.spot_session_playlists_info, R.string.spot_session_keep_in_step_info)) {
+            assertTrue(t(id), t(id).lowercase().let { "can’t be read" !in it && "can't be read" !in it && "developer app" !in it })
+        }
+        assertTrue(t(R.string.spot_session_playlists_info).contains(t(R.string.spot_session_followed_all)))
+        val disconnect = t(R.string.cn_disconnect_spotify)
+        assertEquals(t(R.string.spot_connected_as, "Tester"), value(disconnect))
+
+        tap(disconnect)
+        compose.onNodeWithText(t(R.string.spot_disconnect_title)).assertExists()
+        assertEquals("no Client ID to forget", 0, compose.onAllNodes(hasText(t(R.string.spot_forget_client_id))).fetchSemanticsNodes().size)
+        assertEquals(1, compose.onAllNodes(hasText(t(R.string.spot_keep_playlists))).fetchSemanticsNodes().size)
+        compose.onNodeWithText(t(R.string.cancel)).performClick()
+        compose.waitForIdle()
+        assertEquals(Spotify.Connection.Connected("Tester"), container.spotify.connection.value)
+        assertNoSecretShown()
+    }
+
+    /** Signed out by Spotify after the sign-in: "Sign in again" (to "Before you sign in"), not the own app's Reconnect. */
+    @Test fun aSessionTakenBackSignsInAgain() {
+        signInToSpotify(Spotify.Connection.Revoked)
+        show()
+        assertBudgets("Spotify session ended")
+        val again = t(R.string.spot_session_sign_in_again)
+        assertEquals(SettingsTags.ROW_LINK, type(again))
+        assertEquals(t(R.string.spot_session_signed_out), value(again))
+        assertTrue(hasTitled(t(R.string.cn_disconnect_spotify)))
+        assertFalse("no own-app row", hasTitled(spotify))
+        assertTrue(allTexts().none { it == t(R.string.cn_spot_access_taken_back) || it == t(R.string.spot_reconnect) })
+        tap(again)
+        compose.waitUntil(5_000) { route() == "spotify_before" }
+    }
+
+    /** Search finds the Spotify card by the sign-in's words. */
+    @Test fun theSignInIsFoundBySearch() {
+        for (q in listOf("spotify sign in", "spotify login", "spotify account")) {
+            assertTrue(q, SettingsIndex.search(q).any { it.page == me && it.group == spotify })
+        }
+        assertTrue(SettingsIndex.search("spotify login").any { it.title == t(R.string.spot_session_sign_in) })
+    }
+
+    /**
+     * 1.8.7.6: "Bring your history" moved here from Recommendations & history: it is the last row of Accounts (after
+     * "YouTube Music history"), opens its screen, has its search line here and none there, and the old link finds it.
+     */
+    @Test fun bringYourHistoryIsTheLastRowOfAccounts() {
+        show()
+        val bring = t(R.string.imp_title)
+        val titles = rows().mapNotNull { it.config.getOrNull(SemanticsProperties.Text)?.firstOrNull()?.text }
+        assertEquals(titles.indexOf(history) + 1, titles.indexOf(bring))
+        assertEquals(titles.indexOf(prismAccount) + 3, titles.indexOf(bring))
+        assertEquals(SettingsTags.ROW_LINK, type(bring))
+        assertEquals(t(R.string.imp_row_detail), value(bring))
+        val nc = navController!!
+        compose.runOnUiThread {
+            val navigator = nc.navigatorProvider.getNavigator(androidx.navigation.compose.ComposeNavigator::class.java)
+            nc.graph.addDestination(
+                androidx.navigation.compose.ComposeNavigator.Destination(navigator) { androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier) }
+                    .apply { route = com.prism.music.ui.Routes.BRING_HISTORY },
+            )
+        }
+        tap(bring)
+        compose.waitUntil(5_000) { route() == com.prism.music.ui.Routes.BRING_HISTORY }
+        // Search: one line here, in Accounts; none on Recommendations & history.
+        val lines = SettingsIndex.entries.filter { it.title == bring }
+        assertEquals(listOf(me), lines.map { it.page })
+        assertEquals(accounts, lines.single().group)
+        assertTrue(SettingsIndex.search("spotify history").any { it.page == me && it.title == bring })
+        assertTrue(SettingsIndex.entries.none { it.page == SettingsPageId.RECOMMENDATIONS_HISTORY && it.title == bring })
+        // The old link (library, Bring your history) opens this page at its Accounts group.
+        assertEquals(SettingsTarget(me, accounts), SettingsMap.resolve("library", bring))
+    }
+
     /** The old links land, and every line of the page's search names a group the page draws. */
     @Test fun theOldRoutesAndSearch() {
         val discordKey = t(R.string.discord)
@@ -307,10 +565,10 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         assertEquals(SettingsTarget(me, sharing), SettingsMap.resolve("devices", sharing))
 
         val mine = SettingsIndex.entries.filter { it.page == me && !it.isPage }
-        assertEquals(setOf(accounts, "Last.fm", spotify, discordKey, sharing), mine.map { it.group }.toSet())
+        assertEquals(setOf(accounts, otherServices, "Last.fm", spotify, discordKey, sharing), mine.map { it.group }.toSet())
         // The groups' keys are in the page as it is written (three of the cards have no title to read them from).
         val source = File("src/main/java/com/prism/music/ui/screens/settings/AccountsSharingPage.kt").readText()
-        for (key in listOf("group(tr(R.string.accounts))", "group(null, key = LAST_FM)", "key = tr(R.string.spotify)", "group(null, key = tr(R.string.discord))", "group(tr(R.string.sharing_and_links))")) {
+        for (key in listOf("group(tr(R.string.accounts))", "group(tr(R.string.cn_other_services), key = LAST_FM)", "key = tr(R.string.spotify)", "group(null, key = tr(R.string.discord))", "group(tr(R.string.sharing_and_links))")) {
             assertTrue(key, key in source)
         }
         // The rows that only explained have no line any more; what they said is words for the row that took it over.
@@ -356,6 +614,11 @@ class AccountsSharingPageTest : ListeningPageHarness(SettingsPageId.ACCOUNTS_SHA
         show(glass = true) { it.copy(themeMode = ThemeMode.DARK) }
         compose.onNode(rowIs(spotify)).performClick()
         compose.waitForIdle()
+        assertEquals(1, sheets())
+        val ways = runCatching { saveNode(SettingsTags.SHEET, "accounts-dark-connect-spotify") }
+        assertTrue("the sheet's picture: ${ways.exceptionOrNull()}", ways.isSuccess)
+        swipeSheetAway()
+        openHowToConnect()
         assertEquals(1, sheets())
         val how = runCatching { saveNode(SettingsTags.SHEET, "accounts-dark-how-to-connect") }
         assertTrue("the sheet's picture: ${how.exceptionOrNull()}", how.isSuccess)

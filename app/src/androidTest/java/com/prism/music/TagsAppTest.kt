@@ -66,7 +66,7 @@ class TagsAppTest {
         compose.waitUntil(5_000) { compose.onAllNodes(hasTestTag("selectionBar")).fetchSemanticsNodes().isNotEmpty() }
         compose.onAllNodes(hasText("Test song 2")).onFirst().performClick()
         compose.waitForText("2 songs picked")
-        compose.clickWhenFound(hasText("Add a tag") and hasClickAction())
+        compose.clickSelectionAction("Add a tag")
         compose.waitUntil(5_000) { compose.onAllNodes(hasTestTag("newTag")).fetchSemanticsNodes().isNotEmpty() }
         compose.onAllNodes(hasTestTag("newTag")).onFirst().performTextInput("Gym")
         compose.clickWhenFound(hasTestTag("addTag"))

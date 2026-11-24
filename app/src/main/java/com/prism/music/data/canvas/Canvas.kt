@@ -30,6 +30,11 @@ data class CanvasArtwork(
     val album: String? = null,
     /** 1.8.6: set when this is a loop cut from the song's music video; [url] is then the clip's own key ([VideoClip.key]). */
     val clip: VideoClip? = null,
+    /**
+     * 1.8.7.6: Spotify's own canvas ("Spotify's canvas first", [SpotifyCanvasSource]): it shows where the animated cover
+     * would, is never saved with a song or its download (plan D5), and is never written to the animated covers' index.
+     */
+    val spotify: Boolean = false,
 )
 
 /**
@@ -70,9 +75,18 @@ class CanvasRepository(private val http: OkHttpClient) {
             field = v
             hidden.value = v?.getStringSet("ids", emptySet())?.toSet() ?: emptySet()
             hiddenLoops.value = v?.getStringSet("loops", emptySet())?.toSet() ?: emptySet()
+            hiddenSpotify.value = v?.getStringSet("spotify", emptySet())?.toSet() ?: emptySet()
         }
     val hidden = kotlinx.coroutines.flow.MutableStateFlow<Set<String>>(emptySet())
     val hiddenLoops = kotlinx.coroutines.flow.MutableStateFlow<Set<String>>(emptySet())
+    /** 1.8.7.6: songs whose Spotify canvas is switched off ("Spotify canvas" in the ⋯ menu), apart from the other two. */
+    val hiddenSpotify = kotlinx.coroutines.flow.MutableStateFlow<Set<String>>(emptySet())
+
+    fun setSpotifyHidden(songId: String, hide: Boolean) {
+        val next = if (hide) hiddenSpotify.value + songId else hiddenSpotify.value - songId
+        hiddenSpotify.value = next
+        hiddenPrefs?.edit()?.putStringSet("spotify", next)?.apply()
+    }
 
     fun setHidden(songId: String, hide: Boolean) {
         val next = if (hide) hidden.value + songId else hidden.value - songId
@@ -201,10 +215,58 @@ class CanvasRepository(private val http: OkHttpClient) {
     private fun latinless(s: String) = !Regex("[a-z0-9]").containsMatchIn(Normalizer.normalize(s, Normalizer.Form.NFD).lowercase(Locale.ROOT))
     private fun entry(song: Song): Entry? = cache[song.id]?.takeIf { !it.suspect(song) }
 
-    fun cached(song: Song): CanvasArtwork? = synchronized(cache) { entry(song)?.art }
+    /**
+     * 1.8.7.6, "Spotify's canvas first": Spotify's own canvas, asked before Prism's animated covers while it is on and the
+     * Spotify connection is the web-player session ([SpotifyCanvasSource.enabled]). Set up by the app container; null
+     * (tests, or before it is set) asks nothing of Spotify.
+     */
+    var spotify: SpotifyCanvasSource? = null
 
-    suspend fun canvasFor(song: Song): CanvasArtwork? {
+    /** Whether Prism's own animated covers (Apple, Tidal, the community index) may play ([prismCoversOn]); the app container's. */
+    var prismCovers: () -> Boolean = { true }
+
+    /** Spotify's canvas may be asked now ([spotifyCanvasOn]: its switch on and signed in with the session; not in Performance mode). */
+    fun spotifyAsked(): Boolean = spotify?.enabled?.invoke() == true
+
+    /**
+     * Spotify's answer for the song however long it takes (up to [SpotifyCanvasSource.LATE_MS]): the same ask as
+     * [canvasFor]'s, waited for past its 4 s, so a loop that comes late still shows ([playerCanvas]).
+     */
+    suspend fun spotifyLate(song: Song): CanvasArtwork? = spotify?.lookup(song, SpotifyCanvasSource.LATE_MS)
+
+    /**
+     * Prism's own animated covers are wanted: Canvas and "Animated covers" on. While Spotify's canvas is not asked, callers decide
+     * that themselves as before 1.8.7.6 (they only ask with it on), so nothing about them changes.
+     */
+    private fun prismWanted(): Boolean = prismCovers() || !spotifyAsked()
+
+    /**
+     * The song's canvas as known on the phone, without asking: Spotify's remembered loop first (while it is asked and
+     * [spotifyOk]: may be fetched now), else Prism's animated cover (when [prismOk]).
+     */
+    fun cached(song: Song, spotifyOk: Boolean = true, prismOk: Boolean = true): CanvasArtwork? {
+        if (spotifyOk) spotify?.known(song)?.let { return it }
+        if (!prismOk || !prismWanted()) return null
+        return synchronized(cache) { entry(song)?.art }
+    }
+
+    /**
+     * The song's canvas: Spotify's first while it is asked and [spotifyOk] ([SpotifyCanvasSource.lookup]: about 4 s at
+     * most), else Prism's animated cover as it always was (when [prismOk]).
+     */
+    suspend fun canvasFor(song: Song, spotifyOk: Boolean = true, prismOk: Boolean = true): CanvasArtwork? {
         // A feed's episode: its name isn't sent around looking for a clip of a song it isn't.
+        if (song.isRss) return null
+        if (spotifyOk) spotify?.lookup(song)?.let { return it }
+        if (!prismOk || !prismWanted()) return null
+        return prismCoverFor(song)
+    }
+
+    /**
+     * Prism's own animated cover, never Spotify's: what the player shows when Spotify has none, and what saved covers
+     * and downloads keep (Spotify's loops are not saved, plan D5).
+     */
+    suspend fun prismCoverFor(song: Song): CanvasArtwork? {
         if (song.isRss) return null
         val now = System.currentTimeMillis()
         synchronized(cache) {

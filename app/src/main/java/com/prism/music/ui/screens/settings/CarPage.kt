@@ -82,7 +82,7 @@ fun CarPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = true, o
     val onOff: (Boolean) -> String = { ListeningResets.onOff(it) }
 
     val lyricsChanged = reset.add(tr(R.string.lyrics_in_the_car), s.carLyrics, d.carLyrics, onOff) { prefs.setCarLyrics(it) }
-    val styleChanged = reset.add(tr(R.string.style), s.carLyricsStyle, d.carLyricsStyle, { it.label }) { prefs.setCarLyricsStyle(it) }
+    val styleChanged = reset.add(tr(R.string.car_lyrics_style), s.carLyricsStyle, d.carLyricsStyle, { it.label }) { prefs.setCarLyricsStyle(it) }
     val keepTitleChanged = reset.add(tr(R.string.keep_the_song_title), s.carLyricsKeepTitle, d.carLyricsKeepTitle, onOff) { prefs.setCarLyricsKeepTitle(it) }
     val linesChanged = reset.add(tr(R.string.car_long_lines), s.behavior.carLyricsLines, d.behavior.carLyricsLines, { it.label }) { prefs.setCarLyricsLines(it) }
     val gridChanged = reset.add(tr(R.string.covers_in_a_grid), s.autoGrid, d.autoGrid, onOff) { prefs.setAutoGrid(it) }
@@ -93,7 +93,7 @@ fun CarPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = true, o
             // These three shape the notification's lyrics too, so they also show with only that switch on.
             if (carLyricRowsShow(s)) {
                 PickCardsRow(
-                    tr(R.string.style), CarLyricsStyle.entries, s.carLyricsStyle, { it.label },
+                    tr(R.string.car_lyrics_style), CarLyricsStyle.entries, s.carLyricsStyle, { it.label },
                     info = tr(R.string.car_style_info), changed = styleChanged, exampleScale = 1f,
                     onPick = { prefs.setCarLyricsStyle(it) },
                 ) { CarLyricsExample(it) }
@@ -108,7 +108,11 @@ fun CarPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = true, o
                 ) { prefs.setCarLyricsLines(it) }
             }
             SwitchRow(tr(R.string.covers_in_a_grid), s.autoGrid, info = tr(R.string.the_car_shows_home_s_sections), changed = gridChanged) { prefs.setAutoGrid(it) }
-            LinkRow(tr(R.string.buttons_in_the_car), value = tr(R.string.beside_play_in_the_order_the)) { nav.go(carButtonsRoute) }
+            // 1.8.7.5: the value is the buttons themselves (as on Gestures & buttons); the sentence moved behind the ⓘ.
+            LinkRow(
+                tr(R.string.buttons_in_the_car), value = s.sessionButtons.joinToString(" · ") { it.label },
+                info = tr(R.string.beside_play_in_the_order_the),
+            ) { nav.go(carButtonsRoute) }
         }
     }
 }
@@ -185,7 +189,7 @@ val carIndex: List<SettingEntry> by lazy {
     val auto = tr(R.string.android_auto)
     listOf(
         SettingEntry(page, auto, tr(R.string.lyrics_in_the_car), tr(R.string.android_auto_2)),
-        SettingEntry(page, auto, tr(R.string.style), tr(R.string.android_auto_car), needs = lyricsSomewhere),
+        SettingEntry(page, auto, tr(R.string.car_lyrics_style), tr(R.string.android_auto_car), needs = lyricsSomewhere),
         // "Lyrics on the cover only" was the switch's second line.
         SettingEntry(page, auto, tr(R.string.keep_the_song_title), tr(R.string.android_auto_car) + " " + tr(R.string.lyrics_on_the_cover_only), needs = lyricsSomewhere),
         SettingEntry(page, auto, tr(R.string.car_long_lines), tr(R.string.car_long_lines_keywords), needs = lyricsSomewhere),

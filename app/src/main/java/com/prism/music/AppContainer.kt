@@ -23,6 +23,7 @@ import com.prism.music.data.innertube.YouTubeMusic
 import com.prism.music.data.lyrics.LyricsRepository
 import com.prism.music.data.meta.MetaRepository
 import com.prism.music.data.prefs.SettingsRepository
+import com.prism.music.data.stream.CachedFormat
 import com.prism.music.data.stream.ResolvedStream
 import com.prism.music.data.stream.StreamResolver
 import com.prism.music.data.stream.YouTubeStreamInterceptor
@@ -69,12 +70,16 @@ class PrismApp : Application(), coil3.SingletonImageLoader.Factory {
                 // First, so a cover kept on the phone is trimmed the same as one from the network (#92).
                 add(com.prism.music.data.VideoCoverInterceptor { ::container.isInitialized && container.settings.current.squareVideoCovers })
                 add(com.prism.music.data.OfflineArtInterceptor { if (::container.isInitialized) container.artwork else null })
+                // #520: local albums' covers sharp on the player and album page (lists keep the small one).
+                add(com.prism.music.data.local.LocalFullArtInterceptor { if (::container.isInitialized) container.localMusic else null })
                 add(com.prism.music.data.DataSaverInterceptor { ::container.isInitialized && container.dataSaving() })
             }
             .diskCache {
                 coil3.disk.DiskCache.Builder()
                     .directory(File(context.cacheDir, "image_cache").absolutePath.toPath())
                     .maxSizePercent(0.02)
+                    // #535: a TV box has 8 GB in all; pictures keep to less there.
+                    .apply { if (com.prism.music.ui.tv.TvDevice.isTv(context)) maximumMaxSizeBytes(com.prism.music.data.TvCacheRoom.IMAGES) }
                     .build()
             }
             .build()
@@ -300,12 +305,14 @@ class AppContainer(val app: Application) {
      */
     @Volatile var returningUser: Boolean? = null
 
-    /** Settings → About → "Take the tour": the activity shows the whole tour. */
-    val tourRequests = kotlinx.coroutines.flow.MutableSharedFlow<Unit>(extraBufferCapacity = 1)
-
-    /** Asks for notifications once ever, when Prism may not post them yet and is on screen to ask. */
+    /**
+     * Asks for notifications once ever, when Prism may not post them yet and is on screen to ask. Never over a coach tour
+     * (1.8.8: First steps' like downloads the song, and Android's prompt covered the next step); not marked asked then,
+     * so a later download asks.
+     */
     fun askNotifications() {
         if (android.os.Build.VERSION.SDK_INT < 33 || com.prism.music.data.Notifications.allowed(app)) return
+        if (com.prism.music.ui.tour.TourAnchors.running) return
         val prefs = app.getSharedPreferences("prompts", android.content.Context.MODE_PRIVATE)
         if (prefs.getBoolean("notifications_asked", false)) return
         val prompt = notificationPrompt ?: return
@@ -325,20 +332,38 @@ class AppContainer(val app: Application) {
         .readTimeout(30, TimeUnit.SECONDS)
         .apply { TestHooks.network?.let(::addInterceptor) }
         .build()
-    private val streamHttp: OkHttpClient = http.newBuilder()
-        .addInterceptor(YouTubeStreamInterceptor(http))
-        .build()
+    /**
+     * googlevideo's links. 1.8.7 (#408): each fetch notes its connection's address family (never the address), the
+     * resolver hears how each link fared, and links asked for over IPv4 only are fetched over IPv4 only too.
+     */
+    internal val streamHttp: OkHttpClient = run {
+        val chunks = http.newBuilder().addNetworkInterceptor(com.prism.music.data.stream.NetFamily.Tag).build()
+        val ipv4 = chunks.newBuilder().dns(com.prism.music.data.stream.Ipv4OnlyDns()).build()
+        val watch = com.prism.music.data.stream.StreamWatch { url, code, family -> resolverMade?.fetched(url, code, family) }
+        http.newBuilder()
+            .addInterceptor(YouTubeStreamInterceptor(chunks, ipv4Client = ipv4, watch = watch))
+            .addNetworkInterceptor(com.prism.music.data.stream.NetFamily.Tag)
+            .build()
+    }
+
+    /** The resolver once it's made: a fetch before then (a Canvas clip) has nothing to tell it, and doesn't make it. */
+    @Volatile private var resolverMade: StreamResolver? = null
 
     val innerTube = InnerTube(http, { settings.current }, settings::setVisitorData)
     val ytm = YouTubeMusic(
         innerTube,
         songsEverywhere = { settings.current.let { it.radioSongsOnly && it.songsEverywhere } },
-        onPairs = { queue.counterparts.putAll(it) },
+        onPairs = { pairs ->
+            pairs.forEach { (song, video) -> queue.counterparts[song.id] = video }
+            plays.learnAll(pairs.map { (song, video) -> video to song }, com.prism.music.data.meta.PairSource.ALBUM_PAGE)
+        },
     ).apply { moodsCache = com.prism.music.data.MoodsCache(app.filesDir) }
     val db = PrismDatabase.build(app)
     /** Versions of songs the listener picked to hear instead (1.7.9, "Play a different version"). */
     val versions = com.prism.music.data.SongVersions(app.getSharedPreferences("song_versions", android.content.Context.MODE_PRIVATE))
-    val streams by lazy { StreamResolver(app, http, settings, innerTube).apply { versionOf = versions::streamedOf } }
+    /** 1.8.7 §3.2: what plays for each row, one answer for playback, downloads, covers, history and lyrics. */
+    val plays = com.prism.music.data.meta.PlaysAs(com.prism.music.data.meta.PlaysAs.fileIn(app.filesDir), scope, pickOf = { versions.picks.value[it] })
+    val streams by lazy { StreamResolver(app, http, settings, innerTube).apply { versionOf = versions::streamedOf; resolverMade = this } }
     val translator = com.prism.music.data.lyrics.LyricsTranslator(http, File(app.filesDir, "translations"))
     /** Artist pages' Wikipedia bios (1.8.2), kept with the artist pages. Asks nothing unless that switch is on. */
     val artistBios by lazy {
@@ -362,6 +387,7 @@ class AppContainer(val app: Application) {
         choices = app.getSharedPreferences("lyrics_choice", android.content.Context.MODE_PRIVATE)
         searchNames = app.getSharedPreferences("lyrics_search_as", android.content.Context.MODE_PRIVATE)
         wordShifts = app.getSharedPreferences("lyrics_word_shift", android.content.Context.MODE_PRIVATE)
+        online = { network.isOnline() }
         // #344: the same files "Save lyrics into your music files" writes to, read only once they're switched on.
         val files = com.prism.music.data.local.EmbeddedLyricsFiles(app) { s ->
             if (s.isLocal) localMusic.uriFor(s.id) else localLossless.match(s)?.uri
@@ -375,6 +401,28 @@ class AppContainer(val app: Application) {
         hiddenPrefs = app.getSharedPreferences("canvas_hidden", android.content.Context.MODE_PRIVATE)
         savedPrefs = app.getSharedPreferences("canvas_saved", android.content.Context.MODE_PRIVATE)
         useIndex(File(app.filesDir, "canvas_index.json"))
+        // 1.8.7.6, "Spotify's canvas first": asked only with its switch on and the Spotify connection the web-player
+        // session (read from its file alone: nothing is built or unsealed for it), whatever Prism's own two Canvas
+        // switches say; Performance mode pauses it (the settings used read it as off).
+        prismCovers = { com.prism.music.data.canvas.prismCoversOn(settings.current) }
+        spotify = com.prism.music.data.canvas.SpotifyCanvasSource(
+            CoroutineScope(scope.coroutineContext + Dispatchers.IO),
+            enabled = {
+                com.prism.music.data.canvas.spotifyCanvasOn(settings.current, com.prism.music.data.spotify.SpotifyStore.sessionIn(spotifyAuthPrefs))
+            },
+            finder = { spotifyCanvasFinder },
+            quietUntil = { this@AppContainer.spotify.web.quietUntil },
+            file = File(app.filesDir, "spotify_canvas.json"),
+            log = { com.prism.music.playback.AudioDiagnostics.log("spotify", it) },
+        )
+    }
+    /** The Spotify connection's own file ([com.prism.music.data.spotify.SpotifyStore.AUTH_PREFS]), read without building it. */
+    private val spotifyAuthPrefs by lazy { app.getSharedPreferences(com.prism.music.data.spotify.SpotifyStore.AUTH_PREFS, android.content.Context.MODE_PRIVATE) }
+    /** Spotify's canvas through the session's reads; built on the first ask. */
+    private val spotifyCanvasFinder by lazy { com.prism.music.data.spotify.SpotifyCanvas { op, vars -> spotify.web.read(op, vars) } }
+    init {
+        // Whether the session sign-in is on, for the rows and search lines that show only then (read off the main thread).
+        scope.launch(Dispatchers.IO) { com.prism.music.data.spotify.SpotifySessionNow.watch(spotifyAuthPrefs) }
     }
     val videoSync by lazy { com.prism.music.playback.VideoSync(app, streamHttp, streams, scope) }
     /** Songs' tempo and edges, for Mix, and their loudness, for normalization. */
@@ -426,8 +474,21 @@ class AppContainer(val app: Application) {
     }
     val queue = QueueState()
     val nerdStats = MutableStateFlow(NerdStats())
+    /** #519: Android refuses the effects the equalizer asks for (the playback service sets it; the Equalizer screen says so). */
+    val eqRefused = MutableStateFlow(false)
     /** video id -> (source label, resolved stream) for the stats overlay */
     val streamDetails = ConcurrentHashMap<String, Pair<String, ResolvedStream?>>()
+    /** song id -> the file its saved copy (Downloaded / Cached) came as, while that copy plays (1.8.7, #373). */
+    private val copyFormats = ConcurrentHashMap<String, CachedFormat>()
+
+    /**
+     * Stats for nerds' line on where [songId]'s quality comes from: the saved copy that plays and its format, or Premium's
+     * best held back by the mobile data quality. Null when there's nothing to say.
+     */
+    fun streamNote(songId: String): String? {
+        val (source, s) = streamDetails[songId] ?: return null
+        return com.prism.music.ui.player.streamQualityNote(source, s?.heldBack, copyFormats[songId])
+    }
     @Volatile var onStreamResolved: ((String) -> Unit)? = null
 
     val databaseProvider by lazy { StandaloneDatabaseProvider(app) }
@@ -439,8 +500,15 @@ class AppContainer(val app: Application) {
             maxBytes = { (settings.current.offlineGb * 1_073_741_824.0).toLong() - smartPickBytes },
             favoured = { id -> runCatching { id in library.likedIds.value }.getOrDefault(false) },
             totalBytes = { (settings.current.offlineGb * 1_073_741_824.0).toLong() },
+            // #535: on a TV box (8 GB in all) the song cache keeps to what the box can spare.
+            roomCap = { used -> if (isTv) com.prism.music.data.TvCacheRoom.songCache(freeSpace(), used) else Long.MAX_VALUE },
         )
     }
+    /** #535: a TV (Android TV / Google TV): the caches keep to [com.prism.music.data.TvCacheRoom]'s smaller rooms. */
+    val isTv: Boolean by lazy { com.prism.music.ui.tv.TvDevice.isTv(app) }
+    private val freeSpace by lazy { com.prism.music.data.TvCacheRoom.FreeSpace { app.cacheDir.usableSpace } }
+    /** Recently played animated covers and loops together. */
+    private val canvasRecentBytes: Long get() = if (isTv) com.prism.music.data.TvCacheRoom.CANVAS else 400L * 1024 * 1024
     val playerCache: SimpleCache by lazy {
         SimpleCache(File(app.cacheDir, "song_cache"), cacheEvictor, databaseProvider)
     }
@@ -480,7 +548,18 @@ class AppContainer(val app: Application) {
     /** Big data files downloaded on first use (the Japanese reading dictionary, Sing's model). */
     val models = com.prism.music.data.ModelStore(app, http)
     /** Playlists and saved albums kept on the phone (no account needed). */
-    val prismLibrary = com.prism.music.data.PrismLibrary(java.io.File(app.filesDir, "library"))
+    val prismLibrary = com.prism.music.data.PrismLibrary(java.io.File(app.filesDir, "library")).also { lib ->
+        lib.onDeleted = { id -> scope.launch(kotlinx.coroutines.Dispatchers.IO) { runCatching { transitions.forgetPlaylist(id) } } }
+    }
+    /**
+     * The listener's own transitions between two songs of a playlist (1.8.8, Mix it yourself): read when the queue's
+     * playlist is asked about, never at start. Made once, it clears out rows unused for a year.
+     */
+    val transitions by lazy {
+        com.prism.music.data.TransitionStore(db.transitions(), scope).also { s ->
+            scope.launch(kotlinx.coroutines.Dispatchers.IO) { runCatching { s.prune() } }
+        }
+    }
     /** The listener's own tags on songs (1.8.3). */
     val tags by lazy { com.prism.music.data.TagStore(db, scope, java.io.File(app.filesDir, "library")) }
     /** Smart playlists' songs (1.8.3): asked for when one opens, never at start. */
@@ -570,6 +649,11 @@ class AppContainer(val app: Application) {
         scope.launch(Dispatchers.IO) {
             if (java.io.File(app.filesDir, "library/" + com.prism.music.data.TagStore.PENDING).isFile) tags.readPending()
         }
+        // 1.8.8: a restored backup's transitions (they go with the Library), read in once (a file check otherwise).
+        scope.launch(Dispatchers.IO) {
+            val f = java.io.File(app.filesDir, "library/" + com.prism.music.data.TransitionStore.PENDING)
+            if (f.isFile) transitions.readPending(f)
+        }
         // GitHub #182: bringing the library over had starred every library song's artist; those come off once, unless the
         // account follows them. Retried on a later launch when the account's follows couldn't be asked for.
         scope.launch(Dispatchers.IO) {
@@ -589,8 +673,20 @@ class AppContainer(val app: Application) {
      */
     val downloadState = kotlinx.coroutines.flow.MutableStateFlow<Map<String, com.prism.music.download.DownloadInfo>>(emptyMap())
     val videoState = kotlinx.coroutines.flow.MutableStateFlow<Map<String, com.prism.music.download.VideoDownload>>(emptyMap())
-    /** Music videos downloaded as their song, video id -> song id ([com.prism.music.download.forRow], #315). */
+    /**
+     * Rows whose download is kept under their song's id, row id -> song id ([com.prism.music.download.forRow], #315):
+     * music videos downloaded as their song, and (1.8.7 §3.2) while videos play as their songs, every video whose song
+     * [plays] knows ([com.prism.music.data.meta.PlaysAsRules.keptAs]).
+     */
     val downloadStandIns = kotlinx.coroutines.flow.MutableStateFlow<Map<String, String>>(emptyMap())
+    init {
+        scope.launch {
+            kotlinx.coroutines.flow.combine(
+                plays.learned, plays.downloaded, versions.picks,
+                settings.flow.map { com.prism.music.download.swapsVideos(it) }.distinctUntilChanged(),
+            ) { _, _, _, everywhere -> plays.keptAs(everywhere) }.collect { downloadStandIns.value = it }
+        }
+    }
     /** Songs left out when a whole list downloads (#221). */
     val downloadSkips by lazy { com.prism.music.download.DownloadSkips(app) }
     /** Playlists that stay downloaded as they grow (#298). */
@@ -744,8 +840,23 @@ class AppContainer(val app: Application) {
     /**
      * Songs YouTube won't play where the listener is, and the music video whose sound plays in their place (#93: the
      * video was allowed when its song wasn't). Set by the player when a song fails as unavailable; for this run only.
+     * One of [plays]' sources ([com.prism.music.data.meta.PlaysAs.blocked]).
      */
-    val soundFrom = ConcurrentHashMap<String, String>()
+    val soundFrom: ConcurrentHashMap<String, String> get() = plays.blocked
+
+    /**
+     * 1.8.7 (#408): song downloads YouTube refused every way, and the music video whose sound comes down in their place
+     * ([com.prism.music.download.DownloadRepository]), as [soundFrom] plays it. Kept with the downloads (one that stops
+     * and goes on later must go on from the same recording); forgotten when the download goes.
+     */
+    private val downloadSounds = app.getSharedPreferences(DOWNLOAD_SOUNDS, android.content.Context.MODE_PRIVATE)
+
+    fun downloadSoundOf(id: String): String? = downloadSounds.getString(id, null)
+
+    fun setDownloadSound(id: String, video: String?) {
+        if (video == null) { if (downloadSounds.contains(id)) downloadSounds.edit().remove(id).apply() }
+        else downloadSounds.edit().putString(id, video).apply()
+    }
 
     /**
      * The song cache's key for song [id]'s sound: a picked version ([versions]) is kept under that recording's own id, so
@@ -785,22 +896,23 @@ class AppContainer(val app: Application) {
         val song = uri.lastPathSegment ?: return spec
         // Played (and cached) as the video it plays from, so its bytes never mix with the song's own. Downloads keep
         // the song's own key, so they aren't swapped.
-        val sound = if (useCaches) soundFrom[song] else null
+        // A download refused every way comes down as its music video's sound (1.8.7, [downloadSoundOf]), under the song's
+        // own key still.
+        val sound = if (useCaches) soundFrom[song] else downloadSoundOf(song)
         // A picked version is cached under its own id too ([songCacheKey]); its download is the song's (fetched again
         // as the version when it was picked).
-        val id = sound ?: if (useCaches) songCacheKey(song) else song
+        val id = if (useCaches) sound ?: songCacheKey(song) else song
         if (useCaches) {
             val saved = sound ?: song
             if (downloadCache.fullyCached(saved, spec.position, spec.length)) {
-                streamDetails[song] = "Downloaded" to streamDetails[song]?.second
-                onStreamResolved?.invoke(song)
+                savedCopyPlays(song, "Downloaded", readFormat(downloadFormats, saved))
                 return spec.buildUpon().setKey(saved).build()
             }
             if (playerCache.fullyCached(id, spec.position, spec.length)) {
-                streamDetails[song] = "Cached" to streamDetails[song]?.second
-                onStreamResolved?.invoke(song)
+                savedCopyPlays(song, "Cached", readFormat(cacheFormats, id))
                 return spec.buildUpon().setKey(STREAMED + id).build()
             }
+            copyFormats.remove(song)
         }
         // The listener's own upload (#101): only their account may play it, so it's asked for that way at once instead of
         // after two refusals.
@@ -813,8 +925,9 @@ class AppContainer(val app: Application) {
         }
         // The song's start was saved ahead from another format (the network changed since, so another quality
         // was picked): bytes of two formats can't be stitched together, so that start goes.
-        prebuffered.remove(id)?.let { itag -> if (itag != s.itag) runCatching { playerCache.removeResource(id) } }
-        if (useCaches) cacheFormat(id, s.itag) else downloadFormat(id, s.itag, spec.position)
+        val format = CachedFormat.of(s)
+        prebuffered.remove(id)?.let { was -> if (!was.sameFile(format)) runCatching { playerCache.removeResource(id) } }
+        if (useCaches) cacheFormat(id, format) else downloadFormat(id, format, spec.position)
         streamDetails[song] = (if (useCaches) "Streaming" else "Downloading") to s
         if (useCaches) onStreamResolved?.invoke(song)
         return spec.buildUpon().setUri(s.audioUrl).setKey(if (useCaches) STREAMED + id else id).build()
@@ -832,15 +945,36 @@ class AppContainer(val app: Application) {
      * into one file nothing could read: GitHub #183, "Skipping atom with length > 2147483647" from Downloads while the
      * song streamed fine. When the format changed, what was saved goes and the download starts over.
      */
-    private fun downloadFormat(id: String, itag: Int, position: Long) {
-        val before = downloadFormats.getInt(id, 0)
-        if (before != 0 && before != itag && (position > 0 || downloadCache.getCachedBytes(id, 0, Long.MAX_VALUE) > 0)) {
+    private fun downloadFormat(id: String, format: CachedFormat, position: Long) {
+        val before = readFormat(downloadFormats, id)
+        // 1.8.7: the same itag can be another file (another length, the volume-levelled variant): only the same file
+        // carries on. A download recorded before 1.8.7 (its itag alone) that stopped part-way starts over once.
+        if (before?.sameFile(format) != true && (position > 0 || downloadCache.getCachedBytes(id, 0, Long.MAX_VALUE) > 0)) {
             runCatching { downloadCache.removeResource(id) }
-            downloadFormats.edit().putInt(id, itag).apply()
-            com.prism.music.playback.AudioDiagnostics.log("download", "$id came as format $itag, not $before as before: starting it over")
+            downloadFormats.edit().putString(id, format.encode()).apply()
+            com.prism.music.playback.AudioDiagnostics.log("download", "$id came as ${format.encode()}, not ${before?.encode() ?: "unrecorded"} as before: starting it over")
             throw IOException(tr(R.string.the_song_s_format_changed_part))
         }
-        if (before != itag) downloadFormats.edit().putInt(id, itag).apply()
+        if (before != format) downloadFormats.edit().putString(id, format.encode()).apply()
+    }
+
+    /** Which file [id]'s saved bytes came as ([CachedFormat]; an Int before 1.8.7, the itag alone). Null: not recorded. */
+    private fun readFormat(prefs: android.content.SharedPreferences, id: String): CachedFormat? = runCatching {
+        try {
+            CachedFormat.decode(prefs.getString(id, null))
+        } catch (_: ClassCastException) {
+            CachedFormat.decode(prefs.getInt(id, 0))
+        }
+    }.getOrNull()
+
+    /** A saved copy of [song] plays ([source]: "Downloaded" or "Cached"), as [format]: Stats for nerds says which. */
+    private fun savedCopyPlays(song: String, source: String, format: CachedFormat?) {
+        if (format != null) copyFormats[song] = format else copyFormats.remove(song)
+        // This session's stream is kept for the stats only when it's the same file as the copy: otherwise the copy's
+        // own format (worked out from its size) shows, not a stream that isn't playing (#373).
+        val stream = streamDetails[song]?.second?.takeIf { format != null && CachedFormat.of(it).sameFile(format) }
+        streamDetails[song] = source to stream
+        onStreamResolved?.invoke(song)
     }
 
     /** The format (itag) each song's cached part came in (1.7.8), so a later part never comes from another one. */
@@ -851,28 +985,30 @@ class AppContainer(val app: Application) {
      * time): what's cached of [id] from another format goes before today's stream adds to it. Before 1.7.8 nothing was
      * recorded; such a song is caught when it can't be read ([forgetCachedAudio] from the player).
      */
-    private fun cacheFormat(id: String, itag: Int) {
-        val before = cacheFormats.getInt(id, 0)
-        if (before == itag) return
-        if (before != 0 && playerCache.getCachedBytes(id, 0, Long.MAX_VALUE) > 0) {
+    private fun cacheFormat(id: String, format: CachedFormat) {
+        val before = readFormat(cacheFormats, id)
+        if (before == format) return
+        // 1.8.7 (plan 4.2): another file of the same itag (another length, the volume-levelled variant) isn't joined
+        // on either: that made a malformed WebM that stopped seconds in. What's cached of it goes, not mixed.
+        if (!mayAddFormat(before, format, playerCache.getCachedBytes(id, 0, Long.MAX_VALUE) > 0)) {
             runCatching { playerCache.removeResource(id) }
-            com.prism.music.playback.AudioDiagnostics.log("stream", "$id came as format $itag, not $before as cached: its cached part goes")
+            com.prism.music.playback.AudioDiagnostics.log("stream", "$id came as ${format.encode()}, not ${before?.encode() ?: "unrecorded"} as cached: its cached part goes")
         }
-        cacheFormats.edit().putInt(id, itag).apply()
+        cacheFormats.edit().putString(id, format.encode()).apply()
     }
 
     /**
-     * [itag] may be saved under [key]: nothing of it is cached yet, or what is came in that format (recorded for it, as
-     * the player's stream does). Blocking (the cache's own lock).
+     * [format] may be saved under [key]: nothing of it is cached yet, or what is came as that same file (recorded for
+     * it, as the player's stream does). Blocking (the cache's own lock).
      */
-    private fun sameFormat(key: String, itag: Int): Boolean {
-        val before = cacheFormats.getInt(key, 0)
+    private fun sameFormat(key: String, format: CachedFormat): Boolean {
+        val before = readFormat(cacheFormats, key)
         val cached = playerCache.getCachedBytes(key, 0, Long.MAX_VALUE) > 0
-        if (!mayAddFormat(before, itag, cached)) {
-            com.prism.music.playback.AudioDiagnostics.log("stream", "$key: not saved ahead as format $itag, its cached part is format $before")
+        if (!mayAddFormat(before, format, cached)) {
+            com.prism.music.playback.AudioDiagnostics.log("stream", "$key: not saved ahead as ${format.encode()}, its cached part is ${before?.encode() ?: "unrecorded"}")
             return false
         }
-        if (before != itag) cacheFormats.edit().putInt(key, itag).apply()
+        if (before != format) cacheFormats.edit().putString(key, format.encode()).apply()
         return true
     }
 
@@ -887,11 +1023,14 @@ class AppContainer(val app: Application) {
     fun forgetDownloadFormat(id: String) = downloadFormats.edit().remove(id).apply()
 
     /** The format (itag) a download came down in, when it's known (recorded since 1.7.7.1). */
-    fun downloadedItag(id: String): Int? = downloadFormats.getInt(id, 0).takeIf { it != 0 }
+    fun downloadedItag(id: String): Int? = readFormat(downloadFormats, id)?.itag
 
     companion object {
         /** The mark on a streamed song's key: Downloads holds no such key ([playbackDataSourceFactory]). */
         private const val STREAMED = "streamed:"
+
+        /** The saved preferences [downloadSoundOf] reads (with the downloads in a backup). */
+        const val DOWNLOAD_SOUNDS = "download_sound_from"
 
         /**
          * Records [id]'s full length in [cache] once all of it is saved there. The cache only learns a length from a
@@ -899,10 +1038,10 @@ class AppContainer(val app: Application) {
          * didn't count as whole, and offline Prism asked the network for it and skipped it (#213).
          */
         /**
-         * Bytes in format [itag] may join what's cached of a song: nothing is ([cached] false), or it came in the same
-         * format ([before]; 0 when it wasn't recorded, which isn't taken on trust).
+         * Bytes of [now] may join what's cached of a song: nothing is ([cached] false), or it came as the same file
+         * ([before]: the same itag and length, [CachedFormat.sameFile]; null when it wasn't recorded, which isn't taken on trust).
          */
-        internal fun mayAddFormat(before: Int, itag: Int, cached: Boolean): Boolean = !cached || before == itag
+        internal fun mayAddFormat(before: CachedFormat?, now: CachedFormat, cached: Boolean): Boolean = CachedFormat.mayAdd(before, now, cached)
 
         /**
          * The key a music video's picture is read by ([videoDataSourceFactory]); [whole]: all of it is saved in Downloads.
@@ -912,14 +1051,22 @@ class AppContainer(val app: Application) {
          */
         internal fun pictureKey(id: String, whole: Boolean): String = if (whole) "video:$id" else "${STREAMED}video:$id"
 
+        /**
+         * [upstream], telling [invalidate] the song (from the key it's read by) whose link YouTube turned away, and whether
+         * that was a refusal (403), so its next lookup gets a fresh link: the prebuffer's (1.8.7, #408), as a download's
+         * and a picture's.
+         */
+        internal fun forgetsRefused(upstream: DataSource, invalidate: (String, Boolean) -> Unit): DataSource =
+            ForgetOnForbidden(upstream) { key, code -> invalidate(key.removePrefix(STREAMED).removePrefix("video:"), code == 403) }
+
         fun markWhole(cache: Cache, id: String, length: Long) {
             if (length <= 0 || !cache.isCached(id, 0, length)) return
             runCatching { cache.applyContentMetadataMutations(id, ContentMetadataMutations().also { ContentMetadataMutations.setContentLength(it, length) }) }
         }
     }
 
-    /** Songs whose first seconds [warmUp] saved into the song cache, and the stream (itag) they came from. */
-    private val prebuffered = ConcurrentHashMap<String, Int>()
+    /** Songs whose first seconds [warmUp] saved into the song cache, and the file they came from. */
+    private val prebuffered = ConcurrentHashMap<String, CachedFormat>()
 
     /**
      * Gets a song ready to start the moment it's picked: its stream is resolved (the slow part, 1–2 s through
@@ -951,12 +1098,16 @@ class AppContainer(val app: Application) {
         // Never added to a part cached in another format (1.8.1): the player's own stream keeps to the format it began
         // in ([cacheFormat]); saving the rest from another one joined two files into one nothing could read, kept till the
         // cache was cleared (Sing on a TV, Reddit: "I have to uninstall and reinstall the app to restore playback").
-        if (!sameFormat(key, s.itag)) return
+        val format = CachedFormat.of(s)
+        if (!sameFormat(key, format)) return
         val spec = DataSpec.Builder().setUri(s.audioUrl).setKey(key).setPosition(0).setLength(bytes).build()
-        val source = CacheDataSource(playerCache, OkHttpDataSource.Factory(streamHttp).createDataSource())
+        // A link YouTube turns away here is forgotten (1.8.7, #408), as a download's is: the player would otherwise open
+        // the song on the same refused link the prebuffer was given.
+        val upstream = forgetsRefused(OkHttpDataSource.Factory(streamHttp).createDataSource()) { song, refused -> streams.invalidate(song, refused) }
+        val source = CacheDataSource(playerCache, upstream)
         runCatching { androidx.media3.datasource.cache.CacheWriter(source, spec, null, null).also { writer?.invoke(it) }.cache() }
             .onSuccess {
-                prebuffered[key] = s.itag
+                prebuffered[key] = format
                 // Saved whole: say so, so it plays from here offline too (#213).
                 if (whole) markWhole(playerCache, key, s.contentLength)
             }
@@ -1065,7 +1216,13 @@ class AppContainer(val app: Application) {
         val http = OkHttpDataSource.Factory(streamHttp)
         // A link YouTube turns away (it ran out mid-download) is forgotten, so the download's next try gets a fresh one
         // (#55): it used to try the same dead link until the download failed.
-        val upstream = DataSource.Factory { ForgetOnForbidden(http.createDataSource()) { key, code -> streams.invalidate(key.removePrefix("video:"), refused = code == 403) } }
+        // (A download coming down as its music video's sound forgets the video's link: that's the one it was given.)
+        val upstream = DataSource.Factory {
+            ForgetOnForbidden(http.createDataSource()) { key, code ->
+                val id = key.removePrefix("video:")
+                streams.invalidate(if (key.startsWith("video:")) id else downloadSoundOf(id) ?: id, refused = code == 403)
+            }
+        }
         return ResolvingDataSource.Factory(upstream) { spec ->
             val id = spec.uri.lastPathSegment
             if (spec.uri.scheme == "prism" && spec.uri.authority == "video" && id != null) {
@@ -1083,24 +1240,27 @@ class AppContainer(val app: Application) {
         videoId: String?, playlistId: String?, params: String? = null, continuation: String? = null, keepFirst: Boolean = false,
     ): com.prism.music.data.model.NextResult {
         val r = ytm.next(videoId, playlistId, params, continuation)
+        plays.learnAll(r.songPairs(), com.prism.music.data.meta.PairSource.RADIO)
         return (if (settings.current.radioSongsOnly) r.songsOnly(keepFirst) else r).also { queue.counterparts.putAll(it.counterparts) }
     }
 
     /** Animated-cover clips on the phone: recently played, and saved (from the player, by album, or with downloads). */
-    val canvasStore by lazy { com.prism.music.data.canvas.CanvasStore(app, http, canvas, ytm, databaseProvider, scope) }
+    val canvasStore by lazy { com.prism.music.data.canvas.CanvasStore(app, http, canvas, ytm, databaseProvider, scope, recentMaxBytes = canvasRecentBytes) }
     /** 1.8.6: Canvas loops cut from music videos, kept as small files (recent ones in the cache, downloads' for good). */
     val clipFiles by lazy {
         com.prism.music.data.canvas.ClipFiles(File(app.cacheDir, "canvas_clips"), File(app.filesDir, "canvas_clips")) {
             // One 400 MB for everything recent that Canvas keeps (the settings say so): loops get what the animated covers leave,
-            // never under 100 MB.
-            (400L * 1024 * 1024 - canvasStore.recentBytes).coerceAtLeast(100L * 1024 * 1024)
+            // never under 100 MB. #535: on a TV, one 128 MB, never under 32 MB.
+            (canvasRecentBytes - canvasStore.recentBytes).coerceAtLeast(canvasRecentBytes / 4)
         }
     }
     val canvasClips by lazy {
+        // 1.8.7: the player answer the finder had for a video is the one the fetch right after it uses.
+        val answers = com.prism.music.data.canvas.PlayerAnswers()
         com.prism.music.data.canvas.ClipRepository(
             db.canvasClips(),
-            com.prism.music.data.canvas.ClipFinder.create(ytm, innerTube, http),
-            com.prism.music.data.canvas.ClipFetcher(streamHttp, { id -> kotlinx.coroutines.withContext(Dispatchers.IO) { innerTube.visionOsPlayer(id) } }, clipFiles),
+            com.prism.music.data.canvas.ClipFinder.create(ytm, innerTube, http, answers = answers),
+            com.prism.music.data.canvas.ClipFetcher(streamHttp, { id -> kotlinx.coroutines.withContext(Dispatchers.IO) { innerTube.visionOsPlayer(id) } }, clipFiles, answers = answers),
         ).apply { files = clipFiles; refiner = com.prism.music.data.canvas.ClipDecode }
     }
     /** 1.8.6: the next two songs' loops got ready on Wi-Fi, and downloads' kept with them (plan-canvas 4.8). */
@@ -1114,8 +1274,10 @@ class AppContainer(val app: Application) {
             override fun savedById(songId: String) = canvas.saved.value.has(songId, null)
             override suspend fun choice(songId: String) = canvasClips.choice(songId)
             // Only an animated cover that may play counts ([canvasCoverWanted]): one that may not leaves room for the loop.
+            // 1.8.7.6: Spotify's canvas is not counted (nor asked) here: it is never kept with a download (plan D5), so a
+            // downloaded song keeps its loop from the video for when Spotify can't be asked.
             override suspend fun hasCover(song: com.prism.music.data.model.Song) =
-                com.prism.music.data.canvas.canvasCoverWanted(settings.current, song.id in canvas.hidden.value) && canvas.canvasFor(song) != null
+                com.prism.music.data.canvas.canvasCoverWanted(settings.current, song.id in canvas.hidden.value) && canvas.canvasFor(song, spotifyOk = false) != null
             override suspend fun prepare(song: com.prism.music.data.model.Song, height: Int, saved: Boolean, allowed: () -> Boolean) =
                 canvasClips.prepare(song, height, saved, allowed)
             override suspend fun videoOf(songId: String) = canvasClips.row(songId)?.videoId
@@ -1126,5 +1288,23 @@ class AppContainer(val app: Application) {
 
     fun clearSongCache() {
         runCatching { playerCache.keys.toList().forEach { playerCache.removeResource(it) } }
+    }
+
+    /**
+     * #535: every cache Prism keeps, for "Clear cache": songs kept from streaming (not Smart Downloads' picks, which are
+     * downloads), pictures, recently played animated covers and loops, pictures made for sharing.
+     */
+    val caches by lazy {
+        val share = File(app.cacheDir, "share")
+        fun images() = runCatching { coil3.SingletonImageLoader.get(app).diskCache }.getOrNull()
+        com.prism.music.data.AppCaches(
+            listOf(
+                com.prism.music.data.AppCaches.Part("songs", ::songCacheBytes, ::clearSongCache),
+                com.prism.music.data.AppCaches.Part("pictures", { images()?.size ?: 0L }, { images()?.clear() }),
+                com.prism.music.data.AppCaches.Part("animated covers", { canvasStore.recentBytes }, { canvasStore.clearRecent() }),
+                com.prism.music.data.AppCaches.Part("loops", { clipFiles.recentBytes }, { clipFiles.clearRecent() }),
+                com.prism.music.data.AppCaches.Part("shared pictures", { com.prism.music.data.AppCaches.dirBytes(share) }, { com.prism.music.data.AppCaches.emptyDir(share) }),
+            ),
+        )
     }
 }

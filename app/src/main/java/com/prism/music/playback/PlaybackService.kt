@@ -77,11 +77,40 @@ internal fun blendsAcrossAlbum(from: String?, to: String?, albumPlaying: Boolean
 }
 
 @Serializable
-private data class SavedQueue(
+internal data class SavedQueue(
     val songs: List<Song>, val index: Int, val positionMs: Long, val title: String,
     // Shuffle (with its order) and repeat, so a restart keeps them (#101: shuffle was off again after Prism restarted).
     val shuffle: Boolean = false, val shuffleOrder: List<Int> = emptyList(), val repeat: Int = Player.REPEAT_MODE_OFF,
 )
+
+/**
+ * queue.json's text from what the player holds: each lined-up item's stored song ([songJson], as [toMediaItem] put it in
+ * the item; null or unreadable ones are left out), where playback is, and shuffle ([order]: the play order by index,
+ * kept only when every item made it into the list) and repeat. 1.8.7: the songs are read and written again here, off the
+ * main thread (with 1,100 songs lined up it held the main thread for up to 200 ms after every song change on the A16).
+ */
+internal fun savedQueueText(
+    songJson: List<String?>, index: Int, positionMs: Long, title: String, shuffle: Boolean, order: List<Int>, repeat: Int,
+): String {
+    val songs = songJson.mapNotNull { s -> s?.let { runCatching { InnerTube.json.decodeFromString(Song.serializer(), it) }.getOrNull() } }
+    val q = SavedQueue(songs, index, positionMs, title, shuffle = shuffle, shuffleOrder = if (shuffle && songs.size == songJson.size) order else emptyList(), repeat = repeat)
+    return InnerTube.json.encodeToString(SavedQueue.serializer(), q)
+}
+
+/** What a resumed Prism plays ([resumptionOf]): the saved queue's songs, from [index] at [positionMs]. */
+internal data class Resumption(val songs: List<Song>, val index: Int, val positionMs: Long, val title: String)
+
+/**
+ * What a headset button or the system's resume card starts after Prism was closed or killed (#388): the saved queue
+ * ([queueText], queue.json) at the kept place ([place], queue-place.json, when newer and its song is still queued), else
+ * at the queue file's own place. Null when nothing was saved or it can't be read.
+ */
+internal fun resumptionOf(queueText: String?, place: QueuePlace?): Resumption? {
+    val q = queueText?.let { runCatching { InnerTube.json.decodeFromString(SavedQueue.serializer(), it) }.getOrNull() } ?: return null
+    if (q.songs.isEmpty()) return null
+    val (index, position) = PlaceKeeper.start(q.songs.map { it.id }, q.index, q.positionMs, place, placeIsNewer = true)
+    return Resumption(q.songs, index.coerceIn(0, q.songs.lastIndex), position.coerceAtLeast(0), q.title)
+}
 
 @OptIn(UnstableApi::class)
 open class PlaybackService : MediaLibraryService(), Player.Listener {
@@ -98,6 +127,11 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private val headphoneEq = ParametricEqProcessor()
     /** Skip silence for songs: their start and end only (#210); episodes keep Media3's skipper. */
     private val edges = EdgeSilenceProcessor()
+    /**
+     * Automix's effects on the song playing (1.8.8, plan-mix §3.3.2): after the silence trimmer (its song time counts
+     * what that left out) and before the EQ. With no transition under way it copies the sound through untouched.
+     */
+    private val transitionFx = TransitionFx(shiftMs = { edges.skippedMs })
     private val spatial = SpatialAudioProcessor()
     /** "Pause when muted" (#157). */
     private val muteWatch by lazy { MuteWatch(this, player) { c.settings.current.behavior.pauseOnMute } }
@@ -130,6 +164,11 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     /** The tracked play doesn't count towards taste (an excluded song, playlist or artist). */
     private var trackedExcluded = false
     private val retries = HashMap<String, Int>()
+    /** A song whose connection failed is tried again in place, or waited on while offline (1.8.7, plan 4.4). */
+    private val netRetry = NetworkRetry()
+    private var netJob: Job? = null
+    /** Songs that failed on this network: their stream block is lifted when the phone moves to another one. */
+    private val failedHere = FailedOnThisNetwork()
     /** When each music video last got its streams asked for afresh after an error ([videoRetryAllowed]). */
     private val videoRetriedAt = HashMap<String, Long>()
     private var saveJob: Job? = null
@@ -145,6 +184,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             PlaybackServices.taskRemovedForTest = { onTaskRemoved(null) }
         }
         AudioDiagnostics.init(this)
+        AudioDiagnostics.session.reset()
         // Media3's own audio warnings (spurious AudioTrack timestamps, position jumps…) go into the diagnostics too.
         androidx.media3.common.util.Log.setLogger(object : androidx.media3.common.util.Log.Logger {
             private val system = androidx.media3.common.util.Log.Logger.DEFAULT
@@ -174,7 +214,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                     // was left out (#210).
                     .setAudioProcessorChain(
                         EdgeSilenceProcessor.Chain(
-                            edges, arrayOf(vocals, edges, headphoneEq, spatial, normalizer, androidx.media3.exoplayer.audio.TeeAudioProcessor(VisualizerTap)),
+                            edges, arrayOf(vocals, edges, transitionFx, headphoneEq, spatial, normalizer, androidx.media3.exoplayer.audio.TeeAudioProcessor(VisualizerTap)),
                         )
                     )
                     .build()
@@ -228,6 +268,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         player.addListener(this)
         player.addAnalyticsListener(StatsListener())
         player.addAnalyticsListener(DiagnosticsListener())
+        if (com.prism.music.BuildConfig.DEBUG) PlaybackServices.playerForTest = player
         applySkipSilence()
         lockScreen = com.prism.music.ui.lockscreen.LockScreenGate(this, c.settings.flow, player, scope).also { it.start() }
 
@@ -275,6 +316,12 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         })
 
         effects.attach(player.audioSessionId)
+        // #519: the effects are made once the session has a track on it, never on an empty one (AudioEffects' note).
+        player.addAnalyticsListener(object : AnalyticsListener {
+            override fun onAudioTrackInitialized(eventTime: AnalyticsListener.EventTime, audioTrackConfig: AudioSink.AudioTrackConfig) =
+                effects.trackReady()
+        })
+        scope.launch { effects.refused.collect { c.eqRefused.value = it } }
         watchCarAudioRoute()
         c.onStreamResolved = { id -> scope.launch { applyStreamStats(id) } }
         // The equalizer as set, or the preset picked for the output playing now (the car's, the earbuds'; A3).
@@ -341,6 +388,17 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         scope.launch { c.dj.on.collect { on -> if (on) djAhead() else { djJob?.cancel(); djSoon?.cancel() } } }
         scope.launch { c.dj.rescan.drop(1).collect { if (c.dj.onNow) djAhead() } }
         scope.launch { c.dj.newSets.drop(1).collect { djNewSet() } }
+        // Another network (or back online): songs that failed on the old one may play now (plan 4.4), and the one coming up
+        // is looked up afresh too (its lookup ahead of time may have failed, and a link can be bound to the old address).
+        scope.launch {
+            c.network.changes.drop(1).collect {
+                val next = player.nextMediaItemIndex.takeIf { it != C.INDEX_UNSET }?.let { player.getMediaItemAt(it).mediaId }
+                val ids = failedHere.take(listOf(next)).filterNot { it.startsWith(Song.LOCAL_PREFIX) || it.startsWith(Song.RSS_PREFIX) }
+                ids.forEach { c.streams.invalidate(it) }
+                c.streams.anotherNetwork()
+                AudioDiagnostics.log("network", "another network: ${ids.size} songs' streams asked for afresh (${ids.take(5).joinToString()})")
+            }
+        }
         scope.launch { c.settings.flow.map { it.djFlow }.distinctUntilChanged().drop(1).collect { resequence() } }
         scope.launch {
             c.settings.flow.map { listOf(it.carLyrics, it.carLyricsStyle, it.carLyricsOnPhone, it.behavior.carLyricsLines) }.distinctUntilChanged().collect {
@@ -358,11 +416,13 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 if (tick % 15 == 0 && player.isPlaying) pushWidgets(progressOnly = true)
                 else if (widgetsBehind && screenOn()) pushWidgets()
                 // Diagnostics: every 10 s of playing, how far ahead it's loaded and what Prism's own processing cost.
-                if (tick % 10 == 0 && player.isPlaying && AudioDiagnostics.enabled) AudioDiagnostics.log(
-                    "tick",
+                // With the sitting's counts (1.8.7), also kept in diagnostics-summary.json for the soak.
+                if (tick % 10 == 0 && player.isPlaying && AudioDiagnostics.enabled) AudioDiagnostics.tick(
                     "at ${player.currentPosition / 1000} s, ${(player.bufferedPosition - player.currentPosition).coerceAtLeast(0) / 1000} s loaded ahead; " +
                         (AudioDiagnostics.summary() ?: "no processing measured"),
                 )
+                // A song tried again after its connection failed: once it has played well past that place, it starts afresh.
+                if (player.isPlaying) player.currentMediaItem?.mediaId?.let { netRetry.playing(it, player.currentPosition) }
                 if (player.mediaItemCount > 0) c.nerdStats.value = c.nerdStats.value.copy(
                     bufferMs = (player.bufferedPosition - player.currentPosition).coerceAtLeast(0),
                     effects = listOfNotNull(
@@ -373,22 +433,44 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 )
             }
         }
+        // 1.8.8 "Blend when I skip" (#481): every skip comes through here, the session player's and Prism's own buttons'.
+        skipFade = SkipFade(
+            main = player,
+            buildHead = { item -> buildTailPlayer(ShiftProcessor(), startingGain(item, player.currentTimeline) ?: normalizeGainDb) },
+            firstSoundMs = { id -> c.mixTempo.cached(id)?.firstSoundMs ?: 0L },
+            on = { c.settings.current.sound.skipBlend },
+            light = { c.settings.current.performanceMode || (getSystemService(POWER_SERVICE) as? android.os.PowerManager)?.isPowerSaveMode == true },
+            allowed = ::maySkipBlend,
+            warm = { item, isNext -> isNext || item.mediaId.startsWith(Song.LOCAL_PREFIX) || c.availableOffline(item.mediaId) },
+            held = { c.cast.casting || togetherNow() },
+            speed = { musicSpeed },
+            pitch = ::pitchNow,
+            curve = { c.settings.current.sound.crossfadeCurve },
+            state = c.mixState,
+            onSettled = ::restoreMusicSpeed,
+        )
+        sessionPlayer.skipHook = { index, command -> sessionSkipKind(command)?.let { skipFade.press(it, index) } == true }
+        if (com.prism.music.BuildConfig.DEBUG) PlaybackServices.skipFadeForTest = skipFade
         mix = MixEngine(
             main = player,
             scope = scope,
             tempo = c.mixTempo,
-            // DJ mode blends every song into the next, beat-matched, at Crossfade's automatic length.
+            // DJ mode blends every song into the next, beat-matched, at Crossfade's automatic length, or at the
+            // listener's own when they set one (#502, [DjBlend]).
             // Not while casting: the renderer plays one song at a time (and the phone's own player is muted).
-            mixMs = { c.settings.current.let { s -> if ((s.mix || c.dj.onNow) && !c.cast.casting) s.mixSeconds * 1000L else null } },
-            auto = { c.settings.current.mixAuto || c.dj.onNow },
-            beatMatch = { c.settings.current.mixBeatMatch || c.dj.onNow },
+            mixMs = { c.settings.current.let { s -> if ((s.mix.on || c.dj.onNow) && !c.cast.casting) s.mix.seconds * 1000L else null } },
+            auto = { c.settings.current.mix.let { m -> DjBlend.automatic(m.on, m.auto, c.dj.onNow) } },
+            beatMatch = { c.settings.current.mix.beatMatch || c.dj.onNow },
             harmonic = { from, to ->
-                if (!c.dj.onNow) null else {
+                val m = c.settings.current.mix
+                if (!DjBlend.keysSetLength(c.dj.onNow, DjBlend.automatic(m.on, m.auto, c.dj.onNow))) null else {
                     val a = c.mixTempo.key(from); val b = c.mixTempo.key(to)
                     if (a?.sure == true && b?.sure == true) MusicKey.clash(a, b) else null
                 }
             },
             allowed = ::mayBlend,
+            // What the songs can't say about a refusal (#493): which of Sing, casting or Listen together it was.
+            whyNot = { from, to -> mixWhyNot(from, to, mixWhyHeld(c.sing.onNow, c.cast.casting, togetherNow())) },
             // Its song's end is waiting for it: no scan makes way for the listener's touches meanwhile (#343).
             scanFromPhone = { id -> scope.launch { MixTempo.urgently { c.mixTempo.measure(id, network = false) } } },
             buildTail = ::buildTailPlayer,
@@ -396,12 +478,23 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             pitch = ::pitchNow,
             curve = { c.settings.current.sound.crossfadeCurve },
             state = c.mixState,
+            skip = skipFade,
+            // 1.8.8 Mix it yourself: a playlist's own transitions, from memory (the store follows the queue's playlist).
+            playlist = { c.queue.source.value.takeIf { it.kind == QueueKind.PLAYLIST }?.originId },
+            custom = { playlist, from, to -> c.transitions.cached(playlist, from, to) },
+            customPlayed = { playlist, from, to -> c.transitions.used(playlist, from, to) },
+            // 1.8.8 Automix: its effects on both players, the move picked by the songs' scans, keys and shapes.
+            // Crossfade's fourth choice (Settings → Playback → Crossfade → Automix).
+            automix = { c.settings.current.mix.let { it.on && it.automix } },
+            mainFx = transitionFx,
+            buildFxTail = { shift, fx -> buildTailPlayer(shift, normalizeGainDb, fx) },
+            shapeOf = { id -> c.waves.shape(id) },
         ).also { it.start() }
+        if (com.prism.music.BuildConfig.DEBUG) PlaybackServices.mixForTest = mix
         // Prism Connect: the speaker or TV being cast to plays what this player plays, and its volume is the session's.
         sessionPlayer.remote = object : LyricsOverlayPlayer.Remote {
             override val volume: Int? get() = if (c.cast.casting) c.cast.volume else null
             override fun setVolume(v: Int) = c.cast.setVolume(v)
-            override fun adjust(delta: Int) = c.cast.adjustVolume(delta)
         }
         c.cast.attach(player, object : com.prism.music.connect.Cast.Hooks {
             override fun beforeCasting() {
@@ -427,8 +520,42 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     }
 
     private lateinit var mix: MixEngine
+    private lateinit var skipFade: SkipFade
+
+    /** How a skip asked through the session player goes ([LyricsOverlayPlayer.skipHook]); null for a move inside the song. */
+    private fun sessionSkipKind(command: Int): SkipKind? = when (command) {
+        Player.COMMAND_SEEK_TO_NEXT, Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM -> SkipKind.NEXT
+        Player.COMMAND_SEEK_TO_PREVIOUS, Player.COMMAND_SEEK_TO_PREVIOUS_MEDIA_ITEM -> SkipKind.PREVIOUS
+        Player.COMMAND_SEEK_TO_MEDIA_ITEM, Player.COMMAND_SEEK_TO_DEFAULT_POSITION -> SkipKind.JUMP
+        else -> null
+    }
+
+    /**
+     * 1.8.8 (plan-mix §2.3a item 1): Prism's own Next, Previous and queue taps ([PlayerConnection]), which drive the player
+     * directly, go through the same skip path as the session player's. [index] for a place given (a queue tap, the song
+     * before); otherwise worked out as the player's own Next and Previous would. True when it was taken over.
+     */
+    internal fun skipBlend(kind: SkipKind, index: Int = C.INDEX_UNSET): Boolean {
+        if (!::skipFade.isInitialized) return false
+        val target = if (index != C.INDEX_UNSET || kind == SkipKind.JUMP) index else when (kind) {
+            SkipKind.NEXT -> player.nextMediaItemIndex
+            // As seekToPrevious: the song before only near this one's start, else this one again (which isn't blended).
+            SkipKind.PREVIOUS -> if (player.hasPreviousMediaItem() && player.currentPosition <= player.maxSeekToPreviousPosition) player.previousMediaItemIndex else player.currentMediaItemIndex
+            SkipKind.JUMP -> index
+        }
+        return skipFade.press(kind, target)
+    }
+
+    /** A new queue replaces what plays ([action]): with "Blend when I skip" on, the song fades out over 200 ms first. */
+    internal fun newQueueFade(action: () -> Unit) {
+        if (::skipFade.isInitialized) skipFade.fadeOutThen(action) else action()
+    }
     /** The equalizer in use now (as set, or the output's own preset). */
     private var eqNow = com.prism.music.data.prefs.EqSettings()
+
+    /** Playing along with others: following a host, or in a Listen together session. */
+    private fun togetherNow(): Boolean =
+        c.queue.followingHost || c.together.state.value !is com.prism.music.playback.together.TogetherState.Idle
 
     /**
      * Whether Mix may blend these two: not an album running into its own next track (albums are made to flow on
@@ -436,6 +563,19 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      * keeps everyone on the same song).
      */
     private fun mayBlend(from: MediaItem, to: MediaItem): Boolean {
+        if (!maySkipBlend(from, to)) return false
+        val a = from.toSong() ?: return false
+        val b = to.toSong() ?: return false
+        // Only while an album plays through (a radio or playlist that puts two of an album's songs side by side blends).
+        // An album played as a DJ set is a set: it blends.
+        return blendsAcrossAlbum(a.album?.id, b.album?.id, c.queue.source.value.kind == QueueKind.ALBUM, c.settings.current.mix.keepAlbums, c.dj.onNow)
+    }
+
+    /**
+     * [mayBlend] without the album rule, for "Blend when I skip" (plan-mix §2.1: a skip inside an album isn't gapless
+     * listening): not live streams or music videos, not podcasts, not while singing along, casting or playing with others.
+     */
+    private fun maySkipBlend(from: MediaItem, to: MediaItem): Boolean {
         val a = from.toSong() ?: return false
         val b = to.toSong() ?: return false
         if (a.isLive || b.isLive || from.videoModeId != null || to.videoModeId != null) return false
@@ -444,29 +584,38 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // Singing along: each song plays whole, with its own vocals taken out.
         if (c.sing.onNow) return false
         if (c.cast.casting) return false
-        if (c.queue.followingHost || c.together.state.value !is com.prism.music.playback.together.TogetherState.Idle) return false
-        // Only while an album plays through (a radio or playlist that puts two of an album's songs side by side blends).
-        // An album played as a DJ set is a set: it blends.
-        return blendsAcrossAlbum(a.album?.id, b.album?.id, c.queue.source.value.kind == QueueKind.ALBUM, c.settings.current.mixKeepAlbums, c.dj.onNow)
+        if (togetherNow()) return false
+        return true
     }
 
     /**
      * The second player Mix plays a song's ending on while the next one fades in: the same sources, the same
      * effects (spatial audio, the ending song's normalization, and the equalizer through the shared audio
-     * session), and no audio focus of its own.
+     * session), on the same output, and no audio focus of its own.
      */
-    private fun buildTailPlayer(shift: ShiftProcessor): ExoPlayer {
+    private fun buildTailPlayer(shift: ShiftProcessor): ExoPlayer = buildTailPlayer(shift, normalizeGainDb)
+
+    /**
+     * 1.8.8 Mix it yourself: one of the transition editor's two small players ([MixPreview]) for [item]: the queue's
+     * second player's sources and sound at the song's own normalization, with [fx] (Automix's effects) after the shift.
+     */
+    internal fun buildPreviewPlayer(item: MediaItem, fx: TransitionFx): ExoPlayer =
+        buildTailPlayer(ShiftProcessor(), startingGain(item, player.currentTimeline) ?: normalizeGainDb, fx)
+
+    /** [buildTailPlayer] at [gainDb]: a skip-blend's head plays the chosen song at its own normalization (1.8.8). */
+    private fun buildTailPlayer(shift: ShiftProcessor, gainDb: Float, fx: TransitionFx? = null): ExoPlayer {
         val s = c.settings.current
         val tailSpatial = SpatialAudioProcessor().apply { configure(s.spatial, s.spatialAmount) }
-        val tailNormalizer = NormalizerProcessor().apply { setGainDb(normalizeGainDb) }
+        val tailNormalizer = NormalizerProcessor().apply { setGainDb(gainDb) }
         // The same headphone correction as the main player, so a blend doesn't change the sound.
         val tailEq = ParametricEqProcessor().apply { c.headphoneEq.active.value.let { configure(it?.profile, it?.strength ?: 1f) } }
-        val renderers = object : DefaultRenderersFactory(this) {
+        // Audio renderers only: it plays a song's ending and nothing else (plan 5.1).
+        val renderers = object : AudioOnlyRenderers(this) {
             override fun buildAudioSink(context: Context, enableFloatOutput: Boolean, enableAudioTrackPlaybackParams: Boolean): AudioSink =
                 DefaultAudioSink.Builder(context)
                     .setEnableFloatOutput(enableFloatOutput || s.lossless)
                     .setEnableAudioTrackPlaybackParams(enableAudioTrackPlaybackParams)
-                    .setAudioProcessors(arrayOf(shift, tailEq, tailSpatial, tailNormalizer))
+                    .setAudioProcessors(listOfNotNull(shift, fx, tailEq, tailSpatial, tailNormalizer).toTypedArray())
                     .build()
 
             override fun buildAudioRenderers(
@@ -497,10 +646,14 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             .build()
             .also {
                 it.skipSilenceEnabled = false
+                // Where the main player plays: the output picked in the device sheet (plan 5.1).
+                it.playOnPicked(c.player.preferredOutput.value)
                 // #364: the main player's underruns are logged; the ending song's, heard through the blend, too.
                 it.addAnalyticsListener(object : AnalyticsListener {
-                    override fun onAudioUnderrun(eventTime: AnalyticsListener.EventTime, bufferSize: Int, bufferSizeMs: Long, elapsedSinceLastFeedMs: Long) =
+                    override fun onAudioUnderrun(eventTime: AnalyticsListener.EventTime, bufferSize: Int, bufferSizeMs: Long, elapsedSinceLastFeedMs: Long) {
+                        AudioDiagnostics.session.underrun()
                         AudioDiagnostics.log("underrun", "the ending song's player ran dry: buffer $bufferSizeMs ms, last fed $elapsedSinceLastFeedMs ms before")
+                    }
                 })
                 // The ending song in the key it was playing in (Sing): the blend used to drop back to the original key.
                 pitchNow().takeIf { p -> p != 1f }?.let { p -> it.playbackParameters = androidx.media3.common.PlaybackParameters(1f, p) }
@@ -514,6 +667,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                     it.setAudioSessionId(session)
                     val tailEffects = AudioEffects(this, announce = false).apply { apply(eq); attach(session) }
                     it.addAnalyticsListener(object : AnalyticsListener {
+                        // Made once the tail's track is (#519: never on a session with nothing on it yet).
+                        override fun onAudioTrackInitialized(eventTime: AnalyticsListener.EventTime, audioTrackConfig: AudioSink.AudioTrackConfig) =
+                            tailEffects.trackReady()
                         override fun onPlayerReleased(eventTime: AnalyticsListener.EventTime) = tailEffects.shutdown()
                     })
                     AudioDiagnostics.log("mix", "tail on its own session $session with the equalizer (${eq.preset})")
@@ -612,6 +768,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         if (PlaybackServices.running == this::class.java) PlaybackServices.running = null
         PlaybackServices.failForTest = null
         PlaybackServices.taskRemovedForTest = null
+        if (PlaybackServices.playerForTest === player) PlaybackServices.playerForTest = null
+        if (::skipFade.isInitialized && PlaybackServices.skipFadeForTest === skipFade) PlaybackServices.skipFadeForTest = null
         flushPlayTime()
         saveEpisodePosition()
         saveQueue(now = true)
@@ -626,6 +784,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         carLyrics.stop()
         // Released on the effects thread, after anything still queued there: a stalled audio server can't hold this up.
         effects.shutdown()
+        c.eqRefused.value = false
         session.release()
         player.release()
         scope.cancel()
@@ -699,7 +858,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
         trackedSong = song
         // For "No repeats this session": heard, however briefly (a quick skip never reaches the history).
-        if (!song.isEpisode) c.sessionHeard.note(song, c.queue.counterparts[song.id])
+        if (!song.isEpisode) c.sessionHeard.note(song, c.queue.counterparts[song.id] ?: c.plays.videoOf(song.id))
         trackedSource = sourceOf(mediaItem)
         trackedRecommended = picked || mediaItem.mediaId in c.queue.smartPicks.value ||
             c.queue.source.value.originId?.let { com.prism.music.data.foryou.ForYou.isMixId(it) } == true
@@ -726,8 +885,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         applySkipSilence()
         // Already playing: a seamless move on (gapless, or a Mix blend); nothing to time.
         startedLoading = if (player.isPlaying) null else song.id to SystemClock.elapsedRealtime()
-        retries.remove(song.id)
-        retries.remove("stuck:${song.id}")
+        RetryKeys.onSongChange(retries) // every once-only retry, "file:"/"cache:" too (1.8.7)
         // A queued song that's playing now isn't "next in queue" any more.
         if (song.id in c.queue.userQueued.value) c.queue.userQueued.value = c.queue.userQueued.value - song.id
         if (player.isPlaying) playStartedAt = SystemClock.elapsedRealtime()
@@ -850,7 +1008,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         return true
     }
 
-    private fun mixing() = ::mix.isInitialized && mix.blending
+    /** A blend owns the volume and speed now: an end-of-song one, or a skip-blend (1.8.8: so the listener's speed isn't reset). */
+    private fun mixing() = (::mix.isInitialized && mix.blending) || (::skipFade.isInitialized && skipFade.active)
 
     override fun onPlaybackParametersChanged(playbackParameters: androidx.media3.common.PlaybackParameters) {
         if (playbackParameters.speed == 1f) restoreMusicSpeed()
@@ -975,6 +1134,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
 
     override fun onPlaybackStateChanged(playbackState: Int) {
         val now = SystemClock.elapsedRealtime()
+        // The sitting's counts (1.8.7): a wait for data while playing, till it plays again or stops.
+        if (playbackState == Player.STATE_BUFFERING && player.playWhenReady && startedLoading == null) AudioDiagnostics.session.bufferingStarted()
+        else if (playbackState != Player.STATE_BUFFERING) AudioDiagnostics.session.bufferingEnded()
         if (playbackState == Player.STATE_BUFFERING && player.playWhenReady && startedLoading == null) stalledAt = now
         else if (playbackState == Player.STATE_READY && stalledAt > 0) {
             android.util.Log.i("PrismStream", "${player.currentMediaItem?.mediaId} stalled ${now - stalledAt} ms at ${player.currentPosition} ms")
@@ -1042,9 +1204,15 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      */
     override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
         if (reason == Player.DISCONTINUITY_REASON_SEEK && player.playbackState == Player.STATE_IDLE && player.playerError != null) player.prepare()
+        // 1.8.8: a seek by the listener during a skip-blend finishes it at once on the new song.
+        if (::skipFade.isInitialized) skipFade.discontinuity(reason)
     }
 
     override fun onPlayerError(error: PlaybackException) {
+        AudioDiagnostics.session.error(
+            error.errorCodeName,
+            generateSequence(error as Throwable) { it.cause }.filterIsInstance<HttpDataSource.InvalidResponseCodeException>().firstOrNull()?.responseCode,
+        )
         val id = player.currentMediaItem?.mediaId ?: return
         // The next song couldn't be had, found as the playing one's last sound is read: the player reports that as the
         // playing song's failure, which would then have its music video looked up and be retried for what isn't its fault.
@@ -1127,7 +1295,9 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             if (retry != null) {
                 videoRetriedAt[videoId] = at
                 AudioDiagnostics.log("video", "video $videoId failed (${httpCode ?: if (parse) "unreadable" else error.errorCodeName}; $about): trying its streams afresh")
-                c.streams.invalidate(videoId, refused = true)
+                // #514: a server answering 5xx isn't a refused link: another way first, not the same one over IPv4 only.
+                c.streams.invalidate(videoId, refused = !retry.serverBusy, unavailable = retry.serverBusy)
+                AudioDiagnostics.session.reResolve()
                 val pos = player.currentPosition
                 if (retry.forgetCachedSound) {
                     // Its sound's cached part goes too, as a song's does (below): asked afresh, the same bytes were read again.
@@ -1181,6 +1351,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             scope.launch {
                 withContext(Dispatchers.IO) { c.forgetCachedAudio(id) }
                 c.streams.invalidate(id)
+                AudioDiagnostics.session.reResolve()
                 playOnFrom(index, id, pos)
             }
             return
@@ -1201,11 +1372,47 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             }
             return
         }
-        if (attempts < 2 && (httpCode == 403 || httpCode == 410 || error.errorCode == PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS ||
-                error.errorCode == PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED)
-        ) {
+        // 1.8.7 (plan 4.4): the connection failed (a timeout mid-song, a dropped or refused connection), not the song. It
+        // plays on from where it stopped after a short wait, three times at most ([NetworkRetry]); offline, it waits for
+        // the network to come back without using up a try. Only then is it skipped, with the reason. Before, a timeout
+        // skipped the song at once, and a failed connection had two immediate tries.
+        if (httpCode == null && !id.startsWith(Song.LOCAL_PREFIX) && networkFailure(error.errorCode, error)) {
+            val pos = player.currentPosition
+            val index = player.currentMediaItemIndex
+            val what = error.errorCodeName
+            netJob?.cancel()
+            when (val step = netRetry.failed(id, pos, c.network.isOnline(), what)) {
+                is NetworkRetry.Step.Retry -> {
+                    AudioDiagnostics.log("song", "$id: $what at ${pos / 1000} s (${(error.cause ?: error).message?.take(80)}): trying it again in place in ${step.afterMs} ms (${step.attempt} of ${NetworkRetry.BACKOFF_MS.size})")
+                    netJob = scope.launch {
+                        delay(step.afterMs)
+                        // The last try asks for the stream afresh too: its link may have gone stale while the connection was down.
+                        if (step.last) { c.streams.invalidate(id); AudioDiagnostics.session.reResolve() }
+                        playOnFrom(index, id, step.positionMs)
+                    }
+                }
+                is NetworkRetry.Step.WaitForNetwork -> {
+                    AudioDiagnostics.log("song", "$id: $what at ${pos / 1000} s while offline: waiting for the network (${step.wait} of ${NetworkRetry.MAX_WAITS})")
+                    if (step.wait == 1) c.player.reportError(tr(R.string.you_re_offline_check_your_connection))
+                    netJob = scope.launch {
+                        awaitOnline(c.network.online, { c.network.isOnline() })
+                        delay(NetworkRetry.BACK_ONLINE_MS)
+                        AudioDiagnostics.log("song", "$id: back online: playing on from ${step.positionMs / 1000} s")
+                        playOnFrom(index, id, step.positionMs)
+                    }
+                }
+                is NetworkRetry.Step.Skip -> {
+                    AudioDiagnostics.log("error", "$id: skipped: ${step.reason}")
+                    failAndSkip(error)
+                }
+            }
+            return
+        }
+        if (attempts < 3 && (httpCode == 403 || httpCode == 410 || error.errorCode == PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS)) {
             retries[id] = attempts + 1
-            c.streams.invalidate(id, refused = httpCode == 403)
+            // #514: a 5xx after the stream's own quick retries: looked up again another way first (and played on from here).
+            c.streams.invalidate(id, refused = httpCode == 403, unavailable = com.prism.music.data.stream.serverBusy(httpCode))
+            AudioDiagnostics.session.reResolve()
             val pos = player.currentPosition
             player.prepare()
             player.seekTo(pos)
@@ -1247,9 +1454,11 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      */
     private fun playOnFrom(index: Int, id: String, pos: Long) {
         if (player.playbackState != Player.STATE_IDLE || player.currentMediaItemIndex != index || player.currentMediaItem?.mediaId != id) return
+        // Paused by the listener while it waited: it's made ready where it stopped, and stays paused.
+        val paused = !player.playWhenReady
         player.prepare()
         player.seekTo(pos)
-        player.play()
+        if (!paused) player.play()
     }
 
     /** The move to the next song after one that wouldn't play, while it's waiting. */
@@ -1269,6 +1478,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         val cause = error.cause ?: error
         val why = (com.prism.music.data.podcast.episodeFailureText(song, error) ?: cause.friendlyMessage(tr(R.string.playback_failed))).trimEnd('.', ' ')
         AudioDiagnostics.log("error", "$id won't play (${error.errorCodeName}: ${cause.message?.take(120)})")
+        AudioDiagnostics.session.skippedByError()
+        id?.let { failedHere.failed(it) }
         fun stillThere() = player.playbackState == Player.STATE_IDLE && player.currentMediaItemIndex == index && player.currentMediaItem?.mediaId == id
         skipJob?.cancel()
         if (player.hasNextMediaItem()) c.player.reportError(tr(R.string.moving_on_after_refusal, title, why))
@@ -1392,15 +1603,15 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         // The waveform progress bar is drawn from the scan too (1.7.4).
         val wave = s.scrubberStyle == com.prism.music.data.prefs.ScrubberStyle.WAVE
         // A radio tuned calm or energetic goes by what's been scanned, so songs heard are scanned for it too.
-        if (!s.mix && !s.normalize && !wave && s.behavior.radioTune.energy == 0f) return
-        val network = s.mixTempoOnCellular || getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered == false
+        if (!s.mix.on && !s.normalize && !wave && s.behavior.radioTune.energy == 0f) return
+        val network = s.mix.tempoOnCellular || getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered == false
         val playing = player.currentMediaItem?.mediaId
         val all = items.mapNotNull { it?.toSong() }.filter { !it.isLive && !it.isEpisode }.distinctBy { it.id }
-        val worth = MixTempo.worthScanning(all.map { it.id }, playing, c.visible.value, s.mix || wave, QUEUE_AHEAD)
+        val worth = MixTempo.worthScanning(all.map { it.id }, playing, c.visible.value, s.mix.on || wave, QUEUE_AHEAD)
         val songs = all.filter { it.id in worth }
         if (songs.isEmpty()) return
         // Songs scanned before fade-outs and intros were measured are scanned again only for Crossfade's automatic length.
-        val edges = s.mix && s.mixAuto
+        val edges = s.mix.on && s.mix.auto
         scanJob?.cancel()
         scanJob = scope.launch {
             if (playing != null) untilUnderWay(playing, UNDER_WAY_MS)
@@ -1416,7 +1627,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             // With the waveform bar, the playing song goes first: its bar is waiting for it.
             for (song in songs.sortedBy { if (wave) it.id != playing else it.id == playing }) {
                 // Asked again for each: the listener may have left since these were lined up.
-                if (song.id !in MixTempo.worthScanning(all.map { it.id }, playing, c.visible.value, s.mix || wave, QUEUE_AHEAD)) continue
+                if (song.id !in MixTempo.worthScanning(all.map { it.id }, playing, c.visible.value, s.mix.on || wave, QUEUE_AHEAD)) continue
                 c.mixTempo.measure(song.id, network, edges, wave = wave, peak = s.normalize)
                 // Measured while it's just begun: its own figure takes over (later in the song, a jump would be heard).
                 if (trackedSong?.id == song.id && settling()) applyNormalization()
@@ -1563,6 +1774,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 player.addMediaItems(answer.add.map { it.toMediaItem() })
                 fb.served(answer.add.map { it.id })
                 if (answer.cameRound) c.player.reportError(tr(R.string.no_repeats_ran_out))
+                // A Radio button's notice (1.8.8): the radio has really started.
+                else if (c.player.radioNotice.take(src, answer.add.size)) c.player.reportError(tr(R.string.radio_started))
             }
         }
         autoplayJob = job
@@ -1749,6 +1962,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
         if (!c.player.songsEverywhere() && !fromRadio) return
         val video = item.toSong()?.takeIf { it.isVideo && !it.isLive && !it.isEpisode && !it.isLocal } ?: return
+        // A version the listener picked for the video plays in its place, and shows as that one already (#328, 1.8.7 §3.2).
+        if (c.plays.picked(video.id)) return
         if (!findingSongs.add(video.id)) return
         scope.launch {
             try {
@@ -1758,8 +1973,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
                 val song = c.player.songFor(video) ?: run {
                     // #328: no song of its length, so its own sound plays; its song's cover and album are there from
                     // the start, not seconds after it begins ([songCoverForVideo]). Same address: nothing reloads.
-                    if (c.versions.of(video.id) != null) return@launch
-                    val found = runCatching { withContext(Dispatchers.IO) { c.ytm.songForVideo(video, anyLength = true) } }.getOrNull() ?: return@launch
+                    val found = coverSongFor(video) ?: return@launch
                     val cover = found.thumbnail?.takeIf { it != video.thumbnail } ?: return@launch
                     val at = queued() ?: return@launch
                     val now = player.getMediaItemAt(at).toSong() ?: return@launch
@@ -1858,6 +2072,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private val prefetched = java.util.Collections.newSetFromMap(java.util.concurrent.ConcurrentHashMap<String, Boolean>())
     /** Videos that failed to play; their streams are re-resolved on the next try. */
     private val failedVideos = HashSet<String>()
+    /** Videos given one more go after failing past their song's end ([videoTakeOver]): once each this session. */
+    private val outroRetried = HashSet<String>()
 
     /** Swaps the current item between its audio track and its music video. Returns an error message, if any. */
     suspend fun setVideoMode(enabled: Boolean): String? {
@@ -1955,18 +2171,26 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         }
     }
 
+    /**
+     * The song whose cover and album a music video playing as itself shows: one known already (1.8.7 §3.2), else the
+     * same title by the same artist at any length, kept as a cover-only pairing ([com.prism.music.data.meta.PairSource.COVER]).
+     */
+    private suspend fun coverSongFor(video: Song): Song? =
+        c.plays.coverSong(video.id) ?: runCatching { withContext(Dispatchers.IO) { c.ytm.songForVideo(video, anyLength = true) } }.getOrNull()
+            ?.also { c.plays.learn(video.id, it, com.prism.music.data.meta.PairSource.COVER) }
+
     private fun songCoverForVideo(song: Song) {
         if (!song.isVideo || song.isLive || song.isLocal || song.isEpisode || song.isUpload) return
         // A version picked to play in its place shows as that one already (#328).
-        if (c.versions.of(song.id) != null) return
+        if (c.plays.picked(song.id)) return
         val item = player.currentMediaItem ?: return
         // A video found as a song's video already shows its song's cover; a video with no song found when it was
         // tapped (PlayerConnection.playQueue waits 4 s for it) is the item itself, shown as its video or, after Song, as its sound.
         if (item.videoModeId != null && item.videoModeId != song.id) return
         scope.launch {
-            // Its song if one was found to play (the session's), else the same title by the same artist at any length:
-            // only for the cover, so it's never kept as the song to play in its place.
-            val found = c.player.songFor(song) ?: runCatching { withContext(Dispatchers.IO) { c.ytm.songForVideo(song, anyLength = true) } }.getOrNull()
+            // Its song if one was found to play, else the same title by the same artist at any length: only for the
+            // cover, so it's never kept as the song to play in its place ([coverSongFor]).
+            val found = c.player.songFor(song) ?: coverSongFor(song)
             android.util.Log.i("PrismVideo", "cover for video ${song.id} \"${song.title}\": song ${found?.id} ${found?.thumbnail}")
             if (found == null) return@launch
             val cover = found.thumbnail?.takeIf { it != song.thumbnail } ?: return@launch
@@ -2031,10 +2255,25 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             c.player.reportError(tr(R.string.the_live_video_didn_t_load))
             return
         }
+        val lag = current.videoModeId?.takeIf { it != song.id }?.let { c.videoSync.cached(song.id, it) } ?: 0L
+        val videoPos = player.currentPosition
+        // Ko-fi (Android TV): a video that failed past its song's end (its outro) went back to a song that was already
+        // over, and so on to the next song before the video had ended. It gets one more go where it was (once).
+        val vid = current.videoModeId
+        val failed = player.playerError != null
+        val takeOver = videoTakeOver(videoPos, lag, song.durationSec * 1000L, triedAgain = !failed || vid == null || vid in outroRetried)
+        if (takeOver == VideoTakeOver.VideoAgain && vid != null) {
+            outroRetried += vid
+            AudioDiagnostics.log("video", "video $vid for $songId failed at $videoPos ms, past its song's end (${song.durationSec} s): one more go, not on to the next song")
+            c.streams.invalidate(vid)
+            player.prepare()
+            player.seekTo(idx, videoPos)
+            player.play()
+            return
+        }
         current.videoModeId?.let { failedVideos += it; prefetched -= it }
         android.util.Log.w("PrismVideo", "video ${current.videoModeId} for $songId didn't load (${player.playerError?.errorCodeName ?: "no picture in time"}); back to the song")
-        val lag = current.videoModeId?.takeIf { it != song.id }?.let { c.videoSync.cached(song.id, it) } ?: 0L
-        val pos = (player.currentPosition - lag).coerceAtLeast(0)
+        val pos = (takeOver as? VideoTakeOver.Song)?.atMs ?: (videoPos - lag).coerceAtLeast(0)
         swapInPlace(idx, song.toMediaItem(null))
         player.seekTo(idx, pos)
         player.prepare()
@@ -2211,7 +2450,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
         if (player.shuffleModeEnabled) player.shuffleModeEnabled = false
         djJob = scope.launch {
             val s = c.settings.current
-            val network = c.dj.dataAllowed || s.mixTempoOnCellular ||
+            val network = c.dj.dataAllowed || s.mix.tempoOnCellular ||
                 getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered == false
             resequence()
             val cur = player.currentMediaItemIndex
@@ -2552,7 +2791,8 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
     private var placeJob: Job? = null
     private val placeKeeper = PlaceKeeper { p ->
         val text = InnerTube.json.encodeToString(QueuePlace.serializer(), p)
-        scope.launch(queueWriter) { runCatching { placeFile.writeText(text) } }
+        // Whole or not at all (1.8.7): a write cut short by a kill left a broken place file, and the place from before.
+        scope.launch(queueWriter) { runCatching { writeAtomically(placeFile, text) } }
     }
 
     private fun currentPlace(): QueuePlace? {
@@ -2581,29 +2821,26 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
      */
     private fun saveQueue(now: Boolean = false) {
         if (!::player.isInitialized) return
-        val songs = (0 until player.mediaItemCount).mapNotNull { player.getMediaItemAt(it).toSong() }
-        // The play order while shuffled, walked from its first song (only when every item made it into the list).
-        val order = if (player.shuffleModeEnabled && songs.size == player.mediaItemCount) player.shuffleOrder.let { so ->
+        // On this thread only what the player has to be asked for: each item's stored song as it is (not read), the
+        // place, and the play order while shuffled, walked from its first song. The file is put together by the writer.
+        val count = player.mediaItemCount
+        val songJson = List(count) { player.getMediaItemAt(it).mediaMetadata.extras?.getString(EXTRA_SONG) }
+        val shuffle = player.shuffleModeEnabled
+        val order = if (shuffle) player.shuffleOrder.let { so ->
             generateSequence(so.firstIndex.takeIf { it != androidx.media3.common.C.INDEX_UNSET }) { i -> so.getNextIndex(i).takeIf { it != androidx.media3.common.C.INDEX_UNSET } }
-                .take(songs.size).toList()
+                .take(count).toList()
         } else emptyList()
-        val q = SavedQueue(
-            songs, player.currentMediaItemIndex, player.currentPosition, c.queue.source.value.title,
-            shuffle = player.shuffleModeEnabled, shuffleOrder = order, repeat = player.repeatMode,
-        )
-        val text = InnerTube.json.encodeToString(SavedQueue.serializer(), q)
+        val index = player.currentMediaItemIndex; val position = player.currentPosition
+        val title = c.queue.source.value.title; val repeat = player.repeatMode
+        val text = { savedQueueText(songJson, index, position, title, shuffle, order, repeat) }
         placeKeeper.saved(currentPlace())
-        if (now) writeQueue(text) else scope.launch(queueWriter) { writeQueue(text) }
+        if (now) writeQueue(text()) else scope.launch(queueWriter) { writeQueue(text()) }
     }
 
     private val queueWriter = Dispatchers.IO.limitedParallelism(1)
 
     @Synchronized private fun writeQueue(text: String) {
-        runCatching {
-            val tmp = File(filesDir, "queue.json.tmp")
-            tmp.writeText(text)
-            if (!tmp.renameTo(queueFile)) { queueFile.writeText(text); tmp.delete() }
-        }
+        runCatching { writeAtomically(queueFile, text) }
     }
 
     private fun restoreQueue() {
@@ -2930,15 +3167,13 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             controller: MediaSession.ControllerInfo,
             isForPlayback: Boolean,
         ): ListenableFuture<MediaSession.MediaItemsWithStartPosition> = scope.future {
-            val (q, place) = withContext(Dispatchers.IO) {
-                runCatching { InnerTube.json.decodeFromString(SavedQueue.serializer(), queueFile.readText()) }.getOrNull() to keptPlace()
-            }
-            if (q == null || q.songs.isEmpty()) {
+            val r = withContext(Dispatchers.IO) { resumptionOf(runCatching { queueFile.readText() }.getOrNull(), keptPlace()) }
+            AudioDiagnostics.log("control", "resume asked by ${controller.packageName}: " + (r?.let { "${it.songs[it.index].id} at ${it.positionMs / 1000} s" } ?: "nothing saved"))
+            if (r == null) {
                 MediaSession.MediaItemsWithStartPosition(emptyList(), 0, C.TIME_UNSET)
             } else {
-                c.queue.source.value = QueueSource(QueueKind.OTHER, q.title)
-                val (index, position) = PlaceKeeper.start(q.songs.map { it.id }, q.index, q.positionMs, place, placeIsNewer = true)
-                MediaSession.MediaItemsWithStartPosition(q.songs.map { it.toMediaItem() }, index.coerceIn(0, q.songs.lastIndex), position)
+                c.queue.source.value = QueueSource(QueueKind.OTHER, r.title)
+                MediaSession.MediaItemsWithStartPosition(r.songs.map { it.toMediaItem() }, r.index, r.positionMs)
             }
         }
     }
@@ -3026,6 +3261,7 @@ open class PlaybackService : MediaLibraryService(), Player.Listener {
             // Background scans back off while the sound is running dry (MixTempo.ease).
             MixTempo.lastUnderrunAt = SystemClock.elapsedRealtime()
             update { copy(underruns = underruns + 1) }
+            AudioDiagnostics.session.underrun()
         }
     }
 

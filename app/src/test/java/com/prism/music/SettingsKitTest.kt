@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.click
+import androidx.compose.material3.Text
+import androidx.compose.ui.platform.testTag
 import com.prism.music.ui.screens.settings.PickCards
 import com.prism.music.ui.screens.settings.PickCardsRow
 import com.prism.music.ui.screens.settings.RowsSheet
@@ -424,8 +426,9 @@ class SettingsKitTest {
         var covers by mutableStateOf(false)
         show { OnAPage { ShowChipsRow("In the queue", listOf(ShowOption("Covers", covers) { covers = it }, ShowOption("Durations", false) {})) } }
         assertEquals("the row's value", listOf("None"), tagged(SettingsTags.ROW_CHOICE).map { it.config[SettingsRowValue] })
-        // On screen too (and so read out), not only in the tag.
-        compose.onNodeWithText("None", useUnmergedTree = true).assertExists()
+        // 1.8.7.6 (W39): not as a line over the chips, which already show that none is on ("When saving: None" above
+        // chips that are off read like one more setting).
+        assertEquals(0, compose.onAllNodes(hasText("None"), useUnmergedTree = true).fetchSemanticsNodes().size)
         compose.onNodeWithText("Covers").performClick()
         compose.waitForIdle()
         assertEquals(listOf("Covers"), tagged(SettingsTags.ROW_CHOICE).map { it.config[SettingsRowValue] })
@@ -502,6 +505,50 @@ class SettingsKitTest {
         compose.waitForIdle()
         assertEquals("the example's control wasn't tapped", 0, inner)
         assertEquals("the card took the tap", "Wave", picked)
+    }
+
+    /**
+     * 1.8.8 check: on the mid emulator the Crossfade sheet's "Hear it on the next song" sat at the foot of the scrolling
+     * cards and was cut through its letters ("sona"). The footer stays under the cards, whole, when they scroll.
+     */
+    @Test fun aPickSheetsFooterIsShownWholeWhenTheCardsScroll() {
+        show {
+            Box(Modifier.height(300.dp)) {
+                PickCards("Progress bar style", styles, "Line", { it }, null, 2, 0.8f, {
+                    Box(Modifier.fillMaxWidth().height(110.dp))
+                }, footer = { Text("Hear it on the next song", Modifier.testTag("footer").height(48.dp)) }) {}
+            }
+        }
+        val footer = compose.onNode(hasTestTag("footer")).fetchSemanticsNode()
+        assertEquals("the footer isn't clipped", footer.size.height.toFloat(), footer.boundsInRoot.height, 0.5f)
+    }
+
+    /**
+     * 1.8.8 check, the retake: with the footer pinned, the half-screen sheet cut the second row of cards instead (the
+     * picked Automix card among them). A sheet with a footer may grow past half the screen: cards and footer whole.
+     */
+    @Test fun aPickSheetWithAFooterShowsAllItsCardsWhole() {
+        show {
+            PickCards("Crossfade", styles, "Steps", { it }, null, 2, 0.8f, {
+                Box(Modifier.fillMaxWidth().height(130.dp))
+            }, footer = { Text("Hear it on the next song", Modifier.testTag("footer").height(48.dp)) }) {}
+        }
+        val cards = compose.onAllNodes(hasTestTag(SettingsTags.SHEET_OPTION)).fetchSemanticsNodes()
+        assertEquals(4, cards.size)
+        cards.forEach { assertEquals("a card isn't clipped", it.size.height.toFloat(), it.boundsInRoot.height, 0.5f) }
+        val footer = compose.onNode(hasTestTag("footer")).fetchSemanticsNode()
+        assertEquals("the footer isn't clipped", footer.size.height.toFloat(), footer.boundsInRoot.height, 0.5f)
+    }
+
+    /**
+     * 1.8.8 check (the transition editor's Overlap, read with TalkBack): a row's slider had no name and no value of its
+     * own, so TalkBack read a bare percentage. It carries the row's title and the value as the row writes it.
+     */
+    @Test fun aSliderRowsSliderIsNamedAndReadsTheRowsValue() {
+        show { OnAPage { SliderRow("Overlap", 8f, 0f..30f, { "${it.toInt()} s" }) {} } }
+        val slider = compose.onNode(androidx.compose.ui.test.SemanticsMatcher.keyIsDefined(SemanticsProperties.ProgressBarRangeInfo)).fetchSemanticsNode()
+        assertEquals(listOf("Overlap"), slider.config.getOrNull(SemanticsProperties.ContentDescription))
+        assertEquals("8 s", slider.config.getOrNull(SemanticsProperties.StateDescription))
     }
 
     @Test fun everyPageTitleFitsTheBarOnA360Phone() {

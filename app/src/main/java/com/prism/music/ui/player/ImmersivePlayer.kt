@@ -136,7 +136,7 @@ private fun immersiveLook(song: Song): LyricsLook {
 @Composable
 private fun lyricsAxis(): androidx.compose.ui.text.font.FontFamily? {
     val s = com.prism.music.ui.theme.LocalAppSettings.current
-    val choice = if (s.lyricsFont.isEmpty()) s.fontChoice else com.prism.music.data.prefs.FontChoice.entries.firstOrNull { it.name == s.lyricsFont }
+    val choice = if (s.lyrics.font.isEmpty()) s.fontChoice else com.prism.music.data.prefs.FontChoice.entries.firstOrNull { it.name == s.lyrics.font }
     return remember(choice) { choice?.let(com.prism.music.ui.theme.AppFonts::axis) }
 }
 
@@ -412,8 +412,8 @@ fun ImmersivePlayer(
                 ActionItem(PrismIcons.Timer, tr(R.string.lyrics_timing), onClick = onLyricsTiming),
                 ActionItem(PrismIcons.Lyrics, tr(R.string.lyrics_source), onClick = onLyricsSource),
                 // The same switch as the player's menu (#358).
-                ActionItem(PrismIcons.Translate, tr(R.string.translate_lyrics), value = if (settings.lyricsTranslate) tr(R.string.into, translateTargetName(settings)) else tr(R.string.off), active = settings.lyricsTranslate, keepOpen = true) {
-                    c.settings.setLyricsTranslate(!settings.lyricsTranslate)
+                ActionItem(PrismIcons.Translate, tr(R.string.translate_lyrics), value = if (settings.lyrics.translate) tr(R.string.into, translateTargetName(settings)) else tr(R.string.off), active = settings.lyrics.translate, keepOpen = true) {
+                    c.settings.setLyricsTranslate(!settings.lyrics.translate)
                 },
             ),
         ) { runAction(it, close) }

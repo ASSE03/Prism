@@ -62,7 +62,7 @@ class LooksPageTest : ThemeLooksPageHarness() {
                 emptyList(), emptyList(),
                 listOf("Browse community Looks", "Add your Look"),
                 listOf("Scan a Look's QR code", "Paste a Look code", "Open a Look file"),
-                listOf("Day and night Looks"),
+                listOf("Change Look by time of day"),
                 listOf("Customize by tapping"),
             ),
             groups.map { g -> g.second.map { titleOf(it) } },
@@ -71,7 +71,13 @@ class LooksPageTest : ThemeLooksPageHarness() {
         // Prism's own Looks are all there to pick.
         val drawn = listed()
         val today = com.prism.music.data.looks.Seasons.today()
-        for (look in BuiltInLooks.all.filter { com.prism.music.data.looks.Seasons.shown(it.id, today) }) assertTrue(look.name, look.name in drawn)
+        val season = com.prism.music.data.looks.Seasons.current(today)?.let { BuiltInLooks.of(it.lookId) }
+        for (look in BuiltInLooks.all.filter { com.prism.music.data.looks.Seasons.shown(it.id, today) && it.id != season?.id }) assertTrue(look.name, look.name in drawn)
+        // W7 (1.8.7.6): the season's Look, in its month, is on its own card only, not in the grid as well.
+        if (season != null) {
+            assertTrue(tr(R.string.for_the_season, season.name) in drawn)
+            assertFalse("${season.name} is in the grid too", season.name in drawn)
+        }
         // What isn't there yet says so, as state (not as rows).
         assertEquals(
             listOf(tr(R.string.looks_you_save_show_here_save), tr(R.string.your_last_changes_to_the_look, com.prism.music.data.looks.LookStore.MAX_STEPS)),
@@ -124,12 +130,12 @@ class LooksPageTest : ThemeLooksPageHarness() {
     @Test fun dayAndNightPicksItsLooksInASheet() {
         page()
         assertFalse(hasRow("By day") || hasRow("By night") || hasRow("Switch"))
-        tap("Day and night Looks")
+        tap("Change Look by time of day")
         await("the schedule") { container.looks.schedule.value.on }
         val group = { groups()[4].second.map { titleOf(it) } }
-        assertEquals(listOf("Day and night Looks", "By day", "By night", "Switch"), group())
+        assertEquals(listOf("Change Look by time of day", "By day", "By night", "Switch"), group())
         // On, the switch's row says what comes next.
-        assertTrue(valueOf("Day and night Looks"), valueOf("Day and night Looks").startsWith("Next: "))
+        assertTrue(valueOf("Change Look by time of day"), valueOf("Change Look by time of day").startsWith("Next: "))
         assertEquals(SettingsTags.ROW_PICK, tagOf(row("By day").fetchSemanticsNode()))
 
         val other = BuiltInLooks.all.first { it.id != container.looks.schedule.value.night && it.id != container.looks.schedule.value.day }
@@ -146,12 +152,12 @@ class LooksPageTest : ThemeLooksPageHarness() {
 
         chip("Switch", tr(R.string.set_times))
         await { !container.looks.schedule.value.sun }
-        assertEquals(listOf("Day and night Looks", "By day", "By night", "Switch", "Day starts at", "Night starts at"), group())
+        assertEquals(listOf("Change Look by time of day", "By day", "By night", "Switch", "Day starts at", "Night starts at"), group())
         assertTrue(valueOf("Day starts at").isNotBlank() && valueOf("Night starts at").isNotBlank())
         assertBudgets()
-        tap("Day and night Looks")
+        tap("Change Look by time of day")
         await { !container.looks.schedule.value.on }
-        assertEquals(listOf("Day and night Looks"), group())
+        assertEquals(listOf("Change Look by time of day"), group())
     }
 
     @Test fun customizeByTappingIsWithHistory() {

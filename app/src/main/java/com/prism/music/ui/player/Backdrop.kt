@@ -4,11 +4,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -23,8 +19,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
@@ -48,6 +46,7 @@ import coil3.toBitmap
 import com.prism.music.data.model.hiRes
 import com.prism.music.ui.theme.boxBlur
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import kotlin.math.floor
 import kotlin.math.roundToInt
@@ -226,10 +225,21 @@ fun ArtworkMeshBackdrop(
     intensity: Float = 1f,
     blur: Float = 1f,
     /**
-     * The system's blur over the mesh (Android 12+), redone every frame it's drawn. Off on a TV (1.8.0): the mesh is a
-     * smoothly scaled texture already, and a TV's GPU spends its frames on focus moves instead.
+     * The blur over the mesh (Android 12+; below it the mesh shows unblurred, as it always has). Off on a TV (1.8.0): the
+     * mesh is a smoothly scaled texture already, and a TV's GPU spends its frames on focus moves instead.
      */
     liveBlur: Boolean = true,
+    /**
+     * 1.8.7: the blurred mesh is made once into a small picture ([bakeMeshBlur]) and drawn as that, so a redraw elsewhere
+     * on the player (the lyric strip, 30-88 a second) costs no blur. False draws it under the system's blur every time,
+     * as before (the tests' reference); the system's blur also covers the moment until the picture is made.
+     */
+    baked: Boolean = true,
+    /**
+     * #547: held still where it is (a sheet over the player) and going on from there when let go. Setting [speed] to 0
+     * instead snaps it back to rest, and its loop starts again from the top: two jumps.
+     */
+    held: Boolean = false,
 ) {
     var shown by remember { mutableStateOf(mesh) }
     var incoming by remember { mutableStateOf<ArtworkMesh?>(null) }
@@ -250,35 +260,197 @@ fun ArtworkMeshBackdrop(
     // The drift moves the drawn layer only (scaled up a little so its edges never show): what's drawn and blurred
     // inside it stays as it is, so it costs the GPU a transform a frame, not a redraw.
     val move = meshDrift(speed).takeUnless { com.prism.music.ui.theme.LocalUi.current.reduceMotion }
-    val drift = if (move == null) null else rememberInfiniteTransition(label = "meshDrift").animateFloat(
-        0f, (2 * Math.PI).toFloat(),
-        infiniteRepeatable(tween(move.loopMs, easing = LinearEasing)),
-        label = "drift",
-    )
+    // Its place in the loop, kept while held: no frames are asked for then, and it goes on from the same place after.
+    val drift = remember { DriftPhase() }
+    if (move != null && !held) LaunchedEffect(move.loopMs) {
+        try {
+            while (true) androidx.compose.animation.core.withInfiniteAnimationFrameNanos { drift.advance(it, move.loopMs) }
+        } finally { drift.hold() }
+    }
     val tone = remember(intensity) {
         if (kotlin.math.abs(intensity - 1f) < 0.01f) null
         else androidx.compose.ui.graphics.ColorFilter.colorMatrix(androidx.compose.ui.graphics.ColorMatrix().apply { setToSaturation(intensity) })
     }
+    val blurs = liveBlur && Build.VERSION.SDK_INT >= 31
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    val radiusPx = with(density) { (32.dp * blur.coerceIn(0.3f, 2f)).toPx() }
+    val seamPx = with(density) { seam.toPx() }
+    // The size it's drawn at: the window's until it's laid out, so a player opened again finds its picture made already.
+    val window = androidx.compose.ui.platform.LocalWindowInfo.current.containerSize
+    var laidOut by remember { mutableStateOf(IntSize.Zero) }
+    val at = if (laidOut != IntSize.Zero) laidOut else window
+    fun keyOf(m: ArtworkMesh?) = if (m == null || !blurs || !baked || at.width <= 0 || at.height <= 0) null
+        else MeshBakeKey(m, at.width, at.height, seamPx.coerceIn(0f, at.height.toFloat()).roundToInt(), radiusPx, intensity)
+    val shownBake = rememberMeshBake(keyOf(shown))
+    val incomingBake = rememberMeshBake(keyOf(incoming))
+    // The pictures are used only once both are made at the size it's drawn at; until then (a moment after a new cover, a
+    // turn of the phone) it's drawn under the system's blur, which looks the same.
+    fun bakedFor(w: Int, h: Int): Boolean = blurs && baked &&
+        (shown == null || shownBake?.fits(w, h) == true) && (incoming == null || incomingBake?.fits(w, h) == true)
     Canvas(
         modifier
             .fillMaxSize()
+            .onSizeChanged { laidOut = it }
             .background(PlayerFallbackBackdrop)
             .graphicsLayer {
-                val t = drift?.value ?: return@graphicsLayer
                 val m = move ?: return@graphicsLayer
+                val t = drift.value
                 val s = m.scale + 0.04f * kotlin.math.sin(t * 2)
                 scaleX = s; scaleY = s
                 translationX = size.width * m.reachX * kotlin.math.cos(t)
                 translationY = size.height * m.reachY * kotlin.math.sin(t)
             }
-            .then(if (liveBlur && Build.VERSION.SDK_INT >= 31) Modifier.blur(32.dp * blur.coerceIn(0.3f, 2f)) else Modifier),
+            // As Modifier.blur(radius) is made (clamped edges, clipped to its bounds), its effect set only while the
+            // pictures aren't there: a layer with no effect is no offscreen picture and no blur pass.
+            .then(if (blurs) Modifier.graphicsLayer {
+                renderEffect = if (bakedFor(size.width.roundToInt(), size.height.roundToInt())) null
+                    else androidx.compose.ui.graphics.BlurEffect(radiusPx, radiusPx, androidx.compose.ui.graphics.TileMode.Clamp)
+                shape = androidx.compose.ui.graphics.RectangleShape
+                clip = true
+            } else Modifier),
     ) {
+        val w = size.width.roundToInt(); val h = size.height.roundToInt()
+        if (bakedFor(w, h)) {
+            val whole = IntSize(w, h)
+            shownBake?.let { drawImage(it.image, IntOffset.Zero, IntSize(it.image.width, it.image.height), IntOffset.Zero, whole, filterQuality = FilterQuality.Low) }
+            incomingBake?.let { drawImage(it.image, IntOffset.Zero, IntSize(it.image.width, it.image.height), IntOffset.Zero, whole, alpha = fade.value, filterQuality = FilterQuality.Low) }
+            // No cover yet: only the deepening, which a blur leaves as it is.
+            if (shown == null) drawDeepening(size)
+            return@Canvas
+        }
         val seamY = seam.toPx().coerceIn(0f, size.height)
         shown?.let { drawMesh(it, seamY, 1f, tone) }
         incoming?.let { drawMesh(it, seamY, fade.value, tone) }
-        // Aura × Spectrum (1.7): the cover's colors glow, deepening under the controls so the white type reads.
-        drawRect(Brush.verticalGradient(0f to Color.Black.copy(alpha = 0.08f), 0.55f to Color.Black.copy(alpha = 0.22f), 1f to Color.Black.copy(alpha = 0.42f)))
+        drawDeepening(size)
     }
+}
+
+/** Aura × Spectrum (1.7): the cover's colors glow, deepening under the controls so the white type reads. */
+private fun DrawScope.drawDeepening(area: androidx.compose.ui.geometry.Size) {
+    // Its ends given: a brush left to find them takes the scope's size, not the rectangle's.
+    drawRect(Brush.verticalGradient(0f to Color.Black.copy(alpha = 0.08f), 0.55f to Color.Black.copy(alpha = 0.22f), 1f to Color.Black.copy(alpha = 0.42f), startY = 0f, endY = area.height), size = area)
+}
+
+/** What one blurred mesh picture is made for: the mesh, the size it's drawn at, where its seam is, the blur, the colors' strength. */
+internal data class MeshBakeKey(val mesh: ArtworkMesh, val width: Int, val height: Int, val seamPx: Int, val radiusPx: Float, val intensity: Float)
+
+/** A blurred mesh picture ([bakeMeshBlur]) and what it was made for. */
+internal class MeshBake(val key: MeshBakeKey, val image: ImageBitmap) {
+    fun fits(w: Int, h: Int) = key.width == w && key.height == h
+}
+
+/** The last few pictures made (a song's, the one before, a turn of the phone): about 160 KB each on a 1080p phone. */
+private val meshBakes = object : LinkedHashMap<MeshBakeKey, MeshBake>(0, 0.75f, true) {
+    override fun removeEldestEntry(eldest: Map.Entry<MeshBakeKey, MeshBake>) = size > 4
+}
+
+/** How many blurred mesh pictures have been made (the tests count them). */
+internal val meshBakeCount = java.util.concurrent.atomic.AtomicInteger()
+
+/** [key]'s picture: from the last few made, else made off the main thread (null until it is). */
+@Composable
+private fun rememberMeshBake(key: MeshBakeKey?): MeshBake? {
+    var bake by remember(key) { mutableStateOf(key?.let(::keptMeshBake)) }
+    LaunchedEffect(key) {
+        if (key == null || bake != null) return@LaunchedEffect
+        bake = keptMeshBake(key) ?: meshBakeOf(key).await()
+    }
+    return bake
+}
+
+private fun keptMeshBake(key: MeshBakeKey): MeshBake? = synchronized(meshBakes) { meshBakes[key] }
+
+/** The pictures being made now: a picture is made once, however many ask for it and whether or not they wait for it. */
+private val meshBaking = java.util.concurrent.ConcurrentHashMap<MeshBakeKey, kotlinx.coroutines.Deferred<MeshBake?>>()
+private val meshBakeScope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + Dispatchers.Default)
+
+/**
+ * [key]'s picture in the making. The new song's is asked for twice, as the one fading in and then as the one shown: the
+ * second asking joins the first, and the first isn't lost when the fade ends before it's made.
+ */
+private fun meshBakeOf(key: MeshBakeKey): kotlinx.coroutines.Deferred<MeshBake?> = meshBaking.computeIfAbsent(key) {
+    meshBakeScope.async {
+        try {
+            keptMeshBake(key) ?: runCatching { bakeMeshBlur(key.mesh, key.width, key.height, key.seamPx, key.radiusPx, key.intensity) }
+                .getOrNull()?.let { MeshBake(key, it) }?.also { synchronized(meshBakes) { meshBakes[key] = it } }
+        } finally { meshBaking.remove(key) }
+    }
+}
+
+/** The sigma Android's blur ([android.graphics.RenderEffect.createBlurEffect], through Skia) uses for a [radius] in pixels. */
+internal fun blurSigma(radius: Float): Float = if (radius > 0f) 0.57735f * radius + 0.5f else 0f
+
+/**
+ * How many times smaller than the screen the blurred mesh is made: as small as leaves the blur about 4 pixels or more
+ * there (no more than 8 times), as Android's own blur does its work at a reduced size. A 32 dp blur of a smooth mesh has
+ * nothing finer in it than that, and it's drawn back up smoothly.
+ */
+internal fun meshBakeStep(sigma: Float): Int = (sigma / 4f).toInt().coerceIn(1, 8)
+
+/**
+ * 1.8.7: [ArtworkMeshBackdrop]'s still picture under its blur, made once: the mesh and the deepening drawn small, then a
+ * Gaussian blur of the system's strength for [radiusPx] (edges clamped, as Modifier.blur's are). Drawn back at [width] ×
+ * [height] with smooth scaling it matches the system's blur of the full-size drawing. Off the main thread.
+ */
+internal fun bakeMeshBlur(mesh: ArtworkMesh, width: Int, height: Int, seamPx: Int, radiusPx: Float, intensity: Float): ImageBitmap {
+    meshBakeCount.incrementAndGet()
+    val sigma = blurSigma(radiusPx)
+    val step = meshBakeStep(sigma)
+    val sw = ((width + step - 1) / step).coerceAtLeast(1)
+    val sh = ((height + step - 1) / step).coerceAtLeast(1)
+    val kx = sw / width.toFloat(); val ky = sh / height.toFloat()
+    val tone = if (kotlin.math.abs(intensity - 1f) < 0.01f) null
+        else androidx.compose.ui.graphics.ColorFilter.colorMatrix(androidx.compose.ui.graphics.ColorMatrix().apply { setToSaturation(intensity) })
+    val img = ImageBitmap(sw, sh)
+    androidx.compose.ui.graphics.drawscope.CanvasDrawScope().draw(
+        androidx.compose.ui.unit.Density(1f), androidx.compose.ui.unit.LayoutDirection.Ltr, androidx.compose.ui.graphics.Canvas(img),
+        androidx.compose.ui.geometry.Size(sw.toFloat(), sh.toFloat()),
+    ) {
+        drawRect(PlayerFallbackBackdrop)
+        scale(kx, ky, androidx.compose.ui.geometry.Offset.Zero) {
+            val area = androidx.compose.ui.geometry.Size(width.toFloat(), height.toFloat())
+            drawMesh(mesh, seamPx.toFloat(), 1f, tone, area)
+            drawDeepening(area)
+        }
+    }
+    val bmp = img.asAndroidBitmap()
+    val px = IntArray(sw * sh)
+    bmp.getPixels(px, 0, sw, 0, 0, sw, sh)
+    gaussianBlur(px, sw, sh, sigma * kx, sigma * ky)
+    bmp.setPixels(px, 0, sw, 0, 0, sw, sh)
+    bmp.prepareToDraw()
+    return img
+}
+
+/** A Gaussian blur of opaque [px] ([w] × [h]) in place, [sx] / [sy] its sigmas across and down, its edges clamped. */
+internal fun gaussianBlur(px: IntArray, w: Int, h: Int, sx: Float, sy: Float) {
+    fun kernel(sigma: Float): FloatArray {
+        if (sigma < 0.1f) return floatArrayOf(1f)
+        val r = kotlin.math.ceil(3 * sigma).toInt()
+        val k = FloatArray(2 * r + 1) { i -> val d = (i - r).toFloat(); kotlin.math.exp(-d * d / (2 * sigma * sigma)) }
+        val sum = k.sum()
+        for (i in k.indices) k[i] /= sum
+        return k
+    }
+    val tmp = IntArray(px.size)
+    fun pass(src: IntArray, dst: IntArray, k: FloatArray, horizontal: Boolean) {
+        val r = k.size / 2
+        val major = if (horizontal) w else h
+        val minor = if (horizontal) h else w
+        for (fixed in 0 until minor) for (m in 0 until major) {
+            var rr = 0f; var gg = 0f; var bb = 0f
+            for (i in k.indices) {
+                val at = (m + i - r).coerceIn(0, major - 1)
+                val c = if (horizontal) src[fixed * w + at] else src[at * w + fixed]
+                val f = k[i]
+                rr += f * ((c shr 16) and 0xFF); gg += f * ((c shr 8) and 0xFF); bb += f * (c and 0xFF)
+            }
+            dst[if (horizontal) fixed * w + m else m * w + fixed] =
+                argb(rr.roundToInt().coerceIn(0, 255), gg.roundToInt().coerceIn(0, 255), bb.roundToInt().coerceIn(0, 255))
+        }
+    }
+    pass(px, tmp, kernel(sx), true)
+    pass(tmp, px, kernel(sy), false)
 }
 
 /**
@@ -304,6 +476,30 @@ internal fun meshDrift(speed: Float): MeshDrift? {
 }
 
 /**
+ * Where the mesh's drift is in its loop (radians, 0 until 2π), moved on frame by frame ([advance]). [hold] stops the
+ * count of time: the next [advance] takes up from the same place, the time held not counted (#547).
+ */
+internal class DriftPhase {
+    private val phase = androidx.compose.runtime.mutableFloatStateOf(0f)
+    private var lastNanos = -1L
+
+    /** Read in the drawn layer only, so a frame's move is a redraw of the layer, not a recomposition. */
+    val value: Float get() = phase.floatValue
+
+    fun advance(frameNanos: Long, loopMs: Int) {
+        val last = lastNanos
+        lastNanos = frameNanos
+        if (last < 0 || loopMs <= 0) return
+        val step = (frameNanos - last).coerceAtLeast(0L) / 1_000_000.0 / loopMs * TWO_PI
+        phase.floatValue = ((phase.floatValue + step) % TWO_PI).toFloat()
+    }
+
+    fun hold() { lastNanos = -1L }
+
+    private companion object { const val TWO_PI = 2 * Math.PI }
+}
+
+/**
  * [ArtworkMeshBackdrop] as it rests on a TV (no drift, no live blur, no seam): the same fill, mesh and deepening,
  * for the TV to make once into a picture (1.8.0).
  */
@@ -313,12 +509,15 @@ internal fun DrawScope.drawStillMesh(mesh: ArtworkMesh) {
     drawRect(Brush.verticalGradient(0f to Color.Black.copy(alpha = 0.08f), 0.55f to Color.Black.copy(alpha = 0.22f), 1f to Color.Black.copy(alpha = 0.42f)))
 }
 
-private fun DrawScope.drawMesh(mesh: ArtworkMesh, seamY: Float, alpha: Float, tone: androidx.compose.ui.graphics.ColorFilter? = null) {
+private fun DrawScope.drawMesh(
+    mesh: ArtworkMesh, seamY: Float, alpha: Float, tone: androidx.compose.ui.graphics.ColorFilter? = null,
+    area: androidx.compose.ui.geometry.Size = size,
+) {
     if (alpha <= 0.001f) return
     val img = mesh.image
-    val w = size.width.roundToInt()
+    val w = area.width.roundToInt()
     if (seamY > 0.5f) drawImage(img, IntOffset.Zero, IntSize(img.width, 1), IntOffset.Zero, IntSize(w, seamY.roundToInt()), alpha = alpha, colorFilter = tone, filterQuality = FilterQuality.Low)
-    drawImage(img, IntOffset.Zero, IntSize(img.width, img.height), IntOffset(0, seamY.roundToInt()), IntSize(w, (size.height - seamY).roundToInt()), alpha = alpha, colorFilter = tone, filterQuality = FilterQuality.Low)
+    drawImage(img, IntOffset.Zero, IntSize(img.width, img.height), IntOffset(0, seamY.roundToInt()), IntSize(w, (area.height - seamY).roundToInt()), alpha = alpha, colorFilter = tone, filterQuality = FilterQuality.Low)
 }
 
 private fun argb(r: Int, g: Int, b: Int) = (0xFF shl 24) or (r shl 16) or (g shl 8) or b

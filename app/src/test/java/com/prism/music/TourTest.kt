@@ -6,25 +6,205 @@ import com.prism.music.ui.screens.settings.SettingsTarget
 import com.prism.music.ui.screens.settings.index
 import com.prism.music.ui.tour.Tour
 import com.prism.music.ui.tour.TourStep
+import com.prism.music.ui.tour.TourTopic
+import com.prism.music.ui.tour.whatsNewPlan
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * The tour's rules: a new install (or the first release with tours) sees every step; someone who finished the tour at
- * a version sees only steps added since; and no step is dated after the build it ships in (it could never be marked
- * seen, and would come back at every start).
+ * The tour's rules: someone who finished the tour at a version sees only steps added since; no step is dated after the
+ * build it ships in (it could never be marked seen, and would come back at every start). Since 1.8.8 (plan-tour.md §3
+ * C, D, §5): a new install gets First steps, not the history; What's new shows the newest release's cards with the
+ * older ones folded into one "more things" count; every card has a Guide topic and every topic a card; and every
+ * release from 1.8.8 on keeps to two cards of at most four points, its headline's Show me using the coach.
  */
 // Robolectric: the tour's words come from strings.xml (1.7.9).
 @org.junit.runner.RunWith(org.robolectric.RobolectricTestRunner::class)
 @org.robolectric.annotation.Config(sdk = [34], application = android.app.Application::class)
 class TourTest {
+    private val newest get() = Tour.steps.maxOf { it.since }
+    private fun cardsOf(release: Int) = Tour.steps.filter { it.since == release }
+
+    /** A new install is not shown the history (it gets First steps); every step is still there for the Guide. */
     @Test
-    fun newInstallsSeeTheWholeTour() {
+    fun aNewInstallIsNotShownTheHistory() {
+        assertNull(whatsNewPlan(0, returning = false))
         assertEquals(Tour.steps, Tour.stepsAfter(0))
-        assertTrue(Tour.isFullTour(0))
+    }
+
+    /** Updating by one release gives that release's cards, and no "more things" line. */
+    @Test
+    fun anUpdateByOneReleaseGivesThatReleasesCards() {
+        val before = Tour.steps.map { it.since }.filter { it < newest }.max()
+        val plan = whatsNewPlan(before, returning = true)!!
+        assertFalse(plan.welcome)
+        assertEquals(cardsOf(newest), plan.steps)
+        assertEquals(0, plan.more)
+        assertEquals(0, plan.start)
+        // The bar (plan §6.7): at most 3 pages, the opening and two cards.
+        assertTrue(plan.pages <= 3)
+    }
+
+    /** Updating across several releases gives the newest release's cards, and the rest as one count. */
+    @Test
+    fun anUpdateAcrossSeveralGivesTheNewestAndTheCount() {
+        for (seen in listOf(54, 60, 63)) {
+            val plan = whatsNewPlan(seen, returning = true)!!
+            assertEquals(cardsOf(newest), plan.steps)
+            assertEquals(Tour.stepsAfter(seen).size - cardsOf(newest).size, plan.more)
+            assertTrue("$seen: older releases were skipped", plan.more > 0)
+        }
+        // The bar (plan §6.7): someone updating from 1.8.0 (build 54) sees at most 4 pages.
+        assertTrue(whatsNewPlan(54, returning = true)!!.pages <= 4)
+        // At this version, nothing is pending.
+        assertNull(whatsNewPlan(BuildConfig.VERSION_CODE, returning = true))
+    }
+
+    /** Someone from before tours ("Welcome to the new Prism") gets the newest release's cards and the Guide line, not every page. */
+    @Test
+    fun aListenerFromBeforeToursGetsTheNewestAndTheGuideLine() {
+        val plan = whatsNewPlan(0, returning = true)!!
+        assertTrue(plan.welcome)
+        assertEquals(cardsOf(newest), plan.steps)
+        assertEquals(Tour.steps.size - plan.steps.size, plan.more)
+        assertTrue(plan.pages <= 3)
+    }
+
+    /** A plan opened again after "Show me" starts at the card after, never past the last. */
+    @Test
+    fun showMeComesBackToTheNextCard() {
+        val plan = whatsNewPlan(0, returning = true)!!
+        assertEquals(2, plan.at(2).start)
+        assertEquals(plan.pages - 1, plan.at(99).start)
+        assertEquals(plan.steps, plan.at(1).steps)
+        assertEquals(plan.more, plan.at(1).more)
+    }
+
+    /** Every card has a Guide topic, and every topic has a card (in this build, and with the release being built). */
+    @Test
+    fun everyCardHasATopicAndEveryTopicACard() {
+        for (list in listOf(Tour.steps, Tour.allSteps)) {
+            val none = list.filter { it.topic == null }.map { "${it.since}: ${it.title}" }
+            assertEquals("cards without a topic", emptyList<String>(), none)
+            for (t in TourTopic.entries) assertTrue("$t has no card", list.any { it.topic == t })
+        }
+        // Within a topic, the newest come first.
+        for (t in TourTopic.entries) {
+            val since = t.cards.map { it.since }
+            assertEquals(since.sortedDescending(), since)
+            assertEquals(Tour.steps.count { it.topic == t }, t.cards.size)
+        }
+    }
+
+    /** The two-card rule's breaks in [steps]: a release from 1.8.8 on with more than two cards, more than four points, or no coach on its headline. */
+    private fun twoCardRuleBreaks(steps: List<TourStep>): List<String> = steps.filter { it.since >= Tour.V1_8_8 }.groupBy { it.since }.flatMap { (v, cards) ->
+        listOfNotNull(
+            "$v: ${cards.size} cards".takeIf { cards.size > 2 },
+            "$v: a card of more than four points".takeIf { cards.any { it.points.size > 4 } },
+            "$v: the headline's Show me has no coach".takeIf { cards.first().coach == null || cards.first().showMe == null },
+            "$v: the second card isn't \"Also new\"".takeIf { cards.size == 2 && cards[1].title != tr(R.string.also_new) },
+        )
+    }
+
+    /** From 1.8.8 on (plan D8): at most two cards, headline and "Also new", four points each, the headline's Show me on the coach. */
+    @Test
+    fun theTwoCardRuleFrom188() {
+        assertEquals(emptyList<String>(), twoCardRuleBreaks(Tour.allSteps))
+        // The rule catches a release that breaks it.
+        val icon = com.prism.music.ui.theme.PrismIcons.Heart
+        val coach = com.prism.music.ui.tour.ShowMeCoach(com.prism.music.ui.tour.TourAnchor.CROSSFADE, "Here.")
+        val good = TourStep(80, icon, "a", "b", listOf("1", "2", "3", "4"), showMe = "settings/playback", coach = coach)
+        assertEquals(emptyList<String>(), twoCardRuleBreaks(listOf(good, TourStep(80, icon, tr(R.string.also_new), "d"))))
+        assertEquals(1, twoCardRuleBreaks(listOf(good, good.copy(title = tr(R.string.also_new)), good.copy(title = tr(R.string.also_new)))).size)
+        assertEquals(1, twoCardRuleBreaks(listOf(good.copy(points = listOf("1", "2", "3", "4", "5")))).size)
+        assertEquals(1, twoCardRuleBreaks(listOf(good.copy(coach = null))).size)
+        // Releases before 1.8.8 aren't held to it.
+        assertEquals(emptyList<String>(), twoCardRuleBreaks(listOf(good.copy(since = 67, coach = null), good.copy(since = 67), good.copy(since = 67))))
+    }
+
+    /**
+     * 1.8.8 (build 68): its two cards, written ahead of the build's versionCode (they show once it is 68). The
+     * headline opens Playback at "From one song to the next" with the coach's hole on the Crossfade row.
+     */
+    @Test
+    fun the188Cards() {
+        val cards = Tour.allSteps.filter { it.since == Tour.V1_8_8 }
+        assertEquals(listOf(tr(R.string.tour_188_mix_title), tr(R.string.also_new)), cards.map { it.title })
+        assertTrue(cards.all { it.points.size in 1..4 && it.points.all { p -> p.isNotBlank() } && "%" !in (it.points + it.body).joinToString() })
+        if (BuildConfig.VERSION_CODE < Tour.V1_8_8) assertTrue("not shown before the build is 1.8.8", Tour.steps.none { it.since == Tour.V1_8_8 })
+        val head = cards.first()
+        assertEquals(com.prism.music.ui.tour.TourAnchor.CROSSFADE, head.coach!!.anchor)
+        val (key, find) = parse(head.showMe!!)
+        val page = SettingsPageId.PLAYBACK
+        assertEquals(SettingsTarget(page, tr(R.string.playback_song_to_song)), SettingsMap.resolve(key, find))
+        assertTrue(page.index.any { it.group == tr(R.string.playback_song_to_song) && it.title == tr(R.string.crossfade) })
+        // Only the last card asks for support, once for the release.
+        assertEquals(listOf(false, true), cards.map { it.support })
+        assertTrue(cards.last().points[1].contains(tr(R.string.ls_sing_button)))
+        assertTrue(cards.last().points[2].contains(tr(R.string.radio_started)))
+        assertTrue(cards.last().points[3].contains(tr(R.string.clear_cache)))
+    }
+
+    /** The Mix headline is sample wording until Mix is built: the 1.8.8 build can't ship with it. */
+    @Test
+    fun theMixHeadlineIsFilledBefore188Ships() {
+        assertFalse(
+            "1.8.8's Mix card is still the placeholder (TourSteps.kt, MIX_HEADLINE_PLACEHOLDER)",
+            Tour.MIX_HEADLINE_PLACEHOLDER && BuildConfig.VERSION_CODE >= Tour.V1_8_8,
+        )
+    }
+
+    /** Every release with cards has its name for the Guide's "Since …". */
+    @Test
+    fun everyReleaseHasItsName() {
+        for (v in Tour.allSteps.map { it.since }.toSet()) assertNotNull("$v", Tour.versionNames[v])
+        assertTrue("written at most one release ahead", Tour.allSteps.all { it.since <= BuildConfig.VERSION_CODE + 1 })
+    }
+
+    private val context get() = androidx.test.core.app.ApplicationProvider.getApplicationContext<android.app.Application>()
+    private fun freshInstall() = context.getSharedPreferences("tour", android.content.Context.MODE_PRIVATE).edit().clear().commit()
+
+    /**
+     * 1.8.8 (plan-tour.md §3 B, §5): a new install is given First steps (five steps), not the history: no pager of every
+     * release's pages, then or at a later start; at this version nothing else is pending.
+     */
+    @Test
+    fun aNewInstallGetsFirstStepsAndNotTheHistory() {
+        freshInstall()
+        com.prism.music.ui.tour.FirstSteps.load(context, returning = false)
+        assertTrue(com.prism.music.ui.tour.FirstSteps.pending)
+        assertEquals(5, com.prism.music.ui.tour.FirstSteps.steps {}.size)
+        assertNull("no history pager for a new install", com.prism.music.ui.tour.pendingTour(context, returning = false))
+        // Prism closed before First steps came up: the next start (set up by then) still gives First steps, no pager.
+        com.prism.music.ui.tour.FirstSteps.load(context, returning = true)
+        assertTrue(com.prism.music.ui.tour.FirstSteps.pending)
+        assertNull(com.prism.music.ui.tour.pendingTour(context, returning = true))
+        // Done (finished or skipped): never again, and still no history.
+        com.prism.music.ui.tour.FirstSteps.markDone(context)
+        com.prism.music.ui.tour.FirstSteps.load(context, returning = false)
+        assertTrue(!com.prism.music.ui.tour.FirstSteps.pending)
+        assertNull(com.prism.music.ui.tour.pendingTour(context, returning = true))
+    }
+
+    /** D9: nobody who has seen the tour, and nobody returning (set up before this start), is given First steps. */
+    @Test
+    fun peopleAlreadyOnPrismNeverGetFirstSteps() {
+        freshInstall()
+        com.prism.music.ui.tour.FirstSteps.load(context, returning = true)
+        assertTrue("set up before tours existed", !com.prism.music.ui.tour.FirstSteps.pending)
+        freshInstall()
+        Tour.markSeen(context)
+        com.prism.music.ui.tour.FirstSteps.load(context, returning = false)
+        assertTrue("saw the old tour", !com.prism.music.ui.tour.FirstSteps.pending)
+        freshInstall()
+        context.getSharedPreferences("tour", android.content.Context.MODE_PRIVATE).edit().putInt("seen_version", 61).commit()
+        com.prism.music.ui.tour.FirstSteps.load(context, returning = true)
+        assertTrue(!com.prism.music.ui.tour.FirstSteps.pending)
+        assertNotNull("someone updating still gets What's new", com.prism.music.ui.tour.pendingTour(context, returning = true))
     }
 
     @Test
@@ -38,6 +218,25 @@ class TourTest {
             assertTrue(Tour.stepsAfter(seen).all { it.since > seen })
             assertEquals(Tour.steps.count { it.since > seen }, Tour.stepsAfter(seen).size)
         }
+    }
+
+    /** The cards with the support line (1.8.7.6) that are not the last of their release's cards. */
+    private fun supportMisplaced(steps: List<TourStep>): List<String> = steps.withIndex()
+        .filter { (i, s) -> s.support && steps.drop(i + 1).any { it.since == s.since } }
+        .map { (_, s) -> "${s.since}: ${s.title}" }
+
+    /**
+     * 1.8.7.6 (plan-1.8.7.6 §4.1 S6, D5): the line asking to support Prism sits only on the last card of a release's
+     * cards (so a release asks once, at its end).
+     */
+    @Test
+    fun theSupportLineOnlyEndsARelease() {
+        assertEquals(emptyList<String>(), supportMisplaced(Tour.steps))
+        // The rule catches a line put on an earlier card of a release.
+        val icon = com.prism.music.ui.theme.PrismIcons.Heart
+        val wrong = listOf(TourStep(70, icon, "a", "b", support = true), TourStep(70, icon, "c", "d"))
+        assertEquals(listOf("70: a"), supportMisplaced(wrong))
+        assertEquals(emptyList<String>(), supportMisplaced(listOf(TourStep(70, icon, "a", "b"), TourStep(70, icon, "c", "d", support = true), TourStep(71, icon, "e", "f", support = true))))
     }
 
     @Test
@@ -141,13 +340,71 @@ class TourTest {
         }
     }
 
+    /** 1.8.7.5 (build 66): an update from 1.8.7 shows Your Spotify, opening Accounts & sharing at Spotify, then the fixes. */
+    /**
+     * 1.8.7.6 (build 67): an update from 1.8.7.5 (66) shows Spotify's canvas, then the fixes, and nothing older. The first
+     * page opens the Player page at Canvas; only the last carries the line about supporting Prism.
+     */
+    @Test
+    fun anUpdateFrom1875ShowsSpotifysCanvas() {
+        // (Up to 1.8.7.6's own: from 1.8.8's build on, its cards come after these.)
+        val pages = Tour.stepsAfter(66).filter { it.since <= 67 }
+        assertEquals(listOf(R.string.tour_1876_canvas_title, R.string.also_new).map { tr(it) }, pages.map { it.title })
+        assertTrue(pages.all { it.since == 67 && it.kind == TourStep.Kind.PLAIN })
+        assertTrue(pages.all { it.points.size in 3..5 && it.points.all { p -> p.isNotBlank() } })
+        assertTrue(pages.flatMap { it.points + it.body }.none { "%" in it })
+        assertEquals(listOf(false, true), pages.map { it.support })
+        val (key, find) = parse(pages.first().showMe!!)
+        assertEquals(SettingsPageId.PLAYER, SettingsMap.resolve(key, find)?.page)
+        // An update from 1.8.7 sees both releases' pages, in order.
+        assertEquals(listOf(66, 66, 67, 67), Tour.stepsAfter(65).map { it.since }.filter { it <= 67 })
+    }
+
+    @Test
+    fun anUpdateFrom187ShowsYourSpotify() {
+        val pages = Tour.stepsAfter(65).filter { it.since == 66 }
+        assertEquals(listOf(R.string.tour_1875_spotify_title, R.string.also_new).map { tr(it) }, pages.map { it.title })
+        assertTrue(pages.all { it.since == 66 && it.kind == TourStep.Kind.PLAIN })
+        assertTrue(pages.all { it.points.size in 3..5 && it.points.all { p -> p.isNotBlank() } })
+        assertTrue(pages.flatMap { it.points + it.body }.none { "%" in it })
+        val (key, find) = parse(pages.first().showMe!!)
+        assertEquals(SettingsTarget(SettingsPageId.ACCOUNTS_SHARING, tr(R.string.spotify)), SettingsMap.resolve(key, find))
+    }
+
+    /**
+     * 1.8.7 (build 65): an update from 1.8.6 (64) shows It just plays, then the rest, and nothing older. The first page
+     * names the check as its row is written and opens the group it is in; the second names the Canvas switch and
+     * Crossfade, and opens the Player page at Cover.
+     */
+    @Test
+    fun anUpdateFrom186ShowsItJustPlays() {
+        val pages = Tour.stepsAfter(64).filter { it.since == 65 }
+        assertEquals(listOf(R.string.tour_187_plays_title, R.string.also_new).map { tr(it) }, pages.map { it.title })
+        assertTrue(pages.all { it.since == 65 && it.kind == TourStep.Kind.PLAIN })
+        assertTrue(pages.all { it.points.size in 3..5 && it.points.all { p -> p.isNotBlank() } })
+        assertTrue(pages.flatMap { it.points + it.body }.none { "%" in it })
+        val plays = pages.first()
+        assertTrue(plays.points.last().contains(tr(R.string.selftest_title)) && plays.points.last().contains(tr(R.string.diagnostics)))
+        val (key, find) = parse(plays.showMe!!)
+        val page = SettingsPageId.BACKUP_ABOUT
+        assertEquals(SettingsTarget(page, tr(R.string.diagnostics)), SettingsMap.resolve(key, find))
+        assertTrue(page.index.any { it.group == tr(R.string.diagnostics) && it.title == tr(R.string.selftest_title) })
+        val also = pages.last()
+        assertTrue(also.points[0].contains(tr(R.string.canvas_lyrics)))
+        assertTrue(also.points[2].contains(tr(R.string.crossfade)))
+        val (alsoKey, alsoFind) = parse(also.showMe!!)
+        assertEquals(SettingsPageId.PLAYER.key, alsoKey)
+        assertEquals(tr(R.string.cover), alsoFind)
+        assertTrue(SettingsPageId.PLAYER.index.any { it.group == tr(R.string.cover) && it.title == tr(R.string.canvas_lyrics) })
+    }
+
     /**
      * 1.8.6 (build 64): an update from 1.8.5 (63) shows Canvas, then the hours on Replay's chart, and nothing older.
      * Canvas's page names the switch and the menu's rows as they are written, and opens the Player page at Cover.
      */
     @Test
     fun anUpdateFrom185ShowsCanvas() {
-        val pages = Tour.stepsAfter(63)
+        val pages = Tour.stepsAfter(63).filter { it.since == 64 }
         assertEquals(listOf(R.string.tour_186_canvas_title, R.string.also_new).map { tr(it) }, pages.map { it.title })
         assertTrue(pages.all { it.since == 64 && it.kind == TourStep.Kind.PLAIN })
         assertTrue(pages.flatMap { it.points + it.body }.none { "%" in it })

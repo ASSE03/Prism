@@ -56,8 +56,20 @@ import org.schabi.newpipe.extractor.downloader.Response as NpResponse
 const val DESKTOP_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0"
 
 /** Bridges NewPipeExtractor's HTTP needs to OkHttp. */
-class NewPipeDownloader(private val client: OkHttpClient) : Downloader() {
+class NewPipeDownloader(private val client: OkHttpClient, private val ipv4Client: OkHttpClient? = null) : Downloader() {
+    companion object {
+        /** NewPipe asks on the caller's thread: while [ipv4Only] runs [block], its requests go out over IPv4 only (#408). */
+        private val ipv4 = ThreadLocal<Boolean>()
+
+        fun <T> ipv4Only(on: Boolean, block: () -> T): T {
+            if (!on) return block()
+            ipv4.set(true)
+            try { return block() } finally { ipv4.remove() }
+        }
+    }
+
     override fun execute(request: Request): NpResponse {
+        val client = ipv4Client?.takeIf { ipv4.get() == true } ?: client
         val data = request.dataToSend()
         val body = when {
             data != null -> data.toRequestBody()
@@ -93,7 +105,21 @@ class NewPipeDownloader(private val client: OkHttpClient) : Downloader() {
 class YouTubeStreamInterceptor(
     private val chunkClient: OkHttpClient? = null,
     private val chunkSize: Long = 1L shl 20,
+    /**
+     * #408 (1.8.7): fetches the links asked for over IPv4 only ([Ipv4Links]), whole or in chunks, so a link and its stream
+     * leave by the same family. Without it, such a link is fetched the usual way.
+     */
+    private val ipv4Client: OkHttpClient? = null,
+    /** Told about each response's code and family ([NetFamily.Tag]'s header), for the diagnostics and the way memory. */
+    private val watch: StreamWatch? = null,
+    /** #514: the pauses before each quick retry of a 5xx ([whileBusy]); their number is the bound. */
+    private val busyPausesMs: List<Long> = BUSY_PAUSES_MS,
 ) : Interceptor {
+    companion object {
+        /** #514 (1.8.7.5): a 5xx is asked again twice, quickly; a third in a row gives the link up ([StreamResolver.fetched]). */
+        val BUSY_PAUSES_MS = listOf(300L, 900L)
+    }
+
     private val requestNumber = AtomicInteger(0)
 
     private fun isStream(url: HttpUrl) = url.host.endsWith("googlevideo.com") && url.encodedPath.startsWith("/videoplayback")
@@ -127,17 +153,61 @@ class YouTubeStreamInterceptor(
     /** googlevideo occasionally rejects a request transiently; one quick retry usually succeeds. */
     private inline fun withRetry(request: okhttp3.Request, send: (okhttp3.Request) -> Response): Response {
         val resp = send(request)
-        if (resp.code != 403) return resp
+        if (resp.code != 403) return whileBusy(resp, { false }) { send(renumbered(request)) }
         resp.close()
         Thread.sleep(350)
         return send(request.newBuilder().url(request.url.newBuilder().setQueryParameter("rn", requestNumber.incrementAndGet().toString()).build()).build())
     }
 
+    /** [request] again, with the next request number. */
+    private fun renumbered(request: okhttp3.Request): okhttp3.Request =
+        request.newBuilder().url(request.url.newBuilder().setQueryParameter("rn", requestNumber.incrementAndGet().toString()).build()).build()
+
+    /**
+     * #514: googlevideo's server answered 5xx (a 503 to a ranged request on a visionOS link, after a seek): that can be
+     * momentary, so it's asked again after each of [busyPausesMs], quickly, and what comes last is the answer. A 5xx
+     * still then tells the watcher the link is given up on ([StreamResolver.fetched]). Anything else comes back at once.
+     * [stop]: the read was given up meanwhile.
+     */
+    private inline fun whileBusy(first: Response, stop: () -> Boolean, again: () -> Response): Response {
+        var resp = first
+        for (pause in busyPausesMs) {
+            if (!serverBusy(resp.code) || stop()) return resp
+            resp.close()
+            pauseFor(pause)
+            resp = again()
+        }
+        return resp
+    }
+
+    /** A wait that a cancelled read cuts short as an IOException, which the player and OkHttp expect. */
+    private fun pauseFor(ms: Long) {
+        try {
+            Thread.sleep(ms)
+        } catch (e: InterruptedException) {
+            Thread.currentThread().interrupt()
+            throw java.io.InterruptedIOException("cancelled while waiting to ask the server again")
+        }
+    }
+
+    /** [resp] came for [url]: the watcher hears of it (it never stops a stream). */
+    private fun tell(url: HttpUrl, resp: Response): Response {
+        val w = watch ?: return resp
+        runCatching { w.fetched(url, resp.code, resp.header(NetFamily.HEADER)) }
+        return resp
+    }
+
     override fun intercept(chain: Interceptor.Chain): Response {
-        val req = chain.request()
+        val asked = chain.request()
+        if (!isStream(asked.url)) return chain.proceed(asked)
+        // A link asked for over IPv4 only goes out over IPv4 only (its own client, so no IPv6 connection is reused).
+        val v4 = Ipv4Links.isMarked(asked.url)
+        val req = if (v4) asked.newBuilder().url(Ipv4Links.strip(asked.url)).build() else asked
         val url = req.url
-        if (!isStream(url)) return chain.proceed(req)
-        if (url.queryParameter("range") != null) return withRetry(streamRequest(req, 0, null, false), chain::proceed)
+        val ipv4 = ipv4Client?.takeIf { v4 }
+        val send: (okhttp3.Request) -> Response = if (ipv4 != null) { r -> ipv4.newCall(r).execute() } else chain::proceed
+        val chunks = ipv4 ?: chunkClient
+        if (url.queryParameter("range") != null) return tell(url, withRetry(streamRequest(req, 0, null, false), send))
 
         val m = req.header("Range")?.let { Regex("bytes=(\\d+)-(\\d*)").find(it) }
         val start = m?.groupValues?.get(1)?.toLong() ?: 0L
@@ -151,9 +221,9 @@ class YouTubeStreamInterceptor(
                 .header("Content-Range", "bytes */$clen").body(ByteArray(0).toResponseBody(null)).build()
         }
 
-        if (chunkClient != null && clen != null && end != null && end - start + 1 > chunkSize) {
+        if (chunks != null && clen != null && end != null && end - start + 1 > chunkSize) {
             val firstEnd = minOf(end, start + chunkSize - 1)
-            val first = withRetry(streamRequest(req, start, firstEnd, true), chain::proceed)
+            val first = tell(url, withRetry(streamRequest(req, start, firstEnd, true), send))
             if (!first.isSuccessful) {
                 runCatching {
                     com.prism.music.playback.AudioDiagnostics.log(
@@ -163,7 +233,7 @@ class YouTubeStreamInterceptor(
                 return first
             }
             val len = end - start + 1
-            val body = ChunkedBody(first, start, end, req)
+            val body = ChunkedBody(first, start, end, req, chunks)
             val rb = first.newBuilder().body(body).removeHeader("Content-Length").removeHeader("Content-Range")
                 .header("Content-Length", len.toString())
             return if (m != null) rb.code(206).message("Partial Content").header("Content-Range", "bytes $start-$end/$clen").build()
@@ -171,7 +241,7 @@ class YouTubeStreamInterceptor(
         }
 
         val translated = m != null && !(start == 0L && m.groupValues[2].isEmpty())
-        val resp = withRetry(streamRequest(req, start, m?.groupValues?.get(2)?.toLongOrNull(), translated), chain::proceed)
+        val resp = tell(url, withRetry(streamRequest(req, start, m?.groupValues?.get(2)?.toLongOrNull(), translated), send))
         if (translated && resp.code == 200) {
             val len = resp.header("Content-Length")?.toLongOrNull()
             val rb = resp.newBuilder().code(206).message("Partial Content")
@@ -182,7 +252,9 @@ class YouTubeStreamInterceptor(
     }
 
     /** Streams bytes [start]..[end] by reading short ranges back to back. */
-    private inner class ChunkedBody(first: Response, start: Long, private val end: Long, private val base: okhttp3.Request) : ResponseBody() {
+    private inner class ChunkedBody(
+        first: Response, start: Long, private val end: Long, private val base: okhttp3.Request, private val chunkClient: OkHttpClient,
+    ) : ResponseBody() {
         private val type = first.body.contentType()
         private var pos = start
         private var current: Response? = first
@@ -192,7 +264,7 @@ class YouTubeStreamInterceptor(
         private fun fetch(from: Long): Future<Response> {
             val to = minOf(end, from + chunkSize - 1)
             val f = CompletableFuture<Response>()
-            val call = chunkClient!!.newCall(streamRequest(base, from, to, true))
+            val call = chunkClient.newCall(streamRequest(base, from, to, true))
             f.whenComplete { _, _ -> if (f.isCancelled) call.cancel() }
             call.enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) { f.completeExceptionally(e) }
@@ -200,6 +272,10 @@ class YouTubeStreamInterceptor(
                     if (response.code == 403) {
                         response.close()
                         runCatching { chunkClient.newCall(streamRequest(base, from, to, true)).execute() }
+                            .onSuccess { if (!f.complete(it)) it.close() }.onFailure { f.completeExceptionally(it) }
+                    } else if (serverBusy(response.code)) {
+                        // #514: a later chunk's 5xx is asked again quickly too, as the first chunk's is.
+                        runCatching { whileBusy(response, { f.isDone }) { chunkClient.newCall(streamRequest(base, from, to, true)).execute() } }
                             .onSuccess { if (!f.complete(it)) it.close() }.onFailure { f.completeExceptionally(it) }
                     } else if (!f.complete(response)) response.close()
                 }
@@ -239,6 +315,7 @@ class YouTubeStreamInterceptor(
                 throw java.io.InterruptedIOException()
             }
             if (!resp.isSuccessful) {
+                tell(base.url, resp)
                 resp.close()
                 // Which of YouTube's clients the link came from, and how far in (#114/#100: the first chunk played, then
                 // 403 at 1 MB for one listener on every song): the diagnostics say so, so the next log can tell why.
@@ -300,6 +377,8 @@ data class ResolvedStream(
     val videoHeight: Int = 0,
     val videoCodec: String? = null,
     val videoFps: Int = 0,
+    /** Premium's best was in hand but the mobile data quality (this one) picked another (1.8.7, #373); null: it wasn't. */
+    val heldBack: com.prism.music.data.prefs.AudioQuality? = null,
 )
 
 class StreamException(message: String, cause: Throwable? = null) : Exception(message, cause)
@@ -332,7 +411,44 @@ internal class RefusedSongs(private val now: () -> Long = System::currentTimeMil
 
     fun forget(id: String) { entries.remove(id) }
 
+    /** The phone is on another network: what was refused on the old one is asked again. */
+    fun clear() = entries.clear()
+
     companion object { const val FOR_MS = 5 * 60_000L }
+}
+
+/**
+ * #514 (1.8.7.5): a googlevideo answer that says its server can't serve now (5xx; a 503 above all), not that the link is
+ * refused (403/410, handled as in 1.8.7).
+ */
+internal fun serverBusy(code: Int?): Boolean = code != null && code in 500..599
+
+/**
+ * #514: songs whose link's server kept answering 5xx after the stream's quick retries, with the ways ([StreamWay.name])
+ * those links came by: the song's next lookups ask the other ways first ([StreamResolver]'s `otherWays`), for [FOR_MS].
+ * Only an order: when no other way has a link, the usual one is asked again, so the player's own bounded retries end it.
+ * Never kept on disk; another network starts afresh.
+ */
+internal class BusyWays(private val now: () -> Long = System::currentTimeMillis) {
+    private class Entry(val until: Long, val ways: Set<String>)
+
+    private val entries = ConcurrentHashMap<String, Entry>()
+
+    fun note(id: String, way: String) {
+        entries.compute(id) { _, e -> Entry(now() + FOR_MS, e?.takeIf { now() < it.until }?.ways.orEmpty() + way) }
+    }
+
+    /** The ways [id]'s links lately got 5xx by; empty: none. */
+    fun of(id: String): Set<String> {
+        val e = entries[id] ?: return emptySet()
+        if (now() < e.until) return e.ways
+        entries.remove(id, e)
+        return emptySet()
+    }
+
+    fun clear() = entries.clear()
+
+    companion object { const val FOR_MS = 10 * 60_000L }
 }
 
 /** [videoId] turned out to be live: it plays from its HLS manifest (`prism://live/…`), not as a file. */
@@ -357,7 +473,17 @@ class StreamResolver(
     http: OkHttpClient,
     private val settings: SettingsRepository,
     private val innerTube: InnerTube,
+    /** The IPv4-only step's address lookup (#408). */
+    ipv4Dns: okhttp3.Dns = Ipv4OnlyDns(),
 ) {
+    /**
+     * #408: the player requests go out through these: the app's client, noting each request's address family
+     * ([NetFamily.Tag]) for the diagnostics, and the same over IPv4 only, for the step after a refused link.
+     */
+    private val apiHttp: OkHttpClient = http.newBuilder().addNetworkInterceptor(NetFamily.Tag).build()
+    private val apiHttp4: OkHttpClient = apiHttp.newBuilder().dns(ipv4Dns).build()
+    private fun api(ipv4: Boolean) = if (ipv4) apiHttp4 else apiHttp
+
     /** One stream format, from either source. [url] is deciphered only when it's picked. */
     private class Fmt(
         val itag: Int,
@@ -377,7 +503,7 @@ class StreamResolver(
         val url: String by lazy(resolveUrl)
     }
 
-    private class Formats(
+    private data class Formats(
         val audio: List<Fmt>,
         val videoOnly: List<Fmt>,
         val muxed: List<Fmt>,
@@ -392,7 +518,24 @@ class StreamResolver(
         val client: InnerTube.PlayerClient? = null,
         /** YouTube says it's a music video or an upload, which never has Premium's formats. */
         val notASong: Boolean = false,
-    )
+        /** #408: asked for over IPv4 only; its links are handed out marked so ([Ipv4Links]), to be fetched over IPv4 too. */
+        val ipv4: Boolean = false,
+        /** The address family its player request went out by ([NetFamily]), for the diagnostics. */
+        val asked: String? = null,
+        /** Came after this song's link was refused (or the way remembered for this network): remembered there if it plays. */
+        val afterRefusal: Boolean = false,
+    ) {
+        /** The way it was got by, for the way memory ([WayMemory]). */
+        val way: StreamWay
+            get() = StreamWay(
+                when {
+                    client != null -> StreamWay.ACCOUNT + client.name
+                    via == "NewPipe" -> StreamWay.NEWPIPE
+                    else -> StreamWay.DIRECT
+                },
+                ipv4,
+            )
+    }
 
     private val solver = PlayerJsSolver(context, http)
 
@@ -410,7 +553,7 @@ class StreamResolver(
         val country = settings.current.contentCountry.uppercase().takeIf { it.matches(Regex("[A-Z]{2}")) }
             ?: Locale.getDefault().country.ifBlank { "US" }
         NewPipe.init(
-            NewPipeDownloader(http),
+            NewPipeDownloader(apiHttp, apiHttp4),
             Localization(Locale.getDefault().language.ifBlank { "en" }, Locale.getDefault().country.ifBlank { "US" }),
             org.schabi.newpipe.extractor.localization.ContentCountry(country),
         )
@@ -421,27 +564,37 @@ class StreamResolver(
         return cm.isActiveNetworkMetered
     }
 
-    /** Which network this is, for telling one from another (Wi-Fi to another Wi-Fi too). */
-    private fun networkNow(): String =
+    /** Which network this is, for telling one from another (Wi-Fi to another Wi-Fi too). An opaque id (tests set their own). */
+    @Volatile internal var networkNow: () -> String = {
         context.getSystemService(ConnectivityManager::class.java)?.activeNetwork?.toString().orEmpty()
+    }
 
-    fun currentQuality(): AudioQuality = when {
-        // Data saver on mobile data (#40) wins over lossless: the mobile data quality, at most Normal.
-        settings.current.dataSaver && isMetered() -> settings.current.cellularQuality.takeIf { it != AudioQuality.HIGH } ?: AudioQuality.NORMAL
-        settings.current.lossless -> AudioQuality.HIGH // lossless mode always takes the best stream there is
-        isMetered() -> settings.current.cellularQuality
-        else -> settings.current.audioQuality
+    fun currentQuality(): AudioQuality = qualityNow(premiumInHand = false).quality
+
+    /** The quality to pick at now ([AudioPick.quality]); [premiumInHand]: Premium quality is on and its formats came. */
+    private fun qualityNow(premiumInHand: Boolean): AudioPick.Quality = settings.current.let {
+        AudioPick.quality(it.audioQuality, it.cellularQuality, it.lossless, it.dataSaver, isMetered(), premiumInHand)
     }
 
     /**
      * Forgets [videoId]'s stream, to be looked up again. [refused]: its server turned the stream away (403), so the next
      * lookup doesn't take the direct answer again (on the phone, "Beat It" `kOn-HdEg6AQ` signed in got 403s on every
      * direct link, so it failed twice and was skipped); it goes through NewPipe, as before the direct lookup.
+     * [unavailable] (#514): its server kept answering 5xx; the way it came by is asked last for it ([BusyWays]), and none
+     * of [refused]'s steps are taken (no IPv4-only step: a busy server isn't the network's doing).
      */
-    fun invalidate(songId: String, refused: Boolean = false) {
+    fun invalidate(songId: String, refused: Boolean = false, unavailable: Boolean = false) {
         val videoId = versionOf(songId) ?: songId
         refusedSongs.forget(videoId)
         val was = cache.remove(videoId)
+        if (unavailable) {
+            // Told by the stream already, as a rule ([fetched]): the same way noted twice is noted once.
+            was?.let { busyWays.note(videoId, it.way.name) }
+            return
+        }
+        // The same refusal told twice (a video's data source and the player both do): the step it started stands.
+        if (refused && was == null && ipv4Retry.containsKey(videoId)) return
+        if (refused && was != null && ipv4Step(videoId, was)) return
         // The account's own link was the one turned away (its web client's links stop after the first megabyte without
         // a PO token, GitHub #188 #192): asking as the account again gets the same, so the other ways are tried first
         // from now on. Before, such a song stayed "account only" and every try failed ~1 minute in.
@@ -459,6 +612,90 @@ class StreamResolver(
             needsAccount += videoId
             Log.i("PrismStream", "$videoId refused twice: asking as the signed-in account from now on")
         }
+    }
+
+    /**
+     * #408: songs whose link was just refused, with the way it came by: [load] asks that way once more over IPv4 only
+     * (the player request and the stream both), before the ladder moves on from it.
+     */
+    private val ipv4Retry = ConcurrentHashMap<String, String>()
+
+    /** Networks where a link asked for over IPv4 only was refused too: no IPv4-only step there for the rest of the session. */
+    private val ipv4NoHelp = ConcurrentHashMap.newKeySet<String>()
+
+    /** The way that last worked on each network after the usual one was refused ([WayMemory]). */
+    private val ways by lazy { WayMemory(runCatching { context.getSharedPreferences(WayMemory.PREFS, Context.MODE_PRIVATE) }.getOrNull()) }
+
+    /** The links handed out lately, so a fetch can say what it was ([fetched]). */
+    private val links = LinkBook()
+
+    private fun diag(line: String) {
+        Log.i("PrismStream", line)
+        runCatching { com.prism.music.playback.AudioDiagnostics.log("stream", line) }
+    }
+
+    /**
+     * #408: [was]'s link was refused. The way it came by is no longer tried first on this network, and a way not yet
+     * asked over IPv4 only is, once, before the ladder moves on (true: it will be). A link that was asked so and refused
+     * anyway says IPv4 doesn't help on this network: no more IPv4-only steps there.
+     */
+    private fun ipv4Step(videoId: String, was: Formats): Boolean {
+        val net = networkNow()
+        val way = was.way
+        if (ways.refused(net, way)) diag("$videoId: the link from $way was refused; it's no longer tried first on this network")
+        if (was.ipv4) {
+            if (ipv4NoHelp.add(net)) diag("$videoId: refused over IPv4 only too; no more IPv4-only tries on this network")
+            return false
+        }
+        if (net in ipv4NoHelp || was.live) return false
+        ipv4Retry[videoId] = way.name
+        diag("$videoId: the link from $way was refused; asking that way once more over IPv4 only")
+        return true
+    }
+
+    /**
+     * A googlevideo response came ([YouTubeStreamInterceptor]'s watcher): a refusal is logged with the families of the
+     * link's player request, of the link itself and of the fetch, together; the first bytes of a link once, the same way.
+     * A link that came after a refusal and plays is the way remembered for this network ([WayMemory]).
+     */
+    fun fetched(url: HttpUrl, code: Int, family: String?) {
+        val e = links.find(url)
+        val families = NetFamily.line(e?.asked, NetFamily.ofLink(url), family)
+        if (code == 403 || code == 410) {
+            diag("${e?.songId ?: url.queryParameter("id") ?: "?"}: refused (HTTP $code), link from ${e?.way ?: "?"}: $families")
+            return
+        }
+        if (serverBusy(code)) { busyLink(e, url, code); return }
+        if (e == null || code !in 200..299 || e.fetched) return
+        e.fetched = true
+        diag("${e.songId}: first bytes, link from ${e.way}: $families")
+        if (!e.remember) return
+        val net = networkNow()
+        if (ways.get(net) != e.way) diag("${e.songId}: ${e.way} plays here after a refusal; it's tried first on this network from now on")
+        ways.worked(net, e.way)
+    }
+
+    /**
+     * #514: [url]'s server kept answering [code] (5xx) through the stream's quick retries: the link is given up on. The
+     * lookup it came from is forgotten while it's still the one in hand, so the next read (Media3's own retry, from where
+     * it was; a download's next try) looks the song up afresh, and the way it came by is asked last ([BusyWays]).
+     */
+    private fun busyLink(e: LinkBook.Entry?, url: HttpUrl, code: Int) {
+        if (e == null) {
+            diag("${url.queryParameter("id") ?: "?"}: HTTP $code from its server, for a link not handed out lately")
+            return
+        }
+        busyWays.note(e.songId, e.way.name)
+        (e.formats as? Formats)?.let { cache.remove(e.songId, it) }
+        diag("${e.songId}: its server kept answering HTTP $code for the link from ${e.way}; it's looked up again, another way first")
+    }
+
+    /** [url], one of [f]'s links for [videoId], as it's handed out: marked when it was asked over IPv4 only, and noted. */
+    private fun handOut(videoId: String, f: Formats, url: String): String {
+        if (links.note(url, LinkBook.Entry(videoId, f.way, f.asked, remember = f.afterRefusal || f.ipv4, formats = f))) {
+            diag("$videoId: link from ${f.way}: ${NetFamily.linkLine(f.asked, NetFamily.ofLink(url))}")
+        }
+        return if (f.ipv4) Ipv4Links.mark(url) else url
     }
 
     /** [videoId] is the listener's own upload (#101): asked for as the signed-in account from the start. */
@@ -483,6 +720,15 @@ class StreamResolver(
     /** Songs refused by every account client a moment ago, and no other way played them ([RefusedSongs]). */
     private val refusedSongs = RefusedSongs()
 
+    /** Another network (1.8.7): no song stays turned away for what the old one did, nor kept off a busy server (#514). */
+    fun anotherNetwork() {
+        refusedSongs.clear()
+        busyWays.clear()
+    }
+
+    /** Songs whose link's server kept answering 5xx, and the ways those links came by (#514). */
+    private val busyWays = BusyWays()
+
     /** Every account client refused the song being looked up now; kept in [refusedSongs] if no other way plays it either. */
     private val refusedNow = ConcurrentHashMap.newKeySet<String>()
 
@@ -506,7 +752,10 @@ class StreamResolver(
         }
         try {
             val started = System.nanoTime()
-            val f = load(videoId, forVideo)
+            NetFamily.clearLast()
+            // The family the (last) player request went out by, for the diagnostics (#408).
+            val f = load(videoId, forVideo).let { it.copy(asked = NetFamily.last()) }
+            NetFamily.clearLast()
             refusedNow -= videoId
             val took = (System.nanoTime() - started) / 1_000_000
             Log.i("PrismStream", "$videoId resolved via ${f.via} in $took ms")
@@ -617,11 +866,61 @@ class StreamResolver(
 
     private fun load(videoId: String, forVideo: Boolean = false): Formats {
         val signedIn = settings.current.isLoggedIn
-        if (signedIn && videoId in needsAccount) return signedInFormats(videoId)
+        // #408: the way whose link was just refused, asked once more over IPv4 only, so the link and its stream leave by
+        // the same family; when it can't answer, the ladder goes on as before.
+        ipv4Retry.remove(videoId)?.let { way -> tryWay(videoId, StreamWay(way, ipv4 = true), signedIn)?.let { return it } }
+        val afterRefusal = videoId in directRefused || videoId in accountRefused
+        return inOrder(videoId, forVideo, signedIn).let { if (afterRefusal && !it.afterRefusal) it.copy(afterRefusal = true) else it }
+    }
+
+    /**
+     * One way, as [way] says (over IPv4 only, when it does), for the IPv4-only step and the way remembered for this
+     * network. Null when it has nothing to play; never throws.
+     */
+    private fun tryWay(videoId: String, way: StreamWay, signedIn: Boolean): Formats? {
+        val f = try {
+            when {
+                way.name == StreamWay.DIRECT -> directFormats(videoId, signedIn, way.ipv4)
+                way.name == StreamWay.NEWPIPE -> if (System.currentTimeMillis() < newPipeBlockedUntil) null
+                else anonymousFormats(videoId, way.ipv4).takeIf { it.audio.isNotEmpty() || it.hlsUrl != null }
+                way.name.startsWith(StreamWay.ACCOUNT) && signedIn -> {
+                    val client = AccountClients.order.firstOrNull { it.name == way.name.removePrefix(StreamWay.ACCOUNT) }
+                    client?.let { signedInFormats(videoId, AccountClients.order(it), ipv4 = way.ipv4) }
+                }
+                else -> null
+            }
+        } catch (e: Exception) {
+            Log.w("StreamResolver", "$videoId as $way failed: $e")
+            null
+        }
+        if (f == null) diag("$videoId: $way had no link")
+        return f?.copy(ipv4 = way.ipv4, afterRefusal = true)
+    }
+
+    /**
+     * The way remembered for this network ([WayMemory]), first; not when it's the usual first step anyway, nor one
+     * this song's own link was refused by.
+     */
+    private fun remembered(videoId: String, signedIn: Boolean, busy: Set<String>): Formats? {
+        val way = ways.get(networkNow()) ?: return null
+        if (way == StreamWay(StreamWay.DIRECT, false)) return null
+        if (way.name in busy) return null
+        if (way.name == StreamWay.DIRECT && videoId in directRefused) return null
+        if (way.name.startsWith(StreamWay.ACCOUNT) && (videoId in accountRefused || !signedIn)) return null
+        return tryWay(videoId, way, signedIn)
+    }
+
+    /** The ladder as it was before 1.8.7, with the way remembered for this network after Premium quality's ask. */
+    private fun inOrder(videoId: String, forVideo: Boolean, signedIn: Boolean): Formats {
+        val busy = busyWays.of(videoId)
+        if (signedIn && videoId in needsAccount) return signedInFormats(videoId, AccountClients.lastly(busy))
+        // #514: this song's link from [busy]'s ways kept getting 5xx from its server: the other ways first.
+        if (busy.isNotEmpty()) otherWays(videoId, signedIn, busy)?.let { return it }
         // A music video looked up for its picture or its length (each song's, ahead of time) never has Premium's formats:
         // its ask slowed it down for nothing and counted as a miss, so that songs in the cache with videos asked for
         // around them paused Premium for the next hour.
         if (!forVideo && videoId !in accountRefused) premiumFormats(videoId)?.let { return it }
+        remembered(videoId, signedIn, busy)?.let { return it }
         // While YouTube is blocking NewPipe here, signed-in playback goes straight to the account's own clients
         // (each song would otherwise wait for NewPipe to be refused first).
         if (signedIn && System.currentTimeMillis() < newPipeBlockedUntil) {
@@ -638,6 +937,9 @@ class StreamResolver(
                 Log.w("StreamResolver", "YouTube is blocking anonymous web playback here; using other clients for a while: $e")
             }
             val why = if (blocked) BLOCKED else e.message ?: tr(R.string.couldn_t_load_this_track)
+            // #531: signed out, neither the visionOS app nor NewPipe (which asks as visionOS too) plays "made for kids"
+            // videos; the older TV app as a Samsung TV does, without an account (yt-dlp's first client signed out).
+            if (!signedIn) signedOutFormats(videoId)?.let { return it }
             when {
                 // Anything YouTube won't play (or NewPipe can't get) anonymously is asked for as the user.
                 signedIn -> try {
@@ -653,6 +955,73 @@ class StreamResolver(
         }
     }
 
+    /**
+     * #514: [videoId]'s links from [busy]'s ways kept getting 5xx from their servers (visionOS links above all): the
+     * other ways, first the account's other clients when signed in, then the visionOS app and NewPipe unless in [busy].
+     * Null when none of them has a link: the usual ladder then runs, the busy way included, so a song is never left
+     * without a try; the player's own retries bound how often.
+     */
+    private fun otherWays(videoId: String, signedIn: Boolean, busy: Set<String>): Formats? {
+        val clients = AccountClients.order.filter { StreamWay.ACCOUNT + it.name !in busy }
+        if (signedIn && videoId !in accountRefused && clients.isNotEmpty()) {
+            runCatching { signedInFormats(videoId, clients) }.getOrNull()?.let { return it }
+        }
+        if (StreamWay.DIRECT !in busy && videoId !in directRefused) directFormats(videoId, signedIn)?.let { return it }
+        if (StreamWay.NEWPIPE !in busy && System.currentTimeMillis() >= newPipeBlockedUntil) {
+            runCatching { anonymousFormats(videoId) }.getOrNull()?.takeIf { it.audio.isNotEmpty() || it.hlsUrl != null }?.let { return it }
+        }
+        diag("$videoId: no way but ${busy.joinToString()} had a link; asking the usual way again")
+        return null
+    }
+
+    /**
+     * #531 (1.8.7.6): signed out, the last way, when the visionOS app and NewPipe had nothing to play: the older TV app as
+     * a Samsung TV ([SIGNED_OUT_CLIENT]), asked without an account. YouTube answers "made for kids" videos there (the
+     * visionOS app gets "This video is not available" for them), with ciphered links solved as the account's are. Null
+     * when it has nothing either; the song then fails as before, with the same message.
+     */
+    private fun signedOutFormats(videoId: String): Formats? = try {
+        signedInFormats(videoId, listOf(SIGNED_OUT_CLIENT), signedOut = true)
+            .also { diag("$videoId: no link from the visionOS app or NewPipe; signed out, ${SIGNED_OUT_CLIENT.name} has one") }
+    } catch (e: Exception) {
+        // Not one of the account's refusals: nothing is kept of it ([RefusedSongs] is about the account's clients).
+        refusedNow -= videoId
+        diag("$videoId: signed out, ${SIGNED_OUT_CLIENT.name} had no link either (${e.message?.take(120)})")
+        null
+    }
+
+    /** The pauses between asks while a signed-out TV link isn't served yet ([awaitServed]); about half a minute in all. */
+    @Volatile internal var servedPausesMs: List<Long> = SERVED_PAUSES_MS
+
+    /**
+     * #531: a link the TV app gets signed out is refused (403) for its first seconds (4 s mostly, 23 s for one video, on
+     * the PC on 2026-11-16) and then served whole. So before it's handed out, its first bytes are asked for until they
+     * come, or [servedPausesMs] run out (then it's handed out anyway, and a refusal goes the usual way). Only this way
+     * waits; a cancelled lookup stops waiting at once.
+     */
+    private fun awaitServed(videoId: String, url: String) {
+        val started = System.nanoTime()
+        fun code(): Int? = try {
+            val req = okhttp3.Request.Builder().url(url).header("Range", "bytes=0-1023").header("User-Agent", DESKTOP_UA).build()
+            apiHttp.newCall(req).execute().use { it.code }
+        } catch (e: IOException) {
+            null
+        }
+        var answer = code()
+        for (pause in servedPausesMs) {
+            if (answer != 403) break
+            try {
+                Thread.sleep(pause)
+            } catch (e: InterruptedException) {
+                Thread.currentThread().interrupt()
+                return
+            }
+            answer = code()
+        }
+        val ms = (System.nanoTime() - started) / 1_000_000
+        diag("$videoId: signed-out TV link ${if (answer == 403) "still refused" else "served (HTTP $answer)"} after $ms ms")
+    }
+
     /** Until when [directFormats] is skipped: YouTube was answering it with bot checks from this network. */
     @Volatile
     private var directOffUntil = 0L
@@ -664,10 +1033,10 @@ class StreamResolver(
      * a live stream without its HLS manifest): NewPipe then resolves it as before. Songs that need an account
      * (age-restricted, Premium-only) go straight to the signed-in clients when signed in.
      */
-    private fun directFormats(videoId: String, signedIn: Boolean): Formats? {
+    private fun directFormats(videoId: String, signedIn: Boolean, ipv4: Boolean = false): Formats? {
         if (System.currentTimeMillis() < directOffUntil) return null
         val res = try {
-            innerTube.visionOsPlayer(videoId)
+            innerTube.visionOsPlayer(videoId, api(ipv4))
         } catch (e: Exception) {
             Log.w("StreamResolver", "Direct lookup of $videoId failed: $e")
             return null
@@ -680,7 +1049,7 @@ class StreamResolver(
             if (reason?.contains("bot", ignoreCase = true) == true) {
                 directOffUntil = System.currentTimeMillis() + BLOCK_BACKOFF_MS
             } else if (signedIn && status == "LOGIN_REQUIRED") {
-                runCatching { signedInFormats(videoId) }.getOrNull()?.let { needsAccount += videoId; return it }
+                runCatching { signedInFormats(videoId, ipv4 = ipv4) }.getOrNull()?.let { needsAccount += videoId; return it }
             }
             return null
         }
@@ -692,8 +1061,8 @@ class StreamResolver(
         return f.takeIf { it.audio.isNotEmpty() }?.also { Log.i("PrismStream", "$videoId resolved directly (visionOS)") }
     }
 
-    private fun anonymousFormats(videoId: String): Formats {
-        val info = StreamInfo.getInfo(ServiceList.YouTube, "https://www.youtube.com/watch?v=$videoId")
+    private fun anonymousFormats(videoId: String, ipv4: Boolean = false): Formats {
+        val info = NewPipeDownloader.ipv4Only(ipv4) { StreamInfo.getInfo(ServiceList.YouTube, "https://www.youtube.com/watch?v=$videoId") }
         fun clen(s: org.schabi.newpipe.extractor.stream.Stream) =
             s.itagItem?.contentLength?.takeIf { it > 0 } ?: Uri.parse(s.content).getQueryParameter("clen")?.toLongOrNull() ?: -1
         val audio = info.audioStreams.filter { it.isUrl && it.deliveryMethod == DeliveryMethod.PROGRESSIVE_HTTP }.map { a ->
@@ -742,16 +1111,22 @@ class StreamResolver(
         fun order(first: InnerTube.PlayerClient?): List<InnerTube.PlayerClient> =
             if (first == null) order else listOf(first) + order.filter { it != first }
 
+        /** [order] with the clients whose links' servers kept answering 5xx ([busy]'s ways, #514) last; as it is without any. */
+        fun lastly(busy: Set<String>): List<InnerTube.PlayerClient> =
+            if (busy.isEmpty()) order else order.sortedBy { StreamWay.ACCOUNT + it.name in busy }
+
         const val RETRY_PAUSE_MS = 300L
     }
 
     /**
      * The player response as the signed-in user: [order], the first with links wins. With [wanted], the first with links
      * that it likes wins, else the first with links. What each client answered goes in [answers], with no links in it.
+     * [signedOut] (#531): asked with no account at all ([signedOutFormats]); its links wait until they're served.
      */
     private fun signedInFormats(
         videoId: String, order: List<InnerTube.PlayerClient> = AccountClients.order,
-        wanted: ((Formats) -> Boolean)? = null, answers: MutableList<String>? = null,
+        wanted: ((Formats) -> Boolean)? = null, answers: MutableList<String>? = null, ipv4: Boolean = false,
+        signedOut: Boolean = false,
     ): Formats {
         val player = try {
             solver.currentPlayer()
@@ -768,12 +1143,12 @@ class StreamResolver(
         if (player == null) answers?.add("no player JS, so no signature timestamp")
         for (client in order) {
             val res = try {
-                var answer = innerTube.signedInPlayer(client, videoId, player?.second)
+                var answer = innerTube.signedInPlayer(client, videoId, player?.second, api(ipv4))
                 // "The page needs to be reloaded" (GitHub #260) is often gone on the next ask.
                 repeat(AccountClients.retries(client)) {
                     if (answer.str("playabilityStatus", "status") != "UNPLAYABLE") return@repeat
                     Thread.sleep(AccountClients.RETRY_PAUSE_MS)
-                    answer = innerTube.signedInPlayer(client, videoId, player?.second)
+                    answer = innerTube.signedInPlayer(client, videoId, player?.second, api(ipv4))
                 }
                 answer
             } catch (e: Exception) {
@@ -791,7 +1166,13 @@ class StreamResolver(
                 answers?.add("${client.name}: $status")
                 continue
             }
-            val f = parsePlayer(res, player?.first, via = "account (${client.name})", client = client)
+            val f = if (signedOut) {
+                // One answer's links are served from the same moment: only the first one picked waits.
+                val waited = java.util.concurrent.atomic.AtomicBoolean()
+                parsePlayer(res, player?.first, via = "signed out (${client.name})", client = client) { url ->
+                    if (waited.compareAndSet(false, true)) awaitServed(videoId, url)
+                }
+            } else parsePlayer(res, player?.first, via = "account (${client.name})", client = client)
             if (f.live && f.hlsUrl == null) { liveWithoutHls = liveWithoutHls ?: f; continue }
             answers?.add("${client.name}: ${describePlayerAnswer(res)}")
             if (f.live && f.hlsUrl != null) return f
@@ -900,6 +1281,12 @@ class StreamResolver(
         }
 
         private const val BLOCK_BACKOFF_MS = 30 * 60_000L
+
+        /** #531: the client asked signed out when nothing else had a link (yt-dlp's first client signed out, 2026). */
+        internal val SIGNED_OUT_CLIENT = InnerTube.PlayerClient.TV_SAMSUNG
+
+        /** #531: [awaitServed]'s pauses, 30 s in all (the PC's slowest signed-out TV link was served after 23 s). */
+        internal val SERVED_PAUSES_MS = listOf(1000L, 1000L, 2000L, 2000L, 3000L, 3000L, 4000L, 4000L, 5000L, 5000L)
         val BLOCKED: String get() = com.prism.music.tr(com.prism.music.R.string.youtube_is_limiting_playback)
 
         /**
@@ -913,8 +1300,14 @@ class StreamResolver(
         internal fun isProtected(format: JsonObject): Boolean = format.arr("drmFamilies")?.isNotEmpty() == true
     }
 
-    /** [playerId] is the player JS whose signature timestamp the request sent; its ciphers are solved with it. */
-    private fun parsePlayer(res: JsonObject, playerId: String?, via: String = "visionOS", client: InnerTube.PlayerClient? = null): Formats {
+    /**
+     * [playerId] is the player JS whose signature timestamp the request sent; its ciphers are solved with it. [served]:
+     * told each link as it's solved, before it's handed out (#531's wait); none by default.
+     */
+    private fun parsePlayer(
+        res: JsonObject, playerId: String?, via: String = "visionOS", client: InnerTube.PlayerClient? = null,
+        served: ((String) -> Unit)? = null,
+    ): Formats {
         val data = res.obj("streamingData")
         fun fmt(o: JsonObject): Fmt? {
             if (isProtected(o)) return null
@@ -935,7 +1328,7 @@ class StreamResolver(
                 contentLength = len,
                 height = o.str("height")?.toIntOrNull() ?: 0, fps = o.str("fps")?.toIntOrNull() ?: 0,
                 original = o.obj("audioTrack")?.let { t -> t.str("audioIsDefault") != "false" } ?: true,
-            ) { decipher(playerId, direct, cipher) }
+            ) { decipher(playerId, direct, cipher).also { served?.invoke(it) } }
         }
         val adaptive = data.arr("adaptiveFormats")?.mapNotNull { (it as? JsonObject)?.let(::fmt) }.orEmpty()
         val muxed = data.arr("formats")?.mapNotNull { (it as? JsonObject)?.let(::fmt) }.orEmpty()
@@ -1027,7 +1420,7 @@ class StreamResolver(
         val usable = f.audio.filter { it.original }.ifEmpty { f.audio }
         val pick = usable.filter { it.mime.contains("mp4") }.minByOrNull { it.kbps }
             ?: usable.minByOrNull { it.kbps } ?: throw StreamException(tr(R.string.no_audio_stream))
-        return AnalysisStream(pick.url, pick.contentLength, f.durationSec)
+        return AnalysisStream(handOut(versionOf(videoId) ?: videoId, f, pick.url), pick.contentLength, f.durationSec)
     }
 
     private fun pickAudio(streams: List<Fmt>, quality: AudioQuality): Fmt? =
@@ -1055,7 +1448,10 @@ class StreamResolver(
         val f = formats(videoId, forVideo = withVideo)
         // A live stream's "file" is only its newest few seconds: the player has to take it as HLS instead.
         if (f.live) throw LiveStreamException(videoId)
-        val audio = pickAudio(f.audio, currentQuality())
+        // Premium quality on and its formats here (#373 #179 #148): on Wi-Fi the best of them, whatever the quality
+        // setting; on mobile data the mobile data quality still holds, and Stats for nerds says it held them back.
+        val quality = qualityNow(premiumInHand = settings.current.premiumStream && f.audio.any { it.itag in PREMIUM_ITAGS })
+        val audio = pickAudio(f.audio, quality.quality)
             ?: throw StreamException(tr(R.string.no_playable_audio_stream_was_found))
         // The account's link couldn't be unlocked (GitHub #179, 1.7.7.1: the player JS sandbox ran out of memory on a
         // OnePlus) for a song that went through the account only for Premium quality: it plays as everyone gets it,
@@ -1081,7 +1477,7 @@ class StreamResolver(
         val uri = Uri.parse(audio.url)
         return ResolvedStream(
             videoId = videoId,
-            audioUrl = audio.url,
+            audioUrl = handOut(videoId, f, audio.url),
             itag = audio.itag,
             mimeType = audio.mime,
             codec = audio.codec,
@@ -1091,10 +1487,11 @@ class StreamResolver(
             contentLength = audio.contentLength.takeIf { it > 0 } ?: uri.getQueryParameter("clen")?.toLongOrNull() ?: -1,
             client = uri.getQueryParameter("c"),
             expiresAtMs = f.expiresAtMs,
-            videoUrl = video?.url,
+            videoUrl = video?.url?.let { handOut(videoId, f, it) },
             videoHeight = video?.height ?: 0,
             videoCodec = video?.codec,
             videoFps = video?.fps ?: 0,
+            heldBack = quality.heldBack?.takeIf { audio.itag !in PREMIUM_ITAGS },
         )
     }
 }

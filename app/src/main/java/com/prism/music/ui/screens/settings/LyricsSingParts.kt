@@ -110,7 +110,7 @@ internal fun LsPreview(strip: Boolean) {
     Box(Modifier.fillMaxSize().background(Color(0xFF15141B)).background(lsGround(look)), contentAlignment = Alignment.CenterStart) {
         LyricsSample(
             look, Modifier.fillMaxWidth(), ground = SolidColor(Color.Transparent), size = if (strip) 0.9f else 1f, lines = if (strip) 1 else 3,
-            extra = if (strip) null else tr(R.string.cada_color_encuentra_su_camino), backing = !strip, progress = s.lyricsProgressLine,
+            extra = if (strip) null else tr(R.string.cada_color_encuentra_su_camino), backing = !strip, progress = s.lyrics.progressLine,
         )
     }
 }
@@ -162,16 +162,16 @@ internal fun LsStyleRows(d: AppSettings) {
     if (s.lyricsBackground == LyricsBackground.COLOR || s.immersiveBackground == LyricsBackground.COLOR) LsYourColorsRow(d)
 
     PickCardsRow(
-        tr(R.string.the_line_on_the_player), STRIP_LINES, stripLineToMerged(s.lyricsStripAlign, s.lyricsStripTwoLines), ::stripLineLabel,
+        tr(R.string.the_line_on_the_player), STRIP_LINES, stripLineToMerged(s.lyrics.stripAlign, s.lyrics.stripTwoLines), ::stripLineLabel,
         info = tr(R.string.the_lyric_over_the_progress_bar) + " " + tr(R.string.the_line_keeps_room_for_two),
-        changed = s.lyricsStripAlign != d.lyricsStripAlign || s.lyricsStripTwoLines != d.lyricsStripTwoLines,
+        changed = s.lyrics.stripAlign != d.lyrics.stripAlign || s.lyrics.stripTwoLines != d.lyrics.stripTwoLines,
         onPick = { stripLineToStored(it).let { (align, two) -> prefs.setLyricsStripAlign(align); prefs.setLyricsStripTwoLines(two) } },
     ) { StripSample(it.align == LyricsAlign.CENTER, if (it.twoLines) 2 else 1) }
 
     PickCardsRow(
         tr(R.string.instrumental_breaks), LyricsGapMark.entries, p.gapMark, { it.label }, info = tr(R.string.what_shows_between_lines_while_the),
         changed = p.gapMark != q.gapMark, onPick = { prefs.setLyricsGapMark(it) },
-    ) { GapSample(it == LyricsGapMark.NOTE, s.lyricsAlign == LyricsAlign.CENTER) }
+    ) { GapSample(it == LyricsGapMark.NOTE, s.lyrics.align == LyricsAlign.CENTER) }
 }
 
 /** Your colors behind the lyrics: the row opens "Top color / Bottom color (/ One color)", and those the color picker. */
@@ -218,8 +218,8 @@ internal fun LsTextRows(d: AppSettings) {
     val q = d.lyricsLook
     val prefs = LocalContainer.current.settings
     LsFontRow(d)
-    SliderRow(tr(R.string.lyrics_size), s.lyricsScale, 0.75f..1.4f, ::lsPercent, changed = s.lyricsScale != d.lyricsScale) { prefs.setLyricsScale(it) }
-    ChoiceRow(tr(R.string.alignment), LyricsAlign.entries, s.lyricsAlign, { it.label }, changed = s.lyricsAlign != d.lyricsAlign) { prefs.setLyricsAlign(it) }
+    SliderRow(tr(R.string.lyrics_size), s.lyrics.scale, 0.75f..1.4f, ::lsPercent, changed = s.lyrics.scale != d.lyrics.scale) { prefs.setLyricsScale(it) }
+    ChoiceRow(tr(R.string.alignment), LyricsAlign.entries, s.lyrics.align, { it.label }, changed = s.lyrics.align != d.lyrics.align) { prefs.setLyricsAlign(it) }
     ChoiceRow(tr(R.string.weight), LyricsWeight.entries, p.weightNow, { it.label }, changed = p.weightNow != q.weightNow) { prefs.setLyricsWeight(it) }
     SliderRow(tr(R.string.line_spacing), p.spacing, 0.6f..1.8f, ::lsSpacingText, changed = p.spacing != q.spacing) { prefs.setLyricsSpacing(it) }
     SwitchRow(tr(R.string.capitals), p.uppercase, changed = p.uppercase != q.uppercase) { prefs.setLyricsUppercase(it) }
@@ -267,20 +267,20 @@ private fun LsFontRow(d: AppSettings) {
             FONT_INSTALLED -> tr(R.string.installed_fonts_for_lyrics)
             FONT_OTHER_FILE -> tr(R.string.ls_pick_a_lyrics_font_file)
             FONT_REMOVE -> tr(R.string.remove_the_lyrics_font_file)
-            FontChoice.CUSTOM.name -> if (hasFile) s.lyricsFontName.ifBlank { tr(R.string.your_font_2) } else tr(R.string.from_a_file)
+            FontChoice.CUSTOM.name -> if (hasFile) s.lyrics.fontName.ifBlank { tr(R.string.your_font_2) } else tr(R.string.from_a_file)
             else -> lsFontText(v, "")
         }
     }
-    val now = s.lyricsFont.takeIf { it in fonts } ?: ""
+    val now = s.lyrics.font.takeIf { it in fonts } ?: ""
     PickListRow(
         tr(R.string.lyrics_font), fonts + more, now, label,
         // A file that couldn't be used says so here, until one can.
         value = error ?: label(now),
-        changed = s.lyricsFont != d.lyricsFont,
+        changed = s.lyrics.font != d.lyrics.font,
         detail = { v ->
             when (v) {
                 FONT_INSTALLED -> tr(R.string.installed_fonts_detail)
-                FONT_OTHER_FILE -> tr(R.string.lyrics_font_file_2, s.lyricsFontName)
+                FONT_OTHER_FILE -> tr(R.string.lyrics_font_file_2, s.lyrics.fontName)
                 else -> null
             }
         },
@@ -291,7 +291,7 @@ private fun LsFontRow(d: AppSettings) {
                 FONT_OTHER_FILE -> pickFile.launch(fontTypes)
                 FONT_REMOVE -> {
                     AppFonts.remove(AppFonts.FontSlot.LYRICS)
-                    if (s.lyricsFont == FontChoice.CUSTOM.name) prefs.setLyricsFont("")
+                    if (s.lyrics.font == FontChoice.CUSTOM.name) prefs.setLyricsFont("")
                     prefs.setLyricsFontFile("")
                 }
                 FontChoice.CUSTOM.name -> if (hasFile) prefs.setLyricsFont(v) else pickFile.launch(fontTypes)
@@ -331,7 +331,7 @@ internal fun LsColorRows(d: AppSettings) {
     ) { prefs.setLyricsBlurAmount(if (it < 0.05f) 0f else it) }
     ChoiceRow(tr(R.string.lines_to_come), LyricsAhead.entries, p.ahead, { it.label }, info = tr(R.string.how_many_of_the_next_lines), changed = p.ahead != q.ahead) { prefs.setLyricsAhead(it) }
 
-    val effects = effectsToMerged(p.haloNow, p.shadow, s.lyricsProgressLine)
+    val effects = effectsToMerged(p.haloNow, p.shadow, s.lyrics.progressLine)
     fun set(e: LyricsEffect, on: Boolean) {
         val (glow, shadow, line) = effectsToStored(if (on) effects + e else effects - e)
         when (e) {
@@ -346,7 +346,7 @@ internal fun LsColorRows(d: AppSettings) {
             tr(R.string.glow_round_the_words), tr(R.string.helps_the_words_read_over_photos), tr(R.string.split_light_under_the_line_being),
             if (old) tr(R.string.glow_needs_android_12_or_later) else null,
         ).joinToString("\n"),
-        changed = effects != effectsToMerged(q.haloNow, q.shadow, d.lyricsProgressLine),
+        changed = effects != effectsToMerged(q.haloNow, q.shadow, d.lyrics.progressLine),
     )
     SliderRow(tr(R.string.background_vocals), p.backingSize, 0.4f..0.9f, ::lsBackingText, changed = p.backingSize != q.backingSize) { prefs.setLyricsBackingSize(it) }
 
@@ -370,11 +370,11 @@ internal fun LsColorRows(d: AppSettings) {
 internal fun LsLanguageRows(d: AppSettings) {
     val s = LocalAppSettings.current
     val prefs = LocalContainer.current.settings
-    val translate = translateToMerged(s.lyricsTranslate, s.lyricsTranslateTo)
+    val translate = translateToMerged(s.lyrics.translate, s.lyrics.translateTo)
     PickListRow(
         tr(R.string.translate_into), listOf(LS_TRANSLATE_OFF) + LS_TRANSLATE_LANGUAGES.map { it.first }, translate, ::translateLabel,
         info = tr(R.string.for_songs_in_another_language_machine),
-        changed = translate != translateToMerged(d.lyricsTranslate, d.lyricsTranslateTo), searchable = true,
+        changed = translate != translateToMerged(d.lyrics.translate, d.lyrics.translateTo), searchable = true,
         onPick = { code -> if (code == LS_TRANSLATE_OFF) prefs.setLyricsTranslate(false) else { prefs.setLyricsTranslateTo(code); prefs.setLyricsTranslate(true) } },
     )
     val romanize = romanizeToMerged(s.romanize, s.romanizeAll)
@@ -437,7 +437,7 @@ internal fun LsSourceRows(d: AppSettings) {
     SwitchRow(tr(R.string.uncensor_lyrics), s.skipCensored, info = tr(R.string.swear_words_starred_out_f_k), changed = s.skipCensored != d.skipCensored) { prefs.setSkipCensored(it) }
     LsSourceOrder(d)
     // Its only control anywhere (plan §2.6): kept.
-    SwitchRow(tr(R.string.lyrics_source_button), s.lyricsSourceButton, info = tr(R.string.lyrics_source_button_info), changed = s.lyricsSourceButton != d.lyricsSourceButton) { prefs.setLyricsSourceButton(it) }
+    SwitchRow(tr(R.string.lyrics_source_button), s.lyrics.sourceButton, info = tr(R.string.lyrics_source_button_info), changed = s.lyrics.sourceButton != d.lyrics.sourceButton) { prefs.setLyricsSourceButton(it) }
     // #404: every song's lyrics a little earlier or later; applied at once.
     val offset = s.behavior.lyricsOffsetMs
     SliderRow(
@@ -458,10 +458,10 @@ private fun LsSourceOrder(d: AppSettings) {
     val prefs = LocalContainer.current.settings
     val title = tr(R.string.ls_source_order)
     var open by rememberSaveable { mutableStateOf(false) }
-    val changed = s.lyricsOrder != d.lyricsOrder || s.lyricsOff != d.lyricsOff || s.behavior.embeddedLyrics != d.behavior.embeddedLyrics
+    val changed = s.lyrics.order != d.lyrics.order || s.lyrics.off != d.lyrics.off || s.behavior.embeddedLyrics != d.behavior.embeddedLyrics
     Column(
         Modifier.fillMaxWidth().testTag("lyricsSing:sourceOrder").semantics {
-            settingsRowValue = s.lyricsOrder.firstOrNull(s::lyricsSourceOn)?.label.orEmpty()
+            settingsRowValue = s.lyrics.order.firstOrNull(s::lyricsSourceOn)?.label.orEmpty()
             settingsRowChanged = changed
         },
     ) {
@@ -472,7 +472,7 @@ private fun LsSourceOrder(d: AppSettings) {
         }
         InfoText(open, tr(R.string.tried_top_to_bottom_hold_one), Modifier.padding(start = 16.dp, end = 16.dp, bottom = 10.dp))
         // The grip moves a source (drag, TalkBack's moves, D-pad / keyboard; 1.8.4: the up / down arrows went).
-        ReorderList(s.lyricsOrder, { it }, { prefs.setLyricsOrder(it) }) { src, i, _, mod ->
+        ReorderList(s.lyrics.order, { it }, { prefs.setLyricsOrder(it) }) { src, i, _, mod ->
             val on = s.lyricsSourceOn(src)
             Row(mod.fillMaxWidth().padding(horizontal = 16.dp, vertical = 2.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(
@@ -488,8 +488,8 @@ private fun LsSourceOrder(d: AppSettings) {
                 }
                 // Turned off, a source is never asked (#51); at least one stays on.
                 PrismSwitch(
-                    on, { v -> if (src == LyricsSource.EMBEDDED) prefs.setEmbeddedLyrics(v) else prefs.setLyricsOff(if (v) s.lyricsOff - src else s.lyricsOff + src) },
-                    enabled = !on || s.lyricsOrder.count(s::lyricsSourceOn) > 1,
+                    on, { v -> if (src == LyricsSource.EMBEDDED) prefs.setEmbeddedLyrics(v) else prefs.setLyricsOff(if (v) s.lyrics.off - src else s.lyrics.off + src) },
+                    enabled = !on || s.lyrics.order.count(s::lyricsSourceOn) > 1,
                     modifier = Modifier.scale(0.8f).testTag("lyricsSing:source:" + src.name),
                 )
                 DragGrip(Modifier.dragHandle().padding(start = 2.dp), tr(R.string.drag, src.label))
@@ -512,6 +512,10 @@ internal fun LsSingRows(d: AppSettings) {
     val runtime = ModelStore.Model.singRuntime()
     val model = ModelStore.Model.SING_MODEL
     var used by remember { mutableStateOf(c.sing.store.bytes()) }
+    // Reddit (1.8.8): the microphone under the open lyrics can go; Sing stays in the player's menu.
+    SwitchRow(
+        tr(R.string.ls_sing_button), s.lyrics.singButton, info = tr(R.string.ls_sing_button_info), changed = s.lyrics.singButton != d.lyrics.singButton,
+    ) { prefs.setLyricsSingButton(it) }
     if (runtime == null) {
         // Sing's full separation doesn't run on this phone's processor: the row says so, the why behind its ⓘ.
         LinkRow(tr(R.string.sing_s_voice_separation), value = tr(R.string.ls_sing_quick_way), info = tr(R.string.sing_doesn_t_run_on_this), enabled = false) {}
@@ -543,7 +547,7 @@ internal fun LsSingRows(d: AppSettings) {
     LinkRow(
         tr(R.string.save_lyrics_into_your_music_files), value = tr(R.string.so_other_players_show_them_too), info = tr(R.string.synced_lyrics_go_into_your_flac), action = true,
     ) { c.lyricsToFiles.request(null) }
-    val with = savedWithToMerged(s.lyricsFileWords, s.lyricsFileTranslation)
+    val with = savedWithToMerged(s.lyrics.fileWords, s.lyrics.fileTranslation)
     fun save(w: SavedWith, on: Boolean) {
         val (words, translation) = savedWithToStored(if (on) with + w else with - w)
         if (w == SavedWith.WORD_TIMINGS) prefs.setLyricsFileWords(words) else prefs.setLyricsFileTranslation(translation)
@@ -555,6 +559,6 @@ internal fun LsSingRows(d: AppSettings) {
             ShowOption(tr(R.string.ls_translation), SavedWith.TRANSLATION in with) { save(SavedWith.TRANSLATION, it) },
         ),
         info = tr(R.string.ls_when_saving_info),
-        changed = with != savedWithToMerged(d.lyricsFileWords, d.lyricsFileTranslation),
+        changed = with != savedWithToMerged(d.lyrics.fileWords, d.lyrics.fileTranslation),
     )
 }

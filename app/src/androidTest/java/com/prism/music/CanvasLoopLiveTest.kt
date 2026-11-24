@@ -41,16 +41,34 @@ class CanvasLoopLiveTest {
     /**
      * The long run for heat and battery (`canvas-heat.ps1` reads the phone meanwhile): one song on repeat for
      * `minutes=<n>`, the player open, with `cond=loop` (Full screen, its music video's loop) or `cond=still` (Canvas off).
+     * 1.8.7: `cond=frame` is the loop in the cover's frame; `loop-paused`, `frame-paused` and `still-paused` pause the
+     * song once that is on screen (what a paused player costs); `newinstall=true` leaves a new install's own defaults
+     * (the cover flight, the backdrop fade) as they are, where the tests' setup otherwise switches them off.
      */
     @Test fun aLongRunForHeat() = runBlocking {
         assumeTrue("live test: run with record=true", args.getString("record") == "true")
-        val loop = args.getString("cond") == "loop"
+        val cond = args.getString("cond") ?: "still"
+        val paused = cond.endsWith("-paused")
+        val framed = cond.startsWith("frame")
+        val loop = cond.startsWith("loop") || framed
         val minutes = args.getString("minutes")?.toDoubleOrNull() ?: 20.0
         Fixture.ready()
         val c = Fixture.container
+        if (args.getString("newinstall") == "true") c.settings.editNow {
+            for (name in com.prism.music.data.prefs.NewInstall.on + com.prism.music.data.prefs.NewInstall.motion) {
+                it[androidx.datastore.preferences.core.booleanPreferencesKey(name)] = true
+            }
+        }
         c.settings.setPerformanceMode(false); c.settings.setReduceMotion(false); c.settings.setImmersivePlayer(false); c.settings.setFullBleedArtwork(false)
-        c.settings.setCanvasEnabled(loop); c.settings.setCanvasFillsBackground(loop); c.settings.setCanvasUseVideos(loop)
+        c.settings.setCanvasEnabled(loop); c.settings.setCanvasFillsBackground(loop && !framed); c.settings.setCanvasUseVideos(loop)
         c.settings.setCanvasVideoFirst(true); c.settings.setCanvasKeepControls(false)
+        // strip=false: without the lyric line over the progress bar (what the open player costs on its own).
+        // Both are set every run: a run's choice stays in the store for the next one otherwise (2026-11-14: a whole
+        // comparison ran without the strip after one run had switched it off).
+        c.settings.setLyricsOnPlayer(args.getString("strip") != "false")
+        // lyrics=true: 1.8.7's "Keep lyrics showing" (the sung line over the picture while the controls are away).
+        // (An older build of the app, driven by this test for a comparison, has no such switch.)
+        try { c.settings.setCanvasLyrics(args.getString("lyrics") == "true") } catch (_: NoSuchMethodError) { }
         Fixture.launch()
         val words = (args.getString("song") ?: "Flowers_Miley_Cyrus").replace('_', ' ')
         val song = withContext(Dispatchers.IO) { c.ytm.search(words, SearchFilter.SONGS).items.filterIsInstance<SongItem>().first().song }
@@ -66,11 +84,16 @@ class CanvasLoopLiveTest {
         repeat(3) { if (c.player.repeatMode.value != androidx.media3.common.Player.REPEAT_MODE_ONE) { withContext(Dispatchers.Main) { c.player.cycleRepeat() }; delay(700) } }
         val until = System.currentTimeMillis() + (minutes * 60_000).toLong()
         if (loop) while (System.currentTimeMillis() < until && CanvasStats.showing?.startsWith("file://") != true) delay(200)
-        android.util.Log.i("CanvasHeat", "start ${if (loop) "loop" else "still"}: \"${song.title}\", repeat ${c.player.repeatMode.value}, showing ${CanvasStats.showing}, row ${c.canvasClips.row(song.id)?.height}p")
+        if (paused) {
+            delay(4_000)
+            if (c.player.isPlaying.value) withContext(Dispatchers.Main) { c.player.togglePlay() }
+            delay(3_000)
+        }
+        android.util.Log.i("CanvasHeat", "start $cond: \"${song.title}\", repeat ${c.player.repeatMode.value}, playing ${c.player.isPlaying.value}, showing ${CanvasStats.showing}, row ${c.canvasClips.row(song.id)?.height}p")
         while (System.currentTimeMillis() < until) delay(1_000)
         android.util.Log.i(
             "CanvasHeat",
-            "end ${if (loop) "loop" else "still"}: rounds ${CanvasStats.rounds - before.first}, covered ${CanvasStats.covered}, errors ${CanvasStats.errors - before.second} " +
+            "end $cond: rounds ${CanvasStats.rounds - before.first}, covered ${CanvasStats.covered}, errors ${CanvasStats.errors - before.second} " +
                 "(${CanvasStats.lastError}), showing ${CanvasStats.showing}, playing ${c.player.isPlaying.value}",
         )
         if (loop) assertEquals("no loop failed in the long run", before.second, CanvasStats.errors)
@@ -121,6 +144,58 @@ class CanvasLoopLiveTest {
                 delay(5_000)
                 for (k in 1..3) { Fixture.screenshot("CanvasEye-${i.toString().padStart(2, '0')}-$k"); delay(2_000) }
             } else Fixture.screenshot("CanvasEye-${i.toString().padStart(2, '0')}-none")
+        }
+    }
+
+    /**
+     * 1.8.7.6 (#528): how long the picture stands at a real loop's restart, on the phone's own network. `kind=video` (the
+     * default) plays a song's music-video loop, `kind=cover` its animated cover; `song=<search words>`; `rounds=<n>`
+     * (default 10). Logged under "CanvasWrap"; nothing asserted but that the loop showed and went round.
+     */
+    @Test fun wrapGapsOnARealLoop() = runBlocking {
+        assumeTrue("live test: run with record=true", args.getString("record") == "true")
+        val cover = args.getString("kind") == "cover"
+        val rounds = args.getString("rounds")?.toIntOrNull() ?: 10
+        Fixture.ready()
+        val c = Fixture.container
+        c.settings.setPerformanceMode(false); c.settings.setReduceMotion(false); c.settings.setImmersivePlayer(false); c.settings.setFullBleedArtwork(false)
+        c.settings.setCanvasEnabled(true); c.settings.setCanvasFillsBackground(true); c.settings.setCanvasUseVideos(true)
+        c.settings.setCanvasVideoFirst(!cover); c.settings.setCanvasKeepControls(false)
+        Fixture.launch()
+        val words = (args.getString("song") ?: if (cover) "Anti-Hero_Taylor_Swift" else "Flowers_Miley_Cyrus").replace('_', ' ')
+        val song = withContext(Dispatchers.IO) { c.ytm.search(words, SearchFilter.SONGS).items.filterIsInstance<SongItem>().first().song }
+        CanvasStats.showing = null
+        com.prism.music.ui.player.CanvasFrames.clear()
+        com.prism.music.ui.player.CanvasFrames.on = true
+        try {
+            withContext(Dispatchers.Main) { c.player.playQueue(listOf(song), 0, QueueSource(QueueKind.SINGLE, "test")) }
+            Fixture.context.startActivity(
+                android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("prism://player"))
+                    .setClass(Fixture.context, PrismActivity::class.java)
+                    .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP),
+            )
+            val end = System.currentTimeMillis() + 60_000
+            while (System.currentTimeMillis() < end && CanvasStats.showing == null) delay(100)
+            assertNotNull("a canvas shows (${CanvasStats.lastError})", CanvasStats.showing)
+            // Counted from the clip on screen now (the player view may have been made again once the clip came).
+            withContext(Dispatchers.Main) { com.prism.music.ui.player.CanvasFrames.clear() }
+            val until = System.currentTimeMillis() + 240_000
+            while (System.currentTimeMillis() < until && withContext(Dispatchers.Main) { com.prism.music.ui.player.CanvasFrames.roundsNs().size } < rounds + 1) delay(250)
+            delay(1_500)
+            val frames = withContext(Dispatchers.Main) { com.prism.music.ui.player.CanvasFrames.framesNs() }
+            val went = withContext(Dispatchers.Main) { com.prism.music.ui.player.CanvasFrames.roundsNs() }
+            val g = com.prism.music.ui.player.wrapGaps(frames, went)
+            val seen = com.prism.music.ui.player.wrapGaps(withContext(Dispatchers.Main) { com.prism.music.ui.player.CanvasFrames.visibleNs() }, went)
+            val row = c.canvasClips.row(song.id)
+            android.util.Log.i(
+                "CanvasWrap",
+                "live ${if (cover) "cover" else "video"} (kept frame up ${withContext(Dispatchers.Main) { com.prism.music.ui.player.CanvasFrames.coversUp() }} times) \"${song.title}\": showing ${CanvasStats.showing}; row ${row?.height}p ${row?.startMs}-${row?.endMs} refined ${row?.refined}; " +
+                    "${went.size} rounds; seen at the restarts ${seen.atWrapsMs.map { "%.0f".format(it) }} ms, drawn ${g.atWrapsMs.map { "%.0f".format(it) }} ms, inside typically ${"%.1f".format(g.typicalMs)} ms " +
+                    "(longest ${"%.0f".format(g.longestElsewhereMs)} ms); decoder: ${synchronized(com.prism.music.ui.player.CanvasFrames.wraps) { com.prism.music.ui.player.CanvasFrames.wraps.toList() }}",
+            )
+            assertTrue("it went round (${went.size})", went.size >= 2)
+        } finally {
+            com.prism.music.ui.player.CanvasFrames.on = false
         }
     }
 
@@ -190,5 +265,57 @@ class CanvasLoopLiveTest {
         device.click(device.displayWidth / 2, device.displayHeight / 3)
         delay(700)
         Fixture.screenshot("CanvasLoopLiveTest-3-controls-back")
+    }
+
+    /**
+     * 1.8.7 "Keep lyrics showing": over a full-screen loop the sung line comes once the controls have gone, changes with
+     * the song, and goes when a tap brings the controls back; with the switch off there is never one.
+     */
+    @Test fun theSungLineStaysWhenTheControlsGo() = runBlocking {
+        assumeTrue("live test: run with record=true", args.getString("record") == "true")
+        Fixture.ready()
+        val c = Fixture.container
+        c.settings.setPerformanceMode(false); c.settings.setReduceMotion(false); c.settings.setImmersivePlayer(false); c.settings.setFullBleedArtwork(false)
+        c.settings.setCanvasEnabled(true); c.settings.setCanvasFillsBackground(true); c.settings.setCanvasUseVideos(true)
+        c.settings.setCanvasVideoFirst(true); c.settings.setCanvasKeepControls(false)
+        c.settings.setLyricsOnPlayer(true)
+        c.settings.setCanvasLyrics(false)
+        Fixture.launch()
+        val words = (args.getString("song") ?: "Flowers_Miley_Cyrus").replace('_', ' ')
+        val song = withContext(Dispatchers.IO) { c.ytm.search(words, SearchFilter.SONGS).items.filterIsInstance<SongItem>().first().song }
+        CanvasStats.showing = null
+        withContext(Dispatchers.Main) { c.player.playQueue(listOf(song), 0, QueueSource(QueueKind.SINGLE, "test")) }
+        Fixture.context.startActivity(
+            android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("prism://player"))
+                .setClass(Fixture.context, PrismActivity::class.java)
+                .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP),
+        )
+        val end = System.currentTimeMillis() + 60_000
+        while (System.currentTimeMillis() < end && CanvasStats.showing?.startsWith("file://") != true) delay(100)
+        assertTrue("the loop shows (${CanvasStats.showing}, ${CanvasStats.lastError})", CanvasStats.showing?.startsWith("file://") == true)
+        // Into the singing, so a line is due; the controls go a few seconds after the seek.
+        withContext(Dispatchers.Main) { c.player.seekTo(30_000) }
+        suspend fun seen(ms: Long): Set<String> {
+            val lines = mutableSetOf<String>(); val until = System.currentTimeMillis() + ms
+            while (System.currentTimeMillis() < until) { CanvasStats.lyricLine?.takeIf { it.isNotBlank() }?.let(lines::add); delay(200) }
+            return lines
+        }
+        // Switched off: the controls go, no line comes.
+        assertTrue("off: no line over the picture", seen(15_000).isEmpty())
+        Fixture.screenshot("CanvasLyricLive-1-off")
+        // Switched on while the controls are away: the line comes, and moves on with the song.
+        c.settings.setCanvasLyrics(true)
+        val lines = seen(25_000)
+        Fixture.screenshot("CanvasLyricLive-2-on")
+        android.util.Log.i("CanvasLyric", "lines seen: $lines")
+        assertTrue("on: the sung line shows and changes (saw $lines)", lines.size >= 2)
+        // A tap brings the controls back and the line goes.
+        val device = UiDevice.getInstance(instrumentation)
+        device.click(device.displayWidth / 2, device.displayHeight / 3)
+        delay(1_200)
+        Fixture.screenshot("CanvasLyricLive-3-controls-back")
+        assertEquals("with the controls up there is no line", null, CanvasStats.lyricLine)
+        // And it returns when they go again.
+        assertTrue("it comes back once the controls have gone", seen(15_000).isNotEmpty())
     }
 }

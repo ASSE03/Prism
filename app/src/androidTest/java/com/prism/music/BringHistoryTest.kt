@@ -85,16 +85,18 @@ class BringHistoryTest {
         val prismOnly = runBlocking { c.imports.replay().totalMs(0, Long.MAX_VALUE) }
 
         Fixture.launch()
-        // 1.8.4: Settings → Recommendations & history → History → Bring your history (a row, its own screen).
-        compose.openSettingsPage(SettingsPageId.RECOMMENDATIONS_HISTORY)
+        // 1.8.7.6: Settings → Accounts & sharing → Accounts → Bring your history (a row, its own screen).
+        compose.openSettingsPage(SettingsPageId.ACCOUNTS_SHARING)
         compose.clickWhenFound(settingsRow("Bring your history"))
         seeText("Your imports")
         seeText("2 plays")
 
-        // Back on Recommendations & history: count Spotify. "Count history from" is one row of Replay's group now; its
-        // sheet lists every source, the ones with plays here as switches.
+        // Back to Accounts & sharing, then to Recommendations & history: count Spotify. "Count history from" is one row
+        // of its History group; its sheet lists every source, the ones with plays here as switches.
         val device = androidx.test.uiautomator.UiDevice.getInstance(androidx.test.platform.app.InstrumentationRegistry.getInstrumentation())
         device.pressBack()
+        device.pressBack()
+        compose.backOnSettingsPage(SettingsPageId.RECOMMENDATIONS_HISTORY)
         seeText("Count history from")
         compose.openSettingsSheet("Count history from")
         compose.clickWhenFound(hasText("Spotify") and hasClickAction() and hasTestTag(SettingsTags.ROW_SWITCH))
@@ -112,10 +114,13 @@ class BringHistoryTest {
         seeText("Includes Spotify")
 
         // Removed from its page. Replay is a tab: Back from it goes Home, and the Settings tab then reopens where it was
-        // (tabs keep their pages), Recommendations & history; if it opens on the root instead, the page is one tap away.
+        // (tabs keep their pages), Recommendations & history; Bring your history is on Accounts & sharing now: Back to the
+        // root, then that page (if Settings opens on the root instead, the page is one tap away).
         device.pressBack()
         compose.clickWhenFound(hasContentDescription("Settings") and hasClickAction())
         compose.backOnSettingsPage(SettingsPageId.RECOMMENDATIONS_HISTORY)
+        device.pressBack()
+        compose.backOnSettingsPage(SettingsPageId.ACCOUNTS_SHARING)
         compose.clickWhenFound(settingsRow("Bring your history"))
         compose.clickWhenFound(hasContentDescription("Remove") and hasClickAction())
         compose.clickWhenFound(hasText("Remove") and hasClickAction() and !hasContentDescription("Remove"))
@@ -139,7 +144,7 @@ class BringHistoryTest {
         assertTrue("the import is dated", ImportSource.SPOTIFY in c.imports.lastImports.value)
 
         Fixture.launch()
-        compose.openSettingsPage(SettingsPageId.RECOMMENDATIONS_HISTORY)
+        compose.openSettingsPage(SettingsPageId.ACCOUNTS_SHARING)
         compose.clickWhenFound(settingsRow("Bring your history"))
         seeText("Last Spotify import")
         seeText("(today)")

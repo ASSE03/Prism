@@ -65,6 +65,7 @@ import com.prism.music.ui.Routes
 import com.prism.music.ui.components.Artwork
 import com.prism.music.ui.components.RoundAction
 import com.prism.music.ui.components.SubPage
+import com.prism.music.ui.player.PlayerAsks
 import com.prism.music.ui.theme.LocalContainer
 import com.prism.music.ui.theme.LocalUi
 import com.prism.music.ui.theme.PrismIcons
@@ -117,7 +118,7 @@ fun RecognizeScreen(autoStart: Boolean, bottomPadding: Dp) {
             }
             Spacer(Modifier.weight(0.6f))
             when (val s = state) {
-                is Recognizer.State.Found -> FoundCard(s.recognition, s.song)
+                is Recognizer.State.Found -> FoundCard(s)
                 else -> {
                     val listening = s as? Recognizer.State.Listening
                     ListenButton(listening != null, listening?.level ?: 0f) { if (listening != null) c.recognizer.cancel() else listen() }
@@ -185,10 +186,14 @@ internal fun ListenButton(listening: Boolean, level: Float, size: Dp = 260.dp, o
 }
 
 @Composable
-private fun FoundCard(r: RecognitionEntity, song: Song?) {
+private fun FoundCard(found: Recognizer.State.Found) {
     val c = LocalContainer.current
     val nav = LocalNavigator.current
     val liked by c.library.likedIds.collectAsState()
+    val r = found.recognition
+    val song = found.song
+    // #215: it plays on from the moment that was heard, with its lyrics open.
+    val play = { s: Song -> playHeard(c, found, s); nav.openPlayer() }
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Artwork(r.cover ?: song?.thumbnail, Modifier.size(240.dp), LocalUi.current.art, placeholderIcon = PrismIcons.Song)
         Spacer(Modifier.height(20.dp))
@@ -198,7 +203,7 @@ private fun FoundCard(r: RecognitionEntity, song: Song?) {
         Spacer(Modifier.height(20.dp))
         if (song != null) {
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                PrismButton({ c.player.playSingle(song); nav.openPlayer() }) { Icon(PrismIcons.Play, null); Spacer(Modifier.width(6.dp)); Text(tr(R.string.widget_play)) }
+                PrismButton({ play(song) }) { Icon(PrismIcons.Play, null); Spacer(Modifier.width(6.dp)); Text(tr(R.string.widget_play)) }
                 val isLiked = song.id in liked
                 PrismOutlinedButton({ c.library.toggleLike(song) }) {
                     Icon(if (isLiked) PrismIcons.HeartFilled else PrismIcons.Heart, null); Spacer(Modifier.width(6.dp)); Text(if (isLiked) tr(R.string.liked) else tr(R.string.widget_like))
@@ -207,7 +212,7 @@ private fun FoundCard(r: RecognitionEntity, song: Song?) {
             Spacer(Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 song.album?.id?.let { album -> PrismTextButton({ nav.go(Routes.album(album)) }) { Text(tr(R.string.album)) } }
-                PrismTextButton({ c.player.playSingle(song); nav.openPlayer() }) { Text(tr(R.string.lyrics)) }
+                PrismTextButton({ play(song) }) { Text(tr(R.string.lyrics)) }
                 PrismTextButton({ c.recognizer.reset() }) { Text(tr(R.string.again)) }
             }
         } else {
@@ -216,6 +221,16 @@ private fun FoundCard(r: RecognitionEntity, song: Song?) {
             PrismTextButton({ c.recognizer.reset() }) { Text(tr(R.string.again)) }
         }
     }
+}
+
+/**
+ * #215: a song just recognized ([found]) plays from where the music is now (Shazam's offset plus the time since
+ * listening began), and the player opens on its lyrics.
+ */
+internal fun playHeard(c: com.prism.music.AppContainer, found: Recognizer.State.Found, song: Song, lyrics: Boolean = true) {
+    // Only where the player opens too: asked for and never taken, the lyrics would open some later time by surprise.
+    PlayerAsks.lyricsFor = if (lyrics) song.id else null
+    c.player.playSingleFrom(song, found.startAt(android.os.SystemClock.elapsedRealtime()))
 }
 
 /** Library → Recognized: every song found by listening, newest first (and any still waiting for a network). */

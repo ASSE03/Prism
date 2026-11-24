@@ -124,13 +124,13 @@ fun RecommendationsHistoryPage(bottomPadding: Dp, find: String? = null, showBack
                 tr(R.string.new_release_notifications), s.releaseNotifications,
                 info = tr(R.string.when_a_starred_artist_puts_out), changed = releasesChanged,
             ) { prefs.setReleaseNotifications(it) }
-            LinkRow(tr(R.string.make_my_mixes_again), info = tr(R.string.fresh_daily_mixes_now), action = true) {
+            LinkRow(tr(R.string.make_my_mixes_again), value = tr(R.string.fresh_daily_mixes_now), action = true) {
                 c.scope.launch { c.forYou.refresh(force = true) }
                 Toast.makeText(context, tr(R.string.making_your_mixes), Toast.LENGTH_SHORT).show()
             }
             LinkRow(tr(R.string.exclusions), info = tr(R.string.artists_not_to_play_and_playlists)) { nav.go(Routes.EXCLUSIONS) }
             // Suggestions skipped at once stay out of mixes and radio for a while (1.7.9): this lets them all back.
-            LinkRow(tr(R.string.forget_skipped_suggestions), info = tr(R.string.forget_skipped_suggestions_info), action = true) {
+            LinkRow(tr(R.string.forget_skipped_suggestions), value = tr(R.string.let_every_song_be_suggested_again), info = tr(R.string.forget_skipped_suggestions_info), action = true) {
                 c.recFeedback.clear()
                 Toast.makeText(context, tr(R.string.suggestions_start_fresh), Toast.LENGTH_SHORT).show()
             }
@@ -173,8 +173,9 @@ fun RecommendationsHistoryPage(bottomPadding: Dp, find: String? = null, showBack
                 tr(R.string.hist_count_account), b.playCountOnAccount,
                 info = tr(R.string.hist_count_account_info), changed = accountChanged,
             ) { prefs.setPlayCountOnAccount(it) }
-            LinkRow(tr(R.string.imp_title), value = tr(R.string.imp_row_detail), info = tr(R.string.imp_group_info)) { nav.go(Routes.BRING_HISTORY) }
             if (imported.isNotEmpty()) SwitchRow(tr(R.string.imp_shape_mixes), teach, info = tr(R.string.imp_shape_mixes_info)) { c.imports.setTeach(it) }
+            // 1.8.7.5: what Replay counts is a history choice, so it sits with the histories.
+            RhCountHistoryFrom(sources, countedText(countedNow), countedChanged)
         }
         group(tr(R.string.replay_2)) {
             SwitchRow(
@@ -190,7 +191,6 @@ fun RecommendationsHistoryPage(bottomPadding: Dp, find: String? = null, showBack
             // 1.8.5: Replay's three notices are one row (the group stays within its seven); each has its switch in the sheet.
             RhReplayNotices(rewindChanged, recapChanged, milestoneChanged)
             SwitchRow(tr(R.string.finish_lyric_title), b.finishLyric, info = tr(R.string.finish_lyric_info), changed = finishLyricChanged) { prefs.setFinishLyric(it) }
-            RhCountHistoryFrom(sources, countedText(countedNow), countedChanged)
         }
     }
 }
@@ -227,7 +227,7 @@ private fun RhCountHistoryFrom(sources: List<CountSources.Row>, value: String, c
 
 /**
  * "Notifications" (1.8.5) as one row: Rewind's (1 December), the monthly recap's and the milestones', each a switch in
- * the row's sheet. The row says how many of the three are on.
+ * the row's sheet. The row names the ones on (1.8.7.6; it said "1 of 3 on" before).
  */
 @Composable
 private fun RhReplayNotices(rewindChanged: Boolean, recapChanged: Boolean, milestoneChanged: Boolean) {
@@ -236,11 +236,16 @@ private fun RhReplayNotices(rewindChanged: Boolean, recapChanged: Boolean, miles
     val s = LocalAppSettings.current
     val b = s.behavior
     val title = tr(R.string.replay_notices)
-    val on = listOf(s.rewindNotification, b.recapNotify, b.milestoneNotify).count { it }
+    // The ones on, by name ("Rewind · Monthly recap"), or Off.
+    val on = listOfNotNull(
+        if (s.rewindNotification) tr(R.string.rewind_3) else null,
+        if (b.recapNotify) tr(R.string.replay_notice_recap_short) else null,
+        if (b.milestoneNotify) tr(R.string.milestones) else null,
+    )
     var open by rememberSaveable(title, "replay-notices") { mutableStateOf(false) }
     // A notice turned on asks for notifications (Android 13+) if Prism may not post them yet: else nothing would come.
     fun asked(turnedOn: Boolean) { if (turnedOn) c.askNotifications() }
-    PickRow(title, if (on == 0) tr(R.string.off) else "$on / 3", changed = rewindChanged || recapChanged || milestoneChanged) { open = true }
+    PickRow(title, if (on.isEmpty()) tr(R.string.off) else on.joinToString(" · "), changed = rewindChanged || recapChanged || milestoneChanged) { open = true }
     if (open) RowsSheet(title, { open = false }) {
         SwitchRow(tr(R.string.rewind_notification), s.rewindNotification, info = tr(R.string.on_december_1_when_your_year), changed = rewindChanged) { prefs.setRewindNotification(it); asked(it) }
         SwitchRow(tr(R.string.recap_notification), b.recapNotify, info = tr(R.string.recap_notification_info), changed = recapChanged) { prefs.setRecapNotify(it); asked(it) }
@@ -255,12 +260,11 @@ fun recommendationsHistoryValue(s: AppSettings, dark: Boolean): String = Setting
 val recommendationsHistoryLookKeys: List<String> = emptyList()
 
 /**
- * Old group titles → this page's groups: "Bring your history" is a row of History now. "Made for you", "Tune your
- * radios", "History" and "Replay" are still called that. (The old "Liked songs" group is Home & Library's.)
+ * Old group titles → this page's groups: none ("Made for you", "Tune your radios", "History" and "Replay" are still
+ * called that). (The old "Liked songs" group is Home & Library's; "Bring your history" is Accounts & sharing's row since
+ * 1.8.7.6, see [SettingsMap.movedGroups].)
  */
-val recommendationsHistoryOldGroups: Map<String, String> by lazy {
-    mapOf(tr(R.string.imp_title) to tr(R.string.hist_title))
-}
+val recommendationsHistoryOldGroups: Map<String, String> = emptyMap()
 
 /** The page's lines in Settings' search (each names the group it is drawn in). */
 val recommendationsHistoryIndex: List<SettingEntry> by lazy {
@@ -284,9 +288,9 @@ val recommendationsHistoryIndex: List<SettingEntry> by lazy {
         SettingEntry(page, history, tr(R.string.hist_pause), tr(R.string.hist_pause_keywords)),
         SettingEntry(page, history, tr(R.string.hist_count_after), tr(R.string.hist_count_keywords)),
         SettingEntry(page, history, tr(R.string.hist_count_account), tr(R.string.hist_count_keywords), needs = signedIn),
-        // 1.8.1: Bring your history.
-        SettingEntry(page, history, tr(R.string.imp_title), tr(R.string.imp_keywords)),
+        // 1.8.1: Bring your history (its row is on Accounts & sharing since 1.8.7.6).
         SettingEntry(page, history, tr(R.string.imp_shape_mixes), tr(R.string.imp_shape_mixes_keywords)),
+        SettingEntry(page, history, tr(R.string.imp_count_history_from), tr(R.string.imp_count_keywords) + " " + tr(R.string.imp_prism_plays)),
         // On the Bring your history screen (opened from this group): the fresh-download reminder.
         SettingEntry(page, history, tr(R.string.imp_remind), tr(R.string.imp_remind_keywords)),
         // And YouTube Music (live): the account's History page every few hours (signed in).
@@ -304,6 +308,5 @@ val recommendationsHistoryIndex: List<SettingEntry> by lazy {
         SettingEntry(page, replay, tr(R.string.recap_notification), tr(R.string.recap_ready_text)),
         SettingEntry(page, replay, tr(R.string.milestone_notification), tr(R.string.milestones)),
         SettingEntry(page, replay, tr(R.string.finish_lyric_title), tr(R.string.finish_lyric_info)),
-        SettingEntry(page, replay, tr(R.string.imp_count_history_from), tr(R.string.imp_count_keywords) + " " + tr(R.string.imp_prism_plays)),
     )
 }

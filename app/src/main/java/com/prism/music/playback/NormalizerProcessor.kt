@@ -191,11 +191,24 @@ class NormalizerProcessor : BaseAudioProcessor() {
         takeAsk()
         gain = targetGain
         // Nor does the limiter hold the last sound's peaks down on the next (its instant attack still catches the new ones).
-        env = 0f
+        // Across a gapless move to the next song the sound goes on without a break (the player plays the chain out to the
+        // last song's end, then flushes it for the next one): there the limiter's hold goes on too, or a lifted album
+        // clicked at every change of song (plan item 10, GaplessChainTest).
+        if (!drained) env = 0f
+        playedOut.clear()
+    }
+
+    /** The sound before the next flush was played out to its end ([onQueueEndOfStream]): what follows goes on from it. */
+    private val playedOut = PlayedOut()
+    private val drained get() = playedOut.goesOn()
+
+    override fun onQueueEndOfStream() {
+        playedOut.mark()
     }
 
     override fun onReset() {
         env = 0f
+        playedOut.clear()
         periodUid = null
         songId = null
     }

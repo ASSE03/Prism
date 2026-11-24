@@ -33,6 +33,24 @@ object AudioDiagnostics {
 
     fun init(context: Context) {
         file = File(context.filesDir, "diagnostics/audio.log").also { it.parentFile?.mkdirs() }
+        summaryFile = File(context.filesDir, "diagnostics/diagnostics-summary.json")
+    }
+
+    /** 1.8.7: counts since the playback service started (it calls [SessionCounters.reset] as it starts). */
+    val session = SessionCounters()
+
+    private var summaryFile: File? = null
+
+    /**
+     * The tick's line ([session]'s counts, after [line]) and the session's counts written to `diagnostics-summary.json`
+     * (`{"session": {...}}`), only while diagnostics are on.
+     */
+    fun tick(line: String) {
+        if (!enabled) return
+        log("tick", "$line; ${session.line()}")
+        val json = session.json()
+        val f = summaryFile ?: return
+        writer.execute { runCatching { writeAtomically(f, json) } }
     }
 
     /** Turned on or off from the setting; [header] describes the phone and the audio settings at the start. */
@@ -167,7 +185,7 @@ object AudioDiagnostics {
             append("Account: ${com.prism.music.data.innertube.AccountSummary.of(s.cookie, s.authUser, s.dataSyncId, s.visitorData, s.behavior.accountSavedAt)}; YouTube takes requests as: ${c.innerTube.seen.value?.text ?: "not asked yet"}\n")
             append("Settings: Premium quality ${s.premiumStream} (${c.streams.premiumState.value}), Data saver ${s.dataSaver}, network metered $metered, history paused ${com.prism.music.data.HistoryPause.paused(s.behavior)}, ")
             append("quality ${s.audioQuality}, lossless ${s.lossless}, normalize ${s.normalize}, ")
-            append("skip silence ${s.skipSilence}, crossfade ${s.mix} (${s.mixSeconds} s), spatial ${s.spatial} (${(s.spatialAmount * 100).toInt()}%), ")
+            append("skip silence ${s.skipSilence}, crossfade ${s.mix.on} (${s.mix.seconds} s), spatial ${s.spatial} (${(s.spatialAmount * 100).toInt()}%), ")
             append("EQ ${s.eq.enabled}, Sing ${c.sing.on.value}, DJ ${c.dj.onNow}, ")
             append("headphone correction ${c.headphoneEq.active.value?.let { "'${it.profile.name}' at ${(it.strength * 100).toInt()}%" } ?: "none"}\n")
             append("Now: ${n.codec} ${n.sampleRate} Hz → ${n.outputEncoding} ${n.outputSampleRate} Hz, decoder ${n.decoder}, offload ${n.offload}, underruns ${n.underruns}\n")
@@ -187,10 +205,11 @@ object AudioDiagnostics {
             stored = c.settings.stored.value, used = c.settings.current,
             metered = c.app.getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered == true,
             videoMode = c.player.videoMode.value, song = song, hidden = song != null && song.id in c.canvas.hiddenLoops.value,
-            cover = song?.let { c.canvas.cached(it) }, row = row, kept = kept,
+            cover = song?.let { c.canvas.cached(it, spotifyOk = it.id !in c.canvas.hiddenSpotify.value, prismOk = it.id !in c.canvas.hidden.value) }, row = row, kept = kept,
             coverHidden = song != null && song.id in c.canvas.hidden.value,
+            spotify = c.canvas.spotifyAsked(), spotifyHidden = song != null && song.id in c.canvas.hiddenSpotify.value,
         )
-    }.getOrElse { "Canvas: couldn't read ($it)" }
+    }.getOrElse { "Canvas: couldn't read (${it.javaClass.simpleName})" }
 
     /** Clears the log (it starts again with a fresh header if diagnostics are on). */
     fun clear(header: () -> String) {

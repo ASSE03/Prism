@@ -2,6 +2,8 @@ package com.prism.music.ui.player
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 /**
  * #280 (1.8.2): "Reopen on the last page". What the player had open when it was left, kept in plain preferences of its
@@ -23,6 +25,14 @@ enum class PlayerPage {
             return if (page == LYRICS && episode) COVER else page
         }
     }
+}
+
+/**
+ * A page asked for from outside the player, taken by it the next time it's on screen with that song: a recognized song
+ * played opens on its lyrics (#215). [lyricsFor] is the song's id.
+ */
+object PlayerAsks {
+    var lyricsFor by androidx.compose.runtime.mutableStateOf<String?>(null)
 }
 
 class PlayerPageMemory(context: Context) {

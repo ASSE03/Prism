@@ -95,10 +95,11 @@ fun <T> PickSheet(
     columns: Int = 2,
     exampleScale: Float = 0.8f,
     onRepick: (() -> Unit)? = null,
+    footer: (@Composable ColumnScope.() -> Unit)? = null,
     example: @Composable (T) -> Unit,
 ) {
     SettingsSheet(onDismiss) { close ->
-        PickCards(title, options, selected, label, info, columns, exampleScale, example) { picked ->
+        PickCards(title, options, selected, label, info, columns, exampleScale, example, footer) { picked ->
             if (picked != selected) onPick(picked) else onRepick?.invoke()
             close {}
         }
@@ -153,13 +154,15 @@ fun <T> PickCardsRow(
     thumbnail: (@Composable (T) -> Unit)? = null,
     value: String? = null,
     onRepick: (() -> Unit)? = null,
+    /** Under the cards in the sheet: something that goes with the choice (Crossfade's "Hear it on the next song"). */
+    footer: (@Composable ColumnScope.() -> Unit)? = null,
     onPick: (T) -> Unit,
     example: @Composable (T) -> Unit,
 ) {
     var open by rememberSaveable(title, "pick-cards") { mutableStateOf(false) }
     val thumb: (@Composable () -> Unit)? = if (thumbnail != null) ({ thumbnail(selected) }) else null
     PickRow(title, value ?: label(selected), modifier, info, changed, enabled, thumb) { open = true }
-    if (open) PickSheet(title, options, selected, label, onPick, { open = false }, info, columns, exampleScale, onRepick, example)
+    if (open) PickSheet(title, options, selected, label, onPick, { open = false }, info, columns, exampleScale, onRepick, footer, example)
 }
 
 /** A [PickRow] that opens its own [PickListSheet]. [value]: what the row says (the picked option's [label] by default). */
@@ -256,6 +259,7 @@ internal fun <T> PickCards(
     columns: Int,
     exampleScale: Float,
     example: @Composable (T) -> Unit,
+    footer: (@Composable ColumnScope.() -> Unit)? = null,
     onPick: (T) -> Unit,
 ) {
     val ui = LocalUi.current
@@ -264,11 +268,15 @@ internal fun <T> PickCards(
     val pick = ticking(onPick)
     val density = LocalDensity.current
     val small = remember(density, exampleScale) { Density(density.density * exampleScale, density.fontScale) }
-    Column(Modifier.fillMaxWidth().heightIn(max = halfScreen()).testTag(SettingsTags.SHEET)) {
+    // A footer (Crossfade's "Hear it on the next song") takes room the cards had: such a sheet may grow past half the
+    // screen, up to the rows sheets' 85%, and is only as tall as what it holds (1.8.8 check: at half the screen the
+    // second row of cards was cut).
+    val maxHeight = if (footer == null) halfScreen() else LocalConfiguration.current.screenHeightDp.dp * 0.85f - 26.dp
+    Column(Modifier.fillMaxWidth().heightIn(max = maxHeight).testTag(SettingsTags.SHEET)) {
         SheetHeader(title, info)
         Column(
             Modifier.fillMaxWidth().weight(1f, fill = false).nestedScroll(KeepUpwardScroll).verticalScroll(rememberScrollState())
-                .padding(start = 16.dp, end = 16.dp, bottom = 22.dp),
+                .padding(start = 16.dp, end = 16.dp, bottom = if (footer == null) 22.dp else 4.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             options.chunked(across).forEach { row ->
@@ -298,6 +306,9 @@ internal fun <T> PickCards(
                 }
             }
         }
+        // Under the cards, outside their scroll: always whole (1.8.8 check: at the foot of the scroll it was cut
+        // through its letters when the cards filled the sheet).
+        if (footer != null) Column(Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 18.dp), content = footer)
     }
 }
 

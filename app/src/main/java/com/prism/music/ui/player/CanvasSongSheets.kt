@@ -65,19 +65,34 @@ import okhttp3.Request
  */
 
 /**
- * "Canvas" (the loop from the song's music video) or "Animated cover" for this song, on or off: a switch to a screen
- * reader ("Canvas, On").
+ * "Prism Canvas" (the loop from the song's music video) or "Animated cover" for this song, on or off: a switch to a
+ * screen reader ("Prism Canvas, On").
  */
 internal fun canvasToggleItem(
     on: Boolean,
-    label: String = tr(R.string.canvas),
+    label: String = tr(R.string.prism_canvas),
     icon: androidx.compose.ui.graphics.vector.ImageVector = PrismIcons.Video,
     onToggle: () -> Unit,
 ): ActionItem = ActionItem(icon, label, active = on, keepOpen = true, toggle = on, onClick = onToggle)
 
+/**
+ * What "Spotify canvas" and "Prism Canvas" show for a song that has both (owner, 2026-11-16): only the one that plays
+ * is checked. [coverOff] is "Spotify canvas" switched off for the song, [loopOff] "Prism Canvas".
+ */
+internal data class CanvasPair(val spotify: Boolean, val prism: Boolean)
+
+/**
+ * "Spotify canvas" and "Prism Canvas" for one song (owner, 2026-11-16: with Spotify canvas selected, Prism Canvas
+ * reads as unchecked). [coverOff] / [loopOff] are the song's own switches, [now] what a song with both shows.
+ */
+internal fun canvasPairShown(coverOff: Boolean, loopOff: Boolean, now: CanvasSource): CanvasPair = CanvasPair(
+    spotify = !coverOff && (loopOff || now == CanvasSource.COVER),
+    prism = !loopOff && (coverOff || now == CanvasSource.VIDEO),
+)
+
 /** Which one a song with both shows now: its own "Use:", else the setting "When a song has both". */
-internal fun canvasUseNow(settings: AppSettings, row: CanvasClipEntity?): CanvasSource =
-    pickSource(hasCover = true, hasClip = true, useVideos = true, videoFirst = settings.behavior.canvas.videoFirst, songChoice = CanvasSource.of(row?.prefer))
+internal fun canvasUseNow(settings: AppSettings, row: CanvasClipEntity?, spotifys: Boolean = false): CanvasSource =
+    pickSource(hasCover = true, hasClip = true, useVideos = true, videoFirst = settings.behavior.canvas.videoFirst && !spotifys, songChoice = CanvasSource.of(row?.prefer))
         ?: CanvasSource.COVER
 
 internal fun canvasSourceName(s: CanvasSource): String = when (s) {

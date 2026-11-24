@@ -1,6 +1,7 @@
 package com.prism.music
 
 import com.prism.music.data.prefs.AppSettings
+import com.prism.music.data.prefs.MixPrefs
 import com.prism.music.data.prefs.AutoplaySource
 import com.prism.music.ui.screens.Crossfade
 import com.prism.music.ui.screens.QueueEnd
@@ -51,7 +52,7 @@ class PlaybackMergeTest {
     /** mix × mixAuto (2 × 2) → Crossfade. Off keeps whether the length was automatic. */
     @Test fun crossfade() {
         for (on in both) for (auto in both) {
-            val merged = SoundChoices.crossfade(AppSettings(mix = on, mixAuto = auto))
+            val merged = SoundChoices.crossfade(AppSettings(mix = MixPrefs(on = on, auto = auto)))
             val (backOn, backAuto) = SoundChoices.crossfadeValues(merged)
             assertEquals("$on, $auto", on, backOn)
             assertEquals("$on, $auto", auto, backAuto ?: auto)

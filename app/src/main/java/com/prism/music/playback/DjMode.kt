@@ -66,6 +66,22 @@ class DjMode {
  */
 data class DjProgress(val looked: Int, val all: Int, val keyed: Int, val needNetwork: Int = 0)
 
+/** How the Crossfade settings read while DJ mode is on. Pure, so each case is a plain unit test ([DjBlendTest]). */
+object DjBlend {
+    /**
+     * Whether blends work out their own length ([MixEngine.autoLengthMs]): as the listener set it, and in DJ mode
+     * unless they set a fixed length (#502: Crossfade on, not Automatic). With Crossfade off DJ mode blends anyway, at
+     * the automatic length (the length stored for Off isn't one they chose to hear).
+     */
+    fun automatic(mixOn: Boolean, mixAuto: Boolean, dj: Boolean): Boolean = if (dj) mixAuto || !mixOn else mixAuto
+
+    /**
+     * Whether DJ mode's keys may stretch or cut a blend's length ([MixEngine]'s harmonic): only a length worked out
+     * ([automatic]); a fixed one is the listener's (#502).
+     */
+    fun keysSetLength(dj: Boolean, automatic: Boolean): Boolean = dj && automatic
+}
+
 /** What the queue says about DJ mode, honestly: it only claims an order it has. */
 object DjStatus {
     /** The line, and whether to offer "Use mobile data" beside it. */

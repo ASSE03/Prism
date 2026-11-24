@@ -155,6 +155,7 @@ object SettingsMap {
             ("devices" to tr(R.string.sharing_and_links)) to SettingsPageId.ACCOUNTS_SHARING,
             ("icons" to tr(R.string.home_screen_widgets)) to SettingsPageId.THEME_COLORS,
             ("library" to tr(R.string.liked_songs)) to SettingsPageId.HOME_LIBRARY,
+            ("library" to tr(R.string.imp_title)) to SettingsPageId.ACCOUNTS_SHARING,
             ("appearance" to tr(R.string.customize_this)) to SettingsPageId.LOOKS,
         )
     }

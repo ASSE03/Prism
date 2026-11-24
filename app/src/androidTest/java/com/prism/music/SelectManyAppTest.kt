@@ -83,7 +83,7 @@ class SelectManyAppTest {
         compose.onAllNodes(hasText("Test song 2")).onFirst().performClick()
         compose.waitForText("2 songs picked")
         Fixture.screenshot("select-many-two")
-        compose.clickWhenFound(hasText("Remove from this playlist") and hasClickAction())
+        compose.clickSelectionAction("Remove from this playlist")
         compose.waitUntil(5_000) { bar().isEmpty() }
         val id = c.prismLibrary.lists.value.first { it.title == "Three" }.id
         compose.waitUntil(5_000) { c.prismLibrary.lists.value.first { it.id == id }.songs.size == 1 }

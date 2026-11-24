@@ -102,7 +102,8 @@ fun CanvasPlayer(
             tv.cropTo(clip.aspect, loop, x)
         }
     }
-    androidx.compose.runtime.SideEffect { held.source.clip = url; held.source.keep = saved }
+    // 1.8.7.6: Spotify's canvas plays from the recent cache only, never written to the saved store (plan D5).
+    androidx.compose.runtime.SideEffect { held.source.clip = url; held.source.keep = saved && !canvas.spotify }
     DisposableEffect(held) { onDispose { CanvasPlayers.give(held) } }
     DisposableEffect(player) {
         val listener = object : Player.Listener {
@@ -120,15 +121,25 @@ fun CanvasPlayer(
             override fun onPositionDiscontinuity(old: Player.PositionInfo, new: Player.PositionInfo, reason: Int) {
                 if (reason != Player.DISCONTINUITY_REASON_AUTO_TRANSITION) return
                 CanvasStats.rounds++
-                restart.wentRound()
+                if (CanvasFrames.on) CanvasFrames.round(System.nanoTime())
+                // 1.8.7.6 (#528): a loop that runs straight on into its start ([loopCut]; animated covers always do) gets
+                // no kept frame over it. Its first frame's word can reach the app before the word that it went round,
+                // and the kept frame then stood over the moving loop until [RESTART_GIVE_UP_MS]: 1.5 s each time round
+                // on the A16 with "Flowers" (the video under it kept moving).
+                if (restartNeedsCover(clip.canvas.clip)) restart.wentRound()
                 if (restart.shown) CanvasStats.covered++
             }
 
             // Only the clip that is loaded now counts (a late word about the one before it is not this one's first frame).
-            override fun onRenderedFirstFrame() { if (CanvasPlayers.playing(player, clip.url)) restart.firstFrameOut() }
+            override fun onRenderedFirstFrame() {
+                if (!CanvasPlayers.playing(player, clip.url)) return
+                restart.firstFrameOut()
+                c.canvasClips.times.step(clip.url, "ready")
+            }
         }
         player.addListener(listener)
-        onDispose { player.removeListener(listener) }
+        val frameTimes = if (CanvasFrames.on) CanvasFrames.releases().also { player.setVideoFrameMetadataListener(it) } else null
+        onDispose { player.removeListener(listener); frameTimes?.let { player.clearVideoFrameMetadataListener(it) } }
     }
     LaunchedEffect(url) {
         clip.rendered = false
@@ -157,15 +168,19 @@ fun CanvasPlayer(
         clip.aspect = 0f
         val item = MediaItem.Builder().setUri(url)
         if (url.substringBefore('?').endsWith(".m3u8")) item.setMimeType(MimeTypes.APPLICATION_M3U8)
-        // 1.8.6: a loop from a music video is some seconds of a longer file, from a key frame on.
+        // 1.8.6: a loop from a music video is some seconds of a longer file, from a key frame on ([loopCut], 1.8.7.6).
         clip.canvas.clip?.let { loop ->
+            val cut = loopCut(loop)
             item.setClippingConfiguration(
                 MediaItem.ClippingConfiguration.Builder()
-                    .setStartPositionMs((loop.startMs - loop.fileStartMs).coerceAtLeast(0))
-                    .setEndPositionMs((loop.endMs - loop.fileStartMs).coerceAtLeast(1))
+                    .setStartPositionUs(cut.startUs)
+                    .setEndPositionUs(cut.endUs)
+                    .setStartsAtKeyFrame(cut.startsAtKeyFrame)
                     .build()
             )
         }
+        // 1.8.7: the loop's wait ([com.prism.music.data.canvas.CanvasTimes]): handed to its player now.
+        c.canvasClips.times.step(url, "handed")
         player.setMediaItem(item.build())
         player.prepare()
         watchTheEnd()
@@ -224,10 +239,11 @@ fun CanvasPlayer(
                     }
                     override fun onSurfaceTextureUpdated(s: SurfaceTexture) {
                         delegate?.onSurfaceTextureUpdated(s)
-                        if (clip.frame()) { place(this@apply); CanvasStats.showing = clip.url }
+                        if (clip.frame()) { place(this@apply); c.canvasClips.times.shown(clip.url); CanvasStats.showing = clip.url }
                         // A loop of several scenes: each has its own crop, changed on the cut.
                         else if (clip.canvas.clip?.crops?.isNotEmpty() == true) place(this@apply)
                         CanvasStats.frames++
+                        if (CanvasFrames.on) CanvasFrames.frame(System.nanoTime())
                         // The loop's first frame is on screen: keep it as a picture, once, for the restarts to come.
                         if (restart.frameDrawn() && still == null) still = firstFrameOf(this@apply, clip.aspect)
                     }
@@ -258,7 +274,9 @@ fun CanvasPlayer(
             val picture = still
             if (firstFrame.drawable == null || (firstFrame.drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap !== picture) firstFrame.setImageBitmap(picture)
             firstFrame.alpha = if (picture == null) 0f else stillAlpha * alpha * presentationAlpha()
-            firstFrame.visibility = if (picture == null || stillAlpha <= 0f) android.view.View.GONE else android.view.View.VISIBLE
+            val coverVisible = if (picture == null || stillAlpha <= 0f) android.view.View.GONE else android.view.View.VISIBLE
+            if (CanvasFrames.on && coverVisible != firstFrame.visibility) CanvasFrames.cover(coverVisible == android.view.View.VISIBLE, System.nanoTime())
+            firstFrame.visibility = coverVisible
             if (picture != null && tv.width > 0 && clip.aspect > 0f) {
                 val t = cropTransform(tv.width.toFloat(), tv.height.toFloat(), clip.aspect, clip.canvas.clip?.bars ?: com.prism.music.data.canvas.Bars.NONE, clip.canvas.clip?.let { it.cropAt(it.startMs) } ?: 0.5f)
                 firstFrame.imageMatrix = Matrix().apply {
@@ -284,6 +302,8 @@ internal object CanvasStats {
     /** The clip on screen last: its address (a file for a loop from a music video) and whether a frame of it showed. */
     @Volatile var showing: String? = null
     @Volatile var frames = 0
+    /** "Keep lyrics showing": the sung line over the canvas now (null: none shown). */
+    @Volatile var lyricLine: String? = null
 }
 
 /** A restart that never drew its first frame (the phone held the picture, the clip failed): the kept frame goes anyway. */
@@ -334,6 +354,42 @@ private fun firstFrameOf(view: TextureView, aspect: Float): android.graphics.Bit
     return runCatching { view.getBitmap(w, h) }.getOrNull()
 }
 
+/** The part of a kept file a loop plays, in the file's own time, and whether it starts on a key frame. */
+internal data class LoopCut(val startUs: Long, val endUs: Long, val startsAtKeyFrame: Boolean)
+
+/**
+ * 1.8.7.6 (#528, "it freezes for about a second and then resumes"): how a loop from a music video is cut from its kept
+ * file. Every loop starts on a key frame ([com.prism.music.data.canvas.ClipRepository.loopIn]), but its time is kept in
+ * whole milliseconds, rounded down, so the start asked for fell a fraction of a millisecond before the key frame's own
+ * time. The player then started from the key frame before that one and decoded up to two seconds of frames nobody sees,
+ * and said so ("the start isn't a key frame"), which made it empty the decoder and start it again at every restart: on
+ * the A16 the picture stood still about 0.4 s each time round (frames are 33 ms apart inside the loop) and the loop's
+ * first 0.3 s were skipped.
+ *
+ * Now the start is asked for [KEY_SLACK_US] past the millisecond, which lands on the key frame itself (its time lies
+ * within that millisecond, give or take one for the two times it is worked out from), and the player is told the loop
+ * starts on a key frame, so going round runs straight on with the same decoder, as an animated cover does.
+ */
+internal fun loopCut(loop: com.prism.music.data.canvas.VideoClip): LoopCut {
+    val startMs = (loop.startMs - loop.fileStartMs).coerceAtLeast(0)
+    val endUs = (loop.endMs - loop.fileStartMs).coerceAtLeast(1) * 1000
+    // From the file's own start nothing is cut (and nothing needs finding).
+    val startUs = if (startMs == 0L) 0L else (startMs * 1000 + KEY_SLACK_US).coerceAtMost(endUs - 1)
+    return LoopCut(startUs, endUs, startsAtKeyFrame = true)
+}
+
+/**
+ * Whether the kept first frame goes up when [loop] goes round: only when the player has to restart its decoder there
+ * (a loop not cut on a key frame). An animated cover (null) and a loop cut by [loopCut] run straight on.
+ */
+internal fun restartNeedsCover(loop: com.prism.music.data.canvas.VideoClip?): Boolean = loop != null && !loopCut(loop).startsAtKeyFrame
+
+/**
+ * How far past a loop's millisecond its start is asked for: more than the millisecond or two its key frame can lie
+ * after it, less than the 16.7 ms to the next frame at 60 frames a second, so the key frame is the one found.
+ */
+internal const val KEY_SLACK_US = 5_000L
+
 /** A paused song's canvas keeps moving this long, then holds its frame (plan-canvas §11a R7). */
 internal const val PAUSED_HOLD_MS = 30_000L
 
@@ -350,8 +406,9 @@ internal data class PhoneStrain(val powerSave: Boolean = false, val hot: Boolean
 
 internal fun isHot(thermalStatus: Int): Boolean = thermalStatus >= 3 // PowerManager.THERMAL_STATUS_SEVERE
 
+/** Battery saver and heat, read now and again when they change (Canvas; and #336's Smoother scrolling reads [PhoneStrain.powerSave]). */
 @Composable
-private fun rememberPhoneStrain(): androidx.compose.runtime.State<PhoneStrain> {
+internal fun rememberPhoneStrain(): androidx.compose.runtime.State<PhoneStrain> {
     val context = LocalContext.current.applicationContext
     val state = remember { mutableStateOf(PhoneStrain()) }
     DisposableEffect(context) {

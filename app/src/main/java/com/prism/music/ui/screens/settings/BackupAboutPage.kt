@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
@@ -29,6 +30,10 @@ import androidx.core.content.FileProvider
 import com.prism.music.BuildConfig
 import com.prism.music.CrashLog
 import com.prism.music.R
+import com.prism.music.data.LiveProbe
+import com.prism.music.data.SelfTestCheck
+import com.prism.music.data.SelfTestChecks
+import com.prism.music.data.SelfTestText
 import com.prism.music.data.prefs.AppSettings
 import com.prism.music.playback.AudioDiagnostics
 import com.prism.music.tr
@@ -42,6 +47,8 @@ import com.prism.music.ui.screens.SettingsSection
 import com.prism.music.ui.screens.UpdateBanner
 import com.prism.music.ui.screens.rememberBackupFlow
 import com.prism.music.ui.screens.rememberRestoreFlow
+import com.prism.music.ui.support.SupportAsks
+import com.prism.music.ui.support.Supporters
 import com.prism.music.ui.theme.LocalAppSettings
 import com.prism.music.ui.theme.LocalContainer
 import kotlinx.coroutines.Dispatchers
@@ -60,8 +67,9 @@ internal const val BACKUP_ABOUT_UPDATE = "backupAbout:update"
 
 /**
  * Settings → Backup & about (1.8.4's map, plan §2.3), built with the kit: back up and restore, the update check (with
- * the update itself under it when there is one), Prism's version and source, the tour, the licenses, and diagnostics
- * as a group of its own (a fold before 1.8.4). At the page's foot, outside the groups, the line that Prism is
+ * the update itself under it when there is one), Prism's version and source, the Guide (1.8.8; "Take the tour"
+ * before), the licenses, and diagnostics as a group of its own (a fold before 1.8.4). At the page's foot, outside the
+ * groups, the line that Prism is
  * unofficial. This file is the only place for the page: its composable, its lines in Settings' search
  * ([backupAboutIndex]), its "Reset this page" keys ([backupAboutLookKeys]), its line on the root ([backupAboutValue])
  * and the old group names it answers to ([backupAboutOldGroups]). The licenses' screen, opened from its About group, is
@@ -81,7 +89,7 @@ fun BackupAboutPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
         shareDiagnostics = {
             scope.launch {
                 val file = withContext(Dispatchers.IO) {
-                    AudioDiagnostics.export(context, AudioDiagnostics.about(c) + "\n" + AudioDiagnostics.canvas(c))
+                    AudioDiagnostics.export(context, diagnosticsAbout(AudioDiagnostics.about(c), AudioDiagnostics.canvas(c), SelfTestText.last))
                 }
                 val uri = FileProvider.getUriForFile(context, "${context.packageName}.share", file)
                 context.startActivity(Intent.createChooser(diagnosticsShareIntent(uri), tr(R.string.share_diagnostics)))
@@ -89,6 +97,13 @@ fun BackupAboutPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
         },
     )
 }
+
+/**
+ * The head of the shared diagnostics: the phone and its settings ([about]), the Canvas lines ([canvas]) and, once "Is
+ * playback working?" has been shared from its sheet, that result ([selfTest]).
+ */
+internal fun diagnosticsAbout(about: String, canvas: String, selfTest: String?): String =
+    about + "\n" + canvas + (selfTest?.let { "\n\n===== ${tr(R.string.selftest_title)} =====\n$it" } ?: "")
 
 /**
  * What goes to Android's share sheet for "Share diagnostics" and "Last crash": the exported text file, readable by
@@ -136,6 +151,8 @@ internal fun BackupAboutContent(
     onSearch: (() -> Unit)?,
     checkNow: suspend () -> String?,
     shareDiagnostics: () -> Unit,
+    /** The checks "Is playback working?" runs: the real ones unless a test hands in its own. */
+    selfTestChecks: (() -> List<SelfTestCheck>)? = null,
 ) {
     val c = LocalContainer.current
     val s = LocalAppSettings.current
@@ -153,6 +170,13 @@ internal fun BackupAboutContent(
     var check by remember { mutableStateOf<UpdateCheck?>(null) }
     // A crash kept on the phone (CrashLog): there to share whether or not diagnostics are on.
     var crashAt by remember { mutableStateOf(CrashLog.lastAt(context)) }
+    // "Is playback working?": its sheet lives here, not in its row, as the backup's dialogs do.
+    var selfTestOpen by rememberSaveable { mutableStateOf(false) }
+    if (selfTestOpen) SelfTestSheet(
+        checks = selfTestChecks ?: { SelfTestChecks.checks(LiveProbe(c, context)) },
+        share = { text -> SelfTestText.last = text; shareDiagnostics() },
+        onDismiss = { selfTestOpen = false },
+    )
 
     val reset = ListeningResets()
     val diagnosticsChanged = reset.add(tr(R.string.playback_diagnostics), s.audioDiagnostics, d.audioDiagnostics, { ListeningResets.onOff(it) }) {
@@ -188,9 +212,18 @@ internal fun BackupAboutContent(
         }
         // "Your data stays here" was a row that did nothing: its words are the group's ⓘ (§2.7).
         group(tr(R.string.about_3), info = tr(R.string.about_data_info)) {
+            // 1.8.7.6 Support Prism (plan-1.8.7.6 §4.1 S1–S3): Ko-fi opens in the browser, Prism never contacts it; the
+            // switch is the listener's word (nothing checks it) and turns every ask off; the names are shipped in the app.
+            LinkRow(tr(R.string.support_prism), value = KOFI, info = tr(R.string.support_prism_info), external = true) { SupportAsks.openKofi(uri) }
+            SwitchRow(
+                tr(R.string.i_ve_supported_prism), s.behavior.supported, info = tr(R.string.i_ve_supported_prism_info),
+                icon = if (s.behavior.supported) com.prism.music.ui.theme.PrismIcons.Heart else null,
+            ) { c.settings.setSupported(it) }
+            LinkRow(tr(R.string.supporters)) { nav.go(Routes.SUPPORTERS) }
             // The installed version is the Updates row's value line (and the root's); this one is where Prism comes from.
             LinkRow(tr(R.string.source_code), value = tr(R.string.open_on_github), external = true) { runCatching { uri.openUri(SOURCE_URL) } }
-            LinkRow(tr(R.string.take_the_tour), info = tr(R.string.a_minute_s_walk_through_prism)) { c.tourRequests.tryEmit(Unit) }
+            // 1.8.8 (plan-tour.md D6): the Guide, every tour card by topic, in place of "Take the tour".
+            LinkRow(tr(R.string.guide), info = tr(R.string.guide_info)) { nav.go(Routes.GUIDE) }
             LinkRow(tr(R.string.open_source_licenses), value = tr(R.string.gpl_3_0_or_later)) { nav.go(Routes.settings(SettingsSection.LICENSES.key)) }
             // Debug builds only, so it's left out of Settings search (named title: SettingsIndexTest skips it).
             if (BuildConfig.DEBUG) LinkRow(title = tr(R.string.design_gallery), info = tr(R.string.every_component_of_the_redesign_in)) { nav.go(Routes.DESIGN_GALLERY) }
@@ -198,6 +231,9 @@ internal fun BackupAboutContent(
         // Playback diagnostics: a log of what the audio did, kept on the phone, for chasing stutters. A group of its
         // own since 1.8.4 (the "More options" fold is gone); Share and Clear only show while the log is kept.
         group(tr(R.string.diagnostics)) {
+            // First in the group (1.8.7 release check): whoever comes here with a song that won't play meets the check before
+            // the log's switch. 1.8.7: a few quick checks of what playing a song needs, in a sheet (plan §9).
+            LinkRow(tr(R.string.selftest_title), info = tr(R.string.selftest_info)) { selfTestOpen = true }
             SwitchRow(
                 tr(R.string.playback_diagnostics), s.audioDiagnostics, info = tr(R.string.keeps_a_log_on_this_phone), changed = diagnosticsChanged,
             ) { c.settings.setAudioDiagnostics(it) }
@@ -238,6 +274,58 @@ fun LicensesScreen(bottomPadding: Dp, showBack: Boolean = true, onSearch: (() ->
     }
 }
 
+/** Ko-fi's own name, the same in every language. */
+internal const val KOFI = "Ko-fi"
+
+/** The Supporters list's own tags (the page's names, the empty line). */
+internal object SupportersTags {
+    const val NAME = "supporters:name"
+    const val EMPTY = "supporters:empty"
+}
+
+/**
+ * 1.8.7.6: the people who supported Prism (`supporters`), a screen of this page opened from About, in the licenses'
+ * style: monthly members first under their own heading, then everyone else, from the list shipped in the app
+ * ([Supporters]). Nothing is fetched. An empty list says so in one line, with the way to Ko-fi.
+ */
+@Composable
+fun SupportersScreen(bottomPadding: Dp, showBack: Boolean = true) {
+    val context = LocalContext.current
+    val uri = LocalUriHandler.current
+    val list = remember { Supporters.read(context) }
+    SettingsPageScaffold(tr(R.string.supporters), bottomPadding, showBack = showBack) {
+        item("supporters") { SupportersList(list) { SupportAsks.openKofi(uri) } }
+    }
+}
+
+/** The list itself ([openKofi] is the only way out of the phone, and only on a tap). */
+@Composable
+internal fun SupportersList(list: Supporters, openKofi: () -> Unit) {
+    androidx.compose.foundation.layout.Column(verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(22.dp)) {
+        if (list.isEmpty) {
+            com.prism.music.ui.screens.Group(tr(R.string.supporters), info = tr(R.string.supporters_info)) {
+                Box(Modifier.testTag(SupportersTags.EMPTY)) { com.prism.music.ui.screens.Note(tr(R.string.supporters_empty)) }
+                com.prism.music.ui.screens.Item(tr(R.string.support_prism), KOFI, onClick = openKofi) {
+                    androidx.compose.material3.Icon(com.prism.music.ui.theme.PrismIcons.OpenInNew, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+            return@Column
+        }
+        @Composable fun names(title: String, names: List<String>, info: String?) {
+            com.prism.music.ui.screens.Group(title, info = info) {
+                names.forEach { n ->
+                    Text(
+                        n, Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp).testTag(SupportersTags.NAME),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+            }
+        }
+        if (list.members.isNotEmpty()) names(tr(R.string.supporters_members), list.members, tr(R.string.supporters_info))
+        if (list.supporters.isNotEmpty()) names(tr(R.string.supporters_thank_you), list.supporters, if (list.members.isEmpty()) tr(R.string.supporters_info) else null)
+    }
+}
+
 /** The root's line for Backup & about: Prism's version, and what the page holds, in one short line. */
 fun backupAboutValue(s: AppSettings, dark: Boolean): String = tr(R.string.root_backup_short, com.prism.music.BuildConfig.VERSION_NAME)
 
@@ -261,10 +349,14 @@ val backupAboutIndex: List<SettingEntry> by lazy {
         SettingEntry(page, backup, tr(R.string.back_up), tr(R.string.backup_export_save_move_new_phone)),
         SettingEntry(page, backup, tr(R.string.restore_from_a_backup), tr(R.string.import_move_new_phone)),
         SettingEntry(page, updates, tr(R.string.check_for_updates), tr(R.string.update_new_version)),
+        SettingEntry(page, about, tr(R.string.support_prism), KOFI + " " + tr(R.string.support_prism_keywords)),
+        SettingEntry(page, about, tr(R.string.i_ve_supported_prism), tr(R.string.i_ve_supported_prism_keywords)),
+        SettingEntry(page, about, tr(R.string.supporters), tr(R.string.supporters_keywords)),
         // "Your data stays here" is the group's ⓘ now: its words still find About.
         SettingEntry(page, about, tr(R.string.source_code), tr(R.string.app_name) + " " + tr(R.string.version_github) + " privacy " + tr(R.string.your_data_stays_here)),
-        SettingEntry(page, about, tr(R.string.take_the_tour), tr(R.string.tutorial_walkthrough_help_guide_what_s)),
+        SettingEntry(page, about, tr(R.string.guide), tr(R.string.guide_keywords) + " " + tr(R.string.take_the_tour)),
         SettingEntry(page, about, tr(R.string.open_source_licenses), tr(R.string.license_gpl)),
+        SettingEntry(page, diagnostics, tr(R.string.selftest_title), tr(R.string.selftest_keywords)),
         SettingEntry(page, diagnostics, tr(R.string.playback_diagnostics), tr(R.string.stutter_judder_skip_glitch_lag_bluetooth) + " " + tr(R.string.a_log_for_tracking_down_stutters)),
         // The two crash rows show while a crash is kept on the phone (not a setting to turn on).
         SettingEntry(page, diagnostics, tr(R.string.last_crash), tr(R.string.crash_closed_unexpectedly_error_report_stack)),

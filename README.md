@@ -49,24 +49,18 @@ The optional lock screen player needs a permission called "Display over other ap
 
 Prism walks you through this on the setting's page. It uses the permission only to bring its player up on your lock screen, and never draws over other apps.
 
-## New in 1.8.6
+## New in 1.8.7
 
-Prism Canvas, Prism's own: designed and built from scratch for Prism.
+It just plays: this release is about the song you picked playing, and playing on.
 
-- **Prism Canvas:** a few seconds of a song's own music video, silent and on a loop, behind the whole player. Prism cuts it on your phone and fetches it once on Wi-Fi.
-- **Full screen:** the controls fade away after a few seconds and come back on a tap.
-- **Animated covers** keep their own switch and play in the cover as before.
-- **Your say, per song:** Canvas on or off, Pick another part, Pick another video, Not this video.
-- **Easy on the phone:** it holds still with Reduce motion, in battery saver and when the phone runs hot, and a loop that flashes is never shown.
-- **Also new:** Minimal, a black-and-white Look, and each month's hours on Replay's "Hours by month".
+- **No more skips from a network hiccup:** Prism tries again from the same place, and waits when the phone is offline.
+- **"This song can't be played" on one Wi-Fi network:** Prism tries another way and remembers what worked there.
+- **Is playback working?** A check in Settings → Backup & about that says, in plain words, what works on your phone and network.
+- **The right lyrics:** another song's lyrics are refused, and missing lyrics come back sooner.
+- **Keep lyrics showing:** the line being sung stays over a full-screen Canvas.
+- **Lighter:** the open player asks less of the phone's processor.
 
 Everything is worked out on your phone. See every change in the [changelog](CHANGELOG.md).
-
-<p align="center">
-<img src="docs/screenshots/canvas-full.jpg" width="32%" alt="Prism Canvas: a loop from the song's music video behind the player's controls">
-<img src="docs/screenshots/canvas-quiet.jpg" width="32%" alt="A few seconds later the controls have faded: the loop, the title, the artist and a thin progress line">
-<img src="docs/screenshots/canvas-menu.jpg" width="32%" alt="The player's menu for a song: Animated cover, Canvas, Pick another part, Pick another video">
-</p>
 
 ## What Prism does
 

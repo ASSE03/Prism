@@ -226,17 +226,17 @@ fun LibraryScreen(bottomPadding: Dp) {
     if (newSmart) com.prism.music.ui.components.SmartEditorSheet(null) { newSmart = false }
     val tagList by c.tags.summaries.collectAsState()
     val tabs = if (tagList.isEmpty()) LibTab.entries - LibTab.TAGS else LibTab.entries
-    val startPage = remember { LibTab.entries.indexOfFirst { it.name == settings.libraryStartTab }.coerceAtLeast(0).coerceAtMost(LibTab.DOWNLOADS.ordinal) }
+    val startPage = remember { LibTab.entries.indexOfFirst { it.name == settings.library.startTab }.coerceAtLeast(0).coerceAtMost(LibTab.DOWNLOADS.ordinal) }
     val pager = rememberPagerState(initialPage = startPage) { tabs.size }
     // Each of Playlists, Albums and Artists can be a list or a grid of its own (1.7.6).
-    fun listFor(tab: LibTab) = (settings.libraryViews[tab.name] ?: settings.libraryView) == com.prism.music.data.prefs.LibraryView.LIST
+    fun listFor(tab: LibTab) = (settings.library.views[tab.name] ?: settings.library.view) == com.prism.music.data.prefs.LibraryView.LIST
     val viewTab = LibTab.entries[pager.currentPage].takeIf { it == LibTab.PLAYLISTS || it == LibTab.ALBUMS || it == LibTab.ARTISTS }
     val asList = listFor(viewTab ?: LibTab.PLAYLISTS)
     val pinned by c.library.pinned.collectAsState()
     val folders by c.prismLibrary.folders.collectAsState()
     // Without the details (1.7.6): titles only under Library's covers and rows.
     fun shown(item: com.prism.music.data.model.BrowseItem): com.prism.music.data.model.BrowseItem =
-        if (settings.librarySubtitles) item else when (item) {
+        if (settings.library.subtitles) item else when (item) {
             is com.prism.music.data.model.PlaylistItem -> item.copy(subtitle = "")
             is com.prism.music.data.model.AlbumItem -> item.copy(subtitle = "")
             is ArtistItem -> item.copy(subtitle = "")
@@ -374,9 +374,17 @@ fun LibraryScreen(bottomPadding: Dp) {
         ?: if (playlistOrder.isEmpty()) PlaylistSort.LIBRARY else PlaylistSort.CUSTOM
     // Signed out, YouTube playlists saved on the phone (H7) sit with Prism's own.
     val savedPlaylists by c.prismLibrary.playlists.collectAsState()
-    val myPlaylists = remember(playlists, prismLists, savedPlaylists, settings.isLoggedIn) {
-        // A Spotify playlist (1.8.1) says so where Prism's own say "Prism playlist".
-        prismLists.map { l -> l.item().let { if (c.spotify.isSpotifyPlaylist(l.id)) it.copy(subtitle = tr(R.string.spot_playlist_subtitle, com.prism.music.data.model.songCount(l.songs.size))) else it } } + (if (settings.isLoggedIn) emptyList() else savedPlaylists.map { it.item() }) + playlists.filter { it.id != "LM" }
+    // Which playlists are Spotify's and which are still being matched: Library follows both by itself (no refresh).
+    val spotifyMirrored by c.spotify.mirroredPlaylists.collectAsState()
+    val spotifyFilling by c.spotify.playlistFilling.collectAsState()
+    val spotifyBringing by c.spotify.followedBringing.collectAsState()
+    val myPlaylists = remember(playlists, prismLists, savedPlaylists, settings.isLoggedIn, spotifyMirrored, spotifyFilling) {
+        // A Spotify playlist (1.8.1) says so where Prism's own say "Prism playlist"; one still being matched says how far.
+        prismLists.map { l -> l.item().let {
+            if (!c.spotify.isSpotifyPlaylist(l.id)) it
+            else it.copy(subtitle = spotifyFilling[l.id]?.let { f -> tr(R.string.spot_playlist_syncing, f.done, f.total) }
+                ?: tr(R.string.spot_playlist_subtitle, com.prism.music.data.model.songCount(l.songs.size)))
+        } } + (if (settings.isLoggedIn) emptyList() else savedPlaylists.map { it.item() }) + playlists.filter { it.id != "LM" }
     }
     if (choosingFrom) SongsFromSheet(songsFrom, myPlaylists, { choosingFrom = false }) { chosen ->
         // Opened again: a YouTube playlist picked anew is read afresh.
@@ -386,6 +394,8 @@ fun LibraryScreen(bottomPadding: Dp) {
     }
     // Spotify playlists the listener follows or saved (1.8.1): named after the playlists, greyed, their songs not shared.
     val spotifyFollowed by c.spotify.followedShown.collectAsState()
+    // Songs matched since the last look are in their Spotify playlists (and liked) by the time Library shows.
+    androidx.compose.runtime.LaunchedEffect(Unit) { c.spotify.placeMatched() }
     var followedOpen by remember { mutableStateOf<com.prism.music.data.spotify.SpotifyPlaylist?>(null) }
     followedOpen?.let { p -> SpotifyFollowedSheet(p) { followedOpen = null } }
     var openingLink by remember { mutableStateOf(false) }
@@ -454,7 +464,7 @@ fun LibraryScreen(bottomPadding: Dp) {
             @Suppress("NAME_SHADOWING") val asList = listFor(tab)
             val gridState = androidx.compose.foundation.lazy.grid.rememberLazyGridState()
             // Swapping playlists and tiles: back to the top, or the list would stay on the tile it showed and hide what moved above.
-            if (tab == LibTab.PLAYLISTS) LaunchedEffect(settings.libraryPlaylistsFirst) { gridState.scrollToItem(0) }
+            if (tab == LibTab.PLAYLISTS) LaunchedEffect(settings.library.playlistsFirst) { gridState.scrollToItem(0) }
             // History (#118): this phone's plays, or the account's (YouTube Music's own history: the app and the web too).
             var fromAccount by rememberSaveable { mutableStateOf(false) }
             var historyLimit by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(300) }
@@ -537,7 +547,7 @@ fun LibraryScreen(bottomPadding: Dp) {
             LazyVerticalGrid(
                 when {
                     asList -> GridCells.Fixed(1)
-                    settings.libraryColumns.count > 0 -> GridCells.Fixed(settings.libraryColumns.count)
+                    settings.library.columns.count > 0 -> GridCells.Fixed(settings.library.columns.count)
                     else -> GridCells.Adaptive(160.dp)
                 },
                 Modifier.fillMaxSize(),
@@ -569,7 +579,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                     LibTab.PLAYLISTS -> {
                       // The tiles picked and ordered with the edit button at the top (Settings → Library & Replay too).
                       val tilesPart: androidx.compose.foundation.lazy.grid.LazyGridScope.() -> Unit = {
-                        settings.libraryTiles.forEach { t ->
+                        settings.library.tiles.forEach { t ->
                             when (t) {
                                 LibraryTile.LIKED -> item(key = "tile-liked") { ShortcutTile(tr(R.string.liked_songs), com.prism.music.data.model.songCount(liked.size), PrismIcons.HeartFilled, asList, art = c.covers.custom("liked"), onLongClick = { menu(com.prism.music.ui.components.Playable.Liked) }) { nav.go(Routes.liked()) } }
                                 LibraryTile.DOWNLOADS -> item(key = "tile-downloads") { ShortcutTile(tr(R.string.downloads), com.prism.music.data.model.songCount(dls.values.count { it.state == androidx.media3.exoplayer.offline.Download.STATE_COMPLETED }), PrismIcons.DownloadDone, asList, onLongClick = { menu(com.prism.music.ui.components.Playable.Downloads) }) { nav.go(Routes.DOWNLOADS) } }
@@ -579,7 +589,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                                         PrismIcons.Phone, asList,
                                     ) { nav.go(Routes.LOCAL) }
                                 }
-                                LibraryTile.REPLAY -> item(key = "tile-replay") { ShortcutTile(tr(R.string.replay_2), tr(R.string.your_listening_recap), if (LibraryTile.HISTORY in settings.libraryTiles) PrismIcons.Replay else PrismIcons.History, asList) { nav.go(Routes.REPLAY) } }
+                                LibraryTile.REPLAY -> item(key = "tile-replay") { ShortcutTile(tr(R.string.replay_2), tr(R.string.your_listening_recap), if (LibraryTile.HISTORY in settings.library.tiles) PrismIcons.Replay else PrismIcons.History, asList) { nav.go(Routes.REPLAY) } }
                                 // Replay keeps its clock unless History's tile is there too, which takes it (Replay gets its chart).
                                 LibraryTile.HISTORY -> item(key = "tile-history") {
                                     ShortcutTile(tr(R.string.history), tr(R.string.everything_you_ve_played), PrismIcons.History, asList) {
@@ -587,7 +597,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                                     }
                                 }
                                 // Home's Podcasts button turned off (#28): Podcasts lives here instead.
-                                LibraryTile.PODCASTS -> if (!settings.homePodcastsButton) item(key = "tile-podcasts") { ShortcutTile(tr(R.string.podcasts), tr(R.string.shows_and_episodes), PrismIcons.Podcasts, asList) { nav.go(Routes.PODCASTS) } }
+                                LibraryTile.PODCASTS -> if (!settings.home.podcastsButton) item(key = "tile-podcasts") { ShortcutTile(tr(R.string.podcasts), tr(R.string.shows_and_episodes), PrismIcons.Podcasts, asList) { nav.go(Routes.PODCASTS) } }
                                 LibraryTile.TOGETHER -> item(key = "tile-together") { ShortcutTile(tr(R.string.listen_together), tr(R.string.with_friends_on_the_same_wi), PrismIcons.Groups, asList) { nav.go(Routes.TOGETHER) } }
                                 LibraryTile.BLEND -> item(key = "tile-blend") { ShortcutTile(tr(R.string.blend), tr(R.string.a_playlist_of_two_tastes), PrismIcons.Blend, asList) { nav.go(Routes.BLENDS) } }
                                 LibraryTile.RECOGNIZED -> item(key = "tile-recognized") { ShortcutTile(tr(R.string.recognized), tr(R.string.songs_found_by_listening), PrismIcons.Recognize, asList) { nav.go(Routes.RECOGNIZED) } }
@@ -604,7 +614,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                             items(foundFolders, key = { "f" + it.id }) { f ->
                                 val first = f.playlists.firstNotNullOfOrNull { id -> myPlaylists.firstOrNull { com.prism.music.data.PrismLibrary.samePlaylist(it.id, id) } }
                                 ShortcutTile(
-                                    f.name, if (!settings.librarySubtitles) "" else trp(R.plurals.folder_n_playlists, f.playlists.size),
+                                    f.name, if (!settings.library.subtitles) "" else trp(R.plurals.folder_n_playlists, f.playlists.size),
                                     PrismIcons.Folder, asList, art = first?.let { c.covers.art(it) },
                                 ) { nav.go(Routes.folder(f.id)) }
                             }
@@ -612,8 +622,13 @@ fun LibraryScreen(bottomPadding: Dp) {
                                 LibraryItem(shown(p), asList, onLongClick = { menuFor = p }) { nav.open(p, onSong) }
                             }
                             items(foundFollowed, key = { "sf" + it.id }) { p ->
-                                val item = com.prism.music.data.model.PlaylistItem("spotify-followed:${p.id}", p.name, tr(R.string.spot_followed_subtitle, p.ownerName.ifBlank { tr(R.string.spotify) }), p.image)
-                                Box(Modifier.alpha(0.6f)) { LibraryItem(item, asList) { followedOpen = p } }
+                                // With the sign-in a followed playlist can be brought in (a tap away), so it isn't dimmed.
+                                val bring = c.spotify.canBringFollowed
+                                val item = com.prism.music.data.model.PlaylistItem(
+                                    "spotify-followed:${p.id}", p.name,
+                                    tr(when { !bring -> R.string.spot_followed_subtitle; p.id in spotifyBringing -> R.string.spot_session_followed_bringing; else -> R.string.spot_session_followed_subtitle }, p.ownerName.ifBlank { tr(R.string.spotify) }), p.image,
+                                )
+                                Box(Modifier.alpha(if (bring) 1f else 0.6f)) { LibraryItem(item, asList) { followedOpen = p } }
                             }
                       }
                       val playlistsPart: androidx.compose.foundation.lazy.grid.LazyGridScope.() -> Unit = {
@@ -664,7 +679,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                           if (foundFolders.isEmpty() && foundPlaylists.isEmpty() && foundFollowed.isEmpty()) nothingFound(tr(R.string.playlists), playlistQuery)
                       } else
                       // Playlists above the tiles, or below them as Prism ships (Edit tiles → "Playlists first").
-                      if (settings.libraryPlaylistsFirst && myPlaylists.isNotEmpty()) {
+                      if (settings.library.playlistsFirst && myPlaylists.isNotEmpty()) {
                           playlistsPart()
                           item(key = "tiles-gap", span = { GridItemSpan(maxLineSpan) }) { Spacer(Modifier.height(8.dp)) }
                           tilesPart()
@@ -785,7 +800,9 @@ fun LibraryScreen(bottomPadding: Dp) {
                             val time = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT)
                             days.forEachIndexed { di, (title, entries) ->
                                 item(key = "ph$di", span = { GridItemSpan(maxLineSpan) }) { HistoryHeading(title) }
-                                items(entries.size, key = { "p$di-${entries[it].at}" }, span = { GridItemSpan(maxLineSpan) }) { i ->
+                                // Plays brought in from elsewhere (an import, by the second) can share a time.
+                                val keys = com.prism.music.ui.components.rowKeys(entries) { "p$di-${it.at}" }
+                                items(entries.size, key = { keys[it] }, span = { GridItemSpan(maxLineSpan) }) { i ->
                                     val e = entries[i]
                                     val at = time.format(java.util.Date(e.at))
                                     // #469: the row's own plays out (a run of the same song is one row), not the song's others.
@@ -813,7 +830,7 @@ fun LibraryScreen(bottomPadding: Dp) {
                         }
                         items(tagList, key = { "t" + it.tag }) { t ->
                             ShortcutTile(
-                                t.tag, if (settings.librarySubtitles) com.prism.music.data.model.songCount(t.songs) else "", PrismIcons.Tag, asList, art = t.thumbnail,
+                                t.tag, if (settings.library.subtitles) com.prism.music.data.model.songCount(t.songs) else "", PrismIcons.Tag, asList, art = t.thumbnail,
                             ) { nav.go(Routes.tag(t.tag)) }
                         }
                     }
@@ -1002,7 +1019,7 @@ private fun ShortcutTile(title: String, subtitle: String, icon: ImageVector, asL
 fun LibraryTilesSheet(onDismiss: () -> Unit) {
     val s = com.prism.music.ui.theme.LocalAppSettings.current
     val prefs = LocalContainer.current.settings
-    val tiles = s.libraryTiles
+    val tiles = s.library.tiles
     val offered = LibraryTile.offered(LocalContainer.current.uploads.has.collectAsState().value)
     com.prism.music.ui.components.PrismSheet(onDismiss) { _ ->
         Column(Modifier.fillMaxWidth().verticalScroll(androidx.compose.foundation.rememberScrollState()).padding(bottom = 24.dp)) {
@@ -1033,7 +1050,7 @@ fun LibraryTilesSheet(onDismiss: () -> Unit) {
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 16.dp),
             )
             ChoiceCards(
-                listOf(false, true), s.libraryPlaylistsFirst,
+                listOf(false, true), s.library.playlistsFirst,
                 title = { if (it) tr(R.string.playlists_first) else tr(R.string.tiles_first) },
                 detail = { if (it) tr(R.string.your_playlists_at_the_top_the) else tr(R.string.the_tiles_at_the_top_your) },
                 onSelect = { prefs.setLibraryPlaylistsFirst(it) },

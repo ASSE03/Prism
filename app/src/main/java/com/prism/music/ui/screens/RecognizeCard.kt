@@ -133,13 +133,14 @@ private fun RecognizeCard(denied: Boolean, onListen: () -> Unit, onOpen: (String
                     }
                     Spacer(Modifier.height(20.dp))
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        if (song != null) PrismButton({ close { c.player.playSingle(song) } }, Modifier.weight(1f)) {
+                        // #215: from the moment that was heard (the lyrics open with "Open", which shows the player).
+                        if (song != null) PrismButton({ close { playHeard(c, s, song, lyrics = false) } }, Modifier.weight(1f)) {
                             Icon(PrismIcons.Play, null); Spacer(Modifier.width(6.dp)); Text(tr(R.string.widget_play))
                         }
                         // With a song: it plays and Prism opens on the player; without one, on the Recognized list.
                         PrismOutlinedButton({
                             close {
-                                if (song != null) c.player.playSingle(song)
+                                if (song != null) playHeard(c, s, song)
                                 onOpen(if (song != null) "prism://player" else "prism://recognized")
                             }
                         }, Modifier.weight(1f)) {

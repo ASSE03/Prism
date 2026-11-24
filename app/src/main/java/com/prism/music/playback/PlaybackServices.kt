@@ -29,6 +29,12 @@ object PlaybackServices {
     @Volatile var failForTest: ((androidx.media3.common.PlaybackException) -> Unit)? = null
     /** Debug builds only, for the in-app tests: Prism swiped away from Recents (#274). */
     @Volatile var taskRemovedForTest: (() -> Unit)? = null
+    /** Debug builds only, for the in-app tests: the running service's own player, for what it reports (GaplessAppTest). */
+    @Volatile var playerForTest: androidx.media3.exoplayer.ExoPlayer? = null
+    /** Debug builds only, for the in-app tests: the running service's skip-blend (SkipBlendTest: no second player left). */
+    @Volatile var skipFadeForTest: SkipFade? = null
+    /** Debug builds only, for the in-app tests: the running service's crossfade engine (AutomixAppTest: its moves). */
+    @Volatile var mixForTest: MixEngine? = null
 
     fun classFor(icon: AppIcon): Class<out PlaybackService> = when (icon) {
         AppIcon.CLASSIC -> PlaybackService::class.java

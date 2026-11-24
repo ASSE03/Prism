@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.prism.music.R
 import com.prism.music.data.prefs.AppSettings
+import com.prism.music.data.prefs.asItComes
 import com.prism.music.data.prefs.ArtworkChange
 import com.prism.music.data.prefs.ArtworkSwatch
 import com.prism.music.data.prefs.ColorSource
@@ -146,7 +147,10 @@ private fun exactLabel(exact: Boolean) = if (exact) tr(R.string.exactly_as_picke
 private fun bandsLabel(bands: Boolean) = if (bands) tr(R.string.bands) else tr(R.string.smooth)
 private fun pageColorsLabel(picture: Boolean) = if (picture) tr(R.string.picture_s_color) else tr(R.string.your_accent)
 private fun onOff(on: Boolean) = if (on) tr(R.string.tl_on) else tr(R.string.off)
-private fun glassPercent(v: Float) = "${(glassSnap(v) * 100).roundToInt()}%"
+/** Blur and Frost run 30-200% / 0-200% around 100%, which is how the glass is designed: that point says so in words. */
+private fun designedOr(percent: String) = if (percent == "100%") tr(R.string.as_designed) else percent
+private fun glassPercent(v: Float) = designedOr("${(glassSnap(v) * 100).roundToInt()}%")
+private fun glassSliderText(v: Float) = designedOr(percent(v))
 
 private fun strengthText(v: Float) =
     worded(when { v < 0.6f -> tr(R.string.faint); v < 1.4f -> tr(R.string.gentle); v < 2.2f -> tr(R.string.strong); else -> tr(R.string.very_strong) }, v)
@@ -178,7 +182,7 @@ private fun glassAlsoText(s: AppSettings) =
  * lists them. [dark]: Prism is in dark mode now (the White light is named Black on light pages).
  */
 fun themeColorsChanges(s: AppSettings, dark: Boolean): List<String> {
-    val d = AppSettings()
+    val d = s.asItComes()
     val out = ArrayList<String>()
     fun line(changed: Boolean, title: Int, now: String, default: String) { if (changed) out += resetLine(tr(title), now, default) }
     line(s.themeMode != d.themeMode || s.pureBlack != d.pureBlack, R.string.theme, themeToMerged(s.themeMode, s.pureBlack).label, themeToMerged(d.themeMode, d.pureBlack).label)
@@ -241,7 +245,7 @@ fun ThemeColorsPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
     val prefs = LocalContainer.current.settings
     val nav = LocalNavigator.current
     val dark = LocalIsDark.current
-    val d = remember { AppSettings() }
+    val d = s.asItComes()
     val white = s.lightStyle == LightStyle.WHITE
     val widgets = placedWidgets()
     var picking by remember { mutableStateOf<ThemePicking?>(null) }
@@ -354,7 +358,7 @@ fun ThemeColorsPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
             when (s.colorSource) {
                 ColorSource.CUSTOM -> {
                     PickRow(
-                        tr(R.string.accent_color), ColorMath.toHex(s.accent), changed = s.accent != d.accent,
+                        tr(R.string.accent_color), ColorMath.toHex(s.accent), changed = s.accent != d.accent, showValue = false,
                         thumbnail = { Box(Modifier.fillMaxSize().background(Color(s.accent))) },
                     ) { picking = ThemePicking.Accent }
                     if (!isNeutralSeed(s.accent)) ChoiceRow(
@@ -409,7 +413,7 @@ fun ThemeColorsPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
                 changed = s.surfaceTint != d.surfaceTint,
             ) { prefs.setSurfaceTint(it) }
             if (s.surfaceTint == SurfaceTint.CUSTOM) PickRow(
-                tr(R.string.background_color), ColorMath.toHex(s.surfaceColor), changed = s.surfaceColor != d.surfaceColor,
+                tr(R.string.background_color), ColorMath.toHex(s.surfaceColor), changed = s.surfaceColor != d.surfaceColor, showValue = false,
                 thumbnail = { Box(Modifier.fillMaxSize().background(Color(s.surfaceColor))) },
             ) { picking = ThemePicking.Surface }
             if (s.surfaceTint == SurfaceTint.ACCENT || s.surfaceTint == SurfaceTint.CUSTOM) SliderRow(
@@ -452,11 +456,11 @@ fun ThemeColorsPage(bottomPadding: Dp, find: String? = null, showBack: Boolean =
             if (choice != GlassChoice.OFF && blurs) {
                 // Not on Clear: it has next to no blur to set.
                 if (choice != GlassChoice.LIQUID_CLEAR) SliderRow(
-                    tr(R.string.glass_blur), look.blur, GlassLook.BLUR_RANGE, ::percent, info = tr(R.string.glass_blur_info),
+                    tr(R.string.glass_blur), look.blur, GlassLook.BLUR_RANGE, ::glassSliderText, info = tr(R.string.glass_blur_info),
                     changed = look.blur != d.view.glass.blur,
                 ) { prefs.setGlassBlur(glassSnap(it)) }
                 SliderRow(
-                    tr(R.string.glass_frost), look.frost, GlassLook.FROST_RANGE, ::percent, info = tr(R.string.glass_frost_info),
+                    tr(R.string.glass_frost), look.frost, GlassLook.FROST_RANGE, ::glassSliderText, info = tr(R.string.glass_frost_info),
                     changed = look.frost != d.view.glass.frost,
                 ) { prefs.setGlassFrost(glassSnap(it)) }
             }

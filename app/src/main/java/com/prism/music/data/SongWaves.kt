@@ -1,6 +1,7 @@
 package com.prism.music.data
 
 import android.content.Context
+import com.prism.music.playback.SongShape
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.File
@@ -35,10 +36,27 @@ class SongWaves(context: Context) {
 
     fun has(id: String): Boolean = synchronized(memory) { id in memory } || file(id).isFile
 
-    /** Forgets song [id]'s outline (another version of it plays now). */
+    /** Forgets song [id]'s outline and shape (another version of it plays now). */
     fun forget(id: String) {
         synchronized(memory) { memory.remove(id) }
         runCatching { file(id).delete() }
+        runCatching { shapeFile(id).delete() }
+    }
+
+    private fun shapeFile(id: String) = File(dir, id.replace(Regex("[^A-Za-z0-9_-]"), "_") + ".shape${SongShape.VERSION}")
+
+    /**
+     * Song [id]'s shape for Automix (1.8.8: energy and bass a second at a time, [SongShape]), or null if it hasn't been
+     * scanned since shapes came in. Reads a file: off the main thread.
+     */
+    fun shape(id: String): SongShape? =
+        runCatching { shapeFile(id).takeIf { it.isFile }?.readBytes() }.getOrNull()?.let(SongShape::decode)
+
+    fun hasShape(id: String): Boolean = shapeFile(id).isFile
+
+    fun putShape(id: String, shape: SongShape) {
+        if (shape.seconds == 0) return
+        runCatching { shapeFile(id).writeBytes(shape.encode()) }
     }
 
     fun put(id: String, wave: FloatArray) {

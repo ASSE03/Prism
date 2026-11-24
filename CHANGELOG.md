@@ -2,6 +2,121 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.8.8
+
+### Mix
+
+- **Automix.** A fourth choice under Crossfade (Settings, Playback): Prism mixes like a DJ, picking a move for each pair of songs: a bass swap, a filter out, an echo out, a cut on the beat, or a blend. Moves that need the beat only happen where the two songs' tempos line up; everywhere else the songs blend as before. Songs are measured first, on Wi-Fi unless you allow mobile data. Crossfade's choices are now cards with an example each, and "Hear it on the next song" jumps to just before the coming transition so you can listen. Off until you pick it.
+- **Blend when I skip.** Next, Previous and a tap in the queue blend into the song you picked instead of cutting: the song playing carries on until the next one is ready, then the two cross over. The cover and title blend too. Works from the notification, lock screen, headset and car, and with Crossfade off. Off until you turn it on (Settings, Playback, under Crossfade).
+- **Your own transitions.** In a playlist, a song's ⋯ menu has "Transition to the next song": drag where the first song leaves and where the next comes in on their waveforms, pick how long they overlap and how (a curve, or one of Automix's moves), snap to the beat, and listen before you keep it. It plays whenever those two songs follow each other in that playlist. A small mark between the two rows shows it is there.
+
+### The tour, redone
+
+- **First steps.** A new install is shown five things by doing them: play a song, open the player, the lyrics, the heart, and Settings. Skip ends it for good.
+- **What's new has "Show me".** It opens the place and points at the control, then brings you back to the next card. Each release now has two cards at most.
+- **The Guide.** Every tip, by topic, in Settings, Backup & about, with a search line.
+
+### Also new
+
+- "Radio started" shows when a Radio button's radio gets going, where there was only a small buzz.
+- Settings, Lyrics & Sing: "Show the Sing button" can hide the microphone under the lyrics.
+- On the TV, Settings, Storage has "Clear cache", and the caches fit a small box (#535).
+
+### Fixes from your reports
+
+- Prism no longer closes at every play on some phones with custom ROMs (#594).
+- Prism shows up when Android asks which music app to use (#548).
+- Select many: every button in the bar is in reach on a phone; the rest are under More (#567).
+- The player's backdrop holds still under a sheet, then carries on (#547).
+- "Lock to portrait" leaves the screen alone while the phone is in a car (#582).
+- Replay's top artists keep their own photo when a song credits them under someone else's page.
+- Moods and genres follow a change of country without a restart.
+- A music video that fails near its end gets one more go instead of skipping to the next song.
+
+## 1.8.7.6
+
+### The small things
+
+- **Spotify's canvas, if you want it.** Signed in to Spotify in Prism? Turn on "Spotify's canvas first" (Settings, Player, under Canvas, or the offer after you sign in) and Prism shows the short looping video Spotify has for a song. Where Spotify has none, Prism Canvas shows as before. It is off until you turn it on. It is unofficial, like the sign-in: it asks Spotify about each song you play and may stop working.
+- **The player's menu says whose loop it is.** A song's switches in the ⋯ menu are now three, each on or off by itself: "Spotify canvas" (Spotify's loop), "Animated cover" (the moving cover from Apple Music or Tidal) and "Prism Canvas" (the loop from the music video). Each shows for a song that has one. Between Spotify canvas and Prism Canvas only the one that plays is checked, and turning one on picks it for the song. With "Spotify's canvas first" on, Spotify's canvas is tried first for every song, also with "music video first" set for songs that have both; a song shows its music video's loop instead only once you pick Prism Canvas for that song. With Canvas set to Full screen, Spotify's canvas fills the player too, and the controls fade over it as they do over a music video's loop (unless "Keep controls showing" is on).
+- **Prism stays free.** There is now a quiet way to support it: a "Support Prism" row in Settings, About, one card after 100 hours of listening, and one line at the end of the year's recap and of What's new. Each shows once. "I've supported Prism" turns them all off for good, and nobody checks. A Supporters page thanks the people who did.
+- **Settings in plainer words.** Dozens of names and lines across the settings pages were reworded, buttons that do something are in your accent color, and "Bring your history" moved to Accounts & sharing, with the other accounts.
+- **A new install's look is called by its name.** A fresh install said its Look was "your own mix" and marked settings as changed that nobody had touched. It now shows Prism's own Look, and a reset goes back to it.
+
+### Fixes from your reports
+
+- The equalizer does something again (#519). Prism was filling a list Android keeps of sound effects until Android refused new ones. If your equalizer still does nothing after updating, restart your phone once: that empties the list, and Prism no longer fills it. The Equalizer screen says so when Android is refusing.
+- A canvas goes round without standing still (#528). On the test phone the pause at the restart went from up to 1.5 seconds to under a tenth of a second.
+- Songs marked as made for kids play without signing in (#531). They can take a few seconds longer to start.
+- Casting to a speaker, one press of a volume key is one step, and a held key no longer runs to full or silent (#534).
+- Mix says which of Sing or Listen together kept two songs from blending (#493).
+- The volume bar in a Look's preview and in the player follows "Match the progress bar".
+
+## 1.8.7.5
+
+### Your Spotify
+
+- **Sign in to Spotify inside Prism.** One sign-in on Spotify's own page, no setup, and it works with free accounts. Prism then reads your liked songs and your playlists, finds the same songs on YouTube Music, and keeps them in step.
+- **Playlists you follow come too.** Tap one in Library to bring it in, or switch on "Followed playlists too" and the first 50 come in by themselves. A playlist that swaps its songs and keeps its length (a weekly or editorial one) is still brought up to date.
+- **You can see it working.** A playlist says "Bringing it in…" while it is read and "Syncing 120 of 500 songs" while its songs are found, and it carries on when you leave the screen. Matched songs land in their playlists and likes as they are found.
+- **Read only, and unofficial.** Prism never changes anything on your Spotify, and the sign-in stays on your phone. Spotify doesn't offer this way in to other apps and it is against Spotify's terms: it may stop working, and the screen before you sign in says so plainly. Recent plays, Top songs and artists, and liking songs on Spotify still need your own developer app, which works as before.
+
+### Fixes from your reports
+
+- Select many, then Play next or Add to queue, with nothing playing: every picked song is queued (#476).
+- The play circle on Home's big cards plays straight away (#507).
+- A song whose server keeps answering with an error is tried twice, then asked for another way, where it used to stall (#514).
+- DJ mode keeps the crossfade length you set (#502).
+- Covers of albums from your own files are sharp on large views (#520).
+- The lyrics' Sing button hides when Sing is already a button in the row (#501).
+- A recognized song plays from the moment you heard it, and the player opens on its lyrics (#215).
+- Home no longer takes a large, short-lived chunk of memory each time it loads (found in this release's hour-long test on a Galaxy A16).
+
+## 1.8.7
+
+### It just plays
+
+- **A song no longer skips because the network hiccuped.** A timeout in the middle of a song is tried again from the same place, a few times with short waits, and Prism waits for the network when the phone is offline. Only after that does it move on, and it says why.
+- **"This song can't be played" on one Wi-Fi network but not on mobile data** (#408): Prism now also tries asking and streaming over IPv4 only, remembers for each network which way worked last and tries it first, and drops a refused link everywhere it was kept. A download that is refused every way comes down from the song's video instead, as playback already did.
+- **A song that stopped seconds in** could be two different files of the same kind stitched together in the cache. They are told apart now.
+- **Premium quality means the best format on Wi-Fi.** Where your mobile-data quality holds it back, Stats for nerds and the setting say so, and Stats for nerds shows when a saved copy is playing and what it is.
+- **Prism killed in the background** picks up where it was when you press Play on a headset or on the phone's own media card.
+- **More music videos play as their song** with "Songs, not videos: Everywhere": a video is also matched by the film or album named in its title, and by its place on the album. What Prism learns about a video is kept on the phone, so it plays as its song at once the next time, offline too. A playlist row whose song you already downloaded shows as downloaded (#315). The version you picked for a song always wins.
+- **Is playback working?** (Settings → Backup & about → Diagnostics): a check you can run that says, in plain words, what works and what doesn't on your phone and network. The result stays on the phone unless you tap Share.
+
+### Crossfade and the DJ
+
+- **Why it didn't blend:** when the DJ or crossfade leaves a plain change between two songs, the reason is behind the ⓘ on the DJ chip and on the Crossfade setting.
+- During a blend the ending song plays on the output you picked in Prism, as the rest of the music does.
+- Fixed: Repeat one switched on after a blend was planned still moved on; a pause while the two songs were being lined up; seeking back in the incoming song during a blend; a skip during a blend was a hard cut (it fades now).
+
+### Albums without a gap
+
+- **Songs that run into each other play as one.** Measured for the first time: with a tone cut across two files, nothing is added, dropped or restarted at the change. Spatial audio, the headphone correction and the volume leveller's limiter each made a small click at every change of song; they carry on across it now.
+
+### Lyrics
+
+- **The wrong song's lyrics** are refused: every source's answer is checked against the song's title, artist and length, and word-by-word lyrics that don't match the song's own lines are dropped. Thanks to NeeL21YT for the LRCLIB check (#494).
+- **Missing lyrics come back sooner.** Network trouble is no longer remembered as "no lyrics" for a day, one slow source no longer holds up the rest, and the empty state has a "Try again".
+- Japanese songs written only in kanji are read as Japanese when the artist or album shows it.
+- **Keep lyrics showing** (Settings → Player → Canvas): with a full-screen Canvas, the line being sung stays over the picture while the controls are away. On for new installs.
+
+### Lighter
+
+- **The open player does less work.** The lyric line over the progress bar is drawn about 30 times a second, and only when it moved. On a Galaxy A16 with the player open, Prism's processor use went from about 95% of one core to about 68%, and from about 98% to about 76% with a Canvas loop (same phone, same song, both orders).
+- A long queue no longer stalls the screen when it is saved.
+- A song's Canvas loop comes sooner the first time it is played: with the video first it no longer waits for the animated-cover lookup, and the steps that find the video run side by side.
+- **Smoother scrolling** (Settings, under Performance mode; shown on phones that let an app choose a faster screen speed): asks the screen for its fastest refresh rate while Prism is open. Off by default; it uses more battery.
+- The download is a little smaller: the app no longer carries code for emulator chips.
+
+### Fixed
+
+- Lists that could crash on a repeated row (podcasts, library search, For you, Uploads, the versions sheet, Blend).
+- With Pure black, or Frosted pages off, the list's text read straight through the mini player and the tab bar. The bars are solid enough to read again (the Minimal Look had it too).
+- Quick picks on Home are recognised in every language, not only English.
+- The Moods page was read from storage again on every visit.
+- Backups no longer carry this phone's raw settings file, diagnostics, crash logs or Canvas clips, and restoring a backup made by 1.7.8 to 1.8.6 leaves them out (#498).
+
 ## 1.8.6
 
 ### Prism Canvas

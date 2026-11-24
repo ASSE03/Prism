@@ -16,6 +16,8 @@ import androidx.compose.ui.test.swipeDown
 import androidx.navigation.compose.ComposeNavigator
 import com.prism.music.data.local.LocalLossless
 import com.prism.music.data.prefs.AppSettings
+import com.prism.music.data.prefs.CanvasPrefs
+import com.prism.music.data.prefs.BehaviorPrefs
 import com.prism.music.data.prefs.LocalSection
 import com.prism.music.data.prefs.Preload
 import com.prism.music.data.prefs.ThemeMode
@@ -34,7 +36,7 @@ import com.prism.music.ui.screens.settings.oldGroups
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -81,11 +83,11 @@ class DownloadsDataPageTest : ListeningPageHarness(SettingsPageId.DOWNLOADS_DATA
     private val gCovers = t(R.string.animated_covers)
     private val gData = t(R.string.mobile_data)
 
-    /** Smart Downloads' switch schedules its worker: WorkManager has to be there for it (the app's start does that on a phone). */
-    @Before fun workManager() {
-        val app = RuntimeEnvironment.getApplication()
-        if (!androidx.work.WorkManager.isInitialized()) androidx.work.WorkManager.initialize(app, androidx.work.Configuration.Builder().build())
-    }
+    /**
+     * Smart Downloads' switch schedules its worker: WorkManager has to be there for it (the app's start does that on a
+     * phone). Each test has its own, closed when it ends ([OwnWorkManager]: one kept for the class outlived its database).
+     */
+    @get:Rule(order = 1) val workManager = OwnWorkManager()
 
     private fun groupTitles() = compose.onAllNodes(hasTestTag(SettingsTags.GROUP)).fetchSemanticsNodes()
         .map { g -> g.children.first().config[SemanticsProperties.Text].first().text }
@@ -215,7 +217,7 @@ class DownloadsDataPageTest : ListeningPageHarness(SettingsPageId.DOWNLOADS_DATA
         assertEquals(formatGb(2f), valueOf(space))
         // canvas_with_downloads
         tap(saveCovers)
-        until("canvas_with_downloads") { !it.canvasWithDownloads }
+        until("canvas_with_downloads") { !it.behavior.canvas.withDownloads }
         // preload
         choose(loadAhead, Preload.NEXT3.label)
         until("preload") { it.preload == Preload.NEXT3 }
@@ -233,22 +235,22 @@ class DownloadsDataPageTest : ListeningPageHarness(SettingsPageId.DOWNLOADS_DATA
         chip(useFor, MobileUse.SMART_DOWNLOADS.label)
         until("smart_downloads_cellular") { it.smartDownloadsCellular }
         chip(useFor, MobileUse.LYRICS.label)
-        until("lyrics_on_mobile_data") { !it.lyricsOnMobileData }
+        until("lyrics_on_mobile_data") { !it.lyrics.onMobileData }
         chip(useFor, MobileUse.ANIMATED_COVERS.label)
-        until("canvas_on_cellular") { !it.canvasOnCellular }
+        until("canvas_on_cellular") { !it.behavior.canvas.onCellular }
         chip(useFor, MobileUse.MEASURING.label)
-        until("mix_tempo_cellular") { it.mixTempoOnCellular }
+        until("mix_tempo_cellular") { it.mix.tempoOnCellular }
         chip(useFor, MobileUse.SING.label)
         until("sing_cellular") { it.singOnCellular }
         // canvas_with_downloads_cellular: its chip shows while covers are saved with downloads.
         assertFalse(MobileUse.SAVING_COVERS.label in chips(useFor))
         tap(saveCovers)
-        until("canvas_with_downloads") { it.canvasWithDownloads }
+        until("canvas_with_downloads") { it.behavior.canvas.withDownloads }
         chip(useFor, MobileUse.SAVING_COVERS.label)
-        until("canvas_with_downloads_cellular") { it.canvasWithDownloadsCellular }
+        until("canvas_with_downloads_cellular") { it.behavior.canvas.withDownloadsCellular }
         tap(saveCovers)
-        until("canvas_with_downloads") { !it.canvasWithDownloads }
-        assertTrue("a hidden chip keeps what it holds", stored.canvasWithDownloadsCellular)
+        until("canvas_with_downloads") { !it.behavior.canvas.withDownloads }
+        assertTrue("a hidden chip keeps what it holds", stored.behavior.canvas.withDownloadsCellular)
 
         // Every row with a setting now differs from how Prism comes, says so, and the page still fits.
         assertBudgets("everything changed")
@@ -266,7 +268,7 @@ class DownloadsDataPageTest : ListeningPageHarness(SettingsPageId.DOWNLOADS_DATA
         until("the reset") {
             it.downloadWifiOnly == d.downloadWifiOnly && it.downloadLikes == d.downloadLikes && it.sound.ownLossyFiles == d.sound.ownLossyFiles &&
                 it.behavior.localSkipFolders == d.behavior.localSkipFolders && it.localSections == d.localSections && it.smartDownloads == d.smartDownloads &&
-                it.offlineGb == d.offlineGb && it.canvasWithDownloads == d.canvasWithDownloads && it.preload == d.preload && it.dataSaver == d.dataSaver &&
+                it.offlineGb == d.offlineGb && it.behavior.canvas.withDownloads == d.behavior.canvas.withDownloads && it.preload == d.preload && it.dataSaver == d.dataSaver &&
                 MobileDataStored.of(it) == MobileDataStored.of(d)
         }
         assertEquals(setOf("PLkept"), stored.behavior.keptPlaylists)
@@ -280,12 +282,7 @@ class DownloadsDataPageTest : ListeningPageHarness(SettingsPageId.DOWNLOADS_DATA
      */
     @Test fun resetLeavesSmartDownloadsWorkerStopped() {
         val app = RuntimeEnvironment.getApplication()
-        // A WorkManager of this test's own: the one an earlier test of the class started holds a database Robolectric has
-        // since closed (its writes fail quietly; this test reads its work back).
-        for (field in listOf("sDelegatedInstance", "sDefaultInstance")) {
-            androidx.work.impl.WorkManagerImpl::class.java.getDeclaredField(field).apply { isAccessible = true }.set(null, null)
-        }
-        androidx.work.WorkManager.initialize(app, androidx.work.Configuration.Builder().build())
+        // The test's own WorkManager ([workManager]): this test reads its work back.
         val wm = androidx.work.WorkManager.getInstance(app)
         container.settings.setSmartDownloads(true)
         container.settings.setSmartDownloadsCellular(true)
@@ -415,13 +412,13 @@ class DownloadsDataPageTest : ListeningPageHarness(SettingsPageId.DOWNLOADS_DATA
         }
         // Rows under a switch say what to turn on first.
         assertFalse(mine.single { it.title == scanAgain }.needs!!.on(AppSettings()))
-        assertFalse(mine.single { it.title == savedCovers }.needs!!.on(AppSettings(canvasEnabled = false)))
+        assertFalse(mine.single { it.title == savedCovers }.needs!!.on(AppSettings(behavior = BehaviorPrefs(canvas = CanvasPrefs(enabled = false)))))
     }
 
     /** With animated covers off, their group goes (as before), and the page is four groups. */
     @Test fun withoutAnimatedCoversTheirGroupGoes() {
         container.settings.setCanvasEnabled(false)
-        until("animated covers off") { !it.canvasEnabled }
+        until("animated covers off") { !it.behavior.canvas.enabled }
         show()
         assertBudgets("animated covers off")
         assertEquals(listOf(gDownloads, gFiles, gSmart, gData), groupTitles())

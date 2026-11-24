@@ -156,24 +156,31 @@ class DesignGalleryTest {
      */
     @Test fun playerYourWay() {
         val base = AppSettings(themeMode = ThemeMode.DARK, frostedPages = false)
-        val variants = com.prism.music.data.prefs.PlayerLayout.entries.map { it.label to base.copy(playerLayout = it) } + listOf(
+        val variants = com.prism.music.data.prefs.PlayerLayout.entries.map { it.label to base.copy(player = base.player.copy(layout = it)) } + listOf(
             "Centred, large, accent, time left" to base.copy(
-                playerTitleAlign = com.prism.music.data.prefs.PlayerTitleAlign.CENTER, playerTitleSize = com.prism.music.data.prefs.PlayerTitleSize.LARGE,
-                scrubberColor = com.prism.music.data.prefs.ScrubberColor.ACCENT, playerTimes = com.prism.music.data.prefs.PlayerTimes.LEFT,
+                player = base.player.copy(
+                    titleAlign = com.prism.music.data.prefs.PlayerTitleAlign.CENTER, titleSize = com.prism.music.data.prefs.PlayerTitleSize.LARGE,
+                    times = com.prism.music.data.prefs.PlayerTimes.LEFT,
+                ),
+                scrubberColor = com.prism.music.data.prefs.ScrubberColor.ACCENT,
             ),
             "Waveform, five buttons" to base.copy(
                 scrubberStyle = com.prism.music.data.prefs.ScrubberStyle.WAVE,
-                playerButtons = listOf(
-                    com.prism.music.data.prefs.PlayerButton.LIKE, com.prism.music.data.prefs.PlayerButton.LYRICS, com.prism.music.data.prefs.PlayerButton.QUEUE,
-                    com.prism.music.data.prefs.PlayerButton.SLEEP, com.prism.music.data.prefs.PlayerButton.DJ,
+                player = base.player.copy(
+                    buttons = listOf(
+                        com.prism.music.data.prefs.PlayerButton.LIKE, com.prism.music.data.prefs.PlayerButton.LYRICS, com.prism.music.data.prefs.PlayerButton.QUEUE,
+                        com.prism.music.data.prefs.PlayerButton.SLEEP, com.prism.music.data.prefs.PlayerButton.DJ,
+                    ),
                 ),
             ),
             "Buttons first, lyric last" to base.copy(
-                playerDeck = listOf(
-                    com.prism.music.data.prefs.DeckPart.BUTTONS, com.prism.music.data.prefs.DeckPart.SCRUBBER, com.prism.music.data.prefs.DeckPart.TRANSPORT,
-                    com.prism.music.data.prefs.DeckPart.VOLUME, com.prism.music.data.prefs.DeckPart.STRIP,
+                player = base.player.copy(
+                    deck = listOf(
+                        com.prism.music.data.prefs.DeckPart.BUTTONS, com.prism.music.data.prefs.DeckPart.SCRUBBER, com.prism.music.data.prefs.DeckPart.TRANSPORT,
+                        com.prism.music.data.prefs.DeckPart.VOLUME, com.prism.music.data.prefs.DeckPart.STRIP,
+                    ),
                 ),
-                lyricsOnPlayer = true,
+                lyrics = base.lyrics.copy(onPlayer = true),
             ),
         )
         compose.setContent {

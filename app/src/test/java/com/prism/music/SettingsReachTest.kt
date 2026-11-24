@@ -139,6 +139,7 @@ class SettingsReachTest {
         Allowed("account_saved_at", Why.ACCOUNT, "when the sign-in was saved (a stamp)"),
         // One-time flags.
         Allowed("onboarded", Why.FLAG, "the first start is done"),
+        Allowed("new_install_look", Why.FLAG, "the first start wrote a new install's own defaults: Prism's Look keeps them on (1.8.7.6)"),
         Allowed("tv_welcomed", Why.FLAG, "the TV's welcome was shown"),
         // Written by another setting's control, never alone.
         Allowed("performance_offered", Why.WRITTEN_WITH, "Home's Performance mode card was answered", with = "performance_mode"),

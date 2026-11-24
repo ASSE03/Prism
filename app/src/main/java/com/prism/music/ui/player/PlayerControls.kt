@@ -57,6 +57,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -98,6 +99,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -126,6 +129,9 @@ fun formatTime(ms: Long): String {
     val s = (ms.coerceAtLeast(0)) / 1000
     return if (s >= 3600) "%d:%02d:%02d".format(s / 3600, (s % 3600) / 60, s % 60) else "%d:%02d".format(s / 60, s % 60)
 }
+
+/** How near the mark (each side) a tap opens it ([ThinSlider]'s markTap). */
+internal val MARK_TAP_HALF = 12.dp
 
 /** A hairline capsule with no thumb that thickens under the finger. */
 @Composable
@@ -160,8 +166,20 @@ fun ThinSlider(
     shape: BlendShape? = null,
     /** Points (0–1) that give a haptic step when dragged across without a tick drawn (the shaped bar's start of the blend). */
     quietMarks: List<Float> = emptyList(),
+    /**
+     * A point (0–1) a tap on opens something (1.8.8, the crossfade mark: its transition): a tap within [MARK_TAP_HALF] of
+     * it calls [onMarkTap] in place of seeking. A drag from it, and a tap anywhere else, still seek. The bar runs left to
+     * right in either direction of text, and so does this point. [markTag] / [markLabel]: its node, for tests and
+     * TalkBack (whose double tap calls [onMarkTap] too).
+     */
+    markTap: Float? = null,
+    onMarkTap: (() -> Unit)? = null,
+    markTag: String? = null,
+    markLabel: String? = null,
 ) {
     var dragging by remember { mutableStateOf(false) }
+    val markTapNow by androidx.compose.runtime.rememberUpdatedState(markTap.takeIf { onMarkTap != null })
+    val onMarkTapNow by androidx.compose.runtime.rememberUpdatedState(onMarkTap)
     // The shaped bar's outline, kept between frames; only made once a shape is there.
     val outline = remember(shape != null) { if (shape != null) BlendBarPath() else null }
     // The strands' paths, rebuilt in place each frame rather than made anew.
@@ -193,22 +211,40 @@ fun ThinSlider(
                     val down = awaitFirstDown(requireUnconsumed = false)
                     dragging = true
                     last = -1f
+                    // On the mark: a tap there opens it; moved past the touch slop, it's a drag that seeks as ever.
+                    val onMark = markTapNow?.let { m -> kotlin.math.abs(down.position.x - m * size.width) <= MARK_TAP_HALF.toPx() } == true
+                    var moved = false
                     (down.position.x / size.width).coerceIn(0f, 1f).let { crossed(it); onChange(it) }
                     while (true) {
                         val event = awaitPointerEvent()
                         val p = event.changes.firstOrNull { it.id == down.id } ?: break
                         if (!p.pressed) { p.consume(); break }
+                        if (!moved && (p.position - down.position).getDistance() > viewConfiguration.touchSlop) moved = true
                         if (p.positionChanged()) {
                             (p.position.x / size.width).coerceIn(0f, 1f).let { crossed(it); onChange(it) }
                             p.consume()
                         }
                     }
                     dragging = false
-                    onFinished?.invoke()
+                    val tapped = onMarkTapNow
+                    if (onMark && !moved && tapped != null) tapped() else onFinished?.invoke()
                 }
             },
         contentAlignment = Alignment.Center,
     ) {
+        // The mark's node: no touch handling of its own (the bar's gesture above has them all), placed from the left
+        // as the bar's values are, not mirrored right to left.
+        val mark = markTap
+        if (mark != null && onMarkTap != null) Box(
+            Modifier.matchParentSize()
+                .layout { measurable, constraints ->
+                    val w = (MARK_TAP_HALF * 2).roundToPx()
+                    val p = measurable.measure(Constraints.fixed(w, constraints.maxHeight))
+                    layout(constraints.maxWidth, constraints.maxHeight) { p.place((constraints.maxWidth * mark).toInt() - w / 2, 0) }
+                }
+                .then(if (markTag != null) Modifier.testTag(markTag) else Modifier)
+                .semantics { onClick(markLabel) { onMarkTap(); true } },
+        )
         Canvas(Modifier.fillMaxWidth().height(height)) {
             val r = CornerRadius(size.height / 2f)
             val filled = size.width * value.coerceIn(0f, 1f)
@@ -437,6 +473,20 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
             lifecycle.framesWhileShown { ribbonPhase.floatValue += it }
         }
     }
+    // 1.8.8 Mix it yourself: while a playlist is the queue, the crossfade mark opens this pair's own transition (not on
+    // the TV). The queue is only read when the mark is tapped.
+    val queueSource by c.queue.source.collectAsState()
+    val transitionList = queueSource.takeIf { it.kind == com.prism.music.playback.QueueKind.PLAYLIST && !c.isTv }?.originId
+    var transitionOpen by remember { mutableStateOf<com.prism.music.ui.screens.TransitionPair?>(null) }
+    transitionOpen?.let { p -> com.prism.music.ui.screens.TransitionEditor(p) { transitionOpen = null } }
+    // The crossfade mark: a tap on it opens the transition into the next song (a drag from it still seeks).
+    val openTransition: (() -> Unit)? = if (blendMark != null && transitionList != null) ({
+        scrub = null
+        val q = pc.queue.value
+        val next = pc.upNext.value.firstOrNull()?.let { q.getOrNull(it)?.song }
+        val now = current
+        if (now != null && next != null && now.id != next.id) transitionOpen = com.prism.music.ui.screens.TransitionPair(transitionList, now, next)
+    }) else null
     Column(Modifier.fillMaxWidth()) {
         // Spectrum: a thin line, the played part in the split light (or the color picked for it).
         ThinSlider(
@@ -458,10 +508,14 @@ fun PlayerScrubber(positionMs: Long, durationMs: Long, centerLabel: @Composable 
             ribbons = if (style == ScrubberStyle.RIBBONS && !waved) ({ ribbonPhase.floatValue }) else null,
             shape = blendShape,
             quietMarks = if (blendShape?.fadesOut == true) remember(blendShape) { listOf(blendShape.outFrom) } else emptyList(),
+            markTap = blendMark.takeIf { openTransition != null },
+            onMarkTap = openTransition,
+            markTag = com.prism.music.ui.screens.TRANSITION_PLAYER_MARK_TAG,
+            markLabel = tr(R.string.transition_edit),
         )
         Box(Modifier.fillMaxWidth().offset(y = (-9).dp).heightIn(min = 16.dp)) {
-            val elapsed = settings.playerTimes == com.prism.music.data.prefs.PlayerTimes.BOTH || settings.playerTimes == com.prism.music.data.prefs.PlayerTimes.ELAPSED
-            val left = settings.playerTimes == com.prism.music.data.prefs.PlayerTimes.BOTH || settings.playerTimes == com.prism.music.data.prefs.PlayerTimes.LEFT
+            val elapsed = settings.player.times == com.prism.music.data.prefs.PlayerTimes.BOTH || settings.player.times == com.prism.music.data.prefs.PlayerTimes.ELAPSED
+            val left = settings.player.times == com.prism.music.data.prefs.PlayerTimes.BOTH || settings.player.times == com.prism.music.data.prefs.PlayerTimes.LEFT
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 if (elapsed) Text(formatTime((shown * duration).toLong()), style = times, color = Color.White.copy(alpha = 0.55f)) else Spacer(Modifier.width(1.dp))
                 if (left) Text(
@@ -571,10 +625,10 @@ fun TransportRow(
     val style = LocalAppSettings.current.transportStyle
     val playSize = if (compact) 58.dp else 74.dp
     // With shuffle and repeat beside it, play's touch area gives a little room back (narrow phones).
-    val playTouch = if (compact) 76.dp else if (LocalAppSettings.current.playerShuffleRepeat) 80.dp else 92.dp
+    val playTouch = if (compact) 76.dp else if (LocalAppSettings.current.player.shuffleRepeat) 80.dp else 92.dp
     val skipSize = if (compact) 44.dp else 53.dp
     // Settings → Player: shuffle and repeat either side of the transport.
-    val modes = LocalAppSettings.current.playerShuffleRepeat
+    val modes = LocalAppSettings.current.player.shuffleRepeat
     val shuffle by pc.shuffle.collectAsState()
     val smart by LocalContainer.current.queue.smartShuffle.collectAsState()
     val repeat by pc.repeatMode.collectAsState()
@@ -877,16 +931,34 @@ fun barHeights(style: ScrubberStyle, thick: Float): Pair<Dp, Dp> = when (style) 
 
 @Composable
 fun VolumeRow(volume: PlayerVolume) {
-    val s = LocalAppSettings.current
-    // Reddit, 1.7.9.1: "Volume bar like the progress bar" takes its style's height and thickness; else its own, as before.
-    val (idle, held) = if (s.volumeMatchesProgress) barHeights(s.scrubberStyle, s.scrubberThickness) else 6.dp to 10.dp
+    // Like the progress bar, its color can come from the cover: the song's art, read only when it's asked for.
+    val cover = if (LocalAppSettings.current.volumeMatchesProgress) {
+        val current by LocalContainer.current.player.currentSong.collectAsState()
+        current?.let { com.prism.music.data.PlaylistCovers.artOf(it) }
+    } else null
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Icon(PrismIcons.VolumeDown, null, tint = Color.White.copy(alpha = 0.5f), modifier = Modifier.size(20.dp))
         Spacer(Modifier.width(10.dp))
-        ThinSlider(volume.level, volume::drag, Modifier.weight(1f).testTag("volumeBar"), volume::release, idleHeight = idle, activeHeight = held)
+        VolumeSlider(volume.level, volume::drag, volume::release, cover, Modifier.weight(1f).testTag("volumeBar"))
         Spacer(Modifier.width(10.dp))
         Icon(PrismIcons.VolumeUp, null, tint = Color.White.copy(alpha = 0.5f), modifier = Modifier.size(20.dp))
     }
+}
+
+/**
+ * The volume bar itself: white, or with "Volume bar like the progress bar" the progress bar's heights and its light too
+ * (the split light, or the color picked for it with [cover] the song's art), as [PlayerScrubber] draws it.
+ */
+@Composable
+internal fun VolumeSlider(level: Float, onDrag: (Float) -> Unit, onRelease: () -> Unit, cover: String?, modifier: Modifier = Modifier) {
+    val s = LocalAppSettings.current
+    // Reddit, 1.7.9.1: "Volume bar like the progress bar" takes its style's height and thickness; else its own, as before.
+    val like = s.volumeMatchesProgress
+    val (idle, held) = if (like) barHeights(s.scrubberStyle, s.scrubberThickness) else 6.dp to 10.dp
+    ThinSlider(
+        level, onDrag, modifier, onRelease, idleHeight = idle, activeHeight = held,
+        spectrum = like, fill = if (like) scrubberFill(s.scrubberColor, cover) else null,
+    )
 }
 
 /**
@@ -916,7 +988,7 @@ fun PlayerActionRow(
     val settings by c.settings.flow.collectAsState()
     val videoLoading by pc.videoLoading.collectAsState()
     // Settings → Player → "Song / Video switch" off: audio only, the Video button goes.
-    val chosen = settings.playerButtons.filter { it != PlayerButton.VIDEO || settings.showVideoSwitch }
+    val chosen = settings.player.buttons.filter { it != PlayerButton.VIDEO || settings.showVideoSwitch }
     // Six to a row still fits a small phone: the buttons narrow a little past four.
     val glyph = when { chosen.size >= 6 -> 46.dp; chosen.size == 5 -> 50.dp; else -> 56.dp }
     // In one glass capsule (1.7), or (1.7.8, #155) as separate buttons spread across the row, as Prism 1.6 had them.
@@ -981,7 +1053,7 @@ private fun PlayerButtonGlyph(
     val song by pc.currentSong.collectAsState()
     val s = song ?: return
     when (b) {
-        PlayerButton.LYRICS -> BottomGlyph(if (lyricsOpen) PrismIcons.LyricsFilled else PrismIcons.Lyrics, if (lyricsOpen) tr(R.string.close_lyrics) else tr(R.string.lyrics), lyricsOpen, onToggleLyrics, width)
+        PlayerButton.LYRICS -> BottomGlyph(if (lyricsOpen) PrismIcons.LyricsFilled else PrismIcons.Lyrics, if (lyricsOpen) tr(R.string.close_lyrics) else tr(R.string.lyrics), lyricsOpen, onToggleLyrics, width, modifier = com.prism.music.ui.tour.TourAnchor.PLAYER_LYRICS.mark)
         // One Video toggle: on (marked) plays the music video; tapping again goes back to the song.
         PlayerButton.VIDEO -> PillSegment(
             PrismIcons.Video,
@@ -1017,7 +1089,7 @@ private fun PlayerButtonGlyph(
                 { if (d != null) c.downloads.remove(s.id) else c.downloads.download(s) }, width, enabled = !s.isLocal && !s.isLive,
             )
         }
-        PlayerButton.RADIO -> BottomGlyph(PrismIcons.Radio, tr(R.string.start_radio), false, { pc.playRadio(s) }, width, enabled = !s.isLocal)
+        PlayerButton.RADIO -> BottomGlyph(PrismIcons.Radio, tr(R.string.start_radio), false, { pc.playRadio(s, announce = true) }, width, enabled = !s.isLocal)
         // Songs faster or slower (1.7.4), and higher or lower (1.7.8): a tap opens Speed & pitch; the speed shows while it isn't 1×.
         PlayerButton.SPEED -> {
             val speed by pc.musicSpeed.collectAsState()
@@ -1149,10 +1221,10 @@ private fun PillSegment(
 }
 
 @Composable
-private fun BottomGlyph(icon: ImageVector, description: String, highlighted: Boolean, onClick: () -> Unit, width: Dp = 56.dp, enabled: Boolean = true) {
+private fun BottomGlyph(icon: ImageVector, description: String, highlighted: Boolean, onClick: () -> Unit, width: Dp = 56.dp, enabled: Boolean = true, modifier: Modifier = Modifier) {
     val haptics = rememberHaptics()
     Box(
-        Modifier.size(width = width, height = BOTTOM_ACTION_SIZE).clip(CircleShape)
+        modifier.size(width = width, height = BOTTOM_ACTION_SIZE).clip(CircleShape)
             .background(if (highlighted && enabled) Color.White.copy(alpha = 0.16f) else Color.Transparent)
             .semantics { selected = highlighted }
             .clickable(remember { MutableInteractionSource() }, indication = null, enabled = enabled) { haptics.tick(); onClick() },
@@ -1165,11 +1237,11 @@ private fun BottomGlyph(icon: ImageVector, description: String, highlighted: Boo
 
 /** A bare button beside the credits (like, menu): Spectrum keeps them out of discs; [active] (liked) in full white. */
 @Composable
-fun CircleGlyph(icon: ImageVector, description: String, active: Boolean = false, onClick: () -> Unit) {
+fun CircleGlyph(icon: ImageVector, description: String, active: Boolean = false, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val ink by animateFloatAsState(if (active) 1f else 0.8f, label = "glyphInk")
     val haptics = rememberHaptics()
     Box(
-        Modifier.size(40.dp).clip(CircleShape).background(Color.White.copy(alpha = if (active) 0.22f else 0.13f)).border(1.dp, Color.White.copy(alpha = 0.16f), CircleShape)
+        modifier.size(40.dp).clip(CircleShape).background(Color.White.copy(alpha = if (active) 0.22f else 0.13f)).border(1.dp, Color.White.copy(alpha = 0.16f), CircleShape)
             .clickable(remember { MutableInteractionSource() }, indication = null, onClickLabel = description) { haptics.click(); onClick() },
         contentAlignment = Alignment.Center,
     ) {

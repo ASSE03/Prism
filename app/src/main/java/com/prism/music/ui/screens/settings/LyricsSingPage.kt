@@ -35,7 +35,8 @@ private val page = SettingsPageId.LYRICS_SING
  * themselves are in `LyricsSingParts.kt`.
  *
  * Six groups: Style · Text · Color and effects · Language and translations · Sources and timing · Sing and music
- * files, under a pinned lyrics sample. Three of them sit at seven rows: the next setting here needs a sheet.
+ * files, under a pinned lyrics sample. Four of them sit at seven rows (Sing's since 1.8.8's "Show the Sing button"):
+ * the next setting here needs a sheet.
  */
 @Composable
 fun LyricsSingPage(bottomPadding: Dp, find: String? = null, showBack: Boolean = true, onSearch: (() -> Unit)? = null) {
@@ -71,7 +72,7 @@ internal object LsGroups {
 
 /** The root's line for Lyrics & Sing: the style and where the sung line sits, and "Translated" when lyrics are. */
 fun lyricsSingValue(s: AppSettings, dark: Boolean): String =
-    listOfNotNull(tr(R.string.style_2, s.lyricsStyle.label, s.lyricsPosition.label), if (s.lyricsTranslate) tr(R.string.translated) else null).joinToString(" · ")
+    listOfNotNull(tr(R.string.style_2, s.lyricsStyle.label, s.lyricsPosition.label), if (s.lyrics.translate) tr(R.string.translated) else null).joinToString(" · ")
 
 /**
  * The look settings "Reset this page" puts back. The page's reset also puts back its other rows (sources, language,
@@ -160,6 +161,7 @@ val lyricsSingIndex: List<SettingEntry> by lazy {
             SettingEntry(page, g.sources, tr(R.string.lyrics_source_button), tr(R.string.change_lyrics_source)),
             SettingEntry(page, g.sources, tr(R.string.ls_offset), tr(R.string.ls_offset_keywords)),
             // Sing and music files
+            SettingEntry(page, g.sing, tr(R.string.ls_sing_button), tr(R.string.ls_sing_button_keywords)),
             SettingEntry(page, g.sing, tr(R.string.sing_s_voice_separation), tr(R.string.karaoke_vocals_remove_instrumental_download_mode)),
             SettingEntry(page, g.sing, tr(R.string.get_songs_ready_while_sing_is), tr(R.string.karaoke_prepare_ahead_background_preload_vocals)),
             SettingEntry(page, g.sing, tr(R.string.room_for_sung_songs), tr(R.string.karaoke_storage_space)),
@@ -308,8 +310,8 @@ internal fun lyricsSingChanges(s: AppSettings, d: AppSettings): List<String> = b
     fun line(id: Int, now: String, default: String) = line(tr(id), now, default)
     val p = s.lyricsLook
     val q = d.lyricsLook
-    fun effects(a: AppSettings) = effectsToMerged(a.lyricsLook.haloNow, a.lyricsLook.shadow, a.lyricsProgressLine).joinToString(" · ") { effectLabel(it) }.ifBlank { tr(R.string.none) }
-    fun saved(a: AppSettings) = savedWithToMerged(a.lyricsFileWords, a.lyricsFileTranslation)
+    fun effects(a: AppSettings) = effectsToMerged(a.lyricsLook.haloNow, a.lyricsLook.shadow, a.lyrics.progressLine).joinToString(" · ") { effectLabel(it) }.ifBlank { tr(R.string.none) }
+    fun saved(a: AppSettings) = savedWithToMerged(a.lyrics.fileWords, a.lyrics.fileTranslation)
         .joinToString(" · ") { if (it == SavedWith.WORD_TIMINGS) tr(R.string.ls_word_timings) else tr(R.string.ls_translation) }.ifBlank { tr(R.string.none) }
     fun behind(l: com.prism.music.data.prefs.LyricsLookPrefs) = behindLabel(if (l.onCard) LsBehind(LyricsBackground.PLAYER, true) else LsBehind(l.background, false))
     fun colors(l: com.prism.music.data.prefs.LyricsLookPrefs) = com.prism.music.ui.theme.ColorMath.toHex(l.bgColor) + if (l.bgColor2 == 0) "" else " · " + com.prism.music.ui.theme.ColorMath.toHex(l.bgColor2)
@@ -319,12 +321,12 @@ internal fun lyricsSingChanges(s: AppSettings, d: AppSettings): List<String> = b
     line(R.string.word_by_word_on_every_line, lsOnOff(p.wordByWordNow), lsOnOff(q.wordByWordNow))
     line(R.string.background, behind(p), behind(q))
     line(R.string.your_colors, colors(p), colors(q))
-    line(R.string.the_line_on_the_player, stripLineLabel(stripLineToMerged(s.lyricsStripAlign, s.lyricsStripTwoLines)), stripLineLabel(stripLineToMerged(d.lyricsStripAlign, d.lyricsStripTwoLines)))
+    line(R.string.the_line_on_the_player, stripLineLabel(stripLineToMerged(s.lyrics.stripAlign, s.lyrics.stripTwoLines)), stripLineLabel(stripLineToMerged(d.lyrics.stripAlign, d.lyrics.stripTwoLines)))
     line(R.string.instrumental_breaks, p.gapMark.label, q.gapMark.label)
     // Text
-    line(R.string.lyrics_font, lsFontText(s.lyricsFont, s.lyricsFontName), lsFontText(d.lyricsFont, d.lyricsFontName))
-    line(R.string.lyrics_size, lsPercent(s.lyricsScale), lsPercent(d.lyricsScale))
-    line(R.string.alignment, s.lyricsAlign.label, d.lyricsAlign.label)
+    line(R.string.lyrics_font, lsFontText(s.lyrics.font, s.lyrics.fontName), lsFontText(d.lyrics.font, d.lyrics.fontName))
+    line(R.string.lyrics_size, lsPercent(s.lyrics.scale), lsPercent(d.lyrics.scale))
+    line(R.string.alignment, s.lyrics.align.label, d.lyrics.align.label)
     line(R.string.weight, p.weightNow.label, q.weightNow.label)
     line(R.string.line_spacing, lsSpacingText(p.spacing), lsSpacingText(q.spacing))
     line(R.string.capitals, lsOnOff(p.uppercase), lsOnOff(q.uppercase))
@@ -338,7 +340,7 @@ internal fun lyricsSingChanges(s: AppSettings, d: AppSettings): List<String> = b
     line(R.string.effects, effects(s), effects(d))
     line(R.string.background_vocals, lsBackingText(p.backingSize), lsBackingText(q.backingSize))
     // Language and translations
-    line(R.string.translate_into, translateLabel(translateToMerged(s.lyricsTranslate, s.lyricsTranslateTo)), translateLabel(translateToMerged(d.lyricsTranslate, d.lyricsTranslateTo)))
+    line(R.string.translate_into, translateLabel(translateToMerged(s.lyrics.translate, s.lyrics.translateTo)), translateLabel(translateToMerged(d.lyrics.translate, d.lyrics.translateTo)))
     line(R.string.romanize_lyrics, romanizeLabel(romanizeToMerged(s.romanize, s.romanizeAll)), romanizeLabel(romanizeToMerged(d.romanize, d.romanizeAll)))
     line(R.string.translation_place, p.extraPlace.label, q.extraPlace.label)
     line(R.string.translation_size, lsPercent(p.extraSize), lsPercent(q.extraSize))
@@ -347,11 +349,12 @@ internal fun lyricsSingChanges(s: AppSettings, d: AppSettings): List<String> = b
     // Sources and timing
     line(R.string.prefer_karaoke_synced_lyrics, lsOnOff(s.preferSynced), lsOnOff(d.preferSynced))
     line(R.string.uncensor_lyrics, lsOnOff(s.skipCensored), lsOnOff(d.skipCensored))
-    fun order(a: AppSettings) = a.lyricsOrder.filter(a::lyricsSourceOn).joinToString(", ") { it.label }
+    fun order(a: AppSettings) = a.lyrics.order.filter(a::lyricsSourceOn).joinToString(", ") { it.label }
     line(R.string.ls_source_order, order(s), order(d))
-    line(R.string.lyrics_source_button, lsOnOff(s.lyricsSourceButton), lsOnOff(d.lyricsSourceButton))
+    line(R.string.lyrics_source_button, lsOnOff(s.lyrics.sourceButton), lsOnOff(d.lyrics.sourceButton))
     line(R.string.ls_offset, lyricsOffsetText(s.behavior.lyricsOffsetMs), lyricsOffsetText(d.behavior.lyricsOffsetMs))
     // Sing and music files
+    line(R.string.ls_sing_button, lsOnOff(s.lyrics.singButton), lsOnOff(d.lyrics.singButton))
     line(R.string.get_songs_ready_while_sing_is, lsOnOff(s.singAlwaysReady), lsOnOff(d.singAlwaysReady))
     line(R.string.room_for_sung_songs, lsSingRoomText(s.singCacheMb.toFloat().coerceAtMost(LS_SING_ROOM_TOP)), lsSingRoomText(d.singCacheMb.toFloat().coerceAtMost(LS_SING_ROOM_TOP)))
     line(R.string.ls_when_saving, saved(s), saved(d))
@@ -363,20 +366,21 @@ internal fun lyricsSingChanges(s: AppSettings, d: AppSettings): List<String> = b
  */
 internal fun resetLyricsSing(prefs: SettingsRepository, d: AppSettings) {
     prefs.resetLookKeys(lyricsSingLookKeys)
-    prefs.setLyricsFont(d.lyricsFont)
-    prefs.setLyricsTranslate(d.lyricsTranslate)
-    prefs.setLyricsTranslateTo(d.lyricsTranslateTo)
+    prefs.setLyricsFont(d.lyrics.font)
+    prefs.setLyricsTranslate(d.lyrics.translate)
+    prefs.setLyricsTranslateTo(d.lyrics.translateTo)
     prefs.setRomanize(d.romanize)
     prefs.setRomanizeAll(d.romanizeAll)
     prefs.setPreferSynced(d.preferSynced)
     prefs.setSkipCensored(d.skipCensored)
-    prefs.setLyricsOrder(d.lyricsOrder)
-    prefs.setLyricsOff(d.lyricsOff)
+    prefs.setLyricsOrder(d.lyrics.order)
+    prefs.setLyricsOff(d.lyrics.off)
     prefs.setEmbeddedLyrics(d.behavior.embeddedLyrics)
-    prefs.setLyricsSourceButton(d.lyricsSourceButton)
+    prefs.setLyricsSourceButton(d.lyrics.sourceButton)
     prefs.setLyricsOffsetMs(d.behavior.lyricsOffsetMs)
+    prefs.setLyricsSingButton(d.lyrics.singButton)
     prefs.setSingAlwaysReady(d.singAlwaysReady)
     prefs.setSingCacheMb(d.singCacheMb)
-    prefs.setLyricsFileWords(d.lyricsFileWords)
-    prefs.setLyricsFileTranslation(d.lyricsFileTranslation)
+    prefs.setLyricsFileWords(d.lyrics.fileWords)
+    prefs.setLyricsFileTranslation(d.lyrics.fileTranslation)
 }

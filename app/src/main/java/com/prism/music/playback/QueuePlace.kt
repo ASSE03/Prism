@@ -1,6 +1,9 @@
 package com.prism.music.playback
 
 import kotlinx.serialization.Serializable
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import kotlin.math.abs
 
 /**
@@ -40,4 +43,24 @@ class PlaceKeeper(private val write: (QueuePlace) -> Unit) {
             return if (at < 0) index to positionMs else at to place.positionMs.coerceAtLeast(0)
         }
     }
+}
+
+/**
+ * Writes [text] to [target] whole or not at all (1.8.7, #388): to `<name>.tmp` beside it first, which then takes its
+ * place, so a write cut short (Prism killed, the disk full) leaves the old file as it was. [write] is the writing
+ * itself (a test's can fail midway).
+ */
+internal fun writeAtomically(target: File, text: String, write: (File, String) -> Unit = { f, t -> f.writeText(t) }) {
+    val tmp = File(target.parentFile, target.name + ".tmp")
+    try {
+        write(tmp, text)
+    } catch (e: Exception) {
+        tmp.delete()
+        throw e
+    }
+    val moved = runCatching {
+        Files.move(tmp.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE)
+    }.isSuccess || tmp.renameTo(target)
+    // Neither worked (a file system without atomic moves): written in place, as before.
+    if (!moved) { target.writeText(text); tmp.delete() }
 }

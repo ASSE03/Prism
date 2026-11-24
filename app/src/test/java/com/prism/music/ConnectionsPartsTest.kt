@@ -72,11 +72,12 @@ class ConnectionsPartsTest {
     }
 
     @Test fun spotifysLineSaysItsState() {
-        assertEquals("Not connected", spotifyValue(Spotify.Connection.None))
+        // W48 (1.8.7.6): what connecting reads, as Last.fm's row is only "Not connected".
+        assertEquals("Not connected · playlists and likes", spotifyValue(Spotify.Connection.None))
         assertEquals(t(R.string.spot_waiting), spotifyValue(Spotify.Connection.Waiting))
         assertEquals("Access taken back · reconnect", spotifyValue(Spotify.Connection.Revoked))
         // Why the last try failed is said in the sheet, under Connect.
-        assertEquals("Not connected", spotifyValue(Spotify.Connection.Failed("Couldn't reach Spotify.")))
+        assertEquals("Not connected · playlists and likes", spotifyValue(Spotify.Connection.Failed("Couldn't reach Spotify.")))
         assertEquals("Connected as Mina", spotifyValue(Spotify.Connection.Connected("Mina")))
         // Never "sign in with Spotify".
         for (c in listOf(Spotify.Connection.None, Spotify.Connection.Waiting, Spotify.Connection.Revoked)) assertFalse("sign in" in spotifyValue(c).lowercase())
@@ -126,10 +127,11 @@ class ConnectionsPartsTest {
 
     @Test fun lastFmNotConnectedIsOneLinkThatSaysSo() {
         showLastFm()
-        assertEquals(listOf(t(R.string.connect_last_fm)), titles())
+        // W47 (1.8.7.6): the plain name, as Spotify's row ("Connect Last.fm" stays as a search line).
+        assertEquals(listOf("Last.fm"), titles())
         assertEquals(SettingsTags.ROW_LINK, rows().single().config[SemanticsProperties.TestTag])
         assertEquals("Not connected", rows().single().config[SettingsRowValue])
-        tap(t(R.string.connect_last_fm))
+        tap("Last.fm")
         assertEquals("a tap opens Last.fm's own page", 1, connects)
     }
 
@@ -162,7 +164,7 @@ class ConnectionsPartsTest {
         }
         // Disconnect: back to the one link.
         tap(disconnect)
-        assertEquals(listOf(t(R.string.connect_last_fm)), titles())
+        assertEquals(listOf("Last.fm"), titles())
     }
 
     @Test fun aCopyBuiltWithoutLastFmSaysSo() {

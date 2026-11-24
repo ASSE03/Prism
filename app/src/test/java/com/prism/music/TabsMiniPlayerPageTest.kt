@@ -93,7 +93,7 @@ class TabsMiniPlayerPageTest : TextTabsPageHarness(SettingsPageId.TABS_MINI_PLAY
         assertEquals(SettingsTags.ROW_SWITCH, type(mini, "Joined to the tab bar"))
         assertEquals(listTag, type(tabs, "Home"))
         assertEquals("Floating", valueOf(rowNode(bar, "Style")))
-        assertEquals("Ink", valueOf(rowNode(bar, "The tab you're on")))
+        assertEquals("Plain", valueOf(rowNode(bar, "The tab you're on")))
         assertEquals("Home", valueOf(rowNode(tabs, "Open Prism on")))
         assertEquals("Play/pause · Next", valueOf(rowNode(mini, "Mini player buttons")))
         assertEquals("Your light", valueOf(rowNode(mini, "Mini player progress color")))

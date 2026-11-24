@@ -157,9 +157,9 @@ class GesturesButtonsPageTest : ListeningPageHarness(SettingsPageId.GESTURES_BUT
         // The nine gesture menus: each a Pick row that says what the gesture does.
         val d = AppSettings()
         val menus = listOf(
-            Triple(cover, swipeLeft, d.coverSwipeLeft), Triple(cover, swipeRight, d.coverSwipeRight), Triple(cover, swipeUp, d.coverSwipeUp),
-            Triple(cover, doubleTap, d.coverDoubleTap), Triple(cover, longPress, d.coverLongPress),
-            Triple(mini, swipeLeft, d.miniSwipeLeft), Triple(mini, swipeRight, d.miniSwipeRight), Triple(mini, swipeUp, d.miniSwipeUp), Triple(mini, pullDown, d.miniSwipeDown),
+            Triple(cover, swipeLeft, d.gestures.coverSwipeLeft), Triple(cover, swipeRight, d.gestures.coverSwipeRight), Triple(cover, swipeUp, d.gestures.coverSwipeUp),
+            Triple(cover, doubleTap, d.gestures.coverDoubleTap), Triple(cover, longPress, d.gestures.coverLongPress),
+            Triple(mini, swipeLeft, d.gestures.miniSwipeLeft), Triple(mini, swipeRight, d.gestures.miniSwipeRight), Triple(mini, swipeUp, d.gestures.miniSwipeUp), Triple(mini, pullDown, d.gestures.miniSwipeDown),
         )
         assertEquals(9, menus.size)
         for ((group, title, gesture) in menus) {
@@ -186,7 +186,7 @@ class GesturesButtonsPageTest : ListeningPageHarness(SettingsPageId.GESTURES_BUT
         openIn(mini, pullDown)
         assertEquals(PlayerGesture.choices(mini = true).size, options().size)
         swipeSheetAway()
-        assertEquals("a sheet swiped away changes nothing", d.miniSwipeDown, stored.miniSwipeDown)
+        assertEquals("a sheet swiped away changes nothing", d.gestures.miniSwipeDown, stored.gestures.miniSwipeDown)
     }
 
     /** Principle 8: every stored setting the ledger gives Gestures & buttons has its control here, and the control stores it. */
@@ -196,20 +196,20 @@ class GesturesButtonsPageTest : ListeningPageHarness(SettingsPageId.GESTURES_BUT
 
         // cover_swipe_left, cover_swipe_right, cover_swipe_up, cover_long_press
         pickIn(cover, swipeLeft, PlayerGesture.LIKE.label)
-        until("cover_swipe_left") { it.coverSwipeLeft == PlayerGesture.LIKE }
+        until("cover_swipe_left") { it.gestures.coverSwipeLeft == PlayerGesture.LIKE }
         assertEquals(PlayerGesture.LIKE.label, valueIn(cover, swipeLeft))
-        assertEquals("the mini player's is another setting", d.miniSwipeLeft, stored.miniSwipeLeft)
+        assertEquals("the mini player's is another setting", d.gestures.miniSwipeLeft, stored.gestures.miniSwipeLeft)
         pickIn(cover, swipeRight, PlayerGesture.SLEEP.label)
-        until("cover_swipe_right") { it.coverSwipeRight == PlayerGesture.SLEEP }
+        until("cover_swipe_right") { it.gestures.coverSwipeRight == PlayerGesture.SLEEP }
         pickIn(cover, swipeUp, PlayerGesture.LYRICS.label)
-        until("cover_swipe_up") { it.coverSwipeUp == PlayerGesture.LYRICS }
+        until("cover_swipe_up") { it.gestures.coverSwipeUp == PlayerGesture.LYRICS }
         pickIn(cover, longPress, PlayerGesture.MENU.label)
-        until("cover_long_press") { it.coverLongPress == PlayerGesture.MENU }
+        until("cover_long_press") { it.gestures.coverLongPress == PlayerGesture.MENU }
         // double_tap_seek_seconds: under the double tap while it seeks by side; cover_double_tap.
         choose(seeks, "5 s")
         until("double_tap_seek_seconds") { it.doubleTapSeekSeconds == 5 }
         pickIn(cover, doubleTap, PlayerGesture.PLAY_PAUSE.label)
-        until("cover_double_tap") { it.coverDoubleTap == PlayerGesture.PLAY_PAUSE }
+        until("cover_double_tap") { it.gestures.coverDoubleTap == PlayerGesture.PLAY_PAUSE }
         assertFalse("the step only shows while a double tap seeks by side", hasRow(seeks))
         // player_gestures_everywhere, player_gestures_under_lyrics: "Gestures work".
         pick(work, anywhere)
@@ -219,13 +219,13 @@ class GesturesButtonsPageTest : ListeningPageHarness(SettingsPageId.GESTURES_BUT
 
         // mini_swipe_left, mini_swipe_right, mini_swipe_up, mini_swipe_down
         pickIn(mini, swipeLeft, PlayerGesture.SLEEP.label)
-        until("mini_swipe_left") { it.miniSwipeLeft == PlayerGesture.SLEEP && it.coverSwipeLeft == PlayerGesture.LIKE }
+        until("mini_swipe_left") { it.gestures.miniSwipeLeft == PlayerGesture.SLEEP && it.gestures.coverSwipeLeft == PlayerGesture.LIKE }
         pickIn(mini, swipeRight, PlayerGesture.LIKE.label)
-        until("mini_swipe_right") { it.miniSwipeRight == PlayerGesture.LIKE }
+        until("mini_swipe_right") { it.gestures.miniSwipeRight == PlayerGesture.LIKE }
         pickIn(mini, swipeUp, PlayerGesture.QUEUE.label)
-        until("mini_swipe_up") { it.miniSwipeUp == PlayerGesture.QUEUE }
+        until("mini_swipe_up") { it.gestures.miniSwipeUp == PlayerGesture.QUEUE }
         pickIn(mini, pullDown, PlayerGesture.NONE.label)
-        until("mini_swipe_down") { it.miniSwipeDown == PlayerGesture.NONE }
+        until("mini_swipe_down") { it.gestures.miniSwipeDown == PlayerGesture.NONE }
 
         // hold_seek_seconds (Off at its start), haptics, panel_swipes, swipe_tabs, row_swipes, lyrics_cover_plays
         slide(holdSeek, 0f)
@@ -273,13 +273,13 @@ class GesturesButtonsPageTest : ListeningPageHarness(SettingsPageId.GESTURES_BUT
         // Reset this page lists each of them (the hidden double-tap step too) and puts them all back.
         val lines = resetLines(confirm = true)
         assertEquals(lines.joinToString("\n"), 21, lines.size)
-        assertTrue(lines.toString(), lines.any { it.startsWith("$mini · $swipeLeft: ${PlayerGesture.SLEEP.label} → ${d.miniSwipeLeft.label}") })
+        assertTrue(lines.toString(), lines.any { it.startsWith("$mini · $swipeLeft: ${PlayerGesture.SLEEP.label} → ${d.gestures.miniSwipeLeft.label}") })
         assertTrue(lines.toString(), lines.any { it.startsWith("$work: $notLyrics → $onCover") })
         until("the reset") { it.behavior == d.behavior && it.sessionButtons == d.sessionButtons && it.haptics == d.haptics && it.swipeTabs == d.swipeTabs }
         until("the reset") {
-            it.coverSwipeLeft == d.coverSwipeLeft && it.coverSwipeRight == d.coverSwipeRight && it.coverSwipeUp == d.coverSwipeUp && it.coverDoubleTap == d.coverDoubleTap &&
-                it.coverLongPress == d.coverLongPress && it.miniSwipeLeft == d.miniSwipeLeft && it.miniSwipeRight == d.miniSwipeRight && it.miniSwipeUp == d.miniSwipeUp &&
-                it.miniSwipeDown == d.miniSwipeDown && it.doubleTapSeekSeconds == d.doubleTapSeekSeconds && it.holdSeekSeconds == d.holdSeekSeconds &&
+            it.gestures.coverSwipeLeft == d.gestures.coverSwipeLeft && it.gestures.coverSwipeRight == d.gestures.coverSwipeRight && it.gestures.coverSwipeUp == d.gestures.coverSwipeUp && it.gestures.coverDoubleTap == d.gestures.coverDoubleTap &&
+                it.gestures.coverLongPress == d.gestures.coverLongPress && it.gestures.miniSwipeLeft == d.gestures.miniSwipeLeft && it.gestures.miniSwipeRight == d.gestures.miniSwipeRight && it.gestures.miniSwipeUp == d.gestures.miniSwipeUp &&
+                it.gestures.miniSwipeDown == d.gestures.miniSwipeDown && it.doubleTapSeekSeconds == d.doubleTapSeekSeconds && it.holdSeekSeconds == d.holdSeekSeconds &&
                 it.carLyricsOnPhone == d.carLyricsOnPhone
         }
         assertEquals(0, changedRows())
@@ -382,7 +382,8 @@ class GesturesButtonsPageTest : ListeningPageHarness(SettingsPageId.GESTURES_BUT
         show()
         assertEquals(SettingsTags.ROW_SWITCH, typeOf(coverPlays))
         assertFalse(stored.behavior.lyricsCoverPlays)
-        assertEquals("Tap the small cover to play or pause", coverPlays)
+        // W41 (1.8.7.6): it says which cover.
+        assertEquals("Tap the lyrics' cover to pause", coverPlays)
         val e = SettingsIndex.entries.single { it.title == coverPlays }
         assertEquals(SettingsPageId.GESTURES_BUTTONS, e.page)
         assertEquals(touch, e.group)

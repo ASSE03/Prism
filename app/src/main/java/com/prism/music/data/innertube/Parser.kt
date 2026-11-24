@@ -369,6 +369,7 @@ object Parser {
                     // column (numItemsPerColumn), but as cards, and were taken for Quick picks.
                     rows = s.arr("contents")?.firstOrNull().obj("musicResponsiveListItemRenderer") != null,
                     stacked = (s.str("numItemsPerColumn")?.toIntOrNull() ?: 1) > 1,
+                    startsRadios = startsRadios(s.arr("contents")),
                 )
             }
             node.obj("musicShelfRenderer")?.let { s ->
@@ -391,6 +392,22 @@ object Parser {
             }
         }
         return out
+    }
+
+    /**
+     * Song rows whose play buttons each start that song's radio (its "RDAMVM" + id list), most of them: how YouTube
+     * Music's Quick picks play, whatever the language its title is in. Other shelves of song rows ("Trending songs for
+     * you" in the recorded Home) play the song alone.
+     */
+    internal fun startsRadios(contents: List<JsonElement>?): Boolean {
+        val rows = contents.orEmpty().mapNotNull { it.obj("musicResponsiveListItemRenderer") }
+        if (rows.isEmpty()) return false
+        val radios = rows.count { r ->
+            val w = r.obj("overlay", "musicItemThumbnailOverlayRenderer", "content", "musicPlayButtonRenderer", "playNavigationEndpoint", "watchEndpoint")
+            val id = w.str("videoId")
+            id != null && w.str("playlistId") == "RDAMVM$id"
+        }
+        return radios * 2 > rows.size
     }
 
     fun continuation(root: JsonElement?): String? =

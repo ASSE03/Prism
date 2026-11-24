@@ -74,7 +74,7 @@ class HomeLibraryMergeTest {
         assertEquals(54, n)
         // As Prism comes: no tab has its own, all three are the fallback.
         val d = AppSettings()
-        assertEquals(LibraryViews(d.libraryView, d.libraryView, d.libraryView), libraryViewsToMerged(d.libraryViews, d.libraryView))
+        assertEquals(LibraryViews(d.library.view, d.library.view, d.library.view), libraryViewsToMerged(d.library.views, d.library.view))
     }
 
     /**
@@ -103,7 +103,7 @@ class HomeLibraryMergeTest {
     @Test fun topButtonsKeepBothSwitches() {
         val d = AppSettings()
         for (podcasts in both) for (customize in both) {
-            val merged = HomeChoices.topButtons(d.copy(homePodcastsButton = podcasts, homeCustomizeTopButton = customize))
+            val merged = HomeChoices.topButtons(d.copy(home = d.home.copy(podcastsButton = podcasts, customizeTopButton = customize)))
             assertEquals(podcasts to customize, HomeChoices.topButtonsValues(merged))
         }
         assertEquals(4, TopButtons.entries.size)

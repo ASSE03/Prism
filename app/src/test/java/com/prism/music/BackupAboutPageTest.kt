@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
@@ -119,18 +120,25 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
     private val restore = t(R.string.restore_from_a_backup)
     private val check = t(R.string.check_for_updates)
     private val source = t(R.string.source_code)
-    private val tour = t(R.string.take_the_tour)
+    // 1.8.8 (plan-tour.md D6): "Take the tour" is the Guide.
+    private val tour = t(R.string.guide)
     private val licenses = t(R.string.open_source_licenses)
     private val diagnostics = t(R.string.playback_diagnostics)
     private val lastCrash = t(R.string.last_crash)
     private val forgetCrashes = t(R.string.forget_crashes)
     private val shareLog = t(R.string.share_diagnostics)
     private val clearLog = t(R.string.clear_diagnostics)
+    private val selfTest = t(R.string.selftest_title)
     private val unofficial = t(R.string.unofficial_not_affiliated_with_google_or)
     private val installed = tr(R.string.prism, BuildConfig.VERSION_NAME)
 
-    /** Debug builds (as the tests are) also have the design gallery's row. */
-    private val aboutRows = if (BuildConfig.DEBUG) 4 else 3
+    // 1.8.7.6: Support Prism's three rows, first in About.
+    private val support = t(R.string.support_prism)
+    private val supported = t(R.string.i_ve_supported_prism)
+    private val supporters = t(R.string.supporters)
+
+    /** Debug builds (as the tests are) also have the design gallery's row; 1.8.7.6 adds Support Prism's three. */
+    private val aboutRows = if (BuildConfig.DEBUG) 7 else 6
 
     private fun groupTitles() = compose.onAllNodes(hasTestTag(SettingsTags.GROUP)).fetchSemanticsNodes()
         .map { g -> g.children.first().config[SemanticsProperties.Text].first().text }
@@ -141,7 +149,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
 
     private val opened = ArrayList<String>()
 
-    private fun showContent(check: suspend () -> String? = { null }, share: () -> Unit = {}) {
+    private fun showContent(check: suspend () -> String? = { null }, share: () -> Unit = {}, selfTest: (() -> List<com.prism.music.data.SelfTestCheck>)? = null) {
         compose.setContent {
             val controller = rememberNavController().also { navController = it }
             val nav = Navigator(controller, openPlayer = {})
@@ -152,8 +160,10 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
                     CompositionLocalProvider(LocalAppSettings provides s) {
                         Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
                             NavHost(controller, "page") {
-                                composable("page") { BackupAboutContent(0.dp, null, true, {}, check, share) }
+                                composable("page") { BackupAboutContent(0.dp, null, true, {}, check, share, selfTest) }
                                 composable("settings/{section}") { Box(Modifier.fillMaxSize()) }
+                                composable(Routes.SUPPORTERS) { Box(Modifier.fillMaxSize()) }
+                                composable(Routes.GUIDE) { Box(Modifier.fillMaxSize()) }
                             }
                         }
                     }
@@ -169,7 +179,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         show()
         assertBudgets("defaults")
         assertEquals(listOf(backupGroup, updatesGroup, aboutGroup, diagnosticsGroup), groupTitles())
-        assertEquals(listOf(2, 1, aboutRows, 1), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 2), groupSizes())
         assertEquals("nothing differs from how Prism comes", 0, changedRows())
         // No group is named as the page, and none as one of its own rows.
         assertTrue(groupTitles().none { it == SettingsPageId.BACKUP_ABOUT.title })
@@ -214,7 +224,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         // The old second lines are no longer prose on the page.
         for (id in listOf(
             R.string.settings_library_replay_sign_in_you, R.string.replaces_what_the_backup_holds_then, R.string.prism_also_checks_on_its_own,
-            R.string.a_minute_s_walk_through_prism, R.string.a_log_for_tracking_down_stutters, R.string.keeps_a_log_on_this_phone,
+            R.string.guide_info, R.string.a_log_for_tracking_down_stutters, R.string.keeps_a_log_on_this_phone,
         )) assertEquals(t(id), 0, shown(t(id)))
         // One tap away: Back up's.
         compose.onNodeWithContentDescription(tr(R.string.more_about, backUp)).performClick()
@@ -234,7 +244,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         assertTrue(hasRow(shareLog) && hasRow(clearLog))
         assertEquals(SettingsTags.ROW_LINK, typeOf(shareLog))
         assertEquals(SettingsTags.ROW_LINK, typeOf(clearLog))
-        assertEquals(listOf(2, 1, aboutRows, 3), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 4), groupSizes())
         assertBudgets("diagnostics on")
         assertEquals(1, changedRows())
 
@@ -243,7 +253,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         assertEquals(listOf("$diagnostics: ${t(R.string.on_2)} → ${t(R.string.off)}"), lines)
         until("the reset") { !it.audioDiagnostics }
         assertEquals(0, changedRows())
-        assertEquals(listOf(2, 1, aboutRows, 1), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 2), groupSizes())
     }
 
     /** Clearing starts the log again and says so; nothing else on the page changes. */
@@ -262,15 +272,15 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         var shared = 0
         showContent(share = { shared++ })
         assertEquals("drawing the page shares nothing", 0, shared)
-        assertEquals(listOf(2, 1, aboutRows, 3), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 4), groupSizes())
         val at = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(Date(crashedAt))
         assertEquals(tr(R.string.tap_to_share_its_details, at), valueOf(lastCrash))
         tap(lastCrash)
         assertEquals(1, shared)
-        // With the log on as well: the group's fullest state, five rows.
+        // With the log on as well: the group's fullest state, six rows.
         tap(diagnostics)
         until("audio_diagnostics") { it.audioDiagnostics }
-        assertEquals(listOf(2, 1, aboutRows, 5), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 6), groupSizes())
         assertBudgets("a crash kept, diagnostics on")
         tap(shareLog)
         assertEquals(2, shared)
@@ -278,7 +288,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         tap(forgetCrashes)
         assertFalse(file.exists())
         assertFalse(hasRow(lastCrash) || hasRow(forgetCrashes))
-        assertEquals(listOf(2, 1, aboutRows, 3), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 4), groupSizes())
         assertEquals(2, shared)
     }
 
@@ -294,6 +304,63 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         assertEquals(uri, send.clipData!!.getItemAt(0).uri)
         assertNull("no app is named: the listener picks", send.component)
         assertNull(send.`package`)
+    }
+
+    // ------------------------------------------------------------------ Is playback working? (1.8.7)
+
+    /** The row: a Link row in Diagnostics, with its words behind ⓘ; drawing the page runs nothing. */
+    @Test fun theSelfTestRowIsInDiagnostics() {
+        var ran = 0
+        showContent(selfTest = { ran++; emptyList() })
+        assertEquals(SettingsTags.ROW_LINK, typeOf(selfTest))
+        assertEquals("drawing the page runs no check", 0, ran)
+        assertEquals(0, shown(t(R.string.selftest_info)))
+        val line = SettingsIndex.entries.single { it.page == SettingsPageId.BACKUP_ABOUT && it.title == selfTest }
+        assertEquals(diagnosticsGroup, line.group)
+        assertTrue(SettingsIndex.search("not playing").any { it.title == selfTest })
+        assertTrue(SettingsIndex.search("403").any { it.title == selfTest })
+    }
+
+    /**
+     * The check comes first in Diagnostics, above the log's switch (1.8.7 release check's settings walk: someone whose
+     * music won't play should meet "Is playback working?" before a switch about a log), in the group and in search.
+     */
+    @Test fun theCheckComesBeforeTheLog() {
+        showContent(selfTest = { emptyList() })
+        fun top(text: String) = compose.onAllNodes(hasText(text)).fetchSemanticsNodes().first().boundsInRoot.top
+        assertTrue("\"$selfTest\" is above \"$diagnostics\"", top(selfTest) < top(diagnostics))
+        val lines = SettingsIndex.entries.filter { it.page == SettingsPageId.BACKUP_ABOUT && it.group == diagnosticsGroup }.map { it.title }
+        assertTrue(lines.indexOf(selfTest) < lines.indexOf(diagnostics))
+    }
+
+    /** The sheet runs the checks it is handed, shows each result, and Share adds the result to the shared diagnostics. */
+    @Test fun theSelfTestSheetShowsAndSharesTheResult() {
+        var shared = 0
+        com.prism.music.data.SelfTestText.last = null
+        val checks = {
+            listOf(
+                com.prism.music.data.SelfTestCheck("a", "First check", "Do the first thing.") { com.prism.music.data.CheckResult.ok() },
+                com.prism.music.data.SelfTestCheck("b", "Second check", "Do the second thing.") { com.prism.music.data.CheckResult.problem("broke") },
+                com.prism.music.data.SelfTestCheck("c", "Third check", "Do the third thing.", needs = listOf("b")) { com.prism.music.data.CheckResult.ok() },
+            )
+        }
+        showContent(share = { shared++ }, selfTest = checks)
+        tap(selfTest)
+        compose.waitUntil(5_000) { shown(t(R.string.selftest_ok)) == 1 && shown(t(R.string.selftest_problem) + "\nDo the second thing.") == 1 }
+        assertEquals(1, shown(tr(R.string.selftest_skipped_after, "Second check")))
+        compose.onNode(hasText(t(R.string.selftest_share)) and hasAnyAncestor(hasTestTag(SettingsTags.SHEET))).performClick()
+        compose.waitForIdle()
+        assertEquals(1, shared)
+        val text = com.prism.music.data.SelfTestText.last!!
+        assertTrue(text, "1. First check: ${t(R.string.selftest_ok)}" in text && "2. Second check: ${t(R.string.selftest_problem)} (broke) Do the second thing." in text)
+        com.prism.music.data.SelfTestText.last = null
+    }
+
+    /** What "Share diagnostics" shares: the result too, once it has been shared from the sheet. */
+    @Test fun theSharedDiagnosticsCarryTheResult() {
+        assertEquals("about\ncanvas", com.prism.music.ui.screens.settings.diagnosticsAbout("about", "canvas", null))
+        val with = com.prism.music.ui.screens.settings.diagnosticsAbout("about", "canvas", "1. Online: Works")
+        assertTrue(with, with.startsWith("about\ncanvas\n") && with.endsWith("===== $selfTest =====\n1. Online: Works"))
     }
 
     // ------------------------------------------------------------------ Backup
@@ -374,30 +441,92 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         val drawn = compose.onNode(hasText(t(R.string.tap_to_update)) and hasAnyAncestor(hasTestTag(BACKUP_ABOUT_UPDATE))).fetchSemanticsNode()
         assertTrue("inside the page's gutters", drawn.boundsInRoot.left >= cards[1].boundsInRoot.left && drawn.boundsInRoot.right <= cards[1].boundsInRoot.right)
         assertBudgets("an update offered")
-        assertEquals(listOf(2, 1, aboutRows, 1), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 2), groupSizes())
     }
 
     // ------------------------------------------------------------------ About
 
+    /** Source code opens GitHub, the Guide (1.8.8, "Take the tour" before) its own page, the licenses theirs. */
     @Test fun aboutsLinksGoWhereTheyDid() {
-        val tours = java.util.concurrent.atomic.AtomicInteger()
-        val scope = CoroutineScope(Dispatchers.Unconfined)
-        scope.launch { container.tourRequests.collect { tours.incrementAndGet() } }
-        try {
-            showContent()
-            tap(source)
-            assertEquals(listOf(SOURCE_URL), opened)
-            tap(tour)
-            assertEquals(1, tours.get())
-            tap(licenses)
-            compose.waitForIdle()
-            assertEquals("settings/{section}", navController!!.currentDestination?.route)
-            assertEquals("licenses", navController!!.currentBackStackEntry?.arguments?.getString("section"))
-            assertTrue(SettingsMap.resolve("licenses")!!.licenses)
-        } finally {
-            scope.cancel()
-        }
+        showContent()
+        tap(source)
+        assertEquals(listOf(SOURCE_URL), opened)
+        assertEquals("the old name is gone", 0, shown(t(R.string.take_the_tour)))
+        tap(tour)
+        compose.waitForIdle()
+        assertEquals(Routes.GUIDE, navController!!.currentDestination?.route)
+        navController!!.popBackStack()
+        compose.waitForIdle()
+        tap(licenses)
+        compose.waitForIdle()
+        assertEquals("settings/{section}", navController!!.currentDestination?.route)
+        assertEquals("licenses", navController!!.currentBackStackEntry?.arguments?.getString("section"))
+        assertTrue(SettingsMap.resolve("licenses")!!.licenses)
+        // Search still finds it by its old name.
+        assertTrue(SettingsIndex.entries.any { it.page == SettingsPageId.BACKUP_ABOUT && it.title == tour && t(R.string.take_the_tour) in it.keywords })
     }
+
+    /**
+     * 1.8.7.6 (plan-1.8.7.6 §4.1 S1–S3): Support Prism opens Ko-fi in the browser (nothing else leaves the phone), "I've
+     * supported Prism" is off as Prism comes and shows a heart when on, and Supporters opens its own screen. All three
+     * sit first in About, above "Source code", with their words behind the ⓘ.
+     */
+    @Test fun supportPrismsThreeRows() {
+        showContent()
+        for (title in listOf(support, supported, supporters)) assertTrue(title, hasRow(title))
+        assertEquals(SettingsTags.ROW_LINK, typeOf(support))
+        assertEquals(SettingsTags.ROW_SWITCH, typeOf(supported))
+        assertEquals(SettingsTags.ROW_LINK, typeOf(supporters))
+        assertEquals("Ko-fi", valueOf(support))
+        // Above Source code, in this order.
+        fun top(title: String) = compose.onAllNodes(hasText(title)).fetchSemanticsNodes().first().boundsInRoot.top
+        assertTrue(top(support) < top(supported) && top(supported) < top(supporters) && top(supporters) < top(source))
+        // Explanations only behind the ⓘ.
+        assertEquals(0, shown(t(R.string.support_prism_info)))
+        assertEquals(0, shown(t(R.string.i_ve_supported_prism_info)))
+        tap(support)
+        assertEquals(listOf("https://ko-fi.com/yigder"), opened)
+        // The switch: off as Prism comes, the listener's word when on.
+        assertFalse(stored.behavior.supported)
+        assertFalse(AppSettings().behavior.supported)
+        tap(supported)
+        until("supported") { it.behavior.supported }
+        tap(supported)
+        until("supported off") { !it.behavior.supported }
+        tap(supporters)
+        compose.waitForIdle()
+        assertEquals(Routes.SUPPORTERS, navController!!.currentDestination?.route)
+    }
+
+    /** An empty Supporters list says so in one friendly line, with the way to Ko-fi; a list shows members first. */
+    @Test fun theSupportersList() {
+        val taps = ArrayList<String>()
+        compose.setContent {
+            val s by container.settings.stored.collectAsState()
+            CompositionLocalProvider(LocalContainer provides container) {
+                PrismTheme(s, artworkColor = null) {
+                    CompositionLocalProvider(LocalAppSettings provides s) {
+                        var list by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(com.prism.music.ui.support.Supporters()) }
+                        listState = { list = it }
+                        com.prism.music.ui.screens.settings.SupportersList(list) { taps += "kofi" }
+                    }
+                }
+            }
+        }
+        compose.waitForIdle()
+        assertEquals(1, shown(t(R.string.supporters_empty)))
+        compose.onNodeWithText(support).performClick()
+        assertEquals(listOf("kofi"), taps)
+        listState!!(com.prism.music.ui.support.Supporters(members = listOf("Ana"), supporters = listOf("Bo", "Cy")))
+        compose.waitForIdle()
+        assertEquals(0, shown(t(R.string.supporters_empty)))
+        // (A group's title is drawn as an eyebrow, in capitals.)
+        fun top(text: String) = compose.onNodeWithText(text, ignoreCase = true).fetchSemanticsNode().boundsInRoot.top
+        assertTrue(top(t(R.string.supporters_members)) < top("Ana") && top("Ana") < top(t(R.string.supporters_thank_you)) && top(t(R.string.supporters_thank_you)) < top("Bo"))
+        assertEquals(3, compose.onAllNodes(hasTestTag(com.prism.music.ui.screens.settings.SupportersTags.NAME)).fetchSemanticsNodes().size)
+    }
+
+    private var listState: ((com.prism.music.ui.support.Supporters) -> Unit)? = null
 
     // ------------------------------------------------------------------ Search and old links
 
@@ -409,7 +538,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         assertTrue("search lines in groups the page doesn't have: ${lost.map { it.group + " › " + it.title }}", lost.isEmpty())
         fun line(title: String) = lines.single { it.title == title }
         // Every row of the page with default settings has its line, in the group it is drawn in.
-        for ((group, titles) in listOf(backupGroup to listOf(backUp, restore), updatesGroup to listOf(check), aboutGroup to listOf(source, tour, licenses), diagnosticsGroup to listOf(diagnostics))) {
+        for ((group, titles) in listOf(backupGroup to listOf(backUp, restore), updatesGroup to listOf(check), aboutGroup to listOf(support, supported, supporters, source, tour, licenses), diagnosticsGroup to listOf(diagnostics, selfTest))) {
             for (title in titles) assertEquals(title, group, line(title).group)
         }
         // The rows that follow the log say what to turn on, and stop saying it once that's on.
@@ -424,6 +553,8 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
         assertTrue(SettingsIndex.search("version").any { it.page == SettingsPageId.BACKUP_ABOUT })
         assertTrue(SettingsIndex.search("github").any { it.title == source })
         assertTrue(SettingsIndex.search("stutter").any { it.title == diagnostics })
+        assertTrue(SettingsIndex.search("ko-fi").any { it.title == support })
+        assertTrue(SettingsIndex.search("donate").any { it.title == support })
         assertEquals(check, SettingsIndex.search("check for updates").first().title)
         // Links written before the rework still land: the old page's key, and its groups by their names.
         assertTrue(SettingsPageId.BACKUP_ABOUT.oldGroups.values.all { it in drawn })
@@ -439,7 +570,7 @@ class BackupAboutPageTest : ListeningPageHarness(SettingsPageId.BACKUP_ABOUT) {
     @Test fun atLargeTextNothingIsCutOff() {
         keepACrash()
         show(fontScale = 1.5f, over = everything)
-        assertEquals(listOf(2, 1, aboutRows, 5), groupSizes())
+        assertEquals(listOf(2, 1, aboutRows, 6), groupSizes())
         assertBudgets("large text")
         assertNoTextCutOff("font scale 1.5")
     }

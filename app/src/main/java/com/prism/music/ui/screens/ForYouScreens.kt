@@ -529,7 +529,11 @@ fun PickArtistsScreen(onboarding: Boolean, bottomPadding: Dp, onDone: () -> Unit
             val list = artists
             if (list == null) item(span = { GridItemSpan(maxLineSpan) }) {
                 Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) { com.prism.music.ui.components.PrismSpinner(Modifier.size(30.dp)) }
-            } else items(list, key = { it.id }) { a ->
+            } else {
+              // A search for an artist can list one twice: each tile a key of its own (#330's kind).
+              val keys = com.prism.music.ui.components.rowKeys(list) { it.id }
+              items(list.size, key = { keys[it] }) { i ->
+                val a = list[i]
                 val on = favorites.any { it.id == a.id }
                 val photo by produceState(a.thumbnail, a.id) { value = ArtistPhotos.of(c, a) }
                 Column(
@@ -548,6 +552,7 @@ fun PickArtistsScreen(onboarding: Boolean, bottomPadding: Dp, onDone: () -> Unit
                     Spacer(Modifier.height(6.dp))
                     Text(a.name, style = MaterialTheme.typography.labelLarge, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
                 }
+              }
             }
         }
         val count = favorites.size

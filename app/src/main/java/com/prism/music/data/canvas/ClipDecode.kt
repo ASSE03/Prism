@@ -34,20 +34,48 @@ object ClipDecode : ClipRefiner {
         val began = System.currentTimeMillis()
         // The file's own clock starts at 0 where the kept part starts.
         val start = (loop.startMs - loop.fileStartMs).coerceAtLeast(0)
-        val read = runCatching { read(file, start, start + ClipRepository.MAX_LOOP_MS + 200, began + BUDGET_MS) }
-            .onFailure { last = "couldn't read ${file.name}: $it" }.getOrNull() ?: return@withContext null
-        if (read.frames.size < 30) { last = "only ${read.frames.size} frames from ${file.name}"; return@withContext null }
+        var plain = false
+        val read = runCatching {
+            hurriedFirst({ it.frames.size >= MIN_FRAMES }) { hurry ->
+                plain = !hurry
+                read(file, start, start + ClipRepository.MAX_LOOP_MS + 200, began + BUDGET_MS, hurry)
+            }
+        }.onFailure { last = "couldn't read ${file.name}: $it" }.getOrNull() ?: return@withContext null
+        if (read.frames.size < MIN_FRAMES) { last = "only ${read.frames.size} frames from ${file.name}"; return@withContext null }
         val r = ClipRefine.judge(read.frames, read.faces, start, loop.bars)
         last = "${read.frames.size} frames, ${read.faces.size} faces, ${r.cutsMs.size} cuts, ${if (r.flashing) "flashing" else "calm"}, " +
             "ends ${r.endMs - start} ms in, crop ${r.cropX ?: "kept"}, scenes ${r.crops.joinToString(" ") { "${it.fromMs - start}:${it.cropX}" }}, ${System.currentTimeMillis() - began} ms" +
+            (if (plain) " (read again unhurried)" else "") +
             read.faces.joinToString(prefix = " [", postfix = "]") { "${it.timeMs - start}:${(it.x * 100).toInt()}/${(it.size * 100).toInt()}/${(it.confidence * 100).toInt()}" }
         // Back on the video's clock.
         r.copy(endMs = r.endMs + loop.fileStartMs, cutsMs = r.cutsMs.map { it + loop.fileStartMs }, crops = r.crops.map { it.copy(fromMs = it.fromMs + loop.fileStartMs) })
     }
 
-    private class Read(val frames: List<ClipRefine.Frame>, val faces: List<ClipRefine.Face>)
+    /** Fewer frames than this can't be judged. */
+    private const val MIN_FRAMES = 30
 
-    private fun read(file: File, fromMs: Long, toMs: Long, deadline: Long): Read {
+    internal class Read(val frames: List<ClipRefine.Frame>, val faces: List<ClipRefine.Face>)
+
+    /**
+     * 1.8.7: the decoder is told this is work to get through, not playback to keep pace with (a decoder left to itself
+     * may run at the video's own frame rate's pace). A hint only: the frames it gives are the same.
+     */
+    internal fun hurried(format: MediaFormat): MediaFormat = format.apply {
+        setInteger(MediaFormat.KEY_PRIORITY, 1)
+        setInteger(MediaFormat.KEY_OPERATING_RATE, Short.MAX_VALUE.toInt())
+    }
+
+    /**
+     * Reads hurried first; a decoder that refuses the hint or gives too few frames with it ([enough]) is read again
+     * without it, as before 1.8.7. Never fewer looks than before: a loop is not shown unchecked because of the hint.
+     */
+    internal fun <T : Any> hurriedFirst(enough: (T) -> Boolean, read: (hurry: Boolean) -> T): T {
+        val first = try { read(true) } catch (e: Exception) { null }
+        if (first != null && enough(first)) return first
+        return read(false)
+    }
+
+    private fun read(file: File, fromMs: Long, toMs: Long, deadline: Long, hurry: Boolean): Read {
         val extractor = MediaExtractor()
         var codec: MediaCodec? = null
         val frames = ArrayList<ClipRefine.Frame>(300); val faces = java.util.Collections.synchronizedList(ArrayList<ClipRefine.Face>())
@@ -62,6 +90,7 @@ object ClipDecode : ClipRefiner {
             extractor.selectTrack(track)
             extractor.seekTo(fromMs * 1000, MediaExtractor.SEEK_TO_PREVIOUS_SYNC)
             format.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420Flexible)
+            if (hurry) hurried(format)
             codec = MediaCodec.createDecoderByType(format.getString(MediaFormat.KEY_MIME)!!)
             codec.configure(format, null, null, 0)
             codec.start()

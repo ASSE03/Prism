@@ -169,6 +169,7 @@ class LocalMusic(
         // mixes) under one album, whose artwork is then one file's cover for all of them (#129): those songs read their
         // own covers instead.
         val mixed = mixedAlbums(out)
+        mixedNow = mixed
         val withArt = out.map { t ->
             if (t.albumId in mixed) t else artFor(t.albumId)?.let { t.copy(song = t.song.copy(thumbnail = it)) } ?: t
         }
@@ -266,11 +267,53 @@ class LocalMusic(
         return tracks.map { t -> found[t.song.id]?.let { t.copy(song = t.song.copy(thumbnail = it)) } ?: t }.also(::publish)
     }
 
+    /** The last scan's [mixedAlbums]: their one album art isn't every song's cover, so it's never made full size. */
+    @Volatile private var mixedNow: Set<Long> = emptySet()
+    /** Albums read for [fullArt] with no picture in their file, this run. */
+    private val noFullArt = java.util.concurrent.ConcurrentHashMap.newKeySet<Long>()
+
+    /**
+     * #520: the album's cover at its own size, for a large view ([fullArtAlbum]): the picture embedded in one of its
+     * files, kept beside the covers [fillEmbeddedArt] keeps (the same file, so it's read once either way). Null when
+     * there's none; the view then keeps Android's thumbnail.
+     */
+    suspend fun fullArt(albumId: Long): java.io.File? = withContext(Dispatchers.IO) {
+        if (albumId <= 0 || albumId in mixedNow || albumId in noFullArt) return@withContext null
+        val file = java.io.File(artDir, "a$albumId.jpg")
+        if (file.exists()) return@withContext file
+        val t = byId.values.firstOrNull { it.albumId == albumId } ?: return@withContext null
+        val bytes = runCatching {
+            val r = android.media.MediaMetadataRetriever()
+            try { r.setDataSource(context, t.uri); r.embeddedPicture } finally { r.release() }
+        }.getOrNull()
+        if (bytes == null || bytes.isEmpty()) { noFullArt += albumId; return@withContext null }
+        // Written aside and moved in, so a second view asking meanwhile never reads half a picture.
+        val part = java.io.File(artDir, "a$albumId.${System.nanoTime()}.part")
+        val ok = runCatching { part.writeBytes(bytes); part.renameTo(file) || file.exists() }.getOrDefault(false)
+        part.delete()
+        if (ok) file else null
+    }
+
     companion object {
         private const val TAG = "PrismLocal"
         private const val MIN_DURATION_MS = 20_000L
         private const val MAX_COVER_READS = 400
         private const val UNKNOWN = "<unknown>"
+        private const val ALBUM_ART = "content://media/external/audio/albumart/"
+        /** Above this many pixels a view gets the album's own picture: Android's album art is a small thumbnail (#520). */
+        private const val FULL_ART_PX = 600
+
+        /**
+         * #520: the album whose full cover a view of [widthPx] × [heightPx] should get instead of Android's album art at
+         * [url] (a thumbnail, pixelated on the player and the album page); null for lists and anything else. An unknown
+         * size stays on the thumbnail, so nothing big is decoded where it isn't asked for.
+         */
+        internal fun fullArtAlbum(url: String?, widthPx: Int?, heightPx: Int?): Long? {
+            if (url == null || !url.startsWith(ALBUM_ART)) return null
+            val px = maxOf(widthPx ?: 0, heightPx ?: 0)
+            if (px <= FULL_ART_PX) return null
+            return url.removePrefix(ALBUM_ART).toLongOrNull()?.takeIf { it > 0 }
+        }
 
         /**
          * Album ids whose one artwork may be wrong for some of its songs (#129): a song with no album tag (Android groups

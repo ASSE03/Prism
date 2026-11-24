@@ -93,10 +93,10 @@ class SavedWhilePlayingAppTest {
     }
 
     private fun addTile() {
-        val before = c.settings.current.libraryTiles
+        val before = c.settings.current.library.tiles
         assertFalse("nobody's Library changes by itself", LibraryTile.SAVED in before)
         c.settings.setLibraryTiles(before + LibraryTile.SAVED)
-        compose.waitUntil(5_000) { LibraryTile.SAVED in c.settings.current.libraryTiles }
+        compose.waitUntil(5_000) { LibraryTile.SAVED in c.settings.current.library.tiles }
     }
 
     private fun shows(text: String) = compose.onAllNodes(hasText(text)).fetchSemanticsNodes().isNotEmpty()

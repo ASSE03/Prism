@@ -77,6 +77,24 @@ class SongsEverywhereLiveTest {
         log("missed $missed of $videosSeen videos")
     }
 
+    /**
+     * #383 (1.8.7, plan 3.1): the three named after 1.8.5 ("Dandiya India", "Sairo Sairo", "Sailaja Sailaja") find their
+     * songs by their videos' full titles; the rest of the playlist's videos are counted, and what's left is logged.
+     */
+    @Test fun theThreeNamedAfter185AndWhatIsLeft() = runBlocking {
+        val named = listOf("Dandiya India", "Sairo Sairo", "Sailaja Sailaja")
+        val videos = ytm.playlistAll("PLEV4Wjn7aSFHRm-VkBxh2TJKwNyfUGqsO", 120).songs.filter { it.isVideo }
+        val left = videos.filter { v ->
+            val s = runCatching { ytm.songForVideo(v) }.getOrNull()
+            log("${v.id} \"${v.title}\" / ${v.artistText} (${v.durationSec}s) -> ${s?.let { "${it.id} \"${it.title}\" ${it.artistText} (${it.album?.title}) ${it.durationSec}s" } ?: "none"}")
+            s == null
+        }
+        log("left unmatched: ${left.size} of ${videos.size} videos: ${left.map { it.title }}")
+        val namedRows = videos.filter { v -> named.any { v.title.equals(it, true) } }
+        org.junit.Assert.assertEquals(3, namedRows.size)
+        org.junit.Assert.assertTrue("still videos: ${left.map { it.title }.filter { it in named }}", namedRows.none { it in left })
+    }
+
     @Test fun reportersPlaylists() = runBlocking {
         for (id in listOf("PLEwlFF5xcXHzubwrqTqBzexAGjhl_1LoA", "PLtLEpc9CWsdfxbsiuKYw02kpbCF1mnNcS")) {
             val songs = ytm.playlistAll(id, 60).songs

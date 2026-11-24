@@ -441,6 +441,15 @@ internal fun CollectionContent(type: CollectionType, live: LiveCollection, initi
             else -> null
         },
     )
+    // 1.8.8 Mix it yourself: a playlist's own transitions between two songs side by side (Prism's own playlists and
+    // YouTube's; not on the TV). Only in the playlist's own order, unfiltered, where the rows are what plays next.
+    // One query a playlist for the marks between rows, nothing for any other page.
+    val transitionList = source.originId?.takeIf { (type == CollectionType.PLAYLIST || type == CollectionType.PRISM) && !c.isTv }
+    val inOrder = transitionList != null && sort == SortMode.DEFAULT && genreFilter == null && query.isBlank() && !groupByGenre
+    val transitionPairs by remember(transitionList) {
+        transitionList?.let { c.transitions.pairs(it) } ?: kotlinx.coroutines.flow.flowOf(emptySet())
+    }.collectAsState(emptySet())
+    var transitionOpen by remember { mutableStateOf<TransitionPair?>(null) }
     // Offline (#55): only songs on the phone (downloaded, cached whole, or files) play; the rest show greyed out.
     val online by c.network.online.collectAsState()
     val ready = remember(songs, downloads, online) { if (online) null else songs.filter { c.availableOffline(it.id) }.map { it.id }.toSet() }
@@ -590,6 +599,17 @@ internal fun CollectionContent(type: CollectionType, live: LiveCollection, initi
             else c.downloads.setSkipped(s.id, true)
         })
     }
+    /** The song at [i] and the one after it in the playlist's order, when they may have a transition of their own (1.8.8). */
+    fun transitionPairAt(i: Int): TransitionPair? {
+        val list = transitionList?.takeIf { inOrder } ?: return null
+        val s = visible.getOrNull(i) ?: return null
+        val next = visible.getOrNull(i + 1) ?: return null
+        if (s.isLive || next.isLive || s.isEpisode || next.isEpisode || s.id == next.id) return null
+        return TransitionPair(list, s, next)
+    }
+    /** "Transition to the next song" (1.8.8, Mix it yourself). */
+    fun transitionAction(i: Int): List<SheetItem> =
+        transitionPairAt(i)?.let { p -> listOf(SheetItem(PrismIcons.Blend, tr(R.string.transition_to_the_next_song)) { transitionOpen = p }) }.orEmpty()
 
     // A smart playlist (1.8.3): its songs are what its rules find, so none is taken out or moved by hand.
     val smartRules = if (type == CollectionType.PRISM) c.prismLibrary.lists.collectAsState().value.firstOrNull { it.id == page.id }?.smart else null
@@ -917,6 +937,7 @@ internal fun CollectionContent(type: CollectionType, live: LiveCollection, initi
                     songRows.grouped = null
                     songRows.start = added
                     itemsIndexed(visible, key = { i, s -> "${s.id}:$i" }) { i, s ->
+                        Column {
                         // Swipe right: play next; left: add to the queue.
                         com.prism.music.ui.components.SwipeToQueue(s, Modifier.locatePulse(locate, s.id)) {
                             SongRow(
@@ -930,9 +951,14 @@ internal fun CollectionContent(type: CollectionType, live: LiveCollection, initi
                                 else if (type == CollectionType.ALBUM) formatDuration(s.durationSec)
                                 else if (type == CollectionType.DOWNLOADS && downloads[s.id]?.ownFile != null) tr(R.string.x_from_your_file, downloads[s.id]?.ownFile)
                                 else genreVersion.let { genres[s.id] }?.takeIf { sort == SortMode.GENRE || genreFilter == null && showGenres }?.let { g -> listOfNotNull(s.album?.title?.takeIf { showAlbums }, com.prism.music.data.meta.Genres.shown(g)).joinToString(" • ") },
-                                extraActions = removeAction(s) + skipAction(s),
+                                extraActions = removeAction(s) + skipAction(s) + transitionAction(i),
                                 showAlbum = showAlbums,
                             ) { playFrom(visible, s, source) }
+                        }
+                        // 1.8.8: this song runs into the next by the listener's own transition.
+                        if (transitionPairs.isNotEmpty()) transitionPairAt(i)?.takeIf { (it.from.id to it.to.id) in transitionPairs }?.let { p ->
+                            TransitionRowMark { transitionOpen = p }
+                        }
                         }
                     }
                 }
@@ -1105,6 +1131,7 @@ internal fun CollectionContent(type: CollectionType, live: LiveCollection, initi
             }
         }
     }
+    transitionOpen?.let { p -> TransitionEditor(p) { transitionOpen = null } }
     if (deleting && type == CollectionType.TAG) AlertDialog(
         onDismissRequest = { deleting = false },
         title = { Text(tr(R.string.delete_tag)) },

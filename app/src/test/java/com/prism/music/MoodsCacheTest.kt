@@ -48,4 +48,21 @@ class MoodsCacheTest {
         clock += MoodsCache.MAX_AGE_MS + 1
         assertEquals(listOf("a"), cache.get("en-US", { throw IOException("offline") }, parse))
     }
+
+    /** 1.8.7: the kept page is read once, not on every visit (Home, Search and the Moods page each asked). */
+    @Test fun theKeptPageIsReadOnce() = runBlocking {
+        var parsed = 0
+        val counting: (JsonObject) -> List<String> = { parsed++; parse(it) }
+        val cache = MoodsCache(dir.root) { clock }
+        repeat(4) { assertEquals(listOf("a"), cache.get("en-US", fetch("a"), counting)) }
+        assertEquals("the fetched page, once", 1, parsed)
+        // After a restart: read from the phone once, then kept.
+        val again = MoodsCache(dir.root) { clock }
+        repeat(3) { assertEquals(listOf("a"), again.get("en-US", fetch("b"), counting)) }
+        assertEquals(2, parsed)
+        // Offline with an old page: still the one reading.
+        clock += MoodsCache.MAX_AGE_MS + 1
+        repeat(2) { assertEquals(listOf("a"), again.get("en-US", { throw IOException("offline") }, counting)) }
+        assertEquals(2, parsed)
+    }
 }

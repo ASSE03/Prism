@@ -240,11 +240,13 @@ interface CountedPlayDao {
     suspend fun topSongs(o: List<String>, from: Long, to: Long, limit: Int): List<SongPlays>
 
     @Query(
-        """SELECT MAX(s.primaryArtist) AS artistName, COUNT(*) AS plays, SUM(e.playedMs) AS ms,
-           MAX(s.thumbnail) AS thumbnail, MAX(s.artistId) AS artistId
-           FROM counted_plays e JOIN songs s ON s.id = e.songId
-           WHERE e.origin IN (:o) AND e.timestamp BETWEEN :from AND :to AND s.primaryArtist != ''
-           GROUP BY s.primaryArtist ORDER BY ms DESC LIMIT :limit"""
+        """SELECT name AS artistName, SUM(n) AS plays, SUM(ms) AS ms, MAX(thumb) AS thumbnail, $ARTIST_ID_VOTE AS artistId
+           FROM (SELECT s.primaryArtist AS name, s.artistId AS id, COUNT(*) AS n, COUNT(DISTINCT e.songId) AS k,
+                 SUM(e.playedMs) AS ms, MAX(s.thumbnail) AS thumb
+                 FROM counted_plays e JOIN songs s ON s.id = e.songId
+                 WHERE e.origin IN (:o) AND e.timestamp BETWEEN :from AND :to AND s.primaryArtist != ''
+                 GROUP BY s.primaryArtist, s.artistId)
+           GROUP BY name ORDER BY ms DESC LIMIT :limit"""
     )
     suspend fun topArtists(o: List<String>, from: Long, to: Long, limit: Int): List<ArtistPlays>
 
@@ -288,13 +290,15 @@ interface CountedPlayDao {
     suspend fun artistCount(o: List<String>, from: Long, to: Long): Int
 
     @Query(
-        """SELECT MAX(s.primaryArtist) AS artistName, COUNT(*) AS plays, SUM(e.playedMs) AS ms,
-           MAX(s.thumbnail) AS thumbnail, MAX(s.artistId) AS artistId
-           FROM counted_plays e JOIN songs s ON s.id = e.songId
-           WHERE e.origin IN (:o) AND e.timestamp BETWEEN :from AND :to AND s.primaryArtist != '' AND s.primaryArtist IN (
-               SELECT s2.primaryArtist FROM counted_plays e2 JOIN songs s2 ON s2.id = e2.songId WHERE e2.origin IN (:o)
-               GROUP BY s2.primaryArtist HAVING MIN(e2.timestamp) BETWEEN :from AND :to)
-           GROUP BY s.primaryArtist ORDER BY ms DESC"""
+        """SELECT name AS artistName, SUM(n) AS plays, SUM(ms) AS ms, MAX(thumb) AS thumbnail, $ARTIST_ID_VOTE AS artistId
+           FROM (SELECT s.primaryArtist AS name, s.artistId AS id, COUNT(*) AS n, COUNT(DISTINCT e.songId) AS k,
+                 SUM(e.playedMs) AS ms, MAX(s.thumbnail) AS thumb
+                 FROM counted_plays e JOIN songs s ON s.id = e.songId
+                 WHERE e.origin IN (:o) AND e.timestamp BETWEEN :from AND :to AND s.primaryArtist != '' AND s.primaryArtist IN (
+                     SELECT s2.primaryArtist FROM counted_plays e2 JOIN songs s2 ON s2.id = e2.songId WHERE e2.origin IN (:o)
+                     GROUP BY s2.primaryArtist HAVING MIN(e2.timestamp) BETWEEN :from AND :to)
+                 GROUP BY s.primaryArtist, s.artistId)
+           GROUP BY name ORDER BY ms DESC"""
     )
     suspend fun newArtists(o: List<String>, from: Long, to: Long): List<ArtistPlays>
 
@@ -330,11 +334,13 @@ interface CountedPlayDao {
     suspend fun tasteTopSongs(o: List<String>, from: Long, to: Long, limit: Int): List<SongPlays>
 
     @Query(
-        """SELECT MAX(s.primaryArtist) AS artistName, COUNT(*) AS plays, SUM(e.playedMs) AS ms,
-           MAX(s.thumbnail) AS thumbnail, MAX(s.artistId) AS artistId
-           FROM counted_plays e JOIN songs s ON s.id = e.songId
-           WHERE e.origin IN (:o) AND e.timestamp BETWEEN :from AND :to AND e.excluded = 0 AND s.primaryArtist != ''
-           GROUP BY s.primaryArtist ORDER BY ms DESC LIMIT :limit"""
+        """SELECT name AS artistName, SUM(n) AS plays, SUM(ms) AS ms, MAX(thumb) AS thumbnail, $ARTIST_ID_VOTE AS artistId
+           FROM (SELECT s.primaryArtist AS name, s.artistId AS id, COUNT(*) AS n, COUNT(DISTINCT e.songId) AS k,
+                 SUM(e.playedMs) AS ms, MAX(s.thumbnail) AS thumb
+                 FROM counted_plays e JOIN songs s ON s.id = e.songId
+                 WHERE e.origin IN (:o) AND e.timestamp BETWEEN :from AND :to AND e.excluded = 0 AND s.primaryArtist != ''
+                 GROUP BY s.primaryArtist, s.artistId)
+           GROUP BY name ORDER BY ms DESC LIMIT :limit"""
     )
     suspend fun tasteTopArtists(o: List<String>, from: Long, to: Long, limit: Int): List<ArtistPlays>
 
