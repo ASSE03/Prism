@@ -3,6 +3,7 @@ package com.prism.music.data.stream
 import android.content.Context
 import android.os.Looper
 import android.os.ParcelFileDescriptor
+import android.util.Log
 import androidx.javascriptengine.EvaluationFailedException
 import androidx.javascriptengine.IsolateStartupParameters
 import androidx.javascriptengine.JavaScriptIsolate
@@ -28,7 +29,8 @@ import java.util.concurrent.TimeUnit
  * through androidx.javascriptengine. Blocking: never call it on the main thread.
  */
 class PlayerJsSolver(private val context: Context, private val http: OkHttpClient) {
-    private class Player(val id: String, val code: String, val sts: Int)
+    /** [variant]: which of [VARIANTS] the code is. */
+    private class Player(val id: String, val code: String, val sts: Int, val variant: Int = 0)
 
     private val lock = Any()
     /** The latest player and the one before it, so songs resolved just before a player change still decipher. */
@@ -67,14 +69,20 @@ class PlayerJsSolver(private val context: Context, private val http: OkHttpClien
         return player(id)
     }
 
-    private fun player(id: String): Player {
-        players[id]?.let { return it }
-        val code = get("https://www.youtube.com/s/player/$id/player_ias.vflset/en_US/base.js")
-        val sts = STS.find(code)?.groupValues?.get(1)?.toInt() ?: throw IOException("No signature timestamp in player $id")
-        val p = Player(id, code, sts)
-        players[id] = p
-        while (players.size > 2) players.remove(players.keys.first { it != id })
-        return p
+    private fun player(id: String, from: Int = 0): Player {
+        players[id]?.let { if (it.variant >= from) return it }
+        var last: IOException? = null
+        for (v in from until VARIANTS.size) {
+            val p = try {
+                val code = get(playerUrl(id, VARIANTS[v]))
+                val sts = STS.find(code)?.groupValues?.get(1)?.toInt() ?: throw IOException("No signature timestamp in player $id (${VARIANTS[v]})")
+                Player(id, code, sts, v)
+            } catch (e: IOException) { last = e; continue }
+            players[id] = p
+            while (players.size > 2) players.remove(players.keys.first { it != id })
+            return p
+        }
+        throw last ?: IOException("No player $id")
     }
 
     private fun get(url: String): String {
@@ -87,12 +95,19 @@ class PlayerJsSolver(private val context: Context, private val http: OkHttpClien
 
     private fun isolateFor(playerId: String): JavaScriptIsolate {
         isolate?.let { if (loadedId == playerId) return it }
-        val p = player(playerId)
-        val iso = isolate ?: newIsolate()
-        val result = evaluateLarge(iso, "prismLoad(${JsonPrimitive(p.code)})")
-        if (result != "ok") throw IOException("Player JS $playerId: $result")
-        loadedId = playerId
-        return iso
+        var p = player(playerId)
+        while (true) {
+            val iso = isolate ?: newIsolate()
+            val result = evaluateLarge(iso, "prismLoad(${JsonPrimitive(p.code)})")
+            if (result == "ok") {
+                loadedId = playerId
+                return iso
+            }
+            // This copy of the player doesn't load in EJS: the next variant, if there is one (yt-dlp #18123).
+            if (p.variant + 1 >= VARIANTS.size) throw IOException("Player JS $playerId: $result")
+            Log.w("PlayerJsSolver", "Player $playerId (${VARIANTS[p.variant]}) didn't load: ${result.take(120)}; trying ${VARIANTS[p.variant + 1]}")
+            p = player(playerId, p.variant + 1)
+        }
     }
 
     private fun newIsolate(): JavaScriptIsolate {
@@ -172,6 +187,17 @@ class PlayerJsSolver(private val context: Context, private val http: OkHttpClien
     companion object {
         private val PLAYER_ID = Regex("""player\\?/([0-9a-fA-F]{8})\\?/""")
         private val STS = Regex("""(?:signatureTimestamp|sts)\s*:\s*(\d{5})""")
+
+        /**
+         * The copies of a player Prism asks for, in order. Since 23 November 2026 the desktop copy (`player_ias`) of
+         * players 05a4ffc0, b485e332, b17b74e6 and 92eef845 stops EJS ("a.addOnDisposeCallback is not a function"), so
+         * no signed-in link could be unlocked: Premium's 256 kbps fell back to the usual stream, and songs only the
+         * account may play failed. yt-dlp 2026.11.23 asks for the TV copy instead (yt-dlp #18123, #18124); the
+         * desktop copy stays as the fallback.
+         */
+        internal val VARIANTS = listOf("tv-player-ias.vflset/tv-player-ias.js", "player_ias.vflset/en_US/base.js")
+
+        internal fun playerUrl(id: String, variant: String) = "https://www.youtube.com/s/player/$id/$variant"
         private const val RECHECK_MS = 60 * 60_000L
         private const val CONNECT_TIMEOUT_S = 20L
         private const val LOAD_TIMEOUT_S = 60L
