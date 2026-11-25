@@ -2,6 +2,12 @@
 
 What changed in each release. Older releases are described on the [Releases page](https://github.com/Yigder/Prism/releases).
 
+## 1.8.8.1
+
+A small fix while 1.8.8.5 gets its last checks.
+
+- **Songs that need your YouTube account play again, and Premium quality (256 kbps) is back.** A change YouTube made on November 23 stopped Prism from opening signed-in streams: some songs stopped with "Couldn't unlock this track's stream", and Premium quality quietly fell back to the usual stream.
+
 ## 1.8.8
 
 ### Mix
